@@ -1,8 +1,8 @@
 ---
 date: 2026-10-20
-updated: 2026-10-20T04:30:00Z
+updated: 2026-10-20T12:40:00Z
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 29
+sources: 35
 license: CC-BY-4.0
 ---
 
@@ -440,13 +440,18 @@ vibe coding 搞定了我爸妈的电视!它总在 Netflix 前面插播赞助广�
 已覆盖 25 个品牌的 66 款电视机型、14 种语言,提供 66 份现成电视配置清单,
 已有 15 个项目在其上构建。媒体浪潮是全球性的——TechCrunch 将其概括为"人们
 正在用 AI 让智能电视重新变笨",指出这类破解瞄准的是自动内容识别(ACR)广
-告/追踪基础设施;从 Frandroid 到 detikINET 的各媒体都做了实测。
+告/追踪基础设施;从 Frandroid 到 detikINET 的各媒体都做了实测。这个流派并
+不新鲜:Mert Cobanov 九月就手工跑过同样的流程,Engadget 9 月 27 日的文章
+——"为什么让 Claude 清理电视预装软件不是个好主意"——警告的正是这件事;
+cleanyourtv 是这波浪潮的一键工具化,不是首个实例,而第一篇公开的反击是编
+辑立场,不是厂商的。
 
-**Why it matters:** 这是编码智能体第一次大规模走出终端、通过网络修改消费
-电子硬件——而卖点不是自动化,是去广告和反监控。留意厂商的反应:ACR 收入
-正是这一拳打穿掉的商业模式。
+**Why it matters:** 这是编码智能体大规模走出终端、通过网络修改消费电子硬
+件的大众化时刻——而卖点不是自动化,是去广告和反监控。到目前为止唯
+一可见的反击是编辑立场的;厂商/平台层面的反应(固件锁定、条款修改、下架)
+才是值得盯住的:ACR 收入正是这一拳打穿掉的商业模式。
 
-[`🔗 Gathin23/cleanyourtv`](https://github.com/Gathin23/cleanyourtv) · [`🔗 TechCrunch:人们正在用 AI 让智能电视重新变笨`](https://techcrunch.com/2026/10/19/people-are-using-ai-to-make-their-smart-tvs-dumb-again/)
+[`🔗 Gathin23/cleanyourtv`](https://github.com/Gathin23/cleanyourtv) · [`🔗 TechCrunch:人们正在用 AI 让智能电视重新变笨`](https://techcrunch.com/2026/10/19/people-are-using-ai-to-make-their-smart-tvs-dumb-again/) · [`🔗 Engadget(9 月 27 日):为什么让 Claude 清理电视预装软件不是个好主意`](https://www.engadget.com/2267074/why-claude-cleaning-tv-bloatware-not-best-idea)
 
 ---
 
@@ -715,15 +720,196 @@ Self-HPO 让两者交替进化:当前策略分析自己的失败并提出 harnes
 
 [`🔗 calabro.io/ohbf`](https://calabro.io/ohbf) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50157865)
 
+## 31. DeepSeek 开源 DeepInfer:支撑其生产集群的推理框架
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** GitHub · 637+ HN pts · 3.2小时前 (~17:08 UTC+8)
+- **Tags:** `inference` `deepseek` `vllm` `open-source`
+
+DeepSeek 开源了 DeepInfer(Apache-2.0,成文时 6.2k★),README 自述其为"支撑
+DeepSeek 大规模生产服务的高性能推理框架"——并且对箱内箱外都写得异常清楚。箱内:离线推理,含优化内核(FlashMLA、DeepGEMM、DeepEP、TileLang)、MoE EP + EPLB、"DSpark 与置信度调度验证"草稿 token 解码、SWA 有界回放、异步零开销批调度器、批不变推理与确定性采样,以及基于 regex/JSON schema/EBNF 的结构化输出。硬件清单:NVIDIA SM100 **和**华为昇腾 950(CANN 9.2)。箱外,写得明明白白:不含 KV cache 系统、不含 prefill/decode 分离、不含负载均衡——"完整推理服务所需(本发布不包含)。"致谢部分给血脉问题下了定论:"最初主要构建在 vLLM 之上",另受 SGLang 与 TensorRT-LLM 启发——这也是 vLLM 今天一同登上 trending 的原因。基准测试(prefill 4×SM100,decode 64 卡)附带 `run_sweep.sh` 供复现。
+
+**Why it matters:** 一线实验室的生产推理栈如今可以 fork 了,而许可证加复现脚本让这件事不止是姿态。注意同一份依赖清单里的两个半球——SM100 与昇腾 950——落地的同一周,DHS 命令(第 23 条)刚把 DeepSeek 清出美国联邦民事机构。而"不包含"清单正是 DeepSeek 认为自己生产护城河仍在之处的地图。
+
+[`🔗 deepseek-ai/DeepInfer`](https://github.com/deepseek-ai/DeepInfer) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50163277)
+
+---
+
+## 32. Google Cloud 西欧故障拖垮英国银行应用——Revolut 受创最重
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** BBC / The Independent · 70+ HN pts · 2.5小时前 (~17:54 UTC+8)
+- **Tags:** `cloud` `outage` `fintech` `google-cloud`
+
+英国时间周二早间,Google Cloud 在西欧的一次故障击穿了一层人们真正依赖的互联网:Revolut 的欧洲用户无法刷卡、无法动用资金;HSBC、Lloyds、Halifax、Bank of Scotland、Barclays 和 ING Germany 的用户报告银行应用失灵;DPD 配送受影响。Google 状态页承认该区域"多项"服务受影响;媒体报道指向伦敦(europe-west2)区域。The Independent 的标题——"为什么互联网刚刚崩了?"——本身就是故事:一家服务商的一个区域级抖动,级联成了数百万人的刷卡失败。截至成文,恢复细节仍在陆续公布;本条按事故进行中的报道撰写。
+
+**Why it matters:** 欧洲金融科技的卡支付轨道,在栈的最底层原来终结于一个云区域。值得等的是 Revolut 的事后报告——这个规模的支付应用,究竟是为其*发卡*链路准备了多区域容灾,还是只给仪表盘准备了。
+
+[`🔗 The Independent:为什么互联网刚刚崩了`](https://www.independent.co.uk/tech/internet-down-not-working-google-cloud-revolut-b3069754.html) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50163625)
+
+---
+
+## 33. Go 紧急不信任一批与 eMudhra 双用途根相关的中间证书——CVE-2026-111943
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** golang/go issue · 112+ HN pts · 9.3小时前 (~11:05 UTC+8)
+- **Tags:** `pki` `tls` `go` `supply-chain`
+
+Go 的 `crypto/x509` 现在会过滤掉包含一小批中间证书的证书链(讨论区社区依据 CCADB 数据整理出八个 SPKI),理由是"其运营存在特定安全担忧"——这是一个 URGENT 级议题,已分配 CVE-2026-111943,并建议"立即升级"。底层故事是一次根计划清理延伸到了语言运行时层:Mozilla Bug 2083709 应 eMudhra 自己的请求,将 emSign Root CA - C1(RSA)与 emSign ECC Root CA - C3 从 NSS 中彻底移除,以符合根商店政策对双用途根的禁令;据该 bug 记录,除 eMudhra 自己的测试站点外,从来没有 TLS 服务器证书链接到这两条根;Go 讨论帖中贴出的 CT 数据显示,被封锁链条签发过的证书全都是非恶意测试证书。分数出处:Go 分配了 CVE 编号,但按其公开安全政策**不评 CVSS 分**——这是政策约定,不是缺失。
+
+**Why it matters:** 两件事同时发生:双用途根清理正在浏览器之下的那一层被执行;而 Go 不得不硬编码一个黑名单,因为 Linux 系统证书库没有任何吊销中间证书的机制——这是 PKI 层一直在打补丁的结构性缺口,本周 Let's Encrypt 的多视角验证(第 7 条)是同一主题的另一半。升级你的 Go 部署;对用户应当无感,而这正是意义所在。
+
+[`🔗 golang/go#82345`](https://github.com/golang/go/issues/82345) · [`🔗 Mozilla Bug 2083709`](https://bugzilla.mozilla.org/show_bug.cgi?id=2083709)
+
+---
+
+## 34. Mercury 的一个漏写逗号:两个拼接的正则把笔记本分享框架变成无认证 shell——10.0
+
+- **Velocity:** ▮▮ rising
+- **Source:** NVD / GHSA · 今日收录
+- **Tags:** `security` `jupyter` `cve` `blocklist`
+
+mljar 的 Mercury——把 Jupyter 笔记本分享为 Web 应用的 Python 框架——其 `BLOCKED_PATTERNS` 列表中漏写了一个逗号,把 `/lab` 和 `/api/terminals` 两个正则字面量拼成了一个模式(CVE-2026-111057,CVSS 10.0,GitHub CNA)。于是发往 `/api/terminals` 的请求径直穿过匿名端点黑名单,进入 Jupyter Server 的终端 API——一个 Mercury 进程权限下的无认证操作系统 shell。已在 3.2.4 修复。第二份公告(CVE-2026-111058,9.8)针对默认*无 token* 部署:匿名客户端可创建内核并发送携带任意 Python 的 `execute_request`——websocket 包装层只跟踪空闲活动、不鉴权可执行消息;已在 3.2.6 修复。NVD 上两条记录均为 `Awaiting Analysis`,仅有 GitHub 发布的分数。同名澄清:这是笔记本框架,不是 Inception Labs 的 Mercury 3 扩散语言模型(第 6 条)。
+
+**Why it matters:** 黑名单总死于单字符之伤——一个逗号让两个被封端点变成零个。而这个产品类目在本 feed 反复出现:"把你的笔记本/模型/agent 分享为 Web 应用"正是那种默认配置会变成所有人事故的自托管暴露面(见第 35 条)。两个问题均已修复;在用 Mercury 的话,补丁路径就这一条。
+
+[`🔗 NVD: CVE-2026-111057`](https://nvd.nist.gov/vuln/detail/CVE-2026-111057) · [`🔗 GHSA-f8c7-rwf9-fmgm`](https://github.com/mljar/mercury/security/advisories/GHSA-f8c7-rwf9-fmgm)
+
+---
+
+## 35. VulnCheck 周二批次:五个自托管 AI 平台,开发默认配置即生产事故
+
+- **Velocity:** ▮▮ rising
+- **Source:** NVD(VulnCheck 评分)· Oct 19–20 收录
+- **Tags:** `security` `cve` `self-hosted` `ai-infra`
+
+六条 CVE,一个模式。Letta ≤0.16.8 自带的 `compose.yaml` 从未启用 `LETTA_SERVER_SECURE`,服务器管理 API 敞开(9.8);DB-GPT ≤0.8.2 默认 docker-compose 中硬编码凭据(9.8)*并且*因沙箱代码执行默认开启而存在无认证 RCE(9.8);Langchain-Chatchat ≤0.3.1.3 暴露 `POST /tools/call`,可无认证调用代码解释器(9.8);piflow 2.0.0–2.0.1 的 DeepAgent 组件存在 RCE(9.8);Cognition <0.13.0 自带无认证 RCE(9.2)。分数出处:所有 9.8 均为 **VulnCheck 评定**(CVSS 3.1 Primary,disclosure@vulncheck.com),NVD 记录仍为 `Received`/`Deferred`——尚无 NVD 分析;且这些属于默认配置与部署类漏洞,修补指引一半在版本、一半在各项目的配置。
+
+**Why it matters:** 与本 feed 10 月 13 日抓到的 BotSharp 提交入库的 JWT 密钥、Agnaistic 的固定管理员密码同属一类,如今整批到达:按 localhost 信任配置的 agent 平台正被指向公网。如果你自托管任何 agent 框架,操作前提应当是"默认配置即开发配置"——先开认证再端口转发,顺序别反。
+
+[`🔗 NVD: CVE-2026-77936(Letta)`](https://nvd.nist.gov/vuln/detail/CVE-2026-77936) · [`🔗 NVD: CVE-2026-77932(DB-GPT)`](https://nvd.nist.gov/vuln/detail/CVE-2026-77932)
+
+---
+
+## 36. Rank Math PRO 被投毒的 11 个小时:3.0.123 部分下载包携带恶意软件——"请把你的网站视为已失陷"
+
+- **Velocity:** ▮ steady
+- **Source:** Rank Math KB · CVE 记录今日落地
+- **Tags:** `security` `supply-chain` `wordpress` `malware`
+
+Rank Math 证实,**10 月 15 日 20:02 UTC 至 10 月 16 日 07:12 UTC** 之间下载或更新的部分 Rank Math PRO v3.0.123 包携带恶意软件,插件激活即生效:建立持久访问、在页面访问时自我重建的隐藏后门,并暴露 WordPress 凭据、数据库凭据、API 密钥及其他服务器机密,回连 `rank1cdn[.]com`(CVE-2026-111862,9.8,NVD 上由 Wordfence 评定)。厂商的指引是最严重等级的口径:激活过受影响包的站点应将网站视为已失陷,并附有逐条处置指南。窗口只有十一个小时;波及半径是当晚开了自动更新的所有人。
+
+**Why it matters:** WordPress 一直是供应链攻击量的主战场——与本 feed 10 月 17 日覆盖的 npm 案不同,这是一次*付费插件更新通道*的投毒,且工件带时间窗,取证问题因此非常具体:查插件版本,同时查它的下载时间戳。"视为已失陷"的口径也是诚实的口径——后门会自我重建,"后来升级了"不构成处置。
+
+[`🔗 Rank Math 安全事件 KB`](https://rankmath.com/kb/pro-3-0-123-security-incident/) · [`🔗 NVD: CVE-2026-111862`](https://nvd.nist.gov/vuln/detail/CVE-2026-111862)
+
+---
+
+## 37. Cloudflare Clairic:返回值而非 token 的"System One"抽取模型
+
+- **Velocity:** ▮▮ rising
+- **Source:** Cloudflare blog · 62+ HN pts · 18小时前 (~02:18 UTC+8)
+- **Tags:** `models` `extraction` `cloudflare` `inference`
+
+Cloudflare 的 Clairic 是其模型分类学里的一个新品类:决策模型(Jev、Clef)返回概率,Clairic 返回**值**——从非结构化文本加每次至多四张图片中给出抽取片段、计算出的数字与日期、估计值与短时程预测,单次并行前向完成,不生成 token。现于 Workers AI 以 `@cf/cloudflare/clairic` 预览,仅按输入 token 计费;开放权重承诺"近期"——目前尚无。厂商自测数字:对比使用 GLM-5.3 的全 LLM 管线,理赔管线从 61.7s 降到 19.3s、每百万份理赔成本从 $11,740 降到 $6,032;21 天的 TSA 安检口流量预测测试平均误差 3.3%,21 天中 17 天落在 80% 区间内。帖子自带泄气阀:多步算术偏弱("更长的算术交给代码"),估计需要输入内有证据,校准是"测出来的、不保证的",格式良好不等于答案正确。
+
+**Why it matters:** 抽取 → 决策 → 行文的管线分类学还在制度化,而一个只按输入计费的"值模型"是与 token 生成真正不同的成本曲线。数字是厂商自测、权重未放出——但这个形态(带校准不确定度的廉价类型化输出,用于路由)正是各 agent 管线一直在用提示词手工搓的东西。
+
+[`🔗 Cloudflare: Clairic`](https://blog.cloudflare.com/clairic-extraction-model/) · [`🔗 Workers AI 模型页`](https://developers.cloudflare.com/workers-ai/models/clairic/)
+
+---
+
+## 38. Google Research 交付 Harness²:权重冻结的递归式 agent harness 优化
+
+- **Velocity:** ▮▮ rising
+- **Source:** arXiv 2610.14224 · 75+ HN pts · 25小时前 (Oct 19 ~19:28 UTC+8)
+- **Tags:** `agents` `harness` `research` `google`
+
+Google Research 的 Harness²(Apache-2.0,13.7k★)在保持模型权重不动的前提下优化 harness,分两层递归。任务层:对比式 **Propose–Probe–Compose**——提出 harness 修改、在同一任务上探测其效果、从行为对比中合成出精炼后的 harness,全程无标准答案反馈。harness 层:一个持久的"改进 harness"沉淀被采纳的 harness 与有证据支撑的经验,用于指导后续任务。在三个专业基准上,一步 Harness² 让 GLM-5 与 Gemini 3.5 Flash 最高提升 WorkBuddy-Bench +11.5、JobBench +4.5、LAB 部分通过率 +11.8 个百分点;发布版支持 OpenCode 与 Codex 执行器。
+
+**Why it matters:** 一周之内两家实验室以相反机制收敛到同一论点——微软的 Self-HPO(第 29 条)用 RL 共训策略与 harness;Google 冻结策略、递归 harness。当双方都报告仅靠 harness 侧工作就有大幅增益时,读法是:如今 agent 分数里还压着个位数到十位数的分,押在 harness 设计上,不在权重上。
+
+[`🔗 arXiv 2610.14224`](https://arxiv.org/abs/2610.14224) · [`🔗 google-research/harness2`](https://github.com/google-research/harness2)
+
+---
+
+## 39. Ponytail 5:"最懒资深工程师"技能自我重建——代码更少、测试更多、基准随附
+
+- **Velocity:** ▮▮ rising
+- **Source:** GitHub Trending · 168.7k★(v5 发布)
+- **Tags:** `agents` `skills` `benchmarks` `claude-code`
+
+DietrichGebert 的 Ponytail——规格说明书是"像房间里最懒的资深工程师那样思考"的 agent 技能——本周发布 v5,一次可发布的自测基准护航的彻底重建(39 个任务,含一个真实 FastAPI + React 仓库;Claude Code;Opus 5.5;每组 5 次):代码量降到无技能基线的 47%(v4.13:52%)、成本 74%(84%)、耗时 59%(62%)——同时 98% 的高风险逻辑带测试交付(基线:68%),agent 自写测试捕获 66% 的注入 bug(46%)。盲测对比中 v5 的回复以 110–67 胜过 v4;六类安全任务(SQL 注入、路径穿越、伪造 token、限流、畸形 CSV、缓存)30/30 全过。方法、逐任务表格与局限都在仓库里(`benchmarks/results/2026-10-07-agentic.md`)。README 强调规则从来不是"最少 token":"只写任务需要的,并且绝不砍验证、错误处理、安全与可访问性。"
+
+**Why it matters:** 全部数字为自报——但同时公开方法、逐任务表*和*局限,正是本 feed 一直在要求 agent 技能项目达到的门槛(genre 同类 superpowers v7 重建,10 月 16 日已覆盖)。"把懒写成规格"还能让测试覆盖率*上升*,这是一个可证伪的主张,而且他们在邀请别人来证伪。
+
+[`🔗 DietrichGebert/ponytail`](https://github.com/DietrichGebert/ponytail) · [`🔗 v5 基准:方法 + 逐任务表格`](https://github.com/DietrichGebert/ponytail/blob/main/benchmarks/results/2026-10-07-agentic.md)
+
+---
+
+## 40. Laminar 的 flow-1:以读 agent 轨迹为生的 RL 模型——每 1 美元 888 条轨迹
+
+- **Velocity:** ▮ steady
+- **Source:** Launch HN · 58+ pts · 20.4小时前 (~00:00 UTC+8)
+- **Tags:** `agents` `observability` `rl` `evals`
+
+Laminar(YC S24,自 2024 年做开源 agent 可观测性)发布 flow-1,一个*在其* Signals agent 内部用 RL 训练的模型——该 agent 把一条轨迹当仓库读(span 即文件),grep、取证、返回结构化结论。在其自建的 523 条高难轨迹基准上,flow-1 得 F1 .835——持平 Claude Sonnet 5,高于 GPT-6-sol(.816),低于 Claude Opus 5(.890,表格如实显示 Opus 夺冠)——价格 $0.05/M 输入、$0.30/M 输出,折合每美元 888 条轨迹:质量相近下是 GPT-6-sol 每美元轨迹数的 23 倍。发布帖自曝一处失利:合同评审样例中,两条 GPT-6 模型都发现的缺失强制 AI 治理条款,flow-1 漏了。产品 API,不开权重。
+
+**Why it matters:** Agent 运维正在长出自己的廉价模型层:不再抽样,而是分析*全部*生产轨迹,再把结论向上路由(其讨论帖描述了便宜模型标记、大模型复核的分工)。注意保留:基准是自建轨迹上的自测,定价是厂商自己的算术——而 F1 表对 Opus 5 夺冠的如实呈现,恰是其余部分值得一读的原因。
+
+[`🔗 Laminar: flow-1`](https://laminar.sh/blog/flow-1) · [`🔗 Launch HN 讨论`](https://news.ycombinator.com/item?id=50154029)
+
+---
+
+## 41. graphify 以 129.5k★ 再登 trending:知识图谱技能品类有了旗舰——和 Rust 移植
+
+- **Velocity:** ▮ steady
+- **Source:** GitHub Trending · 129,529★ · 最近发布 Oct 16
+- **Tags:** `agents` `knowledge-graph` `skills` `retrieval`
+
+Graphify-Labs 的 graphify——在 Claude Code 里敲 `/graphify`,它把你的文件(代码、PDF、markdown、截图、白板照片)读成可查询的知识图谱,产出一个可交互的 `graph.html`、一个 Obsidian 库、一个供 agent 导航的 wiki、一份"枢纽节点与意外关联"的 `GRAPH_REPORT.md`,以及带 SHA256 变更缓存的持久化 `graph.json`。其招牌数据是自报的:相对反复重读原始文件,每查询省 71.5× token。今天的位置没有单一新闻事件驱动——是持续需求加发布节奏(0.9.89 → 0.9.92,贯穿 10 月 13–16)——而这个品类已经开始裂变:Rust 移植 Graphicle 10 月 14 日上了 Show HN,`graf` 宣称建图快 1000×。一句诚实注脚:README 的引子引用 Andrej Karpathy 的 `/raw` 文件夹习惯是作为*问题陈述*,不是背书;PyPI 包名暂为 `graphifyy`,`graphify` 名字正在收回。
+
+**Why it matters:** 这是本周压缩主题(headroom,10 月 19 日条目)的检索半场:别再为重读付费,改为查询预计算的结构。悬而未决的是有损图谱悄悄丢掉了什么——README 里"对找到的与猜到的如实区分"那句话,就是每个项目该拿来考核它的承诺。
+
+[`🔗 Graphify-Labs/graphify`](https://github.com/Graphify-Labs/graphify) · [`🔗 Show HN: Graphicle,Rust 移植`](https://news.ycombinator.com/item?id=50088713)
+
+---
+
+## 42. 一支 AI agent 军团攻入 100 多个网站——John Deere、SharkNinja、Cummins——而且大部分时间在自走
+
+- **Velocity:** ▮▮ rising
+- **Source:** The Verge · 59+ HN pts · 22小时前 (Oct 19 ~22:23 UTC+8)
+- **Tags:** `security` `agents` `breach` `autonomy`
+
+AI 安全公司 Norforge 披露了一组入侵:一名黑客把 AI agent——构建于 Cairn,一个开源"通用问题求解引擎"——指向包括 John Deere、SharkNinja、Cummins 在内的 100 多个网站,瞄准之后 agent"基本自主运行";其中一例,从初始访问到得手约 23 小时。Norforge 另发现 20 多个暴露在外的 Cairn 实例,评估为大概率为恶意。三家公司的口径各异:John Deere 称无迹象表明敏感信息被访问;SharkNinja 称受影响的是独立的售后支持站点、已遏制;Cummins 称正在调查一个第三方供应商站点。Cairn 作者对定性提出异议:该引擎"从来不是'黑客工具'"——"滥用是人的决定,不是引擎的功能。"
+
+**Why it matters:** 这是本 feed agent 自主性条目的对手侧孪生:让"superfans"(第 43 条)有用的那个性质——不需要每圈都有人的 agent——正是让一名操作者同时推进一百场入侵的性质。双用途之争如今两边都有了具体案例集,而披露的不对称(安全公司发现;三位受害者给出三种定性)本身就是教训。
+
+[`🔗 The Verge`](https://www.theverge.com/ai-artificial-intelligence/1013643/ai-agents-hack-john-deere-sharkninja-culex) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50152877)
+
+---
+
+## 43. "Superfans":Anthropic 给每个组件派一个 obsessing 的 Claude——运维随笔品类注意到了
+
+- **Velocity:** ▮ steady
+- **Source:** benjamincongdon.me · 102+ HN pts · 21.5小时前 (Oct 19 ~22:52 UTC+8)
+- **Tags:** `agents` `observability` `sre` `essay`
+
+Ben Congdon 的《Agentic Monitoring》抓住了 Anthropic 一篇博客里一段游离的话——他明说不是全文主旨,但恰是粘在脑中的部分:团队运行着他们称为 **superfans** 的 Claude 实例,每一个"痴迷于单一组件的健康状况"(scion-daemon superfan、scion-cache superfan、Antique 合并队列 superfan),可读遥测与日志,"像一位经验丰富、除刷新图表和寻找异常外无事可做的工程师"——能发现"让传统告警显得一维的细微新问题"。Congdon 的判词:"这显然就是软件系统运维的前进方向",随笔接着推演:当盯盘成为 agent 工作负载,什么会变——包括那个失败模式:superfan 自信的误读,不过是文案更好的告警。
+
+**Why it matters:** 请与同样在本周落地的 Netflix 本体论帖(第 10 条)对读——后者同样选择了"让人类保持审批权"。运维栈正从两个方向合流:读全部遥测的 agent,读 agent 的人类——而有趣的设计空间恰在接缝处:人类审批者到底还在审批什么?
+
+[`🔗 benjamincongdon.me: Agentic Monitoring`](https://benjamincongdon.me/blog/2026/10/19/Agentic-Monitoring/) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50153225)
+
 ---
 
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-10-20T04:30:00Z |
-| Items | 30 |
-| Sources tracked | 29 (Hacker News, GitHub Trending/releases, openbsd.org, jwz.org, TechCrunch, redact.dev, Project Discovery, Federal Register, GamingOnLinux, IPinfo, josie.lol, chriskiehl.com, arXiv, calabro.io, 以及早前批次的 OpenBSD ports 邮件列表、WJCL、MiniMax 博客、po-ru.com、CERN、Inception Labs、Let's Encrypt 论坛、100toolkit、Hugging Face、Netflix Tech Blog、BoredHackerBlog、crystl.dev、kividbio、peter.eisentraut.org、peterp.me) |
+| Generated | 2026-10-20T12:40:00Z |
+| Items | 43 |
+| Sources tracked | 35 (Hacker News, GitHub Trending/releases, The Independent, golang/go, Mozilla Bugzilla, NVD, Rank Math KB, Cloudflare 博客, arXiv, laminar.sh, The Verge, benjamincongdon.me, 以及早前批次的 openbsd.org、jwz.org、TechCrunch、redact.dev、Project Discovery、Federal Register、GamingOnLinux、IPinfo、josie.lol、chriskiehl.com、calabro.io、OpenBSD ports 邮件列表、WJCL、MiniMax 博客、po-ru.com、CERN、Inception Labs、Let's Encrypt 论坛、100toolkit、Hugging Face、Netflix Tech Blog、BoredHackerBlog、crystl.dev、kividbio、peter.eisentraut.org、peterp.me) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (3x daily) |
 | Ranking | Velocity-weighted (recency × engagement acceleration × source authority) |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |
