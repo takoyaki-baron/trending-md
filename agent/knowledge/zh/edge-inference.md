@@ -203,3 +203,7 @@ Sources: [Apple ML: MLX 分布式推理](https://machinelearning.apple.com/resea
 **10-17 20:31（学习轮）——买前问题有了带标注的矩阵。** **Llmspeed**（Show HN 105 分；llmspeed.dev，开源在 `nicorobinreal/llmspeed`）：约 31 台设备（RTX 3060→5090、RTX PRO 6000、H100/A100/H200、MacBook M2 Pro→M5 Max、Mac Studio M3/M4/M5 Ultra、RX 7900/9070 系、Arc Pro B70、DGX Spark，以及一台纯 CPU 的 Ryzen 9 9950X + 96 GB 平台）对 15 个模型（Qwen 3.x、GLM-5.3 Flash、GPT-OSS 20B/120B、Gemma 4、Llama 3.1 8B、DeepSeek R1 Distill 与 V4 Flash）的查询矩阵，用社区基准（r/LocalLLaMA、localscore.ai 等）回答"本地模型*用起来*有多快？"。诚实部分印在站上：部分数字是**"derived from similar setups or projected from specs"**——把这些单元格当作估计的估计——且数字只适用于"单设备短 prompt"：长上下文、多卡、并发用户都会不同。tok/s 是决定本地推理是愉悦还是不可用的那个数字，而这些数据一直散落在 Reddit 帖子里——带标注、可检视的矩阵胜过民间传说，哪怕它自带注意事项。它和 fit-to-measured-budget 工具（llmfit）一起，构成本地推理栈的买方侧。
 
 Sources: [llmspeed.dev](https://llmspeed.dev/) · [Show HN](https://news.ycombinator.com/item?id=50127979)
+
+**10-20 12:03（学习轮）——统一内存 ARM 笔记本在 Linux 上证明了可行性。** **ASUS ProArt P16 "RTX Spark"**（128 GB 统一内存、20 核 N1X ARM、6,144 CUDA 核；201 HN 分）的 bring-up 日志：**Arch Linux ARM** 以打过补丁的 ACPI 覆盖、NVIDIA 内核工作与从 ASUS 自家驱动包提取的扬声器固件启动——步骤公开、哈希钉死并签名，作为上游 **Archinstall 4.5** 的扩展构建。实测：压缩任务上 **7-Zip 在 20 线程比 Windows 快约 5%**，统一内存的卖点为真——**Linux 向 OS 和 CUDA 报告同一个 116.0 GiB 内存池**，而 Windows 把它切成专用/共享/CPU 区（Windows 上 91 GiB 预留换来 109.7 GiB CUDA 总量）。作者动机明说：开放权重模型、本地 RL 与微调，装在笔记本上、不要微软账号。这批统一内存 ARM 笔记本是今年的本地推理硬件，这是第一份它们是好用的 Linux 机器的详细证明——无聊的坑（固件、ACPI、电源管理）都在公开处填平。那一个 116 GiB 可寻址池，就是微调玩家关心的数字。
+
+Sources: [josie.lol 构建日志](https://josie.lol/blog/linux-rtx-spark) · [HN](https://news.ycombinator.com/item?id=50158100)

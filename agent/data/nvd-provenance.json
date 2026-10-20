@@ -1,5 +1,5 @@
 {
- "updated": "2026-10-19T21:44:58.548Z",
+ "updated": "2026-10-20T05:40:05.952Z",
  "cves": {
   "CVE-2026-48382": {
    "vulnStatus": "Undergoing Analysis",
@@ -25,7 +25,7 @@
   "CVE-2026-103849": {
    "vulnStatus": "Undergoing Analysis",
    "published": "2026-10-13",
-   "lastModified": "2026-10-19T13:16",
+   "lastModified": "2026-10-20T04:16",
    "metrics": [
     {
      "version": "3.1",
@@ -389,11 +389,11 @@
   "CVE-2026-111924": {
    "vulnStatus": "Awaiting Analysis",
    "published": "2026-10-17",
-   "lastModified": "2026-10-19T21:13",
+   "lastModified": "2026-10-19T22:17",
    "metrics": [
     {
      "version": "3.1",
-     "type": "Primary",
+     "type": "Secondary",
      "source": "disclosure@vulncheck.com",
      "baseScore": 7.5,
      "severity": "HIGH",
@@ -619,9 +619,9 @@
    "nvdAnalyzed": false
   },
   "CVE-2026-103091": {
-   "vulnStatus": "Received",
+   "vulnStatus": "Awaiting Analysis",
    "published": "2026-10-19",
-   "lastModified": "2026-10-19T18:16",
+   "lastModified": "2026-10-19T21:13",
    "metrics": [
     {
      "version": "4.0",
@@ -706,7 +706,7 @@
   "CVE-2025-71429": {
    "vulnStatus": "Deferred",
    "published": "2026-10-12",
-   "lastModified": "2026-10-16T19:18",
+   "lastModified": "2026-10-19T22:10",
    "metrics": [
     {
      "version": "3.1",
@@ -825,9 +825,9 @@
    "nvdAnalyzed": false
   },
   "CVE-2026-105899": {
-   "vulnStatus": "Undergoing Analysis",
+   "vulnStatus": "Analyzed",
    "published": "2026-10-13",
-   "lastModified": "2026-10-14T15:50",
+   "lastModified": "2026-10-20T00:12",
    "metrics": [
     {
      "version": "3.1",
@@ -843,7 +843,7 @@
    ],
    "kev": null,
    "kevDue": null,
-   "nvdAnalyzed": false
+   "nvdAnalyzed": true
   },
   "CVE-2026-106622": {
    "vulnStatus": "Analyzed",
@@ -1287,7 +1287,7 @@
   "CVE-2026-99999": {
    "vulnStatus": "Received",
    "published": "2026-10-15",
-   "lastModified": "2026-10-19T10:19",
+   "lastModified": "2026-10-19T22:17",
    "metrics": [
     {
      "version": "3.1",
@@ -1298,7 +1298,9 @@
      "vector": "CVSS:3.1/AV:L/AC:L/PR:N/UI:N/S:C/C:H/I:H/A:H"
     }
    ],
-   "cwe": [],
+   "cwe": [
+    "CWE-20"
+   ],
    "kev": null,
    "kevDue": null,
    "nvdAnalyzed": false
@@ -1393,7 +1395,7 @@
   "CVE-2026-96656": {
    "vulnStatus": "Analyzed",
    "published": "2026-09-23",
-   "lastModified": "2026-09-29T18:34",
+   "lastModified": "2026-10-20T04:17",
    "metrics": [
     {
      "version": "3.1",

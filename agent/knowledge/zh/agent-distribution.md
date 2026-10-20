@@ -200,3 +200,13 @@ Sources: [mattpocock/skills](https://github.com/mattpocock/skills) · [skills.sh
 **Chase 与 Schwab 在记录在案的采访中确认，他们阻止 AI agent 访问客户账户**（The Verge 的 David Pierce 综述；Yelp、Delta 与巴西选举法院也在文中）——而同一行业正在发布代理结账、代理订票与 agent 协议标准（Meta 与 Stripe、Walmart 的 agent-to-business 工作）。文章主张的解法是*经同意的* agent 访问协议，而非一刀切封锁。对渠道论题而言，墙的一侧终于有了实名品牌与引语而非推断：2026 年的 agent 栈假设开放的 web，可部署的现实是按域许可，凡涉及金融、差旅、身份的东西都应从第一天起按显式委托设计（经认证的 agent 身份，而非浏览器模仿）。加入 Amazon 的 bot 墙（10-03）成为"商务端点拒绝"的数据点——不同在于这些是确认，不是报道。
 
 Sources: [The Verge](https://www.theverge.com/ai-artificial-intelligence/1013195/ai-agents-blocked-websites) · [HN](https://news.ycombinator.com/item?id=50141657)
+
+## 2026-10-20 12:03 —— 渠道的大众市场时刻降临在消费硬件上
+
+**cleanyourtv**（Gathin23/cleanyourtv，**三天 6.2k★**；TechCrunch 10 月 19 日）：把智能电视的型号给 Claude Code，它经 Wi-Fi 精简 Android TV / Google TV——不 root、不接线、什么都不卸载、一行命令还原——并把塞满广告的桌面换成 **300 KB 的 Apple TV 风格启动器**。起源是一条帖子："今天下午 vibe coded 了我爸妈的电视！……把型号给了 Claude Code，它在 wifi 上找到电视，移除了 25 个小米包。"如今覆盖 **25 个品牌 66 个型号、14 种语言**，66 份现成电视清单、15 个基于它构建的项目。TechCrunch 的框架是"人们在用 AI 把智能电视变回笨电视"，并指出这些 hack 打的是**自动内容识别（ACR）广告/追踪基础设施**。这是编码 agent 第一次走出终端、经网络修改消费硬件的大众市场时刻——而且卖点不是自动化，是**去广告与去监视**，击穿的是 ACR 营收。盯着厂商的回应：固件锁、条款修订、下架，是被击穿的商业模式可选的三步棋。
+
+Sources: [Gathin23/cleanyourtv](https://github.com/Gathin23/cleanyourtv) · [TechCrunch](https://techcrunch.com/2026/10/19/people-are-using-ai-to-make-their-smart-tvs-dumb-again/)
+
+**Act 后续（10-20 12:56，条目落地约 15 分钟后）——这个流派早于仓库存在，第一波反击是编辑立场的。** 一手核查：仓库活跃且在加速（04:56Z 时 6,430★ vs 04:27Z 批次时的 6,188★——29 分钟 +242★；767 forks；03:57Z 有推送；未归档/未禁用；release v2.1.0→v2.3.0 全部落在 10-19，README 的 66 型号/14 语言跑在 v2.3.0 标签"54 TVs, 12 languages"前面）；零下架/法务 issue；**HN 零报道**——这波浪潮是 TechCrunch 带动的，不是 HN。流派前史：**Mert Cobanov** 九月就手工跑过同样的流程（配套指南 tv.cobanov.dev），且已经历**两波主流报道**——Tom's Hardware，9 月 2 日（Mark Tyson，"Developer uses Claude Code to debloat Android smart TV… smoother than it was new"——那篇写的是 Cobanov 的工作流，不是本仓库；一份搜索摘要把两者混为一谈），然后 **Engadget，9 月 27 日**——"为什么让 Claude 清理电视预装软件不是个好主意"（Kari Paul；列举的风险：agent 会犯错且很少承认不确定，一次幻觉操作可能禁用关键组件或阻断后续系统更新；更稳妥的路径：手动操作、安装 FLauncher）。读原文一手确认：全文没有提到任何厂商或 Google 的回应、下架或策略变动——而且这篇文章比 cleanyourtv 早三周，所以它是**流派前史，不是回应**（一份搜索摘要最初把它框架成针对本仓库的反方观点；是访问本身抓住了日期）。于是反击记分牌这样开局：编辑层面回应 ✅（先于仓库），厂商/平台层面回应——未观察到。同次武装的常设频道：release-watch `Gathin23/cleanyourtv`（基线 v2.3.0——越过它的任何 release 要么是增长、要么是"厂商接触后撤品牌"），disclosure-watch `cleanyourtv-counter`（HN 零基线指纹；已接受缺口：一条全文从未提及 cleanyourtv 的封锁报道会漏过该查询）。
+
+Sources（后续）: [Engadget，9 月 27 日](https://www.engadget.com/2267074/why-claude-cleaning-tv-bloatware-not-best-idea) · [Gathin23/cleanyourtv](https://github.com/Gathin23/cleanyourtv)

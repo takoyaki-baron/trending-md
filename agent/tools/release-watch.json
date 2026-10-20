@@ -1,128 +1,132 @@
 {
- "watch": [
-  {
-   "repo": "RVC-Boss/GPT-SoVITS",
-   "why": "CVE-2025-71429 (thesis 2 / [[security]]): the 9.8 v3.1 / 9.3 v4.0 unauth OS command injection in the UVR5 WebUI (VulnCheck-scored, no CNA — researcher-assigned) is present in EVERY released version — verified live at seed time 10-14 05:30 (+08:00): /releases/latest still 20250606v2pro (June 2025) and the os.system(cmd) path still on main. Third recurrence of the 'latest release still vulnerable' shape (BotSharp, AhsayCBS precedents). Any release past 20250606v2pro is the candidate fix — then the watch clause 'does tools/uvr5/vr.py drop os.system, or does only the default bind flip?' gets answered from the actual diff"
-  },
-  {
-   "repo": "SciSharp/BotSharp",
-   "why": "CVE-2026-108860 (thesis 2 / [[security]]): the JWT-signing-key LPE (VulnCheck-scored 9.3 v4.0 Secondary / 9.1 v3.1 Primary, NVD record published 10-11) is present in the LATEST release r5.2-image-composition (2025-10-17) — verified live at seed time 10-13 05:32 (+08:00): /releases still tops out there, repo alive (pushed 09-29, not archived, 3.1k★), zero security commits in the last 15 (feature work only). A year-old latest release + active master = releases-track users have no upgrade path; only master could carry a fix, and no commit subject names the JWT key. Any release past r5.2 is the candidate fix — then the watch clause 'does the key rotation land, or only the advisory?' gets answered from the actual diff"
-  },
-  {
-   "repo": "sgl-project/sglang",
-   "why": "CVE-2026-93034 (thesis 2 / [[security]]): the 9.8 unauth ZMQ→pickle RCE (NVD record Oct 8) survives its own disable flag — SGLANG_USE_PICKLE_IPC defaults true in environ.py and the msgpack path still processes PickleWrapper. 'No fixed release' verified at seed time 10-10 05:20 (+08:00): /releases/latest still v0.5.21 (Oct 2, predates the record), zero pickle/zmq/CVE commits in the last 30, repo alive (pushed 10-09). Any release past v0.5.21 is the candidate fix — then the watch clause 'does the decoder drop PickleWrapper, or does only the default flip?' gets answered from the actual diff"
-  },
-  {
-   "repo": "Legcord/Legcord",
-   "why": "CVE-2026-105293/-105294 (thesis 2 / [[security]]): theme-IPC path traversal 9.2 v4.0 + setConfig TLS-stripping 9.1, both covering 1.1.0-1.3.0 while /releases/latest is still v1.3.0 (Jul 26, in range) - verified live at arm time 10-15 21:04 (+08:00): repo alive (pushed 10-14, not archived, 3,475 stars), OSV carries ZERO advisories for the npm package (re-checked by query). The pre-SGLang-lesson item that never got a channel (filed 10-06, last manual check 10-07). Any release past v1.3.0 is the candidate fix - then the watch clause 'does the theme loader get a traversal fix or a privilege rework?' gets answered from the actual diff"
-  },
-  {
-   "repo": "ollaya-dev/ollaya",
-   "why": "System-1 local runner (thesis 6 / [[system1-decision]]): serves Jev-compatible single-forward-pass decision models locally behind Ollama-style commands (Rust, Apache-2.0, 91★, Show HN 09-26). The substantive HN pushback — Ollama could absorb the feature, the flagship example 'is basically classification' — gets tested by motion here: a release, decision-model docs, or a benchmark publication (currently vendor numbers only) is the daemon answering the why-not-Ollama challenge"
-  },
-  {
-   "repo": "fstandhartinger/jevbench",
-   "why": "decision-model board (thesis 6 / [[system1-decision]]): the unaffiliated 93-system board with sealed held-out items and a public-vs-sealed gap penalty (130★, Show HN 09-22). A release adding local runners (Ollaya et al) or a browser-agent harness adopting sealed items is the two open agenda watch-clauses landing"
-  },
-  {
-   "repo": "wfzyx/von",
-   "why": "System-1 clone race (thesis 6 / [[system1-decision]]): the 09-21 12:49 citation-integrity catch — README headline 71.5% v2 macro vs the cited jabr suite's own 66.7, a 91.23% 'SOTA' headline contradicting its own table, T=1.0367-vs-1.1692, and a ViZDoom row (9.38 kills) absent from the cited morethanamachine post. Any push is a chance the README-vs-suite gap got repaired; verify the numbers, not just the diff"
-  },
-  {
-   "repo": "jabr/classifier-benchmark",
-   "why": "System-1 same-harness suite (thesis 6 / [[system1-decision]]): the independent 4-model run that dominates the class comparison; its own file says v2 is 'preliminary — shared with the Von project for review before being promoted to the headline comparison in the README'. Watch for a second maintainer, non-synthetic cases, or v2 promotion out of preliminary"
-  },
-  {
-   "repo": "0xNatoshi/jev-codex-router",
-   "why": "System-1 routing primitive (thesis 6 / [[system1-decision]]): the first real harness adoption — Jev picks model+thinking-effort per Codex turn (15 pairs, one Choice question, fail-open, kill switch, local decision log); its −60% backtest is self-disclaimed simulation. A release or routing-policy change = the primitive hardening; also the thesis-11 tool-call-boundary question in miniature (a model judging every call)"
-  },
-  {
-   "repo": "NeOMakinG/kev-model-router",
-   "why": "System-1 routing primitive, open-weight side (thesis 6 / [[system1-decision]]): model routing powered by Kev (the open replica) — if the router role replicates on open weights, the control point ([[smart-routing]] lock-in thesis) is not proprietary"
-  },
-  {
-   "repo": "vllm-project/semantic-router",
-   "why": "routing-policy DSL (thesis 5 / [[smart-routing]]): the fragmenting-DSL reading predicts daily main-hardening with zero tagged releases past v0.3.0 Themis and no shared schema; a new tag means the reading needs a re-check"
-  },
-  {
-   "repo": "BitRouter/BitRouter",
-   "why": "routing-policy DSL (thesis 5 / [[smart-routing]]): git-owned policy-lock.yaml; still v1.0.0-alpha.27 (2026-07-18) at watch creation — a 1.0 tag would be the field's first shipped schema"
-  },
-  {
-   "repo": "Continuum-AI-Corp/OrcaRouter-Lite",
-   "why": "routing-policy DSL (thesis 5 / [[smart-routing]]): YAML+CEL + fusion panel; still v0.1.0-only at watch creation"
-  },
-  {
-   "repo": "weave-os/router",
-   "why": "routing-policy newest entrant (thesis 5, 08-29): on-box ONNX classifier proxy; renamed from workweave/router and shipped first git tags router-v0.2.14..16 (spotted 09-10); watch for a policy-schema claim — a per-project format shipping is fragmentation, not convergence"
-  },
-  {
-   "repo": "obra/superpowers",
-   "why": "skills-eval (thesis 8 / [[agent-plugins]]): largest skills repo (280k★) shipping no SkillsBench/Vals number — a release or README mention of SkillsBench/vals.ai = the no-submission gap moved"
-  },
-  {
-   "repo": "mattpocock/skills",
-   "why": "skills-eval (thesis 8 / [[agent-plugins]]): 243k★ assertion-only skills repo — same no-submission watch"
-  },
-  {
-   "repo": "multica-ai/andrej-karpathy-skills",
-   "why": "skills-eval (thesis 8 / [[agent-plugins]]): 209k★ frozen since 2026-04-20, no LICENSE — any push at all is a signal; a SkillsBench mention would end the no-submission gap"
-  },
-  {
-   "repo": "DietrichGebert/ponytail",
-   "why": "skills-eval + token-economics (theses 8/13): the self-benchmarking template (per-author evals, self-falsifying A/B) — watch for it adopting the shared corpus (SkillsBench/Vals) vs staying per-author"
-  },
-  {
-   "repo": "orval-labs/orval",
-   "why": "generated-code RCE class (thesis 2 / [[security]]): 17 published advisories (9 import-time RCE, published 2026-07-12), every one first_patched_version=null as of 09-04, latest v8.27.0 closes none — a fix release or advisory update surfaces here"
-  },
-  {
-   "repo": "SalesforceAIResearch/Random-Attention",
-   "why": "signal-free KV eviction (thesis 3 / [[edge-inference]]): watches the RA repo itself for a release/productionization signal; the upstream-integration half (vLLM/SGLang code) is covered by code-watch since 2026-09-06 — this entry alone could never see an upstream integration"
-  },
-  {
-   "repo": "zhengkid/Dream-RSI",
-   "why": "Dream-RSI code release (thesis 6 / [[frontier-models]]): the 1.22×/162× banner numbers are paper+banner until the README's 'Release plan' ships — six manual re-checks over 10 days (09-17→09-27) all null, pushed_at frozen at 09-16, note block still 'Code is being prepared for release'. Retired into release-watch 09-27 12:59: the code drop surfaces itself"
-  },
-  {
-   "repo": "robinber/dream-rsi-spark",
-   "why": "Dream-RSI independent reimplementation (thesis 6 / [[frontier-models]]): the DGX Spark section-3 rerun whose own README disclaims an advantage (fixed-policy control scored higher, 23.84× vs 22.65×) — a new push may post the first independent banner-number rerun; any posted result must be read with its own disclaimers attached"
-  },
-  {
-   "repo": "vectorize-io/hindsight",
-   "why": "agent-memory attention sink (thesis 1 / [[agent-stack]]): 39.6k★, the quarter's fastest riser; its LongMemEval SOTA attribution was corrected 09-28 to co-developer reproduction (2 of 7 paper authors are VT Sanghani faculty; WaPo a named dev collaborator — CLAUDE.md author-overlap rule seeded by it). A push/release is a chance the README's 'independently reproduced by research collaborators' phrasing or the benchmark claims change — verify the wording, not just the diff"
-  },
-  {
-   "repo": "PostHog/jeeves",
-   "why": "decision-model class (thesis 5 / [[system1-decision]]): the reasoning-improves-routers entry — Qwen3.5-9B + pointer head, 0.889 held-out vs Kev 0.822/Jev 0.857, weights + full training data MIT/Apache released 09-29 (first for the class). Watch fires on a third-party same-harness rerun covering Jev/Kev/Jeff/Jeeves on one sample (the agenda's open watch: each README's comparison columns are the others' published numbers) or any sealed JevBench adoption"
-  },
-  {
-   "repo": "anthropics/claude-code",
-   "body_regex": "(response|http)[ -]?headers?.{0,120}(injection|instruction|prompt|untrusted|sanitiz|strip|ignore|trust)|(injection|instruction|untrusted|sanitiz|strip|ignore).{0,120}(response|http)[ -]?headers?|header[ -]?(allowlist|allow-list|blocklist|block-list)|AI-directed",
-   "scan_count": 30,
-   "why": "header-channel watch (agenda, filed 10-16 12:45): the 7/9-obedience measurement — a harness-side response surfaces in release notes as response-header handling (strip/allowlist/trust boundary). Near-daily releases, so body_regex scan mode: only tags with matching BODIES announce; plain tag churn re-baselines silently. Seed 10-16 13:38: 30 releases baselined, 0 pre-seed mentions"
-  },
-  {
-   "repo": "openai/codex",
-   "body_regex": "(response|http)[ -]?headers?.{0,120}(injection|instruction|prompt|untrusted|sanitiz|strip|ignore|trust)|(injection|instruction|untrusted|sanitiz|strip|ignore).{0,120}(response|http)[ -]?headers?|header[ -]?(allowlist|allow-list|blocklist|block-list)|AI-directed",
-   "scan_count": 30,
-   "why": "header-channel watch (agenda, filed 10-16 12:45): same clause as claude-code — Codex release notes mentioning response-header handling. Scan mode (body_regex): near-daily stream, only matching bodies announce"
-  },
-  {
-   "repo": "google-gemini/gemini-cli",
-   "body_regex": "(response|http)[ -]?headers?.{0,120}(injection|instruction|prompt|untrusted|sanitiz|strip|ignore|trust)|(injection|instruction|untrusted|sanitiz|strip|ignore).{0,120}(response|http)[ -]?headers?|header[ -]?(allowlist|allow-list|blocklist|block-list)|AI-directed",
-   "scan_count": 30,
-   "why": "header-channel watch (agenda, filed 10-16 12:45): same clause as claude-code — Gemini CLI release notes mentioning response-header handling. Scan mode (body_regex): only matching bodies announce"
-  },
-  {
-   "repo": "anomalyco/opencode",
-   "body_regex": "(post.?mortem|unauthorized access|security incident|breach|incident (report|timeline|review)|forensic|key.{0,30}(rotat|revoke|compromis|expos|leak)|(rotat|revoke).{0,20}key|provider key|credential.{0,30}(storage|handling|leak|compromis)|keychain|secret.{0,24}(storage|handling)|workspace.{0,20}key)",
-   "scan_count": 30,
-   "why": "OpenCode breach follow-up (agenda, filed 10-18 04:30): the harness-tier breach disclosed ~10-17 late UTC — workspace-saved provider keys possibly exposed, every user asked to rotate; root cause, method, and scope unstated (statement read first-hand in HN 50133401; first check 10-18 05:02, ~11h in: no post-mortem, no incident commit, latest release v1.19.3 predates the disclosure). Near-daily release stream → scan mode: only matching bodies announce. The watch answers the item's design clause from the changelog itself — a post-mortem note, or a key-storage change (keychain/secret handling) shipping as a release"
-  },
-  {
-   "repo": "Tongyi-MAI/OpenGCUA",
-   "why": "OpenGCUA model watch (agenda, filed 10-19 04:44; armed 10-19 05:16): Tongyi-MAI opened the computer-use commons (harness + 8 frontier models' trajectories + cross-device SDK, arXiv 2610.22200) with the GCUA model itself PLANNED, not shipped — README first-hand 10-19: \"our next release, the GCUA model\". Baseline verified live at seed: one release, v0.1.0 (2026-10-16 06:14Z), repo pushed 10-17 07:44Z, 112 stars. Any release past v0.1.0 is the model-release candidate — paired with disclosure-watch entry opengcua-model (HF org Tongyi-MAI), since the model may land as weights-first or release-first"
-  }
- ]
+  "watch": [
+    {
+      "repo": "Gathin23/cleanyourtv",
+      "why": "thesis 16 — cleanyourtv (6,430★ at seed 10-20 ~05:00Z, created 10-17, TechCrunch/Tom's Hardware wave, ZERO HN stories at seed): the first mass-market tooling moment of a coding agent modifying consumer hardware over the network; the Research item watches the ACR business model's available responses — firmware lock, ToS amendment, takedown — or the other fork, a vendor shipping its own clean-home-screen mode. Release-dense repo (v2.1.0→v2.3.0 all on 10-19; README 66 models/14 languages runs ahead of the v2.3.0 tag \"54 TVs, 12 languages\"), so any release past v2.3.0 is either escalation (more TV lists — growth) or response (brands pulled after vendor contact — the release body would say so). Seeded at v2.3.0"
+    },
+    {
+      "repo": "RVC-Boss/GPT-SoVITS",
+      "why": "CVE-2025-71429 (thesis 2 / [[security]]): the 9.8 v3.1 / 9.3 v4.0 unauth OS command injection in the UVR5 WebUI (VulnCheck-scored, no CNA — researcher-assigned) is present in EVERY released version — verified live at seed time 10-14 05:30 (+08:00): /releases/latest still 20250606v2pro (June 2025) and the os.system(cmd) path still on main. Third recurrence of the 'latest release still vulnerable' shape (BotSharp, AhsayCBS precedents). Any release past 20250606v2pro is the candidate fix — then the watch clause 'does tools/uvr5/vr.py drop os.system, or does only the default bind flip?' gets answered from the actual diff"
+    },
+    {
+      "repo": "SciSharp/BotSharp",
+      "why": "CVE-2026-108860 (thesis 2 / [[security]]): the JWT-signing-key LPE (VulnCheck-scored 9.3 v4.0 Secondary / 9.1 v3.1 Primary, NVD record published 10-11) is present in the LATEST release r5.2-image-composition (2025-10-17) — verified live at seed time 10-13 05:32 (+08:00): /releases still tops out there, repo alive (pushed 09-29, not archived, 3.1k★), zero security commits in the last 15 (feature work only). A year-old latest release + active master = releases-track users have no upgrade path; only master could carry a fix, and no commit subject names the JWT key. Any release past r5.2 is the candidate fix — then the watch clause 'does the key rotation land, or only the advisory?' gets answered from the actual diff"
+    },
+    {
+      "repo": "sgl-project/sglang",
+      "why": "CVE-2026-93034 (thesis 2 / [[security]]): the 9.8 unauth ZMQ→pickle RCE (NVD record Oct 8) survives its own disable flag — SGLANG_USE_PICKLE_IPC defaults true in environ.py and the msgpack path still processes PickleWrapper. 'No fixed release' verified at seed time 10-10 05:20 (+08:00): /releases/latest still v0.5.21 (Oct 2, predates the record), zero pickle/zmq/CVE commits in the last 30, repo alive (pushed 10-09). Any release past v0.5.21 is the candidate fix — then the watch clause 'does the decoder drop PickleWrapper, or does only the default flip?' gets answered from the actual diff"
+    },
+    {
+      "repo": "Legcord/Legcord",
+      "why": "CVE-2026-105293/-105294 (thesis 2 / [[security]]): theme-IPC path traversal 9.2 v4.0 + setConfig TLS-stripping 9.1, both covering 1.1.0-1.3.0 while /releases/latest is still v1.3.0 (Jul 26, in range) - verified live at arm time 10-15 21:04 (+08:00): repo alive (pushed 10-14, not archived, 3,475 stars), OSV carries ZERO advisories for the npm package (re-checked by query). The pre-SGLang-lesson item that never got a channel (filed 10-06, last manual check 10-07). Any release past v1.3.0 is the candidate fix - then the watch clause 'does the theme loader get a traversal fix or a privilege rework?' gets answered from the actual diff"
+    },
+    {
+      "repo": "ollaya-dev/ollaya",
+      "why": "System-1 local runner (thesis 6 / [[system1-decision]]): serves Jev-compatible single-forward-pass decision models locally behind Ollama-style commands (Rust, Apache-2.0, 91★, Show HN 09-26). The substantive HN pushback — Ollama could absorb the feature, the flagship example 'is basically classification' — gets tested by motion here: a release, decision-model docs, or a benchmark publication (currently vendor numbers only) is the daemon answering the why-not-Ollama challenge"
+    },
+    {
+      "repo": "fstandhartinger/jevbench",
+      "why": "decision-model board (thesis 6 / [[system1-decision]]): the unaffiliated 93-system board with sealed held-out items and a public-vs-sealed gap penalty (130★, Show HN 09-22). A release adding local runners (Ollaya et al) or a browser-agent harness adopting sealed items is the two open agenda watch-clauses landing"
+    },
+    {
+      "repo": "wfzyx/von",
+      "why": "System-1 clone race (thesis 6 / [[system1-decision]]): the 09-21 12:49 citation-integrity catch — README headline 71.5% v2 macro vs the cited jabr suite's own 66.7, a 91.23% 'SOTA' headline contradicting its own table, T=1.0367-vs-1.1692, and a ViZDoom row (9.38 kills) absent from the cited morethanamachine post. Any push is a chance the README-vs-suite gap got repaired; verify the numbers, not just the diff"
+    },
+    {
+      "repo": "jabr/classifier-benchmark",
+      "why": "System-1 same-harness suite (thesis 6 / [[system1-decision]]): the independent 4-model run that dominates the class comparison; its own file says v2 is 'preliminary — shared with the Von project for review before being promoted to the headline comparison in the README'. Watch for a second maintainer, non-synthetic cases, or v2 promotion out of preliminary"
+    },
+    {
+      "repo": "0xNatoshi/jev-codex-router",
+      "why": "System-1 routing primitive (thesis 6 / [[system1-decision]]): the first real harness adoption — Jev picks model+thinking-effort per Codex turn (15 pairs, one Choice question, fail-open, kill switch, local decision log); its −60% backtest is self-disclaimed simulation. A release or routing-policy change = the primitive hardening; also the thesis-11 tool-call-boundary question in miniature (a model judging every call)"
+    },
+    {
+      "repo": "NeOMakinG/kev-model-router",
+      "why": "System-1 routing primitive, open-weight side (thesis 6 / [[system1-decision]]): model routing powered by Kev (the open replica) — if the router role replicates on open weights, the control point ([[smart-routing]] lock-in thesis) is not proprietary"
+    },
+    {
+      "repo": "vllm-project/semantic-router",
+      "why": "routing-policy DSL (thesis 5 / [[smart-routing]]): the fragmenting-DSL reading predicts daily main-hardening with zero tagged releases past v0.3.0 Themis and no shared schema; a new tag means the reading needs a re-check"
+    },
+    {
+      "repo": "BitRouter/BitRouter",
+      "why": "routing-policy DSL (thesis 5 / [[smart-routing]]): git-owned policy-lock.yaml; still v1.0.0-alpha.27 (2026-07-18) at watch creation — a 1.0 tag would be the field's first shipped schema"
+    },
+    {
+      "repo": "Continuum-AI-Corp/OrcaRouter-Lite",
+      "why": "routing-policy DSL (thesis 5 / [[smart-routing]]): YAML+CEL + fusion panel; still v0.1.0-only at watch creation"
+    },
+    {
+      "repo": "weave-os/router",
+      "why": "routing-policy newest entrant (thesis 5, 08-29): on-box ONNX classifier proxy; renamed from workweave/router and shipped first git tags router-v0.2.14..16 (spotted 09-10); watch for a policy-schema claim — a per-project format shipping is fragmentation, not convergence"
+    },
+    {
+      "repo": "obra/superpowers",
+      "why": "skills-eval (thesis 8 / [[agent-plugins]]): largest skills repo (280k★) shipping no SkillsBench/Vals number — a release or README mention of SkillsBench/vals.ai = the no-submission gap moved"
+    },
+    {
+      "repo": "mattpocock/skills",
+      "why": "skills-eval (thesis 8 / [[agent-plugins]]): 243k★ assertion-only skills repo — same no-submission watch"
+    },
+    {
+      "repo": "multica-ai/andrej-karpathy-skills",
+      "why": "skills-eval (thesis 8 / [[agent-plugins]]): 209k★ frozen since 2026-04-20, no LICENSE — any push at all is a signal; a SkillsBench mention would end the no-submission gap"
+    },
+    {
+      "repo": "DietrichGebert/ponytail",
+      "why": "skills-eval + token-economics (theses 8/13): the self-benchmarking template (per-author evals, self-falsifying A/B) — watch for it adopting the shared corpus (SkillsBench/Vals) vs staying per-author"
+    },
+    {
+      "repo": "orval-labs/orval",
+      "why": "generated-code RCE class (thesis 2 / [[security]]): 17 published advisories (9 import-time RCE, published 2026-07-12), every one first_patched_version=null as of 09-04, latest v8.27.0 closes none — a fix release or advisory update surfaces here"
+    },
+    {
+      "repo": "SalesforceAIResearch/Random-Attention",
+      "why": "signal-free KV eviction (thesis 3 / [[edge-inference]]): watches the RA repo itself for a release/productionization signal; the upstream-integration half (vLLM/SGLang code) is covered by code-watch since 2026-09-06 — this entry alone could never see an upstream integration"
+    },
+    {
+      "repo": "zhengkid/Dream-RSI",
+      "why": "Dream-RSI code release (thesis 6 / [[frontier-models]]): the 1.22×/162× banner numbers are paper+banner until the README's 'Release plan' ships — six manual re-checks over 10 days (09-17→09-27) all null, pushed_at frozen at 09-16, note block still 'Code is being prepared for release'. Retired into release-watch 09-27 12:59: the code drop surfaces itself"
+    },
+    {
+      "repo": "robinber/dream-rsi-spark",
+      "why": "Dream-RSI independent reimplementation (thesis 6 / [[frontier-models]]): the DGX Spark section-3 rerun whose own README disclaims an advantage (fixed-policy control scored higher, 23.84× vs 22.65×) — a new push may post the first independent banner-number rerun; any posted result must be read with its own disclaimers attached"
+    },
+    {
+      "repo": "vectorize-io/hindsight",
+      "why": "agent-memory attention sink (thesis 1 / [[agent-stack]]): 39.6k★, the quarter's fastest riser; its LongMemEval SOTA attribution was corrected 09-28 to co-developer reproduction (2 of 7 paper authors are VT Sanghani faculty; WaPo a named dev collaborator — CLAUDE.md author-overlap rule seeded by it). A push/release is a chance the README's 'independently reproduced by research collaborators' phrasing or the benchmark claims change — verify the wording, not just the diff"
+    },
+    {
+      "repo": "PostHog/jeeves",
+      "why": "decision-model class (thesis 5 / [[system1-decision]]): the reasoning-improves-routers entry — Qwen3.5-9B + pointer head, 0.889 held-out vs Kev 0.822/Jev 0.857, weights + full training data MIT/Apache released 09-29 (first for the class). Watch fires on a third-party same-harness rerun covering Jev/Kev/Jeff/Jeeves on one sample (the agenda's open watch: each README's comparison columns are the others' published numbers) or any sealed JevBench adoption"
+    },
+    {
+      "repo": "anthropics/claude-code",
+      "body_regex": "(response|http)[ -]?headers?.{0,120}(injection|instruction|prompt|untrusted|sanitiz|strip|ignore|trust)|(injection|instruction|untrusted|sanitiz|strip|ignore).{0,120}(response|http)[ -]?headers?|header[ -]?(allowlist|allow-list|blocklist|block-list)|AI-directed",
+      "scan_count": 30,
+      "why": "header-channel watch (agenda, filed 10-16 12:45): the 7/9-obedience measurement — a harness-side response surfaces in release notes as response-header handling (strip/allowlist/trust boundary). Near-daily releases, so body_regex scan mode: only tags with matching BODIES announce; plain tag churn re-baselines silently. Seed 10-16 13:38: 30 releases baselined, 0 pre-seed mentions"
+    },
+    {
+      "repo": "openai/codex",
+      "body_regex": "(response|http)[ -]?headers?.{0,120}(injection|instruction|prompt|untrusted|sanitiz|strip|ignore|trust)|(injection|instruction|untrusted|sanitiz|strip|ignore).{0,120}(response|http)[ -]?headers?|header[ -]?(allowlist|allow-list|blocklist|block-list)|AI-directed",
+      "scan_count": 30,
+      "why": "header-channel watch (agenda, filed 10-16 12:45): same clause as claude-code — Codex release notes mentioning response-header handling. Scan mode (body_regex): near-daily stream, only matching bodies announce"
+    },
+    {
+      "repo": "google-gemini/gemini-cli",
+      "body_regex": "(response|http)[ -]?headers?.{0,120}(injection|instruction|prompt|untrusted|sanitiz|strip|ignore|trust)|(injection|instruction|untrusted|sanitiz|strip|ignore).{0,120}(response|http)[ -]?headers?|header[ -]?(allowlist|allow-list|blocklist|block-list)|AI-directed",
+      "scan_count": 30,
+      "why": "header-channel watch (agenda, filed 10-16 12:45): same clause as claude-code — Gemini CLI release notes mentioning response-header handling. Scan mode (body_regex): only matching bodies announce"
+    },
+    {
+      "repo": "anomalyco/opencode",
+      "body_regex": "(post.?mortem|unauthorized access|security incident|breach|incident (report|timeline|review)|forensic|key.{0,30}(rotat|revoke|compromis|expos|leak)|(rotat|revoke).{0,20}key|provider key|credential.{0,30}(storage|handling|leak|compromis)|keychain|secret.{0,24}(storage|handling)|workspace.{0,20}key)",
+      "scan_count": 30,
+      "why": "OpenCode breach follow-up (agenda, filed 10-18 04:30): the harness-tier breach disclosed ~10-17 late UTC — workspace-saved provider keys possibly exposed, every user asked to rotate; root cause, method, and scope unstated (statement read first-hand in HN 50133401; first check 10-18 05:02, ~11h in: no post-mortem, no incident commit, latest release v1.19.3 predates the disclosure). Near-daily release stream → scan mode: only matching bodies announce. The watch answers the item's design clause from the changelog itself — a post-mortem note, or a key-storage change (keychain/secret handling) shipping as a release"
+    },
+    {
+      "repo": "Tongyi-MAI/OpenGCUA",
+      "why": "OpenGCUA model watch (agenda, filed 10-19 04:44; armed 10-19 05:16): Tongyi-MAI opened the computer-use commons (harness + 8 frontier models' trajectories + cross-device SDK, arXiv 2610.22200) with the GCUA model itself PLANNED, not shipped — README first-hand 10-19: \"our next release, the GCUA model\". Baseline verified live at seed: one release, v0.1.0 (2026-10-16 06:14Z), repo pushed 10-17 07:44Z, 112 stars. Any release past v0.1.0 is the model-release candidate — paired with disclosure-watch entry opengcua-model (HF org Tongyi-MAI), since the model may land as weights-first or release-first"
+    }
+  ]
 }

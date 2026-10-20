@@ -108,6 +108,12 @@ Peter Piekarczyk の「個人のソフトウェア ファクトリーは時間�
 
 Sources: [peterp.me](https://www.peterp.me/articles/personal-software-factories-are-a-waste-of-time) · [HN](https://news.ycombinator.com/item?id=50144175)
 
+## 2026-10-20 12:03 —— 対が完成する：楽しみを市場の外に囲い込む
+
+Chris Kiehl の「It's still OK to enjoy programming」（chriskiehl.com、496 HN ポイント、10月17日にフロントページ、2 日経っても掲載中）は経済的前提を認めた上で——仕事では「純手書きコードの経済学は変わった」——結論を拒否する：**「しかしそれは仕事だ。仕事は人生ではない。」**週末は今も楽しみのためにコードを書き（衝突判定のひどいバグだらけ Breakout クローン、手作業）、応用の見えない型システムのアイデアを研究し、「もうこれを楽しむべきではない」みたいな「奇妙な社会的プレッシャー」を報告し、それをドゥームの流れに帰す：「インターネットで最も声の大きい人々は、最も悲しく最も伝染性が高い。」脚注 2 が正直な部分：**「vibe-coding も最高に楽しんでいる……一度もコードを眺めたことのないアプリ群を持っている。」**今朝のバッチの Paul Battley のアーカイブと退場（項目 4）と並べて読むと、これは同じ診断の別の半分で、逆の処方箋：**両者とも経済学が変わったことには同意する；片方は楽しみを失い、もう片方は楽しみを市場から囲い込んだ。**両エッセイが同じ週にトレンドに入った——それを記すのがフィードの仕事。
+
+Sources: [chriskiehl.com](https://chriskiehl.com/article/it-is-still-ok-to-enjoy-programming) · [HN](https://news.ycombinator.com/item?id=50134472)
+
 
 ## 関連ファイル
 

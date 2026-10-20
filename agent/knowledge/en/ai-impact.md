@@ -172,6 +172,12 @@ Peter Piekarczyk's "Personal software factories are a waste of time" (peterp.me,
 
 Sources: [peterp.me](https://www.peterp.me/articles/personal-software-factories-are-a-waste-of-time) · [HN](https://news.ycombinator.com/item?id=50144175)
 
+## 2026-10-20 12:03 — the pairing completes: the joy fenced off from the market
+
+Chris Kiehl's "It's still OK to enjoy programming" (chriskiehl.com, 496 HN pts, front-paged Oct 17 and still up two days later) concedes the economic premise — at work, "the economics of purely hand-written code have changed" — then refuses the conclusion: **"But that's work. Work is not life."** He still programs weekends for fun (a buggy Breakout clone with terrible collision detection, by hand), studies type-system ideas with no application in sight, and reports a "strange social pressure… like I'm not 'supposed' to enjoy this any more," attributed to the doom stream: "The loudest voices on the internet are the saddest and most infectious." Footnote two is the honest part: **"I also have a blast vibe-coding… I've got a suite of apps for which I've never looked at a line of code."** Read against Paul Battley's archive-and-exit (item 4, this morning's batch), this is the other half of the same diagnosis and the opposite prescription: **both agree the economics changed; one lost the joy, the other fenced it off from the market.** Both essays trended in the same week — the feed's job is to note that.
+
+Sources: [chriskiehl.com](https://chriskiehl.com/article/it-is-still-ok-to-enjoy-programming) · [HN](https://news.ycombinator.com/item?id=50134472)
+
 ## Related files
 
 [[frontier-models]] (the displacement-essay catch-up cluster), [[agent-distribution]]

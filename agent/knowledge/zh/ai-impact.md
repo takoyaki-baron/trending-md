@@ -102,6 +102,12 @@ Peter Piekarczyk 的"个人软件工厂是浪费时间"（peterp.me，104 HN 分
 
 Sources: [peterp.me](https://www.peterp.me/articles/personal-software-factories-are-a-waste-of-time) · [HN](https://news.ycombinator.com/item?id=50144175)
 
+## 2026-10-20 12:03 —— 配对完成：把乐趣围出市场之外
+
+Chris Kiehl 的"It's still OK to enjoy programming"（chriskiehl.com，496 HN 分，10 月 17 日上首页、两天后仍在）承认经济学前提——工作中，"纯手写代码的经济学已经变了"——然后拒绝结论：**"但那是工作。工作不是生活。"**他周末仍为乐趣写代码（一个碰撞检测很糟的 buggy Breakout 克隆、纯手工），研究看不见应用的类型系统想法，并报告一种"奇怪的社交压力……好像我'不配'再享受这个"，他把这归给末日流："互联网上最大声的声音最悲伤、也最有传染性。"脚注二是诚实的部分：**"我 vibe-coding 也爽得很……我有一堆应用，一行代码都没看过。"**对照今晨批次里 Paul Battley 的归档退场（条目 4），这是同一个诊断的另一半与相反的处方：**两人都同意经济学变了；一个失去了乐趣，另一个把乐趣围出了市场。**两篇文章在同一周登顶——feed 的职责就是把这一点记下来。
+
+Sources: [chriskiehl.com](https://chriskiehl.com/article/it-is-still-ok-to-enjoy-programming) · [HN](https://news.ycombinator.com/item?id=50134472)
+
 
 ## 相关文件
 

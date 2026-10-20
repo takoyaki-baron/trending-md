@@ -12803,5 +12803,86 @@
   "en": "Cybernews's AI news desk; fast aggregation with named-source write-ups, but a secondary outlet — treat its attributions as leads. Cross-checked 2026-10-20: its TV4 'human error, not AI' resolution line matched heise's independent summary of the same statement.",
   "zh": "Cybernews 的 AI 新闻组；聚合速度快、会写明信源，但属二手媒体——其归因只当线索用。2026-10-20 交叉核验：其 TV4「人为失误而非 AI」的结论表述与 heise 对同一声明的独立概述一致。",
   "jp": "Cybernews の AI ニュース部。速い集約と明示的なソース付き記事だが二次メディア——帰属はリードとして扱う。2026-10-20 突合済み：TV4「ヒューマンエラーであって AI ではない」の結論表現が、heise による同じ声明の独立要約と一致。"
+ },
+ "openbsd.org": {
+  "cat": "vendor",
+  "cred": "high",
+  "cv": 1,
+  "density": "high",
+  "en": "The OpenBSD project's own site — canonical for release pages (61st release, 8.0: 512G amd64 kernel address space, drm to Linux 6.18.53, arm64 hibernate). Cross-checked (10-20): the page's 'drm(4) to Linux 6.18.53 / Intel Arc DG2' lines match the separate bsd.network announcement quoted on HN, and the release-day marc.info post confirms the date.",
+  "zh": "OpenBSD 项目自建站点——发布页的权威来源(第 61 个版本 8.0:512G amd64 内核地址空间、drm 升至 Linux 6.18.53、arm64 休眠)。交叉核验(10-20):页面的 'drm(4) to Linux 6.18.53 / Intel Arc DG2' 表述与 HN 上引用的 bsd.network 公告一致,发布当日的 marc.info 帖子确认了日期。",
+  "jp": "OpenBSD プロジェクトの公式サイト——リリースページの一次情報(61 番目のリリース 8.0:512G amd64 カーネルアドレス空間、drm を Linux 6.18.53 へ、arm64 ハイバネート)。相互検証(10-20):ページの 'drm(4) to Linux 6.18.53 / Intel Arc DG2' の記述は HN で引用された bsd.network の発表と一致し、リリース当日の marc.info 投稿が日付を裏付ける。"
+ },
+ "redact.dev": {
+  "cat": "news",
+  "cred": "med",
+  "cv": 1,
+  "density": "high",
+  "en": "Redact (mass-deletion tooling) company blog; its WhatsApp hidden-AI-notes investigation quotes page diffs verbatim and names its method (545 pages crawled). Cross-checked (10-20): the post's WIRED follow-up — WhatsApp attributing the notes to a support-chatbot bug — is an independent second party reporting the same findings, and the before/after is verifiable in the Internet Archive snapshots it links.",
+  "zh": "Redact(批量删除工具)的公司博客;其 WhatsApp 隐藏 AI 指令调查逐字引用页面差异并公开方法(爬取 545 页)。交叉核验(10-20):文中的 WIRED 后续报道——WhatsApp 将这些注释归因于支持聊天机器人的 bug——是对同一发现的独立第二方报道,前后差异可通过其链接的 Internet Archive 快照验证。",
+  "jp": "Redact(一括削除ツール)の企業ブログ。WhatsApp 隠し AI 指令の調査はページ差分を逐語引用し、手法(545 ページをクロール)を明示。相互検証(10-20):記事内の WIRED 追報——WhatsApp がこれらの注記をサポートチャットボットのバグと説明——は同じ発見を報じた独立の第三者であり、前後の差分はリンクされた Internet Archive スナップショットで検証可能。"
+ },
+ "jwz.org": {
+  "cat": "community",
+  "cred": "high",
+  "cv": 1,
+  "density": "high",
+  "en": "Jamie Zawinski's personal blog and the canonical XScreenSaver home — first-hand for the 'gitsquatting' incident (no official GitHub repo; the xscreensaver-official repo exists only to say so). Cross-checked (10-20): the blog post matches the repo README it links, and the HN-adjacent comment thread names the squatted github.com/xscreensaver org as the trigger.",
+  "zh": "Jamie Zawinski 的个人博客,也是 XScreenSaver 的正典主页——'gitsquatting' 事件的一手来源(没有官方 GitHub 仓库;xscreensaver-official 仓库的存在本身就是为了说明这一点)。交叉核验(10-20):博客文章与其链接的仓库 README 相符,评论区点名了触发事件的抢注组织 github.com/xscreensaver。",
+  "jp": "Jamie Zawinski 氏の個人ブログにして XScreenSaver の公式ホーム——「gitsquatting」事件の一次情報(公式 GitHub リポジトリは存在しない。xscreensaver-official リポジトリはそれを告知するためだけに存在)。相互検証(10-20):ブログ記事はリンク先のリポジトリ README と一致し、コメント欄は引き金となった乗っ取り org github.com/xscreensaver を実名で挙げる。"
+ },
+ "projectdiscovery.io": {
+  "cat": "security",
+  "cred": "high",
+  "cv": 1,
+  "density": "high",
+  "en": "Project Discovery's security research blog — first-hand for the backdoored-abliterated-model demo (LoRA poison rates, trigger fire rates, <$50 cost, all self-run and labeled as such). Cross-checked (10-20): its cited literature lines up with the published record — the ~250-poisoned-documents constant is the Anthropic/UK AIS/Alan Turing study, and the Sleeper Agents/BadAgent lineage is real; no claim lacked a named source.",
+  "zh": "Project Discovery 的安全研究博客——后门化 abliterated 模型演示的一手来源(LoRA 投毒比例、触发命中率、不到 50 美元的成本,全部自测并如此标注)。交叉核验(10-20):其引用的文献与已发表记录相符——约 250 份投毒文档的常数即 Anthropic/英国 AIS/图灵研究所的研究,Sleeper Agents/BadAgent 的谱系属实;没有一条主张缺少具名来源。",
+  "jp": "Project Discovery のセキュリティ研究ブログ。バックドア入り abliterated モデルのデモの一次情報(LoRA 毒入れ率、トリガー発火率、50 ドル弱のコスト。すべて自己実行でその旨明記)。相互検証(10-20):引用文献は公刊記録と一致——約 250 件の毒入り文書という定数は Anthropic/英 AIS/チューリング研究所の研究で、Sleeper Agents/BadAgent の系譜も実在。出典のない主張はなかった。"
+ },
+ "public-inspection.federalregister.gov": {
+  "cat": "data",
+  "cred": "high",
+  "cv": 1,
+  "density": "high",
+  "en": "The Federal Register's public-inspection preview — the primary document for the DHS FASCSA order on DeepSeek (Docket DHS-2026-0628) before canonical publication. Cross-checked (10-20): the extracted order text (exclusion + removal, 'third-party products and services developed using DeepSeek implementations') matches Reuters's reporting and the HN thread's verbatim transcriptions.",
+  "zh": "Federal Register 的公开预览渠道——DHS 对 DeepSeek 的 FASCSA 命令(Docket DHS-2026-0628)在正式刊载前的一手文件。交叉核验(10-20):提取的命令文本(排除+移除,'使用 DeepSeek 实现开发的第三方产品和服务')与 Reuters 的报道及 HN 讨论串的逐字转录一致。",
+  "jp": "Federal Register の公開プレビュー——DHS の DeepSeek に対する FASCSA 命令(Docket DHS-2026-0628)の正式掲載前の一次文書。相互検証(10-20):抽出した命令文(排除+除去、「DeepSeek 実装を用いて開発されたサードパーティ製品・サービス」)は Reuters の報道と HN スレッドの逐字転写と一致。"
+ },
+ "gamingonlinux.com": {
+  "cat": "news",
+  "cred": "med",
+  "cv": 1,
+  "density": "med",
+  "en": "Linux-gaming news site; first coverage of BRUTAL's source release (Oct 16), quoting the RocketWerkz press release directly. Cross-checked (10-20): the Dean Hall quotes and the framework's self-description (no editor/renderer, MIT-based, six projects across three studios) match the repo README verbatim.",
+  "zh": "Linux 游戏新闻站;BRUTAL 开源(10 月 16 日)的首发报道,直接引用 RocketWerkz 新闻稿。交叉核验(10-20):Dean Hall 的引语与框架自述(无编辑器/渲染器、基于 MIT、三个工作室的六个项目)与仓库 README 逐字一致。",
+  "jp": "Linux ゲーム系ニュースサイト。BRUTAL ソース公開(10月16日)の最初の報道で、RocketWerkz のプレスリリースを直接引用。相互検証(10-20):Dean Hall 氏の引用とフレームワークの自己記述(エディタ/レンダラなし、MIT ベース、3 スタジオ 6 プロジェクト)はリポジトリ README と逐語一致。"
+ },
+ "josie.lol": {
+  "cat": "community",
+  "cred": "med",
+  "cv": 1,
+  "density": "high",
+  "en": "Personal engineering blog; first-hand for the Arch-on-RTX-Spark bring-up (ACPI overrides, Archinstall extension, hash-pinned packages, all published). Cross-checked (10-20): the post validates its own 7-Zip numbers against ComputerBase's published Windows result (their 155.774 GIPS sits inside the author's measured 155.759–157.193 range), and the hardware specs match ASUS's published ProArt P16 H7607BA configuration.",
+  "zh": "个人工程博客;RTX Spark 上跑 Arch 的点亮记录的一手来源(ACPI override、Archinstall 扩展、哈希锁定的软件包,全部公开)。交叉核验(10-20):文章用 ComputerBase 公布的 Windows 7-Zip 成绩校验了自己的数字(其 155.774 GIPS 落在作者实测的 155.759–157.193 区间内),硬件规格与 ASUS 公布的 ProArt P16 H7607BA 配置一致。",
+  "jp": "個人エンジニアリングブログ。RTX Spark 上の Arch 起動記録の一次情報(ACPI オーバーライド、Archinstall 拡張、ハッシュ固定パッケージ。すべて公開済み)。相互検証(10-20):記事は自らの 7-Zip 数値を ComputerBase 公表の Windows 結果で検証しており(同社の 155.774 GIPS は著者の実測 155.759–157.193 の範囲内)、ハード仕様は ASUS 公表の ProArt P16 H7607BA 構成と一致。"
+ },
+ "chriskiehl.com": {
+  "cat": "community",
+  "cred": "med",
+  "cv": 1,
+  "density": "med",
+  "en": "Chris Kiehl's personal blog — first-person essays ('It's still OK to enjoy programming'); a primary source for its own argument, not for facts. Cross-checked (10-20): authorship and reception confirmed via the HN discussion (496+ pts), and the quoted passages match the fetched page text exactly.",
+  "zh": "Chris Kiehl 的个人博客——第一人称随笔(《享受编程仍然没有问题》);是其自身论证的一手来源,而非事实来源。交叉核验(10-20):作者身份与反响经 HN 讨论串(496+ pts)确认,引文与抓取的页面文本逐字一致。",
+  "jp": "Chris Kiehl 氏の個人ブログ——一人称エッセイ(「プログラミングを楽しむのは、まだ何も間違っていない」)。その主張自体の一次情報であり、事実の情報源ではない。相互検証(10-20):著者と受け止められ方は HN 議論(496+ pts)で確認、引用文は取得ページのテキストと逐語一致。"
+ },
+ "calabro.io": {
+  "cat": "community",
+  "cred": "med",
+  "cv": 1,
+  "density": "high",
+  "en": "Personal blog of a Bluesky backend engineer; first-hand for the production bloom-filter architecture (Scylla-fronting filters, ~1% positive rate) and the one-hash derivation, hand-written by the author's own note. Cross-checked (10-20): the production claims are consistent with Bluesky's publicly documented appview/Scylla architecture, and the Kirsch–Mitzenmacher double-hash lineage matches the published 2008 paper.",
+  "zh": "一位 Bluesky 后端工程师的个人博客;生产环境布隆过滤器架构(前置 Scylla 的过滤器、约 1% 正命中)与单哈希推导的一手来源,作者自注全部手写。交叉核验(10-20):生产说法与 Bluesky 公开文档记载的 appview/Scylla 架构一致,Kirsch–Mitzenmacher double hashing 谱系与 2008 年发表的论文相符。",
+  "jp": "Bluesky のバックエンドエンジニアによる個人ブログ。本番ブルームフィルター構造(Scylla を前段に置くフィルタ、約 1% の陽性率)と 1 ハッシュ導出の一次情報で、著者自身の注記によればすべて手書き。相互検証(10-20):本番に関する主張は Bluesky の公開ドキュメントにある appview/Scylla 構造と整合し、Kirsch–Mitzenmacher double hashing の系譜は 2008 年の公刊論文と一致。"
  }
 }

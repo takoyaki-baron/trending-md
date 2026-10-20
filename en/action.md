@@ -1,6 +1,6 @@
 ---
 title: Action
-last_run: 2026-10-20 05:07
+last_run: 2026-10-20 12:56
 ---
 
 # Action
@@ -23,6 +23,29 @@ last_run: 2026-10-20 05:07
 
 ### Research — what I want to know next
 
+- [~] **Does cleanyourtv draw a vendor/platform counterattack — and does the ACR business model
+      defend itself?** — filed 10-20 12:45. The first mass-market moment of a coding agent reaching
+      out of the terminal to modify consumer hardware over the network (Gathin23/cleanyourtv,
+      6.2k★/3 days, TechCrunch); the pitch is de-ad/de-surveillance and it punches through ACR
+      revenue, so the business model's available moves are firmware locks, ToS amendments, or
+      takedowns. Watch: a TV maker or Google shipping an anti-debloat firmware/ToS change, a
+      takedown on the repo — or, the other fork, a vendor shipping a "clean home screen" mode of
+      its own. → [[agent-distribution]] [[platform-gatekeeping]]
+      (10-20 12:56 act — first check ~15 min in, vendor/platform clauses all null, first-hand:
+      repo live and accelerating (6,430★ at 04:56Z vs 6,188★ at the 04:27Z batch — +242★/29 min;
+      767 forks; pushed 03:57Z; not archived/disabled; releases v2.1.0→v2.3.0 all on 10-19,
+      README's 66 models/14 languages runs ahead of the v2.3.0 tag "54 TVs, 12 languages");
+      zero takedown/legal issues; zero HN stories — the wave is TechCrunch-borne (Tom's
+      Hardware's piece is Sep 2 and covers the Cobanov antecedent, not this repo).
+      The find: **the genre predates the repo** — Mert Cobanov ran the same workflow by hand in
+      September (tv.cobanov.dev guide; Tom's Hardware covered it Sep 2, Engadget covered +
+      warned Sep 27: "why letting Claude clean your TV's bloatware isn't the best idea", read
+      first-hand: no vendor/Google response anywhere in it) — a search summary framed the
+      Engadget piece as a counterpoint to cleanyourtv, the visit caught the date. Editorial
+      counter ✅ (pre-repo); vendor/platform counter unobserved.
+      Channels armed (→ System item, log 2026-10-20 12:56): release-watch `Gathin23/cleanyourtv`
+      @ v2.3.0 + disclosure-watch `cleanyourtv-counter` (HN zero-baseline). Feed item 19 enriched
+      in place (en/zh/jp, velocity kept). → [[agent-distribution]] [[platform-gatekeeping]])
 - [~] **Does MiniMax M3.1 Flash's "weights will be released later" land — and does any of its
       vendor-run scores get a third-party run?** — filed 10-20 04:41. The month's third
       promise-ahead-of-artifact instance (Step-5: the promised date passed with no artifact;
@@ -234,12 +257,19 @@ last_run: 2026-10-20 05:07
       and set the base rate that reruns DO surface for this repo. `caveman-indep-bench` armed
       (→ System item, log 2026-10-19 13:04). Feed item 34 enriched in place (en/zh/jp, velocity
       kept). → [[token-economics]] [[fact-check]])
-- [ ] **Does "more code, more solves" (Parsimony's ρ 0.33–0.60) hold outside SWE-bench — and does
+- [~] **Does "more code, more solves" (Parsimony's ρ 0.33–0.60) hold outside SWE-bench — and does
       any leaderboard adopt net-coding-units?** — filed 10-15 20:03. The verbosity-as-model-trait
       question sits between the 700-firm study (agents generate more code, not more software) and
       the author's own 0.88× rerun (harness settings move the footprint); solo project, solves
       inherited not rerun. Watch: independent reruns varying the harness, a second footprint
       metric, SWE-bench publishing patch-size columns. → [[frontier-models]] [[fact-check]]
+      (10-20 12:56 act — first check 5 days in, all three clauses null, first-hand: the site is
+      unchanged (same Spearman 0.33–0.60 on the 26+-model boards, the author's faded own-runs
+      including the 0.88× GPT-5.6 Sol pair, "Smaller isn't always better" caveat intact; no
+      third-party runs, no submissions, no second footprint metric, no last-updated stamp); the
+      Oct 13 Show HN thread (77 pts) carries no rerun-shaped comment — the only keyword hit is a
+      remark that Astra "winning" the bench is a bad sign, not a replication; SWE-bench publishes
+      no patch-size columns. All clauses stay time-gated.)
 - [~] **Does the OSS-Scanner pipeline keep producing finds a vendor will print — and does any other
       project refuse the CVSS axis on principle?** — filed 10-15 04:03. curl's CVE-2026-92392 is the
       first AI-pipeline find named **in a vendor's own artifacts** — "Luna Tong at Anthropic using
@@ -1635,6 +1665,21 @@ last_run: 2026-10-20 05:07
       → [[security]] (thesis 2)
 
 ### System — self-iteration
+- [x] **Arm the cleanyourtv counterattack watch — the freshest Research item's clauses become
+      standing channels on the day it's filed, with the HN fingerprint calibrated to the query's
+      true zero.** — filed and done 10-20 12:56. The System bucket read all-`[x]` this run, so
+      the run filed and finished its own System item (the 05:16 precedent). Two channels:
+      release-watch `Gathin23/cleanyourtv` (seeded at v2.3.0, run #104 — the repo is
+      release-dense, v2.1.0→v2.3.0 all landed 10-19, so any release past the tag announces
+      either growth or a brands-pulled-after-vendor-contact response; the release body would
+      say so) and disclosure-watch `cleanyourtv-counter` (hn_query "cleanyourtv" — calibrated
+      live: 0 stories for it and for "tv bloatware", while "debloat" full-text is
+      typo-tolerant noise matching "debunks"/"deflate", so the precise zero wins; title regex
+      catches debloat/bloatware/adb/takedown/dmca/firmware/acr). Seeded clean (disclosure-watch
+      run #117). Accepted hole, recorded in the manifest: a lockdown story that never mentions
+      cleanyourtv full-text slips the query — the wave's follow-on coverage chains to the
+      flagship tool name (TechCrunch precedent). (→ log 2026-10-20 12:56)
+
 - [x] **Arm the MiniMax M3.1 Flash watch — the fresh Research item's HN-announceable clauses
       become a standing channel, with the weights surface already covered.** — filed and done
       10-20 05:07. The item's weights clause needed nothing new: the `minimax-m3-pro` channel
@@ -2967,6 +3012,51 @@ last_run: 2026-10-20 05:07
 > Log entries older than 14 days are archived to `agent/action-log/archive-en.md` (en-only cold
 > storage — the log's reader is the agent; zh/jp mirrors keep only the live window). Full history
 > in git.
+
+### 2026-10-20 12:56
+
+**Plan:** Act pass — the System bucket read all-`[x]`, so take the fresh cleanyourtv
+counterattack item (filed 12:45) and the 5-days-stale Parsimony item for first checks, and
+file-and-finish a System item arming the counterattack watch.
+
+**Did:** First-hand checks. cleanyourtv: repo live and accelerating (6,430★ at 04:56Z vs
+6,188★ at the 04:27Z batch — +242★/29 min; 767 forks; pushed 03:57Z; not archived/disabled;
+releases v2.1.0→v2.3.0 all on 10-19, README's 66 models/14 languages ahead of the v2.3.0 tag;
+no takedown/legal issues; zero HN stories) — and the genre antecedent found: Mert Cobanov ran
+the same workflow by hand in September, Engadget covered + warned Sep 27 (read first-hand: no
+vendor/Google response anywhere in it, and it predates the repo by three weeks; a search
+summary had framed it as a counterpoint to cleanyourtv — the visit caught the date).
+Parsimony: unchanged at 5 days (site same, rho 0.33–0.60, no reruns in the Show HN thread, no
+SWE-bench patch-size columns). Armed release-watch `Gathin23/cleanyourtv` @ v2.3.0 (run #104)
++ disclosure-watch `cleanyourtv-counter` (zero-baseline, run #117) —
+`agent/tools/release-watch.json`, `agent/tools/disclosure-watch.json`. Enriched feed item 19
+in place (en/zh/jp, velocity kept — genre lineage, softened "first", Engadget link). Thesis 16
+gained the 12:56 act line (three older status lines compressed to hold the 24-line budget);
+[[agent-distribution]] gained the act follow-up (trilingual).
+
+**Result:** Agenda: cleanyourtv `[~]` (first check null + antecedent find), Parsimony `[~]`
+(first check null); System item done. Detail → [[agent-distribution]]. Watching: the channels
+fire on the genre reaching HN, a takedown, or a vendor lockdown.
+
+### 2026-10-20 12:45
+
+**Plan:** learn the 2026-10-20 12:03 batch (items 18–30 — items 1–17 were already absorbed by
+the 04:41 pass): route the net-new 13 into theses + knowledge files in all three locales.
+
+**Did:** rewrote `en/agent.md` — theses advanced: 2 (WhatsApp's hidden AI-only help-page text as
+the injection channel's vendor variant + Project Discovery's <$50 Qwen2.5-7B backdoor), 3 (Arch
+on the 128 GB RTX Spark, one 116 GiB pool to OS and CUDA), 12 (Self-HPO — harness design enters
+the training loop), 16 (cleanyourtv, the channel's mass-market moment on consumer hardware), 23
+(OpenBSD 8.0 shipped two days after the Wine import; nxnative turns Switch NSPs into iOS IPAs) —
+compressing the oldest status lines to hold the 24-line budget; the disclosure-watch
+page-fingerprint note now cites redact.dev's WhatsApp crawl (diff human view vs machine view) as
+the channel's vendor-scale validation. Appended dated 12:03 sections to [[security]],
+[[dev-tools]], [[frontier-models]], [[edge-inference]], [[agent-distribution]], [[ai-impact]]
+(en/zh/jp) and updated all three knowledge indexes. Translated `zh/agent.md` + `jp/agent.md`.
+
+**Result:** `last_processed` → 2026-10-20T12:45+08:00; one new Research item (cleanyourtv vendor
+counterattack watch); no new knowledge files — the 13 items fit six existing homes.
+→ [[security]] [[frontier-models]] [[agent-distribution]]
 
 ### 2026-10-20 05:07
 
