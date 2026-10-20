@@ -12929,5 +12929,77 @@
     "en": "Ben Congdon's personal engineering blog — practitioner essays that quote their sources verbatim. Read first-hand 10-20 (the Agentic Monitoring essay): the superfans quotes verified verbatim against the cited Anthropic primary (anthropic.com/engineering/redesigning-source-control) — and the same check caught our own feed attributing a 'confident misreading is just an alert with better prose' failure mode the essay does not contain (corrected in place, en/zh/jp). What it actually argues: agents track everything 24/7 below the human attention cutline; the secret sauce is noise-reduction heuristics, monitor specs and a labeled eval set.",
     "zh": "Ben Congdon 的个人工程博客——逐字引用来源的实践者随笔。10-20 一手阅读（Agentic Monitoring 一文）：superfans 引文与所引 Anthropic 原文（anthropic.com/engineering/redesigning-source-control）逐字相符——同一核查还抓到本 feed 把文中并不存在的“superfan 自信误读不过是措辞更好的告警”失效模式归于该文（已在 en/zh/jp 原位更正）。文章实际论点：agent 在人类注意力截止线之下 7×24 追踪一切；秘诀在于降噪启发式、监控 spec 和带标注的评测集。",
     "jp": "Ben Congdon の個人エンジニアリングブログ——出典を逐語引用する実践者のエッセイ。10-20 に一次確認（Agentic Monitoring）：superfans の引用が引用先の Anthropic 一次情報（anthropic.com/engineering/redesigning-source-control）と逐語一致——同じ照合で、本フィードが記事に存在しない「superfan の自信ある誤読はただの上手な文章のアラート」という失敗モードを帰属させていたことを捕捉（en/zh/jp で原位修正）。実際の主張：エージェントが人間の注意カットライン以下を 24 時間追跡し、秘訣はノイズ低減ヒューリスティクス・監視 spec・ラベル付き評価セット。"
+  },
+  "peec.ai": {
+    "cat": "vendor",
+    "cred": "med",
+    "cv": 1,
+    "density": "high",
+    "en": "Peec AI's blog (AI-search-visibility analytics vendor) — the 'publish fake stats, get cited in LLMs' experiment lab; transparent about method and limits, numbers self-reported. Cross-checked (10-21): the experiment's central artifact verified independently — stateglobe.com is live (redirects to data.stateglobe.com, title 'StateGlobe — 1M+ Digital Marketing Statistics (2026)'), the exact fake-stats site the post describes; traffic/citation numbers remain self-reported.",
+    "zh": "Peec AI 博客（AI 搜索可见度分析厂商）——『发布假统计数据被 LLM 引用』实验的诞生地；方法与局限透明，但数字为自报。",
+    "jp": "Peec AI のブログ（AI検索可視性分析ベンダー）——『偽統計を公開するとLLMに引用される』実験の発信地。手法と限界は透明だが数値は自己報告。"
+  },
+  "mastodon.gamedev.place": {
+    "cat": "community",
+    "cred": "high",
+    "cv": 1,
+    "density": "med",
+    "en": "Mastodon instance hosting game developers (Scirra's Ashley Gullen et al.) — permalink-resolution via the status API works; good for first-hand dev accounts of platform changes. Cross-checked (10-21): status 117473851565913919 resolved via /api/v1/statuses and the underlying Meta One policy independently confirmed by Social Media Today and Press Gazette ($49.99/mo for 8 links, $149.99/mo for 20, news publishers excluded for now).",
+    "zh": "托管游戏开发者的 Mastodon 实例（Scirra 的 Ashley Gullen 等）——可通过 status API 解析永久链接，是平台变动的开发者一手叙述来源。",
+    "jp": "ゲーム開発者が集う Mastodon インスタンス（Scirra の Ashley Gullen ほか）。ステータスAPIでパーマリンク解決が可能で、プラットフォーム変更の一次情報に有効。"
+  },
+  "teddysvoronos.com": {
+    "cat": "community",
+    "cred": "high",
+    "cv": 1,
+    "density": "med",
+    "en": "Teddy Svoronos's blog (Screentap/Shelf developer) — first-hand platform-regression writeups that cite feedback IDs and betas tested. Cross-checked (10-21): the iPadOS 27 regression independently confirmed by an Apple Support Communities thread 'iPadOS 27 breaks multitasking with presentation apps' (Sep 17, 2026) describing the same tap-snaps-external-display behavior, plus r/iPadOS reports of companion external-monitor bugs.",
+    "zh": "Teddy Svoronos 的博客（Screentap/Shelf 开发者）——平台回归问题的第一手记录，附反馈编号与所测 beta 版本。",
+    "jp": "Teddy Svoronos のブログ（Screentap/Shelf 開発者）。フィードバックIDと検証ベータを明記した一次のプラットフォーム回帰レポート。"
+  },
+  "kaba.cx": {
+    "cat": "security",
+    "cred": "med",
+    "cv": 1,
+    "density": "high",
+    "en": "Security operator blog (Tor relay operator's writeups) — detailed method reporting (exitmap scans, timelines); single-author, event coverage may lack independent corroboration at publication time. Cross-checked (10-21): the post's Ebury history claim (Léveillé: ~400k servers infected 2009–2023) independently matches ESET's May 2024 research; the Oct 2026 BadExit event itself had no independent coverage at writing time.",
+    "zh": "安全运营者博客（Tor 中继运营者的文章）——方法记录详尽（exitmap 扫描、时间线）；单作者，事件首发时可能缺乏独立印证。",
+    "jp": "セキュリティ運用者のブログ（Tor リレーオペレーターの記事）。exitmap スキャンや時系列など手法の記録が詳細。単一著者で、事件の発表時点では独立した裏付けがない場合がある。"
+  },
+  "prestonbyrne.com": {
+    "cat": "news",
+    "cred": "med",
+    "cv": 1,
+    "density": "med",
+    "en": "Preston Byrne's legal commentary (Byrne & Storm partner) — sharp Online-Safety-Act/jurisdiction analysis; DISCLOSED interested party in the 4chan matter (counsel for the platform), so read advocacy separately from fact. Cross-checked (10-21): enforcement history independently confirmed via UK parliament records (4chan fined £20k for non-compliance, committee scrutiny of Ofcom enforcement); Dawes's Oct 2026 concession testimony itself remains single-source.",
+    "zh": "Preston Byrne 的法律评论（Byrne & Storm 合伙人）——对《在线安全法》与管辖权问题的犀利分析；但他是 4chan 事件的利益相关方（平台律师），事实与主张需分开读。",
+    "jp": "Preston Byrne の法律評論（Byrne & Storm パートナー）。オンライン安全法と管轄権の鋭い分析。ただし 4chan 件では当事者（プラットフォーム側弁護士）であるため、事実と主張を切り分けて読むこと。"
+  },
+  "jepsen.io": {
+    "cat": "research",
+    "cred": "high",
+    "cv": 1,
+    "density": "high",
+    "en": "Jepsen's distributed-systems analyses (Kyle Kingsbury's shop) — the canonical correctness audits of databases and orchestrators; vendor-funded under a published ethics policy, with defects reproduced and fixed versions named. Cross-checked (10-21): subject verified — conductor-oss/conductor live on GitHub (32.4k stars, 'durable and highly resilient execution engine'), matching the lineage and architecture the Conductor analysis describes.",
+    "zh": "Jepsen 的分布式系统分析（Kyle Kingsbury 团队）——数据库与编排器正确性审计的权威；厂商出资但有公开的伦理政策，缺陷可复现并标注修复版本。",
+    "jp": "Jepsen の分散システム分析（Kyle Kingsbury のチーム）。データベースとオーケストレーターの堅牢性監査の第一人者。ベンダー資金だが倫理ポリシーを公開し、欠陥は再現され修正版も明示される。"
+  },
+  "permit.petercai.com": {
+    "cat": "other",
+    "cred": "high",
+    "cv": 1,
+    "density": "low",
+    "en": "Permit Pending, Peter Cai's browser city-builder where the player is an elected mayor — single-purpose artifact site; every mechanic described in coverage is verifiable on the page itself. Cross-checked (10-21): artifact verified first-hand (all quoted mechanics present on the page) and third-party reachability via HN front page (180+ pts).",
+    "zh": "Permit Pending，Peter Cai 的浏览器城市建造游戏，玩家是民选市长——单一用途的作品站点；报道中提到的每个机制都可在页面上直接验证。",
+    "jp": "Permit Pending。Peter Cai 製のブラウザ都市建設ゲームで、プレイヤーは選挙で選ばれた市長。単一目的の作品サイトで、報道されたメカニクスはすべてページ上で検証可能。"
+  },
+  "entropicthoughts.com": {
+    "cat": "community",
+    "cred": "high",
+    "cv": 1,
+    "density": "med",
+    "en": "Chris Siebenmann's long-running essays on systems, mail and NixOS — careful, narrow claims; titles often broader than the argument inside. Cross-checked (10-21): the essay's FreshRSS claim corroborated — a NixOS FreshRSS module exists in nixpkgs (nixos/modules/services/web-apps/freshrss.nix), so '9 lines of Nix' refers to a real packaging.",
+    "zh": "Chris Siebenmann 的长期随笔，主题涵盖系统、邮件与 NixOS——论点谨慎克制，标题常比正文 wider。",
+    "jp": "Chris Siebenmann の長年続くエッセイ。システム・メール・NixOS が主題。主張は慎重で狭く、タイトルはしばしば中身より大きい。"
   }
 }

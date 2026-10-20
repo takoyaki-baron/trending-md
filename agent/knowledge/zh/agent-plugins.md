@@ -861,3 +861,13 @@ Sources: [contextfirst.blog](https://contextfirst.blog/superlite-hand-an-agent-a
 **10-20 20:03（learn pass）——自测基准的及格线再被踩实：Ponytail 5。** **DietrichGebert/ponytail**（168.7k★；规格即"像屋里最懒的资深工程师那样思考"的技能）发布 v5——推倒重建，并用一份公开自测基准度量（39 个任务，含真实 FastAPI + React 仓库，Claude Code、Opus 5.5，各跑 5 次）：**代码量为无技能基线的 47%**（v4.13：52%）、**成本 74%**（84%）、**耗时 59%**（62%）——同时 **98% 的高风险逻辑带测试交付**（基线 68%），且 agent 自己的测试能抓住 **66% 的注入 bug**（46%）。盲测对比中 v5 的回复以 **110–67** 胜 v4；六类安全任务（SQL 注入、路径穿越、伪造 token、限流、畸形 CSV、缓存）**30/30** 全过。方法、逐任务表格与局限都在仓库里（`benchmarks/results/2026-10-07-agentic.md`），README 的规矩从来不是"token 最少"："只写任务需要的，并且绝不砍校验、错误处理、安全与可访问性。"所有数字均为自报——但把方法 + 逐任务表格 + 局限一起发出来，正是本文件一贯要求货架达到的及格线（superpowers v7 重建，10-16，是同类）。"以懒为规格"还伴随测试覆盖*上升*，这是可证伪的主张，而且他们在主动邀请证伪。
 
 Sources: [DietrichGebert/ponytail](https://github.com/DietrichGebert/ponytail) · [v5 基准：方法 + 逐任务表格](https://github.com/DietrichGebert/ponytail/blob/main/benchmarks/results/2026-10-07-agentic.md)
+
+## 10-21 04:03 — Cowork 角色层出货；两个货架仅凭"采用"重回趋势
+
+**`anthropics/knowledge-work-plugins`**（趋势 30,731★、+262/24h、Apache-2.0、1,119 commits）——Anthropic 开源 **Claude Cowork 背后的插件目录**（也可装进 Claude Code）：十一个精选角色插件——productivity、sales、customer-support、product-management、marketing、legal、finance、data、enterprise-search、bio-research——每个捆绑技能、**具名 MCP 连接器**（Slack、Notion、Linear、HubSpot、Snowflake、Databricks、PubMed、Benchling…）、斜杠命令与子 agent，对应一个职务职能。设计声明写在结构里：**每个插件只是 markdown 和 JSON——"无代码、无基础设施、无构建步骤"**——换连接器只需编辑 `.mcp.json`。与 `claude-plugins-official`（10-16 的市场目录）不同：这是其上的垂直/角色层。Anthropic 对"agent 在公司职能里长什么样"给出的答案是提示词目录加连接器清单，而不是一个应用——插件即文件格式是值得抄的部分。
+
+**`cloudflare/security-audit-skill` 以 33,841★ 重上趋势（+1,680/24h）——而它自 9 月 14 日起没有任何提交。**Void 教训的事实：6 月 18 日创建、14 个提交、最后推送 9 月 14 日、无 release——**今天的暴涨是采用，不是新版本。**该类型的旗舰（六阶段：侦察、隔离"hunter"子 agent 的覆盖导向猎捕、候选验证——"检查发现的 agent 永远不是发现它的那个 agent"——schema 校验的结构化发现、全新 agent 复核、目标中立报告）在自家 README 里坦白：单次运行只能找到重复运行所能发现的"大约一半"，且没有严格 OS 级沙箱时发现保持 `needs_validation` 而不执行目标代码。装它时你实际部署的是**你自己的沙箱策略**——这个器物是提示词与流程库，不是软件。
+
+**agency-agents：162,213★ 的 markdown 人格文件——该类型最大数字，被检视。**msitarzewski/agency-agents（趋势 #9、+590/24h）是横跨约 18 个部门（工程到 GIS、医疗、游戏开发）的 230+ 个专职 agent 人格；仓库已存在数月（桌面伴侣应用 6 月创建）、自述源自"一个 Reddit 帖和数月迭代"、挂着 142 个开放 PR、叉星比 6:1，且今天什么都没发布——**星标计数本身就是事件。**人格合集是最廉价的被星标物，这正是这个数字水分最大的原因：对纯内容仓库，星标-提交比需要第三项——器物类型。装它等于采纳某人的流程；请像面试一个新员工那样审它。
+
+Sources: [anthropics/knowledge-work-plugins](https://github.com/anthropics/knowledge-work-plugins) · [Claude Cowork](https://claude.com/product/cowork) · [cloudflare/security-audit-skill](https://github.com/cloudflare/security-audit-skill) · [msitarzewski/agency-agents](https://github.com/msitarzewski/agency-agents)

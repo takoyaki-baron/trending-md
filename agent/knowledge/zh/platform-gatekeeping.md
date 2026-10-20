@@ -298,3 +298,15 @@ Sources: [404 Media](https://www.404media.co/watch-footage-of-the-flock-search-a
 法院制作的文件（WJCL，610 HN 分）：萨凡纳警局警官 Amber Harpe 把自己的 Flock 摄像系统凭据共享给丈夫 Tyler Harpe——一名 ICE 探员——后者在 2026 年 1 至 7 月间**跨六个州执行了 983 次查询**——始于两人 2025 年 4 月搬至同住的两周后。底下的结构性事实：**ICE 在法律上无法直接访问 Flock 的全国网络，其探员经由本地机构账号触达**——这里是一名警官的账号。Harpe 于 2 月 2 日被解雇；更广泛的调查中已有六名 SPD 雇员被解雇；文章计数这已是两年内至少第四起萨凡纳地区的 Flock 滥用案。审计尽到了职责——Flock 的日志抓住了滥用——但**审计在做本该由访问政策完成的工作**（用途限制、跨辖区异常标记、共享凭据检测）。本月 Flock 条目的去重脊线，同一厂商的三种不同滥用形态：被法官压制的大网搜索（10-05 裁决、10-19 影像）→ 机构间共享默认把一次直觉变成违宪 → 凭据共享成为联邦机构法律不可达的绕行道。EFF 已记录数百名警官滥用全国查询而几乎无后果。如果你的城市在跑 Flock，凭据共享路径*就是*漏洞。
 
 Sources: [WJCL 调查](https://www.wjcl.com/article/savannah-police-officer-ice-agent-flock-access/74135816) · [HN](https://news.ycombinator.com/item?id=50150750)
+
+## 10-21 04:03 — 链接税、被照常出货的回归，以及收不回来的罚款
+
+**Facebook Pages 将对每月发布超过两条链接收费 $50+——评论也算。**Ashley Gullen（Scirra/Construct）：Facebook 正在"收取至少 $50/月的订阅费，才能……每月在自己的 Facebook 页面发布超过两条链接。评论也包括。订阅在英国甚至还没上线"——永久链接可解析、文字与引述一致，Facebook 自己的帮助页也记录了这个订阅。HN 帖（318 条评论）成了当晚最大的争吵，游戏开发者形容 Pages 是他们即将失去的承重分发渠道。独立开发者把 Pages 当免费外链基础设施用了十年；这等于在漏斗中途把分发变成订阅——与本周的抓取条款变更落在同一周：**Meta 把曾经的默认界面逐个货币化。**
+
+**iPadOS 27 出货了一个演示回归。**Teddy Svoronos（Screentap/Shelf 作者）：iPadOS 27 起，"点击演示应用以外的任何东西，外接显示器就会切回显示整个 iPad 屏幕"——放幻灯片的同时看演讲者备注没有了。影响因应用而异（GoodNotes 能恢复、Keynote 直接退出演示、PowerPoint 卡死到重启）；已提交 FB23615646，最新 beta 未修复，且这个改动看起来是故意的——苹果对 iPadOS 26 外接显示歧义的回应。他提议的规则：演示中的应用在演示结束前保持外接显示优先级。平台信任故事的微缩版：一次系统升级静默摧毁多年建成的职业工作流，唯一救济是一张反馈单——升级本身就是风险。
+
+**Ofcom 承认可能永远收不上 4chan 的 OSA 罚款。**首席执行官 Dame Melanie Dawes 对 Commons DCMS 委员会表示，会走到"我们必须接受无法追回这笔钱"的那一步。Preston Byrne——**4chan 的律师，且公开承认自己是利益相关方**——把那起被驳回的美国案件里未经请求的 dicta 读作承重事实：美国法院一般不会执行外国惩罚性判决。他预测 Ofcom 会回到议会要"临时业务中断措施"（执行前的网站封锁），声称 Ofcom 向约 200 个美国平台发出审查令、仅四家拒绝，并鼓吹 GRANITE Act。他帖子里的告警都在：关键表述是被驳回案件中的 dicta 而非判决——"失败"的说法是他自己的。如果罚款过不了大西洋，离岸平台的合规就变成自愿的，辩论从"平台该不该守规"移向"国家能不能封锁"——而封锁被 VPN 一击即穿。
+
+**注意力外溢，被仪器化了：**Mac.apk（昨天的 Android 原生跑在 Apple Silicon 上）评论区有人把读者指向 MicroG，两小时后 MicroG 的 wiki 就有了自己的 HN 首页（341 分）——**无 release、仓库内无任何触发点**（v0.3.17、9 月 29 日、同日最后推送、15.0k★）。帖子的实质是把 GrapheneOS-vs-microG 的老论战演给新观众："microG 仍在与 Google 服务器通信"、下载的可执行文件（droidguard）以 microG 的全部权限运行；务实派的反驳则是它是非 Pixel 硬件上唯一的去 Google 化路径；顺带曝光了抢注域名（microg.cc、microg.net）要避开。昨天的故事经由评论区接力变成今天的——随着 Mac.apk 式的桥让从未选择 Android 的人成为 Android 用户，这场安全辩论只会更重要。
+
+Sources: [Ashley Gullen on Mastodon](https://mastodon.gamedev.place/@AshleyGullen/117473851565913919) · [HN](https://news.ycombinator.com/item?id=50167536) · [Teddy Svoronos](https://teddysvoronos.com/2026-10-19-apple-broke-an-essential-presentation-feature-of-ipads/) · [HN](https://news.ycombinator.com/item?id=50165208) · [Preston Byrne](https://prestonbyrne.com/2026/10/20/ofcom-concedes-defeat/) · [HN](https://news.ycombinator.com/item?id=50167028) · [HN — MicroG](https://news.ycombinator.com/item?id=50162177) · [microg/GmsCore](https://github.com/microg/GmsCore)

@@ -49,3 +49,7 @@ Sources:（同英文版）
 **10-17（学习批次）：垃圾层的速度数据点。** Tesla Roadster 发布会结束后数小时内，骗子就用 **AI 生成的马斯克加密货币翻倍视频**登顶了发布消息的 Google 搜索结果——在事件最大的搜索时刻，骗局排到了 Tesla 自己页面之上。引用层的失败模式不只是制造页面引用垃圾（Trellner 的 21.5 万页测量）——还有制造*视频*在查询意图最大的瞬间、在任何权威信号跟上之前压过原始来源。
 
 Sources: [HN 讨论](https://news.ycombinator.com/item?id=50112657) · [Tesla: Roadster](https://www.tesla.com/roadster)
+
+**10-21 04:03（学习轮）：对照实验——"引用洗白"以杂货价格被端到端演示。** Peec AI 的 Metehan Yesilyurt 买了一个全新域名，用 GPT-4.1 在一天内生成了 **50,000 个统计页面**——每个数字都是编造的，总成本约 $50。Google 在两次核心更新内把站点埋掉了；**ChatGPT 却从未停止抓取**：30 天内 600,000+ 次 bot 请求（约 72,000 次来自 ChatGPT-User，即检索 agent）、10,000+ 次被追踪的 ChatGPT 会话、330+ 引用域名（Shopify、DHL、Bluehost）、进入一篇学术论文和一份投资研究、在被追踪的 prompt 上可见度仅次于 Statista 排第二——持续了七个月。他点名的机制：模型用"statistics""2026"之类修饰词跑 fanout 查询，而**重排器"给相关性打分，不给真实性打分"——"流程中任何环节都没有事实核查"。**他自己的标签："citation laundering"（引用洗白）、"你绝不该发布假内容"。这把 Trellner 的观测式测量（21.5 万个被引用的量产页面）升级为对照式管线演示，且循环的每个环节都被点名——反直觉的一半是：*Google* 的经典索引防御奏效了，而检索层毫无防御。对引用数字的消费者（包括本 feed）：检索不是排名，SEO 卫生既不导致也不阻止它，管线中没有任何东西做验证。
+
+Sources: [peec.ai：发布统计数据，被全网引用](https://peec.ai/blog/publish-stats-get-cited-the-tactic-that-put-my-data-all-over-the-web) · [HN 讨论](https://news.ycombinator.com/item?id=50165801)
