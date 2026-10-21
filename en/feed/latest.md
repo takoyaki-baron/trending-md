@@ -1,8 +1,8 @@
 ---
 date: 2026-10-21
-updated: 2026-10-21T04:45:00Z
+updated: 2026-10-21T12:20:00Z
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 30
+sources: 39
 license: CC-BY-4.0
 ---
 
@@ -780,9 +780,9 @@ is the whole fix.
 
 ---
 
-## 29. FulcrumSec publishes a claimed 10.6 TB PingCAP exfiltration — 115,308 plaintext API keys, and no vendor confirmation
+## 29. FulcrumSec publishes a claimed 10.6 TB PingCAP exfiltration — and PingCAP's own statement disputes the key inventory
 
-- **Velocity:** ▮▮ rising
+- **Velocity:** ▮ steady
 - **Source:** FulcrumSec · 55+ HN pts · published Oct 20 (~06:45 UTC+8)
 - **Tags:** `breach` `tidb` `credentials` `cloud`
 
@@ -795,23 +795,33 @@ event." The inventory it lists: ~50 GCP buckets, 180,046 tenant organisations,
 as active)**, 20.6M customer SQL statements, 5M customer server IPs, 413
 private source repos, and Jira/CRM dumps. Its stated initial access is the part
 worth reading twice: GCP service-account keys and an Azure service principal
-"committed in their own repositories." Treat every number as the claimant's.
-No PingCAP statement was reachable when this batch ran, and HN readers
-immediately pushed back on the framing — much of what is described is
-control-plane and billing metadata, though the SQL logs and snapshots may carry
-customer data.
+"committed in their own repositories." Treat every number as the claimant's —
+and note that the vendor had already answered. PingCAP's Trust Hub statement,
+**published October 19**, confirms unauthorized access "between September 9 and
+October 7, 2026" via **stolen service account credentials**, with data copied
+and source code obtained; it found no evidence of command execution or
+persistence and no evidence that data stored in TiDB was impacted. On the
+load-bearing point it contradicts the claimant: "An exported table contained
+**encrypted** TiDB Cloud API-key values," and one investigator-owned value
+tested by the external firm "could not be used directly as an API key" —
+against FulcrumSec's 115,308 *plaintext* keys, 42,612 of them "active."
+PingCAP also fixed four vulnerabilities the external firm reported on October
+12–13 by October 14, and says whether other usable credentials were exposed is
+still unresolved.
 
-**Why it matters:** The claim is unverified, but the vector is checkable in five
-minutes by anyone running a multi-tenant platform: grep your repos for service
-account keys, and ask whether your own control plane would notice 88
-consecutive full exports. If the key inventory is real, TiDB Cloud customers
-have a rotation job regardless of what PingCAP says next.
+**Why it matters:** Two accounts of the same incident now disagree on the one
+number that determines customer action — plaintext versus encrypted keys — so
+the rotation decision has to be made without resolving it. The vector is
+checkable in five minutes by anyone running a multi-tenant platform: grep your
+repos for service-account keys, and ask whether your own control plane would
+notice 88 consecutive full exports. The vendor clock (Sept 9 → detected Oct 7 →
+all access paths blocked Oct 14) is the part both sides agree on.
 
-[`🔗 FulcrumSec: The PingCAP TiDB Cloud Leaks`](https://fulcrumsec.vg/pingcap/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50173716)
+[`🔗 FulcrumSec: The PingCAP TiDB Cloud Leaks`](https://fulcrumsec.vg/pingcap/) · [`🔗 PingCAP Trust Hub: October 2026 security incident`](https://www.pingcap.com/trust-hub/security/security-update-october-2026/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50173716)
 
 ---
 
-## 30. CSS's next baseline is being chosen by upvote — Comeau's Interop 2027 list
+## 30. CSS's next baseline is being *ranked* by upvote — Mozilla's own copy says the data informs, not decides
 
 - **Velocity:** ▮ steady
 - **Source:** joshwcomeau.com · 64+ HN pts · 2.3h ago (~01:47 UTC+8)
@@ -819,22 +829,32 @@ have a rotation job regardless of what PingCAP says next.
 
 Interop is the standing agreement between Google, Apple, Microsoft and Mozilla
 (plus Igalia and Bocoup) to fix the same web-platform gaps in the same year, and
-Mozilla has opened a public ranking system for **Interop 2027** whose votes
-will inform the final list. Josh Comeau walks his top ten: CSS functions
-(`@function`, shipping in Chrome 155 and Edge 154, absent from Firefox 157 and
-Safari 27), `corner-shape` for bevels and squircles, `border-shape`, anchored
-container queries, scroll-triggered animations, `reading-flow`/`reading-order`,
+the Firefox team has opened a public ranking app for **Interop 2027**. Its own
+copy sets the limit on what the vote is: "data we can use when reviewing which
+proposals should be taken on," and last year's 1,900+ rankings "helped us push
+the right proposals in the Interop process" — input to the selection, not the
+selection. Josh Comeau walks his top ten: CSS functions (`@function`, shipping
+in Chrome 155 and Edge 154, absent from Firefox 157 and Safari 27),
+`corner-shape` for bevels and squircles, `border-shape`, anchored container
+queries, scroll-triggered animations, `reading-flow`/`reading-order`,
 `interpolate-size`/`calc-size()` keyword size animation, gap decorations, and
 scroll-state container queries for detecting `position: sticky` activation.
 
 **Why it matters:** Interop is the mechanism that converts "cool in one engine"
 into "safe to ship" — subgrid went from Firefox-only in 2019 to universal
-within a year of joining Interop 2023. The upvote list is therefore a
-prediction market for next year's baseline, and the practical read is
-progressive enhancement: the Chrome-only entries are usable today behind
-fallbacks, the container-query ones are the ones that change architecture.
+within a year of joining Interop 2023. But the ranking is a signal the planners
+read, not a ballot that binds them, and no results table has been published:
+"next year's baseline, decided by upvote" — how this item first ran — is a
+stronger claim than either source makes. What it does predict is what Mozilla
+will *champion*; the practical read is unchanged: the Chrome-only entries are
+usable today behind fallbacks, the container-query ones are the ones that change
+architecture.
 
-[`🔗 The Future of CSS`](https://www.joshwcomeau.com/css/interop-2027/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50175070)
+> The Firefox team, answering a reader on Oct 20: "none [AI-related web platform
+> features] are up for selection for Interop 2027" — the ballot is fixed
+> upstream, before any vote is cast.
+
+[`🔗 The Future of CSS`](https://www.joshwcomeau.com/css/interop-2027/) · [`🔗 2027 Web Platform Feature Ranking (Firefox app)`](https://interop-rank.fxdx.dev/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50175070)
 
 ---
 
@@ -945,13 +965,398 @@ constraint on the field, not a tighter Role.
 
 ---
 
+## 35. eMudhra's CA keys were the number 4 — eight single-byte P-384 secrets, recovered in under a second
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Scott Helme · 244+ HN pts · 3h ago (~17:05 UTC+8)
+- **Tags:** `pki` `certificate-authority` `tls` `post-quantum` `supply-chain`
+
+Since our Oct 20 note on Go distrusting eMudhra's intermediates, the *why* has
+been published — and it is not theft. Scott Helme took the eight affected
+intermediates Mozilla attached to its announcement (8 keys, each in two
+certificates: one issued by eMudhra, one cross-signed by Sectigo's AAA root in
+May 2025) and recovered every private key by computing `d × G` for `d = 1…255`.
+The keys are 47 bytes of zeros and one byte: 156, 230, 115, 56, 155 and 4 for
+the six TLS issuing CAs, 66 and 237 for the two code-signing CAs. A P-384
+private key should carry 2³⁸⁴ possibilities; these carried eight bits. Nothing
+about the certificates looks wrong — a public key derived from `d = 4` is a
+valid point on the curve, and every structural check passes. The keys were
+effectively public from April 2025 onward, and there is no way to know whether
+anyone looked. Mozilla's own post supplies the timeline Helme's analysis sits
+on: report received Oct 17 at 20:06 UTC, OneCRL pushed to standard Firefox
+users by 22:59 UTC, Firefox 158.0.1 / ESR 115.43.1 / ESR 153.5.1 and NSS 3.131.1
+to remove the root, and a Firefox for Android 158.0.2 on Oct 21 at 08:29 UTC for
+clients that weren't applying the bundled blocklist at startup. Mozilla's post
+never states the cause.
+
+**Why it matters:** Browsers are fine and everything else may not be. Chrome and
+Firefox also require Certificate Transparency, which detects mis-issuance rather
+than preventing it; curl, Python, Node, Go, Java, git and package managers trust
+a bundle on disk, don't check revocation by default and don't check CT at all.
+Helme forged `api.stripe.com` and got `SSL certificate verify ok` from curl, a
+completed handshake from Python and `authorized: true` from Node on every Linux
+and macOS machine he tested. The actionable list is not "patch Firefox" — it is
+`curl | sh` installers, CI runners holding cloud keys, server-to-server API
+calls, and embedded devices whose bundles are frozen until 2039.
+
+[`🔗 Scott Helme: Eight Bits of Trust`](https://scotthelme.co.uk/eight-bits-of-trust-emudhras-ca-keys-cracked-in-milliseconds/) · [`🔗 Mozilla Security: protecting Firefox users`](https://blog.mozilla.org/security/2026/10/20/protecting-firefox-users-following-the-compromise-of-emudhra-intermediate-certificates/)
+
+---
+
+## 36. Muse's share links were enumerable by hostname — 6,800 "GhostShares" from one passive-DNS query
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Ars Technica · 210+ HN pts · 11.4h ago (~08:45 UTC+8)
+- **Tags:** `privacy` `meta` `ai-agent` `dns` `leak`
+
+Researchers at Claroc enumerated 6,800 share links that Meta Muse users had
+created for conversations, then opened a few hundred and found material clearly
+never meant to be public: a candidate's notes preparing for a confidential
+executive-search call with a frontier AI lab, naming the lab's internal contact
+and the meeting time; a national marketing company's internal revenue review
+marked for its CEO; a small-business loan application with the amount requested;
+a to-do list containing a bank fraud alert with a partial account number; a
+real-estate investor's performance report with two addresses and exact return,
+income and mortgage figures; and a workplace's full-year staff vacation calendar.
+The tokens were long. The problem is where the title went: Muse built share URLs
+as `<conversation-title>-<random>.cf.metaaiusercontent.com`, putting user text in
+the subdomain, so every time the intended recipient resolved the link, commercial
+passive-DNS services recorded it in a searchable database. Claroc's co-founder
+reported it through Meta's bug bounty on October 8 and says he got no reply;
+Meta told Ars it has paused sharing while it reviews the report, and pointed at
+the bug bounty as the channel it opened for exactly this.
+
+**Why it matters:** "Long random token" is not the security property people
+think it is when the human-readable part of the URL leaks into a third-party
+observability market. Any product that names per-user resources in subdomains —
+share pages, preview deploys, tenant buckets — inherits this failure mode, and
+passive DNS is the cheapest way to harvest it. The fix is structural: keep user
+text in the path, or out of the hostname entirely, and never let a share link's
+discoverability depend on nobody watching DNS.
+
+[`🔗 Ars Technica: Meta Muse exposes users' secrets`](https://arstechnica.com/security/2026/10/meta-muse-exposes-users-personal-and-business-secrets-when-they-share-conversations/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50174687)
+
+---
+
+## 37. Claude found 493 attack-surface issues in 25 projects — and OpenSSH shipped the fix twice
+
+- **Velocity:** ▮▮ rising
+- **Source:** Anthropic Frontier Red Team · 69+ HN pts · 8.6h ago (~11:36 UTC+8)
+- **Tags:** `security` `anthropic` `openssh` `attack-surface` `agents`
+
+Anthropic's Frontier Red Team (Chris Rohlf) ran Claude over 25 open-source
+projects, over five million lines, and reports 493 issues from three passes:
+code reachable in the shipped default configuration, configuration pairs that
+silently disable a control, and security-sensitive code that runs before
+authentication. The inventory is the interesting artifact — 17,000 configuration
+options, 3,842 of them security-relevant. All eleven "gated" projects had
+unintentionally reachable code; 93 unnecessary pre-authentication surfaces in
+default configs, 37 places where code ran or state was recorded before auth, and
+61 configuration combinations that silently weakened a pre-auth control. Of 162
+security-sensitive combinations accepted without an error, warning or
+documentation, 94 turned a control off. One recurring pattern appeared in four
+unrelated projects: an administrator writes a deny rule by hostname or wildcard,
+reverse DNS is off, so the rule is compared against a plain IP address, can never
+match, and the deny list fails open. One conflicting pair had been in the
+software for 21 years and disabled a required client-certificate check
+outright. The OpenSSH case: ~4,500 lines of experimental ML-DSA-44 parsing,
+about 16% of sshd's pre-auth code, reachable with the algorithm disabled. 10.5
+moved the check before parsing — OpenSSH's release notes credit "Christopher Paul
+Rohlf of Anthropic" — then Claude found two gaps in that fix (the advertised
+algorithm name versus the type inside the key blob; the certificate CA signature
+path ungated), and 10.6 moved the checks into the parser itself, removing roughly
+a fifth of the code an unauthenticated client could reach.
+
+**Why it matters:** Read this as a vendor scoring its own model's output, and
+read its own qualifier: "none of these issues would have been immediately
+exploitable on their own." The verifiable half is the OpenSSH diff trail, and it
+is what makes the thesis land — reachability reduction pays off without finding
+a single CVE. The strongest evidence the report stream is real comes from
+OpenSSH, not Anthropic: the 10.6 notes say the team is receiving "a large number
+of security bug reports, many of which are findings from AI models," that some
+AI-reported bugs were later independently rediscovered by other researchers, and
+that they will therefore release more frequently rather than batch fixes.
+
+[`🔗 Anthropic: Using Claude to reduce the attack surface of code`](https://www.anthropic.com/research/attack-surface-reduction) · [`🔗 OpenSSH release notes (10.6)`](https://www.openssh.com/releasenotes.html)
+
+---
+
+## 38. PHP ships its two 9.2s in two hours — and the researcher who published first has already retracted the RCE
+
+- **Velocity:** ▮▮ rising
+- **Source:** jackalsyn.com · 179+ HN pts · 7.7h ago (~12:26 UTC+8)
+- **Tags:** `cve` `php` `memory-corruption` `disclosure`
+
+php.net's October 20 advance notice is unusually specific: two critical
+vulnerabilities, both rated CVSS v4.0 9.2, release scheduled for Wednesday
+October 21 at 14:00 UTC, with "we reserve the right to release earlier should
+details of either vulnerability become public." At 04:26 UTC today a researcher
+published a full write-up of what he says is a
+`session.upload_progress` use-after-free — and a correction block dated today.
+The cached-pointer chain, the path that would have been code execution, is
+"DEAD at the addref (session.c:3213 …) no free, no RCE, CVSS 0.0"; the real bug
+is a serialize-state cross-request UAF, ASAN-confirmed, prefork-only, "NOT code
+execution, CVSS 5.3 Medium," with the honest caveat that reliable reclaim needs
+per-build heap grooming (the bundle publishes a per-build delta table). The
+mechanism: `php_session_rfc1867_callback` runs before `RINIT` zeroes the
+serialize globals, so a `memory_limit` bailout during the pre-RINIT update leaves
+a dangling context that the next request on the same prefork child reuses. He
+publishes the mitigation free: `session.upload_progress.enabled = Off` closes
+both paths (session.c:3239), plus clamping multipart POSTs at the edge. As of
+12:00 UTC the PHP advisory is still scheduled, and NVD has no record for either
+CVE.
+
+**Why it matters:** The gap between the vendor's 9.2 and the researcher's 5.3 —
+and 0.0 for the path that would have mattered — is the thing to carry forward:
+pre-announced severity is a placeholder until the record and the analysis exist.
+But "only 5.3" is not "don't patch." A cross-request UAF in a prefork worker
+still crosses tenant boundaries in shared PHP hosting, and 21 hours of a public
+write-up before a fixed release is exactly the window the PHP team's own
+early-release clause was written for.
+
+[`🔗 jackalsyn: PHP session.upload_progress UAF`](https://jackalsyn.com/posts/php-up-2026.html) · [`🔗 php.net: Upcoming Critical PHP Security Release`](https://www.php.net/archive/2026.php) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50176077)
+
+---
+
+## 39. Tomcat 11.0.27 closes six — a JNDI realm that takes the wrong password, and HTTP/2 responses that cross users
+
+- **Velocity:** ▮▮ rising
+- **Source:** Apache Tomcat advisory · published Oct 20 (~03:35 UTC+8)
+- **Tags:** `cve` `tomcat` `java` `http2` `authentication`
+
+Apache published six Tomcat CVEs on October 20, three rated Important.
+CVE-2026-101296: JNDIRealm bind credential validation "fails open" for non-GSSAPI
+SASL mechanisms, which "allowed attackers to authenticate without providing the
+correct password" — affects 11.0.0-M1 through 11.0.26. CVE-2026-101356: incorrect
+object recycling during HTTP/2 processing of asynchronous servlets can trigger
+"request and/or response mix-up between users" — 11.0.22 to 11.0.26.
+CVE-2026-103119: an AJP buffer under-read where a large non-blocking write could
+split the response body across two requests on the connection, "possibly leakage
+of data from the first response to the second." Plus three Low (TLS 1.3
+connection failures, HTTP/2 trailer cross-contamination, a Jasper `<c:redirect>`
+that doesn't abort the page). Fixed in 11.0.27, 10.1.61 and 9.0.123; reported
+September 14–16, made public October 20. Score provenance matters here: the
+9.1/9.1/9.1 figures on all three Important entries are assigned by CISA's
+ADP container (source `134c704f…`, role "CISA Coordinator"), NVD status is
+`Awaiting Analysis` with no NVD-published metric, and Apache's own advisory
+publishes no CVSS at all — its rating is the word "Important."
+
+**Why it matters:** Two of the three are cross-user data mix-ups in the request
+pipeline, and neither needs an authenticated attacker — that is the shape that
+matters for shared hosting and multi-tenant servlet deployments, where one
+process serves many customers. The JNDI realm one is the inverse and just as
+bad: an authentication check that fails open under a specific SASL configuration
+means the deployment looks protected and isn't. Upgrade, and while you're there,
+check whether your realm uses a non-GSSAPI SASL mechanism at all.
+
+[`🔗 Apache Tomcat 11 security page`](https://tomcat.apache.org/security-11.html) · [`🔗 NVD: CVE-2026-101356`](https://nvd.nist.gov/vuln/detail/CVE-2026-101356)
+
+---
+
+## 40. Strata puts Qwen3.8-Flash-Next on a 32 GB gaming PC — at three bits, with the quality table attached
+
+- **Velocity:** ▮▮ rising
+- **Source:** GitHub repos · 29.6k★ · v0.2.2 pushed today (~19:50 UTC+8)
+- **Tags:** `local-llm` `quantization` `qwen` `agents` `rust`
+
+Strata (29,586★, MIT, created September 24) is a launcher and engine for
+third-party quantizations of Qwen3.8-Flash-Next — the 125B open-weight preview
+released under Qwen's community licence — and its README does the thing most
+"runs on your laptop" projects skip: it publishes the ladder. agentionai's
+"Gyro" trades experts for memory (Gyro-S: 27.6 GB of RAM+VRAM, 58.5 GB download,
+"quality is lower than IQ2_XS"; Gyro-M: 35 GB at roughly IQ3_XXS quality and
+16–21% slower). 32 GB gets you Gyro-S or a "Coder" variant that keeps half the
+experts and is "weaker outside code"; 48 GB gets IQ3_XXS (47.0 GB); 64 GB gets
+IQ3_S (54.8 GB), which the project says matches the full model on published
+tests; 96 GB and up reaches 4–8 bit. Speed on a 12 GB RTX 5070 with 64 GB of
+RAM: 94 tok/s generation and 2,650 tok/s prompt at Q2_0, 62/1,750 at IQ3_XXS.
+It speaks the OpenAI and Anthropic APIs, so Claude Code, Codex and OpenCode
+connect to it, and it ships an MCP server plus a prompt you can paste into a
+coding agent to have it do the install.
+
+**Why it matters:** The headline is "125B on a gaming PC"; the footnote is that
+below 64 GB you are running a materially weaker compression of it, and every
+speed and quality number here is the project's own. What's genuinely new is that
+a frontier-class open release now arrives with a memory/quality ladder published
+down to 27.6 GB — which changes who can self-host, and makes "I run Qwen locally"
+a claim that needs the tier attached.
+
+[`🔗 Niko1221/Strata`](https://github.com/Niko1221/Strata) · [`🔗 Hugging Face: Qwen/Qwen3.8-Flash-Next`](https://huggingface.co/Qwen/Qwen3.8-Flash-Next)
+
+---
+
+## 41. magpie: one local gateway, 66 agent CLIs, and a failover group for when a quota runs out
+
+- **Velocity:** ▮▮ rising
+- **Source:** GitHub repos · 18.6k★ · v0.1.1311 today 12:00 UTC (~20:00 UTC+8)
+- **Tags:** `agents` `routing` `mcp` `subscriptions` `developer-tools`
+
+yetone's magpie (18,583★, MIT) is a menu-bar app, window, TUI, web UI and CLI
+that puts every agent behind one local gateway and rewrites the one key that
+matters in each agent's own config — so Claude Code can run on Kimi K3, Codex on
+DeepSeek V4 Pro, Gemini CLI on GLM-5.3, chosen from one list. It lists roughly
+66 supported agents, from Claude Code and Codex to Zed, Crush, Cline and
+Goose, and adds the feature the vendor harnesses deliberately don't: routing
+groups that fail over between accounts or models when a quota runs out, with
+`magpie quota` as the readout. To do that it reads the sign-ins your agents
+already have — Claude Code's and Codex's config files, and the Keychain — which
+the README states plainly and offers three ways to disable (Settings → Privacy →
+Subscription accounts, `magpie accounts discovery off`, or `MAGPIE_NO_ACCOUNTS=1`).
+v0.1.1311 published today at 12:00 UTC; builds for macOS, Windows, Linux, Docker
+and Termux.
+
+**Why it matters:** The expensive part of running several agents is no longer
+the model — it is the credential and quota wrangling, and magpie is what that
+looks like at 66 harnesses. It also states the corollary plainly: once the model
+is a config key, the harness stops being the moat. The trade is visible in the
+README — reading other applications' stored sign-ins is exactly the surface the
+vendors never designed for, and the off switch is the honest part of shipping it.
+
+[`🔗 yetone/magpie`](https://github.com/yetone/magpie) · [`🔗 usemagpie.ai`](https://usemagpie.ai/)
+
+---
+
+## 42. "No key, no account, no cap" — a DeepSeek Harness plugin at 32.6k★ built on other people's free gateways
+
+- **Velocity:** ▮▮ rising
+- **Source:** GitHub repos · 32.6k★ · Trendshift #1 daily (~19:50 UTC+8)
+- **Tags:** `agents` `deepseek` `model-routing` `supply-chain` `chinese-oss`
+
+`dsh-our-free-model` (32,609★, MIT, created September 24) is a plugin for
+DeepSeek Harness: install it and frontier models — DeepSeek V4.1 Flash, Kimi K3
+— appear with no login, no account and no API key, and, per the README, no usage
+cap. The README states the free lane is OpenCode's Zen gateway plus Kilo AI's
+public gateway, direct, with the model list re-fetched from upstream on each
+refresh rather than stored as a snapshot; unusable models are pruned by probing
+the gateway, with 429s and 5xx explicitly not counted against a model. It also
+ships an OpenAI-compatible local forwarding port, an in-app announcement channel
+where JSON pushed by the maintainers reaches every installed instance within one
+poll cycle (an `urgent` level triggers a fullscreen modal), and a one-click
+self-updater that downloads, SHA-256-verifies, backs up, atomically replaces and
+hot-reloads, rolling back if any step fails. Trendshift has it first on its daily
+chart and first on its JavaScript weekly chart for October 5–11.
+
+**Why it matters:** The feature list is also the risk list. Frontier inference
+for free is necessarily somebody else's quota — availability, cost and terms all
+live upstream and can change without notice — and "completely free, unlimited"
+is the README's claim, not a measured fact. The distribution channel matters
+more than the models: the same plugin that pushes remote JSON into a fullscreen
+modal also hot-reloads downloaded code. That is a legitimate design, and it is
+also a standing decision to trust the repository on every install.
+
+[`🔗 Ebony-Vinyl/dsh-our-free-model`](https://github.com/Ebony-Vinyl/dsh-our-free-model) · [`🔗 Trendshift repository page`](https://trendshift.io/repositories/261203)
+
+---
+
+## 43. Next trait solver, Polonius, parallel frontend: the Rust compiler's bill comes due all at once
+
+- **Velocity:** ▮ steady
+- **Source:** Yoyo Code (compiler contributor) · 185+ HN pts · 22h ago (~21:53 UTC+8)
+- **Tags:** `rust` `compilers` `borrow-checker` `performance`
+
+Matyáš Racek's essay argues 2026 isn't an unusually busy year for rustc — it's
+the year several long-running investments land together. The next-generation
+trait solver, almost ten years in various forms, is a partial reimplementation
+of the type system that fixes soundness bugs and unblocks a queue that includes
+async Rust pain points and `impl Trait` limitations. Polonius, the new borrow
+checker, enables more code to compile and unblocks related features, "hopefully
+one day" internal references. The parallel frontend is close to stabilization
+under a project goal driven by @petrochenkov, after design objections almost
+nobody was happy with — the resolution was to grind through them. On
+performance, LLVM 23 is "pretty much entirely positive" for rustc, after LLVM 22
+was green on instruction counts and almost universally red on wall time; merge
+rollups are now triaged against perf directly by the people merging them; move
+elimination (Amanieu) removes copies LLVM cannot, helping both compile and run
+time; and a third polymorphization experiment borrows Swift's approach of
+passing layouts as arguments, tunable because it costs runtime.
+
+**Why it matters:** These are the changes that decide whether the borrow checker
+stops being the reason a team picks something else — and they arrive as a wave
+precisely because each was a decade-scale project rather than a feature. The
+most useful claim in the post is the social one: regressions get fixed faster
+now because triage and rollup decisions happen in the same place, which is a
+change you cannot see in a release note and can see in the benchmarks.
+
+[`🔗 Yoyo Code: 2026 is an exciting year for the Rust compiler (and me)`](https://yoyo-code.com/2026-is-exciting-year-for-rust-compiler-and-me/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50166502)
+
+---
+
+## 44. C# prints 42 in 47,895 bytes — smaller than a size-tuned Rust build, with the caveats in the README
+
+- **Velocity:** ▮ steady
+- **Source:** GitHub repos · 98+ HN pts · 9h ago (~10:53 UTC+8)
+- **Tags:** `wasm` `dotnet` `csharp` `rust` `compilers`
+
+NetWasm is an independent .NET — compiler, CoreLib, runtime and SDK, built
+outside Microsoft — that compiles C# and CIL straight to standalone WASI Preview
+2 components, with no CLR, no Mono, no `dotnet.js` and no application DLLs in
+the output. Its headline: 47,895 bytes for `Console.WriteLine(42)` including
+runtime and a precise compact garbage collector, against 53,635 bytes for Rust
+1.95.0's documented size-oriented profile — 10.7% smaller raw, 19.5% smaller
+after Brotli-11. The README then argues against its own headline: Rust's figure
+adds `opt-level="z"`, LTO, one codegen unit, `panic=abort` and stripping, while
+Binaryen's `wasm-opt` is part of NetWasm's ordinary build pipeline; applying
+wasm-opt to a Rust WASI P2 component means extracting, optimizing and re-encoding
+by hand; and both toolchains can go far lower with `no_std` or a zero library.
+Its own summary: "a measured workload/profile result, not a language-wide size
+ranking." HN commenters supplied the angle the README doesn't lead with — the
+toolchain is source-available rather than OSI open source. The compiler, linker,
+optimizer, CLI and SDK sit under the NetWasm Community License 1.0: free for
+organizations under 250 employees *and* $10M revenue, with separate OEM terms,
+published by a pseudonymous licensor; CoreLib, the runtime and the collectors
+are MIT/Apache-2.0.
+
+**Why it matters:** WASM payload size is one of the few places a new toolchain
+can beat an incumbent on a number a user actually feels, and print-42 is the
+right kind of honest starting point — but compare the licence before the bytes.
+A compiler you can read and cannot freely ship is a different dependency from
+one that is dual MIT/Apache, especially if your product bundles it. This is a
+rare benchmark post that states its own bounds; read the second half.
+
+[`🔗 zion-sati/NetWasm`](https://github.com/zion-sati/NetWasm) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50175510)
+
+---
+
+## 45. Since our Oct 14 note on the Craft launcher: the apps are the trend — thirteen pure-Rust clones, all pushed inside two hours
+
+- **Velocity:** ▮▮ rising
+- **Source:** GitHub repos · 220k★ across the org · v0.11.1 Oct 20 19:34 UTC (~03:34 UTC+8)
+- **Tags:** `rust` `desktop-apps` `open-source` `trending-metrics`
+
+On October 14 we covered the Craft suite's launcher — thirteen apps, one
+installer. Two weeks on, the individual applications have become the number:
+`storytold/photocraft` is at 70,175★ (created September 30, Apache-2.0/MIT,
+52 MB of Rust, v0.11.1 shipped last night), beside `artcraft` at 34,919★,
+`pdfcraft` 16.8k, `filmcraft` 15.4k, `wordcraft` 15.2k, `lightcraft` 14.1k,
+`vectorcraft` 10.3k, `effectcraft` 7.6k, `cadcraft` 6.3k, `gridcraft` 6.1k,
+`designcraft` 4.6k, `deckcraft` 4.0k and `soundcraft` 3.5k — roughly 220,000
+stars across the org. Each README calls its app a clean-room, pure-Rust
+reimplementation of a desktop incumbent (Photoshop, Word, Excel, PowerPoint,
+Acrobat, AutoCAD, Illustrator, Figma, InDesign), and PhotoCraft's badge still
+reads "early alpha." The fork and issue traffic is unusual for the star count:
+12,368 forks and 3,035 open issues against 308 watchers (a typical repository
+watches roughly one star in a hundred). Every one of the thirteen repos took
+pushes between 10:05 and 12:01 UTC today.
+
+**Why it matters:** The launcher was the story two weeks ago; the fleet is the
+story now, and the shape of it is the point. One organization can now put a
+plausible claim on an entire desktop software category inside three weeks, and
+the attention arrives faster than an issue tracker can absorb it — 3,035 open
+issues on the flagship while its README still says alpha. Whether or not the
+code lives up to the list, this is the genre to judge by release notes, issue
+throughput and installed binaries, not by the star badge.
+
+[`🔗 storytold/photocraft`](https://github.com/storytold/photocraft) · [`🔗 ArtCraft`](https://getartcraft.com/)
+
+---
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-10-21T04:45:00Z |
-| Items | 34 |
-| Sources tracked | 30 (Hacker News, GitHub Trending/repos, Mistral, Cloudflare blog, peec.ai, Mastodon, teddysvoronos.com, kaba.cx, prestonbyrne.com, anthropic.com, jepsen.io, CISA KEV, NVD, claude.com, permit.petercai.com, entropicthoughts.com, php.announce, php.net, FulcrumSec, Engineering at Meta, joshwcomeau.com, krebsonsecurity.com, Proof of Human Research, humanlayer, arXiv, Red Hat, npm, Hugging Face, voicestudio.sh) |
+| Generated | 2026-10-21T12:20:00Z |
+| Items | 45 |
+| Sources tracked | 39 (Hacker News, GitHub Trending/repos, Mistral, Cloudflare blog, peec.ai, Mastodon, teddysvoronos.com, kaba.cx, prestonbyrne.com, anthropic.com, jepsen.io, CISA KEV, NVD, claude.com, permit.petercai.com, entropicthoughts.com, php.announce, php.net, FulcrumSec, Engineering at Meta, joshwcomeau.com, krebsonsecurity.com, Proof of Human Research, humanlayer, arXiv, Red Hat, npm, Hugging Face, voicestudio.sh, scotthelme.co.uk, blog.mozilla.org, Ars Technica, openssh.com, jackalsyn.com, tomcat.apache.org, usemagpie.ai, trendshift.io, getartcraft.com) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (3x daily) |
 | Ranking | Velocity-weighted (recency × engagement acceleration × source authority) |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |

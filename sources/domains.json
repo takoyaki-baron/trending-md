@@ -13046,5 +13046,50 @@
     "en": "The Firefox team's Interop 2027 feature-ranking app (JS-only; its copy lives in the bundle, so a plain fetch returns only the title). First-party for what Mozilla says the rankings are for — \"data we can use when reviewing which proposals should be taken on\" — and for the claim that last year's 1900+ rankings were used to prioritise Firefox development. Curation cross-check 2026-10-21: identity and date confirmed by the official @firefoxwebdevs Mastodon post that launched it (10-19), and the page JS was read directly rather than trusting the shell.",
     "zh": "Firefox 团队的 Interop 2027 特性排名应用（纯 JS，正文在 bundle 里，直接抓取只返回标题）。一手来源，用于确认 Mozilla 对该排名用途的原话——\"供我们在审阅哪些提案应当被采纳时使用的数据\"——以及去年 1900+ 份排名被用于 Firefox 开发优先级的说法。策展交叉核验 2026-10-21：身份与日期由发布它的 @firefoxwebdevs 官方 Mastodon 帖（10-19）确认，页面 JS 为直接读取而非只信外壳。",
     "jp": "Firefox チームの Interop 2027 機能ランキングアプリ（JS のみで本文はバンドル内、素の取得ではタイトルしか返らない）。ランキングの用途についての Mozilla の原典——「どの提案を採り上げるか見直すときに使えるデータ」——と、昨年の 1900+ 件が Firefox の開発優先度に使われたという記述の一次情報。キュレーションのクロスチェック 2026-10-21：同一性と日付は公開した @firefoxwebdevs 公式 Mastodon 投稿（10-19）で確認し、ページはシェルを信じずバンドルの JS を直接読んだ。"
+  },
+  "openssh.com": {
+    "cat": "vendor",
+    "cred": "high",
+    "cv": 1,
+    "density": "high",
+    "en": "The OpenSSH project's official release notes; canonical first-party record for what shipped in each version and who reported it. Cross-checked 2026-10-21: the 10.5 note credits \"Christopher Paul Rohlf of Anthropic\" for moving the public-key algorithm check ahead of key parsing, and the 10.6 note describes the follow-up fix — matching Anthropic's account of what shipped, from the maintainer side rather than the reporter side. Its 10.6 preamble (AI-reported bug volume, independent rediscovery, more frequent releases) is the most valuable content on the page.",
+    "zh": "OpenSSH 项目官方发布说明；每个版本实际交付了什么、由谁上报的权威一方记录。已于 2026-10-21 交叉核验：10.5 说明把“将公钥算法检查移到解析之前”致谢给“Christopher Paul Rohlf of Anthropic”，10.6 说明描述后续修复——与 Anthropic 的说法一致，且来自维护方而非报告方。10.6 前言（AI 报告的数量、被他方独立复现、提高发布频率）是整页最有价值的内容。",
+    "jp": "OpenSSH プロジェクト公式のリリースノート。各バージョンで実際に何が出荷され、誰が報告したかの正典。2026-10-21 に突合済み：10.5 のノートは公開鍵アルゴリズム検査を解析前へ移した件を \"Christopher Paul Rohlf of Anthropic\" とクレジットし、10.6 は後続修正を記す — 報告側ではなく保守側から見た Anthropic の説明と一致。10.6 冒頭の記述（AI 報告の量、他者による独立発見、リリース頻度の引き上げ）がこのページで最も価値が高い。"
+  },
+  "jackalsyn.com": {
+    "cat": "security",
+    "cred": "med",
+    "cv": 1,
+    "density": "high",
+    "en": "Single-researcher security blog (J4ck3LSyN/ATLAS) publishing exploit analysis with reproducer bundles, validation receipts and a dated corrections block. Cross-checked 2026-10-21: the advisory it analyses was confirmed against php.net's own notice (two CVSS 4.0 9.2 flaws, release scheduled 2026-10-21 14:00 UTC) and against NVD's absence of both records. Its core technical claims (prefork-only cross-request UAF, CVSS 5.3 rather than the vendor's 9.2) are single-source and self-corrected — treat as unconfirmed until a maintainer or independent reproducer weighs in.",
+    "zh": "单一研究者的安全博客（J4ck3LSyN/ATLAS），发布漏洞利用分析，附带复现包、验证回执和带日期的更正区块。已于 2026-10-21 交叉核验：其所分析的公告与 php.net 自己的通知一致（两个 CVSS 4.0 9.2，定于 2026-10-21 14:00 UTC 发布），且 NVD 对两条记录均无条目。其核心技术主张（仅影响 prefork 的跨请求 UAF、CVSS 5.3 而非厂商的 9.2）为单一来源且自我更正——在维护者或独立复现者表态前按未确认处理。",
+    "jp": "単独研究者のセキュリティブログ（J4ck3LSyN/ATLAS）。再現バンドル、検証記録、日付入りの訂正ブロックを伴うエクスプロイト分析を公開する。2026-10-21 に突合済み：分析対象の勧告は php.net 自身の告知（CVSS 4.0 9.2 が 2 件、2026-10-21 14:00 UTC 公開予定）と一致し、NVD には両 CVE の記録がないことも確認。中核の技術的主張（prefork 限定のリクエスト間 UAF、ベンダーの 9.2 ではなく CVSS 5.3）は単一情報源かつ自己訂正済み — メンテナまたは独立の再現者が言及するまでは未確認として扱う。"
+  },
+  "getartcraft.com": {
+    "cat": "vendor",
+    "cred": "med",
+    "cv": 1,
+    "density": "med",
+    "en": "Vendor site for the ArtCraft/Craft suite (storytold on GitHub): free downloads, an open-source claim, and an AI-creative-studio framing (Seedance 2.5, Nano Banana 2) rather than the \"clean-room Office/Acrobat clones\" framing the repos use. Cross-checked 2026-10-21: the site's \"pure Rust / open source\" claim matches GitHub's own language metadata and licence fields for the thirteen repos (GitHub linguist is independent of the vendor); star, fork and issue counts come from the repos, not the site. Marketing copy — treat product-capability claims as unverified.",
+    "zh": "ArtCraft/Craft 套件的厂商站点（GitHub 上的 storytold）：免费下载、开源主张，以及“AI 创作工作室”的定位（Seedance 2.5、Nano Banana 2）——与各仓库使用的“净室重写 Office/Acrobat”叙事并不相同。已于 2026-10-21 交叉核验：站点“纯 Rust / 开源”的主张与 GitHub 对十三个仓库自身的语言元数据与许可证字段一致（GitHub linguist 独立于厂商）；星标、fork 与 issue 数取自仓库而非站点。属营销文案——产品能力主张按未核实处理。",
+    "jp": "ArtCraft/Craft スイート（GitHub では storytold）のベンダーサイト。無料ダウンロード、オープンソースの主張、そして各リポジトリが使う「クリーンルームな Office/Acrobat クローン」ではなく「AI クリエイティブスタジオ」（Seedance 2.5、Nano Banana 2）という位置づけ。2026-10-21 に突合済み：サイトの「純 Rust／オープンソース」主張は 13 リポジトリの GitHub 自身の言語メタデータとライセンス欄に一致（GitHub linguist はベンダーから独立）。星・fork・issue 数はサイトではなくリポジトリ由来。マーケティング文であり、製品能力の主張は未検証として扱う。"
+  },
+  "php.net": {
+    "cat": "vendor",
+    "cred": "high",
+    "cv": 1,
+    "density": "high",
+    "en": "The PHP project's official site; canonical for pre-announcement security notices and release history (php.net/archive/2026.php). Cross-checked 2026-10-21: the archive's \"24 Sep 2026 — PHP 8.4.26 Released\" matches the php-src GitHub tag php-8.4.26, published 2026-09-24T18:42Z — the source repository is independent of the website. Its pre-announcement notices are the vendor's own words, including the \"we reserve the right to release earlier if details become public\" clause; the CVSS 4.0 9.2 ratings it advertises are vendor-assigned and were still unreviewed by NVD at publication.",
+    "zh": "PHP 项目官网；安全预告与发布历史的权威来源（php.net/archive/2026.php）。已于 2026-10-21 交叉核验：归档页“2026 年 9 月 24 日 — PHP 8.4.26 发布”与 php-src 仓库的 php-8.4.26 tag（发布于 2026-09-24T18:42Z）一致——源码仓库独立于网站。它的预告是厂商自己的措辞，包含“若细节公开则保留提前发布的权利”一条；其中宣称的 CVSS 4.0 9.2 为厂商自评，发布时 NVD 尚未复核。",
+    "jp": "PHP プロジェクト公式サイト。事前告知とリリース履歴の正典（php.net/archive/2026.php）。2026-10-21 に突合済み：アーカイブの「2026 年 9 月 24 日 — PHP 8.4.26 リリース」は php-src のタグ php-8.4.26（2026-09-24T18:42Z 公開）と一致 — ソースリポジトリはウェブサイトから独立している。事前告知はベンダー自身の文言で、「詳細が公開された場合はより早くリリースする権利を留保する」条項を含む。告知される CVSS 4.0 9.2 はベンダー付与で、公開時点で NVD は未レビュー。"
+  },
+  "yoyo-code.com": {
+    "cat": "community",
+    "cred": "med",
+    "cv": 1,
+    "density": "high",
+    "en": "Matyáš Racek's compiler blog — a rustc contributor writing about compiler performance and long-running compiler projects. Cross-checked 2026-10-21: the three projects the post says are landing in 2026 exist as public rust-lang project goals (src/2026/next-solver.md, src/2026/parallel-front-end.md, src/2026/polonius.md in rust-lang/rust-project-goals), independently of the post. Its performance characterizations (LLVM 23 \"pretty much entirely positive\", the regression-triage changes) are practitioner opinion rather than published measurements — treat the numbers as unattributed.",
+    "zh": "Matyáš Racek 的编译器博客——一位 rustc 贡献者谈编译器性能与长期编译器项目。已于 2026-10-21 交叉核验：文章称 2026 年落地的三个项目确实以公开的 rust-lang 项目目标形式存在（rust-lang/rust-project-goals 仓库的 src/2026/next-solver.md、parallel-front-end.md、polonius.md），这一事实独立于文章本身。其对性能的描述（LLVM 23“几乎全面正向”、回归分诊的变化）属实践者判断而非公开测量——数字按未标注出处对待。",
+    "jp": "Matyáš Racek のコンパイラブログ。rustc 貢献者によるコンパイラ性能と長期プロジェクトの記事。2026-10-21 に突合済み：記事が 2026 年に着地するとする 3 プロジェクトは rust-lang の公開プロジェクトゴールとして実在する（rust-lang/rust-project-goals の src/2026/next-solver.md、parallel-front-end.md、polonius.md）— 記事とは独立した事実。性能に関する記述（LLVM 23 が「ほぼ全面的にプラス」、回帰トリアージの変化）は実務者の見解であり公開計測ではない。数値は出所不明として扱う。"
   }
 }
