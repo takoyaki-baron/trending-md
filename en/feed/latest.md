@@ -1,8 +1,8 @@
 ---
 date: 2026-10-21
-updated: 2026-10-20T20:25:00Z
+updated: 2026-10-21T04:45:00Z
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 16
+sources: 30
 license: CC-BY-4.0
 ---
 
@@ -382,25 +382,33 @@ patch is the deployment to find tonight.
 
 ---
 
-## 15. Craft CMS patches five in one go — four Twig-escape RCEs and a verification-code reuse
+## 15. Craft CMS patches eight in one batch — five Twig breaks, a cross-site GraphQL authz hole, and a verification-code reuse
 
 - **Velocity:** ▮ steady
 - **Source:** NVD (VulnCheck-assigned) · published Oct 19–20
 - **Tags:** `cve` `craftcms` `php` `rce`
 
-Five Craft CMS CVEs landed in two days, all 8.7 on the CVSS v4 scale
-(VulnCheck-assigned; NVD records `Deferred`). The set: RCE via the Twig `group`
-filter invoking non-string callables (4.x before 4.18.8 and 5.x before
-5.11.0); two sandbox escapes by authenticated Control Panel users; Yii
-behavior injection by authenticated administrators; and an authentication
-bypass reusing verification codes on `users/verify*` routes. The affected
-ranges imply the fixes are 5.11.0 (4.18.8 on the 4.x line).
+Eight Craft CMS CVEs landed in a single batch — all eight records published
+within the same second (Oct 19, 20:17:54 UTC — one VulnCheck submission), all
+NVD `Deferred`. The set: RCE via the Twig `group` filter invoking non-string
+callables — the one that starts from content input (4.x before 4.18.8 and 5.x
+before 5.11.0); two sandbox escapes by authenticated Control Panel users; a
+Twig filter-method allowlist bypass (7.1 v4, the pack's lowest); a `create()`
+blocklist bypass through case-sensitive class-name checks; Yii behavior
+injection by authenticated administrators; an authentication bypass reusing
+verification codes on `users/verify*` routes; and — the pack's highest score —
+a multi-site authorization bypass where site-scoped GraphQL tokens can mutate
+other sites' content (9.3 v4 / 9.8 v3.1). The affected ranges imply the fixes
+are 5.11.0 (4.18.8 on the 4.x line).
 
 **Why it matters:** Twig sandbox escapes keep resurfacing as a class, and the
 `group`-filter one starts from content input rather than panel access — the
-difference between "needs a rogue account" and "needs a comment form."
+difference between "needs a rogue account" and "needs a comment form." The
+pack's highest score belongs to the multi-site GraphQL bypass (9.3 v4) — the
+member a five-item summary leaves out, and the one multi-site installs should
+patch for first.
 
-[`🔗 NVD: CVE-2026-112770`](https://nvd.nist.gov/vuln/detail/CVE-2026-112770) · [`🔗 NVD: CVE-2026-112775`](https://nvd.nist.gov/vuln/detail/CVE-2026-112775)
+[`🔗 NVD: CVE-2026-112770`](https://nvd.nist.gov/vuln/detail/CVE-2026-112770) · [`🔗 NVD: CVE-2026-112776`](https://nvd.nist.gov/vuln/detail/CVE-2026-112776) · [`🔗 NVD: CVE-2026-112775`](https://nvd.nist.gov/vuln/detail/CVE-2026-112775)
 
 ---
 
@@ -512,13 +520,438 @@ that's the actual pitch.
 
 ---
 
+## 20. Argo CD published three 9.9s in one hour — all reachable with "Application get"
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** NVD (GitHub-assigned) · published Oct 20, 18:17–19:17 UTC
+- **Tags:** `cve` `argocd` `kubernetes` `gitops`
+
+Three Argo CD CVEs published within an hour of each other on October 20, each
+CVSS 3.1 9.9, GitHub-assigned, all still `Undergoing Analysis` at NVD.
+CVE-2026-113672 (CWE-22): the repo-server's Jsonnet importer doesn't confine
+`import`/`importstr`/`importbin` to the repository root, so absolute paths,
+`..` traversal and repo symlinks read anything the repo-server can — including
+`/proc/self/environ` and projected service-account tokens; imported contents in
+a ConfigMap come back to the caller, and `importstr` on `/dev/zero` exhausts
+memory. CVE-2026-113708 (CWE-88): Kustomize passes `ref`/`version` from remote
+URLs to `git fetch` without an end-of-options separator, so a leading-hyphen
+value becomes `--upload-pack` and runs a command over `file://` — no egress
+needed, output returned through manifest-generation errors. CVE-2026-113709
+(CWE-829): `helmGlobals.configHome` pointed at a repo-controlled path lets Helm
+auto-load a downloader plugin and execute it (requires `--enable-helm`). All
+three share the same cheap entry point: `POST /api/v1/applications/manifestsWithFiles`
+needs only **Application get** — no update, no sync, no repo write. Fixed in
+3.3.15, 3.4.10, 3.5.4 and 3.6.0-rc2; those tags shipped **October 6**, two weeks
+before the CVE records. The same release notes list a fourth CRITICAL:
+AppProject restrictions bypassed by PreDelete/PostDelete hooks — CVE-2026-77459,
+GHSA-fmxq-cgp8-87wp, also 9.9, published October 13 and still `Undergoing
+Analysis`.
+
+**Why it matters:** The patch predates the disclosure by two weeks, so anyone on
+3.3.x below .15 has had the fix available and the reason withheld. The scarier
+detail is the permission model: an attacker who can merely *read* an Application
+can generate manifests from an uploaded file, which turns "viewer" into
+repo-server code execution on three separate paths.
+
+[`🔗 NVD: CVE-2026-113672`](https://nvd.nist.gov/vuln/detail/CVE-2026-113672) · [`🔗 NVD: CVE-2026-113708`](https://nvd.nist.gov/vuln/detail/CVE-2026-113708) · [`🔗 Argo CD v3.3.15 release notes`](https://github.com/argoproj/argo-cd/releases/tag/v3.3.15)
+
+---
+
+## 21. PHP will ship two CVSS 4.0 9.2 vulnerabilities today at 14:00 UTC — and hasn't said which parts
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** php.announce · 196+ HN pts · 8h ago (~20:00 UTC+8)
+- **Tags:** `php` `cve` `pre-disclosure` `patching`
+
+Jakub Zelenka's post to `php.announce` (#509, Oct 20 19:33 UTC) is four
+sentences long: an upcoming PHP security release "addresses two critical
+vulnerabilities (both rated CVSS v4.0 9.2, Critical)", scheduled for
+**Wednesday, 21 October 2026 at 14:00 UTC** — about ten hours after this batch
+runs. It also says the team reserves the right to release earlier "if details of
+either vulnerability become public, or if we see evidence of active exploitation
+in the wild." What the notice does not contain: CVE identifiers, affected
+versions, or the component. That is deliberate — naming the extension would be
+the exploit — but it means the only actionable fact right now is the timestamp.
+
+**Why it matters:** PHP is the runtime under a large share of the web, and a
+coordinated date with a pre-announced severity is a maintenance-window problem,
+not an information problem: stage your package pin and rollback plan before
+14:00 UTC so applying the update is one action. If it ships early, that's the
+team telling you exploitation is already underway.
+
+[`🔗 php.announce #509`](https://news-web.php.net/php.announce/509) · [`🔗 PHP release archive`](https://www.php.net/archive/2026.php) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50172041)
+
+---
+
+## 22. HyperFrames — 68.6k★ for "write HTML, render video," and the release cadence is the tell
+
+- **Velocity:** ▮▮ rising
+- **Source:** GitHub Trending · 68,606★ · +5,994/week
+- **Tags:** `video` `agents` `html` `rendering`
+
+HeyGen's HyperFrames turns HTML, CSS, media and *seekable* animations into
+deterministic MP4s: a CLI, a Claude Code plugin, standalone skills for other
+harnesses, an MCP surface, and a native Mac/Linux app. Apache-2.0, created
+March 10, 2026, 6,205 forks, 399 open issues. Unlike most trending repos this
+week, the activity is verifiable and continuous: npm `hyperframes` is at
+0.8.181 with **535 published versions**, releases v0.8.179 through v0.8.181
+landed inside two days, and the last commit is from 02:52 UTC today. The
+architectural constraint is the interesting part — everything is driven by a
+seekable timeline rather than wall-clock playback, which is what makes the
+render reproducible and lets an agent jump to frame N instead of waiting for
+it.
+
+**Why it matters:** Video is the medium agents are worst at producing, because
+every normal renderer is a stateful real-time system. A deterministic,
+frame-addressable HTML renderer is the shape that makes video generation
+diffable and retryable — the same property that made snapshot testing work for
+UI.
+
+[`── heygen-com/hyperframes`](https://github.com/heygen-com/hyperframes) · [`🔗 HyperFrames`](https://www.hyperframes.dev/)
+
+---
+
+## 23. context-mode at 31.4k★: a real context problem, and an npm package untouched since June
+
+- **Velocity:** ▮▮ rising
+- **Source:** GitHub Trending · 31,407★ · +3,556/week
+- **Tags:** `context-engineering` `mcp` `coding-agents` `licensing`
+
+`mksglu/context-mode` claims to sandbox tool output — 98% reduction — persist
+session memory, and enforce routing across 17 platforms through MCP plus
+per-harness hooks (Claude Code, Codex, Cursor, Copilot, Zed, OpenCode, Kiro,
+Pi). 31,407★, 2,209 forks, 356 open issues, created February 23. Two facts the
+README's badge wall doesn't lead with. First, the license is **ELv2**, not an
+OSI license: source-available, with restrictions on offering it as a managed
+service — the GitHub API reports `NOASSERTION`, and the badge says ELv2.
+Second, the npm registry's `context-mode` package shows **latest 1.0.169, last
+modified June 29**, while GitHub releases stop at the same tag: four months of
+commits — today's is literally `ci: update install stats` — with nothing
+published for users to install.
+
+**Why it matters:** Context reduction is becoming its own layer, and the honest
+accounting matters because the product is a proxy in the middle of your
+prompts: what it drops is what your agent never sees. Install it knowing which
+version you actually get, and read the license before shipping it inside a
+product.
+
+[`── mksglu/context-mode`](https://github.com/mksglu/context-mode) · [`── npm: context-mode`](https://www.npmjs.com/package/context-mode)
+
+---
+
+## 24. VoiceStudio — a local, AGPL voice stack at 79.2k★, with voice cloning and an MCP server
+
+- **Velocity:** ▮▮ rising
+- **Source:** GitHub Trending · 79,197★ · +17,057/week
+- **Tags:** `tts` `voice-cloning` `local-first` `mcp`
+
+`debpalash/VoiceStudio` is the open-source, fully-local alternative to hosted
+voice platforms: voice cloning, voice design, video dubbing with timed speech,
+dictation via a floating widget, transcription, audiobook and batch jobs — as
+an Electron app with a local API and an MCP server for agents. The default
+engine is k2-fsa's OmniVoice, with others selectable; AGPL-3.0, 8,710 forks,
+created April 9, 2026, latest release v0.5.6 on September 23, last commit
+20:03 UTC yesterday. The project claims 646 languages and states that local
+workflows run on your hardware, remote services are optional, and telemetry
+requires consent. The 646-language figure is the project's own; no independent
+evaluation is cited.
+
+**Why it matters:** It lands the same day Mistral priced batch transcription at
+$0.0035/min — the self-hosted counter-offer now covers cloning and dubbing too,
+which is exactly the tier vendors keep out of open weights. AGPL-3.0 is the
+catch: fine for internal tooling, a real constraint if VoiceStudio is embedded
+in a product.
+
+[`── debpalash/VoiceStudio`](https://github.com/debpalash/VoiceStudio) · [`🔗 voicestudio.sh`](https://voicestudio.sh/)
+
+---
+
+## 25. Meta's Prometheus: 85% pretraining goodput, ~47k GPU-hours between interruptions — and a roadmap to 1M GPUs
+
+- **Velocity:** ▮▮ rising
+- **Source:** Engineering at Meta · 75+ HN pts · published Oct 19
+- **Tags:** `datacenter` `gpu` `goodput` `ml-infra`
+
+Meta opened up Prometheus, the gigawatt-scale supercluster in New Albany, Ohio
+that trained the Muse family, including Muse Wonder. First phase is complete;
+today it spans hundreds of thousands of GPUs across multiple buildings wired as
+"a single machine," with a stated target of roughly **1 million** at full scale.
+The numbers worth keeping are reliability, not FLOPS: **>85% goodput** for
+pretraining runs and **>90%** for RL runs of Muse Wonder, with a mean time
+between interruptions of **~47,000 GPU-hours**, raised past **54,000** after
+fleet-wide firmware fixes. Two NVIDIA platforms are deployed — Catalina
+(GB200 NVL72 in a two-rack "Ariel" configuration that buys 800G scale-out per
+GPU rather than the standard 400G) and Clemente (GB300 NVL72, 288 GB HBM per
+GPU, 2:1 GPU-to-CPU, a whole 72-GPU domain in one rack) — with Vera Rubin NVL72
+next, plus closed-loop liquid cooling.
+
+**Why it matters:** Meta is publishing the metric cluster operators actually
+feel. At ~47k GPU-hours MTBI, a job burning 5,000 GPUs expects an interruption
+roughly every nine hours — which is why goodput, not peak throughput, is the
+number that decides whether a frontier training run finishes. These are
+vendor-reported figures from Meta's own fleet, and the pre/post firmware
+comparison is theirs.
+
+[`🔗 Engineering at Meta: Inside Prometheus`](https://engineering.fb.com/2026/10/19/data-center-engineering/inside-prometheus-meta-gigawatt-scale-supercluster/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50152886)
+
+---
+
+## 26. SlopCodeBench 10/2026: frontier models score 12.2–16.3% strict — and xhigh effort made Opus 5.5 worse
+
+- **Velocity:** ▮▮ rising
+- **Source:** humanlayer (Dex Horthy) · 200+ HN pts · published Oct 15
+- **Tags:** `benchmarks` `coding-agents` `code-quality` `evals`
+
+SlopCodeBench hands a coding agent a problem in stages: write it, then take new
+requirements, then change the existing code — with later checkpoints testing
+both new behavior and old. HumanLayer ran six model settings (Opus 5.5,
+Fable 5.1, SOL 6, SOL 6.1, Astra, GLM 5.3) across **36 problems and 196
+checkpoints per setting**. Strict pass rate — every test case plus all regression tests —
+landed in **12.2–16.3%**, with Astra's 16.3% the top; the looser "core pass
+rate" runs **65.8–74.0%**. The gap between those two bands is the finding.
+Second finding: **medium effort beat xhigh** for some newer models, notably
+Opus 5.5, while xhigh cost **2.11–4.22×** as much in the three complete pairs.
+The post's own caveats are load-bearing: earlier subset runs (including a
+much-quoted 30% Fable 5 figure) covered 6 of 36 problems and are not comparable
+to these results, and Part II from the benchmark team is still pending.
+
+**Why it matters:** A benchmark where models pass two-thirds of checkpoints but
+only ~14% of full runs is measuring the thing teams actually fear — the agent
+solves the new ticket and silently breaks the old behavior. And "try harder"
+being non-monotonic, at 2–4× the price, undercuts the effort-slider assumption
+most harnesses are built around.
+
+[`🔗 SlopCodeBench 10/2026`](https://github.com/humanlayer/advanced-context-engineering-for-coding-agents/blob/main/benchmarking-new-models-on-slop-code-bench.md) · [`🔗 SlopCodeBench paper (arXiv 2603.24755)`](https://arxiv.org/abs/2603.24755) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50108717)
+
+---
+
+## 27. Bot detection against AI agents: 9.1% to 99% — measured by the vendor that came first
+
+- **Velocity:** ▮▮ rising
+- **Source:** Proof of Human Research · 35+ HN pts · published Oct 20
+- **Tags:** `bot-detection` `agents` `browser-automation` `captcha`
+
+Proof of Human re-ran its 2025 benchmark with a wider adversary set — scripted
+Chromium, CloakBrowser, and three vision-capable agents (Browser Use, Grok,
+Perplexity Comet) — against five detection systems, 20 sessions each, 89–100
+evaluable sessions per system. Aggregate detection: **Proof of Human 99%**,
+reCAPTCHA v3 **69.4%**, hCaptcha **44.3%**, Cloudflare Turnstile **42.1%**,
+Cloudflare Bot Management **9.1%**. The split is the story: hCaptcha and
+Turnstile caught nearly every *scripted* browser but almost none of the agent
+sessions — Turnstile "did not even issue challenges" during the three agent
+adversaries — while reCAPTCHA v3 inverted it, catching most agent sessions and
+none from CloakBrowser (the only adversary combining a source-level browser
+fingerprint change with a residential IP). Turnstile's advantage has always
+been invisibility; invisibility is exactly what a model that can read a page
+walks through.
+
+**Why it matters:** The caveat is structural and the post says so: the
+benchmark's author sells a bot-detection product and ranks first, the systems
+are black boxes so signal attribution is inference, and 100-session cells are
+small. Read the per-adversary grid rather than the aggregate — if you are
+relying on Turnstile to keep agent browsers off a flow, the number in the
+relevant cell is near zero.
+
+[`🔗 Benchmarking Bot Detection Systems Against Modern AI Agents in 2026`](https://research.poh.org/bot-benchmarking-2026/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50169506)
+
+---
+
+## 28. MCP's TypeScript SDK: 8.6 for tasks that leaked between sessions — fixed in 1.32.0
+
+- **Velocity:** ▮▮ rising
+- **Source:** NVD (GitHub-assigned) · published Oct 20, 19:17 UTC
+- **Tags:** `cve` `mcp` `sdk` `agents`
+
+CVE-2026-111767 (CWE-639/862, CVSS 3.1 8.6, GitHub-assigned, NVD `Deferred`):
+in `@modelcontextprotocol/sdk` from **1.24.0 to before 1.32.0**, the
+experimental tasks feature (`taskStore`) never checked which session created a
+task. Any clients sharing one `InMemoryTaskStore` could list, read and cancel
+each other's tasks — the multi-tenant server shape the SDK's own examples
+encourage. Fixed in 1.32.0; advisory GHSA-22jm-h49p-29qw, patch commit
+`727075b`.
+
+**Why it matters:** Tasks are MCP's answer to long-running work, i.e. the
+primitive that holds your agent's intermediate state. A store keyed by nothing
+but task ID is the classic IDOR, and it arrives in the SDK everyone builds
+servers on — if you run a shared MCP server above 1.24.0, the upgrade to 1.32.0
+is the whole fix.
+
+[`🔗 NVD: CVE-2026-111767`](https://nvd.nist.gov/vuln/detail/CVE-2026-111767) · [`🔗 GHSA-22jm-h49p-29qw`](https://github.com/modelcontextprotocol/typescript-sdk/security/advisories/GHSA-22jm-h49p-29qw)
+
+---
+
+## 29. FulcrumSec publishes a claimed 10.6 TB PingCAP exfiltration — 115,308 plaintext API keys, and no vendor confirmation
+
+- **Velocity:** ▮▮ rising
+- **Source:** FulcrumSec · 55+ HN pts · published Oct 20 (~06:45 UTC+8)
+- **Tags:** `breach` `tidb` `credentials` `cloud`
+
+An extortion group calling itself FulcrumSec published stage one of what it
+says is a breach of PingCAP, the company behind TiDB Cloud: **10.6 TB** and
+4.9M files, including a control-plane replica exported **88 times on a
+six-hourly schedule between September 8 and September 30** — "not one detection
+event." The inventory it lists: ~50 GCP buckets, 180,046 tenant organisations,
+403,262 unique emails, **115,308 plaintext customer API keys (42,612 described
+as active)**, 20.6M customer SQL statements, 5M customer server IPs, 413
+private source repos, and Jira/CRM dumps. Its stated initial access is the part
+worth reading twice: GCP service-account keys and an Azure service principal
+"committed in their own repositories." Treat every number as the claimant's.
+No PingCAP statement was reachable when this batch ran, and HN readers
+immediately pushed back on the framing — much of what is described is
+control-plane and billing metadata, though the SQL logs and snapshots may carry
+customer data.
+
+**Why it matters:** The claim is unverified, but the vector is checkable in five
+minutes by anyone running a multi-tenant platform: grep your repos for service
+account keys, and ask whether your own control plane would notice 88
+consecutive full exports. If the key inventory is real, TiDB Cloud customers
+have a rotation job regardless of what PingCAP says next.
+
+[`🔗 FulcrumSec: The PingCAP TiDB Cloud Leaks`](https://fulcrumsec.vg/pingcap/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50173716)
+
+---
+
+## 30. CSS's next baseline is being chosen by upvote — Comeau's Interop 2027 list
+
+- **Velocity:** ▮ steady
+- **Source:** joshwcomeau.com · 64+ HN pts · 2.3h ago (~01:47 UTC+8)
+- **Tags:** `css` `interop` `browsers` `web-platform`
+
+Interop is the standing agreement between Google, Apple, Microsoft and Mozilla
+(plus Igalia and Bocoup) to fix the same web-platform gaps in the same year, and
+Mozilla has opened a public ranking system for **Interop 2027** whose votes
+will inform the final list. Josh Comeau walks his top ten: CSS functions
+(`@function`, shipping in Chrome 155 and Edge 154, absent from Firefox 157 and
+Safari 27), `corner-shape` for bevels and squircles, `border-shape`, anchored
+container queries, scroll-triggered animations, `reading-flow`/`reading-order`,
+`interpolate-size`/`calc-size()` keyword size animation, gap decorations, and
+scroll-state container queries for detecting `position: sticky` activation.
+
+**Why it matters:** Interop is the mechanism that converts "cool in one engine"
+into "safe to ship" — subgrid went from Firefox-only in 2019 to universal
+within a year of joining Interop 2023. The upvote list is therefore a
+prediction market for next year's baseline, and the practical read is
+progressive enhancement: the Chrome-only entries are usable today behind
+fallbacks, the container-query ones are the ones that change architecture.
+
+[`🔗 The Future of CSS`](https://www.joshwcomeau.com/css/interop-2027/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50175070)
+
+---
+
+## 31. Krebs: the FBI suspects a ransomware negotiator ran a ShinyHunters pressure site
+
+- **Velocity:** ▮ steady
+- **Source:** Krebs on Security · 133+ HN pts · published Oct 19
+- **Tags:** `shinyhunters` `extortion` `incident-response` `fbi`
+
+KrebsOnSecurity reports that federal investigators pursuing ShinyHunters —
+which breached the FBI's own recruitment site, `fbijobs.gov`, in late September
+— identified executives at **two ransomware-negotiation firms** with unusually
+close ties to the group, and that one US-based executive helped run a website
+used to pressure victims into paying. The FBI says ShinyHunters has extorted
+more than **$70 million** this year. The procedural timeline: Dutch police
+arrested suspect Pepijn van der Stap on September 15; the group's operator
+"Rey," a teenager from Amman, was detained by Jordanian authorities and is
+cooperating, per Reuters on October 3. Krebs attributes the details to "sources
+close to the investigation" — no charges against the negotiators are described.
+
+**Why it matters:** Incident-response firms are the trust anchor in the
+extortion economy; a negotiator with a stake in the attacker's side is a
+conflict of interest that no amount of contract language detects. For defenders
+the practical question becomes procurement: who is on the other side of the
+table when you hire a negotiator, and what would you see if they weren't.
+
+[`🔗 Krebs: Feds Suspect Ransom Negotiator Ran ShinyHunters Extortion Site`](https://krebsonsecurity.com/2026/10/feds-suspect-ransom-negotiator-ran-shinyhunters-extortion-site/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50173487)
+
+---
+
+## 32. Kronos is trending again at 42.4k★ — and hasn't taken a commit since April 13
+
+- **Velocity:** ▮ steady
+- **Source:** GitHub Trending · 42,425★ · +733/24h
+- **Tags:** `time-series` `finance` `foundation-models` `maintenance`
+
+`shiyu-coder/Kronos` is a decoder-only foundation model for K-line sequences: a
+specialized tokenizer quantizes OHLCV bars into hierarchical discrete tokens,
+then an autoregressive transformer is pretrained on them, with a model zoo from
+4.1M to ~102M parameters and a live BTC/USDT 24-hour forecast demo. It is also,
+today, 42,425★ with 7,024 forks — and its last push was **April 13, 2026**,
+with **283 open issues** unanswered and no release reflecting anything since.
+Nothing shipped; the star counter moved. That is the exact shape of last
+week's Void and CLI-Anything cases: adoption is not maintenance.
+
+**Why it matters:** A financial forecasting model is a dependency people wire
+into trading and risk loops, where silent drift and stale tokenizers are
+expensive failures rather than inconveniences. Use it as a paper with weights —
+and check whether the unanswered issues contain the bug you're about to hit.
+
+[`── shiyu-coder/Kronos`](https://github.com/shiyu-coder/Kronos) · [`── NeoQuasar on Hugging Face`](https://huggingface.co/NeoQuasar)
+
+---
+
+## 33. wshobson/agents: 41.3k★ for one Markdown catalog that installs into seven harnesses
+
+- **Velocity:** ▮ steady
+- **Source:** GitHub Trending · 41,311★ · +93/24h
+- **Tags:** `agents` `skills` `plugins` `multi-harness`
+
+The catalog at `wshobson/agents` now claims **94 plugins** (92 local), **202
+agents, 185 skills, 105 commands**, written once in Markdown and adapted per
+harness: Claude Code and Cursor get a plugin marketplace, Codex CLI gets a
+native marketplace or generated artifacts, and OpenCode, Antigravity, Copilot
+and Pi get `make install-*` routes that emit generated agents with translated
+tool permissions. MIT, 4,396 forks, 5 open issues, last commit October 17. The
+design decision worth noting is the opposite of the persona-collection genre
+(item 13): one source, seven generated outputs, with each harness's permission
+model explicitly translated rather than assumed.
+
+**Why it matters:** Multi-harness distribution is the maintenance problem the
+skills ecosystem is about to hit — the same artifact has to work with
+different tool-permission semantics, different MCP configs and different
+invocation surfaces. A catalog that treats the per-harness output as generated
+artifacts, not copies, is the version that survives a schema change.
+
+[`── wshobson/agents`](https://github.com/wshobson/agents) · [`── plugins tree`](https://github.com/wshobson/agents/tree/main/plugins)
+
+---
+
+## 34. StreamsHub's Kubernetes console: a 9.9 where "create a Console CR" becomes cluster-wide Kafka access
+
+- **Velocity:** ▮ steady
+- **Source:** NVD (Red Hat-assigned) · published Oct 20, 12:17 UTC
+- **Tags:** `cve` `kubernetes` `strimzi` `rbac`
+
+CVE-2026-105312 (CWE-269, CVSS 3.1 9.9, Red Hat-assigned, NVD status
+`Awaiting Analysis`): a Kubernetes tenant with permission to create
+`consoles.console.streamshub.github.com` resources can set
+`spec.containers.api.spec.image` to an arbitrary image. The operator deploys
+that image into a pod whose ServiceAccount is bound by a ClusterRoleBinding to
+a ClusterRole granting cluster-wide `get/list/watch` on all Strimzi CRDs
+(including KafkaUsers), `patch` on Kafkas and KafkaRebalances, and
+`cluster-monitoring-view`. The attacker's code reads the projected service
+account token and inherits all of it — cross-tenant read *and* write on the
+Kafka control plane. Red Hat's mitigations: remove create/update/patch on
+Console CRs from tenant Roles (only cluster admins should manage them), and add
+an OPA/Gatekeeper or Kyverno admission policy validating
+`spec.containers.api.spec.image`.
+
+**Why it matters:** "Tenant-scoped RBAC on the custom resource" is not a
+security boundary when the operator reconciling that resource holds a
+cluster-scoped binding — the CR is a proxy for the operator's identity. Every
+operator that lets a user specify an image has this shape; the fix is a
+constraint on the field, not a tighter Role.
+
+[`🔗 NVD: CVE-2026-105312`](https://nvd.nist.gov/vuln/detail/CVE-2026-105312) · [`🔗 Red Hat: CVE-2026-105312`](https://access.redhat.com/security/cve/CVE-2026-105312)
+
+---
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-10-20T20:25:00Z |
-| Items | 19 |
-| Sources tracked | 16 (Hacker News, GitHub Trending/repos, Mistral, Cloudflare blog, peec.ai, Mastodon, teddysvoronos.com, kaba.cx, prestonbyrne.com, anthropic.com, jepsen.io, CISA KEV, NVD, claude.com, permit.petercai.com, entropicthoughts.com) |
+| Generated | 2026-10-21T04:45:00Z |
+| Items | 34 |
+| Sources tracked | 30 (Hacker News, GitHub Trending/repos, Mistral, Cloudflare blog, peec.ai, Mastodon, teddysvoronos.com, kaba.cx, prestonbyrne.com, anthropic.com, jepsen.io, CISA KEV, NVD, claude.com, permit.petercai.com, entropicthoughts.com, php.announce, php.net, FulcrumSec, Engineering at Meta, joshwcomeau.com, krebsonsecurity.com, Proof of Human Research, humanlayer, arXiv, Red Hat, npm, Hugging Face, voicestudio.sh) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (3x daily) |
 | Ranking | Velocity-weighted (recency × engagement acceleration × source authority) |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |

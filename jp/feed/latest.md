@@ -1,8 +1,8 @@
 ---
 date: 2026-10-21
-updated: 2026-10-20T20:25:00Z
+updated: 2026-10-21T04:45:00Z
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 16
+sources: 30
 license: CC-BY-4.0
 ---
 
@@ -204,17 +204,17 @@ Camunda 7 の修正2件、バージョン照合の価値あり。CVE-2026-109432
 
 ---
 
-## 15. Craft CMS、一気に5件をパッチ——Twig サンドボックス脱出の RCE 4件と検証コード再利用
+## 15. Craft CMS、一括で8件をパッチ——Twig 脆弱性5件、GraphQL 越権、検証コード再利用
 
 - **Velocity:** ▮ steady
 - **Source:** NVD (VulnCheck-assigned) · 10月19〜20日公開
 - **Tags:** `cve` `craftcms` `php` `rce`
 
-2日で5件の Craft CMS CVE が降り、CVSS v4 はすべて 8.7（VulnCheck 賦点、NVD レコードは `Deferred`）。内訳：非 string callable を呼ぶ Twig `group` フィルタ経由の RCE（4.x は 4.18.8 未満、5.x は 5.11.0 未満）、認証済みコントロールパネルユーザーによるサンドボックス脱出2件、認証済み管理者による Yii ビヘイビア注入、そして `users/verify*` ルートで検証コードを再利用する認証バイパス。影響バージョン範囲から、修正は 5.11.0（4.x 系は 4.18.8）と読める。
+8件の Craft CMS CVE が同一バッチで降り——全8レコードが同じ秒で公開（10月19日 20:17:54 UTC、VulnCheck への一回の提出）、NVD はすべて `Deferred`。内訳：非 string callable を呼ぶ Twig `group` フィルタ経由の RCE——コンテンツ入力から始まる一件（4.x は 4.18.8 未満、5.x は 5.11.0 未満）、認証済みコントロールパネルユーザーによるサンドボックス脱出2件、Twig フィルタメソッドのアローリストバイパス（v4 7.1、バッチ最低）、大文字小文字を区別するクラス名チェックを抜ける `create()` ブロックリストバイパス、認証済み管理者による Yii ビヘイビア注入、`users/verify*` ルートで検証コードを再利用する認証バイパス、そしてバッチ最高スコア——サイトスコープの GraphQL トークンが他サイトのコンテンツを改変できるマルチサイト認可バイパス（v4 9.3 / v3.1 9.8）。影響バージョン範囲から、修正は 5.11.0（4.x 系は 4.18.8）と読める。
 
-**Why it matters:** Twig サンドボックス脱出は種類として繰り返し顔を出す。そして `group` フィルタの一件はパネル権限ではなくコンテンツ入力から始まる——「不正アカウントが必要」と「コメント欄が必要」の違い。
+**Why it matters:** Twig サンドボックス脱出は種類として繰り返し顔を出す。そして `group` フィルタの一件はパネル権限ではなくコンテンツ入力から始まる——「不正アカウントが必要」と「コメント欄が必要」の違い。バッチ最高スコアはマルチサイト GraphQL 越権（v4 9.3）——5件まとめなら漏れる一枚で、マルチサイト構成が最初に当たるべきもの。
 
-[`🔗 NVD: CVE-2026-112770`](https://nvd.nist.gov/vuln/detail/CVE-2026-112770) · [`🔗 NVD: CVE-2026-112775`](https://nvd.nist.gov/vuln/detail/CVE-2026-112775)
+[`🔗 NVD: CVE-2026-112770`](https://nvd.nist.gov/vuln/detail/CVE-2026-112770) · [`🔗 NVD: CVE-2026-112776`](https://nvd.nist.gov/vuln/detail/CVE-2026-112776) · [`🔗 NVD: CVE-2026-112775`](https://nvd.nist.gov/vuln/detail/CVE-2026-112775)
 
 ---
 
@@ -274,13 +274,223 @@ Claude Science の内部研究モデルが、5種のサソリ神経毒（Cn2、T
 
 ---
 
+## 20. Argo CD が1時間で 9.9 を3件公開——いずれも「Application get」だけで到達できる
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** NVD（GitHub 割当）· 10月20日 18:17–19:17 UTC 公開
+- **Tags:** `cve` `argocd` `kubernetes` `gitops`
+
+Argo CD の CVE 3件が10月20日の1時間以内に公開され、いずれも CVSS 3.1 で 9.9、GitHub 割当、NVD のステータスはすべて `Undergoing Analysis` のまま。CVE-2026-113672（CWE-22）：repo-server の Jsonnet インポータが `import`/`importstr`/`importbin` をリポジトリルートに閉じ込めておらず、絶対パス・`..` による遡上・リポジトリ内シンボリックリンクで repo-server が読める任意のファイル——`/proc/self/environ` や投影された service-account トークンを含む——を読める。取り込んだ内容を ConfigMap に置けば呼び出し元に返り、`/dev/zero` に対する `importstr` はメモリを枯渇させる。CVE-2026-113708（CWE-88）：Kustomize がリモート URL の `ref`/`version` を終端オプション区切りなしで `git fetch` に渡すため、先頭ハイフンの値が `--upload-pack` として解釈され、`file://` のローカルトランスポートでコマンドが実行される——外向き通信は不要で、出力はマニフェスト生成エラーとして返る。CVE-2026-113709（CWE-829）：`helmGlobals.configHome` をリポジトリ制御下のパスに向けると、Helm がダウンローダプラグインを自動ロードして実行する（`--enable-helm` が前提）。3件に共通する安価な入口は `POST /api/v1/applications/manifestsWithFiles` で、必要なのは **Application get** のみ——update も sync もリポジトリ書き込み権限も要らない。修正版は 3.3.15、3.4.10、3.5.4、3.6.0-rc2 で、これらのタグは **10月6日** に公開済み、CVE レコードより2週間早い。同じリリースノートには4件目の CRITICAL、PreDelete/PostDelete フックによる AppProject 制限のバイパス——CVE-2026-77459、GHSA-fmxq-cgp8-87wp、こちらも 9.9 で10月13日公開、NVD は `Undergoing Analysis` のまま——も載っている。
+
+**Why it matters:** 修正は開示の2週間前に出ていた——3.3.x の .15 未満に留まっているなら、直せる状態のまま理由だけが伏せられていたことになる。さらに重要なのは権限モデルで、ある Application を「読める」だけの攻撃者がアップロードしたファイルからマニフェストを生成できるなら、「閲覧者」は3つの独立した経路で repo-server 上のコード実行と等価になる。
+
+[`🔗 NVD: CVE-2026-113672`](https://nvd.nist.gov/vuln/detail/CVE-2026-113672) · [`🔗 NVD: CVE-2026-113708`](https://nvd.nist.gov/vuln/detail/CVE-2026-113708) · [`🔗 Argo CD v3.3.15 リリースノート`](https://github.com/argoproj/argo-cd/releases/tag/v3.3.15)
+
+---
+
+## 21. PHP が本日 14:00 UTC に CVSS 4.0 9.2 の2件を修正——どのコンポーネントかは公表せず
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** php.announce · 196+ HN pts · 8時間前 (~20:00 UTC+8)
+- **Tags:** `php` `cve` `pre-disclosure` `patching`
+
+Jakub Zelenka による `php.announce` の #509（10月20日 19:33 UTC）は4文だけ：次回の PHP セキュリティリリースは「2件の重大な脆弱性（いずれも CVSS v4.0 9.2、Critical）に対応する」もので、公開は **2026年10月21日水曜 14:00 UTC** の予定——本バッチの約10時間後だ。同時にチームは「いずれかの詳細が公開された場合、あるいは野外での活発な悪用の証拠を確認した場合」は前倒しする権利を留保すると明記している。書かれていないのは CVE 番号、影響バージョン、コンポーネント名。これは意図的で、拡張機能名を挙げれば攻略法を与えることになる——だがその代わり、いま実行可能な事実は時刻だけになる。
+
+**Why it matters:** PHP は Web ランタイムのかなりの割合を支えており、重要度だけを先に公表した調整済み公開日は、情報の問題ではなくメンテナンス枠の問題だ：14:00 UTC までにバージョン固定とロールバック手順を用意しておけば、適用は1アクションで済む。前倒しになったら、それは PHP チームが野外悪用が始まったと言っているのに等しい。
+
+[`🔗 php.announce #509`](https://news-web.php.net/php.announce/509) · [`🔗 PHP リリースアーカイブ`](https://www.php.net/archive/2026.php) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=50172041)
+
+---
+
+## 22. HyperFrames——「HTML を書いて動画を出す」68.6k★、証拠はリリース頻度のほう
+
+- **Velocity:** ▮▮ rising
+- **Source:** GitHub Trending · 68,606★ · +5,994/週
+- **Tags:** `video` `agents` `html` `rendering`
+
+HeyGen の HyperFrames は HTML・CSS・メディア・**シーク可能な**アニメーションを決定的な MP4 に変換する：CLI、Claude Code プラグイン、他ハーネス向けの単体スキル、MCP サーフェス、ネイティブの Mac/Linux アプリ。Apache-2.0、2026年3月10日作成、6,205 フォーク、未解決 issue 399件。今週のトレンドの多くと違い、活動は検証可能かつ継続的だ：npm の `hyperframes` は 0.8.181、公開バージョンは累計 **535**、v0.8.179〜0.8.181 が2日以内に連続リリースされ、最新コミットは本日 02:52 UTC。設計上の制約こそが要点で、すべてが実時間再生ではなくシーク可能なタイムラインで駆動される——これがレンダリングを再現可能にし、エージェントが待たずに N フレーム目へ飛べる理由になっている。
+
+**Why it matters:** 動画はエージェントが最も苦手とする媒体だ。通常のレンダラはどれも状態を持つリアルタイムシステムだから。決定的でフレーム単位にアドレス可能な HTML レンダラは、動画生成を diff 可能・再試行可能にする——UI におけるスナップショットテストと同じ性質だ。
+
+[`── heygen-com/hyperframes`](https://github.com/heygen-com/hyperframes) · [`🔗 HyperFrames`](https://www.hyperframes.dev/)
+
+---
+
+## 23. context-mode 31.4k★：本物のコンテキスト問題と、6月以降公開が止まった npm パッケージ
+
+- **Velocity:** ▮▮ rising
+- **Source:** GitHub Trending · 31,407★ · +3,556/週
+- **Tags:** `context-engineering` `mcp` `coding-agents` `licensing`
+
+`mksglu/context-mode` はツール出力のサンドボックス化（98% 削減）、セッションメモリの永続化、MCP と各ハーネスのフックによる17プラットフォームのルーティング（Claude Code、Codex、Cursor、Copilot、Zed、OpenCode、Kiro、Pi）を主張する。31,407★、2,209 フォーク、未解決 issue 356件、2月23日作成。README のバッジ壁が前面に出していない事実が2つある。第一に、ライセンスは **ELv2** で OSI 承認ライセンスではない：ソース公開型で、マネージドサービスとしての提供に制限がある——GitHub API は `NOASSERTION` を返し、バッジは ELv2 と表示する。第二に、npm レジストリの `context-mode` は **最新 1.0.169、最終更新 6月29日** で、GitHub のリリースも同じタグで止まっている：4か月分のコミット（今日のものは `ci: update install stats`）がありながら、ユーザーがインストールできる新バージョンは出ていない。
+
+**Why it matters:** コンテキスト削減は独立した層になりつつあり、帳簿は正確でなければならない——この製品はプロンプトの途中に座るプロキシだから、捨てた内容はエージェントが一生見ない内容になる。入れる前に、実際に手に入るのがどのバージョンかを確認し、製品に組み込む前にライセンスを読むこと。
+
+[`── mksglu/context-mode`](https://github.com/mksglu/context-mode) · [`── npm: context-mode`](https://www.npmjs.com/package/context-mode)
+
+---
+
+## 24. VoiceStudio——79.2k★ のローカル AGPL 音声スタック、声クローンと MCP サーバー付き
+
+- **Velocity:** ▮▮ rising
+- **Source:** GitHub Trending · 79,197★ · +17,057/週
+- **Tags:** `tts` `voice-cloning` `local-first` `mcp`
+
+`debpalash/VoiceStudio` はホスト型音声基盤のオープンソースで完全ローカルの代替：声クローン、声デザイン、タイミング付きの吹き替え、フローティングウィジェットでのディクテーション、文字起こし、オーディオブック、バッチ処理——Electron アプリとして提供され、ローカル API とエージェント向け MCP サーバーを備える。既定エンジンは k2-fsa の OmniVoice で他エンジンも選択可能。AGPL-3.0、8,710 フォーク、2026年4月9日作成、最新リリース v0.5.6（9月23日）、最終コミットは昨日 20:03 UTC。646言語を謳い、ローカル処理は自分のハードで動き、リモートサービスは任意、テレメトリは同意が必要だと明記している。646言語はプロジェクト自身の主張で、独立した評価は引用されていない。
+
+**Why it matters:** Mistral がバッチ文字起こしを $0.0035/分に値付けした同じ日に登場した——セルフホスト側の対案がクローンと吹き替えまで覆うというのは、まさにベンダーがオープンウェイトに置きたがらない層だ。代償は AGPL-3.0：社内ツールなら問題ないが、VoiceStudio を製品に組み込むなら実質的な制約になる。
+
+[`── debpalash/VoiceStudio`](https://github.com/debpalash/VoiceStudio) · [`🔗 voicestudio.sh`](https://voicestudio.sh/)
+
+---
+
+## 25. Meta の Prometheus：事前学習 goodput 85%、約47k GPU 時間に1回の中断——そして100万 GPU への道筋
+
+- **Velocity:** ▮▮ rising
+- **Source:** Engineering at Meta · 75+ HN pts · 10月19日公開
+- **Tags:** `datacenter` `gpu` `goodput` `ml-infra`
+
+Meta がオハイオ州 New Albany のギガワット級スーパークラスタ Prometheus を公開した。Muse ファミリー（Muse Wonder を含む）を学習したマシンだ。第1フェーズは完了し、現在は複数の建屋にまたがる数十万基の GPU を「1台のマシン」として束ね、最終的に約 **100万** GPU を目標とする。覚えるべき数字は FLOPS ではなく信頼性：Muse Wonder の事前学習で **goodput 85%超**、強化学習で **90%超**、平均中断間隔（MTBI）は約 **47,000 GPU 時間**、ファームウェア修正の全 fleets 適用後は **54,000 超**に伸びた。NVIDIA の2世代を配備——Catalina（GB200 NVL72、2ラック構成「Ariel」で GPU あたり 800G のスケールアウトを確保、標準は 400G）と Clemente（GB300 NVL72、GPU あたり 288 GB HBM、GPU:CPU 2:1、72 GPU ドメインを1ラックに収容）、次は Vera Rubin NVL72、加えて閉ループ液冷。
+
+**Why it matters:** Meta が出したのはクラスタ運用者が実際に体感する指標だ。MTBI 約47k GPU 時間なら、5,000基を使うジョブはおよそ9時間ごとに中断を想定すべきことになる——だからこそ最先端の学習が完走するかを決めるのはピークスループットではなく goodput なのだ。これは Meta 自身の fleets によるベンダー自己申告値で、ファームウェア前後の比較も彼らのものだ。
+
+[`🔗 Engineering at Meta: Inside Prometheus`](https://engineering.fb.com/2026/10/19/data-center-engineering/inside-prometheus-meta-gigawatt-scale-supercluster/) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=50152886)
+
+---
+
+## 26. SlopCodeBench 10/2026：フロンティアモデルの厳格通過率は 12.2–16.3%——xhigh は Opus 5.5 をむしろ悪化させた
+
+- **Velocity:** ▮▮ rising
+- **Source:** humanlayer（Dex Horthy）· 200+ HN pts · 10月15日公開
+- **Tags:** `benchmarks` `coding-agents` `code-quality` `evals`
+
+SlopCodeBench はコーディングエージェントに段階的に課題を出す：書かせ、新しい要件を渡し、既存コードを変更させる——後半のチェックポイントは新機能と旧挙動の両方を試す。HumanLayer は6つのモデル設定（Opus 5.5、Fable 5.1、SOL 6、SOL 6.1、Astra、GLM 5.3）を **36問・設定あたり196チェックポイント** で走らせた。厳格通過率——全テストケースとすべての回帰テスト——は **12.2–16.3%**、最高は Astra の 16.3%。緩い「core pass rate」は **65.8–74.0%**。この2つの帯の差が発見そのものだ。第二に、**medium が一部の新モデルで xhigh を上回った**（Opus 5.5 が顕著）一方、完備された3組では xhigh のコストは medium の **2.11–4.22倍**だった。記事自身の留保も重要：以前のサブセット実行（広く引用された Fable 5 の 30% を含む）は36問中6問しかカバーしておらず今回とは比較できない、ベンチマークチームによる Part II も未公開。
+
+**Why it matters:** チェックポイントの3分の2は通るのに完全実行では14%しか通らないベンチマークは、チームが本当に恐れているもの——新しいチケットを解決しつつ古い挙動を静かに壊す——を測っている。「もっと頑張る」が2〜4倍の価格で単調に良くならないという事実は、多くのハーネスが前提にしているエフォート設定の想定を崩す。
+
+[`🔗 SlopCodeBench 10/2026`](https://github.com/humanlayer/advanced-context-engineering-for-coding-agents/blob/main/benchmarking-new-models-on-slop-code-bench.md) · [`🔗 SlopCodeBench 論文（arXiv 2603.24755）`](https://arxiv.org/abs/2603.24755) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=50108717)
+
+---
+
+## 27. AI エージェントに対するボット検出：9.1% から 99%——1位になったベンダー自身による測定
+
+- **Velocity:** ▮▮ rising
+- **Source:** Proof of Human Research · 35+ HN pts · 10月20日公開
+- **Tags:** `bot-detection` `agents` `browser-automation` `captcha`
+
+Proof of Human は2025年のベンチマークを、より広い敵対者集合で再実行した——スクリプト化 Chromium、CloakBrowser、視覚能力を持つ3つのエージェント（Browser Use、Grok、Perplexity Comet）——5つの検出システムに対し各20セッション、システムあたり評価可能89〜100セッション。総合検出率は **Proof of Human 99%**、reCAPTCHA v3 **69.4%**、hCaptcha **44.3%**、Cloudflare Turnstile **42.1%**、Cloudflare Bot Management **9.1%**。分断こそが本題だ：hCaptcha と Turnstile は**スクリプト化**ブラウザをほぼ全滅させたがエージェントセッションはほとんど捕まえられず、Turnstile は3つのエージェント相手に「チャレンジすら出さなかった」。reCAPTCHA v3 は逆で、エージェントの多くを捕まえつつ CloakBrowser は1件も検出できなかった（ソースレベルのブラウザ指紋改変と住宅用 IP を併せ持つ唯一の敵対者）。Turnstile の強みは常に不可視性であり、不可視性とはページを読めるモデルがそのまま通り抜けられることでもある。
+
+**Why it matters:** 構造的な留保は記事自身が書いている：ベンチマークの著者はボット検出製品を販売していて1位、システムはブラックボックスなので信号の帰属は推測、100セッションのセルは小さい。総平均ではなく敵対者別の表を読むこと——Turnstile でエージェントブラウザを止めているつもりなら、該当セルの数字はほぼゼロだ。
+
+[`🔗 Benchmarking Bot Detection Systems Against Modern AI Agents in 2026`](https://research.poh.org/bot-benchmarking-2026/) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=50169506)
+
+---
+
+## 28. MCP TypeScript SDK：タスクがセッション間で漏れる 8.6——1.32.0 で修正
+
+- **Velocity:** ▮▮ rising
+- **Source:** NVD（GitHub 割当）· 10月20日 19:17 UTC 公開
+- **Tags:** `cve` `mcp` `sdk` `agents`
+
+CVE-2026-111767（CWE-639/862、CVSS 3.1 8.6、GitHub 割当、NVD は `Deferred`）：`@modelcontextprotocol/sdk` の **1.24.0 から 1.32.0 未満** で、実験的機能 tasks（`taskStore`）がタスクをどのセッションが作ったかを検証していなかった。同じ `InMemoryTaskStore` を共有するクライアント同士が、互いのタスクを列挙・読み取り・キャンセルできた——SDK の例が推奨するマルチテナント構成そのものだ。1.32.0 で修正、勧告 GHSA-22jm-h49p-29qw、パッチコミット `727075b`。
+
+**Why it matters:** tasks は MCP の長時間処理に対する答えであり、エージェントの中間状態を保持するプリミティブだ。タスク ID だけをキーにしたストアは典型的な IDOR で、それが全員がサーバーを建てるこの SDK に入っていた——1.24.0 超で共有 MCP サーバーを動かしているなら、1.32.0 への更新が修正のすべてだ。
+
+[`🔗 NVD: CVE-2026-111767`](https://nvd.nist.gov/vuln/detail/CVE-2026-111767) · [`🔗 GHSA-22jm-h49p-29qw`](https://github.com/modelcontextprotocol/typescript-sdk/security/advisories/GHSA-22jm-h49p-29qw)
+
+---
+
+## 29. FulcrumSec が「10.6 TB の PingCAP 持ち出し」を公開——11万5千件の平文 API キー、ベンダーは未確認
+
+- **Velocity:** ▮▮ rising
+- **Source:** FulcrumSec · 55+ HN pts · 10月20日公開 (~06:45 UTC+8)
+- **Tags:** `breach` `tidb` `credentials` `cloud`
+
+自称 FulcrumSec の恐喝グループが、PingCAP（TiDB Cloud の企業）への侵入だと主張する第1段階の資料を公開した：**10.6 TB**、490万ファイル。そこにはコントロールプレーンの複製が含まれ、**9月8日から9月30日まで6時間ごとに88回連続で持ち出された**——「検知イベントは一度もなかった」という。列挙された内容は GCP バケット約50、テナント組織 180,046、一意メール 403,262、**平文の顧客 API キー 115,308（うち 42,612 が有効と記述）**、顧客 SQL 文 2,060万、顧客サーバー IP 500万、非公開ソースリポジトリ 413、加えて Jira/CRM のダンプ。初期侵入の主張は二度読みたくなる：GCP サービスアカウントキーと Azure サービスプリンシパルが「自分たちのリポジトリにコミットされていた」という。数字はすべて主張者のものだ。本バッチ時点で PingCAP の公表文は確認できず、HN の読者もその枠組みにすぐ異を唱えた——記述の多くはコントロールプレーンと課金のメタデータであり、ただし SQL ログとスナップショットには顧客データが含まれ得る。
+
+**Why it matters:** 主張は未検証だが、攻撃経路はマルチテナント基盤を運用する誰でも5分で自己点検できる：リポジトリでサービスアカウントキーを grep し、自分のコントロールプレーンが88回連続の全量エクスポートに気づくかを問うこと。キー一覧が本物なら、PingCAP が次に何を言おうと TiDB Cloud の顧客にはローテーションの仕事がある。
+
+[`🔗 FulcrumSec: The PingCAP TiDB Cloud Leaks`](https://fulcrumsec.vg/pingcap/) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=50173716)
+
+---
+
+## 30. CSS の次のベースラインは投票で決まる——Comeau の Interop 2027 リスト
+
+- **Velocity:** ▮ steady
+- **Source:** joshwcomeau.com · 64+ HN pts · 2.3時間前 (~01:47 UTC+8)
+- **Tags:** `css` `interop` `browsers` `web-platform`
+
+Interop は Google、Apple、Microsoft、Mozilla（加えて Igalia と Bocoup）が「同じ年に同じ Web プラットフォームの穴を埋める」ための常設合意で、Mozilla は **Interop 2027** 向けの公開ランキングを開設し、投票結果が最終リストに反映される。Josh Comeau は自身のトップ10を解説する：CSS 関数（`@function`、Chrome 155 と Edge 154 で対応、Firefox 157 と Safari 27 は未対応）、面取りとスクワークル用の `corner-shape`、`border-shape`、アンカー付きコンテナクエリ、スクロールトリガーアニメーション、`reading-flow`/`reading-order`、`interpolate-size`/`calc-size()` によるキーワードサイズアニメーション、gap 装飾、`position: sticky` の有効化を検知するスクロール状態コンテナクエリ。
+
+**Why it matters:** Interop は「1エンジンで格好いい」を「安心して出荷できる」に変える仕組みだ——subgrid は2019年に Firefox のみだったのが Interop 2023 入りから1年で全主要ブラウザに到達した。つまりこの投票リストは来年のベースラインの予測市場であり、実務的な読み方はプログレッシブエンハンスメント：Chrome のみの項目は今日からフォールバック付きで使え、コンテナクエリ系はアーキテクチャを変える。
+
+[`🔗 The Future of CSS`](https://www.joshwcomeau.com/css/interop-2027/) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=50175070)
+
+---
+
+## 31. Krebs：FBI は身代金交渉人が ShinyHunters の圧力サイトを運営していたと見ている
+
+- **Velocity:** ▮ steady
+- **Source:** Krebs on Security · 133+ HN pts · 10月19日公開
+- **Tags:** `shinyhunters` `extortion` `incident-response` `fbi`
+
+KrebsOnSecurity の報道：ShinyHunters を追う米連邦捜査当局は——同グループは9月下旬に FBI 自身の採用サイト `fbijobs.gov` を侵害した——**2社の身代金交渉会社**の幹部が同グループと異例に密接な関係を持っていたと特定し、うち米国在住の1人は被害者に支払いを迫るサイトの運営まで手伝っていたという。FBI によれば ShinyHunters の今年の恐喝額は **7,000万ドル** 超。経緯として、オランダ警察は9月15日に容疑者 Pepijn van der Stap を逮捕、グループの運営者「Rey」（アンマンの10代）はヨルダン当局に拘束され協力しているとロイターが10月3日に報じた。Krebs の情報源は「捜査に近い筋」で、交渉人に対する告訴には触れていない。
+
+**Why it matters:** インシデント対応会社は恐喝経済の信頼の錨だ。攻撃者側に利害を持つ交渉人は、どんな契約条項でも検出できない利益相反になる。防御側にとってこれは調達の問題に変わる：交渉人を雇うとき、机の向こうに誰が座っているのか、そして彼らでなければ何が見えるのか。
+
+[`🔗 Krebs: Feds Suspect Ransom Negotiator Ran ShinyHunters Extortion Site`](https://krebsonsecurity.com/2026/10/feds-suspect-ransom-negotiator-ran-shinyhunters-extortion-site/) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=50173487)
+
+---
+
+## 32. Kronos が再び 42.4k★ でトレンド入り——4月13日以降コミットはゼロ
+
+- **Velocity:** ▮ steady
+- **Source:** GitHub Trending · 42,425★ · +733/24h
+- **Tags:** `time-series` `finance` `foundation-models` `maintenance`
+
+`shiyu-coder/Kronos` は K 線系列のための decoder-only 基盤モデル：専用トークナイザが OHLCV を階層的離散トークンに量子化し、自己回帰 Transformer で事前学習する。モデル群は 4.1M から約102M パラメータ、BTC/USDT の24時間予測ライブデモ付き。そして今日 42,425★、7,024 フォーク——最終 push は **2026年4月13日**、**未解決 issue 283件** は放置され、以降のリリースもない。何も出ていない。動いたのは星の数だけだ。先週の Void と CLI-Anything とまったく同じ形：採用は保守ではない。
+
+**Why it matters:** 金融予測モデルは取引やリスク管理のループに組み込まれる依存であり、そこでは静かなドリフトと古いトークナイザは不便ではなく高くつく故障になる。重み付きの論文として扱い、未返信の issue に自分が踏もうとしているバグが転がっていないか確認すること。
+
+[`── shiyu-coder/Kronos`](https://github.com/shiyu-coder/Kronos) · [`── NeoQuasar on Hugging Face`](https://huggingface.co/NeoQuasar)
+
+---
+
+## 33. wshobson/agents：ひとつの Markdown カタログを7つのハーネスに載せて 41.3k★
+
+- **Velocity:** ▮ steady
+- **Source:** GitHub Trending · 41,311★ · +93/24h
+- **Tags:** `agents` `skills` `plugins` `multi-harness`
+
+`wshobson/agents` のカタログは現在 **94プラグイン**（うち92がローカル）、**202エージェント、185スキル、105コマンド** を主張し、Markdown で一度書いてハーネスごとに適応する：Claude Code と Cursor はプラグインマーケットプレイス、Codex CLI はネイティブマーケットプレイスか生成物、OpenCode・Antigravity・Copilot・Pi は `make install-*` でエージェントを生成しツール権限を翻訳する。MIT、4,396 フォーク、未解決 issue はわずか5件、最終コミットは10月17日。注目すべき設計判断はペルソナ集路線（第13項）の正反対で、単一ソースから7つの生成出力を作り、各ハーネスの権限モデルを暗黙にせず明示的に翻訳している。
+
+**Why it matters:** マルチハーネス配布はスキル生態系がこれからぶつかる保守問題だ——同じ成果物が異なるツール権限の意味論、異なる MCP 設定、異なる呼び出し面に適合しなければならない。各ハーネス向けの出力をコピーではなく**生成物**として扱うカタログだけが、スキーマ変更を生き延びる。
+
+[`── wshobson/agents`](https://github.com/wshobson/agents) · [`── plugins ツリー`](https://github.com/wshobson/agents/tree/main/plugins)
+
+---
+
+## 34. StreamsHub の Kubernetes コンソール：9.9、「Console CR を作る」がクラスタ全体の Kafka 権限になる
+
+- **Velocity:** ▮ steady
+- **Source:** NVD（Red Hat 割当）· 10月20日 12:17 UTC 公開
+- **Tags:** `cve` `kubernetes` `strimzi` `rbac`
+
+CVE-2026-105312（CWE-269、CVSS 3.1 9.9、Red Hat 割当、NVD は `Awaiting Analysis`）：`consoles.console.streamshub.github.com` リソースを作成する権限を持つ Kubernetes テナントは、`spec.containers.api.spec.image` に任意のイメージを指定できる。Operator はそのイメージを Pod として展開し、その Pod の ServiceAccount は ClusterRoleBinding で、全 Strimzi CRD（KafkaUsers を含む）へのクラスタ全体の `get/list/watch`、Kafkas/KafkaRebalances への `patch`、`cluster-monitoring-view` を付与する ClusterRole に束ねられている。攻撃者のコードは投影されたサービスアカウントトークンを読み、そのすべてを継承する——テナントをまたいだ Kafka コントロールプレーンの読み書きだ。Red Hat の緩和策は、テナント Role から Console CR の create/update/patch を外すこと（管理はクラスタ管理者のみにすべき）と、`spec.containers.api.spec.image` を検証する OPA/Gatekeeper か Kyverno のアドミッションポリシーの追加。
+
+**Why it matters:** そのリソースを調停する Operator がクラスタスコープのバインディングを持つなら、「カスタムリソースに対するテナントスコープの RBAC」はセキュリティ境界ではない——CR は Operator の identity の代理にすぎない。ユーザーにイメージを指定させる Operator はすべてこの形をしており、修正は Role を締めることではなくフィールドに制約を課すことだ。
+
+[`🔗 NVD: CVE-2026-105312`](https://nvd.nist.gov/vuln/detail/CVE-2026-105312) · [`🔗 Red Hat: CVE-2026-105312`](https://access.redhat.com/security/cve/CVE-2026-105312)
+
+---
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-10-20T20:25:00Z |
-| Items | 19 |
-| Sources tracked | 16 (Hacker News, GitHub Trending/repos, Mistral, Cloudflare blog, peec.ai, Mastodon, teddysvoronos.com, kaba.cx, prestonbyrne.com, anthropic.com, jepsen.io, CISA KEV, NVD, claude.com, permit.petercai.com, entropicthoughts.com) |
+| Generated | 2026-10-21T04:45:00Z |
+| Items | 34 |
+| Sources tracked | 30 (Hacker News, GitHub Trending/repos, Mistral, Cloudflare blog, peec.ai, Mastodon, teddysvoronos.com, kaba.cx, prestonbyrne.com, anthropic.com, jepsen.io, CISA KEV, NVD, claude.com, permit.petercai.com, entropicthoughts.com, php.announce, php.net, FulcrumSec, Engineering at Meta, joshwcomeau.com, krebsonsecurity.com, Proof of Human Research, humanlayer, arXiv, Red Hat, npm, Hugging Face, voicestudio.sh) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (3x daily) |
 | Ranking | Velocity-weighted (recency × engagement acceleration × source authority) |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |

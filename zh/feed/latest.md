@@ -1,8 +1,8 @@
 ---
 date: 2026-10-21
-updated: 2026-10-20T20:25:00Z
+updated: 2026-10-21T04:45:00Z
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 16
+sources: 30
 license: CC-BY-4.0
 ---
 
@@ -204,17 +204,17 @@ Camunda 7 的两个修复值得对照版本检查。CVE-2026-109432：表达式�
 
 ---
 
-## 15. Craft CMS 一次补五个——四个 Twig 逃逸 RCE + 一个验证码重用
+## 15. Craft CMS 一批补八个——五个 Twig 缺口、一个跨站 GraphQL 越权 + 一个验证码重用
 
 - **Velocity:** ▮ steady
 - **Source:** NVD (VulnCheck-assigned) · 10 月 19–20 日发布
 - **Tags:** `cve` `craftcms` `php` `rce`
 
-两天内落下五个 Craft CMS CVE，CVSS v4 全部 8.7（VulnCheck 赋分；NVD 记录 `Deferred`）。清单：经 Twig `group` 过滤器调用非 string callable 的 RCE（4.x < 4.18.8 与 5.x < 5.11.0）；两个由已认证 Control Panel 用户触发的沙箱逃逸；已认证管理员可注入 Yii behavior；以及 `users/verify*` 路由上重用验证码的认证绕过。受影响版本区间意味着修复在 5.11.0（4.x 线为 4.18.8）。
+八个 Craft CMS CVE 同批落下——全部八条记录在同一秒内发布（10 月 19 日 20:17:54 UTC，一次 VulnCheck 提交），NVD 全部 `Deferred`。清单：经 Twig `group` 过滤器调用非 string callable 的 RCE——从内容输入出发的那个（4.x < 4.18.8 与 5.x < 5.11.0）；两个由已认证 Control Panel 用户触发的沙箱逃逸；Twig 过滤器方法 allowlist 绕过（v4 7.1，全批最低）；经大小写敏感类名检查的 `create()` blocklist 绕过；已认证管理员注入 Yii behavior；`users/verify*` 路由上重用验证码的认证绕过；以及全批最高分——多站授权绕过，站点级 GraphQL token 可改动其他站点的内容（v4 9.3 / v3.1 9.8）。受影响版本区间意味着修复在 5.11.0（4.x 线为 4.18.8）。
 
-**Why it matters:** Twig 沙箱逃逸作为一种类别反复出现，而 `group` 过滤器那个从内容输入出发、不需要面板权限——这是"需要一个恶意账号"与"需要一个评论框"的区别。
+**Why it matters:** Twig 沙箱逃逸作为一种类别反复出现，而 `group` 过滤器那个从内容输入出发、不需要面板权限——这是"需要一个恶意账号"与"需要一个评论框"的区别。全批最高分在多站 GraphQL 越权（v4 9.3）——五件套式归纳会漏掉的那个，也是多站部署最该先补的。
 
-[`🔗 NVD：CVE-2026-112770`](https://nvd.nist.gov/vuln/detail/CVE-2026-112770) · [`🔗 NVD：CVE-2026-112775`](https://nvd.nist.gov/vuln/detail/CVE-2026-112775)
+[`🔗 NVD：CVE-2026-112770`](https://nvd.nist.gov/vuln/detail/CVE-2026-112770) · [`🔗 NVD：CVE-2026-112776`](https://nvd.nist.gov/vuln/detail/CVE-2026-112776) · [`🔗 NVD：CVE-2026-112775`](https://nvd.nist.gov/vuln/detail/CVE-2026-112775)
 
 ---
 
@@ -274,13 +274,223 @@ Claude Science 的一台内部研究模型对五种蝎神经毒素（Cn2、Ts1�
 
 ---
 
+## 20. Argo CD 一小时内公开三个 9.9——全部只需"Application get"即可触达
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** NVD（GitHub 指派）· 10 月 20 日 18:17–19:17 UTC 发布
+- **Tags:** `cve` `argocd` `kubernetes` `gitops`
+
+三个 Argo CD CVE 在 10 月 20 日一小时内先后发布，CVSS 3.1 均为 9.9，由 GitHub 指派，NVD 状态全部仍是 `Undergoing Analysis`。CVE-2026-113672（CWE-22）：repo-server 的 Jsonnet 导入器没有把 `import`/`importstr`/`importbin` 限制在仓库根目录内，绝对路径、`..` 穿越和仓库软链接可以读取 repo-server 能读到的任何文件——包括 `/proc/self/environ` 和投射的 service-account token；把导入内容放进 ConfigMap 就能回传给调用者，而对 `/dev/zero` 使用 `importstr` 会耗尽内存。CVE-2026-113708（CWE-88）：Kustomize 把远程 URL 里的 `ref`/`version` 传给 `git fetch` 时没有 `--` 分隔符，以连字符开头的值会被解析成 `--upload-pack`，在 `file://` 本地传输下执行命令——不需要出网，输出通过清单生成错误返回。CVE-2026-113709（CWE-829）：把 `helmGlobals.configHome` 指向仓库可控路径后，Helm 会自动加载 downloader 插件并执行（需开启 `--enable-helm`）。三者共享同一个廉价入口：`POST /api/v1/applications/manifestsWithFiles` 只需要 **Application get** 权限——不需要 update、不需要 sync、不需要仓库写权限。修复版本为 3.3.15、3.4.10、3.5.4 与 3.6.0-rc2，而这些 tag 是 **10 月 6 日** 发布的，比 CVE 记录早两周。同一份发布说明还列出第四个 CRITICAL：PreDelete/PostDelete 资源钩子可绕过 AppProject 限制——CVE-2026-77459，GHSA-fmxq-cgp8-87wp，同为 9.9，10 月 13 日发布，NVD 状态仍是 `Undergoing Analysis`。
+
+**Why it matters:** 补丁比披露早两周——任何停留在 3.3.x 且低于 .15 的实例，修复一直可用而原因被捂着。更该注意的是权限模型：一个只能"读"某个 Application 的攻击者就能用上传文件生成清单，于是"只读账号"在三条独立路径上等同于 repo-server 上的代码执行。
+
+[`🔗 NVD: CVE-2026-113672`](https://nvd.nist.gov/vuln/detail/CVE-2026-113672) · [`🔗 NVD: CVE-2026-113708`](https://nvd.nist.gov/vuln/detail/CVE-2026-113708) · [`🔗 Argo CD v3.3.15 发布说明`](https://github.com/argoproj/argo-cd/releases/tag/v3.3.15)
+
+---
+
+## 21. PHP 今天 14:00 UTC 将发布两个 CVSS 4.0 9.2 漏洞的修复——但没说涉及哪个组件
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** php.announce · 196+ HN pts · 8 小时前 (~20:00 UTC+8)
+- **Tags:** `php` `cve` `pre-disclosure` `patching`
+
+Jakub Zelenka 在 `php.announce` 的第 509 号帖子（10 月 20 日 19:33 UTC）只有四句话：即将发布的 PHP 安全版本"修复两个严重漏洞（CVSS v4.0 均为 9.2，Critical）"，定于 **2026 年 10 月 21 日周三 14:00 UTC** 发布——大约在本批次发布后十小时。帖子还写明团队保留提前发布的权力，"如果任一漏洞的细节被公开，或我们观察到野外主动利用的证据"。帖子没有的内容：CVE 编号、受影响版本、组件名。这是有意的——点名扩展名就等于给出利用方法——但也意味着眼下唯一可执行的事实是这个时间点。
+
+**Why it matters:** PHP 承载着相当大份额的 Web 运行时，一个预先公布严重等级的协调发布时间，本质是运维窗口问题而非信息问题：在 14:00 UTC 之前把版本锁定和回滚方案准备好，到时更新就只剩一个动作。如果它提前发布，那就是 PHP 团队在告诉你野外利用已经开始。
+
+[`🔗 php.announce #509`](https://news-web.php.net/php.announce/509) · [`🔗 PHP 发布存档`](https://www.php.net/archive/2026.php) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50172041)
+
+---
+
+## 22. HyperFrames——68.6k★ 的"写 HTML，渲染视频"，发布节奏才是关键证据
+
+- **Velocity:** ▮▮ rising
+- **Source:** GitHub Trending · 68,606★ · +5,994/周
+- **Tags:** `video` `agents` `html` `rendering`
+
+HeyGen 的 HyperFrames 把 HTML、CSS、媒体与**可定位（seekable）**动画渲染成确定性的 MP4：CLI、Claude Code 插件、面向其他 harness 的独立 skills、MCP 接口，以及原生 Mac/Linux 应用。Apache-2.0，2026 年 3 月 10 日创建，6,205 个 fork，399 个未结 issue。和本周多数趋势仓库不同，它的活跃度可核验且连续：npm 上 `hyperframes` 已到 0.8.181，累计 **535 个发布版本**，v0.8.179 到 0.8.181 两天内连发，最后一次提交就在今天 02:52 UTC。架构上的关键约束才是重点——一切由可定位时间轴驱动而非真实时钟播放，这正是渲染可复现、且代理可以直接跳到第 N 帧而无需等待的原因。
+
+**Why it matters:** 视频是代理最不擅长的媒介，因为常规渲染器都是有状态的实时系统。一个确定性、按帧寻址的 HTML 渲染器，才让视频生成变得可 diff、可重试——和快照测试之于 UI 是同一个性质。
+
+[`── heygen-com/hyperframes`](https://github.com/heygen-com/hyperframes) · [`🔗 HyperFrames`](https://www.hyperframes.dev/)
+
+---
+
+## 23. context-mode 31.4k★：真实的上下文问题，和一个自六月起就没再发布的 npm 包
+
+- **Velocity:** ▮▮ rising
+- **Source:** GitHub Trending · 31,407★ · +3,556/周
+- **Tags:** `context-engineering` `mcp` `coding-agents` `licensing`
+
+`mksglu/context-mode` 声称可以沙箱化工具输出（减少 98%）、持久化会话记忆，并通过 MCP 加各 harness 的 hook 在 17 个平台上强制路由（Claude Code、Codex、Cursor、Copilot、Zed、OpenCode、Kiro、Pi）。31,407★、2,209 fork、356 个未结 issue，2 月 23 日创建。README 的徽章墙没有放在前面的是两个事实。第一，许可证是 **ELv2**，不是 OSI 许可：源码可用，但对把它作为托管服务提供有限制——GitHub API 报的是 `NOASSERTION`，徽章写的是 ELv2。第二，npm registry 上 `context-mode` 显示 **最新版 1.0.169，最后修改于 6 月 29 日**，GitHub release 也停在同一 tag：四个月的提交（今天那条是 `ci: update install stats`），却没有任何可供用户安装的新版本。
+
+**Why it matters:** 上下文压缩正在独立成层，而账目必须诚实——因为这个产品是你 prompt 中间的一个代理：它丢掉的内容，就是代理永远看不到的内容。安装前先搞清楚你真正拿到的是哪个版本，把它塞进产品前先读许可。
+
+[`── mksglu/context-mode`](https://github.com/mksglu/context-mode) · [`── npm: context-mode`](https://www.npmjs.com/package/context-mode)
+
+---
+
+## 24. VoiceStudio——79.2k★ 的本地 AGPL 语音栈，带声纹克隆和 MCP 服务
+
+- **Velocity:** ▮▮ rising
+- **Source:** GitHub Trending · 79,197★ · +17,057/周
+- **Tags:** `tts` `voice-cloning` `local-first` `mcp`
+
+`debpalash/VoiceStudio` 是托管语音平台的开源、完全本地替代：声纹克隆、音色设计、带时间对齐的配音、浮动小组件听写、转写、有声书与批处理——形态是 Electron 应用，附带本地 API 和面向代理的 MCP 服务。默认引擎是 k2-fsa 的 OmniVoice，也可切换其他引擎；AGPL-3.0，8,710 个 fork，2026 年 4 月 9 日创建，最新发布 v0.5.6（9 月 23 日），最后提交在昨天 20:03 UTC。项目声称支持 646 种语言，并说明本地流程跑在自己的硬件上、远程服务可选、遥测需经同意。646 种语言是项目自述，未引用独立评测。
+
+**Why it matters:** 它和 Mistral 把批量转写定到 $0.0035/分钟同一天出现——自托管的还价现在连克隆和配音都覆盖了，而这恰恰是厂商一直不肯放进开放权重的那一层。AGPL-3.0 是代价：内部工具无所谓，把 VoiceStudio 嵌进产品则是实打实的约束。
+
+[`── debpalash/VoiceStudio`](https://github.com/debpalash/VoiceStudio) · [`🔗 voicestudio.sh`](https://voicestudio.sh/)
+
+---
+
+## 25. Meta 的 Prometheus：预训练 85% goodput、约 47k GPU 小时一次中断——以及通往 100 万 GPU 的路线
+
+- **Velocity:** ▮▮ rising
+- **Source:** Engineering at Meta · 75+ HN pts · 10 月 19 日发布
+- **Tags:** `datacenter` `gpu` `goodput` `ml-infra`
+
+Meta 公开了俄亥俄州 New Albany 的千兆瓦级超级集群 Prometheus——训练 Muse 系列（含 Muse Wonder）的那台机器。一期已完工；目前横跨多栋建筑、数十万块 GPU，被布成"一台机器"，满配目标约 **100 万** GPU。真正值得记住的数字是可靠性而非 FLOPS：Muse Wonder 预训练 **goodput >85%**、强化学习 **>90%**，平均无中断时间（MTBI）约 **47,000 GPU 小时**，经全集群固件修复后提升到 **54,000** 以上。部署了两代 NVIDIA 平台——Catalina（GB200 NVL72，双机架"Ariel"配置，为每 GPU 争取到 800G 横向带宽而非标准的 400G）与 Clemente（GB300 NVL72，单 GPU 288 GB HBM，GPU:CPU 2:1，72 GPU 域塞进单机架），下一代是 Vera Rubin NVL72，另有闭环液冷。
+
+**Why it matters:** Meta 公布的是集群运维者真正能感知的指标。按约 47k GPU 小时的 MTBI，一个烧 5,000 张卡的作业大约每九小时就该预期一次中断——这才是为什么决定前沿训练能否跑完的是 goodput 而不是峰值吞吐。这些是 Meta 自家机队的厂商自报数据，固件修复前后的对比也出自他们。
+
+[`🔗 Engineering at Meta: Inside Prometheus`](https://engineering.fb.com/2026/10/19/data-center-engineering/inside-prometheus-meta-gigawatt-scale-supercluster/) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50152886)
+
+---
+
+## 26. SlopCodeBench 10/2026：前沿模型严格通过率 12.2–16.3%——而 xhigh 档反而让 Opus 5.5 更差
+
+- **Velocity:** ▮▮ rising
+- **Source:** humanlayer（Dex Horthy）· 200+ HN pts · 10 月 15 日发布
+- **Tags:** `benchmarks` `coding-agents` `code-quality` `evals`
+
+SlopCodeBench 分阶段给编码代理出题：先写，再接收新需求，再修改既有代码——后续检查点同时测新行为和旧行为。HumanLayer 用 **36 道题、每个设置 196 个检查点** 跑了六组模型设置（Opus 5.5、Fable 5.1、SOL 6、SOL 6.1、Astra、GLM 5.3）。严格通过率——全部测试用例加上所有回归测试——落在 **12.2–16.3%**，最高是 Astra 的 16.3%；宽松的"core pass rate"则是 **65.8–74.0%**。这两个区间之间的落差就是发现本身。第二个发现：**medium 档在部分新模型上优于 xhigh**，Opus 5.5 尤其明显，而三组完整对照里 xhigh 的成本是 medium 的 **2.11–4.22 倍**。帖子的自陈局限同样关键：早前的子集测试（包括被广泛引用的 Fable 5 的 30%）只覆盖 36 题中的 6 题，与本次结果不可比；benchmark 团队的第二部分分析尚未发布。
+
+**Why it matters:** 一个模型能过三分之二检查点、却只有约 14% 的完整运行通过的基准，测的正是团队真正害怕的事——代理解决了新工单，同时悄悄弄坏了旧行为。而"更努力"在 2–4 倍价格下并非单调变好，直接动摇了大多数 harness 赖以设计的努力档位假设。
+
+[`🔗 SlopCodeBench 10/2026`](https://github.com/humanlayer/advanced-context-engineering-for-coding-agents/blob/main/benchmarking-new-models-on-slop-code-bench.md) · [`🔗 SlopCodeBench 论文（arXiv 2603.24755）`](https://arxiv.org/abs/2603.24755) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50108717)
+
+---
+
+## 27. 对抗 AI 代理的机器人检测：9.1% 到 99%——由排名第一的厂商自己测出
+
+- **Velocity:** ▮▮ rising
+- **Source:** Proof of Human Research · 35+ HN pts · 10 月 20 日发布
+- **Tags:** `bot-detection` `agents` `browser-automation` `captcha`
+
+Proof of Human 用更广的对手集重跑了 2025 年的基准——脚本化 Chromium、CloakBrowser，以及三个具备视觉能力的代理（Browser Use、Grok、Perplexity Comet）——对五个检测系统各跑 20 次会话，每个系统可评估 89–100 次。总体检出率：**Proof of Human 99%**、reCAPTCHA v3 **69.4%**、hCaptcha **44.3%**、Cloudflare Turnstile **42.1%**、Cloudflare Bot Management **9.1%**。分化才是重点：hCaptcha 和 Turnstile 几乎抓光了**脚本化**浏览器，却几乎没抓到代理会话——Turnstile 在三个代理对手面前"甚至没有下发挑战"；reCAPTCHA v3 正好相反，抓到多数代理会话，却一个 CloakBrowser 都没抓到（后者是唯一同时具备源码级浏览器指纹修改和住宅 IP 的对手）。Turnstile 的优势一直是无感；而无感，恰恰是一个能读页面的模型可以径直穿过的东西。
+
+**Why it matters:** 结构性局限帖子自己也写了：基准作者本人售卖机器人检测产品并排名第一，系统是黑盒所以归因只是推测，100 次会话的单元格样本很小。请读逐对手的表格而不是总平均——如果你指望 Turnstile 拦住代理浏览器，对应格子的数字接近零。
+
+[`🔗 Benchmarking Bot Detection Systems Against Modern AI Agents in 2026`](https://research.poh.org/bot-benchmarking-2026/) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50169506)
+
+---
+
+## 28. MCP TypeScript SDK：任务跨会话泄漏，8.6——已在 1.32.0 修复
+
+- **Velocity:** ▮▮ rising
+- **Source:** NVD（GitHub 指派）· 10 月 20 日 19:17 UTC 发布
+- **Tags:** `cve` `mcp` `sdk` `agents`
+
+CVE-2026-111767（CWE-639/862，CVSS 3.1 8.6，GitHub 指派，NVD 状态 `Deferred`）：`@modelcontextprotocol/sdk` 从 **1.24.0 到 1.32.0 之前**，实验性的 tasks 功能（`taskStore`）从未校验任务是哪个会话创建的。共享同一个 `InMemoryTaskStore` 的客户端可以列出、读取、取消彼此的任务——而这正是 SDK 示例鼓励的多租户服务形态。已在 1.32.0 修复；公告 GHSA-22jm-h49p-29qw，补丁提交 `727075b`。
+
+**Why it matters:** tasks 是 MCP 对长时任务的答案，也就是承载代理中间状态的基元。一个只以任务 ID 为键的存储就是教科书式 IDOR，而它出现在所有人构建服务端都用的这个 SDK 里——如果你在 1.24.0 以上跑共享 MCP 服务，升级到 1.32.0 就是全部修复。
+
+[`🔗 NVD: CVE-2026-111767`](https://nvd.nist.gov/vuln/detail/CVE-2026-111767) · [`🔗 GHSA-22jm-h49p-29qw`](https://github.com/modelcontextprotocol/typescript-sdk/security/advisories/GHSA-22jm-h49p-29qw)
+
+---
+
+## 29. FulcrumSec 公布声称 10.6 TB 的 PingCAP 数据外泄——11.5 万明文 API 密钥，厂商尚未确认
+
+- **Velocity:** ▮▮ rising
+- **Source:** FulcrumSec · 55+ HN pts · 10 月 20 日发布 (~06:45 UTC+8)
+- **Tags:** `breach` `tidb` `credentials` `cloud`
+
+一个自称 FulcrumSec 的勒索组织公布了它所称 PingCAP（TiDB Cloud 背后的公司）入侵的第一阶段材料：**10.6 TB**、490 万文件，其中包括一份控制面数据库副本——在 **9 月 8 日至 9 月 30 日期间按六小时一次、连续导出 88 次**，"没有一次检测事件"。它列出的清单包括：约 50 个 GCP 存储桶、180,046 个租户组织、403,262 个唯一邮箱、**115,308 个明文客户 API 密钥（其中 42,612 个被描述为仍然有效）**、2,060 万条客户 SQL 语句、500 万个客户服务器 IP、413 个私有源码仓库，以及 Jira/CRM 导出。其声称的初始入口值得读两遍：GCP service-account 密钥和一个 Azure service principal，"被提交在他们自己的仓库里"。所有数字都只是声称方的说法。本批次运行时找不到 PingCAP 的任何公开回应，HN 读者也立即质疑其框架——所描述的大部分是控制面与计费元数据，不过 SQL 日志与快照可能含有客户数据。
+
+**Why it matters:** 这个指控未经验证，但攻击向量对任何多云租户平台的运营者来说五分钟就能自查：在仓库里 grep service-account 密钥，并问一句——你自己的控制面会不会注意到连续 88 次全量导出？如果密钥清单属实，无论 PingCAP 之后说什么，TiDB Cloud 客户都有一轮轮换要做。
+
+[`🔗 FulcrumSec: The PingCAP TiDB Cloud Leaks`](https://fulcrumsec.vg/pingcap/) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50173716)
+
+---
+
+## 30. CSS 的下一个基线由投票决定——Comeau 的 Interop 2027 清单
+
+- **Velocity:** ▮ steady
+- **Source:** joshwcomeau.com · 64+ HN pts · 2.3 小时前 (~01:47 UTC+8)
+- **Tags:** `css` `interop` `browsers` `web-platform`
+
+Interop 是 Google、Apple、Microsoft、Mozilla（外加 Igalia 与 Bocoup）之间"同一年修同一批 Web 平台缺口"的常年协议，而 Mozilla 已为 **Interop 2027** 开放了公开排名系统，投票结果会影响最终名单。Josh Comeau 逐条讲了他的前十：CSS 函数（`@function`，已在 Chrome 155 与 Edge 154 支持，Firefox 157 与 Safari 27 尚无）、用于倒角与方圆的 `corner-shape`、`border-shape`、锚定容器查询、滚动触发动画、`reading-flow`/`reading-order`、`interpolate-size`/`calc-size()` 关键字尺寸动画、gap 装饰，以及用于检测 `position: sticky` 是否生效的滚动状态容器查询。
+
+**Why it matters:** Interop 是把"某个引擎很酷"变成"可以放心上线"的机制——subgrid 从 2019 年只有 Firefox 支持，到加入 Interop 2023 后一年内全线可用。因此这份投票清单其实是明年基线的预测市场；实用读法是渐进增强：仅 Chrome 支持的条目今天可以带降级方案使用，而容器查询那几条会改变架构。
+
+[`🔗 The Future of CSS`](https://www.joshwcomeau.com/css/interop-2027/) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50175070)
+
+---
+
+## 31. Krebs：FBI 怀疑一名勒索谈判顾问运营着 ShinyHunters 的施压网站
+
+- **Velocity:** ▮ steady
+- **Source:** Krebs on Security · 133+ HN pts · 10 月 19 日发布
+- **Tags:** `shinyhunters` `extortion` `incident-response` `fbi`
+
+KrebsOnSecurity 报道，追查 ShinyHunters 的美国联邦调查人员——该组织 9 月下旬入侵了 FBI 自己的招聘网站 `fbijobs.gov`——锁定了**两家勒索谈判公司**的高管，他们与该组织关系异常密切，其中一名美国高管还帮助运营一个用来逼受害方付款的网站。FBI 称 ShinyHunters 今年已勒索超过 **7,000 万美元**。时间线：荷兰警方 9 月 15 日逮捕嫌疑人 Pepijn van der Stap；组织运营者"Rey"（安曼的一名青少年）被约旦当局拘留并配合调查，据路透社 10 月 3 日报道。Krebs 的信息来源是"接近调查的人士"——报道并未提到对谈判顾问提出任何指控。
+
+**Why it matters:** 事件响应公司是勒索经济里的信任锚点；一个在攻击方那边有利益的谈判顾问，是任何合同条款都检测不出的利益冲突。对防守方而言这变成采购问题：你雇谈判顾问时，桌子对面坐着的是谁，以及如果不是他们，你会看到什么。
+
+[`🔗 Krebs: Feds Suspect Ransom Negotiator Ran ShinyHunters Extortion Site`](https://krebsonsecurity.com/2026/10/feds-suspect-ransom-negotiator-ran-shinyhunters-extortion-site/) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50173487)
+
+---
+
+## 32. Kronos 又以 42.4k★ 上榜——而它自 4 月 13 日起没有任何提交
+
+- **Velocity:** ▮ steady
+- **Source:** GitHub Trending · 42,425★ · +733/24h
+- **Tags:** `time-series` `finance` `foundation-models` `maintenance`
+
+`shiyu-coder/Kronos` 是面向 K 线序列的 decoder-only 基础模型：专用 tokenizer 先把 OHLCV 量化成分层离散 token，再用自回归 Transformer 预训练，模型库从 4.1M 到约 102M 参数，另有一个 BTC/USDT 未来 24 小时的在线预测演示。它今天也是 42,425★、7,024 个 fork——而最后一次推送是 **2026 年 4 月 13 日**，**283 个未结 issue** 无人回应，之后也没有任何 release。什么都没发布，动的只有星数。这和上周 Void 与 CLI-Anything 的形态完全一致：被采用不等于被维护。
+
+**Why it matters:** 金融预测模型是会被接进交易与风控环路里的依赖，而在这类场景中，静默漂移和过时的 tokenizer 是昂贵的故障而非不便。请把它当作"带权重的论文"使用——并检查那些未回复的 issue 里，是否正躺着你即将踩到的那个 bug。
+
+[`── shiyu-coder/Kronos`](https://github.com/shiyu-coder/Kronos) · [`── NeoQuasar on Hugging Face`](https://huggingface.co/NeoQuasar)
+
+---
+
+## 33. wshobson/agents：41.3k★，一份 Markdown 目录装进七种 harness
+
+- **Velocity:** ▮ steady
+- **Source:** GitHub Trending · 41,311★ · +93/24h
+- **Tags:** `agents` `skills` `plugins` `multi-harness`
+
+`wshobson/agents` 的目录现在声称有 **94 个插件**（92 个本地）、**202 个代理、185 个 skills、105 个命令**，用 Markdown 写一次、按 harness 适配：Claude Code 与 Cursor 走插件市场，Codex CLI 走原生市场或生成产物，OpenCode、Antigravity、Copilot、Pi 则通过 `make install-*` 生成代理并翻译工具权限。MIT，4,396 fork，仅 5 个未结 issue，最后提交 10 月 17 日。值得注意的设计决定与人设合集路线（见第 13 条）正相反：单一来源、七份生成输出，每个 harness 的权限模型是被显式翻译的，而不是想当然。
+
+**Why it matters:** 多 harness 分发正是 skills 生态即将撞上的维护难题——同一份产物要适配不同的工具权限语义、不同的 MCP 配置、不同的调用面。把各 harness 的输出当作**生成产物**而非复制品的目录，才是能挺过一次 schema 变更的那个版本。
+
+[`── wshobson/agents`](https://github.com/wshobson/agents) · [`── plugins 目录`](https://github.com/wshobson/agents/tree/main/plugins)
+
+---
+
+## 34. StreamsHub 的 Kubernetes 控制台：一个 9.9，让"创建一个 Console CR"变成全集群 Kafka 权限
+
+- **Velocity:** ▮ steady
+- **Source:** NVD（Red Hat 指派）· 10 月 20 日 12:17 UTC 发布
+- **Tags:** `cve` `kubernetes` `strimzi` `rbac`
+
+CVE-2026-105312（CWE-269，CVSS 3.1 9.9，Red Hat 指派，NVD 状态 `Awaiting Analysis`）：一个有权限创建 `consoles.console.streamshub.github.com` 资源的 Kubernetes 租户，可以把 `spec.containers.api.spec.image` 设成任意镜像。Operator 会把该镜像部署进一个 Pod，而这个 Pod 的 ServiceAccount 通过 ClusterRoleBinding 绑定了授予全集群 `get/list/watch` 全部 Strimzi CRD（含 KafkaUsers）、`patch` Kafkas/KafkaRebalances 以及 `cluster-monitoring-view` 的 ClusterRole。攻击者代码读取投射的 service account token，继承以上全部权限——跨租户读写 Kafka 控制面。Red Hat 给出的缓解措施：从租户 Role 中移除对 Console CR 的 create/update/patch（只有集群管理员才该管理它们），并加一条 OPA/Gatekeeper 或 Kyverno 准入策略校验 `spec.containers.api.spec.image`。
+
+**Why it matters:** 当协调该资源的 Operator 持有集群级绑定时，"对自定义资源做租户级 RBAC"根本不是安全边界——CR 只是 Operator 身份的一个代理。任何允许用户指定镜像的 Operator 都是这个形状；修复方式是对字段加约束，而不是收紧 Role。
+
+[`🔗 NVD: CVE-2026-105312`](https://nvd.nist.gov/vuln/detail/CVE-2026-105312) · [`🔗 Red Hat: CVE-2026-105312`](https://access.redhat.com/security/cve/CVE-2026-105312)
+
+---
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-10-20T20:25:00Z |
-| Items | 19 |
-| Sources tracked | 16 (Hacker News, GitHub Trending/repos, Mistral, Cloudflare blog, peec.ai, Mastodon, teddysvoronos.com, kaba.cx, prestonbyrne.com, anthropic.com, jepsen.io, CISA KEV, NVD, claude.com, permit.petercai.com, entropicthoughts.com) |
+| Generated | 2026-10-21T04:45:00Z |
+| Items | 34 |
+| Sources tracked | 30 (Hacker News, GitHub Trending/repos, Mistral, Cloudflare blog, peec.ai, Mastodon, teddysvoronos.com, kaba.cx, prestonbyrne.com, anthropic.com, jepsen.io, CISA KEV, NVD, claude.com, permit.petercai.com, entropicthoughts.com, php.announce, php.net, FulcrumSec, Engineering at Meta, joshwcomeau.com, krebsonsecurity.com, Proof of Human Research, humanlayer, arXiv, Red Hat, npm, Hugging Face, voicestudio.sh) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (3x daily) |
 | Ranking | Velocity-weighted (recency × engagement acceleration × source authority) |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |
