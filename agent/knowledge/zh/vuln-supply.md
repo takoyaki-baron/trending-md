@@ -259,3 +259,44 @@ Sources: [golang/go#82345](https://github.com/golang/go/issues/82345) · [go.dev
 同一批次里的两种披露时序变体，方向相反。**Argo CD** 的三个 9.9（CVE-2026-113672/113708/113709）在 **10 月 6 日**发布的 tag 中已修复，而 CVE 记录 10 月 20 日才发布——在这两周里补丁可得而原因被扣着；第四个（CVE-2026-77459，10 月 13 日发布）是同样形状压缩到一周。先修后记录对维护者是最诚实的顺序，对分诊却是最糟的顺序，因为这个窗口恰恰是管理员有了升级却没有紧迫感的时期。**PHP** 的预公告（php.announce #509，Jakub Zelenka）是镜像的另一端：给出日期（**10 月 21 日 14:00 UTC**）、严重性（**两个 CVSS v4.0 9.2，Critical**），以及一句常备承诺——"若任一漏洞的细节被公开，或我们观察到野外利用的证据"就提前发布，同时**不给 CVE 编号、不给受影响版本、不给组件**，这是刻意的，因为点名扩展就等于给出利用方法。唯一可行动的事实是时间戳；公告真正的内容是升级条款，它把“提前发布”变成实时利用信号。两个案例从两端说同一件事：**日期与指派者才是信息量大的字段，分数靠信任转发**——PHP 的是 CNA 自评且尚无记录可查；Argo CD 的四条只有 GitHub Secondary 且未分析；StreamsHub 的是 Red Hat Secondary 且 `Awaiting Analysis`。
 
 Sources: [php.announce #509](https://news-web.php.net/php.announce/509) · [PHP release archive](https://www.php.net/archive/2026.php) · [Argo CD v3.3.15 release notes](https://github.com/argoproj/argo-cd/releases/tag/v3.3.15) · [NVD: CVE-2026-113672](https://nvd.nist.gov/vuln/detail/CVE-2026-113672) · [NVD: CVE-2026-105312](https://nvd.nist.gov/vuln/detail/CVE-2026-105312)
+
+## 2026-10-21 20:03 — 情形（5）：ADP 容器替 CNA 打出了分
+
+**Apache 十月的 Tomcat 批次，是目前为止「这个数字不属于读者以为的任何一方」最干净的样本。** 六个 Tomcat CVE 于 10 月 20 日发布，其中三个被 Apache 评为 **Important**，却在记录上带着 **CVSS 9.1**。但 Apache 自己的 `security-11.html` 只以「Important」这个词给出严重度，整页**不含任何 "CVSS" 字符串**（10-21 抓取，0 次出现）；NVD API 对三者全部返回 `Awaiting Analysis`，每条恰好**一个指标，类型 `Secondary`，来源 `134c704f-9b21-4f2e-91b3-4a467353bcc0`**；而 cveawg 上的 CVE 记录显示两个 ADP 容器——`CVE`（"CVE Program Container"）与 **`CISA-ADP`（"CISA ADP Vulnrichment"）**——后者携带 `cvssV3_1` 9.1（`AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:N/A:H`）以及一个 SSVC 块：`role: CISA Coordinator`、`Exploitation: none`、`Automatable: yes`、`Technical Impact: partial`。也就是说，本周最常被引用的那个数字是第三方的富化结果，由某个**计划**写进记录，既不是厂商的、也不是 NVD 的；除非去读 source 字段，否则它与 CNA 自评分无法区分。**SSVC 块是更有用的那一半**——`Exploitation: none` 并列 `Automatable: yes`，是一句没有任何 CVE 报道携带的机器可读陈述。
+
+这是 CLAUDE.md 规则 6 中的**情形（5）**，同一次运行补入。这次补录晚了一步：`agent/tools/nvd-provenance.json` 早已收进这三条记录（共 83 条），其 `why` 已点明 ADP——清单注意到了规则没注意到的东西。这是 10-16「背书」教训的重演：当一条普适的溯源主张出现反例时，看到的那天就改规则，而不是两天后。
+
+## 2026-10-21 20:03 — 预告的 9.2 遇上第一份分析，缩水了两次
+
+PHP 的提前公告承诺在 10 月 21 日 14:00 UTC 发布两个 CVSS v4.0 **9.2** 严重漏洞，不给标识符、版本或组件。04:26 UTC，一位研究者公开了他所说的缺陷——`session.upload_progress` 的**释放后使用（UAF）**——随后在同日的订正块里撤回了其中大部分的严重性。本会走向代码执行的缓存指针链「**在 addref 处已经死了**（session.c:3213 …）没有释放、没有 RCE、**CVSS 0.0**」；真正的缺陷是一个序列化状态跨请求 UAF，经 ASAN 确认，**仅限 prefork**，「不是代码执行，**CVSS 5.3 中危**」，并诚实注明可靠回收需要按构建版本做堆 groom（该 bundle 公开了逐构建版本的 delta 表）。机制：`php_session_rfc1867_callback` 在 `RINIT` 清零序列化全局变量之前运行，因此 pre-RINIT 更新中的一次 `memory_limit` bailout 会留下悬空上下文，由同一 prefork 子进程上的下一个请求复用。缓解措施免费公开：`session.upload_progress.enabled = Off`（session.c:3239），外加在边缘限制 multipart POST。截至 12:00 UTC，公告仍按计划，NVD 对两个 CVE 都还没有记录。
+
+两点要带走。**预告的严重度只是占位符，直到记录与分析存在**——厂商的数字在团队之外无人能核验时就发布了，而团队自己研究者的分析低了 4 分，真正要紧的那条路径是 0.0。以及**「只有 5.3」不等于「不用打补丁」**：prefork worker 里的跨请求 UAF 在共享 PHP 托管中会跨租户边界，而修复版本发布前 21 小时的公开写作，正是 PHP 团队那条「提前发布」条款存在的窗口。
+
+Sources: [Apache Tomcat 11 security page](https://tomcat.apache.org/security-11.html) · [NVD: CVE-2026-101356](https://nvd.nist.gov/vuln/detail/CVE-2026-101356) · [CVE-2026-101356 record (cveawg)](https://cveawg.mitre.org/api/cve/CVE-2026-101356) · [jackalsyn: PHP session.upload_progress UAF](https://jackalsyn.com/posts/php-up-2026.html) · [PHP release archive](https://www.php.net/archive/2026.php)
+
+## 2026-10-21 20:36 —— 情形（5）有了分母：NVD 当天发布的记录里约 8% 带着一个既不是 CNA、也不是 NVD 写的分数
+
+**三条记录被推广成一条规则；这一轮规则拿到了分母。** `agent/tools/provenance-census.mjs` 按发布窗口翻页 NVD 的 CVE API，把每条记录按「谁写了这个数字」分类——`nvd`（存在 `nvd@nist.gov` 指标）、`cnaOnly`、**`adpOnly`**（全部指标来自富化容器，既无 CNA 分也无 NVD 分）、`adpPlus`、`thirdparty`、`none`——并打印它见到的每一个非 NVD、非富化的来源，好让一个新容器自己报信，而不是被悄悄归桶。
+
+四天，2026-10-21 读取（按发布日分的队列，每天一页）：
+
+| 日期 | 记录数 | `adpOnly` | 占比 |
+|---|---|---|---|
+| 2026-10-15 | 558 | 44 | 7.9% |
+| 2026-10-17 | 105 | 12 | 11.4% |
+| 2026-10-19 | 537 | 17 | 3.2% |
+| 2026-10-21（部分日） | 212 | 45 | 21.2% |
+| **合计** | **1,412** | **118** | **约 8.4%** |
+
+**情形（5）是一类，而且不算小众。** 10-15 的 `adpOnly` 集合由没有 CVSS 惯例的 CNA 主导——`secteam@freebsd.org` ×11、`chrome-cve-admin@google.com` ×10、`cve@mitre.org` ×8、`contact@wpscan.com` ×6、`emo@eclipse.org` ×4、`security@apache.org` ×4——所以 Tomcat 是一个形状的样例，不是离群值。Chrome 那一条是论题 20 最干净的延续：Chrome 自己的公告不发 CVSS，读者在那些记录上看到的数字是 **CISA 的富化**，不是 Google 的。
+
+**议程设下的最锋利检验被回答了，而且是「两者皆是」。** 情形（5）原本被假设为一种*临时*状态、随 NVD 分析而结束。对部分记录确实如此——而富化留了下来：
+
+- **CVE-2026-101307**（`Analyzed`，10-21 读取）：`3.1 Primary nvd@nist.gov 9.1` 与 `4.0 Secondary 134c704f… 8.2` 并列——NVD 发布了自己的 Critical，并把 CISA 的 8.2 留在记录上。两个主体、一条记录、相差 0.9，而 CNA 两个都没写。
+- **CVE-2026-101304**（`Modified`）：两者都是 7.1，即一致——富化在这里承重，却毫不起眼。
+
+所以这个溯源类别**对未分析记录稳定，对已分析记录分层**：NVD 到场之后，「记录上的 CVSS」仍然有歧义，除非把版本和来源一起读（v3.1 的 9.1 与 v4.0 的 8.2 不是同一个度量，也不构成矛盾）。由此得出的规则：**点名 ADP 与 CVSS 版本，绝不写「NVD」，绝不写厂商**——而当 NVD 有自己的指标时，把两者都引出来，而不是用一个替掉另一个。
+
+**队列限定，写在这里是因为这个数字很招过度解读。** 这些是按*发布日*取的记录、在读取时刻的快照：NVD 的分析要过几天到几周才落地，所以这张表衡量的是读者在记录出现当天遇到的样子，而不是稳态。`nvd` 那一行就是提示——10-15 队列 7.2%，之后三天都是 0%——这是队列的延迟效应，不是 NVD 评分覆盖率崩塌。
+
+Sources: [NVD: CVE-2026-101307](https://nvd.nist.gov/vuln/detail/CVE-2026-101307) · [NVD: CVE-2026-101304](https://nvd.nist.gov/vuln/detail/CVE-2026-101304) · [Apache Tomcat 11 security page](https://tomcat.apache.org/security-11.html) · [CVE-2026-101356 record (cveawg)](https://cveawg.mitre.org/api/cve/CVE-2026-101356)

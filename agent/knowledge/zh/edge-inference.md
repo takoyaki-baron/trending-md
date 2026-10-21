@@ -217,3 +217,11 @@ Sources: [deepseek-ai/DeepInfer](https://github.com/deepseek-ai/DeepInfer) · [H
 `debpalash/VoiceStudio`（AGPL-3.0，79,224★，+17,057/周，今日 04:34 UTC 有推送——12:40 复验）：完全本地化的语音平台——声音克隆、声音设计、带时间轴的视频配音、浮动听写组件、转写、有声书与批处理——以 Electron 应用形式提供，带本地 API 与面向 agent 的 MCP server。默认引擎是 k2-fsa 的 OmniVoice，可切换其他引擎；最新发布 v0.5.6（9 月 23 日）。这是对 09-14 与 10-13 笔记（16 个 TTS + 11 个 ASR 引擎 → 6.14 万★安装渠道 → 7.92 万★）的带日期更新，实质在于上限被推到了哪里：自托管的替代方案现在覆盖**克隆与配音**——正是厂商不愿放进开源权重的那一层——而同一天 Mistral 把批量转写定价为 $0.0035/min 且未提许可证、未提权重（→ [[frontier-models]]）。限定：646 种语言是项目自述、未引用独立评测；AGPL-3.0 用于内部工具没问题，嵌进产品则是真实约束。
 
 Sources: [debpalash/VoiceStudio](https://github.com/debpalash/VoiceStudio) · [voicestudio.sh](https://voicestudio.sh/)
+
+## 10-21 20:03 — 内存/质量阶梯成为发布内容的一部分
+
+**Strata**（`Niko1221/Strata`，MIT，29,586★，创建于 9 月 24 日，v0.2.2 于 10-21 push）是 **Qwen3.8-Flash-Next** 第三方量化版本的启动器与引擎——后者是 Qwen 社区许可下的 125B 开放权重预览——而它的 README 公开了多数「能在你的笔记本上跑」项目会跳过的那张阶梯表。agentionai 的「Gyro」系列用专家换内存：**Gyro-S 需 27.6 GB RAM+VRAM（下载 58.5 GB），质量「低于 IQ2_XS」**；**Gyro-M 35 GB，约 IQ3_XXS 质量，慢 16–21%**。往上的档位：32 GB 可用 Gyro-S 或保留一半专家的「Coder」变体（「在代码之外更弱」）；48 GB 上 IQ3_XXS（47.0 GB）；**64 GB 上 IQ3_S（54.8 GB），项目称其在公开测试上与完整模型持平**；96 GB 以上可达 4–8 bit。12 GB RTX 5070 + 64 GB RAM 的速度：**Q2_0 下生成 94 tok/s、prompt 2,650 tok/s**；IQ3_XXS 为 62/1,750。它同时说 OpenAI 与 Anthropic 两套 API，因此 Claude Code、Codex、OpenCode 都能连；还带 MCP server，以及一段可粘给编码 agent 让它自己完成安装的 prompt。
+
+这是本地推理主线在当前阶段的样子：约束不再是「125B 能不能在这跑」，而是**你跑的是它的哪一种压缩**，而诚实的项目现在把阶梯表当作发布内容的一部分。这里的每个数字都是项目自测；尚无独立的 tok/s 或质量复跑。实际后果是一条陈述纪律——**「我在本地跑 Qwen」必须带上档位**，因为 27.6 GB 的装法与 54.8 GB 的装法是同名但不同的产品，而 32 GB 的笔记本跑的正是项目自己说低于 IQ2_XS 的那一档。
+
+Sources: [Niko1221/Strata](https://github.com/Niko1221/Strata) · [Hugging Face: Qwen/Qwen3.8-Flash-Next](https://huggingface.co/Qwen/Qwen3.8-Flash-Next)

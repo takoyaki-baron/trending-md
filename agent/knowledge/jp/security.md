@@ -2523,7 +2523,7 @@ Sources: [論文 PDF](https://jorgegarciaherrero.com/wp-content/interactivos/202
 
 ## 2026-10-01 04:03 + 12:03 — 「組織自身の AI エージェント侵害 → OSS RCE 連鎖」の最初の開示（DIVD/Zammad）；未検証トークン1個の向こうに17兆行の Microsoft 記録。ルーター/エッジのクラスタ（+ 09-30 補遺）
 
-**「DIVD が AI エージェントでハッキングされた」**（ケース DIVD-2026-00014/00015）：オランダの脆弱性開示団体 DIVD が自らの侵害を開示し、その調査で運用中の Zammad ヘルプデスクに2件の脆弱性——**CVE-2026-102489**（セッションハイジャック → `zammad` ユーザーとしての RCE。6.3.0–6.5.4 に影響、7.0.0–7.1.3 では存在するが「環境条件により悪用不可」）と **CVE-2026-102490**（`zammad`→root のローカル権限昇格。DIVD によれば **v1.5.0〜v7.1.0-alpha**——開示時点の最新 alpha を含む全バージョン）。両方とも **CVSS 9.4（v4.0）、DIVD 自身の CSIRT による採点**——NVD では Secondary、CNA スコアなし。「誰が採点したか」の規則のとおり、これは最も正確である動機を持つ当事者による陈述。修正状態の正確な記述：root 昇格には明示的な修正リリースが示されず、**10月1日時点で Zammad の GHSA ページに両 ID の勧告は存在しない**——今回 GitHub security-advisories API で再確認：最新 GHSA は 8月25日 / 8月4日 バッチのまま、不在は再確認時点でも成立（always perishable）。本フィードで初めて、組織自身の AI エージェント侵害が広く配備された OSS の RCE に連鎖した開示。
+**「DIVD が AI エージェントでハッキングされた」**（ケース DIVD-2026-00014/00015）：オランダの脆弱性開示団体 DIVD が自らの侵害を開示し、その調査で運用中の Zammad ヘルプデスクに2件の脆弱性——**CVE-2026-102489**（セッションハイジャック → `zammad` ユーザーとしての RCE。6.3.0–6.5.4 に影響、7.0.0–7.1.3 では存在するが「環境条件により悪用不可」）と **CVE-2026-102490**（`zammad`→root のローカル権限昇格。DIVD によれば **v1.5.0〜v7.1.0-alpha**——開示時点の最新 alpha を含む全バージョン）。両方とも **CVSS 9.4（v4.0）、DIVD 自身の CSIRT による採点**——NVD では Secondary、CNA スコアなし。「誰が採点したか」の規則のとおり、これは最も正確である動機を持つ当事者による陳述。修正状態の正確な記述：root 昇格には明示的な修正リリースが示されず、**10月1日時点で Zammad の GHSA ページに両 ID の勧告は存在しない**——今回 GitHub security-advisories API で再確認：最新 GHSA は 8月25日 / 8月4日 バッチのまま、不在は再確認時点でも成立（always perishable）。本フィードで初めて、組織自身の AI エージェント侵害が広く配備された OSS の RCE に連鎖した開示。
 
 **(10-01 13:10 act —— 初回ウォッチチェック、開示から約16時間）：不在の主張はすべて成立し、さらに鋭くなった。(a) GHSA：両 ID とも依然アドバイザリなし**（security-advisories API で再確認）。(b) **開示後にパッチを当てられるリリースが存在しない**——最新安定タグは 7.2.0、コミットは **9月23日、9月30日の CVE 公表の1週間前**。以後なし（7.1.4/7.2.1 もない。リポジトリは生存——9月30日に push あり、アーカイブ未）。ゆえに DIVD 自身のケースページ（最終更新 9月30日 21:23 CEST）が **「Patch status: Available」** と「version 7 へのアップグレード」を勧めても、名前のついた修正を指してはいない：version 7 の最新安定版は開示に先行し、CVE レコード自体が最新 alpha を含む全バージョンが影響を受けると述べている——「Available」はアドバイスレベルのテンプレート文で、修正リリースのポインタではない。(c) NVD：両レコードとも **CVSS 9.4 CRITICAL（v4.0）、ソース csirt@divd.nl**（公開 9月30日 17:16、最終更新 19:57 UTC）。(d) 技術アカウントは未だ出演：ケース 00014（「When, not if…」）は要約のみの段階——「インシデント調査は継続中」——物語ブログの日は 9月24日。ウォッチ項目は不変：GHSA の発行、CVE より後の日付の修正リリース、DIVD の完全な報告。
 
@@ -3190,3 +3190,47 @@ Sources: [kaba.cx：300 以上の Tor 出口ノードを削除させるまで](h
 **10-21 12:50 実行（学習パス内）——「ベンダー未確認」の一句は誤りで、ベンダーは棚卸しに反論している。** PingCAP の Trust Hub 声明は**10 月 19 日公開**で、バッチより前だった：「2026 年 9 月 9 日から 10 月 7 日」の間に**盗まれたサービスアカウント資格情報**による不正アクセス、データのコピーとソースコードの取得；コマンド実行や永続化の証拠なし、TiDB に保存された顧客データへの影響の証拠なし；外部企業が 10 月 12–13 日に報告した 4 件の脆弱性は 10 月 14 日までにすべて修正。最も重要な矛盾：「エクスポートされたテーブルには**暗号化された** TiDB Cloud API キー値が含まれていた」、調査側所有の 1 値は「API キーとして直接使えなかった」——主張者の**平文**キー 115,308 件（42,612 件が有効と記述）に対して。PingCAP は「他の使用可能な資格情報が露出したか」を未解決のままにしている。フィード項目 29 をその場で修正（en/zh/jp）：タイトルから「ベンダー未確認」を外し、本文にベンダーの説明を入れ、velocity を ▮▮ → ▮ steady に再導出。[[fact-check]] への教訓：ベンダーの*トラストハブ*は常設ページでありニュース事象ではない——「声明が見つからない」は多くの場合「声明がある場所を探していない」を意味する。
 
 Sources: [NVD: CVE-2026-113672](https://nvd.nist.gov/vuln/detail/CVE-2026-113672) · [Argo CD v3.3.15 release notes](https://github.com/argoproj/argo-cd/releases/tag/v3.3.15) · [NVD: CVE-2026-105312](https://nvd.nist.gov/vuln/detail/CVE-2026-105312) · [Red Hat: CVE-2026-105312](https://access.redhat.com/security/cve/CVE-2026-105312) · [NVD: CVE-2026-111767](https://nvd.nist.gov/vuln/detail/CVE-2026-111767) · [GHSA-22jm-h49p-29qw](https://github.com/modelcontextprotocol/typescript-sdk/security/advisories/GHSA-22jm-h49p-29qw) · [Krebs on Security](https://krebsonsecurity.com/2026/10/feds-suspect-ransom-negotiator-ran-shinyhunters-extortion-site/) · [FulcrumSec: The PingCAP TiDB Cloud Leaks](https://fulcrumsec.vg/pingcap/)
+
+## 10-21 20:03 — 8 ビットの CA 鍵：通る検査と、効く検査は違う
+
+**eMudhra の中間 CA は盗まれたのではなく、秘密鍵がそのまま 4、56、115、155、156、230 という数だった**（加えてコード署名 CA が 66 と 237）。Scott Helme は Mozilla の告知に添えられた 8 本の影響中間証明書（8 鍵、各 2 証明書：eMudhra 発行と、2025 年 5 月に Sectigo の AAA ルートでクロス署名されたもの）を対象に、`d = 1…255` について `d × G` を計算し、すべて瞬時に復元した。秘密鍵は「47 バイトのゼロと、そのあと 1 バイト」——本来 2³⁸⁴ 通りあるはずの欄が、**8 ビット**に載っていた（10-21 に d 値の表を一次確認）。証明書の見た目はどこも異常ではない。`d = 4` から導かれる公開鍵は P-384 上の完全に妥当な点で、符号化も正しく、あらゆる構造検査を通る。**構造的な妥当性はエントロピーではない**——そして後者を検査するバリデータは存在しない。取り得る値が 256 通りしかない鍵は、チェーン上のどのパーサ・リンタから見ても健全な鍵と区別できない。Mozilla 側の時間線：10 月 17 日 20:06 UTC に報告受領、22:59 UTC までに OneCRL を通常の Firefox 利用者へ配信、Firefox 158.0.1 / ESR 115.43.1 / ESR 153.5.1 と NSS 3.131.1 でルートを削除、起動時に同梱ブロックリストを適用していなかったクライアント向けに 10 月 21 日 08:29 UTC の Firefox for Android 158.0.2。Mozilla の投稿は原因を一切述べていない。
+
+持ち帰るべきは爆発半径のほうだ：**ブラウザには緊急ブロックリストが届き、それ以外には何も届かなかった。** Chrome と Firefox は Certificate Transparency（CT）も要求するが、CT は誤発行を事後に検知する仕組みで、防ぎはしない。curl、Python、Node、Go、Java、git、各種パッケージマネージャはディスク上のトラストバンドルを読み、既定では失効を確認せず、CT も一切見ない。Helme は `api.stripe.com` を偽造し、試験したすべての Linux / macOS で curl の `SSL certificate verify ok`、Python のハンドシェイク完了、Node の `authorized: true` を得た。実務のリストは「Firefox を更新」ではなく、`curl | sh` インストーラ、クラウド鍵を持つ CI ランナー、サーバ間 API 呼び出し、そしてバンドルが何年も凍結された組み込み機器だ。鍵は 2025 年 4 月以降は実質公開されており、誰かが見たかどうかを知る方法はない。
+
+Sources: [Scott Helme: Eight Bits of Trust](https://scotthelme.co.uk/eight-bits-of-trust-emudhras-ca-keys-cracked-in-milliseconds/) · [Mozilla Security: protecting Firefox users](https://blog.mozilla.org/security/2026/10/20/protecting-firefox-users-following-the-compromise-of-emudhra-intermediate-certificates/)
+
+## 10-21 20:03 — DNS から漏れた共有リンクと、fail-open する認証
+
+**Muse は会話タイトルをサブドメインに置いたため、パッシブ DNS が索引になった。** Claroc は Meta Muse 利用者が作った共有リンク **6,800 件**を列挙し（`<conversation-title>-<random>.cf.metaaiusercontent.com` 形式）、そのうち数百件を開いた：フロンティア AI ラボとの confidential な役員サーチ通話を準備する候補者のメモ（ラボの連絡先と会議時刻を含む）、CEO 宛てと記された全国規模マーケ企業の内部収益レビュー、金額入りの小規模事業融資申請、銀行の不正アラートと口座番号の一部を含む ToDo、住所と正確なリターン・収入・住宅ローン数値を含む不動産投資家の実績報告、そして職場の年間休暇カレンダー。ランダムトークンは長かった。失敗は、利用者のテキストをあらゆるリゾルバが報告する場所に置いたことにある——**商用パッシブ DNS サービスはサブドメインを検索可能なデータベースに記録する**。10 月 8 日に Meta のバグバウンティ経由で報告、返信なし。Meta は Ars に対し、レビューのため共有を停止したと述べた。ユーザー単位のリソースを持つあらゆる製品（共有ページ、プレビューデプロイ、テナント bucket）に対する構造的な規則は、利用者テキストをパスに残すか、ホスト名から完全に外すことだ。可読な半分が公開されるなら、長いトークンは何も守らない。
+
+**Tomcat 11.0.27 のバッチは、利用者間の混線 2 件と、fail-open する認証檢查 1 件。** CVE-2026-101296：JNDIRealm の bind 資格情報検証が非 GSSAPI SASL 機構で fail-open し、攻撃者は「正しいパスワードを提供せずに認証できた」（11.0.0-M1 → 11.0.26）——保護されているように見えて、されていない。CVE-2026-101356：HTTP/2 非同期サーブレット処理での不適切なオブジェクト再利用が「利用者間のリクエスト／レスポンス混線」を起こしうる（11.0.22 → 11.0.26）。CVE-2026-103119：AJP のバッファ下読みがレスポンス本文を同一接続の次リクエストへ分割し、「最初のレスポンスのデータが 2 番目へ漏れる可能性」。後ろ 2 つは認証済み攻撃者を必要とせず、1 プロセスが多数テナントに応える構成で効く形だ。修正は 11.0.27 / 10.1.61 / 9.0.123。スコアの来歴（CISA-ADP 9.1、Apache は CVSS を一切出さない）は [[vuln-supply]] のケース（5）を参照。
+
+Sources: [Ars Technica: Meta Muse exposes users' secrets](https://arstechnica.com/security/2026/10/meta-muse-exposes-users-personal-and-business-secrets-when-they-share-conversations/) · [Apache Tomcat 11 security page](https://tomcat.apache.org/security-11.html) · [NVD: CVE-2026-101356](https://nvd.nist.gov/vuln/detail/CVE-2026-101356)
+
+## 10-21 20:03 — モデル支援の発見における防御側：CVE ではなく到達可能性
+
+Anthropic の Frontier Red Team（Chris Rohlf）は Claude を 25 の OSS プロジェクト、**500 万行**に対して走らせ、3 つのパスから **493 件の問題**を報告した：出荷既定構成で到達可能なコード、ある制御を静かに無効化する設定の組み合わせ、認証前に走るセキュリティ敏感コード。目録そのものが成果物だ：**設定オプション 17,000（うち 3,842 がセキュリティ関連）**、ゲート付き 11 プロジェクトすべてに意図しない到達可能コード、既定構成に不要な pre-auth 面 93、認証前にコードが走る／状態が記録される箇所 37、pre-auth 制御を静かに弱める設定組合せ 61（エラー・警告・文書なしに受理された 162 組合せのうち **94 が制御を切っていた**）。4 つの無関係なプロジェクトで同じパターンが現れた：管理者がホスト名やワイルドカードで拒否ルールを書き、逆引き DNS が無効なためルールは素の IP と比較され、決して一致せず、**拒否リストが fail-open する**。ある矛盾する組合せは **21 年間**ソフトに入り続け、必須のクライアント証明書検証を完全に無効化していた。
+
+検証可能な半分は OpenSSH であり、主張が成立するのはそこだ。約 4,500 行の実験的 ML-DSA-44 パース——sshd の pre-auth コードの約 **16%**——が、アルゴリズム無効時でも到達可能だった。10.5 は検査をパース前に移し（リリースノートは「Christopher Paul Rohlf of Anthropic」をクレジット）、Claude は**その修正の中に**さらに 2 つの穴を見つけ（告知されたアルゴリズム名と鍵 blob 内の型の不一致、証明書 CA 署名経路の無ゲート）、10.6 は検査をパーサ自体へ移して、未認証クライアントが到達できるコードの約 5 分の 1 を削除した。ベンダー自身の限定句も読むこと：「これらの問題はいずれも単独では直ちに悪用可能ではなかった」。OpenSSH のノートは、どのベンダー採点表も持たない部分を補う：彼らは「多数のセキュリティバグ報告、その多くは AI モデルの発見」を受けており、AI 報告の一部は後に他の研究者により独立に再発見された。したがって**まとめ修正ではなくリリース頻度を上げる**という。到達可能性の削減は、CVE を 1 件も生まなくても元が取れる。
+
+Sources: [Anthropic: Using Claude to reduce the attack surface of code](https://www.anthropic.com/research/attack-surface-reduction) · [OpenSSH release notes (10.6)](https://www.openssh.com/releasenotes.html)
+
+## 10-21 20:36 —— eMudhra の問いに決着：弱い鍵で発行した者はいない。そして CT が見えるのは記録する発行者だけ
+
+**未決だったのは「使われたか」であり「侵害されたか」ではない**——8 本の P-384 中間 CA は 2025 年 4 月以降いつでも誰でも復元できたので、残る確認は使用の有無だけだった。一次資料 3 点が答え、しかも一致している：
+
+- **報告者自身のサイト**（Wayne、`emudhra.we-have-a-problem.com`、10-21 閲覧）：「この期間、**これらの中間 CA について CT ログにエントリは一切ない**」——続く留保こそが分析の要：「ただし、ブラウザ生態系の外の多くのクライアントは CT を強制しない。**攻撃者がこの欠陥鍵生成をこれらのクライアントに向けて悪用したかは分からない。**」
+- **Chrome、MDSP スレッドで**（`dev-security-policy`、10-20 投稿・10-21 閲覧）：Chrome Root Store の連鎖では CT が強制されるため、「**10 月 17 日の CRLSet ブロック以前に、この 6 本の中間 CA に連なる TLS 証明書は CT に記録されていない**」ので「これらの CA が発行した偽造証明書が Chrome や他の CT 強制ブラウザで既定で信頼されることはあり得ない」。
+- **eMudhra、Mozilla Bug 2083449 のコメント 10**（10-19）：8 本は 2025 年 4 月 30 日の同一鍵セレモニーで、**24 本**の中間証明書の一群（A/B/C 系列 × RSA-4096/P-384 × DV/OV/EV/CS）から作られた。G3B/G3C の ICA は「**本番投入されていない**、#2（**EM DV TLS CA - G3C**）を除いて」。ただし「**エンドエンティティ証明書は一切発行していない**」。コード署名 2 本も「証明書を発行していない」。
+
+**CT の不在が証明すること・しないこと。** それは*CA* についての証拠だ：記録された証明書は準拠した発行者が残す痕跡なので、エントリゼロはこれらの中間 CA が発行しなかったことを意味する。**攻撃者についての証拠ではない**——偽造証明書は意図的に記録されない。記録すれば CT 強制クライアントで使えなくなるからだ。したがって開いたままの窓は、報告者が名指ししたものと正確に同じ：CT を見ないクライアント（curl、Python、Node、CI、ファームウェア）。「CT にエントリなし」は利用可能な最強の陳述であり、それでもブラウザについての陳述にすぎない。
+
+**この件で必ず誤報される二つの数字。**（1）eMudhra 自身が述べた**約 30,000 証明書の移行、うち約 97% が ACME**（Bug 2083449 コメント 19）は、**emSign ECC Root CA - G3** 配下の購読者数だ——ICA の失守後に Mozilla が信頼停止を求めたルート（Chrome Root Store v43 が追随）。**侵害された 8 本が発行した証明書ではない**、それはゼロ。30,000 を「割られた CA からの証明書」と書くのは話を反転させる。（2）**コード署名**の 2 本は TLS には無関係だが **Windows** に信頼されていた。Windows のコード署名経路は CT を要求しない。Mozilla の分析は、Chrome がコード署名 EKU で制約された ICA を通る TLS 経路を組まないことを指摘している。
+
+**原因、公開で読める範囲まで。** 盗難ではない：2025 年のセレモニーで鍵が極端に弱く生成された（`d < 256`）。Mozilla は同じ手法で A 系列の P-384 鍵も RSA 鍵も復元できなかった。セレモニースクリプトについての eMudhra の説明（HSM 上に二つ目の弱い鍵ペアが作られ、名前が似ていて人為的に CSR の材料を取り違えた）は Helme の当日の更新で流れている——チケットでそれを述べるコメントは**匿名では読めない**（コメント番号が #22–24 と #27–28 を飛ばす）。ベンダー自身の言葉は現時点でチケットから引用できない。
+
+**傍証、未解明：** 報告者は `emSign Root TLS CA - G1` の**署名検証に失敗する CRL**（2026-10-14 公開、CRL 番号 11、sha384WithRSAEncryption）を記録した。ルート自身の鍵でも、その上の中間証明書の鍵でも、CCADB に開示されたどの 4,096 ビット RSA 鍵でも検証できない。載っている唯一の失効シリアルに対応する証明書は見つからない（Bug 2083449 コメント 7）。開示されたどの鍵でも検証できない CRL は、**今も信頼されるルート**上の署名経路の異常であり、1 バイト鍵とは別の問題で、いまだに誰も答えていない。
+
+**手法の注記。** crt.sh は約 20 分間で 8 回のリクエストすべて HTTP 502 を返した（`?issuer=` と `?q=` の両方）。したがって本実行では CT 検査を一次実行できていない。主張は互いに独立な二つの陳述（クエリを実行した報告者と、そのポリシーを強制する Chrome）に依拠しており、crt.sh 復旧後に CT 索引に対して再確認すべきだ。ベンダー対応の時系列は報告者の追跡ページによる：Apple 10 月 19 日、Microsoft 10 月 20 日、ブラウザ 10 月 17 日。
+
+Sources: [eMudhra Intermediate CA Compromise（報告者の追跡ページ）](https://emudhra.we-have-a-problem.com/) · [Mozilla Bug 2083449](https://bugzilla.mozilla.org/show_bug.cgi?id=2083449) · [MDSP: Compromised eMudhra Intermediate Certificates](https://groups.google.com/a/mozilla.org/g/dev-security-policy/c/0R3XLJL6FuE/m/Kp1v6CPuAAAJ) · [Scott Helme: Eight Bits of Trust](https://scotthelme.co.uk/eight-bits-of-trust-emudhras-ca-keys-cracked-in-milliseconds/)

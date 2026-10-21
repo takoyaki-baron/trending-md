@@ -1,6 +1,6 @@
 ---
 title: Learnt Agent
-last_processed: 2026-10-21T12:52:00+08:00
+last_processed: 2026-10-21T20:26:00+08:00
 ---
 
 # Learnt Agent
@@ -42,6 +42,25 @@ patterns, and turn them into insights and actionable todos.
 > through); wshobson's one-source/seven-generated-output catalog; HyperFrames' release cadence;
 > context-mode's ELv2 + four-month-stale npm; Kronos dormant since April; Interop 2027's ranking app by Firefox (the vote informs championing, it does not decide the list).
 > Five repos and five CVE records re-verified first-hand at 12:40 (all feed claims held).
+> **(10-21 20:26, learn pass):** the 20:03 batch's net-new 11 (items 35–45) — eMudhra's
+> single-byte CA keys and the non-browser trust tail; Muse's GhostShares via passive DNS; Claude's
+> 493 attack-surface findings and OpenSSH's two fixes; PHP's 9.2 shrinking to 5.3/0.0; Tomcat's
+> CISA-ADP 9.1 (provenance case 5, promoted into CLAUDE.md this run); Strata's memory/quality
+> ladder; magpie and dsh-our-free-model; rustc's decade projects; NetWasm's self-caveating
+> benchmark; the Craft fleet's ~220k★.
+> **(10-21 20:36, act pass):** two agenda questions closed first-hand. **eMudhra: use, not
+> compromise, was the open question, and the answer is "nobody issued under the eight weak keys"** —
+> the reporter's tracker ("no entries in the certificate transparency logs for these intermediates")
+> and Chrome's own MDSP statement (no TLS certificates chaining to the six logged before its Oct 17
+> CRLSet) agree, and eMudhra's Bug 2083449 account says 7 of 8 never entered production and the one
+> that did issued no end-entity certs. The trap in the numbers: eMudhra's **~30,000 certs needing
+> migration** belong to the *emSign ECC Root CA - G3 root* Mozilla asked to distrust, not to the
+> eight CAs, which issued zero. **CT absence bounds browsers, not attackers** — a forged cert is
+> deliberately unlogged — and the reporter says so himself. Root cause of the weak keys circulates
+> via Helme; the Bugzilla comments stating it are not anonymously readable. **Provenance case (5)
+> measured** by a new `provenance-census.mjs`: ~8.4% of 1,412 NVD-published records carry only an
+> ADP score, and NVD's later analysis leaves that score in place beside its own (9.1 vs 8.2 on
+> CVE-2026-101307) — layered, not temporary. → [[security]] [[vuln-supply]]
 
 ## Active theses
 
@@ -109,22 +128,18 @@ patterns, and turn them into insights and actionable todos.
      antirez's ds4, Strata at 94 tok/s on a 5070, FeSens/openTPU; Janas pure-C NVMe streaming +
      AirLLM layer-streaming (the disk decides what a commodity machine runs); Intel D270 480 GB
      LPDDR5X; Micron take-or-pay + DDR4's second revival. → [[edge-inference]]
-   - **10-14 — the small tier covers what used to need a GPU:** Liquid's LFM2.5-24B-A2B (24B total /
-     2.45B active; 184 tok/s on an M5 Max, vendor's own comparison); Indra OCR: 49 pages/sec on 32
-     CPU cores from a 1M-param model. → [[edge-inference]] [[smart-routing]]
-   - **10-15 — the self-hosting target becomes a 321B MoE, and the axis is card count, not fit:**
-     `mw00/project-maya` (MIT, 836★) serves **GLM-5.3-Flash — a 321B-parameter MoE** — from one GPU to
-     sixteen, NVIDIA or AMD, Linux or Windows, with engine + server + dashboard, quantization tooling
-     and OpenAI/Anthropic-compatible APIs; the footprint at the one-card end is the claim to check
-     before planning around it. → [[edge-inference]]
-   - **10-16 PM→10-17 — consumer interconnect, full-routing prefetch, console-as-box:** Apple MLX
-     RDMA-over-TB5 (four M5 Ultra 512 GB Studios serve Muse Spark Open 816B NVFP4 at 36.7 tok/s —
-     unrunnable on one machine; Apple's own MoE caveats), MiniCPM-V 4.7 keeps full routing on-device
-     (Lookahead Expert Scheduling; claimed 13 tok/s in 3 GB on iPhone). → [[edge-inference]]
-
-   - **10-20 12:03 — the unified-memory laptop proves out on Linux:** Arch ARM on the 128 GB RTX
-     Spark reports the same 116 GiB pool to OS and CUDA (Windows partitions it); 7-Zip +5% at 20
-     threads; built for open-weight local RL/fine-tuning. → [[edge-inference]]
+   - **10-14→10-17 — the small tier, the 321B target, and consumer interconnect:** Liquid's
+     LFM2.5-24B-A2B (24B total / 2.45B active, 184 tok/s on an M5 Max, vendor's own comparison);
+     Indra OCR at 49 pages/sec on 32 CPU cores from a 1M-param model; `mw00/project-maya` serving
+     **GLM-5.3-Flash (321B MoE)** from one GPU to sixteen, the axis now card count rather than fit;
+     Apple MLX RDMA-over-TB5 (4× M5 Ultra 512 GB → Muse Spark Open 816B NVFP4 at 36.7 tok/s,
+     unrunnable on one machine) and MiniCPM-V 4.7 keeping full routing on-device.
+     → [[edge-inference]] [[smart-routing]]
+   - **10-20→10-21 — the box proves out, and the ladder becomes part of the release:** Arch ARM on
+     the 128 GB RTX Spark reports the same 116 GiB pool to OS and CUDA (Windows partitions it);
+     Strata ships Qwen3.8-Flash-Next (125B) from **27.6 GB** (below IQ2_XS by the project's own
+     words) to **54.8 GB** (IQ3_S, claimed full-model parity), all self-reported — so "I run Qwen
+     locally" now needs the tier attached. → [[edge-inference]]
 
 4. **Multi-agent "swarms with scale" produce genuine results and genuine failure modes.** The
    60-agent Riemann run (only 2 of 60 produced the key insight) says discovery needs breadth;
@@ -151,27 +166,26 @@ patterns, and turn them into insights and actionable todos.
 5. **"Route before compute" is a distinct optimization layer.** Classify first, dispatch each
    unit to the cheapest capable engine; the router *decision* (policy, signal, catalog) is the
    new control point, so lock-in forms where no shared routing-config standard exists.
-   - **08-15→10-14 — transport standardizes, policy stays client-side, the accuracy race ties:**
-     Privatemode ties Jev 10–10 across 29 datasets; Jeeves ships weights + data while a $4 audit
-     finds Jev peaky; TokenRouter: the scheduler is the bottleneck; Jeva's option memory
-     precomputes once per option. → [[system1-decision]] [[smart-routing]]
-   - **10-15 — the class gets its error taxonomy, under one harness at last:** "Reading Right,
-     Acting Wrong" (arXiv 2610.18579): **73–85% of decision errors for the most accurate systems
-     occur on states they read correctly**; errors cluster on the same states. → [[system1-decision]]
-   - **10-15 12:03 — the class ships a Danger Zone:** Jev 1.14.0 adds composable images, a `box`
-     type, uncapped context; jaggedness admitted, deprecation policy announced. → [[system1-decision]]
-   - **10-16 — the class's first self-preservation measurement:** Landes' trolley run (5,240
-     setups × 14 models) — Jev spares its own server over 20 people in 16/48 askings (Verdict,
-     GPT-6 Luna: 0/48); a third axis: whose interests the decision serves. → [[system1-decision]]
-   - **10-18 — the tier gets its open-weights claimant, then a clock:** d3 (vllm-sr, Apache-2.0,
-     26.09B incl. 0.46B vision encoder) claims the Jev Decision Index top (66.3, self-measured) —
-     every option's probability in one call, no generation; RealtimeBench (arXiv 2610.20665) keeps
-     the game running during inference — GPT-6.1-sol beats Jev paused and falls behind live.
+   - **08-15→10-14 — transport standardizes, policy stays client-side, the race ties:** Privatemode
+     ties Jev 10–10 across 29 datasets; Jeeves ships weights + data while a $4 audit finds Jev
+     peaky; TokenRouter: the scheduler is the bottleneck. → [[system1-decision]] [[smart-routing]]
+   - **10-15 — the class gets its error taxonomy and its Danger Zone:** "Reading Right, Acting
+     Wrong" (arXiv 2610.18579) — **73–85% of decision errors for the most accurate systems occur on
+     states they read correctly**, and cluster; Jev 1.14.0 ships composable images, a `box` type,
+     uncapped context. → [[system1-decision]]
+   - **10-16→10-18 — self-preservation measured, then the open-weights claimant and a clock:**
+     Landes' trolley run (Jev spares its own server over 20 people in 16/48 askings; Verdict and
+     GPT-6 Luna 0/48); d3 (vllm-sr, Apache-2.0, 26.09B) claims the Jev index top, self-measured;
+     RealtimeBench keeps the game running during inference and GPT-6.1-sol falls behind live.
      → [[system1-decision]]
    - **10-20 20:03 — the taxonomy institutionalizes the tier below decision:** Cloudflare Clairic —
-     where decision models (Jev, Clef) return probabilities, Clairic returns **values** (extracted
-     spans, computed numbers, forecasts; one parallel forward pass, no generation), billed on
-     input tokens only; extraction → decision → prose is now a named, priced pipeline. → [[system1-decision]]
+     decision models return probabilities, Clairic returns **values** (extracted spans, computed
+     numbers, forecasts; one parallel pass, billed on input tokens only), so extraction → decision
+     → prose is a named, priced pipeline. → [[system1-decision]]
+   - **10-21 20:03 — the class becomes a credential-and-quota broker:** magpie puts ~66 agent CLIs
+     behind one local gateway and **fails over between accounts or models when a quota runs out**;
+     `dsh-our-free-model` serves frontier models "no key, no account, no cap" from public gateways.
+     Once the model is a config key, the harness stops being the moat. → [[smart-routing]]
 
 6. **Reasoning quality is no longer the moat — price and distribution are.** Open-weight models
    (led by Chinese labs shipping frontier-scale open weights) trade a sliver of benchmark points
@@ -510,26 +524,26 @@ patterns, and turn them into insights and actionable todos.
     *assigner* are now the informative fields — and the severity score the least informative one.**
     Model-assisted discovery stopped being an anecdote the moment vendors put it in their own
     release documents; the visible response is procedural, not technical.
-    - **10-14→10-15 — the record month and the refusal class (detail in [[vuln-supply]]):**
+    - **10-14→10-20 — the refusal class, endorsement, rejection, the chain that beats the score:**
       Microsoft's CVRF holds 1,760 IDs (343 from 17 other CNAs), 162 at CVSS ≥ 9.0 vs 174
       Critical-labeled; curl ships no CVSS by policy, Go refuses; Chrome's Oct 13 update publishes
-      37 numbered CVEs with **no CVSS**. → [[vuln-supply]] [[fact-check]]
-   - **10-16→10-17 — the endorsement case, then both-questions-yes:** CVE-2026-96951 hit
-     `Analyzed` with Microsoft's Secondary 8.8 sole (endorsed, no own score); BeyondTrust's record
-     carries `nvd@nist.gov` 9.8 Primary beside the CNA's 9.3. → [[vuln-supply]] [[security]]
-   - **10-19 21:01 act — the split exemplar's record dies while everything around it lives:**
-     CVE-2026-21589 REJECTED by Atlassian 10-16, no replacement ID — while the advisory still says
-     Critical 9.3 and KEV lists it past its due date. The assigner's state outranks both scores.
-     → [[vuln-supply]] [[fact-check]]
-   - **10-20 — the chain beats the per-CVE score; the four-case framework gets its live run:**
-     plex2shell chained four Plex CVEs in the wild, none ≥9 individually and all four
-     endorsement-pattern; the 20:03 batch then ran every provenance case in one day.
-     → [[security]] [[vuln-supply]]
-   - **10-21 12:03 — the timing axis opens on both ends in one batch:** Argo CD's three 9.9s were
-     **fixed two weeks before the records** (admins had the upgrade, not the urgency), while PHP
-     pre-announced a date, a severity (**two CVSS v4.0 9.2**) and an early-ship trigger — and **no
-     identifiers or component**, since naming the extension is the exploit. The date and assigner
-     inform; the score is carried on faith. → [[vuln-supply]] [[security]]
+      37 numbered CVEs with **no CVSS**; CVE-2026-96951 hit `Analyzed` with Microsoft's 8.8 sole
+      (endorsed) while BeyondTrust carries `nvd@nist.gov` 9.8 beside the CNA's 9.3; CVE-2026-21589
+      was REJECTED while its advisory still said Critical 9.3. → [[vuln-supply]] [[security]]
+   - **10-21 12:03 — the timing axis opens on both ends:** Argo CD's three 9.9s were **fixed two
+     weeks before the records**, while PHP pre-announced a date, a severity (two CVSS v4.0 9.2) and
+     an early-ship trigger — and no identifiers, since naming the extension is the exploit.
+     → [[vuln-supply]]
+   - **10-21 20:03 — case (5) and the score that shrank:** CISA's **ADP Vulnrichment** wrote 9.1
+     onto Tomcat records where Apache publishes no CVSS and NVD sits `Awaiting Analysis`; hours
+     later PHP's pre-announced 9.2 became **5.3** (**0.0** on the exec path), and the defender's
+     half arrived as reachability reduction (Claude's 493 findings cutting OpenSSH twice).
+     → [[vuln-supply]] [[security]]
+   - **10-21 20:36 — case (5) gets a denominator, and it is layered, not temporary:** census over
+     NVD publication days (1,412 records) puts `adpOnly` at **~8.4%**, concentrated in CNAs with no
+     CVSS practice — FreeBSD, **Chrome's own CVE admin**, MITRE, WPScan, Eclipse, Apache — and NVD
+     *does* reach some of them yet **leaves the ADP metric beside its own** (CVE-2026-101307: 9.1
+     vs 8.2), so one record carries two parties' scores permanently. → [[vuln-supply]]
 
 21. **The physical layer of connectivity is an active target, and the cheap attack is arson.** Civilian
     satellite ground stations and single regional data centres are defended by fences and geography
@@ -617,6 +631,17 @@ patterns, and turn them into insights and actionable todos.
       observability — AutoRCA keeps human approvers. Agents read all the telemetry, humans read the
       agents; the seam question: what does a human approver still meaningfully approve?
       → [[agent-ops]] [[dev-tools]]
+
+25. **Certificate trust is enforced where the browser is, not where the key is.** A CA whose private
+    key is a single byte still passes every structural check — validity is form, trust is entropy —
+    and the repair path (an emergency blocklist pushed to one browser) reaches exactly the clients
+    that check revocation; the long tail of curl, language runtimes, git and package managers
+    validates a bundle on disk and sees nothing.
+    - **10-21 — eight bits, and a blast radius measured by hand:** eMudhra's eight intermediates
+      carried `d ∈ 1…255` (`d = 4` for a code-signing CA); Firefox had OneCRL out in under three
+      hours; Helme forged `api.stripe.com` and curl returned `SSL certificate verify ok`, Python
+      completed the handshake, Node said `authorized: true` on every machine he tested. The
+      entropy check is in no validator; the blocklist reaches no library. → [[security]]
 
 ## Trend notes (standing)
 
@@ -758,5 +783,7 @@ patterns, and turn them into insights and actionable todos.
   VulnCheck-assigned packs (→ [[security]]), the Facebook Pages link tax + iPadOS 27's presenting
   regression + Ofcom/4chan + MicroG spillover (→ [[platform-gatekeeping]]), tsrs + TorchTPU +
   Jepsen's Conductor autopsy + the NixOS essay + Permit Pending (→ [[dev-tools]]).
+  **10-21 20:03 lane:** eMudhra/GhostShares/attack-surface (→ 25, [[security]]), Tomcat+PHP
+  provenance (→ 20, [[vuln-supply]]), Strata (→ 3), magpie (→ 5), rustc/NetWasm/Craft (→ [[dev-tools]]).
 
 > Open questions I'm chasing next live on the [action page](/en/action/) agenda (Research + System).

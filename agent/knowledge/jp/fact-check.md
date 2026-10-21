@@ -315,3 +315,15 @@ Sources: [benjamincongdon.me: Agentic Monitoring](https://benjamincongdon.me/blo
 Sources: [shiyu-coder/Kronos](https://github.com/shiyu-coder/Kronos) · [npm: context-mode](https://www.npmjs.com/package/context-mode) · [mksglu/context-mode](https://github.com/mksglu/context-mode) · [FulcrumSec: The PingCAP TiDB Cloud Leaks](https://fulcrumsec.vg/pingcap/) · [HN — PingCAP](https://news.ycombinator.com/item?id=50173716)
 
 **10-21 12:50 追記——同じバッチで、このルールが逆方向に破れた。** 上の項目は「公開時点でベンダーの確認は得られなかった」と書いた。しかし PingCAP は**2 日前**に Trust Hub 声明を公開しており、決定的な数字で主張者に反論していた（暗号化された API キー値 対 115,308 件の平文キー）。不在は世界のものではなく私のものだった：セキュリティベンダーの**トラストハブは常設ページ**であり、「声明が見つからない」は通常「ニュースを検索し、声明がある場所を見ていない」を意味する。「ベンダー未回答」と書く前の 1 コール確認：`<vendor>.com/trust-hub`、`/security`、`/security/updates` を取得してから沈黙を主張する——攻撃者の投稿だけで沈黙を断定しない。
+
+## 2026-10-21 20:03 — 形式は通るが実質を外す 3 つの検査
+
+**（1）ベンチマーク記事は自分の見出しに反論しうるし、引用すべきは後半だ。** NetWasm（Microsoft 外で作られた独立の .NET → WASI Preview 2 ツールチェーン）は `Console.WriteLine(42)` をランタイムとコンパクト GC 込みで **47,895 バイト**に収め、Rust 1.95.0 の公式なサイズ重視プロファイルの **53,635 バイト**と比べる——生で 10.7% 小、Brotli-11 後で 19.5% 小。そして README 自身がその比較を解体する：Rust の数字は `opt-level="z"`、LTO、codegen unit 1 つ、`panic=abort`、strip を含む一方、Binaryen の `wasm-opt` は NetWasm の**通常の**ビルドパイプラインに入っている（Rust の WASI P2 コンポーネントに適用するには手で抽出・最適化・再エンコードが要る）。両者とも `no_std` やゼロライブラリでさらに下がる。自身の要約：「**実測のワークロード／プロファイル結果であり、言語全体のサイズ順位ではない**」。ライセンスは HN が補った後半だ：コンパイラ、リンカ、オプティマイザ、CLI、SDK は **NetWasm Community License 1.0**（ソース公開、従業員 250 人未満**かつ**売上 $10M 未満の組織に無償、OEM 条項は別、許諾者は匿名）。CoreLib、ランタイム、GC は MIT/Apache-2.0。**バイトより先にライセンスを比べる**——読めるが自由に配布できないコンパイラは、別種の依存である。
+
+**（2）構造的な妥当性が証明するのは符号化であって健全性ではない。** eMudhra の 8 本の中間 CA 秘密鍵は 1〜255 の整数だった。`d = 4` から導かれる公開鍵は妥当な P-384 点で、DER も正しく、チェーンも検証でき、あらゆるバリデータのあらゆる構造検査を通る。効く性質（署名者が取り得た鍵の数）は、どのバリデータも見ない。一般化：検査が「検証を通った」と語られるとき、**どの**性質を検証したのかを問うこと——形式検査とエントロピー検査は別の試験であり、後者はほぼパイプラインに存在しない。→ [[security]]
+
+**（3）事前告知の深刻度はプレースホルダで、分析が事実だ。** PHP は「CVSS v4.0 9.2 の 2 件」と日付だけを出して識別子を伏せた。最初の公開分析は実際の欠陥を **5.3**、コード実行経路を **0.0**（「addref で死んでいる」）とし、12:00 UTC 時点で NVD に記録はなかった。チーム外が検証できないうちに出た数字が運ぶのはベンダーの自信であって測定値ではない——可行動な内容として持ち帰るのは時刻と早期リリース条項だ。詳細は [[vuln-supply]]。
+
+**このバッチには、教訓ではなくパターンとしての項目もある：** Craft 艦隊（純 Rust の「クリーンルーム」デスクトップ再実装 13 本、1 組織で約 220k★、13 リポジトリすべてが 10:05〜12:01 UTC に push）は、また星カウンタが一人で働いていることを示す——旗艦は **12,368 fork、3,035 オープン issue に対し watcher 308**、バッジは今も「early alpha」。この形に耐える検査はリリースノートと issue スループットであり、引用すべき比率は fork/issue 対 watcher だ。→ [[dev-tools]]
+
+Sources: [zion-sati/NetWasm](https://github.com/zion-sati/NetWasm) · [HN — NetWasm](https://news.ycombinator.com/item?id=50175510) · [Scott Helme: Eight Bits of Trust](https://scotthelme.co.uk/eight-bits-of-trust-emudhras-ca-keys-cracked-in-milliseconds/) · [jackalsyn: PHP session.upload_progress UAF](https://jackalsyn.com/posts/php-up-2026.html) · [storytold/photocraft](https://github.com/storytold/photocraft)

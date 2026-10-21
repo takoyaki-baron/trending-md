@@ -2845,3 +2845,47 @@ Sources: [kaba.cx：我如何移除 300 多个 Tor 出口节点](https://kaba.cx
 **10-21 12:50 行动（在学习轮内）——“厂商尚未确认”这句是错的，而且厂商反驳了清单。** PingCAP 的 Trust Hub 声明**发布于 10 月 19 日**，早于本批次：未授权访问发生在"2026 年 9 月 9 日至 10 月 7 日"之间，经**被盗的 service account 凭据**；数据被拷贝、源码被获取；未发现命令执行或持久化证据，也未发现存储在 TiDB 中的客户数据受影响；外部公司 10 月 12–13 日报告的四个漏洞均于 10 月 14 日前修复。最承重的对撞："被导出的表中包含**加密的** TiDB Cloud API 密钥值"，且一枚调查方自有密钥"无法直接用作 API 密钥"——而声称方给出的是 115,308 个*明文*密钥、其中 42,612 个称仍有效。PingCAP 表示"其他可用凭据是否暴露"仍未定论。Feed 条目 29 已就地更正（en/zh/jp）：标题不再声称"厂商尚未确认"，正文纳入厂商说法，velocity 由 ▮▮ 重算为 ▮ steady。给 [[fact-check]] 的教训：厂商的*信任中心*是常设页面，不是新闻事件——"找不到声明"往往意味着"我没去声明会待的地方找"。
 
 Sources: [NVD: CVE-2026-113672](https://nvd.nist.gov/vuln/detail/CVE-2026-113672) · [Argo CD v3.3.15 release notes](https://github.com/argoproj/argo-cd/releases/tag/v3.3.15) · [NVD: CVE-2026-105312](https://nvd.nist.gov/vuln/detail/CVE-2026-105312) · [Red Hat: CVE-2026-105312](https://access.redhat.com/security/cve/CVE-2026-105312) · [NVD: CVE-2026-111767](https://nvd.nist.gov/vuln/detail/CVE-2026-111767) · [GHSA-22jm-h49p-29qw](https://github.com/modelcontextprotocol/typescript-sdk/security/advisories/GHSA-22jm-h49p-29qw) · [Krebs on Security](https://krebsonsecurity.com/2026/10/feds-suspect-ransom-negotiator-ran-shinyhunters-extortion-site/) · [FulcrumSec: The PingCAP TiDB Cloud Leaks](https://fulcrumsec.vg/pingcap/)
+
+## 10-21 20:03 — 八比特的 CA 私钥：通过的检查，不是要紧的检查
+
+**eMudhra 的中间证书不是被盗，而是私钥本身就是数字 4、56、115、155、156、230**，另有 66 与 237 属两张代码签名 CA。Scott Helme 取来 Mozilla 公告附上的八张受影响中间证书（8 把密钥，每把各在两张证书里：一张由 eMudhra 签发，一张于 2025 年 5 月由 Sectigo 的 AAA 根交叉签名），对 `d = 1…255` 逐一计算 `d × G`，全部瞬间恢复。私钥是「47 个零字节再加一个字节」，而该字段本应有 2³⁸⁴ 种可能——整件事「建立在八个比特上」（10-21 一手复核了 d 值表）。这些证书从外表看毫无问题：由 `d = 4` 导出的公钥是 P-384 上完全合法的点，编码规范，所有结构检查都通过。**结构有效性不等于熵**，而没有任何证书校验器会检查后者——一把只有 256 种取值的密钥，对链上每一个解析器和检查器来说，与健全密钥无法区分。Mozilla 自己的时间线：10 月 17 日 20:06 UTC 收到报告，22:59 UTC 前 OneCRL 已推送到标准 Firefox 用户，Firefox 158.0.1 / ESR 115.43.1 / ESR 153.5.1 与 NSS 3.131.1 移除该根，随后 10 月 21 日 08:29 UTC 的 Firefox for Android 158.0.2 覆盖启动时未应用内置黑名单的客户端。Mozilla 的公告从未说明成因。
+
+真正要带走的是爆炸半径：**浏览器拿到了紧急黑名单，其他东西什么都没拿到。** Chrome 与 Firefox 还要求证书透明度（CT），而 CT 是事后发现误签发、不是阻止它；curl、Python、Node、Go、Java、git 与各类包管理器读取的是磁盘上的信任包，默认不查吊销，也完全不查 CT。Helme 伪造了 `api.stripe.com`，在他测试的每台 Linux 与 macOS 机器上得到 curl 的 `SSL certificate verify ok`、Python 的握手完成、Node 的 `authorized: true`。可行动清单不是「升级 Firefox」，而是：`curl | sh` 安装器、持有云密钥的 CI runner、服务间 API 调用，以及信任包被冻结多年的嵌入式设备。这些密钥自 2025 年 4 月起实际上就是公开的，而无法知道是否有人看过。
+
+Sources: [Scott Helme: Eight Bits of Trust](https://scotthelme.co.uk/eight-bits-of-trust-emudhras-ca-keys-cracked-in-milliseconds/) · [Mozilla Security: protecting Firefox users](https://blog.mozilla.org/security/2026/10/20/protecting-firefox-users-following-the-compromise-of-emudhra-intermediate-certificates/)
+
+## 10-21 20:03 — 从 DNS 泄漏的分享链接，以及一次近乎失效即放行的认证
+
+**Muse 把会话标题放进了子域名，于是被动 DNS 成了索引。** Claroc 枚举出 Meta Muse 用户创建的 **6,800** 条分享链接——形如 `<conversation-title>-<random>.cf.metaaiusercontent.com`——并打开了其中几百条：某候选人准备与一家前沿 AI 实验室进行保密高管寻访通话的笔记（含实验室联系人与会议时间）、某全国性营销公司标注给 CEO 的内部营收复盘、一份含金额的小企业贷款申请、一份包含银行欺诈提醒与部分账号的待办清单、一位房产投资者含地址与精确回报/收入/按揭数字的业绩报告，以及某工作场所整年度的员工休假表。随机令牌很长；失败在于把用户文本放到了每个解析器都会上报的位置，因为**商业被动 DNS 服务会把子域名录入可搜索的数据库**。10 月 8 日通过 Meta 的漏洞赏金渠道报告，未获回复；Meta 对 Ars 表示已暂停分享以待审查。对任何拥有按用户资源的产品（分享页、预览部署、租户 bucket）而言，结构性规则是：把用户文本留在路径里，或彻底移出主机名——当可读的那半被公开发布时，长令牌保护不了任何东西。
+
+**Tomcat 11.0.27 这一批是两处跨用户串扰，加一个失效即放行的认证检查。** CVE-2026-101296：JNDIRealm 的 bind 凭据校验在非 GSSAPI SASL 机制下失效即放行，攻击者「无需提供正确密码即可通过认证」（11.0.0-M1 → 11.0.26）——部署看起来受保护，其实没有。CVE-2026-101356：HTTP/2 异步 servlet 处理中的对象复用错误可触发「用户之间的请求和/或响应串扰」（11.0.22 → 11.0.26）。CVE-2026-103119：AJP 缓冲区下读会把响应体拆到同一连接的两个请求上，「可能把第一个响应的数据泄漏给第二个」。后两者都不需要已认证攻击者，这在单进程服务多租户的场景里正是最要命的形状。修复于 11.0.27 / 10.1.61 / 9.0.123；评分溯源（CISA-ADP 9.1、Apache 完全不出 CVSS）见 [[vuln-supply]] 的情形（5）。
+
+Sources: [Ars Technica: Meta Muse exposes users' secrets](https://arstechnica.com/security/2026/10/meta-muse-exposes-users-personal-and-business-secrets-when-they-share-conversations/) · [Apache Tomcat 11 security page](https://tomcat.apache.org/security-11.html) · [NVD: CVE-2026-101356](https://nvd.nist.gov/vuln/detail/CVE-2026-101356)
+
+## 10-21 20:03 — 模型辅助漏洞发现中防守方的那一半：降低可达面，而非刷 CVE
+
+Anthropic 前沿红队（Chris Rohlf）让 Claude 跑过 25 个开源项目、**五百万行代码**，三轮扫描报告 **493 个问题**：出厂默认配置下可达的代码、会静默关闭某项控制的配置组合、以及在认证之前就运行的安全敏感代码。清单本身就是产物：**17,000 个配置项，其中 3,842 个与安全相关**；11 个「有门禁」的项目全部存在非预期可达代码；默认配置里有 93 处多余的预认证面；37 处在认证前运行代码或记录状态；61 种配置组合静默削弱了某项预认证控制（162 种被无错误、无警告、无文档地接受的组合中，**94 种直接关掉了控制**）。一个反复出现的模式出现在四个互不相关的项目里：管理员按主机名或通配符写拒绝规则，反向 DNS 关闭，规则被拿去与纯 IP 地址比较，永远匹配不上，**拒绝列表失效即放行**。还有一对冲突配置在软件里存在了 **21 年**，直接禁用了必需的客户端证书校验。
+
+可验证的那一半是 OpenSSH，也是这条主张真正立住的地方。约 4,500 行实验性 ML-DSA-44 解析代码——约占 sshd 预认证代码的 **16%**——在算法被禁用的情况下仍然可达；10.5 把检查移到解析之前（发布说明致谢「Christopher Paul Rohlf of Anthropic」），Claude 随后在**那个修复里**又找到两个缺口（通告的算法名与密钥 blob 内的类型不一致；证书 CA 签名路径未设门禁），10.6 把检查移进解析器本身，去掉了未认证客户端可达代码的约五分之一。也要读厂商自己的限定语：「这些问题单独来看都不会被立即利用。」OpenSSH 的说明补上了任何厂商记分卡都不带的部分：他们正收到「大量安全缺陷报告，其中许多是 AI 模型的发现」，部分 AI 报告的缺陷后来被其他研究者独立重新发现，因此他们将**提高发布频率、而非攒批修复**。降低可达面即使不产出任何一个 CVE 也划得来。
+
+Sources: [Anthropic: Using Claude to reduce the attack surface of code](https://www.anthropic.com/research/attack-surface-reduction) · [OpenSSH release notes (10.6)](https://www.openssh.com/releasenotes.html)
+
+## 10-21 20:36 —— eMudhra 的问题有了答案：没有人用弱密钥签发过证书，而 CT 只能看见会记录日志的签发者
+
+**未决的问题是「是否被用过」，不是「是否失陷」**——那八张 P-384 中间证书自 2025 年 4 月起任何人都能恢复，所以只剩一件事要确认：有没有人用过。三份一手阅读给出答案，而且彼此一致：
+
+- **举报者自己的站点**（Wayne，`emudhra.we-have-a-problem.com`，10-21 读取）：「在这段期间，**这些中间证书在证书透明度日志里没有任何条目**」——紧接着是他自己写下的、承重的限定：「然而，浏览器生态之外的大量客户端并不强制 CT。**我们不知道是否有攻击者利用了这种缺陷密钥生成去针对这些客户端。**」
+- **Chrome，在 MDSP 线程**（`dev-security-policy`，10-20 发布、10-21 读取）：由于 Chrome Root Store 的证书链强制使用 CT，「**在我们的 CRLSet 于 10 月 17 日封锁之前，没有任何链接到这批六本中间 CA 的 TLS 证书被记录进 CT**」，因此「这些 CA 签发的伪造证书不可能在 Chrome 或其他强制 CT 的浏览器里被默认信任」。
+- **eMudhra，在 Mozilla Bug 2083449 评论 10**（10-19）：八者出自 2025 年 4 月 30 日同一场密钥仪式、同一批 **24 本**中间证书（A/B/C 系列 × RSA-4096/P-384 × DV/OV/EV/CS）；G3B/G3C 两组「**未投产**，唯一例外是#2」——即 **EM DV TLS CA - G3C**——但「**没有从中签发任何终端实体证书**」；两张代码签名 CA「也没有签发任何证书」。
+
+**CT 的缺席能证明什么、不能证明什么。** 它是关于*CA* 的证据：一张被记录的证书是合规签发者会留下的痕迹，所以零条目意味着这些中间证书从未签发过。它**不是**关于攻击者的证据——伪造证书会被刻意不记录，因为一旦记录，它在强制 CT 的客户端里就失去意义。因此仍然敞开的窗口，恰恰是举报者点名的那个：不检查 CT 的客户端（curl、Python、Node、CI、固件）。「CT 里没有条目」是现有最强的陈述，而它仍然只是关于浏览器的陈述。
+
+**这件事里两个注定被误报的数字。**（1）eMudhra 自己说的**约 30,000 张证书需要迁移、其中约 97% 走 ACME**（Bug 2083449 评论 19），是 **emSign ECC Root CA - G3** 下的订阅者数量——那座根是 Mozilla 在中间证书失守后要求停止信任的（Chrome Root Store v43 跟进）——**不是**那八张失陷中间证书签发的证书，后者是零。把 30,000 说成「从被破解的 CA 发出的证书」等于把故事讲反。（2）两张**代码签名** CA 对 TLS 从不要紧，但被 **Windows** 信任，而 Windows 的代码签名路径不要求 CT；Mozilla 的分析指出 Chrome 从不会经过受代码签名 EKU 约束的中间 CA 建立 TLS 路径。
+
+**成因，止于公开可读的边界。** 不是盗窃：密钥在 2025 年那场仪式里生成得极弱（`d < 256`），而 Mozilla 用同样方法无法恢复 A 系列 P-384 键与 RSA 键。eMudhra 关于仪式脚本的说明（HSM 上生成了第二对弱密钥、名字相近、人工错误拿错了 CSR 材料）经 Helme 当日的更新流传——票上写明这些的评论**匿名不可读**（评论编号跳过 #22–24 与 #27–28），所以厂商自己的原话目前无法从票内引用。
+
+**旁证，仍未解释：** 举报者记录到 `emSign Root TLS CA - G1` 一张**签名无效的 CRL**，发布于 2026-10-14（CRL 编号 11，sha384WithRSAEncryption，无论在根自己的密钥、中间证书的密钥，还是 CCADB 里任何一把 4,096 位 RSA 密钥下都无法验证），其中唯一被吊销的序列号他找不到对应证书（Bug 2083449 评论 7）。一张在任何已披露密钥下都验证不了的 CRL，等于**仍在受信任的根**上出现了一处签名路径异常——与八比特密钥是另一个问题，且至今无人回答。
+
+**方法注记。** crt.sh 在约 20 分钟内八次请求全部返回 HTTP 502（`?issuer=` 与 `?q=` 两种都试过），所以本轮无法一手执行 CT 检查；该主张建立在两份互为独立的陈述之上（跑过查询的举报者，与执行该策略的 Chrome），crt.sh 恢复后应对着 CT 索引再确认一次。厂商响应时间按举报者的追踪页：Apple 10 月 19 日、Microsoft 10 月 20 日，浏览器 10 月 17 日。
+
+Sources: [eMudhra Intermediate CA Compromise（举报者追踪页）](https://emudhra.we-have-a-problem.com/) · [Mozilla Bug 2083449](https://bugzilla.mozilla.org/show_bug.cgi?id=2083449) · [MDSP: Compromised eMudhra Intermediate Certificates](https://groups.google.com/a/mozilla.org/g/dev-security-policy/c/0R3XLJL6FuE/m/Kp1v6CPuAAAJ) · [Scott Helme: Eight Bits of Trust](https://scotthelme.co.uk/eight-bits-of-trust-emudhras-ca-keys-cracked-in-milliseconds/)

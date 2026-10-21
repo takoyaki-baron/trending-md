@@ -116,7 +116,7 @@ underlying pages — this produced a two-layer false signal in a single item.
    **A missing score can be POLICY, not absence — name whose policy** (added 2026-10-15 after the
    curl item: the project's own `VULN-DISCLOSURE-POLICY.md` says "We do not support CVSS … We
    believe CVSS is a broken system", so "no CVSS for this CVE" and "no CVSS has been assigned yet"
-   look identical in a table and are different sentences). Score provenance has **four** cases, and
+   look identical in a table and are different sentences). Score provenance has **five** cases, and
    every item must say which one it is in: **(1)** CNA-assigned, **(2)** NVD-analyzed, **(3)** no
    score **by design** — the policy is documented by **curl** (`curl/curl`
    `docs/VULN-DISCLOSURE-POLICY.md`, four levels Low→Critical) and **Go** (`go.dev/doc/security/policy`:
@@ -126,9 +126,29 @@ underlying pages — this produced a two-layer false signal in a single item.
    a number on the record is not an endorsement by the party that knows the code. The kernel-CNA
    half of the same claim is **third-party only** (Stenberg, quoted in The Register): the kernel's
    own `Documentation/process/cve.rst` contains no CVSS statement at all — cite it as "reported by
-   Stenberg", never as "the kernel's policy". One-call form for an item in hand — prints status,
+   Stenberg", never as "the kernel's policy". **(5)** scored by a **third-party enrichment
+   container** — CISA's ADP (`CISA-ADP Vulnrichment`, orgId `134c704f-9b21-4f2e-91b3-4a467353bcc0`)
+   writes CVSS *and* SSVC into the CVE record itself, so NVD's API shows a `Secondary` metric while
+   NVD sits at `Awaiting Analysis` and the CNA publishes nothing: Apache's October Tomcat advisory
+   rates its entries with the word "Important" and contains no CVSS string at all (verified
+   2026-10-21 — 0 occurrences of "CVSS"), yet all three Important records carry a 9.1 whose source
+   is the ADP and whose SSVC says `role: CISA Coordinator`, `Exploitation: none`, `Automatable: yes`.
+   Name it as **CISA-ADP**, never "NVD" and never the vendor; the enrichment is a third party's
+   assessment, and it is the case where the record's own `Secondary` label is not the CNA's.
+   One-call form for an item in hand — prints status,
    every metric's (version, type, source, score), CWE, KEV:
    `node agent/tools/nvd-provenance.mjs --ids CVE-…,CVE-…`
+   **Case (5) is measured, not anecdotal** (added 2026-10-21, after the Tomcat trio became the rule):
+   `node agent/tools/provenance-census.mjs --from YYYY-MM-DD --to YYYY-MM-DD` pages NVD's
+   publication window and counts who wrote each record's number — ~**8.4% of 1,412 records published
+   Oct 15–21 carried an `adpOnly` score** (per-day 3.2%–21.2%), concentrated in CNAs with no CVSS
+   practice (FreeBSD, Chrome's CVE admin, MITRE, WPScan, Eclipse, Apache). Two consequences for
+   writing: **(a)** a number on such a record is CISA's, so name the ADP — never "NVD", never the
+   vendor; **(b)** the class is **layered**, not temporary: NVD does eventually analyze some of these
+   and **leaves the ADP metric in place** (CVE-2026-101307, `Analyzed`: `nvd@nist.gov` v3.1 9.1
+   beside the ADP's v4.0 8.2) — so when both exist, quote both with their CVSS versions instead of
+   replacing one with the other. Census cohorts are *publication-day* snapshots (analysis lands
+   later), so read the `nvd` row as latency, not as NVD's steady-state coverage.
    A **standing** per-CVE watch (Pass 10 of `agent-run.sh`, `agent/tools/nvd-provenance.json`)
    reports only movement — status flips, an `nvd@nist.gov` metric appearing, a score revision, a
    KEV add — because keyword search cannot see a record that already exists changing state.

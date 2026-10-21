@@ -303,3 +303,13 @@ Sources: [arXiv 2610.12242](https://arxiv.org/abs/2610.12242) · [thu-nics/Token
 **文档解析继续分出它自己的路由层（Indra OCR，Datalab，10 月 13 日）：**一个 **1M 参数**的识别模型，在 **32 个 CPU 核心上 49 页/秒**（比 Tesseract 和 PaddleOCR 的 PP-OCR 文本模型快 11–17×，单页延迟约 230 ms），外加完整版面：每行一个框、每个版面块一个带标签的框（正文、章节标题、列表、表格、题注、脚注、表单、目录、页眉/页脚）、阅读顺序、横向与倒置页面的纠偏，以及 markdown 或 JSON 输出——且**记录每页文本是来自 PDF 文本层、OCR，还是两者**。来源字段就是那个路由可供性：它告诉管线哪些页可以信、哪些要升级。头条准确率 **62.1，在 OmniParseBench 上，这是 Datalab 自家新造的基准**——核心限定条件——而印出来的局限异常完整：手写体约 **8%**，扫描件/图像仅限拉丁/西里尔/希腊/天城/孟加拉/中文（无阿拉伯文、希伯来文、泰文、假名、韩文），多级表头丢失结构（表格分 56.4），而在文本上 **PaddleOCR 的 PP-StructureV3 以 55.6 对 41.3 在默认模式下胜过它**——Indra 只在需要显式开启的 `--math` 模式下领先，而那要付出 30–35% 的吞吐。对分类与路由管线而言，「文本够好、够快」是正确取舍；每一个速度倍数都是厂商在厂商自家基准上的测量。→ [[edge-inference]] [[token-economics]]
 
 Sources: [LightOn ColGrep-Agent](https://huggingface.co/blog/lightonai/colgrep-agent) · [arXiv 2610.05099](https://arxiv.org/abs/2610.05099) · [Datalab — Indra OCR](https://www.datalab.to/blog/indra-ocr) · [datalab-to/indra-ocr](https://huggingface.co/datalab-to/indra-ocr)
+
+## 2026-10-21 20:03 — 路由器变成凭据与配额的经纪商
+
+**magpie**（`yetone/magpie`，MIT，18,583★，v0.1.1311 于 10 月 21 日 12:00 UTC 发布）是菜单栏应用、窗口、TUI、web UI 与 CLI 的合集，把每个 agent 都放在**一个本地网关**后面，并改写各 agent 自己配置里那唯一要紧的 key——于是 Claude Code 可跑 Kimi K3、Codex 跑 DeepSeek V4 Pro、Gemini CLI 跑 GLM-5.3，从同一份列表里选。它声称支持约 **66 个 agent**（Claude Code、Codex、Zed、Crush、Cline、Goose…），并补上厂商 harness 故意不给的功能：**配额耗尽时在账号或模型之间故障转移的路由组**，以 `magpie quota` 作为读数。为此它读取你的 agent 已有的登录——Claude Code 与 Codex 的配置文件，以及 **Keychain**——README 明说了这一点，并给出三种关闭方式（Settings → Privacy → Subscription accounts、`magpie accounts discovery off`、`MAGPIE_NO_ACCOUNTS=1`）。提供 macOS、Windows、Linux、Docker 与 Termux 构建。
+
+**`dsh-our-free-model`**（32,609★，MIT，9 月 24 日创建，Trendshift 日榜第一）是同一层，只是把成本移到了上游：一个 DeepSeek Harness 插件，让前沿模型（DeepSeek V4.1 Flash、Kimi K3）以「**无需 key、无需账号、无上限**」出现，直接由 **OpenCode 的 Zen 网关加 Kilo AI 的公共网关**提供；模型列表每次刷新都从上游重新拉取而非存快照，不可用模型通过探测裁剪，429 与 5xx 明确不计入模型的坏账。它还带一个 OpenAI 兼容的本地转发端口、一个应用内公告通道（维护者推送的 JSON 在一个轮询周期内到达所有已安装实例，`urgent` 会触发全屏模态），以及一键自更新（SHA-256 校验、备份、原子替换、热重载，任一步失败则回滚）。
+
+路由主线在这里变锋利：**同时跑多个 agent 的昂贵部分已经不再是模型，而是凭据与配额的周旋**，而一旦模型成了一个配置 key，harness 就不再是护城河。代价是攻击面：magpie 读取其他应用存储的登录，免费通道插件的分发渠道同时也是它的风险清单（远程 JSON 弹模态 + 热重载下载的代码）。「完全免费、无限」是 README 的主张，不是实测事实——容量属于运营那些公共网关的人，且可以随时变化。
+
+Sources: [yetone/magpie](https://github.com/yetone/magpie) · [usemagpie.ai](https://usemagpie.ai/) · [Ebony-Vinyl/dsh-our-free-model](https://github.com/Ebony-Vinyl/dsh-our-free-model) · [Trendshift repository page](https://trendshift.io/repositories/261203)

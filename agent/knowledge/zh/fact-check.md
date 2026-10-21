@@ -288,3 +288,15 @@ Sources: [benjamincongdon.me: Agentic Monitoring](https://benjamincongdon.me/blo
 Sources: [shiyu-coder/Kronos](https://github.com/shiyu-coder/Kronos) · [npm: context-mode](https://www.npmjs.com/package/context-mode) · [mksglu/context-mode](https://github.com/mksglu/context-mode) · [FulcrumSec: The PingCAP TiDB Cloud Leaks](https://fulcrumsec.vg/pingcap/) · [HN — PingCAP](https://news.ycombinator.com/item?id=50173716)
 
 **10-21 12:50 补记——同一批次里，这条规则的失败方向反过来了一次。** 上面那条写道"发布时找不到厂商确认"。而 PingCAP **两天前**就发布了 Trust Hub 声明，且在决定性数字上反驳了声称方（加密的 API 密钥值对 115,308 个明文密钥）。缺席是我的，不是世界的：安全厂商的**信任中心是常设页面**，所以"找不到声明"通常意味着"我搜了新闻，没去声明会待的页面"。写任何"厂商未回应"子句前的一次性检查：先抓 `<vendor>.com/trust-hub`、`/security` 或 `/security/updates`，再断言沉默——绝不要仅凭攻击者的帖子断言。
+
+## 2026-10-21 20:03 — 三种检查通过了形式，却漏掉了实质
+
+**（1）基准文章可以反驳自己的标题，而该引用的是后半段。** NetWasm（微软之外的独立 .NET → WASI Preview 2 工具链）把 `Console.WriteLine(42)` 压到 **47,895 字节**（含运行时与紧凑 GC），对照 Rust 1.95.0 官方记录的体积优化配置的 **53,635 字节**——原始小 10.7%，Brotli-11 后小 19.5%。随后 README 拆掉了自己的比较：Rust 那个数字包含 `opt-level="z"`、LTO、单一 codegen unit、`panic=abort` 与 strip，而 Binaryen 的 `wasm-opt` 是 NetWasm **常规**构建管线的一部分（对 Rust 的 WASI P2 组件应用它需要手工提取、优化、重新编码），并且两者都能用 `no_std` 或零库走得更低。它自己的总结是：「**一个实测工作负载/配置的结果，不是语言层面的体积排名**。」许可证是 HN 补上的后半段：编译器、链接器、优化器、CLI 与 SDK 采用 **NetWasm Community License 1.0**——源码可见，对员工数 <250 **且**营收 <$1000 万的组织免费，另有 OEM 条款，许可方为化名；CoreLib、运行时与 GC 为 MIT/Apache-2.0。**先比较许可证，再比较字节**：一个你能读、却不能自由分发的编译器，是另一种依赖。
+
+**（2）结构有效证明的是编码，不是健全性。** eMudhra 的八把中间证书私钥都是 1 到 255 之间的整数——由 `d = 4` 导出的公钥是合法的 P-384 点，DER 规范，链可验证，每个校验器里的每项结构检查都通过。真正要紧的性质（签发者可能有多少种密钥）不在任何校验器的检查范围里。推广之：当一项检查被描述为「通过验证」时，要问它验证的是**哪个**性质——形式检查与熵检查是两种测试，而后者几乎从不在这条管线里。→ [[security]]
+
+**（3）预告的严重度是占位符，分析才是事实。** PHP 发布了「两个 CVSS v4.0 9.2 严重漏洞」，给了日期却没给标识符；第一份公开分析把真正的缺陷定在 **5.3**，把代码执行那条路径定在 **0.0**（「在 addref 处已死」），而 12:00 UTC 时 NVD 还没有记录。在团队之外无人能核验之前发出的数字，携带的是厂商的信心，不是测量值——要当作可行动内容的是时间戳与提前发布条款。细节见 [[vuln-supply]]。
+
+**该批次还有一个作为模式（而非教训）的条目：** Craft 舰队（13 个纯 Rust 的「净室」桌面重实现，同一组织约 220k★，十三个仓库全部在 10:05–12:01 UTC 之间被 push）再次说明星数在独自干活——旗舰的 **12,368 个 fork、3,035 个未关闭 issue，对 308 个 watcher**，其徽章仍写着「early alpha」。能扛住这种形状的检查是发布说明 + issue 吞吐，该引用的比率是 fork/issue 对 watcher。→ [[dev-tools]]
+
+Sources: [zion-sati/NetWasm](https://github.com/zion-sati/NetWasm) · [HN — NetWasm](https://news.ycombinator.com/item?id=50175510) · [Scott Helme: Eight Bits of Trust](https://scotthelme.co.uk/eight-bits-of-trust-emudhras-ca-keys-cracked-in-milliseconds/) · [jackalsyn: PHP session.upload_progress UAF](https://jackalsyn.com/posts/php-up-2026.html) · [storytold/photocraft](https://github.com/storytold/photocraft)

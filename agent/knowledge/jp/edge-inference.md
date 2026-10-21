@@ -227,3 +227,11 @@ Sources: [deepseek-ai/DeepInfer](https://github.com/deepseek-ai/DeepInfer) · [H
 `debpalash/VoiceStudio`（AGPL-3.0、79,224★、+17,057/週、本日 04:34 UTC に push——12:40 に再確認）：完全ローカルの音声プラットフォーム——声のクローニング、声のデザイン、タイミング付き動画吹き替え、フローティング聴写ウィジェット、文字起こし、オーディオブックとバッチ処理——を Electron アプリとして提供し、ローカル API とエージェント向け MCP サーバーを備える。既定エンジンは k2-fsa の OmniVoice で他も選択可、最新リリースは v0.5.6（9 月 23 日）。これは 09-14 と 10-13 のメモ（16 TTS + 11 ASR エンジン → 61.4k★ のインストール経路 → 79.2k★）への日付付き更新で、実質は天井がどこまで上がったかにある：セルフホストの対抗策はいまや**クローニングと吹き替え**——ベンダーがオープン重みに置かない層そのもの——を覆う。同じ日に Mistral はバッチ文字起こしを $0.0035/min と値付けし、ライセンスも重みも示さなかった（→ [[frontier-models]]）。注意点：646 言語はプロジェクト自身の数字で独立評価の引用はなく、AGPL-3.0 は社内ツールなら問題ないが製品への組み込みでは実質的な制約になる。
 
 Sources: [debpalash/VoiceStudio](https://github.com/debpalash/VoiceStudio) · [voicestudio.sh](https://voicestudio.sh/)
+
+## 10-21 20:03 — メモリ／品質のラダーがリリースの一部になる
+
+**Strata**（`Niko1221/Strata`、MIT、29,586★、9 月 24 日作成、v0.2.2 を 10-21 に push）は **Qwen3.8-Flash-Next** の第三者量子化版向けランチャ兼エンジンだ。後者は Qwen のコミュニティライセンス下にある 125B のオープンウェイト・プレビューで、README は「自分のノート PC で動く」系プロジェクトが飛ばしがちなラダーを公開している。agentionai の「Gyro」系はエキスパートをメモリと引き換える：**Gyro-S は RAM+VRAM 27.6 GB（ダウンロード 58.5 GB）で品質は「IQ2_XS 未満」**、**Gyro-M は 35 GB で概ね IQ3_XXS 品質、16〜21% 遅い**。上の段は、32 GB なら Gyro-S かエキスパート半分を残す「Coder」変種（「コード以外では弱い」）、48 GB で IQ3_XXS（47.0 GB）、**64 GB で IQ3_S（54.8 GB）——プロジェクトは公開テストでフルモデルに匹敵すると述べる**、96 GB 以上で 4〜8 bit。12 GB の RTX 5070 + 64 GB RAM での速度は **Q2_0 で生成 94 tok/s、prompt 2,650 tok/s**、IQ3_XXS で 62/1,750。OpenAI と Anthropic の両 API を話すので Claude Code、Codex、OpenCode が接続でき、MCP サーバと、コーディングエージェントに貼り付けて導入させるプロンプトも同梱する。
+
+これはローカル推論テーゼの現在形だ。制約は「125B がここで動くか」ではなく**そのどの圧縮を動かしているか**であり、誠実なプロジェクトはラダーをリリースの一部として出すようになった。ここにある数字はすべてプロジェクト自身のもので、独立した tok/s や品質の追試はまだ無い。実務的な帰結は主張規律である——**「Qwen をローカルで動かしている」には段を添えなければならない**。27.6 GB の載せ方と 54.8 GB の載せ方は同じ名前の別製品であり、32 GB のノート PC はプロジェクト自身が IQ2_XS 未満と言う段を動かしている。
+
+Sources: [Niko1221/Strata](https://github.com/Niko1221/Strata) · [Hugging Face: Qwen/Qwen3.8-Flash-Next](https://huggingface.co/Qwen/Qwen3.8-Flash-Next)
