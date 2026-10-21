@@ -1,6 +1,6 @@
 ---
 date: 2026-10-22
-updated: 2026-10-21T20:03:00Z
+updated: 2026-10-21T20:26:00Z
 schedule: 04:03, 12:03, 20:03 UTC+8
 sources: 24
 license: CC-BY-4.0
@@ -72,7 +72,12 @@ Hugging Face——加えてクラウド鍵、CI/CD シークレット、SSH 鍵�
 `www.litellm[.]dev/healthcheck` で、静的な `X-Token` ヘッダを伴っていた。本稿執筆
 時点で PyPI は 1.107.0 を配布しておらず、`latest` は 1.106.2 に戻っている。LiteLLM
 の告知はトークンの入手経路を未解明としている。「We have not yet identified the
-mechanism.」
+mechanism.」プロジェクト自身の issue スレッドにあるより新しい状態更新（18:30 UTC）は
+そこから一歩進み、「一方の認証トークンが漏れた潜在的な経路は特定した」としつつ、他の
+アカウントへの横移動は未特定のままだ——一方、16:00 UTC に最終更新されたインシデント
+記事はいまだ「未特定」と書いている。各コンテナイメージに付いたビルド来歴はすでに
+類似名リポジトリをソースとして名指しし、対応する commit も示していた。リリース経路の
+どこもそれを読まなかった。
 
 **Why it matters:** `.pth` ファイルは 1 回の `pip install` をマシン上の全 Python
 プロセスの永続化に変える。つまり誰もが最初に取る復旧手順——固定バージョンへの
@@ -80,7 +85,7 @@ mechanism.」
 ファイルを消すか、ホストを再構築するかだ。これは少なくとも LiteLLM にとって今年
 2 回目の侵害である。
 
-[`🔗 LiteLLM: security incident Oct 21`](https://docs.litellm.ai/blog/security-incident-oct-21-2026) · [`🔗 SafeDep: technical analysis`](https://safedep.io/litellm-pypi-compromise-credential-stealer-backdoor/)
+[`🔗 LiteLLM: security incident Oct 21`](https://docs.litellm.ai/blog/security-incident-oct-21-2026) · [`🔗 SafeDep: technical analysis`](https://safedep.io/litellm-pypi-compromise-credential-stealer-backdoor/) · [`🔗 LiteLLM issue 47826（タイムラインとビルド来歴）`](https://github.com/BerriAI/litellm/issues/47826)
 
 ---
 

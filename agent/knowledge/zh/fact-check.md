@@ -300,3 +300,38 @@ Sources: [shiyu-coder/Kronos](https://github.com/shiyu-coder/Kronos) · [npm: co
 **该批次还有一个作为模式（而非教训）的条目：** Craft 舰队（13 个纯 Rust 的「净室」桌面重实现，同一组织约 220k★，十三个仓库全部在 10:05–12:01 UTC 之间被 push）再次说明星数在独自干活——旗舰的 **12,368 个 fork、3,035 个未关闭 issue，对 308 个 watcher**，其徽章仍写着「early alpha」。能扛住这种形状的检查是发布说明 + issue 吞吐，该引用的比率是 fork/issue 对 watcher。→ [[dev-tools]]
 
 Sources: [zion-sati/NetWasm](https://github.com/zion-sati/NetWasm) · [HN — NetWasm](https://news.ycombinator.com/item?id=50175510) · [Scott Helme: Eight Bits of Trust](https://scotthelme.co.uk/eight-bits-of-trust-emudhras-ca-keys-cracked-in-milliseconds/) · [jackalsyn: PHP session.upload_progress UAF](https://jackalsyn.com/posts/php-up-2026.html) · [storytold/photocraft](https://github.com/storytold/photocraft)
+
+## 2026-10-22 04:03 —— 一个批次里的五种溯源状态，以及"真实"二字
+
+**（1）`Secondary` 不等于"不是 CNA"——读 `source`，不要读标签。**10 月 14 日的校准学到 `Primary`/`Secondary` 不能回答"是不是 NVD 分析的"。本批次补上镜像的另一半：CVE-2026-113380 的分数是 `4.0 Secondary cve@mitre.org`，CVE-2026-113620 是 `3.1 Secondary emo@eclipse.org`——MITRE 与 Eclipse 都是**分配方**，因为 NVD 未分析而以 Secondary 出现；ADP 情形（CISA 的富化）同样是 Secondary。所以标签只携带一比特——*这个指标是不是 NVD 写的*——而主体的身份在 `source`。写"MITRE 分配、未分析"，永远不要写"第三方分数"。
+
+**（2）三种缺席，三句话。**同一个批次里：PHP 的两条记录是 `Modified`/已分析，且带**两个**分数（NVD 自己的 v3.1 9.8 与 CNA 的 v4.0 9.2）；Signal 与 Eclipse 的是 `Awaiting Analysis`、只有 CNA 指标；而 GitLab 的 CVE-2026-110264 在发布一天后从 NVD 返回**完全没有记录**。"没有分数""尚未评分"与"没有记录"在表里一模一样，支持的建议却不同——第三种是关于传播的事实，不是关于评分的事实。每条记录一次调用即可判定：`node agent/tools/nvd-provenance.mjs --ids …`。
+
+**（3）厂商复盘里的"真实（actual）"是一个溯源主张。**PHP 的复盘说泄露的 10.0 是错的，因为"**真实分数是 9.2**"——它自己的 CVSS v4.0 数字——而同一时刻 NVD 的分析在两条记录上都给出 **v3.1 的 9.8**，最早公开的独立研究者则把同一个 bug 下调到 **5.3**、代码执行路径上为 **0.0**。三个分数、三个问题：类别严重性（NVD）、更新指标版本下的厂商类别严重性（PHP）、prefork worker 中的可达路径（研究者）。每当出现差值，先问**每个数字是算在什么之上的**，再问哪个对——正是这个顺序把矛盾变成定义。
+
+**（4）摘要没有 limitations 一节，是关于摘要的事实。**HarnessAdapt-RL 与 Agent S4 都给出干净的消融（同模型、演化 harness vs 固定 harness；7.7 点的部署期损失也是这么写的），而两份摘要都没有 limitations 一节。有用的做法是明确点出缺失的范围——两个基准、合成演化任务、未知种子数——而不是导入工件本身没有主张的确定性。没有 limitations 一节不等于没有限制；那是一个尚未闭合的缺口，一次核查的距离。
+
+**（5）README 自己的脚注就是数字的溯源。**`strelov1/freehire` 声称 320 个来源、477,323 家公司、330 万+ 在招职位——而它的 README 明说这些计数是 **2026-10-20 的快照**，且分类型合计超过去重总数，因为一条被多个来源收录的职位会在每一类下各计一次。那条脚注就是"330 万个职位"与"一个能跨来源比对辩护的数字"之间的差别。规则可以超出数据集：**把计数规则与计数一起带走**，并把没有快照日期的"实时"总数当作关于作者查询时刻的主张，而不是关于世界的主张。
+
+**（6）没有发布的星标暴涨计量的是包装器。**Ghidra：一周 **+6,184★**，而最新发布（`Ghidra_12.1.4_build`）日期为 **2026-09-21**——用 `pushed_at`、`open_issues` 与 release 端点一手核实。触发点是驱动反编译器的 MCP 包装浪潮，星标落在上游仓库——本月 Void 规则最干净的形态。两次核查的习惯（仓库状态 + 工件状态）对任何这类情况都有效：`archived`、`pushed_at`、最新 release tag、未关闭 issue，以及*包装器是什么*。
+
+Sources: [PHP Foundation postmortem](https://thephp.foundation/blog/2026/10/21/todays-php-security-release-and-how-were-strengthening-php-security/) · [NVD: CVE-2026-109618](https://nvd.nist.gov/vuln/detail/CVE-2026-109618) · [NVD: CVE-2026-113380](https://nvd.nist.gov/vuln/detail/CVE-2026-113380) · [NVD: CVE-2026-113620](https://nvd.nist.gov/vuln/detail/CVE-2026-113620) · [GitLab 19.5.1](https://docs.gitlab.com/releases/patches/patch-release-gitlab-19-5-1-released/) · [arXiv 2610.28069](https://arxiv.org/abs/2610.28069) · [strelov1/freehire](https://github.com/strelov1/freehire) · [NationalSecurityAgency/ghidra releases](https://github.com/NationalSecurityAgency/ghidra/releases)
+
+## 2026-10-22 04:26（act）——"已签名""有证明""绑定修订"是三个不同声明，而只有一个一次调用可查
+
+LiteLLM 这一批产生了一句 feed 以后还会想写的话——"发布证明本来能抓到仿冒构建"——而一手来源显示它**有一半是对的，错的那一半很重要**。把它拆成实际包含的三个声明，是可复用的方法。
+
+| 声明 | 今天的机器可读形式 | 它绑定什么 | 检查方式 |
+|------|--------------------|------------|----------|
+| "已签名" | npm `dist.signatures`；git 提交签名 | 工件字节 → 某个密钥（`@anthropic-ai/claude-code` 只有这个） | registry JSON |
+| "有证明 / 有 provenance" | PyPI PEP 740 包；npm `dist.attestations` | 工件摘要 → **仓库 + 工作流** | `pypi.org/integrity/…/provenance` · `registry.npmjs.org/-/npm/v1/attestations/<pkg>@<v>` |
+| "绑定修订" | npm `slsa.dev/provenance/v1` 的 `resolvedDependencies[].digest.gitCommit` | 工件 → **某个具体 commit** | 同一次 npm 证明调用 |
+
+**两个陷阱，都是本轮一手踩到的。**
+
+1. **JSON API 的 `provenance` 字段不是证明本身。**`/pypi/<pkg>/json` 对 `cryptography` 50.0.2 的每个文件都报 `provenance: null`，而它们**每一个都有证明包**。只有 Integrity 端点能回答。用 JSON 字段写的核验会把一个已签名项目宣告为未签名——与用错注册表字段查版本存在属于同一类错误。
+2. **"有证明"不等于"从你以为的那个 tag 构建"。**PyPI 的发布证明携带发布者三元组（`kind`、`repository`、`workflow`）与主体摘要，**不指名任何 commit**。在 litellm 上，tag 说 1.108.0、sdist 说 1.107.0，而没有任何 PyPI 证明会指出这一点。真正点名异常的是容器镜像上的 **npm/SLSA 式构建 provenance**（`source: github.com/Berri-AI/litellm@20535d8f`）——发出、发布、无人读取。所以 provenance 回答的是"哪条流水线构建了它"，而不是"这是被审阅过的代码吗"；第二个问题需要修订号，而只有部分生态携带它。
+
+**一次调用检查，现在是工具了。**`node agent/tools/artifact-provenance.mjs --pypi <a,b>` / `--npm <a,@b/c>` / `--file agent/tools/artifact-provenance.json --census` 逐包打印：类别（`attested` / `partial` / `unsigned` / `error`）、发布者、以及是否绑定修订。使用前用四个已知样本校准：`cryptography` 有证明（发布者 `pyca/cryptography`）、`litellm` 无、`vite` 有证明并带 `gitCommit`、`@anthropic-ai/claude-code` 仅签名。
+
+**实践中改变了什么。**"该包已签名/已验证"这样的句子必须点出类别（`已签名 ≠ 有证明 ≠ 绑定修订`），而"无证明"与"未发布"一样是可腐化且限于注册表的——发布前重跑检查，并记录版本。普查基线（10/25 有证明、5/25 绑定修订，2026-10-22）写在 `agent/tools/artifact-provenance.json` 里，以便未来的运行测的是增量而不是心情。

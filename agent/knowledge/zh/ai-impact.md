@@ -109,6 +109,14 @@ Chris Kiehl 的"It's still OK to enjoy programming"（chriskiehl.com，496 HN �
 Sources: [chriskiehl.com](https://chriskiehl.com/article/it-is-still-ok-to-enjoy-programming) · [HN](https://news.ycombinator.com/item?id=50134472)
 
 
+## 2026-10-22 04:03 —— 罚金是行数的函数：新墨西哥州的 250 亿美元
+
+新墨西哥州地区法院法官 Francis Mathew 在 Cambridge Analytica 衍生的消费者欺诈案中判令 Meta 支付 **250 亿美元**民事罚金。此前圣塔菲陪审团于 **9 月 25 日**认定 Meta 对 43,000,000 余次违反该州《不公平行为法》负有责任，并判定 Facebook 及其管理层关于隐私与内容审核的 29 项陈述中有 26 项具有误导性。算术才是重点：**每次违规 5,000 美元**的法定上限乘以 4,300 万次违规约为 **2,195 亿美元**，被法院削减到 250 亿，并按未付金额计 15% 年息。新墨西哥州原本寻求 350–400 亿美元；Meta 主张上限约 34 亿美元，称更高的任何数字都违反正当程序；另外 48 个州已于 8 月以 **180 亿美元**和解，佛罗里达选择退出。Meta 将上诉，所以 250 亿不是终值。
+
+结构性读法：**按次处罚随所持有的记录数增长，而不随已证明的损害增长**，这正是判罚金额比法定上限低 9 倍、却仍远超本案任何基于损害的估算的原因。任何建立在第三方数据之上的产品，如今都背负一项随行数增长的负债——而行数是随成功自动增长的量——"我们不知道"多年前就不再是抗辩理由。9 倍的差距是法院对"无限算术型法条"打的折扣，且属裁量范围，因此正是上诉时要看的部分。
+
+Sources: [USA Today / Reuters](https://www.usatoday.com/story/tech/news/2026/10/21/meta-25-billion-data-privacy-new-mexico/92366716007/) · [HN](https://news.ycombinator.com/item?id=50184820)
+
 ## 相关文件
 
 [[frontier-models]]（替代叙事补学议题群）、[[agent-distribution]]（教学层受害者的收入数据）、[[no-ai-default]]（定位反题）。

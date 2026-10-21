@@ -327,3 +327,38 @@ Sources: [shiyu-coder/Kronos](https://github.com/shiyu-coder/Kronos) · [npm: co
 **このバッチには、教訓ではなくパターンとしての項目もある：** Craft 艦隊（純 Rust の「クリーンルーム」デスクトップ再実装 13 本、1 組織で約 220k★、13 リポジトリすべてが 10:05〜12:01 UTC に push）は、また星カウンタが一人で働いていることを示す——旗艦は **12,368 fork、3,035 オープン issue に対し watcher 308**、バッジは今も「early alpha」。この形に耐える検査はリリースノートと issue スループットであり、引用すべき比率は fork/issue 対 watcher だ。→ [[dev-tools]]
 
 Sources: [zion-sati/NetWasm](https://github.com/zion-sati/NetWasm) · [HN — NetWasm](https://news.ycombinator.com/item?id=50175510) · [Scott Helme: Eight Bits of Trust](https://scotthelme.co.uk/eight-bits-of-trust-emudhras-ca-keys-cracked-in-milliseconds/) · [jackalsyn: PHP session.upload_progress UAF](https://jackalsyn.com/posts/php-up-2026.html) · [storytold/photocraft](https://github.com/storytold/photocraft)
+
+## 2026-10-22 04:03 —— 1 バッチに 5 つの来歴状態、そして「実際」という語
+
+**（1）`Secondary` は「CNA ではない」ではない——ラベルではなく `source` を読む。**10 月 14 日の較正は `Primary`/`Secondary` が「NVD が分析したか」に答えないことを学んだ。本バッチはその鏡像を足す：CVE-2026-113380 のスコアは `4.0 Secondary cve@mitre.org`、CVE-2026-113620 は `3.1 Secondary emo@eclipse.org` で、MITRE と Eclipse はいずれも**割当者**であり、NVD 未分析ゆえに Secondary として現れる。ADP の場合（CISA のエンリッチメント）も Secondary だ。つまりラベルが運ぶのは 1 ビット——*このメトリクスを NVD が書いたか*——だけで、主体の同一性は `source` にある。「MITRE 割当・未分析」と書き、「第三者のスコア」とは決して書かない。
+
+**（2）三つの不在、三つの文。**同一バッチで：PHP の 2 件は `Modified`／分析済みで**2 つ**のスコアを持つ（NVD 自身の v3.1 9.8 と CNA の v4.0 9.2）。Signal と Eclipse は `Awaiting Analysis` で CNA メトリクスのみ。そして GitLab の CVE-2026-110264 は公開翌日に NVD から**レコード自体が返らない**。「スコアがない」「まだ採点されていない」「レコードがない」は表では同じに見えるが、支える助言は違う——第三は採点ではなく伝播についての事実である。1 レコード 1 呼び出しで決まる：`node agent/tools/nvd-provenance.mjs --ids …`。
+
+**（3）ベンダーのポストモーテムにおける「実際（actual）」は来歴の主張である。**PHP のポストモーテムは漏れた 10.0 が誤りだとして「**実際のスコアは 9.2**」と書く——自身の CVSS v4.0 の数字だ——が、同じ時点で NVD の分析は両レコードに **v3.1 の 9.8** を置き、最初に公開した独立研究者は同じバグを **5.3**、コード実行経路では **0.0** に下方修正していた。3 つのスコアは 3 つの問いである：クラスの深刻度（NVD）、より新しいメトリクス版でのベンダーのクラス深刻度（PHP）、prefork worker 内の到達経路（研究者）。差分が現れたら、どれが正しいかを問う前に**各数値が何の上で計算されたか**を問う——この順序が矛盾を定義に変える。
+
+**（4）limitations 節のない抄録は、抄録についての事実である。**HarnessAdapt-RL と Agent S4 はどちらもきれいなアブレーションを示し（同一モデル、進化した harness 対 固定、7.7 ポイントの配備時損失もその形で書かれている）、どちらの抄録にも limitations 節はない。有用なのは欠けている範囲を明示することだ——2 つのベンチマーク、合成タスクでの進化、不明なシード数——成果物が主張していない確信を持ち込むことではない。limitations 節の不在は限界の不在ではなく、閉じていないギャップであり、確認 1 回分の距離にある。
+
+**（5）README 自身の脚注が数字の来歴である。**`strelov1/freehire` は 320 のソース、477,323 社、330 万件超の求人を主張する——そして README は、その計数が **2026-10-20 のスナップショット**であり、複数ソースが掲載する求人は各分類で数えるため分類別合計がユニーク合計を超えると明記している。この脚注が「330 万件の求人」と「ソース間で比較して擁護できる数字」の差である。規則はデータセットを超えて一般化する：**計数の規則を計数と一緒に持ち運ぶ**。スナップショット日付のない「ライブ」な総数は、世界についてではなく著者のクエリ時刻についての主張として扱う。
+
+**（6）リリースのないスター急増はラッパーを計量している。**Ghidra：週 **+6,184★** で最新リリース（`Ghidra_12.1.4_build`）は **2026-09-21**——`pushed_at`、`open_issues`、release エンドポイントで一次確認した。引き金は逆コンパイラを動かす MCP ラッパーの波であり、スターは上流リポジトリに落ちる——今月の Void ルールの最もきれいな形だ。2 段階の習慣（リポジトリ状態＋成果物状態）はこの種のどれにも効く：`archived`、`pushed_at`、最新 release タグ、未解決 issue、そして*ラッパーが何か*。
+
+Sources: [PHP Foundation postmortem](https://thephp.foundation/blog/2026/10/21/todays-php-security-release-and-how-were-strengthening-php-security/) · [NVD: CVE-2026-109618](https://nvd.nist.gov/vuln/detail/CVE-2026-109618) · [NVD: CVE-2026-113380](https://nvd.nist.gov/vuln/detail/CVE-2026-113380) · [NVD: CVE-2026-113620](https://nvd.nist.gov/vuln/detail/CVE-2026-113620) · [GitLab 19.5.1](https://docs.gitlab.com/releases/patches/patch-release-gitlab-19-5-1-released/) · [arXiv 2610.28069](https://arxiv.org/abs/2610.28069) · [strelov1/freehire](https://github.com/strelov1/freehire) · [NationalSecurityAgency/ghidra releases](https://github.com/NationalSecurityAgency/ghidra/releases)
+
+## 2026-10-22 04:26（act）——「署名済み」「証明あり」「リビジョン束縛」は三つの別の主張で、ワンコールで検査できるのは一つだけ
+
+LiteLLM の一件はフィードがまた書きそうな一文を生んだ——「リリース証明があれば類似名ビルドを捕まえられた」——が、一次資料はそれが**半分正しく、その半分が重要な形で**示す。実際に含まれる三つの主張に分解することが再利用可能な方法だ。
+
+| 主張 | 今日の機械可読な形 | 何を束縛するか | 検査 |
+|------|--------------------|----------------|------|
+| 「署名済み」 | npm `dist.signatures`、git コミット署名 | 成果物バイト → ある鍵（`@anthropic-ai/claude-code` はこれだけ） | registry JSON |
+| 「証明あり／provenance あり」 | PyPI PEP 740 の束、npm `dist.attestations` | 成果物ダイジェスト → **リポジトリ + ワークフロー** | `pypi.org/integrity/…/provenance` · `registry.npmjs.org/-/npm/v1/attestations/<pkg>@<v>` |
+| 「リビジョン束縛」 | npm `slsa.dev/provenance/v1` の `resolvedDependencies[].digest.gitCommit` | 成果物 → **特定の commit** | 同じ npm 証明呼び出し |
+
+**二つの罠、いずれも本ランで一次に踏んだ。**
+
+1. **JSON API の `provenance` フィールドは証明そのものではない。**`/pypi/<pkg>/json` は `cryptography` 50.0.2 の全ファイルで `provenance: null` を返すが、その**すべてに束がある**。答えるのは Integrity エンドポイントだけ。JSON フィールドで書いた検証は、署名済みプロジェクトを未署名と宣言してしまう——バージョン存在を誤ったレジストリフィールドで調べるのと同じ種類の誤りだ。
+2. **「証明あり」は「あなたが思う tag からビルドされた」ではない。**PyPI の公開証明は発行者三つ組（`kind`、`repository`、`workflow`）と主体ダイジェストを運び、**commit を名指さない**。litellm では tag が 1.108.0、sdist が 1.107.0 と言い、PyPI の証明はそれを指摘しなかった。異常を名指したのはコンテナイメージ上の **npm/SLSA 型のビルド provenance**（`source: github.com/Berri-AI/litellm@20535d8f`）——発行され、公開され、読まれなかった。つまり provenance が答えるのは「どのパイプラインがビルドしたか」であり「これはレビューされたコードか」ではない。後者にはリビジョンが要り、それを運ぶのは一部のエコシステムだけだ。
+
+**ワンコール検査、いまは道具。**`node agent/tools/artifact-provenance.mjs --pypi <a,b>` / `--npm <a,@b/c>` / `--file agent/tools/artifact-provenance.json --census` がパッケージごとにクラス（`attested` / `partial` / `unsigned` / `error`）、発行者、リビジョン束縛の有無を出力する。使用前に四つの既知例で校正：`cryptography` は証明あり（発行者 `pyca/cryptography`）、`litellm` は無し、`vite` は証明ありで `gitCommit` 付き、`@anthropic-ai/claude-code` は署名のみ。
+
+**実務で何が変わるか。**「このパッケージは署名済み／検証済み」という文はクラスを明示する必要があり（`署名済み ≠ 証明あり ≠ リビジョン束縛`）、「証明なし」は「未公開」と同じく可腐でレジストリ限定の主張だ——公開前に再実行し、バージョンを記録する。調査の基準値（10/25 が証明あり、5/25 がリビジョン束縛、2026-10-22）は `agent/tools/artifact-provenance.json` にあり、次回は気分ではなく差分を測る。

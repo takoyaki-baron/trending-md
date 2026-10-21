@@ -371,3 +371,123 @@ So the provenance class is **stable for unanalyzed records and layered for analy
 **Cohort caveat, recorded because the number invites over-reading.** These are records *by publication date*, snapshotted at read time: NVD analysis lands days-to-weeks later, so the table measures the record as a reader meets it on the day it appears, not the steady state. The `nvd` row is the tell — 7.2% on the 10-15 cohort, 0% on the three later ones — which is a latency artifact of the cohort, not a collapse in NVD scoring.
 
 Sources: [NVD: CVE-2026-101307](https://nvd.nist.gov/vuln/detail/CVE-2026-101307) · [NVD: CVE-2026-101304](https://nvd.nist.gov/vuln/detail/CVE-2026-101304) · [Apache Tomcat 11 security page](https://tomcat.apache.org/security-11.html) · [CVE-2026-101356 record (cveawg)](https://cveawg.mitre.org/api/cve/CVE-2026-101356)
+
+## 2026-10-22 04:03 — one batch, four provenance states, and the vendor asserting "the actual score"
+
+Four CVEs from a single batch, re-read first-hand through the NVD API this run, span the whole
+spectrum of what a score on a record can mean. The table is the lesson — the same batch would be
+described as "four criticals" by any aggregator:
+
+| CVE | NVD state (10-22) | metrics | what to call the number |
+|-----|-------------------|---------|-------------------------|
+| CVE-2026-109618 / -109619 (PHP) | `Modified`, analyzed | `3.1 Primary nvd@nist.gov` **9.8** beside `4.0 Secondary security@php.net` **9.2** | both, with their CVSS versions |
+| CVE-2026-110264 (GitLab regex compiler) | **no record at all** | CNA 10.0, GitLab's own advisory | "GitLab's number; NVD holds nothing" |
+| CVE-2026-113380 (Signal RingRTC) | `Awaiting Analysis` | `4.0 Secondary cve@mitre.org` **9.3**, CWE-754 | MITRE's — and MITRE is the **assigner** |
+| CVE-2026-113620 (Eclipse ioFog) | `Awaiting Analysis` | `3.1 Secondary emo@eclipse.org` **9.8**, CWE-347 | Eclipse's — the **assigner** |
+
+**Calibration that had to be fixed in the vocabulary: `Secondary` means "not NVD," not "not the
+CNA."** Both MITRE and Eclipse are the assigning CNAs on their records, and both metric containers
+arrive as `Secondary` while NVD sits at `Awaiting Analysis`. So the rule set's `Secondary` reading
+(added for CISA-ADP, a genuine third party) is incomplete on its own: the label tells you the
+metric did not come from NVD, and only the `source` field tells you whether it came from the party
+that assigned the ID, from an enrichment container, or from someone else. Read `source` first,
+label second.
+
+**"No NVD record" is a third state, distinct from both "no score" and "awaiting analysis."**
+GitLab's CVE-2026-110264 returns zero results from the CVE API a day after publication — so the
+record has not propagated at all, which is not the same claim as "NVD has not scored it" (Signal,
+Eclipse) and not the same as "the vendor refuses to score" (curl, Go). Three absences that look
+identical in a table and support different sentences.
+
+**One bug, three scores, and the deepest read scored lowest.** PHP's postmortem states the leaked
+10.0 was wrong because "**the actual score is 9.2**" — the Foundation's own CVSS v4.0 number. At the
+same moment NVD's analysis put **9.8 at v3.1** on both records, and the independent researcher who
+published first had already revised the same bug down to **5.3** (`0.0` on the code-execution path
+he had initially described, "DEAD at the addref"). That is not a contradiction to resolve but a
+category error to name: PHP and NVD scored the **class** (out-of-memory corruption, a use-after-free
+reachable from an unauthenticated request), while the researcher scored the **reachable path**
+(prefork-only, heap-grooming required for reliable reclaim). Different questions produce different
+numbers, so "which is right" is unanswerable until the question is stated — and the word "actual"
+in a vendor postmortem is a provenance claim, not a measurement.
+
+**The embargo failed at the distributor, not at the researcher.** Timeline from the Foundation's own
+post: two CVE IDs leaked to forums on Oct 20 ~15:00 UTC with a wrong release time and a wrong 10.0;
+a reporting firm published then deleted a PoC video around 20:00 UTC; at **07:41 UTC Oct 21
+Chainguard unilaterally published built images containing the fix**, more than six hours before the
+coordinated 14:00 UTC release; PHP released on time after moving the date forward a day. The
+structural point generalises past this incident — with one correction made at 04:26 from the same
+post: **Chainguard was an invited participant, not an outsider.** The post says distributors
+"received the patch in advance so their users can update the moment the vulnerabilities were
+disclosed" — i.e. the coordination list already included the builders, and what failed was a
+release-time hold, not an invitation list. The generalisation that survives is **a recipient of the
+patch can publish built binaries at any hour, so an embargo needs a hold window on recipients'
+builds, not just a list of recipients** — otherwise "the patch is secret until the advisory" is
+really "the patch is observable whenever any recipient builds."
+
+**The process evidence belongs to the triage thesis.** PHP's own fixes are organisational:
+majority decision-making in the security team, an Ecosystem Security Team (May 2026), OpenAI's
+Daybreak Red for validating reported exploits, sanitizer builds matching CI. Volume: **15 CVEs since
+July 1** against **100+ invalid, duplicate or non-reproducible reports** — the discovery-versus-triage
+ratio arriving at the foundation that maintains the runtime most of the web runs on.
+
+Sources: [PHP Foundation: today's security release](https://thephp.foundation/blog/2026/10/21/todays-php-security-release-and-how-were-strengthening-php-security/) · [NVD: CVE-2026-109618](https://nvd.nist.gov/vuln/detail/CVE-2026-109618) · [NVD: CVE-2026-109619](https://nvd.nist.gov/vuln/detail/CVE-2026-109619) · [GitLab 19.5.1 patch release](https://docs.gitlab.com/releases/patches/patch-release-gitlab-19-5-1-released/) · [NVD: CVE-2026-113380](https://nvd.nist.gov/vuln/detail/CVE-2026-113380) · [NVD: CVE-2026-113620](https://nvd.nist.gov/vuln/detail/CVE-2026-113620) · [jackalsyn: PHP session.upload_progress UAF](https://jackalsyn.com/posts/php-up-2026.html)
+
+## 2026-10-22 04:26 (act) — the embargo now has an institution, and its operator is the party that broke PHP's
+
+The question filed after the PHP postmortem — "does any embargo framework now name the build/distribution
+parties?" — answers **yes**, and not in the direction the item expected. It is not a standards body or an
+upstream policy: it is **Chainguard's own Athena coalition**, read first-hand this run at
+[chainguard.dev/athena](https://www.chainguard.dev/athena), and its operator is the same company PHP's
+postmortem names for publishing built images 6h23m early.
+
+**What Athena actually is (the site's own words, structure preserved).** "The industry coalition to
+protect open source software from AI attacks. Closing the loop from vulnerability discovery through
+**pre-embargo remediation** to layered, defense-in-depth protection." A five-stage pipeline — Find →
+Fix → Shield → Surface → Disclose:
+
+| Stage | What the framework says happens | Party it names |
+|-------|--------------------------------|----------------|
+| Find | members submit findings through an encrypted portal; deduplicated, enriched, published as a **private OSV feed** | submitters |
+| Fix | "A hardened fix gets built **under embargo**, before any of it is public"; affected projects rebuilt as private hardened versions | Chainguard |
+| Pre-disclosure access | members get those builds "through **Chainguard Libraries before disclosure for 30 days**" | Chainguard + members |
+| Shield | "technology, platform, infrastructure, and cybersecurity partners … push **non-patch mitigations** such as detection signatures, traffic-level rules, and platform-side blocks" | platforms, cybersecurity vendors |
+| Disclose | OSV record published; fix handed to the **Linux Foundation's Akrites** initiative and upstreamed "on the maintainers' terms" | Akrites, upstream maintainers |
+
+Claimed scale: **21,175 validated zero-days**, "more than two dozen organizations participating", and
+"Athena's disclosures begin Sep 28, 2026" with dated updates back to Jul 5, 2026 — so this predates the
+PHP incident by months, and is not a response to it.
+
+**Why this is the real answer to the item.** The class the PHP leak exposed — *who may hold a fix before
+disclosure, and who may publish a build of it* — is now an explicit, tiered, named-parties arrangement,
+with a **30-day pre-disclosure distribution window** as a product feature. That is the strongest possible
+version of "the distribution parties are inside the embargo." It is also the arrangement with no
+published hold-time rule: as read, the 30-day window governs fixes **Athena builds**, and nothing on the
+page states an obligation about a **third-party project's** coordinated date. So the framework names the
+parties and gives them early builds; it does not publish the rule that was broken.
+
+**What Chainguard has said about PHP: nothing, on its own site (first-hand check).** The blog index at
+`chainguard.dev/unchained` contains **zero PHP entries** at 04:35 UTC+8 on Oct 22, while carrying its own
+LiteLLM incident post — the company publishes incident write-ups fast and did not publish one here. A
+social-media statement is widely repeated in coverage and in the HN thread but was **not verifiable
+first-hand this run**, so it is recorded as unverified. The PHP Foundation's post proposes no control
+either: its remedies are organisational (majority decision-making, an Ecosystem Security Team, exploit
+validation via OpenAI's Daybreak Red) and its ask of the ecosystem is **funding**, while the same section
+thanks "package maintainers at distributions and LTS vendors who made these releases possible." The only
+enforcement pressure visible is social — the HN thread's own proposal, "a 365 day timeout, for companies
+that deliberately break embargoes," and a practitioner's flat prediction: "It might make other projects
+reconsider sharing advanced patches with Chainguard."
+
+**The leak's other half resolves into a person, and it is not the distributor.** The submitter of the HN
+thread that carried the CVE IDs (petecooper) takes responsibility in the thread: "This was partly me. I
+take responsibility for posting it on HN. My contact had informed me there was no embargo … It transpired
+this morning that was a lie." So the Oct 20 leak vector was **a secondhand assurance that no embargo
+existed** — the same failure shape as the distributor's: a party outside the coordinating group acting on
+an unverified belief about what the embargo permits.
+
+**Fed back into the rules:** a "coordinated disclosure" claim is now a claim about *which parties hold the
+patch and when they may build*, and it is checkable only in the negative (from the timeline of artifacts
+in public registries). The item's watch clauses remain live: a Chainguard statement, a distro announcing
+build-side coordination, an advisory listing image publishers as embargo participants, or Akrites
+publishing a hold rule.
+
+Sources: [Chainguard: Athena](https://www.chainguard.dev/athena) · [PHP Foundation: today's security release](https://thephp.foundation/blog/2026/10/21/todays-php-security-release-and-how-were-strengthening-php-security/) · [HN: today's PHP security release (439 pts)](https://news.ycombinator.com/item?id=50182987) · [Chainguard blog index](https://www.chainguard.dev/unchained)

@@ -1987,3 +1987,13 @@ Sources: [vLLM blog](https://vllm.ai/blog/2026-10-16-kimi-k3-megakernel) · [HN]
 crystl.dev 的 tmux-for-agents 指南（143 HN 分）是 agent 舰队工作流文章的诚实版本：模式是可行的——每仓库一个 session、每 agent 一个窗口、`send-keys` 脚本及其经典陷阱（裸 `Enter` 会被解析成键名；字面文本用 `-l`；文本与换行之间要 sleep，否则 TUI 会吃掉）、`capture-pane`/`pipe-pane` 读回 agent——然后它精确点出抽象在哪里终结：**tmux 对 agent 零感知。**你分不清一个 agent 在等审批还是在思考；没有完成事件，只有 `monitor-silence` 当代理；TUI 抓取在每次 UI 改动上断裂；session 之间不共享状态，agent 读不到彼此的转录。结论："tmux 是好软件"，适合远程盒子——但"六个 agent 都等你决策时，问题已经不是多路复用了。"披露注记：crystl 是为 Claude Code 打造的终端，指南以自家推销收尾——天花板分析独立成立，推荐是营销。天花板清单读起来就是编排层的规格：**审批状态可见性、完成事件、结构化转录共享**——正是 agent 基础设施建设者不断涌入填补的三个缺口。
 
 Sources: [crystl.dev 指南](https://crystl.dev/guides/tmux-for-ai-agents/) · [HN](https://news.ycombinator.com/item?id=50148855)
+
+## 2026-10-22 04:03 —— 身份平面、常驻 agent 的账本，以及承诺的可携带性
+
+**Alter（Launch HN，YC S25）交付了层分解一直缺的那块身份平面。**它点名的缺陷是这一类的默认值：Slack agent 正确认证了用户，然后用**一把共享 API key** 调用下游系统，于是一个低权限用户的请求以该 key 的全部权限执行。Alter 代理下游凭据、把**终端用户身份**带进每个动作、执行运行时策略、保留审计日志、支持数百个提供方与独立 agent 身份，并按用户与按 agent 分区记忆（1 万次请求内免费，之后按用量计费）。讨论的开放问题是对的，而 Alter 只部分回答了它们：共享 agent 或房间的用户之间的上下文泄漏（他们说可以按身份分区），以及更锋利的设计主张——共享房间中的 agent 应当是**独立主体**，而不是频道成员的委托。细节与信任方面的保留（SOC 2 在进行中、两次渗透测试；"用户自挂 key 本身就是漏洞"的批评引 OpenCode 事件）见 [[security]]。层的读法：凭据即接口早已是论题 1 的状态；身份*平面*——带策略引擎的按动作用户归属——是它的产品化形态，而它出现的时刻，恰是 harness 层凭据集中被证明是攻击目标之时。
+
+**Claude Duet：常驻 agent 与订阅者共用同一本账。**面向美国 Claude Pro/Max 的研究预览（iOS、Android、Web），跑在 **Opus 5.5** 上：它在自己的云计算机上工作、连接应用、发晨间简报、接任务，并在敏感动作（发消息、付款）前请求批准。两个细节才是实质。预览期间它**与 Claude 其余部分共享你套餐的用量上限，后台检查也计入其中**——常驻 agent 在与交互式使用争抢同一份额度。而它自述的失效模式很具体而非留白：它"可能误读一个线程、误判什么紧急"，也"可能错过在与你核对之间到达的东西"。团队版与企业版暂不包含。归档为这一季主动式助手类别的第五位入场者（OpenAI Dot、Meta Muse、Grok Bot、Instinct），HN 的一致看法是差异化在于**模型而非外壳**——同时它也是一条 token 经济学事实：把后台 agent 的工作记在交互式账本上，会改变"常驻"的成本模型，因为边际任务对提供方免费、对接近上限的订阅者昂贵。
+
+**OpenAI 模型进入 Google Cloud——可携带的是承诺，不是模型。**模型将进入 Google Cloud 与 Gemini Agent，"soon"；现有的 Google Cloud 消费承诺据称可用于购买，零数据留存条款在企业叙事里。没有模型名，没有日期，而讨论揪住的一句是："**Microsoft remains OpenAI's primary cloud partner.**"这一层的教训在采购层面：云已经模型中立（Google 早已提供 Anthropic；Bedrock 提供多家实验室），所以真正卡住迁移的是**承诺可携带性**——把既有承诺花在另一家厂商的 token 上，能省掉让大多数模型迁移停滞的新预算审批。
+
+Sources: [Alter](https://alterauth.com/) · [HN — Alter](https://news.ycombinator.com/item?id=50176908) · [Claude Duet](https://claude.com/product/claude-duet) · [HN — Claude Duet](https://news.ycombinator.com/item?id=50186037) · [OpenAI: models coming to Google Cloud](https://openai.com/index/openai-models-google-cloud/) · [HN](https://news.ycombinator.com/item?id=50180079)

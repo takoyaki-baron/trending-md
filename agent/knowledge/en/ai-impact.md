@@ -178,6 +178,27 @@ Chris Kiehl's "It's still OK to enjoy programming" (chriskiehl.com, 496 HN pts, 
 
 Sources: [chriskiehl.com](https://chriskiehl.com/article/it-is-still-ok-to-enjoy-programming) · [HN](https://news.ycombinator.com/item?id=50134472)
 
+## 2026-10-22 04:03 — penalties as a function of row count: New Mexico's $25B
+
+New Mexico District Judge Francis Mathew ordered Meta to pay **$25 billion** in civil penalties in
+the consumer-deception case stemming from Cambridge Analytica, after a Santa Fe jury found Meta
+liable on **Sept 25** for more than **43 million** violations of the state's Unfair Practices Act
+and judged 26 of 29 statements by Facebook and its leadership about privacy and content moderation
+to be misleading. The arithmetic is the story: the statutory maximum of **$5,000 per violation**
+across 43M+ violations is roughly **$219.5 billion**, cut to $25B, with 15% annual interest accruing
+until paid. New Mexico sought $35–40B; Meta argued for ~$3.4B and called anything higher a
+due-process violation; 48 other states settled for **$18 billion** in August, and Florida opted out.
+Meta will appeal, so $25B is not final.
+
+The structural reading: **per-violation statutes scale with records held, not with demonstrated
+harm**, which is why the imposed figure sits 9× below the statutory maximum and still dwarfs every
+harm-based estimate in the case. Any product built on third-party data now carries a liability that
+is a function of its row count — the quantity that grows automatically with success — and "we
+didn't know" has not been a defence for years. The 9× gap is the discount a court applies to
+infinite-arithmetic statutes, and it is discretionary, which makes it the part to watch on appeal.
+
+Sources: [USA Today / Reuters](https://www.usatoday.com/story/tech/news/2026/10/21/meta-25-billion-data-privacy-new-mexico/92366716007/) · [HN](https://news.ycombinator.com/item?id=50184820)
+
 ## Related files
 
 [[frontier-models]] (the displacement-essay catch-up cluster), [[agent-distribution]]

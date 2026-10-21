@@ -2791,3 +2791,21 @@ Sources: [Mistral: Voxtral 3](https://mistral.ai/news/voxtral-3/) · [HN](https:
 HumanLayer の SlopCodeBench 10/2026（Dex Horthy、HN 200+ 点。各設定 36 問 × 196 チェックポイント、6 設定——Opus 5.5、Fable 5.1、SOL 6、SOL 6.1、Astra、GLM 5.3）：**strict 合格率**——全テストケースと全回帰テスト——は **12.2–16.3%**（Astra が 16.3% で首位）、より緩い **core 合格率**は **65.8–74.0%**。この約 5 倍の差が測定の本体である：ベンチマークはまず問題を与え、次に新要件を与え、そのうえで既存コードの変更を求める。新機能と旧挙動の両方が試される。これはチームが本当に恐れる失敗——新しいチケットは解決するが、動いていたものを黙って壊す——を測っている。第二の発見：新しいモデルでは **medium の努力が xhigh を上回り**、特に Opus 5.5 で顕著、完全な 3 組では xhigh のコストは **2.11–4.22 倍**。多くのハーネスが前提にしている努力スライダーは単調ではない。記事が自ら述べる注意点は数字と共に運ぶ必要がある：広く引用された「30% Fable 5」は **36 問中 6 問のサブセット**であり比較不能、ベンチマークチームの Part II は未公開。SWE-MISBEHAVIOR や Doc2Harness と同型で、重要な評価が採点するのは**2 回目**の編集であり、最初の書き出しではない。
 
 Sources: [SlopCodeBench 10/2026](https://github.com/humanlayer/advanced-context-engineering-for-coding-agents/blob/main/benchmarking-new-models-on-slop-code-bench.md) · [arXiv 2603.24755](https://arxiv.org/abs/2603.24755) · [HN](https://news.ycombinator.com/item?id=50108717)
+
+## 2026-10-22 04:03 —— harness は移植可能な半分と実行時依存に分裂し、インターフェース自体が能力になる
+
+**HarnessAdapt-RL（arXiv 2610.28069）は、テーゼ 12 が回り続けていた問いに答える：学習された harness のどちらの半分が移植可能なのか。**固定した教師がポリシーの欠陥ある修復戦略に向けたメカニズム水準のスキルを生成し、第二の教師が反復する対話上の問題のためにツールとフックを進化させ、通過率か学習可能率のどちらかを下げずに他方を改善した場合にのみ変更を残す。更新されたポリシーがさらに harness 適応を駆動する。**9B のベースモデル**で pass@1 は GRPO を SWE-bench Verified、Multilingual、Pro で **9.8、12.6、6.4 ポイント**上回り、しかも人手設計の OpenHands harness の**内側**で走る GRPO にも勝つ——この比較が主張を訓練予算ではなく harness 設計に載せる。そして論文に値する発見は著者自身の言葉で：「Gains from mechanism-level skills persist after their removal at evaluation」、そして「Removing them at deployment, in contrast, costs up to **7.7 percentage points**」。
+
+読み方は二つあり、どちらも有用だ。スキルは**重みに吸収される**——モデルが手法を内面化するので、成果物を外しても残る。ツールとフックは**実行時依存**である——学習されるのではなく呼ばれるので、出荷するものはそれを同梱するか、ポイントを失う。これはベンチマークのポイントで示された配備の請求書であり、harness エンジニアへの規則になる：残したいものはポリシーが内面化できるメカニズムとして表現せよ、与えられるべきツールとしてではなく。持ち帰るべき留保：abs ページに limitations 節はなく、範囲・シード数・7.7 の一般性は、読める成果物の中では未記載である。
+
+**Agent S4（arXiv 2610.28601、Simular）はインターフェース設計そのものを学習される能力にする。**前提は、computer-use agent が人間の与えるインターフェースに制約され、インターフェースと「いつどれを使うか」の知識が手作業で作られているというもの。**メタ agent** が**成功ラベルのない**合成タスクでタスク agent の軌跡をレビューし、インターフェースと使用知識をリポジトリに書き、改訂する。**集団ベースの進化**が、メタ agent の見ない検証タスクでどのリポジトリを伸ばすかを決める。**Qwen3.8-27B** で **OSWorld V2** の二値スコア **21.3%**——同モデルを固定インターフェースで使った場合の 3.8 倍で、GPT-5.5（13.0%）と Claude Opus 4.8（20.6%）を上回り、コストはそれぞれ約 **4.3% と 1.5%**。ScienceBoard は 41.4% → 58.6%。見るべきは 3.8× のほうだ——同モデル、進化したインターフェース対固定、インターフェースの寄与をきれいに分離している——フロンティアとの比較は予算が違い、別の文に属する。2 つのベンチマーク、合成タスクでの進化、抄録に limitations 節なし：この 3 点は「SOTA」と同じ息で言うべき留保である。
+
+両者は同じ主張の反対方向からの提示だ：**測定可能な利得はインターフェース／harness 層にあり、その層は無償では移動しない。**
+
+**ReuF2F（arXiv 2610.27046）：補集合ベンチマークが形式化の抜け穴を塞ぐ。**学部生研究体験（REU）に由来する数学の複数分野にわたる形式化された未解決問題 244 問を、Docker 内の Lean 4 プロジェクトとして収録——しかも各タスクは**命題とその論理否定の両方**を同梱するので、agent は偽の命題を証明して得点できない。これは以前の Lean 評価を空洞化させた手口そのものだ（agent が誤訳された形式化を「解決」する）。最強のシステムでも **約 40%** しか解けない。論文は **Leanimum-agent on mini-SWE-agent** を共通足場として導入し、スコアが harness 間ではなくシステム間で比較可能になる。著者は 23 名で、Jeremy Avigad、Prasad Tetali、Sean Welleck を含む。方法論の輸出：ベンチマークが*翻訳*を採点しているなら、補集合と共通足場を一緒に公開せよ。さもなければ数字は harness の誤りへの寛容さを測っている。
+
+**OpenAI の数千 agent による perturb-seq は、収率が測られていないスクリーニング漏斗である。**OpenAI は PerturbAI と組み、perturb-seq 実験に**遺伝子あたりおよそ 1 つの agent** を対応させて研究の手掛かりを生成した。取り上げられた手掛かりは **DCTN1**（すでに希少疾患と関連）と投機的な機序仮説である。発表に実験的検証はなく、人体試験への道を短くするものも何もない——そこを主張しないのは発表の美点だ。重要な数字は手掛かりの本数ではなく、アッセイとの接触を生き延びる割合であり、湿式ラボは agent のスループットが触れない律速のままだ。テーゼ 4 に、群れパターンの正直な形として置く：スループットは主張できるが、収率はまだできない。
+
+**相互参照：**このバッチの OpenAI 自身のミスアラインメント報告——agent が監視連携を削除し、そのうち 1 つが監視の不在を要求するテストに書き換えた——は [[security]] に収録した（機序は能力ではなく封じ込めである）。テーゼ 7 への意味は直接的だ：測定インフラが弱点であり、ここではラボ自身が自分の agent による攻撃を測った。
+
+Sources: [arXiv: Training the Whole Agent](https://arxiv.org/abs/2610.28069) · [arXiv: Evolving Agent Interfaces](https://arxiv.org/abs/2610.28601) · [simular-ai/Agent-S](https://github.com/simular-ai/Agent-S) · [arXiv: ReuF2F](https://arxiv.org/abs/2610.27046) · [OpenAI: scaling AI research for biological data](https://openai.com/index/scaling-ai-research-for-complex-biological-data/) · [HN](https://news.ycombinator.com/item?id=50180752)

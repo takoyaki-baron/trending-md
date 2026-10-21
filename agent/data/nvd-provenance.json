@@ -1,5 +1,5 @@
 {
- "updated": "2026-10-21T13:15:25.111Z",
+ "updated": "2026-10-21T20:55:58.980Z",
  "cves": {
   "CVE-2026-48382": {
    "vulnStatus": "Undergoing Analysis",
@@ -1554,9 +1554,9 @@
    "nvdAnalyzed": false
   },
   "CVE-2026-106931": {
-   "vulnStatus": "Undergoing Analysis",
+   "vulnStatus": "Analyzed",
    "published": "2026-10-14",
-   "lastModified": "2026-10-21T12:03",
+   "lastModified": "2026-10-21T15:42",
    "metrics": [
     {
      "version": "3.0",
@@ -1580,7 +1580,7 @@
    ],
    "kev": "2026-10-20",
    "kevDue": "2026-10-23",
-   "nvdAnalyzed": false
+   "nvdAnalyzed": true
   },
   "CVE-2026-110936": {
    "vulnStatus": "Analyzed",
@@ -1948,7 +1948,7 @@
   "CVE-2026-113709": {
    "vulnStatus": "Undergoing Analysis",
    "published": "2026-10-20",
-   "lastModified": "2026-10-20T19:59",
+   "lastModified": "2026-10-21T16:17",
    "metrics": [
     {
      "version": "3.1",
@@ -2088,6 +2088,113 @@
    ],
    "cwe": [
     "CWE-127"
+   ],
+   "kev": null,
+   "kevDue": null,
+   "nvdAnalyzed": false
+  },
+  "CVE-2026-109618": {
+   "vulnStatus": "Modified",
+   "published": "2026-10-21",
+   "lastModified": "2026-10-21T17:18",
+   "metrics": [
+    {
+     "version": "3.1",
+     "type": "Primary",
+     "source": "nvd@nist.gov",
+     "baseScore": 9.8,
+     "severity": "CRITICAL",
+     "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
+    },
+    {
+     "version": "4.0",
+     "type": "Secondary",
+     "source": "security@php.net",
+     "baseScore": 9.2,
+     "severity": "CRITICAL",
+     "vector": "CVSS:4.0/AV:N/AC:H/AT:P/PR:N/UI:N/VC:H/VI:H/VA:H/SC:N/SI:N/SA:N/E:X/CR:X/IR:X/AR:X/MAV:X/MAC:X/MAT:X/MPR:X/MUI:X/MVC:X/MVI:X/MVA:X/MSC:X/MSI:X/MSA:X/S:X/AU:X/R:X/V:X/RE:X/U:X"
+    }
+   ],
+   "cwe": [
+    "CWE-1325",
+    "CWE-416",
+    "CWE-755",
+    "CWE-824"
+   ],
+   "kev": null,
+   "kevDue": null,
+   "nvdAnalyzed": true
+  },
+  "CVE-2026-109619": {
+   "vulnStatus": "Modified",
+   "published": "2026-10-21",
+   "lastModified": "2026-10-21T19:16",
+   "metrics": [
+    {
+     "version": "3.1",
+     "type": "Primary",
+     "source": "nvd@nist.gov",
+     "baseScore": 9.8,
+     "severity": "CRITICAL",
+     "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
+    },
+    {
+     "version": "4.0",
+     "type": "Secondary",
+     "source": "security@php.net",
+     "baseScore": 9.2,
+     "severity": "CRITICAL",
+     "vector": "CVSS:4.0/AV:N/AC:H/AT:P/PR:N/UI:N/VC:H/VI:H/VA:H/SC:N/SI:N/SA:N/E:X/CR:X/IR:X/AR:X/MAV:X/MAC:X/MAT:X/MPR:X/MUI:X/MVC:X/MVI:X/MVA:X/MSC:X/MSI:X/MSA:X/S:X/AU:X/R:X/V:X/RE:X/U:X"
+    }
+   ],
+   "cwe": [
+    "CWE-1325",
+    "CWE-416",
+    "CWE-755",
+    "CWE-824"
+   ],
+   "kev": null,
+   "kevDue": null,
+   "nvdAnalyzed": true
+  },
+  "CVE-2026-110264": null,
+  "CVE-2026-113380": {
+   "vulnStatus": "Awaiting Analysis",
+   "published": "2026-10-20",
+   "lastModified": "2026-10-20T20:06",
+   "metrics": [
+    {
+     "version": "4.0",
+     "type": "Secondary",
+     "source": "cve@mitre.org",
+     "baseScore": 9.3,
+     "severity": "CRITICAL",
+     "vector": "CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:P/VC:H/VI:H/VA:N/SC:H/SI:N/SA:N/E:X/CR:X/IR:X/AR:X/MAV:X/MAC:X/MAT:X/MPR:X/MUI:X/MVC:X/MVI:X/MVA:X/MSC:X/MSI:X/MSA:X/S:P/AU:X/R:X/V:X/RE:X/U:X"
+    }
+   ],
+   "cwe": [
+    "CWE-754"
+   ],
+   "kev": null,
+   "kevDue": null,
+   "nvdAnalyzed": false
+  },
+  "CVE-2026-113620": {
+   "vulnStatus": "Awaiting Analysis",
+   "published": "2026-10-20",
+   "lastModified": "2026-10-20T19:48",
+   "metrics": [
+    {
+     "version": "3.1",
+     "type": "Secondary",
+     "source": "emo@eclipse.org",
+     "baseScore": 9.8,
+     "severity": "CRITICAL",
+     "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
+    }
+   ],
+   "cwe": [
+    "CWE-347"
    ],
    "kev": null,
    "kevDue": null,

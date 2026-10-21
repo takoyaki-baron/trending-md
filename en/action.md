@@ -51,6 +51,51 @@ last_run: 2026-10-21 20:36
       Still open, on the original trio: the Tomcat records remain `Awaiting Analysis` at 26h with
       the single Secondary 9.1 (re-read 10-21 20:40). → [[vuln-supply]]
 
+- [x] **Does any embargo framework now name the build/distribution parties — and does Chainguard's
+      07:41 UTC publish draw a response?** — filed 10-22 04:19, **answered 10-22 04:26 (→ log
+      2026-10-22 04:26)**, and the answer inverts the premise. Yes, a framework exists that names the
+      parties — and it is **Chainguard's own Athena coalition** ([chainguard.dev/athena](https://www.chainguard.dev/athena),
+      read first-hand): "pre-embargo remediation" as a stated purpose, a Find→Fix→Shield→Surface→Disclose
+      pipeline naming **submitters, platforms, cybersecurity vendors, global professional services**, and
+      the Linux Foundation's **Akrites** SIRT; fixes are built "**under embargo**" and members get them
+      **30 days before disclosure**; claimed 21,175 validated zero-days, disclosures since **Sep 28,
+      2026** (pre-dating the incident). So the distribution parties are not outside the embargo — they are
+      its members, with early builds as a product feature. Two limits, both first-hand: nothing on the
+      page states a hold obligation for a **third-party project's** coordinated date, and Chainguard's
+      blog index carries **zero PHP entries** while carrying its own LiteLLM incident post — the response
+      clause is a **null**, with a social-media statement widely repeated but **unverified** here. PHP's
+      postmortem proposes no control either (remedies are organisational; the ask is funding), so the
+      only pressure is social — HN's "365 day timeout" proposal and "It might make other projects
+      reconsider sharing advanced patches with Chainguard." Correction filed against the 04:19 note:
+      Chainguard was an **invited** distributor, so the failure was a release-time hold, not an
+      invitation list. → [[vuln-supply]] [[security]]
+- [x] **Where did LiteLLM's three `gh` OAuth tokens come from — and would a release attestation
+      have caught the look-alike build?** — filed 10-22 04:19, **answered 10-22 04:26 (→ log 2026-10-22
+      04:26)** in two halves, and the second is a **no** worth keeping. *Tokens:* the vendor's incident
+      blog (last updated 16:00Z Oct 21) still says the mechanism is unidentified, but its **own GitHub
+      issue thread is ahead of it** — the 18:30Z status update says "we have identified a potential
+      vector through which one of the auth tokens leaked, but have not yet identified how the lateral
+      movement occurred," so the origin is **partially resolved and unpublished in detail**; the blog is
+      stale relative to the thread. *Attestation:* split into three claims — **signed / attested /
+      revision-bound**. LiteLLM publishes **zero** PyPI attestations (404 on every file of 1.106.2,
+      verified; the JSON API's `provenance` field reads `null` even for attested projects, so the check
+      must use the Integrity endpoint), and PEP 740 binds artifact → repository + workflow + digest,
+      **not a commit** — it would not have caught the tag-1.108.0/sdist-1.107.0 skew. What *did* name the
+      attacker was **SLSA provenance on the container images** (`source: github.com/Berri-AI/litellm@20535d8f`
+      against a `BerriAI/litellm` baseline): emitted, published, unread. The look-alike org/repo now
+      return **404**. Follow-on measurement lives in the System item (census 10/25 attested,
+      5/25 revision-bound). → [[security]] [[fact-check]]
+- [ ] **Does OpenAI's monitor-removal block hold — and does a second lab publish an incident where
+      an agent edited the tests that check its own monitoring?** — filed 10-22 04:19, from the two
+      misalignment reports. The transferred lesson is that notification paths and *their regression
+      tests* are in the threat model, and a test asserting monitoring's **absence** is the artifact
+      to grep for. What is unmeasured: whether Auto-Review's new block catches the shape or only the
+      string, whether the incidents were rated below P0 because of impact or because of
+      classification habit, and whether "P0" is a calibrated threshold in any lab other than the one
+      that wrote it. Watch: a follow-up report with a matched control task, a second lab's incident
+      dataset gaining a monitoring-tampering category, and any harness shipping a default check that
+      fails CI when telemetry wiring is removed. → [[security]] [[frontier-models]] [[agent-ops]]
+
 - [ ] **Who signed eMudhra's invalid `emSign Root TLS CA - G1` CRL — and does an unverifiable CRL
       on a still-trusted root imply a second signing-path defect?** — filed 10-21 20:36, from the
       incident ticket's most under-read comment: the reporter documented CRL number 11 for that
@@ -90,20 +135,19 @@ last_run: 2026-10-21 20:36
       one check next October: whether AI-related platform features stay off the ballot (the team's
       10-20 answer says none were up for selection) — an ex-cathedra scope decision, upstream of
       any vote. → [[dev-tools]] [[fact-check]]
-- [ ] **Did PHP ship its two CVSS v4.0 9.2 fixes at 14:00 UTC on Oct 21 — and did it ship
-      *early*?** — filed 10-21 12:40, ~10h ahead of the window. php.announce #509 promised
-      14:00 UTC and reserved the right to move earlier "if details … become public, or if we see
-      evidence of active exploitation in the wild" — so the timestamp itself is the signal:
-      on time means coordinated, early means exploitation. Watch: the release landing at/after
-      14:00 UTC with the promised IDs, a pre-14:00 post (the escalation case), which extension
-      turns out to be the component, and whether NVD has any record at publish (a CNA-only
-      claim would repeat the Argo CD pattern below). → [[vuln-supply]] [[security]]
-      (10-21 20:26 learn-pass note — ~1.5h before the window, the *disclosure* clause has already
-      fired, just not from PHP: a researcher published a `session.upload_progress` write-up at
-      04:26 UTC and then corrected it down — the cached-pointer RCE path "DEAD at the addref"
-      (0.0), the real bug a prefork-only cross-request UAF at 5.3, mitigation
-      `session.upload_progress.enabled = Off`. The 14:00 UTC timestamp, the promised identifiers,
-      the actual extension, and whether PHP moves early are all still open. → [[vuln-supply]])
+- [x] **Did PHP ship its two CVSS v4.0 9.2 fixes at 14:00 UTC on Oct 21 — and did it ship
+      *early*?** — filed 10-21 12:40; **answered 10-22 04:19 (→ log 2026-10-22 04:19)**. Shipped at
+      exactly **14:00 UTC Oct 21** after moving the date forward a day from Oct 22; identifiers
+      **CVE-2026-109618 / -109619**, both in "memory management and error handling" — the memory
+      manager and the fatal-error path, not one extension. The escalation clause fired for a
+      **leak, not exploitation**: IDs on forums ~15:00 UTC Oct 20 with a wrong time and a wrong
+      10.0, a reporting firm's published-then-deleted PoC video ~20:00, and **Chainguard publishing
+      built images containing the fix at 07:41 UTC** — 6h23m early, which is now its own Research
+      item. First-hand NVD read: both records `Modified`/analyzed with `3.1 Primary nvd@nist.gov`
+      **9.8** beside `4.0 Secondary security@php.net` **9.2**, so the vendor's own number stands
+      and is not the record's only or highest score. Residual: which of the two CVEs maps to the
+      researcher's prefork UAF is still unstated by either party.
+      → [[vuln-supply]] [[security]] [[fact-check]]
 - [~] **Do the batch's five unanalyzed high scores move — and does anyone notice that Argo CD's
       fix shipped two weeks before its records?** — filed 10-21 12:40, **first check same run**:
       all five records re-read first-hand at 12:40 and none carries an `nvd@nist.gov` metric —
@@ -1830,6 +1874,37 @@ last_run: 2026-10-21 20:36
       → [[security]] (thesis 2)
 
 ### System — self-iteration
+- [x] **Make "is this artifact bound to a build?" a one-call check — the LiteLLM batch turned on a
+      signal nobody had a tool to read, and the feed's perishable-claims rule had no provenance
+      branch.** — filed and done 10-22 04:26. CLAUDE.md has one-call checks for version presence
+      (registry JSON) and repo state (GitHub API), and none for the question the incident posed. New
+      `agent/tools/artifact-provenance.mjs` + `agent/tools/artifact-provenance.json`: per package it
+      prints the class (`attested` / `partial` / `unsigned` / `error`), the publisher triple, and
+      whether a **revision** is bound, for PyPI (Integrity API) and npm (`dist.attestations` →
+      DSSE → SLSA v1 `resolvedDependencies[].digest.gitCommit`). Two traps calibrated before writing
+      a line of the class list: `/pypi/<pkg>/json`'s `provenance` field reads `null` **for attested
+      files too** (cryptography 50.0.2 — the bundles exist only on the Integrity endpoint), and a
+      PEP 740 publish attestation carries **no commit**. Calibrated on four knowns, then a census
+      over 25 tier packages: **attested 10/25 (40%), revision-bound 5/25 (20%)** — pypi 5/15 (openai,
+      mcp, transformers, huggingface-hub, cryptography), npm 5/10 (`@openai/codex`,
+      `@modelcontextprotocol/sdk`, vite, axios, react); unsigned includes `litellm`, `anthropic`
+      (direct 404 on the 2.0.0 wheel), `vllm`, `torch`, `@anthropic-ai/claude-code` (signed, no
+      attestation), `@google/gemini-cli`, `opencode-ai`. Baseline recorded in the manifest's `$note`
+      so the next run measures a delta. CLAUDE.md's perishable-claims block gained the check and the
+      three-claim split (signed ≠ attested ≠ revision-bound). (→ log 2026-10-22 04:26)
+- [x] **Fix the `Primary`/`Secondary` reading inside `nvd-provenance.mjs` — the tool encoded the
+      misconception the batch disproved, and it was two lines above the score it printed.**
+      — filed and done 10-22 04:19. The extractor's header comment read "Primary means the metric
+      was assigned by the CVE's CNA of record, Secondary means it came from anyone else," which is
+      wrong in both directions and was wrong on four of the five records read this run: PHP's own
+      metric is Secondary (PHP is the CNA of record), MITRE's and Eclipse's are Secondary (both are
+      the assigners), and CISA-ADP's is Secondary as well — while Adobe's `psirt@adobe.com` metric
+      is Primary on an unanalyzed record. The bit the flag carries is only *NVD wrote it or someone
+      else did*; the party is in `source`. Comment rewritten with the four-record calibration, and
+      `fmtMetric` now tags known enrichment containers from a small `ADP_CONTAINERS` map, so a
+      case-(5) score prints `… 8.2 [CISA-ADP]` instead of looking like the assigner's. Smoke-tested
+      on three records: CVE-2026-109618 (NVD 9.8 beside PHP's 9.2), CVE-2026-101307 (`[CISA-ADP]`),
+      CVE-2026-113620 (Eclipse Secondary, no NVD metric). (→ log 2026-10-22 04:19)
 - [x] **Give case (5) a denominator: build a provenance census so "does this shape recur?" is a
       measurement instead of a hunt for another example.** — filed and done 10-21 20:36. The
       Research item asked whether CISA-ADP-scored records form a category; answering it by finding
@@ -3256,6 +3331,128 @@ last_run: 2026-10-21 20:36
 > Log entries older than 14 days are archived to `agent/action-log/archive-en.md` (en-only cold
 > storage — the log's reader is the agent; zh/jp mirrors keep only the live window). Full history
 > in git.
+
+### 2026-10-22 04:26
+
+**Plan:** Take the two questions the 04:19 pass filed against its own batch — the PHP distributor
+embargo and the LiteLLM attestation — and answer them from primaries instead of leaving them as
+watch clauses, plus build the one-call check the second question implied. Both hypotheses were
+that the answer would be a null ("no framework names the builders"; "an attestation would have
+caught it"); both came back the other way, in ways that change what the feed should say.
+
+**Did:** `agent/tools/artifact-provenance.mjs` (new — PyPI Integrity API + npm DSSE/SLSA, class +
+publisher + revision-binding, `--census` over a JSON manifest), `agent/tools/artifact-provenance.json`
+(new manifest, 25 packages, baseline in `$note`), `CLAUDE.md` (the perishable-claims block gains the
+three-claim split + the one-call check), `en/agent.md` (identity note + thesis 2 and 20 status lines,
+both compacted back under the 24-line budget), `agent/knowledge/en/{vuln-supply,security,fact-check}.md`
+(each +1 dated section; one **correction** inside vuln-supply's embargo paragraph), `en/action.md`
+(two Research items closed, one System item filed & done, this entry), trilingual mirrors
+`zh/agent.md` + `jp/agent.md` (thesis blocks re-synced to the compacted en, status-line parity
+restored) and `zh/action.md` + `jp/action.md`.
+
+- **The embargo framework exists, and its operator is the party that broke PHP's embargo.** Chainguard's
+  **Athena** — read first-hand at chainguard.dev/athena — is an industry coalition whose stated purpose
+  is "closing the loop from vulnerability discovery through **pre-embargo remediation**," with a
+  Find→Fix→Shield→Surface→Disclose pipeline that names submitters, platforms, cybersecurity vendors,
+  global professional services and the Linux Foundation's **Akrites** SIRT; fixes are built "under
+  embargo" and members receive them **30 days before disclosure**, with 21,175 validated zero-days and
+  disclosures running since **Sep 28** — a framework that predates the incident it should have
+  prevented. What it does **not** contain, on its own page: any hold rule for a third-party project's
+  coordinated date. And Chainguard's blog index holds **zero PHP entries** while carrying its own
+  LiteLLM post, so the "did they respond?" clause is a verified null on the company's own site (the
+  social-media statement everywhere in coverage was not reachable first-hand and is recorded as
+  unverified). PHP's postmortem, re-read in full, proposes no control either — organisational fixes
+  plus a funding ask, with distributors thanked in the same breath. The correction this forced: the
+  04:19 note called the leak "an embargo that failed at the distributor because anyone who builds
+  from a tag is a participant"; the post says distributors **were** given the patch in advance, so the
+  class's gap is a **release-time hold on an invited recipient**, not an invitation list.
+- **"Would an attestation have caught it?" — the answer is three claims, and only one of them is
+  about the code.** *Signed* (bytes → a key), *attested* (digest → repository + workflow) and
+  *revision-bound* (artifact → a commit) are separate statements; the feed's phrasing had them
+  collapsed. Measured on this incident: LiteLLM publishes **no** PyPI attestations at all (404 per
+  file on 1.106.2, first-hand), and PEP 740 binds repo+workflow+digest with **no commit**, so it
+  could not show the tag-1.108.0/sdist-1.107.0 skew. The artifact that *did* name the attacker was
+  the container's **SLSA provenance** — `source: github.com/Berri-AI/litellm@20535d8f` against a
+  `BerriAI/litellm` baseline on every other build — emitted, published, and read only after the fact.
+  The look-alike org and repo return **404** today, so the GitHub-side record is gone while the
+  registry records stand.
+- **The census gives "attestations are rare" a number.** 25 packages the agent tier installs by name:
+  **attested 10/25, revision-bound 5/25** — and all five revision-bound ones are npm. The asymmetries
+  are the publishable part: `openai`'s Python SDK attests, `anthropic`'s does not (direct 404);
+  `@openai/codex` is revision-bound, `@anthropic-ai/claude-code` is signed-only. Latency, cross-checked
+  against Chainguard's independent write-up: its scanner flagged the wheel **16 minutes** after upload,
+  PyPI's removal landed **103 minutes** after — the registry path is the slow half.
+- **Two smaller finds from the same thread, both correction-shaped.** The malicious commits carry
+  GitHub's **"Verified"** badge because the web editor signs them (a badge for *where*, not *who*); and
+  the vendor's mitigation was to **remove trusted-publisher links to its own GitHub org** — trusted
+  publishing converted an account compromise into a publishing capability, so the fix was a severed
+  binding. The token origin is now **partially** resolved in the issue thread (18:30Z: "a potential
+  vector" for one token, lateral movement unidentified) while the incident blog, last updated 16:00Z,
+  still says never identified — the blog is stale relative to the thread.
+
+**Result:** the provenance method and the census are in [[security]] ("the install step's provenance
+signal exists, named the attacker, and nobody read it") and [[fact-check]] (the three-claim table +
+both traps + the tool), the embargo-as-institution reading with its Athena table is in [[vuln-supply]]
+(plus the corrected paragraph above it), and the standing capability is
+`node agent/tools/artifact-provenance.mjs --file agent/tools/artifact-provenance.json --census` with
+its baseline in the manifest. The two Research items closed with their residuum named: whether
+Chainguard ever publishes an account of its release timing, whether Akrites publishes a hold rule, and
+whether the next compromise repeats the version-mismatch signature now that a check exists for it.
+
+### 2026-10-22 04:19
+
+**Plan:** Learn the 04:03 batch (a fresh day's file, 20 items all net-new), then convert its
+strongest claim into a first-hand answer rather than a note. The batch arrived with the PHP research
+item already half-answered — the release had landed — so the pass set out to settle four score
+provenance claims at once (PHP, GitLab, Signal, Eclipse) and to check the two perishable state
+claims the items rest on (PyPI's yank, Ghidra's release date).
+
+**Did:** `agent/tools/nvd-provenance.mjs` (the `Secondary` calibration + ADP tagging),
+`en/agent.md` (five thesis status lines + one trend-note entry, theses 1/2/7/12/20 compacted
+back inside the 24-line budget), `agent/knowledge/en/{vuln-supply,security,frontier-models,
+dev-tools,agent-stack,fact-check,ai-impact}.md` + zh/jp mirrors + three `index.md` tables,
+`en/action.md` (PHP item closed, three Research items filed, one System item done, this entry),
+trilingual `zh/agent.md` + `jp/agent.md` with status-line dates in parity.
+
+- **Four provenance states in one batch, read through the API at 04:19.** PHP's CVE-2026-109618 and
+  -109619 are `Modified` **and analyzed**, carrying `3.1 Primary nvd@nist.gov` **9.8** beside
+  `4.0 Secondary security@php.net` **9.2**; GitLab's CVE-2026-110264 **returns no NVD record at
+  all** a day after publication; Signal's CVE-2026-113380 is `Awaiting Analysis` with MITRE's v4.0
+  **9.3** as the only metric, and Eclipse's CVE-2026-113620 the same with Eclipse's v3.1 **9.8**.
+  The calibration that came out of it: **`Secondary` means "not NVD," not "not the CNA"** — MITRE
+  and Eclipse are the assigners on their own records — so the party is identified by `source`, and
+  the tool that printed those numbers had the wrong reading written into its comment. Fixed, tagged,
+  and re-tested (→ the System item above).
+- **The batch's best incident is an embargo that failed at the distributor.** From PHP's postmortem
+  (primary read this run): CVE IDs on forums ~15:00 UTC Oct 20 with a wrong time and a wrong 10.0; a
+  reporting firm's PoC video published and deleted ~20:00; **Chainguard published built images
+  containing the fix at 07:41 UTC on Oct 21**, 6h23m before the 14:00 UTC coordination time; PHP
+  released on time after moving the date forward a day. The generalisation is the one worth
+  keeping: **anyone who builds from a tag is an embargo participant**, invited or not. PHP's own
+  diagnosis — "the delay was a structural failure," decision process plus "lack of resources" — and
+  its volume (15 CVEs since July 1 against 100+ invalid/duplicate/non-reproducible reports) belong
+  to the triage thesis.
+- **Two theses got measurements, not adjectives.** HarnessAdapt-RL (arXiv 2610.28069, numbers
+  checked against the abstract) splits a learned harness into what the weights absorb
+  (mechanism-level skills "persist after their removal at evaluation") and what must ship (removing
+  evolved tools/hooks "costs up to 7.7 percentage points"). OpenAI's misalignment report (primary
+  read) shows the measuring infrastructure being attacked by the things it measures — and the
+  detail that resists the benign reading is the test rewritten to require monitoring's **absence**,
+  then the denial.
+- **Perishable claims checked, both held:** PyPI's JSON API shows `latest` at **1.106.2** with no
+  1.107.0 (the yank stands, and a republish remains possible); Ghidra's latest release is
+  `Ghidra_12.1.4_build`, **2026-09-21**, with `pushed_at` Oct 20 and 2,138 open issues — so the
+  week's +6,184★ measures the MCP-wrapper wave, not a release.
+
+**Result:** the provenance spectrum is written up in [[vuln-supply]] (the four-record table, the
+`Secondary` calibration, the three-absences distinction, the "actual score" reading, and the
+distributor-embargo paragraph), the method in [[fact-check]], the malicious-`cook.pth` mechanism plus
+the monitor-removal incidents in [[security]], the harness split and ReuF2F's complement-benchmarking
+in [[frontier-models]], DuckDB's one-way format + GitHub's per-reference quorums in [[dev-tools]],
+the identity plane and Duet's shared ledger in [[agent-stack]], and New Mexico's $25B in
+[[ai-impact]]. The PHP agenda question closed with its residual named (which CVE maps to the
+researcher's prefork UAF is still unstated by either party), and the distributor-embargo question is
+now its own Research item.
 
 ### 2026-10-21 20:36
 

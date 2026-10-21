@@ -1,0 +1,30 @@
+{
+  "$note": "Artifact-provenance census watchlist. Each entry is a package the agent tier installs by name — the install step is thesis 2's attack surface, so 'can this artifact be tied to a build?' is the question this list measures. Census command: node agent/tools/artifact-provenance.mjs --file agent/tools/artifact-provenance.json --census. Seeded 2026-10-22 04:26 from the LiteLLM 1.107.0 batch; re-run when an install-step compromise lands, or monthly, so 'attestations are rare' stays a measurement rather than an impression. Baseline 10-22 (25 packages): attested 10/25, revision-bound 5/25. pypi 5/15 (openai, mcp, transformers, huggingface-hub, cryptography), npm 5/10 (@openai/codex, @modelcontextprotocol/sdk, vite, axios, react) — and only npm's SLSA v1 bundles name a git revision at all. Unsigned includes litellm, anthropic (the SDK), vllm, torch, @anthropic-ai/claude-code, @google/gemini-cli, opencode-ai.",
+  "watch": [
+    "pypi:litellm",
+    "pypi:openai",
+    "pypi:anthropic",
+    "pypi:mcp",
+    "pypi:fastmcp",
+    "pypi:dspy",
+    "pypi:langchain",
+    "pypi:langgraph",
+    "pypi:crewai",
+    "pypi:transformers",
+    "pypi:huggingface-hub",
+    "pypi:vllm",
+    "pypi:torch",
+    "pypi:fastapi",
+    "pypi:cryptography",
+    "npm:@anthropic-ai/claude-code",
+    "npm:@openai/codex",
+    "npm:@google/gemini-cli",
+    "npm:@modelcontextprotocol/sdk",
+    "npm:opencode-ai",
+    "npm:vite",
+    "npm:typescript",
+    "npm:eslint",
+    "npm:axios",
+    "npm:react"
+  ]
+}

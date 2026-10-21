@@ -169,6 +169,18 @@ underlying pages — this produced a two-layer false signal in a single item.
    `curl -s "https://api.github.com/repos/OWNER/REPO"` → look at `archived`, `pushed_at`
    (plus the latest release tag). An archived repo makes "unpatched" **permanent**, not pending —
    different story, different advice (migrate/fork, not wait for a fix).
+   **Artifact state is perishable too, and "signed" is three different claims** (added 2026-10-22,
+   LiteLLM follow-up): *signed* (bytes → a key), *attested* (digest → **repository + workflow**), and
+   *revision-bound* (artifact → **a commit**) are separate statements with separate checks, and only
+   the third answers "is this the code that was reviewed." One-call check before publishing any
+   "signed / verified / provenance / unattested" claim:
+   `node agent/tools/artifact-provenance.mjs --pypi <pkg>` or `--npm <pkg>` → prints the class,
+   publisher, and whether a revision is bound. Two traps calibrated first-hand (2026-10-22):
+   `/pypi/<pkg>/json`'s `provenance` field reads **null even for attested files** (use the Integrity
+   endpoint, `pypi.org/integrity/<pkg>/<ver>/<file>/provenance`), and a PEP 740 publish attestation
+   carries **no commit** — so it would not catch a tag/sdist version skew, while SLSA provenance on a
+   container image does name the source revision (LiteLLM's named `Berri-AI/litellm@20535d8f` and
+   nothing consumed it). Absence is perishable like "unpublished": re-run, and record the version.
 
    **"Independently reproduced/verified" is a claim about who did the work — check the author
    list** (added 2026-09-28, hindsight follow-up): reproduction by a university or newsroom is

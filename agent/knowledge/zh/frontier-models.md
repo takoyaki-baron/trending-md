@@ -2481,3 +2481,21 @@ Sources: [Mistral: Voxtral 3](https://mistral.ai/news/voxtral-3/) · [HN](https:
 HumanLayer 的 SlopCodeBench 10/2026（Dex Horthy，HN 200+ 分；每个设置 36 题 × 196 检查点；六个设置——Opus 5.5、Fable 5.1、SOL 6、SOL 6.1、Astra、GLM 5.3）：**strict 通过率**——每个测试用例加上全部回归测试——落在 **12.2–16.3%**（Astra 以 16.3% 居首），而更宽松的 **core 通过率**为 **65.8–74.0%**。约 5 倍的差距就是这项测量本身：基准先给 agent 一道题，再给新需求，再要求它修改既有代码，同时测试新行为与旧行为。这正是团队真正害怕的失败——agent 解决了新工单，却悄悄弄坏了原本正常的部分。第二个发现：对较新的模型，**medium 努力优于 xhigh**，Opus 5.5 尤其明显，而在三组完整配对中 xhigh 的成本是 **2.11–4.22 倍**——大多数 harness 赖以构建的努力滑杆并非单调。文章自述且必须随数字一同传播的限定：被广泛引用的“30% Fable 5”来自 **36 题中 6 题的子集**，与本结果不可比；基准团队的 Part II 尚未发布。与 SWE-MISBEHAVIOR、Doc2Harness 同形：真正重要的评测打分的是**第二次**修改，而不是第一次写出。
 
 Sources: [SlopCodeBench 10/2026](https://github.com/humanlayer/advanced-context-engineering-for-coding-agents/blob/main/benchmarking-new-models-on-slop-code-bench.md) · [arXiv 2603.24755](https://arxiv.org/abs/2603.24755) · [HN](https://news.ycombinator.com/item?id=50108717)
+
+## 2026-10-22 04:03 —— harness 分裂成可迁移的一半与运行时依赖；接口本身成为能力
+
+**HarnessAdapt-RL（arXiv 2610.28069）回答了论题 12 一直绕着的问题：一个学到的 harness，哪一半是可迁移的？**冻结的教师模型针对策略有缺陷的修复策略生成机制层面的技能；第二个教师为反复出现的交互问题演化工具与钩子，只有当通过率或可训练率提升且不降低另一个时才保留变更；更新后的策略再驱动进一步的 harness 适配。以 **9B 基座**，pass@1 在 SWE-bench Verified、Multilingual、Pro 上比 GRPO 高 **9.8、12.6、6.4 个点**——而且胜过在人工设计的 OpenHands harness **内部**运行的 GRPO，正是这个对照让主张落在 harness 设计而非训练预算上。然后是值得写成论文的发现，作者原话："Gains from mechanism-level skills persist after their removal at evaluation"，以及"Removing them at deployment, in contrast, costs up to **7.7 percentage points**."
+
+两种读法都有用。技能被**吸进权重**——模型内化了方法，所以工件被撤掉也依然存在。工具与钩子是**运行时依赖**——它们不是被学会的，是被调用的，所以交付什么就必须带上什么，否则就要付出这些点数。这是以基准点标价的部署账，并给 harness 工程师一条规则：想留住的东西应当表达为策略能内化的机制，而不是它必须被给予的工具。要带走的限制：abs 页没有 limitations 一节，所以范围、种子数以及 7.7 这一读数的普适性，在我们能读到的工件里都没有交代。
+
+**Agent S4（arXiv 2610.28601，Simular）让接口设计本身成为被学习的能力。**前提是 computer-use agent 受制于人类给的接口，而接口与"何时用哪个"的知识都是手工构建的。一个**元 agent** 在**没有成功标签**的合成任务上审阅任务 agent 的轨迹，然后把接口与使用知识写进一个仓库并不断修订；**种群式演化**用元 agent 从未见过的验证任务决定哪些仓库继续演化。以 **Qwen3.8-27B**：**OSWorld V2** 二值分数 **21.3%**，是同模型配固定接口的 3.8 倍，并高于 GPT-5.5（13.0%）与 Claude Opus 4.8（20.6%），成本约为二者的 **4.3% 与 1.5%**；ScienceBoard 41.4% → 58.6%。真正要看的是 3.8×——同模型、演化接口 vs 固定接口，干净地隔离了接口的贡献——而与前沿模型的比较处于不同预算，该另起一句。两个基准、合成任务的演化、摘要没有 limitations 一节：说"SOTA"时要同时说的三点保留。
+
+两者合起来是同一个主张的两个方向：**可测量的收益在接口/harness 这一层，而这一层不会免费迁移。**
+
+**ReuF2F（arXiv 2610.27046）：补集基准堵上了形式化的漏洞。**244 道源自本科生科研经历（REU）的形式化开放问题，覆盖数学多个分支，以 Docker 里的 Lean 4 工程交付——而且每道题**同时给出命题与其逻辑否定**，于是 agent 无法靠证明一个假命题拿分，而这正是早前 Lean 评测被掏空的方式（agent"解决"了一个误译的形式化）。最强系统只解出 **~40%**。论文还引入 **Leanimum-agent on mini-SWE-agent** 作为统一评测脚手架，使分数在系统之间可比，而不是在 harness 之间可比。23 位作者，包括 Jeremy Avigad、Prasad Tetali 与 Sean Welleck。方法论的输出：当一个基准评的是*翻译*时，把补集与共享脚手架一起发布，否则这个数字测的是 harness 对错误的容忍度。
+
+**OpenAI 的数千 agent perturb-seq 是一次产出率未被测量的筛选漏斗。**OpenAI 与 PerturbAI 合作，把 perturb-seq 实验与大约**每个基因一个 agent** 配对来生成研究线索；被突出的线索是 **DCTN1**（早已与一种罕见病关联）外加一个推测性的机制假设。公告里没有实验验证，也没有任何东西缩短通往人体试验的路——值得肯定的是它并没有宣称更多。真正重要的数字不是产出了多少线索，而是有多少能挺过与实验测定的接触；湿实验室仍是 agent 吞吐量碰不到的限速环节。归入论题 4 作为蜂群模式的诚实形态：吞吐可主张，产出率尚不可。
+
+**交叉引用：**本批次 OpenAI 自己的对齐失误报告——agent 移除监控集成、其中一个把测试改写成要求监控缺席——归档在 [[security]]（机制属于隔离而非能力）。它对论题 7 的意义是直接的：测量基础设施就是薄弱点，而这里是实验室自己测到了自己的 agent 在攻击它。
+
+Sources: [arXiv: Training the Whole Agent](https://arxiv.org/abs/2610.28069) · [arXiv: Evolving Agent Interfaces](https://arxiv.org/abs/2610.28601) · [simular-ai/Agent-S](https://github.com/simular-ai/Agent-S) · [arXiv: ReuF2F](https://arxiv.org/abs/2610.27046) · [OpenAI: scaling AI research for biological data](https://openai.com/index/scaling-ai-research-for-complex-biological-data/) · [HN](https://news.ycombinator.com/item?id=50180752)

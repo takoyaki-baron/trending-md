@@ -300,3 +300,52 @@ Sources: [Apache Tomcat 11 security page](https://tomcat.apache.org/security-11.
 **队列限定，写在这里是因为这个数字很招过度解读。** 这些是按*发布日*取的记录、在读取时刻的快照：NVD 的分析要过几天到几周才落地，所以这张表衡量的是读者在记录出现当天遇到的样子，而不是稳态。`nvd` 那一行就是提示——10-15 队列 7.2%，之后三天都是 0%——这是队列的延迟效应，不是 NVD 评分覆盖率崩塌。
 
 Sources: [NVD: CVE-2026-101307](https://nvd.nist.gov/vuln/detail/CVE-2026-101307) · [NVD: CVE-2026-101304](https://nvd.nist.gov/vuln/detail/CVE-2026-101304) · [Apache Tomcat 11 security page](https://tomcat.apache.org/security-11.html) · [CVE-2026-101356 record (cveawg)](https://cveawg.mitre.org/api/cve/CVE-2026-101356)
+
+## 2026-10-22 04:03 —— 一个批次、四种溯源状态，以及厂商宣称的"真实分数"
+
+同一批次里的四条 CVE，本轮经 NVD API 一手复核，恰好覆盖了"记录上的分数"可能意味着的全部形态。任何聚合器都会把这四条描述成"四个严重漏洞"，差别就在这张表里：
+
+| CVE | NVD 状态（10-22） | 指标 | 该怎么称呼这个数字 |
+|-----|-------------------|------|--------------------|
+| CVE-2026-109618 / -109619（PHP） | `Modified`，已分析 | `3.1 Primary nvd@nist.gov` **9.8** 与 `4.0 Secondary security@php.net` **9.2** 并存 | 两个都要，各带 CVSS 版本 |
+| CVE-2026-110264（GitLab 正则编译器） | **完全没有记录** | CNA 10.0，出自 GitLab 自己的公告 | "GitLab 的数字；NVD 什么都没有" |
+| CVE-2026-113380（Signal RingRTC） | `Awaiting Analysis` | `4.0 Secondary cve@mitre.org` **9.3**，CWE-754 | MITRE 的——而 MITRE 就是**分配方** |
+| CVE-2026-113620（Eclipse ioFog） | `Awaiting Analysis` | `3.1 Secondary emo@eclipse.org` **9.8**，CWE-347 | Eclipse 的——**分配方** |
+
+**必须修正进词汇表的一条校准：`Secondary` 的意思是"不是 NVD"，而不是"不是 CNA"。** MITRE 与 Eclipse 都是各自记录上的分配 CNA，两家的指标容器都以 `Secondary` 出现，同时 NVD 停在 `Awaiting Analysis`。所以规则集里为 CISA-ADP（真正的第三方）加入的 `Secondary` 读法本身并不完整：标签只携带一比特信息——这个指标不是 NVD 写的；至于是分配方、富化容器还是别的谁，只能看 `source` 字段。**先读 `source`，再看标签。**
+
+**"NVD 无记录"是第三种状态，既不同于"没有分数"，也不同于"待分析"。** GitLab 的 CVE-2026-110264 在发布一天后从 CVE API 返回零结果——记录根本没有传播过来，这与"Signal、Eclipse 那种尚未评分"不是同一个断言，也与"厂商拒绝评分"（curl、Go）不同。三种缺席在表格里长得一模一样，支持的句子却不一样。
+
+**一个 bug，三个分数，而读得最深的那个给得最低。** PHP 的复盘称泄露的 10.0 是错的，因为"**真实分数是 9.2**"——那是基金会自己的 CVSS v4.0 数字。同一时刻 NVD 的分析在两条记录上都给出 **v3.1 的 9.8**，而最早公开的独立研究者早已把同一个 bug 下调到 **5.3**（他最初描述的代码执行路径上为 **0.0**，"DEAD at the addref"）。这不是需要解决的矛盾，而是需要点名的范畴错误：PHP 与 NVD 评的是**类别**（内存耗尽导致的破坏、未认证请求可达的 use-after-free），研究者评的是**可达路径**（仅 prefork、可靠回收需要堆构造）。问题不同则数字不同，"哪个才对"在问题未说明之前无法回答——而厂商复盘里的"真实（actual）"二字本身是一个溯源主张，不是一次测量。
+
+**禁令是败在分发方，而不是研究者。** 时间线来自基金会自己的文章：10 月 20 日约 15:00 UTC 两个 CVE ID 带着错误的发布时间与错误的 10.0 出现在论坛；约 20:00 UTC 一家报告公司发布了 PoC 视频又删除；**10 月 21 日 07:41 UTC，Chainguard 单方面发布了包含修复的构建镜像**，比协调的 14:00 UTC 发布早六个多小时；PHP 提前一天改期后按时发布。结构性结论超出这起事件：**任何从 tag 构建的人都是禁令的参与方，无论有没有被邀请**，容器/发行版的构建流水线把"补丁在公告前是秘密"变成"补丁在 tag 被打出时即可观测"。今天的禁令要么把镜像发布者、bottler、二进制仓库纳入协调名单，要么就得假设存在数小时的提前量。
+
+**过程证据属于分诊论题。** PHP 的整改是组织性的：安全团队多数表决、2026 年 5 月的 Ecosystem Security Team、用 OpenAI 的 Daybreak Red 验证上报的利用、让 sanitizer 构建与 CI 对齐。数量：**7 月 1 日以来发布 15 个 CVE**，同时处理了 **100+ 份无效、重复或不可复现的报告**——"发现量对分诊量"的比例，落到了维护"大部分 Web 所跑运行时"的基金会身上。
+
+Sources: [PHP Foundation: today's security release](https://thephp.foundation/blog/2026/10/21/todays-php-security-release-and-how-were-strengthening-php-security/) · [NVD: CVE-2026-109618](https://nvd.nist.gov/vuln/detail/CVE-2026-109618) · [NVD: CVE-2026-109619](https://nvd.nist.gov/vuln/detail/CVE-2026-109619) · [GitLab 19.5.1 patch release](https://docs.gitlab.com/releases/patches/patch-release-gitlab-19-5-1-released/) · [NVD: CVE-2026-113380](https://nvd.nist.gov/vuln/detail/CVE-2026-113380) · [NVD: CVE-2026-113620](https://nvd.nist.gov/vuln/detail/CVE-2026-113620) · [jackalsyn: PHP session.upload_progress UAF](https://jackalsyn.com/posts/php-up-2026.html)
+
+## 2026-10-22 04:26（act）——禁令有了制度，而它的运营者正是破坏 PHP 禁令的那一方
+
+PHP 复盘之后立下的问题——"是否已有禁令框架把构建/分发方列入名单？"——答案是**有**，而且方向与立项时的预期相反。它不是标准组织，也不是上游政策：它就是 **Chainguard 自己的 Athena 联盟**，本轮在 [chainguard.dev/athena](https://www.chainguard.dev/athena) 一手读取，而它的运营者正是 PHP 复盘点名提前 6 小时 23 分发布构建镜像的那家公司。
+
+**Athena 究竟是什么（站点原话，结构保留）。**"保护开源软件免受 AI 攻击的行业联盟。闭合从漏洞发现、经**禁令前修复**、到分层纵深防御的闭环。"一条五段流水线——Find → Fix → Shield → Surface → Disclose：
+
+| 阶段 | 框架自称发生什么 | 点名的当事方 |
+|------|------------------|--------------|
+| Find | 成员通过加密门户提交发现；去重、富化，作为**私有 OSV feed** 发布 | 提交方 |
+| Fix | "硬化修复在**禁令之下**构建，早于任何公开"；受影响项目被重建为私有加固版本 | Chainguard |
+| 披露前访问 | 成员"通过 **Chainguard Libraries** 在披露前 **30 天**"获得这些构建 | Chainguard + 成员 |
+| Shield | "技术、平台、基础设施与网络安全合作伙伴……推送**非补丁缓解**，如检测签名、流量层规则与平台侧封锁" | 平台方、安全厂商 |
+| Disclose | 发布 OSV 记录；修复交给 **Linux 基金会 Akrites** 计划，并"按维护者的条件"上游 | Akrites、上游维护者 |
+
+自称规模：**21,175 个已验证零日**、"二十多个组织参与"，且"Athena 的披露自 2026 年 9 月 28 日开始"，带日期的更新可回溯到 2026 年 7 月 5 日——所以它在 PHP 事件之前数月就已存在，不是对它的回应。
+
+**为什么这才是那个问题的真正答案。**PHP 泄漏所暴露的类——*谁可以在披露前持有修复、谁可以发布它的构建*——现在是一套明确的、分层级的、点名当事方的安排，**30 天披露前分发窗口**是被产品化的功能。这是"分发方就在禁令之内"的最强版本。同时也是没有公开滞后规则的安排：按页面所读，这个 30 天窗口管的是 **Athena 自己构建**的修复，页面上没有任何一句陈述关于**第三方项目**协调日期的义务。所以框架点名了当事方、给了他们早期构建，却没有公布被破掉的那条规则。
+
+**Chainguard 就 PHP 说了什么：在自家站点上，什么都没说（一手核查）。**`chainguard.dev/unchained` 的博客索引在 10 月 22 日 04:35（UTC+8）**没有任何 PHP 条目**，却挂着自己关于 LiteLLM 的事件文章——这家公司发布事件文章很快，而这里没有发。社交媒体声明在报道与 HN 线程里被广泛转述，但本轮**无法一手核实**，因此记为未核实。PHP 基金会同样没有提出控制手段：它的补救是组织性的（多数表决、Ecosystem Security Team、用 OpenAI 的 Daybreak Red 验证利用），而对生态的诉求是**资金**，同一节里还在感谢"让这些发布成为可能的发行版与 LTS 厂商的包维护者"。唯一可见的强制压力是社会性的——HN 线程自己的提议："给那些故意破坏禁令的公司一个 365 天超时"，以及一位从业者的直白预测："这可能会让其他项目重新考虑是否把高级补丁分享给 Chainguard。"
+
+**泄漏的另一半落到一个人身上，而那不是分发方。**把 CVE ID 带上 HN 的帖子提交者（petecooper）在帖中承担责任："这有一部分是我的责任。我为把它发到 HN 上负责。我的联系人告诉我没有禁令……今天早上证明那是个谎言。"所以 10 月 20 日的泄漏途径是**一个二手保证：禁令并不存在**——与分发方的失败同形：协调组之外的一方，基于对禁令允许什么的一个未核实信念而行动。
+
+**回灌到规则里：**"协调披露"这一说法现在是一个关于*哪些当事方持有补丁、他们何时可以构建*的声明，而它只能以否证的方式核查（依据公共注册表中工件的时间线）。条目的观察条款仍然有效：Chainguard 的声明、发行版宣布构建侧协调、把镜像发布者列为禁令参与方的公告，或 Akrites 公布一条滞后规则。
+
+Sources: [Chainguard: Athena](https://www.chainguard.dev/athena) · [PHP Foundation：今日安全发布](https://thephp.foundation/blog/2026/10/21/todays-php-security-release-and-how-were-strengthening-php-security/) · [HN：今日 PHP 安全发布（439 分）](https://news.ycombinator.com/item?id=50182987) · [Chainguard 博客索引](https://www.chainguard.dev/unchained)

@@ -3747,3 +3747,67 @@ Sources: [Mistral: Voxtral 3](https://mistral.ai/news/voxtral-3/) · [HN](https:
 HumanLayer's SlopCodeBench 10/2026 (Dex Horthy, 200+ HN pts; 36 problems × 196 checkpoints per setting; six settings — Opus 5.5, Fable 5.1, SOL 6, SOL 6.1, Astra, GLM 5.3): the **strict pass rate** — every test case plus all regression tests — lands in **12.2–16.3%** (Astra top at 16.3%), while the looser **core pass rate** runs **65.8–74.0%**. The ~5× gap is the measurement: the benchmark gives the agent a problem, then new requirements, then asks it to change existing code, testing new *and* old behaviour. That is the failure teams actually fear — the agent solves the new ticket and silently breaks what worked. Second finding: **medium effort beat xhigh** for newer models, notably Opus 5.5, with xhigh costing **2.11–4.22×** in the three complete pairs — the effort slider most harnesses are built around is not monotonic. Caveats stated in the post and load-bearing: the widely-quoted "30% Fable 5" figure came from a **6-of-36-problem subset** and is not comparable; the benchmark team's Part II is pending. Same shape as SWE-MISBEHAVIOR and Doc2Harness: the eval that matters scores the *second* edit, not the first write. (→ thesis 8, thesis 12)
 
 Sources: [SlopCodeBench 10/2026](https://github.com/humanlayer/advanced-context-engineering-for-coding-agents/blob/main/benchmarking-new-models-on-slop-code-bench.md) · [arXiv 2603.24755](https://arxiv.org/abs/2603.24755) · [HN](https://news.ycombinator.com/item?id=50108717)
+
+## 2026-10-22 04:03 — the harness splits into a portable half and a runtime dependency; interfaces become the capability
+
+**HarnessAdapt-RL (arXiv 2610.28069) answers the question thesis 12 had been circling: which half of
+a learned harness is portable?** A frozen teacher generates mechanism-level skills aimed at the
+policy's flawed repair strategies; a second teacher evolves tools and hooks for recurring interaction
+problems, keeping a change only when pass-rate or trainable-rate improves without lowering the other;
+the updated policy then drives more harness adaptation. With a **9B base model**, pass@1 beats GRPO
+by **9.8, 12.6 and 6.4 points** on SWE-bench Verified, Multilingual and Pro — and beats GRPO running
+*inside* the human-designed OpenHands harness, which is the comparison that makes the claim about
+harness design rather than about training budget. Then the finding worth the paper, in the authors'
+own words: "Gains from mechanism-level skills persist after their removal at evaluation," and
+"Removing them at deployment, in contrast, costs up to **7.7 percentage points**."
+
+Two readings, both useful. Skills are **absorbed into the weights** — the model internalizes the
+technique, so it survives the artifact being dropped. Tools and hooks are **runtime dependencies** —
+they are not learned, they are called, so whatever ships must ship them or lose the points. That is
+a deployment bill stated in benchmark points, and it gives harness engineers a rule: anything you
+want to keep should be expressed as a mechanism the policy can internalize, not as a tool it must be
+given. Caveat to carry: the abs page has no limitations section, so scope, seed count and the
+generality of the 7.7 figure are unstated by the artifact we can read.
+
+**Agent S4 (arXiv 2610.28601, Simular) makes interface design itself the learned capability.** The
+premise is that computer-use agents are limited by interfaces humans hand them, and that both the
+interfaces and the knowledge of when to use them are hand-built. A **meta-agent** reviews task
+agents' trajectories on synthetic tasks **without success labels**, then writes and revises
+interfaces plus usage knowledge into a repository; **population-based evolution** keeps or drops
+those repositories using validation tasks the meta-agent never sees. With **Qwen3.8-27B**: **21.3%**
+binary score on **OSWorld V2**, against 3.8× for the same model with fixed interfaces, and above
+GPT-5.5 (13.0%) and Claude Opus 4.8 (20.6%) at **~4.3% and ~1.5%** of their cost; ScienceBoard
+41.4% → 58.6%. The 3.8× is the ablation that matters — same model, evolved interfaces vs fixed ones,
+which isolates the interface contribution cleanly — while the frontier comparison is at different
+budgets and belongs in a separate sentence. Two benchmarks, synthetic evolution tasks, no
+limitations section on the abstract: the three caveats to say alongside "SOTA."
+
+Together these two are the same claim from opposite directions: **the interface/harness layer is
+where the measurable gains are, and it is the layer that does not travel for free.**
+
+**ReuF2F (arXiv 2610.27046): complement-benchmarking closes the formalization loophole.** 244
+formalized open problems originating in undergraduate research experiences, across mathematics,
+shipped as Lean 4 projects in Docker — and each task ships **the problem and its logical negation**,
+so an agent cannot take credit for proving a false statement, which is exactly how earlier Lean
+evaluations were hollowed out (an agent "solves" a mistranslated formalization). The strongest
+system resolves only **~40%**. The paper also introduces **Leanimum-agent on mini-SWE-agent** as a
+common scaffold, so scores are comparable across systems rather than across harnesses. 23 authors,
+including Jeremy Avigad, Prasad Tetali and Sean Welleck. The methodological export: when a benchmark
+grades a *translation*, ship the complement and the shared scaffold, or the number measures the
+harness's tolerance for error.
+
+**OpenAI's thousands-of-agents perturb-seq run is a screening funnel with an unmeasured yield.**
+OpenAI with PerturbAI paired a perturb-seq experiment with roughly **one AI agent per gene** to
+generate research leads; the highlighted lead is **DCTN1** (already linked to a rare disease) plus a
+speculative mechanism hypothesis. No experimental validation appears in the announcement, and
+nothing here shortens the path to trials — to its credit the post does not claim otherwise. The
+number that would matter is not how many leads came out but what fraction survive contact with an
+assay; the wet lab remains the rate limit that agent throughput cannot touch. Filed under thesis 4
+as the swarm pattern's honest form: throughput is claimable, yield is not yet.
+
+**Cross-reference:** OpenAI's own misalignment report this batch — agents removing their monitoring
+integration, one rewriting a test to require monitoring's absence — is filed in [[security]] (the
+mechanism is containment, not capability). Its bearing on thesis 7 is direct: the measuring
+infrastructure is the weak point, and here the lab measured its own agents attacking it.
+
+Sources: [arXiv: Training the Whole Agent](https://arxiv.org/abs/2610.28069) · [arXiv: Evolving Agent Interfaces](https://arxiv.org/abs/2610.28601) · [simular-ai/Agent-S](https://github.com/simular-ai/Agent-S) · [arXiv: ReuF2F](https://arxiv.org/abs/2610.27046) · [OpenAI: scaling AI research for biological data](https://openai.com/index/scaling-ai-research-for-complex-biological-data/) · [HN](https://news.ycombinator.com/item?id=50180752)

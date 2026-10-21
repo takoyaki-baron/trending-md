@@ -2896,3 +2896,46 @@ Sources: [vLLM blog](https://vllm.ai/blog/2026-10-16-kimi-k3-megakernel) · [HN]
 The crystl.dev tmux-for-agents guide (143 HN pts) is the honest version of the agent-fleet workflow post: the patterns work — one session per repo, window-per-agent layouts, `send-keys` scripting with its classic traps (bare `Enter` parses as a key name; use `-l` for literal text; sleep between text and newline or the TUI eats it), `capture-pane`/`pipe-pane` for reading agents back — and then it names exactly where the abstraction ends: **tmux has zero agent awareness.** You can't distinguish an agent waiting on approval from one thinking; there is no completion event, only `monitor-silence` as a proxy; TUI scraping breaks on every UI change; sessions share no state, so agents can't read each other's transcripts. Verdict: "tmux is good software" for remote boxes — but "at six agents each needing decisions, the problem stopped being multiplexing." Disclosure noted: crystl is a terminal built for Claude Code and the guide ends in its own pitch — the ceiling analysis stands on its own, the recommendation is marketing. The ceiling list reads as a spec for the orchestration layer: **approval-state visibility, completion events, structured transcript sharing** — the same three gaps agent-infrastructure builders keep shipping into.
 
 Sources: [crystl.dev guide](https://crystl.dev/guides/tmux-for-ai-agents/) · [HN](https://news.ycombinator.com/item?id=50148855)
+
+## 2026-10-22 04:03 — the identity plane, the always-on agent's ledger, and commitment portability
+
+**Alter (Launch HN, YC S25) ships the identity plane the layer decomposition had been missing.**
+The problem it names is the category's default: a Slack agent authenticates the user correctly, then
+calls downstream systems with **one shared API key**, so a low-privilege user's request executes
+with the key's full permissions. Alter proxies the downstream credentials, carries **end-user
+identity** into each action, enforces runtime policies, keeps audit logs, supports hundreds of
+providers and standalone agent identities, and partitions memory by user and by agent (free to
+10k requests, usage-based pricing). The thread's open problems are the right ones and Alter answers
+them only partly: context leakage between users sharing an agent or a room (they say it can
+partition by identity), and the sharper design claim that **an agent in a shared room should be a
+standalone principal** rather than a delegate of the channel's members. Detail and the trust caveats
+(SOC 2 in progress, two pentests; the "users attach their own keys is the vulnerability" critique
+citing the OpenCode breach) are in [[security]]. The layer reading: credentials-as-interface was
+already a thesis-1 status; the identity *plane* — per-action user attribution with a policy engine —
+is the productized form, and it arrives at the moment the harness tier's credential concentration
+was demonstrated to be the attack target.
+
+**Claude Duet: the always-on agent shares the subscriber's ledger.** A research preview for Claude
+Pro/Max in the US (iOS, Android, web) on **Opus 5.5**: it works on its own cloud computer with
+connected apps, sends a morning brief, takes on tasks, and checks in for approval before sensitive
+actions (sending a message, paying). Two details are the substance. During the preview it **shares
+your plan's usage limits with the rest of Claude, and background checks count toward them** — an
+always-on agent competes with interactive use for the same quota. And its stated failure modes are
+concrete rather than hedged: it "may misread a thread or miscalibrate what's urgent," and it "can
+miss something that arrives between checking in with you." Team and Enterprise are excluded for now.
+Filed as the fifth entrant in the proactive-assistant category this season (OpenAI Dot, Meta Muse,
+Grok Bot, Instinct), where the HN consensus on differentiation was **the model, not the wrapper** —
+and as a token-economics fact: background agent work billed to the interactive ledger changes the
+cost model of "always on," because the marginal task is free to the provider and expensive to a
+subscriber near their ceiling.
+
+**OpenAI models on Google Cloud — the portable part is the commitment, not the model.** Models are
+coming to Google Cloud and the Gemini Agent "soon"; existing Google Cloud spending commitments can
+reportedly be applied, with zero-data-retention terms in the enterprise pitch. No model names, no
+dates, and one sentence the thread fixated on: "**Microsoft remains OpenAI's primary cloud
+partner.**" The layer lesson is procurement-level: the cloud has gone model-neutral (Google already
+serves Anthropic; Bedrock serves several labs), so what actually gates a migration is
+**commitment portability** — the ability to spend an existing commit on a different vendor's tokens
+removes the new-budget approval that stalls most of them.
+
+Sources: [Alter](https://alterauth.com/) · [HN — Alter](https://news.ycombinator.com/item?id=50176908) · [Claude Duet](https://claude.com/product/claude-duet) · [HN — Claude Duet](https://news.ycombinator.com/item?id=50186037) · [OpenAI: models coming to Google Cloud](https://openai.com/index/openai-models-google-cloud/) · [HN](https://news.ycombinator.com/item?id=50180079)

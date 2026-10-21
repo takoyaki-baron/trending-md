@@ -51,9 +51,15 @@ async function fetchCve(id) {
 }
 
 /* ── Provenance extraction ──
-   The whole point is the (source, type) pair: `type` is NVD's own Primary/Secondary flag — Primary
-   means the metric was assigned by the CVE's CNA of record, Secondary means it came from anyone
-   else. A CNA-assigned 10.0 and an NVD-analyzed 10.0 look identical on the detail page. */
+   The whole point is the (source, type) pair — but read `source` FIRST and the type flag second.
+   `type` carries exactly one bit: **Primary = NVD wrote it, Secondary = someone else did.** It does
+   NOT distinguish the CNA from an enrichment container. Calibrated 2026-10-22 the hard way, across
+   four records in one batch: PHP's own metric (security@php.net, the CNA of record) is Secondary,
+   MITRE's on CVE-2026-113380 is Secondary (MITRE is the assigner), Eclipse's on CVE-2026-113620 is
+   Secondary (Eclipse is the assigner), and CISA-ADP's Vulnrichment metric is Secondary too. The
+   previous comment here said "Primary means the CNA of record" — wrong in both directions, since
+   Adobe's psirt adobe metric is Primary on an unanalyzed record. Only `source` identifies the party;
+   fmtMetric tags the known enrichment containers so an ADP score is never quoted as the CNA's. */
 function provenance(cve) {
   const metrics = [];
   for (const key of Object.keys(cve.metrics || {})) {
@@ -92,7 +98,14 @@ function provenance(cve) {
   };
 }
 
-const fmtMetric = m => `${m.version} ${m.type}/${m.source} ${m.baseScore}`;
+/* Enrichment containers write into a record's ADP container and surface in NVD's metrics as
+   Secondary — the same label the CNA's own metric carries. Tagging them here is what keeps an
+   ADP score from being quoted as the assigner's. Extend as new containers are observed. */
+const ADP_CONTAINERS = {
+  '134c704f-9b21-4f2e-91b3-4a467353bcc0': 'CISA-ADP',
+};
+const fmtMetric = m => `${m.version} ${m.type}/${m.source} ${m.baseScore}` +
+  (ADP_CONTAINERS[m.source] ? ` [${ADP_CONTAINERS[m.source]}]` : '');
 
 function describe(id, p) {
   /* Two different questions, two different fields (named apart 2026-10-16): vulnStatus answers

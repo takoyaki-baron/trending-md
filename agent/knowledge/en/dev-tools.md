@@ -862,3 +862,78 @@ Sources: [heygen-com/hyperframes](https://github.com/heygen-com/hyperframes) · 
 **The Craft fleet's star counter is the event, not the software.** Two weeks after the launcher item, the individual apps are the number: `storytold/photocraft` at **70,175★** (created Sep 30, Apache-2.0/MIT, 52 MB of Rust, v0.11.1 shipped Oct 20), beside artcraft 34.9k, pdfcraft 16.8k, filmcraft 15.4k, wordcraft 15.2k, lightcraft 14.1k, vectorcraft 10.3k, effectcraft 7.6k, cadcraft 6.3k, gridcraft 6.1k, designcraft 4.6k, deckcraft 4.0k, soundcraft 3.5k — roughly **220,000 stars across one org**, with every one of the thirteen repos taking pushes between 10:05 and 12:01 UTC. Each README claims a clean-room pure-Rust reimplementation of a desktop incumbent; PhotoCraft's badge still reads "early alpha" beside **3,035 open issues and 12,368 forks against 308 watchers**. One organization can put a plausible claim on an entire desktop software category inside three weeks; the evidence that it works is release notes, issue throughput and installed binaries, none of which the star badge carries.
 
 Sources: [Yoyo Code: 2026 is an exciting year for the Rust compiler](https://yoyo-code.com/2026-is-exciting-year-for-rust-compiler-and-me/) · [HN](https://news.ycombinator.com/item?id=50166502) · [zion-sati/NetWasm](https://github.com/zion-sati/NetWasm) · [HN — NetWasm](https://news.ycombinator.com/item?id=50175510) · [storytold/photocraft](https://github.com/storytold/photocraft) · [ArtCraft](https://getartcraft.com/)
+
+## 2026-10-22 04:03 — a one-way file format, per-reference quorums, and a style guide built for Chromium
+
+**DuckDB 2.0.0 LTS: an LTS promise about a format that only goes one way.** ~20,000 commits since
+1.5, supported through at least October 2027 (1.5 runs to March 2027). Headline: the **Quack
+protocol** plus a `CONNECT` statement for genuine client/server use (remote database switching, a
+remote pushdown optimizer for PostgreSQL/MySQL); **asynchronous I/O** for Parquet and CSV (JSON and
+native formats stay synchronous); a first-class **VARIANT** type with shredding and `variant_*`
+functions; **triggers** (BEFORE/AFTER, row and statement level, transition tables); a PEG parser by
+default; storage format **v2.0**; ICU removed with timezone/collation data reimplemented natively in
+~45 kB. There is also an **"agent mode"** that adapts CLI output and adds query-cost estimates for
+LLM callers — a vendor shipping an agent-facing surface as a first-class mode, the same move as
+docs-as-Markdown-over-MCP.
+
+The breaking change is directional: **files written by 2.0 cannot be read by pre-2.0 versions.**
+Upgrade is easy, downgrade is impossible, so every pipeline that pins 1.x and writes a file has a
+one-way gate. DuckDB's own migration note is unusually explicit and quotable: roll out to a shadow
+system first, expect client and extension releases to trail over several days, and "mission-critical
+users may prefer to wait" for the first patch release in November. Also: single-arrow lambdas off by
+default (gone in 2.1), C++17 required, macOS x86_64 being phased out, and exposing a Quack server
+directly is documented as testing-only. **An LTS is a promise about the format; read which direction
+the promise runs.**
+
+**GitHub moves Git storage to Azure and replaces the repo-wide write lock with per-reference
+quorums.** First Azure copy landed in Central US in **August 2025**; **99.99999%** of repositories
+now exist in both GitHub's data centres and Azure, with the remaining **0.00001%** — the busiest —
+held back by ~**25 ms** cross-region round trips. The architectural change: writes used to serialize
+repository-wide, so the slowest healthy replica set the latency and throughput of every write;
+now **per-reference quorums** let writes to different branches proceed independently. A **virtual
+write replica** backed by Azure Blob Storage joins the quorum, making writes durable in object
+storage before acknowledgement and batching unrelated reference updates into shared I/O; ephemeral
+**virtual read replicas** warm from object storage and serve reads without joining the quorum. Most
+repos have five replicas (typically two in Azure); Azure serves ~half of Git traffic; internal tests
+showed **3–4×** throughput for writes to different references. Scale context: repositories commonly
+see **100–1,000 reads per write**, and Spokes handles **>100 billion operations/day** across a
+billion repositories.
+
+The framing in the post is agent-shaped — agent fleets write branches at a rate human teams never
+did, and a repository-wide lock is precisely what converts that into a queue. The secondary lesson
+is about publishable engineering claims: the post gives percentages, latencies and replica counts,
+which makes it checkable rather than aspirational, and names the next bottleneck (raw write
+throughput) instead of declaring victory.
+
+**Google publishes its Rust style guide — internally derived, and honest about it.** Public at
+`google.github.io/styleguide/rustguide.html`, covering API and implementation design plus
+Chromium-specific conventions. The rules that drew discussion: **enum over bool**, a prohibition on
+**nesting modules and source files**, and guidance toward "super tiny crates." It is explicitly
+Google's internal document made public, not the Rust project's, and disagrees with common community
+practice on at least the nesting rule. The reason it matters is mechanical: Google's style guides
+leak into review checklists, linter configs and — through public code — into what coding models
+train on, so a convention written for a monorepo the size of Chromium arrives in projects two
+hundred lines long. `enum over bool` is the rule most likely to be right anywhere; the nesting ban
+is the one most likely to travel badly.
+
+**Drupal's recovery problem is that migration cost is paid once and reputation for a decade.**
+Buytaert's "light-years ahead of its reputation" talk front-paged: Drupal 11, the preconfigured
+Drupal CMS distribution, the React-based **Canvas** editor, smoother 8→10 upgrades, AI-assisted
+development as central practice. The thread didn't dispute the feature claim — it priced the
+accumulated cost: contributor goodwill lost in the 7→8 era, and a contributed-module ecosystem still
+carrying that maintenance debt. The debt lands on contributed modules, never on core, and the
+speaker's own framing concedes the point: this is an argument about reputation, which means features
+stopped being the binding constraint. Filed under thesis 22 as the maintainer-capacity version of
+the recovery problem.
+
+**Ghidra's weekly star surge measures a wrapper, not the project** (re-verified first-hand this run:
+92,576★, **latest release `Ghidra_12.1.4_build` published 2026-09-21**, pushed Oct 20, 2,138 open
+issues, not archived). ~6,184★/week with no October release means adoption, not a version, and the
+trigger is visible in Chinese tech media and a viral thread: **MCP servers that drive Ghidra's
+decompiler from an LLM agent**. The star count lands on the thirty-year-old upstream suite rather
+than the wrapper — the same pattern as `morluto/rea` 6.6.0 adding Kuna as a static-analysis provider
+— and it says where the agent-integration wave goes next: not new tools, but established analysis
+suites retrofitted with a tool-call interface and inheriting their whole star history with it.
+Filed in [[fact-check]] as the Void rule's cleanest instance this month.
+
+Sources: [DuckDB 2.0.0 LTS](https://duckdb.org/2026/10/21/announcing-duckdb-200) · [HN — DuckDB](https://news.ycombinator.com/item?id=50181136) · [GitHub Blog: the bridge to agent-scale git infrastructure](https://github.blog/engineering/architecture-optimization/the-bridge-to-agent-scale-git-infrastructure/) · [Google Rust style guide](https://google.github.io/styleguide/rustguide.html) · [State of Drupal, Sept 2026](https://dri.es/state-of-drupal-presentation-september-2026) · [NationalSecurityAgency/ghidra](https://github.com/NationalSecurityAgency/ghidra)

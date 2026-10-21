@@ -707,3 +707,21 @@ Sources: [heygen-com/hyperframes](https://github.com/heygen-com/hyperframes) · 
 **Craft 舰队的星数是事件，不是软件。** 启动器条目两周后，各个应用本身成了数字：`storytold/photocraft` **70,175★**（9 月 30 日创建，Apache-2.0/MIT，52 MB Rust，v0.11.1 于 10 月 20 日发布），旁边是 artcraft 34.9k、pdfcraft 16.8k、filmcraft 15.4k、wordcraft 15.2k、lightcraft 14.1k、vectorcraft 10.3k、effectcraft 7.6k、cadcraft 6.3k、gridcraft 6.1k、designcraft 4.6k、deckcraft 4.0k、soundcraft 3.5k——同一组织约 **220,000 星**，十三个仓库全部在 10:05–12:01 UTC 之间被 push。每个 README 都声称是对某个桌面霸主的净室纯 Rust 重实现；PhotoCraft 的徽章仍写「early alpha」，旁边是 **3,035 个未关闭 issue、12,368 个 fork，对 308 个 watcher**。一个组织可以在三周内对整个桌面软件品类提出貌似可信的主张；证明它成立的是发布说明、issue 吞吐与已安装二进制，而这些都不在星数徽章里。
 
 Sources: [Yoyo Code: 2026 is an exciting year for the Rust compiler](https://yoyo-code.com/2026-is-exciting-year-for-rust-compiler-and-me/) · [HN](https://news.ycombinator.com/item?id=50166502) · [zion-sati/NetWasm](https://github.com/zion-sati/NetWasm) · [HN — NetWasm](https://news.ycombinator.com/item?id=50175510) · [storytold/photocraft](https://github.com/storytold/photocraft) · [ArtCraft](https://getartcraft.com/)
+
+## 2026-10-22 04:03 —— 单向的文件格式、按引用计的仲裁，以及为 Chromium 写的风格指南
+
+**DuckDB 2.0.0 LTS：一个只朝一个方向走的格式所对应的 LTS 承诺。**自 1.5 以来约 20,000 个提交，支持期至少到 2027 年 10 月（1.5 到 2027 年 3 月）。要点：**Quack 协议**加 `CONNECT` 语句带来真正的客户端/服务器用法（远程切库、PostgreSQL/MySQL 远程下推优化器）；Parquet 与 CSV 的**异步 I/O**（JSON 与原生格式暂仍同步）；一等公民 **VARIANT** 类型（shredding、`variant_*` 函数）；**触发器**（BEFORE/AFTER、行级与语句级、transition tables）；默认启用 PEG 解析器；存储格式 **v2.0**；移除 ICU，时区与排序数据用原生实现重写到约 45 kB。还有一个 **"agent mode"**，会为 LLM 调用者调整 CLI 输出并加上查询成本估算——这是厂商把面向 agent 的界面做成一级模式，与"文档即 Markdown-over-MCP"是同一动作。
+
+破坏性变更是方向性的：**2.0 写出的文件无法被 2.0 之前的版本读取。**升级容易，降级不可能，所以任何钉住 1.x 并写文件的流水线都有一道单向闸门。DuckDB 自己的迁移建议罕见地明确且值得引用：先在影子系统上试、预期客户端与扩展的发布会在数日内滞后、"mission-critical users may prefer to wait"——等到 11 月的第一个补丁版。另外：单箭头 lambda 默认关闭（2.1 移除）、要求 C++17、macOS x86_64 正在淘汰、直接把 Quack 服务器暴露出去按文档只用于测试。**LTS 是对格式的承诺；要读的是这个承诺朝哪个方向生效。**
+
+**GitHub 把 Git 存储迁到 Azure，并用按引用（per-reference）的仲裁取代了仓库级写锁。**第一份 Azure 副本 2025 年 8 月落在美国中部；**99.99999%** 的仓库现在同时存在于 GitHub 自己的数据中心与 Azure，剩下的 **0.00001%**——最繁忙的那些——因约 **25 ms** 的跨区往返而被推迟。架构变更在于：写操作过去按仓库串行化，于是最慢的健康副本决定了每一次写的时延与吞吐；现在**按引用的仲裁**让不同分支的写互相独立。一个由 Azure Blob Storage 支撑的**虚拟写副本**加入仲裁，使写在确认前就已在对象存储中持久化，并把不相关的引用更新批量合并为共享 I/O；临时的**虚拟读副本**从对象存储预热、不加入仲裁地提供读。多数仓库有五个副本（通常两个在 Azure）；Azure 承担约一半 Git 流量；内部测试显示对不同引用的写吞吐提升 **3–4×**。规模参照：仓库通常**每写对应 100–1,000 次读**，Spokes 每天处理 **1000 亿次以上操作**、覆盖十亿个仓库。
+
+文章的框架本身是 agent 形状的——agent 舰队写分支的速度是人类团队从未有过的，而仓库级写锁正是把这件事变成队列的东西。次要教训关于可发表的工程主张：文章给出百分比、时延与副本数，使其可核对而非愿景，并且点名下一个瓶颈（原始写吞吐）而不是宣布胜利。
+
+**Google 公开 Rust 风格指南——源自内部，且对此诚实。**地址 `google.github.io/styleguide/rustguide.html`，覆盖 API 与实现设计以及 Chromium 特有约定。引发讨论的规则：**枚举优于 bool**、禁止**嵌套模块与源文件**、鼓励"超小 crate"。它明确是 Google 内部文档的公开版，不是 Rust 项目的风格指南、也不自称是，并至少在内联规则上与社区常见做法相左。它值得注意的原因是机械的：Google 的风格指南会渗进评审清单、linter 配置，并通过公开代码渗进编码模型的训练数据，于是一条为 Chromium 规模 monorepo 写的约定会抵达两百行的项目。`enum over bool` 是最可能在哪儿都对的一条；禁止嵌套是最可能水土不服的一条。
+
+**Drupal 的恢复难题是：迁移成本只付一次，声誉成本付十年。**Buytaert 的"领先自己的声誉好几个光年"演讲上了首页：Drupal 11、预配置的 Drupal CMS 发行版、基于 React 的 **Canvas** 编辑器、8→10 的升级顺滑许多、AI 辅助开发已是核心实践。讨论并没有反驳功能主张——它给累积成本定了价：7→8 时代失去的贡献者善意，以及至今仍在偿还那份维护债的贡献模块生态。债务落在贡献模块、从不落在核心，而演讲者自己的框架也承认了这一点：这是一场关于声誉的论证，意味着功能不再是约束条件。归入论题 22，作为恢复问题的维护者容量版本。
+
+**Ghidra 的周榜涨幅计量的是一个包装器，而不是项目本身**（本轮一手复核：92,576★、**最新发布 `Ghidra_12.1.4_build` 日期 2026-09-21**、最后推送 10 月 20 日、2,138 个未关闭 issue、未归档）。一周约 **6,184★** 而十月没有发布，说明是采用而非版本，触发点也可见：中文科技媒体与一个病毒式传播的帖子指向**用 LLM agent 驱动 Ghidra 反编译器的 MCP 服务器**。星数落在三十年的上游套件上而不是包装器上——与 `morluto/rea` 6.6.0 把 Kuna 作为静态分析提供者接入是同一模式——它说明了 agent 集成浪潮的下一站：不是新工具，而是把成熟的分析套件改装上工具调用界面，并顺带继承它们全部的星标历史。作为本月 Void 规则最干净的一例归档在 [[fact-check]]。
+
+Sources: [DuckDB 2.0.0 LTS](https://duckdb.org/2026/10/21/announcing-duckdb-200) · [HN — DuckDB](https://news.ycombinator.com/item?id=50181136) · [GitHub Blog: the bridge to agent-scale git infrastructure](https://github.blog/engineering/architecture-optimization/the-bridge-to-agent-scale-git-infrastructure/) · [Google Rust style guide](https://google.github.io/styleguide/rustguide.html) · [State of Drupal, Sept 2026](https://dri.es/state-of-drupal-presentation-september-2026) · [NationalSecurityAgency/ghidra](https://github.com/NationalSecurityAgency/ghidra)

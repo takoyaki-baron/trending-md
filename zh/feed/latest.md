@@ -1,6 +1,6 @@
 ---
 date: 2026-10-22
-updated: 2026-10-21T20:03:00Z
+updated: 2026-10-21T20:26:00Z
 schedule: 04:03, 12:03, 20:03 UTC+8
 sources: 24
 license: CC-BY-4.0
@@ -63,14 +63,18 @@ Kiro、Zed、Hugging Face——外加云密钥、CI/CD 机密、SSH 密钥、浏
 LiteLLM 代理数据库里的各家厂商密钥。外传地址是
 `www.litellm[.]dev/healthcheck`，带静态 `X-Token` 头。截至本文写作时 PyPI 已
 不再提供 1.107.0，`latest` 回到 1.106.2。LiteLLM 的公告称 token 来源仍未查清：
-"We have not yet identified the mechanism."
+"We have not yet identified the mechanism." 项目自己的 issue 线程里更晚的一条状态更新
+（18:30 UTC）在此之上推进了一步——"我们已经识别出一个可能导致其中一个认证 token
+泄漏的途径"，而横向移动到其他账号的方式仍未查明——而那个最后更新于 16:00 UTC 的
+事件文章仍写着从未查明。每个容器镜像附带的构建 provenance 早已把仿冒仓库点名为
+来源，并给出了对应的 commit；发布路径上没有任何东西去读它。
 
 **Why it matters:** 一个 `.pth` 文件让一次 `pip install` 变成机器上每个 Python
 进程的持久化，这意味着大家最先想到的恢复动作——重装回固定版本——恰恰会再次触发
 载荷。你要么在启动 Python 之前删掉文件，要么重建主机。这至少是 LiteLLM 今年
 第二次被攻陷。
 
-[`🔗 LiteLLM: security incident Oct 21`](https://docs.litellm.ai/blog/security-incident-oct-21-2026) · [`🔗 SafeDep: technical analysis`](https://safedep.io/litellm-pypi-compromise-credential-stealer-backdoor/)
+[`🔗 LiteLLM: security incident Oct 21`](https://docs.litellm.ai/blog/security-incident-oct-21-2026) · [`🔗 SafeDep: technical analysis`](https://safedep.io/litellm-pypi-compromise-credential-stealer-backdoor/) · [`🔗 LiteLLM issue 47826（时间线与构建 provenance）`](https://github.com/BerriAI/litellm/issues/47826)
 
 ---
 

@@ -115,6 +115,14 @@ Chris Kiehl の「It's still OK to enjoy programming」（chriskiehl.com、496 H
 Sources: [chriskiehl.com](https://chriskiehl.com/article/it-is-still-ok-to-enjoy-programming) · [HN](https://news.ycombinator.com/item?id=50134472)
 
 
+## 2026-10-22 04:03 —— 罰金は行数の関数：ニューメキシコ州の 250 億ドル
+
+ニューメキシコ州地方裁判所の Francis Mathew 判事は、Cambridge Analytica に端を発する消費者欺瞞訴訟で Meta に **250 億ドル**の民事制裁金を命じた。サンタフェの陪審は **9 月 25 日**、Meta が州の不公正行為法に **4,300 万件超**違反したと認定し、Facebook とその経営陣のプライバシーおよびコンテンツモデレーションに関する 29 の陳述のうち 26 を誤導的と判断していた。要は算術である：**違反 1 件あたり 5,000 ドル**の法定上限に 4,300 万件超を掛けると約 **2,195 億ドル**になり、裁判所が 250 億ドルに減額し、支払いまで年 15% の利息が付く。州は 350〜400 億ドルを求め、Meta は約 34 億ドルの上限を主張してそれ以上は適正手続違反だと述べた。他の 48 州は 8 月に **180 億ドル**で和解し、フロリダは除外された。Meta は上訴するので 250 億ドルは確定値ではない。
+
+構造的な読み：**違反単位の法定刑は保有するレコード数に比例して増え、立証された損害には比例しない**。だから判決額は法定上限の 9 分の 1 でありながら、本案の損害ベースの見積りをはるかに超える。第三者のデータの上に築かれた製品はすべて、行数に比例して自動的に増える負債を抱える——そして「知らなかった」は何年も前から抗弁にならない。9 倍の差は裁判所が「無限算術型の法文」に付ける割引であり、裁量的であるところが上訴で見るべき部分だ。
+
+Sources: [USA Today / Reuters](https://www.usatoday.com/story/tech/news/2026/10/21/meta-25-billion-data-privacy-new-mexico/92366716007/) · [HN](https://news.ycombinator.com/item?id=50184820)
+
 ## 関連ファイル
 
 [[frontier-models]]（雇用代替エッセイのキャッチアップ クラスタ）、[[agent-distribution]]（教育層の犠牲者に対する収入データ）、[[no-ai-default]]（ポジショニングの対極）。

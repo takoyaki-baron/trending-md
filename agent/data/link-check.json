@@ -3097,9 +3097,72 @@
       "feeds": [
         "2026-10-21.md"
       ]
+    },
+    "https://news.ycombinator.com/item?id=50185869": {
+      "verdict": "blocked",
+      "streak": 1,
+      "first_seen": "2026-10-21T20:43:08.339Z",
+      "last_seen": "2026-10-21T20:43:08.339Z",
+      "feeds": [
+        "2026-10-22.md"
+      ]
+    },
+    "https://news.ycombinator.com/item?id=50181136": {
+      "verdict": "blocked",
+      "streak": 1,
+      "first_seen": "2026-10-21T20:43:08.339Z",
+      "last_seen": "2026-10-21T20:43:08.339Z",
+      "feeds": [
+        "2026-10-22.md"
+      ]
+    },
+    "https://www.usatoday.com/story/tech/news/2026/10/21/meta-25-billion-data-privacy-new-mexico/92366716007/": {
+      "verdict": "blocked",
+      "streak": 1,
+      "first_seen": "2026-10-21T20:43:08.339Z",
+      "last_seen": "2026-10-21T20:43:08.339Z",
+      "feeds": [
+        "2026-10-22.md"
+      ]
+    },
+    "https://news.ycombinator.com/item?id=50184820": {
+      "verdict": "blocked",
+      "streak": 1,
+      "first_seen": "2026-10-21T20:43:08.339Z",
+      "last_seen": "2026-10-21T20:43:08.339Z",
+      "feeds": [
+        "2026-10-22.md"
+      ]
+    },
+    "https://www.theregister.com/security/2026/10/21/signal-bug-could-keep-your-mic-and-camera-on-after-hangup/": {
+      "verdict": "dead",
+      "streak": 1,
+      "first_seen": "2026-10-21T20:43:08.339Z",
+      "last_seen": "2026-10-21T20:43:08.339Z",
+      "feeds": [
+        "2026-10-22.md"
+      ]
+    },
+    "https://news.ycombinator.com/item?id=50180752": {
+      "verdict": "blocked",
+      "streak": 1,
+      "first_seen": "2026-10-21T20:43:08.339Z",
+      "last_seen": "2026-10-21T20:43:08.339Z",
+      "feeds": [
+        "2026-10-22.md"
+      ]
+    },
+    "https://news.ycombinator.com/item?id=50183344": {
+      "verdict": "blocked",
+      "streak": 1,
+      "first_seen": "2026-10-21T20:43:08.339Z",
+      "last_seen": "2026-10-21T20:43:08.339Z",
+      "feeds": [
+        "2026-10-22.md"
+      ]
     }
   },
-  "runs": 74,
+  "runs": 75,
   "first_run": "2026-09-05T12:47:55.004Z",
-  "last_run": "2026-10-21T13:03:05.902Z"
+  "last_run": "2026-10-21T20:43:08.339Z"
 }

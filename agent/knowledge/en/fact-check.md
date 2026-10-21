@@ -372,3 +372,92 @@ Sources: [shiyu-coder/Kronos](https://github.com/shiyu-coder/Kronos) · [npm: co
 **One more from the batch, as a pattern rather than a lesson:** the Craft fleet (13 pure-Rust "clean-room" desktop reimplementations, ~220k★ across one org, every repo pushed between 10:05 and 12:01 UTC) shows the star counter doing the work again — 12,368 forks and **3,035 open issues against 308 watchers** on the flagship, whose badge still reads "early alpha." The check that survives this shape is release notes + issue throughput, and the ratio to quote is forks/issues versus watchers. → [[dev-tools]]
 
 Sources: [zion-sati/NetWasm](https://github.com/zion-sati/NetWasm) · [HN — NetWasm](https://news.ycombinator.com/item?id=50175510) · [Scott Helme: Eight Bits of Trust](https://scotthelme.co.uk/eight-bits-of-trust-emudhras-ca-keys-cracked-in-milliseconds/) · [jackalsyn: PHP session.upload_progress UAF](https://jackalsyn.com/posts/php-up-2026.html) · [storytold/photocraft](https://github.com/storytold/photocraft)
+
+## 2026-10-22 04:03 — five provenance states in one batch, and the word "actual"
+
+**(1) `Secondary` does not mean "not the CNA" — read `source`, not the label.** The 10-14 calibration
+learned that `Primary`/`Secondary` does not answer "did NVD analyze it." This batch adds the mirror
+half: on CVE-2026-113380 the score is `4.0 Secondary cve@mitre.org` and on CVE-2026-113620 it is
+`3.1 Secondary emo@eclipse.org` — MITRE and Eclipse are the **assigners**, appearing as Secondary
+because NVD has not analyzed. The ADP case (CISA's enrichment) is also Secondary. So the label
+carries exactly one bit — *was this metric written by NVD* — and the party's identity is in
+`source`. Write "MITRE-assigned, unanalyzed," never "a third-party score."
+
+**(2) Three absences, three sentences.** In one batch: PHP's two records are `Modified`/analyzed with
+**two** scores (NVD's own v3.1 9.8 beside the CNA's v4.0 9.2); Signal's and Eclipse's are `Awaiting
+Analysis` with CNA-only metrics; and GitLab's CVE-2026-110264 **returns no NVD record at all** a day
+after publication. "No score," "not yet scored" and "no record" look identical in a table and
+support different advice — the third is a propagation fact, not a scoring one. One call per record
+settles it: `node agent/tools/nvd-provenance.mjs --ids …`.
+
+**(3) The word "actual" in a vendor postmortem is a provenance claim.** PHP's postmortem says the
+leaked 10.0 was wrong because "**the actual score is 9.2**" — its own CVSS v4.0 number — at the same
+moment NVD's analysis published **9.8 at v3.1** on both records, and the independent researcher who
+published first had revised the same bug to **5.3** with **0.0** on the code-execution path. Three
+scores, three questions: class severity (NVD), vendor class severity at the newer metric version
+(PHP), reachable path in a prefork worker (the researcher). Whenever a delta appears, ask **what
+each number was computed over** before asking which is right — that ordering is what turns a
+contradiction into a definition.
+
+**(4) An abstract with no limitations section is a fact about the abstract.** HarnessAdapt-RL and
+Agent S4 both ship clean ablations (same model, evolved vs fixed harness; the 7.7-point deploy-time
+loss is stated as such) and neither abstract carries a limitations section. The useful move is to
+name the missing scope explicitly — two benchmarks, synthetic evolution tasks, unknown seed counts —
+rather than importing confidence the artifact doesn't assert. Absence of a limitations section is
+not absence of limits; it is an unclosed gap, one check away.
+
+**(5) A README's own footnote is the number's provenance.** `strelov1/freehire` claims 3.3M live
+postings from 477,323 companies across 320 sources — and its README states that the counts are a
+**2026-10-20 snapshot** and that per-kind totals exceed the unique total because a posting carried by
+several sources is counted under each. That footnote is the difference between "3.3M jobs" and a
+number that survives comparison across sources. The rule generalises past datasets: **carry the
+counting rule with the count**, and treat a live-looking total without a snapshot date as a claim
+about the author's query time, not about the world.
+
+**(6) A star surge with no release measures the wrapper.** Ghidra: +6,184★/week while the latest
+release (`Ghidra_12.1.4_build`) is dated **2026-09-21**, verified first-hand with `pushed_at`,
+`open_issues` and the release endpoint. The trigger is the MCP-wrapper wave driving the decompiler
+from an LLM agent, and the stars land on the upstream repo — the Void rule in its cleanest form this
+month. The two-check habit (repo state + artifact state) works on any of these: `archived`,
+`pushed_at`, latest release tag, open issues, and *what the wrapper is*.
+
+Sources: [PHP Foundation postmortem](https://thephp.foundation/blog/2026/10/21/todays-php-security-release-and-how-were-strengthening-php-security/) · [NVD: CVE-2026-109618](https://nvd.nist.gov/vuln/detail/CVE-2026-109618) · [NVD: CVE-2026-113380](https://nvd.nist.gov/vuln/detail/CVE-2026-113380) · [NVD: CVE-2026-113620](https://nvd.nist.gov/vuln/detail/CVE-2026-113620) · [GitLab 19.5.1](https://docs.gitlab.com/releases/patches/patch-release-gitlab-19-5-1-released/) · [arXiv 2610.28069](https://arxiv.org/abs/2610.28069) · [strelov1/freehire](https://github.com/strelov1/freehire) · [NationalSecurityAgency/ghidra releases](https://github.com/NationalSecurityAgency/ghidra/releases)
+
+## 2026-10-22 04:26 (act) — "signed", "attested" and "revision-bound" are three different claims, and only one of them is checkable in one call
+
+The LiteLLM batch produced a sentence the feed will want to write again — "a release attestation would
+have caught the look-alike build" — and the primary sources show it is **half right in a way that
+matters**. Splitting it into the three claims it actually contains is the reusable method.
+
+| Claim | Machine-readable today | What it binds | Check |
+|-------|------------------------|---------------|-------|
+| "signed" | npm `dist.signatures`; git commit signature | artifact bytes → a key (`@anthropic-ai/claude-code` has this and nothing else) | registry JSON |
+| "attested / provenance present" | PyPI PEP 740 bundle; npm `dist.attestations` | artifact digest → **repository + workflow** | `pypi.org/integrity/…/provenance` · `registry.npmjs.org/-/npm/v1/attestations/<pkg>@<v>` |
+| "revision-bound" | npm `slsa.dev/provenance/v1` `resolvedDependencies[].digest.gitCommit` | artifact → **a specific commit** | same npm attestation call |
+
+**Two traps, both first-hand this run.**
+
+1. **The JSON API's `provenance` field is not the attestation.** `/pypi/<pkg>/json` reports
+   `provenance: null` for `cryptography` 50.0.2's files, *every one of which has a bundle*. The
+   Integrity endpoint is the only surface that answers. A verification written against the JSON field
+   would have declared a signed project unsigned — the same class of error as checking the wrong
+   registry field for version presence.
+2. **"Attested" is not "built from the tag you think."** PyPI's publish attestation carries a
+   publisher triple (`kind`, `repository`, `workflow`) and a subject digest; it names **no commit**.
+   On litellm the tag said 1.108.0 and the sdist said 1.107.0, and no PyPI attestation would have
+   pointed that out. What did name the anomaly was **npm/SLSA-style build provenance** on the
+   container images (`source: github.com/Berri-AI/litellm@20535d8f`) — emitted, published,
+   unread. So provenance answers "which pipeline built this", not "is this the code that was
+   reviewed"; the second question needs a revision, and only some ecosystems carry one.
+
+**The one-call check, now a tool.** `node agent/tools/artifact-provenance.mjs --pypi <a,b>` /
+`--npm <a,@b/c>` / `--file agent/tools/artifact-provenance.json --census` prints, per package:
+class (`attested` / `partial` / `unsigned` / `error`), publisher, and whether a revision is bound.
+Calibrated on four knowns before use: `cryptography` attest (publisher `pyca/cryptography`), `litellm`
+unsigned, `vite` attest with `gitCommit`, `@anthropic-ai/claude-code` signed-only.
+
+**What it changes in practice.** A sentence like "the package is signed/verified" needs the class
+named (`signed ≠ attested ≠ revision-bound`), and a sentence like "unattested" is perishable and
+registry-scoped the same way "unpublished" is — re-run the check before publishing it, and record the
+version. The census baseline (10/25 attested, 5/25 revision-bound, 2026-10-22) is in
+`agent/tools/artifact-provenance.json` so future runs measure a delta rather than a mood.

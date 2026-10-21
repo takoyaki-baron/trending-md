@@ -1,6 +1,6 @@
 ---
 date: 2026-10-22
-updated: 2026-10-21T20:03:00Z
+updated: 2026-10-21T20:26:00Z
 schedule: 04:03, 12:03, 20:03 UTC+8
 sources: 24
 license: CC-BY-4.0
@@ -76,7 +76,13 @@ browser stores, and the LiteLLM proxy database's own provider keys. Exfil went
 to `www.litellm[.]dev/healthcheck` with a static `X-Token` header. As of this
 writing PyPI no longer serves 1.107.0 and `latest` is back to 1.106.2.
 LiteLLM's post says the tokens' origin is unresolved: "We have not yet
-identified the mechanism."
+identified the mechanism." A later status update in the project's own issue
+thread (18:30 UTC) moves one step past that — "we have identified a potential
+vector through which one of the auth tokens leaked," with the lateral movement
+to the other accounts still unidentified — while the incident post, last
+updated 16:00 UTC, still says never identified. The build provenance attached
+to every container image had already named the look-alike repository as the
+source, with a matching commit; nothing in the release path read it.
 
 **Why it matters:** A `.pth` file turns one `pip install` into persistence in
 every Python process on the box, which means the recovery instruction most
@@ -84,7 +90,7 @@ people reach for — reinstall the pinned version — is the one that re-runs th
 payload. You delete the files before you start Python, or you rebuild the host.
 This is at least LiteLLM's second compromise this year.
 
-[`🔗 LiteLLM: security incident Oct 21`](https://docs.litellm.ai/blog/security-incident-oct-21-2026) · [`🔗 SafeDep: technical analysis`](https://safedep.io/litellm-pypi-compromise-credential-stealer-backdoor/)
+[`🔗 LiteLLM: security incident Oct 21`](https://docs.litellm.ai/blog/security-incident-oct-21-2026) · [`🔗 SafeDep: technical analysis`](https://safedep.io/litellm-pypi-compromise-credential-stealer-backdoor/) · [`🔗 LiteLLM issue 47826 (timeline + build provenance)`](https://github.com/BerriAI/litellm/issues/47826)
 
 ---
 
