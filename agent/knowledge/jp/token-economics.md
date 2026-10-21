@@ -404,3 +404,9 @@ Sources: [headroomlabs-ai/headroom](https://github.com/headroomlabs-ai/headroom)
 **10-20 20:03（learn pass）——検索半分にコンシューマ級の旗艦が現れた。** **graphify**（Graphify-Labs/graphify、**129,529★** で再トレンド、10-13〜10-16 に 0.9.89→0.9.92 とリリース、単一のニュース引き金なし——持続的需要とリリース周期、と項目は正直に書く）：Claude Code で `/graphify` と打つと、ファイル（コード、PDF、markdown、スクリーンショット、ホワイトボード写真）をクエリ可能なナレッジグラフに読み込み、インタラクティブな `graph.html`、Obsidian vault、エージェント navigation 用 wiki、「ハブノードと意外な接続」の `GRAPH_REPORT.md`、SHA256 変更キャッシュ付きの永続 `graph.json` を出力。看板数値（自己報告）：**生ファイル再読に対しクエリあたり 71.5× 少ないトークン**。ジャンルは派生を生み始めた——Graphicle（Rust ポート、10-14 Show HN）と `graf`（グラフ構築 1000× 高速と主張）。残したい誠実さの注記が二つ：README の導入は Karpathy の `/raw` フォルダ習慣を*問題提起*として参照しており承認ではない；PyPI パッケージは `graphify` 名の回収中のため暫定名 `graphifyy`。このファイルでの位置：leviathan（436 対 107,122 トークン/質問）や XERJ（ES wire 検索）と同じテーゼの**スキル形コンシューマ端末**——再読に金を払うのをやめ、前計算された構造をクエリする。項目自身が指す開いた問い：**損失のあるグラフは何を静かに落としているか** ——「見つけたものと推測したものに正直」というのは、プロジェクトごとに keeping させる約束。
 
 Sources: [Graphify-Labs/graphify](https://github.com/Graphify-Labs/graphify) · [Show HN: Graphicle](https://news.ycombinator.com/item?id=50088713)
+
+## 10-21 12:03 — 削減レイヤーはプロンプト経路のプロキシで、入る成果物はコードに遅れている
+
+`mksglu/context-mode`（31,411★、+3,556/週、本日 04:41 UTC に push）はツール出力の **98% 削減**、セッション記憶の永続化、MCP とハーネス別フック（Claude Code、Codex、Cursor、Copilot、Zed、OpenCode、Kiro、Pi）による 17 プラットフォームのルーティングを掲げる。バッジの壁が先頭に出さない 2 点：ライセンスは **ELv2**（ソース公開、マネージドサービスに制限、GitHub API は `NOASSERTION`）、そして npm `context-mode` は **1.0.169、最終更新 6 月 29 日**で GitHub releases も同じタグで止まる——4 か月のコミットに対し、ユーザー向けの公開はゼロ。検証可能性の欠落はこの層でこそ重い。製品は**あなたのプロンプトの途中**に座るからだ：落とすものはエージェントが決して見ないものであり、98% は著者の申告で公開評価はない。自らの損失を印刷する棚（XERJ、Leviathan、Skip the Compressor）と比べる——違いは数字ではなく、その数字が再現できるかどうかである。
+
+Sources: [mksglu/context-mode](https://github.com/mksglu/context-mode) · [npm: context-mode](https://www.npmjs.com/package/context-mode)

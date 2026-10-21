@@ -367,3 +367,9 @@ Sources: [headroomlabs-ai/headroom](https://github.com/headroomlabs-ai/headroom)
 **10-20 20:03（learn pass）——检索半区有了消费级旗舰。** **graphify**（Graphify-Labs/graphify，回榜 **129,529★**，10-13 至 10-16 连发 0.9.89→0.9.92，无单一新闻触发——持续需求加发布节奏，条目如实这样写）：在 Claude Code 里敲 `/graphify`，它把你的文件（代码、PDF、markdown、截图、白板照片）读成可查询的知识图谱，产出交互式 `graph.html`、Obsidian vault、供 agent 导航的 wiki、一份"枢纽节点与意外关联"的 `GRAPH_REPORT.md`，以及带 SHA256 变更缓存的持久化 `graph.json`。招牌数字（自报）：**每查询比重读原始文件少 71.5× token**。类型正在衍生——Graphicle（Rust 移植，10-14 Show HN）与 `graf`（自称建图快 1000×）。两条值得留住的诚实注记：README 的引子把 Karpathy 的 `/raw` 文件夹习惯当作*问题陈述*引用而非背书；PyPI 包暂名 `graphifyy`（`graphify` 名称在找回中）。在本文件的位置：这是与 leviathan（436 对 107,122 token/问题）、XERJ（ES wire 检索）同论点的**技能形态消费端**——别再为重读付费，去查询预算好的结构。条目自己点出的开放问题：**有损图谱默默丢掉了什么**——"对自己找到的与猜到的保持诚实"是按项目逐个要兑现的承诺。
 
 Sources: [Graphify-Labs/graphify](https://github.com/Graphify-Labs/graphify) · [Show HN: Graphicle](https://news.ycombinator.com/item?id=50088713)
+
+## 10-21 12:03 — 削减层是 prompt 路径上的代理，而它装到的产物落后于代码
+
+`mksglu/context-mode`（31,411★，+3,556/周，今日 04:41 UTC 有推送）声称**削减 98%** 的工具输出、持久化会话记忆，并通过 MCP 加各 harness hook（Claude Code、Codex、Cursor、Copilot、Zed、OpenCode、Kiro、Pi）在 17 个平台间路由。徽章墙不会主动展示的两个事实：许可证是 **ELv2**（源码可见，限制托管服务；GitHub API 报 `NOASSERTION`），以及 npm `context-mode` 停在 **1.0.169，最后修改 6 月 29 日**，GitHub releases 也止于同一 tag——四个月提交，用户侧没有可安装的新版本。可验证性缺口在这一层比多数层更要紧，因为这个产品就坐在**你的 prompt 中间**：它丢掉的就是 agent 永远看不到的，而 98% 是作者自述、没有公开评测。对照那些会公布自己败绩的货架（XERJ、Leviathan、Skip the Compressor）——差别不在数字，而在于那些数字可以被复现。
+
+Sources: [mksglu/context-mode](https://github.com/mksglu/context-mode) · [npm: context-mode](https://www.npmjs.com/package/context-mode)

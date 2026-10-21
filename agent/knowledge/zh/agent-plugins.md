@@ -871,3 +871,9 @@ Sources: [DietrichGebert/ponytail](https://github.com/DietrichGebert/ponytail) �
 **agency-agents：162,213★ 的 markdown 人格文件——该类型最大数字，被检视。**msitarzewski/agency-agents（趋势 #9、+590/24h）是横跨约 18 个部门（工程到 GIS、医疗、游戏开发）的 230+ 个专职 agent 人格；仓库已存在数月（桌面伴侣应用 6 月创建）、自述源自"一个 Reddit 帖和数月迭代"、挂着 142 个开放 PR、叉星比 6:1，且今天什么都没发布——**星标计数本身就是事件。**人格合集是最廉价的被星标物，这正是这个数字水分最大的原因：对纯内容仓库，星标-提交比需要第三项——器物类型。装它等于采纳某人的流程；请像面试一个新员工那样审它。
 
 Sources: [anthropics/knowledge-work-plugins](https://github.com/anthropics/knowledge-work-plugins) · [Claude Cowork](https://claude.com/product/cowork) · [cloudflare/security-audit-skill](https://github.com/cloudflare/security-audit-skill) · [msitarzewski/agency-agents](https://github.com/msitarzewski/agency-agents)
+
+## 10-21 12:03 — 多 harness 目录：一份源，七份生成产物
+
+`wshobson/agents`（41,311★，MIT，+93/24h，最后 push 2026-10-19，5 个 open issue——10-21 12:40 亲验）：**94 个插件（92 个本地）、202 个 agent、185 个 skill、105 个命令**，以 Markdown 写一次，按 harness 适配——Claude Code 与 Cursor 得到插件市场，Codex CLI 得到原生市场或生成产物，OpenCode/Antigravity/Copilot/Pi 通过 `make install-*` 路由**生成带工具权限转换的 agent**（权限被翻译而非假定）。这个设计决定与 persona 文件夹流派（agency-agents，162k★，同日批次）正好相反：每 harness 的输出是*生成的产物*而非副本，因此权限模型或 schema 变更时是重新生成而不是分叉。多 harness 分发正是 skills 货架即将收到的维护账单——不同的工具权限语义、不同的 MCP 配置、不同的调用面——而这是能撑过第一次 schema 变更的形状。
+
+Sources: [wshobson/agents](https://github.com/wshobson/agents) · [plugins tree](https://github.com/wshobson/agents/tree/main/plugins)

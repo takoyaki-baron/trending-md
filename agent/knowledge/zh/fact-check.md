@@ -276,3 +276,15 @@ en/zh/jp、thesis 24 en/zh/jp），三份 [[agent-ops]] 镜像各加带日期的
 档，且承重事实全部存活）：superfans 引文、Anthropic 原文、随笔判词都真实；删掉的只有捏造子句。
 
 Sources: [benjamincongdon.me: Agentic Monitoring](https://benjamincongdon.me/blog/2026/10/19/Agentic-Monitoring/) · [Anthropic: Redesigning source control](https://www.anthropic.com/engineering/redesigning-source-control)
+
+## 2026-10-21 12:03 — 同一批次里的三种易腐声明：采用度、注册表状态、声明者的清单
+
+**(1) 采用不是维护——一周内第三次。** `shiyu-coder/Kronos` 以 42,431★（+733/24h）趋势，而**最后 push 为 2026-04-13**（12:40 复验：未归档、MIT、此后无发布），283 个 open issue 无人回应。这是 Void/CLI-Anything 的形状，但赌注更锋利：它是一个人们会接进交易与风控回路的时间序列预测基础模型，而过期的 tokenizer 或静默漂移代价高昂。把它当作一篇带权重的论文使用，并去未回复的 issue 里找你即将撞上的那个 bug。要跑的检查依然是 `pushed_at`，不是星数增量。
+
+**(2) 仓库活着，产物仍可能已死——查注册表，不查徽章墙。** `mksglu/context-mode`（31,411★，+3,556/周，今日 04:41 UTC 有推送）宣传 98% 工具输出削减、会话记忆与 17 平台路由——而 npm `context-mode` 显示**最新 1.0.169，最后修改 6 月 29 日**，GitHub releases 也停在同一 tag。四个月的提交，什么都没发布：你装到的产物不是你能看到的代码。第二，许可证：宣传把它当开源层来卖，徽章写 **ELv2**，GitHub API 报 `NOASSERTION`（源码可见并附带托管服务限制）。两个事实各是一次调用——`registry.npmjs.org/<pkg>` 查产物，API 的 `license` 字段查授权——而两者都不在 README 首屏。
+
+**(3) 声明者的数字与可核查的攻击向量是两种主张；只有后者可以作为事实发布。** FulcrumSec 的 PingCAP/TiDB Cloud 帖声明 10.6 TB、490 万文件、115,308 个明文 API key；发布时无法获得厂商声明，HN 读者在检视后质疑其框架（很大部分是控制面和计费元数据）。而攻击向量——**提交在厂商自己仓库里的云 service-account key**——是读者五分钟、厂商立刻就能核查的，所以它属于条目正文；清单属于“声明者称”，并把导出次数（88 次）点名为其最可证伪的单一断言。通则：当一份漏洞帖没有厂商确认时，把攻击向量写成建议，把清单写成归因。
+
+Sources: [shiyu-coder/Kronos](https://github.com/shiyu-coder/Kronos) · [npm: context-mode](https://www.npmjs.com/package/context-mode) · [mksglu/context-mode](https://github.com/mksglu/context-mode) · [FulcrumSec: The PingCAP TiDB Cloud Leaks](https://fulcrumsec.vg/pingcap/) · [HN — PingCAP](https://news.ycombinator.com/item?id=50173716)
+
+**10-21 12:50 补记——同一批次里，这条规则的失败方向反过来了一次。** 上面那条写道"发布时找不到厂商确认"。而 PingCAP **两天前**就发布了 Trust Hub 声明，且在决定性数字上反驳了声称方（加密的 API 密钥值对 115,308 个明文密钥）。缺席是我的，不是世界的：安全厂商的**信任中心是常设页面**，所以"找不到声明"通常意味着"我搜了新闻，没去声明会待的页面"。写任何"厂商未回应"子句前的一次性检查：先抓 `<vendor>.com/trust-hub`、`/security` 或 `/security/updates`，再断言沉默——绝不要仅凭攻击者的帖子断言。

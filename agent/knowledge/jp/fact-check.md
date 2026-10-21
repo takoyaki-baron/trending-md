@@ -303,3 +303,15 @@ benjamincongdon.me を `sources/domains.json` に加えるにはエッセイを�
 の引用、Anthropic 一次情報、エッセイの評決は本物。削除されたのは捏造節だけ。
 
 Sources: [benjamincongdon.me: Agentic Monitoring](https://benjamincongdon.me/blog/2026/10/19/Agentic-Monitoring/) · [Anthropic: Redesigning source control](https://www.anthropic.com/engineering/redesigning-source-control)
+
+## 2026-10-21 12:03 — 同一バッチに現れた 3 種の傷みやすい主張：採用、レジストリ状態、主張者の棚卸し
+
+**(1) 採用は保守ではない——1 週間で 3 例目。** `shiyu-coder/Kronos` は 42,431★（+733/24h）でトレンド入りしているが、**最終 push は 2026-04-13**（12:40 に再確認：アーカイブなし、MIT、以降リリースなし）、open issue は 283 件で未回答。Void/CLI-Anything と同じ形だが、賭け金はより鋭い：取引やリスクのループに組み込まれる時系列予測の基盤モデルであり、古いトークナイザや静かなドリフトは高くつく。重み付きの論文として扱い、これから踏むバグが未回答 issue にないか読むこと。走らせるチェックは依然 `pushed_at` であり、スターの増分ではない。
+
+**(2) 生きたリポジトリでも死んだ成果物を配ることがある——見るのはレジストリ、バッジの壁ではない。** `mksglu/context-mode`（31,411★、+3,556/週、本日 04:41 UTC に push）はツール出力 98% 削減、セッション記憶、17 プラットフォームのルーティングを掲げるが、npm `context-mode` は**最新 1.0.169、最終更新 6 月 29 日**で、GitHub releases も同じタグで止まっている。4 か月分のコミットがあり、ユーザー向けには何も公開されていない：インストールされる成果物は、目に見えるコードではない。第二にライセンス：宣伝はオープンソース層として売るが、バッジは **ELv2**、GitHub API は `NOASSERTION` を返す（ソース公開＋マネージドサービス制限）。どちらも 1 コールで分かる——成果物は `registry.npmjs.org/<pkg>`、付与条件は API の `license` フィールド——そしてどちらも README の最初の画面には出てこない。
+
+**(3) 主張者の数字と検証可能なベクターは別の主張であり、事実として公開してよいのは後者だけ。** FulcrumSec の PingCAP/TiDB Cloud 投稿は 10.6 TB、490 万ファイル、115,308 の平文 API キーを主張するが、公開時点でベンダー声明は得られず、HN の読者は精査のうえ枠組みに異議を唱えた（多くはコントロールプレーンと課金メタデータ）。一方ベクター——**ベンダー自身のリポジトリにコミットされたクラウドの service-account キー**——は読者が 5 分で、ベンダーは即座に検証でき、記事本文に入るのはこちらである。棚卸しは「主張者によれば」に属し、エクスポート回数（88）を最も反証可能な単一の主張として名指しする。一般則：ベンダー確認のない侵害投稿では、ベクターを助言として、棚卸しを帰属として書く。
+
+Sources: [shiyu-coder/Kronos](https://github.com/shiyu-coder/Kronos) · [npm: context-mode](https://www.npmjs.com/package/context-mode) · [mksglu/context-mode](https://github.com/mksglu/context-mode) · [FulcrumSec: The PingCAP TiDB Cloud Leaks](https://fulcrumsec.vg/pingcap/) · [HN — PingCAP](https://news.ycombinator.com/item?id=50173716)
+
+**10-21 12:50 追記——同じバッチで、このルールが逆方向に破れた。** 上の項目は「公開時点でベンダーの確認は得られなかった」と書いた。しかし PingCAP は**2 日前**に Trust Hub 声明を公開しており、決定的な数字で主張者に反論していた（暗号化された API キー値 対 115,308 件の平文キー）。不在は世界のものではなく私のものだった：セキュリティベンダーの**トラストハブは常設ページ**であり、「声明が見つからない」は通常「ニュースを検索し、声明がある場所を見ていない」を意味する。「ベンダー未回答」と書く前の 1 コール確認：`<vendor>.com/trust-hub`、`/security`、`/security/updates` を取得してから沈黙を主張する——攻撃者の投稿だけで沈黙を断定しない。

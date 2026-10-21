@@ -310,3 +310,9 @@ Sources: [WJCL 调查](https://www.wjcl.com/article/savannah-police-officer-ice-
 **注意力外溢，被仪器化了：**Mac.apk（昨天的 Android 原生跑在 Apple Silicon 上）评论区有人把读者指向 MicroG，两小时后 MicroG 的 wiki 就有了自己的 HN 首页（341 分）——**无 release、仓库内无任何触发点**（v0.3.17、9 月 29 日、同日最后推送、15.0k★）。帖子的实质是把 GrapheneOS-vs-microG 的老论战演给新观众："microG 仍在与 Google 服务器通信"、下载的可执行文件（droidguard）以 microG 的全部权限运行；务实派的反驳则是它是非 Pixel 硬件上唯一的去 Google 化路径；顺带曝光了抢注域名（microg.cc、microg.net）要避开。昨天的故事经由评论区接力变成今天的——随着 Mac.apk 式的桥让从未选择 Android 的人成为 Android 用户，这场安全辩论只会更重要。
 
 Sources: [Ashley Gullen on Mastodon](https://mastodon.gamedev.place/@AshleyGullen/117473851565913919) · [HN](https://news.ycombinator.com/item?id=50167536) · [Teddy Svoronos](https://teddysvoronos.com/2026-10-19-apple-broke-an-essential-presentation-feature-of-ipads/) · [HN](https://news.ycombinator.com/item?id=50165208) · [Preston Byrne](https://prestonbyrne.com/2026/10/20/ofcom-concedes-defeat/) · [HN](https://news.ycombinator.com/item?id=50167028) · [HN — MicroG](https://news.ycombinator.com/item?id=50162177) · [microg/GmsCore](https://github.com/microg/GmsCore)
+
+## 10-21 12:03 — 对 agent 实测那堵墙：不可见性正是失效模式
+
+Proof of Human 以其 2025 基准重跑，扩大了对手集——脚本化 Chromium、CloakBrowser，以及三个具备视觉能力的 agent（Browser Use、Grok、Perplexity Comet）——对五个检测系统各 20 个会话，每个系统 89–100 个可评估会话。总体检出率：**Proof of Human 99%、reCAPTCHA v3 69.4%、hCaptcha 44.3%、Cloudflare Turnstile 42.1%、Cloudflare Bot Management 9.1%**。真正的发现在按对手拆分的表格里，而不是总体：hCaptcha 与 Turnstile 几乎抓住了所有*脚本化*浏览器，却几乎没抓到 agent 会话——Turnstile 对三个 agent 对手“甚至没有发起挑战”；而 reCAPTCHA v3 恰好相反，抓住了多数 agent 会话，却**没抓到任何 CloakBrowser 会话**——那是唯一同时做了源码级浏览器指纹改造并使用住宅 IP 的对手。文章自述、必须随数字传播的限定：作者在卖检测产品且自己排第一；系统是黑盒，因此信号归因只是推断；100 会话的格子样本偏小。结构性结论：**Turnstile 的全部卖点就是不可见，而不可见恰恰是能读页面的模型走过的地方。** 任何把 CAPTCHA 组件当作 agent 闸门的人，应当引用那个格子，而不是平均值。
+
+Sources: [PoH: Benchmarking Bot Detection Systems Against Modern AI Agents in 2026](https://research.poh.org/bot-benchmarking-2026/) · [HN](https://news.ycombinator.com/item?id=50169506)

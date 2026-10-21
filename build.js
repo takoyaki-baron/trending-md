@@ -89,14 +89,22 @@ function parseMD(src, lang) {
     return `<pre><code>${unesc(c.code)}</code></pre>`;
   }
 
+  // Split a table row on unescaped pipes, then unescape `\|` inside each cell.
+  // A naive split('.') on '|' broke any cell that legitimately contains a pipe —
+  // `curl \| bash`, or a backslash-escaped pipe emitted by the sources writer
+  // (build.js sources .md). Found 2026-10-21 via the knowledge index rows.
+  function _cells(line) {
+    return line.split(/(?<!\\)\|/).filter(c => c.trim()).map(c => c.trim().replace(/\\\|/g, '|'));
+  }
+
   function _table(block) {
     const lines = block.split('\n').filter(l => l.includes('|'));
     if (lines.length < 2) return null;
     if (!/^[\s|:-]+$/.test(lines[1].replace(/\|/g, ''))) return null;
-    const headers = lines[0].split('|').filter(c => c.trim()).map(c => c.trim());
+    const headers = _cells(lines[0]);
     let t = '<table><thead><tr>' + headers.map(h => `<th>${_inline(h)}</th>`).join('') + '</tr></thead><tbody>';
     for (let i = 2; i < lines.length; i++) {
-      const cells = lines[i].split('|').filter(c => c.trim()).map(c => c.trim());
+      const cells = _cells(lines[i]);
       t += '<tr>' + cells.map(c => `<td>${_inline(c)}</td>`).join('') + '</tr>';
     }
     return t + '</tbody></table>';
@@ -1268,6 +1276,54 @@ if (fs.existsSync(EN_KNOWLEDGE_DIR)) {
     console.log(`  ✓ agent link-integrity: ${enTopics.size} knowledge topics, all [[topic]] links resolve`);
   }
 }
+/* ── Knowledge index table shape check (2026-10-21) ──
+   Each locale's knowledge index is a 3-column table, and the renderer is line- and pipe-driven:
+   a topic row glued onto the previous row's date cell (`… | 2026-10-19 | [[next-topic]] |`), or a
+   raw `|` inside a description (a leftover date cell, `curl | bash`), renders as extra columns or
+   silently swallows a topic. Rows had been glued this way for weeks before anyone saw it — a
+   row-targeted edit had been writing into a neighbouring topic's cell. Escaped pipes (`\|`) are
+   honored by _cells(); anything else must not reach the table. */
+const RE_INDEX_ROW = /^\| \[\[([a-z0-9-]+)\]\] \| ((?:[^|\\]|\\.)+?) \| \d{4}-\d{2}-\d{2} \|$/;
+const indexTopicsByLoc = {};
+let indexProblems = 0;
+for (const loc of ['en', 'zh', 'jp']) {
+  const idxPath = path.join(ROOT, 'agent', 'knowledge', loc, 'index.md');
+  if (!fs.existsSync(idxPath)) continue;
+  // Header + separator rows carry no wiki-link; every topic row must.
+  const rows = fs.readFileSync(idxPath, 'utf8').split('\n').filter(l => /^\|/.test(l.trim()) && l.includes('[['));
+  const topics = [];
+  for (const row of rows) {
+    const m = row.trim().match(RE_INDEX_ROW);
+    if (!m) {
+      indexProblems++;
+      console.log(`  ⚠ ${loc} knowledge index row is not one canonical 3-column row (glued row or unescaped pipe): ${row.trim().slice(0, 90)}…`);
+      continue;
+    }
+    if (topics.includes(m[1])) {
+      indexProblems++;
+      console.log(`  ⚠ ${loc} knowledge index lists [[${m[1]}]] twice — keep one row per topic`);
+      continue;
+    }
+    topics.push(m[1]);
+  }
+  indexTopicsByLoc[loc] = topics;
+}
+if (indexTopicsByLoc.en) {
+  const en = indexTopicsByLoc.en;
+  for (const loc of ['zh', 'jp']) {
+    const other = indexTopicsByLoc[loc] || [];
+    const missing = en.filter(t => !other.includes(t));
+    const extra = other.filter(t => !en.includes(t));
+    if (missing.length || extra.length) {
+      indexProblems++;
+      console.log(`  ⚠ ${loc} knowledge index topic set differs from en — missing: ${missing.join(', ') || 'none'}; extra: ${extra.join(', ') || 'none'}`);
+    }
+  }
+  if (!indexProblems) {
+    console.log(`  ✓ knowledge index tables: ${en.length} topics × ${Object.keys(indexTopicsByLoc).length} locales, one canonical row per topic`);
+  }
+}
+
 const actionPath = path.join(ROOT, 'en', 'action.md');
 const LOG_ARCHIVE_PATH = path.join(ROOT, 'agent', 'action-log', 'archive-en.md');
 if (fs.existsSync(actionPath)) {
@@ -1390,6 +1446,53 @@ if (fs.existsSync(agentMemPath)) {
       }
     } catch (e) {
       console.log(`  ⚠ CVE watch coverage check failed to run: ${e.message}`);
+    }
+  }
+}
+
+/* ── Feed markdown integrity check (2026-10-21) ──
+   The item renderer is line-driven and in code spans: an ODD number of backticks inside one item
+   leaves the last one open, so everything after it — every remaining item, the metadata table,
+   the nav — renders inside one <code> block. That is a silent, total loss of the tail of the page:
+   found on 2026-10-21 when item 29's corrected trust-hub link lost its closing backtick and items
+   30–34 vanished from the HTML while the .md looked fine. Two cheap checks over the trailing-7d
+   feeds: backtick parity per item, and item-count parity between en and each mirror. */
+{
+  const locales = ['en', 'zh', 'jp'];
+  const newestByLoc = {};
+  let integrityFailures = 0;
+  for (const loc of locales) {
+    const dir = path.join(ROOT, loc, 'feed');
+    if (!fs.existsSync(dir)) continue;
+    const dated = fs.readdirSync(dir).filter(f => /^\d{4}-\d{2}-\d{2}\.md$/.test(f)).sort();
+    newestByLoc[loc] = dated[dated.length - 1];
+    if (!newestByLoc[loc]) continue;
+    const src = fs.readFileSync(path.join(dir, newestByLoc[loc]), 'utf8');
+    const items = src.split(/^## (?=\d+\.)/m).slice(1);
+    const odd = items
+      .map(blk => ({ n: (blk.match(/^(\d+)\./) || [])[1], ticks: (blk.match(/`/g) || []).length }))
+      .filter(x => x.n && x.ticks % 2);
+    if (odd.length) {
+      integrityFailures++;
+      console.log(`  ⚠ ${loc}/feed/${newestByLoc[loc]}: unclosed inline code span in item(s) ${odd.map(x => `${x.n} (${x.ticks} backticks)`).join(', ')} — an odd count swallows every later item into one <code> block in the rendered page`);
+    }
+  }
+  if (newestByLoc.en) {
+    const countOf = (loc) => {
+      const p = path.join(ROOT, loc, 'feed', newestByLoc[loc] || '');
+      if (!newestByLoc[loc] || !fs.existsSync(p)) return null;
+      return (fs.readFileSync(p, 'utf8').match(/^## \d+\./gm) || []).length;
+    };
+    const enCount = countOf('en');
+    for (const loc of ['zh', 'jp']) {
+      const c = countOf(loc);
+      if (c !== null && c !== enCount) {
+        integrityFailures++;
+        console.log(`  ⚠ ${loc}/feed/${newestByLoc[loc]} has ${c} items against en's ${enCount} — the mirror is out of sync with the canonical batch`);
+      }
+    }
+    if (!integrityFailures) {
+      console.log(`  ✓ feed markdown integrity: ${enCount} items, closed code spans, zh/jp in sync (latest batch per locale)`);
     }
   }
 }

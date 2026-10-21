@@ -1,5 +1,5 @@
 {
- "updated": "2026-10-20T21:36:02.261Z",
+ "updated": "2026-10-21T05:28:33.162Z",
  "cves": {
   "CVE-2026-48382": {
    "vulnStatus": "Undergoing Analysis",
@@ -1308,7 +1308,7 @@
   "CVE-2026-96652": {
    "vulnStatus": "Modified",
    "published": "2026-09-23",
-   "lastModified": "2026-10-20T20:17",
+   "lastModified": "2026-10-21T04:18",
    "metrics": [
     {
      "version": "3.1",
@@ -1330,14 +1330,14 @@
    "cwe": [
     "CWE-918"
    ],
-   "kev": null,
-   "kevDue": null,
+   "kev": "2026-10-20",
+   "kevDue": "2026-11-03",
    "nvdAnalyzed": false
   },
   "CVE-2026-96654": {
    "vulnStatus": "Modified",
    "published": "2026-09-23",
-   "lastModified": "2026-10-20T20:17",
+   "lastModified": "2026-10-21T04:18",
    "metrics": [
     {
      "version": "3.1",
@@ -1359,14 +1359,14 @@
    "cwe": [
     "CWE-84"
    ],
-   "kev": null,
-   "kevDue": null,
+   "kev": "2026-10-20",
+   "kevDue": "2026-10-23",
    "nvdAnalyzed": false
   },
   "CVE-2026-96655": {
    "vulnStatus": "Modified",
    "published": "2026-09-23",
-   "lastModified": "2026-10-20T20:17",
+   "lastModified": "2026-10-21T04:18",
    "metrics": [
     {
      "version": "3.1",
@@ -1388,14 +1388,14 @@
    "cwe": [
     "CWE-918"
    ],
-   "kev": null,
-   "kevDue": null,
+   "kev": "2026-10-20",
+   "kevDue": "2026-11-03",
    "nvdAnalyzed": false
   },
   "CVE-2026-96656": {
    "vulnStatus": "Modified",
    "published": "2026-09-23",
-   "lastModified": "2026-10-20T20:17",
+   "lastModified": "2026-10-21T04:18",
    "metrics": [
     {
      "version": "3.1",
@@ -1417,8 +1417,8 @@
    "cwe": [
     "CWE-73"
    ],
-   "kev": null,
-   "kevDue": null,
+   "kev": "2026-10-20",
+   "kevDue": "2026-10-23",
    "nvdAnalyzed": false
   },
   "CVE-2026-111057": {
@@ -1485,7 +1485,16 @@
    "kevDue": null,
    "nvdAnalyzed": false
   },
-  "CVE-2026-111943": null,
+  "CVE-2026-111943": {
+   "vulnStatus": "Received",
+   "published": "2026-10-21",
+   "lastModified": "2026-10-21T02:17",
+   "metrics": [],
+   "cwe": [],
+   "kev": null,
+   "kevDue": null,
+   "nvdAnalyzed": false
+  },
   "CVE-2026-77932": {
    "vulnStatus": "Deferred",
    "published": "2026-10-20",
@@ -1547,7 +1556,7 @@
   "CVE-2026-106931": {
    "vulnStatus": "Deferred",
    "published": "2026-10-14",
-   "lastModified": "2026-10-20T20:17",
+   "lastModified": "2026-10-21T04:17",
    "metrics": [
     {
      "version": "3.0",
@@ -1569,14 +1578,14 @@
    "cwe": [
     "CWE-78"
    ],
-   "kev": null,
-   "kevDue": null,
+   "kev": "2026-10-20",
+   "kevDue": "2026-10-23",
    "nvdAnalyzed": false
   },
   "CVE-2026-110936": {
    "vulnStatus": "Undergoing Analysis",
    "published": "2026-10-15",
-   "lastModified": "2026-10-20T20:17",
+   "lastModified": "2026-10-21T04:17",
    "metrics": [
     {
      "version": "3.1",
@@ -1598,8 +1607,8 @@
    "cwe": [
     "CWE-427"
    ],
-   "kev": null,
-   "kevDue": null,
+   "kev": "2026-10-20",
+   "kevDue": "2026-11-03",
    "nvdAnalyzed": false
   },
   "CVE-2026-109432": {
@@ -1889,6 +1898,133 @@
    ],
    "cwe": [
     "CWE-184"
+   ],
+   "kev": null,
+   "kevDue": null,
+   "nvdAnalyzed": false
+  },
+  "CVE-2026-113672": {
+   "vulnStatus": "Undergoing Analysis",
+   "published": "2026-10-20",
+   "lastModified": "2026-10-20T19:59",
+   "metrics": [
+    {
+     "version": "3.1",
+     "type": "Secondary",
+     "source": "security-advisories@github.com",
+     "baseScore": 9.9,
+     "severity": "CRITICAL",
+     "vector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:C/C:H/I:H/A:H"
+    }
+   ],
+   "cwe": [
+    "CWE-22"
+   ],
+   "kev": null,
+   "kevDue": null,
+   "nvdAnalyzed": false
+  },
+  "CVE-2026-113708": {
+   "vulnStatus": "Undergoing Analysis",
+   "published": "2026-10-20",
+   "lastModified": "2026-10-20T19:59",
+   "metrics": [
+    {
+     "version": "3.1",
+     "type": "Secondary",
+     "source": "security-advisories@github.com",
+     "baseScore": 9.9,
+     "severity": "CRITICAL",
+     "vector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:C/C:H/I:H/A:H"
+    }
+   ],
+   "cwe": [
+    "CWE-88"
+   ],
+   "kev": null,
+   "kevDue": null,
+   "nvdAnalyzed": false
+  },
+  "CVE-2026-113709": {
+   "vulnStatus": "Undergoing Analysis",
+   "published": "2026-10-20",
+   "lastModified": "2026-10-20T19:59",
+   "metrics": [
+    {
+     "version": "3.1",
+     "type": "Secondary",
+     "source": "security-advisories@github.com",
+     "baseScore": 9.9,
+     "severity": "CRITICAL",
+     "vector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:C/C:H/I:H/A:H"
+    }
+   ],
+   "cwe": [
+    "CWE-829"
+   ],
+   "kev": null,
+   "kevDue": null,
+   "nvdAnalyzed": false
+  },
+  "CVE-2026-77459": {
+   "vulnStatus": "Undergoing Analysis",
+   "published": "2026-10-13",
+   "lastModified": "2026-10-16T16:00",
+   "metrics": [
+    {
+     "version": "3.1",
+     "type": "Secondary",
+     "source": "security-advisories@github.com",
+     "baseScore": 9.9,
+     "severity": "CRITICAL",
+     "vector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:C/C:H/I:H/A:H"
+    }
+   ],
+   "cwe": [
+    "CWE-863"
+   ],
+   "kev": null,
+   "kevDue": null,
+   "nvdAnalyzed": false
+  },
+  "CVE-2026-105312": {
+   "vulnStatus": "Awaiting Analysis",
+   "published": "2026-10-20",
+   "lastModified": "2026-10-20T17:17",
+   "metrics": [
+    {
+     "version": "3.1",
+     "type": "Secondary",
+     "source": "secalert@redhat.com",
+     "baseScore": 9.9,
+     "severity": "CRITICAL",
+     "vector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:C/C:H/I:H/A:L"
+    }
+   ],
+   "cwe": [
+    "CWE-269"
+   ],
+   "kev": null,
+   "kevDue": null,
+   "nvdAnalyzed": false
+  },
+  "CVE-2026-111767": {
+   "vulnStatus": "Deferred",
+   "published": "2026-10-20",
+   "lastModified": "2026-10-20T19:53",
+   "metrics": [
+    {
+     "version": "3.1",
+     "type": "Secondary",
+     "source": "security-advisories@github.com",
+     "baseScore": 8.6,
+     "severity": "HIGH",
+     "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:L/A:L"
+    }
+   ],
+   "cwe": [
+    "CWE-639",
+    "CWE-862"
    ],
    "kev": null,
    "kevDue": null,

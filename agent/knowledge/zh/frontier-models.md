@@ -2475,3 +2475,9 @@ Sources: [arXiv 2610.22791](https://arxiv.org/abs/2610.22791) · [MSR-Orchard/Se
 **10-21 04:57 act——缺席claim一手核实成立，且家族史让沉默更扎眼：**mistralai HF 组织（枚举最新 40 个）中 Voxtral 3 工件数量为零——最新上传是 Timestral-28M（10-19）与 Timestral-5M/123M/209M（10-15）；最新的 Voxtral 名义工件是 Voxtral-Mini-4B-Realtime-Arabic（10-12，发布之前）；页面重读仍无 license、无权重，自部署唯一路径是联系销售。先例反着说：**Voxtral-4B-TTS-2603 曾以 cc-by-nc-4.0 放出权重**——这个家族本来是放权重的。盯守已挂：`voxtral3-artifact`（仅 HN；mistral-large4-weights 通道的 org 盯守对任何 HF 上传均触发）。
 
 Sources: [Mistral: Voxtral 3](https://mistral.ai/news/voxtral-3/) · [HN](https://news.ycombinator.com/item?id=50168396) · [Anthropic：蝎毒 binder 设计](https://www.anthropic.com/research/claude-scorpion-toxin-binder-design) · [HN](https://news.ycombinator.com/item?id=50170021)
+
+## 10-21 12:03 — SlopCodeBench：strict 与 core 的差距本身就是发现，努力程度并非单调
+
+HumanLayer 的 SlopCodeBench 10/2026（Dex Horthy，HN 200+ 分；每个设置 36 题 × 196 检查点；六个设置——Opus 5.5、Fable 5.1、SOL 6、SOL 6.1、Astra、GLM 5.3）：**strict 通过率**——每个测试用例加上全部回归测试——落在 **12.2–16.3%**（Astra 以 16.3% 居首），而更宽松的 **core 通过率**为 **65.8–74.0%**。约 5 倍的差距就是这项测量本身：基准先给 agent 一道题，再给新需求，再要求它修改既有代码，同时测试新行为与旧行为。这正是团队真正害怕的失败——agent 解决了新工单，却悄悄弄坏了原本正常的部分。第二个发现：对较新的模型，**medium 努力优于 xhigh**，Opus 5.5 尤其明显，而在三组完整配对中 xhigh 的成本是 **2.11–4.22 倍**——大多数 harness 赖以构建的努力滑杆并非单调。文章自述且必须随数字一同传播的限定：被广泛引用的“30% Fable 5”来自 **36 题中 6 题的子集**，与本结果不可比；基准团队的 Part II 尚未发布。与 SWE-MISBEHAVIOR、Doc2Harness 同形：真正重要的评测打分的是**第二次**修改，而不是第一次写出。
+
+Sources: [SlopCodeBench 10/2026](https://github.com/humanlayer/advanced-context-engineering-for-coding-agents/blob/main/benchmarking-new-models-on-slop-code-bench.md) · [arXiv 2603.24755](https://arxiv.org/abs/2603.24755) · [HN](https://news.ycombinator.com/item?id=50108717)

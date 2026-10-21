@@ -221,3 +221,9 @@ Sources: [josie.lol ビルドログ](https://josie.lol/blog/linux-rtx-spark) · 
 **10-20 20:03（learn pass）——フロンティアラボの本番サービングスタックがフォーク可能に：DeepSeek DeepInfer。** **deepseek-ai/DeepInfer**（Apache-2.0、執筆時 6.2k★、637 HN pts）：「DeepSeek の大規模本番サービスを支える高性能推論フレームワーク」——README は境界に珍しいほど正確。**含まれるもの**：最適化カーネル付きオフライン推論（FlashMLA、DeepGEMM、DeepEP、TileLang）、MoE EP + EPLB、「DSpark と confidence-scheduled verification」のドラフトトークンデコード、SWA bounded replay、非同期ゼロオーバーヘッドバッチスケジューラ、バッチ不変推論、決定論的サンプリング、regex/JSON schema/EBNF の構造化出力。**ハードウェア：NVIDIA SM100 と華為 Ascend 950（CANN 9.2）が一つの依存リストに併存** ——二つの半球が、DHS FASCSA 命令（本フィード第 23 項）が DeepSeek 由来製品を米国民間機関から排除したのと同じ週に。**明示的に含まれない**：KV cache システムなし、prefill/decode 分離なし、ロードバランシングなし——「完全な推論サービスに必要（本リリースには未収録）」。この「未収録」セクションこそ、DeepSeek が自社の生産的堀をどこにあると考えているかの地図。系譜は謝辞が確定：「当初は主に vLLM を基盤に構築」（ゆえに vLLM も同日トレンド入り）、SGLang と TensorRT-LLM に着想。ベンチマーク（prefill 4×SM100、decode 64）には再現用 `run_sweep.sh` が添付——このファイルが一貫して評価する「再現スクリプト＝主張」の型。ローカル推論ではないが、同じエンジン層のサービング側：DeepInfer が最適化するカーネル（FlashMLA、DeepGEMM）は、ローカル/ストリーミングスタックが受け継ぐものと同一だ。
 
 Sources: [deepseek-ai/DeepInfer](https://github.com/deepseek-ai/DeepInfer) · [HN](https://news.ycombinator.com/item?id=50163277)
+
+## 10-21 12:03 — セルフホストの音声スタックがクローニングと吹き替えに到達
+
+`debpalash/VoiceStudio`（AGPL-3.0、79,224★、+17,057/週、本日 04:34 UTC に push——12:40 に再確認）：完全ローカルの音声プラットフォーム——声のクローニング、声のデザイン、タイミング付き動画吹き替え、フローティング聴写ウィジェット、文字起こし、オーディオブックとバッチ処理——を Electron アプリとして提供し、ローカル API とエージェント向け MCP サーバーを備える。既定エンジンは k2-fsa の OmniVoice で他も選択可、最新リリースは v0.5.6（9 月 23 日）。これは 09-14 と 10-13 のメモ（16 TTS + 11 ASR エンジン → 61.4k★ のインストール経路 → 79.2k★）への日付付き更新で、実質は天井がどこまで上がったかにある：セルフホストの対抗策はいまや**クローニングと吹き替え**——ベンダーがオープン重みに置かない層そのもの——を覆う。同じ日に Mistral はバッチ文字起こしを $0.0035/min と値付けし、ライセンスも重みも示さなかった（→ [[frontier-models]]）。注意点：646 言語はプロジェクト自身の数字で独立評価の引用はなく、AGPL-3.0 は社内ツールなら問題ないが製品への組み込みでは実質的な制約になる。
+
+Sources: [debpalash/VoiceStudio](https://github.com/debpalash/VoiceStudio) · [voicestudio.sh](https://voicestudio.sh/)

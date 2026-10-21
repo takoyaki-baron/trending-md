@@ -20,3 +20,9 @@ created: 2026-10-14
 **本文件存在的意义在于追踪的那个主张——机箱商品化，而芯片不会。**发布机架与计算托盘设计（与 Hopper、Blackwell 时代的 MGX 是同一动作）为*机箱*造出第二供应源市场，而加速器仍是单一来源；最有理由维持专有机架级设计的厂商，正是把它标准化出去的那一家。反例就在同一周：Maia 300 的芯片既专有、**又**不出售，所以唯一的买家就是微软自家的服务。两个开放检查项：7× 与每兆瓦多 40% 这两个数字，能否在 2027 年量产后经独立的机架测量存活；以及这些电网韧性标准会不会被任何非超大规模厂商采纳——公用事业公司才是真正不得不读它们的那一方。
 
 Sources: [The Register / The Next Platform — Maia 300](https://www.theregister.com/compute/2026/10/13/microsofts-clea-maia-300-inference-xpu-is-a-bandwidth-beast/5302874) · [Microsoft Maia](https://news.microsoft.com/maia-2026/) · [Azure Maia 300 architecture deep dive](https://azure.microsoft.com/en-us/blog/deep-dive-into-azure-maia-300-architecture/) · [NVIDIA at OCP Global Summit](https://blogs.nvidia.com/blog/ocp-global-summit-vera-rubin-scale-ai-factories/) · [NVIDIA MGX](https://www.nvidia.com/en-us/data-center/mgx/)
+
+## 2026-10-21 12:03 — Prometheus 公开 goodput 与 MTBI：决定训练能否跑完的那两个指标
+
+Meta 公开了 **Prometheus**（俄亥俄州 New Albany，第一阶段已完成）：数十万 GPU 分布在同一园区的多栋楼中，被接成“一台机器”，满规模目标约 **100 万**——训练 Muse 系列（含 Muse Wonder）的那套集群。值得记下的数字是可靠性而非 FLOPS：预训练 **goodput >85%**，Muse Wonder 的 RL 运行 **>90%**，平均无中断时长 **约 47,000 GPU-hours——在全机群固件修复后提升到 54,000 以上**。平台：**Catalina**（GB200 NVL72，双机架 "Ariel" 配置，每 GPU 800G scale-out 而非标准的 400G）与 **Clemente**（GB300 NVL72，每 GPU 288 GB HBM，GPU:CPU 2:1，单机架容纳整个 72-GPU domain），下一个是 Vera Rubin NVL72，另有闭式液冷。要带走的算术：在约 4.7 万 GPU-hours 的 MTBI 下，一个跑 5,000 GPU 的任务大约**每九小时**就要预期一次中断——这就是为什么决定前沿训练能否跑完的是 goodput，而不是峰值吞吐。所有数字都来自 Meta 自家机群的自有计量，包含固件前后的对比；没有外部审计，goodput 的定义也是 Meta 的。
+
+Sources: [Engineering at Meta: Inside Prometheus](https://engineering.fb.com/2026/10/19/data-center-engineering/inside-prometheus-meta-gigawatt-scale-supercluster/) · [HN](https://news.ycombinator.com/item?id=50152886)

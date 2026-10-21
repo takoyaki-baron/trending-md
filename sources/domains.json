@@ -13001,5 +13001,50 @@
     "en": "Chris Siebenmann's long-running essays on systems, mail and NixOS — careful, narrow claims; titles often broader than the argument inside. Cross-checked (10-21): the essay's FreshRSS claim corroborated — a NixOS FreshRSS module exists in nixpkgs (nixos/modules/services/web-apps/freshrss.nix), so '9 lines of Nix' refers to a real packaging.",
     "zh": "Chris Siebenmann 的长期随笔，主题涵盖系统、邮件与 NixOS——论点谨慎克制，标题常比正文 wider。",
     "jp": "Chris Siebenmann の長年続くエッセイ。システム・メール・NixOS が主題。主張は慎重で狭く、タイトルはしばしば中身より大きい。"
+  },
+  "hyperframes.dev": {
+    "cat": "code",
+    "cred": "med",
+    "density": "med",
+    "cv": 1,
+    "en": "HeyGen's HyperFrames project site (HTML→deterministic MP4); its product claims check out against the repo's metadata on github.com (Apache-2.0, pushed daily, 535 npm versions) — a landing page, so treat benchmarks there as vendor copy.",
+    "zh": "HeyGen 的 HyperFrames 项目站（HTML→确定性 MP4）；其产品描述可与 github.com 上仓库元数据互相核对（Apache-2.0、每日推送、535 个 npm 版本）——但它是落地页，上面的性能说法按厂商文案对待。",
+    "jp": "HeyGen の HyperFrames プロジェクトサイト（HTML→決定論的 MP4）。製品の主張は github.com のリポジトリ情報と突き合わせて確認できる（Apache-2.0、毎日 push、npm 535 バージョン）。ただしランディングページであり、性能記述はベンダーの文面として扱う。"
+  },
+  "fulcrumsec.vg": {
+    "cat": "security",
+    "cred": "low",
+    "density": "med",
+    "cv": 1,
+    "en": "An extortion group's own disclosure site — claimant-only, no corroboration of its inventory; cite it as the claimant (its PingCAP claim is independently reported, but its 115,308-plaintext-key figure is contradicted by PingCAP's statement).",
+    "zh": "勒索组织自建的披露站点——只有声称方，清单无第三方佐证；引用时应标注为声称方（其 PingCAP 事件本身被独立报道，但 115,308 个明文密钥的数字与 PingCAP 声明冲突）。",
+    "jp": "恐喝グループ自身の開示サイト——主張者のみで棚卸しの裏付けはない。引用は主張者として行う（PingCAP の件自体は独立に報道されているが、平文キー 115,308 件という数字は PingCAP 声明と矛盾する）。"
+  },
+  "pingcap.com": {
+    "cat": "vendor",
+    "cred": "high",
+    "density": "high",
+    "cv": 1,
+    "en": "PingCAP's Trust Hub — the canonical security-incident statement (Oct 2026 one gives the access window, affected categories and remediation dates first-hand); the place to check before claiming a vendor has not responded.",
+    "zh": "PingCAP 的信任中心——安全事故声明的权威来源（2026 年 10 月那份一手给出访问窗口、受影响类别与修复时间）；在断言厂商未回应之前应先查这里。",
+    "jp": "PingCAP の Trust Hub——セキュリティ事故声明の正規の置き場（2026 年 10 月の声明はアクセス期間・影響カテゴリ・修正日を一次で示す）。ベンダーが未回答だと書く前に確認すべきページ。"
+  },
+  "joshwcomeau.com": {
+    "cat": "community",
+    "cred": "med",
+    "cv": 1,
+    "density": "med",
+    "en": "Josh W. Comeau's CSS/React blog — high-craft explanations, but an individual practitioner's reading, not a primary record. Curation cross-check 2026-10-21: his Interop 2027 claim (\"Mozilla created a ranking system; they plan on using the ranking data to decide\") checked against the Firefox team's own ranking app (interop-rank.fxdx.dev), whose copy says \"data we can use when reviewing which proposals should be taken on\" and that last year's 1900+ rankings \"helped us push the right proposals in the Interop process\" — the direction matches, but the app's wording is input-not-decision, which the feed item's \"chosen by upvote\" framing overstated and now carries as a caveat.",
+    "zh": "Josh W. Comeau 的 CSS/React 博客——讲解质量高，但属于个人实践者解读，不是一手记录。策展交叉核验 2026-10-21：其 Interop 2027 说法（\"Mozilla 建了排名系统；他们计划用排名数据来决定\"）与 Firefox 团队自家排名应用（interop-rank.fxdx.dev）对照，该应用原话是\"供我们在审阅哪些提案应当被采纳时使用的数据\"，并称去年的 1900+ 份排名\"帮助我们推动了 Interop 流程中正确的提案\"——方向一致，但应用的措辞是\"输入而非决定\"，feed 中\"由投票决定\"的表述过头，现已改为带限定。",
+    "jp": "Josh W. Comeau の CSS/React ブログ——解説の質は高いが、個人実践者の読みであり一次記録ではない。キュレーションのクロスチェック 2026-10-21：Interop 2027 に関する同氏の主張（「Mozilla がランキングシステムを作り、そのデータで決める予定」）を Firefox チーム自身のランキングアプリ（interop-rank.fxdx.dev）と突合。アプリの文言は「どの提案を採り上げるか見直すときに使えるデータ」で、昨年の 1900+ 件のランキングは「Interop プロセスで正しい提案を押し上げるのに役立った」としている。方向は一致するが、アプリの表現は入力であって決定ではなく、フィードの「投票で決まる」という枠付けは過大だったため限定付きに訂正した。"
+  },
+  "interop-rank.fxdx.dev": {
+    "cat": "vendor",
+    "cred": "high",
+    "cv": 1,
+    "density": "med",
+    "en": "The Firefox team's Interop 2027 feature-ranking app (JS-only; its copy lives in the bundle, so a plain fetch returns only the title). First-party for what Mozilla says the rankings are for — \"data we can use when reviewing which proposals should be taken on\" — and for the claim that last year's 1900+ rankings were used to prioritise Firefox development. Curation cross-check 2026-10-21: identity and date confirmed by the official @firefoxwebdevs Mastodon post that launched it (10-19), and the page JS was read directly rather than trusting the shell.",
+    "zh": "Firefox 团队的 Interop 2027 特性排名应用（纯 JS，正文在 bundle 里，直接抓取只返回标题）。一手来源，用于确认 Mozilla 对该排名用途的原话——\"供我们在审阅哪些提案应当被采纳时使用的数据\"——以及去年 1900+ 份排名被用于 Firefox 开发优先级的说法。策展交叉核验 2026-10-21：身份与日期由发布它的 @firefoxwebdevs 官方 Mastodon 帖（10-19）确认，页面 JS 为直接读取而非只信外壳。",
+    "jp": "Firefox チームの Interop 2027 機能ランキングアプリ（JS のみで本文はバンドル内、素の取得ではタイトルしか返らない）。ランキングの用途についての Mozilla の原典——「どの提案を採り上げるか見直すときに使えるデータ」——と、昨年の 1900+ 件が Firefox の開発優先度に使われたという記述の一次情報。キュレーションのクロスチェック 2026-10-21：同一性と日付は公開した @firefoxwebdevs 公式 Mastodon 投稿（10-19）で確認し、ページはシェルを信じずバンドルの JS を直接読んだ。"
   }
 }

@@ -989,3 +989,9 @@ Sources: [DietrichGebert/ponytail](https://github.com/DietrichGebert/ponytail) �
 **agency-agents：markdown のパーソナリティファイルに 162,213★——ジャンル最大の数字を検分する。**msitarzewski/agency-agents（トレンド #9、+590/24h）は約 18 部門（エンジニアリングから GIS、医療、ゲーム開発）にわたる 230+ の専門エージェントペルソナ；リポジトリは数か月前から存在（デスクトップ companion アプリは 6 月作成）、「Reddit スレッドと数か月の反復」を由来と明記、オープン PR 142 本、fork対star 比 6:1、そして今日は何も出荷していない——**スターカウンターこそがイベント。**ペルソナ集は星を付けられる最も安い器物であり、それこそが数字の見かけ以上の重みを殺す理由：コンテンツ専用リポジトリでは star-to-commit チェックに第 3 の項——器物タイプ——が必要。インストールするなら誰かのプロセスを採用しているのだ；新入社員を採用するようにレビューせよ。
 
 Sources: [anthropics/knowledge-work-plugins](https://github.com/anthropics/knowledge-work-plugins) · [Claude Cowork](https://claude.com/product/cowork) · [cloudflare/security-audit-skill](https://github.com/cloudflare/security-audit-skill) · [msitarzewski/agency-agents](https://github.com/msitarzewski/agency-agents)
+
+## 10-21 12:03 — マルチハーネス・カタログ：1 つのソースから 7 つの生成物
+
+`wshobson/agents`（41,311★、MIT、+93/24h、最終 push 2026-10-19、open issue 5 件——10-21 12:40 に一次確認）：**94 プラグイン（うち 92 はローカル）、202 エージェント、185 スキル、105 コマンド**を Markdown で一度だけ書き、ハーネスごとに適応させる——Claude Code と Cursor にはプラグインマーケットプレイス、Codex CLI にはネイティブマーケットプレイスまたは生成物、OpenCode/Antigravity/Copilot/Pi には `make install-*` 経由で**ツール権限を変換した生成エージェント**を出力する（権限は仮定ではなく翻訳される）。この設計判断はペルソナ・フォルダのジャンル（agency-agents、162k★、同日バッチ）の正反対で、ハーネス別の出力はコピーではなく*生成物*であるため、権限モデルやスキーマが変わっても分岐せず再生成される。マルチハーネス配布はスキル棚がこれから受け取る請求書そのもの——ツール権限の意味論、MCP 設定、呼び出し面がそれぞれ異なる——であり、これは最初のスキーマ変更を生き延びる形である。
+
+Sources: [wshobson/agents](https://github.com/wshobson/agents) · [plugins tree](https://github.com/wshobson/agents/tree/main/plugins)

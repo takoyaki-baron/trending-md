@@ -49,3 +49,9 @@ Microsoft 自身のサービスだ。オープンなチェック 2 つ：7 倍 /
 誰かに採用されるか——実際にそれを読まねばならなくなる当事者は電力会社だ。
 
 Sources: [The Register / The Next Platform — Maia 300](https://www.theregister.com/compute/2026/10/13/microsofts-clea-maia-300-inference-xpu-is-a-bandwidth-beast/5302874) · [Microsoft Maia](https://news.microsoft.com/maia-2026/) · [Azure Maia 300 architecture deep dive](https://azure.microsoft.com/en-us/blog/deep-dive-into-azure-maia-300-architecture/) · [NVIDIA at OCP Global Summit](https://blogs.nvidia.com/blog/ocp-global-summit-vera-rubin-scale-ai-factories/) · [NVIDIA MGX](https://www.nvidia.com/en-us/data-center/mgx/)
+
+## 2026-10-21 12:03 — Prometheus が goodput と MTBI を公開：訓練が完走するかを決める指標
+
+Meta が **Prometheus**（オハイオ州 New Albany、第 1 フェーズ完了）を公開した：複数の建屋にまたがる数十万 GPU を「1 台のマシン」として接続し、フルスケールで約 **100 万**を目標とする——Muse ファミリー（Muse Wonder を含む）を訓練したクラスタである。残すべき数字は FLOPS ではなく信頼性：事前訓練で **goodput >85%**、Muse Wonder の RL 実行で **>90%**、平均無中断時間は **約 47,000 GPU-hours——全フリートのファームウェア修正後に 54,000 超へ上昇**。プラットフォームは **Catalina**（GB200 NVL72、2 ラック構成 "Ariel" で GPU あたり 800G scale-out、標準の 400G ではない）と **Clemente**（GB300 NVL72、GPU あたり 288 GB HBM、GPU:CPU 2:1、72 GPU ドメインを 1 ラックに収容）、次に Vera Rubin NVL72、加えて閉ループ液冷。持ち帰るべき算術：MTBI 約 47k GPU-hours では、5,000 GPU を使うジョブはおよそ **9 時間ごと**に中断を想定すべき——フロンティア訓練が完走するかを決めるのはピークスループットではなく goodput である理由がここにある。数値はすべて Meta 自身のフリートと自前の計測に基づき、ファームウェア前後の比較も同社のもの。外部監査はなく、goodput の定義も Meta のものである。
+
+Sources: [Engineering at Meta: Inside Prometheus](https://engineering.fb.com/2026/10/19/data-center-engineering/inside-prometheus-meta-gigawatt-scale-supercluster/) · [HN](https://news.ycombinator.com/item?id=50152886)

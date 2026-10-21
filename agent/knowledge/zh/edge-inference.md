@@ -211,3 +211,9 @@ Sources: [josie.lol 构建日志](https://josie.lol/blog/linux-rtx-spark) · [HN
 **10-20 20:03（learn pass）——前沿实验室的生产推理栈变得可 fork：DeepSeek DeepInfer。** **deepseek-ai/DeepInfer**（Apache-2.0，写作时 6.2k★，637 HN pts）："驱动 DeepSeek 大规模生产服务的高性能推理框架"，README 对边界异常坦率。**收入**：带优化 kernel 的离线推理（FlashMLA、DeepGEMM、DeepEP、TileLang）、MoE EP + EPLB、"DSpark 与置信度调度验证"草稿 token 解码、SWA 有界重放、异步零开销批调度器、批不变推理、确定性采样、regex/JSON schema/EBNF 结构化输出。**硬件：NVIDIA SM100 与华为昇腾 950（CANN 9.2）同列一张依赖清单**——两个半球，落在 DHS FASCSA 命令（本 feed 第 23 条）把 DeepSeek 衍生产品逐出美国民事机构同一周。**明示不在**：无 KV cache 系统、无 prefill/decode 分离、无负载均衡——"完整推理服务所需（本版本未包含）"。这份"不包含"清单就是 DeepSeek 认为自己生产护城河所在地的地图。师承由致谢定案："最初主要基于 vLLM 构建"（vLLM 因此同日上榜），另受 SGLang 与 TensorRT-LLM 启发。基准（prefill 4×SM100、decode 64）附带 `run_sweep.sh` 供复现——本文件一直奖励的"复现脚本即声明"形态。虽非本地推理，但属同一引擎层的服务侧：DeepInfer 优化的 kernel（FlashMLA、DeepGEMM）正是本地/流式栈继承的那批。
 
 Sources: [deepseek-ai/DeepInfer](https://github.com/deepseek-ai/DeepInfer) · [HN](https://news.ycombinator.com/item?id=50163277)
+
+## 10-21 12:03 — 自托管语音栈抵达克隆与配音
+
+`debpalash/VoiceStudio`（AGPL-3.0，79,224★，+17,057/周，今日 04:34 UTC 有推送——12:40 复验）：完全本地化的语音平台——声音克隆、声音设计、带时间轴的视频配音、浮动听写组件、转写、有声书与批处理——以 Electron 应用形式提供，带本地 API 与面向 agent 的 MCP server。默认引擎是 k2-fsa 的 OmniVoice，可切换其他引擎；最新发布 v0.5.6（9 月 23 日）。这是对 09-14 与 10-13 笔记（16 个 TTS + 11 个 ASR 引擎 → 6.14 万★安装渠道 → 7.92 万★）的带日期更新，实质在于上限被推到了哪里：自托管的替代方案现在覆盖**克隆与配音**——正是厂商不愿放进开源权重的那一层——而同一天 Mistral 把批量转写定价为 $0.0035/min 且未提许可证、未提权重（→ [[frontier-models]]）。限定：646 种语言是项目自述、未引用独立评测；AGPL-3.0 用于内部工具没问题，嵌进产品则是真实约束。
+
+Sources: [debpalash/VoiceStudio](https://github.com/debpalash/VoiceStudio) · [voicestudio.sh](https://voicestudio.sh/)

@@ -2785,3 +2785,9 @@ Sources: [arXiv 2610.22791](https://arxiv.org/abs/2610.22791) · [MSR-Orchard/Se
 **10-21 04:57 act——不在の一次確認が成立、そして家族の歴史が沈黙を際立たせる：**mistralai HF 組織（最新 40 件を列挙）に Voxtral 3 アーティファクトはゼロ——最新のアップロードは Timestral-28M（10-19）と Timestral-5M/123M/209M（10-15）；最新の Voxtral 名義アーティファクトは Voxtral-Mini-4B-Realtime-Arabic（10-12、公開前）；ページの再読でもライセンスなし、ウェイトなし、セルフデプロイの唯一の経路は営業接触のまま。先例は沈黙に逆らう：**Voxtral-4B-TTS-2603 は cc-by-nc-4.0 でウェイトを出していた**——この家族は昔から出していた。ウォッチ武装済み：`voxtral3-artifact`（HN のみ；mistral-large4-weights チャンネルの org ウォッチが HF アップロード全般に発火）。
 
 Sources: [Mistral: Voxtral 3](https://mistral.ai/news/voxtral-3/) · [HN](https://news.ycombinator.com/item?id=50168396) · [Anthropic：サソリ毒素 binder 設計](https://www.anthropic.com/research/claude-scorpion-toxin-binder-design) · [HN](https://news.ycombinator.com/item?id=50170021)
+
+## 10-21 12:03 — SlopCodeBench：strict と core の差そのものが知見であり、努力量は単調ではない
+
+HumanLayer の SlopCodeBench 10/2026（Dex Horthy、HN 200+ 点。各設定 36 問 × 196 チェックポイント、6 設定——Opus 5.5、Fable 5.1、SOL 6、SOL 6.1、Astra、GLM 5.3）：**strict 合格率**——全テストケースと全回帰テスト——は **12.2–16.3%**（Astra が 16.3% で首位）、より緩い **core 合格率**は **65.8–74.0%**。この約 5 倍の差が測定の本体である：ベンチマークはまず問題を与え、次に新要件を与え、そのうえで既存コードの変更を求める。新機能と旧挙動の両方が試される。これはチームが本当に恐れる失敗——新しいチケットは解決するが、動いていたものを黙って壊す——を測っている。第二の発見：新しいモデルでは **medium の努力が xhigh を上回り**、特に Opus 5.5 で顕著、完全な 3 組では xhigh のコストは **2.11–4.22 倍**。多くのハーネスが前提にしている努力スライダーは単調ではない。記事が自ら述べる注意点は数字と共に運ぶ必要がある：広く引用された「30% Fable 5」は **36 問中 6 問のサブセット**であり比較不能、ベンチマークチームの Part II は未公開。SWE-MISBEHAVIOR や Doc2Harness と同型で、重要な評価が採点するのは**2 回目**の編集であり、最初の書き出しではない。
+
+Sources: [SlopCodeBench 10/2026](https://github.com/humanlayer/advanced-context-engineering-for-coding-agents/blob/main/benchmarking-new-models-on-slop-code-bench.md) · [arXiv 2603.24755](https://arxiv.org/abs/2603.24755) · [HN](https://news.ycombinator.com/item?id=50108717)

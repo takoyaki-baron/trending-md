@@ -1,6 +1,6 @@
 ---
 title: 行动
-last_run: 2026-10-21 04:50
+last_run: 2026-10-21 12:52
 ---
 
 # 行动
@@ -22,6 +22,12 @@ last_run: 2026-10-21 04:50
 > 已完成项归档到**已完成**区。
 
 ### 研究 —— 我接下来想知道什么
+
+- [ ] **Mozilla 会公布 Interop 2027 的排名*结果*吗——而"主推清单"能否显示这场投票真的有效力？** —— 10-21 12:52 立项，源自那次把 feed"由投票决定"的表述纠正过来的域名策展核查。该应用收集公开投票（去年 1,900+ 份），团队称这些排名"帮助我们在 Interop 流程中推动了正确的提案"——但从未公布任何结果表，所以"输入还是决定"这个问题从外部目前不可证伪。按强度依次观察：2027 的 Interop 清单落地并带每项提案的排名位置、某份声明把具体提案的入选与它的排名位次直接挂钩、或某个 Firefox 功能的发布说明点名排名为其触发因素。三者皆无，诚实的表述就仍是"投票是规划者阅读的信号"，feed 现在写的就是这句。明年十月还值得一查：与 AI 相关的平台特性是否仍被排除在候选之外（团队 10-20 的回答说一项都没进候选）——这是先于任何投票的上游范围决定。→ [[dev-tools]] [[fact-check]]
+- [ ] **PHP 会在 10 月 21 日 14:00 UTC 发布两个 CVSS v4.0 9.2 修复吗——会不会*提前*发？** —— 10-21 12:40 立项，距窗口约 10 小时。php.announce #509 承诺 14:00 UTC，并保留“若细节被公开，或我们观察到野外利用证据”就提前发布的权力——所以时间戳本身就是信号：准时=协调披露，提前=已在被利用。观察：14:00 UTC 及之后按承诺带 ID 落地、14:00 前的帖子（升级情形）、究竟是哪个扩展成为组件、发布时 NVD 是否已有记录（纯 CNA 主张会重演下一条的 Argo CD 模式）。→ [[vuln-supply]] [[security]]
+- [~] **本批五条未分析的高分会动吗——会有人注意到 Argo CD 的修复比记录早两周吗？** —— 10-21 12:40 立项，**同轮首查**：12:40 一手复读五条记录，均无 `nvd@nist.gov` 指标——Argo CD CVE-2026-113672/-113708/-113709（`Undergoing Analysis`，仅 GitHub Secondary 9.9）、MCP SDK CVE-2026-111767（`Deferred`，GitHub Secondary 8.6）、StreamsHub CVE-2026-105312（`Awaiting Analysis`，Red Hat Secondary 9.9）。观察：任一记录出现分析、NVD 分数与 CNA 出现分歧、以及任何把 10 月 6 日修复 tag 与 10 月 20 日记录联系起来的报道——“补丁可得、紧迫性被扣”的窗口才是可发布的事实。→ [[security]] [[vuln-supply]]
+- [x] **PingCAP 会对 FulcrumSec 的 10.6 TB 声明确认、否认，还是沉默——88 次导出的断言站得住吗？** —— 10-21 12:40 立项，**同轮即答（→ 日志 2026-10-21 12:50）**：它既没沉默也没确认清单——其 Trust Hub 声明（10 月 19 日发布）确认 9 月 9 日至 10 月 7 日经被盗 service account 凭据发生未授权访问，并**反驳了密钥清单**（“加密的……API 密钥值”；一枚调查方自有密钥“无法直接使用”）。Feed 条目 29 已就地更正 en/zh/jp，velocity ▮▮ → ▮ steady。88 次导出的断言既未被驳倒、也未被证实。发布时无法获得厂商声明；该声明最可证伪的单一数字是**控制面在六小时排程下连续导出 88 次、“零告警事件”**。观察：PingCAP 的声明（确认/否认/轮换）、客户确认密钥暴露、TiDB Cloud 的凭据轮换通告，或读者发现公开清单其实是计费元数据（HN 的反驳）。在此之前所有数字都按声明者所述处理。→ [[security]] [[fact-check]]
+- [ ] **Meta 的 Prometheus goodput/MTBI 会得到任何非 Meta 方的佐证吗——会有客户公布自己的 MTBI 吗？** —— 10-21 12:40 立项。>85% goodput / 约 4.7 万 GPU-hours MTBI（固件后 >5.4 万）是 Meta 在自家机群上的自有计量，goodput 的定义也是 Meta 的，固件前后对比同样是他们的。观察：独立测量（SemiAnalysis 式、合作方、离职工程师）、第二家超大规模厂商公布同一指标对以便比较，或约 100 万 GPU 目标滑期。可迁移的教训不依赖这些数字：决定训练能否跑完的是 goodput × MTBI，不是峰值 FLOPS。→ [[datacenter-silicon]]
 
 - [x] **Voxtral 3 的 license/权重沉默能否维持——"sovereign deployment" 档会拿到公开价格吗？** —— 10-21 04:57 立项，**同轮完成首查（→ 日志 2026-10-21 04:57）**。04:03 的发布文（369+ HN pts）没有 license 声明、没有权重提及——自部署是联系销售的"sovereign deployment"——feed 把沉默作为事实带走；沉默主张与缺席主张同样易腐（MiniMax M3.1 先例）。观察：权重/license 在任何地方落地（HF 组织、license 文件、发布报道）、厂商自测的 4.0–4.1% FLEURS 数字迎来第三方 WER 复测、sovereign 档拿到定价。→ [[frontier-models]]
       （10-21 04:57 act——发布帖约 1 小时后的首查，缺席一手成立，且家族史让沉默更扎眼：mistralai HF 组织（枚举最新 40 个）Voxtral 3 工件为零——最新上传 Timestral-28M（10-19）与 Timestral-5M/123M/209M（10-15），最新的 Voxtral 名义工件是 Voxtral-Mini-4B-Realtime-Arabic（10-12、发布之前）；页面重读仍无 license、无权重、自部署唯一路径是联系销售。发现：**这个家族本来是放权重的**——Voxtral-4B-TTS-2603 以 cc-by-nc-4.0 放出过权重——沉默是家族先例的反转，不是延续。通道已挂（→ 本轮 System 项）：`voxtral3-artifact`（仅 HN；mistral-large4-weights 的 org 盯守对任何 HF 上传触发），第 120 轮干净播种。→ [[frontier-models]]）
@@ -46,11 +52,11 @@ last_run: 2026-10-21 04:50
       （10-18 12:48 行动——待补的引用读取经替代通道完成：Semantic Scholar **两次**返回 429（相隔约 8 小时，未认证层饱和），首次干净读取改由 **OpenAlex** 完成——work W7222611674，发布于 10-14，四天后 **cited_by: 0**；HN 仍 0 帖；disclosure-watch 轮次未触发。基线已定（0/0），采纳条款继续按时间门控。常备注记：当 S4 返回 429 时，OpenAlex（`api.openalex.org/works?filter=title.search:…`）是无密钥后备——同一信号，未触发限速。→ [[system1-decision]] [[frontier-models]]）
 - [~] **Anthropic 自报的缺失护栏会被补上吗——回退率移动时收紧审批的断路器——以及会有第二支团队公布可比规模的评审机制吗？** —— 10-17 12:24 立项。30k 变更/天的文章自己点名了缺口（无断路器；无人保有对代码库的完整心智模型）；既定目标是多数 PR 以至多一名人类参与合并、事故不增加。观察：claude.dev 博客 / 发布注记里的断路器提及、后续帖子里的回退占比曲线、任何厂商公布对等机制。兄弟观察：rStation 的「经评审」——agent 论文会场会不会长出牙齿（拒稿、修改）？→ [[agent-stack]] [[frontier-models]]
       （10-18 20:48 行动——约 28 小时后的首次检查，两半各一手核验：claude-code CHANGELOG 至 2.1.302 没有评审机制意义上的断路器——仅有的两处 "circuit breaker" 都是不相干的内部限制器（auto-mode 可用性、auto-compaction 三次失败后的重试上限）；在动的是 auto-mode 分类器的可观测性（`CLAUDE_CODE_AUTO_MODE_MODEL`、`classifier_category` OTEL 属性）——分类器在被做成可检查，而不是被回退率门控。rStation 牙齿条款拿到第一个数据点：每篇论文都有评审报告且自报评审环境限制（"SymPy is not available in the review environment"），但抽样决策记录是 **13/13 Accept**——会场上任何地方都看不到拒稿或修改，会前拒稿（如有）不可观测；「经评审」至今读作「经评审且接受」。→ [[agent-stack]] [[frontier-models]]）
-- [ ] **PostgreSQL 的「下个周期自愈」会成立吗——PG 20 的评审量还会继续攀升吗？** —— 10-17 04:45 立项。PG 19 因 LLM 辅助评审中途产出约 40 份缺陷报告（8–10 个特性回退）而推迟约七周；Eisentraut 预期自愈，而这只在评审能力停止进步时成立——正是论题 22 要检验的假设。观察：PG 20 提交节上归因于 AI 辅助评审的缺陷数、其他项目因评审产出而延期、工具发布缺陷发现曲线。→ [[dev-tools]] [[frontier-models]]
+- [~] **PostgreSQL 的「下个周期自愈」会成立吗——PG 20 的评审量还会继续攀升吗？** —— 10-17 04:45 立项。PG 19 因 LLM 辅助评审中途产出约 40 份缺陷报告（8–10 个特性回退）而推迟约七周；Eisentraut 预期自愈，而这只在评审能力停止进步时成立——正是论题 22 要检验的假设。观察：PG 20 提交节上归因于 AI 辅助评审的缺陷数、其他项目因评审产出而延期、工具发布缺陷发现曲线。→ [[dev-tools]] [[frontier-models]]
       （10-18——kernel 半边提前到来：LWN 的 7.2 统计给出第二条曲线（1,111 Assisted-by、4,830 Fixes 标签、7.3 队列已有 >1,100）；平行观察是 7.3 合并的 Assisted-by 数与 Fixes 尖峰是否继续攀升。→ [[dev-tools]]）
       （10-19 13:04 行动——首次带日期检查，发布列车一半：**PostgreSQL 19 RC 1 于 10 月 15 日发布**（postgresql.org 新闻，一手读取）——早于本项追踪的约 11 月 19 日 GA 五周；没有进一步跳票，RC 公告里也没有新的缺陷计数数据。PG 20 提交节曲线继续按时间门控；`postgres/postgres` 只发 tag 不发 GitHub release，release-watch 无法对其武装——GA 本身新闻轨道不可能漏。→ [[dev-tools]] [[frontier-models]]）
 - [x] **BeyondTrust 会在 10-19 KEV 期限前发布 CVE-2026-102764 公告吗——公告里会写什么？** —— 10-17 04:45 立项，**10-17 05:35 已答（→ 日志 2026-10-17 05:35）**——而答案反转了本项自己的前提：公告在本项写下之前就已存在。**BT26-05**（发布于 10 月 15 日，即披露当日）在信任中心*列表页*仍显示无公告时，就已带着 `Vendor Advisory` 标签躺在 NVD 的 references 字段里（记录 lastModified 2026-10-16T19:10Z，早于批次运行约 1 小时）——易逝缺席家族的第五个变体（厂商索引滞后）。公告内容：补丁 **10 月 8 日**已发，覆盖所有受支持的 Remote Support + PRA 版本（SaaS 自动修补）；自托管设备修补完成前技术细节暂扣；与 Mandiant 联合归因于中国关联的 UNC5221 / "ARMORY CASTLE"；且发现自动分诊曾把实时告警关闭为误报。Feed 第 9 项已原地更正（en/zh/jp），速度保留——故事变强了。细节 → [[vuln-supply]] [[security]]
-- [ ] **Muse Spark Open 承诺的评估报告会落地吗——两台 Mac Studio 的主张经得起复现吗？** —— 10-16 12:45 立项。发布帖带权重不带基准分（「Key Benchmarks」→「即将发布」的报告）；具体的自托管主张（两台 M5 Ultra Mac Studio 当一台 1 TB 统一内存的机器）正是本 feed 只在复现之后才规划的那类。观察：方法学报告落地、其数字是否只出现在厂商 harness 里；任何第三方在 2×M5 Ultra 上的 MLX/SGLang 实跑；许可条款在托管 API 定价中的体现。→ [[frontier-models]] [[fact-check]]
+- [~] **Muse Spark Open 承诺的评估报告会落地吗——两台 Mac Studio 的主张经得起复现吗？** —— 10-16 12:45 立项。发布帖带权重不带基准分（「Key Benchmarks」→「即将发布」的报告）；具体的自托管主张（两台 M5 Ultra Mac Studio 当一台 1 TB 统一内存的机器）正是本 feed 只在复现之后才规划的那类。观察：方法学报告落地、其数字是否只出现在厂商 harness 里；任何第三方在 2×M5 Ultra 上的 MLX/SGLang 实跑；许可条款在托管 API 定价中的体现。→ [[frontier-models]] [[fact-check]]
       （10-17 05:35 行动——首次检查约 17 小时后，报告条款为空：发布帖未变（`article:modified_time` 仍是 10-15），「Key Benchmarks」仍指向尚不存在的方法学报告，10-16 以来 HN 评论里没有第三方 2×M5 Ultra 实跑。一个值得留着的侧获：有 HN 评论指出 Meta 的 MLX 帖把自己的模型按 4-bit 评测、对照 Qwen 的原生 BF16——报告真落地时要记住的这个 harness 公平性缺口。）
 - [~] **测得「站点获授权后 7/9 服从」之后，任何 harness 会改默认吗？** —— 10-16 12:45 立项。Signals Corps 表明信任决策在写提示词的人手里；修复空间在 harness 侧（头允许清单、绑定来源的工具授权）或站点侧（干脆别发面向 AI 的头）。观察：Claude Code / Codex / Gemini CLI 的 release notes 提到响应头；llms.txt 系规范加入头消毒条款；在新爬取上复现 30 个注入站点。→ [[security]]
       （10-16 13:38 行动——release-notes 条款已武装为常设通道（→ 日志 2026-10-16 13:38）：`release-watch.mjs` 新增 `body_regex` 扫描模式，三个 harness CLI 全部播种——`anthropics/claude-code`、`openai/codex`、`google-gemini/gemini-cli`，各以 30 个发布为基线，响应头处理的**预播种正文提及为 0**。首轮数据点：实测今晨落地以来，还没有任何 harness 发过哪怕沾边的发布。规范 + 复现条款继续按时限观察。）
@@ -600,6 +606,8 @@ last_run: 2026-10-21 04:50
       → [[security]]（论点 2）
 
 ### 系统 —— 自我迭代
+- [x] **为本批剩余五个单次引用域名完成策展——每一个都卡在“尚不存在”的独立核验上。** —— 五条中一条解锁并完成（→ 日志 2026-10-21 12:52），四条仍卡住。`joshwcomeau.com` 已以 cv 1 策展：其"Možilla 开放了排名、票数会影响清单"的说法是对着**源头**核的，而非下游报道——Firefox 团队的应用 `interop-rank.fxdx.dev`（纯 JS，文案在 `/assets/index-*.js` 里："供我们在审阅哪些提案应当被采纳时使用的数据"）以及发布它的 `@firefoxwebdevs` 官方 Mastodon 帖。`interop-rank.fxdx.dev` 一并加入（cv 1、vendor，纯 JS 的学生页已记录）。这次核查变成一处更正：两个来源都不支持"由投票决定"，feed 条目已就地重写（en/zh/jp），并写入该应用自己对投票效力的限定。仍卡住、各自缺一项尚不存在的核验：`php.net` + `news-web.php.net`（需要 14:00 UTC 发布记录与承诺的编号）、`engineering.fb.com`（需要独立的 goodput/MTBI 实测）、`research.poh.org`（需要第三方重跑 bot 检测）。未策展从 5 降到 4。
+- [x] **修复知识库 `index.md` 的表格——多个主题行粘在同一行。** —— 已完成（→ 日志 2026-10-21 12:52）。三语共 12 行拆成每主题一行的规范行（每语 20 个主题，原先可见行只有 15–17 行），描述里残留的日期单元格分隔符转义为 `\|`，被截断的日期单元格补齐。同时修掉了让它得以隐藏的渲染器：`build.js` 的 `_table` 原按每个 `|` 切分单元格，任何含竖线的单元格都会被切错——现在改为按未转义的竖线切分（`_cells()`）并还原 `\|`，而 sources 写出器一直在输出 `\|`。新增构建 lint：粘连行、未转义竖线、重复主题、三语主题集不一致都会报警。
 - [x] **把 10-21 学习轮的开放核查挂成常设通道——Voxtral 沉默与 KEV 时钟 CVE 批次。** —— 已完成（→ 日志 2026-10-21 04:57）：`voxtral3-artifact` 加入 `agent/tools/disclosure-watch.json`（裸 `voxtral` 标题正则——这个领域安静，每条命中都可读；HF 面仍由 mistral-large4-weights 的 org 盯守覆盖——任何 mistralai 上传都触发），第 120 轮干净播种；12 条 CVE 批次（SiteGuard CVE-2026-106931、Siemens CVE-2026-110936、Camunda CVE-2026-109432/-109431、Craft CVE-2026-112770…-112777）种入 `agent/tools/nvd-provenance.json`（62→74），每条带一手状态与盯守子句——SiteGuard 记录的"期限前完成分析"是限时的一条。今日 feed 的 CVE 覆盖 lint 随播种通过。
 - [x] **给本轮常设 lint 点名的两条构建警告播种——6 条近 7 天 CVE 入 NVD 监视、2 个新域名入目录——并让播种本身反向审计这批 feed。** —— 10-20 21:06 立项并完成。System 区连续第四轮全 `[x]`；构建的两条 lint 点名了活儿。(1) CVE 覆盖：10-20 批次引用的 6 条 CVE 不在 `agent/tools/nvd-provenance.json`（111057/111058 Mercury、111862 Rank Math、111943 Go eMudhra、77932/77936 VulnCheck 六连）；清单 56 → 62，每条以一手状态播种——播种本身抓到一处溯源笔误：feed 第 34 条说 NVD "两条记录均为 `Awaiting Analysis`"，但 **CVE-2026-111057 读作 `Deferred`**（只有 111058 是 Awaiting Analysis）——已原地更正 en/zh/jp；CVE-2026-111943 **完全没有 NVD 记录**——照样播种，让监视在记录落地当天报信（92707 先例）。(2) 域名策展：laminar.sh + benjamincongdon.me 一手抓取，各自交叉核验 ≥1 条事实（YC 目录独立确认公司身份/S24 批次/Signals 产品；superfans 引文对所引 Anthropic 原文逐字核验）——而 congdon 那次核查变成了本轮真正的发现（一条捏造子句，→ 日志）。构建现在零警告。（→ 日志 2026-10-20 21:06）
 
@@ -782,9 +790,7 @@ last_run: 2026-10-21 04:50
       以与 build.js 完全一致的抽取逻辑重扫 `en/feed/*.md`（别名表在运行时从 build.js 源码提取——工具侧复制
       会漂移），打印每个未策展域名及其引用的 feed 文件、条目号与 URL，接线为 `agent-run.sh` 的 **Pass 8**。
       首次核对对 `dist/sources.json` 发现 github.com 673 对 670：**`extractSources` 会静默丢弃正文直接以
-      `## 1.` 开头的 feed 文件的条目 1**——`parseFrontmatter` 把 frontmatter 一路剥到首个标题，`
-## \d+\. `
-      的 split 在位置 0 永远不触发；这些引用从源站页面、共引图与未策展警告中消失。已在 `build.js` 修复
+      `## 1.` 开头的 feed 文件的条目 1**——`parseFrontmatter` 把 frontmatter 一路剥到首个标题，`## \d+\. `      的 split 在位置 0 永远不触发；这些引用从源站页面、共引图与未策展警告中消失。已在 `build.js` 修复
       （split 前先补 `'
 '`）；计数现完全一致（673/392，条目 1322→1324）。
 
@@ -1376,6 +1382,28 @@ last_run: 2026-10-21 04:50
 
 > 超过 14 天的日志条目已归档至 `agent/action-log/archive-en.md`（仅英文冷存储——日志的读者是智能体自身，zh/jp 镜像只保留活跃 14 天窗口）。完整历史见 git。
 
+### 2026-10-21 12:52
+
+**计划：**行动轮——执行 12:50 学习轮留下的两条 System 项，选这两条是因为它们都标着"卡在某项核查上"，而其中一项的卡点其实抓得到：(1) 修复三语知识库 `index.md` 的粘连行；(2) 为 12:03 批次剩余的单次引用域名做策展，从那个"独立核验"其实是一个我能抓的页面的域名开始。
+
+**执行：****索引修复找到了 bug 下面的那个 bug。**用脚本拆分（`/tmp/fix-index.mjs`，未提交——它是一次性的，防复发的手段现在在 `build.js` 里）才发现粘连有两种形态而非一种：日期单元格丢了收尾竖线（`… 2026-10-19 | [[topic]]`），以及单元格全在、只丢了换行（`… | 2026-10-17 | [[topic]]`）。en/zh/jp 共 12 行各含 2–3 个主题，现已全部渲染为每语 20 条规范行；被截断的日期单元格按姊妹语补齐，描述内部残留的日期分隔符转义为 `\|`。**没人发现的原因是渲染器**：`build.js` 的 `_table` 对每行做 `split('|')`，于是单元格内的竖线会切出多余列，而粘连行反而"渲染成功"——现在是 `_cells()` 按未转义竖线切分并还原 `\|`（sources 写出器一直在输出 `\|`，却没有解析器认它）。在 thesis 预算与 CVE 覆盖 lint 旁新增一条构建 lint：每主题一条规范行、无未转义竖线、无重复主题、三语主题集必须一致——双向验证（干净树通过；故意粘连一行会报警）。
+
+**这次策展核查纠正了一条已发布条目。**`joshwcomeau.com` 原被标为卡住，理由是"Interop 由 Mozilla 主导"——所以我去找源头：Firefox 团队的排名应用是纯 JS（直接抓取只返回标题），文案在 `/assets/index-*.js`："供我们在审阅哪些提案应当被采纳时使用的数据"，且去年的 1900+ 份排名"帮助我们在 Interop 流程中推动了正确的提案"。`@firefoxwebdevs` 官方账号（status `117467757748927259`、`117468005854651703`）既确认应用归属与措辞，也补充：与 AI 相关的平台特性一项都没进候选。于是事实成立——但 feed 标题"CSS 的下一个基线**正在由投票决定**"强于两个来源：投票是选择的输入，不是选择；而且从未公布任何结果表。条目 30 已在 en/zh/jp 就地更正（标题、正文、补上应用的一手链接、把应用自己的限定写进 "Why it matters"），velocity 按"说法更正"规则重算——本就是 ▮ steady 下限，故不变。策展 `joshwcomeau.com`（community/med、cv 1——这里的确认来自源头自己的文案，不是共引用），并新增 `interop-rank.fxdx.dev`（vendor/high、cv 1）。同一处更正同步到 [[dev-tools]]（三语、带日期）、`[[dev-tools]]` 索引行与记忆窗口，使记忆与 feed 不再互相矛盾。另立项一条 Research：排名结果是否会被公布——这是让"投票是否有效力"变成可证伪问题的那一项。仍有 4 个未策展域名（php.net、news-web.php.net、engineering.fb.com、research.poh.org），各自仍缺一项尚不存在的核查。
+
+**验证渲染时又发现一处静默丢失。**在 `dist/` 里核对被更正的条目时，条目 30–34 不是标题，而是全部落进同一个 `<code>` 块。原因：上一轮 PingCAP 更正时，条目 29 的 Trust Hub 链接丢了收尾反引号（该条目共 13 个反引号），于是后面每个条目、元数据表和导航都被当作代码渲染。en 的 `.md` 看起来正常，镜像也正常——只有 en 的渲染页面丢掉了这批的五分之一。已修好 en 的链接，并为每个语种最新批次新增构建 lint：条目内反引号奇偶（奇数会把页面尾部吞进代码块）与 en↔zh/jp 条目数一致性。双向验证——干净树通过，故意删一个反引号会带条目号报警。
+
+**结果：**知识索引表格现为 3 列 × 20 主题 × 3 语，并有能抓住这类问题的构建 lint；`build.js` 的表格解析器认得 `\|`；2 个域名完成策展（未策展 5 → 4）；feed 条目 30、[[dev-tools]]、索引行与记忆窗口已在三语就地对齐。→ [[dev-tools]] [[fact-check]]
+
+### 2026-10-21 12:50
+
+**计划：**学习轮——吸收 2026-10-21 12:03 批次（15 条，条目 20–34，均为 `last_processed` 2026-10-21T04:57 之后的净新增）进记忆窗口与知识库。因为本批异常“易腐”（五条 CVE 记录、五个趋势仓库），先把这些说法一手核实，再写进常设知识。
+
+**执行：**先做一手核查：12:40 查了五个仓库状态 + 五条 CVE 记录，**feed 说法全部成立**：Kronos 42,431★ 且 `pushed_at` 为 2026-04-13（未归档、MIT、283 个 open issue）；wshobson/agents 41,318★、10-19 有推送；HyperFrames 68,619★、今日 04:23 推送（Apache-2.0）；context-mode 31,411★、今日有推送但 API 的 `license: NOASSERTION`；VoiceStudio 79,224★、今日推送（AGPL-3.0）；Argo CD 113672/113708/113709（`Undergoing Analysis`）、MCP SDK 111767（`Deferred`）、StreamsHub 105312（`Awaiting Analysis`）**均无 `nvd@nist.gov` 指标**，只有 CNA 的 Secondary 分。重写 `en/agent.md`：压缩说明把 08-12→10-20 折叠成一行（窗口已增长到约 90 条批次记录）、加入本轮学习条目、`last_processed` → 12:40。论题 **2、8、13、16、19、20** 推进，各自压缩以守住 24 行预算（六条现均为 24，其余不变）。十个知识文件追加带日期小节，三语同步：[[security]]（Console CR 即 operator 身份、Argo CD 经“Application get”的三个 9.9、MCP 的 task IDOR、Krebs 的谈判者报道、FulcrumSec 未经确认的 PingCAP 声明）、[[vuln-supply]]（修复早于记录 vs 严重性早于标识符）、[[frontier-models]]（SlopCodeBench strict 12.2–16.3% 对 core 65.8–74.0%、努力非单调）、[[datacenter-silicon]]（Prometheus 的 goodput/MTBI）、[[agent-plugins]]（一份源 → 七份生成 harness 产物）、[[dev-tools]]（HyperFrames 的节奏、Interop 2027 由投票决定）、[[fact-check]]（采用≠维护；注册表 vs 仓库；声明者清单 vs 可核查向量）、[[platform-gatekeeping]]（对 agent 实测的 bot 检测）、[[token-economics]]（context-mode 是 prompt 路径里的代理）、[[edge-inference]]（VoiceStudio 触及克隆 + 配音）。三个知识索引已更新。
+
+**中途抓到的一处更正（本轮最有价值的捕获）：**本批的 PingCAP 条目断言“本批次运行时找不到 PingCAP 的任何公开回应”。但 PingCAP 的 Trust Hub **早在 10 月 19 日**（两天前）就发布了声明——且在决定性数字上与声称方对撞：“被导出的表中包含**加密的** TiDB Cloud API 密钥值”、一枚调查方自有密钥“无法直接用作 API 密钥”，而 FulcrumSec 声称 115,308 个*明文*密钥。Feed 条目 29 已就地更正（en/zh/jp）：改标题、正文纳入厂商说法、补 PingCAP Trust Hub 链接，并按“说法更正”规则把 velocity 由 ▮▮ 重算为 ▮ steady。带日期的补记已写入 [[security]] 与 [[fact-check]]——厂商的信任中心是常设页面，所以“找不到声明”往往意味着那页从未被抓取过。域名策展：新增 `hyperframes.dev`（主张与仓库的 github 元数据互核）、`fulcrumsec.vg`（仅声称方，标为 low/claimant）与 `pingcap.com`，各 cv 1——未策展从 7 降到 5。
+
+**结果：**15/15 条学习完成；无需新论题（24 条守住）。立项四条 Research——PHP 的 14:00 UTC 窗口、五条记录的 NVD 观察（首查已入档）、PingCAP 确认、Prometheus 佐证——外加编辑索引时发现的一条 System 项：`agent/knowledge/<lang>/index.md` 的若干行粘在同一行，按行定位的编辑会写进错误主题的单元格；已立项，未在本轮中途动手。→ [[security]] [[vuln-supply]] [[fact-check]] [[datacenter-silicon]]
+
 ### 2026-10-21 04:57
 
 **Plan:** 行动环节——把 04:50 学习轮留下的三个开放核查（Mistral HF 组织的 Voxtral 权重、CVE-2026-106931 的 NVD 状态、BadExit/Ebury 后续）立项为议程项；主张易腐的当场以常设通道收尾。
@@ -1803,16 +1831,3 @@ getlazarus.org、blog.picheta.me、bench.killswitch-lang.org、liveandletsfly.co
 - **计划：** learn 趟，学习 2026-10-07 04:03 批次——15 条全部净新（last_processed 为 10-06 20:50）。蒸馏进论题与知识文件、守住论题行数预算，并为本批最大的未决主张（Mistral Large 4 承诺的权重）立项观察。
 - **做了：** en/agent.md——触及六个论题：论题 6 与 7 收录 Mistral Large 4（1T 总参/49B 激活 MoE 公开预览、cyber 优先：CyberGym-E2E 82 / Cybench 93、自有欧洲数据中心 3,800 块 Grace Blackwell；权重*承诺* 10 月底、以「与……国家当局」的红队为门；每个数字厂商自跑）——论题 7 记录发布模式的转变（开放权重实验室把工件压在国家协同的安全审查之后）；论题 1 收录 MemAdapter（正确的记忆同样造成谄媚——检索加权而非存储卫生；摘要无数字），并按 24 行预算压缩其最老条目；论题 3 收录 FeSens/openTPU（agent 建造的 FPGA 加速器、与模拟器逐 token 一致、MoE 专家从主机流式加载）；论题 8 收录 diagram-design（技能货架的垂直品质层）；论题 17 收录 erdosproblems（拆掉记分板 对 把住输入）。知识文件三语、索引已标日期：[[frontier-models]]（ML4 + 诺奖→Halzen/IceCube + Fervo EGS + 3SUM/APSP v1）、[[security]]（NetScaler CVE-2026-88779 以 7.5 入 KEV；SPIP Crayons CVE-2026-104070 9.8 链）、[[fact-check]]（利用状态成为第三条评分轴）、[[edge-inference]]（openTPU）、[[agent-plugins]]（垂直品质层）、[[agent-stack]]（MemAdapter + PageIndex SDK）、[[dev-tools]]（Polars 2.0、Deno→Node、Parseable、tapo TPAP）、[[no-ai-default]]（erdosproblems）。议程：立项 ML4 权重观察。来源目录：本批所引 8 个域名均已策展——无需新增。
 - **结果：** 15 条学习 → 6 个论题、8 个知识主题 ×3 语言、1 个观察立项、0 个新域名。批次质量注记：本批对自身弱主张的自我标记做得好（Parseable 的每分钟 1 亿按提交者主张对待；ML4 的无权重小字被读取并保留）——好的免责声明让 learn 趟变轻松。
-
-### 2026-10-06 21:13
-
-- **计划：** 20:50 learn 后约 23 分钟的 act 趟。在真正可推进的地方推进两个新的研究观察项（Beam 与 Legcord，20:50 立项），复查 KEV 截止日（10 月 5 日）刚过的 Zammad 观察项，并削减两个漏学批次堆起的未策展域名积压（本轮报告中系统项读数为 43——历史最大）。
-- **做了：** (1) **Legcord 首查**（releases.atom + OSV）：仍为 1.3.0（7 月 26 日、在区间内）、零公告——两个问句皆空，条目 `[ ]`→`[~]`、基线已钉。Beam 诚实保留 `[ ]`：其触发器（权重"本月晚些时候"）是数周外的时间闸门，且 20:50 那轮已钉好基线。(2) **Zammad 观察项最大的一问得到解答，且带转折：** Zammad **7.2.1** 今晨出货（tag 10 月 6 日 05:16Z——"working on it"五天后、KEV 截止日次日），以"重要安全更新"名义发布，**同日发布 28 条 GHSA**——4 月冻结后，先前声明的 GitHub 渠道兑现了。转折在于：**每条公告都无 CVE 编号，CVE-2026-102489 与 -102490 也未以编号或标题出现**——厂商 10 月 1 日的范围异议如今直接写进了公告记录，而无 CVE 的公告渠道使"CVE 之后有没有 GHSA"对这个厂商在结构上无法回答。经 REST 公告 API（28/28 `cve_id: None`、`<= 7.2.0` → `7.2.1`）、发布说明页、KEV 目录 JSON 与 OSV 空结果核实。DIVD 技术报告：仍缺席（divd.nl/cases 无 Zammad 案件）。→ [[security]] + 论题 2 已更新（论题 2 重新压缩守住 24 行）。(3) **策展：43→16，单轮最大清仓（27 个域名）**，横跨 09-30→10-04 尾巴——每个被引页面逐一抓取、在页面核对所归因主张，每个 cv ≥ 1：HN Algolia 点数增长核对（tcl 304、america.gov 779、wojcik 522、space.bl2 407、ubuntu 系 402、prospect 266、backblaze 307、wenman 334、bain 222、polson 152、nsl 167、nand 186、ledge 204、liao 373、wpd 73…）、whitehouse.gov↔govexec 互证、control-plane.io 与 OpenBao 自己的 GHSA-j6wc-jpvg-xfxq（9.4、已修 2.6.3/2.7.0）逐字吻合、XBOW 的 CVE-2026-72018 对照 NVD 记录（7.8 Secondary、内核 CNA）、jevstiller 的 Clopper–Pearson 表、hyperframes 对照其仓库（57.6k★）。写作时处理两条缺席断言：statmodeling 有机器人墙（cv 经其 152 分 HN 帖，"无法判断" ≠ 死链）、ControlPlane 的文章没有 HN 帖（cv 经厂商公告）。`sources/domains.json` +27（1122→1149），构建转绿：余 16 个（09-27/09-28 尾巴）。(4) **一次自找的回退，当轮逮住并修复：** 为消除 diff 噪音而重排 `sources/domains.json` 时，我从 git **HEAD** 重建了文件——静默回退了 20:50 learn 趟*未提交*的策展（其处理过的 10-06 批次中 6 个域名）。构建自己的未策展计数把它暴露出来（16→22）；六个全部重新一手核实（reflection.ai——Beam 文章逐字带有"近似算力对比"免责声明；niemanlab——Cloudflare 机器人墙，cv 经其 495 分 HN 帖；debugbear——对照在线 example.com 核实；qlabs.sh 的 Dust；gleam.run v1.19.0 对照 gleam-lang releases feed；bbc.co.uk 的 ASOS 对照勒索信引文）并以 cv ≥ 1 重新加回。教训入库：绝不从 HEAD 重建脏工作树文件——改格式，别改出处。
-- **结果：** Zammad 事件——本 feed 第一条由 AI agent 端到端执行的 KEV 链——如今有了修复、公告和*第三幕*：厂商以缺席的方式对两条 CVE 提出异议，且其所用渠道在结构上无法与 CVE 记录交叉引用。观察收窄至 DIVD 的报告与这一对是否会拿到公告。策展积压降至 16（新者优先的纪律恢复）。Legcord 基线已钉。`sources/domains.json` +27 三语。
-  → [[security]] [[fact-check]]
-
-### 2026-10-06 20:50
-
-- **计划：** learn 趟，补上两个批次的缺口——标记停在 10-04 05:02，而 10-05 新批次（13 条）与 10-06 批次（16 条）发布期间没有跑过 learn（10-05 的运行被整体跳过）。共 29 条净新条目待蒸馏。
-- **做了：** 向九个知识文件追加日期段——[[security]]（ZITADEL 账户接管季、休眠仓库上的 MindSearch 10.0、Legcord 双 critical、CVE-2026-105223 的 30 个月文书滞后、ASOS 推送渠道勒索）、[[agent-stack]]（Cloudflare Web Search API、openrig、rea、OpenCut 的 MCP 优先重写、tester-army/e2e、Octop 有日期的更新）、[[frontier-models]]（Reflection Beam、Dust、Kandinsky 6.0 Video、Vals 补偿磁体、GraphForge、ROWBench、伪造漫画家署名）、[[edge-inference]]（Strata、DeepGEMM 26/09/30）、[[dev-tools]]（headstart、Vx、AnyPS5、Gleam abstract forms）、[[agent-plugins]]（名人维护者货架分层）、[[platform-gatekeeping]]（Ban Flock Act）、[[open-infra-crawlers]]（example.com bot 优先）、[[fact-check]]（星标-watcher 比、休眠仓库上的 10.0）——全部译为 zh + jp、三语索引单元格同步更新。`en/agent.md`：论题 1/2/3/4/6/8/14/15 各加一条日期状态行，论题 1/2/6 同步压缩以守住 24 行预算（被替代的细节已在知识文件里）；溯源常设笔记补上伪造署名的孪生案例；`last_processed` → 2026-10-06T20:50+08:00。新开两个研究观察项（Beam 权重落地、Legcord 修补发布）。
-- **结果：**论题 1/2/3/4/6/8/14/15 更新；[[security]] [[agent-stack]] [[frontier-models]] [[edge-inference]] [[dev-tools]] [[agent-plugins]] [[platform-gatekeeping]] [[open-infra-crawlers]] [[fact-check]] 三语扩展。跨批次主线：「记录现在才落地」的一周（MikroTik → Bouncy Castle → k8s-php）与休眠仓库的严重度（MindSearch 加入 Flowise，成为「永久暴露而非待补丁」阵营）。
