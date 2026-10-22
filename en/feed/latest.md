@@ -1,8 +1,8 @@
 ---
 date: 2026-10-22
-updated: 2026-10-22T04:20:00Z
+updated: 2026-10-22T12:15:00Z
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 38
+sources: 44
 license: CC-BY-4.0
 ---
 
@@ -634,9 +634,10 @@ about *whose* process decrypted them. What Railway does say is the intent:
 it believes this is "part of a series of attacks recently targeting platform
 companies" "with the aim of compromising AI inference providers," and that it
 has "notified these upstream providers to revoke all keys proactively." By
-Oct 22 the blog had grown nine separate recommendation posts — GCP, AWS, MySQL,
-Redis, MongoDB, PostgreSQL, GitHub, Stripe, OpenAI, plus Anthropic usage and
-object-storage redeploys. The advice is uniform and total: immediately roll
+Oct 22 the blog had grown **thirteen** separate recommendation posts — AWS, GCP,
+GitHub and Stripe access, MongoDB/MySQL/PostgreSQL/Redis credential rotation, a
+bucket redeploy plus GitHub reconnect, and unexpected-usage checks for
+**Anthropic, Grok, OpenAI and OpenRouter**. The advice is uniform and total: immediately roll
 every environment variable and every private-registry credential, then review
 logs. The GCP post adds the detail that shapes the blast radius — "By default,
 service account keys don't expire," short-lived tokens already issued stay
@@ -646,7 +647,8 @@ targets."
 **Why it matters:** The environment-variable drawer *is* the product for a PaaS,
 and it is also a complete map of every downstream credential the customer owns —
 provider keys, database passwords, registry tokens. The list of recommendation
-posts is effectively a census of what an AI team keeps in there, and it says
+posts is effectively a census of what an AI team keeps in there — down to the
+inference broker, not just the model vendors — and it says
 plainly that the attackers came for GPU spend rather than for data. Note also
 what rotation can and cannot fix: a service-account key that was already used
 keeps minting tokens for up to an hour after you delete it.
@@ -1061,8 +1063,8 @@ flow lets the *requester* choose the token request ID: an unauthenticated
 attacker creates a token request via `POST /api/token-request`, sends the
 resulting login link to a signed-in user, and then fetches "the resulting
 non-expiring API key" — full account takeover from one social-engineered click,
-with no expiry to bound it. `AV:N/AC:L/PR:N/UI:P`, CWE-unclassified, **CVSS 4.0
-8.6** and **CVSS 3.1 8.1**. It arrived in the same **VulnCheck** batch as
+with no expiry to bound it. `AV:N/AC:L/PR:N/UI:P`, **CWE-352**, **CVSS 4.0
+8.6** and **CVSS 3.1 8.1** (both VulnCheck's; the record is `Deferred`, not analyzed). It arrived in the same **VulnCheck** batch as
 `CVE-2026-114661` (OpenRemote, **9.0** at 4.0 / 8.5 at 3.1 — any authenticated
 user can open persistent TCP tunnels into an edge gateway's network) and four
 Grav CVEs, the sharpest of which lets a page author obtain a superuser account
@@ -1081,13 +1083,556 @@ so an account takeover there is not one account.
 
 ---
 
+## 35. vLLM publishes seven CVEs — and the fix has been on PyPI since October 5
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** VulnCheck CNA / GitHub Advisory · Oct 21
+- **Tags:** `cve` `vllm` `inference` `llm-serving`
+
+Seven contiguous CVEs, **CVE-2026-114049 through CVE-2026-114055**, all carrying the
+same "before **0.31.0**" boundary and all assigned by **VulnCheck** — while 0.31.0 was
+published on **Oct 5** and the current release, 0.32.0, on Oct 18. The headline is
+**CVE-2026-114053**: vLLM forwards the client-supplied
+`mm_processor_kwargs.code_revision` into Transformers'
+`AutoProcessor.from_pretrained`, so a caller picks which revision of a model's dynamic
+processor code gets imported. With `trust_remote_code=True` and an `auto_map` processor,
+a multimodal request to the **unauthenticated `/tokenize` endpoint** runs arbitrary Python
+in the API process — **9.2 at CVSS 4.0 / 8.1 at 3.1**, CWE-94. The rest: a cross-request
+**mask leak** in `InputBatch.condense()` that lets one client constrain another's outputs
+via stale `allowed_token_ids`; a client-supplied multimodal UUID used verbatim as cache
+identity (engine crash); a null `max_tokens` that skips the `min_tokens` check and kills
+the EngineCore input thread; per-distinct-kwarg processor caching in MOSS-Audio serving
+(memory exhaustion); cache aliasing through caller-controlled values such as EXIF fields;
+and unconstrained processor parameters. Pinning the *model* revision does not close the
+first one — only the *code* revision matters. Reporter adithyan-ak; triaged by DarkLight1337.
+
+**Why it matters:** Two things a version scanner will miss. The fix predates the advisory
+by 16 days, so a `pip install vllm==0.30.0` in a serving cluster today is vulnerable to a
+CVE published yesterday — the disclosure lag is the risk window, not the patch. And
+`/tokenize` is unauthenticated in most deployments: the item people think is a tokenizer is
+an interpreter.
+
+[`🔗 GHSA-f623-hjm8-5wg5 (CVE-2026-114053)`](https://github.com/advisories/GHSA-f623-hjm8-5wg5) · [`🔗 vLLM v0.31.0 release`](https://github.com/vllm-project/vllm/releases/tag/v0.31.0) · [`🔗 VulnCheck advisory`](https://www.vulncheck.com/advisories/vllm-0.7.3-before-0.31.0-rce-via-mm-processor-kwargs-code-revision)
+
+---
+
+## 36. Trigger.dev's 29 CVEs in one day are a map of three months of fixes — and one live bug
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** NVD / VulnCheck CNA · Oct 21
+- **Tags:** `cve` `trigger-dev` `agent-platform` `self-hosted`
+
+**CVE-2026-114065 through CVE-2026-114093** landed as one contiguous block on Oct 21, every
+one VulnCheck-assigned and NVD-unanalyzed. They are not new bugs: the repo's advisory list
+carries **39 GHSAs** published between **Jul 9 and Oct 20**, and the CVE block maps onto them
+one-for-one. The sharpest: **CVE-2026-114087** (9.2 at CVSS 4.0 / 8.1 at 3.1) — self-hosted
+Docker Compose deployments using `hosting/docker/.env.example` inherit a hardcoded
+`MAGIC_LINK_SECRET`, so anyone can forge a magic link for **any email address**, then reach
+Postgres, Redis and ClickHouse with default credentials exposed from runner containers;
+**CVE-2026-114090**, the `trigger dev --mcp` server binding all interfaces and exposing
+`/sse` and `/messages`; SQL injection in the TSQL query compiler (`POST /api/v1/query`) and in
+`/realtime/v1/runs` via an unescaped `tags` parameter; and a CLI that serialises unredacted
+resolved secrets into debug deployment logs. **One is not retrospective:** CVE-2026-114085
+says "through **4.7.6**" — the supervisor workload server never checks cross-tenant ownership,
+so a workload holding a run/snapshot pair can call `attempts/start` and take back resolved
+environment variables and run JWTs. The next release, **v4.7.7**, shipped at **08:39 UTC
+today** described as "a security release" — its notes list Node-runtime CVEs (a Brotli
+out-of-bounds write) and distrust of compromised eMudhra CAs, not this fix.
+
+**Why it matters:** A CVE number is an assignment event, not a discovery event. Three months
+of GHSAs acquired identifiers on one day, so a feed that sorts by publication date reports a
+platform "under attack" while the actually-current bug — the supervisor one — is one line in
+the middle. The version range is the only field that tells you which of the 29 you still have.
+
+[`🔗 Trigger.dev security advisories (39)`](https://github.com/triggerdotdev/trigger.dev/security/advisories) · [`🔗 v4.7.7 security release`](https://github.com/triggerdotdev/trigger.dev/releases/tag/v4.7.7) · [`🔗 NVD: CVE-2026-114085`](https://nvd.nist.gov/vuln/detail/CVE-2026-114085)
+
+---
+
+## 37. ZDI posted six unpatched kernel vulnerability reports to the public mailing list
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Phoronix / LKML archive · 47 HN pts · ~1h ago (~19:12 UTC+8)
+- **Tags:** `kernel` `disclosure` `zdi` `ksmbd`
+
+Overnight, six **ZDI-CAN** reports arrived on the *public* LKML instead of the private
+security list, without patches attached. Two are remote-code-execution bugs in **ksmbd** at
+**CVSS 9.0**: **ZDI-CAN-33549**, an integer underflow in `smbdirect_connection_rdma_xmit()` —
+an SMB2 WRITE with `RemainingBytes=8` and two RDMA buffer descriptors trips the clamp on the
+first (`buf_len=0`), then the second subtracts 4096 from a `size_t` and wraps, giving an
+~8 KB out-of-bounds write; and **ZDI-CAN-33774**, a protocol-dispatch race that flips the
+SMB1→SMB2 handler between enqueue and dequeue. The rest are local or informational:
+ZDI-CAN-33367 (`skb_zerocopy` LPE — the same issue was reported privately a week earlier),
+ZDI-CAN-34068 (vmwgfx out-of-bounds write), ZDI-CAN-34076 (NVMe-T uninitialised resource),
+ZDI-CAN-32005 (search-domain TCP query stack overflow, posted a day earlier). No CVE IDs
+exist yet; a fix for the SMB Direct underflow sits in a branch targeting Linux 7.5 and is not
+in mainline. Greg Kroah-Hartman's reply to the vmwgfx report is the whole story in two lines:
+"For some reason you sent this to public lists, and did not include a patch, so there's not
+much we can do with this."
+
+**Why it matters:** A full reproduction script and KASAN output are public for bugs whose
+fixes are not. And because the reports carry ZDI-CAN identifiers and no CVEs, a CVE-based
+scanner sees nothing at all — the disclosure that matters most today is the one with no
+record in the database everyone queries.
+
+[`🔗 Phoronix: several kernel vulnerabilities posted publicly`](https://www.phoronix.com/news/LKML-New-Trend-Vulnerabilities) · [`🔗 LKML thread: ZDI-CAN-34068 and Greg KH's reply`](https://lists.openwall.net/linux-kernel/2026/10/22/308)
+
+---
+
+## 38. Vibe-Trading's 9.8: `require_auth()` returns early when no key is configured
+
+- **Velocity:** ▮▮ rising
+- **Source:** GHSA / NVD (VulnCheck CNA) · Oct 21
+- **Tags:** `cve` `ai-agent` `trading` `prompt-injection`
+
+Three CVEs against **HKUDS/Vibe-Trading** (36.3k★), all scoped "0.1.0 before **0.1.7**".
+**CVE-2026-114108** — **9.8 at CVSS 3.1 / 9.3 at 4.0**, CWE-306 — is the flat one: the
+FastAPI server's `require_auth()` returns early when `API_AUTH_KEY` is unset, so an
+unauthenticated caller can post to `/sessions/{id}/messages`, have `BashTool` run commands
+**as root**, upload `.py` or `.sh` via `/upload`, read session histories and retrieve partial
+API keys. **CVE-2026-114107** (8.8 / 8.7) is the agent-native one: indirect prompt injection
+planted in a document or web page the agent reads becomes root shell, because `BashTool` and
+`BackgroundRunTool` hand model-emitted strings to `subprocess.run(..., shell=True)` with no
+allow-list or approval step, while `read_url` fetches arbitrary URLs (so the same path is
+SSRF). **CVE-2026-114106** adds path traversal through the agent's file-read tools. All three
+were fixed in **v0.1.7, published 2026-05-06**; the current release is **v0.1.18** (Oct 21).
+
+**Why it matters:** The disclosure lands five and a half months after the fix, so "new
+critical in a trending agent repo" is the wrong reading — but the shape is the right one to
+remember. The vulnerability was not in the model or the prompt filter; it was that the agent's
+shell tool took model output straight to `shell=True`, and that the auth gate failed open when
+unconfigured. Both defaults are common, and neither needs a jailbreak.
+
+[`🔗 GHSA-v2f8-6655-7grj (missing auth)`](https://github.com/HKUDS/Vibe-Trading/security/advisories/GHSA-v2f8-6655-7grj) · [`🔗 GHSA-jqmf-mx4f-hfr6 (prompt injection → RCE)`](https://github.com/HKUDS/Vibe-Trading/security/advisories/GHSA-jqmf-mx4f-hfr6) · [`🔗 v0.1.7 release`](https://github.com/HKUDS/Vibe-Trading/releases/tag/v0.1.7)
+
+---
+
+## 39. OpenStack Manila: any tenant can seize any *public* share — 9.9
+
+- **Velocity:** ▮▮ rising
+- **Source:** OpenStack OSSA-2026-046 / NVD · Oct 20–21
+- **Tags:** `cve` `openstack` `cloud` `authorization`
+
+**CVE-2026-71195**. A public share is visible to every tenant, so its UUID is not a secret —
+and Manila's controllers authorise the request against the *caller's* project, then load the
+foreign public share without ever re-authorising against its owner. The OSSA enumerates what
+that buys an ordinary authenticated project member: `allow_access` grants data-plane
+read/write on another tenant's share; `deny_access` revokes the owner's existing rules;
+`update_access` escalates a rule from read-only to read-write; `create_share_backup`
+exfiltrates the data as a backup filed under the attacker's own project; `soft_delete` and
+`restore` interfere with the owner's deletion workflow; export-location metadata can be
+created, modified and deleted on foreign shares; and access-rule listing discloses IPs,
+usernames and CephFS keys. Fixed in **20.0.3, 21.0.3, 22.0.2 and 23.0.1**, delivered as
+branch patches across 2025.1/epoxy through 2027.1/indri. Reported by Chen YuXiang (Institute
+of Computing Technology, Chinese Academy of Sciences) and Yuliang Xiao; Red Hat's Goutham
+Pacha Ravi and Carlos da Silva found the additional public-share paths. **Score provenance:**
+the OSSA itself carries **no CVSS string**; the **9.9 on the record is MITRE's** (v3.1, CNA
+metric), and NVD had not analyzed the record when checked.
+
+**Why it matters:** "Public" is a sharing flag, not a permission model, and the two got
+conflated in the controller layer. The transferable check is cheaper than the CVE: for every
+resource a tenant can *name*, is there an authorisation call against the resource's owner, or
+only against the caller's context? Also carry the scorer — quoting this as "NVD 9.9" would be
+wrong on two counts today.
+
+[`🔗 OSSA-2026-046`](https://security.openstack.org/ossa/OSSA-2026-046.html) · [`🔗 NVD: CVE-2026-71195`](https://nvd.nist.gov/vuln/detail/CVE-2026-71195)
+
+---
+
+## 40. Vyper's optimizer turns `(msg.value | 2)` into `1`, and there is no patched release
+
+- **Velocity:** ▮▮ rising
+- **Source:** Vyper GHSA / VulnCheck CNA · Oct 21
+- **Tags:** `cve` `vyper` `compiler` `miscompilation`
+
+**GHSA-6j9c-gvcw-74fj / CVE-2026-114117.** The optimizer rewrites `(or x K)` to `1`, which is
+only valid when the value is consumed for truthiness — and it decides that from the parent's
+opcode alone, so *both value branches* of a ternary look like conditions. `finalize()` normally
+rolls the rewrite back, but not for `callvalue` and `calldatasize`, which sit in
+`do_not_cache` and are therefore not treated as complex:
+
+```vyper
+@external
+@payable
+def f(c: bool) -> uint256:
+    return (msg.value | 2) if c else 5
+```
+
+`f(True)` with `msg.value = 5` returns **1** at the default `-O gas` (and at `-O codesize`),
+and **7** only under `-O none`. Wrong values then flow into storage, arithmetic, indexes,
+return values and events with no revert and no warning — the advisory's own example,
+`self.deposits[msg.sender] = (msg.value | 1) if flag else msg.value`, records every deposit as
+1 and locks the funds. Affected: **>= 0.3.8**, including the newest release, **v0.5.0b1**
+(Sep 1). **8.2 at CVSS 4.0** (`VI:H`, no confidentiality or availability impact) / **5.9 at
+3.1**, CWE-682, VulnCheck-assigned. **Patched version: none listed** — the only mitigation is
+to compile with `-O none` or avoid the pattern.
+
+**Why it matters:** A compiler bug that produces a plausible number instead of an error is
+strictly worse than one that crashes, because nothing downstream can tell. And "no patch yet"
+on a language people deploy contracts in means the exposure window is open-ended: the affected
+range includes the current release, not a historical one.
+
+[`🔗 GHSA-6j9c-gvcw-74fj`](https://github.com/vyperlang/vyper/security/advisories/GHSA-6j9c-gvcw-74fj) · [`🔗 Vyper releases (latest: v0.5.0b1, Sep 1)`](https://github.com/vyperlang/vyper/releases/tag/v0.5.0b1)
+
+---
+
+## 41. ns2jb: a tethered Switch 2 jailbreak built out of a SmileBASIC integer overflow
+
+- **Velocity:** ▮▮ rising
+- **Source:** pepsipu.com · 91 HN pts · ~4h ago (~16:00 UTC+8)
+- **Tags:** `jailbreak` `nintendo` `exploit` `reverse-engineering`
+
+Firmware **23.0.1**, author Sammy Hajhamid. The obvious route failed first and is the
+interesting part: a WebKit n-day delivered through a captive portal did produce native
+control-flow takeover, but could not be extended to arbitrary IPC against execute-only
+memory, pointer authentication and control-flow integrity. The working entry was **SmileBASIC**,
+a Switch 1 game — an integer overflow in array element removal wraps a bounds check, so a
+`memmove` reads from before the array, and the preceding pointer is then treated as a huge
+string length, giving out-of-bounds read/write and eventually ROP. From there a `GetEntryType`
+path-normalisation bug involving a `/..\` component overflows a 0x301-byte heap buffer,
+corrupts a `BufferedStorage` cache entry and yields unrestricted memory read/write; setting the
+`fs` connection's saved PID to 1 grants full filesystem privileges, which is how the author
+dumped internal storage and every ordinary sysmodule's code. Arbitrary sysmodule execution
+comes from abusing `fs`'s ExeFS-loading role: swap the loader's ExeFS entry for a substitute
+filesystem after `fs` has already supplied the valid NCA header hash and signature, control the
+timing by replacing the loader's IPC wait handle with an event driven from SmileBASIC, then
+`MapProcessMemory` to patch `fs` and obtain its `KProcess` by overwriting `IEventNotifier`'s
+handle with `0xffff8001`. The author's stated limits: tethered, only `fs` compromised among
+built-in sysmodules, entry depends on *SmileBASIC*, and this is not CFW.
+
+**Why it matters:** The hardened component held; the *game* was the soft one. Console
+platforms now spend their security budget on the browser and the kernel boundary while a
+licensed title's array bounds check sits in the same privilege path — which is the general
+lesson for any sandbox that admits third-party code with legacy assumptions.
+
+[`🔗 ns2jb write-up`](https://pepsipu.com/blog/2026-10-switch2-jailbreak-ns2jb/) · [`🔗 gitlab.com/pepsipu/ns2jb`](https://gitlab.com/pepsipu/ns2jb)
+
+---
+
+## 42. WorldTUI: a 360M model that pretends to be a terminal — 75 GPU-hours, 208 MB, in a browser
+
+- **Velocity:** ▮▮ rising
+- **Source:** simedw.com · 283 HN pts · ~10h ago (~10:00 UTC+8)
+- **Tags:** `world-model` `terminal` `webgpu` `small-models`
+
+There is no shell, kernel or filesystem underneath: every keypress goes to the model, which
+predicts the next screen. The construction is the story. Base model Qwen2.5-Coder-0.5B; the
+151,936-token embedding is replaced with a **333-token vocabulary** over bytes, rows and
+special operations, landing at ~**360M parameters**; int4 quantisation makes it a **208 MB**
+download running on a custom JavaScript Qwen decoder over WebGPU. Training data is synthetic —
+**336k episodes, ~2B tokens** — generated by running real programs inside Docker containers and
+recording keystrokes against resulting screens, with randomised usernames, hosts, directories
+and terminal sizes, a **1.2% simulated typo rate**, and **35%** of sessions starting partway
+through so the model learns to continue from an arbitrary state. Rows are decoded in parallel
+because most do not depend on each other, then verified with speculative decoding; a `COPY`
+operation moves rows during scrolling and clearing. Three rounds of SFT plus DAgger on an RTX
+4090, ~**75 GPU-hours**. Results: ShellBench **80/106** against 60 for a prompted Qwen3-0.6B and
+52 for the tuned base; file readbacks **9/13** vs 3/13; PresetBench **24/47 → 38/47** at int4;
+large-frame p95 on a 4090 from **6.7 s to 0.87 s**.
+
+The author's own limits, which are the reason to read the post rather than the score: "It's
+still far from a reliable filesystem." Appending with `echo green >> colors` and then running
+`cat colors` often fails to show the line; nested directories lose the current path; harder
+Python produces GPT-3-era hallucinations; distillation was abandoned after students lost memory
+ability while still sounding plausible; and the demo is ~20× slower in Firefox than Chrome for
+unknown reasons.
+
+**Why it matters:** The measured quantity is not terminal emulation, it is *state persistence* —
+and the ablation says it is what distillation destroys first. A plausible-looking model that
+drops the file it just wrote is the failure mode every world-model demo risks, and this one
+names it.
+
+[`🔗 WorldTUI`](https://simedw.com/2026/10/21/world-model-terminal/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50190363)
+
+---
+
+## 43. "The End of Consensus Research?" — an agent harness found a protocol, and the authors say experts remain essential
+
+- **Velocity:** ▮▮ rising
+- **Source:** arXiv 2610.30114 · Oct 21
+- **Tags:** `agents` `distributed-systems` `lean` `research`
+
+**A-greement** is a new consensus protocol for geo-replicated state machines, and it wins on
+measurement: averaged across six deployments with 5 or 9 replicas, it cuts the mean latency of
+a geo-distributed key-value store over the fastest baseline by **12.2%** on write-heavy and
+**33.3%** on read-heavy workloads, and matches the fastest baseline on read-only ones. It
+combines lease-authorised local reads, direct client learning for leader-ordered writes, and a
+fast fixed-quorum per-key write path chosen by topology and workload. What found it was
+**AI-greement**, a harness of three parts: a concept-oriented protocol knowledge base, a
+modular implementation skeleton, and a **Lean** verification framework with reusable safety
+definitions, reference specifications and proofs. The Lean formalisation is independently
+useful — it uncovered several previously unreported vulnerabilities in existing consensus
+protocols.
+
+**Why it matters:** The title is the claim and the last sentence of the abstract is the
+finding, so quote both: "human consensus experts remain essential before, during, and after the
+search: agents reshape the researcher's role rather than end consensus research." A 33.3%
+latency win is real; the paper's position is that the harness — knowledge base plus skeleton
+plus proofs — is what made it reachable, which is a reproducible claim about tooling rather
+than a claim about autonomous discovery.
+
+[`🔗 arXiv abstract`](https://arxiv.org/abs/2610.30114) · [`🔗 Full text (HTML)`](https://arxiv.org/html/2610.30114v1)
+
+---
+
+## 44. Silent cue loss: agents read your documents blind to highlight and colour
+
+- **Velocity:** ▮▮ rising
+- **Source:** arXiv 2610.30026 · Oct 21
+- **Tags:** `agents` `rag` `document-parsing` `benchmark`
+
+The paper's premise is that before an agent can follow a policy, some ingestion layer turns a
+Word file or PDF into tokens — and that layer is where a deployed agent silently loses
+information. The task is built from **76 real policy documents**: recover the requirements the
+author singled out, scored against the file's own OOXML properties by a deterministic matcher
+with **no LLM judge**. Formatting-blind ingestion collapses from **micro F1 0.690 to 0.150**
+(docling) and **0.075** (plain text), and the gap replicates across six answering models from
+two vendors — five Claude tiers and GPT-5.6. A span-level leave-one-out localises the loss to
+two cues: **highlight (+0.302)** and **colour (+0.262)**, both Holm-adjusted p < 1e-4, while
+bold, italic, monospace and strikethrough each sit within ±0.003 of zero. It is not an edge
+case — **32.8% of 6,460 documents** carry a deliberate colour or highlight and **10.3%** carry
+one on an obligation. A pre-registered test finds that *typing* a cue for the agent adds
+**+0.085** beyond merely preserving it (Holm-adjusted p = 0.049). Labels were validated against
+rendered page images in an independent modality (kappa 0.72), and wording alone is bounded at
+AUC 0.664; docling's false-positive rate on requirements the author did not flag is four times
+theirs.
+
+**Why it matters:** The failure mode is confident wrongness, not visible incompleteness — an
+agent that cannot see the cue guesses. And the asymmetry is a debugging shortcut: if your
+pipeline drops colour, you lose exactly the information authors use to mark the sentence that
+matters, and no parsing benchmark currently scores it.
+
+[`🔗 arXiv abstract`](https://arxiv.org/abs/2610.30026) · [`🔗 Full text (HTML)`](https://arxiv.org/html/2610.30026v1)
+
+---
+
+## 45. Quant-Arena: nine frontier models, one sealed year, and none beat the equal-weight market
+
+- **Velocity:** ▮ steady
+- **Source:** arXiv 2610.30113 · Oct 21
+- **Tags:** `benchmark` `agents` `quant` `evaluation`
+
+An open benchmark and leaderboard for end-to-end quantitative research on real A-share data.
+The loop is the unit of evaluation, not the formula: a model constructs features and
+stock-scoring code, receives feedback **only on 2022–2023**, freezes one strategy, and is
+assessed on the **sealed year 2024**. A cash-account evaluator applies trading constraints and
+costs, including market impact estimated from a simulated order book, and the score is
+dominated by realised excess return with signal quality and feature diversity as complements.
+Nine frontier models were evaluated; **GPT-6 Astra scores highest** — and **"no model beats the
+equal-weight market in 2024."** Submissions are open to any model or harness.
+
+**Why it matters:** This is the rare leaderboard that publishes the row that undercuts its own
+headline. "Best of nine frontier models, still behind equal-weight" is the finding; the ranking
+above it is only interesting once that sentence is attached.
+
+[`🔗 arXiv abstract`](https://arxiv.org/abs/2610.30113) · [`🔗 Full text (HTML)`](https://arxiv.org/html/2610.30113v1)
+
+---
+
+## 46. OpenAI ships an official REST-API CLI in Go — and HN asks why it exists beside Codex
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News / GitHub · 148 pts · 79 comments · ~7h ago (~13:20 UTC+8)
+- **Tags:** `openai` `cli` `developer-tools` `go`
+
+`openai/openai-cli` is Apache-2.0 Go and describes itself as the "Official CLI for the OpenAI
+API" — a resource-based wrapper over the REST surface (`openai responses create`), with
+separate admin keys for administrative endpoints, output as readable text or JSON, JSONL, YAML,
+raw and GJSON transformations, `@file` expansion with explicit `@file://` and `@data://`
+encodings, image generation into `~/Downloads/gpt-images/`, shell completion, help that works
+without credentials, `--header` plus `OPENAI_CUSTOM_HEADERS`, and beta mutual TLS that
+deliberately rejects HTTPS proxies so the client certificate is never presented to one. The
+repo is small — **924★**, 82 forks — but the release cadence is not: v1.39.0 on Oct 19,
+v1.40.0 and v1.40.1 on Oct 21, **v1.40.2 at 03:31 UTC today**. The README restricts
+contributions: "Pull requests are limited to repository collaborators."
+
+The thread is mostly about identity rather than features — whether this duplicates Codex
+(replies: Codex is an interactive agent harness, this is a batch/API wrapper), whether it is an
+administration tool or something consumer-facing, and a long branch warning that OpenAI tooling
+changes or disappears quickly. One commenter alleges a repo script contains "half a backdoor";
+a reply identifies it as a standard `go run` wrapper. The README's own warning that debug logs
+may contain sensitive request and response payloads is the practical caveat.
+
+**Why it matters:** For agent builders the useful signal is that the API now has a first-party
+scriptable surface with structured output formats — the thing people have been wrapping by hand.
+The caveat is what the thread is actually about: a CLI with no announcement, a fast release
+train, and PRs closed to outside contributors is a tool to depend on operationally, not to
+extend.
+
+[`🔗 openai/openai-cli`](https://github.com/openai/openai-cli) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50191507)
+
+---
+
+## 47. universal-modder: point Claude Code at a game you own — recon, assets, in-game test, package
+
+- **Velocity:** ▮▮ rising
+- **Source:** GitHub · 8.7k★ · Oct 22
+- **Tags:** `claude-code` `game-modding` `mcp` `skills`
+
+An MIT-licensed toolkit, 953 forks, that installs as a Claude Code plugin
+(`/plugin marketplace add rehan-remade/universal-modder`) and supplies skills, a `um` CLI and
+the **fal MCP** server, with a SessionStart hook putting `um` on PATH. The main skill,
+`mod-any-game`, is a workflow rather than a prompt: search prior field notes, recon and pick a
+route, back up saves, inspect code, build the smallest working slice, generate assets, test in
+the game, record, package, and write the field note back. Engine guidance covers Unity,
+Unreal, .NET/XNA (Terraria, Stardew, Celeste), Godot, Source 1/2, Bethesda, Minecraft,
+AoE2/Genie, GameMaker, RPG Maker, Ren'Py and Doom; the showcase examples include a custom
+civilization for AoE2 DE and Minecraft implemented inside GTA V over a local WebSocket. Asset
+generation runs through fal (art, 3D models, textures, SFX, music, voice, video) via MCP or
+`um fal`, with local ComfyUI as the image alternative.
+
+The project states its own boundary, which is the part worth quoting: single-player,
+multiplayer, or servers you host; it refuses to inject into anti-cheat-protected online games,
+to cheat against other players, or to bypass anti-cheat, DRM or ownership checks; it ships no
+game files or decompiled code, and asks before controlling input or installing loaders.
+
+**Why it matters:** This is the clearest example yet of the "agent + MCP + CLI + field notes"
+pattern leaving software and entering *content* — the deliverable is a working mod, and the
+loop closes with an in-game test. The refusal list is the interesting design decision: it
+draws the line at anti-cheat rather than at modding, which is where the enforceable boundary
+actually sits.
+
+[`🔗 rehan-remade/universal-modder`](https://github.com/rehan-remade/universal-modder) · [`🔗 Releases`](https://github.com/rehan-remade/universal-modder/releases)
+
+---
+
+## 48. DigUp: describe the file, get the file — EmbeddingGemma 2 on your own laptop
+
+- **Velocity:** ▮▮ rising
+- **Source:** GitHub · 5.4k★ · Oct 22
+- **Tags:** `local-first` `embeddings` `search` `gemma`
+
+Point it at folders and it indexes the contents of pictures, PDFs, documents, recordings,
+videos and code, then answers a natural-language query by opening the match — the demo hunts a
+zebra in a video, a minute in a podcast, a clause in a lease and a function in code. It is MIT,
+ships Mac plus Windows and Linux betas (v0.7.0-beta.3), and everything runs locally. The model
+is the reason it fits there: Google DeepMind's **EmbeddingGemma 2**, released this month —
+**740M parameters, Apache-2.0**, more than 100 languages, with text, images, audio and video
+landing in one shared space so "a dog on the beach" sits next to the frame.
+
+**Why it matters:** Multimodal retrieval has been a cloud feature mostly because of model size.
+A 740M embedding model small enough to run on a laptop, shipped in an app that indexes your own
+folders, moves the interesting question from capability to policy: what it reads, where the
+index lives, and whether anything leaves the machine.
+
+[`🔗 ARahim3/DigUp`](https://github.com/ARahim3/DigUp) · [`🔗 google/embeddinggemma-2`](https://huggingface.co/google/embeddinggemma-2)
+
+---
+
+## 49. OpenDots: an open template for always-on AI coworkers, each with its own computer
+
+- **Velocity:** ▮ steady
+- **Source:** GitHub · 5.9k★ · Oct 22
+- **Tags:** `agents` `copilotkit` `ag-ui` `template`
+
+CopilotKit's MIT template, marked **alpha**, for persistent agents that move between text,
+calls and Slack, on web and mobile. The interaction shape is the substance: ask → browse →
+approve → save, with a live computer view and a human review card rendered inside the chat,
+and the approved draft becoming an editable "Space" page — an agent that acts in a browser
+while a person watches and signs off, rather than a chat transcript claiming work happened.
+It is built on CopilotKit and **AG-UI**.
+
+The dependency is stated plainly and is the caveat: you self-host the app on your own
+infrastructure, but conversations **require CopilotKit Intelligence** — hosted, a local Docker
+evaluation, or a licensed self-hosted deployment. So "self-hostable" describes the surface,
+not the stack.
+
+**Why it matters:** The approval card plus live view is the pattern most agent products still
+skip, and it is being published as a template rather than a product — which makes it the one
+of this week's agent launches you can actually read. The licensing line is equally worth
+knowing before planning around it.
+
+[`🔗 CopilotKit/OpenDots`](https://github.com/CopilotKit/OpenDots) · [`🔗 CopilotKit`](https://github.com/CopilotKit/CopilotKit)
+
+---
+
+## 50. DroidDeck: Steam Big Picture and ARM64 Proton on an Android phone — no root
+
+- **Velocity:** ▮▮ rising
+- **Source:** GitHub · 12.5k★ · 0.5.0 (Oct 18)
+- **Tags:** `android` `steamos` `proton` `gaming`
+
+GPL-3.0, 638 forks, 1,254 commits. It runs Valve's Steam client in Big Picture and, through
+Valve's **ARM64 Proton** layer, Windows games — plus a Linux desktop with apps and emulators, a
+Flatpak-based app store, and GOG, Epic and Amazon integrations. The compatibility matrix is the
+real content of the README: **Android 9+** and an **Adreno 730/8xx** GPU; Adreno 6xx is
+experimental; Mali, Xclipse, PowerVR and Adreno 710 are unsupported. No root. Around 3 GB for
+the runtime plus 1.1 GB for desktop and emulators; Android 14+ needs the developer setting that
+relaxes child-process restrictions. The stated caveats are equally specific: desktop
+compositing is software-rendered, Firefox sandboxing is reduced under proot, and DirectX 12
+titles on Adreno 6xx may still crash. The README also warns that the project has no official
+standalone website, so links found elsewhere should be treated as suspect — a supply-chain
+note in a 12.5k-star gaming repo, which is now standard.
+
+**Why it matters:** Valve's ARM64 Proton is doing the work here, and the project's value is
+publishing *where it doesn't* — a per-SoC allowlist is far more useful than a compatibility
+claim, and it is the difference between a download and a support burden.
+
+[`🔗 Droid-Deck/DroidDeck`](https://github.com/Droid-Deck/DroidDeck) · [`🔗 Releases (0.5.0)`](https://github.com/Droid-Deck/DroidDeck/releases)
+
+---
+
+## 51. earstrip: an ear-clipping triangulator that beats earcut by 14% — by skipping ears that can't matter
+
+- **Velocity:** ▮▮ rising
+- **Source:** globus.software · Oct 16–22
+- **Tags:** `geometry` `performance` `wasm` `maps`
+
+An ISC single-header C++ ear clipper plus a WebAssembly npm package with an earcut-compatible
+API, benchmarked on **3,740,425 polygons** from zoom level 13 of a Masovian Voivodeship map, on
+one M4 Pro core. The optimisation chain is published commit by commit: constrained-Delaunay
+baseline **2,931 ms** → naive ear clipping **1,119** → test only reflex vertices, the "dents"
+that can block an ear, **882** → convex-polygon shortcut **880** → triangle strips **762** →
+bucketed dents **697** → branchless counting pass **519** → bit-mask of marked dents **489**.
+The gains are legible: ~**1.8M polygons have four vertices or fewer**, and Delaunay spends
+419 ms on them; restricting ear tests to dents cut scanned points from 353M to 185M; strips cut
+output indices from 64.5M to 35.8M while *increasing* ear tests from 23.7M to 25.0M.
+
+The caveats are in the post, not below it: ear clipping assumes simple polygons, so 76 Masovian
+polygons fall back to Delaunay after grid rounding produces self-touching outlines with no ear;
+polygons with **128 or more holes** are handed to Delaunay outright, and a world-map polygon
+with 11,675 holes takes **606 ms** with ear clipping against **17 ms** with Delaunay; and on the
+hard zoom-13 polygons earcut's triangles disagree with an even-odd fill on **31%** of pixels
+against **0.15%** for earstrip.
+
+**Why it matters:** Two numbers that never appear together in geometry-library READMEs — speed
+*and* where the output is wrong — are both here, and the second is what decides whether a map
+renders. The technique worth stealing is the constraint, not the constant: only a reflex vertex
+can block an ear, so most of the work is provably unnecessary.
+
+[`🔗 earstrip: cutting map polygons`](https://globus.software/blog/2026/10/16/cutting-map-polygons/) · [`🔗 mapbox/earcut (baseline)`](https://github.com/mapbox/earcut)
+
+---
+
+## 52. anatomy: 18.9k stars for a skill that explains a machine by drawing it
+
+- **Velocity:** ▮ steady
+- **Source:** GitHub · 18.9k★ · last push Oct 18
+- **Tags:** `agent-skills` `svg` `illustration` `claude-code`
+
+MIT, zero runtime dependencies, Node ≥20.10, installed with `npx skills add`. It is a Claude
+skill (also listed for Antigravity, OpenCode, Codex and MiniMax Code) that answers a question
+about a machine by building an interactive isometric figure of it — the README's sample is a
+Raptor 2 test stand with a WebGL-shader exhaust plume, labelled with chamber pressure and
+thrust. Output is SVG, WebGL or 3D, assembled from many small precise parts rather than one
+generated image.
+
+**Why it matters:** At 18.9k★ it is the visual branch of the agent-skill genre reaching the same
+scale as its text counterparts, and the appeal is the constraint: a labelled isometric drawing
+is *checkable* in a way a generated picture is not — the parts either line up with the thing or
+they don't. Note the staleness signal, though: five days without a push while doubling stars is
+the pattern this feed keeps flagging.
+
+[`🔗 wheresryan22/anatomy`](https://github.com/wheresryan22/anatomy) · [`🔗 Skill page`](https://skills.wheresryan.sh/anatomy)
+
+---
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-10-22T04:20:00Z |
-| Items | 34 |
-| Sources tracked | 38 (Hacker News, GitHub Trending/repos, NVD, CISA KEV, GitHub Blog, thephp.foundation, SafeDep, LiteLLM, GitLab, DuckDB, Anthropic/claude.com, OpenAI, OpenAI Alignment, SecurityWeek, The Register, USA Today/Reuters, arXiv, Simular, freehire.me, Google Style Guide, dri.es, alterauth.com, Eclipse, PyPI, Railway Blog, VulnCheck, Traefik, Mistral, Calif, Wiz, Hirundo, mitmproxy, Cursor, texttocad.dev, Omnara, Federal Court of Australia/9to5Mac, Ardent Performance, Obot) |
+| Generated | 2026-10-22T12:15:00Z |
+| Items | 52 |
+| Sources tracked | 44 (Hacker News, GitHub Trending/repos, NVD, CISA KEV, GitHub Blog, thephp.foundation, SafeDep, LiteLLM, GitLab, DuckDB, Anthropic/claude.com, OpenAI, OpenAI Alignment, SecurityWeek, The Register, USA Today/Reuters, arXiv, Simular, freehire.me, Google Style Guide, dri.es, alterauth.com, Eclipse, PyPI, Railway Blog, VulnCheck, Traefik, Mistral, Calif, Wiz, Hirundo, mitmproxy, Cursor, texttocad.dev, Omnara, Federal Court of Australia/9to5Mac, Ardent Performance, Obot, vLLM, Trigger.dev, Phoronix/LKML, OpenStack OSSA, vyperlang, HKUDS, CopilotKit, Hugging Face, pepsipu.com, simedw.com, globus.software, wheresryan.sh, openai-cli, DroidDeck, mapbox) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (3x daily) |
 | Ranking | Velocity-weighted (recency × engagement acceleration × source authority) |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |

@@ -1,8 +1,8 @@
 ---
 date: 2026-10-22
-updated: 2026-10-22T04:20:00Z
+updated: 2026-10-22T12:15:00Z
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 38
+sources: 44
 license: CC-BY-4.0
 ---
 
@@ -582,7 +582,7 @@ agent WebSocket は fog トークンを検証する——operator WebSocket の�
 
 ---
 
-## 21. Railway の環境変数は復号可能だった——デプロイは全面停止、24 時間で 9 本のローテーション勧告
+## 21. Railway の環境変数は復号可能だった——デプロイは全面停止、24 時間で 13 本のローテーション勧告
 
 - **Velocity:** ▮▮▮ trending
 - **Source:** Railway Blog · 364+ HN pts · 6h ago (~05:58 UTC+8)
@@ -596,9 +596,10 @@ Railway は 10 月 21 日朝、「顧客の環境変数を保存するシステ�
 明言しているのは意図のほうだ。これは「最近プラットフォーム企業を標的にした一連の
 攻撃」の一部であり、「AI 推論プロバイダの侵害を目的とする」と見ており、「これらの
 上流プロバイダに通知して全キーの積極的な失効を要請した」という。10 月 22 日までに
-ブログは 9 本の独立した勧告記事に増えた——GCP、AWS、MySQL、Redis、MongoDB、
-PostgreSQL、GitHub、Stripe、OpenAI、加えて Anthropic の利用状況とオブジェクト
-ストレージの再デプロイ。助言は一律かつ徹底している。すべての環境変数とすべての
+ブログは **13 本**の独立した勧告記事に増えた——AWS、GCP、GitHub、Stripe のアクセス、
+MongoDB/MySQL/PostgreSQL/Redis の資格情報ローテーション、バケット再デプロイと
+GitHub 再接続、そして **Anthropic、Grok、OpenAI、OpenRouter** の異常利用チェック。
+助言は一律かつ徹底している。すべての環境変数とすべての
 プライベートレジストリ資格情報を直ちにローテートし、ログを点検せよ、と。GCP の記事は
 被害半径を決めるディテールを補う——「既定では、サービスアカウントキーは失効しない」、
 既に発行された短期トークンは最大 1 時間有効で、「Compute、GPU、Vertex AI の利用が
@@ -607,7 +608,8 @@ PostgreSQL、GitHub、Stripe、OpenAI、加えて Anthropic の利用状況と�
 **Why it matters:** PaaS にとって環境変数の引き出しは**製品そのもの**であり、同時に
 顧客が持つすべての下流資格情報の完全な地図でもある——プロバイダキー、DB パスワード、
 レジストリトークン。あの勧告記事の並びは、AI チームがそこに何を入れているかの事実上の
-国勢調査であり、攻撃者がデータではなく GPU 課金を狙って来たことをはっきり書いている。
+国勢調査であり——モデルベンダーだけでなく推論の**ブローカー**まで含む——攻撃者が
+データではなく GPU 課金を狙って来たことをはっきり書いている。
 ローテーションが直せるもの・直せないものにも注意が必要だ。既に使われたサービス
 アカウントキーは、削除した後も最大 1 時間はトークンを発行し続ける。
 
@@ -988,7 +990,8 @@ pgbench scale 640、5% のテーブル更新——それでもスタンバイは
 `POST /api/token-request` でリクエストを作り、生成されたログインリンクをサインイン済み
 のユーザーに送り、その後「結果として得られる、期限のない API キー」を取得する——1 回の
 ソーシャルエンジニアリングで完全なアカウント奪取、しかも期限がないので範囲を区切る
-ものがない。`AV:N/AC:L/PR:N/UI:P`、**CVSS 4.0 8.6**、**CVSS 3.1 8.1**。同じ
+ものがない。`AV:N/AC:L/PR:N/UI:P`、**CWE-352**、**CVSS 4.0 8.6**、**CVSS 3.1 8.1**
+（いずれも VulnCheck のスコア。レコードは `Deferred` で未分析）。同じ
 **VulnCheck** のバッチには `CVE-2026-114661`（OpenRemote、4.0 **9.0** / 3.1 8.5——
 任意の認証済みユーザーがエッジゲートウェイのネットワークへ持続的双方向 TCP 回路を
 開ける）と Grav の 4 件が並び、最も鋭いものはページ frontmatter で定義した招待
@@ -1006,13 +1009,524 @@ pgbench scale 640、5% のテーブル更新——それでもスタンバイは
 
 ---
 
+## 35. vLLM が 7 件の CVE を公開——修正は 10 月 5 日から PyPI に載っていた
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** VulnCheck CNA / GitHub Advisory · 10 月 21 日
+- **Tags:** `cve` `vllm` `inference` `llm-serving`
+
+連番の 7 件、**CVE-2026-114049〜CVE-2026-114055**。すべて「**0.31.0** より前」という同じ
+境界を持ち、すべて **VulnCheck** の割り当て——ところが 0.31.0 は **10 月 5 日**に、現行の
+0.32.0 は 10 月 18 日に公開済みだ。主役は **CVE-2026-114053**：vLLM はクライアントが渡した
+`mm_processor_kwargs.code_revision` を Transformers の `AutoProcessor.from_pretrained` へ
+そのまま転送するため、呼び出し側が「モデルのどのリビジョンの動的 processor コードを import
+するか」を選べる。`trust_remote_code=True` かつ `auto_map` processor がある構成で、
+**認証のない `/tokenize` エンドポイント**にマルチモーダル要求を投げると API プロセス内で
+任意の Python が走る——**CVSS 4.0 で 9.2 / 3.1 で 8.1**、CWE-94。残り 6 件は、
+`InputBatch.condense()` の**リクエスト間 mask 漏れ**（残留した `allowed_token_ids` で他
+クライアントの出力を制約できる）、クライアント指定のマルチモーダル UUID をそのままキャッシュ
+識別子に使う（エンジンが落ちる）、`max_tokens` が null のとき `min_tokens` 検査を飛ばして
+EngineCore の入力スレッドが死ぬ、MOSS-Audio 配信で kwarg ごとに processor をキャッシュ
+（メモリ枯渇）、EXIF など呼び出し側が制御できる値によるキャッシュの別名衝突、そして制約
+なしの processor 引数。**モデル**のリビジョンを固定しても 1 件目は塞がらない——効くのは
+**コード**のリビジョンだけだ。報告は adithyan-ak、トリアージは DarkLight1337。
+
+**Why it matters:** バージョンスキャナが見落とす点が 2 つある。修正はアドバイザリより 16 日
+早いので、今日 `pip install vllm==0.30.0` した推論クラスタは「昨日公開された CVE」に対して
+脆弱なままだ——リスクの窓はパッチではなく開示の遅れにある。そして `/tokenize` は多くの
+配備で認証なしだ。トークナイザだと思っているものが、実はインタプリタである。
+
+[`🔗 GHSA-f623-hjm8-5wg5（CVE-2026-114053）`](https://github.com/advisories/GHSA-f623-hjm8-5wg5) · [`🔗 vLLM v0.31.0 リリース`](https://github.com/vllm-project/vllm/releases/tag/v0.31.0) · [`🔗 VulnCheck アドバイザリ`](https://www.vulncheck.com/advisories/vllm-0.7.3-before-0.31.0-rce-via-mm-processor-kwargs-code-revision)
+
+---
+
+## 36. Trigger.dev の 1 日 29 件は 3 か月分の修正の地図——そして生きたままの穴が 1 つ
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** NVD / VulnCheck CNA · 10 月 21 日
+- **Tags:** `cve` `trigger-dev` `agent-platform` `self-hosted`
+
+**CVE-2026-114065〜CVE-2026-114093** が 10 月 21 日に連番の塊として着地した。すべて
+VulnCheck 割り当て、すべて NVD 未分析。新しいバグではない：リポジトリのアドバイザリ一覧には
+**39 件の GHSA** が **7 月 9 日から 10 月 20 日**までに公開されており、この CVE 群はそれと
+1 対 1 で対応する。鋭いのは **CVE-2026-114087**（CVSS 4.0 9.2 / 3.1 8.1）——セルフホストの
+Docker Compose が `hosting/docker/.env.example` を使うとハードコードされた
+`MAGIC_LINK_SECRET` を引き継ぎ、**任意のメールアドレス**の magic link を偽造できる。さらに
+runner コンテナから露出する既定資格情報で Postgres、Redis、ClickHouse に到達される。
+**CVE-2026-114090** は `trigger dev --mcp` が全インターフェースにバインドして `/sse` と
+`/messages` を晒す。TSQL クエリコンパイラ（`POST /api/v1/query`）と `/realtime/v1/runs`
+（`tags` パラメータ未エスケープ）に SQL インジェクション。CLI はマスクされていない解決済み
+secret を debug デプロイログに書き出す。**1 件だけ遡及ではない：** CVE-2026-114085 は
+「**4.7.6** まで」と書いてある——supervisor ワークロードサーバがテナント越境の所有権検査を
+せず、run/snapshot の組を持つワークロードが `attempts/start` を呼べば解決済みの環境変数と
+run JWT が取れる。次の **v4.7.7** は**本日 08:39 UTC** に「セキュリティリリース」として
+出たが、ノートに並ぶのは Node ランタイムの CVE（Brotli の領域外書き込み）と侵害された
+eMudhra CA の不信任であって、この修正ではない。
+
+**Why it matters:** CVE 番号は割り当ての出来事であって、発見の出来事ではない。3 か月分の
+GHSA が同じ日に番号を得たので、公開日で並べるフィードは「いま攻撃されている」と報じる——
+その間に、実際に現行の supervisor の穴は真ん中の 1 行として埋もれている。29 件のうち
+どれがまだ手元にあるかを教えるのはバージョン範囲だけだ。
+
+[`🔗 Trigger.dev セキュリティアドバイザリ（39 件）`](https://github.com/triggerdotdev/trigger.dev/security/advisories) · [`🔗 v4.7.7 セキュリティリリース`](https://github.com/triggerdotdev/trigger.dev/releases/tag/v4.7.7) · [`🔗 NVD: CVE-2026-114085`](https://nvd.nist.gov/vuln/detail/CVE-2026-114085)
+
+---
+
+## 37. ZDI が未修正のカーネル脆弱性レポート 6 件を公開メーリングリストへ流した
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Phoronix / LKML アーカイブ · 47 HN pts · ~1h ago (~19:12 UTC+8)
+- **Tags:** `kernel` `disclosure` `zdi` `ksmbd`
+
+一晩のうちに **ZDI-CAN** のレポート 6 件が、非公開のセキュリティ一覧ではなく*公開*の LKML に
+届いた。パッチはどれにも添付されていない。うち 2 件は **ksmbd** のリモートコード実行で
+**CVSS 9.0**：**ZDI-CAN-33549** は `smbdirect_connection_rdma_xmit()` の整数アンダーフロー
+——`RemainingBytes=8` の SMB2 WRITE と RDMA バッファ記述子 2 つで、1 つ目がクランプを
+発火させ（`buf_len=0`）、2 つ目が `size_t` から 4096 を引いて回り込み、約 8 KB の領域外
+書き込みになる。**ZDI-CAN-33774** は enqueue と dequeue の間で SMB1→SMB2 のハンドラが
+入れ替わるプロトコルディスパッチ競合。残りはローカル系・情報系：ZDI-CAN-33367
+（`skb_zerocopy` の LPE——同じ問題は前週に非公開で報告済み）、ZDI-CAN-34068（vmwgfx の
+領域外書き込み）、ZDI-CAN-34076（NVMe-T の未初期化リソース）、ZDI-CAN-32005（search-domain
+TCP クエリのスタックバッファ溢れ、前日に投稿）。CVE 番号はまだ存在しない。SMB Direct の
+修正は Linux 7.5 向けブランチにあり、mainline には入っていない。vmwgfx への Greg
+Kroah-Hartman の返信がすべてを言い切っている。「なぜかこれを公開リストに送っていて、
+パッチも付けていないので、こちらにできることはほとんどない。」
+
+**Why it matters:** 完全な再現スクリプトと KASAN 出力が公開され、修正は公開されていない。
+しかもレポートは CVE を持たない ZDI-CAN 識別子なので、CVE ベースのスキャナには何も見えない
+——今日いちばん重要な開示は、みんなが引いているデータベースに記録がないその開示だ。
+
+[`🔗 Phoronix: カーネル脆弱性が公開された`](https://www.phoronix.com/news/LKML-New-Trend-Vulnerabilities) · [`🔗 LKML スレッド: ZDI-CAN-34068 と Greg KH の返信`](https://lists.openwall.net/linux-kernel/2026/10/22/308)
+
+---
+
+## 38. Vibe-Trading の 9.8：キー未設定なら `require_auth()` が早期リターンする
+
+- **Velocity:** ▮▮ rising
+- **Source:** GHSA / NVD（VulnCheck CNA）· 10 月 21 日
+- **Tags:** `cve` `ai-agent` `trading` `prompt-injection`
+
+**HKUDS/Vibe-Trading**（36.3k★）に対する 3 件。範囲はいずれも「0.1.0 から **0.1.7** 未満」。
+**CVE-2026-114108**——**CVSS 3.1 で 9.8 / 4.0 で 9.3**、CWE-306——が最も平坦だ：FastAPI
+サーバの `require_auth()` は `API_AUTH_KEY` が未設定だと早期リターンするため、未認証の
+呼び出し側が `/sessions/{id}/messages` に投稿して `BashTool` に **root** でコマンドを実行
+させ、`/upload` で `.py`／`.sh` を置き、セッション履歴を読み、部分的な API キーを取得できる。
+**CVE-2026-114107**（8.8 / 8.7）はエージェント固有のほう：エージェントが読む文書や Web
+ページに仕込まれた間接プロンプトインジェクションが root シェルになる。`BashTool` と
+`BackgroundRunTool` がモデル出力の文字列を `subprocess.run(..., shell=True)` にそのまま
+渡し、許可リストも承認ステップもない。`read_url` は任意の URL を取得するので同じ経路が
+SSRF でもある。**CVE-2026-114106** はエージェントのファイル読み取りツールのパストラバーサル。
+3 件とも **v0.1.7（2026-05-06 公開）**で修正済み。現行リリースは **v0.1.18**（10 月 21 日）。
+
+**Why it matters:** 開示は修正から 5 か月半後なので、「人気エージェントリポジトリに新たな
+重大脆弱性」は誤読だ——しかし形は覚えておく価値がある。脆弱性はモデルにもプロンプト
+フィルタにもなく、エージェントのシェルツールがモデル出力を `shell=True` に直結していた
+ことと、認証ゲートが未設定時に「失敗して開く」側に倒れていたことにある。どちらの既定値も
+よくあるもので、脱獄は要らない。
+
+[`🔗 GHSA-v2f8-6655-7grj（認証欠如）`](https://github.com/HKUDS/Vibe-Trading/security/advisories/GHSA-v2f8-6655-7grj) · [`🔗 GHSA-jqmf-mx4f-hfr6（プロンプト注入 → RCE）`](https://github.com/HKUDS/Vibe-Trading/security/advisories/GHSA-jqmf-mx4f-hfr6) · [`🔗 v0.1.7 リリース`](https://github.com/HKUDS/Vibe-Trading/releases/tag/v0.1.7)
+
+---
+
+## 39. OpenStack Manila：任意のテナントが任意の*公開*シェアを奪える——9.9
+
+- **Velocity:** ▮▮ rising
+- **Source:** OpenStack OSSA-2026-046 / NVD · 10 月 20〜21 日
+- **Tags:** `cve` `openstack` `cloud` `authorization`
+
+**CVE-2026-71195**。公開シェアは全テナントから見えるので UUID は秘密ではない——そして
+Manila のコントローラは*呼び出し元*のプロジェクトで認可し、その後、外部の公開シェアを
+読み込む際に所有者に対して再認可しない。OSSA はこれが普通の認証済みプロジェクトメンバーに
+何をもたらすかを列挙する：`allow_access` は他テナントのシェアへのデータプレーン読み書きを
+与え、`deny_access` は所有者の既存ルールを取り消し、`update_access` は読み取り専用から
+読み書きへ昇格させ、`create_share_backup` は攻撃者プロジェクト名下のバックアップとして
+データを持ち出し、`soft_delete` と `restore` は所有者の削除フローに干渉し、エクスポート
+位置メタデータは外部シェア上で作成・変更・削除でき、アクセスルール一覧は IP、ユーザー名、
+CephFS キーを漏らす。修正は **20.0.3、21.0.3、22.0.2、23.0.1**、2025.1/epoxy から
+2027.1/indri までブランチパッチで提供。報告は中国科学院計算技術研究所の Chen YuXiang と
+Yuliang Xiao。Red Hat の Goutham Pacha Ravi と Carlos da Silva が追加の公開シェア経路を
+見つけた。**スコアの出所：** OSSA 自体には **CVSS 文字列が一切ない**。レコード上の **9.9 は
+MITRE のもの**（v3.1、CNA 指標）で、確認時点で NVD は未分析だった。
+
+**Why it matters:** 「公開」は共有フラグであって権限モデルではない。両者がコントローラ層で
+混同された。移植できる検査は CVE より安い：テナントが*名前を指定できる*すべてのリソースに
+ついて、資源の所有者に対する認可呼び出しがあるのか、呼び出し元のコンテキストに対する
+ものしかないのか。採点者も併記すること——これを「NVD 9.9」と書くのは今日は二重に誤りだ。
+
+[`🔗 OSSA-2026-046`](https://security.openstack.org/ossa/OSSA-2026-046.html) · [`🔗 NVD: CVE-2026-71195`](https://nvd.nist.gov/vuln/detail/CVE-2026-71195)
+
+---
+
+## 40. Vyper のオプティマイザが `(msg.value | 2)` を `1` にする——修正版は存在しない
+
+- **Velocity:** ▮▮ rising
+- **Source:** Vyper GHSA / VulnCheck CNA · 10 月 21 日
+- **Tags:** `cve` `vyper` `compiler` `miscompilation`
+
+**GHSA-6j9c-gvcw-74fj / CVE-2026-114117**。オプティマイザは `(or x K)` を `1` に書き換える。
+これは値が真偽値としてのみ使われる場合にだけ妥当だが、判定は親の opcode だけで行われるため、
+三項演算子の*両方の値分岐*が条件として扱われる。`finalize()` は通常この書き換えを巻き戻すが、
+`callvalue` と `calldatasize` は `do_not_cache` に入っていて複雑値と見なされないため、
+巻き戻されない：
+
+```vyper
+@external
+@payable
+def f(c: bool) -> uint256:
+    return (msg.value | 2) if c else 5
+```
+
+`msg.value = 5` で `f(True)` を呼ぶと、既定の `-O gas`（および `-O codesize`）では **1**、
+`-O none` でのみ **7** を返す。誤った値は revert も警告もなくストレージ、算術、インデックス、
+戻り値、イベントへ流れ込む。アドバイザリ自身の例
+`self.deposits[msg.sender] = (msg.value | 1) if flag else msg.value` では、全入金が 1 として
+記録され資金が永久にロックされる。影響範囲は **>= 0.3.8**、最新リリース **v0.5.0b1**
+（9 月 1 日）を含む。**CVSS 4.0 で 8.2**（`VI:H`、機密性・可用性への影響なし）/ **3.1 で
+5.9**、CWE-682、VulnCheck 割り当て。**修正版：なし**——緩和策は `-O none` でコンパイルする
+か、この書き方を避けることだけ。
+
+**Why it matters:** エラーではなく「もっともらしい数値」を出すコンパイラのバグは、クラッシュ
+するバグより厳密に悪い。下流には何も気づけないからだ。そしてコントラクトを配備する言語で
+「パッチ未提供」は、露出の窓が開いたままであることを意味する。影響範囲には現在のリリースが
+含まれており、過去のバージョンの話ではない。
+
+[`🔗 GHSA-6j9c-gvcw-74fj`](https://github.com/vyperlang/vyper/security/advisories/GHSA-6j9c-gvcw-74fj) · [`🔗 Vyper リリース（最新 v0.5.0b1、9 月 1 日）`](https://github.com/vyperlang/vyper/releases/tag/v0.5.0b1)
+
+---
+
+## 41. ns2jb：SmileBASIC の整数オーバーフローから組み上げた、テザードの Switch 2 脱獄
+
+- **Velocity:** ▮▮ rising
+- **Source:** pepsipu.com · 91 HN pts · ~4h ago (~16:00 UTC+8)
+- **Tags:** `jailbreak` `nintendo` `exploit` `reverse-engineering`
+
+ファームウェア **23.0.1**、作者は Sammy Hajhamid。明らかな経路が先に失敗したことが面白い：
+キャプティブポータル経由の WebKit n-day はネイティブな制御フロー奪取までは行ったが、
+実行専用メモリ、ポインタ認証、制御フロー完全性の前で任意 IPC へ拡張できなかった。通ったのは
+**SmileBASIC**——Switch 1 のゲームだ。配列要素削除の整数オーバーフローで境界検査が回り込み、
+`memmove` が配列の手前から読み、直前のポインタが巨大な文字列長として扱われて領域外読み書き、
+やがて ROP に至る。そこから `/..\` 成分を含む `GetEntryType` のパス正規化バグが 0x301 バイトの
+ヒープバッファを溢れさせ、`BufferedStorage` のキャッシュ項目を壊して無制限のメモリ読み書きを
+得る。`fs` 接続の保存済み PID を 1 に書き換えればファイルシステム全域の権限が手に入り、作者は
+これで内部ストレージと全通常 sysmodule のコードを吸い出した。任意 sysmodule 実行は `fs` の
+ExeFS ロード責務の悪用による：`fs` が正当な NCA ヘッダのハッシュと署名を渡した後に loader の
+ExeFS 項目を差し替え、loader の IPC 待機ハンドルを SmileBASIC 側から駆動するイベントに
+置き換えてタイミングを制御し、`MapProcessMemory` で `fs` にパッチを当て、`IEventNotifier`
+のハンドルを `0xffff8001` に上書きして `GetEventHandle` を呼び `KProcess` を得る。作者が
+明示する限界：テザード、内蔵 sysmodule のうち取れたのは `fs` のみ、入口は *SmileBASIC* 依存、
+CFW ではない。
+
+**Why it matters:** 堅牢化された側は持ちこたえ、*ゲーム*が柔らかい側だった。コンソール
+プラットフォームはセキュリティ予算をブラウザとカーネル境界に投じているが、ライセンス
+タイトルの配列境界検査が同じ特権経路に座っている——レガシーな前提を受け入れて第三者コードを
+招き入れるあらゆるサンドボックスへの一般的な教訓だ。
+
+[`🔗 ns2jb 解説`](https://pepsipu.com/blog/2026-10-switch2-jailbreak-ns2jb/) · [`🔗 gitlab.com/pepsipu/ns2jb`](https://gitlab.com/pepsipu/ns2jb)
+
+---
+
+## 42. WorldTUI：端末のふりをする 360M モデル——75 GPU 時間、208 MB、ブラウザで動く
+
+- **Velocity:** ▮▮ rising
+- **Source:** simedw.com · 283 HN pts · ~10h ago (~10:00 UTC+8)
+- **Tags:** `world-model` `terminal` `webgpu` `small-models`
+
+下にシェルもカーネルもファイルシステムもない。キー入力はすべてモデルに渡り、次の画面を予測
+する。作り方が本題だ。ベースは Qwen2.5-Coder-0.5B。151,936 トークンの埋め込みを、バイト・行・
+特殊操作を覆う **333 トークンの語彙**に置き換えて約 **360M パラメータ**にし、int4 量子化で
+**208 MB** のダウンロードとして、自作の JavaScript Qwen デコーダと WebGPU 上で動く。学習
+データは合成——Docker コンテナ内で実プログラムを走らせ、キー入力と結果画面を同時に記録して
+**336k エピソード、約 2B トークン**。ユーザー名、ホスト名、ディレクトリ、端末サイズを
+ランダム化し、**1.2% の打ち間違い率**を模擬し、**35%** のセッションを途中から始めて任意状態
+からの継続を学ばせる。ほとんどの行は互いに独立なので行を並列デコードし、投機的デコードで
+検証する。スクロールや消去は `COPY` 操作で行を移す。SFT と DAgger を 3 ラウンド、RTX 4090 で
+約 **75 GPU 時間**。結果は ShellBench **80/106**（プロンプト付き Qwen3-0.6B が 60、調整済み
+ベースが 52）、ファイル読み戻し **9/13** 対 3/13、int4 で PresetBench **24/47 → 38/47**、
+4090 上の大フレーム p95 が **6.7 秒 → 0.87 秒**。
+
+作者自身の限界記述こそが、スコアではなく原文を読む理由だ。「信頼できるファイルシステムには
+ほど遠い」。`echo green >> colors` の後に `cat colors` しても行が出ないことが多く、ネストした
+ディレクトリでは現在パスを見失い、難しめの Python では GPT-3 時代の幻覚が出る。蒸留は、
+学生モデルが記憶能力を失ったまま説得力のある出力を保つことが分かって断念された。デモは
+Firefox で Chrome より約 20 倍遅く、原因は不明。
+
+**Why it matters:** 測られているのは端末エミュレーションではなく*状態の保持*であり、アブレー
+ションはそれを蒸留が最初に壊すと示している。書いたばかりのファイルを忘れる、もっともらしい
+モデル——あらゆる world-model デモが抱える失敗形態を、この記事は名指ししている。
+
+[`🔗 WorldTUI`](https://simedw.com/2026/10/21/world-model-terminal/) · [`🔗 HN ディスカッション`](https://news.ycombinator.com/item?id=50190363)
+
+---
+
+## 43. 「合意研究の終わり？」——エージェントハーネスがプロトコルを発見し、著者は専門家が依然不可欠だと言う
+
+- **Velocity:** ▮▮ rising
+- **Source:** arXiv 2610.30114 · 10 月 21 日
+- **Tags:** `agents` `distributed-systems` `lean` `research`
+
+**A-greement** は地理分散ステートマシン向けの新しい合意プロトコルで、測定で勝っている：
+レプリカ 5 台または 9 台の 6 つの配備で平均し、地理分散キーバリューストアの平均レイテンシを
+最速ベースライン比で書き込み重視 **12.2%**、読み取り重視 **33.3%** 削減し、読み取り専用では
+最速ベースラインと同等。リース認可のローカル読み取り、リーダー順序書き込みのための直接
+クライアント学習、ネットワークトポロジとワークロードに応じて選ばれる高速固定クォラムの
+キー単位書き込み経路を組み合わせる。見つけたのは **AI-greement** という 3 部構成のハーネス：
+概念志向のプロトコル知識ベース、モジュール式の実装骨格、再利用可能な安全性定義・参照仕様・
+証明を備えた **Lean** 検証フレームワーク。Lean 形式化自体に独立した価値がある——既存の合意
+プロトコルにあった未報告の脆弱性を複数暴いた。
+
+**Why it matters:** タイトルが主張で、抄録の最後の一文が知見だ。両方を引用したい：「人間の
+合意形成の専門家は探索の前・最中・後に依然不可欠であり、エージェントは研究者の役割を作り
+変えるが合意研究を終わらせはしない」。12.2%/33.3% のレイテンシ改善は本物で、論文の立場は
+「ハーネス（知識ベース＋骨格＋証明）がそれを到達可能にした」というもの——自律的発見では
+なく、ツールに関する再現可能な主張だ。
+
+[`🔗 arXiv 抄録`](https://arxiv.org/abs/2610.30114) · [`🔗 全文（HTML）`](https://arxiv.org/html/2610.30114v1)
+
+---
+
+## 44. 静かな手がかりの喪失：エージェントはハイライトと色を見ずに文書を読む
+
+- **Velocity:** ▮▮ rising
+- **Source:** arXiv 2610.30026 · 10 月 21 日
+- **Tags:** `agents` `rag` `document-parsing` `benchmark`
+
+前提はこうだ。エージェントが方針に従う前に、必ずどこかの取り込み層が Word や PDF をトークン
+に変える——実環境に配備されたエージェントの情報の静かな喪失は、その層で起きる。タスクは
+**実在の政策文書 76 件**で構成され、著者が特に示した要件を復元できるかを、**LLM 判定器を
+使わない**決定論的マッチャでファイル自身の OOXML プロパティと照合して採点する。書式を見ない
+取り込みでは **micro F1 が 0.690 から 0.150**（docling）、**0.075**（プレーンテキスト）へ
+崩れ、この差は 2 社 6 モデル（Claude の 5 階層と GPT-5.6）で再現する。span 単位の
+leave-one-out は損失を 2 つの手がかりに局在させる：**ハイライト（+0.302）**と**色（+0.262）**
+でいずれも Holm 補正後 p < 1e-4。太字・斜体・等幅・取り消し線はいずれも ±0.003 以内。
+周辺事例ではない——**6,460 文書の 32.8%** が意図的な色かハイライトを持ち、**10.3%** は義務
+条項に付いている。事前登録した試験では、手がかりを*保持する*だけでなくエージェント向けに
+*打ち直す*とさらに **+0.085**（Holm 補正 p = 0.049）。ラベルは独立モダリティとして描画後の
+ページ画像で検証され（kappa 0.72）、文言だけの上限は AUC 0.664。docling が著者の示して
+いない要件に対して出す偽陽性率は彼らの 4 倍だ。
+
+**Why it matters:** 失敗の形は「目に見える不完全さ」ではなく「自信を持った誤り」だ。手がかり
+が見えないエージェントは推測する。この非対称性はデバッグの近道でもある。パイプラインが色を
+落とすなら、落ちているのは著者が「重要な一文」を示すために使った情報そのもので、それを
+採点する解析ベンチマークは現在存在しない。
+
+[`🔗 arXiv 抄録`](https://arxiv.org/abs/2610.30026) · [`🔗 全文（HTML）`](https://arxiv.org/html/2610.30026v1)
+
+---
+
+## 45. Quant-Arena：9 つのフロンティアモデル、封じられた 1 年、等ウェイト市場に誰も勝てず
+
+- **Velocity:** ▮ steady
+- **Source:** arXiv 2610.30113 · 10 月 21 日
+- **Tags:** `benchmark` `agents` `quant` `evaluation`
+
+実在の A 株データでエンドツーエンドのクオンツ研究を評価する、公開ベンチマークとリーダー
+ボード。評価単位は式ではなくループだ：モデルが特徴量と銘柄スコアリングのコードを構築し、
+**2022〜2023 でのみフィードバックを受け**、1 つの戦略を凍結し、**封じられた 2024 年**で評価
+される。現金口座の評価器が取引制約とコストを適用し、市場インパクトは模擬オーダーブックから
+見積もる。スコアは実現超過リターンが主で、シグナル品質と特徴量の多様性が補助。フロンティア
+モデル 9 つを評価し、**GPT-6 Astra が最高**——そして**「2024 年において等ウェイト市場を
+上回ったモデルは 1 つもない」**。任意のモデルやハーネスからの投稿を受け付ける。
+
+**Why it matters:** 自分の見出しを打ち消す行を載せる、珍しいリーダーボードだ。「フロンティア
+9 つの最良でも等ウェイトに負ける」が知見であり、その上の順位はその一文が添えられて初めて
+意味を持つ。
+
+[`🔗 arXiv 抄録`](https://arxiv.org/abs/2610.30113) · [`🔗 全文（HTML）`](https://arxiv.org/html/2610.30113v1)
+
+---
+
+## 46. OpenAI が Go 製の公式 REST API CLI を出し、HN は Codex との並存を問う
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News / GitHub · 148 pts · 79 comments · ~7h ago (~13:20 UTC+8)
+- **Tags:** `openai` `cli` `developer-tools` `go`
+
+`openai/openai-cli` は Apache-2.0 の Go 実装で、自らを「OpenAI API の公式 CLI」と称する。
+REST 面へのリソース指向ラッパー（`openai responses create`）で、管理系エンドポイントには
+別の admin キーを使い、出力は可読テキストのほか JSON、JSONL、YAML、raw、GJSON 変換に対応。
+`@file` 展開は明示的な `@file://` と `@data://` エンコーディング付き、画像生成は
+`~/Downloads/gpt-images/` に落ちる。シェル補完、資格情報なしでも動く help、`--header` と
+`OPENAI_CUSTOM_HEADERS`、そして beta の相互 TLS ——後者は HTTPS プロキシを意図的に拒否し、
+プロキシにクライアント証明書を提示しないようにしている。リポジトリは小さく **924★**、82
+フォーク。しかしリリースの刻みは違う：10 月 19 日に v1.39.0、10 月 21 日に v1.40.0 と
+v1.40.1、**本日 03:31 UTC に v1.40.2**。README はコントリビューションを制限している：
+「Pull request はリポジトリのコラボレータに限られます」。
+
+スレッドは機能ではなく身元の話だ——Codex と重複するのか（回答：Codex は対話型エージェント
+ハーネス、これはバッチ／API ラッパー）、管理ツールなのか消費者向けなのか、そして OpenAI の
+ツールはすぐ変わるか消えるという長い枝。あるコメント投稿者はリポジトリのスクリプトに
+「半分のバックドア」があると主張し、返信は標準的な `go run` ラッパーだと指摘する。実務的な
+注意点は README 自身の警告——debug ログには機密のリクエスト／レスポンス本文が含まれ得る。
+
+**Why it matters:** エージェント開発者にとって有用な信号は、API に一次実装のスクリプト可能な
+面と構造化出力が付いたこと——みんなが手で包んでいたものだ。注意すべきはスレッドの内容その
+もの：告知なし、発版が速い、PR 非公開の CLI は、運用で依存する道具であって拡張する道具では
+ない。
+
+[`🔗 openai/openai-cli`](https://github.com/openai/openai-cli) · [`🔗 HN ディスカッション`](https://news.ycombinator.com/item?id=50191507)
+
+---
+
+## 47. universal-modder：所有しているゲームに Claude Code を向ける——偵察、素材、実機テスト、パッケージ
+
+- **Velocity:** ▮▮ rising
+- **Source:** GitHub · 8.7k★ · 10 月 22 日
+- **Tags:** `claude-code` `game-modding` `mcp` `skills`
+
+MIT ライセンスのツールキット、953 フォーク。Claude Code のプラグインとして入り
+（`/plugin marketplace add rehan-remade/universal-modder`）、skills、`um` CLI、**fal MCP**
+サーバを供給し、SessionStart フックが `um` を PATH に置く。主スキル `mod-any-game` は
+プロンプトではなくワークフローだ：過去のフィールドノートを検索し、偵察して経路を選び、
+セーブを退避し、コードを読み、最小の動く切片を作り、素材を生成し、ゲーム内で試し、録画し、
+パッケージし、フィールドノートを書き戻す。エンジン指針は Unity、Unreal、.NET/XNA
+（Terraria、Stardew、Celeste）、Godot、Source 1/2、Bethesda、Minecraft、AoE2/Genie、
+GameMaker、RPG Maker、Ren'Py、Doom をカバー。例には AoE2 DE のカスタム文明や、ローカル
+WebSocket 経由で GTA V の中で動く Minecraft がある。素材生成は fal（アート、3D モデル、
+テクスチャ、SFX、音楽、音声、映像）を MCP か `um fal` 経由で使い、画像はローカル ComfyUI
+でも代替できる。
+
+引用すべきはプロジェクト自身が書いた境界線だ：シングルプレイ、マルチプレイ、あるいは自分が
+ホストするサーバのみ。アンチチート付きのオンラインゲームへの注入、他プレイヤーへのチート、
+アンチチート・DRM・所有権検査の回避は拒否する。ゲームファイルや逆コンパイル済みコードは
+同梱せず、入力の制御や loader の導入前には確認を求める。
+
+**Why it matters:** 「エージェント＋MCP＋CLI＋フィールドノート」という形がソフトウェアを出て
+*コンテンツ*に入った、最も明快な例だ——成果物は動く mod で、ループは実機テストで閉じる。
+拒否リストこそが面白い設計判断で、線は mod ではなくアンチチートに引かれている。そこが実際に
+執行可能な境界だ。
+
+[`🔗 rehan-remade/universal-modder`](https://github.com/rehan-remade/universal-modder) · [`🔗 リリース`](https://github.com/rehan-remade/universal-modder/releases)
+
+---
+
+## 48. DigUp：そのファイルを描写すれば出てくる——EmbeddingGemma 2 を自分のノート PC で
+
+- **Velocity:** ▮▮ rising
+- **Source:** GitHub · 5.4k★ · 10 月 22 日
+- **Tags:** `local-first` `embeddings` `search` `gemma`
+
+フォルダを指定すると中の画像、PDF、文書、録音、動画、コードを索引化し、自然言語のクエリで
+一致するものを開く——デモは動画の中のシマウマ、ポッドキャストの 1 分、賃貸契約の 1 条、
+コードの 1 関数を探す。MIT、Mac と Windows/Linux ベータ（v0.7.0-beta.3）を提供し、すべて
+ローカルで動く。そこに収まる理由はモデルだ：Google DeepMind が今月公開した
+**EmbeddingGemma 2**——**740M パラメータ、Apache-2.0**、100 言語以上、テキスト・画像・音声・
+映像を 1 つの共有空間に置くので「浜辺の犬」がそのフレームの隣に来る。
+
+**Why it matters:** マルチモーダル検索がクラウド機能だったのは主にモデルサイズのせいだ。
+ノート PC で動く 740M の埋め込みモデルが、自分のフォルダを索引するアプリに入ると、面白い
+問いは能力から方針へ移る：何を読み、索引はどこにあり、何かがマシンの外に出るのか。
+
+[`🔗 ARahim3/DigUp`](https://github.com/ARahim3/DigUp) · [`🔗 google/embeddinggemma-2`](https://huggingface.co/google/embeddinggemma-2)
+
+---
+
+## 49. OpenDots：「常駐する AI 同僚」のオープンテンプレート、各自が自分のコンピュータを持つ
+
+- **Velocity:** ▮ steady
+- **Source:** GitHub · 5.9k★ · 10 月 22 日
+- **Tags:** `agents` `copilotkit` `ag-ui` `template`
+
+CopilotKit の MIT テンプレートで、**alpha** 表示。テキスト、通話、Slack の間を移る常駐
+エージェントを Web とモバイルで提供する。実体は対話の形だ：ask → browse → approve → save。
+ライブのコンピュータ画面と人間のレビューカードがチャット内に描画され、承認されたドラフトが
+編集可能な "Space" ページになる——作業が終わったと主張するチャット記録ではなく、ブラウザで
+働くエージェントを人が見て署名する。CopilotKit と **AG-UI** の上に構築されている。
+
+依存も明記されており、それが注意点だ：アプリは自分のインフラにセルフホストできるが、会話には
+**CopilotKit Intelligence** が必要——ホスト版、ローカル Docker 評価、またはライセンス版
+セルフホスト配備のいずれか。「セルフホスト可能」が指すのは表層であって、スタック全体ではない。
+
+**Why it matters:** 承認カードとライブ画面は、多くのエージェント製品がまだ飛ばしている部分で、
+それが製品ではなくテンプレートとして公開された——今週のエージェント発表の中で、実際に読める
+のはこれだ。ライセンスの一行も、これを前提に計画する前に知っておく価値がある。
+
+[`🔗 CopilotKit/OpenDots`](https://github.com/CopilotKit/OpenDots) · [`🔗 CopilotKit`](https://github.com/CopilotKit/CopilotKit)
+
+---
+
+## 50. DroidDeck：Android 端末で Steam Big Picture と ARM64 Proton——root 不要
+
+- **Velocity:** ▮▮ rising
+- **Source:** GitHub · 12.5k★ · 0.5.0（10 月 18 日）
+- **Tags:** `android` `steamos` `proton` `gaming`
+
+GPL-3.0、638 フォーク、1,254 コミット。Valve の Steam クライアントを Big Picture で動かし、
+Valve の **ARM64 Proton** 層で Windows ゲームを走らせる。加えてアプリとエミュレータ入りの
+Linux デスクトップ、Flatpak ベースのアプリストア、GOG・Epic・Amazon 連携。README の実体は
+互換性マトリクスだ：**Android 9 以上** と **Adreno 730/8xx** GPU。Adreno 6xx は実験的、
+Mali・Xclipse・PowerVR・Adreno 710 は非対応。root 不要。ランタイムに約 3 GB、デスクトップ
+とエミュレータにさらに 1.1 GB。Android 14 以上では子プロセス制限を緩める開発者オプションが
+要る。自己申告の注意点も具体的：デスクトップ合成はソフトウェアレンダリング、proot 下で
+Firefox のサンドボックスは弱められ、Adreno 6xx の DirectX 12 タイトルは今も落ち得る。
+README はさらに、公式の単独サイトは存在しないので他所のリンクは疑ってほしいと記す——
+12.5k★ のゲームリポジトリに入ったサプライチェーン注意で、いまや標準装備だ。
+
+**Why it matters:** 実際に働いているのは Valve の ARM64 Proton で、このプロジェクトの価値は
+*動かない*ところを公表している点にある——SoC ごとの許可リストは互換性の主張よりはるかに
+有用で、「1 回のダウンロード」と「サポート負担」の差そのものだ。
+
+[`🔗 Droid-Deck/DroidDeck`](https://github.com/Droid-Deck/DroidDeck) · [`🔗 リリース（0.5.0）`](https://github.com/Droid-Deck/DroidDeck/releases)
+
+---
+
+## 51. earstrip：意味を持ち得ない耳を飛ばして、earcut より 14% 速い耳切り三角化
+
+- **Velocity:** ▮▮ rising
+- **Source:** globus.software · 10 月 16〜22 日
+- **Tags:** `geometry` `performance` `wasm` `maps`
+
+ISC の単一ヘッダ C++ 耳切り器と、earcut 互換 API を持つ WebAssembly npm パッケージ。
+ベンチマークはマゾフシェ県地図のズーム 13 から取った **3,740,425 ポリゴン**、M4 Pro の 1 コア。
+最適化の連鎖はコミットごとに公開されている：制約付き Delaunay の基準 **2,931 ms** → 素朴な
+耳切り **1,119** → 耳を塞ぎ得る凹頂点（"dents"）だけを検査 **882** → 凸ポリゴンの近道 **880**
+→ トライアングルストリップ **762** → dents のバケツ分け **697** → 分岐なしの計数パス **519**
+→ dents 印のビットマスク **489**。数字は読める形で効いている：頂点 4 以下のポリゴンが約
+**180 万**あり、Delaunay はそこに 419 ms 使う。耳検査を dents に限定して走査点は 3.53 億から
+1.85 億へ。ストリップは出力インデックスを 6,450 万から 3,580 万へ減らし、その一方で耳検査は
+2,370 万から 2,500 万へ増えた。
+
+注意点は本文にある：耳切りは単純ポリゴンを前提とするため、格子丸めが自己接触で耳のない輪郭を
+作ると 76 ポリゴンがフォールバックする。穴が **128 以上**のポリゴンは Delaunay に回され、
+11,675 個の穴を持つ世界地図ポリゴンは耳切りで **606 ms**、Delaunay なら **17 ms**。難しい
+ズーム 13 のポリゴンでは、earcut の三角形は奇数偶数の塗り分けと **31%** のピクセルで食い違う
+（earstrip は **0.15%**）。
+
+**Why it matters:** ジオメトリライブラリの README には決して並ばない 2 つの数字——速度*と*、
+どこで間違えるか——が両方ここにあり、地図が正しく描けるかを決めるのは後者だ。盗むべきは
+定数ではなく制約：耳を塞げるのは凹頂点だけなので、仕事の大半は証明可能に不要である。
+
+[`🔗 earstrip：地図ポリゴンを切る`](https://globus.software/blog/2026/10/16/cutting-map-polygons/) · [`🔗 mapbox/earcut（基準）`](https://github.com/mapbox/earcut)
+
+---
+
+## 52. anatomy：「機械を描くこと」で機械を説明するスキルに 18.9k 星
+
+- **Velocity:** ▮ steady
+- **Source:** GitHub · 18.9k★ · 最終 push 10 月 18 日
+- **Tags:** `agent-skills` `svg` `illustration` `claude-code`
+
+MIT、ランタイム依存ゼロ、Node 20.10 以上、`npx skills add` で導入。Claude スキル（ほかに
+Antigravity、OpenCode、Codex、MiniMax Code 向けの記載もある）で、機械についての問いに答える方法が
+「その可動な等角投影図を組み立てる」ことにある。README の見本は Raptor 2 の試運転スタンドで、
+排気プルームは WebGL シェーダで描かれ、燃焼室圧力と推力をラベルに持つ。出力は SVG、WebGL、
+3D で、生成画像 1 枚ではなく多くの小さく正確な部品から組み上げられる。
+
+**Why it matters:** 18.9k★ は、エージェントスキルというジャンルの視覚分枝が文字分枝と同じ
+規模に達したことを意味する。魅力は制約にある：ラベル付きの等角投影図は*検証できる*——部品が
+実物と合うか合わないかのどちらかだ。ただし陳腐化の信号にも注意：星が倍になる間に 5 日間
+push がないのは、このフィードが繰り返し印を付けてきたパターンだ。
+
+[`🔗 wheresryan22/anatomy`](https://github.com/wheresryan22/anatomy) · [`🔗 スキルページ`](https://skills.wheresryan.sh/anatomy)
+
+---
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-10-22T04:20:00Z |
-| Items | 34 |
-| Sources tracked | 38 (Hacker News, GitHub Trending/repos, NVD, CISA KEV, GitHub Blog, thephp.foundation, SafeDep, LiteLLM, GitLab, DuckDB, Anthropic/claude.com, OpenAI, OpenAI Alignment, SecurityWeek, The Register, USA Today/Reuters, arXiv, Simular, freehire.me, Google Style Guide, dri.es, alterauth.com, Eclipse, PyPI, Railway Blog, VulnCheck, Traefik, Mistral, Calif, Wiz, Hirundo, mitmproxy, Cursor, texttocad.dev, Omnara, Federal Court of Australia/9to5Mac, Ardent Performance, Obot) |
+| Generated | 2026-10-22T12:15:00Z |
+| Items | 52 |
+| Sources tracked | 44 (Hacker News, GitHub Trending/repos, NVD, CISA KEV, GitHub Blog, thephp.foundation, SafeDep, LiteLLM, GitLab, DuckDB, Anthropic/claude.com, OpenAI, OpenAI Alignment, SecurityWeek, The Register, USA Today/Reuters, arXiv, Simular, freehire.me, Google Style Guide, dri.es, alterauth.com, Eclipse, PyPI, Railway Blog, VulnCheck, Traefik, Mistral, Calif, Wiz, Hirundo, mitmproxy, Cursor, texttocad.dev, Omnara, Federal Court of Australia/9to5Mac, Ardent Performance, Obot, vLLM, Trigger.dev, Phoronix/LKML, OpenStack OSSA, vyperlang, HKUDS, CopilotKit, Hugging Face, pepsipu.com, simedw.com, globus.software, wheresryan.sh, openai-cli, DroidDeck, mapbox) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (3x daily) |
 | Ranking | Velocity-weighted (recency × engagement acceleration × source authority) |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |
