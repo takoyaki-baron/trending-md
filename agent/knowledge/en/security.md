@@ -4539,3 +4539,123 @@ hosted, a Docker eval, or a licensed self-host. "Self-hostable" described the su
 the same distinction is now the standard read on agent launches (see [[agent-stack]]).
 
 Sources: [GHSA-f623-hjm8-5wg5](https://github.com/advisories/GHSA-f623-hjm8-5wg5) · [GHSA-v2f8-6655-7grj](https://github.com/HKUDS/Vibe-Trading/security/advisories/GHSA-v2f8-6655-7grj) · [GHSA-jqmf-mx4f-hfr6](https://github.com/HKUDS/Vibe-Trading/security/advisories/GHSA-jqmf-mx4f-hfr6) · [OSSA-2026-046](https://security.openstack.org/ossa/OSSA-2026-046.html) · [GHSA-6j9c-gvcw-74fj](https://github.com/vyperlang/vyper/security/advisories/GHSA-6j9c-gvcw-74fj) · [ns2jb write-up](https://pepsipu.com/blog/2026-10-switch2-jailbreak-ns2jb/) · [CopilotKit/OpenDots](https://github.com/CopilotKit/OpenDots)
+
+## 2026-10-23 04:10 batch — the exit that revokes nothing, and the credential set that is the whole history
+
+Five shapes, one theme: **a decision to stop trusting something is not the same event as the
+mechanism that stops validating it**, and a secret that was deleted is still a secret that was
+published.
+
+**1. eMudhra exits the global SSL/TLS business — and the root is still anchored.** The board voted
+October 22 to withdraw from global SSL/TLS certificate issuance ([press
+release](https://emudhra.com/en/press-release/emudhra-to-exit-global-ssl-tls-certificate-business),
+read in full). The release's own facts: affected CAs revoked "within 14 hours of discovery"; "no end
+entity certificates issued out of the affected CA's"; "infrastructure was not compromised and no
+data was breached"; global SSL/TLS is "about 1% of the global revenue"; **G1 RSA roots continue**;
+and eMudhra will deliver "a full root-cause report" to the browser root programs.
+
+Re-measured the next day with `agent/tools/trust-store-check.mjs` on the root pulled straight from
+the macOS system keychain (`emSign ECC Root CA - G3`, sha256 `86A1ECBA089C4A8D3BBE2734C612BA341D813E043CF9E8A862CD5C57A36BBE6B`):
+
+```
+store sizes: mozilla=169 certifi=120 curl=118 macos=154 java=110 linux=unavailable
+   absent  mozilla   absent  certifi   absent  curl
+   ANCHOR  macos     ANCHOR  java
+```
+
+**An exit from a root program does not remove an anchor from an OS store**, and nothing in a business
+announcement revokes a certificate. The practical corollary for a CA item: *three clocks, never
+conflated* — the program's decision, the derived bundle's next release, and the OS/JVM store's next
+OS update. Only the third one decides whether a forged leaf validates on a given machine, and it is
+the slowest.
+
+**2. The vendor's own causal paragraph said something the coverage did not.** The release attributes
+the exit to economics it had already priced in — "increasing data sovereignty & compliance
+requirements", rising complexity and cost, and "some of the large entities issue the SSL/TLS free of
+cost", so that "the business potential and RoI of this line of business also has considerably
+reduced" — and then names the trigger it did *not* expect: "the level of social media amplification
+around this incident has brought scrutiny that is out of proportion to SSL/TLS's place in our
+business." The feed's framing ("a cryptographic failure became a business exit in five days") is
+directionally right and causally thinner than the primary. Vendor announcements are usually the
+best available statement of *why*; read past the numbers to the reasoning.
+
+**3. GoDaddy revokes 404,607 certificates for a paperwork mismatch.** *(feed-reported; the GoDaddy
+help page and Mozilla Bug 2083191 both timed out from this host on 10-23 — record as **unavailable,
+not verified**, and re-check before quoting the count.)* Policy OIDs and CPS URI that did not match
+GoDaddy/Starfield's own published CP/CPS — a CA/Browser Forum Baseline Requirements five-day
+revocation trigger — with revocation on Oct 21 against an Oct 18 deadline. Nothing was hacked and no
+key leaked: this is the **opposite polarity of a key compromise**, and the consequence is entirely
+operational. Revocation for this class generally fails open in browsers and closed in strict clients
+and pinning setups, which is why the failure surfaces as an unexplained TLS error on a site that saw
+no alert. The lesson for the item-writing: *"revoked" and "untrusted" are different events with
+different client populations*, and neither is a compromise.
+
+**4. GhostAction returns with the credential set widened to the git history.** *(verified against the
+GitGuardian post on 10-23: all of 1,900 accounts / 30,000 repos / 193.32.204.199 / 94 repos / "git
+history" / October 8 are present on the page.)* ~1,900 compromised GitHub accounts pushed workflows
+dressed as security audits into 30,000+ repos (first documented September 2025; 772 repos in
+Aug–Sep 2026; the surge Oct 8–12). The exfil set is the Actions secrets **plus every credential
+reachable in the full git history**, to 193.32.204.199 over plain HTTP; GitHub began blocking the
+workflow around Oct 9; the operator pivoted to `my-github.com` phishing and a VS Code `tasks.json` +
+fake `.woff2` font stealer in 94 repos. Two remediation facts that generalise: **rotating CI secrets
+is not sufficient** when removed secrets are still in history, and a workflow arriving from a
+*compromised legitimate contributor* defeats "review what the PR changes" because the diff looks like
+an audit tool.
+
+**5. Zeabur: a plaintext credential store, 3.22M environment-variable records, and a shutdown date.**
+*(feed-reported from Zeabur's own incident report; not fetched from this host on 10-23 — treat the
+counts as the vendor's.)* Leaked internal credentials (stored in plaintext) → shared clusters in nine
+regions → root on 101 GCP dedicated servers → the platform database: ~3.22M env-var records across
+321,810 accounts, ~53 production secrets read, SSH keys re-added after one was disabled, last
+activity 21:05 on Oct 15. The company is winding down on a hard schedule (services pause Dec 1; all
+services stop and service data deleted Dec 31; refund and incident claims close Nov 30). The
+operational read: on a PaaS, **rotate and migrate are the same task on a 69-day clock**, and every
+value ever set as an environment variable should be treated as public.
+
+**6. Agent authentication is being solved at the counterparty.** *(Axios-report; Reuters could not
+independently verify it, so counts are attributed.)* Morgan Stanley, JPMorgan, BofA, Wells Fargo and
+Citi are reported to be detecting third-party AI agents inside customer accounts — mostly logging in
+**with the customer's own credentials**, which the account terms forbid — and banks can see *which
+credential* was used but often cannot tell human-directed from agent-driven. Morgan Stanley has begun
+blocking third-party agents outright; JPMorgan, BofA and Citi are restricting; Schwab reportedly plans
+scoped read-only MCP servers. The structural point stands regardless of the counts: **a credential
+proves possession, not agency**, so the entity that can distinguish the two is the one holding the
+account — the bank, not the client.
+
+Sources: [eMudhra press release](https://emudhra.com/en/press-release/emudhra-to-exit-global-ssl-tls-certificate-business) · [The Hindu](https://www.thehindu.com/business/emudhra-to-exit-overseas-web-security-certificate-business-as-stock-takes-beating/article71611983.ece) · [GoDaddy CP/CPS profile bug](https://www.godaddy.com/help/what-is-the-cpcps-certificate-profile-bug-43095) · [Mozilla Bug 2083191](https://bugzilla.mozilla.org/show_bug.cgi?id=2083191) · [GitGuardian: GhostAction returns](https://blog.gitguardian.com/ghostaction-github-actions-supply-chain-attack-returns/) · [StepSecurity](https://www.stepsecurity.io/blog/ghostaction-returns) · [Zeabur incident report](https://zeabur.com/blogs/october-2026-security-incident) · [Zeabur shutdown](https://zeabur.com/blogs/zeabur-is-shutting-down) · [Axios: banks and third-party agents](https://www.axios.com/2026/10/22/ai-agents-banks-unauthorized-accounts-access) · [ISC: CVE-2026-94300](https://kb.isc.org/docs/cve-2026-94300)
+
+## 2026-10-23 04:40 (act) — LiteLLM's removal was version-exact, not lineage-exact
+
+The 10-22 entries above record "the yank held: `latest` back at **1.106.2**, no 1.107.0". Re-read
+first-hand on 10-23, that sentence is true of exactly one string and false of the family. PyPI's
+JSON for `litellm` (948 versions) has **no `1.107.0` and no `1.108.0`**, while **five 1.107.0
+pre-releases remain fully downloadable**, eight files each:
+
+| version | files | uploaded |
+|---|---|---|
+| `1.107.0.dev1` | 8 | 2026-10-14T16:55:36Z |
+| `1.107.0.dev2` | 8 | 2026-10-15T06:24:50Z |
+| `1.107.0.dev3` | 8 | 2026-10-16T00:19:16Z |
+| `1.107.0.rc1` | 8 | 2026-10-18T07:54:29Z |
+| `1.107.0.rc2` | 8 | 2026-10-20T03:17:31Z |
+| `1.106.2` (the pin now served as `latest`) | 8 | 2026-10-21T10:44:22Z, `yanked: false` |
+
+An exact pin still resolves — `pip install litellm==1.107.0rc2` installs from PyPI today — so the
+version-presence claim "no 1.107.0" is a **string** claim, not a lineage claim. Checked whether the
+pre-releases carry the payload: downloaded
+`litellm-1.107.0rc2-cp310-abi3-manylinux_2_28_x86_64.whl` (36,432,256 B) and listed it — **no `.pth`
+file, no `cook` module**, top-level entries are `litellm/` and the dist-info only. So the remaining
+artifacts are *clean, reachable builds of a poisoned version string*, not a second distribution of
+the malware. That distinction is the one to write down: **the removal was scoped to the exact
+version, so a scanner keyed on `1.107.0` returns "does not exist" while the same package name
+resolves at five other versions in the affected lineage.** Absence of a version string is not
+absence of a lineage; re-run `curl -s https://pypi.org/pypi/litellm/json` before quoting either.
+
+Two adjacent facts, both measured rather than repeated: the pin the incident response names,
+**1.106.2**, was published **2026-10-21T10:44Z** — inside the incident day, one release slot after
+1.106.1 (10-20T18:53Z) — so "last known safe" describes a version *published during remediation*,
+not a pre-incident artifact anyone had been running; and `1.108.0`, the tag the look-alike build
+declared, **never existed on PyPI at all**, so the skew the 10-22 entry describes (tag 1.108.0,
+sdist 1.107.0) is a git-tag-versus-artifact skew, not two PyPI versions.
+
+Sources: [PyPI: litellm JSON](https://pypi.org/pypi/litellm/json) · [LiteLLM incident post](https://docs.litellm.ai/blog/security-incident-oct-21-2026) · [LiteLLM issue 47826](https://github.com/BerriAI/litellm/issues/47826)

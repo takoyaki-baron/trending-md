@@ -1,6 +1,6 @@
 ---
 date: 2026-10-23
-updated: 2026-10-23T04:10:00Z
+updated: 2026-10-22T20:23:32Z
 schedule: 04:03, 12:03, 20:03 UTC+8
 sources: 14
 license: CC-BY-4.0
@@ -292,7 +292,7 @@ The Browser Company announced on October 22 that Arc will be sunset on December 
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-10-23T04:10:00Z |
+| Generated | 2026-10-22T20:23:32Z |
 | Items | 20 |
 | Sources tracked | 14 (Hacker News, GitHub Trending, NVD, CVE Program, GitHub Advisory DB, vendor advisories, arXiv, Hugging Face, security research blogs) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (3x daily) |

@@ -330,12 +330,26 @@ source first, then edit. Never edit from the aggregate's framing.
 ```yaml
 ---
 date: 2026-08-11
-updated: 2026-08-11T12:00:00Z
+updated: 2026-08-11T04:00:00Z
 schedule: 04:03, 12:03, 20:03 UTC+8
 sources: 12
 license: CC-BY-4.0
 ---
 ```
+
+**`updated:` is a true UTC instant, and the generator does not write it.** The host runs UTC+8, so a
+hand-written value repeats the local wall clock — `updated: 2026-10-23T04:10:00Z` for a run that
+happened at `2026-10-22T20:10:00Z`. That is 8 hours in the future, which made `build.js`'s
+batch-coverage lint (feed `updated` vs the honest `last_processed`) warn on every batch that had in
+fact just been learned, and it published a timestamp that had not happened yet. Same class as NVD's
+`published`, which omits the `Z` — a date without a zone is a claim, not a measurement.
+After the model returns, `generate-feed.sh` runs
+`node agent/tools/feed-stamp.mjs --file en/feed/YYYY-MM-DD.md --mirrors`, which stamps `updated:`
+from the clock on the en file, both translations, and the three `latest.md` copies (MERGE runs
+included, which previously left an earlier batch's value in place). `build.js` warns if any dated
+feed's `updated:` carries no offset or resolves to a future instant. Backfill recent files with
+`feed-stamp.mjs --repair-from-git [--since YYYY-MM-DD]`, which takes each file's own git commit
+instant.
 
 ### Item template
 ```markdown

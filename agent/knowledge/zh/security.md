@@ -3015,3 +3015,30 @@ Sources: [eMudhra 中间 CA 被攻陷——报告者披露 + 在线测试主机]
 **6. 模板开放、基底托管（此处保留以供许可检查）。** CopilotKit 的 OpenDots 是一个 MIT 模板，用于常驻 agent，而其对话**需要 CopilotKit Intelligence**——托管、Docker 评测，或授权的自托管部署。"可自托管"描述的是表面，不是整套技术栈；这一区分如今是读 agent 发布的标准动作（见 [[agent-stack]]）。
 
 Sources: [GHSA-f623-hjm8-5wg5](https://github.com/advisories/GHSA-f623-hjm8-5wg5) · [GHSA-v2f8-6655-7grj](https://github.com/HKUDS/Vibe-Trading/security/advisories/GHSA-v2f8-6655-7grj) · [GHSA-jqmf-mx4f-hfr6](https://github.com/HKUDS/Vibe-Trading/security/advisories/GHSA-jqmf-mx4f-hfr6) · [OSSA-2026-046](https://security.openstack.org/ossa/OSSA-2026-046.html) · [GHSA-6j9c-gvcw-74fj](https://github.com/vyperlang/vyper/security/advisories/GHSA-6j9c-gvcw-74fj) · [ns2jb write-up](https://pepsipu.com/blog/2026-10-switch2-jailbreak-ns2jb/) · [CopilotKit/OpenDots](https://github.com/CopilotKit/OpenDots)
+## 2026-10-23 04:10 批次 —— 什么也没撤销的退出，以及「凭据集就是整段历史」
+
+五种形态，一个主题：**决定不再信任某物，与真正停止校验它的机制，是两件事**；而一个被删除的秘密，仍然是已经泄露的秘密。
+
+**1. eMudhra 退出全球 SSL/TLS 业务——而根证书仍然锚定。** 董事会于 10 月 22 日表决退出全球 SSL/TLS 证书签发（[新闻稿](https://emudhra.com/en/press-release/emudhra-to-exit-global-ssl-tls-certificate-business)，全文读过）。新闻稿自己给出的事实：受影响 CA「在发现后 14 小时内」被吊销；「未从受影响的 CA 签发任何终端实体证书」；「基础设施未被入侵，无数据泄露」；全球 SSL/TLS 约占「全球营收的 1%」；**G1 RSA 根继续服务**；eMudhra 将向浏览器根计划提交「一份完整的根因报告」。
+
+次日用 `agent/tools/trust-store-check.mjs` 对从 macOS 系统钥匙串直接取出的根复测（`emSign ECC Root CA - G3`，sha256 `86A1ECBA089C4A8D3BBE2734C612BA341D813E043CF9E8A862CD5C57A36BBE6B`）：
+
+```
+store sizes: mozilla=169 certifi=120 curl=118 macos=154 java=110 linux=unavailable
+   absent  mozilla   absent  certifi   absent  curl
+   ANCHOR  macos     ANCHOR  java
+```
+
+**退出一个根计划，并不会从 OS 信任库里移除一个锚点**，而商业公告里也没有任何一句会吊销证书。对 CA 条目的实务推论：*三个时钟，永不可混*——计划的决定、派生信任包的下一个版本、OS/JVM 信任库的下一次更新。只有第三个决定一张伪造叶证书能否在某台机器上通过校验，而它是最慢的那个。
+
+**2. 厂商自己的因果段落说了报道没说的东西。** 新闻稿把退出归因于它早已计入的经济性——「日益增长的数据主权与合规要求」、复杂度与成本上升、以及「一些大型实体免费签发 SSL/TLS」，于是「这条业务线的商业潜力与 RoI 已大幅下降」——然后点名它没预料到的触发点：「围绕此次事件的社交媒体放大带来了与 SSL/TLS 在我们业务中所占分量不相称的关注。」feed 的框架（「一次密码学失败在五天内变成了业务退出」）方向正确，但因果上比原始文件单薄。厂商公告通常是*为什么*的最好可得陈述；请读数字之后的推理。
+
+**3. GoDaddy 因文书不匹配吊销 404,607 张证书。** *（feed 报道；GoDaddy 帮助页与 Mozilla Bug 2083191 在本机 10-23 均超时——记为**不可用、未核实**，引用该数字前请重查。）* 策略 OID 与 CPS URI 与 GoDaddy/Starfield 自己公布的 CP/CPS 不一致——这是 CA/Browser Forum 基线要求的五天吊销触发条件——10 月 21 日吊销，而截止日是 10 月 18 日。没有被入侵，也没有密钥泄漏：这是**密钥泄露的反极性**，后果完全是运营性的。这一类吊销在浏览器里通常是 fail-open，在严格客户端与 pinning 配置里则是 fail-closed，这就是为什么故障会表现为一个没有明显原因的 TLS 错误。写作上的教训：*「已吊销」与「不受信任」是不同事件，面向不同的客户端人群*，而两者都不是入侵。
+
+**4. GhostAction 回归，凭据集扩大到 git 历史。** *（10-23 已对 GitGuardian 帖子核实：1,900 个账号 / 30,000 个仓库 / 193.32.204.199 / 94 个仓库 /「git history」/ 10 月 8 日 均在页面上。）* 约 1,900 个被入侵的 GitHub 账号把伪装成安全审计的 workflow 推进 30,000+ 个仓库（2025 年 9 月首次记录；2026 年 8–9 月 772 个仓库；10 月 8–12 日激增）。外泄集合是 Actions 密钥**加上全 git 历史中可到达的一切凭据**，以明文 HTTP 发往 193.32.204.199；GitHub 约在 10 月 9 日开始拦截该 workflow；运营者转向 `my-github.com` 钓鱼，以及 94 个仓库里的 VS Code `tasks.json` + 假 `.woff2` 字体窃密器。两条可推广的整改事实：**轮换 CI 密钥并不足够**（已被移除的密钥仍在历史里），而来自*被入侵的合法贡献者*的 workflow 会让「审查这个 PR 改了什么」失效，因为 diff 看起来像个审计工具。
+
+**5. Zeabur：明文凭据库、322 万条环境变量记录，以及一个关停日。** *（feed 据 Zeabur 自家事件报告；本机 10-23 未抓取——数字按厂商说法。）* 泄漏的内部凭据（以明文存储）→ 九个区域的共享集群 → 101 台 Zeabur 管理的 GCP 专享服务器 root → 平台数据库：约 322 万条环境变量记录、321,810 个账号、约 53 个生产密钥被读取、一个 SSH 密钥被禁用后又被加回、最后活动时间 10 月 15 日 21:05。公司在硬日程上关停（12 月 1 日共享集群服务暂停；12 月 31 日全部服务停止且服务数据删除；退款与事件索赔 11 月 30 日截止）。运营层面的解读：在一个 PaaS 上，**轮换与迁移在 69 天的时钟上是同一件事**，而任何曾经作为环境变量设置过的值都应当视为公开。
+
+**6. agent 认证正在由交易对手方解决。** *（Axios 报道；路透称无法独立核实，故计数为「据称」。）* 据报道，Morgan Stanley、JPMorgan、BofA、Wells Fargo 与 Citi 正在客户账户中发现第三方 AI agent——多数是**用客户自己的凭据**登录，而账户条款禁止这样做——并且银行能看到*用了哪个凭据*，却常常无法区分人类指挥与 agent 驱动。Morgan Stanley 已开始直接封禁第三方 agent；JPMorgan、BofA 与 Citi 在收紧限制；Schwab 据报道计划以 MCP 服务器形式提供范围受限的只读连接。无论计数如何，结构性结论都成立：**凭据证明的是持有，而不是代理**，所以能区分两者的是持有账户的一方——银行，而不是客户端。
+
+Sources: [eMudhra 新闻稿](https://emudhra.com/en/press-release/emudhra-to-exit-global-ssl-tls-certificate-business) · [The Hindu](https://www.thehindu.com/business/emudhra-to-exit-overseas-web-security-certificate-business-as-stock-takes-beating/article71611983.ece) · [GoDaddy CP/CPS 说明](https://www.godaddy.com/help/what-is-the-cpcps-certificate-profile-bug-43095) · [Mozilla Bug 2083191](https://bugzilla.mozilla.org/show_bug.cgi?id=2083191) · [GitGuardian：GhostAction 回归](https://blog.gitguardian.com/ghostaction-github-actions-supply-chain-attack-returns/) · [StepSecurity](https://www.stepsecurity.io/blog/ghostaction-returns) · [Zeabur 事件报告](https://zeabur.com/blogs/october-2026-security-incident) · [Zeabur 关停](https://zeabur.com/blogs/zeabur-is-shutting-down) · [Axios：银行与第三方 agent](https://www.axios.com/2026/10/22/ai-agents-banks-unauthorized-accounts-access) · [ISC：CVE-2026-94300](https://kb.isc.org/docs/cve-2026-94300)

@@ -402,3 +402,20 @@ Sources: [eMudhra 侵害 + 公開テストホスト](https://emudhra.we-have-a-p
 5. **一度の呼び出しで取れる安価なリポジトリ比率が二つ、うち一つは新しい。** `wheresryan22/anatomy` は 18,877★ / **44 watchers** / 作成 2026-10-08（GitHub API、一次）：14 日で**watcher あたり 429 スター**、tester-army の事例が最初に記録した「観客の不在」比率（417:1）であり、そばには既に陳腐化シグナルとしてフラグ済みの `pushed_at` 2026-10-18 がある。この二つ組——stars-per-watcher *と* 最終 push からの日数——は「広くスターされた」と「使われている」を分け、コストは一回の呼び出しだ。同じバッチから保持すべきもう一つ：**失敗を報告しているコメントを読む**（WorldTUI の著者は「It's still far from a reliable filesystem」と書き、追記してから読むケースが壊れると名指しし、蒸留は学生が「書いたばかりのファイル」を失いながら尤もらしく響き続けたため断念したと報告する——尤もらしく見えるモデルが状態を落とすのはあらゆるデモが冒す失敗モードであり、それを名指ししたのは投稿だけだ）。
 
 Sources: [Trigger.dev v4.7.7](https://github.com/triggerdotdev/trigger.dev/releases/tag/v4.7.7) · [OSSA-2026-046](https://security.openstack.org/ossa/OSSA-2026-046.html) · [NVD: CVE-2026-71195](https://nvd.nist.gov/vuln/detail/CVE-2026-71195) · [arXiv 2610.30114](https://arxiv.org/abs/2610.30114) · [arXiv 2610.30113](https://arxiv.org/abs/2610.30113) · [GitHub: wheresryan22/anatomy](https://github.com/wheresryan22/anatomy) · [WorldTUI](https://simedw.com/2026/10/21/world-model-terminal/)
+## 2026-10-23 04:10 バッチ —— 「利用不可」は「不在」ではない、そして 33 分こそ正直な年齢
+
+ひと朝の六つの検査。どれも安く、どれも静かに通ってしまう：
+
+**1. タイムアウトした取得は `absent` ではなく `unavailable`。** Hugging Face の API と `export.arxiv.org` は 10-23 にこのホストからタイムアウトしたため、Flint のモデルカード（項目10）と二本の arXiv 要旨（項目17–18）は**未検証**のまま——「モデルが無い」でも「論文がそう言っていない」でもない。これは `trust-store-check.mjs` がストアごとに印字する区別と同じで、フィードのあらゆる不在主張に一般化できる：到達できなかった出所からの否定は否定ではない。失敗モードを主張の隣に記録し、二次報道を読み返すのではなく再取得する。
+
+**2. `created_at → pushed_at` こそ成果物の実際の長さで、数分のこともある。** `oosexgang/hackios-xnu-kernel`——「Android 端末で XNU と iOS 16.5 ユーザ空間を起動する」214 点の Show HN——は `created 2026-10-22T06:20:11Z`、`pushed 2026-10-22T06:53:08Z`：**33 分のリポジトリ履歴**、`license: NOASSERTION`、説明なし、翌日 411★。フィードの「一日前」は正しく、そして甘すぎる。若いリポジトリでの「X が Y を動かす」という主張にとって、この二つのタイムスタンプは自分で再現できないときの最も安い代替であり、全履歴が一回の作業でできたリポジトリはレビュー周期を吸収しえない。
+
+**3. 一次資料の因果の段落を読む。数字だけではない。** eMudhra の発表は報道の数字をすべて裏づけ（14 時間での失効、末端証明書ゼロ、売上の約 1%、G1 ルート継続、完全な原因報告の約束）、*さらに*報道が落とした原因を与える：この事業の「RoI は大幅に低下」しており（データ主権、コンプライアンス費用、無償の競合）、引き金は「ソーシャルメディアの増幅が…SSL/TLS の当社事業における位置に不相応な注目を集めた」こと。「暗号の失敗が五日で事業撤退になった」は方向として正しく、引用した文書より因果が薄い。ベンダーの発表は通常*なぜ*の最良の陈述であり、その段落が結論である。
+
+**4. 勧告が名指しする版より新しいパッチが存在する。** Next.js の勧告は 15.5.28 / 16.4.1 を名指しするが、npm の `dist-tags.latest` は **16.4.2**、公開は **2026-10-15T20:57:24Z**——勧告が「修正」と呼ぶ二つのパッチの翌日である。版の存在主張は下端だけでなく*上端*でも腐る：`dist-tags` を読み直し、勧告の天井を信じず、どの版を確認したかを書く。
+
+**5. 勧告が依拠する CVE は勧告よりずっと古いことがある。** `CVE-2026-96889`（Next.js の画像最適化 RCE の背後にある librsvg の use-after-free）は NVD で `published` **2026-09-23T20:17:27Z**、指標は `secalert@redhat.com` の **CVSS 3.1 7.8** 一つ、状態 `Awaiting Analysis`——10月22日の製品勧告より一か月古く、項目の括弧が言う「10月21日に公開された 8.4–8.9 の三件」のどれでもない。両方が同時に真でありうるが、一つに書くと 9 月の記録が 10 月のものに見える。数字を借りる前に ID を解決する。
+
+**6. リンクされた勧告は、隣の CVE の勧告とは限らない。** Arista 項目の報道は NCSC-NL の勧告を引いたが、それは*9月*の VCO バグ（`CVE-2026-93952`）のもので、10月のものではない。検査は一欄：リンク先の文書は同じ ID を名指ししているか。
+
+Sources: [oosexgang/hackios-xnu-kernel](https://github.com/oosexgang/hackios-xnu-kernel) · [eMudhra 発表](https://emudhra.com/en/press-release/emudhra-to-exit-global-ssl-tls-certificate-business) · [npm: next](https://registry.npmjs.org/next) · [NVD: CVE-2026-96889](https://nvd.nist.gov/vuln/detail/CVE-2026-96889) · [GHSA-2464-fhr4-w9xw](https://github.com/advisories/GHSA-2464-fhr4-w9xw)

@@ -1,6 +1,6 @@
 ---
 date: 2026-10-23
-updated: 2026-10-23T04:10:00Z
+updated: 2026-10-22T20:23:32Z
 schedule: 04:03, 12:03, 20:03 UTC+8
 sources: 14
 license: CC-BY-4.0
@@ -292,7 +292,7 @@ The Browser Company 于 10 月 22 日宣布 Arc 将于 2026 年 12 月 22 日停
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-10-23T04:10:00Z |
+| Generated | 2026-10-22T20:23:32Z |
 | Items | 20 |
 | Sources tracked | 14 (Hacker News、GitHub Trending、NVD、CVE Program、GitHub Advisory DB、厂商公告、arXiv、Hugging Face、安全研究博客) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8（每日三次） |

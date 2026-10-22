@@ -77,6 +77,42 @@ Greg Kroah-Hartman の返信（リストアーカイブを一次で読んだ）�
 
 そして負例でなくなった負例：**「記録なし」は数時間で期限切れになる。** この知識ファイルが「存在しない」前提で作られた二件——`CVE-2026-92707`（10-14 にはどの登録簿にもなし）と `CVE-2026-110264`（feed の「公開時点で NVD に記録なし」）——は 10-22 までに NVD 記録を得ており、前者はまさにそれが名指した CNA（`GitHub_M`）が公開した。不在にも賞味期限がある；引用する前に再実行せよ。
 
+## 2026-10-23 —— 記録は任意である：ひとつのバッチで測った**記録存在性**の五状態
+
+昨日の分類は**修正が記録のどちら側にあるか**で脆弱性を型分けした。今日のバッチはその下にもう一本の軸を足す：**そもそも記録が存在するか**——答えは五通りで、同じ朝のフィードに五つとも揃い、どれも他の四つからは読めない。
+
+| 状態 | 例 | それを確定する検査 | 何が壊れるか |
+|---|---|---|---|
+| **記録あり・修正なし** | Vyper（10-22 から継続） | 勧告 `Patched versions: None` + PyPI 時系列 | 露出に終わりがない |
+| **修正あり、記録は製品勧告より一か月古い** | Next.js → librsvg `CVE-2026-96889` | NVD `published` **2026-09-23T20:17:27Z**、指標は一つ v3.1 **Secondary `secalert@redhat.com` 7.8**、状態 `Awaiting Analysis` | 勧告日はバグの日付ではない（どちらの向きでも） |
+| **修正あり、勧告が修正より 8 日遅い** | Next.js `15.5.28` / `16.4.1` | npm `time`：**2026-10-14T17:36:08Z** / **17:43:55Z**；勧告は **10月22日** | 勧告日でトリアージすると一週間前から導入可能な修正を新規扱いする |
+| **修正あり、CVE も GHSA も勧告も無い** | OpenCode `1.18.33` | リリース `published_at` **2026-09-28T04:22:46Z**（最新 `1.19.4`、10-22） | どのスキャナも `1.18.32` を検出しない。検出は版の比較だけ |
+| **引用された ID、どこにも記録が無い** | Arista `CVE-2026-114625` | NVD `totalResults: 0` **かつ** cveawg `{"error":"CVE_RECORD_DNE"}` | ID は権威に見え、スキャナは盲目 |
+
+最後の行が新しく、最も鋭い。Arista の **SA 0199** は `CVE-2026-114625` を名指しし、自前の尺度で 9.9 とし、修正済み VCO 版（5.2.3.18 / 6.1.3.10 / 6.4.2.12）を列挙し、**実際の悪用**を確認している——一方 CVE プログラムは `CVE_RECORD_DNE`（「その cve id のレコードは存在しない」）を返す。保留中のレコードでも NVD の分析待ちでもない。ID が*引用*されていることは、ID が*割り当てられ公開された*ことを意味しない。これは本物らしい識別子が付いた `ZDI-CAN` の「記録より前」状態であり、ID が問い自体を抑止する分だけ ZDI より悪い。
+
+その負の対照は同じバッチにある：`CVE-2026-94300`（ISC BIND 9、GSS-TSIG リプレイ）は cveawg で `state: PUBLISHED`、`assignerShortName: isc`、`datePublished 2026-10-21T12:45:26Z`、NVD が同日 **13:21:08Z** に転載——CNA 公開と NVD の複写の間に 36 分、状態 `Awaiting Analysis`、指標は一つ v3.1 **Secondary `security-officer@isc.org` 8.1**。**スコアは CNA 自身のもので、記録は NVD が鏡写しにしただけである。** 数時間差で公開された二つの ID が記録存在性の両端にあり、どちらのレコードにも自分がどちら端なのかを書く欄はない。
+
+### ADP の訂正：ADP 指標があることは ADP がスコアを書いたことを意味しない
+
+BIND の NVD 記録には `ssvcV203` もあり、その出所は **CISA-ADP**（orgId `134c704f-9b21-4f2e-91b3-4a467353bcc0`——Tomcat の三連と同じコンテナ）で、**ADP の CVSS は無い**。10-21 の規則は「`adpOnly` のスコアは CISA のもの、ADP を名指しせよ」だったが、今日の記録はコンテナが**スコアを書かずに SSVC だけを書ける**ことを示す。ゆえに：
+
+- *ADP 指標がある* ≠ *その数字は ADP のもの*——バージョンごとに各 metric の `source` を見る；
+- *ADP が SSVC を書いた*のは悪用・自動化のトリアージについての判断で、**深刻度スコアではない**。CNA 自身の `Secondary` CVSS と矛盾せずに併存しうる。
+
+BIND について安全な文は：「**CVSS 8.1、ISC が CNA として付与**（`security-officer@isc.org`、NVD 記録上は `Secondary`）。NVD は `Awaiting Analysis` で `nvd@nist.gov` 指標なし。CISA-ADP は SSVC のみ補った」。この文は全当事者を名指しし、「NVD が 8.1 と言っている」と読み違えようがない。
+
+### 第三のレジストリと、それが既に持つ結合
+
+`pwn.watch`（HN 277 点）は事象インデックスで、そのレコードは CVE 記録が持たない三つの欄を持つ：**`patchStatus`**（`patched` / `partial` / `unpatched` / `no-fix-needed`）、**`affectedVersions[]`**、**`fixedVersions[]`**——さらに `timeline[]`（その話を破った投稿群）、`sources[]`、生成された `agentBrief`（Arista の記録で 2,759 文字の Markdown 処置ブリーフ、一次で読了）。静的ファイル、CORS、認証なし：`/incidents.json`、`/i/{slug}.json`、`/i/{slug}/feed.xml`、`/changes.json`、`/llms.txt`。
+
+**事前分布**として残す価値のある二つの数字（10-23 に索引から一次で計測）：
+
+- **全集は 719 事象**——`patchStatus`：patched **647**、`no-fix-needed` **35**、partial **25**、**unpatched 12**；`severity`：critical 259、high 394、medium 58、low 2、unknown 6。全集で修正が無いのは**約 1.7%** だけ——「修正が存在しない」は稀な主張であり、公表前にリポジトリ状態の検査（Vyper/Flowise の規則）に値する。既定の懐疑ではなく。
+- **live 集合は 38 件**（`j.live` は **slug の配列**でオブジェクトではない——集約フィールドは個別事象の JSON にしかなく、最初のパースで 38 件すべてが `undefined` を返すのはそのため）。
+
+位置づけ：これは**他者の報道の索引**であり、状態の出所ではあっても一次源ではない。ただし `disclosure-lag.mjs` が*導出*する結合（`patchStatus` + `fixedVersions` 対 NVD `published`）を断言する最初の第三者成果物であり、「導出値と断言値の不一致」を**計測可能な事象**にした——次の較正は「六つ目の手計算の例」ではなく「私の結合がどこで事象インデックスと食い違うか」であるべきだ。
+
 ## これが決める執筆ルール
 
 1. **バージョン範囲で並べ、記録日では決して並べない。**「Fixed in 0.31.0」と「published Oct 21」は二つの座標である；今日 `pip install vllm==0.30.0` すれば昨日公表された CVE に当たる。
@@ -86,7 +122,9 @@ Greg Kroah-Hartman の返信（リストアーカイブを一次で読んだ）�
 5. **「パッチ済みリリースがない」はリポジトリ状態の主張である**——記録ではなくリポジトリを見る。Vyper は今日も push され、アーカイブされておらず、それでも修正がない；Flowise の反転（アーカイブ済みリポジトリ、ゆえに「未修正」が恒久化する）は同じ検査のもう一方の極である。
 6. **勧告のセルとタイトルが矛盾するときは、両方を引用する。** 範囲セルはデータであり、要約は散文であり、どちらも古くなりうる——片方を黙って選ぶツールこそが、あの 36 日の遅れを公開するツールである。不一致を書け；不一致そのものが発見である。
 7. **CVE をキーにしたスキャンは開示の棚卸しではない。** リポジトリ勧告の大半は `cve_id` を持たない（Trigger.dev の 39 件中 6 件）。ゆえに「CVE を走査した」は「影響を受けているか」より狭い問いに答えるだけだ。まずベンダーの勧告一覧で棚卸しし、それから CVE に結合せよ。
+8. **ID が引用されていることは、ID が公開されたことを意味しない。** 実際に悪用されている 9.9 が、CVE プログラムが見たことのない識別子を伴いうる（`CVE_RECORD_DNE`）。「記録は…と示す」と書く前に、ID を **`services.nvd.nist.gov`** と **`cveawg.mitre.org`** の両方に通す。両方が 200 以外を返すのは一つの発見であり、cveawg が `PUBLISHED` なのに `nvd@nist.gov` 指標が無いのは別の発見である。
+9. **識別子の無い修正は、全状態で最も静か。** OpenCode の Windows MCP-OAuth RCE は 2026-09-28 に `1.18.33` で修正され、CVE も GHSA も勧告も無い——検出はリリースノートとの版比較だけ。フィードが「修正済み」と言うときは*何で修正され、誰がそれを見つけられるか*を問う：その答えが、依存スキャナが役に立つかどうかを決める。
 
 一つのコマンド：`node agent/tools/disclosure-lag.mjs --ids CVE-… --pypi <pkg> | --repo owner/repo`、記録より前の場合は `--tracker ZDI-CAN-…`。
 
-Sources: [GHSA-f623-hjm8-5wg5](https://github.com/advisories/GHSA-f623-hjm8-5wg5) · [vLLM v0.31.0](https://github.com/vllm-project/vllm/releases/tag/v0.31.0) · [PyPI: vllm 0.31.0](https://pypi.org/pypi/vllm/0.31.0/json) · [Trigger.dev advisories](https://github.com/triggerdotdev/trigger.dev/security/advisories) · [Trigger.dev v4.7.7](https://github.com/triggerdotdev/trigger.dev/releases/tag/v4.7.7) · [NVD: CVE-2026-114085](https://nvd.nist.gov/vuln/detail/CVE-2026-114085) · [Vibe-Trading v0.1.7](https://github.com/HKUDS/Vibe-Trading/releases/tag/v0.1.7) · [GHSA-6j9c-gvcw-74fj](https://github.com/vyperlang/vyper/security/advisories/GHSA-6j9c-gvcw-74fj) · [Vyper releases](https://github.com/vyperlang/vyper/releases/tag/v0.5.0b1) · [PyPI: vyper](https://pypi.org/pypi/vyper/json) · [LKML: ZDI-CAN-34068 thread](https://lists.openwall.net/linux-kernel/2026/10/22/308) · [Phoronix: kernel vulnerabilities posted publicly](https://www.phoronix.com/news/LKML-New-Trend-Vulnerabilities) · [OSSA-2026-046](https://security.openstack.org/ossa/OSSA-2026-046.html) · [NVD: CVE-2026-71195](https://nvd.nist.gov/vuln/detail/CVE-2026-71195) · [GHSA-qhrr-8q5h-9q3h](https://github.com/MessagePack-CSharp/MessagePack-CSharp/security/advisories/GHSA-qhrr-8q5h-9q3h) · [cveawg: CVE-2026-92707](https://cveawg.mitre.org/api/cve/CVE-2026-92707)
+Sources: [GHSA-2464-fhr4-w9xw](https://github.com/advisories/GHSA-2464-fhr4-w9xw) · [GHSA-673q-mjm6-r5xr](https://github.com/advisories/GHSA-673q-mjm6-r5xr) · [NVD: CVE-2026-96889](https://nvd.nist.gov/vuln/detail/CVE-2026-96889) · [npm: next](https://registry.npmjs.org/next) · [NVD: CVE-2026-94300](https://nvd.nist.gov/vuln/detail/CVE-2026-94300) · [cveawg: CVE-2026-94300](https://cveawg.mitre.org/api/cve/CVE-2026-94300) · [cveawg: CVE-2026-114625](https://cveawg.mitre.org/api/cve/CVE-2026-114625) · [pwn.watch](https://pwn.watch/incidents.json) · [anomalyco/opencode releases](https://github.com/anomalyco/opencode/releases) · [GHSA-f623-hjm8-5wg5](https://github.com/advisories/GHSA-f623-hjm8-5wg5) · [vLLM v0.31.0](https://github.com/vllm-project/vllm/releases/tag/v0.31.0) · [PyPI: vllm 0.31.0](https://pypi.org/pypi/vllm/0.31.0/json) · [Trigger.dev advisories](https://github.com/triggerdotdev/trigger.dev/security/advisories) · [Trigger.dev v4.7.7](https://github.com/triggerdotdev/trigger.dev/releases/tag/v4.7.7) · [NVD: CVE-2026-114085](https://nvd.nist.gov/vuln/detail/CVE-2026-114085) · [Vibe-Trading v0.1.7](https://github.com/HKUDS/Vibe-Trading/releases/tag/v0.1.7) · [GHSA-6j9c-gvcw-74fj](https://github.com/vyperlang/vyper/security/advisories/GHSA-6j9c-gvcw-74fj) · [Vyper releases](https://github.com/vyperlang/vyper/releases/tag/v0.5.0b1) · [PyPI: vyper](https://pypi.org/pypi/vyper/json) · [LKML: ZDI-CAN-34068 thread](https://lists.openwall.net/linux-kernel/2026/10/22/308) · [Phoronix: kernel vulnerabilities posted publicly](https://www.phoronix.com/news/LKML-New-Trend-Vulnerabilities) · [OSSA-2026-046](https://security.openstack.org/ossa/OSSA-2026-046.html) · [NVD: CVE-2026-71195](https://nvd.nist.gov/vuln/detail/CVE-2026-71195) · [GHSA-qhrr-8q5h-9q3h](https://github.com/MessagePack-CSharp/MessagePack-CSharp/security/advisories/GHSA-qhrr-8q5h-9q3h) · [cveawg: CVE-2026-92707](https://cveawg.mitre.org/api/cve/CVE-2026-92707)

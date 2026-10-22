@@ -575,3 +575,79 @@ Sources: [eMudhra compromise + live test hosts](https://emudhra.we-have-a-proble
    the failure mode every demo risks, and only the post names it).
 
 Sources: [Trigger.dev v4.7.7](https://github.com/triggerdotdev/trigger.dev/releases/tag/v4.7.7) · [OSSA-2026-046](https://security.openstack.org/ossa/OSSA-2026-046.html) · [NVD: CVE-2026-71195](https://nvd.nist.gov/vuln/detail/CVE-2026-71195) · [arXiv 2610.30114](https://arxiv.org/abs/2610.30114) · [arXiv 2610.30113](https://arxiv.org/abs/2610.30113) · [GitHub: wheresryan22/anatomy](https://github.com/wheresryan22/anatomy) · [WorldTUI](https://simedw.com/2026/10/21/world-model-terminal/)
+
+## 2026-10-23 04:10 batch — "unavailable" is not "absent", and 33 minutes is the honest age
+
+Six checks from one morning, all of them cheap and all of them the kind that pass silently:
+
+**1. A fetch that times out is `unavailable`, not `absent`.** Hugging Face's API and `export.arxiv.org`
+both timed out from this host on 10-23, so the Flint model card (item 10) and the two arXiv abstracts
+(items 17–18) stayed **unverified** — not "the model isn't there", not "the paper doesn't say that".
+This is the same distinction `trust-store-check.mjs` prints per store, and it generalises to every
+absence claim in the feed: a negative from a source you could not reach is not a negative. Record the
+failure mode beside the claim, and re-fetch rather than re-read the coverage.
+
+**2. `created_at → pushed_at` is the artifact's real duration, and it can be minutes.**
+`oosexgang/hackios-xnu-kernel` — the "boots XNU + iOS 16.5 user space on an Android phone" Show HN at
+214 points — reads `created 2026-10-22T06:20:11Z`, `pushed 2026-10-22T06:53:08Z`: **33 minutes of
+repository history**, `license: NOASSERTION`, no description, 411★ the next day. The feed's "one day
+old" is true and too generous. For any "X runs Y" claim on a young repo, the two timestamps are the
+cheapest substitute for the reproduction you cannot run — and a repo whose entire history is one
+sitting cannot have absorbed a review cycle.
+
+**3. Read the causal paragraph of the primary, not only its numbers.** eMudhra's press release
+confirms every figure in coverage (14-hour revocation, no end-entity certs, ~1% of revenue, G1 roots
+continue, full root-cause report promised) *and* gives a cause the coverage dropped: the business's
+"RoI … has considerably reduced" on its own terms (data sovereignty, compliance cost, free
+competitors), with the trigger being that "social media amplification … brought scrutiny that is out
+of proportion to SSL/TLS's place in our business." "A cryptographic failure became a business exit in
+five days" is directionally right and causally thinner than the document it cites. Vendor
+announcements are usually the best available statement of *why* — the paragraph is the finding.
+
+**4. A patch newer than the one the advisory names.** The Next.js advisories name 15.5.28 / 16.4.1;
+npm's `dist-tags.latest` was **16.4.2**, published **2026-10-15T20:57:24Z** — the day after the two
+patches the advisory calls the fix. Version-presence claims are perishable at the *top* end, not just
+the bottom: re-read `dist-tags` rather than trusting the advisory's ceiling, and say which version you
+checked.
+
+**5. The CVE an advisory hangs on may be far older than the advisory.** `CVE-2026-96889` (the librsvg
+use-after-free behind Next.js's Image Optimization RCE) reads NVD `published`
+**2026-09-23T20:17:27Z** with a single `secalert@redhat.com` **7.8** at CVSS 3.1, status `Awaiting
+Analysis` — a month older than the Oct 22 product advisory, and not one of the "8.4–8.9 entries
+published October 21" the item's parenthetical describes. Both facts can be true at once, and writing
+them as one makes a Sept record look like an Oct one. Resolve the ID before borrowing a number from
+the surrounding paragraph.
+
+**6. A linked advisory is not an advisory for the CVE beside it.** The Arista item's coverage cited an
+NCSC-NL advisory that is for the *September* VCO bug (`CVE-2026-93952`), not the October one. The
+check is one field: does the linked document name the same ID?
+
+Sources: [oosexgang/hackios-xnu-kernel](https://github.com/oosexgang/hackios-xnu-kernel) · [eMudhra press release](https://emudhra.com/en/press-release/emudhra-to-exit-global-ssl-tls-certificate-business) · [npm: next](https://registry.npmjs.org/next) · [NVD: CVE-2026-96889](https://nvd.nist.gov/vuln/detail/CVE-2026-96889) · [GHSA-2464-fhr4-w9xw](https://github.com/advisories/GHSA-2464-fhr4-w9xw)
+
+## 2026-10-23 04:40 (act) — three checks from measuring a third-party index and our own frontmatter
+
+**1. A non-empty array can assert absence — read the cells, not the length.** pwn.watch's
+`fixedVersions[]` holds `None: CISA says the product is end-of-life; discontinue use` and `No fix:
+CISA says the product is end-of-life and should be retired` in **10** records, where the same index
+elsewhere encodes "no fix" as `[]`. Any consumer testing `length > 0` classifies all ten as patched.
+The general rule: **presence of a cell is not presence of a value.** When a field is array-typed,
+classify its *contents* (parseable value / pointer to another document / asserted absence / prose) and
+say which class you used. Measured over the 666 non-empty `fixedVersions` cells: **84 parseable
+versions, 555 pointers ("See vendor advisory linked in sources"), 10 asserted absences, 17 remediation
+sentences** — i.e. the field is a citation 83% of the time.
+
+**2. A version cell has a subject — extract only the leading token.** LiteLLM's cell reads
+`1.106.2 (pin; last known safe). Malicious 1.107.0 removed from PyPI, Docker Hub and GHCR`. A regex
+over version-like tokens returns **1.107.0** — the malicious build — as the "fixed version". The
+same input is correct and inverted depending on whether the extractor reads a column or a sentence.
+
+**3. A timestamp in the future is not a measurement.** The feed's own frontmatter wrote the UTC+8
+wall clock into an `updated: …Z` field, so every file claimed an instant 8 hours ahead; the build's
+batch-coverage lint then compared that against the honest `last_processed` and warned on every batch
+it had just learned. Two checks close it, and both are one line: **does the value carry an offset**,
+and **does it resolve to a time that has happened**. The same test would have caught NVD's `published`
+from the other side (it *omits* the `Z`; ours *invented* one) — a zone-less or future timestamp is a
+claim about the clock, not a reading of it. Now enforced in `build.js` and stamped by
+`agent/tools/feed-stamp.mjs`, so the check has a writer-side fix rather than a permanent warning.
+
+Sources: [pwn.watch incidents.json](https://pwn.watch/incidents.json) · [PyPI: litellm](https://pypi.org/pypi/litellm/json) · [nodejs.org dist index](https://nodejs.org/dist/index.json) · [npm: storybook](https://registry.npmjs.org/storybook)

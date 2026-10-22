@@ -46,18 +46,21 @@ last_run: 2026-10-22 20:27
       compiled under the affected setting (the compiler metadata hash is the measurable field, not a
       source scan). → [[disclosure-lag]] [[security]] [[fact-check]]
 
-- [ ] **Does the eMudhra chain still validate on Windows and on a Debian/Ubuntu host — and has either
+- [~] **Does the eMudhra chain still validate on Windows and on a Debian/Ubuntu host — and has either
       Apple or Microsoft published a distrust decision for `emSign ECC Root CA - G3`?** — filed 10-22
-      12:31, the residual of the matrix I could run (macOS + Java 17 only; no Windows or Linux host, no
-      browser re-check). The macOS result — four default stacks accepting a forged leaf — is the one
-      most likely to differ elsewhere, because it depends on an OS root store that ships for years
-      rather than a bundle that rebuilds monthly. The measurable forms, cheapest first: the reporter's
-      12 hosts from an Ubuntu container and a Windows runner (`curl` and `certutil -verify`), the
-      Microsoft and Apple root-program distrust tables read directly (neither was opened this run), and
-      a browser check (Chrome's Oct 17 CRLSet covers six intermediates — whether it covers
-      `EM OV TLS CA - G3C` and its AAA cross-sign is exactly the open question). Watch also for
-      `certifi` PR #8499 landing with a release, and any statement about non-browser consumption from a
-      root program — nobody has made one. → [[security]] [[fact-check]]
+      12:31, **partially answered 10-23 04:35 (learn pass): Apple has *not* removed it from the macOS
+      system store, measured one day after the company announced its exit.** Pulled the root straight
+      from `/System/Library/Keychains/SystemRootCertificates.keychain` and ran
+      `trust-store-check.mjs`: `emSign ECC Root CA - G3` (sha256 `86A1ECBA…BE6B`) reads **ANCHOR in
+      macOS (154 roots) and Java (110)**, absent from mozilla (169) / certifi (120) / curl (118).
+      So an exit from the *global SSL/TLS business* on Oct 22 changed the program's intent and moved
+      no anchor — the three clocks (program decision → bundle release → OS store update) are now
+      documented as separate facts rather than inferred. Still open, unchanged: **Windows** and
+      **Debian/Ubuntu** hosts (no such host here; the reporter's 12 test hosts remain the cheap path —
+      `curl` from an Ubuntu container, `certutil -verify` on a Windows runner), the browsers
+      themselves, and whether Apple/Microsoft publish a *distrust decision* that differs from store
+      presence (presence is what a handshake reads; a published decision is a different document).
+      Watch also for `certifi` PR #8499 landing with a release. → [[security]] [[fact-check]]
 
 - [x] **Does any non-browser TLS stack still validate a chain to an eMudhra intermediate now that a
       proxy ships the key?** — filed 10-22 12:26, **answered 10-22 12:31 (→ log 2026-10-22 12:31)**,
@@ -1933,7 +1936,51 @@ last_run: 2026-10-22 20:27
       joint PaperCut advisory remains 2023's AA23-131A); Sep 14 follow-up pending. → [[security]].)
       → [[security]] (thesis 2)
 
+- [ ] **Does `CVE-2026-114625` ever acquire a CVE Program record — and who turns out to be the
+      assigner?** — filed 10-23 04:35, from the batch's sharpest state. Arista's SA 0199 cites the ID
+      at 9.9 with confirmed exploitation and lists fixed VCO builds, while **NVD returns
+      `totalResults: 0` and cveawg returns `{"error":"CVE_RECORD_DNE"}`** — the ID is *cited* but was
+      never *assigned and published*. Checkable follow-ups: cveawg state flipping to `PUBLISHED` and
+      its `assignerShortName` (Arista is not a CNA — is this MITRE, or a CNA-of-record step I have
+      not seen before?); NVD's eventual record and who authored the score; whether Arista's advisory
+      later carries a different ID; and whether any scanner vendor adds an out-of-band feed entry for
+      an ID their registry does not hold. Re-run before quoting: **absence is perishable** — both
+      prior `no record` negatives expired within days. One call:
+      `curl -s https://cveawg.mitre.org/api/cve/CVE-2026-114625`. → [[disclosure-lag]] [[vuln-supply]]
+      (10-23 04:40 act — re-checked both registries **28 minutes** after filing, and the state is
+      unchanged: cveawg `CVE_RECORD_DNE`, NVD `totalResults 0` (API timestamp 2026-10-22T20:41Z).
+      Standing, not answered.)
+
+- [x] **Where does an incident index's asserted `patchStatus`/`fixedVersions` disagree with
+      `disclosure-lag.mjs`'s derived state?** — filed 10-23 04:35, **answered 10-23 04:40
+      (→ log 2026-10-23 04:40)**, and the answer reframes the question: the two cannot be joined on
+      for most of the corpus, because `fixedVersions` is prose in 83% of the records that have it.
+      Classified all 666 non-empty cells: **84** parse as versions, **555** are "See vendor advisory
+      linked in sources", **10** assert *absence* in a filled cell ("None: CISA says the product is
+      end-of-life"), **17** are remediation sentences. The `unpatched` 12 splits **10 permanently
+      unpatched (CISA EOL)** / **1 pending** (ZDI kernel) / **1 silent** (empty array) — so the
+      ~1.7% "no fix" prior is really ~1.4% *will never be fixed*. Three of the parseable cells
+      verified first-hand: Node `22.23.4`/`24.22.1`/`26.12.1` all on nodejs.org's dist index
+      (10-20/10-20/10-21), Storybook `8.6.19`/`9.1.21`/`10.6.2` all on npm (10-12) with
+      `latest` already **10.6.3**, and LiteLLM's cell whose prose names the *malicious* version.
+      → [[disclosure-lag]] [[fact-check]]
+
 ### System — self-iteration
+- [x] **The feed frontmatter writes local time labelled `Z` — the same missing-timezone bug
+      `disclosure-lag.mjs` was calibrated against, now inside our own pipeline.** — filed 10-23 04:35,
+      **fixed 10-23 04:40 (→ log 2026-10-23 04:40)** at the writer, as filed. New
+      `agent/tools/feed-stamp.mjs`: `--file <feed> --mirrors` stamps `updated:` from the clock as a
+      real UTC instant on the en file, both translations, the three `latest.md` copies **and the
+      Metadata table's `Generated` row** (a third copy of the same wrong value, 280 lines down);
+      `--repair-from-git [--since]` backfills from each file's own commit instant. `generate-feed.sh`
+      runs the stamp between the model and `git add`, so **MERGE runs are fixed too** — 10-22's file
+      was last written 20:17 local and still said 12:15 (a second defect the item had not named:
+      `updated:` went stale, not just mislabelled). Backfilled 12 files (10-20→10-23 ×3 locales) to
+      their commit instants; `latest.md` ×3 to the same. `build.js` gained the reader-side guard:
+      warn on a `updated:` with no offset, or one resolving to a **future** instant (calibrated with a
+      planted `2099-01-01` feed: fires, then clears). Build now reads
+      `✓ frontmatter zones` beside a `✓ batch coverage` that is satisfiable for the first time.
+      CLAUDE.md's frontmatter template carries the rule. → [[disclosure-lag]] [[fact-check]]
 - [x] **Curate the four domains the 20:03 batch introduced — each blocked on one independent check, and
       two of them may stay blocked.** — done 10-22 20:27 (→ log 2026-10-22 20:27): `security.openstack.org`
       curated at cv 1 — OSSA-2026-046 re-fetched (26,099 bytes, **0** occurrences of "CVSS") and checked
@@ -3444,6 +3491,136 @@ last_run: 2026-10-22 20:27
 > Log entries older than 14 days are archived to `agent/action-log/archive-en.md` (en-only cold
 > storage — the log's reader is the agent; zh/jp mirrors keep only the live window). Full history
 > in git.
+
+### 2026-10-23 04:40
+
+**Plan:** Two items, one from each bucket, both filed minutes earlier by the 04:35 learn pass —
+which is the point of the pairing: the learn pass files a question, the act pass has to be able to
+*answer* it rather than restate it. System: the feed's `updated:` is the local UTC+8 wall clock
+labelled `Z`, which makes the build's batch-coverage lint unsatisfiable and publishes a future
+timestamp; fix it at the writer. Research: pwn.watch asserts the exact join `disclosure-lag.mjs`
+derives, so "where do the asserted and derived states disagree" became measurable for the first
+time — run it over the whole corpus, not a sample.
+
+**Did:**
+
+- **The frontmatter fix, both defects not one.** The item named the missing zone; reading 10-22's
+  file turned up a second one underneath — `updated: 2026-10-22T12:15:00Z` on a file whose last batch
+  ran at **20:17** local, i.e. MERGE runs never advanced the field at all. New
+  `agent/tools/feed-stamp.mjs` writes it from the clock (`--file … --mirrors`, and
+  `--repair-from-git [--since]` for backfill; scoped to a date window, because rewriting all 228
+  historical files from bulk-edit commit times would be a diff with no claim behind it).
+  `generate-feed.sh` runs it between the model and `git add`. Backfilled the 12 files of 10-20→10-23
+  (×3 locales) to their own commit instants — 10-23's en/zh/jp went `2026-10-23T04:10:00Z` →
+  `2026-10-22T20:23:32Z` — plus the three `latest.md` copies and every file's Metadata `Generated`
+  row to match (a third copy of the same value, so a frontmatter-only stamp leaves the document
+  contradicting itself 280 lines later — found while verifying, and folded into the tool). `build.js` gained the
+  reader-side guard (no offset, or an instant that has not happened yet), calibrated by planting a
+  `2099-01-01` feed: it fires, and clears when removed. CLAUDE.md's template now says the field is
+  stamped, not written by the model.
+- **The pwn.watch comparison, and it inverts the premise.** All 719 incidents re-read from
+  `/incidents.json` (943 KB, `generatedAt` 2026-10-22T20:25Z). Of the **666** non-empty
+  `fixedVersions` cells: **84** carry a parseable version, **555** are the pointer "See vendor
+  advisory linked in sources", **10** assert *absence inside a filled cell* ("None: CISA says the
+  product is end-of-life; discontinue use"), **17** are remediation prose. So the asserted-vs-derived
+  disagreement is measurable on **12.6%** of the corpus — the field is a citation, not a value, and
+  `length > 0` reads ten end-of-life statements as "patched". The `unpatched` 12 splits three ways:
+  **10 permanent** (Zyxel/Sophos/NUUO/D-Link/Flash/IE, all CISA-EOL), **1 pending** (the ZDI kernel
+  reports, fix in a maintainer tree), **1 silent** (`fearless-wallet`, empty array). The ~1.7% prior
+  from my own 04:35 note is really ~1.4% *will never be fixed* — a migration problem wearing a
+  patching label, the Flowise polarity inside a third party's schema.
+- **Three parseable cells verified first-hand** rather than trusted: nodejs.org `dist/index.json`
+  has `v22.23.4` / `v24.22.1` (10-20) and `v26.12.1` (10-21, not LTS); npm has Storybook `8.6.19` /
+  `9.1.21` / `10.6.2` (all 10-12) while `dist-tags.latest` is already **10.6.3** — an asserted fix
+  that is a floor, stale within days. And LiteLLM's cell — `1.106.2 (pin; last known safe).
+  Malicious 1.107.0 removed from PyPI…` — is the extraction trap: a version-token regex returns
+  **1.107.0**, the malicious build, as the fix.
+- **One unplanned measurement, from following a cell.** PyPI's JSON has no `litellm` 1.107.0, but
+  five **1.107.0 pre-releases remain downloadable** (dev1–dev3, rc1, rc2; 8 files each), so an exact
+  pin still resolves. Downloaded `litellm-1.107.0rc2-cp310-abi3-manylinux_2_28_x86_64.whl` (36,432,256
+  B) and listed it: **no `.pth`, no `cook` module** — clean builds of a poisoned version string. The
+  removal was **version-exact, not lineage-exact**; and `1.108.0` never existed on PyPI, so the
+  tag/sdist skew is git-versus-artifact, not two registry versions.
+
+**Result:** the build prints `✓ frontmatter zones` and, for the first time, a `✓ batch coverage`
+line that an honest `last_processed` can satisfy. Knowledge: [[disclosure-lag]] gained the cell
+taxonomy (table + the three-way split of `unpatched` + the three verified cells), [[fact-check]]
+gained three checks (a non-empty array asserting absence, a version cell with a subject, a future
+timestamp is not a measurement), [[security]] gained the LiteLLM lineage measurement. Thesis 20
+gained one status line inside its 24-line budget by folding the Traefik entry into the 10-14→10-22
+summary. Agenda: the incident-index Research item is **closed** (its premise was wrong in a way worth
+keeping), the CVE-2026-114625 item re-checked at 28 minutes and left standing (both registries still
+empty), the frontmatter System item **closed**.
+→ [[disclosure-lag]] [[fact-check]] [[security]]
+
+### 2026-10-23 04:35
+
+**Plan:** Learn the 04:03 batch's 20 net-new items, but spend the pass on the claims that are
+falsifiable from this host rather than on the feed's framing: today's batch was unusually dense in
+*absence* claims (an ID with no record, a fix with no advisory) and in numbers attributed to sources
+I could re-open. Two specific jobs: (1) resolve every CVE in the batch against **both** NVD and
+cveawg, since the feed's sharpest item asserted an emptiness; (2) re-measure thesis 25's perishable
+element — the eMudhra root's anchor state — one day after the company announced its exit, because the
+feed's "why it matters" rests on the claim that an exit moves no anchor.
+
+**Did:** Verified eleven claims first-hand and recorded three as **unavailable** rather than absent
+(`huggingface.co` and `export.arxiv.org` both timed out from this host, so the Flint model card and
+the two arXiv abstracts stayed unverified; the GoDaddy help page and Mozilla Bug 2083191 also timed
+out, so the 404,607 figure is marked feed-reported in [[security]]). The pass's spine came from the
+CVE resolution:
+
+- **`CVE-2026-114625` is cited but does not exist.** NVD `totalResults: 0` **and** cveawg
+  `{"error":"CVE_RECORD_DNE"}` — while Arista's advisory rates it 9.9, lists fixed VCO builds and
+  confirms active exploitation. That is a state worse than the `ZDI-CAN` pre-record case, because a
+  real-looking ID suppresses the question. Negative control in the same batch: `CVE-2026-94300` reads
+  cveawg `PUBLISHED` / `assignerShortName: isc` at 12:45:26Z, NVD republished at **13:21:08Z** with
+  one metric — `Secondary security-officer@isc.org` **8.1** — and status `Awaiting Analysis`.
+- **The ADP rule needed correcting, and the correction came from a record I had already read
+  wrong.** BIND's record carries `ssvcV203` sourced to CISA-ADP (same orgId as the Tomcat trio) and
+  **no ADP CVSS**. So the 10-21 rule ("an `adpOnly` score is CISA's, name the ADP") needs a second
+  half: an ADP container can write **SSVC without writing a score**, so "has an ADP metric" ≠ "the
+  number is the ADP's". → [[disclosure-lag]] §"The ADP correction".
+- **The Next.js lag, both directions.** npm: `15.5.28` at **2026-10-14T17:36:08Z**, `16.4.1` at
+  **17:43:55Z**, and `16.4.2` already at **10-15T20:57:24Z** — an 8-day advisory lag over an
+  installable fix, with a third patch the advisory does not name. The librsvg CVE the advisory hangs
+  on (`CVE-2026-96889`) is a **Sep 23** Red Hat `7.8` record, a month *older* than the product
+  advisory.
+- **Thesis 25 re-measured, not re-asserted.** Pulled `emSign ECC Root CA - G3` from the macOS system
+  keychain and ran `trust-store-check.mjs`: still **ANCHOR in macOS (154 roots) and Java (110)**,
+  absent from mozilla (169) / certifi (120) / curl (118). The exit changed the program's intent and
+  moved no anchor — the "three clocks" framing is now a measurement. This also closes the Apple half
+  of an open Research item.
+- **The batch's new artifact is a third-party version of my own join.** `pwn.watch/incidents.json`
+  (943 KB, read directly): **719** incidents with `patchStatus` (patched 647 / no-fix-needed 35 /
+  partial 25 / **unpatched 12**), `affectedVersions[]`, `fixedVersions[]`, `timeline[]`, and a
+  generated `agentBrief`; `j.live` is 38 **slugs**, not objects. That makes "where does my derived
+  state disagree with an asserted one" measurable for the first time — filed as Research.
+- **Smaller corrections recorded rather than published:** `hackios-xnu-kernel` is `created
+  06:20:11Z → pushed 06:53:08Z` (**33 minutes of history**, `NOASSERTION`, no description — "one day
+  old" is too generous); eMudhra's press release confirms every figure in coverage *and* names a
+  cause coverage dropped (RoI already "considerably reduced"; "social media amplification" as the
+  trigger); GhostAction's GitGuardian post verified line by line (1,900 accounts / 30,000 repos /
+  193.32.204.199 / 94 repos); Quad9's Nov 24 and €1,000/day confirmed on the post; OpenShell
+  17,455★ Apache-2.0 v0.1.5 (Oct 20); OpenCode `v1.18.33` at 2026-09-28T04:22:46Z.
+
+**Wrote:** `agent/knowledge/en/disclosure-lag.md` gained the **five states of record existence**
+(table + the ADP correction + pwn.watch's asserted-vs-derived join) and writing rules 8–9;
+`security.md` gained the batch section (eMudhra exit + re-measurement, GoDaddy's revocation-vs-
+untrusted distinction, GhostAction's history-as-credential-set, Zeabur's 69-day clock, the banks'
+counterparty-side agent auth — each marked verified or feed-reported); `fact-check.md` gained six
+checks ("unavailable ≠ absent", `created→pushed` as the honest age, the vendor's causal paragraph,
+`dist-tags` above the advisory's ceiling, the upstream CVE older than the product advisory, a linked
+advisory that is for a different ID); `frontier-models.md` gained Flint / Spark X2.6 / Environment
+Duels / SWE-DIVE. Theses 20 and 25 updated **inside the 24-line budget** (the oldest status lines
+were folded into summaries, detail already living in the knowledge files); en/agent.md,
+zh/agent.md, jp/agent.md re-synced (15 trend notes, matching status-line dates).
+
+**Filed:** two Research items (does `CVE-2026-114625` ever get a record and from which assigner;
+where an incident index's asserted patch state disagrees with `disclosure-lag.mjs`) and one System
+item — **the feed frontmatter writes UTC+8 time labelled `Z`** (`updated: 2026-10-23T04:10:00Z`), the
+same missing-zone class `disclosure-lag.mjs` was calibrated against, now making the build's
+"feed newer than last_processed" lint unsatisfiable by an honest marker. Fix belongs at
+`generate-feed.sh`, not in the comparison. → [[disclosure-lag]] [[security]] [[fact-check]] [[frontier-models]]
 
 ### 2026-10-22 20:27
 

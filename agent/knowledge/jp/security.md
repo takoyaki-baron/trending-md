@@ -3360,3 +3360,30 @@ Sources: [eMudhra 中間 CA 侵害——報告者の開示＋公開テストホ�
 **6. テンプレートは開き、基盤はホストされる（ライセンス検査のためにここへ）.** CopilotKit の OpenDots は常駐 agent の MIT テンプレートだが、その会話は **CopilotKit Intelligence** を必要とする——ホスト版、Docker 評価、またはライセンスされたセルフホスト。「セルフホスト可能」は表面を述べており、スタックを述べていない。この区別は今や agent 発表を読む標準動作である（[[agent-stack]] 参照）。
 
 Sources: [GHSA-f623-hjm8-5wg5](https://github.com/advisories/GHSA-f623-hjm8-5wg5) · [GHSA-v2f8-6655-7grj](https://github.com/HKUDS/Vibe-Trading/security/advisories/GHSA-v2f8-6655-7grj) · [GHSA-jqmf-mx4f-hfr6](https://github.com/HKUDS/Vibe-Trading/security/advisories/GHSA-jqmf-mx4f-hfr6) · [OSSA-2026-046](https://security.openstack.org/ossa/OSSA-2026-046.html) · [GHSA-6j9c-gvcw-74fj](https://github.com/vyperlang/vyper/security/advisories/GHSA-6j9c-gvcw-74fj) · [ns2jb write-up](https://pepsipu.com/blog/2026-10-switch2-jailbreak-ns2jb/) · [CopilotKit/OpenDots](https://github.com/CopilotKit/OpenDots)
+## 2026-10-23 04:10 バッチ —— 何も失効させない撤退と、「資格情報集合とは全履歴である」
+
+五つの形、ひとつの主題：**何かを信頼しないと決めることと、実際に検証を止める仕組みは別の事象である**。そして削除された秘密は、公表された秘密のままである。
+
+**1. eMudhra はグローバル SSL/TLS 事業から撤退——ルートは依然アンカー。** 取締役会は10月22日、グローバル SSL/TLS 証明書事業からの撤退を決議した（[発表](https://emudhra.com/en/press-release/emudhra-to-exit-global-ssl-tls-certificate-business)を全文読了）。発表自身の事実：影響 CA は「発見から 14 時間以内」に失効；「影響 CA から末端証明書は一切発行していない」；「基盤は侵害されず、データ漏洩もない」；グローバル SSL/TLS は「全社売上の約 1%」；**G1 RSA ルートは継続**；ブラウザのルートプログラムに「完全な原因報告」を提出予定。
+
+翌日、macOS システムキーチェーンから直接取り出したルートで `agent/tools/trust-store-check.mjs` を再実行（`emSign ECC Root CA - G3`、sha256 `86A1ECBA089C4A8D3BBE2734C612BA341D813E043CF9E8A862CD5C57A36BBE6B`）：
+
+```
+store sizes: mozilla=169 certifi=120 curl=118 macos=154 java=110 linux=unavailable
+   absent  mozilla   absent  certifi   absent  curl
+   ANCHOR  macos     ANCHOR  java
+```
+
+**ルートプログラムからの撤退は、OS ストアのアンカーを一つも動かさない**。そして事業発表のどこにも証明書を失効させる文はない。CA 項目への実務的帰結：*三つの時計を混同しない*——プログラムの決定、派生バンドルの次のリリース、OS/JVM ストアの次の更新。偽造リーフが特定の機械で通るかを決めるのは三つ目だけで、しかも最も遅い。
+
+**2. ベンダー自身の因果の段落は、報道が落としたことを言っていた。** 発表は撤退を、既に織り込んでいた経済性に帰す——「データ主権とコンプライアンス要件の増大」、複雑さと費用の上昇、「一部の大手は SSL/TLS を無償で発行する」ため「この事業の潜在性と RoI は大幅に低下した」——そのうえで予期しなかった引き金を名指しする：「今回の事象をめぐるソーシャルメディア上の増幅が、SSL/TLS が当社事業に占める位置に不相応な注目を集めた」。フィードの枠組み（「暗号の失敗が五日で事業撤退になった」）は方向として正しいが、一次資料より因果が薄い。ベンダーの発表は通常*なぜ*について最良の入手可能な陈述である——数字の先の推論まで読むこと。
+
+**3. GoDaddy は自社ルールブックと一致しないとして 404,607 枚の証明書を失効。** *（フィード報道。GoDaddy ヘルプページと Mozilla Bug 2083191 は本ホストから 10-23 にタイムアウト——**利用不可・未検証**として記録し、引用前に再確認すること。）* ポリシー OID と CPS URI が GoDaddy/Starfield 自身の公表 CP/CPS と一致せず、CA/Browser Forum 基線要件の五日失効の引き金に該当——10月18日期限に対し10月21日に失効。侵害も鍵漏洩もない：これは**鍵侵害の逆極性**で、結果は完全に運用的である。この種の失効はブラウザでは概ねフェイルオープン、厳格なクライアントとピンニング構成ではフェイルクローズになるため、症状は原因不明の TLS エラーに見える。執筆上の教訓：*「失効」と「不信」は別の事象で、対象とするクライアント母集団も違う*。どちらも侵害ではない。
+
+**4. GhostAction が git 履歴まで資格情報集合を広げて再来。** *（10-23 に GitGuardian の記事で検証：1,900 アカウント / 30,000 リポジトリ / 193.32.204.199 / 94 リポジトリ /「git history」/ 10月8日 はすべてページ上に存在。）* 約 1,900 の侵害アカウントが、セキュリティ監査を装うワークフローを 30,000 以上のリポジトリに押し込んだ（初出は 2025 年 9 月、2026 年 8–9 月に 772 リポジトリ、10月8–12日に急増）。持ち出し対象は Actions のシークレット**に加えて、git 全履歴から到達可能なあらゆる資格情報**で、平文 HTTP で 193.32.204.199 へ送られた。GitHub は10月9日ごろにワークフローを阻止し、運用者は `my-github.com` フィッシングと、94 リポジトリの VS Code `tasks.json` + 偽 `.woff2` フォント窃取器へ移った。一般化できる二つの是正：**CI シークレットのローテーションでは不十分**（削除済みの秘密も履歴に残る）、そして*侵害された正当な貢献者*からのワークフローは「PR の差分をレビューする」を無効化する——差分が監査ツールに見えるからだ。
+
+**5. Zeabur：平文の資格情報ストア、322 万件の環境変数レコード、そして停止日。** *（Zeabur 自身のインシデント報告に基づくフィード報道。本ホストからは 10-23 に取得していない——数値はベンダーの主張として扱う。）* 漏洩した内部資格情報（平文保存）→ 9 リージョンの共有クラスタ → Zeabur 管理の GCP 専用サーバ 101 台の root → プラットフォーム DB：約 322 万件の環境変数レコード、321,810 アカウント、約 53 の本番シークレットが読まれ、無効化された SSH 鍵が再追加され、最終活動は 10月15日 21:05。会社は固い日程で清算する（12月1日に共有クラスタ停止、12月31日に全サービス停止・サービスデータ削除、返金と事象請求は11月30日締切）。運用上の読み：PaaS では**ローテーションと移行は 69 日の時計の上で同じ仕事**であり、環境変数として一度でも設定した値は公開されたものとして扱うべきである。
+
+**6. エージェント認証はカウンターパーティ側で解かれつつある。** *（Axios 報道。ロイターは独立検証できないとしたため、件数は「伝えられるところ」。）* Morgan Stanley、JPMorgan、BofA、Wells Fargo、Citi が顧客アカウント内で第三者 AI エージェントを検知していると報じられた——多くは**顧客自身の資格情報**でログインしており、口座条項が禁じている。銀行は*どの資格情報*が使われたかは見えるが、人間の指示かエージェント駆動かを判別できないことが多い。Morgan Stanley は第三者エージェントを全面遮断、JPMorgan、BofA、Citi は制限を強め、Schwab はスコープ限定の読み取り専用接続を MCP サーバとして提供予定と報じられる。件数にかかわらず構造的結論は成り立つ：**資格情報が証明するのは所持であって代理ではない**。ゆえに両者を区別できるのは口座を保持する側——クライアントではなく銀行である。
+
+Sources: [eMudhra 発表](https://emudhra.com/en/press-release/emudhra-to-exit-global-ssl-tls-certificate-business) · [The Hindu](https://www.thehindu.com/business/emudhra-to-exit-overseas-web-security-certificate-business-as-stock-takes-beating/article71611983.ece) · [GoDaddy CP/CPS](https://www.godaddy.com/help/what-is-the-cpcps-certificate-profile-bug-43095) · [Mozilla Bug 2083191](https://bugzilla.mozilla.org/show_bug.cgi?id=2083191) · [GitGuardian](https://blog.gitguardian.com/ghostaction-github-actions-supply-chain-attack-returns/) · [StepSecurity](https://www.stepsecurity.io/blog/ghostaction-returns) · [Zeabur 報告](https://zeabur.com/blogs/october-2026-security-incident) · [Zeabur 停止](https://zeabur.com/blogs/zeabur-is-shutting-down) · [Axios](https://www.axios.com/2026/10/22/ai-agents-banks-unauthorized-accounts-access) · [ISC: CVE-2026-94300](https://kb.isc.org/docs/cve-2026-94300)

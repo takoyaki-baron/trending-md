@@ -1401,6 +1401,43 @@ if (fs.existsSync(agentMemPath)) {
   }
 }
 
+/* ── Frontmatter-zone check ──
+   The batch-coverage check above is only as honest as the instants it compares, and until
+   10-23 one side was not: the generator (a UTC+8 host) wrote its LOCAL wall clock into
+   `updated:` with a `Z` suffix — `en/feed/2026-10-23.md` said `2026-10-23T04:10:00Z` for a run
+   that happened at `2026-10-22T20:10:00Z`. Two failures followed: the check above is
+   unsatisfiable (a local-as-UTC value is always 8h ahead of the honest `last_processed`, so every
+   learned batch warned), and the site published a future timestamp. Fixed at the writer —
+   generate-feed.sh now runs `agent/tools/feed-stamp.mjs` after the model returns — and this is
+   the reader-side guard against a regression: a date without a zone is a claim, and a value in
+   the future is not a measurement. Same class as the NVD `published` bug in
+   [[disclosure-lag]] (that one OMITS the `Z`; this one invented it), so both directions are
+   checked: missing offset, or an instant that has not happened yet. */
+{
+  const feedDirs = ['en', 'zh', 'jp'].map(l => path.join(ROOT, l, 'feed')).filter(d => fs.existsSync(d));
+  const nowMs = Date.now() + 10 * 60 * 1000;   // 10-min tolerance for clock skew mid-run
+  const badZone = [], future = [];
+  for (const dir of feedDirs) {
+    for (const f of fs.readdirSync(dir).filter(n => /^\d{4}-\d{2}-\d{2}\.md$/.test(n))) {
+      const rel = path.relative(ROOT, path.join(dir, f));
+      const upd = (fs.readFileSync(path.join(dir, f), 'utf8').match(/^updated:\s*(\S+)/m) || [])[1];
+      if (!upd) continue;
+      if (!/(Z|[+-]\d{2}:?\d{2})$/.test(upd)) { badZone.push(`${rel} (updated ${upd})`); continue; }
+      const ms = Date.parse(upd);
+      if (Number.isFinite(ms) && ms > nowMs) future.push(`${rel} (updated ${upd})`);
+    }
+  }
+  if (badZone.length) {
+    console.log(`  ⚠ ${badZone.length} feed frontmatter has updated: with no timezone offset — a local clock reading is not an instant, so Date.parse reads it as host-local: ${badZone.slice(0, 6).join('; ')}${badZone.length > 6 ? ' …' : ''}`);
+  }
+  if (future.length) {
+    console.log(`  ⚠ ${future.length} feed frontmatter has updated: in the FUTURE — almost always local UTC+8 wall clock labelled Z (the 10-23 bug): ${future.slice(0, 6).join('; ')}${future.length > 6 ? ' …' : ''}. Fix with: node agent/tools/feed-stamp.mjs --file <path> --mirrors`);
+  }
+  if (!badZone.length && !future.length) {
+    console.log(`  ✓ frontmatter zones: every dated feed's updated: carries an offset and is not in the future`);
+  }
+}
+
 /* ── CVE watch-coverage check ──
    Pass 10 of agent-run.sh (agent/tools/nvd-provenance.mjs) only watches the CVEs listed in
    agent/tools/nvd-provenance.json, so a feed batch that publishes a new CVE falls outside the

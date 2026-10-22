@@ -3880,3 +3880,54 @@ long-horizon environment-task pairs**, some requiring more than 100 agent steps,
 improved substantially across **8** out-of-distribution benchmarks (web, "claw", computer-use).
 
 Sources: [Mistral: Mistral Large 4](https://mistral.ai/news/mistral-large-4/) · [HN: Mistral Large 4](https://news.ycombinator.com/item?id=50186129) · [Hirundo: Qwen3-Coder vulnerabilities](https://www.hirundo.io/blog/qwen3-coder-vulnerabilities) · [HN](https://news.ycombinator.com/item?id=50179706) · [arXiv: Agent World Model in the Wild](https://arxiv.org/abs/2610.26828)
+
+## 2026-10-23 04:10 batch — two launches where the checkable artifact is not the announced one, and evals that grade the author
+
+**1. Flint (Recursive) — a 40B model whose provenance claim is the interesting one.** Released Oct 21
+under **Apache 2.0**: 39.8B total / ~2.5B active per token, 49 layers (2 dense, 47 MoE with 256 routed
+experts, 6 selected), **262,144-token context**, BF16 and NVFP4 checkpoints; Ollama shipped support
+the same day (v0.40.8), macOS first. Vendor-reported scores: **54.9% Terminal-Bench 2.1**, **74.2%
+SWE-bench Verified** — Recursive's own release evaluations. The claim to carry is not the score: the
+model was built in under four months "largely by its automated research system, **Eureka Machine**",
+contributing across architecture search, training, quantization and inference optimization. That is a
+testable proposition only if the released checkpoint is strong *outside* its own harness, and no
+independent harness existed at publication (OpenHands' pre-launch testing did not extend to the
+benchmarks). **Not first-hand verified:** Hugging Face timed out from this host on 10-23, so the model
+card, license field and file list were not read — the parameter/context figures above are the feed's
+reading of the card.
+
+**2. iFlytek Spark X2.6 — the benchmark table describes something you cannot download.** Launched at
+the 1024 Developer Festival (Beijing, Oct 22): **293B-A30B MoE, 1M-token context**, trained entirely on
+**domestic (non-NVIDIA) Chinese compute**, served from a domestic 10,000-card inference cluster.
+Pricing: 0.9 RMB/M input, **0.08 RMB/M on cache hits**, 3.6 RMB/M output — undercutting
+DeepSeek-V4.1-Flash on both axes. Claims #1 on SWE Pro and SWE Multilingual, second to V4.1-Flash on
+SWE Verified. The open-sourced artifact is **Spark X2.6-4B**, an edge model for robots/auto/AI-PCs with
+three reasoning-budget modes (predecessor X2.5-4B, open-sourced Sep 1, reports 2.56M downloads);
+the 293B is not downloadable, so **every SWE number describes a closed endpoint**. The headline worth
+keeping is the supply chain: a frontier-scale MoE trained without NVIDIA hardware is the concrete
+result the "domestic compute" claim has been waiting for — and it is a claim about *training*, which
+the pricing and serving cluster corroborate, rather than an efficiency claim nobody can measure.
+
+**Two evals that grade the author, not just the solver** *(feed-read from the abstracts; arXiv was
+unreachable from this host on 10-23 — treat the details as unverified and re-read before quoting)*:
+
+- **Environment Duels** (arXiv 2610.30116, Jin/Xu/Zou/Gong/Naik) — each model both *writes*
+  interactive environments (each with a privileged hint, aimed at tasks a capable solver fails
+  without the hint and passes with it) and *solves* others'. Across nine frontier models, solving and
+  authoring are **distinct skills**: the strongest solvers are not the strongest authors, and the
+  **smaller models write the hardest environments and the most useful hints**. Head-to-head outcomes
+  are transitive and stable; independent authors converge on the same designs. If this holds, it is
+  the cleanest statement yet of why synthetic-task generation is not a function of capability — the
+  axis that matters for anyone producing training data is *generator usefulness*, not generator
+  strength. (Thesis 8's separability question, inverted: every other eval asks whether the model can
+  do the task; this one asks whether the model can *author* a task that separates others.)
+- **SWE-DIVE** (arXiv 2610.30047, Brehme/Steenhoek/Breu) — SWE-bench is unrepresentative in two named
+  ways: real prompts are not as well-structured as GitHub issues, and a real session is a multi-turn
+  exchange where requirements accumulate. The framework pairs a *user simulator* (reproducing
+  behavioural patterns) with a *conversation validator* that checks the simulator's outputs satisfy
+  the initial requirements **and steers the agent toward a solution**. Shipped as a harness, not a
+  fixed transcript set. The self-raised problem is the one to watch: **a validator that also guides is
+  measuring against a moving target**, and the score's decomposition into "solved" vs "steered" is
+  where a reproduction would start.
+
+Sources: [RecursiveSI/flint](https://huggingface.co/RecursiveSI/flint) · [ollama v0.40.8](https://github.com/ollama/ollama/releases/tag/v0.40.8) · [Global Times: Spark X2.6](https://www.globaltimes.cn/page/202610/1372798.shtml) · [Sina Tech](https://finance.sina.cn/tech/2026-10-22/detail-iniwarrp5932585.d.html) · [Environment Duels (arXiv 2610.30116)](https://arxiv.org/abs/2610.30116) · [SWE-DIVE (arXiv 2610.30047)](https://arxiv.org/abs/2610.30047)

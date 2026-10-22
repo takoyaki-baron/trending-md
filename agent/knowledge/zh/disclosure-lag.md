@@ -77,6 +77,42 @@ Greg Kroah-Hartman 的回复（一手读自列表归档）就是整段对话：*
 
 以及那个不再是负例的负例：**"没有记录"会在几小时内过期。** 这份知识文件当作"不存在"来建的两条 CVE——`CVE-2026-92707`（10-14 时不在任何登记处）与 `CVE-2026-110264`（feed 里那句"发布时查过 NVD 无记录"）——到 10-22 都已有 NVD 记录，且第一条正是由它预测的那个 CNA（`GitHub_M`）发布的。不存在也有保质期；引述前先重跑。
 
+## 2026-10-23 —— 记录是可选的：一个批次里量出的**记录存在性**五种状态
+
+昨天的分类按**修复落在记录的哪一侧**给漏洞分型。今天的批次在它下面补上了另一根轴：**记录到底存不存在**——而它有五种答案，同一个早晨的 feed 里五种齐全，且没有一种能从其余四种读出来。
+
+| 状态 | 实例 | 确立它的检查 | 坏在哪里 |
+|---|---|---|---|
+| **有记录、无修复** | Vyper（10-22 延续） | 公告 `Patched versions: None` + PyPI 时间线 | 暴露无终点 |
+| **有修复，但记录比产品公告早一个月** | Next.js → librsvg `CVE-2026-96889` | NVD `published` **2026-09-23T20:17:27Z**，唯一指标 v3.1 **Secondary `secalert@redhat.com` 7.8**，状态 `Awaiting Analysis` | 公告日期不是 bug 的日期，两个方向都不是 |
+| **有修复，公告比修复晚 8 天** | Next.js `15.5.28` / `16.4.1` | npm `time`：**2026-10-14T17:36:08Z** / **17:43:55Z**；公告 **10 月 22 日** | 按公告日期分诊会把「一周前就可安装」的补丁记成新问题 |
+| **有修复，无 CVE、无 GHSA、无公告** | OpenCode `1.18.33` | release `published_at` **2026-09-28T04:22:46Z**（最新 `1.19.4`，10-22） | 任何扫描器都不会标记 `1.18.32`；检测只能靠版本比对 |
+| **被引用的编号，任何地方都没有记录** | Arista `CVE-2026-114625` | NVD `totalResults: 0` **且** cveawg `{"error":"CVE_RECORD_DNE"}` | 编号看起来权威，而扫描器是盲的 |
+
+最后一行是新的，也最锋利：Arista 的 **SA 0199** 点名 `CVE-2026-114625`、按其自身尺度给 9.9、列出已修复的 VCO 版本（5.2.3.18 / 6.1.3.10 / 6.4.2.12）、并确认**正在被利用**——而 CVE 计划返回 `CVE_RECORD_DNE`（「该 cve 编号的记录不存在」），不是待处理记录，也不是 NVD 的分析欠账。编号被*引用*，并不等于编号被*分配并发布*。这是带了一个看起来合法标识符的 `ZDI-CAN`「记录之前」状态，比 ZDI 的情形更糟，因为编号会消解掉这个问题。
+
+它的反向对照就在同一批：`CVE-2026-94300`（ISC BIND 9，GSS-TSIG 重放）在 cveawg 为 `state: PUBLISHED`、`assignerShortName: isc`、`datePublished 2026-10-21T12:45:26Z`，NVD 同日 **13:21:08Z** 转发——CNA 发布与 NVD 抄录之间 36 分钟，状态 `Awaiting Analysis`，唯一指标 v3.1 **Secondary `security-officer@isc.org` 8.1**。**这个分数是 CNA 自己的，记录只是被 NVD 镜像。** 两个相隔数小时发布的编号，分处记录存在性的两端；两条记录上都没有任何字段说明自己在哪一端。
+
+### ADP 修正：有 ADP 指标，不等于 ADP 给了分数
+
+BIND 的 NVD 记录还带 `ssvcV203`，其来源是 **CISA-ADP**（orgId `134c704f-9b21-4f2e-91b3-4a467353bcc0`——与 Tomcat 三连同一个容器），且**没有 ADP 的 CVSS**。10-21 的规则写的是「`adpOnly` 分数是 CISA 的，要点名 ADP」；今天的记录说明这个容器可以**只写 SSVC 不写分数**。于是：
+
+- *有 ADP 指标* ≠ *这个数字是 ADP 的*——要逐个版本看每个 metric 的 `source`；
+- *ADP 写了 SSVC* 是关于利用/自动化分诊的判断，**不是**严重度分数，而且它可以与 CNA 自己的 `Secondary` CVSS 并存而不矛盾。
+
+对 BIND 安全的写法是：「**CVSS 8.1，由 ISC 以 CNA 身份给出**（`security-officer@isc.org`，在 NVD 记录上为 `Secondary`）；NVD `Awaiting Analysis`，无 `nvd@nist.gov` 指标；CISA-ADP 仅补入 SSVC。」这句话点名了每一方，无法被误读成「NVD 说是 8.1」。
+
+### 第三个注册表，以及它已经具备的那个连接
+
+`pwn.watch`（HN 277 分）是一个事件索引，其记录带有 CVE 记录没有的三个字段：**`patchStatus`**（`patched` / `partial` / `unpatched` / `no-fix-needed`）、**`affectedVersions[]`** 与 **`fixedVersions[]`**——外加 `timeline[]`（打破该事件的那些帖子）、`sources[]`，以及一份生成的 `agentBrief`（Arista 记录上 2,759 字符的 Markdown 处置简报，一手读过）。静态文件、开 CORS、无鉴权：`/incidents.json`、`/i/{slug}.json`、`/i/{slug}/feed.xml`、`/changes.json`、`/llms.txt`。
+
+两个值得作为**先验**留下的数字，10-23 一手从索引里量出：
+
+- **全集 719 条事件**——`patchStatus`：patched **647**、`no-fix-needed` **35**、partial **25**、**unpatched 12**；`severity`：critical 259、high 394、medium 58、low 2、unknown 6。全集只有 **约 1.7% 没有修复**——所以「不存在补丁」是个罕见断言，发表前值得做仓库状态检查（Vyper/Flowise 规则），而不是默认怀疑。
+- **live 集合是 38 条**（`j.live` 是一串 **slug**，不是对象——聚合字段只在单条事件的 JSON 上，这正是第一次解析时 38 条全部打印 `undefined` 的原因）。
+
+它属于哪里：它是**对他人报道的索引**，因此是状态的来源，不是一手源。但它是第一个断言了 `disclosure-lag.mjs` 所*推导*之确切连接（`patchStatus` + `fixedVersions` 对 NVD `published`）的第三方工件，这让「推导值与断言值不一致」成为一个**可测量事件**——下一次校准应当是「我的连接在哪儿与某个事件索引不一致」，而不是第六个人工演算的例子。
+
 ## 由此定下的写作规则
 
 1. **按版本范围排序，绝不按记录日期。** "Fixed in 0.31.0" 与 "published Oct 21" 是两个坐标；今天执行 `pip install vllm==0.30.0` 会中一条昨天才公布的 CVE。
@@ -86,7 +122,9 @@ Greg Kroah-Hartman 的回复（一手读自列表归档）就是整段对话：*
 5. **"没有已修复版本"是仓库状态主张**——查仓库，不是查记录。Vyper 今天仍有推送、未归档、却仍无修复；Flowise 那个反转（仓库已归档，于是"未修复"变成永久）是同一检查的另一极。
 6. **当公告的格子与它的标题矛盾时，两个都引。** 范围格子是数据，摘要是散文，任何一个都可能过期——悄悄偏好其中之一的工具，就是会发出那个 36 天落后的工具。把分歧写出来；分歧本身就是结论。
 7. **以 CVE 为键的扫描不是一份披露清单。** 大多数仓库公告不带 `cve_id`（Trigger.dev 的 39 份里只有 6 份带），所以"我们扫过 CVE"回答的问题比"我们是否受影响"窄。先按厂商公告列表盘点，再连到 CVE。
+8. **编号被引用，不等于编号被发布。** 一条 9.9 且正在利用的漏洞，其标识符可能是 CVE 计划从未见过的（`CVE_RECORD_DNE`）。写下「记录显示……」之前，把编号同时丢给 **`services.nvd.nist.gov`** 与 **`cveawg.mitre.org`**；两边都返回 200 之外的东西是一个结论，而 cveawg 为 `PUBLISHED` 却没有 `nvd@nist.gov` 指标是另一个结论。
+9. **有修复而无标识符，是所有状态里最安静的。** OpenCode 的 Windows MCP-OAuth RCE 于 2026-09-28 在 `1.18.33` 修复，无 CVE、无 GHSA、无公告——唯一检测方式是把版本与发布说明比对。当一条 feed 说「已修复」时，要问*修在什么版本、谁能找到它*：答案决定了依赖扫描器能否帮上忙。
 
 一条命令：`node agent/tools/disclosure-lag.mjs --ids CVE-… --pypi <pkg> | --repo owner/repo`，记录之前的情形用 `--tracker ZDI-CAN-…`。
 
-Sources: [GHSA-f623-hjm8-5wg5](https://github.com/advisories/GHSA-f623-hjm8-5wg5) · [vLLM v0.31.0](https://github.com/vllm-project/vllm/releases/tag/v0.31.0) · [PyPI: vllm 0.31.0](https://pypi.org/pypi/vllm/0.31.0/json) · [Trigger.dev advisories](https://github.com/triggerdotdev/trigger.dev/security/advisories) · [Trigger.dev v4.7.7](https://github.com/triggerdotdev/trigger.dev/releases/tag/v4.7.7) · [NVD: CVE-2026-114085](https://nvd.nist.gov/vuln/detail/CVE-2026-114085) · [Vibe-Trading v0.1.7](https://github.com/HKUDS/Vibe-Trading/releases/tag/v0.1.7) · [GHSA-6j9c-gvcw-74fj](https://github.com/vyperlang/vyper/security/advisories/GHSA-6j9c-gvcw-74fj) · [Vyper releases](https://github.com/vyperlang/vyper/releases/tag/v0.5.0b1) · [PyPI: vyper](https://pypi.org/pypi/vyper/json) · [LKML: ZDI-CAN-34068 thread](https://lists.openwall.net/linux-kernel/2026/10/22/308) · [Phoronix: kernel vulnerabilities posted publicly](https://www.phoronix.com/news/LKML-New-Trend-Vulnerabilities) · [OSSA-2026-046](https://security.openstack.org/ossa/OSSA-2026-046.html) · [NVD: CVE-2026-71195](https://nvd.nist.gov/vuln/detail/CVE-2026-71195) · [GHSA-qhrr-8q5h-9q3h](https://github.com/MessagePack-CSharp/MessagePack-CSharp/security/advisories/GHSA-qhrr-8q5h-9q3h) · [cveawg: CVE-2026-92707](https://cveawg.mitre.org/api/cve/CVE-2026-92707)
+Sources: [GHSA-2464-fhr4-w9xw](https://github.com/advisories/GHSA-2464-fhr4-w9xw) · [GHSA-673q-mjm6-r5xr](https://github.com/advisories/GHSA-673q-mjm6-r5xr) · [NVD: CVE-2026-96889](https://nvd.nist.gov/vuln/detail/CVE-2026-96889) · [npm: next](https://registry.npmjs.org/next) · [NVD: CVE-2026-94300](https://nvd.nist.gov/vuln/detail/CVE-2026-94300) · [cveawg: CVE-2026-94300](https://cveawg.mitre.org/api/cve/CVE-2026-94300) · [cveawg: CVE-2026-114625](https://cveawg.mitre.org/api/cve/CVE-2026-114625) · [Arista SA 0199 报道](https://securityonline.info/velocloud-orchestrator-cve-2026-114625-exploited/) · [pwn.watch 事件索引](https://pwn.watch/incidents.json) · [pwn.watch llms.txt](https://pwn.watch/llms.txt) · [anomalyco/opencode releases](https://github.com/anomalyco/opencode/releases) · [GHSA-f623-hjm8-5wg5](https://github.com/advisories/GHSA-f623-hjm8-5wg5) · [vLLM v0.31.0](https://github.com/vllm-project/vllm/releases/tag/v0.31.0) · [PyPI: vllm 0.31.0](https://pypi.org/pypi/vllm/0.31.0/json) · [Trigger.dev advisories](https://github.com/triggerdotdev/trigger.dev/security/advisories) · [Trigger.dev v4.7.7](https://github.com/triggerdotdev/trigger.dev/releases/tag/v4.7.7) · [NVD: CVE-2026-114085](https://nvd.nist.gov/vuln/detail/CVE-2026-114085) · [Vibe-Trading v0.1.7](https://github.com/HKUDS/Vibe-Trading/releases/tag/v0.1.7) · [GHSA-6j9c-gvcw-74fj](https://github.com/vyperlang/vyper/security/advisories/GHSA-6j9c-gvcw-74fj) · [Vyper releases](https://github.com/vyperlang/vyper/releases/tag/v0.5.0b1) · [PyPI: vyper](https://pypi.org/pypi/vyper/json) · [LKML: ZDI-CAN-34068 thread](https://lists.openwall.net/linux-kernel/2026/10/22/308) · [Phoronix: kernel vulnerabilities posted publicly](https://www.phoronix.com/news/LKML-New-Trend-Vulnerabilities) · [OSSA-2026-046](https://security.openstack.org/ossa/OSSA-2026-046.html) · [NVD: CVE-2026-71195](https://nvd.nist.gov/vuln/detail/CVE-2026-71195) · [GHSA-qhrr-8q5h-9q3h](https://github.com/MessagePack-CSharp/MessagePack-CSharp/security/advisories/GHSA-qhrr-8q5h-9q3h) · [cveawg: CVE-2026-92707](https://cveawg.mitre.org/api/cve/CVE-2026-92707)

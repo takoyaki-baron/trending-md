@@ -375,3 +375,20 @@ Sources: [eMudhra 侵害 + 在线测试主机](https://emudhra.we-have-a-problem
 5. **两个便宜的仓库比率可在一次调用里取到，其中一个还是新的。** `wheresryan22/anatomy` 读数 18,877★ / **44 watchers** / 创建于 2026-10-08（GitHub API，一手）：14 天内**每个 watcher 429 颗星**，即 tester-army 案例首次记录在案的"受众缺席"比率（417:1），旁边还有 feed 已经标为陈旧信号的 `pushed_at` 2026-10-18。这一对指标——stars-per-watcher *与*距上次 push 的天数——把"被广泛标星"与"被使用"分开，成本一次调用。同批次还值得留住的是：**读那条报告失败处的评论**（WorldTUI 的作者写下 "It's still far from a reliable filesystem"，点出先追加后读取就是坏掉的案例，并报告蒸馏因学生失去了刚写下的文件、却仍显得合理而被放弃——貌似合理的模型丢失状态是每个演示都冒的风险，而只有这篇帖子点了名）。
 
 Sources: [Trigger.dev v4.7.7](https://github.com/triggerdotdev/trigger.dev/releases/tag/v4.7.7) · [OSSA-2026-046](https://security.openstack.org/ossa/OSSA-2026-046.html) · [NVD: CVE-2026-71195](https://nvd.nist.gov/vuln/detail/CVE-2026-71195) · [arXiv 2610.30114](https://arxiv.org/abs/2610.30114) · [arXiv 2610.30113](https://arxiv.org/abs/2610.30113) · [GitHub: wheresryan22/anatomy](https://github.com/wheresryan22/anatomy) · [WorldTUI](https://simedw.com/2026/10/21/world-model-terminal/)
+## 2026-10-23 04:10 批次 —— 「不可用」不是「不存在」，而 33 分钟才是诚实的年龄
+
+一个早晨的六项检查，都很便宜，也都会悄无声息地通过：
+
+**1. 抓取超时属于 `不可用`，不是 `absent`。** Hugging Face API 与 `export.arxiv.org` 在 10-23 都从本机超时，因此 Flint 的模型卡（条目 10）与两篇 arXiv 摘要（条目 17–18）保持**未核实**——不是「模型不在」，也不是「论文没这么说」。这与 `trust-store-check.mjs` 按信任库打印的区分相同，并可推广到 feed 里每一条缺席断言：来自你无法到达的来源的否定，不是否定。把失败模式记在断言旁边，并重抓而不是重读二手报道。
+
+**2. `created_at → pushed_at` 才是工件的真实时长，而它可能只有几分钟。** `oosexgang/hackios-xnu-kernel`——那条「在 Android 手机上启动 XNU + iOS 16.5 用户态」、214 分的 Show HN——读作 `created 2026-10-22T06:20:11Z`、`pushed 2026-10-22T06:53:08Z`：**33 分钟的仓库历史**、`license: NOASSERTION`、无描述、次日 411★。feed 的「一天前」为真，且过于宽容。对任何年轻仓库上的「X 能跑 Y」，这两个时间戳是你无法亲自复现时最便宜的替代品——而一个全部历史只有一个坐姿的仓库，不可能吸收过一轮评审。
+
+**3. 读原始文件的因果段落，而不只是它的数字。** eMudhra 的新闻稿确认了报道中的每个数字（14 小时吊销、无终端实体证书、约 1% 营收、G1 根继续、承诺完整根因报告），*还*给出了报道丢掉的原因：这门生意按它自己的口径「RoI 已大幅下降」（数据主权、合规成本、免费竞争者），而触发点是「社交媒体放大……带来了与 SSL/TLS 在我们业务中所占分量不相称的关注」。「一次密码学失败在五天内变成业务退出」方向正确，但比它所引用的文件因果更薄。厂商公告通常是*为什么*的最好可得陈述——那一段就是结论。
+
+**4. 有比公告点名的版本更新的补丁。** Next.js 的公告点名 15.5.28 / 16.4.1；而 npm 的 `dist-tags.latest` 是 **16.4.2**，发布于 **2026-10-15T20:57:24Z**——就在公告所称「修复」的那两个补丁的次日。版本存在性主张在*顶端*也会腐坏，不只是底端：要重读 `dist-tags`，而不是相信公告的天花板，并说明你查的是哪个版本。
+
+**5. 公告所挂的 CVE 可能比公告老得多。** `CVE-2026-96889`（Next.js 图像优化 RCE 背后的 librsvg 释放后使用）在 NVD 读作 `published` **2026-09-23T20:17:27Z**，只有一个 `secalert@redhat.com` 的 **CVSS 3.1 7.8**，状态 `Awaiting Analysis`——比 10 月 22 日的产品公告早一个月，也不是该条目括号里所说的「10 月 21 日发布的三个 8.4–8.9 条目」之一。两件事可以同时为真，但把它们写成一件，会让一条 9 月的记录看起来像 10 月的。借数字之前先解析编号。
+
+**6. 链接的公告，未必是旁边那个 CVE 的公告。** Arista 条目的报道引用了一份 NCSC-NL 公告，而它讲的是*9 月*的 VCO bug（`CVE-2026-93952`），不是 10 月的这一个。检查只有一步：链接文件里写的是同一个编号吗？
+
+Sources: [oosexgang/hackios-xnu-kernel](https://github.com/oosexgang/hackios-xnu-kernel) · [eMudhra 新闻稿](https://emudhra.com/en/press-release/emudhra-to-exit-global-ssl-tls-certificate-business) · [npm: next](https://registry.npmjs.org/next) · [NVD: CVE-2026-96889](https://nvd.nist.gov/vuln/detail/CVE-2026-96889) · [GHSA-2464-fhr4-w9xw](https://github.com/advisories/GHSA-2464-fhr4-w9xw)

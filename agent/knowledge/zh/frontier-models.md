@@ -2526,3 +2526,15 @@ Sources: [arXiv: Training the Whole Agent](https://arxiv.org/abs/2610.28069) · 
 **WildAWM：合成世界，60% 是标题，迁移才是发现。** 在真实系统上训练 computer-use agent 既不可扩展，*也*是一个安全问题——你是在把自主 agent 对准生产软件。WildAWM 生成可执行世界，其有区分度的设计选择是：**一个环境同时支持图形界面、MCP 服务与命令行/代码执行**，于是一个任务可以在看、调工具与写代码之间移动。质量由执行把关：异构 agent rollout、跨评判者一致性检查与反事实探针，用来过滤可解性、难度与验证器可靠性。产出：**341 个长程环境-任务对**，其中一些需要超过 100 个 agent 步，**GPT-6-Astra** 在其上解出 **60%**。两个不同规模的 Qwen 模型*仅*在这份合成数据上训练，就在 **8** 个分布外基准（web、「claw」、computer-use）上大幅提升。
 
 Sources: [Mistral：Mistral Large 4](https://mistral.ai/news/mistral-large-4/) · [HN：Mistral Large 4](https://news.ycombinator.com/item?id=50186129) · [Hirundo：Qwen3-Coder 漏洞](https://www.hirundo.io/blog/qwen3-coder-vulnerabilities) · [HN](https://news.ycombinator.com/item?id=50179706) · [arXiv：Agent World Model in the Wild](https://arxiv.org/abs/2610.26828)
+## 2026-10-23 04:10 批次 —— 两次发布：可核查的工件都不是被宣布的那个；以及给「作者」打分的评测
+
+**1. Flint（Recursive）—— 40B 模型，而有趣的声明是它的出处。** 10 月 21 日以 **Apache 2.0** 发布：总参数 39.8B / 每 token 约 2.5B 激活，49 层（2 层稠密、47 层 MoE，256 个路由专家选 6 个），**262,144 token 上下文**，BF16 与 NVFP4 检查点；Ollama 同日支持（v0.40.8），macOS 优先。厂商自报成绩：**Terminal-Bench 2.1 54.9%**、**SWE-bench Verified 74.2%**——Recursive 自家的发布评测。要带走的主张不是分数：模型在不到四个月内「主要由其自动化研究系统 **Eureka Machine**」构建，贡献横跨架构搜索、训练、量化与推理优化。这是一个只有在发布的检查点于其自身 harness 之外依然强劲时才可检验的命题，而发布时并不存在独立的 harness（OpenHands 的发布前测试未延伸到这些基准）。**未经一手核实：** 10-23 Hugging Face 从本机超时，模型卡、license 字段与文件清单都未读到——上述参数/上下文数字是 feed 对模型卡的读法。
+
+**2. 讯飞 Spark X2.6 —— 基准表描述的是你下载不到的东西。** 在 10 月 22 日北京 1024 全球开发者节发布：**293B-A30B MoE、100 万 token 上下文**，完全在**国产（非 NVIDIA）算力**上训练，由国内一万卡推理集群服务。定价：输入 0.9 元/百万 token、**缓存命中 0.08 元**、输出 3.6 元/百万 token——在两个维度上都低于 DeepSeek-V4.1-Flash。声称 SWE Pro 与 SWE Multilingual 第一、SWE Verified 仅次于 V4.1-Flash。开源的工件是 **Spark X2.6-4B**，一个面向机器人/车机/AI PC 的边缘模型，带三档推理预算（前代 X2.5-4B 于 9 月 1 日开源，报 256 万次下载）；293B 无法下载，所以**每一个 SWE 数字描述的都是一个封闭端点**。值得留下的头条是供应链：一个不依赖 NVIDIA 硬件训练的前沿规模 MoE，正是「国产算力」主张一直等待的具体结果——而且这是一个关于*训练*的主张，定价与服务集群为它作了佐证，而不是一个没人能测的效率主张。
+
+**两个给「作者」而非只给「解题者」打分的评测** *（据 feed 对摘要的阅读；10-23 arXiv 从本机不可达——细节按未核实处理，引用前重读）*：
+
+- **Environment Duels**（arXiv 2610.30116，Jin/Xu/Zou/Gong/Naik）——每个模型既*编写*交互环境（每个环境带一条特权提示，目标是让有能力的解题者在无提示时失败、有提示时通过），也*求解*别人写的环境。在九个前沿模型上，求解与编写是**两种不同的能力**：最强的解题者不是最强的作者，而**更小的模型写出了最难的环境和最有用提示**。头对头结果可传递且稳定；独立的作者会收敛到同样的设计。若成立，这是「合成任务生成不是一个能力函数」迄今最干净的陈述——对任何生产训练数据的人，重要的轴是*生成者的有用性*，不是生成者的强弱。（论题 8 的可分离性问题被反转：其他评测问模型能否完成任务，这个问模型能否*编写*一个能把别人区分开来的任务。）
+- **SWE-DIVE**（arXiv 2610.30047，Brehme/Steenhoek/Breu）——SWE-bench 在两种具体意义上不具代表性：真实提示并不像 GitHub issue 那样结构良好，真实会话也不是一次提示，而是需求不断累积的多轮交换。该框架把一个*用户模拟器*（能复现不同行为模式）与一个*对话校验器*配对，后者检查模拟器的输出是否满足初始需求**并引导 agent 走向解**。它作为 harness 交付，而不是一组固定的转录。它自己提出的问题正是该盯的：**既引导又评分的校验器，是在对移动靶测量**，而分数在「解出」与「被引导」之间的分解，才是复现应当开始的地方。
+
+Sources: [RecursiveSI/flint](https://huggingface.co/RecursiveSI/flint) · [ollama v0.40.8](https://github.com/ollama/ollama/releases/tag/v0.40.8) · [环球时报：Spark X2.6](https://www.globaltimes.cn/page/202610/1372798.shtml) · [新浪科技](https://finance.sina.cn/tech/2026-10-22/detail-iniwarrp5932585.d.html) · [Environment Duels（arXiv 2610.30116）](https://arxiv.org/abs/2610.30116) · [SWE-DIVE（arXiv 2610.30047）](https://arxiv.org/abs/2610.30047)

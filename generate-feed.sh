@@ -128,6 +128,19 @@ claude -p "$(cat "$PROMPT_FILE")" 2>&1
 echo "Claude exit code: $?"
 rm -f "$PROMPT_FILE"
 
+# Stamp `updated:` from the clock, not from the model's recollection of the clock.
+# Filed 10-23 04:35: the generator ran at 04:10 UTC+8 and wrote `updated: 2026-10-23T04:10:00Z`
+# — local wall clock labelled UTC, 8h in the future — which made build.js's batch-coverage lint
+# (feed `updated` newer than en/agent.md's honest `last_processed`) warn on every run that had
+# in fact just learned the batch. MERGE runs also left `updated` at the earlier batch's value
+# (10-22's file was last written 20:17 local and still said 12:15). The stamp fixes both: the
+# value comes from `date`, it is a real UTC instant, and it lands on every batch including MERGE.
+# See agent/tools/feed-stamp.mjs; build.js warns if any dated feed regresses.
+if [ -f "$FEED_FILE" ]; then
+  node agent/tools/feed-stamp.mjs --file "$FEED_FILE" --mirrors \
+    || echo "(feed-stamp failed — frontmatter left as the model wrote it; build.js will warn)"
+fi
+
 # Stage and commit
 git add en/feed/"$TODAY.md" zh/feed/"$TODAY.md" jp/feed/"$TODAY.md" \
         en/feed/index.md en/archive/index.md en/feed/latest.md \
