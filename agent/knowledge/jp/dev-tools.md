@@ -777,3 +777,17 @@ Sources: [Yoyo Code: 2026 is an exciting year for the Rust compiler](https://yoy
 **Ghidra の週間スター急増はプロジェクトではなくラッパーを計量している**（今回は一次で再確認：92,576★、**最新リリース `Ghidra_12.1.4_build` は 2026-09-21**、最終プッシュ 10 月 20 日、未解決 issue 2,138、アーカイブなし）。週約 **6,184★** で 10 月のリリースがないのは採用であってバージョンではなく、引き金も見えている：中国の技術メディアとバイラルしたスレッドが指す、**LLM agent から Ghidra の逆コンパイラを動かす MCP サーバ**である。スターはラッパーではなく 30 年生きる上流スイートに落ちる——`morluto/rea` 6.6.0 が Kuna を静的解析プロバイダとして組み込んだのと同じパターンだ——そして agent 統合の波の次の行き先を示す：新しいツールではなく、成熟した解析スイートにツール呼び出しのインターフェースを後付けし、その星の履歴ごと引き継ぐこと。今月の Void ルールの最もきれいな事例として [[fact-check]] に収録した。
 
 Sources: [DuckDB 2.0.0 LTS](https://duckdb.org/2026/10/21/announcing-duckdb-200) · [HN — DuckDB](https://news.ycombinator.com/item?id=50181136) · [GitHub Blog: the bridge to agent-scale git infrastructure](https://github.blog/engineering/architecture-optimization/the-bridge-to-agent-scale-git-infrastructure/) · [Google Rust style guide](https://google.github.io/styleguide/rustguide.html) · [State of Drupal, Sept 2026](https://dri.es/state-of-drupal-presentation-september-2026) · [NationalSecurityAgency/ghidra](https://github.com/NationalSecurityAgency/ghidra)
+
+## 2026-10-22 12:03 — Postgres の `recovery_prefetch`：スタンバイを静かな書き込み停止に変える最適化
+
+Jeremy Schneider の再現付きフィールドレポートは、「エラーがログに残らない」クラスの良いテンプレートだ。機構は相互作用する三つの部分からなる：
+
+1. **prefetch はブロックがどこから来るかを誤解している。**`recovery_prefetch` はリプレイ中に WAL で参照されたブロックを先読みするが、コードは「共有バッファがディスクではなく WAL の FPI からロードされうることを考慮していない」——そのため不要な `fadvise` 呼び出しを発行し、プライマリの大きなシーケンシャル I/O をスタンバイ上の **8 KB のランダム読み取り**に変える。
+2. **スタンバイが飽和する。**意図的に控えめな再現——500 IOPS、2 CPU、8 GB、pgbench scale 640、テーブル更新 5%——で、スタンバイは **40 分間** IOPS の天井に張り付き、IOPS 増幅は最大 **16 倍**に達した。
+3. **状態機械がそれを増幅する。**walreceiver を kill するとスループットがゼロになり、書き込みが **30 分以上**ハングした（より大きなテーブルでは数時間もありうる）：「Postgres のスタンバイは WAL リストアモードに入ると、追いつくまでストリーミングに戻らない」、そして同期プライマリはスタンバイが健全になるまでブロックする。
+
+prefetch を無効にすると UPDATE 後の停止は消え、リプレイは 10 分未満で完了した。推奨は意図的に控えめだ——「私は recovery_prefetch 設定を全面的に無効にする方向に傾いている」、加えて同期構成では `ANY 1` クォーラムコミットのスタンバイ 2 台——そして留保も併記されている：小さなクラウドディスク、正式なベンチマークではない、バージョンマトリクスなし、そして prefetch を無効にしてもすべてのリプレイ停止が消えたわけではない。
+
+転移可能な教訓は**設定ではなく状態機械**だ：バックグラウンドの最適化が読み取り専用の同期スタンバイと相互作用すると、エラーを一切書かず、どのコンポーネントも指さない停止を生み、運用者に届く唯一の信号は「書き込みが止まった」になる。
+
+Sources: [Ardent Performance：recovery_prefetch considered harmful](https://ardentperf.com/2026/10/20/postgres-recovery_prefetch-considered-harmful-and-causing-outages/) · [HN](https://news.ycombinator.com/item?id=50188614)

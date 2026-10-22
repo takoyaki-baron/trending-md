@@ -877,3 +877,15 @@ Sources: [anthropics/knowledge-work-plugins](https://github.com/anthropics/knowl
 `wshobson/agents`（41,311★，MIT，+93/24h，最后 push 2026-10-19，5 个 open issue——10-21 12:40 亲验）：**94 个插件（92 个本地）、202 个 agent、185 个 skill、105 个命令**，以 Markdown 写一次，按 harness 适配——Claude Code 与 Cursor 得到插件市场，Codex CLI 得到原生市场或生成产物，OpenCode/Antigravity/Copilot/Pi 通过 `make install-*` 路由**生成带工具权限转换的 agent**（权限被翻译而非假定）。这个设计决定与 persona 文件夹流派（agency-agents，162k★，同日批次）正好相反：每 harness 的输出是*生成的产物*而非副本，因此权限模型或 schema 变更时是重新生成而不是分叉。多 harness 分发正是 skills 货架即将收到的维护账单——不同的工具权限语义、不同的 MCP 配置、不同的调用面——而这是能撑过第一次 schema 变更的形状。
 
 Sources: [wshobson/agents](https://github.com/wshobson/agents) · [plugins tree](https://github.com/wshobson/agents/tree/main/plugins)
+
+## 2026-10-22 12:03 —— 第三种插件清单，以及第一个「输出格式即交付物」的垂直领域
+
+**`cursor/plugins`：厂商发布的是规范，不只是目录。** 这个仓库既是 Cursor 的官方插件集合，*也*是插件的定义：仓库根下一个独立目录，带 **`.cursor-plugin/plugin.json`** 清单。事实经 GitHub API 一手核查（2026-10-22）：**13,442★**、1,336 fork、创建于 2026 年 1 月、最后推送 10 月 22 日 03:27 UTC、TypeScript，且 **`license: null`**——完全没有声明许可证，这对任何想从中 vendor 的人都重要。目录分三块：第一方开发者工具（`orchestrate`、`advisor`、`thermos`、`pr-review-canvas`、`cursor-sdk`、`ralph-loop`、`create-plugin`），署名作者的第三方工作流插件（`pstack`、`dyl-stack`、`continual-learning`、`cli-for-agent`），以及一长串 `third_party/` 的 SaaS 集成——Salesforce、HubSpot、Gmail、Playwright、GitHub、X、与 Stripe 相邻的财务工具——每一个都以插件形式出货，而不是定制连接器。
+
+战略要点是格式的数量：三个编码 agent 厂商现在出货三种互不兼容的插件格式——Claude Code plugins、Codex skills，以及 `.cursor-plugin`。插件正是一个厂商的工具面不再是它自己的地方，而 Salesforce 与 HubSpot 以清单形状的目录出现，正是「集成市场已经成为 agent 能力的分发渠道」的信号。谁的清单赢，谁就继承目录；没有人的清单被标准化，而三者中没有一个许可他人复用。
+
+**`text-to-cad`：STEP 就是交付物。** 一个 agent 插件（MIT，Python 3.11+），建在 build123d 0.11 与 Open CASCADE 7.9 之上，让编码 agent 获得本地工作流：生成 **STEP、GLB、STL 或 3MF** 格式的 3D 模型、跑可制造性设计检查、产出工程图，并连接 3D 打印、钣金与 CNC 服务。**22,335★** 与 2,184 fork、创建于 2026 年 4 月、最后推送 10 月 22 日 04:06 UTC（已核查）。它作为 skills 加一个本地查看器服务器（`cadgen mcp`）出货，可安装进 Claude Code、Codex、Cursor、Gemini 与 Grok——「supported by all popular agents that support plugins or the skills framework」，这现在是一个项目能写出来的句子。
+
+两个「第一次」值得留下。**CAD 是这一波里第一个输出格式即交付物的领域**——STEP 是机加工车间读的东西，而不是零件的图片——所以「agent 产出了可制造的几何」与「agent 产出了它的图像」是不同的声明，而下游消费者是一台机器而不是一只眼睛。以及**遥测默认开启**：README 披露它「sends usage stats and crash reports, tagged with a random ID」——从不涉及文件、路径或 prompt——用 `uvx cadgen telemetry off` 关闭。这份披露堪称典范；默认值才是要留意的部分，因为它是这个货架上第一个诊断数据需要主动选择退出的 agent-skill 工件。
+
+Sources: [cursor/plugins](https://github.com/cursor/plugins) · [Cursor 插件市场](https://cursor.com/marketplace) · [earthtojake/text-to-cad](https://github.com/earthtojake/text-to-cad) · [texttocad.dev](https://www.texttocad.dev)

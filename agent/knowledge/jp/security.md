@@ -3278,3 +3278,67 @@ LiteLLM 1.107.0 の侵害は 04:03 のフィードでは一つの機構（`.pth`
 **整った読みに抵抗する細部が二つ。**（a）攻撃者の最初の 9 コミットは GitHub の **"Verified"** バッジを持つ——ウェブエディタが署名するためで、バッジが意味するのは「github.com で作られた」であって「正しい人が作った」ではない。ベンダーの記事は tag コミットを「普通の署名済みコミット」と述べる。（b）ベンダーの緩和策は**自社 GitHub 組織への trusted publisher リンクの除去**だった——trusted publishing が組織の侵害を公開能力に変えたので、是正は束縛の強化ではなく切断になった。Wiz は 19:05Z に「観測された後利用活動」を追記し、`.pth` と `sitecustomize.py` の併用を両技術が同時に野外で確認された最初の事例とする。
 
 Sources: [LiteLLM issue 47826（一次タイムラインと provenance）](https://github.com/BerriAI/litellm/issues/47826) · [LiteLLM インシデント記事](https://docs.litellm.ai/blog/security-incident-oct-21-2026) · [SafeDep 分析](https://safedep.io/litellm-pypi-compromise-credential-stealer-backdoor/) · [Chainguard の LiteLLM 記事](https://www.chainguard.dev/unchained/litellm-attacked-again-malicious-1-107-0-wheels-on-pypi-and-docker-hub-october-2026) · [Wiz：後利用活動](https://www.wiz.io/blog/litellm-compromised-steals-credentials) · [PyPI Integrity API——cryptography](https://pypi.org/integrity/cryptography/50.0.2/cryptography-50.0.2-cp311-abi3-macosx_11_0_arm64.whl/provenance)
+
+## 2026-10-22 12:03 — シークレットストア、ソケット、ログインリンク：三つの形と、一つの明言された動機
+
+**Railway：環境変数の引き出しが復号され、その引き出しこそが製品だった。**Railway は 10 月 21 日朝に「顧客の環境変数を保存するシステムに関わる異常な活動」を検知し、すべてのデプロイを停止した。文言そのものが所見だ：侵入者は「暗号化された環境変数にアクセスし、その一部については復号された内容を取得した可能性がある」——これは、そこへ到達した者に対して暗号化層が持ちこたえなかった、と言うのと同じ文である。顧客数の記載も、初期アクセス経路も、*誰の*プロセスが復号したかについての陳述もない。
+
+これを単なるもう一つの PaaS インシデント以上にしている点が二つある：
+
+- **明言された目的はデータではなく従量課金の計算資源だ。**Railway はこれが「最近プラットフォーム企業を標的にした一連の攻撃の一部」であり、「AI 推論プロバイダの侵害を狙う」ものだと考えると述べ、「これらの上流プロバイダに通知し、すべての鍵を先回りして失効させた」としている。動機は盗まれた鍵の価値を変える：プロバイダの鍵が買うのは GPU 時間であり、コーパスではない。
+- **復旧手順のリストは、AI チームの資格情報の引き出しを数え上げた国勢調査になっている。**ブログ索引から一次で数えると（2026-10-22）：**`security-disclosure*` 投稿 14 本——インシデント開示 1 本＋推奨 13 本**であり、フィードが最初に公開した 9 本ではない。13 本の中身は、**AWS**・**GCP**・**GitHub** への異常なアクセス；**Anthropic**・**Grok**・**OpenAI**・**OpenRouter** の予期しない利用；**Stripe** の利用；資格情報リセット後のバケット再デプロイと GitHub 再接続；**MongoDB**・**MySQL**・**PostgreSQL**・**Redis** のローテーション。フィード自身のリストが落としていた二つのカテゴリは **Grok** と **OpenRouter** だ——つまり推論の*ブローカー*が、モデルベンダーの隣で同じ引き出しに入っている。
+- **ローテーションは既に鋳造されたものを失効させられない。**Railway 自身の GCP 投稿：「既定では、サービスアカウントの鍵は失効しない」。発行済みの短命トークンは最大 1 時間有効なままで、「Compute、GPU、Vertex AI の利用がよくある標的だ」。その 1 時間がインシデント対応の窓であり、ほとんどのローテーション手順書より短い。
+
+一般化：PaaS にとって環境変数ストアは製品そのものであると同時に、顧客が保持するすべての下流権限の完全な地図でもある。これを侵害することは一つの資格情報イベントではなく、顧客がこれまで接続したすべてのプロバイダへのファンアウトであり、だから応答が 1 本ではなく 13 本になる。
+
+**Traefik：9 件の CVE、一つのクラス——「ソケットを使い回す」はいま「アイデンティティを使い回す」を意味する。**10 月 22 日の 2 秒の窓の中で公開された 9 レコードで、すべて **VulnCheck** が割り当て、すべて **2.11.58 / 3.7.14** で修正済み（mTLS の 1 件は 3.7.13）。うち 7 件が、名前を持つ形としては新しい単一の根本原因を共有する：**バックエンド接続プールがアイデンティティでキー付けされていない**。
+
+- `CVE-2026-114639` — `Authorization: Negotiate` トークンで事前認証されたソケットがグローバル共有プールに入り、別のフロントエンド接続の未認証クライアントに渡されうる。
+- `CVE-2026-114637` — 実験的な FastProxy プールが NTLM/Negotiate で同じことをする。
+- `CVE-2026-114642` — round-tripper スロットが `ServersTransport` でキー付けされていないため、あるサービスの TLS クライアント設定が別のサービスのバックエンドに再利用される。
+- `CVE-2026-114641` — そのスロットが同期なしで読み書きされ、並行する HTTP/2 や HTTP/3 のリクエストがバックエンド接続を孤立させたり Traefik をクラッシュさせたりする。
+- `CVE-2026-114636` — ssl-passthrough Ingress 用に生成される HTTP ルータが、その Ingress の `auth-type`・`auth-url`・`whitelist-source` を一切適用しない。
+- `CVE-2026-114640` — クライアント供給の `Ssl-Client-*` ヘッダが平文ルータで転送されるため、`ssl-redirect` が無効だと `Ssl-Client-Verify: SUCCESS` が誰にでもなりすませる。
+- `CVE-2026-114638` — `auth-tls-secret` 名がドット→ダッシュ正規化後に衝突すると、クライアント CA が併合される。
+- `CVE-2026-114635` — Go 1.27 ビルドでは nil の TLS 状態が SNI チェックを飛ばし、`:scheme http` 疑似ヘッダを持つ HTTP/2 リクエストが証明書なしでクライアント証明書ルータに到達する。
+- `CVE-2026-114656` — 否定された `!Host()` マッチャが提供ドメインとして数えられ、TLS オプションの衝突が生じて既定オプションにフォールバックし、`RequireAndVerifyClientCert` を飛ばす。
+
+このクラスの教訓は keep-alive プールだ：HTTP の接続再利用はスループットのために設計され、接続単位の認証が存在するより前のものだ。認証済みプリンシパルより粗い何かでキー付けされたプールは、誰も宣言していない認証境界である。
+
+**Obot：要求者が要求を名指しする。**`CVE-2026-114662`（0.26.0 未満の Obot；MIT、1,118★、10 月 21 日 push——確認済み）は、*要求者*が CLI ログインのトークン要求 ID を選べるようにする：未認証の攻撃者が `POST /api/token-request` で要求を作り、得られたログインリンクをサインイン済みユーザーに送り、その後「結果として得られる失効しない API キー」を取得する——1 クリックでのアカウント全乗っ取りで、それを縛る有効期限がない。NVD レコードは**CWE-352**（CSRF）を持ち、最初に公開された「未分類」ではない（2026-10-22 に `nvd-provenance.mjs` で確認）。これはデバイスコードフローのクラスがエージェント基盤に到達したものだ：「このリンクをクリックして CLI を認可せよ」というモデル全体が、要求者が要求を名指しできないことと、出てくる資格情報に有効期限があることに依存している。両方が失敗した。MCP ホストの乗っ取りの深刻度はアカウント 1 つではない——ホストはチームが接続したすべてのツール資格情報を保持している。
+
+**mitmproxy は侵害された鍵をフラグとして出荷する。**コミット `16923449`（Maximilian Hils、10 月 21 日）は `--emudhra` を追加し、オプションのヘルプには「侵害された eMudhra 中間 CA 鍵で証明書に署名する」とある。実装は `EMUDHRA_CHAIN_PEM` を `mitmproxy/certs.py` に埋め込む——**EM OV TLS CA - G3C（`d = 4`）**の秘密鍵と、そのクロス署名ルート（emSign Root TLS CA - G3）——そしてそれを certstore の既定の鍵とチェーンとして差し替える。スカラーは `0x04` に続く 31 個のゼロバイト：「8 本の 1 バイト秘密」の話は diff からそのまま読める。同じコミット系列が `certifi` のプリコンパイル済みバイナリから eMudhra のルートを削除し（PR #8499）、`CertStoreEntry.privatekey` を RSA から RSA-or-EC へ広げる。両半分を併せて読む：**修復はエコシステムごとに 1 バンドルに届き、鍵はあらゆるプロキシに届く。**この非対称性こそ、いまも eMudhra 中間 CA に連なるすべてのものの常置条件である。
+
+Sources: [Railway：10 月 21 日のセキュリティ開示](https://blog.railway.com/p/security-disclosure-wednesday-october-21st) · [Railway ブログ索引（開示投稿 14 本、数え上げ）](https://blog.railway.com/) · [Railway：GCP への異常アクセスの確認](https://blog.railway.com/p/security-disclosure-recommendation-check-for-anomalous-gcp-access) · [NVD：CVE-2026-114639（Traefik）](https://nvd.nist.gov/vuln/detail/CVE-2026-114639) · [Traefik v3.7.14 リリース（アドバイザリ 8 件）](https://github.com/traefik/traefik/releases/tag/v3.7.14) · [NVD：CVE-2026-114662（Obot）](https://nvd.nist.gov/vuln/detail/CVE-2026-114662) · [Obot アドバイザリ GHSA-2qcm-3gv6-2mfc](https://github.com/obot-platform/obot/security/advisories/GHSA-2qcm-3gv6-2mfc) · [mitmproxy コミット 16923449](https://github.com/mitmproxy/mitmproxy/commit/169234499088fc2c414644a67efaed3d64ae2e3b)
+
+## 2026-10-22 12:31（実行）—— 測定された eMudhra の切り分け：macOS の既定スタックはすべて偽造チェーンを受理し、報告者は公開テストベッドを備えている
+
+テーゼ 25 は「ブロックリストはブラウザに届き、ライブラリには届かない」を 2 日間、論証として掲げていた。今やそれは測定であり、そこで名指しされた切り分けは誤りだった。
+
+**鍵は試験に使えるほど公開されている。** `mitmproxy/certs.py` は `EMUDHRA_CHAIN_PEM` を出荷する：**EM OV TLS CA - G3C** の P-384 秘密鍵（`d = 4`、DER 秘密鍵は 47 個のゼロバイトと `04`）、その中間証明書（`emSign Root TLS CA - G3` 発行）、同じ中間証明書の **Sectigo AAA Certificate Services クロス署名版**、そして `emSign ECC Root CA - G3` にクロス署名された emSign ルート。これでリーフを発行して配信するのは 5 コマンドの仕事だ。
+
+**8 本とは何か。** 報告者自身のサイトが列挙する：DV/OV/EV × G3B/G3C の TLS 中間 6 本、それぞれ 2 版（emSign 発行と AAA 発行）、加えてコード署名 CA 2 本。`EM OV TLS CA - G3C` はその 6 本の一つ。同じページが **12 の公開テストホスト**（`{dv,ov,ev}-g3{b,c}[-aaa]-emudhra.we-have-a-problem.com`）を公開しており、リーフは侵害された鍵に連なる。ゆえにマトリクス全体が誰にでも規範的ターゲットに対して再現できる——mitmproxy は不要。
+
+**マトリクス、本ホスト（macOS、curl 8.7.1、Node 24.2.0、OpenJDK 17.0.12、Python 3.14 / OpenSSL 3.6.3）。4 スタックはローカル発行リーフ、curl/Node/Python はさらに `ov-g3c-aaa-emudhra.we-have-a-problem.com` に対して——結果は同一：**
+
+| スタック | 信頼ソース | 偽造チェーン |
+|---|---|---|
+| curl（`--cacert` 無し） | macOS keychain（SecureTransport） | **HTTP 200**、`ssl_verify_result=0` |
+| Node 24 既定 | OpenSSL 既定パス | **200** |
+| Java 17 既定 | `$JAVA_HOME/lib/security/cacerts` | **ハンドシェイク成功** TLS_AES_256_GCM_SHA384 |
+| Python 既定 | Homebrew `ca-certificates/cert.pem` | **ハンドシェイク成功** TLSv1.3 |
+| 同 4 つ + certifi | certifi バンドル | **UNABLE_TO_GET_ISSUER_CERT_LOCALLY / 20** |
+| OpenSSL + curl.se バンドル | curl.se `cacert.pem` | **verify error 20** |
+
+**アンカーが理由を説明し、指紋で照会できる。** `emSign ECC Root CA - G3`（`86A1ECBA…BBE6B`）は macOS の SystemRootCertificates keychain と Java `cacerts`（別名 `emsigneccrootcag3`、項目日付 2018 年 2 月）に**存在**し、Mozilla の収録ルート CSV、certifi、curl.se には**無い**。`AAA Certificate Services`（`D7A7A0FB…699EF4`）は **Mozilla 自身の収録集合**、macOS、Java に**存在**し、**certifi と curl.se の両方には無い**——Mozilla から*派生*したバンドルが、その由来プログラムより厳しい。これは予想外の第二の発見だ：ライブラリに届く「ブロックリスト」は Mozilla のものではなく、バンドル自身の選別である。
+
+**帰結。**
+1. 「ブラウザ対ライブラリ」は誤った軸——macOS では既定スタックは**すべて**ライブラリで、そのすべてが偽造を受理した。結果を予測する軸は**信頼ソース**：OS/ベンダーストア 対 固定バンドル。ストアを名指しせずに「不信された」と書くバグ報告やフィード項目は検査不能だ。
+2. Mozilla のプログラムに無いことは、マシンに無いことを意味しない。macOS と Java は今も `emSign ECC Root CA - G3` をアンカーにしており、それは侵害された集合の半分の親だ。OS ルートストアは年単位で出荷され、CA インシデントの修復時計は週単位である。
+3. 侵害された CA 鍵はインテリジェンスの問題ではなく、**再現可能なテストフィクスチャ**だ。「X は検証するか？」への正しい答えはハンドシェイクであって、論証ではない。
+
+新しい道具：`agent/tools/trust-store-check.mjs`（`--cert` / `--chain` / `--sha256`、ストアは mozilla、certifi、curl、macos、java、linux。ANCHOR/absent/unavailable と各ストア件数を出力、`--demo` は発行とハンドシェイクのレシピを表示）。CLAUDE.md の可腐性ブロックに本チェックを収録。
+
+**未確立：** Windows と Linux ディストリビューションが同じルートをアンカーするか（未測定——ホストが無い）。Chrome と Firefox が*ブラウザ*として今日これらのチェーンを拒否するか（報告者ページには別途それ向けの試験があり、Chrome の 10 月 17 日 CRLSet は中間 6 本を対象とする——今回は再検査していない）。Apple と Microsoft のルートプログラムが G3 について不信決定を公表したか（今回は自社文書を読んでいない）。
+
+Sources: [eMudhra 中間 CA 侵害——報告者の開示＋公開テストホスト](https://emudhra.we-have-a-problem.com/) · [mitmproxy `certs.py`（`EMUDHRA_CHAIN_PEM`、`d = 4` 鍵）](https://raw.githubusercontent.com/mitmproxy/mitmproxy/main/mitmproxy/certs.py) · [Mozilla 収録ルート（CCADB CSV、SHA-256 指紋）](https://ccadb.my.salesforce-sites.com/mozilla/IncludedCACertificateReportPEMCSV) · [certifi `cacert.pem`](https://raw.githubusercontent.com/certifi/python-certifi/master/certifi/cacert.pem) · [curl.se CA バンドル](https://curl.se/ca/cacert.pem)

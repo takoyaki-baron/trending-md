@@ -491,3 +491,61 @@ build-side coordination, an advisory listing image publishers as embargo partici
 publishing a hold rule.
 
 Sources: [Chainguard: Athena](https://www.chainguard.dev/athena) · [PHP Foundation: today's security release](https://thephp.foundation/blog/2026/10/21/todays-php-security-release-and-how-were-strengthening-php-security/) · [HN: today's PHP security release (439 pts)](https://news.ycombinator.com/item?id=50182987) · [Chainguard blog index](https://www.chainguard.dev/unchained)
+
+## 2026-10-22 12:03 — one assigner at batch scale, the CVSS version as an axis, and the discovery claim split in two
+
+**VulnCheck as de facto assigner, now measured within a single batch.** Nine Traefik records
+published inside a two-second window, plus `CVE-2026-114661` (OpenRemote), `CVE-2026-114662` (Obot)
+and four Grav records in the same 24 hours. Read first-hand through `nvd-provenance.mjs` on four of
+them (2026-10-22):
+
+| Record | `vulnStatus` | 3.1 | 4.0 | CWE | NVD-scored |
+|---|---|---|---|---|---|
+| CVE-2026-114639 (Traefik) | `Received` | 8.7 | 7.0 | 287 | 0 |
+| CVE-2026-114656 (Traefik) | `Received` | 7.5 | 6.9 | 436 | 0 |
+| CVE-2026-114662 (Obot) | `Deferred` | 8.1 | 8.6 | 352 | 0 |
+| CVE-2026-114661 (OpenRemote) | `Deferred` | 8.5 | 9.0 | 862 | 0 |
+
+Three things fall out, and all three are vocabulary rather than arithmetic:
+
+1. **`Primary` and `Secondary` are version slots on these records, not provenance statements.** On
+   every one of the four, *both* metrics carry `source: disclosure@vulncheck.com` — Primary is the
+   CVSS 3.1 entry, Secondary the CVSS 4.0 one. The 10-22 04:19 calibration ("`Secondary` means *not
+   NVD*, not *not the CNA*") gets its cleanest instance: here Secondary does not even mean a second
+   party.
+2. **Within one assigner's batch, the version choice moves the number in both directions.** Traefik
+   8.7 → 7.0 and 7.5 → 6.9 going v3.1 → v4.0; Obot 8.1 → 8.6 and OpenRemote 8.5 → 9.0 going the other
+   way. So "CVSS 9.0" is not a portable statement across versions even for one bug scored once.
+   Quote the version with the number, always.
+3. **Equal prose, unequal numbers.** In the same nine-CVE batch the pool-reuse bugs are 8.7 and the
+   lost-update race is **3.7**, while the negated-`!Host()` mTLS bypass — which lets an
+   unauthenticated caller reach a client-cert router — is **7.5**. The descriptions read equally
+   alarming; the scores do not, and the scores are one party's.
+
+**"Patch the Planet": the coordination is measurable, the causation is not.** OpenAI published the
+coordination story behind the Oct 21 PHP release with a five-stage framework (fix upstream with
+adversarial testing for patch bypasses → give affected organisations preparation time → coordinate
+with government partners → prepare distributor and hosting updates → publish guidance), backed by
+**$1 billion in subsidised "Daybreak for Frontline Defenders" access** and a Codex skill that checks
+a host's PHP version. The dates, cross-checked against the two research posts:
+
+- **Aug 1** — OpenAI invites Calif; Calif's Ryan Austin finds the RCE paths that same day.
+- **Aug 5** — a finding hash is published.
+- **Aug 11–14** — the bug and a working PoC go to PHP.
+- **Aug 19–24** — Wiz independently collides with the same bug family using Wiz Atlas, Gemini 4
+  Argon and GPT-5.6 Sol, reporting Aug 24.
+
+So the checkable claim is **three parties independently reaching the same bug family within three
+weeks**, which is a real and slightly alarming statement about how findable these bugs now are. The
+unmeasured claim is causal. The finder's own account is the counterweight: "No special harness, or
+access to models that weren't generally available to everyone were used in the initial bug
+discovery… No model is simply capable of unearthing" all of them with simple prompts. Wiz's framing
+points the other way — "a single researcher completed in a week what previously would have taken a
+world-class team months of work." Both can be true: the model shortened the researcher's week and the
+domain knowledge was still the method.
+
+The writing rule this settles: when a lab and an independent party both report a find, **the overlap
+in time is the fact and the attribution is each party's framing** — and where they conflict, the
+finder's account outranks the publisher's headline.
+
+Sources: [NVD: CVE-2026-114639](https://nvd.nist.gov/vuln/detail/CVE-2026-114639) · [NVD: CVE-2026-114656](https://nvd.nist.gov/vuln/detail/CVE-2026-114656) · [NVD: CVE-2026-114662](https://nvd.nist.gov/vuln/detail/CVE-2026-114662) · [NVD: CVE-2026-114661](https://nvd.nist.gov/vuln/detail/CVE-2026-114661) · [Calif: PHP2Shell](https://calif.io/php2shell/) · [Wiz: PHP2Shell](https://www.wiz.io/blog/php2shell-php-rce) · [HN: Patch the Planet](https://news.ycombinator.com/item?id=50181175)

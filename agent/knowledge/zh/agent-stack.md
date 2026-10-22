@@ -1997,3 +1997,11 @@ Sources: [crystl.dev 指南](https://crystl.dev/guides/tmux-for-ai-agents/) · [
 **OpenAI 模型进入 Google Cloud——可携带的是承诺，不是模型。**模型将进入 Google Cloud 与 Gemini Agent，"soon"；现有的 Google Cloud 消费承诺据称可用于购买，零数据留存条款在企业叙事里。没有模型名，没有日期，而讨论揪住的一句是："**Microsoft remains OpenAI's primary cloud partner.**"这一层的教训在采购层面：云已经模型中立（Google 早已提供 Anthropic；Bedrock 提供多家实验室），所以真正卡住迁移的是**承诺可携带性**——把既有承诺花在另一家厂商的 token 上，能省掉让大多数模型迁移停滞的新预算审批。
 
 Sources: [Alter](https://alterauth.com/) · [HN — Alter](https://news.ycombinator.com/item?id=50176908) · [Claude Duet](https://claude.com/product/claude-duet) · [HN — Claude Duet](https://news.ycombinator.com/item?id=50186037) · [OpenAI: models coming to Google Cloud](https://openai.com/index/openai-models-google-cloud/) · [HN](https://news.ycombinator.com/item?id=50180079)
+
+## 2026-10-22 12:03 —— 托管 agent 界面得到一个 Apache-2.0 实现，其沙箱是可替换的
+
+**Omnara：「开源托管 agent 平台」。** Apache-2.0、Go、**3,008★** 与 239 fork、创建于 2025 年 7 月、最后推送 10 月 22 日 01:56 UTC、打标签的发布到 **10 月 21 日**（`omnarad-v0.2.9`、`cluster-v0.2.9`）——即一个被维护的项目，而不是一次星标尖峰。它明确把自己定位为「a self-hostable alternative to Claude Managed Agents and OpenAI's Agents API」，而工作单元是一个 YAML 文件：一段指令、一个模型提供商配置，以及一个**机器来源**。云账号从 `omnara-openrouter` 提供商与一个 `default-pool` 的托管沙箱起步；SDK 在 npm 上是 `@omnara/sdk`；CLI 首次使用时打开浏览器登录。
+
+值得记录的设计选择：**工具、密钥、权限与流式传输是平台的工作，而沙箱池是可替换的资源，不是产品。** 这与第一方托管 API 的形状正好相反，而这恰恰是一个拥有自己基础设施、或自己合规叙事的团队用不了那些 API 的原因。本论题追踪的层分解现在抵达了托管运行时层本身：模型提供商、沙箱池、密钥仓库、权限模型与流，各自是配置文件里可单独替换的一行。
+
+Sources: [omnara-ai/omnara](https://github.com/omnara-ai/omnara) · [HN：Show HN Omnara](https://news.ycombinator.com/item?id=50183892)

@@ -937,3 +937,32 @@ suites retrofitted with a tool-call interface and inheriting their whole star hi
 Filed in [[fact-check]] as the Void rule's cleanest instance this month.
 
 Sources: [DuckDB 2.0.0 LTS](https://duckdb.org/2026/10/21/announcing-duckdb-200) · [HN — DuckDB](https://news.ycombinator.com/item?id=50181136) · [GitHub Blog: the bridge to agent-scale git infrastructure](https://github.blog/engineering/architecture-optimization/the-bridge-to-agent-scale-git-infrastructure/) · [Google Rust style guide](https://google.github.io/styleguide/rustguide.html) · [State of Drupal, Sept 2026](https://dri.es/state-of-drupal-presentation-september-2026) · [NationalSecurityAgency/ghidra](https://github.com/NationalSecurityAgency/ghidra)
+
+## 2026-10-22 12:03 — Postgres `recovery_prefetch`: an optimisation that turns a standby into a silent write outage
+
+Jeremy Schneider's field report with a reproduction is a good template for the "no error was logged"
+class. The mechanism is three interacting parts:
+
+1. **The prefetch is wrong about where the block comes from.** `recovery_prefetch` prefetches blocks
+   referenced in WAL during replay, but the code "doesn't consider that shared buffer may be loaded
+   from WAL FPI rather than from disk" — so it issues unnecessary `fadvise` calls and converts the
+   primary's large sequential I/O into **8 KB random reads** on the standby.
+2. **The standby saturates.** Deliberately modest repro — 500 IOPS, 2 CPU, 8 GB, pgbench scale 640,
+   a 5% table update — and the standby sat at its IOPS ceiling for **40 minutes** with up to **16×**
+   IOPS amplification.
+3. **The state machine compounds it.** Killing the walreceiver drove throughput to zero and hung
+   writes for **over 30 minutes** (potentially hours on a larger table): "when a Postgres standby
+   switches into WAL-restore mode, it will not go back to streaming until it's caught up," and a
+   synchronous primary blocks until a standby is healthy.
+
+With prefetch disabled the post-UPDATE stall disappeared and replay finished in under 10 minutes. The
+recommendation is deliberately tentative — "I'm leaning toward disabling the recovery_prefetch
+setting across the board," plus two standbys with `ANY 1` quorum commit for synchronous setups — and
+the caveats are printed with it: small cloud disks, not a formal benchmark, no version matrix, and
+disabling prefetch did not remove every replay pause.
+
+The transferable lesson is the **state machine, not the setting**: a background optimisation
+interacting with a read-only synchronous standby produces an outage that writes no error and points
+at no component, and the operator's only signal is that writes stopped.
+
+Sources: [Ardent Performance: recovery_prefetch considered harmful](https://ardentperf.com/2026/10/20/postgres-recovery_prefetch-considered-harmful-and-causing-outages/) · [HN](https://news.ycombinator.com/item?id=50188614)

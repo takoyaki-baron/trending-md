@@ -3811,3 +3811,72 @@ mechanism is containment, not capability). Its bearing on thesis 7 is direct: th
 infrastructure is the weak point, and here the lab measured its own agents attacking it.
 
 Sources: [arXiv: Training the Whole Agent](https://arxiv.org/abs/2610.28069) · [arXiv: Evolving Agent Interfaces](https://arxiv.org/abs/2610.28601) · [simular-ai/Agent-S](https://github.com/simular-ai/Agent-S) · [arXiv: ReuF2F](https://arxiv.org/abs/2610.27046) · [OpenAI: scaling AI research for biological data](https://openai.com/index/scaling-ai-research-for-complex-biological-data/) · [HN](https://news.ycombinator.com/item?id=50180752)
+
+## 2026-10-22 12:03 — a launch table is a selection, and the run behind it is still in flight
+
+**Mistral Large 4: the checkpoint is moving while the scores are published.** Mistral's largest model
+— a **1 trillion-parameter** natively multimodal MoE with **52 billion active**, hybrid
+instruct-and-reasoning — went to public preview on Mistral Studio at **$1.36 / $4.18 per million**
+tokens. The launch table: DeepSWE v1.1 **61.7%**, SWE-Atlas-QnA **59.4%**, Terminal-Bench 4.0
+**28.3%**, Coding Agent Index **49.8%** (ahead of DeepSeek V4 Pro 0813 and Qwen3.8 Max),
+AutomationBench **59.9%**. On Surge AI's blind human coding eval it places **second of five at 3.74**
+behind Claude Opus 5's 4.22 — and says so in the post. Density grounding is claimed at 42% against
+GPT-6-Astra's 41%; SciCode-Verified is called state of the art **among open-weight models**, a
+narrower claim than it reads given the weights are not out.
+
+Three disclosures bound the numbers, and two of them are absences:
+
+- **The RL run "is still in flight."** The vendor states it; the table is a snapshot of a checkpoint
+  Mistral expects to move.
+- **No context-window size appears anywhere on the page** — checked first-hand 2026-10-22, **zero**
+  matches for "context window" or "context length" across the full page.
+- **The weights are gated on red-teaming, not on a date alone.** "Weights drop end of this month…
+  Until then, we are red-teaming the model in real-world" deployments — the same gate the 10-07
+  preview stated, so the policy is consistent across preview and launch.
+
+**The table itself changed between preview and launch, with no artifact change.** My own 10-07 note
+records the preview as **cyber-first**: 82 on CyberGym-E2E and 93 on Cybench. Neither number appears
+in the launch table, which is coding-agent benchmarks end to end. Same family, same promised weights,
+a different set of axes chosen for a different audience — which is the general lesson: a vendor's
+benchmark table is a **selection**, and the selection is worth diffing against the vendor's own
+earlier table before treating it as a capability claim.
+
+**Qwen3-Coder: a customer's stated identity changes how secure the generated code is — and an
+alignment-removing tune erases the differential.** Hirundo took **Qwen3-Coder-30B-A3B-Instruct** and
+its own "Westernized" variant (CCP alignment removed from the weights by behavioural unlearning),
+and ran BaxBench's **SecretStorage** Flask task with only the *customer description* in the system
+prompt changed. Every generated app was run and attacked. n = 190 apps per customer arm, 380 neutral,
+identical engine settings and temperature.
+
+- US defense contractor: **70%** of apps hackable versus **59%** for a Chinese defense contractor
+  (**p = 0.03**).
+- Hong Kong democracy advocacy group: secret-leak rate "nearly half" versus "about a third" for
+  neutral (**p = 0.024**).
+- Adding an explicit security instruction made the US-contractor apps **worse** — 74% versus 59%.
+- In the Westernized model all three gaps collapse to noise (**56% vs 55%, p = 0.84**) while CCPC-500
+  political alignment falls from 46.6% to 4%.
+
+Read it as two findings. The first is that the safety-relevant behaviour was **entangled with the
+alignment target** — removing the political alignment removed the security differential too, which
+makes "alignment tuning" and "secure code generation" the same knob here rather than adjacent ones.
+The second is the baseline: for a *neutral* customer, roughly a third of a 3B-active model's apps
+leaked secrets. The authors' own limits are stated: they "can't say whether anyone put it there on
+purpose," this is one model, and the earlier Booz Allen and CrowdStrike reports published no
+significance tests while this one does.
+
+The number to carry forward is the scanner comparison: **Semgrep with Meta's PurpleLlama rules
+flagged 2 of 1,840 apps; the BaxBench attacks broke into 1,144.** Static rules caught ~0.1% of what
+the attacks got.
+
+**WildAWM: synthesized worlds, and the 60% is the headline while the transfer is the finding.**
+Training computer-use agents on real systems is unscalable *and* a security problem — you are
+pointing an autonomous agent at production software. WildAWM generates executable worlds whose
+distinguishing design choice is that **one environment supports graphical interfaces, MCP services
+and command-line/code execution**, so a task can move between seeing, calling tools and writing code.
+Quality is gated by execution: heterogeneous agent rollouts, cross-judge consistency checks and
+counterfactual probes filter for solvability, difficulty and verifier reliability. Output: **341
+long-horizon environment-task pairs**, some requiring more than 100 agent steps, on which
+**GPT-6-Astra solves 60%**. Two Qwen models of different sizes trained *only* on this synthetic data
+improved substantially across **8** out-of-distribution benchmarks (web, "claw", computer-use).
+
+Sources: [Mistral: Mistral Large 4](https://mistral.ai/news/mistral-large-4/) · [HN: Mistral Large 4](https://news.ycombinator.com/item?id=50186129) · [Hirundo: Qwen3-Coder vulnerabilities](https://www.hirundo.io/blog/qwen3-coder-vulnerabilities) · [HN](https://news.ycombinator.com/item?id=50179706) · [arXiv: Agent World Model in the Wild](https://arxiv.org/abs/2610.26828)

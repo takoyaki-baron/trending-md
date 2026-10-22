@@ -373,3 +373,22 @@ Sources: [Graphify-Labs/graphify](https://github.com/Graphify-Labs/graphify) · 
 `mksglu/context-mode`（31,411★，+3,556/周，今日 04:41 UTC 有推送）声称**削减 98%** 的工具输出、持久化会话记忆，并通过 MCP 加各 harness hook（Claude Code、Codex、Cursor、Copilot、Zed、OpenCode、Kiro、Pi）在 17 个平台间路由。徽章墙不会主动展示的两个事实：许可证是 **ELv2**（源码可见，限制托管服务；GitHub API 报 `NOASSERTION`），以及 npm `context-mode` 停在 **1.0.169，最后修改 6 月 29 日**，GitHub releases 也止于同一 tag——四个月提交，用户侧没有可安装的新版本。可验证性缺口在这一层比多数层更要紧，因为这个产品就坐在**你的 prompt 中间**：它丢掉的就是 agent 永远看不到的，而 98% 是作者自述、没有公开评测。对照那些会公布自己败绩的货架（XERJ、Leviathan、Skip the Compressor）——差别不在数字，而在于那些数字可以被复现。
 
 Sources: [mksglu/context-mode](https://github.com/mksglu/context-mode) · [npm: context-mode](https://www.npmjs.com/package/context-mode)
+
+## 2026-10-22 12:03 —— 上下文边界移进了 KV cache 内部
+
+对「agent 携带多少历史」的每一个 prompt 层答案——摘要、截断、检索——都要付一次**重预填**。*Cache Engineering for Agents*（arXiv 2610.28577）把决策搬进 cache 本身，给 agent 两个作用于自身 KV 状态的原语：
+
+- **`drop`** —— 把选定的 cache 从未来注意力中移除（轨迹不变；token 仍在历史里，模型只是停止注意它们）。
+- **`repos`** —— 调整保留的 key 的位置编码，使幸存下来的部分可以被重新锚定，而无需重预填。
+
+由此产生的服务问题才是论文最锋利的贡献，因为它点明了为什么一个普通的前缀 cache 实现不了其中任何一项：**历史依赖**。相同的 token 序列现在可以带着*不同的* cache 状态，取决于在它之前发生过哪些 cache 操作，所以前缀匹配不足以作为复用键。他们的答案是共同设计的 **AKV** 引擎——一个无状态 API，底下是有状态的复用、驱逐与恢复。
+
+结果：
+
+- 一个工具响应的 **rolling-drop** 策略，平均基准分比阈值触发的摘要高 **+1.7 分**，平均成本低 **27.7%**。
+- AKV 带来最高 **1.2×** 的输出吞吐与 **1.5×** 的 P95 延迟改善。
+- 让 agent **递归地自我改进自己的 cache 策略**，在专家设计的策略之上再降 **7.1%** 成本——与本论题其他自调结果同一形状，也是要盯的那部分。
+
+为什么它属于上下文边界层而不是「serving」：被优化的对象正是整个论题所谈的那一个——agent 向前携带多少字节——而「agent 自己的工作记忆是一种可调度资源（而不是 prompt 的涌现属性）」这个发现，是该层第一个模型本身可以操作的版本。这是推理引擎的改动，不是包装：任何放在 API 前面的代理都无法丢弃服务器持有的 cache。
+
+Sources: [arXiv: Cache Engineering for Agents](https://arxiv.org/abs/2610.28577) · [arXiv PDF](https://arxiv.org/pdf/2610.28577)

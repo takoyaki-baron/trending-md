@@ -1198,3 +1198,43 @@ Sources: [anthropics/knowledge-work-plugins](https://github.com/anthropics/knowl
 `wshobson/agents` (41,311★, MIT, +93/24h, pushed 2026-10-19, 5 open issues — re-verified first-hand 10-21 12:40): **94 plugins (92 local), 202 agents, 185 skills, 105 commands** written once in Markdown and adapted per harness — Claude Code and Cursor get a plugin marketplace, Codex CLI a native marketplace or generated artifacts, OpenCode/Antigravity/Copilot/Pi get `make install-*` routes that emit generated agents **with each harness's tool permissions translated rather than assumed**. The design decision is the exact opposite of the persona-folder genre (agency-agents, 162k★, same day's batch): the per-harness output is a *generated artifact*, not a copy, so a permission-model or schema change regenerates instead of forking. Multi-harness distribution is the maintenance bill the skills shelf is about to receive — different tool-permission semantics, different MCP configs, different invocation surfaces — and this is the shape that survives the first schema change. (→ thesis 8)
 
 Sources: [wshobson/agents](https://github.com/wshobson/agents) · [plugins tree](https://github.com/wshobson/agents/tree/main/plugins)
+
+## 2026-10-22 12:03 — a third plugin manifest, and the first vertical where the output format is the deliverable
+
+**`cursor/plugins`: the vendor publishes the spec, not just a catalogue.** The repo is Cursor's
+official plugin collection *and* the definition of what a plugin is: a standalone directory at the
+repo root with a **`.cursor-plugin/plugin.json`** manifest. Facts checked first-hand via the GitHub
+API (2026-10-22): **13,442★**, 1,336 forks, created January 2026, last push Oct 22 03:27 UTC,
+TypeScript, and **`license: null`** — no declared license at all, which matters for anyone vendoring
+from it. The catalogue splits three ways: first-party developer tools (`orchestrate`, `advisor`,
+`thermos`, `pr-review-canvas`, `cursor-sdk`, `ralph-loop`, `create-plugin`), third-party workflow
+plugins from named authors (`pstack`, `dyl-stack`, `continual-learning`, `cli-for-agent`), and a long
+`third_party/` block of SaaS integrations — Salesforce, HubSpot, Gmail, Playwright, GitHub, X,
+Stripe-adjacent finance tools — each shipped as a plugin rather than a bespoke connector.
+
+The strategic point is the count of formats: three coding-agent vendors now ship three incompatible
+plugin formats — Claude Code plugins, Codex skills, and `.cursor-plugin`. A plugin is where a
+vendor's tool surface stops being its own, and the appearance of Salesforce and HubSpot as
+manifest-shaped directories is the signal that the integration marketplace has become the
+distribution channel for agent capability. Whoever's manifest wins inherits the catalogue; nobody's
+manifest is standardised, and none of the three is licensed for reuse by the others.
+
+**`text-to-cad`: STEP as the deliverable.** An agent plugin (MIT, Python 3.11+) built on build123d
+0.11 and Open CASCADE 7.9 that gives a coding agent local workflows for generating 3D models as
+**STEP, GLB, STL or 3MF**, running design-for-manufacturing checks, producing engineering drawings,
+and connecting to 3D-printing, sheet-metal and CNC services. **22,335★** and 2,184 forks, created
+April 2026, last push Oct 22 04:06 UTC (checked). It ships as skills plus a local viewer server
+(`cadgen mcp`) and installs into Claude Code, Codex, Cursor, Gemini and Grok — "supported by all
+popular agents that support plugins or the skills framework," which is now a sentence a project can
+write.
+
+Two firsts worth keeping. **CAD is the first domain in this wave where the output format is the
+deliverable** — STEP is what a machine shop reads, not a picture of the part — so "an agent produced
+manufacturable geometry" is a different claim from "an agent produced an image of it," and the
+downstream consumer is a machine rather than an eye. And **telemetry ships on by default**: the
+README discloses that it "sends usage stats and crash reports, tagged with a random ID" — never
+files, paths or prompts — with `uvx cadgen telemetry off` to disable it. The disclosure is exemplary;
+the default is the part to notice, because it is the first agent-skill artifact in this shelf whose
+diagnostics are opt-out.
+
+Sources: [cursor/plugins](https://github.com/cursor/plugins) · [Cursor plugin marketplace](https://cursor.com/marketplace) · [earthtojake/text-to-cad](https://github.com/earthtojake/text-to-cad) · [texttocad.dev](https://www.texttocad.dev)

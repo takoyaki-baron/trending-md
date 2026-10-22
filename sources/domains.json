@@ -12,6 +12,96 @@
     },
     "tool": "node agent/tools/cv-audit.mjs (--clusters | --check | --bump <host> --note \"YYYY-MM-DD — …\" [--write])"
   },
+  "alterauth.com": {
+    "cat": "vendor",
+    "cred": "med",
+    "cv": 1,
+    "density": "med",
+    "en": "Launch site for Alter (YC S25), an agent-identity proxy — accurate about the shared-API-key problem it addresses, but every trust claim (SOC 2 in progress, two pentests) is self-reported and it publishes no architecture or audit.",
+    "jp": "agent アイデンティティ代理を掲げる Alter（YC S25）の公開ページ。解決する共有 API キー問題の記述は正確だが、信頼に関する主張（SOC 2 取得中、ペネトレーションテスト 2 回）はすべて自己申告で、アーキテクチャも監査も公開していない。",
+    "zh": "Alter（YC S25）的发布页，做 agent 身份代理——对它要解决的共享 API key 问题描述准确，但每一条信任声明（SOC 2 进行中、两次渗透测试）都是自述，且不公开架构或审计报告。"
+  },
+  "dri.es": {
+    "cat": "community",
+    "cred": "high",
+    "cv": 1,
+    "density": "med",
+    "en": "Dries Buytaert's blog — the Drupal founder's own framing of the project's state, which makes it the primary for Drupal's positioning and history and never an independent assessment of either.",
+    "jp": "Dries Buytaert のブログ——Drupal 創始者自身によるプロジェクト現状の記述であり、Drupal の位置づけと歴史の一次資料。ただし独立した評価では決してない。",
+    "zh": "Dries Buytaert 的博客——Drupal 创始人本人对项目现状的表述，因此是 Drupal 定位与历史的一手来源，但从来不是对它的独立评估。"
+  },
+  "engineering.fb.com": {
+    "cat": "vendor",
+    "cred": "med",
+    "cv": 1,
+    "density": "high",
+    "en": "Meta's engineering blog — detailed first-party systems write-ups whose numbers are real but unaudited and chosen by the operator; good for mechanism, weak for comparison.",
+    "jp": "Meta のエンジニアリングブログ——詳細な一次のシステム記事。数字は実在するが監査されておらず運営者が選んだもの。機構の理解には良く、比較には弱い。",
+    "zh": "Meta 的工程博客——详尽的第一方系统文章，数字真实但未经审计、且由运营方挑选；适合看机制，不适合做横向比较。"
+  },
+  "freehire.me": {
+    "cat": "data",
+    "cred": "med",
+    "cv": 1,
+    "density": "med",
+    "en": "Hosted instance of the MIT-licensed strelov1/freehire job-search engine — usable as a data-volume datapoint (3.3M postings, a dated snapshot), but looser than the repo README, which carries the double-counting footnote.",
+    "jp": "MIT ライセンスの strelov1/freehire 求人検索エンジンのホスト版。データ量の目安（330 万件、ある時点のスナップショット）としては有用だが、README より緩く、二重計上の脚注は README 側にある。",
+    "zh": "MIT 许可的 strelov1/freehire 求职搜索引擎的托管实例——可作为数据量参照（330 万条、某一时点的快照），但比仓库 README 更松，重复计数的脚注写在 README 里。"
+  },
+  "gitlab.eclipse.org": {
+    "cat": "security",
+    "cred": "high",
+    "cv": 1,
+    "density": "high",
+    "en": "The Eclipse Foundation's own CVE-assignment work items — the assigning CNA's tracker, so the primary for which component a CVE covers, and on 10-20 for the fact that ioFog's 9.8 is the Eclipse CNA's score and not NVD's.",
+    "jp": "Eclipse Foundation 自身の CVE 割当ワークアイテム——割当 CNA のトラッカーであり、ある CVE が実際どのコンポーネントを指すかの一次資料。10-20 には ioFog の 9.8 が NVD ではなく Eclipse CNA のスコアであることの確認にも使った。",
+    "zh": "Eclipse 基金会自己的 CVE 分配工单——即分配方 CNA 的追踪页，因此是某个 CVE 究竟覆盖哪个组件的一手来源；10-20 也用它确认 ioFog 的 9.8 是 Eclipse CNA 的分数而非 NVD 的。"
+  },
+  "google.github.io": {
+    "cat": "code",
+    "cred": "high",
+    "cv": 1,
+    "density": "high",
+    "en": "Google's published style guides (including the Rust guide) — internal documents made public and explicitly labelled as Google's, not the language project's; authoritative for what Google enforces, not for community consensus.",
+    "jp": "Google が公開しているスタイルガイド（Rust ガイドを含む）——内部文書の公開版で、言語プロジェクトではなく Google の規範であると明記されている。Google が何を強制するかには権威があるが、コミュニティの合意ではない。",
+    "zh": "Google 公开的风格指南（含 Rust 指南）——内部文档的公开版，并明确标注为 Google 的规范而非语言项目本身的；对「Google 强制什么」有权威，对社区共识没有。"
+  },
+  "news-web.php.net": {
+    "cat": "vendor",
+    "cred": "high",
+    "cv": 1,
+    "density": "high",
+    "en": "php.net's official news archive — the project's own release announcements, which is where a PHP version's existence and date are settled, ahead of any foundation post or coverage.",
+    "jp": "php.net の公式ニュースアーカイブ——プロジェクト自身のリリース告知。PHP のあるバージョンの存在と日付はここで確定し、財団の記事や報道より先行する。",
+    "zh": "php.net 的官方新闻存档——项目自己的发布公告，PHP 某个版本是否存在、何时发布以它为准，早于基金会文章或媒体报道。"
+  },
+  "research.poh.org": {
+    "cat": "research",
+    "cred": "low",
+    "cv": 1,
+    "density": "high",
+    "en": "PoH's bot-detection benchmark measured against AI agents — methodologically careful per-cell work whose author sells the winning product, as the report itself discloses; quote the cell, not the average.",
+    "jp": "AI エージェントに対する PoH の bot 検出ベンチマーク——方法論的に丁寧なセル単位の測定だが、著者は勝っている製品を販売しており、その点は報告自身が開示している。平均ではなくセルを引用すること。",
+    "zh": "PoH 针对 AI agent 的 bot 检测基准——方法论上细致的逐格测量，但作者在卖获胜的产品（报告自己披露了）；要引用格子，不要引用平均值。"
+  },
+  "thephp.foundation": {
+    "cat": "vendor",
+    "cred": "high",
+    "cv": 1,
+    "density": "high",
+    "en": "The PHP Foundation's blog — postmortems and process changes written by the maintainers; the primary for PHP's disclosure timeline and its own score corrections, cross-checked 10-22 against the php-src release tags and the HN thread.",
+    "jp": "PHP Foundation のブログ——メンテナ自身によるポストモーテムとプロセス変更。PHP の開示タイムラインとスコア訂正の一次資料で、10-22 に php-src のリリースタグと HN スレッドでクロスチェックした。",
+    "zh": "PHP 基金会的博客——由维护者本人撰写的复盘与流程变更，是 PHP 披露时间线与自身分数更正的一手来源；10-22 已与 php-src 发布标签和 HN 讨论交叉核验。"
+  },
+  "usatoday.com": {
+    "cat": "news",
+    "cred": "med",
+    "cv": 1,
+    "density": "med",
+    "en": "USA Today carrying Reuters legal copy — reliable for the reported figure and the named judge, but it is syndication, so the ruling's scope (what was refused, what the deadline is) has to come from the judgment itself.",
+    "jp": "USA Today によるロイターの法廷記事——報じられた金額と裁判官名には信頼できるがシンジケーションであり、判決の範囲（何が退けられ、期限はどうか）は判決文そのものに当たる必要がある。",
+    "zh": "USA Today 转载的路透社法律稿——对报道的数字和法官姓名可靠，但属转载，因此判决的范围（拒绝了什么、期限如何）必须回到判决书本身。"
+  },
   "02ship.com": {
     "cat": "community",
     "cred": "low",
@@ -13103,5 +13193,41 @@
     "en": "Matyáš Racek's compiler blog — a rustc contributor writing about compiler performance and long-running compiler projects. Cross-checked 2026-10-21: the three projects the post says are landing in 2026 exist as public rust-lang project goals (src/2026/next-solver.md, src/2026/parallel-front-end.md, src/2026/polonius.md in rust-lang/rust-project-goals), independently of the post. Its performance characterizations (LLVM 23 \"pretty much entirely positive\", the regression-triage changes) are practitioner opinion rather than published measurements — treat the numbers as unattributed.",
     "zh": "Matyáš Racek 的编译器博客——一位 rustc 贡献者谈编译器性能与长期编译器项目。已于 2026-10-21 交叉核验：文章称 2026 年落地的三个项目确实以公开的 rust-lang 项目目标形式存在（rust-lang/rust-project-goals 仓库的 src/2026/next-solver.md、parallel-front-end.md、polonius.md），这一事实独立于文章本身。其对性能的描述（LLVM 23“几乎全面正向”、回归分诊的变化）属实践者判断而非公开测量——数字按未标注出处对待。",
     "jp": "Matyáš Racek のコンパイラブログ。rustc 貢献者によるコンパイラ性能と長期プロジェクトの記事。2026-10-21 に突合済み：記事が 2026 年に着地するとする 3 プロジェクトは rust-lang の公開プロジェクトゴールとして実在する（rust-lang/rust-project-goals の src/2026/next-solver.md、parallel-front-end.md、polonius.md）— 記事とは独立した事実。性能に関する記述（LLVM 23 が「ほぼ全面的にプラス」、回帰トリアージの変化）は実務者の見解であり公開計測ではない。数値は出所不明として扱う。"
+  },
+  "blog.railway.com": {
+    "cat": "vendor",
+    "cred": "high",
+    "cv": 1,
+    "density": "high",
+    "en": "Railway's platform engineering blog — first-party incident disclosures for a PaaS that AI teams put their provider keys in. Primary for what was exposed and what to rotate, but customer counts and the initial access vector have been left unstated, so read it as a vendor account of an open investigation rather than a closed finding.",
+    "jp": "Railwayのプラットフォームエンジニアリングブログ——AIチームがプロバイダキーを預けるPaaSの一次インシデント開示。何が漏れ何をローテートすべきかの一次情報だが、顧客数と初期侵入経路は示されておらず、完了した知見ではなく進行中の調査についてのベンダー自身の説明として読むべき。",
+    "zh": "Railway 的平台工程博客——AI 团队把 provider 密钥放在里面的那个 PaaS 的一手事件披露。关于暴露了什么、该轮换什么是一手来源，但客户数与初始入侵途径至今未披露，应作为厂商对仍在进行中的调查的自述，而非已结案的结论。"
+  },
+  "hirundo.io": {
+    "cat": "security",
+    "cred": "med",
+    "cv": 1,
+    "density": "high",
+    "en": "Hirundo — an AI-security startup publishing its own controlled experiments, with sample sizes, Fisher exact tests and a visible limitations section. It is a vendor evaluating a competitor's model: the differential is its measurement, the intent claim is explicitly left unestablished (the authors say they cannot tell whether anyone put the behaviour there on purpose).",
+    "jp": "Hirundo——AIセキュリティ企業による自社の統制実験。サンプル数、Fisher正確検定、明示的な限界節を備える。競合モデルを評価するベンダーであり、差分は同社の測定値、意図に関する主張は著者自身が「故意に入れたかは言えない」と留保している。",
+    "zh": "Hirundo——一家 AI 安全初创公司发表的自有对照实验，附样本量、Fisher 精确检验与可见的局限性章节。它是在评估竞品模型的厂商：差异值是该公司的测量，动机主张被作者明确留作未确立（他们自述无法判断是否有人故意如此）。"
+  },
+  "judgments.fedcourt.gov.au": {
+    "cat": "other",
+    "cred": "high",
+    "cv": 1,
+    "density": "high",
+    "en": "Federal Court of Australia judgments database — the primary record for Australian competition and IP rulings, full text and dated. Bot-blocked to plain fetches, so corroborate any quoted remedy against a reporting outlet before citing specifics; the remedies judgment in Epic v Apple [2026] FCA 1552 was checked this way (2026-10-22).",
+    "jp": "オーストラリア連邦裁判所の判決データベース——豪州の競争法・知財判決の一次記録。全文と日付がある。素のfetchはボットブロックされるため、具体的な救済内容を引用する前に報道機関で裏取りする（Epic v Apple [2026] FCA 1552 の救済判決はこの方法で確認、2026-10-22）。",
+    "zh": "澳大利亚联邦法院判决库——澳州竞争法与知识产权裁决的一手记录，有全文与日期。对普通抓取做机器人拦截，引用具体救济内容前须先用媒体报道核对（Epic v Apple [2026] FCA 1552 的救济判决即以此方式核实，2026-10-22）。"
+  },
+  "ardentperf.com": {
+    "cat": "community",
+    "cred": "high",
+    "cv": 1,
+    "density": "high",
+    "en": "Ardent Performance (Jeremy Schneider) — Postgres/MySQL performance field notes with public reproductions attached. Conclusions are hedged and the limitations are stated in the post, which makes the reproduction more useful than the verdict; it is practitioner measurement, not a formal benchmark.",
+    "jp": "Ardent Performance（Jeremy Schneider）——公開再現付きのPostgres/MySQL性能の現場記録。結論は留保付きで限界も本文に明記されるため、判定よりも再現のほうが有用。実務者の計測であり正式なベンチマークではない。",
+    "zh": "Ardent Performance（Jeremy Schneider）——附公开复现的 Postgres/MySQL 性能现场记录。结论带保留、局限写在正文里，因此复现过程比结论更有用；属实践者测量，不是正式基准。"
   }
 }

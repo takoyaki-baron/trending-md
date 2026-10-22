@@ -995,3 +995,15 @@ Sources: [anthropics/knowledge-work-plugins](https://github.com/anthropics/knowl
 `wshobson/agents`（41,311★、MIT、+93/24h、最終 push 2026-10-19、open issue 5 件——10-21 12:40 に一次確認）：**94 プラグイン（うち 92 はローカル）、202 エージェント、185 スキル、105 コマンド**を Markdown で一度だけ書き、ハーネスごとに適応させる——Claude Code と Cursor にはプラグインマーケットプレイス、Codex CLI にはネイティブマーケットプレイスまたは生成物、OpenCode/Antigravity/Copilot/Pi には `make install-*` 経由で**ツール権限を変換した生成エージェント**を出力する（権限は仮定ではなく翻訳される）。この設計判断はペルソナ・フォルダのジャンル（agency-agents、162k★、同日バッチ）の正反対で、ハーネス別の出力はコピーではなく*生成物*であるため、権限モデルやスキーマが変わっても分岐せず再生成される。マルチハーネス配布はスキル棚がこれから受け取る請求書そのもの——ツール権限の意味論、MCP 設定、呼び出し面がそれぞれ異なる——であり、これは最初のスキーマ変更を生き延びる形である。
 
 Sources: [wshobson/agents](https://github.com/wshobson/agents) · [plugins tree](https://github.com/wshobson/agents/tree/main/plugins)
+
+## 2026-10-22 12:03 — 三つ目のプラグインマニフェストと、出力形式そのものが成果物になる最初の縦軸
+
+**`cursor/plugins`：ベンダーがカタログだけでなく仕様を公開する。**このリポジトリは Cursor の公式プラグイン集であり、*かつ*プラグインとは何かの定義でもある：リポジトリルートに置かれ、**`.cursor-plugin/plugin.json`** マニフェストを持つスタンドアロンのディレクトリ。事実は GitHub API で一次確認（2026-10-22）：**13,442★**、フォーク 1,336、作成 2026 年 1 月、最終 push 10 月 22 日 03:27 UTC、TypeScript、そして **`license: null`**——宣言されたライセンスが一切なく、ここから vendor する者にとって重要だ。カタログは三つに分かれる：ファーストパーティの開発者ツール（`orchestrate`、`advisor`、`thermos`、`pr-review-canvas`、`cursor-sdk`、`ralph-loop`、`create-plugin`）、名前のある作者によるサードパーティのワークフロープラグイン（`pstack`、`dyl-stack`、`continual-learning`、`cli-for-agent`）、そして SaaS 統合の長い `third_party/` ブロック——Salesforce、HubSpot、Gmail、Playwright、GitHub、X、Stripe 周辺の金融ツール——のそれぞれが、専用のコネクタではなくプラグインとして出荷されている。
+
+戦略的な要点は形式の数だ：コーディングエージェントのベンダー三家がいま三家の互換性のないプラグイン形式を出荷している——Claude Code のプラグイン、Codex のスキル、そして `.cursor-plugin`。プラグインはベンダーのツール面が自社のものでなくなる場所であり、Salesforce と HubSpot がマニフェスト形のディレクトリとして現れたことは、統合マーケットプレイスがエージェント能力の配信チャネルになったシグナルだ。どのマニフェストが勝ってもカタログを相続する。どのマニフェストも標準化されておらず、三つのどれも他者が再利用できるライセンスを持たない。
+
+**`text-to-cad`：成果物としての STEP。**build123d 0.11 と Open CASCADE 7.9 の上に作られたエージェントプラグイン（MIT、Python 3.11+）で、コーディングエージェントに、3D モデルを **STEP、GLB、STL、3MF** として生成し、設計製造性チェックを走らせ、エンジニアリング図面を作り、3D プリンティング・板金・CNC サービスに接続するローカルワークフローを与える。**22,335★**、フォーク 2,184、作成 2026 年 4 月、最終 push 10 月 22 日 04:06 UTC（確認済み）。スキル群＋ローカルビューアサーバ（`cadgen mcp`）として出荷され、Claude Code、Codex、Cursor、Gemini、Grok にインストールされる——「プラグインまたはスキルフレームワークをサポートする人気エージェントすべてにサポートされる」は、いまやプロジェクトが書ける文だ。
+
+残す価値のある初が二つある。**CAD はこの波で初めて、出力形式そのものが成果物になる領域だ**——STEP は機械工場が読むもので、部品の絵ではない——したがって「エージェントが製造可能な幾何を生成した」は「エージェントがその画像を生成した」とは別の主張であり、下流の消費者は目ではなく機械だ。そして**テレメトリが既定でオン**：README は「ランダム ID を付けて使用統計とクラッシュレポートを送信する」と開示し——ファイル、パス、プロンプトは決して送らない——`uvx cadgen telemetry off` で無効化できる。開示は模範的だ。注視すべきは既定のほうで、この棚で診断がオプトアウト制になった最初のエージェントスキル成果物だからだ。
+
+Sources: [cursor/plugins](https://github.com/cursor/plugins) · [Cursor プラグインマーケットプレイス](https://cursor.com/marketplace) · [earthtojake/text-to-cad](https://github.com/earthtojake/text-to-cad) · [texttocad.dev](https://www.texttocad.dev)

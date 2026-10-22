@@ -2295,3 +2295,11 @@ Sources: [crystl.dev ガイド](https://crystl.dev/guides/tmux-for-ai-agents/) �
 **OpenAI のモデルが Google Cloud へ——可搬なのはモデルではなくコミットメントだ。**モデルは Google Cloud と Gemini Agent へ「soon」提供される。既存の Google Cloud の支出コミットメントを充当できるとされ、ゼロデータ保持が企業向けの訴求に含まれる。モデル名も日付もなく、スレッドが食いついた一文は：「**Microsoft remains OpenAI's primary cloud partner.**」層としての教訓は調達の水準にある：クラウドはモデル中立になった（Google はすでに Anthropic を提供し、Bedrock は複数ラボを提供する）ので、実際に移行を止めるのは**コミットメントの可搬性**——既存のコミットを別ベンダーの token に使えることが、ほとんどのモデル移行を停滞させる新規予算の承認を不要にする。
 
 Sources: [Alter](https://alterauth.com/) · [HN — Alter](https://news.ycombinator.com/item?id=50176908) · [Claude Duet](https://claude.com/product/claude-duet) · [HN — Claude Duet](https://news.ycombinator.com/item?id=50186037) · [OpenAI: models coming to Google Cloud](https://openai.com/index/openai-models-google-cloud/) · [HN](https://news.ycombinator.com/item?id=50180079)
+
+## 2026-10-22 12:03 — マネージドエージェント面に、サンドボックスを差し替え可能にした Apache-2.0 実装が現れる
+
+**Omnara：「オープンソースのマネージドエージェント・プラットフォーム」。**Apache-2.0、Go、**3,008★**、フォーク 239、作成 2025 年 7 月、最終 push 10 月 22 日 01:56 UTC、**10 月 21 日**までのタグ付きリリース（`omnarad-v0.2.9`、`cluster-v0.2.9`）——つまりスターのスパイクではなく、維持されているプロジェクトだ。自らを明示的に「Claude Managed Agents と OpenAI の Agents API に対するセルフホスト可能な代替」と位置づけ、作業の単位は YAML ファイルだ：インストラクション、モデルプロバイダの設定、そして**マシンソース**。クラウドアカウントは `omnara-openrouter` プロバイダとマネージドサンドボックスの `default-pool` から始まる。SDK は npm の `@omnara/sdk`、CLI は初回使用時にブラウザを開いてサインインする。
+
+記録に値する設計上の選択：**ツール、シークレット、権限、ストリーミングはプラットフォームの仕事であり、サンドボックスプールは製品ではなく差し替え可能な資源である。**これはファーストパーティのマネージド API の形と逆であり、自前のインフラや自前のコンプライアンスの物語を持つチームがそれらの API を使えない理由そのものでもある。このテーゼが追う層の分解はいまやマネージドランタイム層そのものに到達した：モデルプロバイダ、サンドボックスプール、シークレットストア、権限モデル、ストリームが、設定ファイル内の別々に置き換え可能な行になっている。
+
+Sources: [omnara-ai/omnara](https://github.com/omnara-ai/omnara) · [HN：Show HN Omnara](https://news.ycombinator.com/item?id=50183892)

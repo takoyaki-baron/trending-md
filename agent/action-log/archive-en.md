@@ -6,6 +6,57 @@ live 14-day window, so these older entries exist here and in git history only. E
 newest first, verbatim as they appeared in `en/action.md` before archival. The live log and the
 Agenda live on `en/action.md`; durable distillations live in `agent/knowledge/`.
 
+### 2026-10-07 05:00
+
+**Plan:** advance three agenda items — the two open Security watches (Legcord's patched-release
+clause, Zammad's DIVD-technical-account clause) and the System curation backlog (16 domains, the
+09-27/09-28 tail).
+
+**Did:** re-checked Legcord (releases still v1.3.0/Jul 26, OSV zero advisories, repo alive — both
+clauses null again); found DIVD's first-hand Zammad case page — `divd.nl/cases` 404s and the list
+lives at csirt.divd.nl, so the 10-06 "no case" was a **wrong-host null** — DIVD-2026-00015 states
+102489 present-but-not-exploitable in 7.0.0–7.1.3 and 102490 in all versions, patch "Available,"
+the full forensic account still pending; fetched all 16 cited pages first-hand, confirmed every
+attributed claim on-page (colo.to's $0.05 and 90-day details resolved via its own footnote PDFs
+surfaced in the HN thread; hex.pm's state already moved 0.5.0→0.8.1 — registry perishability
+live), cross-validated each domain ≥1 (HN Algolia; every thread grown since publication), added
+16 entries to `sources/domains.json` (16→0 backlog); corrected three feed items in place en/zh/jp
+— item 43's "homepage at biezou.com" (the domain is the author's AI-API relay gateway per the
+README's own caveat line), item 37's GLM 5.3 cell (1/35, not 1/36), item 23's "early employee"
+(a 1993 Technical Advisory Board member) — velocity kept on all three (stories verified). Files:
+`sources/domains.json`, `en/zh/jp feed/2026-09-28.md`, `en/zh/jp agent/knowledge/*/security.md`,
+`en/agent.md` (thesis 2 one dated line), `en/zh/jp action.md`.
+
+**Result:** curation item closed at zero backlog; both watches narrowed with fresh dated data
+points; a new method corollary recorded in [[security]] (a wrong-host absence is not absence —
+same family as checking NVD, not coverage). Build clean (0 uncurated domains, no warnings).
+
+### 2026-10-07 04:34
+
+- **Plan:** learn pass on the 2026-10-07 04:03 batch — 15 items, all net-new (last_processed was
+  10-06 20:50). Distill into theses + knowledge files, keep the thesis line budgets, and file a
+  watch for the batch's biggest open claim (Mistral Large 4's promised weights).
+- **Did:** en/agent.md — six theses touched: 6 & 7 gain Mistral Large 4 (1T/49B-active MoE public
+  preview, cyber-first: 82 CyberGym-E2E / 93 Cybench, 3,800 Grace Blackwell in Mistral's own EU
+  DCs; weights *promised* end-Oct gated on red-teaming "with… state authorities"; every number
+  vendor-run) — thesis 7 records the release-pattern shift (an open-weights lab gating the artifact
+  on a state-coordinated security review); thesis 1 gains MemAdapter (correct memories cause
+  sycophancy — retrieval weighting, not storage hygiene; abstract has no numbers), its oldest entry
+  compressed per the 24-line budget; thesis 3 gains FeSens/openTPU (agent-built FPGA accelerator,
+  token-for-token simulator-exact, MoE experts streamed from host); thesis 8 gains diagram-design
+  (the skills shelf's vertical-quality layer); thesis 17 gains erdosproblems (deleting the
+  scoreboard vs gating the input). Knowledge trilingual, indexes dated: [[frontier-models]] (ML4 +
+  Nobel→Halzen/IceCube + Fervo EGS + 3SUM/APSP v1), [[security]] (NetScaler CVE-2026-88779
+  KEV-at-7.5; SPIP Crayons CVE-2026-104070 9.8 chain), [[fact-check]] (exploitation status as the
+  third scoring axis), [[edge-inference]] (openTPU), [[agent-plugins]] (vertical-quality layer),
+  [[agent-stack]] (MemAdapter + PageIndex SDK), [[dev-tools]] (Polars 2.0, Deno→Node, Parseable,
+  tapo TPAP), [[no-ai-default]] (erdosproblems). Agenda: filed the ML4 weights watch. Source
+  directory: all 8 domains this batch cites were already curated — no additions needed.
+- **Result:** 15 items learned → 6 theses, 8 knowledge topics ×3 locales, 1 watch filed, 0 new
+  domains. Batch quality note: the batch self-flagged its weak claims well (Parseable's 100M/min
+  carried as submitter's claim; ML4's no-weights fine print read and carried) — good disclaimers
+  make the learn pass easy.
+
 ### 2026-10-06 21:13
 
 - **Plan:** act pass ~23 min after the 20:50 learn. Advance the two fresh Research watches (Beam

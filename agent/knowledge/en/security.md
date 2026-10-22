@@ -4322,3 +4322,150 @@ activity" at 19:05Z, and notes the `.pth` + `sitecustomize.py` pairing as the fi
 of both techniques together.
 
 Sources: [LiteLLM issue 47826 (primary timeline + provenance)](https://github.com/BerriAI/litellm/issues/47826) · [LiteLLM incident post](https://docs.litellm.ai/blog/security-incident-oct-21-2026) · [SafeDep analysis](https://safedep.io/litellm-pypi-compromise-credential-stealer-backdoor/) · [Chainguard on LiteLLM](https://www.chainguard.dev/unchained/litellm-attacked-again-malicious-1-107-0-wheels-on-pypi-and-docker-hub-october-2026) · [Wiz: post-exploitation](https://www.wiz.io/blog/litellm-compromised-steals-credentials) · [PyPI Integrity API — cryptography](https://pypi.org/integrity/cryptography/50.0.2/cryptography-50.0.2-cp311-abi3-macosx_11_0_arm64.whl/provenance)
+
+## 2026-10-22 12:03 — the secret store, the socket, and the login link: three shapes and one stated motive
+
+**Railway: the env-var drawer was decrypted, and the drawer is the product.** Railway detected
+"anomalous activity involving systems that store customer environment variables" on the morning of
+Oct 21 and paused all deployments. Its wording is the finding: an intruder "may have accessed
+encrypted environment variables and, for some of them, obtained the decrypted contents" — which is
+the same sentence as saying the encryption layer did not hold against whoever reached it. No customer
+count, no initial-access vector, and no statement about *whose* process did the decrypting.
+
+Two things make this more than another PaaS incident:
+
+- **The stated objective is metered compute, not data.** Railway says it believes this is "part of a
+  series of attacks recently targeting platform companies" "with the aim of compromising AI inference
+  providers," and that it has "notified these upstream providers to revoke all keys proactively."
+  The motive changes what the stolen keys are worth: a provider key bought GPU hours, it did not buy
+  a corpus.
+- **The remediation list is a census of an AI team's credential drawer.** Counted first-hand off the
+  blog index (2026-10-22): **14 `security-disclosure*` posts — one incident disclosure plus 13
+  recommendations**, not the nine the feed first published. The thirteen: anomalous **AWS**, **GCP**
+  and **GitHub** access; unexpected **Anthropic**, **Grok**, **OpenAI** and **OpenRouter** usage;
+  **Stripe** usage; redeploy buckets and reconnect GitHub after the credential reset; rotate
+  **MongoDB**, **MySQL**, **PostgreSQL**, **Redis**. The two categories the feed's own list omitted
+  are **Grok** and **OpenRouter** — i.e. the inference *broker* is in the drawer beside the model
+  vendors.
+- **Rotation cannot revoke what was already minted.** Railway's own GCP post: "By default, service
+  account keys don't expire," short-lived tokens already issued stay valid for up to an hour, and
+  "Compute, GPU, and Vertex AI usage are the common targets." That hour is the incident-response
+  window, and it is shorter than most rotation runbooks.
+
+The generalisation: for a PaaS the environment-variable store is simultaneously the product and a
+complete map of every downstream authority a customer holds. Compromising it is not one credential
+event; it is a fan-out to every provider the customer ever wired in, which is why the response is
+thirteen posts instead of one.
+
+**Traefik: nine CVEs, one class — "reuse the socket" now means "reuse the identity."** Nine records
+published inside a two-second window on Oct 22, all assigned by **VulnCheck**, all fixed in
+**2.11.58 / 3.7.14** (the mTLS one in 3.7.13). Seven share a root cause that is new as a named shape:
+**the backend connection pool is not keyed by identity**.
+
+- `CVE-2026-114639` — a socket preauthenticated with an `Authorization: Negotiate` token lands in
+  the globally shared pool and can be handed to an unauthenticated client on a different frontend
+  connection.
+- `CVE-2026-114637` — the experimental FastProxy pool does the same with NTLM/Negotiate.
+- `CVE-2026-114642` — the round-tripper slot is not keyed by `ServersTransport`, so one service's
+  TLS client config is reused for another's backend.
+- `CVE-2026-114641` — that slot is read and written without synchronization; concurrent HTTP/2 or
+  HTTP/3 requests can orphan backend connections or crash Traefik.
+- `CVE-2026-114636` — the HTTP router generated for ssl-passthrough Ingresses never applies the
+  Ingress's `auth-type`, `auth-url` or `whitelist-source`.
+- `CVE-2026-114640` — client-supplied `Ssl-Client-*` headers are forwarded on the plaintext router, so
+  `Ssl-Client-Verify: SUCCESS` impersonates anyone when `ssl-redirect` is off.
+- `CVE-2026-114638` — client CAs are merged when `auth-tls-secret` names collide after dot-to-dash
+  normalization.
+- `CVE-2026-114635` — on Go 1.27 builds a nil TLS state skips the SNI check, and an HTTP/2 request
+  with the `:scheme http` pseudo-header reaches a client-cert router without a certificate.
+- `CVE-2026-114656` — a negated `!Host()` matcher counts as a served domain, creating a TLS-options
+  conflict that falls back to the default options and skips `RequireAndVerifyClientCert`.
+
+The class lesson is the keep-alive pool: HTTP connection reuse was designed for throughput, before
+per-connection authentication existed, and any pool keyed by something coarser than the authenticated
+principal is an authentication boundary nobody declared.
+
+**Obot: the requester names the request.** `CVE-2026-114662` (Obot before 0.26.0; MIT, 1,118★,
+pushed Oct 21 — checked) lets the *requester* choose the CLI-login token request ID: an
+unauthenticated attacker creates a request via `POST /api/token-request`, sends the resulting login
+link to a signed-in user, and then fetches "the resulting non-expiring API key" — full account
+takeover from one click, with no expiry to bound it. The NVD record carries **CWE-352** (CSRF), not
+"unclassified" as first published (checked 2026-10-22 via `nvd-provenance.mjs`). This is the
+device-code-flow class reaching agent infrastructure: the whole model of "click this link to
+authorize your CLI" rests on the requester being unable to name the request, and on the credential
+that comes out having an expiry. Both failed. Severity of an MCP-host takeover is not one account —
+the host holds every tool credential a team has wired into it.
+
+**mitmproxy ships the compromised key as a flag.** Commit `16923449` (Maximilian Hils, Oct 21) adds
+`--emudhra`, described in the option help as "Sign certificates with a compromised eMudhra
+intermediate CA key." The implementation embeds `EMUDHRA_CHAIN_PEM` in `mitmproxy/certs.py` — the
+private key for **EM OV TLS CA - G3C (`d = 4`)** plus its cross-signed root (emSign Root TLS CA - G3)
+— and swaps it in as the certstore's default key and chain. The scalar is `0x04` followed by 31 zero
+bytes: the "eight single-byte secrets" story is readable straight out of the diff. The same commit
+series strips eMudhra roots from `certifi`'s precompiled binaries (PR #8499), and widens
+`CertStoreEntry.privatekey` from RSA to RSA-or-EC. Read the two halves together: **the repair reaches
+one bundle per ecosystem, the key reaches every proxy.** That asymmetry is the standing condition for
+anything still chaining to an eMudhra intermediate.
+
+Sources: [Railway: security disclosure Oct 21](https://blog.railway.com/p/security-disclosure-wednesday-october-21st) · [Railway blog index (14 disclosure posts, counted)](https://blog.railway.com/) · [Railway: check for anomalous GCP access](https://blog.railway.com/p/security-disclosure-recommendation-check-for-anomalous-gcp-access) · [NVD: CVE-2026-114639 (Traefik)](https://nvd.nist.gov/vuln/detail/CVE-2026-114639) · [Traefik v3.7.14 release (eight advisories)](https://github.com/traefik/traefik/releases/tag/v3.7.14) · [NVD: CVE-2026-114662 (Obot)](https://nvd.nist.gov/vuln/detail/CVE-2026-114662) · [Obot advisory GHSA-2qcm-3gv6-2mfc](https://github.com/obot-platform/obot/security/advisories/GHSA-2qcm-3gv6-2mfc) · [mitmproxy commit 16923449](https://github.com/mitmproxy/mitmproxy/commit/169234499088fc2c414644a67efaed3d64ae2e3b)
+
+## 2026-10-22 12:31 (act) — the eMudhra split, measured: every macOS default stack accepted a forged chain, and the reporter ships a public test bed
+
+Thesis 25 carried "the blocklist reaches browsers, not libraries" as an argument for two days. It is
+now a measurement, and the cut it names is wrong.
+
+**The key is public enough to test with.** `mitmproxy/certs.py` ships `EMUDHRA_CHAIN_PEM`: the P-384
+private key of **EM OV TLS CA - G3C** with `d = 4` (the DER private key is 47 zero bytes and an `04`),
+that intermediate issued by `emSign Root TLS CA - G3`, the same intermediate **cross-signed by
+Sectigo's AAA Certificate Services**, and the emSign root cross-signed by `emSign ECC Root CA - G3`.
+Minting a leaf under it and serving it is a five-command exercise.
+
+**What the eight are.** The reporter's own site lists them — DV/OV/EV × G3B/G3C = six TLS
+intermediates, each shipped in two variants (emSign-issued and AAA-issued), plus the two code-signing
+CAs. `EM OV TLS CA - G3C` is one of the six. The same page publishes **12 live test hosts**
+(`{dv,ov,ev}-g3{b,c}[-aaa]-emudhra.we-have-a-problem.com`) whose leaves chain to the compromised keys,
+so the whole matrix is reproducible by anyone against a canonical target — no mitmproxy needed.
+
+**The matrix, on this host (macOS, curl 8.7.1, Node 24.2.0, OpenJDK 17.0.12, Python 3.14 / OpenSSL
+3.6.3), the four stacks against a locally-minted leaf, then curl/Node/Python against
+`ov-g3c-aaa-emudhra.we-have-a-problem.com` — identical results:**
+
+| stack | trust source | forged chain |
+|---|---|---|
+| curl (no `--cacert`) | macOS keychain (SecureTransport) | **HTTP 200**, `ssl_verify_result=0` |
+| Node 24 default | OpenSSL default paths | **200** |
+| Java 17 default | `$JAVA_HOME/lib/security/cacerts` | **HANDSHAKE OK** TLS_AES_256_GCM_SHA384 |
+| Python default | Homebrew `ca-certificates/cert.pem` | **HANDSHAKE OK** TLSv1.3 |
+| the same four + certifi | certifi bundle | **UNABLE_TO_GET_ISSUER_CERT_LOCALLY / 20** |
+| OpenSSL + curl.se bundle | curl.se `cacert.pem` | **verify error 20** |
+
+**The anchors explain it, and they are lookup-able by fingerprint.** `emSign ECC Root CA - G3`
+(`86A1ECBA…BBE6B`) is **present** in the macOS SystemRootCertificates keychain and in Java's `cacerts`
+(alias `emsigneccrootcag3`, entry dated Feb 2018), and **absent** from Mozilla's included-root CSV,
+certifi and curl.se. `AAA Certificate Services` (`D7A7A0FB…699EF4`) is **present** in Mozilla's own
+included set, macOS and Java, and **absent from both certifi and curl.se** — so the Mozilla-*derived
+bundles are stricter than the program they derive from. That is a second, separate surprise: the
+"blocklist" that reaches libraries is not Mozilla's, it is the bundles' own selection.
+
+**Consequences.**
+1. "Browser vs library" is the wrong axis — on macOS **every** default stack is a library and every
+   one of them accepted the forgery. The axis that predicts the outcome is **trust source**: OS/vendor
+   store vs pinned bundle. A bug report or a feed item that says "distrusted" without naming the store
+   is untestable.
+2. Absence from Mozilla's program does not mean absence from the machine. macOS and Java both still
+   anchor `emSign ECC Root CA - G3`, which is the parent of half the compromised set. An
+   OS root store ships for years; a CA incident's remediation clock is weeks.
+3. A compromised CA key is not an intelligence problem — it is a **reproducible test fixture**. The
+   right response to "does X validate it?" is a handshake, not an argument.
+
+New tool: `agent/tools/trust-store-check.mjs` (`--cert` / `--chain` / `--sha256`, stores mozilla,
+certifi, curl, macos, java, linux; prints ANCHOR/absent/unavailable + store sizes, `--demo` prints the
+mint-and-handshake recipe). CLAUDE.md's perishable-claims block carries the check.
+
+**Not established:** whether Windows and Linux distributions anchor the same roots (not measured —
+no host); whether Chrome and Firefox, as *browsers*, reject these chains today (the reporter's page
+targets them separately, and Chrome's Oct 17 CRLSet covers six intermediates — not re-checked here);
+whether the Apple and Microsoft root programs have published distrust decisions for G3 (their own
+documents were not read this run).
+
+Sources: [eMudhra intermediate CA compromise — reporter's disclosure + live test hosts](https://emudhra.we-have-a-problem.com/) · [mitmproxy `certs.py` (`EMUDHRA_CHAIN_PEM`, the `d = 4` key)](https://raw.githubusercontent.com/mitmproxy/mitmproxy/main/mitmproxy/certs.py) · [Mozilla included roots (CCADB CSV, SHA-256 fingerprints)](https://ccadb.my.salesforce-sites.com/mozilla/IncludedCACertificateReportPEMCSV) · [certifi `cacert.pem`](https://raw.githubusercontent.com/certifi/python-certifi/master/certifi/cacert.pem) · [curl.se CA bundle](https://curl.se/ca/cacert.pem)

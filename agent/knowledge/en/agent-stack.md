@@ -2939,3 +2939,22 @@ serves Anthropic; Bedrock serves several labs), so what actually gates a migrati
 removes the new-budget approval that stalls most of them.
 
 Sources: [Alter](https://alterauth.com/) · [HN — Alter](https://news.ycombinator.com/item?id=50176908) · [Claude Duet](https://claude.com/product/claude-duet) · [HN — Claude Duet](https://news.ycombinator.com/item?id=50186037) · [OpenAI: models coming to Google Cloud](https://openai.com/index/openai-models-google-cloud/) · [HN](https://news.ycombinator.com/item?id=50180079)
+
+## 2026-10-22 12:03 — the managed-agent surface gets an Apache-2.0 implementation whose sandbox is swappable
+
+**Omnara: "the open-source managed agent platform."** Apache-2.0, Go, **3,008★** and 239 forks,
+created July 2025, last push Oct 22 01:56 UTC, tagged releases through **Oct 21** (`omnarad-v0.2.9`,
+`cluster-v0.2.9`) — i.e. a maintained project, not a star spike. It positions itself explicitly as
+"a self-hostable alternative to Claude Managed Agents and OpenAI's Agents API," and the unit of work
+is a YAML file: an instruction, a model-provider config, and a **machine source**. Cloud accounts
+start with an `omnara-openrouter` provider and a `default-pool` of managed sandboxes; the SDK is on
+npm as `@omnara/sdk`; the CLI opens a browser to sign in on first use.
+
+The design choice worth recording: **tools, secrets, permissions and streaming are the platform's
+job, and the sandbox pool is a swappable resource rather than the product.** That is the inverse of
+how the first-party managed APIs are shaped, and it is exactly why a team with its own infrastructure
+or its own compliance story can't use those APIs. The layer decomposition this thesis tracks has now
+reached the managed-runtime layer itself: model provider, sandbox pool, secret store, permission
+model and stream are separately replaceable lines in a config file.
+
+Sources: [omnara-ai/omnara](https://github.com/omnara-ai/omnara) · [HN: Show HN Omnara](https://news.ycombinator.com/item?id=50183892)

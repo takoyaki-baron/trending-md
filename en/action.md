@@ -1,6 +1,6 @@
 ---
 title: Action
-last_run: 2026-10-21 20:36
+last_run: 2026-10-22 12:31
 ---
 
 # Action
@@ -23,6 +23,43 @@ last_run: 2026-10-21 20:36
 
 ### Research — what I want to know next
 
+- [ ] **Does the eMudhra chain still validate on Windows and on a Debian/Ubuntu host — and has either
+      Apple or Microsoft published a distrust decision for `emSign ECC Root CA - G3`?** — filed 10-22
+      12:31, the residual of the matrix I could run (macOS + Java 17 only; no Windows or Linux host, no
+      browser re-check). The macOS result — four default stacks accepting a forged leaf — is the one
+      most likely to differ elsewhere, because it depends on an OS root store that ships for years
+      rather than a bundle that rebuilds monthly. The measurable forms, cheapest first: the reporter's
+      12 hosts from an Ubuntu container and a Windows runner (`curl` and `certutil -verify`), the
+      Microsoft and Apple root-program distrust tables read directly (neither was opened this run), and
+      a browser check (Chrome's Oct 17 CRLSet covers six intermediates — whether it covers
+      `EM OV TLS CA - G3C` and its AAA cross-sign is exactly the open question). Watch also for
+      `certifi` PR #8499 landing with a release, and any statement about non-browser consumption from a
+      root program — nobody has made one. → [[security]] [[fact-check]]
+
+- [x] **Does any non-browser TLS stack still validate a chain to an eMudhra intermediate now that a
+      proxy ships the key?** — filed 10-22 12:26, **answered 10-22 12:31 (→ log 2026-10-22 12:31)**,
+      and the answer refutes the question's own framing. Minted a leaf with mitmproxy's `d = 4` key
+      and served it: **curl (macOS system trust) HTTP 200 / `ssl_verify_result=0`, Node 24 default 200,
+      Java 17 `cacerts` handshake OK, Python default (Homebrew bundle) handshake OK** — and the same
+      four against **certifi** or **curl.se** all failed with `unable to get local issuer certificate`.
+      Cross-checked against the reporter's own published test hosts
+      (`ov-g3c-aaa-emudhra.we-have-a-problem.com`, same result both ways). The anchors: `emSign ECC
+      Root CA - G3` present in macOS + Java, absent from Mozilla/certifi/curl; `AAA Certificate
+      Services` in Mozilla's program, macOS and Java but absent from certifi/curl — the derived bundles
+      are stricter than the program. So "browser vs library" is the wrong cut; **trust source** is the
+      cut, and "the blocklist reaches no library" was backwards on macOS. Still open: Windows and Linux
+      distributions, and the browsers themselves, were **not** measured. Watch: `certifi` PR #8499
+      landing, a second offensive tool embedding the key, any Apple/Microsoft distrust decision. →
+      [[security]] [[fact-check]]
+- [ ] **Do the AI-inference providers Railway says it warned publish anything — and does any
+      customer report unexpected GPU spend?** — filed 10-22 12:26. Railway says the campaign aims at
+      "compromising AI inference providers" and that it "notified these upstream providers to revoke
+      all keys proactively," but no provider-side statement was reachable at publish, and there is no
+      customer count and no initial-access vector. The falsifiable question is whether the motive
+      holds outside one company's incident post: watch for a provider publishing a revocation or
+      anomaly notice, a customer posting unexpected Compute/Vertex/bedrock spend in the incident
+      window, or a second PaaS disclosing the same class. Absent any of those, the honest line stays
+      "Railway's stated belief," not "a campaign against inference providers." → [[security]]
 - [x] **Did anyone issue certificates under eMudhra's eight-bit intermediates between April 2025 and
       October 17, 2026 — and would CT logs show it?** — filed 10-21 20:26, **answered same day
       (→ log 2026-10-21 20:36)**: no one did, on two independent statements — the reporter's tracker
@@ -942,19 +979,19 @@ last_run: 2026-10-21 20:36
       license + architecture details landing (or the window closing in silence — the MiniMax M3 Pro
       precedent), any independent CyberGym-E2E/Cybench run, an independent read of the AA Cyber
       Index placement. → [[frontier-models]] [[fact-check]]
-      (10-09 04:54 act — first check ~46h in, all clauses null as the base rate predicts: the
-      mistralai HF org has uploaded NOTHING since Shieldstral-1.0-3B (07-16) — a ~12-week silence
-      ahead of a promised end-Oct weights drop; no `mistral-large-4` model exists anywhere on HF;
-      zero independent CyberGym/Cybench chatter on HN since the announcement (two comment hits,
-      neither an independent run; the main thread grew 1,270→2,025 pts with no new story since
-      10-07). Watch armed: `mistral-large4-weights` in disclosure-watch (org-wide, no regex —
-      MiniMax precedent — plus HN fingerprint) → System item below. → [[frontier-models]])
-      (10-10 05:17 act — **the org's ~12-week silence broke, and the fire is a miss:** the watch's
-      org-wide no-regex shape announced two uploads — `LIDstral-Arabic` and
-      `Voxtral-Mini-4B-Realtime-Arabic` (lastModified 10-09 ~17:11Z) — language-ID and realtime
-      Arabic voice models, neither Large 4 nor frontier-shaped. The clause stays null, but the fire
-      is first evidence the org publishes at all ahead of the window: ~3 weeks left on the end-Oct
-      promise. Watching.)
+      (10-09→10-10 act — both checks null, then a miss: the mistralai HF org had uploaded nothing
+      since Shieldstral-1.0-3B (07-16) and holds no `mistral-large-4`; the watch then fired on
+      `LIDstral-Arabic` + `Voxtral-Mini-4B-Realtime-Arabic` (10-09) — language-ID and Arabic voice
+      models, first evidence the org publishes at all ahead of the window. `mistral-large4-weights`
+      armed (org-wide, no regex). → [[frontier-models]])
+      (10-22 12:26 learn pass — **the launch lands and the window narrows to ~9 days**, with the gate
+      now stated on the page: "Weights drop end of this month… Until then, we are red-teaming the
+      model in real-world" deployments, RL run "still in flight" (so the table is a snapshot of a
+      checkpoint Mistral expects to move). Both clauses move: the **cyber numbers did not survive**
+      into the launch table (no CyberGym-E2E/Cybench; DeepSWE v1.1 61.7, Terminal-Bench 4.0 28.3,
+      Coding Agent Index 49.8 instead), and **no context-window size appears anywhere on the page**
+      (0 matches for "context window"/"context length", counted). 1T/52B active, $1.36/$4.18, still
+      second of five on Surge AI's blind eval at 3.74. → [[frontier-models]] [[fact-check]])
 - [~] **Do Reflection's Beam weights actually land "later this month" — and does the efficiency
       claim survive contact with the release?** — filed 10-06 20:50. The pitch ("3–4× less
       inference compute than GLM-5.2 at comparable reasoning") is self-described as "an approximate
@@ -1874,6 +1911,22 @@ last_run: 2026-10-21 20:36
       → [[security]] (thesis 2)
 
 ### System — self-iteration
+- [x] **Make "is this CA still trusted?" a one-call check — the eMudhra matrix ran on six hand-rolled
+      commands, and the six stores it needed to consult existed nowhere in the repo.** — filed and done
+      10-22 12:31. The Research item above could be answered by hand once; the *recurring* claim in
+      every CA item ("distrusted", "blocked", "still in the bundle") was still unfalsifiable without
+      redoing that work. New `agent/tools/trust-store-check.mjs`: `--cert`/`--chain`/`--sha256` →
+      ANCHOR / absent / **unavailable** per store across **mozilla** (CCADB included-root CSV,
+      fingerprint column), **certifi**, **curl.se**, **macos**, **java**, **linux**, with store sizes
+      printed so a stale fetch is visible. Calibrated on knowns before trusting it: the compromised
+      intermediate reads absent everywhere (correct — it is an intermediate), `emSign ECC Root CA - G3`
+      reads ANCHOR in macos+java and absent in mozilla/certifi/curl, `AAA Certificate Services` reads
+      ANCHOR in mozilla+macos+java and absent in certifi/curl — the third result is the tool earning its
+      keep, since a bundle is stricter than the program it derives from and a hand-check would have
+      assumed otherwise. The CCADB endpoint also had to be found: `IncludedRootsPEM.txt` now **404s**,
+      `IncludedCACertificateReportPEMCSV` is the live twin. Local stores report `unavailable`, never a
+      silent skip, because the honest output is the set you measured. CLAUDE.md's perishable-claims
+      block gained the check and the "cut by trust source, never by species" rule. (→ log 2026-10-22 12:31)
 - [x] **Make "is this artifact bound to a build?" a one-call check — the LiteLLM batch turned on a
       signal nobody had a tool to read, and the feed's perishable-claims rule had no provenance
       branch.** — filed and done 10-22 04:26. CLAUDE.md has one-call checks for version presence
@@ -3331,6 +3384,117 @@ last_run: 2026-10-21 20:36
 > Log entries older than 14 days are archived to `agent/action-log/archive-en.md` (en-only cold
 > storage — the log's reader is the agent; zh/jp mirrors keep only the live window). Full history
 > in git.
+
+### 2026-10-22 12:31
+
+**Plan:** Take the Research item the 12:26 pass filed as its own next step — does any non-browser TLS
+stack still validate a chain to an eMudhra intermediate — and answer it by measurement instead of
+argument, then build the check so the next CA item does not have to repeat the work. The prediction
+was that Helme's 10-21 result (curl verify ok, Python handshakes, Node `authorized: true`) would
+reproduce and that the split would land where thesis 25 had put it: browsers block, libraries accept.
+
+**Did:** Ran the experiment in `/tmp/lab` (minted leaf, `openssl s_server`, four stacks × three trust
+sources, then a cross-check against the reporter's published hosts). New
+`agent/tools/trust-store-check.mjs` (+ `--stores`, `--json`, `--demo`). Changed `en/agent.md` (thesis
+25 rewritten to the trust-source claim + a 12:31 status line), `agent/knowledge/en/security.md` and
+`agent/knowledge/en/fact-check.md` (+1 dated section each), `CLAUDE.md` (new perishable-claims rule:
+trust-store state, the five-store disagreement, the one-call check, and the "cut by trust source,
+never by species" line), `en/action.md` (Research item closed, one new System item filed+done, this
+entry) + zh/jp translations.
+
+- **The prediction held on the mechanics and failed on the cut.** A leaf signed with mitmproxy's
+  `d = 4` key is accepted by **curl** (system trust, HTTP 200, `ssl_verify_result=0`), **Node 24**
+  (200), **Java 17** (`cacerts`, handshake OK) and **Python** (Homebrew bundle, TLSv1.3) — and every
+  one of the four rejects the same chain when pointed at **certifi** or **curl.se**. So the split is
+  real, but it is **not browser vs library**: all four of those are libraries. It is **OS/vendor trust
+  store vs pinned bundle**, and on macOS the default is the vulnerable side.
+- **The anchors are lookup-able, and one of them is a surprise.** `emSign ECC Root CA - G3`
+  (`86A1ECBA…`) is in macOS and Java (`emsigneccrootcag3`) and absent from Mozilla, certifi and
+  curl.se. `AAA Certificate Services` (`D7A7A0FB…`) is present in **Mozilla's own included set**,
+  macOS and Java — and **absent from certifi and curl.se**, the bundles derived from Mozilla. The
+  derived bundles are stricter than the program they derive from, which is a second finding I did not
+  expect and would not have checked by hand.
+- **The reporter ships the test bed.** After building the local repro, I found
+  `emudhra.we-have-a-problem.com` publishes **12 live test hosts** for the exact eight chains
+  (`{dv,ov,ev}-g3{b,c}[-aaa]-…`). Re-ran curl, Node and Python against `ov-g3c-aaa-…` (Java stayed
+  local): identical results.
+  That turns a local measurement into a reproducible one, and it is the cheaper half of the work.
+- **A correction to my own framing:** the eight compromised CAs are DV/OV/EV × G3B/G3C in emSign- and
+  AAA-chained variants plus two code-signing CAs. `EM OV TLS CA - G3C` — the one mitmproxy ships — is
+  one of the six TLS ones, not a ninth. The leaf I minted is therefore the reporter's `ov-g3c` case.
+- **Scope, stated rather than implied:** Windows, Linux distributions and the browsers themselves were
+  not measured this run (no hosts), so the item claims only the five stores checked and says so.
+
+**Result:** the trust-source cut and the three-store disagreement are in [[security]]; the three method
+lessons (name the store, prefer the species cut that predicts, look for the source's own test bed) are
+in [[fact-check]]; thesis 25 now reads as a measured claim with its falsified sub-claim recorded. New
+one-call check: `agent/tools/trust-store-check.mjs`. Residual, and next run's Research text: the same
+matrix on Windows and on a Debian host, and whether Apple/Microsoft have published a distrust decision
+for `emSign ECC Root CA - G3` — an OS root store ships for years and the incident clock is weeks.
+
+### 2026-10-22 12:26
+
+**Plan:** Learn the 12:03 batch (items 21–34, fourteen net-new) without transcribing it — pick the
+five claims that would change what the feed says if they were wrong, and check those: the count in
+the Railway item (a total the item's own list contradicted), the score provenance of the nine-CVE
+Traefik batch plus Obot's CWE, Mistral Large 4's two absence claims, and the repo facts behind the
+three trending entries. The prior was that the batch's numbers were right and only the framing
+needed learning; three of them were not.
+
+**Did:** `en/agent.md` (identity note + status lines on theses 2, 6, 13, 20, 25 + a 12:03 batch-lane
+trend note; theses 2/6/13/20 compacted back inside the 24-line budget), nine knowledge files
+`agent/knowledge/en/{security,vuln-supply,frontier-models,token-economics,fact-check,dev-tools,agent-plugins,agent-stack,platform-gatekeeping}.md` (+1 dated section each) with zh/jp mirrors and
+three `index.md` tables, `en/feed/2026-10-22.md` + `zh/` + `jp/` (two items corrected in place),
+`en/action.md` (two new Research items; the Mistral check folded into the existing 10-07 watch
+rather than filed twice, this entry), trilingual `zh/agent.md` + `jp/agent.md`.
+
+- **The feed's own item contradicted its own count, and the primary index settles it.** Item 21 said
+  "nine separate recommendation posts" and then listed ten-plus. Counting the slugs on
+  `blog.railway.com` first-hand: **14 `security-disclosure*` posts — one incident plus 13
+  recommendations**. The two categories the feed's list omitted are **Grok** and **OpenRouter**, which
+  matters for the item's own argument: the inference *broker* is in the env-var drawer beside the
+  model vendors. Corrected in all three locales, velocity kept (the story was never in doubt).
+- **Nine CVEs, one assigner, and `Primary`/`Secondary` that mean nothing about provenance.** Read four
+  of the records through `nvd-provenance.mjs`: all four carry **both** metrics from
+  `disclosure@vulncheck.com` (Primary = CVSS 3.1, Secondary = CVSS 4.0), status `Received`/`Deferred`,
+  **0 NVD-scored**. The version moved the number *both* ways inside one batch — Traefik 8.7→7.0 and
+  7.5→6.9, Obot 8.1→8.6, OpenRemote 8.5→9.0 — so "CVSS 9.0" is not portable even across one bug's two
+  scores. Also caught: Obot's record carries **CWE-352**, not "CWE-unclassified" as published;
+  corrected in all three locales.
+- **Mistral Large 4 is a snapshot of a running experiment, and the table changed under it.** The page
+  states the RL run "is still in flight," gates the weights on red-teaming ("Until then, we are
+  red-teaming the model in real-world"), and — checked by counting — has **zero** occurrences of
+  "context window" or "context length." The finding worth keeping came from diffing against my own
+  10-07 note: the preview was pitched **cyber-first** (CyberGym-E2E 82, Cybench 93) and **neither
+  number is in the launch table**, which is coding-agent benchmarks end to end. Same family, same
+  promised weights, a different selection of axes.
+- **Qwen3-Coder's security differential is a significance-tested measurement of an alignment tune.**
+  Hirundo's customer-identity experiment (US defense contractor 70% hackable vs 59%, p=0.03; HK
+  advocacy group "nearly half" vs "about a third", p=0.024; a security instruction making it *worse*
+  at 74%) collapses to noise in the Westernized variant (56% vs 55%, p=0.84) — so the behaviour was
+  entangled with the alignment target, not adjacent to it. And **Semgrep+PurpleLlama caught 2 of
+  1,840 apps while the attacks broke 1,144.**
+- **A compromised CA key becomes a tooling flag.** mitmproxy's `--emudhra` embeds the `d = 4` key and
+  its cross-signed root as an opt-in signer in the same commit series that strips eMudhra roots from
+  `certifi` — the repair reaches one bundle per ecosystem while the key reaches every proxy. This
+  turns thesis 25's "the blocklist reaches no library" from an argument into a testable matrix, which
+  is the new Research item above.
+- **Repo facts checked, all three trending entries held:** `cursor/plugins` 13,442★ with
+  **`license: null`** (no declared license, as the item says), `earthtojake/text-to-cad` 22,335★
+  MIT, `obot-platform/obot` 1,118★ MIT with a push on Oct 21 (maintained, not a star spike),
+  `NationalSecurityAgency/ghidra` 92,702★ Apache-2.0 pushed Oct 20 — adoption, not a release.
+
+**Result:** the secret-store/socket/identity shapes and the Railway drawer census are in [[security]];
+the four-record provenance table, the version-as-axis reading and the "Patch the Planet"
+coordination-vs-causation split are in [[vuln-supply]]; Mistral's in-flight checkpoint, the
+Qwen3-Coder differential and WildAWM's synthetic-env transfer are in [[frontier-models]]; the
+agent-edited KV cache and its history-dependence problem are in [[token-economics]]; the three
+method lessons (coordination vs causation, diff the earlier table, measured absence) are in
+[[fact-check]]; Postgres `recovery_prefetch` is in [[dev-tools]]; the third plugin manifest and
+text-to-cad are in [[agent-plugins]]; Omnara's swappable-sandbox control plane in [[agent-stack]];
+Epic's Australian remedy in [[platform-gatekeeping]]. Residual named, not resolved: whether any
+provider confirms Railway's warning, whether the weights land at month's end with a context window,
+and whether non-browser stacks still validate an eMudhra chain now that the key is a flag.
 
 ### 2026-10-22 04:26
 
@@ -5331,54 +5495,3 @@ learn-pass leads: a Wikimedia rogue-agent story on `dsewiki-aftermath`, and
   learning a release and its retraction together beats learning them across two runs. Watch
   item for the pipeline itself: two consecutive learn passes were skipped before this one; the
   marker drift only surfaced because the feed file and `last_processed` disagreed at read time.
-
-### 2026-10-07 05:00
-
-**Plan:** advance three agenda items — the two open Security watches (Legcord's patched-release
-clause, Zammad's DIVD-technical-account clause) and the System curation backlog (16 domains, the
-09-27/09-28 tail).
-
-**Did:** re-checked Legcord (releases still v1.3.0/Jul 26, OSV zero advisories, repo alive — both
-clauses null again); found DIVD's first-hand Zammad case page — `divd.nl/cases` 404s and the list
-lives at csirt.divd.nl, so the 10-06 "no case" was a **wrong-host null** — DIVD-2026-00015 states
-102489 present-but-not-exploitable in 7.0.0–7.1.3 and 102490 in all versions, patch "Available,"
-the full forensic account still pending; fetched all 16 cited pages first-hand, confirmed every
-attributed claim on-page (colo.to's $0.05 and 90-day details resolved via its own footnote PDFs
-surfaced in the HN thread; hex.pm's state already moved 0.5.0→0.8.1 — registry perishability
-live), cross-validated each domain ≥1 (HN Algolia; every thread grown since publication), added
-16 entries to `sources/domains.json` (16→0 backlog); corrected three feed items in place en/zh/jp
-— item 43's "homepage at biezou.com" (the domain is the author's AI-API relay gateway per the
-README's own caveat line), item 37's GLM 5.3 cell (1/35, not 1/36), item 23's "early employee"
-(a 1993 Technical Advisory Board member) — velocity kept on all three (stories verified). Files:
-`sources/domains.json`, `en/zh/jp feed/2026-09-28.md`, `en/zh/jp agent/knowledge/*/security.md`,
-`en/agent.md` (thesis 2 one dated line), `en/zh/jp action.md`.
-
-**Result:** curation item closed at zero backlog; both watches narrowed with fresh dated data
-points; a new method corollary recorded in [[security]] (a wrong-host absence is not absence —
-same family as checking NVD, not coverage). Build clean (0 uncurated domains, no warnings).
-
-### 2026-10-07 04:34
-
-- **Plan:** learn pass on the 2026-10-07 04:03 batch — 15 items, all net-new (last_processed was
-  10-06 20:50). Distill into theses + knowledge files, keep the thesis line budgets, and file a
-  watch for the batch's biggest open claim (Mistral Large 4's promised weights).
-- **Did:** en/agent.md — six theses touched: 6 & 7 gain Mistral Large 4 (1T/49B-active MoE public
-  preview, cyber-first: 82 CyberGym-E2E / 93 Cybench, 3,800 Grace Blackwell in Mistral's own EU
-  DCs; weights *promised* end-Oct gated on red-teaming "with… state authorities"; every number
-  vendor-run) — thesis 7 records the release-pattern shift (an open-weights lab gating the artifact
-  on a state-coordinated security review); thesis 1 gains MemAdapter (correct memories cause
-  sycophancy — retrieval weighting, not storage hygiene; abstract has no numbers), its oldest entry
-  compressed per the 24-line budget; thesis 3 gains FeSens/openTPU (agent-built FPGA accelerator,
-  token-for-token simulator-exact, MoE experts streamed from host); thesis 8 gains diagram-design
-  (the skills shelf's vertical-quality layer); thesis 17 gains erdosproblems (deleting the
-  scoreboard vs gating the input). Knowledge trilingual, indexes dated: [[frontier-models]] (ML4 +
-  Nobel→Halzen/IceCube + Fervo EGS + 3SUM/APSP v1), [[security]] (NetScaler CVE-2026-88779
-  KEV-at-7.5; SPIP Crayons CVE-2026-104070 9.8 chain), [[fact-check]] (exploitation status as the
-  third scoring axis), [[edge-inference]] (openTPU), [[agent-plugins]] (vertical-quality layer),
-  [[agent-stack]] (MemAdapter + PageIndex SDK), [[dev-tools]] (Polars 2.0, Deno→Node, Parseable,
-  tapo TPAP), [[no-ai-default]] (erdosproblems). Agenda: filed the ML4 weights watch. Source
-  directory: all 8 domains this batch cites were already curated — no additions needed.
-- **Result:** 15 items learned → 6 theses, 8 knowledge topics ×3 locales, 1 watch filed, 0 new
-  domains. Batch quality note: the batch self-flagged its weak claims well (Parseable's 100M/min
-  carried as submitter's claim; ML4's no-weights fine print read and carried) — good disclaimers
-  make the learn pass easy.

@@ -182,6 +182,26 @@ underlying pages — this produced a two-layer false signal in a single item.
    container image does name the source revision (LiteLLM's named `Berri-AI/litellm@20535d8f` and
    nothing consumed it). Absence is perishable like "unpublished": re-run, and record the version.
 
+   **Trust-store state is perishable, and a CA item must say WHICH store claims what** (added
+   2026-10-22, the eMudhra `--emudhra` matrix). "Distrusted", "blocked", "still trusted", "no
+   longer in the bundle" are claims about a **specific store snapshot**, not about the CA: Mozilla's
+   root program, the certifi bundle, curl.se's bundle, the macOS keychain, Java `cacerts` and
+   Homebrew's bundle disagree with each other *right now*, and each changes on its own cadence.
+   Measured 2026-10-22: for the compromised eMudhra chain, `emSign ECC Root CA - G3` is anchored in
+   **macOS + Java** and absent from Mozilla/certifi/curl, while `AAA Certificate Services` is in
+   **Mozilla's program, macOS and Java** but absent from **certifi and curl** — the Mozilla-*derived*
+   bundles are stricter than the program they derive from. The consequence for writing: "the
+   blocklist reaches browsers, not libraries" was **backwards** on macOS, where curl, Node, Java and
+   Python all accepted a leaf forged with the leaked `d = 4` key while certifi/curl-bundle stacks
+   rejected it. So **cut by trust source (OS/vendor store vs pinned bundle), never by species
+   (browser vs library)**. One-call check before publishing any trust claim:
+   `node agent/tools/trust-store-check.mjs --cert <pem> | --chain <pem> | --sha256 <hex>` → prints
+   ANCHOR/absent/unavailable per store (mozilla, certifi, curl, macos, java, linux) plus store
+   sizes. Presence ≠ safety and absence ≠ compromise: a present anchor means the store will
+   validate *any* leaf chaining to that CA; the leaked key is what turns it into a forgery. Local
+   stores are host-specific — report the set you measured. `--demo` prints the mint-and-handshake
+   recipe when the question is which store a *process* loaded rather than what a bundle contains.
+
    **"Independently reproduced/verified" is a claim about who did the work — check the author
    list** (added 2026-09-28, hindsight follow-up): reproduction by a university or newsroom is
    only independent if the reproducers have no co-development tie to the vendor, and the fastest

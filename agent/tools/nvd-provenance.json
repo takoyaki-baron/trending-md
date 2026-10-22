@@ -455,6 +455,86 @@
    "lastStatus": null,
    "lastMetrics": [],
    "lastKev": null
+  }  ,
+  {
+   "id": "CVE-2026-114635",
+   "why": "Traefik SNI check skipped when TLS state is nil -> HTTP/2 :scheme http reaches a client-cert router without presenting one, CVSS 3.1 8.7 VulnCheck-assigned, fixed 2.11.58/3.7.14 (feed 2026-10-22). Received, unanalyzed; watch for an nvd@nist.gov metric and whether NVD keeps 8.7 or re-rates the Go-1.27-only precondition.",
+   "seed": "2026-10-22",
+   "lastStatus": null,
+   "lastMetrics": [],
+   "lastKev": null
+  }  ,
+  {
+   "id": "CVE-2026-114637",
+   "why": "Traefik experimental FastProxy pool fails to pin NTLM/Negotiate backend connections to their frontend connection, CVSS 3.1 8.7 VulnCheck-assigned, fixed 3.7.14 (feed 2026-10-22). Received, unanalyzed; one of five pool-identity bugs in the same batch — watch whether NVD scores them identically or splits them.",
+   "seed": "2026-10-22",
+   "lastStatus": null,
+   "lastMetrics": [],
+   "lastKev": null
+  }  ,
+  {
+   "id": "CVE-2026-114639",
+   "why": "Traefik: a socket preauthenticated with Authorization: Negotiate enters the globally shared backend pool and can be handed to an unauthenticated client, CVSS 3.1 8.7 VulnCheck-assigned, fixed 2.11.58/3.7.14 (feed 2026-10-22). Received, unanalyzed.",
+   "seed": "2026-10-22",
+   "lastStatus": null,
+   "lastMetrics": [],
+   "lastKev": null
+  }  ,
+  {
+   "id": "CVE-2026-114640",
+   "why": "Traefik Ingress-NGINX provider forwards client-supplied Ssl-Client-* headers on the plaintext HTTP router -> mTLS impersonation when ssl-redirect is off, CVSS 3.1 8.7 VulnCheck-assigned, fixed 3.7.14 (feed 2026-10-22). Received, unanalyzed.",
+   "seed": "2026-10-22",
+   "lastStatus": null,
+   "lastMetrics": [],
+   "lastKev": null
+  }  ,
+  {
+   "id": "CVE-2026-114641",
+   "why": "Traefik NTLM/Kerberos round-tripper slot read/written without synchronization -> orphaned backend connections or crash, CVSS 3.1 3.7 (4.0 6.3) VulnCheck-assigned, fixed 2.11.58/3.7.14 (feed 2026-10-22). Received, unanalyzed; scored far below its six siblings in the same batch, so watch whether NVD agrees with the 3.7.",
+   "seed": "2026-10-22",
+   "lastStatus": null,
+   "lastMetrics": [],
+   "lastKev": null
+  }  ,
+  {
+   "id": "CVE-2026-114642",
+   "why": "Traefik round-tripper stored in a client-connection slot not keyed by ServersTransport -> one service TLS client config reused for another backend, CVSS 3.1 8.7 VulnCheck-assigned, fixed 2.11.58/3.7.14 (feed 2026-10-22). Received, unanalyzed.",
+   "seed": "2026-10-22",
+   "lastStatus": null,
+   "lastMetrics": [],
+   "lastKev": null
+  }  ,
+  {
+   "id": "CVE-2026-114656",
+   "why": "Traefik mTLS bypass: a negated !Host() matcher counts as a served domain, TLS-options conflict falls back to defaults and skips RequireAndVerifyClientCert, CVSS 3.1 7.5 VulnCheck-assigned, fixed 3.7.13 (feed 2026-10-22). Received, unanalyzed.",
+   "seed": "2026-10-22",
+   "lastStatus": null,
+   "lastMetrics": [],
+   "lastKev": null
+  }  ,
+  {
+   "id": "CVE-2026-114658",
+   "why": "Grav Login plugin missing authorization in login.invite -> page authors obtain superuser accounts via an invitation form in frontmatter, CVSS 3.1 8.8 VulnCheck-assigned, fixed 3.9.13 (feed 2026-10-22). Received, unanalyzed.",
+   "seed": "2026-10-22",
+   "lastStatus": null,
+   "lastMetrics": [],
+   "lastKev": null
+  }  ,
+  {
+   "id": "CVE-2026-114661",
+   "why": "OpenRemote missing authorization on gateway tunnel endpoints -> any authenticated user can open persistent bidirectional TCP circuits into an edge gateway network, CVSS 4.0 9.0 / 3.1 8.5 VulnCheck-assigned, fixed 1.31.0 (feed 2026-10-22). Deferred, unanalyzed.",
+   "seed": "2026-10-22",
+   "lastStatus": null,
+   "lastMetrics": [],
+   "lastKev": null
+  }  ,
+  {
+   "id": "CVE-2026-114662",
+   "why": "Obot CLI login token-request ID chosen by the requester -> unauthenticated attacker sends a login link and fetches a non-expiring API key (account takeover), CVSS 4.0 8.6 / 3.1 8.1 VulnCheck-assigned, fixed 0.26.0 (feed 2026-10-22). Deferred, unanalyzed.",
+   "seed": "2026-10-22",
+   "lastStatus": null,
+   "lastMetrics": [],
+   "lastKev": null
   }
  ]
 }

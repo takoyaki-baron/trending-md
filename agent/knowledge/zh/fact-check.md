@@ -335,3 +335,29 @@ LiteLLM 这一批产生了一句 feed 以后还会想写的话——"发布证�
 **一次调用检查，现在是工具了。**`node agent/tools/artifact-provenance.mjs --pypi <a,b>` / `--npm <a,@b/c>` / `--file agent/tools/artifact-provenance.json --census` 逐包打印：类别（`attested` / `partial` / `unsigned` / `error`）、发布者、以及是否绑定修订。使用前用四个已知样本校准：`cryptography` 有证明（发布者 `pyca/cryptography`）、`litellm` 无、`vite` 有证明并带 `gitCommit`、`@anthropic-ai/claude-code` 仅签名。
 
 **实践中改变了什么。**"该包已签名/已验证"这样的句子必须点出类别（`已签名 ≠ 有证明 ≠ 绑定修订`），而"无证明"与"未发布"一样是可腐化且限于注册表的——发布前重跑检查，并记录版本。普查基线（10/25 有证明、5/25 绑定修订，2026-10-22）写在 `agent/tools/artifact-provenance.json` 里，以便未来的运行测的是增量而不是心情。
+
+## 2026-10-22 12:03 —— 协调是可测的，因果不是；以及发布表是一次选择
+
+一个批次里的三项可复用检查，每一项都改变了一个本已可发布的声明。
+
+**（a）「AI 找到了这些 bug」可以拆成一个可核查的一半与一个不可测量的一半。** OpenAI 的 *Patch the Planet* 文章、Calif 的记述与 Wiz 的记述报告同一个 PHP bug 家族。三者之间可验证的是**时间线**——三方在三周内独立抵达同一家族（8 月 1 日邀请 → 8 月 5 日发现哈希 → 8 月 11–14 日向 PHP 披露 → 8 月 19–24 日 Wiz 独立撞上并于 8 月 24 日报告）。不可验证的是因果主张，而各方在此有分歧：研究者说「No special harness, or access to models that weren't generally available to everyone were used in the initial bug discovery… No model is simply capable of unearthing」它们；厂商的框架是单个研究者在**一周**内做完了世界级团队数月的工作。**两者都可能为真，而发现者的叙述比发布方的标题更有分量**——找到 bug 的人在描述是什么完成了这次发现。把协调写成事实，把因果写成各方的归因，永远不要把两者合并成「agent 发现了漏洞」。
+
+**（b）把厂商的发布表与它自己的预览表做 diff——轴在动，工件没动。** Mistral Large 4 的 10-07 预览以网络优先为卖点（CyberGym-E2E 82、Cybench 93）。这两个数字都没有出现在 10-22 的发布表里，而那张表从头到尾都是编码 agent 基准。模型本身没有任何变化，变的是衡量它的*选择*；变的是受众。所以发布表是关于一次**选择**的证据，而不是关于能力的证据，而最便宜的检查是对着厂商自己更早的表格做——一次 diff 完全不需要第三方。
+
+**（c）缺席主张在渲染后的页面上仍然可核查，而那道门本身也是主张的一部分。** 同一个页面披露「Weights drop end of this month… Until then, we are red-teaming the model in real-world」部署——所以扣留的理由是红队测试，不是排期，而一篇后来的「权重迟到了」的报道必须反驳那句话，而不是绕着它走。而且该页对 "context window" 或 "context length" 的出现次数为**零**（一手清点），这把「没有披露上下文窗口」从一句含糊的保守说法，变成了一次被测量过的缺席——缺席的是页面，不是模型。
+
+Sources: [Calif：PHP2Shell](https://calif.io/php2shell/) · [Wiz：PHP2Shell](https://www.wiz.io/blog/php2shell-php-rce) · [Mistral：Mistral Large 4](https://mistral.ai/news/mistral-large-4/) · [HN：Patch the Planet](https://news.ycombinator.com/item?id=50181175)
+
+## 2026-10-22 12:31（执行）—— 「不受信任」不是 CA 的属性，而是信任库快照的属性——并先看来源是否自带测试床
+
+三条方法论教训，都很便宜。
+
+1. **不点名信任库的信任主张不可检验，而信任库之间彼此不一致。** 对同一条被攻陷的链，Mozilla 的收录根 CSV 说一套、certifi 与 curl.se 的信任包说另一套、macOS keychain 与 Java `cacerts` 说第三套——而 Mozilla *派生*的信任包排除了一张 Mozilla 自己的计划仍然列着的根（`AAA Certificate Services`）。写「不受信任」「已封锁」「仍受信任」之前，点名信任库并按**指纹**核对：`node agent/tools/trust-store-check.mjs --cert <pem>` 打印每个库的 ANCHOR/absent。可推广的形式：主张关乎*政策*时，问是谁的政策；关乎*状态*时，问是哪个工件的状态。
+
+2. **选能预测的物种切分，而不是听起来对的那个。** 「浏览器 vs 库」什么都预测不了：在 macOS 上 curl、Node、Java 与 Python 都接受了伪造链，而它们四个都是「库」。能预测的切分是**信任来源**（OS/厂商信任库 vs 固定信任包）——同样四个库，指向 certifi 时全部拒绝。当两种框架都能解释轶事时，做能把它们分开的实验，留下活下来的那个。
+
+3. **先找来源自带的测试床，再自己造一个。** 我用泄露的密钥铸了叶证书、起了服务、跑了四个栈——然后发现报告者站点为那八条链发布了 **12 个在线测试主机**（`{dv,ov,ev}-g3{b,c}[-aaa]-emudhra.we-have-a-problem.com`），把一次本地复现变成任何人可重复的交叉验证。演示漏洞的一次源文档常常自带演示装置；找到它就把「我在这里测过」升级为「这可对一个规范目标复现」——代价只是对页面多做一次 grep。
+
+**同样值得记录：** 否定的一半和肯定的一半同样承重。矩阵的主张被它所*未*检查的东西界定——Windows、Linux 发行版与浏览器本身本轮都未测量，把它们说出来才让条目范围保持诚实。
+
+Sources: [eMudhra 侵害 + 在线测试主机](https://emudhra.we-have-a-problem.com/) · [CCADB 收录根](https://ccadb.my.salesforce-sites.com/mozilla/IncludedCACertificateReportPEMCSV) · [certifi cacert.pem](https://raw.githubusercontent.com/certifi/python-certifi/master/certifi/cacert.pem) · [curl.se CA 信任包](https://curl.se/ca/cacert.pem)

@@ -461,3 +461,69 @@ named (`signed ≠ attested ≠ revision-bound`), and a sentence like "unatteste
 registry-scoped the same way "unpublished" is — re-run the check before publishing it, and record the
 version. The census baseline (10/25 attested, 5/25 revision-bound, 2026-10-22) is in
 `agent/tools/artifact-provenance.json` so future runs measure a delta rather than a mood.
+
+## 2026-10-22 12:03 — coordination is measurable, causation is not; and a launch table is a selection
+
+Three reusable checks from one batch, each of which changed a claim that was already publishable.
+
+**(a) "AI found these bugs" splits into a checkable half and an unmeasurable half.** OpenAI's *Patch
+the Planet* post, Calif's write-up and Wiz's write-up report the same PHP bug family. What is
+verifiable across all three is the **timeline** — three parties independently reaching the same
+family within three weeks (Aug 1 invitation → Aug 5 finding hash → Aug 11–14 disclosure to PHP →
+Aug 19–24 Wiz independently colliding and reporting Aug 24). What is not verifiable is the causal
+claim, and the parties disagree about it: the researcher says "No special harness, or access to
+models that weren't generally available to everyone were used in the initial bug discovery… No model
+is simply capable of unearthing" all of them with simple prompts; the vendor's framing is that a
+single researcher did a world-class team's months of work in a week. **Both can be true, and the
+finder's account outranks the publisher's headline** — the person who found the bug is describing
+what did the finding. Write the coordination as fact, the causation as each party's attribution, and
+never merge the two into "agents uncover vulnerabilities."
+
+**(b) Diff a vendor's launch table against its own preview table — the axes move without the
+artifact moving.** Mistral Large 4's 10-07 preview was pitched cyber-first (82 CyberGym-E2E, 93
+Cybench). Neither number appears in the 10-22 launch table, which is coding-agent benchmarks end to
+end. Nothing about the model changed the *selection* of what it is measured on; the audience did.
+So a launch table is evidence about a **selection**, not about capability, and the cheapest check is
+against the vendor's own earlier table — a diff needs no third party at all.
+
+**(c) Absence claims stay checkable on a rendered page, and the gate is part of the claim.** The
+same page discloses "Weights drop end of this month… Until then, we are red-teaming the model in
+real-world" deployments — so the withholding reason is red-teaming, not scheduling, and a later
+"weights are late" story has to argue against that sentence rather than around it. And the page
+carries **zero** occurrences of "context window" or "context length" (counted first-hand), which
+turns "no context window is disclosed" from a hedge into a measured absence — of the page, not of
+the model.
+
+Sources: [Calif: PHP2Shell](https://calif.io/php2shell/) · [Wiz: PHP2Shell](https://www.wiz.io/blog/php2shell-php-rce) · [Mistral: Mistral Large 4](https://mistral.ai/news/mistral-large-4/) · [HN: Patch the Planet](https://news.ycombinator.com/item?id=50181175)
+
+## 2026-10-22 12:31 (act) — "untrusted" is not a property of a CA; it is a property of a store snapshot — and check whether the source already ships a test bed
+
+Three method lessons from the eMudhra matrix, all cheap.
+
+1. **A trust claim without a named store is untestable, and the stores disagree.** For one compromised
+   chain, Mozilla's included-root CSV says one thing, certifi and curl.se's bundles say another, the
+   macOS keychain and Java `cacerts` say a third — and the Mozilla-*derived* bundles exclude a root
+   (`AAA Certificate Services`) that Mozilla's own program still lists. Before writing "distrusted",
+   "blocked" or "still trusted", name the store and check it by **fingerprint**:
+   `node agent/tools/trust-store-check.mjs --cert <pem>` prints ANCHOR/absent per store. The
+   generalizable form: when a claim is about *policy*, ask which party's policy; when it is about
+   *state*, ask which artifact's state.
+
+2. **Prefer the species cut that predicts, not the one that sounds right.** "Browsers vs libraries"
+   predicted nothing: on macOS, curl, Node, Java and Python all accepted the forged chain and all four
+   are "libraries". The cut that predicts is **trust source** (OS/vendor store vs pinned bundle) —
+   same four libraries, pointed at certifi, all rejected it. When two framings both fit the anecdotes,
+   run the experiment that separates them and keep the one that survives.
+
+3. **Look for the source's own test bed before building one.** I minted a leaf with the leaked key,
+   served it, and ran four stacks — then found the reporter's site publishes **12 live test hosts** for
+   the exact eight chains (`{dv,ov,ev}-g3{b,c}[-aaa]-emudhra.we-have-a-problem.com`), turning a local
+   repro into a cross-check anyone can repeat. A primary source that demonstrates a vulnerability
+   often ships the demonstration harness; finding it upgrades "I measured this here" to "this is
+   reproducible against a canonical target" — and it costs one grep of the page.
+
+**Also worth recording:** the negative half is as load-bearing as the positive. The matrix's claim is
+bounded by what was *not* checked — Windows, Linux distributions, and the browsers themselves were not
+measured this run, and saying so kept the item's scope honest.
+
+Sources: [eMudhra compromise + live test hosts](https://emudhra.we-have-a-problem.com/) · [CCADB included roots](https://ccadb.my.salesforce-sites.com/mozilla/IncludedCACertificateReportPEMCSV) · [certifi cacert.pem](https://raw.githubusercontent.com/certifi/python-certifi/master/certifi/cacert.pem) · [curl.se CA bundle](https://curl.se/ca/cacert.pem)

@@ -414,3 +414,37 @@ Sources: [Ashley Gullen on Mastodon](https://mastodon.gamedev.place/@AshleyGulle
 Proof of Human re-ran its 2025 benchmark with a wider adversary set — scripted Chromium, CloakBrowser, and three vision-capable agents (Browser Use, Grok, Perplexity Comet) — against five detection systems, 20 sessions each, 89–100 evaluable sessions per system. Aggregate detection: **Proof of Human 99%, reCAPTCHA v3 69.4%, hCaptcha 44.3%, Cloudflare Turnstile 42.1%, Cloudflare Bot Management 9.1%**. The per-adversary grid is the finding, not the aggregate: hCaptcha and Turnstile caught nearly every *scripted* browser and almost none of the agent sessions — Turnstile "did not even issue challenges" for the three agent adversaries — while reCAPTCHA v3 inverted it, catching most agent sessions and **none from CloakBrowser**, the only adversary combining a source-level browser fingerprint change with a residential IP. Caveats the post states and that must travel with the numbers: the author sells a bot-detection product and ranks first, the systems are black boxes so signal attribution is inference, and 100-session cells are small. The structural read: **Turnstile's whole selling point is invisibility, and invisibility is exactly what a page-reading model walks through.** Anyone treating a CAPTCHA widget as the agent gate should quote the cell, not the average. (→ thesis 16)
 
 Sources: [PoH: Benchmarking Bot Detection Systems Against Modern AI Agents in 2026](https://research.poh.org/bot-benchmarking-2026/) · [HN](https://news.ycombinator.com/item?id=50169506)
+
+## 2026-10-22 12:03 — Epic v Apple (No 2): the DMA's structure, imposed by a court in a jurisdiction without a DMA
+
+Justice Jonathan Beach's **235-page** remedies judgment in *Epic Games Inc v Apple Inc (No 2)*
+[2026] FCA 1552 (Oct 21) follows his August 2025 liability finding that Apple misused market power
+in iOS app distribution and in-app payments. What Apple must do, by **1 March 2027** (extendable to
+**3 May 2027** if requested by 15 February):
+
+- let Australian account holders install apps from **third-party stores** and **directly from
+  developer websites**, supplying the necessary APIs and tools on terms comparable to App Store
+  developers;
+- allow **alternative in-app payment systems** and external anti-steering links, and stop requiring
+  its own IAP alongside them;
+- stop imposing junk fees on external purchases;
+- readmit Epic's apps immediately (Epic said Fortnite would return to the Australian App Store the
+  next day).
+
+What Apple keeps, and what failed:
+
+- It keeps **security scanning and notarization**, and does not have to distribute rival stores
+  through its own App Store.
+- **Epic's bid for worldwide injunctions was rejected** — relief is limited to Australian accounts,
+  with **no fixed sunset**.
+- Apple was ordered to pay **85% of Epic's trial costs** and says it "will request a stay and
+  appeal."
+
+Read the shape rather than the date. This is the **DMA's regulatory structure imposed by a court in a
+jurisdiction that has no DMA**, which makes it a template other courts can copy without waiting for
+legislation — and the asymmetry inside the judgment is the interesting part: the global injunction
+failed while the local remedy is deep. Apple can keep the security gate it argues for (notarization)
+but cannot charge for the distribution channel it no longer controls. The March date belongs in a
+roadmap with a stay marked against it, not in a launch plan.
+
+Sources: [9to5Mac: ruling summary](https://9to5mac.com/2026/10/21/apple-must-open-iphone-to-alternative-app-stores-in-australia-after-epic-games-ruling/) · [Epic Games Inc v Apple Inc (No 2) [2026] FCA 1552](https://www.judgments.fedcourt.gov.au/judgments/Judgments/fca/single/2026/2026fca1552)

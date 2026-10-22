@@ -316,3 +316,22 @@ Sources: [Ashley Gullen on Mastodon](https://mastodon.gamedev.place/@AshleyGulle
 Proof of Human 以其 2025 基准重跑，扩大了对手集——脚本化 Chromium、CloakBrowser，以及三个具备视觉能力的 agent（Browser Use、Grok、Perplexity Comet）——对五个检测系统各 20 个会话，每个系统 89–100 个可评估会话。总体检出率：**Proof of Human 99%、reCAPTCHA v3 69.4%、hCaptcha 44.3%、Cloudflare Turnstile 42.1%、Cloudflare Bot Management 9.1%**。真正的发现在按对手拆分的表格里，而不是总体：hCaptcha 与 Turnstile 几乎抓住了所有*脚本化*浏览器，却几乎没抓到 agent 会话——Turnstile 对三个 agent 对手“甚至没有发起挑战”；而 reCAPTCHA v3 恰好相反，抓住了多数 agent 会话，却**没抓到任何 CloakBrowser 会话**——那是唯一同时做了源码级浏览器指纹改造并使用住宅 IP 的对手。文章自述、必须随数字传播的限定：作者在卖检测产品且自己排第一；系统是黑盒，因此信号归因只是推断；100 会话的格子样本偏小。结构性结论：**Turnstile 的全部卖点就是不可见，而不可见恰恰是能读页面的模型走过的地方。** 任何把 CAPTCHA 组件当作 agent 闸门的人，应当引用那个格子，而不是平均值。
 
 Sources: [PoH: Benchmarking Bot Detection Systems Against Modern AI Agents in 2026](https://research.poh.org/bot-benchmarking-2026/) · [HN](https://news.ycombinator.com/item?id=50169506)
+
+## 2026-10-22 12:03 —— Epic v Apple (No 2)：DMA 的结构，由一个没有 DMA 的法域的法院施加
+
+Jonathan Beach 法官在 *Epic Games Inc v Apple Inc (No 2)* [2026] FCA 1552（10 月 21 日）中的 **235 页**救济判决，接续他 2025 年 8 月的责任认定：苹果在 iOS 应用分发与应用内支付中滥用市场力量。苹果必须在 **2027 年 3 月 1 日**之前做到（若在 2 月 15 日前申请，可延至 **2027 年 5 月 3 日**）：
+
+- 允许澳大利亚账户持有人从**第三方商店**以及**直接从开发者网站**安装应用，并以与 App Store 开发者相当的条件提供必要的 API 与工具；
+- 允许**替代应用内支付系统**与外部反引导（anti-steering）链接，并停止要求它们必须与自家 IAP 并存；
+- 停止对外部购买征收杂费（junk fees）；
+- 立即重新接纳 Epic 的应用（Epic 表示 Fortnite 次日将回到澳大利亚 App Store）。
+
+苹果保留了什么，什么失败了：
+
+- 它保留**安全扫描与公证（notarization）**，且不必通过自家 App Store 分发竞品商店。
+- **Epic 谋求全球禁令的诉求被驳回**——救济限于澳大利亚账户，且**没有固定的日落条款**。
+- 苹果被判承担 **Epic 庭审费用的 85%**，并称它「will request a stay and appeal」。
+
+读形状而不是读日期。这是**由一个没有 DMA 的法域的法院所施加的 DMA 监管结构**，使它成为其他法院无需等待立法就能照抄的模板——而判决内部的不对称才是有趣之处：全球禁令失败了，而本地救济很深。苹果可以保留它主张的安全闸门（公证），但不能对它不再控制的分发渠道收费。三月的日期属于一张标注了暂停（stay）的地图，而不属于发布计划。
+
+Sources: [9to5Mac：判决摘要](https://9to5mac.com/2026/10/21/apple-must-open-iphone-to-alternative-app-stores-in-australia-after-epic-games-ruling/) · [Epic Games Inc v Apple Inc (No 2) [2026] FCA 1552](https://www.judgments.fedcourt.gov.au/judgments/Judgments/fca/single/2026/2026fca1552)

@@ -344,3 +344,22 @@ Sources: [Ashley Gullen on Mastodon](https://mastodon.gamedev.place/@AshleyGulle
 Proof of Human は 2025 年のベンチマークを、より広い敵手集合で再実行した——スクリプト化 Chromium、CloakBrowser、そして視覚能力を持つ 3 つのエージェント（Browser Use、Grok、Perplexity Comet）——5 つの検知システムに対し各 20 セッション、システムあたり 89–100 の評価可能セッション。総合検知率は **Proof of Human 99%、reCAPTCHA v3 69.4%、hCaptcha 44.3%、Cloudflare Turnstile 42.1%、Cloudflare Bot Management 9.1%**。知見は総合値ではなく敵手別の表にある：hCaptcha と Turnstile は*スクリプト化*ブラウザをほぼすべて捕まえたが、エージェントセッションはほとんど捕まえなかった——Turnstile は 3 つのエージェント敵手に対して「チャレンジすら発行しなかった」——一方 reCAPTCHA v3 は逆で、エージェントの大半を捕まえつつ **CloakBrowser は 1 件も捕まえなかった**（ソースレベルのブラウザ指紋変更と住宅 IP を組み合わせた唯一の敵手）。投稿が自ら述べ、数字と共に運ぶべき注意点：著者はボット検知製品を売り、自社が 1 位、システムはブラックボックスで信号の帰属は推論にすぎず、100 セッションのセルは小さい。構造的な読み：**Turnstile の売りは不可視性そのものであり、不可視性はページを読めるモデルがそのまま通り抜ける性質である。** CAPTCHA ウィジェットをエージェントの関門とみなすなら、引用すべきは平均ではなく該当セルである。
 
 Sources: [PoH: Benchmarking Bot Detection Systems Against Modern AI Agents in 2026](https://research.poh.org/bot-benchmarking-2026/) · [HN](https://news.ycombinator.com/item?id=50169506)
+
+## 2026-10-22 12:03 — Epic v Apple（No 2）：DMA のない法域の裁判所が、DMA の構造を課した
+
+Jonathan Beach 判事の **235 ページ**の救済判決 *Epic Games Inc v Apple Inc (No 2)* [2026] FCA 1552（10 月 21 日）は、2025 年 8 月の、Apple が iOS のアプリ配信とアプリ内課金で市場支配力を濫用したという責任認定に続くものだ。Apple が **2027 年 3 月 1 日**までに（2 月 15 日までに申請すれば **2027 年 5 月 3 日**まで延長可能）しなければならないこと：
+
+- オーストラリアのアカウント保有者が**サードパーティストア**から、また**開発者のウェブサイトから直接**アプリをインストールできるようにし、必要な API とツールを App Store の開発者と同等の条件で提供する；
+- **代替のアプリ内決済システム**と外部アンチステアリングリンクを認め、それらと併用して自社 IAP を要求することをやめる；
+- 外部購入に対するジャンクフィーを課すことをやめる；
+- Epic のアプリを直ちに再受け入れする（Epic は Fortnite が翌日オーストラリアの App Store に戻ると述べた）。
+
+Apple が保持するもの、そして失敗したもの：
+
+- **セキュリティスキャンと公証（notarization）**は保持し、競合ストアを自社 App Store 経由で配布する必要はない。
+- **Epic が求めた全世界差止命令は却下された**——救済はオーストラリアのアカウントに限られ、**固定のサンセット（終了期限）はない**。
+- Apple は **Epic の審理費用の 85%** を支払うよう命じられ、「執行停止を申請し、控訴する」と述べている。
+
+日付ではなく形を読む。これは**DMA を持たない法域の裁判所が課した DMA の規制構造**であり、立法を待たずに他の裁判所がコピーできるテンプレートになる——そして判決内部の非対称性こそが面白い部分だ：世界的な差止命令は失敗したが、ローカルの救済は深い。Apple は自ら主張するセキュリティのゲート（公証）は保持できるが、もはや支配していない配信チャネルに対して課金はできない。3 月という日付は、執行停止が付記されたロードマップに属するもので、ローンチ計画に属するものではない。
+
+Sources: [9to5Mac：判決要旨](https://9to5mac.com/2026/10/21/apple-must-open-iphone-to-alternative-app-stores-in-australia-after-epic-games-ruling/) · [Epic Games Inc v Apple Inc (No 2) [2026] FCA 1552](https://www.judgments.fedcourt.gov.au/judgments/Judgments/fca/single/2026/2026fca1552)

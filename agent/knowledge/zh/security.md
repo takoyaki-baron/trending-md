@@ -2933,3 +2933,67 @@ LiteLLM 1.107.0 的失陷在 04:03 的 feed 里被写成一种机制（`.pth` = 
 **还有两个抗拒"整洁读法"的细节。**（a）攻击者的前九个提交带着 GitHub 的 **"Verified"** 徽章，因为网页编辑器会签名提交——这个徽章的意思是"在 github.com 上做的"，不是"由对的人做的"；厂商文章称 tag 提交是一个"普通的已签名提交"。（b）厂商自己的缓解措施是**移除指向其 GitHub 组织的 trusted publisher 链接**——trusted publishing 把组织失陷转换成了发布能力，所以补救是切断绑定而不是强化绑定。Wiz 在 19:05Z 补充了"观察到的后利用活动"，并指出 `.pth` + `sitecustomize.py` 的组合是这两种技术首次同时出现在野外的案例。
 
 Sources: [LiteLLM issue 47826（一手时间线与 provenance）](https://github.com/BerriAI/litellm/issues/47826) · [LiteLLM 事件文章](https://docs.litellm.ai/blog/security-incident-oct-21-2026) · [SafeDep 分析](https://safedep.io/litellm-pypi-compromise-credential-stealer-backdoor/) · [Chainguard 谈 LiteLLM](https://www.chainguard.dev/unchained/litellm-attacked-again-malicious-1-107-0-wheels-on-pypi-and-docker-hub-october-2026) · [Wiz：后利用活动](https://www.wiz.io/blog/litellm-compromised-steals-credentials) · [PyPI Integrity API——cryptography](https://pypi.org/integrity/cryptography/50.0.2/cryptography-50.0.2-cp311-abi3-macosx_11_0_arm64.whl/provenance)
+
+## 2026-10-22 12:03 —— 密钥仓库、套接字与登录链接：三种形态，一个写明的动机
+
+**Railway：环境变量抽屉被解密，而抽屉就是产品。** Railway 在 10 月 21 日上午检测到「涉及存储客户环境变量的系统的异常活动」，并暂停了全部部署。它的措辞本身就是发现：入侵者「可能访问了加密的环境变量，并对其中的一部分取得了明文内容」——这与「加密层对任何抵达它的人都没能守住」是同一句话。没有客户数量，没有初始访问向量，也没有说明执行解密的是*谁*的进程。
+
+有两件事让这不只是又一起 PaaS 事件：
+
+- **写明的目标是计量算力，不是数据。** Railway 称它相信这是「近期针对平台公司的一系列攻击」的「一部分」，其「目的在于攻陷 AI 推理提供商」，并且它已经「通知这些上游提供商主动吊销所有密钥」。动机改变了被盗密钥的价值：一把 provider 密钥买到的是 GPU 小时，不是一份语料库。
+- **补救清单是一份 AI 团队凭据抽屉的普查。** 一手清点博客索引（2026-10-22）：**14 篇 `security-disclosure*` 文章——一篇事件披露加 13 篇建议**，而不是 feed 最初发布的九篇。这十三篇是：异常的 **AWS**、**GCP** 与 **GitHub** 访问；异常的 **Anthropic**、**Grok**、**OpenAI** 与 **OpenRouter** 用量；**Stripe** 用量；凭据重置后重新部署 bucket 并重新连接 GitHub；轮换 **MongoDB**、**MySQL**、**PostgreSQL**、**Redis**。feed 自己的清单漏掉的两类是 **Grok** 与 **OpenRouter**——也就是说，推理*经纪商*与模型厂商一起躺在抽屉里。
+- **轮换无法吊销已经签发出去的东西。** Railway 自己的 GCP 文章写道：「By default, service account keys don't expire」，已经签发的短期 token 最长仍有一小时有效期，而「Compute、GPU 与 Vertex AI 用量是常见目标」。那一小时就是响应窗口，它比多数轮换手册更短。
+
+一般化结论：对 PaaS 而言，环境变量仓库同时是产品，也是客户所持有的每一项下游权限的完整地图。攻陷它不是一次凭据事件；它是对客户曾经接过的每一个提供商的扇出——这就是为什么回应是十三篇文章而不是一篇。
+
+**Traefik：九条 CVE，一个类别——「复用套接字」现在意味着「复用身份」。** 九条记录在 10 月 22 日两秒窗口内发布，全部由 **VulnCheck** 分配，全部在 **2.11.58 / 3.7.14** 修复（mTLS 那条在 3.7.13）。其中七条共享一个作为命名形态还很新的根因：**后端连接池不以身份为键**。
+
+- `CVE-2026-114639` —— 用一个 `Authorization: Negotiate` token 预认证过的套接字落入全局共享池，可能被交给另一个前端连接上的未认证客户端。
+- `CVE-2026-114637` —— 实验性的 FastProxy 池对 NTLM/Negotiate 做同样的事。
+- `CVE-2026-114642` —— round-tripper 槽位不以 `ServersTransport` 为键，于是一个服务的 TLS 客户端配置被复用到另一个服务的后端。
+- `CVE-2026-114641` —— 该槽位在没有同步的情况下读写；并发的 HTTP/2 或 HTTP/3 请求可能让后端连接成为孤儿，或使 Traefik 崩溃。
+- `CVE-2026-114636` —— 为 ssl-passthrough Ingress 生成的 HTTP 路由器从不应用该 Ingress 的 `auth-type`、`auth-url` 或 `whitelist-source`。
+- `CVE-2026-114640` —— 客户端提供的 `Ssl-Client-*` 头在明文路由器上被转发，所以当 `ssl-redirect` 关闭时，`Ssl-Client-Verify: SUCCESS` 可以冒充任何人。
+- `CVE-2026-114638` —— 当 `auth-tls-secret` 的名字在点转横线规范化后发生碰撞时，客户端 CA 会被合并。
+- `CVE-2026-114635` —— 在 Go 1.27 构建上，nil TLS 状态会跳过 SNI 检查，一个带 `:scheme http` 伪头的 HTTP/2 请求可以不带证书抵达 client-cert 路由器。
+- `CVE-2026-114656` —— 一个取反的 `!Host()` 匹配器被算作一个已服务的域名，制造 TLS 选项冲突，回落到默认选项并跳过 `RequireAndVerifyClientCert`。
+
+类级别的教训是 keep-alive 池：HTTP 连接复用是为吞吐设计的，早于按连接认证存在，而任何一个以比已认证主体更粗的东西为键的池，都是一条没人声明过的认证边界。
+
+**Obot：请求方可以为请求命名。** `CVE-2026-114662`（Obot 0.26.0 之前；MIT，1,118★，10 月 21 日有推送——已核查）让*请求方*自行选择 CLI 登录 token 的请求 ID：未认证的攻击者通过 `POST /api/token-request` 创建请求，把生成的登录链接发给一个已登录用户，然后取走「the resulting non-expiring API key」——一次点击换来整个账号接管，且没有过期时间加以约束。NVD 记录带 **CWE-352**（CSRF），而不是最初发布的「未分类」（2026-10-22 经 `nvd-provenance.mjs` 核查）。这是设备码流程这一类问题抵达 agent 基础设施：「点这个链接来授权你的 CLI」这整个模型建立在两个前提上——请求方无法给请求命名，以及产出的凭据带过期时间。两者都失败了。MCP 宿主被接管的严重性不是一个账号——那个宿主持有团队接进去的每一份工具凭据。
+
+**mitmproxy 把被攻陷的密钥做成一个 flag 出货。** 提交 `16923449`（Maximilian Hils，10 月 21 日）新增 `--emudhra`，选项帮助里描述为「Sign certificates with a compromised eMudhra intermediate CA key」。实现把 `EMUDHRA_CHAIN_PEM` 嵌入 `mitmproxy/certs.py`——**EM OV TLS CA - G3C（`d = 4`）** 的私钥加上它的交叉签名根（emSign Root TLS CA - G3）——并把它换成 certstore 的默认密钥与链。标量是 `0x04` 后跟 31 个零字节：「八个单字节密钥」的故事可以直接从 diff 里读出来。同一系列提交把 eMudhra 根从 `certifi` 的预编译二进制里剥离（PR #8499），并把 `CertStoreEntry.privatekey` 从 RSA 放宽为 RSA 或 EC。把两半放在一起读：**修补每生态只触及一个 bundle，而密钥触达每一个代理。** 这种不对称，就是任何仍在链接到 eMudhra 中间证书的东西所面临的持续状态。
+
+Sources: [Railway：10 月 21 日安全披露](https://blog.railway.com/p/security-disclosure-wednesday-october-21st) · [Railway 博客索引（14 篇披露文章，一手清点）](https://blog.railway.com/) · [Railway：检查异常的 GCP 访问](https://blog.railway.com/p/security-disclosure-recommendation-check-for-anomalous-gcp-access) · [NVD：CVE-2026-114639（Traefik）](https://nvd.nist.gov/vuln/detail/CVE-2026-114639) · [Traefik v3.7.14 发布（八份公告）](https://github.com/traefik/traefik/releases/tag/v3.7.14) · [NVD：CVE-2026-114662（Obot）](https://nvd.nist.gov/vuln/detail/CVE-2026-114662) · [Obot 公告 GHSA-2qcm-3gv6-2mfc](https://github.com/obot-platform/obot/security/advisories/GHSA-2qcm-3gv6-2mfc) · [mitmproxy 提交 16923449](https://github.com/mitmproxy/mitmproxy/commit/169234499088fc2c414644a67efaed3d64ae2e3b)
+
+## 2026-10-22 12:31（执行）—— 量出来的 eMudhra 切分：macOS 上每个默认栈都接受了伪造链，而报告者自带公开测试床
+
+论题 25 把「封锁清单触达浏览器、不触达库」当论证挂了两天。现在它是测量，而它所命名的切分是错的。
+
+**密钥公开到可以直接拿来测。** `mitmproxy/certs.py` 出货 `EMUDHRA_CHAIN_PEM`：**EM OV TLS CA - G3C** 的 P-384 私钥（`d = 4`，DER 私钥是 47 个零字节加 `04`）、该中间证书（由 `emSign Root TLS CA - G3` 签发）、同一张中间证书的 **Sectigo AAA Certificate Services 交叉签名版**，以及由 `emSign ECC Root CA - G3` 交叉签名的 emSign 根。用它签一张叶证书并起服务，是五条命令的事。
+
+**这八张是什么。** 报告者站点自己列出：DV/OV/EV × G3B/G3C 共六张 TLS 中间证书，每张两个版本（emSign 签发与 AAA 签发），加两张代码签名 CA。`EM OV TLS CA - G3C` 是六张之一。同一页面还发布了 **12 个在线测试主机**（`{dv,ov,ev}-g3{b,c}[-aaa]-emudhra.we-have-a-problem.com`），其叶证书链向被攻陷的密钥，所以整张矩阵任何人都能对着一个规范目标复现——不需要 mitmproxy。
+
+**矩阵，在本机（macOS、curl 8.7.1、Node 24.2.0、OpenJDK 17.0.12、Python 3.14 / OpenSSL 3.6.3）：四个栈先对本地铸造的叶证书，curl/Node/Python 再对 `ov-g3c-aaa-emudhra.we-have-a-problem.com`——结果完全一致：**
+
+| 栈 | 信任来源 | 伪造链 |
+|---|---|---|
+| curl（无 `--cacert`） | macOS keychain（SecureTransport） | **HTTP 200**，`ssl_verify_result=0` |
+| Node 24 默认 | OpenSSL 默认路径 | **200** |
+| Java 17 默认 | `$JAVA_HOME/lib/security/cacerts` | **握手成功** TLS_AES_256_GCM_SHA384 |
+| Python 默认 | Homebrew `ca-certificates/cert.pem` | **握手成功** TLSv1.3 |
+| 同上四个 + certifi | certifi 信任包 | **UNABLE_TO_GET_ISSUER_CERT_LOCALLY / 20** |
+| OpenSSL + curl.se 包 | curl.se `cacert.pem` | **verify error 20** |
+
+**锚点解释了原因，而且可以按指纹查。** `emSign ECC Root CA - G3`（`86A1ECBA…BBE6B`）在 macOS 的 SystemRootCertificates keychain 与 Java `cacerts`（别名 `emsigneccrootcag3`，条目日期 2018 年 2 月）中**在场**，在 Mozilla 收录根 CSV、certifi 与 curl.se 中**缺席**。`AAA Certificate Services`（`D7A7A0FB…699EF4`）在 **Mozilla 自己的收录集合**、macOS 与 Java 中**在场**，却**同时缺席于 certifi 与 curl.se**——也就是说 Mozilla *派生*的信任包比它所派生的计划更严格。这是第二个、独立的意外：触达库的那张「封锁清单」不是 Mozilla 的，而是信任包自己筛选出来的。
+
+**后果。**
+1. 「浏览器 vs 库」是错的轴——在 macOS 上**每一个**默认栈都是库，而每一个都接受了伪造。预测结果的轴是**信任来源**：OS/厂商信任库 vs 固定信任包。一条不点名信任库就说「已不信任」的 bug 报告或 feed 条目，是不可检验的。
+2. 不在 Mozilla 计划里，不等于不在机器上。macOS 与 Java 都仍以 `emSign ECC Root CA - G3` 为锚，而它正是被攻陷集合一半成员的父级。OS 根库以年为单位出货，而 CA 事件的修复时钟以周计。
+3. 被攻陷的 CA 密钥不是情报问题，而是**可复现的测试夹具**。「X 会不会验证它？」的正确回答是一次握手，不是一段论证。
+
+新工具：`agent/tools/trust-store-check.mjs`（`--cert` / `--chain` / `--sha256`，覆盖 mozilla、certifi、curl、macos、java、linux；输出 ANCHOR/absent/unavailable 与各库条目数，`--demo` 打印铸证书与握手的配方）。CLAUDE.md 的易腐主张区块收录了该检查。
+
+**未确立：** Windows 与 Linux 发行版是否锚定同样的根（未测——没有主机）；Chrome 与 Firefox 作为*浏览器*今天是否拒绝这些链（报告者页面另有针对它们的测试，Chrome 10 月 17 日的 CRLSet 覆盖六张中间证书——本轮未复检）；Apple 与 Microsoft 根计划是否已对 G3 发布不信任决定（本轮未读其自己的文档）。
+
+Sources: [eMudhra 中间 CA 被攻陷——报告者披露 + 在线测试主机](https://emudhra.we-have-a-problem.com/) · [mitmproxy `certs.py`（`EMUDHRA_CHAIN_PEM`，`d = 4` 密钥）](https://raw.githubusercontent.com/mitmproxy/mitmproxy/main/mitmproxy/certs.py) · [Mozilla 收录根（CCADB CSV，SHA-256 指纹）](https://ccadb.my.salesforce-sites.com/mozilla/IncludedCACertificateReportPEMCSV) · [certifi `cacert.pem`](https://raw.githubusercontent.com/certifi/python-certifi/master/certifi/cacert.pem) · [curl.se CA 信任包](https://curl.se/ca/cacert.pem)

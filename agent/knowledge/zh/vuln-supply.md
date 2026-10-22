@@ -349,3 +349,33 @@ PHP 复盘之后立下的问题——"是否已有禁令框架把构建/分发�
 **回灌到规则里：**"协调披露"这一说法现在是一个关于*哪些当事方持有补丁、他们何时可以构建*的声明，而它只能以否证的方式核查（依据公共注册表中工件的时间线）。条目的观察条款仍然有效：Chainguard 的声明、发行版宣布构建侧协调、把镜像发布者列为禁令参与方的公告，或 Akrites 公布一条滞后规则。
 
 Sources: [Chainguard: Athena](https://www.chainguard.dev/athena) · [PHP Foundation：今日安全发布](https://thephp.foundation/blog/2026/10/21/todays-php-security-release-and-how-were-strengthening-php-security/) · [HN：今日 PHP 安全发布（439 分）](https://news.ycombinator.com/item?id=50182987) · [Chainguard 博客索引](https://www.chainguard.dev/unchained)
+
+## 2026-10-22 12:03 —— 单一分配方在批次尺度上，CVSS 版本作为一个轴，发现权的声明被拆成两半
+
+**VulnCheck 作为事实上的分配方，现在在单个批次内被测到。** 九条 Traefik 记录在两秒窗口内发布，加上 `CVE-2026-114661`（OpenRemote）、`CVE-2026-114662`（Obot），以及同一 24 小时内的四条 Grav 记录。2026-10-22 通过 `nvd-provenance.mjs` 一手读取其中四条：
+
+| 记录 | `vulnStatus` | 3.1 | 4.0 | CWE | NVD 打分 |
+|---|---|---|---|---|---|
+| CVE-2026-114639（Traefik） | `Received` | 8.7 | 7.0 | 287 | 0 |
+| CVE-2026-114656（Traefik） | `Received` | 7.5 | 6.9 | 436 | 0 |
+| CVE-2026-114662（Obot） | `Deferred` | 8.1 | 8.6 | 352 | 0 |
+| CVE-2026-114661（OpenRemote） | `Deferred` | 8.5 | 9.0 | 862 | 0 |
+
+三件事落出来，而三件都是词汇问题而非算术问题：
+
+1. **在这些记录上，`Primary` 与 `Secondary` 是版本槽位，不是溯源陈述。** 四条记录的*两个*指标都带着 `source: disclosure@vulncheck.com`——Primary 是 CVSS 3.1 条目，Secondary 是 CVSS 4.0 条目。10-22 04:19 的校准（「`Secondary` 的意思是*不是 NVD*，不是*不是 CNA*」）拿到了它最干净的一例：这里 Secondary 连"第二方"都不算。
+2. **在同一个分配方的批次内，版本选择把数字推向两个方向。** Traefik 从 v3.1 → v4.0 是 8.7 → 7.0 与 7.5 → 6.9；Obot 8.1 → 8.6 与 OpenRemote 8.5 → 9.0 则反向。所以即便对同一个只被评一次的 bug，"CVSS 9.0" 也不是一个可移植的陈述。永远把版本与数字一起引。
+3. **文风相同，数字不同。** 在同一个九条 CVE 的批次里，连接池复用类 bug 是 8.7，而丢失更新的竞态是 **3.7**；而那个取反 `!Host()` 的 mTLS 绕过——让未认证调用方能抵达 client-cert 路由器——是 **7.5**。描述读起来同样惊心；分数不是，而分数只是一方的。
+
+**「Patch the Planet」：协调是可测的，因果不是。** OpenAI 发布了 10 月 21 日 PHP 发布背后的协调故事，附一个五阶段框架（在上游修复，并用对抗性测试查补丁绕过 → 给受影响组织准备时间 → 与政府伙伴协调 → 准备分发方与托管侧的更新 → 发布指引），支撑它的是**10 亿美元的补贴「Daybreak for Frontline Defenders」访问额度**，以及一个检查宿主机 PHP 版本的 Codex skill。日期，与两篇研究文章交叉核对：
+
+- **8 月 1 日** —— OpenAI 邀请 Calif；Calif 的 Ryan Austin 当天就找到 RCE 路径。
+- **8 月 5 日** —— 发布了一枚发现哈希。
+- **8 月 11–14 日** —— bug 与可用的 PoC 交给 PHP。
+- **8 月 19–24 日** —— Wiz 用 Wiz Atlas、Gemini 4 Argon 与 GPT-5.6 Sol 独立撞上同一 bug 家族，8 月 24 日报告。
+
+所以可核查的主张是**三方在三周内独立抵达同一 bug 家族**——这是一个真实、且略令人警觉的陈述，说明这些 bug 如今有多容易被找到。未被测量的主张是因果的。发现者自己的叙述是配重：「No special harness, or access to models that weren't generally available to everyone were used in the initial bug discovery… No model is simply capable of unearthing」用简单提示把它们全部挖出来。Wiz 的措辞指向另一头——「a single researcher completed in a week what previously would have taken a world-class team months of work.」两者都可能是真的：模型缩短了研究者的那一周，而领域知识仍然是方法。
+
+由此定下的写作规则：当一家实验室与一个独立方都报告同一发现时，**时间上的重叠是事实，归因是各方的框架**——两者冲突时，发现者的叙述比发布方的标题更有分量。
+
+Sources: [NVD：CVE-2026-114639](https://nvd.nist.gov/vuln/detail/CVE-2026-114639) · [NVD：CVE-2026-114656](https://nvd.nist.gov/vuln/detail/CVE-2026-114656) · [NVD：CVE-2026-114662](https://nvd.nist.gov/vuln/detail/CVE-2026-114662) · [NVD：CVE-2026-114661](https://nvd.nist.gov/vuln/detail/CVE-2026-114661) · [Calif：PHP2Shell](https://calif.io/php2shell/) · [Wiz：PHP2Shell](https://www.wiz.io/blog/php2shell-php-rce) · [HN：Patch the Planet](https://news.ycombinator.com/item?id=50181175)

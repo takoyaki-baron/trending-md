@@ -527,3 +527,37 @@ Sources: [Graphify-Labs/graphify](https://github.com/Graphify-Labs/graphify) · 
 `mksglu/context-mode` (31,411★, +3,556/week, pushed 04:41 UTC today) claims a **98% reduction** in tool output, persisted session memory, and routing across 17 platforms through MCP plus per-harness hooks (Claude Code, Codex, Cursor, Copilot, Zed, OpenCode, Kiro, Pi). Two facts the badge wall does not lead with: the license is **ELv2** (source-available, managed-service restriction; GitHub API reports `NOASSERTION`), and npm `context-mode` is at **1.0.169, last modified June 29**, with GitHub releases stopping at the same tag — four months of commits and nothing published for users. The verifiability gap matters more in this layer than in most, because the product sits **in the middle of your prompts**: what it drops is what your agent never sees, and the 98% is author-stated with no published eval. Compare the shelves that print their own losses (XERJ, Leviathan, Skip the Compressor) — the difference is not the number, it is that those numbers can be reproduced.
 
 Sources: [mksglu/context-mode](https://github.com/mksglu/context-mode) · [npm: context-mode](https://www.npmjs.com/package/context-mode)
+
+## 2026-10-22 12:03 — the context boundary moves inside the KV cache
+
+Every prompt-level answer to "how much history does the agent carry" — summarize, truncate, retrieve —
+pays a **re-prefill**. *Cache Engineering for Agents* (arXiv 2610.28577) moves the decision into the
+cache itself, giving the agent two primitives over its own KV state:
+
+- **`drop`** — remove selected cache from future attention (the trajectory is unchanged; the tokens
+  are still in the history, the model stops attending to them).
+- **`repos`** — adjust retained keys' positional encodings, so what survives can be re-anchored
+  without re-prefilling it.
+
+The serving problem this creates is the paper's sharpest contribution, because it names why an
+ordinary prefix cache cannot implement any of it: **history dependence**. Identical token sequences
+can now carry *different* cache states depending on what cache operations happened before them, so
+prefix matching is insufficient as a reuse key. Their answer is the co-designed **AKV** engine — a
+stateless API over internal stateful reuse, eviction and restoration.
+
+Results:
+
+- A tool-response **rolling-drop** policy beats threshold-triggered summarization by **+1.7 points**
+  average benchmark score at **27.7% lower average cost**.
+- AKV gives up to **1.2×** output throughput and **1.5×** P95 latency improvement.
+- Letting agents **recursively self-improve their own cache policy** adds a further **7.1%** cost
+  reduction over the expert-designed policy — the same shape as this thesis's other self-tuning
+  results, and the part to watch.
+
+Why it belongs in the context-boundary layer rather than "serving": the object being optimized is the
+same one this whole thesis is about — how many bytes the agent carries forward — and the finding that
+the agent's own working memory is a schedulable resource (rather than an emergent property of its
+prompt) is the first version of that layer that the model itself can operate. It is a serving-engine
+change, not a wrapper: no proxy in front of the API can drop cache the server holds.
+
+Sources: [arXiv: Cache Engineering for Agents](https://arxiv.org/abs/2610.28577) · [arXiv PDF](https://arxiv.org/pdf/2610.28577)

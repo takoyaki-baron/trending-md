@@ -725,3 +725,17 @@ Sources: [Yoyo Code: 2026 is an exciting year for the Rust compiler](https://yoy
 **Ghidra 的周榜涨幅计量的是一个包装器，而不是项目本身**（本轮一手复核：92,576★、**最新发布 `Ghidra_12.1.4_build` 日期 2026-09-21**、最后推送 10 月 20 日、2,138 个未关闭 issue、未归档）。一周约 **6,184★** 而十月没有发布，说明是采用而非版本，触发点也可见：中文科技媒体与一个病毒式传播的帖子指向**用 LLM agent 驱动 Ghidra 反编译器的 MCP 服务器**。星数落在三十年的上游套件上而不是包装器上——与 `morluto/rea` 6.6.0 把 Kuna 作为静态分析提供者接入是同一模式——它说明了 agent 集成浪潮的下一站：不是新工具，而是把成熟的分析套件改装上工具调用界面，并顺带继承它们全部的星标历史。作为本月 Void 规则最干净的一例归档在 [[fact-check]]。
 
 Sources: [DuckDB 2.0.0 LTS](https://duckdb.org/2026/10/21/announcing-duckdb-200) · [HN — DuckDB](https://news.ycombinator.com/item?id=50181136) · [GitHub Blog: the bridge to agent-scale git infrastructure](https://github.blog/engineering/architecture-optimization/the-bridge-to-agent-scale-git-infrastructure/) · [Google Rust style guide](https://google.github.io/styleguide/rustguide.html) · [State of Drupal, Sept 2026](https://dri.es/state-of-drupal-presentation-september-2026) · [NationalSecurityAgency/ghidra](https://github.com/NationalSecurityAgency/ghidra)
+
+## 2026-10-22 12:03 —— Postgres `recovery_prefetch`：一个把 standby 变成静默写入中断的优化
+
+Jeremy Schneider 带复现的现场报告，是「没有任何错误被记录」这一类的好模板。机制是三个相互作用的部件：
+
+1. **prefetch 搞错了块从哪来。** `recovery_prefetch` 在重放时预取 WAL 中引用的块，但那段代码「doesn't consider that shared buffer may be loaded from WAL FPI rather than from disk」——于是它发出不必要的 `fadvise` 调用，把主库的大顺序 I/O 在 standby 上变成 **8 KB 随机读**。
+2. **standby 被打满。** 刻意调低的复现——500 IOPS、2 CPU、8 GB、pgbench scale 640、5% 表更新——而 standby 贴着 IOPS 上限坐满 **40 分钟**，IOPS 放大最高达 **16×**。
+3. **状态机把它叠加放大。** 杀掉 walreceiver 让吞吐降到零，并把写入挂起**超过 30 分钟**（更大的表上可能数小时）：「when a Postgres standby switches into WAL-restore mode, it will not go back to streaming until it's caught up」，而一个同步主库会一直阻塞，直到某个 standby 恢复健康。
+
+禁用 prefetch 后，UPDATE 之后的停顿消失，重放不到 10 分钟就完成。建议是刻意留有余地的——「I'm leaning toward disabling the recovery_prefetch setting across the board」，再加上对同步部署使用两个 standby 配 `ANY 1` 法定提交——而限定条件与建议一起印出来：小容量云盘、不是正式基准、没有版本矩阵，而且禁用 prefetch 并没有消除每一次重放停顿。
+
+可迁移的教训是**状态机，不是那个设置**：一个后台优化与一个只读的同步 standby 相互作用，产出的中断不写任何错误，也不指向任何组件，而运维唯一的信号是写入停了。
+
+Sources: [Ardent Performance：recovery_prefetch considered harmful](https://ardentperf.com/2026/10/20/postgres-recovery_prefetch-considered-harmful-and-causing-outages/) · [HN](https://news.ycombinator.com/item?id=50188614)

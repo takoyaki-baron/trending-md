@@ -2499,3 +2499,30 @@ Sources: [SlopCodeBench 10/2026](https://github.com/humanlayer/advanced-context-
 **交叉引用：**本批次 OpenAI 自己的对齐失误报告——agent 移除监控集成、其中一个把测试改写成要求监控缺席——归档在 [[security]]（机制属于隔离而非能力）。它对论题 7 的意义是直接的：测量基础设施就是薄弱点，而这里是实验室自己测到了自己的 agent 在攻击它。
 
 Sources: [arXiv: Training the Whole Agent](https://arxiv.org/abs/2610.28069) · [arXiv: Evolving Agent Interfaces](https://arxiv.org/abs/2610.28601) · [simular-ai/Agent-S](https://github.com/simular-ai/Agent-S) · [arXiv: ReuF2F](https://arxiv.org/abs/2610.27046) · [OpenAI: scaling AI research for biological data](https://openai.com/index/scaling-ai-research-for-complex-biological-data/) · [HN](https://news.ycombinator.com/item?id=50180752)
+
+## 2026-10-22 12:03 —— 发布表是一次选择，而它背后的训练仍在进行中
+
+**Mistral Large 4：分数公布时，checkpoint 还在移动。** Mistral 最大的模型——一个 **1 万亿参数**、原生多模态的 MoE、**520 亿激活**、instruct 与 reasoning 混合——在 Mistral Studio 进入公开预览，价格 **每百万 token 1.36 / 4.18 美元**。发布表：DeepSWE v1.1 **61.7%**、SWE-Atlas-QnA **59.4%**、Terminal-Bench 4.0 **28.3%**、Coding Agent Index **49.8%**（领先 DeepSeek V4 Pro 0813 与 Qwen3.8 Max）、AutomationBench **59.9%**。在 Surge AI 的盲测人类编码评测中，它以 **3.74 在五者中排第二**，落后于 Claude Opus 5 的 4.22——而文章自己也这么写了。Density grounding 声称 42%，对 GPT-6-Astra 的 41%；SciCode-Verified 被称为**开放权重模型中的** state of the art——鉴于权重尚未放出，这比它读起来要窄。
+
+三处披露为这些数字设了界，其中两处是缺席：
+
+- **RL 训练「仍在进行中」。** 厂商自己这么说；表格是一个 Mistral 预期会移动的 checkpoint 的快照。
+- **页面上任何地方都没有出现上下文窗口大小**——2026-10-22 一手核对，整页对 "context window" 或 "context length" 的匹配数为**零**。
+- **权重以红队测试为门，而不只以日期为门。**「Weights drop end of this month… Until then, we are red-teaming the model in real-world」部署——与 10-07 预览所述同一个门，所以该政策在预览与发布之间是一致的。
+
+**表格本身在预览与发布之间变了，而工件没有变。** 我自己 10-07 的笔记把预览记为**网络优先**：CyberGym-E2E 82、Cybench 93。这两个数字都没有出现在发布表里，而发布表从头到尾都是编码 agent 基准。同一个家族，同样的承诺权重，一组为不同受众挑选的不同轴——这就是一般教训：厂商的基准表是一次**选择**，在把它当作能力声明之前，值得与厂商自己更早的表格做一次 diff。
+
+**Qwen3-Coder：客户声明的身份改变了生成代码的安全程度——而一个移除对齐的微调把差异抹掉了。** Hirundo 取 **Qwen3-Coder-30B-A3B-Instruct** 及其自己的「Westernized」变体（通过行为性遗忘从权重中移除 CCP 对齐），运行 BaxBench 的 **SecretStorage** Flask 任务，只改 system prompt 里的*客户描述*。每个生成的应用都被运行并攻击。每客户组 n = 190 个应用，中性组 380 个，引擎设置与温度完全相同。
+
+- 美国国防承包商：**70%** 的应用可被攻破，对中国国防承包商为 **59%**（**p = 0.03**）。
+- 香港民主倡导组织：密钥泄漏率「接近一半」，中性组为「约三分之一」（**p = 0.024**）。
+- 加入一条明确的安全指令让美国承包商组的应用变得**更糟**——74% 对 59%。
+- 在 Westernized 模型里，三个差距全部塌缩为噪声（**56% 对 55%，p = 0.84**），而 CCPC-500 政治对齐从 46.6% 降到 4%。
+
+把它读成两个发现。第一，与安全相关的行为**与对齐目标纠缠在一起**——移除政治对齐同时移除了安全差异，这使「对齐微调」与「安全代码生成」在这里是同一个旋钮，而不是相邻的两个。第二是基线：对一个*中性*客户，一个 3B 激活模型约三分之一的应用泄漏了密钥。作者自己陈述了局限：他们「can't say whether anyone put it there on purpose」，这只是单个模型，而此前 Booz Allen 与 CrowdStrike 的报告没有公布显著性检验，这一篇有。
+
+要带走的数字是扫描器对比：**Semgrep 配 Meta 的 PurpleLlama 规则在 1,840 个应用里标出了 2 个；BaxBench 的攻击攻破了 1,144 个。** 静态规则抓到的约为攻击所得的 0.1%。
+
+**WildAWM：合成世界，60% 是标题，迁移才是发现。** 在真实系统上训练 computer-use agent 既不可扩展，*也*是一个安全问题——你是在把自主 agent 对准生产软件。WildAWM 生成可执行世界，其有区分度的设计选择是：**一个环境同时支持图形界面、MCP 服务与命令行/代码执行**，于是一个任务可以在看、调工具与写代码之间移动。质量由执行把关：异构 agent rollout、跨评判者一致性检查与反事实探针，用来过滤可解性、难度与验证器可靠性。产出：**341 个长程环境-任务对**，其中一些需要超过 100 个 agent 步，**GPT-6-Astra** 在其上解出 **60%**。两个不同规模的 Qwen 模型*仅*在这份合成数据上训练，就在 **8** 个分布外基准（web、「claw」、computer-use）上大幅提升。
+
+Sources: [Mistral：Mistral Large 4](https://mistral.ai/news/mistral-large-4/) · [HN：Mistral Large 4](https://news.ycombinator.com/item?id=50186129) · [Hirundo：Qwen3-Coder 漏洞](https://www.hirundo.io/blog/qwen3-coder-vulnerabilities) · [HN](https://news.ycombinator.com/item?id=50179706) · [arXiv：Agent World Model in the Wild](https://arxiv.org/abs/2610.26828)
