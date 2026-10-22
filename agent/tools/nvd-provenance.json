@@ -639,6 +639,46 @@
    "lastStatus": null,
    "lastMetrics": [],
    "lastKev": null
+  },
+  {
+   "id": "CVE-2026-114625",
+   "why": "Arista VeloCloud Orchestrator SQL injection, CVSS 9.9, exploited in the wild, Arista-assigned; NO NVD record and NO cveawg record at seed time",
+   "seeded": "2026-10-23 [absent] no NVD record, no cveawg record; 9.9 is Arista's own score"
+  },
+  {
+   "id": "CVE-2026-94300",
+   "why": "ISC BIND 9 GSS-TSIG replay memory corruption; watch for NVD analysis appearing beside ISC's CNA 8.1",
+   "seeded": "2026-10-23 [Awaiting Analysis] 3.1 Secondary/security-officer@isc.org 8.1, CWE-362/CWE-415, published 10-21"
+  },
+  {
+   "id": "CVE-2026-96889",
+   "why": "librsvg UAF reached via sharp/Next.js Image Optimization; Red Hat CNA 7.8, NVD has never analyzed it",
+   "seeded": "2026-10-23 [Awaiting Analysis] 3.1 Secondary/secalert@redhat.com 7.8, CWE-416, published 09-23"
+  },
+  {
+   "id": "CVE-2026-93952",
+   "why": "Arista VeloCloud input validation, KEV-added Sept 2026 — cited as context in the 10-23 VeloCloud item; watch for NVD analysis",
+   "seeded": "2026-10-23 [unchecked] cited as historical context (KEV September addition)"
+  },
+  {
+   "id": "CVE-2026-16812",
+   "why": "Arista VeloCloud OS command injection, KEV-added July 2026 — cited as context in the 10-23 VeloCloud item",
+   "seeded": "2026-10-23 [unchecked] cited as historical context (KEV July addition)"
+  },
+  {
+   "id": "CVE-2025-64702",
+   "why": "quic-go QPACK header amplification (Header Accordions); CVE ID is from 2025, disclosed jointly 10-20/10-22",
+   "seeded": "2026-10-23 [unchecked] CVE ID predates the Oct 2026 coordinated disclosure"
+  },
+  {
+   "id": "CVE-2026-12523",
+   "why": "Cloudflare quiche QPACK header amplification (Header Accordions)",
+   "seeded": "2026-10-23 [unchecked] fixed in quiche 0.29.3"
+  },
+  {
+   "id": "CVE-2025-13945",
+   "why": "Wireshark QPACK header amplification (Header Accordions); CVE ID from 2025",
+   "seeded": "2026-10-23 [unchecked] fixed in 4.6.2 / 4.4.12"
   }
  ]
 }
