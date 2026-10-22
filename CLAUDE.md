@@ -152,6 +152,30 @@ underlying pages — this produced a two-layer false signal in a single item.
    A **standing** per-CVE watch (Pass 10 of `agent-run.sh`, `agent/tools/nvd-provenance.json`)
    reports only movement — status flips, an `nvd@nist.gov` metric appearing, a score revision, a
    KEV add — because keyword search cannot see a record that already exists changing state.
+   **A record's `published` date is a WORKFLOW timestamp, not the event's date — check the fix
+   release before writing "new"** (added 2026-10-22, the vLLM / Vibe-Trading / Trigger.dev batch).
+   `published` is when the assignment finished, and the gap runs both ways: vLLM's seven CVEs
+   published Oct 21 were fixed in **0.31.0 on Oct 5 (16 days earlier)**, Vibe-Trading's fix is
+   **168 days** older than its record, Trigger.dev's 29-CVE block maps onto repo advisories dated
+   **Jul 9 – Oct 20**, Vyper publishes **no repaired release at all**, and six `ZDI-CAN` kernel
+   reports have no CVE id to look up. Sorting by publication date reports a platform "under
+   attack" on the day its paperwork was filed. One-call check before publishing any "newly
+   disclosed / just patched / still unpatched" framing:
+   `node agent/tools/disclosure-lag.mjs --ids CVE-… --pypi <pkg>` or `--repo owner/repo` →
+   joins NVD's `published`, the advisory's affected/patched range, and the release timeline into
+   one of eight states (`fix-then-record` / `fix-predates-record` / `record-then-fix` /
+   `backfill` / `no-fix` / `no-record` / `pre-record` / `indeterminate`); `--tracker ZDI-CAN-…`
+   covers the no-CVE case. Three traps the calibration put into the tool, each of which had
+   already produced a wrong number by hand: **NVD omits the `Z`** on `published` (parse it as
+   host-local and a UTC+8 host shifts every lag by a day — 15 vs 16 for vLLM); GitHub's advisory
+   cells use a **second, interval syntax** (`[,2.5.303), [3.0,3.1.9)`, patched `2.5.303, 3.1.9`)
+   for multi-branch fixes, which a comparison-only parser reads as "no range"; and the cells can
+   **contradict the advisory's own title** — Trigger.dev's read `<= 4.6.0` / `>= 4.6.0` (both
+   true at 4.6.0) while the summary says "through 4.7.6", so trusting the cell yields a 36-day
+   lag for a fix that actually landed **one day after** the record. When the two disagree, say
+   so; never silently pick one. **`no record` is perishable like every other absence** — both
+   negatives this tool was filed against (`CVE-2026-92707`, `CVE-2026-110264`) acquired NVD
+   records within days, so re-run before quoting one.
    **Package-registry state is perishable the same way** (added 2026-09-26, GHAPPIER follow-up):
    "unpublished", "removed", "still downloadable" and "no advisory" for a cited npm/PyPI package
    are version-presence claims that invert without notice — a backdoored version can be
@@ -239,9 +263,14 @@ underlying pages — this produced a two-layer false signal in a single item.
    October entries are assigned by 17 other CNAs (Linux 172, apache 80, mitre 30, GitHub_M 14 …), so a
    Patch Tuesday list is not a list of that vendor's CVEs. Cross-validated first-hand: the CVRF's CNA
    equals the CVE Program's `assignerShortName` on 11 of 11 sampled IDs across 11 CNAs. **This settles
-   "the primary can also be the only record":** CVE-2026-92707 appears in no registry at all (no NVD,
-   no cveawg, no GHSA) — and the vendor document itself says why, `CNA = GitHub_M`, so the pending
-   party is GitHub, not NVD. One call for that whole question:
+   "the primary can also be the only record":** CVE-2026-92707 appeared in no registry at all on
+   10-14 (no NVD, no cveawg, no GHSA) — and the vendor document itself said why, `CNA = GitHub_M`,
+   so the pending party was GitHub, not NVD. **That prediction resolved on 10-15:** the record is
+   now `PUBLISHED` with `assignerShortName: GitHub_M` (cveawg, checked 10-22), and NVD published it
+   the same day beside a repo advisory dated **Sep 17** — a 28-day backfill, which is what
+   `disclosure-lag.mjs --ids CVE-2026-92707 --repo MessagePack-CSharp/MessagePack-CSharp` prints.
+   The rule earned its keep by naming the party and the date; the *example* is expired, so do not
+   quote it as a live absence. One call for that whole question:
    `node agent/tools/vendor-advisory.mjs --cve CVE-… --cna-doc <cvrf url|path>`. The recurring four
    formats are **CSAF, CVRF, OSV, GHSA**; a vendor document is also the place to check what it
    *doesn't* carry — Microsoft's October CVRF omits an `Exploit Status` on 341 of its 1,760 records,

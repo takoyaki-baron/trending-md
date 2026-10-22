@@ -1,6 +1,6 @@
 ---
 title: Learnt Agent
-last_processed: 2026-10-22T12:31:00+08:00
+last_processed: 2026-10-22T20:20:00+08:00
 ---
 
 # Learnt Agent
@@ -105,6 +105,25 @@ patterns, and turn them into insights and actionable todos.
 > from the Mozilla-derived bundles — **bundles stricter than the program**. New one-call check:
 > `agent/tools/trust-store-check.mjs`; CLAUDE.md's perishable block gained the rule. Detail →
 > [[security]] [[fact-check]].
+> **(10-22 20:20, learn pass):** the 20:03 batch's net-new 18 (items 35–52). Spine: **the record's
+> publication date is a workflow timestamp, and one record has no date at all** — five fix/record
+> relationships in one batch (vLLM fixed 16 days *before* its advisory, Vibe-Trading 168 days before,
+> Trigger.dev converting 39 GHSAs into 29 CVEs in a day while its own same-day "security release"
+> names Node and eMudhra instead, Vyper with *no* patched release and the current release affected,
+> and six ZDI kernel reports on public LKML with PoCs and no CVE IDs). Re-verified first-hand: vLLM
+> 0.31.0 uploaded 2026-10-05T07:41:02Z; Vibe-Trading v0.1.7 2026-05-06T12:11:26Z; Trigger.dev v4.7.7
+> body read in full; Vyper repo `archived:false`/pushed today/still no fix; OSSA-2026-046 carries
+> **0** "CVSS" strings while MITRE's 9.9 sits on the record as Secondary; A-greement's abstract
+> quotes verified verbatim. New knowledge file → [[disclosure-lag]].
+> **(10-22 20:27, act pass):** the batch's spine became a tool — `agent/tools/disclosure-lag.mjs`
+> joins NVD `published` + advisory range + release timeline into eight states, calibrated live on
+> five (vLLM 16d, Vibe-Trading 168d, Vyper no-fix, Trigger.dev record-then-fix, MessagePack backfill
+> 28d). Calibration corrected the hand count three times: NVD omits the `Z` on `published` (a UTC+8
+> host read 15d, not 16d), GitHub has a **second** range syntax for multi-branch fixes
+> (`[,2.5.303), [3.0,3.1.9)`), and an advisory's cells can contradict its own title (Trigger.dev
+> `<= 4.6.0`/`>= 4.6.0` vs "through 4.7.6" — 36d vs the true 1d-*after*). Both "no record"
+> negatives expired: CVE-2026-92707 and -110264 now have NVD records. CLAUDE.md gained the check;
+> `security.openstack.org` curated. → [[disclosure-lag]] [[vuln-supply]]
 
 ## Active theses
 
@@ -113,17 +132,14 @@ patterns, and turn them into insights and actionable todos.
    routing, review, orchestration/harness and computer-use all shipped OSS winners; consolidation
    happens *by layer* (DeepSeek Harness = plugin graph, LoopX = state kernel, Cline Kanban =
    worktree isolation).
-   - **08-16→10-17 — the stack decomposes by layer, and each layer gets its own winners:**
-     Codex Agents API, Supabase/Turso, Docker Agent OCI, OpenDots credentials, Meta's AGENTS.md
-     beside every README; OpenCode 2.0 (213,563★, MIT) onto a background Service with Code Mode
-     (MCP + OpenAPI as callable JS), while Rain disputes Scion's uncredited derived-data design
-     (credit, not reuse); Scion then self-hostable via `gitai`, Hy-Memory-30B-A3B deciding what an
-     agent remembers, earshot adding CPU-only hearing. → [[agent-stack]] [[fact-check]]
+   - **08-16→10-17 — the stack decomposes by layer, each layer gets winners:** Codex Agents API,
+     Supabase/Turso, Docker Agent OCI, Meta's AGENTS.md beside every README; OpenCode 2.0 (213,563★,
+     MIT) with Code Mode over a background Service, Rain disputing Scion's uncredited derived-data
+     design; Scion self-hostable via `gitai`, Hy-Memory-30B-A3B, earshot. → [[agent-stack]] [[fact-check]]
    - **10-19 04:03 — memory handoff becomes a protocol; computer-use gets its commons:**
-     `ai-memory` (10.4k★, +513/day) makes 20+ harnesses read/write one shared memory with
-     typed, owner-tracked claim-once handoffs and a private session projection via `run codex`;
-     Alibaba's OpenGCUA ships the computer-use commons — harness, cross-device SDK, eight
-     frontier models' trajectories through one open harness (model planned, not shipped).
+     `ai-memory` (10.4k★, +513/day) makes 20+ harnesses share one memory with typed, owner-tracked
+     claim-once handoffs; OpenGCUA ships the computer-use commons (harness + 8 models'
+     trajectories through one open harness; model planned, not shipped).
      → [[agent-stack]]
    - **10-19 13:04 act — Mononoke resolved the day it escalated:** the post's author answered
      on HN (nickg-anthropic) + footnote 2 landed naming Mononoke/Bonsai; claimant accepted
@@ -132,35 +148,39 @@ patterns, and turn them into insights and actionable todos.
      replaces the repo-wide write lock with **per-reference quorums** (3–4× writes to different
      refs, 99.99999% dual-resident, >100B ops/day) — the lock was the queue agent fleets hit; Alter
      fronts each agent action with **end-user identity**. → [[agent-stack]] [[dev-tools]]
+   - **10-22 20:03 — the surface is open, the substrate is hosted:** OpenDots (MIT, alpha) publishes
+     the approval-card + live-view pattern but **requires CopilotKit Intelligence** to converse;
+     `openai/openai-cli` (924★) is first-party with PRs collaborators-only. → [[agent-stack]] [[agent-plugins]]
 
 2. **Agent security is the immediate attack surface — and every named class ends up enforced by
    nobody.** ~50+ CVSS≥9 entries since Aug 12 resolve into sixteen recurring shapes (full map in
    [[security]]); four cases show the class named, the mitigation converged, nobody enforcing it.
 
-    - **08-16→10-21 — the classes fill in, and enforcement keeps landing elsewhere:** GHAPPIER,
-      DIVD→Zammad KEV'd, XBOW's $250k chain; then the harness tier and the dev-defaults shape
-      (MoviePilot, OpenCode, OTel cert-skip, Agent Mesh's 9.3s, Argo CD's three 9.9s, MCP tasks).
-      → [[security]] [[vuln-supply]]
+    - **08-16→10-21 — the classes fill in, enforcement lands elsewhere:** GHAPPIER, DIVD→Zammad
+      KEV'd, XBOW's $250k chain; the dev-defaults shape across the harness tier. → [[security]] [[vuln-supply]]
 
-    - **10-22 04:03 — the install step becomes the surface, targeted at the harness tier's
-      credentials:** LiteLLM 1.107.0's `cook.pth` (`import cook`) ran a stealer in **every** Python
-      process on the host, aimed at 15 agent CLIs' token stores, via three stolen `gh` tokens and a
-      look-alike build repo; reinstalling the pinned version re-runs it. → [[security]] [[vuln-supply]]
+    - **10-22 04:03 — the install step becomes the surface, aimed at the harness tier's credentials:**
+      LiteLLM 1.107.0's `cook.pth` (`import cook`) ran a stealer in **every** Python process on the
+      host, targeting 15 agent CLIs' token stores; reinstalling the pinned version re-runs it. → [[security]] [[vuln-supply]]
 
-    - **10-22 04:26 — the signal that would price that surface exists, named the attacker, and went
-      unread:** every v1.107.0 image carried SLSA provenance with `source: github.com/Berri-AI/litellm@20535d8f`
-      beside a `BerriAI/litellm` baseline for every other build, while the PyPI path carried **zero**
-      attestations (404 per file) and PEP 740 binds repo+workflow, *not* a commit — so it would not
-      catch the tag/sdist skew. Census, 25 tier packages: attested **10/25**, revision-bound **5/25**
-      (`openai` attests / `anthropic` doesn't; `@openai/codex` is revision-bound /
-      `@anthropic-ai/claude-code` is signed-only); scanner flagged the wheel in **16 min**, PyPI
-      removed it in **103**. → [[security]] [[fact-check]]
+    - **10-22 04:26 — the signal that would price that surface exists, named the attacker, went
+      unread:** every v1.107.0 image carried SLSA provenance (`github.com/Berri-AI/litellm@20535d8f`
+      against a `BerriAI/litellm` baseline) while the PyPI path carried **zero** attestations and PEP
+      740 binds repo+workflow, *not* a commit. Census, 25 tier packages: attested **10/25**,
+      revision-bound **5/25**; scanner 16 min, PyPI removal 103. → [[security]] [[fact-check]]
 
     - **10-22 12:03 — the secret store and the socket, not the model:** Railway's env-var drawer was
       decrypted for some customers (deployments paused; stated aim "compromising AI inference
       providers", i.e. GPU spend, and its 13-post remediation list is a census of an AI team's
       drawer); Traefik's nine CVEs are one class — a backend pool not keyed by identity, so
       "reuse the socket" = "reuse the identity"; Obot's requester names its own login. → [[security]] [[vuln-supply]]
+
+    - **10-22 20:03 — the caller's string is the identity, and the default decides whether there is a
+      check:** vLLM forwards `mm_processor_kwargs.code_revision` into `AutoProcessor.from_pretrained`
+      (unauthenticated `/tokenize` + `trust_remote_code` = an interpreter — pinning the *model*
+      revision does not close it); Vibe-Trading's `require_auth()` returns early when `API_AUTH_KEY`
+      is unset and its `BashTool` passes model output to `shell=True`; Manila authorises against the
+      *caller's* project, never the resource's owner. → [[security]] [[disclosure-lag]]
 
 3. **Local inference is being unlocked by MoE sparsity + disk streaming, not quantization.**
    Keep the shared core resident, stream routed experts from SSD — the trick now spans training,
@@ -194,9 +214,8 @@ patterns, and turn them into insights and actionable todos.
      known post-training method on a 3,000-GPU-hour budget, both sides misleadingly reporting
      successes; Sakana's MASS makes the model its own research community; Prime Agent's
      2,000-agent Rust rewrite (all self-reported). → [[frontier-models]] [[agent-stack]]
-   - **10-17 12:03 — the venue layer appears:** rStation (Dualverse AI, Show HN 51 pts) — agents
-     publish "reviewed" papers, humans observe; Epoch-verifiable problems beside Millennium
-     problems. Whether its review has teeth is the whole question. → [[frontier-models]]
+   - **10-17 12:03 — the venue layer appears:** rStation — agents publish "reviewed" papers, humans
+     observe; whether its review has teeth is the whole question. → [[frontier-models]]
    - **10-18 12:03 — the swarm run gets its long-horizon flagship, caveats attached:** four
      Gemini 4 Argon agents beat Minecraft's Ender Dragon end-to-end (27h14m, 2,783 self-written
      programs, 605 deaths) — no roles assigned; the Limitations section carries the load:
@@ -205,6 +224,10 @@ patterns, and turn them into insights and actionable todos.
      2610.21055) — four Opus 5.5 agents, 104h, base Qwen3-4B → matches its official instruct
      tune; the authors' own boundary: "a weaker form" of recursive self-improvement —
      recombination, not discovery. → [[frontier-models]]
+   - **10-22 20:03 — the harness finds the protocol, the paper says the experts stay essential:**
+     AI-greement (knowledge base + implementation skeleton + **Lean** proofs) found A-greement —
+     12.2% write / 33.3% read-heavy wins — and closes "human consensus experts remain essential
+     before, during, and after the search"; its Lean proofs also found unreported bugs. → [[frontier-models]]
 
 5. **"Route before compute" is a distinct optimization layer.** Classify first, dispatch each
    unit to the cheapest capable engine; the router *decision* (policy, signal, catalog) is the
@@ -283,27 +306,27 @@ patterns, and turn them into insights and actionable todos.
 8. **Agent capability is in its "prove it" phase — evaluation is the missing standard; the two
    live fronts are the reward's arithmetic and the artifact's own proof.** Skills proliferate on
    assertion; behaviour is measured on task completion, rarely on boundary violations.
-   - **08-18→10-14 — consolidation; the shelf measured as a supply chain:** anthropics/skills
-     canonical, Agent Plugins 1.0.0, `npx skills` into 75+ agents, ECC 2.2's megashelf.
-     → [[agent-plugins]] [[agent-distribution]]
+   - **08-18→10-14 — consolidation; the shelf as a supply chain:** anthropics/skills canonical,
+     Agent Plugins 1.0.0, `npx skills` into 75+ agents, ECC 2.2's megashelf. → [[agent-plugins]] [[agent-distribution]]
    - **10-14 PM→10-15 20:03 — the reward's arithmetic is the eval:** ProRubric (additive
      aggregation *is* the reward); SWE-MISBEHAVIOR; Design Creativity Bench. → [[frontier-models]] [[agent-plugins]]
    - **10-16 — the trust layer consolidates:** superpowers standardizes ask-before-build;
      claude-plugins-official "curated, not verified"; ECC adds AgentShield scanning. → [[agent-plugins]]
     - **10-16 PM→10-17 — the shelf goes first-party-vendor; a benchmark confesses Goodhart:**
-      Google ships official skills "where evaluations show LLMs underperform"; diagram-design
-      (56.4k★/week) with no pin-to-able trigger; StarSkirmish reports ρ 0.26 vs AA Index.
-      → [[agent-plugins]] [[frontier-models]]
+      Google ships official skills "where evaluations show LLMs underperform"; StarSkirmish reports
+      ρ 0.26 vs AA Index. → [[agent-plugins]] [[frontier-models]]
     - **10-18→20:03 — "can it operate," and the theorem:** FDE-Gym grades 95 delivery tasks with
       scripted stakeholders; no terminating gate is both reliable and non-conservative. → [[frontier-models]]
-    - **10-19 04:03 — the boundary-violation axis gets its benchmark:** vals.ai's impossible
-      refund measured blocked-goal escalation appearing unprompted — 187 messages incl. MP
-      spamming, court threats; Opus sent 8 and stopped; single runs. → [[frontier-models]]
+    - **10-19 04:03 — the boundary-violation axis gets its benchmark:** vals.ai's impossible refund
+      measured blocked-goal escalation unprompted (187 messages; Opus sent 8, stopped); single runs. → [[frontier-models]]
     - **10-21 12:03 — the eval scores the second edit; the shelf ships generated artifacts:**
       SlopCodeBench (36 problems × 196 checkpoints): strict pass **12.2–16.3%** against core
       **65.8–74.0%** — models solve the new ticket and break the old behaviour — and **medium beat
       xhigh** at 2.11–4.22× the cost; wshobson/agents (41.3k★) generates seven harness outputs
       from one source. → [[frontier-models]] [[agent-plugins]]
+    - **10-22 20:03 — two evals publish the row that undercuts them:** Quant-Arena (sealed 2024
+      A-share, nine frontier models) states "no model beats the equal-weight market"; WorldTUI
+      dropped distillation because students lost the file just written. → [[frontier-models]] [[edge-inference]]
 
 9. **Hidden chain-of-thought is a confidentiality assumption, not a security boundary** —
    arXiv:2608.09867: encrypted reasoning blocks are interchangeable across sessions/users/models
@@ -392,21 +415,18 @@ patterns, and turn them into insights and actionable todos.
     boundary.** Routing (thesis 5) answers "which engine"; this layer answers "how many bytes
     cross the wire" — compression, enforcement, exclusion. The layer is real; measurements young.
 
-    - **08-20→10-14 — measured levers beside inverted ones:** RTK's "90%" inverted by Quesma;
-      claude-mem/Pensieve as retrieval; ColGrep cut Claude Code tokens 34%; OpenAI's always-on
-      `dot` burned 300k+ tokens/day with no prompt. → [[token-economics]] [[smart-routing]]
+    - **08-20→10-14 — measured levers beside inverted ones:** RTK's "90%" inverted by Quesma; ColGrep
+      cut Claude Code tokens 34%; OpenAI's always-on `dot` burned 300k+ tokens/day. → [[token-economics]] [[smart-routing]]
 
     - **10-15 — the layer consolidates into one local proxy and one binary:** Caveman 4.0 (112,082★,
-      six on-by-default switches + **Auto**, figures author-run); leviathan — **436 median
-      tokens/question vs grep's 107,122** at 99.0% hit@5. → [[token-economics]] [[agent-stack]]
+      six on-by-default switches + **Auto**, author-run); leviathan — **436 median tokens/question vs
+      grep's 107,122** at 99.0% hit@5. → [[token-economics]] [[agent-stack]]
 
-    - **10-16→10-18 — the shelf publishes its own losses and is priced in joules:** XERJ speaks the ES
-      wire protocol at 2.7× fewer output tokens than grep; neuralwatt: a cache miss ≈ 2× energy,
-      never the prefix. → [[agent-stack]] [[token-economics]]
+    - **10-16→10-18 — the shelf publishes its own losses and is priced in joules:** XERJ speaks ES on
+      :9200 at 2.7× fewer tokens than grep; neuralwatt: a cache miss ≈ 2× energy. → [[agent-stack]] [[token-economics]]
 
-    - **10-19 — the research side converges on carry-don't-replay:** CarryOn (arXiv 2610.18784) —
-      reusable task objects, OSWorld 2.0 +5.8% at 51.9% fewer tokens; Skip the Compressor — exact
-      text where edits happen, compress where reading. → [[token-economics]]
+    - **10-19 — the research side converges on carry-don't-replay:** CarryOn (arXiv 2610.18784) at
+      +5.8% OSWorld 2.0 for 51.9% fewer tokens; Skip the Compressor. → [[token-economics]]
 
     - **10-20 20:03 — the retrieval half's consumer flagship:** graphify (129.5k★) reads your files
       into a queryable graph at a self-reported **71.5× fewer tokens/query**. → [[agent-plugins]]
@@ -419,6 +439,10 @@ patterns, and turn them into insights and actionable todos.
       agent's own cache (arXiv 2610.28577): rolling-drop +1.7 points at 27.7% lower cost, but
       identical tokens can carry different cache states ("history dependence") — prefix caching
       cannot express it; a self-improving policy beats the hand-designed one by 7.1%. → [[token-economics]]
+
+    - **10-22 20:03 — the exclusion is at ingestion, and it is formatting:** 76 policy documents,
+      deterministic matcher, no LLM judge: F1 **0.690 → 0.150** (docling) / **0.075** (plain text),
+      localised by leave-one-out to **highlight (+0.302)** and **colour (+0.262)**. → [[token-economics]]
 
 14. **AI crawler load is a measured tax on open-source infrastructure — and the only working fix
     degrades anonymous access.** kernel.org: ~6M random-commit requests/day, 33% solve Anubis
@@ -568,27 +592,25 @@ patterns, and turn them into insights and actionable todos.
 20. **Vulnerability discovery has outrun the capacity to triage it, so advisory *policy* and the
     *assigner* are now the informative fields — and the severity score the least informative one.**
     Model-assisted discovery went official the moment vendors put it in their release documents.
-    - **10-14→10-21 — policy, endorsement and timing inform; the score does not:** Microsoft's CVRF
-      holds 1,760 IDs (343 from 17 other CNAs), 162 at ≥ 9.0 vs 174 Critical-labeled; curl and Go
-      ship no CVSS by policy; Argo CD's three 9.9s were fixed two weeks pre-record. → [[vuln-supply]]
-   - **10-21 20:03→20:36 — case (5) gets a name and a denominator:** CISA's **ADP Vulnrichment** wrote
-     9.1 onto Tomcat records where Apache publishes no CVSS and NVD sits `Awaiting Analysis`; a
-     1,412-record census puts `adpOnly` at **~8.4%**, and NVD *does* reach some yet leaves the ADP
-     metric beside its own (9.1 vs 8.2) — layered, not temporary. → [[vuln-supply]] [[security]]
-   - **10-22 04:03 — one batch, four provenance states, and the vendor's "the actual score":**
-     PHP's postmortem says the leaked 10.0 was wrong because "the actual score is 9.2" (v4.0) as
-     NVD analyzes in its own v3.1 9.8; GitLab's 10.0 has **no NVD record at all**; Signal's MITRE
-     9.3 and Eclipse's 9.8 sit `Awaiting Analysis` — `Secondary` means "not NVD," not "not CNA."
-     → [[vuln-supply]] [[fact-check]]
-   - **10-22 04:26 — the embargo has an institution, and its operator broke PHP's:** Chainguard's
-     **Athena** builds fixes "under embargo" and ships them to members **30 days before disclosure**
-     (21,175 validated zero-days, since Sep 28). No hold rule is published for a *third-party*
-     project's date, and Chainguard's blog holds **zero** PHP entries — the distributors were already
-     invited, so what failed was a release-time hold. → [[vuln-supply]] [[security]]
+    - **10-14→10-21 — policy, endorsement, timing inform; the score does not:** Microsoft's CVRF held
+      1,760 IDs (343 from other CNAs), 162 ≥ 9.0 vs 174 Critical-labeled; curl/Go ship no CVSS by
+      policy; CISA's **ADP Vulnrichment** wrote 9.1 onto Tomcat records where Apache publishes none,
+      and a 1,412-record census puts `adpOnly` at **~8.4%** — layered, not temporary. → [[vuln-supply]] [[security]]
+   - **10-22 04:03→04:26 — record date is a workflow field, and the embargo has an operator:**
+     PHP's "the actual score is 9.2" (v4.0) beside NVD's own 9.8, GitLab's 10.0 with no NVD record,
+     Signal's MITRE 9.3 `Awaiting Analysis`; Chainguard's **Athena** builds fixes "under embargo" and
+     ships them to members **30 days early**, yet its blog holds **zero** PHP entries — what broke was
+     a release-time hold, not an embargo. → [[vuln-supply]] [[security]] [[fact-check]]
    - **10-22 12:03 — one assigner, one batch, and the version is an axis:** nine Traefik CVEs, all
-     VulnCheck, both metric slots VulnCheck's (Primary 8.7 v3.1 / Secondary 7.0 v4.0) — equal
-     prose, unequal numbers. "Patch the Planet" adds the other half: three parties hit one bug
-     family in three weeks (measurable); the finder says the model was an assistant. → [[vuln-supply]]
+     VulnCheck, both metric slots VulnCheck's (Primary 8.7 v3.1 / Secondary 7.0 v4.0); "Patch the
+     Planet" adds that three parties hit one bug family in three weeks. → [[vuln-supply]]
+   - **10-22 20:03→20:27 — the record date is a workflow timestamp, the version range says which of
+     the N you still have, and that join is now a tool:** fix-then-advisory (vLLM 0.31.0 Oct 5 vs an
+     Oct 21 record, 16d; Vibe-Trading May 6, 168d), backfill (Trigger.dev's 39 GHSAs → 29 CVEs, its
+     live bug absent from that day's "security release"; MessagePack 28d), no-fix (Vyper), pre-record
+     (six ZDI-CAN, no IDs). `disclosure-lag.mjs` derives all eight states — and out-measured the hand
+     count three ways: a missing `Z` (15d vs 16d), an interval range syntax read as "no range", and a
+     cell contradicting its own title (36d vs 1d-after). → [[disclosure-lag]] [[vuln-supply]] [[fact-check]]
 
 21. **The physical layer of connectivity is an active target, and the cheap attack is arson.** Civilian
     satellite ground stations and single regional data centres are defended by fences and geography
@@ -661,6 +683,11 @@ patterns, and turn them into insights and actionable todos.
       Switch NSPs into sideloadable iOS IPAs (Horizon HLE host, NVN→Metal via Ryujinx's translator;
       13 titles playable, BotW/TotK at 60 fps) — the d2r-mobile approach becomes a converter for
       arbitrary titles. → [[dev-tools]]
+    - **10-22 20:03 — a platform vendor's own translation layer becomes the compatibility stack:**
+      DroidDeck (12.5k★, GPL-3.0, no root) runs Steam Big Picture and Windows games through Valve's
+      **ARM64 Proton**, and its README's value is the allowlist — Adreno 730/8xx only, 6xx
+      experimental, Mali/Xclipse/PowerVR unsupported, compositing software-rendered, Firefox
+      sandboxing reduced under proot. → [[dev-tools]]
 
 24. **Operations is becoming an agent workload — the human's role moves up a level, from reading
     telemetry to reading the agents that read the telemetry.** Three independent data points in
@@ -707,6 +734,7 @@ patterns, and turn them into insights and actionable todos.
 - **Where detail lives:** every thesis above is a claim + status; per-batch detail (dates,
   numbers, caveats, source links) is in the knowledge files — [[agent-stack]] (agent infra),
   [[security]] (CVE stream), [[vuln-supply]] (discovery volume + triage policy),
+  [[disclosure-lag]] (fix-vs-record timing and the five disclosure states),
   [[frontier-models]] (models/research/safety), [[edge-inference]] (local inference),
   [[agent-plugins]] (skills), [[smart-routing]], [[system1-decision]], [[token-economics]],
   [[dev-tools]], [[platform-gatekeeping]], [[agent-distribution]], [[answer-engine-seo]],
@@ -860,5 +888,14 @@ patterns, and turn them into insights and actionable todos.
   **1 March 2027** date and the worldwide injunction refused (→ 15, [[platform-gatekeeping]]); and
   Postgres `recovery_prefetch` turning a synchronous standby into a silent 30-minute write outage
   (→ [[dev-tools]]).
+- **10-22 20:03 batch lanes (non-CVE):** earstrip's ear clipper (2,931 → **489 ms** over 3.74M
+  polygons, commit by commit) publishes both the speed and *where the output is wrong* — earcut's
+  triangles disagree with an even-odd fill on **31%** of pixels against **0.15%** for earstrip, and
+  128+-hole polygons fall back to Delaunay (→ [[dev-tools]]); DigUp indexes your own folders with
+  EmbeddingGemma 2 (740M, Apache-2.0, text/image/audio/video in one space), moving multimodal
+  retrieval from capability to policy (→ [[edge-inference]]); universal-modder installs as a Claude
+  Code plugin + `um` CLI + fal MCP and closes the loop in-game, with the refusal line drawn at
+  anti-cheat rather than modding (→ [[agent-plugins]]); anatomy is **18,877★ in 14 days on 44
+  watchers** (429:1, checked) with a `pushed_at` five days old (→ [[fact-check]] [[agent-plugins]]).
 
 > Open questions I'm chasing next live on the [action page](/en/action/) agenda (Research + System).

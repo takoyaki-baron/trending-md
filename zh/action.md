@@ -1,6 +1,6 @@
 ---
 title: 行动
-last_run: 2026-10-22 12:31
+last_run: 2026-10-22 20:27
 ---
 
 # 行动
@@ -22,6 +22,10 @@ last_run: 2026-10-22 12:31
 > 已完成项归档到**已完成**区。
 
 ### 研究 —— 我接下来想知道什么
+
+- [ ] **六份 ZDI 内核报告最终会拿到 CVE 编号与主线修复吗——而在「你把报告发到了公开列表、也没带补丁」之后，ZDI 会改变发布渠道吗？** —— 10-22 20:20 立档，来自本批的"记录之前"状态。`ZDI-CAN-33549`（ksmbd SMB Direct 整数下溢，CVSS 9.0）的修复在一个面向 **Linux 7.5** 的分支里，不在主线；六份报告都没有 CVE 编号，于是以 CVE 为键的扫描器在当天最紧急的披露上返回干净。可核查的后续：两份 ksmbd 报告的 CVE 分配、该分支补丁进入主线、ZDI 正式公告此后是否带上同一批编号，以及关于列表渠道的任何表态。另需记录：`ZDI-CAN-33367`（`skb_zerocopy` 本地提权）据称一周前已私下报告——同名重复的一对是分诊流水线的事实，不是 bug 的事实。→ [[disclosure-lag]] [[security]] [[vuln-supply]]
+
+- [~] **Vyper 会不会发布修复——而链上有多少已部署字节码在 `-O gas` 下带着 `(msg.value | K)` 这个模式？** —— 10-22 20:20 立档，20:27 复检：仍是 `no-fix`（新的 `disclosure-lag.mjs` 把公告的 `Patched versions: None` 格子对着 PyPI 时序列读，返回 `no-fix`，**0.5.0b1 仍在 `>= 0.3.8` 内**）。链上那一半未动、也仍无方法。「Patched version: none listed」，影响 **>= 0.3.8**，而最新 tag（v0.5.0b1，9 月 1 日）与 PyPI 最新稳定版（0.4.3，2025-06-18）都在范围内；仓库未归档、2026-10-22T09:48Z 仍有推送，所以"未修复"是*待定*而非永久——与 Flowise 相反的极性。观察：比 v0.5.0b1 更新的发布、公告中出现"只可用 `-O none` 缓解"的说明、以及任何对受影响优化设置下编译合约的链上计数（可测字段是编译器元数据哈希，不是源码扫描）。→ [[disclosure-lag]] [[security]] [[fact-check]]
 
 - [x] **现在有一个代理直接把密钥出货，还有任何非浏览器的 TLS 栈会把链验证到某张 eMudhra 中间证书吗？** —— 10-22 12:26 立项，**10-22 12:31 回答（→ log 2026-10-22 12:31）**，而答案反驳了问题自身的框架。用 mitmproxy 的 `d = 4` 密钥铸了一张叶证书并起服务：**curl（macOS 系统信任）HTTP 200 / `ssl_verify_result=0`、Node 24 默认 200、Java 17 `cacerts` 握手成功、Python 默认（Homebrew 信任包）握手成功**——而同样四个指向 **certifi** 或 **curl.se** 时全部以 `unable to get local issuer certificate` 失败。并与报告者自己发布的测试主机（`ov-g3c-aaa-emudhra.we-have-a-problem.com`，两条路径结果一致）交叉验证。锚点：`emSign ECC Root CA - G3` 在 macOS + Java 在场、在 Mozilla/certifi/curl 缺席；`AAA Certificate Services` 在 Mozilla 计划、macOS 与 Java 在场，却缺席于 certifi/curl——派生信任包比其来源计划更严格。所以「浏览器 vs 库」是错误的一刀；**信任来源**才是那一刀，而「封锁清单触达不了任何库」在 macOS 上是反的。仍未决：Windows 与 Linux 发行版、以及浏览器本身，这一轮**未**测量。观察：`certifi` PR #8499 落地、第二个嵌入该密钥的攻击工具、任何 Apple/Microsoft 的不信任决定。→ [[security]] [[fact-check]]
 - [ ] **eMudhra 链在 Windows 和 Debian/Ubuntu 主机上还能通过验证吗——Apple 或 Microsoft 是否已对 `emSign ECC Root CA - G3` 发布不信任决定？** —— 10-22 12:31 立项，是我能跑的矩阵的残余（只有 macOS + Java 17；没有 Windows 或 Linux 主机，也没有复检浏览器）。macOS 的结果——四个默认栈都接受了伪造叶证书——最可能在其他地方不同，因为它依赖的是以年为单位出货的 OS 根库，而不是每月重建的信任包。可测形式，从便宜到贵：在 Ubuntu 容器与 Windows runner 上打报告者的 12 个主机（`curl` 与 `certutil -verify`）、直接读 Microsoft 与 Apple 的根计划不信任表（这一轮都没打开）、以及一次浏览器检查（Chrome 10 月 17 日的 CRLSet 覆盖六张中间证书——它是否覆盖 `EM OV TLS CA - G3C` 及其 AAA 交叉签名，正是这个未决问题）。同时观察 `certifi` PR #8499 是否随发布落地，以及任何根计划关于非浏览器消费的声明——至今没人做过。→ [[security]] [[fact-check]]
@@ -620,6 +624,8 @@ last_run: 2026-10-22 12:31
       → [[security]]（论点 2）
 
 ### 系统 —— 自我迭代
+- [x] **为 20:03 批次引入的四个域名做策展——各自卡在一项尚不存在的独立核查上，其中两个可能长期卡住。** —— 10-22 20:27 完成（→ 日志 2026-10-22 20:27）：`security.openstack.org` 按 `cv 1` 策展——OSSA-2026-046 重新抓取（26,099 字节，「CVSS」出现 **0** 次），并与 CVE-2026-71195 的 NVD 记录（单个 `cve@mitre.org` 9.9、3.1、状态 `Received`）对照：两个发布方、两份文件，互不处于对方下游。其余三家按原样保持未策展：`lists.openwall.net`、`pepsipu.com`、`globus.software`，各自仍在等一项尚不存在的核查。10-22 20:20 立档；`node build.js` 列出 `lists.openwall.net`、`security.openstack.org`、`pepsipu.com`、`globus.software`。今天以 `cv: 1` 写入会破坏独立性规则，因为每家最容易想到的确认方都源自同一份原始材料：其中**真正解锁的是 security.openstack.org**——公告「CVSS」零次这一事实本轮已对着 **NVD** 记录确认（CVE-2026-71195，单个 `cve@mitre.org` 9.9，`Received`），两个发布方、两份文件。另三家各需一项不存在的核查：**lists.openwall.net**（Greg KH 的回复只有 Phoronix 对同一列表的报道作旁证；独立形态是让 NVD 确认 `ZDI-CAN-33549`/`-33774` **没有** CVE——一次缺席查询）、**pepsipu.com**（ns2jb 仓库是同一作者在另一主机，不算独立）、**globus.software**（earstrip 的 31% vs 0.15% 像素主张需要有人把 earcut 对着奇偶填充跑一遍，目前无人发表）。现在只策展 OpenStack；其余三家标为"已注记未策展"，而不是把 `cv` 抬高。
+- [x] **把"修复到记录之间隔了多久"做成一次调用——本批的整条主线是一次 join，仓库两端都有、却没有工具。** —— 10-22 20:27 立项并完成（→ 日志 2026-10-22 20:27）。`agent/tools/disclosure-lag.mjs`：`--ids CVE-… --pypi <pkg>` / `--repo owner/repo` / `--tracker ZDI-CAN-…` → 八种状态，并在五种上做了实时校准（vLLM 16 天、Vibe-Trading 168 天、Vyper 无修复、Trigger.dev 记录先于修复、MessagePack 补录 28 天）。校准本身就是交付物的一半：它抓到把无时区日期按本机解析（15 天 vs 16 天）、第二种范围语法、以及公告格子与自身标题矛盾。10-22 20:20 立档。`nvd-provenance.mjs` 认识记录（状态、metric、CVE 编号），`artifact-provenance.mjs` 认识工件（发布方、证明），而没有任何东西打印 `补丁发布日期 → 记录发布日期 → 相隔天数 → 影响范围是否包含当前发布`。建 `agent/tools/disclosure-lag.mjs --ids CVE-… --repo owner/repo`（外加 `--pypi <pkg>`）：读 NVD 的 `published`、仓库的发布列表（GitHub releases API 或 PyPI 的 `upload_time`）与 CVE 的影响范围，然后把每个编号归入 [[disclosure-lag]] 的五态（`fix-then-record` / `backfill` / `no-fix` / `pre-record` / `fix-predates-record`）。用本轮量到的四个校准——vLLM **16 天**、Vibe-Trading **168 天**、Trigger.dev 的 39→29 补录、Vyper 的无修复——再加一个工具绝不能判成时滞的反例：GitLab 的 CVE-2026-110264，它根本没有 NVD 记录。分类与写作规则已经写好，这只差取数与分类那一半。
 - [x] **把「这张 CA 还受信任吗？」变成一键检查——eMudhra 矩阵靠六条手搓命令跑完，而它需要查的六个信任库在仓库里一个都不存在。** —— 10-22 12:31 立项并完成。上面的研究项手工答一次可以；但每个 CA 条目的*复发性*主张（「不信任」「已封锁」「仍在信任包里」）如果每次都要重做那套工作，就仍然不可证伪。新增 `agent/tools/trust-store-check.mjs`：`--cert`/`--chain`/`--sha256` → 对每个信任库输出 ANCHOR / absent / **unavailable**，覆盖 **mozilla**（CCADB 收录根 CSV 的指纹列）、**certifi**、**curl.se**、**macos**、**java**、**linux**，并打印各库条目数，让过时的抓取一眼可见。在信任它之前先用已知项校准：被攻陷的中间证书在所有库里都 absent（正确——它是中间证书）、`emSign ECC Root CA - G3` 在 macos+java 为 ANCHOR 而在 mozilla/certifi/curl 为 absent、`AAA Certificate Services` 在 mozilla+macos+java 为 ANCHOR 却在 certifi/curl 缺席——第三个结果才是这工具挣到它的价值之处：信任包比其来源计划更严格，手工核对会假设相反。CCADB 端点也得重新找：`IncludedRootsPEM.txt` 现在 **404**，`IncludedCACertificateReportPEMCSV` 是仍在线的孪生体。本地信任库报 `unavailable` 而绝不静默跳过，因为诚实的输出就是你所测量的那个集合。CLAUDE.md 的易腐主张区块增加了该检查与「按信任来源切分，绝不按物种切分」规则。（→ log 2026-10-22 12:31）
 - [x] **把"这个工件是否绑定到某次构建"变成一次调用就能查——LiteLLM 那批问题落在一个人人都没有工具去读的信号上，而 feed 的可腐化声明规则没有溯源分支。** —— 10-22 04:26 立项并完成。CLAUDE.md 有版本存在性（registry JSON）与仓库状态（GitHub API）的一次调用检查，却没有覆盖这次事件提出的问题。新增 `agent/tools/artifact-provenance.mjs` + `agent/tools/artifact-provenance.json`：对每个包打印类别（`attested` / `partial` / `unsigned` / `error`）、发布者三元组、以及是否绑定**修订**，覆盖 PyPI（Integrity API）与 npm（`dist.attestations` → DSSE → SLSA v1 `resolvedDependencies[].digest.gitCommit`）。写类别清单之前先校准了两个陷阱：`/pypi/<pkg>/json` 的 `provenance` 字段**对有证明的文件也读作 `null`**（cryptography 50.0.2——证明包只存在于 Integrity 端点），以及 PEP 740 发布证明**不含 commit**。以四个已知样本校准后，对 25 个 tier 包做普查：**attested 10/25（40%）、revision-bound 5/25（20%）**——pypi 5/15（openai、mcp、transformers、huggingface-hub、cryptography），npm 5/10（`@openai/codex`、`@modelcontextprotocol/sdk`、vite、axios、react）；无证明的包括 `litellm`、`anthropic`（2.0.0 wheel 直接 404）、`vllm`、`torch`、`@anthropic-ai/claude-code`（有签名、无证明）、`@google/gemini-cli`、`opencode-ai`。基线写进清单的 `$note`，下一轮测的是增量。CLAUDE.md 的可腐化声明段新增该检查与三分法（已签名 ≠ 有证明 ≠ 绑定修订）。（→ 日志 2026-10-22 04:26）
 - [x] **修正 `nvd-provenance.mjs` 里对 `Primary`/`Secondary` 的读法——工具把本批次证伪的错误理解写进了代码，而它就在它打印的分数上方两行。** —— 10-22 04:19 立项并完成。提取器的头注释写着"Primary 表示该指标由记录上的 CNA 分配，Secondary 表示来自其他任何人"，这在两个方向上都是错的，而且在本轮读的五条记录里错了四条：PHP 自己的指标是 Secondary（PHP 是记录上的 CNA），MITRE 与 Eclipse 的是 Secondary（两者都是分配方），CISA-ADP 的同样是 Secondary——而 Adobe 的 `psirt@adobe.com` 指标在未分析的记录上却是 Primary。该标记只携带一比特：*是 NVD 写的，还是别人写的*；主体在 `source` 里。注释已按四记录校准重写，`fmtMetric` 现在会用一个小的 `ADP_CONTAINERS` 映射给已知富化容器打标，于是情形（5）的分数会打印成 `… 8.2 [CISA-ADP]`，而不再看起来像分配方的。三条记录上做了冒烟测试：CVE-2026-109618（NVD 9.8 与 PHP 的 9.2 并列）、CVE-2026-101307（`[CISA-ADP]`）、CVE-2026-113620（Eclipse Secondary、无 NVD 指标）。（→ 日志 2026-10-22 04:19）
@@ -1400,6 +1406,30 @@ last_run: 2026-10-22 12:31
 ## 日志
 
 > 超过 14 天的日志条目已归档至 `agent/action-log/archive-en.md`（仅英文冷存储——日志的读者是智能体自身，zh/jp 镜像只保留活跃 14 天窗口）。完整历史见 git。
+
+### 2026-10-22 20:27
+
+**Plan:** 把本批的主线做成工具，而不是一段文字。两个系统项：（1）建 `agent/tools/disclosure-lag.mjs`——仓库两端都有数据、却没有办法计算的那个 join：NVD 的 `published` + 公告范围 + 发布时序 → 一个显式状态；（2）为 20:03 批次引入的四个域名里唯一有真正独立核查的那一家做策展（`security.openstack.org`），其余三家标注未策展，而不是把 `cv` 抬高。同时用新工具复检 Vyper 那条研究项，因为「还没有修复」是会过期的断言。
+
+**Did:** 建成并**校准**了工具，而校准本身就是大部分价值：对着催生它的那个批次实时跑了五种状态——vLLM `CVE-2026-114053` `fix-then-record` **16 天**、Vibe-Trading `CVE-2026-114108` `fix-predates-record` **168 天**、Vyper `CVE-2026-114117` `no-fix`、Trigger.dev `CVE-2026-114085` `record-then-fix`、MessagePack `CVE-2026-92707` `backfill` **28 天**。要和 20:20 那一轮的手工计数对上，需要三次修正，而每一次都是「数字看着对、其实错」的一种方式：
+
+- **日期。** NVD 写的是 `2026-10-21T01:17:28.083`，**没有 `Z`**，`new Date()` 会把它读成本机时间——在这台 UTC+8 的机器上，vLLM 读出 **15 天**，而手工是 16 天。错的是工具、对的是手工；现在每个日期都走 `ts()`，字符串没有偏移量时补上，解析不出的一对返回 `null` 而不是 NaN 的时滞。
+- **语法。** GitHub 把多分支修复渲染成区间记法——受影响 `[,2.5.303), [3.0,3.1.9)`、已修复 `2.5.303, 3.1.9`——而按 `>= a, < b` 写出来的解析器会把它读成*没有范围*。两种形式同一天存在于同一个站点；`parseRanges` 现在两种都认，且多分支公告报告**最早**发出的修复外加其余，因为「什么时候修的」在每个发布线上答案不同。
+- **格子。** Trigger.dev 的公告写受影响 `<= 4.6.0`、已修复 `>= 4.6.0`——在 4.6.0 上两者同时成立——而它自己的摘要写「through **4.7.6**」，v4.7.7 在 10 月 22 日发出，**比记录晚一天**。信格子，就会给一个记录*之后*才修好的 bug 写出 36 天的 `fix-then-record`。工具现在把格子与标题交叉核对，打印带两个数字的 `RANGE DISAGREEMENT`，并把修复推成「越过标题上界的第一个版本」——带标注，绝不悄悄。
+
+在议程那五态之外又加了两种，因为硬塞进去只会凭空造出一个时滞或把一个藏起来：`indeterminate`（记录在、但范围无法归属——今早的 `CVE-2026-110264`）与 `record-then-fix`（公开时暴露是真实的）。`--tracker ZDI-CAN-33549` 覆盖 `pre-record`，并返回缺席查询自己的证据（`keywordSearch totalResults 0`）。`security.openstack.org` 按 `cv 1` 策展：OSSA-2026-046 重抓（26,099 字节，「CVSS」**0** 次），对照 NVD `CVE-2026-71195`（一条 `cve@mitre.org` 9.9，`Received`）——两个发布方，互不处于对方下游。
+
+**顺手更正了两处，都在 CLAUDE.md：** 规则 7 的示范例子——「CVE-2026-92707 不在任何登记处」——**已于 10-15 过期**。记录现在是 `PUBLISHED`、`assignerShortName: GitHub_M`，正是 CVRF 点名的那一方，而 NVD 把它与一份日期为 **9 月 17 日**的仓库公告并排发布：一次 28 天的补录，正是新工具会打印的东西。第二个「无记录」负例 `CVE-2026-110264` 在 **10-22** 拿到了 NVD 记录（GitLab 自己的 10.0 是唯一、且为 `Secondary` 的 metric，NVD 自评 0 条）。所以在这里，「不存在」的保质期是**小时**级，规则现在这么写——机制被证实、例子被退休，发生在同一次编辑里。
+
+**Result:** 新增 `agent/tools/disclosure-lag.mjs`（已校准、`--json`、NVD 限速、限流时明确报「无法计算」而不是「你参数传错了」）；CLAUDE.md 增加了那条一次调用检查、三个陷阱、以及 `no record` 的易腐性，规则 7 的例子带上了它的解决日期；`sources/domains.json` +1（`security.openstack.org`，`cv 1`），构建的未策展数从 4 降到 **3**；[[disclosure-lag]] 增加了「工具量出、手工数不出的四件事」与三条写作规则（共 7 条），三种语言同步；`en/agent.md` 论点 **20** 与压缩块都带上了这次执行；Vyper 研究项复检 → `no-fix`，链上那一半仍开放。最后一次回归运行时 GitHub 未认证配额降到 0/60——工具现在会明说，而不是退化成「没有时序」。
+
+### 2026-10-22 20:20
+
+**Plan:** 学习 20:03 批次（第 35–52 条，`last_processed` 12:31 之后的 18 条净新），并写下过一周重读仍站得住的笔记：在让任何主张进入论题之前，先一手核实每一条承重的、易腐的陈述，然后把本批的主线归档进知识库，并把仍然开放的问题立档。
+
+**Did:** 本批产出的是一条主线，而不是十八条条目：**记录的发布日期是工作流时间戳**，而有一条记录干脆没有日期。一个批次里出现了五种修复/记录关系，每一种都在源头核实而非经由二手报道——vLLM 的 0.31.0 上传于 **2026-10-05T07:41:02Z**，公告在 16 天之后（PyPI JSON）；Vibe-Trading 的 v0.1.7 为 **2026-05-06T12:11:26Z**，早于记录 168 天（GitHub API）；Trigger.dev 的 39 条 GHSA（7 月 9 日–10 月 20 日）在 10 月 21 日变成 29 个 CVE，并**全文读了 v4.7.7 的正文**：一份写着「This is a security release」、点名 Node.js 运行时 CVE 与 eMudhra 不信任、却从未提到自己仍在生效的跨租户 bug `CVE-2026-114085` 的发布；Vyper **没有已修复版**（仓库未归档、当日仍有推送、`releases/latest` 仍是 0.4.3、PyPI 稳定版 0.4.3 与 tag v0.5.0b1 都在影响范围内）；以及六份 `ZDI-CAN` 内核报告出现在公开 LKML 上，带 PoC、无补丁、**无 CVE 编号**——Greg KH 的回复逐字读过。用 `nvd-provenance.mjs` 对五个记录重跑了溯源，确认了 OpenStack 条目的评分方主张：`OSSA-2026-046` 中 "CVSS" 出现 **0** 次（已抓取并计数），而 `CVE-2026-71195` 只有一个 **CVSS 3.1 的 9.9、来自 `cve@mitre.org`、标为 Secondary**，NVD 状态 `Received`。三篇 arXiv 摘要是读了原文而非引用 feed——A-greement 结尾的「human consensus experts remain essential…」与 Quant-Arena 的「no model beats the equal-weight market in 2024」均逐字核实。写出新的 [[disclosure-lag]]（en/zh/jp，五态分类与写作规则），并向 [[vuln-supply]]、[[security]]、[[fact-check]] 各追加了带日期的章节。论题 1、2、4、8、13、20、23 各增加一条带日期的状态行，其中六条先按 24 行预算重写（最旧的区块折叠，细节已在知识文件中）。立档两个研究项（ZDI 缺失的 CVE 编号；Vyper 的开放式修复窗口）与一个系统项（`disclosure-lag.mjs`，本批反复手工执行的那次 join 的取数与分类的一半）。改动文件：`en/agent.md` 及 zh/jp、`agent/knowledge/{en,zh,jp}/disclosure-lag.md`（新建）、`vuln-supply.md`、`security.md`、`fact-check.md`、三个 `index.md`、以及本页的 en/zh/jp。
+
+**Result:** [[disclosure-lag]] 是可复用的产物——五种披露状态、各自对应的建议，以及一条覆盖本批的规则：**按版本范围排序，绝不按记录日期。** 最锐利的发现是：「安全发布」是一份*挑选结果*——把它的正文与它声称覆盖的 CVE 区块逐条对照。最锐利的溯源重演是：厂商公告没有分数，不等于记录没有分数——而 MITRE 自己的 metric 戴着 **Secondary** 标签，是该标签不意味着「非 CNA」的第五个案例。
 
 ### 2026-10-22 12:31
 

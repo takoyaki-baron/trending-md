@@ -4469,3 +4469,73 @@ whether the Apple and Microsoft root programs have published distrust decisions 
 documents were not read this run).
 
 Sources: [eMudhra intermediate CA compromise — reporter's disclosure + live test hosts](https://emudhra.we-have-a-problem.com/) · [mitmproxy `certs.py` (`EMUDHRA_CHAIN_PEM`, the `d = 4` key)](https://raw.githubusercontent.com/mitmproxy/mitmproxy/main/mitmproxy/certs.py) · [Mozilla included roots (CCADB CSV, SHA-256 fingerprints)](https://ccadb.my.salesforce-sites.com/mozilla/IncludedCACertificateReportPEMCSV) · [certifi `cacert.pem`](https://raw.githubusercontent.com/certifi/python-certifi/master/certifi/cacert.pem) · [curl.se CA bundle](https://curl.se/ca/cacert.pem)
+
+## 2026-10-22 (20:00 batch) — the caller's string as identity, the default as the check, and a game as the soft component
+
+Four new shapes and one hardening lesson from the 20:03 batch; the timing side of these items is in
+[[disclosure-lag]], the counting side in [[vuln-supply]].
+
+**1. A caller-supplied revision string used as code identity (vLLM).** `CVE-2026-114053` forwards
+`mm_processor_kwargs.code_revision` into `AutoProcessor.from_pretrained`, so the request chooses which
+revision of a model's *dynamic processor code* gets imported — and with `trust_remote_code=True` plus
+an `auto_map` processor, a POST to the **unauthenticated `/tokenize`** endpoint runs Python in the API
+process. Pinning the model revision does not close it. The generalisation is worth keeping: serving
+stacks increasingly accept "which code should I load" as a request parameter (revisions, adapters,
+processor maps), and every such parameter is an import path. In a serving cluster, the endpoint
+people assume is a tokenizer is an interpreter. Five sibling bugs in the same block are all the same
+shape — a caller-controlled value used as cache identity: a multimodal UUID verbatim, EXIF fields, a
+null `max_tokens` skipping `min_tokens`, per-kwarg processor caches, and a cross-request `mask` leak
+through stale `allowed_token_ids` in `InputBatch.condense()` that lets one client constrain another's
+outputs.
+
+**2. Two defaults, both common, neither needing a jailbreak (Vibe-Trading, 36.3k★).**
+`CVE-2026-114108` (9.8 at CVSS 3.1 / 9.3 at 4.0, CWE-306): the FastAPI server's `require_auth()`
+**returns early when `API_AUTH_KEY` is unset**, so an unauthenticated caller posts to
+`/sessions/{id}/messages` and has `BashTool` run commands **as root**. `CVE-2026-114107`: `BashTool`
+and `BackgroundRunTool` hand model-emitted strings to `subprocess.run(..., shell=True)` with no
+allow-list or approval, so **indirect prompt injection** in any document or page the agent reads
+becomes a root shell — and `read_url` fetching arbitrary URLs makes the same path SSRF. Neither bug is
+in the model or a prompt filter; both are wiring. An auth gate that fails *open* when unconfigured and
+a shell tool that trusts model output are the two most copyable mistakes in the agent-repo genre.
+
+**3. Authorised against the caller, never against the owner (OpenStack Manila).**
+`CVE-2026-71195` (9.9, MITRE-assigned, CWE-863). A public share is visible to every tenant, so its
+UUID is not a secret — and the controllers authorise the request against the *caller's* project, then
+load the foreign public share without re-authorising against its owner. What that buys an ordinary
+authenticated project member: `allow_access` grants data-plane read/write on another tenant's share,
+`deny_access` revokes the owner's rules, `update_access` escalates read-only to read-write,
+`create_share_backup` exfiltrates the data as a backup filed under the attacker's project, and
+access-rule listing discloses IPs, usernames and CephFS keys. The transferable check is cheaper than
+the CVE: **for every resource a tenant can name, is there an authorisation call against the
+resource's owner, or only against the caller's context?** "Public" is a sharing flag, not a
+permission model, and the two were conflated in the controller layer.
+
+**4. A compiler that produces a plausible number instead of an error (Vyper).** `CVE-2026-114117`:
+`(or x K)` → `1` is only valid where the value is consumed for truthiness, but the rewrite is decided
+from the parent opcode, so both value branches of a ternary look like conditions; `finalize()`'s
+rollback is skipped for `callvalue`/`calldatasize`, which sit in `do_not_cache`. `(msg.value | 2)`
+returns `1` at the default `-O gas`. Wrong values flow into storage, arithmetic, indexes and events
+with **no revert and no warning**, so nothing downstream can tell. Strictly worse than a crash, and
+with **no patched release** the window is open-ended (full detail and repo state in
+[[disclosure-lag]]).
+
+**5. The hardened component held; the licensed game was the entry (Switch 2).** `ns2jb`, firmware
+23.0.1: a WebKit n-day through a captive portal *did* produce native control-flow takeover, but could
+not be extended against execute-only memory, pointer authentication and CFI. The working path was
+**SmileBASIC**, a Switch 1 title — an integer overflow in array-element removal wraps a bounds check,
+a `memmove` reads before the array, and the preceding pointer becomes a huge string length. Then a
+`/..\` path-normalisation bug in `GetEntryType` overflows a 0x301-byte heap buffer and corrupts a
+`BufferedStorage` cache entry; setting the `fs` connection's saved PID to 1 grants full filesystem
+privileges; arbitrary sysmodule execution comes from swapping `fs`'s ExeFS entry for a substitute
+filesystem after `fs` has already supplied a valid NCA header hash, with timing controlled by
+replacing the loader's IPC wait handle. Author's stated limits: tethered, only `fs` compromised, entry
+depends on SmileBASIC, and this is not CFW. The lesson generalises past consoles: a sandbox that
+admits third-party code carrying legacy assumptions has a soft component inside the privilege path,
+and platform security budgets are spent on the browser and the kernel instead.
+
+**6. Template open, substrate hosted (carried here for the licensing check).** CopilotKit's OpenDots
+is an MIT template for always-on agents whose conversations **require CopilotKit Intelligence** —
+hosted, a Docker eval, or a licensed self-host. "Self-hostable" described the surface, not the stack;
+the same distinction is now the standard read on agent launches (see [[agent-stack]]).
+
+Sources: [GHSA-f623-hjm8-5wg5](https://github.com/advisories/GHSA-f623-hjm8-5wg5) · [GHSA-v2f8-6655-7grj](https://github.com/HKUDS/Vibe-Trading/security/advisories/GHSA-v2f8-6655-7grj) · [GHSA-jqmf-mx4f-hfr6](https://github.com/HKUDS/Vibe-Trading/security/advisories/GHSA-jqmf-mx4f-hfr6) · [OSSA-2026-046](https://security.openstack.org/ossa/OSSA-2026-046.html) · [GHSA-6j9c-gvcw-74fj](https://github.com/vyperlang/vyper/security/advisories/GHSA-6j9c-gvcw-74fj) · [ns2jb write-up](https://pepsipu.com/blog/2026-10-switch2-jailbreak-ns2jb/) · [CopilotKit/OpenDots](https://github.com/CopilotKit/OpenDots)

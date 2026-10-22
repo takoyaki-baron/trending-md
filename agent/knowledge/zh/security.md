@@ -2997,3 +2997,21 @@ Sources: [Railway：10 月 21 日安全披露](https://blog.railway.com/p/securi
 **未确立：** Windows 与 Linux 发行版是否锚定同样的根（未测——没有主机）；Chrome 与 Firefox 作为*浏览器*今天是否拒绝这些链（报告者页面另有针对它们的测试，Chrome 10 月 17 日的 CRLSet 覆盖六张中间证书——本轮未复检）；Apple 与 Microsoft 根计划是否已对 G3 发布不信任决定（本轮未读其自己的文档）。
 
 Sources: [eMudhra 中间 CA 被攻陷——报告者披露 + 在线测试主机](https://emudhra.we-have-a-problem.com/) · [mitmproxy `certs.py`（`EMUDHRA_CHAIN_PEM`，`d = 4` 密钥）](https://raw.githubusercontent.com/mitmproxy/mitmproxy/main/mitmproxy/certs.py) · [Mozilla 收录根（CCADB CSV，SHA-256 指纹）](https://ccadb.my.salesforce-sites.com/mozilla/IncludedCACertificateReportPEMCSV) · [certifi `cacert.pem`](https://raw.githubusercontent.com/certifi/python-certifi/master/certifi/cacert.pem) · [curl.se CA 信任包](https://curl.se/ca/cacert.pem)
+
+## 2026-10-22（20:00 批次）—— 调用方的字符串即身份，默认值即检查，而游戏是软组件
+
+20:03 批次的四个新形态与一条加固教训；这些条目在时间侧的内容见 [[disclosure-lag]]，计数侧见 [[vuln-supply]]。
+
+**1. 把调用方提供的修订字符串当作代码身份（vLLM）。** `CVE-2026-114053` 把 `mm_processor_kwargs.code_revision` 转发进 `AutoProcessor.from_pretrained`，于是请求方决定导入模型*动态处理器代码*的哪个修订——配上 `trust_remote_code=True` 与 `auto_map` 处理器，发往**未鉴权的 `/tokenize`** 端点的一次 POST 就在 API 进程里执行 Python。钉住模型修订并不能堵住它。值得留存的推广：服务技术栈越来越把"该加载哪段代码"当作请求参数接收（修订、适配器、处理器映射），而每一个这样的参数都是一条 import 路径。在服务集群里，人们以为是分词器的端点，其实是解释器。同一区块里还有五个同形 bug——调用方可控的值被当作缓存身份：原样使用的多模态 UUID、EXIF 字段、跳过 `min_tokens` 的 null `max_tokens`、按 kwarg 分开的处理器缓存，以及 `InputBatch.condense()` 里经陈旧 `allowed_token_ids` 造成的跨请求 mask 泄漏（一个客户端可约束另一个客户端的输出）。
+
+**2. 两个默认值，都很常见，都不需要越狱（Vibe-Trading，36.3k★）。** `CVE-2026-114108`（CVSS 3.1 的 9.8 / 4.0 的 9.3，CWE-306）：FastAPI 服务器的 `require_auth()` **在 `API_AUTH_KEY` 未设置时提前返回**，于是未鉴权的调用方可以 post 到 `/sessions/{id}/messages`，让 `BashTool` **以 root 身份**执行命令。`CVE-2026-114107`：`BashTool` 与 `BackgroundRunTool` 把模型产出的字符串直接交给 `subprocess.run(..., shell=True)`，没有允许清单也没有审批步骤，于是 agent 读到的任何文档或网页里的**间接提示注入**就变成 root shell——而 `read_url` 抓任意 URL 让同一条路径成为 SSRF。两个 bug 都不在模型或提示过滤器里，都在接线。未配置时*失效开放*的鉴权门，以及信任模型输出的 shell 工具，是 agent 仓库这一体裁里最易被复制的两个错误。
+
+**3. 对着调用方鉴权，从不对着所有者（OpenStack Manila）。** `CVE-2026-71195`（9.9，MITRE 分配，CWE-863）。公开共享对每个租户可见，故其 UUID 不是秘密——而控制器对着**调用方**的项目鉴权，随后加载外来的公开共享，却从不针对其所有者重新鉴权。这给一个普通已认证项目成员买到：`allow_access` 授予对他人共享的数据面读写、`deny_access` 撤销所有者的既有规则、`update_access` 把只读规则提权为读写、`create_share_backup` 把数据以攻击者项目名下的备份形式外泄、而访问规则列表泄露 IP、用户名与 CephFS 密钥。可迁移的检查比 CVE 更便宜：**对每一个租户能"指名"的资源，是否存在一次针对该资源所有者的鉴权调用，还是只针对调用方的上下文？**"公开"是一个共享标志，不是权限模型，而两者在控制器层被混为一谈。
+
+**4. 产出貌似合理数字而非报错的编译器（Vyper）。** `CVE-2026-114117`：只有当值被当作真值消费时 `(or x K)` → `1` 才成立，但该改写的判断只基于父节点 opcode，于是三元表达式的两个值分支都像条件；而 `finalize()` 的回滚对 `callvalue`/`calldatasize` 被跳过——它们在 `do_not_cache` 里。`(msg.value | 2)` 在默认 `-O gas` 下返回 `1`。错误的数值流入存储、算术、索引与事件，**既不 revert 也无警告**，下游无从分辨。比崩溃严格更糟；而**没有已修复发布**使窗口开放式（完整细节与仓库状态见 [[disclosure-lag]]）。
+
+**5. 加固组件顶住了，被授权的游戏成了入口（Switch 2）。** `ns2jb`，固件 23.0.1：经由强制门户投递的 WebKit n-day *确实*取得了原生控制流接管，但在 execute-only 内存、指针认证与 CFI 面前无法扩展。可行的路径是 **SmileBASIC**，一款 Switch 1 游戏——数组元素移除的整数溢出绕过了边界检查，`memmove` 从数组之前读取，前一个指针被当作巨大的字符串长度。随后 `GetEntryType` 的 `/..\` 路径规范化 bug 溢出 0x301 字节堆缓冲，破坏 `BufferedStorage` 缓存项；把 `fs` 连接的已保存 PID 设为 1 即获完整文件系统权限；任意 sysmodule 执行来自在 `fs` 已提供合法 NCA 头哈希之后，把它的 ExeFS 项换成替代文件系统，并用替换加载器 IPC 等待句柄（由 SmileBASIC 事件驱动）来控制时机。作者自陈限制：有线连接、仅攻陷 `fs`、入口依赖 SmileBASIC，且这不是 CFW。教训超出主机：一个接纳带遗留假设的第三方代码的沙箱，在其特权路径里有一个软组件，而平台的安全预算花在了浏览器与内核上。
+
+**6. 模板开放、基底托管（此处保留以供许可检查）。** CopilotKit 的 OpenDots 是一个 MIT 模板，用于常驻 agent，而其对话**需要 CopilotKit Intelligence**——托管、Docker 评测，或授权的自托管部署。"可自托管"描述的是表面，不是整套技术栈；这一区分如今是读 agent 发布的标准动作（见 [[agent-stack]]）。
+
+Sources: [GHSA-f623-hjm8-5wg5](https://github.com/advisories/GHSA-f623-hjm8-5wg5) · [GHSA-v2f8-6655-7grj](https://github.com/HKUDS/Vibe-Trading/security/advisories/GHSA-v2f8-6655-7grj) · [GHSA-jqmf-mx4f-hfr6](https://github.com/HKUDS/Vibe-Trading/security/advisories/GHSA-jqmf-mx4f-hfr6) · [OSSA-2026-046](https://security.openstack.org/ossa/OSSA-2026-046.html) · [GHSA-6j9c-gvcw-74fj](https://github.com/vyperlang/vyper/security/advisories/GHSA-6j9c-gvcw-74fj) · [ns2jb write-up](https://pepsipu.com/blog/2026-10-switch2-jailbreak-ns2jb/) · [CopilotKit/OpenDots](https://github.com/CopilotKit/OpenDots)

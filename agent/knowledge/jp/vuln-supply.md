@@ -408,3 +408,19 @@ Sources: [Chainguard: Athena](https://www.chainguard.dev/athena) · [PHP Foundat
 これが決める執筆ルール：ラボと独立の当事者が同じ発見を報告するとき、**時間の重なりが事実であり、帰属は各当事者の枠付けである**——そしてそれらが衝突する場合、発見者の説明が発行元の見出しより上位に来る。
 
 Sources: [NVD：CVE-2026-114639](https://nvd.nist.gov/vuln/detail/CVE-2026-114639) · [NVD：CVE-2026-114656](https://nvd.nist.gov/vuln/detail/CVE-2026-114656) · [NVD：CVE-2026-114662](https://nvd.nist.gov/vuln/detail/CVE-2026-114662) · [NVD：CVE-2026-114661](https://nvd.nist.gov/vuln/detail/CVE-2026-114661) · [Calif：PHP2Shell](https://calif.io/php2shell/) · [Wiz：PHP2Shell](https://www.wiz.io/blog/php2shell-php-rce) · [HN：Patch the Planet](https://news.ycombinator.com/item?id=50181175)
+
+## 2026-10-22 —— 記録の日付はワークフローのタイムスタンプであり、日付を持たない記録もある
+
+一つのバッチが**修正と記録の五つの異なる関係**を生み出した。これは本ファイルにとって最良の校正である。分類の全体、各事例の数値、執筆ルールは [[disclosure-lag]] に移った。ここに残すのは、各形状が*供給*の計数に何をするかである。
+
+- **記録の 16 日前に修正。** vLLM の連番七件（`CVE-2026-114049…-114055`、VulnCheck、「before 0.31.0」）は **2026-10-05T07:41:02Z** にアップロードされたリリースに対応する——したがってこの勧告ブロックは 10 月 21 日時点の露出数に**ゼロ**を加え、「今週の新規クリティカル」グラフには七を加える。
+- **記録の 168 日前に修正。** Vibe-Trading の三件は **v0.1.7（2026-05-06T12:11:26Z）** で修正され、公表の五か月半前だった。
+- **割り当ての後追い。** Trigger.dev の **39 件の GHSA（7 月 9 日〜10 月 20 日）** が一日で **29 の CVE 番号**になった。その日に発見されたものは何もない。
+- **修正がまったくない。** Vyper のオプティマイザ誤コンパイルはパッチ済みバージョンを持たず、現行リリースに影響する——このバッチで、記録の遅れが*悪い*知らせである唯一の事例。
+- **記録がまったくない。** 六件の `ZDI-CAN` カーネル報告（二件は CVSS 9.0）が公開 LKML に再現スクリプト付きで投稿され、CVE 番号はない。これは本ファイル初の**記録前の開示**である：供給は存在し、データベースは空で、CVE をキーにするあらゆる検査がクリーンを返す。
+
+**供給計数への帰結：**「今週公表された CVE」は三つの異なる量の混合物だ——発見、割り当て、そしてずっと前に修正済みのバグの再公表。それらを分ける唯一のレコード単位のフィールドはバージョン範囲であり、記録前のクラスには範囲を取るべき記録自体がない。
+
+**来歴、同じ教訓の五度目の再演。** `OSSA-2026-046`（OpenStack Manila、任意のテナントが任意の*公開*共有を奪える）に「CVSS」は **0 回**——一次確認、26,099 バイトの HTML で 0 回——しか現れないが、`CVE-2026-71195` は metric を一つだけ持つ：**CVSS 3.1 の 9.9、source `cve@mitre.org`、Secondary と表示**、NVD 状態 `Received`、CWE-863。二つの教訓はすでに記録済みだが、いま第二の文書形状を得た：スコアのない勧告はスコアのない記録ではない。そして MITRE 自身の metric が Secondary として届くことは、このラベルが「CNA ではない」を意味しない五番目の事例である。（OSSA が実際に持つ帰属：中国科学院計算技術研究所の Chen YuXiang と Yuliang Xiao が報告し、Red Hat の Goutham Pacha Ravi と Carlos da Silva が追加の公開共有経路を発見した。）
+
+Sources: [Trigger.dev advisories](https://github.com/triggerdotdev/trigger.dev/security/advisories) · [vLLM v0.31.0](https://github.com/vllm-project/vllm/releases/tag/v0.31.0) · [NVD: CVE-2026-71195](https://nvd.nist.gov/vuln/detail/CVE-2026-71195) · [OSSA-2026-046](https://security.openstack.org/ossa/OSSA-2026-046.html) · [Phoronix: publicly posted kernel reports](https://www.phoronix.com/news/LKML-New-Trend-Vulnerabilities) · [GHSA-6j9c-gvcw-74fj](https://github.com/vyperlang/vyper/security/advisories/GHSA-6j9c-gvcw-74fj)

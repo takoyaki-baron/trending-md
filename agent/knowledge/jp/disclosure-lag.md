@@ -1,0 +1,92 @@
+---
+title: 開示ラグ——記録の日付はワークフローのタイムスタンプである
+topic: disclosure-lag
+created: 2026-10-22
+---
+
+# 開示ラグ——記録の日付はワークフローのタイムスタンプである
+
+CVE レコードは `published` フィールドを持ち、すべての下流の消費者——バージョンスキャナ、トレンドフィード、リーダーボード、この agent 自身の速度ランキング——がそれを「この脆弱性がいつ成立したか」と読む。ほとんどそうではない。それは**割り当てワークフロー**が終わった時刻であり、修正と記録の間の差は両方向に、数日から数か月にわたって走る。
+
+隣接ファイル：[[vuln-supply]]（発見量、トリアージ方針、誰が採点するか）、[[security]]（攻撃面のクラス自体）、[[fact-check]]（検証の方法）。
+
+**主張：** 五つの状態が日常的に一つに畳まれ、それぞれが異なる助言を意味する。自分がどの状態にいるかを教える唯一のフィールドは**バージョン範囲**であり、スコアでも重大度ラベルでも、まして公開日でもない。
+
+## 一つのバッチで測った五つの状態（2026-10-22）
+
+| 状態 | 実例 | ラグの方向 | 読むべきこと |
+|---|---|---|---|
+| **修正が記録より先行——数日** | vLLM `CVE-2026-114053` | 0.31.0 が **2026-10-05T07:41:02Z** に PyPI へ、勧告は 10 月 21 日（**16 日**） | 固定しているバージョンを確認せよ：開示ラグ*が*リスク窓である |
+| **修正が記録より先行——数か月** | Vibe-Trading `CVE-2026-114108` | **v0.1.7、2026-05-06T12:11:26Z** で修正、記録は 10 月 21 日（**168 日**） | 「人気リポジトリに新たなクリティカル」は誤読 |
+| **割り当ての後追い** | Trigger.dev `CVE-2026-114065…-114093`（29 件） | **7 月 9 日〜10 月 20 日の 39 件の GHSA** が一日で CVE 番号に | バージョン範囲で並べよ。一件は今も有効 |
+| **修正なし** | Vyper `CVE-2026-114117` | 「Patched version: **none listed**」 | コンパイル時の緩和のみ。露出は無期限 |
+| **記録より前** | 六件の `ZDI-CAN` カーネル報告 | **CVE 番号が存在しない**。PoC と KASAN は公開、パッチなし | CVE をキーにするスキャナはその日最も緊急の開示でゼロ件を返す |
+
+## vLLM：連番の七つの CVE、修正は勧告より古い
+
+`CVE-2026-114049` から `CVE-2026-114055` まで、すべて「before **0.31.0**」の境界を持ち、すべて VulnCheck 割り当て。**0.31.0 のアップロードは 2026-10-05T07:41:02Z**（PyPI JSON を一次確認）。現在のリリースは 0.32.0（10 月 18 日）。本命は `CVE-2026-114053`：vLLM はクライアント供給の `mm_processor_kwargs.code_revision` を Transformers の `AutoProcessor.from_pretrained` へそのまま転送するので、**呼び出し側**がモデルの動的プロセッサコードのどのリビジョンを import するかを決める——`trust_remote_code=True` と `auto_map` プロセッサが揃えば、**認証のない `/tokenize` エンドポイント**へのリクエストが API プロセス内で Python を実行する（CWE-94）。*モデル*のリビジョンを固定しても塞がらず、*コード*のリビジョンだけが意味を持つ。
+
+来歴の注記（同一バッチ、[[vuln-supply]] と同じ教訓）：この記録は **CVSS 3.1 の 8.1（Primary）と 4.0 の 9.2（Secondary）** を持ち、*両方*の metric が `disclosure@vulncheck.com` である。ここでの Primary/Secondary はスロットのラベルであり、誰が採点したかの陳述ではない——この規則の三週間で四度目の校正だ。
+
+このブロックの残りは形状の一覧として保持する価値がある。いずれも**呼び出し側が制御する値を識別子として使う**型である：`InputBatch.condense()` のクロスリクエスト mask リーク（古い `allowed_token_ids` が他クライアントの出力を制約する）、クライアント供給のマルチモーダル UUID をそのままキャッシュ識別子に使う（エンジンが落ちる）、null の `max_tokens` が `min_tokens` 検査を飛ばす（EngineCore 入力スレッドが死ぬ）、kwarg ごとに別々のプロセッサキャッシュ（メモリ枯渇）、EXIF など呼び出し側が制御する値を通じたキャッシュの別名化。
+
+## Trigger.dev：29 件の CVE、そして唯一有効なものが「セキュリティリリース」に載っていない
+
+`CVE-2026-114065…-114093` は 10 月 21 日に一続きの VulnCheck ブロックとして着地し、すべて NVD 未分析。新しいバグではない：リポジトリの勧告一覧には **7 月 9 日〜10 月 20 日に公表された 39 件の GHSA** があり、CVE ブロックはそれと一対一に対応する。公開日で並べるフィードは、書類を提出した日にそのプラットフォームが「攻撃下にある」と報じる。
+
+有効なのは `CVE-2026-114085`（「through **4.7.6**」、CVSS 3.1 で 7.9 / 4.0 で 8.8）：supervisor のワークロードサーバはクロステナントの所有権を検査しないので、run/snapshot の組を持つワークロードが `attempts/start` を呼び、解決済みの環境変数と run JWT を取り戻せる。
+
+項目を成立させた検査はリリース本文だ。**v4.7.7 は 2026-10-22T08:39:41Z に公開**（GitHub API を一次で読んだ）。冒頭は「This is a security release」で、続けて Node.js 22.23.4 / 24.22.1 / 26.12.1（`CVE-2026-111497`、Brotli デコーダの範囲外書き込み、および複数の TLS ホスト名検証バイパス）、supervisor による emSign/eMudhra 不信任、Go 1.26.10 ビルドを列挙する。**自らのテナント分離バグには触れていない。**「セキュリティリリース」は選択の結果である；本文と CVE ブロックを突き合わせてから、リポジトリ名のプラットフォームを覆っていると信じること。
+
+他に知るべきもの：`CVE-2026-114087`（4.0 で 9.2 / 3.1 で 8.1）——`hosting/docker/.env.example` から作ったセルフホストの Docker Compose はハードコードされた `MAGIC_LINK_SECRET` を継承し、誰でも**任意のメールアドレス**の magic link を偽造でき、runner コンテナが露出する既定資格情報で Postgres、Redis、ClickHouse に到達する；`CVE-2026-114090`、`trigger dev --mcp` が全インターフェースにバインド；TSQL クエリコンパイラと `/realtime/v1/runs` の SQL インジェクション；CLI が解決済みシークレットをマスクせずデバッグログへ書く。
+
+## Vyper：パッチ済みリリースがなく、最新リリースが影響範囲内
+
+`CVE-2026-114117` / `GHSA-6j9c-gvcw-74fj`。オプティマイザは `(or x K)` を `1` に書き換えるが、これは値が真偽値として消費される場合にのみ妥当であり、しかも親の opcode だけで判断するので、**三項演算子の両方の値分岐が条件に見える**。`finalize()` は通常この書き換えを巻き戻すが、`callvalue` と `calldatasize` では行わない——これらは `do_not_cache` にあり、したがって「複雑」と扱われない：
+
+```vyper
+@external
+@payable
+def f(c: bool) -> uint256:
+    return (msg.value | 2) if c else 5
+```
+
+`msg.value = 5` で `f(True)` は既定の `-O gas`（および `-O codesize`）で **1** を返し、`-O none` でのみ **7** を返す。誤った値はその後、revert も警告もなくストレージ、算術、インデックス、イベントへ流れ込む。影響範囲：**>= 0.3.8**。リポジトリ状態は一次確認（2026-10-22）：最新タグはプレリリース **v0.5.0b1**（9 月 1 日）、PyPI の最新安定版は **0.4.3（2025-06-18）**——*どちらも範囲内*——`archived: false`、`pushed_at` 2026-10-22T09:48Z、`releases/latest` は今も 0.4.3。つまりリポジトリは生きているが修正版はまだない；唯一の緩和は `-O none` でコンパイルすること。
+
+重大度の来歴、記録として：**CVSS 4.0 で 8.2**（`VI:H`、機密性・可用性への影響なし）/ **3.1 で 5.9**、CWE-682、VulnCheck 割り当て、NVD は `Received`。
+
+## 記録より前：どのデータベースにも存在しない ZDI カーネル報告
+
+六件の `ZDI-CAN` 報告が一夜のうちに*公開* LKML に届き、パッチは添付されていない。二件は **ksmbd** の遠隔コード実行で CVSS 9.0：`ZDI-CAN-33549`（`smbdirect_connection_rdma_xmit()` の整数アンダーフロー——`RemainingBytes=8` と二つの RDMA バッファ記述子を持つ SMB2 WRITE が最初で clamp を作動させ、二つ目が `size_t` から 4096 を引いて回り込み、約 8 KB の範囲外書き込みになる）と `ZDI-CAN-33774`（SMB1→SMB2 ハンドラが enqueue と dequeue の間で入れ替わる競合）。残りはローカルまたは情報レベル。**CVE 番号は存在せず**、SMB Direct の修正は Linux 7.5 を目標とするブランチにあり、メインラインにはない。
+
+Greg Kroah-Hartman の返信（リストアーカイブを一次で読んだ）がやり取りのすべてである：*「For some reason you sent this to public lists, and did not include a patch, so there's not much we can do with this.」* 再現スクリプトと KASAN 出力は公開されているが、修正はされていない。
+
+## ツール、そして手作業では数えられなかった四つの測定
+
+`agent/tools/disclosure-lag.mjs`（2026-10-22 20:27 作成）は NVD の `published`、勧告の影響範囲／パッチ済み範囲、リリース時系列を結合し、八つの状態のいずれかに分類する。上の表の全行で較正した——vLLM 16 日、Vibe-Trading 168 日、Vyper 修正なし、Trigger.dev は記録が修正より先、MessagePack-CSharp `CVE-2026-92707` はバックフィル 28 日——そしてこの較正自体が本バッチの残りの教訓を生んだ。どれも手作業ではすでに一度、間違った数を出していたからである。
+
+1. **NVD の `published` にはタイムゾーン接尾辞がない。** `2026-10-21T01:17:28.083` を `new Date()` に渡すと**ホストのローカル時刻**として解釈される。UTC+8 のマシンでは vLLM が 15 日と読め、実際の遅れは 16 日だった——ツールの初回実行が手作業と食い違い、正しかったのは手作業のほうである。この主題の日付比較はすべて、いつ壊れてもおかしくないタイムゾーンバグである。
+2. **勧告の範囲には第二の構文がある。** 複数ブランチの修正を GitHub は `[,2.5.303), [3.0,3.1.9)`、パッチ済みを `2.5.303, 3.1.9` と描画する——区間記法で、リリースラインごとに一区間。`>= a, < b`（vLLM／Vyper の形）だけを相手に書いたパーサはこれを*範囲なし*と読む。両方の構文が同じ日の同じサイトに併存している。
+3. **機械可読のセルは人間向けのタイトルと矛盾しうるし、嘘をつくのはたいていセルのほうである。** Trigger.dev の勧告セルは影響 `<= 4.6.0`／パッチ済み `>= 4.6.0`——4.6.0 自身で自己矛盾——だが同じ勧告の要約は「Trigger.dev **through 4.7.6**」と書き、v4.7.7 は記録の*翌日*に出ている。セルを信じれば、修正が一日遅れただけのバグに 36 日の「修正が記録に先行」を書くことになる。二つの数は必ず併記する。
+4. **バルク投入では、GitHub 勧告の `published_at` は取り込みタイムスタンプである。** 三つの異なるリポジトリの四件の CVE がすべて `2026-10-21T03:32:2xZ` を返す——VulnCheck のパイプラインが走った数分であり、バグとは無関係だ。本当の勧告日は**リポジトリ自身の**勧告一覧（`/repos/<o>/<r>/security-advisories`）にあり、Trigger.dev のそれは **7 月 9 日 – 10 月 20 日**に及ぶ。対応する CVE ブロックは 10 月 21 日の一本である。
+
+同じ実行から構造的な事実も二つ出た：
+
+- **CVE をキーにした照会はリポジトリ勧告の大半を見えない。** Trigger.dev は **39** 件の勧告を出し、`cve_id` を持つのは **6** 件。残り 33 件は CVE をキーとするあらゆる照会から不可視である——`backfill` が結合の存在するときだけ*正確に*測れるのはこのためだ（MessagePack の勧告は `CVE-2026-92707` を持ち、日付は **9 月 17 日**、記録より 28 日早い）。
+- **複数ブランチの修正に単一の修正日はない。** 正直な答えは「最も早く出たバージョン＋一覧」である——「いつ直ったか」はリリースラインごとに違う。
+
+そして負例でなくなった負例：**「記録なし」は数時間で期限切れになる。** この知識ファイルが「存在しない」前提で作られた二件——`CVE-2026-92707`（10-14 にはどの登録簿にもなし）と `CVE-2026-110264`（feed の「公開時点で NVD に記録なし」）——は 10-22 までに NVD 記録を得ており、前者はまさにそれが名指した CNA（`GitHub_M`）が公開した。不在にも賞味期限がある；引用する前に再実行せよ。
+
+## これが決める執筆ルール
+
+1. **バージョン範囲で並べ、記録日では決して並べない。**「Fixed in 0.31.0」と「published Oct 21」は二つの座標である；今日 `pip install vllm==0.30.0` すれば昨日公表された CVE に当たる。
+2. **「セキュリティリリース」は選択の結果であり、突き合わせる対象だ。** v4.7.7 の本文が名指すのは第三者の修正（Node、eMudhra）である。ベンダー自身の有効なバグは 29 件のブロックの中央の一行だ。本文と CVE ブロックが交差しなければ、そう書く。
+3. **スコアのないベンダー勧告は、スコアのない記録ではない。** `OSSA-2026-046` に「CVSS」は **0 回**（確認済み：26,099 バイトの HTML 中 0 回）しか現れないが、記録には `cve@mitre.org` の **CVSS 3.1 9.9** が一つあり、NVD 状態は `Received`。「スコアは公表されていない」と書く前に両方の文書を読むこと——そして MITRE 自身の metric が **Secondary** として届くことに注意せよ。このラベルが「CNA ではない」を意味しない五番目の事例である。
+4. **記録より前の開示は、CVE をキーにするあらゆる検査から見えない。** ベンダー追跡 ID 空間（`ZDI-CAN-*`）と公開メーリングリストを並行チャネルとして監視せよ；ある日最も緊急な開示はデータベース行をまったく持たないことがある。
+5. **「パッチ済みリリースがない」はリポジトリ状態の主張である**——記録ではなくリポジトリを見る。Vyper は今日も push され、アーカイブされておらず、それでも修正がない；Flowise の反転（アーカイブ済みリポジトリ、ゆえに「未修正」が恒久化する）は同じ検査のもう一方の極である。
+6. **勧告のセルとタイトルが矛盾するときは、両方を引用する。** 範囲セルはデータであり、要約は散文であり、どちらも古くなりうる——片方を黙って選ぶツールこそが、あの 36 日の遅れを公開するツールである。不一致を書け；不一致そのものが発見である。
+7. **CVE をキーにしたスキャンは開示の棚卸しではない。** リポジトリ勧告の大半は `cve_id` を持たない（Trigger.dev の 39 件中 6 件）。ゆえに「CVE を走査した」は「影響を受けているか」より狭い問いに答えるだけだ。まずベンダーの勧告一覧で棚卸しし、それから CVE に結合せよ。
+
+一つのコマンド：`node agent/tools/disclosure-lag.mjs --ids CVE-… --pypi <pkg> | --repo owner/repo`、記録より前の場合は `--tracker ZDI-CAN-…`。
+
+Sources: [GHSA-f623-hjm8-5wg5](https://github.com/advisories/GHSA-f623-hjm8-5wg5) · [vLLM v0.31.0](https://github.com/vllm-project/vllm/releases/tag/v0.31.0) · [PyPI: vllm 0.31.0](https://pypi.org/pypi/vllm/0.31.0/json) · [Trigger.dev advisories](https://github.com/triggerdotdev/trigger.dev/security/advisories) · [Trigger.dev v4.7.7](https://github.com/triggerdotdev/trigger.dev/releases/tag/v4.7.7) · [NVD: CVE-2026-114085](https://nvd.nist.gov/vuln/detail/CVE-2026-114085) · [Vibe-Trading v0.1.7](https://github.com/HKUDS/Vibe-Trading/releases/tag/v0.1.7) · [GHSA-6j9c-gvcw-74fj](https://github.com/vyperlang/vyper/security/advisories/GHSA-6j9c-gvcw-74fj) · [Vyper releases](https://github.com/vyperlang/vyper/releases/tag/v0.5.0b1) · [PyPI: vyper](https://pypi.org/pypi/vyper/json) · [LKML: ZDI-CAN-34068 thread](https://lists.openwall.net/linux-kernel/2026/10/22/308) · [Phoronix: kernel vulnerabilities posted publicly](https://www.phoronix.com/news/LKML-New-Trend-Vulnerabilities) · [OSSA-2026-046](https://security.openstack.org/ossa/OSSA-2026-046.html) · [NVD: CVE-2026-71195](https://nvd.nist.gov/vuln/detail/CVE-2026-71195) · [GHSA-qhrr-8q5h-9q3h](https://github.com/MessagePack-CSharp/MessagePack-CSharp/security/advisories/GHSA-qhrr-8q5h-9q3h) · [cveawg: CVE-2026-92707](https://cveawg.mitre.org/api/cve/CVE-2026-92707)

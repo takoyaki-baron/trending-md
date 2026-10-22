@@ -455,7 +455,7 @@
    "lastStatus": null,
    "lastMetrics": [],
    "lastKev": null
-  }  ,
+  },
   {
    "id": "CVE-2026-114635",
    "why": "Traefik SNI check skipped when TLS state is nil -> HTTP/2 :scheme http reaches a client-cert router without presenting one, CVSS 3.1 8.7 VulnCheck-assigned, fixed 2.11.58/3.7.14 (feed 2026-10-22). Received, unanalyzed; watch for an nvd@nist.gov metric and whether NVD keeps 8.7 or re-rates the Go-1.27-only precondition.",
@@ -463,7 +463,7 @@
    "lastStatus": null,
    "lastMetrics": [],
    "lastKev": null
-  }  ,
+  },
   {
    "id": "CVE-2026-114637",
    "why": "Traefik experimental FastProxy pool fails to pin NTLM/Negotiate backend connections to their frontend connection, CVSS 3.1 8.7 VulnCheck-assigned, fixed 3.7.14 (feed 2026-10-22). Received, unanalyzed; one of five pool-identity bugs in the same batch — watch whether NVD scores them identically or splits them.",
@@ -471,7 +471,7 @@
    "lastStatus": null,
    "lastMetrics": [],
    "lastKev": null
-  }  ,
+  },
   {
    "id": "CVE-2026-114639",
    "why": "Traefik: a socket preauthenticated with Authorization: Negotiate enters the globally shared backend pool and can be handed to an unauthenticated client, CVSS 3.1 8.7 VulnCheck-assigned, fixed 2.11.58/3.7.14 (feed 2026-10-22). Received, unanalyzed.",
@@ -479,7 +479,7 @@
    "lastStatus": null,
    "lastMetrics": [],
    "lastKev": null
-  }  ,
+  },
   {
    "id": "CVE-2026-114640",
    "why": "Traefik Ingress-NGINX provider forwards client-supplied Ssl-Client-* headers on the plaintext HTTP router -> mTLS impersonation when ssl-redirect is off, CVSS 3.1 8.7 VulnCheck-assigned, fixed 3.7.14 (feed 2026-10-22). Received, unanalyzed.",
@@ -487,7 +487,7 @@
    "lastStatus": null,
    "lastMetrics": [],
    "lastKev": null
-  }  ,
+  },
   {
    "id": "CVE-2026-114641",
    "why": "Traefik NTLM/Kerberos round-tripper slot read/written without synchronization -> orphaned backend connections or crash, CVSS 3.1 3.7 (4.0 6.3) VulnCheck-assigned, fixed 2.11.58/3.7.14 (feed 2026-10-22). Received, unanalyzed; scored far below its six siblings in the same batch, so watch whether NVD agrees with the 3.7.",
@@ -495,7 +495,7 @@
    "lastStatus": null,
    "lastMetrics": [],
    "lastKev": null
-  }  ,
+  },
   {
    "id": "CVE-2026-114642",
    "why": "Traefik round-tripper stored in a client-connection slot not keyed by ServersTransport -> one service TLS client config reused for another backend, CVSS 3.1 8.7 VulnCheck-assigned, fixed 2.11.58/3.7.14 (feed 2026-10-22). Received, unanalyzed.",
@@ -503,7 +503,7 @@
    "lastStatus": null,
    "lastMetrics": [],
    "lastKev": null
-  }  ,
+  },
   {
    "id": "CVE-2026-114656",
    "why": "Traefik mTLS bypass: a negated !Host() matcher counts as a served domain, TLS-options conflict falls back to defaults and skips RequireAndVerifyClientCert, CVSS 3.1 7.5 VulnCheck-assigned, fixed 3.7.13 (feed 2026-10-22). Received, unanalyzed.",
@@ -511,7 +511,7 @@
    "lastStatus": null,
    "lastMetrics": [],
    "lastKev": null
-  }  ,
+  },
   {
    "id": "CVE-2026-114658",
    "why": "Grav Login plugin missing authorization in login.invite -> page authors obtain superuser accounts via an invitation form in frontmatter, CVSS 3.1 8.8 VulnCheck-assigned, fixed 3.9.13 (feed 2026-10-22). Received, unanalyzed.",
@@ -519,7 +519,7 @@
    "lastStatus": null,
    "lastMetrics": [],
    "lastKev": null
-  }  ,
+  },
   {
    "id": "CVE-2026-114661",
    "why": "OpenRemote missing authorization on gateway tunnel endpoints -> any authenticated user can open persistent bidirectional TCP circuits into an edge gateway network, CVSS 4.0 9.0 / 3.1 8.5 VulnCheck-assigned, fixed 1.31.0 (feed 2026-10-22). Deferred, unanalyzed.",
@@ -527,10 +527,114 @@
    "lastStatus": null,
    "lastMetrics": [],
    "lastKev": null
-  }  ,
+  },
   {
    "id": "CVE-2026-114662",
    "why": "Obot CLI login token-request ID chosen by the requester -> unauthenticated attacker sends a login link and fetches a non-expiring API key (account takeover), CVSS 4.0 8.6 / 3.1 8.1 VulnCheck-assigned, fixed 0.26.0 (feed 2026-10-22). Deferred, unanalyzed.",
+   "seed": "2026-10-22",
+   "lastStatus": null,
+   "lastMetrics": [],
+   "lastKev": null
+  },
+  {
+   "id": "CVE-2026-114053",
+   "why": "vLLM mm_processor_kwargs.code_revision → unauthenticated /tokenize RCE 9.2/8.1 — both disclosure@vulncheck.com, Received Seeded from NVD [Received] 3.1 Primary/disclosure@vulncheck.com 8.1, 4.0 Secondary/disclosure@vulncheck.com 9.2, CWE-94, published 10-21.",
+   "seed": "2026-10-22",
+   "lastStatus": null,
+   "lastMetrics": [],
+   "lastKev": null
+  },
+  {
+   "id": "CVE-2026-114049",
+   "why": "vLLM cross-request allowed_token_ids mask leak — both disclosure@vulncheck.com, Received Seeded from NVD [Received] 3.1 Primary/disclosure@vulncheck.com 3.7, 4.0 Secondary/disclosure@vulncheck.com 6.3, CWE-440, published 10-21.",
+   "seed": "2026-10-22",
+   "lastStatus": null,
+   "lastMetrics": [],
+   "lastKev": null
+  },
+  {
+   "id": "CVE-2026-114055",
+   "why": "vLLM uncontrolled multimodal processor params 8.7 v4.0 / 7.5 v3.1 — both disclosure@vulncheck.com, Received Seeded from NVD [Received] 3.1 Secondary/disclosure@vulncheck.com 7.5, 4.0 Secondary/disclosure@vulncheck.com 8.7, CWE-400, published 10-21.",
+   "seed": "2026-10-22",
+   "lastStatus": null,
+   "lastMetrics": [],
+   "lastKev": null
+  },
+  {
+   "id": "CVE-2026-114085",
+   "why": "Trigger.dev supervisor workload server missing cross-tenant auth 8.8 v4.0 / 7.9 v3.1, fixed boundary 4.7.7 — Deferred Seeded from NVD [Deferred] 3.1 Secondary/disclosure@vulncheck.com 7.9, 4.0 Secondary/disclosure@vulncheck.com 8.8, CWE-306, published 10-21.",
+   "seed": "2026-10-22",
+   "lastStatus": null,
+   "lastMetrics": [],
+   "lastKev": null
+  },
+  {
+   "id": "CVE-2026-114087",
+   "why": "Trigger.dev self-hosted default MAGIC_LINK_SECRET auth bypass 9.2 v4.0 / 8.1 v3.1 — Deferred Seeded from NVD [Deferred] 3.1 Primary/disclosure@vulncheck.com 8.1, 4.0 Secondary/disclosure@vulncheck.com 9.2, CWE-653, published 10-21.",
+   "seed": "2026-10-22",
+   "lastStatus": null,
+   "lastMetrics": [],
+   "lastKev": null
+  },
+  {
+   "id": "CVE-2026-114090",
+   "why": "Trigger.dev --mcp server binds all interfaces 7.6 v4.0 — Received Seeded from NVD [Received] 3.1 Secondary/disclosure@vulncheck.com 7.1, 4.0 Secondary/disclosure@vulncheck.com 7.6, CWE-306, published 10-21.",
+   "seed": "2026-10-22",
+   "lastStatus": null,
+   "lastMetrics": [],
+   "lastKev": null
+  },
+  {
+   "id": "CVE-2026-114093",
+   "why": "Trigger.dev CSRF logout 5.3 v4.0 / 4.3 v3.1 — Deferred Seeded from NVD [Deferred] 3.1 Primary/disclosure@vulncheck.com 4.3, 4.0 Secondary/disclosure@vulncheck.com 5.3, CWE-352, published 10-21.",
+   "seed": "2026-10-22",
+   "lastStatus": null,
+   "lastMetrics": [],
+   "lastKev": null
+  },
+  {
+   "id": "CVE-2026-114065",
+   "why": "Trigger.dev tenant filtering bypass via query table placeholders 7.1 v4.0 — Deferred Seeded from NVD [Deferred] 3.1 Secondary/disclosure@vulncheck.com 6.5, 4.0 Secondary/disclosure@vulncheck.com 7.1, CWE-89, published 10-21.",
+   "seed": "2026-10-22",
+   "lastStatus": null,
+   "lastMetrics": [],
+   "lastKev": null
+  },
+  {
+   "id": "CVE-2026-114108",
+   "why": "HKUDS Vibe-Trading require_auth() fails open 9.8 v3.1 / 9.3 v4.0, fixed in 0.1.7 (2026-05-06) — Received Seeded from NVD [Received] 3.1 Primary/disclosure@vulncheck.com 9.8, 4.0 Secondary/disclosure@vulncheck.com 9.3, CWE-306, published 10-21.",
+   "seed": "2026-10-22",
+   "lastStatus": null,
+   "lastMetrics": [],
+   "lastKev": null
+  },
+  {
+   "id": "CVE-2026-114107",
+   "why": "Vibe-Trading indirect prompt injection → BashTool shell=True root RCE 8.8 v3.1 — Received Seeded from NVD [Received] 3.1 Primary/disclosure@vulncheck.com 8.8, 4.0 Secondary/disclosure@vulncheck.com 8.7, published 10-21.",
+   "seed": "2026-10-22",
+   "lastStatus": null,
+   "lastMetrics": [],
+   "lastKev": null
+  },
+  {
+   "id": "CVE-2026-114106",
+   "why": "Vibe-Trading agent file-read path traversal 8.7 v4.0 / 7.5 v3.1 — Received Seeded from NVD [Received] 3.1 Primary/disclosure@vulncheck.com 7.5, 4.0 Secondary/disclosure@vulncheck.com 8.7, CWE-22, published 10-21.",
+   "seed": "2026-10-22",
+   "lastStatus": null,
+   "lastMetrics": [],
+   "lastKev": null
+  },
+  {
+   "id": "CVE-2026-114117",
+   "why": "Vyper optimizer rewrites (msg.value|K) to 1 in ternary branches 8.2 v4.0 / 5.9 v3.1, NO patched release — Received Seeded from NVD [Received] 3.1 Secondary/disclosure@vulncheck.com 5.9, 4.0 Secondary/disclosure@vulncheck.com 8.2, CWE-682, published 10-21.",
+   "seed": "2026-10-22",
+   "lastStatus": null,
+   "lastMetrics": [],
+   "lastKev": null
+  },
+  {
+   "id": "CVE-2026-71195",
+   "why": "OpenStack Manila public-share takeover 9.9, sole metric 3.1 Secondary/cve@mitre.org (OSSA carries no CVSS) — Received Seeded from NVD [Received] 3.1 Secondary/cve@mitre.org 9.9, CWE-863, published 10-21.",
    "seed": "2026-10-22",
    "lastStatus": null,
    "lastMetrics": [],

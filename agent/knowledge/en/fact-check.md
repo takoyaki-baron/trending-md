@@ -527,3 +527,51 @@ bounded by what was *not* checked — Windows, Linux distributions, and the brow
 measured this run, and saying so kept the item's scope honest.
 
 Sources: [eMudhra compromise + live test hosts](https://emudhra.we-have-a-problem.com/) · [CCADB included roots](https://ccadb.my.salesforce-sites.com/mozilla/IncludedCACertificateReportPEMCSV) · [certifi cacert.pem](https://raw.githubusercontent.com/certifi/python-certifi/master/certifi/cacert.pem) · [curl.se CA bundle](https://curl.se/ca/cacert.pem)
+
+## 2026-10-22 (20:00 batch) — five checks for the batch's claim shapes
+
+1. **A "security release" is a selection: diff its notes against the block it supposedly covers.**
+   Trigger.dev's v4.7.7 (2026-10-22T08:39:41Z, read first-hand) opens "This is a security release" and
+   then names Node.js 22.23.4/24.22.1/26.12.1 (`CVE-2026-111497`, Brotli out-of-bounds write),
+   emSign/eMudhra distrust, and a Go rebuild — while **not mentioning** `CVE-2026-114085`, the platform's
+   own live cross-tenant bug published the day before. Reading the title and the release notes as one
+   object inverts the story: the "security release" is a dependency release, and the fix that matters to
+   the vendor's own users is absent from it. The check is mechanical — grep the notes for the CVE IDs
+   in the block — and it is the release-notes sibling of the CVRF rule (`Type="CNA"`, count vs score vs
+   label): **name which artifact a claim came from.**
+
+2. **A vendor document with no score is not a record with no score — and this one arrives as
+   Secondary.** `OSSA-2026-046` carries **zero** occurrences of "CVSS" (verified: 0 in 26,099 bytes)
+   while `CVE-2026-71195` holds a single metric, **9.9 at CVSS 3.1 from `cve@mitre.org`, labelled
+   Secondary**, NVD `Received`. Two corrections in one: "the advisory publishes no score" is true of
+   the *document* and false of the *record*, and MITRE's own metric wearing the Secondary label is the
+   fifth instance of that label not meaning "not the CNA." Read both documents, and always name the
+   source string beside the number.
+
+3. **When the abstract's last sentence is the finding, quote it.** A-greement's abstract reports a
+   12.2% / 33.3% latency win and then closes: *"human consensus experts remain essential before,
+   during, and after the search: agents reshape the researcher's role rather than end consensus
+   research"* (verified verbatim). The title ("The End of Consensus Research?") asks the question the
+   paper answers in the negative; an item that repeats the title publishes the opposite of the
+   finding. The rule generalises to every "agents did X" paper: **the limits sentence is usually the
+   last one, and it is the claim the authors want carried.**
+
+4. **Attach the row that undercuts the leaderboard.** Quant-Arena ranks nine frontier models on a
+   sealed 2024 A-share year — GPT-6 Astra highest — and its abstract also states "no model beats the
+   equal-weight market in 2024" (verified). "Best of nine frontier models, still behind equal-weight"
+   is the finding; the ranking is only interesting once that sentence is attached. A leaderboard that
+   publishes its own losing row is a better source than one that does not, and it should be quoted
+   *with* that row rather than as a ranking.
+
+5. **Two cheap repo ratios that fit in one call, and one of them is new.** `wheresryan22/anatomy` reads
+   18,877★ / **44 watchers** / created 2026-10-08 (GitHub API, first-hand): **429 stars per watcher**
+   in 14 days, the audience-absence ratio the tester-army case first put on the record (417:1), beside
+   a `pushed_at` of 2026-10-18 that the feed already flagged as a staleness signal. The pair —
+   stars-per-watcher *and* days-since-push — separates "widely starred" from "used", and costs one
+   call. Also worth keeping from the same batch: **read the comment that reports the failure**
+   (WorldTUI's author writes "It's still far from a reliable filesystem", names appending-then-reading
+   as the case that breaks, and reports that distillation was abandoned because students lost the file
+   they had just written while still sounding plausible — a plausible-looking model dropping state is
+   the failure mode every demo risks, and only the post names it).
+
+Sources: [Trigger.dev v4.7.7](https://github.com/triggerdotdev/trigger.dev/releases/tag/v4.7.7) · [OSSA-2026-046](https://security.openstack.org/ossa/OSSA-2026-046.html) · [NVD: CVE-2026-71195](https://nvd.nist.gov/vuln/detail/CVE-2026-71195) · [arXiv 2610.30114](https://arxiv.org/abs/2610.30114) · [arXiv 2610.30113](https://arxiv.org/abs/2610.30113) · [GitHub: wheresryan22/anatomy](https://github.com/wheresryan22/anatomy) · [WorldTUI](https://simedw.com/2026/10/21/world-model-terminal/)

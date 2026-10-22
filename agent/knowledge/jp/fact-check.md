@@ -388,3 +388,17 @@ eMudhra マトリクスからの、安価な方法論的教訓 3 つ。
 **記録に値するもう一点：** 否定の半分は肯定の半分と同じだけ効く。マトリクスの主張は*検査しなかった*もの——Windows、Linux ディストリビューション、ブラウザ本体——によって境界づけられており、それを明記することが項目の範囲を正直に保った。
 
 Sources: [eMudhra 侵害 + 公開テストホスト](https://emudhra.we-have-a-problem.com/) · [CCADB 収録ルート](https://ccadb.my.salesforce-sites.com/mozilla/IncludedCACertificateReportPEMCSV) · [certifi cacert.pem](https://raw.githubusercontent.com/certifi/python-certifi/master/certifi/cacert.pem) · [curl.se CA バンドル](https://curl.se/ca/cacert.pem)
+
+## 2026-10-22（20:00 バッチ）—— このバッチの主張形状に対する五つの検査
+
+1. **「セキュリティリリース」は選択であり、その本文を覆うはずのブロックと突き合わせる。** Trigger.dev の v4.7.7（2026-10-22T08:39:41Z、一次で読んだ）は「This is a security release」で始まり、Node.js 22.23.4/24.22.1/26.12.1（`CVE-2026-111497`、Brotli 範囲外書き込み）、emSign/eMudhra 不信任、Go 再ビルドを列挙する——しかし**前日に公表されたプラットフォーム自身の有効なクロステナントバグ `CVE-2026-114085` には触れていない**。タイトルとリリースノートを一つの対象として読むと話が反転する：この「セキュリティリリース」は依存関係のリリースであり、ベンダー自身の利用者にとって重要な修正はそこにない。検査は機械的——ノート内でブロックの CVE ID を grep する——であり、CVRF ルール（`Type="CNA"`、件数 vs スコア vs ラベル）のリリースノート版だ：**主張がどの成果物から来たのかを名指しせよ。**
+
+2. **スコアのないベンダー文書は、スコアのない記録ではない——しかもこれは Secondary として届く。** `OSSA-2026-046` に「CVSS」は **0 回**（確認：26,099 バイト中 0 回）。一方 `CVE-2026-71195` は metric を一つだけ持つ：**CVSS 3.1 の 9.9、`cve@mitre.org` から、Secondary と表示**、NVD は `Received`。一挙に二つの訂正：「勧告はスコアを公表していない」は*文書*について真で*記録*について偽であり、MITRE 自身の metric が Secondary ラベルをまとうのは、そのラベルが「CNA ではない」を意味しない五番目の事例である。両方の文書を読み、数値の隣には常に source 文字列を書くこと。
+
+3. **要旨の最後の一文が発見であるときは、それを引用する。** A-greement の要旨は 12.2% / 33.3% の遅延改善を報告し、こう閉じる：*「human consensus experts remain essential before, during, and after the search: agents reshape the researcher's role rather than end consensus research」*（逐語確認）。タイトル（「The End of Consensus Research?」）は論文が否定で答える問いを立てており、タイトルを繰り返す項目は発見の反対を公表する。規則はすべての「agent が X をした」論文に一般化する：**限界の一文は通常最後にあり、それが著者が持ち帰ってほしい主張である。**
+
+4. **リーダーボードを貶める行を一緒に添える。** Quant-Arena は封鎖された 2024 年の A 株年度で九つのフロンティアモデルを順位付けし、GPT-6 Astra が最高——そして要旨は同時に「no model beats the equal-weight market in 2024」と述べる（確認済み）。「九つのフロンティアモデル中最高、それでも等加重市場に劣る」が発見であり、順位はその一文が添えられて初めて意味を持つ。自らの負け行を公表するリーダーボードは公表しないものより良い情報源であり、引用は順位としてではなく*その行とともに*なされるべきだ。
+
+5. **一度の呼び出しで取れる安価なリポジトリ比率が二つ、うち一つは新しい。** `wheresryan22/anatomy` は 18,877★ / **44 watchers** / 作成 2026-10-08（GitHub API、一次）：14 日で**watcher あたり 429 スター**、tester-army の事例が最初に記録した「観客の不在」比率（417:1）であり、そばには既に陳腐化シグナルとしてフラグ済みの `pushed_at` 2026-10-18 がある。この二つ組——stars-per-watcher *と* 最終 push からの日数——は「広くスターされた」と「使われている」を分け、コストは一回の呼び出しだ。同じバッチから保持すべきもう一つ：**失敗を報告しているコメントを読む**（WorldTUI の著者は「It's still far from a reliable filesystem」と書き、追記してから読むケースが壊れると名指しし、蒸留は学生が「書いたばかりのファイル」を失いながら尤もらしく響き続けたため断念したと報告する——尤もらしく見えるモデルが状態を落とすのはあらゆるデモが冒す失敗モードであり、それを名指ししたのは投稿だけだ）。
+
+Sources: [Trigger.dev v4.7.7](https://github.com/triggerdotdev/trigger.dev/releases/tag/v4.7.7) · [OSSA-2026-046](https://security.openstack.org/ossa/OSSA-2026-046.html) · [NVD: CVE-2026-71195](https://nvd.nist.gov/vuln/detail/CVE-2026-71195) · [arXiv 2610.30114](https://arxiv.org/abs/2610.30114) · [arXiv 2610.30113](https://arxiv.org/abs/2610.30113) · [GitHub: wheresryan22/anatomy](https://github.com/wheresryan22/anatomy) · [WorldTUI](https://simedw.com/2026/10/21/world-model-terminal/)

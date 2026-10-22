@@ -84,6 +84,15 @@
     "jp": "AI エージェントに対する PoH の bot 検出ベンチマーク——方法論的に丁寧なセル単位の測定だが、著者は勝っている製品を販売しており、その点は報告自身が開示している。平均ではなくセルを引用すること。",
     "zh": "PoH 针对 AI agent 的 bot 检测基准——方法论上细致的逐格测量，但作者在卖获胜的产品（报告自己披露了）；要引用格子，不要引用平均值。"
   },
+  "security.openstack.org": {
+    "cat": "security",
+    "cred": "high",
+    "cv": 1,
+    "density": "high",
+    "en": "OpenStack's OSSA advisory index — the maintainers' own record, precise about affected components and fixes, and deliberately silent on scores: OSSA-2026-046 carries zero occurrences of 'CVSS' in 26,099 bytes, while the NVD record for its CVE holds a single MITRE-assigned 9.9. Read both documents before writing 'no score was published' (cv 1, checked 10-22 against NVD CVE-2026-71195).",
+    "jp": "OpenStack の OSSA アドバイザリ索引——メンテナ自身の記録で、影響コンポーネントと修正には正確だがスコアには意図的に触れない。OSSA-2026-046 は 26,099 バイト中 'CVSS' が 0 回、一方その CVE の NVD レコードには MITRE 割当の 9.9 が 1 件だけある。「スコアが公表されていない」と書く前に両方の文書を読むこと（cv 1、10-22 に NVD CVE-2026-71195 で確認）。",
+    "zh": "OpenStack 的 OSSA 公告索引——维护者自己的记录，对受影响组件与修复描述精确，但刻意不提分数：OSSA-2026-046 在 26,099 字节中 'CVSS' 出现 0 次，而其 CVE 的 NVD 记录里只有一条 MITRE 分配的 9.9。在写“未公布分数”之前必须两份文件都读（cv 1，10-22 与 NVD CVE-2026-71195 交叉核验）。"
+  },
   "thephp.foundation": {
     "cat": "vendor",
     "cred": "high",

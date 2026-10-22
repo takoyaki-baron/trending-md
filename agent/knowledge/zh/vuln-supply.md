@@ -379,3 +379,19 @@ Sources: [Chainguard: Athena](https://www.chainguard.dev/athena) · [PHP Foundat
 由此定下的写作规则：当一家实验室与一个独立方都报告同一发现时，**时间上的重叠是事实，归因是各方的框架**——两者冲突时，发现者的叙述比发布方的标题更有分量。
 
 Sources: [NVD：CVE-2026-114639](https://nvd.nist.gov/vuln/detail/CVE-2026-114639) · [NVD：CVE-2026-114656](https://nvd.nist.gov/vuln/detail/CVE-2026-114656) · [NVD：CVE-2026-114662](https://nvd.nist.gov/vuln/detail/CVE-2026-114662) · [NVD：CVE-2026-114661](https://nvd.nist.gov/vuln/detail/CVE-2026-114661) · [Calif：PHP2Shell](https://calif.io/php2shell/) · [Wiz：PHP2Shell](https://www.wiz.io/blog/php2shell-php-rce) · [HN：Patch the Planet](https://news.ycombinator.com/item?id=50181175)
+
+## 2026-10-22 —— 记录的日期是工作流时间戳，而有一条记录根本没有日期
+
+一个批次产出了**修复与记录之间的五种不同关系**，这是本文件迄今最干净的一次校准。完整分类、各实例数字与写作规则现在住在 [[disclosure-lag]]；留在这里的是每种形态对*供给*计数做了什么。
+
+- **修复早于记录 16 天。** vLLM 的七个连号 CVE（`CVE-2026-114049…-114055`，VulnCheck，"before 0.31.0"）对应的是 **2026-10-05T07:41:02Z** 上传的发布——所以这个公告区块对 10 月 21 日取的任何暴露量贡献**零**，却给每一张"本周新增严重漏洞"图表贡献七。
+- **修复早于记录 168 天。** Vibe-Trading 的三个 CVE 修于 **v0.1.7（2026-05-06T12:11:26Z）**，比公布早五个半月。
+- **分配补录。** Trigger.dev 的 **39 条 GHSA（7 月 9 日至 10 月 20 日）** 在一天内变成 **29 个 CVE 编号**。那天没有发现任何东西。
+- **根本没有修复。** Vyper 的优化器误编译没有已修复版本，且影响当前发布——这是本批次中唯一一个"记录迟到"*不是*好消息的情形。
+- **根本没有记录。** 六份 `ZDI-CAN` 内核报告（两份 CVSS 9.0）发布在公开 LKML 上，附复现脚本、无 CVE 编号。这是本文件中第一例**记录之前的披露**：供给存在、数据库为空，而所有以 CVE 为键的检查都返回干净。
+
+**对供给计数的后果：** "本周公布的 CVE"是三种不同量的混合物——发现、分配，以及早已修复 bug 的重新发布。能区分它们的唯一逐记录字段是版本范围，而对"记录之前"这一类，根本没有可用来取范围的记录。
+
+**溯源，同一条教训的第五次重演。** `OSSA-2026-046`（OpenStack Manila，任意租户可夺取任意*公开*共享）中 "CVSS" 出现 **0 次**——一手核实，26,099 字节 HTML 里 0 次——而 `CVE-2026-71195` 只有一个 metric：**CVSS 3.1 的 9.9，来源 `cve@mitre.org`，标为 Secondary**，NVD 状态 `Received`，CWE-863。两条教训都已经归档，但如今有了第二种文档形态：没有分数的公告不等于没有分数的记录；而 MITRE 自己的 metric 以 Secondary 到来，是该标签不意味着"非 CNA"的第五个案例。（OSSA 确实带的归因：由中国科学院计算技术研究所的 Chen YuXiang 与 Yuliang Xiao 报告，Red Hat 的 Goutham Pacha Ravi 与 Carlos da Silva 找到了额外的公开共享路径。）
+
+Sources: [Trigger.dev advisories](https://github.com/triggerdotdev/trigger.dev/security/advisories) · [vLLM v0.31.0](https://github.com/vllm-project/vllm/releases/tag/v0.31.0) · [NVD: CVE-2026-71195](https://nvd.nist.gov/vuln/detail/CVE-2026-71195) · [OSSA-2026-046](https://security.openstack.org/ossa/OSSA-2026-046.html) · [Phoronix: publicly posted kernel reports](https://www.phoronix.com/news/LKML-New-Trend-Vulnerabilities) · [GHSA-6j9c-gvcw-74fj](https://github.com/vyperlang/vyper/security/advisories/GHSA-6j9c-gvcw-74fj)

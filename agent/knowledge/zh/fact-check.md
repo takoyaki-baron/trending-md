@@ -361,3 +361,17 @@ Sources: [Calif：PHP2Shell](https://calif.io/php2shell/) · [Wiz：PHP2Shell](h
 **同样值得记录：** 否定的一半和肯定的一半同样承重。矩阵的主张被它所*未*检查的东西界定——Windows、Linux 发行版与浏览器本身本轮都未测量，把它们说出来才让条目范围保持诚实。
 
 Sources: [eMudhra 侵害 + 在线测试主机](https://emudhra.we-have-a-problem.com/) · [CCADB 收录根](https://ccadb.my.salesforce-sites.com/mozilla/IncludedCACertificateReportPEMCSV) · [certifi cacert.pem](https://raw.githubusercontent.com/certifi/python-certifi/master/certifi/cacert.pem) · [curl.se CA 信任包](https://curl.se/ca/cacert.pem)
+
+## 2026-10-22（20:00 批次）—— 针对本批主张形态的五项检查
+
+1. **"安全发布"是一份挑选结果：把它的正文与它声称覆盖的区块对账。** Trigger.dev 的 v4.7.7（2026-10-22T08:39:41Z，一手读取）开头写 "This is a security release"，随后点名 Node.js 22.23.4/24.22.1/26.12.1（`CVE-2026-111497`，Brotli 越界写）、不信任 emSign/eMudhra，以及 Go 重建——却**没有提** `CVE-2026-114085`，即该平台自己的、前一天才公布的、仍在生效的跨租户 bug。把标题与发布正文当作同一个对象来读，会把故事颠倒：这个"安全发布"是依赖发布，而对厂商自己的用户最要紧的那个修复并不在里面。检查是机械的——在正文里 grep 区块中的 CVE 编号——它是 CVRF 规则（`Type="CNA"`、计数 vs 分数 vs 标签）在发布说明上的姊妹条款：**说清一个主张来自哪份工件。**
+
+2. **厂商文档没有分数，不等于记录没有分数——而这一条还是以 Secondary 到来的。** `OSSA-2026-046` 中 "CVSS" 出现 **0 次**（已核：26,099 字节里 0 次），而 `CVE-2026-71195` 只有一个 metric：**CVSS 3.1 的 9.9，来自 `cve@mitre.org`，标为 Secondary**，NVD `Received`。一次得到两个更正："公告未公布评分"对*文档*为真、对*记录*为假；而 MITRE 自己的 metric 戴着 Secondary 标签，是该标签不意味着"非 CNA"的第五个实例。两份文件都要读，且永远把数字旁边的来源串写出来。
+
+3. **当摘要的最后一句就是发现时，引用它。** A-greement 的摘要报告 12.2% / 33.3% 的延迟收益，然后收尾：*"human consensus experts remain essential before, during, and after the search: agents reshape the researcher's role rather than end consensus research"*（逐字核实）。标题（"The End of Consensus Research?"）提出的是论文以否定作答的问题；一条重复标题的条目，发布的是发现的相反面。规则推广到每一篇"agent 做了 X"的论文：**限制句通常是最后一句，而它正是作者希望被带走的那个主张。**
+
+4. **把拆自己台的在那行一起附上。** Quant-Arena 在封存的 2024 年 A 股年度上给九个前沿模型排名——GPT-6 Astra 最高——而它的摘要同时写着 "no model beats the equal-weight market in 2024"（已核）。"九个前沿模型中最好，仍落后于等权市场"才是发现；排名只有在这句话附上之后才有意思。一个公布了自己落败行的排行榜，比不公布的更可信，而引用时应当*连同*那一行引用，而不是当作排名。
+
+5. **两个便宜的仓库比率可在一次调用里取到，其中一个还是新的。** `wheresryan22/anatomy` 读数 18,877★ / **44 watchers** / 创建于 2026-10-08（GitHub API，一手）：14 天内**每个 watcher 429 颗星**，即 tester-army 案例首次记录在案的"受众缺席"比率（417:1），旁边还有 feed 已经标为陈旧信号的 `pushed_at` 2026-10-18。这一对指标——stars-per-watcher *与*距上次 push 的天数——把"被广泛标星"与"被使用"分开，成本一次调用。同批次还值得留住的是：**读那条报告失败处的评论**（WorldTUI 的作者写下 "It's still far from a reliable filesystem"，点出先追加后读取就是坏掉的案例，并报告蒸馏因学生失去了刚写下的文件、却仍显得合理而被放弃——貌似合理的模型丢失状态是每个演示都冒的风险，而只有这篇帖子点了名）。
+
+Sources: [Trigger.dev v4.7.7](https://github.com/triggerdotdev/trigger.dev/releases/tag/v4.7.7) · [OSSA-2026-046](https://security.openstack.org/ossa/OSSA-2026-046.html) · [NVD: CVE-2026-71195](https://nvd.nist.gov/vuln/detail/CVE-2026-71195) · [arXiv 2610.30114](https://arxiv.org/abs/2610.30114) · [arXiv 2610.30113](https://arxiv.org/abs/2610.30113) · [GitHub: wheresryan22/anatomy](https://github.com/wheresryan22/anatomy) · [WorldTUI](https://simedw.com/2026/10/21/world-model-terminal/)

@@ -3100,123 +3100,132 @@
     },
     "https://news.ycombinator.com/item?id=50185869": {
       "verdict": "blocked",
-      "streak": 2,
+      "streak": 3,
       "first_seen": "2026-10-21T20:43:08.339Z",
-      "last_seen": "2026-10-22T04:52:18.856Z",
+      "last_seen": "2026-10-22T12:45:41.851Z",
       "feeds": [
         "2026-10-22.md"
       ]
     },
     "https://news.ycombinator.com/item?id=50181136": {
       "verdict": "blocked",
-      "streak": 2,
+      "streak": 3,
       "first_seen": "2026-10-21T20:43:08.339Z",
-      "last_seen": "2026-10-22T04:52:18.856Z",
+      "last_seen": "2026-10-22T12:45:41.851Z",
       "feeds": [
         "2026-10-22.md"
       ]
     },
     "https://www.usatoday.com/story/tech/news/2026/10/21/meta-25-billion-data-privacy-new-mexico/92366716007/": {
       "verdict": "blocked",
-      "streak": 2,
+      "streak": 3,
       "first_seen": "2026-10-21T20:43:08.339Z",
-      "last_seen": "2026-10-22T04:52:18.856Z",
+      "last_seen": "2026-10-22T12:45:41.851Z",
       "feeds": [
         "2026-10-22.md"
       ]
     },
     "https://news.ycombinator.com/item?id=50184820": {
       "verdict": "blocked",
-      "streak": 2,
+      "streak": 3,
       "first_seen": "2026-10-21T20:43:08.339Z",
-      "last_seen": "2026-10-22T04:52:18.856Z",
+      "last_seen": "2026-10-22T12:45:41.851Z",
       "feeds": [
         "2026-10-22.md"
       ]
     },
     "https://www.theregister.com/security/2026/10/21/signal-bug-could-keep-your-mic-and-camera-on-after-hangup/": {
       "verdict": "dead",
-      "streak": 2,
+      "streak": 3,
       "first_seen": "2026-10-21T20:43:08.339Z",
-      "last_seen": "2026-10-22T04:52:18.856Z",
+      "last_seen": "2026-10-22T12:45:41.851Z",
       "feeds": [
         "2026-10-22.md"
       ]
     },
     "https://news.ycombinator.com/item?id=50180752": {
       "verdict": "blocked",
-      "streak": 2,
+      "streak": 3,
       "first_seen": "2026-10-21T20:43:08.339Z",
-      "last_seen": "2026-10-22T04:52:18.856Z",
-      "feeds": [
-        "2026-10-22.md"
-      ]
-    },
-    "https://news.ycombinator.com/item?id=50158408": {
-      "verdict": "blocked",
-      "streak": 1,
-      "first_seen": "2026-10-22T04:52:18.856Z",
-      "last_seen": "2026-10-22T04:52:18.856Z",
+      "last_seen": "2026-10-22T12:45:41.851Z",
       "feeds": [
         "2026-10-22.md"
       ]
     },
     "https://news.ycombinator.com/item?id=50188228": {
       "verdict": "blocked",
-      "streak": 1,
+      "streak": 2,
       "first_seen": "2026-10-22T04:52:18.856Z",
-      "last_seen": "2026-10-22T04:52:18.856Z",
+      "last_seen": "2026-10-22T12:45:41.851Z",
       "feeds": [
         "2026-10-22.md"
       ]
     },
     "https://news.ycombinator.com/item?id=50181175": {
       "verdict": "blocked",
-      "streak": 1,
+      "streak": 2,
       "first_seen": "2026-10-22T04:52:18.856Z",
-      "last_seen": "2026-10-22T04:52:18.856Z",
-      "feeds": [
-        "2026-10-22.md"
-      ]
-    },
-    "https://news.ycombinator.com/item?id=50179706": {
-      "verdict": "blocked",
-      "streak": 1,
-      "first_seen": "2026-10-22T04:52:18.856Z",
-      "last_seen": "2026-10-22T04:52:18.856Z",
+      "last_seen": "2026-10-22T12:45:41.851Z",
       "feeds": [
         "2026-10-22.md"
       ]
     },
     "https://news.ycombinator.com/item?id=50183892": {
       "verdict": "blocked",
-      "streak": 1,
+      "streak": 2,
       "first_seen": "2026-10-22T04:52:18.856Z",
-      "last_seen": "2026-10-22T04:52:18.856Z",
-      "feeds": [
-        "2026-10-22.md"
-      ]
-    },
-    "https://news.ycombinator.com/item?id=50190168": {
-      "verdict": "blocked",
-      "streak": 1,
-      "first_seen": "2026-10-22T04:52:18.856Z",
-      "last_seen": "2026-10-22T04:52:18.856Z",
+      "last_seen": "2026-10-22T12:45:41.851Z",
       "feeds": [
         "2026-10-22.md"
       ]
     },
     "https://www.judgments.fedcourt.gov.au/judgments/Judgments/fca/single/2026/2026fca1552": {
       "verdict": "blocked",
-      "streak": 1,
+      "streak": 2,
       "first_seen": "2026-10-22T04:52:18.856Z",
-      "last_seen": "2026-10-22T04:52:18.856Z",
+      "last_seen": "2026-10-22T12:45:41.851Z",
+      "feeds": [
+        "2026-10-22.md"
+      ]
+    },
+    "https://news.ycombinator.com/item?id=50183344": {
+      "verdict": "blocked",
+      "streak": 1,
+      "first_seen": "2026-10-22T12:45:41.851Z",
+      "last_seen": "2026-10-22T12:45:41.851Z",
+      "feeds": [
+        "2026-10-22.md"
+      ]
+    },
+    "https://news.ycombinator.com/item?id=50188614": {
+      "verdict": "blocked",
+      "streak": 1,
+      "first_seen": "2026-10-22T12:45:41.851Z",
+      "last_seen": "2026-10-22T12:45:41.851Z",
+      "feeds": [
+        "2026-10-22.md"
+      ]
+    },
+    "https://news.ycombinator.com/item?id=50190363": {
+      "verdict": "blocked",
+      "streak": 1,
+      "first_seen": "2026-10-22T12:45:41.851Z",
+      "last_seen": "2026-10-22T12:45:41.851Z",
+      "feeds": [
+        "2026-10-22.md"
+      ]
+    },
+    "https://news.ycombinator.com/item?id=50191507": {
+      "verdict": "blocked",
+      "streak": 1,
+      "first_seen": "2026-10-22T12:45:41.851Z",
+      "last_seen": "2026-10-22T12:45:41.851Z",
       "feeds": [
         "2026-10-22.md"
       ]
     }
   },
-  "runs": 76,
+  "runs": 77,
   "first_run": "2026-09-05T12:47:55.004Z",
-  "last_run": "2026-10-22T04:52:18.856Z"
+  "last_run": "2026-10-22T12:45:41.851Z"
 }

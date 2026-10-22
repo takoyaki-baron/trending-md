@@ -549,3 +549,40 @@ in time is the fact and the attribution is each party's framing** — and where 
 finder's account outranks the publisher's headline.
 
 Sources: [NVD: CVE-2026-114639](https://nvd.nist.gov/vuln/detail/CVE-2026-114639) · [NVD: CVE-2026-114656](https://nvd.nist.gov/vuln/detail/CVE-2026-114656) · [NVD: CVE-2026-114662](https://nvd.nist.gov/vuln/detail/CVE-2026-114662) · [NVD: CVE-2026-114661](https://nvd.nist.gov/vuln/detail/CVE-2026-114661) · [Calif: PHP2Shell](https://calif.io/php2shell/) · [Wiz: PHP2Shell](https://www.wiz.io/blog/php2shell-php-rce) · [HN: Patch the Planet](https://news.ycombinator.com/item?id=50181175)
+
+## 2026-10-22 — the record's date is a workflow timestamp, and one record has no date at all
+
+One batch produced **five different relationships between the fix and the record**, which is the
+cleanest calibration this file has had. Full taxonomy, per-instance numbers and the writing rules
+now live in [[disclosure-lag]]; what belongs here is what each shape does to the *supply* count.
+
+- **Fix 16 days before the record.** vLLM's seven contiguous CVEs (`CVE-2026-114049…-114055`,
+  VulnCheck, "before 0.31.0") map onto a release uploaded **2026-10-05T07:41:02Z** — so the advisory
+  block adds **zero** to any exposure count taken on Oct 21, while adding seven to every
+  "new criticals this week" chart.
+- **Fix 168 days before the record.** Vibe-Trading's three CVEs were fixed in **v0.1.7
+  (2026-05-06T12:11:26Z)**, five and a half months before publication.
+- **Assignment backfill.** Trigger.dev's **39 GHSAs (Jul 9 – Oct 20)** became **29 CVE IDs on one
+  day**. Nothing was discovered that day.
+- **No fix at all.** Vyper's optimizer miscompilation has no patched version and affects the current
+  release — the only case in the batch where the record's late publication is *not* good news.
+- **No record at all.** Six `ZDI-CAN` kernel reports, two at CVSS 9.0, published on the public LKML
+  with reproduction scripts and no CVE IDs. This is the first instance in this file of a **pre-record
+  disclosure**: the supply exists, the database has nothing, and every CVE-keyed check returns clean.
+
+**The consequence for a supply count:** "CVEs published this week" is three different quantities
+mixed together — discoveries, assignments, and re-publications of long-fixed bugs. The only
+per-record field that separates them is the version range, and for the pre-record class there is no
+record to range over.
+
+**Provenance, fifth repeat of the same lesson.** `OSSA-2026-046` (OpenStack Manila, any tenant can
+seize any *public* share) carries **zero** occurrences of "CVSS" — verified first-hand, 0 in 26,099
+bytes of HTML — while `CVE-2026-71195` holds a single metric: **9.9 at CVSS 3.1, source
+`cve@mitre.org`, labelled Secondary**, NVD status `Received`, CWE-863. Two lessons, both already
+filed but now with a second document shape: an advisory without a score is not a record without one,
+and MITRE's own metric arriving as Secondary is the fifth case of that label not meaning "not the
+CNA." (The attribution the OSSA does carry: reported by Chen YuXiang at the Institute of Computing
+Technology, Chinese Academy of Sciences, and Yuliang Xiao, with Red Hat's Goutham Pacha Ravi and
+Carlos da Silva finding the additional public-share paths.)
+
+Sources: [Trigger.dev advisories](https://github.com/triggerdotdev/trigger.dev/security/advisories) · [vLLM v0.31.0](https://github.com/vllm-project/vllm/releases/tag/v0.31.0) · [NVD: CVE-2026-71195](https://nvd.nist.gov/vuln/detail/CVE-2026-71195) · [OSSA-2026-046](https://security.openstack.org/ossa/OSSA-2026-046.html) · [Phoronix: publicly posted kernel reports](https://www.phoronix.com/news/LKML-New-Trend-Vulnerabilities) · [GHSA-6j9c-gvcw-74fj](https://github.com/vyperlang/vyper/security/advisories/GHSA-6j9c-gvcw-74fj)
