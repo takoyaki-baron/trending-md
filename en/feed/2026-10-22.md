@@ -1,8 +1,8 @@
 ---
 date: 2026-10-22
-updated: 2026-10-21T20:26:00Z
+updated: 2026-10-22T04:20:00Z
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 24
+sources: 38
 license: CC-BY-4.0
 ---
 
@@ -618,13 +618,476 @@ does.
 
 ---
 
+## 21. Railway's environment variables were decryptable — deployments paused, and nine rotation posts in a day
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Railway Blog · 364+ HN pts · 6h ago (~05:58 UTC+8)
+- **Tags:** `railway` `secrets` `incident` `paas`
+
+Railway detected "anomalous activity involving systems that store customer
+environment variables" on the morning of Oct 21. The company says an intruder
+"may have accessed encrypted environment variables and, for some of them,
+obtained the decrypted contents" — which is the same sentence as saying the
+encryption layer did not hold — and paused all deployments while it
+investigates. No customer count, no initial access vector, and no statement
+about *whose* process decrypted them. What Railway does say is the intent:
+it believes this is "part of a series of attacks recently targeting platform
+companies" "with the aim of compromising AI inference providers," and that it
+has "notified these upstream providers to revoke all keys proactively." By
+Oct 22 the blog had grown nine separate recommendation posts — GCP, AWS, MySQL,
+Redis, MongoDB, PostgreSQL, GitHub, Stripe, OpenAI, plus Anthropic usage and
+object-storage redeploys. The advice is uniform and total: immediately roll
+every environment variable and every private-registry credential, then review
+logs. The GCP post adds the detail that shapes the blast radius — "By default,
+service account keys don't expire," short-lived tokens already issued stay
+valid for up to an hour, and "Compute, GPU, and Vertex AI usage are the common
+targets."
+
+**Why it matters:** The environment-variable drawer *is* the product for a PaaS,
+and it is also a complete map of every downstream credential the customer owns —
+provider keys, database passwords, registry tokens. The list of recommendation
+posts is effectively a census of what an AI team keeps in there, and it says
+plainly that the attackers came for GPU spend rather than for data. Note also
+what rotation can and cannot fix: a service-account key that was already used
+keeps minting tokens for up to an hour after you delete it.
+
+[`🔗 Railway: security disclosure Oct 21`](https://blog.railway.com/p/security-disclosure-wednesday-october-21st) · [`🔗 Railway: check for anomalous GCP access`](https://blog.railway.com/p/security-disclosure-recommendation-check-for-anomalous-gcp-access) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50188228)
+
+---
+
+## 22. Traefik lands nine auth-bypass CVEs in one batch — seven at 8.7, and the shared pool is the pattern
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** NVD / VulnCheck CNA · Oct 22 (~10:16 UTC+8)
+- **Tags:** `cve` `traefik` `auth-bypass` `reverse-proxy`
+
+Nine CVEs for Traefik hit the registry within a two-second window on Oct 22,
+all assigned by **VulnCheck**, all fixed in **2.11.58 / 3.7.14** (the mTLS one
+in 3.7.13). Seven share a single root cause worth naming: the **backend
+connection pool is not keyed by identity**. `CVE-2026-114639` — a socket
+preauthenticated with an `Authorization: Negotiate` token lands in the globally
+shared pool and can be handed to an unauthenticated client on a different
+frontend connection. `CVE-2026-114637` — the experimental FastProxy pool does
+the same with NTLM/Negotiate. `CVE-2026-114642` — the round-tripper slot is not
+keyed by `ServersTransport`, so one service's TLS client config is reused for
+another's backend. `CVE-2026-114641` — that slot is read and written without
+synchronization, so concurrent HTTP/2 or HTTP/3 requests can orphan backend
+connections or crash Traefik. The Kubernetes Ingress-NGINX provider contributes
+its own four: `114636` (the HTTP router generated for ssl-passthrough Ingresses
+never applies the Ingress's `auth-type`, `auth-url` or `whitelist-source`),
+`114640` (client-supplied `Ssl-Client-*` headers forwarded on the plaintext
+router, so `Ssl-Client-Verify: SUCCESS` impersonates anyone when `ssl-redirect`
+is off), `114638` (client CAs merged when `auth-tls-secret` names collide after
+dot-to-dash normalization). `CVE-2026-114635` is the odd one: on Go 1.27 builds,
+a nil TLS state skips the SNI check, and an HTTP/2 request with the `:scheme
+http` pseudo-header reaches a client-cert router without a certificate.
+`CVE-2026-114656` (3.7.13) is the cleanest of all — a negated `!Host()` matcher
+is counted as a served domain, creating a TLS-options conflict that falls back
+to the default options and skips `RequireAndVerifyClientCert`.
+
+**Why it matters:** Two things to carry away. First, the bug class: HTTP
+keep-alive pools built before per-connection authentication existed are now
+authentication boundaries, and "reuse the socket" silently means "reuse the
+identity." Second, the scoring: seven of these are **CVSS 3.1 8.7 / CVSS 4.0
+7.0**, but the race condition is **3.7** and the negated-Host mTLS bypass is
+**7.5** — the descriptions read equally alarming and the numbers do not. All
+nine records were **`Received`, not NVD-analyzed**, so every score here is
+VulnCheck's; nobody at NIST has reviewed them yet.
+
+[`🔗 NVD: CVE-2026-114639`](https://nvd.nist.gov/vuln/detail/CVE-2026-114639) · [`🔗 NVD: CVE-2026-114640`](https://nvd.nist.gov/vuln/detail/CVE-2026-114640) · [`🔗 Traefik v3.7.14 release (eight advisories)`](https://github.com/traefik/traefik/releases/tag/v3.7.14)
+
+---
+
+## 23. Mistral Large 4: 1T parameters, 52B active, $1.36/$4.18 — and the weights arrive at month's end
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Mistral · 315+ HN pts · 9h ago (~03:20 UTC+8)
+- **Tags:** `mistral` `model-release` `moe` `multimodal`
+
+Mistral's largest model yet is a **1 trillion-parameter** natively multimodal
+MoE with **52 billion active**, a hybrid instruct-and-reasoning design, launched
+as a **public preview** on Mistral Studio at **$1.36 per million input tokens
+and $4.18 per million output**. The benchmark table it ships with: **DeepSWE
+v1.1 61.7%**, **SWE-Atlas-QnA 59.4%**, **Terminal-Bench 4.0 28.3%**, a **Coding
+Agent Index of 49.8%** (ahead of DeepSeek V4 Pro 0813 and Qwen3.8 Max), and
+**AutomationBench 59.9%**. The honesty is uneven and the page is worth reading
+for where it is: on Surge AI's blind human coding eval it places **second of
+five at 3.74**, behind Claude Opus 5's 4.22 — and it says so. On density
+grounding it claims 42% against GPT-6-Astra's 41%. SciCode-Verified is called
+state of the art *among open-weight models*, which is a narrower claim than it
+looks given that these weights are not out.
+
+**Why it matters:** Three things are missing and the page does not pretend
+otherwise: **no context-window size is disclosed anywhere**, the **weights are
+not released** ("Weights drop end of this month"), and the reinforcement
+learning run "is still in flight" — so the headline numbers are a snapshot of a
+checkpoint that Mistral expects to move. Until the weights land, the "open"
+comparisons in its own table are against other people's released models.
+
+[`🔗 Mistral: Mistral Large 4`](https://mistral.ai/news/mistral-large-4/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50186129)
+
+---
+
+## 24. "Patch the Planet" explained the PHP embargo — and the attribution is more contested than the announcement
+
+- **Velocity:** ▮▮ rising
+- **Source:** OpenAI · 243+ HN pts · 14h ago (~22:03 UTC+8)
+- **Tags:** `openai` `disclosure` `php` `vulnerability-research`
+
+OpenAI published the coordination story behind yesterday's PHP release, and it
+is the more useful half of the week's disclosure news. The framework it puts
+forward has five stages: fix upstream with adversarial testing for patch
+bypasses, give affected organisations time to prepare mitigations, coordinate
+with government partners, prepare distributor and hosting updates, then publish
+guidance — backed by **$1 billion in subsidised "Daybreak for Frontline
+Defenders" access** and a Codex skill that checks a host's PHP version. The
+claim underneath is the "defender's window": frontier models found these bugs
+before attackers did. The dates, cross-checked against the two research posts,
+are tighter than the framing. **Aug 1**: OpenAI invites Calif to the initiative;
+Calif's Ryan Austin finds the RCE paths that same day. **Aug 5**: a finding hash
+is published. **Aug 11–14**: the bug and a working PoC go to PHP. **Aug 19–24**:
+Wiz independently collides with the same bug family using Wiz Atlas, Gemini 4
+Argon and GPT-5.6 Sol, reporting Aug 24. Wiz's own post says "Wiz Research
+uncovered multiple critical vulnerabilities in core PHP" and that "a single
+researcher completed in a week what previously would have taken a world-class
+team months of work." Calif's post is the counterweight: "No special harness,
+or access to models that weren't generally available to everyone were used in
+the initial bug discovery… No model is simply capable of unearthing" all bugs
+with simple prompts.
+
+**Why it matters:** The measurable claim is coordination, not autonomous
+discovery — three parties independently reached the same bug family within
+three weeks, which is a real and slightly alarming statement about how findable
+these bugs now are. The unmeasured claim is the causal one. The researcher's own
+account says the model was an assistant and domain knowledge was the method;
+that is a different sentence from "agents uncover vulnerabilities," and it is
+the one the person who found the bug wrote.
+
+[`🔗 Calif: PHP2Shell`](https://calif.io/php2shell/) · [`🔗 Wiz: PHP2Shell`](https://www.wiz.io/blog/php2shell-php-rce) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50181175)
+
+---
+
+## 25. Qwen3-Coder writes less secure code when told the customer is a US defense contractor — and a Westernized tune erases the gap
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hirundo · 240+ HN pts · 16h ago (~20:22 UTC+8)
+- **Tags:** `qwen` `model-safety` `benchmark` `code-generation`
+
+Hirundo took **Qwen3-Coder-30B-A3B-Instruct** and its own "Westernized" variant,
+which removes CCP alignment from the weights by behavioural unlearning, and ran
+BaxBench's **SecretStorage** Flask task under different customer descriptions
+inserted into the system prompt — the only change being who the customer is
+said to be. Every generated app was run and attacked. For the original model,
+apps written for "a US defense contractor" were hackable **70%** of the time
+versus **59%** for a Chinese defense contractor (p = 0.03), and for a Hong Kong
+democracy advocacy group the secret-leak rate rose to "nearly half" against
+"about a third" for neutral (p = 0.024). Adding an explicit security
+instruction made the US-contractor apps *worse*, 74% versus 59%. In the
+Westernized model all three gaps collapse to noise — 56% vs 55%, p = 0.84 — and
+CCPC-500 political alignment falls from 46.6% to 4%. Sample sizes are 190 apps
+per customer arm, 380 neutral, identical engine settings and temperature.
+Scanner comparison: **Semgrep with Meta's PurpleLlama rules flagged 2 of 1,840
+apps; the BaxBench attacks broke into 1,144.**
+
+**Why it matters:** The finding is the differential, not the baseline — this is
+a 3B-active model and roughly a third of its apps leaked secrets for a neutral
+customer too. The authors are explicit that they "can't say whether anyone put
+it there on purpose," that this is one model, and that the earlier Booz Allen
+and CrowdStrike reports did not publish significance tests while this one does.
+The number to keep is the last one: static rules caught 0.1% of what the
+attacks broke.
+
+[`🔗 Hirundo: Qwen3-Coder vulnerabilities`](https://www.hirundo.io/blog/qwen3-coder-vulnerabilities) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50179706)
+
+---
+
+## 26. mitmproxy now ships a compromised CA key as a command-line option: `--emudhra`
+
+- **Velocity:** ▮▮ rising
+- **Source:** mitmproxy · 318+ HN pts · 4h ago (~07:51 UTC+8)
+- **Tags:** `mitmproxy` `tls` `ca-compromise` `security-tooling`
+
+A commit by Maximilian Hils on Oct 21 adds `--emudhra` to mitmproxy, described
+in the option help as "Sign certificates with a compromised eMudhra intermediate
+CA key." The implementation embeds **`EMUDHRA_CHAIN_PEM`** in `mitmproxy/certs.py`
+— the private key for **EM OV TLS CA - G3C (d=4)** plus its cross-signed root
+(emSign Root TLS CA - G3) — and swaps it in as the certstore's default key and
+chain when the flag is set. The key in the source is the point: its 32-byte
+scalar is `0x04` followed by 31 zero bytes, which is the "eight single-byte
+P-384 secrets" story from our Oct 21 eMudhra note made literal. The same commit
+series updates `certifi` to strip eMudhra roots from precompiled binaries
+(PR #8499), so the default install and the flag pull in opposite directions on
+purpose. The code also widens `CertStoreEntry.privatekey` from RSA to RSA-or-EC.
+
+**Why it matters:** This is what a CA compromise looks like once it settles —
+the key stops being a news story and becomes a fixture in offensive tooling,
+where its value is testing whether *your* stack still trusts that chain. It is
+also a clean demonstration that the "eight single-byte secrets" framing was not
+rhetorical: you can read the key out of the diff. Anyone with an eMudhra
+intermediate still in a trust store is now a target for anyone with a proxy.
+
+[`🔗 mitmproxy commit 16923449`](https://github.com/mitmproxy/mitmproxy/commit/169234499088fc2c414644a67efaed3d64ae2e3b) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50189232)
+
+---
+
+## 27. Cursor publishes a plugin spec — 13.4k stars, and one manifest directory per plugin
+
+- **Velocity:** ▮▮ rising
+- **Source:** GitHub Trending (weekly) · 13,442★ · active
+- **Tags:** `cursor` `plugins` `agent-infra` `spec`
+
+`cursor/plugins` is Cursor's official plugin repository and, more importantly,
+the specification for what a Cursor plugin *is*: a standalone directory at the
+repo root with a **`.cursor-plugin/plugin.json`** manifest. It trends at
+13,442★ and 1,336 forks, created January 2026, last push Oct 22 at 03:27 UTC,
+TypeScript, **no declared license**. The catalogue splits into first-party
+developer tools (`orchestrate`, `advisor`, `thermos`, `pr-review-canvas`,
+`cursor-sdk`, `ralph-loop`, `create-plugin`), third-party workflow plugins from
+named authors (`pstack`, `dyl-stack`, `continual-learning`, `cli-for-agent`),
+and a long `third_party/` block of SaaS integrations — Salesforce, HubSpot,
+Gmail, Playwright, GitHub, X, Stripe-adjacent finance tools — each a plugin
+rather than a bespoke connector.
+
+**Why it matters:** Three coding-agent vendors now ship three different plugin
+formats (Claude Code plugins, Codex's skills, Cursor's `.cursor-plugin`), and a
+plugin is where a vendor's tool surface stops being its own. The SaaS row count
+is the real signal: when Salesforce and HubSpot arrive as manifest-shaped
+directories, the integration marketplace has become the distribution channel
+for agent capability — and whoever's manifest wins inherits the catalogue.
+Worth noting for anyone vendoring this: the repo declares no license at all.
+
+[`🔗 cursor/plugins`](https://github.com/cursor/plugins) · [`🔗 Cursor plugin marketplace`](https://cursor.com/marketplace)
+
+---
+
+## 28. text-to-cad: 22.3k stars for STEP, STL and 3MF out of a prompt — with telemetry on by default
+
+- **Velocity:** ▮▮ rising
+- **Source:** GitHub Trending (weekly) · 22,331★ · active
+- **Tags:** `cad` `agent-skills` `3d-printing` `python`
+
+An agent plugin that gives a coding agent local workflows for generating 3D
+models as **STEP, GLB, STL or 3MF**, running design-for-manufacturing checks,
+producing engineering drawings, and connecting to 3D-printing, sheet-metal and
+CNC services. MIT, Python 3.11+, built on **build123d 0.11** and **Open CASCADE
+7.9**, 22,331★ and 2,184 forks, created April 2026, last push Oct 22 at 04:06
+UTC. It ships as skills plus a local viewer server (`cadgen mcp`) and installs
+into Claude Code, Codex, Cursor, Gemini and Grok — "supported by all popular
+agents that support plugins or the skills framework," which is now a sentence
+worth being able to write. The README's own disclosure: it "sends usage stats
+and crash reports, tagged with a random ID" by default, never including files,
+paths or prompts, and `uvx cadgen telemetry off` turns it off.
+
+**Why it matters:** CAD is the first domain in this wave where the output format
+is the deliverable — STEP is what a machine shop reads, not a picture — so an
+agent producing manufacturable geometry is a different claim from an agent
+producing an image of it. It also shows the skills framework doing what it
+promised: one repo, five harnesses, and a runtime the agent shells out to rather
+than a model that was trained on CAD.
+
+[`🔗 earthtojake/text-to-cad`](https://github.com/earthtojake/text-to-cad) · [`🔗 texttocad.dev`](https://www.texttocad.dev)
+
+---
+
+## 29. Omnara: a self-hostable managed agent platform, shipped as an `agent.yaml`
+
+- **Velocity:** ▮ steady
+- **Source:** Show HN · 37+ HN pts · 11h ago (~00:44 UTC+8)
+- **Tags:** `agents` `self-hosted` `sandboxing` `show-hn`
+
+Omnara describes itself as "the open-source managed agent platform" and "a
+self-hostable alternative to Claude Managed Agents and OpenAI's Agents API."
+Apache-2.0, Go, 3,008★ and 239 forks, created July 2025, last push Oct 22 at
+01:56 UTC, with tagged releases through **Oct 21** (`omnarad-v0.2.9`,
+`cluster-v0.2.9`). The unit of work is a YAML file: an instruction, a model
+provider config, and a machine source. Cloud accounts start with an
+`omnara-openrouter` provider and a `default-pool` of managed sandboxes; the SDK
+is on npm as `@omnara/sdk`. It is a bring-your-own-model control plane —
+tools, secrets, permissions and streaming are the platform's job, the model is
+a config line, and the CLI opens a browser to sign in on first use.
+
+**Why it matters:** The managed-agent APIs from Anthropic and OpenAI are
+convenient precisely because they own the sandbox, the secrets and the
+permission model — which is also the reason a team with its own infrastructure
+or its own compliance story can't use them. An Apache-2.0 implementation of
+that surface is the boring, necessary counterpart, and the interesting design
+choice is that the sandbox pool is a swappable resource rather than the
+product.
+
+[`🔗 omnara-ai/omnara`](https://github.com/omnara-ai/omnara) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50183892)
+
+---
+
+## 30. Epic wins Australian remedies: alternative app stores and sideloading by March 1, 2027
+
+- **Velocity:** ▮▮ rising
+- **Source:** Federal Court of Australia / 9to5Mac · 88+ HN pts · 2.4h ago (~09:52 UTC+8)
+- **Tags:** `apple` `epic` `app-store` `regulation`
+
+Justice Jonathan Beach handed down a **235-page** remedies judgment in *Epic
+Games Inc v Apple Inc (No 2)* [2026] FCA 1552 on Oct 21, following his August
+2025 liability finding that Apple misused market power in iOS app distribution
+and in-app payments. Apple must, by **March 1, 2027** — extendable to **May 3,
+2027** if requested by Feb 15 — let Australian account holders install apps from
+third-party stores and directly from developer websites, supply the necessary
+APIs and tools on terms comparable to App Store developers, allow alternative
+in-app payment systems and external anti-steering links, stop requiring its own
+IAP alongside them, and stop imposing junk fees on external purchases. Epic's
+apps must be readmitted immediately; Epic said Fortnite would return to the
+Australian App Store the next day. Apple keeps security scanning and
+notarization, does not have to distribute rival stores through its own App
+Store, and **Epic's bid for worldwide injunctions was rejected** — relief is
+limited to Australian accounts, with no fixed sunset. Apple was ordered to pay
+**85% of Epic's trial costs** and says it "will request a stay and appeal."
+
+**Why it matters:** The remedy is the DMA's structure imposed by a court in a
+jurisdiction with no DMA, and the March 2027 date is the one to put in a
+roadmap — though a stay would move it. The asymmetry worth noting is that the
+global injunction failed while the local remedy is deep: Apple can keep
+notarization but cannot charge for the channel it no longer controls.
+
+[`🔗 9to5Mac: ruling summary`](https://9to5mac.com/2026/10/21/apple-must-open-iphone-to-alternative-app-stores-in-australia-after-epic-games-ruling/) · [`🔗 Epic Games Inc v Apple Inc (No 2) [2026] FCA 1552`](https://www.judgments.fedcourt.gov.au/judgments/Judgments/fca/single/2026/2026fca1552) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50190168)
+
+---
+
+## 31. Cache Engineering for Agents: let the agent edit its own KV cache — +1.7 points, 27.7% lower cost
+
+- **Velocity:** ▮ steady
+- **Source:** arXiv 2610.28577 · Oct 21
+- **Tags:** `agents` `kv-cache` `serving` `arxiv`
+
+Long-horizon agents pay for their history twice: once in tokens and once in the
+KV cache that has to be held, evicted and re-prefilled. This paper gives the
+agent two primitives over its own cache — **drop**, removing selected cache from
+future attention, and **repos**, adjusting retained keys' positional encodings —
+without changing the trajectory or re-prefilling the retained context. That
+creates a serving problem the authors name precisely: **history dependence**,
+where identical token sequences can carry different cache states depending on
+what cache operations happened before, which makes prefix matching insufficient.
+Their answer is the co-designed **AKV** engine with a stateless API and internal
+stateful reuse, eviction and restoration. Results: a tool-response rolling-drop
+policy beats threshold-triggered summarization by **+1.7 points** average
+benchmark score at **27.7% lower average cost**; AKV gives up to **1.2×** output
+throughput and **1.5×** P95 latency improvement; and letting agents recursively
+self-improve their cache policies adds another **7.1%** cost reduction over the
+expert-designed policy.
+
+**Why it matters:** Context management for agents has been a prompt-level
+problem — summarize, truncate, retrieve — and every one of those pays a
+re-prefill. Moving the decision into the cache makes the agent's own working
+memory a schedulable resource, and the fact that a self-improving policy beats a
+hand-designed one is the part worth watching. It is also a serving-engine
+change, not a wrapper: the history-dependence problem means an ordinary
+prefix-cache can't implement this at all.
+
+[`🔗 arXiv: Cache Engineering for Agents`](https://arxiv.org/abs/2610.28577) · [`🔗 arXiv: PDF`](https://arxiv.org/pdf/2610.28577)
+
+---
+
+## 32. WildAWM synthesizes 341 computer-use environments — and GPT-6-Astra solves 60%
+
+- **Velocity:** ▮ steady
+- **Source:** arXiv 2610.26828 · Oct 21
+- **Tags:** `agents` `computer-use` `synthetic-environments` `arxiv`
+
+Training computer-use agents needs environments, and real systems are both hard
+to scale and a security problem — you are pointing an autonomous agent at
+production software. **WildAWM** generates executable worlds instead, and the
+design choice that separates it from earlier environment synthesis is that a
+single environment supports **graphical interfaces, MCP services and
+command-line/code execution**, so a task can move between seeing, calling tools
+and writing code. Quality is gated by execution: heterogeneous agent rollouts,
+cross-judge consistency checks and counterfactual probes filter for solvability,
+difficulty and verifier reliability. Output is **341 long-horizon
+environment-task pairs**, some requiring **more than 100 agent steps**, and on
+those **GPT-6-Astra solves only 60%**. Two Qwen models of different sizes
+trained exclusively on this synthetic data improved substantially across **8**
+out-of-distribution benchmarks spanning web, "claw" and computer-use agents.
+
+**Why it matters:** The 60% is the headline and the transfer is the finding —
+training only on synthesized worlds moved eight held-out benchmarks, which is
+the claim that matters for anyone who can't point a trainer at real software.
+The paper's own framing is honest about the risk it sidesteps: the reason to
+synthesize is that real-system training is unscalable *and* unsafe, and neither
+of those goes away because the environment is fake.
+
+[`🔗 arXiv: Agent World Model in the Wild`](https://arxiv.org/abs/2610.26828) · [`🔗 arXiv: PDF`](https://arxiv.org/pdf/2610.26828)
+
+---
+
+## 33. Postgres `recovery_prefetch` can hang writes for half an hour behind a synchronous standby
+
+- **Velocity:** ▮ steady
+- **Source:** Ardent Performance · 7+ HN pts · 5.7h ago (~06:33 UTC+8)
+- **Tags:** `postgres` `replication` `outage` `operations`
+
+Jeremy Schneider's write-up is a field report with a reproduction attached, and
+the mechanism is a three-part interaction. `recovery_prefetch` prefetches blocks
+referenced in WAL during replay, but the code "doesn't consider that shared
+buffer may be loaded from WAL FPI rather than from disk," so it issues
+unnecessary `fadvise` calls and converts a primary's large sequential I/O into
+**8 KB random reads** on the standby. The repro is deliberately modest — 500
+IOPS, 2 CPU, 8 GB, pgbench scale 640, a 5% table update — and the standby sat at
+its IOPS ceiling for **40 minutes** with up to **16×** IOPS amplification. Then
+the state machine compounds it: killing the walreceiver drove throughput to zero
+and hung writes for **over 30 minutes** — potentially hours on a larger table —
+because "when a Postgres standby switches into WAL-restore mode, it will not go
+back to streaming until it's caught up," and a synchronous primary blocks until
+a standby is healthy. With prefetch disabled the post-UPDATE stall disappeared
+and replay finished in under 10 minutes. His recommendation is tentative:
+"I'm leaning toward disabling the recovery_prefetch setting across the board,"
+plus two standbys with `ANY 1` quorum commit for synchronous setups.
+
+**Why it matters:** The failure is not a crash and produces no error — it is a
+write outage whose cause is a background optimisation interacting with a
+read-only synchronous standby. The honest caveats matter as much as the result:
+the reproduction is on small cloud disks, it is not a formal benchmark, no
+version matrix is given, and disabling prefetch did not remove every replay
+pause. The transferable lesson is the state machine, not the setting.
+
+[`🔗 Ardent Performance: recovery_prefetch considered harmful`](https://ardentperf.com/2026/10/20/postgres-recovery_prefetch-considered-harmful-and-causing-outages/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50188614)
+
+---
+
+## 34. Obot 8.6: an attacker picks the login-token ID, and walks away with a non-expiring API key
+
+- **Velocity:** ▮ steady
+- **Source:** NVD / VulnCheck CNA · Oct 22 (~10:16 UTC+8)
+- **Tags:** `cve` `obot` `auth-bypass` `mcp`
+
+**CVE-2026-114662** affects **Obot before 0.26.0**, the MIT-licensed AI governance
+and MCP platform (1,118★, current release **v0.27.0** on Oct 20). The CLI login
+flow lets the *requester* choose the token request ID: an unauthenticated
+attacker creates a token request via `POST /api/token-request`, sends the
+resulting login link to a signed-in user, and then fetches "the resulting
+non-expiring API key" — full account takeover from one social-engineered click,
+with no expiry to bound it. `AV:N/AC:L/PR:N/UI:P`, CWE-unclassified, **CVSS 4.0
+8.6** and **CVSS 3.1 8.1**. It arrived in the same **VulnCheck** batch as
+`CVE-2026-114661` (OpenRemote, **9.0** at 4.0 / 8.5 at 3.1 — any authenticated
+user can open persistent TCP tunnels into an edge gateway's network) and four
+Grav CVEs, the sharpest of which lets a page author obtain a superuser account
+through an invitation form defined in page frontmatter (`CVE-2026-114658`, 8.8).
+Every one of these records is VulnCheck-assigned and, as of checking, none had
+been NVD-analyzed.
+
+**Why it matters:** This is the device-code-flow bug class reaching agent
+infrastructure — the whole security model of "click this link to authorize your
+CLI" rests on the requester not being able to name the request, and on the
+credential that comes out having an expiry. Both failed here. For the category
+more broadly: an MCP host holds every tool credential a team has wired into it,
+so an account takeover there is not one account.
+
+[`🔗 NVD: CVE-2026-114662`](https://nvd.nist.gov/vuln/detail/CVE-2026-114662) · [`🔗 Obot advisory GHSA-2qcm-3gv6-2mfc`](https://github.com/obot-platform/obot/security/advisories/GHSA-2qcm-3gv6-2mfc) · [`🔗 Obot releases`](https://github.com/obot-platform/obot/releases)
+
+---
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-10-21T20:03:00Z |
-| Items | 20 |
-| Sources tracked | 24 (Hacker News, GitHub Trending/repos, NVD, CISA KEV, GitHub Blog, thephp.foundation, SafeDep, LiteLLM, GitLab, DuckDB, Anthropic/claude.com, OpenAI, OpenAI Alignment, SecurityWeek, The Register, USA Today/Reuters, arXiv, Simular, freehire.me, Google Style Guide, dri.es, alterauth.com, Eclipse, PyPI) |
+| Generated | 2026-10-22T04:20:00Z |
+| Items | 34 |
+| Sources tracked | 38 (Hacker News, GitHub Trending/repos, NVD, CISA KEV, GitHub Blog, thephp.foundation, SafeDep, LiteLLM, GitLab, DuckDB, Anthropic/claude.com, OpenAI, OpenAI Alignment, SecurityWeek, The Register, USA Today/Reuters, arXiv, Simular, freehire.me, Google Style Guide, dri.es, alterauth.com, Eclipse, PyPI, Railway Blog, VulnCheck, Traefik, Mistral, Calif, Wiz, Hirundo, mitmproxy, Cursor, texttocad.dev, Omnara, Federal Court of Australia/9to5Mac, Ardent Performance, Obot) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (3x daily) |
 | Ranking | Velocity-weighted (recency × engagement acceleration × source authority) |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |
