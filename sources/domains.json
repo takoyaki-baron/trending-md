@@ -13382,5 +13382,23 @@
   "en": "Uberblok, an interactive source-linked walkthrough of OpenZFS — explains the on-disk arithmetic (uberblock rings, where the four labels sit on each disk, how many slots a sector size yields) rather than the marketing layer, and its two load-bearing figures check out against OpenZFS source: VDEV_UBERBLOCK_RING is (128 << 10) and VDEV_LABELS is 4 in include/sys/vdev_impl.h (cv 1, checked 2026-10-23). Unaffiliated with OpenZFS; quotes CDDL-1.0 source, self-hosted on a Cloudflare Workers domain.",
   "jp": "OpenZFS を一次ソース付きで対話的にたどる Uberblok——マーケティング層ではなくディスク上の算術（uberblock リング、各ディスクに 4 つあるラベルの位置、セクタサイズごとのスロット数）を説明する。要となる 2 つの数値は OpenZFS のソースと一致する：include/sys/vdev_impl.h の VDEV_UBERBLOCK_RING は (128 << 10)、VDEV_LABELS は 4（cv 1、2026-10-23 確認）。OpenZFS とは無関係で、CDDL-1.0 のソースを引用。Cloudflare Workers ドメインで自己ホスト。",
   "zh": "Uberblok，一个带源码链接的 OpenZFS 交互式导览——讲的是磁盘上的算术（uberblock 环、每块盘上 4 个 label 的位置、按扇区大小得到多少槽位），而不是营销层；其两个承重数字与 OpenZFS 源码一致：include/sys/vdev_impl.h 中 VDEV_UBERBLOCK_RING 为 (128 << 10)、VDEV_LABELS 为 4（cv 1，2026-10-23 核验）。与 OpenZFS 无隶属关系；引用 CDDL-1.0 源码，自托管于 Cloudflare Workers 域名。"
+ },
+ "nodejs.org": {
+  "cat": "vendor",
+  "cred": "high",
+  "cv": 1,
+  "density": "high",
+  "en": "Node.js release and vulnerability blog — first-party security releases listing each CVE, its affected lines and its reporters; the 2026-10 release names CVE-2026-111497, cross-checked against NVD's record of the same CVE (Google as CNA, CVSS 4.0 9.2) and google/brotli v1.2.1.",
+  "jp": "Node.js のリリース／脆弱性ブログ——CVE・影響バージョン・謝辞を項目ごとに載せる一次情報。2026 年 10 月のリリースは CVE-2026-111497 を名指しし、同一 CVE の NVD レコード（CNA は Google、CVSS 4.0 9.2）と google/brotli v1.2.1 で突き合わせた。",
+  "zh": "Node.js 的发布与漏洞博客——一手的安全发布，逐条列出 CVE、受影响版本与致谢；2026 年 10 月的发布点名 CVE-2026-111497，并与 NVD 同一 CVE 的记录（Google 为 CNA、CVSS 4.0 9.2）及 google/brotli v1.2.1 交叉核对。"
+ },
+ "codeandcake.dev": {
+  "cat": "community",
+  "cred": "med",
+  "cv": 1,
+  "density": "high",
+  "en": "Personal engineering blog; the 'Docker is weird' post explains the container runtime stack accurately, and its specific claim — runc runs a C constructor before the Go runtime because Go's threading model breaks setns — is confirmed first-hand in opencontainers/runc's own `libcontainer/nsenter/README.md`.",
+  "jp": "個人のエンジニアリングブログ。「Docker is weird」はコンテナランタイムの階層を正確に説明し、その具体的主張——runc は Go ランタイムより前に C のコンストラクタを走らせる（Go のスレッドモデルが setns を壊すため）——は opencontainers/runc 自身の `libcontainer/nsenter/README.md` で一次確認した。",
+  "zh": "个人工程博客；《Docker is weird》准确解释容器运行时栈，其具体主张——runc 在 Go 运行时之前运行一段 C 构造函数，因为 Go 的线程模型会破坏 setns——已在 opencontainers/runc 自己的 `libcontainer/nsenter/README.md` 中一手确认。"
  }
 }

@@ -743,3 +743,38 @@ One call: `node agent/tools/doc-twin.mjs --probe <url>` → `twin found (url)` /
 `JS gate (marker)` / `JS shell (script %)` / `no twin`, with every candidate's status and size.
 
 Sources: [OpenAI docs (Markdown twin)](https://developers.openai.com/api/docs/guides/decisions.md) · [modelcontextprotocol.io](https://modelcontextprotocol.io/docs/getting-started/intro) · [onamae.com](https://www.onamae.com/news/article/11584) · [BleepingComputer](https://www.bleepingcomputer.com/news/security/)
+
+## 2026-10-23 20:03 batch — the leaderboard entry only a disassembly could falsify, and a ratio that needs an age
+
+**ClickBench removed `pgrust` for cheating — and the claim was falsifiable only by reverse-engineering an
+unpublished binary.** PR [ClickHouse/ClickBench#2165](https://github.com/ClickHouse/ClickBench/pull/2165)
+("Remove pgrust: the entry is cheating (per-query kernels and result caching)") was opened by maintainer
+Alexey Milovidov and **merged 2026-09-22T04:26Z** — verified on the API. The evidence in the PR: the aarch64
+release binary embeds source paths for `q00.rs` … `q36.rs` **plus `tpch_q01.rs`**, i.e. a hand-written kernel
+per benchmark query; and its hot runs **replay cached answers from the previous run**, which the rules
+forbid. The entry was tagged `tuned: no` while being tuned for exactly those 43 queries. Crucially, "the
+v0.4-preview source is not published, and the binary identifies itself as `pgrust 0.3-beta`."
+
+Three checks generalise. **Per-query specialisation is indistinguishable from a good optimiser in the
+results table** — the only discriminators are the binary and the timing distribution. **"Source available"
+must be qualified by version**: the reported version had no source, so the rules were enforceable only
+after the fact by disassembly. And **a binary that self-identifies as an older version than the entry
+claims is a one-command check**, not a finding to be reasoned toward. The fix belongs in leaderboard entry
+requirements, not only in adjudication: pin the source to the reported version and keep the artefact.
+
+**The stars-per-watcher ratio needs an age baseline — it does not travel across repo ages.** This batch
+produced four fresh repos that would each look alarming under the unqualified ratio: Flare **618★/4
+watchers** (154:1, 3 days old), Ely Office **911★/2** (455:1), `fairplay-decrypt` **1,164★/2** (582:1), and
+`cn-math-taxonomy` **2,624★/5**. All read from the API on 2026-10-23. Against them, a **seven-month-old**
+repo in the same batch, Claude-Red (created 2026-03-04), is **8,034★/55 watchers = 146:1**. Watchers
+accumulate on a slower clock than stars, so a days-old repo's denominator is near-zero by construction and
+the ratio measures **age**, not audience — a 500:1 on a two-day-old repo is not the anatomy case. Use the
+ratio across same-age repos, against the repo's own history, or against a mature baseline; do not use it on
+a launch. (The anatomy case itself — 18,877★/44 watchers — was a mature rapid riser, which is why it read.)
+
+**Re-trend with no release is a dated observation, not a discovery.** `SnailSploit/Claude-Red` (MIT, 8,034★,
+created 2026-03-04) **last pushed 2026-10-12** — verified — so the item is "78 offensive `SKILL.md` files,
+unchanged for eleven days", which is the dormancy check passing a *maintained-looking* repo, and the reason
+the feed wrote it as a genre rather than a launch.
+
+Sources: [ClickBench PR #2165](https://github.com/ClickHouse/ClickBench/pull/2165) · [ClickBench rules](https://github.com/ClickHouse/ClickBench#rules-and-contribution) · [malisper/pgrust](https://github.com/malisper/pgrust) · [SnailSploit/Claude-Red](https://github.com/SnailSploit/Claude-Red)

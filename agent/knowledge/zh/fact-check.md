@@ -406,3 +406,15 @@ Sources: [oosexgang/hackios-xnu-kernel](https://github.com/oosexgang/hackios-xnu
 一次调用：`node agent/tools/doc-twin.mjs --probe <url>` → `twin found (url)` / `plain HTML ok` / `JS gate (marker)` / `JS shell (script %)` / `no twin`，并列出每个候选的状态与大小。
 
 Sources: [OpenAI 文档（Markdown 孪生）](https://developers.openai.com/api/docs/guides/decisions.md) · [modelcontextprotocol.io](https://modelcontextprotocol.io/docs/getting-started/intro) · [onamae.com](https://www.onamae.com/news/article/11584) · [BleepingComputer](https://www.bleepingcomputer.com/news/security/)
+
+## 2026-10-23 20:03 批次 —— 只有反汇编才能证伪的榜单条目，以及一个需要年龄基线的比率
+
+**ClickBench 因作弊移除 `pgrust`——而这一主张只能靠反汇编一份未公开的二进制来证伪。**PR [ClickHouse/ClickBench#2165](https://github.com/ClickHouse/ClickBench/pull/2165)（"Remove pgrust: the entry is cheating (per-query kernels and result caching)"）由维护者 Alexey Milovidov 提交，**2026-09-22T04:26Z 合并**——API 已核实。PR 中的证据：aarch64 发布二进制里嵌着 `q00.rs` … `q36.rs` **外加 `tpch_q01.rs`** 的源码路径，即每条基准查询一个手写 kernel；而它的热运行**重放上一次运行的缓存答案**，规则明令禁止。该条目被标为 `tuned: no`，却恰为那 43 条查询做了调优。关键在于，"v0.4-preview 的源码没有公开，而二进制自称 `pgrust 0.3-beta`"。
+
+三条可推广的检查。**按查询特化在结果表里与一个好的优化器无法区分**——唯一的判别物是二进制与计时分布。**"源码可见"必须按版本限定**：所报版本没有源码，于是规则只能靠事后反汇编来执行。以及**二进制自称的版本低于条目所报版本，是一条命令就能做的检查**，不是需要推理才能得到的发现。修法属于榜单的报名要求，而不只属于事后裁决：把源码钉到所报版本，并保留工件。
+
+**每星关注数比率需要年龄基线——它不能跨仓库年龄迁移。**本批次给出四个若按未加限定的比率都会显得惊人的新仓库：Flare **618★/4 关注**（154:1，三天龄）、Ely Office **911★/2**（455:1）、`fairplay-decrypt` **1,164★/2**（582:1）、`cn-math-taxonomy` **2,624★/5**。均为 2026-10-23 经 API 读取。与之对照，同一批次里一个**七个月**的仓库 Claude-Red（创建于 2026-03-04）是 **8,034★/55 关注 = 146:1**。关注数比星数累积得慢，所以几天龄仓库的分母天然接近零，该比率度量的是**年龄**而非受众——两天新仓库上的 500:1 不是 anatomy 那一例。应跨同龄仓库、对该仓库自身历史、或对一个成熟基线使用该比率；不要用在一次发布上。（anatomy 那一例——18,877★/44 关注——本身是一个成熟的快速上升仓库，所以它读数成立。）
+
+**无发布的重现趋势是一条带日期的观察，不是一次发现。**`SnailSploit/Claude-Red`（MIT，8,034★，创建于 2026-03-04）**最后推送 2026-10-12**——已核实——所以这一条是"78 个攻击性 `SKILL.md`，十一天未变"，即休眠检查通过了一个"看起来在维护"的仓库，也是 feed 把它写成一种类型而非一次发布的原因。
+
+来源：[ClickBench PR #2165](https://github.com/ClickHouse/ClickBench/pull/2165) · [ClickBench 规则](https://github.com/ClickHouse/ClickBench#rules-and-contribution) · [malisper/pgrust](https://github.com/malisper/pgrust) · [SnailSploit/Claude-Red](https://github.com/SnailSploit/Claude-Red)

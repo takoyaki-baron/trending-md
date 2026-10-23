@@ -3226,69 +3226,96 @@
     },
     "https://news.ycombinator.com/item?id=50195959": {
       "verdict": "blocked",
-      "streak": 1,
+      "streak": 4,
       "first_seen": "2026-10-22T20:18:32.481Z",
-      "last_seen": "2026-10-23T04:39:49.482Z",
+      "last_seen": "2026-10-23T12:51:21.123Z",
       "feeds": [
         "2026-10-23.md"
       ]
     },
     "https://www.axios.com/2026/10/22/ai-agents-banks-unauthorized-accounts-access": {
       "verdict": "blocked",
-      "streak": 1,
+      "streak": 4,
       "first_seen": "2026-10-22T20:18:32.481Z",
-      "last_seen": "2026-10-23T04:39:49.482Z",
+      "last_seen": "2026-10-23T12:51:21.123Z",
       "feeds": [
         "2026-10-23.md"
       ]
     },
     "https://news.ycombinator.com/item?id=50196718": {
       "verdict": "blocked",
-      "streak": 1,
+      "streak": 4,
       "first_seen": "2026-10-22T20:18:32.481Z",
-      "last_seen": "2026-10-23T04:39:49.482Z",
+      "last_seen": "2026-10-23T12:51:21.123Z",
       "feeds": [
         "2026-10-23.md"
       ]
     },
     "https://news.ycombinator.com/item?id=50202217": {
       "verdict": "blocked",
-      "streak": 1,
+      "streak": 4,
       "first_seen": "2026-10-23T04:39:49.482Z",
-      "last_seen": "2026-10-23T04:39:49.482Z",
+      "last_seen": "2026-10-23T12:51:21.123Z",
       "feeds": [
         "2026-10-23.md"
       ]
     },
     "https://news.ycombinator.com/item?id=50180190": {
       "verdict": "blocked",
-      "streak": 1,
+      "streak": 4,
       "first_seen": "2026-10-23T04:39:49.482Z",
-      "last_seen": "2026-10-23T04:39:49.482Z",
+      "last_seen": "2026-10-23T12:51:21.123Z",
       "feeds": [
         "2026-10-23.md"
       ]
     },
     "https://news.ycombinator.com/item?id=50180257": {
       "verdict": "blocked",
-      "streak": 1,
+      "streak": 4,
       "first_seen": "2026-10-23T04:39:49.482Z",
-      "last_seen": "2026-10-23T04:39:49.482Z",
+      "last_seen": "2026-10-23T12:51:21.123Z",
       "feeds": [
         "2026-10-23.md"
       ]
     },
     "https://news.ycombinator.com/item?id=50197404": {
       "verdict": "blocked",
-      "streak": 1,
+      "streak": 4,
       "first_seen": "2026-10-23T04:39:49.482Z",
-      "last_seen": "2026-10-23T04:39:49.482Z",
+      "last_seen": "2026-10-23T12:51:21.123Z",
+      "feeds": [
+        "2026-10-23.md"
+      ]
+    },
+    "https://news.ycombinator.com/item?id=50202681": {
+      "verdict": "blocked",
+      "streak": 3,
+      "first_seen": "2026-10-23T12:19:11.217Z",
+      "last_seen": "2026-10-23T12:51:21.123Z",
+      "feeds": [
+        "2026-10-23.md"
+      ]
+    },
+    "https://news.ycombinator.com/item?id=50202285": {
+      "verdict": "blocked",
+      "streak": 3,
+      "first_seen": "2026-10-23T12:19:11.217Z",
+      "last_seen": "2026-10-23T12:51:21.123Z",
+      "feeds": [
+        "2026-10-23.md"
+      ]
+    },
+    "https://github.com/keycloak/keycloak/security/advisories/GHSA-4gv3-mc9p-5wqc": {
+      "verdict": "dead",
+      "streak": 1,
+      "first_seen": "2026-10-23T12:19:11.217Z",
+      "last_seen": "2026-10-23T12:19:11.217Z",
       "feeds": [
         "2026-10-23.md"
       ]
     }
   },
-  "runs": 81,
+  "runs": 84,
   "first_run": "2026-09-05T12:47:55.004Z",
-  "last_run": "2026-10-23T04:39:49.482Z"
+  "last_run": "2026-10-23T12:51:21.123Z"
 }

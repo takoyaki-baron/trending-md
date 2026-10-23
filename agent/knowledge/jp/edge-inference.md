@@ -235,3 +235,11 @@ Sources: [debpalash/VoiceStudio](https://github.com/debpalash/VoiceStudio) · [v
 これはローカル推論テーゼの現在形だ。制約は「125B がここで動くか」ではなく**そのどの圧縮を動かしているか**であり、誠実なプロジェクトはラダーをリリースの一部として出すようになった。ここにある数字はすべてプロジェクト自身のもので、独立した tok/s や品質の追試はまだ無い。実務的な帰結は主張規律である——**「Qwen をローカルで動かしている」には段を添えなければならない**。27.6 GB の載せ方と 54.8 GB の載せ方は同じ名前の別製品であり、32 GB のノート PC はプロジェクト自身が IQ2_XS 未満と言う段を動かしている。
 
 Sources: [Niko1221/Strata](https://github.com/Niko1221/Strata) · [Hugging Face: Qwen/Qwen3.8-Flash-Next](https://huggingface.co/Qwen/Qwen3.8-Flash-Next)
+
+## 2026-10-23 20:03 バッチ —— 配信物がコンパイル済み・署名済みパッケージになる
+
+**NVIDIA Flare はローカル推論を Python のコンパイル段と Rust ランタイムに分け、交換の単位は署名済みパッケージである。**`NVIDIA/flare-local-inference`（Apache-2.0、**618★／4 ウォッチャー**、2026-10-20 作成・10-23 プッシュ——API で確認）は **SM120/SM121** GPU、すなわち DGX Spark のようなワークステーション／コンパクト機を対象とする。**Ignition**（PyTorch + Transformers + FlashInfer/b12x）がモデルを読み込み、カーネルを調整し CUDA グラフを捕捉して*ランタイムパッケージ*を作る：メタデータのみの主 `.safetensors` と、**SHA-256** で命名された不変ペイロードブロブ、それらを包む**署名済みエンベロープ**（暗号化された cubin を含む）。Rust ランタイム **Helios** が Python 抜きでそれを配信する。全レシピで FP8 E4M3 の KV 格納が既定で、会話状態——再帰状態と KV キャッシュの両方——は単位として計画され、分岐と再開がそれを保つ。
+
+これがフレームワークの山ではなくディスクストリーミングの系譜に属する理由は 2 つ。第一に配信物の境界が動く：出荷するのは「重み + あるエンジンの版」ではなく、**コンパイル済みでハッシュアドレス指定され署名された塊**であり、これはエージェントサンドボックスと来歴の系譜が収束してきた形（[[disclosure-lag]] の配信物軸、SLSA/LiteLLM の教訓）をモデル重みに適用したものだ——検証可能な配信、検証不能なモデル。第二に、README 自身が線を引いており、言い換えず引用すべきである：「**研究プロトタイプ**」、SM120/SM121 のみ、「**Flare は vLLM のような本番推論エンジンの代替ではないし、決してならない**」。非目標を公表するのは 2026 年の常態であり（[[fact-check]]）、同時に何を見るべきかも告げる：Ignition のパッケージ形式に第二の消費者が現れるか——それはベンダーのビルドツールを交換形式に変える。
+
+出典：[NVIDIA/flare-local-inference](https://github.com/NVIDIA/flare-local-inference) · [モデル準備と配信](https://github.com/NVIDIA/flare-local-inference/blob/main/docs/model-preparation.md)

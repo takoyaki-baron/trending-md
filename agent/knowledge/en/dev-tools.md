@@ -1035,3 +1035,46 @@ the regulator instead of the protocol. Nothing is licensed yet: as of today Tale
 operation, not euro operation, and the post's own ask includes recruiting citizens as investors.
 
 Sources: [colinhacks/reylo](https://github.com/colinhacks/reylo) · [reylo.dev](https://reylo.dev) · [Uberblok](https://uberblok.storagebits.workers.dev/) · [HN](https://news.ycombinator.com/item?id=50180257) · [tek-sys-hub/Rubix-lang](https://github.com/tek-sys-hub/Rubix-lang) · [Rubix issue #1](https://github.com/tek-sys-hub/Rubix-lang/issues/1) · [Taler — Getting ready to operate Taler in Germany](https://www.taler.net/en/news/2026-13.html)
+
+## 2026-10-23 20:03 batch — five builds where the README carries the caveat
+
+**Ely Office: keep LibreOffice's engines, replace the shell.** `ELY-Open-Source/ElyOffice` (MIT, **911★**,
+created 2026-10-19 — API-checked) is an offline-first desktop suite in Rust on **GPUI**: ElyDoc/ElyTable/
+ElyShow run on a patched **LibreOfficeKit 26.2.6.3**, ElyPDF on MuPDF 1.28.5 with Tesseract OCR, ElyTree
+wraps Git, ElyMark uses `markdown-rs` + RaTeX + `mermaid-rs-renderer`; ElyMail and ElyAgent are scheduled
+for a second release. The bet is the plausible one: DOCX/XLSX fidelity comes from keeping the real engines
+rather than rewriting them. The README's own limits are the item — **only macOS has been run**, the Linux
+and Windows packaging recipes are unexercised, the LibreOffice build takes about an hour, and there is a
+doctor script because a `cargo install` will not do. Files stay in your folders, no account, no cloud.
+
+**"Docker is weird": why `runc` has a C shim.** A 568-point explainer (codeandcake.dev) whose useful section
+is the runtime, not the abstractions: containers are processes with restrictions, not VMs; there is no
+single "container" kernel feature (namespaces hide, cgroups limit, networking is a set of mechanisms);
+images are directories Docker `chroot`/`pivot_root`s into. `runc` is Go, but the runtime needs
+single-threaded syscalls, so it ships a **C module that runs before Go's runtime starts**, and since Go has
+no usable `fork` it **re-execs `/proc/self/exe` with a special argv** to approximate one. That is the
+sentence worth keeping: a container runtime's most privileged operations happen outside the language it is
+written in, because the language's threading model does not fit the job.
+
+**Local Wikipedia: the privacy decision is the design decision.** Ed Jefferson's `edjefferson.com/localwiki`
+builds a Main Page from articles near a place you type — `postcodes.io` for the lookup, Wikipedia
+`geosearch` for the articles — with a **2,414 m** radius (a half-hour walk), capped at 500 articles, and a
+25-nearest-within-10 km fallback for rural areas. Nine editions, articles rendered client-side. The place is
+kept in `localStorage` under its own key and **never written to the address bar**, so shared links,
+screenshots and referrers cannot carry someone's location. The pattern generalises: *if a feature's input is
+personal, its persistence channel is part of the design*, and a URL is a persistence channel.
+
+**`cn-math-taxonomy`: an AI-drafted curriculum graph that marks its own unverified rows.** 1,644 knowledge
+points, 2,403 prerequisite edges (typed `hard`/`soft`), 6,723 questions, aligned to China's 2022 curriculum
+standards and their 2025 revisions, with a diagnostic that walks a wrong answer back along prerequisite
+edges to the primary-school point that failed. Graphs are deliberately disconnected (English does not join
+maths; physics records maths dependencies in a `mathLinks` field, not as edges). **CC BY-NC 4.0** and the
+README says it is an "**AI 生成的初稿**" with alignment rows marked **待核** (pending verification). For
+tutoring agents this is exactly the substrate that is missing, and the provenance marking is what makes it
+usable — the unverified rows are a work queue rather than a liability. The NonCommercial clause rules out
+most products that would want it.
+
+Credential provenance for this batch lives in [[disclosure-lag]] (five records, artifact axis);
+[[fact-check]] carries the ClickBench integrity case and the star-per-watcher age caveat.
+
+Sources: [ELY-Open-Source/ElyOffice](https://github.com/ELY-Open-Source/ElyOffice) · [office.elygpui.com](https://office.elygpui.com) · [Docker is weird](https://codeandcake.dev/posts/2026-10-22-docker-is-weird) · [HN](https://news.ycombinator.com/item?id=50202681) · [Local Wikipedia](https://edjefferson.com/localwiki/) · [cn-math-taxonomy](https://github.com/xiaoyang111222/cn-math-taxonomy)

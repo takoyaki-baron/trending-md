@@ -176,6 +176,29 @@ underlying pages — this produced a two-layer false signal in a single item.
    so; never silently pick one. **`no record` is perishable like every other absence** — both
    negatives this tool was filed against (`CVE-2026-92707`, `CVE-2026-110264`) acquired NVD
    records within days, so re-run before quoting one.
+   **"Patched" is a claim about an artifact, and the record, the commit and the thing a consumer
+   installs are three different objects** (added 2026-10-23, the EDK2 lesson). Every state above
+   is *temporal*; none answers "can I install the fix". EDK2's 9.5 pre-boot RCE has PR **#13302**
+   merged 2026-10-15 while its own advisory cell reads `Patched versions: Not patched currently`,
+   because firmware images are built and signed downstream of the repo — permanent for the
+   installed base, not pending. Add
+   **`--artifact commit|package|firmware|image`** to the same call: it prints the advisory's
+   patched cell **verbatim** beside the derived state and emits **`fix-in-source-no-artifact`**
+   when the fix is newer than the newest release that could carry it; `--fix-ref <commit|pull url>`
+   or `--debian <srcpkg>` supplies the fix's date (the Debian tracker's own `Fixed by:` links are
+   the cheapest route, and `--debian` also prints per-suite installable status, which is what
+   settles "is the released code affected"). Three traps, each measured: an **`as of <date>`**
+   affected cell is a *reporting* date, not an introduction date — EDK2's "master as of
+   2026-09-14" looks like it excludes the August tag, and Debian's tracker is what proves that
+   release is vulnerable, so an older artifact is **not** thereby clean; a **multi-line advisory
+   renders one `div` per line** and a cell reader that takes the first silently truncates three
+   ranges to one; and a **self-contradictory cell must refuse** rather than derive a lag (the
+   tool now returns `indeterminate`, not Trigger.dev's known-wrong 36 days). Two degraded-mode
+   facts also belong here: when `api.github.com` rate-limits, the release timeline comes from
+   `releases.atom` (no auth) and a named fix version missing from it is checked on its own tag
+   page before "absent" is written; and **the advisory a CVE is filed against is not always in
+   the owning repo** — Keycloak's lives only in the GitHub Advisory Database
+   (`/advisories/GHSA-…`) with no NVD reference to it.
    **Package-registry state is perishable the same way** (added 2026-09-26, GHAPPIER follow-up):
    "unpublished", "removed", "still downloadable" and "no advisory" for a cited npm/PyPI package
    are version-presence claims that invert without notice — a backdoored version can be

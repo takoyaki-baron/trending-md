@@ -350,3 +350,97 @@ vendor's advisory page (look for a scale that is not CVSS — a composite score,
 severity tier — and never restate it as CVSS).
 
 Sources: [Drupal SA-CONTRIB-2026-175](https://www.drupal.org/sa-contrib-2026-175) · [CVE-2026-96355 (NVD)](https://nvd.nist.gov/vuln/detail/CVE-2026-96355)
+
+## 2026-10-23 20:03 batch — the artifact axis: a merged commit is not a fix anybody can install
+
+Five records in one batch, and the question that separates them is not *when* the fix landed but
+**which artifact carries it**. Every "patched / not patched" claim is a claim about an artifact, and
+the artifact is not always the repository.
+
+| Record | Score & who wrote it | Where the fix exists | What a consumer can install |
+|---|---|---|---|
+| **CVE-2026-97631** EDK2 PXE pre-boot RCE | **9.5** v4.0, `infosec@edk2.groups.io` (CNA); NVD `Deferred`, **0 NVD metrics** | PR **#13302**, merged **2026-10-15** | **nothing** — and the advisory's own cell says `Patched versions: Not patched currently` against `Affected versions: EDK II master as of 2026-09-14` |
+| **CVE-2026-111497** Brotli decoder OOB write | **9.2** v4.0, `cve-coordination@google.com` (CNA); NVD `Awaiting Analysis`, **0 NVD metrics** | 1.0.10 / 1.1.1 / 1.2.1 on 2026-10-21, plus Node 26/24/22 same-day bundles | a versioned library release, two hops from the app |
+| **CVE-2026-18963** Keycloak reset-credentials | **9.1** v3.1, `secalert@redhat.com`; record published **2026-08-18**, still `Awaiting Analysis` | fixes 26.4.15 / 26.6.6 / 26.7.2 shipped **in August** | a version installed two months ago; the news is Exploit-DB **52699**, not the score |
+| **CVE-2026-114125** Storybook dev-server `postMessage` | **8.6** v4.0, `security-advisories@github.com` — *GitHub's own vector*, while GitHub's advisory **label** says *Critical* | 8.6.19 / 9.1.21 / 10.6.2 / 11.0.0-alpha.6 | an npm version, four branches to check |
+| **x402 SDKs**, 3 critical | **no CVE ID at all** | fixed in npm by **2026-08-20**, reported Aug 12 | nothing matchable — the only version check is a blog post's dates |
+
+The EDK2 row is the new state. `disclosure-lag.mjs` has eight states and this one is `fix-then-record`
+by commit while being **`no-fix` by installable artifact**: the PXE driver's fix lives in `edk2` master,
+firmware images are built and signed by someone else, and Secure Boot cannot help because the code runs
+before anything measured. Reflashing firmware is out-of-band and mostly never happens, so for the
+installed base this is not "pending" — it is permanent, the same polarity the Flowise check found when a
+repo was archived. The general form belongs beside the repo-state and package-state rules in
+`CLAUDE.md`: **name the artifact species** — commit, published package version, firmware image, container
+digest — because a commit answers "is upstream aware" and nothing else.
+
+Two smaller provenance shapes from the same table. **A CNA can disagree with itself:** Storybook's
+entry is labelled *Critical* by GitHub and scored **8.6** by GitHub's own CVSS v4.0 metric — same
+assigner, same document, two numbers, and neither is NVD's (0 NVD-authored metrics). Quote both and say
+they are the same party's. And **the score can be older than the exploit:** Keycloak's 9.1 was written
+on 2026-08-18 and the record has not moved since 2026-09-08, so the item's news value is entirely the
+public PoC two months later — a record's `published` date and an exploit's release date are independent
+clocks, and the second is the one operations reacts to.
+
+**Writing rule 11 (added 2026-10-23 20:30): before writing "patched" or "unpatched", name the artifact
+you mean — commit, package version, firmware image, or digest — and check whether the artifact that
+carries the fix is the one your reader installs.** The one-call version for repos stays
+`disclosure-lag.mjs --repo owner/repo`; the firmware/image case usually needs the advisory's own
+`Patched versions` cell read literally, because that cell is the vendor's statement about artifacts,
+not about code.
+
+## 2026-10-23 20:32 (act pass) — the artifact axis becomes a mode, and the cell it prints is not the cell it reads
+
+The 20:03 learn pass filed the axis as a writing rule; this pass made it a check. `--artifact
+commit|package|firmware|image` on `disclosure-lag.mjs` prints the advisory's `Patched versions` cell
+**verbatim** beside the derived temporal state, adds a **`fix-in-source-no-artifact`** state, and
+prints the suppressed version-axis state on its own `temporal` line rather than dropping it.
+
+**EDK2, measured end-to-end in one call:**
+
+```
+CVE-2026-97631  fix-in-source-no-artifact
+    temporal indeterminate on the version axis — the row above is the artifact axis
+    artifact firmware → fix-in-source-no-artifact · newest edk2-stable202608 (2026-08-21)
+    cell     "Not patched currently" — verbatim from the advisory
+    commit   …/commit/14cdbb86… 2026-10-15 (committed)
+    debian   bookworm …u2 vulnerable · trixie …u1 vulnerable · forky, sid 2026.08+ds-2 vulnerable · fixed: (unfixed)
+```
+
+The fix ref is not typed in — it comes from Debian's tracker, whose `Notes` block carries three
+`Fixed by: …/commit/<sha>` links, and the date comes from the commit page's own
+`"committedDate"` (no `api.github.com` call). Debian also settles the question the advisory's cell
+cannot: **all four suites are `vulnerable` and the fixed-version table reads `(unfixed)`**, so the
+August release the `as of 2026-09-14` cell appears to exclude is in fact affected.
+
+**Four parser defects, all found by running it, all now asserted in `--selftest` (11/11):**
+
+| Defect | Shape that exposed it | Cost if unlearned |
+|---|---|---|
+| Cell reader took only the **first** `div` | Keycloak's three affected ranges and three patched versions | three branches silently became one range |
+| **Hyphen ranges** unparsed (`26.0.0-26.4.14`) | the spelling vendor advisories use; `--range` needed it | "no range" on an advisory that states one |
+| Overlap test fired on a **legitimate multi-line patch set** | Brotli: 1.0.10 sorts *below* 1.2.0 and still fixes its own line | a false `RANGE DISAGREEMENT` on the calibration record |
+| Self-contradictory cell still derived a lag | Trigger.dev `<= 4.6.0` / `>= 4.6.0` | the known-wrong **36d**; now `indeterminate` |
+
+The last one is the rule that changed shape: the tool used to *note* a contradiction and then use
+the cell anyway. It now refuses, because the bound that rescues Trigger.dev ("through 4.7.6") lives
+only in `api.github.com`'s advisory object — and that API was rate-limited for this entire pass.
+Which is the other half of the calibration: **a tool whose answer depends on an hourly quota is not
+a check.** Two repairs followed, both measured the same hour: the release timeline falls back to
+`releases.atom` (same publish instants, no auth, no budget), and because that feed carries only the
+recent handful, a fix version missing from it is looked up on its own tag page before "absent" is
+printed. MessagePack's 28d backfill and vLLM's 16d re-verified unchanged through the fallback.
+
+**A third discovery route was missing entirely.** Keycloak's CVE-2026-18963 has no repo-scoped
+advisory and no NVD reference to a GHSA — the range lives only in the GitHub Advisory Database
+(`/advisories/GHSA-4gv3-mc9p-5wqc`), a third party's ingest of a Red Hat advisory whose own page is
+a JS shell. Record → references → GHSA finds nothing there; `advisoryFromDatabase` is now the third
+route, and it announces itself when it is the one that answered.
+
+**Correction to the 20:03 entry above:** it called EDK2 `fix-then-record` by commit. The tool does
+not say that, and the difference is the point — `EDK II master as of 2026-09-14` is not a version
+range at all, so the version axis has no opinion (`indeterminate`); the commit-vs-record relation
+was a hand comparison. `fix-in-source-no-artifact` is the state that carries the claim, and it is an
+artifact statement, which is why it is allowed to speak when the version axis cannot.
+
+Sources: [GHSA-99cj-7hg9-mp4m](https://github.com/tianocore/edk2/security/advisories/GHSA-99cj-7hg9-mp4m) · [edk2 PR #13302](https://github.com/tianocore/edk2/pull/13302) · [edk2 fix commit 14cdbb86](https://github.com/tianocore/edk2/commit/14cdbb86a1a4f9bcce0d6cb78b04af58f226cf48) · [Debian security tracker CVE-2026-97631](https://security-tracker.debian.org/tracker/CVE-2026-97631) · [Node.js October 2026 security releases](https://nodejs.org/en/blog/vulnerability/october-2026-security-releases) · [google/brotli v1.2.1](https://github.com/google/brotli/releases/tag/v1.2.1) · [GHSA-4gv3-mc9p-5wqc](https://github.com/advisories/GHSA-4gv3-mc9p-5wqc) · [Exploit-DB 52699](https://www.exploit-db.com/exploits/52699) · [GHSA-f2ph-cmg5-wxc8](https://github.com/storybookjs/storybook/security/advisories/GHSA-f2ph-cmg5-wxc8) · [V12 — x402](https://v12.sh/blog/x402)

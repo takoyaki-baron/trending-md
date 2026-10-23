@@ -42,6 +42,51 @@
  *   · syntax    — the cell syntax and the cell CONTENT both have two forms; see `parseRanges` and
  *                 `titleBound`/`contradicted` for the two ways the advisory's own numbers lie.
  *
+ * THE ARTIFACT AXIS (added 2026-10-23 20:32). Every state above is TEMPORAL — it says when the fix
+ * landed relative to the paperwork. None of them says whether the fix is INSTALLABLE, and the 10-23
+ * batch produced a record where the two answers are opposite: EDK2's 9.5 pre-boot RCE has PR #13302
+ * merged 2026-10-15 while the same advisory's cell reads `Patched versions: Not patched currently`,
+ * because firmware images are built and signed downstream of the repo. `--artifact <commit|package|
+ * firmware|image>` prints the advisory's cell VERBATIM beside the derived state and answers the
+ * installable question; when a fix exists in source but no artifact at or after it, the state is
+ * `fix-in-source-no-artifact` — permanent for an installed base, not pending.
+ *   · The fix's date comes from `--fix-ref <commit|pull url|sha>`, or automatically from the Debian
+ *     tracker's own `Fixed by:` commit links (`--debian <srcpkg>`). No GitHub API call is needed:
+ *     a commit page carries `"committedDate"`, a pull page carries `"mergedTime"`.
+ *   · EDK2 calibration (2026-10-23): commit `14cdbb86` committed 2026-10-15, newest release
+ *     `edk2-stable202608` tagged 2026-08-12, Debian lists forky/sid `2026.08+ds-2` **vulnerable**
+ *     and `(unfixed)` → `fix-in-source-no-artifact`. The cell is a REPORTING date, not an
+ *     introduction date: `Affected versions: EDK II master as of 2026-09-14` looks like it excludes
+ *     the Aug tag, and Debian's tracker is what proves the Aug release IS affected. An artifact
+ *     older than an `as of` date is therefore not necessarily clean, and the tool says so instead
+ *     of inferring it.
+ *   · Brotli CVE-2026-111497 → `fix-then-record 1d` + `artifact-carries-fix` (v1.0.10/v1.1.1/
+ *     v1.2.1 all shipped 2026-10-21). Keycloak CVE-2026-18963 → `fix-then-record 7d` +
+ *     `artifact-carries-fix` (26.6.6 on 08-11, 26.7.2 on 08-19; 26.4.15 predates the atom feed's
+ *     window and that gap is printed rather than read as a missing release).
+ *   · Two of the three needed the RANGE from prose, because neither had a usable GHSA cell:
+ *     Brotli's record says "versions 1.0.3 through 1.2.0 … to the latest available version: 1.0.10
+ *     or 1.1.1 or 1.2.1", and Keycloak's lives only in the RHSA, which is a JS shell. Prose
+ *     extraction is narrow, labelled `record prose`, and never silent; `--range` accepts an
+ *     operator-supplied range and labels it the same way.
+ *   · FOUR parsers were wrong in ways only live data exposed, each now asserted in `--selftest`:
+ *     a multi-line advisory renders ONE `<div class="f4">` PER LINE and the cell reader took only
+ *     the first (Keycloak's three ranges collapsed to one); a hyphen range (`26.0.0-26.4.14`, the
+ *     spelling vendor advisories actually use) parsed as nothing, while a prerelease
+ *     (`4.5.0-rc.2`) must never be read as one; the "every patched version is inside the affected
+ *     range" test fired on Brotli's legitimate multi-line patch set (1.0.10 sorts below 1.2.0 and
+ *     still fixes its own line); and a self-contradictory cell now REFUSES — Trigger.dev's
+ *     `<= 4.6.0` / `>= 4.6.0` returns `indeterminate` instead of the known-wrong 36d, because the
+ *     bound that rescues it exists only in api.github.com's advisory object.
+ *   · TWO degraded-mode repairs, both measured the same hour: when api.github.com 403s, the
+ *     timeline falls back to `releases.atom` (no auth, no budget) — and because the atom feed holds
+ *     only recent releases, a named fix version missing from it is looked up on its own tag page
+ *     before the tool claims it is absent.
+ *   · ONE discovery gap: the advisory a CVE is filed against is not always in the owning repo.
+ *     Keycloak's lives only in the GitHub Advisory Database (`/advisories/GHSA-…`) with no NVD
+ *     reference to it, so record → references → GHSA finds nothing; `advisoryFromDatabase` is the
+ *     third route and the tool says so when it is the one that answered.
+ *
  * `no-record` has no live calibration left: BOTH negatives this tool was filed against —
  * CVE-2026-92707 ("in no registry at all", CLAUDE.md rule 7) and CVE-2026-110264 ("NVD had no
  * record when checked at publication", the 10-22 feed) — acquired NVD records on 10-15 and 10-22
@@ -71,6 +116,10 @@
  *   node disclosure-lag.mjs --ids CVE-… --repo triggerdotdev/trigger.dev
  *   node disclosure-lag.mjs --tracker ZDI-CAN-33549          # pre-record check (absence query)
  *   node disclosure-lag.mjs --ids CVE-… --json
+ *   node disclosure-lag.mjs --ids CVE-… --repo tianocore/edk2 --artifact firmware --debian edk2
+ *   node disclosure-lag.mjs --ids CVE-… --repo google/brotli --artifact package
+ *   node disclosure-lag.mjs --ids CVE-… --range "26.0.0-26.4.14, 26.5.0-26.6.5" --repo keycloak/keycloak
+ *   node disclosure-lag.mjs --selftest                       # parsers + the artifact verdict
  *
  * Cost: NVD is 5 req/30s unauthenticated (NVD_API_KEY → 50/30s); calls are paced. api.github.com is
  * 60/hr unauthenticated and this repo budgets ~5–10 calls per feed run — this is an ad-hoc tool,
@@ -95,6 +144,17 @@ const IDS = (argOf('--ids', '') || '').split(',').map(s => s.trim()).filter(Bool
 const TRACKERS = (argOf('--tracker', '') || '').split(',').map(s => s.trim()).filter(Boolean);
 const REPO = argOf('--repo', null);
 const PYPI = argOf('--pypi', null);
+/* The artifact axis: what a consumer can install, as opposed to when the paperwork moved. */
+const ARTIFACT = argOf('--artifact', null);
+const FIX_REF = argOf('--fix-ref', null);
+const DEBIAN = argOf('--debian', null);
+const RANGE_OVERRIDE = argOf('--range', null);
+const SELFTEST = args.includes('--selftest');
+const ARTIFACT_MODES = ['commit', 'package', 'firmware', 'image'];
+if (ARTIFACT && !ARTIFACT_MODES.includes(ARTIFACT)) {
+  console.error(`--artifact must be one of ${ARTIFACT_MODES.join('|')} (got "${ARTIFACT}")`);
+  process.exit(2);
+}
 
 /* ── versions ──
    Semver-ish comparison, because the cohort is full of things like `v0.5.0b1`, `4.5.0-rc.2` and
@@ -133,6 +193,9 @@ function parseRanges(raw) {
   if (!raw) return [];
   const s = String(raw).trim();
   if (/^(unknown|none|n\/a)$/i.test(s)) return [];
+  /* ` | ` separates lines of a multi-line cell (see parseAdvisoryHtml) — each line is its own
+     range, and merging them would turn three disjoint branches into one wide span. */
+  if (s.includes(' | ')) return s.split(' | ').flatMap(p => parseRanges(p));
   const out = [];
   if (/[\[(]/.test(s)) {
     for (const m of s.matchAll(/([\[(])\s*([^,\]\)]*?)\s*,\s*([^\]\)]*?)\s*([\])])/g)) {
@@ -142,6 +205,15 @@ function parseRanges(raw) {
     }
     return out;
   }
+  /* A third range spelling, which IS what vendor advisories print: `26.0.0-26.4.14`. It is split
+     per comma like the comparison form, and the second version must START WITH A DIGIT so a
+     prerelease (`4.5.0-rc.2`) is never read as a range — that ambiguity is why the narrowing is
+     explicit rather than a bare `-`. */
+  const hy = s.split(',').map(p => p.trim())
+    .map(p => p.match(/^v?(\d[\w.+]*)\s*(?:-|–|—|\.\.|to)\s*v?(\d[\w.+-]*)$/i))
+    .filter(Boolean)
+    .map(m => ({ raw: `${m[1]}-${m[2]}`, min: m[1], minInc: true, max: m[2], maxInc: true }));
+  if (hy.length) return hy;
   const r = { raw: s, min: null, minInc: false, max: null, maxInc: false };
   for (const part of s.split(',')) {
     const m = part.trim().match(/^(>=|<=|>|<|=)\s*(.+)$/);
@@ -154,6 +226,36 @@ function parseRanges(raw) {
     else { r.min = ver.trim(); r.minInc = true; r.max = ver.trim(); r.maxInc = true; }
   }
   return (r.min || r.max) ? [r] : [];
+}
+
+/* ── prose: the range nobody publishes as a cell ──
+   Two of the three artifact calibration records had NO GitHub advisory at all, so the only
+   affected range in existence was in the CVE description's own sentence. These parsers are
+   deliberately narrow — one phrasing each — and every result is labelled `record prose` at the
+   point of use, because prose extraction that is not attributable is indistinguishable from a
+   guess. */
+function proseRange(text) {
+  if (!text) return null;
+  const m = String(text).match(/\bversions?\s+v?(\d[\w.+]*)\s+(?:through|thru|to)\s+v?(\d[\w.+]*)/i);
+  if (!m) return null;
+  return { raw: `${m[1]}-${m[2]}`, min: m[1], minInc: true, max: m[2], maxInc: true, from: 'prose' };
+}
+/* "… update … to the latest available version: 1.0.10 or 1.1.1 or 1.2.1." — the fix list, in the
+   vendor's words. Anchored on a phrase that names the fixed versions, so an affected range in the
+   same paragraph ("between 1.0.3 through 1.2.0") cannot be mistaken for one. */
+function prosePatched(text) {
+  if (!text) return null;
+  const m = String(text).match(/\b(?:latest\s+(?:available\s+)?(?:version|release)|patched\s+versions?|fixed\s+(?:in|versions?))\s*:?\s*((?:v?\d[\w.+]*\s*(?:,|\bor\b|\band\b|\/)\s*)+v?\d[\w.+]*)/i);
+  if (!m) return null;
+  return m[1].split(/\s*(?:,|\bor\b|\band\b|\/)\s*/i).map(s => s.trim().replace(/[.,;:]+$/, '')).filter(Boolean);
+}
+/* A date-shaped affected cell — `EDK II master as of 2026-09-14`. This is NOT a version range and
+   NOT an introduction date: it is when the reporter took the snapshot. Kept as its own kind so the
+   classifier never compares it to a tag date and concludes "not affected". */
+function asOfDate(text) {
+  if (!text) return null;
+  const m = String(text).match(/\bas\s+of\s+(\d{4}-\d{2}-\d{2})/i);
+  return m ? m[1] : null;
 }
 function inRange(v, r) {
   if (!r) return null;
@@ -205,15 +307,48 @@ function nvdRanges(cve) {
 const decode = s => s.replace(/&gt;/g, '>').replace(/&lt;/g, '<').replace(/&quot;/g, '"')
   .replace(/&#39;/g, "'").replace(/&amp;/g, '&');
 
-/** GitHub advisory HTML → { affected, patched }. The two cells are the machine-readable part. */
+/** GitHub advisory HTML → { affected, patched }. The two cells are the machine-readable part.
+ *
+ *  A MULTI-LINE advisory renders ONE `<div class="f4">` PER LINE, and the first version of this
+ *  parser read only the first one — which silently truncated Keycloak's CVE-2026-18963 from three
+ *  ranges (`>= 26.0.0, < 26.4.15` / `>= 26.5.0, < 26.6.6` / `>= 26.7.0, < 26.7.2`) to one, on the
+ *  exact records where the range is the whole story. Every value between the label and the next
+ *  heading is collected and joined with ` | `, which `parseRanges` splits back into separate
+ *  bounds. A truncated cell is worse than a missing one: it parses, and it is wrong. */
 function parseAdvisoryHtml(html) {
   const cell = label => {
     const i = html.indexOf(`>${label}</h2>`);
     if (i < 0) return null;
-    const m = html.slice(i, i + 600).match(/class="f4 [^"]*"\s*>([^<]*)</);
-    return m ? decode(m[1]).trim() : null;
+    const seg = html.slice(i + label.length + 5);
+    const stop = seg.indexOf('<h2');
+    const scope = stop > 0 ? seg.slice(0, stop) : seg.slice(0, 1500);
+    const vals = [...scope.matchAll(/class="f4 [^"]*"\s*>([^<]*)</g)]
+      .map(m => decode(m[1]).trim()).filter(Boolean);
+    return vals.length ? vals.join(' | ') : null;
   };
   return { affected: cell('Affected versions'), patched: cell('Patched versions') };
+}
+
+/** The advisory a CVE is filed against is not always in the repo that owns the code. Keycloak's
+ *  CVE-2026-18963 has NO repo-scoped advisory and NO NVD reference to a GHSA — it lives only in
+ *  the GitHub Advisory Database (`/advisories/GHSA-…`), which is a third-party ingest, not the
+ *  vendor's own page. Without this path the tool sees `indeterminate` on a record whose range is
+ *  published and unambiguous. Two HTML GETs, no api.github.com budget. */
+async function advisoryFromDatabase(cveId) {
+  const { body } = await getText(`https://github.com/advisories?query=${encodeURIComponent(cveId)}`);
+  if (!body) return null;
+  const ids = [...new Set([...body.matchAll(/GHSA-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}/g)].map(m => m[0]))];
+  for (const ghsa of ids.slice(0, 3)) {
+    const page = await getText(`https://github.com/advisories/${ghsa}`);
+    if (!page.body) continue;
+    const p = parseAdvisoryHtml(page.body);
+    if (p.affected || p.patched) {
+      const title = (page.body.match(/<title>([^<]*)<\/title>/i) || [])[1] || '';
+      return { ...p, ghsa, url: `https://github.com/advisories/${ghsa}`, repo: null,
+        title: decode(title).trim(), fromDatabase: true };
+    }
+  }
+  return null;
 }
 
 const GHSA_URL_RE = /^https:\/\/github\.com\/([^/]+)\/([^/]+)\/(?:security\/advisories\/|advisories\/)(GHSA-[a-z0-9-]+)$/i;
@@ -263,13 +398,38 @@ async function globalAdvisory(cveId) {
   };
 }
 
+/* `releases.atom` is the unauthenticated twin of `/releases` — same publish instants, no rate
+   limit, no budget. It was added because the 403 below fired for real on 2026-10-23 while
+   calibrating Keycloak, and a tool that cannot read a timeline for an hour a day is a tool whose
+   answer depends on when it runs. Titles are release NAMES (keycloak: "26.8.1"), so the tag in
+   each entry's link is preferred over the title. */
+async function repoReleasesAtom(repo) {
+  const { status, body } = await getText(`https://github.com/${repo}/releases.atom`);
+  if (status !== 200 || !body) return null;
+  const out = [];
+  for (const m of body.matchAll(/<entry>([\s\S]*?)<\/entry>/g)) {
+    const e = m[1];
+    const tag = (e.match(/releases\/tag\/([^"<]+)/) || [])[1];
+    const title = (e.match(/<title>([^<]*)<\/title>/) || [])[1];
+    const date = (e.match(/<updated>([^<]*)<\/updated>/) || [])[1];
+    const version = decode(tag || title || '').trim();
+    if (version && date) out.push({ version, date, name: decode(title || ''), prerelease: false, via: 'atom' });
+  }
+  return out.length ? out.sort((a, b) => cmpVer(a.version, b.version)) : null;
+}
+
 async function repoReleases(repo) {
   const { status, body } = await getJson(`${GH}/repos/${repo}/releases?per_page=100`,
     { Accept: 'application/vnd.github+json' });
   /* Every unauthenticated GitHub call in a session counts against 60/hr, and this repo spends a
      few of them per feed run. A rate-limited fetch must NOT degrade into "no release timeline" —
-     that reads as "pass --repo" and sends you to fix a flag that is already correct. */
-  if (status === 403 || status === 429) throw new Error(`api.github.com rate-limited (HTTP ${status}) — lag not computable, retry later`);
+     that reads as "pass --repo" and sends you to fix a flag that is already correct. It falls back
+     to the atom feed first, and only errors when BOTH routes are unavailable. */
+  if (status === 403 || status === 429) {
+    const atom = await repoReleasesAtom(repo);
+    if (atom) { atom.via = 'atom'; return atom; }
+    throw new Error(`api.github.com rate-limited (HTTP ${status}) and releases.atom unreadable — lag not computable, retry later`);
+  }
   if (!Array.isArray(body)) return null;
   /* The API returns releases NEWEST FIRST by creation, which is not version order and is not even
      date order once backfilled tags exist. Sorting here is what makes `latest` mean latest — the
@@ -287,6 +447,157 @@ async function repoAdvisories(repo) {
     { Accept: 'application/vnd.github+json' });
   if (!Array.isArray(body)) return null;
   return body.map(a => ({ ghsa: a.ghsa_id, cve: a.cve_id || null, date: a.published_at, summary: a.summary }));
+}
+
+/* ── the artifact layer ──
+   Three questions, three sources, none of them the CVE record:
+ * `debianTracker` answers "can a Debian user install a fixed package today", per suite, and is
+   also this tool's cheapest route to the FIX COMMIT: the tracker's Notes block carries
+   `Fixed by: …/commit/<sha>` links, which is a third party naming the patch. One plain HTML GET.
+ * `fixRefDate` turns a commit or pull URL into a date with NO api.github.com call — a commit page
+   embeds `"committedDate":"…"` (when it landed on the branch, not when it was written; the
+   `.patch` header's `Date:` is the author date and is the fallback, labelled as such) and a pull
+   page embeds `"mergedTime":"…"`.
+ * `newestArtifact` is the newest release in the timeline already fetched for the lag calculation —
+   the same array, read for a different question. */
+async function debianTracker(cveId) {
+  const { status, body } = await getText(`https://security-tracker.debian.org/tracker/${cveId}`);
+  if (status !== 200 || !body) return null;
+  /* Rows come in two shapes: the first carries the source-package name and TWO anchors
+     ("edk2 (PTS)"), every continuation row leaves that cell empty — so a cell-count parser is the
+     only one that reads the whole table. The status column is matched by value, because that is
+     what distinguishes the vulnerable-packages table from the fixed-versions table below it. */
+  const STATUSES = /^(vulnerable|resolved|fixed|unfixed|ignored|not affected|end-of-life|no-dsa|unimportant)$/i;
+  const suites = [];
+  for (const tr of body.matchAll(/<tr>([\s\S]*?)<\/tr>/g)) {
+    const tds = [...tr[1].matchAll(/<td[^>]*>([\s\S]*?)<\/td>/g)]
+      .map(m => decode(m[1].replace(/<[^>]+>/g, '')).trim());
+    if (tds.length < 4 || !STATUSES.test(tds[3])) continue;
+    suites.push({ package: tds[0].split(/\s*\(/)[0] || null, release: tds[1], version: tds[2], status: tds[3] });
+  }
+  const fixedCell = (body.match(/<th>Fixed Version<\/th>[\s\S]*?<td><span[^>]*>([^<]*)<\/span><\/td>/) || [])[1] || null;
+  const commits = [...body.matchAll(/https:\/\/github\.com\/([^/"]+\/[^/"]+)\/commit\/([0-9a-f]{7,40})/g)]
+    .map(m => ({ repo: m[1], sha: m[2], url: m[0] }));
+  const prs = [...body.matchAll(/https:\/\/github\.com\/([^/"]+\/[^/"]+)\/pull\/(\d+)/g)]
+    .map(m => ({ repo: m[1], n: m[2], url: m[0] }));
+  return { suites, fixed: fixedCell ? decode(fixedCell).trim() : null, commits, prs };
+}
+
+async function fixRefDate(ref) {
+  if (!ref) return null;
+  const commit = ref.match(/github\.com\/([^/]+\/[^/]+)\/commit\/([0-9a-f]{7,40})/i)
+    || (ref.match(/^([\w.-]+\/[\w.-]+)@?([0-9a-f]{7,40})$/i));
+  if (commit) {
+    const [, repo, sha] = commit;
+    const page = await getText(`https://github.com/${repo}/commit/${sha}`);
+    const m = page.body && page.body.match(/"committedDate":"([^"]+)"/);
+    if (m) return { url: `https://github.com/${repo}/commit/${sha}`, date: m[1], kind: 'commit', label: 'committed' };
+    const patch = await getText(`https://github.com/${repo}/commit/${sha}.patch`);
+    const d = patch.body && patch.body.match(/^Date:\s*(.+)$/m);
+    if (d) {
+      const t = new Date(d[1]);
+      if (!Number.isNaN(t.getTime()))
+        return { url: `https://github.com/${repo}/commit/${sha}`, date: t.toISOString(), kind: 'commit', label: 'authored (no committer date on the page)' };
+    }
+    return null;
+  }
+  const pr = ref.match(/github\.com\/([^/]+\/[^/]+)\/pull\/(\d+)/i);
+  if (pr) {
+    const [, repo, n] = pr;
+    const page = await getText(`https://github.com/${repo}/pull/${n}`);
+    const body = page.body || '';
+    const m = body.match(/"mergedTime":"([^"]+)"/);
+    if (m) {
+      const by = (body.match(/"mergedBy":"([^"]+)"/) || [])[1] || null;
+      return { url: `https://github.com/${repo}/pull/${n}`, date: m[1], kind: 'pull', label: `merged${by ? ` by ${by}` : ''}` };
+    }
+    if (/Merged<\/span>|"state":"MERGED"/.test(body)) return { url: `https://github.com/${repo}/pull/${n}`, date: null, kind: 'pull', label: 'merged, merge date unreadable' };
+    return { url: `https://github.com/${repo}/pull/${n}`, date: null, kind: 'pull', label: 'no merge timestamp on the page — not merged, or the page is a shell' };
+  }
+  return null;
+}
+
+/* The artifact verdict. Deliberately refuses in three situations rather than guessing:
+   no fix date, no artifact timeline, and a cell-vs-commit disagreement (which is printed as a
+   disagreement instead of being resolved in favour of either source). */
+function artifactVerdict({ record, advisory, timeline, mode, fixRef, debian, patched, cellSource }) {
+  const out = { mode, cell: patched !== undefined ? patched : (advisory?.patched ?? null),
+    cellSource: cellSource || (patched !== undefined ? 'cell' : 'cell'), notes: [] };
+  const fixedList = fixedVersionsFrom(out.cell);
+  const newest = timeline?.length ? timeline[timeline.length - 1] : null;
+  out.newest = newest ? { version: newest.version, date: newest.date } : null;
+
+  let fix = fixRef || null;                       // resolved by the caller into {url,date,label}
+  if (debian) {
+    out.debian = debian;
+    if (!fix && debian.commits?.length) {
+      fix = { url: debian.commits[0].url, date: null, kind: 'debian-commit', label: 'unresolved' };
+      out.notes.push(`fix ref taken from the Debian tracker's own "Fixed by:" link (${debian.commits.length} commit(s) listed)`);
+    }
+  }
+  if (fix) out.fixRef = fix;
+  if (out.cell === 'Not patched currently') out.notes.push('the advisory cell says the artifact is NOT patched, which is a statement about the installer, not about the source tree');
+
+  if (!out.newest) { out.state = 'indeterminate'; out.notes.push('no artifact timeline (pass --repo or --pypi, or --debian for a distro view)'); return out; }
+  if (fix && !fix.date) { out.state = 'indeterminate'; out.notes.push(`the fix ref carries no usable date (${fix.label})`); return out; }
+
+  /* A cell that names patched versions is a claim about ARTIFACTS, and a multi-line cell names
+     several — all of them must be looked up, because the timeline may hold only some of them
+     (Keycloak's atom feed carries 26.6.6 and 26.7.2 but not 26.4.15, and reading only the first
+     version reported "not in the timeline" about a fix that plainly shipped). */
+  const shipped = fixedList.map(v => ({ v, rel: timelineLookup(timeline, v) })).filter(x => x.rel)
+    .sort((a, b) => (ts(a.rel.date) ?? 0) - (ts(b.rel.date) ?? 0));
+  const topShipped = shipped[shipped.length - 1] || null;
+
+  /* If the commit that fixes it landed after the LAST artifact the cell calls patched, the two
+     sources contradict each other and NEITHER is discarded: that is the one case where a verdict
+     would be an invention. */
+  if (fix?.date && topShipped && ts(fix.date) > ts(topShipped.rel.date)) {
+    out.state = 'indeterminate';
+    out.notes.push(`CELL-vs-COMMIT DISAGREEMENT — the advisory names ${fixedList.join(', ')} as patched (latest shipped: ${topShipped.v} on ${ymd(topShipped.rel.date)}), but the fix commit is dated ${ymd(fix.date)}; the cell cannot be true of that artifact, so no artifact verdict is emitted`);
+    return out;
+  }
+
+  if (!fix?.date) {
+    if (shipped.length) {
+      out.state = 'artifact-carries-fix';
+      out.notes.push(`${shipped.map(s => `${s.v} (${ymd(s.rel.date)})`).join(', ')} released — an installable artifact carries the fix`);
+      const missing = fixedList.filter(v => !shipped.some(s => s.v === v));
+      if (missing.length) out.notes.push(`not in the release timeline: ${missing.join(', ')} — older lines may have been dropped from the feed, so this is a gap in the timeline, not evidence the release is missing`);
+    } else {
+      out.state = 'indeterminate';
+      out.notes.push(fixedList.length
+        ? `the advisory names ${fixedList.join(', ')}, none of which is in the timeline`
+        : out.cell !== null && out.cell !== undefined
+          ? `the advisory's own patched cell is "${out.cell}" — no fix exists for an artifact to carry`
+          : 'no fix ref and no patched-version cell — the artifact question cannot be answered from these two sources');
+    }
+    return out;
+  }
+
+  if (ts(fix.date) > ts(newest.date)) {
+    out.state = 'fix-in-source-no-artifact';
+    out.notes.push(`the fix landed ${ymd(fix.date)} but the newest ${mode === 'firmware' ? 'tagged release' : 'artifact'} is ${newest.version} (${ymd(newest.date)}) — nothing a consumer can install carries it`);
+    if (mode === 'firmware') out.notes.push('firmware is built and signed by a party other than the code owner, so this is PERMANENT for the installed base until a vendor rebuilds — not a release that is "pending"');
+  } else {
+    out.state = 'artifact-carries-fix';
+    out.notes.push(`the fix landed ${ymd(fix.date)}, at or before ${newest.version} (${ymd(newest.date)}) — an installable artifact carries it`);
+  }
+  return out;
+}
+
+/* One release's date, without the API. `releases.atom` carries only the most recent handful, so a
+   degraded timeline says "does not contain this version" about a version that shipped two years
+   ago — a true statement that reads like a missing release (Trigger.dev's 4.6.0, calibrated
+   2026-10-23). The tag page carries its own `<relative-time datetime>`, one GET. */
+async function tagDate(repo, version) {
+  for (const v of [version, `v${version}`]) {
+    const { status, body } = await getText(`https://github.com/${repo}/releases/tag/${encodeURIComponent(v)}`);
+    if (status !== 200 || !body) continue;
+    const m = body.match(/(?:datetime="|"publishedAt":")(\d{4}-\d{2}-\d{2}T[0-9:.]+Z)/);
+    if (m) return { version, date: m[1], name: v, prerelease: false, via: 'tag page' };
+  }
+  return null;
 }
 
 async function pypiReleases(pkg) {
@@ -335,11 +646,13 @@ function timelineLookup(timeline, version) {
 function fixedVersionsFrom(patched) {
   if (!patched || /^(unknown|none|n\/a)$/i.test(String(patched).trim())) return [];
   const cleaned = String(patched).replace(/(>=|<=|>|<|=)/g, ' ').trim();
-  return cleaned.split(',').map(s => s.trim()).map(s => (s.match(/(\d[\w.\-+]*)/) || [])[1]).filter(Boolean);
+  return cleaned.split(/\s*\|\s*|,/).map(s => s.trim())
+    .map(s => (s.match(/(\d[\w.\-+]*)/) || [])[1]).filter(Boolean);
 }
 const fixedVersionFrom = p => fixedVersionsFrom(p)[0] || null;
 
-function classify({ id, record, nvdRanges: cpes, advisory, timeline, repoAdv, trackerId, timelineError }) {
+function classify({ id, record, nvdRanges: cpes, advisory, timeline, repoAdv, trackerId, timelineError,
+  rangeOverride = RANGE_OVERRIDE }) {
   const base = { id, kind: trackerId ? 'tracker' : 'cve', sources: {}, lagDays: null, notes: [] };
 
   if (trackerId) {
@@ -360,9 +673,13 @@ function classify({ id, record, nvdRanges: cpes, advisory, timeline, repoAdv, tr
   base.recordStatus = record.vulnStatus || null;
   base.sources.record = 'nvd';
 
-  // range: NVD CPE → advisory HTML → global advisory → give up (indeterminate, never a guess)
+  /* range: NVD CPE → advisory HTML → global advisory → operator override → the record's own prose
+     → give up (indeterminate, never a guess). The last two were added 2026-10-23 because two of
+     the three artifact calibration records published their range in NEITHER of the first three. */
   let ranges = cpes || [];
   let patchedRaw = null;
+  const desc = (record.descriptions || []).find(d => d.lang === 'en')?.value
+    || record.descriptions?.[0]?.value || null;
   if (ranges.length) {
     base.sources.range = ranges[0].from;
   } else if (advisory?.affected) {
@@ -373,12 +690,33 @@ function classify({ id, record, nvdRanges: cpes, advisory, timeline, repoAdv, tr
     base.sources.range = `github advisory ${advisory.ghsa}`;
     ranges = parseRanges(advisory.range);
     patchedRaw = advisory.patched;
+  } else if (rangeOverride) {
+    base.sources.range = 'operator-supplied (--range)';
+    ranges = parseRanges(rangeOverride);
+  } else {
+    const pr = proseRange(desc);
+    if (pr) { ranges = [pr]; base.sources.range = 'record prose'; }
   }
   if (!ranges.length && patchedRaw === null && advisory) patchedRaw = advisory.patched;
+  /* The fix list, when no cell published one — the vendor's own sentence ("… to the latest
+     available version: 1.0.10 or 1.1.1 or 1.2.1"), labelled so it is never mistaken for a cell. */
+  if (!patchedRaw) {
+    const pp = prosePatched(desc);
+    if (pp?.length) { patchedRaw = pp.join(', '); base.sources.patched = 'record prose'; }
+  }
   base.range = ranges.length ? ranges.map(r => r.raw).join(' | ') : (advisory?.affected || advisory?.range || null);
   base.patched = patchedRaw;
+  base.rangeKind = ranges.length ? 'version' : 'none';
 
   if (!ranges.length) {
+    /* A DATE-shaped cell is not a failure to parse — it is a different kind of claim, and the
+       version-axis states cannot express it. Record the kind and let the artifact axis speak. */
+    const asOf = asOfDate(advisory?.affected);
+    if (asOf) {
+      base.rangeKind = 'date';
+      base.asOf = asOf;
+      base.notes.push(`the affected cell is a DATE ("${advisory.affected}"), not a version range — it is when the reporter took the snapshot, not when the bug was introduced, so an artifact older than ${asOf} is NOT thereby clean`);
+    }
     return { ...base, state: 'indeterminate',
       notes: [...base.notes, 'no affected version range attributable — refusing to infer a lag from the record date alone'] };
   }
@@ -414,9 +752,16 @@ function classify({ id, record, nvdRanges: cpes, advisory, timeline, repoAdv, tr
   }
   const patchedList = fixedVersionsFrom(patchedRaw);
   const overlapping = patchedList.filter(p => inAnyRange(p, ranges) === true);
-  if (top && overlapping.length) {
+  /* Only a TOTAL overlap is a contradiction. A multi-line fix (Brotli: 1.0.10, 1.1.1 and 1.2.1
+     for 1.0.3–1.2.0) names patch releases that sort BELOW the top of the affected range while
+     still being real fixes for their own line — the version strings overlap the range and the fix
+     is still coherent. Earlier this check fired on exactly that shape, producing a false
+     "RANGE DISAGREEMENT" on the calibration record itself. */
+  if (top && overlapping.length && overlapping.length === patchedList.length) {
     contradicted = contradicted || { cell: `affected ${base.range} vs patched ${patchedRaw}`, title: tb?.phrase || null, titleVer: tb?.ver || null };
-    base.notes.push(`the advisory's own cells overlap at the patched version (${overlapping.join(', ')} is inside ${base.range})`);
+    base.notes.push(`EVERY patched version (${overlapping.join(', ')}) is inside ${base.range} — the cell cannot describe a fix`);
+  } else if (overlapping.length) {
+    base.notes.push(`multi-line fix: ${overlapping.join(', ')} sort inside ${base.range} but one release (${patchedList.filter(p => !overlapping.includes(p)).join(', ')}) escapes it — a per-line patch set, not a contradiction`);
   }
   if (contradicted) {
     base.contradicted = contradicted;
@@ -451,6 +796,16 @@ function classify({ id, record, nvdRanges: cpes, advisory, timeline, repoAdv, tr
     }
   }
   if (fixInferred) base.fixInferred = true;
+  /* A cell that contradicts itself cannot yield a fix date, and picking the cell silently is the
+     exact failure the 10-22 calibration recorded: Trigger.dev's `<= 4.6.0` / `>= 4.6.0` produces a
+     36d lag for a fix that landed 1d AFTER the record. The summary bound ("through 4.7.6") is what
+     rescues it — and on 2026-10-23 that bound was unreachable, because it lives ONLY in the
+     api.github.com advisory object, which was rate-limited; the GHSA HTML page carries the prose
+     Summary but not that one-line title. So: no title bound → no verdict. Refusing is the answer. */
+  if (contradicted && !contradicted.titleVer) {
+    return { ...base, state: 'indeterminate',
+      notes: [...base.notes, 'the advisory\'s cells contradict each other and no human-readable bound is readable this run — refusing to derive a lag from a cell that cannot describe a fix (the one-line summary lives only in api.github.com\'s advisory object)'] };
+  }
 
   if (!fixVersion) {
     if (patchedRaw === null || patchedRaw === undefined) {
@@ -491,10 +846,49 @@ function classify({ id, record, nvdRanges: cpes, advisory, timeline, repoAdv, tr
       latest ? `latest release ${latest.version} (${latest.date?.slice(0, 10)}) is ${stillAffected ? 'STILL in the affected range' : 'outside the affected range'}` : ''] };
 }
 
+/* ── selftest ──
+   The parsers are the part that fails silently, so they are asserted rather than trusted. Every
+   case below is a shape that produced a wrong answer by hand at least once. */
+if (SELFTEST) {
+  const cases = [];
+  const eq = (name, got, want) => cases.push({ name, ok: JSON.stringify(got) === JSON.stringify(want), got, want });
+  eq('hyphen range (advisory spelling)', parseRanges('26.0.0-26.4.14, 26.5.0-26.6.5').map(r => r.raw), ['26.0.0-26.4.14', '26.5.0-26.6.5']);
+  eq('prerelease is not a hyphen range', parseRanges('4.5.0-rc.2'), []);
+  eq('comparison range still parses', parseRanges('>= 0.7.3, < 0.31.0').length, 1);
+  eq('interval range still parses', parseRanges('[,2.5.303), [3.0,3.1.9)').map(r => r.raw), ['[,2.5.303)', '[3.0,3.1.9)']);
+  eq('prose affected range', proseRange('in Google Brotli versions 1.0.3 through 1.2.0 on all platforms')?.max, '1.2.0');
+  eq('prose patched list', prosePatched('Users need to update any Brotli libraries or binaries to the latest available version: 1.0.10 or 1.1.1 or 1.2.1.'), ['1.0.10', '1.1.1', '1.2.1']);
+  eq('prose patched ignores an affected range', prosePatched('versions 1.0.3 through 1.2.0 on all platforms'), null);
+  eq('as-of cell is a date, not a version', asOfDate('EDK II master as of 2026-09-14'), '2026-09-14');
+  const tl = [
+    { version: '2026.05', date: '2026-05-22T09:39:39Z' },
+    { version: '2026.08', date: '2026-08-21T14:22:24Z' },
+  ];
+  const v1 = artifactVerdict({ record: {}, advisory: { patched: 'Not patched currently' }, timeline: tl,
+    mode: 'firmware', fixRef: { url: 'x', date: '2026-10-15T00:09:14Z', label: 'committed' } });
+  eq('EDK2: commit after the newest tag', v1.state, 'fix-in-source-no-artifact');
+  const v2 = artifactVerdict({ record: {}, advisory: { patched: '>= 2026.09' }, timeline: [
+    { version: '2026.08', date: '2026-08-21T14:22:24Z' }, { version: '2026.09', date: '2026-09-01T00:00:00Z' }],
+    mode: 'firmware', fixRef: { url: 'x', date: '2026-10-15T00:00:00Z', label: 'committed' } });
+  eq('cell vs commit disagreement refuses a verdict', v2.state, 'indeterminate');
+  const v3 = artifactVerdict({ record: {}, advisory: { patched: '>= 1.2.1' }, timeline: [
+    { version: '1.2.0', date: '2025-10-21T00:00:00Z' }, { version: '1.2.1', date: '2026-10-21T19:27:20Z' }],
+    mode: 'package' });
+  eq('patched cell shipped as an artifact', v3.state, 'artifact-carries-fix');
+  let pass = 0;
+  for (const c of cases) {
+    if (c.ok) pass++;
+    console.log(`${c.ok ? '✓' : '✗'} ${c.name}${c.ok ? '' : `\n    got  ${JSON.stringify(c.got)}\n    want ${JSON.stringify(c.want)}`}`);
+  }
+  console.log(`\nselftest: ${pass}/${cases.length} matched`);
+  process.exit(pass === cases.length ? 0 : 1);
+}
+
 /* ── entry ── */
 if (!IDS.length && !TRACKERS.length) {
   console.log('nothing to do: pass --ids CVE-…,CVE-… and/or --tracker ZDI-CAN-…' +
-    ' [--repo owner/repo | --pypi pkg] [--json]');
+    ' [--repo owner/repo | --pypi pkg] [--artifact commit|package|firmware|image]' +
+    ' [--fix-ref <commit|pull url>] [--debian <srcpkg>] [--range "<expr>"] [--json] [--selftest]');
   process.exit(0);
 }
 
@@ -505,7 +899,8 @@ try {
 try {
   repoAdv = REPO ? await repoAdvisories(REPO) : null;
 } catch (e) { timelineError = timelineError || e.message; }
-const sourceName = PYPI ? `pypi:${PYPI}` : (REPO ? `github:${REPO}` : null);
+const sourceName = PYPI ? `pypi:${PYPI}`
+  : (REPO ? `github:${REPO}${timeline?.via === 'atom' ? ' via releases.atom (api.github.com rate-limited)' : ''}` : null);
 if (timelineError && !JSON_OUT) console.log(`  ⚠ ${timelineError}\n`);
 
 if (!JSON_OUT && REPO && repoAdv) {
@@ -518,6 +913,10 @@ if (!JSON_OUT && REPO && repoAdv) {
   }
   console.log('');
 }
+
+/* The fix ref is resolved ONCE — it is a property of the advisory, not of each id. */
+const fixRefResolved = FIX_REF ? await fixRefDate(FIX_REF) : null;
+if (FIX_REF && !fixRefResolved && !JSON_OUT) console.log(`  ⚠ could not resolve a date from --fix-ref ${FIX_REF}\n`);
 
 const results = [];
 let first = true;
@@ -532,7 +931,14 @@ for (const id of IDS) {
     continue;
   }
   advisories = await globalAdvisory(id);
-  const advisoriesFromRefs = record ? await advisoryFromRefs((record.references || []).map(r => r.url)) : null;
+  let advisoriesFromRefs = record ? await advisoryFromRefs((record.references || []).map(r => r.url)) : null;
+  /* Order: the advisory the record links (the vendor's own page) → the global API → the Advisory
+     Database. Only reached when the first two are empty, so a vendor page always wins over an
+     ingest, and the database hit is labelled. */
+  if (!advisoriesFromRefs && !advisories && record) {
+    advisoriesFromRefs = await advisoryFromDatabase(id);
+    if (advisoriesFromRefs && !JSON_OUT) console.log(`  · ${id}: advisory found only in the GitHub Advisory Database (${advisoriesFromRefs.ghsa}) — not in the record's references\n`);
+  }
   /* Merge, do not pick: the referenced advisory is the only source of a usable range, and the
      GLOBAL advisory's summary is often the only place the human bound ("through 4.7.6") appears.
      Taking one or the other loses exactly the field that detects a wrong range. */
@@ -540,6 +946,18 @@ for (const id of IDS) {
     ? { ...advisories, ...advisoriesFromRefs,
         summary: advisoriesFromRefs.summary || advisories?.summary || null }
     : advisories;
+  /* Degraded-timeline repair: the atom feed lists ~10 recent releases, so a older fix version
+     looks absent. Fill it in from its own tag page before classifying — bounded to the versions the
+     advisory actually names, and only when the timeline came from the atom fallback. */
+  if (REPO && timeline?.via === 'atom' && record) {
+    const wanted = fixedVersionsFrom(adv?.patched);
+    for (const v of wanted) {
+      if (timelineLookup(timeline, v)) continue;
+      const rel = await tagDate(REPO, v);
+      if (rel) timeline.push(rel);
+    }
+    if (wanted.length) timeline.sort((a, b) => cmpVer(a.version, b.version));
+  }
   const cls = classify({
     id, record,
     nvdRanges: record ? nvdRanges(record) : [],
@@ -548,6 +966,22 @@ for (const id of IDS) {
   });
   cls.sources = { ...sources, ...(cls.sources || {}) };
   if (advisories) cls.ingestionTs = advisories.ingestionTs;
+
+  if (ARTIFACT && record) {
+    const debian = DEBIAN ? await debianTracker(id) : null;
+    let fix = fixRefResolved;
+    if (!fix && debian?.commits?.length) fix = await fixRefDate(debian.commits[0].url);
+    cls.artifact = artifactVerdict({ record, advisory: adv, timeline, mode: ARTIFACT, fixRef: fix, debian,
+      patched: cls.patched ?? null,
+      cellSource: cls.sources?.patched === 'record prose' ? 'record prose (not a cell)' : 'cell' });
+    /* The artifact verdict outranks a version-axis `indeterminate`/`no-fix` ONLY when it is the
+       new state — that is the case where the temporal axis has nothing to say and the consumer's
+       question is answerable. The suppressed state is kept and printed, never dropped. */
+    if (cls.artifact.state === 'fix-in-source-no-artifact' && (cls.state === 'indeterminate' || cls.state === 'no-fix')) {
+      cls.temporalState = cls.state;
+      cls.state = 'fix-in-source-no-artifact';
+    }
+  }
   results.push(cls);
 }
 
@@ -563,15 +997,29 @@ if (JSON_OUT) {
     const lag = r.lagDays === null ? ''
       : r.lagDays < 0 ? `  ${-r.lagDays}d after the record` : `  ${r.lagDays}d`;
     console.log(`${r.id}  ${r.state}${lag}`);
+    if (r.temporalState) console.log(`    temporal ${r.temporalState} on the version axis — the row above is the artifact axis`);
     if (r.recordDate) console.log(`    record   ${ymd(r.recordDate)} (NVD, ${r.recordStatus})`);
     if (r.fixVersion && r.fixDate) console.log(`    fix      ${r.fixVersion} released ${ymd(r.fixDate)} UTC (${sourceName})`);
     if (r.range) console.log(`    range    ${r.range}${r.patched !== null && r.patched !== undefined ? ` · patched: ${r.patched}` : ''}` +
       (r.sources?.range ? `  [${r.sources.range}]` : ''));
+    if (r.asOf) console.log(`    as-of    ${r.asOf} (a reporting date, not an introduction date)`);
     if (r.latest) console.log(`    latest   ${r.latest} (${ymd(r.latestDate)}) — ${r.stillAffected ? 'STILL affected' : 'outside range'}`);
+    if (r.artifact) {
+      const a = r.artifact;
+      console.log(`    artifact ${a.mode} → ${a.state}` +
+        (a.newest ? ` · newest ${a.newest.version} (${ymd(a.newest.date)})` : ''));
+      console.log(`    cell     ${a.cell === null || a.cell === undefined ? '(no patched-version cell published)' : JSON.stringify(a.cell)} — ${a.cellSource === 'cell' ? 'verbatim from the advisory' : a.cellSource}`);
+      if (a.fixRef) console.log(`    commit   ${a.fixRef.url} ${ymd(a.fixRef.date)} (${a.fixRef.label})`);
+      if (a.debian) {
+        const s = a.debian.suites.map(x => `${x.release} ${x.version} ${x.status}`).join(' · ');
+        console.log(`    debian   ${s || '(no suite rows)'}${a.debian.fixed ? ` · fixed: ${a.debian.fixed}` : ''}`);
+      }
+    }
     if (r.advisoryDate) console.log(`    advisory ${r.advisoryGhsa} published ${ymd(r.advisoryDate)}`);
     // ingestion ts is printed only to be disowned: on a bulk drop it is the batch, not the advisory
     if (r.ingestionTs && r.state !== 'backfill') console.log(`    ghsa     ingested ${r.ingestionTs} (ingestion, not the advisory's own date)`);
     (r.notes || []).filter(Boolean).forEach(n => console.log(`    · ${n}`));
+    (r.artifact?.notes || []).filter(Boolean).forEach(n => console.log(`    ⤷ ${n}`));
     console.log('');
   }
   const tally = results.reduce((m, r) => (m[r.state] = (m[r.state] || 0) + 1, m), {});

@@ -225,3 +225,11 @@ Sources: [debpalash/VoiceStudio](https://github.com/debpalash/VoiceStudio) · [v
 这是本地推理主线在当前阶段的样子：约束不再是「125B 能不能在这跑」，而是**你跑的是它的哪一种压缩**，而诚实的项目现在把阶梯表当作发布内容的一部分。这里的每个数字都是项目自测；尚无独立的 tok/s 或质量复跑。实际后果是一条陈述纪律——**「我在本地跑 Qwen」必须带上档位**，因为 27.6 GB 的装法与 54.8 GB 的装法是同名但不同的产品，而 32 GB 的笔记本跑的正是项目自己说低于 IQ2_XS 的那一档。
 
 Sources: [Niko1221/Strata](https://github.com/Niko1221/Strata) · [Hugging Face: Qwen/Qwen3.8-Flash-Next](https://huggingface.co/Qwen/Qwen3.8-Flash-Next)
+
+## 2026-10-23 20:03 批次 —— 服务工件变成编译并签名的包
+
+**NVIDIA Flare 把本地推理拆成一个 Python 编译步骤和一个 Rust 运行时，交换的单位是一个已签名的包。**`NVIDIA/flare-local-inference`（Apache-2.0，**618★／4 关注**，2026-10-20 创建、10-23 推送——API 已核实）面向 **SM120/SM121** GPU，即工作站与紧凑系统（如 DGX Spark）。**Ignition**（PyTorch + Transformers + FlashInfer/b12x）加载模型、调优 kernel 并捕获 CUDA 图，产出一个*运行时包*：仅含元数据的主 `.safetensors` 加按 **SHA-256** 命名的不可变载荷块，装在一个**已签名信封**里，内含加密的 cubin。**Helios**，那个 Rust 运行时，在没有 Python 的情况下服务该包。所有配方默认 FP8 E4M3 的 KV 存储，而对话状态——包括递归状态与 KV 缓存——被作为一个单位规划，以便分支与恢复能保持它。
+
+它属于磁盘流式这条线索而不是框架堆，有两个原因。第一，工件边界移动了：你交付的不再是"权重 + 某个引擎版本"，而是一个**编译过、按哈希寻址、已签名的块**，这与 agent 沙箱及溯源线索一直接近的形状相同（[[disclosure-lag]] 的工件轴、SLSA/LiteLLM 的教训），只是应用在模型权重上——可验证的服务，配不可验证的模型。第二，README 自己划了线，应当引用而非转述：一个"**研究原型**"，只覆盖 SM120/SM121，"**Flare 不是、也永远不会成为 vLLM 这类生产推理引擎的替代品**"。厂商公布非目标已是 2026 年的常态（[[fact-check]]），而它也告诉你该看什么：Ignition 的包格式是否出现第二个消费者——那会把厂商的构建工具变成交换格式。
+
+来源：[NVIDIA/flare-local-inference](https://github.com/NVIDIA/flare-local-inference) · [模型准备与服务](https://github.com/NVIDIA/flare-local-inference/blob/main/docs/model-preparation.md)

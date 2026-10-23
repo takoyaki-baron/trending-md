@@ -1097,3 +1097,27 @@ splitting (4/8→6/8) is the more portable finding: on-device CU is limited by t
 the model's perception.
 
 Sources: [eagle-hq/EAGLE-4](https://github.com/eagle-hq/EAGLE-4) · [Qwen3.8-27B-EAGLE4 draft](https://huggingface.co/EAGLE-Corp/Qwen3.8-27B-EAGLE4) · [Opposable — computer use on the phone](https://getopposable.com/blog/computer-use-on-the-phone) · [HN](https://news.ycombinator.com/item?id=50180190)
+
+## 2026-10-23 20:03 batch — the serving artifact becomes a compiled, signed package
+
+**NVIDIA Flare splits local inference into a Python compile step and a Rust runtime, and the unit of
+exchange is a signed package.** `NVIDIA/flare-local-inference` (Apache-2.0, **618★ / 4 watchers**, created
+2026-10-20, pushed 10-23 — verified on the API) targets **SM120/SM121** GPUs, i.e. workstation and compact
+systems like the DGX Spark. **Ignition** (PyTorch + Transformers + FlashInfer/b12x) loads a model, tunes
+kernels and captures CUDA graphs into a *runtime package*: a metadata-only primary `.safetensors` plus
+immutable payload blobs named by **SHA-256**, in a **signed envelope** with encrypted cubins. **Helios**,
+the Rust runtime, serves that package with no Python in the loop. FP8 E4M3 KV storage is the default in
+every recipe, and conversation state — recurrent state as well as KV — is planned as a unit so branching
+and resuming preserve it.
+
+Two reasons this belongs beside the disk-streaming thread rather than in the framework pile. First, the
+artifact boundary moves: the thing you ship is no longer "weights + an engine version" but a **compiled,
+hash-addressed, signed blob**, which is the same shape the agent-sandbox and provenance threads have been
+converging on ([[disclosure-lag]]'s artifact axis, the SLSA/LiteLLM lesson) applied to model weights —
+verifiable serving without a verifiable model. Second, the README draws its own line and it should be
+quoted rather than paraphrased: a "**research prototype**", SM120/SM121 only, and "**Flare is not, and will
+never, be a replacement for production inference engines like vLLM**." A vendor publishing the non-goal is
+the 2026 norm ([[fact-check]]), and it also tells you what to watch: whether Ignition's package format gets
+a second consumer, which would turn a vendor's build tool into an interchange format.
+
+Sources: [NVIDIA/flare-local-inference](https://github.com/NVIDIA/flare-local-inference) · [model preparation and serving](https://github.com/NVIDIA/flare-local-inference/blob/main/docs/model-preparation.md)

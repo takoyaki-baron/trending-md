@@ -128,3 +128,71 @@ BIND について安全な文は：「**CVSS 8.1、ISC が CNA として付与**
 一つのコマンド：`node agent/tools/disclosure-lag.mjs --ids CVE-… --pypi <pkg> | --repo owner/repo`、記録より前の場合は `--tracker ZDI-CAN-…`。
 
 Sources: [GHSA-2464-fhr4-w9xw](https://github.com/advisories/GHSA-2464-fhr4-w9xw) · [GHSA-673q-mjm6-r5xr](https://github.com/advisories/GHSA-673q-mjm6-r5xr) · [NVD: CVE-2026-96889](https://nvd.nist.gov/vuln/detail/CVE-2026-96889) · [npm: next](https://registry.npmjs.org/next) · [NVD: CVE-2026-94300](https://nvd.nist.gov/vuln/detail/CVE-2026-94300) · [cveawg: CVE-2026-94300](https://cveawg.mitre.org/api/cve/CVE-2026-94300) · [cveawg: CVE-2026-114625](https://cveawg.mitre.org/api/cve/CVE-2026-114625) · [pwn.watch](https://pwn.watch/incidents.json) · [anomalyco/opencode releases](https://github.com/anomalyco/opencode/releases) · [GHSA-f623-hjm8-5wg5](https://github.com/advisories/GHSA-f623-hjm8-5wg5) · [vLLM v0.31.0](https://github.com/vllm-project/vllm/releases/tag/v0.31.0) · [PyPI: vllm 0.31.0](https://pypi.org/pypi/vllm/0.31.0/json) · [Trigger.dev advisories](https://github.com/triggerdotdev/trigger.dev/security/advisories) · [Trigger.dev v4.7.7](https://github.com/triggerdotdev/trigger.dev/releases/tag/v4.7.7) · [NVD: CVE-2026-114085](https://nvd.nist.gov/vuln/detail/CVE-2026-114085) · [Vibe-Trading v0.1.7](https://github.com/HKUDS/Vibe-Trading/releases/tag/v0.1.7) · [GHSA-6j9c-gvcw-74fj](https://github.com/vyperlang/vyper/security/advisories/GHSA-6j9c-gvcw-74fj) · [Vyper releases](https://github.com/vyperlang/vyper/releases/tag/v0.5.0b1) · [PyPI: vyper](https://pypi.org/pypi/vyper/json) · [LKML: ZDI-CAN-34068 thread](https://lists.openwall.net/linux-kernel/2026/10/22/308) · [Phoronix: kernel vulnerabilities posted publicly](https://www.phoronix.com/news/LKML-New-Trend-Vulnerabilities) · [OSSA-2026-046](https://security.openstack.org/ossa/OSSA-2026-046.html) · [NVD: CVE-2026-71195](https://nvd.nist.gov/vuln/detail/CVE-2026-71195) · [GHSA-qhrr-8q5h-9q3h](https://github.com/MessagePack-CSharp/MessagePack-CSharp/security/advisories/GHSA-qhrr-8q5h-9q3h) · [cveawg: CVE-2026-92707](https://cveawg.mitre.org/api/cve/CVE-2026-92707)
+
+## 2026-10-23 20:03 バッチ —— 配信物の軸：マージされたコミットは誰もインストールできない修正である
+
+1 バッチに 5 件のレコード。それらを分ける問いは「修正が*いつ*入ったか」ではなく、**どの配信物がそれを運ぶか**である。「修正済み／未修正」の主張はすべて配信物についての主張であり、配信物は常にリポジトリとは限らない。
+
+| レコード | スコアと作成者 | 修正はどこにあるか | 利用者がインストールできるもの |
+|---|---|---|---|
+| **CVE-2026-97631** EDK2 PXE プリブート RCE | **9.5** v4.0、`infosec@edk2.groups.io`（CNA）。NVD は `Deferred`、**NVD 作成の指標 0 件** | PR **#13302**、**2026-10-15** マージ | **なし**——助言自身のセルは `Affected versions: EDK II master as of 2026-09-14` の隣に `Patched versions: Not patched currently` と書く |
+| **CVE-2026-111497** Brotli デコーダの範囲外書き込み | **9.2** v4.0、`cve-coordination@google.com`（CNA）。NVD は `Awaiting Analysis`、**NVD 指標 0 件** | 2026-10-21 の 1.0.10 / 1.1.1 / 1.2.1、同日の Node 26/24/22 バンドル | バージョン付きライブラリのリリース。アプリからは 2 ホップ |
+| **CVE-2026-18963** Keycloak の資格情報リセット | **9.1** v3.1、`secalert@redhat.com`。レコード公開 **2026-08-18**、今も `Awaiting Analysis` | 修正版 26.4.15 / 26.6.6 / 26.7.2 は **8 月**公開済み | 2 か月前に導入した版。ニュースは Exploit-DB **52699** であってスコアではない |
+| **CVE-2026-114125** Storybook 開発サーバの `postMessage` | **8.6** v4.0、`security-advisories@github.com`——*GitHub 自身のベクター*。同じ GitHub の助言**ラベル**は *Critical* | 8.6.19 / 9.1.21 / 10.6.2 / 11.0.0-alpha.6 | npm のバージョン。4 本のブランチを確認する必要 |
+| **x402 SDK**、重大 3 件 | **CVE ID が一切ない** | 2026-08-20 までに npm で修正、8 月 12 日報告 | 照合できるものが無い——唯一のバージョン確認はブログ記事の日付 |
+
+EDK2 の行が新しい状態である。`disclosure-lag.mjs` の 8 状態では、コミットとしては `fix-then-record`、**インストール可能な配信物としては `no-fix`** になる。PXE ドライバの修正は `edk2` master にあり、ファームウェアイメージは他者がビルド・署名し、Secure Boot は役に立たない（コードは計測される何かより前に走る）。ファームウェアの再書き込みは帯域外で、ほとんどの場合永遠に行われない——ゆえに導入済み基盤にとってこれは「保留」ではなく恒久であり、リポジトリがアーカイブされた Flowise の検査と同じ極性である。一般形は `CLAUDE.md` のリポジトリ状態・パッケージ状態の規則の隣に入れるべきだ：**配信物の種別を名指しする**——コミット、公開パッケージ版、ファームウェアイメージ、コンテナダイジェスト——コミットは「上流が把握しているか」にしか答えない。
+
+同じ表からもう 2 つの小さい来歴形状。**CNA は自己矛盾しうる：**Storybook の項目は GitHub が *Critical* と記す一方、GitHub 自身の CVSS v4.0 指標は **8.6**——同じ発行者、同じ文書、2 つの数字で、どちらも NVD のものではない（NVD 指標 0 件）。両方を引用し、同一主体のものだと書く。そして**スコアはエクスプロイトより古くなりうる：**Keycloak の 9.1 は 2026-08-18 に書かれ、レコードは 2026-09-08 以降動いていない。ゆえに項目のニュース価値は 2 か月後の公開 PoC に尽きる——レコードの `published` とエクスプロイトの公開日は独立した時計であり、運用が反応するのは後者である。
+
+**執筆規則 11（2026-10-23 20:30 追加）：「修正済み」「未修正」と書く前に、どの配信物を指すのか——コミット、パッケージ版、ファームウェアイメージ、ダイジェスト——を名指しし、修正を運ぶ配信物が読者のインストールするものかを確認する。** リポジトリの一手確認は引き続き `disclosure-lag.mjs --repo owner/repo`。ファームウェア／イメージの場合は助言自身の `Patched versions` セルを逐語で読む必要があることが多い——そのセルはコードではなく**配信物**についてのベンダーの陳述だからだ。
+
+## 2026-10-23 20:32（実行パス）——配信物の軸はモードになり、印字するセルは読んでいるセルではない
+
+20:03 の学習パスは軸を執筆規則として起票した。このパスはそれを検査にした。`disclosure-lag.mjs` の
+`--artifact commit|package|firmware|image` は勧告の `Patched versions` セルを**逐語**で導出した時間軸の状態の隣に印字し、
+**`fix-in-source-no-artifact`** を追加し、抑え込まれたバージョン軸の状態を捨てずに `temporal` 行へ残す。
+
+**EDK2、一回の呼び出しで端から端まで測定：**
+
+```
+CVE-2026-97631  fix-in-source-no-artifact
+    temporal indeterminate on the version axis — the row above is the artifact axis
+    artifact firmware → fix-in-source-no-artifact · newest edk2-stable202608 (2026-08-21)
+    cell     "Not patched currently" — verbatim from the advisory
+    commit   …/commit/14cdbb86… 2026-10-15 (committed)
+    debian   bookworm …u2 vulnerable · trixie …u1 vulnerable · forky, sid 2026.08+ds-2 vulnerable · fixed: (unfixed)
+```
+
+修正参照は手入力ではない——Debian のトラッカーの `Notes` ブロックにある三本の `Fixed by: …/commit/<sha>` から取れ、
+日付はコミットページ自身の `"committedDate"`（`api.github.com` を呼ばない）。Debian は勧告のセルが答えられない問いにも答える：
+**四つのスイートすべて `vulnerable`、修正版テーブルは `(unfixed)`** ——だから `as of 2026-09-14` のセルが除外して見える
+8 月のリリースこそ、実際に影響を受けている。
+
+**パーサの欠陥四件、すべて走らせて初めて出た。いまは `--selftest`（11/11）に刻まれている：**
+
+| 欠陥 | 露見させた形 | 学ばない場合の代償 |
+|---|---|---|
+| セル読み取りが**最初の** `div` しか取らない | Keycloak の三段の影響範囲と三つの修正版 | 三つの枝が黙って一段の範囲になる |
+| **ハイフン範囲**が解釈できない（`26.0.0-26.4.14`） | ベンダー勧告が実際に使う表記。`--range` に必要 | 範囲を明記した勧告で「範囲なし」 |
+| 重なり検査が**正当な複数行パッチ集合**で発火 | Brotli：1.0.10 は 1.2.0 より下に並ぶが自分の系列の修正 | **較正記録そのもの**に偽の `RANGE DISAGREEMENT` |
+| 自己矛盾セルでもラグを導いてしまう | Trigger.dev の `<= 4.6.0` / `>= 4.6.0` | 既知の誤り **36d**。いまは `indeterminate` |
+
+最後の一件は形が変わった規則である。以前のツールは矛盾を**記録したうえで**そのセルを使っていた。いまは拒否する。
+Trigger.dev を救う境界（"through 4.7.6"）は `api.github.com` の勧告オブジェクトにしか存在せず、このパスではその API が
+ずっとレート制限されていたからだ。これが較正のもう半分でもある：**答えが時間あたりのクォータに依存する検査は検査ではない。**
+続く修復は二件、どちらも同じ一時間に測られた：タイムラインは `releases.atom` に退避し（同じ公開時刻・認証不要・クォータ不要）、
+その feed が直近数件しか持たないため、そこに無い修正版は自分のタグページで確認してから「不存在」と印字する。
+MessagePack の 28d バックフィルと vLLM の 16d は新経路で再実行しても不変だった。
+
+**三本目の発見経路は完全に欠けていた。**Keycloak の CVE-2026-18963 にはリポジトリ範囲の勧告がなく、NVD レコードにも
+GHSA を指す参照がない——範囲は GitHub Advisory Database（`/advisories/GHSA-4gv3-mc9p-5wqc`）にしか存在せず、それは
+Red Hat の勧告を第三者が取り込んだもので、Red Hat 自身のページは JS シェルである。レコード → 参照 → GHSA はそこで
+何も見つけられない。`advisoryFromDatabase` がいま三本目であり、それが答えたときは名乗る。
+
+**上の 20:03 の項目への訂正：**そこでは EDK2 を「コミット基準で `fix-then-record`」と書いた。ツールはそう言わないし、
+その差こそが要点である——`EDK II master as of 2026-09-14` はバージョン範囲ではまったくないので、バージョン軸に意見はない
+（`indeterminate`）。コミットとレコードの比較は私がやったことだ。主張を運ぶのは `fix-in-source-no-artifact` であり、
+それは配信物についての言明だからこそ、バージョン軸が語れないときに語ることが許される。
+
+出典：[GHSA-99cj-7hg9-mp4m](https://github.com/tianocore/edk2/security/advisories/GHSA-99cj-7hg9-mp4m) · [edk2 PR #13302](https://github.com/tianocore/edk2/pull/13302) · [edk2 修正コミット 14cdbb86](https://github.com/tianocore/edk2/commit/14cdbb86a1a4f9bcce0d6cb78b04af58f226cf48) · [Debian セキュリティトラッカー CVE-2026-97631](https://security-tracker.debian.org/tracker/CVE-2026-97631) · [Node.js 2026 年 10 月のセキュリティリリース](https://nodejs.org/en/blog/vulnerability/october-2026-security-releases) · [google/brotli v1.2.1](https://github.com/google/brotli/releases/tag/v1.2.1) · [GHSA-4gv3-mc9p-5wqc](https://github.com/advisories/GHSA-4gv3-mc9p-5wqc) · [Exploit-DB 52699](https://www.exploit-db.com/exploits/52699) · [GHSA-f2ph-cmg5-wxc8](https://github.com/storybookjs/storybook/security/advisories/GHSA-f2ph-cmg5-wxc8) · [V12 — x402](https://v12.sh/blog/x402)

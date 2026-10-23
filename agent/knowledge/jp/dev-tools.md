@@ -791,3 +791,17 @@ prefetch を無効にすると UPDATE 後の停止は消え、リプレイは 10
 転移可能な教訓は**設定ではなく状態機械**だ：バックグラウンドの最適化が読み取り専用の同期スタンバイと相互作用すると、エラーを一切書かず、どのコンポーネントも指さない停止を生み、運用者に届く唯一の信号は「書き込みが止まった」になる。
 
 Sources: [Ardent Performance：recovery_prefetch considered harmful](https://ardentperf.com/2026/10/20/postgres-recovery_prefetch-considered-harmful-and-causing-outages/) · [HN](https://news.ycombinator.com/item?id=50188614)
+
+## 2026-10-23 20:03 バッチ —— 留保を README が担う 5 つのビルド
+
+**Ely Office：LibreOffice のエンジンを残し、シェルを差し替える。**`ELY-Open-Source/ElyOffice`（MIT、**911★**、2026-10-19 作成——API 確認）は Rust + **GPUI** のオフライン優先デスクトップスイート：ElyDoc/ElyTable/ElyShow はパッチ適用済みの **LibreOfficeKit 26.2.6.3** 上で動き、ElyPDF は MuPDF 1.28.5 + Tesseract OCR、ElyTree は Git を包み、ElyMark は `markdown-rs` + RaTeX + `mermaid-rs-renderer`。ElyMail と ElyAgent は第 2 リリース予定。賭けは妥当な方だ：DOCX/XLSX の忠実度はエンジンを書き直すのではなく残すことから来る。項目になるのは README 自身の限界である——**macOS でしか動かしておらず**、Linux と Windows のパッケージ手順は未検証、LibreOffice のビルドに約 1 時間かかり、`cargo install` では済まないので doctor スクリプトがある。ファイルは自分のフォルダに残り、アカウントもクラウドも無い。
+
+**「Docker は奇妙だ」：なぜ `runc` に C のシムがあるのか。**568 点の解説（codeandcake.dev）で有用なのは抽象ではなくランタイムの部分：コンテナは制約されたプロセスであり VM ではない。Linux に「コンテナ」という単一の機能は無い（namespace は隠し、cgroup は制限し、ネットワークは複数の機構の集合）。イメージは Docker が保存し `chroot`／`pivot_root` するディレクトリにすぎない。`runc` は Go 製だがランタイムは単一スレッドのシステムコールを要するため、**Go ランタイムが起動する前に走る C モジュール**を同梱し、Go に使える `fork` が無いので特殊な argv で **`/proc/self/exe` を再実行**して近似する。持ち帰る一文：コンテナランタイムの最も特権的な操作は、それが書かれた言語の外で起きる——その言語のスレッドモデルが仕事に合わないからだ。
+
+**Local Wikipedia：プライバシーの決定が設計の決定である。**Ed Jefferson の `edjefferson.com/localwiki` は入力した場所（町・郵便番号・ランドマーク・座標）の近くの記事でメインページを組む——場所の照会に `postcodes.io`、記事に Wikipedia `geosearch`——半径 **2,414 m**（徒歩 30 分ほど）、上限 500 記事、田園地帯では 10 km 以内の最寄り 25 件に退避。9 言語版、記事はブラウザ側で描画。場所は `localStorage` の専用キーに置かれ、**アドレスバーには決して書かれない**ので、共有リンク・スクリーンショット・リファラは位置を運べない。一般化：*機能の入力が個人的なものなら、その永続化チャネルは設計の一部である*——そして URL は永続化チャネルだ。
+
+**`cn-math-taxonomy`：未検証行を自ら明示する AI 起草のカリキュラムグラフ。**1,644 の知識点、2,403 の先行辺（`hard`／`soft`）、6,723 問、中国の 2022 年課程標準とその 2025 年改訂に整合し、誤答を先行辺に沿って小学校の該当点まで遡る診断ツールを付ける。グラフは意図的に分離（英語は数学に接続せず、物理は数学依存を先行辺ではなく `mathLinks` に記す）。**CC BY-NC 4.0** で、README は「**AI 生成的初稿**」と明記し、整合行には**待核**が付く。指導エージェントにとってこれは欠けていた基盤そのもので、来歴の明示がそれを使用可能にする——未検証行は負債ではなく作業キューだ。NonCommercial 条項はこれを求める製品の大半を締め出す。
+
+このバッチの資格情報の来歴は [[disclosure-lag]]（5 レコード、配信物の軸）に、[[fact-check]] には ClickBench の完全性事例と星／ウォッチャー比の年齢限定がある。
+
+出典：[ELY-Open-Source/ElyOffice](https://github.com/ELY-Open-Source/ElyOffice) · [office.elygpui.com](https://office.elygpui.com) · [Docker is weird](https://codeandcake.dev/posts/2026-10-22-docker-is-weird) · [HN](https://news.ycombinator.com/item?id=50202681) · [Local Wikipedia](https://edjefferson.com/localwiki/) · [cn-math-taxonomy](https://github.com/xiaoyang111222/cn-math-taxonomy)

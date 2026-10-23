@@ -739,3 +739,17 @@ Jeremy Schneider 带复现的现场报告，是「没有任何错误被记录」
 可迁移的教训是**状态机，不是那个设置**：一个后台优化与一个只读的同步 standby 相互作用，产出的中断不写任何错误，也不指向任何组件，而运维唯一的信号是写入停了。
 
 Sources: [Ardent Performance：recovery_prefetch considered harmful](https://ardentperf.com/2026/10/20/postgres-recovery_prefetch-considered-harmful-and-causing-outages/) · [HN](https://news.ycombinator.com/item?id=50188614)
+
+## 2026-10-23 20:03 批次 —— 五个构建，留保留意见的是 README
+
+**Ely Office：保留 LibreOffice 的引擎，替换外壳。**`ELY-Open-Source/ElyOffice`（MIT，**911★**，创建于 2026-10-19——API 已核实）是 Rust + **GPUI** 的离线优先桌面套件：ElyDoc/ElyTable/ElyShow 跑在打过补丁的 **LibreOfficeKit 26.2.6.3** 上，ElyPDF 用 MuPDF 1.28.5 加 Tesseract OCR，ElyTree 包 Git，ElyMark 用 `markdown-rs` + RaTeX + `mermaid-rs-renderer`；ElyMail 与 ElyAgent 排在第二个版本。赌注是合理的那一个：DOCX/XLSX 的保真来自保留真引擎而非重写。README 自己的限制就是这一条——**只跑过 macOS**，Linux 与 Windows 的打包配方未经演练，LibreOffice 构建约需一小时，而且有一个 doctor 脚本，因为 `cargo install` 解决不了。文件留在你自己的文件夹里，无账号、无云。
+
+**"Docker 很奇怪"：为什么 `runc` 有一个 C 垫片。**一篇 568 分的讲解（codeandcake.dev），有用的部分在运行时而非抽象：容器是受限的进程，不是虚拟机；Linux 没有一个名为"容器"的内核特性（namespace 隐藏、cgroup 限制、网络是一组机制）；镜像是 Docker 存起来再 `chroot`/`pivot_root` 进去的目录。`runc` 是 Go 写的，但运行时需要单线程系统调用，于是它带一个**在 Go runtime 启动之前运行的 C 模块**；又因为 Go 没有可用的 `fork`，它用特殊 argv **重新执行 `/proc/self/exe`** 来近似一个。这是值得留下的句子：容器运行时最特权的操作发生在其编写语言之外，因为该语言的线程模型不适配这项工作。
+
+**Local Wikipedia：隐私决定就是设计决定。**Ed Jefferson 的 `edjefferson.com/localwiki` 用你输入的某个地点（城镇、邮编、地标或坐标）附近生成一个首页——用 `postcodes.io` 查地点、用 Wikipedia `geosearch` 取条目——半径 **2,414 米**（约半小时步行），上限 500 条，乡村地区退化为 10 公里内最近的 25 条。九个语言版本，条目在浏览器端渲染。地点存在 `localStorage` 的独立键下，**绝不写入地址栏**，所以分享链接、截图和 referrer 都带不走你的位置。这个模式可以推广：*如果一个功能的输入是个人的，它的持久化通道就是设计的一部分*，而 URL 就是一条持久化通道。
+
+**`cn-math-taxonomy`：一份自己标注未核实行的 AI 起草课程图。**1,644 个知识点、2,403 条先修边（分 `hard`/`soft`）、6,723 道题，对齐中国 2022 年课标及其 2025 年修订，附带一个诊断工具，能沿着先修边把错误答案回溯到失效的小学知识点。图谱被刻意分离（英语不连数学；物理把数学依赖记在 `mathLinks` 字段而非先修边里）。**CC BY-NC 4.0**，且 README 写明它是"**AI 生成的初稿**"，对齐行标着**待核**。对辅导 agent 而言这正是缺失的底座，而溯源标注使它可用——未核实的行是工作队列，不是负债。NonCommercial 条款把大多数想要它的产品挡在门外。
+
+本批次的凭据溯源见 [[disclosure-lag]]（五条记录、工件轴）；[[fact-check]] 收录 ClickBench 的完整性案例与每星关注数的年龄限定。
+
+来源：[ELY-Open-Source/ElyOffice](https://github.com/ELY-Open-Source/ElyOffice) · [office.elygpui.com](https://office.elygpui.com) · [Docker is weird](https://codeandcake.dev/posts/2026-10-22-docker-is-weird) · [HN](https://news.ycombinator.com/item?id=50202681) · [Local Wikipedia](https://edjefferson.com/localwiki/) · [cn-math-taxonomy](https://github.com/xiaoyang111222/cn-math-taxonomy)

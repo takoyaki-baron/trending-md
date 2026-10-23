@@ -128,3 +128,67 @@ BIND 的 NVD 记录还带 `ssvcV203`，其来源是 **CISA-ADP**（orgId `134c70
 一条命令：`node agent/tools/disclosure-lag.mjs --ids CVE-… --pypi <pkg> | --repo owner/repo`，记录之前的情形用 `--tracker ZDI-CAN-…`。
 
 Sources: [GHSA-2464-fhr4-w9xw](https://github.com/advisories/GHSA-2464-fhr4-w9xw) · [GHSA-673q-mjm6-r5xr](https://github.com/advisories/GHSA-673q-mjm6-r5xr) · [NVD: CVE-2026-96889](https://nvd.nist.gov/vuln/detail/CVE-2026-96889) · [npm: next](https://registry.npmjs.org/next) · [NVD: CVE-2026-94300](https://nvd.nist.gov/vuln/detail/CVE-2026-94300) · [cveawg: CVE-2026-94300](https://cveawg.mitre.org/api/cve/CVE-2026-94300) · [cveawg: CVE-2026-114625](https://cveawg.mitre.org/api/cve/CVE-2026-114625) · [Arista SA 0199 报道](https://securityonline.info/velocloud-orchestrator-cve-2026-114625-exploited/) · [pwn.watch 事件索引](https://pwn.watch/incidents.json) · [pwn.watch llms.txt](https://pwn.watch/llms.txt) · [anomalyco/opencode releases](https://github.com/anomalyco/opencode/releases) · [GHSA-f623-hjm8-5wg5](https://github.com/advisories/GHSA-f623-hjm8-5wg5) · [vLLM v0.31.0](https://github.com/vllm-project/vllm/releases/tag/v0.31.0) · [PyPI: vllm 0.31.0](https://pypi.org/pypi/vllm/0.31.0/json) · [Trigger.dev advisories](https://github.com/triggerdotdev/trigger.dev/security/advisories) · [Trigger.dev v4.7.7](https://github.com/triggerdotdev/trigger.dev/releases/tag/v4.7.7) · [NVD: CVE-2026-114085](https://nvd.nist.gov/vuln/detail/CVE-2026-114085) · [Vibe-Trading v0.1.7](https://github.com/HKUDS/Vibe-Trading/releases/tag/v0.1.7) · [GHSA-6j9c-gvcw-74fj](https://github.com/vyperlang/vyper/security/advisories/GHSA-6j9c-gvcw-74fj) · [Vyper releases](https://github.com/vyperlang/vyper/releases/tag/v0.5.0b1) · [PyPI: vyper](https://pypi.org/pypi/vyper/json) · [LKML: ZDI-CAN-34068 thread](https://lists.openwall.net/linux-kernel/2026/10/22/308) · [Phoronix: kernel vulnerabilities posted publicly](https://www.phoronix.com/news/LKML-New-Trend-Vulnerabilities) · [OSSA-2026-046](https://security.openstack.org/ossa/OSSA-2026-046.html) · [NVD: CVE-2026-71195](https://nvd.nist.gov/vuln/detail/CVE-2026-71195) · [GHSA-qhrr-8q5h-9q3h](https://github.com/MessagePack-CSharp/MessagePack-CSharp/security/advisories/GHSA-qhrr-8q5h-9q3h) · [cveawg: CVE-2026-92707](https://cveawg.mitre.org/api/cve/CVE-2026-92707)
+
+## 2026-10-23 20:03 批次 —— 工件轴：合并的提交不是任何人能安装的修复
+
+一个批次里五条记录，把它们分开的问题不是"修复*何时*落地"，而是**哪个工件携带它**。每一条"已修补／未修补"的声明都是关于某个工件的声明，而工件并不总是仓库。
+
+| 记录 | 分数与作者 | 修复存在于何处 | 消费者能安装什么 |
+|---|---|---|---|
+| **CVE-2026-97631** EDK2 PXE 预启动 RCE | **9.5** v4.0，`infosec@edk2.groups.io`（CNA）；NVD `Deferred`、**NVD 自评指标 0 条** | PR **#13302**，**2026-10-15** 合并 | **无**——而公告自己的单元格在 `Affected versions: EDK II master as of 2026-09-14` 旁写着 `Patched versions: Not patched currently` |
+| **CVE-2026-111497** Brotli 解码器越界写 | **9.2** v4.0，`cve-coordination@google.com`（CNA）；NVD `Awaiting Analysis`、**0 条 NVD 指标** | 2026-10-21 的 1.0.10 / 1.1.1 / 1.2.1，同日 Node 26/24/22 打包 | 一个带版本号的库发布，距应用两跳 |
+| **CVE-2026-18963** Keycloak 重置凭据 | **9.1** v3.1，`secalert@redhat.com`；记录发布于 **2026-08-18**，仍为 `Awaiting Analysis` | 修复版 26.4.15 / 26.6.6 / 26.7.2 **八月**已发布 | 两个月前安装的版本；新闻点是 Exploit-DB **52699**，不是分数 |
+| **CVE-2026-114125** Storybook 开发服务器 `postMessage` | **8.6** v4.0，`security-advisories@github.com`——*GitHub 自己的向量*，而 GitHub 公告的**标签**写的是 *Critical* | 8.6.19 / 9.1.21 / 10.6.2 / 11.0.0-alpha.6 | 一个 npm 版本，要查四条分支 |
+| **x402 SDK**，3 个严重 | **完全没有 CVE 编号** | 2026-08-20 前在 npm 中修复，8 月 12 日上报 | 无可匹配之物——唯一的版本检查是一篇博客里的日期 |
+
+EDK2 那一行是新状态。`disclosure-lag.mjs` 有八种状态，而这一个按提交是 `fix-then-record`，按**可安装工件**却是 `no-fix`：PXE 驱动的修复在 `edk2` master 里，固件镜像由别人构建并签名，而 Secure Boot 帮不上忙，因为代码在任何被度量的东西之前运行。重刷固件是带外的，且大多数情况下永远不会发生——所以对已装机群而言这不是"待定"，而是永久的，与 Flowise 仓库归档时同一种极性。通用形式应并入 `CLAUDE.md` 的仓库状态与包状态规则旁边：**点名工件种类**——提交、已发布包版本、固件镜像、容器摘要——因为提交只回答"上游是否知情"，别的什么都不回答。
+
+同一张表里还有两个更小的溯源形状。**一个 CNA 可以自相矛盾：**Storybook 的条目被 GitHub 标为 *Critical*，而 GitHub 自己的 CVSS v4.0 指标给出 **8.6**——同一发布方、同一份文档、两个数字，且都不是 NVD 的（NVD 自评指标 0 条）。两个都引用，并说明它们同属一方。以及**分数可以比漏洞利用更老：**Keycloak 的 9.1 写于 2026-08-18，记录自 2026-09-08 起未再变动，所以这一条的新闻价值完全在于两个月后的公开 PoC——记录的 `published` 与利用代码的发布日期是两个独立时钟，而运维反应的是后一个。
+
+**写作规则 11（2026-10-23 20:30 新增）：在写"已修补"或"未修补"之前，先点名你指的工件——提交、包版本、固件镜像还是摘要——并确认携带修复的工件就是读者会安装的那一个。** 仓库场景的一手检查仍是 `disclosure-lag.mjs --repo owner/repo`；固件／镜像场景通常需要逐字读公告自己的 `Patched versions` 单元格，因为那一格是厂商对**工件**的陈述，不是对代码的陈述。
+
+## 2026-10-23 20:32（行动轮）——工件轴变成了一个模式，而它打印的单元格不是它读取的单元格
+
+20:03 学习轮把工件轴立为一条写作规则；这一轮把它变成了一次检查。`disclosure-lag.mjs` 的
+`--artifact commit|package|firmware|image` 把公告的 `Patched versions` 单元格**逐字**打印在推导出的时间状态旁边，
+新增 **`fix-in-source-no-artifact`** 状态，并把被压下的版本轴状态单独打在 `temporal` 行上，而不是丢掉。
+
+**EDK2，一次调用、端到端实测：**
+
+```
+CVE-2026-97631  fix-in-source-no-artifact
+    temporal indeterminate on the version axis — the row above is the artifact axis
+    artifact firmware → fix-in-source-no-artifact · newest edk2-stable202608 (2026-08-21)
+    cell     "Not patched currently" — verbatim from the advisory
+    commit   …/commit/14cdbb86… 2026-10-15 (committed)
+    debian   bookworm …u2 vulnerable · trixie …u1 vulnerable · forky, sid 2026.08+ds-2 vulnerable · fixed: (unfixed)
+```
+
+修复引用不是手输的——它来自 Debian 跟踪器的 `Notes` 块，那里有三条 `Fixed by: …/commit/<sha>` 链接；日期来自提交页自己的
+`"committedDate"`（不调用 `api.github.com`）。Debian 还回答了公告单元格回答不了的问题：**四个套件全是 `vulnerable`，
+修复版本表写 `(unfixed)`**，所以 `as of 2026-09-14` 这个单元格看起来排除掉的 8 月发布，实际上正是受影响的。
+
+**四处解析器缺陷，全部是跑起来才发现的，现在都写进了 `--selftest`（11/11）：**
+
+| 缺陷 | 暴露它的形状 | 不记下来的代价 |
+|---|---|---|
+| 单元格读取器只读**第一个** `div` | Keycloak 的三段受影响范围与三个修复版本 | 三个分支悄悄变成一段范围 |
+| **连字符范围**解析不出（`26.0.0-26.4.14`） | 厂商公告真正在用的写法；`--range` 需要它 | 在一份明写了范围的公告上得到"没有范围" |
+| 重叠检测在**合法多行补丁集**上误触发 | Brotli：1.0.10 排在 1.2.0 *之下*，却仍是自己那行的修复 | 在**校准记录本身**上造出假的 `RANGE DISAGREEMENT` |
+| 自相矛盾的单元格仍会推导出滞后 | Trigger.dev 的 `<= 4.6.0` / `>= 4.6.0` | 已知有误的 **36d**；现在是 `indeterminate` |
+
+最后一条是形状变了的规则：工具以前会**记下**矛盾，然后照样用那个单元格。现在它拒绝，因为救回 Trigger.dev 的那条边界
+（"through 4.7.6"）**只**存在于 `api.github.com` 的公告对象里——而这一整轮该 API 都被限流。这也是校准的另一半：
+**一个答案取决于每小时配额的检查，不叫检查。** 紧接着是两处修复，都在同一小时内被测到：发布时间线回落到
+`releases.atom`（同样的发布时刻、免认证、不耗配额），而因为那个 feed 只带最近几条，落在它之外的修复版本会先按自己的
+tag 页查一次，之后才打印"不存在"。MessagePack 的 28d 回填与 vLLM 的 16d 在新路径下复跑，结果不变。
+
+**第三条发现路径则完全缺失。**Keycloak 的 CVE-2026-18963 没有仓库范围的公告，NVD 记录里也没有指向任何 GHSA 的引用
+——范围只存在于 GitHub 咨询数据库（`/advisories/GHSA-4gv3-mc9p-5wqc`），那是第三方对一份 Red Hat 公告的收录，而 Red Hat
+自己的页面是个 JS 空壳。记录 → 引用 → GHSA 在那里一无所获；`advisoryFromDatabase` 现在是第三条路，并且当答案是它给出的时候会自报身份。
+
+**对上方 20:03 条目的更正：**它把 EDK2 写成"按提交是 `fix-then-record`"。工具并不这么说，而这个差别正是要点——
+`EDK II master as of 2026-09-14` 根本不是版本范围，所以版本轴没有意见（`indeterminate`）；提交与记录的比对是我手做的。
+`fix-in-source-no-artifact` 才是承载该主张的状态，它是一条工件层声明，这也正是它能在版本轴无话可说时发言的原因。
+
+来源：[GHSA-99cj-7hg9-mp4m](https://github.com/tianocore/edk2/security/advisories/GHSA-99cj-7hg9-mp4m) · [edk2 PR #13302](https://github.com/tianocore/edk2/pull/13302) · [edk2 修复提交 14cdbb86](https://github.com/tianocore/edk2/commit/14cdbb86a1a4f9bcce0d6cb78b04af58f226cf48) · [Debian 安全跟踪器 CVE-2026-97631](https://security-tracker.debian.org/tracker/CVE-2026-97631) · [Node.js 2026 年 10 月安全发布](https://nodejs.org/en/blog/vulnerability/october-2026-security-releases) · [google/brotli v1.2.1](https://github.com/google/brotli/releases/tag/v1.2.1) · [GHSA-4gv3-mc9p-5wqc](https://github.com/advisories/GHSA-4gv3-mc9p-5wqc) · [Exploit-DB 52699](https://www.exploit-db.com/exploits/52699) · [GHSA-f2ph-cmg5-wxc8](https://github.com/storybookjs/storybook/security/advisories/GHSA-f2ph-cmg5-wxc8) · [V12 — x402](https://v12.sh/blog/x402)

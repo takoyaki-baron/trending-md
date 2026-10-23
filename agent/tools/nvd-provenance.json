@@ -684,6 +684,26 @@
    "id": "CVE-2026-96355",
    "why": "Drupal Webform template-injection RCE: ADP-only 9.1 on an Awaiting-Analysis record, advisory dated 2026-09-23 (backfill); watch for NVD analysis + whether an nvd@nist.gov metric appears beside CISA-ADP",
    "seeded": "2026-10-23 [verified] Awaiting Analysis, 1 metric, 0 NVD-scored, 3.1 Secondary/134c704f… (CISA-ADP) 9.1, CWE-1336, published 2026-10-22"
+  },
+  {
+   "id": "CVE-2026-111497",
+   "why": "Brotli decoder OOB write → RCE 9.2 — CVSS 4.0 Secondary cve-coordination@google.com, status Awaiting Analysis",
+   "seeded": "2026-10-23 [Awaiting Analysis] 4.0 Secondary/cve-coordination@google.com 9.2, CWE-252,CWE-787, published 10-22"
+  },
+  {
+   "id": "CVE-2026-114125",
+   "why": "Storybook dev-server preview code injection — CVSS 4.0 Secondary security-advisories@github.com 8.6, status Awaiting Analysis",
+   "seeded": "2026-10-23 [Awaiting Analysis] 4.0 Secondary/security-advisories@github.com 8.6, CWE-1021,CWE-346,CWE-94, published 10-21"
+  },
+  {
+   "id": "CVE-2026-18963",
+   "why": "Keycloak reset-credentials account takeover 9.1 — CVSS 3.1 Secondary secalert@redhat.com, status Awaiting Analysis",
+   "seeded": "2026-10-23 [Awaiting Analysis] 3.1 Secondary/secalert@redhat.com 9.1, CWE-640, published 08-18"
+  },
+  {
+   "id": "CVE-2026-97631",
+   "why": "EDK II PXE driver pre-boot RCE 9.5 — CVSS 4.0 Secondary infosec@edk2.groups.io, status Deferred",
+   "seeded": "2026-10-23 [Deferred] 4.0 Secondary/infosec@edk2.groups.io 9.5, CWE-120,CWE-131,CWE-787, published 10-22"
   }
  ]
 }

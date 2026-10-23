@@ -433,3 +433,15 @@ Sources: [oosexgang/hackios-xnu-kernel](https://github.com/oosexgang/hackios-xnu
 一回の呼び出し：`node agent/tools/doc-twin.mjs --probe <url>` → `twin found (url)` / `plain HTML ok` / `JS gate (marker)` / `JS shell (script %)` / `no twin`、各候補の状態とサイズ付き。
 
 Sources: [OpenAI ドキュメント（Markdown の双子）](https://developers.openai.com/api/docs/guides/decisions.md) · [modelcontextprotocol.io](https://modelcontextprotocol.io/docs/getting-started/intro) · [onamae.com](https://www.onamae.com/news/article/11584) · [BleepingComputer](https://www.bleepingcomputer.com/news/security/)
+
+## 2026-10-23 20:03 バッチ —— 逆アセンブルでしか反証できなかった項目と、年齢の基準を要する比率
+
+**ClickBench は不正を理由に `pgrust` を削除した——そしてその主張は未公開バイナリの逆アセンブルによってしか反証できなかった。**PR [ClickHouse/ClickBench#2165](https://github.com/ClickHouse/ClickBench/pull/2165)（「Remove pgrust: the entry is cheating (per-query kernels and result caching)」）はメンテナ Alexey Milovidov により提出され、**2026-09-22T04:26Z にマージ**——API で確認。PR の証拠：aarch64 リリースバイナリに `q00.rs` … `q36.rs` **と `tpch_q01.rs`** のソースパスが埋め込まれており、すなわちベンチマーククエリごとの手書きカーネル。さらにホット実行が**前回実行のキャッシュ解答を再生**しており、規則が禁じている。項目は `tuned: no` と記されながら、まさにその 43 クエリにチューンされていた。決定的なのは「v0.4-preview のソースは公開されておらず、バイナリは `pgrust 0.3-beta` と自称する」点である。
+
+一般化できる検査は 3 つ。**クエリ毎の特化は結果表では良いオプティマイザと区別できない**——唯一の判別子はバイナリとタイミング分布。**「ソース公開」はバージョンで限定しなければならない**：報告された版にソースが無く、規則は事後の逆アセンブルでしか執行できなかった。そして**バイナリの自称バージョンが項目の主張より古いことは 1 コマンドの検査**であり、推論して到達する発見ではない。修正は事後裁定ではなく参加要件に属する：ソースを報告版に固定し、成果物を保持すること。
+
+**星／ウォッチャー比には年齢の基準線が要る——リポジトリの年齢をまたいで移植できない。**このバッチは、無限定の比率なら驚いて見える 4 つの新規リポジトリを出した：Flare **618★/4 ウォッチャー**（154:1、3 日）、Ely Office **911★/2**（455:1）、`fairplay-decrypt` **1,164★/2**（582:1）、`cn-math-taxonomy` **2,624★/5**。いずれも 2026-10-23 に API で読んだ。対して同じバッチの**7 か月**のリポジトリ Claude-Red（2026-03-04 作成）は **8,034★/55 = 146:1**。ウォッチャーは星より遅い時計で積み上がるため、数日齢のリポジトリの分母は構造的にゼロに近く、比率は**年齢**を測ってしまう——2 日目の 500:1 は anatomy の事例ではない。同比齢のリポジトリ間、そのリポジトリ自身の履歴、または成熟した基準線に対して使うこと。ローンチに使ってはならない。（anatomy の事例——18,877★/44——は成熟した急上昇リポジトリであり、だから読めた。）
+
+**リリース無しの再浮上は日付付きの観察であり、発見ではない。**`SnailSploit/Claude-Red`（MIT、8,034★、2026-03-04 作成）の**最終プッシュは 2026-10-12**——確認済み——ゆえに項目は「78 の攻撃的 `SKILL.md`、11 日間不変」であり、休眠検査が「保守されているように見える」リポジトリを通過した例で、フィードがローンチではなくジャンルとして書いた理由でもある。
+
+出典：[ClickBench PR #2165](https://github.com/ClickHouse/ClickBench/pull/2165) · [ClickBench の規則](https://github.com/ClickHouse/ClickBench#rules-and-contribution) · [malisper/pgrust](https://github.com/malisper/pgrust) · [SnailSploit/Claude-Red](https://github.com/SnailSploit/Claude-Red)

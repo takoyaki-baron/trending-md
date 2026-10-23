@@ -4745,3 +4745,71 @@ scanner (324★). The detection rules shipping *beside* the exploits in the same
 within a day.
 
 Sources: [Capcom IR notice](https://www.capcom.co.jp/ir/english/news/html/e261022.html) · [GMO / お名前.com notice](https://www.onamae.com/news/article/11584) · [openai/php2shell-checker](https://github.com/openai/php2shell-checker) · [ikow/php2shell-poc](https://github.com/ikow/php2shell-poc) · [BleepingComputer](https://www.bleepingcomputer.com/news/security/amazon-says-php2shell-exploitation-began-4-days-before-patches/)
+
+## 2026-10-23 20:03 batch — the agentic attacker measured at machine speed, and three boundaries that were assumed closed
+
+**Storm-0940 + ARTEX: the measured advantage is volume and clock, and the measured cost is defender
+attention.** Microsoft attributes the ConnectWise Cloud Backup supply-chain compromise to a
+China-state-aligned actor that has used **ARTEX** — an open-source, Go, LLM-driven multi-agent
+pentest framework with a Next.js frontend that "can use any AI model" — since at least September 2026.
+Read first-hand on the post (2026-10-23): "used ARTEX to attempt to sign-in to **more than 2,250
+tenants**", "multiple instances where the time from **initial targeting to privileged access was less
+than 3 hours**", and the caveats in the same document — "**while the majority of the targeting wasn't
+successful**, Storm-0940 achieved privileged cloud persistence at many organizations in a brief time",
+plus the standing one, that an affected app or a successful authentication "does not necessarily
+indicate that customer data was accessed or exfiltrated."
+
+The detail the coverage dropped is the more useful measurement, because it prices the defence:
+"**48 accounts received more than 1,000 failures, and lockout responses represented nearly 98% of all
+activity. Despite the scale, no successful authentication, token issuance, Graph call, or directory
+change was observed.**" So an agentic campaign's observable signature is a **lockout flood** — which is
+both the detection signal and a denial-of-service against the reset path — and Microsoft's own framing of
+the advantage is tempo, not success rate: "the speed of the activity allows very little time for
+Defenders to respond." Agents "are not constrained by factors affecting humans — they can work around the
+clock, on weekends, and on holidays". That is a different claim from "2,250 tenants breached", and it is
+the falsifiable one: if the effect were capability, the success rate would rise; what rises here is
+attempt count and attempts-per-hour.
+
+**x402: the agent payment stack, where the signature says who authorised and nothing says what.**
+V12 reported **25** vulnerabilities in x402 (HTTP 402 payments for agents); three critical, each crossing
+a different boundary — the TypeScript Solana facilitators parsed the *third* instruction of a transaction
+as `TransferChecked` **without checking the instruction type**, so a token **approval** was accepted as a
+payment that transferred nothing; the SIWx login helper signed server-supplied `domain`/`uri` without
+comparing them to the site contacted; and the default client enforced **no spending limit**. No CVE IDs
+anywhere in the disclosure. The generalisable rule: **a signature binds an authoriser, not a payload
+shape** — the client must validate the server's requirements and enforce its own budget *before* signing,
+which is the same lesson Traefik's socket-as-identity CVEs taught at the network layer. → [[disclosure-lag]]
+
+**DeadTag: the dependency did not get compromised, it expired.** Report URI and iVerify documented
+**660+** re-registered expired domains behind analytics/ad tags still embedded on sites; once a domain
+changes hands, every page still carrying the tag loads the new owner's script with no change to the site
+itself. Estimated 135M visits/month; the tags select iPhone visitors and serve **Coruna** (iOS 13–17.2.1)
+and **P7 DarkSword** (iOS 18.4–18.7) kits targeting keychain passwords and crypto wallets; additional
+paths were hacked PrestaShop stores and a malicious Instagram ad. **Nothing watches domain expiry** — no
+dependency scanner, no SCA tool, no lockfile. The class sits beside the abandonware/CVE-unmaintained
+shape and is cheaper to exploit: no site compromise, no maintainer takeover, just a registrar invoice.
+Mitigation is inventory and deletion, plus patching iOS past both ranges.
+
+**Storybook: `localhost` is not a trust boundary, and the assigner contradicted itself.** CVE-2026-114125
+— the dev server's preview iframe was embeddable by any site and accepted `postMessage` from any origin,
+so a malicious page plus some interaction could rewrite story files in the developer's project, which a
+local runtime then executes. The provenance lesson is in the same record: GitHub's advisory labels it
+*Critical* while GitHub's own CVSS v4.0 metric reads **8.6**, and NVD has not analysed it. The advisory
+also states what reduces but does not remove the risk — a browser prompt before a site connects to a
+localhost service — which makes that prompt security-relevant rather than an annoyance.
+
+**fairplay-decrypt: DRM removal moves from the device to the file.** `EthanArbuckle/fairplay-decrypt`
+(**1,164★ / 2 watchers**, created 2026-10-19, `license: None` — verified on the API) derives FairPlay page
+keys from an IPA's own **SINF/SUPF** records and decrypts arm64 Mach-O pages offline on macOS or Linux,
+clearing `cryptid`; it takes a **16-byte credential** belonging to the Apple account that owns each IPA,
+retrieved separately from a jailbroken device. The capability is old; the change is that it runs on the
+container's records rather than the running process, which is what makes it batch-scalable and hard to
+see server-side. Defensive read: the artefact is the unit, not the app launch. Licence is the trap —
+"no licence" is all rights reserved, not public domain.
+
+**Keycloak, for the record's sake:** CVE-2026-18963 (CWE-640) is a pre-auth account takeover via the
+reset-credentials flow; Exploit-DB **52699** (2026-10-21) ships check and takeover modes tested against
+26.6.2, and the fixes have been installable since **August**. Public tooling against a two-month-old
+patch is a version-management failure, not a disclosure gap. → [[disclosure-lag]]
+
+Sources: [Microsoft — Storm-0940 uses ARTEX](https://www.microsoft.com/en-us/security/blog/2026/10/21/storm-0940-uses-artex-agentic-ai-connectwise-supply-chain-compromise/) · [trhhubsd/ARTEX](https://github.com/trhhubsd/ARTEX) · [V12 — x402](https://v12.sh/blog/x402) · [Report URI — DeadTag](https://blog.report-uri.com/deadtag-how-forgotten-website-tags-became-a-delivery-network-for-iphone-spyware/) · [GHSA-f2ph-cmg5-wxc8](https://github.com/storybookjs/storybook/security/advisories/GHSA-f2ph-cmg5-wxc8) · [EthanArbuckle/fairplay-decrypt](https://github.com/EthanArbuckle/fairplay-decrypt)
