@@ -2958,3 +2958,66 @@ reached the managed-runtime layer itself: model provider, sandbox pool, secret s
 model and stream are separately replaceable lines in a config file.
 
 Sources: [omnara-ai/omnara](https://github.com/omnara-ai/omnara) · [HN: Show HN Omnara](https://news.ycombinator.com/item?id=50183892)
+
+## 2026-10-23 (learn pass) — the interface layer is neutralised by treaty, and the messaging layer opens a friendly-name injection path
+
+### AAIF absorbs four interfaces from four rival vendors in one announcement (verified first-hand)
+
+Announced 2026-10-22 at AGNTCon + MCPCon North America (San Jose), read on
+[aaif.io](https://aaif.io/news/agentic-ai-foundation-announces-four-new-projects):
+
+| Donor | Project | Layer it occupies |
+|---|---|---|
+| Anthropic | **Agent Skills** | how an agent gains a capability (instructions + scripts + resources, loaded on demand) |
+| OpenAI | **Open Responses** | how an application talks to models across providers (schema, streaming events, tooling — based on the Responses API) |
+| Hugging Face | **OpenEnv** | how agents are trained/evaluated (containerised service exposing MCP + the Gym training protocol) |
+| Alibaba | **OpenSandbox** | where an agent runs (general-purpose sandbox platform, Docker + Kubernetes runtimes) |
+
+That is **10 hosted projects, up from the three launched in December 2025**: A2A, Agent Router,
+agentgateway, AGENTS.md, goose, MCP + the four above. Two sentences from the release carry the weight:
+
+- Manik Surtani (AAIF CTO): "**four different companies chose to contribute them to neutral
+  governance**" — the donors are rivals, which is the only reason a neutral home is worth anything.
+- David Soria Parra (Anthropic, MCP co-creator): "the AAIF has done important work in giving MCP a
+  neutral home **since we donated it less than a year ago**" — MCP's neutralisation is the precedent
+  the other three were sold on.
+
+**Why this is the batch's structural event:** every donated artifact is an *interface*, and none is a
+model or a runtime implementation. Thesis 1 says the stack decomposes by layer and each layer produces
+winners; this is the same decomposition seen from the governance side — the layer where lock-in is
+decided is the interface, and four parties who each stood to lose from a rival's interface winning
+handed theirs to a foundation instead of fighting for it. The counter-reading, which the release does
+not answer: **no financial terms, no adoption figures beyond the project count, and no stated
+conflict-resolution mechanism** beyond the phrase "vendor-neutral governance". A foundation that hosts
+ten interfaces can still be captured in committee; the test is whether a member ever loses a vote it
+cares about, and nothing here has produced one yet.
+
+### Reason Network: agent-to-agent messaging becomes a team primitive — with the injection path in the README
+
+`reason-machines/reason-network` (Apache-2.0 engine, Rust; verified 2026-10-23: **1,081★**, created
+10-16, pushed 10-23). One small daemon per computer registers every coding-agent session on it —
+Claude Code, Codex, Cursor, Gemini CLI, Copilot CLI, Grok CLI, opencode, pi, DeepSeek Harness, Reason —
+and publishes **presence** (who is running, which repo and branch, busy or idle) to everyone on the same
+network. Agents get MCP tools `list_team`, `send_message`, `ask_user` plus `check_inbox`; messages can
+carry up to ten text files. Computers talk peer-to-peer over **iroh** with end-to-end encryption;
+hosted assistants reach the network through an MCP server at `mcp.reasonmachines.com`. Split licence to
+carry: **engine Apache-2.0, setup CLI free but not open source, service free.**
+
+The architecturally interesting part is not the P2P layer — it is the **delivery-timing differential**:
+
+- **mid-session injection**: Claude Code, Codex, opencode, pi, Reason
+- **next step**: Cursor, Gemini, Copilot, Grok
+
+With the same network, the same tools and the same encryption, the harness's message-delivery point
+decides whether a teammate's text arrives *inside* a running turn (a live prompt-injection surface) or
+*between* turns (a queue a human or policy can gate). "Can this harness be steered by another agent"
+is therefore a **per-harness property**, not a network property — the first capability comparison in
+this file that a buyer can check without a benchmark.
+
+The README's own operational warning is the line to carry and it is honest about the class: **never
+accept a webhook from a teammate's message, a file, or a web page**, "because an agent that takes
+instructions from another agent is a prompt-injection path with a friendly name." The trust boundary is
+drawn where it should be (E2E between your own machines) and disclosed where it leaks (a hosted bot
+necessarily routes through Reason's relay).
+
+Sources: [AAIF announcement](https://aaif.io/news/agentic-ai-foundation-announces-four-new-projects) · [Linux Foundation press release](https://www.linuxfoundation.org/press/agentic-ai-foundation-announces-four-new-projects-agent-skills-open-responses-openenv-and-opensandbox) · [reason-machines/reason-network](https://github.com/reason-machines/reason-network) · [Reason Network](https://reasonmachines.com/network)

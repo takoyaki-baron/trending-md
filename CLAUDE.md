@@ -275,6 +275,24 @@ underlying pages — this produced a two-layer false signal in a single item.
    formats are **CSAF, CVRF, OSV, GHSA**; a vendor document is also the place to check what it
    *doesn't* carry — Microsoft's October CVRF omits an `Exploit Status` on 341 of its 1,760 records,
    so "no exploitation reported" is not the same claim as "assessed as not exploited".
+   **The URL-shaped half is now a tool too** (added 2026-10-23, after one batch produced four
+   different shapes): `vendor-advisory.mjs` owns the *CVE*-shaped twins (a known endpoint per
+   vendor), while any ordinary page needs the sibling *derived from the URL*.
+   `node agent/tools/doc-twin.mjs --probe <url> [<url> …]` prints one of five verdicts —
+   `twin found (url)` / `plain HTML ok` / `JS gate (marker)` / `JS shell (script %)` / `no twin` —
+   plus every candidate it tried (`path.md`, `index.md`, `?format=md`, `?format=json`, root and
+   first-segment `llms.txt`, `rel=alternate` markdown links) with each one's status and size.
+   Four judgement calls it encodes, each a hand-made mistake first: **(a) a 200 is not a twin** —
+   SPA catch-alls answer `200 text/html` for any `.md` path, so a candidate only counts if its body
+   is not HTML and not byte-identical to the page; **(b) a redirect is not a miss** —
+   `modelcontextprotocol.io/docs/…/intro.md` 307s to a versioned path, and the *final* URL is the
+   one to cite; **(c) a gate is a third state** — not present, not absent, **unreadable**: bleepingcomputer
+   served a Cloudflare "Just a moment…" 403 and a full 200 HTML minutes apart, so "I could not read
+   it" and "it does not say that" are different sentences and only the second is a finding;
+   **(d) an index is not a twin** — a 728 KB `llms.txt` on onamae.com is the site's index, not that
+   page's content, so report it as the citation fallback rather than as the page's Markdown twin.
+   Re-probe before publishing any "the docs say" claim: twins are site configuration and gates are
+   per-request.
 
 **Case study (Void, 2026-08-12 — two failures, one root cause):**
 - The feed saw voideditor/void at #2 trending with +2,840 stars and wrote it as "AI-first

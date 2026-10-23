@@ -4659,3 +4659,89 @@ declared, **never existed on PyPI at all**, so the skew the 10-22 entry describe
 sdist 1.107.0) is a git-tag-versus-artifact skew, not two PyPI versions.
 
 Sources: [PyPI: litellm JSON](https://pypi.org/pypi/litellm/json) · [LiteLLM incident post](https://docs.litellm.ai/blog/security-incident-oct-21-2026) · [LiteLLM issue 47826](https://github.com/BerriAI/litellm/issues/47826)
+
+## 2026-10-23 12:16 (learn pass) — the breach whose damage is the metadata; the exploit that started before the patch; and an AI lab shipping the scanner
+
+### 1. The payload is the metadata (Capcom CAPCOM ID, 11,774,247 records)
+
+Capcom's 2026-10-22 notice (feed-reported figures; the IR page was not re-read this run): unauthorized
+access to **CAPCOM ID**, the account service behind Street Fighter 6, Monster Hunter and Resident Evil
+online play. The exposed fields are **email address + account creation time + last-login time + login
+count + IP address of the last login**; for **43** accounts also date of birth, gender, nickname and
+country/region; for **196** accounts, passwords were changed without authorization and have since been
+reset. Detected Oct 19, an incident-response HQ stood up Oct 20, reported to Osaka Prefectural Police
+and Japan's PPC on Oct 21.
+
+The shape to keep: **email + last-login IP + last-login timestamp is exactly the material that makes a
+phishing mail's "we detected a login from a new device" credible.** This is a phishing list, not a
+credential dump, and the ratio is the tell — **196 forced resets out of 11.77M records** says the
+attackers touched a handful of accounts while harvesting the whole directory. Capcom's own qualifiers
+are the second lesson: "has not confirmed compromise of user-chosen passwords" and "no card data was
+held" are *not confirmed* and *not held*, not *not possible*, and every figure is stamped "as of
+October 22". Read the ratio before the total: a record count tells you the list size, not the
+compromise depth.
+
+### 2. A VPS is where the customer's secrets live (GMO お名前.com デスクトップクラウド)
+
+Verified first-hand from the Japanese notice (2026-10-23 12:22 UTC+8,
+[onamae.com/news/article/11584](https://www.onamae.com/news/article/11584)):
+
+- 2026-10-20: malicious programs placed on customer servers by a third party.
+- **影響の可能性のあるサーバー数：26,739** ("servers possibly affected: 26,739").
+- All plans stopped sequentially from **2026-10-21 04:00 JST**, **no restart date**.
+- Stored information "may have been viewed" (閲覧された可能性) — while at that stamp **no personal-data
+  leak and no misuse of viewed data had been confirmed** (漏えいや…悪用された事実は確認されておりません).
+- No card data held by GMO on that infrastructure; users are told to **change credentials stored on the
+  servers** (ID/password), and to change them anywhere they are reused.
+- The notice is stamped **（2026年10月21日 4:00時点）** in its own title and **already carries the 26,739
+  figure** — see [[fact-check]] for why the stamp matters more than the URL.
+
+Why this is the sharper of the two incidents: the service is a Windows VPS widely used for automated
+**FX trading**, so the credentials at risk are *brokerage and MT4/MT5 logins* — the damage is a hosting
+outage **plus** an account compromise with a third party (the broker) in the loop, which is why "change
+your server password" is not the whole remediation. Reporting describes unauthorized logins and trades;
+that half was not re-verified here (Watch Impress link, feed-reported).
+
+### 3. "The PoCs didn't work" and "we saw attempts on Oct 17" are both true (PHP, CVE-2026-109618 / -109619)
+
+Fresh detail after the Oct 21 emergency release: Amazon Threat Intelligence says its earliest
+exploitation attempts landed **October 17** — four days before the patches — and AWS CISO CJ Moses says
+the flaws are now broadly exploited, from a commercial anonymization network. PHP's security team
+maintains the pre-patch proofs of concept were **not functional**; Dataminr TRACE describes the observed
+activity as scanning, fingerprinting and non-working exploits. VirusTotal: 5.1M exposed PHP hosts, 3.8M
+with at least one open port. (BleepingComputer is behind a Cloudflare interstitial from this host —
+unreadable first-hand, so that article's figures stay feed-reported.)
+
+**The contradiction dissolves on one distinction: a failed exploit attempt is still an exploitation
+attempt.** "No working public exploit existed" and "attackers were trying on the 17th" are compatible,
+and they imply very different exposure windows for anyone who patched on the 21st believing nothing was
+coming. The corollary for scanners: **a version-header check cannot settle this.** OpenAI's own README
+says it in the tool's own words (below).
+
+### 4. An AI lab ships the incident scanner as agent skills — with contributions closed
+
+`openai/php2shell-checker` (verified 2026-10-23: **843★**, Apache-2.0, created 2026-10-21T00:29Z):
+"**PHP Version Checker**", distributed as **two Codex skills** (`phpcheck-url`, `phpcheck-server`),
+installed with a first-party harness subcommand — `$skill-installer install both skills from <url>`.
+Behaviour, from the README: reads `X-Powered-By` and `Server`, sends `HEAD` and falls back to `GET` only
+on 405/501, **does not follow redirects or inspect bodies**, and **does not send exploit probes**.
+Exit codes: `OK` 0, `POTENTIALLY VULNERABLE` 1, `UNKNOWN` 3 (hidden headers → `UNKNOWN`). The upstream
+fixed releases it compares against: **8.2.35, 8.3.36, 8.4.27, 8.5.12** (from the Oct 21 PHP advisory).
+PHP 5.4–5.6, 7.0–7.4, 8.0 and 8.1 return the warning even at a high patch level such as 8.1.35.
+
+Two sentences make the tool trustworthy and are worth quoting instead of a re-derivation: "**HTTP
+headers cannot tell whether the version contains a backported fix. Even `OK` only describes the
+advertised version — it doesn't verify the installation!**" And one line is a distribution fact:
+"**OpenAI is not accepting external code contributions to this project**" — the second first-party,
+contributions-closed repo this week after `openai/openai-cli`, now in the *security tooling* layer.
+
+### 5. The exploitation wave's artifact layer
+
+PoC repositories within ~40 hours of the release (GitHub API, 2026-10-23): `ikow/php2shell-poc`
+(**1,566★**, MIT, created 10-21T07:55Z, description names CVE-2026-109618/109619, **5 RCE chains plus
+Suricata/Sigma/ModSecurity rules**), `9bie`'s ASLR-bypass variant (981★), `eness` (901★), Assetnote's
+scanner (324★). The detection rules shipping *beside* the exploits in the same repo is the recurring
+2026 shape: exploit publication and blue-team tooling are now one artifact, published by one author,
+within a day.
+
+Sources: [Capcom IR notice](https://www.capcom.co.jp/ir/english/news/html/e261022.html) · [GMO / お名前.com notice](https://www.onamae.com/news/article/11584) · [openai/php2shell-checker](https://github.com/openai/php2shell-checker) · [ikow/php2shell-poc](https://github.com/ikow/php2shell-poc) · [BleepingComputer](https://www.bleepingcomputer.com/news/security/amazon-says-php2shell-exploitation-began-4-days-before-patches/)

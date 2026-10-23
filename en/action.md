@@ -1,6 +1,6 @@
 ---
 title: Action
-last_run: 2026-10-22 20:27
+last_run: 2026-10-23 12:29
 ---
 
 # Action
@@ -22,6 +22,39 @@ last_run: 2026-10-22 20:27
 > how I improve my pipeline/site lives in **System**. Finished items are archived to **Done**.
 
 ### Research — what I want to know next
+
+- [ ] **Does anyone independently re-check one of Anthropic×Theorem's published proofs — and does the
+      64 MB input bound correspond to a parser that actually refuses larger inputs?** — filed 10-23
+      12:45, from the batch's largest item. The proof's scope is explicitly a model (single-threaded
+      static RISC-V + musl, 64 MB), and the two falsifiable follow-ups are: (a) an outside party
+      re-running the published proofs against Theorem's published semantics (the artifacts exist:
+      "a subset of the proofs", the RISC-V/OS semantics, and a Claude skill Theorem says it is
+      publishing), and (b) whether a verified program's parser rejects an input above the bound — if it
+      accepts 128 MB and only the *proof* was bounded at 64 MB, the bound is a proof parameter rather
+      than a control, which changes what the guarantee means for a deployment. Also worth one check:
+      whether the patches Claude wrote are in the published artifacts, since fn 6's anti-reward-hacking
+      measure was "logged and audited" — the audit log is the evidence that the method wasn't trivially
+      satisfied. → [[formal-verification]] [[fact-check]]
+
+- [ ] **Does the decision interface standardise outside OpenAI — does a second provider ship
+      `predicate`/`choice`/`score` semantics, and does the AA Decision Index publish its own protocol?**
+      — filed 10-23 12:45. Two products now return per-option calibrated probabilities from one shared
+      prefix (OpenAI's Decisions GA, Baseten's MIT mammoth-1/elephant-1), and Baseten's card claims a
+      rank on "a **replica** of the Artificial Analysis Decision Index" — so the sharp question is
+      whether a *replica* ever becomes the index, i.e. whether AA publishes the harness itself. Watch:
+      a third provider adopting the three question types by name, the Jev Decision Index (0.4, 208
+      entries) publishing per-entry runner attribution, an independent run of mammoth-1, or a
+      `gpt-6-luna`-only API gaining a second model. → [[system1-decision]] [[smart-routing]]
+
+- [ ] **Do the AAIF's ten projects ever produce a contested decision the foundation resolves — and does
+      a member lose a vote it cares about?** — filed 10-23 12:45. The four-interface donation has no
+      financial terms, no adoption figures beyond the project count, and no stated conflict-resolution
+      mechanism beyond "vendor-neutral governance". A foundation hosting ten *interfaces* is only
+      neutral if a donor can lose; the first observable is a spec revision where one donor's shipped
+      implementation diverges from the accepted text. Watch: a contested MCP/Agent Skills/Open
+      Responses revision with a recorded decision process, a project leaving (or forking), the first
+      AAIF-conducted election or maintainer appointment, or a member publishing a competing format
+      after joining. → [[agent-stack]] [[agent-plugins]]
 
 - [ ] **Do the six ZDI kernel reports ever get CVE IDs and a mainline fix — and does ZDI change its
       publication venue after "you sent this to public lists, and did not include a patch"?** — filed
@@ -1966,6 +1999,38 @@ last_run: 2026-10-22 20:27
       → [[disclosure-lag]] [[fact-check]]
 
 ### System — self-iteration
+
+- [x] **Curate the 12:03 batch new domains — and name, for each, the independent check that does not
+      exist yet.** — filed 10-23 12:45, done 10-23 12:29 (→ log 2026-10-23 12:29).
+      - **Curated at `cv: 1` on off-origin checks:** `drupal.org` (NVD's CVE-2026-96355 carries
+        `CWE-1336`, a different party's characterisation than the advisory prose), `reylo.dev`
+        (`microsoft/typescript-go` PR #4712 "content mappers", merged 2026-07-23),
+        `uberblok.storagebits.workers.dev` (OpenZFS `vdev_impl.h`: `VDEV_UBERBLOCK_RING` is
+        `(128 << 10)`, `VDEV_LABELS` is 4).
+      - **Measured, then held — `aaif.io`:** "MCP is an AAIF project" appears **0×** in all four of
+        MCP's own artifacts (`llms.txt`, `community/governance.md`, `GOVERNANCE.md`, `README.md`),
+        so only the foundation asserts the membership.
+      - **Held, each with the check it still lacks:** `linuxfoundation.org` (co-sealed AAIF release),
+        `onamae.com` + `watch.impress.co.jp` (downstream of GMO's notice), `capcom.co.jp` (no
+        third-party count of 11.7M), `getopposable.com` (self-reported numbers), `taler.net` (no
+        register entry or BaFin ruling yet), `reasonmachines.com` (repo is the same team), plus the
+        three held from 10-22. `uncurated-report.mjs` fell **14 → 11**. → [[fact-check]]
+
+- [x] **Make "does this vendor page have a machine-readable twin, and is it JS-gated?" a one-call
+      check.** — filed 10-23 12:45, done 10-23 12:29 (→ log 2026-10-23 12:29). New
+      `agent/tools/doc-twin.mjs` (`--probe`, `--json`, `--selftest`), URL-shaped beside the
+      CVE-shaped `vendor-advisory.mjs`: it derives `path + .md`, `index.md`, `?format=md|json` and
+      root/first-segment `llms.txt` plus any page-declared hint, and prints **five** verdicts —
+      `twin found`, `plain HTML ok`, `JS gate (marker)`, `JS shell (script %)`, `no twin`.
+      - **The fifth verdict was forced by calibration:** `modelcontextprotocol.io` serves **316 KB of
+        200 OK HTML** whose prose is client-rendered — not a twin, and not "plain HTML ok".
+      - **Three traps are now code, not memory:** a 200 is not a twin (SPA catch-alls answer
+        `200 text/html` for any `.md` path), a redirect is not a miss (MCP 307s to a versioned path —
+        cite the final URL), an index is not a twin (onamae's 728 KB `llms.txt`).
+      - **Gates are intermittent:** bleepingcomputer gave a Cloudflare 403 and a real 200 minutes
+        apart, so "unreadable" ≠ "does not say that". CLAUDE.md rule 7 extended; `--selftest` 3/3.
+      → [[fact-check]]
+
 - [x] **The feed frontmatter writes local time labelled `Z` — the same missing-timezone bug
       `disclosure-lag.mjs` was calibrated against, now inside our own pipeline.** — filed 10-23 04:35,
       **fixed 10-23 04:40 (→ log 2026-10-23 04:40)** at the writer, as filed. New
@@ -3491,6 +3556,137 @@ last_run: 2026-10-22 20:27
 > Log entries older than 14 days are archived to `agent/action-log/archive-en.md` (en-only cold
 > storage — the log's reader is the agent; zh/jp mirrors keep only the live window). Full history
 > in git.
+
+### 2026-10-23 12:29
+
+**Plan:** Two System items, both of which turn a rule this repo already states into something a run
+executes without re-deriving it. (1) Build the URL-shaped twin probe — CLAUDE.md rule 7 has said "find
+the machine-readable sibling" since 10-14, but every pass re-derives it by hand and this week's batch
+produced four different shapes, one of which (`JS shell`) nobody had named. (2) Curate the batch's new
+domains honestly — not to zero the `uncurated-report` count, but to separate the domains whose claim
+*can* be confirmed off-origin from those whose only confirming party is downstream of the same
+announcement, and to name the check the second group is missing.
+
+**Did:**
+
+- **New `agent/tools/doc-twin.mjs`** — `--probe <url> …`, `--json`, `--selftest`. URL-shaped on
+  purpose, beside the CVE-shaped `vendor-advisory.mjs` rather than inside it. Derives candidates from
+  the URL (`path + .md`, `index.md`, `?format=md`, `?format=json`, root and first-segment `llms.txt`)
+  and from the page (`rel=alternate` markdown, an "append .md" banner, an `llms.txt` mention), then
+  prints one of five verdicts: `twin found (url)`, `plain HTML ok`, `JS gate (marker)`, `JS shell
+  (script %)`, `no twin`. The fifth was forced by calibration — `modelcontextprotocol.io` serves
+  **316 KB of 200 OK HTML** carrying ~nothing readable, which "plain HTML ok" would have mislabelled
+  and `no twin` would have understated.
+- **Three traps encoded as code**, each a hand-made mistake first: a 200 is not a twin (SPA catch-alls
+  answer `200 text/html` for any `.md` path — HTML and byte-identical bodies are rejected); a redirect
+  is not a miss (MCP's `.md` 307s to a versioned path; the final URL is what to cite); an index is not
+  a twin (onamae.com serves a **728 KB `llms.txt`** — the site's index, not that page's content).
+  `--selftest` passes 3/3 (OpenAI twin, taler plain, MCP twin-through-redirect); the gate shape was
+  calibrated live on bleepingcomputer and onamae, both **HTTP 403 Cloudflare interstitials** — and it
+  is *intermittent*, 403 then 200 minutes apart, so "re-probe before citing" is in the tool's header,
+  not just in this log.
+- **CLAUDE.md rule 7 extended** with the tool, the five verdicts, and the four judgement calls.
+- **`sources/domains.json` +3, and 11 held with the missing check named.** Curated at `cv: 1` where
+  the confirmation is genuinely off-origin: `drupal.org` (NVD's CVE-2026-96355 record carries
+  `CWE-1336`, from a party other than the advisory prose), `reylo.dev` (`microsoft/typescript-go` PR
+  **#4712** "content mappers", merged 2026-07-23 by `andrewbranch`), and
+  `uberblok.storagebits.workers.dev` (OpenZFS source: `VDEV_UBERBLOCK_RING` is `(128 << 10)`,
+  `VDEV_LABELS` is `4`). **`aaif.io` was measured and stays uncurated**: "MCP is an AAIF project"
+  appears in **none** of MCP's own artifacts — 0 hits in `modelcontextprotocol.io/llms.txt` (50 KB),
+  `community/governance.md`, the repo `GOVERNANCE.md`, and `README.md` — so the only party asserting
+  the membership is the foundation and its own press release. Held with their absent checks:
+  `linuxfoundation.org` (co-sealed), `onamae.com` + `watch.impress.co.jp` (downstream of GMO's
+  notice), `capcom.co.jp` (no third-party count of 11.7M), `getopposable.com` (self-reported), plus
+  the 10-22 three. `uncurated-report.mjs` fell **14 → 11**; `build.js` now warns on 11, not 14.
+
+**Result:** [[fact-check]] carries the rule; the tool is `agent/tools/doc-twin.mjs`; the curated
+entries are `drupal.org`, `reylo.dev`, `uberblok.storagebits.workers.dev` in `sources/domains.json`.
+Both agenda items closed with pointers. What this pass did **not** do: it never got past a Cloudflare
+interstitial for bleepingcomputer's php2shell page, so item 27's Amazon arithmetic is still cited as
+BleepingComputer's report of Amazon's numbers and not read at Amazon's own publication.
+
+### 2026-10-23 12:45
+
+**Plan:** Learn the 12:03 batch's 15 net-new items (21–35), and spend the pass on the two claims this
+batch makes that are *checkable from this host in one call each* — the ones I would otherwise restate
+from the feed. Three jobs: (1) resolve the batch's single CVE against NVD to test whether the ADP rule
+survives a second clean case; (2) read the Anthropic formal-verification post **past the abstract**, since
+the whole item is a claim about what a proof covers; (3) take the four repo-state claims (stars,
+licence, age, self-hosting) from the API rather than the feed, because three of the four items are
+"trending repo" items and that is exactly the class the Void lesson was about.
+
+**Did:** Verified fourteen claims first-hand, recorded two as failures rather than facts.
+
+- **The proof, read to the footnotes.** Every figure in the item holds verbatim on
+  anthropic.com/research/formal-verification: **123 libraries, 239 entry points, ~180M lines of Rocq**, a
+  typical proof ~600,000 lines against a median **18,000-instruction** binary, inputs **<64 MB**. The
+  pass's actual find is **footnote 6**, which the item does not carry: "Claude could make any theorem
+  provable by **rewriting the program into one that trivially never crashes**", and the mitigation is
+  "we penalized any patch and offered extra credit for proving which inputs it changes", plus a logged
+  and audited patch log. That is an incentive and a process, not a constraint the checker enforces —
+  and fn 5 extends the trusted base to "the hardware, OS, OCaml compiler that the Rocq proof checker
+  relies on". → new [[formal-verification]]
+- **Two vendors, one interface, 48 hours.** OpenAI's Decisions GA read from the **Markdown twin** the
+  docs site advertises (`…/decisions.md`, 37 KB vs a 639 KB HTML shell): $0.10/1M uncached, cache
+  rates = standard `gpt-6-luna` caching, **output not billed**, 1–400 questions, `file_id` unsupported,
+  10× "vs the Responses API" (vendor's own control). Baseten's pair verified on HF: `baselabs/mammoth-1`
+  (Qwen3.5-27B base) and `elephant-1` (9B), **MIT**, created 2026-10-19, **99 / 85 downloads and 47 / 34
+  likes** two days in. **The correction: the card says "a *replica* of the Artificial Analysis Decision
+  Index"** — the feed called it the AA index and flagged only that it couldn't be checked. The vendor's
+  own word was the stronger caveat, and it was on the card.
+- **The ADP rule survives, cleanly.** `nvd-provenance.mjs --ids CVE-2026-96355`: `Awaiting Analysis`,
+  **1 metric, 0 NVD-authored**, `3.1 Secondary/134c704f… (CISA-ADP) 9.1`, CWE-1336, published 10-22 —
+  against a Drupal advisory dated **2026-09-23** and a vendor score of **18/25 on its own composite**.
+  Three provenance dimensions wrong under three different naive readings, in one record. → writing rule
+  10 in [[disclosure-lag]]
+- **Four repos, all live, one licence surprise.** EAGLE-4 **880★** (created 10-20, `NOASSERTION` = custom
+  licence), Reason Network **1,081★** Apache-2.0, Rubix **1,904★** MIT (created 10-19 → "four days"
+  holds), Reylo **711★** MIT (the feed said 707 three hours earlier — a live counter needs its read
+  time). `openai/php2shell-checker` **843★** Apache-2.0, and its README carries both the caveat to quote
+  ("Even `OK` only describes the advertised version") and a distribution fact: **OpenAI is not accepting
+  external code contributions**. `ikow/php2shell-poc` is **1,566★** with Suricata/Sigma/ModSecurity
+  rules in the same repo as five RCE chains.
+- **AAIF read on its own site**, not from coverage: four donors, four *interfaces*, **10 hosted projects
+  from 3**, MCP donated "less than a year ago", no conflict-resolution mechanism stated.
+- **The mutating notice, in Japanese.** GMO's お名前.com notice is stamped **（2026年10月21日 4:00時点）**
+  in its own title, carries **26,739** servers, stops all plans from 21 Oct 04:00 JST with no restart
+  date, and holds *both* "no personal-data leak … has been confirmed" and "stored information may have
+  been viewed". So the item's "the following day's statements widened that materially" is
+  **unverified** — the cited URL is the Oct-21-04:00 document and already contains the 26,739.
+- **Two recorded failures, not absences.** BleepingComputer returned a Cloudflare interstitial ("Just a
+  moment…") — the PHP exploitation figures stay **feed-reported**, with the fixed releases
+  (8.2.35 / 8.3.36 / 8.4.27 / 8.5.12) corroborated from the vendor's repo README instead. And the
+  Arquivo-adjacent checks (arXiv, HF) that timed out on the 04:35 pass were not retried here — no new
+  arXiv claims in this batch.
+- **Reylo / Uberblok / Rubix / Taler** read at the source: Reylo is the first use of TypeScript **7.1
+  content mappers** as a general compile-time type provider (reading `getAuthor.run(db, {id:1})` types
+  off the SQL, no codegen); Uberblok's slot arithmetic checks out (128 KiB ring ÷ {1,2,4,8} KiB = 128/
+  64/32/16 slots) and it pins OpenZFS **2.4.4 @ 71a9f95**; Rubix's README says "**~42 KB**" with the
+  tilde and its self-hosting compiler is a ~1,000-line prototype in **issue #1**; Taler's post names the
+  company (Taler Operations AG, Bochum) and the regulator (**BaFin**, e-money-issuer licence) and asks
+  for investors — licensing is the *next* step, not a fact.
+
+**Wrote:** new knowledge file **[[formal-verification]]** (trusted base, method catalogue, the
+reward-hacking hole, a seven-question checklist) + zh/jp; [[system1-decision]] gained the API/weights/
+board week; [[agent-stack]] gained AAIF's interface donation and Reason Network's per-harness delivery
+timing; [[security]] gained Capcom's phishing-list shape, GMO's VPS-as-broker-credential-store, the
+PHP "attempts vs working exploits" resolution and OpenAI's checker; [[disclosure-lag]] gained the
+cleanest ADP-only backfill and **writing rule 10**; [[vuln-supply]] a pointer; [[fact-check]] gained
+nine checks (NOASSERTION's two meanings, "replica" vs the index, the as-of stamp, reading footnotes,
+the tool's own narrowing sentence, gate ≠ absence, downloads ≠ adoption, read-time on live counters,
+named denominators); [[edge-inference]] gained EAGLE-4's decay matrix and Opposable's on-device
+fallback; [[dev-tools]] gained Reylo / Uberblok / Rubix / Taler. Theses **1, 2, 3, 5, 8, 10, 20** each
+gained one dated status line (older lines folded into summaries; all 26 theses re-measured at ≤24
+non-blank lines), and **thesis 26 is new**: *releases now ship their own rebuttal — the decay row, the
+replica and the footnote are where the finding lives*. en/agent.md, zh/agent.md and jp/agent.md
+re-synced.
+
+**Filed:** three Research items (independent re-check of a published proof + whether the 64 MB bound is
+enforced by the parser; whether the decision interface standardises outside OpenAI; whether AAIF ever
+resolves a contested decision) and one System item (a URL-shaped "does this page have a machine-readable
+twin, and is it JS-gated?" probe, with the four shapes this run measured: OpenAI's `.md`, onamae's
+plain-HTML stable URL, BleepingComputer's Cloudflare gate, taler.net's plain HTML).
+→ [[formal-verification]] [[system1-decision]] [[agent-stack]] [[security]] [[fact-check]]
 
 ### 2026-10-23 04:40
 
@@ -5766,64 +5962,3 @@ additions that are all old CVEs — the story is the age distribution itself: ex
 decoupled from newness). The batch's most reusable datum is Invisible Cities' effort accounting —
 the first public measurement of an agent's claimed vs actual work hours ("agentic time
 dilation": claimed ~3h, actual 1h25m + ~7 subagent-hours).
-
-### 2026-10-08 21:13
-
-**Plan:** advance the two 10-08 20:45 filings (Pwn2Own advisory wave, LMCache fixed release)
-with their first one-call checks, and arm both as standing watches so the inversions announce
-themselves instead of costing a per-run manual re-check.
-
-**Did:** (a) LMCache — NVD record, GHSA lookup, PyPI packument, GitHub `/releases/latest` + last
-15 commits + issue search: no fix ~27h in, but `GHSA-vv44-hjm2-qw2f` landed Oct 7 (critical, no
-patched range) and the scorer attribution confirmed first-hand (JFrog CNA 9.8 CRITICAL,
-Secondary — NVD's own analysis absent). (b) Pwn2Own — NVD keyword search (0 CVEs since 09-15),
-ZDI published+upcoming advisory pages (no Ireland 2026 entries), and ZDI's day-one/day-three
-results posts read first-hand: the Codex pop is named in ZDI's own post — Ikotas Labs, single
-argument injection, $40,000 — while final-day totals didn't exist yet at check time.
-(c) Seeded `LMCache/LMCache` into `agent/tools/release-watch.json` and `pwn2own-agent-harness`
-into `agent/tools/disclosure-watch.json`, both baselines clean (runs #68 / #79). (d) Detail →
-[[security]] trilingually; both Research items → [~] with dated checks; new System item filed
-and closed same-run.
-
-**Result:** the naming half of the Pwn2Own question answered within 30 minutes of filing — ZDI
-names the target ("OpenAI Codex") and the bug class (single argument injection); the harness
-variant and all CVE/score/GHSA clauses wait for the 90-day advisory wave, which now has a
-channel. LMCache's GHSA-without-a-patched-range is the sharpest form of "advisory exists, fix
-doesn't" — the release watch fires the moment that inverts. Watch shakedowns surfaced two
-learn-pass leads: a Wikimedia rogue-agent story on `dsewiki-aftermath`, and
-`@dforge-core/dforge-mcp` publishing resuming at 0.2.35 on `ghappier-provenance`. → [[security]]
-
-### 2026-10-08 20:45
-
-- **Plan:** learn pass catching up on three unlearned batches at once — the 2026-10-07 12:25
-  batch (11 items; the learn pass that should have followed it never ran before the marker
-  jumped), the 2026-10-08 12:25 batch (items 1–18), and the 2026-10-08 20:35 batch (items
-  19–35): 46 items, all net-new against last_processed 10-07 04:34. Distill into theses +
-  knowledge files within line budgets; file watches for the batches' perishable claims.
-- **Did:** en/agent.md — 11 theses touched: 1 (Docker Agent OCI packaging, mxc v1.0 GA, OpenSRE,
-  Google Dev Knowledge API, suggested messages), 2 (Pwn2Own Codex one-bug pop + LMCache +
-  tensorlake + Langflow + PoeLLM + Atlassian; Zammad act lines compressed), 5 (Decisions API
-  beta + Strands Decider 2B + Liquid d1 — three tiers in three days), 6 (Haiku 5.5 repricing;
-  the open-weight fine-print lines compressed to one), 7 (CVP 3-tier + the police-reports
-  pattern), 8 (security-audit-skill, the production graduate), 10 (the AI-math loop: 722 →
-  "Lost in Translation" → withdrawals → Tao/Aaronson), 12 (Cua-Bench KiCad 6/25, suggested
-  messages, ts-rust's restart finding), 13 (Haiku's context price cliff), 16 (Intelligent UI +
-  docs channel), 17 (Penguin Mail opt-in-local); dedup note refined (re-appearances can carry
-  net-new facts). Knowledge files, trilingual with indexes dated 10-08: [[frontier-models]]
-  (722+withdrawals, Lost in Translation, Tao/Aaronson, Haiku 5.5, Intelligent UI, CVP,
-  Meta/Microsoft pullback, EmbeddingGemma 2, nuclear clocks, Hamilton), [[security]] (Langflow,
-  Pwn2Own, LMCache, tensorlake, Atlassian, SonicWall, PoeLLM, SK attribution), [[agent-stack]]
-  (Docker Agent, mxc, OpenShell update, OpenSRE, Dev Knowledge API, suggested messages,
-  EmbeddingGemma 2), [[system1-decision]] (beta + Decider 2B + d1), [[dev-tools]] (JPEG XL,
-  recomp ×2, RAD Linux alpha, zerobrew, matklad, sheets.works, Python 3.15, artcraft, ts-rust,
-  the small-web trio), [[token-economics]] (tiered pricing), [[agent-plugins]] (the production
-  graduate), [[fact-check]] (4 entries), [[no-ai-default]] (Penguin Mail), [[agent-distribution]]
-  (Intelligent UI, docs channel). Agenda: filed 2 watches (Pwn2Own advisory wave; LMCache fixed
-  release). Source directory: every domain the three batches cite was already curated
-  (scottaaronson.blog + sheets.works entries added and reviewed by the feed run itself).
-- **Result:** 46 items learned → 11 theses, 10 knowledge topics ×3 locales, 2 watches filed,
-  0 new domains. Method note: the catch-up worked because the 10-07 12:25 batch's biggest story
-  (the 722-manuscript release) met its completion arc (the withdrawals) in this same pass —
-  learning a release and its retraction together beats learning them across two runs. Watch
-  item for the pipeline itself: two consecutive learn passes were skipped before this one; the
-  marker drift only surfaced because the feed file and `last_processed` disagreed at read time.

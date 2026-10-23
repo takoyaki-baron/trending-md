@@ -651,3 +651,95 @@ claim about the clock, not a reading of it. Now enforced in `build.js` and stamp
 `agent/tools/feed-stamp.mjs`, so the check has a writer-side fix rather than a permanent warning.
 
 Sources: [pwn.watch incidents.json](https://pwn.watch/incidents.json) · [PyPI: litellm](https://pypi.org/pypi/litellm/json) · [nodejs.org dist index](https://nodejs.org/dist/index.json) · [npm: storybook](https://registry.npmjs.org/storybook)
+
+## 2026-10-23 12:16 (learn pass) — nine checks, most of them one call
+
+**1. `NOASSERTION` is not "no licence" — and the two possibilities are opposite risks.** GitHub's
+`license.spdx_id` returns `NOASSERTION` both when a repo has **no licence file** (all rights reserved by
+default — the worst case) and when it has a **custom licence** the detector can't map (unknown terms —
+a different problem). `eagle-hq/EAGLE-4` reads `NOASSERTION` and is a custom "Eagle-4" licence; the same
+value appeared on `context-mode` and on `hackios-xnu-kernel` within ten days. **The API can only tell you
+the licence is unclassified; open the LICENSE file and quote the terms**, or say "unclassified" and mean it.
+
+**2. A *replica* of someone else's index is not that index.** Baseten's model card claims "**#1 on a
+replica of the Artificial Analysis Decision Index**: 65.9, ahead of d1-ultra (65)". The feed's item said
+"65.9 / 65.2 on the Artificial Analysis Decision Index" and flagged only that it "is not one we were able
+to check independently" — the vendor's own word *replica* was the stronger caveat, and it was sitting on
+the card. When a vendor names a third-party index, search the card for the self-qualifier before
+searching for the index.
+
+**3. A notice stamped "（2026年10月21日 4:00時点）" in its title has no history — the stamp *is* the version.**
+GMO's お名前.com notice lives at one stable URL whose content mutates; the only marker of which state you
+are reading is an "as of HH:MM" phrase inside the document's own title. Two consequences: **re-fetch
+before quoting**, and **do not infer a sequence of statements from a difference in framing.** This
+document simultaneously says "no personal-data leak … has been confirmed" *and* "information stored on
+the server may have been viewed" — those are not contradictory and they are not two notices. (The feed's
+item described an Oct-21 statement followed by an Oct-22 widening; the cited URL is stamped Oct-21
+04:00 and already carries the 26,739 figure, so the "widened the following day" half stayed unverified
+here — record it as feed-reported, not as a delta you measured.)
+
+**4. The strongest caveat is often in a footnote, not in the Limitations section.** Read the Limitations
+section *and then* the footnotes: Anthropic's formal-verification post puts the scope limits in §5 and
+puts the **reward-hacking** admission in footnote 6 ("Claude could make any theorem provable by rewriting
+the program into one that trivially never crashes") and the OCaml-compiler dependency in footnote 5.
+Footnotes are where a careful author puts the sentence that would complicate the headline.
+
+**5. Quote the tool's own narrowing sentence instead of re-deriving it.** `openai/php2shell-checker`'s
+README states "HTTP headers cannot tell whether the version contains a backported fix. Even `OK` only
+describes the advertised version — it doesn't verify the installation!" A tool that narrows its own
+output is stronger evidence than a tool that doesn't, and its caveat is one copy-paste away.
+
+**6. A closed HTTP gate is not an absence.** BleepingComputer returns a Cloudflare interstitial ("Just a
+moment…") to a plain fetch — the page exists and was not read. Mark it `unavailable`, then corroborate
+the *same fact* from an open primary (the vendor's repo README gave the fixed versions 8.2.35 / 8.3.36 /
+8.4.27 / 8.5.12 and the header caveat). Unavailable ≠ absent ≠ wrong.
+
+**7. Open weights are a licence fact, not an adoption fact.** `baselabs/mammoth-1` and `elephant-1` are
+MIT and their HF records read **99 downloads / 47 likes** and **85 / 34** two days after release — while
+the closed API with the same interface went GA the next day. Read the download count before writing
+"open weights arrive"; it is the cheapest adoption signal in the current feed.
+
+**8. A live counter needs its read time.** The feed said `colinhacks/reylo` had 707★; the API read three
+hours later says **711**, and `eagle-hq/EAGLE-4`'s 880 matched. Quote a star count as a snapshot
+("~710★ at 12:20 UTC+8"), and compute "N stars in D days" from `created_at` rather than the feed's
+phrasing — Rubix `created 2026-10-19T05:34Z` → "1,904★ in four days" holds exactly.
+
+**9. Two numbers from two pipelines are not an ablation — including when both are yours.** The Decisions
+API's "10x faster than the Responses API" and EAGLE-4's "3.35×" are both ratios to a control the vendor
+chose. The second is trustworthy because the control is named (the same engine without speculation, same
+allocation, ✅/⚠️/❌ per cell); the first is not checkable from outside. **Prefer the ratio that names its
+denominator**, and when quoting one that doesn't, say so in the same sentence.
+
+Sources: [eagle-hq/EAGLE-4](https://github.com/eagle-hq/EAGLE-4) · [baselabs/mammoth-1](https://huggingface.co/baselabs/mammoth-1) · [onamae.com notice](https://www.onamae.com/news/article/11584) · [Anthropic formal verification](https://www.anthropic.com/research/formal-verification) · [openai/php2shell-checker](https://github.com/openai/php2shell-checker)
+
+## 2026-10-23 12:29 (act) — three checks on whether you read the page at all
+
+The twin rule has been in CLAUDE.md since 10-14, but a single batch produced four page shapes and the
+hand-derived check got three of them wrong in different ways. The generalized form: **"the source says"
+is only true of the artifact you actually fetched**, and the failure states are not all "absent".
+
+**1. A 200 is not a twin — SPA catch-alls answer `200 text/html` for any `.md` path.** The obvious
+implementation of "append `.md`" checks the status and the size, and on a client-rendered site every
+candidate passes both: the app shell is served for `page.md`, `page/index.md`, `llms.txt`, and anything
+else that 404s in the router. Reject a candidate whose **body is HTML** or whose bytes are **identical
+to the page**, then judge. `doc-twin.mjs` prints the content-type and byte count of every probe it
+tried, which is what makes a wrong verdict auditable rather than plausible.
+
+**2. A gate is a third state, and it is intermittent.** BleepingComputer returned a Cloudflare
+"Just a moment…" interstitial (HTTP 403, 16 characters of visible text) and a full 98 KB page with real
+content minutes apart. Two consequences: **one 200 does not license "I read it"**, and **one 403 does
+not license "it does not say that"**. Record `unavailable` with the marker and the status — the same
+distinction `trust-store-check.mjs` makes per store and this file made for fetch timeouts — and never
+let an unread page become a negative finding.
+
+**3. An index is not a twin, and a JS shell needs the index.** onamae.com serves a **728 KB
+`llms.txt`** — a site-level index, not the content of the page you asked for; citing it as that page's
+Markdown version would attribute an index to a document. Conversely `modelcontextprotocol.io` returns
+**316 KB of 200 OK HTML carrying almost no prose** (client-rendered): not a twin, not "plain HTML ok".
+Its twin exists but one hop away — `/docs/…/intro.md` **307s** to a versioned path, so **follow the
+redirect and cite the final URL**.
+
+One call: `node agent/tools/doc-twin.mjs --probe <url>` → `twin found (url)` / `plain HTML ok` /
+`JS gate (marker)` / `JS shell (script %)` / `no twin`, with every candidate's status and size.
+
+Sources: [OpenAI docs (Markdown twin)](https://developers.openai.com/api/docs/guides/decisions.md) · [modelcontextprotocol.io](https://modelcontextprotocol.io/docs/getting-started/intro) · [onamae.com](https://www.onamae.com/news/article/11584) · [BleepingComputer](https://www.bleepingcomputer.com/news/security/)

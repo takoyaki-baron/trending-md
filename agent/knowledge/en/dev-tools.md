@@ -966,3 +966,72 @@ interacting with a read-only synchronous standby produces an outage that writes 
 at no component, and the operator's only signal is that writes stopped.
 
 Sources: [Ardent Performance: recovery_prefetch considered harmful](https://ardentperf.com/2026/10/20/postgres-recovery_prefetch-considered-harmful-and-causing-outages/) · [HN](https://news.ycombinator.com/item?id=50188614)
+
+## 2026-10-23 (learn pass) — four non-AI builds: a type provider, a museum, a 42 KB compiler, and a payments company
+
+### Reylo — TypeScript 7.1's content mappers used as a general compile-time type provider
+
+`colinhacks/reylo` (verified 2026-10-23: **711★**, MIT, created 2026-10-21T00:16Z; npm `0.3.0`, six
+releases). Colin Hacks' (Zod) design: `import getAuthor from "./get_author.sql"`, then
+`getAuthor.run(db, { id: 1 })` — and the result type follows the SQL, updating in the editor as the query
+changes, **with no codegen step**. It works because of TypeScript **7.1 content mappers**
+(`microsoft/typescript-go` PR 4712), which let a plugin define static types for foreign file extensions
+*inside* compilation. Postgres / MySQL / SQLite with bring-your-own driver (`pg`, postgres.js, `mysql2`,
+`better-sqlite3`, `Bun.sql`, Cloudflare D1).
+
+Why it belongs here rather than in a SQL-tooling note: **this is the first project in this file using
+7.1's extension hook as a general compile-time type provider**, which turns a language feature into a
+pattern others will copy — the same way typed-routes and `tRPC` became templates. Constraints are real
+and stated: it needs `typescript@beta` 7.1 (not drop-in for a build pinned to stable), and parameters
+still need explicit casts where the query doesn't pin a type down. The Rust in the repo is the
+parser/plugin, not the interface.
+
+### Uberblok — ZFS internals as a source-linked museum, and the on-disk arithmetic nobody documents
+
+A Show HN walkthrough of OpenZFS that starts at the uberblock and never leaves the arithmetic: `ub_txg`
+records the latest transaction group, `ub_rootbp` points at the root of the block tree, each disk carries
+**four labels** (two at each end), each label holds a **128 KiB ring of uberblocks**; a new uberblock goes
+into slot **`N mod slots`** (one slot reserved when multihost/MMP is enabled); slot size follows sector
+size, **rounded to 1 KiB and capped at 8 KiB**, which yields **128, 64, 32 or 16 slots**; on import ZFS
+picks the valid uberblock with the **highest txg**. Rooms cover COW, checksums/self-healing, vdevs,
+RAID-Z, snapshots/clones, the ARC, metaslabs, ZIL/SLOG, send/receive, encryption, plus a 3D ring showing
+successive txgs occupying slots. Code excerpts pin to **OpenZFS 2.4.4 at commit `71a9f95`**.
+
+The documentation pattern is what to steal: **explain the disjunction you actually depend on.** Most
+filesystem docs cover the model or the code; the detail that decides *which of your four copies is the
+one that mounts* is a slot-count table you normally only get by reading source. It is unaffiliated with
+OpenZFS and says so, and it does the licensing bookkeeping interactive explainers usually skip —
+**CDDL-1.0 for the quoted source, CC BY 4.0 for the text, MIT for the site.**
+
+### Rubix — a "42 KB" compiler in ~3,500 lines of pure x86-64 assembly, with self-hosting still a roadmap item
+
+`tek-sys-hub/Rubix-lang` (verified 2026-10-23: **1,904★**, MIT, `created 2026-10-19T05:34Z`, pushed
+10-22, language `Assembly`): `.ix` is a systems language whose production compiler is ~3,500 lines of pure
+GNU x86-64 assembly emitting standalone **Linux ELF64 and Windows PE64** binaries with **no libc, no C,
+no LLVM, no VM**. README (read first-hand): "**~42 KB compiler** building standalone native binaries in
+**sub-milliseconds**", 19 test suites (arithmetic, control flow, functions, structs, SSE2 floats,
+separate compilation, Windows cross-linking), examples include a 1,000-element sieve and a 200-element
+quicksort.
+
+Carry the candid part: **the self-hosting compiler is an early ~1,000-line prototype tracked in issue
+#1**, so "self-hosting" is a roadmap item, not a property — today's compiler is assembly all the way
+down. Both headline numbers are the author's own and carry tildes ("~42 KB", "sub-milliseconds"); a size
+claim about a build artefact and a speed claim about one machine are reproducible in an afternoon, and
+nobody had done it at file time. The 19 suites are the part you can check.
+
+### GNU Taler gets its regulated operator — the blocker was never the cryptography
+
+Read first-hand ([taler.net/news/2026-13](https://www.taler.net/en/news/2026-13.html)): after three years
+of NGI TALER, **Taler Operations AG is being founded in Bochum** to operate Taler in euro — first
+Germany, then the euro-zone — and the **next step is to apply to BaFin**, Germany's financial supervisor,
+for a licence as an **e-money issuer**. Taler issues bearer tokens representing value, which makes it
+electronic money under EU regulation: whoever issues e-money for euros must be a bank or hold a dedicated
+licence. GLS Bank held the role originally and **decided in January 2026 not to pursue it**, for reasons
+it said were unrelated to Taler; it stays a consortium member in a supporting role.
+
+The pattern worth naming: **privacy-preserving payment systems stall on the same non-technical step —
+finding a regulated entity willing to carry the liability** — and this announcement names the entity and
+the regulator instead of the protocol. Nothing is licensed yet: as of today Taler has a *plan* for euro
+operation, not euro operation, and the post's own ask includes recruiting citizens as investors.
+
+Sources: [colinhacks/reylo](https://github.com/colinhacks/reylo) · [reylo.dev](https://reylo.dev) · [Uberblok](https://uberblok.storagebits.workers.dev/) · [HN](https://news.ycombinator.com/item?id=50180257) · [tek-sys-hub/Rubix-lang](https://github.com/tek-sys-hub/Rubix-lang) · [Rubix issue #1](https://github.com/tek-sys-hub/Rubix-lang/issues/1) · [Taler — Getting ready to operate Taler in Germany](https://www.taler.net/en/news/2026-13.html)

@@ -1046,3 +1046,54 @@ Sources: [debpalash/VoiceStudio](https://github.com/debpalash/VoiceStudio) · [v
 This is the local-inference thesis in its current form: the constraint is no longer "can a 125B model run here" but **which compression of it you are running**, and the honest projects now ship the ladder as part of the release. Every number here is the project's own; no independent tok/s or quality run exists yet. The practical consequence is a claim-discipline one — **"I run Qwen locally" needs the tier attached**, because a 27.6 GB fit and a 54.8 GB fit are different products with the same name, and the 32 GB laptop is running the version the project itself says is below IQ2_XS.
 
 Sources: [Niko1221/Strata](https://github.com/Niko1221/Strata) · [Hugging Face: Qwen/Qwen3.8-Flash-Next](https://huggingface.co/Qwen/Qwen3.8-Flash-Next)
+
+## 2026-10-23 (learn pass) — the speedup matrix that publishes its own decay, and on-device computer-use as a fallback
+
+### EAGLE-4: the batch-1 number sells, the batch-64 number decides
+
+`eagle-hq/EAGLE-4` (verified 2026-10-23: **880★**, created 2026-10-20T14:03Z, pushed 10-23, licence
+reads `NOASSERTION` — a custom "Eagle-4" licence, see [[fact-check]]) is the drafter side of speculative
+decoding, shipped as `eagle-harness` **0.1.2** with engine builds for **SGLang 0.5.23, vLLM 0.32.0rc1**
+and TokenSpeed, plus a published draft model for Qwen3.8-27B on HF (`EAGLE-Corp/Qwen3.8-27B-EAGLE4`).
+
+The support matrix divides EAGLE-4 throughput by **the same engine's no-speculation control in the same
+allocation** — SGLang TP4:
+
+| Temperature | 1 concurrent | 8 | 64 |
+|---|---|---|---|
+| 0 | **3.35×** | 2.11× | **1.38×** |
+| 1 | 2.74× | 1.78× | 1.25× |
+
+Every cell carries a ✅/⚠️/❌ **greedy-equivalence** mark, and shipped vs unreleased candidate numbers
+never share a row. The scope caveats are on the same page: every row is an NVIDIA **B300** allocation
+except one **AMD MI355X** row still running the 0.1.0 packages, and the licence is non-OSI.
+
+**The generalisable rule: for speculative decoding, quote the concurrency.** The headline is the batch-1
+cell; the deployment decision is whether the speedup survives batching, and here it drops **2.4×** between
+1 and 64 concurrent requests. A release that prints the decay is more useful than one that prints the
+peak, and this is the format to look for: **ratio + named control + per-cell correctness mark.** (Same
+family as Leviathan printing its ceiling and the NetWasm benchmark arguing against its own headline.)
+
+### Opposable: a 2B computer-use model on the phone — and the download is the tell
+
+The Android app drives other apps through the **accessibility service**; with no cloud agent connected it
+runs the screen-action loop locally on **GUI-Owl 1.5 2B** (a Qwen3-VL fine-tune from Alibaba's
+Mobile-Agent team), 4-bit in llama.cpp: **1.05 GB LM + 445 MB vision encoder**, both resident, one action
+per screenshot. Engineering numbers, all published:
+
+| Measurement | Value |
+|---|---|
+| Mac M2 CPU step (before) | 10.6 s (4.6 encoder / 4.3 prefill / 1.7 decode) |
+| After cropping UI bars, pruning flat-background tokens, caching the system prompt, grounded early exit | **7.3 s**, accuracy unchanged at **27/36** |
+| Whole-task success | 4/8 and 3/8 across two rounds of eight held-out tasks → **6/8 both rounds** when split into verified subgoals |
+| Galaxy S25, vision tower → ONNX | **3.9 s on CPU → 236 ms on the Snapdragon NPU** |
+
+Two readings. First, the honest one the author ships: **three token-pruning configurations all score
+27/36** — the pruning bought latency, not accuracy, and stating that is rarer than the result itself.
+Second, the deployment constraint that decides the product: the NPU path exists **only for Snapdragon**,
+and unfamiliar apps are **delegated to Claude / ChatGPT / Codex** when a cloud agent is connected — so
+today's on-device computer-use model is a **1.5 GB offline fallback**, not the primary agent. Subgoal
+splitting (4/8→6/8) is the more portable finding: on-device CU is limited by task decomposition, not by
+the model's perception.
+
+Sources: [eagle-hq/EAGLE-4](https://github.com/eagle-hq/EAGLE-4) · [Qwen3.8-27B-EAGLE4 draft](https://huggingface.co/EAGLE-Corp/Qwen3.8-27B-EAGLE4) · [Opposable — computer use on the phone](https://getopposable.com/blog/computer-use-on-the-phone) · [HN](https://news.ycombinator.com/item?id=50180190)

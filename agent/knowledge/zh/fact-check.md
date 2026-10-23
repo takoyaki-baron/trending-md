@@ -392,3 +392,17 @@ Sources: [Trigger.dev v4.7.7](https://github.com/triggerdotdev/trigger.dev/relea
 **6. 链接的公告，未必是旁边那个 CVE 的公告。** Arista 条目的报道引用了一份 NCSC-NL 公告，而它讲的是*9 月*的 VCO bug（`CVE-2026-93952`），不是 10 月的这一个。检查只有一步：链接文件里写的是同一个编号吗？
 
 Sources: [oosexgang/hackios-xnu-kernel](https://github.com/oosexgang/hackios-xnu-kernel) · [eMudhra 新闻稿](https://emudhra.com/en/press-release/emudhra-to-exit-global-ssl-tls-certificate-business) · [npm: next](https://registry.npmjs.org/next) · [NVD: CVE-2026-96889](https://nvd.nist.gov/vuln/detail/CVE-2026-96889) · [GHSA-2464-fhr4-w9xw](https://github.com/advisories/GHSA-2464-fhr4-w9xw)
+
+## 2026-10-23 12:29 行动轮 —— 三项检查：你到底有没有把页面读下来
+
+孪生规则 10-14 就写进了 CLAUDE.md，但一个批次出现了四种页面形状，手工推导的检查在其中三种上分别错在不同的地方。可推广的形式：**「来源是这么说的」只对你真正抓下来的那件制品为真**，而失败状态并不都是「不存在」。
+
+**1. 200 不等于孪生——SPA 的兜底路由对任意 `.md` 路径都回 `200 text/html`。** 「在后缀加 `.md`」最直白的实现看状态码和大小，而在客户端渲染的站上每个候选都能通过：应用外壳会被回给 `page.md`、`page/index.md`、`llms.txt`，以及任何路由里 404 的路径。**正文是 HTML**、或字节与页面**完全相同**的候选一律拒收，再做判断。`doc-twin.mjs` 会打印它试过的每个候选的状态码、content-type 与字节数——这才让一个错误判定可审计，而不是看起来合理。
+
+**2. 门禁是第三种状态，而且是间歇性的。** BleepingComputer 相隔几分钟先后返回 Cloudflare 的「Just a moment…」拦截页（HTTP 403，可见正文 16 个字符）和一个 98 KB、有真实内容的完整页面。两个后果：**一次 200 不等于「我读过了」**，**一次 403 也不等于「它没这么说」**。把带标记与状态码的 `unavailable` 记下来——与 `trust-store-check.mjs` 按信任库做的区分、以及本文件对抓取超时做的区分相同——绝不让一个没读到的页面变成否定性结论。
+
+**3. 索引不等于孪生，而 JS 外壳正需要索引。** onamae.com 提供 **728 KB 的 `llms.txt`**——那是站点级索引，不是你所问那一页的正文；把它当作该页的 Markdown 版本引用，等于把索引归给一份文档。反过来，`modelcontextprotocol.io` 返回 **316 KB 的 200 OK HTML，却几乎没有正文**（客户端渲染）：既不是孪生，也不是「纯 HTML 可读」。它的孪生存在，但隔一跳——`/docs/…/intro.md` **307** 到带版本号的路径，所以要**跟随重定向并引用最终 URL**。
+
+一次调用：`node agent/tools/doc-twin.mjs --probe <url>` → `twin found (url)` / `plain HTML ok` / `JS gate (marker)` / `JS shell (script %)` / `no twin`，并列出每个候选的状态与大小。
+
+Sources: [OpenAI 文档（Markdown 孪生）](https://developers.openai.com/api/docs/guides/decisions.md) · [modelcontextprotocol.io](https://modelcontextprotocol.io/docs/getting-started/intro) · [onamae.com](https://www.onamae.com/news/article/11584) · [BleepingComputer](https://www.bleepingcomputer.com/news/security/)

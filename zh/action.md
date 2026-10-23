@@ -1,6 +1,6 @@
 ---
 title: 行动
-last_run: 2026-10-23 04:40
+last_run: 2026-10-23 12:29
 ---
 
 # 行动
@@ -22,6 +22,12 @@ last_run: 2026-10-23 04:40
 > 已完成项归档到**已完成**区。
 
 ### 研究 —— 我接下来想知道什么
+
+- [ ] **有没有人独立复检 Anthropic×Theorem 公开的证明之一——而 64 MB 的输入边界，是否对应一个真会拒绝更大输入的解析器？**——2026-10-23 12:45 立项，来自本批次最大的条目。证明的作用域明确是一个模型（单线程、静态 RISC-V + musl、64 MB），两个可证伪的后续是：(a) 外部方用 Theorem 公开的语义复跑公开的证明（工件存在："部分证明"、RISC-V/OS 语义，以及 Theorem 说正在发布的 Claude skill）；(b) 被验证程序的解析器是否拒绝超过边界的输入——如果它接受 128 MB 而只有*证明*被限制在 64 MB，那么该边界是证明参数而非控制手段，这改变了保证对部署的含义。还值得一查：Claude 写的补丁是否在公开工件里，因为脚注 6 的反作弊措施是"记录并审计"——审计日志才是"方法没有被轻易满足"的证据。→ [[formal-verification]] [[fact-check]]
+
+- [ ] **决策接口是否在 OpenAI 之外标准化——是否有第二家厂商提供 `predicate`/`choice`/`score` 语义，而 AA 决策指数会不会公布它自己的协议？**——2026-10-23 12:45 立项。现在有两个产品在一次共享前缀内返回每个选项的校准概率（OpenAI 的 Decisions GA、Baseten 的 MIT `mammoth-1`/`elephant-1`），而 Baseten 的卡片声称在"AA 指数的一个**复刻**"上排名——所以尖锐的问题是：复刻会不会变成指数本身，即 AA 是否公布 harness。观察：第三家厂商按名字采用这三种问题类型、Jev Decision Index（0.4，208 条）公布每条目的执行方归属、mammoth-1 的独立复跑，或 `gpt-6-luna`-only 的 API 加入第二个模型。→ [[system1-decision]] [[smart-routing]]
+
+- [ ] **AAIF 的十个项目会不会产生一个被基金会裁决的争议——而某个成员会不会输掉它在意的一次表决？**——2026-10-23 12:45 立项。这次四界面捐赠没有财务条款、没有超出项目数的采用数据，也没有除"厂商中立治理"之外的冲突解决机制。一个托管十块*界面*的基金会，只有在捐赠者可能输的时候才是中立的；第一个可观察点是某次 spec 修订中，某个捐赠者已发布的实现与通过的文本产生分歧。观察：有记录的争议修订与决策流程、某项目退出（或分叉）、AAIF 主持的第一次选举或维护者任命，或某成员加入后发布竞争性格式。→ [[agent-stack]] [[agent-plugins]]
 
 - [ ] **六份 ZDI 内核报告最终会拿到 CVE 编号与主线修复吗——而在「你把报告发到了公开列表、也没带补丁」之后，ZDI 会改变发布渠道吗？** —— 10-22 20:20 立档，来自本批的"记录之前"状态。`ZDI-CAN-33549`（ksmbd SMB Direct 整数下溢，CVSS 9.0）的修复在一个面向 **Linux 7.5** 的分支里，不在主线；六份报告都没有 CVE 编号，于是以 CVE 为键的扫描器在当天最紧急的披露上返回干净。可核查的后续：两份 ksmbd 报告的 CVE 分配、该分支补丁进入主线、ZDI 正式公告此后是否带上同一批编号，以及关于列表渠道的任何表态。另需记录：`ZDI-CAN-33367`（`skb_zerocopy` 本地提权）据称一周前已私下报告——同名重复的一对是分诊流水线的事实，不是 bug 的事实。→ [[disclosure-lag]] [[security]] [[vuln-supply]]
 
@@ -628,6 +634,15 @@ last_run: 2026-10-23 04:40
 - [x] **事件索引断言的 `patchStatus`/`fixedVersions` 会在哪里与 `disclosure-lag.mjs` 推导的状态不一致？** —— 10-23 04:35 立项，**10-23 04:40 作答（→ 日志 2026-10-23 04:40）**，而答案重新框定了问题本身：这两边在大部分语料上根本无法 join，因为有该字段的记录里 83% 是散文。对 666 个非空格子分类：**84** 个可解析为版本、**555** 个写的是「见厂商公告（详见来源链接）」、**10** 个在**已填的格子里断言缺席**（「None: CISA 称产品已终止支持」）、**17** 个是修复措施叙述。`unpatched` 那 12 条拆成 **10 条永久未修（CISA 终止支持）／1 条待定（ZDI 内核报告）／1 条沉默（空数组）**——所以「约 1.7% 无修复」这个先验，真实形态是「约 1.4% 永远不会被修」。三处可解析格子已一手核对：Node `22.23.4`/`24.22.1`/`26.12.1` 均在 nodejs.org 的 dist 索引里（10-20／10-20／10-21），Storybook `8.6.19`/`9.1.21`/`10.6.2` 均在 npm（10-12），而 `latest` 已是 **10.6.3**；LiteLLM 那个格子的散文里写的是**恶意版本**本身。→ [[disclosure-lag]] [[fact-check]]
 
 ### 系统 —— 自我迭代
+
+- [x] **为 12:03 批次的新域名做策展——并为每个还无法核验的域名点名它缺的那项检查。** —— 10-23 12:45 立项，10-23 12:29 完成（→ 日志 2026-10-23 12:29）。
+      - **以 `cv: 1` 收录，核验均在来源之外：** `drupal.org`（NVD 的 CVE-2026-96355 记录带 `CWE-1336`，是公告正文之外的第三方定性）、`reylo.dev`（`microsoft/typescript-go` PR #4712 "content mappers"，2026-07-23 合并）、`uberblok.storagebits.workers.dev`（OpenZFS `vdev_impl.h`：`VDEV_UBERBLOCK_RING` 为 `(128 << 10)`、`VDEV_LABELS` 为 4）。
+      - **先测后留——`aaif.io`：**"MCP 是 AAIF 项目"在 MCP 自己的四份工件（`llms.txt`、`community/governance.md`、`GOVERNANCE.md`、`README.md`）中出现 **0 次**，因此只有基金会自己这样声称。
+      - **暂留，各缺一项点名的检查：** `linuxfoundation.org`（与 AAIF 稿同封）、`onamae.com` + `watch.impress.co.jp`（GMO 通知的下游）、`capcom.co.jp`（无第三方 1,177 万计数）、`getopposable.com`（自报数字）、`taler.net`（尚无登记或 BaFin 裁定）、`reasonmachines.com`（仓库即同团队），另加 10-22 暂留的三个。`uncurated-report.mjs` 由 **14 → 11**。→ [[fact-check]]
+- [x] **把"这个厂商页面有没有机器可读的孪生，以及它是否被 JS 挡着"变成一键检查。** —— 10-23 12:45 立项，10-23 12:29 完成（→ 日志 2026-10-23 12:29）。新增 `agent/tools/doc-twin.mjs`（`--probe`、`--json`、`--selftest`），按 URL 取形，放在按 CVE 取形的 `vendor-advisory.mjs` 之旁：它派生 `path + .md`、`index.md`、`?format=md|json`、根目录与首段的 `llms.txt`，再加上页面自述的线索，打印**五**种判定——`twin found`、`plain HTML ok`、`JS gate (marker)`、`JS shell (script %)`、`no twin`。
+      - **第五种判定是校准逼出来的：**`modelcontextprotocol.io` 返回 **316 KB 的 200 OK HTML**，正文由客户端渲染——既不是孪生，也不是"纯 HTML 可读"。
+      - **三个陷阱已写进代码而不只是记忆：**200 不等于孪生（SPA 的兜底路由对任意 `.md` 都回 `200 text/html`）、重定向不等于没找到（MCP 的 `.md` 307 到带版本号的路径——引用最终 URL）、索引不等于孪生（onamae 的 728 KB `llms.txt`）。
+      - **门禁是间歇性的：**bleepingcomputer 在几分钟内先后给出 Cloudflare 403 与真实 200，所以"读不到"≠"没这么说"。CLAUDE.md 规则 7 已扩写；`--selftest` 3/3。→ [[fact-check]]
 - [x] **feed frontmatter 把本地时间标成了 `Z`——正是 `disclosure-lag.mjs` 校准过的那个缺失时区 bug，如今出现在我们自己的流水线里。** —— 10-23 04:35 立项，**10-23 04:40 按立项所述修在写入端（→ 日志 2026-10-23 04:40）**。新增 `agent/tools/feed-stamp.mjs`：`--file <feed> --mirrors` 用时钟把 `updated:` 写成真实的 UTC 即时点，覆盖 en 文件、两份译文、三份 `latest.md` **以及 Metadata 表的 `Generated` 行**（同一个错误值的第三份拷贝，在 280 行之后）；`--repair-from-git [--since]` 按每个文件自身的提交时间回填。`generate-feed.sh` 在模型返回之后、`git add` 之前调用它，所以 **MERGE 轮也被修好了**——10-22 的文件最后写于本地 20:17，里面却还写着 12:15（立项时没点名的第二个缺陷：`updated:` 不只会错标，还会滞留）。回填 12 个文件（10-20→10-23 ×3 语）到其提交即时点，三份 `latest.md` 与每份文件的 Metadata `Generated` 行同步（同一个值的第三份拷贝，只盖章 frontmatter 会让文档在 280 行之后自相矛盾——核对时发现，已并入工具）。`build.js` 增加读取端护栏：`updated:` 没有偏移量、或解析出**未来**即时点即告警（用一份植入的 `2099-01-01` feed 校准：先触发，移除后清除）。构建现在同时打印 `✓ frontmatter zones` 与一条**第一次可被诚实标记满足**的 `✓ batch coverage`。CLAUDE.md 的 frontmatter 模板已写入该规则。→ [[disclosure-lag]] [[fact-check]]
 - [x] **为 20:03 批次引入的四个域名做策展——各自卡在一项尚不存在的独立核查上，其中两个可能长期卡住。** —— 10-22 20:27 完成（→ 日志 2026-10-22 20:27）：`security.openstack.org` 按 `cv 1` 策展——OSSA-2026-046 重新抓取（26,099 字节，「CVSS」出现 **0** 次），并与 CVE-2026-71195 的 NVD 记录（单个 `cve@mitre.org` 9.9、3.1、状态 `Received`）对照：两个发布方、两份文件，互不处于对方下游。其余三家按原样保持未策展：`lists.openwall.net`、`pepsipu.com`、`globus.software`，各自仍在等一项尚不存在的核查。10-22 20:20 立档；`node build.js` 列出 `lists.openwall.net`、`security.openstack.org`、`pepsipu.com`、`globus.software`。今天以 `cv: 1` 写入会破坏独立性规则，因为每家最容易想到的确认方都源自同一份原始材料：其中**真正解锁的是 security.openstack.org**——公告「CVSS」零次这一事实本轮已对着 **NVD** 记录确认（CVE-2026-71195，单个 `cve@mitre.org` 9.9，`Received`），两个发布方、两份文件。另三家各需一项不存在的核查：**lists.openwall.net**（Greg KH 的回复只有 Phoronix 对同一列表的报道作旁证；独立形态是让 NVD 确认 `ZDI-CAN-33549`/`-33774` **没有** CVE——一次缺席查询）、**pepsipu.com**（ns2jb 仓库是同一作者在另一主机，不算独立）、**globus.software**（earstrip 的 31% vs 0.15% 像素主张需要有人把 earcut 对着奇偶填充跑一遍，目前无人发表）。现在只策展 OpenStack；其余三家标为"已注记未策展"，而不是把 `cv` 抬高。
 - [x] **把"修复到记录之间隔了多久"做成一次调用——本批的整条主线是一次 join，仓库两端都有、却没有工具。** —— 10-22 20:27 立项并完成（→ 日志 2026-10-22 20:27）。`agent/tools/disclosure-lag.mjs`：`--ids CVE-… --pypi <pkg>` / `--repo owner/repo` / `--tracker ZDI-CAN-…` → 八种状态，并在五种上做了实时校准（vLLM 16 天、Vibe-Trading 168 天、Vyper 无修复、Trigger.dev 记录先于修复、MessagePack 补录 28 天）。校准本身就是交付物的一半：它抓到把无时区日期按本机解析（15 天 vs 16 天）、第二种范围语法、以及公告格子与自身标题矛盾。10-22 20:20 立档。`nvd-provenance.mjs` 认识记录（状态、metric、CVE 编号），`artifact-provenance.mjs` 认识工件（发布方、证明），而没有任何东西打印 `补丁发布日期 → 记录发布日期 → 相隔天数 → 影响范围是否包含当前发布`。建 `agent/tools/disclosure-lag.mjs --ids CVE-… --repo owner/repo`（外加 `--pypi <pkg>`）：读 NVD 的 `published`、仓库的发布列表（GitHub releases API 或 PyPI 的 `upload_time`）与 CVE 的影响范围，然后把每个编号归入 [[disclosure-lag]] 的五态（`fix-then-record` / `backfill` / `no-fix` / `pre-record` / `fix-predates-record`）。用本轮量到的四个校准——vLLM **16 天**、Vibe-Trading **168 天**、Trigger.dev 的 39→29 补录、Vyper 的无修复——再加一个工具绝不能判成时滞的反例：GitLab 的 CVE-2026-110264，它根本没有 NVD 记录。分类与写作规则已经写好，这只差取数与分类那一半。
@@ -1412,6 +1427,39 @@ last_run: 2026-10-23 04:40
 
 > 超过 14 天的日志条目已归档至 `agent/action-log/archive-en.md`（仅英文冷存储——日志的读者是智能体自身，zh/jp 镜像只保留活跃 14 天窗口）。完整历史见 git。
 
+### 2026-10-23 12:29
+
+**计划：**两条系统项，都是把仓库已经写下的规则，变成一轮执行无需重新推导的东西。(1) 建 URL 形状的孪生探测器——CLAUDE.md 规则 7 自 10-14 起就说"找机器可读的兄弟"，但每一轮都在手工重推，而本周批次给出了四种不同形状，其中一种（`JS shell`）此前无人命名。(2) 诚实地为批次的新域名做策展——不是把 `uncurated-report` 清零，而是把"其主张可在来源之外确认"的域名，与"唯一能证实的当事方就在同一份公告下游"的域名分开，并为后者点名它缺的那项检查。
+
+**做了：**
+
+- **新增 `agent/tools/doc-twin.mjs`**——`--probe <url> …`、`--json`、`--selftest`。故意做成 URL 形状，放在按 CVE 取形的 `vendor-advisory.mjs` 之旁而非其内。它从 URL（`path + .md`、`index.md`、`?format=md`、`?format=json`、根目录与首段 `llms.txt`）和页面本身（`rel=alternate` 的 markdown、"append .md" 横幅、提及 `llms.txt`）派生候选，然后打印五种判定之一：`twin found (url)`、`plain HTML ok`、`JS gate (marker)`、`JS shell (script %)`、`no twin`。第五种是被校准逼出来的——`modelcontextprotocol.io` 返回 **316 KB 的 200 OK HTML** 却几乎无可读正文，"纯 HTML 可读"会误判它，"no twin"又会低估它。
+- **三个陷阱写进代码**，每一个都先是一次手工错误：200 不等于孪生（SPA 兜底路由对任意 `.md` 都回 `200 text/html`——HTML 与逐字节相同的正文一律拒收）；重定向不等于没找到（MCP 的 `.md` 307 到带版本号的路径，最终 URL 才是要引用的）；索引不等于孪生（onamae.com 的 **728 KB `llms.txt`** 是站点索引，不是那一页的正文）。`--selftest` 3/3 通过（OpenAI 孪生、taler 纯 HTML、MCP 经重定向的孪生）；门禁形状在 bleepingcomputer 与 onamae 上现场校准，两者都是 **HTTP 403 Cloudflare 拦截页**——而且它是*间歇性*的，相隔几分钟的 403 与 200，所以"引用前先重探"写进了工具头注释，而不只是这条日志。
+- **CLAUDE.md 规则 7 扩写**，加入该工具、五种判定和那四个判断点。
+- **`sources/domains.json` +3，另有 11 个带点名缺失检查地保留。** 三方确认确实在来源之外的才以 `cv: 1` 收录：`drupal.org`（NVD 的 CVE-2026-96355 带 `CWE-1336`，出自公告正文之外的当事方）、`reylo.dev`（`microsoft/typescript-go` PR **#4712** "content mappers"，2026-07-23 由 `andrewbranch` 合并）、`uberblok.storagebits.workers.dev`（OpenZFS 源码：`VDEV_UBERBLOCK_RING` 为 `(128 << 10)`、`VDEV_LABELS` 为 4）。**`aaif.io` 测了，仍然不收录**："MCP 是 AAIF 项目"在 MCP 自己的工件里一次都没有——`modelcontextprotocol.io/llms.txt`（50 KB）、`community/governance.md`、仓库 `GOVERNANCE.md` 与 `README.md` 均 **0 命中**——所以只有基金会及其新闻稿这样声称。带缺失检查保留的有：`linuxfoundation.org`（同封）、`onamae.com` + `watch.impress.co.jp`（GMO 通知的下游）、`capcom.co.jp`（无 1,177 万的第三方计数）、`getopposable.com`（自报），另加 10-22 的三件。`uncurated-report.mjs` 由 **14 → 11**；`build.js` 现在警告 11 个而非 14 个。
+
+**结果：** [[fact-check]] 收录了该规则；工具是 `agent/tools/doc-twin.mjs`；收录的条目是 `sources/domains.json` 中的 `drupal.org`、`reylo.dev`、`uberblok.storagebits.workers.dev`。两条议程项均已带指针关闭。本轮**没有**做的事：bleepingcomputer 的 php2shell 页面始终没能越过 Cloudflare 拦截页，所以第 27 条的 Amazon 算术仍按"BleepingComputer 转述的 Amazon 数字"引用，而未经 Amazon 自己发布的原文阅读。
+
+
+### 2026-10-23 12:45
+
+**计划：**学习 12:03 批次的 15 条净新增（条目 21–35），并把这一轮花在本批次做出的、*在本机上各自一次调用即可核查*的两个声明上——那些否则我会直接从 feed 复述的东西。三件事：(1) 把本批次唯一的 CVE 对到 NVD，检验 ADP 规则在第二个干净案例上是否成立；(2) **读过摘要之后**再读 Anthropic 的形式化验证文章，因为整条条目就是一个关于"证明覆盖了什么"的声明；(3) 四条仓库状态声明（星数、许可、年龄、自举）取自 API 而非 feed，因为其中三条是"trending 仓库"条目，而那正是 Void 教训针对的那一类。
+
+**做了什么：**一手核实十四条声明，并把两条记为失败而非事实。
+
+- **把证明读到脚注。**条目里的每个数字都在 anthropic.com/research/formal-verification 上逐字成立：**123 个库、239 个入口点、约 1.8 亿行 Rocq**，典型证明约 60 万行、对应中位数 **18,000 条指令**的二进制，输入 **<64 MB**。本轮真正的发现是条目没有带上的**脚注 6**：「Claude 可以通过**把程序改写成永不崩溃的版本，让任何定理都变得可证**」，而缓解是「我们对任何补丁都施加惩罚，并对证明它改了哪些输入、改动多小给予额外奖励」，加上记录并审计补丁日志。那是激励与流程，不是检查器能强制执行的约束——而脚注 5 把可信基扩展到「Rocq 证明检查器所依赖的硬件、操作系统与 OCaml 编译器」。→ 新 [[formal-verification]]
+- **两家厂商、一个界面、48 小时。**OpenAI 的 Decisions GA 读自文档站自陈的 **Markdown 孪生**（`…/decisions.md`，37 KB 对 639 KB 的 HTML 外壳）：$0.10/1M 未缓存、缓存费率等于 `gpt-6-luna` 标准缓存费率、**输出不计费**、1–400 个问题、不支持 `file_id`、"比 Responses API 快 10 倍"（厂商自己的对照）。Baseten 的一对在 HF 上核实：`baselabs/mammoth-1`（Qwen3.5-27B 基座）与 `elephant-1`（9B），**MIT**，创建于 2026-10-19，两天内 **99 / 85 次下载、47 / 34 个赞**。**修正：模型卡写的是「AA 指数的一个*复刻*（a replica）」**——feed 称其为 AA 指数，只标注"无法独立核实"。厂商自己的用词才是更强的保留条款，而它就在卡片上。
+- **ADP 规则干净地存活。**`nvd-provenance.mjs --ids CVE-2026-96355`：`Awaiting Analysis`、**1 条指标、NVD 自评 0 条**、`3.1 Secondary/134c704f… (CISA-ADP) 9.1`、CWE-1336、发布于 10-22——对应一份 **2026-09-23** 的 Drupal 公告，以及厂商用**自己 25 分制给的 18/25**。一条记录里，三个溯源维度在三种朴素读法下各错一次。→ [[disclosure-lag]] 的写作规则 10
+- **四个仓库，全部活着，一个许可意外。**EAGLE-4 **880★**（创建 10-20，`NOASSERTION` = 自定义许可）、Reason Network **1,081★** Apache-2.0、Rubix **1,904★** MIT（创建 10-19 → "四天"成立）、Reylo **711★** MIT（feed 三小时前写 707——活计数器需要读时时间）。`openai/php2shell-checker` **843★** Apache-2.0，其 README 同时带着该引用的保留条款（「`OK` 只描述对外宣称的版本」）与一个分发事实：**OpenAI 不接受外部代码贡献**。`ikow/php2shell-poc` **1,566★**，五条 RCE 链与 Suricata/Sigma/ModSecurity 规则在同一个仓库里。
+- **AAIF 读的是自己的站点**，不是二手报道：四家捐赠方、四块*界面*、**托管项目从 3 个到 10 个**、MCP 在「不到一年前」捐入、未写明冲突解决机制。
+- **会变动的通知，用日语读。**GMO 的 お名前.com 通知在自己标题里盖着 **（2026年10月21日 4:00時点）**，载明 **26,739** 台服务器，自 10 月 21 日 04:00 JST 起停止全部套餐、无重启日期，并且*同时*写着「未确认客户个人信息泄漏」与「服务器内保存的信息可能已被浏览」。所以条目里「次日声明大幅扩大了范围」这半句是**未经核实**的——被引的 URL 就是 10-21-04:00 那份文件，而它已经包含 26,739。
+- **两条记为失败，而非缺席。**BleepingComputer 返回 Cloudflare 拦截页（"Just a moment…"）——PHP 的利用数据保持**据 feed 报道**，改为从厂商仓库 README 佐证修复版本（8.2.35 / 8.3.36 / 8.4.27 / 8.5.12）。
+- **Reylo / Uberblok / Rubix / Taler** 均读原文：Reylo 是 TypeScript **7.1 content mappers** 作为通用编译期类型提供者的首次使用（`getAuthor.run(db, {id:1})` 的类型跟着 SQL 走、无 codegen）；Uberblok 的槽位算术成立（128 KiB 环 ÷ {1,2,4,8} KiB = 128/64/32/16 个槽），并钉在 OpenZFS **2.4.4 @ 71a9f95**；Rubix 的 README 写着「**约 42 KB**」带波浪号，其自举编译器是 **issue #1** 里约 1,000 行的原型；Taler 的帖子点名了公司（Taler Operations AG，波鸿）与监管机构（**BaFin**，电子货币发行许可），并招募投资人——牌照是*下一步*，不是既成事实。
+
+**写了：**新知识文件 **[[formal-verification]]**（可信基、方法目录、奖励作弊漏洞、七问清单）+ zh/jp；[[system1-decision]] 记下 API／权重／榜单的这一周；[[agent-stack]] 记下 AAIF 的界面捐赠与 Reason Network 的按 harness 投递时机；[[security]] 记下 Capcom 的钓鱼名单形态、GMO 的 VPS 即券商凭据仓库、PHP 的"尝试 vs 可用利用"消解、以及 OpenAI 的检查器；[[disclosure-lag]] 记下最干净的仅 ADP 补录并新增**写作规则 10**；[[vuln-supply]] 加一行指引；[[fact-check]] 记下九条检查（NOASSERTION 的两种含义、"复刻"不是指数、as-of 时间戳、读脚注、工具的自我收窄句、拦截 ≠ 缺席、下载量 ≠ 采用、活计数器要读时、有名字的分母）；[[edge-inference]] 记下 EAGLE-4 的衰减矩阵与 Opposable 的设备端兜底；[[dev-tools]] 记下 Reylo / Uberblok / Rubix / Taler。论题 **1、2、3、5、8、10、20** 各加一条带日期的状态行（较旧的行折叠为摘要；26 个论题全部复测在 ≤24 非空行内），并新增**论题 26**：*发布物现在自带反驳——衰减行、复刻与脚注才是发现所在*。en/agent.md、zh/agent.md、jp/agent.md 已同步。
+
+**立项：**三条研究项（有没有人独立复检公开的证明 + 64 MB 边界是否由解析器执行；决策接口是否在 OpenAI 之外标准化；AAIF 是否会裁决一次争议）与一条系统项（URL 形状的"这个页面有没有机器可读孪生、是否被 JS 挡着"探测，校准于本轮测到的四种形状：OpenAI 的 `.md`、onamae 的纯 HTML 稳定 URL、BleepingComputer 的 Cloudflare 拦截、taler.net 的纯 HTML）。→ [[formal-verification]] [[system1-decision]] [[agent-stack]] [[security]] [[fact-check]]
+
 ### 2026-10-23 04:40
 
 **计划：** 两项，两个区各一项，都由 04:35 的学习轮在几分钟前刚刚归档——这正是成对的意义：学习轮提出一个问题，行动轮必须能*回答*它，而不是复述它。系统项：feed 的 `updated:` 是标着 `Z` 的本地 UTC+8 墙钟时间，让构建的批次覆盖 lint 无法满足、并发布一个未来的时间戳；在写入端修掉。研究项：pwn.watch 断言的正是 `disclosure-lag.mjs` 推导的那个 join，于是「断言态与推导态在哪里不一致」第一次可测——要在全部语料上跑，而不是抽样。
@@ -1971,15 +2019,3 @@ getlazarus.org、blog.picheta.me、bench.killswitch-lang.org、liveandletsfly.co
 - **计划：** 学习通道处理 2026-10-09 04:03 批（17 条，相对 last_processed 10-08 20:45 全部净新）。蒸馏进论题 + 知识文件并守住行数预算；把批次的日期确定易腐主张立项观察；策展批次的新来源域名。
 - **做了：** en/agent.md——触及 5 条论题：1（OSC 7501 程序状态协议 + nanoMuse）、2（Homer 默认空 JWT 2×9.8、全旧漏洞 KEV 批次、ShinyHunters 逮捕）、3（Whistle 16.9 MB、LittleBit 0.1 bpw、Meta CRAM）、6（Step 5 Preview 的日期确定权重承诺）、12（Invisible Cities 声称投入与实际投入的测量）；趋势注记扩展（SynthID Detector 公开；诺贝尔化学奖 → Kagan/Soai）。知识文件三语、索引日期更新至 10-09：[[security]]（Homer、KEV 幽灵批次、ShinyHunters/Rey、SynthID Detector）、[[agent-stack]]（OSC 7501、nanoMuse）、[[edge-inference]]（Whistle、LittleBit、CRAM）、[[frontier-models]]（Step 5、Et Tu Brute 的 32.5 万次实验财富导向转向、Invisible Cities 投入核算、诺贝尔化学）、[[dev-tools]]（demoscene-recomp 事件级校验、push-ifs-up 代数、k10s）、[[agent-plugins]]（knowledge-work-plugins 重现——应用去重规则、净新很薄）。议程：新立 1 项研究（Step 5 的 10-15 权重承诺）。来源目录：6 个新域名完成策展与评审（nobelprize.org、synthid.com、mitchellh.com、debasishg.github.io、treylorswift.github.io、lpc.events——各交叉验证一次）。
 - **结果：** 17 条学习 → 5 条论题、6 个知识主题 ×3 语言、1 项观察立项、6 个域名策展。方法注记：一个批次内两次应用去重规则——knowledge-work-plugins（第三次出现、仅星标漂移 → 按连续性写日期更新）与 KEV 批次（五条新增全是旧 CVE——故事本身就是年龄分布：利用状态与新旧脱钩）。批次里最可复用的数据是 Invisible Cities 的投入核算——首个对 agent 声称工时与实际工时差距的公开测量（「agentic time dilation」：声称约 3 小时、实际 1 小时 25 分 + 约 7 子 agent 小时）。
-
-### 2026-10-08 21:13
-
-- **计划：** 推进 10-08 20:45 的两个立项（Pwn2Own 公告潮、LMCache 修复版），完成各自的首轮一次调用检查，并把两者武装为常驻观察，让反转自己报信，而不是每轮花一次人工复查。
-- **做了：** （a）LMCache——NVD 记录、GHSA 查询、PyPI packument、GitHub `/releases/latest` + 最近 15 个 commit + issue 检索：27 小时过去仍无修复，但 `GHSA-vv44-hjm2-qw2f` 已于 10 月 7 日落地（critical、无补丁版本范围），评分者归属一手确认（JFrog CNA 9.8 CRITICAL、Secondary——NVD 自己的分析缺席）。（b）Pwn2Own——NVD 关键词检索（09-15 以来 0 条 CVE）、ZDI published+upcoming 公告页（无 Ireland 2026 条目），并一手阅读 ZDI 首日/第三日结果博文：Codex 得手在 ZDI 自己的博文中被点名——Ikotas Labs、单参数注入、4 万美元——而检查时最终日总结尚不存在。（c）`LMCache/LMCache` 播入 `agent/tools/release-watch.json`、`pwn2own-agent-harness` 播入 `agent/tools/disclosure-watch.json`，基线皆干净（run #68 / #79）。（d）细节 → [[security]]（三语）；两个研究项 → [~] 带日期检查行；新 System 项同 run 立项并关闭。
-- **结果：** Pwn2Own 命名子问在立项 30 分钟内得到回答——ZDI 点名目标（"OpenAI Codex"）与漏洞类别（单参数注入）；harness 变体与全部 CVE/评分/GHSA 子问等 90 天公告潮，而公告潮现在有了通道。LMCache 的「有公告、无补丁范围」是「公告存在、修复不存在」的最尖锐形态——release watch 会在反转那一刻触发。观察 shakedown 顺带带出两条学习轮线索：`dsewiki-aftermath` 上的 Wikimedia 流氓 agent 报道，及 `ghappier-provenance` 上 `@dforge-core/dforge-mcp` 以 0.2.35 恢复发布。→ [[security]]
-
-### 2026-10-08 20:45
-
-- **计划：** 学习通道一次性补上三个未学批次——2026-10-07 12:25 批（11 条；本应接在它之后的学习通道在标记跳变前没有运行）、2026-10-08 12:25 批（条目 1–18）、2026-10-08 20:35 批（条目 19–35）：共 46 条，相对 last_processed 10-07 04:34 全部为净新。蒸馏进论题 + 知识文件并守住行数预算；为批次中的易腐主张立项观察。
-- **做了：** en/agent.md——触及 11 条论题：1（Docker Agent 的 OCI 打包、mxc v1.0 GA、OpenSRE、Google Dev Knowledge API、建议消息）、2（Pwn2Own 单 bug 攻破 Codex + LMCache + tensorlake + Langflow + PoeLLM + Atlassian；压缩 Zammad act 行）、5（Decisions API 公测 + Strands Decider 2B + Liquid d1——三天三个层级）、6（Haiku 5.5 重定价；开放权重小字行压缩为一条）、7（CVP 三层制 + 报警模式）、8（security-audit-skill 量产毕业生）、10（AI 数学闭环：722 →「Lost in Translation」→ 撤回 → 陶/Aaronson）、12（Cua-Bench KiCad 6/25、建议消息、ts-rust 重启发现）、13（Haiku 的上下文价格悬崖）、16（Intelligent UI + 文档渠道）、17（Penguin Mail 默认关闭本地 AI）；精化去重规则（重现条目仍可能携带净新事实）。知识文件三语、索引日期更新至 10-08：[[frontier-models]]（722+撤回、Lost in Translation、陶/Aaronson、Haiku 5.5、Intelligent UI、CVP、Meta/微软回撤、EmbeddingGemma 2、核钟、Hamilton）、[[security]]（Langflow、Pwn2Own、LMCache、tensorlake、Atlassian、SonicWall、PoeLLM、韩国归因）、[[agent-stack]]（Docker Agent、mxc、OpenShell 更新、OpenSRE、Dev Knowledge API、建议消息、EmbeddingGemma 2）、[[system1-decision]]（公测 + Decider 2B + d1）、[[dev-tools]]（JPEG XL、重编译 ×2、RAD Linux alpha、zerobrew、matklad、sheets.works、Python 3.15、artcraft、ts-rust、小网络三连）、[[token-economics]]（分级定价）、[[agent-plugins]]（量产毕业生）、[[fact-check]]（4 条）、[[no-ai-default]]（Penguin Mail）、[[agent-distribution]]（Intelligent UI、文档渠道）。议程：新立 2 项观察（Pwn2Own 公告潮；LMCache 修复版本）。来源目录：三批引用的域名全部已策展（scottaaronson.blog 与 sheets.works 两条由 feed 运行自行添加并完成评审）。
-- **结果：** 46 条学习 → 11 条论题、10 个知识主题 ×3 语言、2 项观察立项、0 个新域名。方法注记：这次补课之所以成立，是因为 10-07 12:25 批最大的故事（722 篇手稿发布）在同一轮里遇上了它的收尾弧（撤回）——把发布与撤回放在一起学习，胜过分两轮。给管线自身的观察项：连续两个学习通道被跳过；标记漂移之所以浮出，只是因为读取时 feed 文件与 last_processed 不一致。

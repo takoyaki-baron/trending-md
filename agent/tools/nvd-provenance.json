@@ -679,6 +679,11 @@
    "id": "CVE-2025-13945",
    "why": "Wireshark QPACK header amplification (Header Accordions); CVE ID from 2025",
    "seeded": "2026-10-23 [unchecked] fixed in 4.6.2 / 4.4.12"
+  },
+  {
+   "id": "CVE-2026-96355",
+   "why": "Drupal Webform template-injection RCE: ADP-only 9.1 on an Awaiting-Analysis record, advisory dated 2026-09-23 (backfill); watch for NVD analysis + whether an nvd@nist.gov metric appears beside CISA-ADP",
+   "seeded": "2026-10-23 [verified] Awaiting Analysis, 1 metric, 0 NVD-scored, 3.1 Secondary/134c704f… (CISA-ADP) 9.1, CWE-1336, published 2026-10-22"
   }
  ]
 }

@@ -13355,5 +13355,32 @@
   "en": "Zeabur's company blog — the primary for its own incident reports and shutdown notices. The write-ups are unusually specific (server counts, record counts, timestamps), which is what makes them citable.",
   "jp": "Zeabur の公式ブログ — 自社のインシデント報告と終了告知の一次情報源。記述が異例なほど具体的（サーバ数、レコード数、タイムスタンプ）で、それが引用可能にしている。",
   "zh": "Zeabur 官方博客 —— 其事故报告与关停公告的一手来源。事故说明异常具体（服务器数、记录数、时间戳），这正是其可被引用的原因。"
+ },
+ "drupal.org": {
+  "cat": "security",
+  "cred": "high",
+  "cv": 1,
+  "density": "high",
+  "en": "Drupal Security Team’s advisory index (SA-CONTRIB-…) — precise about the affected component, the exact fix versions and the mitigation, and it scores on its own 0–25 composite rather than CVSS, so its number is not comparable to a CVE score. The character of the flaw is independently confirmable outside the prose: NVD’s record for CVE-2026-96355 carries CWE-1336, template-engine injection (cv 1, checked 2026-10-23).",
+  "jp": "Drupal セキュリティチームのアドバイザリ索引（SA-CONTRIB-…）—影響コンポーネント、正確な修正バージョン、緩和策の記述は精密だが、スコアは CVSS ではなく独自の 0–25 合成値なので CVE スコアとは比較できない。脆弱性の性格は本文の外でも独立に確認できる：CVE-2026-96355 の NVD レコードは CWE-1336（テンプレートエンジン注入）を持つ（cv 1、2026-10-23 確認）。",
+  "zh": "Drupal 安全团队的公告索引（SA-CONTRIB-…）——对受影响组件、确切修复版本与缓解条件写得很精确，但分数用的是自家 0–25 合成量表而非 CVSS，因此不能与 CVE 分数比较。漏洞性质可在正文之外独立核验：CVE-2026-96355 的 NVD 记录带有 CWE-1336（模板引擎注入）（cv 1，2026-10-23 核验）。"
+ },
+ "reylo.dev": {
+  "cat": "code",
+  "cred": "high",
+  "cv": 1,
+  "density": "med",
+  "en": "Colin Hacks’ project site for Reylo, the .sql typing tool — first-party about the API and design, so read it as the author’s claim, not an evaluation. Its load-bearing dependency claim is checkable elsewhere and holds: TypeScript 7.1 “content mappers” is microsoft/typescript-go PR #4712, merged 2026-07-23 (cv 1, checked 2026-10-23). Star counts and release cadence are not assessed here.",
+  "jp": "Colin Hacks による .sql 型付けツール Reylo のプロジェクトサイト——API と設計についての一次情報であり、評価ではなく作者の主張として読む。要となる依存の主張は他所で検証でき、成立する：TypeScript 7.1 の「content mappers」は microsoft/typescript-go の PR #4712、2026-07-23 にマージ済み（cv 1、2026-10-23 確認）。スター数やリリース頻度はここでは評価しない。",
+  "zh": "Colin Hacks 为 .sql 类型化工具 Reylo 建的项目站——关于 API 与设计的一手说明，应作为作者主张来读，而非评估。其关键依赖主张可在别处核验且成立：TypeScript 7.1 的「content mappers」即 microsoft/typescript-go 的 PR #4712，已于 2026-07-23 合并（cv 1，2026-10-23 核验）。star 数与发布节奏在此不作评价。"
+ },
+ "uberblok.storagebits.workers.dev": {
+  "cat": "community",
+  "cred": "high",
+  "cv": 1,
+  "density": "high",
+  "en": "Uberblok, an interactive source-linked walkthrough of OpenZFS — explains the on-disk arithmetic (uberblock rings, where the four labels sit on each disk, how many slots a sector size yields) rather than the marketing layer, and its two load-bearing figures check out against OpenZFS source: VDEV_UBERBLOCK_RING is (128 << 10) and VDEV_LABELS is 4 in include/sys/vdev_impl.h (cv 1, checked 2026-10-23). Unaffiliated with OpenZFS; quotes CDDL-1.0 source, self-hosted on a Cloudflare Workers domain.",
+  "jp": "OpenZFS を一次ソース付きで対話的にたどる Uberblok——マーケティング層ではなくディスク上の算術（uberblock リング、各ディスクに 4 つあるラベルの位置、セクタサイズごとのスロット数）を説明する。要となる 2 つの数値は OpenZFS のソースと一致する：include/sys/vdev_impl.h の VDEV_UBERBLOCK_RING は (128 << 10)、VDEV_LABELS は 4（cv 1、2026-10-23 確認）。OpenZFS とは無関係で、CDDL-1.0 のソースを引用。Cloudflare Workers ドメインで自己ホスト。",
+  "zh": "Uberblok，一个带源码链接的 OpenZFS 交互式导览——讲的是磁盘上的算术（uberblock 环、每块盘上 4 个 label 的位置、按扇区大小得到多少槽位），而不是营销层；其两个承重数字与 OpenZFS 源码一致：include/sys/vdev_impl.h 中 VDEV_UBERBLOCK_RING 为 (128 << 10)、VDEV_LABELS 为 4（cv 1，2026-10-23 核验）。与 OpenZFS 无隶属关系；引用 CDDL-1.0 源码，自托管于 Cloudflare Workers 域名。"
  }
 }

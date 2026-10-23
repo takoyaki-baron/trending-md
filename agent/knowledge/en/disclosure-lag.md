@@ -318,3 +318,35 @@ One call: `node agent/tools/disclosure-lag.mjs --ids CVE-… --pypi <pkg> | --re
 `--tracker ZDI-CAN-…` for the pre-record case.
 
 Sources: [GHSA-2464-fhr4-w9xw](https://github.com/advisories/GHSA-2464-fhr4-w9xw) · [GHSA-673q-mjm6-r5xr](https://github.com/advisories/GHSA-673q-mjm6-r5xr) · [NVD: CVE-2026-96889](https://nvd.nist.gov/vuln/detail/CVE-2026-96889) · [npm: next](https://registry.npmjs.org/next) · [NVD: CVE-2026-94300](https://nvd.nist.gov/vuln/detail/CVE-2026-94300) · [cveawg: CVE-2026-94300](https://cveawg.mitre.org/api/cve/CVE-2026-94300) · [cveawg: CVE-2026-114625](https://cveawg.mitre.org/api/cve/CVE-2026-114625) · [Arista SA 0199 coverage](https://securityonline.info/velocloud-orchestrator-cve-2026-114625-exploited/) · [pwn.watch incident index](https://pwn.watch/incidents.json) · [pwn.watch llms.txt](https://pwn.watch/llms.txt) · [anomalyco/opencode releases](https://github.com/anomalyco/opencode/releases) · [GHSA-f623-hjm8-5wg5](https://github.com/advisories/GHSA-f623-hjm8-5wg5) · [vLLM v0.31.0](https://github.com/vllm-project/vllm/releases/tag/v0.31.0) · [PyPI: vllm 0.31.0](https://pypi.org/pypi/vllm/0.31.0/json) · [Trigger.dev advisories](https://github.com/triggerdotdev/trigger.dev/security/advisories) · [Trigger.dev v4.7.7](https://github.com/triggerdotdev/trigger.dev/releases/tag/v4.7.7) · [NVD: CVE-2026-114085](https://nvd.nist.gov/vuln/detail/CVE-2026-114085) · [Vibe-Trading v0.1.7](https://github.com/HKUDS/Vibe-Trading/releases/tag/v0.1.7) · [GHSA-6j9c-gvcw-74fj](https://github.com/vyperlang/vyper/security/advisories/GHSA-6j9c-gvcw-74fj) · [Vyper releases](https://github.com/vyperlang/vyper/releases/tag/v0.5.0b1) · [PyPI: vyper](https://pypi.org/pypi/vyper/json) · [LKML: ZDI-CAN-34068 thread](https://lists.openwall.net/linux-kernel/2026/10/22/308) · [Phoronix: kernel vulnerabilities posted publicly](https://www.phoronix.com/news/LKML-New-Trend-Vulnerabilities) · [OSSA-2026-046](https://security.openstack.org/ossa/OSSA-2026-046.html) · [NVD: CVE-2026-71195](https://nvd.nist.gov/vuln/detail/CVE-2026-71195) · [GHSA-qhrr-8q5h-9q3h](https://github.com/MessagePack-CSharp/MessagePack-CSharp/security/advisories/GHSA-qhrr-8q5h-9q3h) · [cveawg: CVE-2026-92707](https://cveawg.mitre.org/api/cve/CVE-2026-92707)
+
+## 2026-10-23 12:16 (learn pass) — the cleanest provenance record yet: CVE-2026-96355 (Drupal Webform)
+
+One record, three independent provenance facts, all verified in a single call
+(`node agent/tools/nvd-provenance.mjs --ids CVE-2026-96355`, 2026-10-23 12:18 UTC+8):
+
+```
+CVE-2026-96355 [Awaiting Analysis] 1 metric(s) (0 NVD-scored)
+    — 3.1 Secondary/134c704f-9b21-4f2e-91b3-4a467353bcc0 9.1 [CISA-ADP]
+    published 2026-10-22 · lastModified 2026-10-22T16:54
+    analyzed(status)=false · NVD-scored metrics=0 · CWE-1336
+```
+
+| Axis | The naive reading | What the record says |
+|---|---|---|
+| **Who wrote the 9.1** | "NVD rated it critical" | **CISA-ADP** (orgId `134c704f…`, Vulnrichment) wrote the only metric; **0** NVD-authored metrics; status `Awaiting Analysis` |
+| **When it became known** | "critical Drupal RCE published Oct 22" | the advisory (**SA-CONTRIB-2026-175**) is dated **2026-09-23** — a ~29-day **backfill**; fixed in Webform **6.2.12 / 6.3.1** |
+| **What the vendor's severity even is** | "critical = CVSS≥9" | Drupal scores it **18/25 on its own 25-point composite** — the vendor publishes *no CVSS at all*, so 9.1 is not a restatement of anything Drupal said |
+
+This is the textbook case (5) record — third-party enrichment, layerable, not NVD's and not the
+vendor's — *and* a textbook backfill, *and* a vendor with a non-CVSS scale. Any two of the three
+misreadings produce a publishable-sounding sentence that is wrong in a different way ("NVD says 9.1",
+"Drupal rushed a critical fix yesterday", "Drupal rates it 9.1"). The item that survives says: CISA's
+number, on a backfilled record, for a vendor that scores on a different axis.
+
+**Writing rule 10 (added 2026-10-23): a record can be wrong in three provenance dimensions at once — check
+who wrote the number, when the fix landed, and what scale the vendor uses, in that order.** The first is
+one call, the second is the advisory date vs the record's `published`, the third is 30 seconds on the
+vendor's advisory page (look for a scale that is not CVSS — a composite score, a four-word label, a
+severity tier — and never restate it as CVSS).
+
+Sources: [Drupal SA-CONTRIB-2026-175](https://www.drupal.org/sa-contrib-2026-175) · [CVE-2026-96355 (NVD)](https://nvd.nist.gov/vuln/detail/CVE-2026-96355)

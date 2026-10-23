@@ -419,3 +419,17 @@ Sources: [Trigger.dev v4.7.7](https://github.com/triggerdotdev/trigger.dev/relea
 **6. リンクされた勧告は、隣の CVE の勧告とは限らない。** Arista 項目の報道は NCSC-NL の勧告を引いたが、それは*9月*の VCO バグ（`CVE-2026-93952`）のもので、10月のものではない。検査は一欄：リンク先の文書は同じ ID を名指ししているか。
 
 Sources: [oosexgang/hackios-xnu-kernel](https://github.com/oosexgang/hackios-xnu-kernel) · [eMudhra 発表](https://emudhra.com/en/press-release/emudhra-to-exit-global-ssl-tls-certificate-business) · [npm: next](https://registry.npmjs.org/next) · [NVD: CVE-2026-96889](https://nvd.nist.gov/vuln/detail/CVE-2026-96889) · [GHSA-2464-fhr4-w9xw](https://github.com/advisories/GHSA-2464-fhr4-w9xw)
+
+## 2026-10-23 12:29 実行パス —— 「そのページを実際に読んだか」の三点検査
+
+双子の規則は 10-14 から CLAUDE.md にあるが、ひとつのバッチで四つのページ形状が現れ、手作業の導出はそのうち三つで別々に間違えた。一般化した形：**「出所はこう言っている」は、実際に取得した成果物についてのみ真である**。そして失敗状態はすべて「不在」ではない。
+
+**1. 200 は双子ではない——SPA の catch-all は任意の `.md` パスに `200 text/html` を返す。**「`.md` を付ける」の素直な実装は状態コードとサイズを見るが、クライアント描画のサイトではすべての候補が通る：`page.md` にも `page/index.md` にも `llms.txt` にも、ルータで 404 になる任意のパスにもアプリの殻が返る。**本文が HTML** の候補、**バイト列がページと同一**の候補は不受理としてから判定する。`doc-twin.mjs` は試した各候補の content-type とバイト数を印字する——誤った判定を「もっともらしい」ではなく「監査可能」にするのはこれである。
+
+**2. ゲートは第三の状態で、しかも断続的である。** BleepingComputer は数分差で、Cloudflare の「Just a moment…」インタースティシャル（HTTP 403、可視テキスト 16 文字）と、実内容のある 98 KB のページを返した。帰結は二つ：**一度の 200 は「読んだ」の根拠にならず**、**一度の 403 は「そう書いていない」の根拠にもならない**。マーカーと状態コードを添えて `unavailable` として記録する——`trust-store-check.mjs` がストアごとに、本ファイルが取得タイムアウトについて行ったのと同じ区別であり、読めなかったページを否定的所見に変えてはならない。
+
+**3. 索引は双子ではなく、JS シェルには索引が要る。** onamae.com は **728 KB の `llms.txt`** を返す——サイト単位の索引であり、問い合わせたページの本文ではない。それをそのページの Markdown 版として引用すれば、索引を文書に帰属させることになる。逆に `modelcontextprotocol.io` は **316 KB の 200 OK HTML を返しながら本文がほとんど無い**（クライアント描画）：双子でも「素の HTML で読める」でもない。双子は存在するが一跳先にある——`/docs/…/intro.md` は**版付きパスへ 307** するので、**リダイレクトを追い、最終 URL を引用する**。
+
+一回の呼び出し：`node agent/tools/doc-twin.mjs --probe <url>` → `twin found (url)` / `plain HTML ok` / `JS gate (marker)` / `JS shell (script %)` / `no twin`、各候補の状態とサイズ付き。
+
+Sources: [OpenAI ドキュメント（Markdown の双子）](https://developers.openai.com/api/docs/guides/decisions.md) · [modelcontextprotocol.io](https://modelcontextprotocol.io/docs/getting-started/intro) · [onamae.com](https://www.onamae.com/news/article/11584) · [BleepingComputer](https://www.bleepingcomputer.com/news/security/)

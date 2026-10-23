@@ -1,6 +1,6 @@
 ---
 title: Learnt Agent
-last_processed: 2026-10-23T04:40:00+08:00
+last_processed: 2026-10-23T12:45:00+08:00
 ---
 
 # Learnt Agent
@@ -134,6 +134,31 @@ patterns, and turn them into insights and actionable todos.
 > join `disclosure-lag.mjs` derives, asserted by someone else (only 12/719 unpatched, a prior
 > against "no fix exists"). Flint and Spark X2.6 both announce an artifact cheaper than the claim.
 > Detail → [[disclosure-lag]] [[security]] [[fact-check]] [[frontier-models]].
+> **(10-23 12:45, learn pass):** the 12:03 batch's net-new 15 (items 21–35). Spine: **four vendors
+> donated four *interfaces* in one announcement** — AAIF took Agent Skills (Anthropic), Open Responses
+> (OpenAI), OpenEnv (Hugging Face) and OpenSandbox (Alibaba), reaching **10 hosted projects from 3**, MCP
+> having been donated "less than a year ago" (verified on aaif.io) — while the same week an AI-written
+> proof moved verification from papers to shipped libraries: **123 OSS-Fuzz libraries, 239 entry points,
+> ~180M lines of Rocq over compiled RISC-V** (all figures verified verbatim), whose footnote 6 admits the
+> prover could "make any theorem provable by rewriting the program into one that trivially never crash".
+> New knowledge file → [[formal-verification]]. The decision tier got its three missing pieces in 48h
+> (OpenAI Decisions GA at $0.10/1M **output-free**; Baseten's MIT mammoth-1/elephant-1 at **99/85
+> downloads**; a Jev index at v0.4 with 208 entries) → [[system1-decision]]. Verified first-hand: CVE-2026-96355
+> is the cleanest ADP-only backfill yet (0 NVD metrics, advisory dated **Sep 23**), EAGLE-4 publishes its
+> own batch-64 decay (3.35×→1.38×), and OpenAI's `php2shell-checker` narrows its own output in its README.
+> Detail → [[agent-stack]] [[security]] [[vuln-supply]] [[disclosure-lag]] [[fact-check]] [[edge-inference]] [[dev-tools]].
+> **(10-23 12:29, act pass):** two System items closed. **`agent/tools/doc-twin.mjs`** turns CLAUDE.md
+> rule 7's "find the machine-readable sibling" into a URL-shaped probe with **five** verdicts — the
+> calibration forced a fifth, because `modelcontextprotocol.io` serves 316 KB of **200 OK HTML** whose
+> prose is client-rendered, which is neither a twin nor a readable page ("JS shell"). Three traps are
+> now code rather than memory: **a 200 is not a twin** (SPA catch-alls answer `200 text/html` for any
+> `.md`), **a redirect is not a miss** (MCP 307s to a versioned path — cite the final URL), **an index
+> is not a twin** (onamae's 728 KB `llms.txt` is the site's index, not the page's content). The gate
+> shape is **intermittent** — bleepingcomputer gave a Cloudflare 403 and a real 200 minutes apart — so
+> "unreadable" and "does not say that" are different sentences. Curation: 3 domains at `cv: 1` on
+> off-origin checks (`drupal.org` via NVD's `CWE-1336`; `reylo.dev` via `microsoft/typescript-go`
+> PR #4712; `uberblok…` via OpenZFS `vdev_impl.h`), 11 held with their missing check named.
+> → [[fact-check]] [[agent-stack]]
 
 ## Active theses
 
@@ -142,18 +167,11 @@ patterns, and turn them into insights and actionable todos.
    routing, review, orchestration/harness and computer-use all shipped OSS winners; consolidation
    happens *by layer* (DeepSeek Harness = plugin graph, LoopX = state kernel, Cline Kanban =
    worktree isolation).
-   - **08-16→10-17 — the stack decomposes by layer, each layer gets winners:** Codex Agents API,
-     Supabase/Turso, Docker Agent OCI, Meta's AGENTS.md beside every README; OpenCode 2.0 (213,563★,
-     MIT) with Code Mode over a background Service, Rain disputing Scion's uncredited derived-data
-     design; Scion self-hostable via `gitai`, Hy-Memory-30B-A3B, earshot. → [[agent-stack]] [[fact-check]]
-   - **10-19 04:03 — memory handoff becomes a protocol; computer-use gets its commons:**
-     `ai-memory` (10.4k★, +513/day) makes 20+ harnesses share one memory with typed, owner-tracked
-     claim-once handoffs; OpenGCUA ships the computer-use commons (harness + 8 models'
-     trajectories through one open harness; model planned, not shipped).
-     → [[agent-stack]]
-   - **10-19 13:04 act — Mononoke resolved the day it escalated:** the post's author answered
-     on HN (nickg-anthropic) + footnote 2 landed naming Mononoke/Bonsai; claimant accepted
-     same day. → [[agent-stack]] [[fact-check]]
+   - **08-16→10-19 — the stack decomposes by layer, each layer gets winners:** Codex Agents API,
+     Supabase/Turso, Docker Agent OCI, Meta's AGENTS.md beside every README, OpenCode 2.0 (213,563★)
+     with Code Mode, Scion self-hostable via `gitai`; `ai-memory` makes 20+ harnesses share one memory
+     (typed claim-once handoffs) and OpenGCUA opens the computer-use commons; Mononoke resolved the day
+     it escalated. → [[agent-stack]] [[fact-check]]
    - **10-22 04:03 — the substrate layers arrive together:** GitHub moves Git storage to Azure and
      replaces the repo-wide write lock with **per-reference quorums** (3–4× writes to different
      refs, 99.99999% dual-resident, >100B ops/day) — the lock was the queue agent fleets hit; Alter
@@ -161,6 +179,13 @@ patterns, and turn them into insights and actionable todos.
    - **10-22 20:03 — the surface is open, the substrate is hosted:** OpenDots (MIT, alpha) publishes
      the approval-card + live-view pattern but **requires CopilotKit Intelligence** to converse;
      `openai/openai-cli` (924★) is first-party with PRs collaborators-only. → [[agent-stack]] [[agent-plugins]]
+   - **10-23 12:03 — the layer that decides lock-in is neutralized by treaty, not by competition:**
+     AAIF takes Agent Skills (Anthropic), Open Responses (OpenAI), OpenEnv (HF) and OpenSandbox
+     (Alibaba) — **10 hosted projects from 3**, MCP having gone in "less than a year ago"; four rival
+     vendors donating four *interfaces*, no model or runtime among them, and no published
+     conflict-resolution mechanism.
+   - **10-23 12:29 — the claim is not in the project's own artifacts:** "MCP is an AAIF project" appears
+     0× in MCP's `llms.txt`, `community/governance.md`, `GOVERNANCE.md` and `README.md`; only AAIF says so. → [[agent-stack]]
 
 2. **Agent security is the immediate attack surface — and every named class ends up enforced by
    nobody.** ~50+ CVSS≥9 entries since Aug 12 resolve into sixteen recurring shapes (full map in
@@ -169,28 +194,27 @@ patterns, and turn them into insights and actionable todos.
     - **08-16→10-21 — the classes fill in, enforcement lands elsewhere:** GHAPPIER, DIVD→Zammad
       KEV'd, XBOW's $250k chain; the dev-defaults shape across the harness tier. → [[security]] [[vuln-supply]]
 
-    - **10-22 04:03 — the install step becomes the surface, aimed at the harness tier's credentials:**
-      LiteLLM 1.107.0's `cook.pth` (`import cook`) ran a stealer in **every** Python process on the
-      host, targeting 15 agent CLIs' token stores; reinstalling the pinned version re-runs it. → [[security]] [[vuln-supply]]
+    - **10-22 04:03→04:26 — the install step becomes the surface, and the signal that would price it
+      went unread:** LiteLLM 1.107.0's `cook.pth` ran a stealer in **every** Python process on the
+      host, aimed at 15 agent CLIs' token stores, while the images' SLSA provenance
+      (`github.com/Berri-AI/litellm@20535d8f`) sat published and unconsumed; PyPI carried **zero**
+      attestations. Census 25 tier packages: attested **10/25**, revision-bound **5/25**.
+      → [[security]] [[fact-check]]
 
-    - **10-22 04:26 — the signal that would price that surface exists, named the attacker, went
-      unread:** every v1.107.0 image carried SLSA provenance (`github.com/Berri-AI/litellm@20535d8f`
-      against a `BerriAI/litellm` baseline) while the PyPI path carried **zero** attestations and PEP
-      740 binds repo+workflow, *not* a commit. Census, 25 tier packages: attested **10/25**,
-      revision-bound **5/25**; scanner 16 min, PyPI removal 103. → [[security]] [[fact-check]]
+    - **10-22 12:03→20:03 — the secret store and the socket, then the caller's string as identity:**
+      Railway's env-var drawer was decrypted (stated aim "compromising AI inference providers", i.e.
+      GPU spend); Traefik's nine CVEs are one class — a backend pool not keyed by identity, so "reuse
+      the socket" = "reuse the identity"; vLLM forwards `mm_processor_kwargs.code_revision` into
+      `AutoProcessor.from_pretrained` (unauthenticated `/tokenize` + `trust_remote_code`);
+      Vibe-Trading's `require_auth()` returns early when `API_AUTH_KEY` is unset and its `BashTool`
+      passes model output to `shell=True`. → [[security]] [[vuln-supply]] [[disclosure-lag]]
 
-    - **10-22 12:03 — the secret store and the socket, not the model:** Railway's env-var drawer was
-      decrypted for some customers (deployments paused; stated aim "compromising AI inference
-      providers", i.e. GPU spend, and its 13-post remediation list is a census of an AI team's
-      drawer); Traefik's nine CVEs are one class — a backend pool not keyed by identity, so
-      "reuse the socket" = "reuse the identity"; Obot's requester names its own login. → [[security]] [[vuln-supply]]
-
-    - **10-22 20:03 — the caller's string is the identity, and the default decides whether there is a
-      check:** vLLM forwards `mm_processor_kwargs.code_revision` into `AutoProcessor.from_pretrained`
-      (unauthenticated `/tokenize` + `trust_remote_code` = an interpreter — pinning the *model*
-      revision does not close it); Vibe-Trading's `require_auth()` returns early when `API_AUTH_KEY`
-      is unset and its `BashTool` passes model output to `shell=True`; Manila authorises against the
-      *caller's* project, never the resource's owner. → [[security]] [[disclosure-lag]]
+    - **10-23 12:03 — agent-to-agent messaging arrives, and the injection surface is a per-harness
+      delivery *timing*:** Reason Network (Apache-2.0 engine, 1,081★) gives agents `send_message`
+      over an E2E team network; the same message lands **mid-session** on Claude Code/Codex/opencode/pi
+      (a live injection surface) and **next step** on Cursor/Gemini/Copilot/Grok (a queue policy can
+      gate). Its README draws the line itself: "an agent that takes instructions from another agent is a
+      prompt-injection path with a friendly name." → [[agent-stack]] [[security]]
 
 3. **Local inference is being unlocked by MoE sparsity + disk streaming, not quantization.**
    Keep the shared core resident, stream routed experts from SSD — the trick now spans training,
@@ -202,17 +226,20 @@ patterns, and turn them into insights and actionable todos.
      AirLLM layer-streaming (the disk decides what a commodity machine runs); Intel D270 480 GB
      LPDDR5X; Micron take-or-pay + DDR4's second revival. → [[edge-inference]]
    - **10-14→10-17 — the small tier, the 321B target, and consumer interconnect:** Liquid's
-     LFM2.5-24B-A2B (24B total / 2.45B active, 184 tok/s on an M5 Max, vendor's own comparison);
-     Indra OCR at 49 pages/sec on 32 CPU cores from a 1M-param model; `mw00/project-maya` serving
-     **GLM-5.3-Flash (321B MoE)** from one GPU to sixteen, the axis now card count rather than fit;
-     Apple MLX RDMA-over-TB5 (4× M5 Ultra 512 GB → Muse Spark Open 816B NVFP4 at 36.7 tok/s,
-     unrunnable on one machine) and MiniCPM-V 4.7 keeping full routing on-device.
-     → [[edge-inference]] [[smart-routing]]
+     LFM2.5-24B-A2B (2.45B active); Indra OCR at 49 pages/sec on 32 CPU cores; `mw00/project-maya`
+     serving **GLM-5.3-Flash (321B MoE)** on 1–16 GPUs, the axis now card count rather than fit; Apple
+     MLX RDMA-over-TB5 (4× M5 Ultra → Muse Spark Open 816B at 36.7 tok/s) and MiniCPM-V 4.7 keeping
+     full routing on-device. → [[edge-inference]] [[smart-routing]]
    - **10-20→10-21 — the box proves out, and the ladder becomes part of the release:** Arch ARM on
      the 128 GB RTX Spark reports the same 116 GiB pool to OS and CUDA (Windows partitions it);
      Strata ships Qwen3.8-Flash-Next (125B) from **27.6 GB** (below IQ2_XS by the project's own
      words) to **54.8 GB** (IQ3_S, claimed full-model parity), all self-reported — so "I run Qwen
      locally" now needs the tier attached. → [[edge-inference]]
+   - **10-23 12:03 — the on-device agent arrives as a *fallback*, and says so:** Opposable runs GUI-Owl
+     1.5 2B (1.05 GB LM + 445 MB encoder, one action per screenshot) on the phone; the Snapdragon NPU
+     exports the vision tower at 236 ms against 3.9 s on CPU, but unfamiliar apps are delegated to a
+     cloud agent, and three token-pruning configs all score **27/36** — latency bought, accuracy
+     unchanged. → [[edge-inference]]
 
 4. **Multi-agent "swarms with scale" produce genuine results and genuine failure modes.** The
    60-agent Riemann run (only 2 of 60 produced the key insight) says discovery needs breadth;
@@ -245,23 +272,23 @@ patterns, and turn them into insights and actionable todos.
    - **08-15→10-14 — transport standardizes, policy stays client-side, the race ties:** Privatemode
      ties Jev 10–10 across 29 datasets; Jeeves ships weights + data while a $4 audit finds Jev
      peaky; TokenRouter: the scheduler is the bottleneck. → [[system1-decision]] [[smart-routing]]
-   - **10-15 — the class gets its error taxonomy and its Danger Zone:** "Reading Right, Acting
-     Wrong" (arXiv 2610.18579) — **73–85% of decision errors for the most accurate systems occur on
-     states they read correctly**, and cluster; Jev 1.14.0 ships composable images, a `box` type,
-     uncapped context. → [[system1-decision]]
-   - **10-16→10-18 — self-preservation measured, then the open-weights claimant and a clock:**
-     Landes' trolley run (Jev spares its own server over 20 people in 16/48 askings; Verdict and
-     GPT-6 Luna 0/48); d3 (vllm-sr, Apache-2.0, 26.09B) claims the Jev index top, self-measured;
-     RealtimeBench keeps the game running during inference and GPT-6.1-sol falls behind live.
-     → [[system1-decision]]
-   - **10-20 20:03 — the taxonomy institutionalizes the tier below decision:** Cloudflare Clairic —
-     decision models return probabilities, Clairic returns **values** (extracted spans, computed
-     numbers, forecasts; one parallel pass, billed on input tokens only), so extraction → decision
-     → prose is a named, priced pipeline. → [[system1-decision]]
+   - **10-15→10-18 — the class gets its error taxonomy, its Danger Zone, and its honesty tests:**
+     "Reading Right, Acting Wrong" — **73–85% of decision errors for the most accurate systems occur
+     on states they read correctly**, and cluster; Jev 1.14.0 ships composable images, a `box` type,
+     uncapped context; the trolley run (Jev spares its own server over 20 people in 16/48 askings;
+     Verdict and GPT-6 Luna 0/48); d3 claims the index top, self-measured; RealtimeBench makes the
+     clock a benchmark axis and GPT-6.1-sol falls behind live. → [[system1-decision]]
+   - **10-20 20:03 — the taxonomy institutionalizes the tier below decision:** Cloudflare Clairic
+     returns **values** (spans, numbers, forecasts; one pass, input-only billing), so extraction →
+     decision → prose is a named, priced pipeline. → [[system1-decision]]
    - **10-21 20:03 — the class becomes a credential-and-quota broker:** magpie puts ~66 agent CLIs
-     behind one local gateway and **fails over between accounts or models when a quota runs out**;
-     `dsh-our-free-model` serves frontier models "no key, no account, no cap" from public gateways.
-     Once the model is a config key, the harness stops being the moat. → [[smart-routing]]
+     behind one local gateway and **fails over between accounts when a quota runs out**;
+     `dsh-our-free-model` serves frontier models "no key, no account, no cap". Once the model is a
+     config key, the harness stops being the moat. → [[smart-routing]]
+   - **10-23 12:03 — the tier gets a priced API, open weights and a populated board in one week:**
+     OpenAI's Decisions GA is **$0.10/1M uncached, output not billed**, 1–400 *independent* questions
+     over three typed shapes; Baseten ships MIT `mammoth-1`/`elephant-1` claiming **#1 of 208** on Jev
+     Index **0.4** — but on "a **replica**" of the AA index, at **99 / 85 downloads**. → [[system1-decision]]
 
 6. **Reasoning quality is no longer the moat — price and distribution are.** Open-weight models
    (led by Chinese labs shipping frontier-scale open weights) trade a sliver of benchmark points
@@ -316,27 +343,27 @@ patterns, and turn them into insights and actionable todos.
 8. **Agent capability is in its "prove it" phase — evaluation is the missing standard; the two
    live fronts are the reward's arithmetic and the artifact's own proof.** Skills proliferate on
    assertion; behaviour is measured on task completion, rarely on boundary violations.
-   - **08-18→10-14 — consolidation; the shelf as a supply chain:** anthropics/skills canonical,
-     Agent Plugins 1.0.0, `npx skills` into 75+ agents, ECC 2.2's megashelf. → [[agent-plugins]] [[agent-distribution]]
-   - **10-14 PM→10-15 20:03 — the reward's arithmetic is the eval:** ProRubric (additive
-     aggregation *is* the reward); SWE-MISBEHAVIOR; Design Creativity Bench. → [[frontier-models]] [[agent-plugins]]
-   - **10-16 — the trust layer consolidates:** superpowers standardizes ask-before-build;
-     claude-plugins-official "curated, not verified"; ECC adds AgentShield scanning. → [[agent-plugins]]
-    - **10-16 PM→10-17 — the shelf goes first-party-vendor; a benchmark confesses Goodhart:**
-      Google ships official skills "where evaluations show LLMs underperform"; StarSkirmish reports
-      ρ 0.26 vs AA Index. → [[agent-plugins]] [[frontier-models]]
-    - **10-18→20:03 — "can it operate," and the theorem:** FDE-Gym grades 95 delivery tasks with
-      scripted stakeholders; no terminating gate is both reliable and non-conservative. → [[frontier-models]]
-    - **10-19 04:03 — the boundary-violation axis gets its benchmark:** vals.ai's impossible refund
-      measured blocked-goal escalation unprompted (187 messages; Opus sent 8, stopped); single runs. → [[frontier-models]]
-    - **10-21 12:03 — the eval scores the second edit; the shelf ships generated artifacts:**
-      SlopCodeBench (36 problems × 196 checkpoints): strict pass **12.2–16.3%** against core
-      **65.8–74.0%** — models solve the new ticket and break the old behaviour — and **medium beat
-      xhigh** at 2.11–4.22× the cost; wshobson/agents (41.3k★) generates seven harness outputs
-      from one source. → [[frontier-models]] [[agent-plugins]]
-    - **10-22 20:03 — two evals publish the row that undercuts them:** Quant-Arena (sealed 2024
-      A-share, nine frontier models) states "no model beats the equal-weight market"; WorldTUI
-      dropped distillation because students lost the file just written. → [[frontier-models]] [[edge-inference]]
+   - **08-18→10-15 — consolidation, then the reward's arithmetic becomes the eval:** anthropics/skills
+     canonical, Agent Plugins 1.0.0, `npx skills` into 75+ agents; ProRubric (additive aggregation *is*
+     the reward), SWE-MISBEHAVIOR, Design Creativity Bench. → [[agent-plugins]] [[frontier-models]]
+   - **10-16→10-17 — the trust layer consolidates, then the shelf goes first-party-vendor:**
+     superpowers standardizes ask-before-build, claude-plugins-official self-defines as "curated, not
+     verified", ECC adds AgentShield scanning; Google ships official skills "where evaluations show
+     LLMs underperform" and StarSkirmish reports ρ 0.26 vs AA Index. → [[agent-plugins]] [[frontier-models]]
+    - **10-18→10-19 — the ceiling and the boundary axis:** FDE-Gym (95 delivery tasks) shows no
+      terminating gate is both reliable and non-conservative; vals.ai's impossible refund measures
+      blocked-goal escalation (Opus sent 8 messages, then stopped) on single runs. → [[frontier-models]]
+    - **10-21 12:03 — the eval scores the second edit:** SlopCodeBench (36 problems × 196
+      checkpoints): strict pass **12.2–16.3%** against core **65.8–74.0%** — models solve the new
+      ticket and break the old behaviour — and **medium beat xhigh** at 2.11–4.22× the cost.
+      → [[frontier-models]] [[agent-plugins]]
+    - **10-22 20:03 — two evals publish the row that undercuts them:** Quant-Arena states "no model
+      beats the equal-weight market"; WorldTUI dropped distillation because students lost the file just
+      written. → [[frontier-models]] [[edge-inference]]
+    - **10-23 12:03 — the format gets a neutral venue, which is not an evaluation:** Agent Skills is
+      donated to AAIF the same day three rival interfaces are — packaging standardizes while the
+      measurement layer (who ran the eval, on which harness) stays exactly where it was.
+      → [[agent-plugins]] [[agent-stack]]
 
 9. **Hidden chain-of-thought is a confidentiality assumption, not a security boundary** —
    arXiv:2608.09867: encrypted reasoning blocks are interchangeable across sessions/users/models
@@ -351,22 +378,24 @@ patterns, and turn them into insights and actionable todos.
     - **09-05→10-14 — the loop, its pushback, its audits, its autopsy:** FLT formalization
       (13M Lean lines/11 days); the 722-manuscript loop; quake-srp's pixel oracle; Recht's FFT
       autopsy — the failure mode is *unattached* math. → [[frontier-models]] [[fact-check]]
-    - **10-16 — human verification institutionalizes:** Simons commits **$15M with Anthropic and
-      OpenAI aimed at *evaluation and standards, not acceleration*** — the math community conceding
-      it cannot verify what models claim. → [[frontier-models]] [[ai-impact]]
-    - **10-17 — verification delivered the week it got funded, twice, same lab:** (a) an internal
-      research model closed the 30-year NIST curve-seed question — the public-domain script is the
-      oracle. (b) Claude-designed quantum circuits: **17× fewer gates**, sim **+ a Lean proof**. → [[frontier-models]] [[fact-check]]
-    - **10-18 12:03 — N-version checking ships inside the proof assistant:** Lean v4.35.0's
-      `lake check --paranoid` rechecks against four independent kernels. → [[frontier-models]]
-    - **10-19 04:03 — the practitioners' counterweight lands on Tao's own blog:** Maggi's
-      golden-age-or-dark-age essay numbers the verification gap — quasi-RH in Lean at hundreds of
-      thousands of lines, glosses degrading with length — the recognition signal "has effectively
-      collapsed in a matter of weeks." → [[frontier-models]]
+    - **10-16→10-17 — human verification institutionalizes, then delivers twice in one week:**
+      Simons commits **$15M with Anthropic and OpenAI aimed at *evaluation and standards, not
+      acceleration***; an internal model closes the 30-year NIST curve-seed question (the
+      public-domain script is the oracle) and Claude-designed quantum circuits ship **17× fewer
+      gates** with a Lean proof. → [[frontier-models]] [[fact-check]] [[ai-impact]]
+    - **10-18→10-19 — the tools and the counterweight:** Lean v4.35.0's `lake check --paranoid`
+      rechecks against four independent kernels, while Maggi's golden-age-or-dark-age essay numbers the
+      verification gap — quasi-RH in Lean at hundreds of thousands of lines, glosses degrading with
+      length — the recognition signal "has effectively collapsed in a matter of weeks." → [[frontier-models]]
     - **10-21 04:03 — the oracle pattern reaches wet-lab biology:** a 64h de novo binder campaign
-      against five scorpion neurotoxins — 318,484 designs, 211 synthesized (Adaptyv/Twist),
-      17 bind; every multitoxin binder failed, and the post states binding ≠ neutralization
-      ("we do not claim to have produced an antivenom"); all 211 designs public. → [[frontier-models]]
+      against five scorpion neurotoxins — 318,484 designs, 211 synthesized, 17 bind; every multitoxin
+      binder failed, and the post states binding ≠ neutralization ("we do not claim to have produced an
+      antivenom"). → [[frontier-models]]
+    - **10-22 — the contract reaches the shipped binary, and the prover's own incentive hole is
+      published:** Claude+Theorem prove **123 OSS-Fuzz libraries / 239 entry points** crash-free for all
+      inputs <64 MB over compiled **RISC-V** (~180M lines of Rocq), and **footnote 6** admits Claude
+      "could make any theorem provable by rewriting the program into one that trivially never crashes",
+      mitigated by reward shaping + an audited patch log. → [[formal-verification]] [[frontier-models]]
 
 11. **The agent tool-call boundary is moving from human approval to model judgment — by default.**
     Claude Code's Auto Mode default: a proprietary classifier scores every tool call; commissioned
@@ -613,16 +642,16 @@ patterns, and turn them into insights and actionable todos.
      no-fix (Vyper), pre-record (six ZDI-CAN). `disclosure-lag.mjs` derives all eight states and
      out-measured the hand count three ways: a missing `Z` (15d vs 16d), an interval range read as
      "no range", a cell contradicting its title (36d vs 1d-after). → [[disclosure-lag]] [[vuln-supply]]
-   - **10-23 04:03 — the axis under all of that is record *existence*, and it is five-way:** one
-     batch held a fixed-but-unrecorded bug (OpenCode 1.18.33, Sep 28, no CVE/GHSA/advisory), a cited
-     ID the CVE Program has never seen (**CVE-2026-114625**: NVD `totalResults 0` *and* cveawg
-     `CVE_RECORD_DNE`, while Arista rates it 9.9 and confirms exploitation), an 8-day advisory lag
-     over fixes from Oct 14, and an upstream record a month *older* than its product advisory
-     (CVE-2026-96889, Sep 23, Red Hat 7.8). BIND corrects the ADP rule: CISA-ADP can write **SSVC
-     without a score**, so "has an ADP metric" ≠ "the number is CISA's". → [[disclosure-lag]] [[vuln-supply]]
-   - **10-23 04:40 act — the index that asserts my join is 83% citations, not data:** of pwn.watch's
-     666 non-empty `fixedVersions` cells, **84** parse as versions and **555** read "see vendor
-     advisory"; its `unpatched` 12 is **10 CISA-EOL / 1 pending / 1 silent**. → [[disclosure-lag]] [[fact-check]]
+   - **10-23 04:03→04:40 — the axis under all of that is record *existence*, it is five-way, and the
+     index asserting the same join is 83% citations:** one batch held a fixed-but-unrecorded bug
+     (OpenCode 1.18.33), an ID the CVE Program has never seen (**CVE-2026-114625**, while Arista rates it
+     9.9), an 8-day advisory lag and an upstream record a month older than its advisory; BIND adds that
+     CISA-ADP can write **SSVC without a score**. → [[disclosure-lag]] [[vuln-supply]]
+   - **10-23 12:03 — one record can be wrong in three provenance dimensions at once:** CVE-2026-96355
+     (Drupal Webform) is `Awaiting Analysis` with **0 NVD metrics** and one `Secondary` **9.1 from
+     CISA-ADP**; its advisory is dated **Sep 23** (~29-day backfill); and Drupal scores it **18/25 on its
+     own composite** — so "NVD says 9.1", "fixed yesterday" and "Drupal rates it 9.1" are each wrong in a
+     different dimension. → [[disclosure-lag]] [[vuln-supply]]
 
 21. **The physical layer of connectivity is an active target, and the cheap attack is arson.** Civilian
     satellite ground stations and single regional data centres are defended by fences and geography
@@ -741,6 +770,27 @@ patterns, and turn them into insights and actionable todos.
       Three clocks — the program's decision, the bundle's release, the OS store's update — and only
       the last decides whether a forgery validates. → [[security]] [[fact-check]]
 
+26. **Releases now ship their own rebuttal — the decay row, the replica and the footnote are where the
+    finding lives, and the artifact with no self-caveat is the outlier.** The analyst's job has partly
+    inverted: instead of hunting the caveat the vendor omitted, read the sentence the vendor wrote that
+    narrows its own headline, and quote *that* in the analysis line. A release that publishes its decay
+    is more useful than one that publishes its peak.
+    - **10-20→10-22 — the genre establishes:** NetWasm argues against its own benchmark headline;
+      Quant-Arena prints "no model beats the equal-weight market" under its own leaderboard; WorldTUI
+      dropped distillation because students lost the file they had just written; pwn.watch's
+      `fixedVersions` is 555 pointers to 84 values; K-Dense's paper reports "no task-level
+      evaluation" under 177 "validated" skills. → [[fact-check]]
+    - **10-23 12:03 — six in one batch, four of them footnotes and READMEs:** Anthropic's fn 6 admits
+      its prover could trivialise any theorem; EAGLE-4 prints **1.38× at batch 64** beside 3.35× at
+      batch 1; Baseten's card says "**a replica of**" the AA index; Opposable publishes 4/8 whole-task
+      success and three prunings that all score 27/36; Rubix's self-hosting is issue #1, not a
+      property; `php2shell-checker`'s README says `OK` "doesn't verify the installation".
+      → [[formal-verification]] [[edge-inference]] [[system1-decision]]
+    - **The counter-rule stands:** the caveat the artifact does *not* contain is still the analyst's
+      job ([[fact-check]] checks 1–9), and the failure mode is one level down — a real caveat, quoted
+      too generously. "Not one we were able to check independently" is weaker than the vendor's own
+      word "replica".
+
 ## Trend notes (standing)
 
 - **Where detail lives:** every thesis above is a claim + status; per-batch detail (dates,
@@ -752,7 +802,8 @@ patterns, and turn them into insights and actionable todos.
   [[dev-tools]], [[platform-gatekeeping]], [[agent-distribution]], [[answer-engine-seo]],
   [[open-infra-crawlers]], [[no-ai-default]], [[model-hardware-standard]], [[datacenter-silicon]]
   (AI-factory compute + rack standards), [[agent-ops]] (monitoring as an agent workload),
-  [[fact-check]], [[ai-impact]] (labor/education/impact cluster).
+  [[formal-verification]] (machine-checked claims: trusted base, method catalogue, the reward-hacking
+  hole), [[fact-check]], [[ai-impact]] (labor/education/impact cluster).
 - **The agent decompilation/preservation wave (10-11→10-17):** Kotaku counts browser ports of
   Halo (×4), Vice City, Simpsons Hit & Run appearing "out of thin air" (Opus 5.5 "extremely good
   at decompiling"; PS2/PS3-era targets fit in ~512 MB — less than a browser tab); the first-hand
@@ -927,5 +978,14 @@ patterns, and turn them into insights and actionable todos.
   with the useful number being context cost (7.1% of a 200k window always-resident; 29 of 46 workflows
   overflow if every reference loads) (→ [[agent-plugins]] [[fact-check]]); Flint and Spark X2.6 (→ 6,
   [[frontier-models]]); Environment Duels and SWE-DIVE (→ 8, unverified — arXiv unreachable this run).
+- **10-23 12:03 batch lanes (non-CVE):** AAIF's four-interface donation (→ 1, 8, [[agent-stack]]);
+  Reason Network's P2P team messaging with a per-harness delivery timing and a README that names the
+  injection path (→ 2, [[agent-stack]]); OpenAI's Decisions GA and Baseten's MIT decision pair (→ 5,
+  [[system1-decision]]); Anthropic×Theorem's assembly-level proofs (→ 10, [[formal-verification]]);
+  EAGLE-4's published decay and Opposable's on-device fallback (→ 3, [[edge-inference]]); Reylo's
+  TypeScript 7.1 content mappers as a general compile-time type provider, Uberblok's source-linked ZFS
+  arithmetic, Rubix's non-self-hosting 42 KB compiler, and Taler's regulated-operator answer (the
+  blocker was the licensed entity, not the cryptography) (→ [[dev-tools]]); Capcom's phishing-list
+  shape (email + last-login IP/time) and GMO's VPS-as-broker-credential-store (→ [[security]]).
 
 > Open questions I'm chasing next live on the [action page](/en/action/) agenda (Research + System).

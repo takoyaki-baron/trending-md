@@ -3224,116 +3224,71 @@
         "2026-10-22.md"
       ]
     },
-    "https://socket.dev/blog/ghostaction-cloud-credentials": {
-      "verdict": "blocked",
-      "streak": 3,
-      "first_seen": "2026-10-22T20:18:32.481Z",
-      "last_seen": "2026-10-22T20:51:54.828Z",
-      "feeds": [
-        "2026-10-23.md"
-      ]
-    },
-    "https://www.thehindu.com/business/emudhra-to-exit-overseas-web-security-certificate-business-as-stock-takes-beating/article71611983.ece": {
-      "verdict": "transient",
-      "streak": 3,
-      "first_seen": "2026-10-22T20:18:32.481Z",
-      "last_seen": "2026-10-22T20:51:54.828Z",
-      "feeds": [
-        "2026-10-23.md"
-      ]
-    },
-    "https://www.channelnewsasia.com/business/indian-firm-emudhra-exits-global-digital-certificates-business-after-vulnerability-disclosure-6482671": {
-      "verdict": "transient",
-      "streak": 3,
-      "first_seen": "2026-10-22T20:18:32.481Z",
-      "last_seen": "2026-10-22T20:51:54.828Z",
-      "feeds": [
-        "2026-10-23.md"
-      ]
-    },
     "https://news.ycombinator.com/item?id=50195959": {
-      "verdict": "transient",
-      "streak": 3,
+      "verdict": "blocked",
+      "streak": 1,
       "first_seen": "2026-10-22T20:18:32.481Z",
-      "last_seen": "2026-10-22T20:51:54.828Z",
+      "last_seen": "2026-10-23T04:39:49.482Z",
       "feeds": [
         "2026-10-23.md"
       ]
     },
     "https://www.axios.com/2026/10/22/ai-agents-banks-unauthorized-accounts-access": {
-      "verdict": "transient",
-      "streak": 3,
+      "verdict": "blocked",
+      "streak": 1,
       "first_seen": "2026-10-22T20:18:32.481Z",
-      "last_seen": "2026-10-22T20:51:54.828Z",
-      "feeds": [
-        "2026-10-23.md"
-      ]
-    },
-    "https://huggingface.co/RecursiveSI/flint": {
-      "verdict": "transient",
-      "streak": 3,
-      "first_seen": "2026-10-22T20:18:32.481Z",
-      "last_seen": "2026-10-22T20:51:54.828Z",
+      "last_seen": "2026-10-23T04:39:49.482Z",
       "feeds": [
         "2026-10-23.md"
       ]
     },
     "https://news.ycombinator.com/item?id=50196718": {
-      "verdict": "transient",
-      "streak": 3,
-      "first_seen": "2026-10-22T20:18:32.481Z",
-      "last_seen": "2026-10-22T20:51:54.828Z",
-      "feeds": [
-        "2026-10-23.md"
-      ]
-    },
-    "https://arc.net/": {
       "verdict": "blocked",
-      "streak": 3,
+      "streak": 1,
       "first_seen": "2026-10-22T20:18:32.481Z",
-      "last_seen": "2026-10-22T20:51:54.828Z",
+      "last_seen": "2026-10-23T04:39:49.482Z",
       "feeds": [
         "2026-10-23.md"
       ]
     },
-    "https://www.godaddy.com/help/what-is-the-cpcps-certificate-profile-bug-43095": {
-      "verdict": "transient",
-      "streak": 3,
-      "first_seen": "2026-10-22T20:18:32.481Z",
-      "last_seen": "2026-10-22T20:51:54.828Z",
-      "feeds": [
-        "2026-10-23.md"
-      ]
-    },
-    "https://zeabur.com/blogs/october-2026-security-incident": {
-      "verdict": "transient",
+    "https://news.ycombinator.com/item?id=50202217": {
+      "verdict": "blocked",
       "streak": 1,
-      "first_seen": "2026-10-22T20:51:54.828Z",
-      "last_seen": "2026-10-22T20:51:54.828Z",
+      "first_seen": "2026-10-23T04:39:49.482Z",
+      "last_seen": "2026-10-23T04:39:49.482Z",
       "feeds": [
         "2026-10-23.md"
       ]
     },
-    "https://zeabur.com/blogs/zeabur-is-shutting-down": {
-      "verdict": "transient",
+    "https://news.ycombinator.com/item?id=50180190": {
+      "verdict": "blocked",
       "streak": 1,
-      "first_seen": "2026-10-22T20:51:54.828Z",
-      "last_seen": "2026-10-22T20:51:54.828Z",
+      "first_seen": "2026-10-23T04:39:49.482Z",
+      "last_seen": "2026-10-23T04:39:49.482Z",
       "feeds": [
         "2026-10-23.md"
       ]
     },
-    "https://zeabur.com/blogs/migration-refunds-and-security-claims": {
-      "verdict": "transient",
+    "https://news.ycombinator.com/item?id=50180257": {
+      "verdict": "blocked",
       "streak": 1,
-      "first_seen": "2026-10-22T20:51:54.828Z",
-      "last_seen": "2026-10-22T20:51:54.828Z",
+      "first_seen": "2026-10-23T04:39:49.482Z",
+      "last_seen": "2026-10-23T04:39:49.482Z",
+      "feeds": [
+        "2026-10-23.md"
+      ]
+    },
+    "https://news.ycombinator.com/item?id=50197404": {
+      "verdict": "blocked",
+      "streak": 1,
+      "first_seen": "2026-10-23T04:39:49.482Z",
+      "last_seen": "2026-10-23T04:39:49.482Z",
       "feeds": [
         "2026-10-23.md"
       ]
     }
   },
-  "runs": 80,
+  "runs": 81,
   "first_run": "2026-09-05T12:47:55.004Z",
-  "last_run": "2026-10-22T20:51:54.828Z"
+  "last_run": "2026-10-23T04:39:49.482Z"
 }

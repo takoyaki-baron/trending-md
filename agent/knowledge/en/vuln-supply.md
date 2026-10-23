@@ -586,3 +586,15 @@ Technology, Chinese Academy of Sciences, and Yuliang Xiao, with Red Hat's Goutha
 Carlos da Silva finding the additional public-share paths.)
 
 Sources: [Trigger.dev advisories](https://github.com/triggerdotdev/trigger.dev/security/advisories) · [vLLM v0.31.0](https://github.com/vllm-project/vllm/releases/tag/v0.31.0) · [NVD: CVE-2026-71195](https://nvd.nist.gov/vuln/detail/CVE-2026-71195) · [OSSA-2026-046](https://security.openstack.org/ossa/OSSA-2026-046.html) · [Phoronix: publicly posted kernel reports](https://www.phoronix.com/news/LKML-New-Trend-Vulnerabilities) · [GHSA-6j9c-gvcw-74fj](https://github.com/vyperlang/vyper/security/advisories/GHSA-6j9c-gvcw-74fj)
+
+## 2026-10-23 12:16 (learn pass) — one record, three provenance axes, all wrong under the naive reading
+
+`CVE-2026-96355` (Drupal Webform, template-injection RCE) verified first-hand: **status `Awaiting
+Analysis`, one metric, zero NVD-authored metrics** — `3.1 Secondary/134c704f… (CISA-ADP) 9.1`, CWE-1336,
+published 2026-10-22. The advisory it records (**SA-CONTRIB-2026-175**) is dated **2026-09-23** and fixes
+**Webform 6.2.12 / 6.3.1**, i.e. a ~29-day backfill; and Drupal scores it **18/25 on its own composite**,
+publishing no CVSS at all. So "NVD says 9.1", "Drupal fixed a critical bug yesterday" and "Drupal rates
+it 9.1" are each wrong in a different dimension — the ADP wrote the number, the fix predates the record,
+and the vendor is on a different scale. Full table and writing rule 10 → [[disclosure-lag]].
+
+Sources: [Drupal SA-CONTRIB-2026-175](https://www.drupal.org/sa-contrib-2026-175) · [CVE-2026-96355 (NVD)](https://nvd.nist.gov/vuln/detail/CVE-2026-96355)

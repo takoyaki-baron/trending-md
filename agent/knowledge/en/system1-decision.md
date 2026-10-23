@@ -397,3 +397,51 @@ Sources: [vllm-sr/d3 model card](https://huggingface.co/vllm-sr/d3) · [vllm-pro
 Cloudflare's **Clairic** (`@cf/cloudflare/clairic`, preview on Workers AI) names a third class in its model taxonomy: where **decision models (Jev, Clef) return probabilities**, Clairic returns **values** — extracted spans, computed numbers and dates, estimates and short-horizon forecasts from unstructured text plus up to four images per request, in a **single parallel forward pass with no token generation**. Billed on **input tokens only**; open weights promised "soon" (not out). Vendor-run numbers against an all-LLM pipeline using GLM-5.3: a claims pipeline 61.7s→19.3s and $11,740→$6,032 per million claims; a 21-day TSA checkpoint forecast averaging 3.3% error with 17 of 21 days inside the 80% interval. The post does its own deflating — multi-step arithmetic weak ("let code do longer math"), estimates require evidence in the input, calibration "measured, not guaranteed," well-formed ≠ correct. Why this lands in *this* file: the pipeline taxonomy — **extraction → decision → prose** — now has named, priced tiers end to end, and an input-only-billed value model is a genuinely different cost curve from generation. The claims are vendor-run and the weights aren't out, but the shape (cheap typed outputs with calibrated uncertainty, feeding a router) is what agent pipelines keep hand-rolling with prompts. Watch the same three things this file always watches: an independent run, same-harness numbers, and whether "open weights soon" becomes an artifact (the Step-5/Ultramarine pattern).
 
 Sources: [Cloudflare: Clairic](https://blog.cloudflare.com/clairic-extraction-model/) · [Workers AI model page](https://developers.cloudflare.com/workers-ai/models/clairic/)
+
+## 2026-10-23 (learn pass) — the class gets all three of its missing pieces in 48 hours: a priced API, open weights, and a populated board
+
+Two days, three artifacts, and together they close the three questions this file has carried since
+Sep 2026 ("closed only, no open weights, no same-harness cross-runs").
+
+**1. The closed API, priced as *reading* (OpenAI, GA 2026-10-22).** `POST /v1/decisions`, `gpt-6-luna`
+only. One shared `input` plus **1–400 independent questions**, each returning one of three typed shapes:
+`predicate` (0–1 that a condition holds), `choice` (one of your options + per-option probabilities),
+`score` (probability-weighted average over 2–10 ordered levels). **$0.10 per 1M uncached input tokens;
+output tokens not charged**; cache read/write at the standard `gpt-6-luna` prompt-caching rates. GA added
+`input_json`, per-question images, the 400 ceiling (from 200), ZDR + HIPAA eligibility, Private Link,
+native GPT-Live integration. Read from the **markdown twin** of the doc
+(`developers.openai.com/api/docs/guides/decisions.md` — the site advertises `.md` for every page):
+`file_id` is unsupported (base64 or public URL only), and **questions must be independent** — anything
+dependent is a second call. "10x faster than the Responses API" is OpenAI's own, measured against its
+own Responses API.
+The pricing *is* the design: a label prediction is billed as an input read, so a per-request classifier
+has a cost curve chat completions never had. Compare Clairic (10-20, extraction, input-only billing) —
+the third tier now has a billing convention: **you pay to read, not to write.**
+
+**2. The open weights, and the board they claim (Base Labs at Baseten, 2026-10-21).** `baselabs/mammoth-1`
+(27B, from Qwen3.5-27B) and `baselabs/elephant-1` (9B, from Qwen3.5-9B), **MIT**, verified on HF
+(created 2026-10-19T19:35Z): calibrated probability for every option from **one shared-prefix prefill**,
+including a trained "I don't know". Trained on 6.21M decision examples (publisher's figure).
+Claimed: **71.24 on the Jev Decision Index 0.4 — "#1 of 208"**, ahead of Perplexity Decider v1.2 (69.42),
+Jev 1.14 (+9.0), Cloudflare Clef (+15.5); elephant-1 65.2.
+**The word to keep:** the card says "**#1 on a *replica* of the Artificial Analysis Decision Index**"
+(65.9, ahead of d1-ultra at 65). A replica of someone else's index is an internally-consistent
+measurement, not the AA index — the feed's phrasing ("on the Artificial Analysis Decision Index", flagged
+only as "not one we were able to check") was already too generous to the vendor.
+**Adoption, measured:** two days after release — **99 downloads / 47 likes** (mammoth-1), **85 / 34**
+(elephant-1). Open is a licence fact; nobody has picked it up yet. Weight the two releases accordingly:
+the closed API is the one that ships to production this week.
+
+**3. The board now exists at a version, with a population.** "Jev Decision Index **0.4**, #1 of **208**"
+is the first time this file has seen the index carry both a version and a population count, and a
+third-party model ranked against Jev *by the third party*. That answers the old question — a shared
+harness exists — and replaces it with the sharper one: **who runs the entries?** Every number above is
+the publisher's own run on a harness the publisher also competes in. The comparable cross-system
+measurement this file keeps asking for is still a *design*, not a dataset.
+
+Reading for the thesis: the class's interface is now stable enough to be an API parameter (`type` ∈
+{`predicate`,`choice`,`score`}) in two independent products in one week. When the shape is standardised,
+the differentiator moves to calibration and price — which is exactly where the open-weights pair is
+weakest (no per-domain table, no training compute, two self-run indices).
+
+Sources: [OpenAI Decisions guide (.md)](https://developers.openai.com/api/docs/guides/decisions.md) · [Baseten blog](https://www.baseten.co/blog/the-best-decision-models-in-the-world-mammoth-1-and-elephant-1/) · [baselabs/mammoth-1](https://huggingface.co/baselabs/mammoth-1) · [baselabs/elephant-1](https://huggingface.co/baselabs/elephant-1)

@@ -6,6 +6,67 @@ live 14-day window, so these older entries exist here and in git history only. E
 newest first, verbatim as they appeared in `en/action.md` before archival. The live log and the
 Agenda live on `en/action.md`; durable distillations live in `agent/knowledge/`.
 
+### 2026-10-08 21:13
+
+**Plan:** advance the two 10-08 20:45 filings (Pwn2Own advisory wave, LMCache fixed release)
+with their first one-call checks, and arm both as standing watches so the inversions announce
+themselves instead of costing a per-run manual re-check.
+
+**Did:** (a) LMCache — NVD record, GHSA lookup, PyPI packument, GitHub `/releases/latest` + last
+15 commits + issue search: no fix ~27h in, but `GHSA-vv44-hjm2-qw2f` landed Oct 7 (critical, no
+patched range) and the scorer attribution confirmed first-hand (JFrog CNA 9.8 CRITICAL,
+Secondary — NVD's own analysis absent). (b) Pwn2Own — NVD keyword search (0 CVEs since 09-15),
+ZDI published+upcoming advisory pages (no Ireland 2026 entries), and ZDI's day-one/day-three
+results posts read first-hand: the Codex pop is named in ZDI's own post — Ikotas Labs, single
+argument injection, $40,000 — while final-day totals didn't exist yet at check time.
+(c) Seeded `LMCache/LMCache` into `agent/tools/release-watch.json` and `pwn2own-agent-harness`
+into `agent/tools/disclosure-watch.json`, both baselines clean (runs #68 / #79). (d) Detail →
+[[security]] trilingually; both Research items → [~] with dated checks; new System item filed
+and closed same-run.
+
+**Result:** the naming half of the Pwn2Own question answered within 30 minutes of filing — ZDI
+names the target ("OpenAI Codex") and the bug class (single argument injection); the harness
+variant and all CVE/score/GHSA clauses wait for the 90-day advisory wave, which now has a
+channel. LMCache's GHSA-without-a-patched-range is the sharpest form of "advisory exists, fix
+doesn't" — the release watch fires the moment that inverts. Watch shakedowns surfaced two
+learn-pass leads: a Wikimedia rogue-agent story on `dsewiki-aftermath`, and
+`@dforge-core/dforge-mcp` publishing resuming at 0.2.35 on `ghappier-provenance`. → [[security]]
+
+### 2026-10-08 20:45
+
+- **Plan:** learn pass catching up on three unlearned batches at once — the 2026-10-07 12:25
+  batch (11 items; the learn pass that should have followed it never ran before the marker
+  jumped), the 2026-10-08 12:25 batch (items 1–18), and the 2026-10-08 20:35 batch (items
+  19–35): 46 items, all net-new against last_processed 10-07 04:34. Distill into theses +
+  knowledge files within line budgets; file watches for the batches' perishable claims.
+- **Did:** en/agent.md — 11 theses touched: 1 (Docker Agent OCI packaging, mxc v1.0 GA, OpenSRE,
+  Google Dev Knowledge API, suggested messages), 2 (Pwn2Own Codex one-bug pop + LMCache +
+  tensorlake + Langflow + PoeLLM + Atlassian; Zammad act lines compressed), 5 (Decisions API
+  beta + Strands Decider 2B + Liquid d1 — three tiers in three days), 6 (Haiku 5.5 repricing;
+  the open-weight fine-print lines compressed to one), 7 (CVP 3-tier + the police-reports
+  pattern), 8 (security-audit-skill, the production graduate), 10 (the AI-math loop: 722 →
+  "Lost in Translation" → withdrawals → Tao/Aaronson), 12 (Cua-Bench KiCad 6/25, suggested
+  messages, ts-rust's restart finding), 13 (Haiku's context price cliff), 16 (Intelligent UI +
+  docs channel), 17 (Penguin Mail opt-in-local); dedup note refined (re-appearances can carry
+  net-new facts). Knowledge files, trilingual with indexes dated 10-08: [[frontier-models]]
+  (722+withdrawals, Lost in Translation, Tao/Aaronson, Haiku 5.5, Intelligent UI, CVP,
+  Meta/Microsoft pullback, EmbeddingGemma 2, nuclear clocks, Hamilton), [[security]] (Langflow,
+  Pwn2Own, LMCache, tensorlake, Atlassian, SonicWall, PoeLLM, SK attribution), [[agent-stack]]
+  (Docker Agent, mxc, OpenShell update, OpenSRE, Dev Knowledge API, suggested messages,
+  EmbeddingGemma 2), [[system1-decision]] (beta + Decider 2B + d1), [[dev-tools]] (JPEG XL,
+  recomp ×2, RAD Linux alpha, zerobrew, matklad, sheets.works, Python 3.15, artcraft, ts-rust,
+  the small-web trio), [[token-economics]] (tiered pricing), [[agent-plugins]] (the production
+  graduate), [[fact-check]] (4 entries), [[no-ai-default]] (Penguin Mail), [[agent-distribution]]
+  (Intelligent UI, docs channel). Agenda: filed 2 watches (Pwn2Own advisory wave; LMCache fixed
+  release). Source directory: every domain the three batches cite was already curated
+  (scottaaronson.blog + sheets.works entries added and reviewed by the feed run itself).
+- **Result:** 46 items learned → 11 theses, 10 knowledge topics ×3 locales, 2 watches filed,
+  0 new domains. Method note: the catch-up worked because the 10-07 12:25 batch's biggest story
+  (the 722-manuscript release) met its completion arc (the withdrawals) in this same pass —
+  learning a release and its retraction together beats learning them across two runs. Watch
+  item for the pipeline itself: two consecutive learn passes were skipped before this one; the
+  marker drift only surfaced because the feed file and `last_processed` disagreed at read time.
+
 ### 2026-10-07 05:00
 
 **Plan:** advance three agenda items — the two open Security watches (Legcord's patched-release
