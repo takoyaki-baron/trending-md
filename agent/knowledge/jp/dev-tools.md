@@ -805,3 +805,49 @@ Sources: [Ardent Performance：recovery_prefetch considered harmful](https://ard
 このバッチの資格情報の来歴は [[disclosure-lag]]（5 レコード、配信物の軸）に、[[fact-check]] には ClickBench の完全性事例と星／ウォッチャー比の年齢限定がある。
 
 出典：[ELY-Open-Source/ElyOffice](https://github.com/ELY-Open-Source/ElyOffice) · [office.elygpui.com](https://office.elygpui.com) · [Docker is weird](https://codeandcake.dev/posts/2026-10-22-docker-is-weird) · [HN](https://news.ycombinator.com/item?id=50202681) · [Local Wikipedia](https://edjefferson.com/localwiki/) · [cn-math-taxonomy](https://github.com/xiaoyang111222/cn-math-taxonomy)
+
+## 2026-10-24 バッチ——リスクが「削除項目」にあるツールチェーン 2 件と、真似する価値のある準備度の数字
+
+**OpenSSL 4.1.0（2026-10-23）**——機能リリースで、ノートに **CVE 修正はない**。追加はプロトコル層で長く
+要望されていたもの：**DTLS 1.3（RFC 9147）**、**RFC 8701 GREASE**、SSL listener API の DTLS、IKEV2 KDF、
+`e2k`（Elbrus2000）の初期対応、加えて `ppc64le` の ML-DSA/ML-KEM NTT 最適化と `x86_64` の AVX-512/VAES
+AES-CBC 最適化。移行リスクは削除側にすべてある：**Windows-on-Itanium（`VC-WIN64I`）**と **Windows CE
+（`VC-CE`）**ターゲットが削除され、**`no-ecdsa` と `no-ecdh`** の Configure オプションも削除——「`no-ec` を
+使う」。`tsget` は `Net::Curl::Easy` に依存するようになり、「`tsget` に依存するユーザーはアップグレード前に
+`Net::Curl::Easy` を導入すべき」と明記。2 つの読み：`no-ecdsa` を渡すビルドレシピは曲線を静かに無効化する
+のではなく**大きな音で失敗する**（良い結果だが、アップグレード当日には壊れたパイプライン）；そして尾が最も長い
+のは GREASE——ランダム化された拡張を送り始めるクライアントは、経路上の全サーバーがそれらを*既に*正しく無視
+できていることを要求する。暗号周辺のツールはこれを CI ではなく現場で発見しがちである。
+
+**Dagger 1.0 beta（2026-10-23）**——「Jenkins と GitHub Actions に続く第 3 世代 CI」、コミットがパイプライン
+のレビュー能力より速く届くチームに向ける（「5 年の v0 の後で」）。測定された主張：1,000 の並列コンテナが
+**35–61 s → 16–17 s**、300 ファイルの収集が **11.8 s → 1.1 s**。エージェントが書いたコードに効く機能は構造的
+である：**テストネイティブ CI** はテストコードを変えずに個々のテストを発見・選択・報告・再実行する（テスト単位
+の報告が大きなエージェント diff をレビュー可能にする）、自己編成テストは Dagger モジュールを呼んで依存を自前で
+用意できる、`dagger shell` でワークスペースのシェル、`dagger check -i` で失敗点のシェル、workflow ファイル不要
+の GitHub 連携、アイドル容量は無料の課金。破壊的変更は移行の形とともに開示される：`dagger.json` は
+`dagger.toml`（ワークスペース）+ `dagger-module.toml`（モジュール）に分割され、「多くの CLI コマンドが変化」、
+「後方互換または自動移行がその大部分を覆う。少数の例外がある」。持ち帰るべき譲歩：
+「**我々はあなたのプライベートリポジトリに対してテストできない**」——自分では生成できない報告を求めている beta。
+
+**ReactOS が NTFS にインストール可能に（PR #9700）**——10 年来の FAT32 要件が終わる：NTFS パーティションに
+インストールして起動でき、NTFS ボリュームの作成とフォーマットもできる。読み取り専用 NTFS は 2016 年、
+FreeLoader の NTFS 起動は 2022 年に到達していたが、OS 自体をそこにインストールすることは今までできなかった。
+制限はプロジェクト自身が述べており、日常利用には決定的：ドライバは「まだキャッシュがなく、他の NTFS ドライバ
+より遅い」、「ジャーナリングとセキュリティも未実装」——ACL セマンティクスが無いので、セキュリティ記述子の無い
+NTFS ボリュームはファイルシステムであって Windows のファイルシステムではない。**開発ビルドのみ**：
+ReactOS 0.4.16（2026-08-29）が最新の公式リリースで、これを含まない。
+
+**ArtCraft / `storytold`——準備度パーセントは真似すべきパターン。** 68 リポジトリ。2026-10-23 に 12 のアプリ
+リポジトリが約 25 分のうちに更新された（`wordcraft`、`pdfcraft`、`filmcraft`、`vectorcraft`、`lightcraft`、
+`solidcraft`、`effectcraft`、`cadcraft`、`gridcraft`、`designcraft`、`deckcraft`、`figcraft`）、いずれも
+「ゼロから純 Rust で」；`photocraft` 72k★、`artcraft` 36k★、`wordcraft` **15.7k★ / 1,657 コミット**。
+再実装の波と違うのは、README が乖離を**3 つの尺度**で公表している点：「リボンとメニュー機能の 97%」の
+コマンド、「**実務で使えるのは約 60%**、典型的なプロフェッショナルの週次作業では約 55%、日常用途では約 63%」、
+さらに未完了リスト（「実際の `.docx` でのテスト」「ラウンドトリップでグラフと SmartArt を保つ」「より近い
+ページネーション忠実度」「安定性の掃討とネイティブ印刷」）とプラットフォーム制限（Windows は既定で DirectX 12
+のみ初期化；「32 ビット Windows では DirectX 12 のグラフィックスパイプライン作成が即座に失敗し、ウィンドウが
+出る前にアプリが終了する」）。MIT/Apache-2.0 のデュアル、ブランドは除外。97% の機能数と 60% の実務準備度は
+同時に真であり、計画の入力になるのは後者だけである。
+
+Sources: [OpenSSL 4.1.0 リリース](https://github.com/openssl/openssl/releases/tag/openssl-4.1.0) · [OpenSSL CHANGES.md](https://github.com/openssl/openssl/blob/master/CHANGES.md) · [Dagger 1.0 beta](https://dagger.io/blog/dagger-10-beta/) · [dagger/dagger releases](https://github.com/dagger/dagger/releases) · [Phoronix——ReactOS NTFS](https://www.phoronix.com/news/ReactOS-NTFS-Driver) · [reactos/reactos PR #9700](https://github.com/reactos/reactos/pull/9700) · [storytold/wordcraft](https://github.com/storytold/wordcraft)

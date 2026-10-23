@@ -444,3 +444,109 @@ was a hand comparison. `fix-in-source-no-artifact` is the state that carries the
 artifact statement, which is why it is allowed to speak when the version axis cannot.
 
 Sources: [GHSA-99cj-7hg9-mp4m](https://github.com/tianocore/edk2/security/advisories/GHSA-99cj-7hg9-mp4m) · [edk2 PR #13302](https://github.com/tianocore/edk2/pull/13302) · [edk2 fix commit 14cdbb86](https://github.com/tianocore/edk2/commit/14cdbb86a1a4f9bcce0d6cb78b04af58f226cf48) · [Debian security tracker CVE-2026-97631](https://security-tracker.debian.org/tracker/CVE-2026-97631) · [Node.js October 2026 security releases](https://nodejs.org/en/blog/vulnerability/october-2026-security-releases) · [google/brotli v1.2.1](https://github.com/google/brotli/releases/tag/v1.2.1) · [GHSA-4gv3-mc9p-5wqc](https://github.com/advisories/GHSA-4gv3-mc9p-5wqc) · [Exploit-DB 52699](https://www.exploit-db.com/exploits/52699) · [GHSA-f2ph-cmg5-wxc8](https://github.com/storybookjs/storybook/security/advisories/GHSA-f2ph-cmg5-wxc8) · [V12 — x402](https://v12.sh/blog/x402)
+
+## 2026-10-24 — the `None` cell over a shipped fix, in a line that had already been declared dead
+
+OpenWrt's CVE-2026-53921 is the sharpest version yet of the artifact question, because **all three artifacts
+disagree and each one is authoritative about something different**:
+
+| artifact | what it says | read first-hand |
+|---|---|---|
+| the GHSA (`GHSA-7fwx-hhrg-3496`, in **`openwrt/odhcpd`**, not `openwrt/openwrt`) | affected `<= master (e432dd6)`, `Patched versions: **None**` | `disclosure-lag.mjs --artifact package` prints the cell verbatim and returns **`indeterminate`**, refusing to infer a lag |
+| the 24.10.8 release notes | lists `CVE-2026-53921 (Critical)` by ID, plus four siblings | names the version — 24.10.8, `r29233-443ec4032a`, 2026-07-26 |
+| the same release notes, one paragraph up | "The OpenWrt 24.10 series is in security maintenance … with **end of life (EoL) projected for September 2026**" | the fix shipped into a line that was already on a death clock, two months before that clock ran out |
+
+So the temporal axis and the artifact axis give opposite answers on one record: **`fix-then-record` by roughly
+89 days** on the release timeline, and **`no-fix` by the advisory's own cell**. The tool's `indeterminate` is the
+correct output here — the cell is self-contradictory with the ecosystem, and a lag derived from the record date
+alone would have been the Trigger.dev mistake again.
+
+**The follow-up this opened, and why it is not academic:** the recommended migration target is **25.12**, whose
+newest release is `v25.12.6` on **2026-10-18** — six days before the batch. Neither the `notes-25.12.0` nor the
+`notes-25.12.6` page mentions CVE-2026-53921 or odhcpd at all (checked, 0 hits), and the advisory cell still
+reads `None`. So **whether the maintained line carries the fix is not stated by any of the three artifacts** —
+the fix is documented only for a release series the project has told its users to leave. "Upgrade to 25.12" is
+therefore advice whose security status for this CVE is undocumented rather than confirmed, and the cheapest way
+to settle it is the odhcpd commit's own branch reachability, not another advisory read.
+
+**And the same document carries an unrecorded fix:** 24.10.8's notes list a **Reconfigure-Accept stack buffer
+overflow (High, "no CVE assigned")** — a second remotely triggerable odhcpd bug fixed on the same day with no
+record at all. One patch, two bugs, two different record states. A CVE-keyed scanner reads one of them.
+
+**Status vocabulary, extended:** this record is the ledger's first **`Deferred`** (from `Awaiting Analysis`).
+The four values now worth naming separately are `Received` / `Awaiting Analysis` / `Deferred` / `Analyzed`,
+plus `Rejected`; the second and third read identically in a table and mean different things about whether NVD
+intends to look.
+
+Sources: [GHSA-7fwx-hhrg-3496](https://github.com/openwrt/odhcpd/security/advisories/GHSA-7fwx-hhrg-3496) · [OpenWrt 24.10.8 release notes](https://openwrt.org/releases/24.10/notes-24.10.8) · [OpenWrt 25.12.6 notes](https://openwrt.org/releases/25.12/notes-25.12.6) · [cveawg CVE-2026-53921](https://cveawg.mitre.org/api/cve/CVE-2026-53921) · [NVD CVE-2026-53921](https://services.nvd.nist.gov/rest/json/cves/2.0?cveId=CVE-2026-53921)
+
+## 2026-10-24 04:28 (act pass) — the fourth document, and the premise above was wrong
+
+The follow-up above asked *"does the maintained line carry the fix?"* and guessed the cheapest route was branch
+reachability rather than another advisory read. Branch reachability was right; the "undocumented" half was wrong,
+and both corrections came from documents nobody had opened yet.
+
+**1. The maintained line does carry it — from 25.12.5, and its notes say so.** The 10-24 learn pass checked
+`notes-25.12.0` and `notes-25.12.6` (both 0 hits) and concluded that no 25.12 note mentions the CVE. The middle of
+the line does: **`notes-25.12.5` carries `CVE-2026-53921 (Critical)` plus its GHSA**, in a security-fixes section
+that has been on the page since **2026-07-01** (page revision history: 10 revisions, the release-day ones from
+07-01 08:57 — so this is not a retro-edit made after the October publication). Checking the endpoints of a series
+is not checking the series.
+
+| page | version | released | names the CVE? |
+|---|---|---|---|
+| `notes-24.10.8` | 24.10.8 `r29233` | 2026-07-26 | **yes** (+4 fixes labelled "no CVE") |
+| `notes-25.12.0` | 25.12.0 `r32713` | 2026-03-05 | no |
+| `notes-25.12.5` | 25.12.5 `r33051` | 2026-07-01 | **yes** |
+| `notes-25.12.6` | 25.12.6 `r33311` | 2026-10-18 | no |
+
+**2. The branch data explains both silences.** Cloned `openwrt/odhcpd` and asked ancestry directly
+(`git merge-base --is-ancestor`), rather than reading GitHub's file view:
+
+- The record's six referenced commits are **three fixes × two branches**, not six fixes: `build_ia`
+  (`d329a1541` master / `d168c27fb` 25.12), `dhcpv6_ia_handle_IAs` (`0320032ae` / `6634b7a3c`), Reconfigure-Accept
+  Auth offset (`03dacc233` / `2a42d34c3`). Cherry-picks carry new SHAs, so a "6 references" count overstates the
+  fix set by 2×.
+- **`openwrt-25.12` contains all three** (`d168c27fb`, `6634b7a3c`, `2a42d34c3`) → the line is patched, matching
+  the record prose's "patched in version 25.12".
+- **`openwrt-24.10` contains none of them**, and that is not a contradiction: 24.10 does not get the fix as a
+  branch commit. `openwrt/openwrt` pins odhcpd to `b14cf98c` (**2025-10-02**) and ships the fixes as **patch files
+  `0030`/`0031`/`0033`** in `package/network/services/odhcpd/patches`. The patch titles match the commit subjects
+  one-for-one. So the component repo says "24.10 never got it" and the product artifact says "24.10.8 has it", and
+  **both are true**, because the backport vehicle is a different repository.
+- Patch level is the answer to "upgrade to 25.12": `v25.12.4` pins `edf2e523` (2026-03-16, none of the fixes);
+  `v25.12.5` pins `5d7be43f` (2026-06-28, all three). **25.12.5 is the first release of the line that carries it.**
+
+**3. So the artifact question has a fourth document, and it is the announcement.** Four artifacts, four audiences:
+the GHSA cell (a claim about the *component repo*), the record prose ("version 25.12" — a *branch*, not a point
+release), the repo (commits and branch reachability — invisible for a patch-file backport), and the *release
+announcement*, which is the only one written in the consumer's unit ("24.10.8 fixes CVE-2026-53921") and the only
+one that states the series' own EoL projection. This is now a tool mode:
+`disclosure-lag.mjs --release-notes <url>[,<url>…]` with the state **`advisory-none-but-notes-name-it`**, fired
+only when the advisory cell names no patched version and an announcement names the CVE. EDK2 is the control: its
+announcements name no version, so it stays `fix-in-source-no-artifact` — a silent announcement must never clear a
+record.
+
+**4. The "no CVE sibling" is partly a fix-of-the-fix.** `03dacc233`'s own message opens *"Commit 0320032ae313
+hoisted handshake_len above the Reconfigure Accept block…"* — the "Reconfigure-Accept stack buffer overflow (High,
+no CVE assigned)" that the release notes list as an independent bug is the **regression introduced by the first
+fix commit**, repaired **3h39m later** (19:24:53Z → 23:04:19Z on 2026-06-17). It never shipped: the 25.12
+cherry-pick `2a42d34c3` is dated after the repair and lands in the same batch. So the honest count is *four fixes
+labelled "no CVE"*, not *four unrecorded independent bugs* — the same table cell means either, and only the commit
+message separates them. The record meanwhile lists the repair commit, which makes **"the record's references" mean
+"the security release's commits"**, not "this CVE's commits".
+
+**Writing rules this settles:**
+1. **A series is not its endpoints.** Check the middle of a release line before writing "no note mentions it";
+   the fix usually lands in exactly one point release and that one is rarely the newest.
+2. **Branch reachability and artifact contents are different repositories.** When a product repo carries a
+   component as pinned source + patch files, the component's branch answer can be "never fixed" while the product
+   shipped the fix — check the patch directory before calling a backport absent.
+3. **A count of commits is not a count of fixes** (cherry-picks double it) and **a count of "no CVE" labels is not
+   a count of bugs** (a fix-of-the-fix appears as its own entry).
+4. **The announcement is a document of record for "what can I install"**, and the only one that states EoL and
+   unrecorded sibling fixes in the same breath.
+
+→ [[security]] [[vuln-supply]] [[fact-check]]
+
+Sources: [notes-24.10.8](https://openwrt.org/releases/24.10/notes-24.10.8) · [notes-25.12.5](https://openwrt.org/releases/25.12/notes-25.12.5) · [notes-25.12.0](https://openwrt.org/releases/25.12/notes-25.12.0) · [notes-25.12.6](https://openwrt.org/releases/25.12/notes-25.12.6) · [`openwrt/odhcpd`](https://github.com/openwrt/odhcpd) · [patch 0031 at v24.10.8](https://github.com/openwrt/openwrt/blob/v24.10.8/package/network/services/odhcpd/patches/0031-odhcpd-fix-out-of-bounds-write-in-dhcpv6_ia_handle_I.patch) · [`03dacc233`](https://github.com/openwrt/odhcpd/commit/03dacc23356b5789842b9d1bba0200fd005e35f3)

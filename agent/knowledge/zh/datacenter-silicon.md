@@ -26,3 +26,23 @@ Sources: [The Register / The Next Platform — Maia 300](https://www.theregister
 Meta 公开了 **Prometheus**（俄亥俄州 New Albany，第一阶段已完成）：数十万 GPU 分布在同一园区的多栋楼中，被接成“一台机器”，满规模目标约 **100 万**——训练 Muse 系列（含 Muse Wonder）的那套集群。值得记下的数字是可靠性而非 FLOPS：预训练 **goodput >85%**，Muse Wonder 的 RL 运行 **>90%**，平均无中断时长 **约 47,000 GPU-hours——在全机群固件修复后提升到 54,000 以上**。平台：**Catalina**（GB200 NVL72，双机架 "Ariel" 配置，每 GPU 800G scale-out 而非标准的 400G）与 **Clemente**（GB300 NVL72，每 GPU 288 GB HBM，GPU:CPU 2:1，单机架容纳整个 72-GPU domain），下一个是 Vera Rubin NVL72，另有闭式液冷。要带走的算术：在约 4.7 万 GPU-hours 的 MTBI 下，一个跑 5,000 GPU 的任务大约**每九小时**就要预期一次中断——这就是为什么决定前沿训练能否跑完的是 goodput，而不是峰值吞吐。所有数字都来自 Meta 自家机群的自有计量，包含固件前后的对比；没有外部审计，goodput 的定义也是 Meta 的。
 
 Sources: [Engineering at Meta: Inside Prometheus](https://engineering.fb.com/2026/10/19/data-center-engineering/inside-prometheus-meta-gigawatt-scale-supercluster/) · [HN](https://news.ycombinator.com/item?id=50152886)
+
+## 2026-10-24——同一个请求在瑞典是 0.38 g、在得州是 3.2 g，而在清洁电网上排放的主体是硬件
+
+Berget AI 与斯德哥尔摩环境研究所、WattTime、Klimatkollen 合作，公布了一个典型 Kimi K3 请求的每请求
+CO₂e：**瑞典 0.38 g、爱尔兰 1.6 g、德国 2.5 g、得州 3.2 g**——「得州比瑞典多 8.5 倍」。能耗几乎相同，
+「约 **4 Wh**」；不同的是它的构成。瑞典一侧 **89%** 的足迹来自**硬件制造**；得州 **90%** 来自电力，
+「另加约 6 mL 冷却水」。方法遵循绿色软件基金会的 SCI for AI 规范，代码 MIT 许可放在 GitHub，并附公开计算器。
+
+**文章自己的更正是最有用的部分。** 早先的数字——爱尔兰 1.2 g、德国 2.1 g、得州 3.9 g、以及**十倍**的
+得州—瑞典差距——在修正电网强度后被替换（爱尔兰约 224、德国约 337、ERCOT 约 333 g CO₂e/kWh），头条从十倍
+变成 **8.5×**。一家厂商公布让自己的头条变小的修订，正是 [[fact-check]] 体裁作用在可持续性主张上，而它在那里
+比在基准里更罕见。
+
+**限定条件很硬，而结构性结论仍站得住：**它用的是**平均**电网强度，而边际排放率「可能显著改变瑞典数据中心的
+实测温室气体强度」（下个月才加入）；芯片制造的水与能耗被排除；训练被排除，因为「自报数字有 ±50% 的波动」。
+剩下的不是数字而是决策规则：**在低碳电网上，隐含的硬件成为主导项**，于是「放到电最干净的地方跑」不再是全部
+答案——选址要与更新节奏和利用率竞争，一台在清洁电网里轻度使用的加速器，可能输给一台在更脏电网上满负荷使用的。
+可测的后续是：是否有运营方公布每 token 的隐含排放，而不只是每 token 的能耗。
+
+来源：[Berget AI——每请求 CO₂ 新闻稿](https://berget.ai/en/blog/per-request-co2-press-release) · [berget-ai/co2-calculator（MIT）](https://github.com/berget-ai/co2-calculator)

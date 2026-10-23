@@ -199,6 +199,28 @@ underlying pages — this produced a two-layer false signal in a single item.
    page before "absent" is written; and **the advisory a CVE is filed against is not always in
    the owning repo** — Keycloak's lives only in the GitHub Advisory Database
    (`/advisories/GHSA-…`) with no NVD reference to it.
+   **The fourth document is the ANNOUNCEMENT, and it is often the only one in the consumer's
+   unit** (added 2026-10-24, the OpenWrt odhcpd lesson). On CVE-2026-53921 four artifacts gave
+   four answers: the GHSA cell read `Patched versions: None`; the record's prose said "patched in
+   version 25.12" (a *branch*, not a point release); the component repo's `openwrt-24.10` branch
+   contained **none** of the fixes because 24.10 ships them as **patch files 0030/0031/0033** in
+   `openwrt/openwrt` over a source pinned at `b14cf98c` (2025-10-02); and the release notes named
+   **24.10.8 and 25.12.5**. One call:
+   `node agent/tools/disclosure-lag.mjs --ids CVE-… --release-notes <url>[,<url>…]` → per page:
+   does it name the CVE, which release, the date, the revision, the series' own EoL statement, and
+   the count of sibling fixes it labels "no CVE"; emits
+   **`advisory-none-but-notes-name-it`** only when the cell names no patched version and an
+   announcement names the CVE (`notes-do-not-name-it` never clears a record — EDK2 must stay
+   `fix-in-source-no-artifact`). Four traps, each measured: **a series is not its endpoints** —
+   "no 25.12 note mentions it" was checked against 25.12.0 and 25.12.6, and the fix is in 25.12.5,
+   so "upgrade to <line>" needs a **patch level**; **branch reachability and artifact contents are
+   different repositories**, so check the patch directory before calling a backport absent; **a
+   commit count is not a fix count** (cherry-picks double it — the record's "6 references" were
+   three fixes × two branches) and **a "no CVE" count is not a bug count** (`03dacc233` repairs a
+   regression `0320032ae` introduced 3h39m earlier, so a fix-of-the-fix appears as its own
+   entry); and **the page's version is its `<title>` or a banner beside its own revision id, never
+   a number in the body** (a body scan reported EDK2's release as "3.5.1" from a release-index
+   row).
    **Package-registry state is perishable the same way** (added 2026-09-26, GHAPPIER follow-up):
    "unpublished", "removed", "still downloadable" and "no advisory" for a cited npm/PyPI package
    are version-presence claims that invert without notice — a backdoored version can be

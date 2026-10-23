@@ -448,3 +448,34 @@ but cannot charge for the distribution channel it no longer controls. The March 
 roadmap with a stay marked against it, not in a launch plan.
 
 Sources: [9to5Mac: ruling summary](https://9to5mac.com/2026/10/21/apple-must-open-iphone-to-alternative-app-stores-in-australia-after-epic-games-ruling/) · [Epic Games Inc v Apple Inc (No 2) [2026] FCA 1552](https://www.judgments.fedcourt.gov.au/judgments/Judgments/fca/single/2026/2026fca1552)
+
+## 2026-10-24 batch — the capability class this time is *sideloading*, and the vendor's page is the moderate document
+
+**Android developer verification: the campaign and the program describe different things, and the campaign is
+the one that overstates.** `keepandroidopen.org` runs a countdown ("70 days until lockdown", ≈ New Year 2027)
+claiming that from 2027 "every Android app developer must register centrally with Google … **Not just Play Store
+apps: all apps**", with a fee, government ID, evidence of the private signing key and a list of application
+identifiers, noncompliant apps "silently blocked on every Android device worldwide", "**no opt-out**"; its open
+letter lists **71 organizations from 23 countries** (F-Droid, EFF, FSF, KDE, the Tor Project, GrapheneOS).
+`developer.android.com/developer-verification`, fetched and read: protections **began September 30, 2026** for
+installs from *participating stores* in **Brazil, Indonesia, Singapore and Thailand** on certified Android 7+
+devices, with global expansion "in 2027" — a staged regional rollout, not a single switch-on. It also documents a
+**limited-distribution account** letting "students, teachers, and hobbyists … share apps with up to **20 devices**
+without a government-issued ID or registration fee", a registration path for both existing and new open-source
+apps, and a planned **"advanced flow"** for power users "who want the ability to download unverified apps".
+All six elements verified in the page.
+The gatekeeping lesson is the **exemption surface**: this is not a capability being removed, it is a capability
+being *re-bucketed*, and the buckets are named on the vendor's page and nowhere in the campaign. For an
+open-source distributor the operative question is "which bucket am I in today", which the countdown cannot
+answer. The citation rule follows: when a policy is reported by its opponents, the vendor page is the document
+of record for *what applies*, and the campaign is the document for *how it will feel*.
+
+**Sweden's Government Offices: procurement decides access, and the replacement is a hyperscaler.** Regeringskansliet
+is blocking ChatGPT and Claude on staff work machines from **Monday 2026-10-26**, directing staff to Microsoft
+Copilot, which SVT reports was approved after "en översyn av tjänsten har höjt säkerheten" (a review of the
+service raised its security). Skatteverket and SiS already run similar blocks; Kronofogden is considering one.
+The pattern to watch across European public sectors is not model quality but **who already holds the framework
+agreement** — a ban that redirects staff to a US hyperscaler product with its own data terms is a migration, not
+a reduction, and the measurable follow-up is whether approved-tool lists converge on the incumbent vendors.
+
+Sources: [Keep Android Open](https://keepandroidopen.org/) · [Android developer verification](https://developer.android.com/developer-verification) · [SVT](https://www.svt.se/nyheter/inrikes/ai-tjanster-sparras-pa-regeringskansliet) · [Dagens Nyheter](https://www.dn.se/direkt/2026-10-23/regeringskansliet-sparrar-ai-tjansterna/)

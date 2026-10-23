@@ -111,6 +111,48 @@
  * different repos all come back at 2026-10-21T03:32:2xZ. So it is never used as the advisory's own
  * date; `--repo` reads the repo's own advisory list instead, which carries the real dates.
  *
+ * THE ANNOUNCEMENT AXIS (added 2026-10-24 04:28). The artifact question has a FOURTH document —
+ * the release announcement — and on OpenWrt's CVE-2026-53921 it was the only one that spoke in the
+ * consumer's unit. Four artifacts, four answers:
+ *   · the GHSA cell              `Affected: <= master (e432dd6)` / `Patched versions: None`
+ *   · the record's own prose     "patched in version 25.12"  (a branch, not a point release)
+ *   · the component repo         the three fixes are commits on `master` and `openwrt-25.12` with
+ *                                DIFFERENT SHAs (cherry-picks), and NONE of them is on
+ *                                `openwrt-24.10` — because 24.10's fix ships as patch files
+ *                                0030/0031/0033 inside the openwrt/openwrt tree over a source
+ *                                pinned at b14cf98c (2025-10-02), never as a branch commit
+ *   · the announcement           24.10.8 (r29233, 2026-07-26) names the CVE and its GHSA, and
+ *                                25.12.5 (r33051, 2026-07-01) names it too
+ * `--release-notes <url>[,<url>…]` reads the announcements and answers per page: does it name this
+ * CVE, which release does it name, when was that released, on which revision, and what does the
+ * page say about the end of the line. Several pages are the POINT — "does 25.12 carry it?" has
+ * three different answers across 25.12.0 / .5 / .6 (0 / 1 / 0 occurrences of the id), and one page
+ * cannot show that. Passing a line's every note is how "upgrade to <line>" turns into "from which
+ * patch level".
+ *   · New state `advisory-none-but-notes-name-it`, emitted ONLY when the advisory's patched cell is
+ *     `None`/`Unknown`/absent AND an announcement names the CVE — a cell that contradicts a shipped
+ *     artifact, not merely a terse one. The version-axis state is preserved on its own `temporal`
+ *     line, as `--artifact` already does.
+ *   · A page that does not name the CVE never changes the state: EDK2 has announcements, they name
+ *     no version, and EDK2 must stay `fix-in-source-no-artifact`. Reported as
+ *     `notes-do-not-name-it`, with the caveat that it does not clear anything.
+ *   · An UNREADABLE page is `notes-unreadable`, never "does not name it" — the gate/absence
+ *     distinction from doc-twin.mjs applies to every fetched page here.
+ *   · The page's version is its SELF-DESCRIPTION (the `<title>`, or a banner carrying the version
+ *     beside its own revision id) or it is null. Scanning the body for a version string is how the
+ *     EDK2 control read a release index row and reported the release as "3.5.1"; the same wiki also
+ *     spells the release date "26th July 2026" in English and "1. July 2026" in German, so both
+ *     ordinal forms are parsed.
+ *   · Two counts the notes carry that nothing else does: the series' own EoL projection, and the
+ *     number of SIBLING fixes the same page labels "no CVE" (24.10.8: four) — shipped code no
+ *     record can key on, which is the `pre-record` state caught at the announcement instead of at
+ *     the record. The count is a count, NOT a count of independent bugs, and the odhcpd chain is
+ *     why: one of those four "no CVE" entries is the fix-of-the-fix for commit 0320032ae — its own
+ *     message begins "Commit 0320032ae313 hoisted handshake_len above the Reconfigure Accept
+ *     block", and it landed 3h39m after the commit it repairs, in a series that had not released.
+ *     The CVE record lists all six commits (three fixes × master + the 25.12 cherry-picks), so
+ *     "the record's references" means "the security release's commits", not "this CVE's commits".
+ *
  * Usage:
  *   node disclosure-lag.mjs --ids CVE-…,CVE-… --pypi vllm
  *   node disclosure-lag.mjs --ids CVE-… --repo triggerdotdev/trigger.dev
@@ -119,7 +161,8 @@
  *   node disclosure-lag.mjs --ids CVE-… --repo tianocore/edk2 --artifact firmware --debian edk2
  *   node disclosure-lag.mjs --ids CVE-… --repo google/brotli --artifact package
  *   node disclosure-lag.mjs --ids CVE-… --range "26.0.0-26.4.14, 26.5.0-26.6.5" --repo keycloak/keycloak
- *   node disclosure-lag.mjs --selftest                       # parsers + the artifact verdict
+ *   node disclosure-lag.mjs --ids CVE-… --release-notes <url>[,<url>…]   # the announcement axis
+ *   node disclosure-lag.mjs --selftest                       # parsers + the artifact + notes verdicts
  *
  * Cost: NVD is 5 req/30s unauthenticated (NVD_API_KEY → 50/30s); calls are paced. api.github.com is
  * 60/hr unauthenticated and this repo budgets ~5–10 calls per feed run — this is an ad-hoc tool,
@@ -146,6 +189,7 @@ const REPO = argOf('--repo', null);
 const PYPI = argOf('--pypi', null);
 /* The artifact axis: what a consumer can install, as opposed to when the paperwork moved. */
 const ARTIFACT = argOf('--artifact', null);
+const NOTES = (argOf('--release-notes', '') || '').split(',').map(s => s.trim()).filter(Boolean);
 const FIX_REF = argOf('--fix-ref', null);
 const DEBIAN = argOf('--debian', null);
 const RANGE_OVERRIDE = argOf('--range', null);
@@ -612,6 +656,165 @@ async function pypiReleases(pkg) {
   return out;
 }
 
+/* ── the announcement axis (added 2026-10-24 04:28) ────────────────────────────────────────────
+ * "What can I install?" has a FOURTH document beyond record / commit / artifact: the release
+ * ANNOUNCEMENT, which is frequently the only artifact that states a version in plain prose — and
+ * the only one written in the consumer's unit ("24.10.8 fixes it") rather than the component's
+ * ("patched in version 25.12"). The 10-24 batch's OpenWrt case is why this exists: the GHSA cell
+ * read `Patched versions: None`, the record's own prose said "patched in version 25.12", the
+ * odhcpd repo's `openwrt-24.10` branch contained none of the three fixes (they ship as patch files
+ * in the openwrt/openwrt tree, patches 0030/0031/0033, over a source pinned at b14cf98c from
+ * 2025-10-02) — and the 24.10.8 announcement named the CVE, the GHSA, the release (r29233) and the
+ * series' EoL projection. Four documents, four answers, one of them actionable.
+ *
+ * `--release-notes <url>[,<url>…]` takes one or more announcement URLs and answers, per page:
+ * does it name this CVE, which release does it name, when was that released, and what does it say
+ * about the end of the line. Passing several pages is the point — the OpenWrt question "does
+ * 25.12 carry the fix?" has THREE different answers across 25.12.0 / 25.12.5 / 25.12.6, and only
+ * the matrix shows that (0 / 1 / 0 occurrences of the id). Never infer from one page.
+ *
+ * The state `advisory-none-but-notes-name-it` fires only when the advisory cell names NO patched
+ * version (`None`, `Unknown`, absent) and an announcement names the CVE — the case where the cell
+ * is not merely terse but contradicts a shipped artifact. The version-axis state is kept and
+ * printed on its own `temporal` line, exactly as `--artifact` does. A page that does not name the
+ * CVE never changes the state; it is reported as `notes-do-not-name-it` and the existing state
+ * stands (the EDK2 calibration: its blog posts exist and name no version, so EDK2 must stay
+ * `fix-in-source-no-artifact`).
+ */
+const MONTHS = { january: 1, february: 2, march: 3, april: 4, may: 5, june: 6, july: 7,
+  august: 8, september: 9, october: 10, november: 11, december: 12 };
+
+/* Announcement dates come in at least three spellings on ONE wiki, which is how this got written:
+   DokuWiki's English locale renders "26th July 2026" and its German locale renders "1. July 2026"
+   for the same field. A parser that knows one of them silently reports the date as absent, and
+   `?` in a date column reads as "no release" rather than "not parsed". */
+function proseDate(s) {
+  if (!s) return null;
+  const str = String(s);
+  let m = str.match(/(\d{4})-(\d{2})-(\d{2})/);
+  if (m) return `${m[1]}-${m[2]}-${m[3]}`;
+  m = str.match(/(\d{1,2})(?:st|nd|rd|th)?\.?\s+([A-Za-z]{3,9})\.?,?\s+(\d{4})/);
+  if (m && MONTHS[m[2].toLowerCase()]) {
+    return `${m[3]}-${String(MONTHS[m[2].toLowerCase()]).padStart(2, '0')}-${m[1].padStart(2, '0')}`;
+  }
+  m = str.match(/([A-Za-z]{3,9})\.?\s+(\d{1,2})(?:st|nd|rd|th)?,?\s+(\d{4})/);
+  if (m && MONTHS[m[1].toLowerCase()]) {
+    return `${m[3]}-${String(MONTHS[m[1].toLowerCase()]).padStart(2, '0')}-${m[2].padStart(2, '0')}`;
+  }
+  return null;
+}
+
+/* The page's own claim about itself. Prefer the <title> ("OpenWrt 24.10.8 - Service Release -
+   26th July 2026"), fall back to the banner a release announcement carries in its body
+   ("OpenWrt 24.10.8, r29233-443ec4032a"). Both are the publisher's words; neither is inferred
+   from the URL, because a versioned URL can serve an unversioned page and vice versa. */
+function parseNotesPage({ url, title = '', text = '', cveId }) {
+  const out = { url, title: (title || '').trim() || null, version: null, date: null, revision: null,
+    eol: null, migrateTo: null, names: false, context: null, noCveFixes: 0, status: 'ok' };
+  const hay = `${title} ${text}`;
+  /* The version is the page's SELF-DESCRIPTION or it is nothing. A global version scan over the
+     body is the defect the EDK2 control found live: GitHub's releases index carries "3.5.1" in an
+     unrelated row, and a scanner that took the first match reported the release as 3.5.1 — a number
+     that belongs to no EDK II artifact at all. So: the <title> ("OpenWrt 24.10.8 - Service Release
+     …"), or a banner that puts the version beside its own revision id ("OpenWrt 24.10.8, r29233"). */
+  const fromTitle = (title || '').match(/\bv(\d+(?:\.\d+)+)\b|\b(\d+\.\d+(?:\.\d+)+)\b/);
+  if (fromTitle) out.version = fromTitle[1] || fromTitle[2];
+  const rm = hay.match(/\b(r\d{4,6})\b/);
+  if (rm) out.revision = rm[1];
+  if (!out.version && out.revision) {
+    const banner = hay.match(/\bv?(\d+\.\d+(?:\.\d+)?)\s*,\s*[\w.\-]*r\d{4,6}\b/i);
+    if (banner) out.version = banner[1];
+  }
+  // The date comes from the title when it is there — the body of a release announcement is full of
+  // OTHER dates (the packages' build dates, the previous release's), so a global date scan is wrong.
+  out.date = proseDate(title) || null;
+  const eol = text.match(/(?:end[\s-]of[\s-]life|EoL)[^.]{0,120}/i);
+  if (eol) {
+    const when = eol[0].match(/([A-Za-z]+)\s+(\d{4})/);
+    if (when) out.eol = `${when[1]} ${when[2]}`;
+    out.eolSentence = eol[0].trim();
+  }
+  const mig = text.match(/migrat\w*\s+to\s+([A-Za-z][\w.\- ]{0,24}\d+(?:\.\d+)*)/i);
+  if (mig) out.migrateTo = mig[1].trim();
+  if (cveId) {
+    const i = text.toUpperCase().indexOf(cveId.toUpperCase());
+    out.names = i >= 0;
+    if (out.names) out.context = text.slice(i, i + 190).replace(/\s+/g, ' ').trim();
+  }
+  // "…fixed with no CVE at all" is a finding in its own right: a shipped fix that no record can
+  // ever be keyed on. Counted, not listed, because the phrase is what is machine-detectable.
+  // The optional prefix must be a bounded ANY-text run, not `\w+, ` — the real page writes
+  // "(Moderate, CVSS 5.4, no CVE assigned)", and a one-comma pattern silently counted 3 of 4.
+  out.noCveFixes = (text.match(/\([^()]{0,60}?\bno CVE\b[^()]{0,30}?\)/gi) || []).length;
+  return out;
+}
+
+async function releaseNotesPage(url, cveId) {
+  const { status, body } = await getText(url);
+  if (status !== 200 || !body) return { url, status: `unreadable (HTTP ${status})`, names: false, version: null, date: null, noCveFixes: 0 };
+  // A gate is a third state, not an absence (CLAUDE.md rule 7 / doc-twin.mjs): a Cloudflare
+  // interstitial and a page that does not say something are different sentences.
+  if (/Just a moment|Enable JavaScript and cookies to continue|cf-chl/i.test(body)) {
+    return { url, status: 'JS gate — could not read it, which is not the same as "it does not say that"', names: false, version: null, date: null, noCveFixes: 0 };
+  }
+  const title = decode((body.match(/<title>([^<]*)<\/title>/i) || [])[1] || '');
+  const text = decode(body.replace(/<script[\s\S]*?<\/script>/gi, ' ')
+    .replace(/<style[\s\S]*?<\/style>/gi, ' ')
+    .replace(/<[^>]+>/g, ' ')).replace(/\s+/g, ' ').trim();
+  return parseNotesPage({ url, title, text, cveId });
+}
+
+/* The matrix over pages, plus the one inference worth making: when the pages name the CVE on SOME
+   release of a line and not others, the earliest naming release is the answer to "from which patch
+   level", which is a different question from "is the line patched". Labelled as derived. */
+function notesVerdict({ pages, cell, cveId }) {
+  const live = pages.filter(p => p.status === 'ok');
+  const named = live.filter(p => p.names);
+  const out = { cve: cveId, state: null, pages: pages.length, named: named.length, pageList: pages,
+    version: null, versions: [], date: null,
+    eol: live.find(p => p.eol)?.eol || null, migrateTo: live.find(p => p.migrateTo)?.migrateTo || null,
+    earliestPatchedLevel: null, noCveFixes: 0,
+    notes: [] };
+  if (!live.length) {
+    out.state = 'notes-unreadable';
+    out.notes.push('no announcement page could be read — an unreadable page is not a page that omits it');
+    return out;
+  }
+  const sorted = named.filter(p => p.version)
+    .sort((a, b) => cmpVer(a.version, b.version));
+  /* A per-page count, never a sum: three "no CVE" fixes spread across four announcements belong to
+     three different releases, and an aggregate reads as though one release shipped all three. */
+  out.noCveFixes = pages.reduce((n, p) => n + (p.noCveFixes || 0), 0);
+  /* Several naming releases is the COMMON case (a line backports the fix at its next point
+     release while the previous line already had it), so the verdict names all of them rather than
+     picking the first page that happened to be listed first on the command line. */
+  out.versions = sorted.map(p => p.version);
+  out.version = out.versions[0] || null;
+  out.date = sorted[0]?.date || null;
+  if (sorted.length > 1) {
+    out.earliestPatchedLevel = sorted[0].version;
+    out.notes.push(`named on ${sorted.length} of ${live.length} readable pages: ${sorted.map(p => `${p.version}${p.date ? ` (${p.date})` : ''}`).join(', ')} — "upgrade to <line>" without a patch level is ambiguous`);
+  }
+  const silent = live.filter(p => !p.names && p.version);
+  if (named.length && silent.length) {
+    out.notes.push(`names the id on ${sorted.map(p => p.version).join(', ')} and NOT on ${silent.map(p => p.version).join(', ')} — silence in a later note is not a regression, but silence in an earlier one is not a fix`);
+  }
+  const cellBlocks = !cell || /^(none|unknown|n\/a)$/i.test(String(cell).trim());
+  if (named.length && cellBlocks) {
+    out.state = 'advisory-none-but-notes-name-it';
+    out.notes.push(`the advisory's patched cell is ${cell === null || cell === undefined ? 'absent' : `"${cell}"`}, while the announcement names ${cveId} fixed in ${out.versions.join(', ')} — the artifact exists and the cell does not describe it`);
+  } else if (!named.length) {
+    out.state = 'notes-do-not-name-it';
+    out.notes.push(`read ${live.length} page(s) (${live.map(p => p.version || 'unversioned').join(', ')}); none names ${cveId} — this does not clear them, it only means the announcement does not carry the id`);
+  }
+  if (out.eol) out.notes.push(`the series' own end-of-life statement reads: "${out.eol}"${out.migrateTo ? `, recommending migration to ${out.migrateTo}` : ''}`);
+  const withNoCve = live.filter(p => p.noCveFixes);
+  if (withNoCve.length) {
+    out.notes.push(`sibling fixes labelled "no CVE" — ${withNoCve.map(p => `${p.version || 'unversioned'}: ${p.noCveFixes}`).join(', ')} — a COUNT of unrecorded fixes, not of independent bugs`);
+  }
+  return out;
+}
+
 /* ── classification ── */
 const DAY = 86400000;
 /* NVD dates have NO timezone suffix (`2026-10-21T01:17:28.083`). Handed straight to `new Date()`
@@ -875,6 +1078,40 @@ if (SELFTEST) {
     { version: '1.2.0', date: '2025-10-21T00:00:00Z' }, { version: '1.2.1', date: '2026-10-21T19:27:20Z' }],
     mode: 'package' });
   eq('patched cell shipped as an artifact', v3.state, 'artifact-carries-fix');
+  /* ── the announcement axis: three date spellings on one wiki, and the EoL sentence ── */
+  eq('announcement date, English ordinal', proseDate('OpenWrt 24.10.8 - Service Release - 26th July 2026'), '2026-07-26');
+  eq('announcement date, Germanic ordinal', proseDate('OpenWrt 25.12.5 - Service Release - 1. July 2026'), '2026-07-01');
+  eq('announcement date, US order', proseDate('Released July 26, 2026'), '2026-07-26');
+  eq('announcement date, ISO', proseDate('2026-10-18 service release'), '2026-10-18');
+  eq('a body-only date is not the release date', proseDate('see changelog-25.12.5 for details'), null);
+  const pg = parseNotesPage({
+    url: 'u', cveId: 'CVE-2026-53921', title: 'OpenWrt 24.10.8 - Service Release - 26th July 2026',
+    text: 'OpenWrt 24.10.8, r29233-443ec4032a CVE-2026-53921 (Critical): stack buffer overflow in the DHCPv6 IA reply serialization. GHSA-7fwx-hhrg-3496 Reconfigure-Accept stack buffer overflow (High, no CVE assigned) The OpenWrt 24.10 series is in security maintenance, with end of life (EoL) projected for September 2026. We recommend migrating to OpenWrt 25.12 before then.' });
+  eq('names the CVE', pg.names, true);
+  eq('names the release', pg.version, '24.10.8');
+  eq('reads the revision', pg.revision, 'r29233');
+  eq('reads the release date', pg.date, '2026-07-26');
+  eq('reads the EoL projection', pg.eol, 'September 2026');
+  eq('reads the migration target', pg.migrateTo, 'OpenWrt 25.12');
+  eq('counts the no-CVE sibling fix', pg.noCveFixes, 1);
+  eq('no-CVE count survives a two-comma severity cell', parseNotesPage({ url: 'u', cveId: 'CVE-1', title: 'N',
+    text: 'NDP hop-limit spoofing (Moderate, CVSS 5.4, no CVE assigned): the relay accepted …' }).noCveFixes, 1);
+  eq('prose "no CVE" outside a parenthetical is not counted', parseNotesPage({ url: 'u', cveId: 'CVE-1', title: 'N',
+    text: 'the bug has no CVE and probably never will' }).noCveFixes, 0);
+  const pn = parseNotesPage({ url: 'u', cveId: 'CVE-2026-53921', title: 'EDK II Security Advisory', text: 'no mention here' });
+  eq('a page that omits the id does not name it', pn.names, false);
+  /* The EDK2 control's live defect: a version in the BODY is not the page's own release. */
+  eq('body-only version is not the page version', parseNotesPage({ url: 'u', cveId: 'CVE-1', title: 'Releases', text: 'packages 3.5.1 and 1.2.3 are listed' }).version, null);
+  eq('banner version beside its revision still parses', parseNotesPage({ url: 'u', cveId: 'CVE-1', title: 'Release Notes', text: 'OpenWrt 24.10.8, r29233-443ec4032a is out' }).version, '24.10.8');
+  eq('title version wins over a body version', parseNotesPage({ url: 'u', cveId: 'CVE-1', title: 'OpenWrt 25.12.5 - Service Release - 1. July 2026', text: 'see 3.5.1 for details' }).version, '25.12.5');
+  eq('cell None + notes name it → the new state', notesVerdict({ pages: [pg], cell: 'None', cveId: 'CVE-2026-53921' }).state, 'advisory-none-but-notes-name-it');
+  eq('a real cell is not overridden by the notes', notesVerdict({ pages: [pg], cell: '>= 1.2.1', cveId: 'CVE-2026-53921' }).state, null);
+  eq('silent notes leave the state alone (EDK2)', notesVerdict({ pages: [pn], cell: 'Not patched currently', cveId: 'CVE-2026-53921' }).state, 'notes-do-not-name-it');
+  const multi = notesVerdict({ pages: [pg, { ...pg, version: '25.12.5', date: '2026-07-01' }, { ...pg, names: false, version: '25.12.6' }], cell: 'None', cveId: 'CVE-2026-53921' });
+  eq('matrix: earliest naming release of the line', multi.earliestPatchedLevel, '24.10.8');
+  eq('matrix: every naming release is reported, not the first page listed', multi.versions, ['24.10.8', '25.12.5']);
+  eq('matrix: the silent later page is named, not dropped', /NOT on 25\.12\.6/.test(multi.notes.join(' ')), true);
+  eq('an unreadable page is not an absent one', notesVerdict({ pages: [{ url: 'u', status: 'JS gate — x', names: false }], cell: 'None', cveId: 'CVE-2026-53921' }).state, 'notes-unreadable');
   let pass = 0;
   for (const c of cases) {
     if (c.ok) pass++;
@@ -888,7 +1125,8 @@ if (SELFTEST) {
 if (!IDS.length && !TRACKERS.length) {
   console.log('nothing to do: pass --ids CVE-…,CVE-… and/or --tracker ZDI-CAN-…' +
     ' [--repo owner/repo | --pypi pkg] [--artifact commit|package|firmware|image]' +
-    ' [--fix-ref <commit|pull url>] [--debian <srcpkg>] [--range "<expr>"] [--json] [--selftest]');
+    ' [--fix-ref <commit|pull url>] [--debian <srcpkg>] [--range "<expr>"] [--json] [--selftest]' +
+    ' [--release-notes <url>[,<url>…]]');
   process.exit(0);
 }
 
@@ -982,6 +1220,18 @@ for (const id of IDS) {
       cls.state = 'fix-in-source-no-artifact';
     }
   }
+  /* The announcement axis. Runs after the artifact axis because it answers the same consumer
+     question from a different document, and it escalates the state only where the advisory's cell
+     names no patched version at all — a cell that is wrong, not merely terse. */
+  if (NOTES.length && record) {
+    const pages = [];
+    for (const u of NOTES) pages.push(await releaseNotesPage(u, id));
+    cls.releaseNotes = notesVerdict({ pages, cell: cls.patched ?? null, cveId: id });
+    if (cls.releaseNotes.state === 'advisory-none-but-notes-name-it' && !cls.temporalState) {
+      cls.temporalState = cls.state;
+      cls.state = 'advisory-none-but-notes-name-it';
+    }
+  }
   results.push(cls);
 }
 
@@ -1016,6 +1266,18 @@ if (JSON_OUT) {
       }
     }
     if (r.advisoryDate) console.log(`    advisory ${r.advisoryGhsa} published ${ymd(r.advisoryDate)}`);
+    if (r.releaseNotes) {
+      const n = r.releaseNotes;
+      const tag = n.state === 'advisory-none-but-notes-name-it'
+        ? ` ${n.versions.join(', ')}${n.date ? ` (earliest released ${n.date}` : ''}${n.eol ? `, series EoL ${n.eol})` : n.date ? ')' : ''}`
+        : '';
+      console.log(`    notes    ${n.state}${tag} — ${n.named}/${n.pages} page(s) name ${r.id}`);
+      for (const p of (n.pageList || [])) {
+        if (!p) continue;
+        console.log(`             · ${p.version || '(unversioned)'}${p.date ? ` (${p.date})` : ''}${p.revision ? ` ${p.revision}` : ''} — ${p.names ? 'NAMES it' : 'does not name it'}${p.noCveFixes ? `, +${p.noCveFixes} fix(es) labelled no-CVE` : ''}${p.status !== 'ok' ? ` [${p.status}]` : ''}`);
+      }
+      (n.notes || []).filter(Boolean).forEach(x => console.log(`             ⤷ ${x}`));
+    }
     // ingestion ts is printed only to be disowned: on a bulk drop it is the batch, not the advisory
     if (r.ingestionTs && r.state !== 'backfill') console.log(`    ghsa     ingested ${r.ingestionTs} (ingestion, not the advisory's own date)`);
     (r.notes || []).filter(Boolean).forEach(n => console.log(`    · ${n}`));

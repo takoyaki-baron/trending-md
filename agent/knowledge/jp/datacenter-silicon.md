@@ -55,3 +55,26 @@ Sources: [The Register / The Next Platform — Maia 300](https://www.theregister
 Meta が **Prometheus**（オハイオ州 New Albany、第 1 フェーズ完了）を公開した：複数の建屋にまたがる数十万 GPU を「1 台のマシン」として接続し、フルスケールで約 **100 万**を目標とする——Muse ファミリー（Muse Wonder を含む）を訓練したクラスタである。残すべき数字は FLOPS ではなく信頼性：事前訓練で **goodput >85%**、Muse Wonder の RL 実行で **>90%**、平均無中断時間は **約 47,000 GPU-hours——全フリートのファームウェア修正後に 54,000 超へ上昇**。プラットフォームは **Catalina**（GB200 NVL72、2 ラック構成 "Ariel" で GPU あたり 800G scale-out、標準の 400G ではない）と **Clemente**（GB300 NVL72、GPU あたり 288 GB HBM、GPU:CPU 2:1、72 GPU ドメインを 1 ラックに収容）、次に Vera Rubin NVL72、加えて閉ループ液冷。持ち帰るべき算術：MTBI 約 47k GPU-hours では、5,000 GPU を使うジョブはおよそ **9 時間ごと**に中断を想定すべき——フロンティア訓練が完走するかを決めるのはピークスループットではなく goodput である理由がここにある。数値はすべて Meta 自身のフリートと自前の計測に基づき、ファームウェア前後の比較も同社のもの。外部監査はなく、goodput の定義も Meta のものである。
 
 Sources: [Engineering at Meta: Inside Prometheus](https://engineering.fb.com/2026/10/19/data-center-engineering/inside-prometheus-meta-gigawatt-scale-supercluster/) · [HN](https://news.ycombinator.com/item?id=50152886)
+
+## 2026-10-24——同じリクエストがスウェーデンで 0.38 g、テキサスで 3.2 g。清潔な電網では排出の主役はハードウェア
+
+Berget AI はストックホルム環境研究所、WattTime、Klimatkollen とともに、典型的な Kimi K3 リクエストの
+リクエストあたり CO₂e を公表した：**スウェーデン 0.38 g、アイルランド 1.6 g、ドイツ 2.5 g、
+テキサス 3.2 g**——「テキサスはスウェーデンの 8.5 倍」。エネルギーはほぼ同じで「約 **4 Wh**」、違うのはその
+構成である。スウェーデンではフットプリントの **89%** が**ハードウェア製造**、テキサスでは **90%** が電力で
+「加えて約 6 mL の冷却水」。手法は Green Software Foundation の SCI for AI に従い、MIT ライセンスで GitHub に
+公開、計算機も公開されている。
+
+**記事自身の訂正が最も有用な部分。** 以前の数字——アイルランド 1.2 g、ドイツ 2.1 g、テキサス 3.9 g、そして
+**10 倍**のテキサス–スウェーデン差——は電網強度の修正（アイルランド約 224、ドイツ約 337、ERCOT 約 333
+g CO₂e/kWh）の後に置き換えられ、見出しは 10 倍から **8.5×** になった。自社の見出しを小さくする改訂を公表
+するベンダーは、[[fact-check]] のジャンルが持続可能性の主張に働いた例であり、そこではベンチマークより稀である。
+
+**注意点は厳しく、しかし構造的な結論は生き残る：**使っているのは**平均**電網強度で、限界排出率は「スウェーデン
+のデータセンターの実測温室効果ガス強度を大きく変え得る」（来月追加予定）。チップ製造の水とエネルギーは除外され、
+学習は「自己申告値が ±50% 変動する」ため除外されている。残るのは数字ではなく判断規則である：**低炭素の電網では
+内包ハードウェアが支配項になる**ため、「電気がきれいな場所で動かす」は答えの全部ではなくなる——立地は更新周期と
+利用率と競合し、清潔な電網で軽く使われるアクセラレータは、汚い電網で高稼働のものに負け得る。測定可能な follow-up
+は、事業者がトークンあたりのエネルギーだけでなくトークンあたりの内包排出を公表するかどうかである。
+
+Sources: [Berget AI——リクエストあたり CO₂ プレスリリース](https://berget.ai/en/blog/per-request-co2-press-release) · [berget-ai/co2-calculator（MIT）](https://github.com/berget-ai/co2-calculator)

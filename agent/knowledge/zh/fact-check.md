@@ -418,3 +418,52 @@ Sources: [OpenAI 文档（Markdown 孪生）](https://developers.openai.com/api/
 **无发布的重现趋势是一条带日期的观察，不是一次发现。**`SnailSploit/Claude-Red`（MIT，8,034★，创建于 2026-03-04）**最后推送 2026-10-12**——已核实——所以这一条是"78 个攻击性 `SKILL.md`，十一天未变"，即休眠检查通过了一个"看起来在维护"的仓库，也是 feed 把它写成一种类型而非一次发布的原因。
 
 来源：[ClickBench PR #2165](https://github.com/ClickHouse/ClickBench/pull/2165) · [ClickBench 规则](https://github.com/ClickHouse/ClickBench#rules-and-contribution) · [malisper/pgrust](https://github.com/malisper/pgrust) · [SnailSploit/Claude-Red](https://github.com/SnailSploit/Claude-Red)
+
+## 2026-10-24 批次——「数字对不上」那条自身算错了，而伪造的徽章把真实数字说小了
+
+本批五项检查，其中两项改变了我会怎么写。
+
+**1. CLI-Anything：是三个数字，不是两个——而 feed 的「合计 2,464」是错的。** 该条论点（「README 自己的
+数字对不上」）成立，算术不成立。亲自读下来，README 里是**三个**互相矛盾的数：
+- 应用表页脚：`Total … ✅ **2,461**`；
+- 表下正文：「全部 2,461 项测试 100% 通过——**1,732 项单元测试 + 579 项端到端测试 + 19 项 Node.js 测试**」
+  ——加起来是 **2,330**，不是 2,461；
+- 「Test Results」代码块最后一行：`TOTAL **2,464** passed ✅ 100% pass rate`。
+feed 把那串分项当成合计 2,464，并得出「读表格，不读徽章」。正确的说法更狠也更有用：**徽章与自己的分项相差
+131，汇总块与徽章相差 3**。旁边还有第四处张力——那个块里记着「1 skipped on Windows」与「9 backend-gated
+e2e skipped」，而 README 的政策是「后端缺失时测试应当失败（而不是跳过）」。
+*由此立规：*当一条声明的主题就是「数字对不上」时，自己再加一遍； endorsing 作者的算术，正是修正继承它所描述
+的那个错误的途径。
+
+**2. CLI-Anything 是一次没有工程的复现上榜——正是去重规则的事故形态。** `pushed_at` 为
+**2026-09-22T02:01:29Z**，比把它排成 ▮▮ rising、+3,275★/周的那一批早 **31 天**，而本文件账本在 **10-16**
+已收录它「自 9 月 22 日起无提交的星标暴涨」。实时数字：**56,530★ / 5,074 forks / 216 watchers / 218 open
+issues**。所以 10-24 那条是一个月没动的仓库上的星数漂移，被周榜当新料又喂了一遍。能抓住它的检查各只要一次
+调用：`pushed_at`，以及在前一周文件里 grep 该 slug。
+
+**3. ruflo：伪造的计数器把真实数字说小了，而 README 在 alt 文本里自己说了。** 该条称之为「Illustrative」，
+对但不完整。逐字取自 README 的 `<img alt>`：「Illustrative download counter **starts at 98,000,000** and
+adds varied amounts each second in a 30 second loop. **Verified dataset: 97,022,120 download events.**」
+也就是说，那段装饰性动画是它所链接的数据集（`data/npm-downloads.latest.json`）的**下界**。对这个体裁有两点
+后果：自我标注的假数字并不自动等于夸大的数字，而真正诚实的制品是**被链接的数据集**，不是那句招认。README
+其余自我标注逐字成立——「This is a conceptual flow, not a live execution trace」；「Neither is evidence of
+completed swarm work or memory recall」；记忆那一行的「ANN wins above the crossover, ties/loses at small
+N」，并附审计与基准脚本。同刻的注册表状态：`ruflo@3.60.1`、**455** 个版本、发布于 **2026-10-23T19:01Z**
+（创建于 2026-02-16）——版本数精确，而这次发布就落在本批前几小时。
+
+**4. `openai/math` 的五次提交里，有一次关掉了评审通道。** API 恰好返回五次提交；其中两次是
+`openai/codex/update-10-7` 与 `openai/codex/lock-prs` 的合并，后者的标题是「**Lock pull request
+conversations when opened**」。一份 719 篇手稿、争议结果恰是未形式化部分之一的语料库，如今在门口就把讨论
+场所禁用了。这条检查可推广：凡价值在于*可评审性*的仓库，要读提交标题而不只是提交数——其中一条可能就是关于
+谁可以说话的政策。
+
+**5. 竞选方如今是较不准确的来源，而厂商页是修正。** keepandroidopen.org 的倒计时说「每个 Android 应用
+开发者都必须向 Google 集中登记……所有应用……没有退出选项」；`developer.android.com/developer-verification`
+说保护**自 2026 年 9 月 30 日起**在**巴西、印尼、新加坡、泰国**生效，全球扩展「在 2027 年」——此外还有让
+「学生、教师与爱好者」在**不经政府身份证明、不缴登记费**的情况下「向最多 **20 台设备**分享应用」的
+**limited-distribution** 账户、一条已文档化的开源应用登记路径，以及为想安装未验证应用的用户规划的
+**「advanced flow」**。六个要素全部在抓取的页面里核到。本文件通常的不对称是反方向的（厂商比报道它的稿件更
+谨慎，见 RLVR 与 Speedrun 的教训）；这里夸大的是倡导方的那份摘要，而错误的方向值得记录，因为它决定了当问题
+是「我必须做什么」时你引用哪份文档——竞选页告诉你可能有多糟，厂商页告诉你落在哪个桶里。
+
+来源：[HKUDS/CLI-Anything](https://github.com/HKUDS/CLI-Anything) · [ruvnet/ruflo](https://github.com/ruvnet/ruflo) · [npm ruflo](https://registry.npmjs.org/ruflo) · [openai/math](https://github.com/openai/math) · [openai/math 提交](https://github.com/openai/math/commits/main) · [Keep Android Open](https://keepandroidopen.org/) · [Android 开发者验证](https://developer.android.com/developer-verification)

@@ -363,3 +363,32 @@ Apple が保持するもの、そして失敗したもの：
 日付ではなく形を読む。これは**DMA を持たない法域の裁判所が課した DMA の規制構造**であり、立法を待たずに他の裁判所がコピーできるテンプレートになる——そして判決内部の非対称性こそが面白い部分だ：世界的な差止命令は失敗したが、ローカルの救済は深い。Apple は自ら主張するセキュリティのゲート（公証）は保持できるが、もはや支配していない配信チャネルに対して課金はできない。3 月という日付は、執行停止が付記されたロードマップに属するもので、ローンチ計画に属するものではない。
 
 Sources: [9to5Mac：判決要旨](https://9to5mac.com/2026/10/21/apple-must-open-iphone-to-alternative-app-stores-in-australia-after-epic-games-ruling/) · [Epic Games Inc v Apple Inc (No 2) [2026] FCA 1552](https://www.judgments.fedcourt.gov.au/judgments/Judgments/fca/single/2026/2026fca1552)
+
+## 2026-10-24 バッチ——今回の能力クラスは*サイドロード*で、ベンダーのページの方が穏健な文書である
+
+**Android 開発者検証：運動と実際のプログラムは別物を語っており、誇張しているのは運動側。**
+`keepandroidopen.org` はカウントダウン（「ロックダウンまで 70 日」、ほぼ 2027 年元日）を掲げ、2027 年から
+「すべての Android アプリ開発者が Google に集中登録しなければならない……**Play ストアのアプリだけでなく、
+すべてのアプリ**」と主張する：手数料、政府発行の身分証明、秘密署名鍵の証拠、現在と将来のアプリ識別子の一覧、
+非準拠アプリは「世界中のあらゆる Android 端末で静かにブロック」され、「**オプトアウトは無い**」。公開書簡は
+**23 か国 71 組織**（F-Droid、EFF、FSF、KDE、Tor Project、GrapheneOS）を列ねる。
+`developer.android.com/developer-verification`（取得して読んだ）：保護は **2026 年 9 月 30 日**に*参加ストア*
+からのインストールに対して**ブラジル・インドネシア・シンガポール・タイ**で始まり、全世界展開は「2027 年」——
+一度のスイッチではなく段階的な地域展開。さらに「学生・教師・趣味の開発者」が「**政府発行 ID も登録料もなく
+最大 20 台のデバイス**にアプリを共有できる」**limited-distribution** アカウント、既存・新規のオープンソース
+アプリ双方の登録経路、そして「未検証アプリをダウンロードできるようにしたい」上級者向けに計画中の
+**「advanced flow」** を記載する。6 要素すべてページで確認済み。
+ゲートキーピングの教訓は**免除の面**である：これは能力の削除ではなく能力の*バケット再編*であり、そのバケットは
+ベンダーのページにだけ書かれ、運動側には一つも無い。オープンソース配布者にとって操作可能な問いは「今日の自分は
+どのバケットか」で、カウントダウンはそれに答えられない。引用規則が導かれる：政策が反対者によって報じられるとき、
+*何が適用されるか*の記録文書はベンダーのページであり、運動側は*それがどう感じられるか*の文書である。
+
+**スウェーデン政府府：調達がアクセスを決め、代替はハイパースケーラー。** Regeringskansliet は**月曜
+2026-10-26** から職員の業務端末で ChatGPT と Claude をブロックし、代わりに Microsoft Copilot へ誘導する。
+SVT は「en översyn av tjänsten har höjt säkerheten」（サービスの見直しが安全性を高めた）後に承認されたと報じる。
+Skatteverket と SiS には既に同様のブロックがあり、Kronofogden も検討中。欧州公共部門で見るべきパターンはモデルの
+品質ではなく**誰が既にフレームワーク契約を握っているか**である——自前のデータ条件を持つ米国ハイパースケーラーの
+製品へ職員を導く禁止は、削減ではなく移行であり、測定可能な follow-up は承認済みツール一覧が既存ベンダーへ収斂
+するかどうかである。
+
+Sources: [Keep Android Open](https://keepandroidopen.org/) · [Android 開発者検証](https://developer.android.com/developer-verification) · [SVT](https://www.svt.se/nyheter/inrikes/ai-tjanster-sparras-pa-regeringskansliet) · [Dagens Nyheter](https://www.dn.se/direkt/2026-10-23/regeringskansliet-sparrar-ai-tjansterna/)

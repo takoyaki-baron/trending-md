@@ -1007,3 +1007,40 @@ Sources: [wshobson/agents](https://github.com/wshobson/agents) · [plugins tree]
 残す価値のある初が二つある。**CAD はこの波で初めて、出力形式そのものが成果物になる領域だ**——STEP は機械工場が読むもので、部品の絵ではない——したがって「エージェントが製造可能な幾何を生成した」は「エージェントがその画像を生成した」とは別の主張であり、下流の消費者は目ではなく機械だ。そして**テレメトリが既定でオン**：README は「ランダム ID を付けて使用統計とクラッシュレポートを送信する」と開示し——ファイル、パス、プロンプトは決して送らない——`uvx cadgen telemetry off` で無効化できる。開示は模範的だ。注視すべきは既定のほうで、この棚で診断がオプトアウト制になった最初のエージェントスキル成果物だからだ。
 
 Sources: [cursor/plugins](https://github.com/cursor/plugins) · [Cursor プラグインマーケットプレイス](https://cursor.com/marketplace) · [earthtojake/text-to-cad](https://github.com/earthtojake/text-to-cad) · [texttocad.dev](https://www.texttocad.dev)
+
+## 2026-10-24 バッチ——棚にプラットフォームベンダーが入り、不変 slug を規則にしたマーケットプレイスも入った
+
+**`android/skills`——プラットフォームベンダーが文書ではなく*スキル*を出荷し、外部貢献を閉じている。** 確認済み：
+**9,390★ / 603 forks / 33 open issues**、Apache-2.0、作成 **2026-03-16**、push 2026-10-23。範囲は広く具体的
+（AGP 9 アップグレード、CameraX、Cars、オンデバイス AI、Compose、Media3 Cast、Play、R8、テスト、TV 移行、
+Wear、XR）で、導入はコピペではなくファーストパーティのツール：`android skills add r8-analyzer --project=.`
+または `--all`、同じスキルは Claude Code や Codex のプラグインとしても入る。「エージェントはタスクに関連する
+スキルを自動的に有効化する。」
+構造的な事実は貢献ポリシー——「**現在、公開からの貢献は受け付けていない**」——で、これがベンダーの助言の権威を
+保つと同時に、コミュニティが先に見つけるものに必ず遅れることを保証する。比率（**9,390 stars に 603 forks**、
+7 か月で 88 commits）は*消費*されているリポジトリの形であり、開発されている形ではない：これは文書を文脈として
+配るもので、配布経路は人間が読むドキュメントサイトではなくエージェント自身のプロンプトである。監視点：2 社目の
+プラットフォームベンダーが *貢献不可* モデル（権威だが古い）を採るか、コミュニティモデル（新しいが争われる）を
+採るか。
+
+**`anthropics/claude-plugins-official`——このディレクトリは信頼境界であり、README 自身がそう書いている。**
+確認済み：**44,093★ / 4,637 forks / 1,203 open issues**、Apache-2.0、作成 2025-11-20、push
+2026-10-23T18:21Z。レイアウトは事実上の仕様：必須の `.claude-plugin/plugin.json`、任意の `.mcp.json`、
+`commands/`、`agents/`、`skills/`。`SKILL.md` だけのソースリポジトリは `"strict": false` と `skills` 配列で
+登録できる。唯一のハードな不変条件は命名規則：「`name` フィールドは**不変 slug**……改名するとユーザーの
+インストールが `plugin-not-found` で壊れる」、改名は `renames` マップ経由。これはスキル仕様自体が定義して
+いないバージョン管理であり、ここで文書化されている唯一のものである。限界も明記：「Anthropic はプラグインに
+含まれる MCP サーバー、ファイル、その他のソフトウェアを制御できず、意図どおり動作することも、変化しないことも
+**検証できない**」。掲載承認は提出時点の品質・安全基準を満たしたという意味であって、次の更新後も安全という意味
+ではない——10-16 に `claude-plugins-official` が取った「キュレーションであり検証ではない」姿勢と同じで、今は
+背後に 1,203 の未クローズ issue がある。バージョンを固定すること。
+
+**CLI-Anything——アーキテクチャは正しく、再浮上に問題がある。** 設計主張そのものが貢献である：ソフトウェアへの
+「**構造化インターフェース**を作り、代替品は作らない」、実物の Blender/LibreOffice/FFmpeg/GIMP/QGIS バック
+エンドを呼び、JSON 出力・REPL・undo/redo・テスト・生成された `SKILL.md` を備える——実アプリに対する JSON 出力
+CLI はスクリーンショットループよりはるかに優れたエージェント界面であり、生成された各ハーネスは次のエージェント
+に自己を説明する。数字の問題と古い push の問題は [[fact-check]] にある。ここでの読みは、*アーティファクトの
+型*（生成されたアダプタ + スキルファイル）が採用の単位になりつつあるということで、だからこそ 1 週間で 3,275 星
+増えてコミットが 0 ということが起こる。
+
+Sources: [android/skills](https://github.com/android/skills) · [Android エージェントツール](https://developer.android.com/tools/agents) · [anthropics/claude-plugins-official](https://github.com/anthropics/claude-plugins-official) · [Claude Code プラグイン文書](https://code.claude.com/docs/en/plugins) · [HKUDS/CLI-Anything](https://github.com/HKUDS/CLI-Anything)

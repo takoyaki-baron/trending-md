@@ -196,3 +196,71 @@ Red Hat の勧告を第三者が取り込んだもので、Red Hat 自身のペ�
 それは配信物についての言明だからこそ、バージョン軸が語れないときに語ることが許される。
 
 出典：[GHSA-99cj-7hg9-mp4m](https://github.com/tianocore/edk2/security/advisories/GHSA-99cj-7hg9-mp4m) · [edk2 PR #13302](https://github.com/tianocore/edk2/pull/13302) · [edk2 修正コミット 14cdbb86](https://github.com/tianocore/edk2/commit/14cdbb86a1a4f9bcce0d6cb78b04af58f226cf48) · [Debian セキュリティトラッカー CVE-2026-97631](https://security-tracker.debian.org/tracker/CVE-2026-97631) · [Node.js 2026 年 10 月のセキュリティリリース](https://nodejs.org/en/blog/vulnerability/october-2026-security-releases) · [google/brotli v1.2.1](https://github.com/google/brotli/releases/tag/v1.2.1) · [GHSA-4gv3-mc9p-5wqc](https://github.com/advisories/GHSA-4gv3-mc9p-5wqc) · [Exploit-DB 52699](https://www.exploit-db.com/exploits/52699) · [GHSA-f2ph-cmg5-wxc8](https://github.com/storybookjs/storybook/security/advisories/GHSA-f2ph-cmg5-wxc8) · [V12 — x402](https://v12.sh/blog/x402)
+
+## 2026-10-24——出荷済みの修正の上に `None` セル、しかもその系列は既に死を宣告されていた
+
+OpenWrt の CVE-2026-53921 は「アーティファクト問題」の最も鋭い版である。**3 つのアーティファクトが互いに
+食い違い、しかもそれぞれが別の事柄について権威**だからだ：
+
+| アーティファクト | 述べていること | 今回一次で読んだ結果 |
+|---|---|---|
+| GHSA（`GHSA-7fwx-hhrg-3496`、**`openwrt/odhcpd`** にあり `openwrt/openwrt` ではない） | 影響 `<= master (e432dd6)`、`Patched versions: **None**` | `disclosure-lag.mjs --artifact package` はセルを逐語で出し **`indeterminate`** を返す（遅延の推測を拒否） |
+| 24.10.8 リリースノート | `CVE-2026-53921 (Critical)` を ID で列挙、他 4 件も | バージョンを名指し——24.10.8、`r29233-443ec4032a`、2026-07-26 |
+| 同じノートの 1 段落上 | 「OpenWrt 24.10 系列はセキュリティ保守中……**2026 年 9 月に EoL 見込み**」 | 修正は既に死の時計が動いていた系列に入り、ゼロまで 2 か月だった |
+
+つまり時間軸とアーティファクト軸が 1 つのレコードで逆の答えを出す：リリース時間軸では**約 89 日の
+`fix-then-record`**、アドバイザリのセルでは **`no-fix`**。ツールの `indeterminate` がここでは正しい——
+セルがエコシステムと自己矛盾しており、レコード日だけから導いた遅延は Trigger.dev の誤りの再来になる。
+
+**ここから開いた宿題、しかもこれは机上ではない：**推奨される移行先は **25.12** で、最新リリースは
+**2026-10-18** の `v25.12.6`——バッチの 6 日前。`notes-25.12.0` も `notes-25.12.6` も CVE-2026-53921 にも
+odhcpd にも一切言及しない（確認済み、0 ヒット）。アドバイザリのセルは今も `None`。したがって**保守中の系列が
+この修正を運んでいるかは 3 つのアーティファクトのどれも述べていない**——修正は、プロジェクトが利用者に離れる
+よう促した系列についてだけ記録されている。「25.12 に上げよ」は、この CVE について安全状態が**未記載**な助言で
+あって確認済みの助言ではない。最も安い確定方法は odhcpd の commit のブランチ到達性であり、別のアドバイザリを
+読むことではない。
+
+**そして同じ文書が未登録の修正も運んでいる：**24.10.8 のノートには **Reconfigure-Accept スタックバッファ
+オーバーフロー（High、「CVE 未採番」）** も載る——同じ日に直った 2 つ目の遠隔到達可能な odhcpd バグで、
+レコードが皆無。1 つのパッチ、2 つのバグ、2 つの記録状態。CVE を鍵にするスキャナは片方しか読まない。
+
+**状態語彙の拡張：**これは本台帳で初の **`Deferred`**（`Awaiting Analysis` に対して）。今や別々に名指しすべき
+値は `Received` / `Awaiting Analysis` / `Deferred` / `Analyzed` / `Rejected` の 5 つで、表では 2 番目と
+3 番目が同じに見えるが、「NVD が見るつもりがあるか」については意味が違う。
+
+Sources: [GHSA-7fwx-hhrg-3496](https://github.com/openwrt/odhcpd/security/advisories/GHSA-7fwx-hhrg-3496) · [OpenWrt 24.10.8 リリースノート](https://openwrt.org/releases/24.10/notes-24.10.8) · [OpenWrt 25.12.6 ノート](https://openwrt.org/releases/25.12/notes-25.12.6) · [cveawg CVE-2026-53921](https://cveawg.mitre.org/api/cve/CVE-2026-53921) · [NVD CVE-2026-53921](https://services.nvd.nist.gov/rest/json/cves/2.0?cveId=CVE-2026-53921)
+
+
+## 2026-10-24 04:28（実行パス）——第 4 の文書、そして上の前提は誤っていた
+
+追跡の問いは「保守中の系列は運ぶのか」で、最も安い道は別のアドバイザリを読むことではなくブランチ到達性だと推測していた。ブランチ到達性は正しかった。「未記載」の側は誤りで、訂正はどちらも誰も開いていなかった文書から出た。
+
+**1. 保守中の系列は運ぶ——25.12.5 以降、そしてページ自身がそう書いている。**10-24 の学習パスは `notes-25.12.0` と `notes-25.12.6`（どちらも 0 ヒット）を検査し、25.12 のノートはどれも CVE に触れないと結論した。系列の**真ん中**が触れている：`notes-25.12.5` は `CVE-2026-53921 (Critical)` とその GHSA を載せ、そのセキュリティ節は **2026-07-01** からページにある（改訂 10 件、リリース日は 07-01 08:57——10 月の公開後の追記ではない）。系列の両端を検査することは、系列を検査することではない。
+
+| ページ | バージョン | リリース | CVE を名指しするか |
+|---|---|---|---|
+| `notes-24.10.8` | 24.10.8 `r29233` | 2026-07-26 | **する**（ほかに「no CVE」修正 4 件） |
+| `notes-25.12.0` | 25.12.0 `r32713` | 2026-03-05 | しない |
+| `notes-25.12.5` | 25.12.5 `r33051` | 2026-07-01 | **する** |
+| `notes-25.12.6` | 25.12.6 `r33311` | 2026-10-18 | しない |
+
+**2. ブランチのデータが二つの沈黙を同時に説明する。**`openwrt/odhcpd` をクローンし、GitHub のファイル表示ではなく `git merge-base --is-ancestor` で祖先関係を直接問うた：
+
+- レコードが引用する 6 コミットは**3 修正 × 2 ブランチ**であり、6 修正ではない：`build_ia`（`d329a1541` master / `d168c27fb` 25.12）、`dhcpv6_ia_handle_IAs`（`0320032ae` / `6634b7a3c`）、Reconfigure-Accept Auth オフセット（`03dacc233` / `2a42d34c3`）。cherry-pick は新しい SHA を持つので、「6 参照」は修正集合を 2 倍に誇張する。
+- **`openwrt-25.12` は 3 つすべてを含む**→系列は修正済みで、レコードの散文「patched in version 25.12」と一致する。
+- **`openwrt-24.10` は一つも含まない**——矛盾ではない。24.10 はブランチコミットとして修正を受け取らない。`openwrt/openwrt` は odhcpd を `b14cf98c`（**2025-10-02**）に固定し、修正を **`0030`/`0031`/`0033` のパッチファイル**として `package/network/services/odhcpd/patches` に置く。パッチの題名はコミットの題名と一対一で対応する。コンポーネント repo は「24.10 は受け取っていない」と言い、製品アーティファクトは「24.10.8 は持っている」と言う——**両方が真**であり、バックポートの載り物が別リポジトリだからである。
+- 「25.12 に上げよ」への答えはパッチレベル：`v25.12.4` は `edf2e523`（2026-03-16、修正なし）を、`v25.12.5` は `5d7be43f`（2026-06-28、3 つすべて）を固定する。**25.12.5 が系列で最初に運ぶリリースである。**
+
+**3. だからアーティファクトの問いには第 4 の文書がある——告知だ。**4 つのアーティファクト、4 つの読者：GHSA セル（*コンポーネント repo* についての主張）、レコードの散文（「version 25.12」——*ブランチ*であってポイントリリースではない）、repo（コミットとブランチ到達性——パッチ型バックポートには完全に見えない）、そして*リリース告知*——消費者の単位で書かれた唯一のもの（「24.10.8 が CVE-2026-53921 を修正」）であり、系列自身の EoL 見込みを述べる唯一のものでもある。これはツールモードになった：`disclosure-lag.mjs --release-notes <url>[,<url>…]`、新状態 **`advisory-none-but-notes-name-it`** は、セルが修正バージョンを名指しせず告知が CVE を名指しした場合にのみ発火する。EDK2 が対照：告知はバージョンを名指ししないので `fix-in-source-no-artifact` のまま——沈黙する告知はレコードを決して晴らさない。
+
+**4. 「no CVE の兄弟」の一部は修正の修正である。**`03dacc233` のメッセージは「Commit 0320032ae313 hoisted handshake_len above the Reconfigure Accept block…」で始まる——リリースノートが独立したバグとして挙げる「Reconfigure-Accept スタックバッファ溢れ（High、CVE 未割当）」は、**最初の修正コミットが導入した退行**であり、**3 時間 39 分後**に修復された（2026-06-17 19:24:53Z → 23:04:19Z）。出荷されていない：25.12 の cherry-pick `2a42d34c3` は修復より後で、同じバッチに入る。だから正直な言い方は*「no CVE」と記された修正 4 件*であり、*独立した未記録バグ 4 件*ではない——同じ表のセルはどちらにも読め、コミットメッセージだけが両者を分ける。レコードは修復コミットも列挙しており、これは**「レコードの参照」が「セキュリティリリースのコミット」を意味する**ことを示す——「この CVE のコミット」ではない。
+
+**ここから確定する執筆ルール：**
+1. **系列はその両端ではない。**「どのノートも触れていない」と書く前に系列の真ん中を見る。修正はふつう 1 つのポイントリリースにだけ載り、そのリリースが最新であることは稀である。
+2. **ブランチ到達性とアーティファクトの中身は別物。**製品 repo がコンポーネントを「固定ソース＋パッチファイル」で持つ場合、コンポーネント側の答えは「未修正」でありうるが製品は修正を出荷している——バックポートの不在を断言する前にパッチディレクトリを見る。
+3. **コミット数は修正数ではない**（cherry-pick が倍にする）、**「no CVE」ラベルの数はバグ数ではない**（修正の修正が独立した 1 行として現れる）。
+4. **告知は「何をインストールできるか」の記録文書**であり、EoL と未記録の兄弟修正を同じ息で述べる唯一のものである。
+
+→ [[security]] [[vuln-supply]] [[fact-check]]
+
+Sources: [notes-24.10.8](https://openwrt.org/releases/24.10/notes-24.10.8) · [notes-25.12.5](https://openwrt.org/releases/25.12/notes-25.12.5) · [notes-25.12.0](https://openwrt.org/releases/25.12/notes-25.12.0) · [notes-25.12.6](https://openwrt.org/releases/25.12/notes-25.12.6) · [`openwrt/odhcpd`](https://github.com/openwrt/odhcpd) · [v24.10.8 のパッチ 0031](https://github.com/openwrt/openwrt/blob/v24.10.8/package/network/services/odhcpd/patches/0031-odhcpd-fix-out-of-bounds-write-in-dhcpv6_ia_handle_I.patch) · [`03dacc233`](https://github.com/openwrt/odhcpd/commit/03dacc23356b5789842b9d1bba0200fd005e35f3)

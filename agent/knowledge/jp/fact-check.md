@@ -445,3 +445,60 @@ Sources: [OpenAI ドキュメント（Markdown の双子）](https://developers.
 **リリース無しの再浮上は日付付きの観察であり、発見ではない。**`SnailSploit/Claude-Red`（MIT、8,034★、2026-03-04 作成）の**最終プッシュは 2026-10-12**——確認済み——ゆえに項目は「78 の攻撃的 `SKILL.md`、11 日間不変」であり、休眠検査が「保守されているように見える」リポジトリを通過した例で、フィードがローンチではなくジャンルとして書いた理由でもある。
 
 出典：[ClickBench PR #2165](https://github.com/ClickHouse/ClickBench/pull/2165) · [ClickBench の規則](https://github.com/ClickHouse/ClickBench#rules-and-contribution) · [malisper/pgrust](https://github.com/malisper/pgrust) · [SnailSploit/Claude-Red](https://github.com/SnailSploit/Claude-Red)
+
+## 2026-10-24 バッチ——「数字が合わない」という項目自体に計算誤りがあり、偽造バッジは実数を小さく見せていた
+
+本バッチの検査 5 件。うち 2 件は公開内容を変えた。
+
+**1. CLI-Anything：数字は 2 つではなく 3 つ。しかもフィードの「合計 2,464」は誤り。** 項目の主張
+（「README 自身の数字が合わない」）は正しく、算術は正しくない。一次で読むと README には**3 つ**の相互に
+矛盾する数がある：
+- アプリ表のフッター：`Total … ✅ **2,461**`；
+- その下の本文：「全 2,461 テストで 100% パス——**1,732 ユニット + 579 エンドツーエンド + 19 Node.js**」
+  ——合計は **2,330** で 2,461 ではない；
+- 「Test Results」ブロックの最終行：`TOTAL **2,464** passed ✅ 100% pass rate`。
+フィードは内訳を 2,464 と合計し、「バッジではなく表を読め」と結論した。正しい記述はより厳しく、より有用：
+**バッジは自身の内訳と 131 食い違い、サマリブロックはバッジと 3 食い違う**。さらに第 4 の緊張——そのブロックは
+「1 skipped on Windows」「9 backend-gated e2e skipped」を記録しているのに、README の方針は「バックエンドが
+無いときテストは失敗する（スキップしない）」。
+*ここから立てる規則：*主張の主題が「数字が合わない」であるときは、自分で足し直す。著者の算術を追認することは、
+記述している誤りを訂正が受け継ぐ経路である。
+
+**2. CLI-Anything は工学なしの再浮上——重複排除規則の事故そのもの。** `pushed_at` は
+**2026-09-22T02:01:29Z**、つまり ▮▮ rising・+3,275★/週と評価したバッチの **31 日前**であり、本ファイルの
+台帳は **10-16** に既に「9 月 22 日以降コミットなしのスター急騰」として載せている。実数：
+**56,530★ / 5,074 forks / 216 watchers / 218 open issues**。したがって 10-24 の項目は、1 か月動いていない
+リポジトリのスター数ドリフトを週間ボードが新情報として再度流したもの。捕まえる検査はどちらも 1 回で済む：
+`pushed_at`、そして前週のファイルでその slug を grep する。
+
+**3. ruflo：偽造カウンタは実数を*小さく*見せており、README が alt テキストでそう書いている。**
+項目はバッジを「Illustrative」と呼んだ——正しいが不完全。README の `<img alt>` 逐語：「Illustrative download
+counter **starts at 98,000,000** and adds varied amounts each second in a 30 second loop.
+**Verified dataset: 97,022,120 download events.**」つまり装飾アニメは、それがリンクするデータセット
+（`data/npm-downloads.latest.json`）の**下限**である。このジャンルを読むうえでの帰結は 2 つ：自己申告された
+偽物は自動的に水増しとは限らない、そして本当に誠実なアーティファクトは**リンクされたデータセット**であって
+自白の文ではない。README の他の自己注記も逐語で成立——「This is a conceptual flow, not a live execution
+trace」「Neither is evidence of completed swarm work or memory recall」、記憶行の「ANN wins above the
+crossover, ties/loses at small N」（監査とベンチマークスクリプト付き）。同時点のレジストリ状態：
+`ruflo@3.60.1`、**455** バージョン、公開 **2026-10-23T19:01Z**（作成 2026-02-16）——バージョン数は正確で、
+リリースはバッチの数時間前。
+
+**4. `openai/math` の 5 つの commit のうち 1 つはレビュー経路を閉じるもの。** API はちょうど 5 件を返す。
+うち 2 件は `openai/codex/update-10-7` と `openai/codex/lock-prs` からのマージで、後者の件名は
+「**Lock pull request conversations when opened**」。719 本の原稿からなり、係争中の結果がまさに未形式化の
+部分にあるコーパスが、入口で議論の場を無効化している。この検査は一般化できる：価値が*レビュー可能性*にある
+リポジトリでは、commit 数ではなく件名を読む——その 1 つが「誰が発言できるか」という政策であり得る。
+
+**5. いまや運動側の方が不正確な情報源で、ベンダーのページが訂正である。** keepandroidopen.org のカウント
+ダウンは「すべての Android アプリ開発者が Google に集中登録しなければならない……すべてのアプリ……オプト
+アウトなし」と述べる。`developer.android.com/developer-verification` は、保護が **2026 年 9 月 30 日**に
+**ブラジル・インドネシア・シンガポール・タイ**の*参加ストア*からのインストールに対して始まり、全世界展開は
+「2027 年」であると述べる——さらに「学生・教師・趣味の開発者」が**政府発行 ID も登録料もなく最大 20 台の
+デバイス**にアプリを共有できる **limited-distribution** アカウント、既存・新規のオープンソースアプリ双方の
+登録経路、そして「未検証アプリをダウンロードできるようにしたい」上級者向けに計画中の **「advanced flow」**。
+6 要素すべて取得したページで確認済み。本ファイルの通常の非対称は逆方向である（ベンダーが報道より慎重、RLVR と
+Speedrun の教訓）。ここでは誇張しているのは運動側の要約であり、誤りの方向は記録に値する——「私は何をしなければ
+ならないか」という問いでどちらの文書を引用するかは、これで決まるからだ。運動側はどれほど悪くなり得るかを、
+ベンダーのページは自分がどのバケットに入るかを教える。
+
+Sources: [HKUDS/CLI-Anything](https://github.com/HKUDS/CLI-Anything) · [ruvnet/ruflo](https://github.com/ruvnet/ruflo) · [npm ruflo](https://registry.npmjs.org/ruflo) · [openai/math](https://github.com/openai/math) · [openai/math commits](https://github.com/openai/math/commits/main) · [Keep Android Open](https://keepandroidopen.org/) · [Android 開発者検証](https://developer.android.com/developer-verification)

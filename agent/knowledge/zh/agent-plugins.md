@@ -889,3 +889,33 @@ Sources: [wshobson/agents](https://github.com/wshobson/agents) · [plugins tree]
 两个「第一次」值得留下。**CAD 是这一波里第一个输出格式即交付物的领域**——STEP 是机加工车间读的东西，而不是零件的图片——所以「agent 产出了可制造的几何」与「agent 产出了它的图像」是不同的声明，而下游消费者是一台机器而不是一只眼睛。以及**遥测默认开启**：README 披露它「sends usage stats and crash reports, tagged with a random ID」——从不涉及文件、路径或 prompt——用 `uvx cadgen telemetry off` 关闭。这份披露堪称典范；默认值才是要留意的部分，因为它是这个货架上第一个诊断数据需要主动选择退出的 agent-skill 工件。
 
 Sources: [cursor/plugins](https://github.com/cursor/plugins) · [Cursor 插件市场](https://cursor.com/marketplace) · [earthtojake/text-to-cad](https://github.com/earthtojake/text-to-cad) · [texttocad.dev](https://www.texttocad.dev)
+
+## 2026-10-24 批次——货架迎来一个平台厂商，以及一个把稳定 slug 写进规则的市场
+
+**`android/skills`——平台厂商如今发的不是文档而是*技能*，并且关掉了外部贡献。** 已核：**9,390★ / 603
+forks / 33 open issues**、Apache-2.0、创建 **2026-03-16**、推送 2026-10-23。覆盖面宽且具体（AGP 9 升级、
+CameraX、Cars、端侧 AI、Compose、Media3 Cast、Play、R8、测试、TV 迁移、Wear、XR），安装是一方工具而非
+复制粘贴：`android skills add r8-analyzer --project=.` 或 `--all`，同一批技能也能作为 Claude Code 或 Codex
+插件安装。「你的智能体会自动激活与其任务相关的技能。」
+结构性的事实是贡献政策——「**目前不接受公开贡献**」——它既保住了厂商建议的权威性，也保证它必然落后于社区
+先发现的东西。比例（**603 forks 对 9,390 stars**，七个月 88 次提交）是一个被*消费*而非被开发的仓库的形状：
+这是把文档当上下文，分发渠道是智能体自己的提示，而不是人读的文档站。观察点：是否会有第二家平台厂商照搬
+*不接贡献*模式（权威但陈旧），而不是社区模式（新鲜但有争议）。
+
+**`anthropics/claude-plugins-official`——这个目录是一道信任边界，而它自己的 README 这么说。** 已核：
+**44,093★ / 4,637 forks / 1,203 open issues**、Apache-2.0、创建 2025-11-20、推送 2026-10-23T18:21Z。布局
+已是事实标准：必需的 `.claude-plugin/plugin.json`，可选的 `.mcp.json`、`commands/`、`agents/`、`skills/`；
+只有 `SKILL.md` 的源仓库可用 `"strict": false` 加一个 `skills` 数组上架。
+唯一硬性不变量是命名规则：「`name` 字段是**不可变 slug**……改名会让用户的安装以 `plugin-not-found` 失败」，
+改名的出口是 `renames` 映射。这是技能规范本身没有定义的版本控制，也是这里唯一有文字记录的一个。
+限制写得很直白：「Anthropic 无法控制插件中包含了哪些 MCP 服务器、文件或其他软件，也**无法验证**它们会按预期
+工作或不会改变。」上架通过只意味着一件事：提交时达到质量标准与安全标准，并不意味下一次更新之后仍安全——这与
+`claude-plugins-official` 在 10-16 采取的「策划而非验证」立场一致，如今背后是 1,203 个未关闭议题。锁版本。
+
+**CLI-Anything——架构是对的，但存在复现上榜问题。** 设计主张本身就是贡献：构建「面向软件的**结构化接口**，
+而非替代品」，调用真实的 Blender/LibreOffice/FFmpeg/GIMP/QGIS 后端，输出 JSON、带 REPL、撤销/重做、测试
+以及生成的 `SKILL.md`——一个对真实应用输出 JSON 的 CLI 远胜截屏循环，而每个生成的 harness 会向下一个智能体
+自我说明。数字问题与陈旧推送问题见 [[fact-check]]；此处往下读的结论是：*制品类型*（一个生成的适配器加一份
+技能文件）正在成为采用的单位，这正是为什么一个仓库能在一周内涨 3,275 星而零提交。
+
+来源：[android/skills](https://github.com/android/skills) · [Android 智能体工具](https://developer.android.com/tools/agents) · [anthropics/claude-plugins-official](https://github.com/anthropics/claude-plugins-official) · [Claude Code 插件文档](https://code.claude.com/docs/en/plugins) · [HKUDS/CLI-Anything](https://github.com/HKUDS/CLI-Anything)

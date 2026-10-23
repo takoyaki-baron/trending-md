@@ -753,3 +753,41 @@ Sources: [Ardent Performance：recovery_prefetch considered harmful](https://ard
 本批次的凭据溯源见 [[disclosure-lag]]（五条记录、工件轴）；[[fact-check]] 收录 ClickBench 的完整性案例与每星关注数的年龄限定。
 
 来源：[ELY-Open-Source/ElyOffice](https://github.com/ELY-Open-Source/ElyOffice) · [office.elygpui.com](https://office.elygpui.com) · [Docker is weird](https://codeandcake.dev/posts/2026-10-22-docker-is-weird) · [HN](https://news.ycombinator.com/item?id=50202681) · [Local Wikipedia](https://edjefferson.com/localwiki/) · [cn-math-taxonomy](https://github.com/xiaoyang111222/cn-math-taxonomy)
+
+## 2026-10-24 批次——两个风险在「删除项」里的工具链发布，以及一个值得照抄的就绪度数字
+
+**OpenSSL 4.1.0（2026-10-23）**——一次功能发布，说明里**没有 CVE 修复**。新增是协议级的、被要求已久的：
+**DTLS 1.3（RFC 9147）**、**RFC 8701 GREASE**、SSL listener API 里的 DTLS、IKEV2 KDF、初步的 `e2k`
+（Elbrus2000）支持，以及 `ppc64le` 上的 ML-DSA/ML-KEM NTT 优化与 `x86_64` 上的 AVX-512/VAES AES-CBC 优化。
+迁移风险全在移除项：**Windows-on-Itanium（`VC-WIN64I`）**与 **Windows CE（`VC-CE`）**目标被删除，
+**`no-ecdsa` 与 `no-ecdh`** 配置项也被删除——「用 `no-ec`」。`tsget` 现在依赖 `Net::Curl::Easy`，发布说明
+警告用户「升级前应安装 `Net::Curl::Easy`」。两点解读：传 `no-ecdsa` 的构建配方现在会**响亮地失败**而不是
+静默禁用一条曲线（好结果，但在升级日仍是一条断掉的流水线）；而 GREASE 的尾巴最长——一个开始发送随机扩展的
+客户端，要求路径上每台服务器*早就*正确地忽略它们。加密周边工具往往在现网而非 CI 里发现这件事。
+
+**Dagger 1.0 beta（2026-10-23）**——「第三代 CI，继 Jenkins 与 GitHub Actions 之后」，瞄准的是提交到来速度
+快过流水线评审速度的团队（「五年 v0 之后」）。可测主张：1,000 个并行容器 **35–61 s → 16–17 s**；收集 300 个
+文件 **11.8 s → 1.1 s**。对智能体写的代码而言重要的功能是结构性的：**测试原生 CI** 无需改动测试代码即可发现、
+选择、报告、重跑单个测试（逐测试报告正是让大的智能体 diff 可评审的东西）、自编排测试可调用 Dagger 模块自行
+准备依赖、`dagger shell` 打开工作区 shell、`dagger check -i` 直接在失败点打开、无需 workflow 文件的 GitHub
+集成，以及空闲容量免费。破坏性变更连同迁移形状一起披露：`dagger.json` 拆成 `dagger.toml`（工作区）+
+`dagger-module.toml`（模块），「许多 CLI 命令已变化」，且「向后兼容或自动迁移覆盖了其中大部分，少数例外」。
+值得记住的让步：「**我们无法针对你的私有仓库测试**」——一个 beta 正在索取它自己无法生成的报告。
+
+**ReactOS 可装到 NTFS 上（PR #9700）**——十年之久的 FAT32 要求结束：能装进 NTFS 分区并从那里运行，也能
+创建与格式化 NTFS 卷。只读 NTFS 在 2016 年到来，FreeLoader 到 2022 年已能从 NTFS 启动，但 OS 自身直到现在
+才能装在那里。限制是项目自己说的，且对日常使用是否决性的：驱动「仍缺缓存，导致性能慢于其他 NTFS 驱动」，
+且「日志与安全支持同样尚未实现」——没有 ACL 语义，所以一个没有安全描述符的 NTFS 卷只是一个文件系统，而不是
+Windows 文件系统。**仅开发构建**：ReactOS 0.4.16（2026-08-29）仍是最新正式发布，不含此功能。
+
+**ArtCraft / `storytold`——就绪度百分比是值得照抄的模式。**68 个仓库；2026-10-23 十二个应用仓库在约 25 分钟
+内先后更新（`wordcraft`、`pdfcraft`、`filmcraft`、`vectorcraft`、`lightcraft`、`solidcraft`、`effectcraft`、
+`cadcraft`、`gridcraft`、`designcraft`、`deckcraft`、`figcraft`），每个都「从零用纯 Rust 写」；`photocraft`
+72k★、`artcraft` 36k★、`wordcraft` **15.7k★ / 1,657 次提交**。它与再实现浪潮的区别在于，README 用**三种口径**
+公布差距：覆盖「97% 的功能区与菜单功能」的命令、 「约 **60% 可用于真实工作**、对典型专业人员的每周工作约
+55%、对日常必需约 63%」，外加未完成清单（「用真实 `.docx` 文件测试」「往返保留图表与 SmartArt」「更接近的
+分页保真度」「一次稳定性扫尾与原生打印」）与平台限制（Windows 默认只初始化 DirectX 12；「在 32 位 Windows 上，
+创建 DirectX 12 图形管线会立刻失败，应用在窗口出现前就退出」）。MIT/Apache-2.0 双许可，品牌除外。一个
+97% 的功能数和 60% 的可用于工作数同时为真，而只有后者是规划输入。
+
+来源：[OpenSSL 4.1.0 发布](https://github.com/openssl/openssl/releases/tag/openssl-4.1.0) · [OpenSSL CHANGES.md](https://github.com/openssl/openssl/blob/master/CHANGES.md) · [Dagger 1.0 beta](https://dagger.io/blog/dagger-10-beta/) · [dagger/dagger releases](https://github.com/dagger/dagger/releases) · [Phoronix——ReactOS NTFS](https://www.phoronix.com/news/ReactOS-NTFS-Driver) · [reactos/reactos PR #9700](https://github.com/reactos/reactos/pull/9700) · [storytold/wordcraft](https://github.com/storytold/wordcraft)

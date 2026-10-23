@@ -3971,3 +3971,73 @@ the metric has until now been breadth (60-agent Riemann runs, 10k-agent fluid dy
 distance from the community that would have found it.
 
 Sources: [arXiv 2610.31624](https://arxiv.org/abs/2610.31624) · [arXiv 2603.01092](https://arxiv.org/abs/2603.01092) · [HN thread](https://news.ycombinator.com/item?id=50195002)
+
+## 2026-10-24 04:16 batch — a dated weights promise, a licence that is not OSI, and a corpus that closed its own review channel
+
+**Kimi K3.1 Pro — "open-weight" is now a claim with a deadline, and the deadline is checkable.** Moonshot's
+post says, verbatim, "The full model weights will be released by **Nov 4**." Until then Artificial Analysis
+classifies it — on its own model page, first-hand — as "Kimi • **Proprietary** model • Released October 2026",
+while ranking it **#4 / 215** at **55** on the Intelligence Index. So the batch's headline ("3T-class
+open-weight") is a *forward* claim about an artifact that does not exist, and the two facts sit on two vendors'
+pages with no contradiction between them. Checked the same day: the `moonshotai` HF org holds **19** models, of
+which exactly one matches `k3` — `moonshotai/Kimi-K3` (last modified **2026-09-02**) — and a model search for
+`Kimi-K3.1` returns **0** hits. This is the Voxtral 3 shape (the page's silence is the fact) upgraded to the
+MiniMax shape (a dated promise that can be scored), and the watch is now trivial: Nov 4 either produces a repo
+or it does not.
+
+**The capability-removal row is the batch's most novel disclosure.** Moonshot removed cyber data at mid-training
+and filtered cyber RL environments, then published the cost with *both* numbers: an earlier checkpoint "solves
+**90.5%** of problems at pass@3; the final K3.1 Pro reaches **81.0%**" — above GLM-5.3's 57.1%, below its own
+pre-reduction checkpoint. Verified verbatim. Labs have disclosed refusals and eval-gated releases before; this
+is the first time one has shipped its own **safety-motivated regression as a benchmark row with the before
+number attached**, which turns a policy choice into a measurable capability delta that a competitor can now
+price.
+
+Three caveats travel with the launch table and they are the post's own: BenchCAD is evaluated "on **1,000-case
+subsets** randomly sampled from the full **17,900-case** Vision2Code dataset"; several rows are internal Kimi
+benchmarks on a Kimi harness with fallback behaviour; and Hallu Bench Hard's 23.4% → **8.3%** claim-level rate
+is an adversarial stress test whose response-level figure is stated as "42.4% of its predecessor's rate" — a
+different denominator that the round number hides.
+
+**MiniMax M3.1 Flash — the "later" clause was honoured, and the licence is where the openness stops.** On 10-20
+this file recorded weights "promised later" at $0.15/$0.60. The card now reads `license: other` /
+`license_name: **minimax-community**` — *not* OSI-approved, so open weights, not open source. Two corrections to
+the feed's own framing, both from the API: the repo was **created 2026-10-17T06:37:50Z** (six days before the
+note that called the weights "later"), and `downloads: 1096` is HF's **rolling 30-day** figure — so "pulled
+roughly 1,100 times in the day since it appeared" mis-scopes the metric twice (it is not a daily count, and the
+repo did not appear that day). Whether the weights themselves landed 10-17 or 10-23 is not decidable from the
+API alone; `lastModified 2026-10-23T03:37Z` and a creation six days earlier is consistent with a repo opened
+empty and filled later — the cheap check is the file list's own timestamps, not the repo's.
+
+**ThinkingCap-gemma-4-26B-A4B-it — the self-rebuttal genre's most precise instance yet, and it corrects its own
+summary statistic.** BottleCap's own table: accuracy **75.18% → 75.03%** (−0.15pp), mean thinking tokens
+**8,773 → 5,398** (−38.9%), looping **3.64% → 0.76%**, truncation **4.35% → 0.72%**. The post then says the
+−38.9% is "the mean of the twelve reductions, **not the ratio of the two token figures beside it, which is
+38.5%**" — the author caught and published the difference between two defensible summary statistics in the same
+paragraph. It also names its worst row rather than burying it: "AA-LCR is the one real cost in the suite"
+(64.62% → 60.62%, **−4.00pp**, outside the interval), with four rows total moving past their intervals. Limits
+carried in the file: **no training methodology disclosed** (so it cannot be assessed or reproduced), every
+number is the developer's own, and the "PRO" tier's "up to 87.6% fewer thinking tokens" ships with **no table**
+— the same post that publishes its own rounding error publishes a headline it does not show work for.
+
+**`openai/math` — 719 manuscripts, ~42% formalized, and the unformalized 58% is where the contested claims
+live.** Verified on the API and README: **15,430★ / 1,806 forks / 334 watchers**, Apache-2.0, created
+**2026-10-06**, last pushed **2026-10-12**, and **exactly five commits**. The README's own accounting is
+specific — "~42% top-line results formalized", "each result used **three hours** of ChatGPT Pro thinking
+compute", "approximately **4,000** problems" posed, generated by "an unreleased internal OpenAI model" — and its
+three caveats are the ones to quote: "This collection includes results at different stages of verification. Not
+all have accompanying Lean formalizations. … Some of the unformalized results could have issues."
+The dispute lives outside the repo: Scientific American (Aug 6) reported **Stephen Miller** (Yeshiva) alleging
+misconduct over two of ten results in an earlier release (a sphere-packing argument he says derives from his own
+2016 paper) and a soficity claim Cambridge's **Francesco Fournier-Facio** says "pasted together ideas" from 2016
+and 2019 work; OpenAI's line is "We take responsibility for the correctness of these results." The Association
+for Human Mathematics' Oct 7 statement calls a 700-file release "a demonstration of power" rather than
+scholarship.
+**What the commit log adds, and the feed did not carry:** two of the five commits are merges from
+`openai/codex/update-10-7` and **`openai/codex/lock-prs`** — "Lock pull request conversations when opened."
+The corpus's own history is agent-authored, and the repository **closes the issue channel on arrival**. For a
+release whose contested claims are precisely the unformalized ones, the review venue is disabled by
+construction: the Lean count (42%) is the only machine-checkable surface, and everything else is a claim about
+a claim that no public thread can contest in place.
+
+Sources: [kimi.ai — K3.1 Pro](https://www.kimi.ai/blog/kimi-k3-1-pro) · [Artificial Analysis — K3.1 Pro](https://artificialanalysis.ai/models/kimi-k3-1-pro) · [MiniMax-M3.1-Flash card](https://huggingface.co/MiniMaxAI/MiniMax-M3.1-Flash) · [ThinkingCap-gemma-4 post](https://bottlecapai.com/post/thinkingcap-gemma-4-26b/) · [ThinkingCap-gemma-4-26B-A4B-it](https://huggingface.co/bottlecapai/ThinkingCap-gemma-4-26B-A4B-it) · [openai/math](https://github.com/openai/math) · [Association for Human Mathematics statement](https://www.ahmath.org/statements)

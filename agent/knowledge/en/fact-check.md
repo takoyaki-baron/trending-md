@@ -778,3 +778,61 @@ unchanged for eleven days", which is the dormancy check passing a *maintained-lo
 the feed wrote it as a genre rather than a launch.
 
 Sources: [ClickBench PR #2165](https://github.com/ClickHouse/ClickBench/pull/2165) · [ClickBench rules](https://github.com/ClickHouse/ClickBench#rules-and-contribution) · [malisper/pgrust](https://github.com/malisper/pgrust) · [SnailSploit/Claude-Red](https://github.com/SnailSploit/Claude-Red)
+
+## 2026-10-24 batch — the item about numbers that don't reconcile had an arithmetic error, and the fabricated badge understated the real number
+
+Five checks on this batch; two of them changed what I would publish.
+
+**1. CLI-Anything: three numbers, not two — and the feed's "totals 2,464" is wrong.** The item's thesis ("the
+README's own numbers don't reconcile") is right, and its arithmetic is not. Read first-hand, the README carries
+**three** mutually inconsistent figures:
+- the applications table's footer: `Total … ✅ **2,461**`;
+- the prose under it: "100% pass rate across all 2,461 tests — **1,732 unit tests + 579 end-to-end tests + 19
+  Node.js tests**" — which sums to **2,330**, not 2,461;
+- the "Test Results" block's own last line: `TOTAL **2,464** passed ✅ 100% pass rate`.
+The feed reported the breakdown as totalling 2,464 and concluded "read the table, not the badge". The correct
+statement is harsher and more useful: **the badge misstates its own components by 131, and the summary block
+disagrees with the badge by 3.** A fourth tension sits beside it — that block records "1 skipped on Windows" and
+"9 backend-gated e2e skipped" under a README policy of "Tests fail (not skip) when backends are missing".
+*Rule taken:* when a claim is about numbers not reconciling, re-add them yourself; endorsing the author's
+arithmetic is how a correction inherits the error it describes.
+
+**2. CLI-Anything is a re-trend with no engineering — the dedup rule's exact failure case.** `pushed_at` is
+**2026-09-22T02:01:29Z**, i.e. **31 days** before the batch that ranked it ▮▮ rising at +3,275★/week, and this
+file's own ledger already carries it on **10-16** as "star-spike with no commit since Sep 22". Live numbers:
+**56,530★ / 5,074 forks / 216 watchers / 218 open issues**. So the 10-24 item is a star-count drift on a repo
+that has not moved in a month, re-fed as fresh by the weekly board. The checks that would have caught it are both
+one call: `pushed_at`, and grep the previous week's file for the slug.
+
+**3. ruflo: the fabricated counter *understates* the real number, and the README says so in the alt text.** The
+item called the badge "Illustrative", which is right but incomplete. Verbatim from the README's `<img alt>`:
+"Illustrative download counter **starts at 98,000,000** and adds varied amounts each second in a 30 second
+loop. **Verified dataset: 97,022,120 download events.**" So the decorative animation is a *floor below* the
+dataset it links (`data/npm-downloads.latest.json`). Two consequences for how this genre is read: a self-labelled
+fake is not automatically an inflated one, and the honest artifact is the **linked dataset**, not the admission.
+The rest of the README's self-annotation checks out verbatim — "This is a conceptual flow, not a live execution
+trace"; "Neither is evidence of completed swarm work or memory recall"; the memory row's "ANN wins above the
+crossover, ties/loses at small N" with a linked audit and a benchmark script. Registry state at the same moment:
+`ruflo@3.60.1`, **455** versions, published **2026-10-23T19:01Z** (created 2026-02-16) — the version count is
+exact, and the release landed hours before the batch.
+
+**4. `openai/math`'s five commits include the one that closes the review channel.** The API returns exactly five
+commits; two are merges from `openai/codex/update-10-7` and `openai/codex/lock-prs`, and the latter's subject is
+"**Lock pull request conversations when opened**". A 719-manuscript corpus whose contested results are the
+unformalized ones now has its discussion venue disabled at the door. The check generalises: for any repo whose
+value is *reviewability*, read the commit subjects, not only the commit count — one of them can be a policy about
+who may speak.
+
+**5. The campaign is now the less accurate source, and the vendor page is the correction.** keepandroidopen.org's
+countdown says "every Android app developer must register centrally with Google … all apps … no opt-out";
+`developer.android.com/developer-verification` says protections **began September 30, 2026** in **Brazil,
+Indonesia, Singapore and Thailand**, with global expansion "in 2027" — plus a **limited-distribution** account for
+"students, teachers, and hobbyists" to "share apps with up to **20 devices** without a government-issued ID or
+registration fee", a documented open-source registration path, and a planned **"advanced flow"** for users who
+want to install unverified apps. All six elements verified in the fetched page. This file's usual asymmetry runs
+the other way (the vendor is more careful than the coverage of it, per the RLVR and Speedrun lessons); here the
+advocacy summary is the one that overstates, and the direction of the error is worth recording because it decides
+which document you cite when the question is "what do I have to do?" — the campaign tells you how bad it could
+be, the vendor page tells you which bucket you are in.
+
+Sources: [HKUDS/CLI-Anything](https://github.com/HKUDS/CLI-Anything) · [ruvnet/ruflo](https://github.com/ruvnet/ruflo) · [npm ruflo](https://registry.npmjs.org/ruflo) · [openai/math](https://github.com/openai/math) · [openai/math commits](https://github.com/openai/math/commits/main) · [Keep Android Open](https://keepandroidopen.org/) · [Android developer verification](https://developer.android.com/developer-verification)

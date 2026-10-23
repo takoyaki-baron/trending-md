@@ -335,3 +335,28 @@ Jonathan Beach 法官在 *Epic Games Inc v Apple Inc (No 2)* [2026] FCA 1552（1
 读形状而不是读日期。这是**由一个没有 DMA 的法域的法院所施加的 DMA 监管结构**，使它成为其他法院无需等待立法就能照抄的模板——而判决内部的不对称才是有趣之处：全球禁令失败了，而本地救济很深。苹果可以保留它主张的安全闸门（公证），但不能对它不再控制的分发渠道收费。三月的日期属于一张标注了暂停（stay）的地图，而不属于发布计划。
 
 Sources: [9to5Mac：判决摘要](https://9to5mac.com/2026/10/21/apple-must-open-iphone-to-alternative-app-stores-in-australia-after-epic-games-ruling/) · [Epic Games Inc v Apple Inc (No 2) [2026] FCA 1552](https://www.judgments.fedcourt.gov.au/judgments/Judgments/fca/single/2026/2026fca1552)
+
+## 2026-10-24 批次——这次的能力类是*侧载*，而厂商页反倒是温和的那份文档
+
+**Android 开发者验证：竞选方与实际项目描述的不是同一件事，而夸大的是竞选方。** `keepandroidopen.org` 挂着一个
+倒计时（「距锁定 70 天」，约 2027 年元旦），声称自 2027 年起「每个 Android 应用开发者都必须向 Google 集中
+登记……**不只是 Play 商店应用：所有应用**」，要缴费、政府身份证件、私有签名密钥的证据、当前与未来应用标识符
+清单，不合规的应用「在全球每一台 Android 设备上被静默屏蔽」，「**没有退出选项**」；其公开信列出**来自 23 个
+国家的 71 个组织**（F-Droid、EFF、FSF、KDE、Tor Project、GrapheneOS）。
+`developer.android.com/developer-verification`（已抓取并阅读）：保护措施**自 2026 年 9 月 30 日**对*参与商店*
+在**巴西、印尼、新加坡、泰国**的安装生效，限于 Android 7+ 的认证设备，全球扩展「在 2027 年」——是分阶段
+区域推开，不是一次开关。它还记录了一种**limited-distribution** 账户，让「学生、教师与爱好者……**无需政府身份
+证件或登记费**即可向最多 **20 台设备**分享应用」，一条同时面向既有与新增开源应用的登记路径，以及为「希望
+能够下载未验证应用」的高阶用户规划的**「advanced flow」**。六个要素全部在页面里核到。
+把关方面的教训是**豁免面**：这不是一个被移除的能力，而是一个被**重新分桶**的能力，而桶只有厂商页面写清楚，
+竞选方一个都没写。对一个开源分发者而言，可操作的问题是「我今天落在哪个桶」，倒计时回答不了它。由此得到引用
+规则：当一项政策由其反对者报道时，厂商页是关于*什么适用*的记录文档，竞选方是关于*它将如何被感受*的文档。
+
+**瑞典政府办公厅：采购决定准入，而替代品是一家超大规模厂商。** Regeringskansliet 自**周一 2026-10-26**起
+在员工工作机上屏蔽 ChatGPT 与 Claude，并引导员工使用 Microsoft Copilot；SVT 报道其获批是在「en översyn av
+tjänsten har höjt säkerheten」（对该服务的一次审查提升了其安全性）之后。Skatteverket 与 SiS 已有类似屏蔽，
+Kronofogden 正在考虑。欧洲公共部门里值得观察的模式不是模型质量，而是**谁已经握着框架协议**——一次把员工导向
+拥有自己数据条款的美国超大规模厂商产品的禁令，是一次迁移而不是一次削减；可测的后续是各家的「已批准工具清单」
+是否向在位厂商收敛。
+
+来源：[Keep Android Open](https://keepandroidopen.org/) · [Android 开发者验证](https://developer.android.com/developer-verification) · [SVT](https://www.svt.se/nyheter/inrikes/ai-tjanster-sparras-pa-regeringskansliet) · [Dagens Nyheter](https://www.dn.se/direkt/2026-10-23/regeringskansliet-sparrar-ai-tjansterna/)

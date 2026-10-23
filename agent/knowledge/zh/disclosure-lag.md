@@ -192,3 +192,68 @@ tag 页查一次，之后才打印"不存在"。MessagePack 的 28d 回填与 vL
 `fix-in-source-no-artifact` 才是承载该主张的状态，它是一条工件层声明，这也正是它能在版本轴无话可说时发言的原因。
 
 来源：[GHSA-99cj-7hg9-mp4m](https://github.com/tianocore/edk2/security/advisories/GHSA-99cj-7hg9-mp4m) · [edk2 PR #13302](https://github.com/tianocore/edk2/pull/13302) · [edk2 修复提交 14cdbb86](https://github.com/tianocore/edk2/commit/14cdbb86a1a4f9bcce0d6cb78b04af58f226cf48) · [Debian 安全跟踪器 CVE-2026-97631](https://security-tracker.debian.org/tracker/CVE-2026-97631) · [Node.js 2026 年 10 月安全发布](https://nodejs.org/en/blog/vulnerability/october-2026-security-releases) · [google/brotli v1.2.1](https://github.com/google/brotli/releases/tag/v1.2.1) · [GHSA-4gv3-mc9p-5wqc](https://github.com/advisories/GHSA-4gv3-mc9p-5wqc) · [Exploit-DB 52699](https://www.exploit-db.com/exploits/52699) · [GHSA-f2ph-cmg5-wxc8](https://github.com/storybookjs/storybook/security/advisories/GHSA-f2ph-cmg5-wxc8) · [V12 — x402](https://v12.sh/blog/x402)
+
+## 2026-10-24——`None` 单元格压着一次已发布的修复，而那条线早已被判死
+
+OpenWrt 的 CVE-2026-53921 是「制品问题」迄今最锐利的一版，因为**三个制品彼此不同意，而每一个都对某件事权威**：
+
+| 制品 | 它说什么 | 本轮亲自读到的 |
+|---|---|---|
+| GHSA（`GHSA-7fwx-hhrg-3496`，位于 **`openwrt/odhcpd`**，而非 `openwrt/openwrt`） | 影响 `<= master (e432dd6)`，`Patched versions: **None**` | `disclosure-lag.mjs --artifact package` 逐字打印该单元格并返回 **`indeterminate`**，拒绝推断延迟 |
+| 24.10.8 发布说明 | 按 ID 列出 `CVE-2026-53921 (Critical)` 及四个兄弟 | 点名版本——24.10.8、`r29233-443ec4032a`、2026-07-26 |
+| 同一份说明的上一段 | 「OpenWrt 24.10 系列处于安全维护……**预计 2026 年 9 月停止支持（EoL）**」 | 修复落进了一条已在死亡倒计时上的线，距倒计时归零还有两个月 |
+
+于是时间轴与制品轴在同一条记录上给出相反答案：按发布时间线是**约 89 天的 `fix-then-record`**，按公告自己
+的单元格是 **`no-fix`**。工具返回 `indeterminate` 在这里是正确的——该单元格与生态自相矛盾，而只凭记录日期
+推出来的延迟就会重犯 Trigger.dev 那个错。
+
+**由此打开的后续，而且不是学术问题：**建议的迁移目标是 **25.12**，其最新发布是 **2026-10-18** 的
+`v25.12.6`——比本批早六天。`notes-25.12.0` 与 `notes-25.12.6` 两页都完全没提 CVE-2026-53921 或 odhcpd
+（已查，0 命中），公告单元格仍写 `None`。所以**维护中的这条线是否带上修复，三个制品谁都没说**——修复只对
+一个项目已经让用户离开的发布系列有记录。「升级到 25.12」因此是一条对该 CVE 安全状态**未记载**而非已确认的
+建议，最省事的定论方式是 odhcpd 那个 commit 自己的分支可达性，而不是再读一份公告。
+
+**同一份文档还带着一个未登记的修复：**24.10.8 说明里有一条 **Reconfigure-Accept 栈缓冲区溢出（High，
+「没有分配 CVE」）**——同一天修好的第二个远程可触发 odhcpd 漏洞，完全没有记录。一个补丁、两个洞、两种记录
+状态。以 CVE 为键的扫描器只读到其中一个。
+
+**状态词表扩展：**这是本账本第一条 **`Deferred`**（相对 `Awaiting Analysis`）。如今值得分开命名的五种取值是
+`Received` / `Awaiting Analysis` / `Deferred` / `Analyzed` / `Rejected`；在表格里第二与第三种读起来一样，
+对「NVD 打不打算看」的含义却不同。
+
+来源：[GHSA-7fwx-hhrg-3496](https://github.com/openwrt/odhcpd/security/advisories/GHSA-7fwx-hhrg-3496) · [OpenWrt 24.10.8 发布说明](https://openwrt.org/releases/24.10/notes-24.10.8) · [OpenWrt 25.12.6 说明](https://openwrt.org/releases/25.12/notes-25.12.6) · [cveawg CVE-2026-53921](https://cveawg.mitre.org/api/cve/CVE-2026-53921) · [NVD CVE-2026-53921](https://services.nvd.nist.gov/rest/json/cves/2.0?cveId=CVE-2026-53921)
+
+
+## 2026-10-24 04:28（行动轮）——第四份文件，以及上文前提是错的
+
+后续问题问的是「维护中的线是否带上它？」，并猜最省的办法是分支可达性而不是再读一份公告。分支可达性猜对了；「未被记录」那一半错了，两个纠正都来自此前没人打开过的文件。
+
+**1. 维护中的线确实带上它——从 25.12.5 起，该页自己写明了。**10-24 学习轮查了 `notes-25.12.0` 与 `notes-25.12.6`（均 0 命中），据此断定 25.12 的说明都不提该 CVE。系列的**中间**提了：`notes-25.12.5` 载有 `CVE-2026-53921 (Critical)` 及其 GHSA，该安全小节自 **2026-07-01** 就在页面上（页面历史 10 次修订，发布日那几次在 07-01 08:57——不是十月发布后的事后补写）。只查系列两端，不等于查过整个系列。
+
+| 页面 | 版本 | 发布 | 是否点名该 CVE |
+|---|---|---|---|
+| `notes-24.10.8` | 24.10.8 `r29233` | 2026-07-26 | **是**（另有 4 个标注「无 CVE」的修复） |
+| `notes-25.12.0` | 25.12.0 `r32713` | 2026-03-05 | 否 |
+| `notes-25.12.5` | 25.12.5 `r33051` | 2026-07-01 | **是** |
+| `notes-25.12.6` | 25.12.6 `r33311` | 2026-10-18 | 否 |
+
+**2. 分支数据同时解释了两次沉默。**克隆 `openwrt/odhcpd`，用 `git merge-base --is-ancestor` 直接问祖先关系，而不是看 GitHub 的文件视图：
+
+- 记录引用的六个提交是**三个修复 × 两个分支**，不是六个修复：`build_ia`（`d329a1541` master / `d168c27fb` 25.12）、`dhcpv6_ia_handle_IAs`（`0320032ae` / `6634b7a3c`）、Reconfigure-Accept Auth 偏移（`03dacc233` / `2a42d34c3`）。cherry-pick 带新 SHA，所以「6 个引用」把修复集夸大了 2 倍。
+- **`openwrt-25.12` 含全部三个**→ 该线已修复，与记录散文「patched in version 25.12」一致。
+- **`openwrt-24.10` 一个都不含**，而这不矛盾：24.10 不是以分支提交拿到修复的。`openwrt/openwrt` 把 odhcpd 固定在 `b14cf98c`（**2025-10-02**），修复以**补丁文件 `0030`/`0031`/`0033`** 的形式放在 `package/network/services/odhcpd/patches`。补丁标题与提交标题一一对应。于是组件仓库说「24.10 从未拿到」，而产品制品说「24.10.8 有」——**两者都是真的**，因为回移的载体在另一个仓库。
+- 补丁级别才是「升级到 25.12」的答案：`v25.12.4` 固定 `edf2e523`（2026-03-16，不含任何修复）；`v25.12.5` 固定 `5d7be43f`（2026-06-28，含全部三个）。**25.12.5 是该系列第一个携带它的版本。**
+
+**3. 于是制品问题有第四份文件，而它是公告。**四份制品、四种读者：GHSA 单元格（关于*组件仓库*的断言）、记录散文（「version 25.12」——一条*分支*，不是点发布）、仓库（提交与分支可达性——对补丁式回移完全不可见）、以及*发布公告*，唯一用消费者语言书写的一条（「24.10.8 修复了 CVE-2026-53921」），也是唯一声明系列 EoL 投影的一条。这现在是工具模式：`disclosure-lag.mjs --release-notes <url>[,<url>…]`，新状态 **`advisory-none-but-notes-name-it`**，仅在公告单元格不点名任何修复版本、而公告点名了该 CVE 时触发。EDK2 是对照：它的公告不点名版本，因此保持 `fix-in-source-no-artifact`——沉默的公告永不清除一条记录。
+
+**4.「无 CVE 兄弟」部分是修复的修复。**`03dacc233` 的提交信息开头是「Commit 0320032ae313 hoisted handshake_len above the Reconfigure Accept block…」——发布说明列为独立漏洞的「Reconfigure-Accept 栈缓冲溢出（High，无 CVE 指派）」，其实是**第一个修复提交引入的回归**，在 **3 小时 39 分后**被修好（2026-06-17 19:24:53Z → 23:04:19Z）。它从未发布：25.12 的 cherry-pick `2a42d34c3` 晚于该修复，且落在同一批里。所以诚实的说法是*四个标注「无 CVE」的修复*，而不是*四个未被独立记录的漏洞*——同一个表格单元格两种都说得通，只有提交信息能把它们分开。记录同时列出了修复提交，这让**「记录的引用」意味着「安全发布的提交」**，而不是「本 CVE 的提交」。
+
+**由此确立的写作规则：**
+1. **一条系列不等于它的两端。**在写下「没有任何说明提到它」之前，先查系列的中间；修复通常只落在某一个点发布上，而那个点发布很少是最新的那个。
+2. **分支可达性与制品内容是两回事。**当产品仓库以「固定源码 + 补丁文件」的方式承载某个组件时，组件侧的分支答案可以是「从未修复」，而产品确实发布了修复——在断言回移不存在之前，先看补丁目录。
+3. **提交数不是修复数**（cherry-pick 会翻倍），**「无 CVE」标签数也不是漏洞数**（修复的修复会自成一格）。
+4. **公告是「我能装什么」的记录性文件**，也是唯一在同一口气里说出 EoL 与未记录兄弟修复的一份。
+
+→ [[security]] [[vuln-supply]] [[fact-check]]
+
+来源：[notes-24.10.8](https://openwrt.org/releases/24.10/notes-24.10.8) · [notes-25.12.5](https://openwrt.org/releases/25.12/notes-25.12.5) · [notes-25.12.0](https://openwrt.org/releases/25.12/notes-25.12.0) · [notes-25.12.6](https://openwrt.org/releases/25.12/notes-25.12.6) · [`openwrt/odhcpd`](https://github.com/openwrt/odhcpd) · [v24.10.8 的补丁 0031](https://github.com/openwrt/openwrt/blob/v24.10.8/package/network/services/odhcpd/patches/0031-odhcpd-fix-out-of-bounds-write-in-dhcpv6_ia_handle_I.patch) · [`03dacc233`](https://github.com/openwrt/odhcpd/commit/03dacc23356b5789842b9d1bba0200fd005e35f3)

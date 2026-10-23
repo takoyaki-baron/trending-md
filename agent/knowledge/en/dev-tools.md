@@ -1078,3 +1078,53 @@ Credential provenance for this batch lives in [[disclosure-lag]] (five records, 
 [[fact-check]] carries the ClickBench integrity case and the star-per-watcher age caveat.
 
 Sources: [ELY-Open-Source/ElyOffice](https://github.com/ELY-Open-Source/ElyOffice) · [office.elygpui.com](https://office.elygpui.com) · [Docker is weird](https://codeandcake.dev/posts/2026-10-22-docker-is-weird) · [HN](https://news.ycombinator.com/item?id=50202681) · [Local Wikipedia](https://edjefferson.com/localwiki/) · [cn-math-taxonomy](https://github.com/xiaoyang111222/cn-math-taxonomy)
+
+## 2026-10-24 batch — two toolchain releases whose risk is in the removals, and a readiness number worth copying
+
+**OpenSSL 4.1.0 (2026-10-23)** — a feature release with **no CVE fixes in the notes**. The additions are
+protocol-level and long-requested: **DTLS 1.3 (RFC 9147)**, **RFC 8701 GREASE**, DTLS in the SSL listener API,
+the IKEV2 KDF, initial `e2k` (Elbrus2000) support, plus optimized ML-DSA/ML-KEM NTT on `ppc64le` and AVX-512/VAES
+AES-CBC on `x86_64`. The migration risk is entirely in what goes: the **Windows-on-Itanium (`VC-WIN64I`)** and
+**Windows CE (`VC-CE`)** targets are dropped, and so are the **`no-ecdsa` and `no-ecdh`** Configure options —
+"Use `no-ec`". `tsget` now depends on `Net::Curl::Easy`, with the release warning that users "should install
+`Net::Curl::Easy` before upgrading." Two reads: a build recipe passing `no-ecdsa` now **fails loudly** rather
+than silently disabling a curve (the good outcome that is still a broken pipeline on upgrade day), and GREASE is
+the change with the longest tail — a client that starts sending randomized extensions requires every server in
+the path to have been *already* correct about ignoring them. Encryption-adjacent tooling tends to discover that
+in the field, not in CI.
+
+**Dagger 1.0 beta (2026-10-23)** — "third-generation CI, after Jenkins and GitHub Actions", pitched at teams
+whose commits arrive faster than the pipeline can review them ("After five years of v0"). Measured claims:
+1,000 parallel containers **35–61 s → 16–17 s**; collecting 300 files **11.8 s → 1.1 s**. The features that
+matter for agent-authored code are structural: **test-native CI** discovers/selects/reports/re-runs individual
+tests without modifying test code (per-test reporting is what makes a large agent diff reviewable),
+self-orchestrating tests that call Dagger modules to provision their own dependencies, `dagger shell` for a
+workspace shell and `dagger check -i` to open one at the failure point, GitHub integration with no workflow file,
+and idle-capacity-free pricing. Breaking changes are disclosed with the migration's shape: `dagger.json` splits
+into `dagger.toml` (workspace) + `dagger-module.toml` (module), "many CLI commands have changed", and
+"Backwards compatibility or automated migration covers most of these changes, with a few exceptions." The
+concession worth keeping: "**We can't test against your private repositories**" — a beta asking for exactly the
+reports it cannot generate.
+
+**ReactOS installs onto NTFS (PR #9700)** — the decade-old FAT32 requirement ends: install and run from an NTFS
+partition, and create/format NTFS volumes. Read-only NTFS arrived 2016, FreeLoader could boot NTFS by 2022, and
+the OS itself could not install there until now. The limits are the project's own and they are disqualifying for
+daily use: the driver "still lacks caching leading to slower performance", and "journaling, and security support
+are also not yet implemented" — no ACL semantics, so an NTFS volume without security descriptors is a filesystem
+rather than a Windows filesystem. **Development builds only**: ReactOS 0.4.16 (2026-08-29) is still the newest
+official release and does not include it.
+
+**ArtCraft / `storytold` — the readiness percentage is the pattern to copy.** 68 repos; on 2026-10-23 twelve app
+repos updated within ~25 minutes of each other (`wordcraft`, `pdfcraft`, `filmcraft`, `vectorcraft`, `lightcraft`,
+`solidcraft`, `effectcraft`, `cadcraft`, `gridcraft`, `designcraft`, `deckcraft`, `figcraft`), each "from scratch
+in pure Rust"; `photocraft` 72k★, `artcraft` 36k★, `wordcraft` **15.7k★ over 1,657 commits**. What separates this
+from the reimplementation wave is that the READMEs publish the *gap in three registers*: commands for "97% of the
+ribbon and menu features", "about **60% ready for real work**, about 55% for a typical professional's weekly work
+and about 63% for everyday essentials", plus the outstanding list ("testing against real-world `.docx` files",
+"keeping charts and SmartArt through a round trip", "closer pagination fidelity", "a stability sweep and native
+printing") and platform limits (Windows initializes only DirectX 12 by default; "on 32-bit Windows, creating a
+DirectX 12 graphics pipeline fails immediately and the app exits before the window appears"). Dual MIT/Apache-2.0
+with branding carved out. A 97%-of-features number and a 60%-ready-for-work number are both true at once, and
+only the second is a planning input.
+
+Sources: [OpenSSL 4.1.0 release](https://github.com/openssl/openssl/releases/tag/openssl-4.1.0) · [OpenSSL CHANGES.md](https://github.com/openssl/openssl/blob/master/CHANGES.md) · [Dagger 1.0 beta](https://dagger.io/blog/dagger-10-beta/) · [dagger/dagger releases](https://github.com/dagger/dagger/releases) · [Phoronix — ReactOS NTFS](https://www.phoronix.com/news/ReactOS-NTFS-Driver) · [reactos/reactos PR #9700](https://github.com/reactos/reactos/pull/9700) · [storytold/wordcraft](https://github.com/storytold/wordcraft)

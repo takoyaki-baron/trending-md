@@ -3313,9 +3313,45 @@
       "feeds": [
         "2026-10-23.md"
       ]
+    },
+    "https://news.ycombinator.com/item?id=50212065": {
+      "verdict": "blocked",
+      "streak": 2,
+      "first_seen": "2026-10-23T20:15:35.230Z",
+      "last_seen": "2026-10-23T20:43:57.077Z",
+      "feeds": [
+        "2026-10-24.md"
+      ]
+    },
+    "https://news.ycombinator.com/item?id=50209939": {
+      "verdict": "blocked",
+      "streak": 2,
+      "first_seen": "2026-10-23T20:15:35.230Z",
+      "last_seen": "2026-10-23T20:43:57.077Z",
+      "feeds": [
+        "2026-10-24.md"
+      ]
+    },
+    "https://developer.android.com/developer-verification": {
+      "verdict": "transient",
+      "streak": 2,
+      "first_seen": "2026-10-23T20:15:35.230Z",
+      "last_seen": "2026-10-23T20:43:57.077Z",
+      "feeds": [
+        "2026-10-24.md"
+      ]
+    },
+    "https://developer.android.com/tools/agents": {
+      "verdict": "transient",
+      "streak": 2,
+      "first_seen": "2026-10-23T20:15:35.230Z",
+      "last_seen": "2026-10-23T20:43:57.077Z",
+      "feeds": [
+        "2026-10-24.md"
+      ]
     }
   },
-  "runs": 84,
+  "runs": 86,
   "first_run": "2026-09-05T12:47:55.004Z",
-  "last_run": "2026-10-23T12:51:21.123Z"
+  "last_run": "2026-10-23T20:43:57.077Z"
 }

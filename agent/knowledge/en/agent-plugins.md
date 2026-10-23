@@ -1238,3 +1238,40 @@ the default is the part to notice, because it is the first agent-skill artifact 
 diagnostics are opt-out.
 
 Sources: [cursor/plugins](https://github.com/cursor/plugins) · [Cursor plugin marketplace](https://cursor.com/marketplace) · [earthtojake/text-to-cad](https://github.com/earthtojake/text-to-cad) · [texttocad.dev](https://www.texttocad.dev)
+
+## 2026-10-24 batch — the shelf gets a platform vendor and a marketplace with an immutable-slug rule
+
+**`android/skills` — a platform vendor now ships *skills* instead of documentation, and closes contributions.**
+Verified: **9,390★ / 603 forks / 33 open issues**, Apache-2.0, created **2026-03-16**, pushed 2026-10-23. Coverage
+is broad and specific (AGP 9 upgrades, CameraX, Cars, on-device AI, Compose, Media3 Cast, Play, R8, testing, TV
+migration, Wear, XR) and installation is first-party tooling rather than copy-paste: `android skills add
+r8-analyzer --project=.`, or `--all`, and the same skills install into Claude Code or Codex as plugins. "Your
+agent automatically activates skills that are relevant to your task."
+The structural fact is the contribution policy — "**Public contributions are not accepted at this time**" — which
+is what keeps a vendor's advice authoritative and simultaneously guarantees it lags whatever the community learns
+first. The ratio (**603 forks to 9,390 stars**, 88 commits over seven months) is the shape of a repo being
+*consumed*, not developed: this is documentation-as-context, and its distribution channel is the agent's own
+prompt rather than a docs site a human reads. Watch: whether a second platform vendor copies the *no-contributions*
+model (authoritative, stale) rather than the community model (fresh, contested).
+
+**`anthropics/claude-plugins-official` — the directory is a trust boundary, and its own README says so.** Verified:
+**44,093★ / 4,637 forks / 1,203 open issues**, Apache-2.0, created 2025-11-20, pushed 2026-10-23T18:21Z. Layout
+is the de facto spec: required `.claude-plugin/plugin.json`, optional `.mcp.json`, `commands/`, `agents/`,
+`skills/`; a `SKILL.md`-only source repo lists with `"strict": false` + a `skills` array.
+The one hard invariant is a naming rule: "The `name` field … is an **immutable slug** … renaming it breaks their
+install with a `plugin-not-found` error," with a `renames` map as the escape. That is a versioning control the
+skill spec itself does not define, and it is the only one documented here.
+The limit is stated as plainly: "Anthropic does not control what MCP servers, files, or other software are
+included in plugins and **cannot verify** that they will work as intended or that they won't change." Approval
+means standards at submission, not safety after the next update — the same curated-not-verified stance
+`claude-plugins-official` took on 10-16, now with 1,203 open issues behind it. Pin versions.
+
+**CLI-Anything — the right architecture, with a re-trend problem.** The design claim is the contribution: build
+"structured interfaces **TO** software, not replacements", calling real Blender/LibreOffice/FFmpeg/GIMP/QGIS
+backends, with JSON output, a REPL, undo/redo, tests and a generated `SKILL.md` — a JSON-emitting CLI over the
+real application beats a screenshot loop, and each generated harness documents itself to the next agent. The
+numbers problem and the stale-push problem are in [[fact-check]]; the onward read here is that the *artifact type*
+(a generated adapter plus a skill file) is becoming the unit of adoption, which is why a repo can gain 3,275
+stars in a week without a commit.
+
+Sources: [android/skills](https://github.com/android/skills) · [Android agent tooling](https://developer.android.com/tools/agents) · [anthropics/claude-plugins-official](https://github.com/anthropics/claude-plugins-official) · [Claude Code plugin docs](https://code.claude.com/docs/en/plugins) · [HKUDS/CLI-Anything](https://github.com/HKUDS/CLI-Anything)

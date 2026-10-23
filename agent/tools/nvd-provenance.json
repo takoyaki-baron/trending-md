@@ -704,6 +704,36 @@
    "id": "CVE-2026-97631",
    "why": "EDK II PXE driver pre-boot RCE 9.5 — CVSS 4.0 Secondary infosec@edk2.groups.io, status Deferred",
    "seeded": "2026-10-23 [Deferred] 4.0 Secondary/infosec@edk2.groups.io 9.5, CWE-120,CWE-131,CWE-787, published 10-22"
+  },
+  {
+   "id": "CVE-2026-53942",
+   "why": "conda update.yml '@conda-bot render' pwn request 9.9 — GitHub_M assigned, fixed in commit 9c0f238 (+2/-63); watch for NVD analysis and whether an NVD-authored score differs from GitHub's",
+   "seeded": "2026-10-24 [Awaiting Analysis] 3.1 Secondary/security-advisories@github.com 9.9, CWE-94, published 10-23"
+  },
+  {
+   "id": "CVE-2026-53921",
+   "why": "OpenWrt odhcpd DHCPv6 stack overflow 9.8 — the advisory cell reads 'Patched versions: None' while 24.10.8 (2026-07-26) names it, and 24.10 is EOL; watch for the cell changing and for a 25.12 backport statement",
+   "seeded": "2026-10-24 [Deferred] 3.1 Secondary/security-advisories@github.com 9.8, CWE-121, published 10-23"
+  },
+  {
+   "id": "CVE-2026-53918",
+   "why": "OpenWrt odhcpd use-after-free (dangling first-lease pointer) — same 24.10.8 release; paired with CVE-2026-53921 in the same advisory batch",
+   "seeded": "2026-10-24 seeded from the 24.10.8 release notes; provenance read via nvd-provenance.mjs"
+  },
+  {
+   "id": "CVE-2026-53920",
+   "why": "OpenWrt odhcpd stack memory disclosure — same 24.10.8 release, same odhcpd advisory batch",
+   "seeded": "2026-10-24 seeded from the 24.10.8 release notes; provenance read via nvd-provenance.mjs"
+  },
+  {
+   "id": "CVE-2026-53922",
+   "why": "OpenWrt odhcpd pre-auth DoS via size_t underflow — same 24.10.8 release, same odhcpd advisory batch",
+   "seeded": "2026-10-24 seeded from the 24.10.8 release notes; provenance read via nvd-provenance.mjs"
+  },
+  {
+   "id": "CVE-2026-62948",
+   "why": "OpenWrt stored XSS via a crafted FQDN hostname in a DHCPv6 client — same 24.10.8 release; the one non-odhcpd CVE of the batch",
+   "seeded": "2026-10-24 seeded from the 24.10.8 release notes; provenance read via nvd-provenance.mjs"
   }
  ]
 }

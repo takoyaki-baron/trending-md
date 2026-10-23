@@ -13400,5 +13400,25 @@
   "en": "Personal engineering blog; the 'Docker is weird' post explains the container runtime stack accurately, and its specific claim — runc runs a C constructor before the Go runtime because Go's threading model breaks setns — is confirmed first-hand in opencontainers/runc's own `libcontainer/nsenter/README.md`.",
   "jp": "個人のエンジニアリングブログ。「Docker is weird」はコンテナランタイムの階層を正確に説明し、その具体的主張——runc は Go ランタイムより前に C のコンストラクタを走らせる（Go のスレッドモデルが setns を壊すため）——は opencontainers/runc 自身の `libcontainer/nsenter/README.md` で一次確認した。",
   "zh": "个人工程博客；《Docker is weird》准确解释容器运行时栈，其具体主张——runc 在 Go 运行时之前运行一段 C 构造函数，因为 Go 的线程模型会破坏 setns——已在 opencontainers/runc 自己的 `libcontainer/nsenter/README.md` 中一手确认。"
+ },
+ "openwrt.org": {
+  "cat": "vendor",
+  "cred": "high",
+  "density": "high",
+  "cv": 1,
+  "en": "OpenWrt's official release notes — the only document that names the version a security fix shipped in; its notes carry CVE IDs, the series EOL statement and sometimes a fixed bug with no CVE at all.",
+  "zh": "OpenWrt 官方发布说明 —— 唯一点名安全修复落在哪个版本的文档；说明里带 CVE 编号、系列停服声明，有时还带一个已修好却完全没有 CVE 的漏洞。",
+  "jp": "OpenWrt 公式リリースノート。セキュリティ修正が入ったバージョンを名指しする唯一の文書で、CVE ID・系列の EoL 声明、時には CVE の無いまま修正されたバグも載る。",
+  "review": "cv 1 — 10-24: the five CVE IDs in the 24.10.8 notes (incl. CVE-2026-53921) resolve as real NVD/cveawg records published 10-23, i.e. the notes are cross-checked against a different party's registry rather than read alone."
+ },
+ "kimi.ai": {
+  "cat": "vendor",
+  "cred": "high",
+  "density": "med",
+  "cv": 1,
+  "en": "Moonshot AI's Kimi blog — first-party for model releases and benchmarks; publishes its own capability-removal deltas (the K3.1 Pro cyber regression) but all scores are self-run.",
+  "zh": "Moonshot AI 的 Kimi 博客 —— 模型发布与基准的一方来源；会公布自己的能力移除差值（K3.1 Pro 的网络能力回退），但所有分数均为自测。",
+  "jp": "Moonshot AI の Kimi ブログ。モデル公開とベンチの一次情報で、能力削除の差分（K3.1 Pro のサイバー能力後退）まで自ら公表するが、スコアはすべて自社測定。",
+  "review": "cv 1 — 10-24, narrow: the 'weights not yet released' status is confirmed off-origin by the moonshotai HF org holding zero K3.1 artifacts while Artificial Analysis lists the model as Proprietary. The capability numbers (90.5%→81.0%) have no independent check and should be read as vendor-run."
  }
 }

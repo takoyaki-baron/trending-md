@@ -57,3 +57,29 @@ Sources: [The Register / The Next Platform — Maia 300](https://www.theregister
 Meta opened up **Prometheus** (New Albany, Ohio; first phase complete): hundreds of thousands of GPUs across multiple buildings wired as "a single machine," with a stated target of roughly **1 million** at full scale — the cluster that trained the Muse family including Muse Wonder. The numbers worth keeping are reliability, not FLOPS: **>85% goodput** on pretraining, **>90%** on Muse Wonder RL runs, and a mean time between interruptions of **~47,000 GPU-hours — raised past 54,000 after fleet-wide firmware fixes**. Platforms: **Catalina** (GB200 NVL72 in a two-rack "Ariel" configuration that buys 800G scale-out per GPU instead of the standard 400G) and **Clemente** (GB300 NVL72, 288 GB HBM per GPU, 2:1 GPU-to-CPU, a whole 72-GPU domain in one rack), with Vera Rubin NVL72 next, plus closed-loop liquid cooling. The arithmetic to carry: at ~47k GPU-hours MTBI, a job burning 5,000 GPUs expects an interruption roughly **every nine hours** — which is why goodput, not peak throughput, is the number that decides whether a frontier training run finishes. All figures are Meta's own instrumentation on its own fleet, including the pre/post firmware comparison; there is no external audit, and the goodput definition is Meta's. (→ thesis 19)
 
 Sources: [Engineering at Meta: Inside Prometheus](https://engineering.fb.com/2026/10/19/data-center-engineering/inside-prometheus-meta-gigawatt-scale-supercluster/) · [HN](https://news.ycombinator.com/item?id=50152886)
+
+## 2026-10-24 — the same request is 0.38 g in Sweden and 3.2 g in Texas, and in the clean grid the hardware is the emission
+
+Berget AI, with the Stockholm Environment Institute, WattTime and Klimatkollen, published per-request CO₂e for a
+typical Kimi K3 request: **Sweden 0.38 g, Ireland 1.6 g, Germany 2.5 g, Texas 3.2 g** — "8.5 times more in Texas
+than in Sweden". The energy is nearly identical, "about **4 Wh**"; what differs is its composition. In Sweden
+**89%** of the footprint is **hardware manufacturing**; in Texas **90%** is electricity, "plus about 6 mL of
+cooling water". Method follows the Green Software Foundation's SCI for AI, MIT-licensed on GitHub, with a public
+calculator.
+
+**The post's own correction is the useful part.** Earlier figures — 1.2 g Ireland, 2.1 g Germany, 3.9 g Texas,
+and a **tenfold** Texas–Sweden gap — were replaced after corrected grid intensities (Ireland ~224, Germany ~337,
+ERCOT ~333 g CO₂e/kWh), which moved the headline from tenfold to **8.5×**. A vendor publishing the revision that
+shrinks its own headline is the [[fact-check]] genre operating on a sustainability claim, where it is rarer than
+in benchmarks.
+
+**The caveats bound it hard, and the structural conclusion survives them:** it uses **average** grid intensity
+while marginal rates "may significantly change the measured greenhouse gas intensity of data centres in Sweden"
+(being added next month); chip-manufacturing water and energy are excluded; training is excluded because
+"self-reported figures vary ±50%". What remains is not a number but a decision rule: **on a low-carbon grid the
+embodied hardware becomes the dominant term**, so "run it where the electricity is clean" stops being the whole
+answer — siting competes with refresh cadence and utilisation, and a lightly used accelerator in a clean grid can
+lose to a well-utilised one on a dirtier one. The measurable follow-up is whether any operator publishes
+embodied-per-token rather than energy-per-token.
+
+Sources: [Berget AI — per-request CO₂ press release](https://berget.ai/en/blog/per-request-co2-press-release) · [berget-ai/co2-calculator (MIT)](https://github.com/berget-ai/co2-calculator)
