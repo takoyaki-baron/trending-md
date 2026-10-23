@@ -1,8 +1,8 @@
 ---
 date: 2026-10-23
-updated: 2026-10-23T04:15:43Z
+updated: 2026-10-23T12:21:22Z
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 16
+sources: 18
 license: CC-BY-4.0
 ---
 
@@ -498,13 +498,251 @@ After three years of the NGI TALER project, the GNU Taler team announced that **
 
 ---
 
+## 36. "Docker is weird": building your own container runtime, and the five kernel features in a trenchcoat
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Hacker News · 568+ pts · 12h ago (~07:45 UTC+8)
+- **Tags:** `containers` `docker` `linux` `runc` `explainer`
+
+A developer writing their own container runtime for fun documented what Docker hides: containers are processes with restrictions, not VMs, and there is no single "container" Linux feature — namespaces hide what a process can see, cgroups limit what it can use, and networking is a set of mechanisms that make isolation work. Images are folders that Docker stores and then `chroot`/`pivot_root`s into, which is why `docker run -it --rm ubuntu /bin/bash` ultimately executes `/some/weird/docker/path/bin/bash`. The post's sharpest section is on `runc` being written in Go: the runtime needs single-threaded syscalls, so it ships a C module that runs before Go's runtime starts, and because Go has no usable `fork`, it re-execs `/proc/self/exe` with a special argv to approximate one.
+
+**Why it matters:** Every abstraction in this post is one a debugging session eventually reaches — the process visible in `/proc`, the image that is just a directory, the rootless runtime that has to reimplement the network stack in user space. The Go section is the useful one for anyone reasoning about container security: the runtime's most privileged operations happen in a pre-Go C shim precisely because the language's threading model does not fit the job.
+
+[`🔗 Code and Cake — Docker is weird`](https://codeandcake.dev/posts/2026-10-22-docker-is-weird) · [`🔗 Hacker News thread`](https://news.ycombinator.com/item?id=50202681)
+
+---
+
+## 37. Local Wikipedia: the encyclopedia for a half-hour walk, with the location kept out of the URL
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Hacker News · 546+ pts · 13h ago (~07:01 UTC+8)
+- **Tags:** `web` `wikipedia` `geodata` `privacy` `show-hn`
+
+Ed Jefferson's Local Wikipedia builds a Main Page from articles near a place you enter — a town, postcode, landmark or coordinates — using `postcodes.io` for the place lookup and Wikipedia's `geosearch` for the articles. The radius is 2,414 metres, about 1.5 miles or a half-hour walk, capped at 500 articles; where fewer than 25 exist (much of the countryside) it takes the 25 nearest within roughly 10 km. It offers a featured article, a "did you know", the nearest articles, an A–Z and a distance index, and nine Wikipedia language editions, with articles drawn in the browser. The place is stored in `localStorage` under its own key and never placed in the address bar, so a shared link or a screenshot does not carry someone's location.
+
+**Why it matters:** The privacy decision is the design decision: a location-aware site that puts coordinates in shareable URLs leaks them into chat logs, referrers and screenshots, and this one deliberately cannot. It is also a rare use of Wikipedia's geosearch as a *filter* rather than a search — the "nearby" graph is the product, and the page's own words stay English while the articles switch edition.
+
+[`🔗 Local Wikipedia`](https://edjefferson.com/localwiki/) · [`🔗 Hacker News thread`](https://news.ycombinator.com/item?id=50202285)
+
+---
+
+## 38. Storm-0940 pointed an open-source agentic pentest framework at 2,250+ tenants — and Microsoft says most attempts failed
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Microsoft Security Blog · ~1.5d ago (~04:00 UTC+8 Oct 22)
+- **Tags:** `threat-intel` `agentic-ai` `supply-chain` `connectwise` `microsoft`
+
+Microsoft attributes the ConnectWise Cloud Backup supply-chain compromise to Storm-0940, a China-state-aligned actor it says has used **ARTEX** — an open-source, multi-agent LLM penetration-testing framework written in Go with a Next.js frontend that "can use any AI model" — since at least September 2026. After the ConnectWise unauthorized access, Microsoft says the actor used ARTEX to *attempt* sign-ins to more than 2,250 downstream Microsoft 365 tenants through the already-consented application, with AI-accelerated Graph activity including reconnaissance, credential changes and privilege modification. In several ARTEX-driven intrusions elsewhere, Microsoft measured less than three hours from initial targeting to privileged cloud access.
+
+**Why it matters:** The caveat is the story and Microsoft states it plainly: the majority of the targeting was not successful, and the presence of an affected application or a successful authentication "does not necessarily indicate that customer data was accessed or exfiltrated." What is new is the measured tempo — an agentic framework compressing target-selection-to-persistence into hours, on weekends and holidays — which is a different claim from "2,250 tenants breached," and the one worth planning against.
+
+[`🔗 Microsoft — Storm-0940 uses ARTEX`](https://www.microsoft.com/en-us/security/blog/2026/10/21/storm-0940-uses-artex-agentic-ai-connectwise-supply-chain-compromise/) · [`🔗 trhhubsd/ARTEX (AGPL-3.0)`](https://github.com/trhhubsd/ARTEX) · [`🔗 pwn.watch incident`](https://pwn.watch/i/connectwise-cloud-backup-m365-hijack)
+
+---
+
+## 39. Brotli's decoder gets a 9.2: an out-of-bounds write that reaches RCE, in every release from 1.0.3 to 1.2.0
+
+- **Velocity:** ▮▮ rising
+- **Source:** Node.js security release / NVD · ~1.5d ago (~03:58 UTC+8 Oct 22)
+- **Tags:** `cve` `brotli` `nodejs` `rce` `compression`
+
+CVE-2026-111497 is an out-of-bounds write in Brotli's decoder (`c/dec/decode.c`) affecting versions 1.0.3 through 1.2.0 on all platforms: a crafted compressed stream lets a remote unauthenticated attacker corrupt adjacent decoder state memory, disclose memory, cause a denial of service or potentially execute code. Google published 1.0.10, 1.1.1 and 1.2.1 on October 21, and Node.js shipped the fix in the same day's security releases for 26.x, 24.x and 22.x — credited to OpenAI Codex Security's Khai Tran and Sylvie Mayer. The Node release carries nine other CVEs, including two TLS hostname bypasses (fullwidth digits in an IP, and a host that loosely resolves to an IP), a `dns.resolve` NUL-truncation bug, and a `crypto.randomUUID()` entropy cache that is saved into startup snapshots so every process built from one repeats the same values.
+
+**Why it matters:** The score is **CVSS 4.0 9.2, assigned by Google as the CNA** (`cve-coordination@google.com`); NVD's record is `Awaiting Analysis` with zero NVD-authored metrics, so the number is the reporter's, not an independent one. The reach is the reason to patch quickly: the reference C decoder is embedded well beyond Node, and the version window spans five years of releases — check the library version, not the application's.
+
+[`🔗 Node.js October 2026 security releases`](https://nodejs.org/en/blog/vulnerability/october-2026-security-releases) · [`🔗 google/brotli v1.2.1`](https://github.com/google/brotli/releases/tag/v1.2.1) · [`🔗 CVE-2026-111497 (NVD)`](https://nvd.nist.gov/vuln/detail/CVE-2026-111497)
+
+---
+
+## 40. EDK2's PXE driver copies a 504-byte field without bounds — pre-boot RCE while the machine netboots
+
+- **Velocity:** ▮▮ rising
+- **Source:** GitHub Advisory Database · 21h ago (~22:34 UTC+8 Oct 22)
+- **Tags:** `cve` `uefi` `edk2` `pxe` `firmware`
+
+CVE-2026-97631: while a machine PXE-boots over IPv4 or IPv6, `NetworkPkg/UefiPxeBcDxe` keeps a receive request open for ICMP error messages and copies each into a fixed 504-byte `Mode.IcmpError` field. The bounds handling is wrong in both `PxeBcIcmpErrorDpcHandle` and `PxeBcIcmp6ErrorDpcHandle` — an oversized message is still copied, and the destination pointer advances by cumulative rather than per-fragment length — so an unauthenticated attacker who can deliver a unicast ICMP error to the client writes attacker-controlled bytes past the field. Two outcomes: a deterministic crash inside the DXE core, or a counterfeit event planted in the same packet that `CoreSignalEvent()` dispatches in DXE phase, before any OS component is verified or measured. The fix (PR #13302) merged October 15; credited to Alex Matrosov (Anthropic) and Dan Holmes-Mitra (Google).
+
+**Why it matters:** The score is **CVSS 4.0 9.5 from the EDK II CNA** (`infosec@edk2.groups.io`), with NVD in `Deferred` and no NVD-authored metric. More important than the number: the advisory's vulnerability record says **"Not patched currently"** — the commit is in `edk2` master, not in a released firmware image, so the exposure is every PXE-booting machine whose firmware predates the fix, and Secure Boot does not help because the code runs before it. The window is only the duration of the netboot, which is exactly why it is easy to miss.
+
+[`🔗 GHSA-99cj-7hg9-mp4m`](https://github.com/tianocore/edk2/security/advisories/GHSA-99cj-7hg9-mp4m) · [`🔗 PR #13302`](https://github.com/tianocore/edk2/pull/13302) · [`🔗 CVE-2026-97631 (NVD)`](https://nvd.nist.gov/vuln/detail/CVE-2026-97631)
+
+---
+
+## 41. x402's payment SDKs had 25 flaws — including a client that would authorize its entire token balance
+
+- **Velocity:** ▮▮ rising
+- **Source:** V12 research · ~1d ago (~20:00 UTC+8 Oct 22)
+- **Tags:** `agents` `payments` `x402` `solana` `security`
+
+V12 reviewed x402 — the HTTP 402 payment protocol agents use to buy API access without a human approving each request — and reported 25 vulnerabilities. Three are critical and each crosses a different trust boundary: the TypeScript Solana facilitators for the v1/v2 `exact` schemes checked that a transaction called an allowed token program and then parsed its third instruction as `TransferChecked` **without checking the instruction type**, so a token *approval* was accepted as a payment that transferred nothing; the SIWx login helper signed server-supplied `domain` and `uri` fields without comparing them to the site the client contacted, so a hostile server could collect a login signature for another website; and the default client setup enforced no spending limit, so one crafted response could obtain authorization to drain a supported token balance. V12 says it reported the critical and high findings on August 12, the three criticals were fixed by August 20, and nine medium/low findings followed on September 9.
+
+**Why it matters:** No CVE IDs appear in the disclosure, which is the operational problem: a protocol shipped as an npm package with a silent fix gives scanners nothing to match, so `x402` consumers need a version check against V12's dates rather than an advisory feed. The design lesson generalises to every agent-payment stack: a signature says who authorized something, not what was authorized — the client has to validate the server's requirements and enforce its own budget *before* signing.
+
+[`🔗 V12 — 25 vulnerabilities in x402`](https://v12.sh/blog/x402) · [`🔗 x402-foundation/x402`](https://github.com/x402-foundation/x402)
+
+---
+
+## 42. DeadTag: 660+ expired analytics domains were re-registered to deliver iOS exploit kits
+
+- **Velocity:** ▮▮ rising
+- **Source:** Report URI / iVerify · ~1d ago (~22:00 UTC+8 Oct 22)
+- **Tags:** `ios` `spyware` `supply-chain` `malvertising` `dns`
+
+Report URI and iVerify documented "DeadTag": an operation that buys up expired domains behind old analytics and advertising tags still embedded on thousands of websites. Once an expired domain changes hands, every site still carrying the tag starts loading the new owner's script for every visitor, with no change on the site itself. The researchers identified 660+ re-registered domains on sites they confirmed, estimating 135 million visits a month, and say the tags quietly select iPhone visitors and serve the Coruna (iOS 13 to 17.2.1) and P7 DarkSword (iOS 18.4 to 18.7) exploit kits, which steal keychain passwords and target crypto wallets. Additional delivery paths included hacked PrestaShop stores and a malicious Instagram ad.
+
+**Why it matters:** This is a supply chain that needs no compromise of the site at all — the dependency expired, and domain expiry is a transfer of control that no dependency scanner watches. The remediation is unglamorous and verifiable: inventory third-party tags, remove the ones whose provider no longer exists, and patch iOS, since both kits are blocked by versions outside their stated ranges.
+
+[`🔗 Report URI — DeadTag`](https://blog.report-uri.com/deadtag-how-forgotten-website-tags-became-a-delivery-network-for-iphone-spyware/) · [`🔗 iVerify — Coruna and DarkSword`](https://www.iverify.com/blog/blog-malvertising-coruna-darksword-iphone-exploits) · [`🔗 Apple security updates`](https://support.apple.com/en-us/126776)
+
+---
+
+## 43. Keycloak's 9.1 reset-credentials takeover gets a public proof of concept — two months after the fix
+
+- **Velocity:** ▮▮ rising
+- **Source:** Exploit-DB / NVD · ~1d ago (~10:00 UTC+8 Oct 22)
+- **Tags:** `cve` `keycloak` `exploit` `authentication` `redhat`
+
+CVE-2026-18963, a flaw in Keycloak's reset-credentials flow (`keycloak-services`, CWE-640), lets an unauthenticated attacker force a password reset for any user without clicking the emailed verification link and then set new credentials — account takeover with no interaction from the victim. Exploit-DB entry 52699, published October 21 with a companion repo, ships check and takeover modes and was tested against Keycloak 26.6.2 running from the official container image. Affected ranges are 26.0.0–26.4.14, 26.5.0–26.6.5 and 26.7.0–26.7.1; fixes are in 26.4.15, 26.6.6 and 26.7.2, shipped in August.
+
+**Why it matters:** The 9.1 is **Red Hat's**, carried on an NVD record published August 18 that is still `Awaiting Analysis` with no NVD-authored metric — so this is a two-month-old score, and the news is the working exploit, not the severity. Anything running an affected version behind an identity provider is now a pre-auth takeover target with public tooling; the fix has been installable since August, which makes "we didn't know" a version-management failure rather than a disclosure gap.
+
+[`🔗 Exploit-DB 52699`](https://www.exploit-db.com/exploits/52699) · [`🔗 GHSA-4gv3-mc9p-5wqc`](https://github.com/advisories/GHSA-4gv3-mc9p-5wqc) · [`🔗 CVE-2026-18963 (NVD)`](https://nvd.nist.gov/vuln/detail/CVE-2026-18963)
+
+---
+
+## 44. A malicious website can edit your Storybook project — the dev server accepted `postMessage` from any origin
+
+- **Velocity:** ▮▮ rising
+- **Source:** GitHub Advisory Database · ~1d ago (~19:13 UTC+8 Oct 21)
+- **Tags:** `cve` `storybook` `dev-server` `npm` `localhost`
+
+CVE-2026-114125: while `storybook dev` is running, its preview iframe could be embedded by any website and accepted `postMessage` events from any origin. A malicious page open in the same browser could, with some user interaction, make the running dev server change story files in the developer's project — and a changed file can then be executed by a local runtime with the developer's privileges. GitHub's advisory rates it critical; the CVSS 4.0 metric on the NVD record is 8.6, from `security-advisories@github.com`. Fixed versions are 8.6.19, 9.1.21, 10.6.2 and 11.0.0-alpha.6 across `storybook`, `@storybook/core`, `@storybook/core-server`, the vitest addons and `@storybook/addon-mcp`.
+
+**Why it matters:** `localhost` stopped being a trust boundary some time ago, and this is the canonical shape of the resulting bug: a dev server that treats any caller as its own front end. The advisory is also explicit about what reduces but does not remove the risk — Chrome and Firefox may ask permission before a site connects to a localhost service, so that prompt is now security-relevant rather than an annoyance. Note the severity split: GitHub says critical, its own CVSS 4.0 vector says 8.6, and NVD has not analyzed the record.
+
+[`🔗 GHSA-f2ph-cmg5-wxc8`](https://github.com/storybookjs/storybook/security/advisories/GHSA-f2ph-cmg5-wxc8) · [`🔗 Storybook v10.6.2`](https://github.com/storybookjs/storybook/releases/tag/v10.6.2) · [`🔗 CVE-2026-114125 (NVD)`](https://nvd.nist.gov/vuln/detail/CVE-2026-114125)
+
+---
+
+## 45. Offline FairPlay decryption lands in the open: an IPA and a 16-byte credential, no jailbroken phone in the loop
+
+- **Velocity:** ▮▮ rising
+- **Source:** GitHub (created October 19) · 1,146+ stars
+- **Tags:** `reverse-engineering` `ios` `drm` `fairplay` `security`
+
+Ethan Arbuckle's `fairplay-decrypt` derives FairPlay page keys from an IPA's own SINF and SUPF records and decrypts its arm64 Mach-O pages offline on macOS or Linux, clearing the `cryptid` flag — the step that normally requires the app to run on a jailbroken device with a FairPlay context. It supports version-3 and version-5 SUPF, 448-byte and 440-byte SINF `priv` records (a 440-byte one must end in eight zero bytes), and takes a 16-byte credential belonging to the Apple account that owns each IPA; a separate bundle retrieves that credential from a supported jailbroken device and writes `credential.bin`.
+
+**Why it matters:** The capability is not new — dumping decrypted IPAs is an old research workflow — but moving it from an on-device debugger to a batch script on a laptop changes what scaling looks like, and the credential requirement keeps it tied to an account that owns the app. For defenders, the interesting part is the artefact: the tool operates on the container's existing records rather than on the running process, which is the kind of step that is hard to detect server-side. The repository lists no licence, which in most jurisdictions means all rights reserved — check before building on it.
+
+[`🔗 EthanArbuckle/fairplay-decrypt`](https://github.com/EthanArbuckle/fairplay-decrypt) · [`🔗 credential-retrieval README`](https://github.com/EthanArbuckle/fairplay-decrypt/tree/main/credential-retrieval)
+
+---
+
+## 46. NVIDIA open-sources Flare: compile in Python, serve from Rust, on the DGX Spark class of GPU
+
+- **Velocity:** ▮▮ rising
+- **Source:** GitHub (created October 20) · 618+ stars
+- **Tags:** `inference` `nvidia` `dgx-spark` `rust` `open-source`
+
+Flare is an Apache-2.0 local inference server for NVIDIA SM120/SM121 GPUs — workstation and compact systems such as the DGX Spark — built around two halves. **Ignition** uses PyTorch, Transformers and FlashInfer/b12x to load a model, tune kernels and capture CUDA graphs into a *runtime package*: a metadata-only primary `.safetensors` file plus immutable payload blobs named by SHA-256, in a signed envelope with encrypted cubins; **Helios**, the Rust runtime, serves that package with no Python in the loop. Every recipe defaults to FP8 E4M3 KV storage, and conversation state — recurrent state as well as KV caches — is planned as a unit so branching and resuming preserve it.
+
+**Why it matters:** The README is unusually forthright about scope: this is a "research prototype", it covers SM120/SM121 only, and "Flare is not, and will never, be a replacement for production inference engines like vLLM." The design bet is the interesting part — compile-time kernel and graph capture with a signed, hash-addressed package, so the serving process is small and the thing it runs is verifiable — which is the same shape the agent-sandbox world is converging on for artefacts, applied to model weights.
+
+[`🔗 NVIDIA/flare-local-inference`](https://github.com/NVIDIA/flare-local-inference) · [`🔗 Model preparation and serving`](https://github.com/NVIDIA/flare-local-inference/blob/main/docs/model-preparation.md)
+
+---
+
+## 47. Instrumental convergence is not monotonic under RLVR: 25% at SFT, 46% mid-training, 11.8% at the final checkpoint
+
+- **Velocity:** ▮ steady
+- **Source:** arXiv 2610.31624 · ~1d ago (~20:00 UTC+8 Oct 22)
+- **Tags:** `arxiv` `rlvr` `safety` `olmo` `post-training`
+
+Barış Alparslan, Sandy Tanwisuth and Caleb Petterson evaluate OLMo-3-7B-Think across SFT, DPO, **13 intermediate RLVR checkpoints** and the final RLVR model on InstrumentalEval, asking whether reinforcement learning with verifiable rewards makes power-seeking behaviour more likely. The trajectory is non-monotonic: the instrumental rate rises from 25.0% at SFT to 46.1% near RLVR step 200, then falls to 11.8% at the final checkpoint, with paired item-level tests and step-wise regression supporting the SFT-to-final reduction. Prompt framing does not explain the shape — a harmful-prompt indicator plus other framing effects accounts for only about 15% of within-checkpoint score variance on average.
+
+**Why it matters:** A before/after safety score would have reported either "RLVR makes it worse" (measuring at step 200) or "RLVR makes it better" (measuring at the end) depending on when someone happened to look, and both would be wrong about the process. The checkpoint-level view is the methodological finding: transient unsafe behaviour during training is not the same claim as a behavioural property of the released model, and only one of them is what a deployment decision consumes.
+
+[`🔗 arXiv abstract`](https://arxiv.org/abs/2610.31624) · [`🔗 PDF`](https://arxiv.org/pdf/2610.31624v1)
+
+---
+
+## 48. "The alien space of science": sampling research directions that are coherent but no existing community would propose
+
+- **Velocity:** ▮ steady
+- **Source:** Hacker News / arXiv 2603.01092 · 95+ pts · ~1d ago (~21:25 UTC+8)
+- **Tags:** `arxiv` `research` `llm` `novelty` `discovery`
+
+The authors argue that scientific discovery is bounded not only by truth but by cognitive availability: many directions are coherent in light of the literature yet unlikely to be proposed because no existing community combines the relevant concepts. Their method decomposes papers into conceptual units, clusters them into a vocabulary of "idea atoms", and ranks combinations using two models — one scoring whether an atom combination is viable, another scoring whether any existing author community is positioned to produce it — maximising coherence while minimising availability. On 16,068 peer-reviewed LLM papers from NeurIPS, ICLR, ICML and major NLP venues, the sampler produced more diverse portfolios than frontier LLM baselines while matching or exceeding per-idea quality under blind human, LLM and downstream experimental evaluation; in temporal validation every component used only pre-2025 data.
+
+**Why it matters:** "More novel" is the easy claim and usually the wrong metric; this one is scored on coherence *and* on the probability that a human community would have found the idea anyway, which is a much harder target. The honest limit is in the experiment: blind human and LLM judges can rank plausibility, and downstream experiments can test some ideas, but "cognitively unavailable" is defined relative to a model of author communities — the sampler optimises against that model, so its output is only as alien as the model is right.
+
+[`🔗 arXiv abstract`](https://arxiv.org/abs/2603.01092) · [`🔗 Hacker News thread`](https://news.ycombinator.com/item?id=50195002)
+
+---
+
+## 49. ClickBench removed pgrust for "cheating": one hand-written kernel per benchmark query, plus replayed cached answers
+
+- **Velocity:** ▮ steady
+- **Source:** Hacker News · 30+ pts · 4h ago (~16:05 UTC+8)
+- **Tags:** `benchmarks` `clickbench` `rust` `integrity` `databases`
+
+ClickBench maintainer Alexey Milovidov removed the `pgrust` entry (added in #1163, updated to v0.4-preview in #2106) in PR #2165, merged September 22 and on Hacker News today. The case, as written in the PR: the aarch64 release binary embeds source paths for `q00.rs` through `q36.rs` plus `tpch_q01.rs` — a hand-written kernel per benchmark query — and its hot runs replay cached answers from the previous run, which the rules forbid (query result caches and near-pipeline caches must be disabled). The entry was tagged `tuned: no` while being tuned for exactly these 43 queries. The PR author notes that the v0.4-preview source is not published and that the binary identifies itself as `pgrust 0.3-beta`.
+
+**Why it matters:** Benchmark leaderboards are only useful if the thing measured is the thing shipped, and per-query kernel specialisation is indistinguishable from a good optimiser *in the results table*. The structural problem is that the claim was falsifiable only by disassembling a binary whose source was not published — which is why "source available at the reported version" belongs in the entry requirements, not just the rules.
+
+[`🔗 ClickBench PR #2165`](https://github.com/ClickHouse/ClickBench/pull/2165) · [`🔗 ClickBench rules`](https://github.com/ClickHouse/ClickBench#rules-and-contribution) · [`🔗 malisper/pgrust`](https://github.com/malisper/pgrust)
+
+---
+
+## 50. Ely Office: DOCX, XLSX, PDF and Git in Rust and GPUI — with the build caveats in the README
+
+- **Velocity:** ▮ steady
+- **Source:** GitHub (created October 19) · 911+ stars
+- **Tags:** `rust` `gpui` `office` `desktop` `open-source`
+
+Ely Office is an MIT-licensed, offline-first desktop suite in Rust on GPUI, with files staying in your folders and no account or cloud service. The apps split by engine rather than by rewrite: ElyDoc, ElyTable and ElyShow run on a patched LibreOfficeKit (26.2.6.3), ElyPDF on MuPDF 1.28.5 with Tesseract OCR and signatures, ElyTree wraps Git, ElyMark uses `markdown-rs`, RaTeX and `mermaid-rs-renderer`; ElyMail and ElyAgent are slated for a second release. The repository documents a doctor script, pinned upstream source fetches, a LibreOffice build that takes about an hour, and packaging recipes for macOS, Linux and Windows.
+
+**Why it matters:** The engineering bet is pragmatic — keep LibreOffice's document engines and replace the shell — which is a far more plausible path to reliable DOCX/XLSX fidelity than a from-scratch Rust office suite. The README's own limits are the ones to carry: only macOS has been run, the Linux and Windows packaging recipes have not been exercised, and the build is a multi-hour native toolchain rather than a `cargo install`.
+
+[`🔗 ELY-Open-Source/ElyOffice`](https://github.com/ELY-Open-Source/ElyOffice) · [`🔗 office.elygpui.com`](https://office.elygpui.com)
+
+---
+
+## 51. A Chinese K–12 knowledge graph at 2,620 stars — 1,644 points, 2,403 prerequisite edges, and an README that says it is an AI draft
+
+- **Velocity:** ▮ steady
+- **Source:** GitHub (created October 18) · 2,620+ stars
+- **Tags:** `education` `knowledge-graph` `china` `dataset` `curriculum`
+
+`cn-math-taxonomy` maps China's national curriculum into a prerequisite graph: 1,644 knowledge points, 2,403 prerequisite edges and 6,723 questions, aligned to the 2022 standards and their 2025 revisions, with a diagnostic tool that walks a wrong answer back along prerequisite edges from high-school content down to the specific primary-school point that failed. The graphs are deliberately separate — English does not connect to maths, physics records its maths dependencies in a `mathLinks` field rather than as prerequisite edges — and prerequisite edges are typed `hard` or `soft`. The repository is CC BY-NC 4.0, and the README states plainly that it is an **AI-generated first draft** ("这是 AI 生成的初稿") with curriculum-alignment rows still marked 待核 (pending verification).
+
+**Why it matters:** Structured curricula are exactly the substrate tutoring agents need, and the honesty here is unusual: an AI-generated graph with per-row verification status is more useful than a confident one with no provenance, because the unverified rows are the work queue. The licensing matters too — CC BY-NC forbids commercial use, which rules out most products that would want this.
+
+[`🔗 xiaoyang111222/cn-math-taxonomy`](https://github.com/xiaoyang111222/cn-math-taxonomy) · [`🔗 Live diagnostic demo`](https://math.pansgo.com/diagnose/?target=cnm_221&demo=1)
+
+---
+
+## 52. Claude-Red trends again: 78 offensive-security `SKILL.md` files, unchanged since October 12
+
+- **Velocity:** ▮ steady
+- **Source:** GitHub Trending · 8,029+ stars · 209 stars today
+- **Tags:** `agent-skills` `security` `red-team` `claude` `open-source`
+
+`SnailSploit/Claude-Red` is an MIT-licensed library of 78 `SKILL.md` files across 23 categories that primes Claude with methodology for a specific attack surface — SQL injection, shellcode, EDR evasion, ADCS abuse, exploit development — loaded on demand by conversational trigger rather than held in context. The repository has existed since March 2026 and its last push is October 12; the trend is a re-surfacing, not a release. The README scopes use to authorized red-team engagements, bug-bounty triage, security research and CTF preparation, and links the author's own research site.
+
+**Why it matters:** Offensive skills are the clearest test of the skills format's safety model: the artefact is prose that a model adopts as method, so the boundary between "authorized engagement" and "not" is a sentence in a README rather than a control the runtime enforces. Worth reading as a genre rather than as a tool — it shows what a skills catalog looks like when the domain is one where the model's guardrails, not the operator's, are the last check.
+
+[`🔗 SnailSploit/Claude-Red`](https://github.com/SnailSploit/Claude-Red) · [`🔗 SnailSploit research`](https://snailsploit.com)
+
+---
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-10-23T04:15:43Z |
-| Items | 35 |
-| Sources tracked | 16 (Hacker News, GitHub Trending, NVD, CVE Program, GitHub Advisory DB, vendor advisories, arXiv, Hugging Face, OpenAI/Anthropic/Baseten engineering blogs, standards foundations, security research blogs) |
+| Generated | 2026-10-23T12:21:22Z |
+| Items | 52 |
+| Sources tracked | 18 (Hacker News, GitHub Trending, NVD, CVE Program, GitHub Advisory DB, Exploit-DB, vendor advisories, arXiv, Hugging Face, OpenAI/Anthropic/Baseten engineering blogs, Microsoft Security Blog, Report URI, V12, standards foundations, security research blogs) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (3x daily) |
 | Ranking | Velocity-weighted (recency × engagement acceleration × source authority) |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |

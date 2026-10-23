@@ -1,8 +1,8 @@
 ---
 date: 2026-10-23
-updated: 2026-10-23T04:15:43Z
+updated: 2026-10-23T12:21:22Z
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 16
+sources: 18
 license: CC-BY-4.0
 ---
 
@@ -498,13 +498,251 @@ Rubix（`.ix`）是一门系统编程语言，其生产编译器约 3,500 行纯
 
 ---
 
+## 36. "Docker 很怪"：自己写容器运行时，以及"披着风衣的五个内核特性"
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Hacker News · 568+ pts · 12 小时前 (~07:45 UTC+8)
+- **Tags:** `containers` `docker` `linux` `runc` `explainer`
+
+一位为了好玩而自己写容器运行时的开发者，记录了 Docker 隐藏起来的东西：容器只是被施加了限制的进程，不是虚拟机；Linux 里也没有一个叫"容器"的单一特性 —— namespace 隐藏进程能看到什么，cgroup 限制它能用多少，网络则是让隔离真正生效的一整套机制。镜像是 Docker 存在某处的目录，然后 `chroot`/`pivot_root` 进去，所以 `docker run -it --rm ubuntu /bin/bash` 最终执行的是 `/some/weird/docker/path/bin/bash`。文章最锋利的一段讲 `runc` 用 Go 写：运行时需要单线程环境下发起系统调用，于是它带了一个在 Go runtime 启动前运行的 C 模块；而 Go 没有可用的 `fork`，它只能带着特殊 argv 重新 exec `/proc/self/exe` 来近似一次 fork。
+
+**Why it matters:** 文中的每一层抽象，都是调试时终将撞上的那一层 —— `/proc` 里可见的进程、本质是目录的镜像、不得不在用户态重新实现整个网络栈的 rootless 运行时。对任何思考容器安全的人来说，Go 那一节最有用：运行时最需要特权的操作发生在一个先于 Go 的 C 垫片里，恰恰因为这门语言的线程模型不适合这份工作。
+
+[`🔗 Code and Cake —— Docker 很怪`](https://codeandcake.dev/posts/2026-10-22-docker-is-weird) · [`🔗 Hacker News 讨论`](https://news.ycombinator.com/item?id=50202681)
+
+---
+
+## 37. Local Wikipedia：半小时步行范围内的百科全书，且位置不进 URL
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Hacker News · 546+ pts · 13 小时前 (~07:01 UTC+8)
+- **Tags:** `web` `wikipedia` `geodata` `privacy` `show-hn`
+
+Ed Jefferson 的 Local Wikipedia 会用一个你输入的地点 —— 城镇、邮编、地标或坐标 —— 构造一份附近条目的首页：地点查找用 `postcodes.io`，条目来自维基百科的 `geosearch`。半径 2,414 米，约 1.5 英里或半小时步行，最多 500 条；若附近不足 25 条（乡村地区大多如此），则取约 10 公里内最近的 25 条。页面提供特色条目、"你知道吗"、最近条目、A–Z 与按距离排序的索引，支持九种维基百科语言版本，条目在浏览器内绘制。地点存在 `localStorage` 的独立键里，从不进入地址栏，因此分享链接或截图不会带出某人的位置。
+
+**Why it matters:** 隐私决策就是设计决策：把坐标放进可分享 URL 的位置感知站点，会把位置泄漏进聊天记录、referrer 和截图，而这个站点刻意做不到这一点。它也是少见的把维基百科 geosearch 当作**过滤器**而非搜索来用的例子 —— "附近"这张图本身就是产品，页面自己的文字保持英文，而条目内容随语言版本切换。
+
+[`🔗 Local Wikipedia`](https://edjefferson.com/localwiki/) · [`🔗 Hacker News 讨论`](https://news.ycombinator.com/item?id=50202285)
+
+---
+
+## 38. Storm-0940 用开源 agent 化渗透框架扫了 2,250+ 个租户 —— 微软称多数尝试失败
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Microsoft Security Blog · 约 1.5 天前 (~04:00 UTC+8 10 月 22 日)
+- **Tags:** `threat-intel` `agentic-ai` `supply-chain` `connectwise` `microsoft`
+
+微软把 ConnectWise Cloud Backup 供应链失陷归因于 Storm-0940，一个与中国政府关联的攻击组织；微软称该组织至少从 2026 年 9 月起就在使用 **ARTEX** —— 一个开源、多 agent 的 LLM 渗透测试框架，Go 后端、Next.js 前端，"可以使用任何 AI 模型"。在 ConnectWise 未授权访问之后，微软称攻击者用 ARTEX **尝试**通过这个已获用户同意的应用登录 2,250 多个下游 Microsoft 365 租户，并由 AI 加速的 Graph 活动包括侦察、应用凭据修改和权限改动。在其它若干 ARTEX 驱动的入侵中，微软测到从选定目标到获得云上特权访问不足三小时。
+
+**Why it matters:** 警示就是故事本身，而微软写得很清楚：多数定向尝试并未成功，存在受影响应用或一次成功认证"并不必然意味着客户数据被访问或外泄"。真正新的是被量化的节奏 —— 一个 agent 化框架把"选目标到建立持久化"压缩到数小时，周末与假日也不例外 —— 这与"2,250 个租户被攻破"是不同的断言，而前者才是应该据以做防御规划的那个。
+
+[`🔗 微软 —— Storm-0940 使用 ARTEX`](https://www.microsoft.com/en-us/security/blog/2026/10/21/storm-0940-uses-artex-agentic-ai-connectwise-supply-chain-compromise/) · [`🔗 trhhubsd/ARTEX (AGPL-3.0)`](https://github.com/trhhubsd/ARTEX) · [`🔗 pwn.watch 事件页`](https://pwn.watch/i/connectwise-cloud-backup-m365-hijack)
+
+---
+
+## 39. Brotli 解码器拿到 9.2：一个可致 RCE 的越界写，覆盖 1.0.3 到 1.2.0 全部版本
+
+- **Velocity:** ▮▮ rising
+- **Source:** Node.js 安全公告 / NVD · 约 1.5 天前 (~03:58 UTC+8 10 月 22 日)
+- **Tags:** `cve` `brotli` `nodejs` `rce` `compression`
+
+CVE-2026-111497 是 Brotli 解码器（`c/dec/decode.c`）中的越界写，影响 1.0.3 至 1.2.0 的所有平台版本：一个精心构造的压缩流可让远程未认证攻击者破坏相邻的解码器状态内存、泄露内存、造成拒绝服务，或可能执行代码。Google 于 10 月 21 日发布 1.0.10、1.1.1 与 1.2.1，Node.js 在同日的安全版本中为 26.x、24.x、22.x 修复，致谢 OpenAI Codex Security 的 Khai Tran 与 Sylvie Mayer。Node 这次发布共带十个 CVE，还包括两个 TLS 主机名绕过（把 IP 写成全角数字、以及主机"松散解析"到某个 IP）、`dns.resolve` 遇到 NUL 截断名称，以及一个 `crypto.randomUUID()` 熵缓存会被写进启动快照、导致同一快照构建出的每个进程重复生成相同值的问题。
+
+**Why it matters:** 分数是 **CVSS 4.0 9.2，由 Google 作为 CNA 赋值**（`cve-coordination@google.com`）；NVD 记录处于 `Awaiting Analysis`，没有任何 NVD 自评指标，所以这个数字来自报告方而非独立第三方。传播范围才是尽快修补的理由：参考实现的 C 解码器被嵌入到远不止 Node 的地方，而这个版本窗口横跨五年的发布 —— 该查的是库版本，不是应用版本。
+
+[`🔗 Node.js 2026 年 10 月安全版本`](https://nodejs.org/en/blog/vulnerability/october-2026-security-releases) · [`🔗 google/brotli v1.2.1`](https://github.com/google/brotli/releases/tag/v1.2.1) · [`🔗 CVE-2026-111497 (NVD)`](https://nvd.nist.gov/vuln/detail/CVE-2026-111497)
+
+---
+
+## 40. EDK2 的 PXE 驱动无边界拷贝 504 字节字段 —— 网络启动阶段的预启动 RCE
+
+- **Velocity:** ▮▮ rising
+- **Source:** GitHub Advisory Database · 21 小时前 (~22:34 UTC+8 10 月 22 日)
+- **Tags:** `cve` `uefi` `edk2` `pxe` `firmware`
+
+CVE-2026-97631：当机器通过 IPv4 或 IPv6 进行 PXE 启动时，`NetworkPkg/UefiPxeBcDxe` 会保持一个接收请求以收取 ICMP 错误消息，并把每条消息复制进固定 504 字节的 `Mode.IcmpError` 字段。`PxeBcIcmpErrorDpcHandle` 与 `PxeBcIcmp6ErrorDpcHandle` 的边界处理都是错的 —— 超过 504 字节的消息仍会被复制，且目标指针按累计长度而非单分片长度推进 —— 因此只要能向客户端投递单播 ICMP 错误的未认证攻击者，就能把可控字节写到该字段之外。后果有两种：DXE 核内确定性崩溃，或在同一个包里植入伪造事件，由 `CoreSignalEvent()` 在 DXE 阶段派发 —— 那时任何操作系统组件都还没被校验或度量。修复（PR #13302）已于 10 月 15 日合入；致谢 Anthropic 的 Alex Matrosov 与 Google 的 Dan Holmes-Mitra。
+
+**Why it matters:** 分数是 **EDK II CNA 给出的 CVSS 4.0 9.5**（`infosec@edk2.groups.io`），NVD 处于 `Deferred` 且无自评指标。比数字更重要的，是公告的受影响版本字段写着 **"Not patched currently"** —— 提交在 `edk2` 主干里，而不在任何已发布的固件镜像里，所以暴露面是所有固件早于该修复、且会做 PXE 启动的机器；Secure Boot 帮不上忙，因为这段代码运行在它之前。窗口只有网络启动那段时间，正因如此才容易被忽略。
+
+[`🔗 GHSA-99cj-7hg9-mp4m`](https://github.com/tianocore/edk2/security/advisories/GHSA-99cj-7hg9-mp4m) · [`🔗 PR #13302`](https://github.com/tianocore/edk2/pull/13302) · [`🔗 CVE-2026-97631 (NVD)`](https://nvd.nist.gov/vuln/detail/CVE-2026-97631)
+
+---
+
+## 41. x402 的支付 SDK 有 25 个缺陷 —— 其中一个客户端会授权其全部代币余额
+
+- **Velocity:** ▮▮ rising
+- **Source:** V12 研究 · 约 1 天前 (~20:00 UTC+8 10 月 22 日)
+- **Tags:** `agents` `payments` `x402` `solana` `security`
+
+V12 审计了 x402 —— agent 用来在无需人类逐笔批准的情况下购买 API 访问的 HTTP 402 支付协议 —— 并报告了 25 个漏洞。三个严重缺陷各自跨越不同的信任边界：v1/v2 `exact` 方案下的 TypeScript Solana facilitator 检查了交易是否调用允许的代币程序，然后直接把第三条指令当作 `TransferChecked` 解析，**没有检查指令类型**，于是"代币授权（approval）"被当作一笔并未转移任何资金的支付接受；SIWx 登录助手直接使用服务器提供的 `domain` 与 `uri` 签名，不与此前联系的站点比对，于是恶意服务器可以骗取一份指向其它网站的登录签名；默认客户端配置不设任何消费上限，一条精心构造的响应就能获得授权、掏空某个受支持代币的余额。V12 称 8 月 12 日提交了严重与高危项，三个严重项在 8 月 20 日前修复，9 月 9 日又提交了九个中低危项。
+
+**Why it matters:** 披露文中**没有出现任何 CVE 编号**，这才是运维层面的问题：一个以 npm 包形式分发、静默修复的协议，扫描器无号可匹配，x402 的使用者只能拿 V12 给出的日期做版本核对，而不是等公告源。设计教训适用于所有 agent 支付栈：签名只说明**谁**授权了某事，不说明**授权了什么** —— 客户端必须在签名之前校验服务器给出的要求，并强制执行自己的预算。
+
+[`🔗 V12 —— x402 的 25 个漏洞`](https://v12.sh/blog/x402) · [`🔗 x402-foundation/x402`](https://github.com/x402-foundation/x402)
+
+---
+
+## 42. DeadTag：660+ 个过期分析域名被重新注册，用来投递 iOS 漏洞利用套件
+
+- **Velocity:** ▮▮ rising
+- **Source:** Report URI / iVerify · 约 1 天前 (~22:00 UTC+8 10 月 22 日)
+- **Tags:** `ios` `spyware` `supply-chain` `malvertising` `dns`
+
+Report URI 与 iVerify 记录了一个名为 "DeadTag" 的行动：它买下仍嵌在数千个网站上的旧分析、广告标签背后的过期域名。域名一旦易手，所有仍带着该标签的站点就开始对每个访客加载新主人的脚本，而站点本身什么都没改。研究者确认了 660 多个被重新注册的域名，估算月访问量 1.35 亿次，并称这些标签会悄悄筛出 iPhone 访客、投递 Coruna（iOS 13 至 17.2.1）与 P7 DarkSword（iOS 18.4 至 18.7）漏洞利用套件，后者窃取钥匙串密码、针对加密钱包。其它投递路径还包括被入侵的 PrestaShop 商店和一条恶意 Instagram 广告。
+
+**Why it matters:** 这是一条完全不需要入侵站点的供应链 —— 依赖过期了，而域名到期就是控制权的转移，任何依赖扫描器都不会盯这件事。补救既不体面也可验证：盘点第三方标签、移除提供方已不存在的那些，并更新 iOS，因为两套工具包在其标注的版本范围之外都被挡住。
+
+[`🔗 Report URI —— DeadTag`](https://blog.report-uri.com/deadtag-how-forgotten-website-tags-became-a-delivery-network-for-iphone-spyware/) · [`🔗 iVerify —— Coruna 与 DarkSword`](https://www.iverify.com/blog/blog-malvertising-coruna-darksword-iphone-exploits) · [`🔗 Apple 安全更新`](https://support.apple.com/en-us/126776)
+
+---
+
+## 43. Keycloak 的 9.1 重置凭据接管获得公开 PoC —— 距修复已两个月
+
+- **Velocity:** ▮▮ rising
+- **Source:** Exploit-DB / NVD · 约 1 天前 (~10:00 UTC+8 10 月 22 日)
+- **Tags:** `cve` `keycloak` `exploit` `authentication` `redhat`
+
+CVE-2026-18963 是 Keycloak 重置凭据流程（`keycloak-services`，CWE-640）中的缺陷：未认证攻击者可以不必点击邮件里的验证链接，就为任意用户强制发起密码重置，随后设置新凭据 —— 无需受害者任何交互即可接管账号。Exploit-DB 条目 52699 于 10 月 21 日发布并附带 PoC 仓库，提供 check 与 takeover 两种模式，使用官方容器镜像上的 Keycloak 26.6.2 测试。受影响范围为 26.0.0–26.4.14、26.5.0–26.6.5、26.7.0–26.7.1；修复版本为 26.4.15、26.6.6、26.7.2，8 月已发布。
+
+**Why it matters:** 9.1 是 **Red Hat 的分数**，挂在一份 8 月 18 日发布、至今仍是 `Awaiting Analysis`、且无 NVD 自评指标的记录上 —— 所以这是两个月前的评分，新闻点是可用的利用代码，不是严重性。任何在身份提供方后面运行受影响版本的部署，现在都是有公开工具链的预认证接管目标；修复自 8 月起就可安装，这让"我们不知道"变成版本管理失职，而非披露缺口。
+
+[`🔗 Exploit-DB 52699`](https://www.exploit-db.com/exploits/52699) · [`🔗 GHSA-4gv3-mc9p-5wqc`](https://github.com/advisories/GHSA-4gv3-mc9p-5wqc) · [`🔗 CVE-2026-18963 (NVD)`](https://nvd.nist.gov/vuln/detail/CVE-2026-18963)
+
+---
+
+## 44. 一个恶意网站就能改你的 Storybook 项目 —— 开发服务器接受任意来源的 `postMessage`
+
+- **Velocity:** ▮▮ rising
+- **Source:** GitHub Advisory Database · 约 1 天前 (~19:13 UTC+8 10 月 21 日)
+- **Tags:** `cve` `storybook` `dev-server` `npm` `localhost`
+
+CVE-2026-114125：当 `storybook dev` 运行时，它的预览 iframe 可被任意网站嵌入，并接受来自任意来源的 `postMessage` 事件。同一浏览器里打开的一个恶意页面，在少量用户交互下，就能让运行中的开发服务器修改开发者项目里的 story 文件 —— 而被改动的文件随后可能被本地运行时以开发者权限执行。GitHub 公告将其评为严重；NVD 记录上的 CVSS 4.0 指标是 8.6，来源为 `security-advisories@github.com`。修复版本为 8.6.19、9.1.21、10.6.2 与 11.0.0-alpha.6，覆盖 `storybook`、`@storybook/core`、`@storybook/core-server`、vitest 插件与 `@storybook/addon-mcp`。
+
+**Why it matters:** `localhost` 早已不再是信任边界，而这是由此产生的教科书式缺陷：一个把任何调用方都当成自己前端的开发服务器。公告也明确说了什么能降低但不能消除风险 —— Chrome 与 Firefox 可能在某站点连接 localhost 服务前请求许可，所以那个弹窗如今是安全相关的东西，而不是噪音。注意评级的分裂：GitHub 说严重，它自己的 CVSS 4.0 向量是 8.6，而 NVD 尚未分析该记录。
+
+[`🔗 GHSA-f2ph-cmg5-wxc8`](https://github.com/storybookjs/storybook/security/advisories/GHSA-f2ph-cmg5-wxc8) · [`🔗 Storybook v10.6.2`](https://github.com/storybookjs/storybook/releases/tag/v10.6.2) · [`🔗 CVE-2026-114125 (NVD)`](https://nvd.nist.gov/vuln/detail/CVE-2026-114125)
+
+---
+
+## 45. 离线 FairPlay 解密进入公开：一个 IPA 加 16 字节凭据，无需越狱手机参与
+
+- **Velocity:** ▮▮ rising
+- **Source:** GitHub（创建于 10 月 19 日）· 1,146+ stars
+- **Tags:** `reverse-engineering` `ios` `drm` `fairplay` `security`
+
+Ethan Arbuckle 的 `fairplay-decrypt` 从 IPA 自身的 SINF 与 SUPF 记录推导 FairPlay 页密钥，在 macOS 或 Linux 上离线解密其 arm64 Mach-O 页面并清除 `cryptid` 标志 —— 这一步通常需要在越狱设备上以具备 FairPlay 上下文的进程运行应用才能完成。它支持 version-3 与 version-5 SUPF、448 字节与 440 字节的 SINF `priv` 记录（440 字节的记录必须以八个零字节结尾），并需要一个属于持有该 IPA 的 Apple 账号的 16 字节凭据；另一个组件可从受支持的越狱设备取出该凭据并写入 `credential.bin`。
+
+**Why it matters:** 这项能力并不新 —— 导出解密后的 IPA 是老牌研究流程 —— 但把它从设备上的调试器搬到笔记本上的批处理脚本，改变了"规模化"长什么样，而凭据要求仍把它绑在一个拥有该应用的账号上。对防御方而言，有意思的是**工件**：这个工具操作的是容器里既有的记录，而不是运行中的进程，这类步骤在服务端很难被发现。仓库没有声明许可证，在多数司法辖区这意味着保留所有权利 —— 采用前先确认。
+
+[`🔗 EthanArbuckle/fairplay-decrypt`](https://github.com/EthanArbuckle/fairplay-decrypt) · [`🔗 credential-retrieval 说明`](https://github.com/EthanArbuckle/fairplay-decrypt/tree/main/credential-retrieval)
+
+---
+
+## 46. NVIDIA 开源 Flare：Python 编译，Rust 服务，面向 DGX Spark 级 GPU
+
+- **Velocity:** ▮▮ rising
+- **Source:** GitHub（创建于 10 月 20 日）· 618+ stars
+- **Tags:** `inference` `nvidia` `dgx-spark` `rust` `open-source`
+
+Flare 是一个 Apache-2.0 的本地推理服务器，面向 NVIDIA SM120/SM121 GPU —— 工作站与 DGX Spark 这类紧凑系统 —— 分为两半。**Ignition** 用 PyTorch、Transformers 与 FlashInfer/b12x 加载模型、调优内核、捕获 CUDA 图，产出**运行时包**：一个只含元数据的主 `.safetensors` 文件，加上按 SHA-256 命名的不可变 payload blob，装在签名信封里、cubin 加密；**Helios** 这个 Rust 运行时则以无 Python 的方式服务该包。所有 recipe 默认 FP8 E4M3 KV 存储，并且会话状态 —— 循环状态与 KV 缓存一并 —— 作为一个整体规划，使分支与恢复都能正确保留。
+
+**Why it matters:** README 对范围罕见地坦率：这是"研究原型"，只覆盖 SM120/SM121，且"Flare 不是、也永远不会是 vLLM 这类生产推理引擎的替代品"。值得关注的是它的设计赌注 —— 在编译期完成内核与图的捕获，产出带签名、按哈希寻址的包，使服务进程很小、它运行的东西可验证 —— 这与 agent 沙箱世界正在收敛的工件形态是同一个形状，只是用在了模型权重上。
+
+[`🔗 NVIDIA/flare-local-inference`](https://github.com/NVIDIA/flare-local-inference) · [`🔗 模型准备与服务`](https://github.com/NVIDIA/flare-local-inference/blob/main/docs/model-preparation.md)
+
+---
+
+## 47. RLVR 下的工具性趋同并非单调：SFT 时 25%，训练中 46%，最终检查点 11.8%
+
+- **Velocity:** ▮ steady
+- **Source:** arXiv 2610.31624 · 约 1 天前 (~20:00 UTC+8 10 月 22 日)
+- **Tags:** `arxiv` `rlvr` `safety` `olmo` `post-training`
+
+Barış Alparslan、Sandy Tanwisuth 与 Caleb Petterson 在 InstrumentalEval 上评估 OLMo-3-7B-Think，覆盖 SFT、DPO、**13 个中间 RLVR 检查点**与最终 RLVR 模型，追问带可验证奖励的强化学习是否让权力寻求行为更可能。轨迹是非单调的：工具性行为率从 SFT 的 25.0% 上升到 RLVR 约第 200 步的 46.1%，再在最终检查点降到 11.8%；配对的项目级检验与逐步骤回归支持 SFT 到最终版本确有下降。提示框架解释不了这个形状 —— 有害提示指示符加上其它框架效应，平均只能解释同一检查点内约 15% 的分数方差。
+
+**Why it matters:** 一个"训练前 vs 训练后"的安全分数，会依据取样时刻报告"RLVR 让它更糟"（在第 200 步测）或"RLVR 让它更好"（在末尾测），而两种说法对过程都是错的。检查点级别的视角才是方法论上的发现：训练中的**暂时性**不安全行为，与已发布模型的**行为属性**不是同一个断言，而部署决策只消费后者。
+
+[`🔗 arXiv 摘要`](https://arxiv.org/abs/2610.31624) · [`🔗 PDF`](https://arxiv.org/pdf/2610.31624v1)
+
+---
+
+## 48. "科学的异质空间"：采样连贯、但没有任何现有社区会提出的研究方向
+
+- **Velocity:** ▮ steady
+- **Source:** Hacker News / arXiv 2603.01092 · 95+ pts · 约 1 天前 (~21:25 UTC+8)
+- **Tags:** `arxiv` `research` `llm` `novelty` `discovery`
+
+作者主张，科学发现不只受真值约束，也受**认知可得性**约束：许多方向在文献看来是连贯的，却不太可能被提出，因为没有哪个现有社区把相关的概念、方法与直觉组合在一起。他们的方法把论文分解为概念单元，聚类成"思想原子"词表，再用两个模型给组合排序 —— 一个判断该组合是否可行，另一个判断**是否有任何现有作者社区**处于能产出它的位置 —— 从而在最大化连贯性的同时最小化可得性。在 NeurIPS、ICLR、ICML 与主要 NLP 会议的 16,068 篇同行评审 LLM 论文上，该采样器产出的研究组合比前沿 LLM 基线更多样，并在盲评人类、LLM 与下游实验评估中持平或超过其单条想法质量；时间验证中所有组件只使用 2025 年前的数据。
+
+**Why it matters:** "更新颖"是容易的主张，通常也是错的度量；这一项同时在**连贯性**和**人类社区本来会不会想到**两个维度上打分，后者是难得多目标。诚实的边界在实验里：盲评人类与 LLM 裁判只能判断可信度，下游实验只能测部分想法，而"认知不可得"是相对于一个作者社区模型定义的 —— 采样器正是在优化那个模型，所以它的产出只在模型正确的范围内才够"异质"。
+
+[`🔗 arXiv 摘要`](https://arxiv.org/abs/2603.01092) · [`🔗 Hacker News 讨论`](https://news.ycombinator.com/item?id=50195002)
+
+---
+
+## 49. ClickBench 以"作弊"为由移除 pgrust：每个基准查询一个手写内核，外加重放缓存答案
+
+- **Velocity:** ▮ steady
+- **Source:** Hacker News · 30+ pts · 4 小时前 (~16:05 UTC+8)
+- **Tags:** `benchmarks` `clickbench` `rust` `integrity` `databases`
+
+ClickBench 维护者 Alexey Milovidov 在 PR #2165 中移除了 `pgrust` 条目（#1163 加入、#2106 更新到 v0.4-preview），该 PR 于 9 月 22 日合入，今天登上 Hacker News。按 PR 的陈述：aarch64 发布二进制内嵌了 `q00.rs` 到 `q36.rs` 加 `tpch_q01.rs` 的源码路径 —— 每个基准查询一个手写内核 —— 而它的热跑会重放上一轮缓存的答案，这是规则禁止的（查询结果缓存与靠近流水线末端的缓存必须关闭）。该条目被标注为 `tuned: no`，实际却针对这 43 条查询专门调优。PR 作者还指出，v0.4-preview 的源码未公开，而二进制自称 `pgrust 0.3-beta`。
+
+**Why it matters:** 只有当被测的东西就是交付的东西，排行榜才有用；而**只看结果表**，逐查询特化内核与一个好的优化器无法区分。结构性问题在于：这个主张只能靠反汇编一个未公开源码的二进制来证伪 —— 所以"在报告版本上可获取源码"应当写进条目的准入要求，而不只是规则里的一句话。
+
+[`🔗 ClickBench PR #2165`](https://github.com/ClickHouse/ClickBench/pull/2165) · [`🔗 ClickBench 规则`](https://github.com/ClickHouse/ClickBench#rules-and-contribution) · [`🔗 malisper/pgrust`](https://github.com/malisper/pgrust)
+
+---
+
+## 50. Ely Office：用 Rust 与 GPUI 做 DOCX、XLSX、PDF 和 Git —— 构建注意事项写在 README 里
+
+- **Velocity:** ▮ steady
+- **Source:** GitHub（创建于 10 月 19 日）· 911+ stars
+- **Tags:** `rust` `gpui` `office` `desktop` `open-source`
+
+Ely Office 是一套 MIT 许可、离线优先的桌面套件，用 Rust 写在 GPUI 之上，文件留在你的目录里，没有账号也没有云服务。应用按**引擎**而不是按重写来划分：ElyDoc、ElyTable、ElyShow 跑在打过补丁的 LibreOfficeKit（26.2.6.3）上，ElyPDF 用 MuPDF 1.28.5 加 Tesseract OCR 与签名，ElyTree 封装 Git，ElyMark 使用 `markdown-rs`、RaTeX 与 `mermaid-rs-renderer`；ElyMail 与 ElyAgent 排在第二个版本。仓库给出了 doctor 脚本、固定版本的依赖源码抓取、约一小时的 LibreOffice 构建，以及 macOS、Linux、Windows 的打包 recipe。
+
+**Why it matters:** 工程上的赌注很务实 —— 保留 LibreOffice 的文档引擎、替换外壳 —— 这比从零写一个 Rust 办公套件更可能达到可靠的 DOCX/XLSX 保真度。README 自己写明的限制才是要带走的：只有 macOS 真正跑过，Linux 与 Windows 的打包 recipe 尚未验证，而且构建是多小时的原生工具链，不是一句 `cargo install`。
+
+[`🔗 ELY-Open-Source/ElyOffice`](https://github.com/ELY-Open-Source/ElyOffice) · [`🔗 office.elygpui.com`](https://office.elygpui.com)
+
+---
+
+## 51. 一个中国 K–12 知识图谱 2,620 星 —— 1,644 个知识点、2,403 条先修边，而 README 说它是 AI 初稿
+
+- **Velocity:** ▮ steady
+- **Source:** GitHub（创建于 10 月 18 日）· 2,620+ stars
+- **Tags:** `education` `knowledge-graph` `china` `dataset` `curriculum`
+
+`cn-math-taxonomy` 把中国国家课程映射成一张先修图：1,644 个知识点、2,403 条先修边、6,723 道题，对齐 2022 年版课程标准及其 2025 年修订，并附带一个诊断工具 —— 答错时会沿先修边从高中内容一路回溯到真正没掌握的那个小学知识点。各个图刻意分开：英语不与数学连边，物理把自己的数学依赖写在 `mathLinks` 字段而非先修边里；先修边分为 `hard` 与 `soft`。仓库采用 CC BY-NC 4.0，README 明确写着这是 **AI 生成的初稿**（"这是 AI 生成的初稿"），课标对齐表中仍有若干行标注"待核"。
+
+**Why it matters:** 结构化的课程内容正是辅导型 agent 需要的底座，而这里的诚实很不寻常：一张带有逐行核验状态的 AI 生成图，比一张自信但无出处说明的图更有用，因为未核验的行就是工作队列。许可同样重要 —— CC BY-NC 禁止商业使用，这把大多数会想要它的产品排除在外。
+
+[`🔗 xiaoyang111222/cn-math-taxonomy`](https://github.com/xiaoyang111222/cn-math-taxonomy) · [`🔗 在线诊断演示`](https://math.pansgo.com/diagnose/?target=cnm_221&demo=1)
+
+---
+
+## 52. Claude-Red 再次上榜：78 个攻防安全 `SKILL.md`，自 10 月 12 日起未变更
+
+- **Velocity:** ▮ steady
+- **Source:** GitHub Trending · 8,029+ stars · 今日 +209 stars
+- **Tags:** `agent-skills` `security` `red-team` `claude` `open-source`
+
+`SnailSploit/Claude-Red` 是一个 MIT 许可的技能库，包含 23 个类别下的 78 个 `SKILL.md` 文件，为 Claude 预先注入针对特定攻击面的方法论 —— SQL 注入、shellcode、EDR 规避、ADCS 滥用、漏洞利用开发 —— 由对话触发按需加载，而不是常驻上下文。仓库自 2026 年 3 月就存在，最后一次推送是 10 月 12 日；这次是**重新浮出**，不是新发布。README 把用途限定为获授权的红队项目、漏洞赏金初筛、安全研究与 CTF 准备，并链接了作者自己的研究站点。
+
+**Why it matters:** 攻击性技能是技能格式安全模型最清晰的检验：工件是一段模型会当作方法论采纳的散文，于是"获授权项目"与"未授权"之间的边界，是 README 里的一句话，而不是运行时会强制执行的某个控制。它值得作为**一个门类**来读，而不是当作工具 —— 它展示了当一个技能目录处在"模型自身的护栏、而非操作方，是最后一道检查"的领域时，长什么样。
+
+[`🔗 SnailSploit/Claude-Red`](https://github.com/SnailSploit/Claude-Red) · [`🔗 SnailSploit 研究`](https://snailsploit.com)
+
+---
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-10-23T04:15:43Z |
-| Items | 35 |
-| Sources tracked | 16 (Hacker News、GitHub Trending、NVD、CVE Program、GitHub Advisory DB、厂商公告、arXiv、Hugging Face、OpenAI/Anthropic/Baseten 工程博客、标准基金会、安全研究博客) |
+| Generated | 2026-10-23T12:21:22Z |
+| Items | 52 |
+| Sources tracked | 18 (Hacker News、GitHub Trending、NVD、CVE Program、GitHub Advisory DB、Exploit-DB、厂商公告、arXiv、Hugging Face、OpenAI/Anthropic/Baseten 工程博客、Microsoft Security Blog、Report URI、V12、标准基金会、安全研究博客) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8（每日三次） |
 | Ranking | 速度加权（时效 × 互动加速度 × 信源权威度） |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |
