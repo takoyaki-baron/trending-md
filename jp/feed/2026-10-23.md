@@ -1,8 +1,8 @@
 ---
 date: 2026-10-23
-updated: 2026-10-22T20:23:32Z
+updated: 2026-10-23T04:15:43Z
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 14
+sources: 16
 license: CC-BY-4.0
 ---
 
@@ -288,13 +288,223 @@ The Browser Company は 10 月 22 日、Arc を 2026 年 12 月 22 日に終了�
 
 ---
 
+## 21. Claude が 123 のオープンソースライブラリを「クラッシュしない」と証明 —— 239 エントリポイント、1.8 億行の Rocq
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Anthropic Frontier Red Team · 190+ pts · 5 時間前 (~06:54 UTC+8)
+- **Tags:** `formal-verification` `security` `anthropic` `rocq` `riscv`
+
+10 月 22 日、Anthropic は Theorem との共同研究を公開した。Claude が 123 の OSS-Fuzz C/C++ ライブラリのコンパイル済みバイナリについて、**64 MB 未満のあらゆる入力**でクラッシュしないことを機械検証可能な証明として書き上げたというもの。仕様は各プロジェクトの既存 fuzz エントリポイントから機械的に導出され（「このテストスイートは決してクラッシュしない」）、Theorem の RISC-V および Linux プロセス意味論を用いてコンパイル済み RISC-V 命令上で証明される。検証は Rocq カーネルが行う。結果は 239 エントリポイント、約 1 億 8,000 万行の Rocq。典型的な証明は約 60 万行で、対象バイナリの中央値は 18,000 RISC-V 命令だった。証明を書く過程で、Claude は数兆回の fuzz 実行でも見つからなかったバグを発見し修正した。
+
+**Why it matters:** 引用すべきは記事自身の「限界」節だ。証明が対象とするのは**シングルスレッド・静的リンク・musl の RISC-V バイナリ**であり、実際の配備はほぼ x86 か ARM に glibc である。各ライブラリの全エントリポイントが検証されたわけではなく、ASan が全てのメモリ安全性バグを検出するわけでもなく、**呼び出し側**の誤用は完全に範囲外である。「形式的に検証済み」は「バグなし」ではない。証明されるのは「宣言されたモデル内でクラッシュに到達しない」ことであり、信頼の基点は Theorem の意味論、定理文そのもの、そして Rocq チェッカーだ。これは fuzzer よりはるかに強い主張であり、見出しが誘うよりはるかに狭い主張でもある。
+
+[`🔗 Anthropic — 形式的手法によるソフトウェア検証`](https://www.anthropic.com/research/formal-verification) · [`🔗 Hacker News スレッド`](https://news.ycombinator.com/item?id=50202217)
+
+---
+
+## 22. OpenAI の Decisions API が GA に —— 型付き出力は 3 種類、書かなかったトークンには課金されない
+
+- **Velocity:** ▮▮ rising
+- **Source:** OpenAI API チェンジログ · ~14 時間前 (~22:00 UTC+8)
+- **Tags:** `openai` `api` `decision-models` `pricing` `agents`
+
+`POST /v1/decisions` が 10 月 22 日に一般提供となった。動くのは `gpt-6-luna` のみ。リクエストは共有入力 1 つと 1〜400 個の**独立した**質問を運び、各質問は 3 種類の型付き出力のいずれかを返す。`predicate`（条件成立の確率 0〜1）、`choice`（与えた選択肢のいずれかと、選択肢ごとの確率・信頼度）、`score`（2〜10 段の順序尺度上の確率加重平均）。未キャッシュ入力は 100 万トークンあたり 0.10 ドル、キャッシュ読み出しは 0.01 ドル、**出力トークンは無料**。キャッシュは 1,024 トークン以上の同一共有プレフィックスを再利用する。GA で `input_json`、質問単位の画像埋め込み、質問数の上限 400（ベータ時 200）、対象顧客向けの ZDR と HIPAA 対応が加わった。
+
+**Why it matters:** 価格設定そのものが設計だ。ラベルを予測することは「書く」ではなく「読む」として課金され、チャット補完では決して得られないほど安いリクエスト単位の分類器になる。設計文書に入れるべき制約は 2 つ。質問は独立なので依存のある判断は 2 回目の呼び出しになり、`file_id` は非対応なので画像は base64 データ URL か公開 HTTP(S) URL でなければならない。「最大 10 倍高速」は OpenAI 自身の数字で、比較対象は自社の Responses API だ。
+
+[`🔗 Decisions API ガイド`](https://developers.openai.com/api/docs/guides/decisions) · [`🔗 API チェンジログ（10 月 22 日）`](https://developers.openai.com/api/docs/changelog)
+
+---
+
+## 23. Base Labs が mammoth-1 と elephant-1 をオープンソース化 —— 文章ではなく確率を返す判断モデル
+
+- **Velocity:** ▮▮ rising
+- **Source:** Baseten / Base Labs · ~1 日前 (~22:00 UTC+8)
+- **Tags:** `llm` `open-weights` `decision-models` `qwen` `benchmarks`
+
+Baseten の研究チームは 10 月 21 日、Qwen3.5 の事後学習モデル 2 つ —— mammoth-1（27B）と elephant-1（9B）—— を公開した。621 万件の判断例で訓練され、**選択肢が固定された**質問に共有プレフィックスの 1 回のフォワードで答える。どちらも文章を書かない。返すのは yes/no の確率、与えられた選択肢からの選択、順序尺度上のスコアで、訓練された「わからない」も含む。重みは Hugging Face の `baselabs/mammoth-1` と `baselabs/elephant-1` に MIT で公開され、公開から 1 週間 Baseten Model APIs で無料で試せる（既定でゼロデータ保持）。Baseten の報告では Jev Decision Index 0.4 が 71.24（208 モデル中 1 位）、Artificial Analysis Decision Index が 65.9 / 65.2 で、elephant-1 は Liquid AI の d1-ultra と並ぶ。
+
+**Why it matters:** ここにある数字はすべて公開した側のものだ。ブログは訓練計算量も領域別の表も示さず、2 つ目の指標は我々が独立に確認できなかった。したがって「208 中 1 位」はベンチマークについての主張として読み、確定した順位とは考えない方がよい。実質的なのはインターフェースで、選択肢ごとの較正済み確率はルータやガードレール、トリアージが実際に消費する形であり、OpenAI が翌日に Decisions API で出したものと同じ形だ。
+
+[`🔗 Baseten — mammoth-1 と elephant-1`](https://www.baseten.co/blog/the-best-decision-models-in-the-world-mammoth-1-and-elephant-1/) · [`🔗 baselabs/mammoth-1（MIT）`](https://huggingface.co/baselabs/mammoth-1)
+
+---
+
+## 24. AAIF が Agent Skills、Open Responses、OpenEnv、OpenSandbox を迎え入れ —— 初年度で 10 プロジェクト
+
+- **Velocity:** ▮▮ rising
+- **Source:** Agentic AI Foundation · ~18 時間前 (~18:00 UTC+8)
+- **Tags:** `agents` `standards` `mcp` `governance` `open-source`
+
+10 月 22 日、サンノゼの AGNTCon + MCPCon North America で 4 つのプロジェクトが Agentic AI Foundation に加わると発表された。Anthropic の **Agent Skills**（エージェントが必要時に読み込む指示・スクリプト・リソースのパッケージ形式）、OpenAI の **Open Responses**（Responses API を基にしたマルチプロバイダ LLM インターフェースのオープン仕様）、Hugging Face の **OpenEnv**（MCP と Gym プロトコル上のコンテナ化 RL 環境）、Alibaba の **OpenSandbox**（Docker と Kubernetes ランタイムを備えた汎用サンドボックス基盤）。既存の A2A、Agent Router、agentgateway、AGENTS.md、goose、MCP に加わり、ホスト件数は 10 に。2025 年 12 月の設立時は 3 件だった。
+
+**Why it matters:** 互いに競合する 4 社が寄贈したのはモデル層ではなく**インターフェース層**の 4 ピースであり、ロックインが決まるのはまさにそこだ。スキルの梱包方法、リクエスト/レスポンスの形、環境の定義、コードの実行場所。発表に**書かれていない**ことも同じくらい語っている。財務条件はなく、プロジェクト数以外の採用指標もなく、「ベンダー中立のガバナンス」という一句以外にメンバー間の利害対立を解く仕組みも示されていない。
+
+[`🔗 AAIF 発表`](https://aaif.io/news/agentic-ai-foundation-announces-four-new-projects) · [`🔗 Linux Foundation プレスリリース`](https://www.linuxfoundation.org/press/agentic-ai-foundation-announces-four-new-projects-agent-skills-open-responses-openenv-and-opensandbox)
+
+---
+
+## 25. EAGLE-4 は見出しの数字ではなく高速化マトリクスを出す —— バッチ 1 で 3.35×、64 で 1.38×
+
+- **Velocity:** ▮▮ rising
+- **Source:** eagle-hq/EAGLE-4 · 880+ stars · ~2 時間前 (~10:00 UTC+8)
+- **Tags:** `inference` `speculative-decoding` `vllm` `sglang` `benchmarks`
+
+EAGLE-4 は投機的デコーディングの「ドラフト token」側 ——「すべてのバッチサイズとハードウェアに適応する 1 つの drafter」—— で、`eagle-harness` 0.1.2 として SGLang 0.5.23、vLLM 0.32.0rc1、TokenSpeed 向けのエンジンビルドと、Qwen3.8-27B 用の公開ドラフトモデルを伴って出荷された。サポートマトリクスは**同一の割り当て**で、EAGLE-4 のスループットを同じエンジンの投機なし対照で割る。SGLang TP4・temperature 0 では同時 1 リクエストで 3.35×、8 で 2.11×、64 で 1.38×。temperature 1 では同じ 3 セルが 2.74×、1.78×、1.25×。各セルには貪欲等価チェックの ✅/⚠️/❌ が付き、出荷済みと未出荷候補の数字が同じ行に並ぶことはない。
+
+**Why it matters:** 投機的デコーディングの主張は高負荷で静かに崩れるのが常で、崩れ方そのものを公開するリリースは珍しい。バッチ 1 の 3.35× は引用される数字だが、同時 64 での 1.38× こそ、推論チームが本番で付けっぱなしにするかを決める数字だ。範囲の但し書きも同じページにある。AMD MI355X の 1 行（0.1.0 パッケージのまま）を除き全行が NVIDIA B300 の割り当てで、ライセンスは OSI 認可ではなく独自の「Eagle-4」ライセンスだ。
+
+[`🔗 eagle-hq/EAGLE-4`](https://github.com/eagle-hq/EAGLE-4) · [`🔗 EAGLE-Corp/Qwen3.8-27B-EAGLE4 ドラフト`](https://huggingface.co/EAGLE-Corp/Qwen3.8-27B-EAGLE4)
+
+---
+
+## 26. Opposable は 2B の computer-use モデルをスマホ本体で動かす —— 27/36 画面、そして 1.5 GB のダウンロードがその注釈になる
+
+- **Velocity:** ▮▮ rising
+- **Source:** Opposable エンジニアリングブログ · 17+ pts · ~1 日前 (~21:00 UTC+8)
+- **Tags:** `agents` `computer-use` `on-device` `android` `npu`
+
+Opposable の Android アプリはアクセシビリティサービス経由で他のアプリを操作し、クラウドエージェント未接続時は画面操作ループを端末上で回す。使うのは GUI-Owl 1.5 2B —— Alibaba の Mobile-Agent チームによる Qwen3-VL のファインチューン —— を llama.cpp で 4-bit に量子化したもの。1.05 GB の言語モデルと 445 MB の視覚エンコーダが常駐し、スクリーンショット 1 枚につき 1 アクションを出す。Mac M2 の CPU では 1 ステップが当初 10.6 秒（エンコーダ 4.6 秒、prefill 4.3 秒、デコード 1.7 秒）かかり、UI バーの切り落とし、平坦な背景の画像トークン削除、システムプロンプトのキャッシュ、接地付き早期終了で 7.3 秒に短縮された。36 画面の採点セットでの精度は 27/36 のまま変わらない。8 つのホールドアウトタスクを 2 巡した全体成功率は 4/8 と 3/8 で、タスクを検証可能なサブゴールに分割すると両巡とも 6/8 に上がった。Galaxy S25 では視覚タワーのみを ONNX に書き出し、同一画面が CPU の 3.9 秒から Snapdragon NPU の 236 ミリ秒になった。
+
+**Why it matters:** 公表された数字は控えめで、それでも著者はそのまま出す。27/36 に留まった 3 通りのトークン削除設定も含めて。削除が買ったのは遅延であって精度ではない、と書くのは結果以上に珍しい。本当の物語は配備の制約だ。NPU 経路は Snapdragon のみで、見慣れないアプリはクラウド接続時に Claude、ChatGPT、Codex へ委譲される。1.5 GB のダウンロードが手に入れるのはフォールバックである。
+
+[`🔗 Opposable — スマホ自体で computer use`](https://getopposable.com/blog/computer-use-on-the-phone) · [`🔗 Hacker News スレッド`](https://news.ycombinator.com/item?id=50180190)
+
+---
+
+## 27. 10 月 21 日の PHP の 9.2 に関する記録の続報：Amazon のハニーポットはパッチ 4 日前に試行を観測していた
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** BleepingComputer / Amazon Threat Intelligence · ~15 時間前 (~21:09 UTC+8)
+- **Tags:** `cve` `php` `exploited` `patching` `exploit`
+
+Amazon Threat Intelligence は、php2shell の最初期の悪用試行を観測したのが **10 月 17 日**だったと述べている。CVE-2026-109618 と CVE-2026-109619 の 10 月 21 日の緊急リリースより 4 日早い。AWS の CISO、CJ Moses は両脆弱性が現在広く悪用されており、試行の一部は商用の匿名化ネットワーク由来だとしている。PHP のセキュリティチームはパッチ前の概念実証は「動作しなかった」と主張し、Dataminr TRACE も観測された活動はスキャン、フィンガープリンティング、動作しないエクスプロイトに限られるとする。VirusTotal は露出した PHP ホストを 510 万台と数え、うち 380 万台が少なくとも 1 つのポートを開いている。並行してエクスプロイトコードが公開された。`ikow/php2shell-poc`（1,564★、5 本の RCE チェーンと Suricata/Sigma/ModSecurity ルール）、`9bie` の ASLR 回避版（981★）、`eness` の PoC（901★）、Assetnote のスキャナ（324★）、そして OpenAI の `php2shell-checker`（843★）—— `X-Powered-By` と `Server` を読む 2 つの Codex スキル。
+
+**Why it matters:** 見かけの矛盾は矛盾ではない。失敗した悪用試行も悪用試行であり、「PoC は動かなかった」と「17 日に試行を観測した」は同時に真になりうる。ただし両者が示す露出期間は大きく異なる。バージョンヘッダのスキャンでは決着しない。OpenAI 自身の README が、HTTP ヘッダではバックポートされた修正を判別できないと明記している。`OK` が示すのは** advertised なバージョン**であり、実際にインストールされたものではない。
+
+[`🔗 BleepingComputer — 悪用はパッチ 4 日前に始まっていた`](https://www.bleepingcomputer.com/news/security/amazon-says-php2shell-exploitation-began-4-days-before-patches/) · [`🔗 openai/php2shell-checker`](https://github.com/openai/php2shell-checker) · [`🔗 ikow/php2shell-poc`](https://github.com/ikow/php2shell-poc)
+
+---
+
+## 28. Capcom の CAPCOM ID 流出は 11,774,247 件 —— パスワードが強制リセットされたのは 196 アカウントで、全部ではない
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Capcom IR · ~8 時間前 (~04:22 UTC+8)
+- **Tags:** `breach` `gaming` `credentials` `capcom` `incident`
+
+Capcom の 10 月 22 日の告知によれば、『ストリートファイター 6』『モンスターハンター』『バイオハザード』のオンラインプレイを支えるアカウントサービス CAPCOM ID が不正アクセスを受け、世界で 11,774,247 件のレコードが影響した。露出した項目はメールアドレスとシステム識別子 —— アカウント作成日時、最終ログイン日時、ログイン回数、最終ログインの IP アドレス。43 件では生年月日、性別、ニックネーム、国・地域も含まれた。196 アカウントはパスワードが無断で変更され、現在はリセット済み。Capcom は 10 月 19 日に異常を検知し、翌日に対策本部を設置、10 月 21 日に大阪府警と個人情報保護委員会へ報告した。
+
+**Why it matters:** 流出したのは認証情報のダンプではなく**フィッシング用の名簿**だ。メールアドレスに最終ログイン IP と時刻が付くのは、「新しい端末からのログインを検知しました」を説得力あるものにする材料そのもので、Capcom はすでになりすましへの注意を呼びかけている。同社は利用者が設定したパスワードの侵害は確認しておらず、カード情報も保持していないとしている。これは「確認されていない」であって「起こりえない」ではなく、数字はすべて「10 月 22 日時点」と明記されている。
+
+[`🔗 Capcom — 不正アクセスに関するお知らせ`](https://www.capcom.co.jp/ir/english/news/html/e261022.html) · [`🔗 BleepingComputer`](https://www.bleepingcomputer.com/news/security/capcom-confirms-data-breach-affecting-117-million-accounts/)
+
+---
+
+## 29. GMO の「お名前.com デスクトップクラウド」は依然停止中：26,739 台、FX 取引の認証情報も影響範囲に
+
+- **Velocity:** ▮▮ rising
+- **Source:** GMO Internet / Watch Impress · ~1.3 日前 (~04:00 UTC+8)
+- **Tags:** `breach` `vps` `japan` `fx` `incident`
+
+GMO Internet は 10 月 20 日、FX 自動売買で広く使われる Windows VPS「お名前.com デスクトップクラウド」の一部顧客サーバーに不正なプログラムが設置されていたことを確認した。全プランが 10 月 21 日 04:00 JST から順次停止し、現在も復旧しておらず再開時期は未定。GMO の 10 月 22 日の説明は影響しうる規模を **26,739 台**としており、報道によればこれらのサーバー上に保存されていた証券・MT4/MT5 のログイン認証情報が窃取された可能性があり、利用者から不正ログインや不正取引の報告が出ている。同社はこの基盤にカード情報を保持していないとしている。
+
+**Why it matters:** VPS 事業者は顧客**自身**の秘密が置かれる場所であり、ここには証券口座のログイン情報があった。つまりこの事件は同時にホスティングの停止と金融アカウントの侵害であり、しかも経路に第三者（証券会社）が介在する。「サーバーのパスワードを変える」だけでは済まない所以だ。最初の告知ではなく最新の告知を読むべきで、10 月 21 日の文面は個人情報の漏えいも閲覧データの悪用も確認していないとしていたが、翌日の説明はその範囲を実質的に広げた。
+
+[`🔗 GMO / お名前.com のお知らせ`](https://www.onamae.com/news/article/11584) · [`🔗 Watch Impress — FX の不正利用も発生`](https://www.watch.impress.co.jp/docs/news/2150663.html)
+
+---
+
+## 30. Drupal Webform の 9.1 は CISA の数字で、記録の元になったアドバイザリは 9 月 23 日付
+
+- **Velocity:** ▮ steady
+- **Source:** Drupal セキュリティチーム / NVD · ~14 時間前 (~22:00 UTC+8)
+- **Tags:** `cve` `drupal` `provenance` `rce` `adp`
+
+CVE-2026-96355 は Webform コントリビュートモジュールの重大な（Drupal 独自の 25 点満点で 18 点）リモートコード実行だ。一部のフォーマットテンプレートをトークン置換の対象から十分に除外しておらず、攻撃者が投稿したデータが送信内容のレンダリング時にテンプレートコードとして評価される。設定次第で情報漏えい、蓄積型 XSS、RCE になりうる。Webform 6.2.12 と 6.3.1 で修正済み。緩和条件は、影響を受けるフォームが送信値トークンを含むカスタムの複数値アイテムフォーマットを使っている場合に限られる点だ。Drupal のアドバイザリは **2026-09-23** 付。NVD は 10 月 22 日に CVE レコードを公開したが、指標は 1 つだけ —— CVSS 3.1、**9.1、`Secondary`、source `134c704f-…`（CISA-ADP）** —— で、状態は `Awaiting Analysis`、NVD 自身の指標は 0 件だった。
+
+**Why it matters:** ありがちな枠組みは両方とも間違っている。修正はレコードより 1 か月早く出ており、これは**バックフィル**であって「今週の新しい Drupal RCE」ではない。そして 9.1 を書いたのは CISA の Vulnrichment コンテナであり、NVD でも Drupal でもない（Drupal 自身のスコアは CVSS ではなく 25 点の複合指標だ）。第三者のエンリッチメント基盤が他人の脆弱性を採点するのは例外的状況ではなくなっており、我々が 10 月の 1 週間について行った調査では、ADP のみのスコアを持つレコードは公開レコードの約 8% に上った。
+
+[`🔗 Drupal SA-CONTRIB-2026-175`](https://www.drupal.org/sa-contrib-2026-175) · [`🔗 CVE-2026-96355（NVD）`](https://nvd.nist.gov/vuln/detail/CVE-2026-96355)
+
+---
+
+## 31. Reason Network は同僚のコーディングエージェントを P2P ネットワークに載せる —— デーモン 1 つ、エンドツーエンド暗号化
+
+- **Velocity:** ▮ steady
+- **Source:** reason-machines/reason-network · 1,081+ stars · ~4 時間前 (~08:10 UTC+8)
+- **Tags:** `agents` `mcp` `p2p` `coding-agents` `infra`
+
+Reason Network は各コンピュータに小さなデーモンを 1 つ入れ、そこ上のすべてのコーディングエージェントセッション —— Claude Code、Codex、Cursor、Gemini CLI、Copilot CLI、Grok CLI、opencode、pi、DeepSeek Harness、Reason —— を登録し、誰がどのリポジトリ・ブランチで動いているか、ビジーかアイドルかを同じネットワークの全員に公開する。エージェントには 3 つの MCP ツール（`list_team`、`send_message`、`ask_user`）と `check_inbox` が与えられ、メッセージは Claude Code、Codex、opencode、pi、Reason ではセッション中に、Cursor、Gemini、Copilot、Grok では次のステップで届く。テキストファイルは最大 10 個まで添付できる。マシン間は iroh による P2P で、エンドツーエンド暗号化。ホスト型アシスタントは `mcp.reasonmachines.com` の MCP サーバー経由で接続する。エンジンは Apache-2.0、セットアップ CLI は無料だが非オープンソース、サービスは無料。
+
+**Why it matters:** エージェント間メッセージングを単独ユーザーの道具ではなく**チーム**のプリミティブにした、初めて広く星を集めた試みであり、設計は信頼境界を正直に引いている。自分のマシン間はエンドツーエンドだが、ホスト型ボットは必然的に Reason の中継を通る。持ち帰るべきは README 自身の運用上の警告だ。同僚のメッセージ、ファイル、ウェブページからの webhook を決して受け入れるな —— 別のエージェントから指示を受け取るエージェントは、親しみやすい名前をしたプロンプトインジェクションの経路そのものだからだ。
+
+[`🔗 reason-machines/reason-network`](https://github.com/reason-machines/reason-network) · [`🔗 Reason Network`](https://reasonmachines.com/network)
+
+---
+
+## 32. Reylo は `.sql` ファイルを TypeScript にコンパイルさせて型を付ける —— 2 日で 707 星、ただし TS 7.1 beta が必要
+
+- **Velocity:** ▮ steady
+- **Source:** colinhacks/reylo · 707+ stars · ~1 日前 (~21:00 UTC+8)
+- **Tags:** `typescript` `sql` `devtools` `types` `open-source`
+
+Colin Hacks（Zod 作者）が 10 月 21 日に MIT で公開した Reylo は、`import getAuthor from "./get_author.sql"` して `getAuthor.run(db, { id: 1 })` を呼ぶだけで、戻り値の型が SQL に追随し、クエリを変えるとエディタ上でも更新される。土台は TypeScript 7.1 の **content mappers**（`microsoft/typescript-go` PR 4712）で、プラグインがコンパイル中に外部ファイル拡張子へ静的型を定義できるようにするもの。そのため SQL 方言の構文をそのまま使い、コード生成の手順も要らない。Postgres、MySQL、SQLite に対応し、ドライバは持参（`pg`、postgres.js、`mysql2`、`better-sqlite3`、`Bun.sql`、Cloudflare D1）。npm は 0.3.0、6 リリース。
+
+**Why it matters:** 注目すべきは content mappers のほうだ。TypeScript 7.1 の新しい拡張フックを汎用のコンパイル時型プロバイダとして使う最初のプロジェクトであり、言語機能が他の人が真似するパターンになったことを意味する。制約も同様に現実的で、`typescript@beta` 7.1 を要求するため安定版 TS を固定したビルドには入れられず、クエリが型を確定しない箇所では引数に明示的なキャストが要る。
+
+[`🔗 colinhacks/reylo`](https://github.com/colinhacks/reylo) · [`🔗 reylo.dev`](https://reylo.dev)
+
+---
+
+## 33. Uberblok は ZFS の内部構造を博物館にした —— 128 KiB のリング、`N mod slots`、特定コミットに固定したソースリンク
+
+- **Velocity:** ▮ steady
+- **Source:** Show HN · 94+ pts · ~1 日前 (~21:04 UTC+8)
+- **Tags:** `zfs` `storage` `education` `filesystems` `show-hn`
+
+Uberblok は OpenZFS を対話的にたどる、ソースリンク付きの解説サイトだ。出発点は uberblock。`ub_txg` が最新のトランザクショングループを記録し、`ub_rootbp` がブロックツリーの根を指す。各ディスクは 4 つのラベル —— 両端に 2 つずつ —— を持ち、各ラベルには 128 KiB の uberblock リングが入る。新しい uberblock はスロット `N mod slots` に書かれ（multihost/MMP 有効時は 1 スロット予約）、スロットサイズはセクタサイズを 1 KiB に丸め、8 KiB を上限とするため、128／64／32／16 スロットになる。インポート時、ZFS は txg が最大の**有効な** uberblock を選ぶ。部屋はコピーオンライト、チェックサムと自己修復、vdev、RAID-Z、スナップショットとクローン、ARC、metaslab、ZIL/SLOG、send/receive、暗号化まで続き、連続するトランザクショングループがスロットを占める様子を 3D リングで見せる。コード抜粋は OpenZFS 2.4.4、コミット `71a9f95` に固定されている。
+
+**Why it matters:** ファイルシステムの解説はモデルかコードを説明するが、**自分のどのコピーがマウントされるか**を決めるオンディスクの算術は説明しない。スロット数の表は、通常ソースを読まないと得られない種類の詳細だ。OpenZFS とは無関係だと明記し、多くの対話型解説が飛ばすライセンスの整理もしている。引用ソースは CDDL-1.0、本文は CC BY 4.0、サイトのコードは MIT。
+
+[`🔗 Uberblok`](https://uberblok.storagebits.workers.dev/) · [`🔗 Hacker News スレッド`](https://news.ycombinator.com/item?id=50180257)
+
+---
+
+## 34. Rubix：3,500 行の x86-64 アセンブリで書かれた 42 KB のコンパイラ —— セルフホストはまだ試作
+
+- **Velocity:** ▮ steady
+- **Source:** GitHub（10 月 19 日作成）· 1,904+ stars
+- **Tags:** `compilers` `assembly` `systems` `open-source` `languages`
+
+Rubix（`.ix`）は、本番コンパイラが約 3,500 行の純粋な GNU x86-64 アセンブリで書かれたシステムプログラミング言語で、Linux ELF64 と Windows PE64 の単体バイナリを生成する。libc も C も LLVM も仮想マシンも使わない。README はコンパイラを約 42 KB とし、1 ミリ秒未満のビルドを主張、19 のテストスイート（算術、制御フロー、関数、構造体、ネイティブ SSE2 演算子による浮動小数点、分割コンパイル、Windows クロスリンク）を列挙する。MIT ライセンスで、4 日間で 1,904 星。例題には 1,000 要素の篩や 200 要素のクイックソートが含まれる。
+
+**Why it matters:** 興味深い主張はセルフホストのほうで、リポジトリはそれについて正直だ。Rubix 自身で書かれたセルフホストコンパイラは約 1,000 行の初期試作で、issue #1 で追跡されている。つまり今日のコンパイラは下までアセンブリであり、「セルフホスト」はロードマップ項目であって既存の性質ではない。サイズと速度の数字は誰かが再現するまでは著者自身の測定値として扱うべきだ。「42 KB のコンパイラ」はビルド成果物についての主張であり、実際に検証できるのは 19 のテストスイートの側だ。
+
+[`🔗 tek-sys-hub/Rubix-lang`](https://github.com/tek-sys-hub/Rubix-lang) · [`🔗 Issue #1 —— セルフホストのロードマップ`](https://github.com/tek-sys-hub/Rubix-lang/issues/1)
+
+---
+
+## 35. GNU Taler に会社ができる：Taler Operations AG がボーフムに設立され、電子マネー免許を申請へ
+
+- **Velocity:** ▮ steady
+- **Source:** taler.net · 240+ pts · ~12 時間前 (~00:14 UTC+8)
+- **Tags:** `payments` `privacy` `eu` `regulation` `fintech`
+
+NGI TALER プロジェクトの 3 年を経て、GNU Taler のチームは **Taler Operations AG** をボーフムに設立し、ユーロ建てで Taler を運営すると発表した。まずドイツ、次にユーロ圏へ広げる。ドイツの金融監督当局 BaFin には電子マネー発行者の免許を申請する。この役割は当初 GLS 銀行が担う予定だったが、GLS は 2026 年 1 月に Taler とは無関係な理由として撤退を決め、現在は支援の立場でコンソーシアムに残っている。Taler は価値を表す無記名トークンを発行するため、EU 規制上は電子マネーに当たり、ユーロの電子マネーを発行する機関は銀行であるか専用の免許を持つ必要がある。
+
+**Why it matters:** プライバシー保護型の決済システムは、同じ非技術的な段階で繰り返し止まってきた。責任を負う規制対象の事業者を見つけることだ。今回の発表は暗号方式ではなく、その事業者と監督当局の名前を示している。免許はまだ取得していない。BaFin への申請が次の一歩であり、今日の時点で Taler が持つのはユーロ運営の**計画**であって、ユーロ運営そのものではない。
+
+[`🔗 taler.net — ドイツでの Taler 運営に向けて`](https://www.taler.net/en/news/2026-13.html) · [`🔗 Hacker News スレッド`](https://news.ycombinator.com/item?id=50197404)
+
+---
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-10-22T20:23:32Z |
-| Items | 20 |
-| Sources tracked | 14（Hacker News、GitHub Trending、NVD、CVE Program、GitHub Advisory DB、ベンダーアドバイザリ、arXiv、Hugging Face、セキュリティ研究ブログ） |
+| Generated | 2026-10-23T04:15:43Z |
+| Items | 35 |
+| Sources tracked | 16（Hacker News、GitHub Trending、NVD、CVE Program、GitHub Advisory DB、ベンダーアドバイザリ、arXiv、Hugging Face、OpenAI/Anthropic/Baseten のエンジニアリングブログ、標準化財団、セキュリティ研究ブログ） |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8（1 日 3 回） |
 | Ranking | 速度加重（鮮度 × エンゲージメント加速 × 情報源の権威） |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |

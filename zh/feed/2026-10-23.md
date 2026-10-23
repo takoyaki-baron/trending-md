@@ -1,8 +1,8 @@
 ---
 date: 2026-10-23
-updated: 2026-10-22T20:23:32Z
+updated: 2026-10-23T04:15:43Z
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 14
+sources: 16
 license: CC-BY-4.0
 ---
 
@@ -288,13 +288,223 @@ The Browser Company 于 10 月 22 日宣布 Arc 将于 2026 年 12 月 22 日停
 
 ---
 
+## 21. Claude 证明 123 个开源库"永不崩溃" —— 239 个入口点、1.8 亿行 Rocq
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Anthropic Frontier Red Team · 190+ pts · 5 小时前 (~06:54 UTC+8)
+- **Tags:** `formal-verification` `security` `anthropic` `rocq` `riscv`
+
+10 月 22 日，Anthropic 公布与 Theorem 的合作成果：Claude 为 123 个 OSS-Fuzz C/C++ 库的编译产物写出机器可检验的证明，断定它们在**任何小于 64 MB 的输入**下都不会崩溃。规约由各项目既有的 fuzz 入口点机械导出 —— 即"该测试套件永不崩溃" —— 并借助 Theorem 的 RISC-V 与 Linux 进程语义，在编译后的 RISC-V 指令上完成证明；每份证明都由 Rocq 内核校验。最终覆盖 239 个入口点、约 1.8 亿行 Rocq；典型证明约 60 万行，对应二进制的中位长度为 18,000 条 RISC-V 指令。写证明期间，Claude 还发现并修补了数万亿次 fuzz 运行都未触及的缺陷。
+
+**Why it matters:** 文章自带的"局限"一节才是该被引用的部分：这些证明描述的是**单线程、静态链接 musl 的 RISC-V 二进制**，而现实中几乎所有人部署的是 x86 或 ARM + glibc；每个库并非所有入口点都被验证；ASan 并不能发现全部内存安全缺陷；而**调用方**的误用完全不在覆盖范围内。"形式化验证"不等于"没有 bug" —— 被证明的是"在给定模型内不可达任何崩溃"，可信基是 Theorem 的语义、定理陈述本身与 Rocq 检查器。这比 fuzzer 强得多，也比标题暗示的窄得多。
+
+[`🔗 Anthropic —— 形式化软件验证`](https://www.anthropic.com/research/formal-verification) · [`🔗 Hacker News 讨论`](https://news.ycombinator.com/item?id=50202217)
+
+---
+
+## 22. OpenAI 的 Decisions API 正式可用 —— 三种带类型的输出，且不为你没生成的 token 付费
+
+- **Velocity:** ▮▮ rising
+- **Source:** OpenAI API 更新日志 · ~14 小时前 (~22:00 UTC+8)
+- **Tags:** `openai` `api` `decision-models` `pricing` `agents`
+
+`POST /v1/decisions` 于 10 月 22 日转为正式可用，且只跑 `gpt-6-luna`。一次请求携带一份共享输入与 1–400 个**相互独立**的问题，每个问题返回三种带类型的形状之一：`predicate`（条件成立的概率，0–1）、`choice`（在你给出的选项里选一个，附各选项概率与置信度）或 `score`（2–10 个有序等级上的概率加权均值）。未命中缓存的输入为每百万 token 0.10 美元，缓存读取 0.01 美元，**输出 token 免费**；缓存复用至少 1,024 token 的相同共享前缀。正式版新增 `input_json`、可在单个问题指令中内嵌图片、单请求上限从 200 提升到 400 个问题，以及面向符合条件客户的零数据保留（ZDR）与 HIPAA。
+
+**Why it matters:** 定价本身就是设计：预测一个标签被计为"读"而非"写"，这让逐请求的分类器便宜到聊天补全永远做不到的程度。两条约束必须写进设计文档 —— 问题彼此独立，任何有依赖的判断都要再发一次请求；`file_id` 不受支持，图片只能是 base64 data URL 或公开的 HTTP(S) 地址。"最高快 10 倍"是 OpenAI 自己的数字，对照的是它自家的 Responses API。
+
+[`🔗 Decisions API 指南`](https://developers.openai.com/api/docs/guides/decisions) · [`🔗 API 更新日志（10 月 22 日）`](https://developers.openai.com/api/docs/changelog)
+
+---
+
+## 23. Base Labs 开源 mammoth-1 与 elephant-1：返回概率、而不是散文的决策模型
+
+- **Velocity:** ▮▮ rising
+- **Source:** Baseten / Base Labs · ~1 天前 (~22:00 UTC+8)
+- **Tags:** `llm` `open-weights` `decision-models` `qwen` `benchmarks`
+
+Baseten 的研究团队 10 月 21 日发布两个 Qwen3.5 后训练模型 —— mammoth-1（27B）与 elephant-1（9B），用 621 万条决策样本训练，在一次共享前缀前向中回答**选项固定**的问题。两个模型都不写答案：它们返回"是/否"的概率、在你给定选项中的选择，或有序评分，其中包含一个被训练出来的"我不知道"。权重以 MIT 许可发布在 Hugging Face 的 `baselabs/mammoth-1` 与 `baselabs/elephant-1`；在 Baseten Model APIs 上自发布起可免费试用一周，默认零数据保留。Baseten 报告 Jev Decision Index 0.4 得分 71.24（208 个模型中的第 1），Artificial Analysis Decision Index 为 65.9 / 65.2，其中 elephant-1 与 Liquid AI 的 d1-ultra 并列。
+
+**Why it matters:** 这里每个数字都出自发布方自己：博客没有给出训练算力、没有分领域表格，第二个榜单我们也无法独立核对 —— 所以"208 个模型中第 1"应读作对某个 benchmark 的声明，而不是已定论的排名。真正有分量的是接口：每个选项一个标定概率，正是路由器、护栏或分诊步骤实际消费的形状，也正是 OpenAI 第二天在 Decisions API 里给出的同一种形状。
+
+[`🔗 Baseten —— mammoth-1 与 elephant-1`](https://www.baseten.co/blog/the-best-decision-models-in-the-world-mammoth-1-and-elephant-1/) · [`🔗 baselabs/mammoth-1（MIT）`](https://huggingface.co/baselabs/mammoth-1)
+
+---
+
+## 24. AAIF 收入 Agent Skills、Open Responses、OpenEnv 与 OpenSandbox —— 第一年即达十个项目
+
+- **Velocity:** ▮▮ rising
+- **Source:** Agentic AI Foundation · ~18 小时前 (~18:00 UTC+8)
+- **Tags:** `agents` `standards` `mcp` `governance` `open-source`
+
+10 月 22 日在圣何塞的 AGNTCon + MCPCon North America 上宣布，四个项目加入 Agentic AI Foundation：Anthropic 的 **Agent Skills**（打包指令、脚本与资源、供 agent 按需加载的格式）、OpenAI 的 **Open Responses**（基于 Responses API 的多供应商 LLM 接口开放规范）、Hugging Face 的 **OpenEnv**（基于 MCP 与 Gym 协议的容器化强化学习环境）以及阿里巴巴的 **OpenSandbox**（带 Docker 与 Kubernetes 运行时的通用沙箱平台）。它们与 A2A、Agent Router、agentgateway、AGENTS.md、goose、MCP 并列 —— 托管项目达十个，而 AAIF 在 2025 年 12 月成立时只有三个。
+
+**Why it matters:** 四家互相竞争的厂商捐出的是**接口层**而非模型层的四块拼图，而锁定恰恰发生在接口层：技能怎么打包、请求/响应长什么样、环境如何定义、代码在哪里执行。公告里没有的东西同样说明问题 —— 没有财务条款，除项目数量外没有任何采用率数据，除"供应商中立治理"这句话外也没有成员间冲突的解决机制。
+
+[`🔗 AAIF 公告`](https://aaif.io/news/agentic-ai-foundation-announces-four-new-projects) · [`🔗 Linux 基金会新闻稿`](https://www.linuxfoundation.org/press/agentic-ai-foundation-announces-four-new-projects-agent-skills-open-responses-openenv-and-opensandbox)
+
+---
+
+## 25. EAGLE-4 交出的是加速比矩阵而不是一个标题数字 —— batch 1 时 3.35×，64 时 1.38×
+
+- **Velocity:** ▮▮ rising
+- **Source:** eagle-hq/EAGLE-4 · 880+ stars · ~2 小时前 (~10:00 UTC+8)
+- **Tags:** `inference` `speculative-decoding` `vllm` `sglang` `benchmarks`
+
+EAGLE-4 是投机解码里"草稿 token"的那一侧 —— "一个适配所有批量与硬件的灵活 drafter" —— 以 `eagle-harness` 0.1.2 发布，附带 SGLang 0.5.23、vLLM 0.32.0rc1 与 TokenSpeed 的引擎构建，以及 Qwen3.8-27B 的草稿模型。它的支持矩阵在**同一份分配**里把 EAGLE-4 吞吐除以同引擎关闭投机解码的对照组：SGLang TP4、temperature 0 下，1 个并发请求为 3.35×，8 个为 2.11×，64 个为 1.38×；temperature 1 下同样三格是 2.74×、1.78×、1.25×。每一格都带有贪心等价检查的 ✅/⚠️/❌ 标记，且已发布版本与未发布候选的数字从不出现在同一行。
+
+**Why it matters:** 投机解码的性能声明通常会在高并发下悄悄衰减，而这是少见的把衰减曲线本身公开的发布 —— batch 1 的 3.35× 是被引用的数字，64 并发下的 1.38× 才是决定推理团队是否让它一直开着的数字。范围限制写在同一页：除了一行仍在跑 0.1.0 包的 AMD MI355X，所有行都是 NVIDIA B300 分配；许可证是自定义的 "Eagle-4" 许可，而非 OSI 许可。
+
+[`🔗 eagle-hq/EAGLE-4`](https://github.com/eagle-hq/EAGLE-4) · [`🔗 EAGLE-Corp/Qwen3.8-27B-EAGLE4 草稿模型`](https://huggingface.co/EAGLE-Corp/Qwen3.8-27B-EAGLE4)
+
+---
+
+## 26. Opposable 把 2B 的 computer-use 模型放进手机本身 —— 27/36 个界面，而 1.5 GB 下载量才是那句话的注脚
+
+- **Velocity:** ▮▮ rising
+- **Source:** Opposable 工程博客 · 17+ pts · ~1 天前 (~21:00 UTC+8)
+- **Tags:** `agents` `computer-use` `on-device` `android` `npu`
+
+Opposable 的 Android 应用通过无障碍服务操作其他 App；在未连接云端 agent 时，屏幕动作循环就在本地跑 GUI-Owl 1.5 2B —— 阿里巴巴 Mobile-Agent 团队基于 Qwen3-VL 的微调 —— 以 4-bit 量化放进 llama.cpp：1.05 GB 语言模型加 445 MB 视觉编码器，全部常驻内存，每张截图产出一个动作。在 Mac M2 CPU 上，单步最初需 10.6 秒（编码 4.6 秒、prefill 4.3 秒、解码 1.7 秒），裁掉界面栏、剪除纯背景图像 token、缓存系统提示并加入接地早退后降到 7.3 秒 —— 而在 36 张分级界面上的准确率不变，仍为 27/36。在八项留出任务、两轮测试中，整任务成功率为 4/8 与 3/8；把任务拆成可验证的子目标后，两轮都提升到 6/8。在 Galaxy S25 上，只把视觉塔导出为 ONNX，同一屏从 CPU 的 3.9 秒降到骁龙 NPU 的 236 毫秒。
+
+**Why it matters:** 公布的数字并不夸张，作者却照实写出，包括三组全部落在 27/36 的 token 剪枝配置 —— 剪枝换来的是延迟而非准确率，把这点讲出来比结果本身更少见。真正的故事是部署约束：NPU 路径只存在于骁龙平台，而遇到不熟悉的 App 时会转交给 Claude、ChatGPT 或 Codex —— 一个 1.5 GB 的下载，换来的是一个兜底方案。
+
+[`🔗 Opposable —— 在手机本身上做 computer use`](https://getopposable.com/blog/computer-use-on-the-phone) · [`🔗 Hacker News 讨论`](https://news.ycombinator.com/item?id=50180190)
+
+---
+
+## 27. 继我们 10 月 21 日关于 PHP 两个 9.2 的记录：亚马逊说它的蜜罐在补丁前四天就看到了尝试
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** BleepingComputer / Amazon Threat Intelligence · ~15 小时前 (~21:09 UTC+8)
+- **Tags:** `cve` `php` `exploited` `patching` `exploit`
+
+Amazon Threat Intelligence 称，它观测到最早的 php2shell 利用尝试发生在 **10 月 17 日** —— 比 CVE-2026-109618 与 CVE-2026-109619 的 10 月 21 日紧急修复早四天；AWS CISO CJ Moses 表示这些漏洞现已被广泛利用，其中一次尝试来自某商业匿名化网络。PHP 安全团队坚持补丁前的概念验证"并不具备可用性"，Dataminr TRACE 也把观测到的活动描述为扫描、指纹识别与不可用的利用；VirusTotal 统计有 510 万台暴露的 PHP 主机，其中 380 万台至少有一个开放端口。与此同时利用代码公开：`ikow/php2shell-poc`（1,564★，五条 RCE 链加 Suricata/Sigma/ModSecurity 规则）、`9bie` 的绕 ASLR 变体（981★）、`eness` 的 PoC（901★）、Assetnote 的扫描器（324★），以及 OpenAI 的 `php2shell-checker`（843★）—— 两个读取 `X-Powered-By` 与 `Server` 的 Codex 技能。
+
+**Why it matters:** 表面上的矛盾其实不成立 —— 失败的利用尝试依然是利用尝试，所以"PoC 不可用"与"17 日就看到尝试"可以同时为真，但两者暗示的暴露窗口完全不同。按版本头扫描也无法裁决：OpenAI 自己的 README 明说 HTTP 头无法反映是否打了向后移植的补丁，所以 `OK` 描述的是**对外宣称的版本**，不是**已安装的版本**。
+
+[`🔗 BleepingComputer —— 利用早于补丁四天`](https://www.bleepingcomputer.com/news/security/amazon-says-php2shell-exploitation-began-4-days-before-patches/) · [`🔗 openai/php2shell-checker`](https://github.com/openai/php2shell-checker) · [`🔗 ikow/php2shell-poc`](https://github.com/ikow/php2shell-poc)
+
+---
+
+## 28. 卡普空的 CAPCOM ID 泄露为 11,774,247 条记录 —— 被强制重置密码的是 196 个账号，不是全部
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Capcom IR · ~8 小时前 (~04:22 UTC+8)
+- **Tags:** `breach` `gaming` `credentials` `capcom` `incident`
+
+卡普空 10 月 22 日的公告称，承载《街霸 6》《怪物猎人》《生化危机》在线游玩的账号服务 CAPCOM ID 遭未授权访问，全球共 11,774,247 条记录受影响。泄露字段为邮箱地址加系统标识 —— 账号创建时间、最后登录时间、登录次数与最后登录的 IP 地址。43 条记录还包含出生日期、性别、昵称与国家/地区；196 个账号的密码被未授权修改，现已重置。卡普空 10 月 19 日发现异常，次日在内部成立事件响应本部，10 月 21 日向大阪府警与日本个人信息保护委员会报告。
+
+**Why it matters:** 泄露出来的是一份**钓鱼清单**，而不是凭据库 —— 邮箱加上最后登录 IP 与时间戳，恰好是让"我们检测到一次来自新设备的登录"变得可信的材料，卡普空也已经就冒充邮件发出警告。公司称尚未确认用户自设密码被攻破、也未持有信用卡数据；这是"未确认"，不是"不可能"，且所有数字都明确标注"截至 10 月 22 日"。
+
+[`🔗 卡普空 —— 未授权访问公告`](https://www.capcom.co.jp/ir/english/news/html/e261022.html) · [`🔗 BleepingComputer`](https://www.bleepingcomputer.com/news/security/capcom-confirms-data-breach-affecting-117-million-accounts/)
+
+---
+
+## 29. GMO 的お名前.com 桌面云仍未恢复：26,739 台服务器，外汇交易凭据也在波及范围内
+
+- **Velocity:** ▮▮ rising
+- **Source:** GMO Internet / Watch Impress · ~1.3 天前 (~04:00 UTC+8)
+- **Tags:** `breach` `vps` `japan` `fx` `incident`
+
+GMO Internet 10 月 20 日确认，在广泛用于外汇自动交易的 Windows VPS「お名前.com デスクトップクラウド」的部分客户服务器上被植入了恶意程序。全部套餐自 10 月 21 日 04:00 JST 起依次停机，服务至今未恢复，重启时间未定。GMO 10 月 22 日的说明把可能受影响规模定为 **26,739 台服务器**，报道称存放于这些服务器上的券商与 MT4/MT5 登录凭据疑似被盗，已有用户报告未授权的登录与交易；公司表示该基础设施上不持有信用卡数据。
+
+**Why it matters:** VPS 提供商正是客户**自己**的密钥所在之处，而这一家存放的是券商登录凭据 —— 所以这起事件同时是一次托管中断和一次金融账户失陷，且链条上还有第三方（券商），这也意味着"改服务器密码"远不是全部补救。要读最新公告而不是第一份：10 月 21 日的文本说尚未确认个人信息泄露、也未见被浏览数据遭滥用，而次日的说明实质性扩大了这一范围。
+
+[`🔗 GMO / お名前.com 公告`](https://www.onamae.com/news/article/11584) · [`🔗 Watch Impress —— 已出现 FX 不正利用`](https://www.watch.impress.co.jp/docs/news/2150663.html)
+
+---
+
+## 30. Drupal Webform 的 9.1 是 CISA 给的分数，而这条记录对应的公告日期是 9 月 23 日
+
+- **Velocity:** ▮ steady
+- **Source:** Drupal 安全团队 / NVD · ~14 小时前 (~22:00 UTC+8)
+- **Tags:** `cve` `drupal` `provenance` `rce` `adp`
+
+CVE-2026-96355 是 Webform 贡献模块中的严重漏洞（按 Drupal 自有的 25 分制为 18 分）远程代码执行：它未充分将某些格式模板排除在 token 替换之外，攻击者提交的数据在渲染提交结果时会被当作模板代码执行 —— 视配置可能造成信息泄露、存储型 XSS 或 RCE。已在 Webform 6.2.12 与 6.3.1 修复；缓解条件是受影响的表单必须使用自定义的多值条目格式，且包含提交值 token。Drupal 公告日期为 **2026-09-23**。NVD 于 10 月 22 日发布该 CVE 记录，仅携带一个指标 —— CVSS 3.1，**9.1，`Secondary`，来源 `134c704f-…`（CISA-ADP）** —— 状态 `Awaiting Analysis`，NVD 自评指标为 0。
+
+**Why it matters:** 显而易见的那种叙事，两半都错。修复比记录早一个月发布，所以这是一次**回填**，而不是"本周新增的 Drupal RCE"；而那个 9.1 是 CISA 的 Vulnrichment 容器写的，既不是 NVD 也不是 Drupal —— Drupal 自己用的是 25 分制综合风险分，不是 CVSS。由第三方富化容器为别人的漏洞打分已不再是边缘情况：我们自己对 10 月某一周的普查显示，仅有 ADP 分数的记录约占已发布记录的 8%。
+
+[`🔗 Drupal SA-CONTRIB-2026-175`](https://www.drupal.org/sa-contrib-2026-175) · [`🔗 CVE-2026-96355（NVD）`](https://nvd.nist.gov/vuln/detail/CVE-2026-96355)
+
+---
+
+## 31. Reason Network 把同事的编码 agent 放进一张点对点网络 —— 一个守护进程，端到端加密
+
+- **Velocity:** ▮ steady
+- **Source:** reason-machines/reason-network · 1,081+ stars · ~4 小时前 (~08:10 UTC+8)
+- **Tags:** `agents` `mcp` `p2p` `coding-agents` `infra`
+
+Reason Network 在每台电脑上装一个小守护进程，登记其上的每个编码 agent 会话 —— Claude Code、Codex、Cursor、Gemini CLI、Copilot CLI、Grok CLI、opencode、pi、DeepSeek Harness 与 Reason —— 并向同一网络内的所有人公布：谁在跑、在哪个仓库哪个分支、忙还是闲。Agent 获得三个 MCP 工具（`list_team`、`send_message`、`ask_user`）外加 `check_inbox`；消息对 Claude Code、Codex、opencode、pi 与 Reason 会直接落到会话中，对 Cursor、Gemini、Copilot 与 Grok 则在下一步生效，最多可携带十个文本文件。电脑之间通过 iroh 点对点通信并端到端加密；托管助手则经由 `mcp.reasonmachines.com` 的 MCP 服务器接入。引擎为 Apache-2.0，安装 CLI 免费但不开源，服务免费。
+
+**Why it matters:** 这是第一个获得广泛星标的尝试，把 agent 之间的消息传递做成**团队**原语而不是单人原语，而且架构对信任边界画得诚实 —— 自己的电脑之间端到端加密，但托管 bot 必然要经过 Reason 的中继。README 自带的运维警告最值得带走：永远不要接受来自同事消息、文件或网页的 webhook —— 因为一个接受另一个 agent 指令的 agent，就是一条名字很友好的提示注入路径。
+
+[`🔗 reason-machines/reason-network`](https://github.com/reason-machines/reason-network) · [`🔗 Reason Network`](https://reasonmachines.com/network)
+
+---
+
+## 32. Reylo 让 TypeScript 去编译你的 `.sql` 文件，从而给它加上类型 —— 两天 707 星，但需要 TS 7.1 beta
+
+- **Velocity:** ▮ steady
+- **Source:** colinhacks/reylo · 707+ stars · ~1 天前 (~21:00 UTC+8)
+- **Tags:** `typescript` `sql` `devtools` `types` `open-source`
+
+Colin Hacks（Zod 作者）10 月 21 日以 MIT 发布 Reylo：你 `import getAuthor from "./get_author.sql"`，然后调用 `getAuthor.run(db, { id: 1 })`，结果类型跟随 SQL，并在编辑器里随查询变化实时更新。它构建在 TypeScript 7.1 的 **content mappers**（`microsoft/typescript-go` PR 4712）之上，允许插件在编译过程中为外部文件扩展名定义静态类型 —— 于是该 SQL 方言的完整语法都可用，且不需要代码生成步骤。支持 Postgres、MySQL 与 SQLite，自带驱动（`pg`、postgres.js、`mysql2`、`better-sqlite3`、`Bun.sql`、Cloudflare D1）；npm 上为 0.3.0，已发六个版本。
+
+**Why it matters:** content mappers 才是值得关注的部分：这是我们见到的第一个把 TypeScript 7.1 的新扩展钩子当作**通用编译期类型提供者**的项目，这把一个语言特性变成了别人会照抄的模式。约束同样真实 —— 它需要 `typescript@beta` 7.1，所以不适合放进固定在稳定版 TS 的构建里；而且当查询本身没有锁定类型时，参数仍需显式类型转换。
+
+[`🔗 colinhacks/reylo`](https://github.com/colinhacks/reylo) · [`🔗 reylo.dev`](https://reylo.dev)
+
+---
+
+## 33. Uberblok 把 ZFS 内部结构做成了一座博物馆 —— 128 KiB 环、`N mod slots`，以及钉在某个提交上的源码链接
+
+- **Velocity:** ▮ steady
+- **Source:** Show HN · 94+ pts · ~1 天前 (~21:04 UTC+8)
+- **Tags:** `zfs` `storage` `education` `filesystems` `show-hn`
+
+Uberblok 是一份可交互、逐行链接到源码的 OpenZFS 导览，从 uberblock 讲起：`ub_txg` 记录最新的事务组，`ub_rootbp` 指向块树根，每块盘带四个 label —— 两端各两个 —— 每个 label 里是一个 128 KiB 的 uberblock 环。新的 uberblock 写入槽位 `N mod slots`（启用 multihost/MMP 时保留一个槽），槽大小随扇区大小取整到 1 KiB、上限 8 KiB，因而得到 128、64、32 或 16 个槽；导入时 ZFS 选取 txg 最高的**有效** uberblock。房间依次走过写时复制、校验与自愈、vdev、RAID-Z、快照与克隆、ARC、metaslab、ZIL/SLOG、send/receive 与加密，另有一个 3D 环展示连续事务组占据槽位的过程。代码片段钉在 OpenZFS 2.4.4、提交 `71a9f95`。
+
+**Why it matters:** 文件系统文档通常解释模型或解释代码，却不解释**决定哪一份副本会被挂载**的那段盘上算术 —— 那张槽位数量表，通常只有读源码才能拿到。站点明确声明与 OpenZFS 无隶属关系，也做了大多数交互式解说会略过的许可账：引用的源码按 CDDL-1.0，正文 CC BY 4.0，站点代码 MIT。
+
+[`🔗 Uberblok`](https://uberblok.storagebits.workers.dev/) · [`🔗 Hacker News 讨论`](https://news.ycombinator.com/item?id=50180257)
+
+---
+
+## 34. Rubix：一个用 3,500 行 x86-64 汇编写成的 42 KB 编译器 —— 自举仍是原型
+
+- **Velocity:** ▮ steady
+- **Source:** GitHub（创建于 10 月 19 日）· 1,904+ stars
+- **Tags:** `compilers` `assembly` `systems` `open-source` `languages`
+
+Rubix（`.ix`）是一门系统编程语言，其生产编译器约 3,500 行纯 GNU x86-64 汇编，直接产出 Linux ELF64 与 Windows PE64 独立二进制，不用 libc、不用 C、不用 LLVM，也没有虚拟机。README 称编译器约 42 KB、构建耗时低于 1 毫秒，并列出 19 套测试，覆盖算术、控制流、函数、结构体、基于原生 SSE2 指令的浮点、分离编译与 Windows 交叉链接。MIT 许可，四天拿下 1,904 星，示例程序包括 1,000 元素的筛法与 200 元素的快速排序。
+
+**Why it matters:** 真正有意思的声明是**自举**，而仓库对此很坦诚 —— 用 Rubix 自身编写的自举编译器只是一个约 1,000 行的早期原型，进展记录在 issue #1，所以今天的编译器从里到外都是汇编，"自举"是一个路线图条目而不是一个已有属性。体积与速度数字在有人复现之前，都只是作者自己的测量："42 KB 编译器"是关于构建产物的声明，而 19 套测试才是你能实际核对的部分。
+
+[`🔗 tek-sys-hub/Rubix-lang`](https://github.com/tek-sys-hub/Rubix-lang) · [`🔗 Issue #1 —— 自举路线图`](https://github.com/tek-sys-hub/Rubix-lang/issues/1)
+
+---
+
+## 35. GNU Taler 有公司了：Taler Operations AG 正在波鸿设立，将申请电子货币牌照
+
+- **Velocity:** ▮ steady
+- **Source:** taler.net · 240+ pts · ~12 小时前 (~00:14 UTC+8)
+- **Tags:** `payments` `privacy` `eu` `regulation` `fintech`
+
+在 NGI TALER 项目走过三年之后，GNU Taler 团队宣布 **Taler Operations AG** 正在波鸿设立，用于以欧元运营 Taler —— 先在德国，再扩展至欧元区 —— 并将向德国金融监管机构 BaFin 申请电子货币发行牌照。这一角色原本属于 GLS 银行，但 GLS 在 2026 年 1 月决定不再推进，称原因与 Taler 本身无关；它仍以支持身份留在联盟中。Taler 发行代表价值的无记名代币，这在欧盟监管下即构成电子货币，而为欧元发行电子货币的机构必须是银行，或持有专门的牌照。
+
+**Why it matters:** 隐私保护型支付系统反复卡在同一个非技术步骤上 —— 找到一家愿意承担责任的受监管实体 —— 而这份公告给出的是实体与监管机构的名字，而不是密码学。牌照尚未取得：向 BaFin 提交申请才是下一步，所以截至今天，Taler 拥有的是**欧元运营的计划**，而不是欧元运营本身。
+
+[`🔗 taler.net —— 准备在德国运营 Taler`](https://www.taler.net/en/news/2026-13.html) · [`🔗 Hacker News 讨论`](https://news.ycombinator.com/item?id=50197404)
+
+---
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-10-22T20:23:32Z |
-| Items | 20 |
-| Sources tracked | 14 (Hacker News、GitHub Trending、NVD、CVE Program、GitHub Advisory DB、厂商公告、arXiv、Hugging Face、安全研究博客) |
+| Generated | 2026-10-23T04:15:43Z |
+| Items | 35 |
+| Sources tracked | 16 (Hacker News、GitHub Trending、NVD、CVE Program、GitHub Advisory DB、厂商公告、arXiv、Hugging Face、OpenAI/Anthropic/Baseten 工程博客、标准基金会、安全研究博客) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8（每日三次） |
 | Ranking | 速度加权（时效 × 互动加速度 × 信源权威度） |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |
