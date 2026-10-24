@@ -1128,3 +1128,33 @@ with branding carved out. A 97%-of-features number and a 60%-ready-for-work numb
 only the second is a planning input.
 
 Sources: [OpenSSL 4.1.0 release](https://github.com/openssl/openssl/releases/tag/openssl-4.1.0) · [OpenSSL CHANGES.md](https://github.com/openssl/openssl/blob/master/CHANGES.md) · [Dagger 1.0 beta](https://dagger.io/blog/dagger-10-beta/) · [dagger/dagger releases](https://github.com/dagger/dagger/releases) · [Phoronix — ReactOS NTFS](https://www.phoronix.com/news/ReactOS-NTFS-Driver) · [reactos/reactos PR #9700](https://github.com/reactos/reactos/pull/9700) · [storytold/wordcraft](https://github.com/storytold/wordcraft)
+
+## 2026-10-24 12:03 (learn pass) — per-script environments, a 16-day-stale audio re-trend, and a corpus that tells you its weakest axis
+
+**uv + ty: the checker now evaluates each PEP 723 script against its own dependency set.** Astral's experimental
+integration has ty "use inline metadata to discover scripts throughout your project and leverage uv to prepare an
+environment for each script", so a single-file script is type-checked "against its own dependency declarations,
+**even if those dependencies or Python requirements differ from the project's**" — with the editor path
+backgrounding `uv` to serve completions, hover and definition from that environment, plus `uv check` doing sync
++ type-check in one command. Single-file scripts with their own pins are the default shape for agent-written
+Python, and checking one in the project's environment resolves imports that do not exist there — confident
+nonsense. Two operational notes: it is **experimental**, and "the ty binary is installed separately on first
+invocation", which a locked-down CI has to allow.
+
+**VoxCPM2's spec sheet is complete and its repository is 16 days cold.** `OpenBMB/VoxCPM` (**40.3k★ / 4,582
+forks / 153 open issues**): tokenizer-free TTS, 2B params, "over 2 million hours" of multilingual speech, 30
+languages + nine Chinese dialects, **48 kHz** output synthesized from 16 kHz references by an asymmetric AudioVAE
+V2 with built-in super-resolution, RTF "as low as ~0.3 on an NVIDIA RTX 4090" (~0.13 with Nano-vLLM / vLLM-Omni),
+built on a MiniCPM-4 backbone, code and weights **Apache-2.0** and explicitly commercial-use. Last push
+**2026-10-08**; the technical report (arXiv 2606.06928) is from June. So the trending signal is demand for the
+category — an Apache-2.0 alternative to this month's `minimax-community`-style releases — not a fresh shipment.
+
+**ziwei-doushu: a 56.6 GB corpus whose licence split and self-criticism are the engineering.** `Renhuai123/ziwei-doushu`
+(TypeScript 紫微斗数 engine): dataset **v4.0** (2026-10-15) = **674,976 charts × 13 dimensions = 8,774,688
+segments**, ~20.4B characters, **56.6 GB decompressed**, dates 1950–2026; against v3.0 that is **+30% charts and
++71% size**. **MIT code, CC BY 4.0 data in a separate `DATASET-LICENSE`** — the split done properly, unlike most
+corpora this feed sees. 6,975★ / 1,427 forks / **6 open issues**, and the README volunteers that 紫微斗数 "在六亲判断
+上存在一定局限", quoting the teacher's own "斗数批六亲本来就比较差一点". Generation volume is not validity: 8.77M
+interpretations measure output, not truth.
+
+Sources: [Astral — uv × ty](https://astral.sh/blog/uv-ty-integration) · [OpenBMB/VoxCPM](https://github.com/OpenBMB/VoxCPM) · [VoxCPM2 on HF](https://huggingface.co/openbmb/VoxCPM2) · [Renhuai123/ziwei-doushu](https://github.com/Renhuai123/ziwei-doushu)

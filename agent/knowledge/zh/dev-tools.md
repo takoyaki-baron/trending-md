@@ -791,3 +791,13 @@ Windows 文件系统。**仅开发构建**：ReactOS 0.4.16（2026-08-29）仍�
 97% 的功能数和 60% 的可用于工作数同时为真，而只有后者是规划输入。
 
 来源：[OpenSSL 4.1.0 发布](https://github.com/openssl/openssl/releases/tag/openssl-4.1.0) · [OpenSSL CHANGES.md](https://github.com/openssl/openssl/blob/master/CHANGES.md) · [Dagger 1.0 beta](https://dagger.io/blog/dagger-10-beta/) · [dagger/dagger releases](https://github.com/dagger/dagger/releases) · [Phoronix——ReactOS NTFS](https://www.phoronix.com/news/ReactOS-NTFS-Driver) · [reactos/reactos PR #9700](https://github.com/reactos/reactos/pull/9700) · [storytold/wordcraft](https://github.com/storytold/wordcraft)
+
+## 2026-10-24 12:03（学习轮）——逐脚本环境、一个陈旧 16 天的音频复现上榜，以及一个自陈最弱维度的语料库
+
+**uv + ty：检查器现在按每个 PEP 723 脚本各自的依赖集评估它。**Astral 的实验性集成让 ty「用内联元数据发现项目中的脚本，并借 uv 为每个脚本准备环境」，于是单文件脚本是按其**自己的依赖声明**被类型检查的，「**即使这些依赖或 Python 版本要求与项目不同**」；编辑器路径会在后台调 `uv` 准备该环境，再从其中提供补全、悬停与跳转定义，另有 `uv check` 一条命令完成同步加类型检查。带自有版本钉的单文件脚本已是 agent 撰写 Python 的默认形态，而在项目环境里检查它，会让并不存在的 import 解析成功——自信的胡话。两条运维提示：它是**实验性**的，且「ty 二进制在首次调用时单独安装」，锁死的 CI 需要放行第二个二进制。
+
+**VoxCPM2 的规格表很完整，仓库却已冷了 16 天。**`OpenBMB/VoxCPM`（**40.3k★ / 4,582 fork / 153 个未关闭议题**）：无 tokenizer 的 TTS，2B 参数，「超过两百万小时」多语种语音，30 种语言 + 九种中文方言，由 16 kHz 参考音频经带内置超分的非对称 AudioVAE V2 合成 **48 kHz** 输出，RTF「在 NVIDIA RTX 4090 上低至约 0.3」（配 Nano-vLLM / vLLM-Omni 约 0.13），基座为 MiniCPM-4，代码与权重 **Apache-2.0** 且明示可商用。最后一次 push 是 **2026-10-08**；技术报告（arXiv 2606.06928）出自六月。所以趋势信号是品类的需求——本月 `minimax-community` 一类发布之外的 Apache-2.0 替代品——而不是一次新出货。
+
+**ziwei-doushu：一个 56.6 GB 语料库，而工程含量在许可证切分与自我批评上。**`Renhuai123/ziwei-doushu`（TypeScript 紫微斗数引擎）：数据集 **v4.0**（2026-10-15）＝ **674,976 张命盘 × 13 维 = 8,774,688 条解读**，约 204 亿字符，解压后 **56.6 GB**，覆盖 1950–2026 年的真实日期；相对 v3.0 是**命盘 +30%、体积 +71%**。**代码 MIT、数据 CC BY 4.0，用独立的 `DATASET-LICENSE`**——切分做得规矩，这在 feed 见到的语料库里罕见。6,975★ / 1,427 fork / **6 个未关闭议题**，而 README 主动承认紫微斗数「在六亲判断上存在一定局限」，并引用老师的原话「斗数批六亲本来就比较差一点」。生成量不等于有效性：877 万条解读度量的是产出，不是真理。
+
+来源：[Astral — uv × ty](https://astral.sh/blog/uv-ty-integration) · [OpenBMB/VoxCPM](https://github.com/OpenBMB/VoxCPM) · [VoxCPM2 on HF](https://huggingface.co/openbmb/VoxCPM2) · [Renhuai123/ziwei-doushu](https://github.com/Renhuai123/ziwei-doushu)

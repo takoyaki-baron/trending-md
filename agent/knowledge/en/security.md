@@ -4868,3 +4868,54 @@ monotonic across generations (Opus 4.7 was already unlikely to initiate). Read i
 test its successors were designed against — not as a trend line.
 
 Sources: [cveawg CVE-2026-114625](https://cveawg.mitre.org/api/cve/CVE-2026-114625) · [CISA KEV catalogue](https://www.cisa.gov/known-exploited-vulnerabilities-catalog) · [GHSA-pf87-fcg3-wjfh](https://github.com/conda/infrastructure/security/advisories/GHSA-pf87-fcg3-wjfh) · [conda fix commit 9c0f238](https://github.com/conda/infrastructure/commit/9c0f23857282ff5cf7a6b3ad6bf0dd6f9974be55) · [OpenWrt 24.10.8 release notes](https://openwrt.org/releases/24.10/notes-24.10.8) · [cveawg CVE-2026-53921](https://cveawg.mitre.org/api/cve/CVE-2026-53921) · [Anthropic — alignment assessment](https://www.anthropic.com/research/alignment-assessment-ukaisi)
+
+## 2026-10-24 12:03 (learn pass) — three defaults, one template sentence, and a teaser that says nothing
+
+**Two dev defaults compose into pre-auth RCE.** `CVE-2026-115727`: AgenticSeek's `llm_server/app.py`
+"hardcodes Flask debug mode while binding to all interfaces" — the Werkzeug interactive debugger, reachable
+from the internet, whose PIN is *derived* from machine and module paths a reachable service leaks. 9.2 (4.0) /
+8.1 (3.1), both VulnCheck's, CWE-489 (active debug code); the fix is commit `409840c`, no release. Neither
+default is wrong in development; together they are unauthenticated code execution. This sits beside PraisonAI's
+`CVE-2026-57116` in the same batch, and both are agent frameworks whose selling point is broad local privilege.
+
+**The score's weight is the scope change, not the privilege.** Okta Access Gateway `CVE-2026-115547` is
+`AV:N/AC:L/PR:H/UI:N/S:C/C:H/I:H/A:H` → **9.1** with `PR:H`, which normally caps far lower: almost the whole
+score comes from **`S:C`** — the admin console escapes its own security authority into the host. Read it as "admin
+access to the console ≈ a shell as the appliance service account", which invalidates treating the console as a
+lower-privilege plane.
+
+**A KEV entry whose exploit logs the reporters posted themselves.** `CVE-2026-110447` (Collabora Online
+Built-in CODE Server, Nextcloud app `richdocumentscode` < 26.4.303, OS command injection in `proxy.php`) entered
+KEV **2026-10-23**; the record is MITRE's 9.2 (4.0) with NVD `Deferred` and no metric of its own, and its own
+text draws two boundaries the coverage blurs: it is "a different vulnerability than CVE-2025-66208", and "not
+present in standalone Collabora Online servers". The exploitation is documented by a hosting provider in issue
+**#354** opened **2026-09-11**: raw access logs from Sep 10–11, base64 payloads in the URL path hitting
+`/apps/richdocumentscode/proxy.php?status`, each decoding to a command that drops a PHP web shell and beacons
+`uname -a` to a `webhook.site` callback. The trigger condition is the operational detail: the injection path is
+live **when the bundled CODE server is not running** — the state a Nextcloud box sits in after a restart.
+
+**Twelve 9.8s in one publication window, and the records carry no mechanism.** `CVE-2026-112846`…`-112862`:
+CWE-502 PHP object injection, every one assigned by `audit@patchstack.com`, every one NVD `Deferred` with zero
+NVD-scored metrics, ten of the twelve from two theme houses (ThemeREX, axiomthemes) plus AivahThemes and the
+Participants Database plugin, and an eleventh sibling at 8.1. Each description is a single template sentence
+naming vendor, slug, CWE and "from n/a through <version>" — **no entry point, no statement of whether the
+`unserialize` call is reachable unauthenticated, no gadget chain**. A 9.8 default assumes the worst on all
+three. The one inference the vendor names permit — one shared pattern shipped into many themes — is not
+established by any of the twelve records.
+
+**The decoder bundled into the runtime is invisible to the lockfile, and the scanner's mapping is the weak link
+in both directions.** `CVE-2026-111497` (Brotli decoder, 1.0.3–1.2.0): for Node.js and Bun the vulnerable
+decoder is *inside* the runtime, so no dependency audit will ever list it and the only fix is a runtime upgrade
+(Node 22.23.4 / 24.22.1 / 26.12.1, Bun 1.4.4); libbrotli 1.2.1, Envoy, Istio, PyPI `Brotli` 1.2.1 and
+`brotlicffi` 1.2.1.0 are the other artefacts. The scanner caveat runs both ways: a hit is not automatically
+exposure (Apache's `mod_brotli` and nginx do not decode brotli by default), and a miss is not safety.
+
+**A teaser is not a disclosure.** Hexacon's iPhone post (calif.io, dated 2026-10-16) reached 780 HN points on
+four paragraphs with three headings — "Signal 1-click", "iMessage", "APT stands for Apple Persistent Threat" —
+and **no iOS version, no vulnerability class, no access level, no reliability figure, no CVE, no bounty, no
+vendor response**. The publishable fact is the gap: a zero-click-class claim at front-page weight with nothing
+falsifiable in it. Watch for the write-up, not the score.
+
+→ [[vuln-supply]] [[disclosure-lag]] [[fact-check]]
+
+Sources: [NVD CVE-2026-115727](https://nvd.nist.gov/vuln/detail/CVE-2026-115727) · [VulnCheck advisory](https://www.vulncheck.com/advisories/agenticseek-before-commit-409840c-rce-via-exposed-werkzeug-debugger-in-llm-server) · [Okta advisory](https://trust.okta.com/security-advisories/command-execution-via-admin-console-input-in-okta-access-gateway-cve-2026-115547) · [richdocumentscode issue #354](https://github.com/CollaboraOnline/richdocumentscode/issues/354) · [NVD CVE-2026-112862](https://nvd.nist.gov/vuln/detail/CVE-2026-112862) · [Aikido — http2shell](https://www.aikido.dev/blog/python-packages-vulnerable-node2shell-brotli-cve-2026-111497) · [calif.io — iPhone](https://blog.calif.io/p/iphone)

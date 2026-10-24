@@ -153,6 +153,24 @@
  *     The CVE record lists all six commits (three fixes × master + the 25.12 cherry-picks), so
  *     "the record's references" means "the security release's commits", not "this CVE's commits".
  *
+ * WHERE THE RANGE CAME FROM — the census (added 2026-10-24 12:38). Every verdict above rests on a
+ * version range, and the range arrives from one of six places that are NOT equally trustworthy:
+ *   `nvd-cpe`            NVD's own CPE configuration — machine-readable, but usually empty for this
+ *                        cohort (a CVE with no CPE match has no range at NVD at all)
+ *   `vendor-advisory`    the GHSA page the record's references point at — the vendor's own cells
+ *   `advisory-db`        `/advisories/GHSA-…` found by CVE search — a THIRD PARTY's ingest, not the
+ *                        vendor's page, and the only source for Keycloak's CVE-2026-18963
+ *   `advisory-api`       `api.github.com/advisories?cve_id=…`'s `vulnerable_version_range`
+ *   `record-prose`       a sentence in NVD's description — parsed, so the weakest usable source
+ *   `operator-supplied`  `--range`
+ * `--census` prints that tally over a whole `--ids` list instead of one record at a time, and — the
+ * part that matters — **re-runs the same IDs with `api.github.com` deliberately unavailable**, reusing
+ * the NVD records it already fetched so the second pass costs no NVD budget. A verdict that changes
+ * between the two passes is *quota-dependent*, and naming those is the difference between a check and
+ * a coin flip: on 2026-10-23 Trigger.dev's rescue bound lived only in the advisory object, so an
+ * hourly quota decided whether the tool answered 1d or refused. `--no-github` runs only the degraded
+ * pass, for when the quota really is gone.
+ *
  * Usage:
  *   node disclosure-lag.mjs --ids CVE-…,CVE-… --pypi vllm
  *   node disclosure-lag.mjs --ids CVE-… --repo triggerdotdev/trigger.dev
@@ -162,6 +180,8 @@
  *   node disclosure-lag.mjs --ids CVE-… --repo google/brotli --artifact package
  *   node disclosure-lag.mjs --ids CVE-… --range "26.0.0-26.4.14, 26.5.0-26.6.5" --repo keycloak/keycloak
  *   node disclosure-lag.mjs --ids CVE-… --release-notes <url>[,<url>…]   # the announcement axis
+ *   node disclosure-lag.mjs --ids CVE-…,CVE-… --repo owner/repo --census # range-source census
+ *   node disclosure-lag.mjs --ids CVE-… --census --no-github            # graded mode only
  *   node disclosure-lag.mjs --selftest                       # parsers + the artifact + notes verdicts
  *
  * Cost: NVD is 5 req/30s unauthenticated (NVD_API_KEY → 50/30s); calls are paced. api.github.com is
@@ -194,6 +214,14 @@ const FIX_REF = argOf('--fix-ref', null);
 const DEBIAN = argOf('--debian', null);
 const RANGE_OVERRIDE = argOf('--range', null);
 const SELFTEST = args.includes('--selftest');
+/* The range-source census: tally where each range came from, then re-run with the API gone. */
+const CENSUS = args.includes('--census');
+const NO_GH = args.includes('--no-github');
+/* One switch, flipped between passes. It blocks ONLY api.github.com — github.com HTML (the
+   advisory page, `releases.atom`, the Advisory Database) stays readable, because the whole point
+   of the degraded pass is to show which verdicts the quota owns and which survive on HTML alone. */
+let GH_UNAVAILABLE = NO_GH;
+const GH_API = 'https://api.github.com';
 const ARTIFACT_MODES = ['commit', 'package', 'firmware', 'image'];
 if (ARTIFACT && !ARTIFACT_MODES.includes(ARTIFACT)) {
   console.error(`--artifact must be one of ${ARTIFACT_MODES.join('|')} (got "${ARTIFACT}")`);
@@ -311,6 +339,9 @@ const inAnyRange = (v, ranges) => (ranges?.length ? ranges.some(r => inRange(v, 
 
 /* ── fetchers ── */
 async function getJson(url, headers = {}) {
+  /* The deliberate 403 has the SAME shape as the real one (status 403, body null), so every call
+     site's existing degraded path is exercised rather than a parallel mock of it being tested. */
+  if (GH_UNAVAILABLE && url.startsWith(GH_API)) return { status: 403, body: null, blocked: true };
   const res = await fetch(url, { headers: { ...UA, ...headers } });
   if (res.status === 404) return { status: 404, body: null };
   if (res.status === 403 || res.status === 429) return { status: res.status, body: null };
@@ -1112,6 +1143,23 @@ if (SELFTEST) {
   eq('matrix: every naming release is reported, not the first page listed', multi.versions, ['24.10.8', '25.12.5']);
   eq('matrix: the silent later page is named, not dropped', /NOT on 25\.12\.6/.test(multi.notes.join(' ')), true);
   eq('an unreadable page is not an absent one', notesVerdict({ pages: [{ url: 'u', status: 'JS gate — x', names: false }], cell: 'None', cveId: 'CVE-2026-53921' }).state, 'notes-unreadable');
+  /* ── the range-source census: six buckets, and the same URL shape can be two of them ── */
+  eq('census: CPE', rangeBucket({ sources: { range: 'nvd-cpe' } }), 'nvd-cpe');
+  eq('census: the vendor page from the record references', rangeBucket({ sources: { range: 'https://github.com/keycloak/keycloak/security/advisories/GHSA-aaaa-bbbb-cccc' } }), 'vendor-advisory');
+  eq('census: the same GHSA shape, but the Advisory Database', rangeBucket({ sources: { range: 'https://github.com/advisories/GHSA-aaaa-bbbb-cccc' } }), 'advisory-db');
+  eq('census: the quota-bearing API range', rangeBucket({ sources: { range: 'github advisory GHSA-aaaa-bbbb-cccc' } }), 'advisory-api');
+  eq('census: prose', rangeBucket({ sources: { range: 'record prose' } }), 'record-prose');
+  eq('census: operator', rangeBucket({ sources: { range: 'operator-supplied (--range)' } }), 'operator-supplied');
+  eq('census: no range at all is its own bucket, not prose', rangeBucket({ sources: {} }), 'none');
+  const qn = [{ id: 'CVE-1', state: 'fix-then-record', lagDays: 1, sources: { range: 'github advisory GHSA-x' } },
+    { id: 'CVE-2', state: 'no-fix', lagDays: null, sources: { range: 'https://github.com/o/r/security/advisories/GHSA-y' } }];
+  const qd = [{ id: 'CVE-1', state: 'indeterminate', lagDays: null, sources: {} },
+    { id: 'CVE-2', state: 'no-fix', lagDays: null, sources: { range: 'https://github.com/o/r/security/advisories/GHSA-y' } }];
+  eq('census: a verdict that needs the API is named as quota-dependent', quotaDelta(qn, qd).map(m => m.id), ['CVE-1']);
+  eq('census: the delta names what was lost, not just that something changed',
+    quotaDelta(qn, qd)[0].rangeAfter, 'none');
+  eq('census: the survivor is not reported', quotaDelta(qn, qd).some(m => m.id === 'CVE-2'), false);
+  eq('census: identical passes produce no quota claims', quotaDelta(qn, qn), []);
   let pass = 0;
   for (const c of cases) {
     if (c.ok) pass++;
@@ -1126,7 +1174,7 @@ if (!IDS.length && !TRACKERS.length) {
   console.log('nothing to do: pass --ids CVE-…,CVE-… and/or --tracker ZDI-CAN-…' +
     ' [--repo owner/repo | --pypi pkg] [--artifact commit|package|firmware|image]' +
     ' [--fix-ref <commit|pull url>] [--debian <srcpkg>] [--range "<expr>"] [--json] [--selftest]' +
-    ' [--release-notes <url>[,<url>…]]');
+    ' [--release-notes <url>[,<url>…]] [--census [--no-github]]');
   process.exit(0);
 }
 
@@ -1137,15 +1185,16 @@ try {
 try {
   repoAdv = REPO ? await repoAdvisories(REPO) : null;
 } catch (e) { timelineError = timelineError || e.message; }
-const sourceName = PYPI ? `pypi:${PYPI}`
+let sourceName = PYPI ? `pypi:${PYPI}`
   : (REPO ? `github:${REPO}${timeline?.via === 'atom' ? ' via releases.atom (api.github.com rate-limited)' : ''}` : null);
 if (timelineError && !JSON_OUT) console.log(`  ⚠ ${timelineError}\n`);
 
 if (!JSON_OUT && REPO && repoAdv) {
   const withCve = repoAdv.filter(a => a.cve).length;
   const dates = repoAdv.map(a => a.date).filter(Boolean).sort();
-  console.log(`repo ${REPO}: ${repoAdv.length} published advisories, ${dates[0]?.slice(0, 10)} → ${dates.at(-1)?.slice(0, 10)}; ` +
-    `${withCve}/${repoAdv.length} carry a CVE id`);
+  console.log(`repo ${REPO}: ${repoAdv.length} published advisories` +
+    (dates.length ? `, ${dates[0].slice(0, 10)} → ${dates.at(-1).slice(0, 10)}` : ' (none in this repo — the advisory lives elsewhere)') +
+    `; ${withCve}/${repoAdv.length} carry a CVE id`);
   if (withCve < repoAdv.length) {
     console.log(`  ⚠ ${repoAdv.length - withCve} advisories are invisible to a CVE-keyed lookup — repo-level fact, not a per-CVE join`);
   }
@@ -1153,21 +1202,31 @@ if (!JSON_OUT && REPO && repoAdv) {
 }
 
 /* The fix ref is resolved ONCE — it is a property of the advisory, not of each id. */
-const fixRefResolved = FIX_REF ? await fixRefDate(FIX_REF) : null;
+let fixRefResolved = FIX_REF ? await fixRefDate(FIX_REF) : null;
 if (FIX_REF && !fixRefResolved && !JSON_OUT) console.log(`  ⚠ could not resolve a date from --fix-ref ${FIX_REF}\n`);
 
-const results = [];
-let first = true;
-for (const id of IDS) {
-  if (!first) await sleep(NVD_PACE);
-  first = false;
-  let record = null, advisories = null, sources = {};
-  try {
-    record = await nvdRecord(id);
-  } catch (e) {
-    results.push({ id, state: 'error', notes: [e.message] });
-    continue;
-  }
+/** Probe every `--ids` entry once. `nvdCache` is what makes the degraded pass affordable: the NVD
+ *  record does not depend on GitHub at all, so a census re-run reuses it instead of spending
+ *  6.5s/record of NVD pacing to re-learn the same thing. */
+async function probeAll({ nvdCache = null } = {}) {
+  const results = [];
+  let first = true;
+  for (const id of IDS) {
+    const cached = nvdCache && nvdCache.has(id);
+    if (!first && !cached) await sleep(NVD_PACE);
+    first = false;
+    let record = null, advisories = null, sources = {};
+    if (cached) {
+      record = nvdCache.get(id);
+    } else {
+      try {
+        record = await nvdRecord(id);
+      } catch (e) {
+        results.push({ id, state: 'error', notes: [e.message] });
+        continue;
+      }
+      if (nvdCache) nvdCache.set(id, record);
+    }
   advisories = await globalAdvisory(id);
   let advisoriesFromRefs = record ? await advisoryFromRefs((record.references || []).map(r => r.url)) : null;
   /* Order: the advisory the record links (the vendor's own page) → the global API → the Advisory
@@ -1175,7 +1234,7 @@ for (const id of IDS) {
      ingest, and the database hit is labelled. */
   if (!advisoriesFromRefs && !advisories && record) {
     advisoriesFromRefs = await advisoryFromDatabase(id);
-    if (advisoriesFromRefs && !JSON_OUT) console.log(`  · ${id}: advisory found only in the GitHub Advisory Database (${advisoriesFromRefs.ghsa}) — not in the record's references\n`);
+    if (advisoriesFromRefs && !JSON_OUT && !CENSUS) console.log(`  · ${id}: advisory found only in the GitHub Advisory Database (${advisoriesFromRefs.ghsa}) — not in the record's references\n`);
   }
   /* Merge, do not pick: the referenced advisory is the only source of a usable range, and the
      GLOBAL advisory's summary is often the only place the human bound ("through 4.7.6") appears.
@@ -1233,13 +1292,126 @@ for (const id of IDS) {
     }
   }
   results.push(cls);
+  }
+
+  for (const t of TRACKERS) {
+    results.push(classify({ id: t, record: null, nvdRanges: [], advisory: null, timeline, repoAdv, trackerId: t }));
+  }
+  return results;
 }
 
-for (const t of TRACKERS) {
-  results.push(classify({ id: t, record: null, nvdRanges: [], advisory: null, timeline, repoAdv, trackerId: t }));
+/* ── the range-source census ──
+   Six buckets, ordered from the machine-readable end to the operator's end. The label is derived
+   from what `classify` stamped, not re-inferred, so the census cannot disagree with the single-record
+   output. `fromDatabase` is the distinction that only that field carries: the same GHSA URL shape
+   means "the vendor's page the record links" or "a third party's ingest", and those are different
+   provenance claims about the same range. */
+const RANGE_BUCKETS = [
+  ['nvd-cpe', 'NVD CPE configuration'],
+  ['vendor-advisory', "the record's own advisory page"],
+  ['advisory-db', 'GitHub Advisory Database (third-party ingest)'],
+  ['advisory-api', 'api.github.com/advisories (quota-bearing)'],
+  ['record-prose', 'parsed from the record description'],
+  ['operator-supplied', '--range'],
+  ['none', 'no range attributable'],
+];
+
+function rangeBucket(r) {
+  if (!r.sources || !r.sources.range) return 'none';
+  const s = r.sources.range;
+  if (s === 'nvd-cpe') return 'nvd-cpe';
+  if (s === 'record prose') return 'record-prose';
+  if (s === 'operator-supplied (--range)') return 'operator-supplied';
+  if (/^github advisory GHSA-/.test(s)) return 'advisory-api';
+  if (/^https?:\/\/github\.com\/advisories\//.test(s)) return 'advisory-db';
+  return 'vendor-advisory';
+}
+
+/** The diff between the two passes. A state that moves when api.github.com disappears is
+ *  quota-dependent: the verdict was never a property of the record alone. */
+function quotaDelta(normal, degraded) {
+  const byId = new Map(degraded.map(r => [r.id, r]));
+  const moved = [];
+  for (const r of normal) {
+    const d = byId.get(r.id);
+    if (!d) continue;
+    const before = r.temporalState || r.state;
+    const after = d.temporalState || d.state;
+    const bBefore = rangeBucket(r), bAfter = rangeBucket(d);
+    if (before !== after || bBefore !== bAfter) {
+      moved.push({ id: r.id, before, after, rangeBefore: bBefore, rangeAfter: bAfter,
+        lagBefore: r.lagDays ?? null, lagAfter: d.lagDays ?? null });
+    }
+  }
+  return moved;
+}
+
+function censusReport(normal, degraded) {
+  const tally = {};
+  for (const r of normal) (tally[rangeBucket(r)] = (tally[rangeBucket(r)] || 0) + 1);
+  const lines = [];
+  lines.push(`range source (${normal.length} record${normal.length === 1 ? '' : 's'})`);
+  for (const [key, label] of RANGE_BUCKETS) {
+    const n = tally[key] || 0;
+    if (!n) continue;
+    const ids = normal.filter(r => rangeBucket(r) === key).map(r => r.id);
+    lines.push(`  ${key.padEnd(17)} ${String(n).padStart(2)}  ${label}`);
+    lines.push(`  ${' '.repeat(17)}     ${ids.join(', ')}`);
+  }
+  const states = normal.reduce((m, r) => (m[r.state] = (m[r.state] || 0) + 1, m), {});
+  lines.push('');
+  lines.push('states: ' + (Object.entries(states).map(([k, v]) => `${k}×${v}`).join(', ') || '(none)'));
+  /* A state column of `indeterminate×N` with no timeline is not a finding about the records: the
+     tool refuses to derive a lag from a record date alone, by design. Say so instead of letting the
+     tally read as "four broken records". */
+  if (!sourceName) {
+    lines.push('  (no release timeline — pass --repo/--pypi for a meaningful state column; the range');
+    lines.push('   tally is unaffected, and the delta below is a provenance delta in that case)');
+  }
+  if (degraded) {
+    const moved = quotaDelta(normal, degraded);
+    lines.push('');
+    if (!moved.length) {
+      lines.push(`quota-dependent verdicts: none — all ${normal.length} survive without api.github.com`);
+    } else {
+      lines.push(`quota-dependent verdicts: ${moved.length}/${normal.length} change when api.github.com is unavailable`);
+      for (const m of moved) {
+        const lag = (b, a) => `${b ?? '—'} → ${a ?? '—'}`;
+        const rng = m.rangeBefore === m.rangeAfter ? m.rangeBefore : `${m.rangeBefore} → ${m.rangeAfter}`;
+        lines.push(`  · ${m.id}  ${lag(m.before, m.after)}  [range ${rng}]`);
+      }
+      lines.push('  a verdict that flips on a quota is not a check — re-run before quoting, or pin --range');
+    }
+  }
+  return lines.join('\n');
 }
 
 /* ── output ── */
+/* The census runs the ordinary pass, then the degraded one on the SAME NVD records. With
+   `--no-github` only the degraded pass runs, because the quota is already gone and a "normal" pass
+   would just be the same numbers under a misleading label. */
+let results, degradedResults = null;
+if (CENSUS && !NO_GH) {
+  const nvdCache = new Map();
+  results = await probeAll({ nvdCache });
+  GH_UNAVAILABLE = true;
+  degradedResults = await probeAll({ nvdCache });
+  GH_UNAVAILABLE = false;
+} else {
+  results = await probeAll();
+}
+
+if (CENSUS) {
+  if (JSON_OUT) {
+    console.log(JSON.stringify({ source: sourceName, checked: new Date().toISOString(),
+      census: results.map(r => ({ id: r.id, state: r.state, rangeSource: rangeBucket(r) })),
+      quotaDependent: degradedResults ? quotaDelta(results, degradedResults) : null }, null, 1));
+  } else {
+    console.log(censusReport(results, degradedResults));
+  }
+  process.exit(0);
+}
+
 if (JSON_OUT) {
   console.log(JSON.stringify({ source: sourceName, checked: new Date().toISOString(), results }, null, 1));
 } else {

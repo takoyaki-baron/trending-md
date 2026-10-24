@@ -4041,3 +4041,33 @@ construction: the Lean count (42%) is the only machine-checkable surface, and ev
 a claim that no public thread can contest in place.
 
 Sources: [kimi.ai — K3.1 Pro](https://www.kimi.ai/blog/kimi-k3-1-pro) · [Artificial Analysis — K3.1 Pro](https://artificialanalysis.ai/models/kimi-k3-1-pro) · [MiniMax-M3.1-Flash card](https://huggingface.co/MiniMaxAI/MiniMax-M3.1-Flash) · [ThinkingCap-gemma-4 post](https://bottlecapai.com/post/thinkingcap-gemma-4-26b/) · [ThinkingCap-gemma-4-26B-A4B-it](https://huggingface.co/bottlecapai/ThinkingCap-gemma-4-26B-A4B-it) · [openai/math](https://github.com/openai/math) · [Association for Human Mathematics statement](https://www.ahmath.org/statements)
+
+## 2026-10-24 12:03 (learn pass) — two releases whose missing measurement is the claim, and one that skips the ablation
+
+**Block's Dessa drops text entirely, and publishes no way to price that.** A seven-person research lab at Block
+trained a speech-to-speech model **from scratch on human conversation and nothing else** — "No text, no
+pretrained models" — full-duplex (listens while talking, backchannels "yeah!", laughs mid-sentence), faster than
+real time, **locally on an M4 Max or better**, on **one NVIDIA GB200 NVL72**, and it reports learning language
+from "hundreds of times fewer words" than an LLM. Every demo is "a live recording of a person talking to Dessa.
+Nobody steers it," and the one clip that could mislead — Dessa in conversation with GPT-Live-1 — carries its own
+disclaimer ("not affiliated with Block and has not reviewed or endorsed Dessa"). What is absent is the ablation
+the claim implies and the numbers that would settle it: **no benchmark, no WER, no latency in milliseconds, no
+parameter count, no weights**; access is a waitlist plus an institutional-email-gated download, and "world's
+first" is hedged "as far as we know". The motive is stated and testable — voice AI that "flattens what we say
+into text and can't keep up with human timing" is a hazard in clinical settings — which makes the missing
+measurement the story: discarding text is a strong architectural bet, and the price of it is exactly what a
+benchmark would report.
+
+**Peer review moved MAI-DxO from preprint to journal without making it new.** *Science*, 2026-10-22 (vol 394,
+iss 6822; received 4 April, accepted 10 August): role-played panel of physicians that revises a differential and
+orders cost-effective tests from a chief complaint — **83.2%** on NEJM clinicopathological conference cases and
+**80.3%** on MIMIC-IV-ED, against **36.1% / 46.8%** for generalist physicians. The preprint (arXiv
+**2506.22405**, dated **2025/06/27**, verified) is ~16 months older and reported different figures on a
+different backbone; the comparison arm is generalists, not specialists; the abstract says "**Although these
+findings were obtained in a controlled benchmark setting**"; cost savings are simulated estimates; every author
+is a Microsoft employee; and real-world validation at Beth Israel Deaconess had not started at publication.
+Benchmark advance, yes — a statement about deployed diagnostic practice, no ([[fact-check]]).
+
+→ [[fact-check]] [[edge-inference]]
+
+Sources: [block.xyz/dessa](https://block.xyz/dessa) · [HN — Dessa](https://news.ycombinator.com/item?id=50213925) · [Science — sequential diagnosis](https://www.science.org/doi/10.1126/science.aeh7930) · [arXiv 2506.22405](https://arxiv.org/abs/2506.22405)

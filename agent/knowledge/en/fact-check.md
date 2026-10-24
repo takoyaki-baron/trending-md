@@ -836,3 +836,48 @@ which document you cite when the question is "what do I have to do?" — the cam
 be, the vendor page tells you which bucket you are in.
 
 Sources: [HKUDS/CLI-Anything](https://github.com/HKUDS/CLI-Anything) · [ruvnet/ruflo](https://github.com/ruvnet/ruflo) · [npm ruflo](https://registry.npmjs.org/ruflo) · [openai/math](https://github.com/openai/math) · [openai/math commits](https://github.com/openai/math/commits/main) · [Keep Android Open](https://keepandroidopen.org/) · [Android developer verification](https://developer.android.com/developer-verification)
+
+### 2026-10-24 12:03 (learn pass) — an absence that inverted in a day, and four dates that are not the event
+
+**1. The perishable absence, caught inside 24 hours.** Aikido's http2shell post states that "as of October 23,
+advisory databases don't map the CVE to either PyPI package, so pip-audit, Dependabot, and Safety won't flag
+vulnerable versions yet." Queried today through OSV: a package query for **`Brotli 1.2.0`** *and* for
+**`brotlicffi`** both return **`GHSA-9v8h-qqgm-4m35`** ("also affects the PyPI Brotli package"), whose
+`modified` is 2026-10-23T19:15Z and `github_reviewed_at` 2026-10-23T19:08Z, and the CVE's own OSV entry carries
+the aliases **`PYSEC-2026-4322` / `PYSEC-2026-4323`**. So the mapping existed — partly *before* the sentence's
+"as of" date — and the claim was stale on arrival. The transferable part is not "Aikido was wrong": the
+*reader-facing* rule survives (scanner silence is not safety), while the *asserted fact* about the databases
+expired same-day. This is the fourth perishable-absence class this file has recorded, and the first where the
+inversion was visible in under a day: re-run the query, then write the sentence, then timestamp the sentence.
+
+**2. Four dates on one CVE, and only one of them is the event.** For `CVE-2026-111497`: OpenAI found it in
+**February**; Brotli's source was fixed then without a release ("wasn't recognized as a security issue at the
+time"); Node.js published the CVE on **2026-10-21**; NVD's `published` is **2026-10-22**. A "new critical"
+headline is a five-month-old bug receiving paperwork. Same shape in this batch's other records: PraisonAI's
+advisory is **2026-06-18** while the record is **10-23** ([[disclosure-lag]]); gose's advisory is 08-31 while
+the record is 10-23.
+
+**3. A teaser is not a disclosure.** Hexacon's iPhone post earned 780 HN points for three headings and no
+version, class, access level, CVE or vendor response ([[security]]). The check that matters: *what would falsify
+this?* — if the page contains nothing that could, the item's publishable content is the absence, stated as an
+absence, not the demo titles.
+
+**4. Peer review is not recency.** Microsoft's MAI-DxO reached *Science* on 2026-10-22 (vol 394 iss 6822;
+received 4 April, accepted 10 August) with **83.2% NEJM-CPC / 80.3% MIMIC-IV-ED against 36.1% / 46.8% for
+generalist physicians** — but the arXiv preprint (**2506.22405**) is dated **2025/06/27** (verified on the abs
+page), ~16 months earlier, with different figures on a different backbone. Publication moved a claim from
+"preprint" to "peer-reviewed"; it did not make it new, and the comparison arm is *generalists*, not the
+specialists who normally take these cases. The paper's own abstract carries the caveat the coverage drops:
+"**Although these findings were obtained in a controlled benchmark setting**", and the press adds that cost
+savings are "estimated costs in simulated cases", that every author is a Microsoft employee, and that real-world
+validation has not started. **The rule: when a famous claim is published, check the preprint date before writing
+"new" — and check which arm the delta is against.**
+
+**5. The count that matters is the rejection count.** Two artifacts in this batch are credible for the same
+reason ([[agent-stack]], [[frontier-models]]): the Enron Brain publishes 37 quotes dropped for not being in the
+message, 25 of 540 phase verdicts failing an audit, and a 4.0% overlap between its development and published
+mailbox sets; Trail of Bits publishes 21 regressions from 130+ merged agent-authored PRs, the **36% precision**
+of the agent that found them (21 confirmed among 58 candidates in a single run), and that "none broke a security
+protection". A pipeline that prints its rejects is auditable; one that prints only its output is not.
+
+Sources: [Aikido — http2shell](https://www.aikido.dev/blog/python-packages-vulnerable-node2shell-brotli-cve-2026-111497) · [OSV CVE-2026-111497](https://api.osv.dev/v1/vulns/CVE-2026-111497) · [Node.js October 2026 security releases](https://nodejs.org/en/blog/vulnerability/october-2026-security-releases) · [arXiv 2506.22405](https://arxiv.org/abs/2506.22405) · [Science — sequential diagnosis](https://www.science.org/doi/10.1126/science.aeh7930) · [Trail of Bits — what else did it change](https://blog.trailofbits.com/2026/10/21/your-ai-agent-fixed-the-bug-but-what-else-did-it-change/) · [The Enron Brain — methodology](https://www.thisandthat.chat/enron/methodology.html)

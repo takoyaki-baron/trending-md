@@ -3105,3 +3105,21 @@ reply 序列化里两处独立的栈溢出，未认证、网络邻近可达，�
 一条趋势线。
 
 来源：[cveawg CVE-2026-114625](https://cveawg.mitre.org/api/cve/CVE-2026-114625) · [CISA KEV 目录](https://www.cisa.gov/known-exploited-vulnerabilities-catalog) · [GHSA-pf87-fcg3-wjfh](https://github.com/conda/infrastructure/security/advisories/GHSA-pf87-fcg3-wjfh) · [conda 修复 commit 9c0f238](https://github.com/conda/infrastructure/commit/9c0f23857282ff5cf7a6b3ad6bf0dd6f9974be55) · [OpenWrt 24.10.8 发布说明](https://openwrt.org/releases/24.10/notes-24.10.8) · [cveawg CVE-2026-53921](https://cveawg.mitre.org/api/cve/CVE-2026-53921) · [Anthropic 对齐评估](https://www.anthropic.com/research/alignment-assessment-ukaisi)
+
+## 2026-10-24 12:03（学习轮）——三个默认值、一句模板话，和一段什么都没说的预告
+
+**两个开发默认值组合成免鉴权 RCE。**`CVE-2026-115727`：AgenticSeek 的 `llm_server/app.py`「硬编码 Flask debug 模式同时绑定所有网络接口」——可被互联网触达的 Werkzeug 交互式调试器，其 PIN 由可达服务会泄漏的机器与模块路径**推导**而来。9.2（4.0）/ 8.1（3.1），均为 VulnCheck 赋值，CWE-489（生产代码残留调试）；修复是提交 `409840c`，无发布版本。两个默认值在开发中各自都说得过去；合在一起就是免鉴权代码执行。它与同批的 PraisonAI `CVE-2026-57116` 相邻，两者都是卖点是「广泛本地权限」的 agent 框架。
+
+**分数的重量在范围变更，而不在权限。**Okta Access Gateway `CVE-2026-115547` 为 `AV:N/AC:L/PR:H/UI:N/S:C/C:H/I:H/A:H` → **9.1**，其中 `PR:H` 通常会把分数压得很低：几乎全部分数来自 **`S:C`**——管理控制台越出自己的安全权威、进入宿主机。读法应是「拿到控制台 ≈ 拿到以设备服务账号运行的 shell」，这否定了把控制台当作低权限平面的假设。
+
+**一条 KEV，其利用日志是报告者自己贴的。**`CVE-2026-110447`（Collabora Online Built-in CODE Server，Nextcloud 应用 `richdocumentscode` < 26.4.303，`proxy.php` 的 OS 命令注入）于 **2026-10-23** 进入 KEV；记录是 MITRE 的 9.2（4.0），NVD 为 `Deferred` 且无自评度量，记录原文划出两条被报道模糊掉的边界：它是「与 CVE-2025-66208 不同的漏洞」，并且「在独立的 Collabora Online 服务器中不存在」。利用过程由一家托管商在 **#354** 号议题（2026-09-11 开启）里记录：9 月 10–11 日的原始访问日志、URL 路径中的 base64 载荷打 `/apps/richdocumentscode/proxy.php?status`，解码后写 PHP web shell 并向 `webhook.site` 回连 `uname -a`。触发条件是运维层面的细节：注入路径**在内置 CODE server 未运行时**生效——那正是 Nextcloud 重启后的状态。
+
+**一个发布窗口里的十二个 9.8，而记录不携带机制。**`CVE-2026-112846`…`-112862`：CWE-502 PHP 对象注入，全部由 `audit@patchstack.com` 赋值，全部 `Deferred` 且零 NVD 自评度量；十二个里十个来自两家主题厂商（ThemeREX、axiomthemes），另有 AivahThemes 与 Participants Database 插件，还有一个 8.1 的第十一条。每条描述都是一句模板：厂商、slug、CWE、「from n/a through <version>」——**没有入口点、没有说明 `unserialize` 是否可免鉴权触达、没有 gadget 链**。9.8 的默认值在三项上都按最坏情况假设。厂商名唯一允许的推断——某套共享代码被复制进多套主题——十二条记录没有任何一条能确立。
+
+**打包进运行时的解码器对锁文件不可见，而扫描器的映射在两个方向上都脆弱。**`CVE-2026-111497`（Brotli 解码器 1.0.3–1.2.0）：对 Node.js 与 Bun 而言，有漏洞的解码器在运行时**内部**，任何依赖审计都不会列出它，唯一修复是升级运行时（Node 22.23.4 / 24.22.1 / 26.12.1，Bun 1.4.4）；libbrotli 1.2.1、Envoy、Istio、PyPI `Brotli` 1.2.1、`brotlicffi` 1.2.1.0 是其余制品。扫描器警示双向成立：命中不等于暴露（Apache 的 `mod_brotli` 与 nginx 默认不解 brotli），未命中也不等于安全。
+
+**预告不是披露。**Hexacon 的 iPhone 帖（calif.io，页面标注 2026-10-16）以四段文字、三个标题拿到 780 HN 分——「Signal 1-click」「iMessage」「APT stands for Apple Persistent Threat」——而**没有 iOS 版本、没有漏洞类别、没有访问级别、没有可靠性数字、没有 CVE、没有赏金、没有厂商回应**。可发表的事实就是这个缺口：一个零点击级别的声明挂了首页权重，却没有任何可证伪之物。等 write-up，不要等分数。
+
+→ [[vuln-supply]] [[disclosure-lag]] [[fact-check]]
+
+来源：[NVD CVE-2026-115727](https://nvd.nist.gov/vuln/detail/CVE-2026-115727) · [VulnCheck 公告](https://www.vulncheck.com/advisories/agenticseek-before-commit-409840c-rce-via-exposed-werkzeug-debugger-in-llm-server) · [Okta 公告](https://trust.okta.com/security-advisories/command-execution-via-admin-console-input-in-okta-access-gateway-cve-2026-115547) · [richdocumentscode issue #354](https://github.com/CollaboraOnline/richdocumentscode/issues/354) · [NVD CVE-2026-112862](https://nvd.nist.gov/vuln/detail/CVE-2026-112862) · [Aikido — http2shell](https://www.aikido.dev/blog/python-packages-vulnerable-node2shell-brotli-cve-2026-111497) · [calif.io — iPhone](https://blog.calif.io/p/iphone)

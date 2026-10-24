@@ -3021,3 +3021,36 @@ drawn where it should be (E2E between your own machines) and disclosed where it 
 necessarily routes through Reason's relay).
 
 Sources: [AAIF announcement](https://aaif.io/news/agentic-ai-foundation-announces-four-new-projects) · [Linux Foundation press release](https://www.linuxfoundation.org/press/agentic-ai-foundation-announces-four-new-projects-agent-skills-open-responses-openenv-and-opensandbox) · [reason-machines/reason-network](https://github.com/reason-machines/reason-network) · [Reason Network](https://reasonmachines.com/network)
+
+## 2026-10-24 12:03 (learn pass) — the durable object is the history, not the agent; and a knowledge base whose facts expire
+
+**LayerFS inverts the sandbox: compute is ephemeral, the history is the object that persists.** `Ephemeral-AI-Lab/layerfs`
+(MIT, Rust; **2,005★ / 96 forks**, v1.1.0) mounts a writable, copy-on-write workspace over shared *committed*
+history — each agent commits what it changed and goes away; commits are content-addressable and deduplicated, so
+branches rewind and merge. Topics name the machinery plainly: `copy-on-write`, `content-addressable-storage`,
+`fuse`, `sqlite`. Three caveats are in the release notes rather than the pitch: **"It breaks code written for
+1.0.0"**; the benchmarks on the README "are **1.0.0's**, measured on `main` at `e5c7aaae05`" — not re-run for
+1.1.0; and the durability statement reads "**The Store runs in its Disposable profile only, with no crash or
+power-loss durability: use LayerFS for agent work and its history, not as the only copy of data you cannot
+rebuild.**" Reachable today through `dsh-layerfs` (a DeepSeek Harness plugin); Linux native, macOS/Windows via
+DSH and WSL2. The open problem it creates is new rather than inherited: when two agents' commits must merge, the
+review question is *which history is the record* — git's tooling has no vocabulary for "two agents edited the
+same lineage concurrently."
+
+**The Enron Brain is the first knowledge base in this file whose facts have dates and expiry.** 45,047 unique
+messages from eight mailboxes → **214 pages** (Claude Opus 5 pipeline, Opus 5.5 for a final pass) about the
+companies, regulators and banks around Enron; every fact is a sentence with a source message and a validity
+window, and **19,528 of the published facts expire** on the date the mail shows they stopped being true (Dynegy
+runs trading counterparty → agreed acquirer in Nov 2001 → adversary). The method is the transferable part: the
+approach was developed on eight mailboxes and every published page was built from **eight different ones** —
+"the two sets share 129 of 3,200 sampled messages, **4.0 percent**" — and a ninth candidate sharing **16.4%**
+was dropped. Verification: every quote checked against its message, **37 dropped because "the quote wasn't in
+the message"**; a human graded **50** fact verdicts blind and agreed with **48**, and *both* disagreements were
+traced to a bug in the excerpt window (against the full message, both facts were supported); a phase audit
+failed **25 of 540**, the labels were split, and the same judge then passed **580 of 591**. Total cost at list
+prices: **$11,215**. That number — a real dollar figure for fact-checking 45k documents — is the one no
+"company brain" product publishes.
+
+→ [[fact-check]] [[token-economics]] [[dev-tools]]
+
+Sources: [Ephemeral-AI-Lab/layerfs](https://github.com/Ephemeral-AI-Lab/layerfs) · [layerfs.ai](https://layerfs.ai/) · [The Enron Brain](https://www.thisandthat.chat/enron/) · [Enron Brain — methodology](https://www.thisandthat.chat/enron/methodology.html)

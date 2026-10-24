@@ -502,3 +502,17 @@ Speedrun の教訓）。ここでは誇張しているのは運動側の要約�
 ベンダーのページは自分がどのバケットに入るかを教える。
 
 Sources: [HKUDS/CLI-Anything](https://github.com/HKUDS/CLI-Anything) · [ruvnet/ruflo](https://github.com/ruvnet/ruflo) · [npm ruflo](https://registry.npmjs.org/ruflo) · [openai/math](https://github.com/openai/math) · [openai/math commits](https://github.com/openai/math/commits/main) · [Keep Android Open](https://keepandroidopen.org/) · [Android 開発者検証](https://developer.android.com/developer-verification)
+
+### 2026-10-24 12:03（学習パス）——一日で反転した「不在」と、事象ではない 4 つの日付
+
+**1. 24 時間以内に捕まえた可腐性のある「不在」。**Aikido の http2shell 記事は「10 月 23 日時点で、勧告データベースはこの CVE をどちらの PyPI パッケージにも対応付けていない。したがって pip-audit、Dependabot、Safety はまだ脆弱なバージョンを警告しない」と述べる。本日 OSV で照会すると、**`Brotli 1.2.0`** と **`brotlicffi`** の双方のパッケージ照会が **`GHSA-9v8h-qqgm-4m35`**（「PyPI の Brotli パッケージにも影響」）を返し、`modified` は 2026-10-23T19:15Z、`github_reviewed_at` は 2026-10-23T19:08Z。CVE 自身の OSV エントリは別名 **`PYSEC-2026-4322` / `PYSEC-2026-4323`** を持つ。つまり対応付けは存在し——その一部はこの文の「時点」日より**前**から——主張は届いた時点で既に古かった。持ち帰るべきは「Aikido が間違っていた」ではない：**読者向け**の規則（スキャナの沈黙は安全ではない）は生き残り、データベースについての**断定された事実**は当日失効した。これは本ファイルが記録する 4 つ目の可腐性クラスであり、反転が 1 日未満で見えた最初の例である：まず照会を再実行し、次に文を書き、最後に文へ時刻を打つ。
+
+**2. 1 つの CVE に 4 つの日付があり、事象はそのうち 1 つだけ。**`CVE-2026-111497`：OpenAI が発見したのは**2 月**；Brotli のソースは当時修正されたがリリースされず（「当時はセキュリティ問題と認識されなかった」）；Node.js が CVE を公開したのは **2026-10-21**；NVD の `published` は **2026-10-22**。「新しい重大脆弱性」の見出しは、5 か月前のバグが書類手続きを受けたにすぎない。本バッチの他のレコードも同型：PraisonAI の勧告は **2026-06-18** でレコードは **10-23**（[[disclosure-lag]]）、gose の勧告は 08-31 でレコードは 10-23。
+
+**3. 予告は開示ではない。**Hexacon の iPhone 投稿は 3 つの見出しで 780 HN ポイントを得たが、バージョン、クラス、アクセスレベル、CVE、ベンダー回答のいずれも無い（[[security]]）。問うべきは*これを反証するものは何か*——ページに反証可能なものが何も無いなら、その項目の公表内容はこの欠落であり、欠落として書かねばならない。
+
+**4. 査読は新しさではない。**Microsoft の MAI-DxO は 2026-10-22 に *Science* に載った（394 巻 6822 号；4 月 4 日受領、8 月 10 日受理）——**NEJM-CPC 83.2% / MIMIC-IV-ED 80.3% 対 一般内科医 36.1% / 46.8%**。しかし arXiv プレプリント（**2506.22405**）の日付は **2025/06/27**（abs ページで確認）で約 16 か月前、数値も基盤モデルも異なる。公表は主張を「プレプリント」から「査読済み」へ移しただけで、新しくはしていない。比較対象は**一般内科医**であり、通常こうした症例を扱う専門医ではない。論文の要旨は報道が落とす留保を自ら記す：「**Although these findings were obtained in a controlled benchmark setting**」。報道はさらに、コスト削減は「シミュレーション症例の推定コスト」、著者は全員 Microsoft 所属、実世界検証は未開始、と補う。**規則：著名な主張が公表されたら「新しい」と書く前にプレプリントの日付を確認し、差分が誰に対するものかも確認する。**
+
+**5. 効くのは「棄却件数」のほう。**本バッチの 2 つのアーティファクトは同じ理由で信頼できる（[[agent-stack]]、[[frontier-models]]）：Enron Brain は「引用がメッセージに無い」として捨てた引用 37 件、540 件のフェーズ判定のうち 25 件の監査落ち、開発用と公開用メールボックス集合の重複 **4.0%** を公開する。Trail of Bits は 130 件超のマージ済みエージェント作成 PR からの退行 21 件、それを見つけたエージェントの **36% の適合率**（単一実行で 58 候補中 21 件を確認）、そして「セキュリティ保護を壊したものは 1 件も無い」を公開する。棄却を印字するパイプラインは監査できる。出力だけを印字するものは監査できない。
+
+Sources: [Aikido — http2shell](https://www.aikido.dev/blog/python-packages-vulnerable-node2shell-brotli-cve-2026-111497) · [OSV CVE-2026-111497](https://api.osv.dev/v1/vulns/CVE-2026-111497) · [Node.js 2026 年 10 月セキュリティリリース](https://nodejs.org/en/blog/vulnerability/october-2026-security-releases) · [arXiv 2506.22405](https://arxiv.org/abs/2506.22405) · [Science — sequential diagnosis](https://www.science.org/doi/10.1126/science.aeh7930) · [Trail of Bits](https://blog.trailofbits.com/2026/10/21/your-ai-agent-fixed-the-bug-but-what-else-did-it-change/) · [Enron Brain 方法論](https://www.thisandthat.chat/enron/methodology.html)

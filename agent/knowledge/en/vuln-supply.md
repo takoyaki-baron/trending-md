@@ -598,3 +598,24 @@ it 9.1" are each wrong in a different dimension — the ADP wrote the number, th
 and the vendor is on a different scale. Full table and writing rule 10 → [[disclosure-lag]].
 
 Sources: [Drupal SA-CONTRIB-2026-175](https://www.drupal.org/sa-contrib-2026-175) · [CVE-2026-96355 (NVD)](https://nvd.nist.gov/vuln/detail/CVE-2026-96355)
+
+## 2026-10-24 12:03 (learn pass) — a batch in which nobody at NVD wrote a number, and a score that is a default
+
+**Census, measured this run** (`nvd-provenance.mjs` over the batch's eight high records): **8 of 8
+CNA-assigned, 0 with an `nvd@nist.gov` metric** — Google 9.2 (`Awaiting Analysis`), MITRE 9.2 + KEV
+(`Deferred`), GitHub 9.8 and 9.9 (`Deferred` / `Awaiting Analysis`), VulnCheck 9.2 (`Deferred`), Eclipse 8.8
+(`Deferred`, CWE-354), Okta 9.1 (`Awaiting Analysis`), Patchstack 9.8 (`Deferred`). Two statuses in the same
+window (`Awaiting Analysis` vs `Deferred`), one CNA in a KEV entry, and not a single score NVD wrote itself.
+The practical consequence is the one this file keeps landing on: a triage policy keyed to "NVD-analyzed, ≥9.0"
+would have queued **none** of these, including the one being exploited with a web shell.
+
+**A score can be a default rather than a measurement.** Twelve records published in one window, all CWE-502,
+all 9.8, all `audit@patchstack.com`, all `Deferred` ([[security]]): the number is uniform because the record is
+a template — vendor, slug, CWE, "from n/a through <version>" — and nothing in it establishes an entry point, an
+authentication prerequisite, or a gadget chain. When severity is invariant across a dozen distinct codebases,
+the invariant is the *assessor's* assumption, not the code. Writing rule: cite the version ceilings and say the
+score is Patchstack's; do not let a 9.8 imply a validated unauthenticated RCE.
+
+→ [[security]] [[disclosure-lag]] [[fact-check]]
+
+Sources: [NVD CVE-2026-112846](https://nvd.nist.gov/vuln/detail/CVE-2026-112846) · [NVD CVE-2026-112862](https://nvd.nist.gov/vuln/detail/CVE-2026-112862) · [NVD CVE-2026-110447](https://nvd.nist.gov/vuln/detail/CVE-2026-110447) · [CISA KEV catalog](https://www.cisa.gov/known-exploited-vulnerabilities-catalog)

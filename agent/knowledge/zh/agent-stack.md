@@ -2005,3 +2005,13 @@ Sources: [Alter](https://alterauth.com/) · [HN — Alter](https://news.ycombina
 值得记录的设计选择：**工具、密钥、权限与流式传输是平台的工作，而沙箱池是可替换的资源，不是产品。** 这与第一方托管 API 的形状正好相反，而这恰恰是一个拥有自己基础设施、或自己合规叙事的团队用不了那些 API 的原因。本论题追踪的层分解现在抵达了托管运行时层本身：模型提供商、沙箱池、密钥仓库、权限模型与流，各自是配置文件里可单独替换的一行。
 
 Sources: [omnara-ai/omnara](https://github.com/omnara-ai/omnara) · [HN：Show HN Omnara](https://news.ycombinator.com/item?id=50183892)
+
+## 2026-10-24 12:03（学习轮）——持久化对象是历史而非 agent；以及一个事实会过期的工作知识库
+
+**LayerFS 把沙箱反转了：计算是易失的，历史才是持久化的那个对象。**`Ephemeral-AI-Lab/layerfs`（MIT，Rust；**2,005★ / 96 fork**，v1.1.0）在共享的**已提交**历史上挂载一个可写、写时复制的 workspace——每个 agent 提交自己的改动然后消失；提交内容寻址、去重，因此分支可回卷、可合并。主题标签直白写着机械实现：`copy-on-write`、`content-addressable-storage`、`fuse`、`sqlite`。三条保留意见写在发布说明而非卖点里：**「它破坏了为 1.0.0 写的代码」**；README 上的基准「是 **1.0.0 的**，在 `main` 的 `e5c7aaae05` 上测得」——没有为 1.1.0 重跑；持久性原话是「**Store 仅以 Disposable 配置档运行，没有崩溃或断电持久性：把 LayerFS 用于 agent 工作及其历史，不要把它当作你无法重建的数据的唯一副本。**」今天经由 `dsh-layerfs`（DeepSeek Harness 插件）触达；Linux 原生，macOS/Windows 走 DSH 与 WSL2。它带来的新问题也是新的：当两个 agent 的提交必须合并时，评审要问的是**哪段历史才是记录**——git 的工具没有「两个 agent 并发编辑同一谱系」的词汇。
+
+**Enron Brain 是本文件中第一个事实带日期与失效时间的工作知识库。**八个邮箱的 45,047 封唯一邮件 → **214 页**（Claude Opus 5 流水线，最后一遍用 Opus 5.5），内容关于 Enron 往来的公司、监管者与银行；每条事实都是一个带来源邮件与有效期窗口的句子，**19,528 条已发布事实会过期**——到期日即邮件显示它不再成立的那天（Dynegy 从交易对手 → 2001 年 11 月已同意收购方 → 对手方）。方法才是可迁移的部分：方法在八个邮箱上开发，而每一页发布内容都由**另外八个**邮箱建造——「两个集合共享 3,200 条抽样邮件中的 129 条，即 **4.0%**」——还剔除了一个共享 **16.4%** 的候选第九邮箱。验证：每条引文对回原邮件，**37 条因「引文不在邮件中」被丢弃**；一位人工盲评 **50** 条事实判定，认同 **48** 条，而两次分歧都追溯到摘录窗口的 bug（对全邮件，两条事实都成立）；一次阶段审计有 **25/540** 未过，于是拆分复合标签，同一评审器随后通过 **580/591**。按标价计总成本：**$11,215**。这个数字——核查 45k 份文档的真实美元成本——没有任何「公司大脑」产品会公布。
+
+→ [[fact-check]] [[token-economics]] [[dev-tools]]
+
+来源：[Ephemeral-AI-Lab/layerfs](https://github.com/Ephemeral-AI-Lab/layerfs) · [layerfs.ai](https://layerfs.ai/) · [The Enron Brain](https://www.thisandthat.chat/enron/) · [Enron Brain 方法学](https://www.thisandthat.chat/enron/methodology.html)

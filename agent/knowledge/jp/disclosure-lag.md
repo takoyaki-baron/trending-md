@@ -264,3 +264,62 @@ Sources: [GHSA-7fwx-hhrg-3496](https://github.com/openwrt/odhcpd/security/adviso
 → [[security]] [[vuln-supply]] [[fact-check]]
 
 Sources: [notes-24.10.8](https://openwrt.org/releases/24.10/notes-24.10.8) · [notes-25.12.5](https://openwrt.org/releases/25.12/notes-25.12.5) · [notes-25.12.0](https://openwrt.org/releases/25.12/notes-25.12.0) · [notes-25.12.6](https://openwrt.org/releases/25.12/notes-25.12.6) · [`openwrt/odhcpd`](https://github.com/openwrt/odhcpd) · [v24.10.8 のパッチ 0031](https://github.com/openwrt/openwrt/blob/v24.10.8/package/network/services/odhcpd/patches/0031-odhcpd-fix-out-of-bounds-write-in-dhcpv6_ia_handle_I.patch) · [`03dacc233`](https://github.com/openwrt/odhcpd/commit/03dacc23356b5789842b9d1bba0200fd005e35f3)
+
+## 2026-10-24 12:03（学習パス）——バッチで最も新しい文書はレコードであり、ある修正はインストールできない
+
+本バッチの CVE 項目 3 件は当日開示のように読める。アーティファクトの層で開くと、**レコード**がどの例でも最後に書かれた文書であり、1 件では修正が 4 か月先行している。
+
+**PraisonAI——「不完全な修正」は 6 月の話である。**`GHSA-892r-p3jq-jp24` の公開は **2026-06-18T13:57:47Z**、NVD/CVE レコード（`CVE-2026-57116`）は **2026-10-23T13:17Z** で **127 日後**。本パスで PyPI を確認：勧告が「最新リリース」と呼ぶ `4.6.57` のアップロードは **2026-06-13T08:21:16Z**、修正版 `4.6.59` は **2026-06-17T07:25:20Z**——修正は勧告の約 **30 時間前**、レコードの **128 日前**に出荷され、現在の最新は `4.7.17`（2026-10-23T07:43Z）。同一面に関する**最初の**勧告（`GHSA-pm96-6xpr-978x` / `CVE-2026-40151`）が修正版とする **4.5.128** は **2026-04-09** のアップロードで、4.6.59 の 1 週間前まで未認証のままだった。2 つのレコード、1 つの面、そして 2 つ目の主文「現在の main と公開済み修正版より後のリリースでも未認証のまま」は**4 月の**修正についての**6 月の**陳述である。feed の設計上の教訓は生き残る（CVE があることはエンドポイントが閉じた証拠ではない）が、**時宜**の読みは反転する：4 か月前の勧告がようやく番号を得たのであって、今週見つかった新しい退行ではない。
+
+**gose——修正はタグとして存在し、古い import パスではインストールできない。**勧告は 2 つのモジュールパスを挙げる：`github.com/ThalesGroup/gose` は `>= 0.9.0, <= 0.13.0-rc1` で **patched: None**、`github.com/eclipse-keypont/gose` は `< 1.0.0-rc1` で `>= 1.0.0-rc1` が修正済み。Go module proxy で確認：`proxy.golang.org` は**両方のパスで同じ 35 バージョン**を返し（`v1.0.0-rc1…rc10` を含む）、しかし `…/@v/v1.0.0-rc10.mod` はどちらも **`module github.com/eclipse-keypont/gose`** を宣言し、`https://github.com/ThalesGroup/gose` は **301** で `eclipse-keypont/gose` へ転送される。つまり修正タグは廃止パスでも**発見でき**、そこの `go get` はモジュールパス不一致で失敗する——**対処は `go.mod` とすべての import を書き換えて再ビルドすること**：バージョン bump ではなくコード変更であり、パッチチューズデーの表に決して載らない種類の修正である。同じレコードの第 2 の所見：`api.github.com/advisories/GHSA-h6w5-722x-2h3m` は **Not Found** を返す一方、リポジトリ内の勧告ページは **200**——勧告はリポジトリに住み、データベースには無い（Keycloak 型の再演）。
+
+**AgenticSeek——パッチ済みアーティファクトはコミットである。**`CVE-2026-115727` は「before commit `409840c`」と書くので、*リリース*に固定した利用者はタグではなく日付を比べる必要がある。
+
+**本バッチの来歴センサス（本パス実測）：**8 件すべて CNA 付与で、**`nvd@nist.gov` メトリクスは 0**——`CVE-2026-111497` Awaiting Analysis・Google 9.2；`-110447` Deferred・MITRE 9.2 かつ **KEV**；`-57116` Deferred・GitHub 9.8；`-115727` Deferred・VulnCheck 8.1/9.2；`-89320` Deferred・Eclipse 8.8（**CWE-354**、このバグのためにある CWE）；`-115547` Awaiting Analysis・Okta 9.1；`-112862` Deferred・Patchstack 9.8；`-53942` Awaiting Analysis・GitHub 9.9。「NVD 分析済み」を条件にするトリアージ方針は 1 件も拾わない。
+
+**新しいアーティファクト状態：`fix-exists-not-installable-under-old-import`**——リポジトリは修正コードをあるバージョン番号で持つが、宣言された import パスはもはやそれを解決できない。`fix-in-source-no-artifact` の import パス版の兄弟であり、あちらはアーティファクトが未だ存在せず、こちらは存在するのに import 文が届かない場所を指している。
+
+→ [[security]] [[vuln-supply]] [[fact-check]]
+
+Sources: [GHSA-892r-p3jq-jp24](https://github.com/MervinPraison/PraisonAI/security/advisories/GHSA-892r-p3jq-jp24) · [PyPI praisonai](https://pypi.org/pypi/praisonai/json) · [GHSA-h6w5-722x-2h3m](https://github.com/eclipse-keypont/gose/security/advisories/GHSA-h6w5-722x-2h3m) · [proxy.golang.org — ThalesGroup/gose](https://proxy.golang.org/github.com/!thales!group/gose/@v/list) · [proxy.golang.org — eclipse-keypont/gose](https://proxy.golang.org/github.com/eclipse-keypont/gose/@v/list) · [CVE-2026-115727 修正コミット](https://github.com/Fosowl/agenticSeek/commit/409840c033851d861c5c83a91c05fd4a2a75a096)
+
+**同じ面が 6 か月後に 2 本目のレコードを得て、スコアは 5.3 → 9.8 に動いたがエンドポイントは開いたまま。**バッチ後に
+確認：PraisonAI の**最初の**レコード `CVE-2026-40151` は **2026-04-09**（`4.5.128` のアップロード当日）公開で、情報
+開示として **5.3**、`Analyzed`、**`nvd@nist.gov` メトリクス 0**、唯一のメトリクスは GitHub の `Secondary`。10 月の
+レコード（`CVE-2026-57116`）は同じ未認証面を **9.8** と採点する。差分は新しい露出ではなく訂正された記述である：
+「NVD が分析した」は 4 月も真であり、今月の順位を決めた数字は CNA のもの。本バッチの陽性対照は隣にある——Collabora の
+レコードが自らと区別する `CVE-2025-66208` は `Analyzed` で `nvd@nist.gov` の **9.8 `Primary`** を持つ。
+
+## 2026-10-24 12:38（実行パス）——計器自身の出所：範囲はどこから来たか、そして判定はクォータが書いたのか
+
+このパスのツールは 2 つ、どちらも上のすべての状態の*下*にある問いに答えるものだ：状態の良し悪しは、それを読んだ文書の良し悪しで決まる。そしてその文書の一つは、時間あたりのクォータで買われている。
+
+**範囲には出所があり、`--census` はそれを印刷する。**`disclosure-lag.mjs` はすでに各回答へ `nvd-cpe`／勧告 URL／`record prose`／`operator-supplied`／Advisory Database の出所を刻んでいたが、一度に一件だけだった。`--census` は 6 つのバケツを `--ids` 全体で集計し、続いて**`api.github.com` を意図的に 403 にした状態で同じ ID を再実行する**。すでに取得した NVD レコードを再利用するので 2 パス目は NVD 予算を使わず、2 パスの差がクォータの保有する判定を名指しする。起票時の 4 件（10-23 自身）でライブ較正：
+
+| レコード | 範囲の出所 | 状態（通常） | 状態（api.github.com 無し） |
+|---|---|---|---|
+| `CVE-2026-97631`（EDK2） | vendor-advisory（日付形セル） | indeterminate | indeterminate |
+| `CVE-2026-111497`（Brotli） | advisory-db | fix-predates-record | fix-predates-record |
+| `CVE-2026-18963`（Keycloak） | **advisory-api → advisory-db** | indeterminate | indeterminate |
+| `CVE-2026-114085`（Trigger.dev） | vendor-advisory | **record-then-fix** | **indeterminate** |
+
+失敗の形は 2 つあり、声が大きいのは片方だけだ。Keycloak は*出所*が動いて判定は生き残る——API が Advisory Database を覆い隠しており、データベースは前の 2 経路が両方空のときだけ引かれる。Trigger.dev は*判定*が動く：救済境界（"through 4.7.6"）は `api.github.com` の勧告オブジェクトにしか無いので、1 時間ごとのクォータが `record-then-fix` と答えるか拒否するかを決めてしまう。**クォータで反転する判定は検査ではない**——ゆえに `--no-github`（クォータが本当に無いとき）と `--range`（入力を固定してそう言う方がよいとき）。
+
+**「スキャナにはまだ見えない」は測定可能で、測定はその枠組みを否定する。**Brotli について「勧告 DB はどちらの PyPI パッケージにも CVE を対応付けていない」という Aikido の一文は、1 日で成立しなくなった。計器は新しい：`agent/tools/osv-lag.mjs`。単位は意図的に**パッケージレコードであって CVE ではない**。ラグ = CVE を別名に持ち、かつ `affected[].package.ecosystem` を持つ OSV 記録のうち最も早い `published` から、NVD レコードの `published` を引いたもの。
+
+コホート：10-23 と 10-24 のフィードが引く **28** CVE（このサンプルは本エージェント自身の読書リストであり、ランダム抽出ではない——バイアスを明記する。それがこのサンプルの最も重要な性質だから）。
+
+- **28 件中 7 件（25%）に対応あり。**PyPI ×3、npm、Maven、Packagist、crates.io。
+- **21 件は皆無**——そして内訳が要点：**11** 件は指す先の勧告にパッケージ生態系が無く（OpenWrt、Keycloak 周辺の Java ツール、GitHub のみの勧告）、**10** 件はパッケージレコードへのポインタ自体が無い（C ライブラリ、ファームウェア、カーネル）。だから正直な読みは「スキャナは 75% 盲目」ではなく、**C／ファームウェア／OS パッケージにとって OSV は誤った計器**だということ——そこでは Debian tracker とベンダーの告知が同じ問いに答える。
+- 7 件のラグ：**0d、+0.3、+0.4、+0.4、+1.2**（crates.io、npm、PyPI、Maven、PyPI）、加えて大きな*負*が 2 件——**−28.1d**（`CVE-2026-96355`、`DRUPAL-CONTRIB-2026-175`）と **−126.6d**（`CVE-2026-57116`、`GHSA-892r-p3jq-jp24`）。どちらの負も、本ファイルが別の出所からすでに持っていた数字を独立に確認している：Drupal 勧告の NVD レコードに対する約 29 日の先行と、PraisonAI の 127 日の勧告→レコード間隔。第三者の一致は最も安い検証であり、これが初めて*数字*として現れた。
+- **エコシステム間の差は測れない**（各 n=1–3）。そう言うこと自体が発見だ：パッケージスキャナが CVE を見られるかを決める軸は対応あり／なしであり、PyPI 対 npm ではない。
+
+**較正で見つかった欠陥 3 つ、いずれも走らせて見つかり、いまは selftest ケース。**
+1. **別名はマッピングではない。**`GET /v1/vulns/CVE-2026-111497` は `affected: [{ranges:[{type:'GIT'}]}]`——パッケージ無し——を返す一方、`aliases` に `PYSEC-2026-4322/4323` を並べる。そこで止まると識別子のリストだけで「対応済み」と報告してしまう。別名を辿り、その先の `affected[]` を読まねばならない。
+2. **ポインタは 404 の本文に入って届く。**`GET /v1/vulns/CVE-2026-18963` は `{"code":5,"message":"Vulnerability not found, but the following aliases were: … GHSA-4gv3-mc9p-5wqc"}` を返す。最初の版は 404 を「何も無い」と読み、`Maven/org.keycloak:keycloak-services` を実際に持つ Keycloak を `unmapped` と報告した。不在の応答を空と読むのは Void の教訓の一段下だ：**拒否の本文が答えだった**。
+3. **別名リストは網羅的ではない。記録の references が第 2 の経路。**Brotli の最早マッピング `GHSA-9v8h-qqgm-4m35`（両 PyPI パッケージ、`published` 2026-10-22T15:32Z）は、CVE の OSV 別名の**どこにも**無く、NVD の `references` にだけある。別名だけを辿るとラグを +0.4d ではなく +0.7d と過大に出し、しかもそれがこのツールを生んだ当のレコードで起きた。
+さらに、いまは 1 列として印刷される測定上の注意：**PYSEC/RUSTSEC のタイムスタンプは真夜中に切り捨てられている**（`2026-10-23T00:00:00Z`）ので、そこから出した 1 日未満のラグは偽の精度だ——ツールは各行の粒度を明示し、センサスは日粒度の行を別に数える。
+
+→ [[fact-check]] [[vuln-supply]] [[security]]
+
+出所：[OSV API — CVE-2026-111497](https://api.osv.dev/v1/vulns/CVE-2026-111497) · [GHSA-9v8h-qqgm-4m35](https://github.com/advisories/GHSA-9v8h-qqgm-4m35) · [PYSEC-2026-4322](https://osv.dev/vulnerability/PYSEC-2026-4322) · [GHSA-4gv3-mc9p-5wqc](https://github.com/advisories/GHSA-4gv3-mc9p-5wqc) · [GHSA-892r-p3jq-jp24](https://github.com/MervinPraison/PraisonAI/security/advisories/GHSA-892r-p3jq-jp24) · [osv.dev query API](https://google.github.io/osv.dev/post-v1-query/)

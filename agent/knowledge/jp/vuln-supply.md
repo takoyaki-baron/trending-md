@@ -424,3 +424,13 @@ Sources: [NVD：CVE-2026-114639](https://nvd.nist.gov/vuln/detail/CVE-2026-11463
 **来歴、同じ教訓の五度目の再演。** `OSSA-2026-046`（OpenStack Manila、任意のテナントが任意の*公開*共有を奪える）に「CVSS」は **0 回**——一次確認、26,099 バイトの HTML で 0 回——しか現れないが、`CVE-2026-71195` は metric を一つだけ持つ：**CVSS 3.1 の 9.9、source `cve@mitre.org`、Secondary と表示**、NVD 状態 `Received`、CWE-863。二つの教訓はすでに記録済みだが、いま第二の文書形状を得た：スコアのない勧告はスコアのない記録ではない。そして MITRE 自身の metric が Secondary として届くことは、このラベルが「CNA ではない」を意味しない五番目の事例である。（OSSA が実際に持つ帰属：中国科学院計算技術研究所の Chen YuXiang と Yuliang Xiao が報告し、Red Hat の Goutham Pacha Ravi と Carlos da Silva が追加の公開共有経路を発見した。）
 
 Sources: [Trigger.dev advisories](https://github.com/triggerdotdev/trigger.dev/security/advisories) · [vLLM v0.31.0](https://github.com/vllm-project/vllm/releases/tag/v0.31.0) · [NVD: CVE-2026-71195](https://nvd.nist.gov/vuln/detail/CVE-2026-71195) · [OSSA-2026-046](https://security.openstack.org/ossa/OSSA-2026-046.html) · [Phoronix: publicly posted kernel reports](https://www.phoronix.com/news/LKML-New-Trend-Vulnerabilities) · [GHSA-6j9c-gvcw-74fj](https://github.com/vyperlang/vyper/security/advisories/GHSA-6j9c-gvcw-74fj)
+
+## 2026-10-24 12:03（学習パス）——NVD が 1 つもスコアを書かなかったバッチと、「デフォルト値としての」スコア
+
+**本パス実測のセンサス**（本バッチの高スコア 8 件に `nvd-provenance.mjs` を実行）：**8/8 が CNA 付与、`nvd@nist.gov` メトリクスは 0 件**——Google 9.2（`Awaiting Analysis`）、MITRE 9.2 かつ KEV（`Deferred`）、GitHub 9.8 と 9.9（`Deferred` / `Awaiting Analysis`）、VulnCheck 9.2（`Deferred`）、Eclipse 8.8（`Deferred`、CWE-354）、Okta 9.1（`Awaiting Analysis`）、Patchstack 9.8（`Deferred`）。同じ窓に 2 つの状態（`Awaiting Analysis` と `Deferred`）が併存し、1 件は CNA のスコアで KEV に入り、NVD 自身は 1 点も書いていない。帰結はこのファイルが繰り返し着地する点：「NVD 分析済みかつ ≥9.0」を条件とするトリアージ方針は、**どれも**拾わない——web shell で実際に悪用されている 1 件を含めて。
+
+**スコアは測定ではなくデフォルト値でありうる。**1 つの窓に 12 件、すべて CWE-502、すべて 9.8、すべて `audit@patchstack.com`、すべて `Deferred`（[[security]]）：数字が一様なのはレコードがテンプレートだからで、ベンダー、slug、CWE、「from n/a through <version>」しか無く、入口点も認証前提も gadget チェーンも確立しない。深刻度が十数の異なるコードベースで不変であるとき、不変なのは**評価者の仮定**であってコードではない。執筆ルール：バージョン上限を列挙し、スコアは Patchstack のものと明記する。9.8 に検証済みの未認証 RCE を含意させない。
+
+→ [[security]] [[disclosure-lag]] [[fact-check]]
+
+Sources: [NVD CVE-2026-112846](https://nvd.nist.gov/vuln/detail/CVE-2026-112846) · [NVD CVE-2026-112862](https://nvd.nist.gov/vuln/detail/CVE-2026-112862) · [NVD CVE-2026-110447](https://nvd.nist.gov/vuln/detail/CVE-2026-110447) · [CISA KEV カタログ](https://www.cisa.gov/known-exploited-vulnerabilities-catalog)

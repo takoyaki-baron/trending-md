@@ -734,6 +734,56 @@
    "id": "CVE-2026-62948",
    "why": "OpenWrt stored XSS via a crafted FQDN hostname in a DHCPv6 client — same 24.10.8 release; the one non-odhcpd CVE of the batch",
    "seeded": "2026-10-24 seeded from the 24.10.8 release notes; provenance read via nvd-provenance.mjs"
+  },
+  {
+   "id": "CVE-2026-89320",
+   "why": "gose HmacShaCryptor.Hash returned HMAC_K(\"\") — constant tag per key; fix only under the eclipse-keypont module path",
+   "seeded": "2026-10-24 [Deferred] 4.0 Secondary/emo@eclipse.org 8.8, CWE-354, published 10-23"
+  },
+  {
+   "id": "CVE-2026-57116",
+   "why": "PraisonAI AgentOS still unauthenticated; advisory published 2026-06-18, record 10-23 (127-day gap)",
+   "seeded": "2026-10-24 [Deferred] 3.1 Secondary/security-advisories@github.com 9.8, CWE-200,306,862, published 10-23"
+  },
+  {
+   "id": "CVE-2026-115727",
+   "why": "AgenticSeek Flask debug=True on all interfaces, Werkzeug PIN derivable; fix is commit 409840c, no release",
+   "seeded": "2026-10-24 [Deferred] 3.1 Secondary/disclosure@vulncheck.com 8.1, 4.0 Secondary/disclosure@vulncheck.com 9.2, CWE-489, published 10-23"
+  },
+  {
+   "id": "CVE-2026-115547",
+   "why": "Okta Access Gateway 9.1 via S:C — admin console escapes to the service account",
+   "seeded": "2026-10-24 [Awaiting Analysis] 3.1 Secondary/psirt@okta.com 9.1, CWE-20,CWE-94, published 10-23"
+  },
+  {
+   "id": "CVE-2026-112862",
+   "why": "One of twelve 9.8 PHP-object-injection records published in one Patchstack window; template-sentence description",
+   "seeded": "2026-10-24 [Deferred] 3.1 Secondary/audit@patchstack.com 9.8, CWE-502, published 10-23"
+  },
+  {
+   "id": "CVE-2026-110447",
+   "why": "Collabora Online CODE Server proxy.php command injection, exploited with web shells since Sep 10 — MITRE's 9.2, NVD Deferred, KEV 10-23",
+   "seeded": "2026-10-24 [Deferred] 4.0 Secondary/cve@mitre.org 9.2, CWE-78, KEV 2026-10-23, published 10-14"
+  },
+  {
+   "id": "CVE-2026-40151",
+   "why": "PraisonAI AgentOS instruction disclosure 5.3 — the FIRST record on the same surface, published 2026-04-09, Analyzed with 0 NVD-scored metrics; still unauthenticated when CVE-2026-57116 filed it at 9.8 in October",
+   "seeded": "2026-10-24 [Analyzed] 3.1 Secondary/security-advisories@github.com 5.3, CWE-200, published 04-09"
+  },
+  {
+   "id": "CVE-2026-112846",
+   "why": "ThemeREX Save Life PHP object injection — one of twelve 9.8s from one Patchstack window, template-sentence record",
+   "seeded": "2026-10-24 [Deferred] 3.1 Secondary/audit@patchstack.com 9.8, CWE-502, published 10-23"
+  },
+  {
+   "id": "CVE-2026-112852",
+   "why": "ThemeREX Helion CWE-502 at 8.1 — the twelfth-sibling row that shows the 9.8 is not invariant across the theme family",
+   "seeded": "2026-10-24 [Deferred] 3.1 Secondary/audit@patchstack.com 8.1, CWE-502, published 10-23"
+  },
+  {
+   "id": "CVE-2025-66208",
+   "why": "Positive control beside CVE-2026-110447 (whose record says the two are different): this one is Analyzed WITH an nvd@nist.gov 9.8 Primary",
+   "seeded": "2026-10-24 [Analyzed] 3.1 Primary/nvd@nist.gov 9.8, 4.0 Secondary/security-advisories@github.com 7.2, CWE-78, published 2025-12-03"
   }
  ]
 }

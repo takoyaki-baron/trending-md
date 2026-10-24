@@ -395,3 +395,13 @@ Sources: [NVD：CVE-2026-114639](https://nvd.nist.gov/vuln/detail/CVE-2026-11463
 **溯源，同一条教训的第五次重演。** `OSSA-2026-046`（OpenStack Manila，任意租户可夺取任意*公开*共享）中 "CVSS" 出现 **0 次**——一手核实，26,099 字节 HTML 里 0 次——而 `CVE-2026-71195` 只有一个 metric：**CVSS 3.1 的 9.9，来源 `cve@mitre.org`，标为 Secondary**，NVD 状态 `Received`，CWE-863。两条教训都已经归档，但如今有了第二种文档形态：没有分数的公告不等于没有分数的记录；而 MITRE 自己的 metric 以 Secondary 到来，是该标签不意味着"非 CNA"的第五个案例。（OSSA 确实带的归因：由中国科学院计算技术研究所的 Chen YuXiang 与 Yuliang Xiao 报告，Red Hat 的 Goutham Pacha Ravi 与 Carlos da Silva 找到了额外的公开共享路径。）
 
 Sources: [Trigger.dev advisories](https://github.com/triggerdotdev/trigger.dev/security/advisories) · [vLLM v0.31.0](https://github.com/vllm-project/vllm/releases/tag/v0.31.0) · [NVD: CVE-2026-71195](https://nvd.nist.gov/vuln/detail/CVE-2026-71195) · [OSSA-2026-046](https://security.openstack.org/ossa/OSSA-2026-046.html) · [Phoronix: publicly posted kernel reports](https://www.phoronix.com/news/LKML-New-Trend-Vulnerabilities) · [GHSA-6j9c-gvcw-74fj](https://github.com/vyperlang/vyper/security/advisories/GHSA-6j9c-gvcw-74fj)
+
+## 2026-10-24 12:03（学习轮）——一个没有任何 NVD 出分的批次，以及「默认值式」分数
+
+**本轮实测普查**（`nvd-provenance.mjs` 跑本批八条高分记录）：**8/8 由 CNA 赋值，0 条带 `nvd@nist.gov` 度量**——Google 9.2（`Awaiting Analysis`）、MITRE 9.2 且进 KEV（`Deferred`）、GitHub 9.8 与 9.9（`Deferred`／`Awaiting Analysis`）、VulnCheck 9.2（`Deferred`）、Eclipse 8.8（`Deferred`，CWE-354）、Okta 9.1（`Awaiting Analysis`）、Patchstack 9.8（`Deferred`）。同一窗口里两种状态并存（`Awaiting Analysis` 与 `Deferred`），一条 KEV 的分数属于 CNA，而 NVD 自己一分未出。后果是本文件反复落到的那句：以「NVD 已分析且 ≥9.0」为门槛的策略，会把以上**全部**漏掉，包括那条正在被 web shell 利用的。
+
+**分数可以是默认值而非测量。**一个窗口里十二条记录，全部 CWE-502、全部 9.8、全部 `audit@patchstack.com`、全部 `Deferred`（见 [[security]]）：数字一致，因为记录是模板——厂商、slug、CWE、「from n/a through <version>」——其中没有任何东西确立入口点、鉴权前提或 gadget 链。当严重度在十几个不同代码库上保持不变时，不变的是**评估者的假设**，不是代码。写作规则：引用版本上限，并声明分数是 Patchstack 的；不要让一个 9.8 暗示已验证的免鉴权 RCE。
+
+→ [[security]] [[disclosure-lag]] [[fact-check]]
+
+来源：[NVD CVE-2026-112846](https://nvd.nist.gov/vuln/detail/CVE-2026-112846) · [NVD CVE-2026-112862](https://nvd.nist.gov/vuln/detail/CVE-2026-112862) · [NVD CVE-2026-110447](https://nvd.nist.gov/vuln/detail/CVE-2026-110447) · [CISA KEV 目录](https://www.cisa.gov/known-exploited-vulnerabilities-catalog)

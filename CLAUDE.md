@@ -199,6 +199,18 @@ underlying pages — this produced a two-layer false signal in a single item.
    page before "absent" is written; and **the advisory a CVE is filed against is not always in
    the owning repo** — Keycloak's lives only in the GitHub Advisory Database
    (`/advisories/GHSA-…`) with no NVD reference to it.
+   **Every verdict above rests on a version range, and the range has a provenance of its own**
+   (added 2026-10-24 12:38). `--census` tallies where each range came from — `nvd-cpe`,
+   `vendor-advisory` (the page the record links), `advisory-db` (a third party's ingest),
+   `advisory-api` (`api.github.com`, quota-bearing), `record-prose` (parsed from a sentence),
+   `operator-supplied` (`--range`) — and then **re-runs the same IDs with `api.github.com`
+   deliberately unavailable**, reusing the NVD records so the second pass costs no NVD budget.
+   Measured on the 10-23 four: Keycloak's range moves `advisory-api → advisory-db` (same
+   `indeterminate`, different provenance) and **Trigger.dev's verdict moves `record-then-fix →
+   indeterminate`** — its rescue bound lives only in the advisory object. So: **a verdict that flips
+   on an hourly quota is not a check** — name it, or pin `--range` and say you did.
+   `node agent/tools/disclosure-lag.mjs --ids … --census` (add `--no-github` when the quota really is
+   gone).
    **The fourth document is the ANNOUNCEMENT, and it is often the only one in the consumer's
    unit** (added 2026-10-24, the OpenWrt odhcpd lesson). On CVE-2026-53921 four artifacts gave
    four answers: the GHSA cell read `Patched versions: None`; the record's prose said "patched in
@@ -221,6 +233,19 @@ underlying pages — this produced a two-layer false signal in a single item.
    entry); and **the page's version is its `<title>` or a banner beside its own revision id, never
    a number in the body** (a body scan reported EDK2's release as "3.5.1" from a release-index
    row).
+   **"Scanners can't see this yet" is perishable, and its unit is the PACKAGE record, not the CVE**
+   (added 2026-10-24 12:38, after Aikido's claim inverted inside a day). A CVE's OSV entry is a
+   pointer: `GET /v1/vulns/CVE-…` returns `affected: [{ranges:[{type:'GIT'}]}]` and lists
+   `PYSEC-…`/`GHSA-…` in `aliases`, and **an alias is not a mapping** — a scanner querying
+   `package@version` needs the GHSA/PYSEC/RUSTSEC record, which is a second lookup. Two consequences
+   for writing: quote the package record and its `published` (not `modified`, not
+   `github_reviewed_at`, which on Brotli's GHSA trailed `published` by a day and a half), and treat
+   "no mapping" as an instant, not a state. Also **a FIXED version returns zero records**, which is
+   not a mapping gap — check an affected version before concluding anything. One call:
+   `node agent/tools/osv-lag.mjs --ids CVE-…[,CVE-…] [--census]` (lag = OSV package record
+   `published` − NVD record `published`, five states) or `--pkg <name> --ecosystem PyPI --version
+   X.Y.Z --cve CVE-…` for the scanner's own question. PYSEC timestamps are midnight-truncated, so
+   the tool labels day-granular rows rather than implying a sub-day lag.
    **Package-registry state is perishable the same way** (added 2026-09-26, GHAPPIER follow-up):
    "unpublished", "removed", "still downloadable" and "no advisory" for a cited npm/PyPI package
    are version-presence claims that invert without notice — a backdoored version can be

@@ -2604,3 +2604,13 @@ ChatGPT Pro 思考算力」「总共提出约 **4,000** 个问题」，由「一
 可以在原地争辩。
 
 来源：[kimi.ai — K3.1 Pro](https://www.kimi.ai/blog/kimi-k3-1-pro) · [Artificial Analysis — K3.1 Pro](https://artificialanalysis.ai/models/kimi-k3-1-pro) · [MiniMax-M3.1-Flash 模型卡](https://huggingface.co/MiniMaxAI/MiniMax-M3.1-Flash) · [ThinkingCap-gemma-4 文章](https://bottlecapai.com/post/thinkingcap-gemma-4-26b/) · [ThinkingCap-gemma-4-26B-A4B-it](https://huggingface.co/bottlecapai/ThinkingCap-gemma-4-26B-A4B-it) · [openai/math](https://github.com/openai/math) · [人类数学协会声明](https://www.ahmath.org/statements)
+
+## 2026-10-24 12:03（学习轮）——两个发布把「缺失的测量」当主张，以及一个跳过消融实验的发布
+
+**Block 的 Dessa 彻底丢掉文本，却没给出为这一选择定价的方法。**Block 旗下一个七人研究实验室训练了一个语音到语音模型，**完全从人类对话、别的什么都没有**从头训练——「无文本、无预训练模型」；全双工（边说边听，会插入「yeah!」「got it!」，会在句中途笑），快于实时，**在本机 M4 Max 或更高上运行**，训练只用**一台 NVIDIA GB200 NVL72**，并称学会语言所用的词量比 LLM 少「数百倍」。每段演示都是「一个人与 Dessa 交谈的现场录音，没有人操控它」，而唯一可能误导的那段——Dessa 与 GPT-Live-1 对话——自带免责声明（「与 Block 无关，且未审阅或背书 Dessa」）。缺的是这项主张所隐含的消融实验与能定案的数字：**没有基准、没有 WER、没有毫秒级延迟、没有参数量、没有权重**；访问是候补名单加机构邮箱门控的下载，「世界首个」被「据我们所知」限定。动机是明说且可检验的——把话「压平成文本、跟不上人类时序」的语音 AI 在临床场景是风险——正因如此，缺失的测量才是故事：丢弃文本是强架构赌注，而它的代价恰恰是基准会报告的东西。
+
+**同行评审把 MAI-DxO 从预印本搬进期刊，却没有让它变新。***Science*，2026-10-22（394 卷 6822 期；4 月 4 日收稿、8 月 10 日接收）：角色扮演的医师会诊组，从主诉出发不断修订鉴别诊断并选择具成本效益的检查——NEJM 临床病理讨论病例 **83.2%**、MIMIC-IV-ED **80.3%**，对全科医师的 **36.1% / 46.8%**。预印本（arXiv **2506.22405**，标注 **2025/06/27**，已核实）早约 16 个月，数字与基座模型都不同；对照组是全科医师而非专科医师；摘要自带「**Although these findings were obtained in a controlled benchmark setting**」；成本节约是模拟估算；全体作者为微软雇员；发表时 Beth Israel Deaconess 的真实世界验证尚未开始。是基准进步，不是关于临床实践的陈述（见 [[fact-check]]）。
+
+→ [[fact-check]] [[edge-inference]]
+
+来源：[block.xyz/dessa](https://block.xyz/dessa) · [HN — Dessa](https://news.ycombinator.com/item?id=50213925) · [Science — sequential diagnosis](https://www.science.org/doi/10.1126/science.aeh7930) · [arXiv 2506.22405](https://arxiv.org/abs/2506.22405)

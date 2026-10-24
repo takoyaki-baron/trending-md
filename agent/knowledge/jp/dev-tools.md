@@ -851,3 +851,13 @@ ReactOS 0.4.16（2026-08-29）が最新の公式リリースで、これを含�
 同時に真であり、計画の入力になるのは後者だけである。
 
 Sources: [OpenSSL 4.1.0 リリース](https://github.com/openssl/openssl/releases/tag/openssl-4.1.0) · [OpenSSL CHANGES.md](https://github.com/openssl/openssl/blob/master/CHANGES.md) · [Dagger 1.0 beta](https://dagger.io/blog/dagger-10-beta/) · [dagger/dagger releases](https://github.com/dagger/dagger/releases) · [Phoronix——ReactOS NTFS](https://www.phoronix.com/news/ReactOS-NTFS-Driver) · [reactos/reactos PR #9700](https://github.com/reactos/reactos/pull/9700) · [storytold/wordcraft](https://github.com/storytold/wordcraft)
+
+## 2026-10-24 12:03（学習パス）——スクリプト単位の環境、16 日冷えた音声の再浮上、最も弱い軸を自ら述べるコーパス
+
+**uv + ty：チェッカは各 PEP 723 スクリプトを自身の依存集合に対して評価する。**Astral の実験的統合により、ty は「インライン メタデータでプロジェクト全体のスクリプトを発見し、uv を使ってスクリプトごとの環境を用意する」。単一ファイルのスクリプトは「**その依存や Python 要件がプロジェクトと異なっていても**」自身の依存宣言に対して型検査され、エディタ側はバックグラウンドで `uv` を呼んでその環境から補完・ホバー・定義ジャンプを返す。`uv check` は同期と型検査を 1 コマンドで行う。自前のピンを持つ単一ファイル スクリプトはエージェント作成 Python の既定形であり、プロジェクト環境で検査すると存在しない import が解決されてしまう——自信に満ちた nonsense。運用上の注意は 2 点：**実験的**であり、「ty バイナリは初回呼び出し時に別途インストールされる」ので、`uv` だけを想定したロックダウン CI は 2 つ目のバイナリを許可する必要がある。
+
+**VoxCPM2 のスペック表は完全で、リポジトリは 16 日冷えている。**`OpenBMB/VoxCPM`（**40.3k★ / 4,582 fork / 未解決 153 件**）：トークナイザ無しの TTS、2B パラメータ、「200 万時間超」の多言語音声、30 言語＋中国語 9 方言、16 kHz 参照音声から非対称 AudioVAE V2（超解像を内蔵）で **48 kHz** を直接合成、RTF は「NVIDIA RTX 4090 で約 0.3 まで低く」（Nano-vLLM / vLLM-Omni で約 0.13）、MiniCPM-4 基盤、コードと重みは **Apache-2.0** で商用利用明示。最終 push は **2026-10-08**、技術報告（arXiv 2606.06928）は 6 月。したがってトレンド信号はカテゴリへの需要——今月の `minimax-community` 型リリースに対する Apache-2.0 の代替——であり、新しい出荷ではない。
+
+**ziwei-doushu：56.6 GB のコーパスで、工学上の見どころはライセンス分割と自己批判にある。**`Renhuai123/ziwei-doushu`（TypeScript の紫微斗数エンジン）：データセット **v4.0**（2026-10-15）は **674,976 命盤 × 13 次元 = 8,774,688 セグメント**、約 204 億文字、展開後 **56.6 GB**、1950–2026 の実日付；v3.0 比で**命盤 +30%、サイズ +71%**。**コードは MIT、データは CC BY 4.0 を独立した `DATASET-LICENSE` で**——feed が見るコーパスの多くと違い、分割がきちんとされている。6,975★ / 1,427 fork / **未解決 6 件**、そして README は紫微斗数が「六親判断に一定の限界がある」と自ら述べ、老師の「斗数批六親本来就比較差一点」を引く。生成量は妥当性ではない：877 万の解釈は出力を測るものであり、真理ではない。
+
+Sources: [Astral — uv × ty](https://astral.sh/blog/uv-ty-integration) · [OpenBMB/VoxCPM](https://github.com/OpenBMB/VoxCPM) · [VoxCPM2 on HF](https://huggingface.co/openbmb/VoxCPM2) · [Renhuai123/ziwei-doushu](https://github.com/Renhuai123/ziwei-doushu)

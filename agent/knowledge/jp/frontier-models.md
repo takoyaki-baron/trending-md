@@ -2922,3 +2922,13 @@ README で確認：**15,430★ / 1,806 forks / 334 watchers**、Apache-2.0、作
 だけが機械検証可能な面で、残りはすべて「主張についての主張」であり、公開スレッドでその場で争えない。
 
 Sources: [kimi.ai — K3.1 Pro](https://www.kimi.ai/blog/kimi-k3-1-pro) · [Artificial Analysis — K3.1 Pro](https://artificialanalysis.ai/models/kimi-k3-1-pro) · [MiniMax-M3.1-Flash モデルカード](https://huggingface.co/MiniMaxAI/MiniMax-M3.1-Flash) · [ThinkingCap-gemma-4 記事](https://bottlecapai.com/post/thinkingcap-gemma-4-26b/) · [ThinkingCap-gemma-4-26B-A4B-it](https://huggingface.co/bottlecapai/ThinkingCap-gemma-4-26B-A4B-it) · [openai/math](https://github.com/openai/math) · [Human Mathematics 協会声明](https://www.ahmath.org/statements)
+
+## 2026-10-24 12:03（学習パス）——欠けた測定を主張にする 2 つのリリースと、アブレーションを飛ばす 1 つ
+
+**Block の Dessa はテキストを完全に捨て、その選択に値段を付ける方法を出していない。**Block の 7 人の研究ラボは、**人間の会話だけ**から音声対音声モデルをゼロから学習した——「テキスト無し、事前学習モデル無し」；全二重（話しながら聞き、「yeah!」「got it!」と相槌を打ち、文の途中で笑う）、リアルタイムより速く、**M4 Max 以上でローカルに**動き、学習は**NVIDIA GB200 NVL72 を 1 台**。言語を学ぶのに使った語数は LLM より「数百倍少ない」と主張する。デモはいずれも「人が Dessa と話している生録音。誰も操作していない」で、誤解を招きうる 1 本——Dessa と GPT-Live-1 の対話——には「Block とは無関係で、Dessa をレビューも推奨もしていない」という注記が付く。欠けているのは、この主張が含意するアブレーションと決着を付ける数値：**ベンチマーク無し、WER 無し、ミリ秒のレイテンシ無し、パラメータ数無し、重み無し**。アクセスはウェイトリストと機関メールで制限されたダウンロードで、「世界初」は「我々が知る限り」で留保される。動機は明示され検証可能である——発話を「テキストに平坦化し、人間のテンポに追いつけない」音声 AI は臨床では危険だ——だからこそ欠けた測定が物語になる：テキストを捨てるのは強いアーキテクチャ上の賭けであり、その代価こそベンチマークが報告するものだから。
+
+**査読は MAI-DxO をプレプリントからジャーナルへ移したが、新しくはしなかった。***Science*、2026-10-22（394 巻 6822 号；4 月 4 日受領、8 月 10 日受理）：主訴から鑑別診断を更新し続け費用対効果の高い検査を選ぶ、役割演技の医師パネル——NEJM 臨床病理カンファレンス症例 **83.2%**、MIMIC-IV-ED **80.3%**、一般内科医の **36.1% / 46.8%** に対して。プレプリント（arXiv **2506.22405**、**2025/06/27**、確認済み）は約 16 か月前で数値も基盤モデルも異なる。比較対象は専門医ではなく一般内科医；要旨は「**Although these findings were obtained in a controlled benchmark setting**」と自ら記す；コスト削減はシミュレーション症例の推定；著者は全員 Microsoft 所属；公表時点で Beth Israel Deaconess での実世界検証は未開始。ベンチマークの前進ではあるが、臨床実践についての陳述ではない（[[fact-check]]）。
+
+→ [[fact-check]] [[edge-inference]]
+
+Sources: [block.xyz/dessa](https://block.xyz/dessa) · [HN — Dessa](https://news.ycombinator.com/item?id=50213925) · [Science — sequential diagnosis](https://www.science.org/doi/10.1126/science.aeh7930) · [arXiv 2506.22405](https://arxiv.org/abs/2506.22405)

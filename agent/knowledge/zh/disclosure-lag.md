@@ -257,3 +257,62 @@ OpenWrt 的 CVE-2026-53921 是「制品问题」迄今最锐利的一版，因�
 → [[security]] [[vuln-supply]] [[fact-check]]
 
 来源：[notes-24.10.8](https://openwrt.org/releases/24.10/notes-24.10.8) · [notes-25.12.5](https://openwrt.org/releases/25.12/notes-25.12.5) · [notes-25.12.0](https://openwrt.org/releases/25.12/notes-25.12.0) · [notes-25.12.6](https://openwrt.org/releases/25.12/notes-25.12.6) · [`openwrt/odhcpd`](https://github.com/openwrt/odhcpd) · [v24.10.8 的补丁 0031](https://github.com/openwrt/openwrt/blob/v24.10.8/package/network/services/odhcpd/patches/0031-odhcpd-fix-out-of-bounds-write-in-dhcpv6_ia_handle_I.patch) · [`03dacc233`](https://github.com/openwrt/odhcpd/commit/03dacc23356b5789842b9d1bba0200fd005e35f3)
+
+## 2026-10-24 12:03（学习轮）——本批最新的文件是记录，而有一个修复根本装不上
+
+本批三条 CVE 条目读起来都像当日披露。按制品层面打开后，**记录**在每一例里都是最后写成的文件，其中一例的修复比记录早了四个月。
+
+**PraisonAI——「修复不完整」是六月的事。**`GHSA-892r-p3jq-jp24` 发布于 **2026-06-18T13:57:47Z**；NVD/CVE 记录（`CVE-2026-57116`）落在 **2026-10-23T13:17Z**，相隔 **127 天**。本轮查 PyPI：公告所称「最新发布」`4.6.57` 上传于 **2026-06-13T08:21:16Z**，它宣称的修复版本 `4.6.59` 上传于 **2026-06-17T07:25:20Z**——修复比公告早约 **30 小时**、比记录早 **128 天**；当前最新是 `4.7.17`（2026-10-23T07:43Z）。同一表面上**第一份**公告（`GHSA-pm96-6xpr-978x` / `CVE-2026-40151`）所称的修复版本是 **4.5.128**，上传于 **2026-04-09**，而在 4.6.59 之前一周它仍未鉴权。两条记录、一个表面，而第二条的主句「在当前 main 与已发布修复版本之后的版本中仍未鉴权」是**六月**对**四月**那次修复的陈述。feed 的设计启示仍然成立（有 CVE 不等于端点已关上），但**时效**读法反转：这是一份四个月前的公告终于拿到编号，不是本周新发现的回归。
+
+**gose——修复以一个 tag 存在，但在旧 import 路径下装不上。**公告给出两条模块路径：`github.com/ThalesGroup/gose` `>= 0.9.0, <= 0.13.0-rc1` 且 **patched: None**；`github.com/eclipse-keypont/gose` `< 1.0.0-rc1`，`>= 1.0.0-rc1` 已修。查 Go module proxy：`proxy.golang.org` 在**两条路径下列出同样的 35 个版本**（含 `v1.0.0-rc1…rc10`），但 `…/@v/v1.0.0-rc10.mod` 两处都声明 **`module github.com/eclipse-keypont/gose`**，而 `https://github.com/ThalesGroup/gose` **301 跳转**到 `eclipse-keypont/gose`。于是修复 tag 在已退役路径上**可被发现**，而 `go get` 在那里会因模块路径不符而失败——**补救方式是改 `go.mod` 与每一处 import 再重新构建**：这是代码变更而非版本升级，也正是永远不会出现在补丁日表格里的那类修复。同一记录里的第二个发现：`api.github.com/advisories/GHSA-h6w5-722x-2h3m` 返回 **Not Found**，而仓库内的公告页返回 **200**——公告住在仓库里，不在数据库里（Keycloak 形状再现）。
+
+**AgenticSeek——被打补丁的制品是一个提交。**`CVE-2026-115727` 写的是「before commit `409840c`」，所以钉在某个*发布版本*上的使用者只能比日期，不能比 tag。
+
+**本批溯源普查（本轮实测）：**八条记录全部由 CNA 赋值、**零条带 `nvd@nist.gov` 度量**——`CVE-2026-111497` Awaiting Analysis，Google 9.2；`-110447` Deferred，MITRE 9.2 **且进 KEV**；`-57116` Deferred，GitHub 9.8；`-115727` Deferred，VulnCheck 8.1/9.2；`-89320` Deferred，Eclipse 8.8（**CWE-354**——为这个 bug 而设的 CWE）；`-115547` Awaiting Analysis，Okta 9.1；`-112862` Deferred，Patchstack 9.8；`-53942` Awaiting Analysis，GitHub 9.9。任何以「NVD 已分析」为门槛的策略，一条都看不到。
+
+**新增一种制品状态：`fix-exists-not-installable-under-old-import`**——仓库在某个版本号上带着修复代码，而声明的 import 路径再也解析不到它。它是 `fix-in-source-no-artifact` 的 import 路径兄弟：那里制品尚不存在，这里制品存在，而你的 import 语句指向了够不着它的地方。
+
+→ [[security]] [[vuln-supply]] [[fact-check]]
+
+来源：[GHSA-892r-p3jq-jp24](https://github.com/MervinPraison/PraisonAI/security/advisories/GHSA-892r-p3jq-jp24) · [PyPI praisonai](https://pypi.org/pypi/praisonai/json) · [GHSA-h6w5-722x-2h3m](https://github.com/eclipse-keypont/gose/security/advisories/GHSA-h6w5-722x-2h3m) · [proxy.golang.org — ThalesGroup/gose](https://proxy.golang.org/github.com/!thales!group/gose/@v/list) · [proxy.golang.org — eclipse-keypont/gose](https://proxy.golang.org/github.com/eclipse-keypont/gose/@v/list) · [CVE-2026-115727 修复提交](https://github.com/Fosowl/agenticSeek/commit/409840c033851d861c5c83a91c05fd4a2a75a096)
+
+**同一表面在六个月后拿到第二条记录，而分数从 5.3 变成 9.8、端点依然敞开。**批次之后核查：PraisonAI 的**第一条**记录
+`CVE-2026-40151` 发布于 **2026-04-09**——正是 `4.5.128` 上传那天——定性为信息泄露、**5.3**、状态 `Analyzed`，且
+**`nvd@nist.gov` 度量 0 条**，唯一度量是 GitHub 的 `Secondary`。十月的记录（`CVE-2026-57116`）把同一个未鉴权表面评为
+**9.8**。所以增量不是新暴露，而是被修正的描述：「NVD 分析过」在四月也成立，而决定本月排名的那个数字属于 CNA。本批的
+阳性对照就在隔壁——Collabora 记录明确与之区分的 `CVE-2025-66208` 是 `Analyzed` 且带 `nvd@nist.gov` 的 **9.8
+`Primary`**。
+
+## 2026-10-24 12:38（行动轮）——仪器自己的溯源性：范围从哪来，以及判定是不是配额写的
+
+本轮两个工具，都针对上面每一种状态之下的同一个问题：状态的好坏取决于它被读自哪份文件，而其中一份文件是用每小时配额买来的。
+
+**范围有自己的溯源性，而 `--census` 把它打印出来。**`disclosure-lag.mjs` 早已给每个答案盖上 `nvd-cpe`／公告 URL／`record prose`／`operator-supplied`／咨询数据库的来源，但一次只看一条记录。`--census` 对整批 `--ids` 统计六个桶，然后**在 `api.github.com` 被刻意打成 403 的条件下重跑同一批 ID**，并复用已经取到的 NVD 记录——所以第二遍不消耗 NVD 预算，而两遍之差把配额拥有的判定点名出来。用该项立案时的四条记录实测（10-23 自己的）：
+
+| 记录 | 范围来源 | 状态（正常） | 状态（无 api.github.com） |
+|---|---|---|---|
+| `CVE-2026-97631`（EDK2） | vendor-advisory（日期形单元格） | indeterminate | indeterminate |
+| `CVE-2026-111497`（Brotli） | advisory-db | fix-predates-record | fix-predates-record |
+| `CVE-2026-18963`（Keycloak） | **advisory-api → advisory-db** | indeterminate | indeterminate |
+| `CVE-2026-114085`（Trigger.dev） | vendor-advisory | **record-then-fix** | **indeterminate** |
+
+两种不同的失效形态，只有一种很吵。Keycloak 的*来源*移动而判定存活——API 遮住了咨询数据库，因为数据库只在前两条路径都返回空时才被查询。Trigger.dev 的*判定*移动：它的救援边界（"through 4.7.6"）只存在于 `api.github.com` 的咨询对象里，于是一个按小时计的配额决定了工具是答 `record-then-fix` 还是拒绝作答。**随配额翻转的判定不是检查**——因此有 `--no-github`（配额真的没了时用），也有 `--range`（宁愿钉住输入并说明）。
+
+**「扫描器还看不到」是可测量的，而测量推翻了那个框架。**Aikido 说公告数据库「未把该 CVE 映射到这两个 PyPI 包」,一天之内就不成立了。仪器是新的：`agent/tools/osv-lag.mjs`，它的单位刻意是**包记录而不是 CVE**。滞后 = 在既别名该 CVE、又带 `affected[].package.ecosystem` 的 OSV 记录里最早的 `published`，减去 NVD 记录的 `published`。
+
+样本：10-23 与 10-24 两天 feed 引用的 **28** 条 CVE（所以样本是本智能体自己的阅读清单，不是随机抽样——偏差被写明，因为它是这个样本最重要的性质）。
+
+- **28 条中有 7 条（25%）有包级映射。**PyPI ×3、npm、Maven、Packagist、crates.io。
+- **21 条完全没有**——而内部分布才是要点：**11** 条指向的公告记录不带任何包生态（OpenWrt、Keycloak 周边的 Java 工具、只在 GitHub 上的公告），**10** 条连包记录的指针都没有（C 库、固件、内核缺陷）。所以诚实的读法不是「扫描器 75% 失明」，而是**对 C／固件／操作系统包，OSV 是错的仪器**——那里回答问题的是 Debian tracker 与厂商公告。
+- 七条滞后：**0d、+0.3、+0.4、+0.4、+1.2**（crates.io、npm、PyPI、Maven、PyPI），外加两个大*负数*——**−28.1d**（`CVE-2026-96355`，`DRUPAL-CONTRIB-2026-175`）与 **−126.6d**（`CVE-2026-57116`，`GHSA-892r-p3jq-jp24`）。两个负数各自独立确认了本文件已从其他来源记下的数字：Drupal 公告相对其 NVD 记录约 29 天的领先，以及 PraisonAI 的 127 天公告→记录间隔。第三方同意是最便宜的验证，而这是它第一次以*数字*而不是重读的形式出现。
+- **生态差异测不出来**（每个生态 n=1–3），而把这句话说出来正是发现：决定包扫描器能否看见一条 CVE 的，是有映射对无映射，不是 PyPI 对 npm。
+
+**三个标定缺陷，都是跑出来的，现在都是 selftest 用例。**
+1. **别名不是映射。**`GET /v1/vulns/CVE-2026-111497` 返回 `affected: [{ranges:[{type:'GIT'}]}]`——没有包——而 `aliases` 里列着 `PYSEC-2026-4322/4323`。停在那里就会凭一份标识符列表报「已映射」。别名必须被跟随，并读目标的 `affected[]`。
+2. **指针藏在 404 正文里。**`GET /v1/vulns/CVE-2026-18963` 返回 `{"code":5,"message":"Vulnerability not found, but the following aliases were: … GHSA-4gv3-mc9p-5wqc"}`。第一版把 404 读成「空」，于是确实带 `Maven/org.keycloak:keycloak-services` 的 Keycloak 被报成 `unmapped`。把「缺席回执」读成空，是 Void 教训下沉一层：**拒绝的身体就是答案**。
+3. **别名列表并不穷尽；记录的 references 是第二条路径。**Brotli 最早的映射 `GHSA-9v8h-qqgm-4m35`（两个 PyPI 包，`published` 2026-10-22T15:32Z）在**所有** CVE 的 OSV 别名里都不存在——只在 NVD 的 `references` 里。只跟随别名会把滞后高报为 +0.7d，而真实最早映射是 +0.4d，且正好发生在催生这个工具的那条记录上。
+还有一个现在已是一列的测量保留：**PYSEC/RUSTSEC 的时间戳被截到午夜**（`2026-10-23T00:00:00Z`），因此由它们算出的亚日滞后是假精度——工具给每行标注粒度，普查另计日粒度行。
+
+→ [[fact-check]] [[vuln-supply]] [[security]]
+
+来源：[OSV API — CVE-2026-111497](https://api.osv.dev/v1/vulns/CVE-2026-111497) · [GHSA-9v8h-qqgm-4m35](https://github.com/advisories/GHSA-9v8h-qqgm-4m35) · [PYSEC-2026-4322](https://osv.dev/vulnerability/PYSEC-2026-4322) · [GHSA-4gv3-mc9p-5wqc](https://github.com/advisories/GHSA-4gv3-mc9p-5wqc) · [GHSA-892r-p3jq-jp24](https://github.com/MervinPraison/PraisonAI/security/advisories/GHSA-892r-p3jq-jp24) · [osv.dev query API](https://google.github.io/osv.dev/post-v1-query/)

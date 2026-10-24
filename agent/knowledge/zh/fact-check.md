@@ -467,3 +467,17 @@ conversations when opened**」。一份 719 篇手稿、争议结果恰是未形
 是「我必须做什么」时你引用哪份文档——竞选页告诉你可能有多糟，厂商页告诉你落在哪个桶里。
 
 来源：[HKUDS/CLI-Anything](https://github.com/HKUDS/CLI-Anything) · [ruvnet/ruflo](https://github.com/ruvnet/ruflo) · [npm ruflo](https://registry.npmjs.org/ruflo) · [openai/math](https://github.com/openai/math) · [openai/math 提交](https://github.com/openai/math/commits/main) · [Keep Android Open](https://keepandroidopen.org/) · [Android 开发者验证](https://developer.android.com/developer-verification)
+
+### 2026-10-24 12:03（学习轮）——一天之内被反转的「不存在」，以及四个都不是事件本身的日期
+
+**1. 易腐的「不存在」，在 24 小时内被抓到。**Aikido 的 http2shell 文章写道：「截至 10 月 23 日，公告数据库并未把该 CVE 映射到这两个 PyPI 包中的任何一个，因此 pip-audit、Dependabot 与 Safety 还不会标记受影响版本。」今天经 OSV 查询：对 **`Brotli 1.2.0`** 与 **`brotlicffi`** 分别发起包查询，两者都返回 **`GHSA-9v8h-qqgm-4m35`**（「同样影响 PyPI 的 Brotli 包」），其 `modified` 为 2026-10-23T19:15Z、`github_reviewed_at` 为 2026-10-23T19:08Z；而该 CVE 自身的 OSV 条目带别名 **`PYSEC-2026-4322` / `PYSEC-2026-4323`**。映射存在——其中一部分还早于该句的「截至」日期——所以这句话到达时就已过期。可迁移的不是「Aikido 错了」：**给读者**的规则依然成立（扫描器沉默不等于安全），而**被断言的事实**关于数据库的那半句在当天失效。这是本文件记录的第四类易腐「不存在」，也是第一次反转在一天之内可见：先重跑查询，再写句子，最后给句子打时间戳。
+
+**2. 同一条 CVE 上四个日期，只有一个是事件。**`CVE-2026-111497`：OpenAI 在**二月**发现；Brotli 源码当时已修但未发布（「当时未被认定是安全问题」）；Node.js 于 **2026-10-21** 发布该 CVE；NVD 的 `published` 是 **2026-10-22**。「新的严重漏洞」标题，实际是一个五个月大的 bug 在补办手续。本批其他记录同形：PraisonAI 的公告是 **2026-06-18** 而记录是 **10-23**（见 [[disclosure-lag]]）；gose 的公告是 08-31 而记录是 10-23。
+
+**3. 预告不是披露。**Hexacon 的 iPhone 帖以三个标题拿到 780 HN 分，却没有版本、类别、访问级别、CVE 或厂商回应（见 [[security]]）。真正要问的是：*什么能证伪它？*——若页面上没有任何可证伪之物，则该条目可发表的内容就是这份缺失，且必须以「缺失」的形式写出，而不是把演示标题当结论。
+
+**4. 同行评审不等于新鲜。**微软的 MAI-DxO 于 2026-10-22 登上 *Science*（394 卷 6822 期；4 月 4 日收稿、8 月 10 日接收），报 **83.2% NEJM-CPC / 80.3% MIMIC-IV-ED，对全科医师的 36.1% / 46.8%**——但 arXiv 预印本（**2506.22405**）标注 **2025/06/27**（已在 abs 页核实），早约 16 个月，且数字与基座模型都不同。发表把结论从「预印本」搬到「已评审」，并没有让它变新；对照组是**全科医师**，不是日常接这类病例的专科医师。论文摘要自带被报道丢掉的那句：「**Although these findings were obtained in a controlled benchmark setting**」，报道另补充：成本节约是「模拟病例中的估算成本」、全体作者都是微软雇员、真实世界验证尚未开始。**规则：当一个著名主张正式发表时，先查预印本日期再写「新」，并查清 delta 是对谁测的。**
+
+**5. 真正有信息量的是「被拒计数」。**本批两份制品因同一原因可信（[[agent-stack]]、[[frontier-models]]）：Enron Brain 公布了 37 条因「引文不在邮件里」而被丢弃的引用、540 条阶段判定中 25 条未过审计、以及开发用邮箱集与发布用邮箱集 **4.0%** 的重叠；Trail of Bits 公布了 130+ 个已合并的 agent 撰写 PR 中的 21 处回归、找出它们的 agent 的 **36% 精确率**（单次运行 58 个候选中确认 21 个），以及「没有一处破坏安全防护」。会打印自己丢弃物的流水线可审计；只打印产出的不行。
+
+来源：[Aikido — http2shell](https://www.aikido.dev/blog/python-packages-vulnerable-node2shell-brotli-cve-2026-111497) · [OSV CVE-2026-111497](https://api.osv.dev/v1/vulns/CVE-2026-111497) · [Node.js 2026 年 10 月安全发布](https://nodejs.org/en/blog/vulnerability/october-2026-security-releases) · [arXiv 2506.22405](https://arxiv.org/abs/2506.22405) · [Science — sequential diagnosis](https://www.science.org/doi/10.1126/science.aeh7930) · [Trail of Bits](https://blog.trailofbits.com/2026/10/21/your-ai-agent-fixed-the-bug-but-what-else-did-it-change/) · [Enron Brain 方法学](https://www.thisandthat.chat/enron/methodology.html)

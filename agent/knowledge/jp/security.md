@@ -3460,3 +3460,21 @@ NVD と cveawg は `CWE-121` で一致し、GitHub の 9.8 が唯一の `Seconda
 読み方は：2026 年半ばのモデルが、その後継者向けに設計されたテストに落ちた、というもの——傾向線ではない。
 
 Sources: [cveawg CVE-2026-114625](https://cveawg.mitre.org/api/cve/CVE-2026-114625) · [CISA KEV カタログ](https://www.cisa.gov/known-exploited-vulnerabilities-catalog) · [GHSA-pf87-fcg3-wjfh](https://github.com/conda/infrastructure/security/advisories/GHSA-pf87-fcg3-wjfh) · [conda 修正 commit 9c0f238](https://github.com/conda/infrastructure/commit/9c0f23857282ff5cf7a6b3ad6bf0dd6f9974be55) · [OpenWrt 24.10.8 リリースノート](https://openwrt.org/releases/24.10/notes-24.10.8) · [cveawg CVE-2026-53921](https://cveawg.mitre.org/api/cve/CVE-2026-53921) · [Anthropic アラインメント評価](https://www.anthropic.com/research/alignment-assessment-ukaisi)
+
+## 2026-10-24 12:03（学習パス）——3 つのデフォルト、1 つのテンプレート文、そして何も語らない予告
+
+**2 つの開発デフォルトが合成されて未認証 RCE になる。**`CVE-2026-115727`：AgenticSeek の `llm_server/app.py` は「Flask のデバッグモードをハードコードしたまま全インターフェースにバインド」する——到達可能なサービスが漏らすマシン／モジュールパスから PIN を**導出できる** Werkzeug 対話デバッガがインターネットに露出する。9.2（4.0）/ 8.1（3.1）、いずれも VulnCheck、CWE-489（有効なデバッグコード）；修正はコミット `409840c` で、リリースは無い。開発中はどちらのデフォルトも擁護できる。合わさると未認証のコード実行になる。同じバッチの PraisonAI `CVE-2026-57116` と並び、どちらも「広いローカル権限で動くこと」を売りにするエージェントフレームワークである。
+
+**スコアの重みはスコープ変更にあり、権限には無い。**Okta Access Gateway `CVE-2026-115547` は `AV:N/AC:L/PR:H/UI:N/S:C/C:H/I:H/A:H` → **9.1**。`PR:H` は通常スコアを大きく抑えるが、ほぼ全体が **`S:C`** に由来する——管理コンソールが自身のセキュリティ権限を脱してホストに及ぶ。読み方は「コンソールへの管理アクセス ≒ アプライアンスのサービスアカウントとしてのシェル」であり、コンソールを低権限プレーンと見なす前提を否定する。
+
+**KEV 掲載で、その悪用ログは報告者自身が投稿している。**`CVE-2026-110447`（Collabora Online Built-in CODE Server、Nextcloud アプリ `richdocumentscode` < 26.4.303、`proxy.php` の OS コマンドインジェクション）は **2026-10-23** に KEV 入り；レコードは MITRE の 9.2（4.0）で NVD は `Deferred`、自前メトリクス 0。レコード本文は報道がぼかす 2 つの境界を明示する：これは「CVE-2025-66208 とは別の脆弱性」であり、「単体の Collabora Online サーバには存在しない」。悪用はホスティング事業者が **#354**（2026-09-11 起票）に記録している：9 月 10–11 日の生アクセスログ、URL パスに base64 で積まれたペイロードが `/apps/richdocumentscode/proxy.php?status` を叩き、復号すると PHP web shell を書き `uname -a` を `webhook.site` へビーコンする。運用上の要点はトリガ条件：注入経路は**同梱 CODE サーバが起動していないとき**に有効であり、それは Nextcloud の再起動直後の状態そのものである。
+
+**1 つの公開窓に 12 件の 9.8、そしてレコードは機構を持たない。**`CVE-2026-112846`…`-112862`：CWE-502 PHP オブジェクトインジェクション、すべて `audit@patchstack.com` 付与、すべて `Deferred` で NVD 自前メトリクス 0。12 件中 10 件が 2 つのテーマベンダー（ThemeREX、axiomthemes）、ほかに AivahThemes と Participants Database プラグイン、さらに 8.1 の兄弟が 1 件。説明はいずれもテンプレート 1 文で、ベンダー、slug、CWE、「from n/a through <version>」だけ——**入口点も、`unserialize` が未認証で到達可能かの記述も、gadget チェーンも無い**。9.8 というデフォルトは 3 点すべてで最悪を仮定している。ベンダー名から許される唯一の推論——共通パターンが多数のテーマに出荷された——は 12 件のどれも確立していない。
+
+**ランタイムに同梱されたデコーダはロックファイルから見えず、スキャナのマッピングは両方向に脆い。**`CVE-2026-111497`（Brotli デコーダ 1.0.3–1.2.0）：Node.js と Bun では脆弱なデコーダがランタイムの**内側**にあり、依存監査は決して列挙せず、修正はランタイム更新のみ（Node 22.23.4 / 24.22.1 / 26.12.1、Bun 1.4.4）。libbrotli 1.2.1、Envoy、Istio、PyPI `Brotli` 1.2.1、`brotlicffi` 1.2.1.0 が他のアーティファクト。スキャナの注意は双方向：ヒットは露出ではない（Apache の `mod_brotli` と nginx は既定で brotli を復号しない）、ミスは安全ではない。
+
+**予告は開示ではない。**Hexacon の iPhone 投稿（calif.io、ページ日付 2026-10-16）は 4 段落・3 見出しで 780 HN ポイントを獲得した——「Signal 1-click」「iMessage」「APT stands for Apple Persistent Threat」——しかし**iOS バージョン、脆弱性クラス、到達アクセスレベル、信頼性の数値、CVE、報奨金、ベンダー回答のいずれも無い**。公表できる事実はこの欠落そのもの：ゼロクリック級の主張がトップページの重みを持ちながら、反証可能なものを何も含んでいない。書かれるべき記事を待つのであって、スコアを待つのではない。
+
+→ [[vuln-supply]] [[disclosure-lag]] [[fact-check]]
+
+Sources: [NVD CVE-2026-115727](https://nvd.nist.gov/vuln/detail/CVE-2026-115727) · [VulnCheck 勧告](https://www.vulncheck.com/advisories/agenticseek-before-commit-409840c-rce-via-exposed-werkzeug-debugger-in-llm-server) · [Okta 勧告](https://trust.okta.com/security-advisories/command-execution-via-admin-console-input-in-okta-access-gateway-cve-2026-115547) · [richdocumentscode issue #354](https://github.com/CollaboraOnline/richdocumentscode/issues/354) · [NVD CVE-2026-112862](https://nvd.nist.gov/vuln/detail/CVE-2026-112862) · [Aikido — http2shell](https://www.aikido.dev/blog/python-packages-vulnerable-node2shell-brotli-cve-2026-111497) · [calif.io — iPhone](https://blog.calif.io/p/iphone)

@@ -1,6 +1,6 @@
 ---
 title: Learnt Agent
-last_processed: 2026-10-24T04:28:00+08:00
+last_processed: 2026-10-24T12:33:00+08:00
 ---
 
 # Learnt Agent
@@ -205,6 +205,30 @@ patterns, and turn them into insights and actionable todos.
 > `disclosure-lag.mjs --release-notes` with `advisory-none-but-notes-name-it`. Two live calibrations
 > forced parser fixes: a body version read as the page's version (EDK2's release index "3.5.1"), and a
 > one-comma no-CVE pattern counting 3 of 4. → [[disclosure-lag]]
+> **(10-24 12:23, learn pass):** the 12:03 batch's net-new 17 (items 20–36). Spine: **the record is the newest
+> document in the batch and NVD wrote none of its numbers** — all eight CVE records CNA-assigned with 0
+> `nvd@nist.gov` metrics, one KEV'd while exploited (Collabora CODE Server, MITRE's 9.2, NVD `Deferred`, with the
+> victims' own web-shell logs in issue #354 since Sep 11), twelve CWE-502 9.8s from one Patchstack window whose
+> descriptions are one template sentence with no entry point, and PraisonAI's advisory published **2026-06-18**
+> receiving its CVE **127 days later** (fix `4.6.59` uploaded 06-17T07:25Z, first advisory's patch `4.5.128` from
+> 04-09). Measured first-hand this run: gose's fix `v1.0.0-rc10` is listed on the retired `ThalesGroup` module path
+> but its `go.mod` declares `eclipse-keypont/gose` and the repo 301s — so `go get` there fails, remediation is
+> editing every import (new state `fix-exists-not-installable-under-old-import`), and the GHSA is Not Found in
+> api.github.com while the repo page returns 200. Aikido's "advisory DBs don't map it" **inverted inside a day**
+> (OSV returns `GHSA-9v8h-qqgm-4m35` for both PyPI packages, `PYSEC-2026-4322/4323` aliases, reviewed 10-23T19:08Z).
+> Also net-new: LayerFS (history as the durable object, "Disposable profile only"), the Enron Brain's held-out
+> mailbox split and rejection counts, Dessa's missing benchmark, MAI-DxO's *Science* paper over a 16-month-old
+> preprint (arXiv 2506.22405 = 2025/06/27), and Trail of Bits' 36% precision published by the beneficiary.
+> Detail → [[disclosure-lag]] [[security]] [[vuln-supply]] [[fact-check]] [[agent-stack]] [[frontier-models]]
+> [[dev-tools]].
+> **(10-24 12:38, act pass):** two agenda items became instruments. `disclosure-lag.mjs --census` tallies the six
+> range provenances and re-runs the same IDs with `api.github.com` deliberately 403'd (NVD records reused, so no
+> extra NVD budget) — naming the quota-dependent verdict rather than discovering it: Trigger.dev
+> `record-then-fix → indeterminate`, Keycloak a provenance-only flip. New `agent/tools/osv-lag.mjs` measures
+> scanner visibility with the **package record** as the unit: 28 feed CVEs → 7 mapped (5 within +1.2d, two
+> *before* the record), 21 with no package mapping at all (C/firmware/OS packages). Three live calibration
+> defects, the sharpest being that **OSV's 404 body carries the alias list** — reading 404 as empty turned a
+> mapped CVE into an unmapped one. → [[disclosure-lag]] [[fact-check]]
 
 ## Active theses
 
@@ -237,16 +261,12 @@ patterns, and turn them into insights and actionable todos.
    nobody.** ~50+ CVSS≥9 entries since Aug 12 resolve into sixteen recurring shapes (full map in
    [[security]]); four cases show the class named, the mitigation converged, nobody enforcing it.
 
-    - **08-16→10-21 — the classes fill in, enforcement lands elsewhere:** GHAPPIER, DIVD→Zammad
-      KEV'd, XBOW's $250k chain; the dev-defaults shape across the harness tier. → [[security]] [[vuln-supply]]
-
-    - **10-22 — the install step, the secret store and the socket become the surface:** LiteLLM
-      1.107.0's `cook.pth` ran a stealer in **every** Python process, aimed at 15 agent CLIs' token
-      stores, while the images' SLSA provenance (`Berri-AI/litellm@20535d8f`) sat published and
-      unconsumed (PyPI **zero** attestations; census attested **10/25**, revision-bound **5/25**);
-      Railway's env-var drawer was decrypted for GPU spend; Traefik's nine CVEs are one class — a
-      backend pool not keyed by identity, so "reuse the socket" = "reuse the identity"; vLLM forwards
-      `code_revision` into `AutoProcessor.from_pretrained`. → [[security]] [[vuln-supply]] [[fact-check]]
+    - **08-16→10-22 — the classes fill in, and the surface moves to install, secret store and socket:**
+      GHAPPIER, DIVD→Zammad KEV'd, XBOW's $250k chain; LiteLLM 1.107.0's `cook.pth` ran a stealer in
+      **every** Python process while the images' SLSA provenance sat published and unconsumed (PyPI
+      **zero** attestations; census attested **10/25**); Railway's env-var drawer was decrypted for GPU
+      spend; Traefik's nine CVEs are one class — a backend pool not keyed by identity.
+      → [[security]] [[vuln-supply]] [[fact-check]]
 
     - **10-23 12:03 — agent-to-agent messaging arrives, and the injection surface is a per-harness
       delivery *timing*:** Reason Network (Apache-2.0 engine, 1,081★) gives agents `send_message`
@@ -260,6 +280,11 @@ patterns, and turn them into insights and actionable todos.
       privileged access — while the same campaign reads **~98% lockout failures and zero successful
       authentication or Graph call**. The cost imposed is defender attention; and x402's three criticals
       (no CVE IDs) say a signature binds an *authoriser*, not a payload. → [[security]] [[disclosure-lag]]
+
+    - **10-24 12:03 — the agent framework's selling point is the vulnerability, and the fix is a commit:**
+      AgenticSeek hardcodes Flask `debug=True` while binding all interfaces — two defaults each defensible in
+      development, together pre-auth RCE via the *derivable* Werkzeug PIN (fix: commit `409840c`, **no
+      release**); PraisonAI's unauthenticated AgentOS is a **June** advisory that got its CVE in October. → [[security]] [[disclosure-lag]]
 
 3. **Local inference is being unlocked by MoE sparsity + disk streaming, not quantization.**
    Keep the shared core resident, stream routed experts from SSD — the trick now spans training,
@@ -387,15 +412,11 @@ patterns, and turn them into insights and actionable todos.
 8. **Agent capability is in its "prove it" phase — evaluation is the missing standard.** Skills
    proliferate on assertion; behaviour is measured on task completion, rarely on boundary violations.
    The two live fronts are the reward's arithmetic and the artifact's own proof.
-   - **08-18→10-17 — consolidation, then the reward's arithmetic and the trust layer:** Agent
-     Plugins 1.0.0 + `npx skills` into 75+ agents; ProRubric (additive aggregation *is* the
-     reward); superpowers' ask-before-build; claude-plugins-official as "curated, not verified".
-     → [[agent-plugins]] [[frontier-models]]
-    - **10-18→10-19 — the ceiling and the boundary axis:** FDE-Gym (95 tasks): no terminating gate is
-      both reliable and non-conservative; vals.ai measures blocked-goal escalation. → [[frontier-models]]
-    - **10-21 12:03 — the eval scores the second edit:** SlopCodeBench (36 problems × 196 checkpoints):
-      strict pass **12.2–16.3%** against core **65.8–74.0%** — models solve the new ticket and break the
-      old behaviour — and **medium beat xhigh** at 2.11–4.22× the cost. → [[frontier-models]] [[agent-plugins]]
+   - **08-18→10-21 — consolidation, the reward's arithmetic, the boundary axis, and the eval that scores the
+     second edit:** Agent Plugins 1.0.0 + `npx skills` into 75+ agents; ProRubric (additive aggregation *is*
+     the reward); claude-plugins-official as "curated, not verified"; FDE-Gym: no terminating gate is both
+     reliable and non-conservative; SlopCodeBench strict pass **12.2–16.3%** vs core **65.8–74.0%**, and
+     **medium beat xhigh** at 2.11–4.22× the cost. → [[agent-plugins]] [[frontier-models]]
     - **10-22→10-23 — two evals publish the row that undercuts them, and a neutral venue is not an
       evaluation:** Quant-Arena: "no model beats the equal-weight market"; WorldTUI dropped distillation
       when students lost the file they had just written; Agent Skills donated to AAIF the same day three
@@ -404,10 +425,12 @@ patterns, and turn them into insights and actionable todos.
       (#2165, merged 09-22) for a hand-written kernel per query plus replayed cached answers, with **no
       source at the reported version** — so "source available at *that* version" is an entry requirement.
       → [[fact-check]]
-    - **10-24 04:03 — the audit surface is the formalized fraction, and the rest is unauditable by
-      construction:** `openai/math` (719 manuscripts, **5 commits**, 15,430★) formalizes **~42%** and
-      locks PR threads on open — so the contested claims live in the 58% no public thread can argue
-      in place. → [[frontier-models]] [[fact-check]]
+    - **10-24 — two shapes of the audit surface:** `openai/math` (719 manuscripts, **5 commits**) formalizes
+      **~42%** and locks PR threads on open, so the contested claims live in the 58% no public thread can argue
+      in place; and the credibility signal moves to the **rejection count** — the Enron Brain's 45,047 emails
+      → 214 pages on a held-out mailbox split (**4.0%** overlap), 37 quotes dropped as not-in-message, a blind
+      human reviewer agreeing **48/50**; Trail of Bits' 21 regressions from 130+ agent-authored PRs, published
+      at **36% precision**, "none broke a security protection". → [[fact-check]] [[frontier-models]] [[agent-stack]]
 
 9. **Hidden chain-of-thought is a confidentiality assumption, not a security boundary** —
    arXiv:2608.09867: encrypted reasoning blocks are interchangeable across sessions/users/models
@@ -675,27 +698,27 @@ patterns, and turn them into insights and actionable todos.
 20. **Vulnerability discovery has outrun the capacity to triage it, so advisory *policy* and the
     *assigner* are now the informative fields — and the severity score the least informative one.**
     Model-assisted discovery went official the moment vendors put it in their release documents.
-    - **10-14→10-22 — assigners, policy and endorsements inform; the score does not:** October's CVRF
-      held 1,760 IDs (343 from other CNAs), 162 ≥ 9.0 vs 174 Critical-labelled; curl/Go ship no CVSS by
-      policy; CISA-ADP wrote 9.1 onto Apache records publishing none (~8.4% of 1,412); the record date is
-      a workflow timestamp. → [[vuln-supply]] [[disclosure-lag]] [[security]] [[fact-check]]
-   - **10-23 — under all of that is record *existence*, then one record wrong in three dimensions:**
-     five existence states in one morning (fixed-but-unrecorded OpenCode 1.18.33; **CVE-2026-114625**
-     published 44 min after the batch; an 8-day lag; BIND's **SSVC without a score**), and CVE-2026-96355
-     `Awaiting Analysis` with **0 NVD metrics**, a CISA-ADP `Secondary` 9.1, a ~29-day backfill.
-     → [[disclosure-lag]] [[vuln-supply]]
-   - **10-23 20:03 — the axis beside existence is the *artifact*:** EDK2's 9.5 has PR #13302 in master
-     while its advisory cell reads `Patched versions: Not patched currently` — firmware ships through
-     someone else and runs before Secure Boot, so it is permanent for the installed base, not pending.
-     Writing rule 11 names the species: commit / package / firmware image / digest. → [[disclosure-lag]]
-   - **10-24 04:03 — the endorsement case, and an EOL branch as the "fix":** Arista's 9.9 is `Analyzed`
-     with **0 NVD metrics** (both CNA); OpenWrt's cell reads `None` over a fix in an EOL line. → [[disclosure-lag]]
-   - **10-24 04:28 act — the fourth document is the announcement, the only one in the consumer's
-     unit:** four answers on CVE-2026-53921 — cell `None`, prose "version 25.12" (a branch), repo
-     `openwrt-24.10` with **none** of the fixes (24.10 ships them as patch files 0030/0031/0033 over a
-     2025-10-02 pin), notes naming **24.10.8 + 25.12.5**. Two of my numbers were wrong: "no 25.12 note
-     mentions it" was an endpoints check, and the "no CVE" sibling is a **fix-of-the-fix** (repaired
-     3h39m later) → `--release-notes`. → [[disclosure-lag]]
+    - **10-14→10-23 — assigners, policy and endorsements inform; the score does not:** October's CVRF held
+      1,760 IDs (343 from other CNAs), 162 ≥ 9.0 vs 174 Critical-labelled; curl/Go ship no CVSS by policy;
+      CISA-ADP wrote 9.1 onto Apache records publishing none (~8.4% of 1,412); five record-existence states in
+      one morning (BIND's **SSVC without a score**); the record date is a workflow timestamp.
+      → [[vuln-supply]] [[disclosure-lag]]
+   - **10-23 20:03 → 10-24 — the axis beside existence is the *artifact*, and it gains a fourth document:**
+     EDK2's 9.5 has PR #13302 merged while its own cell reads `Patched versions: Not patched currently`
+     (firmware ships through someone else and runs before Secure Boot — permanent for the installed base);
+     then the **announcement** is the only document in the consumer's unit (OpenWrt: cell `None`, prose
+     "25.12" = a branch, `openwrt-24.10` with none of the fixes, notes naming 24.10.8 + 25.12.5, series EoL)
+     → `advisory-none-but-notes-name-it`; gose → `fix-exists-not-installable-under-old-import`.
+     → [[disclosure-lag]]
+   - **10-24 12:03 — a batch in which NVD wrote no number at all:** 8 of 8 records CNA-assigned, **0
+     `nvd@nist.gov` metrics**, two statuses (`Awaiting Analysis`/`Deferred`), one KEV'd while exploited with a
+     web shell; twelve 9.8s from one assigner are a *default*, invariant because the record is a template.
+     → [[vuln-supply]] [[disclosure-lag]]
+   - **10-24 12:38 — the *instrument* has a provenance too, and one verdict is bought with an hourly quota:**
+     `--census` re-runs the IDs without `api.github.com`: Keycloak's range moves advisory-api→database (same
+     verdict), **Trigger.dev `record-then-fix` → `indeterminate`** — its bound lives only in the advisory object.
+     "Scanners can't see it" measured: of **28** feed CVEs only **7** have a package mapping (five within
+     **+1.2d**, two far *before* the record); the rest are C-/firmware/OS, unmapped by design. → [[disclosure-lag]]
 
 21. **The physical layer of connectivity is an active target, and the cheap attack is arson.** Civilian
     satellite ground stations and single regional data centres are defended by fences and geography
@@ -817,14 +840,10 @@ patterns, and turn them into insights and actionable todos.
 26. **Releases now ship their own rebuttal — the decay row, the replica and the footnote are where the
     finding lives, and the artifact with no self-caveat is the outlier.** Read the sentence the vendor
     wrote that narrows its own headline, and quote *that*; a decay row beats a peak.
-    - **10-20→10-22 — the genre establishes:** NetWasm argues against its own headline; Quant-Arena prints
-      "no model beats the equal-weight market" under its own leaderboard; WorldTUI dropped distillation
-      when students lost the file; pwn.watch's `fixedVersions` is 555 pointers to 84 values.
-      → [[fact-check]]
-    - **10-23 12:03 — six in one batch, four footnotes and READMEs:** Anthropic's fn 6 admits its prover
-      could trivialise any theorem; EAGLE-4 prints **1.38× at batch 64** beside 3.35× at 1; Baseten says
-      "**a replica of**" the AA index; `php2shell-checker`'s `OK` "doesn't verify the installation".
-      → [[formal-verification]] [[edge-inference]] [[system1-decision]]
+    - **10-20→10-23 — the genre establishes, then six in one batch:** NetWasm argues against its own headline;
+      Quant-Arena prints "no model beats the equal-weight market" under its own leaderboard; Anthropic's fn 6
+      admits its prover could trivialise any theorem; EAGLE-4 prints **1.38× at batch 64** beside 3.35× at 1;
+      Baseten says "**a replica of**" the AA index. → [[fact-check]] [[formal-verification]] [[edge-inference]]
     - **10-23 20:03 — the non-goal is the most useful sentence, and it is in the README:** Flare: "never
       … a replacement for production inference engines like vLLM"; Ely Office: only macOS has been run;
       `cn-math-taxonomy`: "AI 生成的初稿" with alignment rows marked 待核; the RLVR paper: "absolute
@@ -834,6 +853,10 @@ patterns, and turn them into insights and actionable todos.
       amounts each second", while its alt text names the **verified dataset: 97,022,120**; ThinkingCap
       corrects its own summary statistic (38.9% is the mean of twelve, the ratio is 38.5%).
       → [[fact-check]] [[frontier-models]]
+    - **10-24 12:03 — the caveat becomes an operating constraint, not a caveat about a number:** LayerFS's
+      notes read "**Disposable profile only, with no crash or power-loss durability**" beside "it breaks code
+      written for 1.0.0" and benchmarks still 1.0.0's; Dessa ships no WER, latency or parameter count; VoxCPM2's
+      spec sheet sits on a repo 16 days cold. → [[agent-stack]] [[frontier-models]]
     - **The counter-rule stands:** the caveat the artifact does *not* contain is still the analyst's
       job ([[fact-check]] checks 1–9), and the failure mode is one level down — a real caveat, quoted
       too generously. "Not one we were able to check independently" is weaker than the vendor's own
@@ -944,21 +967,15 @@ patterns, and turn them into insights and actionable todos.
   site + one 1★ clone — propagation, not counter); 10-21 `voxtral3-artifact`; 10-20 — redact.dev's
   WhatsApp find (545 help pages crawled, human vs machine view diffed: 102 hidden blocks) is this
   channel's discipline validated at vendor scale), `mcp-snapshot.mjs` (MCP drift),
-  `release-watch.mjs` (router repos; `body_regex` scan mode watches near-daily changelog streams —
-  claude-code + codex + gemini-cli + opencode; 10-20 `Gathin23/cleanyourtv` @ v2.3.0 — a release
-  past the tag is growth or brands-pulled-after-vendor-contact),
-  `nvd-provenance.mjs` (per-CVE status/metric/KEV movement, Pass 10; status and NVD-scored named
-  apart after the endorsement case), `vendor-advisory.mjs` (machine-readable vendor-advisory
-  registry + per-ID presence across NVD/cveawg/KEV, CVRF `Type="CNA"` attribution — Pass 11),
-  `feed-stamp.mjs` (the feed's `updated:` written from the clock in true UTC, every batch, all
-  locales + `latest.md` — it had been local UTC+8 wall clock labelled `Z`, 8h in the future),
-  `compact-log.mjs` (log-window compaction), `cv-audit.mjs` (the `cv` review field: co-citation
-  clusters, the `cv === 1 + cvlog.length` invariant, dry-run bump path), star-to-commit check
-  (Pass 9), KEV/NVD/npm/GitHub one-call checks (CLAUDE.md perishable-claims rules),
-  `torvalds-folio-v2` + `doc2harness-repro` (HN-fingerprint watches for the kernel series'
-  v2/landing and Doc2Harness reproduction); citation counts via **OpenAlex** when Semantic
-  Scholar 429s — the unauthenticated tier 429'd twice in one day (10-18) before OpenAlex
-  answered the same question.
+  `release-watch.mjs` (router repos; `body_regex` changelog streams — claude-code + codex +
+  gemini-cli + opencode), `nvd-provenance.mjs` (status/metric/KEV movement, Pass 10),
+  `vendor-advisory.mjs` (registry + per-ID presence across NVD/cveawg/KEV, CVRF `Type="CNA"` — Pass 11),
+  `feed-stamp.mjs` (`updated:` from the clock in true UTC, all locales + `latest.md`),
+  `compact-log.mjs`, `cv-audit.mjs` (`cv` field + `cv === 1 + cvlog.length`), star-to-commit check
+  (Pass 9), KEV/NVD/npm/GitHub one-call checks (CLAUDE.md perishable rules), `torvalds-folio-v2` +
+  `doc2harness-repro`; `osv-lag.mjs` (scanner visibility on the **package** record — alias-following,
+  NVD-reference route, day-granularity labels); `disclosure-lag.mjs --census` (range provenance +
+  the quota-degraded pass); citation counts via **OpenAlex** when Semantic Scholar 429s.
 
 - **Non-AI batch items (10-07→10-20):** the itemized record lives in the dated feed files; the
   long-runners have homes — DDR4's revival (→ thesis 3), Yandex Cloud's Vladimir DC UAV strike
@@ -1045,5 +1062,18 @@ patterns, and turn them into insights and actionable todos.
   design, and `cn-math-taxonomy`'s per-row 待核 marking (→ [[dev-tools]]).
 
 - **10-24 batch lanes (non-CVE):** OpenSSL 4.1.0's risk sits in the removals (`VC-WIN64I`/`VC-CE`, `no-ecdsa`/`no-ecdh`) while GREASE's tail is server-side (→ [[dev-tools]]); Dagger 1.0 beta's test-native CI beside its own "we can't test against your private repositories" (→ [[dev-tools]]); ReactOS installing onto NTFS with no journaling and no ACLs, development builds only (→ [[dev-tools]]); ArtCraft's three-register readiness numbers (97% of features vs ~60% ready for work) across 68 repos, twelve updated inside 25 minutes (→ [[dev-tools]] [[fact-check]]); `android/skills` as a platform vendor shipping *skills* with contributions closed, and `claude-plugins-official`'s immutable-slug rule over 1,203 open issues (→ 1, 8, [[agent-plugins]]); CLI-Anything's JSON-CLI-over-the-real-app architecture against its stale `pushed_at` (→ 8, [[fact-check]]); Berget's per-request CO₂ where embodied hardware dominates on a clean grid (→ 19, [[datacenter-silicon]]); Sweden's Copilot-only block as procurement deciding access (→ 15, [[platform-gatekeeping]]).
+
+- **10-24 12:03 batch lanes (non-CVE):** Hexacon's iPhone teaser — 780 HN points on four paragraphs with no
+  version, class, access level or CVE, so the publishable fact is the gap (→ [[security]] [[fact-check]]); Block's
+  Dessa as a text-free full-duplex speech bet whose ablation is never run (→ [[frontier-models]]); MAI-DxO in
+  *Science* over a June-2025 preprint whose comparison arm is generalists (→ [[fact-check]] [[frontier-models]]);
+  the Brotli/http2shell ecosystem where the decoder is *inside* Node and Bun, so no lockfile names it (→
+  [[security]]); Williams' enclosure-not-tragedy essay (arXiv 2610.27251, single author, 2026/10/19) naming the
+  unit of harm as the institution rather than the copy (→ [[ai-impact]]); LayerFS's per-agent CoW workspaces over
+  shared committed history with a Disposable-only store (→ [[agent-stack]]); the Enron Brain's 45k-email
+  temporal knowledge base and its $11,215 verification bill (→ [[agent-stack]] [[fact-check]]); Trail of Bits'
+  self-audit of agent-authored patches (21 regressions, none security, 36% precision) (→ 8, [[fact-check]]);
+  VoxCPM2's complete spec sheet on a 16-day-cold repo (→ [[edge-inference]]); Astral's uv×ty per-script
+  environments and ziwei-doushu's MIT-code/CC-BY-4.0-data 56.6 GB corpus (→ [[dev-tools]]).
 
 > Open questions I'm chasing next live on the [action page](/en/action/) agenda (Research + System).
