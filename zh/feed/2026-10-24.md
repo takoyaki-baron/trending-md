@@ -1,8 +1,8 @@
 ---
 date: 2026-10-24
-updated: 2026-10-24T04:24:51Z
+updated: 2026-10-24T12:13:13Z
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 22
+sources: 28
 license: CC-BY-4.0
 ---
 
@@ -574,12 +574,208 @@ README 开头不是卖点而是理由 ——"算法是公开的传统智慧，�
 
 ---
 
+## 37. Wasmtime 的 Cranelift 发了两个能逃出 Wasm 沙箱的 9.9 —— 而 NVD 对这两条记录都尚未分析
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** GitHub Advisory Database / NVD · 公告 2026-10-19T19:21Z · NVD 记录 2026-10-23T22:16Z
+- **Tags:** `cve` `wasmtime` `sandbox-escape` `compiler` `cvss-provenance`
+
+Wasmtime 仓库里的两条严重公告，都在同一小时发布的版本中修复。**GHSA-897f-g5gm-fmxm**（CVE-2026-115889）：Cranelift 对 SSA 值索引做位打包的方式"在编译一个足够大、或特制的、含大量 SSA 值的 Wasm 函数时，可能在 release 构建中静默溢出"，之后它"可能引用错误的 IR 值，造成任意错误编译、类型混淆，以及其他由攻击者控制的影响，在使用默认 Cranelift 后端的任何架构上都可能逃出 Wasm 沙箱"。修复于 **36.0.19 与 43.0.0**。**GHSA-mghf-wjfp-p5xm**（CVE-2026-115893）：在 aarch64 上，一个目标数超过约 **256,000** 的 `br_table` 会被编译成一个目标错误的条件分支，从而"可以跳到用户控制偏移处的任意其他代码，使一个用户控制的 Wasm 模块能在使用默认 Cranelift 后端的 aarch64 引擎上逃出沙箱"。修复于 **36.0.19、48.0.7 与 49.0.4**。
+
+时点很干净，也值得点名：公告发布于 **2026-10-19 的 19:21Z**，而 `v36.0.19`（19:09:53Z）、`v48.0.7`（19:20:31Z）与 `v49.0.4`（19:20:37Z）全部落在同一个窗口内 —— 修复先于记录。NVD 直到 **2026-10-23 的 22:16Z**，也就是四天后，才发布这些 CVE 记录。仓库里在 **90 秒内**（19:20:21 → 19:21:51）出现了五条公告，另外三条分别评为中危（降级一个宿主创建的 component-model 流时 panic）、中危（拼接响应体上的 wasi-http p3 content-length）与低危（转发的 trailer 未按 `is_forbidden_header` 检查）。
+
+**Why it matters:** 两个 9.9 各自只带一条度量 —— 一条来自 `security-advisories@github.com` 的 **CVSS 3.1 `Secondary`**，也就是 GitHub 的 CNA 分数 —— 而 NVD 对两者的 `vulnStatus` 都是 **`Deferred`**，不是 `Analyzed`。所以这是一对 CNA 指派的分数，数字属于 GitHub 而非 NIST；请照此读它。工程上的后果是另一回事：沙箱的好坏只等于它编译器的好坏，而这两个 bug 都是对攻击者编写输入的误编译，恰恰是 Wasmtime 存在的威胁模型。注意修复版本横跨三条线（36、48、49）—— 去核对自己在哪一条，不要假设最新的 tag 同时覆盖两者，因为 `v50.0.0` 已于 2026-10-20 发布，而公告点名的是它的前代。
+
+[`🔗 GHSA-897f-g5gm-fmxm`](https://github.com/bytecodealliance/wasmtime/security/advisories/GHSA-897f-g5gm-fmxm) · [`🔗 GHSA-mghf-wjfp-p5xm`](https://github.com/bytecodealliance/wasmtime/security/advisories/GHSA-mghf-wjfp-p5xm) · [`🔗 Wasmtime v36.0.19`](https://github.com/bytecodealliance/wasmtime/releases/tag/v36.0.19)
+
+---
+
+## 38. Postiz 的 9.9：一个已登录用户点名一个辅助函数，后端就把自己的会话签名密钥交了出来
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** CVE Program（cveawg）/ Postiz 公告 · 记录发布 2026-10-23T22:02Z
+- **Tags:** `cve` `postiz` `self-hosted` `path-traversal` `session-forgery`
+
+**CVE-2026-115931** 由项目自己指派（`assignerShortName: postiz`，公告 PSA-2026-JNXM56），是 Postiz 里的一个 9.9 —— 一个自托管的社交媒体排程工具，拥有 **37,696 stars**。机制是缺少一份允许列表："Postiz 允许已登录用户请求后端在其某个已连接渠道上运行一个函数。后端没有限制可以请求哪些函数，因此用户可以调用那些从未打算从 Web 界面触达的内部辅助函数。"其中一个辅助函数会从磁盘读取文件，而"一个连接了某个渠道、其存储令牌是一个文件路径的用户，可以让后端返回它能读取的任意文件内容，包括它的环境 —— 其中含有用于签名登录会话的密钥、数据库地址以及所连接服务的凭据。"第二个辅助函数"用一次请求就让后端进程退出"。CWE-470（不安全的反射）与 CWE-73（文件名或路径的外部控制）；声明的范围是 **2.23.0 至 < 2.25.2**。
+
+**Why it matters:** 影响链才是 9.9 站得住的原因 —— 泄露的密钥用于签名登录会话，于是一次文件读取变成了伪造任意账号会话的能力，而不只是攻击者自己的。"自注册默认开启"，记录补充道，因此不需要已有账号，也不需要另一个用户做任何动作。两个细节该放在旁边：`v2.25.2` 发布于 **21:59:49Z**，比 CVE 记录（22:02:21Z）早约**两分半钟**，所以这是一个"先修复、后记录"的故事，该装的补丁就是这个版本；而 `v2.25.1`（2026-10-11）本身就是针对*另一份*公告（PSA-2026-4QX1WG）的安全版本，在把上一次补丁当作已经覆盖了这个界面之前，这一点值得知道。
+
+[`🔗 CVE-2026-115931（cveawg）`](https://cveawg.mitre.org/api/cve/CVE-2026-115931) · [`🔗 Postiz v2.25.2`](https://github.com/gitroomhq/postiz-app/releases/tag/v2.25.2)
+
+---
+
+## 39. OBS Studio 33 迁到 CEF 150，重定位所有插件，并放弃 Ubuntu 24.04
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** GitHub Releases / Hacker News · 199+ pts · 约 7 小时前 (~12:49 UTC+8)
+- **Tags:** `obs` `release` `plugins` `cef` `packaging`
+
+OBS Studio **33.0.0** 于 **2026-10-23T22:20:29Z** 发布，三项头条变更中有两项是插件作者与打包者会直接感受到的管道改动。**CEF 从 127/6533 升到 150/7871** —— "从 2024 年 7 月的发布到 2026 年 9 月"，发布说明请用户报告浏览器源里的"任何新的怪异之处"，对一个跨两年的框架跳跃来说，这是异常坦诚的措辞。**插件加载被彻底重做**：一方插件移入名为 `core` 的文件夹，第三方插件获得"更新的安装位置与文件夹结构"，而旧位置"会继续加载……直到 OBS Studio 34.0" —— 一个只给一个版本的迁移窗口。
+
+两项较小的变更带来的风险超过它们的戏份。**安全模式下完全不加载第三方插件**，并且安全模式**也不再启动 WebSocket Server** —— 于是任何基于 obs-websocket 的自动化，恰好在 OBS 崩溃进安全模式时静默失去控制通道。**NVENC 现在在 Arm64 上启用**，Windows 构建迁到 **Visual Studio 2026** 与 SDK 26100。说明还列出了**移除对 Ubuntu 24.04 的支持**，这是最可能在任何人读 changelog 之前就先弄坏一个 CI 镜像或桌面的那一行。
+
+**Why it matters:** 33 是 OBS 不再是一个自包含应用、而开始成为一个带迁移截止日的插件平台的版本。`core` 重定位加上 34.0 的截止，是对每个第三方插件都成立的、带日期的破坏性变更；而安全模式的改动移走了一条调试假设 —— "重启进安全模式，我的脚本还能控制它" —— 大量直播自动化正是建立在这条假设上。现在就规划插件搬迁；旧路径有保质期。
+
+[`🔗 OBS Studio 33.0.0 发布说明`](https://github.com/obsproject/obs-studio/releases/tag/33.0.0) · [`🔗 HN 讨论 (50218430)`](https://news.ycombinator.com/item?id=50218430)
+
+---
+
+## 40. 十二年分布式 SQLite：rqlite 的作者写下这个品类的新来者跳过的那段历史
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Philip O'Toole / Hacker News · 231+ pts · 约 11 小时前 (~09:16 UTC+8)
+- **Tags:** `database` `sqlite` `raft` `distributed-systems` `open-source`
+
+Philip O'Toole 于 **2014 年 9 月**发布了 rqlite —— "拿 SQLite，在它前面放一个 Raft 日志，把每次写复制到一个集群" —— 而这份十二年回顾，是一个如今"已有十几个项目、其中几个拿了风投、两个被收购"的品类的一手历史；他指出该品类的记述者"倾向于从 2021 年前后开始讲这个故事"。时间线：第一版用的是 **goraft**（与 InfluxDB、etcd 同一个库），2016 年初换成 **HashiCorp 的 Raft**，rqlite 至今仍用它。从未改变的设计决策是 rqlite 是一个 **CP 系统** —— 写经 leader、多数派确认，被分区隔离出的少数派拒绝写入。
+
+他点名了先例，而不是声称这个想法是自己的：**Expensify 的 Bedrock**（Paxos 风格，2016 年开源）与 **ActorDB**（Erlang，每个 actor 一个 SQLite，用 Raft 复制）。然后是 2017 年 Canonical 为 LXD、后来为 MicroK8s 做的 **dqlite**（"以 Go 起步，后用 C 重写并配了自己的 Raft 库"）；2021 年的 **Litestream**，完全不用共识，把 WAL 流到 S3；2022 年 Fly.io 的 **LiteFS**，在文件系统层面复制，配合 Consul 租约；**cr-sqlite** 的 CRDT，占据 AP 那一角；**libSQL**，从 SQLite 自身 fork 出来，由 ChiselStrike 后来到 Turso，**2026 年被 Supabase 收购**；SQLite Cloud；以及 Cloudflare 的 D1，加上 Durable Objects 里的 SQLite。
+
+**Why it matters:** 分类法才是可复用的部分。他把这个空间分成三个角 —— **共识**（rqlite、dqlite）、**流式**（Litestream）、**合并**（cr-sqlite）—— 并观察到"大多数争论都是它们各自的用户之间关于'被问的是哪个问题'的争论"。他自己对这个取舍的概括是全文最锋利的一句："Litestream：如果机器死了怎么办？rqlite：如果机器死了而我一分钟都等不了恢复怎么办？"限定是作者身份 —— 这是一份参与者的历史，他自己一开始就说了（"这一切我都在场"），包括承认钱都去了平台公司，而开源实现一直免费。一个值得带走的细节：Litestream 处理 WAL 的方式，正是启发 rqlite 自己 v8.0 处理方式的东西。
+
+[`🔗 十二年分布式 SQLite`](https://philipotoole.com/twelve-years-of-distributed-sqlite/) · [`🔗 rqlite/rqlite`](https://github.com/rqlite/rqlite) · [`🔗 HN 讨论 (50217500)`](https://news.ycombinator.com/item?id=50217500)
+
+---
+
+## 41. JetBrains 开源 ThinkRail：一个 Apache-2.0 的 IDE，每个工作区都是一个 git worktree
+
+- **Velocity:** ▮▮ rising
+- **Source:** thinkrail.ai / Hacker News · 43+ pts，60 条评论 · 约 4 小时前 (~16:08 UTC+8)
+- **Tags:** `agent-ide` `jetbrains` `git-worktree` `spec-graph` `apache-2.0`
+
+**JetBrains/thinkrail** 是来自 JetBrains InnovationHub 的 Apache-2.0 agentic IDE —— **1,069 stars**，创建于 2026-07-08，今天有推送，**202 个未关 issue**。工作单位是从任意仓库打开的项目，被切成**真实 git worktree 的工作区**："自己的分支，自己的 cwd"，于是"你可以并行跑好几个 agent；每个的烂摊子都留在自己的分支上，main 在你发话之前保持干净"。第二个设计赌注是 **spec 图**："一份互相连接的 spec 文件图与代码并排放着，agent 用专门的工具读取、检索并维护它"，其声明的目标是"意图能活过会话"。
+
+架构主张是逆流的那一个。ThinkRail 把自己描述为"一个薄宿主，一台真引擎"：**`pi` 编码 agent 在进程内运行，并拥有模型、技能、压缩与成本**，而 ThinkRail"拥有工作区、编辑器与连线 —— 它从不背着你组装提示词"。它在 macOS、Windows 与 Linux 上运行，作为本地启动器打开浏览器 UI（另有一个 `.dmg`），安装路径是仓库 `main` 分支上的一个 `curl -fsSL … | bash` 脚本。
+
+**Why it matters:** 这是一个 JetBrains *InnovationHub* 项目，不是 JetBrains IDE 的一个功能，而它下的赌注与那些拥有提示词的 harness 相反：把状态（worktree、spec 文件）放进 IDE，把提示词构建留给别人的 agent。对已经在同一个仓库里跑多个编码 agent 的团队来说，一工作区一 worktree 是解决真问题的那部分 —— 并发 agent 之间的合并冲突 —— 而 spec 图是需要证据的那部分。两件该盯的事：一个三个月大的仓库有 202 个未关 issue，以及一个从 `main` 管道执行的安装脚本 —— 这既是一个上手方式的选择，也是一个供应链选择。
+
+[`🔗 thinkrail.ai`](https://thinkrail.ai/) · [`🔗 JetBrains/thinkrail`](https://github.com/JetBrains/thinkrail) · [`🔗 HN 讨论 (50219186)`](https://news.ycombinator.com/item?id=50219186)
+
+---
+
+## 42. IQuest-Q1：为 agentic CLI 工作打造的 320B-A15B —— 而它的基准表以一张 PNG 交付
+
+- **Velocity:** ▮▮ rising
+- **Source:** arXiv 2610.30949 / Hugging Face Daily Papers · 74 个赞同
+- **Tags:** `moe` `agentic-coding` `open-weights` `benchmarks` `cli-harness`
+
+IQuest 发布了 **IQuest-Q1** 的报告，"一个稀疏 MoE agentic 基础模型，**总参 320B（激活 15B）**"，定位直指编码 agent：88 层、隐藏维 3,072、48/8 注意力头、**256 个专家、激活 8 个**、**3 个滑窗 + 1 个全注意力层**的混合模式（窗口 4,096）、32 维的部分 RoPE、**524,288 上下文**，以及 MTP 层 —— 训练时两个独立，推理时一个递归应用 **×8**。训练分三阶段：预训练结合 Stable SplitNorm、Muon 与 muP，采用两阶段课程，第二阶段提高编码数据配比；领域/格式扩展的中期训练并做上下文扩展；然后是"多脚手架、多版本后训练"（SFT、领域专用 RL，以及跨脚手架的 MOPD），最后做跨专家与检查点的模型合并。
+
+有趣的是它的报告方式。基准表是**一张单独的 PNG**（`IQuest-Q1_Performance.png`）—— 摘要里一个数字都没有 —— 而说明解释的是设置而不是结果：温度 1.0、top-p 0.95、top-k 20，harness 用 **Claude Code `2.1.140` 或 Codex `0.142`**；DeepSWE v1.1 用 **mini-SWE-agent**，其余用 Claude Code；Agents' Last Exam 用 **Claude Code `2.1.258`**；CyberGym 限时六小时，Terminal-Bench 2.1 限时八小时。因为"我们的模型目前不具备多模态能力，我们把 agent 对话中的多模态内容输入替换为占位符"。
+
+**Why it matters:** 配置才是故事 —— 一个围绕特定 CLI harness 版本调教的 15B 激活模型，等于在说 harness 现在已经是模型的一部分；而递归 MTP（推理时 ×8）是随权重一起发布的解码侧优化。限定同样具体：那些数字不先把一张图做 OCR 就无法核对；**IQuest-CLIBench 是自家基准**；而权重（`IQuestLab/IQuest-Q1`，**最后修改 2026-09-29**，约 4,800 次下载）带的是 `license: other` / `license_name: iquest-q1`，属开放权重而非 OSI 许可证。请把摘要里的"开源模型"读作一个关于可得性的说法，而不是关于权利的说法。
+
+[`🔗 arXiv 2610.30949`](https://arxiv.org/abs/2610.30949) · [`🔗 IQuest-Q1 模型卡`](https://huggingface.co/IQuestLab/IQuest-Q1) · [`🔗 HF Daily Papers`](https://huggingface.co/papers/2610.30949)
+
+---
+
+## 43. 腾讯的 WeVisOne-VL 把框、点、掩码与 alpha matte 放进同一个 4B 模型
+
+- **Velocity:** ▮▮ rising
+- **Source:** arXiv 2610.31329 / Hugging Face · 229 个赞同
+- **Tags:** `vlm` `segmentation` `matting` `tencent` `open-weights`
+
+**WeVisOne-VL**（"微信视觉多合一"）来自腾讯微信视觉团队，基于 **Qwen3-VL**，通过结构化下一 token 预测统一了目标级与像素级感知：开放词表目标检测、指代定位、目标计数、目标指点、OCR、指代分割，以及可提示的 **alpha matting** —— "从点与框到掩码与 alpha matte"。机制是一个由特殊 `<OBJ>` token（ID 152678）触发的**轻量 9.6M 参数像素解码器**，它组合了架在 Qwen3-VL 合并前 ViT 特征之上的视觉特征适配器、一个带六个可变形交叉注意力块的框引导查询解码器，以及一个在 S/4 → S/2 → S/1 步长上细化、输出全分辨率连续 alpha 的稠密预测头。坐标以专用 token `<0>`…`<1000>` 输出，而模型"在被查询的目标不存在时返回 `None`"。训练是三阶段课程式 SFT 后接混合任务 RL；摘要声称在"超过 30 个基准"上取得领先表现。
+
+**Why it matters:** matting 是不寻常的能力 —— 连续的 alpha 通道是一种生成式风格的输出，而用一个 9.6M 参数的附加模块、而不是扩散头，从下一 token 预测的 VLM 里把它取出来，是值得研究的设计。已公布的限定很具体，且应该与主张同行："精细的 alpha 边界仍对图像分辨率、严重遮挡、复杂透明与提示措辞敏感"；模型"直接生成结构化输出，**没有显式思维链**"，且"目前面向**单轮**图像感知（视频网格会被像素解码器拒绝）"；模型卡还写明它"不打算用于自主的高影响决策或识别个人"。把它读作一个感知组件，不是一个 agent —— 并注意"超过 30 个基准"这个标题在摘要里并没有配表。权重是 Apache-2.0（`tencent/WeVisOne-VL-2B` 与 `-4B`，首次上传于 2026-10-22）。
+
+[`🔗 arXiv 2610.31329`](https://arxiv.org/abs/2610.31329) · [`🔗 WeVisOne-VL-4B 模型卡`](https://huggingface.co/tencent/WeVisOne-VL-4B) · [`🔗 Tencent/WeVisOne-VL`](https://github.com/Tencent/WeVisOne-VL)
+
+---
+
+## 44. 接我们 10 月 21 日 PhotoCraft 那条：同一个组织现在列出 14 个"纯 Rust"桌面应用 —— 183,348 星与 14,912 个未关 issue
+
+- **Velocity:** ▮▮ rising
+- **Source:** GitHub（storytold 组织）· 14 个应用仓库，创建于 2026-09-30 → 2026-10-14
+- **Tags:** `rust` `desktop-apps` `open-source` `git-hygiene` `org-scale`
+
+我们在 10 月 21 日讲到 **storytold/photocraft** 时，它还是单个 5.6 万星的图片编辑器。此后该组织长成了一套：**14 个桌面应用、183,348 星、合计 14,912 个未关 issue**，全部创建于一个两周窗口内（2026-09-30 → 2026-10-14）。排序：photocraft 72,165★ / 2,852 个未关 issue，pdfcraft 17,530★ / 1,990，filmcraft 15,976★ / 1,623，wordcraft 15,822★ / 1,738，lightcraft 14,491★ / 1,074，vectorcraft 10,560★ / 845，effectcraft 7,814★ / 834，cadcraft 6,633★ / 866，gridcraft 6,393★ / 1,127，designcraft 4,725★ / 644，deckcraft 4,189★ / 532，soundcraft 3,667★ / 470，figcraft 3,326★ / 315，AniCraft 57★。每一个都被描述为"一个开源的净室重实现……用纯 Rust 从零写成"，而 **14 个里有 13 个声明 Apache-2.0**（AniCraft 没有许可证字段）。组织下共 **68 个仓库**，包括共享管道 —— `craft-libs`（337★，168 个未关 issue）、`craft-launcher`（3,960★，492）、`craft-ai-integrations`（102★）、`craft-common-actions`（70★）—— 还有 `egui` 与 `winit` 的镜像。
+
+**Why it matters:** issue 积压才是应该与星标数一起传播的那个数字。**14,912 个未关 issue 对 183,348 星，等于每十二颗星一个 issue**，而单个最大的仓库背着 2,852 个 —— 那不是 bug 跟踪器，那是一条接单队列。这并不说明这些应用差；它说明"星"衡量的是这个品类的需求，而不是软件能用的证据，而面对一个三周大、长成这样的套件，诚实的读法是：README 很出色，以及一份没人证明能被清掉的支持负载。许可证的统一是真的且有用（整套 Apache-2.0 相对本月扎堆的社区许可证发布，确实是一个采用优势）；"净室"这个说法从外部无法核实，在依赖其中任何一个之前，值得对着它们各自点名的商业对标项目核一遍。
+
+[`🔗 storytold 组织`](https://github.com/storytold) · [`🔗 storytold/photocraft`](https://github.com/storytold/photocraft)
+
+---
+
+## 45. Puter 的"Everything"是一个声称重建所有软件的单体仓库 —— 而它一半的"Try it"链接指向一个锚点
+
+- **Velocity:** ▮▮ rising
+- **Source:** GitHub Trending / HeyPuter · 3,779★ · 创建于 2026-10-13
+- **Tags:** `open-source` `monorepo` `web-apps` `mit` `catalog`
+
+**HeyPuter/everything** 毫不含糊地陈述自己的野心："一项从零重建并开源世界上所有软件的努力。从 Office 到 Slack、从 Photoshop 到 AutoCAD，我们正在为所有专有软件重建免费的开源替代品。"这是一个 MIT 许可的单体仓库，创建于 **2026-10-13**，现有 **3,779 stars、474 forks 与 13 个未关 issue**，含**九个类别** —— 办公、协作、创意工具、工程、生产力、金融、商业、开发者工具、游戏 —— 每一行都把一个应用与它所替代的商业产品配对：电子表格（Excel、Sheets、Numbers）、文档（Word、Docs、Pages）、照片工作室（Photoshop、Pixelmator）、视频工作室（CapCut、Premiere Pro、Final Cut Pro、DaVinci Resolve）、矢量工作室（Illustrator、CorelDRAW、Affinity Designer）、3D 工作室（Maya、SketchUp）等等。上手方式是 `cd everything/src/[app-name] && npm install && npm run dev`，需要 Node 22.12+。
+
+README 在一个很具体的地方比推销话术更诚实：一条 HTML 注释说明"演示与源码链接在有项目元数据时使用之；**缺失的目标指向 link-status 说明**"，而相当一部分"Try it"链接带着 `title="Demo URL not yet provided"` —— 链接解析到 `#link-status`，而不是一个能跑的应用。
+
+**Why it matters:** 主张是最大化的，而制品是一份目录，所以唯一有意义的问题是这些应用里有多少能跑。这是 Puter 既有的浏览器 OS 项目把自己的表面积打包成一个单体仓库；这个仓库今天展示的是范围与许可证的清晰度，而不是所列 30 多个应用中任何一个能与它点名的产品竞争。这个模式值得普遍识别："重建一切"类仓库能快速把愿望换成星标，而该检查的地方是那张表与可部署物之间的距离。
+
+[`🔗 HeyPuter/everything`](https://github.com/HeyPuter/everything) · [`🔗 Puter`](https://puter.com/)
+
+---
+
+## 46. 设计品味变成一项技能：Impeccable 发布 62 条针对 AI 生成 UI 的检测规则
+
+- **Velocity:** ▮▮ rising
+- **Source:** GitHub Trending / pbakaus · 85,860★ · 今日 +541★
+- **Tags:** `agent-skills` `design` `linting` `frontend` `claude-code`
+
+**pbakaus/impeccable** 把自己描述为"给 AI 编码 agent 的设计指南：1 项技能、24 条命令、实时浏览器迭代，以及 **62 条针对 AI 生成前端设计的确定性检测规则**"—— **85,860 stars**，Apache-2.0，`4.7.1` 发布于 **2026-10-24T01:46Z**。它直说自己的来处："Anthropic 的 frontend-design 是第一个被广泛使用的 Claude 设计技能。Impeccable 从那里起步。"诊断是最常被引用的部分 —— "每个模型都在同一套 SaaS 模板上训练"，而它点名的痕迹都很好认：什么都用 Inter、紫到蓝的渐变、卡片里套卡片、彩色背景上的灰字、"每个标题上方那一块圆角方形图标"。初始化通过 `/impeccable init` 把持久的产品事实写进 `PRODUCT.md`，安装是 `npx impeccable install`。邻近的 **Nutlope/hallmark** —— "给 Claude Code、Cursor 和 Codex 的反 AI 垃圾设计技能" —— 有 **31,502 stars**（MIT，今日 1,053）。
+
+**Why it matters:** "确定性检测规则"是与纯提示词技能之间的结构性差别。一句提示说"别用 Inter"；62 条规则可以对生成的 CSS 运行并让构建失败，这就把品味变成了一个可检查的闸门 —— 而闸门的好坏只等于它的规则：面对一种模型会无限重新生成的外观，62 条启发式会被针对着优化，通过它们也不等于设计好。这些星标数（一项在过去一年内发布的技能就有 85.9k）说明这个品类现在有了旗舰级的数字，以及会扭曲它们的注意力；诚实的检验是这套检测器能不能抓到人类评审者会抓到的东西。
+
+[`🔗 pbakaus/impeccable`](https://github.com/pbakaus/impeccable) · [`🔗 impeccable.style`](https://impeccable.style) · [`🔗 Nutlope/hallmark`](https://github.com/Nutlope/hallmark)
+
+---
+
+## 47. 现在约有十几家银行应用明确允许 GrapheneOS —— 而约 10% 仍然封禁任何非 Google 系统
+
+- **Velocity:** ▮▮ rising
+- **Source:** GrapheneOS（Mastodon）/ Hacker News · 183+ pts · 约 11 小时前 (~09:15 UTC+8)
+- **Tags:** `grapheneos` `android` `attestation` `banking` `play-integrity`
+
+GrapheneOS 自己的账号，在 **2026-10-23T21:36Z** 发布的一条回复中写道："大多数银行应用在 GrapheneOS 上可用，但很多有内存破坏 bug 与错误的反篡改代码，需要我们那个逐应用利用防护兼容模式开关。**约 10% 的银行应用不可用，原因是它们封禁使用非 Google 批准的系统。**约有十几家银行应用开始在一套 Google 批准的系统之外，明确允许 GrapheneOS，而且这个数字在增长。"该项目指向众包的 **privsec.dev** 兼容性列表 —— 一份按国家整理的数据集（5,617 词，最后更新于 **2026-10-20**），由用户报告维护。
+
+**Why it matters:** 闸门是认证，不是密码学 —— 一个"封禁非 Google 批准系统"的银行应用，读的是 Play Integrity 的设备裁决，所以真正起变化的，是银行那边的一处策略编辑，而不是 ROM 这边的一个技术修复。两个限定与数字同行："约 10%"与"十几家"是 **GrapheneOS 依据用户报告做出的自估**，帖子里没有逐应用清单，也没有点名任何银行；而 privsec.dev 本身就是一个众包登记册，它记录的是用户提交的东西，而不是每一家银行认证过的东西。方向仍然是故事本身：自定义系统用户多年来一直在失去访问权，而十几家银行把这件事反过来，是第一次朝另一个方向动。
+
+[`🔗 GrapheneOS 状态`](https://grapheneos.social/@GrapheneOS/117492375462459244) · [`🔗 privsec.dev 兼容性列表`](https://privsec.dev/posts/android/banking-applications-compatibility-with-grapheneos/) · [`🔗 HN 讨论 (50217495)`](https://news.ycombinator.com/item?id=50217495)
+
+---
+
+## 48. Filee 2.0：255 种格式，离线 —— 而五个可选引擎才是诚实的部分
+
+- **Velocity:** ▮ steady
+- **Source:** GitHub Trending / KnifeLemon · 11,396★ · v2.0.0 2026-10-21
+- **Tags:** `file-conversion` `offline` `dotnet` `mit` `desktop`
+
+**KnifeLemon/Filee** 是一个拖放式文件转换器，支持 Windows 10/11、Linux x64/ARM64 与 macOS（预览版）：按住 Ctrl（macOS 上是 Option），把文件拖到光标处弹出的圆环里的某个格式上，结果就保存在原文件旁边。**MIT**，C#/.NET，**11,396 stars、748 forks、90 个未关 issue**，`v2.0.0` 发布于 **2026-10-21**。格式表就是那个主张 —— 跨图像、PDF、Word/Excel/PowerPoint、**HWP/HWPX**、电子书（EPUB、MOBI、AZW3、CBZ、CBR……）、压缩包、字体、CAD、3D 模型与地理空间数据的"**255 种格式**"—— 多步路径会被自动解析（HWP → HWPX → DOCX）。
+
+README 划出了一条多数转换器会糊掉的界线，这也正是可以信任其余部分的原因：**未标记的格式开箱即用**，不需要 Office、Hancom Office 或 LibreOffice，而**标记过的格式需要仅在需要时才下载的可选引擎** —— Ghostscript、LibreOffice、Pandoc、calibre、FFmpeg，在 `engines.json` 里按 URL 固定版本。有一个 CLI（`filee`），而安全说明异常直接：库与程序"由其制作者签名的（.NET、SkiaSharp、ImageMagick、微软 C++ 运行时……）保留自己的签名；捆绑而来、本身未签名的（**rhwp、7-Zip** 以及大多数库）用 Filee 的证书签名，**作为 Filee 的一部分**"。
+
+**Why it matters:** "不需要 Office"对未标记的那一组是真的，对标记的那一组是假的，而这正是"一台气隙转换器"与"一台首次使用就呼叫五家厂商的转换器"之间的全部差别 —— 在受限机器上部署之前先读那条脚注。签名披露是另一半：用你自己的证书重签一个第三方二进制，是一次信任转移，而不是一份来源记录，所以"Filee 里的 7-Zip"是 Filee 对别人代码的签名 —— 作为一种声明没问题，但它并不是上游自己签名的那种保证。
+
+[`🔗 KnifeLemon/Filee`](https://github.com/KnifeLemon/Filee) · [`🔗 Filee — 引擎`](https://github.com/KnifeLemon/Filee/blob/main/docs/ENGINES.md) · [`🔗 filee.sh`](https://filee.sh)
+
+---
+
+## 49. AWS 的 Multi Model Server 因为模型归档解压拿到 9.8 —— 而 AWS 说别再用了
+
+- **Velocity:** ▮ steady
+- **Source:** CVE Program（cveawg）/ AWS Security Bulletins · 发布 2026-10-23T17:33Z
+- **Tags:** `cve` `aws` `model-serving` `path-traversal` `end-of-life`
+
+**CVE-2026-115812**，由 **AMZN** 指派，是"在 Amazon Web Services Multi Model Server 1.1.11 及更早版本的模型归档解压过程中"的一处相对路径穿越，它"可能让远程行为者通过一个特制的模型归档执行任意代码"。向量是 `AV:N/AC:L/PR:N/UI:N` —— 网络、无需权限、无需交互 —— 而 AWS 给它的评分是 **CVSS 3.1 下的 9.8、CVSS 4.0 下的 9.3**。NVD 的 `vulnStatus` 是 **`Awaiting Analysis`**，所以两个数字都是 CNA 的，不是 NIST 的。记录里的修复那一行才是关键："Multi Model Server **已终止生命周期（end of life）**，**没有可用的修复版本**。用户应停止使用 Multi Model Server，并迁移到受支持的模型服务方案。"
+
+**Why it matters:** 不会有补丁，将来也不会有，所以这里的"未修复"是永久的，而不是待定的 —— 建议是迁移，不是等待。这个 bug 类别是今年反复产出的那一种：一条信任归档条目的解压路径，出现在一个全部工作就是加载别人提供的文件的组件里。任何运行着会接受运维方或租户方提供的模型归档的 MMS 端点的人，今天都应该把它当作一个未鉴权的 RCE 面；而检查很便宜 —— 如果你在 ≤ 1.1.11 而服务可达，受影响的资产是那个服务，不是模型。
+
+[`🔗 CVE-2026-115812（cveawg）`](https://cveawg.mitre.org/api/cve/CVE-2026-115812) · [`🔗 AWS Security Bulletin 2026-148`](https://aws.amazon.com/security/security-bulletins/2026-148-aws/)
+
+---
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-10-24T04:24:51Z |
-| Items | 36 |
+| Generated | 2026-10-24T12:13:13Z |
+| Items | 49 |
 | Sources tracked | 30 (Hacker News、GitHub Trending、NVD、CISA KEV、CVE Program、GitHub Advisory Database、Science、arXiv、厂商博客、研究者公告) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8（每日 3 次） |
 | Ranking | 速度加权（时效 × 互动加速度 × 信源权威度） |
@@ -587,4 +783,4 @@ README 开头不是卖点而是理由 ——"算法是公开的传统智慧，�
 
 ---
 
-[前一天](2026-10-23.md) · [原始 .md](2026-10-24.md) · [归档](../archive/)
+[前一日](2026-10-23.md) · [原始 .md](2026-10-24.md) · [归档](../archive/)

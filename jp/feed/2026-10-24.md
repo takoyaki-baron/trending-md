@@ -1,8 +1,8 @@
 ---
 date: 2026-10-24
-updated: 2026-10-24T04:24:51Z
+updated: 2026-10-24T12:13:13Z
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 22
+sources: 28
 license: CC-BY-4.0
 ---
 
@@ -574,12 +574,208 @@ README は売り込みではなく理由から始まる ──「算法是公开
 
 ---
 
+## 37. Wasmtime の Cranelift は Wasm サンドボックスを抜ける 9.9 を 2 件出した ── そして NVD はどちらのレコードも分析していない
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** GitHub Advisory Database / NVD · 勧告 2026-10-19T19:21Z · NVD レコード 2026-10-23T22:16Z
+- **Tags:** `cve` `wasmtime` `sandbox-escape` `compiler` `cvss-provenance`
+
+Wasmtime リポジトリの 2 件の重大な勧告で、いずれも同じ時間に出荷されたリリースで修正されている。**GHSA-897f-g5gm-fmxm**（CVE-2026-115889）：Cranelift は SSA 値インデックスをビットパックするが、その方法は「can silently overflow in release builds when compiling a sufficiently large or specially crafted Wasm function with many SSA values」（多数の SSA 値を持つ十分に大きい、あるいは細工された Wasm 関数をコンパイルする際、リリースビルドで黙ってオーバーフローしうる）。その後それは「can reference incorrect IR values, causing arbitrary miscompilation, type confusion, and other attacker-controlled effects that may escape the Wasm sandbox on any architecture using the default Cranelift backend.」（誤った IR 値を参照し、任意の誤コンパイル、型混同、その他の攻撃者制御の効果を引き起こし、既定の Cranelift バックエンドを使う任意のアーキテクチャで Wasm サンドボックスを抜けうる。）**36.0.19 と 43.0.0** で修正。**GHSA-mghf-wjfp-p5xm**（CVE-2026-115893）：aarch64 では、おおよそ **256,000 個**を超えるターゲットを持つ `br_table` が誤ったターゲットの条件分岐にコンパイルされ、「can then jump to arbitrary other code at a user-controlled offset, allowing a user-controlled Wasm module to escape the sandbox on aarch64 engines using the default Cranelift backend.」（利用者制御のオフセットで任意の他のコードへジャンプでき、既定の Cranelift バックエンドを使う aarch64 エンジン上で利用者制御の Wasm モジュールがサンドボックスを抜けられる。）**36.0.19、48.0.7、49.0.4** で修正。
+
+タイミングはきれいで、名指しする価値がある。勧告は **2026-10-19 の 19:21Z** に公開され、`v36.0.19`（19:09:53Z）、`v48.0.7`（19:20:31Z）、`v49.0.4`（19:20:37Z）はすべて同じ時間帯に着地した ── 修正がレコードより先に来た。NVD が CVE レコードを公開したのは 4 日後の **2026-10-23 22:16Z**。リポジトリには **90 秒**の間に 5 件の勧告が現れ（19:20:21 → 19:21:51）、残り 3 件は中（ホストが作成したコンポーネントモデルストリームを lower する際のパニック）、中（spliced された応答本文に対する wasi-http p3 の content-length）、低（転送された trailer が `is_forbidden_header` で検査されない）と評価された。
+
+**Why it matters:** 両方の 9.9 が持つメトリクスはちょうど 1 つ ── **`security-advisories@github.com` による CVSS 3.1 の `Secondary`**、すなわち GitHub の CNA スコア ── であり、NVD の `vulnStatus` は両方とも `Analyzed` ではなく **`Deferred`** だ。したがってこれは CNA 採番のペアで、数値は NIST ではなく GitHub のものであり、そう読むべきである。工学的な帰結は別だ。サンドボックスはそのコンパイラと同じだけしか堅牢でなく、両方のバグは攻撃者が書いた入力の誤コンパイルであり、それはまさに Wasmtime が守るために存在する脅威モデルである。修正版が 3 つの系列（36、48、49）に分かれている点に注意 ── 最新タグが両方を覆うと仮定せず、自分がどれにいるか確認すること。`v50.0.0` は 2026-10-20 に出荷されており、勧告はその前身を名指ししている。
+
+[`🔗 GHSA-897f-g5gm-fmxm`](https://github.com/bytecodealliance/wasmtime/security/advisories/GHSA-897f-g5gm-fmxm) · [`🔗 GHSA-mghf-wjfp-p5xm`](https://github.com/bytecodealliance/wasmtime/security/advisories/GHSA-mghf-wjfp-p5xm) · [`🔗 Wasmtime v36.0.19`](https://github.com/bytecodealliance/wasmtime/releases/tag/v36.0.19)
+
+---
+
+## 38. Postiz の 9.9：ログイン済み利用者がヘルパー関数を名指しすると、バックエンドがセッション署名の秘密を渡す
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** CVE Program（cveawg）/ Postiz 勧告 · レコード公開 2026-10-23T22:02Z
+- **Tags:** `cve` `postiz` `self-hosted` `path-traversal` `session-forgery`
+
+**CVE-2026-115931** はプロジェクト自身が採番し（`assignerShortName: postiz`、勧告 PSA-2026-JNXM56）、Postiz ── **37,696 stars** のセルフホスト型ソーシャルメディアスケジューラ ── における 9.9 である。仕組みは許可リストの欠落だ。「Postiz lets a signed-in user ask the backend to run a function on one of their connected channels. The backend did not restrict which functions can be requested, so a user could call internal helper functions that were never meant to be reachable from the web interface.」（Postiz はログイン済み利用者に対し、接続済みチャネルの 1 つで関数を実行するようバックエンドへ要求させる。バックエンドは要求できる関数を制限していなかったため、利用者は Web インターフェースから到達するはずのなかった内部ヘルパー関数を呼べた。）そうしたヘルパーの 1 つはディスクからファイルを読み、「a user who connects a channel whose stored token is a file path can have the backend return the contents of any file it can read, including its environment, which holds the secret used to sign login sessions, the database address and the credentials of connected services.」（保存されたトークンがファイルパスであるチャネルを接続した利用者は、バックエンドが読める任意のファイルの内容を返させられる。環境変数を含み、そこにはログインセッションの署名に使う秘密、データベースのアドレス、接続サービスの資格情報がある。）2 つ目のヘルパーは「makes the backend process exit with a single request.」（1 回の要求でバックエンドプロセスを終了させる。）CWE-470（安全でないリフレクション）と CWE-73（ファイル名・パスの外部制御）。宣言された範囲は **2.23.0 以上 2.25.2 未満**。
+
+**Why it matters:** 影響の連鎖こそが 9.9 を擁護可能な数値にしている ── 漏れた秘密はログインセッションに署名するので、ファイル読み出しは攻撃者自身のものだけでなく任意のアカウントのセッション偽造になる。レコードはさらに「Self-registration is open by default」（自己登録は既定で開いている）と述べるので、既存アカウントも他の利用者の行為も不要だ。隣に置くべき詳細が 2 つある。`v2.25.2` は **21:59:49Z** に公開され、CVE レコード（22:02:21Z）の**約 2 分半前** ── つまりこれは修正先行の記録であり、インストールすべきパッチはこのリリースだ。そして `v2.25.1`（2026-10-11）自体が*別の*勧告（PSA-2026-4QX1WG）向けのセキュリティリリースであり、前回のパッチがこの面を覆っていると見なす前に知っておく価値がある。
+
+[`🔗 CVE-2026-115931（cveawg）`](https://cveawg.mitre.org/api/cve/CVE-2026-115931) · [`🔗 Postiz v2.25.2`](https://github.com/gitroomhq/postiz-app/releases/tag/v2.25.2)
+
+---
+
+## 39. OBS Studio 33 は CEF 150 へ移行し、全プラグインを移設し、Ubuntu 24.04 を落とす
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** GitHub Releases / Hacker News · 199+ pts · 約 7 時間前（UTC+8 12:49）
+- **Tags:** `obs` `release` `plugins` `cef` `packaging`
+
+OBS Studio **33.0.0** は **2026-10-23T22:20:29Z** に出荷され、3 つの看板変更のうち 2 つはプラグイン作者とパッケージャが体感する配管作業だ。**CEF は 127/6533 から 150/7871 へ** ──「from the July 2024 release to September 2026」（2024 年 7 月のリリースから 2026 年 9 月へ）であり、ノートはブラウザソースの「any new weirdness」（あらゆる新しい妙な挙動）を報告するよう求めている。2 年分のフレームワーク跳躍としては異例に率直な書き方だ。**プラグイン読み込みは全面的に刷新**される。ファーストパーティのプラグインは `core` という名前のフォルダへ移り、サードパーティは「an updated installation location and folder structure」（更新されたインストール場所とフォルダ構造）を得て、従来の場所は「will continue to load … until OBS Studio 34.0」（OBS Studio 34.0 まで読み込まれ続ける）── 1 リリース分の移行期間だ。
+
+小さく見える 2 つの変更は、その触れ込みより大きなリスクを運ぶ。**サードパーティプラグインはセーフモードでは一切読み込まれない**、そしてセーフモードは**WebSocket サーバも起動しなくなる** ── つまり obs-websocket 上に組んだ自動化は、OBS がセーフモードへ落ちたまさにその時に制御チャネルを黙って失う。**NVENC は Arm64 で有効化**され、Windows ビルドは SDK 26100 の **Visual Studio 2026** へ移る。ノートは **Ubuntu 24.04 のサポート削除**も挙げており、これが changelog を誰かが読む前に CI イメージやデスクトップを壊す可能性が最も高い行だ。
+
+**Why it matters:** 33 は OBS が自己完結したアプリであるのをやめ、移行期限付きのプラグイン基盤になり始めるリリースだ。`core` への移設と 34.0 の期限は、すべてのサードパーティプラグインにとって日付の入った破壊的変更であり、セーフモードの変更は「セーフモードで再起動してもスクリプトは制御できる」というデバッグ上の前提 ── 多くの配信自動化がその上に築かれている ── を取り除く。プラグインの移設は今計画すること。従来パスには賞味期限がある。
+
+[`🔗 OBS Studio 33.0.0 リリースノート`](https://github.com/obsproject/obs-studio/releases/tag/33.0.0) · [`🔗 HN ディスカッション (50218430)`](https://news.ycombinator.com/item?id=50218430)
+
+---
+
+## 40. 分散 SQLite の 12 年：rqlite の作者が、このカテゴリの新参者が飛ばす歴史を書く
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Philip O'Toole / Hacker News · 231+ pts · 約 11 時間前（UTC+8 09:16）
+- **Tags:** `database` `sqlite` `raft` `distributed-systems` `open-source`
+
+Philip O'Toole は **2014 年 9 月**に rqlite を公開した ──「take SQLite, put a Raft log in front of it, and replicate every write to a cluster」（SQLite を取り、その前に Raft ログを置き、すべての書き込みをクラスタへ複製する）── そして 12 年の回顧は、彼が指摘するように「now has a dozen projects in it, a few of them venture-funded, two of them acquired」（いまや十数のプロジェクトがあり、いくつかは VC 出資、2 つは買収済み）であり、その記録者たちが「tend to start the story around 2021」（物語を 2021 年あたりから始める傾向がある）カテゴリの一次資料的な歴史である。年表はこうだ。最初の版は **goraft**（InfluxDB や etcd と同じライブラリ）を使い、2016 年初頭に **Hashicorp の Raft** へ置き換えられ、rqlite は今もそれを使っている。決して変わらなかった設計判断は、rqlite が **CP システム**であること ── リーダー経由の書き込み、過半数による確認、そして分断された少数派は書き込みを拒否する。
+
+彼はアイデアを主張せず先例を名指しする。**Expensify の Bedrock**（Paxos 系、2016 年にオープンソース化）と **ActorDB**（Erlang、アクターごとに 1 つの SQLite、Raft で複製）。次に Canonical の **dqlite**（2017 年、LXD と後に MicroK8s 向け。「began in Go and was rewritten in C with its own Raft library」＝ Go で始まり、独自の Raft ライブラリを伴って C で書き直された）、**Litestream**（2021 年、合意形成を一切使わず WAL を S3 へストリームする）、Fly.io の **LiteFS**（2022 年、Consul のリースを用いてファイルシステム層で複製）、AP の隅を占める **cr-sqlite** の CRDT、ChiselStrike が SQLite からフォークし後に Turso となった **libSQL**（**2026 年に Supabase が買収**）、SQLite Cloud、そして Cloudflare の D1 と Durable Objects 内の SQLite。
+
+**Why it matters:** 再利用できるのは分類のほうだ。彼はこの空間を 3 つの隅に整理する ── **合意**（rqlite、dqlite）、**ストリーミング**（Litestream）、**マージ**（cr-sqlite）── そして「most of the arguments are arguments between their users about which question is being asked」（議論のほとんどは、どの問いが問われているかについての利用者同士の議論だ）と観察する。トレードオフについての彼自身の定式化が最も鋭い一行だ。「Litestream: what if the machine dies? rqlite: what if the machine dies and I cannot wait to restore?」（Litestream：マシンが死んだら？ rqlite：マシンが死んで、復旧を待てないなら？）但し書きは著者性にある ── これは参加者の歴史であり、彼は最初にそう言う（「I was there for all of it」＝すべてその場にいた）── 金はプラットフォームに流れ、オープンソース実装は無料のままだったという告白も含めて。持ち帰る価値のある細部が 1 つある。Litestream の WAL へのアプローチが、rqlite 自身の v8.0 の扱いに着想を与えた。
+
+[`🔗 Twelve years of distributed SQLite`](https://philipotoole.com/twelve-years-of-distributed-sqlite/) · [`🔗 rqlite/rqlite`](https://github.com/rqlite/rqlite) · [`🔗 HN ディスカッション (50217500)`](https://news.ycombinator.com/item?id=50217500)
+
+---
+
+## 41. JetBrains が ThinkRail をオープンソース化：すべてのワークスペースが git worktree である Apache-2.0 の IDE
+
+- **Velocity:** ▮▮ rising
+- **Source:** thinkrail.ai / Hacker News · 43+ pts、60 コメント · 約 4 時間前（UTC+8 16:08）
+- **Tags:** `agent-ide` `jetbrains` `git-worktree` `spec-graph` `apache-2.0`
+
+**JetBrains/thinkrail** は JetBrains InnovationHub による Apache-2.0 のエージェント型 IDE で、**1,069 stars**、2026-07-08 作成、本日 push、**未クローズ issue 202 件**。作業単位は任意のリポジトリから開かれるプロジェクトで、**実際の git worktree であるワークスペース**に切られる。「its own branch, its own cwd」（自前のブランチ、自前の cwd）なので「run several agents in parallel; each one's mess stays on its branch, and main stays clean until you say otherwise.」（複数のエージェントを並列に走らせられる。各自の乱雑さは自分のブランチに留まり、main はあなたがそう言うまで清潔なまま。）2 つ目の設計上の賭けは **spec graph** だ。「a connected graph of spec files lives beside the code, and the agent reads, searches, and maintains it with dedicated tools」（仕様ファイルの連結グラフがコードの隣に存在し、エージェントは専用ツールで読み、検索し、保守する）であり、掲げられた目標は「intent survives the session」（意図がセッションを越えて生き残る）ことだ。
+
+アーキテクチャ上の主張は逆張りのものだ。ThinkRail は自らを「a thin host, a real engine」（薄いホスト、本物のエンジン）と説明する。**`pi` コーディングエージェントがプロセス内で走り、モデル、スキル、コンパクション、コストを所有**し、ThinkRail は「owns the workspace, the editor, and the wire — it never assembles prompts behind your back.」（ワークスペース、エディタ、配線を所有する。背後でプロンプトを組み立てることは決してない。）macOS、Windows、Linux でローカルランチャーとして動き、ブラウザ UI を開く（`.dmg` もあり）。インストール経路はリポジトリの `main` ブランチから取る `curl -fsSL … | bash` スクリプトだ。
+
+**Why it matters:** これは JetBrains の *InnovationHub* プロジェクトであり、JetBrains IDE の機能ではない。そしてその賭けはプロンプトを所有するハーネス群の逆を行く ── 状態（worktree、仕様ファイル）を IDE に置き、プロンプト構築は他人のエージェントに任せる。すでに 1 つのリポジトリで複数のコーディングエージェントを走らせているチームにとって、ワークスペースごとの worktree は現実の問題 ── 並行エージェント間のマージ競合 ── を解く部分であり、spec graph は証拠を要する部分だ。注視すべき 2 点。3 か月前のリポジトリに未クローズ issue が 202 件あること、そしてインストールが `main` からパイプされるスクリプトであること ── これはオンボーディングであると同時にサプライチェーンの選択である。
+
+[`🔗 thinkrail.ai`](https://thinkrail.ai/) · [`🔗 JetBrains/thinkrail`](https://github.com/JetBrains/thinkrail) · [`🔗 HN ディスカッション (50219186)`](https://news.ycombinator.com/item?id=50219186)
+
+---
+
+## 42. IQuest-Q1：エージェント型 CLI 作業向けに作られた 320B-A15B ── そしてベンチマーク表は PNG で出荷される
+
+- **Velocity:** ▮▮ rising
+- **Source:** arXiv 2610.30949 / Hugging Face Daily Papers · 74 upvotes
+- **Tags:** `moe` `agentic-coding` `open-weights` `benchmarks` `cli-harness`
+
+IQuest は **IQuest-Q1** のレポートを公開した。「a sparse Mixture-of-Experts (MoE) agentic foundation model with **320B total parameters (15B activated)**」（**総パラメータ 320B、15B アクティブ**のスパース MoE エージェント基盤モデル）で、コーディングエージェントへまっすぐ向けられている。88 層、隠れ次元 3,072、48/8 のアテンションヘッド、**256 エキスパート中 8 アクティブ**、**3 のスライディングウィンドウ + 1 のフルアテンション**というハイブリッドパターンでウィンドウ 4,096、32 次元の部分 RoPE、**524,288 コンテキスト**、そして MTP 層 ── 訓練時は独立した 2 層、推論時は 1 層を **×8** で再帰適用する。訓練は 3 段階。Stable SplitNorm、Muon、muP を組み合わせ、第 2 段階でコーディングデータの混合比を上げる 2 段カリキュラムの事前訓練。コンテキスト拡張を伴うドメイン／形式拡張の中間訓練。そして「multi-scaffold with multi-version post-training」（マルチスキャフォールド・マルチバージョンのポストトレーニング：SFT、ドメイン特化 RL、スキャフォールド横断の MOPD）で、最後にエキスパートとチェックポイント間のモデルマージ。
+
+興味深いのは報告のほうだ。ベンチマーク表は**単一の PNG**（`IQuest-Q1_Performance.png`）で、抄録には数値が一切ない。ノートは結果ではなく設定を説明する。temperature 1.0、top-p 0.95、top-k 20、ハーネスは **Claude Code `2.1.140` または Codex `0.142`**。DeepSWE v1.1 には **mini-SWE-agent**、それ以外は Claude Code。Agents' Last Exam には **Claude Code `2.1.258`**。CyberGym は 6 時間、Terminal-Bench 2.1 は 8 時間の制限。そして「our models currently do not have multimodal capability, we replace multimodal content inputs in the agent conversation with placeholders.」（我々のモデルは現時点でマルチモーダル能力を持たないため、エージェント会話におけるマルチモーダル内容入力はプレースホルダに置き換える。）
+
+**Why it matters:** 設定こそが本題だ ── 特定の CLI ハーネスのバージョンに合わせて調整された 15B アクティブのモデルは、ハーネスが今やモデルの一部だという宣言であり、再帰 MTP（推論時 ×8）は重みと一緒に出荷されるデコード側の最適化である。但し書きも同じくらい具体的だ。数値は画像を OCR しないと検証できない。**IQuest-CLIBench は自社ベンチマーク**である。そして重み（`IQuestLab/IQuest-Q1`、**最終更新 2026-09-29**、約 4,800 ダウンロード）は `license: other` / `license_name: iquest-q1` を持ち、これはオープンウェイトであって OSI ライセンスではない。抄録の「open-source model」は権利ではなく入手可能性についての主張として扱うこと。
+
+[`🔗 arXiv 2610.30949`](https://arxiv.org/abs/2610.30949) · [`🔗 IQuest-Q1 モデルカード`](https://huggingface.co/IQuestLab/IQuest-Q1) · [`🔗 HF Daily Papers`](https://huggingface.co/papers/2610.30949)
+
+---
+
+## 43. テンセントの WeVisOne-VL はボックス、点、マスク、アルファマットを 1 つの 4B モデルの背後に置く
+
+- **Velocity:** ▮▮ rising
+- **Source:** arXiv 2610.31329 / Hugging Face · 229 upvotes
+- **Tags:** `vlm` `segmentation` `matting` `tencent` `open-weights`
+
+テンセント WeChat Vision の **WeVisOne-VL**（「WeChat Vision All-in-One」）は **Qwen3-VL** を基盤とし、物体レベルとピクセルレベルの知覚を「through structured next-token prediction」（構造化された次トークン予測を通じて）統合する。オープンボキャブラリの物体検出、参照ローカライゼーション、物体計数、物体ポインティング、OCR、参照セグメンテーション、そしてプロンプト可能な**アルファマット** ── 「from points and boxes to masks and alpha mattes」（点とボックスからマスクとアルファマットまで）。仕組みは特別な `<OBJ>` トークン（ID 152678）で起動される**軽量な 960 万（9.6M）パラメータのピクセルデコーダ**で、Qwen3-VL のマージ前 ViT 特徴に対する視覚特徴アダプタ、6 つの deformable cross-attention ブロックを持つボックス誘導クエリデコーダ、そしてストライド S/4 → S/2 → S/1 で精細化しフル解像度の連続アルファを出力する dense 予測ヘッドを組み合わせる。座標は専用トークン `<0>`…`<1000>` として出力され、モデルは「returns `None` when a queried target is absent.」（問い合わせた対象が存在しない場合 `None` を返す。）訓練は 3 段階カリキュラムの SFT と混合タスク RL。抄録は「across over 30 benchmarks」で首位の性能を主張する。
+
+**Why it matters:** マッティングが異例の能力だ ── 連続アルファチャネルは生成的な出力であり、それを拡散ヘッドではなく 960 万（9.6M）パラメータの後付けで次トークン VLM から取り出すのは研究する価値のある設計だ。公表された限界は具体的で、主張と一緒に置くべきものだ。「fine alpha boundaries remain sensitive to image resolution, severe occlusion, complex transparency, and prompt phrasing」（細かいアルファ境界は画像解像度、重度のオクルージョン、複雑な透明、プロンプトの言い回しに敏感なまま）。モデルは「directly generates structured outputs **without explicit chain-of-thought**」（**明示的な思考連鎖なしに**構造化出力を直接生成する）であり、「currently targets **single-turn** image perception (video grids are rejected by the pixel decoder)」（現在は**単一ターン**の画像知覚を対象とする ── ビデオグリッドはピクセルデコーダに拒否される）。カードは「not intended to make autonomous high-impact decisions or to identify individuals」（自律的な高影響判断や個人の識別を意図しない）と明記する。知覚コンポーネントとして読み、エージェントとしては読まないこと ── そして「over 30 benchmarks」という見出しが抄録に表を伴わずに届く点に注意。重みは Apache-2.0（`tencent/WeVisOne-VL-2B` と `-4B`、初回アップロード 2026-10-22）。
+
+[`🔗 arXiv 2610.31329`](https://arxiv.org/abs/2610.31329) · [`🔗 WeVisOne-VL-4B モデルカード`](https://huggingface.co/tencent/WeVisOne-VL-4B) · [`🔗 Tencent/WeVisOne-VL`](https://github.com/Tencent/WeVisOne-VL)
+
+---
+
+## 44. 10 月 21 日の PhotoCraft 記事の続報：同じ組織がいまや「純 Rust」デスクトップアプリ 14 本を抱える ── 183,348 stars、未クローズ issue 14,912 件
+
+- **Velocity:** ▮▮ rising
+- **Source:** GitHub（storytold オーガナイゼーション）· アプリリポジトリ 14 本、作成 2026-09-30 → 2026-10-14
+- **Tags:** `rust` `desktop-apps` `open-source` `git-hygiene` `org-scale`
+
+10 月 21 日に **storytold/photocraft** を扱ったとき、それは 56k stars の単一の写真エディタだった。その後組織はスイートへ成長した。**デスクトップアプリ 14 本、合計 183,348 stars、未クローズ issue 14,912 件**、すべて 2 週間の窓（2026-09-30 → 2026-10-14）に作られている。順位は photocraft 72,165★ / 2,852 件、pdfcraft 17,530★ / 1,990、filmcraft 15,976★ / 1,623、wordcraft 15,822★ / 1,738、lightcraft 14,491★ / 1,074、vectorcraft 10,560★ / 845、effectcraft 7,814★ / 834、cadcraft 6,633★ / 866、gridcraft 6,393★ / 1,127、designcraft 4,725★ / 644、deckcraft 4,189★ / 532、soundcraft 3,667★ / 470、figcraft 3,326★ / 315、AniCraft 57★。いずれも「an open-source, clean-room reimplementation … written by scratch in pure Rust」（オープンソースのクリーンルーム再実装で、ゼロから純 Rust で書かれた）と説明され、**14 本のうち 13 本が Apache-2.0 を宣言**する（AniCraft はライセンス欄がない）。組織は**リポジトリ 68 本**を抱え、共通の配管 ── `craft-libs`（337★、168 件）、`craft-launcher`（3,960★、492）、`craft-ai-integrations`（102★）、`craft-common-actions`（70★）── に加え `egui` と `winit` のミラーも含む。
+
+**Why it matters:** star 数と一緒に運ばれるべき数字は issue のバックログだ。**183,348 stars に対して未クローズ issue 14,912 件は star 12 個につき issue 1 件**であり、最大の単一リポジトリが 2,852 を抱える ── これはバグトラッカーではなく受付待ち行列である。だからといってアプリが悪いわけではない。それは「stars」がソフトウェアが動く証拠ではなくジャンルへの需要の尺度であることを意味し、この形をした 3 週齢のスイートを読む誠実な方法はこうだ ── 優れた README と、片付くと誰も証明していないサポート負荷。ライセンスの統一は本物で有用だ（スイート全体で Apache-2.0 は、今月集中しているコミュニティライセンスのリリースに対する実際の採用上の利点である）。「clean-room」の主張は外から検証できず、依存する前に各プロジェクトが商用の対抗製品として名指しするものと突き合わせて確認する価値がある。
+
+[`🔗 storytold オーガナイゼーション`](https://github.com/storytold) · [`🔗 storytold/photocraft`](https://github.com/storytold/photocraft)
+
+---
+
+## 45. Puter の「Everything」は全ソフトウェアの再構築を掲げるモノレポ ── そして「Try it」リンクの半分はアンカーへ飛ぶ
+
+- **Velocity:** ▮▮ rising
+- **Source:** GitHub Trending / HeyPuter · 3,779★ · 作成 2026-10-13
+- **Tags:** `open-source` `monorepo` `web-apps` `mit` `catalog`
+
+**HeyPuter/everything** は野心を留保なしに述べる。「an effort to rebuild and open-source the world's software from scratch. From Office to Slack and Photoshop to AutoCAD, we are recreating free, open-source alternatives to all proprietary software.」（世界のソフトウェアをゼロから再構築しオープンソース化する取り組み。Office から Slack まで、Photoshop から AutoCAD まで、すべてのプロプライエタリソフトウェアの無料オープンソース代替を作り直している。）MIT ライセンスのモノレポで、**2026-10-13** 作成、現在 **3,779 stars、474 forks、未クローズ issue 13 件**、**9 つのカテゴリ** ── Office、Collaboration、Creative Tools、Engineering、Productivity、Finance、Business、Developer Tools、Games ── を持ち、各行がアプリとそれが置き換える商用製品を対にする。Spreadsheet（Excel、Sheets、Numbers）、Documents（Word、Docs、Pages）、Photo Studio（Photoshop、Pixelmator）、Video Studio（CapCut、Premiere Pro、Final Cut Pro、DaVinci Resolve）、Vector Studio（Illustrator、CorelDRAW、Affinity Designer）、3D Studio（Maya、SketchUp）など。開始は `cd everything/src/[app-name] && npm install && npm run dev`、Node 22.12 以上。
+
+README は 1 つの特定の点で売り込みより正直だ。HTML コメントが「demo and source links use project metadata where available; **missing destinations point to the link-status note**」（デモとソースのリンクは利用可能な場合はプロジェクトのメタデータを使う。**欠けている行き先はリンク状態の注記を指す**）と述べ、「Try it」リンクの相当な割合が `title="Demo URL not yet provided"` を帯びている ── リンクは動くアプリではなく `#link-status` に解決する。
+
+**Why it matters:** 主張は最大限で成果物はカタログなので、意味のある唯一の問いはこれらのアプリのうち何本が動くかだ。これは Puter の既存のブラウザ OS プロジェクトが、その表面積をモノレポとして包んだものであり、今日このリポジトリが示しているのは範囲とライセンスの明瞭さであって、列挙された 30 本余りのアプリのいずれかが名指しした製品と競合できることではない。このパターンは一般に認識する価値がある。「rebuild everything」リポジトリは願望を素早く star に変換し、確認すべき場所は表とデプロイの間の距離だ。
+
+[`🔗 HeyPuter/everything`](https://github.com/HeyPuter/everything) · [`🔗 Puter`](https://puter.com/)
+
+---
+
+## 46. デザインの趣味がスキルになる：Impeccable は AI 生成 UI に対する 62 の検出ルールを出荷する
+
+- **Velocity:** ▮▮ rising
+- **Source:** GitHub Trending / pbakaus · 85,860★ · 本日 541 stars
+- **Tags:** `agent-skills` `design` `linting` `frontend` `claude-code`
+
+**pbakaus/impeccable** は自らを「design guidance for AI coding agents: 1 skill, 24 commands, live browser iteration, and **62 deterministic detector rules** for AI-generated frontend design」（AI コーディングエージェント向けのデザイン指針：1 スキル、24 コマンド、ライブのブラウザ反復、そして AI 生成フロントエンドデザイン向けの **62 の決定的な検出ルール**）と説明する ── **85,860 stars**、Apache-2.0、`4.7.1` は **2026-10-24T01:46Z** リリース。どこから来たかも率直に言う。「Anthropic's frontend-design was the first widely-used design skill for Claude. Impeccable started from there.」（Anthropic の frontend-design は Claude 向けに広く使われた最初のデザインスキルだった。Impeccable はそこから始まった。）最も引用されるのは診断の部分だ ──「every model trained on the same SaaS templates」（すべてのモデルが同じ SaaS テンプレートで訓練されている）── そして名指しされる兆候は見覚えのあるものだ。何にでも Inter、紫から青のグラデーション、カードの中のカード、色付き背景の上の灰色文字、「the rounded-square icon tile above every heading」（すべての見出しの上の角丸正方形アイコンタイル）。セットアップは `/impeccable init` で永続的な製品的事実を `PRODUCT.md` に書き、インストールは `npx impeccable install`。隣接する **Nutlope/hallmark** ──「anti-AI-slop design skill for Claude Code, Cursor, and Codex」── は **31,502 stars**（MIT、本日 1,053）。
+
+**Why it matters:** 「決定的な検出ルール」がプロンプトのみのスキルとの構造的な違いだ。プロンプトは「Inter を使うな」と言う。62 のルールは生成された CSS に対して実行しビルドを失敗させられる。つまり趣味が検査可能なゲートになる ── そしてゲートはそのルールと同じだけしか良くない。モデルが際限なく再生成する見た目に対する 62 のヒューリスティックは最適化の対象になり、それらを通ることは良いデザインと同じではない。star 数（この 1 年に出たスキルに 85.9k）は、このカテゴリが今や看板的な数字と、それを歪める注意力を持つことを示している。誠実なテストは、検出器が人間のレビュアーが捕まえるものを捕まえるかどうかだ。
+
+[`🔗 pbakaus/impeccable`](https://github.com/pbakaus/impeccable) · [`🔗 impeccable.style`](https://impeccable.style) · [`🔗 Nutlope/hallmark`](https://github.com/Nutlope/hallmark)
+
+---
+
+## 47. 十数社の銀行アプリが今や GrapheneOS を明示的に許可する ── そして約 10% は非 Google 製 OS を依然として禁止する
+
+- **Velocity:** ▮▮ rising
+- **Source:** GrapheneOS（Mastodon）/ Hacker News · 183+ pts · 約 11 時間前（UTC+8 09:15）
+- **Tags:** `grapheneos` `android` `attestation` `banking` `play-integrity`
+
+GrapheneOS 自身のアカウントが **2026-10-23T21:36Z** に投稿した返信でこう述べる。「Most banking apps work on GrapheneOS but many have memory corruption bugs and incorrect anti-tampering code requiring our per-app exploit protection compatibility mode toggle. **Around 10% of banking apps are unavailable due to banning using a non-Google-approved OS.** Around a dozen banking apps began specifically permitting GrapheneOS in addition to a Google-approved OS which is growing.」（ほとんどの銀行アプリは GrapheneOS で動くが、多くはメモリ破壊バグと誤った改ざん防止コードを持ち、我々のアプリごとのエクスプロイト保護互換モードのトグルを必要とする。**銀行アプリの約 10% は、Google 承認の OS 以外の使用を禁止しているため利用できない。** 十数社の銀行アプリが、Google 承認の OS に加えて GrapheneOS を明示的に許可し始めており、増えている。）プロジェクトはクラウドソースの **privsec.dev** 互換性リストを挙げる。国別のデータセット（5,617 語、最終更新 **2026-10-20**）で、利用者の報告から維持されている。
+
+**Why it matters:** ゲートは暗号ではなくアテステーションだ ──「非 Google 承認の OS を禁止する」銀行アプリは Play Integrity のデバイス判定を読んでいるので、重要な変化は ROM 側の技術的修正ではなく銀行側のポリシー編集である。数字には 2 つの但し書きが付く。「around 10%」と「a dozen」は**利用者報告に基づく GrapheneOS 自身の推計**であり、投稿にアプリ別リストも銀行名もない。そして privsec.dev 自体がクラウドソースの登録簿なので、すべての銀行が認証したことではなく利用者が提出したことを記録している。それでも方向は本題だ。カスタム OS の利用者は何年もアクセスを失い続けており、十数社の銀行がそれを反転させたのは初めて逆方向の動きである。
+
+[`🔗 GrapheneOS の投稿`](https://grapheneos.social/@GrapheneOS/117492375462459244) · [`🔗 privsec.dev 互換性リスト`](https://privsec.dev/posts/android/banking-applications-compatibility-with-grapheneos/) · [`🔗 HN ディスカッション (50217495)`](https://news.ycombinator.com/item?id=50217495)
+
+---
+
+## 48. Filee 2.0：255 形式、オフライン ── そして 5 つの任意エンジンこそが正直な部分
+
+- **Velocity:** ▮ steady
+- **Source:** GitHub Trending / KnifeLemon · 11,396★ · v2.0.0 2026-10-21
+- **Tags:** `file-conversion` `offline` `dotnet` `mit` `desktop`
+
+**KnifeLemon/Filee** は Windows 10/11、Linux x64/ARM64、macOS（プレビュー）向けのドラッグ＆ドロップ式ファイル変換器だ。Ctrl（macOS では Option）を押しながらファイルを、カーソル位置に開くドーナツ上の形式へドラッグすると、結果は元ファイルの隣に保存される。**MIT**、C#/.NET、**11,396 stars、748 forks、未クローズ issue 90 件**、`v2.0.0` は **2026-10-21** リリース。主張は形式表だ ── 画像、PDF、Word/Excel/PowerPoint、**HWP/HWPX**、電子書籍（EPUB、MOBI、AZW3、CBZ、CBR…）、アーカイブ、フォント、CAD、3D モデル、地理空間データにわたる「**255 形式**」で、多段の経路は自動解決される（HWP → HWPX → DOCX）。
+
+README はほとんどの変換器が曖昧にする区別を引いており、それが残りを信頼する理由だ。**印のない形式は Office、Hancom Office、LibreOffice なしでそのまま動く**。一方**印のある形式は必要時にだけダウンロードされる任意エンジン**を要する ── Ghostscript、LibreOffice、Pandoc、calibre、FFmpeg で、`engines.json` に URL で固定されている。CLI（`filee`）もあり、セキュリティの注記は異例に直接だ。ライブラリとプログラムは「their makers signed (.NET, SkiaSharp, ImageMagick, the Microsoft C++ runtime…) keep their own signatures; bundled ones that come unsigned (**rhwp, 7-Zip** and most libraries) are signed with Filee's certificate, **as part of Filee**.」（製作者が署名したもの（.NET、SkiaSharp、ImageMagick、Microsoft C++ ランタイム…）は自前の署名を保つ。同梱される未署名のもの（**rhwp、7-Zip** とほとんどのライブラリ）は Filee の証明書で、**Filee の一部として**署名される。）
+
+**Why it matters:** 「Office は不要」は印のない集合には真で、印のある集合には偽だ ── そしてそれがエアギャップ環境用の変換器と、初回使用時に 5 つのベンダーへ電話をかけるものの違いそのものだ。制限されたマシンへ配備する前に脚注を読むこと。署名の開示がもう半分だ。サードパーティのバイナリを自社証明書で再署名することは来歴の記録ではなく信頼の移転であり、`7-Zip inside Filee` は他人のコードに対する Filee の署名である ── 表明としては問題ないが、上流自身の署名と同じ保証ではない。
+
+[`🔗 KnifeLemon/Filee`](https://github.com/KnifeLemon/Filee) · [`🔗 Filee — エンジン`](https://github.com/KnifeLemon/Filee/blob/main/docs/ENGINES.md) · [`🔗 filee.sh`](https://filee.sh)
+
+---
+
+## 49. AWS の Multi Model Server にモデルアーカイブ展開の 9.8 ── そして AWS は使用をやめろと言う
+
+- **Velocity:** ▮ steady
+- **Source:** CVE Program（cveawg）/ AWS Security Bulletins · 公開 2026-10-23T17:33Z
+- **Tags:** `cve` `aws` `model-serving` `path-traversal` `end-of-life`
+
+**CVE-2026-115812** は **AMZN** が採番し、「during model archive extraction in Amazon Web Services Multi Model Server 1.1.11 and earlier」（Amazon Web Services Multi Model Server 1.1.11 以前のモデルアーカイブ展開時）の相対パストラバーサルで、「might allow remote actors to execute arbitrary code via a crafted model archive.」（細工されたモデルアーカイブを介してリモートの行為者が任意のコードを実行できる可能性がある。）ベクトルは `AV:N/AC:L/PR:N/UI:N` ── ネットワーク、権限なし、操作なし ── で、AWS は **CVSS 3.1 で 9.8、CVSS 4.0 で 9.3** と採点する。NVD の `vulnStatus` は **`Awaiting Analysis`** なので、どちらの数値も NIST ではなく CNA のものである。重要なのはレコードの対処行だ。「Multi Model Server is **end of life** and **no fixed version is available**. Users should discontinue use of Multi Model Server and migrate to a supported model serving solution.」（Multi Model Server は**サポート終了**であり、**修正版は存在しない**。利用者は Multi Model Server の使用を中止し、サポートされているモデルサービング基盤へ移行すべきである。）
+
+**Why it matters:** パッチは来ないし、これからも来ない。したがってここでの「未修正」は保留ではなく恒久であり、助言は待つことではなく移行だ。バグの種類は今年繰り返し出ているものだ ── 他者が供給したファイルを読み込むことだけが仕事であるコンポーネントにおける、エントリを信用するアーカイブ展開パス。運用者やテナントが供給したモデルアーカイブを受け付ける MMS エンドポイントを動かしているなら、今日それを未認証の RCE 面として扱うべきだ。確認は安い。≤ 1.1.11 でサービスに到達可能なら、影響を受ける資産はモデルではなくサービスである。
+
+[`🔗 CVE-2026-115812（cveawg）`](https://cveawg.mitre.org/api/cve/CVE-2026-115812) · [`🔗 AWS Security Bulletin 2026-148`](https://aws.amazon.com/security/security-bulletins/2026-148-aws/)
+
+---
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-10-24T04:24:51Z |
-| Items | 36 |
+| Generated | 2026-10-24T12:13:13Z |
+| Items | 49 |
 | Sources tracked | 30 (Hacker News、GitHub Trending、NVD、CISA KEV、CVE Program、GitHub Advisory Database、Science、arXiv、ベンダーブログ、研究者の勧告) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8（1 日 3 回） |
 | Ranking | 速度加重（新しさ × エンゲージメント加速度 × 情報源の権威） |

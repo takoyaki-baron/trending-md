@@ -1,8 +1,8 @@
 ---
 date: 2026-10-24
-updated: 2026-10-24T04:24:51Z
+updated: 2026-10-24T12:13:13Z
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 22
+sources: 28
 license: CC-BY-4.0
 ---
 
@@ -574,12 +574,208 @@ The README opens with a rationale rather than a pitch — "算法是公开的传
 
 ---
 
+## 37. Wasmtime's Cranelift shipped two 9.9s that leave the Wasm sandbox — and NVD has analyzed neither record
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** GitHub Advisory Database / NVD · advisories 2026-10-19T19:21Z · NVD records 2026-10-23T22:16Z
+- **Tags:** `cve` `wasmtime` `sandbox-escape` `compiler` `cvss-provenance`
+
+Two critical advisories in the Wasmtime repository, both fixed in releases that shipped the same hour. **GHSA-897f-g5gm-fmxm** (CVE-2026-115889): Cranelift bit-packs SSA value indices in a way that "can silently overflow in release builds when compiling a sufficiently large or specially crafted Wasm function with many SSA values," after which it "can reference incorrect IR values, causing arbitrary miscompilation, type confusion, and other attacker-controlled effects that may escape the Wasm sandbox on any architecture using the default Cranelift backend." Fixed in **36.0.19 and 43.0.0**. **GHSA-mghf-wjfp-p5xm** (CVE-2026-115893): on aarch64, a `br_table` with more than roughly **256,000 targets** compiles to a conditional branch with the wrong target, which "can then jump to arbitrary other code at a user-controlled offset, allowing a user-controlled Wasm module to escape the sandbox on aarch64 engines using the default Cranelift backend." Fixed in **36.0.19, 48.0.7 and 49.0.4**.
+
+The timing is clean and worth naming: the advisories were published at **19:21Z on 2026-10-19**, and `v36.0.19` (19:09:53Z), `v48.0.7` (19:20:31Z) and `v49.0.4` (19:20:37Z) all landed inside that same window — the fix came before the record. NVD did not publish the CVE records until **22:16Z on 2026-10-23**, four days later. Five advisories appeared in the repository in **90 seconds** (19:20:21 → 19:21:51), the other three rated medium (a panic lowering a host-created component-model stream), medium (wasi-http p3 content-length on spliced response bodies) and low (forwarded trailers not checked against `is_forbidden_header`).
+
+**Why it matters:** both 9.9s carry exactly one metric — a **CVSS 3.1 `Secondary` from `security-advisories@github.com`**, i.e. GitHub's CNA score — and NVD's `vulnStatus` for both is **`Deferred`**, not `Analyzed`. So this is a CNA-assigned pair and the number is GitHub's, not NIST's; read it as such. The engineering consequence is separate: a sandbox is only as good as its compiler, and both bugs are miscompilation of attacker-authored input, which is precisely the threat model Wasmtime exists to hold. Note the patched versions come in three lines (36, 48, 49) — check which one you are on rather than assuming the newest tag covers both, since `v50.0.0` shipped on 2026-10-20 and the advisory names its predecessors.
+
+[`🔗 GHSA-897f-g5gm-fmxm`](https://github.com/bytecodealliance/wasmtime/security/advisories/GHSA-897f-g5gm-fmxm) · [`🔗 GHSA-mghf-wjfp-p5xm`](https://github.com/bytecodealliance/wasmtime/security/advisories/GHSA-mghf-wjfp-p5xm) · [`🔗 Wasmtime v36.0.19`](https://github.com/bytecodealliance/wasmtime/releases/tag/v36.0.19)
+
+---
+
+## 38. Postiz's 9.9: a signed-in user names a helper function, and the backend hands over its session-signing secret
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** CVE Program (cveawg) / Postiz advisory · record published 2026-10-23T22:02Z
+- **Tags:** `cve` `postiz` `self-hosted` `path-traversal` `session-forgery`
+
+**CVE-2026-115931**, assigned by the project itself (`assignerShortName: postiz`, advisory PSA-2026-JNXM56), is a 9.9 in Postiz — a self-hosted social-media scheduler with **37,696 stars**. The mechanism is a missing allowlist: "Postiz lets a signed-in user ask the backend to run a function on one of their connected channels. The backend did not restrict which functions can be requested, so a user could call internal helper functions that were never meant to be reachable from the web interface." One such helper reads a file off disk, and "a user who connects a channel whose stored token is a file path can have the backend return the contents of any file it can read, including its environment, which holds the secret used to sign login sessions, the database address and the credentials of connected services." A second helper "makes the backend process exit with a single request." CWE-470 (unsafe reflection) and CWE-73 (external control of file name or path); the declared range is **2.23.0 through < 2.25.2**.
+
+**Why it matters:** the impact chain is what makes 9.9 the defensible number — the leaked secret signs login sessions, so a file read becomes forgery of any account's session, not just the attacker's own. "Self-registration is open by default," the record adds, so no existing account and no action by another user is needed. Two details belong beside it: `v2.25.2` was published at **21:59:49Z**, about **two and a half minutes before** the CVE record (22:02:21Z), so this is a fix-then-record story and the release is the patch to install; and `v2.25.1` (2026-10-11) was itself a security release for a *different* advisory (PSA-2026-4QX1WG), which is worth knowing before treating the previous patch as covering this surface.
+
+[`🔗 CVE-2026-115931 (cveawg)`](https://cveawg.mitre.org/api/cve/CVE-2026-115931) · [`🔗 Postiz v2.25.2`](https://github.com/gitroomhq/postiz-app/releases/tag/v2.25.2)
+
+---
+
+## 39. OBS Studio 33 moves to CEF 150, relocates every plugin, and drops Ubuntu 24.04
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** GitHub Releases / Hacker News · 199+ pts · ~7h ago (~12:49 UTC+8)
+- **Tags:** `obs` `release` `plugins` `cef` `packaging`
+
+OBS Studio **33.0.0** shipped on **2026-10-23T22:20:29Z**, and two of its three headline changes are plumbing that plugin authors and packagers will feel. **CEF goes from 127/6533 to 150/7871** — "from the July 2024 release to September 2026," with the notes asking users to report "any new weirdness" in browser sources, which is an unusually candid framing for a two-year framework jump. **Plugin loading is completely overhauled**: first-party plugins move into a folder named `core`, third-party plugins get "an updated installation location and folder structure," and legacy locations "will continue to load … until OBS Studio 34.0" — a one-release migration window.
+
+Two smaller changes carry more risk than their billing. **Third-party plugins are not loaded at all in Safe Mode**, and Safe Mode also **no longer starts the WebSocket Server** — so any automation built on obs-websocket silently loses its control channel exactly when OBS has crashed into safe mode. **NVENC is now enabled on Arm64**, and Windows builds move to **Visual Studio 2026** with SDK 26100. The notes also list **removal of support for Ubuntu 24.04**, which is the row most likely to break a CI image or a desktop before anyone reads the changelog.
+
+**Why it matters:** 33 is the release where OBS stops being a self-contained app and starts being a plugin platform with a migration deadline. The `core` relocation plus the 34.0 cutoff is a dated breaking change for every third-party plugin, and the Safe Mode change removes a debugging assumption — "restart in safe mode and my scripts still control it" — that a lot of stream automation was built on. Plan the plugin move now; the legacy path has an expiry.
+
+[`🔗 OBS Studio 33.0.0 release notes`](https://github.com/obsproject/obs-studio/releases/tag/33.0.0) · [`🔗 HN discussion (50218430)`](https://news.ycombinator.com/item?id=50218430)
+
+---
+
+## 40. Twelve years of distributed SQLite: rqlite's author writes the history the category's newcomers skip
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Philip O'Toole / Hacker News · 231+ pts · ~11h ago (~09:16 UTC+8)
+- **Tags:** `database` `sqlite` `raft` `distributed-systems` `open-source`
+
+Philip O'Toole published rqlite in **September 2014** — "take SQLite, put a Raft log in front of it, and replicate every write to a cluster" — and the twelve-year retrospective is a primary-source history of a category that, he notes, "now has a dozen projects in it, a few of them venture-funded, two of them acquired," and whose chroniclers "tend to start the story around 2021." The timeline: the first version used **goraft** (the same library as InfluxDB and etcd), replaced in early 2016 with **Hashicorp's Raft**, which rqlite still uses. The design decision that never changed is that rqlite is a **CP system** — writes through the leader, majority acknowledgement, and a partitioned minority that refuses writes.
+
+He names the precedents rather than claiming the idea: **Expensify's Bedrock** (Paxos-style, open-sourced 2016) and **ActorDB** (Erlang, one SQLite per actor, Raft-replicated). Then **dqlite** at Canonical in 2017 for LXD and later MicroK8s ("began in Go and was rewritten in C with its own Raft library"); **Litestream** in 2021, which uses no consensus at all and streams the WAL to S3; **LiteFS** at Fly.io in 2022, replicating at the filesystem level with Consul leases; **cr-sqlite**'s CRDTs, which occupy the AP corner; **libSQL**, forked from SQLite itself by ChiselStrike and later Turso, which **Supabase acquired in 2026**; SQLite Cloud; and Cloudflare's D1 plus SQLite inside Durable Objects.
+
+**Why it matters:** the taxonomy is the reusable part. He sorts the space into three corners — **consensus** (rqlite, dqlite), **streaming** (Litestream), **merge** (cr-sqlite) — and observes that "most of the arguments are arguments between their users about which question is being asked." His own framing of the trade is the sharpest line in it: "Litestream: what if the machine dies? rqlite: what if the machine dies and I cannot wait to restore?" The caveat is authorship — this is a participant's history, and he says so up front ("I was there for all of it"), including the admission that the money went to the platforms while the open-source implementations stayed free. One detail worth carrying: Litestream's approach to the WAL is what inspired rqlite's own v8.0 handling.
+
+[`🔗 Twelve years of distributed SQLite`](https://philipotoole.com/twelve-years-of-distributed-sqlite/) · [`🔗 rqlite/rqlite`](https://github.com/rqlite/rqlite) · [`🔗 HN discussion (50217500)`](https://news.ycombinator.com/item?id=50217500)
+
+---
+
+## 41. JetBrains open-sources ThinkRail: an Apache-2.0 IDE where every workspace is a git worktree
+
+- **Velocity:** ▮▮ rising
+- **Source:** thinkrail.ai / Hacker News · 43+ pts, 60 comments · ~4h ago (~16:08 UTC+8)
+- **Tags:** `agent-ide` `jetbrains` `git-worktree` `spec-graph` `apache-2.0`
+
+**JetBrains/thinkrail** is an Apache-2.0 agentic IDE from JetBrains InnovationHub — **1,069 stars**, created 2026-07-08, pushed today, with **202 open issues**. The unit of work is a project opened from any repo, cut into **workspaces that are real git worktrees**: "its own branch, its own cwd," so "run several agents in parallel; each one's mess stays on its branch, and main stays clean until you say otherwise." The second design bet is the **spec graph**: "a connected graph of spec files lives beside the code, and the agent reads, searches, and maintains it with dedicated tools," with the stated goal that "intent survives the session."
+
+The architecture claim is the contrarian one. ThinkRail describes itself as "a thin host, a real engine": the **`pi` coding agent runs in-process and owns models, skills, compaction, and cost**, while ThinkRail "owns the workspace, the editor, and the wire — it never assembles prompts behind your back." It runs on macOS, Windows and Linux as a local launcher opening a browser UI (plus a `.dmg`), and the install path is a `curl -fsSL … | bash` script off the repo's `main` branch.
+
+**Why it matters:** this is a JetBrains *InnovationHub* project, not a JetBrains IDE feature, and the bet it makes is the opposite of the harnesses that own the prompt: put the state (worktrees, spec files) in the IDE and leave the prompt-building to someone else's agent. For teams already running several coding agents in one repo, worktree-per-workspace is the part that solves a real problem — merge conflicts between concurrent agents — while the spec graph is the part that needs evidence. Two things to watch: 202 open issues on a repo three months old, and an install script piped from `main`, which is a supply-chain choice as much as an onboarding one.
+
+[`🔗 thinkrail.ai`](https://thinkrail.ai/) · [`🔗 JetBrains/thinkrail`](https://github.com/JetBrains/thinkrail) · [`🔗 HN discussion (50219186)`](https://news.ycombinator.com/item?id=50219186)
+
+---
+
+## 42. IQuest-Q1: 320B-A15B built for agentic CLI work — and its benchmark table ships as a PNG
+
+- **Velocity:** ▮▮ rising
+- **Source:** arXiv 2610.30949 / Hugging Face Daily Papers · 74 upvotes
+- **Tags:** `moe` `agentic-coding` `open-weights` `benchmarks` `cli-harness`
+
+IQuest published the report for **IQuest-Q1**, "a sparse Mixture-of-Experts (MoE) agentic foundation model with **320B total parameters (15B activated)**," positioned squarely at coding agents: 88 layers, hidden dimension 3,072, 48/8 attention heads, **256 experts with 8 active**, a hybrid pattern of **3 sliding-window + 1 full attention** layer with a 4,096 window, partial RoPE at 32 dimensions, **524,288 context**, and MTP layers — two independent at training, one applied recursively **×8** at inference. Training runs three stages: pretraining combining Stable SplitNorm, Muon and muP with a two-stage curriculum whose second stage raises the coding-data mix; domain/format-expanding mid-training with context extension; then "multi-scaffold with multi-version post-training" (SFT, domain-specialised RL, and MOPD across scaffolds), finished with model merging across experts and checkpoints.
+
+The reporting is where it gets interesting. The benchmark table is a **single PNG** (`IQuest-Q1_Performance.png`) — the abstract carries no numbers at all — and the notes explain the setup rather than the result: temperature 1.0, top-p 0.95, top-k 20, with **Claude Code `2.1.140` or Codex `0.142`** as the harness; **mini-SWE-agent** for DeepSWE v1.1 and Claude Code for everything else; **Claude Code `2.1.258`** for Agents' Last Exam; six-hour limits for CyberGym and eight for Terminal-Bench 2.1. Because "our models currently do not have multimodal capability, we replace multimodal content inputs in the agent conversation with placeholders."
+
+**Why it matters:** the configuration is the story — a 15B-active model tuned around specific CLI harness versions is a statement that the harness is part of the model now, and the recursive MTP (×8 at inference) is a decoding-side optimisation shipping with the weights. The caveats are equally concrete: the numbers can't be checked without OCRing an image; **IQuest-CLIBench is an in-house benchmark**; and the weights (`IQuestLab/IQuest-Q1`, **last modified 2026-09-29**, ~4,800 downloads) carry `license: other` / `license_name: iquest-q1`, which is open weights and not an OSI licence. Treat "open-source model" in the abstract as a claim about availability, not rights.
+
+[`🔗 arXiv 2610.30949`](https://arxiv.org/abs/2610.30949) · [`🔗 IQuest-Q1 model card`](https://huggingface.co/IQuestLab/IQuest-Q1) · [`🔗 HF Daily Papers`](https://huggingface.co/papers/2610.30949)
+
+---
+
+## 43. Tencent's WeVisOne-VL puts boxes, points, masks and alpha mattes behind one 4B model
+
+- **Velocity:** ▮▮ rising
+- **Source:** arXiv 2610.31329 / Hugging Face · 229 upvotes
+- **Tags:** `vlm` `segmentation` `matting` `tencent` `open-weights`
+
+**WeVisOne-VL** ("WeChat Vision All-in-One") from Tencent WeChat Vision is built on **Qwen3-VL** and unifies object-level and pixel-level perception "through structured next-token prediction": open-vocabulary object detection, referring localization, object counting, object pointing, OCR, referring segmentation and promptable **alpha matting** — "from points and boxes to masks and alpha mattes." The mechanism is a **lightweight 9.6M-parameter pixel decoder** triggered by a special `<OBJ>` token (ID 152678), combining a visual feature adapter over Qwen3-VL's pre-merging ViT features, a box-guided query decoder with six deformable cross-attention blocks, and a dense prediction head that refines at strides S/4 → S/2 → S/1 to emit full-resolution continuous alpha. Coordinates are emitted as dedicated tokens `<0>`…`<1000>`, and the model "returns `None` when a queried target is absent." Training is a three-stage curriculum SFT followed by mixed-task RL; the abstract claims leading performance "across over 30 benchmarks."
+
+**Why it matters:** matting is the unusual capability — a continuous alpha channel is a generative-style output, and getting it out of a next-token VLM via a 9.6M-parameter bolt-on rather than a diffusion head is the design worth studying. The published limits are specific and belong with the claim: "fine alpha boundaries remain sensitive to image resolution, severe occlusion, complex transparency, and prompt phrasing"; the model "directly generates structured outputs **without explicit chain-of-thought**" and "currently targets **single-turn** image perception (video grids are rejected by the pixel decoder)"; and the card states it is "not intended to make autonomous high-impact decisions or to identify individuals." Read it as a perception component, not an agent — and note the "over 30 benchmarks" headline arrives without a table in the abstract. Weights are Apache-2.0 (`tencent/WeVisOne-VL-2B` and `-4B`, first uploaded 2026-10-22).
+
+[`🔗 arXiv 2610.31329`](https://arxiv.org/abs/2610.31329) · [`🔗 WeVisOne-VL-4B model card`](https://huggingface.co/tencent/WeVisOne-VL-4B) · [`🔗 Tencent/WeVisOne-VL`](https://github.com/Tencent/WeVisOne-VL)
+
+---
+
+## 44. Since our Oct 21 PhotoCraft note: the same org now lists 14 "pure Rust" desktop apps — 183,348 stars and 14,912 open issues
+
+- **Velocity:** ▮▮ rising
+- **Source:** GitHub (storytold org) · 14 app repos, created 2026-09-30 → 2026-10-14
+- **Tags:** `rust` `desktop-apps` `open-source` `git-hygiene` `org-scale`
+
+When we covered **storytold/photocraft** on October 21 it was a single 56k-star photo editor. The organisation has since grown into a suite: **14 desktop applications, 183,348 stars and 14,912 open issues between them**, all created in a two-week window (2026-09-30 → 2026-10-14). Ranked: photocraft 72,165★ / 2,852 open issues, pdfcraft 17,530★ / 1,990, filmcraft 15,976★ / 1,623, wordcraft 15,822★ / 1,738, lightcraft 14,491★ / 1,074, vectorcraft 10,560★ / 845, effectcraft 7,814★ / 834, cadcraft 6,633★ / 866, gridcraft 6,393★ / 1,127, designcraft 4,725★ / 644, deckcraft 4,189★ / 532, soundcraft 3,667★ / 470, figcraft 3,326★ / 315, AniCraft 57★. Every one is described as "an open-source, clean-room reimplementation … written by scratch in pure Rust," and **13 of the 14 declare Apache-2.0** (AniCraft has no licence field). The org carries **68 repositories**, including the shared plumbing — `craft-libs` (337★, 168 open issues), `craft-launcher` (3,960★, 492), `craft-ai-integrations` (102★), `craft-common-actions` (70★) — plus mirrors of `egui` and `winit`.
+
+**Why it matters:** the issue backlog is the number that should travel with the star count. **14,912 open issues against 183,348 stars is one issue per twelve stars**, and the largest single repo carries 2,852 — which is not a bug tracker, it is an intake queue. That does not make the apps bad; it makes "stars" a measure of demand for the genre rather than evidence the software works, and the honest way to read a three-week-old suite with this shape is: excellent READMEs and a support load nobody has demonstrated can be cleared. The licence uniformity is real and useful (Apache-2.0 across the suite is a genuine adoption advantage over the community-licence releases clustering this month); the "clean-room" claim is unverifiable from the outside, and worth checking against the projects each one names as its commercial counterpart before depending on any of it.
+
+[`🔗 storytold org`](https://github.com/storytold) · [`🔗 storytold/photocraft`](https://github.com/storytold/photocraft)
+
+---
+
+## 45. Puter's "Everything" is a monorepo claiming to rebuild all software — and half its "Try it" links go to an anchor
+
+- **Velocity:** ▮▮ rising
+- **Source:** GitHub Trending / HeyPuter · 3,779★ · created 2026-10-13
+- **Tags:** `open-source` `monorepo` `web-apps` `mit` `catalog`
+
+**HeyPuter/everything** states its ambition without hedging: "an effort to rebuild and open-source the world's software from scratch. From Office to Slack and Photoshop to AutoCAD, we are recreating free, open-source alternatives to all proprietary software." It is a MIT-licensed monorepo, created **2026-10-13**, now at **3,779 stars, 474 forks and 13 open issues**, with **nine categories** — Office, Collaboration, Creative Tools, Engineering, Productivity, Finance, Business, Developer Tools, Games — and each row pairing an app with the commercial products it replaces: Spreadsheet (Excel, Sheets, Numbers), Documents (Word, Docs, Pages), Photo Studio (Photoshop, Pixelmator), Video Studio (CapCut, Premiere Pro, Final Cut Pro, DaVinci Resolve), Vector Studio (Illustrator, CorelDRAW, Affinity Designer), 3D Studio (Maya, SketchUp), and so on. Getting started is `cd everything/src/[app-name] && npm install && npm run dev`, on Node 22.12+.
+
+The README is more honest than the pitch in one specific way: an HTML comment states that "demo and source links use project metadata where available; **missing destinations point to the link-status note**," and a substantial share of the "Try it" links carry `title="Demo URL not yet provided"` — the link resolves to `#link-status`, not to a running app.
+
+**Why it matters:** the claim is maximal and the artifact is a catalogue, so the only meaningful question is how many of those apps run. This is Puter's existing browser-OS project packaging its surface area as a mono-repo; what the repo demonstrates today is scope and licensing clarity, not that any of the 30-plus listed applications is competitive with the product it names. The pattern is worth recognising generally: "rebuild everything" repos convert an aspiration into stars quickly, and the place to check is the distance between the table and the deploy.
+
+[`🔗 HeyPuter/everything`](https://github.com/HeyPuter/everything) · [`🔗 Puter`](https://puter.com/)
+
+---
+
+## 46. Design taste becomes a skill: Impeccable ships 62 detector rules against AI-generated UI
+
+- **Velocity:** ▮▮ rising
+- **Source:** GitHub Trending / pbakaus · 85,860★ · 541 stars today
+- **Tags:** `agent-skills` `design` `linting` `frontend` `claude-code`
+
+**pbakaus/impeccable** describes itself as "design guidance for AI coding agents: 1 skill, 24 commands, live browser iteration, and **62 deterministic detector rules** for AI-generated frontend design" — **85,860 stars**, Apache-2.0, and `4.7.1` released **2026-10-24T01:46Z**. It says plainly where it came from: "Anthropic's frontend-design was the first widely-used design skill for Claude. Impeccable started from there." The diagnosis is the most quoted part — "every model trained on the same SaaS templates," and the tells it names are recognisable: Inter for everything, purple-to-blue gradients, cards nested in cards, gray text on coloured backgrounds, "the rounded-square icon tile above every heading." Setup writes durable product facts into `PRODUCT.md` via `/impeccable init`, and install is `npx impeccable install`. The adjacent **Nutlope/hallmark** — "anti-AI-slop design skill for Claude Code, Cursor, and Codex" — is at **31,502 stars** (MIT, 1,053 today).
+
+**Why it matters:** "deterministic detector rules" is the structural difference from prompt-only skills. A prompt says "don't use Inter"; 62 rules can be run against the generated CSS and fail the build, which turns taste into a checkable gate — and a gate is only as good as its rules: 62 heuristics for a look that models regenerate endlessly will be optimised against, and passing them is not the same as a good design. The star counts (85.9k for a skill released in the last year) say this category now has flagship numbers and the attention that distorts them; the honest test is whether the detector catches things a human reviewer would.
+
+[`🔗 pbakaus/impeccable`](https://github.com/pbakaus/impeccable) · [`🔗 impeccable.style`](https://impeccable.style) · [`🔗 Nutlope/hallmark`](https://github.com/Nutlope/hallmark)
+
+---
+
+## 47. Around a dozen banking apps now explicitly permit GrapheneOS — and about 10% still ban any non-Google OS
+
+- **Velocity:** ▮▮ rising
+- **Source:** GrapheneOS (Mastodon) / Hacker News · 183+ pts · ~11h ago (~09:15 UTC+8)
+- **Tags:** `grapheneos` `android` `attestation` `banking` `play-integrity`
+
+GrapheneOS's own account, in a reply posted **2026-10-23T21:36Z**: "Most banking apps work on GrapheneOS but many have memory corruption bugs and incorrect anti-tampering code requiring our per-app exploit protection compatibility mode toggle. **Around 10% of banking apps are unavailable due to banning using a non-Google-approved OS.** Around a dozen banking apps began specifically permitting GrapheneOS in addition to a Google-approved OS which is growing." The project points to the crowd-sourced **privsec.dev** compatibility list, a per-country dataset (5,617 words, last updated **2026-10-20**) maintained from user reports.
+
+**Why it matters:** the gate is attestation, not cryptography — a bank app that "bans a non-Google-approved OS" is reading Play Integrity's device verdict, so the change that matters is a policy edit on the bank's side, not a technical fix on the ROM's. Two caveats travel with the numbers: "around 10%" and "a dozen" are **GrapheneOS's own estimates from user reports**, with no per-app list and no named banks in the post; and privsec.dev is itself a crowd-sourced register, so it records what users submitted rather than what every bank has certified. The direction of travel is still the story: custom-OS users have been losing access for years, and a dozen banks reversing that is the first movement the other way.
+
+[`🔗 GrapheneOS status`](https://grapheneos.social/@GrapheneOS/117492375462459244) · [`🔗 privsec.dev compatibility list`](https://privsec.dev/posts/android/banking-applications-compatibility-with-grapheneos/) · [`🔗 HN discussion (50217495)`](https://news.ycombinator.com/item?id=50217495)
+
+---
+
+## 48. Filee 2.0: 255 formats, offline — and the five optional engines are the honest part
+
+- **Velocity:** ▮ steady
+- **Source:** GitHub Trending / KnifeLemon · 11,396★ · v2.0.0 2026-10-21
+- **Tags:** `file-conversion` `offline` `dotnet` `mit` `desktop`
+
+**KnifeLemon/Filee** is a drag-and-drop file converter for Windows 10/11, Linux x64/ARM64 and macOS (preview): hold Ctrl (Option on macOS), drag files onto a format in the donut that opens at the cursor, and the result is saved next to the original. **MIT**, C#/.NET, **11,396 stars, 748 forks, 90 open issues**, `v2.0.0` released **2026-10-21**. The format table is the claim — "**255 formats**" across images, PDF, Word/Excel/PowerPoint, **HWP/HWPX**, e-books (EPUB, MOBI, AZW3, CBZ, CBR…), archives, fonts, CAD, 3D models and geospatial data — with multi-step routes resolved automatically (HWP → HWPX → DOCX).
+
+The README draws a distinction most converters blur, and it is the reason to trust the rest: **unmarked formats work out of the box** without Office, Hancom Office or LibreOffice, while **marked ones need an optional engine downloaded only when needed** — Ghostscript, LibreOffice, Pandoc, calibre, FFmpeg, pinned by URL in `engines.json`. There is a CLI (`filee`), and the security note is unusually direct: libraries and programs "their makers signed (.NET, SkiaSharp, ImageMagick, the Microsoft C++ runtime…) keep their own signatures; bundled ones that come unsigned (**rhwp, 7-Zip** and most libraries) are signed with Filee's certificate, **as part of Filee**."
+
+**Why it matters:** "no Office needed" is true for the unmarked set and false for the marked one, and that is the whole difference between an air-gapped converter and one that phones five vendors on first use — read the footnote before deploying it on a restricted machine. The signing disclosure is the other half: re-signing a third-party binary with your own certificate is a trust transfer, not a provenance record, so `7-Zip inside Filee` is Filee's signature on somebody else's code — fine as a statement, but not the same assurance as upstream's own signature.
+
+[`🔗 KnifeLemon/Filee`](https://github.com/KnifeLemon/Filee) · [`🔗 Filee — engines`](https://github.com/KnifeLemon/Filee/blob/main/docs/ENGINES.md) · [`🔗 filee.sh`](https://filee.sh)
+
+---
+
+## 49. AWS's Multi Model Server gets a 9.8 for model-archive extraction — and AWS says stop using it
+
+- **Velocity:** ▮ steady
+- **Source:** CVE Program (cveawg) / AWS Security Bulletins · published 2026-10-23T17:33Z
+- **Tags:** `cve` `aws` `model-serving` `path-traversal` `end-of-life`
+
+**CVE-2026-115812**, assigned by **AMZN**, is a relative path traversal "during model archive extraction in Amazon Web Services Multi Model Server 1.1.11 and earlier" that "might allow remote actors to execute arbitrary code via a crafted model archive." The vector is `AV:N/AC:L/PR:N/UI:N` — network, no privileges, no interaction — and AWS scores it **9.8 at CVSS 3.1 and 9.3 at CVSS 4.0**. NVD's `vulnStatus` is **`Awaiting Analysis`**, so both numbers are the CNA's, not NIST's. The record's remediation line is the one that matters: "Multi Model Server is **end of life** and **no fixed version is available**. Users should discontinue use of Multi Model Server and migrate to a supported model serving solution."
+
+**Why it matters:** there is no patch coming and there will not be one, so "unpatched" here is permanent rather than pending — the advice is migration, not waiting. The bug class is the one this year keeps producing: an archive-extraction path that trusts entries, in a component whose entire job is to load files someone else supplied. Anyone running an MMS endpoint that accepts operator- or tenant-supplied model archives should treat it as an unauthenticated RCE surface today, and the check is cheap — if you are on ≤ 1.1.11 and the service is reachable, the affected asset is the service, not the model.
+
+[`🔗 CVE-2026-115812 (cveawg)`](https://cveawg.mitre.org/api/cve/CVE-2026-115812) · [`🔗 AWS Security Bulletin 2026-148`](https://aws.amazon.com/security/security-bulletins/2026-148-aws/)
+
+---
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-10-24T04:24:51Z |
-| Items | 36 |
+| Generated | 2026-10-24T12:13:13Z |
+| Items | 49 |
 | Sources tracked | 30 (Hacker News, GitHub Trending, NVD, CISA KEV, CVE Program, GitHub Advisory Database, Science, arXiv, vendor blogs, researcher advisories) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (3x daily) |
 | Ranking | Velocity-weighted (recency × engagement acceleration × source authority) |
