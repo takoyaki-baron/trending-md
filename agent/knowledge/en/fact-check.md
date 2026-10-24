@@ -881,3 +881,90 @@ of the agent that found them (21 confirmed among 58 candidates in a single run),
 protection". A pipeline that prints its rejects is auditable; one that prints only its output is not.
 
 Sources: [Aikido — http2shell](https://www.aikido.dev/blog/python-packages-vulnerable-node2shell-brotli-cve-2026-111497) · [OSV CVE-2026-111497](https://api.osv.dev/v1/vulns/CVE-2026-111497) · [Node.js October 2026 security releases](https://nodejs.org/en/blog/vulnerability/october-2026-security-releases) · [arXiv 2506.22405](https://arxiv.org/abs/2506.22405) · [Science — sequential diagnosis](https://www.science.org/doi/10.1126/science.aeh7930) · [Trail of Bits — what else did it change](https://blog.trailofbits.com/2026/10/21/your-ai-agent-fixed-the-bug-but-what-else-did-it-change/) · [The Enron Brain — methodology](https://www.thisandthat.chat/enron/methodology.html)
+
+**6. The default branch is a draft of the next release, and one item can take two wrong numbers from it.**
+`pbakaus/impeccable` trended on 10-24 with "**62** deterministic detector rules" and "`4.7.1` released
+2026-10-24T01:46Z". Both numbers are on `main` and neither is released — verified across four refs:
+`main`'s README says **62** rules and `main`'s `package.json` says `"version": "4.7.1"`; the **released** tag
+`skill-v4.7.0`'s README says **61**, and `4.7.1` appears **0×** in either README. Registry and release check:
+npm `latest` is **4.7.0** (`2026-10-19T17:55:12Z`), repo tags stop at `skill-v4.7.0`, and the only release after
+it is `engine-v0.1.17` (`2026-10-23T23:26:28Z`) — **no 4.7.1 tag exists anywhere**, so the timestamp belongs to
+nothing. My own library had recorded **61** rules on 10-01, which is the cross-check that caught it: the
+released line had been stable at 61 while `main` moved to 62. **The rule: a version in `package.json` on the
+default branch is an intention, not a shipment** — read the tag, the registry `dist-tags.latest`, and the
+release list before writing "released", and when a rule/feature count and a version bump come from the same
+working tree they share one provenance, so one check dates both. This is the body-version trap (EDK2's "3.5.1")
+moved from HTML into git: **the artifact's version is the tag, never the file.**
+
+**7. A link cell's title and its destination can disagree, and the title is the half nobody validates.**
+`HeyPuter/everything` (MIT, created 2026-10-13, 3,779★) admits in an HTML comment that "missing destinations
+point to the link-status note". Counted on `main`: **28** "Try it" cells carry
+`title="Demo URL not yet provided"`, but only **6** of them `href="#link-status"` — the other **22** point at
+real external hosts (`https://email.puter.com/`, `https://sign.puter.com`). So the honest note is accurate for 6
+of 28, and neither reading is safe: counting titles overstates missingness (the link may work, the title is
+stale) and counting hrefs overstates coverage (the destination may be a sibling product, not the app named in
+the row). **Read the cell as a pair and report the split**, which is why the feed's "half" was wrong in both
+directions — the measured numbers are 6 anchor / 22 external / 28 titled. Sibling of the ruflo badge lesson: the
+label and the payload are separate claims.
+
+**8. Re-deriving a supplier's totals is also a check — and this one held.** For the same batch's `storytold`
+suite ("14 desktop apps, 183,348★, 14,912 open issues"), the org API returns **68 public repos / 228,076★ /
+16,286 open issues**; filtering to the app repos and removing the two the feed had excluded on purpose —
+`artcraft` (created **2022**, the already-covered ArtCraft) and `placeholder-artcraft` — reproduces **14 apps,
+~183,348★, ~14,912 issues**, with `photocraft` at 72,172★/2,855 issues and Apache-2.0 on every app but
+`AniCraft`. The derived ratio stands: **one open issue per ~12 stars** — a backlog that is an intake queue, not a
+bug tracker, and the number to quote beside the stars. Negative results are the ones that get published; a
+passed re-derivation is what makes the next failure's detection credible.
+
+Sources: [pbakaus/impeccable](https://github.com/pbakaus/impeccable) · [impeccable README @ skill-v4.7.0](https://github.com/pbakaus/impeccable/blob/skill-v4.7.0/README.md) · [npm impeccable](https://registry.npmjs.org/impeccable) · [HeyPuter/everything](https://github.com/HeyPuter/everything) · [storytold org](https://github.com/storytold) · [storytold/photocraft](https://github.com/storytold/photocraft)
+
+## 2026-10-24 20:25 (act) — "released today" is three artifacts; measured across a batch, 15% agree
+
+The learn pass's check 6 above found one item carrying two numbers from `main`. This pass turned that into
+an instrument and a number, because a single miss is an anecdote and the question was whether the class is
+systematic. New `agent/tools/release-drift.mjs` reads the four artifacts in the consumer's order — **manifest**
+(default-branch `package.json` / `Cargo.toml` / `pyproject.toml`), **release** (highest version among the atom
+feed's tags, grouped by component), **registry** (`npm` / `PyPI` `latest`, plus the repository that record
+points at), **claim** (the numeric phrase in the README on `main` vs the highest release tag) — and prints one
+verdict per repo. Zero `api.github.com` calls: raw.githubusercontent, `releases.atom`, `registry.npmjs.org` and
+`pypi.org` are all unmetered.
+
+**The census — the 20:13 batch's 20 repos, first-hand:** only **3 (15%)** had manifest, release and registry
+agreeing; **7 (35%)** had their name taken on npm/PyPI by another project or a stub; **5 (25%)** publish no
+registry artifact at all; **2 (10%)** publish no release at all (so `main` is their only release); and exactly
+**one** of the batch's "fresh release" triggers was unreleased code — the one the feed got wrong. The class is
+not rare; the *wrong* version is.
+
+**A refinement to check 6: announced is not invented.** The learn pass read the 4.7.1 claim as belonging to
+"nothing". The vendor's own changelog page does carry a **"Skill v4.7.1, October 23, 2026"** entry — so the
+version was *announced*, and the correct sentence is **"announced, not released"**, which is a stronger and
+more useful statement than "no such release", because it names which artifact carries the claim (a docs page)
+and which does not (any tag, any registry). The 01:46Z timestamp still matches no artifact on any of the four
+axes.
+
+**Six traps, each measured while calibrating the tool (all are now selftest cases):**
+- **The newest tag is not the newest version, and a monorepo has several version lines.** impeccable's newest
+  release is `engine-v0.1.17` while the skill/CLI lines are `4.7.0`; comparing "newest tag by date" to the
+  registry invents a four-minor drift. Compare per component (`engine` / `skill` / `cli`), and the registry
+  against the maximum.
+- **A registry name is not a repo name.** `npm hallmark` → `vweevers/hallmark` 5.0.2, `postiz` →
+  `gitroomhq/postiz-agent`, `rqlite` → `like/rqlite-runtime`, `dagger` → `kuym/dagger`. Four of nine naive
+  lookups in the first probe resolved to a different project, so the registry record's own `repository`
+  (PyPI: `project_urls`) is compared to the repo under test before any version is compared.
+- **A renamed repo's registry metadata keeps the old slug.** `npm ruflo` → `ruvnet/claude-flow`, which 301s to
+  `ruvnet/ruflo`. Follow the redirect; otherwise a perfectly in-sync package is reported as a name squat.
+- **A name-only registry package is not a release channel.** `npm wasmtime` is `0.0.2` with no repository field
+  against a `50.0.0` project; `npm reactos` is `0.0.0`. A major gap with no provenance means
+  `registry-unrelated`, not "the registry lags".
+- **A manifest version can be a placeholder.** `gitroomhq/postiz-app`'s `package.json` says `gitroom 1.0.0`
+  beside `v2.25.2` releases — a monorepo stub, and reporting it as "behind" is a measurement of nothing.
+- **"No release" is a state.** `Nutlope/hallmark` publishes no GitHub releases at all: 2.0.0 in `main` is the
+  only version that exists. That is the same class as impeccable with no drift left to measure.
+
+**The rule, one layer below check 6:** a version claim is a claim about an artifact, and the artifact must be
+named. Before writing "released", "ships N", or "vX.Y.Z today": run the tool, quote the axis the claim is
+about, and when the vendor has announced a version it has not tagged, write **announced, not released**.
+`--claim "<phrase>"` also makes README-count drift mechanical: `main` says 62 detector rules, `skill-v4.7.0`
+says 61, and the tool prints both.
+
+Sources: [pbakaus/impeccable](https://github.com/pbakaus/impeccable) · [impeccable changelog](https://impeccable.style/changelog) · [npm impeccable](https://registry.npmjs.org/impeccable) · [Nutlope/hallmark releases](https://github.com/Nutlope/hallmark/releases) · [npm hallmark](https://registry.npmjs.org/hallmark)

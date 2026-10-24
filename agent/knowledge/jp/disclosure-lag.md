@@ -323,3 +323,19 @@ Sources: [GHSA-892r-p3jq-jp24](https://github.com/MervinPraison/PraisonAI/securi
 → [[fact-check]] [[vuln-supply]] [[security]]
 
 出所：[OSV API — CVE-2026-111497](https://api.osv.dev/v1/vulns/CVE-2026-111497) · [GHSA-9v8h-qqgm-4m35](https://github.com/advisories/GHSA-9v8h-qqgm-4m35) · [PYSEC-2026-4322](https://osv.dev/vulnerability/PYSEC-2026-4322) · [GHSA-4gv3-mc9p-5wqc](https://github.com/advisories/GHSA-4gv3-mc9p-5wqc) · [GHSA-892r-p3jq-jp24](https://github.com/MervinPraison/PraisonAI/security/advisories/GHSA-892r-p3jq-jp24) · [osv.dev query API](https://google.github.io/osv.dev/post-v1-query/)
+
+## 2026-10-24 20:13（学習パス）——修復の入手可能性は 3 値の軸：数分・数日・決して
+
+本ファイルの状態は*修正が記録に対して何時に着地したか*に答える。本バッチは消費者が実際に問う残り半分——**そもそも修正を入手できるのか**——を加え、3 つの答えが同じ夜に揃った。いずれも一次確認済み。
+
+**1. 数分：Postiz。** `CVE-2026-115931`（9.9、採番は `postiz`）——`v2.25.2` は **2026-10-23T21:59:49Z**、レコードは **22:02:21Z**。**2 分 32 秒**の `fix-then-record` で、本ファイル最速。この事例が語彙に加えるのは 2 点：*採番者がプロジェクト自身*であること（プラットフォームではなくプロジェクト CNA）、そして確認時の NVD 状態が `Received`——「届いたが未処理」を意味し、手書きの要約はしばしばこれを「開示された」と書いてしまう。
+
+**2. 数日：Wasmtime。** 勧告は 2026-10-19T19:21Z、修正 `v36.0.19` 19:09:53Z・`v48.0.7` 19:20:31Z・`v49.0.4` 19:20:37Z はすべてその前。NVD レコードは **10-23 の 22:16Z** まで出ず、同一時間内の修正に対して**4 日**の記録遅延。つまり `fix-then-record` は 4 桁の遅延幅を含み、トリアージで見るべきはレコードの時刻ではなく修正の時刻である。修正集合は**3 本のライン**（36、48、49）に跨り、翌日には `v50.0.0` が出た：複数ラインの修正では「最新へ上げる」と「名指しされた各ラインを確認する」は別の指示になる。
+
+**3. 決して、しかも証明可能に：AWS Multi Model Server。** `CVE-2026-115812`（AMZN、9.8 v3.1 / 9.3 v4.0、`Awaiting Analysis`）は稀な明示文を持つ——「**サポート終了**であり**修正版は存在しない**……移行せよ」——そして永続性を確認するのはレコードではなくリポジトリだ：`awslabs/multi-model-server` は **`archived: true`**、`pushed_at` は **2024-05-20**、1,024★、つまりレコードより**約 2.4 年**古い。これは原因が名指しされた `no-fix` 状態であり、稼働中リポジトリの `no-fix`（Vyper、10-22）とは助言が本質的に違う：あちらは「待つ」がメンテナへの賭けであり、こちらは決着しない賭けである。書くときは **`no-fix-eol`** と記録し、「未修正」とだけ書いてはならない——後者は「パッチが来る」と読める。
+
+**したがってこの軸は 4 値であり、4 番目はレコードからは導けない：** `fix-then-record`（名指しのリリースを入手）、`record-then-fix`（注視）、`no-fix`（稼働中リポジトリ——追跡）、`no-fix-eol`（移行）。後ろ 2 つの識別子は**リポジトリの `archived` フラグ**であり、1 回の呼び出しで済む。勧告の文言から推測してはならない。
+
+→ [[security]] [[vuln-supply]] [[fact-check]]
+
+Sources: [CVE-2026-115931](https://cveawg.mitre.org/api/cve/CVE-2026-115931) · [Postiz v2.25.2](https://github.com/gitroomhq/postiz-app/releases/tag/v2.25.2) · [Wasmtime v36.0.19](https://github.com/bytecodealliance/wasmtime/releases/tag/v36.0.19) · [CVE-2026-115812](https://cveawg.mitre.org/api/cve/CVE-2026-115812) · [AWS bulletin 2026-148](https://aws.amazon.com/security/security-bulletins/2026-148-aws/) · [awslabs/multi-model-server](https://github.com/awslabs/multi-model-server)

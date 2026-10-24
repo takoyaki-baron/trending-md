@@ -1,6 +1,6 @@
 ---
 date: 2026-10-24
-updated: 2026-10-24T12:13:13Z
+updated: 2026-10-24T12:25:00Z
 schedule: 04:03, 12:03, 20:03 UTC+8
 sources: 28
 license: CC-BY-4.0
@@ -712,17 +712,17 @@ The README is more honest than the pitch in one specific way: an HTML comment st
 
 ---
 
-## 46. Design taste becomes a skill: Impeccable ships 62 detector rules against AI-generated UI
+## 46. Design taste becomes a skill: Impeccable's shipped detector has 61 rules (62 is on `main`, not in a release)
 
-- **Velocity:** ▮▮ rising
+- **Velocity:** ▮ steady
 - **Source:** GitHub Trending / pbakaus · 85,860★ · 541 stars today
 - **Tags:** `agent-skills` `design` `linting` `frontend` `claude-code`
 
-**pbakaus/impeccable** describes itself as "design guidance for AI coding agents: 1 skill, 24 commands, live browser iteration, and **62 deterministic detector rules** for AI-generated frontend design" — **85,860 stars**, Apache-2.0, and `4.7.1` released **2026-10-24T01:46Z**. It says plainly where it came from: "Anthropic's frontend-design was the first widely-used design skill for Claude. Impeccable started from there." The diagnosis is the most quoted part — "every model trained on the same SaaS templates," and the tells it names are recognisable: Inter for everything, purple-to-blue gradients, cards nested in cards, gray text on coloured backgrounds, "the rounded-square icon tile above every heading." Setup writes durable product facts into `PRODUCT.md` via `/impeccable init`, and install is `npx impeccable install`. The adjacent **Nutlope/hallmark** — "anti-AI-slop design skill for Claude Code, Cursor, and Codex" — is at **31,502 stars** (MIT, 1,053 today).
+**pbakaus/impeccable** describes itself as "design guidance for AI coding agents: 1 skill, 24 commands, live browser iteration, and deterministic detector rules for AI-generated frontend design" — **85,873 stars**, Apache-2.0. The rule count depends on which artifact you open: the newest release, `skill-v4.7.0` (2026-10-19T17:52Z), says **61**, and `npm latest` is **4.7.0** (published 2026-10-19T17:55:12Z); `main`'s `package.json` says **4.7.1** and `main`'s README says **62**, while the vendor's own changelog page already carries a "Skill v4.7.1, October 23, 2026" entry — released docs, unreleased code (no `skill-v4.7.1` tag, no 4.7.1 on npm). *(Corrected 2026-10-24 20:25: this item first reported "`4.7.1` released 2026-10-24T01:46Z" and "62 deterministic detector rules"; both came from the default branch, not from a release.)* It says plainly where it came from: "Anthropic's frontend-design was the first widely-used design skill for Claude. Impeccable started from there." The diagnosis is the most quoted part — "every model trained on the same SaaS templates," and the tells it names are recognisable: Inter for everything, purple-to-blue gradients, cards nested in cards, gray text on coloured backgrounds, "the rounded-square icon tile above every heading." Setup writes durable product facts into `PRODUCT.md` via `/impeccable init`, and install is `npx impeccable install`. The adjacent **Nutlope/hallmark** — "anti-AI-slop design skill for Claude Code, Cursor, and Codex" — is at **31,502 stars** (MIT, 1,053 today).
 
-**Why it matters:** "deterministic detector rules" is the structural difference from prompt-only skills. A prompt says "don't use Inter"; 62 rules can be run against the generated CSS and fail the build, which turns taste into a checkable gate — and a gate is only as good as its rules: 62 heuristics for a look that models regenerate endlessly will be optimised against, and passing them is not the same as a good design. The star counts (85.9k for a skill released in the last year) say this category now has flagship numbers and the attention that distorts them; the honest test is whether the detector catches things a human reviewer would.
+**Why it matters:** "deterministic detector rules" is the structural difference from prompt-only skills. A prompt says "don't use Inter"; 61 rules can be run against the generated CSS and fail the build, which turns taste into a checkable gate — and a gate is only as good as its rules: 61 heuristics for a look that models regenerate endlessly will be optimised against, and passing them is not the same as a good design. The star counts (85.9k for a skill released in the last year) say this category now has flagship numbers and the attention that distorts them; the honest test is whether the detector catches things a human reviewer would. The circulating number is also the wrong one: **62 is what `main` promises, 61 is what any install gets**, which is the ordinary shape of this failure — the docs move first, and a count copied from a README is a claim about a branch, not about a release.
 
-[`🔗 pbakaus/impeccable`](https://github.com/pbakaus/impeccable) · [`🔗 impeccable.style`](https://impeccable.style) · [`🔗 Nutlope/hallmark`](https://github.com/Nutlope/hallmark)
+[`🔗 pbakaus/impeccable`](https://github.com/pbakaus/impeccable) · [`🔗 impeccable.style/changelog`](https://impeccable.style/changelog) · [`🔗 npm: impeccable`](https://www.npmjs.com/package/impeccable) · [`🔗 Nutlope/hallmark`](https://github.com/Nutlope/hallmark)
 
 ---
 
@@ -774,7 +774,7 @@ The README draws a distinction most converters blur, and it is the reason to tru
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-10-24T12:13:13Z |
+| Generated | 2026-10-24T12:25:00Z |
 | Items | 49 |
 | Sources tracked | 30 (Hacker News, GitHub Trending, NVD, CISA KEV, CVE Program, GitHub Advisory Database, Science, arXiv, vendor blogs, researcher advisories) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (3x daily) |

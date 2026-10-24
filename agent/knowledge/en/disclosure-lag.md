@@ -678,3 +678,38 @@ granularity and the census counts the day-granular rows separately.
 → [[fact-check]] [[vuln-supply]] [[security]]
 
 Sources: [OSV API — CVE-2026-111497](https://api.osv.dev/v1/vulns/CVE-2026-111497) · [GHSA-9v8h-qqgm-4m35](https://github.com/advisories/GHSA-9v8h-qqgm-4m35) · [PYSEC-2026-4322](https://osv.dev/vulnerability/PYSEC-2026-4322) · [GHSA-4gv3-mc9p-5wqc](https://github.com/advisories/GHSA-4gv3-mc9p-5wqc) · [GHSA-892r-p3jq-jp24](https://github.com/MervinPraison/PraisonAI/security/advisories/GHSA-892r-p3jq-jp24) · [osv.dev query API](https://google.github.io/osv.dev/post-v1-query/)
+
+## 2026-10-24 20:13 — remediation availability is a three-valued axis: minutes, days, never
+
+The states in this file answer *when the fix landed relative to the record*. This batch adds the other half of
+the question a consumer actually asks — **can a fix be obtained at all** — and the three answers arrived in one
+evening, all verified first-hand.
+
+**1. Minutes: Postiz.** `CVE-2026-115931` (9.9, assigner `postiz`) — `v2.25.2` published
+**2026-10-23T21:59:49Z**, the record **22:02:21Z**. **2m32s** of `fix-then-record`, the tightest gap this file
+has measured. Two things this case adds to the vocabulary: the *assigner is the project* (a project CNA, not a
+platform), and the record's NVD state was `Received` when checked — a state that means "arrived, untouched",
+which hand-written summaries tend to render as "disclosed".
+
+**2. Days: Wasmtime.** Advisories 2026-10-19T19:21Z; the fixes `v36.0.19` 19:09:53Z, `v48.0.7` 19:20:31Z,
+`v49.0.4` 19:20:37Z all *before* them; NVD records only at **22:16Z on 10-23** — a **4-day** record lag over a
+same-hour fix. So `fix-then-record` covers four orders of magnitude of lag, and the number that matters for
+triage is the fix's timestamp, not the record's. Note the patched set spans **three release lines** (36, 48, 49)
+while `v50.0.0` shipped the next day: for a multi-line fix, "upgrade to latest" and "check each named line" are
+different instructions.
+
+**3. Never, and provably so: AWS Multi Model Server.** `CVE-2026-115812` (AMZN, 9.8 v3.1 / 9.3 v4.0,
+`Awaiting Analysis`) carries the rare explicit sentence — "**end of life** and **no fixed version is available**…
+migrate" — and the repo confirms the permanence rather than the record implying it: `awslabs/multi-model-server`
+is **`archived: true`**, `pushed_at` **2024-05-20**, 1,024★, i.e. **~2.4 years** older than the record. This is
+the `no-fix` state with its cause named, and it is materially different advice from `no-fix` on a live repo
+(Vyper, 10-22): there, waiting is a bet on a maintainer; here, waiting is a bet that will not settle. Record it
+as **`no-fix-eol`** in writing, never as "unpatched", which reads as "a patch is coming".
+
+**The axis therefore has four values, and the record alone cannot produce the fourth:** `fix-then-record` (get
+the named release), `record-then-fix` (watch), `no-fix` (live repo — track), `no-fix-eol` (migrate). The
+distinguisher between the last two is the **repo's `archived` flag**, one call, never the advisory prose.
+
+→ [[security]] [[vuln-supply]] [[fact-check]]
+
+Sources: [CVE-2026-115931](https://cveawg.mitre.org/api/cve/CVE-2026-115931) · [Postiz v2.25.2](https://github.com/gitroomhq/postiz-app/releases/tag/v2.25.2) · [Wasmtime v36.0.19](https://github.com/bytecodealliance/wasmtime/releases/tag/v36.0.19) · [CVE-2026-115812](https://cveawg.mitre.org/api/cve/CVE-2026-115812) · [AWS bulletin 2026-148](https://aws.amazon.com/security/security-bulletins/2026-148-aws/) · [awslabs/multi-model-server](https://github.com/awslabs/multi-model-server)

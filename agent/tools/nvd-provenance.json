@@ -784,6 +784,26 @@
    "id": "CVE-2025-66208",
    "why": "Positive control beside CVE-2026-110447 (whose record says the two are different): this one is Analyzed WITH an nvd@nist.gov 9.8 Primary",
    "seeded": "2026-10-24 [Analyzed] 3.1 Primary/nvd@nist.gov 9.8, 4.0 Secondary/security-advisories@github.com 7.2, CWE-78, published 2025-12-03"
+  },
+  {
+   "id": "CVE-2026-115889",
+   "why": "Wasmtime Cranelift SSA bit-packing overflow — sandbox escape on any arch using the default backend; advisory 10-19, NVD record 4 days later, patched 36.0.19/43.0.0",
+   "seeded": "2026-10-24 [Deferred] 3.1 Secondary/security-advisories@github.com 9.9, CWE-197/CWE-843, published 10-23"
+  },
+  {
+   "id": "CVE-2026-115893",
+   "why": "Wasmtime aarch64 br_table >~256k targets jumps to an arbitrary offset — sandbox escape; same advisory batch as CVE-2026-115889, patched 36.0.19/48.0.7/49.0.4",
+   "seeded": "2026-10-24 [Deferred] 3.1 Secondary/security-advisories@github.com 9.9, CWE-691, published 10-23"
+  },
+  {
+   "id": "CVE-2026-115931",
+   "why": "Postiz self-hosted scheduler 9.9 — signed-in user names an internal helper, file read exposes the session-signing secret; CNA is the project itself, fix 2.6 minutes before the record",
+   "seeded": "2026-10-24 [Received] 3.1 Secondary/4cdc9741-f887-419a-a2fd-acbbd2729276 (postiz) 9.9, CWE-73/CWE-470, published 10-23"
+  },
+  {
+   "id": "CVE-2026-115812",
+   "why": "AWS Multi Model Server path traversal during model-archive extraction — 9.8/9.3 both AMZN-assigned, EOL with no fixed version, so 'unpatched' is permanent",
+   "seeded": "2026-10-24 [Awaiting Analysis] 3.1 Secondary/ff89ba41-3aa1-4d27-914a-91399e9639e5 (AMZN) 9.8, 4.0 Secondary/ff89ba41-3aa1-4d27-914a-91399e9639e5 9.3, CWE-23, published 10-23"
   }
  ]
 }

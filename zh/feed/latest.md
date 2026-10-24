@@ -1,6 +1,6 @@
 ---
 date: 2026-10-24
-updated: 2026-10-24T12:13:13Z
+updated: 2026-10-24T12:25:00Z
 schedule: 04:03, 12:03, 20:03 UTC+8
 sources: 28
 license: CC-BY-4.0
@@ -712,17 +712,17 @@ README 在一个很具体的地方比推销话术更诚实：一条 HTML 注释�
 
 ---
 
-## 46. 设计品味变成一项技能：Impeccable 发布 62 条针对 AI 生成 UI 的检测规则
+## 46. 设计品味变成一项技能：Impeccable 已发布的检测器有 61 条规则（62 只在 `main` 上，不在任何发布里）
 
-- **Velocity:** ▮▮ rising
+- **Velocity:** ▮ steady
 - **Source:** GitHub Trending / pbakaus · 85,860★ · 今日 +541★
 - **Tags:** `agent-skills` `design` `linting` `frontend` `claude-code`
 
-**pbakaus/impeccable** 把自己描述为"给 AI 编码 agent 的设计指南：1 项技能、24 条命令、实时浏览器迭代，以及 **62 条针对 AI 生成前端设计的确定性检测规则**"—— **85,860 stars**，Apache-2.0，`4.7.1` 发布于 **2026-10-24T01:46Z**。它直说自己的来处："Anthropic 的 frontend-design 是第一个被广泛使用的 Claude 设计技能。Impeccable 从那里起步。"诊断是最常被引用的部分 —— "每个模型都在同一套 SaaS 模板上训练"，而它点名的痕迹都很好认：什么都用 Inter、紫到蓝的渐变、卡片里套卡片、彩色背景上的灰字、"每个标题上方那一块圆角方形图标"。初始化通过 `/impeccable init` 把持久的产品事实写进 `PRODUCT.md`，安装是 `npx impeccable install`。邻近的 **Nutlope/hallmark** —— "给 Claude Code、Cursor 和 Codex 的反 AI 垃圾设计技能" —— 有 **31,502 stars**（MIT，今日 1,053）。
+**pbakaus/impeccable** 把自己描述为"给 AI 编码 agent 的设计指南：1 项技能、24 条命令、实时浏览器迭代，以及针对 AI 生成前端设计的确定性检测规则"—— **85,873 stars**，Apache-2.0。规则条数取决于你打开的是哪个产物：最新发布 `skill-v4.7.0`（2026-10-19T17:52Z）写的是 **61**，`npm latest` 是 **4.7.0**（发布于 2026-10-19T17:55:12Z）；而 `main` 的 `package.json` 写着 **4.7.1**、`main` 的 README 写着 **62**，厂商自己的 changelog 页面也已经挂着"Skill v4.7.1, October 23, 2026"一条 —— 文档已发、代码未发（没有 `skill-v4.7.1` 标签，npm 上也没有 4.7.1）。*（2026-10-24 20:25 更正：本条最初写"`4.7.1` 发布于 2026-10-24T01:46Z"和"**62 条**确定性检测规则"，两个数字都来自默认分支，而非任何一次发布。）* 它直说自己的来处："Anthropic 的 frontend-design 是第一个被广泛使用的 Claude 设计技能。Impeccable 从那里起步。"诊断是最常被引用的部分 —— "每个模型都在同一套 SaaS 模板上训练"，而它点名的痕迹都很好认：什么都用 Inter、紫到蓝的渐变、卡片里套卡片、彩色背景上的灰字、"每个标题上方那一块圆角方形图标"。初始化通过 `/impeccable init` 把持久的产品事实写进 `PRODUCT.md`，安装是 `npx impeccable install`。邻近的 **Nutlope/hallmark** —— "给 Claude Code、Cursor 和 Codex 的反 AI 垃圾设计技能" —— 有 **31,502 stars**（MIT，今日 1,053）。
 
-**Why it matters:** "确定性检测规则"是与纯提示词技能之间的结构性差别。一句提示说"别用 Inter"；62 条规则可以对生成的 CSS 运行并让构建失败，这就把品味变成了一个可检查的闸门 —— 而闸门的好坏只等于它的规则：面对一种模型会无限重新生成的外观，62 条启发式会被针对着优化，通过它们也不等于设计好。这些星标数（一项在过去一年内发布的技能就有 85.9k）说明这个品类现在有了旗舰级的数字，以及会扭曲它们的注意力；诚实的检验是这套检测器能不能抓到人类评审者会抓到的东西。
+**Why it matters:** "确定性检测规则"是与纯提示词技能之间的结构性差别。一句提示说"别用 Inter"；61 条规则可以对生成的 CSS 运行并让构建失败，这就把品味变成了一个可检查的闸门 —— 而闸门的好坏只等于它的规则：面对一种模型会无限重新生成的外观，61 条启发式会被针对着优化，通过它们也不等于设计好。这些星标数（一项在过去一年内发布的技能就有 85.9k）说明这个品类现在有了旗舰级的数字，以及会扭曲它们的注意力；诚实的检验是这套检测器能不能抓到人类评审者会抓到的东西。流通的那个数字还是错的那个：**62 是 `main` 的承诺，61 是任何一次安装真正得到的**，而这正是这类失败最常见的形状 —— 文档先动，而从 README 抄来的计数是关于某个分支的断言，不是关于某个发布的断言。
 
-[`🔗 pbakaus/impeccable`](https://github.com/pbakaus/impeccable) · [`🔗 impeccable.style`](https://impeccable.style) · [`🔗 Nutlope/hallmark`](https://github.com/Nutlope/hallmark)
+[`🔗 pbakaus/impeccable`](https://github.com/pbakaus/impeccable) · [`🔗 impeccable.style/changelog`](https://impeccable.style/changelog) · [`🔗 npm: impeccable`](https://www.npmjs.com/package/impeccable) · [`🔗 Nutlope/hallmark`](https://github.com/Nutlope/hallmark)
 
 ---
 
@@ -774,7 +774,7 @@ README 划出了一条多数转换器会糊掉的界线，这也正是可以信�
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-10-24T12:13:13Z |
+| Generated | 2026-10-24T12:25:00Z |
 | Items | 49 |
 | Sources tracked | 30 (Hacker News、GitHub Trending、NVD、CISA KEV、CVE Program、GitHub Advisory Database、Science、arXiv、厂商博客、研究者公告) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8（每日 3 次） |

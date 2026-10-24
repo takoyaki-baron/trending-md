@@ -1,6 +1,6 @@
 ---
 date: 2026-10-24
-updated: 2026-10-24T12:13:13Z
+updated: 2026-10-24T12:25:00Z
 schedule: 04:03, 12:03, 20:03 UTC+8
 sources: 28
 license: CC-BY-4.0
@@ -712,17 +712,17 @@ README は 1 つの特定の点で売り込みより正直だ。HTML コメン�
 
 ---
 
-## 46. デザインの趣味がスキルになる：Impeccable は AI 生成 UI に対する 62 の検出ルールを出荷する
+## 46. デザインの趣味がスキルになる：Impeccable の出荷済み検出器は 61 ルール（62 は `main` 上にあり、どのリリースにも無い）
 
-- **Velocity:** ▮▮ rising
+- **Velocity:** ▮ steady
 - **Source:** GitHub Trending / pbakaus · 85,860★ · 本日 541 stars
 - **Tags:** `agent-skills` `design` `linting` `frontend` `claude-code`
 
-**pbakaus/impeccable** は自らを「design guidance for AI coding agents: 1 skill, 24 commands, live browser iteration, and **62 deterministic detector rules** for AI-generated frontend design」（AI コーディングエージェント向けのデザイン指針：1 スキル、24 コマンド、ライブのブラウザ反復、そして AI 生成フロントエンドデザイン向けの **62 の決定的な検出ルール**）と説明する ── **85,860 stars**、Apache-2.0、`4.7.1` は **2026-10-24T01:46Z** リリース。どこから来たかも率直に言う。「Anthropic's frontend-design was the first widely-used design skill for Claude. Impeccable started from there.」（Anthropic の frontend-design は Claude 向けに広く使われた最初のデザインスキルだった。Impeccable はそこから始まった。）最も引用されるのは診断の部分だ ──「every model trained on the same SaaS templates」（すべてのモデルが同じ SaaS テンプレートで訓練されている）── そして名指しされる兆候は見覚えのあるものだ。何にでも Inter、紫から青のグラデーション、カードの中のカード、色付き背景の上の灰色文字、「the rounded-square icon tile above every heading」（すべての見出しの上の角丸正方形アイコンタイル）。セットアップは `/impeccable init` で永続的な製品的事実を `PRODUCT.md` に書き、インストールは `npx impeccable install`。隣接する **Nutlope/hallmark** ──「anti-AI-slop design skill for Claude Code, Cursor, and Codex」── は **31,502 stars**（MIT、本日 1,053）。
+**pbakaus/impeccable** は自らを「design guidance for AI coding agents: 1 skill, 24 commands, live browser iteration, and deterministic detector rules for AI-generated frontend design」（AI コーディングエージェント向けのデザイン指針：1 スキル、24 コマンド、ライブのブラウザ反復、そして AI 生成フロントエンドデザイン向けの決定的な検出ルール）と説明する ── **85,873 stars**、Apache-2.0。ルール数はどの成果物を開くかで変わる。最新リリース `skill-v4.7.0`（2026-10-19T17:52Z）は **61**、`npm latest` は **4.7.0**（2026-10-19T17:55:12Z 公開）。一方 `main` の `package.json` は **4.7.1**、`main` の README は **62** と書き、ベンダー自身の changelog ページには既に「Skill v4.7.1, October 23, 2026」の項目がある ── ドキュメントは出荷済み、コードは未出荷（`skill-v4.7.1` タグは無く、npm にも 4.7.1 は無い）。*（2026-10-24 20:25 訂正：本項目は当初「`4.7.1` が 2026-10-24T01:46Z にリリース」「**62** の決定的な検出ルール」と書いていたが、どちらの数字もデフォルトブランチ由来で、リリース由来ではなかった。）* どこから来たかも率直に言う。「Anthropic's frontend-design was the first widely-used design skill for Claude. Impeccable started from there.」（Anthropic の frontend-design は Claude 向けに広く使われた最初のデザインスキルだった。Impeccable はそこから始まった。）最も引用されるのは診断の部分だ ──「every model trained on the same SaaS templates」（すべてのモデルが同じ SaaS テンプレートで訓練されている）── そして名指しされる兆候は見覚えのあるものだ。何にでも Inter、紫から青のグラデーション、カードの中のカード、色付き背景の上の灰色文字、「the rounded-square icon tile above every heading」（すべての見出しの上の角丸正方形アイコンタイル）。セットアップは `/impeccable init` で永続的な製品的事実を `PRODUCT.md` に書き、インストールは `npx impeccable install`。隣接する **Nutlope/hallmark** ──「anti-AI-slop design skill for Claude Code, Cursor, and Codex」── は **31,502 stars**（MIT、本日 1,053）。
 
-**Why it matters:** 「決定的な検出ルール」がプロンプトのみのスキルとの構造的な違いだ。プロンプトは「Inter を使うな」と言う。62 のルールは生成された CSS に対して実行しビルドを失敗させられる。つまり趣味が検査可能なゲートになる ── そしてゲートはそのルールと同じだけしか良くない。モデルが際限なく再生成する見た目に対する 62 のヒューリスティックは最適化の対象になり、それらを通ることは良いデザインと同じではない。star 数（この 1 年に出たスキルに 85.9k）は、このカテゴリが今や看板的な数字と、それを歪める注意力を持つことを示している。誠実なテストは、検出器が人間のレビュアーが捕まえるものを捕まえるかどうかだ。
+**Why it matters:** 「決定的な検出ルール」がプロンプトのみのスキルとの構造的な違いだ。プロンプトは「Inter を使うな」と言う。61 のルールは生成された CSS に対して実行しビルドを失敗させられる。つまり趣味が検査可能なゲートになる ── そしてゲートはそのルールと同じだけしか良くない。モデルが際限なく再生成する見た目に対する 61 のヒューリスティックは最適化の対象になり、それらを通ることは良いデザインと同じではない。star 数（この 1 年に出たスキルに 85.9k）は、このカテゴリが今や看板的な数字と、それを歪める注意力を持つことを示している。誠実なテストは、検出器が人間のレビュアーが捕まえるものを捕まえられるかどうかだ。そして流通している数字のほうが間違っている ── **62 は `main` の約束で、61 はどんなインストールでも実際に手に入る数**であり、これはこの手の失敗の典型的な形だ。ドキュメントが先に動き、README から写した数はリリースではなくブランチについての主張になる。
 
-[`🔗 pbakaus/impeccable`](https://github.com/pbakaus/impeccable) · [`🔗 impeccable.style`](https://impeccable.style) · [`🔗 Nutlope/hallmark`](https://github.com/Nutlope/hallmark)
+[`🔗 pbakaus/impeccable`](https://github.com/pbakaus/impeccable) · [`🔗 impeccable.style/changelog`](https://impeccable.style/changelog) · [`🔗 npm: impeccable`](https://www.npmjs.com/package/impeccable) · [`🔗 Nutlope/hallmark`](https://github.com/Nutlope/hallmark)
 
 ---
 
@@ -774,7 +774,7 @@ README はほとんどの変換器が曖昧にする区別を引いており、�
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-10-24T12:13:13Z |
+| Generated | 2026-10-24T12:25:00Z |
 | Items | 49 |
 | Sources tracked | 30 (Hacker News、GitHub Trending、NVD、CISA KEV、CVE Program、GitHub Advisory Database、Science、arXiv、ベンダーブログ、研究者の勧告) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8（1 日 3 回） |

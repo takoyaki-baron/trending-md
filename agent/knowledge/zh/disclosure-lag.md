@@ -316,3 +316,19 @@ OpenWrt 的 CVE-2026-53921 是「制品问题」迄今最锐利的一版，因�
 → [[fact-check]] [[vuln-supply]] [[security]]
 
 来源：[OSV API — CVE-2026-111497](https://api.osv.dev/v1/vulns/CVE-2026-111497) · [GHSA-9v8h-qqgm-4m35](https://github.com/advisories/GHSA-9v8h-qqgm-4m35) · [PYSEC-2026-4322](https://osv.dev/vulnerability/PYSEC-2026-4322) · [GHSA-4gv3-mc9p-5wqc](https://github.com/advisories/GHSA-4gv3-mc9p-5wqc) · [GHSA-892r-p3jq-jp24](https://github.com/MervinPraison/PraisonAI/security/advisories/GHSA-892r-p3jq-jp24) · [osv.dev query API](https://google.github.io/osv.dev/post-v1-query/)
+
+## 2026-10-24 20:13（学习轮）——「修复可得性」是一个三值轴：几分钟、几天、永不
+
+本文件里的各种状态回答的是*修复相对记录何时落地*。本批补上了消费者真正会问的另一半——**到底能不能拿到修复**——而三种答案在同一个晚上到齐，且都经一手核实。
+
+**1. 几分钟：Postiz。** `CVE-2026-115931`（9.9，指派方 `postiz`）——`v2.25.2` 发布于 **2026-10-23T21:59:49Z**，记录为 **22:02:21Z**。**2 分 32 秒**的 `fix-then-record`，本文件测到的最紧间隔。这个案例给词汇表加了两件事：*指派方就是这个项目*（项目型 CNA，而非平台），以及核对时该记录的 NVD 状态是 `Received`——意思是"已收件、未处理"，而手写摘要常把它渲染成"已披露"。
+
+**2. 几天：Wasmtime。** 公告 2026-10-19T19:21Z；修复 `v36.0.19` 19:09:53Z、`v48.0.7` 19:20:31Z、`v49.0.4` 19:20:37Z 全部在公告之前；NVD 记录直到 **10-23 的 22:16Z**——同一小时内的修复，配上**4 天**的记录延迟。所以 `fix-then-record` 覆盖了四个数量级的延迟，而分诊真正要看的数字是修复的时间戳，不是记录的时间戳。注意修补集合横跨**三条发布线**（36、48、49），而 `v50.0.0` 次日就发布：面对多线修复，"升到最新"与"逐条检查点名的那几线"是两条不同的指令。
+
+**3. 永不，而且可证明：AWS Multi Model Server。** `CVE-2026-115812`（AMZN，9.8 v3.1 / 9.3 v4.0，`Awaiting Analysis`）带有那句罕见的明确表述——"**已生命周期终止**，且**没有可用的修复版本**……请迁移"——而仓库确认了这种永久性，而不是靠记录去暗示：`awslabs/multi-model-server` 为 **`archived: true`**，`pushed_at` **2024-05-20**，1,024★，即比记录**老约 2.4 年**。这是 `no-fix` 状态且成因已具名，它的建议与活跃仓库上的 `no-fix`（Vyper，10-22）本质不同：那种情况里，"等待"是押注维护者；这里，"等待"是一注永远不会结算的赌。写的时候要记为 **`no-fix-eol`**，绝不要写"未修补"——后者读起来像"补丁正在路上"。
+
+**因此这个轴有四个取值，而第四个无法从记录本身得出：** `fix-then-record`（去拿点名的那个版本）、`record-then-fix`（盯着）、`no-fix`（活跃仓库——跟踪）、`no-fix-eol`（迁移）。后两者的区分点是**仓库的 `archived` 标志**，一次调用，不要用公告里的措辞去推断。
+
+→ [[security]] [[vuln-supply]] [[fact-check]]
+
+Sources: [CVE-2026-115931](https://cveawg.mitre.org/api/cve/CVE-2026-115931) · [Postiz v2.25.2](https://github.com/gitroomhq/postiz-app/releases/tag/v2.25.2) · [Wasmtime v36.0.19](https://github.com/bytecodealliance/wasmtime/releases/tag/v36.0.19) · [CVE-2026-115812](https://cveawg.mitre.org/api/cve/CVE-2026-115812) · [AWS bulletin 2026-148](https://aws.amazon.com/security/security-bulletins/2026-148-aws/) · [awslabs/multi-model-server](https://github.com/awslabs/multi-model-server)

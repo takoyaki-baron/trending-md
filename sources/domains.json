@@ -13420,5 +13420,41 @@
   "zh": "Moonshot AI 的 Kimi 博客 —— 模型发布与基准的一方来源；会公布自己的能力移除差值（K3.1 Pro 的网络能力回退），但所有分数均为自测。",
   "jp": "Moonshot AI の Kimi ブログ。モデル公開とベンチの一次情報で、能力削除の差分（K3.1 Pro のサイバー能力後退）まで自ら公表するが、スコアはすべて自社測定。",
   "review": "cv 1 — 10-24, narrow: the 'weights not yet released' status is confirmed off-origin by the moonshotai HF org holding zero K3.1 artifacts while Artificial Analysis lists the model as Proprietary. The capability numbers (90.5%→81.0%) have no independent check and should be read as vendor-run."
+ },
+ "thinkrail.ai": {
+  "cat": "vendor",
+  "cred": "med",
+  "density": "med",
+  "cv": 1,
+  "en": "ThinkRail's product site — a JetBrains InnovationHub agentic IDE that calls itself \"a thin host\": the `pi` agent owns models/skills/cost and ThinkRail owns only workspace, editor and wire. Marketing page; the repo is the document of record for licence and activity. Apache-2.0 / JetBrains InnovationHub / worktree-per-workspace claims are confirmed off-origin against api.github.com/repos/JetBrains/thinkrail (Apache-2.0, created 2026-07-08, 1,070★, 202 open issues) (cv 1, checked 2026-10-24).",
+  "zh": "ThinkRail 的产品站——JetBrains InnovationHub 的 agentic IDE，自称「a thin host」：`pi` agent 拥有模型/技能/成本，ThinkRail 只拥有 workspace、编辑器与线路。属营销页；许可证与活跃度以仓库为准。 Apache-2.0／JetBrains InnovationHub／每 workspace 一个 worktree 的主张已在来源外核实：api.github.com/repos/JetBrains/thinkrail（Apache-2.0、创建于 2026-07-08、1,070★、202 个未关闭 issue）（cv 1，2026-10-24 核）。",
+  "jp": "ThinkRail の製品サイト——JetBrains InnovationHub のエージェント型 IDE で、自らを「a thin host」と呼ぶ：`pi` がモデル・スキル・コストを所有し、ThinkRail はワークスペースとエディタと配線だけを持つ。マーケティング頁であり、ライセンスと活動状況の正典はリポジトリ側。 Apache-2.0／JetBrains InnovationHub／ワークスペースごとの worktree という主張は外部で確認済み：api.github.com/repos/JetBrains/thinkrail（Apache-2.0、2026-07-08 作成、1,070★、未クローズ issue 202）（cv 1、2026-10-24 確認）。"
+ },
+ "philipotoole.com": {
+  "cat": "community",
+  "cred": "high",
+  "density": "high",
+  "cv": 1,
+  "en": "Philip O'Toole's engineering blog (rqlite's author) — primary-source systems retrospectives written by the person who built the thing, with authorship and incentives stated in the text. Its load-bearing timeline claim — Hashicorp Raft since early 2016, still in use — is confirmed off-origin in rqlite own go.mod (`github.com/hashicorp/raft v1.8.0`) (cv 1, checked 2026-10-24).",
+  "zh": "Philip O'Toole 的工程博客（rqlite 作者）——由亲身实现者撰写的一手系统回顾，文中会点明作者身份与利益关系。 其承重的时间线主张——自 2016 年初起使用 Hashicorp Raft 并沿用至今——已在 rqlite 自己的 go.mod 中于来源外核实（`github.com/hashicorp/raft v1.8.0`）（cv 1，2026-10-24 核）。",
+  "jp": "Philip O'Toole のエンジニアリングブログ（rqlite の作者）——作った本人が書く一次文献のシステム回顧。著者性と利害は本文中に明示される。 主要な時系列主張——2016 年初頭から Hashicorp Raft を使い続けている——は rqlite 自身の go.mod（`github.com/hashicorp/raft v1.8.0`）で外部確認済み（cv 1、2026-10-24 確認）。"
+ },
+ "filee.sh": {
+  "cat": "code",
+  "cred": "med",
+  "density": "med",
+  "cv": 1,
+  "en": "Filee's project site — an MIT offline file converter whose real documentation is the repo's README + `docs/ENGINES.md` (which formats need the optional engines). Treat the site as a landing page and the repo as the spec. The v2.0.0 release date is confirmed off-origin via api.github.com/repos/KnifeLemon/Filee/releases/tags/v2.0.0 (published 2026-10-21T10:44:57Z) (cv 1, checked 2026-10-24).",
+  "zh": "Filee 的项目站——MIT 离线文件转换器，真正的文档在仓库 README 与 `docs/ENGINES.md`（说明哪些格式需要可选引擎）。把站点当落地页、把仓库当规格。 v2.0.0 的发布日期已在来源外核实：api.github.com/repos/KnifeLemon/Filee/releases/tags/v2.0.0（发布于 2026-10-21T10:44:57Z）（cv 1，2026-10-24 核）。",
+  "jp": "Filee のプロジェクトサイト——MIT のオフライン変換ツール。実質のドキュメントはリポジトリの README と `docs/ENGINES.md`（どの形式が任意エンジンを要するか）。サイトはランディング、仕様はリポジトリ。 v2.0.0 のリリース日は api.github.com/repos/KnifeLemon/Filee/releases/tags/v2.0.0（2026-10-21T10:44:57Z 公開）で外部確認済み（cv 1、2026-10-24 確認）。"
+ },
+ "puter.com": {
+  "cat": "vendor",
+  "cred": "med",
+  "density": "low",
+  "cv": 1,
+  "en": "Puter's site — the browser-OS vendor behind HeyPuter/everything. Product marketing: scope claims are large and verified only at the repo level (a catalogue, not a shipped suite). The monorepo claim is checked off-origin at api.github.com/repos/HeyPuter/everything (MIT, created 2026-10-13, 3,781★); note that 22 of the 28 cells titled \"Demo URL not yet provided\" link to external hosts rather than the app (cv 1, checked 2026-10-24).",
+  "zh": "Puter 的站点——HeyPuter/everything 背后的浏览器 OS 厂商。属产品营销：范围主张很大，只能在仓库层面核实（是目录，不是已交付的套件）。 单一仓库（monorepo）主张已在 api.github.com/repos/HeyPuter/everything 于来源外核实（MIT、创建于 2026-10-13、3,781★）；注意 28 个标注「Demo URL not yet provided」的单元格里有 22 个指向外部主机而非该应用（cv 1，2026-10-24 核）。",
+  "jp": "Puter のサイト——HeyPuter/everything を擁するブラウザ OS ベンダー。製品マーケティングであり、範囲の主張は大きいが検証できるのはリポジトリの水準まで（出荷済みスイートではなくカタログ）。 モノレポの主張は api.github.com/repos/HeyPuter/everything で外部確認済み（MIT、2026-10-13 作成、3,781★）。ただし「Demo URL not yet provided」と題された 28 セルのうち 22 はアプリではなく外部ホストを指す（cv 1、2026-10-24 確認）。"
  }
 }

@@ -4071,3 +4071,42 @@ Benchmark advance, yes — a statement about deployed diagnostic practice, no ([
 → [[fact-check]] [[edge-inference]]
 
 Sources: [block.xyz/dessa](https://block.xyz/dessa) · [HN — Dessa](https://news.ycombinator.com/item?id=50213925) · [Science — sequential diagnosis](https://www.science.org/doi/10.1126/science.aeh7930) · [arXiv 2506.22405](https://arxiv.org/abs/2506.22405)
+
+**IQuest-Q1 pins the harness into the model — three harness builds across one benchmark table, and the table is
+a PNG.** arXiv 2610.30949, "Advancing Foundation Capabilities for Agentic CLI Systems" (title verified): a
+**320B-A15B** MoE — 88 layers, hidden 3,072, 48/8 heads, **256 experts with 8 active**, 3 sliding-window + 1
+full attention at a 4,096 window, partial RoPE at 32 dims, **524,288 context**, MTP layers (two independent at
+training, one applied recursively **×8** at inference). Training is three stages — pretrain (Stable SplitNorm +
+Muon + muP, two-stage curriculum whose second stage raises coding data), mid-training (domain/format expansion +
+context extension), post-training (SFT, domain RL, **MOPD across scaffolds**) — then model merging across
+experts and checkpoints. The reporting is the finding. The benchmark table is a **single PNG**
+(`IQuest-Q1_Performance.png`) and the abstract carries **no numbers at all**; the notes describe setup instead —
+temperature 1.0 / top-p 0.95 / top-k 20, and harnesses that differ **by row**: Claude Code `2.1.140` or Codex
+`0.142`, **mini-SWE-agent** for DeepSWE v1.1, Claude Code `2.1.258` for Agents' Last Exam, six-hour limits for
+CyberGym and eight for Terminal-Bench 2.1. A model post-trained *around specific CLI harness versions*, then
+evaluated on three different builds of them, is the cleanest statement yet that the harness is part of the model
+(thesis 12) — and it makes the rows non-comparable across harness columns. Two caveats belong in the same
+sentence as any score: "our models currently do not have multimodal capability, we replace multimodal content
+inputs in the agent conversation with **placeholders**" (so agentic scores are earned on a degraded input path),
+and **IQuest-CLIBench is in-house**. Weights: `IQuestLab/IQuest-Q1`, last modified **2026-09-29**, ~4,777
+downloads, `license: other` / `license_name: iquest-q1` — **open weights, not an OSI licence**, so "open-source
+model" in the abstract is a claim about availability, not rights.
+
+**WeVisOne-VL gets continuous alpha mattes out of a next-token VLM with a 9.6M-parameter head.** Tencent WeChat
+Vision, arXiv 2610.31329 (229 HF upvotes), built on **Qwen3-VL**: open-vocabulary detection, referring
+localization, counting, pointing, OCR, referring segmentation and promptable **alpha matting**, all as structured
+next-token prediction. The mechanism is the design worth keeping — a **9.6M-param pixel decoder** triggered by a
+dedicated `<OBJ>` token (ID **152678**), taking Qwen3-VL's pre-merging ViT features through a visual adapter into
+a box-guided query decoder (six deformable cross-attention blocks) and a dense head that refines at **S/4 → S/2
+→ S/1** to emit full-resolution continuous alpha; coordinates are emitted as `<0>`…`<1000>` tokens and an absent
+target returns `None`. The interface discipline is the point: **the VLM stays text-native and only the pixel head
+is dense**, which is a different bet from bolting a diffusion decoder on. Its published limits bound it to a
+component: "fine alpha boundaries remain sensitive to image resolution, severe occlusion, complex transparency,
+and prompt phrasing"; it generates structured output "**without explicit chain-of-thought**"; it is "**single-turn**
+image perception (video grids are rejected by the pixel decoder)"; and the card disclaims autonomous high-impact
+use and identification of individuals. Apache-2.0 at `tencent/WeVisOne-VL-2B` and `-4B` (first uploaded
+2026-10-22); "leading performance across over 30 benchmarks" arrives with no table in the abstract.
+
+→ [[edge-inference]] [[fact-check]]
+
+Sources: [arXiv 2610.30949](https://arxiv.org/abs/2610.30949) · [IQuest-Q1 model card](https://huggingface.co/IQuestLab/IQuest-Q1) · [arXiv 2610.31329](https://arxiv.org/abs/2610.31329) · [WeVisOne-VL-4B](https://huggingface.co/tencent/WeVisOne-VL-4B) · [Tencent/WeVisOne-VL](https://github.com/Tencent/WeVisOne-VL)

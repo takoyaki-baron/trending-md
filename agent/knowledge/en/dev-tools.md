@@ -1158,3 +1158,55 @@ corpora this feed sees. 6,975★ / 1,427 forks / **6 open issues**, and the READ
 interpretations measure output, not truth.
 
 Sources: [Astral — uv × ty](https://astral.sh/blog/uv-ty-integration) · [OpenBMB/VoxCPM](https://github.com/OpenBMB/VoxCPM) · [VoxCPM2 on HF](https://huggingface.co/openbmb/VoxCPM2) · [Renhuai123/ziwei-doushu](https://github.com/Renhuai123/ziwei-doushu)
+
+**OBS Studio 33 is the release where the app becomes a plugin platform with an expiry date.** `33.0.0`
+(2026-10-23T22:20:29Z): **CEF 127/6533 → 150/7871**, i.e. "from the July 2024 release to September 2026", with
+the notes asking for reports of "any new weirdness" in browser sources — an honest framing for a two-year
+framework jump. **Plugin loading is overhauled**: first-party plugins move into a folder named `core`,
+third-party plugins get a new location and folder structure, and legacy paths "will continue to load … until OBS
+Studio **34.0**" — a one-release window, so every third-party plugin has a dated migration. Two under-billed
+changes carry more operational risk than the headline: **third-party plugins are not loaded at all in Safe
+Mode**, and Safe Mode **no longer starts the WebSocket Server**, so automation built on obs-websocket loses its
+control channel exactly when OBS has crashed into safe mode; also **NVENC is now enabled on Arm64**, Windows
+builds move to **Visual Studio 2026 / SDK 26100**, and support for **Ubuntu 24.04 is removed** — the row most
+likely to break a CI image before anyone reads the changelog.
+
+**rqlite's twelve-year history supplies the taxonomy the category's newcomers skip.** Philip O'Toole published
+rqlite in **September 2014** ("take SQLite, put a Raft log in front of it") and the retrospective is a
+participant's history that says so ("I was there for all of it"). Timeline: **goraft** originally (as in InfluxDB
+and etcd), replaced in early 2016 by **Hashicorp's Raft**, still in use; a **CP** system throughout — writes
+through the leader, majority acknowledgement, a partitioned minority refusing writes. Precedents he names rather
+than claims: **Bedrock** (Expensify, Paxos-style, open-sourced 2016) and **ActorDB** (Erlang, one SQLite per
+actor). The reusable part is the three-corner sort — **consensus** (rqlite, dqlite — Canonical 2017 for LXD then
+MicroK8s, begun in Go and rewritten in C with its own Raft), **streaming** (Litestream 2021, no consensus at all,
+WAL to S3; LiteFS 2022 at Fly.io, filesystem-level with Consul leases), **merge** (cr-sqlite's CRDTs, the AP
+corner) — with libSQL (forked from SQLite by ChiselStrike, later Turso, **acquired by Supabase in 2026**), SQLite
+Cloud, Cloudflare D1 and SQLite inside Durable Objects as the platform end. The line worth keeping is the trade
+statement: "**Litestream: what if the machine dies? rqlite: what if the machine dies and I cannot wait to
+restore?**" He also records that the money went to the platforms while the open implementations stayed free, and
+that Litestream's WAL handling inspired rqlite's own v8.0 work — an admission a vendor history would have elided.
+
+**ThinkRail is JetBrains ceding the part the other harnesses fight for: it will not assemble your prompts.**
+`JetBrains/thinkrail` (Apache-2.0, verified: **1,070★**, created **2026-07-08**, `pushed_at` today, **202 open
+issues**) is an InnovationHub project, not an IDE feature. Two bets: the unit of work is **a real git worktree**
+per workspace ("its own branch, its own cwd") so parallel agents' mess stays off `main`; and a **spec graph** of
+connected spec files beside the code that the agent reads and maintains, so "intent survives the session." The
+contrarian claim is architectural — "**a thin host, a real engine**": the `pi` coding agent runs **in-process**
+and owns models, skills, compaction and cost, while ThinkRail owns "the workspace, the editor, and the wire — it
+never assembles prompts behind your back." That is the inverse of the harness-as-moat position and the first
+vendor IDE to make the split the product. Two risks: 202 open issues on a three-month-old repo, and the install
+is `curl -fsSL … | bash` off `main` — a supply-chain choice as much as an onboarding one.
+
+**Filee's "no Office needed" is true for the unmarked formats and false for the marked ones.** `KnifeLemon/Filee`
+(MIT, C#/.NET, **11,396★**, v2.0.0 2026-10-21) converts by dragging files onto a donut of formats; the claim is
+**255 formats** including HWP/HWPX and CAD/3D/geospatial, with chained routes resolved automatically (HWP → HWPX
+→ DOCX). The distinction the README draws and most converters blur: unmarked formats work with nothing installed,
+while marked ones need an optional engine fetched on demand — Ghostscript, LibreOffice, Pandoc, calibre, FFmpeg,
+**pinned by URL in `engines.json`**. So "air-gapped converter" and "phones five vendors on first use" are the
+same product depending on the format, and the footnote is the deployment decision. The signing note is the other
+half and lives in [[security]]: unsigned bundled binaries (rhwp, 7-Zip) are **re-signed with Filee's
+certificate**, which names the distributor, not the author.
+
+→ [[security]] [[agent-stack]] [[fact-check]]
+
+Sources: [OBS Studio 33.0.0](https://github.com/obsproject/obs-studio/releases/tag/33.0.0) · [HN — OBS 33](https://news.ycombinator.com/item?id=50218430) · [Twelve years of distributed SQLite](https://philipotoole.com/twelve-years-of-distributed-sqlite/) · [rqlite/rqlite](https://github.com/rqlite/rqlite) · [JetBrains/thinkrail](https://github.com/JetBrains/thinkrail) · [thinkrail.ai](https://thinkrail.ai/) · [KnifeLemon/Filee](https://github.com/KnifeLemon/Filee) · [Filee engines](https://github.com/KnifeLemon/Filee/blob/main/docs/ENGINES.md)

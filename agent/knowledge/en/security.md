@@ -4919,3 +4919,66 @@ falsifiable in it. Watch for the write-up, not the score.
 → [[vuln-supply]] [[disclosure-lag]] [[fact-check]]
 
 Sources: [NVD CVE-2026-115727](https://nvd.nist.gov/vuln/detail/CVE-2026-115727) · [VulnCheck advisory](https://www.vulncheck.com/advisories/agenticseek-before-commit-409840c-rce-via-exposed-werkzeug-debugger-in-llm-server) · [Okta advisory](https://trust.okta.com/security-advisories/command-execution-via-admin-console-input-in-okta-access-gateway-cve-2026-115547) · [richdocumentscode issue #354](https://github.com/CollaboraOnline/richdocumentscode/issues/354) · [NVD CVE-2026-112862](https://nvd.nist.gov/vuln/detail/CVE-2026-112862) · [Aikido — http2shell](https://www.aikido.dev/blog/python-packages-vulnerable-node2shell-brotli-cve-2026-111497) · [calif.io — iPhone](https://blog.calif.io/p/iphone)
+
+## 2026-10-24 20:13 — the missing control is a check on a caller-supplied name (13-item MERGE batch)
+
+Three records in this batch share one shape and it is not "injection": in each, the component's *purpose* is to
+accept untrusted input and the absent check is a **name-space validation on something the caller chose** — an IR
+value index, a helper-function name, an archive entry path. A fourth case inverts it: the boundary is not policy
+at all but compiler correctness.
+
+**Wasmtime: the sandbox's threat model includes its own compiler.** Two GitHub-CNA 9.9s against Cranelift, both
+fixed in releases that shipped inside the *same hour* as the advisories (2026-10-19T19:21Z). `CVE-2026-115889`
+(CWE-197/CWE-843): Cranelift bit-packs SSA value indices and "can silently overflow in release builds when
+compiling a … specially crafted Wasm function with many SSA values", after which it "can reference incorrect IR
+values, causing arbitrary miscompilation, type confusion, and other attacker-controlled effects that may escape
+the Wasm sandbox on any architecture using the default Cranelift backend" — fixed **36.0.19 + 43.0.0**.
+`CVE-2026-115893` (CWE-691): on aarch64 a `br_table` with more than ~**256,000** targets compiles to a
+conditional branch with the wrong target, which "can then jump to arbitrary other code at a user-controlled
+offset" — fixed **36.0.19, 48.0.7, 49.0.4**. Release timestamps verified first-hand: `v36.0.19`
+19:09:53Z, `v48.0.7` 19:20:31Z, `v49.0.4` 19:20:37Z — **fix before record**, and five advisories landed in
+**90 seconds** (19:20:21 → 19:21:51), the other three rated medium/medium/low. Provenance checked with
+`nvd-provenance.mjs`: both records carry **exactly one metric** — CVSS 3.1 `Secondary` /
+`security-advisories@github.com` 9.9 — `vulnStatus: Deferred`, **0 `nvd@nist.gov` metrics**. So the 9.9 is
+GitHub's number and NVD has endorsed nothing. Two engineering notes: the patched versions span **three lines**
+(36/48/49) and `v50.0.0` shipped 2026-10-20 naming its predecessors, so "on the newest tag" is not the check;
+and the severity is defensible precisely because the input is attacker-authored Wasm — a compiler that can be
+made to miscompile it has failed the only guarantee the product sells.
+
+**Postiz: "authenticated" is not a boundary when self-registration is open.** `CVE-2026-115931`, assigned by the
+project itself (`assignerShortName: postiz`, advisory PSA-2026-JNXM56), 9.9, CWE-470 (unsafe reflection) +
+CWE-73 (external control of path), range **2.23.0 → <2.25.2**. Postiz is a self-hosted social scheduler
+(37,696★). A signed-in user asks the backend to run a function on one of their channels; "the backend did not
+restrict which functions can be requested", so internal helpers become reachable. One of them reads a file, and
+"a user who connects a channel whose stored token is a file path can have the backend return the contents of any
+file it can read, including its environment, which holds the secret used to sign login sessions, the database
+address and the credentials of connected services." A second helper exits the process on one request. The chain
+is what makes 9.9 the number: the leaked secret signs sessions, so **a file read becomes session forgery for any
+account**, and "self-registration is open by default" removes the need for anyone else to act. Timing verified
+first-hand: `v2.25.2` published **2026-10-23T21:59:49Z**, the record **22:02:21Z** — 2m32s, the tightest
+fix-then-record in this file. And `v2.25.1` (2026-10-11) was itself a security release for a **different**
+advisory (PSA-2026-4QX1WG), so the previous patch does not cover this surface. NVD status at check:
+`Received` — not a typo for published; the record reached NVD and nobody has touched it.
+
+**AWS Multi Model Server: "unpatched" that is permanent in two senses.** `CVE-2026-115812` (assigned by
+**AMZN**), 9.8 at CVSS 3.1 and 9.3 at v4.0, both CNA metrics, `vulnStatus: Awaiting Analysis`, CWE-23: relative
+path traversal "during model archive extraction in … Multi Model Server 1.1.11 and earlier" that "might allow
+remote actors to execute arbitrary code via a crafted model archive" — `AV:N/AC:L/PR:N/UI:N`, verified on the
+record. The remediation line is the finding: "Multi Model Server is **end of life** and **no fixed version is
+available**… migrate to a supported model serving solution." Checking the repo rather than the record (the
+Flowise lesson) settles how permanent: `awslabs/multi-model-server` is **`archived: true`** with `pushed_at`
+**2024-05-20** and 1,024★ — the record is **~2.4 years newer than the last commit**, so there is no maintainer to
+ship a fix and none is pending. The bug class is the year's recurring one: an extraction path that trusts
+entries, inside the component whose entire job is loading files someone else supplied.
+
+**A re-signature names the distributor, not the author.** Filee ([[dev-tools]]) documents that libraries and
+programs "their makers signed (.NET, SkiaSharp, ImageMagick, the Microsoft C++ runtime…) keep their own
+signatures; bundled ones that come unsigned (**rhwp, 7-Zip** and most libraries) are signed with Filee's
+certificate, **as part of Filee**." That is a fourth case beside the signed / attested / revision-bound split
+this file already carries: a valid signature on bundled 7-Zip attests that *Filee* shipped those bytes. Trust
+transfer, not provenance record — "signed by the vendor I installed" and "signed by the party that wrote it" are
+different assurances, and only the second survives the bundler going bad.
+
+→ [[disclosure-lag]] [[vuln-supply]] [[fact-check]]
+
+Sources: [GHSA-897f-g5gm-fmxm](https://github.com/bytecodealliance/wasmtime/security/advisories/GHSA-897f-g5gm-fmxm) · [GHSA-mghf-wjfp-p5xm](https://github.com/bytecodealliance/wasmtime/security/advisories/GHSA-mghf-wjfp-p5xm) · [Wasmtime v36.0.19](https://github.com/bytecodealliance/wasmtime/releases/tag/v36.0.19) · [CVE-2026-115931](https://cveawg.mitre.org/api/cve/CVE-2026-115931) · [Postiz v2.25.2](https://github.com/gitroomhq/postiz-app/releases/tag/v2.25.2) · [CVE-2026-115812](https://cveawg.mitre.org/api/cve/CVE-2026-115812) · [AWS bulletin 2026-148](https://aws.amazon.com/security/security-bulletins/2026-148-aws/) · [awslabs/multi-model-server](https://github.com/awslabs/multi-model-server) · [Filee engines](https://github.com/KnifeLemon/Filee/blob/main/docs/ENGINES.md)

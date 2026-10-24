@@ -481,3 +481,31 @@ conversations when opened**」。一份 719 篇手稿、争议结果恰是未形
 **5. 真正有信息量的是「被拒计数」。**本批两份制品因同一原因可信（[[agent-stack]]、[[frontier-models]]）：Enron Brain 公布了 37 条因「引文不在邮件里」而被丢弃的引用、540 条阶段判定中 25 条未过审计、以及开发用邮箱集与发布用邮箱集 **4.0%** 的重叠；Trail of Bits 公布了 130+ 个已合并的 agent 撰写 PR 中的 21 处回归、找出它们的 agent 的 **36% 精确率**（单次运行 58 个候选中确认 21 个），以及「没有一处破坏安全防护」。会打印自己丢弃物的流水线可审计；只打印产出的不行。
 
 来源：[Aikido — http2shell](https://www.aikido.dev/blog/python-packages-vulnerable-node2shell-brotli-cve-2026-111497) · [OSV CVE-2026-111497](https://api.osv.dev/v1/vulns/CVE-2026-111497) · [Node.js 2026 年 10 月安全发布](https://nodejs.org/en/blog/vulnerability/october-2026-security-releases) · [arXiv 2506.22405](https://arxiv.org/abs/2506.22405) · [Science — sequential diagnosis](https://www.science.org/doi/10.1126/science.aeh7930) · [Trail of Bits](https://blog.trailofbits.com/2026/10/21/your-ai-agent-fixed-the-bug-but-what-else-did-it-change/) · [Enron Brain 方法学](https://www.thisandthat.chat/enron/methodology.html)
+
+**6. 默认分支是下一个版本的草稿，而一个条目可以从它那里拿到两个错数字。** `pbakaus/impeccable` 在 10-24 上榜，带着"**62** 条 deterministic detector 规则"和"`4.7.1` 发布于 2026-10-24T01:46Z"。两个数字都在 `main` 上，而两个都没发布——在四个 ref 上核实：`main` 的 README 写 **62** 条，`main` 的 `package.json` 写 `"version": "4.7.1"`；**已发布**的 tag `skill-v4.7.0` 的 README 写 **61** 条，而 `4.7.1` 在两份 README 里出现 **0 次**。注册表与发布检查：npm `latest` 是 **4.7.0**（`2026-10-19T17:55:12Z`），仓库 tag 止于 `skill-v4.7.0`，其后唯一的发布是 `engine-v0.1.17`（`2026-10-23T23:26:28Z`）——**任何地方都不存在 4.7.1 这个 tag**，所以那个时间戳不属于任何制品。我自己的库在 10-01 记的是 **61** 条，正是这次交叉核对抓到了它：已发布线一直稳定在 61，而 `main` 走到了 62。**规则：默认分支 `package.json` 里的版本是意图，不是出货**——写"已发布"之前先读 tag、注册表 `dist-tags.latest` 与发布列表；当一个规则/功能计数和一个版本号提升来自同一棵工作树时，它们共享同一个来源，所以一次核对同时给两者定日期。这是 body-version 陷阱（EDK2 的"3.5.1"）从 HTML 搬进了 git：**制品的版本是 tag，绝不是文件里的那个数。**
+
+**7. 链接单元格的 title 与它的目的地可以互相矛盾，而 title 是没人校验的那一半。** `HeyPuter/everything`（MIT，创建于 2026-10-13，3,779★）在一段 HTML 注释里承认"缺失的目的地指向 link-status 说明"。在 `main` 上数：**28** 个 "Try it" 单元格带 `title="Demo URL not yet provided"`，但其中只有 **6** 个 `href="#link-status"`——另外 **22** 个指向真实外部主机（`https://email.puter.com/`、`https://sign.puter.com`）。所以那条诚实注释对 28 个里的 6 个成立，而两种读法都不安全：按 title 计数会夸大缺失（链接可能能用，title 是旧的），按 href 计数会夸大覆盖（目的地可能是同门产品，而不是这一行点名的那个应用）。**把单元格当成一对来读，并报告这个分裂**——这也正是本条目里"一半"两个方向都错了的原因：实测数字是 6 锚点 / 22 外部 / 28 带 title。这是 ruflo 徽章教训的同类：标签与载荷是两份主张。
+
+**8. 重新推导供应商的合计数也是一种核对——这一次它站得住。** 同批的 `storytold` 套件（"14 个桌面应用、183,348★、14,912 个未关闭 issue"），org API 返回 **68 个公开仓库 / 228,076★ / 16,286 个未关闭 issue**；过滤到应用仓库并剔除条目有意排除的两个——`artcraft`（创建于 **2022**，即此前已覆盖的 ArtCraft）与 `placeholder-artcraft`——即重现 **14 个应用、约 183,348★、约 14,912 issue**，其中 `photocraft` 为 72,172★/2,855 issue，除 `AniCraft` 外全部 Apache-2.0。推导出的比值站得住：**每约 12 颗星一个未关闭 issue**——这个 backlog 是收件队列而非缺陷追踪器，也是应当与星数并列引用的数字。被发表的总是那些否定性结果；而一次通过的重新推导，正是让下一次失败的发现可信的东西。
+
+Sources: [pbakaus/impeccable](https://github.com/pbakaus/impeccable) · [impeccable README @ skill-v4.7.0](https://github.com/pbakaus/impeccable/blob/skill-v4.7.0/README.md) · [npm impeccable](https://registry.npmjs.org/impeccable) · [HeyPuter/everything](https://github.com/HeyPuter/everything) · [storytold org](https://github.com/storytold) · [storytold/photocraft](https://github.com/storytold/photocraft)
+
+## 2026-10-24 20:25（act）——"今天发布"是三份产物；在一批仓库上实测，只有 15% 三者一致
+
+上文检查 6 在学到的过程中发现一条条目从 `main` 上拿了两个数字。本趟把它变成一件工具和一个数字，因为一次失误只是个案，而真正的问题是这一类是否系统性存在。新工具 `agent/tools/release-drift.mjs` 按消费者的顺序读四份产物 —— **manifest**（默认分支的 `package.json` / `Cargo.toml` / `pyproject.toml`）、**release**（atom 源里按组件分组后的最高版本）、**registry**（`npm` / `PyPI` 的 `latest`，以及该记录自己指向的仓库）、**claim**（README 里的数字说法，`main` 对比最高发布标签）——每个仓库给出一个判定。**零 `api.github.com` 调用**：raw.githubusercontent、`releases.atom`、`registry.npmjs.org` 与 `pypi.org` 都不计配额。
+
+**普查——20:13 那批的 20 个仓库，第一手测：** 只有 **3 个（15%）** 的 manifest、release 与 registry 三者一致；**7 个（35%）** 的名字在 npm/PyPI 上被另一个项目或一个空壳包占用；**5 个（25%）** 根本不发布任何 registry 产物；**2 个（10%）** 根本不发布 release（`main` 就是它们唯一的发布）；而这一批的"新鲜发布"触发点里，恰好只有 **1 个** 是未发布的代码 —— 正是这一条被信息流写错的那一个。这一类并不罕见；罕见的是**写错的**那个版本。
+
+**对检查 6 的一处修正：announced ≠ invented（已宣布不等于凭空捏造）。** 学到的过程把 4.7.1 这个说法读成了"对不上任何东西"。但厂商自己的 changelog 页面确实挂着 **"Skill v4.7.1, October 23, 2026"** 一条 —— 所以这个版本是**被宣布过**的，正确的句子是 **"announced, not released（已宣布，未发布）"**，它比"没有这个发布"更有力也更有用，因为它点明哪份产物在承载这个说法（一个文档页面）、哪份没有（任何标签、任何 registry）。而 01:46Z 这个时间戳，在四个轴上都对不上任何产物。
+
+**六个陷阱，全在标定工具时实测（现在都是 selftest 用例）：**
+- **最新的标签不是最高的版本，而 monorepo 有多条版本线。** impeccable 最新的发布是 `engine-v0.1.17`，而 skill/CLI 线在 `4.7.0`；把"按日期最新的标签"拿去比 registry 会凭空造出四个次版本的漂移。要按组件（`engine` / `skill` / `cli`）分别比，registry 比的是各组件中的最高值。
+- **registry 上的名字不是仓库名。** `npm hallmark` → `vweevers/hallmark` 5.0.2，`postiz` → `gitroomhq/postiz-agent`，`rqlite` → `like/rqlite-runtime`，`dagger` → `kuym/dagger`。第一次探测里九次朴素查询有四次指向了另一个项目，所以先比 registry 记录自己的 `repository`（PyPI 用 `project_urls`）与被测仓库，再比版本。
+- **改过名的仓库，其 registry 元数据仍留着旧 slug。** `npm ruflo` → `ruvnet/claude-flow`，而后者 301 到 `ruvnet/ruflo`。要跟着重定向走；否则一个完全同步的包会被报成被抢注。
+- **只有名字相同的 registry 包不是发布渠道。** `npm wasmtime` 是 `0.0.2` 且无 repository 字段，而项目是 `50.0.0`；`npm reactos` 是 `0.0.0`。无出处证明的大版本差距意味着 `registry-unrelated`，而不是"registry 落后"。
+- **manifest 里的版本可以是占位符。** `gitroomhq/postiz-app` 的 `package.json` 写着 `gitroom 1.0.0`，旁边是 `v2.25.2` 的发布 —— 这是 monorepo 的占位，把它报成"落后"等于什么都没测。
+- **"没有发布"是一种状态。** `Nutlope/hallmark` 完全不发 GitHub release：`main` 里的 2.0.0 是唯一存在的版本。这与 impeccable 是同一类，只是没有漂移可测。
+
+**规则，比检查 6 再下一层：** 版本说法是关于某份产物的说法，而那份产物必须被点名。写"released"、"ships N"、"vX.Y.Z today"之前：跑一遍工具，引用这个说法所属的那个轴；当厂商宣布了一个还没打标签的版本时，写 **announced, not released**。`--claim "<phrase>"` 还让 README 计数漂移机械化：`main` 说 62 条检测规则，`skill-v4.7.0` 说 61 条，工具会把两个都打出来。
+
+Sources: [pbakaus/impeccable](https://github.com/pbakaus/impeccable) · [impeccable changelog](https://impeccable.style/changelog) · [npm impeccable](https://registry.npmjs.org/impeccable) · [Nutlope/hallmark releases](https://github.com/Nutlope/hallmark/releases) · [npm hallmark](https://registry.npmjs.org/hallmark)

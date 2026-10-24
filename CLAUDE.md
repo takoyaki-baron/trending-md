@@ -364,6 +364,41 @@ underlying pages — this produced a two-layer false signal in a single item.
    Re-probe before publishing any "the docs say" claim: twins are site configuration and gates are
    per-request.
 
+8. **"Released today" is a claim about three artifacts, and the newsroom default is to read the wrong
+   one.** (added 2026-10-24, the impeccable lesson.) The feed wrote that `pbakaus/impeccable`'s `4.7.1`
+   was "released 2026-10-24T01:46Z" with "62 detector rules". There is no `skill-v4.7.1` tag and no
+   4.7.1 on npm; the highest release is `skill-v4.7.0` (2026-10-19T17:52Z), `npm latest` is **4.7.0**,
+   that tag's README says **61**, and 4.7.1 exists only in `main`'s `package.json` — while the vendor's
+   own changelog page carries a "Skill v4.7.1, October 23, 2026" entry. So **docs-ahead-of-release is the
+   shape most likely to be published as a release**, and a count copied from a README is a claim about a
+   branch. Keep the three axes separate — **manifest** (default-branch `package.json`/`Cargo.toml`/
+   `pyproject.toml`), **release** (the tag/release page), **registry** (`npm`/`PyPI` `latest`) — and a
+   version is only "shipped" when release and registry agree. One call:
+   `node agent/tools/release-drift.mjs --repos owner/repo[,owner/repo…] [--npm owner/repo=pkg] [--pypi owner/repo=pkg] [--claim "detector rules"] [--census]`
+   → per repo: manifest/release/registry + the numeric claim on `main` vs the highest release tag, then a
+   verdict (`in-sync` / `manifest-ahead` / `manifest-behind` / `registry-lags-release` / `registry-ahead-of-tags` /
+   `release-no-registry` / `no-release` / `name-collision` / `registry-unrelated` / `manifest-name-mismatch` /
+   `no-manifest` / `unreadable`). Costs **zero** `api.github.com` calls: raw.githubusercontent,
+   `releases.atom`, `registry.npmjs.org` and `pypi.org` are unmetered (the summary prints the API count).
+   **Six traps, each measured while calibrating it:** **(a) the newest tag is not the newest version, and
+   a monorepo has several version lines** — impeccable's newest release is `engine-v0.1.17` while the
+   skill/CLI lines are `4.7.0`, so versions are compared per component (`engine` / `skill` / `cli`) and
+   the registry against the maximum; **(b) a registry name is not a repo name** — `npm hallmark` is
+   `vweevers/hallmark`, `postiz` is `postiz-agent`, `rqlite` is `like/rqlite-runtime`, `dagger` is
+   `kuym/dagger`, so compare the registry record's own `repository` field (PyPI: `project_urls`) before
+   comparing versions; **(c) a renamed repo's metadata keeps the old slug** — `npm ruflo` →
+   `ruvnet/claude-flow`, which 301s to `ruvnet/ruflo`, so follow the redirect before calling a collision;
+   **(d) a name-only registry package is not a release channel** — `npm wasmtime` is `0.0.2` with no
+   repository field against a `50.0.0` project, so a major-version gap with no provenance is
+   `registry-unrelated`, not "the registry lags"; **(e) a manifest version can be a placeholder** —
+   `gitroomhq/postiz-app`'s `package.json` says `gitroom 1.0.0` beside `v2.25.2` releases; **(f) `no
+   release` is a state** — `Nutlope/hallmark` publishes no releases at all, so `main` is the only
+   release. **Measured on the 20:13 batch's 20 repos: only 3 (15%) had all three artifacts agreeing; 7
+   (35%) had their name taken on npm/PyPI by another project or by a stub; 5 (25%) publish no registry
+   artifact at all; and exactly 1 of the batch's "fresh release" triggers was unreleased code** — the one
+   the feed got wrong. Before writing any "released / ships N / vX.Y.Z today": run it, quote the artifact
+   the claim is about, and if the release is announced but untagged, say **announced, not released**.
+
 **Case study (Void, 2026-08-12 — two failures, one root cause):**
 - The feed saw voideditor/void at #2 trending with +2,840 stars and wrote it as "AI-first
   editor momentum beyond Cursor/Copilot."

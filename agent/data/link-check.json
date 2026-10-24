@@ -3316,51 +3316,60 @@
     },
     "https://news.ycombinator.com/item?id=50212065": {
       "verdict": "blocked",
-      "streak": 3,
+      "streak": 4,
       "first_seen": "2026-10-23T20:15:35.230Z",
-      "last_seen": "2026-10-24T05:07:44.292Z",
+      "last_seen": "2026-10-24T12:39:47.999Z",
       "feeds": [
         "2026-10-24.md"
       ]
     },
     "https://news.ycombinator.com/item?id=50209939": {
       "verdict": "blocked",
-      "streak": 3,
+      "streak": 4,
       "first_seen": "2026-10-23T20:15:35.230Z",
-      "last_seen": "2026-10-24T05:07:44.292Z",
+      "last_seen": "2026-10-24T12:39:47.999Z",
       "feeds": [
         "2026-10-24.md"
       ]
     },
     "https://developer.android.com/developer-verification": {
       "verdict": "transient",
-      "streak": 3,
+      "streak": 4,
       "first_seen": "2026-10-23T20:15:35.230Z",
-      "last_seen": "2026-10-24T05:07:44.292Z",
+      "last_seen": "2026-10-24T12:39:47.999Z",
       "feeds": [
         "2026-10-24.md"
       ]
     },
     "https://developer.android.com/tools/agents": {
       "verdict": "transient",
-      "streak": 3,
+      "streak": 4,
       "first_seen": "2026-10-23T20:15:35.230Z",
-      "last_seen": "2026-10-24T05:07:44.292Z",
+      "last_seen": "2026-10-24T12:39:47.999Z",
       "feeds": [
         "2026-10-24.md"
       ]
     },
     "https://www.science.org/doi/10.1126/science.aeh7930": {
       "verdict": "blocked",
-      "streak": 1,
+      "streak": 2,
       "first_seen": "2026-10-24T05:07:44.292Z",
-      "last_seen": "2026-10-24T05:07:44.292Z",
+      "last_seen": "2026-10-24T12:39:47.999Z",
+      "feeds": [
+        "2026-10-24.md"
+      ]
+    },
+    "https://www.npmjs.com/package/impeccable": {
+      "verdict": "blocked",
+      "streak": 1,
+      "first_seen": "2026-10-24T12:39:47.999Z",
+      "last_seen": "2026-10-24T12:39:47.999Z",
       "feeds": [
         "2026-10-24.md"
       ]
     }
   },
-  "runs": 87,
+  "runs": 88,
   "first_run": "2026-09-05T12:47:55.004Z",
-  "last_run": "2026-10-24T05:07:44.292Z"
+  "last_run": "2026-10-24T12:39:47.999Z"
 }
