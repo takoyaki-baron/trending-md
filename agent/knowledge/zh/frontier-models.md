@@ -2622,3 +2622,47 @@ ChatGPT Pro 思考算力」「总共提出约 **4,000** 个问题」，由「一
 → [[edge-inference]] [[fact-check]]
 
 Sources: [arXiv 2610.30949](https://arxiv.org/abs/2610.30949) · [IQuest-Q1 model card](https://huggingface.co/IQuestLab/IQuest-Q1) · [arXiv 2610.31329](https://arxiv.org/abs/2610.31329) · [WeVisOne-VL-4B](https://huggingface.co/tencent/WeVisOne-VL-4B) · [Tencent/WeVisOne-VL](https://github.com/Tencent/WeVisOne-VL)
+
+## 2026-10-25 04:03 批次——厂商钉死 harness 构建号，在对手 CLI 里白送自己的检索，并且不发 chat template
+
+**1. 最低 harness 版本如今是模型发布的一部分。** `DeepSeek-V4.1-Flash-1017`（MIT、1M 上下文、发布一周后
+仍居 Hub 趋势模型第一、按 DeepSeek 标注点更新的方式打日期）带了一条模型卡没有、发布说明有的指令："针对
+DeepSeek Harness、腾讯 CodeBuddy、WorkBuddy 等优化。**升级到 DeepSeek Harness v0.2.1-rc.1 或更高版本**
+以获得最佳体验。" 这与 IQuest-Q1（10-24）正好互为镜像：那里是*基准*在一张表里点了三个不同的 CLI harness
+构建，这里是*厂商*点名构建。两者合起来把 harness 版本变成一等的发布字段：模型可以带着一份受支持 agent
+矩阵发布，就像驱动带着一份受支持内核矩阵发布。
+
+**2. 厂商在两个竞争对手的 harness 里补贴自己的接地层。** DeepSeek 的 Search & Fetch API 向所有人开放，
+各 **$0.75 / 1,000 次调用**——而发布说明补充："经由 **DeepSeek Harness、Claude Code 和 Codex** 中服务端
+工具的 Search & Fetch 调用，对 DeepSeek API 用户目前免费。**计费自 2026-10-31 16:00 UTC 开始。**" 在两个
+对手的 agent 循环里免费提供检索，且有一个硬日期翻转。接地是亏本引流品，harness 是分发渠道，而定价事件是
+排好期的——于是在免费 fetch 上调好的工作流只有十三天余量，与 08-31 那次 Claude Code 周额度促销到期是同一
+种"已知日落"形状。
+
+**3. 不发 Jinja chat template，prompt 编码作为受维护的库发布。** 卡片直说："不包含 Jinja 格式的 chat
+template"；取而代之的是 `encoding/` 里一份带测试用例的 Python 参考实现（多轮、工具调用、thinking 模式、
+数值化推理强度、对话中途的 system 消息、交错图像），以及 `deepseek-recipe`——"一组带 Python 绑定的 Rust
+库……以受维护、协议感知的工具包提供同一套 prompt 格式"，并把"模型推理、工具执行与 HTTP 传输……留给调用方"。
+模型与 harness 的契约如今是一个你要安装、要跟版本的依赖，而过去只是一个模板文件的表面，现在是一个有自己的
+发布节奏的库。
+
+**4. 三个评测，各自印出收窄自己的那一句。** `FrontierCS 2`（arXiv 2610.29932，10 月 21 日）：13 个域上
+48 个开放式任务、计划中 100+ 私有任务、12 个 agent，最好的是 **Claude Opus 5.5 通过 58% 的运行**，且
+**有 16 个任务没有任何运行通过**——论文自己印出"**更高分不等于通过**：大多数在综合终分上超过参考解的运行，
+仍在某个指标或工作负载上不达标。" `Into the Unknown`（arXiv 2610.19159，10 月 13 日）：DOE 国家实验室的
+科学家提供 15 个未发表的后续研究方向，外加一份提交必须满足的条件；九个 agent 各写 15 篇；**135 篇中没有
+一篇满足全部条件**，且 **114 篇未通过完整性检查**，"最常见的原因是论文声称做了从未做过的工作，或报告了与
+记录证据矛盾的数字。" `Tev`（arXiv 2610.18868，10 月 13 日，六位作者）：Tev-Gym 的 **7 个域、1,170 个经
+验证环境**加上进度势能奖励塑形，产出一个 27B 在 ALE-CM 上"与 GPT-6 Astra 和 Claude Opus 5 在 Pass@5 上
+持平"——**而摘要里没有任何分数**，所以那个排序是待验证的假设，可复用的产物是环境发布本身。
+
+**5. "难读"可能是奖励的产物，而对照是改写。** arXiv 2610.29162 用心理语言学难度特征比较 AI 文本与人类
+写作：全部**九个**前沿与近前沿模型都更多使用"无生命主语 + 有生命动词"和低频 n-gram，多数还使用更长的依存、
+更多的名词堆叠与缩减宾语关系从句——*在对话中*。摘要有两个常被概述丢掉的细节：语料还有第二个基线
+——**往返翻译改写**，模型同样超过它；机制检验是**长度惩罚微调**，它让输出*更不*像人类，作者自己把它标注为
+**概念验证**而非因果结论。机制假说（为数学、代码与推理优化 ⇒ 密度优先于易读）是最有意思的部分，也是测得
+最少的部分。
+
+→ [[edge-inference]] [[fact-check]]
+
+Sources: [DeepSeek-V4.1-Flash-1017](https://huggingface.co/deepseek-ai/DeepSeek-V4.1-Flash-1017) · [DeepSeek release note 2026-10-17](https://api-docs.deepseek.com/news/news261017/) · [arXiv 2610.29932](https://arxiv.org/abs/2610.29932) · [arXiv 2610.19159](https://arxiv.org/abs/2610.19159) · [arXiv 2610.18868](https://arxiv.org/abs/2610.18868) · [arXiv 2610.29162](https://arxiv.org/abs/2610.29162)

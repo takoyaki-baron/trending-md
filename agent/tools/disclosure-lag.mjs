@@ -93,18 +93,31 @@
  * respectively. The state stays in the code because it is real, but absence has a shelf life of
  * hours here, and a `no-record` result should be re-run before it is quoted.
  *
- * WHERE THE RANGE COMES FROM — three sources, in order, because the obvious one is empty:
- *   1. NVD `configurations[].cpeMatch[]`. For this cohort it is **null**: 0 configuration nodes on
- *      CVE-2026-114053 and -114117 (checked). Recent VulnCheck-assigned records carry no CPE data
- *      at all, so a tool that reads only NVD cannot answer "which versions".
- *   2. The GitHub advisory named in the record's references (`github.com/<o>/<r>/security/
+ * WHERE THE RANGE COMES FROM — five sources, in order, because the obvious one is often empty:
+ *   1. NVD `configurations[].cpeMatch[]` — **NVD's ANALYSIS OUTPUT**, present only once NVD
+ *      analyses a record. Measured on the 2026-10-18→10-24 publication week (4,624 records):
+ *      present on **408/408** `Analyzed`+`Modified` records and on **0/4,097** of every other
+ *      status. So an empty `configurations` means "NVD has not analysed this", never "the record
+ *      does not say what it affects" — the conflation that produced a wrong claim on 2026-10-25.
+ *   2. The CNA container's `affected[].affectedData[].versions[]` (added 2026-10-25) — present from
+ *      publication day on **4,505/4,624** records, i.e. 97.4%, and on every non-`Rejected` record
+ *      with a product; `lessThan` is exclusive, a bare `version` is a point. This is what answers
+ *      "which versions" on an unanalysed record — and it names the fix by exclusion when nothing
+ *      else does (`1.5.0 < 1.5.7` → the first unaffected release is 1.5.7).
+ *   3. The GitHub advisory named in the record's references (`github.com/<o>/<r>/security/
  *      advisories/GHSA-…`). Its HTML carries machine-readable "Affected versions" / "Patched
- *      versions" cells: `>= 0.7.3, < 0.31.0` / `>= 0.31.0`, and literally `None` for Vyper. This is
- *      the source that works today.
- *   3. `/advisories?cve_id=…` — the global advisory's `vulnerabilities[]`. **Empty on this whole
+ *      versions" cells: `>= 0.7.3, < 0.31.0` / `>= 0.31.0`, and literally `None` for Vyper.
+ *   4. `/advisories?cve_id=…` — the global advisory's `vulnerabilities[]`. **Empty on that whole
  *      cohort** (four checked, all `[]`), and on the global page the same fields read "Unknown".
  *      Kept as a last resort, and its emptiness is printed rather than silently skipped, because
  *      "no range published" and "range could not be found" are different sentences.
+ *   5. The record's own prose — measured last, and it is worth knowing how rarely it is the carrier:
+ *      on that same week it rescued **1 record of 4,624** (0.02%). A prose range is a fallback for
+ *      one record in five thousand, not "what unanalysed records rely on".
+ *
+ * `--range-census --from … --to …` is the check that answers the class question over a publication
+ * window instead of over the ids a feed happened to cite. Read its rows as "records whose paperwork
+ * completed that week" — and re-run it, because `configurations` is acquired later.
  *
  * The same trap one level up, which the tool prints instead of hiding: the global advisory's
  * `published_at` on a VulnCheck-style bulk drop is an INGESTION timestamp — four CVEs from two
@@ -181,7 +194,8 @@
  *   node disclosure-lag.mjs --ids CVE-… --range "26.0.0-26.4.14, 26.5.0-26.6.5" --repo keycloak/keycloak
  *   node disclosure-lag.mjs --ids CVE-… --release-notes <url>[,<url>…]   # the announcement axis
  *   node disclosure-lag.mjs --ids CVE-…,CVE-… --repo owner/repo --census # range-source census
- *   node disclosure-lag.mjs --ids CVE-… --census --no-github            # graded mode only
+ *   node disclosure-lag.mjs --ids CVE-… --census --no-github            # degraded mode only
+ *   node disclosure-lag.mjs --range-census --from 2026-10-18 --to 2026-10-24  # a whole window
  *   node disclosure-lag.mjs --selftest                       # parsers + the artifact + notes verdicts
  *
  * Cost: NVD is 5 req/30s unauthenticated (NVD_API_KEY → 50/30s); calls are paced. api.github.com is
@@ -217,6 +231,13 @@ const SELFTEST = args.includes('--selftest');
 /* The range-source census: tally where each range came from, then re-run with the API gone. */
 const CENSUS = args.includes('--census');
 const NO_GH = args.includes('--no-github');
+/* The window census: "what fraction of records carry no machine-readable range at all?" — asked
+   over a publication window instead of over the ids a feed happened to cite, because the answer
+   from one record is what produced the wrong claim this mode exists to test. */
+const RANGE_CENSUS = args.includes('--range-census');
+const CENSUS_FROM = argOf('--from', null);
+const CENSUS_TO = argOf('--to', null);
+const CENSUS_PAGES = Number(argOf('--pages', 6));
 /* One switch, flipped between passes. It blocks ONLY api.github.com — github.com HTML (the
    advisory page, `releases.atom`, the Advisory Database) stays readable, because the whole point
    of the degraded pass is to show which verdicts the quota owns and which survive on HTML alone. */
@@ -308,9 +329,28 @@ function parseRanges(raw) {
    guess. */
 function proseRange(text) {
   if (!text) return null;
-  const m = String(text).match(/\bversions?\s+v?(\d[\w.+]*)\s+(?:through|thru|to)\s+v?(\d[\w.+]*)/i);
+  const s = String(text);
+  /* EXCLUSIVE forms first — they are the more specific match, and reading their upper bound as
+     inclusive marks the fix release itself as affected. `open62541 1.5.0 before 1.5.7` is the
+     verbatim shape this was filed against. */
+  const ex = s.match(/\bv?(\d[\w.+]*)\s+(?:and\s+)?(?:before|prior\s+to|earlier\s+than)\s+v?(\d[\w.+]*)/i);
+  if (ex) {
+    return { raw: `${ex[1]} before ${ex[2]}`, phrase: ex[0], min: ex[1], minInc: true,
+      max: ex[2], maxInc: false, from: 'prose' };
+  }
+  const cmp = s.match(/\bv?(\d[\w.+]*)\s*(<=?)\s*v?(\d[\w.+]*)/i);
+  if (cmp) {
+    return { raw: `${cmp[1]} ${cmp[2]} ${cmp[3]}`, phrase: cmp[0], min: cmp[1], minInc: true,
+      max: cmp[3], maxInc: cmp[2] === '<=', from: 'prose' };
+  }
+  /* INCLUSIVE forms: the original "versions A through B" anchor, then the product-name anchor
+     ("open62541 1.5.0 to 1.5.6") which the first one cannot reach because the word "version"
+     never appears. The product anchor requires a version on BOTH sides, so a release title
+     ("OpenWrt 24.10.8 - Service Release") cannot match. */
+  const m = s.match(/\bversions?\s+v?(\d[\w.+]*)\s+(?:through|thru|to)\s+v?(\d[\w.+]*)/i)
+    || s.match(/\b[A-Za-z][\w.+-]*\s+v?(\d[\w.+]*)\s*(?:through|thru|to|-|–|—)\s*v?(\d[\w.+]*)/i);
   if (!m) return null;
-  return { raw: `${m[1]}-${m[2]}`, min: m[1], minInc: true, max: m[2], maxInc: true, from: 'prose' };
+  return { raw: `${m[1]}-${m[2]}`, phrase: m[0], min: m[1], minInc: true, max: m[2], maxInc: true, from: 'prose' };
 }
 /* "… update … to the latest available version: 1.0.10 or 1.1.1 or 1.2.1." — the fix list, in the
    vendor's words. Anchored on a phrase that names the fixed versions, so an affected range in the
@@ -377,6 +417,58 @@ function nvdRanges(cve) {
     }
   }
   return out;
+}
+
+/** The CNA container's own affected set — `affected[].affectedData[].versions[]`.
+ *
+ *  Added 2026-10-25 04:32, after this tool answered `indeterminate` on `CVE-2026-116014` for the
+ *  wrong reason. The prior reading was "no `configurations` → the record does not say what it
+ *  affects → the range lives in one prose sentence". Both halves were wrong in the same way:
+ *  `configurations` is NVD's *analysis output* and appears only once NVD analyses a record (on the
+ *  2026-10-01 / 10-15 / 10-24 publication days, **0 of 366** non-`Analyzed` records carried one,
+ *  and **175 of 175** `Analyzed` ones did), while `affected[]` is the CNA's own statement, mirrored
+ *  on **every** non-`Rejected` record from the day it is published. This record carried
+ *  `{version: "1.5.0", lessThan: "1.5.7"}` the whole time; the tool simply never opened the field.
+ *
+ *  CVE 5.x semantics, which a parser must not flatten:
+ *   · `lessThan` is EXCLUSIVE and `lessThanOrEqual` inclusive — reading `lessThan` as inclusive
+ *     marks the fix release itself as affected, the same error prose parsing made by hand.
+ *   · a `version` with no bound is a SINGLE affected version, not an open-ended range. Reading it
+ *     as `[v, ∞)` would call every later release affected.
+ *   · `version: "0"` or `"*"` means "from the beginning" — a null minimum, not a literal 0.
+ *   · `status: "unaffected"` entries list the *complement* of the set when `defaultStatus` is
+ *     `affected`. That shape is not expressible as ranges here, so it is returned as a note rather
+ *     than silently inverted into "everything except these".
+ */
+function affectedRanges(cve) {
+  const ranges = [];
+  const inverted = [];
+  for (const a of cve.affected || []) {
+    for (const d of a.affectedData || []) {
+      const vs = d.versions || [];
+      const affectedOnly = vs.filter(v => v.status !== 'unaffected');
+      if (d.defaultStatus === 'affected' && affectedOnly.length !== vs.length) {
+        inverted.push(`${d.vendor || '?'}/${d.product || '?'}`);
+        continue;                       // do not invert a complement into a range
+      }
+      for (const v of affectedOnly) {
+        const min = v.version != null && !['0', '*', ''].includes(String(v.version)) ? String(v.version) : null;
+        const less = v.lessThan != null ? String(v.lessThan) : null;
+        const lessEq = v.lessThanOrEqual != null ? String(v.lessThanOrEqual) : null;
+        const max = less || lessEq;
+        if (!min && !max) continue;
+        if (min && !max) {              // single affected version — a POINT, not an open range
+          ranges.push({ raw: min, min, minInc: true, max: min, maxInc: true, from: 'cna-affected' });
+          continue;
+        }
+        ranges.push({
+          raw: min ? `${min} ${less ? '<' : '<='} ${max}` : `${less ? '<' : '<='} ${max}`,
+          min, minInc: true, max, maxInc: !!lessEq, from: 'cna-affected',
+        });
+      }
+    }
+  }
+  return { ranges, inverted };
 }
 
 const decode = s => s.replace(/&gt;/g, '>').replace(/&lt;/g, '<').replace(/&quot;/g, '"')
@@ -907,15 +999,21 @@ function classify({ id, record, nvdRanges: cpes, advisory, timeline, repoAdv, tr
   base.recordStatus = record.vulnStatus || null;
   base.sources.record = 'nvd';
 
-  /* range: NVD CPE → advisory HTML → global advisory → operator override → the record's own prose
-     → give up (indeterminate, never a guess). The last two were added 2026-10-23 because two of
-     the three artifact calibration records published their range in NEITHER of the first three. */
+  /* range: NVD CPE → the CNA container's `affected[]` → advisory HTML → global advisory →
+     operator override → the record's own prose → give up (indeterminate, never a guess).
+     The CNA container was inserted second on 2026-10-25: it is present from publication day while
+     `configurations` only exists after NVD analysis, so on an unanalysed record it is the ONLY
+     machine-readable statement of what is affected — and it is the CNA's, not a derivation. */
+  const aff = affectedRanges(record);
   let ranges = cpes || [];
   let patchedRaw = null;
   const desc = (record.descriptions || []).find(d => d.lang === 'en')?.value
     || record.descriptions?.[0]?.value || null;
   if (ranges.length) {
     base.sources.range = ranges[0].from;
+  } else if (aff.ranges.length) {
+    ranges = aff.ranges;
+    base.sources.range = 'cna-affected';
   } else if (advisory?.affected) {
     base.sources.range = advisory.url;
     ranges = parseRanges(advisory.affected);
@@ -929,7 +1027,7 @@ function classify({ id, record, nvdRanges: cpes, advisory, timeline, repoAdv, tr
     ranges = parseRanges(rangeOverride);
   } else {
     const pr = proseRange(desc);
-    if (pr) { ranges = [pr]; base.sources.range = 'record prose'; }
+    if (pr) { ranges = [pr]; base.sources.range = 'record prose'; base.rangePhrase = pr.phrase; }
   }
   if (!ranges.length && patchedRaw === null && advisory) patchedRaw = advisory.patched;
   /* The fix list, when no cell published one — the vendor's own sentence ("… to the latest
@@ -941,6 +1039,23 @@ function classify({ id, record, nvdRanges: cpes, advisory, timeline, repoAdv, tr
   base.range = ranges.length ? ranges.map(r => r.raw).join(' | ') : (advisory?.affected || advisory?.range || null);
   base.patched = patchedRaw;
   base.rangeKind = ranges.length ? 'version' : 'none';
+
+  /* Cross-check: an analysed record carries TWO independent statements about the range — NVD's CPE
+     configuration and the CNA's container. Multi-branch advisories are REPRESENTED differently in
+     the two (the CNA lists each branch with `lessThanOrEqual`; NVD coalesces with
+     `versionEndExcluding: <next patch>`), so a bare max-vs-max comparison manufactures
+     disagreements. Flag it as something to read; never let it overwrite either source. */
+  if ((cpes || []).length && aff.ranges.length) {
+    base.affectedByCna = aff.ranges.map(r => r.raw).join(' | ');
+    const cMax = (cpes || []).map(r => r.max).filter(Boolean).sort(cmpVer).at(-1) || null;
+    const aMax = aff.ranges.map(r => r.max).filter(Boolean).sort(cmpVer).at(-1) || null;
+    if (cMax && aMax && cmpVer(cMax, aMax) !== 0) {
+      base.notes.push(`two ranges on one record — NVD CPE ${cMax} vs CNA container ${aMax}; branch spelling differs (lessThanOrEqual per branch vs versionEndExcluding of the next patch), so read it, do not adjudicate it from this line`);
+    }
+  }
+  if (aff.inverted.length) {
+    base.notes.push(`the CNA lists UNAFFECTED versions under a defaultStatus of affected for ${aff.inverted.join(', ')} — a complement, not a range`);
+  }
 
   if (!ranges.length) {
     /* A DATE-shaped cell is not a failure to parse — it is a different kind of claim, and the
@@ -1042,6 +1157,21 @@ function classify({ id, record, nvdRanges: cpes, advisory, timeline, repoAdv, tr
   }
 
   if (!fixVersion) {
+    /* No cell published a fix, but an EXCLUSIVE upper bound names one: `lessThan: 1.5.7` means the
+       first unaffected version is 1.5.7, which is where the fix landed. Labelled as an inference
+       from the range, never as a `patched versions` cell — and only when a release timeline
+       actually contains that version, so the date is an artifact's, not a guess. */
+    const exclMax = ranges.map(r => (r.max && r.maxInc === false ? r.max : null)).filter(Boolean)
+      .sort(cmpVer).at(-1) || null;
+    const rel = exclMax ? timelineLookup(timeline, exclMax) : null;
+    if (exclMax && rel) {
+      fixVersion = exclMax;
+      fixInferred = true;
+      base.fixInferred = true;
+      base.notes.push(`no patched-version cell anywhere — the range's EXCLUSIVE upper bound names the fix (${exclMax}), and that release exists (${ymd(rel.date)})`);
+    }
+  }
+  if (!fixVersion) {
     if (patchedRaw === null || patchedRaw === undefined) {
       return { ...base, state: 'indeterminate',
         notes: [...base.notes, 'range known but no patched-version cell published'] };
@@ -1091,6 +1221,40 @@ if (SELFTEST) {
   eq('comparison range still parses', parseRanges('>= 0.7.3, < 0.31.0').length, 1);
   eq('interval range still parses', parseRanges('[,2.5.303), [3.0,3.1.9)').map(r => r.raw), ['[,2.5.303)', '[3.0,3.1.9)']);
   eq('prose affected range', proseRange('in Google Brotli versions 1.0.3 through 1.2.0 on all platforms')?.max, '1.2.0');
+  /* The two gaps filed 10-25 04:35 on CVE-2026-116014's sentence. Both are asserted against it. */
+  const o62541 = proseRange('open62541 1.5.0 before 1.5.7 contains an integer overflow in UA_DataType_fromStructureDescription()');
+  eq('prose: "before" is read at all (product-name anchor)', o62541?.min, '1.5.0');
+  eq('prose: "before" gives the exclusive upper bound', [o62541?.max, o62541?.maxInc], ['1.5.7', false]);
+  eq('prose: the fix release is outside an exclusive range', inAnyRange('1.5.7', [o62541]), false);
+  eq('prose: "prior to" is exclusive', proseRange('affects 2.1.0 prior to 2.1.4 on all platforms')?.maxInc, false);
+  eq('prose: "earlier than" is exclusive', proseRange('versions 3.0.0 earlier than 3.0.8 crash')?.maxInc, false);
+  eq('prose: a bare "<" is exclusive', proseRange('open62541 1.5.0 < 1.5.7')?.maxInc, false);
+  eq('prose: "<=" stays inclusive', proseRange('open62541 1.5.0 <= 1.5.7')?.maxInc, true);
+  eq('prose: a release title is not a range', proseRange('OpenWrt 24.10.8 - Service Release - 26th July 2026'), null);
+  /* ── the CNA container: semantics a flattening parser gets wrong ── */
+  const affV = affectedRanges({ affected: [{ source: 'emo@eclipse.org', affectedData: [{ vendor: 'Eclipse Foundation',
+    product: 'Eclipse Vert.x', defaultStatus: 'unaffected', versions: [
+      { version: '4.0.0', lessThanOrEqual: '4.5.34', status: 'affected' },
+      { version: '5.1.0', lessThanOrEqual: '5.1.9', status: 'affected' },
+      { version: '5.2.0', status: 'affected' }] }] }] });
+  eq('cna: lessThanOrEqual is inclusive', [affV.ranges[0].max, affV.ranges[0].maxInc], ['4.5.34', true]);
+  eq('cna: per-branch ranges are kept apart', affV.ranges.map(r => r.max), ['4.5.34', '5.1.9', '5.2.0']);
+  eq('cna: a bare version is a POINT, not [v, ∞)',
+    [affV.ranges[2].min, affV.ranges[2].max, affV.ranges[2].maxInc], ['5.2.0', '5.2.0', true]);
+  const affZ = affectedRanges({ affected: [{ affectedData: [{ versions: [{ version: '0', lessThan: '4.33.0', status: 'affected' }] }] }] });
+  eq('cna: version "0" is a null minimum, lessThan stays exclusive',
+    [affZ.ranges[0].min, affZ.ranges[0].max, affZ.ranges[0].maxInc], [null, '4.33.0', false]);
+  const affC = affectedRanges({ affected: [{ affectedData: [{ vendor: 'Red Hat', product: 'RHEL 10',
+    defaultStatus: 'affected', versions: [{ version: '10.1', status: 'unaffected' }] }] }] });
+  eq('cna: a complement is noted, never inverted into a range', [affC.ranges.length, affC.inverted.length], [0, 1]);
+  const affO = affectedRanges({ affected: [{ source: 'disclosure@vulncheck.com', affectedData: [{ vendor: 'open62541',
+    product: 'open62541', defaultStatus: 'unaffected', versions: [{ version: '1.5.0', lessThan: '1.5.7',
+      versionType: 'semver', status: 'affected' }] }] }] });
+  eq('CVE-2026-116014: the range the tool never read',
+    [affO.ranges[0].min, affO.ranges[0].max, affO.ranges[0].maxInc], ['1.5.0', '1.5.7', false]);
+  eq('…so 1.5.6 is affected and 1.5.7 (the fix) is not',
+    [inAnyRange('1.5.6', affO.ranges), inAnyRange('1.5.7', affO.ranges)], [true, false]);
+  eq('census: the CNA container is its own bucket', rangeBucket({ sources: { range: 'cna-affected' } }), 'cna-affected');
   eq('prose patched list', prosePatched('Users need to update any Brotli libraries or binaries to the latest available version: 1.0.10 or 1.1.1 or 1.2.1.'), ['1.0.10', '1.1.1', '1.2.1']);
   eq('prose patched ignores an affected range', prosePatched('versions 1.0.3 through 1.2.0 on all platforms'), null);
   eq('as-of cell is a date, not a version', asOfDate('EDK II master as of 2026-09-14'), '2026-09-14');
@@ -1169,12 +1333,137 @@ if (SELFTEST) {
   process.exit(pass === cases.length ? 0 : 1);
 }
 
+/* ── the window census: does an NVD record carry an affected range at all? ────────────────────
+   Filed as a Research item on 2026-10-25 04:35 with the premise "the range lives in the prose",
+   derived from ONE record (`CVE-2026-116014`). Measured over three publication days, the premise
+   was wrong twice: `configurations` is a *status* indicator (NVD analysis output), and the CNA
+   container's `affected[]` is present from publication. This mode is the check the single record
+   could not perform — and it is the one to re-run a week later, because `Analyzed` records acquire
+   `configurations` and the answer therefore moves.
+
+   NVD's `pubStartDate`/`pubEndDate` are publication windows, NOT event dates (the 10-22 lesson:
+   `published` is a workflow timestamp), so read a row here as "records whose paperwork completed
+   that week", never as "vulnerabilities that appeared that week". */
+async function rangeCensus({ from, to }) {
+  const sleepMs = NVD_PACE;
+  const parseDay = s => {
+    const d = new Date(`${s}T00:00:00.000Z`);
+    if (Number.isNaN(d.getTime())) throw new Error(`bad date "${s}" — expected YYYY-MM-DD`);
+    return s;
+  };
+  from = parseDay(from); to = parseDay(to);
+  const records = [];
+  let total = null;
+  for (let start = 0, p = 0; p < CENSUS_PAGES; p++) {
+    const url = `${NVD}?pubStartDate=${encodeURIComponent(`${from}T00:00:00.000Z`)}` +
+      `&pubEndDate=${encodeURIComponent(`${to}T23:59:59.999Z`)}` +
+      `&resultsPerPage=2000&startIndex=${start}`;
+    const { status, body } = await getJson(url, NVD_API_KEY ? { apiKey: NVD_API_KEY } : {});
+    if (!body) throw new Error(`NVD HTTP ${status} for the ${from}→${to} window`);
+    total = body.totalResults ?? total;
+    const batch = body.vulnerabilities || [];
+    for (const v of batch) if (v.cve) records.push(v.cve);
+    start += batch.length;
+    if (start >= (total || 0) || !batch.length) break;
+    await sleep(sleepMs);
+  }
+
+  const verEntries = c => (c.affected || []).flatMap(a => a.affectedData || []).flatMap(x => x.versions || []);
+  const cfgs = c => (c.configurations || []).flatMap(cfg => (cfg.nodes || []).flatMap(n => (n.cpeMatch || []).filter(m => m.vulnerable)));
+  const rows = records.map(c => {
+    const status = c.vulnStatus || '?';
+    const cpe = cfgs(c).some(m => m.versionStartIncluding || m.versionStartExcluding || m.versionEndIncluding || m.versionEndExcluding)
+      || cfgs(c).length > 0;
+    const vs = verEntries(c);
+    const aff = vs.length > 0;
+    const bounded = vs.some(v => v.lessThan || v.lessThanOrEqual);
+    const desc = (c.descriptions || []).find(d => d.lang === 'en')?.value || null;
+    const prose = proseRange(desc);
+    const ar = affectedRanges(c);
+    return { id: c.id, status, configurations: (c.configurations || []).length > 0, cpe, affected: (c.affected || []).length > 0,
+      affectedVersions: vs.length, bounded, prose: !!prose, cnaRanges: ar.ranges.length, id_ok: true };
+  });
+
+  const byStatus = {};
+  for (const r of rows) {
+    const s = (byStatus[r.status] = byStatus[r.status] || { n: 0, configurations: 0, affected: 0, afVersions: 0,
+      bounded: 0, neither: 0, proseOnly: 0, cnaOnly: 0, both: 0 });
+    s.n++;
+    if (r.configurations) s.configurations++;
+    if (r.affected) s.affected++;
+    if (r.affectedVersions) s.afVersions++;
+    if (r.bounded) s.bounded++;
+    if (!r.configurations && !r.affected) { s.neither++; if (r.prose) s.proseOnly++; }
+    if (!r.configurations && r.cnaRanges) s.cnaOnly++;
+    if (r.configurations && r.cnaRanges) s.both++;
+  }
+  return { from, to, totalResults: total, fetched: rows.length, byStatus, rows };
+}
+
+function printRangeCensus(c) {
+  const pct = (n, d) => (d ? ((100 * n) / d).toFixed(1) : '0.0');
+  const order = ['Received', 'Awaiting Analysis', 'Undergoing Analysis', 'Deferred', 'Analyzed', 'Modified', 'Rejected'];
+  console.log(`Range census — publication window ${c.from} → ${c.to} (UTC)`);
+  console.log(`  NVD reports ${c.totalResults} records; fetched ${c.fetched}`);
+  console.log('');
+  console.log('  status              n   configurations   affected[]   affected w/ versions   bounded   neither');
+  for (const s of order) {
+    const r = c.byStatus[s];
+    if (!r) continue;
+    console.log(`  ${s.padEnd(17)} ${String(r.n).padStart(4)}   ${String(r.configurations).padStart(6)} (${pct(r.configurations, r.n).padStart(5)}%)   ` +
+      `${String(r.affected).padStart(6)}   ${String(r.afVersions).padStart(6)} (${pct(r.afVersions, r.n).padStart(5)}%)   ` +
+      `${String(r.bounded).padStart(5)}   ${String(r.neither).padStart(5)}`);
+  }
+  for (const s of Object.keys(c.byStatus)) if (!order.includes(s)) {
+    const r = c.byStatus[s];
+    console.log(`  ${s.padEnd(17)} ${String(r.n).padStart(4)}   ${String(r.configurations).padStart(6)}   ${String(r.affected).padStart(11)}   ${String(r.afVersions).padStart(16)}   ${String(r.bounded).padStart(7)}   ${String(r.neither).padStart(7)}`);
+  }
+  const n = c.fetched;
+  const cfg = c.rows.filter(r => r.configurations).length;
+  const aff = c.rows.filter(r => r.affected).length;
+  const neither = c.rows.filter(r => !r.configurations && !r.affected);
+  const cnaOnly = c.rows.filter(r => !r.configurations && r.cnaRanges).length;
+  const neitherNoVer = c.rows.filter(r => r.affected && !r.affectedVersions);
+  console.log('');
+  console.log(`  configurations      ${cfg}/${n} (${pct(cfg, n)}%)  — NVD's analysis output`);
+  console.log(`  affected[]          ${aff}/${n} (${pct(aff, n)}%)  — the CNA container, present from publication`);
+  console.log(`  neither             ${neither.length}/${n} (${pct(neither.length, n)}%)` +
+    (neither.length ? `  e.g. ${neither.slice(0, 4).map(r => `${r.id} [${r.status}]`).join(', ')}` : ''));
+  console.log(`  affected but no versions[]  ${neitherNoVer.length}` +
+    (neitherNoVer.length ? `  e.g. ${neitherNoVer.slice(0, 4).map(r => r.id).join(', ')} — the range is not in the record at all` : ''));
+  console.log(`  range readable WITHOUT analysis (configurations absent, affected[] present with versions): ${cnaOnly}`);
+  const noRangeAnywhere = c.rows.filter(r => !r.configurations && r.cnaRanges === 0 && !r.prose);
+  const rejected = noRangeAnywhere.filter(r => r.status === 'Rejected').length;
+  const noVersions = noRangeAnywhere.filter(r => r.status !== 'Rejected' && r.affected && !r.affectedVersions).length;
+  const complement = noRangeAnywhere.length - rejected - noVersions;
+  console.log(`  no range from any field AND no prose match: ${noRangeAnywhere.length}` +
+    `  = ${rejected} Rejected (no product by definition) + ${noVersions} listed a product but no versions` +
+    (complement ? ` + ${complement} listed only UNAFFECTED versions (a complement, not a range)` : '') +
+    (noRangeAnywhere.length ? `\n    e.g. ${noRangeAnywhere.slice(0, 4).map(r => `${r.id} [${r.status}]`).join(', ')}` : ''));
+  const proseRescued = c.rows.filter(r => !r.configurations && r.cnaRanges === 0 && r.prose);
+  console.log(`  …of which the PROSE parser rescues: ${proseRescued.length}` +
+    (proseRescued.length ? `  e.g. ${proseRescued.slice(0, 4).map(r => r.id).join(', ')}` : ''));
+  console.log('');
+  console.log('  Read a row as "records whose paperwork completed that week", not "vulnerabilities that');
+  console.log('  appeared that week" — NVD\'s published date is a workflow timestamp. Re-run this in a');
+  console.log('  week: configurations is acquired on analysis, so the top table moves and this one should.');
+}
+
 /* ── entry ── */
+if (RANGE_CENSUS) {
+  const to = CENSUS_TO || new Date(Date.now() - 864e5).toISOString().slice(0, 10);
+  const from = CENSUS_FROM || new Date(Date.parse(`${to}T00:00:00Z`) - 6 * 864e5).toISOString().slice(0, 10);
+  const c = await rangeCensus({ from, to });
+  if (JSON_OUT) console.log(JSON.stringify(c, null, 1));
+  else printRangeCensus(c);
+  process.exit(0);
+}
+
 if (!IDS.length && !TRACKERS.length) {
   console.log('nothing to do: pass --ids CVE-…,CVE-… and/or --tracker ZDI-CAN-…' +
     ' [--repo owner/repo | --pypi pkg] [--artifact commit|package|firmware|image]' +
     ' [--fix-ref <commit|pull url>] [--debian <srcpkg>] [--range "<expr>"] [--json] [--selftest]' +
-    ' [--release-notes <url>[,<url>…]] [--census [--no-github]]');
+    ' [--release-notes <url>[,<url>…]] [--census [--no-github]] [--range-census --from YYYY-MM-DD --to YYYY-MM-DD]');
   process.exit(0);
 }
 
@@ -1245,15 +1534,19 @@ async function probeAll({ nvdCache = null } = {}) {
     : advisories;
   /* Degraded-timeline repair: the atom feed lists ~10 recent releases, so a older fix version
      looks absent. Fill it in from its own tag page before classifying — bounded to the versions the
-     advisory actually names, and only when the timeline came from the atom fallback. */
+     advisory actually names, and only when the timeline came from the atom fallback.
+     Extended 2026-10-25: when there is NO advisory at all, the CNA container's exclusive upper
+     bound names the fix ("1.5.0 < 1.5.7" → the first unaffected version is 1.5.7), so an
+     unanalysed, advisory-less record no longer needs a hand-derived lag. */
   if (REPO && timeline?.via === 'atom' && record) {
-    const wanted = fixedVersionsFrom(adv?.patched);
+    const wanted = new Set(fixedVersionsFrom(adv?.patched));
+    for (const r of affectedRanges(record).ranges) if (r.max && r.maxInc === false) wanted.add(r.max);
     for (const v of wanted) {
       if (timelineLookup(timeline, v)) continue;
       const rel = await tagDate(REPO, v);
       if (rel) timeline.push(rel);
     }
-    if (wanted.length) timeline.sort((a, b) => cmpVer(a.version, b.version));
+    if (wanted.size) timeline.sort((a, b) => cmpVer(a.version, b.version));
   }
   const cls = classify({
     id, record,
@@ -1307,7 +1600,8 @@ async function probeAll({ nvdCache = null } = {}) {
    means "the vendor's page the record links" or "a third party's ingest", and those are different
    provenance claims about the same range. */
 const RANGE_BUCKETS = [
-  ['nvd-cpe', 'NVD CPE configuration'],
+  ['nvd-cpe', 'NVD CPE configuration (post-analysis)'],
+  ['cna-affected', "the CNA container's affected[] (present from publication)"],
   ['vendor-advisory', "the record's own advisory page"],
   ['advisory-db', 'GitHub Advisory Database (third-party ingest)'],
   ['advisory-api', 'api.github.com/advisories (quota-bearing)'],
@@ -1320,6 +1614,7 @@ function rangeBucket(r) {
   if (!r.sources || !r.sources.range) return 'none';
   const s = r.sources.range;
   if (s === 'nvd-cpe') return 'nvd-cpe';
+  if (s === 'cna-affected') return 'cna-affected';
   if (s === 'record prose') return 'record-prose';
   if (s === 'operator-supplied (--range)') return 'operator-supplied';
   if (/^github advisory GHSA-/.test(s)) return 'advisory-api';

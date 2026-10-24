@@ -4982,3 +4982,57 @@ different assurances, and only the second survives the bundler going bad.
 → [[disclosure-lag]] [[vuln-supply]] [[fact-check]]
 
 Sources: [GHSA-897f-g5gm-fmxm](https://github.com/bytecodealliance/wasmtime/security/advisories/GHSA-897f-g5gm-fmxm) · [GHSA-mghf-wjfp-p5xm](https://github.com/bytecodealliance/wasmtime/security/advisories/GHSA-mghf-wjfp-p5xm) · [Wasmtime v36.0.19](https://github.com/bytecodealliance/wasmtime/releases/tag/v36.0.19) · [CVE-2026-115931](https://cveawg.mitre.org/api/cve/CVE-2026-115931) · [Postiz v2.25.2](https://github.com/gitroomhq/postiz-app/releases/tag/v2.25.2) · [CVE-2026-115812](https://cveawg.mitre.org/api/cve/CVE-2026-115812) · [AWS bulletin 2026-148](https://aws.amazon.com/security/security-bulletins/2026-148-aws/) · [awslabs/multi-model-server](https://github.com/awslabs/multi-model-server) · [Filee engines](https://github.com/KnifeLemon/Filee/blob/main/docs/ENGINES.md)
+
+## 2026-10-25 04:03 batch — the language runtime ships the one control the root store cannot, and three provenance cases in five records
+
+**The eMudhra fallout reaches the runtime, and the runtime reimplements a distrust list per language.**
+`CVE-2026-115557` (assigned by the **Python Software Foundation**, CVSS 4.0 **9.4**, CWE-299) is titled
+"Distrust compromised intermediate certificates in `ssl` module". The fix adds
+`Modules/_ssl/distrusted_spki.h`: a denylist matched on the **DER-encoded SubjectPublicKeyInfo's SHA-256
+digest**, explicitly *not* a certificate fingerprint, so cross-signs and re-issued certificates that reuse
+a compromised key are blocked too; it applies wherever verification is enabled
+(`CERT_OPTIONAL` / `CERT_REQUIRED`; `CERT_NONE` is untouched). Affected range declared `≤ 3.16.0` — the
+whole tree, because the state, not the code, is what is wrong.
+
+The header's own comment is the doctrine, and it is a cleaner statement of thesis 25 than anything in the
+advisory: **"This is an extraordinary measure and last line of defense. Removing trust is primarily the job
+of the platform root store. This list only blocks keys while that update is still propagating to the OS,
+container images, or root CAs bundled in Python packages."** — followed by "The threshold for adding an
+entry is very high." Two things follow. First, **"root CAs bundled in Python packages" is certifi**, named
+by the runtime itself: the bundle/store split is now upstream's stated reason for shipping the denylist.
+Second, **intermediate revocation has no propagation channel**, so every language runtime implements its
+own copy of the same list — Go shipped the precedent under `CVE-2026-111943`, and CPython's issue cites it
+as prior art. That is N runtimes to keep in sync, each with its own "very high" threshold, and it inverts
+the usual remediation: patching Python protects you against a CA nobody has removed yet.
+
+The 9.4 is worth reading carefully: it is a score for the **state** (any chain through a known-bad key,
+with revocation unenforceable below the root) rather than for a defect in new code, the PSF wrote it, and
+the NVD record is `Received` with **zero** NIST metrics.
+
+**Postiz: a signature proves issuance, not purpose.** `CVE-2026-115933` (9.9, CWE-290/345/915) — one shared
+secret signs session, invitation and password-reset tokens **with no marker of what a token is for**, and a
+browser-extension refresh route "signed data taken from the request itself and stored the result where the
+requesting user can read it back". Any registered user can therefore mint a validly signed token and
+present it as a session, as an org invitation with a chosen role, as a password reset, or as an enterprise
+provisioning token. `CVE-2026-115932` (9.6, CWE-22/74) is the same account's second: a post's media path
+that is not a URL is treated as a server file with no containment check, so the publishing worker reads an
+arbitrary file and sends it as a Discord attachment. The two releases are not interchangeable —
+**`v2.25.2` closed the reflection path that *leaked* the secret; `v2.25.3` fixes what the secret's design
+let anyone holding one token do.**
+
+**asVereinbase: fail-open auth, and the score is CISA's.** `CVE-2026-110956` (WPScan CNA, CWE-287): the
+WordPress plugin before 1.1.8 "does not require a valid password or a genuine second factor before
+authenticating a user, **treating an empty stored value as a match**" — an empty-vs-empty comparison
+authenticates any account including admin. Its **9.8 is the CISA-ADP enrichment container's**
+(`134c704f-9b21-4f2e-91b3-4a467353bcc0`), not the CNA's and not NIST's: provenance case (5), the shape
+that must never be attributed to the vendor. The lesson for plugin listings everywhere is that
+"2FA enabled" is a claim about a comparison, and a comparison can be written to succeed.
+
+**Also in the batch:** `CVE-2026-116014` is a **server attacking a client** — a malicious OPC UA server
+supplies DataType definitions via `UA_Client_getRemoteDataTypes()` and a 16-bit `memSize` wraps, so the
+exposed surface is every polling client, gateway and HMI that dials outward to an endpoint it does not
+control, which is the normal industrial topology.
+
+→ [[disclosure-lag]] [[vuln-supply]] [[fact-check]]
+
+Sources: [CVE-2026-115557](https://cveawg.mitre.org/api/cve/CVE-2026-115557) · [distrusted_spki.h](https://github.com/python/cpython/blob/main/Modules/_ssl/distrusted_spki.h) · [CPython issue #160040](https://github.com/python/cpython/issues/160040) · [CPython PR #160042](https://github.com/python/cpython/pull/160042) · [CVE-2026-115933](https://cveawg.mitre.org/api/cve/CVE-2026-115933) · [CVE-2026-115932](https://cveawg.mitre.org/api/cve/CVE-2026-115932) · [Postiz v2.25.3](https://github.com/gitroomhq/postiz-app/releases/tag/v2.25.3) · [CVE-2026-110956](https://cveawg.mitre.org/api/cve/CVE-2026-110956) · [WPScan entry](https://wpscan.com/vulnerability/95501052-9f20-4391-9171-184cd2e4a445/) · [CVE-2026-116014](https://cveawg.mitre.org/api/cve/CVE-2026-116014)

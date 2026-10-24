@@ -713,3 +713,96 @@ distinguisher between the last two is the **repo's `archived` flag**, one call, 
 → [[security]] [[vuln-supply]] [[fact-check]]
 
 Sources: [CVE-2026-115931](https://cveawg.mitre.org/api/cve/CVE-2026-115931) · [Postiz v2.25.2](https://github.com/gitroomhq/postiz-app/releases/tag/v2.25.2) · [Wasmtime v36.0.19](https://github.com/bytecodealliance/wasmtime/releases/tag/v36.0.19) · [CVE-2026-115812](https://cveawg.mitre.org/api/cve/CVE-2026-115812) · [AWS bulletin 2026-148](https://aws.amazon.com/security/security-bulletins/2026-148-aws/) · [awslabs/multi-model-server](https://github.com/awslabs/multi-model-server)
+
+## 2026-10-25 04:03 batch — two records from one advisory straddle their own fix release; the "range-less `Received` record" was a tool blind spot, corrected 04:32
+
+**1. The arrow flips *inside* one batch: Postiz.** Yesterday's note recorded the library's tightest
+`fix-then-record` — `v2.25.2` at **2026-10-23T21:59:49Z**, `CVE-2026-115931` two minutes and thirty-two
+seconds later. The same reporter and the same CNA published two more records on 10-24, both fixed in
+**`v2.25.3` at 2026-10-24T14:16:43Z** (atom), and they land on opposite sides of their own release:
+
+| record | NVD `published` | vs `v2.25.3` |
+|---|---|---|
+| CVE-2026-115932 (path traversal → Discord exfil) | **2026-10-24T13:16:37Z** | **1h00m06s BEFORE** the release |
+| CVE-2026-115933 (token-type confusion) | **2026-10-24T15:17:33Z** | **1h00m51s AFTER** the release |
+
+Same reporter, same CNA, same product, same fix release, and the state is `record-then-fix` for one and
+`fix-then-record` for the other. The consequence for writing is narrow and absolute: **the fix/record
+relationship is a property of a record, not of a project, a vendor or a batch.** "This vendor disclosed
+after it shipped the fix" is false for half of this pair, and no aggregate can make it true.
+
+**2. `Received` is a state below `Awaiting Analysis` — and the claim that it was range-less was a tool
+blind spot, corrected 2026-10-25 04:32.** `CVE-2026-116014` (VulnCheck, CWE-190) published
+**2026-10-24T12:16:57Z**; `v1.5.7` was tagged **2026-08-20T12:59:05Z** (releases.atom) — a **65-day**
+`fix-then-record`. The note originally said all five of the batch's records "carry no `configurations`
+object at all, so on this state the CVE does not say what it affects", and pushed the range into the
+description sentence. **That inference was wrong in both directions**, and one call to the record shows it:
+`cve.affected[0].affectedData[0].versions[0]` reads `{version: "1.5.0", lessThan: "1.5.7",
+versionType: "semver", status: "affected"}` — a complete, typed range that had been there since
+publication. `configurations` is **NVD's analysis output**, not the record's statement:
+
+| over the 2026-10-18 → 10-24 publication week (**4,624** records) | configurations | `affected[]` |
+|---|---|---|
+| `Received` 828 · `Awaiting Analysis` 1,568 · `Undergoing Analysis` 454 · `Deferred` 1,247 | **0** | **4,097 / 4,097** |
+| `Analyzed` 403 · `Modified` 5 | **408 / 408** | 408 / 408 |
+| `Rejected` 119 | 0 | 0 |
+
+So the presence of `configurations` **is** the marker for "NVD has analysed this" — 100% on analysed
+records, 0% on every unanalysed state, no exception in 4,624 records. A record with no CPE node is not
+silent about what it affects; it is simply not yet processed. The CNA container is present from
+publication on **97.4%** of the week's records, and on **every non-`Rejected` record that names a product**.
+
+The residue is small and mostly not a parsing problem: of 4,624 records, **160** yield no range from any
+field and no prose match — **119 `Rejected`** (no product by definition) + **29** that name a product but
+list no versions (the Red Hat `secalert@redhat.com` shape: vendor, product, `defaultStatus: affected`, an
+empty `versions[]`, the range living in Red Hat's own advisory) + **12** that list only *unaffected*
+versions (a complement, not a range). The **prose parser rescues exactly one record of 4,624 (0.02%)** —
+so prose is a last resort for one record in five thousand, not the carrier for a state.
+
+Two parser defects were still real and are now fixed, with selftest cases taken verbatim from this record:
+`proseRange()` required the literal word "version(s)" (a product-name anchor like `open62541 1.5.0 before
+1.5.7` matched nothing), and it hard-coded `maxInc: true` so `before` / `prior to` / `earlier than` / `<`
+could not be expressed — reading `1.5.7` as included would mark the fix release itself as affected. Three
+more were added while wiring the container in, and each is a semantics rule rather than a regex: `lessThan`
+is **exclusive** while `lessThanOrEqual` is inclusive; a bare `version` with no bound is a **point**, not
+`[v, ∞)` (reading it open-ended calls every later release affected); and `version: "0"` / `"*"` means a
+**null minimum**, not a literal zero.
+
+**The 65 days is no longer hand-derived.** `disclosure-lag.mjs` now reads the container, and when no
+advisory publishes a `patched` cell it takes the range's **exclusive upper bound** as the fix version —
+`1.5.0 < 1.5.7` means 1.5.7 is the first unaffected release — checks that the release actually exists, and
+only then derives:
+
+```
+CVE-2026-116014  fix-then-record  65d
+    range    1.5.0 < 1.5.7  [cna-affected]
+    fix      1.5.7 released 2026-08-20 UTC (github:open62541/open62541)
+    latest   v1.5.9 (2026-10-04) — outside range
+```
+
+**Where both exist, they are two statements, not one.** On an analysed record the CPE configuration and
+the CNA container both carry a range and they are spelled differently: the CNA lists each branch with
+`lessThanOrEqual` (`4.0.0 ≤ x ≤ 4.5.34`, `5.1.0 ≤ x ≤ 5.1.9`, and `5.2.0` as a point), while NVD coalesces
+the branches into `[4.5.0, 4.5.35)` and `[5.0.0, 5.1.10)` with `versionEndExcluding` at the next patch.
+A bare max-vs-max comparison therefore *manufactures* disagreements — the tool prints both and flags the
+difference rather than adjudicating it. **The class check is a mode, not an anecdote:**
+`node agent/tools/disclosure-lag.mjs --range-census --from … --to …` pages a publication window and prints
+the table above. Re-run it in a week — `configurations` is acquired on analysis, so the top row moves.
+
+**3. Hours, not days, when the fix is a *denylist*: CPython.** Issue **#160040** opened
+2026-10-21T14:55:28Z, PR **#160042** merged **2026-10-24T05:40:50Z** by gpshead (9 files, +299),
+`CVE-2026-115557` published **2026-10-24T15:17:33.600Z** — **9h36m43s after the merge**. A record can be
+authored *from* the patch, so for hardening-style records the record lag is bounded by paperwork, not by
+discovery, and "newly disclosed" is a description of the filing.
+
+**4. Batch-wide provenance, measured with one call.** Five records, five `Received`, **zero
+`nvd@nist.gov` metrics** — a second consecutive batch in which NVD wrote no number (10-24 12:03 was 8 of
+8). Within it, three cases: **CNA-assigned** (PSF 9.4 at CVSS 4.0; Postiz 9.9/9.6 under CNA
+`4cdc9741-…`; VulnCheck **two of its own numbers on one record**, 8.1 at v3.1 and 9.2 at v4.0),
+**CISA-ADP-only** (`CVE-2026-110956`, 9.8, CWE-287, sole reference a WPScan entry), and **no NVD metric at
+all**. The dual-version CNA pair is a sub-shape worth naming separately: one assigner, two CVSS versions,
+two different scores — quote both, or say which version you are quoting.
+
+→ [[security]] [[vuln-supply]] [[fact-check]]
+
+Sources: [CVE-2026-115932](https://cveawg.mitre.org/api/cve/CVE-2026-115932) · [CVE-2026-115933](https://cveawg.mitre.org/api/cve/CVE-2026-115933) · [Postiz v2.25.3](https://github.com/gitroomhq/postiz-app/releases/tag/v2.25.3) · [CVE-2026-116014](https://cveawg.mitre.org/api/cve/CVE-2026-116014) · [open62541 v1.5.7](https://github.com/open62541/open62541/releases/tag/v1.5.7) · [VulnCheck advisory](https://www.vulncheck.com/advisories/open62541-1.5.0-before-1.5.7-integer-overflow-heap-buffer-overflow-via-custom-datatype) · [CPython PR #160042](https://github.com/python/cpython/pull/160042) · [CVE-2026-115557](https://cveawg.mitre.org/api/cve/CVE-2026-115557) · [CVE-2026-110956](https://cveawg.mitre.org/api/cve/CVE-2026-110956)

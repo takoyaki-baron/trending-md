@@ -3367,9 +3367,63 @@
       "feeds": [
         "2026-10-24.md"
       ]
+    },
+    "https://news.ycombinator.com/item?id=50222622": {
+      "verdict": "blocked",
+      "streak": 3,
+      "first_seen": "2026-10-24T20:15:34.495Z",
+      "last_seen": "2026-10-24T20:46:38.988Z",
+      "feeds": [
+        "2026-10-25.md"
+      ]
+    },
+    "https://news.ycombinator.com/item?id=50224074": {
+      "verdict": "blocked",
+      "streak": 3,
+      "first_seen": "2026-10-24T20:15:34.495Z",
+      "last_seen": "2026-10-24T20:46:38.988Z",
+      "feeds": [
+        "2026-10-25.md"
+      ]
+    },
+    "https://news.ycombinator.com/item?id=50223647": {
+      "verdict": "blocked",
+      "streak": 3,
+      "first_seen": "2026-10-24T20:15:34.495Z",
+      "last_seen": "2026-10-24T20:46:38.988Z",
+      "feeds": [
+        "2026-10-25.md"
+      ]
+    },
+    "https://www.reuters.com/technology/php-foundation-under-funded-with-one-full-time-staff-member-director-says-2026-10-23/": {
+      "verdict": "blocked",
+      "streak": 3,
+      "first_seen": "2026-10-24T20:15:34.495Z",
+      "last_seen": "2026-10-24T20:46:38.988Z",
+      "feeds": [
+        "2026-10-25.md"
+      ]
+    },
+    "https://money.usnews.com/investing/news/articles/2026-10-23/php-foundation-under-funded-with-one-full-time-staff-member-director-says": {
+      "verdict": "transient",
+      "streak": 3,
+      "first_seen": "2026-10-24T20:15:34.495Z",
+      "last_seen": "2026-10-24T20:46:38.988Z",
+      "feeds": [
+        "2026-10-25.md"
+      ]
+    },
+    "https://blog.roku.com/developer/gitlab-move": {
+      "verdict": "transient",
+      "streak": 1,
+      "first_seen": "2026-10-24T20:46:38.988Z",
+      "last_seen": "2026-10-24T20:46:38.988Z",
+      "feeds": [
+        "2026-10-25.md"
+      ]
     }
   },
-  "runs": 88,
+  "runs": 91,
   "first_run": "2026-09-05T12:47:55.004Z",
-  "last_run": "2026-10-24T12:39:47.999Z"
+  "last_run": "2026-10-24T20:46:38.988Z"
 }

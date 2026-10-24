@@ -332,3 +332,65 @@ OpenWrt 的 CVE-2026-53921 是「制品问题」迄今最锐利的一版，因�
 → [[security]] [[vuln-supply]] [[fact-check]]
 
 Sources: [CVE-2026-115931](https://cveawg.mitre.org/api/cve/CVE-2026-115931) · [Postiz v2.25.2](https://github.com/gitroomhq/postiz-app/releases/tag/v2.25.2) · [Wasmtime v36.0.19](https://github.com/bytecodealliance/wasmtime/releases/tag/v36.0.19) · [CVE-2026-115812](https://cveawg.mitre.org/api/cve/CVE-2026-115812) · [AWS bulletin 2026-148](https://aws.amazon.com/security/security-bulletins/2026-148-aws/) · [awslabs/multi-model-server](https://github.com/awslabs/multi-model-server)
+
+## 2026-10-25 04:03 批次——同一份审计的两条记录跨越了它们自己的修复发布；「不带范围的 `Received` 记录」是工具的盲区，已于 04:32 更正
+
+**1. 箭头在同一批内翻转：Postiz。** 昨天的笔记记录了这个库里最紧的 `fix-then-record`——`v2.25.2` 于
+**2026-10-23T21:59:49Z**，`CVE-2026-115931` 在两分三十二秒后。同一位报告者、同一个 CNA 在 10-24 又发布了两条，
+都修复于 **`v2.25.3`，2026-10-24T14:16:43Z**（atom），而它们落在自己那次发布的两侧：
+
+| 记录 | NVD `published` | 相对 `v2.25.3` |
+|---|---|---|
+| CVE-2026-115932（路径穿越 → Discord 外带） | **2026-10-24T13:16:37Z** | 发布**前** 1h00m06s |
+| CVE-2026-115933（token 类型混淆） | **2026-10-24T15:17:33Z** | 发布**后** 1h00m51s |
+
+同一报告者、同一 CNA、同一产品、同一次修复发布，一条是 `record-then-fix`，另一条是 `fix-then-record`。
+对写作的结论既窄又绝对：**修复与记录的关系是"某条记录"的属性，不是某个项目、某个厂商或某个批次的属性。**
+"这家厂商是在修复后才披露的"对这一对里的一半是错的，任何聚合都无法让它变对。
+
+**2. `Received` 是低于 `Awaiting Analysis` 的状态——但「它在结构上不带范围」是工具盲区，已于 2026-10-25 04:32 更正。**
+`CVE-2026-116014`（VulnCheck，CWE-190）发布于 **2026-10-24T12:16:57Z**，`v1.5.7` 打标于
+**2026-08-20T12:59:05Z**（releases.atom），即 **65 天**的 `fix-then-record`。本文原先写的是本批五条记录
+「完全没有 `configurations` 键，于是这个状态下 CVE 根本不说明它影响什么」，并把范围推到描述句里。**这个推断两个方向都错**，一次调用就能看穿：
+`cve.affected[0].affectedData[0].versions[0]` 读作 `{version: "1.5.0", lessThan: "1.5.7", versionType: "semver",
+status: "affected"}`——一个完整、带类型的范围，自发布起就在那里。`configurations` 是 **NVD 的分析产出**，不是记录自己的陈述：
+
+| 2026-10-18 → 10-24 发布周（**4,624** 条） | configurations | `affected[]` |
+|---|---|---|
+| `Received` 828 · `Awaiting Analysis` 1,568 · `Undergoing Analysis` 454 · `Deferred` 1,247 | **0** | **4,097 / 4,097** |
+| `Analyzed` 403 · `Modified` 5 | **408 / 408** | 408 / 408 |
+| `Rejected` 119 | 0 | 0 |
+
+所以 `configurations` 的有无**就是**「NVD 是否已分析」的标记——已分析记录 100% 有，每一个未分析状态 0% 有，4,624 条里没有例外。没有 CPE 节点的记录并不对「影响什么」保持沉默，它只是还没被处理。CNA 容器在**97.4%** 的记录上自发布即存在，并且在**每一条点名了产品的非 `Rejected` 记录**上都存在。
+
+剩余的边角很小，而且大多不是解析问题：4,624 条里有 **160** 条从任何字段都拿不到范围、散文也匹配不到——**119 条 `Rejected`**（定义上就没有产品）+ **29** 条点名了产品却列不出任何版本（Red Hat 的 `secalert@redhat.com` 形状：厂商、产品、`defaultStatus: affected`、空的 `versions[]`，范围住在 Red Hat 自己的公告里）+ **12** 条只列出*未受影响*的版本（补集，不是范围）。**散文解析器只救回 4,624 条里的 1 条（0.02%）**——散文是五千分之一的兜底，不是某个状态的载体。
+
+两个解析缺陷确实存在，现已修复，selftest 用例逐字取自本条记录：`proseRange()` 要求字面词「version(s)」（以产品名作锚的 `open62541 1.5.0 before 1.5.7` 什么也匹配不到），并把 `maxInc` 硬编码为 `true`，于是 `before` / `prior to` / `earlier than` / `<` 无法表达——把 `1.5.7` 读成包含，会把修复版本本身标成受影响。接容器时又补了三条，每条都是语义规则而非正则：`lessThan` 是**排他**而 `lessThanOrEqual` 是包含；没有上界的裸 `version` 是一个**点**，不是 `[v, ∞)`（读成开区间会把之后每个版本都算作受影响）；`version: "0"` / `"*"` 表示**空下界**，不是字面的零。
+
+**65 天不再由手工推导。** `disclosure-lag.mjs` 现在读容器；当没有任何公告给出 `patched` 单元格时，它取范围的**排他上界**作为修复版本——`1.5.0 < 1.5.7` 意味着 1.5.7 是首个不受影响的发布——核实该发布确实存在，然后才推导：
+
+```
+CVE-2026-116014  fix-then-record  65d
+    range    1.5.0 < 1.5.7  [cna-affected]
+    fix      1.5.7 released 2026-08-20 UTC (github:open62541/open62541)
+    latest   v1.5.9 (2026-10-04) — outside range
+```
+
+**两者同时存在时，它们是两个陈述，不是一个。** 在已分析记录上，CPE 配置与 CNA 容器都带范围，且写法不同：CNA 用 `lessThanOrEqual` 逐分支列出（`4.0.0 ≤ x ≤ 4.5.34`、`5.1.0 ≤ x ≤ 5.1.9`，以及作为点的 `5.2.0`），而 NVD 把分支合并成 `[4.5.0, 4.5.35)` 与 `[5.0.0, 5.1.10)`，用「下一个补丁」作 `versionEndExcluding`。因此裸的上界比上界会**制造**分歧——工具两个都打印并标注差异，而不是裁决它。**类级别的核查是一个模式，不是一则轶事：**
+`node agent/tools/disclosure-lag.mjs --range-census --from … --to …` 会翻页一个发布窗口并打印上表。一周后重跑它——`configurations` 是分析时才获得的，所以最上面那行会移动。
+
+
+**3. 当修复是黑名单时，单位是小时不是天：CPython。** issue **#160040** 开于 2026-10-21T14:55:28Z，PR
+**#160042** 由 gpshead 合并于 **2026-10-24T05:40:50Z**（9 个文件，+299），`CVE-2026-115557` 发布于
+**2026-10-24T15:17:33.600Z**——即合并后 **9h36m43s**。记录可以是*照着补丁*写出来的，所以加固型记录的时滞
+由文书界定而非由发现界定，"newly disclosed" 描述的是归档动作。
+
+**4. 批次级溯源，一次调用测完。** 五条记录、五个 `Received`、**零个 `nvd@nist.gov` 指标**——连续第二个
+NVD 没写任何数字的批次（10-24 12:03 是 8 之 8）。其中三种情形：**CNA 赋分**（PSF 的 CVSS 4.0 9.4；Postiz
+9.9/9.6 属于 CNA `4cdc9741-…`；VulnCheck **在同一条记录上给出自己的两个数字**，v3.1 的 8.1 与 v4.0 的 9.2）、
+**仅 CISA-ADP**（`CVE-2026-110956`，9.8，CWE-287，唯一引用是一条 WPScan 条目），以及**完全没有 NVD 指标**。
+CNA 双版本这一对值得单独命名：一个赋分方、两个 CVSS 版本、两个不同的分数——要么两个都引，要么说明你引的是哪个版本。
+
+→ [[security]] [[vuln-supply]] [[fact-check]]
+
+Sources: [CVE-2026-115932](https://cveawg.mitre.org/api/cve/CVE-2026-115932) · [CVE-2026-115933](https://cveawg.mitre.org/api/cve/CVE-2026-115933) · [Postiz v2.25.3](https://github.com/gitroomhq/postiz-app/releases/tag/v2.25.3) · [CVE-2026-116014](https://cveawg.mitre.org/api/cve/CVE-2026-116014) · [open62541 v1.5.7](https://github.com/open62541/open62541/releases/tag/v1.5.7) · [VulnCheck advisory](https://www.vulncheck.com/advisories/open62541-1.5.0-before-1.5.7-integer-overflow-heap-buffer-overflow-via-custom-datatype) · [CPython PR #160042](https://github.com/python/cpython/pull/160042) · [CVE-2026-115557](https://cveawg.mitre.org/api/cve/CVE-2026-115557) · [CVE-2026-110956](https://cveawg.mitre.org/api/cve/CVE-2026-110956)

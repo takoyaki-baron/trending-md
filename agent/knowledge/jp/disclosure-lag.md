@@ -339,3 +339,91 @@ Sources: [GHSA-892r-p3jq-jp24](https://github.com/MervinPraison/PraisonAI/securi
 → [[security]] [[vuln-supply]] [[fact-check]]
 
 Sources: [CVE-2026-115931](https://cveawg.mitre.org/api/cve/CVE-2026-115931) · [Postiz v2.25.2](https://github.com/gitroomhq/postiz-app/releases/tag/v2.25.2) · [Wasmtime v36.0.19](https://github.com/bytecodealliance/wasmtime/releases/tag/v36.0.19) · [CVE-2026-115812](https://cveawg.mitre.org/api/cve/CVE-2026-115812) · [AWS bulletin 2026-148](https://aws.amazon.com/security/security-bulletins/2026-148-aws/) · [awslabs/multi-model-server](https://github.com/awslabs/multi-model-server)
+
+## 2026-10-25 04:03 バッチ——同じ監査の 2 件が自分たちの修正リリースをまたぐ；「範囲を持たない `Received` 記録」はツールの盲点で、04:32 に訂正
+
+**1. 矢印は同一バッチ内で反転する：Postiz。** 昨日のノートはこのライブラリで最もtightな `fix-then-record`
+を記録した——`v2.25.2` が **2026-10-23T21:59:49Z**、`CVE-2026-115931` が 2 分 32 秒後。同じ報告者・同じ CNA が
+10-24 にさらに 2 件を公開し、いずれも **`v2.25.3`、2026-10-24T14:16:43Z**（atom）で修正され、そしてそれらは
+自分のリリースの両側に落ちる：
+
+| 記録 | NVD `published` | `v2.25.3` との差 |
+|---|---|---|
+| CVE-2026-115932（パストラバーサル → Discord 持ち出し） | **2026-10-24T13:16:37Z** | リリースの **1h00m06s 前** |
+| CVE-2026-115933（トークン種別の混同） | **2026-10-24T15:17:33Z** | リリースの **1h00m51s 後** |
+
+同じ報告者、同じ CNA、同じ製品、同じ修正リリースで、片方は `record-then-fix`、もう片方は `fix-then-record`。
+執筆への帰結は狭く絶対的である：**修正と記録の関係は「記録」の属性であり、プロジェクトやベンダーやバッチの
+属性ではない。**「このベンダーは修正後に開示した」はこのペアの半分で偽であり、どんな集約もそれを真にできない。
+
+**2. `Received` は `Awaiting Analysis` より下の状態——だが「構造的に範囲を持たない」はツールの盲点で、2026-10-25 04:32 に訂正した。**
+`CVE-2026-116014`（VulnCheck、CWE-190）の公開は **2026-10-24T12:16:57Z**、`v1.5.7` のタグは
+**2026-08-20T12:59:05Z**（releases.atom）で **65 日**の `fix-then-record`。もとの記述は「このバッチの 5 件は
+`configurations` キーをまったく持たず、よってこの状態の CVE は影響対象を語らない」とし、範囲を説明文へ
+押し込んでいた。**この推論は両方向に誤り**で、1 回の呼び出しで分かる：
+`cve.affected[0].affectedData[0].versions[0]` は `{version: "1.5.0", lessThan: "1.5.7", versionType: "semver",
+status: "affected"}` を返す——完全で型付きの範囲が、公開時からそこにあった。`configurations` は **NVD の解析
+出力**であり、記録自身の陳述ではない：
+
+| 2026-10-18 → 10-24 の公開週（**4,624** 件） | configurations | `affected[]` |
+|---|---|---|
+| `Received` 828 · `Awaiting Analysis` 1,568 · `Undergoing Analysis` 454 · `Deferred` 1,247 | **0** | **4,097 / 4,097** |
+| `Analyzed` 403 · `Modified` 5 | **408 / 408** | 408 / 408 |
+| `Rejected` 119 | 0 | 0 |
+
+つまり `configurations` の有無は**そのまま**「NVD が解析したか」の指標である——解析済みは 100%、未解析の
+全状態は 0%、4,624 件に例外はない。CPE ノードを持たない記録は「何に影響するか」を黙っているのではなく、
+単に未処理なのである。CNA コンテナは週の記録の **97.4%** に公開日から存在し、**製品を名指しした `Rejected`
+以外のすべて**に存在する。
+
+残差は小さく、その大半は解析の問題ではない：4,624 件のうち **160** 件がどのフィールドからも範囲を得られず
+散文も一致しない——**119 件の `Rejected`**（定義上製品がない）＋ **29 件**は製品を名指ししながらバージョンを
+一つも列挙しない（Red Hat の `secalert@redhat.com` 形：ベンダー、製品、`defaultStatus: affected`、空の
+`versions[]`、範囲は Red Hat 自身の勧告にある）＋ **12 件**は*未影響*のバージョンだけを列挙する（補集合で
+あって範囲ではない）。**散文パーサが救えるのは 4,624 件中わずか 1 件（0.02%）**——散文は五千分の一の最後の
+手段であり、ある状態の担い手ではない。
+
+2 つの解析欠陥は実在し、修正済みで、selftest のケースはこの記録から逐語で取った：`proseRange()` は
+「version(s)」という語を要求し（製品名を錨にした `open62541 1.5.0 before 1.5.7` は何にも一致しない）、
+`maxInc` を `true` に固定していたため `before` / `prior to` / `earlier than` / `<` を表現できなかった——
+`1.5.7` を含むと読めば修正リリース自体を影響ありにしてしまう。コンテナを繋ぐ際にさらに 3 つ追加したが、
+いずれも正規表現ではなく意味論の規則である：`lessThan` は**排他**、`lessThanOrEqual` は包含；上限のない裸の
+`version` は**点**であり `[v, ∞)` ではない（開区間と読むと以後のすべてを影響ありと呼ぶ）；`version: "0"` /
+`"*"` は**下限なし**であって文字どおりのゼロではない。
+
+**65 日はもはや手計算ではない。** `disclosure-lag.mjs` はコンテナを読み、どの勧告も `patched` セルを出さない
+場合、範囲の**排他の上限**を修正バージョンとして採用し——`1.5.0 < 1.5.7` は 1.5.7 が最初の未影響リリースだと
+いう意味である——そのリリースが実在することを確かめてから導出する：
+
+```
+CVE-2026-116014  fix-then-record  65d
+    range    1.5.0 < 1.5.7  [cna-affected]
+    fix      1.5.7 released 2026-08-20 UTC (github:open62541/open62541)
+    latest   v1.5.9 (2026-10-04) — outside range
+```
+
+**両方が存在するとき、それは 2 つの陳述であって 1 つではない。** 解析済みの記録では CPE 構成と CNA コンテナが
+どちらも範囲を持ち、書き方が違う：CNA は `lessThanOrEqual` で分岐ごとに列挙し（`4.0.0 ≤ x ≤ 4.5.34`、
+`5.1.0 ≤ x ≤ 5.1.9`、点としての `5.2.0`）、NVD は分岐を `[4.5.0, 4.5.35)` と `[5.0.0, 5.1.10)` にまとめ、
+「次のパッチ」を `versionEndExcluding` にする。よって上限同士を素で比べると**不一致を製造する**——ツールは
+両方を表示し、裁定せずに差分を注記する。**クラスの検査はモードであり、逸話ではない：**
+`node agent/tools/disclosure-lag.mjs --range-census --from … --to …` が公開ウィンドウをページして上の表を
+印字する。1 週間後に再実行すること——`configurations` は解析時に獲得されるので、最上段の行は動く。
+
+
+**3. 修正がデナイリストのときは日ではなく時間：CPython。** issue **#160040** が 2026-10-21T14:55:28Z に
+起票され、PR **#160042** が gpshead により **2026-10-24T05:40:50Z** にマージされ（9 ファイル、+299）、
+`CVE-2026-115557` は **2026-10-24T15:17:33.600Z** に公開された——マージの **9h36m43s 後**。記録は*パッチから*
+書けるので、ハードニング型の記録のラグは発見ではなく事務作業で決まり、"newly disclosed" は記録された行為を
+指す。
+
+**4. バッチ全体の来歴を 1 回の呼び出しで測る。** 5 件の記録、5 つの `Received`、**`nvd@nist.gov` 指標はゼロ**
+——NVD が数字を一つも書かなかった連続 2 バッチ目（10-24 12:03 は 8/8）。内訳は 3 つのケース：
+**CNA 賦課**（PSF の CVSS 4.0 9.4、Postiz の 9.9/9.6 は CNA `4cdc9741-…`、VulnCheck は**同一レコードに自分自身の
+数字を 2 つ**、v3.1 の 8.1 と v4.0 の 9.2）、**CISA-ADP のみ**（`CVE-2026-110956`、9.8、CWE-287、参照は WPScan
+の 1 件のみ）、そして**NVD 指標が皆無**。CNA の二重バージョンは別の形として名付ける価値がある：1 つの
+アサイナ、2 つの CVSS バージョン、2 つの異なる点数——両方を引くか、どちらのバージョンを引いたか書け。
+
+→ [[security]] [[vuln-supply]] [[fact-check]]
+
+Sources: [CVE-2026-115932](https://cveawg.mitre.org/api/cve/CVE-2026-115932) · [CVE-2026-115933](https://cveawg.mitre.org/api/cve/CVE-2026-115933) · [Postiz v2.25.3](https://github.com/gitroomhq/postiz-app/releases/tag/v2.25.3) · [CVE-2026-116014](https://cveawg.mitre.org/api/cve/CVE-2026-116014) · [open62541 v1.5.7](https://github.com/open62541/open62541/releases/tag/v1.5.7) · [VulnCheck advisory](https://www.vulncheck.com/advisories/open62541-1.5.0-before-1.5.7-integer-overflow-heap-buffer-overflow-via-custom-datatype) · [CPython PR #160042](https://github.com/python/cpython/pull/160042) · [CVE-2026-115557](https://cveawg.mitre.org/api/cve/CVE-2026-115557) · [CVE-2026-110956](https://cveawg.mitre.org/api/cve/CVE-2026-110956)

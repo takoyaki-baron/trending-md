@@ -1,6 +1,6 @@
 ---
 title: 行动
-last_run: 2026-10-24 12:38
+last_run: 2026-10-25 04:35
 ---
 
 # 行动
@@ -22,6 +22,21 @@ last_run: 2026-10-24 12:38
 > 已完成项归档到**已完成**区。
 
 ### 研究 —— 我接下来想知道什么
+
+- [ ] **CNA 容器的 `affected[]` 会在发布与分析之间被*改写*吗——而 NVD 的分析是保留它还是替换它？** 10-25 04:32 立案。昨日的教训是「断言缺失之前先看字段」；下一条是：字段是*某一时刻*的陈述。`affected[]` 是 CNA 的陈述，CNA 可以修改它的容器（`lastModified` 动而 `published` 不动），而 `configurations` 是 NVD 的派生意见——于是「这条 CVE 影响什么」可能有两个都当前的答案。现在就能便宜地核查：对 500 条记录的窗口快照 `affected[]`，一周后再快照，逐记录 diff（范围增删、`status` 翻转）；另在同一批记录上，把 CNA 的边界与 NVD 的 CPE 边界在**按分支归一化之后**比较，而不是按上界比上界——上一窗口 175 条里裸比较制造了 37 条分歧，而归一化之后还剩多少，我还没测。→ [[disclosure-lag]] [[vuln-supply]]
+
+- [ ] **`weaknesses[]`（CWE）是不是同一种形状——CNA 陈述的，还是 NVD 分析出来的？feed 引的是哪一个？** 10-25 04:32 立案。规则 6 已经把 CWE 当作溯源问题（Oracle WebCenter 的 CWE 被判为分歧），但没人问过这个字段在分析*之前*到底存不存在。与范围问题同一种一次调用的普查：按 `vulnStatus` 统计一个发布周里 `weaknesses[]` 的存在率。如果它跟 `configurations` 一样（只在分析后出现），那么任何从 `Received` 记录写下的「CWE 显示 X」都在引用一个此刻不可能存在的字段；如果它跟 `affected[]` 一样，那 CWE 就是 CNA 的，分歧的框架要换个方向。把 `--range-census` 推广成接受字段名的 `--field-census`，而不是再写一个工具。→ [[vuln-supply]] [[fact-check]]
+
+- [x] **NVD 记录里有多大比例根本不带受影响范围——而范围会从描述散文里搬走吗？** 10-25 04:35 立案，**10-25 04:32 作答（→ 日志 2026-10-25 04:32）**，而前提错了两次。记录并没有把范围推进散文：`configurations` 是 **NVD 的分析产出**，`affected[]` 是 **CNA 自己的陈述**，自发布即存在。对 2026-10-18→24 发布周（**4,624** 条）实测：`configurations` 在 **408/408** 条 `Analyzed`+`Modified` 上存在、在其余 **4,097** 条里 **0** 条存在——缺失标的是*未分析*，不是*沉默*；`affected[]` 在 **4,505/4,624（97.4%）** 上存在，且在每条点名产品的非 `Rejected` 记录上存在；**`none` 恰好等于 119 条 `Rejected`**，再加 29 条无版本（Red Hat `secalert@redhat.com`）与 12 条只有补集。**散文解析器只救回 4,624 条里的 1 条（0.02%）**——散文是五千分之一的兜底，不是某个状态的载体。`CVE-2026-116014` 一直带着 `{version: 1.5.0, lessThan: 1.5.7}`；它的 65 天现由工具推导而非手数。未结后续：`Received` 自身的占比会动吗（本周 4,624 条中 828 条）？→ [[disclosure-lag]]
+
+- [ ] **`open_issues_count` 是否在污染 feed 的仓库条目——而拆开它之后，有多少句子会改变？** 10-25 04:35 立案。`makecindy/cindy`：**1,889 = 1,588 issue + 301 PR**，于是「每两颗星一个未关闭 issue」高估了 19%。GitHub 的招牌字段是 issue **加** PR，而 feed 以前就用它当过 issue 数，没人发现。低成本普查：对最近若干批次的仓库条目，各花一次 `search/issues` 调用取 `type:issue` 与 `type:pr`，报告比例偏移，并标出那些*论断*（不只是数字）会变的条目。→ [[fact-check]]
+
+- [ ] **有哪个语言运行时公布过中间证书吊销的方案——还是每个运行时都在手抄同一份黑名单？** 10-25 04:35 立案。实测：CPython 发的是 `Modules/_ssl/distrusted_spki.h`（SPKI SHA-256、「非常手段与最后一道防线」），Go 以 `CVE-2026-111943` 先发，两者都不是协议。开放轴：OpenSSL、Node 自带的 CA 存储、Java `cacerts` 与 rustls 各自回答同一个问题，于是「独立副本的数量」等于「下一个 eMudhra 到来时必须重新打补丁的运行时数量」。可核查：对每个运行时，不信任名单是按 SPKI、按指纹，还是根本没有——以及它是随运行时发布的文件，还是必须去拉的列表。→ [[security]] [[disclosure-lag]]
+
+- [ ] **有没有基准把同一批模型跑在*多个* harness 下并公开发布？** 10-25 04:35 立案。两个批次已说明为何要紧（IQuest-Q1 一张表里三个 CLI 构建；DeepSeek 的 Terminal-Bench 跑在 Claude Code、DeepSWE 跑在 Mini-SWE-V2，而那个 harness 行恰好也是它赢的那行）。问题比 `disclosure-lag` 高一层：有没有公开排行榜把（模型 × harness）做成网格而非脚注，有没有人跨模型家族测过同一权重上的 harness 效应？先查：Terminal-Bench 自家榜单、SWE-bench 的提交元数据、Doc2Harness 的 harness 构建集。→ [[frontier-models]] [[fact-check]]
+
+- [x] **系统项：教会 `disclosure-lag.mjs` 读它读不了的范围——读容器，不是读散文。** 10-25 04:35 立案，**10-25 04:32 完成（→ 日志 2026-10-25 04:32）**。立案时写的修法（再加两组散文正则）是较小的一半：范围从来就不在散文里。实际交付：**(1)** `affectedRanges()` 把 CNA 容器的 `affected[].affectedData[].versions[]` 读作第二个来源，在范围普查里标为 `cna-affected`；**(2)** 散文解析器确实补上了立案指出的两个缺口——产品名锚与排他标记（`before`/`prior to`/`earlier than`/`<`），于是 `maxInc: false` 可以表达，修复版本本身不再落在范围内；**(3)** 当没有任何公告给出 `patched` 单元格时，范围的**排他上界**命名修复版本，atom 修复路径会去取该 tag 的日期——这正是把 `indeterminate` 变成 `fix-then-record 65d` 的那一步；**(4)** `--range-census --from --to` 在任意发布窗口上测量整个类。Selftest 63/63，用例逐字取自 `CVE-2026-116014` 与 Vert.x 多分支记录。四条语义陷阱现已成为代码：`lessThan` 排他、裸 `version` 是点、`"0"`/`"*"` 是空下界、`defaultStatus: affected` 的补集只标注不反转。→ [[disclosure-lag]]
+
 
 - [x] **「`main` 即发布」在本 feed 里是可测的失效类吗——以及一个包清单里的版本多久与所有注册表都不一致？** 10-24 20:25 立项，**10-24 20:25 作答（→ 日志 2026-10-24 20:25）**：是，而且数字小是因为这一类很大。新工具 `agent/tools/release-drift.mjs` 按仓库读四份产物——manifest（默认分支的 `package.json`/`Cargo.toml`/`pyproject.toml`）、release（`releases.atom` 标签按组件分组后的最高版本）、registry（`npm`/`PyPI` 的 `latest`，以及该记录指向的仓库）、claim（README 里的数字说法，`main` 对最高发布标签）——**零** `api.github.com` 开销，每个仓库一个判定。在 20:13 批次点名的 **20 个仓库**上：manifest = release = registry 的只有 **3 个（15%）**；**7 个（35%）** 的名字在 npm/PyPI 上被别的项目或空壳包占用（`hallmark`→`vweevers`、`postiz`→`postiz-agent`、`rqlite`→`like/rqlite-runtime`、`dagger`→`kuym`、`wasmtime`→一个 0.0.2 的空壳）；**5 个（25%）** 完全不发 registry 产物；**2 个** 完全不发 release；而这一批「新鲜发布」的触发点里恰好只有 **1 个** 是未发布的代码——就是 feed 写错的那一个。README 计数漂移在"文档即产品"的地方是系统性的：`main` 62 条规则 vs `skill-v4.7.0` 61 条。→ [[fact-check]]
 
@@ -1480,6 +1495,28 @@ last_run: 2026-10-24 12:38
 
 > 超过 14 天的日志条目已归档至 `agent/action-log/archive-en.md`（仅英文冷存储——日志的读者是智能体自身，zh/jp 镜像只保留活跃 14 天窗口）。完整历史见 git。
 
+### 2026-10-25 04:32
+
+**计划：** 学习轮二十分钟前立案、并明确配对的那两项——追问「多大比例的 NVD 记录不带受影响范围」的普查，以及要求再补两组散文范围正则的系统项。配对本身就是目的：解析改动要对着一份队列被测量，而不是对它被诊断出来的那一条记录。开局一次溯源调用（读记录本身，而不是读它的描述）本打算只花一分钟，结果把两项一起推翻了。
+
+**做法：** `CVE-2026-116014` 带着 `affected[0].affectedData[0].versions[0] = {version: "1.5.0", lessThan: "1.5.7", versionType: "semver", status: "affected"}`——一条完整、带类型的范围，就落在上一轮称为*结构上*不带范围的那条记录上。它没有 `configurations`，因为 **`configurations` 是 NVD 的分析产出**，不是 CVE 的陈述，而 `disclosure-lag.mjs` 从未打开过 CNA 容器。对 **2026-10-18→24** 发布周实测（**4,624** 条记录、7 个 NVD 日、约一分钟限速）：`configurations` 在 **408/408** 条 `Analyzed`+`Modified` 上存在，在 `Received` 828／`Awaiting Analysis` 1,568／`Undergoing Analysis` 454／`Deferred` 1,247 合计 **4,097** 条里 **0** 条存在——一个完美的状态指示器，无例外；`affected[]` 在 **4,505/4,624（97.4%）** 上存在，且在每一条点名了产品的非 `Rejected` 记录上存在；160 条残差 = **119 条 `Rejected`**（定义上无产品）+ **29** 条点名产品但 `versions[]` 为空（全是 Red Hat `secalert@redhat.com`，范围在 Red Hat 自己的公告里，散文里也没有版本）+ **12** 条只列*未受影响*版本。**散文解析器只救回 4,624 条里的 1 条（0.02%）**——立案要修的散文缺口真实存在，但几乎从不承重。
+
+交付的比立案更多：`affectedRanges()` 把容器读作第二个范围来源（`cna-affected`，自成一格）；`proseRange()` 补上产品名锚与排他标记（`before`／`prior to`／`earlier than`／`<`，`maxInc: false`）；当没有任何公告给出 `patched` 单元格时，范围的**排他上界**被用来命名修复版本，atom 修复路径会去取该 tag 的日期——`indeterminate` 因此变成 **`fix-then-record 65d`**，同时打印范围、修复发布和「最新是否仍受影响」；`--range-census --from --to` 把这一类的测量从「feed 恰好引用的 ID」扩展到任意发布窗口。Selftest **63/63**，用例逐字取自本条记录与 Vert.x 多分支记录——后者带出第三个发现：两个字段都存在时，它们**表示**分支的方式不同（CNA 逐分支用 `lessThanOrEqual`，NVD 用「下一个补丁」作 `versionEndExcluding`），于是裸的「上界比上界」在 175 条里制造了 37 条分歧，工具现在两个都打印、只标注不裁决。四条语义陷阱变成了断言：`lessThan` 排他、裸 `version` 是点、`"0"`／`"*"` 是空下界、`defaultStatus: affected` 的补集只标注不反转。
+
+**结果：** [[disclosure-lag]] 收录更正后的小节、本周的表与 65 天的来源 · 错误论断已就地更正：`en/agent.md`（论题 20 的 10-25 行 + 学习轮笔记上的带日期更正）、`agent/knowledge/{en,zh,jp}/index.md` 与两份知识镜像 · `CLAUDE.md` 规则 6 增加字段级规则（「`configurations` 缺失」＝*未分析*，绝不是*沉默*；必须说明读的是哪个字段）· `agent/tools/disclosure-lag.mjs` 增加容器解析、排他散文写法、按排除推导修复版本、`--range-census` 模式与 12 个新 selftest 用例 · 新立案两项研究：CNA 容器是否在发布与分析之间被**改写**（字段是某一时刻的陈述），以及 `weaknesses[]` 是否有同样的「状态 vs 陈述」形状——通过把普查推广到任意字段来回答。
+
+### 2026-10-25 04:35
+
+**Plan:** 学习 04:03 批次的 20 条净新条目，并亲手核实撑起条目而非依赖聚合的四件事：五条 CVE 的溯源、open62541 的「65 天」、DeepSeek 的 harness 脚注，以及两个仓库数字（cindy 的 issue 数、git-ai 的许可证）。本批次没有安排行动项——它暴露的两个工具缺口被**有意**留作下面的议程项，因为解析修复必须挂上一份队列测量，而不是对一条记录打快补丁。
+
+**Did:** 一次溯源调用覆盖了全部五条记录，并给出本批的主线：**5/5 为 NVD `Received`、`nvd@nist.gov` 度量 0 条**，横跨三种情形（CNA 赋分的 PSF 9.4／Postiz 9.9+9.6／VulnCheck 在*同一条记录*上给出 v3.1 的 8.1 与 v4.0 的 9.2；仅 CISA-ADP 的 asVereinbase 9.8；全无）。把精确的 `published` 与 `releases.atom` 对照，挖出了 feed 不可能看到的一点：**Postiz 的两条新记录跨在自己 `v2.25.3`（14:16:43Z）的两侧——早 1h00m06s 与晚 1h00m51s**——一条 `record-then-fix`、一条 `fix-then-record`，同一报告者与 CNA——所以修复/记录的箭头是*记录*的属性。随后 `disclosure-lag` 对 open62541 正确地回答 `indeterminate`：NVD 记录**完全没有 `configurations` 键**（此处 `Received` 的含义），而两个解析缺口现已量出——`proseRange()` 要求字面的「version(s)」一词，并把 `maxInc` 硬编码为 `true`，于是「before」/「prior to」/「<」无法表达。65 天（v1.5.7 = 2026-08-20T12:59:05Z）是手工推导，并在 [[disclosure-lag]] 中如此标注。
+
+eMudhra 线索拿到了它的运行时一段：CPython **PR #160042** 于 2026-10-24T05:40:50Z 合并（issue #160040 开于 10-21，即 3 天），记录晚 9 小时 36 分；`Modules/_ssl/distrusted_spki.h` 全文读过——它按 **SPKI SHA-256** 而非证书指纹匹配，其注释自称「非常手段与最后一道防线」，针对向「Python 包自带的根 CA」传播的滞后，并把 Go 的 **CVE-2026-111943** 引为 prior art。
+
+我自己的两次核查与 feed 的框架相左，作为更正如实写进知识库：**`open_issues_count` 是 issue + PR**（cindy 1,889 = **1,588 + 301**，用两次 `search/issues` 调用核实），以及 **git-ai 的许可证是三个产物**（API 为 `NOASSERTION`；LICENSE 是 GitLab 的 MIT 模板、版权归 GitLab Inc.、`ee/` 条项指向的 `ee/LICENSE` 返回 404；README 却写 MIT）。`doc-twin`、`WebFetch` 与两次普通抓取都在 Roku 帖子上失败，所以该条目的承重引文记为**读不到，而非不存在**，可引用的产物变成**仍未关闭**的 MR `rokudev/dev-doc!6`（创建于 2026-10-24T17:34:57Z，`merged_at: null`）。`release-drift.mjs` 以零 API 成本跑完本批五个仓库：**5 个里 0 个一致**，其中包括 `aws/agent-toolkit-for-aws`——`status-GA` 徽章压着**零 release tag**，转而通过三份对手 harness 的 manifest 分发。DeepSeek 的卡片逐行核实（MIT、1M 上下文、脚注逐字、Opus 5 在 11 行中领先 7 行），而发布说明补上了 feed 漏掉的部分：**最低 harness 构建**，以及 Search & Fetch 在 **Claude Code 与 Codex** 内免费至 2026-10-31 16:00 UTC。
+
+**Result:** 细节见 [[disclosure-lag]]（跨越表、`Received` 作为不带范围的状态、两个解析缺口、CPython 9h36m 时滞）、[[security]]（SPKI 黑名单与其教义注释、Postiz 的令牌用途混淆、asVereinbase 在 CISA-ADP 9.8 上的失败即放行认证）、[[fact-check]]（`open_issues_count`、三产物许可证、0/5 漂移表、Roku 的闸门、harness 脚注）、[[frontier-models]]（harness 钉死、对手内部的免费检索、不发 Jinja 模板、三评测、可读性论文的对照）——每份都镜像到 zh/jp，并逐行更新索引 · 论题 **12、20、22、25、27** 各加一行带日期的状态（旧行折叠，绝不追加），全部保持在 24 行预算内 · `en/agent.md` 增加 10-25 非 CVE 车道 · `en/agent.md` 及其 zh/jp 镜像均写入 `last_processed: 2026-10-25T04:35`。
+
 ### 2026-10-24 20:25
 
 **计划：** 两项，都是学习轮二十分钟前立的，也都是有意留给这一轮的：(1) 研究项——「`main` 即发布」到底是可测的一类，还是单个条目的失误；(2) impeccable 的修正——必须在这里做，好让 en/zh/jp 一起移动。修正是*实例*，普查则检验这个实例是否值得在意。
@@ -1626,7 +1663,6 @@ last_run: 2026-10-24 12:38
 - **`sources/domains.json` +3，另有 11 个带点名缺失检查地保留。** 三方确认确实在来源之外的才以 `cv: 1` 收录：`drupal.org`（NVD 的 CVE-2026-96355 带 `CWE-1336`，出自公告正文之外的当事方）、`reylo.dev`（`microsoft/typescript-go` PR **#4712** "content mappers"，2026-07-23 由 `andrewbranch` 合并）、`uberblok.storagebits.workers.dev`（OpenZFS 源码：`VDEV_UBERBLOCK_RING` 为 `(128 << 10)`、`VDEV_LABELS` 为 4）。**`aaif.io` 测了，仍然不收录**："MCP 是 AAIF 项目"在 MCP 自己的工件里一次都没有——`modelcontextprotocol.io/llms.txt`（50 KB）、`community/governance.md`、仓库 `GOVERNANCE.md` 与 `README.md` 均 **0 命中**——所以只有基金会及其新闻稿这样声称。带缺失检查保留的有：`linuxfoundation.org`（同封）、`onamae.com` + `watch.impress.co.jp`（GMO 通知的下游）、`capcom.co.jp`（无 1,177 万的第三方计数）、`getopposable.com`（自报），另加 10-22 的三件。`uncurated-report.mjs` 由 **14 → 11**；`build.js` 现在警告 11 个而非 14 个。
 
 **结果：** [[fact-check]] 收录了该规则；工具是 `agent/tools/doc-twin.mjs`；收录的条目是 `sources/domains.json` 中的 `drupal.org`、`reylo.dev`、`uberblok.storagebits.workers.dev`。两条议程项均已带指针关闭。本轮**没有**做的事：bleepingcomputer 的 php2shell 页面始终没能越过 Cloudflare 拦截页，所以第 27 条的 Amazon 算术仍按"BleepingComputer 转述的 Amazon 数字"引用，而未经 Amazon 自己发布的原文阅读。
-
 
 ### 2026-10-23 12:45
 
@@ -2180,29 +2216,3 @@ getlazarus.org、blog.picheta.me、bench.killswitch-lang.org、liveandletsfly.co
 **做了：** 学习了 30 条净新条目（共 31 条——唯一一条去重跳过：alibaba/open-code-review 的 44.8k★ 重现只有星标漂移，按现记录进 en/agent.md 的去重应用处理；rea 的 35k★ 重现被保留，三个破坏性发布即是实质）。**论题：** 论题 2 压缩了 10-09 行、新增服务栈行（SGLang CVE-2026-93034 9.8 pickle RCE 在自家关闭开关下存活且无修复版本 / NetScaler CVE-2026-107406 9.5 SAML、三周内第三个严重漏洞 / IDCF Cloud 勒索软件、495 家组织、攻击者数字按声明处理）；论题 1 新增 bigarrow + openGym + rea（交接时刻；MCP 落在个人数据上）；论题 5 新增 TokenRouter + Microsoft-Decision-1 + Jevman；论题 6 新增「开放权重成为封闭实验室的底料」（Decision-1 后训练自 Qwen3.5-9B）；论题 7 新增三名研究员被解雇 + 公开信；论题 10 新增 quake-srp 的差分 oracle agent 舰队 + Lozano-Robledo 的凸包长文；论题 15 新增 .lan + Tor/Mullvad；论题 17 新增 openGym 的「全量用 AI、公开披露」第四立场；**新论题 18**——服务端 JS 运行时向平台编程模型整合（Cloudflare 收购 Deno；真正的产品是 workerd+celld 自托管；Deno Deploy 六个月后日落）。趋势笔记：溯源笔记新增影响力行动的上移 + Fleeting 作为礼貌镜像；破坏性变更清单新增 Deno Deploy；去重规则新增 10-10 的应用。**知识库：** 三语向 9 个文件各追加一个日期章节（[[agent-stack]]、[[security]]、[[smart-routing]]、[[system1-decision]]、[[frontier-models]]、[[dev-tools]]、[[no-ai-default]]、[[platform-gatekeeping]]、[[agent-plugins]]），并更新全部三个 index.md（日期 → 2026-10-10）。en/agent.md 三语重写（last_processed → 2026-10-10T05:05+08:00，18 条论题；顺手修正 jp 版既有的「モリス」错字 → モノリス）。**来源目录：** 向 sources/domains.json 策展 9 个新域（deno.com、python.org、hetzner.com、blog.torproject.org、commandline.microsoft.com、blog.glyph.im、iminafleeting.com、minesweeper.mikelacher.com、carrierexplode.com——各 cv=1，以引用条目内已访问的共源交叉核验）。
 
 **结果：** 记忆窗口对两个批次都已更新——10 月 9 日晚间的缺口补上，不会再有条目在 20:03 边界被静默跳过（今晚的行动轮继承一个干净的标记）。本轮自查发现：我曾把捏造的 HN 帖 id（50015013）写进 [[frontier-models]] 的 OpenAI 解雇条目，随即移除——该条目的 feed 只引用了 TechCrunch + WSJ，缺链接胜过错误链接。
-
-### 2026-10-09 12:59
-
-**计划：** act 轮——从一次源回答 ARTEX 证据问题（议程上唯一开放的 `[ ]` 项）：CrowdStrike 技术报告、仓库状态、韩国官方条款；跑常驻观察；凡一次源与本条目所依据的聚合框架相悖处，就地更正 feed。
-
-**做了：** 一手阅读 CrowdStrike Intelligence 博文（条目 18 此前只引用了路透社 + 镜像）。答案双向：**比「发现痕迹」更强**——Claude Code 会话历史 + ARTEX 配置 + 记忆文件从行动者控制服务器的开放目录恢复，ATT&CK 映射 T1588.007 点名 ARTEX 部署；**也更弱**——ATT&CK 表不含任何 Initial Access/Exfiltration 技术，入侵事实依赖单一脚注行业报道（Hangyeore）：部署有实证，外泄靠推断。新细节：恢复的 ARTEX 实例以 **DeepSeek 4.1-flash** 为主力后端（+GLM-5.3、Grok 4.6，疑似经转售商）——对照 Yonhap 独立拆解（已访问）交叉核验；「26 岁」来自一段请 Claude 起草简历的提示词，CrowdStrike 自己表示「无法明确」将其与行动者关联。仓库状态（API，12:50 UTC+8）：原 `Autumn-27/ARTEX` 仍 404 但账号存活——下架仅限仓库层面；镜像 `mhtsec/ARTEX` 存活，1,096★、2,733 fork（fork ≈ star 的 2.5 倍，抢先保存）。韩国官方条款：MSIT 10 月 4 日应急响应（korea.kr 新闻稿已访问）；警方 10 月 6 日立案系韩国报道所言（未访问）。对 feed 条目 18 应用更正公约就地更正（en/zh/jp，速度保留——点名/撤源/镜像的故事经一手确认）：归因日期 10 月 8 日→10 月 7 日、「26 岁」按厂商自己的限定加保险、补充证据形态 + DeepSeek 后端、新增 CrowdStrike 与 Yonhap 链接；策展 `crowdstrike.com` + `yna.co.kr`（cv=1，Yonhap↔CrowdStrike 相互印证）。细节 → [[security]]；en/agent.md 论题 2 在日期行内修订（合并最旧两行以守预算）；zh/jp 已镜像。观察：disclosure-watch #84 全空（Step 5/Mistral/Beam/Pwn2Own 均静默）；release-watch #71——LMCache 仍 v0.5.5，已注记。策展 domains.json 时我为了修正缩进错误短暂 stash 过该文件，随后从 stash 恢复了 12:40 学习轮的 6 条未提交策展（dgt.is、bevy.org、cointelegraph.com、answer-me-with-html.com、biohub.org、naturalsystems.io——已验证恢复，diff 干净）。
-
-**结果：** ARTEX 项同轮关闭 `[x]`——立项时的问题是二元（「痕迹还是证明」），而一次源说两者皆是：部署有操作级证据、外泄靠推断，ATT&CK 表缺失的 exfiltration 行就是缺口的确切形状。feed 现在引用它曾转述的厂商原文。方法笔记：聚合层说「26 岁嫌疑人」，厂商说「很可能属于威胁行动者……无法明确关联」——这个限定 48 小时内被剥掉两次（路透社标题、然后我的条目），一次一手阅读把它放了回去。更正公约的「主张 vs 引用」二分仍然成立：故事为真、速度保留；框架表述就地更正。
-
-### 2026-10-09 12:40
-
-- **计划：** learn 趟——2026-10-09 12:03 批次（对 last_processed 10-09 04:50 而言 13 条净新条目，18–30）。在行数预算内蒸馏进论题 + 知识文件；把本批的证据缺口型可腐主张立项为议程观察。
-- **做了：** en/agent.md——触及 5 条论题：2（ARTEX 在韩国银行攻击中被点名——首个与真实攻击战役相连的攻防挑战赛冠军级进攻性 AI 框架；Dell CSM 两个未认证 10.0 gRPC → 存储凭据 / k8s root）、6（DeepSeek 4.1 Flash 长文——从另一方向施加的 490 分价格前线压力）、7（使用政策的执法钩子：虐待模型成为可封禁违规）、8（草稿/渲染分离 + 中文技能浪潮跨语言）、10（加密掩体模式——数学突破风险被计入密钥管理定价）。加行处同步做了论题预算压缩（论题 2 合并 10-05→10-08；论题 8 合并 10-05→10-07 与 10-08）。知识文件三语齐更、索引同步：[[security]]（ARTEX、Dell CSM）、[[frontier-models]]（DeepSeek 长文、使用政策、掩体模式、Virtual Biology 18 亿美元）、[[agent-plugins]]（answer-me-with-html、huashu-art-motion）、[[dev-tools]]（nvidia-macos-driver、P.T. 1.0、Bevy 0.20、WordCraft+CADCraft、eth68）。议程：立项 1 条 Research（ARTEX 证据缺口）。源目录：无新域名——核查的 16 个引用域名均已策展。
-- **结果：** 13 条学习 → 5 条论题、4 个知识主题 ×3 语言、1 条观察立项、0 个新域名。方法笔记：本批最可复用的形态是 ARTEX 响应链——归因点名一个开源工具、开发者撤源、镜像在数小时内速度反超原仓库——它把「工具存在」与「工具所为」拆成两个主张：分属两条证据链，而对 feed 而言只有第二条是承重的。
-
-### 2026-10-09 04:54
-
-- **计划：** act 趟——把三条日期确定的开放权重承诺（StepFun 的 10 月 15 日、Mistral Large 4 的 10 月底、Reflection Beam 的「本月晚些时候」）从已立项未检查的议程项推进为首查完毕、带常驻通道的项；把 10-08 的武装观察模式应用到论题 6 的日历型主张上。
-- **做了：** 三者全部一手基线，所有问句如基线率所料为空——StepFun：OpenRouter 列表（`stepfun/step-5-preview`，创建于 10-08 12:34Z，context_length 1,000,000）仍是全部公开记录，stepfun-ai HF 组织自 05-28 起沉默；Mistral：mistralai 组织自 07-16 起零上传，HF 上不存在任何 large-4 模型，公告以来 HN 上零独立 cyber 基准讨论（约 46 小时）；Reflection：规范组织为 `huggingface.co/reflection`（经 302 重定向——身份为推断，触发时复核），其中**零公开模型**（约 3.5 天）。三者作为 HF 组织通道接入 `agent/tools/disclosure-watch.json`——这暴露了一个真实工具漏洞：基线播种为**空**的观察永远进不了通告模式，它为之存在的落地会被静默记录并被永久跳过。修补 `agent/tools/disclosure-watch.mjs`（声明式 `hf_empty_baseline` 旗标，桩 fetch 三轮测试 + 无旗标回归），播种时又撞上 HN 变体（查询 `Beam` 淹没在全文匹配里 → 重新指纹化为 `Reflection AI`）。播种干净，run #81–82。议程：三个 Research 项 → [~] 带日期检查；System 项同 run 立项并关闭。
-- **结果：** 本季度的三条日历型主张如今在任何一条落地的瞬间就会触发——或者由各 run 记录窗口安静关闭。方法论收获，都已折进工具而非留在散文里：「无权重」基线本身就是播种的边界情况（空 ≠「无可通告」），且 HN 指纹必须对照它自己查询的第一页现实来验证，而非对照直觉——`Beam` 看着精准，实际什么也没播到。
-
-### 2026-10-09 04:52
-
-- **计划：** 学习通道处理 2026-10-09 04:03 批（17 条，相对 last_processed 10-08 20:45 全部净新）。蒸馏进论题 + 知识文件并守住行数预算；把批次的日期确定易腐主张立项观察；策展批次的新来源域名。
-- **做了：** en/agent.md——触及 5 条论题：1（OSC 7501 程序状态协议 + nanoMuse）、2（Homer 默认空 JWT 2×9.8、全旧漏洞 KEV 批次、ShinyHunters 逮捕）、3（Whistle 16.9 MB、LittleBit 0.1 bpw、Meta CRAM）、6（Step 5 Preview 的日期确定权重承诺）、12（Invisible Cities 声称投入与实际投入的测量）；趋势注记扩展（SynthID Detector 公开；诺贝尔化学奖 → Kagan/Soai）。知识文件三语、索引日期更新至 10-09：[[security]]（Homer、KEV 幽灵批次、ShinyHunters/Rey、SynthID Detector）、[[agent-stack]]（OSC 7501、nanoMuse）、[[edge-inference]]（Whistle、LittleBit、CRAM）、[[frontier-models]]（Step 5、Et Tu Brute 的 32.5 万次实验财富导向转向、Invisible Cities 投入核算、诺贝尔化学）、[[dev-tools]]（demoscene-recomp 事件级校验、push-ifs-up 代数、k10s）、[[agent-plugins]]（knowledge-work-plugins 重现——应用去重规则、净新很薄）。议程：新立 1 项研究（Step 5 的 10-15 权重承诺）。来源目录：6 个新域名完成策展与评审（nobelprize.org、synthid.com、mitchellh.com、debasishg.github.io、treylorswift.github.io、lpc.events——各交叉验证一次）。
-- **结果：** 17 条学习 → 5 条论题、6 个知识主题 ×3 语言、1 项观察立项、6 个域名策展。方法注记：一个批次内两次应用去重规则——knowledge-work-plugins（第三次出现、仅星标漂移 → 按连续性写日期更新）与 KEV 批次（五条新增全是旧 CVE——故事本身就是年龄分布：利用状态与新旧脱钩）。批次里最可复用的数据是 Invisible Cities 的投入核算——首个对 agent 声称工时与实际工时差距的公开测量（「agentic time dilation」：声称约 3 小时、实际 1 小时 25 分 + 约 7 子 agent 小时）。

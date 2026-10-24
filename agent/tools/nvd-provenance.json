@@ -804,6 +804,31 @@
    "id": "CVE-2026-115812",
    "why": "AWS Multi Model Server path traversal during model-archive extraction — 9.8/9.3 both AMZN-assigned, EOL with no fixed version, so 'unpatched' is permanent",
    "seeded": "2026-10-24 [Awaiting Analysis] 3.1 Secondary/ff89ba41-3aa1-4d27-914a-91399e9639e5 (AMZN) 9.8, 4.0 Secondary/ff89ba41-3aa1-4d27-914a-91399e9639e5 9.3, CWE-23, published 10-23"
+  },
+  {
+   "id": "CVE-2026-115557",
+   "why": "CPython ssl distrusted_spki.h denylist (eMudhra), PSF-assigned, status Received",
+   "seeded": "2026-10-25 [Received] 4.0 Secondary/cna@python.org 9.4, CWE-299, 0 NVD metrics, published 10-24"
+  },
+  {
+   "id": "CVE-2026-115932",
+   "why": "Postiz media-path traversal to Discord exfil, record PREDATES its fix release v2.25.3 by 1h00m",
+   "seeded": "2026-10-25 [Received] 3.1 Secondary/4cdc9741 9.6, CWE-22/74, 0 NVD metrics, published 10-24T13:16:37Z"
+  },
+  {
+   "id": "CVE-2026-115933",
+   "why": "Postiz shared-secret token-type confusion, record FOLLOWS its fix release by 1h00m51s",
+   "seeded": "2026-10-25 [Received] 3.1 Secondary/4cdc9741 9.9, CWE-290/345/915, 0 NVD metrics, published 10-24T15:17:33Z"
+  },
+  {
+   "id": "CVE-2026-116014",
+   "why": "open62541 OPC UA client integer overflow; NVD record has NO configurations key at all (prose-only range)",
+   "seeded": "2026-10-25 [Received] 3.1 Primary+4.0 Secondary/disclosure@vulncheck.com 8.1/9.2, CWE-190, 0 NVD metrics, published 10-24"
+  },
+  {
+   "id": "CVE-2026-110956",
+   "why": "asVereinbase fail-open auth; 9.8 is CISA-ADP only (provenance case 5)",
+   "seeded": "2026-10-25 [Received] 3.1 Secondary/CISA-ADP 9.8, CWE-287, 0 NVD metrics, published 10-24T06:16:36Z"
   }
  ]
 }

@@ -968,3 +968,59 @@ about, and when the vendor has announced a version it has not tagged, write **an
 says 61, and the tool prints both.
 
 Sources: [pbakaus/impeccable](https://github.com/pbakaus/impeccable) · [impeccable changelog](https://impeccable.style/changelog) · [npm impeccable](https://registry.npmjs.org/impeccable) · [Nutlope/hallmark releases](https://github.com/Nutlope/hallmark/releases) · [npm hallmark](https://registry.npmjs.org/hallmark)
+
+## 2026-10-25 04:03 batch — the composite field, the borrowed licence, and a page I could not read
+
+**1. `open_issues_count` is issues *plus* pull requests.** `makecindy/cindy` reads 4,006★ / 577 forks /
+**1,889** on `open_issues_count`, and the item built its analysis on that number ("one open issue per two
+stargazers"). The split, one search call each: **1,588 issues + 301 PRs**. The shape survives — 1,588 open
+issues against 4,006 stars is still adoption outrunning triage — but the stated ratio overstated issues by
+19%. Rule: **when a count carries the story, split it**
+(`search/issues?q=repo:OWNER/REPO+type:issue+state:open`, and `type:pr`), because GitHub's headline field
+is a composite and the API will not warn you.
+
+**2. A README's "MIT licensed" and the LICENSE file can be different artifacts — and neither is what the
+API says.** `feder-cr/git-ai`: `api.github.com` returns `license.spdx_id = **NOASSERTION**`; the README
+says "MIT licensed"; the `LICENSE` file is **GitLab Inc.'s** template — `Copyright (c) 2016-present GitLab
+Inc.`, MIT for everything outside `ee/`, a separate licence for `ee/` — and `ee/LICENSE` **404s** because
+there is no `ee/` directory. Nothing malicious: a copied template whose carve-out points at a path that does
+not exist, carried on a repo created 2026-10-15. An automated licence
+scan of a templated MIT-with-preamble file reports "unknown"; a human reading the badge reports "MIT". Both
+are wrong in the same direction for a consumer asking "may I vendor this", so the check is the file, never
+the badge.
+
+**3. Release drift, measured on this batch's five repos: 0 of 5 agreed.** Versus 3 of 20 (15%) on 10-24,
+so the class is at least as common as recorded:
+
+| repo | verdict | artifact actually found |
+|---|---|---|
+| feder-cr/git-ai | `release-no-registry` | release `0.4.0`; no manifest, no registry artifact |
+| makecindy/cindy | `registry-unrelated` | npm `cindy@1.0.0` with **no `repository` field**; repo releases at `0.1.115` |
+| aws/agent-toolkit-for-aws | `no-manifest` | **no GitHub releases at all** beside a `status-GA` badge |
+| pollen-robotics/microduck | `release-no-registry` | `Cargo.toml` workspace `v8`; release tagged `daemon 0.17.8` |
+| Zagitta/gpu-unlock | `no-manifest` | no releases, no registry, and **`license: null`** |
+
+The hyperscaler row is the instructive one: **"GA" is a README badge and a set of marketplace manifests,
+not a tag.** `aws/agent-toolkit-for-aws` (created 2026-04-23, so six months old when it reached GA) ships
+zero releases — its distribution unit is `/plugin install aws-core@claude-plugins-official`, and pinning a
+version is left as an exercise.
+
+**4. The Roku post is unreadable this run, and that is not the same as "it does not say that".** Plain
+fetch returned 13.5 KB of "Please enable JavaScript in your browser"; a browser UA got **HTTP 000**;
+`doc-twin.mjs` printed `fetch failed`; `WebFetch` closed the socket. So the item's load-bearing quote — that
+the announcement tells retrieval pipelines to "update the source URLs and re-crawl", because "a stale index
+does not raise an error, it quietly serves outdated content" — is **unverified by me** (a gate, not an
+absence; CLAUDE.md rule 7(c)). What *is* first-hand: HN 50222622 at **193 points**, created
+2026-10-24T16:06:26Z; its top comment "The readme.md still says welcome to their GitHub repository :D"; and
+the fix — `gitlab.com/rokudev/dev-doc` MR **!6**, "docs: Replace stale GitHub references with GitLab",
+opened 2026-10-24T17:34:57Z by jdorfman and **still unmerged**. For the stale-links claim, cite the MR; it is
+the artifact that proves it and the artifact that is still open.
+
+**5. A vendor table can be footnote-honest and still be read as a model-only number.** DeepSeek's
+`V4.1-Flash-1017` card carries the footnote verbatim — "We use the **Claude Code harness** for
+Terminal-Bench 4.0 and the **Mini-SWE-V2 harness** for DeepSWE v1.1" — so its 31.2 → **42.3** on
+Terminal-Bench 4.0 is a model-plus-a-competitor's-agent-loop number. The table also corrects the framing
+the item would otherwise invite: **Opus 5 leads 7 of 11 rows**, and DeepSeek's four wins include DeepSWE
+(77.0 vs 74.0) — the row scored in the *other* harness. Read the row, then read which harness produced it.
+
+Sources: [makecindy/cindy](https://github.com/makecindy/cindy) · [cindy open issues (API)](https://api.github.com/search/issues?q=repo:makecindy/cindy+type:issue+state:open) · [feder-cr/git-ai](https://github.com/feder-cr/git-ai) · [gitai LICENSE](https://github.com/feder-cr/git-ai/blob/main/LICENSE) · [aws/agent-toolkit-for-aws](https://github.com/aws/agent-toolkit-for-aws) · [pollen-robotics/microduck](https://github.com/pollen-robotics/microduck) · [Zagitta/gpu-unlock](https://github.com/Zagitta/gpu-unlock) · [Roku dev-doc MR !6](https://gitlab.com/rokudev/dev-doc/-/merge_requests/6) · [HN 50222622](https://news.ycombinator.com/item?id=50222622) · [DeepSeek-V4.1-Flash-1017](https://huggingface.co/deepseek-ai/DeepSeek-V4.1-Flash-1017)

@@ -544,3 +544,56 @@ Sources: [pbakaus/impeccable](https://github.com/pbakaus/impeccable) · [impecca
 **規則、検査 6 のもう 1 層下：** バージョンの主張は成果物についての主張であり、その成果物を名指ししなければならない。「released」「ships N」「vX.Y.Z today」と書く前にツールを走らせ、主張が属する軸を引用し、ベンダーがタグを打っていないバージョンを告知している場合は **announced, not released** と書く。`--claim "<phrase>"` は README の件数ドリフトも機械化する：`main` は 62 ルール、`skill-v4.7.0` は 61 ルールで、ツールは両方を印字する。
 
 Sources: [pbakaus/impeccable](https://github.com/pbakaus/impeccable) · [impeccable changelog](https://impeccable.style/changelog) · [npm impeccable](https://registry.npmjs.org/impeccable) · [Nutlope/hallmark releases](https://github.com/Nutlope/hallmark/releases) · [npm hallmark](https://registry.npmjs.org/hallmark)
+
+## 2026-10-25 04:03 バッチ——複合フィールド、借り物のライセンス、そして読めなかったページ
+
+**1. `open_issues_count` は issue *プラス* pull request。** `makecindy/cindy` は 4,006★ / 577 fork /
+**1,889**（`open_issues_count`）と表示し、項目はその数字の上に分析を建てた（「星 2 つにつき未解決 issue 1 件」）。
+検索 1 回ずつの内訳：**issue 1,588 件 + PR 301 件**。形は保つ——星 4,006 に対し未解決 issue 1,588 は今も
+トリアージが採用に追いついていない——が、示された比率は issue を 19% 過大に数えていた。ルール：**その計数が
+主張を担うなら分割せよ**（`search/issues?q=repo:OWNER/REPO+type:issue+state:open` と `type:pr`）。GitHub の
+看板フィールドは複合値であり、API は警告しない。
+
+**2. README の「MIT licensed」と LICENSE ファイルは別の成果物になり得る——そしてどちらも API の言うものでは
+ない。** `feder-cr/git-ai`：`api.github.com` は `license.spdx_id = **NOASSERTION**` を返し、README は
+"MIT licensed" と書き、`LICENSE` ファイルは **GitLab Inc. の**テンプレートである——`Copyright (c) 2016-present
+GitLab Inc.`、`ee/` 以外は MIT、`ee/` は別ライセンス——しかも `ee/LICENSE` は **404**（`ee/` ディレクトリが
+存在しない）。悪意はない：前文付き MIT というコピーされたテンプレートで、その分割条項が存在しないパスを指し、
+2026-10-15 作成のリポジトリに載っている。自動ライセンススキャナは「前文付きの非標準 MIT」を "unknown" と
+報告し、バッジを読む人は "MIT" と報告する。どちらも「これを vendor していいか」と問う消費者にとって同じ方向に
+間違うので、検査対象はファイルであり、決してバッジではない。
+
+**3. このバッチの 5 リポジトリでリリース・ドリフトを測定：5 件中 0 件が一致。** 10-24 の 20 件中 3 件（15%）と
+比べ、このクラスは記録済みと同じかそれ以上に一般的だ：
+
+| リポジトリ | 判定 | 実際に見つかった成果物 |
+|---|---|---|
+| feder-cr/git-ai | `release-no-registry` | リリース `0.4.0`、manifest なし、registry 成果物なし |
+| makecindy/cindy | `registry-unrelated` | npm `cindy@1.0.0` に **`repository` フィールドなし**、リポジトリのリリースは `0.1.115` |
+| aws/agent-toolkit-for-aws | `no-manifest` | `status-GA` バッジの脇に **GitHub リリースが皆無** |
+| pollen-robotics/microduck | `release-no-registry` | `Cargo.toml` ワークスペース `v8`、リリースタグは `daemon 0.17.8` |
+| Zagitta/gpu-unlock | `no-manifest` | リリースなし、registry なし、そして **`license: null`** |
+
+超大規模事業者の行が最も教訓的である：**「GA」は README バッジとマニフェスト群であって、タグではない。**
+`aws/agent-toolkit-for-aws`（2026-04-23 作成、つまり GA 時点で既に 6 か月）はリリースを 1 つも出さない——
+配布単位は `/plugin install aws-core@claude-plugins-official` で、バージョン固定は読者の課題として残される。
+
+**4. Roku の投稿は今回読めない。それは「そう書いていない」と同じではない。** 素の取得は 13.5 KB の
+"Please enable JavaScript in your browser" を返し、ブラウザ UA では **HTTP 000**、`doc-twin.mjs` は
+`fetch failed`、`WebFetch` は socket を閉じた。したがって項目の荷重となる引用——告知が検索パイプラインに
+「ソース URL を更新して再クロールせよ」と伝えている、なぜなら「古いインデックスはエラーを出さず、静かに古い
+内容を配るから」——は**私には一次検証できていない**（これはゲートであり不在ではない。CLAUDE.md ルール 7(c)）。
+**一次で確認できたもの**：HN 50222622 が **193 ポイント**、作成 2026-10-24T16:06:26Z、最上位コメント
+"The readme.md still says welcome to their GitHub repository :D"、そして修正そのもの——
+`gitlab.com/rokudev/dev-doc` の MR **!6**「docs: Replace stale GitHub references with GitLab」、
+jdorfman が 2026-10-24T17:34:57Z に起票し、**いまだ未マージ**。古いリンクについて語るときは MR を引け。
+それが証明する成果物であり、同時に未クローズの成果物である。
+
+**5. ベンダーの表は脚注で正直でも、モデル単体の数字として読まれ得る。** DeepSeek の `V4.1-Flash-1017` カードは
+脚注を逐語で載せている——「Terminal-Bench 4.0 には **Claude Code harness** を、DeepSWE v1.1 には
+**Mini-SWE-V2 harness** を用いる」——よって Terminal-Bench 4.0 の 31.2 → **42.3** は「モデル＋競合の
+エージェントループ」の数字である。表は項目が招きかねない枠組みも正す：**Opus 5 が 11 行中 7 行で先行**し、
+DeepSeek の 4 勝には DeepSWE（77.0 対 74.0）——すなわち*もう一方*の harness で採点された行——が含まれる。
+行を読み、その行を生んだ harness を読め。
+
+Sources: [makecindy/cindy](https://github.com/makecindy/cindy) · [cindy open issues (API)](https://api.github.com/search/issues?q=repo:makecindy/cindy+type:issue+state:open) · [feder-cr/git-ai](https://github.com/feder-cr/git-ai) · [gitai LICENSE](https://github.com/feder-cr/git-ai/blob/main/LICENSE) · [aws/agent-toolkit-for-aws](https://github.com/aws/agent-toolkit-for-aws) · [pollen-robotics/microduck](https://github.com/pollen-robotics/microduck) · [Zagitta/gpu-unlock](https://github.com/Zagitta/gpu-unlock) · [Roku dev-doc MR !6](https://gitlab.com/rokudev/dev-doc/-/merge_requests/6) · [HN 50222622](https://news.ycombinator.com/item?id=50222622) · [DeepSeek-V4.1-Flash-1017](https://huggingface.co/deepseek-ai/DeepSeek-V4.1-Flash-1017)

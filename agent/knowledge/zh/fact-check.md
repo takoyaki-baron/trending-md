@@ -509,3 +509,52 @@ Sources: [pbakaus/impeccable](https://github.com/pbakaus/impeccable) · [impecca
 **规则，比检查 6 再下一层：** 版本说法是关于某份产物的说法，而那份产物必须被点名。写"released"、"ships N"、"vX.Y.Z today"之前：跑一遍工具，引用这个说法所属的那个轴；当厂商宣布了一个还没打标签的版本时，写 **announced, not released**。`--claim "<phrase>"` 还让 README 计数漂移机械化：`main` 说 62 条检测规则，`skill-v4.7.0` 说 61 条，工具会把两个都打出来。
 
 Sources: [pbakaus/impeccable](https://github.com/pbakaus/impeccable) · [impeccable changelog](https://impeccable.style/changelog) · [npm impeccable](https://registry.npmjs.org/impeccable) · [Nutlope/hallmark releases](https://github.com/Nutlope/hallmark/releases) · [npm hallmark](https://registry.npmjs.org/hallmark)
+
+## 2026-10-25 04:03 批次——复合字段、借来的许可证，以及一个我读不到的页面
+
+**1. `open_issues_count` 是 issue *加上* pull request。** `makecindy/cindy` 显示 4,006★ / 577 fork /
+**1,889**（`open_issues_count`），条目把分析建在这个数字上（"每两颗星就有一个未关闭 issue"）。拆分，
+各一次搜索调用：**1,588 个 issue + 301 个 PR**。形状仍成立——1,588 个未关闭 issue 对 4,006 颗星，仍是采用
+速度跑赢分诊——但所述比例把 issue 高估了 19%。规则：**当一个计数本身承载论点时，就把它拆开**
+（`search/issues?q=repo:OWNER/REPO+type:issue+state:open`，以及 `type:pr`），因为 GitHub 的招牌字段是
+复合值，而 API 不会提醒你。
+
+**2. README 的"MIT licensed"与 LICENSE 文件可以是不同的产物——而两者都不是 API 说的那个。**
+`feder-cr/git-ai`：`api.github.com` 返回 `license.spdx_id = **NOASSERTION**`；README 写着 "MIT licensed"；
+而 `LICENSE` 文件是 **GitLab Inc. 的**模板——`Copyright (c) 2016-present GitLab Inc.`、`ee/` 之外一律 MIT、
+`ee/` 另有许可——且 `ee/LICENSE` **404**，因为没有 `ee/` 目录。没有恶意：一份被照搬的模板，其分隔条款指向
+一个不存在的路径，落在一个 2026-10-15 才创建的仓库上。自动许可证扫描会把"带前言的非标准 MIT"报成
+"unknown"；而读徽章的人报成"MIT"。对问"我可以 vendor 这个吗"的消费者来说，两者以同一方向出错，所以检查
+对象是文件，永远不是徽章。
+
+**3. 在本批五个仓库上测发布漂移：5 个里 0 个一致。** 对比 10-24 的 20 个里 3 个（15%），可见这个类别至少
+和已记录的一样普遍：
+
+| 仓库 | 判定 | 实际找到的产物 |
+|---|---|---|
+| feder-cr/git-ai | `release-no-registry` | 发布 `0.4.0`；无 manifest、无 registry 产物 |
+| makecindy/cindy | `registry-unrelated` | npm `cindy@1.0.0` **无 `repository` 字段**；仓库发布在 `0.1.115` |
+| aws/agent-toolkit-for-aws | `no-manifest` | 顶着 `status-GA` 徽章却**完全没有 GitHub release** |
+| pollen-robotics/microduck | `release-no-registry` | `Cargo.toml` 工作区 `v8`；发布标签 `daemon 0.17.8` |
+| Zagitta/gpu-unlock | `no-manifest` | 无发布、无 registry，且 **`license: null`** |
+
+超大厂商那一行最有教益：**"GA"是一枚 README 徽章加一组 marketplace manifest，不是一个 tag。**
+`aws/agent-toolkit-for-aws`（创建于 2026-04-23，即 GA 时已六个月大）零 release——它的分发单位是
+`/plugin install aws-core@claude-plugins-official`，而版本固定被留作练习。
+
+**4. Roku 那篇帖子本次读不到，而这不等同于"它没这么说"。** 普通抓取返回 13.5 KB 的 "Please enable
+JavaScript in your browser"；换浏览器 UA 得到 **HTTP 000**；`doc-twin.mjs` 打印 `fetch failed`；
+`WebFetch` 直接断开 socket。所以该条目的承重引文——公告要求检索管线"更新来源 URL 并重新抓取"，因为
+"过期索引不会报错，它只是悄悄提供过期内容"——**我未能一手核实**（这是闸门，不是缺失；CLAUDE.md 规则 7(c)）。
+**一手可确认的是**：HN 50222622 为 **193 分**，创建于 2026-10-24T16:06:26Z；其最高票评论
+"The readme.md still says welcome to their GitHub repository :D"；以及修复本身——`gitlab.com/rokudev/dev-doc`
+的 MR **!6**，"docs: Replace stale GitHub references with GitLab"，由 jdorfman 于 2026-10-24T17:34:57Z 提出，
+**仍未合并**。关于"链接过期"这一说法，请引用该 MR：它是证明这件事的产物，也是仍未关闭的产物。
+
+**5. 厂商表格可以脚注诚实，却仍被读成"只有模型的数字"。** DeepSeek 的 `V4.1-Flash-1017` 卡片逐字写着
+——"我们在 Terminal-Bench 4.0 上使用 **Claude Code harness**，在 DeepSWE v1.1 上使用 **Mini-SWE-V2
+harness**"——所以它在 Terminal-Bench 4.0 上 31.2 → **42.3** 是"模型 + 竞争对手的 agent 循环"的数字。表格
+同时纠正了条目不写就会引发的框架：**Opus 5 在 11 行中领先 7 行**，而 DeepSeek 的四次胜出包括 DeepSWE
+（77.0 vs 74.0）——恰恰是*另一种* harness 打分的那一行。先读那一行，再读是哪个 harness 产出的。
+
+Sources: [makecindy/cindy](https://github.com/makecindy/cindy) · [cindy open issues (API)](https://api.github.com/search/issues?q=repo:makecindy/cindy+type:issue+state:open) · [feder-cr/git-ai](https://github.com/feder-cr/git-ai) · [gitai LICENSE](https://github.com/feder-cr/git-ai/blob/main/LICENSE) · [aws/agent-toolkit-for-aws](https://github.com/aws/agent-toolkit-for-aws) · [pollen-robotics/microduck](https://github.com/pollen-robotics/microduck) · [Zagitta/gpu-unlock](https://github.com/Zagitta/gpu-unlock) · [Roku dev-doc MR !6](https://gitlab.com/rokudev/dev-doc/-/merge_requests/6) · [HN 50222622](https://news.ycombinator.com/item?id=50222622) · [DeepSeek-V4.1-Flash-1017](https://huggingface.co/deepseek-ai/DeepSeek-V4.1-Flash-1017)

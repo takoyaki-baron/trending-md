@@ -13456,5 +13456,29 @@
   "en": "Puter's site — the browser-OS vendor behind HeyPuter/everything. Product marketing: scope claims are large and verified only at the repo level (a catalogue, not a shipped suite). The monorepo claim is checked off-origin at api.github.com/repos/HeyPuter/everything (MIT, created 2026-10-13, 3,781★); note that 22 of the 28 cells titled \"Demo URL not yet provided\" link to external hosts rather than the app (cv 1, checked 2026-10-24).",
   "zh": "Puter 的站点——HeyPuter/everything 背后的浏览器 OS 厂商。属产品营销：范围主张很大，只能在仓库层面核实（是目录，不是已交付的套件）。 单一仓库（monorepo）主张已在 api.github.com/repos/HeyPuter/everything 于来源外核实（MIT、创建于 2026-10-13、3,781★）；注意 28 个标注「Demo URL not yet provided」的单元格里有 22 个指向外部主机而非该应用（cv 1，2026-10-24 核）。",
   "jp": "Puter のサイト——HeyPuter/everything を擁するブラウザ OS ベンダー。製品マーケティングであり、範囲の主張は大きいが検証できるのはリポジトリの水準まで（出荷済みスイートではなくカタログ）。 モノレポの主張は api.github.com/repos/HeyPuter/everything で外部確認済み（MIT、2026-10-13 作成、3,781★）。ただし「Demo URL not yet provided」と題された 28 セルのうち 22 はアプリではなく外部ホストを指す（cv 1、2026-10-24 確認）。"
+ },
+ "dreamlabs.ai": {
+  "cat": "vendor",
+  "cred": "med",
+  "density": "high",
+  "cv": 2,
+  "en": "Dream Labs research/product site — the primary page for Dream-1, a World Action Model sold as a robot policy by the hour ($3/h, $2/h flash, each call returns 1.6s of actions). High density on pricing and evaluation setup, low on auditability: no weights, no parameter count, no licence, a “research beta” label and an explicit “not validated for safety-critical use” warning. Cross-checked 2026-10-25: the $90M seed and public Service launch are independently reported by The Robot Report (15 “90M” and 12 “Dream API” occurrences on that page), while the per-hour rate and the 27-unseen-robot figure remain vendor-only.",
+  "jp": "Dream Labs の研究/製品サイト——時間単位で売られるロボットポリシー Dream-1（World Action Model、$3/時、flash $2/時、1 コールで 1.6 秒分の行動）の一次ページ。価格と評価設定は高密度だが、検証可能性は低い：重みなし、パラメータ数なし、ライセンスなし、「research beta」表記、そして「安全-critical 用途での検証はしていない」と明記。2026-10-25 に突合：$90M のシードと公開 API の開始は The Robot Report が独立に報道（同ページに「90M」15 件、「Dream API」12 件）。時間単価と未見 27 台という数字はベンダー単独。",
+  "zh": "Dream Labs 的研究/产品站——按小时出售的机器人策略 Dream-1（World Action Model，$3/小时、flash $2/小时，每次调用返回 1.6 秒动作）的一手页面。价格与评测设置密度高，可验证性低：无权重、无参数数量、无许可证、标注「research beta」，并明确「未做安全关键用途验证」。2026-10-25 交叉核验：$90M 种子轮与公开 API 的上线由 The Robot Report 独立报道（该页出现 15 次「90M」、12 次「Dream API」）；按小时定价与「27 台未见过的机器人」仍是厂商单方口径。",
+  "cvlog": [
+   "2026-10-25 — funding + API launch confirmed off-origin by The Robot Report; the $3/hour rate, the 300-rollouts-per-embodiment protocol and the 27-robot zero-shot figure have no independent check and are reported as vendor claims."
+  ]
+ },
+ "thisandthat.chat": {
+  "cat": "community",
+  "cred": "med",
+  "density": "high",
+  "cv": 2,
+  "en": "A builder’s demo of a temporal knowledge base over the Enron corpus (45,047 emails → 214 entity pages, per-fact citation and expiry, a date slider). High information density — the pages are readable primary-source summaries — but self-reported, so every rate (4.0% held-out overlap, 48/50 blind agreement, $11,215 verification bill) is the author’s own instrumentation. Cross-checked 2026-10-25: its Dynegy entity page (“agreed to acquire Enron in November 2001, then terminated the merger and claimed its Northern Natural Gas pipeline”) matches Wikipedia’s independent account of the failed 2001 acquisition and the January 2002 Northern Natural Gas transfer.",
+  "jp": "Enron コーパス上の時間的ナレッジベースの実演（45,047 通 → 214 のエンティティページ、事実ごとの引用と失効、日付スライダー）。情報密度は高い——ページは一次資料の要約として読める——が自己申告であり、あらゆる率（held-out の重複 4.0%、ブラインド一致 48/50、検証費用 $11,215）は作者自身の計測である。2026-10-25 に突合：Dynegy のページ（「2001 年 11 月に Enron 買収で合意し、その後撤回して Northern Natural Gas パイプラインを主張」）は、2001 年の買収失敗と 2002 年 1 月の Northern Natural Gas 移転についての Wikipedia の独立記述と一致する。",
+  "zh": "建立在 Enron 语料之上的时序知识库演示（45,047 封邮件 → 214 个实体页、每条事实带引用与失效期、可拖动日期滑块）。信息密度高——页面可当作一手材料摘要来读——但属自报，所有比率（留出集 4.0% 重叠、盲评 48/50、$11,215 核查账单）都是作者自己的测量。2026-10-25 交叉核验：其 Dynegy 实体页（「2001 年 11 月同意收购 Enron，随后终止合并并主张其 Northern Natural Gas 管道」）与维基百科关于 2001 年收购失败及 2002 年 1 月该管道交割的独立记载一致。",
+  "cvlog": [
+   "2026-10-25 — entity fact (Dynegy’s failed 2001 Enron acquisition and the Northern Natural Gas pipeline) confirmed against Wikipedia’s independent account; the corpus statistics remain author-reported."
+  ]
  }
 }

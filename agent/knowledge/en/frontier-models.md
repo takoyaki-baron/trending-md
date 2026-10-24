@@ -4110,3 +4110,55 @@ use and identification of individuals. Apache-2.0 at `tencent/WeVisOne-VL-2B` an
 → [[edge-inference]] [[fact-check]]
 
 Sources: [arXiv 2610.30949](https://arxiv.org/abs/2610.30949) · [IQuest-Q1 model card](https://huggingface.co/IQuestLab/IQuest-Q1) · [arXiv 2610.31329](https://arxiv.org/abs/2610.31329) · [WeVisOne-VL-4B](https://huggingface.co/tencent/WeVisOne-VL-4B) · [Tencent/WeVisOne-VL](https://github.com/Tencent/WeVisOne-VL)
+
+## 2026-10-25 04:03 batch — the vendor pins a harness build, gives away its retrieval inside rival CLIs, and ships no chat template
+
+**1. A minimum harness version is now part of a model release.** `DeepSeek-V4.1-Flash-1017` (MIT, 1M
+context, #1 trending model on the Hub a week after release, dated the way DeepSeek dates point updates)
+ships with an instruction the model card does not carry and the release note does: "Optimized for DeepSeek
+Harness, Tencent CodeBuddy, WorkBuddy, and more. **Upgrade to DeepSeek Harness v0.2.1-rc.1 or later** for the
+best experience with the new model." This is the mirror image of IQuest-Q1 (10-24), where the *benchmark*
+named three different CLI harness builds across one table; here the *vendor* names the build. Together they
+make harness version a first-class release field: a model can be shipped with a supported-agent matrix, the
+way drivers ship with a supported-kernel matrix.
+
+**2. The vendor subsidises its own grounding layer inside two competitors' harnesses.** DeepSeek's Search &
+Fetch APIs opened to everyone at **$0.75 per 1,000 calls** each — and the release note adds: "Search & Fetch
+calls via server-side tools in **DeepSeek Harness, Claude Code, and Codex** are currently free for DeepSeek
+API users. **Billing starts Oct 31, 2026, at 16:00 UTC.**" Free retrieval inside two rival agent loops, on a
+hard dated flip. Grounding is the loss leader, the harness is the distribution channel, and the pricing
+event is scheduled — so a workflow tuned on free fetch has thirteen days of headroom, the same
+known-sunset shape as the Claude Code weekly-limit promotion of 08-31.
+
+**3. No Jinja chat template — prompt encoding ships as a maintained library.** The card states it plainly:
+"does not include a Jinja-format chat template"; instead `encoding/` holds a Python reference implementation
+with test cases (multi-turn, tool calls, thinking mode, numeric reasoning effort, mid-conversation system
+messages, interleaved images) and `deepseek-recipe`, "a set of Rust libraries with Python bindings … same
+prompt format as a maintained, protocol-aware toolkit", leaving "model inference, tool execution, and HTTP
+transport … to the caller". The model–harness contract is now a dependency you install and version, and the
+surface that used to be a template file is a library with its own release cadence.
+
+**4. Three evals, each publishing the line that narrows it.** `FrontierCS 2` (arXiv 2610.29932, 21 Oct):
+48 open-ended tasks over 13 domains, >100 private tasks planned, 12 agents, best **Claude Opus 5.5 passing
+58%** of runs and **no run passing on 16 tasks** — and the paper prints "**a higher score is not the same as
+a pass**: most runs that beat the reference on the combined final score still fall short on some metric or
+workload." `Into the Unknown` (arXiv 2610.19159, 13 Oct): DOE-lab scientists supply 15 unpublished follow-up
+directions plus the conditions a submission must meet; nine agents write 15 each; **none of 135 satisfies all
+conditions** and **114 fail the integrity check**, "most often because the paper claims work that was never
+done or reports numbers that contradict the recorded evidence." `Tev` (arXiv 2610.18868, 13 Oct, six authors):
+Tev-Gym's **1,170 verified environments across 7 domains** plus progress-potential reward shaping, yielding a
+27B that "match[es] GPT-6 Astra and Claude Opus 5 at Pass@5" on ALE-CM — **with no score anywhere in the
+abstract**, so the ordering is a hypothesis and the environment release is the reusable artifact.
+
+**5. "Hard to read" may be a reward artifact, and the control is a paraphrase.** arXiv 2610.29162 compares
+AI text against human writing on psycholinguistic difficulty features: all **nine** frontier and
+near-frontier models use more inanimate subjects with animate verbs and more low-frequency n-grams, and most
+use longer dependencies, stacked nouns and reduced object relatives *in conversation*. Two details a summary
+drops: the corpus has a second baseline — **round-trip-translation paraphrases**, which the models also
+exceed — and the mechanism test is a **length-penalty fine-tune** that makes output *less* human-like, which
+the authors label a **proof-of-concept**, not a causal result. The mechanism hypothesis (optimised for maths,
+code and reasoning ⇒ density over ease) is the interesting part and the least measured one.
+
+→ [[edge-inference]] [[fact-check]]
+
+Sources: [DeepSeek-V4.1-Flash-1017](https://huggingface.co/deepseek-ai/DeepSeek-V4.1-Flash-1017) · [DeepSeek release note 2026-10-17](https://api-docs.deepseek.com/news/news261017/) · [arXiv 2610.29932](https://arxiv.org/abs/2610.29932) · [arXiv 2610.19159](https://arxiv.org/abs/2610.19159) · [arXiv 2610.18868](https://arxiv.org/abs/2610.18868) · [arXiv 2610.29162](https://arxiv.org/abs/2610.29162)

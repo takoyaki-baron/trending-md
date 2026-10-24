@@ -1,5 +1,5 @@
 {
- "updated": "2026-10-24T13:00:25.362Z",
+ "updated": "2026-10-24T21:07:36.477Z",
  "cves": {
   "CVE-2026-48382": {
    "vulnStatus": "Undergoing Analysis",
@@ -2981,7 +2981,7 @@
   "CVE-2026-16812": {
    "vulnStatus": "Analyzed",
    "published": "2026-07-27",
-   "lastModified": "2026-07-28T14:50",
+   "lastModified": "2026-10-24T13:10",
    "metrics": [
     {
      "version": "3.1",
@@ -3094,7 +3094,7 @@
   "CVE-2026-111497": {
    "vulnStatus": "Awaiting Analysis",
    "published": "2026-10-22",
-   "lastModified": "2026-10-24T04:18",
+   "lastModified": "2026-10-24T18:16",
    "metrics": [
     {
      "version": "4.0",
@@ -3475,7 +3475,7 @@
   "CVE-2026-112846": {
    "vulnStatus": "Deferred",
    "published": "2026-10-23",
-   "lastModified": "2026-10-23T16:06",
+   "lastModified": "2026-10-24T15:16",
    "metrics": [
     {
      "version": "3.1",
@@ -3496,7 +3496,7 @@
   "CVE-2026-112852": {
    "vulnStatus": "Deferred",
    "published": "2026-10-23",
-   "lastModified": "2026-10-23T16:06",
+   "lastModified": "2026-10-24T15:17",
    "metrics": [
     {
      "version": "3.1",
@@ -3589,7 +3589,7 @@
   "CVE-2026-115931": {
    "vulnStatus": "Received",
    "published": "2026-10-23",
-   "lastModified": "2026-10-23T23:17",
+   "lastModified": "2026-10-24T15:17",
    "metrics": [
     {
      "version": "3.1",
@@ -3632,6 +3632,122 @@
    ],
    "cwe": [
     "CWE-23"
+   ],
+   "kev": null,
+   "kevDue": null,
+   "nvdAnalyzed": false
+  },
+  "CVE-2026-115557": {
+   "vulnStatus": "Received",
+   "published": "2026-10-24",
+   "lastModified": "2026-10-24T18:16",
+   "metrics": [
+    {
+     "version": "4.0",
+     "type": "Secondary",
+     "source": "cna@python.org",
+     "baseScore": 9.4,
+     "severity": "CRITICAL",
+     "vector": "CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:P/VC:H/VI:H/VA:H/SC:H/SI:H/SA:H/E:X/CR:X/IR:X/AR:X/MAV:X/MAC:X/MAT:X/MPR:X/MUI:X/MVC:X/MVI:X/MVA:X/MSC:X/MSI:X/MSA:X/S:X/AU:X/R:X/V:X/RE:X/U:X"
+    }
+   ],
+   "cwe": [
+    "CWE-299"
+   ],
+   "kev": null,
+   "kevDue": null,
+   "nvdAnalyzed": false
+  },
+  "CVE-2026-115932": {
+   "vulnStatus": "Received",
+   "published": "2026-10-24",
+   "lastModified": "2026-10-24T13:16",
+   "metrics": [
+    {
+     "version": "3.1",
+     "type": "Secondary",
+     "source": "4cdc9741-f887-419a-a2fd-acbbd2729276",
+     "baseScore": 9.6,
+     "severity": "CRITICAL",
+     "vector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:C/C:H/I:H/A:N"
+    }
+   ],
+   "cwe": [
+    "CWE-22",
+    "CWE-74"
+   ],
+   "kev": null,
+   "kevDue": null,
+   "nvdAnalyzed": false
+  },
+  "CVE-2026-115933": {
+   "vulnStatus": "Received",
+   "published": "2026-10-24",
+   "lastModified": "2026-10-24T15:17",
+   "metrics": [
+    {
+     "version": "3.1",
+     "type": "Secondary",
+     "source": "4cdc9741-f887-419a-a2fd-acbbd2729276",
+     "baseScore": 9.9,
+     "severity": "CRITICAL",
+     "vector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:C/C:H/I:H/A:H"
+    }
+   ],
+   "cwe": [
+    "CWE-290",
+    "CWE-345",
+    "CWE-915"
+   ],
+   "kev": null,
+   "kevDue": null,
+   "nvdAnalyzed": false
+  },
+  "CVE-2026-116014": {
+   "vulnStatus": "Received",
+   "published": "2026-10-24",
+   "lastModified": "2026-10-24T12:16",
+   "metrics": [
+    {
+     "version": "3.1",
+     "type": "Primary",
+     "source": "disclosure@vulncheck.com",
+     "baseScore": 8.1,
+     "severity": "HIGH",
+     "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:H/I:H/A:H"
+    },
+    {
+     "version": "4.0",
+     "type": "Secondary",
+     "source": "disclosure@vulncheck.com",
+     "baseScore": 9.2,
+     "severity": "CRITICAL",
+     "vector": "CVSS:4.0/AV:N/AC:L/AT:P/PR:N/UI:N/VC:H/VI:H/VA:H/SC:N/SI:N/SA:N/E:X/CR:X/IR:X/AR:X/MAV:X/MAC:X/MAT:X/MPR:X/MUI:X/MVC:X/MVI:X/MVA:X/MSC:X/MSI:X/MSA:X/S:X/AU:X/R:X/V:X/RE:X/U:X"
+    }
+   ],
+   "cwe": [
+    "CWE-190"
+   ],
+   "kev": null,
+   "kevDue": null,
+   "nvdAnalyzed": false
+  },
+  "CVE-2026-110956": {
+   "vulnStatus": "Received",
+   "published": "2026-10-24",
+   "lastModified": "2026-10-24T15:16",
+   "metrics": [
+    {
+     "version": "3.1",
+     "type": "Secondary",
+     "source": "134c704f-9b21-4f2e-91b3-4a467353bcc0",
+     "baseScore": 9.8,
+     "severity": "CRITICAL",
+     "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
+    }
+   ],
+   "cwe": [
+    "CWE-287"
    ],
    "kev": null,
    "kevDue": null,

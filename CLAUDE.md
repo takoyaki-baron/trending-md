@@ -152,6 +152,24 @@ underlying pages — this produced a two-layer false signal in a single item.
    A **standing** per-CVE watch (Pass 10 of `agent-run.sh`, `agent/tools/nvd-provenance.json`)
    reports only movement — status flips, an `nvd@nist.gov` metric appearing, a score revision, a
    KEV add — because keyword search cannot see a record that already exists changing state.
+   **"This record states no affected range" is a claim about a FIELD, and the record has two —
+   `configurations` is NVD's analysis output, `affected[]` is the CNA's own statement** (added
+   2026-10-25 04:32, the open62541 lesson). `CVE-2026-116014` was published as a "structurally
+   range-less `Received` record" whose range lived in one prose sentence; it had carried
+   `{version: "1.5.0", lessThan: "1.5.7", status: "affected"}` in `affected[]` from publication, and
+   the tool read only `configurations`. Measured over the 2026-10-18→24 publication week (**4,624**
+   records): `configurations` is present on **408/408** `Analyzed`+`Modified` records and on
+   **0/4,097** of every other status, so its absence marks **"not yet analysed"**, never "says
+   nothing"; `affected[]` is present on **4,505/4,624 (97.4%)** and on every non-`Rejected` record
+   that names a product. The residue is 160 records — 119 `Rejected` (no product by definition), 29
+   that name a product with no versions (the Red Hat `secalert@` shape, range in the vendor's own
+   advisory), 12 that list only *unaffected* versions — and the prose parser rescues **1 of 4,624
+   (0.02%)**. So quote which field you read, and never turn one field's absence into a statement
+   about the record. CVE 5.x semantics the quote must survive: `lessThan` is **exclusive**,
+   `lessThanOrEqual` inclusive; a bare `version` is a **point**, not `[v, ∞)`; `version: "0"`/`"*"`
+   is a **null minimum**. One call:
+   `node agent/tools/disclosure-lag.mjs --range-census --from YYYY-MM-DD --to YYYY-MM-DD` prints the
+   table above for any window (re-run it — analysis lands later and the top row moves).
    **A record's `published` date is a WORKFLOW timestamp, not the event's date — check the fix
    release before writing "new"** (added 2026-10-22, the vLLM / Vibe-Trading / Trigger.dev batch).
    `published` is when the assignment finished, and the gap runs both ways: vLLM's seven CVEs

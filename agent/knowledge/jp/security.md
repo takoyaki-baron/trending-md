@@ -3494,3 +3494,54 @@ Sources: [NVD CVE-2026-115727](https://nvd.nist.gov/vuln/detail/CVE-2026-115727)
 → [[disclosure-lag]] [[vuln-supply]] [[fact-check]]
 
 Sources: [GHSA-897f-g5gm-fmxm](https://github.com/bytecodealliance/wasmtime/security/advisories/GHSA-897f-g5gm-fmxm) · [GHSA-mghf-wjfp-p5xm](https://github.com/bytecodealliance/wasmtime/security/advisories/GHSA-mghf-wjfp-p5xm) · [Wasmtime v36.0.19](https://github.com/bytecodealliance/wasmtime/releases/tag/v36.0.19) · [CVE-2026-115931](https://cveawg.mitre.org/api/cve/CVE-2026-115931) · [Postiz v2.25.2](https://github.com/gitroomhq/postiz-app/releases/tag/v2.25.2) · [CVE-2026-115812](https://cveawg.mitre.org/api/cve/CVE-2026-115812) · [AWS bulletin 2026-148](https://aws.amazon.com/security/security-bulletins/2026-148-aws/) · [awslabs/multi-model-server](https://github.com/awslabs/multi-model-server) · [Filee engines](https://github.com/KnifeLemon/Filee/blob/main/docs/ENGINES.md)
+
+## 2026-10-25 04:03 バッチ——言語ランタイムがルートストアにできない制御を自前で出し、5 件の記録に 3 つの来歴
+
+**eMudhra の余波がランタイムに到達し、各言語が不信リストを個別に再実装している。** `CVE-2026-115557`
+（**Python Software Foundation** が採番、CVSS 4.0 **9.4**、CWE-299）の表題は「`ssl` モジュールで侵害された
+中間証明書を不信とする」。修正は `Modules/_ssl/distrusted_spki.h` を追加する：**DER エンコードされた
+SubjectPublicKeyInfo の SHA-256 ダイジェスト**で照合するデナイリストで、証明書フィンガープリントでは*ない*と
+明示されているため、侵害鍵を再利用したクロスサインや再発行も塞がれる。検証が有効なあらゆる `SSLContext` で
+効く（`CERT_OPTIONAL` / `CERT_REQUIRED`。`CERT_NONE` は対象外）。影響範囲は `≤ 3.16.0`——ツリー全体。誤って
+いるのはコードではなく状態だからだ。
+
+ヘッダ自身のコメントが教義であり、どのアドバイザリよりも明快にセシス 25 を述べている：**「これは非常手段
+であり最後の防衛線である。信頼の除去は主としてプラットフォームのルートストアの仕事である。このリストは、
+その更新が OS、コンテナイメージ、あるいは Python パッケージに同梱されたルート CA へまだ伝播している間だけ
+鍵を封じる。」** 続けて「項目を追加する閾値は非常に高い」。帰結は 2 つ。第一に、**「Python パッケージに同梱
+されたルート CA」とは certifi であり**、bundle と store の分裂がデナイリストを出す上流の明示的な理由になって
+いる。第二に、**中間証明書の失効には伝播経路がない**ので、あらゆる言語ランタイムが同じリストの自前コピーを
+実装する——Go が `CVE-2026-111943` で先例を作り、CPython の issue はそれを prior art として引く。N 個の
+ランタイムを同期し続ける必要があり、それぞれが「非常に高い」閾値を持ち、しかも通常の修復方向を反転させる：
+Python にパッチを当てることが、まだ誰も外していない CA からあなたを守る。
+
+9.4 は注意して読む価値がある：**状態**（既知の悪い鍵を通るあらゆるチェーン、根より下では失効を強制できない）
+に対する点数であり、新しいコードの欠陥に対する点数ではない。書いたのは PSF で、NVD レコードは `Received`、
+NIST 指標は**ゼロ**。
+
+**Postiz：署名が証明するのは「発行したこと」で「用途」ではない。** `CVE-2026-115933`（9.9、
+CWE-290/345/915）——1 つの共有秘密がセッション・招待・パスワードリセットのトークンに署名し、**そのトークンが
+何のためのものかを示す印が一切ない**。さらにブラウザ拡張のリフレッシュ経路が「リクエスト自身から取ったデータに
+署名し、その結果を要求したユーザーが読み返せる場所に保存した」。したがって登録済みユーザーなら誰でも、署名の
+有効なトークンを鋳造し、セッションとして、任意ロールの組織招待として、パスワードリセットとして、あるいは
+エンタープライズのプロビジョニングトークンとして提示できる。`CVE-2026-115932`（9.6、CWE-22/74）は同じ
+アカウントの 2 件目：投稿のメディアパスが URL でなければサーバ上のファイルとして扱われ封じ込め検査がないため、
+公開ワーカーが任意ファイルを読み Discord 添付として送る。2 つのリリースは交換可能ではない——**`v2.25.2` が
+塞いだのは秘密を*漏らす*反射経路であり、`v2.25.3` が直したのは秘密の設計がトークン 1 つを持つ誰にでも許した
+ことだ。**
+
+**asVereinbase：失敗時許可の認証で、点数は CISA のもの。** `CVE-2026-110956`（WPScan が CNA、CWE-287）：
+1.1.8 未満の WordPress プラグインは「ユーザーを認証する前に有効なパスワードも真正な第 2 要素も要求せず、
+**空の保存値を一致と見なす**」——空 vs 空の比較で管理者を含む任意アカウントに認証できる。その **9.8 は
+CISA-ADP のエンリッチメントコンテナ**（`134c704f-9b21-4f2e-91b3-4a467353bcc0`）のもので、CNA のものでも
+NIST のものでもない：来歴ケース (5)、ベンダーに帰属させてはならない形。あらゆるプラグイン一覧への教訓は、
+「2FA 有効」とは比較についての主張であり、比較は成功するように書けるということだ。
+
+**同バッチの他：** `CVE-2026-116014` は**サーバがクライアントを攻撃する**形——悪意ある OPC UA サーバが
+`UA_Client_getRemoteDataTypes()` 経由で DataType 定義を供給し 16 ビットの `memSize` が回り込む。露出面は、
+自分が制御しない端点へ外向きに接続するすべてのポーリングクライアント・ゲートウェイ・HMI であり、産業配置では
+それが通常のトポロジである。
+
+→ [[disclosure-lag]] [[vuln-supply]] [[fact-check]]
+
+Sources: [CVE-2026-115557](https://cveawg.mitre.org/api/cve/CVE-2026-115557) · [distrusted_spki.h](https://github.com/python/cpython/blob/main/Modules/_ssl/distrusted_spki.h) · [CPython issue #160040](https://github.com/python/cpython/issues/160040) · [CPython PR #160042](https://github.com/python/cpython/pull/160042) · [CVE-2026-115933](https://cveawg.mitre.org/api/cve/CVE-2026-115933) · [CVE-2026-115932](https://cveawg.mitre.org/api/cve/CVE-2026-115932) · [Postiz v2.25.3](https://github.com/gitroomhq/postiz-app/releases/tag/v2.25.3) · [CVE-2026-110956](https://cveawg.mitre.org/api/cve/CVE-2026-110956) · [WPScan entry](https://wpscan.com/vulnerability/95501052-9f20-4391-9171-184cd2e4a445/) · [CVE-2026-116014](https://cveawg.mitre.org/api/cve/CVE-2026-116014)

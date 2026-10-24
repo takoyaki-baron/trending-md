@@ -3139,3 +3139,45 @@ reply 序列化里两处独立的栈溢出，未认证、网络邻近可达，�
 → [[disclosure-lag]] [[vuln-supply]] [[fact-check]]
 
 Sources: [GHSA-897f-g5gm-fmxm](https://github.com/bytecodealliance/wasmtime/security/advisories/GHSA-897f-g5gm-fmxm) · [GHSA-mghf-wjfp-p5xm](https://github.com/bytecodealliance/wasmtime/security/advisories/GHSA-mghf-wjfp-p5xm) · [Wasmtime v36.0.19](https://github.com/bytecodealliance/wasmtime/releases/tag/v36.0.19) · [CVE-2026-115931](https://cveawg.mitre.org/api/cve/CVE-2026-115931) · [Postiz v2.25.2](https://github.com/gitroomhq/postiz-app/releases/tag/v2.25.2) · [CVE-2026-115812](https://cveawg.mitre.org/api/cve/CVE-2026-115812) · [AWS bulletin 2026-148](https://aws.amazon.com/security/security-bulletins/2026-148-aws/) · [awslabs/multi-model-server](https://github.com/awslabs/multi-model-server) · [Filee engines](https://github.com/KnifeLemon/Filee/blob/main/docs/ENGINES.md)
+
+## 2026-10-25 04:03 批次——语言运行时亲自实现了根存储做不到的那个控制，而五条记录里有三种溯源
+
+**eMudhra 的余波抵达运行时，而每个语言各自重新实现一份不信任名单。** `CVE-2026-115557`（由 **Python
+Software Foundation** 赋号，CVSS 4.0 **9.4**，CWE-299）题为"在 `ssl` 模块中不信任被入侵的中间证书"。修复新增
+`Modules/_ssl/distrusted_spki.h`：一份以 **DER 编码的 SubjectPublicKeyInfo 的 SHA-256 摘要**匹配的黑名单，
+明确*不是*证书指纹，所以复用被入侵密钥的交叉签名与重签证书一并被拦；在启用验证的每个 `SSLContext` 上生效
+（`CERT_OPTIONAL` / `CERT_REQUIRED`；`CERT_NONE` 不受影响）。声明的受影响范围是 `≤ 3.16.0`——整棵树，因为
+错的是状态而非代码。
+
+头文件自己的注释就是教义，而且它比任何公告都更干净地表述了论点 25：**"这是一项非常手段，也是最后一道防线。
+移除信任主要是平台根存储的职责。这份名单只在那个更新仍向 OS、容器镜像或 Python 包自带的根 CA 传播期间
+封堵密钥。"** 紧接着是"加一条的门槛非常高"。由此两点。第一，**"Python 包自带的根 CA"就是 certifi**，由运行时
+自己点名：bundle 与 store 的分裂如今是上游提供黑名单的明示理由。第二，**中间证书吊销没有传播通道**，于是每个
+语言运行时都实现自己那份同样的名单——Go 以 `CVE-2026-111943` 先例在前，CPython 的 issue 引用它作为 prior
+art。这是 N 个运行时要保持同步、各有自己的"非常高"门槛，而且它颠倒了通常的修复方向：打补丁的 Python 保护
+你免于一个还没人移除的 CA。
+
+9.4 值得细读：它是对**状态**（任何经由已知坏密钥的链，而根之下的吊销无法强制执行）的评分，而非对新代码缺陷的
+评分；写它的是 PSF，而 NVD 记录是 `Received` 且**零** NIST 指标。
+
+**Postiz：签名证明的是"签发过"，不是"用途"。** `CVE-2026-115933`（9.9，CWE-290/345/915）——同一个共享密钥
+签发会话、邀请与密码重置令牌，**而没有任何标记说明令牌是做什么用的**，且一个浏览器扩展刷新路由"对从请求本身
+取得的签名数据签名，并把结果存放在发起请求的用户可读回的地方"。于是任何已注册用户都能铸造一个签名有效的令牌，
+当作会话、当作带自选角色的组织邀请、当作密码重置、或当作企业开通令牌来出示。`CVE-2026-115932`（9.6，
+CWE-22/74）是同一账户的第二个：帖子的媒体路径若不是 URL 就被当成服务器文件、无包含检查，于是发布 worker 读取
+任意文件并以 Discord 附件送出。两次发布不可互换——**`v2.25.2` 关掉的是*泄漏*密钥的反射路径；`v2.25.3` 修的是
+密钥设计让任何持有一个令牌的人能做的事。**
+
+**asVereinbase：失败即放行的认证，而分数是 CISA 的。** `CVE-2026-110956`（WPScan 为 CNA，CWE-287）：1.1.8
+之前的 WordPress 插件"在认证用户前既不要求有效密码、也不要求真正的第二因素，**把空存储值当作匹配**"——一次
+空对空的比较就能认证任何账户包括管理员。它的 **9.8 来自 CISA-ADP 富化容器**
+（`134c704f-9b21-4f2e-91b3-4a467353bcc0`），既不是 CNA 的、也不是 NIST 的：溯源情形 (5)，一种绝不可归因给
+厂商的形状。对所有插件清单的教训是："已启用 2FA"是关于一次比较的说法，而比较是可以被写成成功的。
+
+**同批还有：** `CVE-2026-116014` 是**服务器攻击客户端**——恶意 OPC UA 服务器经
+`UA_Client_getRemoteDataTypes()` 提供 DataType 定义，16 位 `memSize` 回绕，于是暴露面是每一个向外拨号的
+轮询客户端、网关与 HMI，而它连的端点自己并不控制，这在工业部署里正是常态拓扑。
+
+→ [[disclosure-lag]] [[vuln-supply]] [[fact-check]]
+
+Sources: [CVE-2026-115557](https://cveawg.mitre.org/api/cve/CVE-2026-115557) · [distrusted_spki.h](https://github.com/python/cpython/blob/main/Modules/_ssl/distrusted_spki.h) · [CPython issue #160040](https://github.com/python/cpython/issues/160040) · [CPython PR #160042](https://github.com/python/cpython/pull/160042) · [CVE-2026-115933](https://cveawg.mitre.org/api/cve/CVE-2026-115933) · [CVE-2026-115932](https://cveawg.mitre.org/api/cve/CVE-2026-115932) · [Postiz v2.25.3](https://github.com/gitroomhq/postiz-app/releases/tag/v2.25.3) · [CVE-2026-110956](https://cveawg.mitre.org/api/cve/CVE-2026-110956) · [WPScan entry](https://wpscan.com/vulnerability/95501052-9f20-4391-9171-184cd2e4a445/) · [CVE-2026-116014](https://cveawg.mitre.org/api/cve/CVE-2026-116014)
