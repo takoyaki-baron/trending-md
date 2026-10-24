@@ -1,6 +1,6 @@
 ---
 date: 2026-10-24
-updated: 2026-10-23T20:16:06Z
+updated: 2026-10-24T04:24:51Z
 schedule: 04:03, 12:03, 20:03 UTC+8
 sources: 22
 license: CC-BY-4.0
@@ -310,13 +310,277 @@ The limits are stated plainly by the project. The driver "still lacks caching le
 
 ---
 
+## 20. Hexacon's iPhone demos reached HN's front page on a teaser post: Signal 1-click, iMessage, and no write-up yet
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Blog (calif.io) / Hacker News · 780+ pts · ~12h ago (~00:21 UTC+8 Oct 24)
+- **Tags:** `ios` `exploit` `hexacon` `disclosure` `mobile-security`
+
+The post is four paragraphs. "Today, we hacked what we'd set out to hack: the iPhone," it opens, and says the rest is "a series of demos we revealed at Hexacon in Paris today." The demo headings name the targets: **"Signal 1-click," "iMessage,"** and a slide titled **"APT stands for Apple Persistent Threat."** The only forward-looking sentence is "Everything will be released in due time." The post carries the date **October 16, 2026** — a week before it reached Hacker News on October 23, where it took 780 points.
+
+What the page does not contain is most of what a vulnerability item needs: **no iOS version, no vulnerability class, no statement of the access level achieved** (userland, kernel, persistence, or data extraction), no reliability figure, no CVE, no mention of a bounty, and no vendor response. The r/netsec and HN threads are working entirely from the three headings.
+
+**Why it matters:** a 780-point front-page story about a zero-click-class iPhone claim is being carried by a page that says nothing falsifiable — and that gap is the publishable fact. The honest reading is that a research team has demonstrated *something* against Signal and iMessage on an unspecified iOS build at a conference, and has promised details later; whether the exploit chain is full-device, whether it survives reboot, and which iOS versions are exposed are all still unknown. Watch for the write-up rather than the point count: the claim will be checkable when the demos are, and a teaser is not a disclosure.
+
+[`🔗 calif.io — "Today, we hacked… the iPhone"`](https://blog.calif.io/p/iphone) · [`🔗 HN discussion (50211474)`](https://news.ycombinator.com/item?id=50211474)
+
+---
+
+## 21. Block's Dessa is a full-duplex speech model trained on sound alone — no text, no pretrained weights, one GB200 rack
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Block / Hacker News · 285+ pts · ~9h ago (~03:09 UTC+8 Oct 24)
+- **Tags:** `speech` `full-duplex` `block` `research-preview` `training`
+
+Dessa, from a small research lab at Block that reports to Jack Dorsey, is a speech-to-speech model trained **from scratch on human conversation and nothing else** — "No text, no pretrained models." It is full-duplex, so it listens while it talks, learns to backchannel ("yeah!", "got it!"), and laughs mid-sentence rather than waiting for a turn boundary. It runs faster than real time and **locally on a MacBook Pro M4 Max or better**. The training claim is the headline: it learned language "from hundreds of times fewer words" than an LLM, on **one NVIDIA GB200 NVL72**. The team is seven researchers, several formerly of the Toronto startup also called Dessa, and they have been building generative speech models for over eight years.
+
+Every demo clip is presented as "a live recording of a person talking to Dessa. Nobody steers it," with subtitles added afterward. The one that reaches beyond marketing is the **Dessa-in-conversation-with-GPT-Live-1** sample, and the page handles it carefully: "The developer of GPT-Live-1 is not affiliated with Block and has not reviewed or endorsed Dessa."
+
+**Why it matters:** the interesting claim is an ablation the post never runs — what a model gives up by discarding text entirely. There is **no benchmark, no WER, no latency figure in milliseconds, no parameter count, and no weights**; access is a waitlist plus a download gated on an institutional email, and the "world's first" framing is hedged with "As far as we know." The safety motive is stated plainly, though: current voice AI "flattens what we say into text and can't keep up with human timing," and a model deaf to the emotion in a voice is a hazard the post puts in clinical terms. That is a testable thesis, and Dessa is the artifact that would test it — once there is something to measure.
+
+[`🔗 block.xyz/dessa`](https://block.xyz/dessa) · [`🔗 HN discussion (50213925)`](https://news.ycombinator.com/item?id=50213925)
+
+---
+
+## 22. Microsoft's MAI-DxO reached *Science* this week — 83.2% vs 36.1% on NEJM cases, on a preprint that has been public since June 2025
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Science (DOI 10.1126/science.aeh7930) / Gizmodo · 46+ pts · ~8.6h ago
+- **Tags:** `medical-ai` `science` `benchmarks` `agents` `peer-review`
+
+"Sequential diagnosis with language models" was published in **Science on 22 October 2026** (vol. 394, issue 6822; received 4 April, accepted 10 August). The system, **MAI-DxO**, role-plays a panel of physicians that "continually revis[es] the differential diagnosis and select[s] cost-effective tests," starting from a chief complaint and choosing which questions and tests to order rather than being handed a full case file. The abstract's numbers: **83.2% accuracy on NEJM clinicopathological conference cases and 80.3% on MIMIC-IV-ED emergency-department admissions, against 36.1% and 46.8% for generalist physicians.**
+
+The publication history is the part the coverage dropped. The **arXiv preprint (2506.22405) dates to June 2025** — roughly sixteen months earlier — and reported different figures on a different backbone, so the *Science* version is a peer-reviewed restatement of a claim that has been circulating since last summer, not a new result. The comparison arm is also narrower than "doctors": generalists, not the specialists who normally handle these cases.
+
+**Why it matters:** the paper's own abstract supplies the caveat that the headline strips — "**Although these findings were obtained in a controlled benchmark setting**" — and Gizmodo reports the researchers "would expect the performance gap to narrow" against expert specialists, that the cost savings are "based on estimated costs in simulated cases rather than actual medical expenses," and that every author is a Microsoft employee. Real-world validation at Beth Israel Deaconess is described as starting "within the next couple of months," and Suleyman concedes clinical testing is still required. So: a real peer-reviewed benchmark advance in sequential diagnosis, described by its own authors as a benchmark result.
+
+[`🔗 Science — Sequential diagnosis with language models`](https://www.science.org/doi/10.1126/science.aeh7930) · [`🔗 arXiv preprint 2506.22405`](https://arxiv.org/abs/2506.22405) · [`🔗 Gizmodo`](https://gizmodo.com/microsoft-says-its-new-ai-is-more-than-twice-as-good-at-diagnosing-diseases-as-doctors-2000664899)
+
+---
+
+## 23. Since our Oct 23 Brotli note: the CVE has a number, and the hole reaches Bun, Envoy, Istio, curl and two PyPI packages
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Aikido Security / Hacker News · 121+ pts · ~4.6h ago (~07:30 UTC+8 Oct 24)
+- **Tags:** `cve` `brotli` `http2shell` `rce` `ecosystem`
+
+Yesterday's item covered a 9.2 out-of-bounds write in Google's Brotli decoder, releases 1.0.3–1.2.0. It now has an identifier and an ecosystem. **CVE-2026-111497** was published by Node.js on **October 21** as "node2shell"; Python disclosed its packages were affected on October 22; and by **October 23** Aikido reports the blast radius as "other major languages and service applications using HTTP, where patches are not yet fully available," re-branding it **http2shell**. OpenAI found it in February, reported it as unauthenticated RCE **in both directions** — a malicious client can take over an unpatched server, and a malicious server can take over an unpatched client that accepts compressed responses — and the root cause was fixed in Brotli's source then, but "wasn't recognized as a security issue at the time and no release shipped with the fix until now."
+
+The fix matrix, reviewed October 23: **Node.js 22.23.4 / 24.22.1 / 26.12.1** (shipped Oct 21); **libbrotli 1.2.1**, or 1.0.10 / 1.1.1 on older lines; **PyPI `Brotli` 1.2.1 and `brotlicffi` 1.2.1.0**; **Bun 1.4.4**; **Envoy 1.40.0 / 1.39.3 / 1.38.6 / 1.37.8**; **Istio 1.29.9 / 1.30.6 / 1.31.2**.
+
+**Why it matters:** two facts make this harder than the average CVE. First, the decoder is **bundled into the runtime, not a dependency** — for Node.js and Bun it will never appear in a lockfile audit, and the only fix is a runtime upgrade. Second, Aikido states that "as of October 23, advisory databases don't map the CVE to either PyPI package, so **pip-audit, Dependabot, and Safety won't flag vulnerable versions yet**" — silence from the scanner is not evidence of safety. The reverse also holds: Apache's `mod_brotli` and nginx do not decode brotli by default, so a scanner hit is not automatically exposure. Aikido's own mitigation where no patch exists is to reject `Content-Encoding: br` at the proxy before any decoder runs, matching case-insensitively, including inside lists.
+
+[`🔗 Aikido — Node2Shell evolves to HTTP2Shell`](https://www.aikido.dev/blog/python-packages-vulnerable-node2shell-brotli-cve-2026-111497) · [`🔗 Node.js October 2026 security releases`](https://nodejs.org/en/blog/vulnerability/october-2026-security-releases) · [`🔗 HN discussion (50216791)`](https://news.ycombinator.com/item?id=50216791)
+
+---
+
+## 24. "AI and the Enclosure of the Scientific Commons": a CfA astronomer argues the fence is the product, and slop is the mechanism
+
+- **Velocity:** ▮▮ rising
+- **Source:** arXiv 2610.27251 / Hacker News · 137+ pts · ~1.5d ago (~02:28 UTC+8 Oct 23)
+- **Tags:** `research` `ai-policy` `economics` `scientific-commons` `essay`
+
+P. K. G. Williams, at the Center for Astrophysics | Harvard & Smithsonian, argues the scientific literature is an **information commons** — "an intangible resource that no one owns and is shared by everyone" — and that the English agricultural commons is the right precedent, not the one usually invoked. The commons of preindustrial England did not disappear through a tragedy of overuse; it was **enclosed (~1600–1800)**, "transformed … into private property," and "many observers, then and now, judge enclosure to have been theft at a societal scale." The paper's claim is that AI supplies "precisely the tools needed to enable a previously-infeasible enclosure," and that the mechanism is not scraping but **"slop spam"** — flooding the commons until the social systems that maintain it stop functioning.
+
+**Why it matters:** this is a primer and a position, not a measurement — one author, no dataset, no experiment — and it is worth reading as the strongest framing yet of a complaint the feed keeps meeting from the other direction: maintainers archiving their projects and naming AI as the reason, marketplaces whose curation explicitly disclaims verification, and benchmarks whose public sets are contaminated. The paper's contribution is to name the unit of harm. If the loss is an institution rather than a copy, then per-document licensing and robots.txt are the wrong instruments, and "the data was public" answers a question nobody asked. Treat the historical analogy as an argument to be evaluated, not a finding.
+
+[`🔗 arXiv 2610.27251`](https://arxiv.org/abs/2610.27251) · [`🔗 HN discussion (50199230)`](https://news.ycombinator.com/item?id=50199230)
+
+---
+
+## 25. LayerFS: every agent gets a writable filesystem over shared committed history — and the README says the store has no crash durability
+
+- **Velocity:** ▮▮ rising
+- **Source:** GitHub / Hacker News · 2,005★ · 96 forks · released v1.1.0
+- **Tags:** `agents` `filesystem` `rust` `copy-on-write` `agent-infra`
+
+`Ephemeral-AI-Lab/layerfs` (MIT, Rust) puts a versioned copy-on-write filesystem under a fleet of coding agents. Each agent "mounts a complete, writable Workspace over shared committed history, does its work, commits what it changed, and goes away" — no copying the base tree, no per-agent image. Commits are deduplicated and content-addressable, so branches can be rewound and merged; the repo's topics list the machinery plainly (`copy-on-write`, `content-addressable-storage`, `fuse`, `sqlite`). It reached **2,005 stars and 96 forks** with **v1.1.0** shipped as source, splitting the JS API into `@layerfs/agent`, `@layerfs/backend` and `@layerfs/runtime`.
+
+The release notes lead with what breaks. "**It breaks code written for 1.0.0**," and the benchmarks on the README "are 1.0.0's, measured on `main` at `e5c7aaae05`" — not re-run for 1.1.0. The durability statement is the one to read before trusting it with anything: "**The Store runs in its Disposable profile only, with no crash or power-loss durability: use LayerFS for agent work and its history, not as the only copy of data you cannot rebuild.**" Today it is reachable through `dsh-layerfs`, a plugin for DeepSeek Harness; Linux is native, macOS and Windows arrive through DSH and WSL2.
+
+**Why it matters:** the interesting design decision is that compute is ephemeral and *history* is the durable object — the filesystem, not the agent, is what persists. That inverts the usual sandbox model, where a container holds both. The catch is the same one every agent substrate now has to answer: if the store is the system of record, "disposable profile" is a very large caveat, and a merge conflict between two agents' commits is a new kind of review problem that git's tooling does not currently address.
+
+[`🔗 Ephemeral-AI-Lab/layerfs`](https://github.com/Ephemeral-AI-Lab/layerfs) · [`🔗 layerfs.ai`](https://layerfs.ai/) · [`🔗 HN discussion (50179857)`](https://news.ycombinator.com/item?id=50179857)
+
+---
+
+## 26. The Enron Brain: 45,047 emails became 214 pages where every fact cites its message and expires on the date it stopped being true
+
+- **Velocity:** ▮▮ rising
+- **Source:** thisandthat.chat / Hacker News · 58+ pts · ~16h ago (~20:02 UTC+8 Oct 23)
+- **Tags:** `agents` `rag` `provenance` `evaluation` `knowledge-base`
+
+thisandthat.chat fed **45,047 unique messages from eight Enron mailboxes** to a pipeline built on Claude Opus 5 (and Opus 5.5 for the final pass) and got back **214 pages** about the companies, regulators and banks Enron dealt with. The design rule is unusual and specific: "Every fact cites the email it came from. When the mail shows a fact stopped being true, the page expires it on that date." Facts are sentences with a date and a source rather than fields, and **19,528 of the published facts expire**; on 175 pages the relationship changes over time — Dynegy runs "from trading counterparty to agreed acquirer in November 2001, and then to adversary."
+
+The construction is documented step by step, and the evaluation is the part worth copying. They **developed the method on eight mailboxes and built every published page from eight different ones**, measuring the overlap: the two sets "share 129 of 3,200 sampled messages, 4.0 percent," and they dropped a ninth candidate mailbox that shared 16.4%. Every quote was checked against its source message and **37 were dropped because "the quote wasn't in the message."** A person graded **50 of the third audit's fact verdicts blind and agreed with 48**; in both disagreements the excerpt had missed the quoted sentence because of a bug, and against the full message both facts were supported. Phases were the weak point — 25 of 540 failed the audit, so they split compound labels, and the same judge then passed **580 of 591**. Total cost, at list prices: **$11,215** for building and checking.
+
+**Why it matters:** the per-fact citation and the temporal expiry are the two things most "company brain" products cannot do, and the held-out mailbox split is what makes the accuracy claim mean anything. But the numbers that matter are the failures: 37 fabricated quotes caught by an automated check, a phase audit that failed 4.6% of its inputs, and a human reviewer who disagreed twice and was right about the bug both times. That is what verification costs on 45k documents — and the honest conclusion is that the pipeline is trustworthy because it publishes its rejection counts, not because a model wrote it.
+
+[`🔗 The Enron Brain`](https://www.thisandthat.chat/enron/) · [`🔗 Methodology and audit`](https://www.thisandthat.chat/enron/methodology.html)
+
+---
+
+## 27. CISA added a Collabora CODE Server RCE to KEV — and Nextcloud admins had been posting web-shell logs since September 10
+
+- **Velocity:** ▮▮ rising
+- **Source:** CISA KEV / NVD · KEV added 2026-10-23 · record 2026-10-14
+- **Tags:** `cve` `kev` `nextcloud` `rce` `exploited`
+
+**CVE-2026-110447** entered CISA's KEV catalog on **2026-10-23**. The record — published October 14, NVD status `Deferred`, zero NVD-authored metrics, **9.2 at CVSS 4.0 sourced to `cve@mitre.org`** — describes an OS command injection in `proxy.php` in **Collabora Online Built-in CODE Server (`richdocumentscode`) before 26.4.303**, a Nextcloud app, "as exploited in the wild in September and October 2026." The record is explicit about two things that usually get blurred: it is "a different vulnerability than CVE-2025-66208," and "the vulnerability is not present in standalone Collabora Online servers; only this deployment with CODE Server is affected."
+
+The exploitation is documented by the reporters themselves. Issue **#354** in `CollaboraOnline/richdocumentscode`, opened **2026-09-11** and titled "Security issue - Hack", is a hosting provider posting raw access logs from two servers on September 10 and 11: base64-encoded payloads smuggled into the URL path, hitting `/apps/richdocumentscode/proxy.php?status`, each decoding to a command that writes a PHP web shell (`shrf4645.php`, `shxa35d0.php`) and beacons `uname -a` to a `webhook.site` callback.
+
+**Why it matters:** the trigger condition is the detail to carry into an upgrade plan — the injection path is live **when the bundled CODE server is not running**, "e.g., the product was recently restarted," which is precisely the state a Nextcloud instance sits in after a restart or a crash. This is also a KEV entry whose severity number belongs to MITRE rather than NVD, so a policy that queues emergency patching only on NVD-analyzed 9.0+ records would have missed a vulnerability that was being exploited with a working web shell five weeks before the catalog noticed.
+
+[`🔗 CollaboraOnline/richdocumentscode issue #354`](https://github.com/CollaboraOnline/richdocumentscode/issues/354) · [`🔗 CISA KEV catalog`](https://www.cisa.gov/known-exploited-vulnerabilities-catalog) · [`🔗 NVD record`](https://nvd.nist.gov/vuln/detail/CVE-2026-110447)
+
+---
+
+## 28. Twelve WordPress themes and plugins got a 9.8 for the same PHP object injection on the same day — and the records are one template sentence
+
+- **Velocity:** ▮▮ rising
+- **Source:** NVD / Patchstack · 12 records published 2026-10-23 · NVD `Deferred`
+- **Tags:** `cve` `wordpress` `php-object-injection` `patchstack` `supply-chain`
+
+In a single publication window on **2026-10-23**, NVD gained **twelve records scored 9.8** with identical structure: CWE-502, "Deserialization of Untrusted Data … allows Object Injection," every one assigned by **`audit@patchstack.com`** and every one sitting at NVD status `Deferred` with **zero NVD-authored metrics**. Two theme vendors account for ten of them — **ThemeREX Group** (Save Life ≤1.2.14, ZenSoul ≤1.13, HotLock ≤1.3.9, Vagabonds ≤1.3.10, Little Birdies ≤1.3.16) and **axiomthemes** (Hallelujah ≤1.1.1, Holistic Center ≤1.2.6, Redy ≤1.3.5, Reprizo ≤1.0.8, Rhodos ≤1.3.3) — plus **AivahThemes** Hostme v2 ≤7.0 and the **Participants Database** plugin ≤2.7.8.5. An eleventh CWE-502 record in the same vendor family, CVE-2026-112852 (ThemeREX Helion), was scored **8.1**.
+
+**Why it matters:** the version ceiling is all these records actually tell you. Each description is a single template sentence naming the vendor, the slug, CWE-502 and "from n/a through <version>" — **none of them states the entry point, whether the unserialize call is reachable unauthenticated, or which gadget chain exists**, and a 9.8 default assumes the worst on all three. For an operator the actionable content is the list of twelve slugs and their ceilings; for a scanner, the caveat is that a Patchstack score is a third party's assessment on a `Deferred` record. Twelve 9.8s in one day across two theme houses also suggests one shared code pattern shipped into many themes — but that is an inference from the vendor names, not something any of the twelve records establishes.
+
+[`🔗 CVE-2026-112862 (Participants Database)`](https://nvd.nist.gov/vuln/detail/CVE-2026-112862) · [`🔗 CVE-2026-112846 (Save Life)`](https://nvd.nist.gov/vuln/detail/CVE-2026-112846)
+
+---
+
+## 29. PraisonAI's AgentOS is still unauthenticated — the record says a previous fix for the same surface didn't hold
+
+- **Velocity:** ▮ steady
+- **Source:** CVE Program (GitHub_M) · published 2026-10-23T13:17Z
+- **Tags:** `cve` `ai-agents` `authentication` `fastapi` `agent-framework`
+
+**CVE-2026-57116** is a **GitHub-assigned 9.8** (CWE-200, CWE-306, CWE-862), published 2026-10-23T13:17Z, NVD `Deferred` with no NVD-authored metric. It covers PraisonAI **4.2.1 to before 4.6.59**: the AgentOS FastAPI deployment surface "remains unauthenticated," and the chat route "directly calls `agent.chat(request.message)`." The record is blunt about the bar to clear — "No-auth and wrong-bearer requests both execute the deployed agent" — and about why it matters beyond metadata disclosure: "In any deployment where AgentOS wraps agents with tools, private context, memory, API integrations, or cost-bearing model calls, an unauthenticated reachable client can drive those agents."
+
+The sentence that makes this a different story from the usual missing-authz CVE is the next clause: the surface "**remains unauthenticated in current main and in releases after the published patched version for GHSA-pm96-6xpr-978x / CVE-2026-40151.**" An earlier advisory fixed this and the fix did not hold.
+
+**Why it matters:** an agent runtime with tools is a shell with a budget, and "wrong bearer token is accepted" is the failure mode that survives every gateway, WAF and reverse proxy in front of it — nothing upstream knows the request should have been rejected. The regression is the more useful lesson: for agent frameworks moving at this cadence, a CVE is not evidence the endpoint was closed, and the only check that counts is calling the route without credentials after you upgrade.
+
+[`🔗 GHSA-892r-p3jq-jp24`](https://github.com/MervinPraison/PraisonAI/security/advisories/GHSA-892r-p3jq-jp24) · [`🔗 NVD record`](https://nvd.nist.gov/vuln/detail/CVE-2026-57116)
+
+---
+
+## 30. AgenticSeek shipped `debug=True` on all interfaces — and the Werkzeug PIN is derivable, so the debugger is a pre-auth RCE
+
+- **Velocity:** ▮ steady
+- **Source:** VulnCheck / NVD · published 2026-10-23T12:18Z · fixed by 409840c
+- **Tags:** `cve` `ai-agents` `flask` `werkzeug` `rce`
+
+**CVE-2026-115727** covers **AgenticSeek before commit 409840c** — a 27.5k-star, GPL-3.0 self-hosted agent project that is still actively developed. The flaw is entirely in the startup file: `llm_server/app.py` "hardcodes Flask debug mode while binding to all interfaces." That combination hands the internet a Werkzeug interactive debugger, and "attackers who reach the server port and obtain the derivable Werkzeug debugger PIN can execute Python code and operating system commands with `llm_server` privileges." Scores: **9.2 at CVSS 4.0 and 8.1 at 3.1**, both `Secondary` and sourced to `disclosure@vulncheck.com`; NVD is `Deferred` with no metric of its own. CWE-489 (active debug code).
+
+The fix is a commit, not a release: **`409840c`**, via PR #558.
+
+**Why it matters:** two defaults, each individually defensible in development, compose into unauthenticated code execution — and the Werkzeug PIN is not a secret, it is derived from machine and module paths that a reachable service can leak. For the agent-framework ecosystem this is now a pattern rather than an accident: the same week brought PraisonAI's unauthenticated AgentOS, and both are frameworks whose selling point is that they run with broad local privileges. Because the patched state here is a **commit rather than a version**, anything pinned to a published release should be checked against the fix date rather than the tag.
+
+[`🔗 NVD record`](https://nvd.nist.gov/vuln/detail/CVE-2026-115727) · [`🔗 Fix commit 409840c`](https://github.com/Fosowl/agenticSeek/commit/409840c033851d861c5c83a91c05fd4a2a75a096) · [`🔗 VulnCheck advisory`](https://www.vulncheck.com/advisories/agenticseek-before-commit-409840c-rce-via-exposed-werkzeug-debugger-in-llm-server)
+
+---
+
+## 31. `HmacShaCryptor.Hash` never hashed: every gose JWE carried the MAC of the empty string, so one valid tag validated all of them
+
+- **Velocity:** ▮ steady
+- **Source:** GHSA / NVD · advisory 2026-08-31 · NVD record 2026-10-23
+- **Tags:** `cve` `cryptography` `jwe` `go` `integrity`
+
+**CVE-2026-89320** documents a one-line class of cryptographic failure in the Eclipse Keypont **gose** library: "`HmacShaCryptor.Hash` never hashed its input. For any input it returned `HMAC_K("")` — the MAC of the empty message under the key." Every AES-CBC-HMAC JWE the library produced or verified therefore carried "an authentication tag that is constant per key and independent of the message, removing ciphertext integrity entirely." The advisory states the consequence directly: "a tag observed on one JWE is valid for *every* other JWE under the same key. An attacker who has seen a single valid JWE can substitute arbitrary ciphertext and the integrity check still passes — **no knowledge of the key is required.**"
+
+Scope is narrow and stated: AES-CBC with HMAC only — `JweDirectEncryptorBlock`, `JweDirectDecryptorBlock`, via `JweHmacVerifierImpl`. "**AEAD/GCM modes are not affected.**" The version ranges are the awkward part: `github.com/ThalesGroup/gose` is listed as `>= 0.9.0, <= 0.13.0-rc1` with **patched `None`**, while `github.com/eclipse-keypont/gose` is `< 1.0.0-rc1` with `>= 1.0.0-rc1` patched — so the fix arrives under a new module path.
+
+**Why it matters:** this is the bug that test vectors miss, because a MAC over the empty message is a perfectly valid MAC — it verifies, it is deterministic, and it fails only when you check that two different messages produce different tags. The score is **8.8 at CVSS 4.0, `Secondary` and sourced to `emo@eclipse.org`**, on a record NVD holds at `Deferred`; the NVD record landed **53 days after the advisory**. And the migration is not a version bump: users on the `ThalesGroup` import path have no patched release at all, so the remediation is changing the import and rebuilding, which is the kind of fix that never makes it onto a patch-Tuesday spreadsheet.
+
+[`🔗 GHSA-h6w5-722x-2h3m`](https://github.com/eclipse-keypont/gose/security/advisories/GHSA-h6w5-722x-2h3m) · [`🔗 NVD record`](https://nvd.nist.gov/vuln/detail/CVE-2026-89320)
+
+---
+
+## 32. Okta Access Gateway's 9.1 is a privilege-boundary break: an admin console command runs as the appliance's service account
+
+- **Velocity:** ▮ steady
+- **Source:** Okta Trust / NVD · advisory 2026-10-22 · record 2026-10-23T04:18Z
+- **Tags:** `cve` `okta` `access-gateway` `command-injection` `iam`
+
+**CVE-2026-115547** covers Okta Access Gateway appliance versions **prior to 2026.10.2**. Okta's own advisory: "An input validation issue in the Okta Access Gateway (OAG) Admin Console allows the processing of specially formatted configuration values. An authenticated administrator can leverage this to execute system commands within the context of the OAG service account." The vector tells you where the weight sits — **`CVSS:3.1/AV:N/AC:L/PR:H/UI:N/S:C/C:H/I:H/A:H`**, 9.1, Okta-assigned (`psirt@okta.com`), NVD still at `Awaiting Analysis` with no metric of its own. CWE-94 and CWE-20. Remediation is an appliance upgrade to **2026.10.2 or greater**.
+
+**Why it matters:** `PR:H` normally caps a score well below 9, and the 9.1 here comes almost entirely from **`S:C`** — the change of scope, meaning the console escapes its own security authority into the underlying host. That is the right way to read it: this is not a pre-auth hole, it is a statement that admin access to OAG's web console is equivalent to a shell as the service account, which matters for anyone who has treated the console as a lower-privilege plane than the appliance. **The record's score is Okta's, not NVD's**, and the link between them is the advisory, not the database.
+
+[`🔗 Okta security advisory`](https://trust.okta.com/security-advisories/command-execution-via-admin-console-input-in-okta-access-gateway-cve-2026-115547) · [`🔗 NVD record`](https://nvd.nist.gov/vuln/detail/CVE-2026-115547)
+
+---
+
+## 33. Trail of Bits counted its own patches: 21 regressions in 130+ merged PRs, none of which broke a security protection
+
+- **Velocity:** ▮ steady
+- **Source:** Trail of Bits blog / Hacker News · 53+ pts · ~2.2d ago (~00:03 UTC+8 Oct 22)
+- **Tags:** `agents` `security-patching` `regression-testing` `open-source` `tooling`
+
+Trail of Bits shipped two Claude plugins — **`patching-bugs`**, which reproduces a reported bug and develops and tests a fix, and **`regression-hunt`**, which checks whether a change breaks previously working and supported behaviour — and then published the audit of its own work. From the Patch the Planet effort with OpenAI, the team "reviewed every patch that a Trail of Bits engineer authored and maintainers merged upstream. The review confirmed **21 regressions from over 130 PRs merged: 16 functional, one performance, and four build/test. None broke a security protection.**" The method was per-patch: an agent hunted for possible regressions, confirmed each with a PoC run before and after, then handed results to an engineer.
+
+The precision numbers are unflattering and published anyway: "The 21 confirmed regressions were identified among **58 candidates in a single run (~36% precision)**," and the review "was noisy" because "agents take many different approaches and reach different results," so each run generates more candidates to sort. In preliminary evaluations, `regression-hunt` "produces **25% fewer false-positive findings** than a baseline Codex agent prompted to 'review the PR for regressions.'"
+
+**Why it matters:** "none broke a security protection" is the sentence a maintainer deciding whether to accept an agent-authored patch actually needs, and almost nobody publishes it. The 36% precision is the cost side of the same ledger — two thirds of what the agent flags needs a human to dismiss — and the plugins' answer is to standardise both the patch format and the definition of a regression so runs become comparable, feeding failed tasks from one version into the next version's benchmark. Read alongside this week's Patch the Planet coverage, the picture is of a pipeline whose throughput claim is now being audited by the same organisation that benefits from it.
+
+[`🔗 Trail of Bits`](https://blog.trailofbits.com/2026/10/21/your-ai-agent-fixed-the-bug-but-what-else-did-it-change/) · [`🔗 HN discussion (50183253)`](https://news.ycombinator.com/item?id=50183253)
+
+---
+
+## 34. VoxCPM2 trends at 40.3k stars: a 2B tokenizer-free TTS in 30 languages at 48 kHz — last commit 16 days ago
+
+- **Velocity:** ▮ steady
+- **Source:** GitHub Trending (daily) / OpenBMB · 40.3k★ · 4,582 forks
+- **Tags:** `tts` `open-weights` `speech` `apache-2.0` `multilingual`
+
+`OpenBMB/VoxCPM` is **VoxCPM2**, a tokenizer-free text-to-speech system that "directly generates continuous speech representations via an end-to-end diffusion autoregressive architecture, bypassing discrete tokenization." The spec sheet is unusually complete for a trending model repo: **2B parameters**, "trained on **over 2 million hours** of multilingual speech data," **30 languages** plus nine Chinese dialects (四川话, 粤语, 吴语, 东北话, 河南话, 陕西话, 山东话, 天津话, 闽南话), **48 kHz** output produced directly from 16 kHz reference audio via an asymmetric AudioVAE V2 with built-in super-resolution, and a real-time factor "as low as ~0.3 on NVIDIA RTX 4090," dropping to ~0.13 with Nano-vLLM or vLLM-Omni. It is built on a MiniCPM-4 backbone, and code and weights are **Apache-2.0, "free for commercial use."**
+
+The repo reached **40.3k stars and 4,582 forks** with **153 open issues**, but its last push was **2026-10-08** — sixteen days before it trended, and the technical report it links (arXiv 2606.06928) dates to June.
+
+**Why it matters:** the architectural claim is that discrete audio tokens are an unnecessary bottleneck, and 2M hours of training data plus a 0.3 RTF on a consumer GPU is a concrete way to test it. The licensing is the other half: Apache-2.0 with an explicit commercial-use grant puts this in a different category from the "open weights, community licence" releases that have clustered this month — MiniMax M3.1 Flash's `minimax-community` terms, for instance. But note what the trending signal is and is not: this is attention arriving at a repo that has not moved in over two weeks, so read the model card and the report, and treat the star velocity as demand for the category rather than evidence the project shipped something new this week.
+
+[`🔗 OpenBMB/VoxCPM`](https://github.com/OpenBMB/VoxCPM) · [`🔗 VoxCPM2 on Hugging Face`](https://huggingface.co/openbmb/VoxCPM2)
+
+---
+
+## 35. Astral's uv and ty now share a dependency model — each PEP 723 script gets checked against its own environment
+
+- **Velocity:** ▮ steady
+- **Source:** Astral blog / Hacker News · 55+ pts · ~3.3d ago (~05:30 UTC+8 Oct 21)
+- **Tags:** `python` `uv` `ty` `type-checking` `tooling`
+
+Astral shipped an **experimental uv–ty integration** built on a simple premise: "uv understands your Python project's environment and dependencies, while ty understands your code." The concrete payoff is for **PEP 723 inline-metadata scripts**. ty now "uses inline metadata to discover scripts throughout your project and leverages uv to prepare an environment for each script," so a script is type-checked "against its own dependency declarations, **even if those dependencies or Python requirements differ from the project's**." The editor story is the reason this is more than a CLI convenience: when enabled, "ty automatically invokes uv to prepare the script's environment in the background," then serves completions, hover and go-to-definition from it. There is also a unified diagnostic interface and a `uv check` that syncs the project and type-checks it in one command — "It 'just works.'"
+
+**Why it matters:** single-file scripts carrying their own pinned dependencies have become the default shape for agent-written Python, and a checker that evaluates them in the project's environment produces confident nonsense — the imports resolve, the types do not. Per-script environments fix that at the cost of N environments and N resolutions, which is exactly the kind of trade the integration exists to make invisible. Two limits belong with the announcement: it is **experimental**, and "the ty binary is installed separately on first invocation," so a locked-down CI that expects only `uv` to appear will need to allow a second binary.
+
+[`🔗 Astral — Bringing uv and ty together`](https://astral.sh/blog/uv-ty-integration) · [`🔗 HN discussion (50172962)`](https://news.ycombinator.com/item?id=50172962)
+
+---
+
+## 36. ziwei-doushu: 674,976 charts × 13 dimensions = 8.77M interpretation segments, 56.6 GB, MIT — and a README that states its limits
+
+- **Velocity:** ▮ steady
+- **Source:** GitHub Trending (daily) / Renhuai123 · 6,975★ · 1,427 forks
+- **Tags:** `chinese-oss` `dataset` `typescript` `traditional-culture` `knowledge-base`
+
+`Renhuai123/ziwei-doushu` is an open-source 紫微斗数 (Purple Star Astrology) charting engine in TypeScript, built on 倪海厦's 《天纪》 teaching system, with the charting algorithm, the 四化 transformation system, a pattern (格局) knowledge base and classical source texts. The engineering story is the dataset: version **v4.0**, published **2026-10-15**, contains **674,976 charts × 13 dimensions = 8,774,688 interpretation segments**, about **20.4 billion characters**, **56.6 GB decompressed**, covering real dates from **1950 to 2026** at roughly 30,000 characters per chart. Against v3.0 (518,400 charts, 6,739,200 segments, 33.1 GB) that is **+30% charts and +71% in size**. Code is MIT; the dataset is **CC BY 4.0**, separately licensed through a `DATASET-LICENSE` file. The repo has **6,975 stars, 1,427 forks and only 6 open issues**.
+
+The README opens with a rationale rather than a pitch — "算法是公开的传统智慧，不应该被锁在围墙里" (the algorithm is public traditional knowledge and should not be locked behind walls) — and then states a limitation unasked: 紫微斗数 "在六亲（父母、兄弟、子女等）判断上存在一定局限," quoting the teacher's own remark that "斗数批六亲本来就比较差一点," with the same note repeated for the three corresponding dimensions on the companion site.
+
+**Why it matters:** as an artifact this is a very large, cleanly licensed, dimensionally labelled Chinese corpus — the same shape as last week's K–12 knowledge graph but roughly two orders of magnitude larger, and with the licence split (MIT code, CC BY 4.0 data) done properly. The README's willingness to print its own weakest dimension is what separates it from the genre's usual output. What none of that establishes is whether the labels are *true*: 8.77 million interpretations is a measure of generation, not of validity, and the honest way to hold both facts is that a serious dataset of an unscientific system is still a serious dataset — and still not evidence for the system.
+
+[`🔗 Renhuai123/ziwei-doushu`](https://github.com/Renhuai123/ziwei-doushu) · [`🔗 English README`](https://github.com/Renhuai123/ziwei-doushu/blob/main/README.en.md)
+
+---
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-10-23T20:16:06Z |
-| Items | 19 |
-| Sources tracked | 22 (Hacker News, GitHub Trending, NVD, CISA KEV, CVE Program, vendor blogs, arXiv-adjacent research) |
+| Generated | 2026-10-24T04:24:51Z |
+| Items | 36 |
+| Sources tracked | 30 (Hacker News, GitHub Trending, NVD, CISA KEV, CVE Program, GitHub Advisory Database, Science, arXiv, vendor blogs, researcher advisories) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (3x daily) |
 | Ranking | Velocity-weighted (recency × engagement acceleration × source authority) |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |
