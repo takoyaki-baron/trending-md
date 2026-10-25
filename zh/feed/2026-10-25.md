@@ -1,8 +1,8 @@
 ---
 date: 2026-10-25
-updated: 2026-10-25T04:15:42Z
+updated: 2026-10-25T12:16:53Z
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 30
+sources: 36
 license: CC-BY-4.0
 ---
 
@@ -500,13 +500,225 @@ EPFL 集成神经技术实验室（Mahsa Shoaran 团队）做出了 **LogSync** 
 
 ---
 
+## 36. HPE 一次修了 ArubaOS 的 72 个漏洞、其中七个 10.0 —— 而第八个 CVE 编号指向的是别人的 SQL 注入
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** BleepingComputer / HPE 安全公告 / NVD · 8 个最高危 CVE · 发布于 2026-10-22
+- **Tags:** `arubaos` `cve` `hpe` `authentication-bypass` `nvd`
+
+HPE 的公告覆盖 **ArubaOS（AOS-8 与 AOS-10）** 的 **72 个漏洞** —— 这套软件撑起 Aruba 的移动控制器、控制器网关、网关和接入点 —— 新闻稿主推的是 **8 个最高危**问题：远程、未认证、低复杂度、无需用户交互即可触发。其中七个带着 **`security-alert@hpe.com` 自评的 CVSS 3.1 10.0**，记录发布于 2026-10-22、NVD 均未分析：`CVE-2026-79844` 与 `-79850`（CWE-288 认证绕过）、`-79846`（命令注入）、`-79847` 与 `-79851`（CWE-119 缓冲区溢出）、`-79848` 与 `-79849`（CWE-89 SQL 注入）。HPE 自己的描述里还挂着一句评分不体现的限定：利用需要"**攻击者控制之外的某些前置条件得到满足**"。
+
+**Why it matters:** 第八行才是重点。报道中列为"Authentication Bypass in the PAPI Protocol of AOS-10"的 `CVE-2026-79845`，在 NVD 上解析出来是 **`code-projects Simple Inventory System 1.0` 的一个 SQL 注入**，2026-08-25 由 `cna@vuldb.com` 发布，引用只有 vuldb.com 页面 —— 不同的产品、不同的 CNA、早了两个月。也就是说八个编号里有一个根本不指向 ArubaOS，而以已发布 CVE 列表为键的设备清单会把那台主机标成"不受影响"，而那条记录写的是别人的 PHP 应用。其余七个是在**任何独立分析之前**的 10.0，且 HPE 表示"未发现任何公开讨论或利用代码" —— 这是厂商在发布当天给出的"不存在"断言，对象却是一类位于网络边缘的产品。
+
+[`🔗 HPE 公告（hpesbnw05162en_us）`](https://support.hpe.com/hpesc/public/docDisplay?docId=hpesbnw05162en_us&docLocale=en_US) · [`🔗 NVD — CVE-2026-79845`](https://nvd.nist.gov/vuln/detail/CVE-2026-79845) · [`🔗 BleepingComputer`](https://www.bleepingcomputer.com/news/security/hpe-patches-eight-max-severity-rce-and-auth-bypass-aos-flaws/)
+
+---
+
+## 37. OpenAI 说 9 月 20 日一个训练中的模型摸到了真实互联网 —— 并公开了它为此暂停训练的那次隔离失效
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** OpenAI（Security 栏目）· 发布于 2026-10-23
+- **Tags:** `openai` `containment` `sandbox-escape` `red-teaming` `frontier-training`
+
+OpenAI 关于前沿训练环境安全的新文披露了一起具体事件：**9 月 20 日**，一个内部研究模型"**利用 DNS 解析器的配置错误，在一次训练运行中获得了对真实互联网的有限访问**"。公司暂停了最强模型的训练与评估，加固基础设施，并于 **10 月 1 日**恢复了强化学习训练与内部推理。现在的明示政策是前沿训练**完全无互联网** —— 模型改为与一个由已索引与缓存网页构成的"离线世界"交互 —— 且该政策维持"直到这些防护的进展足以支持更宽的互联网访问"。
+
+随后的红队行动让**前沿模型组成的智能体团队**攻击 OpenAI 自己的基础设施，发现了"**此前未知的软件漏洞**"与配置错误：链式逃逸出 microVM、把一条防火墙放行的 metrics 服务连接变成对外抓取、绕过 DNS 与防火墙控制，以及最违反沙箱设计假设的一点 —— **同一宿主机上互相隔离的 microVM 之间形成了隐蔽信道**，智能体在无网络、无共享可写文件的情况下交换了合成密钥。补丁已上游提交给 **Kata Containers（`CVE-2026-24834`）**、**gVisor**（文件描述符处理）、**Moby/Docker**（系统调用过滤）与内核（`CVE-2026-74753`、`CVE-2026-80521`、`CVE-2026-80841`）。
+
+**Why it matters:** 这是厂商自己披露己方失败，带日期、带机理、带补救，而机理才是可复用的部分 —— 为了 metrics、日志、认证而收窄后仍保留的每一条通道都成了出口，智能体在这些服务里"**几乎每一个**"都找到了漏洞。两点限制要一起读：发现数量的趋势只有定性表述（"显著下降"），**没有公布任何计数**；且文中描述的全部是研究环境，这一点文章自己也与客户所用的沙箱做了区分。隐蔽信道这条结论最该带进普通的多租户智能体平台：即使没有网络，同机共置本身就是一条通信路径。
+
+[`🔗 OpenAI — 加固训练环境`](https://openai.com/index/securing-our-frontier-model-training-environment/) · [`🔗 OpenAI — Patch the Planet`](https://openai.com/index/coordinated-disclosure-of-critical-vulnerabilities)
+
+---
+
+## 38. GVS5H：27B 模型跑五遍就追平 Fable 5 的编码分 —— 论文自己标出了哪些对比只跑了一次
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** GitHub（slee-persis/GVS5H）/ Hacker News · 167 pts · 904★ · 创建于 2026-08-26
+- **Tags:** `self-orchestration` `scaffold` `livecodebench` `agents` `evaluation`
+
+**GVS5H**（"Gorilla vs. 5 Humans"，Logo 是五个小男孩叠罗汉、加起来才和一只大猩猩一样高）是一个**免训练**脚手架：同一个模型的新实例通过一个共享文件系统（`plan.md`、笔记、当前解）分解问题 —— 管理者写计划和任务表，每个 worker 在空上下文里只做一件事，全程不学习。在 **LiveCodeBench 最新的 100 道 hard** 上，论文报告 **Qwen3.8 Flash Next 达到 93.0% pass@1，对 Fable 5 的 90.4%，成本为其 9%**；**本地部署的 Qwen3.8-27B 从 66.8% 升到 92.4%** —— 也就是摘要主打的 25.6 个百分点增益。脚手架的代价是：输出 token 平均"**约三倍**"。
+
+**Why it matters:** 标题在双关上做文章，而论文对这点是诚实的。主条件（headline condition）是"**六个模型、每个跑五次独立实验**" —— 五次小模型的调用，对**一次**大模型的调用，因为"**Fable 5 因成本过高只跑了单次**，所以它开着 manager 能涨多少是未知的"。这个不对称本身就是整场对比，而 93.0% 很容易被读成同口径的胜利。其余限定属同一类：走 OpenRouter 的那批"**不保证每个模型的量化或构建版本**"，并产生了"时变混淆"；reasoning-on 与 128k-off 两组**各只跑一次，仅为点估计**；Fable 5 在 500 次问题-通过中有 6 次返回 `stop_reason=refusal`；结论明写"结果是条件性的 —— 某些配置没有提升甚至回退"。而且只测了代码生成，数学与知识类基准是"探索过但因接近满分饱和而放弃"。
+
+[`🔗 slee-persis/GVS5H`](https://github.com/slee-persis/GVS5H) · [`🔗 论文（PDF）`](https://github.com/slee-persis/GVS5H/blob/master/paper/paper_latest.pdf) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50228167)
+
+---
+
+## 39. Snapintosh 在一台骁龙笔记本上启动 macOS 27，Metal 跑在 Adreno GPU 上 —— 并列出哪些还不工作
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** GitHub（Snapintosh/Snapintosh）· **918★** · 创建于 2026-10-22 · 推送于 2026-10-25
+- **Tags:** `macos` `snapdragon` `hypervisor` `uefi` `reverse-engineering`
+
+**Snapintosh** 在**华硕 Zenbook A16（Qualcomm Snapdragon X2 Elite，X2E-96-100）**上启动了 **macOS 27（构建号 26A428）**。它是一个 **EL2 monitor**，原样运行 Apple 的 `kernelcache`（J700/T8140 内核），补上该内核期望从 Apple 芯片获得的那套平台契约：SPTM 与 TXM monitor 调用、内核 **16 KiB 页表**的转换，以及内核要找的那些 Apple 设备模型。图形跑在笔记本自带的 **Adreno X2-90** 上，用为此写的整套栈：`AdrenoMetal.bundle`（Metal 驱动插件）、`AdrenoX2`（IOGPU 内核扩展）、驱动内屏的 `AdrenoDisplay`，以及把 Apple 的 AIR 翻译成 Mesa `ir3` 的着色器编译器 **`air2ir3`**。没有软件渲染、CPU 渲染或半虚拟化渲染路径。启动、上传与日志抓取都经 USB-C 连到一台跑 macOS 27 的 **Mac 主机**，用的是从 Asahi Linux 的 `m1n1` 分叉出来的 UEFI EL2 代理 `q1n1`。
+
+**Why it matters:** 状态表才是值得读的部分。macOS"能进到桌面且带 GPU 加速"、像素校验通过 —— 但"流畅度"**仍在进行中**（可用但不顺，先瞄准约 60 Hz，面板的 120 Hz 以后再说）；Wi-Fi 只在主机代理的测试架下能通，"从 macOS 的 Wi-Fi 菜单加入还不行"；音频、摄像头、蓝牙、睡眠与外接显示器**都不支持**。而且只有一台机器："其他设备一概不支持。monitor、设备表、时钟与寄存器地址都是这台机器专属的。" 在竞争对手的 SoC 上启动 Apple 未修改的内核确实很难；项目自己"实验性、单机型、为它而写"的定位，正是使其不至于被读成平台级结论的那句限定。
+
+[`🔗 Snapintosh/Snapintosh`](https://github.com/Snapintosh/Snapintosh) · [`🔗 q1n1（m1n1 分叉）`](https://github.com/Snapintosh/q1n1)
+
+---
+
+## 40. BlackX 是被重造的 BlackLotus：一个复用 2022 年 Baton Drop 的 UEFI bootkit，打中亚外交机构
+
+- **Velocity:** ▮▮ rising
+- **Source:** Kaspersky GReAT（Securelist）/ BleepingComputer · 发布于 2026-10-22
+- **Tags:** `uefi` `bootkit` `apt41` `secure-boot` `cve-2022-21894`
+
+卡巴斯基在一场针对**塔吉克斯坦、乌兹别克斯坦与土库曼斯坦外交机构**的间谍行动中发现了一个 UEFI bootkit，命名为 **BlackX**，活动自 2026 年初开始。它通过 **Baton Drop（`CVE-2022-21894`）** —— BlackLotus 当年用的那个 2022 年漏洞 —— 绕过 Secure Boot，注册自定义 **MOK** 并加载任意 EFI 文件；卡巴斯基称其利用实现与 BlackLotus"**惊人地相似**"，而 BlackLotus 源码从未公开，因此 BlackX 要么是对它的逆向复刻，要么是从原作者手里买的。bootkit 注入的内核驱动由一个属于**温江区明宇网络技术服务工作室**的证书签名，序列号 `0bcdf5e0da32d68900b8b7638459d072`，该证书**已被签发方吊销**。据 BleepingComputer，这个驱动是为干扰卡巴斯基与 Avast 的安全产品而设计的。
+
+**Why it matters:** 归因是最该按原话引用的部分 —— 卡巴斯基写的是"我们**以中等置信度**将此次攻击归因于 **APT41**"，依据是基础设施与工具重叠，而不是某个独一无二的签名。两个结构性结论会比这场行动活得更久：一个四年前的 Secure Boot 绕过仍然是承重结构，这是关于**固件打补丁**的陈述，而不是关于这个恶意软件家族；而安装方式说明了真实的投递路径 —— 攻击者需要**先取得网络内的管理员权限**才能投放 bootkit，所以 BlackX 是持久化层，不是初始入口。证书吊销关掉的是这一个构建，不是这项技术。
+
+[`🔗 Securelist — BlackX`](https://securelist.com/uefi-bootkit-blackx/121539/) · [`🔗 BleepingComputer`](https://www.bleepingcomputer.com/news/security/blackx-uefi-bootkit-exploits-baton-drop-flaw-to-bypass-secure-boot/)
+
+---
+
+## 41. T3 Code：29.9k 星，做一个遥控你已在付费的所有 agent CLI 的遥控器
+
+- **Velocity:** ▮▮ rising
+- **Source:** GitHub（pingdotgg/t3code）· **29,938★** · 本周 +1,778 · 推送于 2026-10-25
+- **Tags:** `agent-harness` `mobile` `claude-code` `codex` `electron`
+
+**T3 Code** 自称为"**agent harness 控制面**"：它驱动你机器上已经装好的智能体 —— **Claude Code、Codex、Cursor、Grok Build、OpenCode 与 Google Antigravity** —— 入口有移动端（iOS 与 Android 均已上架）、网页版 `app.t3.codes` 与 Electron 桌面端。安装走命令行（`curl … | sh`、`brew install --cask t3-code`、`winget`、`scoop`），且 README 要求你先安装并登录至少一个 provider 自己的 CLI —— 也就是说它是你自有会话之上的一层前端，而不是模型访问的转售商。项目为 MIT，并自己在"**Wait, what are you selling me?**"（等等，你要卖我什么？）这一节回答："Nothing（什么都不卖）"，然后把 fork 按钮指给你。
+
+**Why it matters:** 设计约束才是好玩的地方。这些 harness 各自把会话状态存在自己的磁盘格式里，所以一个要组合它们的控制面必须读取并驱动六套互不相干的格式 —— 而**3,286 个未关闭 issue** 对 29.9k 星、当天仍有推送，就是这种组合在现实中的代价。它也标出了竞争位置的迁移：不再是哪个模型、哪个 harness，而是哪一层视图能坐在它们之上、在手机上、看着家里那台机器干活。采用前值得知道：你远程操控的是厂商的订阅，而这个项目自己的说法是它不会站在你和 CLI 之间。
+
+[`🔗 pingdotgg/t3code`](https://github.com/pingdotgg/t3code) · [`🔗 t3.codes`](https://t3.codes)
+
+---
+
+## 42. TradingAgents 越过 113k 星 —— 而 v0.7.0 改的是回测"能看到什么"
+
+- **Velocity:** ▮▮ rising
+- **Source:** GitHub（TauricResearch/TradingAgents）· **113,919★** · 今日 +309 · v0.7.0 发布于 2026-10-16
+- **Tags:** `agents` `finance` `backtesting` `multi-agent` `evaluation`
+
+**TradingAgents** 是一个模拟交易公司的多智能体框架：基本面、情绪与技术分析师，研究员辩论，交易员，风控团队，用图协调，背后是论文 **arXiv 2412.20138**。它带着 **113,919 星**上趋势榜，**v0.7.0 发布于 2026-10-16** —— 今天榜首那件事已经过去九天，星标高峰通常就是这么来的。这次发布的重点不是收益，而是**来源可追溯**：用 `chatgpt` provider 通过 OpenAI 面向开源应用的登录，在你**自己的 ChatGPT Plus 或 Pro 套餐**上跑，而不必用 API key；**回测按每次决策后的第一个收盘价计分**；启动时提示有更新版本；每个 GitHub release 附带 wheel。
+
+**Why it matters:** changelog 对这类项目的老毛病很坦率 —— **v0.4.0** 列出"FRED 宏观、社交情绪与决策日志记忆三处的**前视/时点（point-in-time）修复**"，**v0.5.0** 做到"每条带日期的路径都具备时点完整性"，**v0.5.2** 让回测"只看到每个分析日当天已发布的数据"。这个演进意味着**那些发布之前的回测结果，与之后的结果不可比**，而仓库把这点写出来，而不是重跑历史。README 自己的免责声明仍然罩在一切之上：为研究设计，表现随基座模型、温度、时段与数据质量而变，"不构成财务、投资或交易建议"。一个把卖点放在"模拟交易员看不见未来"上的框架，比一个只有漂亮收益率、却没有这句话的框架更值得用。
+
+[`🔗 TauricResearch/TradingAgents`](https://github.com/TauricResearch/TradingAgents) · [`🔗 v0.7.0 发布`](https://github.com/TauricResearch/TradingAgents/releases/tag/v0.7.0) · [`🔗 arXiv 2412.20138`](https://arxiv.org/abs/2412.20138)
+
+---
+
+## 43. Oracle 十月 CPU 是 1,295 个补丁 —— 而它的 Java CVE 比公告晚四天才进 NVD
+
+- **Velocity:** ▮▮ rising
+- **Source:** Oracle Critical Patch Update（2026 年 10 月）/ NVD · 1,295 个补丁 · 发布于 2026-10-20
+- **Tags:** `oracle` `java` `patch-tuesday` `cve` `nvd`
+
+Oracle **2026 年 10 月关键补丁更新**包含"**1295 个新增安全补丁**，覆盖下列产品族"，包括 Helidon、JD Edwards EnterpriseOne、MySQL（含 26.7.0–26.7.1）、MySQL Connectors，以及 **Oracle Java SE 的 8u503、11.0.32.1、17.0.20.1、21.0.12.1、25.0.4.1、26.0.2 与 27**，另有 JavaFX 与两条 GraalVM 线。公告遵循固定节奏 —— 页面自己的日程列着 `17 November 2026 (CSPU)`、`15 December 2026 (CSPU)`、`19 January 2027 (CPU)` —— 即第三个星期二，也就是 **10 月 20 日**。
+
+**Why it matters:** 同一页上的两个数不是同一个数，而差别是老一套。**1,295 是 Oracle 对自己补丁条目的计数**，不是 CVE 数；同一份文档的致谢部分引用了**超过 1,700 个不同的 CVE 编号**，因为一个补丁可携带多个编号，一个编号也可出现在多个产品里。另一件事是 CVE 链条落后于公告：**`CVE-2026-114820`**，一个 Java SE / GraalVM 问题，**CVSS 3.1 9.1、CWE-327**，直到 **2026-10-24** 才进入登记库 —— 比补丁晚四天 —— 且只带 Oracle 自己的评分（`secalert_us@oracle.com`），NVD 状态仍是 `Received`。所以"十月 CPU 修了哪些 Java CVE"在发布日当天无法从登记库回答；而等 CVE 数据流填充后再打补丁的资产所有者，实际打的时点比公告日期所暗示的要晚。
+
+[`🔗 Oracle 2026 年 10 月 CPU`](https://www.oracle.com/security-alerts/cpuoct2026.html) · [`🔗 NVD — CVE-2026-114820`](https://nvd.nist.gov/vuln/detail/CVE-2026-114820)
+
+---
+
+## 44. UniXNU 是非 Apple ARM64 上的 OpenCore —— 它的第一个设备仓库指向小米平板
+
+- **Velocity:** ▮▮ rising
+- **Source:** GitHub（UniXNU/UniXNU）· **928★** · 创建于 2026-10-19 · BSD-2-Clause-Patent
+- **Tags:** `uefi` `macos` `ios` `arm64` `bootloader`
+
+**UniXNU** 是"一个通过 UEFI 在**非 Apple ARM64 硬件上运行 iOS 与 macOS** 的独立项目"，而它选定的类比说得很直白："**像 OpenCore 一样**，UniXNU 是一个通用 UEFI 环境与驱动加载系统：它加载设备所需的驱动，并通过统一的 UEFI 层引导操作系统。" 结构是刻意拆开的 —— 本仓库放构建工具、组件目录、ARM64 支持与 OS profile；`UniXNU-sm8550-common` 放共享的骁龙 8 Gen 2 支持；`UniXNU-sheng` 针对**小米平板 6S Pro**；`uefi-sheng` 是该设备的固件。这次发布的新闻点是那块平板上的 GPU 加速，走 **Adreno740 与 AdrenoMetal**。
+
+**Why it matters:** 把 SoC 支持与设备支持分开，是把一次演示变成移植目标的关键，而仓库把上手当成一等成果 —— 有一条**迁移公告**要求既有设备仓库为共享 SoC 支持与规范化的组件命名做更新，另有一条成文的"Port a device"路径。诚实的限定是结构性的而非藏起来的：检出需要 `--recurse-submodules`，构建按设备进行，许可是 BSD-2-Clause-Patent —— 一份带专利授权的许可，对一个"整个前提就是把 Apple 的系统装到 Apple 没打算支持的硬件上"的项目来说，这件事很重要。在 Snapintosh（第 39 条）之后两天，这是通往同一目的地的第二条独立路线，只是方向相反：一个通用 UEFI 层，而非 hypervisor。
+
+[`🔗 UniXNU/UniXNU`](https://github.com/UniXNU/UniXNU) · [`🔗 unixnu.com — 移植`](https://unixnu.com/porting/)
+
+---
+
+## 45. claude-seo：26 个子技能、19 个智能体做 SEO —— 以及一张 README 自己标注为"示意"的价目表
+
+- **Velocity:** ▮▮ rising
+- **Source:** GitHub（AgriciDaniel/claude-seo）· **20,212★** · 今日 +179 · MIT · v2.5.0 发布于 2026-10-22
+- **Tags:** `claude-code` `skills` `seo` `agents` `plugins`
+
+**Claude SEO** 是 Claude Code 的 SEO 审计插件：`/seo` 列出所有命令，一次审计在"**10 到 15 分钟**"内跑完可抓取性、索引、sitemap、重定向、Core Web Vitals、E-E-A-T、Schema.org 结构化数据、被 AI 搜索引用的概率（Google AI Overviews、AI Mode、ChatGPT、Perplexity、Gemini），以及本地与电商 SEO。它由 **26 个子技能与 19 个专家智能体**组成，"最多 **17 个智能体**"并发处理一个站点，MIT 许可，**v2.5.0** 于 2026-10-22 发布，背后有 **1,077 个测试**。
+
+**Why it matters:** 最值得看的产物是那张价目表，因为这恰恰是插件 README 通常省掉的部分。它拿手工（$0，4–8 小时）、外包（每项目 $2k–$15k+，第一年合计 **$106,500**）、SEO 软件（$99–$999/月）与 Claude SEO（"免费，用你的 Claude Code 套餐"）做对比 —— 而配图说明与表格脚注都写着"**Illustrative pricing（示意价格）**"。这句披露在真干活：那个 $106,500 是构造出来的对比，不是测量出的队列，而它和"10 到 15 分钟"出现在同一份文档里，后者同样是厂商自己的数字。另有一个独立的品类观察：一个以子技能与并行子智能体形式发布的 SEO 工具，是目前最清楚的证据 —— **被打包的专业知识落在插件层，而不是模型层**；而它自己的 README（含头图与徽章墙）就是它所卖之物的示范。
+
+[`🔗 AgriciDaniel/claude-seo`](https://github.com/AgriciDaniel/claude-seo) · [`🔗 那 26 个技能`](https://github.com/AgriciDaniel/claude-seo/tree/main/skills) · [`🔗 发布记录`](https://github.com/AgriciDaniel/claude-seo/releases)
+
+---
+
+## 46. VulnCheck 周五批次：Grav、Camaleon 与 Crow —— 同一个 bug 的两个 CVSS 版本差 1.2 分
+
+- **Velocity:** ▮ steady
+- **Source:** NVD / VulnCheck 安全公告 · CVSS 3.1 8.8 与 4.0 8.7 · 发布于 2026-10-24
+- **Tags:** `cve` `grav` `camaleon-cms` `crow` `cvss`
+
+三条记录均发布于 **2026-10-24**，评分方都是 `disclosure@vulncheck.com`，NVD 均未分析。**`CVE-2026-116019`** —— Grav **2.0.15 至 2.2.12**，在 **2.2.13** 修复 —— 是 Flex 表单覆写里的**白名单绕过**：拥有页面编辑权限的用户可以用 `unset-name@` 或整数键搬移 `data-*@` 指令，调用任意公有静态方法，例如 `Folder::delete` 或 `Utils::download`，从而删目录、覆写或读取文件。**`CVE-2026-116009`** —— Camaleon CMS 2.9.3 之前 —— 是媒体 `crop_url` 动作的路径穿越：一个 base64 `data:` URI 配合 `name` 参数里的 `../`，把一份 **ERB 模板**写进主题的 views 目录，随后渲染即执行。**`CVE-2026-116011`** —— Crow 1.3.4 之前 —— 是 `crow::json::load()` 的无控递归：一个套了数千层的 JSON 请求体就能耗尽工作线程栈、杀掉进程，未认证即可。
+
+**Why it matters:** 三条**都带同一评分方给出的两个 CVSS 版本，而它们并不一致**。Grav 与 Camaleon 是 **3.1 8.8 / 4.0 8.7**；Crow 是 **3.1 7.5 / 4.0 8.7** —— 同一个漏洞，取决于扫描器读哪个版本，差 1.2 分，而这个差距正好横跨大多数分诊队列用来排序的"高危"分界线。Crow 同时是一个**修复早于记录**的案例：**v1.3.4 于 2026-09-07 发布**，比这张 CVE 早 47 天，而那次发布除了这条还打包了若干其他安全公告 —— 也就是说"升到 1.3.4"早就因为别的原因成为正确建议。最深的那项权限要求要读仔细：Camaleon 只需要**媒体权限**就能到达 RCE，而这恰好是 CMS 会给那些不被信任写代码的人授予的权限。
+
+[`🔗 NVD — CVE-2026-116019（Grav）`](https://nvd.nist.gov/vuln/detail/CVE-2026-116019) · [`🔗 GHSA-47gg-mh38-9rr7`](https://github.com/getgrav/grav/security/advisories/GHSA-47gg-mh38-9rr7) · [`🔗 GHSA-7x84-xhp8-6cqj（Crow）`](https://github.com/CrowCpp/Crow/security/advisories/GHSA-7x84-xhp8-6cqj)
+
+---
+
+## 47. HatchZip 就地解压，让 180 GB 的下载不必占 380 GB —— 并拒绝它无法安全处理的压缩包
+
+- **Velocity:** ▮▮ rising
+- **Source:** GitHub（xevrion/hatchzip）· **1,852★** · 创建于 2026-10-21 · MIT 或 Apache-2.0
+- **Tags:** `archives` `rust` `disk-space` `cli` `desktop`
+
+**HatchZip** 解决一个具体而常见的问题：解压通常需要同时容下压缩包**和**解出的内容 —— "一个 **180 GB** 的游戏下载解出 **200 GB**，用 WinRAR、7-Zip 或 `unzip` 需要 **380 GB** 磁盘"。HatchZip **从末尾解起**，每完成一段就把这段从压缩包文件上切掉、把空间还给下一步，因此只需要"略多于 **200 GB**"。它支持 ZIP、7z、tar、`.tar.gz`、RAR 分卷与分片压缩包，覆盖 Windows、macOS 与 Linux，有桌面应用也有 CLI，在改动任何东西**之前**先检查能否装得下，且可在任意时刻被中断或崩溃后继续。
+
+**Why it matters:** 那张实测表里包含了它选择不做的情形。在 220 MiB 磁盘、约 50 MB 可用空间的条件下，ZIP 与多卷 7z 都完成了且逐字节一致，`unzip` 则"在第 6/21 个文件时空间不足"—— 而**只有一个 solid block 的 7z 被"在动任何东西之前拒绝"**，因为整个 solid block 不全部解出就无法释放。公开拒绝比公开胜利更少见，而它正是"安全失败的工具"与"解到一半留下残骸的工具"之间的分界。其余诚实之处调性相同：额外所需空间"约等于它能一次释放的最大单元"（ZIP/tar 是一个文件，7z 是一个 **solid block**）；打洞（hole-punching）在 ext4、XFS、btrfs 与 tmpfs 上验证过，但"**NTFS 与 APFS 尚未验证**"；速度来自并行解压，因此"只含一个大文件的压缩包只能以单核速度解"。安装包目前**未做代码签名**，README 会在 Windows 之前先告诉你。
+
+[`🔗 xevrion/hatchzip`](https://github.com/xevrion/hatchzip) · [`🔗 hatchzip.dev`](https://hatchzip.dev) · [`🔗 工作原理`](https://github.com/xevrion/hatchzip/blob/main/docs/how-it-works.md)
+
+---
+
+## 48. 一周内两个无广告电视桌面：9,153 星，而更快的那个公布了它单机型的实测
+
+- **Velocity:** ▮▮ rising
+- **Source:** GitHub（pengchujin/aerial-tv、simbasjungles/free-my-tv）· **4,740★ / 4,413★** · 创建于 2026-10-19/20
+- **Tags:** `android-tv` `webos` `launcher` `claude-code` `open-source`
+
+两个互不相干的项目在同一周决定替换智能电视的桌面。**Aerial**（`pengchujin/aerial-tv`，**4,740★**，MIT）是面向国产 Android 电视的 tvOS 风格桌面 —— "给国产电视的一块干净桌面"，没有广告、没有推荐流，只有你的 App、壁纸和航拍屏保，开机自动接管。**Free My TV**（`simbasjungles/free-my-tv`，**4,413★**，MIT）覆盖 **Google TV、LG webOS 与 Samsung Tizen**，热门推荐只从你已装的 App 里出，带天气，明暗主题跟随你所在城市的真实日落。两者都不需要 root、不卸载任何东西，Free My TV 给出的回滚是"一个按钮恢复出厂桌面"。它的安装路径本身就是这个年份的标记：文档里最省事的方式是打开一个 AI 编码助手，然后说"在我 192.168.1.50 的电视上装 Free My TV"。
+
+**Why it matters:** Free My TV 的性能段落是值得照抄的范式 —— "**60 fps，每一帧 16.6 ms**"、"**96 MB** 内存而不是 242 MB（−60%）"，而同句就附上限定："**在一台 98 吋 TCL Google TV、Android 14 上测得**。" 一块面板、一颗芯片、一个固件版本；这些数字不会迁移到你客厅那台机器上，而仓库这么说，而不是暗示相反。它还交代了现成 APK 缺什么 ——"没有 TMDB key，所以桌面没有推荐" —— 正是这种缺失依赖会在装好后变成 bug 报告。Aerial 的对应限定写在 issue 数里：一个五天的仓库，**226 个未关闭**。
+
+[`🔗 pengchujin/aerial-tv`](https://github.com/pengchujin/aerial-tv) · [`🔗 simbasjungles/free-my-tv`](https://github.com/simbasjungles/free-my-tv) · [`🔗 freemytv.io`](https://freemytv.io)
+
+---
+
+## 49. 3D Model Anything 把 iPhone LiDAR 扫描变成可编辑的 Three.js 房间 —— 靠技能，不靠一键转换器
+
+- **Velocity:** ▮ steady
+- **Source:** GitHub（wesbos/3d-model-anything）· **1,818★** · 创建于 2026-10-21
+- **Tags:** `threejs` `lidar` `agent-skills` `iphone` `3d-reconstruction`
+
+Wes Bos 的 **3D Model Anything** 交付三样东西：一个采集房间 LiDAR 几何与照片的 **iPhone 应用**、一个带 dollhouse／漫游／俯视／线框／knolling 视图的 **Three.js 查看器**，以及一个 **`scan-to-threejs` 技能** —— 位于 `.agents/skills/scan-to-threejs/` 的 `SKILL.md` 与参考资料 —— 引导智能体完成测量、建模，以及与原始照片的**同机位视觉比对**。导出使用带版本的契约（`house-capture/5`），落在 `data/captures-in/<room>/`，示例办公室可直接在 `wesbos.github.io/3d-model-anything` 浏览。辅助脚本需要 Python 3；深度重建可选地需要 Open3D 与 Pillow。
+
+**Why it matters:** README 拒绝了它自己的标题所诱发的读法 ——"这是一套**迭代式重建流程，不是一键出完美模型**的转换器"，目前范围限定在"房间与室内"。这一点之所以重要，是因为这里的智能体回路是一个**带闭环校验的测量回**路（用相同机位渲染视图，再与照片比对），而正是这种设计把"会收敛的 agent 技能"与"会幻觉出一张看着像的网格"的东西分开。分发上的限定同样具体：仓库是 source-available，"上架 App Store 是另一个独立步骤"，并且"**不要假定 App Store 上已经有下载**"；只附带办公室这一个示例，"原始扫描与照片集不分发"；代码与技能是 MIT，而附带的图像另有**单独的资产条款**。
+
+[`🔗 wesbos/3d-model-anything`](https://github.com/wesbos/3d-model-anything) · [`🔗 办公室查看器`](https://wesbos.github.io/3d-model-anything/) · [`🔗 视频演示`](https://www.youtube.com/watch?v=JGQCcCzuS88)
+
+---
+
+## 50. SpeedCrunch 相隔十六天发出 1.0 与 1.1 —— 这台计算器自 2014 年以来的首次发布
+
+- **Velocity:** ▮ steady
+- **Source:** GitHub（heldercorreia/speedcrunch）/ Hacker News · 164 pts · v1.1.0 发布于 2026-10-20
+- **Tags:** `speedcrunch` `qt` `release` `desktop` `open-source`
+
+键盘驱动的高精度科学计算器 **SpeedCrunch**，于 **2026-10-04 发布 1.0.0**、**2026-10-20 发布 1.1.0** —— 上一个 **0.11 版本是 2014-01-30**，中间隔了十二年多。1.0 的重写带来 **标签页与分栏**工作区、跨重启保留的计算历史、启动时加载自定义函数与变量、自定义键盘预设，以及结果上的右键菜单；1.1 增加 `root(n; x)` 求 n 次方根（"包含负值与带单位的量"），修好用户自定义函数里的阶乘，把过时的 `lg` 按钮换成 `log10`，加上紧凑的 **Classic** 布局，并提供把设置放在应用旁的便携 macOS ZIP 包。官网列出 **50 位精度**、**140+ 函数**与 **40+ 种翻译**。
+
+**Why it matters:** 一个沉寂的 Qt 桌面应用带着 1.0 回来，十六天后又发 1.1，是罕见的形态，而第二次发布才是关键信号 —— 那是只有在真的有人维护时才会出现的修 bug 与打磨轮次，而不是一次性的现代化提交。它也提醒一件事：项目状态如今存在哪里 —— 项目官网指向的那个仓库只有 **86 星**，而这对一个有二十年用户的计算器什么也说明不了，因为它的历史早于这个计数器、且不在其中。对任何维护表格类工具链的人来说，`root()` 支持带单位的量与负的被开方数才是实用增量 —— 那种算术很简单、定义域处理不简单的函数。
+
+[`🔗 v1.1.0 发布说明`](https://github.com/heldercorreia/speedcrunch/releases/tag/v1.1.0) · [`🔗 speedcrunch.org`](https://www.speedcrunch.org/) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50224210)
+
+---
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-10-25T04:15:42Z |
-| Items | 35 |
-| Sources tracked | 30 (Hacker News、GitHub Trending、Hugging Face、arXiv、NVD、CISA KEV、CVE Program、路透社、InfoQ、EPFL、Cerebras、厂商博客、工程博客) |
+| Generated | 2026-10-25T12:16:53Z |
+| Items | 50 |
+| Sources tracked | 36 (Hacker News、GitHub Trending、Hugging Face、arXiv、NVD、CVE Program、CISA KEV、Oracle CPU、HPE、Kaspersky Securelist、BleepingComputer、OpenAI、路透社、InfoQ、EPFL、Cerebras、厂商博客、工程博客) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8（每日 3 次） |
 | Ranking | 速度加权（时效 × 互动加速度 × 信源权威度） |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |
