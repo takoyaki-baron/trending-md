@@ -1,8 +1,8 @@
 ---
 date: 2026-10-25
-updated: 2026-10-24T20:17:50Z
+updated: 2026-10-25T04:15:42Z
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 26
+sources: 30
 license: CC-BY-4.0
 ---
 
@@ -288,13 +288,223 @@ A data platform team replaced a **~300-seat, $150k/year Looker deployment** with
 
 ---
 
+## 21. "Steal My Bitcoin": $502 on a server running PHP 8.4.26, as a falsifiable test of the PHP RCE
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Hacker News (Show HN) · 434 pts · ~8h ago (~04:30 UTC+8 Oct 25)
+- **Tags:** `php` `rce` `challenge` `security-research` `disclosure`
+
+A Show HN post titled **"Steal My Bitcoin"** puts a bitcoin key worth about **$502** on a server and invites anyone to take it. The author's reason, in the thread: "I'm curious if anyone out there has figured out how to actually use this **PHP RCE** we spent the last few days panicking over." The page as reposted in-thread states the key is "accessible to the **PHP user account** through the `print-flag` binary," and carries a running counter — **"0.65 hours without a successful hack"** at capture. Commenters report the target is **PHP 8.4.26 behind nginx**, with a **1 MB request-body cap**.
+
+**Why it matters:** this is the falsifiability move the PHP 9.2 disclosures (CVE-2026-109618 / CVE-2026-109619) did not have — instead of arguing about exploitability, it makes the claim cost money to be wrong about, and the counter is public. Two cautions belong with it: the site was **overloaded while we tried to read it**, so the challenge text here is the copy the author posted in the thread rather than a first-hand read, and at least one commenter notes the pages they could see were **static, with no PHP entry point** — which would make the server immune to the class being tested rather than a proof it is unexploitable. A time-boxed bounty proves someone could not do a thing in 0.65 hours; it does not prove the thing is impossible.
+
+[`🔗 HN discussion (434 pts)`](https://news.ycombinator.com/item?id=50224916) · [`🔗 stealmybitcoin.com`](https://stealmybitcoin.com/)
+
+---
+
+## 22. Goose: a systems language with no heap, no GC and no lifetimes — designed by a human, implemented by Claude Fable
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Hacker News / aardappel.github.io · 289 pts · ~9h ago (~03:06 UTC+8 Oct 25)
+- **Tags:** `programming-languages` `compilers` `ai-authored` `memory-management` `c`
+
+**Goose** is a new systems language by **Wouter van Oortmerssen** (the author of Lobster, which he says he had Goose imitate), with an unusual memory model: "no heap allocator, garbage collector, or lifetime annotations." Values live inline on compiler-assigned data stacks; growth advances a pointer and scope exit restores the stack top, with at most one resizable value per stack so growth never relocates or re-checks capacity. References into grow-only arrays stay valid across later pushes, and the compiler infers reference lifetimes, rejecting those that could outlive their owners. It emits **C**, calls C via `extern fn`, and is **Apache-2.0**.
+
+**Why it matters:** the provenance is the story. The credits split the work into two lines — "Wouter van Oortmerssen: Language Design, Compiler Design, Coding standards" and "**Claude Fable: Compiler implementation, Benchmarking, Sample & Doc writing**" — and the page says the repo "was produced almost entirely with AI, from a human language design." That makes the benchmark table a self-assessment by the same model that wrote the compiler: "over sixteen benchmarks Goose runs at **3.3x the speed of idiomatic C++**," 1.16x hand-optimized C++ and 1.12x the best safe Rust, on 1.9x/1.3x/1.2x less memory — with the page claiming "the benchmarks have the numbers, losses included." The stated limits are real design boundaries, not bugs: recursive functions cannot retain growable data across calls, arrays of variable-size elements can be iterated but not indexed, closures cannot escape, there are no function pointers, and **wholesale program compilation** is required. Read the language design as the human contribution and the numbers as unverified-by-third-parties.
+
+[`🔗 Goose`](https://aardappel.github.io/goose/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50224100)
+
+---
+
+## 23. "How close can pure functional programming get to C?": 2.6% slower on M1, 8.9% on Ryzen — over 144 benchmarks
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** rtfeldman.com / Hacker News · 260 pts · ~24h ago (~11:43 UTC+8 Oct 24)
+- **Tags:** `roc` `deflate` `benchmarks` `performance` `memory-safety`
+
+Richard Feldman optimized **roc-deflate**, Niclas Ahden's pure-Roc DEFLATE implementation, and benchmarked it against C's **libdeflate** on the **Silesia corpus** with non-streaming APIs on both sides, verifying byte-identical output. Across **144 benchmarks**: Roc averaged **2.6% slower on an M1 MacBook Pro** and **8.9% slower on a Ryzen 9 3900X**, with the worst inputs about **18% slower** and the best "slightly over **18% faster**."
+
+**Why it matters:** the author spends most of the post arguing *against* the headline his own data could support. One package cannot establish how close Roc gets to C generally; C keeps a higher ceiling precisely because Roc enforces memory safety, automatic reference counting and bounds checks with no unsafe opt-out; roc-deflate has no streaming API, x64 has "room to improve," and best-case wins are not average gains. That last distinction is the one that separates a benchmark from marketing — the geometric mean is the finding, and the 18% faster slice is the exception the mean already accounts for.
+
+[`🔗 rtfeldman.com — FP vs C`](https://rtfeldman.com/fp-vs-c) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50218195)
+
+---
+
+## 24. Dan Luu argues the cost model changed and software should get more ambitious — with the rebuttal in the piece
+
+- **Velocity:** ▮▮ rising
+- **Source:** danluu.com / Hacker News · 259 pts · ~6h ago (~05:47 UTC+8 Oct 25)
+- **Tags:** `software-engineering` `ai-assisted` `maintainability` `essay` `verification`
+
+Dan Luu's essay argues that builders are still running a "pre-agentic cost model," dismissing projects as not worth the time when AI assistance has changed the arithmetic. His running example is **pgrust**, Michael Malis's Rust rewrite of Postgres, whose differential testing surfaced real Postgres bugs (SP-GiST, JSONPath caching, pgcrypto, a dictionary-loader memory-safety issue, money overflow) — value that survives even if the rewrite does not. His personal evidence: a tunable regex engine, a faster ripgrep fork, and a Rust interpreter he says gave **50× on cold compiles and 2× on warm builds**, each taking hours rather than a year.
+
+**Why it matters:** the piece carries its opposition rather than burying it. Luu quotes **Yossi Kreinin's** rebuttal — most people should be *less* ambitious with AI-built software, because many problems lack pass/fail criteria and people cannot reason about large black boxes; Kreinin's advice is "run for cover." Luu also concedes most AI rewrite projects are "vibeslop," that **pgrust's ClickHouse benchmark submission was premature** (while calling the cheating accusations false), that Amdahl's law limits gains from doing the same work with new tools, and that he wrote the post quickly without his usual benchmark rigor. The transferable claim is narrow and worth keeping: the gap that now matters is between what a model can implement and what a person can *verify* without handholding.
+
+[`🔗 danluu.com — ambitious software`](https://danluu.com/ambitious/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50225695)
+
+---
+
+## 25. Cerebras lays out how to serve a 3-trillion-parameter Kimi K3 on 59 wafers — and declines to publish the number that would settle it
+
+- **Velocity:** ▮▮ rising
+- **Source:** Cerebras Blog / Hacker News · 32 pts · ~2.5h ago (~09:33 UTC+8 Oct 25)
+- **Tags:** `cerebras` `inference` `kimi-k3` `wafer-scale` `memory`
+
+Cerebras published a deployment design for **Kimi K3** — the ~3-trillion-parameter open model — across **59 WSE-3T wafers**: 35 for its **69 linear-attention layers** (two layers per wafer) and 24 for its **24 dense layers** (one per wafer plus KV-cache space), each wafer holding **44 GB** of on-chip SRAM, with 4-bit weights and an 8-bit KV cache under a 256k-token average-request assumption. Weights stay on-chip; only activations cross wafers, over RDMA at about **2 µs per hop**, with pipeline stages working on different requests concurrently. The headline claim is **"1000–2000+ tokens per second"** for multi-trillion-parameter models.
+
+**Why it matters:** the post is more careful than the headline. It says the 59-wafer layout is "an illustrative configuration, not a reported end-to-end benchmark," gives no measured end-to-end latency and **no tokens-per-second-per-megawatt** figure — while stating that tokens/s/MW "at matched output speed" is the more meaningful metric. Concurrency is capped by KV-cache space on the dense wafers, micro-batch size trades per-request speed against total throughput, and a footer notes performance varies by workload and date. A memory-bound argument for wafer-scale inference is a real argument; this post is a budget, not a measurement.
+
+[`🔗 Cerebras — trillion-parameter deployment`](https://www.cerebras.ai/blog/how-we-deploy-trillion-parameter-frontier-models-on-cerebras) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50227356)
+
+---
+
+## 26. Unitree Go2 gets a 9.6: `set_volume` in `gpt_thread.py` runs shell commands, and the fix is firmware 1.1.11.5
+
+- **Velocity:** ▮▮ rising
+- **Source:** CVE Program (cveawg) / VulDB · CVSS 3.1 9.6, CVSS 4.0 9.4 · published 2026-10-24
+- **Tags:** `cve` `robotics` `unitree` `command-injection` `firmware`
+
+**CVE-2026-115995**, assigned by **VulDB**, affects the **Unitree Go2** robot dog through **1.1.11.4**: "the impacted element is the function `set_volume` of the file `gpt_thread.py` of the component `chat_go`. Such manipulation of the argument Value leads to **OS command injection**." Attack vector is network, no privileges required, user interaction required, scope changed — **9.6 at CVSS 3.1**, **9.4 at CVSS 4.0**, and a **10.0** on the CVSS 2.0 metric, all three from the CNA. CWE-78. Upgrading to **1.1.11.5** resolves it, and the record carries a vendor confirmation quoted verbatim: "Submission 990502 corresponds to our internal ticket **#474** (Go2 `chat_go` `set_volume` OS command injection, CWE-78)."
+
+**Why it matters:** a voice-assistant thread on a quadruped robot is a shell, and the argument that carries the volume setting is the injection point — which is the recurring shape of consumer-robot security: an LLM-adjacent convenience feature bound to a privileged host process. Two provenance notes belong with the score: all three CVSS versions are the **CNA's own**, on a record NVD lists as `Received` with no NIST metric, and the affected range is declared as an explicit list of five point versions (**1.1.11.0–1.1.11.4**) with **1.1.11.5** marked unaffected — so this is an enumerated range, not a `lessThan`. The firmware artifact is linked from the record, which makes "patched" checkable as a download rather than as a promise.
+
+[`🔗 CVE-2026-115995 (cveawg)`](https://cveawg.mitre.org/api/cve/CVE-2026-115995) · [`🔗 NVD record (API)`](https://services.nvd.nist.gov/rest/json/cves/2.0?cveId=CVE-2026-115995)
+
+---
+
+## 27. MongoDB Compass carries the eMudhra intermediates inside Electron's own root store — and the fix is a bundled runtime update
+
+- **Velocity:** ▮▮ rising
+- **Source:** CVE Program (cveawg) / Compass release notes · CVSS 4.0 7.6 · fixed 2026-10-23
+- **Tags:** `cve` `emudhra` `electron` `trust-store` `tls`
+
+**CVE-2026-115929**, assigned by **MongoDB**, states the issue in one sentence: "MongoDB Compass relies on Electron, a third-party runtime that carries its **own TLS root certificate store**. This root certificate store has the recoverable eMudhra intermediate CA certificates." It is resolved in **Compass 1.53.1**, which bundles **Electron 44.9.1**; that release was published **2026-10-23T17:23Z**, and its changelog line is the terse "Updated Electron to address a security issue." CWE-295. Score is the CNA's: **7.6 at CVSS 4.0**, 6.8 at 3.1. Affected is declared with a **null minimum** (`version: "0"`) up to but excluding 1.53.1. NVD lists the record as `Received` with no NIST metric.
+
+**Why it matters:** this is the part of the eMudhra fallout that does not get fixed by a browser release. Mozilla's own account says it pushed the eight compromised intermediates into **OneCRL within three hours** of the October 17 report and removed the signing root in **NSS 3.131.1** — but OneCRL reaches *Firefox*, and an Electron app that ships its own store does not consume it. So every desktop application embedding a runtime with a pinned bundle needs its own update, which is why the CVE exists at all: "patch the CA out of your trust store" is per-artifact work, and the artifact here is an application release, not a system update. The mitigations remain split by trust source rather than by species — a host-level store and a bundled store disagree until both are updated.
+
+[`🔗 CVE-2026-115929 (cveawg)`](https://cveawg.mitre.org/api/cve/CVE-2026-115929) · [`🔗 Compass v1.53.1 release`](https://github.com/mongodb-js/compass/releases/tag/v1.53.1) · [`🔗 Mozilla on the eMudhra compromise`](https://blog.mozilla.org/security/2026/10/20/protecting-firefox-users-following-the-compromise-of-emudhra-intermediate-certificates/)
+
+---
+
+## 28. OPAL puts a coding agent inside one training run and lets it rewrite the optimizer — −11.6 against −2.2 for the best static recipe
+
+- **Velocity:** ▮▮ rising
+- **Source:** xingjianbai.com / GitHub (xingjian-bai/opal) · 22 pts · posted 2026-10-21
+- **Tags:** `optimizers` `agents` `training` `pytorch` `research`
+
+**OPAL** ("OPtimizer with an Agent in the Loop") is a PyTorch wrapper that hands two small programs to a coding agent — an `analysis.py` that extracts whatever statistics it wants and an `updater.py` that turns gradients into updates — and lets it rewrite either **during training**, per parameter group, in response to loss spikes, stalls or overfitting. Nothing is carried between runs. Reported results: **LightningDiT-XL/1 FID-50K 1.83 vs 2.18** with guidance (4.33 vs 5.15 without), Goldfish Amharic **83.48 → 81.11 bits per sentence**, and on toy landscapes an average score of **−11.6** against **−2.2** for the best of twelve hand-picked static recipes and **−7.4** for the best of **382,080** swept ones. With 10% mislabeled labels, test loss 0.69 / 78.6% accuracy versus 2.49 / 73.5% for AdamW.
+
+**Why it matters:** the caveats are where the engineering is. Letting training wait for the agent cost **1.30×–4.39× wall-clock**, reduced to **1.01×–1.14×** with asynchronous updates; the implementation "still needs work" for sharded training and optimizer compilation; gains shrink when runs are short and recipes are already tuned; and **most experiments were run once**. The authors also concede the approach is impractical at frontier scale in FLOP terms and compare API tokens to GPU hours instead ($6.42 in tokens beside ~74 H100-hours, ≈$510). One more line from the repo deserves equal billing with the results: the agent's programs "run inside your training process, so this is a rule, not a sandbox" — the constraint that it not touch model, data or loss is enforced by instruction, not by isolation.
+
+[`🔗 Reactive Optimizers (blog)`](https://xingjianbai.com/reactive-optimizers/) · [`🔗 xingjian-bai/opal`](https://github.com/xingjian-bai/opal)
+
+---
+
+## 29. OpenDS: 200 deep-search tasks on the live web, best frontier agent 39.0%, humans 21.1% over 1,000 tries
+
+- **Velocity:** ▮▮ rising
+- **Source:** arXiv 2610.30181 / Hugging Face Papers · 160 upvotes · submitted October 2026
+- **Tags:** `benchmark` `deep-research` `web-agents` `tool-use` `evaluation`
+
+**OpenDS** asks an agent to answer a question that requires multi-step search across the **open, live web** — several modalities, several file formats, interactive browsing — and to return one factual answer; **OpenDS-World** is the **200-task** public set, with human verification of the evidence and a unique answer per task. Twelve frontier models ran under **one shared tool setup**. The best reached **39.0% accuracy**; human attempts reached **21.1%** across **1,000 tries** (~211 successes).
+
+**Why it matters:** a benchmark on the live web trades reproducibility for realism, and the paper is candid about what still breaks: "tool coordination and long-horizon search management," plus wide variation in research strategy, search cost, how agents decide to stop, and how they recover from failure. The human baseline also belongs in the reading — 21.1% is a *successful-answer* rate for people on tasks built to be hard, so the useful comparison is not "agents beat humans" but "the ceiling on this set is low for everyone," which is what makes a 39.0% top score informative rather than saturated.
+
+[`🔗 arXiv 2610.30181`](https://arxiv.org/abs/2610.30181) · [`🔗 Hugging Face Papers`](https://huggingface.co/papers/2610.30181)
+
+---
+
+## 30. claude-howto: 44,652 stars for a third-party Claude Code curriculum — and the README's own version numbers disagree
+
+- **Velocity:** ▮▮ rising
+- **Source:** GitHub (luongnv89/claude-howto) · **44,652★** · +392 today · MIT
+- **Tags:** `claude-code` `documentation` `tutorial` `mcp` `skills`
+
+**claude-howto** is an unofficial, example-driven guide to Claude Code: ten numbered modules (slash commands, memory, skills, subagents, MCP, hooks, plugins, checkpoints, advanced features, CLI), copy-paste templates, Mermaid diagrams, quizzes, and translations into Vietnamese, Chinese, Ukrainian and Japanese. **44,652 stars, 5,496 forks, 40 open issues, MIT**, created **2025-11-07**, last pushed **2026-10-20**, one of the fastest-gaining repos on today's daily board at **+392**.
+
+**Why it matters:** the repository's value and its weakness are the same property — it is a fast-moving third-party mirror of a surface Anthropic changes often. The README states "Last Updated: October 18, 2026" against **Claude Code 2.1.302**, and its model-compatibility lists are not internally consistent (the FAQ and the footer name different model sets). Two operational details are worth more than the star count: installation guidance now calls **npm installation deprecated** in favour of the native installer, Homebrew or WinGet, with downloads served from `downloads.claude.ai` — which corporate proxies must allow; and the repo "ships no marketplace," so `/plugin install` does not apply and `claude --plugin-dir` is the path. A guide this popular is de facto onboarding documentation; treat its version pins as claims with dates, not as facts.
+
+[`🔗 luongnv89/claude-howto`](https://github.com/luongnv89/claude-howto) · [`🔗 GitHub Trending`](https://github.com/trending?since=daily)
+
+---
+
+## 31. Corgi: a terminal multiplexer built for agents first, with token accounting in a `top`-style view
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News (Show HN) / corgi.computer · 126 pts · ~1.3d ago (~03:46 UTC+8 Oct 24)
+- **Tags:** `agents` `terminal` `multiplexer` `claude-code` `worktrees`
+
+**Corgi** is a terminal multiplexer that treats coding agents as first-class panes: one view shows every agent's state (**working / needs you / finished / idle**), F1 gives a summary, and a `top`-style screen reports **per-agent token accounting** with activity detail on hover. It drives Claude Code, Codex, Pi and OpenCode using **your existing accounts**, keeps processes running in the background the way tmux does, and adds agent-specific affordances — replay an agent's work, see every file it changed in one scroll, manage **worktrees**, group workspaces automatically, and monitor live resource use per workspace. Install is a one-line shell command on **macOS, Linux and WSL**, and `corgi --skill` exists so an agent can learn to drive the multiplexer itself.
+
+**Why it matters:** this is the tmux slot being re-filled by a different owner — the operator. As the number of concurrent agents per developer grows, the scarce resource becomes *attention routing* (which agent needs a human, right now) and *spend visibility* (which agent is burning tokens), and both are things a plain terminal multiplexer cannot express. The stated limits are honest and narrow: macOS/Linux/WSL only, and the richer image features (pasting images with ⌘V, including over SSH) "require **Ghostty Nightly**" — a dependency on an unreleased terminal build is the kind of constraint that decides whether a tool is daily-driver ready.
+
+[`🔗 corgi.computer`](https://corgi.computer/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50214373)
+
+---
+
+## 32. LogSync: a 4 × 2 mm implantable chip that classifies brain states on under 200 µW
+
+- **Velocity:** ▮▮ rising
+- **Source:** EPFL / Hacker News · 97 pts · ~12h ago (~23:57 UTC+8 Oct 24)
+- **Tags:** `neural-interface` `low-power` `biomarkers` `epfl` `hardware`
+
+EPFL's Integrated Neurotechnologies Lab (Mahsa Shoaran's group) built **LogSync**, a roughly **4 × 2 mm** implantable neural system-on-chip that records activity and extracts network-level biomarkers — the strength of brain waves and **cross-region synchrony** — rather than only single-channel features. A machine-learning classifier turns those into cognitive and emotional states and can emit **stimulation triggers** when a chosen state is detected. It uses logarithmic computation and draws **under 200 microwatts**. Validation used previously collected **human psychiatric recordings**, where it separated cognitive engagement during a mental task and emotional arousal during video viewing from neural signals alone; in rats at the University of Minnesota it tracked ongoing oscillations and delivered stimulation at predetermined phases.
+
+**Why it matters:** the constraint that shaped the design is the interesting part — cross-region synchrony normally costs more power than an implant can spend, and the log-domain compute is what fits it inside the budget. But the evidence is early and the article says so: human validation used **existing datasets, not newly implanted patients**, and phase-locked stimulation was demonstrated in **animals**. So this is a hardware result about what is computable at 200 µW with retrospective human data, not a closed-loop therapy result — a distinction that decides whether "detects emotional arousal" means a device that works in a person or a classifier that works on a recording.
+
+[`🔗 EPFL — LogSync`](https://actu.epfl.ch/news/neural-chip-decodes-interactions-between-brain-r-2/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50222525)
+
+---
+
+## 33. A TCL Android TV root toolkit that reuses CVE-2022-22706 — and says exactly which one firmware it was tested on
+
+- **Velocity:** ▮ steady
+- **Source:** GitLab (c4psu13/mali-pagecache-root) / Hacker News · 52 pts · ~17h ago (~18:51 UTC+8 Oct 24)
+- **Tags:** `android-tv` `mali` `cve-2022-22706` `root` `disclosure`
+
+**mali-pagecache-root** is a full root chain for one television: a **TCL 50C721** (Realtek **RTD1319**, Mali-G31, firmware **V8-R51MT02-LF1V903**, Android 11, kernel 4.14.198). The autonomous binary gets `uid=0` from an unprivileged app context in under two seconds by importing a `MAP_SHARED` mapping of libc's `__cxa_atexit` page as a GPU user buffer (**CVE-2022-22706**), replacing the file mapping with `mremap(MREMAP_FIXED)`, and writing **112 bytes of Thumb-2 shellcode** into the **page cache** — on-disk bytes untouched, so dm-verity stays happy. A privileged domain then maps a physical page via `/dev/rtkmem` and flips `selinux_state.enforcing = 0`; the chain walks `task_struct`, overwrites `cred`, and clears `TIF_SECCOMP` to escape zygote's BPF filter, before bind-mounting ad-block hosts and disabling 28 bloatware packages. **MIT**, one recorded test unit.
+
+**Why it matters:** the release notes are a model of scope discipline for a device exploit — "firmware-specific research and tooling, **not a universal TCL root tool**," a table of the exact build it ran on, and a compatibility document that says SoC and Mali driver revision "are inconsistent across the original records." It also states plainly that **no fresh rooting test was performed** while preparing the release, that no APK wrapper is included, and that flashing patched boot or vbmeta images bootlooped twice in historical attempts. And the underlying lesson is the one that keeps recurring: **CVE-2022-22706 is a 2022 GPU page-cache bug still rooting a consumer TV in 2026**, because the patch boundary for a television is a firmware image that ships once. It is not an unnoticed bug either: NVD has analyzed it, scores it 7.8 at CVSS 3.1, and it has been in CISA's KEV since **2023-03-30**.
+
+[`🔗 c4psu13/mali-pagecache-root`](https://gitlab.com/c4psu13/mali-pagecache-root) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50220042)
+
+---
+
+## 34. Deep Fusion Memory: chunk-level parametric memory with the backbone frozen — and an abstract that lists no limitations
+
+- **Velocity:** ▮ steady
+- **Source:** arXiv 2610.25100 / Hugging Face Papers · 48 upvotes · submitted October 2026
+- **Tags:** `memory` `parametric` `rag-alternative` `architecture` `llm`
+
+**Deep Fusion Memory (DFM)** replaces retrieval with a learned chunk-level memory: a causal memory predictor generates memory from the preceding context, supervised by **retrieved chunk embeddings**, and that memory is shared across the tokens of a chunk and injected into hidden states through **gated cross-attention**. The backbone stays **frozen** — only the predictor and fusion layers are trained — and inference needs **no explicit retrieval**. Training-data construction uses "**32× fewer retrieval queries** and **2,048× fewer retrieved items**" than parametric-memory methods that build token-level targets. Across six QA tasks it beats the strongest baseline by **12.71%** on Mistral-7B-v0.3 and **11.19%** on Qwen3-8B-Base, with domain-adaptation gains of 6.51 and 4.38 points on Qwen3-4B-Base and Qwen3-8B-Base.
+
+**Why it matters:** freezing the backbone is the design decision that makes this comparable to retrieval rather than to continued pretraining — the base model is unchanged, so the delta is attributable to the memory module and not to weights drifting. The caveat is structural and easy to miss: **the abstract states no limitations of its own method**, offers no retrieval baseline at matched cost despite the framing as a RAG alternative, and all numbers are the authors' own on six QA tasks. A frozen-backbone memory that needs no retrieval is exactly the shape production systems want; the missing comparison is against what those systems currently run.
+
+[`🔗 arXiv 2610.25100`](https://arxiv.org/abs/2610.25100) · [`🔗 Hugging Face Papers`](https://huggingface.co/papers/2610.25100)
+
+---
+
+## 35. A 93-page review asks whether robots can recursively self-improve — and finds no study that isolates the recursive gain
+
+- **Velocity:** ▮ steady
+- **Source:** arXiv 2610.29677 / Hugging Face Papers · 56 upvotes · submitted October 2026
+- **Tags:** `recursive-self-improvement` `robotics` `review` `robot-learning` `evaluation`
+
+**"Toward Recursive Self-Improvement in Physical AI"** is a **93-page** review that separates two things usually conflated: a robot improving its *behaviour*, and a robot improving *the methods that produce* its behaviour. It traces the path from behaviour to method to method-improvement across the manipulation literature and summarises what that literature shows — better behaviour, benefits for subsequent learning, and improved procedures, with some systems modifying the improver's own knowledge or tools.
+
+**Why it matters:** the finding is a negative one, stated by the authors: physical studies "**have yet to isolate gains attributable to recursion**." That is the sentence to keep, because "self-improving robot" claims usually rest on a pipeline where each stage got better and no ablation separates recursive improvement from ordinary better data or better supervision. The paper's own contribution is therefore **assessment guidelines rather than new experiments**, and its four conditions for an improvement to persist are the useful checklist: the feedback must address the remaining learning need, the receiving component must be able to use the change, the benefit must survive a task or hardware change, and continued practice must be safe and affordable — four filters that most physical-AI improvement loops have not been run through.
+
+[`🔗 arXiv 2610.29677`](https://arxiv.org/abs/2610.29677) · [`🔗 Hugging Face Papers`](https://huggingface.co/papers/2610.29677)
+
+---
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-10-24T20:17:50Z |
-| Items | 20 |
-| Sources tracked | 26 (Hacker News, GitHub Trending, Hugging Face, arXiv, NVD, CISA KEV, CVE Program, Reuters, InfoQ, vendor blogs, engineering blogs) |
+| Generated | 2026-10-25T04:15:42Z |
+| Items | 35 |
+| Sources tracked | 30 (Hacker News, GitHub Trending, Hugging Face, arXiv, NVD, CISA KEV, CVE Program, Reuters, InfoQ, EPFL, Cerebras, vendor blogs, engineering blogs) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (3x daily) |
 | Ranking | Velocity-weighted (recency × engagement acceleration × source authority) |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |

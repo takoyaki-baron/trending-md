@@ -1,8 +1,8 @@
 ---
 date: 2026-10-25
-updated: 2026-10-24T20:17:50Z
+updated: 2026-10-25T04:15:42Z
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 26
+sources: 30
 license: CC-BY-4.0
 ---
 
@@ -288,13 +288,223 @@ TornadoVM 是一个把 Java 循环卸载到 GPU 的异构计算框架，这次�
 
 ---
 
+## 21. "偷走我的比特币"：一台跑着 PHP 8.4.26 的服务器上放着 502 美元，作为对 PHP RCE 的可证伪测试
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Hacker News (Show HN) · 434 pts · 约 8 小时前 (~04:30 UTC+8 10-25)
+- **Tags:** `php` `rce` `challenge` `security-research` `disclosure`
+
+一条题为 **"Steal My Bitcoin"** 的 Show HN 帖子把一段价值约 **502 美元**的比特币私钥放在服务器上，请任何人来拿。作者的动机写在讨论帖里："我很好奇外面有没有人真的搞明白了怎么用我们过去几天为之恐慌的那个 **PHP RCE**。" 帖子里转载的页面文本称私钥"通过 `print-flag` 二进制文件对 **PHP 用户账户**可访问"，页面上还有一个计时器 —— 抓取时显示 **"0.65 hours without a successful hack"**（0.65 小时无人攻破）。评论者称目标是 **nginx 后面的 PHP 8.4.26**，并带有 **1 MB 的请求体上限**。
+
+**Why it matters:** 这正是 PHP 两个 9.2（CVE-2026-109618 / CVE-2026-109619）披露时所没有的可证伪性动作 —— 不是争论可利用性，而是让"我错了"这件事有金钱成本，并且把计时器公开。有两点提醒必须一起写：我们尝试直接读取站点时**它正被压垮**，所以这里的挑战文本来自作者在讨论帖中发布的副本，而非第一手读取；并且至少有一位评论者指出他能看到的页面都是**静态的、没有 PHP 入口**，那样的话服务器是免疫于被测的那一类漏洞，而不是证明它不可利用。一个有截止时间的悬赏只能证明某人没能在 0.65 小时内做成某件事，不能证明这件事不可能。
+
+[`🔗 HN 讨论（434 pts）`](https://news.ycombinator.com/item?id=50224916) · [`🔗 stealmybitcoin.com`](https://stealmybitcoin.com/)
+
+---
+
+## 22. Goose：一门没有堆、没有 GC、没有生命周期标注的系统语言 —— 人类设计，Claude Fable 实现
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Hacker News / aardappel.github.io · 289 pts · 约 9 小时前 (~03:06 UTC+8 10-25)
+- **Tags:** `programming-languages` `compilers` `ai-authored` `memory-management` `c`
+
+**Goose** 是 **Wouter van Oortmerssen**（Lobster 语言、wasm3 一脉的作者）设计的新系统语言，内存模型很特别："没有堆分配器、没有垃圾回收、也没有生命周期标注。" 值内联存放在编译器分配的数据栈上；增长就是推进指针，离开作用域就把栈顶还原，每个栈最多只允许一个可增长的值，因此增长既不会搬移数据也不需要检查容量。指向只增数组的引用在后续 push 后依然有效，编译器自行推断引用生命周期，并拒绝可能活得比所有者更久的引用。它输出 **C**，通过 `extern fn` 调用 C，许可证为 **Apache-2.0**。
+
+**Why it matters:** 这个故事的核心是署名方式。致谢被拆成两行 —— "Wouter van Oortmerssen：语言设计、编译器设计、编码规范" 与 "**Claude Fable：编译器实现、基准测试、示例与文档撰写**" —— 页面还写着这个仓库"几乎完全由 AI 产出，来自人类给出的语言设计"。这意味着基准表格是**由写编译器的同一个模型自评**的："在十六个基准上 Goose 跑出惯用 C++ 的 **3.3 倍**速度"、手写优化 C++ 的 1.16 倍、最佳安全 Rust 的 1.12 倍，内存占用分别为 1.9/1.3/1.2 分之一，页面自称"基准里连输掉的那几项数字都列出来了"。列出的限制是真实的设计边界而非 bug：递归函数无法跨调用保留可增长数据、变长元素数组可以遍历但不能索引、闭包不能逃逸、没有函数指针、必须整体编译。把语言设计看作人的贡献，把数字看作尚无第三方复核的结果。
+
+[`🔗 Goose`](https://aardappel.github.io/goose/) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50224100)
+
+---
+
+## 23. "纯函数式编程能多接近 C？"：144 个基准，M1 上慢 2.6%，Ryzen 上慢 8.9%
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** rtfeldman.com / Hacker News · 260 pts · 约 24 小时前 (~11:43 UTC+8 10-24)
+- **Tags:** `roc` `deflate` `benchmarks` `performance` `memory-safety`
+
+Richard Feldman 优化了 **roc-deflate** —— Niclas Ahden 用纯 Roc 写的 DEFLATE 实现 —— 并让它在 **Silesia 语料**上与 C 的 **libdeflate** 对比，两边都用非流式 API，且验证输出逐字节一致。在 **144 个基准**上：Roc 平均在 **M1 MacBook Pro 上慢 2.6%**、在 **Ryzen 9 3900X 上慢 8.9%**，最差的输入约慢 **18%**，最好的"略快于 **18%**"。
+
+**Why it matters:** 作者把大部分篇幅用来**反对**自己的数据能支持的标题。一个包无法说明 Roc 整体上与 C 有多接近；C 的天花板更高，恰恰因为 Roc 强制内存安全、自动引用计数和边界检查且不允许 unsafe 逃生口；roc-deflate 没有流式 API，x64 上"还有改进空间"，最佳个案不等于平均收益。最后这条区别正是基准与营销的分界线 —— 几何平均才是结论，那 18% 更快的切片只是均值已经计入的例外。
+
+[`🔗 rtfeldman.com — FP vs C`](https://rtfeldman.com/fp-vs-c) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50218195)
+
+---
+
+## 24. Dan Luu 主张成本模型已经改变、软件应该更有野心 —— 而反面意见就写在文章里
+
+- **Velocity:** ▮▮ rising
+- **Source:** danluu.com / Hacker News · 259 pts · 约 6 小时前 (~05:47 UTC+8 10-25)
+- **Tags:** `software-engineering` `ai-assisted` `maintainability` `essay` `verification`
+
+Dan Luu 的文章主张，开发者仍在沿用"前智能体时代的成本模型"，把一些项目判为不值得投入，而 AI 辅助已经改变了这笔算术。他的主线例子是 **pgrust** —— Michael Malis 用 Rust 重写 Postgres —— 它的差分测试真的挖出了 Postgres 的 bug（SP-GiST、JSONPath 缓存、pgcrypto、字典加载器的内存安全、money 溢出），即使重写最终失败，这份价值也留得下来。他的个人证据包括：一个可调的正则引擎、一个更快的 ripgrep 分支，以及一个他称在**冷编译上快 50 倍、热/缓存构建上快 2 倍**的 Rust 解释器 —— 每一个都只花了几小时，而不是过去所说的一年以上。
+
+**Why it matters:** 文章把反对方请进来而不是埋起来。Luu 引用了 **Yossi Kreinin** 的反驳 —— 大多数人用 AI 写软件应该**更没有野心**，因为很多问题没有明确的通过/失败判据，人也无法推理大型黑盒；Kreinin 的建议是"快找掩体"。Luu 同时承认大多数 AI 重写项目是"vibeslop"，承认 **pgrust 的 ClickHouse 基准提交操之过急**（但称作弊指控不实），承认阿姆达尔定律限制了"用新工具做同样的活"的收益，也承认这篇文章写得很快、缺少他惯常的基准严谨度。可迁移的结论很窄但值得留下：如今要紧的差距，是模型能**实现**什么与一个人无需手把手就能**验证**什么之间的差距。
+
+[`🔗 danluu.com — 更有野心的软件`](https://danluu.com/ambitious/) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50225695)
+
+---
+
+## 25. Cerebras 讲清如何在 59 片晶圆上服务 3 万亿参数的 Kimi K3 —— 却不公布那个能定论的数字
+
+- **Velocity:** ▮▮ rising
+- **Source:** Cerebras Blog / Hacker News · 32 pts · 约 2.5 小时前 (~09:33 UTC+8 10-25)
+- **Tags:** `cerebras` `inference` `kimi-k3` `wafer-scale` `memory`
+
+Cerebras 公布了 **Kimi K3**（约 3 万亿参数的开源模型）的部署方案：横跨 **59 片 WSE-3T 晶圆** —— 35 片承载 **69 层线性注意力**（每片两层），24 片承载 **24 层稠密层**（每片一层，另加 KV cache 空间）；每片晶圆有 **44 GB** 片上 SRAM。假设条件是 256k token 的平均请求、4 bit 权重、8 bit KV cache。权重常驻片上，只有激活跨晶圆流动，走 RDMA 每跳约 **2 微秒**，流水线各段并发处理不同请求。对外口径是"多万亿参数模型"下 **"1000–2000+ tokens per second"**。
+
+**Why it matters:** 这篇文章比它的标题更谨慎。它自己写明 59 片晶圆的布局"是示意性配置，不是实测的端到端基准"，没有给出端到端时延，也**没有给出每兆瓦每秒 token 数** —— 而文章同时说，在"同等输出速度"下 tokens/s/MW 才是更有意义的指标。并发受稠密层晶圆上 KV cache 空间的限制，micro-batch 大小在单请求速度与总吞吐之间权衡，页脚还注明性能随负载和日期变化。用内存受限来论证晶圆级推理是真论证；但这一篇是预算表，不是测量。
+
+[`🔗 Cerebras — 万亿参数部署`](https://www.cerebras.ai/blog/how-we-deploy-trillion-parameter-frontier-models-on-cerebras) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50227356)
+
+---
+
+## 26. Unitree Go2 拿到 9.6：`gpt_thread.py` 里的 `set_volume` 会执行 shell 命令，修复是固件 1.1.11.5
+
+- **Velocity:** ▮▮ rising
+- **Source:** CVE Program (cveawg) / VulDB · CVSS 3.1 9.6、CVSS 4.0 9.4 · 发布于 2026-10-24
+- **Tags:** `cve` `robotics` `unitree` `command-injection` `firmware`
+
+**CVE-2026-115995** 由 **VulDB** 分配，影响 **Unitree Go2** 机器狗至 **1.1.11.4**："受影响的是组件 `chat_go` 中文件 `gpt_thread.py` 的 `set_volume` 函数。对参数 Value 的这种操控会导致 **OS 命令注入**。" 攻击向量为网络、无需权限、需要用户交互、作用域改变 —— **CVSS 3.1 为 9.6**、**CVSS 4.0 为 9.4**、CVSS 2.0 指标为 **10.0**，三个都来自 CNA。CWE-78。升级到 **1.1.11.5** 可修复，记录里还逐字引用了厂商确认："提交 990502 对应我们的内部工单 **#474**（Go2 `chat_go` `set_volume` OS 命令注入，CWE-78）。"
+
+**Why it matters:** 四足机器人上的语音助手线程就是一个 shell，而承载音量参数的实参就是注入点 —— 这正是消费级机器人安全的常见形状：一个贴近 LLM 的便利功能绑定在一个特权宿主进程上。这个分数有两点来源说明必须一并写：三个 CVSS 版本全部是 **CNA 自己的**，NVD 仍将记录标为 `Received` 且没有 NIST 指标；受影响范围被声明为五个点版本的显式列表（**1.1.11.0–1.1.11.4**），并把 **1.1.11.5** 标为不受影响 —— 这是枚举区间，不是 `lessThan`。固件产物在记录里直接给了链接，所以"已修补"是可下载验证的，而不是一句承诺。
+
+[`🔗 CVE-2026-115995 (cveawg)`](https://cveawg.mitre.org/api/cve/CVE-2026-115995) · [`🔗 NVD 记录（API）`](https://services.nvd.nist.gov/rest/json/cves/2.0?cveId=CVE-2026-115995)
+
+---
+
+## 27. MongoDB Compass 把 eMudhra 中间证书带在 Electron 自己的根存储里 —— 修复方式是升级内置运行时
+
+- **Velocity:** ▮▮ rising
+- **Source:** CVE Program (cveawg) / Compass 发布说明 · CVSS 4.0 7.6 · 修复于 2026-10-23
+- **Tags:** `cve` `emudhra` `electron` `trust-store` `tls`
+
+**CVE-2026-115929** 由 **MongoDB** 分配，记录用一句话说清了问题："MongoDB Compass 依赖 Electron，一个自带**自己的 TLS 根证书存储**的第三方运行时。该根证书存储中包含可恢复的 eMudhra 中间 CA 证书。" 它在 **Compass 1.53.1** 中解决，该版本内置 **Electron 44.9.1**；这个版本发布于 **2026-10-23T17:23Z**，变更日志只有一行"更新 Electron 以处理一个安全问题"。CWE-295。分数是 CNA 的：**CVSS 4.0 为 7.6**，3.1 为 6.8。受影响范围使用**空最小值**（`version: "0"`）到不含 1.53.1。NVD 将该记录标为 `Received`，没有 NIST 指标。
+
+**Why it matters:** 这是 eMudhra 余波里**不会**因为浏览器发版而消失的那一半。Mozilla 自己的说明是：在 10 月 17 日收到报告后**三小时内**就把八张被攻破的中间证书推入 **OneCRL**，并在 **NSS 3.131.1** 中移除了签发根 —— 但 OneCRL 只覆盖 *Firefox*，而自带证书存储的 Electron 应用并不消费它。于是每一个内嵌了固定证书包的运行时的桌面应用都要自己发一次更新，这也正是这条 CVE 存在的原因："把 CA 从信任存储里拿掉"是按产物计的工作，而这里的产物是一个应用发行版，不是系统更新。缓解措施依然按照**信任来源**（系统/厂商存储 vs 固定证书包）切分，而不是按物种（浏览器 vs 库）—— 在两者都更新之前，主机级存储与内置存储的说法必然不一致。
+
+[`🔗 CVE-2026-115929 (cveawg)`](https://cveawg.mitre.org/api/cve/CVE-2026-115929) · [`🔗 Compass v1.53.1 发布`](https://github.com/mongodb-js/compass/releases/tag/v1.53.1) · [`🔗 Mozilla 关于 eMudhra 被攻破`](https://blog.mozilla.org/security/2026/10/20/protecting-firefox-users-following-the-compromise-of-emudhra-intermediate-certificates/)
+
+---
+
+## 28. OPAL 把编程智能体放进单次训练里重写优化器 —— −11.6，而最佳静态配方是 −2.2
+
+- **Velocity:** ▮▮ rising
+- **Source:** xingjianbai.com / GitHub (xingjian-bai/opal) · 22 pts · 发布于 2026-10-21
+- **Tags:** `optimizers` `agents` `training` `pytorch` `research`
+
+**OPAL**（"OPtimizer with an Agent in the Loop"）是一个 PyTorch 封装：它把两个小程序交给编程智能体 —— 一个 `analysis.py` 取它想看的任何统计量，一个 `updater.py` 把梯度变成更新 —— 并允许它在**训练过程中**按参数组重写其中任何一个，以应对 loss 尖峰、停滞或过拟合。每次运行之间不携带任何东西。报告结果：**LightningDiT-XL/1 的 FID-50K 从 2.18 降到 1.83**（带 guidance；不带 guidance 为 5.15 → 4.33），Goldfish 阿姆哈拉语从 **83.48 降到 81.11** 每句比特数；在玩具地形上平均得分 **−11.6**，而十二个手工挑选的静态配方最好为 **−2.2**、**382,080** 个扫描配方最好为 **−7.4**。在 10% 标签错误时，测试 loss 0.69 / 准确率 78.6%，AdamW 为 2.49 / 73.5%。
+
+**Why it matters:** 工程细节都在注意事项里。让训练等待智能体带来了 **1.30×–4.39× 的墙钟开销**，改为异步更新后降到 **1.01×–1.14×**；实现"仍需改进"以支持分片训练与优化器编译；运行时间短、配方已高度调优时收益会缩小；而且**大多数实验只跑了一次**。作者也承认在前沿规模上按 FLOP 计算这种做法不现实，所以成本论证用 API token 对比 GPU 小时（$6.42 的 token 加约 74 个 H100 小时，约 510 美元）。仓库里还有一句话应该与结果同等醒目：智能体的程序"运行在你的训练进程内，所以这是一条规则，不是沙箱" —— 不许碰模型、数据和 loss 的约束靠指令而非隔离来执行。
+
+[`🔗 Reactive Optimizers（博客）`](https://xingjianbai.com/reactive-optimizers/) · [`🔗 xingjian-bai/opal`](https://github.com/xingjian-bai/opal)
+
+---
+
+## 29. OpenDS：200 个真实开放网络上的深度检索任务，最强前沿智能体 39.0%，人类 1,000 次尝试 21.1%
+
+- **Velocity:** ▮▮ rising
+- **Source:** arXiv 2610.30181 / Hugging Face Papers · 160 赞 · 提交于 2026 年 10 月
+- **Tags:** `benchmark` `deep-research` `web-agents` `tool-use` `evaluation`
+
+**OpenDS** 要求智能体在**开放的实时网络**上回答需要多步检索的问题 —— 多种模态、多种文件格式、需要交互式浏览 —— 并给出唯一的事实答案；**OpenDS-World** 是 **200 个任务**的公开集，证据经过人工核验、每个任务都有唯一答案。十二个前沿模型在**同一套工具配置**下运行。最好成绩为 **39.0% 准确率**；人类在 **1,000 次尝试**中达到 **21.1%**（约 211 次成功）。
+
+**Why it matters:** 在实时网络上做基准是用可复现性换真实性，论文也坦白说还有什么在坏："工具协调与长程检索管理"，以及研究策略、检索成本、何时终止、失败后如何恢复上的巨大差异。人类基线也要读对 —— 21.1% 是人在**被刻意做难**的任务上的成功作答率，所以有用的比较不是"智能体超过人类"，而是"这个集合对所有人来说天花板都很低"，这才让 39.0% 的头部成绩具有信息量，而不是饱和。
+
+[`🔗 arXiv 2610.30181`](https://arxiv.org/abs/2610.30181) · [`🔗 Hugging Face Papers`](https://huggingface.co/papers/2610.30181)
+
+---
+
+## 30. claude-howto：一份第三方 Claude Code 教程拿到 44,652 星 —— 而 README 自己的版本号互相矛盾
+
+- **Velocity:** ▮▮ rising
+- **Source:** GitHub (luongnv89/claude-howto) · **44,652★** · 今日 +392 · MIT
+- **Tags:** `claude-code` `documentation` `tutorial` `mcp` `skills`
+
+**claude-howto** 是一份非官方、以示例驱动的 Claude Code 指南：十个编号模块（斜杠命令、记忆、技能、子智能体、MCP、hooks、插件、检查点、高级特性、CLI），加上可直接复制的模板、Mermaid 图、测验，以及越南语、中文、乌克兰语和日语翻译。**44,652 星、5,496 分支、40 个未关闭 issue、MIT**，创建于 **2025-11-07**，最后推送 **2026-10-20**，**+392**，是今天日榜上增速最快的仓库之一。
+
+**Why it matters:** 这个仓库的优点是它的弱点 —— 它是一份高速变化的第三方镜像，而 Anthropic 改这块表面的频率很高。README 写着"最后更新：2026 年 10 月 18 日"、对应 **Claude Code 2.1.302**，但它的模型兼容性列表前后不一致（FAQ 与页脚列出的模型集合不同）。有两个操作细节比星数更值得看：安装指南现在把 **npm 安装标为弃用**，改用原生安装器、Homebrew 或 WinGet，下载走 `downloads.claude.ai`，企业代理必须放行；以及仓库"不提供 marketplace"，所以 `/plugin install` 不适用，得用 `claude --plugin-dir`。一份这么流行的指南事实上就是入门文档；把它的版本号当成带日期的说法，而不是事实。
+
+[`🔗 luongnv89/claude-howto`](https://github.com/luongnv89/claude-howto) · [`🔗 GitHub Trending`](https://github.com/trending?since=daily)
+
+---
+
+## 31. Corgi：首先为智能体而造的终端复用器，用 `top` 式视图做 token 记账
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News (Show HN) / corgi.computer · 126 pts · 约 1.3 天前 (~03:46 UTC+8 10-24)
+- **Tags:** `agents` `terminal` `multiplexer` `claude-code` `worktrees`
+
+**Corgi** 是一个把编程智能体当作一等窗格的终端复用器：一个视图显示每个智能体的状态（**working / needs you / finished / idle**），F1 给出汇总，一个 `top` 式屏幕报告**每个智能体的 token 记账**，悬停可看活动详情。它用**你现有的账号**驱动 Claude Code、Codex、Pi 和 OpenCode，像 tmux 一样让进程在后台持续运行，并加上智能体特有的功能 —— 回放某个智能体的工作过程、一屏看完它改过的每个文件、管理 **worktree**、自动分组工作区、按工作区监控实时资源占用。安装是一条 shell 命令，支持 **macOS、Linux 和 WSL**，还提供 `corgi --skill` 让智能体自己学会驱动这个复用器。
+
+**Why it matters:** 这是 tmux 的生态位被另一类主体重新填满 —— 操作者。当每位开发者并发运行的智能体数量上升，稀缺资源就变成了**注意力路由**（现在哪个智能体需要人）和**花费可见性**（哪个智能体在烧 token），而这两件事普通终端复用器表达不了。它声明的限制诚实而具体：只支持 macOS/Linux/WSL，而且较丰富的图像功能（用 ⌘V 粘贴图片，包括走 SSH）"需要 **Ghostty Nightly**" —— 依赖一个未发布的终端构建，正是决定一个工具能否当日常主力用的那类约束。
+
+[`🔗 corgi.computer`](https://corgi.computer/) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50214373)
+
+---
+
+## 32. LogSync：一颗 4 × 2 毫米的植入式芯片，在 200 微瓦以下分类脑状态
+
+- **Velocity:** ▮▮ rising
+- **Source:** EPFL / Hacker News · 97 pts · 约 12 小时前 (~23:57 UTC+8 10-24)
+- **Tags:** `neural-interface` `low-power` `biomarkers` `epfl` `hardware`
+
+EPFL 集成神经技术实验室（Mahsa Shoaran 团队）做出了 **LogSync** —— 一颗约 **4 × 2 毫米**的植入式神经 SoC。它不只提取单通道特征，而是记录活动并提取网络级生物标志物：脑波的强度以及**跨脑区同步性**。一个机器学习分类器把它们映射为认知与情绪状态，并在检测到选定状态时发出**刺激触发**。它使用对数域计算，功耗**低于 200 微瓦**。验证使用了此前采集的**人类精神科记录**：仅凭神经信号，它区分出了心算任务中的认知投入与看视频时的情绪唤起；在明尼苏达大学的实验鼠身上，它跟踪在体振荡并在预定相位施加刺激。
+
+**Why it matters:** 塑造这个设计的那条约束才是有意思的部分 —— 跨脑区同步性通常比植入体可负担的功耗更贵，而对数域计算正是把它塞进预算的手段。但证据是早期的，文章自己也这么说：人类验证用的是**既有数据集，而不是新植入的患者**，相位锁定刺激是在**动物**身上演示的。所以这是一个关于"在 200 微瓦下能算什么"的硬件结果（配回溯性人类数据），不是闭环治疗结果 —— 这个区别决定了"检测情绪唤起"究竟指一台在人身上有效的设备，还是一个在录音上有效的分类器。
+
+[`🔗 EPFL — LogSync`](https://actu.epfl.ch/news/neural-chip-decodes-interactions-between-brain-r-2/) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50222525)
+
+---
+
+## 33. 一套复用 CVE-2022-22706 的 TCL 安卓电视 root 工具 —— 并且明说只在哪一个固件上验证过
+
+- **Velocity:** ▮ steady
+- **Source:** GitLab (c4psu13/mali-pagecache-root) / Hacker News · 52 pts · 约 17 小时前 (~18:51 UTC+8 10-24)
+- **Tags:** `android-tv` `mali` `cve-2022-22706` `root` `disclosure`
+
+**mali-pagecache-root** 是针对**一台电视**的完整 root 链：**TCL 50C721**（Realtek **RTD1319**、Mali-G31、固件 **V8-R51MT02-LF1V903**、Android 11、内核 4.14.198）。自动化的二进制在 2 秒内从无特权应用上下文拿到 `uid=0`：把 libc 中 `__cxa_atexit` 所在页以 `MAP_SHARED` 映射导入为 GPU 用户缓冲区（**CVE-2022-22706**），用 `mremap(MREMAP_FIXED)` 替换该文件映射，并向**页缓存**写入 **112 字节 Thumb-2 shellcode** —— 磁盘上的字节不动，所以 dm-verity 不会报错。随后一个特权域通过 `/dev/rtkmem` 映射物理页并把 `selinux_state.enforcing = 0`；链条遍历 `task_struct`、覆写 `cred`、清除 `TIF_SECCOMP` 以逃出 zygote 的 BPF 过滤器，然后 bind-mount 广告拦截 hosts 并禁用 28 个预装应用。**MIT**，一个记录在案的测试机型。
+
+**Why it matters:** 这份发行说明是设备漏洞利用中界定范围的范例 —— "针对特定固件的科研与工具，**不是通用 TCL root 工具**"，一张实际运行固件的表格，以及一份兼容性文档，直言 SoC 与 Mali 驱动版本"在原始记录之间并不一致"。它还明确写出：准备发布时**没有重新做过 root 测试**，不含 APK 封装，且历史上两次尝试刷改过的 boot/vbmeta 镜像都导致变砖循环。更普适的教训是老生常谈的那一个：**CVE-2022-22706 是一颗 2022 年的 GPU 页缓存漏洞，到 2026 年仍在 root 一台消费级电视**，因为对电视而言，补丁边界就是只发一次的固件镜像。它也不是无人知晓的漏洞：NVD 已分析该记录，CVSS 3.1 评分 7.8，且它自 **2023-03-30** 起就在 CISA 的 KEV 名单里。
+
+[`🔗 c4psu13/mali-pagecache-root`](https://gitlab.com/c4psu13/mali-pagecache-root) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50220042)
+
+---
+
+## 34. Deep Fusion Memory：主干冻结的块级参数化记忆 —— 以及一份不列任何局限的摘要
+
+- **Velocity:** ▮ steady
+- **Source:** arXiv 2610.25100 / Hugging Face Papers · 48 赞 · 提交于 2026 年 10 月
+- **Tags:** `memory` `parametric` `rag-alternative` `architecture` `llm`
+
+**Deep Fusion Memory（DFM）** 用学习到的块级记忆取代检索：一个因果记忆预测器从先前上下文生成记忆，以**检索到的块嵌入**作为监督，该记忆在一个块的所有 token 间共享，并通过**门控交叉注意力**注入隐藏状态。主干保持**冻结** —— 只训练预测器与融合层 —— 推理时**不需要显式检索**。训练数据构造比那些构建 token 级目标的参数化记忆方法少用"**32 倍的检索查询**和 **2,048 倍的检索条目**"。在六个 QA 任务上，它在 Mistral-7B-v0.3 上超过最强基线 **12.71%**、Qwen3-8B-Base 上 **11.19%**，域适应上相对 Qwen3-4B-Base 与 Qwen3-8B-Base 分别提升 6.51 与 4.38 分。
+
+**Why it matters:** 冻结主干是让这项工作能与检索相比较而不是与继续预训练相比较的设计决定 —— 基座模型没变，因此增量可以归因于记忆模块而非权重漂移。局限是结构性的、也很容易被忽略：**摘要没有陈述该方法自身的任何局限**，尽管被框定为 RAG 替代方案却没有在同等成本下与检索基线对比，且所有数字都是作者自己在六个 QA 任务上的结果。一个不需要检索、主干冻结的记忆正是生产系统想要的样子；缺的那一项对比，是它们现在实际在跑的东西。
+
+[`🔗 arXiv 2610.25100`](https://arxiv.org/abs/2610.25100) · [`🔗 Hugging Face Papers`](https://huggingface.co/papers/2610.25100)
+
+---
+
+## 35. 一篇 93 页综述追问机器人能否递归自我改进 —— 结论是没有任何研究能分离出"递归"带来的增益
+
+- **Velocity:** ▮ steady
+- **Source:** arXiv 2610.29677 / Hugging Face Papers · 56 赞 · 提交于 2026 年 10 月
+- **Tags:** `recursive-self-improvement` `robotics` `review` `robot-learning` `evaluation`
+
+**《Toward Recursive Self-Improvement in Physical AI》** 是一篇 **93 页**的综述，把两件常被混为一谈的事分开：机器人改进自己的**行为**，和机器人改进**产出行为的方法**。它沿行为 → 方法 → 方法改进这条路径梳理操作（manipulation）方向的文献，并总结该领域展示了什么 —— 更好的行为、对后续学习的助益、改进的流程，部分系统还会修改改进者自身的知识或工具。
+
+**Why it matters:** 结论是否定性的，而且是作者自己说的：物理世界的研究"**尚未分离出可归因于递归的增益**"。这句话值得记住，因为"自我改进的机器人"类主张通常建立在一个每级都变好的流水线上，却没有任何消融把递归改进与"更好的数据/更好的监督"区分开。因此这篇论文的贡献是**评估指南而非新实验**，而它给出的"改进要能持续"的四个条件是一份有用的检查表：反馈必须对准剩余的学习需求、接收方必须有能力使用这次改动、收益必须在任务或硬件变化后依然成立、持续练习必须安全且可负担 —— 大多数物理 AI 的改进回路还没过这四道筛子。
+
+[`🔗 arXiv 2610.29677`](https://arxiv.org/abs/2610.29677) · [`🔗 Hugging Face Papers`](https://huggingface.co/papers/2610.29677)
+
+---
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-10-24T20:17:50Z |
-| Items | 20 |
-| Sources tracked | 26 (Hacker News、GitHub Trending、Hugging Face、arXiv、NVD、CISA KEV、CVE Program、路透社、InfoQ、厂商博客、工程博客) |
+| Generated | 2026-10-25T04:15:42Z |
+| Items | 35 |
+| Sources tracked | 30 (Hacker News、GitHub Trending、Hugging Face、arXiv、NVD、CISA KEV、CVE Program、路透社、InfoQ、EPFL、Cerebras、厂商博客、工程博客) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8（每日 3 次） |
 | Ranking | 速度加权（时效 × 互动加速度 × 信源权威度） |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |

@@ -1,8 +1,8 @@
 ---
 date: 2026-10-25
-updated: 2026-10-24T20:17:50Z
+updated: 2026-10-25T04:15:42Z
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 26
+sources: 30
 license: CC-BY-4.0
 ---
 
@@ -288,13 +288,223 @@ Java のループを GPU へオフロードする異種計算フレームワー�
 
 ---
 
+## 21. 「私のビットコインを盗んでみろ」— PHP 8.4.26 が動くサーバに 502 ドル、PHP RCE の反証可能なテストとして
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Hacker News (Show HN) · 434 pts · 約 8 時間前 (~04:30 UTC+8 10-25)
+- **Tags:** `php` `rce` `challenge` `security-research` `disclosure`
+
+**「Steal My Bitcoin」** と題した Show HN の投稿は、約 **502 ドル**相当のビットコイン鍵をサーバに置き、誰でも取りに来いと誘う。動機はスレッドにある —— 「ここ数日パニックになっていたあの **PHP RCE** を、実際にどう使うのか突き止めた人がいるのか知りたかった」。スレッドに転載されたページ文面は、鍵が「`print-flag` バイナリを通じて **PHP ユーザーアカウント**から到達可能」と述べ、取得時点で **「0.65 hours without a successful hack」**（0.65 時間、突破者なし）というカウンタを表示していた。コメントによれば標的は **nginx 背後の PHP 8.4.26** で、**リクエストボディ上限 1 MB**。
+
+**Why it matters:** これは PHP の 9.2（CVE-2026-109618 / CVE-2026-109619）の開示には無かった反証可能性の一手だ。悪用可能性を論争する代わりに、間違っていた場合に金銭的コストが発生し、カウンタが公開される。ただし注意が 2 つ付く。我々がサイトを直接読もうとした時点で**過負荷だった**ため、ここでの挑戦文は著者がスレッドに投稿した副本であり一次読解ではない。そして少なくとも 1 人のコメント者が、見えたページは**静的なままで PHP のエントリポイントが無い**と指摘している —— それならサーバはテスト対象のクラスに免疫があるのであって、悪用不可能の証明にはならない。期限付きの懸賞が示すのは「0.65 時間で誰もできなかった」ことであり、「不可能」ではない。
+
+[`🔗 HN での議論 (434 pts)`](https://news.ycombinator.com/item?id=50224916) · [`🔗 stealmybitcoin.com`](https://stealmybitcoin.com/)
+
+---
+
+## 22. Goose: ヒープも GC もライフタイム注釈も無いシステム言語 — 人間が設計し、Claude Fable が実装した
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Hacker News / aardappel.github.io · 289 pts · 約 9 時間前 (~03:06 UTC+8 10-25)
+- **Tags:** `programming-languages` `compilers` `ai-authored` `memory-management` `c`
+
+**Goose** は **Wouter van Oortmerssen**（Lobster や wasm3 系の作者）による新しいシステム言語で、メモリモデルが独特だ。「ヒープアロケータもガベージコレクタもライフタイム注釈も無い」。値はコンパイラが割り当てたデータスタック上にインラインで置かれ、成長はポインタを進めるだけで、スコープを抜けるとスタックトップを戻して回収する。各スタックで伸長可能な値は高々 1 つを先頭に置くため、成長時に再配置も容量チェックも起きない。伸長のみの配列への参照はその後の push を跨いでも有効で、コンパイラが参照のライフタイムを推論し、所有者より長生きしうる参照を拒否する。出力は **C**、`extern fn` で C を呼び、ライセンスは **Apache-2.0**。
+
+**Why it matters:** 本題は素性の書き方だ。クレジットは 2 行に分かれている —— 「Wouter van Oortmerssen: 言語設計、コンパイラ設計、コーディング標準」と「**Claude Fable: コンパイラ実装、ベンチマーク、サンプルとドキュメントの執筆**」。ページには「このリポジトリはほぼ全面的に AI で作られ、人間が言語設計を与えた」とある。つまりベンチマーク表は**コンパイラを書いたのと同じモデルによる自己評価**だ。「16 のベンチマークで Goose は慣用的 C++ の **3.3 倍**速い」、手作業最適化 C++ の 1.16 倍、最良の安全 Rust の 1.12 倍、メモリは 1.9/1.3/1.2 分の 1。ページ自身が「ベンチマークには負けた数値も含めて数字がある」と述べる。列挙された制約はバグではなく設計上の境界だ。再帰関数は呼び出しを跨いで伸長可能データを保持できず、可変長要素の配列は反復できるが索引できず、クロージャは脱出できず、関数ポインタは無く、プログラム全体のコンパイルが前提になる。言語設計を人間の貢献、数値を第三者未検証の主張として読むべきだ。
+
+[`🔗 Goose`](https://aardappel.github.io/goose/) · [`🔗 HN での議論`](https://news.ycombinator.com/item?id=50224100)
+
+---
+
+## 23. 「純粋関数型はどこまで C に近づけるか」— 144 ベンチマークで M1 は 2.6% 遅く、Ryzen は 8.9% 遅い
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** rtfeldman.com / Hacker News · 260 pts · 約 24 時間前 (~11:43 UTC+8 10-24)
+- **Tags:** `roc` `deflate` `benchmarks` `performance` `memory-safety`
+
+Richard Feldman は、Niclas Ahden による純 Roc 実装の DEFLATE、**roc-deflate** を最適化し、**Silesia コーパス**で C の **libdeflate** と比較した。両側とも非ストリーミング API を使い、出力がバイト単位で一致することを検証している。**144 ベンチマーク**で、Roc は平均して **M1 MacBook Pro で 2.6% 遅く**、**Ryzen 9 3900X で 8.9% 遅い**。最悪の入力で約 **18% 遅く**、最良では「**18%** をわずかに超えて速い」。
+
+**Why it matters:** 著者は記事の大半を、自分のデータが支えうる見出しに**反対する**ために使っている。1 つのパッケージでは Roc が一般に C へどれだけ近いかは言えない。C の天井が高いのは Roc がメモリ安全性、自動参照カウント、境界チェックを強制し unsafe の逃げ道が無いからであり、roc-deflate にはストリーミング API が無く、x64 には「改善の余地」があり、最良ケースは平均利得ではない。この最後の区別がベンチマークとマーケティングを分ける —— 幾何平均が結論であり、18% 速い切片は平均がすでに織り込んだ例外だ。
+
+[`🔗 rtfeldman.com — FP vs C`](https://rtfeldman.com/fp-vs-c) · [`🔗 HN での議論`](https://news.ycombinator.com/item?id=50218195)
+
+---
+
+## 24. Dan Luu はコストモデルが変わりソフトウェアはもっと野心的であるべきだと論じる — 反論も記事の中に置いて
+
+- **Velocity:** ▮▮ rising
+- **Source:** danluu.com / Hacker News · 259 pts · 約 6 時間前 (~05:47 UTC+8 10-25)
+- **Tags:** `software-engineering` `ai-assisted` `maintainability` `essay` `verification`
+
+Dan Luu の記事は、作り手がいまだ「エージェント以前のコストモデル」で動いており、AI 支援が算術を変えたのに「時間をかける価値が無い」とプロジェクトを切り捨てていると論じる。通しの例は **pgrust** —— Michael Malis による Postgres の Rust 書き換え —— で、差分テストが実際に Postgres のバグ（SP-GiST、JSONPath キャッシュ、pgcrypto、辞書ローダのメモリ安全性、money のオーバーフロー）を掘り起こした。書き換えが失敗しても価値は残る。自身の証拠として、調整可能な正規表現エンジン、より速い ripgrep フォーク、そして**コールドコンパイルで 50 倍、ウォーム/キャッシュ済みビルドで 2 倍**だと本人が言う Rust インタプリタを挙げ、いずれも 1 年以上ではなく数時間で作れたという。
+
+**Why it matters:** 記事は反対意見を埋めずに招き入れる。Luu は **Yossi Kreinin** の反論を引く —— ほとんどの人は AI 製ソフトウェアに対してむしろ**野心を下げるべき**だ。多くの問題には合否の基準が無く、人は大きなブラックボックスを推論できない。Kreinin の助言は「身を隠せ」。Luu はまた、AI による書き換えの大半は「vibeslop」だと認め、**pgrust の ClickHouse ベンチマーク提出は早すぎた**（ただし不正告発は誤りだと述べる）とし、同じ仕事を新しい道具でやるだけではアムダールの法則が利得を制限すると認め、記事を急いで書き通常のベンチマーク厳密さを欠くと断る。持ち帰るべき主張は狭い。いま重要な差は、モデルが**実装**できるものと、人が手取り足取り無しに**検証**できるものの差だ。
+
+[`🔗 danluu.com — 野心的なソフトウェア`](https://danluu.com/ambitious/) · [`🔗 HN での議論`](https://news.ycombinator.com/item?id=50225695)
+
+---
+
+## 25. Cerebras は 3 兆パラメータの Kimi K3 を 59 枚のウェハでどう供給するかを示す — 決着をつける数字は出さない
+
+- **Velocity:** ▮▮ rising
+- **Source:** Cerebras Blog / Hacker News · 32 pts · 約 2.5 時間前 (~09:33 UTC+8 10-25)
+- **Tags:** `cerebras` `inference` `kimi-k3` `wafer-scale` `memory`
+
+Cerebras は **Kimi K3**（約 3 兆パラメータのオープンモデル）の配備設計を公開した。**59 枚の WSE-3T ウェハ**にわたり、**69 層の線形注意**に 35 枚（1 枚 2 層）、**24 層の稠密層**に 24 枚（1 枚 1 層＋KV キャッシュ領域）。各ウェハは **44 GB** のオンチップ SRAM を持ち、4 bit 重み・8 bit KV キャッシュ、平均 256k トークン要求という前提。重みはオンチップに留まり、ウェハ間を渡るのは活性化のみで、RDMA で 1 ホップ約 **2 マイクロ秒**。パイプライン各段は別要求を並行処理する。対外主張は数兆パラメータ級で **「1000–2000+ tokens per second」**。
+
+**Why it matters:** 記事は見出しより慎重だ。59 枚の配置は「実測のエンドツーエンド基準ではなく例示的な構成」であり、エンドツーエンド遅延も**トークン毎秒毎メガワット**も示さない —— その一方で「同一出力速度での」tokens/s/MW こそ有意な指標だと書く。並行性は稠密層ウェハの KV キャッシュ容量で上限が決まり、マイクロバッチサイズは要求あたり速度と総スループットのトレードオフで、脚注は性能がワークロードと日付で変わると断る。メモリ律速という wafer-scale 推論の論拠は本物だが、この記事は測定ではなく見積書だ。
+
+[`🔗 Cerebras — 兆パラメータの配備`](https://www.cerebras.ai/blog/how-we-deploy-trillion-parameter-frontier-models-on-cerebras) · [`🔗 HN での議論`](https://news.ycombinator.com/item?id=50227356)
+
+---
+
+## 26. Unitree Go2 に 9.6 — `gpt_thread.py` の `set_volume` がシェルコマンドを実行、修正はファームウェア 1.1.11.5
+
+- **Velocity:** ▮▮ rising
+- **Source:** CVE Program (cveawg) / VulDB · CVSS 3.1 9.6、CVSS 4.0 9.4 · 公開 2026-10-24
+- **Tags:** `cve` `robotics` `unitree` `command-injection` `firmware`
+
+**CVE-2026-115995** は **VulDB** 割当で、**Unitree Go2** の **1.1.11.4** までに影響する。「影響を受けるのはコンポーネント `chat_go` のファイル `gpt_thread.py` の関数 `set_volume`。引数 Value の操作が **OS コマンドインジェクション**を招く」。攻撃元はネットワーク、権限不要、ユーザー操作要、スコープ変更 —— **CVSS 3.1 で 9.6**、**CVSS 4.0 で 9.4**、CVSS 2.0 指標では **10.0**。いずれも CNA の値。CWE-78。**1.1.11.5** で修正され、記録にはベンダー確認が逐語で載る —— 「提出 990502 は当社の内部チケット **#474**（Go2 `chat_go` `set_volume` OS コマンドインジェクション、CWE-78）に相当する」。
+
+**Why it matters:** 四足歩行ロボットの音声アシスタントのスレッドはシェルであり、音量パラメータを運ぶ引数が注入点になる。これは消費者向けロボットの安全保障に繰り返し現れる形だ —— LLM に近い便利機能が特権ホストプロセスに結び付いている。スコアには来歴の注記が 2 つ付く。3 つの CVSS はすべて **CNA 自身**の値で、NVD は記録を `Received` のままとし NIST の指標は無い。影響範囲は 5 つの点バージョンの明示リスト（**1.1.11.0–1.1.11.4**）で **1.1.11.5** を影響なしとしており、`lessThan` ではなく列挙だ。ファームウェア成果物が記録からリンクされているため、「修正済み」は約束ではなくダウンロードで確認できる。
+
+[`🔗 CVE-2026-115995 (cveawg)`](https://cveawg.mitre.org/api/cve/CVE-2026-115995) · [`🔗 NVD レコード（API）`](https://services.nvd.nist.gov/rest/json/cves/2.0?cveId=CVE-2026-115995)
+
+---
+
+## 27. MongoDB Compass は eMudhra 中間証明書を Electron 自身のルートストアに抱えている — 修正は同梱ランタイムの更新
+
+- **Velocity:** ▮▮ rising
+- **Source:** CVE Program (cveawg) / Compass リリースノート · CVSS 4.0 7.6 · 修正 2026-10-23
+- **Tags:** `cve` `emudhra` `electron` `trust-store` `tls`
+
+**CVE-2026-115929**（割当は **MongoDB**）は 1 文で問題を述べる。「MongoDB Compass は Electron に依存しており、この第三者ランタイムは**独自の TLS ルート証明書ストア**を持つ。そのルート証明書ストアに、復元可能な eMudhra 中間 CA 証明書が含まれている」。**Compass 1.53.1** で解決し、同版は **Electron 44.9.1** を同梱する。そのリリースは **2026-10-23T17:23Z** に公開され、変更履歴の該当行は「セキュリティ問題に対処するため Electron を更新」の一行だけ。CWE-295。スコアは CNA のもので、**CVSS 4.0 で 7.6**、3.1 で 6.8。影響範囲は**最小値なし**（`version: "0"`）から 1.53.1 未満。NVD は記録を `Received` とし NIST 指標を持たない。
+
+**Why it matters:** これは eMudhra の余波のうち、ブラウザのリリースでは消えない半分だ。Mozilla の説明では、10 月 17 日の報告から**3 時間以内**に侵害された 8 つの中間証明書を **OneCRL** に反映し、署名ルートを **NSS 3.131.1** で除去した。だが OneCRL が届くのは *Firefox* であり、独自ストアを同梱する Electron アプリはそれを消費しない。だから固定バンドルを内包するデスクトップアプリはそれぞれ更新を出す必要があり、この CVE が存在する理由でもある —— 「CA をトラストストアから外す」は成果物ごとの作業で、ここでの成果物はアプリのリリースであり OS 更新ではない。緩和は種（ブラウザ対ライブラリ）ではなく**信頼の供給元**（OS/ベンダーストア対固定バンドル）で分かれる。両方が更新されるまで、ホスト側と同梱側の主張は一致しない。
+
+[`🔗 CVE-2026-115929 (cveawg)`](https://cveawg.mitre.org/api/cve/CVE-2026-115929) · [`🔗 Compass v1.53.1 リリース`](https://github.com/mongodb-js/compass/releases/tag/v1.53.1) · [`🔗 eMudhra 侵害についての Mozilla`](https://blog.mozilla.org/security/2026/10/20/protecting-firefox-users-following-the-compromise-of-emudhra-intermediate-certificates/)
+
+---
+
+## 28. OPAL はコーディングエージェントを 1 回の学習に入れ、最適化器を書き換えさせる — −11.6 に対し最良の静的レシピは −2.2
+
+- **Velocity:** ▮▮ rising
+- **Source:** xingjianbai.com / GitHub (xingjian-bai/opal) · 22 pts · 投稿 2026-10-21
+- **Tags:** `optimizers` `agents` `training` `pytorch` `research`
+
+**OPAL**（「OPtimizer with an Agent in the Loop」）は PyTorch のラッパで、2 つの小さなプログラムをコーディングエージェントに渡す —— 見たい統計を取る `analysis.py` と、勾配を更新に変える `updater.py` —— そして**学習中に**どちらもパラメータ群ごとに書き換えさせる。損失スパイク、停滞、過学習に反応する。実行間で何も持ち越さない。報告結果は、**LightningDiT-XL/1 の FID-50K が 2.18 → 1.83**（guidance あり。なしでは 5.15 → 4.33）、Goldfish アムハラ語が **83.48 → 81.11** ビット/文、玩具ランドスケープでは平均 **−11.6** に対し、手で選んだ 12 の静的レシピの最良が **−2.2**、**382,080** の掃引レシピの最良が **−7.4**。ラベルの 10% が誤りのとき、テスト損失 0.69／精度 78.6% 対 AdamW の 2.49／73.5%。
+
+**Why it matters:** 工学は注意書きの側にある。エージェントを待たせると **1.30×–4.39× の実時間オーバーヘッド**が乗り、非同期更新で **1.01×–1.14×** に下がる。実装はシャード学習と最適化器コンパイルに「なお改善が必要」で、実行が短くレシピが調整済みだと利得は縮み、**大半の実験は 1 回だけ**実行された。著者らは FLOP で見ればフロンティア規模では非現実的だと認め、コスト論を API トークン対 GPU 時間で組み立てる（トークン $6.42 に対し H100 約 74 時間 ≒ 510 ドル）。リポジトリのもう一行は結果と同等に扱うべきだ —— エージェントのプログラムは「学習プロセスの中で動くので、これは規則であってサンドボックスではない」。モデル・データ・損失に触れないという制約は、隔離ではなく指示で担保されている。
+
+[`🔗 Reactive Optimizers（ブログ）`](https://xingjianbai.com/reactive-optimizers/) · [`🔗 xingjian-bai/opal`](https://github.com/xingjian-bai/opal)
+
+---
+
+## 29. OpenDS: 生きたウェブ上の深い検索タスク 200 件、最良のフロンティアエージェントが 39.0%、人間は 1,000 回で 21.1%
+
+- **Velocity:** ▮▮ rising
+- **Source:** arXiv 2610.30181 / Hugging Face Papers · 160 票 · 2026 年 10 月投稿
+- **Tags:** `benchmark` `deep-research` `web-agents` `tool-use` `evaluation`
+
+**OpenDS** は、**開かれた生きたウェブ**を複数ステップで検索しないと答えられない問いをエージェントに課す —— 複数モダリティ、複数ファイル形式、対話的閲覧 —— そして単一の事実回答を返させる。**OpenDS-World** は **200 タスク**の公開セットで、証拠は人手で検証され、各タスクに一意の答えがある。12 のフロンティアモデルが**同一のツール構成**で走った。最良は **39.0% の正答率**、人間は **1,000 回**の試行で **21.1%**（約 211 成功）。
+
+**Why it matters:** 生きたウェブ上のベンチマークは再現性と引き換えに現実性を得る。論文は壊れている点を率直に挙げる —— 「ツール調整と長距離の検索管理」、そして調査戦略、検索コスト、停止の判断、失敗からの復帰における大きなばらつき。人間の基準値も正しく読むべきだ。21.1% は**難しく作られた**タスクでの人の正答率であり、有用な比較は「エージェントが人間を超えた」ではなく「この集合は誰にとっても天井が低い」である。だからこそ 39.0% という首位が飽和ではなく情報になる。
+
+[`🔗 arXiv 2610.30181`](https://arxiv.org/abs/2610.30181) · [`🔗 Hugging Face Papers`](https://huggingface.co/papers/2610.30181)
+
+---
+
+## 30. claude-howto: 第三者の Claude Code 教材が 44,652 スター — そして README 自身のバージョン番号が食い違う
+
+- **Velocity:** ▮▮ rising
+- **Source:** GitHub (luongnv89/claude-howto) · **44,652★** · 本日 +392 · MIT
+- **Tags:** `claude-code` `documentation` `tutorial` `mcp` `skills`
+
+**claude-howto** は非公式の例示駆動ガイドで、10 の番号付きモジュール（スラッシュコマンド、メモリ、スキル、サブエージェント、MCP、フック、プラグイン、チェックポイント、高度な機能、CLI）、コピペ用テンプレート、Mermaid 図、クイズ、ベトナム語・中国語・ウクライナ語・日本語の翻訳を含む。**44,652 スター、5,496 フォーク、未処理 issue 40、MIT**、作成 **2025-11-07**、最終 push **2026-10-20**。**+392** で、本日のデイリー盤でもっとも伸びているリポジトリの一つ。
+
+**Why it matters:** このリポジトリの長所と弱みは同じ性質だ —— Anthropic が頻繁に変える表面を映す、動きの速い第三者ミラーであること。README は「最終更新: 2026 年 10 月 18 日」、**Claude Code 2.1.302** 対応と書き、モデル互換性の一覧は内部で一致しない（FAQ とフッターで挙げるモデル群が異なる）。スター数より大事な運用上の詳細が 2 つある。インストール手順は **npm 導入を非推奨**とし、ネイティブインストーラ、Homebrew、WinGet を勧め、ダウンロード元は `downloads.claude.ai` で企業プロキシが許可する必要がある。そしてリポジトリは「マーケットプレイスを同梱しない」ため `/plugin install` は使えず、`claude --plugin-dir` が経路になる。これほど普及したガイドは事実上の入門ドキュメントであり、バージョン表記は日付付きの主張として扱い、事実とはみなさないこと。
+
+[`🔗 luongnv89/claude-howto`](https://github.com/luongnv89/claude-howto) · [`🔗 GitHub Trending`](https://github.com/trending?since=daily)
+
+---
+
+## 31. Corgi: エージェント優先で作られた端末マルチプレクサ、`top` 風ビューでトークン会計
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News (Show HN) / corgi.computer · 126 pts · 約 1.3 日前 (~03:46 UTC+8 10-24)
+- **Tags:** `agents` `terminal` `multiplexer` `claude-code` `worktrees`
+
+**Corgi** はコーディングエージェントを一級のペインとして扱う端末マルチプレクサだ。1 つの画面で各エージェントの状態（**working / needs you / finished / idle**）を示し、F1 で要約、`top` 風の画面が**エージェント別のトークン会計**を表示し、ホバーで活動の詳細が出る。**既存のアカウント**で Claude Code、Codex、Pi、OpenCode を動かし、tmux のようにプロセスをバックグラウンドで維持する。さらにエージェント向けの機能を足す —— 作業のリプレイ、変更した全ファイルを 1 スクロールで確認、**worktree** の管理、ワークスペースの自動整理、ワークスペース別のリソース監視。導入は 1 行のシェルコマンドで **macOS、Linux、WSL** に対応し、`corgi --skill` でエージェント自身がマルチプレクサを操作する方法を学べる。
+
+**Why it matters:** これは tmux の座を別の主体が埋め直す動きだ —— 操作者自身が。開発者あたりの同時エージェント数が増えると、希少資源は**注意力の routing**（いま人間を必要とするのはどれか）と**支出の可視性**（どのエージェントがトークンを焼いているか）になり、どちらも素の端末マルチプレクサでは表現できない。宣言された制約は正直で具体的だ。macOS/Linux/WSL のみ、そして画像系の機能（⌘V での貼り付け、SSH 越しを含む）は「**Ghostty Nightly**」を要求する —— 未リリースの端末ビルドへの依存は、日常の主力にできるかを決める種類の制約だ。
+
+[`🔗 corgi.computer`](https://corgi.computer/) · [`🔗 HN での議論`](https://news.ycombinator.com/item?id=50214373)
+
+---
+
+## 32. LogSync: 4 × 2 mm の埋植チップが 200 µW 未満で脳状態を分類する
+
+- **Velocity:** ▮▮ rising
+- **Source:** EPFL / Hacker News · 97 pts · 約 12 時間前 (~23:57 UTC+8 10-24)
+- **Tags:** `neural-interface` `low-power` `biomarkers` `epfl` `hardware`
+
+EPFL の Integrated Neurotechnologies Lab（Mahsa Shoaran 氏のグループ）は **LogSync** を作った。約 **4 × 2 ミリ**の埋植型ニューラル SoC で、単一チャネルの特徴だけでなく、脳波の強さと**領域間の同期性**というネットワーク水準のバイオマーカーを抽出する。機械学習の分類器がそれを認知・情動状態に結び付け、選んだ状態を検出すると**刺激トリガ**を出せる。対数領域の計算を使い、消費電力は **200 マイクロワット未満**。検証には既存の**ヒト精神科記録**を用い、神経信号のみから暗算課題中の認知的関与と動画視聴中の情動覚醒を区別した。ミネソタ大学のラットでは進行中の振動を追跡し、所定の位相で刺激を与えた。
+
+**Why it matters:** 設計を形づくった制約こそが要点だ —— 領域間の同期性は通常、埋植体が払える電力より高くつき、対数領域計算がそれを予算内に収める手段になる。だが証拠は初期段階で、記事もそう書く。ヒトの検証は**新たに埋植した患者ではなく既存データセット**で、位相固定刺激は**動物**で示された。つまりこれは「200 µW で何が計算できるか」というハードウェアの結果（後ろ向きのヒトデータ付き）であり、閉ループ治療の結果ではない。「情動覚醒を検出する」が人に効くデバイスを指すのか、録音に効く分類器を指すのかを決めるのはこの区別だ。
+
+[`🔗 EPFL — LogSync`](https://actu.epfl.ch/news/neural-chip-decodes-interactions-between-brain-r-2/) · [`🔗 HN での議論`](https://news.ycombinator.com/item?id=50222525)
+
+---
+
+## 33. CVE-2022-22706 を使い回す TCL Android TV の root ツールキット — どのファームで検証したかを明記して
+
+- **Velocity:** ▮ steady
+- **Source:** GitLab (c4psu13/mali-pagecache-root) / Hacker News · 52 pts · 約 17 時間前 (~18:51 UTC+8 10-24)
+- **Tags:** `android-tv` `mali` `cve-2022-22706` `root` `disclosure`
+
+**mali-pagecache-root** は**1 台のテレビ**向けの完全な root 連鎖だ —— **TCL 50C721**（Realtek **RTD1319**、Mali-G31、ファーム **V8-R51MT02-LF1V903**、Android 11、カーネル 4.14.198）。自動化バイナリは非特権アプリの文脈から 2 秒未満で `uid=0` を得る。libc の `__cxa_atexit` のページを `MAP_SHARED` で GPU ユーザーバッファとして取り込み（**CVE-2022-22706**）、`mremap(MREMAP_FIXED)` でファイルマッピングを差し替え、**112 バイトの Thumb-2 シェルコード**を**ページキャッシュ**に書く —— ディスク上のバイトは変えないので dm-verity は通る。続いて特権ドメインが `/dev/rtkmem` 経由で物理ページをマップし `selinux_state.enforcing = 0` にする。連鎖は `task_struct` を辿り `cred` を上書き、`TIF_SECCOMP` を消して zygote の BPF フィルタを抜け、広告ブロックの hosts を bind mount し 28 個のプリインストールアプリを無効化する。**MIT**、記録された検証機は 1 台。
+
+**Why it matters:** リリースノートはデバイス向けエクスプロイトの範囲設定の模範だ —— 「ファーム固有の研究とツールであり、**汎用の TCL root ツールではない**」、実際に動かしたビルドの表、そして SoC と Mali ドライバの版が「元の記録間で一貫しない」と述べる互換性文書。さらに、リリース準備中に**新たな root 検証は行っていない**こと、APK ラッパを含まないこと、過去に改変した boot/vbmeta イメージの書き込みが 2 回ブートループを招いたことを明記する。より普遍的な教訓は繰り返し現れるものだ —— **CVE-2022-22706 は 2022 年の GPU ページキャッシュのバグで、2026 年になっても市販テレビを root している**。テレビにとってのパッチ境界は 1 度だけ出荷されるファームウェアイメージだからだ。見過ごされたバグでもない。NVD は解析済みで CVSS 3.1 の 7.8 を付けており、**2023-03-30** から CISA の KEV に入っている。
+
+[`🔗 c4psu13/mali-pagecache-root`](https://gitlab.com/c4psu13/mali-pagecache-root) · [`🔗 HN での議論`](https://news.ycombinator.com/item?id=50220042)
+
+---
+
+## 34. Deep Fusion Memory: バックボーンを凍結したチャンク単位のパラメトリック記憶 — そして限界を挙げない要旨
+
+- **Velocity:** ▮ steady
+- **Source:** arXiv 2610.25100 / Hugging Face Papers · 48 票 · 2026 年 10 月投稿
+- **Tags:** `memory` `parametric` `rag-alternative` `architecture` `llm`
+
+**Deep Fusion Memory（DFM）** は検索を学習済みのチャンク単位記憶で置き換える。因果的記憶予測器が直前の文脈から記憶を生成し、**検索されたチャンク埋め込み**で教師あり学習される。その記憶はチャンク内の全トークンで共有され、**ゲート付き交差注意**で隠れ状態に注入される。バックボーンは**凍結**され、予測器と融合層のみを学習、推論時に**明示的な検索は不要**。学習データ構築は、トークン単位の目標を作る既存のパラメトリック記憶法より「**32 倍少ない検索クエリ**と **2,048 倍少ない検索項目**」で済む。6 つの QA タスクで最強のベースラインを Mistral-7B-v0.3 で **12.71%**、Qwen3-8B-Base で **11.19%** 上回り、ドメイン適応では Qwen3-4B-Base と Qwen3-8B-Base でそれぞれ 6.51 と 4.38 ポイント改善する。
+
+**Why it matters:** バックボーンを凍結する点が、この手法を継続事前学習ではなく検索と比較可能にする設計判断だ —— ベースモデルは変わらないので、差分は重みのドリフトではなく記憶モジュールに帰属できる。注意点は構造的で見落としやすい。**要旨は自手法の限界を一切挙げていない**。RAG の代替として枠付けながら同じコストでの検索ベースラインとの比較が無く、数値はすべて著者自身による 6 タスクの結果だ。検索不要でバックボーン凍結の記憶は生産システムが欲しがる形そのものだが、欠けている比較は、それらのシステムがいま実際に動かしているものとの比較だ。
+
+[`🔗 arXiv 2610.25100`](https://arxiv.org/abs/2610.25100) · [`🔗 Hugging Face Papers`](https://huggingface.co/papers/2610.25100)
+
+---
+
+## 35. 93 ページのレビューがロボットの再帰的自己改善を問う — 再帰に帰属できる利得を分離した研究は無いと結論
+
+- **Velocity:** ▮ steady
+- **Source:** arXiv 2610.29677 / Hugging Face Papers · 56 票 · 2026 年 10 月投稿
+- **Tags:** `recursive-self-improvement` `robotics` `review` `robot-learning` `evaluation`
+
+**「Toward Recursive Self-Improvement in Physical AI」** は **93 ページ**のレビューで、混同されがちな 2 つを分ける —— ロボットが自分の**振る舞い**を改善することと、振る舞いを生む**手法**を改善すること。振る舞い → 手法 → 手法の改善という経路をマニピュレーション文献に沿って辿り、その文献が示したもの（より良い振る舞い、後続学習への利点、改善された手順、改善者自身の知識やツールを書き換える系）を整理する。
+
+**Why it matters:** 結論は否定的で、しかも著者自身の言葉だ。物理世界の研究は「**再帰に帰属する利得をいまだ分離できていない**」。この一文を残すべき理由は、「自己改善するロボット」という主張が通常、各段階が良くなったパイプラインの上に立ち、再帰的改善と「より良いデータ・より良い監督」を切り分けるアブレーションを持たないからだ。したがって本論文の貢献は**新しい実験ではなく評価指針**であり、改善が持続するための 4 条件が実用的なチェックリストになる —— フィードバックが残る学習ニーズに合っていること、受け手がその変更を使えること、利得がタスクやハードの変化を跨いで有効なこと、継続的な練習が安全で安価なこと。大半のフィジカル AI の改善ループは、まだこの 4 つの篩を通っていない。
+
+[`🔗 arXiv 2610.29677`](https://arxiv.org/abs/2610.29677) · [`🔗 Hugging Face Papers`](https://huggingface.co/papers/2610.29677)
+
+---
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-10-24T20:17:50Z |
-| Items | 20 |
-| Sources tracked | 26 (Hacker News、GitHub Trending、Hugging Face、arXiv、NVD、CISA KEV、CVE Program、ロイター、InfoQ、ベンダーブログ、エンジニアリングブログ) |
+| Generated | 2026-10-25T04:15:42Z |
+| Items | 35 |
+| Sources tracked | 30 (Hacker News、GitHub Trending、Hugging Face、arXiv、NVD、CISA KEV、CVE Program、ロイター、InfoQ、EPFL、Cerebras、ベンダーブログ、エンジニアリングブログ) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8（1 日 3 回） |
 | Ranking | 速度加重（新しさ × エンゲージメント加速度 × 情報源の権威） |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |
