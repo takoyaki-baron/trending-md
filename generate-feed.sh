@@ -141,11 +141,27 @@ if [ -f "$FEED_FILE" ]; then
     || echo "(feed-stamp failed — frontmatter left as the model wrote it; build.js will warn)"
 fi
 
+# Claim-unit lint — the four units that have each produced a wrong sentence in this feed: the
+# `open_issues_count` composite quoted as an issue count, a CVSS score quoted against the wrong
+# version, a star count on an archived/stale repo, and a count about an artifact that the artifact
+# never states. Both of the first two were written into CLAUDE.md AND the knowledge library and
+# both recurred in the very next batch (10-25 → 10-26), which is why this is a check and not a
+# third rule. Non-fatal by design: a finding is a claim to open, not a proven error, and the act
+# pass (`agent-run.sh` Pass 2) reads the JSON and fixes what is real. See
+# agent/tools/claim-unit-lint.mjs.
+if [ -f "$FEED_FILE" ]; then
+  echo "Linting claim units…"
+  node agent/tools/claim-unit-lint.mjs --file "$FEED_FILE" \
+       --out "agent/data/claim-unit-$TODAY.json" 2>&1 | tail -40 \
+    || echo "(claim-unit-lint failed — feed ships un-linted; see the log above)"
+fi
+
 # Stage and commit
 git add en/feed/"$TODAY.md" zh/feed/"$TODAY.md" jp/feed/"$TODAY.md" \
         en/feed/index.md en/archive/index.md en/feed/latest.md \
         zh/feed/index.md zh/archive/index.md zh/feed/latest.md \
-        jp/feed/index.md jp/archive/index.md jp/feed/latest.md 2>/dev/null || true
+        jp/feed/index.md jp/archive/index.md jp/feed/latest.md \
+        agent/data/claim-unit-"$TODAY".json 2>/dev/null || true
 
 if git diff --cached --quiet; then
   echo "No changes to commit"

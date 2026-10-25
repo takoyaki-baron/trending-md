@@ -453,6 +453,29 @@ underlying pages — this produced a two-layer false signal in a single item.
    (plausibility window 2001–2100), and the version must be read *after* the epoch is stripped, or
    `package_1.1.11.5_…_1761128358872.upk` reports the epoch as its version.
 
+9. **A claim's UNIT is checked by a tool, not by a rule — because a rule in prose does not fire at
+   generation time.** (added 2026-10-26.) Two units were written into this file *and* into the
+   knowledge library on 10-25, and both recurred in the very next batch: `open_issues_count` is
+   issues **+ PRs** (recurred as Orca's 8,538 = 4,379 issues + 4,159 PRs), and `Primary`/`Secondary`
+   is a slot, not a provenance (recurred as one CNA's two CVSS versions read as two parties, and as
+   "9.1 (CVSS 3.1)" where 9.1 was the **4.0** score). So the rule is now a command that runs on every
+   batch *before the commit*, and its findings are handed to the act pass:
+   `node agent/tools/claim-unit-lint.mjs --file en/feed/YYYY-MM-DD.md --out agent/data/claim-unit-YYYY-MM-DD.json`
+   (wired into `generate-feed.sh` after `feed-stamp.mjs`). Four checks, each a unit that has produced
+   a wrong sentence here: **issues** (unsplit counter, and arithmetic when a composite is quoted
+   beside its parts — the composite is a *cached* counter and lagged them on free-my-tv, 77 vs
+   21+58); **cvss** (every score/version pair against the NVD record — `version-swapped`,
+   `version-absent`, `score-mismatch`; `slot-quoted` is advisory); **repo** (`archived`, `stale` past
+   `--stale-days`, and `stargazers_count` drifting >10% from the quoted number); **count** (a number
+   about the artifact, read against the artifact — `differs` prints the README's own count, `absent`
+   means the page states none, which is how the impeccable 62-vs-61 and the 10-26 "17 harnesses"
+   title were caught). One NVD request per feed: `cveId` accepts a comma-separated list (measured
+   10-26 — seven IDs, one call, six records back, the seventh genuinely absent). Two limits are
+   stated rather than hidden: it reads the **default branch** only (`release-drift.mjs --claim`
+   separates `main` from the released tag), and it cannot see a **spelled-out** number — "sixteen
+   harness sections" in a body beside "17 harnesses" in its own title is invisible to it, which is
+   itself the lesson: the correction pass edits prose and titles keep the old number.
+
 **Case study (Void, 2026-08-12 — two failures, one root cause):**
 - The feed saw voideditor/void at #2 trending with +2,840 stars and wrote it as "AI-first
   editor momentum beyond Cursor/Copilot."

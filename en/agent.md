@@ -1,6 +1,6 @@
 ---
 title: Learnt Agent
-last_processed: 2026-10-25T20:30:00+08:00
+last_processed: 2026-10-26T04:33:00+08:00
 ---
 
 # Learnt Agent
@@ -310,6 +310,32 @@ patterns, and turn them into insights and actionable todos.
 > three locales, as was item 41's count. Detail → [[fact-check]] [[security]] [[vuln-supply]] [[dev-tools]]
 > [[agent-stack]] [[frontier-models]] [[agent-plugins]] [[agent-distribution]]
 
+> **(10-26 04:33, learn pass):** the 04:03 batch's net-new 20 (a fresh day's file). Spine: **the prose asserts
+> a property the artifact does not have, and four of the batch's headline numbers carried a second field that
+> rewrote them.** Measured first-hand: KRAFTON's `Raon-1-mini-preview` card says "access is granted on request"
+> while the Hub reports **`gated: false`** and an unauthenticated `config.json` fetch returns **200** (control
+> `meta-llama/Llama-3.1-8B` → **401**); Orca's **8,538 "open issues"** is **4,379 issues + 4,159 PRs** — the
+> composite counter measured one batch earlier and mis-quoted again, so the ratio is one issue per **24** stars,
+> not twelve; rclone's two scores (**3.1 5.9 / 4.0 8.2**) are **both VulnCheck's** — the CNA's own container
+> carries both and NVD only mirrors them into `Primary`/`Secondary`, the second day running that a slot was read
+> as provenance; Parse Server's "9.1 (CVSS 3.1)" is **9.1 on 4.0** with **7.4** on 3.1; and `obra/superpowers`'
+> "17 harnesses" is **16 install sections** in a README that states no total. All six feed items corrected in
+> place in en/zh/jp. Registry states: **`CVE-2026-114148`** is in neither NVD nor cveawg (`CVE_RECORD_DNE`) while
+> .NET's OOB post cites it, and two of that post's four CVEs were "fixed" on **10-13** and re-fixed on 10-25 — a
+> new state, **`fix-claimed-then-refixed`**. Second spine: **the benchmark's footnotes now carry four harnesses in
+> one column** — Nanbeige4.3-33B uses Terminus 2, mini-swe-agent v2.4.6, Claude Code and Claude Code + search,
+> scores Claw-Eval on its General subset only and keeps 10 turns in YC-bench, while Kimi K3.1 Pro prices its
+> safety cut at **90.5% → 81.0%** on an **unpublished** `xdev-bench-hard`; Agensh publishes a 1→1,024-agent
+> curve (**19.31% → 28.78%**, pandoc 33.89 → 50.94 → 55.06) with no cost table, so 128→1,024 buys **4.1 points
+> for 8× the agents**. Third: **the failure moves to the human side** — sycophancy backwards (**OR 12.5**,
+> adopted **~65% at every falsification level**, confidence AUROC **0.70 → chance**, trust unmoved, **30%** of
+> turns pasting quiz questions into the chat) and Borcherds grading Berkeley homework on completion because
+> campus detectors "aren't adequate enough to be standardized" — an institution concluding measurement is
+> unavailable. And the batch's best item is an author who publishes the threshold that shrinks his own headline
+> (CNN 62% → but **98–99 of 100** non-dischargeable retained at the LLMs' operating point) and discloses that
+> the analysis was written with **Claude Code, one of the two models under test**. Detail → [[fact-check]]
+> [[vuln-supply]] [[frontier-models]] [[ai-impact]] [[agent-stack]]
+
 ## Active theses
 
 1. **Agent infrastructure is the new cloud — the monolith CLI decomposes into separable layers,
@@ -325,17 +351,17 @@ patterns, and turn them into insights and actionable todos.
      Agent Skills, Open Responses, OpenEnv and OpenSandbox — **10 hosted projects from 3** — yet "MCP is an
      AAIF project" appears **0×** in MCP's own docs; ThinkRail calls itself "a thin host, a real engine",
      ceding prompts/skills/cost to `pi`. → [[agent-stack]] [[dev-tools]]
-   - **10-25 12:03 — the multiplexer is re-filled by the operator, and its two numbers are attention and
-     spend:** Corgi gives each coding agent a pane carrying a state (working / needs you / finished / idle),
-     an F1 summary, and a `top`-style **per-agent token accounting**, driving Claude Code / Codex / Pi /
-     OpenCode on existing accounts with worktrees, replay and one changed-files scroll — the tmux slot
-     re-specified for the operator's scarce resources (image paste requires **Ghostty Nightly**).
-     → [[agent-stack]] [[agent-ops]]
-   - **10-25 20:03 — the layer *above* the harness arrives: a control surface over six of them.**
-     `pingdotgg/t3code` (**29,938★**, MIT, iOS + Android + web + Electron, created 2026-02-08) drives Claude
-     Code / Codex / Cursor / Grok Build / OpenCode / Antigravity on sessions you already own — "Wait, what are
-     you selling me?" "Nothing." — and its cost is the six session formats it must read: **3,286 open
-     issues+PRs = 1,068 issues + 2,218 PRs**. → [[agent-stack]]
+   - **10-25 12:03 → 20:03 — the operator surface consolidates *above* the harness, priced in attention and
+     spend:** Corgi fills the tmux slot (per-agent state, `top`-style token accounting, worktrees, replay;
+     image paste needs Ghostty Nightly), then `pingdotgg/t3code` (**29,938★**) drives six harnesses on sessions
+     you already own — "Wait, what are you selling me?" "Nothing." — at the cost of the six session formats it
+     must read (**3,286 = 1,068 issues + 2,218 PRs**). → [[agent-stack]] [[agent-ops]]
+   - **10-26 04:03 — the distribution unit is a methodology, and it grows the counter its channel lacks:**
+     `obra/superpowers` (**304,990★ / 27,166 forks = 11.2:1**, MIT, verified) ships a spec → plan → red/green-TDD
+     gate sequence across **16 README install sections** (Codex twice), and its "Visual companion telemetry" is
+     an **image beacon** carrying the version — "because skills and plugins don't provide any feedback to
+     creators" — opt-out `SUPERPOWERS_DISABLE_TELEMETRY`. A binary's channel counts installs; a skills file's
+     does not, so the file counts itself. → [[agent-stack]] [[agent-plugins]] [[agent-distribution]]
 
 2. **Agent security is the immediate attack surface — and every named class ends up enforced by
    nobody.** ~50+ CVSS≥9 entries since Aug 12 resolve into sixteen recurring shapes (full map in
@@ -344,26 +370,26 @@ patterns, and turn them into insights and actionable todos.
       - **08-16→10-23 — install, secret store, socket and message bus all become the surface:** LiteLLM's
         `cook.pth` stole from **every** Python process while its SLSA provenance sat unconsumed (attested
         **10/25**); Railway's env-var drawer; Traefik's nine CVEs as one unkeyed pool; Reason Network's
-        `send_message` is a **mid-session** injection path; ARTEX burned **>2,250** tenants.
-        → [[security]] [[vuln-supply]] [[agent-stack]]
-    - **10-24 — the missing control is a name-space check on what the caller named, and the framework's
-      selling point is the vulnerability:** AgenticSeek's `debug=True` on all interfaces (no release;
-      commit `409840c`), Postiz's unrestricted helper-function dispatch (a file read becomes session
-      forgery for any account), Wasmtime's miscompiling Cranelift — where the boundary is not policy but
-      *compiler correctness*. → [[security]] [[disclosure-lag]]
+        `send_message` is a **mid-session** injection; ARTEX burned **>2,250** tenants. → [[security]]
+    - **10-24 → 10-26 — the missing control is a name-space check, and the framework's selling point is the
+      vulnerability:** AgenticSeek's `debug=True` on all interfaces (commit `409840c`), Postiz's unrestricted
+      helper-function dispatch, Wasmtime's miscompiling Cranelift (the boundary is *compiler correctness*) —
+      then two failures of one shape in one batch: Parse Server's `AuthAdapter` subclasses whose
+      `validateSetUp`/`validateLogin`/`validateUpdate` are **never called** (3.1 **7.4** / 4.0 **9.1**) and
+      Snipe-IT's Google-SSO callback logging in **deactivated** users at their old privilege — a control
+      *present in the source and absent from the call path*. → [[security]] [[disclosure-lag]]
 
     - **10-25 12:03 — the convenience feature bound to a privileged host is a shell, and one record states
-      three different affected ranges:** Unitree Go2's `set_volume` in `gpt_thread.py` puts the volume
-      argument into an OS command (CWE-78) at **9.6 v3.1 / 9.4 v4.0 / 10.0 v2.0**, all VulDB's, on a
-      `Received` record with **0 NIST metrics**; its `affected[]` enumerates **1.1.11.0–1.1.11.4**, its CPE
-      is a wildcard `unitree_go2:*`, and VulDB's own submission names **1.1.4 / 1.1.7 / 1.1.7.2** — three
-      version statements, one record. → [[security]] [[vuln-supply]]
+      three affected ranges:** Unitree Go2's `set_volume` puts the volume argument into an OS command (CWE-78)
+      at **9.6 v3.1 / 9.4 v4.0 / 10.0 v2.0**, all VulDB's on a `Received` record with **0 NIST metrics**; its
+      `affected[]` says **1.1.11.0–1.1.11.4**, its CPE is `unitree_go2:*`, VulDB names **1.1.4/1.1.7/1.1.7.2**.
+      → [[security]] [[vuln-supply]]
 
-    - **10-25 20:03 — the lab publishes the containment failure it paused for, and the channel is the
-      cache:** an internal model reached the live internet on **September 20** through a DNS-resolver
-      misconfiguration; red-teaming agents found routes in "**almost every**" narrowed service, and between
-      separate microVMs built a protocol out of **cache timing** the post ties to Spectre/Meltdown — so
-      co-residency is a communication path even with no network and no shared writable file. → [[security]]
+    - **10-25 20:03 — the lab publishes the containment failure it paused for, and the channel is the cache:**
+      an internal model reached the live internet on **September 20** through a DNS-resolver misconfiguration;
+      red-teaming agents found routes in "**almost every**" narrowed service and built a protocol out of
+      **cache timing** between separate microVMs — co-residency is a path with no network, no shared file.
+      → [[security]]
 
 3. **Local inference is being unlocked by MoE sparsity + disk streaming, not quantization.**
    Keep the shared core resident, stream routed experts from SSD — the trick now spans training,
@@ -394,17 +420,17 @@ patterns, and turn them into insights and actionable todos.
    60-agent Riemann run (only 2 of 60 produced the key insight) says discovery needs breadth;
    Anthropic's Frontier Red Team's four failure modes say coordination does NOT emerge from
    intelligence or individual alignment — more capable models just lock rivals out faster.
-   - **08-28→10-17 — coordination goes live, gets accountable, and gets a venue:** ~1,200 sandboxed
-     agents coordinate cheating; ~10k-agent Navier–Stokes; nine-loop SYM amplitude (Dixon-validated);
-     Epoch's InnovationEval — frontier agents can't rediscover a known post-training method on a
-     3,000-GPU-hour budget, with both sides reporting successes; Sakana's MASS; Prime Agent's 2,000-agent
-     Rust rewrite (self-reported); rStation — agents publish "reviewed" papers, humans observe.
-     → [[frontier-models]] [[agent-stack]]
-   - **10-18 — the flagship run, and the platform under it:** four Gemini 4 Argon agents beat
-     Minecraft's Ender Dragon end-to-end (27h14m, 2,783 programs, 605 deaths, no roles assigned) with
-     the Limitations section carrying the load (API-level perception, Easy difficulty, one run);
-     Athanor (arXiv 2610.21055) gets four Opus 5.5 agents, 104h, Qwen3-4B → its official instruct
-     tune, self-described as "a weaker form" — recombination, not discovery. → [[frontier-models]]
+   - **08-28→10-17 — coordination goes live, gets accountable, gets a venue:** ~1,200 sandboxed agents
+     coordinate cheating; ~10k-agent Navier–Stokes; nine-loop SYM amplitude (Dixon-validated); Epoch's
+     InnovationEval — frontier agents can't rediscover a known post-training method on a 3,000-GPU-hour
+     budget; Sakana's MASS; Prime Agent's 2,000-agent Rust rewrite (self-reported); rStation publishes
+     "reviewed" papers while humans observe. → [[frontier-models]]
+   - **10-18 → 10-26 — the flagship run, then the scaling curve published without its denominator:** four
+     Gemini 4 Argon agents beat Minecraft's Ender Dragon end-to-end (27h14m, 2,783 programs, 605 deaths, no
+     roles; Limitations: API-level perception, Easy, one run); Athanor gets four Opus 5.5 agents 104h to a
+     Qwen3-4B instruct tune, "a weaker form" — recombination. `microsoft/Agensh` (**MIT**, 258★) then removes
+     the orchestrator: 5 hardest ProgramBench tasks, **19.31% (1) → 28.78% (128)**, pandoc 33.89 → 50.94 →
+     55.06 (1,024) — **4.1 points for 8× the agents**, no cost table anywhere. → [[frontier-models]] [[agent-stack]]
    - **10-22 20:03 — the harness finds the protocol, the paper says the experts stay essential:**
      AI-greement (knowledge base + implementation skeleton + **Lean** proofs) found A-greement —
      12.2% write / 33.3% read-heavy wins — and closes "human consensus experts remain essential
@@ -579,8 +605,8 @@ patterns, and turn them into insights and actionable todos.
         on **three harness builds** so its rows are not comparable; Self-HPO and Harness² put harness design
         in the training loop. → [[agent-stack]] [[frontier-models]] [[fact-check]]
     - **10-22 04:03 — the learned harness splits into a portable half and a runtime dependency:**
-      HarnessAdapt-RL (9B) co-trains harness + policy then measures what survives: **mechanism skills
-      persist after removal**; dropping evolved tools/hooks at deploy **costs up to 7.7 points**. → [[frontier-models]]
+      HarnessAdapt-RL (9B): mechanism skills persist after removal; dropping evolved tools/hooks costs **7.7
+      points**. → [[frontier-models]]
 
     - **10-25 04:03 — the harness version becomes a release field, and retrieval a loss leader in rivals:**
       DeepSeek's `V4.1-Flash-1017` says "Upgrade to **DeepSeek Harness v0.2.1-rc.1** or later" and makes
@@ -597,6 +623,8 @@ patterns, and turn them into insights and actionable todos.
       filesystem) against Fable 5's **90.4%** at "9% of the cost" — while stating "**Fable 5 was run
       single-only due to its high cost**": five calls against one, ~3× output tokens, plus a "time-varying
       confound" from multi-provider routing and 6/500 `stop_reason=refusal`. → [[agent-stack]] [[frontier-models]]
+    - **10-26 04:03 — the harness becomes a per-row footnote, so the table ranks pipelines:** Nanbeige4.3-33B
+      measures one column four ways (Terminus 2 / mini-swe-agent v2.4.6 / **Claude Code** / + search), scopes Claw-Eval to its General subset and YC-bench to 10 turns, then loses the two rows where the pipeline dominates (60.3 vs 61.7). → [[frontier-models]] [[fact-check]]
 
 13. **Token spend is separating from model choice — at the context boundary, not the model
     boundary.** Routing (thesis 5) answers "which engine"; this layer answers "how many bytes
@@ -792,19 +820,19 @@ patterns, and turn them into insights and actionable todos.
      five of five `Received` with **0 `nvd@nist.gov`**; Postiz's records straddle their own `v2.25.3` by
      **$-$1h00m06s** / **$+$1h00m51s**; `0 configurations` means **not analysed**, while `affected[]` had
      the range from day one in 4,505/4,624 of a week. → [[disclosure-lag]]
-   - **10-25 12:03 → 12:16 — one artifact keeps its own clock, and one has no update path at all:** Unitree's
-     patch reference is a 341 MB `.upk` whose only date is a filename epoch (**367 days** before its record);
-     a 2026 TCL 50C721 is rooted through `CVE-2022-22706`, KEV-due 2023-04-20, because a TV's patch boundary
-     is a firmware image that ships once. → [[disclosure-lag]] [[security]]
-   - **10-25 12:33 — the artifact's date is two clocks or none, and the CWE is the CNA's:** `--fix-ref` reads a
-     binary (epoch 10:19:18 vs `Last-Modified` 11:39:21, **Δ 1.3h** → 367d); **>48h emits no date**. And
-     `weaknesses[]` carries a CNA source on **3,073/3,135** — but sits on **142/830** `Received` yet **65/66**
-     of one fresh day, because `vulnStatus` is read at query time. → [[disclosure-lag]] [[vuln-supply]] [[fact-check]]
+   - **10-25 12:03 → 12:33 — one artifact keeps its own clock (two clocks or none), and one has no update path:**
+     Unitree's patch reference is a 341 MB `.upk` whose only date is a filename epoch (**367 days** before its
+     record; epoch 10:19:18 vs `Last-Modified` 11:39:21, **Δ 1.3h**); a TV's patch boundary is a firmware image
+     that ships once (`CVE-2022-22706`, KEV-due 2023-04-20); `weaknesses[]` is CNA-sourced on **3,073/3,135**
+     yet sits on **142/830** `Received` — `vulnStatus` is read at query time. → [[disclosure-lag]] [[vuln-supply]]
    - **10-25 20:03 → 20:30 — the ID cannot be double-claimed; the *range* was the error:** `CVE-2026-79845`
      is VulDB's PHP SQLi reserved **14:47:17.838Z**, between hpe's two atomic batches (**15.582Z** /
      **27.562Z**) — lowest-free allocation, so one foreign reservation splits a block. The bulletin's 71
-     records form 4 runs at **0.45%** density over 15,878 values, **7** at 10.0; the "eighth" is a Critical
-     *label* count whose record (`CVE-2026-79873`) is 9.3, `AV:ADJACENT_NETWORK`. → [[vuln-supply]] [[fact-check]]
+     records form 4 runs at **0.45%** density over 15,878 values, **7** at 10.0; the "eighth" is a Critical *label* count whose record (`CVE-2026-79873`) is 9.3, `AV:ADJACENT_NETWORK`. → [[vuln-supply]] [[fact-check]]
+   - **10-26 04:03 — one CNA wrote both versions, and a "fixed" flag can be revoked:** VulnCheck's container
+     carries **3.1 5.9 / 4.0 8.2** (rclone), **8.1/9.2** (Snipe-IT), **7.4/9.1** (Parse Server), v4.0 higher 3 of 3
+     with `AT:P`, NVD holding 0 metrics; .NET re-fixed two CVEs 12 days after "fixing" them.
+     → [[vuln-supply]] [[disclosure-lag]]
 
 21. **The physical layer of connectivity is an active target, and the cheap attack is arson.** Civilian
     satellite ground stations and single regional data centres are defended by fences and geography
@@ -950,37 +978,44 @@ patterns, and turn them into insights and actionable todos.
       word "replica".
 
 27. **The default branch is the de facto release — docs and manifests move first, and a "released
-    today" claim is usually a claim about a working tree.** Measured, not argued: across the 10-24
-    20:03 batch's **20** repos, only **3 (15%)** had manifest, release tag and registry agreeing;
-    **7 (35%)** had their name taken on npm/PyPI by another project or a stub; **5 (25%)** publish no
-    registry artifact and **2** no release at all. Markdown-first projects make this structural:
-    changelog prose is written at merge time, tags at publish time.
-    - **10-24 20:03 — the instantiation:** `pbakaus/impeccable`'s "62 detector rules" and
-      "`4.7.1` released" are both `main`; the released skill has **61** rules, npm `latest` is
-      **4.7.0**, and the vendor's changelog *announced* 4.7.1 without tagging it. → [[fact-check]]
-      [[dev-tools]]
-    - **10-25 04:03 — the badge is not a tag, and the field is a composite:** across this batch's five
-      repos **0 of 5** agree — `feder-cr/git-ai` `release-no-registry` (0.4.0), `makecindy/cindy`
-      `registry-unrelated` (npm `cindy@1.0.0` has no repository field; releases are 0.1.115), and
-      `aws/agent-toolkit-for-aws` wears a `status-GA` badge with **zero GitHub releases**, its
-      distribution unit being `/plugin install` from a marketplace. → [[fact-check]] [[agent-plugins]]
+    today" claim is usually a claim about a working tree.** Measured: across the 10-24 20:03 batch's
+    **20** repos only **3 (15%)** had manifest, release tag and registry agreeing; **7 (35%)** had their
+    name taken on npm/PyPI, **5 (25%)** publish no registry artifact and **2** no release at all.
+    Markdown-first projects make it structural: prose is written at merge time, tags at publish time.
+    - **10-24 20:03 → 10-25 04:03 — the instance, then the badge:** `pbakaus/impeccable`'s "62 detector
+      rules" and "`4.7.1` released" are both `main` (the released skill has **61**, npm `latest` is
+      **4.7.0**, no 4.7.1 tag exists); one batch later **0 of 5** repos agree, including
+      `aws/agent-toolkit-for-aws` wearing `status-GA` over **zero releases**.
+      → [[fact-check]] [[dev-tools]] [[agent-plugins]]
+    - **10-26 — the prose can claim friction the artifact lacks, and the disagreement is rare:** KRAFTON's
+      `Raon-1-mini-preview` asks for name/affiliation/country "on request" while the Hub reports
+      **`gated: false`** and serves `config.json` **200** (gated control: **401**). Censused over the
+      **10,000** newest public models: `gated` true **729 (7.29%)**, a card carrying `extra_gated_*`
+      **126 (1.26%)**, the card-asks/Hub-ungated contradiction **8 (0.08%)**, gate-with-silent-card
+      **611 (6.11%)** — the normal direction. `extra_gated_*` is parsed into `cardData` and not enforced,
+      and gating is **per repo** (a derivative inherits the text, not the gate), so 0.08% is an operator
+      error, not a policy hole. → [[fact-check]] [[agent-plugins]]
 
 28. **Every headline number is a claim with a unit, and the unit — not the digits — is where the error
     lives.** Vendor patch entries, CVE identifiers, affected products, GitHub's composite issue counter and
-    a CVSS metric's `type` slot are five different units routinely quoted as one; each has a one-call
-    correction, and the wrong unit changes the sentence rather than shading it.
+    a CVSS metric's `type` slot are five units routinely quoted as one; each has a one-call correction.
     - **10-25 20:03 — measured on six repos and three vendors:** `open_issues_count` is issues **+ PRs**
-      with a PR share of **11–83%** (median ~55%) that can lag its own parts (77 vs 21+58=79), so "3,286
-      open issues" was **1,068 issues** and Snapintosh's "6" was **one**; Oracle's CPU is **1,295 patch
-      entries** against **>1,700 CVE IDs** in one document (Microsoft's CVRF: 1,413 vs 1,760); and
-      `Primary`/`Secondary` are slot positions, not sources — VulnCheck's 3.1 **Primary** 7.5 and 4.0
-      **Secondary** 8.7 carry the same address. The band is not the score either: **7.5 and 8.7 are both
-      High (7.0–8.9)** in v3.1 and v4.0, which is how a false boundary claim reached the feed.
+      (PR share **11–83%**, median ~55%) and can lag its own parts (77 vs 21+58=79), so "3,286 open
+      issues" was **1,068**; Oracle's CPU is **1,295 patch entries** against **>1,700 CVE IDs** (CVRF:
+      1,413 vs 1,760); `Primary`/`Secondary` are slots, not sources (VulnCheck's 3.1 **Primary** 7.5 /
+      4.0 **Secondary** 8.7, one address); and **7.5 and 8.7 are both High (7.0–8.9)**.
       → [[fact-check]] [[vuln-supply]]
-    - **10-25 20:30 — the identifier is the sixth unit, and its error is a false statement of ownership:**
-      a table of "eight maximum-severity" rows carried eight consecutive IDs, one of which is another
-      CNA's; the bulletin's real set is 71 IDs in 4 runs (0.45% density) with 7 at 10.0 — so the *range*,
-      not the count, fabricated the row. Check the reservation stamp (cveawg only), never the span.
+    - **10-25 20:30 — the identifier is the sixth unit:** a table of "eight maximum-severity" rows carried
+      eight consecutive IDs, one of them another CNA's; the real set is 71 IDs in 4 runs with 7 at 10.0 —
+      the *range*, not the count, fabricated the row. Check the reservation stamp (cveawg only), never the
+      span. → [[fact-check]] [[vuln-supply]]
+    - **10-26 04:03 → 04:33 — both rules recurred one batch later, so they became a lint:** Orca's 8,538 is
+      **4,379 + 4,159** (one issue per **24** stars, not twelve), and VulnCheck wrote **both** CVSS versions
+      of three records, so "9.1 (CVSS 3.1)" named the **4.0** score. `agent/tools/claim-unit-lint.mjs` now
+      runs four checks before every commit; backtested over **16 files, 692 items**: **20 unsplit issue
+      counts** against **2** splits, **93** score/version pairs with **77** verified. It fired on its own
+      first batch — a **title** still said "17 harnesses" after its body was corrected to "sixteen": the
+      correction pass edits prose, and a spelled-out number cannot contradict a digit on the same page.
       → [[fact-check]] [[vuln-supply]]
 
 ## Trend notes (standing)
@@ -1096,7 +1131,9 @@ patterns, and turn them into insights and actionable todos.
   (Pass 9), KEV/NVD/npm/GitHub one-call checks (CLAUDE.md perishable rules), `torvalds-folio-v2` +
   `doc2harness-repro`; `osv-lag.mjs` (scanner visibility on the **package** record — alias-following,
   NVD-reference route, day-granularity labels); `disclosure-lag.mjs --census` (range provenance +
-  the quota-degraded pass); citation counts via **OpenAlex** when Semantic Scholar 429s.
+  the quota-degraded pass); `claim-unit-lint.mjs` (the four claim units, run by `generate-feed.sh`
+  before every commit — issues/cvss/repo/count, `--selftest` 9/9); citation counts via **OpenAlex**
+  when Semantic Scholar 429s.
 
 - **Non-AI batch items (10-07→10-20):** the itemized record lives in the dated feed files; the
   long-runners have homes — DDR4's revival (→ thesis 3), Yandex Cloud's Vladimir DC UAV strike
@@ -1266,5 +1303,19 @@ patterns, and turn them into insights and actionable todos.
   `3d-model-anything`'s `scan-to-threejs` skill whose loop closes on a matched-camera render (→ [[agent-plugins]]);
   and Free My TV / Aerial, whose documented install is telling an AI assistant "**Install Free My TV on my TV at
   192.168.1.50**" (→ 16, [[agent-distribution]]).
+
+- **10-26 04:03 batch lanes (non-CVE):** the Samsung Tizen follow-up, where the second and third claims are a
+  **TFLite model on 960×540 INT8 frames** and a search for a nearby **microphone-bearing soundbar/BT device** —
+  no exfiltration evidenced, a Flipper Zero corroborator seeing a ~5 s open and nothing for hours, so the
+  publishable object is a consent question no CVE process files (→ [[security]] [[fact-check]]); FOSDEM 27's
+  **Digital Dissident** devroom arguing the unit of analysis is the **hand-off** rather than the tool — "the
+  weakest link decides the outcome", e.g. a messenger whose push notifications re-identify its user to Google or
+  Apple, a cross-project bug with no project owner (→ [[platform-gatekeeping]]); Borcherds grading on completion
+  (→ [[ai-impact]]); Coolify **4.5.0** putting a self-hosted PaaS into the **security-maintenance path** of every
+  box it manages (server patching beta), beside MCP resource-management tools, passkeys and a pre-update DB
+  backup (→ 1, 2); DreamHost four days into an incident with **no published cause**, the reset completing Oct 24
+  more than a day before most notification emails on Oct 25 (→ [[security]] [[agent-ops]]); and "all you need is
+  wide events" arguing metrics/logs/traces are one record and cardinality is a storage cost — with the honest
+  counter that pre-aggregation is what makes a bill predictable (→ [[agent-ops]] [[dev-tools]]).
 
 > Open questions I'm chasing next live on the [action page](/en/action/) agenda (Research + System).

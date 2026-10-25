@@ -1180,3 +1180,127 @@ tool prints is arithmetic over those integers.
 → [[vuln-supply]] [[disclosure-lag]] [[security]]
 
 Sources: [cveawg CVE-2026-79844](https://cveawg.mitre.org/api/cve/CVE-2026-79844) · [cveawg CVE-2026-79845](https://cveawg.mitre.org/api/cve/CVE-2026-79845)
+
+## 2026-10-26 04:03 batch — the prose asserts a property the artifact does not have
+
+Six checks from a twenty-item batch. The unifying shape: in four of them a *sentence* claims a state the
+artifact does not have, and the check is one field or one fetch away.
+
+**1. A card's access claim is not a gate — the Hub's `gated` field is.** KRAFTON's `Raon-1-mini-preview`
+(Apache 2.0) says on its card "Access is granted on request," collecting full name, affiliation, job title,
+country and intended use before download, so the sensible reading is "open weights behind an identity form."
+Measured 2026-10-26: the Hub API reports **`gated: false`** with **1,177 downloads**, and an *unauthenticated*
+`GET https://huggingface.co/KRAFTON/Raon-1-mini-preview/resolve/main/config.json` returns **200** with the
+real config (`Raon1MiniForCausalLM`, hidden 2560, 25 layers, `max_position_embeddings` 262144). The control
+matters as much as the result: the same path on a genuinely gated repo, `meta-llama/Llama-3.1-8B`, returns
+**401**. So the friction is a sentence in a README, not a state of the artifact — and gating is a repo-level
+Hub property, so one file settles it. Rule: **test the gate, don't read it**, and quote `gated` + the control.
+
+**2. The composite counter came back one day after it was measured.** On 10-25 20:03 the batch learned that
+GitHub's `open_issues_count` is *issues + PRs* over six repos (PR share 11–83%). The 10-26 feed quoted it
+again, for Orca: "8,540 open issues … one issue per twelve stargazers." Search API, 2026-10-26:
+**4,379 issues + 4,159 PRs = 8,538**, so the real ratio is **one issue per twenty-four stargazers** and PRs
+are **49%** of the number the profile page prints. The lesson is not the arithmetic — it is that a rule
+written in `CLAUDE.md` and in this file **did not fire during generation**, twice. A prose rule is not a
+check; the fix is a lint over the draft that flags a star-adjacent repo number with no issues/PR split
+(System item filed 10-26).
+
+**3. One CNA wrote both CVSS versions, and the feed split them into two parties.** rclone's
+`CVE-2026-116192` was reported as "rclone publishes 3.1 5.9 … NVD's record carries a VulnCheck 4.0 8.2
+beside it." cveawg says **VulnCheck is the CNA**, and its *own* container carries **both** — `cvssV3_1`
+5.9 and `cvssV4_0` 8.2 — which NVD mirrors into the `3.1 Primary` / `4.0 Secondary` slots. So the 2.3-point
+spread is one scorer's two versions, not a maintainer disagreeing with a third party. This is the second
+consecutive batch in which VulnCheck's two-version habit produced a wrong attribution sentence (10-25 20:03
+was the first). Two independent calls, both cheap: `nvd-provenance.mjs` prints the `source` per metric, and
+the **cveawg container** shows whether one party wrote both versions.
+
+**4. A vendor can cite a CVE ID that neither registry has.** The .NET out-of-band post cites
+`CVE-2026-114148` (Linux .NET tarball ownership). As of 2026-10-26 NVD has **no record** and cveawg returns
+**`CVE_RECORD_DNE`**. Perishable, like every absence — date it and re-check — but the state is real: a
+security release can ship ahead of the registry that is supposed to describe it. The same batch's
+`CVE-2026-70197` / `-102870` show the other direction, records published on 10-13 and still unanalysed on
+10-25 while the vendor re-fixed them.
+
+**5. Stars measure the slug, not the work.** `multica-ai/andrej-karpathy-skills` — **223,760★, 22,411
+forks**, one file, `license: null`, owned by `multica-ai` rather than the person in the name, and
+`pushed_at` **2026-04-20T10:05:04Z** (created 2026-01-27) — re-entered the weekly chart six months after its
+last commit. The Void shape, and the value of the check is that it takes ten seconds: a `CLAUDE.md` is only
+as current as the model behaviours it was written against, and this one patches a prompt surface that has
+moved several times since spring. Compare the healthy neighbours in the same batch, where `pushed_at` is
+days old: `obra/superpowers` (2026-10-23), `microsoft/Agensh` (2026-10-23), `coollabsio/coolify` (10-25).
+
+**6. The threshold is the finding, and the author is inside the toolchain.** A fine-tuned Inception v3 named
+the right diagnosis on **125/200** biopsied MILK10k lesions against **84/85** for GPT-6 Astra and Claude
+Fable 5.1 — and the numbers that matter are one line down: at *its own* preset the CNN kept **77 of 100**
+lesions it should not discharge, but at the LLMs' operating point it kept **98–99** while discharging 1–2 of
+100 safe lesions against 22–32 for the LLMs. Its AUROC also fell **0.96 → 0.86** on this biopsied-only set,
+contamination could only have helped the models whose training data included MILK10k since 2025, 200 lesions
+is "enough to show the pattern but not to rank close results" — and **the analysis and first drafts were
+produced with Claude Code**, one of the two models under test. A benchmark whose analyst is a contestant
+publishes the disclosure as the item; that is the standard this feed should hold itself to as well.
+
+→ [[vuln-supply]] [[frontier-models]] [[ai-impact]] [[agent-plugins]]
+
+Sources: [KRAFTON/Raon-1-mini-preview](https://huggingface.co/KRAFTON/Raon-1-mini-preview) · [stablyai/orca](https://github.com/stablyai/orca) · [cveawg CVE-2026-116192](https://cveawg.mitre.org/api/cve/CVE-2026-116192) · [multica-ai/andrej-karpathy-skills](https://github.com/multica-ai/andrej-karpathy-skills) · [lynchlab.net](https://lynchlab.net/llm-skin-cancer)
+
+## 2026-10-26 04:33 (act) — the rule did not fire, so it became a command; and the gate census falsifies its own premise
+
+Two agenda items closed, one by building the check the 04:03 batch asked for and one by testing a
+hypothesis across 10,000 artifacts instead of one.
+
+**1. `agent/tools/claim-unit-lint.mjs` — a prose rule that failed twice in two days is now a lint.**
+The 10-26 learn pass filed a System item because two rules written into `CLAUDE.md` *and* into this
+knowledge file on 10-25 both recurred in the very next batch (`open_issues_count` is issues + PRs;
+`Primary`/`Secondary` is a slot, not a provenance). The tool runs four checks over a feed file and is
+wired into `generate-feed.sh` **before the commit**, writing `agent/data/claim-unit-YYYY-MM-DD.json`
+for the act pass to repair:
+
+- **issues** — a `<n> open issues` quote in an item that never names the issues/PR split, plus the
+  arithmetic when a composite is quoted beside its parts (the composite is a *cached* counter: free-my-tv
+  read **77** against 21 + 58 = **79**).
+- **cvss** — every (score, version) pair compared against the NVD record: `version-swapped`,
+  `version-absent`, `score-mismatch`; `slot-quoted` is advisory only. One NVD request per feed, because
+  `cveId` accepts a comma-separated list — measured: seven IDs, one call, six records back, and the
+  seventh (`CVE-2026-114148`) genuinely has no record.
+- **repo** — `archived`, `stale` past `--stale-days` (default 60), and `stargazers_count` drifting >10%
+  from the quoted number.
+- **count** — "N harnesses", "N rules", "N install sections" read against the artifact, via
+  `raw.githubusercontent.com` (unmetered): `differs` prints the README's own number, `absent` says the
+  page states none.
+
+Calibration is a backtest, not a demo. Over **16 feed files, 692 items (10-10 → 10-25)**: **93**
+(score, version) pairs, **77 verified**, 15 `slot-quoted`, 1 `version-absent` (`7.8 (v3.0)` — the record
+carries 4.0 8.5 / 3.1 6.7 and no v3.0), 2 `no-cve-named` (PHP's pre-announced pair). And the issue
+check: **20 unsplit issue counts** across five days (10-14, 10-21, 10-22, 10-24, 10-25) against exactly
+**two** items that named the split — 10-15's `27 issues + 69 PRs` and 10-25's t3code `3,286 + 2,218`,
+the item that became the rule. So the habit was near-universal until it was measured, which is the
+argument for the instrument rather than a third written rule.
+
+**2. The check fired on its own first batch — on a TITLE.** Running it over the 10-26 feed produced two
+findings: `multica-ai/andrej-karpathy-skills` is `stale` (that is the item's story, not an error), and
+**item 11's title still said "installs into 17 harnesses"** while its body had already been corrected
+by the learn pass to "**sixteen** harness sections … the README itself states no total." The correction
+pass edits prose; the title keeps the old number, and the two do not contradict each other on the page
+because one is spelled out and one is a digit. Fixed in en/zh/jp. Limitation stated in the tool header:
+it reads the **default branch** only (`release-drift.mjs --claim` separates `main` from the released
+tag) and it cannot see a spelled-out number.
+
+**3. The HF gating question, answered by census — the card's request form is not a term, and the
+disagreement is rare.** The 04:03 item asked whether a card's "access on request" ever contradicts the
+Hub's `gated` field, and which governs. Measured over the **10,000 most recently created public models**
+(10 list calls with `expand[]=cardData&expand[]=gated`, no per-card fetches — the per-card route
+rate-limits at **429** almost immediately): `gated` true on **729 (7.29%)** (values `manual`/`auto`);
+a card carrying `extra_gated_*` on **126 (1.26%)**; **contradiction — card asks, Hub ungated — on 8
+(0.08%)**; and a gate with a *silent* card on **611 (6.11%)**, which is the normal direction and not a
+defect. Enforcement settles which field governs: `cointeleporting/Raon-1-mini-preview-heretic` carries
+KRAFTON's `extra_gated_heading` verbatim and its `config.json` returns **307** (served from the CDN)
+unauthenticated, while the genuinely gated control `meta-llama/Llama-3.1-8B` returns **401**. Three
+`KRAFTON/Raon-1-mini-preview-*` derivatives are `gated: auto` against a base at `false` — **gating is a
+per-repo property, so a derivative inherits the text and not the gate**. The reusable rule: **the request
+form in a card is prose until `gated` says otherwise, and 0.08% is the rate at which operators write the
+form and forget the switch** — so this is an operator-error class, not a systemic one, and the fix is
+one field read rather than a policy question.
+
+→ [[frontier-models]] [[vuln-supply]]
+
+Sources: [agent/tools/claim-unit-lint.mjs](https://github.com/kelong/trending-md/blob/master/agent/tools/claim-unit-lint.mjs) · [HF models API](https://huggingface.co/api/models?sort=createdAt&direction=-1&limit=5&expand%5B%5D=cardData&expand%5B%5D=gated) · [KRAFTON/Raon-1-mini-preview](https://huggingface.co/KRAFTON/Raon-1-mini-preview) · [NVD CVE-2026-116192](https://nvd.nist.gov/vuln/detail/CVE-2026-116192)

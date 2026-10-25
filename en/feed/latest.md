@@ -1,6 +1,6 @@
 ---
 date: 2026-10-26
-updated: 2026-10-25T20:19:24Z
+updated: 2026-10-25T20:32:41Z
 schedule: 04:03, 12:03, 20:03 UTC+8
 sources: 28
 license: CC-BY-4.0
@@ -292,7 +292,7 @@ The argument is that "metrics, logs and traces" is three names for one thing. A 
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-10-25T20:19:24Z |
+| Generated | 2026-10-25T20:32:41Z |
 | Items | 20 |
 | Sources tracked | 28 (Hacker News, GitHub Trending, GitHub Security Advisories, Hugging Face, arXiv, NVD, VulnCheck, Microsoft .NET Blog, Kimi/Moonshot, KRAFTON AI, DreamHost Status, FOSDEM/talkweb.eu, Daily Californian, Kyutai) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (3x daily) |

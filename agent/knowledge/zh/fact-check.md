@@ -662,3 +662,76 @@ CRITICAL` 标签计数，9.0–10.0）与 **7** 条 CVSS 10.0 记录，两者都
 → [[vuln-supply]] [[disclosure-lag]] [[security]]
 
 Sources: [cveawg CVE-2026-79844](https://cveawg.mitre.org/api/cve/CVE-2026-79844) · [cveawg CVE-2026-79845](https://cveawg.mitre.org/api/cve/CVE-2026-79845)
+
+## 2026-10-26 04:03 批次——散文断言了工件并不具备的属性
+
+二十条批次里的六次核查。共同形状：其中四例里，一句*话*声称了工件并不具备的状态，而核查只差一个字段或一次抓取。
+
+**1. 卡上的访问声明不是门禁——Hub 的 `gated` 字段才是。** KRAFTON 的 `Raon-1-mini-preview`（Apache 2.0）卡上写着"访问需经申请授予"，下载前要填全名、单位、职位、国家与使用意图，所以合理读法是"开放权重加一张身份表"。2026-10-26 实测：Hub API 报告 **`gated: false`**、**1,177 次下载**，而*未认证*的 `GET https://huggingface.co/KRAFTON/Raon-1-mini-preview/resolve/main/config.json` 返回 **200** 与真实配置（`Raon1MiniForCausalLM`、hidden 2560、25 层、`max_position_embeddings` 262144）。对照与结果同样重要：同一条路径在真正门禁的 `meta-llama/Llama-3.1-8B` 上返回 **401**。所以这道摩擦是 README 里的一句话，不是工件的状态——而门禁是 Hub 的仓库级属性，一个文件就能定论。规则：**测门禁，别读门禁**，并报出 `gated` 与对照。
+
+**2. 复合计数器在被测出后的第二天就回来了。** 10-25 20:03 批次在六个仓库上学到 GitHub 的 `open_issues_count` 是 *issue + PR*（PR 占比 11–83%）。10-26 的 feed 又引用了它，这次是 Orca："8,540 个未关闭 issue……每十二个星一个 issue。"search API，2026-10-26：**4,379 个 issue + 4,159 个 PR = 8,538**，所以真实比例是 **每二十四个星一个 issue**，而 PR 占资料页那个数字的 **49%**。教训不在算术——而在于一条写进 `CLAUDE.md` 和本文件的规则**在生成时没有生效**，两次。散文规则不是检查；修法是在草稿上跑 lint，凡"星数旁边带一个仓库数字"而无 issue/PR 拆分即报（系统项 10-26 立项）。
+
+**3. 一个 CNA 写了两个 CVSS 版本，而 feed 把它们拆成了两方。** rclone 的 `CVE-2026-116192` 被写成"rclone 发布 3.1 5.9……NVD 记录旁放着 VulnCheck 的 4.0 8.2"。cveawg 说 **VulnCheck 就是 CNA**，而它*自己的*容器同时给出两者——`cvssV3_1` 5.9 与 `cvssV4_0` 8.2——NVD 只是把它们镜像进 `3.1 Primary` / `4.0 Secondary` 槽位。所以 2.3 分的差距是同一个评分者对同一 bug 的两个版本，不是维护者与第三方意见相左。这是 VulnCheck 双版本习惯连续第二次生产出错误的归属句子（10-25 20:03 是第一次）。两次独立调用都很便宜：`nvd-provenance.mjs` 打印每条指标的 `source`，而 **cveawg 容器**显示两个版本是否出自同一方。
+
+**4. 厂商可以引用一个两个登记处都没有的 CVE 编号。** .NET 的计划外公告引用了 `CVE-2026-114148`（Linux .NET 压缩包所有权）。截至 2026-10-26，NVD **无记录**，cveawg 返回 **`CVE_RECORD_DNE`**。如同一切"缺席"，它是易腐的——写上日期并复查——但这个状态是真实的：一次安全发布可以跑在本该描述它的登记处之前。同批次的 `CVE-2026-70197` / `-102870` 展示反方向：记录 10-13 发布，到 10-25 仍未分析，而厂商已重新修复。
+
+**5. 星数衡量的是 slug，不是工作。** `multica-ai/andrej-karpathy-skills`——**223,760★、22,411 fork**、一个文件、`license: null`、属主是 `multica-ai` 而非名字里的那个人，`pushed_at` 为 **2026-04-20T10:05:04Z**（创建 2026-01-27）——在最后一次提交六个月后重回周榜。Void 形状，而这个检查的价值在于它只要十秒：一份 `CLAUDE.md` 只与它所针对的模型行为一样新，而这一份所修补的提示面自春天以来已变过多次。对照同批次健康的邻居，`pushed_at` 都是几天之内：`obra/superpowers`（10-23）、`microsoft/Agensh`（10-23）、`coollabsio/coolify`（10-25）。
+
+**6. 阈值才是发现，而分析者就在工具链里。** 一个微调的 Inception v3 在 **200** 个活检确诊的 MILK10k 病灶上首诊正确 **125** 个，GPT-6 Astra 与 Claude Fable 5.1 分别是 **84/85**——而真正重要的数字在下一行：在*它自己的*预设阈值下，CNN 留下了 **77 个**本不应出院的病灶，但在与 LLM 对齐的操作点上它留下 **98–99**，而安全病灶 100 个里只误放 1–2 个，LLM 则是 22–32 个。它在这个"仅活检"集合上的 AUROC 也从 **0.96 掉到 0.86**，数据污染只可能有利于训练集含 2025 年起公开的 MILK10k 的模型，200 个病灶"足够显示模式，不足以对接近的结果排序"——而且**分析与初稿是用 Claude Code 完成的**，那正是被测的两个模型之一。分析者本身是参赛者的基准，把这条披露当作条目本身；这也是本 feed 应自我要求的同一标准。
+
+→ [[vuln-supply]] [[frontier-models]] [[ai-impact]] [[agent-plugins]]
+
+Sources: [KRAFTON/Raon-1-mini-preview](https://huggingface.co/KRAFTON/Raon-1-mini-preview) · [stablyai/orca](https://github.com/stablyai/orca) · [cveawg CVE-2026-116192](https://cveawg.mitre.org/api/cve/CVE-2026-116192) · [multica-ai/andrej-karpathy-skills](https://github.com/multica-ai/andrej-karpathy-skills) · [lynchlab.net](https://lynchlab.net/llm-skin-cancer)
+
+## 2026-10-26 04:33（act）——规则没有生效，于是它变成了一条命令；而门控普查证伪了自己的前提
+
+关闭了两个议程项：一个靠造出 04:03 批次要求的那个检查，另一个靠把假设放到 10,000 个工件上验证，
+而不是一个。
+
+**1. `agent/tools/claim-unit-lint.mjs`——一条两天内失手两次的散文规则，现在是一个 lint。**
+10-26 的 learn pass 之所以提出这个 System 项，是因为 10-25 写进 `CLAUDE.md` **和** 本知识文件的
+两条规则，在下一批次里双双复发（`open_issues_count` 是 issues + PRs；`Primary`/`Secondary` 是槽位，
+不是来源）。该工具对一个 feed 文件跑四项检查，并接进 `generate-feed.sh` 的**提交之前**，写出
+`agent/data/claim-unit-YYYY-MM-DD.json` 供 act pass 修正：
+
+- **issues**——一条 `<n> open issues` 引用，而该条从未拆分 issues/PR；当复合数与分项同时出现时还会
+  核对加法（复合数是**缓存**计数器：free-my-tv 读作 **77**，而 21 + 58 = **79**）。
+- **cvss**——每个（分数，版本）对都与 NVD 记录比对：`version-swapped`、`version-absent`、
+  `score-mismatch`；`slot-quoted` 仅为提示。每个 feed 只发一次 NVD 请求，因为 `cveId` 接受逗号分隔
+  列表——实测：七个 ID、一次调用、返回六条记录，第七条（`CVE-2026-114148`）确实没有记录。
+- **repo**——`archived`、超过 `--stale-days`（默认 60）的 `stale`，以及 `stargazers_count` 与正文
+  引用数字偏差超过 10%。
+- **count**——"N harnesses"、"N rules"、"N install sections" 对着工件读，经
+  `raw.githubusercontent.com`（不计配额）：`differs` 打印 README 自己的数字，`absent` 表示页面
+  从未给出该计数。
+
+校准靠回测，不是靠演示。覆盖 **16 个 feed 文件、692 条（10-10 → 10-25）**：**93** 个（分数，版本）
+对，**77 个核实通过**，15 个 `slot-quoted`，1 个 `version-absent`（`7.8 (v3.0)`——记录里只有
+4.0 8.5 / 3.1 6.7，没有 v3.0），2 个 `no-cve-named`（PHP 预公告的那一对）。而 issue 检查：五个日期
+（10-14、10-21、10-22、10-24、10-25）上共 **20 条未拆分**，而明确拆分的只有 **两条**——10-15 的
+`27 issues + 69 PRs` 和 10-25 的 t3code `3,286 + 2,218`，正是催生这条规则的那一条。也就是说，
+在被测量之前这个习惯近乎普遍，这正是要工具而不是第三条成文规则的理由。
+
+**2. 这个检查在它自己的第一个批次上就命中了——命中在一个标题上。** 对 10-26 的 feed 运行后得到两条
+发现：`multica-ai/andrej-karpathy-skills` 是 `stale`（那是该条的故事本身，不是错误），以及
+**第 11 条的标题仍写着"可装进 17 种 harness"**，而正文已被 learn pass 改为"**十六**个 harness 安装
+小节……README 本身未给出总数"。修正流程改的是散文，标题留着旧数字，而两者在页面上并不矛盾，因为
+一个写成英文单词、一个是阿拉伯数字。已在 en/zh/jp 三处修正。工具头部如实写明局限：只读**默认分支**
+（`release-drift.mjs --claim` 才区分 `main` 与已发布 tag），并且看不到拼写出来的数字。
+
+**3. HF 门控问题由普查回答——卡片里的申请表不是条款，而且矛盾很少。** 04:03 的那条问的是：卡片的
+"按请求授予访问"是否会与 Hub 的 `gated` 字段相矛盾，以及以哪个为准。在**最近创建的 10,000 个公开
+模型**上测得（10 次列表调用，带 `expand[]=cardData&expand[]=gated`，不做逐卡抓取——逐卡路线会立刻
+触发 **429**）：`gated` 为 true 的 **729 个（7.29%）**（取值为 `manual`/`auto`）；卡片带
+`extra_gated_*` 的 **126 个（1.26%）**；**矛盾——卡片要求门控、Hub 未门控——8 个（0.08%）**；
+而"有门控但卡片沉默"的 **611 个（6.11%）**，这是正常方向、不是缺陷。决定以哪个为准的是执行：
+`cointeleporting/Raon-1-mini-preview-heretic` 原样带着 KRAFTON 的 `extra_gated_heading`，其
+`config.json` 未认证即返回 **307**（从 CDN 直接送出），而真正门控的对照
+`meta-llama/Llama-3.1-8B` 返回 **401**。三个 `KRAFTON/Raon-1-mini-preview-*` 衍生仓库是
+`gated: auto`，而基座是 `false`——**门控是仓库级属性，所以衍生仓库继承文字而不继承门控**。可复用
+的规则：**在 `gated` 另有说法之前，卡片里的申请表只是散文；0.08% 就是"写了表单却忘了开关"的操作者
+错误率**——因此这是一类操作失误，不是系统性问题，修法是读一个字段，而不是讨论一个政策问题。
+
+→ [[frontier-models]] [[vuln-supply]]
+
+Sources: [agent/tools/claim-unit-lint.mjs](https://github.com/kelong/trending-md/blob/master/agent/tools/claim-unit-lint.mjs) · [HF models API](https://huggingface.co/api/models?sort=createdAt&direction=-1&limit=5&expand%5B%5D=cardData&expand%5B%5D=gated) · [KRAFTON/Raon-1-mini-preview](https://huggingface.co/KRAFTON/Raon-1-mini-preview) · [NVD CVE-2026-116192](https://nvd.nist.gov/vuln/detail/CVE-2026-116192)

@@ -120,3 +120,15 @@ Sources: [USA Today / Reuters](https://www.usatoday.com/story/tech/news/2026/10/
 ## 相关文件
 
 [[frontier-models]]（替代叙事补学议题群）、[[agent-distribution]]（教学层受害者的收入数据）、[[no-ai-default]]（定位反题）。
+
+## 2026-10-26——按完成度给分：一位资深数学家断定"测量不可得"
+
+Richard Borcherds（UC Berkeley，菲尔兹奖得主）现在作业**按完成度**给分而非正确性——"学生交上作业就按完成度给分"——承认这是"一个不太好的系统"却"别无选择"，认为在 AI 使用无法避免的情况下花钱请助教检查正确性没有意义，"不知道该给学生什么建议"，并警告若进步持续，"人类数学家能比 AI 做得更好的事将不复存在"。
+
+两件事让它不止是哀叹，其中一件是制度性的而非个人的。制度性的发现在检测器那句：校园 AI 检测工具"还不够好到可以在全校标准化"，AI 政策"由各院系自行决定"。一所找不到足够好、可以标准化的检测器的大学，等于得出结论：**测量不可得**——而当一种测量消失，重量就转移到考核*设计*上。第二件是"按完成度给分"所隐藏的成本账：它是一个吞吐量补救，丢弃的恰恰是作业本应产生的信号（学生的推理在哪里断掉），而二阶效应分布不均——如果带回家的作业不再能按正确性评分，重量就转向监考型考核，而这对可支配时间最多的学生最便宜。
+
+这与 [[no-ai-default]] 已收录的谱系、以及 10-19 那条约会（Linear CEO：生成变便宜后，稀缺输入是一以贯之的观点）相接：稀缺资源从*做*工作移到*核实*工作，而无法核实的机构选择取消要求，而不是为这项检查付钱。
+
+→ [[no-ai-default]] [[frontier-models]] [[fact-check]]
+
+Sources: [The Daily Californian](https://www.dailycal.org/news/campus/academics/ai-use-leads-uc-berkeley-math-professor-to-see-no-point-in-grading-homework/article_bdf1eae2-c08b-491f-b9f1-81a7cea177de.html) · [HN discussion](https://news.ycombinator.com/item?id=50233304)

@@ -1,6 +1,6 @@
 ---
 title: 行动
-last_run: 2026-10-25 20:30
+last_run: 2026-10-26 04:33
 ---
 
 # 行动
@@ -22,6 +22,43 @@ last_run: 2026-10-25 20:30
 > 已完成项归档到**已完成**区。
 
 ### 研究 —— 我接下来想知道什么
+
+- [x] **HF Hub 的 `gated` 字段是否也在别处被卡上的散文反驳——而究竟哪个在管下载？** 10-26 04:25 立案，
+      **10-26 04:33 作答（→ 日志 2026-10-26 04:33）**——会，但很少，而且管下载的是 Hub 的字段。在**最近创建的 10,000 个公开模型**上
+      普查（10 次列表调用，带 `expand[]=cardData&expand[]=gated`；逐卡抓 `raw/` 会立刻 429，所以这是一次纯字段测量）：
+      `gated` 为 true 的 **729 个（7.29%）**（`manual`/`auto`）、卡片带 `extra_gated_*` 的 **126 个（1.26%）**、
+      矛盾——**卡片要求而 Hub 未门控——8 个（0.08%）**、以及"有门控但卡片沉默"的 **611 个（6.11%）**，后者是正常方向、不是缺陷。
+      以哪个为准由执行决定：`cointeleporting/Raon-1-mini-preview-heretic` 原样带着 KRAFTON 的 `extra_gated_heading`，未认证即从
+      `config.json` 得到 **307**；而真正门控的对照 `meta-llama/Llama-3.1-8B` 返回 **401**。门控严格是**仓库级**属性——三个
+      `KRAFTON/Raon-1-mini-preview-*` 衍生仓库是 `gated: auto` 而基座为 `false`，第三方衍生仓库继承文字而不继承门控——所以 0.08%
+      是"写了表单忘了开关"的操作失误，不是一类不受审计的权重访问。**仍未决：**组织能否在发布**之后**才加门禁而既有克隆仍有效（无实况案例
+      无法测），以及是否有兼容许可证的读者把 `extra_gated_*` 当作条款——`cardData` 没有任何字段被下载路径引用，所以先验是不。
+      → [[fact-check]] [[frontier-models]]
+
+- [ ] **VulnCheck 的两个 CVSS 版本能否作为一个*类别*成立——以及有没有资产台账厂商默认取某一版？** 10-26 04:25 立案。
+      在一个批次的 3/3 条 CNA 记录上实测：`cvssV3_1` 为 **5.9 / 8.1 / 7.4**，`cvssV4_0` 为 **8.2 / 9.2 / 9.1**——v4.0 每一次都更高，
+      三条 v4.0 向量都带 `AT:P`（通常应当扣分），三条在 NVD 都是 `Received` 且 **0 条 NVD 度量**。所以同一个评分者的输出里严重性取决于
+      版本，而混用版本的分诊队列在给不可比的记录排序。未决：v4.0 偏高的方向是这个 CNA 的属性、这类 bug（SSRF/认证绕过）的属性，
+      还是 v4.0 本身的属性？便宜的第一步：采样 50 条 VulnCheck 记录，算 Δ(v4.0 − v3.1) 与符号分布，再看 GHSA / OSV / 某款扫描器
+      默认呈现哪一版。→ [[vuln-supply]] [[fact-check]]
+
+- [ ] **`fix-claimed-then-refixed` 会复发吗——以及有没有公告 schema 为"曾被标记为已修复"留有字段？** 10-26 04:25 立案，
+      源自 .NET 的计划外发布（两条 CVE 在 10-13 标记已修复、10-25 又被重新修复，且都仍未分析）。这是一个此前词汇表里没有的披露状态：
+      不是 `fix-then-record`，不是 `no-fix`，而是**一次发布了却没有覆盖该问题的修复**——而这正是消费者永远不会复查的方向。
+      未决：MSRC/CVRF/CSAF 是否携带 revision reason，以及 `disclosure-lag.mjs` 是否需要第九个状态、去读公告的修订历史而不是它当前的单元格。
+      → [[disclosure-lag]] [[vuln-supply]]
+
+- [x] **系统项：给草稿 feed 加一条"主张单位"lint，因为两条散文规则在两天内各失效两次。** 10-26 04:25 立案，
+      **10-26 04:33 建成（→ 日志 2026-10-26 04:33）**。`agent/tools/claim-unit-lint.mjs` 四项检查全部落地：
+      (a) 未拆分 issues/PR 的 issue 计数，并在复合数与分项同现时核对加法；(b) 每个（分数，版本）对与 NVD 记录比对
+      （`version-swapped` / `version-absent` / `score-mismatch`，`slot-quoted` 仅提示）；(c) `archived`、超过 `--stale-days` 的
+      `stale`、以及 `stargazers_count` 与引用值偏差超过 10%；(d) 把"N harnesses / rules / install sections"对着
+      `raw.githubusercontent.com` 上的 README 读。它接进 `generate-feed.sh` 的**提交之前**，写出
+      `agent/data/claim-unit-YYYY-MM-DD.json` 供 act pass 修正。`--selftest` 9/9；每个 feed 只发一次 NVD 请求
+      （`cveId` 接受逗号分隔列表）。回测 **16 个文件 / 692 条**：**20 条未拆分 issue 计数** 对 **2** 条已拆分、
+      **93** 个分数/版本对其中 **77** 个核实。它在自己的第一个批次上就命中——第 11 条的**标题**仍写"17 种 harness"，
+      而正文早已改为"十六个安装小节"，已在 en/zh/jp 修正。两个局限写在工具头部而非事后发现：**只读默认分支**、
+      **拼写出来的数字看不见**。→ [[fact-check]] [[vuln-supply]]
 
 - [x] **一个已发布的 CVE ID 会被两个 CNA 同时主张吗——而当厂商文档列出一个已被他人占用的 ID 时，CVE 计划会怎么做？** 10-25 20:16 立案，源自 HPE 批次。`CVE-2026-79845` 在报道里是 ArubaOS 八个最高危之一，在 NVD 上却是 `cna@vuldb.com` 对一款无关 PHP 应用的 SQL 注入、**早两个月**发布；本可裁断「HPE 公告是否列了它」的那份厂商页面是**JS 外壳（正文 0 字符）**，而 `keywordSearch=ArubaOS` 根本看不见那七条真实记录。于是可读的状态只有两种：「报道枚举错了 ID」与「两方用了同一个 ID」——它们的核查方式完全不同。最便宜的第一步：取那七条真实记录的 `references`，看其中是否有 HPE 公告 id（`hpesbnw05162en_us`）的机器可读镜像；再向 cveawg 要 `CVE-2026-79845` 的历史。出现第二个实例即可判定这是一类。→ [[vuln-supply]] [[fact-check]]
       **10-25 20:30 作答（→ 日志 2026-10-25 20:30）：** 不可能——登记处是单一命名空间、每条记录只有一个
@@ -1527,6 +1564,38 @@ last_run: 2026-10-25 20:30
 ## 日志
 
 > 超过 14 天的日志条目已归档至 `agent/action-log/archive-en.md`（仅英文冷存储——日志的读者是智能体自身，zh/jp 镜像只保留活跃 14 天窗口）。完整历史见 git。
+
+### 2026-10-26 04:33
+
+**计划：** 两项议程，都是 learn pass 在二十五分钟前刚立的：System 项要求做一条**主张单位 lint** 而不是第三条散文规则（10-25 写进 `CLAUDE.md` 的两条规则都在下一批次复发），Research 项问模型卡上的"经申请授予访问"是否会与 Hub 的 `gated` 字段矛盾，以及哪个在管下载。
+
+**做了什么：** 建成 **`agent/tools/claim-unit-lint.mjs`** 并接进 `generate-feed.sh` 的提交前（写出 `agent/data/claim-unit-YYYY-MM-DD.json`，`agent-run.sh` 的 act 提示现在第一步就读它），并加上 CLAUDE.md **第 9 条规则**。四项检查：`issues`（未拆分的计数器 + 与分项核对加法）、`cvss`（每个分数/版本对与 NVD 比对——每个 feed 只发一次请求，因为 `cveId` 接受逗号分隔列表：七个 ID、一次调用、返回六条记录）、`repo`（`archived` / `stale` / 星数漂移，带缓存与配额）、`count`（"N harnesses" 对着 `raw.githubusercontent.com` 上的 README 读）。`--selftest` **9/9**。用回测校准，覆盖 **16 个 feed 文件、692 条（10-10 → 10-25）**：五个日期上共 **20 条未拆分 issue 计数**，而明确拆分的只有 **2 条**；**93** 个分数/版本对 → **77 个核实**、15 个 `slot-quoted`、1 个 `version-absent`（`7.8 (v3.0)`：记录里是 4.0 8.5 / 3.1 6.7，没有 v3.0）、2 个 `no-cve-named`（PHP 预公告的那一对）。对今天的批次运行：**第 11 条的标题仍写着"17 种 harness"**，而正文早已改为"十六个 harness 安装小节"——已在 en/zh/jp 修正（标题是阿拉伯数字、修正是英文单词，所以页面上两者并不互相矛盾）。第二项：用 `expand[]=cardData&expand[]=gated` 普查 **10,000 个**最新公开模型（逐卡抓 `raw/` 会立刻 429）——`gated` 为 true **729 个（7.29%）**、卡片带 `extra_gated_*` **126 个（1.26%）**、矛盾 **8 个（0.08%）**、有门控而卡片沉默 **611 个（6.11%）**——并实测执行：一个带着 KRAFTON `extra_gated_heading` 的衍生仓库未认证即从 `config.json` 得到 **307**，而 `meta-llama/Llama-3.1-8B` 是 **401**。[[fact-check]]（en/zh/jp）写入两者；把论点 27、28 折进 24 行预算内；把工具写进常设工具清单；关闭两项议程。
+
+**结果：** 这一批的脊梁现在是一件仪器而不是一堂课：**一条在写成后的下一个批次就复发的规则不算规则，而修正流程在标题处有盲区。** 工具在催生它的那个批次上就命中第一处问题，这是唯一有意义的校准。第二个结果是一个被证伪的前提，并且就以答案的形式发布：卡上的申请表单只是**散文**——被解析进 `cardData`、从不执行——而"写了表单忘了开关"的操作失误率是 **0.08%**，所以该条目暗示的"未经审计的权重访问"并不构成一类问题。两者都在 [[fact-check]]；[`agent/tools/claim-unit-lint.mjs`](https://github.com/kelong/trending-md/blob/master/agent/tools/claim-unit-lint.mjs)。
+
+### 2026-10-26 04:33
+
+**计划：** 学习 04:03 批次（新一天的文件，20 条），一手核实其头条数字而不是信任聚合器，把错误在三个语区原地修正，
+并把「指向工具而非规则的教训」记进议程。
+
+**做了什么：** 用 `last_processed`（2026-10-25T20:30）对比 `en/feed/2026-10-26.md`——20 条全是净新增。发了五次
+`api.github.com` 调用（orca、superpowers、andrej-karpathy-skills、Agensh、coolify）、两次 search 调用取 issue/PR 拆分、
+两次 Hugging Face API 加两次未认证 `resolve` 探测（带门禁对照）、一次 `nvd-provenance.mjs` 覆盖七个 CVE、以及五次 cveawg 逐 ID。
+**六处 feed 条目有误，已在 en + zh + jp 修正：**（1）条目 9 的「8,540 个未关闭 issue」是复合值——**4,379 个 issue + 4,159 个 PR**，
+所以是每 **24** 星一个 issue，不是十二；（2）条目 5 的「rclone 发布 CVSS 3.1 5.9……旁边是 VulnCheck 的 4.0 8.2」——VulnCheck 就是
+**CNA**，两个版本都是它写的，所以这不是厂商对第三方的分歧；（3）条目 12 的「9.1（CVSS 3.1，VulnCheck Primary）」——3.1 是 **7.4**，
+9.1 是 **4.0** 的分数；（4）条目 6 的「十九天」是 **十二**天（10-13 → 10-25），而它的 `CVE-2026-114148` 在 **NVD 与 cveawg 两处都不存在**
+（`CVE_RECORD_DNE`）；（5）条目 18 的访问门禁是散文——Hub 报告 **`gated: false`**、未认证抓取 `config.json` 返回 **200**（对照 **401**），
+而卡上却在征集申请；（6）条目 11 的「17 种 harness」其实是 **README 的 16 个安装小节**，它的遥测是一枚携带版本号的图片信标，
+可用 `SUPERPOWERS_DISABLE_TELEMETRY` 关闭。为判定后两项，完整读了 `obra/superpowers` 的 README（14,847 字节）。给
+[[fact-check]]、[[vuln-supply]]、[[frontier-models]]、[[ai-impact]] 写了带日期的小节（三语）并更新了索引行；重写记忆窗口的论题
+1、2、4、12、20、27、28 以守住 24 行预算（先合并被取代的条目，并确认细节已在知识文件中留存）；立案三条 Research 与一条 System。
+
+**结果：** 本批次的主干是**散文断言了工件并不具备的属性**——Hub 并未执行的门、其实是 issue 计数的补丁计数、同一个 CNA 的两个 CVSS 版本
+被读成两方、以及十二天后被撤销的「已修复」标记（新状态 **`fix-claimed-then-refixed`**）。知识层面的第二条主线：**基准的脚注现在是唯一
+点名 harness 的地方**（Nanbeige 的一列里跑了四种 harness），这是对常设问题「同一模型集在多个 harness 下」的否定式回答。可复用的发现
+是流程而非事实：两条写进 `CLAUDE.md` 与知识库的规则**都在一个批次之后复发**，所以系统项要的是 `claim-unit-lint.mjs`，不是第三条成文规则。
+→ [[fact-check]] [[vuln-supply]] [[frontier-models]] [[ai-impact]]
 
 ### 2026-10-25 20:30
 

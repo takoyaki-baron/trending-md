@@ -904,6 +904,30 @@
       "id": "CVE-2026-79873",
       "why": "HPE ArubaOS PAPI AOS-10 auth bypass — the real record behind coverage's fabricated 8th row (9.3, AV:ADJACENT_NETWORK, CRITICAL label); watch whether NVD analyses it or a 10.0 lands.",
       "filed": "2026-10-25"
+    },
+    {
+      "id": "CVE-2026-116192",
+      "why": "rclone --rc-serve SSRF (2026-10-26). VulnCheck is the CNA and its own container carries BOTH a v3.1 5.9 and a v4.0 8.2; NVD placed them in the Primary(3.1)/Secondary(4.0) slots at Received with 0 nvd@nist.gov metrics. Watch: an NVD-scored metric appearing beside or replacing them, and whether analysis keeps both versions."
+    },
+    {
+      "id": "CVE-2026-116199",
+      "why": "Snipe-IT Google-SSO deactivated-user bypass (2026-10-26). Same CNA, same two-version split (3.1 8.1 / 4.0 9.2), Received, 0 NVD metrics. Watch: analysis, and whether the v3.1-vs-v4.0 gap survives it."
+    },
+    {
+      "id": "CVE-2026-116163",
+      "why": "Parse Server AuthAdapter fail-open bypass (2026-10-26). CNA container says v3.1 7.4 / v4.0 9.1 (the feed first paired 9.1 with 3.1); Received, 0 NVD metrics. Watch: analysis and any NVD-published score."
+    },
+    {
+      "id": "CVE-2026-70197",
+      "why": "Microsoft SocketAsyncEventArgs memory corruption (2026-10-26). Published 2026-10-13 as fixed, then re-fixed in the 2026-10-25 out-of-band release because Oct 13 did not fully address it -- the fix-claimed-then-refixed state. Awaiting Analysis with Microsoft's Secondary 8.1. Watch: analysis plus any advisory revision."
+    },
+    {
+      "id": "CVE-2026-102870",
+      "why": "Microsoft Blazor WebAssembly debugger (2026-10-26), re-fixed with CVE-2026-70197 on 2026-10-25 after the Oct 13 release failed to fully address it. Undergoing Analysis, Microsoft Secondary 8.8. Watch: analysis."
+    },
+    {
+      "id": "CVE-2026-114148",
+      "why": "NO RECORD ANYWHERE at filing (2026-10-26): NVD absent, cveawg returns CVE_RECORD_DNE, while Microsoft cites it in the 2026-10-25 out-of-band .NET post as the Linux tarball ownership issue. Watch: first appearance of a record, and under which assignerShortName."
     }
   ]
 }

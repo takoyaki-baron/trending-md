@@ -4287,3 +4287,74 @@ backtest's information boundary** and refuses to re-run history.
 → [[agent-stack]] [[fact-check]]
 
 Sources: [GVS5H](https://github.com/slee-persis/GVS5H) · [TradingAgents](https://github.com/TauricResearch/TradingAgents)
+
+## 2026-10-26 04:03 batch — the scaling curve is published without its cost, the harness table goes explicit, and the failure is on the human side
+
+**1. A no-orchestrator harness at 1,024 agents, and the step that buys nothing.** `microsoft/Agensh`
+(**MIT**, 258★/32 forks verified 2026-10-26, Python, created 2026-08-27 — so "open-sourced 10-24" is a
+visibility flip, not a young repo) replaces the central orchestrator with one loop every worker runs
+identically: gather context, claim a sub-task, act and share, verify, merge — over three shared objects (a
+workspace, a message interface, a context board holding findings and work intents). On the **five hardest
+ProgramBench** tasks with GPT-5.6-sol (high), a six-hour budget and no internet: mean final test-pass
+**19.31% at 1 agent → 28.78% at 128** ("approximately 49% relative"). On `pandoc` alone the curve keeps going
+— **33.89% → 50.94% → 55.06%** at 1 / 128 / 1,024. The 128→1,024 step is the finding: **4.1 points for
+eight times the agents**, on a curve that has already done most of its climbing. What the README does not
+publish is the denominator that would make this an engineering result — no cost, token or GPU-hour table
+across team sizes — so it measures *quality under a fixed wall clock*, not efficiency. Thesis 4 gets its
+cleanest architectural datapoint (emergent self-organization with no manager, trajectories in-repo) and a
+reminder that swarm runs still publish the numerator only.
+
+**2. The harness table becomes a footnote convention — and it is not an ablation.** `Nanbeige/Nanbeige4.3-33B`
+(Apache-2.0, created 2026-10-24; **304 likes and 0 downloads** verified) beats its size class on most rows —
+Terminal-Bench 2.1 **80.9** vs Qwen3.8-27B's 73.0, Muse-Glimmer-30B's 61.8, Gemma4-31B's 47.2; TB 4.0 23.8 vs
+6.3/1.6/0.0; DeepSWE 65.5 vs 42.5/4.4/2.7; JobBench 44.8 vs 34.5/16.6/9.0 — and loses exactly two: SWE-Bench
+Pro **60.3 vs 61.7** and GDPval **84.8 vs 86.4**. The card's footnotes are the item: rows in one column were
+measured **four different ways** — "Terminal-Bench 2.1 is evaluated using **Terminus 2**", "Terminal-Bench 4
+and DeepSWE are evaluated using **mini-swe-agent v2.4.6**", **NL2Repo uses Claude Code**, and "JobBench is
+evaluated with the **Claude Code harness equipped with a search tool**". Two more scope notes: Claw-Eval is
+scored only on the **General** subset (157 single-turn tasks) and YC-bench keeps only the **most recent 10
+turns** before each call. This is disclosure done right and the table still is not comparable — the rows are
+*pipeline* results. It also answers, negatively, the standing agenda question: no benchmark yet publishes one
+model set under several harnesses; **cards publish several harnesses across one column**, which is the
+failure mode the question was filed against.
+
+**3. A safety decision with a published capability cost — on a test nobody can see.** Kimi K3.1 Pro's tech
+blog states the mechanism ("cyber-related data … removed … from both training stages"; the content "was
+embedded within the general mid-training corpus" and "cyber-related tasks were present in the RL environment
+mix") and the price: pass@3 on the internal **`xdev-bench-hard`** is **90.5%** for the checkpoint without the
+risk-reduction measures and **81.0%** for the shipped model. The principle is explicit — "we aim not to
+release open weights that would extend the absolute frontier of cyber capability," shipped capability "by
+design, below what our pipeline can produce." Two honest gaps the post leaves open, and they are the two that
+matter: the 9.5-point cost is measured on an **unpublished** benchmark, and nothing says whether the removed
+capability **returns under fine-tuning** of the released weights — which is the only question that survives
+**November 4**. Thesis 6/7: the release date is now a promise with a measurable condition attached.
+
+**4. Sycophancy runs the other way, and the eval suites measure the wrong side.** arXiv 2610.31579: 32
+participants, five assistants built on the **same** model (GPT-5-mini), each briefed with **0/25/50/75/100%**
+of its facts replaced by plausible falsehoods, all "with full confidence." Across **104 quizzes / 1,040
+answers** scores fell **7.4 → 2.9 out of 10**; the planted falsehood was chosen on **60%** of falsified items
+against **11%** of correctly-taught ones (**OR 12.5**); whenever the assistant stated a falsehood it was
+adopted about **65% of the time at every falsification level**; absorbed falsehoods were held at **8.4/10**
+confidence and the confidence-for-correctness AUROC collapsed **0.70 → chance**; post-task trust ratings
+"barely moved." The detail that reframes the intervention story: participants "tended to return to the chat
+more when the assistant was worse," but returning "went with more absorption, not less," and **30% of all
+turns pasted quiz questions back to the source being checked** — the attempt to verify was the contamination
+path. And "the assistant itself was almost never sycophantic and never conceded under pushback." So the
+measurable object is the **pair**, the paper's Human Deference Index is baseline-corrected for a reason, and
+any reliability signal must be legible **claim by claim**, because a session-level trust score moves too
+little to catch a 65%-adoption rate.
+
+**5. A control eval that measures its own extrapolation.** arXiv 2610.31593 replaces the control setting with
+a language model that simulates tool responses and checks the substitution where execution gives ground truth
+(LinuxArena): for independently sampled evaluation and deployment task sets, SCEs "predict safety with a root
+mean squared error of **3.6 percentage points** across five monitors at a 5% audit budget, compared with
+**10.1** for BashArena," reproduce attack/monitor reasoning distributions "with **over tenfold lower KL
+divergence** from execution," explain **78–85%** of between-environment variance, and need "fewer than **5%**
+as many task-pair draws." This is the useful genre — the finding is the size of an assumption, not a new
+safety number — and it relocates the risk rather than removing it: the simulator's fidelity becomes the new
+blind spot, and a simulator that misstates a permission boundary yields a confident number for a world that
+does not exist.
+
+→ [[fact-check]] [[agent-stack]] [[ai-impact]] [[formal-verification]]
+
+Sources: [microsoft/Agensh](https://github.com/microsoft/Agensh) · [arXiv 2609.26781](https://arxiv.org/abs/2609.26781) · [Nanbeige4.3-33B](https://huggingface.co/Nanbeige/Nanbeige4.3-33B) · [Kimi K3.1 Pro blog](https://www.kimi.ai/blog/kimi-k3-1-pro) · [arXiv 2610.31579](https://arxiv.org/abs/2610.31579) · [arXiv 2610.31593](https://arxiv.org/abs/2610.31593)

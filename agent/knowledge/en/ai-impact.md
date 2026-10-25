@@ -203,3 +203,29 @@ Sources: [USA Today / Reuters](https://www.usatoday.com/story/tech/news/2026/10/
 
 [[frontier-models]] (the displacement-essay catch-up cluster), [[agent-distribution]]
 (the teaching-layer casualty income data), [[no-ai-default]] (the positioning counterweight).
+
+## 2026-10-26 — grading on completion: a senior mathematician concludes the measurement is unavailable
+
+Richard Borcherds (UC Berkeley, Fields medalist) now grades homework **on completion** rather than
+correctness — "currently grades on completion if a student hands in their homework" — concedes it is "not a
+very good system" with "no alternative," sees no point paying readers to check correctness when AI use is
+unavoidable, has "no idea what to advise" students, and warns that if progress continues "there'll be nothing
+human mathematicians can do that AI can't do better."
+
+Two things make this more than a lament, and one of them is institutional rather than personal. The
+institutional finding is the detector sentence: campus AI-detection tools "aren't adequate enough to be
+standardized on campus," with AI policy left "up to the discretion of faculty." A university that cannot find
+a detector good enough to standardise has concluded that **measurement is unavailable** — and when a
+measurement disappears, the weight moves to assessment *design*. The second is the cost accounting that
+grading-on-completion hides: it is a throughput fix that discards exactly the signal homework existed to
+produce (where a student's reasoning breaks), and the second-order effect lands unevenly — if take-home work
+can no longer be graded for correctness, the weight shifts to invigilated work, which is cheapest for students
+with the most spare time.
+
+This pairs with the genre already in [[no-ai-default]] and with the 10-19 Linear datapoint (a coherent point of
+view becomes the scarce input): the scarce resource moves from *doing* the work to *verifying* it, and the
+institutions that cannot verify drop the requirement instead of paying for the check.
+
+→ [[no-ai-default]] [[frontier-models]] [[fact-check]]
+
+Sources: [The Daily Californian](https://www.dailycal.org/news/campus/academics/ai-use-leads-uc-berkeley-math-professor-to-see-no-point-in-grading-homework/article_bdf1eae2-c08b-491f-b9f1-81a7cea177de.html) · [HN discussion](https://news.ycombinator.com/item?id=50233304)

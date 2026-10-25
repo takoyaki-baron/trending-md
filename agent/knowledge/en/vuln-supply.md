@@ -780,3 +780,52 @@ what finds it.
 → [[disclosure-lag]] [[security]] [[fact-check]]
 
 Sources: [cveawg CVE-2026-79845](https://cveawg.mitre.org/api/cve/CVE-2026-79845) · [cveawg CVE-2026-79873](https://cveawg.mitre.org/api/cve/CVE-2026-79873) · [NVD CVE-2026-79845](https://nvd.nist.gov/vuln/detail/CVE-2026-79845)
+
+## 2026-10-26 04:03 batch — one CNA writes both numbers, and a "fixed" flag gets revoked
+
+**1. The CVSS version is a severity axis because one CNA writes both versions.** Three records in this batch
+share a CNA — `VulnCheck` on cveawg — and each carries two scores in the same container, which NVD mirrors
+into the `Primary`/`Secondary` slots:
+
+| CVE | product | CVSS 3.1 | CVSS 4.0 | Δ | NVD status | NVD-scored metrics |
+|-----|---------|----------|----------|---|-----------|--------------------|
+| CVE-2026-116192 | rclone `--rc-serve` SSRF | 5.9 (`AV:N/AC:H/…/C:H/I:N/A:N`) | 8.2 (`AT:P`) | +2.3 | `Received` | 0 |
+| CVE-2026-116199 | Snipe-IT Google-SSO auth bypass | 8.1 (`AC:H`) | 9.2 (`AC:L/AT:P`) | +1.1 | `Received` | 0 |
+| CVE-2026-116163 | Parse Server `AuthAdapter` bypass | 7.4 (`AC:H`) | 9.1 (`AC:L/AT:P`) | +1.7 | `Received` | 0 |
+
+v4.0 is **higher on 3 of 3**, and every v4.0 vector sets `AT:P` (Attack Requirements: Present), which in
+v4.0 normally *discounts* rather than inflates — so the gap is not one metric arithmetic; it is a different
+question being asked. The consequence for an inventory: Parse Server is **Critical (9.1)** if the feed is
+keyed on CVSS 4.0 and **High (7.4)** if keyed on 3.1, and both numbers were written by the same party in the
+same container. So "what is the severity" needs the version *and* the scorer, and a triage queue that mixes
+versions sorts records it cannot compare. All three are `Received` with **0 NVD metrics**, so nothing on
+those records is NVD's — including, as CLAUDE.md case (2)/(5) requires, the absence of any NVD number.
+
+**2. `Primary`/`Secondary` is a slot, not a source — second day running.** Both of rclone's metrics carry
+`source: disclosure@vulncheck.com`; the 3.1 one is `Primary` and the 4.0 one is `Secondary`. Reading the slot
+as provenance turns one CNA's two versions into a vendor-vs-third-party disagreement, which is exactly what
+reached the feed (corrected in place, all three locales).
+
+**3. A "fixed" flag can be revoked, and the revision is the patch that matters.** Microsoft's out-of-band
+.NET release re-fixes `CVE-2026-70197` (8.1, `secure@microsoft.com`) and `CVE-2026-102870` (8.8, same)
+because the **October 13, 2026** release "did not fully address these issues." Both records were published
+2026-10-13 and remain **unanalysed** (`Awaiting Analysis` / `Undergoing Analysis`) with 0 NVD metrics. So the
+disclosure-lag vocabulary gains a state it lacked: not `fix-then-record` (the fix existed), not `no-fix` (a
+fix shipped), but **`fix-claimed-then-refixed`** — the advisory's patched version was wrong in the
+*too-early* direction, which is the direction no consumer re-checks. Practical corollary: a patch-Tuesday
+inventory that records "patched" as a boolean has no field for this, and the correct unit is *which build*, as
+the post itself says — "installing a newer runtime on the host does not update the runtime bundled with your
+application," so self-contained apps must be rebuilt and containers rebuilt.
+
+**4. An advisory's metadata and its own body can disagree, and the body is the reporter's.** rclone's
+`GHSA-xqmq-v4wj-rw5m` metadata reads affected `>= 1.37, <= 1.74.1`, patched `1.74.2`; the body says "I
+confirmed the behavior on the latest release, **v1.75.1**" and its dynamic affected list includes 1.75.1. So
+"upgrade to 1.74.2" is an instruction that may not hold. This is the Trigger.dev shape (a cell contradicting
+its own title) one level up: here the contradiction is *metadata vs prose* inside one advisory, and the prose
+carries the reproduction. It also publishes its six preconditions — `--rc-serve` on (default off), a
+non-loopback listener, no RC auth, an existing `http`/`netstorage` remote, and no write primitive
+demonstrated — which is what makes the 5.9 vs 8.2 argument a real one rather than a scoring exercise.
+
+→ [[disclosure-lag]] [[fact-check]] [[security]]
+
+Sources: [cveawg CVE-2026-116192](https://cveawg.mitre.org/api/cve/CVE-2026-116192) · [NVD CVE-2026-116192](https://nvd.nist.gov/vuln/detail/CVE-2026-116192) · [rclone advisory](https://github.com/rclone/rclone/security/advisories/GHSA-xqmq-v4wj-rw5m) · [.NET Blog OOB](https://devblogs.microsoft.com/dotnet/dotnet-october-2026-oob-security-updates/)

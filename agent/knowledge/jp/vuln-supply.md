@@ -553,3 +553,25 @@ PAPI）。レジストリは製品名で列挙できず、references フィー�
 → [[disclosure-lag]] [[security]] [[fact-check]]
 
 Sources: [cveawg CVE-2026-79845](https://cveawg.mitre.org/api/cve/CVE-2026-79845) · [cveawg CVE-2026-79873](https://cveawg.mitre.org/api/cve/CVE-2026-79873) · [NVD CVE-2026-79845](https://nvd.nist.gov/vuln/detail/CVE-2026-79845)
+
+## 2026-10-26 04:03 バッチ——同じCNAが両方の数字を書き、「修正済み」フラグは撤回される
+
+**1. CVSSバージョンが重大度の軸になるのは、1つのCNAが両バージョンを書くからだ。** このバッチの3レコードは同一CNA（cveawg上で `VulnCheck`）を共有し、各レコードが同じコンテナに2つのスコアを持ち、NVDはそれを `Primary`/`Secondary` の枠へ移すだけだ：
+
+| CVE | 製品 | CVSS 3.1 | CVSS 4.0 | Δ | NVD状態 | NVD採点メトリクス |
+|-----|---------|----------|----------|---|-----------|--------------------|
+| CVE-2026-116192 | rclone `--rc-serve` SSRF | 5.9（`AV:N/AC:H/…/C:H/I:N/A:N`） | 8.2（`AT:P`） | +2.3 | `Received` | 0 |
+| CVE-2026-116199 | Snipe-IT Google-SSO認証バイパス | 8.1（`AC:H`） | 9.2（`AC:L/AT:P`） | +1.1 | `Received` | 0 |
+| CVE-2026-116163 | Parse Server `AuthAdapter` バイパス | 7.4（`AC:H`） | 9.1（`AC:L/AT:P`） | +1.7 | `Received` | 0 |
+
+v4.0は **3/3** で高い。しかも各v4.0ベクタは `AT:P`（Attack Requirements: Present）を立てており、v4.0では通常これは*減点*であって加点ではない。だから差は一方の算術ではなく、別の問いが問われていることの結果だ。資産台帳への帰結：Parse ServerはCVSS 4.0なら **Critical（9.1）**、3.1なら **High（7.4）**。そして両方の数を同一の主体が同一コンテナに書いた。「重大度はいくつか」にはバージョン*と*採点者が要り、バージョンを混ぜたトリアージ列は比較不能なレコードを並べることになる。3件とも `Received` で **NVDメトリクス0**、つまりこれらのレコード上にNVDのものは無い——CLAUDE.mdのケース(2)/(5)が求める「NVD番号の不在」という主張自体も含めて。
+
+**2. `Primary`/`Secondary` は枠であって出所ではない——2日連続。** rcloneの2つのメトリクスはどちらも `source: disclosure@vulncheck.com`。3.1が `Primary`、4.0が `Secondary` だ。枠を出所として読むと、1つのCNAの2バージョンがベンダー対第三者の不一致に変わる。まさにそれがfeedに載った（3言語でその場で修正済み）。
+
+**3. 「修正済み」フラグは撤回され得る。そして改訂版こそが問題のパッチだ。** Microsoftの帯域外.NETリリースは `CVE-2026-70197`（8.1、`secure@microsoft.com`）と `CVE-2026-102870`（8.8、同）を再修正した。**2026年10月13日**のリリースが「これらの問題を完全には解決しなかった」ためだ。両レコードは2026-10-13公開で、いまも**未分析**（`Awaiting Analysis` / `Undergoing Analysis`）、NVDメトリクス0。よって開示ラグの語彙に無かった状態が加わる：`fix-then-record` ではなく（修正は存在した）、`no-fix` でもなく（修正は出た）、**`fix-claimed-then-refixed`**——勧告の修正済みバージョンが*早すぎる*方向に誤っており、その方向を消費者は誰も再確認しない。実務的系：パッチ・チューズデイの台帳が「修正済み」を真偽値で持つなら、この状態の欄が無い。正しい単位は*どのビルドか*であり、投稿自身が言う通り「ホストに新しいランタイムを入れても、アプリに同梱されたランタイムは更新されない」。自己完結アプリは再ビルド、コンテナも再ビルドが必要だ。
+
+**4. 勧告のメタデータとその本文は食い違い得る。そして本文は再現者のものだ。** rcloneの `GHSA-xqmq-v4wj-rw5m` のメタデータは影響 `>= 1.37, <= 1.74.1`、修正 `1.74.2`。本文は「最新リリース **v1.75.1** で挙動を確認した」と述べ、動的な影響リストにも1.75.1が入る。つまり「1.74.2へ上げよ」は成立しない可能性のある指示だ。これはTrigger.devの形（セルが自分のタイトルと矛盾する）の一段上で、矛盾は1つの勧告の*メタデータ対散文*の内部にあり、散文が再現を運んでいる。さらに6つの前提条件を公表している——`--rc-serve` 有効（既定は無効）、非ループバック待受、RC認証なし、既存の `http`/`netstorage` リモート、書き込みプリミティブは未実証——これが5.9対8.2を採点練習ではなく実のある議論にしている。
+
+→ [[disclosure-lag]] [[fact-check]] [[security]]
+
+Sources: [cveawg CVE-2026-116192](https://cveawg.mitre.org/api/cve/CVE-2026-116192) · [NVD CVE-2026-116192](https://nvd.nist.gov/vuln/detail/CVE-2026-116192) · [rclone advisory](https://github.com/rclone/rclone/security/advisories/GHSA-xqmq-v4wj-rw5m) · [.NET Blog OOB](https://devblogs.microsoft.com/dotnet/dotnet-october-2026-oob-security-updates/)

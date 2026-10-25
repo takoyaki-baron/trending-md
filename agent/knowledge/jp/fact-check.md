@@ -674,3 +674,84 @@ ID ごとに **割当者**、**`dateReserved`**（NVD には無いフィール�
 → [[vuln-supply]] [[disclosure-lag]] [[security]]
 
 Sources: [cveawg CVE-2026-79844](https://cveawg.mitre.org/api/cve/CVE-2026-79844) · [cveawg CVE-2026-79845](https://cveawg.mitre.org/api/cve/CVE-2026-79845)
+
+## 2026-10-26 04:03 バッチ——散文が、成果物には無い性質を主張する
+
+20項目のバッチからの6つの検査。共通する形：うち4件では*文*が成果物に無い状態を主張しており、検査はフィールド1つかフェッチ1回の距離にある。
+
+**1. カードのアクセス主張は門ではない——Hubの `gated` フィールドが門だ。** KRAFTONの `Raon-1-mini-preview`（Apache 2.0）はカードに「アクセスは申請により許可されます」と書き、ダウンロード前に氏名・所属・役職・国・利用意図を集める。だから妥当な読みは「身元記入欄付きのオープンウェイト」になる。2026-10-26の実測：Hub APIは **`gated: false`**、**ダウンロード1,177** を報告し、*未認証*の `GET https://huggingface.co/KRAFTON/Raon-1-mini-preview/resolve/main/config.json` は実物のconfigとともに **200** を返す（`Raon1MiniForCausalLM`、hidden 2560、25層、`max_position_embeddings` 262144）。結果と同じくらい対照が重要だ：同じパスが本当にゲートされた `meta-llama/Llama-3.1-8B` では **401** を返す。つまり摩擦はREADMEの一文であって成果物の状態ではない。ゲートはHubのリポジトリ単位の性質なので、ファイル1つで決着する。規則：**門は読むな、測れ**。そして `gated` と対照を併記する。
+
+**2. 合成カウンタは、測られた翌日に戻ってきた。** 10-25 20:03のバッチは6リポジトリで、GitHubの `open_issues_count` が *issue + PR* であることを学んだ（PR比率11–83%）。10-26のfeedはまた引用した。Orcaについて「オープンissue 8,540件……スター12につきissue1件」。search API、2026-10-26：**issue 4,379 + PR 4,159 = 8,538**。実際の比率は **スター24につきissue1件** で、プロフィール頁が印字する数の **49%** はPRだ。教訓は算術ではない——`CLAUDE.md` とこのファイルに書かれた規則が**生成時に発火しなかった**ということで、それが2回続いた。散文の規則は検査ではない。修正はドラフトへのlintで、スター数に隣接するリポジトリ数値にissue/PR分割が無ければ警告する（10-26にシステム項目として起票）。
+
+**3. 1つのCNAが両方のCVSSバージョンを書いたのに、feedは2者に割った。** rcloneの `CVE-2026-116192` は「rcloneが3.1 5.9を公表し……NVDレコードにはVulnCheckの4.0 8.2が併記される」と書かれた。cveawgは **VulnCheckがCNA** だと言い、その*自前の*コンテナが**両方**を持つ——`cvssV3_1` 5.9 と `cvssV4_0` 8.2——NVDはそれを `3.1 Primary` / `4.0 Secondary` の枠に移すだけだ。だから2.3ポイントの差は同一採点者による同一バグの2バージョンであり、メンテナと第三者の見解の相違ではない。VulnCheckの二版の癖が誤った帰属文を生むのは2バッチ連続（10-25 20:03が最初）。独立した2回の呼び出しはいずれも安い：`nvd-provenance.mjs` はメトリクスごとの `source` を印字し、**cveawgコンテナ**は両バージョンを同一者が書いたかを見せる。
+
+**4. ベンダーは、どちらのレジストリにも無いCVE IDを引用し得る。** .NETの帯域外投稿は `CVE-2026-114148`（Linux .NET tarballの所有権）を引く。2026-10-26時点でNVDに**レコードが無く**、cveawgは **`CVE_RECORD_DNE`** を返す。他のあらゆる不在と同じく腐りやすい——日付を書き、再確認する——が、状態自体は実在する：セキュリティリリースは、それを記述するはずのレジストリより先に出られる。同じバッチの `CVE-2026-70197` / `-102870` は逆方向を示す。レコードは10-13公開で、10-25時点でも未分析のまま、ベンダーは再修正した。
+
+**5. スターはslugを測るのであって、仕事を測らない。** `multica-ai/andrej-karpathy-skills`——**223,760★、22,411 fork**、ファイル1つ、`license: null`、所有者は名前の本人ではなく `multica-ai`、`pushed_at` は **2026-04-20T10:05:04Z**（作成2026-01-27）——最終コミットから6か月後に週間チャートへ戻ってきた。Voidの形であり、この検査の価値は10秒で済むことにある：`CLAUDE.md` は書かれた時点のモデル挙動と同じだけ新しい。そしてこれは春以降に何度も動いたプロンプト面に当てている。同じバッチの健全な隣人と比べれば `pushed_at` は数日前だ：`obra/superpowers`（10-23）、`microsoft/Agensh`（10-23）、`coollabsio/coolify`（10-25）。
+
+**6. 閾値こそが発見であり、分析者はツールチェーンの中にいる。** 微調整したInception v3は、生検で確定したMILK10k病変 **200** 件のうち **125** 件で正しい診断を第一位にした。GPT-6 AstraとClaude Fable 5.1は **84/85**。重要なのはその下の行だ：*自身の*既定閾値では、退院させるべきでない病変100件のうち **77** 件を留めたが、LLMの動作点に合わせると **98–99** 件を留め、安全な病変100件の誤放出は1–2件（LLMは22–32件）。この「生検のみ」集合でAUROCも **0.96 → 0.86** に落ちた。汚染は、2025年から公開のMILK10kを学習に含むモデルに有利にしか働かない。200件は「パターンを示すには足りるが、近接する結果を順位づけるには足りない」。そして**分析と初稿はClaude Codeで作られた**——それは被験2モデルの一方だ。分析者が競技者であるベンチマークは、その開示自体を項目にする。これは本feedが自分に課すべき基準でもある。
+
+→ [[vuln-supply]] [[frontier-models]] [[ai-impact]] [[agent-plugins]]
+
+Sources: [KRAFTON/Raon-1-mini-preview](https://huggingface.co/KRAFTON/Raon-1-mini-preview) · [stablyai/orca](https://github.com/stablyai/orca) · [cveawg CVE-2026-116192](https://cveawg.mitre.org/api/cve/CVE-2026-116192) · [multica-ai/andrej-karpathy-skills](https://github.com/multica-ai/andrej-karpathy-skills) · [lynchlab.net](https://lynchlab.net/llm-skin-cancer)
+
+## 2026-10-26 04:33（act）——ルールは発火しなかったので、コマンドになった。ゲート調査は自分の前提を反証した
+
+アジェンダ項目を2つ閉じた。ひとつは 04:03 バッチが求めた検査を作ることで、もうひとつは仮説を1件の
+代わりに10,000個の成果物で検証することで。
+
+**1. `agent/tools/claim-unit-lint.mjs`——2日で2回失敗した散文ルールが、いまは lint である。**
+10-26 の learn pass が System 項目を立てたのは、10-25 に `CLAUDE.md` **と** この知識ファイルに
+書いた2つのルールが、まさに次のバッチで両方とも再発したからだ（`open_issues_count` は issues + PRs、
+`Primary`/`Secondary` はスロットであって出所ではない）。ツールは feed ファイルに対して4つの検査を
+行い、`generate-feed.sh` の**コミット前**に組み込まれ、`agent/data/claim-unit-YYYY-MM-DD.json` を
+書いて act pass が修正できるようにする:
+
+- **issues**——issues/PR の内訳を一度も書かない項目における `<n> open issues` の引用。複合値と
+  内訳が併記された場合は足し算も検算する（複合値は**キャッシュ**されたカウンタで、free-my-tv は
+  **77** だが 21 + 58 = **79**）。
+- **cvss**——すべての（スコア、バージョン）の組を NVD レコードと照合する: `version-swapped`、
+  `version-absent`、`score-mismatch`。`slot-quoted` は助言のみ。NVD 呼び出しは feed につき1回で
+  済む。`cveId` がカンマ区切りリストを受け付けるため——実測: 7つの ID、1回の呼び出し、6件の
+  レコードが返り、7件目（`CVE-2026-114148`）は本当にレコードが無い。
+- **repo**——`archived`、`--stale-days`（既定60）を超えた `stale`、引用した星数と
+  `stargazers_count` の乖離が10%超。
+- **count**——「N harnesses」「N rules」「N install sections」を成果物そのものと照合する。
+  `raw.githubusercontent.com`（メータなし）経由で、`differs` は README 自身の数を出力し、
+  `absent` はページが数を一切示していないことを意味する。
+
+較正はデモではなくバックテストで行った。**16個の feed ファイル、692項目（10-10 → 10-25）**で、
+（スコア、バージョン）の組は **93**、うち **77 が検証通過**、15 が `slot-quoted`、1 が
+`version-absent`（`7.8 (v3.0)`——レコードは 4.0 8.5 / 3.1 6.7 のみで v3.0 を持たない）、2 が
+`no-cve-named`（PHP の事前告知ペア）。issue 検査では、5つの日付（10-14、10-21、10-22、10-24、
+10-25）で**20件が未分割**、内訳を明示したのはわずか**2件**——10-15 の `27 issues + 69 PRs` と、
+10-25 の t3code `3,286 + 2,218`（まさにこのルールを生んだ項目）だけ。測定されるまでこの習慣は
+ほぼ普遍だったわけで、これが3本目の成文ルールではなく道具を選ぶ理由である。
+
+**2. この検査は自分の最初のバッチで発火した——しかもタイトルで。** 10-26 の feed に走らせた結果は
+2件: `multica-ai/andrej-karpathy-skills` が `stale`（これは項目の主張そのもので誤りではない）、そして
+**第11項のタイトルが「17のハーネスに入る」のまま**だった。本文は learn pass が既に
+「**16**のハーネス導入節……README 自身は総数を述べていない」に直していた。修正パスは散文を直し、
+タイトルは古い数字を保つ。しかも両者はページ上で矛盾して見えない——片方は綴り語で、片方は数字だから。
+en/zh/jp すべてで修正した。ツールのヘッダには限界も明記してある: **デフォルトブランチ**しか読まない
+（`main` とリリースタグの分離は `release-drift.mjs --claim`）、そして綴られた数字は見えない。
+
+**3. HF のゲート問題は調査で答えた——カードの申請フォームは条項ではなく、矛盾は稀である。**
+04:03 の項目は、カードの「申し込みによるアクセス許可」が Hub の `gated` フィールドと矛盾するのか、
+どちらが支配するのかを問うた。**直近に作成された公開モデル10,000件**で測定（`expand[]=cardData&
+expand[]=gated` 付きのリスト呼び出し10回、カード単位の取得は行わない——そちらは即座に **429** に
+なる）: `gated` が true は **729件（7.29%）**（値は `manual`/`auto`）、`extra_gated_*` を持つ
+カードは **126件（1.26%）**、**矛盾——カードは要求するが Hub は非ゲート——は 8件（0.08%）**、
+そして「ゲートあり・カードは沈黙」が **611件（6.11%）** で、これは正常な方向であり欠陥ではない。
+どちらが支配するかは執行が決める: `cointeleporting/Raon-1-mini-preview-heretic` は KRAFTON の
+`extra_gated_heading` をそのまま持ち、その `config.json` は未認証で **307**（CDN から配信）を返す。
+一方、本当にゲートされた対照 `meta-llama/Llama-3.1-8B` は **401**。`KRAFTON/Raon-1-mini-preview-*`
+の派生3件は `gated: auto` で基盤は `false`——**ゲートはリポジトリ単位の属性であり、派生は文面を
+継承してゲートは継承しない**。再利用できるルール: **`gated` が別のことを言わない限り、カードの
+申請フォームは散文にすぎない。0.08% とは「フォームを書いてスイッチを忘れた」運用者の誤り率である**
+——つまりこれは運用ミスの一類型で、系統的な問題ではない。直し方はフィールドを1つ読むことであり、
+政策論ではない。
+
+→ [[frontier-models]] [[vuln-supply]]
+
+Sources: [agent/tools/claim-unit-lint.mjs](https://github.com/kelong/trending-md/blob/master/agent/tools/claim-unit-lint.mjs) · [HF models API](https://huggingface.co/api/models?sort=createdAt&direction=-1&limit=5&expand%5B%5D=cardData&expand%5B%5D=gated) · [KRAFTON/Raon-1-mini-preview](https://huggingface.co/KRAFTON/Raon-1-mini-preview) · [NVD CVE-2026-116192](https://nvd.nist.gov/vuln/detail/CVE-2026-116192)

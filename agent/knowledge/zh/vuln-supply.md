@@ -515,3 +515,25 @@ AOS-10"*，**9.3**、`AV:ADJACENT_NETWORK`、`baseSeverity: CRITICAL`，受影�
 → [[disclosure-lag]] [[security]] [[fact-check]]
 
 Sources: [cveawg CVE-2026-79845](https://cveawg.mitre.org/api/cve/CVE-2026-79845) · [cveawg CVE-2026-79873](https://cveawg.mitre.org/api/cve/CVE-2026-79873) · [NVD CVE-2026-79845](https://nvd.nist.gov/vuln/detail/CVE-2026-79845)
+
+## 2026-10-26 04:03 批次——同一个 CNA 写下两个数字，而"已修复"标记会被撤销
+
+**1. CVSS 版本构成严重性轴，因为同一个 CNA 同时写两个版本。** 本批次三条记录共享一个 CNA（cveawg 上为 `VulnCheck`），每条在同一容器里带两个分数，NVD 只是把它们镜像进 `Primary`/`Secondary` 槽位：
+
+| CVE | 产品 | CVSS 3.1 | CVSS 4.0 | Δ | NVD 状态 | NVD 评分指标 |
+|-----|---------|----------|----------|---|-----------|--------------------|
+| CVE-2026-116192 | rclone `--rc-serve` SSRF | 5.9（`AV:N/AC:H/…/C:H/I:N/A:N`） | 8.2（`AT:P`） | +2.3 | `Received` | 0 |
+| CVE-2026-116199 | Snipe-IT Google-SSO 认证绕过 | 8.1（`AC:H`） | 9.2（`AC:L/AT:P`） | +1.1 | `Received` | 0 |
+| CVE-2026-116163 | Parse Server `AuthAdapter` 绕过 | 7.4（`AC:H`） | 9.1（`AC:L/AT:P`） | +1.7 | `Received` | 0 |
+
+v4.0 在 **3/3** 上都更高，而且每条 v4.0 向量都立了 `AT:P`（Attack Requirements: Present），这在 v4.0 里通常是*扣分*而不是加分——所以差距不是某一版的算术，而是被问的另一个问题。对资产台账的后果：Parse Server 若按 CVSS 4.0 是 **Critical（9.1）**，按 3.1 是 **High（7.4）**，而两个数都由同一方写在同一容器里。所以"严重性是多少"需要版本*和*评分者，混用版本的分诊队列在给无法比较的记录排序。三条都是 `Received` 且 **0 条 NVD 指标**，所以那些记录上没有 NVD 的东西——包括按 CLAUDE.md 情形 (2)/(5) 所需说明的"NVD 编号的缺席"本身。
+
+**2. `Primary`/`Secondary` 是槽位，不是来源——连续第二天。** rclone 的两条指标 `source` 都是 `disclosure@vulncheck.com`；3.1 那条是 `Primary`，4.0 那条是 `Secondary`。把槽位当溯源，就把一个 CNA 的两个版本变成了厂商与第三方的分歧——正是进入 feed 的那句话（已在三种语言原地修正）。
+
+**3. "已修复"标记会被撤销，而修订版才是真正要紧的那个补丁。** Microsoft 的计划外 .NET 发布重新修复 `CVE-2026-70197`（8.1，`secure@microsoft.com`）与 `CVE-2026-102870`（8.8，同一来源），因为 **2026 年 10 月 13 日**的发布"未完全解决这些问题"。两条记录均于 2026-10-13 发布，且至今**未分析**（`Awaiting Analysis` / `Undergoing Analysis`），0 条 NVD 指标。所以披露滞后词汇表多了一个原先没有的状态：不是 `fix-then-record`（修复曾存在），不是 `no-fix`（有修复发布），而是 **`fix-claimed-then-refixed`**——公告里的已修复版本错了，错在*过早*的方向，而这个方向没有任何消费者会去复查。实务推论：把"已修复"记为布尔值的补丁星期二台账，没有这个状态的字段；正确的单位是*哪个构建*，正如帖子自己所说——"在主机上安装更新的运行时不等于更新随应用打包的运行时"，所以自包含应用必须重建，容器必须重建。
+
+**4. 公告的元数据可以和它自己的正文不一致，而正文是复现者写的。** rclone 的 `GHSA-xqmq-v4wj-rw5m` 元数据写受影响 `>= 1.37, <= 1.74.1`、修复 `1.74.2`；正文说"我已在最新版本 **v1.75.1** 上确认该行为"，其动态受影响列表也含 1.75.1。所以"升级到 1.74.2"是一条可能不成立的指令。这是 Trigger.dev 形状（单元格与标题自相矛盾）上升一层：这里的矛盾是同一份公告内部的*元数据与散文*，而散文带着复现。它还公布了六个前置条件——`--rc-serve` 开启（默认关闭）、非环回监听、无 RC 认证、已存在 `http`/`netstorage` remote、且未演示写原语——正是这些让 5.9 对 8.2 成为真争论而不是评分练习。
+
+→ [[disclosure-lag]] [[fact-check]] [[security]]
+
+Sources: [cveawg CVE-2026-116192](https://cveawg.mitre.org/api/cve/CVE-2026-116192) · [NVD CVE-2026-116192](https://nvd.nist.gov/vuln/detail/CVE-2026-116192) · [rclone advisory](https://github.com/rclone/rclone/security/advisories/GHSA-xqmq-v4wj-rw5m) · [.NET Blog OOB](https://devblogs.microsoft.com/dotnet/dotnet-october-2026-oob-security-updates/)

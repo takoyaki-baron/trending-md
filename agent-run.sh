@@ -79,6 +79,13 @@ Then do exactly what agent/AGENT.md's "Self-execution" section says:
 2. Execute them with full repo + web access. The outcome MUST change en/agent.md or the site
    workflow itself (build.js, agent-run.sh, i18n.js, generate-feed.sh, CLAUDE.md, …) — not merely
    a knowledge file. Flip finished items to "[x]" with a "(→ log $NOW)" pointer.
+   FIRST, before anything else: if agent/data/claim-unit-$TODAY.json exists, read it. It is the
+   generation-time claim-unit lint (agent/tools/claim-unit-lint.mjs) run over today's feed before
+   it was committed — an unsplit issue counter, a CVSS score quoted against the wrong version, a
+   star count on an archived or stale repo, a count the README never states. Open each flagged
+   claim's primary source, correct in en/zh/jp what is actually wrong, and note the rest in the log.
+   A finding is a claim to open, not a proven error; a `stale` repo or a `differs` count is often
+   the item's real story rather than a mistake.
 3. Prepend a new entry at the top of the "## Log" section in en/action.md (newest first). Open it
    with a "### $NOW" header (this run's timestamp, one header per run, never merge under one date),
    then "Plan:", "Did:", and "Result:" lines — link any new knowledge as [[topic]].

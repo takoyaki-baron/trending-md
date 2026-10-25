@@ -1,0 +1,112 @@
+{
+ "generated": "2026-10-25T20:49:10.871Z",
+ "files": [
+  {
+   "file": "2026-10-26.md",
+   "items": 20,
+   "findings": [
+    {
+     "check": "cvss",
+     "item": 5,
+     "verdict": "ok",
+     "claim": "3.1 5.9",
+     "detail": "CVE-2026-116192 Primary/disclosure@vulncheck.com"
+    },
+    {
+     "check": "cvss",
+     "item": 5,
+     "verdict": "ok",
+     "claim": "4.0 8.2",
+     "detail": "CVE-2026-116192 Secondary/disclosure@vulncheck.com"
+    },
+    {
+     "check": "cvss",
+     "item": 5,
+     "verdict": "slot-quoted",
+     "claim": "Primary/Secondary",
+     "detail": "a metric slot is not a provenance — name the source (CNA / nvd@nist.gov / CISA-ADP) instead"
+    },
+    {
+     "check": "issues",
+     "item": 9,
+     "verdict": "ok",
+     "claim": "4379 issues + 4159 PRs",
+     "detail": "split named (PR share 49%)"
+    },
+    {
+     "check": "cvss",
+     "item": 10,
+     "verdict": "ok",
+     "claim": "4.0 9.2",
+     "detail": "CVE-2026-116199 Secondary/disclosure@vulncheck.com"
+    },
+    {
+     "check": "cvss",
+     "item": 10,
+     "verdict": "ok",
+     "claim": "3.1 8.1",
+     "detail": "CVE-2026-116199 Primary/disclosure@vulncheck.com"
+    },
+    {
+     "check": "cvss",
+     "item": 12,
+     "verdict": "ok",
+     "claim": "3.1 7.4",
+     "detail": "CVE-2026-116163 Primary/disclosure@vulncheck.com"
+    },
+    {
+     "check": "cvss",
+     "item": 12,
+     "verdict": "ok",
+     "claim": "4.0 9.1",
+     "detail": "CVE-2026-116163 Secondary/disclosure@vulncheck.com"
+    },
+    {
+     "check": "repo",
+     "item": 4,
+     "verdict": "ok",
+     "claim": "microsoft/Agensh",
+     "detail": "261★, last push 2026-10-23"
+    },
+    {
+     "check": "repo",
+     "item": 11,
+     "verdict": "ok",
+     "claim": "obra/superpowers",
+     "detail": "304999★, last push 2026-10-23"
+    },
+    {
+     "check": "repo",
+     "item": 16,
+     "verdict": "ok",
+     "claim": "coollabsio/coolify",
+     "detail": "64207★, last push 2026-10-25"
+    },
+    {
+     "check": "repo",
+     "item": 17,
+     "verdict": "stale",
+     "claim": "multica-ai/andrej-karpathy-skills",
+     "detail": "last push 2026-04-20 (188d) with 223763 stars — is the item about the code or the name?"
+    },
+    {
+     "check": "count",
+     "item": 4,
+     "verdict": "ok",
+     "claim": "128 agents",
+     "detail": "README states it"
+    },
+    {
+     "check": "count",
+     "item": 4,
+     "verdict": "ok",
+     "claim": "1,024 Agents",
+     "detail": "README states it"
+    }
+   ]
+  }
+ ],
+ "api_calls": 0,
+ "readme_calls": 0,
+ "nvd_calls": 1
+}

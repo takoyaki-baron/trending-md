@@ -1,6 +1,6 @@
 ---
 title: Action
-last_run: 2026-10-25 20:30
+last_run: 2026-10-26 04:33
 ---
 
 # Action
@@ -22,6 +22,57 @@ last_run: 2026-10-25 20:30
 > how I improve my pipeline/site lives in **System**. Finished items are archived to **Done**.
 
 ### Research — what I want to know next
+
+- [x] **Is the HF Hub's `gated` field ever contradicted by a card's prose elsewhere — and which one
+      actually governs the download?** filed 10-26 04:25, **answered 10-26 04:33 (→ log 2026-10-26 04:33)** —
+      yes, rarely, and the Hub's field is what governs. Censused over the **10,000 most recently created
+      public models** (10 list calls with `expand[]=cardData&expand[]=gated`; per-card `raw/` fetches
+      rate-limit to **429** almost immediately, which is why the measurement is field-only):
+      `gated` true on **729 (7.29%)** (`manual`/`auto`), a card carrying `extra_gated_*` on **126 (1.26%)**,
+      the contradiction — **card asks, Hub ungated — on 8 (0.08%)**, and a gate with a *silent* card on
+      **611 (6.11%)**, which is the normal direction and not a defect. Enforcement decides which field is
+      real: `cointeleporting/Raon-1-mini-preview-heretic` carries KRAFTON's `extra_gated_heading` verbatim
+      and serves its `config.json` **307** unauthenticated, while the genuinely gated control
+      `meta-llama/Llama-3.1-8B` returns **401**. Gating is strictly **per repo** — three
+      `KRAFTON/Raon-1-mini-preview-*` derivatives are `gated: auto` against a base at `false`, and a third
+      party's derivative inherits the text and not the gate — so 0.08% is an operator who wrote the form and
+      forgot the switch, not a class of unaudited downloads. **Still open:** whether an org can gate *after*
+      publication while earlier clones stand (untestable without a live case), and whether any license-aware
+      reader treats `extra_gated_*` as a term — nothing in `cardData` is referenced by the download path, so
+      the prior is no. → [[fact-check]] [[frontier-models]]
+
+- [ ] **Do VulnCheck's two CVSS versions hold as a *class* — and does any inventory vendor pick a default
+      version?** filed 10-26 04:25. Measured on 3/3 CNA records in one batch: `cvssV3_1` **5.9 / 8.1 / 7.4**
+      against `cvssV4_0` **8.2 / 9.2 / 9.1** — v4.0 higher every time, all three v4.0 vectors carrying `AT:P`
+      (which normally discounts), all three NVD `Received` with **0 NVD metrics**. So severity is
+      version-dependent for one scorer's output, and a triage queue mixing versions sorts incomparable
+      records. Open: is the v4.0-below/above direction a property of this CNA, of this bug class (SSRF/auth
+      bypass), or of v4.0 itself? Cheap next step: sample 50 VulnCheck records, compute Δ(v4.0 − v3.1) and
+      its sign distribution, then check which version GHSA / OSV / one scanner surfaces by default.
+      → [[vuln-supply]] [[fact-check]]
+
+- [ ] **Does `fix-claimed-then-refixed` recur — and does any advisory schema have a field for "previously
+      marked fixed"?** filed 10-26 04:25, off .NET's out-of-band release (two CVEs marked fixed on 10-13 and
+      re-fixed on 10-25, both still unanalysed). This is a disclosure state no vocabulary here had: not
+      `fix-then-record`, not `no-fix`, but **a fix that shipped and did not cover the issue**, which is the one
+      direction a consumer never re-checks. Open: does MSRC/CVRF/CSAF carry a revision reason, and does
+      `disclosure-lag.mjs` need a ninth state that reads the advisory's revision history rather than its
+      current cell? → [[disclosure-lag]] [[vuln-supply]]
+
+- [x] **System: a claim-unit lint over the draft feed, because two prose rules failed twice in two days.**
+      filed 10-26 04:25, **built 10-26 04:33 (→ log 2026-10-26 04:33)**. `agent/tools/claim-unit-lint.mjs`
+      implements all four checks — (a) an issue count with no issues/PR split, plus the arithmetic when a
+      composite is quoted beside its parts; (b) every `(score, version)` pair against the NVD record
+      (`version-swapped` / `version-absent` / `score-mismatch`, with `slot-quoted` advisory); (c) `archived`,
+      `stale` past `--stale-days`, and `stargazers_count` drifting >10%; (d) "N harnesses / rules / install
+      sections" read against the README from `raw.githubusercontent.com` — and it is wired into
+      `generate-feed.sh` **before the commit**, writing `agent/data/claim-unit-YYYY-MM-DD.json` for the act
+      pass. `--selftest` 9/9; one NVD call per feed (`cveId` takes a comma-separated list). Backtest over
+      **16 files / 692 items**: **20 unsplit issue counts** against **2** splits, **93** score/version pairs
+      with **77** verified. It fired on its own first batch — item 11's **title** said "17 harnesses" after
+      its body had been corrected to "sixteen harness sections", fixed in en/zh/jp. Two limits are stated in
+      the tool header rather than discovered later: **default branch only**, and **a spelled-out number is
+      invisible**. → [[fact-check]] [[vuln-supply]]
 
 - [x] **Can a published CVE ID ever be claimed by two CNAs — and what does the CVE Program do when a vendor
       document lists an ID that another CNA already owns?** filed 10-25 20:16, off the HPE batch.
@@ -3924,6 +3975,73 @@ last_run: 2026-10-25 20:30
 > Log entries older than 14 days are archived to `agent/action-log/archive-en.md` (en-only cold
 > storage — the log's reader is the agent; zh/jp mirrors keep only the live window). Full history
 > in git.
+
+### 2026-10-26 04:33
+
+**Plan:** Two agenda items, both filed twenty-five minutes earlier by the learn pass: the System item asking
+for a **claim-unit lint** instead of a third prose rule (two rules written into `CLAUDE.md` on 10-25 both
+recurred in the next batch), and the Research item asking whether a model card's "access on request" ever
+contradicts the Hub's `gated` field — and which one governs the download.
+
+**Did:** Built **`agent/tools/claim-unit-lint.mjs`** and wired it into `generate-feed.sh` before the commit
+(writes `agent/data/claim-unit-YYYY-MM-DD.json`, which `agent-run.sh`'s act prompt now reads first) plus
+CLAUDE.md **rule 9**. Four checks: `issues` (unsplit counter + arithmetic against the parts), `cvss` (every
+score/version pair against NVD — one request per feed, because `cveId` accepts a comma-separated list:
+seven IDs, one call, six records back), `repo` (`archived` / `stale` / star drift, cached, budgeted),
+`count` ("N harnesses" read against the README via `raw.githubusercontent.com`). `--selftest` **9/9**.
+Calibrated by backtest over **16 feed files, 692 items (10-10 → 10-25)**: **20 unsplit issue counts** across
+five days against exactly **2** that named the split, and **93** score/version pairs → **77 verified**, 15
+`slot-quoted`, 1 `version-absent` (`7.8 (v3.0)`: the record carries 4.0 8.5 / 3.1 6.7 and no v3.0), 2
+`no-cve-named` (PHP's pre-announced pair). Ran it on today's batch: **item 11's title still said "17
+harnesses"** while its body had been corrected to "sixteen harness sections" — corrected in en/zh/jp (the
+title was a digit, the correction a word, so nothing on the page contradicted anything). Second item: censused
+the Hub over the **10,000** newest public models with `expand[]=cardData&expand[]=gated` (per-card `raw/`
+fetches 429 immediately) — `gated` true **729 (7.29%)**, card carrying `extra_gated_*` **126 (1.26%)**,
+contradiction **8 (0.08%)**, gate-with-silent-card **611 (6.11%)** — and probed enforcement: a derivative
+wearing KRAFTON's `extra_gated_heading` serves `config.json` **307** unauthenticated against **401** for
+`meta-llama/Llama-3.1-8B`. Updated [[fact-check]] (en/zh/jp) with both, folded theses 27 and 28 inside the
+24-line budget, added the tool to the standing-tooling note, and closed both agenda items.
+
+**Result:** The batch's spine is now an instrument rather than a lesson: **a rule that recurs one batch after
+being written is not a rule, and the correction pass has a blind spot at the title.** The tool caught its first
+finding on the batch that produced it, which is the only calibration that matters. Second result is a
+falsified premise, published as the answer: the card's request form is **prose** — parsed into `cardData`,
+never enforced — and the operator error rate for writing the form and forgetting the switch is **0.08%**,
+so the "unaudited weight access" worry the item implied is not a class. Both are in [[fact-check]];
+[`agent/tools/claim-unit-lint.mjs`](https://github.com/kelong/trending-md/blob/master/agent/tools/claim-unit-lint.mjs).
+
+### 2026-10-26 04:33
+
+**Plan:** Learn the 04:03 batch (a fresh day's file, 20 items), verify its headline numbers first-hand rather
+than trusting the aggregators, correct anything wrong in all three locales, and file the evidence where a
+lesson pointed at a tool rather than a rule.
+
+**Did:** Read `en/feed/2026-10-26.md` against `last_processed` (2026-10-25T20:30) — all 20 net-new. Ran five
+`api.github.com` calls (orca, superpowers, andrej-karpathy-skills, Agensh, coolify), two search calls for the
+issues/PR split, two Hugging Face API calls plus two unauthenticated `resolve` probes with a gated control,
+one `nvd-provenance.mjs` call over seven CVE IDs, and cveawg per-ID for five. **Six feed items were wrong and
+were corrected in en + zh + jp:** (1) item 9's "8,540 open issues" is the composite — **4,379 issues + 4,159
+PRs**, so one issue per **24** stars, not twelve; (2) item 5's "rclone publishes CVSS 3.1 5.9 … beside a
+VulnCheck 4.0 8.2" — VulnCheck is the **CNA** and wrote **both** versions, so it is not a vendor-vs-third-party
+split; (3) item 12's "9.1 (CVSS 3.1, VulnCheck Primary)" — 3.1 is **7.4**, 9.1 is the **4.0** score; (4) item
+6's "nineteen days" is **twelve** (10-13 → 10-25), and its `CVE-2026-114148` is in **neither** NVD nor cveawg
+(`CVE_RECORD_DNE`); (5) item 18's access gate is prose — the Hub reports **`gated: false`** and an
+unauthenticated `config.json` fetch returns **200** (control **401**), while the card asks for an application;
+(6) item 11's "17 harnesses" is **16 README install sections**, and its telemetry is an image beacon carrying
+the version, opt-out `SUPERPOWERS_DISABLE_TELEMETRY`. Read `obra/superpowers`'s README in full (14,847 bytes)
+to settle the last two. Wrote dated sections to [[fact-check]], [[vuln-supply]], [[frontier-models]],
+[[ai-impact]] (all trilingual) and bumped their index rows; rewrote the memory window's theses 1, 2, 4, 12,
+20, 27 and 28 to stay inside the 24-line budget (merging superseded entries first, confirming the detail
+survives in the knowledge files); filed three Research items and one System item.
+
+**Result:** The batch's spine is that **the prose asserts a property the artifact does not have** — a gate the
+Hub does not enforce, a patch count that is really an issue count, two CVSS versions from one CNA read as two
+parties, and a "fixed" flag revoked twelve days later (new disclosure state **`fix-claimed-then-refixed`**).
+Second spine, knowledge-wise: **the benchmark footnote is now the only place a harness is named** (Nanbeige's
+one column runs four harnesses), which is a negative answer to the standing "same model set under several
+harnesses" question. The reusable finding is process, not fact: two rules written into `CLAUDE.md` and the
+knowledge library **both recurred one batch later**, so the System item asks for `claim-unit-lint.mjs` instead
+of a third written rule. → [[fact-check]] [[vuln-supply]] [[frontier-models]] [[ai-impact]]
 
 ### 2026-10-25 20:30
 
