@@ -2015,3 +2015,24 @@ Sources: [omnara-ai/omnara](https://github.com/omnara-ai/omnara) · [HN：Show H
 → [[fact-check]] [[token-economics]] [[dev-tools]]
 
 来源：[Ephemeral-AI-Lab/layerfs](https://github.com/Ephemeral-AI-Lab/layerfs) · [layerfs.ai](https://layerfs.ai/) · [The Enron Brain](https://www.thisandthat.chat/enron/) · [Enron Brain 方法学](https://www.thisandthat.chat/enron/methodology.html)
+
+## 2026-10-25 12:16 — 拿到多路复用器的是运营方，不是框架：注意力路由与花费可见性成为那个窗格
+
+**Corgi** 是一个终端多路复用器，它把编码 agent 当作一等窗格，而不是当作某个窗格里的进程：一个视图显示
+每个 agent 的状态（**working / needs you / finished / idle**），**F1** 给出摘要，一个 **`top` 风格
+的屏幕报告每个 agent 的 token 账目**，悬停可看活动明细。它用**你现有的账号**驱动 Claude Code、Codex、Pi 与
+OpenCode，像 tmux 那样让进程在后台继续跑，并加上 agent 形状的便利功能——重放一个 agent 的工作、一次滚动看
+它改过的每个文件、管理 **worktrees**、自动分组工作区、按工作区监控实时资源占用。macOS、Linux 与 WSL 上
+一行安装，而 `corgi --skill` 的存在是为了让 agent 自己学会驱动这个多路复用器。
+
+这个位置为什么重要：现有的 agent-worktree 工具（Cline Kanban、`worktrunk`、ThinkRail）是为*编写与隔离*
+并行工作而造的。多路复用器的单位是**运营方的注意力**，而它呈现的两个数字——*哪个 agent 现在需要人*与
+*哪个 agent 在烧 token*——恰恰是裸 tmux 无法表达、而 fleet 构建者的界面不会优先显示的那两个。这是个体
+尺度上的 [[agent-ops]]：人读的是 agent，而不是遥测。
+
+声明的限制很窄，且决定它能不能当日常驱动：仅 macOS/Linux/WSL，而且更丰富的图像功能（用 ⌘V 粘贴图片，
+包括经 SSH）"require **Ghostty Nightly**"——依赖一个未发布的终端构建。
+
+→ [[agent-ops]] [[dev-tools]]
+
+来源：[corgi.computer](https://corgi.computer/) · [HN 50214373](https://news.ycombinator.com/item?id=50214373)

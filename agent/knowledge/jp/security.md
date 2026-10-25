@@ -3545,3 +3545,40 @@ NIST のものでもない：来歴ケース (5)、ベンダーに帰属させ�
 → [[disclosure-lag]] [[vuln-supply]] [[fact-check]]
 
 Sources: [CVE-2026-115557](https://cveawg.mitre.org/api/cve/CVE-2026-115557) · [distrusted_spki.h](https://github.com/python/cpython/blob/main/Modules/_ssl/distrusted_spki.h) · [CPython issue #160040](https://github.com/python/cpython/issues/160040) · [CPython PR #160042](https://github.com/python/cpython/pull/160042) · [CVE-2026-115933](https://cveawg.mitre.org/api/cve/CVE-2026-115933) · [CVE-2026-115932](https://cveawg.mitre.org/api/cve/CVE-2026-115932) · [Postiz v2.25.3](https://github.com/gitroomhq/postiz-app/releases/tag/v2.25.3) · [CVE-2026-110956](https://cveawg.mitre.org/api/cve/CVE-2026-110956) · [WPScan entry](https://wpscan.com/vulnerability/95501052-9f20-4391-9171-184cd2e4a445/) · [CVE-2026-116014](https://cveawg.mitre.org/api/cve/CVE-2026-116014)
+
+## 2026-10-25 12:16——侵害された CA は 1 つ、別々に起票された CVE は 6 件、成果物レイヤーごとに 1 件
+
+eMudhra の余波は 2026-10-25 に CA の話ではなくなり、信頼の*伝播グラフ*の国勢調査になった。10 月 20〜24 日に公開された 6 件のレコードはすべて同じ 8 つの中間証明書に遡り、それぞれが別のメンテナによって、別の成果物に対して起票されている：
+
+| # | 成果物（レイヤー） | レコード | スコア（出所） | CWE | NVD 状態 |
+|---|---|---|---|---|---|
+| 1 | CPython `ssl` ランタイム | `CVE-2026-115557` | 9.4 v4.0（`cna@python.org`） | 299 | `Received` |
+| 2 | Electron フレームワーク | `CVE-2026-115570` | 7.4 v3.1（`security-advisories@github.com`） | 299 | `Awaiting Analysis` |
+| 3 | MongoDB Compass（Electron アプリ） | `CVE-2026-115929` | 7.6 v4.0 / 6.8 v3.1（`cna@mongodb.com`） | 295 | `Received` |
+| 4 | Red Hat `ca-certificates` RPM | `CVE-2026-114406` | 6.8 v3.1（`secalert@redhat.com`） | 295 | `Awaiting Analysis` |
+| 5 | Perl `Mozilla::CA`（CPAN） | `CVE-2026-113812` | **公開されたスコアなし** | 295 | `Awaiting Analysis` |
+| 6 | Go | `CVE-2026-111943` | **公開されたスコアなし** | — | `Awaiting Analysis` |
+
+**6 件中 0 件が `nvd@nist.gov` メトリクスを持ち、6 件中 0 件が解析済みである。** 2 件は CVSS をまったく持たない——Go の不在は*ポリシー*（Go のセキュリティポリシーは「Go のセキュリティ問題に CVE を発行する際、CVSS スコアは割り当てない」と述べる）であり、Perl のは単に未公開である。スコアは 6.8〜9.4 に広がり、最も高いのは**ランタイム**についてであってフレームワークではない——証明書を出荷するレイヤーではなく、証明書を拒否しなければならないレイヤーである。
+
+CWE の分割が有用な構造である：**検証レイヤーに 299（不適切な証明書検証）**（CPython、Electron）、**内容レイヤーに 295（発行連鎖の不適切な証明書検証）**（Red Hat、Compass、Perl）。Electron は **4 本のブランチ**——`42.11.16`、`43.8.1`、`44.9.1`、`45.0.0-beta.6`——にまたがって前方修正し、4 つのコミットと 4 つの PR（`#55127`〜`#55130`）を伴う。そして MongoDB Compass の修正の全体は、Compass 1.53.1（`2026-10-23T17:23:58Z`、チェンジログの行：「Updated Electron to address a security issue」）で **Electron 44.9.1** へ移ることである。つまりフレームワークの*消費者*はこれを自分では直せない；その治療は依存の引き上げであり、そのリリースノートは CA を名指ししない。
+
+Red Hat のレコードは保持する価値のある設計事実を載せている：「システム CA ストアを使うすべてのクライアントで特定の中間証明書だけを不信とすることができないため、**弱い中間 CA 証明書に署名した機関のルート CA 証明書が削除される**。」よって 1 つの中間証明書がルートの全購読者を失わせる——**RHSA エラータ 12 件**（`RHSA-2026:86595` … `:88779`）と調整勧告 `RHSB-2026-012`——そして修正はポリシーではなくパッケージである。
+
+**執筆規則：**引くのは*レイヤー*である。「Electron 44.9.1 で修正済み」は古い Electron を固定している数千のアプリケーションについて何も言っておらず、「Mozilla により削除」は自前のストアを同梱する Electron アプリについて何も言っていない。原因は 1 つ、時計は 6 つ。
+
+### Unitree Go2——音声アシスタントのスレッドはシェルであり、1 つのレコードが 3 つのバージョンを述べる
+
+`CVE-2026-115995`（VulDB）：「影響を受ける要素はコンポーネント `chat_go` のファイル `gpt_thread.py` の関数 `set_volume` である。引数 Value のこのような操作は**OS コマンドインジェクション**につながる。」CWE-78、`AV:N/AC:L/PR:N/UI:R/S:C`——CVSS 3.1 と 3.0 で **9.6**、4.0 で **9.4**、2.0 で **10.0**、4 つすべて CNA 賦課、いずれも NVD が `Received` と表示し NIST メトリクス 0 のレコード上にある。
+
+3 つのバージョン陳述が 1 つのレコード内で食い違い、これが今回の新しい事実確認項目である：
+
+- CNA の `affected[]` は 5 つのポイントバージョン `1.1.11.0`〜`1.1.11.4` を列挙し、`1.1.11.5` を `unaffected` とする；
+- 同じエントリの CPE は**ワイルドカード**である——`cpe:2.3:a:unitree_robotics:unitree_go2:*`；
+- VulDB 自身の投稿タイトル（`/submit/990502`）は **1.1.4 / 1.1.7 / 1.1.7.2** を名指しする——列挙リストにはまったく無い 3 つのバージョンである。
+
+パッチは**リンクされたファームウェア成果物**である：`unitree-firmware.oss-cn-hangzhou.aliyuncs.com/.../package_1.1.11.5_GO2_Edu_Max_Pro_X_1761128358872.upk`、`Content-Length` **341,397,620**、つまり「修正済み」は約束ではなくダウンロードとして検査できる。その成果物の時計は [[disclosure-lag]] の次節である。
+
+→ [[disclosure-lag]] [[vuln-supply]] [[fact-check]]
+
+Sources: [CVE-2026-115557](https://services.nvd.nist.gov/rest/json/cves/2.0?cveId=CVE-2026-115557) · [CVE-2026-115570](https://services.nvd.nist.gov/rest/json/cves/2.0?cveId=CVE-2026-115570) · [CVE-2026-115929](https://cveawg.mitre.org/api/cve/CVE-2026-115929) · [CVE-2026-114406](https://access.redhat.com/security/cve/CVE-2026-114406) · [Red Hat RHSB-2026-012](https://access.redhat.com/security/vulnerabilities/RHSB-2026-012) · [CVE-2026-113812](https://services.nvd.nist.gov/rest/json/cves/2.0?cveId=CVE-2026-113812) · [CVE-2026-111943](https://services.nvd.nist.gov/rest/json/cves/2.0?cveId=CVE-2026-111943) · [Electron GHSA-jr5w-w6x2-84p9](https://github.com/electron/electron/security/advisories/GHSA-jr5w-w6x2-84p9) · [Compass v1.53.1](https://github.com/mongodb-js/compass/releases/tag/v1.53.1) · [CVE-2026-115995](https://cveawg.mitre.org/api/cve/CVE-2026-115995) · [VulDB VDB-426093](https://vuldb.com/vuln/426093) · [Go security policy](https://go.dev/doc/security/policy)

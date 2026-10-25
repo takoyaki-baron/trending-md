@@ -2666,3 +2666,78 @@ template"；取而代之的是 `encoding/` 里一份带测试用例的 Python �
 → [[edge-inference]] [[fact-check]]
 
 Sources: [DeepSeek-V4.1-Flash-1017](https://huggingface.co/deepseek-ai/DeepSeek-V4.1-Flash-1017) · [DeepSeek release note 2026-10-17](https://api-docs.deepseek.com/news/news261017/) · [arXiv 2610.29932](https://arxiv.org/abs/2610.29932) · [arXiv 2610.19159](https://arxiv.org/abs/2610.19159) · [arXiv 2610.18868](https://arxiv.org/abs/2610.18868) · [arXiv 2610.29162](https://arxiv.org/abs/2610.29162)
+
+## 2026-10-25 12:16 — agent 走进优化器内部（OPAL），而三个产物发布了阴性结果
+
+**OPAL——"OPtimizer with an Agent in the Loop"**（`xingjian-bai/opal`，PyTorch 包装器 + 博客）递给
+一个编码 agent 两个小程序：`analysis.py` 提取它想要的任何统计量，`updater.py` 把梯度变成更新，然后让它在
+**训练过程中**、按参数组、针对 loss 尖峰、停滞或过拟合，改写其中任何一个。跑与跑之间不携带任何东西；在被
+包装的那次运行里，直到 agent 改动什么之前，它都与"plain 版本逐位相同"。
+
+对照博客核实过的数字：
+
+- **34 个 landscape** 上平均 **−11.6**（到最优点的距离取 log₁₀），对比十二种常见静态配方中最好的 **−2.2**，
+  以及 **382,080** 个扫过的配方中最好的 **−7.4**；
+- LightningDiT-XL/1 **FID-50K 1.83 vs 2.18**（带 guidance；不带时 4.33 vs 5.15）；Goldfish Amharic
+  **83.48 → 81.11** bits/sentence；在 **10%** 标签被错标的情况下，test loss 0.69 / **78.6%** 准确率，
+  对比 AdamW 的 2.49 / 73.5%；
+- 训练等待 agent 时墙钟成本 **1.30×–4.39×**，改用异步更新后降到 **1.01×–1.14×**；
+- 按 Claude Opus 5.5 列表价，一次运行约 100 个决策花费 **$6.42**，同时约 74 H100-hours（AWS 按需约
+  $510）——"counted in FLOPs, any reactive optimizer would be impractical given the size of frontier
+  agents"，这一点作者自己也承认；
+- "At a larger scale, the current implementation still needs work to support sharded training and
+  optimizer compilation"；"**Most experiments in this post are run once**, a few three times."
+
+与结果同等重要的那一句：agent 的程序"run inside your training process, so **this is a rule, not a
+sandbox**."约束——不许碰模型、数据、loss、batch size、步数或评估——靠指令执行。而它所在的*层*相对论点 12
+是新的：Self-HPO 与 HarnessAdapt 跨多次运行共同演化 harness 并**保留**有效的东西；OPAL 在**一次运行内部**
+优化，然后**丢弃**。一个是记忆，一个是反射。
+
+**OpenDS——一个所有人天花板都低的活网基准。**arXiv 2610.30181（2026 年 10 月 19 日提交）构建了
+**OpenDS-World**：开放 web 上的 **200** 个多步深度搜索任务，横跨多种模态、文件格式与交互式访问，并对证据
+有效性与答案唯一性做了独立人工核验。十二个前沿模型在同一个共享工具环境下运行，最好的得 **39.0%**，而人类在
+**1,000 次独立尝试**里得 **21.1%**。论文自己列出的残余问题是"tool coordination and long-horizon search
+management"，外加策略、搜索成本、终止行为与失败恢复上的大幅波动。把这一对读成一句难度陈述，而不是一个能力差距。
+
+**那篇没找到递归的递归自我改进综述。**arXiv 2610.29677，《Toward Recursive Self-Improvement in Physical
+AI》（93 页，2026 年 10 月 21 日提交，12 位作者）。它把改进*行为*与改进*产生*行为的过程分开，而它的发现是
+阴性的，并且由作者自己说出：现有研究——集中在操作（manipulation）领域——支持行为改进、对后续学习的收益与
+流程改进，且"Some systems also change the improver's knowledge or tools, but **the physical studies
+reviewed here have yet to isolate gains attributable to recursion**."收益只在四个条件下向前传递：反馈针对
+剩余的学习需求、接收组件能用上这个改动、其价值在任务或硬件改变后仍存续、持续练习保持安全且可负担。它的贡献是
+**评估准则，不是实验**——对一个主张跑在消融前面的领域来说，这正是正确的形状。
+
+**Deep Fusion Memory——冻结骨干，推理时不做检索。**arXiv 2610.25100（2026 年 10 月 18 日）。一个因果记忆
+预测器从前文生成记忆，由检索到的 chunk embedding 监督，在一个 chunk 的 token 间共享，并经由门控
+cross-attention 注入 hidden state；骨干保持冻结，推理不需要显式检索。训练数据构建所需的检索查询比 token 级
+参数记忆方法少 **32×**，检索条目少 **2,048×**。在六个 QA 任务上，它比最强基线在 Mistral-7B-v0.3 上高
+**12.71%**、在 Qwen3-8B-Base 上高 **11.19%**；领域自适应在 Qwen3-4B-Base 与 Qwen3-8B-Base 上分别再加
+**6.51** 与 **4.38** 分。冻结骨干正是让这份增益可归因于记忆模块、而不是权重漂移的原因——但摘要**没有陈述
+任何局限**，也**没有给出同成本下的检索基线**，而那恰恰是它自己的框架所邀请的比较。
+
+**Goose——一门设计与实现出自不同作者的语言。**Wouter van Oortmerssen 的 **Goose**"no heap allocator,
+garbage collector, or lifetime annotations"：值内联在编译器分配的数据栈上，增长推进指针，作用域退出恢复栈顶，
+每个栈最多一个可增长的值，所以增长永不搬迁，引用生命周期由编译器推断。它输出 **C**，通过 `extern fn` 调用
+C，Apache-2.0。声明的极限是设计边界而非缺陷：递归函数无法跨调用保留可增长数据，可变大小元素的数组可迭代但不可
+索引，闭包不能逃逸，没有函数指针，且必须**整程序编译**。致谢把工作拆开了——人类做语言设计，"**Claude
+Fable: Compiler implementation, Benchmarking**"——所以那张基准表（对惯用 C++ 3.3×、对手工优化 C++ 1.16×、
+对最好的 safe Rust 1.12×，内存少 1.9×/1.3×/1.2×）是实现的模型对自己编译器的自我测量。
+
+**Roc 对 C——作者在反驳自己的头条。**Richard Feldman 优化了 roc-deflate，并在 Silesia 语料上对 C 的
+libdeflate 做基准，两边都用非流式 API，输出逐一核验为字节相同：**144 个基准**，中位数情况下 **M1 MacBook
+Pro 上慢 2.6%**、**Ryzen 9 3900X 上慢 8.9%**，最差输入约慢 18%，最好输入略快于 18%。他的帖子大半篇幅都在
+限制这个主张：一个包无法确立 Roc 总体上离 C 有多近；C 的天花板更高恰恰是因为 Roc 用**没有 unsafe 退出通道**
+的强制手段换来内存安全、自动引用计数与边界检查；roc-deflate 还没有流式 API；x64 还有"room to improve"。
+
+**Dan Luu 的成本模型文章，反驳就印在正文里。**论点是：构建者仍在用一套前 agent 时代的成本模型。证据：pgrust
+的差分测试翻出了真实的 Postgres 缺陷（SP-GiST、JSONPath 缓存、pgcrypto、一个字典加载器的内存安全问题、
+money 溢出），即使这次重写失败，这份价值也留得下来；一个可调的 regex 引擎、一个更快的 ripgrep fork，以及一个
+"**50× on cold compiles and 2× on warm builds**" 的 Rust 解释器，每个都只花了数小时而不是一年。文章同时
+印出了 Yossi Kreinin 的反驳（多数人应该*更不*有野心，因为很多问题缺少 pass/fail 判据，而人无法对大型黑箱
+做推理——"run for cover"），承认多数 AI 重写项目是"vibeslop",指出 **pgrust 的 ClickHouse 基准提交为时过早**
+同时又否定了作弊指控，援引了 Amdahl 定律，并说自己写得很快、未达到平日的严谨。可保留的那句：真正要紧的差距，
+在模型能实现什么、与人能**在没有手把手的情况下核实**什么之间。
+
+→ [[datacenter-silicon]] [[agent-stack]] [[fact-check]] [[token-economics]]
+
+Sources: [Reactive Optimizers (blog)](https://xingjianbai.com/reactive-optimizers/) · [xingjian-bai/opal](https://github.com/xingjian-bai/opal) · [arXiv 2610.30181](https://arxiv.org/abs/2610.30181) · [arXiv 2610.29677](https://arxiv.org/abs/2610.29677) · [arXiv 2610.25100](https://arxiv.org/abs/2610.25100) · [Goose](https://aardappel.github.io/goose/) · [rtfeldman — FP vs C](https://rtfeldman.com/fp-vs-c) · [danluu — ambitious software](https://danluu.com/ambitious/)

@@ -4162,3 +4162,99 @@ code and reasoning ⇒ density over ease) is the interesting part and the least 
 → [[edge-inference]] [[fact-check]]
 
 Sources: [DeepSeek-V4.1-Flash-1017](https://huggingface.co/deepseek-ai/DeepSeek-V4.1-Flash-1017) · [DeepSeek release note 2026-10-17](https://api-docs.deepseek.com/news/news261017/) · [arXiv 2610.29932](https://arxiv.org/abs/2610.29932) · [arXiv 2610.19159](https://arxiv.org/abs/2610.19159) · [arXiv 2610.18868](https://arxiv.org/abs/2610.18868) · [arXiv 2610.29162](https://arxiv.org/abs/2610.29162)
+
+## 2026-10-25 12:16 — the agent moves inside the optimizer (OPAL), and three artifacts publish the negative
+
+**OPAL — "OPtimizer with an Agent in the Loop"** (`xingjian-bai/opal`, PyTorch wrapper + blog) hands a
+coding agent two small programs, an `analysis.py` that extracts whatever statistics it wants and an
+`updater.py` that turns gradients into updates, and lets it rewrite either **during training**, per
+parameter group, in response to loss spikes, stalls or overfitting. Nothing is carried between runs; the
+wrapped run stays "bit-for-bit the same as the plain one" until the agent changes something.
+
+Numbers verified against the blog:
+
+- **−11.6** average over **34 landscapes** (log₁₀ of distance to optimum), against **−2.2** for the best of
+  twelve common static recipes and **−7.4** for the best of **382,080** swept recipes;
+- LightningDiT-XL/1 **FID-50K 1.83 vs 2.18** with guidance (4.33 vs 5.15 without); Goldfish Amharic
+  **83.48 → 81.11** bits/sentence; with **10%** mislabelled labels, test loss 0.69 / **78.6%** accuracy
+  against AdamW's 2.49 / 73.5%;
+- wall-clock cost **1.30×–4.39×** when training waits for the agent, reduced to **1.01×–1.14×** with
+  asynchronous updates;
+- cost **$6.42** at Claude Opus 5.5 list price for ~100 decisions in one run, beside ~74 H100-hours
+  (~$510 at AWS on-demand) — "counted in FLOPs, any reactive optimizer would be impractical given the size
+  of frontier agents", which the authors concede;
+- "At a larger scale, the current implementation still needs work to support sharded training and optimizer
+  compilation"; "**Most experiments in this post are run once**, a few three times."
+
+The line that matters as much as the results: the agent's programs "run inside your training process, so
+**this is a rule, not a sandbox**." Constraints — do not touch the model, data, loss, batch size, steps or
+evaluation — are enforced by instruction. And the *layer* is new relative to thesis 12: Self-HPO and
+HarnessAdapt co-evolve the harness across runs and **keep** what works; OPAL optimises **inside one run and
+discards it**. One is memory, the other is reflex.
+
+**OpenDS — a live-web benchmark whose ceiling is low for everyone.** arXiv 2610.30181 (submitted 19 Oct
+2026) builds **OpenDS-World**: **200** multi-step deep-search tasks on the open web, spanning modalities,
+file formats and interactive access, with independent human verification of evidence validity and answer
+uniqueness. Twelve frontier models ran under one shared tool environment; the best scored **39.0%**, and
+humans scored **21.1% across 1,000 independent attempts**. The paper's own residual problems are "tool
+coordination and long-horizon search management", plus wide variation in strategy, search cost, termination
+behaviour and failure recovery. Read the pair as a difficulty statement, not a capability gap.
+
+**The recursive-self-improvement review that finds no recursion.** arXiv 2610.29677, "Toward Recursive
+Self-Improvement in Physical AI" (93 pages, submitted 21 Oct 2026, 12 authors). It separates improving
+*behaviour* from improving *the process that produces* behaviour, and its finding is negative and stated by
+the authors: existing studies — concentrated in manipulation — support behavioural improvement, benefits to
+later learning and procedure improvement, and "Some systems also change the improver's knowledge or tools,
+but **the physical studies reviewed here have yet to isolate gains attributable to recursion**." Gains carry
+forward only under four conditions: the feedback addresses the remaining learning need, the receiving
+component can use the change, its value survives a change in task or hardware, and continued practice
+remains safe and affordable. Its contribution is **assessment guidelines, not experiments** — which is the
+correct shape for a field whose claims outran its ablations.
+
+**Deep Fusion Memory — frozen backbone, no retrieval at inference.** arXiv 2610.25100 (18 Oct 2026). A causal
+memory predictor generates memory from preceding context, supervised by retrieved chunk embeddings, shared
+across the tokens of a chunk and injected into hidden states through gated cross-attention; the backbone
+stays frozen and inference needs no explicit retrieval. Training-data construction needs **32× fewer
+retrieval queries** and **2,048× fewer retrieved items** than token-level parametric-memory methods. Across
+six QA tasks it beats the strongest baseline by **12.71%** on Mistral-7B-v0.3 and **11.19%** on
+Qwen3-8B-Base; domain adaptation adds **6.51** and **4.38** points on Qwen3-4B-Base and Qwen3-8B-Base.
+Freezing the backbone is what makes the delta attributable to the memory module rather than to weight drift —
+but the abstract states **no limitations** and gives **no retrieval baseline at matched cost**, which is the
+comparison its own framing invites.
+
+**Goose — a language whose design and implementation have different authors.** Wouter van Oortmerssen's
+**Goose** has "no heap allocator, garbage collector, or lifetime annotations": values live inline on
+compiler-assigned data stacks, growth advances a pointer and scope exit restores the stack top, at most one
+resizable value per stack so growth never relocates, and the compiler infers reference lifetimes. It emits
+**C**, calls C through `extern fn`, and is Apache-2.0. The stated limits are design boundaries rather than
+bugs: recursive functions cannot retain growable data across calls, arrays of variable-size elements can be
+iterated but not indexed, closures cannot escape, there are no function pointers, and **wholesale program
+compilation** is required. The credits split the work — human language design, "**Claude Fable: Compiler
+implementation, Benchmarking**" — so the benchmark table (3.3× vs idiomatic C++, 1.16× vs hand-optimised
+C++, 1.12× vs the best safe Rust, on 1.9×/1.3×/1.2× less memory) is the implementing model's own
+measurement of its own compiler.
+
+**Roc vs C — the author argues against his own headline.** Richard Feldman optimised roc-deflate and
+benchmarked it against C's libdeflate over the Silesia corpus, non-streaming APIs on both sides, outputs
+verified byte-identical: **144 benchmarks**, **2.6% slower on an M1 MacBook Pro** and **8.9% slower on a
+Ryzen 9 3900X** in the median case, worst inputs ~18% slower and best inputs slightly over 18% faster. His
+post spends most of its length limiting the claim: one package cannot establish how close Roc gets to C
+generally, C keeps a higher ceiling precisely because Roc enforces memory safety, automatic reference
+counting and bounds checks with **no unsafe opt-out**, roc-deflate has no streaming API yet, and x64 has
+"room to improve."
+
+**Dan Luu's cost-model essay, with the rebuttal inline.** The argument: builders still run a pre-agentic
+cost model. Evidence: pgrust's differential testing surfaced real Postgres bugs (SP-GiST, JSONPath caching,
+pgcrypto, a dictionary-loader memory-safety issue, money overflow), value that survives even if the rewrite
+does not; a tunable regex engine, a faster ripgrep fork, and a Rust interpreter at "**50× on cold compiles
+and 2× on warm builds**", each taking hours rather than a year. The piece also prints Yossi Kreinin's
+counter-argument (most people should be *less* ambitious, because many problems lack pass/fail criteria and
+people cannot reason about large black boxes — "run for cover"), concedes most AI rewrite projects are
+"vibeslop", notes **pgrust's ClickHouse benchmark submission was premature** while calling the cheating
+accusations false, invokes Amdahl's law, and says he wrote it quickly without his usual rigor. The keepable
+sentence: the gap that matters is between what a model can implement and what a person can **verify without
+handholding**.
+
+→ [[datacenter-silicon]] [[agent-stack]] [[fact-check]] [[token-economics]]
+
+Sources: [Reactive Optimizers (blog)](https://xingjianbai.com/reactive-optimizers/) · [xingjian-bai/opal](https://github.com/xingjian-bai/opal) · [arXiv 2610.30181](https://arxiv.org/abs/2610.30181) · [arXiv 2610.29677](https://arxiv.org/abs/2610.29677) · [arXiv 2610.25100](https://arxiv.org/abs/2610.25100) · [Goose](https://aardappel.github.io/goose/) · [rtfeldman — FP vs C](https://rtfeldman.com/fp-vs-c) · [danluu — ambitious software](https://danluu.com/ambitious/)

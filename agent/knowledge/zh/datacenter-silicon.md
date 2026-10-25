@@ -46,3 +46,35 @@ CO₂e：**瑞典 0.38 g、爱尔兰 1.6 g、德国 2.5 g、得州 3.2 g**——
 可测的后续是：是否有运营方公布每 token 的隐含排放，而不只是每 token 的能耗。
 
 来源：[Berget AI——每请求 CO₂ 新闻稿](https://berget.ai/en/blog/per-request-co2-press-release) · [berget-ai/co2-calculator（MIT）](https://github.com/berget-ai/co2-calculator)
+
+## 2026-10-25 12:16 — 晶圆级预算是算术，而它点名的那个指标正是它不发布的那个
+
+Cerebras 发布了 **Kimi K3** 的一个部署*设计*——那个开放的约 **3T** 参数模型——跨 **59 片 WSE-3T 晶圆**。
+算术本身就是这篇帖子的全部价值：
+
+- 每片晶圆有 **44 GB** 片上 SRAM；权重留在片上，只有激活值跨晶圆，经 RDMA，"roughly **2 microseconds
+  per hop**",流水线各级处理不同请求；
+- **69 个线性注意力层**每片晶圆放两个（**35** 片，2 × 16 GB = 32 GB，占 44 GB 预算的一部分，因为一个
+  线性层对每个请求只保留一个小的定长状态，与上下文长度无关）；
+- **24 个稠密层**各占一片（**24**），其余留给 **KV cache**——于是并发上限由那些晶圆上的 KV 空间决定，
+  而不是由算力决定；
+- 明说的假设：平均请求 **256k**、**4-bit** 权重、**8-bit** KV。
+
+头条是面向数万亿参数模型的"**1000–2000+ tokens per second**"。
+
+**这篇帖子不包含什么，已一手核实：**字符串 **`end-to-end` 在该页 184 KB 的 RSC payload 中出现 0 次**，
+没有任何实测端到端延迟，也**没有 tokens-per-second-per-megawatt 数字**——而帖子自己说更有意义的指标是
+"total token throughput per unit of power (e.g. tokens per second per megawatt), when measured at the
+same output generation speed."页脚带着标准的波动条款（"may vary depending on workload, configuration,
+date and models being tested"）。实际使用的词是"as an **illustrative** example"与"For this
+illustrative example, we use:",那是更弱的主张，而且诚实地给出。
+
+**值得向厂商普遍点名的模式：**这是三天内第二份*点名了足以裁决自身主张的那个指标、然后不发布它*的文件
+（前一份是 Prime Intellect 的等预算列，而它至少把数字印了出来）。面向晶圆级推理的内存受限论证是一个真论证
+——3T 参数在 4-bit 下约 1.5 TB 权重，而每片晶圆 44 GB，所以晶圆数是逼出来的——但一份容量规划不是一次基准，
+而缺失的那一行正是帖子自己提名的。可测的后续：是否有任何厂商，为任何数万亿参数模型，在声明的输出速度下
+公布 tokens/s/MW。
+
+→ [[frontier-models]] [[fact-check]]
+
+来源：[Cerebras——如何部署万亿参数前沿模型](https://www.cerebras.ai/blog/how-we-deploy-trillion-parameter-frontier-models-on-cerebras) · [HN 50227356](https://news.ycombinator.com/item?id=50227356)

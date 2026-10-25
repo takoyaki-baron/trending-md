@@ -619,3 +619,62 @@ score is Patchstack's; do not let a 9.8 imply a validated unauthenticated RCE.
 → [[security]] [[disclosure-lag]] [[fact-check]]
 
 Sources: [NVD CVE-2026-112846](https://nvd.nist.gov/vuln/detail/CVE-2026-112846) · [NVD CVE-2026-112862](https://nvd.nist.gov/vuln/detail/CVE-2026-112862) · [NVD CVE-2026-110447](https://nvd.nist.gov/vuln/detail/CVE-2026-110447) · [CISA KEV catalog](https://www.cisa.gov/known-exploited-vulnerabilities-catalog)
+
+## 2026-10-25 12:33 — `weaknesses[]` is the CNA's field, and `vulnStatus` is read at query time, not at publication
+
+The filed question was binary — is `weaknesses[]` (CWE) present from publication like `affected[]`, or
+only after NVD analysis like `configurations`? Measured with `disclosure-lag.mjs --field-census
+weaknesses` over the **2026-10-18 → 10-24** publication week (**4,631** records, the same window the
+range census used — which returned **4,624** eight hours earlier, and the seven-record delta is itself a
+reminder that NVD's `pubStartDate`/`pubEndDate` window is evaluated at *request* time, not frozen), the
+answer is neither, and the reason is a trap the range census never had to face.
+
+| status | n | carries `weaknesses[]` | % |
+|---|---:|---:|---:|
+| Received | 830 | 142 | **17.1** |
+| Awaiting Analysis | 1,568 | 1,071 | 68.3 |
+| Undergoing Analysis | 454 | 297 | 65.4 |
+| Deferred | 1,249 | 1,217 | 97.4 |
+| Analyzed | 403 | 403 | 100.0 |
+| Modified | 5 | 5 | 100.0 |
+| Rejected | 122 | 0 | 0.0 |
+| **total** | **4,631** | **3,135** | **67.7** |
+
+**The attribution settles the field's ownership: 3,073 of the 3,135 records carry a CNA source**
+(3,073 `cna` · 33 `mitre` · 27 `nvd`-only · 2 `nvd`+`cna`). So the CWE is the CNA's statement, not
+NVD's analysis output — `weaknesses[]` mirrors `affected[]` in *kind*. But it does **not** mirror it in
+*availability*: the range is present on 97.4% of records the day they are published, and the CWE is
+present on 67.7% of a week's records and on **17.1%** of the ones still sitting at `Received`.
+
+**Why the two numbers are not a contradiction is the finding.** `vulnStatus` is a *live* field read at
+query time, so a publication-window census cross-tabulates "published that week" against "status
+*today*". The `Received` row is therefore not "yesterday's arrivals" but a **backlog that has not
+moved** — and the control proves it: the same census over **2026-10-24 alone** returned **66 `Received`
+records, 65 of them (98.5%) carrying a CWE**, and 10-24 contributes only 66 of the week's 830. The
+long-lived `Received` residue is the low-CWE cohort; a day-fresh `Received` record almost always has
+one. Two consequences:
+
+1. **"This `Received` record has no CWE" is a statement about the freeze, not about the CNA.** The
+   filed fear — that quoting a CWE from a `Received` record quotes a field that "cannot be there yet" —
+   is wrong in the other direction: it can be there, it usually is on a fresh record, and its absence
+   on an old one marks a record nobody has touched.
+2. **Every per-status table this tool prints needs the same footnote as the range census, one notch
+   harder.** The range census prints "read a row as records whose paperwork completed that week"; a
+   per-status field table must also say its status column is *now*, not then. The honest phrasing of
+   any row is "records published that week whose status today is X".
+
+**NVD analyses without publishing its own CWE on 93% of records.** Of 408 `Analyzed`+`Modified`
+records, **29 (7.1%)** carry an `nvd@nist.gov` source at all, and only 27 are NVD-only. The
+`Analyzed` status and the `nvd@nist.gov` metric remain two different questions on this field too — the
+same endorsement shape `CLAUDE.md`'s rule 6 records for CVSS, now confirmed on CWE. And there is a
+**third attribution the feed never names**: 33 records carry `cve@mitre.org`, the CVE Program's
+last-resort CNA, which is neither the vendor nor NVD.
+
+**Writing rule:** "the CWE says X" needs the same three words as a score — *whose* CWE. Quote it as
+"the CNA's CWE-862 (`secalert@redhat.com`)" or say the source class; on a `Received` record, say the
+record is unanalysed and the CWE is the CNA's own guess, not an assessment. And never infer "no CWE
+assigned" from a record that simply has not moved.
+
+→ [[disclosure-lag]] [[security]] [[fact-check]]
+
+Sources: [NVD CVE API 2.0](https://services.nvd.nist.gov/rest/json/cves/2.0) · [CVE-2026-115557](https://cveawg.mitre.org/api/cve/CVE-2026-115557) · [CVE-2026-114406](https://cveawg.mitre.org/api/cve/CVE-2026-114406) · [NVD CVE-2026-116014](https://nvd.nist.gov/vuln/detail/CVE-2026-116014)

@@ -806,3 +806,110 @@ two different scores — quote both, or say which version you are quoting.
 → [[security]] [[vuln-supply]] [[fact-check]]
 
 Sources: [CVE-2026-115932](https://cveawg.mitre.org/api/cve/CVE-2026-115932) · [CVE-2026-115933](https://cveawg.mitre.org/api/cve/CVE-2026-115933) · [Postiz v2.25.3](https://github.com/gitroomhq/postiz-app/releases/tag/v2.25.3) · [CVE-2026-116014](https://cveawg.mitre.org/api/cve/CVE-2026-116014) · [open62541 v1.5.7](https://github.com/open62541/open62541/releases/tag/v1.5.7) · [VulnCheck advisory](https://www.vulncheck.com/advisories/open62541-1.5.0-before-1.5.7-integer-overflow-heap-buffer-overflow-via-custom-datatype) · [CPython PR #160042](https://github.com/python/cpython/pull/160042) · [CVE-2026-115557](https://cveawg.mitre.org/api/cve/CVE-2026-115557) · [CVE-2026-110956](https://cveawg.mitre.org/api/cve/CVE-2026-110956)
+
+## 2026-10-25 12:16 — the patch reference can be 367 days older than the record, and its only date is a 13-digit epoch in a filename
+
+`CVE-2026-115995` (Unitree Go2) is `Received`, published `2026-10-24T22:15:15Z`, and its only `patch`
+reference is a raw firmware download:
+
+```
+https://unitree-firmware.oss-cn-hangzhou.aliyuncs.com/firmware/release/
+  package_1.1.11.5_GO2_Edu_Max_Pro_X_1761128358872.upk
+```
+
+Two independent clocks, checked first-hand:
+
+- the **filename's trailing 13-digit epoch** `1761128358872` → `2025-10-22T10:19:18.872Z`;
+- the object's own **`Last-Modified: Wed, 22 Oct 2025 11:39:21 GMT`** — agreeing to within 80 minutes;
+- `Content-Length: 341,397,620` (a 341 MB blob), served by Aliyun OSS.
+
+The record is **367.5 days** later. That makes this the largest `fix-predates-record` gap in the library,
+ahead of Vibe-Trading's 168 days and vLLM's 16 — and the fix is not a commit, an advisory or a release
+note. **It is a single opaque `.upk` whose entire version metadata is a filename.**
+
+Three rules this calibrates into the tool and the prose:
+
+1. **A patch URL is an artifact, and an artifact's date may live only in its filename or its
+   `Last-Modified` header.** `disclosure-lag.mjs --artifact` reads the advisory's patched cell and a fix
+   date from `--fix-ref`; a raw binary reference needs the same treatment — parse a trailing epoch when
+   present and confirm it against the HTTP `Last-Modified`, because one clock in a filename is a guess and
+   two clocks agreeing is a measurement.
+2. **"Patched in X" and "that binary shipped in Y" are different claims, and the second can be a year
+   older.** Unitree published the fixed firmware (1.1.11.5) well before anyone filed the record against
+   1.1.11.4 — so the *exploitable window* and the *record date* have nothing to do with each other. Quote
+   the artifact date, never the record date, when the question is "can a consumer install the fix."
+3. **A record can carry three disagreeing version statements at once** — an enumerated `affected[]`
+   (1.1.11.0–1.1.11.4), a wildcard CPE (`unitree_go2:*`) and a submission title naming different versions
+   (1.1.4 / 1.1.7 / 1.1.7.2). When they disagree, the enumerated list is the only one that is a *bound*;
+   the other two are claims about product identity, not about which builds are affected.
+
+### KEV's required action presumes an update path the artifact may not have
+
+The same batch's TCL 50C721 root chain (`c4psu13/mali-pagecache-root`) reaches `uid=0` in under two
+seconds through **`CVE-2022-22706`** — an Arm Mali GPU page-cache bug from 2022 — imported as a
+`MAP_SHARED` mapping of libc's `__cxa_atexit` page as a GPU user buffer, then `mremap(MREMAP_FIXED)` and
+**112 bytes of Thumb-2 shellcode written into the page cache** so dm-verity's on-disk hash still matches.
+
+Checked against the CISA catalog (version **2026.10.23**, 1,756 entries): `CVE-2022-22706` was added
+**2023-03-30** with a due date of **2023-04-20** — three and a half years before the device was rooted —
+and its `requiredAction` reads "Apply updates per vendor instructions." NVD has analysed it and scores it
+7.8 at CVSS 3.1, so this is not an unseen bug being rediscovered; it is a **fully public, KEV-deadlined
+bug that a consumer television cannot absorb a fix for**, because the patch boundary for a TV is a
+firmware image that ships once and is never revised. Two distinct artifact states now sit beside
+`no-fix-eol` (AWS MMS) and `fix-in-source-no-artifact` (EDK2): **`fix-unreachable-in-artifact`** — the fix
+exists, is published, and has no delivery mechanism to the installed base.
+
+→ [[security]] [[vuln-supply]] [[fact-check]]
+
+Sources: [CVE-2026-115995](https://cveawg.mitre.org/api/cve/CVE-2026-115995) · [Unitree firmware package 1.1.11.5](https://unitree-firmware.oss-cn-hangzhou.aliyuncs.com/firmware/release/package_1.1.11.5_GO2_Edu_Max_Pro_X_1761128358872.upk) · [CISA KEV catalog](https://www.cisa.gov/sites/default/files/feeds/known_exploited_vulnerabilities.json) · [c4psu13/mali-pagecache-root](https://gitlab.com/c4psu13/mali-pagecache-root) · [HN 50220042](https://news.ycombinator.com/item?id=50220042)
+
+## 2026-10-25 12:33 — a raw patch URL is an artifact, and its date is a two-clock measurement
+
+The Unitree lesson (above) was written as prose and left the tool unable to repeat it. `--fix-ref`
+accepted a commit or a pull request; a firmware `.upk` passed to it resolved to nothing, and the
+artifact axis then answered `indeterminate / no artifact timeline` — a true statement about the
+inputs and a useless answer to the question, because **the patch URL is the artifact the question is
+about**. `disclosure-lag.mjs --fix-ref <http(s) url>` now reads it.
+
+**The rule is not "parse the epoch", it is "two clocks or no date."** A binary has exactly two
+independent clocks and both are guesses alone:
+
+| clock | where it lives | what it measures |
+|---|---|---|
+| filename epoch | a trailing 13-digit (ms) or 10-digit (s) run in the basename | *usually* the build stamp |
+| `Last-Modified` | the object's own HTTP header | *usually* the upload stamp |
+| `Content-Length` | the same header set | size only — no date, but it makes the object identifiable |
+
+`artifactClocks()` returns a **verdict**, never a bare date, and the verdict is the claim:
+
+- `two-clocks` — both readable and within **48h** → a date, with the delta printed. Unitree:
+  filename `2025-10-22T10:19:18.872Z`, `Last-Modified` `2025-10-22T11:39:21Z`, **Δ 1.3h**.
+- `clocks-disagree` — beyond 48h → **no date at all**. They are not averaged and neither is preferred;
+  a build stamp and an upload stamp that far apart describe two different events.
+- `single-clock` — one readable → a date labelled **"unconfirmed, do not quote as measured"**.
+- `no-clock` — neither → its own state. Unreadable is not absent.
+
+Three traps the implementation encodes, each of which the hand reading had already met:
+
+1. **A version is not an epoch.** The plausibility window is 2001-01-01 → 2100-01-01, so `1.1.11.5`
+   and an 8-digit date stamp cannot become a date. A 13-digit run that resolves outside that window
+   returns null rather than a wrong century.
+2. **The version must be read AFTER the epoch is stripped.** In
+   `package_1.1.11.5_GO2_Edu_Max_Pro_X_1761128358872.upk` a longest-numeric-match reads the version
+   as the epoch; stripping the 13-digit run first yields `1.1.11.5`.
+3. **`HEAD` is not universal.** Some object stores reject it, so the fetch falls back to a 1-byte
+   ranged `GET` and cancels the body. Aliyun OSS answers `HEAD` fine — HTTP 200, 341,397,620 bytes
+   (**325.6 MiB**; the "341 MB" of the earlier note is the decimal count).
+
+**The lag then comes from the artifact, not from an advisory cell.** With no release timeline at all,
+the artifact *is* the newest installable thing, so `newest` is taken from the fix reference and the
+artifact's date is compared to the record's `published`. Unitree: record `2026-10-24`, artifact
+`2025-10-22`, **367d** — `fix-predates-record` on the artifact axis, with the version axis kept and
+printed as `indeterminate` beside it. Escalation is deliberately narrow: it fires only where the
+version axis is `indeterminate`/`no-fix`/`record-then-fix`, because a version-axis verdict already
+saying `fix-predates-record` measures a different object (a release can predate its own patch URL)
+and its own, larger lag must survive.
+
+→ [[fact-check]] [[security]]
+
+Sources: [CVE-2026-115995](https://cveawg.mitre.org/api/cve/CVE-2026-115995) · [Unitree firmware package 1.1.11.5](https://unitree-firmware.oss-cn-hangzhou.aliyuncs.com/firmware/release/package_1.1.11.5_GO2_Edu_Max_Pro_X_1761128358872.upk)

@@ -5036,3 +5036,64 @@ control, which is the normal industrial topology.
 → [[disclosure-lag]] [[vuln-supply]] [[fact-check]]
 
 Sources: [CVE-2026-115557](https://cveawg.mitre.org/api/cve/CVE-2026-115557) · [distrusted_spki.h](https://github.com/python/cpython/blob/main/Modules/_ssl/distrusted_spki.h) · [CPython issue #160040](https://github.com/python/cpython/issues/160040) · [CPython PR #160042](https://github.com/python/cpython/pull/160042) · [CVE-2026-115933](https://cveawg.mitre.org/api/cve/CVE-2026-115933) · [CVE-2026-115932](https://cveawg.mitre.org/api/cve/CVE-2026-115932) · [Postiz v2.25.3](https://github.com/gitroomhq/postiz-app/releases/tag/v2.25.3) · [CVE-2026-110956](https://cveawg.mitre.org/api/cve/CVE-2026-110956) · [WPScan entry](https://wpscan.com/vulnerability/95501052-9f20-4391-9171-184cd2e4a445/) · [CVE-2026-116014](https://cveawg.mitre.org/api/cve/CVE-2026-116014)
+
+## 2026-10-25 12:16 — one compromised CA, six separately-filed CVEs, one per artifact layer
+
+The eMudhra fallout stopped being a story about a CA on 2026-10-25 and became a census of the trust
+*propagation graph*. Six records published over Oct 20–24 all trace to the same eight weak intermediates,
+and each one is filed by a different maintainer against a different artifact:
+
+| # | Artifact (layer) | Record | Score (source) | CWE | NVD status |
+|---|---|---|---|---|---|
+| 1 | CPython `ssl` runtime | `CVE-2026-115557` | 9.4 v4.0 (`cna@python.org`) | 299 | `Received` |
+| 2 | Electron framework | `CVE-2026-115570` | 7.4 v3.1 (`security-advisories@github.com`) | 299 | `Awaiting Analysis` |
+| 3 | MongoDB Compass (an Electron app) | `CVE-2026-115929` | 7.6 v4.0 / 6.8 v3.1 (`cna@mongodb.com`) | 295 | `Received` |
+| 4 | Red Hat `ca-certificates` RPM | `CVE-2026-114406` | 6.8 v3.1 (`secalert@redhat.com`) | 295 | `Awaiting Analysis` |
+| 5 | Perl `Mozilla::CA` (CPAN) | `CVE-2026-113812` | **none published** | 295 | `Awaiting Analysis` |
+| 6 | Go | `CVE-2026-111943` | **none published** | — | `Awaiting Analysis` |
+
+**0 of 6 carries an `nvd@nist.gov` metric; 0 of 6 is analysed.** Two have no CVSS at all — Go's absence
+is *policy* (the Go security policy says "when issuing CVEs for Go security issues we do not assign CVSS
+scores"), Perl's is simply unpublished. The scores span 6.8–9.4 and the highest is on the **runtime**, not
+the framework — the layer that must reject the certificate rather than the layer that ships it.
+
+The CWE split is the useful structure: **299 (improper certificate validation) on the validation layer**
+(CPython, Electron) and **295 (improper certificate validation of the issuing chain) on the contents
+layer** (Red Hat, Compass, Perl). Electron fixes forward across **four branches** — `42.11.16`, `43.8.1`,
+`44.9.1`, `45.0.0-beta.6` — with four commits and four PRs (`#55127`–`#55130`), and MongoDB Compass's
+entire fix is to move to **Electron 44.9.1** in Compass 1.53.1 (`2026-10-23T17:23:58Z`, changelog line:
+"Updated Electron to address a security issue"). So a *consumer* of a framework cannot fix this itself;
+its remedy is a dependency bump whose release note does not name the CA.
+
+Red Hat's record carries the design fact worth keeping: "Due to inability to only distrust specific
+intermediate certificates in all clients using the system CA store, **root CA certificates of authorities
+that signed weak intermediate CA certificates are being removed**." One weak intermediate therefore costs
+the whole root's subscribers — **12 RHSA errata** (`RHSA-2026:86595` … `:88779`) and coordination
+advisory `RHSB-2026-012` — and the fix is a package, not a policy.
+
+**The writing rule:** quote the *layer*. "Patched in Electron 44.9.1" says nothing about the thousands of
+applications that pin an older Electron, and "removed by Mozilla" says nothing about an Electron app that
+ships its own store. One root cause, six clocks.
+
+### Unitree Go2 — a voice-assistant thread is a shell, and one record states three versions
+
+`CVE-2026-115995` (VulDB): "the impacted element is the function `set_volume` of the file `gpt_thread.py`
+of the component `chat_go`. Such manipulation of the argument Value leads to **OS command injection**."
+CWE-78, `AV:N/AC:L/PR:N/UI:R/S:C` — **9.6** at CVSS 3.1 and 3.0, **9.4** at 4.0, **10.0** at 2.0, all four
+CNA-assigned, all on a record NVD lists `Received` with 0 NIST metrics.
+
+Three version statements disagree inside one record, and this is the net-new fact-check item:
+
+- the CNA's `affected[]` enumerates five point versions `1.1.11.0`–`1.1.11.4` with `1.1.11.5` `unaffected`;
+- the same entry's CPE is a **wildcard** — `cpe:2.3:a:unitree_robotics:unitree_go2:*`;
+- VulDB's own submission title (`/submit/990502`) names **1.1.4 / 1.1.7 / 1.1.7.2** — three versions that
+  are not in the enumerated list at all.
+
+The patch is a **linked firmware artifact**: `unitree-firmware.oss-cn-hangzhou.aliyuncs.com/.../
+package_1.1.11.5_GO2_Edu_Max_Pro_X_1761128358872.upk`, `Content-Length` **341,397,620**, i.e. "patched" is
+checkable as a download rather than as a promise. That artifact's clock is the next section of
+[[disclosure-lag]].
+
+→ [[disclosure-lag]] [[vuln-supply]] [[fact-check]]
+
+Sources: [CVE-2026-115557](https://services.nvd.nist.gov/rest/json/cves/2.0?cveId=CVE-2026-115557) · [CVE-2026-115570](https://services.nvd.nist.gov/rest/json/cves/2.0?cveId=CVE-2026-115570) · [CVE-2026-115929](https://cveawg.mitre.org/api/cve/CVE-2026-115929) · [CVE-2026-114406](https://access.redhat.com/security/cve/CVE-2026-114406) · [Red Hat RHSB-2026-012](https://access.redhat.com/security/vulnerabilities/RHSB-2026-012) · [CVE-2026-113812](https://services.nvd.nist.gov/rest/json/cves/2.0?cveId=CVE-2026-113812) · [CVE-2026-111943](https://services.nvd.nist.gov/rest/json/cves/2.0?cveId=CVE-2026-111943) · [Electron GHSA-jr5w-w6x2-84p9](https://github.com/electron/electron/security/advisories/GHSA-jr5w-w6x2-84p9) · [Compass v1.53.1](https://github.com/mongodb-js/compass/releases/tag/v1.53.1) · [CVE-2026-115995](https://cveawg.mitre.org/api/cve/CVE-2026-115995) · [VulDB VDB-426093](https://vuldb.com/vuln/426093) · [Go security policy](https://go.dev/doc/security/policy)

@@ -80,6 +80,12 @@ underlying pages — this produced a two-layer false signal in a single item.
    Cheap checks: grep the page for "not", "should not be interpreted", "does not isolate",
    "limitations", "public set", "we did not"; if the headline is a **delta** (30% → 100), ask whether
    the source claims the delta is attributable — two numbers from different setups are not an ablation.
+   **A quotation must be greppable** (added 2026-10-25): a sentence in quotation marks is a claim about bytes
+   in the source, so check the string is actually there before publishing — on a JS-rendered page the prose
+   lives in the RSC/`__next_f` payload or a Markdown twin (`doc-twin.mjs` reaches both). If it is not there you
+   have a paraphrase, and attributing it verbatim is a fabricated quote; the analysis can stand while the
+   quotation is replaced (Cerebras' trillion-parameter post was quoted as "an illustrative configuration, not a
+   reported end-to-end benchmark" — `end-to-end` appears **0 times** in its 184 KB payload).
    When a caveat exists it belongs in **"Why it matters"**, not only in the body: the analysis line is
    what gets quoted onward.
 5. **The whole source, including its own corrections** — a primary source often *fixes* the record that
@@ -416,6 +422,17 @@ underlying pages — this produced a two-layer false signal in a single item.
    artifact at all; and exactly 1 of the batch's "fresh release" triggers was unreleased code** — the one
    the feed got wrong. Before writing any "released / ships N / vX.Y.Z today": run it, quote the artifact
    the claim is about, and if the release is announced but untagged, say **announced, not released**.
+   **A raw patch URL is an artifact too, and its date is TWO clocks or none** (added 2026-10-25 12:33,
+   the Unitree `.upk`). `CVE-2026-115995`'s only `patch` reference is a 341 MB firmware blob whose entire
+   version metadata is a filename; the date lives in a trailing epoch (`…_1761128358872` →
+   `2025-10-22T10:19:18Z`) *and* in the object's `Last-Modified` (`11:39:21 GMT`), **1.3h apart**. One
+   clock in a filename is a guess; two agreeing is a measurement; beyond **48h** the two describe
+   different events and the answer is "no date", never an average. So a fix date for a binary is never
+   quoted from a filename alone. `node agent/tools/disclosure-lag.mjs --ids CVE-… --artifact firmware
+   --fix-ref <url>` now reads it and emits `fix-predates-record` from the artifact when the artifact is
+   older than the record — 367d for Unitree, the largest in the library. Trap: a version is not an epoch
+   (plausibility window 2001–2100), and the version must be read *after* the epoch is stripped, or
+   `package_1.1.11.5_…_1761128358872.upk` reports the epoch as its version.
 
 **Case study (Void, 2026-08-12 — two failures, one root cause):**
 - The feed saw voideditor/void at #2 trending with +2,840 stars and wrote it as "AI-first

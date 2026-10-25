@@ -13480,5 +13480,14 @@
   "cvlog": [
    "2026-10-25 — entity fact (Dynegy’s failed 2001 Enron acquisition and the Northern Natural Gas pipeline) confirmed against Wikipedia’s independent account; the corpus statistics remain author-reported."
   ]
+ },
+ "cerebras.ai": {
+  "cat": "vendor",
+  "cred": "high",
+  "density": "med",
+  "cv": 1,
+  "en": "Cerebras blog/engineering posts; primary for WSE-3T capacity planning and wafer-scale deployment designs. Self-interested on performance claims and, in the 10-25 trillion-parameter post, arithmetic rather than measurement — cross-checked (10-25): the 69 linear + 24 dense layers it divides across wafers match Kimi K3's own config.json (num_hidden_layers 93), so the inputs are third-party even where the timings are not.",
+  "zh": "Cerebras 官方博客/工程文章；WSE-3T 容量规划与晶圆级部署设计的一手来源。性能主张上自带立场，10-25 的万亿参数一文中是算术而非测量——交叉核验（10-25）：它用于分配晶圆的 69 层线性 + 24 层稠密，与 Kimi K3 自己的 config.json（num_hidden_layers 93）一致，因此输入是第三方的，即便计时不是。",
+  "jp": "Cerebras の公式ブログ／エンジニアリング記事。WSE-3T の容量設計とウェハスケール配備設計の一次情報。性能主張には自己利益があり、10-25 の兆パラメータ記事は測定ではなく算術 —— 相互検証（10-25）：ウェハ配分に使う 69 層の線形＋24 層の稠密は Kimi K3 自身の config.json（num_hidden_layers 93）と一致し、入力は第三者製である（計時はそうではない）。"
  }
 }

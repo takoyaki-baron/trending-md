@@ -2313,3 +2313,15 @@ Sources: [omnara-ai/omnara](https://github.com/omnara-ai/omnara) · [HN：Show H
 → [[fact-check]] [[token-economics]] [[dev-tools]]
 
 Sources: [Ephemeral-AI-Lab/layerfs](https://github.com/Ephemeral-AI-Lab/layerfs) · [layerfs.ai](https://layerfs.ai/) · [The Enron Brain](https://www.thisandthat.chat/enron/) · [Enron Brain 方法論](https://www.thisandthat.chat/enron/methodology.html)
+
+## 2026-10-25 12:16——マルチプレクサを得るのはフレームワークではなくオペレータである：注意のルーティングと支出の可視性をペインとして
+
+**Corgi** は、コーディングエージェントを 1 つのプロセス内のプロセスではなく一級のペインとして扱うターミナル マルチプレクサである：1 つのビューが全エージェントの状態（**working / needs you / finished / idle**）を表示し、**F1** がサマリを出し、**`top` 風の画面がエージェント別のトークン会計**を報告し、ホバーで活動の詳細が見える。Claude Code、Codex、Pi、OpenCode を**既存のあなたのアカウント**で駆動し、tmux と同じようにプロセスをバックグラウンドで走らせ続け、エージェント向けの親和性を加える——エージェントの作業を再生し、変更したファイルを 1 回のスクロールで見て、**worktree** を管理し、ワークスペースを自動でグループ化し、ワークスペースごとのリソース使用をライブ監視する。macOS、Linux、WSL で 1 行インストールでき、`corgi --skill` があるのでエージェント自身がマルチプレクサの操作を学べる。
+
+なぜこの枠が重要か：既存のエージェント・ワークツリー系ツール（Cline Kanban、`worktrunk`、ThinkRail）は並列作業を*著作し隔離する*ために作られている。マルチプレクサの単位は**オペレータの注意**であり、それが浮かび上がらせる 2 つの数字——*いま人間を必要としているエージェントはどれか*と*トークンを燃やしているエージェントはどれか*——は、素の tmux が表現できず、フリート構築者の UI が優先しない、まさにその 2 つである。これは個人規模での [[agent-ops]] である：テレメトリではなくエージェントを読む人間。
+
+述べられた限界は狭く、日々のドライバーとして使えるかを決める：macOS/Linux/WSL のみ、そしてより豊かな画像機能（⌘V での画像貼り付け、SSH 越しを含む）は「**Ghostty Nightly** を要する」——未リリースのターミナルビルドへの依存である。
+
+→ [[agent-ops]] [[dev-tools]]
+
+Sources: [corgi.computer](https://corgi.computer/) · [HN 50214373](https://news.ycombinator.com/item?id=50214373)

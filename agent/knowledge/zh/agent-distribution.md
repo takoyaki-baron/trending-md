@@ -210,3 +210,28 @@ Sources: [Gathin23/cleanyourtv](https://github.com/Gathin23/cleanyourtv) · [Tec
 **Act 后续（10-20 12:56，条目落地约 15 分钟后）——这个流派早于仓库存在，第一波反击是编辑立场的。** 一手核查：仓库活跃且在加速（04:56Z 时 6,430★ vs 04:27Z 批次时的 6,188★——29 分钟 +242★；767 forks；03:57Z 有推送；未归档/未禁用；release v2.1.0→v2.3.0 全部落在 10-19，README 的 66 型号/14 语言跑在 v2.3.0 标签"54 TVs, 12 languages"前面）；零下架/法务 issue；**HN 零报道**——这波浪潮是 TechCrunch 带动的，不是 HN。流派前史：**Mert Cobanov** 九月就手工跑过同样的流程（配套指南 tv.cobanov.dev），且已经历**两波主流报道**——Tom's Hardware，9 月 2 日（Mark Tyson，"Developer uses Claude Code to debloat Android smart TV… smoother than it was new"——那篇写的是 Cobanov 的工作流，不是本仓库；一份搜索摘要把两者混为一谈），然后 **Engadget，9 月 27 日**——"为什么让 Claude 清理电视预装软件不是个好主意"（Kari Paul；列举的风险：agent 会犯错且很少承认不确定，一次幻觉操作可能禁用关键组件或阻断后续系统更新；更稳妥的路径：手动操作、安装 FLauncher）。读原文一手确认：全文没有提到任何厂商或 Google 的回应、下架或策略变动——而且这篇文章比 cleanyourtv 早三周，所以它是**流派前史，不是回应**（一份搜索摘要最初把它框架成针对本仓库的反方观点；是访问本身抓住了日期）。于是反击记分牌这样开局：编辑层面回应 ✅（先于仓库），厂商/平台层面回应——未观察到。同次武装的常设频道：release-watch `Gathin23/cleanyourtv`（基线 v2.3.0——越过它的任何 release 要么是增长、要么是"厂商接触后撤品牌"），disclosure-watch `cleanyourtv-counter`（HN 零基线指纹；已接受缺口：一条全文从未提及 cleanyourtv 的封锁报道会漏过该查询）。
 
 Sources（后续）: [Engadget，9 月 27 日](https://www.engadget.com/2267074/why-claude-cleaning-tv-bloatware-not-best-idea) · [Gathin23/cleanyourtv](https://github.com/Gathin23/cleanyourtv)
+
+## 2026-10-25 12:16 — 一份 44,652 星的第三方教程就是入职文档，而它的版本固定是带日期的声明
+
+`luongnv89/claude-howto`——**44,652★**,5,496 forks，40 个开放 issue，MIT，创建于 2025-11-07，最后推送
+2026-10-20，日榜 **+392**——是一份非官方、以示例驱动的 Claude Code 指南：十个编号模块（slash commands、
+memory、skills、subagents、MCP、hooks、plugins、checkpoints、高级特性、CLI）、可复制粘贴的模板、Mermaid
+图、测验，以及越南语、中文、乌克兰语和日语翻译。
+
+有两样东西值得留下，而都不是星数：
+
+- **它的版本固定是带日期的声明。**README 写着"Last Updated: October 18, 2026",对的是 Claude Code
+  **2.1.302**，而仓库自身并不一致——它的 FAQ 与页脚点名的模型集合不同。一个快速变动的、对厂商每周都在改的
+  界面做的第三方镜像，结构性地带有这种失败模式；有用的读法是"as of 10-18, on 2.1.302"，而引用它的 agent
+  应该带上这个限定。
+- **它的操作性细节才是运营方真正需要的。**安装指引现在把 **npm 安装标为废弃**，改用原生安装器、Homebrew 或
+  WinGet，下载由 `downloads.claude.ai` 提供——那是企业代理必须放行的主机，其失败模式看起来像一次网络故障。
+  它还"ships no marketplace"，所以 `/plugin install` 不适用，路径是 `claude --plugin-dir`。
+
+分发这一课的要点是论点 16 的，只是换到文档一侧重述：当一个平台的界面比它自己的文档跑得更快时，**第三方教程
+就成了事实上的入职层**，并继承厂商 changelog 制造出的每一处漂移。把一份这么流行的指南当作带日期戳的镜像，
+而不是当作规格。
+
+→ [[fact-check]] [[agent-plugins]]
+
+Sources: [luongnv89/claude-howto](https://github.com/luongnv89/claude-howto) · [GitHub Trending (daily)](https://github.com/trending?since=daily)

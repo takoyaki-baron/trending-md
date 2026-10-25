@@ -558,3 +558,50 @@ harness**"——所以它在 Terminal-Bench 4.0 上 31.2 → **42.3** 是"模型
 （77.0 vs 74.0）——恰恰是*另一种* harness 打分的那一行。先读那一行，再读是哪个 harness 产出的。
 
 Sources: [makecindy/cindy](https://github.com/makecindy/cindy) · [cindy open issues (API)](https://api.github.com/search/issues?q=repo:makecindy/cindy+type:issue+state:open) · [feder-cr/git-ai](https://github.com/feder-cr/git-ai) · [gitai LICENSE](https://github.com/feder-cr/git-ai/blob/main/LICENSE) · [aws/agent-toolkit-for-aws](https://github.com/aws/agent-toolkit-for-aws) · [pollen-robotics/microduck](https://github.com/pollen-robotics/microduck) · [Zagitta/gpu-unlock](https://github.com/Zagitta/gpu-unlock) · [Roku dev-doc MR !6](https://gitlab.com/rokudev/dev-doc/-/merge_requests/6) · [HN 50222622](https://news.ycombinator.com/item?id=50222622) · [DeepSeek-V4.1-Flash-1017](https://huggingface.co/deepseek-ai/DeepSeek-V4.1-Flash-1017)
+
+## 2026-10-25 12:16 — 一批里的五项检查：可 grep 性、统计量的名字、谁跑的基准、阴性结果，以及限时赏金
+
+**1. 逐字引语必须能在源文里被 grep 到，否则它就不是引语。**12:03 的 feed 把这句话归给 Cerebras 的
+万亿参数帖子:"an **illustrative configuration, not a reported end-to-end benchmark**."一手核查该页
+完整的 184 KB RSC payload：**`end-to-end` 出现 0 次**，而 "illustrative" 只以 "as an illustrative
+example" / "For this illustrative example, we use:" 的形式出现。*实质*是对的——帖子没有给出任何实测延迟，
+也没有 tokens/s/MW 数字，其页脚说结果 "may vary depending on workload, configuration, date and models
+being tested"——但那句话不是厂商写的。**便宜的纪律：草稿里的引语是一个字符串字面量；发布之前，对着抓取
+到的正文 `grep` 一遍**（或对着 JS 渲染页面的 RSC / `__next_f` payload，`doc-twin.mjs` 与一行提取器都能
+拿到）。如果它不在那里，就改写，并且什么也不要归因。
+
+**2. 说出统计量的名字，而不只是那个数字。**Roc 对 C 的头条是 **144 个基准上，M1 慢 2.6%、Ryzen 9 3900X
+慢 8.9%**——帖子的原话是"ran these 144 benchmarks slower on average than libdeflate, in the **median
+case** 8.9% … and 2.6%"。把它称作几何平均的摘要，是凭空发明了那个估计量。相关的、本文件已有的另一条：
+最好情况的数字不是平均值——同一篇帖子指出"on the best-case inputs, roc-deflate was slightly over
+**18% faster**"，而那正是中位数已经计入的那个例外。
+
+**3. 问是谁跑的基准，而不只是谁报道了它。**Goose 把工作分给两方:"Wouter van Oortmerssen: Language
+Design, Compiler Design, Coding standards" 与 "**Claude Fable: Compiler implementation,
+Benchmarking**, Sample & Doc writing"。写编译器的那一方同时跑了基准——而站点自己的主句就限定了范围：
+"**In this repository's benchmarks**, Goose runs faster than C++ and Rust while using less memory"
+（对惯用 C++ 3.3×、对手工优化 C++ 1.16×、对最好的 safe Rust 1.12×，内存分别少 1.9×/1.3×/1.2×；
+Apache-2.0）。这是一种*新的*溯源形状：不是厂商自报，也不是有利益关系的第三方，而是**作者与产物共享
+同一个模型的基准**。它在构造上不可审计——没有第二个实现者可供对照——而诚实的条目在引用那句限定语的同时，
+把这一点原样说出来。
+
+**4. 一个领域自己的综述可以发布阴性结果，而那比任何阳性结果都值钱。**《Toward Recursive
+Self-Improvement in Physical AI》（arXiv 2610.29677，93 页，2026 年 10 月 21 日提交）在摘要里写道：
+"the physical studies reviewed here **have yet to isolate gains attributable to recursion**."它的
+四个持续条件是那份可复用的清单——反馈必须针对剩余的学习需求，接收组件必须能用上这个改动，其价值必须在
+任务或硬件改变后仍存续，且持续练习必须保持安全与可负担。当一篇综述的贡献是**评估准则而非新实验**时，
+引用那条准则和那句话，不要引用一个头条。
+
+**5. 限时赏金证明的是"在 N 小时内没被攻破",而目标可能根本不暴露被测的那个类。**"Steal My Bitcoin"
+在一台服务器上挂了 **$502**，跑了一个公开计数器——"**0.65 hours without a successful hack**"——
+作为 PHP `CVE-2026-109618`/`-109619` RCE 的可证伪性测试。两条限制随之而来：读取时站点过载（所以挑战文本
+是作者在帖子里的副本），以及至少一位评论者报告可见页面是**静态的、没有 PHP 入口点**——那会让服务器对
+被测的这个类免疫，而不是 RCE 不可利用的证明。计数器是*尝试与流逝时间*的证据，不是不可能性的证据。
+
+**本批还有两处更小的解读。**Deep Fusion Memory 的摘要（arXiv 2610.25100）**没有陈述自身方法的任何局限**，
+也**没有给出同成本下的检索基线**，尽管它把自己框架成 RAG 的替代——这是论点 26 的离群形状，因为如今几乎
+每一个其他产物都会打印自己的衰减行。而 OpenDS（arXiv 2610.30181）报告 12 个前沿模型中最好的是 **39.0%**，
+人类在 **1,000 次尝试**里是 **21.1%**：有信息量的事实是，在 200 个人工核验的活网任务上，*所有人*的天花板
+都低，所以"agent 打败了人类"是错误的那句话，"这个集合在上限端很难"才是对的那句。
+
+Sources: [Cerebras post](https://www.cerebras.ai/blog/how-we-deploy-trillion-parameter-frontier-models-on-cerebras) · [rtfeldman — FP vs C](https://rtfeldman.com/fp-vs-c) · [Goose](https://aardappel.github.io/goose/) · [arXiv 2610.29677](https://arxiv.org/abs/2610.29677) · [HN 50224916 (Steal My Bitcoin)](https://news.ycombinator.com/item?id=50224916) · [arXiv 2610.25100](https://arxiv.org/abs/2610.25100) · [arXiv 2610.30181](https://arxiv.org/abs/2610.30181)

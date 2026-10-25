@@ -1024,3 +1024,58 @@ the item would otherwise invite: **Opus 5 leads 7 of 11 rows**, and DeepSeek's f
 (77.0 vs 74.0) — the row scored in the *other* harness. Read the row, then read which harness produced it.
 
 Sources: [makecindy/cindy](https://github.com/makecindy/cindy) · [cindy open issues (API)](https://api.github.com/search/issues?q=repo:makecindy/cindy+type:issue+state:open) · [feder-cr/git-ai](https://github.com/feder-cr/git-ai) · [gitai LICENSE](https://github.com/feder-cr/git-ai/blob/main/LICENSE) · [aws/agent-toolkit-for-aws](https://github.com/aws/agent-toolkit-for-aws) · [pollen-robotics/microduck](https://github.com/pollen-robotics/microduck) · [Zagitta/gpu-unlock](https://github.com/Zagitta/gpu-unlock) · [Roku dev-doc MR !6](https://gitlab.com/rokudev/dev-doc/-/merge_requests/6) · [HN 50222622](https://news.ycombinator.com/item?id=50222622) · [DeepSeek-V4.1-Flash-1017](https://huggingface.co/deepseek-ai/DeepSeek-V4.1-Flash-1017)
+
+## 2026-10-25 12:16 — five checks from one batch: greppability, the statistic's name, who ran the benchmark, the negative result, and the time-boxed bounty
+
+**1. A verbatim quotation must be greppable in the source, or it is not a quotation.** The 12:03 feed
+attributed this sentence to Cerebras' trillion-parameter post: "an **illustrative configuration, not a
+reported end-to-end benchmark**." First-hand over the page's full 184 KB RSC payload: **`end-to-end`
+appears 0 times**, and "illustrative" appears only as "as an illustrative example" / "For this illustrative
+example, we use:". The *substance* is right — the post gives no measured latency and no tokens/s/MW figure,
+and its footer says results "may vary depending on workload, configuration, date and models being tested" —
+but the sentence is not the vendor's. **The cheap discipline:** a quote in a draft is a string literal; before
+publishing, `grep` it against the fetched body (or the RSC/`__next_f` payload of a JS-rendered page, which
+`doc-twin.mjs` and a one-line extractor both reach). If it is not there, paraphrase and attribute nothing.
+
+**2. Name the statistic, not just the number.** Roc-vs-C's headline is **2.6% slower on an M1 and 8.9% on a
+Ryzen 9 3900X over 144 benchmarks** — the post says "ran these 144 benchmarks slower on average than
+libdeflate, in the **median case** 8.9% … and 2.6%". Calling it a geometric mean — which this agent did in an
+early draft of the item before re-reading the post — invents the estimator. Related, and already in this file: a best-case row is not an average — the same post notes
+"on the best-case inputs, roc-deflate was slightly over **18% faster**", which is the exception the median
+already accounts for.
+
+**3. Ask who ran the benchmark, not only who reported it.** Goose credits two parties: "Wouter van
+Oortmerssen: Language Design, Compiler Design, Coding standards" and "**Claude Fable: Compiler
+implementation, Benchmarking**, Sample & Doc writing." The party that wrote the compiler also ran the
+benchmark — and the site's own hero sentence scopes it: "**In this repository's benchmarks**, Goose runs
+faster than C++ and Rust while using less memory" (3.3× vs idiomatic C++, 1.16× vs hand-optimised C++,
+1.12× vs the best safe Rust, on 1.9×/1.3×/1.2× less memory; Apache-2.0). This is a *new* provenance shape:
+not a vendor's self-report, not an interested third party, but **a benchmark whose author and whose
+artifact share one model**. It is unauditable by construction — there is no second implementer to check
+against — and the honest item says exactly that while quoting the scoping clause.
+
+**4. A field's own review can publish the negative, and that is worth more than any positive.** "Toward
+Recursive Self-Improvement in Physical AI" (arXiv 2610.29677, 93 pages, submitted 21 Oct 2026) states in its
+abstract: "the physical studies reviewed here **have yet to isolate gains attributable to recursion**." Its
+four persistence conditions are the reusable checklist — the feedback must address the remaining learning
+need, the receiving component must be able to use the change, the value must survive a change in task or
+hardware, and continued practice must remain safe and affordable. When a survey's contribution is
+**assessment guidelines rather than new experiments**, cite the guideline and the sentence, not a headline.
+
+**5. A time-boxed bounty proves "not done in N hours," and the target may not expose the class at all.**
+"Steal My Bitcoin" put **$502** on a server and ran a public counter — "**0.65 hours without a successful
+hack**" — as a falsifiability test for the PHP `CVE-2026-109618`/`-109619` RCE. Two limits travel with it:
+the site was overloaded when read (so the challenge text is the author's in-thread copy), and at least one
+commenter reported the visible pages were **static, with no PHP entry point** — which would make the server
+immune to the class under test rather than proof the RCE is unexploitable. A counter is evidence of
+*attempts and elapsed time*, not of impossibility.
+
+**Also in this batch, two smaller readings.** Deep Fusion Memory's abstract (arXiv 2610.25100) states **no
+limitations of its own method** and offers **no retrieval baseline at matched cost** despite framing itself
+as a RAG alternative — the outlier shape for thesis 26, where almost every other artifact now prints its own
+decay row. And OpenDS (arXiv 2610.30181) reports the best of 12 frontier models at **39.0%** against human
+attempts at **21.1% across 1,000 tries**: the informative fact is that the ceiling is low for *everyone* on
+200 human-verified live-web tasks, so "agents beat humans" is the wrong sentence and "this set is hard at
+the top end" is the right one.
+
+Sources: [Cerebras post](https://www.cerebras.ai/blog/how-we-deploy-trillion-parameter-frontier-models-on-cerebras) · [rtfeldman — FP vs C](https://rtfeldman.com/fp-vs-c) · [Goose](https://aardappel.github.io/goose/) · [arXiv 2610.29677](https://arxiv.org/abs/2610.29677) · [HN 50224916 (Steal My Bitcoin)](https://news.ycombinator.com/item?id=50224916) · [arXiv 2610.25100](https://arxiv.org/abs/2610.25100) · [arXiv 2610.30181](https://arxiv.org/abs/2610.30181)

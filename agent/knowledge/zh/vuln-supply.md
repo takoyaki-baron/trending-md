@@ -405,3 +405,53 @@ Sources: [Trigger.dev advisories](https://github.com/triggerdotdev/trigger.dev/s
 → [[security]] [[disclosure-lag]] [[fact-check]]
 
 来源：[NVD CVE-2026-112846](https://nvd.nist.gov/vuln/detail/CVE-2026-112846) · [NVD CVE-2026-112862](https://nvd.nist.gov/vuln/detail/CVE-2026-112862) · [NVD CVE-2026-110447](https://nvd.nist.gov/vuln/detail/CVE-2026-110447) · [CISA KEV 目录](https://www.cisa.gov/known-exploited-vulnerabilities-catalog)
+
+## 2026-10-25 12:33 —— `weaknesses[]` 是 CNA 的字段，而 `vulnStatus` 是*查询时*读取的，不是发布时的快照
+
+立案时的问法是二选一的——`weaknesses[]`（CWE）是像 `affected[]` 那样自发布即存在，还是像
+`configurations` 那样只在 NVD 分析之后才出现？用 `disclosure-lag.mjs --field-census weaknesses` 对
+**2026-10-18 → 10-24** 发布周（**4,631** 条，与范围普查同一窗口——它在八小时前返回 **4,624** 条，这 7 条的差值本身就是个提醒：NVD 的 `pubStartDate`／`pubEndDate` 窗口是在*请求*时求值的，不是冻结的）实测，答案是两者都不是，而原因正是
+范围普查从未遇到过的那个陷阱。
+
+| 状态 | 条数 | 携带 `weaknesses[]` | % |
+|---|---:|---:|---:|
+| Received | 830 | 142 | **17.1** |
+| Awaiting Analysis | 1,568 | 1,071 | 68.3 |
+| Undergoing Analysis | 454 | 297 | 65.4 |
+| Deferred | 1,249 | 1,217 | 97.4 |
+| Analyzed | 403 | 403 | 100.0 |
+| Modified | 5 | 5 | 100.0 |
+| Rejected | 122 | 0 | 0.0 |
+| **合计** | **4,631** | **3,135** | **67.7** |
+
+**归属字段把所有权定了下来：3,135 条里有 3,073 条带的是 CNA 来源**（3,073 条 `cna` · 33 条 `mitre` ·
+27 条仅 `nvd` · 2 条 `nvd`+`cna`）。所以 CWE 是 CNA 的陈述，不是 NVD 的分析产出——在*种类*上
+`weaknesses[]` 与 `affected[]` 一致。但在*可得性*上并不一致：范围在记录发布当天就有 97.4% 的存在率，
+而 CWE 在一周的记录里只有 67.7%，在仍停在 `Received` 的记录里只有 **17.1%**。
+
+**这两个数字之所以不矛盾，正是本次的发现。** `vulnStatus` 是*查询时*读取的活字段，所以按发布窗做的
+普查是把「那一周发布」与「*今天*的状态」交叉制表。于是 `Received` 那一行不是「昨天的到达」，而是
+**一个没动过的积压**——对照实验证明了这一点：同一个普查只跑 **2026-10-24 单日**时，返回 **66 条
+`Received`，其中 65 条（98.5%）携带 CWE**，而 10-24 只贡献了这一周 830 条里的 66 条。长期滞留的
+`Received` 残余才是低 CWE 的那一群；当天新到的 `Received` 记录几乎总有一个。两点后果：
+
+1. **「这条 `Received` 记录没有 CWE」是关于冻结状态的陈述，不是关于 CNA 的。** 立案时的担心——从
+   `Received` 记录引用 CWE 等于引用一个「此刻不可能存在」的字段——方向反了：它能存在，在新记录上通常
+   就存在，而在一条老记录上缺失标的是「没人碰过这条」。
+2. **本工具打印的每一张按状态分布的表，都要带上范围普查那条脚注，而且更硬一档。** 范围普查写的是
+   「把一行读作那一周完成文书流程的记录」；按状态的字段表还得多说一句：状态列是*现在*，不是当时。
+   任何一行的诚实措辞是「那一周发布、而*今天*状态为 X 的记录」。
+
+**NVD 在 93% 的记录上做了分析却不发表自己的 CWE。** 408 条 `Analyzed`+`Modified` 中，**29 条
+（7.1%）**带有任何 `nvd@nist.gov` 来源，其中只有 27 条是仅 NVD。`Analyzed` 状态与 `nvd@nist.gov`
+指标在这个字段上依然是两个不同的问题——与 `CLAUDE.md` 规则 6 为 CVSS 记录的同一种「背书」形态，
+现在在 CWE 上得到确认。还有**feed 从未点名的第三种归属**：33 条记录带 `cve@mitre.org`，即 CVE
+计划的最后顺位 CNA，它既不是厂商也不是 NVD。
+
+**写作规则：**「CWE 显示 X」需要的三个字与分数一样——*谁的* CWE。要写成「CNA 的 CWE-862
+（`secalert@redhat.com`）」或者点明来源类别；在 `Received` 记录上，要说明该记录未分析、CWE 是 CNA
+自己的判断而非评估结论。绝不要从一条根本没动过的记录推断「未分配 CWE」。
+
+→ [[disclosure-lag]] [[security]] [[fact-check]]
+
+来源：[NVD CVE API 2.0](https://services.nvd.nist.gov/rest/json/cves/2.0) · [CVE-2026-115557](https://cveawg.mitre.org/api/cve/CVE-2026-115557) · [CVE-2026-114406](https://cveawg.mitre.org/api/cve/CVE-2026-114406) · [NVD CVE-2026-116014](https://nvd.nist.gov/vuln/detail/CVE-2026-116014)

@@ -829,6 +829,21 @@
    "id": "CVE-2026-110956",
    "why": "asVereinbase fail-open auth; 9.8 is CISA-ADP only (provenance case 5)",
    "seeded": "2026-10-25 [Received] 3.1 Secondary/CISA-ADP 9.8, CWE-287, 0 NVD metrics, published 10-24T06:16:36Z"
+  },
+  {
+   "id": "CVE-2026-115995",
+   "why": "Unitree Go2 chat_go set_volume OS command injection 9.6 — all three CVSS versions cna@vuldb.com, status Received",
+   "seeded": "2026-10-25 [Received] 3.1 Primary/cna@vuldb.com 9.6, 4.0 Secondary/cna@vuldb.com 9.4, 2.0 Secondary/cna@vuldb.com 10, CWE-78, published 10-24"
+  },
+  {
+   "id": "CVE-2026-115929",
+   "why": "MongoDB Compass bundles Electron's own TLS root store carrying the recoverable eMudhra intermediates — cna@mongodb.com, status Received",
+   "seeded": "2026-10-25 [Received] 3.1 Secondary/cna@mongodb.com 6.8, 4.0 Secondary/cna@mongodb.com 7.6, CWE-295, published 10-24"
+  },
+  {
+   "id": "CVE-2022-22706",
+   "why": "Mali GPU page-cache write reused by the 2026 TCL 50C721 root toolkit — re-checks the KEV-listed 2022 record the device exploit leans on",
+   "seeded": "2026-10-25 [Analyzed] 3.1 Primary/nvd@nist.gov 7.8, 2.0 Primary/nvd@nist.gov 4.6, 3.1 Secondary/CISA-ADP 7.8, CWE-119, KEV 2023-03-30, published 2022-03-03"
   }
  ]
 }

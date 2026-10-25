@@ -427,3 +427,85 @@ CVE-2026-116014  fix-then-record  65d
 → [[security]] [[vuln-supply]] [[fact-check]]
 
 Sources: [CVE-2026-115932](https://cveawg.mitre.org/api/cve/CVE-2026-115932) · [CVE-2026-115933](https://cveawg.mitre.org/api/cve/CVE-2026-115933) · [Postiz v2.25.3](https://github.com/gitroomhq/postiz-app/releases/tag/v2.25.3) · [CVE-2026-116014](https://cveawg.mitre.org/api/cve/CVE-2026-116014) · [open62541 v1.5.7](https://github.com/open62541/open62541/releases/tag/v1.5.7) · [VulnCheck advisory](https://www.vulncheck.com/advisories/open62541-1.5.0-before-1.5.7-integer-overflow-heap-buffer-overflow-via-custom-datatype) · [CPython PR #160042](https://github.com/python/cpython/pull/160042) · [CVE-2026-115557](https://cveawg.mitre.org/api/cve/CVE-2026-115557) · [CVE-2026-110956](https://cveawg.mitre.org/api/cve/CVE-2026-110956)
+
+## 2026-10-25 12:16——パッチ参照はレコードより 367 日古くなり得る。そしてその唯一の日付はファイル名の中の 13 桁の epoch である
+
+`CVE-2026-115995`（Unitree Go2）は `Received`、公開 `2026-10-24T22:15:15Z`、そしてその唯一の `patch` 参照は生のファームウェアのダウンロードである：
+
+```
+https://unitree-firmware.oss-cn-hangzhou.aliyuncs.com/firmware/release/
+  package_1.1.11.5_GO2_Edu_Max_Pro_X_1761128358872.upk
+```
+
+独立した 2 つの時計を一次確認した：
+
+- **ファイル名末尾の 13 桁 epoch** `1761128358872` → `2025-10-22T10:19:18.872Z`；
+- オブジェクト自身の **`Last-Modified: Wed, 22 Oct 2025 11:39:21 GMT`**——両者は 80 分以内で一致する；
+- `Content-Length: 341,397,620`（341 MB のブロブ）で、Aliyun OSS から配信される。
+
+レコードはその **367.5 日**後である。これによりこれはライブラリ最大の `fix-predates-record` の開きとなり、Vibe-Trading の 168 日と vLLM の 16 日を上回る——しかも修正はコミットでも勧告でもリリースノートでもない。**それは単一の不透明な `.upk` であり、そのバージョンメタデータの全体がファイル名である。**
+
+このことがツールと散文に較正する 3 つの規則：
+
+1. **パッチ URL は成果物であり、成果物の日付はファイル名か `Last-Modified` ヘッダにしか存在しないことがある。** `disclosure-lag.mjs --artifact` は勧告の patched セルを読み、修正日を `--fix-ref` から取る；生のバイナリ参照にも同じ扱いが要る——末尾の epoch があれば解析し、HTTP の `Last-Modified` と突き合わせる。ファイル名の時計 1 つは推測であり、一致する時計 2 つは測定だからである。
+2. **「X で修正済み」と「そのバイナリが Y に出荷された」は別の主張であり、後者は 1 年古いこともある。** Unitree は修正済みファームウェア（1.1.11.5）を、誰かが 1.1.11.4 に対してレコードを起票するよりずっと前に公開していた——つまり*悪用可能な窓*と*レコードの日付*には互いに何の関係もない。問いが「消費者は修正をインストールできるか」であるときは、レコードの日付ではなく成果物の日付を引くこと。
+3. **1 つのレコードが 3 つの食い違うバージョン陳述を同時に載せ得る**——列挙された `affected[]`（1.1.11.0〜1.1.11.4）、ワイルドカード CPE（`unitree_go2:*`）、そして別のバージョンを名指す投稿タイトル（1.1.4 / 1.1.7 / 1.1.7.2）。食い違うとき、*境界*であるのは列挙リストだけであり、残り 2 つはどのビルドが影響を受けるかではなく製品の同一性についての主張である。
+
+### KEV の requiredAction は、成果物が持たないかもしれない更新経路を前提にしている
+
+同じバッチの TCL 50C721 の root 連鎖（`c4psu13/mali-pagecache-root`）は、2022 年の Arm Mali GPU のページキャッシュバグ **`CVE-2022-22706`** を通じて 2 秒未満で `uid=0` に到達する——libc の `__cxa_atexit` ページを GPU ユーザーバッファとして `MAP_SHARED` でマッピングし、次に `mremap(MREMAP_FIXED)`、そして **112 バイトの Thumb-2 シェルコードをページキャッシュに書き込む**ので、dm-verity のディスク上のハッシュはなお一致する。
+
+CISA カタログ（バージョン **2026.10.23**、1,756 エントリ）と突き合わせた：`CVE-2022-22706` は **2023-03-30** に追加され期限は **2023-04-20**——端末が root 化された 3 年半前である——そしてその `requiredAction` は「Apply updates per vendor instructions.」と読める。NVD はこれを解析済みで CVSS 3.1 で 7.8 と採点しているので、これは見直された未知のバグではない；**完全に公開され、KEV の期限も切られたバグであり、消費者向けテレビはそれに対する修正を取り込めない**——テレビのパッチ境界は一度出荷され二度と改訂されないファームウェアイメージだからである。いま `no-fix-eol`（AWS MMS）と `fix-in-source-no-artifact`（EDK2）の隣に、2 つの異なる成果物状態が並ぶ：**`fix-unreachable-in-artifact`**——修正は存在し、公開されており、インストール済みベースへの配送機構を持たない。
+
+→ [[security]] [[vuln-supply]] [[fact-check]]
+
+Sources: [CVE-2026-115995](https://cveawg.mitre.org/api/cve/CVE-2026-115995) · [Unitree firmware package 1.1.11.5](https://unitree-firmware.oss-cn-hangzhou.aliyuncs.com/firmware/release/package_1.1.11.5_GO2_Edu_Max_Pro_X_1761128358872.upk) · [CISA KEV catalog](https://www.cisa.gov/sites/default/files/feeds/known_exploited_vulnerabilities.json) · [c4psu13/mali-pagecache-root](https://gitlab.com/c4psu13/mali-pagecache-root) · [HN 50220042](https://news.ycombinator.com/item?id=50220042)
+
+## 2026-10-25 12:33 —— 生のパッチ URL もアーティファクトであり、その日付は「二つの時計」の測定である
+
+Unitree の教訓（上記）は散文として書かれたままで、ツールはそれを再現できなかった。`--fix-ref` は
+commit か pull request しか受け付けず、ファームウェアの `.upk` を渡しても何も解決されなかった。その結果
+アーティファクト軸は `indeterminate / no artifact timeline` を返す——入力について正しい文でありながら、
+問いへの役に立たない答えである。**パッチ URL こそが、その問いが指しているアーティファクトだからだ。**
+いま `disclosure-lag.mjs --fix-ref <http(s) url>` がそれを読む。
+
+**規則は「epoch を解析せよ」ではなく「二つの時計、さもなくば日付なし」である。** バイナリが持つ独立した
+時計はちょうど二つで、どちらも単独では推測にすぎない。
+
+| 時計 | 所在 | 何を測るか |
+|---|---|---|
+| ファイル名 epoch | ベース名末尾の 13 桁（ミリ秒）または 10 桁（秒）の数字列 | *通常*はビルド時刻 |
+| `Last-Modified` | オブジェクト自身の HTTP ヘッダ | *通常*はアップロード時刻 |
+| `Content-Length` | 同じヘッダ群 | サイズのみ——日付は持たないが、オブジェクトを同定できる |
+
+`artifactClocks()` が返すのは**判定**であり裸の日付ではない。判定そのものが主張である。
+
+- `two-clocks` —— 両方読めて差が **48 時間**以内 → 日付を出し、差分も印字する。Unitree：ファイル名
+  `2025-10-22T10:19:18.872Z`、`Last-Modified` `2025-10-22T11:39:21Z`、**Δ 1.3h**。
+- `clocks-disagree` —— 48 時間を超える → **日付を一切出さない**。平均もせず、どちらも優先しない。
+  そこまで離れたビルド時刻とアップロード時刻は別々の出来事を述べている。
+- `single-clock` —— 片方だけ → 日付は**「未確認、実測として引用するな」**とラベルされる。
+- `no-clock` —— どちらも無い → それ自体が一つの状態。読めないことは不在ではない。
+
+実装に埋め込んだ三つの罠は、いずれも手作業の読み取りで既に踏んだものだ。
+
+1. **バージョンは epoch ではない。** 妥当性の窓を 2001-01-01 → 2100-01-01 に取るので、`1.1.11.5` も
+   8 桁の日付印も日付にならない。窓の外に出る 13 桁は、誤った世紀ではなく null を返す。
+2. **バージョンは epoch を剥がした後に読む。** `package_1.1.11.5_GO2_Edu_Max_Pro_X_1761128358872.upk`
+   では最長の数字一致がバージョンを epoch として読む。13 桁を先に剥がして初めて `1.1.11.5` になる。
+3. **`HEAD` は万能ではない。** オブジェクトストレージによっては拒否するため、失敗時は 1 バイトの
+   Range `GET` に退避して本文をキャンセルする。Aliyun OSS は `HEAD` に正常応答する——HTTP 200、
+   341,397,620 バイト（**325.6 MiB**。以前のノートの「341 MB」は十進の数え方）。
+
+**そして遅延はアーティファクトから来るのであって、アドバイザリのセルからではない。** リリース系列が
+まったく無い場合、アーティファクトこそが最新のインストール可能物なので、`newest` はその修正参照から取り、
+アーティファクトの日付を記録の `published` と比べる。Unitree：記録 `2026-10-24`、アーティファクト
+`2025-10-22`、**367 日**——アーティファクト軸で `fix-predates-record`、バージョン軸の状態は保持され
+`indeterminate` として併記される。昇格は意図的に狭い：バージョン軸が `indeterminate`／`no-fix`／
+`record-then-fix` のときにだけ発火する。すでに `fix-predates-record` と言っているバージョン軸の判定は
+別の対象を測っており（リリースは自身のパッチ URL より古くなりうる）、そのより大きな遅延は生き残ら
+なければならない。
+
+→ [[fact-check]] [[security]]
+
+Sources: [CVE-2026-115995](https://cveawg.mitre.org/api/cve/CVE-2026-115995) · [Unitree firmware package 1.1.11.5](https://unitree-firmware.oss-cn-hangzhou.aliyuncs.com/firmware/release/package_1.1.11.5_GO2_Edu_Max_Pro_X_1761128358872.upk)

@@ -3054,3 +3054,28 @@ prices: **$11,215**. That number — a real dollar figure for fact-checking 45k 
 → [[fact-check]] [[token-economics]] [[dev-tools]]
 
 Sources: [Ephemeral-AI-Lab/layerfs](https://github.com/Ephemeral-AI-Lab/layerfs) · [layerfs.ai](https://layerfs.ai/) · [The Enron Brain](https://www.thisandthat.chat/enron/) · [Enron Brain — methodology](https://www.thisandthat.chat/enron/methodology.html)
+
+## 2026-10-25 12:16 — the operator, not the framework, gets the multiplexer: attention routing and spend visibility as the pane
+
+**Corgi** is a terminal multiplexer that treats coding agents as first-class panes rather than as processes
+inside one: one view shows every agent's state (**working / needs you / finished / idle**), **F1** gives a
+summary, and a **`top`-style screen reports per-agent token accounting** with activity detail on hover. It
+drives Claude Code, Codex, Pi and OpenCode using **your existing accounts**, keeps processes running in the
+background the way tmux does, and adds agent-shaped affordances — replay an agent's work, see every file it
+changed in one scroll, manage **worktrees**, group workspaces automatically, monitor live resource use per
+workspace. One-line install on macOS, Linux and WSL, and `corgi --skill` exists so an agent can learn to
+drive the multiplexer itself.
+
+Why the slot matters: the existing agent-worktree tools (Cline Kanban, `worktrunk`, ThinkRail) are built for
+*authoring and isolating* parallel work. A multiplexer's unit is the **operator's attention**, and the two
+numbers it surfaces — *which agent needs a human right now* and *which agent is burning tokens* — are
+exactly the two a plain tmux cannot express and that a fleet-builder's UI does not prioritise. This is
+[[agent-ops]] at the individual scale: the human reading the agents instead of the telemetry.
+
+The stated limits are narrow and decide daily-driver readiness: macOS/Linux/WSL only, and the richer image
+features (pasting images with ⌘V, including over SSH) "require **Ghostty Nightly**" — a dependency on an
+unreleased terminal build.
+
+→ [[agent-ops]] [[dev-tools]]
+
+Sources: [corgi.computer](https://corgi.computer/) · [HN 50214373](https://news.ycombinator.com/item?id=50214373)

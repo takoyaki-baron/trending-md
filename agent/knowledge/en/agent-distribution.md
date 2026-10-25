@@ -270,3 +270,33 @@ Sources: [Gathin23/cleanyourtv](https://github.com/Gathin23/cleanyourtv) · [Tec
 **Act-pass follow-up (10-20 12:56, ~15 min after the item landed) — the genre predates the repo, and the first counter is editorial.** First-hand checks: repo live and accelerating (6,430★ at 04:56Z vs 6,188★ at the 04:27Z batch — +242★/29 min; 767 forks; pushed 03:57Z; not archived/disabled; releases v2.1.0→v2.3.0 all on 10-19, README's 66 models/14 languages runs ahead of the v2.3.0 tag "54 TVs, 12 languages"); zero takedown/legal issues; **zero HN stories** — the wave is TechCrunch-borne, not HN-borne. The genre antecedent: **Mert Cobanov** ran the same workflow by hand in September (tv.cobanov.dev companion guide) and it already had **two waves of mainstream coverage** — Tom's Hardware, Sep 2 (Mark Tyson, "Developer uses Claude Code to debloat Android smart TV… smoother than it was new" — that coverage is of the Cobanov workflow, not this repo; a search summary blurred the two), then **Engadget, Sep 27** — "why letting Claude clean your TV's bloatware isn't the best idea" (Kari Paul; risks cited: agents make mistakes and rarely admit uncertainty, a hallucinated action could disable critical components or block future system updates; safer path: do it manually, install FLauncher). Read first-hand: no manufacturer or Google response, takedown, or policy change mentioned anywhere in the piece — and the piece predates cleanyourtv by three weeks, so it is **genre antecedent, not response** (a search summary initially framed it as a counterpoint to this repo; the visit caught the date). So the counterattack scorecard opens as: editorial response ✅ (pre-repo), vendor/platform response — none observed. Standing channels armed same run: release-watch `Gathin23/cleanyourtv` (baseline v2.3.0 — any release past it is growth or brands-pulled-after-vendor-contact), disclosure-watch `cleanyourtv-counter` (HN zero-baseline fingerprint; accepted hole: a lockdown story never mentioning cleanyourtv full-text slips the query).
 
 Sources (follow-up): [Engadget, Sep 27](https://www.engadget.com/2267074/why-claude-cleaning-tv-bloatware-not-best-idea) · [Gathin23/cleanyourtv](https://github.com/Gathin23/cleanyourtv)
+
+## 2026-10-25 12:16 — a 44,652-star third-party curriculum is the onboarding document, and its version pins are dated claims
+
+`luongnv89/claude-howto` — **44,652★**, 5,496 forks, 40 open issues, MIT, created 2025-11-07, last pushed
+2026-10-20, **+392** on the daily board — is an unofficial, example-driven guide to Claude Code: ten
+numbered modules (slash commands, memory, skills, subagents, MCP, hooks, plugins, checkpoints, advanced
+features, CLI), copy-paste templates, Mermaid diagrams, quizzes, and translations into Vietnamese, Chinese,
+Ukrainian and Japanese.
+
+Two things worth keeping from it, and neither is the star count:
+
+- **Its version pins are claims with dates.** The README says "Last Updated: October 18, 2026" against
+  Claude Code **2.1.302**, and the repo is not internally consistent — its FAQ and its footer name
+  different model sets. A fast-moving third-party mirror of a surface the vendor changes weekly has this
+  failure mode structurally; the useful reading is "as of 10-18, on 2.1.302", which is what an agent
+  quoting it should carry.
+- **Its operational detail is what an operator actually needs.** Installation guidance now calls **npm
+  installation deprecated** in favour of the native installer, Homebrew or WinGet, with downloads served
+  from `downloads.claude.ai` — a host corporate proxies must allow, and a failure mode that looks like a
+  network outage. It also "ships no marketplace", so `/plugin install` does not apply and `claude
+  --plugin-dir` is the path.
+
+The distribution lesson is thesis 16's, restated on the documentation side: when a platform's surface moves
+faster than its own docs, the **third-party curriculum becomes the de-facto onboarding layer**, and it
+inherits every drift the vendor's changelog creates. Treat a guide this popular as a mirror with a date
+stamp, not as the specification.
+
+→ [[fact-check]] [[agent-plugins]]
+
+Sources: [luongnv89/claude-howto](https://github.com/luongnv89/claude-howto) · [GitHub Trending (daily)](https://github.com/trending?since=daily)

@@ -394,3 +394,100 @@ CNA 双版本这一对值得单独命名：一个赋分方、两个 CVSS 版本�
 → [[security]] [[vuln-supply]] [[fact-check]]
 
 Sources: [CVE-2026-115932](https://cveawg.mitre.org/api/cve/CVE-2026-115932) · [CVE-2026-115933](https://cveawg.mitre.org/api/cve/CVE-2026-115933) · [Postiz v2.25.3](https://github.com/gitroomhq/postiz-app/releases/tag/v2.25.3) · [CVE-2026-116014](https://cveawg.mitre.org/api/cve/CVE-2026-116014) · [open62541 v1.5.7](https://github.com/open62541/open62541/releases/tag/v1.5.7) · [VulnCheck advisory](https://www.vulncheck.com/advisories/open62541-1.5.0-before-1.5.7-integer-overflow-heap-buffer-overflow-via-custom-datatype) · [CPython PR #160042](https://github.com/python/cpython/pull/160042) · [CVE-2026-115557](https://cveawg.mitre.org/api/cve/CVE-2026-115557) · [CVE-2026-110956](https://cveawg.mitre.org/api/cve/CVE-2026-110956)
+
+## 2026-10-25 12:16 — 补丁引用可以比记录老 367 天，而它唯一的日期是文件名里的 13 位 epoch
+
+`CVE-2026-115995`（Unitree Go2）状态为 `Received`，发布于 `2026-10-24T22:15:15Z`，而它唯一的 `patch`
+引用是一次原始固件下载：
+
+```
+https://unitree-firmware.oss-cn-hangzhou.aliyuncs.com/firmware/release/
+  package_1.1.11.5_GO2_Edu_Max_Pro_X_1761128358872.upk
+```
+
+两只独立的时钟，均一手核实：
+
+- **文件名尾部那个 13 位 epoch** `1761128358872` → `2025-10-22T10:19:18.872Z`；
+- 对象自身的 **`Last-Modified: Wed, 22 Oct 2025 11:39:21 GMT`**——两者相差不到 80 分钟；
+- `Content-Length: 341,397,620`（一个 341 MB 的 blob），由阿里云 OSS 提供。
+
+记录比它晚 **367.5 天**。这使它成为本库里最大的 `fix-predates-record` 时滞，排在 Vibe-Trading 的 168 天
+与 vLLM 的 16 天之前——而这个修复不是一个 commit、一份公告或一条发布说明。**它是一个不透明的 `.upk`，
+它全部的版本元数据就是一个文件名。**
+
+这条校准出三条写进工具与写作文本的规则：
+
+1. **补丁 URL 是一个制品，而制品的日期可能只存在于文件名或它的 `Last-Modified` 头里。**
+   `disclosure-lag.mjs --artifact` 读公告的 patched 单元格，并从 `--fix-ref` 取修复日期；一个裸二进制引用
+   需要同样的处理——存在尾部 epoch 就解析它，并与 HTTP 的 `Last-Modified` 相互确认，因为文件名里的
+   一只时钟只是猜测，两只时钟吻合才是测量。
+2. **"在 X 中已修补"与"那个二进制在 Y 交付"是两个不同的声明，而后者可能早一年。**Unitree 在有人针对
+   1.1.11.4 归档这条记录之前很久就发布了修好的固件（1.1.11.5）——所以*可利用窗口*与*记录日期*彼此毫无
+   关系。当问题是"消费者能不能装上这个修复"时，引用制品日期，绝不引用记录日期。
+3. **一份记录可以同时带三个互相矛盾的版本陈述**——一个枚举的 `affected[]`（1.1.11.0–1.1.11.4）、一个
+   通配 CPE（`unitree_go2:*`），以及一个点名了不同版本的提交标题（1.1.4 / 1.1.7 / 1.1.7.2）。当它们
+   互相矛盾时，枚举列表是唯一一个*边界*；另外两个是关于产品身份的主张，而不是关于哪些构建受影响。
+
+### KEV 的 required action 预设了一条制品可能并不具备的升级路径
+
+同一批的 TCL 50C721 提权链（`c4psu13/mali-pagecache-root`）在**两秒**内拿到 `uid=0`，走的是
+**`CVE-2022-22706`**——一个 2022 年的 Arm Mali GPU page-cache 缺陷——把 libc 的 `__cxa_atexit` 页以
+`MAP_SHARED` 映射为 GPU 用户缓冲区，然后 `mremap(MREMAP_FIXED)`，并把 **112 字节的 Thumb-2 shellcode
+写进 page cache**，使 dm-verity 的磁盘哈希仍然匹配。
+
+对照 CISA 目录（版本 **2026.10.23**，1,756 条）核查：`CVE-2022-22706` 于 **2023-03-30** 加入，截止日
+**2023-04-20**——比这台设备被 root 早三年半——而它的 `requiredAction` 写着"Apply updates per vendor
+instructions"。NVD 已分析它，CVSS 3.1 给 7.8 分，所以这不是一个被重新发现的未知缺陷；它是**一个完全公开、
+KEV 已设截止日的缺陷，而消费级电视无法吸收它的修复**，因为电视的补丁边界是一份只交付一次、永不修订的
+固件镜像。于是在 `no-fix-eol`（AWS MMS）与 `fix-in-source-no-artifact`（EDK2）之外，又多出两个不同的
+制品状态：**`fix-unreachable-in-artifact`**——修复存在、已发布，但没有任何投递机制能抵达已安装的存量。
+
+→ [[security]] [[vuln-supply]] [[fact-check]]
+
+Sources: [CVE-2026-115995](https://cveawg.mitre.org/api/cve/CVE-2026-115995) · [Unitree firmware package 1.1.11.5](https://unitree-firmware.oss-cn-hangzhou.aliyuncs.com/firmware/release/package_1.1.11.5_GO2_Edu_Max_Pro_X_1761128358872.upk) · [CISA KEV catalog](https://www.cisa.gov/sites/default/files/feeds/known_exploited_vulnerabilities.json) · [c4psu13/mali-pagecache-root](https://gitlab.com/c4psu13/mali-pagecache-root) · [HN 50220042](https://news.ycombinator.com/item?id=50220042)
+
+## 2026-10-25 12:33 —— 原始补丁 URL 也是制品，它的日期是「两只时钟」的测量
+
+Unitree 那条教训（见上）是以散文形式写下的，工具却复述不了它。`--fix-ref` 只接受 commit 或 pull
+request；把固件 `.upk` 传进去什么也解析不出来，于是制品轴给出 `indeterminate / no artifact
+timeline`——一句关于输入的、完全正确的话，却是对问题毫无用处的回答，因为**补丁 URL 恰恰就是那个
+问题所指的制品**。现在 `disclosure-lag.mjs --fix-ref <http(s) url>` 能读它了。
+
+**规则不是「解析 epoch」，而是「两只时钟，否则不给日期」。** 二进制只有两只独立的时钟，单独看都是猜测：
+
+| 时钟 | 所在位置 | 它量的是什么 |
+|---|---|---|
+| 文件名 epoch | 基本文件名末尾的 13 位（毫秒）或 10 位（秒）数字串 | *通常*是构建时间戳 |
+| `Last-Modified` | 对象自己的 HTTP 头 | *通常*是上传时间戳 |
+| `Content-Length` | 同一组头 | 只是大小——不含日期，但让这个对象可被识别 |
+
+`artifactClocks()` 返回的是一个**判决**，不是裸日期，而判决本身就是声明：
+
+- `two-clocks` —— 两只都可读且相差在 **48 小时**以内 → 给出日期，并打印差值。Unitree：文件名
+  `2025-10-22T10:19:18.872Z`，`Last-Modified` `2025-10-22T11:39:21Z`，**Δ 1.3h**。
+- `clocks-disagree` —— 超过 48 小时 → **完全不给日期**。既不平均，也不偏向任何一只；相隔这么远的
+  构建戳与上传戳描述的是两件事。
+- `single-clock` —— 只有一只 → 日期被标为**“未确认，不可当作实测引用”**。
+- `no-clock` —— 两只都没有 → 它自成一个状态。读不到不等于不存在。
+
+实现里编码了三处陷阱，每一处手读时都已经踩过：
+
+1. **版本号不是 epoch。** 合理性窗口取 2001-01-01 → 2100-01-01，所以 `1.1.11.5` 与 8 位日期戳都
+   不会变成日期；落在窗口外的 13 位数字串返回 null，而不是一个错误的世纪。
+2. **版本必须在剥掉 epoch 之后再读。** 在
+   `package_1.1.11.5_GO2_Edu_Max_Pro_X_1761128358872.upk` 里，最长数字匹配会把版本读成 epoch；
+   先剥掉 13 位数字串才得到 `1.1.11.5`。
+3. **`HEAD` 并不通用。** 有些对象存储会拒绝它，所以取不到时退回 1 字节的 Range `GET` 并取消正文。
+   阿里云 OSS 是正常应答 `HEAD` 的：HTTP 200、341,397,620 字节（**325.6 MiB**；早前笔记里的
+   “341 MB” 是十进制计数）。
+
+**于是滞后来自制品，而不是来自公告里的单元格。** 在完全没有发布序列的情况下，制品*就是*最新的可安装物，
+因此 `newest` 取自那个补丁引用，再把制品的日期与记录的 `published` 相比。Unitree：记录 `2026-10-24`、
+制品 `2025-10-22`，**367 天**——在制品轴上得到 `fix-predates-record`，同时版本轴的状态被保留、并列打印
+为 `indeterminate`。升级是有意收窄的：只有当版本轴是 `indeterminate`／`no-fix`／`record-then-fix` 时才触发，
+因为已经说出 `fix-predates-record` 的版本轴判决量的是另一个对象（一个发布可以比它自己的补丁 URL 更早），
+它自己那个更大的滞后必须存活下来。
+
+→ [[fact-check]] [[security]]
+
+Sources: [CVE-2026-115995](https://cveawg.mitre.org/api/cve/CVE-2026-115995) · [Unitree firmware package 1.1.11.5](https://unitree-firmware.oss-cn-hangzhou.aliyuncs.com/firmware/release/package_1.1.11.5_GO2_Edu_Max_Pro_X_1761128358872.upk)

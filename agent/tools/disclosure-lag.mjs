@@ -53,6 +53,18 @@
  *   · The fix's date comes from `--fix-ref <commit|pull url|sha>`, or automatically from the Debian
  *     tracker's own `Fixed by:` commit links (`--debian <srcpkg>`). No GitHub API call is needed:
  *     a commit page carries `"committedDate"`, a pull page carries `"mergedTime"`.
+ *   · A RAW ARTIFACT URL is a fourth kind of fix reference (added 2026-10-25 12:33). `CVE-2026-115995`
+ *     (Unitree Go2) carries exactly one `patch` reference and it is a 341 MB `.upk` download whose
+ *     entire version metadata is its filename — the date lives in a trailing 13-digit epoch
+ *     (`…_1761128358872` → 2025-10-22T10:19:18Z), confirmed within 80 minutes by the object's own
+ *     `Last-Modified`. `--fix-ref <http(s) url>` now reads it: the filename epoch and the HTTP clock
+ *     are TWO clocks, and **the tool requires them to agree before it emits a date** — one clock in a
+ *     filename is a guess, two agreeing is a measurement; a >48h disagreement is reported as a
+ *     disagreement (never averaged, never resolved in favour of either). A single clock is still
+ *     emitted but labelled `single-clock`, so nothing downstream can quote it as measured. When the
+ *     artifact is the only timeline, the artifact IS the newest installable thing, and its date is
+ *     then compared to the record's `published` to produce `fix-predates-record` from the artifact
+ *     rather than from an advisory cell.
  *   · EDK2 calibration (2026-10-23): commit `14cdbb86` committed 2026-10-15, newest release
  *     `edk2-stable202608` tagged 2026-08-12, Debian lists forky/sid `2026.08+ds-2` **vulnerable**
  *     and `(unfixed)` → `fix-in-source-no-artifact`. The cell is a REPORTING date, not an
@@ -196,6 +208,8 @@
  *   node disclosure-lag.mjs --ids CVE-…,CVE-… --repo owner/repo --census # range-source census
  *   node disclosure-lag.mjs --ids CVE-… --census --no-github            # degraded mode only
  *   node disclosure-lag.mjs --range-census --from 2026-10-18 --to 2026-10-24  # a whole window
+ *   node disclosure-lag.mjs --field-census weaknesses --from 2026-10-18 --to 2026-10-24
+ *   node disclosure-lag.mjs --ids CVE-… --artifact firmware --fix-ref <raw artifact url>
  *   node disclosure-lag.mjs --selftest                       # parsers + the artifact + notes verdicts
  *
  * Cost: NVD is 5 req/30s unauthenticated (NVD_API_KEY → 50/30s); calls are paced. api.github.com is
@@ -235,6 +249,9 @@ const NO_GH = args.includes('--no-github');
    over a publication window instead of over the ids a feed happened to cite, because the answer
    from one record is what produced the wrong claim this mode exists to test. */
 const RANGE_CENSUS = args.includes('--range-census');
+/* The field census: the same per-`vulnStatus` presence table for ANY record field, because the
+   range was only the first field whose provenance turned out to matter (2026-10-25 12:33). */
+const FIELD_CENSUS = argOf('--field-census', null);
 const CENSUS_FROM = argOf('--from', null);
 const CENSUS_TO = argOf('--to', null);
 const CENSUS_PAGES = Number(argOf('--pages', 6));
@@ -681,8 +698,116 @@ async function fixRefDate(ref) {
     if (/Merged<\/span>|"state":"MERGED"/.test(body)) return { url: `https://github.com/${repo}/pull/${n}`, date: null, kind: 'pull', label: 'merged, merge date unreadable' };
     return { url: `https://github.com/${repo}/pull/${n}`, date: null, kind: 'pull', label: 'no merge timestamp on the page — not merged, or the page is a shell' };
   }
+  /* Anything else that is a URL is an ARTIFACT, not a commit — a firmware image, a tarball, a build
+     output. Its date cannot be read from a page, so it is read from the object itself. */
+  if (/^https?:\/\//i.test(ref)) return rawArtifactDate(ref);
   return null;
 }
+
+/* ── the raw-artifact clock (added 2026-10-25 12:33) ──
+   A binary has no advisory cell, no commit page and no atom feed. What it has is a filename and a
+   set of HTTP headers, and the two are independent clocks: the filename epoch is (usually) the build
+   stamp, `Last-Modified` is (usually) the upload stamp. Unitree's 341 MB `.upk` shows both, 80
+   minutes apart, and either alone would have been a guess. So the decision is a pure function here
+   rather than inline in the fetch, because it is the part that can be wrong silently. */
+
+/** A trailing epoch in a filename: 13 digits = ms, 10 digits = seconds. Plausibility-bounded to
+ *  2001–2100 so a version string (`1.1.11.5`) or a short counter cannot be read as a date. */
+function epochFromName(url) {
+  let name;
+  try { name = decodeURIComponent(new URL(url).pathname.split('/').filter(Boolean).pop() || ''); }
+  catch { name = String(url).split('/').filter(Boolean).pop() || ''; }
+  if (!name) return null;
+  const stem = name.replace(/\.[A-Za-z0-9]{1,8}$/, '');   // drop ONE extension: `.upk`, `.tar.gz`→`.tar`
+  const m = stem.match(/(?:^|[_\-.+])(\d{13}|\d{10})$/);
+  if (!m) return null;
+  const n = Number(m[1]);
+  const ms = m[1].length === 13 ? n : n * 1000;
+  if (!(ms >= 978307200000 && ms <= 4102444800000)) return null;
+  return { epoch: m[1], date: new Date(ms).toISOString() };
+}
+
+/** A version read from an artifact's filename, for display only. `package_1.1.11.5_GO2_…_1761128358872.upk`
+ *  → `1.1.11.5`. The epoch is stripped FIRST, because a 13-digit run would otherwise win a longest-match
+ *  and be reported as the version. Returns null rather than guessing when there is no dotted number. */
+function artifactVersionFromUrl(url) {
+  let name;
+  try { name = decodeURIComponent(new URL(url).pathname.split('/').filter(Boolean).pop() || ''); }
+  catch { name = String(url).split('/').filter(Boolean).pop() || ''; }
+  const stem = name.replace(/\.[A-Za-z0-9]{1,8}$/, '').replace(/(?:^|[_\-.+])\d{13}(?=$|[_\-.+])/, '_');
+  const m = stem.match(/(\d+\.\d+(?:\.\d+)*)/);
+  return m ? m[1] : null;
+}
+
+/** The two-clock rule. Returns a verdict, never a bare date — `agreement` is the claim. */
+function artifactClocks({ nameEpoch, lastModified, contentLength, url }) {
+  const lmMs = lastModified ? Date.parse(lastModified) : NaN;
+  const nameMs = nameEpoch?.date ? Date.parse(nameEpoch.date) : NaN;
+  const out = { url, clock: nameEpoch?.epoch || null, filenameDate: nameEpoch?.date || null,
+    headerDate: Number.isNaN(lmMs) ? null : new Date(lmMs).toISOString(), contentLength: contentLength ?? null,
+    agreement: null, deltaHours: null, date: null, label: null, notes: [] };
+  if (!out.filenameDate && !out.headerDate) {
+    out.agreement = 'no-clock';
+    out.notes.push('the artifact carries neither a parsable filename epoch nor a Last-Modified header — its date is unreadable, which is not the same as absent');
+    return out;
+  }
+  if (out.filenameDate && out.headerDate) {
+    const h = (lmMs - nameMs) / 3.6e6;
+    out.deltaHours = Number(h.toFixed(1));
+    if (Math.abs(h) <= 48) {
+      out.agreement = 'two-clocks';
+      out.date = out.headerDate;             // the upload clock is the one a consumer could have fetched
+      out.label = `artifact ${new Date(lmMs).toISOString().slice(0, 10)} (filename epoch agrees within ${Math.abs(h).toFixed(1)}h)`;
+    } else {
+      out.agreement = 'clocks-disagree';
+      out.notes.push(`the filename epoch (${out.filenameDate}) and Last-Modified (${out.headerDate}) are ${Math.abs(h).toFixed(1)}h apart — two clocks that do not agree make neither of them a measurement, so no artifact date is emitted`);
+    }
+    return out;
+  }
+  out.agreement = 'single-clock';
+  out.date = out.filenameDate || out.headerDate;
+  out.label = out.filenameDate
+    ? `artifact ${out.filenameDate.slice(0, 10)} (filename epoch ONLY — unconfirmed, do not quote as measured)`
+    : `artifact ${out.headerDate.slice(0, 10)} (Last-Modified ONLY — unconfirmed, do not quote as measured)`;
+  out.notes.push('only one clock was readable, so this date is a guess with provenance, not a measurement');
+  return out;
+}
+
+/** HEAD (falling back to a 1-byte ranged GET, because some object stores reject HEAD). */
+async function headArtifact(url) {
+  const tryFetch = async init => {
+    const res = await fetch(url, { ...init, headers: { ...UA, ...(init.headers || {}) }, redirect: 'follow' });
+    return res;
+  };
+  let res;
+  try { res = await tryFetch({ method: 'HEAD' }); } catch { res = null; }
+  if (!res || !res.ok || !res.headers.get('last-modified')) {
+    try {
+      const r2 = await tryFetch({ headers: { Range: 'bytes=0-0' } });
+      if (r2.ok || r2.status === 206) res = r2;
+      if (r2.body) await r2.body.cancel().catch(() => {});
+    } catch { /* keep the HEAD result, even if partial */ }
+  }
+  if (!res) return { status: 0, lastModified: null, contentLength: null, etag: null };
+  return { status: res.status, lastModified: res.headers.get('last-modified'),
+    contentLength: res.headers.get('content-length'), etag: res.headers.get('etag'),
+    contentType: res.headers.get('content-type') };
+}
+
+async function rawArtifactDate(url) {
+  const head = await headArtifact(url);
+  const verdict = artifactClocks({
+    nameEpoch: epochFromName(url),
+    lastModified: head.lastModified,
+    contentLength: head.contentLength ? Number(head.contentLength) : null,
+    url,
+  });
+  verdict.httpStatus = head.status;
+  verdict.etag = head.etag;
+  return { url, date: verdict.date, kind: 'artifact', label: verdict.label || `artifact (${verdict.agreement})`,
+    artifact: verdict, contentType: head.contentType || null };
+}
+
 
 /* The artifact verdict. Deliberately refuses in three situations rather than guessing:
    no fix date, no artifact timeline, and a cell-vs-commit disagreement (which is printed as a
@@ -691,7 +816,7 @@ function artifactVerdict({ record, advisory, timeline, mode, fixRef, debian, pat
   const out = { mode, cell: patched !== undefined ? patched : (advisory?.patched ?? null),
     cellSource: cellSource || (patched !== undefined ? 'cell' : 'cell'), notes: [] };
   const fixedList = fixedVersionsFrom(out.cell);
-  const newest = timeline?.length ? timeline[timeline.length - 1] : null;
+  let newest = timeline?.length ? timeline[timeline.length - 1] : null;
   out.newest = newest ? { version: newest.version, date: newest.date } : null;
 
   let fix = fixRef || null;                       // resolved by the caller into {url,date,label}
@@ -705,6 +830,27 @@ function artifactVerdict({ record, advisory, timeline, mode, fixRef, debian, pat
   if (fix) out.fixRef = fix;
   if (out.cell === 'Not patched currently') out.notes.push('the advisory cell says the artifact is NOT patched, which is a statement about the installer, not about the source tree');
 
+  /* A raw artifact reference is itself an installable artifact (added 2026-10-25 12:33). Without
+     this, a firmware download passed as `--fix-ref` produced `indeterminate` with "no artifact
+     timeline" — a true statement about the inputs and a useless answer to the question, because the
+     patch URL *is* the artifact the question is about. The artifact's own date is then compared to
+     the record's `published`, which is the comparison the advisory cell could never make here. */
+  if (fix?.kind === 'artifact') {
+    out.artifact = fix.artifact || null;
+    if (!out.newest && fix.date) {
+      newest = { version: artifactVersionFromUrl(fix.url) || 'artifact', date: fix.date, fromArtifact: true };
+      out.newest = newest;
+    }
+    out.recordDate = record?.published || null;
+    if (fix.date && out.recordDate) {
+      const lag = days(out.recordDate, fix.date);
+      out.artifactLagDays = lag;
+      out.predatesRecord = lag !== null && lag > 0;
+      if (out.predatesRecord) out.notes.push(`the ARTIFACT is ${lag}d older than the record (record ${out.recordDate.slice(0, 10)}, artifact ${fix.date.slice(0, 10)}) — the fix shipped before anyone filed the CVE, so the exposure window and the paperwork have nothing to do with each other`);
+    }
+    if (fix.artifact?.agreement === 'single-clock') out.notes.push('the artifact date rests on ONE clock (see --fix-ref verdict) — report it as unconfirmed');
+    if (fix.artifact?.agreement === 'clocks-disagree') out.notes.push('the artifact date is REFUSED: its two clocks disagree, so no lag is claimed from it');
+  }
   if (!out.newest) { out.state = 'indeterminate'; out.notes.push('no artifact timeline (pass --repo or --pypi, or --debian for a distro view)'); return out; }
   if (fix && !fix.date) { out.state = 'indeterminate'; out.notes.push(`the fix ref carries no usable date (${fix.label})`); return out; }
 
@@ -1273,6 +1419,32 @@ if (SELFTEST) {
     { version: '1.2.0', date: '2025-10-21T00:00:00Z' }, { version: '1.2.1', date: '2026-10-21T19:27:20Z' }],
     mode: 'package' });
   eq('patched cell shipped as an artifact', v3.state, 'artifact-carries-fix');
+  /* ── the raw-artifact clock: the Unitree shape, asserted against the live object ── */
+  const UK = 'https://unitree-firmware.oss-cn-hangzhou.aliyuncs.com/firmware/release/package_1.1.11.5_GO2_Edu_Max_Pro_X_1761128358872.upk';
+  eq('filename epoch: 13 digits = ms', epochFromName(UK)?.date, '2025-10-22T10:19:18.872Z');
+  eq('filename epoch: 10 digits = seconds', epochFromName('https://x/pkg-1761128358.zip')?.date, '2025-10-22T10:19:18.000Z');
+  eq('a version is not an epoch', epochFromName('https://x/brotli-1.2.1.tar.gz'), null);
+  eq('an implausible 13-digit run is not an epoch', epochFromName('https://x/blob_9999999999999.bin'), null);
+  const c2 = artifactClocks({ nameEpoch: epochFromName(UK), lastModified: 'Wed, 22 Oct 2025 11:39:21 GMT', contentLength: 341397620, url: UK });
+  eq('two clocks that agree produce a date', [c2.agreement, c2.date], ['two-clocks', '2025-10-22T11:39:21.000Z']);
+  eq('…and the agreement delta is reported', c2.deltaHours, 1.3);
+  const cx = artifactClocks({ nameEpoch: { epoch: '1761128358872', date: '2025-10-22T10:19:18.872Z' },
+    lastModified: 'Thu, 01 Jan 2026 00:00:00 GMT', url: 'u' });
+  eq('two clocks that disagree emit NO date', [cx.agreement, cx.date], ['clocks-disagree', null]);
+  const c1 = artifactClocks({ nameEpoch: epochFromName(UK), lastModified: null, url: 'u' });
+  eq('one clock is labelled unconfirmed, not measured', [c1.agreement, /unconfirmed/.test(c1.label)], ['single-clock', true]);
+  eq('no clock is its own state', artifactClocks({ nameEpoch: null, lastModified: null, url: 'u' }).agreement, 'no-clock');
+  eq('version read from a filename, epoch stripped first', artifactVersionFromUrl(UK), '1.1.11.5');
+  const va = artifactVerdict({ record: { published: '2026-10-24T22:15:15Z' }, advisory: { patched: 'None' }, timeline: null,
+    mode: 'firmware', fixRef: { url: UK, date: c2.date, kind: 'artifact', label: c2.label, artifact: c2 } });
+  eq('the raw artifact IS the installable thing (no timeline needed)', [va.state, va.newest?.fromArtifact], ['artifact-carries-fix', true]);
+  eq('the artifact predates the record by 367d', [va.predatesRecord, va.artifactLagDays], [true, 367]);
+  const vb = artifactVerdict({ record: { published: '2025-10-01T00:00:00Z' }, advisory: { patched: 'None' }, timeline: null,
+    mode: 'firmware', fixRef: { url: UK, date: c2.date, kind: 'artifact', label: c2.label, artifact: c2 } });
+  eq('an artifact that postdates the record does not claim a lag', [vb.predatesRecord, vb.artifactLagDays], [false, -21]);
+  eq('a refused clock produces no lag at all', artifactVerdict({ record: { published: '2026-10-24T22:15:15Z' },
+    advisory: { patched: 'None' }, timeline: null, mode: 'firmware',
+    fixRef: { url: 'u', date: null, kind: 'artifact', label: 'artifact (clocks-disagree)', artifact: cx } }).artifactLagDays, undefined);
   /* ── the announcement axis: three date spellings on one wiki, and the EoL sentence ── */
   eq('announcement date, English ordinal', proseDate('OpenWrt 24.10.8 - Service Release - 26th July 2026'), '2026-07-26');
   eq('announcement date, Germanic ordinal', proseDate('OpenWrt 25.12.5 - Service Release - 1. July 2026'), '2026-07-01');
@@ -1324,6 +1496,12 @@ if (SELFTEST) {
     quotaDelta(qn, qd)[0].rangeAfter, 'none');
   eq('census: the survivor is not reported', quotaDelta(qn, qd).some(m => m.id === 'CVE-2'), false);
   eq('census: identical passes produce no quota claims', quotaDelta(qn, qn), []);
+  /* ── the field census: a weakness's `source` is the attribution, and the four kinds are not one ── */
+  eq('cwe source: NVD analysis', cweSourceKind('nvd@nist.gov'), 'nvd');
+  eq('cwe source: a CNA email', cweSourceKind('secalert@redhat.com'), 'cna');
+  eq('cwe source: the ADP container', cweSourceKind('CISA-ADP'), 'adp');
+  eq('cwe source: MITRE is the last-resort CNA, not the vendor', cweSourceKind('cve@mitre.org'), 'mitre');
+  eq('cwe source: absent', cweSourceKind(''), 'none');
   let pass = 0;
   for (const c of cases) {
     if (c.ok) pass++;
@@ -1344,8 +1522,7 @@ if (SELFTEST) {
    NVD's `pubStartDate`/`pubEndDate` are publication windows, NOT event dates (the 10-22 lesson:
    `published` is a workflow timestamp), so read a row here as "records whose paperwork completed
    that week", never as "vulnerabilities that appeared that week". */
-async function rangeCensus({ from, to }) {
-  const sleepMs = NVD_PACE;
+async function fetchWindow(from, to) {
   const parseDay = s => {
     const d = new Date(`${s}T00:00:00.000Z`);
     if (Number.isNaN(d.getTime())) throw new Error(`bad date "${s}" — expected YYYY-MM-DD`);
@@ -1365,8 +1542,13 @@ async function rangeCensus({ from, to }) {
     for (const v of batch) if (v.cve) records.push(v.cve);
     start += batch.length;
     if (start >= (total || 0) || !batch.length) break;
-    await sleep(sleepMs);
+    await sleep(NVD_PACE);
   }
+  return { from, to, records, total };
+}
+
+async function rangeCensus({ from, to }) {
+  const { records, total } = await fetchWindow(from, to);
 
   const verEntries = c => (c.affected || []).flatMap(a => a.affectedData || []).flatMap(x => x.versions || []);
   const cfgs = c => (c.configurations || []).flatMap(cfg => (cfg.nodes || []).flatMap(n => (n.cpeMatch || []).filter(m => m.vulnerable)));
@@ -1449,7 +1631,110 @@ function printRangeCensus(c) {
   console.log('  week: configurations is acquired on analysis, so the top table moves and this one should.');
 }
 
+/* ── the field census (added 2026-10-25 12:33) ──
+   The range census answered "which field carries the affected range"; the same shape answers the
+   next question about ANY field, and it is the same tool because a second tool would drift. The
+   filed question was about `weaknesses[]` (CWE): is it a CNA statement present from publication
+   (like `affected[]`) or an NVD analysis output (like `configurations`)? The field also carries a
+   `source`, so the second half is answerable at the same time — WHO stated the CWE — and that is
+   the half a feed quotes without checking.
+
+   `cweSourceKind` is the classification, kept pure so `--selftest` can assert it: `nvd@nist.gov`
+   is NVD, an ADP/`cisa` source is the enrichment container, `mitre.org` is the CVE Program's
+   legacy last-resort CNA (not the vendor), anything else is presumed to be the CNA that filed it. */
+
+function cweSourceKind(src) {
+  const s = String(src || '').toLowerCase();
+  if (!s) return 'none';
+  if (s.includes('nist.gov')) return 'nvd';
+  if (s.includes('cisa') || s.includes('adp')) return 'adp';
+  if (s.includes('mitre.org')) return 'mitre';
+  return 'cna';
+}
+
+async function fieldCensus({ from, to, field }) {
+  const { from: f, to: t, records, total } = await fetchWindow(from, to);
+  const rows = records.map(c => {
+    const status = c.vulnStatus || '?';
+    const raw = c[field];
+    const present = Array.isArray(raw) ? raw.length > 0 : raw !== undefined && raw !== null;
+    let values = null, sources = null, kinds = null;
+    if (field === 'weaknesses' && present) {
+      values = [...new Set(raw.flatMap(w => (w.description || []).filter(d => d.lang === 'en').map(d => d.value)))];
+      sources = [...new Set(raw.map(w => w.source || ''))];
+      kinds = [...new Set(sources.map(cweSourceKind))];
+    }
+    return { id: c.id, status, present, values, sources, kinds };
+  });
+
+  const byStatus = {};
+  for (const r of rows) {
+    const s = (byStatus[r.status] = byStatus[r.status] || { n: 0, present: 0 });
+    s.n++;
+    if (r.present) s.present++;
+  }
+  const withField = rows.filter(r => r.present);
+  const attribution = {};
+  if (field === 'weaknesses') {
+    for (const r of withField) {
+      const k = r.kinds.filter(x => x !== 'none');
+      const key = k.length === 0 ? 'no-source' : k.includes('nvd') && k.length > 1 ? 'nvd+cna'
+        : k[0];
+      attribution[key] = (attribution[key] || 0) + 1;
+    }
+  }
+  const counts = {};
+  for (const r of withField) for (const v of (r.values || [])) counts[v] = (counts[v] || 0) + 1;
+  const top = Object.entries(counts).sort((a, b) => b[1] - a[1]).slice(0, 10);
+  /* `analysed` is the row that answers the filed question directly: if NVD restates or adds, its
+     own source must appear here; if it only endorses, the CNA's source stands alone. */
+  const analysed = rows.filter(r => ['Analyzed', 'Modified'].includes(r.status));
+  const nvdInAnalysed = analysed.filter(r => r.present && r.kinds.includes('nvd')).length;
+  return { field, from: f, to: t, totalResults: total, fetched: rows.length, byStatus, attribution,
+    distinctValues: Object.keys(counts).length, top, analysed: analysed.length, nvdInAnalysed, rows };
+}
+
+function printFieldCensus(c) {
+  const pct = (n, d) => (d ? ((100 * n) / d).toFixed(1) : '0.0');
+  const order = ['Received', 'Awaiting Analysis', 'Undergoing Analysis', 'Deferred', 'Analyzed', 'Modified', 'Rejected'];
+  console.log(`Field census — "${c.field}" over publication window ${c.from} → ${c.to} (UTC)`);
+  console.log(`  NVD reports ${c.totalResults} records; fetched ${c.fetched}`);
+  console.log('');
+  console.log(`  status              n   ${c.field.padEnd(14)}   pct`);
+  for (const s of order) {
+    const r = c.byStatus[s];
+    if (!r) continue;
+    console.log(`  ${s.padEnd(17)} ${String(r.n).padStart(4)}   ${String(r.present).padStart(14)}   ${pct(r.present, r.n).padStart(5)}%`);
+  }
+  for (const s of Object.keys(c.byStatus)) if (!order.includes(s)) {
+    const r = c.byStatus[s];
+    console.log(`  ${s.padEnd(17)} ${String(r.n).padStart(4)}   ${String(r.present).padStart(14)}   ${pct(r.present, r.n).padStart(5)}%`);
+  }
+  const withField = c.rows.filter(r => r.present).length;
+  console.log('');
+  console.log(`  ${c.field} present on ${withField}/${c.fetched} (${pct(withField, c.fetched)}%)`);
+  if (c.field === 'weaknesses') {
+    console.log(`  attribution (records that carry one): ${Object.entries(c.attribution).map(([k, v]) => `${k} ${v}`).join(' · ')}`);
+    console.log(`  analysed records: ${c.analysed}, of which this field carries an nvd@nist.gov source: ${c.nvdInAnalysed}` +
+      (c.analysed && c.nvdInAnalysed === 0 ? '  ← NVD analyses without publishing its own value (endorsement, not restatement)' : ''));
+    console.log(`  distinct values: ${c.distinctValues}` + (c.top.length ? ` · top ${c.top.map(([v, n]) => `${v} (${n})`).join(', ')}` : ''));
+  }
+  console.log('');
+  console.log('  Same reading rule as the range census: NVD\'s `published` is a workflow timestamp, so a row');
+  console.log('  is "records whose paperwork completed that week". Re-run `--json` later and diff per id to');
+  console.log('  see whether a value MOVES between publication and analysis — that is the open half.');
+}
+
 /* ── entry ── */
+if (FIELD_CENSUS) {
+  const to = CENSUS_TO || new Date(Date.now() - 864e5).toISOString().slice(0, 10);
+  const from = CENSUS_FROM || new Date(Date.parse(`${to}T00:00:00Z`) - 6 * 864e5).toISOString().slice(0, 10);
+  const c = await fieldCensus({ from, to, field: FIELD_CENSUS });
+  if (JSON_OUT) console.log(JSON.stringify(c, null, 1));
+  else printFieldCensus(c);
+  process.exit(0);
+}
+
 if (RANGE_CENSUS) {
   const to = CENSUS_TO || new Date(Date.now() - 864e5).toISOString().slice(0, 10);
   const from = CENSUS_FROM || new Date(Date.parse(`${to}T00:00:00Z`) - 6 * 864e5).toISOString().slice(0, 10);
@@ -1462,8 +1747,9 @@ if (RANGE_CENSUS) {
 if (!IDS.length && !TRACKERS.length) {
   console.log('nothing to do: pass --ids CVE-…,CVE-… and/or --tracker ZDI-CAN-…' +
     ' [--repo owner/repo | --pypi pkg] [--artifact commit|package|firmware|image]' +
-    ' [--fix-ref <commit|pull url>] [--debian <srcpkg>] [--range "<expr>"] [--json] [--selftest]' +
-    ' [--release-notes <url>[,<url>…]] [--census [--no-github]] [--range-census --from YYYY-MM-DD --to YYYY-MM-DD]');
+    ' [--fix-ref <commit|pull url|artifact url>] [--debian <srcpkg>] [--range "<expr>"] [--json] [--selftest]' +
+    ' [--release-notes <url>[,<url>…]] [--census [--no-github]] [--range-census --from YYYY-MM-DD --to YYYY-MM-DD]' +
+    ' [--field-census <field> --from YYYY-MM-DD --to YYYY-MM-DD]');
   process.exit(0);
 }
 
@@ -1570,6 +1856,18 @@ async function probeAll({ nvdCache = null } = {}) {
     if (cls.artifact.state === 'fix-in-source-no-artifact' && (cls.state === 'indeterminate' || cls.state === 'no-fix')) {
       cls.temporalState = cls.state;
       cls.state = 'fix-in-source-no-artifact';
+    }
+    /* An ARTIFACT older than the record is the same claim the version axis makes, derived from a
+       different object — and the version axis cannot make it here, because a raw patch URL names no
+       version the timeline can be searched for. Escalates only where the version axis has nothing
+       (or says the fix came after); a version-axis verdict that already says `fix-predates-record`
+       keeps its own, larger lag, since a release can predate its own patch URL. */
+    if (cls.artifact.predatesRecord && ['indeterminate', 'no-fix', 'record-then-fix'].includes(cls.state)) {
+      cls.temporalState = cls.state;
+      cls.state = 'fix-predates-record';
+      cls.lagDays = cls.artifact.artifactLagDays;
+      cls.lagBasis = 'artifact';
+      (cls.notes = cls.notes || []).push('the lag is the ARTIFACT\'s, not a release\'s — a raw patch URL carries no version the release timeline can be searched for, so quote the artifact date as the fix date');
     }
   }
   /* The announcement axis. Runs after the artifact axis because it answers the same consumer
@@ -1726,7 +2024,14 @@ if (JSON_OUT) {
       console.log(`    artifact ${a.mode} → ${a.state}` +
         (a.newest ? ` · newest ${a.newest.version} (${ymd(a.newest.date)})` : ''));
       console.log(`    cell     ${a.cell === null || a.cell === undefined ? '(no patched-version cell published)' : JSON.stringify(a.cell)} — ${a.cellSource === 'cell' ? 'verbatim from the advisory' : a.cellSource}`);
-      if (a.fixRef) console.log(`    commit   ${a.fixRef.url} ${ymd(a.fixRef.date)} (${a.fixRef.label})`);
+      if (a.fixRef) console.log(`    ${a.fixRef.kind === 'artifact' ? 'artifact' : 'commit  '} ${a.fixRef.url} ${ymd(a.fixRef.date)} (${a.fixRef.label})`);
+      if (a.artifact) {
+        const x = a.artifact;
+        console.log(`    clocks   filename ${x.filenameDate ? ymd(x.filenameDate) : '(none)'} · Last-Modified ${x.headerDate ? ymd(x.headerDate) : '(none)'}` +
+          (x.deltaHours !== null ? ` · Δ ${x.deltaHours}h → ${x.agreement.toUpperCase()}` : ` → ${x.agreement.toUpperCase()}`) +
+          (x.contentLength ? ` · ${(x.contentLength / 1048576).toFixed(1)} MiB` : '') +
+          (x.httpStatus ? ` · HTTP ${x.httpStatus}` : ''));
+      }
       if (a.debian) {
         const s = a.debian.suites.map(x => `${x.release} ${x.version} ${x.status}`).join(' · ');
         console.log(`    debian   ${s || '(no suite rows)'}${a.debian.fixed ? ` · fixed: ${a.debian.fixed}` : ''}`);
@@ -1752,6 +2057,11 @@ if (JSON_OUT) {
     console.log('');
   }
   const tally = results.reduce((m, r) => (m[r.state] = (m[r.state] || 0) + 1, m), {});
+  /* A lag can now come from an ARTIFACT rather than a release timeline, so the no-timeline suffix
+     must not call a computed number incomputable (2026-10-25 12:33). */
+  const fromArtifact = results.filter(r => r.lagBasis === 'artifact');
   console.log('disclosure-lag: ' + Object.entries(tally).map(([k, v]) => `${k}×${v}`).join(', ') +
-    (sourceName ? ` — timeline ${sourceName}` : ' — no release timeline (lag not computable)'));
+    (sourceName ? ` — timeline ${sourceName}`
+      : fromArtifact.length ? ` — no release timeline; lag derived from the artifact itself (${fromArtifact.map(r => r.id).join(', ')})`
+        : ' — no release timeline (lag not computable)'));
 }

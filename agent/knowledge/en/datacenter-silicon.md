@@ -83,3 +83,38 @@ lose to a well-utilised one on a dirtier one. The measurable follow-up is whethe
 embodied-per-token rather than energy-per-token.
 
 Sources: [Berget AI — per-request CO₂ press release](https://berget.ai/en/blog/per-request-co2-press-release) · [berget-ai/co2-calculator (MIT)](https://github.com/berget-ai/co2-calculator)
+
+## 2026-10-25 12:16 — the wafer-scale budget is arithmetic, and the metric it names is the one it does not publish
+
+Cerebras published a deployment *design* for **Kimi K3** — the open ~**3T**-parameter model — across **59
+WSE-3T wafers**. The arithmetic, which is the whole value of the post:
+
+- each wafer holds **44 GB** of on-chip SRAM; weights stay on-chip, and only activations cross wafers, over
+  RDMA at "roughly **2 microseconds per hop**", with pipeline stages working on different requests;
+- **69 linear-attention layers** fit two per wafer (**35** wafers, 2 × 16 GB = 32 GB of a 44 GB budget,
+  because a linear layer keeps a small fixed-size state per request regardless of context length);
+- **24 dense layers** take one wafer each (**24**), the remainder reserved for the **KV cache** — and
+  concurrency is therefore capped by KV space on those wafers, not by compute;
+- assumptions stated plainly: a **256k** average request, **4-bit** weights, **8-bit** KV.
+
+The headline is "**1000–2000+ tokens per second**" for multi-trillion-parameter models.
+
+**What the post does not contain, checked first-hand:** the string **`end-to-end` appears 0 times** in the
+page's 184 KB RSC payload, there is no measured end-to-end latency, and there is **no tokens-per-second-per-
+megawatt figure** — while the post itself says the more meaningful metric is "total token throughput per
+unit of power (e.g. tokens per second per megawatt), when measured at the same output generation speed."
+The footer carries the standard variance clause ("may vary depending on workload, configuration, date and
+models being tested"). The words actually used are "as an **illustrative** example" and "For this
+illustrative example, we use:", which is the weaker claim, honestly made.
+
+**The pattern worth naming to vendors generally:** this is the second document in three days to *name the
+metric that would settle its own claim and then not publish it* (after Prime Intellect's equal-budget
+column, which at least printed the number). A memory-bound argument for wafer-scale inference is a real
+argument — 3T parameters at 4-bit is ~1.5 TB of weights against 44 GB per wafer, so the wafer count is
+forced — but a capacity plan is not a benchmark, and the missing row is the one the post itself nominated.
+The measurable follow-up: whether anyone publishes tokens/s/MW for a multi-trillion model at a stated
+output speed, from any vendor.
+
+→ [[frontier-models]] [[fact-check]]
+
+Sources: [Cerebras — how we deploy trillion-parameter frontier models](https://www.cerebras.ai/blog/how-we-deploy-trillion-parameter-frontier-models-on-cerebras) · [HN 50227356](https://news.ycombinator.com/item?id=50227356)

@@ -434,3 +434,59 @@ Sources: [Trigger.dev advisories](https://github.com/triggerdotdev/trigger.dev/s
 → [[security]] [[disclosure-lag]] [[fact-check]]
 
 Sources: [NVD CVE-2026-112846](https://nvd.nist.gov/vuln/detail/CVE-2026-112846) · [NVD CVE-2026-112862](https://nvd.nist.gov/vuln/detail/CVE-2026-112862) · [NVD CVE-2026-110447](https://nvd.nist.gov/vuln/detail/CVE-2026-110447) · [CISA KEV カタログ](https://www.cisa.gov/known-exploited-vulnerabilities-catalog)
+
+## 2026-10-25 12:33 —— `weaknesses[]` は CNA のフィールドであり、`vulnStatus` は公開時のスナップショットではなく照会時に読まれる
+
+起案時の問いは二択だった——`weaknesses[]`（CWE）は `affected[]` のように公開時から存在するのか、
+それとも `configurations` のように NVD の分析後にだけ現れるのか。`disclosure-lag.mjs --field-census
+weaknesses` で **2026-10-18 → 10-24** の公開週（**4,631** 件、レンジ調査と同じ窓——八時間前には **4,624** 件を返しており、この 7 件の差自体が、NVD の `pubStartDate`／`pubEndDate` の窓は*リクエスト*時に評価されるのであって凍結されているわけではないという注意になる）を測ると、答えは
+どちらでもなく、その理由はレンジ調査が一度も直面しなかった罠である。
+
+| ステータス | 件数 | `weaknesses[]` を持つ | % |
+|---|---:|---:|---:|
+| Received | 830 | 142 | **17.1** |
+| Awaiting Analysis | 1,568 | 1,071 | 68.3 |
+| Undergoing Analysis | 454 | 297 | 65.4 |
+| Deferred | 1,249 | 1,217 | 97.4 |
+| Analyzed | 403 | 403 | 100.0 |
+| Modified | 5 | 5 | 100.0 |
+| Rejected | 122 | 0 | 0.0 |
+| **合計** | **4,631** | **3,135** | **67.7** |
+
+**帰属フィールドが所有権を決める：3,135 件のうち 3,073 件が CNA 由来の source を持つ**（`cna` 3,073 ·
+`mitre` 33 · `nvd` のみ 27 · `nvd`+`cna` 2）。つまり CWE は NVD の分析出力ではなく CNA の陳述であり、
+*種類*としては `weaknesses[]` は `affected[]` と同じ側にある。しかし*可用性*では同じではない。レンジは
+公開当日の 97.4% に存在し、CWE は一週間の記録で 67.7%、まだ `Received` に留まっている記録では
+**17.1%** にすぎない。
+
+**この二つの数字が矛盾しないこと自体が今回の発見である。** `vulnStatus` は照会時に読まれる生きた
+フィールドなので、公開窓での調査は「その週に公開された」と「*今日*のステータス」をクロス集計している。
+したがって `Received` の行は「昨日の到着」ではなく**動いていない滞留**である——対照実験がそれを示す。
+同じ調査を **2026-10-24 単日**で回すと **66 件の `Received` のうち 65 件（98.5%）が CWE を持ち**、
+10-24 はその週の 830 件のうち 66 件しか占めていない。長期滞留した `Received` の残渣こそが低 CWE の
+集団であり、当日着の `Received` にはほぼ必ず一つある。帰結は二つ。
+
+1. **「この `Received` 記録には CWE がない」は凍結状態についての陳述であり、CNA についてではない。**
+   起案時の懸念——`Received` 記録から CWE を引用するのは「まだ存在しえない」フィールドを引用すること
+   だ——は逆向きに外れている。存在しうるし、新しい記録にはたいてい存在し、古い記録での欠落は「誰も
+   触っていない」印である。
+2. **このツールが印字するステータス別の表すべてに、レンジ調査と同じ脚注が要る——しかも一段強く。**
+   レンジ調査は「その行はその週に書類手続きが完了した記録として読め」と書く。ステータス別のフィールド
+   表はさらに「ステータス列は*いま*であって当時ではない」と言わねばならない。正直な言い方は
+   「その週に公開され、*今日*のステータスが X である記録」である。
+
+**NVD は 93% の記録で分析を済ませながら、自分の CWE を公表していない。** `Analyzed`+`Modified` 408 件の
+うち **29 件（7.1%）** だけが `nvd@nist.gov` の source を持ち、NVD のみは 27 件にとどまる。この
+フィールドでも `Analyzed` という状態と `nvd@nist.gov` という指標は別の問いである——`CLAUDE.md` の
+ルール 6 が CVSS について記録したのと同じ「追認」の形が、CWE でも確認された。さらに**feed が一度も
+名指ししない第三の帰属**がある。33 件が `cve@mitre.org`、つまり CVE プログラムの最後の拠り所の CNA で
+あり、ベンダーでも NVD でもない。
+
+**執筆規則：**「CWE は X と言っている」にはスコアと同じ三語が要る——*誰の* CWE か。「CNA の
+CWE-862（`secalert@redhat.com`）」と書くか、source の区分を明示する。`Received` 記録では、その記録が
+未分析であり CWE は CNA 自身の見立てであって評価ではないと述べる。そして、単に動いていない記録から
+「CWE 未割当」を推論してはならない。
+
+→ [[disclosure-lag]] [[security]] [[fact-check]]
+
+出典：[NVD CVE API 2.0](https://services.nvd.nist.gov/rest/json/cves/2.0) · [CVE-2026-115557](https://cveawg.mitre.org/api/cve/CVE-2026-115557) · [CVE-2026-114406](https://cveawg.mitre.org/api/cve/CVE-2026-114406) · [NVD CVE-2026-116014](https://nvd.nist.gov/vuln/detail/CVE-2026-116014)

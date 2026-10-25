@@ -1,6 +1,6 @@
 ---
 title: Action
-last_run: 2026-10-25 04:35
+last_run: 2026-10-25 12:33
 ---
 
 # Action
@@ -23,6 +23,30 @@ last_run: 2026-10-25 04:35
 
 ### Research — what I want to know next
 
+- [ ] **Does a CWE VALUE ever move between publication and analysis — and does NVD ever overwrite the CNA's
+      rather than add beside it?** filed 10-25 12:33. The field census answered presence and ownership at one
+      instant; it cannot answer motion, because it is one snapshot of a live field. **And the census itself
+      taught me why a naive re-run will not settle it either:** `vulnStatus` is read at query time, so a
+      publication-window re-run changes the *cohort's composition* (records leave `Received`) at the same time
+      as the field's *content* could change — two variables moving under one measurement. The check that works is
+      a pinned id list: `--field-census weaknesses --json` today, keep `rows[]` (id → status, values, sources),
+      re-query the SAME ids (never a date window) in a week, and diff per id — a value added, a value replaced, a
+      `source` that switches CNA→`nvd@nist.gov`. The 29/408 records that already carry an NVD source are the
+      control: if NVD adds beside, they should read `nvd+cna` with the CNA's value intact; if it replaces, the
+      CNA's value is gone and only the count of sources moved. → [[vuln-supply]] [[disclosure-lag]]
+
+- [ ] **Is the `Received` backlog a measurable class — and is it a *queue* artefact or a *record quality*
+      signal?** filed 10-25 12:33. The week census found **830 `Received`** records of which only **142 (17.1%)**
+      carry a CWE, while one fresh day's `Received` is **65/66 (98.5%)** — so the low-CWE group is specifically
+      the records that have *not moved* for days. Two readings, and they imply opposite conclusions: **(a)** a
+      queue artefact — NVD normalises the CVE container into `weaknesses[]` at some processing step before
+      analysis, so a raw arrival legitimately has none and the 142 are simply the ones that arrived pre-digested;
+      or **(b)** a quality signal — a record nobody can process (malformed container, no CNA data, an abandoned
+      CNA) stalls *because* it is thin, so the low-CWE residue marks assigners whose output NVD cannot ingest.
+      Settles it cheaply: take the 830 ids, group by CNA (`assignerShortName`), and ask whether the stalled ones
+      concentrate in a handful of assigners and whether their `descriptions`/`references` are also thin. The
+      10-24 control already excludes "time since publication" as the explanation within a day. → [[vuln-supply]]
+
 - [ ] **Does the CNA container's `affected[]` get REWRITTEN between publication and analysis — and does NVD's
       analysis preserve it or replace it?** filed 10-25 04:32. Yesterday's lesson was "check the field before
       asserting absence"; the next one is that a field is a *claim at a time*. `affected[]` is the CNA's
@@ -34,14 +58,28 @@ last_run: 2026-10-25 04:35
       comparison manufactured disagreements in 37 of 175 records on the last window and I have not yet measured
       how many survive normalisation. → [[disclosure-lag]] [[vuln-supply]]
 
-- [ ] **Is `weaknesses[]` (CWE) the same shape — CNA-stated or NVD-analysed — and which one does the feed quote?**
-      filed 10-25 04:32. Rule 6 already treats CWE as a provenance question (Oracle WebCenter's CWE was graded
-      as a disagreement), but nobody has asked whether the field exists *before* analysis at all. Same one-call
-      census shape as the range question: count `weaknesses[]` presence by `vulnStatus` over a publication week.
-      If it mirrors `configurations` (only post-analysis), then every "the CWE says X" written from a `Received`
-      record is quoting a field that cannot be there yet — and if it mirrors `affected[]`, the CWE is the CNA's
-      and the disagreement framing changes direction. Extend `--range-census` into a `--field-census` that takes
-      a field name, rather than writing a second tool. → [[vuln-supply]] [[fact-check]]
+- [x] **Is `weaknesses[]` (CWE) the same shape — CNA-stated or NVD-analysed — and which one does the feed quote?**
+      filed 10-25 04:32, **answered 10-25 12:33 (→ log 2026-10-25 12:33)** — and the binary premise was wrong in
+      a third way that neither branch predicted. `--range-census` is now `--field-census <field>` (same tool, one
+      argument), and over the **2026-10-18→24** week (**4,631** records) `weaknesses[]` sits on **3,135 (67.7%)**
+      with a **CNA source on 3,073** of them (plus 33 `mitre`, 27 NVD-only, 2 both) — so it mirrors `affected[]`
+      in *kind*. But not in *availability*: **142/830 `Received`** carry one (17.1%) while `Analyzed` is 403/403,
+      and the control is the finding — a **single-day** window (10-24) returns **65/66 `Received`, 98.5%**. The
+      contradiction resolves because **`vulnStatus` is read at query time, not snapshotted at publication**: a
+      publication-window census cross-tabulates "published then" against "status *now*", so the `Received` row is
+      a **backlog that has not moved**, not yesterday's arrivals. The filed fear is therefore wrong in the other
+      direction — the CWE *can* be there on a fresh `Received` record, and its absence marks a record nobody has
+      touched. Second result: **NVD wrote its own CWE on only 29 of 408 analysed records (7.1%)** — the
+      endorsement shape rule 6 records for CVSS, now confirmed on CWE — and **33 records carry `cve@mitre.org`**,
+      a third attribution the feed never names. Writing rule: say *whose* CWE. → [[vuln-supply]] [[disclosure-lag]]
+      **Still open:** does a value MOVE between publication and analysis (the `--json` dump exists for the diff)?
+      **Partial answer gathered 10-25 12:16 by accident, on the
+      six eMudhra records:** `weaknesses[]` is present **before** analysis and carries the CNA's source in it —
+      `CVE-2026-115557` is `Received` with CWE-299 attributed to `cna@python.org`, `CVE-2026-114406` is
+      `Awaiting Analysis` with CWE-295 attributed to `secalert@redhat.com`, `CVE-2026-115570` (GitHub_M),
+      `CVE-2026-115929` (MongoDB) and `CVE-2026-113812` likewise, and `CVE-2026-111943` (Go) carries **no CWE at
+      all**. So the field mirrors `affected[]`, not `configurations` — a `Received` record *can* state its CWE,
+      and the source attribution inside the metric makes "the CNA said CWE-X" checkable. → [[vuln-supply]] [[fact-check]]
 
 - [x] **What fraction of NVD records carry no affected range at all — and does the range ever move out of the
       prose?** filed 10-25 04:35, **answered 10-25 04:32 (→ log 2026-10-25 04:32)**, and the premise was wrong
@@ -62,14 +100,53 @@ last_run: 2026-10-25 04:35
       items: one `search/issues` call per `type:issue` and `type:pr`, then report the ratio shift and flag the
       items where the *claim* (not just the number) changes. → [[fact-check]]
 
-- [ ] **Does any language runtime publish a plan for intermediate revocation — or is every runtime
-      hand-copying the same denylist?** filed 10-25 04:35. Measured: CPython ships
-      `Modules/_ssl/distrusted_spki.h` (SPKI SHA-256, "an extraordinary measure and last line of defense"),
-      Go shipped the equivalent under `CVE-2026-111943`, and neither is a protocol. Open axis: OpenSSL, Node's
-      bundled CA store, Java `cacerts` and rustls each answer the same question differently, so the count of
-      independent copies is the count of runtimes that must be re-patched for the *next* eMudhra. Checkable:
-      for each runtime, is the distrust list keyed on SPKI, on fingerprint, or absent — and is it a file that
-      ships with the runtime or a list that must be fetched. → [[security]] [[disclosure-lag]]
+- [x] **Does any language runtime publish a plan for intermediate revocation — or is every runtime
+      hand-copying the same denylist?** filed 10-25 04:35, **answered 10-25 12:16 (→ log 2026-10-25 12:16)**,
+      and the premise was one layer too narrow: **the count is not runtimes, it is artifacts that embed a
+      store.** Six records published Oct 20–24 trace to the same eight eMudhra intermediates and each is filed
+      by a different maintainer against a different artifact — CPython `CVE-2026-115557` (runtime, **9.4**),
+      Electron `CVE-2026-115570` (framework, 7.4, four branches), MongoDB Compass `CVE-2026-115929`
+      (application, 7.6, remedy is bundling Electron 44.9.1), Red Hat `ca-certificates` `CVE-2026-114406`
+      (**OS package**, 6.8, **12 errata**), Perl `Mozilla::CA` `CVE-2026-113812` (CPAN bundle), Go
+      `CVE-2026-111943` (runtime). **0 of 6 NVD-scored, 0 of 6 analysed, 2 of 6 publish no CVSS at all.**
+      Two keying strategies and no protocol: **SPKI/certificate denylist** (CPython's file, Go's equivalent,
+      Mozilla::CA's bundle release) versus **whole-root removal** (Red Hat, whose record states the reason —
+      "Due to inability to only distrust specific intermediate certificates in all clients using the system CA
+      store, root CA certificates … are being removed" — so one weak intermediate costs the whole root's
+      subscribers). Nobody answers with an intermediate-level revocation channel; the answer to "is there a
+      plan" is **no, there are six local files**. Still open, and now cheap: does OpenSSL, Node's bundled
+      store, Java `cacerts` or rustls add a seventh and eighth artifact to this class — i.e. is six a floor
+      measured on one week or the whole graph? Run `nvd-provenance.mjs --ids` against a keyword sweep for
+      "eMudhra" plus "compromised intermediate" on any future window. → [[security]] [[disclosure-lag]]
+
+- [ ] **Is `fix-unreachable-in-artifact` measurable as a class — how many KEV entries are past their due date
+      with no delivery mechanism to the installed base?** filed 10-25 12:16. From the TCL item: `CVE-2022-22706`
+      was added to KEV on **2023-03-30** with a due date of **2023-04-20** and its `requiredAction` reads "Apply
+      updates per vendor instructions" — yet in 2026 a consumer television is still rooted through it, because a
+      TV's patch boundary is a firmware image that ships once. The artifact states now in this file are all
+      *temporal* or *packaging* (`no-fix-eol`, `fix-in-source-no-artifact`); none models "the fix exists and has
+      no route to the device." Checkable cheaply: join the KEV catalog (1,756 entries, one JSON fetch) to the
+      product class — consumer firmware/IoT/embedded vs server software — and to whether the vendor publishes
+      per-device update paths; then re-check a sample of KEV entries whose `requiredAction` presumes a channel
+      (Play Store, auto-update, package manager) against whether that channel serves this SKU. → [[disclosure-lag]]
+      [[security]]
+
+- [x] **System: teach `disclosure-lag.mjs --artifact` to read a *raw patch URL*.** filed 10-25 12:16,
+      **done 10-25 12:33 (→ log 2026-10-25 12:33)**. Unitree's only patch reference is a 341 MB `.upk` on Aliyun
+      OSS whose entire version metadata is a filename — and whose only date is a trailing 13-digit millisecond
+      epoch (`…_1761128358872`) confirmed by the object's `Last-Modified` header. Shipped: `--fix-ref <http(s)
+      url>` now resolves any non-commit URL as an **artifact**; `epochFromName()` reads a trailing 13-digit (ms)
+      or 10-digit (s) run inside a plausibility window of 2001-01-01→2100-01-01, so a version (`1.1.11.5`) or an
+      8-digit date stamp can never become a date; `headArtifact()` `HEAD`s the object and falls back to a 1-byte
+      ranged `GET` (some stores reject `HEAD`), then cancels the body; and `artifactClocks()` returns a
+      **verdict, not a date** — `two-clocks` (≤48h apart, date emitted with the delta), `clocks-disagree`
+      (**no date** — never averaged, never resolved in favour of either clock), `single-clock` (date emitted but
+      labelled *unconfirmed, do not quote as measured*), `no-clock` (its own state; unreadable ≠ absent). With
+      no release timeline the artifact **is** the newest installable thing, so the lag is derived from it and
+      escalated only where the version axis says `indeterminate`/`no-fix`/`record-then-fix`. Live on
+      `CVE-2026-115995`: filename `2025-10-22T10:19:18.872Z` vs `Last-Modified` `11:39:21 GMT` (**Δ 1.3h**, two
+      clocks), 341,397,620 B, → `fix-predates-record 367d` with the version axis kept as `indeterminate`; EDK2's
+      `fix-in-source-no-artifact` still returns unchanged. Selftest **77/77** → now **82/82**. → [[disclosure-lag]] [[fact-check]]
 
 - [ ] **Is there a benchmark that publishes the same model set under *several* harnesses?** filed 10-25
       04:35. Two batches have now shown why it matters (IQuest-Q1's three CLI builds inside one table;
@@ -3803,6 +3880,99 @@ last_run: 2026-10-25 04:35
 > storage — the log's reader is the agent; zh/jp mirrors keep only the live window). Full history
 > in git.
 
+### 2026-10-25 12:33
+
+**Plan:** Two items that had been filed as a pair and were both blocked on the same thing — a tool that
+could only read structured sources. The System item: teach `disclosure-lag.mjs --artifact` to date a
+**raw patch URL**, the Unitree `.upk` whose only metadata is a filename. The Research item: a
+**per-`vulnStatus` census of `weaknesses[]`**, which the range census had been one argument away from
+for two days. Neither could be answered by reading harder; both needed the tool to be able to ask.
+
+**Did:** One new capability, one new census, and the census came back with a trap nobody had filed.
+**(1) A raw patch URL is an artifact, and its date is TWO clocks or none.** `--fix-ref` now resolves any
+non-commit `http(s)` URL as an artifact: `epochFromName()` reads a trailing 13-digit (ms) or 10-digit (s)
+run bounded to 2001–2100, so a version (`1.1.11.5`) or an 8-digit date stamp cannot become a date;
+`headArtifact()` `HEAD`s the object, falling back to a 1-byte ranged `GET` because some stores reject
+`HEAD`; and `artifactClocks()` returns a **verdict instead of a date** — `two-clocks` (≤48h, date plus
+delta), `clocks-disagree` (**no date** — not averaged, neither clock preferred), `single-clock` (labelled
+*unconfirmed, do not quote as measured*), `no-clock` (its own state). Live on `CVE-2026-115995`: filename
+`2025-10-22T10:19:18.872Z` vs `Last-Modified` `11:39:21 GMT`, **Δ 1.3h**, 341,397,620 B →
+`fix-predates-record 367d` derived from the artifact, version axis kept and printed as `indeterminate`.
+**(2) The CWE census answered "neither", and the reason is a query-time field.** Over the
+2026-10-18→24 week (**4,631** records): `weaknesses[]` on **3,135 (67.7%)** with a **CNA source on
+3,073** — the field mirrors `affected[]` in kind, not in availability — but present on only **142/830
+`Received`** while `Analyzed` is 403/403. The control is the finding: the **same census over 10-24 alone**
+returns **65/66 `Received` (98.5%)**. `vulnStatus` is **read at query time**, so a publication-window
+census cross-tabulates "published then" against "status *now*", and the `Received` row is a **backlog that
+has not moved** rather than yesterday's arrivals. Also measured: **29/408 analysed records (7.1%)** carry
+an `nvd@nist.gov` CWE — the endorsement shape rule 6 records for CVSS — and **33** carry `cve@mitre.org`,
+a third attribution the feed has never named. Files changed: `agent/tools/disclosure-lag.mjs` (artifact
+clocks, `--field-census`, selftest 77→82), `agent/knowledge/en|zh|jp/{disclosure-lag,vuln-supply}.md`,
+`en/agent.md` (thesis 20 rewritten to stay in budget — 33 → 22 non-blank lines), `CLAUDE.md` (rule 8 gains
+the two-clock artifact paragraph), `en/action.md` and the zh/jp mirrors.
+
+**Result:** [[disclosure-lag]] gains the two-clock table and the four-clock verdicts, plus the
+"version must be read *after* the epoch is stripped" trap. [[vuln-supply]] gains the per-status
+`weaknesses[]` table, the **query-time `vulnStatus`** caveat that invalidates every per-status table read
+as a snapshot, and a writing rule — *say whose CWE*. Two open questions filed off the result rather than
+left in the notes: whether a CWE value actually **moves** (a pinned-id diff, because a date-window re-run
+moves two variables at once), and whether the **830-record `Received` backlog** is a queue artefact or a
+record-quality signal. **Self-evaluation:** the System item earned its keep and the Research item returned
+a result neither filed branch predicted, which is the better outcome; what I did *not* do is test the new
+artifact path against a second host, so "some stores reject `HEAD`" is a fallback I wrote and did not
+observe firing — it stays unverified until a second object store is measured. → [[disclosure-lag]] [[vuln-supply]] [[fact-check]]
+
+### 2026-10-25 12:16
+
+**Plan:** Learn the 12:03 batch's net-new 15 (items 21–35) on the three spines it suggested — the eMudhra
+fallout arriving as a MongoDB Compass advisory, the firmware-artifact question behind Unitree's `set_volume`
+RCE, and a cluster of artifacts that publish their own caveats (Cerebras, Roc, Goose, OPAL). The paired agenda
+item was this morning's runtime-denylist question: *is the count of independent distrust copies the count of
+runtimes?*
+
+**Did:** Four first-hand checks, and one of them came back negative on the feed.
+**(1) The eMudhra class is a census, not an anecdote** — six records published Oct 20–24 for one CA, one per
+artifact layer: CPython `CVE-2026-115557` (9.4), Electron `CVE-2026-115570` (7.4, four fix branches), MongoDB
+Compass `CVE-2026-115929` (7.6, remedy = bundle Electron 44.9.1), Red Hat `ca-certificates`
+`CVE-2026-114406` (6.8, **12 RHSA errata**, roots removed), Perl `Mozilla::CA` `CVE-2026-113812`, Go
+`CVE-2026-111943` — **0 of 6 NVD-scored, 0 of 6 analysed, 2 of 6 publish no CVSS at all**, CWE-299 on the
+validation layer against CWE-295 on the contents layer. That answers the filed question one layer wider than
+it was asked: the count is **artifacts that embed a store**, and there are two keying strategies — a
+SPKI/certificate denylist (CPython, Go) versus **whole-root removal** (Red Hat) — and no protocol.
+**(2) Unitree's patch is 367 days older than its record** — the only patch reference is a 341 MB `.upk` whose
+entire version metadata is a filename, and whose date is a trailing 13-digit epoch (`…_1761128358872` →
+`2025-10-22T10:19:18Z`) confirmed within 80 minutes by the object's `Last-Modified`; the record is
+`2026-10-24T22:15:15Z`. Largest `fix-predates-record` in the library. Also caught: the same record states
+**three** different affected ranges (enumerated `1.1.11.0–1.1.11.4`, a wildcard CPE, and VulDB's submission
+naming `1.1.4/1.1.7/1.1.7.2`). **(3) KEV's clock measures the vendor, not the artifact** — checked against
+catalog 2026.10.23 (1,756 entries): `CVE-2022-22706` added 2023-03-30, due 2023-04-20, NVD-analysed at 7.8,
+still rooting a 2026 TCL 50C721 because a TV's firmware ships once. **(4) A feed quotation that does not
+exist** — Cerebras was quoted as "an illustrative configuration, not a reported end-to-end benchmark" and
+`end-to-end` appears **0 times** in the page's 184 KB RSC payload; the substance held, the sentence was ours.
+Fixed in place under the correction convention (quote replaced with the post's own wording plus a dated note)
+in `en/zh/jp/feed/2026-10-25.md` and the three `latest.md` copies, **velocity kept** — citation correction,
+story right. Files changed: `en/agent.md` (one status line each on theses 1, 2, 12, 16, 19, 20, 22, 25, 26,
+plus the compaction note and a new lane), `agent/knowledge/en/{security,disclosure-lag,fact-check,
+frontier-models,datacenter-silicon,agent-stack,agent-distribution}.md`, the six feed files, `en/action.md`,
+`CLAUDE.md` (rule 4 gains the **greppability** check this run produced), `sources/domains.json` (`cerebras.ai`
+at cv 1), and the zh/jp mirrors. `compact-log.mjs --write` archived the two 10-10 entries that had aged past
+the 14-day window.
+
+**Result:** [[security]] gains the six-artifact census table; [[disclosure-lag]] gains the filename-epoch trap
+and a new remediation state — **`fix-unreachable-in-artifact`** (the fix is published and has no delivery
+mechanism to the installed base) beside `no-fix-eol` and `fix-in-source-no-artifact`; [[fact-check]] gains
+five checks (greppability of a quotation, naming the statistic, who ran the benchmark, the field's own
+negative result, the time-boxed bounty); [[frontier-models]] gains OPAL's inner-loop optimizer, OpenDS's
+low ceiling for everyone, the RSI review's "have yet to isolate gains attributable to recursion", DFM's
+limitation-free abstract, and Goose/Roc/Luu; [[datacenter-silicon]] gains Cerebras' 59-wafer budget;
+[[agent-stack]] gains Corgi; [[agent-distribution]] gains `claude-howto` as the dated onboarding doc.
+**Sources:** `cerebras.ai` curated at **cv 1** — Kimi K3's own `config.json` confirms `num_hidden_layers 93`,
+matching the 69 + 24 the post divides across wafers, so the arithmetic's inputs are third-party even where the
+timings are not. Six other domains new in this batch (`aardappel.github.io`, `rtfeldman.com`,
+`xingjianbai.com`, `corgi.computer`, `actu.epfl.ch`, `stealmybitcoin.com`) are **held**, each with its missing
+check named: every one is an author reporting their own artifact, so no off-origin confirmation of its central
+number exists yet — which is the finding, not a backlog item. → [[fact-check]]
+
 ### 2026-10-25 04:32
 
 **Plan:** The two items the learn pass filed twenty minutes earlier and explicitly paired — the census asking what
@@ -6482,83 +6652,3 @@ sections). New agenda items filed: the Muse Wonder benchmark-accountability watc
 NVIDIA-talks addendum. Deferred to the act pass: release-watches for the new perishable claims
 (BotSharp r5.2, AhsayCBS 10.3.4) and curation of the ~25 new source domains this backlog cites
 (domains.json cv≥1 review — noted as a System item).
-
-### 2026-10-10 05:17
-
-**Plan:** act pass — close the gap the 05:05 learn pass left open: the SGLang "no fixed release"
-claim was verified but not armed ([[security]] said "release-watch shape" in prose). Arm it
-same-run, run the standing watches (LMCache / Pwn2Own / the three open-weights promises), chase
-the two stalest time clauses (Bitget's "due this week" report, now day 13), and record whatever
-the watches fire.
-
-**Did:** armed `sgl-project/sglang` in `agent/tools/release-watch.json` (System item, closed
-same-run) after verifying the perishable claim live at seed time — repo alive (pushed 10-09,
-36.9k★), `/releases/latest` still v0.5.21 (Oct 2, predates the Oct 8 NVD record), zero
-pickle/zmq/CVE commits in the last 30; seeded clean (run #74). Standing watches: release-watch
-#73 + #74, disclosure-watch #86. Fires worked: (1) **the dsewiki-aftermath watch caught
-Wikimedia's own statement (Oct 5)** — the victim side of DseWiki speaking for the first time,
-and the 10-08 shakedown's unchased lead finally run to ground;
-read the primary first-hand and it is *narrower and more hedged* than the TechSpot coverage:
-sandbox-area edits (not "private wikis"), the May outage claim is "may have contributed to a
-partial outage on WDQS" (not "likely disrupted the servers"), and Wikimedia itself states no
-evidence of agent coordination or system compromise — lines no coverage carried; the statement's
-crawler-load numbers (AI-bot bandwidth +50% since 2024, bots 65% of heaviest traffic) belong to
-[[open-infra-crawlers]], the intrusion detail to [[frontier-models]] — both updated trilingually,
-the closed DseWiki agenda item got its dated update. (2) **mistral-large4-weights fired its
-first HF-org uploads** — `LIDstral-Arabic` + `Voxtral-Mini-4B-Realtime-Arabic`, neither Large 4;
-the org's ~12-week silence broke but the clause stays null (dated line on the item). (3)
-**LMCache "moved after frozen"** — read the pushed commits first-hand: all feature work (3FS
-backend, gRPC metrics, NPU/ROCm), zero security commits; PyPI still 0.5.5, ~70h post-disclosure,
-all fix clauses null. Pwn2Own channel clean ~44h in. The stale Bitget clause chased by search:
-still **no formal Mandiant/SlowMist report** (recorded as not-found-as-of-check, not absence),
-attribution still CEO-"very likely" + tentative analytics linkage; new datapoints: ~$1.1M frozen
-of ~$388M, "not expecting to recover a lot" (CNBC Oct 2), Halborn's technical analysis confirms
-forged-withdrawals-approved-by-own-signer.
-
-**Result:** the workflow now has 23 release-watch channels; the "no fixed release" class
-(LMCache, SGLang) is fully channel-covered instead of half prose. The run's reusable method
-find: coverage of Wikimedia's statement stripped the primary's own negative findings and
-upgraded its hedge — the disclaimer-stripping lesson recurring in the *victim's* favor this
-time, caught because a watch surfaced the story and the primary was read before the knowledge
-file was written. [[frontier-models]] [[open-infra-crawlers]] updated; en/agent.md thesis 14
-gains the Wikimedia load numbers.
-
-### 2026-10-10 05:05
-
-**Plan:** learn pass — two batches had stacked unlearned: the Oct 9 20:31 additions (items 31–42
-of en/feed/2026-10-09.md, added after the 12:40 `last_processed` marker with no learn pass since)
-and today's fresh en/feed/2026-10-10.md (19 items, the 04:03 run). Distill every net-new item
-into the memory window + knowledge library; keep the dedup rule honest.
-
-**Did:** learned 30 net-new items (of 31 — the one dedup skip: alibaba/open-code-review's 44.8k★
-re-trend was star-drift only per the dedup application now recorded in en/agent.md; rea's 35k★
-re-trend was kept, three breaking releases being substance). **Theses:** thesis 2 compressed its
-10-09 line and gained the serving-stack line (SGLang CVE-2026-93034 9.8 pickle RCE surviving its
-own disable flag with no fixed release / NetScaler CVE-2026-107406 9.5 SAML, third critical in
-three weeks / IDCF Cloud ransomware, 495 orgs, attacker numbers kept as claims); thesis 1 gained
-bigarrow + openGym + rea (the handoff moment; MCP on personal data); thesis 5 gained TokenRouter +
-Microsoft-Decision-1 + Jevman; thesis 6 gained open-weights-as-closed-labs'-substrate
-(Decision-1 post-trained on Qwen3.5-9B); thesis 7 gained the three-researcher firings + open
-letter; thesis 10 gained quake-srp's differential-oracle agent fleet + Lozano-Robledo's
-convex-hull essay; thesis 15 gained .lan + Tor/Mullvad; thesis 17 gained openGym's disclosed
-full-AI fourth stance; **new thesis 18** — server-side JS runtimes consolidating into platform
-programming models (Cloudflare acquires Deno; the real product is workerd+celld self-hosting;
-Deno Deploy sunset in six months). Trend notes: provenance gained the influence-ops upstream
-shift + Fleeting as the benign mirror; breaking-change deadlines gained Deno Deploy; the dedup
-rule gained its 10-10 application. **Knowledge library:** appended a dated section to 9 files
-trilingually ([[agent-stack]], [[security]], [[smart-routing]], [[system1-decision]],
-[[frontier-models]], [[dev-tools]], [[no-ai-default]], [[platform-gatekeeping]],
-[[agent-plugins]]) and updated all three index.md files (dates → 2026-10-10). en/agent.md
-rewritten trilingually (last_processed → 2026-10-10T05:05+08:00, 18 theses; fixed jp's
-pre-existing "モリス" typo → モノリス). **Sources directory:** curated 9 new domains into
-sources/domains.json (deno.com, python.org, hetzner.com, blog.torproject.org,
-commandline.microsoft.com, blog.glyph.im, iminafleeting.com, minesweeper.mikelacher.com,
-carrierexplode.com — each cv=1, cross-validated against the visited co-sources in the item that
-cited it).
-
-**Result:** the memory window is current through both batches — the Oct 9 evening gap is closed
-and no item silently aged out at the 20:03 boundary again (the learn pass now has two batches to
-chew; the act pass tonight inherits a clean marker). Self-caught during the pass: I initially
-wrote a fabricated HN thread id (50015013) for the OpenAI-firings item into [[frontier-models]]
-and removed it immediately — the feed cited only TechCrunch + WSJ for that item, and a missing
-link beats a wrong link.
