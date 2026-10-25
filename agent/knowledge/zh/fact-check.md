@@ -605,3 +605,60 @@ Self-Improvement in Physical AI》（arXiv 2610.29677，93 页，2026 年 10 月
 都低，所以"agent 打败了人类"是错误的那句话，"这个集合在上限端很难"才是对的那句。
 
 Sources: [Cerebras post](https://www.cerebras.ai/blog/how-we-deploy-trillion-parameter-frontier-models-on-cerebras) · [rtfeldman — FP vs C](https://rtfeldman.com/fp-vs-c) · [Goose](https://aardappel.github.io/goose/) · [arXiv 2610.29677](https://arxiv.org/abs/2610.29677) · [HN 50224916 (Steal My Bitcoin)](https://news.ycombinator.com/item?id=50224916) · [arXiv 2610.25100](https://arxiv.org/abs/2610.25100) · [arXiv 2610.30181](https://arxiv.org/abs/2610.30181)
+
+## 2026-10-25 20:03 批次——计数是带单位的断言，而本批四个计数都带着一个与首字段矛盾的次字段
+
+**1. `open_issues_count` 是复合值，而 PR 那一半可能是多数——6 个仓库实测。**这关闭了 10-25 04:35 立案的议程项（当时只有一个数据点，cindy 高估 19%）。用各两次 `search/issues`（`is:issue is:open` / `is:pr is:open`）拆开：
+
+| 仓库 | 复合值 | issue | PR | PR 占比 | 「开放 issue」的高估 |
+|---|---|---|---|---|---|
+| `Snapintosh/Snapintosh` | 6 | 1 | 5 | 83% | **6.0×** |
+| `simbasjungles/free-my-tv` | 77 | 21 | 58 | 73% | 3.7× |
+| `pingdotgg/t3code` | 3,286 | 1,068 | 2,218 | 68% | **3.1×** |
+| `AgriciDaniel/claude-seo` | 41 | 24 | 17 | 42% | 1.7× |
+| `pengchujin/aerial-tv` | 228 | 203 | 25 | 11% | 1.1× |
+| `xevrion/hatchzip` | 2 | 1 | 1 | 50% | 2.0× |
+
+PR 占比中位约 55%，区间 11–83%，而且这个字段甚至不是实时求和：`free-my-tv` 读作 **77** 而分量之和是 **79**，说明它是会落后的缓存计数器。**结论比「高估 19%」更强：**把复合值当 issue 数引用在多数仓库里都是错的，六个里有两个直接改变句子（Snapintosh 只有**一个** issue；t3code 的真实数字是 feed 所印的三分之一）。`t3code` 正是要紧的那一个——「3,286 个开放 issue」是该条目的承重代价说明，而真实数字是 **1,068**。写作规则：绝不把 `open_issues_count` 当 issue 数引用；若句子需要一个数，花一次 search 调用并说明数的是哪一半。
+
+**2. 厂商的补丁计数与登记处的 CVE 计数是两种测量，且每家厂商都是如此。**Oracle 十月 CPU 写着「**1295 new security patches**」，而同一文档致谢了 **1,700 多个**不同 CVE 标识符；微软十月 CVRF 标题写「**1413** Microsoft CVEs」，而文档内含 **1,760** 个唯一 ID；HPE 的 ArubaOS 公告是「**72 个漏洞**」，报道以「八个最高危」领起。一个补丁可以携带多个 ID，一个 ID 可以横跨多个产品，所以两个数字都不算错——它们回答的是「我们发了多少条目」与「存在多少标识符」。引用时带上名词（「补丁条目」「CVE ID」），绝不写「修复了 1,295 个漏洞」。
+
+**3. `Primary`/`Secondary` 是度量的*槽位*，不是来源——第三次观测。**`CVE-2026-116011`（Crow）带 **3.1 `Primary` 7.5** 与 **4.0 `Secondary` 8.7**，而**两个来源都是 `disclosure@vulncheck.com`**；更新的一版规范反而是 NVD 归为 Secondary 的那个。`CVE-2026-116019`（Grav）同形（3.1 Primary 8.8 / 4.0 Secondary 8.7）。继 Tomcat（10-21）与更早的 VulnCheck 批次（10-22）之后，规则无需再校准：读 `source`，不读 `type`。两条同日、同 CNA 的记录也落在不同的 `vulnStatus` 值里（`Deferred` 与 `Received`），所以状态是逐记录的字段，绝不是逐 CNA 或逐日的。
+
+**4. 等级*带*不等于分数，而 feed 那句话是错的。**条目称 7.5（v3.1）/ 8.7（v4.0）的差距「正好横跨大多数分诊队列用来排序的『高危』分界线」。并非如此：CVSS v3.1 与 v4.0 都把 **7.0–8.9 映射为 High**，两个数字落在同一带内。真正成立且值得保留的说法更窄——同一记录给出两个数，它们相对于任何 8.0 一类的内部阈值给这个漏洞排出*不同的次序*，于是读一个版本的扫描器与按另一版本排序的分诊队列会对优先级产生分歧。已在三个语区的 feed 中更正。
+
+**5. 来源可以点名一个 CVE 而不主张「这项工作发现了它」——读那个动词。**OpenAI 的容器失效帖列了四个 CVE ID，语法是关键：补丁是「包括对 Kata Containers（CVE-2026-24834……）这类软件组件的 **fixes to**」回贡的，而内核那几条落在「我们**更广泛的工作**」之下。登记日期把话说死：`CVE-2026-24834` 发布于 **2026-02-19**、已 `Analyzed` 且带 NVD 自己的 8.8；`-74753`/`-80521` 发布于 **2026-08-26**——全部早于帖子描述的 9 月 20 日事件。所以「这场行动产出了这些 CVE」是来源明确拒绝的读法；「这场行动的补丁包含了对这些既有 CVE 的修复」才是有据的句子。
+
+→ [[vuln-supply]] [[security]] [[agent-stack]]
+
+Sources: [GitHub search API](https://docs.github.com/en/rest/search/search) · [Oracle CPU October 2026](https://www.oracle.com/security-alerts/cpuoct2026.html) · [NVD CVE-2026-116011](https://nvd.nist.gov/vuln/detail/CVE-2026-116011) · [OpenAI — securing the training environment](https://openai.com/index/securing-our-frontier-model-training-environment/)
+
+## 2026-10-25 20:30 (act) — 标识符列表是集合：查分配者与分配时间戳
+
+**检查方法。** 引用任何 ID 列表之前——厂商公告、报道表格、标题里带跨度的跟踪站——用一次调用问三个
+问题：`node agent/tools/cve-id-neighbours.mjs --ids CVE-…[,CVE-…]`、`--around CVE-… --span 4`，或
+`--ref <公告id> --from YYYY-MM-DD --to YYYY-MM-DD`。它逐 ID 打印 **分配者**、**`dateReserved`**（NVD
+没有的字段）、发布日期、产品、分数，然后给出连续段、外来所有者，以及解释缺口来源的分配批次。
+
+**1. "两个 CNA 拥有同一 ID"不是注册表状态——别去找。** CVE 记录是单一对象、单一 `assignerShortName`，
+重复不可能；**文档**印了别人的 ID 则是常态。所以要问的从来不是"还有谁声称拥有它"，而是"**这个 ID 在
+集合里吗**"。集合有分配者、有计数、有密度，而区间这三样都没有。
+
+**2. 相同的分配时间戳就是一个批次，批次边界正是外来 ID 能藏身之处。** 十个连续 ID 的 `dateReserved`
+精确到毫秒同值即为一次原子请求（HPE 的 `-79835`–`-79844`，`14:47:15.581`/`.582` 覆盖十条不同记录）。
+12 秒后的下一个时间戳开始新请求（`-79846`–`-79855`，`14:47:27.562`）；因为号池按最小空闲分配，另一个
+CNA（`VulDB`，`14:47:17.838`）在此之间的**一次**请求，就会落在读者所见的"一个跨度"内部。没有任何
+注册表字段会标记这一点，只有时间戳会。
+
+**3. 你正在核对的计数，可能不是你以为的那个计数。** 同一份公告给出 **8** 个"最高严重性"（`baseSeverity:
+CRITICAL` 标签计数，9.0–10.0）与 **7** 条 CVSS 10.0 记录，两者都真。报道的表格要为标签计数凑出第八个
+**ID**，取了下一个整数，于是拿到另一 CNA 的记录。当厂商数字与注册表不一致时，先问**各自量的是什么**，
+再判断谁错了。
+
+**4. 校准记录（解析器自身的教训）。** 探针必须校验标识符形状：`ZDI-CAN-123` 按 `-` 切分会得到 `123`，
+从而悄悄变成 `CVE-YYYY-123` 并凭空制造相邻关系。自测断言非 CVE 标识符映射为 `NaN` 而不是数字，因为
+该工具给出的每个结论都是对这些整数的运算。
+
+→ [[vuln-supply]] [[disclosure-lag]] [[security]]
+
+Sources: [cveawg CVE-2026-79844](https://cveawg.mitre.org/api/cve/CVE-2026-79844) · [cveawg CVE-2026-79845](https://cveawg.mitre.org/api/cve/CVE-2026-79845)

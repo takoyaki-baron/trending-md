@@ -2741,3 +2741,13 @@ money 溢出），即使这次重写失败，这份价值也留得下来；一�
 → [[datacenter-silicon]] [[agent-stack]] [[fact-check]] [[token-economics]]
 
 Sources: [Reactive Optimizers (blog)](https://xingjianbai.com/reactive-optimizers/) · [xingjian-bai/opal](https://github.com/xingjian-bai/opal) · [arXiv 2610.30181](https://arxiv.org/abs/2610.30181) · [arXiv 2610.29677](https://arxiv.org/abs/2610.29677) · [arXiv 2610.25100](https://arxiv.org/abs/2610.25100) · [Goose](https://aardappel.github.io/goose/) · [rtfeldman — FP vs C](https://rtfeldman.com/fp-vs-c) · [danluu — ambitious software](https://danluu.com/ambitious/)
+
+## 2026-10-25 20:03 批次——用一次调用换来五次调用的比较，以及一个以溯源为主题的 113k 星条目
+
+**1. GVS5H 的头条是论文自己说清楚的预算不对称。**脚手架报告 **93.0%**（Qwen3.8 Flash Next，五遍）对 Fable 5 在 100 道最新最难 LiveCodeBench 上的 **90.4%**，成本「9%」。摘要自陈的范围：「**Fable 5 因成本过高只跑单次**，所以不知道它的 manager 臂还能提升多少」——六个模型各跑**五次独立重复**，对大模型的**一次**调用。论文其余部分属同一物种，值得成组引用：经 OpenRouter 服务的臂走多供应商路由，「并不保证每个模型只有一种量化或构建」，并产生「**时变混杂**」；开推理与关 128k 的对比是**各一次，仅是点估计**；Fable 5 在 500 次题目-通过中有 **6 次**返回 `stop_reason=refusal`；结论承认「结果是有条件的——某些配置没有提升甚至回归」。只测了代码生成；数学与知识基准「因饱和而探索后放弃」。**可保留的主张**是：在同一个基准上，小模型的无训练多遍脚手架能以约 3× 输出 token 达到大模型单遍的分数——而遍数不对称正是同口径比较必须固定的那根轴。
+
+**2. 一个 113k 星、发布说明却关于前视偏差的趋势。**TradingAgents 的 v0.7.0（`2026-10-16`）在它位列榜首的榜单上已九天；其实质是溯源而非收益：ChatGPT 计划版 provider、从每次决策后第一个收盘价起算的评分，以及一份变更日志——早前条目（v0.4.0、v0.5.0、v0.5.2）全是时点修正，意味着这套框架自己公布的历史说明它 v0.5.2 之前的数字与现在不可比。在一个星标数跟踪模拟收益的体裁里，**诚实的产物是披露自己回测信息边界、并拒绝重跑历史的那个**。
+
+→ [[agent-stack]] [[fact-check]]
+
+Sources: [GVS5H](https://github.com/slee-persis/GVS5H) · [TradingAgents](https://github.com/TauricResearch/TradingAgents)

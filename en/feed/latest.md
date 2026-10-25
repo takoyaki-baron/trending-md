@@ -1,6 +1,6 @@
 ---
 date: 2026-10-25
-updated: 2026-10-25T12:16:53Z
+updated: 2026-10-25T12:42:04Z
 schedule: 04:03, 12:03, 20:03 UTC+8
 sources: 36
 license: CC-BY-4.0
@@ -500,17 +500,19 @@ EPFL's Integrated Neurotechnologies Lab (Mahsa Shoaran's group) built **LogSync*
 
 ---
 
-## 36. HPE ships 72 ArubaOS fixes with seven 10.0s — and the eighth CVE ID resolves to someone else's SQL injection
+## 36. HPE ships 72 ArubaOS fixes with seven CVSS 10.0s — and coverage's eighth ID belongs to another CNA
 
-- **Velocity:** ▮▮▮ trending
-- **Source:** BleepingComputer / HPE Security Advisory / NVD · 8 max-severity CVEs · published 2026-10-22
+- **Velocity:** ▮▮ rising
+- **Source:** HPE Security Advisory / BleepingComputer / cveawg · 72 fixes · 7× CVSS 10.0 (CNA-assigned) · published 2026-10-22
 - **Tags:** `arubaos` `cve` `hpe` `authentication-bypass` `nvd`
 
-HPE's advisory covers **72 vulnerabilities** in **ArubaOS (AOS-8 and AOS-10)**, the software behind Aruba's mobility conductors, controllers, gateways and access points, and the press release leads with **eight maximum-severity** flaws reachable by a remote unauthenticated attacker at low complexity with no user interaction. Seven of those eight carry **CVSS 3.1 10.0 assigned by `security-alert@hpe.com`** on records published 2026-10-22 that NVD has not analyzed: `CVE-2026-79844` and `-79850` (CWE-288 authentication bypass), `-79846` (command injection), `-79847` and `-79851` (CWE-119 buffer overflow), `-79848` and `-79849` (CWE-89 SQL injection). HPE's own descriptions attach a clause the score does not: exploitation works "**if certain preconditions outside of the attacker's control are met**."
+HPE's advisory covers **72 vulnerabilities** in **ArubaOS (AOS-8 and AOS-10)**, the software behind Aruba's mobility conductors, controllers, gateways and access points, and the press release leads with **eight maximum-severity** flaws reachable by an unauthenticated remote attacker at low complexity with no user interaction. **Seven** of those eight carry **CVSS 3.1 10.0 assigned by `security-alert@hpe.com`** on records published 2026-10-22 that NVD has not analyzed: `CVE-2026-79844` and `-79850` (CWE-288 authentication bypass), `-79846` (command injection), `-79847` and `-79851` (CWE-119 buffer overflow), `-79848` and `-79849` (CWE-89 SQL injection). HPE's own descriptions attach a clause the score does not: exploitation works "**if certain preconditions outside of the attacker's control are met**."
 
-**Why it matters:** the eighth row is the interesting one. `CVE-2026-79845`, listed in coverage as "Authentication Bypass in the PAPI Protocol of AOS-10", resolves on NVD to **a SQL injection in `code-projects Simple Inventory System 1.0`**, published **2026-08-25** by `cna@vuldb.com`, whose only references are vuldb.com pages — a different product, a different CNA, two months earlier. So one of the eight numbers does not point at ArubaOS at all, and a fleet inventory keyed on the published CVE list will mark that host "not affected" for a record that describes someone else's PHP app. The remaining seven are 10.0s **before** any independent analysis, and HPE states it is "not aware of any public discussion or exploit code" — a vendor's absence claim, on the day of release, for a product class that sits at the edge of the network.
+**Why it matters:** the eighth row is where the coverage table breaks, and the break is instructive. Its ID, `CVE-2026-79845`, resolves on NVD to **a SQL injection in `code-projects Simple Inventory System 1.0`**, published **2026-08-25** by `cna@vuldb.com` — a different product, a different CNA, two months earlier. Counting HPE's own records first-hand: **71** cite the advisory, **exactly seven** score 10.0, and **none of them is 79845**; the PAPI authentication bypass that row describes is `CVE-2026-79873`, at **9.3** (`AV:ADJACENT_NETWORK`, `baseSeverity: CRITICAL`). So "eight" is a **label** count and "seven" a **score** count, and the only wrong field in the table is the ID — the flaw is real. The ID landed there by allocation, not by error in any registry: HPE's `-79835`–`-79844` share one reservation stamp (14:47:15.581–.582Z), VulDB took `-79845` **2.26 seconds later**, and HPE's next batch starts at `-79846` (14:47:27.562Z) — the pool hands out the lowest free ID per request, so one foreign reservation splits a vendor's block. No ID can be claimed by two CNAs; a *table* can print a neighbour's. What still holds is the operational consequence: an inventory keyed on the coverage list carries one ID that describes someone else's PHP app, so a scanner reports the controller "not affected". The seven real 10.0s are scores **before** any independent analysis, and HPE states it is "not aware of any public discussion or exploit code" — a vendor's absence claim, on the day of release, for a product class that sits at the edge of the network.
 
-[`🔗 HPE advisory (hpesbnw05162en_us)`](https://support.hpe.com/hpesc/public/docDisplay?docId=hpesbnw05162en_us&docLocale=en_US) · [`🔗 NVD — CVE-2026-79845`](https://nvd.nist.gov/vuln/detail/CVE-2026-79845) · [`🔗 BleepingComputer`](https://www.bleepingcomputer.com/news/security/hpe-patches-eight-max-severity-rce-and-auth-bypass-aos-flaws/)
+**Correction (2026-10-25 20:30):** this item originally called the eighth row a CVE-ID collision and framed the question as what the CVE Program does when two CNAs claim one ID. Checked first-hand against `cveawg`'s `assignerShortName` and `dateReserved` fields: a duplicate is structurally impossible, and HPE's 71 records contain no foreign ID at all — the range in the coverage table (`79844`–`79851`) was the artifact. Title, body and velocity corrected in all three locales.
+
+[`🔗 cveawg — CVE-2026-79845 (assigner + dateReserved)`](https://cveawg.mitre.org/api/cve/CVE-2026-79845) · [`🔗 HPE advisory (hpesbnw05162en_us)`](https://support.hpe.com/hpesc/public/docDisplay?docId=hpesbnw05162en_us&docLocale=en_US) · [`🔗 NVD — CVE-2026-79873`](https://nvd.nist.gov/vuln/detail/CVE-2026-79873) · [`🔗 BleepingComputer`](https://www.bleepingcomputer.com/news/security/hpe-patches-eight-max-severity-rce-and-auth-bypass-aos-flaws/)
 
 ---
 
@@ -580,7 +582,7 @@ Kaspersky found a UEFI bootkit it calls **BlackX** in an espionage campaign agai
 
 **T3 Code** calls itself an "**agent harness control surface**": it drives the agents already installed on your machine — **Claude Code, Codex, Cursor, Grok Build, OpenCode and Google Antigravity** — from a mobile app (iOS and Android, both live in the stores), a web app at `app.t3.codes`, and an Electron desktop app. Setup is by CLI (`curl … | sh`, `brew install --cask t3-code`, `winget`, `scoop`), and the README requires that you install and authenticate at least one provider's own CLI first, so it is a front end over sessions you own rather than a reseller of model access. The project is MIT-licensed and answers the obvious question itself — under "**Wait, what are you selling me?**" it says "Nothing," and points at the fork button.
 
-**Why it matters:** the design constraint is the interesting part. Each of these harnesses already persists its own session state on disk, so a control surface that composes them has to read and drive six unrelated formats — and the repo's **3,286 open issues**, against 29.9k stars and a same-day push, is what that composition costs in practice. It also marks a shift in where the competition sits: not which model or which harness, but which view sits above all of them, on a phone, while the work runs on a machine at home. Worth knowing before adopting: the subscription you are remote-controlling is the vendor's, and this project's own terms say it will not stand between you and the CLI.
+**Why it matters:** the design constraint is the interesting part. Each of these harnesses already persists its own session state on disk, so a control surface that composes them has to read and drive six unrelated formats — and its **3,286 open issues and pull requests** (**2,218** PRs, **1,068** issues; measured 2026-10-25), against 29.9k stars and a same-day push, is what that composition costs in practice. It also marks a shift in where the competition sits: not which model or which harness, but which view sits above all of them, on a phone, while the work runs on a machine at home. Worth knowing before adopting: the subscription you are remote-controlling is the vendor's, and this project's own terms say it will not stand between you and the CLI.
 
 [`🔗 pingdotgg/t3code`](https://github.com/pingdotgg/t3code) · [`🔗 t3.codes`](https://t3.codes)
 
@@ -650,7 +652,7 @@ Oracle's **October 2026 Critical Patch Update** contains "**1295 new security pa
 
 Three records published **2026-10-24**, all scored by `disclosure@vulncheck.com`, none analyzed by NVD. **`CVE-2026-116019`** — Grav **2.0.15 through 2.2.12**, fixed in **2.2.13** — is an **allowlist bypass** in Flex form overrides: a user with page-edit permission can relocate `data-*@` directives using `unset-name@` or integer keys and invoke arbitrary public static methods such as `Folder::delete` or `Utils::download`, deleting directories, overwriting files or reading them. **`CVE-2026-116009`** — Camaleon CMS before **2.9.3** — is a path traversal in the media `crop_url` action: a base64 `data:` URI plus `../` in the `name` parameter writes an **ERB template** into a theme's views directory, which then executes. **`CVE-2026-116011`** — Crow before **1.3.4** — is uncontrolled recursion in `crow::json::load()`: a request body with thousands of nested objects exhausts the worker thread stack and kills the process, unauthenticated.
 
-**Why it matters:** all three carry **two CVSS versions from the same scorer, and they do not agree**. Grav and Camaleon read **3.1 8.8 / 4.0 8.7**; Crow reads **3.1 7.5 / 4.0 8.7** — the same vulnerability is 1.2 points apart depending on which version a scanner reads, and that gap straddles the "high" boundary most triage queues sort on. Crow's is also a **fix-predates-record** case: **v1.3.4 shipped 2026-09-07**, 47 days before the CVE existed, and that release bundles several other security advisories besides this one — so "upgrade to 1.3.4" was already the right advice for unrelated reasons. And the deepest access requirement is the one to read carefully: Camaleon needs only **media permission** to reach RCE, which is exactly the permission a CMS grants to people who are not trusted with code.
+**Why it matters:** all three carry **two CVSS versions from the same scorer, and they do not agree**. Grav and Camaleon read **3.1 8.8 / 4.0 8.7**; Crow reads **3.1 7.5 / 4.0 8.7** — the same vulnerability is 1.2 points apart depending on which version a scanner reads, and both v3.1 and v4.0 map 7.0–8.9 to *High*, so the two numbers share a band while ordering the bug differently against any 8.0-class internal bar. Crow's is also a **fix-predates-record** case: **v1.3.4 shipped 2026-09-07**, 47 days before the CVE existed, and that release bundles several other security advisories besides this one — so "upgrade to 1.3.4" was already the right advice for unrelated reasons. And the deepest access requirement is the one to read carefully: Camaleon needs only **media permission** to reach RCE, which is exactly the permission a CMS grants to people who are not trusted with code.
 
 [`🔗 NVD — CVE-2026-116019 (Grav)`](https://nvd.nist.gov/vuln/detail/CVE-2026-116019) · [`🔗 GHSA-47gg-mh38-9rr7`](https://github.com/getgrav/grav/security/advisories/GHSA-47gg-mh38-9rr7) · [`🔗 GHSA-7x84-xhp8-6cqj (Crow)`](https://github.com/CrowCpp/Crow/security/advisories/GHSA-7x84-xhp8-6cqj)
 
@@ -716,7 +718,7 @@ Wes Bos's **3D Model Anything** ships three things: an **iPhone app** that captu
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-10-25T12:16:53Z |
+| Generated | 2026-10-25T12:42:04Z |
 | Items | 50 |
 | Sources tracked | 36 (Hacker News, GitHub Trending, Hugging Face, arXiv, NVD, CVE Program, CISA KEV, Oracle CPU, HPE, Kaspersky Securelist, BleepingComputer, OpenAI, Reuters, InfoQ, EPFL, Cerebras, vendor blogs, engineering blogs) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (3x daily) |

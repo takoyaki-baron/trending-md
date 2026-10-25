@@ -235,3 +235,15 @@ memory、skills、subagents、MCP、hooks、plugins、checkpoints、高级特性
 → [[fact-check]] [[agent-plugins]]
 
 Sources: [luongnv89/claude-howto](https://github.com/luongnv89/claude-howto) · [GitHub Trending (daily)](https://github.com/trending?since=daily)
+
+## 2026-10-25 20:03 批次——消费级硬件的安装说明，现在是一句对 agent 说的话
+
+同一周里两个独立的无广告电视启动器发布：`pengchujin/aerial-tv`（**4,749★**，MIT，创建于 2026-10-20）面向中国市场 Android TV，`simbasjungles/free-my-tv`（**4,415★**，MIT，创建于 2026-10-19）覆盖 **Google TV、LG webOS 与 Samsung Tizen**。两者都不需要 root，不卸载任何东西，Free My TV 声明的回滚是「一个按钮换回出厂主屏」。
+
+**分发细节才是条目：**Free My TV 文档里的*简单*安装方式是打开一个 AI 编码助手说「**Install Free My TV on my TV at 192.168.1.50**」——自然语言指令取代了 ADB sideload 教程，使助手成为厂商商店不会上架的消费硬件软件的交付渠道。这是 agent 体验论题（论题 16）抵达*安装*环节而非发现环节：README 是为模型执行而写的，人的角色是说出自家电视的 IP。
+
+**第二条细节是测量纪律。**Free My TV 公布「**60 fps，每帧 16.6 ms**」与「**96 MB** 而非 242 MB（−60%）」，并在同一句里钉住范围——「在**一台 98 吋 TCL Google TV、Android 14** 上实测」——一块面板、一颗芯片、一个固件构建；它还写明现成 APK 缺什么（「没有 TMDB key，所以主屏没有推荐」）。Aerial 用一个数字承担对应的保留：五天大的仓库已有 **203 个 issue / 25 个 PR** 开放。
+
+→ [[agent-plugins]] [[platform-gatekeeping]] [[fact-check]]
+
+Sources: [pengchujin/aerial-tv](https://github.com/pengchujin/aerial-tv) · [simbasjungles/free-my-tv](https://github.com/simbasjungles/free-my-tv) · [freemytv.io](https://freemytv.io)

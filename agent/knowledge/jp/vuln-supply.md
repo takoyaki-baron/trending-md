@@ -490,3 +490,66 @@ CWE-862（`secalert@redhat.com`）」と書くか、source の区分を明示す
 → [[disclosure-lag]] [[security]] [[fact-check]]
 
 出典：[NVD CVE API 2.0](https://services.nvd.nist.gov/rest/json/cves/2.0) · [CVE-2026-115557](https://cveawg.mitre.org/api/cve/CVE-2026-115557) · [CVE-2026-114406](https://cveawg.mitre.org/api/cve/CVE-2026-114406) · [NVD CVE-2026-116014](https://nvd.nist.gov/vuln/detail/CVE-2026-116014)
+
+## 2026-10-25 20:03 バッチ——CVE ID は資産キーであり、このバッチの 1 つの ID は別の製品に解決する
+
+**1. 件数の口径をベンダー規模で見る。**Oracle の 10 月 CPU は「**1295 new security patches**」、同一文書で **1,700 超**の異なる CVE 識別子をクレジットし、Java SE は 8u503 / 11.0.32.1 / 17.0.20.1 / 21.0.12.1 / 25.0.4.1 / 26.0.2 / 27 を覆う。HPE の ArubaOS は **72 の脆弱性**で「最大深刻度 8 件」と報じられ、うち **7 件**が `security-alert@hpe.com` の **10.0** を持ち、すべて `Received` かつ **NVD 採点 0**——スコアは CNA のもので未解析、しかもネットワークの縁に座る機器クラスである。Microsoft の 10 月 CVRF（規則 7 の校正済み双子）は **1,413** 件の記述項目に対し **1,760** の一意 ID。繰り返す算術：パッチ ≠ CVE ≠ 影響製品であり、名詞はベンダーごとに違う。名詞を書くこと。
+
+**2. リリース日の遅れを 1 つの ID で実測。**`CVE-2026-114820`（Java SE / GraalVM、**9.1 / CWE-327**）は **2026-10-24** に登録簿へ公開された——**パッチ出荷の 10 月 20 日より 4 日後**——で、Oracle の `secalert_us@oracle.com` 指標のみ、状態 `Received`、NVD 指標 0。CVE フィードの充填を待つ資産所有者は、勧告の日付が示すより遅れてパッチを当てることになり、この遅れの向きは深刻度ではなくワークフローが決める。
+
+**3. 資産キーの破綻は、スコアの誤りより悪い。**`CVE-2026-79845` は報道では HPE の ArubaOS 最大深刻度 8 件の一つだが、NVD 上では **VulDB 割当の無関係な PHP 在庫アプリの SQL インジェクション**で、**2026-08-25** 公開（`Deferred`、VulDB の 3 スコア、NVD 0）。CVE ID をキーにしたスキャンは、影響を受ける Aruba コントローラを*79845 の影響なし*と報告する——レコードは運用者が動かしていないソフトを記述しているからだ——一方、トリアージが並べ替えに使う数（3.1 の 7.3）は誤った製品に付いている。**スコア来歴の規則ではこれを捕まえられない**：誤ったレコードの各フィールドは内部的に整合しているからだ。捕まえられるのは、レコードの製品が勧告の主張と一致するか、そしてベンダー文書（ここでは読めない——`doc-twin` は **JS シェル、本文 0 文字**を返す）と `keywordSearch` が裏づけるかである。公開ウィンドウに対する `keywordSearch=ArubaOS` は、実在する集合に **0 件**を返す——説明文が AOS-10/PAPI だからだ。キーワード検索は発見の手掛かりであり、センサスでも反証でもない。
+
+**4. このバッチを採点したのは CNA で、週を通じて例外は 1 件。**HPE の 7 件（`security-alert@hpe.com`）、Oracle の 9.1（`secalert_us@oracle.com`）、VulnCheck の 3 件（`disclosure@vulncheck.com`）——すべて `Received`/`Deferred`、すべて **NVD 採点 0**。例外は OpenAI の投稿が*既存*の欠陥として指すレコード：`CVE-2026-24834`、`Analyzed`、**NVD 自身の 8.8 Primary** に GitHub 9.3 と CISA-ADP 9.3 が並ぶ。対照として残す価値がある：NVD が解析したレコードはこういう形で、この週のほぼ何もそうではない。再確認：VulnCheck の 2 つの CVSS 版は**同一ソース**でありながら**異なる `type` スロット**（3.1 `Primary`、4.0 `Secondary`）に入る。スロットは来歴の主張ではない。
+
+**5. 持ち帰るべき修復事実 2 つ。**Grav `CVE-2026-116019`（Flex フォーム上書きの許可リスト回避：ページ編集権限の利用者が `data-*@` 指令を移して `Folder::delete` / `Utils::download` を呼ぶ）は **2.2.13** で修正。Camaleon `CVE-2026-116009` は**メディア権限だけ**で ERB テンプレートをテーマに書き込み実行に到達する（**2.9.3** で修正）。Crow `CVE-2026-116011` は未認証のスタック枯渇で **v1.3.4（2026-09-07 出荷、レコードより 47 日早い）** で修正（`fix-predates-record`）。そのリリースは無関係な修正も含むため「1.3.4 へ上げる」は既に正しい助言だった。
+
+→ [[disclosure-lag]] [[security]] [[fact-check]]
+
+Sources: [Oracle CPU October 2026](https://www.oracle.com/security-alerts/cpuoct2026.html) · [NVD CVE-2026-79845](https://nvd.nist.gov/vuln/detail/CVE-2026-79845) · [NVD CVE-2026-114820](https://nvd.nist.gov/vuln/detail/CVE-2026-114820) · [GHSA-7x84-xhp8-6cqj (Crow)](https://github.com/CrowCpp/Crow/security/advisories/GHSA-7x84-xhp8-6cqj)
+
+## 2026-10-25 20:30 (act) — 一つの ID に一人の割当者：衝突ではなく**範囲**が誤りで、割当は時刻を持つ
+
+**問い（10-25 20:16 起票）：公開済みの CVE ID が二人の CNA に帰属しうるか、CVE Program はどう扱うか。
+答えは「起こりえない」であり、このバッチの誤りは**範囲**であって重複ではなかった。**
+`CVE-2026-79845` は `PUBLISHED`、`assignerShortName: VulDB`、ベンダー `code-projects`、製品
+`Simple Inventory System 1.0`、公開 **2026-08-25T22:00:11Z**——記録は一つ、所有者も一つで、この ID の
+下に第二の記録は存在しない。HPE はこれを一度も持っていない。
+
+**1. 予約（reservation）イベントだけが機構を可視化し、`dateReserved` を持つのは cveawg だけ。**
+NVD にこのフィールドはなく、それが本リポジトリの全ツールが記録を読めても割当を見られなかった理由である。
+三つの時刻で決着する：
+
+| 記録 | 割当者 | `dateReserved` | 意味 |
+|---|---|---|---|
+| `CVE-2026-79835`–`-79844` | hpe | 2026-08-25T14:47:15.581–.582Z | **10 件の原子的バッチ**（ミリ秒まで同一） |
+| `CVE-2026-79845` | **VulDB** | **2026-08-25T14:47:17.838Z** | 別 CNA、**2.26 秒後** |
+| `CVE-2026-79846`–`-79855` | hpe | 2026-08-25T14:47:27.562–.563Z | HPE の**次の**バッチ、**9.72 秒後** |
+
+プールは**リクエストごとに最小の空き ID** を払い出す。ベンダーの二回のリクエストの間に他者の一度の
+リクエストが入るとブロックが分割され、一個だけの島が残る——ここでは `-79844`（AOS-10 の 10.0）で、
+片側が VulDB の PHP アプリ、もう片側が 50 件の HPE ArubaOS 記録である。ベンダーの運用ではなく共有
+カウンタの帰結だ。したがって「二者が同じ ID を使った」は**レジストリ**の状態ではなく**文書**の状態で
+あり、記録のどのフィールドもそれを示さない。
+
+**2. アドバイザリは集合であり、密度は 0.45%。** `cve-id-neighbours.mjs --ref hpesbnw05162` の実測：
+**71** 件が当該アドバイザリを参照（すべて `security-alert@hpe.com`、公開日 2026-10-22）し、**4 本の
+連続区間**——`{79844}`、`79846–79895`（50）、`79955–79956`（2）、`95704–95721`（18）——に分かれ、
+**15,878** 個の ID 値をまたぐ。ベンダーの公開集合は構造的に範囲ではない。あるトラッカーの見出しに
+ある「`CVE-2026-79844` **から** `-79851`」と八件の ID 列は構成物である。
+
+**3. その 8 はラベル件数で、八行のうち誤っているのは ID だけ。** 71 件のうち**ちょうど 7 件**が 10.0。
+八番目の「最大深刻度」行は `CVE-2026-79873`——*"Unauthenticated Adjacent Authentication Bypasses in
+the PAPI Protocol of AOS-10"*、**9.3**、`AV:ADJACENT_NETWORK`、`baseSeverity: CRITICAL`、影響範囲は
+同じ（≤10.8.1.1 / ≤10.7.2.6）。つまり「八件」（Critical ラベル）と「七件」（CVSS 10.0）はどちらも
+正しく、別のものを測っている。表の誤りは連続した ID を実在の ID の代わりに置いた一点である。
+CLAUDE.md ルール 6 の「ラベル ≠ 閾値」の三度目の出現であり、単位の取り違えが**行を捏造した**最初の例。
+
+**4. 利用者側のコストを正確に。** **アドバイザリ**を鍵にした台帳（references は HPE の記録だけを指す）
+は 71 行すべて正しい。**報道の八行表**を鍵にすると、PHP アプリを記述する ID を一つ抱え込む：Aruba
+コントローラで `79845` をスキャンすると「影響なし」となり、トリアージは VulDB の 6.9/7.3/7.5 で
+その記録を並べる。`keywordSearch=ArubaOS` はこの集合に対していまも **0 件**（説明文は AOS-8/AOS-10/
+PAPI）。レジストリは製品名で列挙できず、references フィールドだけが到達経路になる。
+
+→ [[disclosure-lag]] [[security]] [[fact-check]]
+
+Sources: [cveawg CVE-2026-79845](https://cveawg.mitre.org/api/cve/CVE-2026-79845) · [cveawg CVE-2026-79873](https://cveawg.mitre.org/api/cve/CVE-2026-79873) · [NVD CVE-2026-79845](https://nvd.nist.gov/vuln/detail/CVE-2026-79845)

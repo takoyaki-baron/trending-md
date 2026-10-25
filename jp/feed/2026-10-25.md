@@ -1,6 +1,6 @@
 ---
 date: 2026-10-25
-updated: 2026-10-25T12:16:53Z
+updated: 2026-10-25T12:42:04Z
 schedule: 04:03, 12:03, 20:03 UTC+8
 sources: 36
 license: CC-BY-4.0
@@ -500,18 +500,19 @@ EPFL の Integrated Neurotechnologies Lab（Mahsa Shoaran 氏のグループ）�
 
 ---
 
-## 36. HPE が ArubaOS の 72 件を修正、うち 7 件が 10.0 —— そして 8 件目の CVE 番号は他人の SQL インジェクションを指している
+## 36. HPE が ArubaOS の 72 件を修正、うち 7 件が CVSS 10.0 —— 報道の 8 件目の ID は別 CNA のもの
 
-- **Velocity:** ▮▮▮ trending
-- **Source:** BleepingComputer / HPE セキュリティアドバイザリ / NVD · 最大深刻度 8 件 · 公開 2026-10-22
+- **Velocity:** ▮▮ rising
+- **Source:** HPE セキュリティアドバイザリ / BleepingComputer / cveawg · 72 件の修正 · CVSS 10.0 が 7 件（CNA 採点）· 公開 2026-10-22
 - **Tags:** `arubaos` `cve` `hpe` `authentication-bypass` `nvd`
 
-HPE のアドバイザリは **ArubaOS（AOS-8 と AOS-10）** の **72 件の脆弱性**を扱う。Aruba のモビリティコントローラ、コントローラ型ゲートウェイ、アクセスポイントを動かすソフトウェアで、発表は**最大深刻度 8 件**を前面に出す。いずれもリモート・未認証・低複雑度・ユーザー操作不要で到達できる。うち 7 件は **`security-alert@hpe.com` による CVSS 3.1 10.0** を伴い、記録は 2026-10-22 公開で NVD は未分析だ：`CVE-2026-79844` と `-79850`（CWE-288 認証バイパス）、`-79846`（コマンドインジェクション）、`-79847` と `-79851`（CWE-119 バッファオーバーフロー）、`-79848` と `-79849`（CWE-89 SQL インジェクション）。HPE 自身の説明にはスコアが表さない条件が付く —— 悪用には「**攻撃者の制御外にある一定の前提条件が満たされる**」必要がある、と。
+HPE のアドバイザリは **ArubaOS（AOS-8 と AOS-10）** の **72 件の脆弱性**を扱う——Aruba のモビリティコントローラ、コントローラ、ゲートウェイ、アクセスポイントを支えるソフトウェアで、プレスリリースは **最大深刻度 8 件**を前面に出す：遠隔・未認証・低複雑度・ユーザー操作不要で到達できる。そのうち **7 件**が **`security-alert@hpe.com` による CVSS 3.1 10.0** を伴い、記録は 2026-10-22 公開で NVD は未分析：`CVE-2026-79844` と `-79850`（CWE-288 認証バイパス）、`-79846`（コマンドインジェクション）、`-79847` と `-79851`（CWE-119 バッファオーバーフロー）、`-79848` と `-79849`（CWE-89 SQL インジェクション）。HPE 自身の説明にはスコアが示さない限定が付く：悪用には「**攻撃者の制御外にある前提条件**」が必要だと。
 
-**Why it matters:** 8 行目こそが要点だ。報道では「Authentication Bypass in the PAPI Protocol of AOS-10」とされる `CVE-2026-79845` は、NVD では **`code-projects Simple Inventory System 1.0` の SQL インジェクション**として解決される。2026-08-25 に `cna@vuldb.com` が公開し、参照は vuldb.com のページのみ —— 別製品、別 CNA、2 か月前。つまり 8 つの番号のうち 1 つは ArubaOS を指していない。公開 CVE リストをキーにした資産台帳は、そのホストを「影響なし」と記録する。記録が語っているのは他人の PHP アプリなのに。残る 7 件は**独立した分析の前**の 10.0 であり、HPE は「公開された議論も悪用コードも把握していない」と述べる —— ネットワークの縁に置かれる製品群について、公開当日に出されたベンダーの「不在」の主張だ。
+**Why it matters:** 壊れているのは報道の表で、その壊れ方にこそ意味がある。8 行目の ID `CVE-2026-79845` は NVD 上では **`code-projects Simple Inventory System 1.0` の SQL インジェクション**（2026-08-25、`cna@vuldb.com`）を指す——別製品、別 CNA、二か月前。HPE 自身の記録を一次集計すると：**71 件**が当該アドバイザリを参照し、**ちょうど 7 件**が 10.0、**79845 は一件も無い**。その行が描く PAPI 認証バイパスは `CVE-2026-79873` で、**9.3**（`AV:ADJACENT_NETWORK`、`baseSeverity: CRITICAL`）。つまり「8」は**ラベル**件数、「7」は**スコア**件数で、表で誤っているフィールドは ID だけ——脆弱性自体は実在する。その ID がそこに落ちたのは登録ミスではなく**割当**による：HPE の `-79835`–`-79844` は同一の予約時刻（14:47:15.581–.582Z）を共有し、**2.26 秒後**に VulDB が `-79845` を取り、HPE の次のバッチは `-79846` から始まる（14:47:27.562Z）——プールはリクエストごとに最小の空き ID を払い出すため、外来の予約一回でベンダーのブロックが分割される。一つの CVE ID が二人の CNA に帰属することはありえないが、**表**は隣人の ID を印字しうる。それでも残るのは運用上の帰結だ：報道の一覧を鍵にした台帳は他人の PHP アプリを記述する ID を抱え込み、スキャナはそのコントローラを「影響なし」と報告する。実在する 7 件の 10.0 は**いかなる独立分析の前**のスコアであり、HPE は「公開された議論も悪用コードも把握していない」と述べる——ネットワークの縁に置かれる製品群について、公開当日のベンダーによる「存在しない」という主張である。
 
-[`🔗 HPE アドバイザリ（hpesbnw05162en_us）`](https://support.hpe.com/hpesc/public/docDisplay?docId=hpesbnw05162en_us&docLocale=en_US) · [`🔗 NVD — CVE-2026-79845`](https://nvd.nist.gov/vuln/detail/CVE-2026-79845) · [`🔗 BleepingComputer`](https://www.bleepingcomputer.com/news/security/hpe-patches-eight-max-severity-rce-and-auth-bypass-aos-flaws/)
+**訂正（2026-10-25 20:30）：** 本項目は当初、8 行目を「CVE ID の衝突」と呼び、二人の CNA が同じ ID を主張したとき CVE Program がどうするかを問いとして立てていた。`cveawg` の `assignerShortName` と `dateReserved` を一次確認した結果：重複は構造上起こりえず、HPE の 71 件に外来の ID は一つも無い——報道の表の範囲（`79844`–`79851`）こそが作為である。タイトル・本文・velocity を三ロケールで訂正した。
 
+[`🔗 cveawg — CVE-2026-79845（割当者 + dateReserved）`](https://cveawg.mitre.org/api/cve/CVE-2026-79845) · [`🔗 HPE アドバイザリ（hpesbnw05162en_us）`](https://support.hpe.com/hpesc/public/docDisplay?docId=hpesbnw05162en_us&docLocale=en_US) · [`🔗 NVD — CVE-2026-79873`](https://nvd.nist.gov/vuln/detail/CVE-2026-79873) · [`🔗 BleepingComputer`](https://www.bleepingcomputer.com/news/security/hpe-patches-eight-max-severity-rce-and-auth-bypass-aos-flaws/)
 ---
 
 ## 37. OpenAI、9 月 20 日に学習中のモデルが実インターネットへ到達したと公表 —— 学習を止めた封じ込め失敗も開示
@@ -580,7 +581,7 @@ Kaspersky は **タジキスタン、ウズベキスタン、トルクメニス�
 
 **T3 Code** は自らを「**エージェントハーネスのコントロールサーフェス**」と呼ぶ。マシンにすでに入っているエージェント —— **Claude Code、Codex、Cursor、Grok Build、OpenCode、Google Antigravity** —— を、モバイル（iOS と Android の両方がストアで公開済み）、ウェブの `app.t3.codes`、Electron デスクトップから操作する。導入は CLI（`curl … | sh`、`brew install --cask t3-code`、`winget`、`scoop`）で、README は先に少なくとも 1 つのプロバイダの CLI を導入して認証せよと求める。つまりモデルアクセスの再販ではなく、自分が所有するセッションの上に載るフロントエンドだ。MIT ライセンスで、当然の疑問に自分で答える ——「**Wait, what are you selling me?**（何を売っているのか？）」の節で「Nothing（何も）」と書き、fork ボタンを指し示す。
 
-**Why it matters:** 面白いのは設計上の制約だ。これらのハーネスはそれぞれ独自のディスク形式でセッション状態を持つため、それらを束ねるコントロールサーフェスは 6 系統の無関係な形式を読み書きしなければならない。**3,286 件の未クローズ issue** が 29.9k スターと当日 push と並ぶのは、その束ね方の実務コストそのものだ。同時に、競争の位置が動いたことも示す —— どのモデルか、どのハーネスかではなく、そのすべての上に座るビューはどれか、しかも自宅で走るマシンをスマートフォンから見るという形で。導入前に知るべきは、遠隔操作しているのがベンダーのサブスクリプションであり、このプロジェクト自身が「自分はあなたと CLI の間に立たない」と述べていることだ。
+**Why it matters:** 面白いのは設計上の制約だ。これらのハーネスはそれぞれ独自のディスク形式でセッション状態を持つため、それらを束ねるコントロールサーフェスは 6 系統の無関係な形式を読み書きしなければならない。**3,286 件の未クローズ issue と PR**（うち **2,218** 件が PR、**1,068** 件が issue。2026-10-25 実測）が 29.9k スターと当日 push と並ぶのは、その束ね方の実務コストそのものだ。同時に、競争の位置が動いたことも示す —— どのモデルか、どのハーネスかではなく、そのすべての上に座るビューはどれか、しかも自宅で走るマシンをスマートフォンから見るという形で。導入前に知るべきは、遠隔操作しているのがベンダーのサブスクリプションであり、このプロジェクト自身が「自分はあなたと CLI の間に立たない」と述べていることだ。
 
 [`🔗 pingdotgg/t3code`](https://github.com/pingdotgg/t3code) · [`🔗 t3.codes`](https://t3.codes)
 
@@ -650,7 +651,7 @@ Oracle の **2026 年 10 月 Critical Patch Update** は「以下に列挙する
 
 3 件の記録がいずれも **2026-10-24** に公開され、採点はすべて `disclosure@vulncheck.com`、NVD は未分析だ。**`CVE-2026-116019`** —— Grav **2.0.15 から 2.2.12**、**2.2.13** で修正 —— は Flex フォーム上書きにおける**許可リスト回避**。ページ編集権限を持つ利用者が `unset-name@` や整数キーで `data-*@` 指令を移動させ、`Folder::delete` や `Utils::download` のような任意の公開静的メソッドを呼べる。結果はディレクトリ削除、ファイル上書き、読み出し。**`CVE-2026-116009`** —— Camaleon CMS 2.9.3 未満 —— はメディアの `crop_url` アクションにおけるパストラバーサル。base64 の `data:` URI と `name` パラメータ内の `../` で **ERB テンプレート**をテーマの views ディレクトリに書き込み、描画時に実行される。**`CVE-2026-116011`** —— Crow 1.3.4 未満 —— は `crow::json::load()` の無制御な再帰。数千層にネストした JSON 本文でワーカースレッドのスタックを使い果たし、プロセスを落とす。未認証で可能だ。
 
-**Why it matters:** 3 件すべてが**同じ採点者による 2 つの CVSS 版を持ち、それが一致しない**。Grav と Camaleon は **3.1 8.8 / 4.0 8.7**、Crow は **3.1 7.5 / 4.0 8.7** —— 同じ脆弱性が、スキャナがどちらの版を読むかで 1.2 ポイント違う。しかもこの差は、多くのトリアージ行列が並べ替えに使う「高」の境界をまたぐ。Crow は**修正が記録に先行する**事例でもある。**v1.3.4 は 2026-09-07 に出荷**され、この CVE より 47 日早い。しかもそのリリースはこの件だけでなく複数のセキュリティアドバイザリをまとめて含む —— 「1.3.4 へ上げる」は別の理由ですでに正しい助言だった。最も深い権限要件は慎重に読むべき点だ。Camaleon は**メディア権限だけ**で RCE に到達する。これはまさに CMS がコードを任せない相手に与える権限である。
+**Why it matters:** 3 件すべてが**同じ採点者による 2 つの CVSS 版を持ち、それが一致しない**。Grav と Camaleon は **3.1 8.8 / 4.0 8.7**、Crow は **3.1 7.5 / 4.0 8.7** —— 同じ脆弱性が、スキャナがどちらの版を読むかで 1.2 ポイント違う。しかも v3.1 も v4.0 も 7.0–8.9 を *High* に写像するため、この二つの数は同じ帯に収まりつつ、8.0 級の社内しきい値に対しては異なる順序を与える。Crow は**修正が記録に先行する**事例でもある。**v1.3.4 は 2026-09-07 に出荷**され、この CVE より 47 日早い。しかもそのリリースはこの件だけでなく複数のセキュリティアドバイザリをまとめて含む —— 「1.3.4 へ上げる」は別の理由ですでに正しい助言だった。最も深い権限要件は慎重に読むべき点だ。Camaleon は**メディア権限だけ**で RCE に到達する。これはまさに CMS がコードを任せない相手に与える権限である。
 
 [`🔗 NVD — CVE-2026-116019（Grav）`](https://nvd.nist.gov/vuln/detail/CVE-2026-116019) · [`🔗 GHSA-47gg-mh38-9rr7`](https://github.com/getgrav/grav/security/advisories/GHSA-47gg-mh38-9rr7) · [`🔗 GHSA-7x84-xhp8-6cqj（Crow）`](https://github.com/CrowCpp/Crow/security/advisories/GHSA-7x84-xhp8-6cqj)
 
@@ -716,7 +717,7 @@ Wes Bos の **3D Model Anything** は 3 つを届ける。部屋の LiDAR 形状
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-10-25T12:16:53Z |
+| Generated | 2026-10-25T12:42:04Z |
 | Items | 50 |
 | Sources tracked | 36 (Hacker News、GitHub Trending、Hugging Face、arXiv、NVD、CVE Program、CISA KEV、Oracle CPU、HPE、Kaspersky Securelist、BleepingComputer、OpenAI、ロイター、InfoQ、EPFL、Cerebras、ベンダーブログ、エンジニアリングブログ) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8（1 日 3 回） |

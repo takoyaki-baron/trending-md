@@ -3019,3 +3019,13 @@ Sources: [DeepSeek-V4.1-Flash-1017](https://huggingface.co/deepseek-ai/DeepSeek-
 → [[datacenter-silicon]] [[agent-stack]] [[fact-check]] [[token-economics]]
 
 Sources: [Reactive Optimizers (blog)](https://xingjianbai.com/reactive-optimizers/) · [xingjian-bai/opal](https://github.com/xingjian-bai/opal) · [arXiv 2610.30181](https://arxiv.org/abs/2610.30181) · [arXiv 2610.29677](https://arxiv.org/abs/2610.29677) · [arXiv 2610.25100](https://arxiv.org/abs/2610.25100) · [Goose](https://aardappel.github.io/goose/) · [rtfeldman — FP vs C](https://rtfeldman.com/fp-vs-c) · [danluu — ambitious software](https://danluu.com/ambitious/)
+
+## 2026-10-25 20:03 バッチ——1 回の呼び出しを 5 回で払う比較と、来歴を主題にした 113k スターの項目
+
+**1. GVS5H の見出しは、論文自身が明記する予算の非対称である。**足場は直近最難の LiveCodeBench 100 問で Qwen3.8 Flash Next が **93.0%**（5 パス）、Fable 5 が **90.4%**、コストは「9%」と報告する。アブストラクトの範囲：「**Fable 5 はコストが高いため単発でしか走らせていない**ため、そのマネージャ腕がどれだけ改善し得るかは不明」——6 モデル各 **5 回の独立実行**に対し、大モデルは **1 回**の呼び出し。他の記述も同種で、まとめて引用する価値がある：OpenRouter 経由の腕はマルチプロバイダ経路を通り「モデルごとに 1 つの量子化やビルドを保証しない」ため「**時間変動する交絡**」を生む；推論 ON と 128k OFF の比較は**各 1 回の点推定**；Fable 5 は 500 回の設問パスのうち **6 回** `stop_reason=refusal` を返した；結論は「結果は条件的で、構成によっては改善も回帰もない」と認める。測ったのはコード生成のみで、数学と知識のベンチマークは「飽和のため探索後に断念」。**持ち帰れる主張**は、同一ベンチマーク上で小モデルの学習不要な多パス足場が、約 3× の出力トークンで大モデル 1 パスのスコアに届くということ——そしてパス数の非対称こそ同条件比較が固定すべき軸である。
+
+**2. 113k スターのトレンドで、リリースノートが先読みバイアスの話をしている。**TradingAgents の v0.7.0（`2026-10-16`）は、それが首位に立つボードで既に 9 日経っている。中身は収益ではなく来歴：ChatGPT プラン用 provider、各判断後の最初の終値からの採点、そして変更履歴——初期項目（v0.4.0、v0.5.0、v0.5.2）はすべてポイントインタイム修正で、このフレームワーク自身が公表した履歴が「v0.5.2 以前の数値は現在と比較できない」と言っている。スター数が模擬収益を追うジャンルにおいて、**誠実な成果物とは自分のバックテストの情報境界を開示し、履歴の再実行を拒むもの**である。
+
+→ [[agent-stack]] [[fact-check]]
+
+Sources: [GVS5H](https://github.com/slee-persis/GVS5H) · [TradingAgents](https://github.com/TauricResearch/TradingAgents)

@@ -1,6 +1,6 @@
 ---
 date: 2026-10-25
-updated: 2026-10-25T12:16:53Z
+updated: 2026-10-25T12:42:04Z
 schedule: 04:03, 12:03, 20:03 UTC+8
 sources: 36
 license: CC-BY-4.0
@@ -500,18 +500,19 @@ EPFL 集成神经技术实验室（Mahsa Shoaran 团队）做出了 **LogSync** 
 
 ---
 
-## 36. HPE 一次修了 ArubaOS 的 72 个漏洞、其中七个 10.0 —— 而第八个 CVE 编号指向的是别人的 SQL 注入
+## 36. HPE 一次修了 ArubaOS 的 72 个漏洞、其中七个 CVSS 10.0 —— 而报道里的第八个编号属于另一家 CNA
 
-- **Velocity:** ▮▮▮ trending
-- **Source:** BleepingComputer / HPE 安全公告 / NVD · 8 个最高危 CVE · 发布于 2026-10-22
+- **Velocity:** ▮▮ rising
+- **Source:** HPE 安全公告 / BleepingComputer / cveawg · 72 项修复 · 7 个 CVSS 10.0（CNA 自评）· 发布于 2026-10-22
 - **Tags:** `arubaos` `cve` `hpe` `authentication-bypass` `nvd`
 
-HPE 的公告覆盖 **ArubaOS（AOS-8 与 AOS-10）** 的 **72 个漏洞** —— 这套软件撑起 Aruba 的移动控制器、控制器网关、网关和接入点 —— 新闻稿主推的是 **8 个最高危**问题：远程、未认证、低复杂度、无需用户交互即可触发。其中七个带着 **`security-alert@hpe.com` 自评的 CVSS 3.1 10.0**，记录发布于 2026-10-22、NVD 均未分析：`CVE-2026-79844` 与 `-79850`（CWE-288 认证绕过）、`-79846`（命令注入）、`-79847` 与 `-79851`（CWE-119 缓冲区溢出）、`-79848` 与 `-79849`（CWE-89 SQL 注入）。HPE 自己的描述里还挂着一句评分不体现的限定：利用需要"**攻击者控制之外的某些前置条件得到满足**"。
+HPE 的公告覆盖 **ArubaOS（AOS-8 与 AOS-10）** 的 **72 个漏洞** —— 这套软件撑起 Aruba 的移动控制器、控制器网关、网关和接入点 —— 新闻稿主推的是 **8 个最高危**问题：远程、未认证、低复杂度、无需用户交互即可触发。其中**七个**带着 **`security-alert@hpe.com` 自评的 CVSS 3.1 10.0**，记录发布于 2026-10-22、NVD 均未分析：`CVE-2026-79844` 与 `-79850`（CWE-288 认证绕过）、`-79846`（命令注入）、`-79847` 与 `-79851`（CWE-119 缓冲区溢出）、`-79848` 与 `-79849`（CWE-89 SQL 注入）。HPE 自己的描述里还挂着一句评分不体现的限定：利用需要"**攻击者控制之外的某些前置条件得到满足**"。
 
-**Why it matters:** 第八行才是重点。报道中列为"Authentication Bypass in the PAPI Protocol of AOS-10"的 `CVE-2026-79845`，在 NVD 上解析出来是 **`code-projects Simple Inventory System 1.0` 的一个 SQL 注入**，2026-08-25 由 `cna@vuldb.com` 发布，引用只有 vuldb.com 页面 —— 不同的产品、不同的 CNA、早了两个月。也就是说八个编号里有一个根本不指向 ArubaOS，而以已发布 CVE 列表为键的设备清单会把那台主机标成"不受影响"，而那条记录写的是别人的 PHP 应用。其余七个是在**任何独立分析之前**的 10.0，且 HPE 表示"未发现任何公开讨论或利用代码" —— 这是厂商在发布当天给出的"不存在"断言，对象却是一类位于网络边缘的产品。
+**Why it matters:** 出错的是报道的表格，而错法本身值得记。第八行的编号 `CVE-2026-79845` 在 NVD 上解析出来是 **`code-projects Simple Inventory System 1.0` 的一个 SQL 注入**，2026-08-25 由 `cna@vuldb.com` 发布 —— 不同的产品、不同的 CNA、早了两个月。一手清点 HPE 自己的记录：**71 条**引用该公告、**恰好七条**为 10.0、**没有一条是 79845**；那一行描述的 PAPI 鉴权绕过其实是 `CVE-2026-79873`，**9.3**（`AV:ADJACENT_NETWORK`、`baseSeverity: CRITICAL`）。所以"八个"是**标签**计数、"七个"是**分数**计数，表里唯一错的字段就是编号 —— 漏洞是真的。那个编号是靠**分配**落在那里的，不是任何一方登记错误：HPE 的 `-79835`–`-79844` 共享同一分配时间戳（14:47:15.581–.582Z），VulDB **2.26 秒后**取走 `-79845`，HPE 的下一批从 `-79846` 开始（14:47:27.562Z）—— 号池按请求发放当前最小空闲编号，一次外来分配就把厂商的整块切开。一个 CVE 编号不可能被两家 CNA 同时拥有；但一张**表格**可以印上邻居的编号。仍然成立的是运营层面的后果：以报道清单为键的台账会带进一个描述别人 PHP 应用的编号，扫描器因此把那台控制器报成"不受影响"。真实的七个 10.0 是**任何独立分析之前**的分数，且 HPE 表示"未发现任何公开讨论或利用代码" —— 这是厂商在发布当天给出的"不存在"断言，对象却是一类位于网络边缘的产品。
 
-[`🔗 HPE 公告（hpesbnw05162en_us）`](https://support.hpe.com/hpesc/public/docDisplay?docId=hpesbnw05162en_us&docLocale=en_US) · [`🔗 NVD — CVE-2026-79845`](https://nvd.nist.gov/vuln/detail/CVE-2026-79845) · [`🔗 BleepingComputer`](https://www.bleepingcomputer.com/news/security/hpe-patches-eight-max-severity-rce-and-auth-bypass-aos-flaws/)
+**更正（2026-10-25 20:30）：** 本条原先把第八行称为"CVE 编号撞号"，并把问题表述为"两个 CNA 抢同一个编号时 CVE Program 怎么办"。一手核对 `cveawg` 的 `assignerShortName` 与 `dateReserved` 字段后：重复在结构上不可能发生，且 HPE 的 71 条记录里没有任何外来编号 —— 报道表格里的区间（`79844`–`79851`）才是人造物。标题、正文与 velocity 已在三个语区一并更正。
 
+[`🔗 cveawg — CVE-2026-79845（分配者 + dateReserved）`](https://cveawg.mitre.org/api/cve/CVE-2026-79845) · [`🔗 HPE 公告（hpesbnw05162en_us）`](https://support.hpe.com/hpesc/public/docDisplay?docId=hpesbnw05162en_us&docLocale=en_US) · [`🔗 NVD — CVE-2026-79873`](https://nvd.nist.gov/vuln/detail/CVE-2026-79873) · [`🔗 BleepingComputer`](https://www.bleepingcomputer.com/news/security/hpe-patches-eight-max-severity-rce-and-auth-bypass-aos-flaws/)
 ---
 
 ## 37. OpenAI 说 9 月 20 日一个训练中的模型摸到了真实互联网 —— 并公开了它为此暂停训练的那次隔离失效
@@ -580,7 +581,7 @@ OpenAI 关于前沿训练环境安全的新文披露了一起具体事件：**9 
 
 **T3 Code** 自称为"**agent harness 控制面**"：它驱动你机器上已经装好的智能体 —— **Claude Code、Codex、Cursor、Grok Build、OpenCode 与 Google Antigravity** —— 入口有移动端（iOS 与 Android 均已上架）、网页版 `app.t3.codes` 与 Electron 桌面端。安装走命令行（`curl … | sh`、`brew install --cask t3-code`、`winget`、`scoop`），且 README 要求你先安装并登录至少一个 provider 自己的 CLI —— 也就是说它是你自有会话之上的一层前端，而不是模型访问的转售商。项目为 MIT，并自己在"**Wait, what are you selling me?**"（等等，你要卖我什么？）这一节回答："Nothing（什么都不卖）"，然后把 fork 按钮指给你。
 
-**Why it matters:** 设计约束才是好玩的地方。这些 harness 各自把会话状态存在自己的磁盘格式里，所以一个要组合它们的控制面必须读取并驱动六套互不相干的格式 —— 而**3,286 个未关闭 issue** 对 29.9k 星、当天仍有推送，就是这种组合在现实中的代价。它也标出了竞争位置的迁移：不再是哪个模型、哪个 harness，而是哪一层视图能坐在它们之上、在手机上、看着家里那台机器干活。采用前值得知道：你远程操控的是厂商的订阅，而这个项目自己的说法是它不会站在你和 CLI 之间。
+**Why it matters:** 设计约束才是好玩的地方。这些 harness 各自把会话状态存在自己的磁盘格式里，所以一个要组合它们的控制面必须读取并驱动六套互不相干的格式 —— 而它的**3,286 个未关闭 issue 与 PR**（其中 **2,218** 个是 PR、**1,068** 个是 issue；2026-10-25 实测）对 29.9k 星、当天仍有推送，就是这种组合在现实中的代价。它也标出了竞争位置的迁移：不再是哪个模型、哪个 harness，而是哪一层视图能坐在它们之上、在手机上、看着家里那台机器干活。采用前值得知道：你远程操控的是厂商的订阅，而这个项目自己的说法是它不会站在你和 CLI 之间。
 
 [`🔗 pingdotgg/t3code`](https://github.com/pingdotgg/t3code) · [`🔗 t3.codes`](https://t3.codes)
 
@@ -650,7 +651,7 @@ Oracle **2026 年 10 月关键补丁更新**包含"**1295 个新增安全补丁*
 
 三条记录均发布于 **2026-10-24**，评分方都是 `disclosure@vulncheck.com`，NVD 均未分析。**`CVE-2026-116019`** —— Grav **2.0.15 至 2.2.12**，在 **2.2.13** 修复 —— 是 Flex 表单覆写里的**白名单绕过**：拥有页面编辑权限的用户可以用 `unset-name@` 或整数键搬移 `data-*@` 指令，调用任意公有静态方法，例如 `Folder::delete` 或 `Utils::download`，从而删目录、覆写或读取文件。**`CVE-2026-116009`** —— Camaleon CMS 2.9.3 之前 —— 是媒体 `crop_url` 动作的路径穿越：一个 base64 `data:` URI 配合 `name` 参数里的 `../`，把一份 **ERB 模板**写进主题的 views 目录，随后渲染即执行。**`CVE-2026-116011`** —— Crow 1.3.4 之前 —— 是 `crow::json::load()` 的无控递归：一个套了数千层的 JSON 请求体就能耗尽工作线程栈、杀掉进程，未认证即可。
 
-**Why it matters:** 三条**都带同一评分方给出的两个 CVSS 版本，而它们并不一致**。Grav 与 Camaleon 是 **3.1 8.8 / 4.0 8.7**；Crow 是 **3.1 7.5 / 4.0 8.7** —— 同一个漏洞，取决于扫描器读哪个版本，差 1.2 分，而这个差距正好横跨大多数分诊队列用来排序的"高危"分界线。Crow 同时是一个**修复早于记录**的案例：**v1.3.4 于 2026-09-07 发布**，比这张 CVE 早 47 天，而那次发布除了这条还打包了若干其他安全公告 —— 也就是说"升到 1.3.4"早就因为别的原因成为正确建议。最深的那项权限要求要读仔细：Camaleon 只需要**媒体权限**就能到达 RCE，而这恰好是 CMS 会给那些不被信任写代码的人授予的权限。
+**Why it matters:** 三条**都带同一评分方给出的两个 CVSS 版本，而它们并不一致**。Grav 与 Camaleon 是 **3.1 8.8 / 4.0 8.7**；Crow 是 **3.1 7.5 / 4.0 8.7** —— 同一个漏洞，取决于扫描器读哪个版本，差 1.2 分；而 v3.1 与 v4.0 都把 7.0–8.9 映射为 *High*，所以这两个数字落在同一条带上，只是相对于任何 8.0 一类的内部阈值，它们给这个漏洞排出的次序不同。Crow 同时是一个**修复早于记录**的案例：**v1.3.4 于 2026-09-07 发布**，比这张 CVE 早 47 天，而那次发布除了这条还打包了若干其他安全公告 —— 也就是说"升到 1.3.4"早就因为别的原因成为正确建议。最深的那项权限要求要读仔细：Camaleon 只需要**媒体权限**就能到达 RCE，而这恰好是 CMS 会给那些不被信任写代码的人授予的权限。
 
 [`🔗 NVD — CVE-2026-116019（Grav）`](https://nvd.nist.gov/vuln/detail/CVE-2026-116019) · [`🔗 GHSA-47gg-mh38-9rr7`](https://github.com/getgrav/grav/security/advisories/GHSA-47gg-mh38-9rr7) · [`🔗 GHSA-7x84-xhp8-6cqj（Crow）`](https://github.com/CrowCpp/Crow/security/advisories/GHSA-7x84-xhp8-6cqj)
 
@@ -716,7 +717,7 @@ Wes Bos 的 **3D Model Anything** 交付三样东西：一个采集房间 LiDAR 
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-10-25T12:16:53Z |
+| Generated | 2026-10-25T12:42:04Z |
 | Items | 50 |
 | Sources tracked | 36 (Hacker News、GitHub Trending、Hugging Face、arXiv、NVD、CVE Program、CISA KEV、Oracle CPU、HPE、Kaspersky Securelist、BleepingComputer、OpenAI、路透社、InfoQ、EPFL、Cerebras、厂商博客、工程博客) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8（每日 3 次） |

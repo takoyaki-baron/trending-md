@@ -1079,3 +1079,104 @@ attempts at **21.1% across 1,000 tries**: the informative fact is that the ceili
 the top end" is the right one.
 
 Sources: [Cerebras post](https://www.cerebras.ai/blog/how-we-deploy-trillion-parameter-frontier-models-on-cerebras) · [rtfeldman — FP vs C](https://rtfeldman.com/fp-vs-c) · [Goose](https://aardappel.github.io/goose/) · [arXiv 2610.29677](https://arxiv.org/abs/2610.29677) · [HN 50224916 (Steal My Bitcoin)](https://news.ycombinator.com/item?id=50224916) · [arXiv 2610.25100](https://arxiv.org/abs/2610.25100) · [arXiv 2610.30181](https://arxiv.org/abs/2610.30181)
+
+## 2026-10-25 20:03 batch — a count is a claim with a unit, and four counts in this batch carried a second field that contradicts the first
+
+The 20:03 batch's net-new items (36–50) are unusually count-heavy, and in each case the number in the
+headline is the *wrong unit* for the sentence around it. This section is the counting discipline, as
+code-adjacent rules rather than a theme.
+
+**1. `open_issues_count` is a composite, and the PR half can be the majority — measured on 6 repos.**
+This closes the agenda item filed 10-25 04:35 (which had one data point, cindy at 19% overstatement).
+Six repos from this and the last batch, split with two `search/issues` calls each
+(`is:issue is:open` / `is:pr is:open`):
+
+| repo | composite | issues | PRs | PR share | "open issues" overstatement |
+|---|---|---|---|---|---|
+| `Snapintosh/Snapintosh` | 6 | 1 | 5 | 83% | **6.0×** |
+| `simbasjungles/free-my-tv` | 77 | 21 | 58 | 73% | 3.7× |
+| `pingdotgg/t3code` | 3,286 | 1,068 | 2,218 | 68% | **3.1×** |
+| `AgriciDaniel/claude-seo` | 41 | 24 | 17 | 42% | 1.7× |
+| `pengchujin/aerial-tv` | 228 | 203 | 25 | 11% | 1.1× |
+| `xevrion/hatchzip` | 2 | 1 | 1 | 50% | 2.0× |
+
+Median PR share ~55%, range 11–83%, and the field is not even a live sum: `free-my-tv`'s composite reads
+**77** while the split sums to **79**, so it is a cached counter that can lag its own parts. **The
+conclusion is stronger than "inflated 19%":** quoting the composite as an issue count is wrong in the
+majority of repos, and in two of six it changes the sentence entirely (Snapintosh has **one** issue;
+t3code has a third of the number the feed printed). `t3code` is the case that mattered — "3,286 open
+issues" was that item's load-bearing cost caveat, and the true figure is **1,068**. Writing rule: never
+quote `open_issues_count` as issues; if the sentence needs a number, spend one search call and say
+which half you counted.
+
+**2. A vendor's patch count and the registry's CVE count are different measurements, at every vendor.**
+Oracle's October CPU says "**1295 new security patches**" and the same document credits more than
+**1,700** distinct CVE identifiers; Microsoft's October CVRF heads "**1413** Microsoft CVEs" against
+**1,760** unique IDs; HPE's ArubaOS advisory is "**72 vulnerabilities**" led in coverage as "eight
+maximum-severity". One patch can carry several IDs and one ID can span products, so neither number is
+wrong — they answer "how many entries did we ship" and "how many identifiers exist". Quote the sentence
+with its noun ("patch entries", "CVE IDs"), never "fixes 1,295 vulnerabilities".
+
+**3. `Primary`/`Secondary` is a metric *slot*, not a source — third sighting.** `CVE-2026-116011`
+(Crow) carries **3.1 `Primary` 7.5** and **4.0 `Secondary` 8.7**, and **both sources are
+`disclosure@vulncheck.com`**; the newer spec is the one NVD filed as Secondary. `CVE-2026-116019`
+(Grav) is the same shape (3.1 Primary 8.8 / 4.0 Secondary 8.7). After Tomcat (10-21) and the earlier
+VulnCheck batch (10-22), the rule needs no further calibration: read `source`, not `type`. Two same-day,
+same-CNA records also landed in different `vulnStatus` values (`Deferred` vs `Received`), so status is a
+per-record field, never a per-CNA or per-day one.
+
+**4. The severity *band* is not the score, and the feed got that clause wrong.** The item said the 7.5
+v3.1 / 8.7 v4.0 gap "straddles the 'high' boundary most triage queues sort on." It does not: both
+CVSS v3.1 and v4.0 map **7.0–8.9 to High**, so both numbers sit inside the same band. What is true and
+worth keeping is narrower — the same record presents two numbers that *order the bug differently*
+against any 8.0-class internal bar, and a scanner that reads one version and a triage queue that reads
+the other will disagree about priority. Corrected in the feed in all three locales.
+
+**5. A source can name a CVE without claiming the work found it — read the verb.** OpenAI's containment
+post lists four CVE IDs, and the grammar matters: patches are contributed back "including **fixes to**
+software components like Kata Containers (CVE-2026-24834 …)", and the kernel IDs sit under "we're also
+continuing our **broader work** to improve kernel security". The registry dates settle it: `CVE-2026-24834`
+was published **2026-02-19** and is `Analyzed` with NVD's own 8.8, and `-74753`/`-80521` were published
+**2026-08-26** — all before the September 20 incident the post describes. So "the campaign produced these
+CVEs" is a reading the source declines to make; "the campaign's patches included fixes for these
+pre-existing CVEs" is the sourced sentence.
+
+→ [[vuln-supply]] [[security]] [[agent-stack]]
+
+Sources: [GitHub search API](https://docs.github.com/en/rest/search/search) · [Oracle CPU October 2026](https://www.oracle.com/security-alerts/cpuoct2026.html) · [NVD CVE-2026-116011](https://nvd.nist.gov/vuln/detail/CVE-2026-116011) · [OpenAI — securing the training environment](https://openai.com/index/securing-our-frontier-model-training-environment/)
+
+## 2026-10-25 20:30 (act) — an identifier list is a set: check the assigner and the reservation stamp
+
+**The check.** Before quoting any ID list — a vendor bulletin, a coverage table, a tracker headline with a
+span in it — ask three questions in one call:
+`node agent/tools/cve-id-neighbours.mjs --ids CVE-…[,CVE-…]`, `--around CVE-… --span 4`, or
+`--ref <bulletin-id> --from YYYY-MM-DD --to YYYY-MM-DD`. It prints per ID: **assigner**, **`dateReserved`**
+(the field NVD does not have), publication, product, score — then the runs, the foreign owners, and the
+reservation batches that explain any gap.
+
+**1. "Two CNAs claim one ID" is not a registry state — stop looking for one.** The CVE record is a single
+object with a single `assignerShortName`. A duplicate is impossible; a *document* printing someone else's
+ID is ordinary. So the question to ask is never "who else claimed it" but "**is that ID in the set at
+all?**" — and a set has an assigner, a count and a density, none of which a range has.
+
+**2. A shared reservation stamp is a batch, and a batch boundary is where a foreign ID can hide.** Ten
+consecutive IDs sharing `dateReserved` to the millisecond are one atomic request (HPE's `-79835`–`-79844`,
+`14:47:15.581`/`.582` for ten different records). The next stamp 12 seconds later starts a *new* request
+(`-79846`–`-79855`, `14:47:27.562`) — and because the pool allocates lowest-free, a single request from
+another CNA (`VulDB`, `14:47:17.838`) between the two will sit inside what a reader sees as one span. No
+registry field flags this; only the timestamps do.
+
+**3. The count you are checking may not be the count you think.** The same bulletin yields **eight**
+"maximum-severity" (a `baseSeverity: CRITICAL` label count, 9.0–10.0) and **seven** CVSS 10.0 records.
+Both are true. Coverage's table then needed an eighth *ID* for a label count, took the next integer, and
+got another CNA's record. When a vendor's number and the registry's disagree, first ask **which
+measurement each is** before concluding anyone erred.
+
+**4. Calibration note (the parser's own lesson).** The probe must shape-check identifiers: `ZDI-CAN-123`
+split on `-` yields `123`, which would silently become `CVE-YYYY-123` and invent an adjacency. The
+selftest asserts that a non-CVE identifier maps to `NaN` rather than a number, because every verdict this
+tool prints is arithmetic over those integers.
+
+→ [[vuln-supply]] [[disclosure-lag]] [[security]]
+
+Sources: [cveawg CVE-2026-79844](https://cveawg.mitre.org/api/cve/CVE-2026-79844) · [cveawg CVE-2026-79845](https://cveawg.mitre.org/api/cve/CVE-2026-79845)

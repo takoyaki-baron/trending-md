@@ -13489,5 +13489,32 @@
   "en": "Cerebras blog/engineering posts; primary for WSE-3T capacity planning and wafer-scale deployment designs. Self-interested on performance claims and, in the 10-25 trillion-parameter post, arithmetic rather than measurement — cross-checked (10-25): the 69 linear + 24 dense layers it divides across wafers match Kimi K3's own config.json (num_hidden_layers 93), so the inputs are third-party even where the timings are not.",
   "zh": "Cerebras 官方博客/工程文章；WSE-3T 容量规划与晶圆级部署设计的一手来源。性能主张上自带立场，10-25 的万亿参数一文中是算术而非测量——交叉核验（10-25）：它用于分配晶圆的 69 层线性 + 24 层稠密，与 Kimi K3 自己的 config.json（num_hidden_layers 93）一致，因此输入是第三方的，即便计时不是。",
   "jp": "Cerebras の公式ブログ／エンジニアリング記事。WSE-3T の容量設計とウェハスケール配備設計の一次情報。性能主張には自己利益があり、10-25 の兆パラメータ記事は測定ではなく算術 —— 相互検証（10-25）：ウェハ配分に使う 69 層の線形＋24 層の稠密は Kimi K3 自身の config.json（num_hidden_layers 93）と一致し、入力は第三者製である（計時はそうではない）。"
+ },
+ "support.hpe.com": {
+  "cat": "vendor",
+  "cred": "med",
+  "cv": 1,
+  "density": "low",
+  "en": "HPE's support document portal. Advisories are served as a client-rendered iframe wrapper: the ArubaOS October advisory (hpesbnw05162en_us) returns 200 with 9 KB of HTML and 0 characters of text to a plain fetch, so cite the CVE records it underpins, not the page. Cross-checked (10-25): the seven 10.0 scores it implies are on NVD as security-alert@hpe.com metrics (CVE-2026-79844/-79851 verified first-hand).",
+  "zh": "HPE 支持文档门户。公告以客户端渲染的 iframe 外壳提供：ArubaOS 十月公告（hpesbnw05162en_us）对普通抓取返回 200、9 KB HTML、正文 0 字符，所以应引用它所支撑的 CVE 记录而非页面本身。交叉核验（10-25）：其隐含的七个 10.0 在 NVD 上以 security-alert@hpe.com 度量存在（CVE-2026-79844/-79851 已一手核实）。",
+  "jp": "HPE のサポート文書ポータル。勧告はクライアント描画の iframe ラッパーで提供される：ArubaOS 10 月の勧告（hpesbnw05162en_us）は素の取得に対し 200・9 KB の HTML・本文 0 文字を返すため、ページではなく背後にある CVE レコードを引用する。突合（10-25）：そこから示唆される 7 件の 10.0 は NVD 上に security-alert@hpe.com の指標として存在する（CVE-2026-79844/-79851 を一次確認）。"
+ },
+ "t3.codes": {
+  "cat": "vendor",
+  "cred": "med",
+  "cv": 1,
+  "density": "med",
+  "en": "The T3 Code product site. Cross-checked (10-25) against the repo: the GitHub API reports 29,938★, MIT, iOS/Android store links matching the site's claims, and pushed_at same-day, so the product surface is real; pricing/claims beyond that are the vendor's own.",
+  "zh": "T3 Code 产品站。与仓库交叉核验（10-25）：GitHub API 显示 29,938★、MIT、iOS/Android 商店链接与站点主张一致、当天仍有推送，说明产品面真实；此之外的定价与主张均属厂商自述。",
+  "jp": "T3 Code の製品サイト。リポジトリと突合（10-25）：GitHub API は 29,938★、MIT、サイトの主張と一致する iOS/Android ストアリンク、当日の push を返すため製品面は実在する。それ以上の価格や主張はベンダー自身のもの。"
+ },
+ "speedcrunch.org": {
+  "cat": "vendor",
+  "cred": "high",
+  "cv": 1,
+  "density": "med",
+  "en": "SpeedCrunch's project site. Cross-checked (10-25): its 1.0.0/1.1.0 release claims match the repo's releases.atom (2026-10-04T16:36Z and 2026-10-20T18:58Z); the feature counts on the site (50 digits, 140+ functions, 40+ translations) are the project's own.",
+  "zh": "SpeedCrunch 项目站。交叉核验（10-25）：其 1.0.0/1.1.0 发布主张与仓库 releases.atom 一致（2026-10-04T16:36Z 与 2026-10-20T18:58Z）；站点上的功能计数（50 位精度、140+ 函数、40+ 翻译）属项目自述。",
+  "jp": "SpeedCrunch のプロジェクトサイト。突合（10-25）：1.0.0/1.1.0 のリリース主張はリポジトリの releases.atom と一致（2026-10-04T16:36Z と 2026-10-20T18:58Z）。サイト上の機能数（50 桁、140+ 関数、40+ 翻訳）はプロジェクト自身のもの。"
  }
 }

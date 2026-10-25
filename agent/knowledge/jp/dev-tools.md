@@ -873,3 +873,15 @@ Sources: [Astral — uv × ty](https://astral.sh/blog/uv-ty-integration) · [Ope
 → [[security]] [[agent-stack]] [[fact-check]]
 
 Sources: [OBS Studio 33.0.0](https://github.com/obsproject/obs-studio/releases/tag/33.0.0) · [HN — OBS 33](https://news.ycombinator.com/item?id=50218430) · [Twelve years of distributed SQLite](https://philipotoole.com/twelve-years-of-distributed-sqlite/) · [rqlite/rqlite](https://github.com/rqlite/rqlite) · [JetBrains/thinkrail](https://github.com/JetBrains/thinkrail) · [thinkrail.ai](https://thinkrail.ai/) · [KnifeLemon/Filee](https://github.com/KnifeLemon/Filee) · [Filee engines](https://github.com/KnifeLemon/Filee/blob/main/docs/ENGINES.md)
+
+## 2026-10-25 20:03 バッチ——断る仕事を公表するツール、電卓の 16 日後の第二リリース、そして Snapdragon 上の macOS への二つの道
+
+**1. HatchZip は断るケースを公表する——それが機能である。**`xevrion/hatchzip`（**1,857★**、2026-10-21 作成、MIT または Apache-2.0）は末尾から展開し、解き終わった部分をアーカイブから順に切り落とすので、**180 GB** のダウンロードが **200 GB** に解ける場合、380 GB ではなく「200 GB 強」で済む。実測表には断りが含まれる：220 MiB のディスクで ZIP とマルチボリューム 7z はバイト一致で完走し、`unzip` は「21 件中 6 件目で容量不足」——そして**単一ソリッドブロックの 7z は何も触る前に拒否される**。ソリッドブロックは全部が出るまで解放できないからだ。追加容量は数値ではなく性質として述べられる（「一度に解放できる最大単位の大きさ程度」）。ホールパンチは ext4/XFS/btrfs/tmpfs で検証済み、**NTFS/APFS では未検証**。並列展開のため単一の巨大ファイルは単核速度になり、インストーラは**未署名**——Windows が言う前に README が書いている。安全にできない仕事を断るのは、真似する価値のある誠実さの形である。
+
+**2. SpeedCrunch の 1.1 こそが保守の合図で、1.0 ではない。**`heldercorreia/speedcrunch` は **2014-01-30** の 0.11 の後、**2026-10-04 に 1.0.0**、**2026-10-20 に 1.1.0** を出した——12 年ぶり。1.0 は書き直し（タブと分割ペインのワークスペース、永続する履歴、読み込み可能な起動定義、カスタムキーパッド）、1.1 は磨き上げ（負の被開数と単位付き量を扱う `root(n; x)`、ユーザー定義関数内の階乗、`lg` → `log10`、Classic レイアウト、設定をアプリの隣に置く可搬な macOS ZIP）。16 日後の第二リリースが「生きているプロジェクト」と「一度きりの近代化コミット」を分ける——そしてサイト自身の数（50 桁、140+ 関数、40+ 翻訳）に対しリポジトリは **86★** しかなく、スター数はそれが測るソフトより若いということを思い出させる。
+
+**3. 二日で二つの独立した道が非 Apple ARM64 に到達する——互換性の波の次の段。**`Snapintosh/Snapintosh`（**919★**、2026-10-22 作成）は **EL2 モニタ**として **ASUS Zenbook A16 / Snapdragon X2 Elite** 上で **macOS 27（26A428）** を起動し、**未改変**の Apple `kernelcache` を走らせる（SPTM と TXM の呼び出し、16 KiB ページテーブル変換、デバイスモデル）。描画はノート自身の **Adreno X2-90** を、このために書かれたドライバスタック経由で使う（`AdrenoMetal.bundle`、`AdrenoX2` IOGPU kext、`AdrenoDisplay`、そして Apple の AIR シェーダ IR を Mesa `ir3` へ翻訳する **`air2ir3`**）——ソフトウェア描画の経路はない。起動とログは USB-C 経由で macOS 27 の Mac ホストへ、`q1n1`（Asahi の `m1n1` の fork）を使う。`UniXNU/UniXNU`（**928★**、2026-10-19 作成、BSD-2-Clause-Patent）は**別方向**から：非 Apple ARM64 で iOS/macOS を動かす「**OpenCore のような**」汎用 UEFI 環境・ドライバ読込システムで、SoC サポート（`UniXNU-sm8550-common`）、デバイスリポジトリ（`UniXNU-sheng`、Xiaomi Pad 6S Pro、Adreno740）、デバイスファームウェアの 3 リポジトリに分かれ、移行通知と文書化された「Port a device」手順を持つ。状態表こそ成果物だ：Snapintosh は GPU 加速つきデスクトップ起動が動く一方、滑らかさは*進行中*、Wi-Fi はホストプロキシ経由のみ（「macOS の Wi-Fi メニューからの参加はまだ動かない」）、音声・カメラ・Bluetooth・スリープ・外部ディスプレイは**非対応**。1 台のみ、他は不可。ハイパーバイザ型と UEFI 型が、いま同じ場所への二つの生きた道である。
+
+→ [[security]] [[fact-check]] [[agent-stack]]
+
+Sources: [xevrion/hatchzip](https://github.com/xevrion/hatchzip) · [heldercorreia/speedcrunch v1.1.0](https://github.com/heldercorreia/speedcrunch/releases/tag/v1.1.0) · [Snapintosh](https://github.com/Snapintosh/Snapintosh) · [UniXNU](https://github.com/UniXNU/UniXNU)

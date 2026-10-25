@@ -300,3 +300,27 @@ stamp, not as the specification.
 → [[fact-check]] [[agent-plugins]]
 
 Sources: [luongnv89/claude-howto](https://github.com/luongnv89/claude-howto) · [GitHub Trending (daily)](https://github.com/trending?since=daily)
+
+## 2026-10-25 20:03 batch — the install instructions for consumer hardware are now a sentence to an agent
+
+Two independent ad-free TV launchers shipped in the same week: `pengchujin/aerial-tv` (**4,749★**, MIT,
+created 2026-10-20) for Chinese-market Android TVs, and `simbasjungles/free-my-tv` (**4,415★**, MIT,
+created 2026-10-19) spanning **Google TV, LG webOS and Samsung Tizen**. Neither needs root, nothing is
+uninstalled, and Free My TV's stated rollback is "one button brings back the factory home screen."
+
+**The distribution detail is the item:** Free My TV's documented *easy* install path is to open an AI
+coding assistant and say "**Install Free My TV on my TV at 192.168.1.50**" — the natural-language
+instruction replaces the ADB-sideload tutorial, which makes the assistant the delivery channel for
+consumer-hardware software the vendor's own store will not carry. That is the agent-experience thesis
+(thesis 16) arriving at the *install* step rather than the discovery step: the README is written for a
+model to execute, and the human's role is naming their TV's IP.
+
+**The measurement discipline is the second detail.** Free My TV publishes "**60 fps, every frame in
+16.6 ms**" and "**96 MB** instead of 242 MB (−60%)" with the scope attached in the same sentence —
+"Measured on a **98″ TCL Google TV running Android 14**" — one panel, one chip, one firmware build, and
+it states what the ready-made APK lacks ("no TMDB key, so the home screen has no picks"). Aerial carries
+the counterpart caveat as a number: **203 issues / 25 PRs open** on a repo five days old.
+
+→ [[agent-plugins]] [[platform-gatekeeping]] [[fact-check]]
+
+Sources: [pengchujin/aerial-tv](https://github.com/pengchujin/aerial-tv) · [simbasjungles/free-my-tv](https://github.com/simbasjungles/free-my-tv) · [freemytv.io](https://freemytv.io)

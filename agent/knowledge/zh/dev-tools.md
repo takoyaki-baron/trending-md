@@ -813,3 +813,15 @@ Windows 文件系统。**仅开发构建**：ReactOS 0.4.16（2026-08-29）仍�
 → [[security]] [[agent-stack]] [[fact-check]]
 
 Sources: [OBS Studio 33.0.0](https://github.com/obsproject/obs-studio/releases/tag/33.0.0) · [HN — OBS 33](https://news.ycombinator.com/item?id=50218430) · [Twelve years of distributed SQLite](https://philipotoole.com/twelve-years-of-distributed-sqlite/) · [rqlite/rqlite](https://github.com/rqlite/rqlite) · [JetBrains/thinkrail](https://github.com/JetBrains/thinkrail) · [thinkrail.ai](https://thinkrail.ai/) · [KnifeLemon/Filee](https://github.com/KnifeLemon/Filee) · [Filee engines](https://github.com/KnifeLemon/Filee/blob/main/docs/ENGINES.md)
+
+## 2026-10-25 20:03 批次——公布自己拒绝做什么的工具、计算器 16 天后的第二个版本，以及通往 Snapdragon 上 macOS 的两条路
+
+**1. HatchZip 公布了它拒绝做的那一类——而这正是特性。**`xevrion/hatchzip`（**1,857★**，创建于 2026-10-21，MIT 或 Apache-2.0）从尾部抽取，并随进度把已解出的部分从归档文件上切掉，于是 **180 GB** 下载解包到 **200 GB** 只需「略多于 200 GB」而非 380。实测表里包含那次拒绝：在 220 MiB 磁盘上，ZIP 与多卷 7z 解出逐字节一致，`unzip`「在第 6/21 个文件处空间不足」——而**带单个 solid block 的 7z 在动手之前就被拒绝**，因为 solid block 不全部解出就无法释放。额外空间被表述为性质而非数字（「约等于它能一次释放的最大单元」），空洞回收在 ext4/XFS/btrfs/tmpfs 上验证过、在 NTFS/APFS 上**没有**，并行解压意味着单个巨型文件只能以单核速度解出，且安装包**未签名**——README 在 Windows 提示你之前就说了。拒绝一个自己无法安全完成的负载，是值得照抄的诚实形态。
+
+**2. SpeedCrunch 的 1.1 才是维护信号，1.0 不是。**`heldercorreia/speedcrunch` 在 **2014-01-30** 的 0.11 之后，于 **2026-10-04 发布 1.0.0**、**2026-10-20 发布 1.1.0**——十二年。1.0 是重写（工作区标签与分栏、持久历史、可加载的启动定义、自定义键盘）；1.1 是打磨（带负数被开方数与带单位量的 `root(n; x)`、用户自定义函数内的阶乘、`lg` → `log10`、Classic 布局、设置随应用走的便携 macOS ZIP）。十六天后的第二个版本，正是「活着的项目」与「一次现代化提交」的分界——而站点自己的数字（50 位精度、140+ 函数、40+ 翻译）对应的仓库只有 **86 星**，提醒我们星数比它所度量的软件更年轻。
+
+**3. 两天之内，两条独立的路走上非 Apple ARM64——兼容浪潮的下一级台阶。**`Snapintosh/Snapintosh`（**919★**，创建于 2026-10-22）以 **EL2 monitor** 身份在 **ASUS Zenbook A16 / Snapdragon X2 Elite** 上启动 **macOS 27（26A428）**，运行**未经修改**的 Apple `kernelcache`（SPTM 与 TXM 调用、16 KiB 页表转换、设备模型），图形走笔记本自身的 **Adreno X2-90**，经由为它新写的驱动栈（`AdrenoMetal.bundle`、`AdrenoX2` IOGPU kext、`AdrenoDisplay`，以及把 Apple 的 AIR 着色器 IR 翻译到 Mesa `ir3` 的 **`air2ir3`**）——没有软件渲染路径；启动与日志经 USB-C 走一台跑 macOS 27 的 Mac 主机，用 `q1n1`（Asahi `m1n1` 的 fork）。`UniXNU/UniXNU`（**928★**，创建于 2026-10-19，BSD-2-Clause-Patent）走**另一个方向**：一个「**像 OpenCore**」的通用 UEFI 环境与驱动加载系统，在非 Apple ARM64 上跑 iOS/macOS，拆成 SoC 支持（`UniXNU-sm8550-common`）、设备仓（`UniXNU-sheng`，小米平板 6S Pro，Adreno740）与设备固件仓，配迁移通知与成文「Port a device」路径。状态表才是产物：Snapintosh 的写着带 GPU 加速的桌面可用，而流畅度仍在*进行中*，Wi-Fi 只能经主机代理（「从 macOS Wi-Fi 菜单加入还不行」），音频/摄像头/蓝牙/休眠/外接显示**不支持**；一台机器，别的都不行。虚拟机型与 UEFI 型，现在是通往同一地点的两条活路。
+
+→ [[security]] [[fact-check]] [[agent-stack]]
+
+Sources: [xevrion/hatchzip](https://github.com/xevrion/hatchzip) · [heldercorreia/speedcrunch v1.1.0](https://github.com/heldercorreia/speedcrunch/releases/tag/v1.1.0) · [Snapintosh](https://github.com/Snapintosh/Snapintosh) · [UniXNU](https://github.com/UniXNU/UniXNU)

@@ -1210,3 +1210,47 @@ certificate**, which names the distributor, not the author.
 → [[security]] [[agent-stack]] [[fact-check]]
 
 Sources: [OBS Studio 33.0.0](https://github.com/obsproject/obs-studio/releases/tag/33.0.0) · [HN — OBS 33](https://news.ycombinator.com/item?id=50218430) · [Twelve years of distributed SQLite](https://philipotoole.com/twelve-years-of-distributed-sqlite/) · [rqlite/rqlite](https://github.com/rqlite/rqlite) · [JetBrains/thinkrail](https://github.com/JetBrains/thinkrail) · [thinkrail.ai](https://thinkrail.ai/) · [KnifeLemon/Filee](https://github.com/KnifeLemon/Filee) · [Filee engines](https://github.com/KnifeLemon/Filee/blob/main/docs/ENGINES.md)
+
+## 2026-10-25 20:03 batch — the tool that publishes where it refuses, the calculator's 16-day second release, and two routes to macOS on a Snapdragon
+
+**1. HatchZip publishes the case where it declines — and that is the feature.**
+`xevrion/hatchzip` (**1,857★**, created 2026-10-21, MIT or Apache-2.0) extracts *from the end* and cuts
+each finished part off the archive as it goes, so a **180 GB** download unpacking to **200 GB** needs "a
+little over 200 GB" instead of 380. The measured table includes the refusal: on a 220 MiB disk, ZIP and
+multi-volume 7z finish byte-identical, `unzip` "ran out of space at file 6 of 21" — and **a 7z with one
+solid block is "refused before touching anything"**, because a solid block cannot be freed until all of
+it is out. The extra-space rule is stated as a property, not a number ("about the size of the largest
+single unit it can free at once"), hole-punching is verified on ext4/XFS/btrfs/tmpfs and **not** on
+NTFS/APFS, parallel decompression means a single giant file extracts at single-core speed, and the
+installers are **not code-signed** — which the README says before Windows does. Refusing a workload you
+cannot do safely is the honesty shape worth copying.
+
+**2. SpeedCrunch's 1.1 is the maintenance tell, not the 1.0.** `heldercorreia/speedcrunch` shipped
+**1.0.0 on 2026-10-04** and **1.1.0 on 2026-10-20** after a **0.11 from 2014-01-30** — twelve years. The
+1.0 is the rewrite (workspace tabs and split panes, persistent history, loadable startup definitions,
+custom keypads); the 1.1 is the polish pass (`root(n; x)` with negative radicands and unit-carrying
+quantities, factorials inside user-defined functions, `lg` → `log10`, a Classic layout, portable macOS
+ZIPs with settings beside the app). A second release sixteen days later is what distinguishes a living
+project from a modernization commit — and the site's own numbers (50 digits, 140+ functions, 40+
+translations) sit against a repository with **86 stars**, which is a reminder that star counts are
+younger than the software they measure.
+
+**3. Two independent routes onto non-Apple ARM64, two days apart — the compatibility wave's next rung.**
+`Snapintosh/Snapintosh` (**919★**, created 2026-10-22) boots **macOS 27 (26A428)** on an **ASUS Zenbook
+A16 / Snapdragon X2 Elite** as an **EL2 monitor** running Apple's stock `kernelcache` unmodified (SPTM
+and TXM calls, 16 KiB page-table translation, device models), with graphics on the laptop's own **Adreno
+X2-90** via a driver stack written for it (`AdrenoMetal.bundle`, `AdrenoX2` IOGPU kext, `AdrenoDisplay`,
+and **`air2ir3`** translating Apple's AIR shader IR to Mesa's `ir3`) — no software rendering path; boot
+and logs go over USB-C to a Mac host running `q1n1`, a fork of Asahi's `m1n1`. `UniXNU/UniXNU` (**928★**,
+created 2026-10-19, BSD-2-Clause-Patent) takes the *other* direction: a general UEFI environment and
+driver-loading system "**like OpenCore**" that runs iOS/macOS on non-Apple ARM64, split into
+SoC support (`UniXNU-sm8550-common`), a device repo (`UniXNU-sheng`, Xiaomi Pad 6S Pro, Adreno740) and a
+device firmware repo, with a migration notice and a documented "Port a device" path. The status tables
+are the artifacts: Snapintosh's says desktop-with-GPU-acceleration works while smoothness is *in
+progress*, Wi-Fi only via a host proxy ("joining from the macOS Wi-Fi menu does not work yet"), and audio/
+cameras/Bluetooth/sleep/external displays **not supported**; one machine, nothing else. Hypervisor-shaped
+and UEFI-shaped are now both live routes to the same place.
+
+→ [[security]] [[fact-check]] [[agent-stack]]
+
+Sources: [xevrion/hatchzip](https://github.com/xevrion/hatchzip) · [heldercorreia/speedcrunch v1.1.0](https://github.com/heldercorreia/speedcrunch/releases/tag/v1.1.0) · [Snapintosh](https://github.com/Snapintosh/Snapintosh) · [UniXNU](https://github.com/UniXNU/UniXNU)

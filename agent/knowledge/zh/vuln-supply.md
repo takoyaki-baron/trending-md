@@ -455,3 +455,63 @@ Sources: [Trigger.dev advisories](https://github.com/triggerdotdev/trigger.dev/s
 → [[disclosure-lag]] [[security]] [[fact-check]]
 
 来源：[NVD CVE API 2.0](https://services.nvd.nist.gov/rest/json/cves/2.0) · [CVE-2026-115557](https://cveawg.mitre.org/api/cve/CVE-2026-115557) · [CVE-2026-114406](https://cveawg.mitre.org/api/cve/CVE-2026-114406) · [NVD CVE-2026-116014](https://nvd.nist.gov/vuln/detail/CVE-2026-116014)
+
+## 2026-10-25 20:03 批次——CVE ID 是资产键，而本批的一个 ID 解析到了错误的产品
+
+**1. 计数口径，在厂商尺度上。**Oracle 十月 CPU：「**1295 new security patches**」，同一文档致谢 **>1,700** 个不同 CVE 标识符，Java SE 覆盖 8u503 / 11.0.32.1 / 17.0.20.1 / 21.0.12.1 / 25.0.4.1 / 26.0.2 / 27。HPE ArubaOS：**72 个漏洞**，以**八个最高危**领起，其中**七个**携带 `security-alert@hpe.com` **10.0**，且全部 `Received`、**0 条 NVD 评分**——分数是 CNA 的、未经分析，落在一类坐在网络边缘的设备上。微软十月 CVRF（规则 7 已校准的孪生件）是 **1,413** 条记录条目对 **1,760** 个唯一 ID。反复出现的算术：补丁 ≠ CVE ≠ 受影响产品，而每家厂商自选名词。把名词写出来。
+
+**2. 发布日滞后，在一个 ID 上实测。**`CVE-2026-114820`（Java SE / GraalVM，**9.1 / CWE-327**）于 **2026-10-24** 进入登记册——**比 10 月 20 日发布的补丁晚四天**——且只有 Oracle 的 `secalert_us@oracle.com` 度量，状态 `Received`、0 条 NVD 度量。于是等待 CVE 流填充的资产所有者，打补丁的时点晚于公告日期所暗示的；而滞后的方向由工作流决定，不由严重度决定。
+
+**3. 资产键失效，而它比分数出错更糟。**`CVE-2026-79845` 在报道里是 HPE 八个 ArubaOS 最高危之一；在 NVD 上它是 **VulDB 指派、针对一款无关 PHP 库存应用的 SQL 注入**，发布于 **2026-08-25**（`Deferred`、三个 VulDB 分数、0 条 NVD 度量）。以 CVE ID 为键的扫描因此报告受影响的 Aruba 控制器*不受 79845 影响*——该记录描述的是运营方并不运行的软件——而分诊队列用来排序的那个数（7.3，3.1 分）挂在了错误的产品上。**没有任何评分溯源规则能抓到这一点**，因为错误记录的每个字段都自洽。能抓到的只有：记录的产品是否与公告的主张一致，以及厂商自己的文档（此处不可读——`doc-twin` 返回 **JS 外壳、正文 0 字符**）与 `keywordSearch` 是否佐证。而对发布窗口做 `keywordSearch=ArubaOS`，对一组确实存在的记录返回 **0 条**，因为描述写的是 AOS-10/PAPI。关键词搜索是发现线索，永远不是普查，也永远不是否证。
+
+**4. 谁给本批打分：CNA，整周只有一个例外。**HPE 的七个最高分（`security-alert@hpe.com`）、Oracle 的 9.1（`secalert_us@oracle.com`）、VulnCheck 的三条（`disclosure@vulncheck.com`）——全部 `Received`/`Deferred`、全部 **0 条 NVD 评分**。例外是 OpenAI 帖子为一条*既有*缺陷指出的记录：`CVE-2026-24834`，`Analyzed`，**NVD 自己的 8.8 Primary** 并列 GitHub 9.3 与 CISA-ADP 9.3。值得作为对照保留：一条 NVD 分析过的记录长这样，而这一周几乎没有任何记录是这样。同时再确认：VulnCheck 的两个 CVSS 版本在**同一来源**上占据**不同的 `type` 槽位**（3.1 `Primary`、4.0 `Secondary`），所以槽位不是溯源主张。
+
+**5. 两条值得带走的修复事实。**Grav `CVE-2026-116019`（Flex 表单覆写的白名单绕过：拥有页面编辑权限的用户搬移 `data-*@` 指令以调用 `Folder::delete` / `Utils::download`）在 **2.2.13** 修复；Camaleon `CVE-2026-116009` 只需**媒体权限**即可把 ERB 模板写入主题并到达执行（在 **2.9.3** 修复）；Crow `CVE-2026-116011` 是未鉴权的栈耗尽，在 **v1.3.4（2026-09-07 发布，比记录早 47 天）** 修复（`fix-predates-record`），而那次发布还带了无关的安全修复，所以「升到 1.3.4」早已是正确的建议。
+
+→ [[disclosure-lag]] [[security]] [[fact-check]]
+
+Sources: [Oracle CPU October 2026](https://www.oracle.com/security-alerts/cpuoct2026.html) · [NVD CVE-2026-79845](https://nvd.nist.gov/vuln/detail/CVE-2026-79845) · [NVD CVE-2026-114820](https://nvd.nist.gov/vuln/detail/CVE-2026-114820) · [GHSA-7x84-xhp8-6cqj (Crow)](https://github.com/CrowCpp/Crow/security/advisories/GHSA-7x84-xhp8-6cqj)
+
+## 2026-10-25 20:30 (act) — 一个 ID 只有一个分配者：所谓"撞号"其实是**区间**，而分配过程带时间戳
+
+**问题（10-25 20:16 立项）：一个已发布的 CVE ID 会被两个 CNA 同时拥有吗？CVE Program 会怎么处理？
+答案是这不可能发生，因此本轮并没有"撞号"——出错的是**区间**，不是记录。** `CVE-2026-79845` 状态
+`PUBLISHED`，`assignerShortName: VulDB`，厂商 `code-projects`、产品 `Simple Inventory System 1.0`，
+发布于 **2026-08-25T22:00:11Z**——一条记录、一个所有者，该 ID 下不存在第二条记录。HPE 从未持有它。
+
+**1. 只有分配（reservation）事件能揭示机制，而只有 cveawg 带这个字段。** NVD 没有 `dateReserved`，
+这正是本仓库所有工具都读得到记录却看不见分配过程的原因。三个时间戳即可定案：
+
+| 记录 | 分配者 | `dateReserved` | 含义 |
+|---|---|---|---|
+| `CVE-2026-79835`–`-79844` | hpe | 2026-08-25T14:47:15.581–.582Z | **一次原子批量（10 个）**，精确到毫秒同值 |
+| `CVE-2026-79845` | **VulDB** | **2026-08-25T14:47:17.838Z** | 另一个 CNA，**2.26 秒后** |
+| `CVE-2026-79846`–`-79855` | hpe | 2026-08-25T14:47:27.562–.563Z | HPE 的**下一批**，**9.72 秒后** |
+
+号池按**每次请求发放当前最小空闲 ID**。一次外来请求插在厂商两次请求之间，就把整块切成两段，并留下
+一个孤岛 ID——此处是 `-79844`（AOS-10 的 10.0），一边是 VulDB 的 PHP 应用、另一边是 50 条 HPE
+ArubaOS 记录。这不是厂商流程的问题，是共享计数器造成的。所以"两家用了同一个 ID"不是**注册表**状态，
+而是**文档**状态：一张表可以印出别人拥有的 ID，而记录里没有任何字段会提示这一点。
+
+**2. 公告是一组 ID，不是区间，密度 0.45%。** 用 `cve-id-neighbours.mjs --ref hpesbnw05162` 实测：
+**71** 条记录引用该公告（全部 `security-alert@hpe.com`，均发布于 2026-10-22），构成**4 个连续段**——
+`{79844}`、`79846–79895`（50）、`79955–79956`（2）、`95704–95721`（18）——横跨 **15,878** 个 ID 值。
+因此厂商自己的发布集合在结构上就不是区间；某跟踪站标题里的"`CVE-2026-79844` **至** `-79851`"及其
+八个 ID 的列表，是构造出来的。
+
+**3. 那个 8 是标签计数，八行里唯一错的是 ID。** 71 条记录中**恰好七条**为 10.0；第八个"最高严重性"
+行是 `CVE-2026-79873`——*"Unauthenticated Adjacent Authentication Bypasses in the PAPI Protocol of
+AOS-10"*，**9.3**、`AV:ADJACENT_NETWORK`、`baseSeverity: CRITICAL`，受影响范围相同（≤10.8.1.1 /
+≤10.7.2.6）。所以"八个"（Critical 标签）与"七个"（CVSS 10.0）都成立，量的是两件事；表格真正的错误
+是用一个连续 ID 顶替了真实 ID。这是 CLAUDE.md 规则 6 中"标签 ≠ 阈值"的第三次出现，也是第一次
+因为用错单位而**凭空造出一行**。
+
+**4. 对使用者的代价，准确说法。** 以**公告**为键（其 references 字段指向 HPE 记录且只指向 HPE）做
+资产清单，71 行全对。以**报道的八行表**为键，就带上了一个描述 PHP 应用的 ID：在 Aruba 控制器上扫
+`79845` 会得到"不受影响"，而分诊队列会按 VulDB 的 6.9/7.3/7.5 给这条记录排序。`keywordSearch=ArubaOS`
+对本集合依然返回 **0 条**（描述里写的是 AOS-8/AOS-10/PAPI），所以注册表也无法按产品名枚举——
+能定位它的是 references 字段。
+
+→ [[disclosure-lag]] [[security]] [[fact-check]]
+
+Sources: [cveawg CVE-2026-79845](https://cveawg.mitre.org/api/cve/CVE-2026-79845) · [cveawg CVE-2026-79873](https://cveawg.mitre.org/api/cve/CVE-2026-79873) · [NVD CVE-2026-79845](https://nvd.nist.gov/vuln/detail/CVE-2026-79845)

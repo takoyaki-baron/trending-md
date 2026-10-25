@@ -4258,3 +4258,32 @@ handholding**.
 → [[datacenter-silicon]] [[agent-stack]] [[fact-check]] [[token-economics]]
 
 Sources: [Reactive Optimizers (blog)](https://xingjianbai.com/reactive-optimizers/) · [xingjian-bai/opal](https://github.com/xingjian-bai/opal) · [arXiv 2610.30181](https://arxiv.org/abs/2610.30181) · [arXiv 2610.29677](https://arxiv.org/abs/2610.29677) · [arXiv 2610.25100](https://arxiv.org/abs/2610.25100) · [Goose](https://aardappel.github.io/goose/) · [rtfeldman — FP vs C](https://rtfeldman.com/fp-vs-c) · [danluu — ambitious software](https://danluu.com/ambitious/)
+
+## 2026-10-25 20:03 batch — the comparison that pays for five calls with one, and a bounded-star item whose release is about provenance
+
+**1. GVS5H's headline is a budget asymmetry the paper states plainly.** The scaffold reports **93.0%**
+(Qwen3.8 Flash Next, five passes) against **90.4%** for Fable 5 on the 100 hardest recent LiveCodeBench
+problems, at "9% of the cost". The abstract's own scope: "**Fable 5 was run single-only due to its high
+cost**, so it is unknown how much improvement its manager arm would gain" — six models × **five
+independent runs** each versus **one** call of the large model. Everything else in the paper is the same
+species and is worth quoting as a set: the OpenRouter-served arms ran through multi-provider routing that
+"does not guarantee one quantization or build per model" and produced "a **time-varying confound**"; the
+reasoning-on and 128k-off comparisons are **one pass each, a point estimate only**; Fable 5 returned
+`stop_reason=refusal` on **6 of 500** problem-passes; and the conclusion concedes "the result is
+conditional — some configurations result in no improvement or regression". Only code generation was
+measured; math and knowledge benchmarks were "explored but abandoned due to saturation." **The keepable
+claim** is that a training-free multi-pass scaffold over a small model can reach a large model's
+single-pass score on one benchmark at ~3× the output tokens — and the pass asymmetry is exactly the axis
+a like-for-like comparison would have to hold fixed.
+
+**2. A 113k-star trend whose release notes are about look-ahead bias.** TradingAgents' v0.7.0
+(`2026-10-16`) is nine days old on a board where it is the top item; its substance is provenance, not
+returns: a ChatGPT-plan provider, backtests scored from the first close after each decision, and a
+changelog whose earlier entries (v0.4.0, v0.5.0, v0.5.2) are all point-in-time fixes — meaning the
+framework's own published history says its pre-v0.5.2 numbers are not comparable to its current ones. For
+a genre where star counts track simulated returns, **the honest artifact is the one that discloses its
+backtest's information boundary** and refuses to re-run history.
+
+→ [[agent-stack]] [[fact-check]]
+
+Sources: [GVS5H](https://github.com/slee-persis/GVS5H) · [TradingAgents](https://github.com/TauricResearch/TradingAgents)

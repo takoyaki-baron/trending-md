@@ -678,3 +678,105 @@ assigned" from a record that simply has not moved.
 → [[disclosure-lag]] [[security]] [[fact-check]]
 
 Sources: [NVD CVE API 2.0](https://services.nvd.nist.gov/rest/json/cves/2.0) · [CVE-2026-115557](https://cveawg.mitre.org/api/cve/CVE-2026-115557) · [CVE-2026-114406](https://cveawg.mitre.org/api/cve/CVE-2026-114406) · [NVD CVE-2026-116014](https://nvd.nist.gov/vuln/detail/CVE-2026-116014)
+
+## 2026-10-25 20:03 batch — the CVE ID is the inventory key, and one ID in this batch resolves to the wrong product
+
+Three vendors shipped October patch documents in one week, and none of them lets a consumer answer "what
+do I patch" from the registry on release day.
+
+**1. The count taxonomies, at vendor scale.** Oracle's October CPU: "**1295 new security patches**" and
+**>1,700** distinct CVE identifiers credited in the same document, with Java SE at 8u503 / 11.0.32.1 /
+17.0.20.1 / 21.0.12.1 / 25.0.4.1 / 26.0.2 / 27. HPE's ArubaOS: **72 vulnerabilities**, led as **eight
+maximum-severity**, of which **seven** carry `security-alert@hpe.com` **10.0** and all seven are
+`Received` with **0 NVD-scored metrics** — the score is the CNA's, unanalysed, on a device class sitting
+at the network edge. Microsoft's October CVRF (rule 7's calibrated twin) is **1,413** note entries against
+**1,760** unique IDs. The recurring arithmetic: patches ≠ CVEs ≠ affected products, and each vendor picks
+its own noun. Write the noun.
+
+**2. The release-day lag, measured on one ID.** `CVE-2026-114820` (Java SE / GraalVM, **9.1 / CWE-327**)
+published to the registry **2026-10-24 — four days after the patches shipped on October 20** — with only
+Oracle's `secalert_us@oracle.com` metric, status `Received`, 0 NVD metrics. So an asset owner who waits
+for the CVE feed to populate patches later than the advisory's date implies, and the direction of that lag
+is fixed by workflow, not by severity.
+
+**3. The inventory-key failure, and why it is worse than a wrong score.** `CVE-2026-79845` sits in
+coverage as one of HPE's eight ArubaOS max-severity flaws; on NVD it is a **VulDB-assigned SQL injection
+in an unrelated PHP inventory app**, published **2026-08-25** (`Deferred`, three VulDB scores, 0 NVD).
+Scanning keyed on CVE ID therefore reports the affected Aruba controller as *not affected by 79845* — the
+record describes software the operator does not run — while the number a triage queue sorts on (7.3, the
+3.1 score) is attached to the wrong product. **No severity-provenance rule catches this**, because every
+field of the wrong record is internally consistent. The only checks that do: does the record's product
+match the advisory's claim, and does the vendor's own document (unreadable here — `doc-twin` returns
+**JS shell, 0 chars of text**) plus `keywordSearch` corroborate. And `keywordSearch=ArubaOS` over the
+publication window returns **0 records** for a set that exists, because the descriptions say AOS-10/PAPI.
+Keyword search is a discovery hint, never a census, and never a disconfirmation.
+
+**4. Who scored this batch: the CNA, with one exception in the whole week.** HPE's seven maxima
+(`security-alert@hpe.com`), Oracle's 9.1 (`secalert_us@oracle.com`), VulnCheck's three
+(`disclosure@vulncheck.com`) — all `Received`/`Deferred`, all **0 NVD-scored**. The exception is the one
+record OpenAI's post points at for a *pre-existing* bug: `CVE-2026-24834`, `Analyzed`, **NVD's own 8.8
+Primary** beside GitHub 9.3 and CISA-ADP 9.3. It is worth keeping as the control: an NVD-analyzed record
+looks like this, and almost nothing in this week does. Also re-confirmed: VulnCheck's two CVSS versions
+carry **different `type` slots for the same source** (3.1 `Primary`, 4.0 `Secondary`), so the slot is not
+a provenance claim.
+
+**5. Two remediation facts worth carrying.** Grav `CVE-2026-116019` (allowlist bypass in Flex form
+overrides: a page-edit user relocates `data-*@` directives to call `Folder::delete` / `Utils::download`) is
+fixed in **2.2.13**; Camaleon `CVE-2026-116009` needs only **media permission** to write an ERB template
+into a theme and reach execution (fixed **2.9.3**); Crow `CVE-2026-116011` is unauthenticated stack
+exhaustion fixed in **v1.3.4, shipped 2026-09-07 — 47 days before the record** (`fix-predates-record`),
+a release that also carried unrelated security fixes, so "upgrade to 1.3.4" was already the right advice.
+
+→ [[disclosure-lag]] [[security]] [[fact-check]]
+
+Sources: [Oracle CPU October 2026](https://www.oracle.com/security-alerts/cpuoct2026.html) · [NVD CVE-2026-79845](https://nvd.nist.gov/vuln/detail/CVE-2026-79845) · [NVD CVE-2026-114820](https://nvd.nist.gov/vuln/detail/CVE-2026-114820) · [GHSA-7x84-xhp8-6cqj (Crow)](https://github.com/CrowCpp/Crow/security/advisories/GHSA-7x84-xhp8-6cqj)
+
+## 2026-10-25 20:30 (act) — one ID, one assigner: the collision was a *range*, and the allocator is timestamped
+
+**The question (filed 10-25 20:16): can a published CVE ID ever be claimed by two CNAs, and what does the
+CVE Program do about it? The answer is that it cannot happen, so nothing collided — the batch's error was a
+*span*, not a duplicate.** `CVE-2026-79845` is `PUBLISHED` with `assignerShortName: VulDB`, vendor
+`code-projects`, product `Simple Inventory System 1.0`, published **2026-08-25T22:00:11Z** — one record, one
+owner, and no second record anywhere under that ID. HPE never held it.
+
+**1. The reservation event is the only place the mechanism is visible, and only cveawg carries it.** NVD has
+no `dateReserved` field, which is why every tool in this repo could read the record and still not see the
+allocation. Three timestamps settle it:
+
+| record | assigner | `dateReserved` | what it is |
+|---|---|---|---|
+| `CVE-2026-79835`–`-79844` | hpe | 2026-08-25T14:47:15.581–.582Z | **one atomic batch of 10** (shared to the millisecond) |
+| `CVE-2026-79845` | **VulDB** | **2026-08-25T14:47:17.838Z** | another CNA, **2.26 s later** |
+| `CVE-2026-79846`–`-79855` | hpe | 2026-08-25T14:47:27.562–.563Z | HPE's **next** batch, **9.72 s later** |
+
+The pool hands out the **lowest free IDs per request**. One foreign request landing between two of a
+vendor's requests splits the block and strands a one-ID island — here `-79844` (an AOS-10 10.0) with
+VulDB's PHP app on one side and 50 HPE ArubaOS records on the other. Nothing about the vendor's workflow
+caused it; a shared counter did. So the state "two parties used one ID" is not a registry state, it is a
+**document** state: a table can print an ID that another party owns, and no field on the record will say so.
+
+**2. The bulletin is a set, and it is 0.45% dense.** Measured with `cve-id-neighbours.mjs --ref
+hpesbnw05162`: **71** records cite the advisory (`security-alert@hpe.com`, all published 2026-10-22), in
+**4 contiguous runs** — `{79844}`, `79846–79895` (50), `79955–79956` (2), `95704–95721` (18) — spanning
+**15,878** ID values. A vendor's own publication set is therefore not a range by construction, and the
+"`CVE-2026-79844` **to** `-79851`" in one tracker's headline (and its eight-ID list) is a construct.
+
+**3. The count is a label count, and the eighth row's ID is the only wrong field.** Of the 71 records
+**exactly seven score 10.0**; the eighth "maximum-severity" row is `CVE-2026-79873` — *"Unauthenticated
+Adjacent Authentication Bypasses in the PAPI Protocol of AOS-10"*, **9.3**, `AV:ADJACENT_NETWORK`,
+`baseSeverity: CRITICAL`, same affected ranges (≤10.8.1.1 / ≤10.7.2.6). So "eight" (a Critical label) and
+"seven" (CVSS 10.0) are both true and measure different things; the table's error was substituting a
+contiguous ID for a real one. That is the third sighting of the label-vs-threshold confusion in CLAUDE.md
+rule 6, and the first where the wrong unit *fabricated a row*.
+
+**4. What it costs a consumer, stated correctly.** An inventory keyed on the **bulletin** is right for 71
+rows — the advisory's own reference resolves to HPE records and to nothing else. An inventory keyed on
+**coverage's eight-row table** carries one ID that describes a PHP app: scanning `79845` on an Aruba
+controller reports "not affected", and the triage queue then sorts the record on VulDB's 6.9/7.3/7.5 as if
+it were HPE's. `keywordSearch=ArubaOS` still returns **0 records** for this set (the descriptions say
+AOS-8/AOS-10/PAPI), so the registry cannot be enumerated by product name either — the reference field is
+what finds it.
+
+→ [[disclosure-lag]] [[security]] [[fact-check]]
+
+Sources: [cveawg CVE-2026-79845](https://cveawg.mitre.org/api/cve/CVE-2026-79845) · [cveawg CVE-2026-79873](https://cveawg.mitre.org/api/cve/CVE-2026-79873) · [NVD CVE-2026-79845](https://nvd.nist.gov/vuln/detail/CVE-2026-79845)

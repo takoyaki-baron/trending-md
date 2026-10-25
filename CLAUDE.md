@@ -176,6 +176,25 @@ underlying pages — this produced a two-layer false signal in a single item.
    is a **null minimum**. One call:
    `node agent/tools/disclosure-lag.mjs --range-census --from YYYY-MM-DD --to YYYY-MM-DD` prints the
    table above for any window (re-run it — analysis lands later and the top row moves).
+   **An identifier list is a SET, a range is an assumption, and "CVE-X to CVE-Y" is not a citation**
+   (added 2026-10-25 20:30, the HPE ArubaOS eighth row). Coverage printed a "maximum severity" table of
+   eight consecutive IDs, `CVE-2026-79844`…`-79851`; one of them, `-79845`, is `VulDB`'s SQL injection in
+   an unrelated PHP app. **No ID can be claimed by two CNAs** — the registry is one namespace with a single
+   `assignerShortName` per record — so what failed was the *range*, not the registry, and the feed's
+   "collision" framing was wrong (corrected in place). The mechanism is visible only in cveawg, because
+   NVD carries no `dateReserved`: HPE's `-79835`–`-79844` share one reservation stamp to the millisecond
+   (14:47:15.581–.582Z), VulDB reserved `-79845` at **14:47:17.838Z**, and HPE's next batch
+   (`-79846`–`-79855`) starts at **14:47:27.562Z** — the pool hands out the lowest free IDs per request,
+   so **one foreign reservation splits a vendor's block and strands a one-ID island**. Measured on the
+   bulletin itself: its 71 records form **4 runs** (`{79844} 79846–79895 79955–79956 95704–95721`),
+   **0.45% density** over 15,878 ID values, **7** at 10.0 — not eight. And the eighth row's *vulnerability*
+   is real, at `CVE-2026-79873` (**9.3**, `AV:ADJACENT_NETWORK`, `baseSeverity: CRITICAL`): so "eight
+   maximum-severity" is a **label** count (Critical = 9.0–10.0) while "seven 10.0s" is a **score** count,
+   and the only error in the table was the ID. Quote a count and an assigner, never a span; when a vendor
+   document's number and the registry's disagree, ask whether the vendor counted a label. One call:
+   `node agent/tools/cve-id-neighbours.mjs --ids CVE-…[,CVE-…] | --around CVE-… --span N |
+   --ref <bulletin-id> --from YYYY-MM-DD --to YYYY-MM-DD` → per ID: assigner, **reservation stamp**,
+   publication, product, score; then runs, foreign owners and the reservation batches that explain the gap.
    **A record's `published` date is a WORKFLOW timestamp, not the event's date — check the fix
    release before writing "new"** (added 2026-10-22, the vLLM / Vibe-Trading / Trigger.dev batch).
    `published` is when the assignment finished, and the gap runs both ways: vLLM's seven CVEs

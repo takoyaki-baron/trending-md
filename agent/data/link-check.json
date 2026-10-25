@@ -3370,105 +3370,123 @@
     },
     "https://news.ycombinator.com/item?id=50222622": {
       "verdict": "blocked",
-      "streak": 4,
+      "streak": 5,
       "first_seen": "2026-10-24T20:15:34.495Z",
-      "last_seen": "2026-10-25T04:52:23.820Z",
+      "last_seen": "2026-10-25T12:49:32.561Z",
       "feeds": [
         "2026-10-25.md"
       ]
     },
     "https://news.ycombinator.com/item?id=50224074": {
       "verdict": "blocked",
-      "streak": 4,
+      "streak": 5,
       "first_seen": "2026-10-24T20:15:34.495Z",
-      "last_seen": "2026-10-25T04:52:23.820Z",
+      "last_seen": "2026-10-25T12:49:32.561Z",
       "feeds": [
         "2026-10-25.md"
       ]
     },
     "https://news.ycombinator.com/item?id=50223647": {
       "verdict": "blocked",
-      "streak": 4,
+      "streak": 5,
       "first_seen": "2026-10-24T20:15:34.495Z",
-      "last_seen": "2026-10-25T04:52:23.820Z",
+      "last_seen": "2026-10-25T12:49:32.561Z",
       "feeds": [
         "2026-10-25.md"
       ]
     },
     "https://www.reuters.com/technology/php-foundation-under-funded-with-one-full-time-staff-member-director-says-2026-10-23/": {
       "verdict": "blocked",
-      "streak": 4,
+      "streak": 5,
       "first_seen": "2026-10-24T20:15:34.495Z",
-      "last_seen": "2026-10-25T04:52:23.820Z",
+      "last_seen": "2026-10-25T12:49:32.561Z",
       "feeds": [
         "2026-10-25.md"
       ]
     },
     "https://money.usnews.com/investing/news/articles/2026-10-23/php-foundation-under-funded-with-one-full-time-staff-member-director-says": {
       "verdict": "transient",
-      "streak": 4,
+      "streak": 5,
       "first_seen": "2026-10-24T20:15:34.495Z",
-      "last_seen": "2026-10-25T04:52:23.820Z",
+      "last_seen": "2026-10-25T12:49:32.561Z",
       "feeds": [
         "2026-10-25.md"
       ]
     },
     "https://news.ycombinator.com/item?id=50218195": {
       "verdict": "blocked",
-      "streak": 1,
+      "streak": 2,
       "first_seen": "2026-10-25T04:52:23.820Z",
-      "last_seen": "2026-10-25T04:52:23.820Z",
-      "feeds": [
-        "2026-10-25.md"
-      ]
-    },
-    "https://news.ycombinator.com/item?id=50225695": {
-      "verdict": "blocked",
-      "streak": 1,
-      "first_seen": "2026-10-25T04:52:23.820Z",
-      "last_seen": "2026-10-25T04:52:23.820Z",
-      "feeds": [
-        "2026-10-25.md"
-      ]
-    },
-    "https://news.ycombinator.com/item?id=50227356": {
-      "verdict": "blocked",
-      "streak": 1,
-      "first_seen": "2026-10-25T04:52:23.820Z",
-      "last_seen": "2026-10-25T04:52:23.820Z",
+      "last_seen": "2026-10-25T12:49:32.561Z",
       "feeds": [
         "2026-10-25.md"
       ]
     },
     "https://news.ycombinator.com/item?id=50214373": {
       "verdict": "blocked",
-      "streak": 1,
+      "streak": 2,
       "first_seen": "2026-10-25T04:52:23.820Z",
-      "last_seen": "2026-10-25T04:52:23.820Z",
+      "last_seen": "2026-10-25T12:49:32.561Z",
       "feeds": [
         "2026-10-25.md"
       ]
     },
     "https://news.ycombinator.com/item?id=50222525": {
       "verdict": "blocked",
-      "streak": 1,
+      "streak": 2,
       "first_seen": "2026-10-25T04:52:23.820Z",
-      "last_seen": "2026-10-25T04:52:23.820Z",
+      "last_seen": "2026-10-25T12:49:32.561Z",
       "feeds": [
         "2026-10-25.md"
       ]
     },
     "https://stealmybitcoin.com/": {
       "verdict": "transient",
-      "streak": 1,
+      "streak": 2,
       "first_seen": "2026-10-25T04:52:23.820Z",
-      "last_seen": "2026-10-25T04:52:23.820Z",
+      "last_seen": "2026-10-25T12:49:32.561Z",
+      "feeds": [
+        "2026-10-25.md"
+      ]
+    },
+    "https://news.ycombinator.com/item?id=50218633": {
+      "verdict": "blocked",
+      "streak": 1,
+      "first_seen": "2026-10-25T12:49:32.561Z",
+      "last_seen": "2026-10-25T12:49:32.561Z",
+      "feeds": [
+        "2026-10-25.md"
+      ]
+    },
+    "https://news.ycombinator.com/item?id=50219700": {
+      "verdict": "blocked",
+      "streak": 1,
+      "first_seen": "2026-10-25T12:49:32.561Z",
+      "last_seen": "2026-10-25T12:49:32.561Z",
+      "feeds": [
+        "2026-10-25.md"
+      ]
+    },
+    "https://news.ycombinator.com/item?id=50212320": {
+      "verdict": "blocked",
+      "streak": 1,
+      "first_seen": "2026-10-25T12:49:32.561Z",
+      "last_seen": "2026-10-25T12:49:32.561Z",
+      "feeds": [
+        "2026-10-25.md"
+      ]
+    },
+    "https://news.ycombinator.com/item?id=50228167": {
+      "verdict": "blocked",
+      "streak": 1,
+      "first_seen": "2026-10-25T12:49:32.561Z",
+      "last_seen": "2026-10-25T12:49:32.561Z",
       "feeds": [
         "2026-10-25.md"
       ]
     }
   },
-  "runs": 92,
+  "runs": 93,
   "first_run": "2026-09-05T12:47:55.004Z",
-  "last_run": "2026-10-25T04:52:23.820Z"
+  "last_run": "2026-10-25T12:49:32.561Z"
 }

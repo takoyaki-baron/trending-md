@@ -2325,3 +2325,15 @@ Sources: [Ephemeral-AI-Lab/layerfs](https://github.com/Ephemeral-AI-Lab/layerfs)
 → [[agent-ops]] [[dev-tools]]
 
 Sources: [corgi.computer](https://corgi.computer/) · [HN 50214373](https://news.ycombinator.com/item?id=50214373)
+
+## 2026-10-25 20:03 バッチ——コントロールサーフェスはハーネスの*上*に座り、そのコストは読み分けねばならない形式である
+
+**1. `pingdotgg/t3code` は自分が既に持つ 6 つのハーネスのリモコンである。****29,938★**、8,043 fork、**MIT**、2026-02-08 作成、当日も push あり。iOS と Android の両方にアプリがあり、`app.t3.codes` のウェブ版と Electron デスクトップ版もある。導入は `curl … | sh` / Homebrew / winget / scoop。**Claude Code、Codex、Cursor、Grok Build、OpenCode、Google Antigravity** を駆動し、先に少なくとも 1 つの provider の CLI を導入・認証することを求める——つまりモデルアクセスの再販ではなく、自分が所有するセッションの上に載るフロントエンドだ。当然の問いに README 自身が答える（「**Wait, what are you selling me?**」——「Nothing.」）。**コストは実測できる合成の代償：**各ハーネスは独自のセッション形式を永続化するため、このリポジトリのオープン issue+PR は **3,286——うちオープン PR が 2,218、issue が 1,068**（search API、2026-10-25）。示される競争軸はモデルでもハーネスでもなく、**それらすべての上に座るビューはどれか**、しかも自宅で走る処理をスマートフォンから見る形——Corgi がデスクトップで占めるのと同じ層である（10-25 12:16）。
+
+**2. GVS5H：同一モデルの新規 5 インスタンス、共有ファイルシステム、学習ゼロ。**`slee-persis/GVS5H`（**904★**、HN 167 点、2026-08-26 作成）は学習なしの足場——マネージャが `plan.md` とタスク一覧を書き、ワーカーがそれぞれ**空のコンテキスト**で 1 タスクを実行し、すべては共有ファイルシステムで調整される。直近最難の LiveCodeBench 100 問で Qwen3.8 Flash Next が **93.0%** pass@1、Fable 5 が **90.4%**、ローカル配備の Qwen3.8-27B は **66.8% → 92.4%**、出力トークンは約 **3×**。発見は比較の形そのものにある（[[frontier-models]] 参照）：**小モデル 5 回 対 大モデル 1 回**。設計上は「ハーネスが状態を持つ」テーゼへの反命题で、共有*ファイルシステム*が唯一の永続オブジェクト、ワーカーの文脈は使い捨て——LayerFS の CoW 履歴、Corgi の worktree と同じ分割である。
+
+**3. TradingAgents v0.7.0 はバックテストの*ポイントインタイム*境界を明示的なリリース軸にした。**`TauricResearch/TradingAgents`——**113,931★**、Apache-2.0、`pushed_at` **2026-10-16T21:38:46Z**（トップ項目が 9 日間 push なし。リリース起点のスター急騰の典型）——`chatgpt` provider を追加し、API キーではなく OpenAI の OSS アプリ向けサインイン経由で自分の ChatGPT Plus/Pro プラン上で動かせる。バックテストは**各判断後の最初の終値から**採点され、各リリースに wheel が付く。変更履歴が来歴の記録である：v0.4.0 が FRED マクロ・センチメント・判断ログ記憶の先読みを修正し、v0.5.0 が日付付き経路すべてにポイントインタイム整合性を追加し、v0.5.2 がバックテストを「各分析日までに公開されたデータのみ見る」ようにした——したがって**これらのリリースより前の結果は後と比較できない**。リポジトリは履歴を再実行せずそう書いている。免責はその手前に残る：研究用フレームワーク、バックボーンモデルと温度で変動、「not intended as financial, investment, or trading advice」。
+
+→ [[frontier-models]] [[dev-tools]] [[token-economics]]
+
+Sources: [pingdotgg/t3code](https://github.com/pingdotgg/t3code) · [slee-persis/GVS5H](https://github.com/slee-persis/GVS5H) · [TradingAgents v0.7.0](https://github.com/TauricResearch/TradingAgents/releases/tag/v0.7.0)

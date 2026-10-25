@@ -919,3 +919,13 @@ CameraX、Cars、端侧 AI、Compose、Media3 Cast、Play、R8、测试、TV 迁
 技能文件）正在成为采用的单位，这正是为什么一个仓库能在一周内涨 3,275 星而零提交。
 
 来源：[android/skills](https://github.com/android/skills) · [Android 智能体工具](https://developer.android.com/tools/agents) · [anthropics/claude-plugins-official](https://github.com/anthropics/claude-plugins-official) · [Claude Code 插件文档](https://code.claude.com/docs/en/plugins) · [HKUDS/CLI-Anything](https://github.com/HKUDS/CLI-Anything)
+
+## 2026-10-25 20:03 批次——插件自带了经济学表格，以及在测量上闭环的技能
+
+**1. `AgriciDaniel/claude-seo`——26 个 sub-skill 与 19 个 agent，还配上了这个体裁通常省略的定价表。****20,227★**、2,912 fork、MIT、v2.5.0 于 2026-10-22 发布、**1,077 个测试**；`/seo` 跑一次 10–15 分钟的审计，覆盖可抓取性、索引、sitemap、重定向、Core Web Vitals、E-E-A-T、Schema.org、AI 搜索被引概率（AI Overviews、AI Mode、ChatGPT、Perplexity、Gemini）、本地与电商 SEO，并发「最多 17 个 agent」。有意思的产物是那张对比表——手工（$0、4–8 小时）、代理公司（每项目 **$2k–$15k+**，首年合计 **$106,500**）、软件（$99–$999/月）、以及「Free, with your Claude Code plan」——而**图注与表尾都标注了「Illustrative pricing」**。这个标注在做实事：$106,500 是构造出来的对比而非实测队列，却和厂商自己的 10–15 分钟出现在同一份文档里。体裁层面的要点：打包好的 SEO 专业知识现在以 sub-skill + 并行子 agent 的形式分发，而 README 自己的主视觉与徽章墙就是它所售之物的演示。（它的 41 个开放 issue+PR 拆为 **24 个 issue / 17 个 PR**。）
+
+**2. `wesbos/3d-model-anything`——一个由*测量*而非生成闭环的技能。****1,818★**、创建于 2026-10-21：iPhone 应用采集房间的 LiDAR 几何与照片，Three.js 查看器提供玩偶屋/行走/俯视/线框/knolling 视图，而给 agent 的交付物是一个 **`scan-to-threejs` 技能**（`SKILL.md` + 引用，位于 `.agents/skills/scan-to-threejs/`），引导测量、建模与**同机位视觉比对**原始照片。导出使用带版本的契约（`house-capture/5`），落在 `data/captures-in/<room>/`。对技能问题为何重要：agent 的校验是*从同一机位渲染并与照片比对*——一个闭合、可证伪的环，这正是「会收敛的技能」与「会幻觉出貌似合理网格的技能」之间的区别。它自己的限制都写了：「这是一套**迭代式重建工作流，不是一键扫描即完美模型的转换器**」，当前范围限于房间与室内，只分发办公室演示，「**不要假定 App Store 已有下载**」，代码/技能 MIT 而所附图像另有资产条款。
+
+→ [[agent-stack]] [[fact-check]] [[agent-distribution]]
+
+Sources: [AgriciDaniel/claude-seo](https://github.com/AgriciDaniel/claude-seo) · [the 26 skills](https://github.com/AgriciDaniel/claude-seo/tree/main/skills) · [wesbos/3d-model-anything](https://github.com/wesbos/3d-model-anything) · [the office viewer](https://wesbos.github.io/3d-model-anything/)

@@ -243,3 +243,15 @@ Sources（フォローアップ）: [Engadget、9月27日](https://www.engadget.
 → [[fact-check]] [[agent-plugins]]
 
 Sources: [luongnv89/claude-howto](https://github.com/luongnv89/claude-howto) · [GitHub Trending (daily)](https://github.com/trending?since=daily)
+
+## 2026-10-25 20:03 バッチ——民生ハードの導入説明は、いまエージェントへの一言になった
+
+同じ週に独立した広告なし TV ランチャーが 2 本出た：`pengchujin/aerial-tv`（**4,749★**、MIT、2026-10-20 作成）は中国市場の Android TV 向け、`simbasjungles/free-my-tv`（**4,415★**、MIT、2026-10-19 作成）は **Google TV、LG webOS、Samsung Tizen** を覆う。どちらも root 不要、何もアンインストールせず、Free My TV のロールバックは「ボタン一つで工場出荷のホーム画面に戻る」。
+
+**配布の詳細こそが項目である：**Free My TV の文書化された*簡単な*導入方法は、AI コーディングアシスタントを開いて「**Install Free My TV on my TV at 192.168.1.50**」と言うこと——自然言語の指示が ADB サイドロードの手順を置き換え、アシスタントがベンダーのストアに載らない民生ハードのソフトウェアの配送経路になる。これはエージェント体験のテーゼ（テーゼ 16）が*発見*ではなく*導入*の段階に到達した形であり、README はモデルが実行するために書かれ、人間の役割は自分の TV の IP を告げることになる。
+
+**第二の詳細は測定の規律。**Free My TV は「**60 fps、毎フレーム 16.6 ms**」と「242 MB ではなく **96 MB**（−60%）」を公表し、同じ文で範囲を固定する——「**98 インチ TCL Google TV、Android 14** で実測」——1 枚のパネル、1 つのチップ、1 つのファームウェア。さらに既成 APK に欠けるものも書く（「TMDB キーが無いためホーム画面にピックが出ない」）。Aerial は対応する留保を数字で負う：作成 5 日で **issue 203 / PR 25** がオープン。
+
+→ [[agent-plugins]] [[platform-gatekeeping]] [[fact-check]]
+
+Sources: [pengchujin/aerial-tv](https://github.com/pengchujin/aerial-tv) · [simbasjungles/free-my-tv](https://github.com/simbasjungles/free-my-tv) · [freemytv.io](https://freemytv.io)

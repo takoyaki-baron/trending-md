@@ -3079,3 +3079,44 @@ unreleased terminal build.
 → [[agent-ops]] [[dev-tools]]
 
 Sources: [corgi.computer](https://corgi.computer/) · [HN 50214373](https://news.ycombinator.com/item?id=50214373)
+
+## 2026-10-25 20:03 batch — the control surface sits *above* the harnesses, and its cost is the formats it must read
+
+**1. `pingdotgg/t3code` is a remote control for six harnesses you already own.** **29,938★**, 8,043
+forks, **MIT**, created 2026-02-08, pushed 2026-10-25; apps on iOS *and* Android, a web app at
+`app.t3.codes` and an Electron desktop build, installed by `curl … | sh` / Homebrew / winget / scoop. It
+drives **Claude Code, Codex, Cursor, Grok Build, OpenCode and Google Antigravity** — and requires that
+you install and authenticate at least one provider's own CLI first, which makes it a front end over
+sessions you own rather than a reseller. It answers the obvious question in its own README ("**Wait,
+what are you selling me?**" — "Nothing."). **The measured cost is composition:** each harness persists
+its own session format, and the repo's issue+PR backlog is **3,286 — of which 2,218 are open PRs and
+1,068 are issues** (search API, 2026-10-25). The competition this marks is not which model or which
+harness but **which view sits one level above all of them**, on a phone, while the work runs at home —
+the same layer Corgi occupies on the desktop (10-25 12:16).
+
+**2. GVS5H: five fresh instances of one model, a shared filesystem, and no training.** `slee-persis/GVS5H`
+(**904★**, HN 167 pts, created 2026-08-26) is a training-free scaffold — a manager writes `plan.md` plus a
+task list, workers each execute one task with an **empty context**, everything coordinated through a
+shared filesystem — reporting **93.0%** pass@1 on the 100 hardest recent LiveCodeBench problems with
+Qwen3.8 Flash Next against **90.4%** for Fable 5, and **66.8% → 92.4%** for locally served Qwen3.8-27B, at
+roughly **3×** the output-token bill. The comparison's shape is the finding (see [[frontier-models]]):
+**five calls of the small model versus one call of the large one**. Architecturally it is the
+counter-position to the harness-owns-state thesis: the shared *filesystem* is the only durable object and
+the worker contexts are disposable, which is the same split LayerFS makes with copy-on-write history and
+Corgi makes with worktrees.
+
+**3. TradingAgents v0.7.0 makes the backtest's *point-in-time* boundary an explicit release axis.**
+`TauricResearch/TradingAgents` — **113,931★**, Apache-2.0, `pushed_at` **2026-10-16T21:38:46Z** (the
+board's top item is nine days without a push, which is what a release-triggered star spike looks like) —
+ships a `chatgpt` provider that runs the framework on your own ChatGPT Plus/Pro plan through OpenAI's
+sign-in for open-source apps instead of an API key, backtests scored **from the first close after each
+decision**, and a wheel per release. The changelog is the provenance record: v0.4.0 fixed look-ahead in
+FRED macro, social sentiment and decision-log memory, v0.5.0 added point-in-time integrity across dated
+paths, v0.5.2 made backtests "see only data published by each analysis date" — so **results from before
+those releases are not comparable to results after them**, and the repo says that rather than re-running
+history. Its disclaimer stays in front of everything: research framework, varies with backbone model and
+temperature, "not intended as financial, investment, or trading advice."
+
+→ [[frontier-models]] [[dev-tools]] [[token-economics]]
+
+Sources: [pingdotgg/t3code](https://github.com/pingdotgg/t3code) · [slee-persis/GVS5H](https://github.com/slee-persis/GVS5H) · [TradingAgents v0.7.0](https://github.com/TauricResearch/TradingAgents/releases/tag/v0.7.0)

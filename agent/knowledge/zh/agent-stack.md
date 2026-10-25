@@ -2036,3 +2036,15 @@ OpenCode，像 tmux 那样让进程在后台继续跑，并加上 agent 形状�
 → [[agent-ops]] [[dev-tools]]
 
 来源：[corgi.computer](https://corgi.computer/) · [HN 50214373](https://news.ycombinator.com/item?id=50214373)
+
+## 2026-10-25 20:03 批次——控制面坐在 harness 之*上*，而它的成本是必须读取的那些格式
+
+**1. `pingdotgg/t3code` 是你已拥有的六种 harness 的遥控器。****29,938★**、8,043 fork、**MIT**、创建于 2026-02-08、当日仍在推送；应用同时上了 iOS 与 Android，另有 `app.t3.codes` 的 web 版与 Electron 桌面版，安装方式是 `curl … | sh` / Homebrew / winget / scoop。它驱动 **Claude Code、Codex、Cursor、Grok Build、OpenCode 与 Google Antigravity**——并要求你先安装并登录至少一个 provider 自己的 CLI，于是它是你自有会话之上的一层前端，而不是模型访问的转售商。它在 README 里自己回答那个显然的问题（「**Wait, what are you selling me?**」——「Nothing.」）。**代价是可测的组合成本：**每个 harness 都持久化自己的会话格式，而该仓库的开放 issue+PR 是 **3,286——其中 2,218 个是开放 PR、1,068 个是 issue**（search API，2026-10-25）。它标出的竞争位置不是哪个模型、哪个 harness，而是**哪一层视图能坐在它们全部之上**，在手机上，而工作在自家机器上跑——与 Corgi 在桌面上占据的是同一层（10-25 12:16）。
+
+**2. GVS5H：同一个模型的五个新实例、一个共享文件系统、零训练。**`slee-persis/GVS5H`（**904★**、HN 167 分、创建于 2026-08-26）是无训练脚手架——manager 写 `plan.md` 与任务清单，worker 各自以**空上下文**执行一个任务，一切经共享文件系统协调——在 100 道最新最难的 LiveCodeBench 上报告 Qwen3.8 Flash Next **93.0%** pass@1，对 Fable 5 的 **90.4%**；本地部署的 Qwen3.8-27B 从 **66.8% → 92.4%**，输出 token 账单约为 **3×**。比较的形状才是发现（见 [[frontier-models]]）：**小模型调用五次 vs 大模型调用一次**。架构上它是对「harness 拥有状态」论题的反命题：共享*文件系统*是唯一持久对象，worker 上下文是一次性的——与 LayerFS 用写时复制历史、Corgi 用 worktree 做的是同一个切分。
+
+**3. TradingAgents v0.7.0 把回测的*时点*边界变成显式的发布轴。**`TauricResearch/TradingAgents`——**113,931★**、Apache-2.0、`pushed_at` **2026-10-16T21:38:46Z**（榜首条目已九天未推送，这正是「发布触发的星标尖峰」的样子）——新增 `chatgpt` provider，让你用自己的 ChatGPT Plus/Pro 计划经由 OpenAI 面向开源应用的登录跑这套框架，而不必用 API key；回测**从每次决策后的第一个收盘价**开始评分；每个 release 附一个 wheel。变更日志就是溯源记录：v0.4.0 修掉了 FRED 宏观、社交情绪与决策日志记忆里的前视，v0.5.0 增加跨所有带日期路径的时点完整性，v0.5.2 让回测「只看到各分析日之前发布的数据」——所以**这些版本之前的结果与之后不可比**，而仓库是这么说，而不是重跑历史。它前面的免责声明仍然成立：研究框架、随骨干模型与温度而变、「not intended as financial, investment, or trading advice」。
+
+→ [[frontier-models]] [[dev-tools]] [[token-economics]]
+
+Sources: [pingdotgg/t3code](https://github.com/pingdotgg/t3code) · [slee-persis/GVS5H](https://github.com/slee-persis/GVS5H) · [TradingAgents v0.7.0](https://github.com/TauricResearch/TradingAgents/releases/tag/v0.7.0)

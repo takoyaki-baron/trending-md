@@ -1275,3 +1275,34 @@ numbers problem and the stale-push problem are in [[fact-check]]; the onward rea
 stars in a week without a commit.
 
 Sources: [android/skills](https://github.com/android/skills) · [Android agent tooling](https://developer.android.com/tools/agents) · [anthropics/claude-plugins-official](https://github.com/anthropics/claude-plugins-official) · [Claude Code plugin docs](https://code.claude.com/docs/en/plugins) · [HKUDS/CLI-Anything](https://github.com/HKUDS/CLI-Anything)
+
+## 2026-10-25 20:03 batch — the plugin ships its own economics table, and the skill that closes the loop on a measurement
+
+**1. `AgriciDaniel/claude-seo` — 26 sub-skills and 19 agents, with the pricing table the genre usually
+omits.** **20,227★**, 2,912 forks, MIT, v2.5.0 on 2026-10-22, **1,077 tests**; `/seo` runs a 10–15 minute
+audit over crawlability, indexing, sitemaps, redirects, Core Web Vitals, E-E-A-T, Schema.org, AI-search
+citation likelihood (AI Overviews, AI Mode, ChatGPT, Perplexity, Gemini), local and e-commerce, using
+"up to 17 agents" concurrently. The interesting artifact is the comparison table — by hand ($0, 4–8 h),
+agency (**$2k–$15k+** per project, year-one total **$106,500**), software ($99–$999/month), and "Free,
+with your Claude Code plan" — and **both the caption and the footer label it "Illustrative pricing."**
+That label is doing the work: $106,500 is a constructed comparison, not a measured cohort, sitting in the
+same document as the vendor's own 10–15 minutes. The genre point: packaged SEO expertise now ships as
+sub-skills plus parallel sub-agents, and the README's own hero images and badge wall are a demonstration
+of the thing it sells. (Its 41 open issues+PRs split as **24 issues / 17 PRs**.)
+
+**2. `wesbos/3d-model-anything` — a skill whose loop is closed by *measurement*, not by generation.**
+**1,818★**, created 2026-10-21: an iPhone app captures a room's LiDAR geometry plus photographs, a
+Three.js viewer renders dollhouse/walking/overhead/wireframe/knolling views, and the deliverable for
+agents is a **`scan-to-threejs` skill** (`SKILL.md` + references at `.agents/skills/scan-to-threejs/`)
+that guides measurement, modeling and **matched-camera visual comparison** against the original photos.
+The export contract is versioned (`house-capture/5`) and lands in `data/captures-in/<room>/`. Why this
+matters for the skills question: the agent's check is *render from the same camera and compare to the
+photograph* — a closed, falsifiable loop — which is the property that separates a skill that converges
+from one that hallucinates a plausible mesh. Its own limits are stated: "an **iterative reconstruction
+workflow, not a one-click scan-to-perfect-model converter**", scoped to rooms and interiors, only the
+office demo distributed, "**do not assume an App Store download is available yet**", code/skill MIT with
+separate asset terms for the supplied images.
+
+→ [[agent-stack]] [[fact-check]] [[agent-distribution]]
+
+Sources: [AgriciDaniel/claude-seo](https://github.com/AgriciDaniel/claude-seo) · [the 26 skills](https://github.com/AgriciDaniel/claude-seo/tree/main/skills) · [wesbos/3d-model-anything](https://github.com/wesbos/3d-model-anything) · [the office viewer](https://wesbos.github.io/3d-model-anything/)

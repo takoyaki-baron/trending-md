@@ -1044,3 +1044,13 @@ CLI はスクリーンショットループよりはるかに優れたエージ�
 増えてコミットが 0 ということが起こる。
 
 Sources: [android/skills](https://github.com/android/skills) · [Android エージェントツール](https://developer.android.com/tools/agents) · [anthropics/claude-plugins-official](https://github.com/anthropics/claude-plugins-official) · [Claude Code プラグイン文書](https://code.claude.com/docs/en/plugins) · [HKUDS/CLI-Anything](https://github.com/HKUDS/CLI-Anything)
+
+## 2026-10-25 20:03 バッチ——プラグインが自前の経済表を持ち、スキルが測定でループを閉じる
+
+**1. `AgriciDaniel/claude-seo`——26 sub-skill と 19 agent、そしてこのジャンルが普通は省く価格表。****20,227★**、2,912 fork、MIT、v2.5.0 は 2026-10-22、**テスト 1,077 件**。`/seo` は 10〜15 分の監査を走らせ、クロール可能性・インデックス・サイトマップ・リダイレクト・Core Web Vitals・E-E-A-T・Schema.org・AI 検索での被引用可能性（AI Overviews、AI Mode、ChatGPT、Perplexity、Gemini）・ローカルと EC を対象に、「最大 17 の agent」を並行させる。面白いのは比較表の方だ——手作業（$0、4〜8 時間）、代理店（案件あたり **$2k〜$15k+**、初年度合計 **$106,500**）、ソフトウェア（月 $99〜$999）、そして「Free, with your Claude Code plan」——しかも**図のキャプションと表のフッターが両方「Illustrative pricing」と記している**。この注記は実働している：$106,500 は測定されたコホートではなく構成された比較であり、それがベンダー自身の「10〜15 分」と同じ文書に並ぶ。ジャンルとしての要点は、パッケージ化された SEO の専門知識が今や sub-skill と並行サブエージェントとして出荷され、README 自身のヒーロー画像とバッジの壁が売り物の実演になっていることだ。（オープン issue+PR 41 件は **issue 24 / PR 17** に分かれる。）
+
+**2. `wesbos/3d-model-anything`——生成ではなく*測定*でループを閉じるスキル。****1,818★**、2026-10-21 作成。iPhone アプリが部屋の LiDAR 形状と写真を取得し、Three.js ビューアがドールハウス／ウォークスルー／俯瞰／ワイヤーフレーム／knolling を描き、エージェントへの成果物は **`scan-to-threejs` スキル**（`SKILL.md` と参照群を `.agents/skills/scan-to-threejs/` に）で、計測・モデリング・**同じカメラ位置での視覚比較**を原写真に対して導く。書き出しはバージョン付き契約（`house-capture/5`）で `data/captures-in/<room>/` に落ちる。スキル論として重要なのは、エージェントの検査が*同じカメラから描画して写真と比べる*という閉じた反証可能なループである点——これが「収束するスキル」と「もっともらしいメッシュを幻覚するスキル」を分ける。限界も明記される：「**ワンクリックで完璧なモデルになる変換器ではなく、反復的な再構築ワークフロー**」、現状は部屋と屋内に限定、配布はオフィスのデモのみ、「**App Store 版が既にあると仮定しないこと**」、コード/スキルは MIT で提供画像は別の資産条件。
+
+→ [[agent-stack]] [[fact-check]] [[agent-distribution]]
+
+Sources: [AgriciDaniel/claude-seo](https://github.com/AgriciDaniel/claude-seo) · [the 26 skills](https://github.com/AgriciDaniel/claude-seo/tree/main/skills) · [wesbos/3d-model-anything](https://github.com/wesbos/3d-model-anything) · [the office viewer](https://wesbos.github.io/3d-model-anything/)
