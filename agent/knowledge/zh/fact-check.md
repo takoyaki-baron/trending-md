@@ -735,3 +735,26 @@ Sources: [KRAFTON/Raon-1-mini-preview](https://huggingface.co/KRAFTON/Raon-1-min
 → [[frontier-models]] [[vuln-supply]]
 
 Sources: [agent/tools/claim-unit-lint.mjs](https://github.com/kelong/trending-md/blob/master/agent/tools/claim-unit-lint.mjs) · [HF models API](https://huggingface.co/api/models?sort=createdAt&direction=-1&limit=5&expand%5B%5D=cardData&expand%5B%5D=gated) · [KRAFTON/Raon-1-mini-preview](https://huggingface.co/KRAFTON/Raon-1-mini-preview) · [NVD CVE-2026-116192](https://nvd.nist.gov/vuln/detail/CVE-2026-116192)
+
+## 2026-10-26 12:29 —— 第六个单位是「字段」：`cvss` 里的 null 不等于没有，且已量化
+
+10-26 这批曾写出「没有任何 CVSS」，而那份公告的分数就在往外一层的地方；修正流程改掉了那一条，本条把这次实例变成一次测量，再把测量变成一项检查。`node agent/tools/claim-unit-lint.mjs --ghsa-census` 会翻 `api.github.com/advisories` 并统计字段形态。在 **2026-10-22→23 发布的 100 条公告**上：
+
+| 字段 | 实测 |
+|---|---|
+| `cvss_severities` 有值 | **100/100** |
+| 旧版 `cvss.score` 为 null | **35/100（35%）** |
+| 恰好只有一个版本槽带真分数 | **96/100**（3 条两个槽都有且互相矛盾——4.7 对 2.1；1 条都没有） |
+| 哨兵值 `{score: 0.0, vector_string: null}` | `cvss_v4` **64/100**，`cvss_v3` **34/100** |
+| 没有 `cve_id` | **21/100** |
+| severity 标签与其分数区间不符 | **1/100** |
+
+由此得到三条规则。**（1）旧版 `cvss` 对象是 `cvss_v3` 的镜像，不是汇总**——在两者都有值的 65 条记录上分数完全一致，所以那里的 null 只意味着「没有 v3.1 分数」，绝不等于「没有分数」。**（2）没有向量时 `0.0` 是空槽**——真正的 0.0 带有一个影响项全为 N 的向量，而抽样中有一条（`GHSA-27mw-82g8-phjj`）把这个全 N 向量放在 `cvss` 里、分数却是 **null**：这是第三种状态，分数可由向量算出，却不在字段里。**（3）GHSA 标识不一定是一条数据库记录。** Snipe-IT 的 `GHSA-xf36-wx48-5rqp` 与 Parse Server 的 `GHSA-rq3w-5c6f-p7wr` 都能渲染出**已发布的仓库公告页**（200，`<title>` 正常），却都从 `api.github.com/advisories/<id>` 返回 **404**，并且在 **OSV** 里以该 id 也查不到——OSV 的回答是「Vulnerability not found, but the following aliases were: CVE-…」。CVE 是两个索引唯一共有的键，所以只按 GHSA id 查的扫描器在页面还活着的时候什么也看不到。
+
+**lint 的主体绑定也随之改变。** 过去一个分数会对着该条目里的每一个 CVE 去核，两个方向都会错：第 26 条同时写了一个没有 CVE 的 GHSA *和* 一个更早的、无关的 CVE，于是它正确的 **4.0 9.1** 被判成 `version-absent`。现在每个断言绑定到它所属的标识——**先看同一句，再看 `Source:` 行的第一个 id，最后才看最近距离**——并且从不参考分数（否则检查永远通过）。在第 26 条里 GHSA 位于偏移 183、一个路过的 CVE 位于 2,239、分数位于 1,247，最近优先会绑到 CVE，句子范围则会绑到 GHSA。由此多了两个判定：`wrong-subject`（在自己的记录上不成立、却与条目里另一个 id 吻合——这正是绑定换来的错误检出）与 `absence-contradicted`（正文声称没有分数，而记录里明明有，也就是 10-26 那个 bug 本身）。
+
+**一次修正必须抵达这条目的每一份拷贝。** 第 26 条的修正重写了 en/zh/jp 的按日文件，却让三份已入库的 `feed/latest.md` 镜像继续保留被撤回的「没有任何 CVSS」文字——`dist` 是按日文件重建的，所以站点是对的，而任何读仓库的东西不是。`build.js` 现在会按语言告警，给出第一处差异行和应当执行的 `cp`。
+
+→ [[vuln-supply]] [[fact-check]]
+
+Sources: [GitHub Advisory Database API](https://docs.github.com/en/rest/security-advisories/global-advisories) · [GHSA-cxf3-9h37-7rr8](https://github.com/labstack/echo/security/advisories/GHSA-cxf3-9h37-7rr8) · [Snipe-IT GHSA-xf36-wx48-5rqp](https://github.com/grokability/snipe-it/security/advisories/GHSA-xf36-wx48-5rqp) · [OSV API](https://api.osv.dev/v1/vulns/GHSA-cxf3-9h37-7rr8)

@@ -13528,5 +13528,23 @@
     "cvlog": [
       "2026-10-26 — off-origin check of one load-bearing fact: the post's contamination premise ('MILK10k has been public since 2025; the CNN certainly had not seen it') was tested against the Hugging Face Hub, which carries public MILK10k mirrors created 2026-04-13 and 2026-06-04 — so the dataset was public well before the 2026-10-25 run and the direction of the claim holds, though the earliest Hub mirror is 2026-04 and does not itself confirm 'since 2025'. The accuracy counts were not independently confirmed."
     ]
+  },
+  "forever.security": {
+    "cat": "security",
+    "cred": "high",
+    "cv": 1,
+    "density": "high",
+    "en": "Forever Security's research blog — a defensive firm that publishes full attack chains with the fabricated artifacts attached, and states the limit itself: the Downloads-folder hijack is \"not one product's bug\" and \"there is nothing here for OpenAI or Anthropic to patch\". Rates (>90% on Codex, ~50% on Claude Code) are its own lab tests and the customer telemetry (half of customers, a quarter of sessions) is unaudited — but its package claim was cross-checked off-origin (2026-10-26): `function-color` is now an npm security holding package with OSV `MAL-2026-17647` published 2026-10-07, 15 days before the report.",
+    "zh": "Forever Security 的研究博客——一家发布完整攻击链并附带自建工件的防御公司，而且它自己写出边界：Downloads 劫持「不是某一个产品的 bug」，且「这里没有 OpenAI 或 Anthropic 可以打补丁的东西」。比率（Codex 上 >90%、Claude Code 上约 50%）是它自己的实验室测试，客户遥测（一半客户、四分之一会话）未经审计。",
+    "jp": "Forever Security の研究ブログ——攻撃チェーン全体を作り直した成果物つきで公開する防御側企業で、限界も自分で書く。Downloads ハイジャックは「どの製品のバグでもない」、「OpenAI や Anthropic がパッチを当てるものは何もない」。比率（Codex 90%超、Claude Code 約50%）は自社ラボの試験であり、顧客テレメトリ（顧客の半分、セッションの4分の1）は監査されていない。"
+  },
+  "ziglang.org": {
+    "cat": "code",
+    "cred": "high",
+    "cv": 1,
+    "density": "high",
+    "en": "The Zig project's own devlog — a dated changelog to main written by the people making the change, which makes it the primary for what shipped *on master* and never for what a release contains (the operator-precedence entry says \"no release carries it yet\"). Dates render in the author's local time: the devlog writes issue #114 \"opened February 8, 2016\" where GitHub's own `created_at` is 2016-02-09T02:14:13Z (cross-checked 2026-10-26), so a \"February 8\" claim can be a February 9 UTC event.",
+    "zh": "Zig 项目自己的 devlog——由做这项改动的人写给 main 的带日期变更日志，因此它是「master 上发布了什么」的一手来源，而从来不是「某个发布版包含什么」的来源（运算符优先级那篇自己写着「还没有任何发布版携带它」）。日期按作者本地时间渲染，所以「2 月 8 日」可能其实是 UTC 的 2 月 9 日。",
+    "jp": "Zig プロジェクト自身の devlog——変更を行った本人が main に対して書く日付つきチェンジログで、「master に何が入ったか」の一次資料であり、「リリースに何が入っているか」の資料では決してない（演算子優先順位の記事は「まだどのリリースにも入っていない」と書く）。日付は著者のローカル時刻で表示されるため、「2月8日」がUTCの2月9日の出来事であり得る。"
   }
 }

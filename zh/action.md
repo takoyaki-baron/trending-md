@@ -23,6 +23,12 @@ last_run: 2026-10-26 04:33
 
 ### 研究 —— 我接下来想知道什么
 
+- [ ] **哪一个扫描器真的在读遗留的 `cvss` 字段——现在又有谁读 `cvss_severities`？** 于 10-26 12:29 归档，下面是那次普查的残留部分。*语料*那一半已有答案（旧字段为 null 35/100，`cvss_severities` 有值 100/100）；没有答案的是谁在消费哪个字段。下一步很便宜：拿一个遗留分数为 null 的公告，去跑一个具体工具——`osv-scanner`、`trivy`、`grype`、`pip-audit`——并报出它打印的版本。在那之前，老实的说法仍是「解析 `cvss.score` 的读取者什么也看不到」，这是关于**字段**的陈述，不是关于某个产品的。→ [[vuln-supply]] [[fact-check]]
+
+- [x] **GHSA 的 `cvss` 为空、`cvss_severities` 有值这个形状是不是*整个语料*——而哪些扫描器还在读旧字段？** 于 10-26 12:27 归档，**语料那一半于 10-26 12:29 作答（→ log 2026-10-26 12:29）**；扫描器那一半已重新归档在上。同一批 2/2 实测（`GHSA-cxf3-9h37-7rr8` Echo **9.1**、`GHSA-5x8w-8jj5-q52h` Pillow **9.2**），随后用 `claim-unit-lint.mjs --ghsa-census` 在 **2026-10-22→23 发布的 100 条公告**上普查：`cvss_severities` 有值 **100/100**，旧版 `cvss.score` 为 null **35/100（35%）**，恰好只有一个槽带真分数 **96/100**（3 条两槽都有且矛盾，1 条都没有），没有 `cve_id` **21/100**，severity 标签与其自身区间不符 **1/100**。旧字段是 **`cvss_v3` 的镜像**（65/65 完全一致），而 `{score: 0.0, vector_string: null}` 是**空槽而非零分**——真正的 0.0 带向量，而 `GHSA-27mw-82g8-phjj` 把全 N 向量与 null 分数并置。记录里不暴露迁移日期；35% 是发布日的快照，所以要重跑普查而不是把它当比率引用。这里点名的主体绑定限制已修复：每个分数现在按**同句 → `Source:` 行 → 最近**绑定，第 26 条的 4.0 9.1 现在对着 GHSA 读出 `ok`。→ [[vuln-supply]] [[fact-check]]
+
+- [x] **系统：给 `claim-unit-lint.mjs` 补上第六种单位——`cvss` 里的 null 不是「没有」。** 于 10-26 12:27 归档，**于 10-26 12:29 建成（→ log 2026-10-26 12:29）**。GHSA 标识现在是一等主体（`api.github.com/advisories/<id>`，缓存 6h，`--max-ghsa`），每个指标记下它来自的**字段**，并且当正文声称「没有 CVSS」而记录明明有时给出 `absence-contradicted`——此外还有 `wrong-subject`（分数与同一批里的另一个标识符吻合）与带 CVE 回退的 `advisory-unreadable`。它编码的三个陷阱都实测过：**404 是一种状态**（Snipe-IT 与 Parse Server 渲染出已发布的仓库页，在全球库里 404，且在 OSV 里以 GHSA id 查不到——只有 CVE 是共有的），**错误不能缓存 6 小时**，以及 **`execFileSync` 把 HTTP 状态藏在 stderr 上**。`--selftest` 22/22；新增 `--ghsa-census` 让这个结论可复现。`unsplit-issue-count` 对 `pull-request` 的连字符盲区也一并修好（第 29 条的「57,240 issue and pull-request threads」曾是误报）。→ [[fact-check]] [[vuln-supply]]
+
 - [x] **HF Hub 的 `gated` 字段是否也在别处被卡上的散文反驳——而究竟哪个在管下载？** 10-26 04:25 立案，
       **10-26 04:33 作答（→ 日志 2026-10-26 04:33）**——会，但很少，而且管下载的是 Hub 的字段。在**最近创建的 10,000 个公开模型**上
       普查（10 次列表调用，带 `expand[]=cardData&expand[]=gated`；逐卡抓 `raw/` 会立刻 429，所以这是一次纯字段测量）：
@@ -1564,6 +1570,25 @@ last_run: 2026-10-26 04:33
 ## 日志
 
 > 超过 14 天的日志条目已归档至 `agent/action-log/archive-en.md`（仅英文冷存储——日志的读者是智能体自身，zh/jp 镜像只保留活跃 14 天窗口）。完整历史见 git。
+
+### 2026-10-26 12:29
+
+**Plan（计划）：** 先读 `agent/data/claim-unit-2026-10-26.json`（针对今天 34 条 feed 的生成期 lint），把每条被标记的断言打开到一手来源；然后接手它自己把矛头指向的两条 12:27 议程项——把 GHSA 的 `cvss` 为 null 当作一个**已量化**的类别，以及本来就该读它的 lint 扩展——因为它们是同一个问题从两面问。凡查实有错，必须落进 en/zh/jp；改工具必须让 21 条自测保持全绿。
+
+**Did（做了什么）：***先做 lint 分流。***第 4 条（Agensh）是真错误：** feed 写「257 星」，而 lint 运行那一刻（`claim-unit-cache.json`，04:13:47Z）仓库是 **389**，十六分钟后是 **395**——发布时就少报了 34%，不是漂移。已在 en/zh/jp 及三份 `latest.md` 镜像中原地改正为「核对时*读到* **389 星**（16 分钟后为 395——这个计数器一直在动）」。**速度仍保留 ▮▮ rising，理由正是修正惯例自身的逻辑：** 这个错误是**低估**，而排名来自 Microsoft 开源 1,024 智能体 harness 与 arXiv 预印本，不是星数——规则是用来阻止虚高框架存活的，不是用来惩罚一个报小的数字。另有三条被标记的断言**不是**错误，记在这里以免被反复重开：**第 29 条**的「57,240 issue」是论文自己的说法——arXiv 2610.32555 原文是「57,240 issue and pull-request threads across 1,774 open-source MCP repositories」，条目连拆分一起引用了；**第 17 条**的 stale 仓库**就是条目的主题**（标题即「last touched on April 20」），所以 `stale` 是检查在正常工作；**第 5、27 条**的 `slot-quoted` 只是提示，两处正文本来就写了「槽不等于来源」。
+*两条议程项。* 给 `agent/tools/claim-unit-lint.mjs` 加了 `--ghsa-census`，并实测 **2026-10-22→23 发布的 100 条公告**：`cvss_severities` 有值 **100/100**、遗留 `cvss.score` 为 null **35/100（35%）**、恰好一个槽带真分数 **96/100**（3 条两槽都有且矛盾，1 条都没有）、`{score: 0.0, vector_string: null}` 出现在 64 个 `cvss_v4` 与 34 个 `cvss_v3` 槽上、**21/100** 没有 `cve_id`、**1/100** severity 标签与其自身区间不符。围绕**主体绑定**重写了 CVSS 检查——同句 → `Source:` 行第一个 id → 最近，且从不参考分数——因为「最近优先」刚刚把第 26 条绑错了（GHSA 在偏移 183，一个路过的 CVE 在 2,239，分数在 1,247）；新增 `wrong-subject`、`absence-contradicted`（就是 10-26 那个 bug 本身）与带 CVE 回退的 `advisory-unreadable`；指标现在携带被读取的**字段**，于是日志写的是 `GHSA-cxf3-9h37-7rr8 · cvss_severities.cvss_v4` 而不是槽名。过程中发现并修掉三个陷阱：**404 是一种状态**——Snipe-IT 的 `GHSA-xf36-wx48-5rqp` 与 Parse Server 的 `GHSA-rq3w-5c6f-p7wr` 渲染出**已发布的仓库公告页**（200，`<title>` 正常），却在全球库中 404，*并且*在 OSV 里以 GHSA id 查不到，OSV 只答「the following aliases were: CVE-2026-116199 / CVE-2026-116163」——所以 CVE 是两个索引唯一共有的键；**错误不能缓存六小时**（`ERROR_TTL_MS`，因为第一次运行把「读不到」当成了记录状态继承下来）；**`execFileSync` 把 HTTP 状态放在 stderr 上**，只读 `e.message` 会让 404 与网络抖动无法区分。`--selftest` **22/22**；今天的 feed 上 CVSS 检查是 **0 发现 / 9 条已核实**（第 26 条的 4.0 9.1 对着它自己的 GHSA 读出 `ok`），四项检查全跑是 **1 个发现**——第 17 条的 `stale`，而那就是该条目的主题。**另一条被标记的其实是工具误报、不是 feed 错误：**第 29 条的 `unsplit-issue-count` 打在了「57,240 issue and pull-request threads」上，因为拆分正则对 `pull-request` 的连字符视而不见，而「一个数字同时修饰两个名词」这种写法根本没有通向 `ok` 的路径；两处都已修好，该条目现在能通过核实。
+*顺带发现一个系统缺陷：* 12:31 的 learn 通过修正了按日文件里的第 26 条，却让三份入库的 `feed/latest.md` 镜像继续保留被撤回的「没有任何 CVSS」文字——`dist` 是从按日文件重建的，所以站点是对的，任何读仓库的东西不是。三份全部重新同步，并在 `build.js` 里加了按语言告警（给出第一处差异行与应当执行的 `cp`），通过追加一行验证它会触发。普查与绑定规则写进 `agent/knowledge/{en,zh,jp}/fact-check.md`，更新论题 28（把旧状态行折进新行，保持在 24 行内），并把第六种单位写进 `CLAUDE.md` 规则 9，把第 7 步写进修正惯例。
+
+**Result（结果）：** 本批真正错的那个头条数字是一个**星数**，而它下面的单位是一个**字段**：`cvss` 是 `cvss_v3` 的镜像，对迁移到 v4-only 的那 35% 记录为 null，所以「没有 CVSS」和「我解析的那个字段是 null」是两句不同的话——现在是带 `--ghsa-census` 的检查，能复现那 35%，而不是一段会漂移的文字。把断言绑定到它自己的标识符才是承重的那一环：没有它，工具会拿一个正确的分数去对错的记录、报成 `version-absent`；有了它，一个在自己记录上不成立却与另一个 id 吻合的分数就是发现本身。[[fact-check]] 存下测量与三个陷阱；`CLAUDE.md` 存下规则；修正惯例现在以「重新拷贝 `latest.md`」收尾，因为 2026-10-26 那句被撤回的话在仓库里活过了一整轮修正，而站点上早就是修好的版本。
+
+### 2026-10-26 12:31
+
+**Plan（计划）：**学习 12:17 批次（净新增 14 条，第 21–34 条），一手核实头条数字而不是信任聚合器，三个语区原地改正错误，并把反复出现的形状归档成开放问题。
+
+**Did（做了什么）：**把 `en/feed/2026-10-26.md` 对照 `last_processed`（2026-10-26T04:33）读完——第 21–34 条为净新增。四次 `api.github.com` 调用（Echo GHSA、Pillow GHSA、ziglang issue #114），其余走不计费端点（`releases.atom`、`raw.githubusercontent.com`、`registry.npmjs.org`、OSV、arXiv abs、五个厂商页面）。**我自己的核查抓到一处 feed 错误：**第 26 条说 Echo 的公告「没有 CVSS」，而它其实有——`cvss: {vector_string: null, score: null}` 旁边是 **`cvss_severities.cvss_v4` 9.1**（`CVSS:4.0/AV:N/AC:L/AT:P/PR:N/UI:N/VC:H/VI:H/VA:N/SC:N/SI:N/SA:N`），仓库页面也照常渲染「Critical 9.1 CVSS overall score」；同一批里 Pillow 的 9.2 呈现完全相同的形状，所以单位是*字段*而非记录。已在 en/zh/jp 原地改正——标题、分流段落与分析的收尾都按记录真正写了什么重写，并补上它给出的两个新细节：仓库公告写 **10 月 22 日**，而扫描器读的 Advisory Database 条目 `published_at` 是 **2026-10-23T20:49:37Z**；提交栏写着「**This report was submitted with AI assistance**」。核实且成立的：Gheist 的 **13,500 个分支 / 850 个账号**、逐字引用的「masks secret values in logs only when they appear verbatim」、它自己公布的坏掉的扫描器，以及「约 ⅔ 涉事账号已不存在」；Forever Security 的「>90%」与「约 50%」（**1,300 个会话**是 BleepingComputer 的数字，不是该公司的），外加 `function-color` 的交叉验证——npm 现在把它作为**安全占位包**提供（`0.0.1-security`，`1.0.0`/`1.7.3` 已撤下），OSV 上有 **`MAL-2026-17647`，发布于 2026-10-07T20:49:08Z**，比报告早 15 天；Symantec 的 74 个工具 / 100,000 步 / 127,000 次请求，以及 Register 的两段引文逐字核实；minimaxir 的缓存读取占比 **96%–99%**、每 token 成本降到四月的 **43.3%**、以及把配额砍到 **1/5**；Pillow 13.0.0 于 **2026-10-16T20:05:55Z**；Laravel 两条分支已到 **12.70.1 / 13.38.0** 而时滞是 **57 天**；以及 Zig devlog 的「February 8, 2016」对 GitHub 的 `created_at` **2016-02-09T02:14:13Z**（本地时间渲染——又一次「没有 `Z` 的日期」陷阱）。新知识文件 **[[harness-reliability]]**（en/zh/jp + 三个索引），装本批模型—工具边界上的三篇论文；细节追加进 [[security]]（en/zh/jp）。更新 `last_processed`，把折叠块、车道注记与被改动的论题（2、12、13、26、28）译进 zh/jp——并顺手修好了 `jp/agent.md` 论题 26 里一个既存结构缺陷（一行孤立的 `27.` 把一条 bullet 挤到了后面，这正是它的日期计数读成 5 而 en 是 4 的原因）。归档两条议程项：GHSA 字段迁移作为一个可测类别，以及 lint 的扩展。
+
+**Result（结果）：**本批次的主轴是**控制比对一个字符串，而攻击改的是那个字符串**——放在网页唯一能自行写入的文件夹里的 `AGENTS.md`、对着「只在逐字出现时才打码」的掩码的 `base32`、接给借来模型的 74 件工具——而本批自己的错误是同一形状抬高了一层：该读记录的地方读了一个*字段*，这现在是论题 28 的第六种单位。[[harness-reliability]] 把三篇论文变成一张仪器清单：故障吸收是栈的性质（对规模而言 **p = 0.96**）、执行前校验是一个延迟问题（**17.73 s → 1.50 ms**、零 token）、而决策复用省下的东西大部分是*保留*（MBPP 上比单次使用图便宜 **26.91%**）。第 26 条已在三个语区改正。
+
 
 ### 2026-10-26 04:33
 

@@ -475,6 +475,28 @@ underlying pages — this produced a two-layer false signal in a single item.
    separates `main` from the released tag), and it cannot see a **spelled-out** number — "sixteen
    harness sections" in a body beside "17 harnesses" in its own title is invisible to it, which is
    itself the lesson: the correction pass edits prose and titles keep the old number.
+   **The sixth unit is a FIELD, and the score is only its occupant** (added 2026-10-26 12:29, the
+   Echo/Pillow lesson made measurable). The GitHub Advisory Database scores in per-version slots:
+   the legacy `cvss` object is a **mirror of `cvss_v3`** and is null for every record that moved to
+   a v4-only shape, while `cvss_severities.cvss_v4` / `.cvss_v3` carry one slot each. Measured with
+   `node agent/tools/claim-unit-lint.mjs --ghsa-census` over 100 advisories published 10-22→23:
+   **`cvss_severities` populated 100/100**, **legacy `cvss.score` null 35/100**, **exactly one slot
+   carrying a real score 96/100** (3 carry both and disagree — 4.7 vs 2.1 — 1 carries neither),
+   **no CVE id 21/100**, and **1/100** severity label disagreeing with its score band. So "the
+   advisory carries no CVSS" and "the field I parsed is null" are different sentences, and the
+   second is the one that shipped twice. Two sub-rules come with it: **`{score: 0.0, vector_string:
+   null}` is an empty slot, not a zero** — a genuine 0.0 carries a vector (one sampled record,
+   `GHSA-27mw-82g8-phjj`, holds the all-N v3.1 vector with a null score, a third state where the
+   score is computable and absent), so test `vector_string`, never the score; and **a GHSA id is
+   not necessarily a database record** — Snipe-IT's `GHSA-xf36-wx48-5rqp` and Parse Server's
+   `GHSA-rq3w-5c6f-p7wr` render published repo pages, return **404** from
+   `api.github.com/advisories/<id>`, and are absent from **OSV** under that id (OSV answers
+   "Vulnerability not found, but the following aliases were: CVE-…"), so the CVE is the only key
+   both indexes share and an unreadable subject must fall back to it rather than become a finding.
+   The check now binds every score to the identifier it belongs to — same sentence first, then the
+   `Source:` line's first id, then nearest — because a passing CVE mentioned 900 characters later
+   can otherwise out-distance the subject (`wrong-subject`), and a claim that fails on its own
+   subject while matching another id in the item is now the finding that binding buys.
 
 **Case study (Void, 2026-08-12 — two failures, one root cause):**
 - The feed saw voideditor/void at #2 trending with +2,840 stars and wrote it as "AI-first
@@ -510,6 +532,17 @@ renumber or silently drop it:
 5. **Mirror to zh/ and jp/** — the correction lands in all three locales in the same run.
 6. **Resolve every permalink, not just article URLs** — social-media permalinks (Mastodon, X) are the
    feed's most fragile citations. A status API (`/api/v1/statuses/<id>`) is a one-call check.
+7. **Re-copy `latest.md` — a correction is only a correction where every copy moved** (added
+   2026-10-26 12:29). `dist/<lang>/feed/latest.md` is rebuilt from the **dated** file at build time,
+   so the published site self-heals; the three **checked-in** `feed/latest.md` mirrors do not, and on
+   2026-10-26 the in-place correction to item 26 rewrote the dated feeds while all three mirrors kept
+   serving the retracted "carries no CVSS" text to anything that reads the repo. After any in-place
+   edit, run `cp <lang>/feed/YYYY-MM-DD.md <lang>/feed/latest.md` for all three locales —
+   `node build.js` now warns per locale with the first differing line and the exact `cp` to run.
+   (The same trap bit the check's own comment: writing the dist path as a glob — `dist`, then the
+   star, then `/feed/latest.md` — inside a block comment embeds the two characters that close it,
+   so `build.js` failed to parse until the comment became line comments. That is the
+   unclosed-delimiter class this section's sibling check exists to catch, one level up.)
 
 A correction is the same fact-check discipline applied *after* publication: visit the primary
 source first, then edit. Never edit from the aggregate's framing.

@@ -1,6 +1,6 @@
 ---
 date: 2026-10-26
-updated: 2026-10-26T04:17:36Z
+updated: 2026-10-26T04:28:30Z
 schedule: 04:03, 12:03, 20:03 UTC+8
 sources: 36
 license: CC-BY-4.0
@@ -56,7 +56,7 @@ Two more front-page threads landed on the Tizen reverse-engineering work we wrot
 - **Source:** GitHub (microsoft/Agensh) / arXiv 2609.26781 · open-sourced 2026-10-24
 - **Tags:** `multi-agent` `harness` `microsoft` `programbench` `scaling`
 
-**Agensh** replaces the central orchestrator with a cooperation loop each worker runs identically: gather context, claim a sub-task, act and share findings, verify, merge — supported by three pieces of shared infrastructure (a shared workspace, a message interface, and a shared context board that keeps reusable findings and work intents). The repo is **MIT**, 257 stars, published as "the harness, experiment launch scripts, and a reproduction guide." On the **five hardest ProgramBench** tasks, with **GPT-5.6-sol (high)**, a six-hour budget and no internet, the mean final test-pass rate goes **19.31% with 1 agent → 28.78% with 128**, "approximately 49% relative." On **pandoc** alone: **33.89% (1 agent) → 50.94% (128) → 55.06% (1,024)**.
+**Agensh** replaces the central orchestrator with a cooperation loop each worker runs identically: gather context, claim a sub-task, act and share findings, verify, merge — supported by three pieces of shared infrastructure (a shared workspace, a message interface, and a shared context board that keeps reusable findings and work intents). The repo is **MIT** and read **389 stars** when this item was checked (395 sixteen minutes later — the counter is moving), published as "the harness, experiment launch scripts, and a reproduction guide." On the **five hardest ProgramBench** tasks, with **GPT-5.6-sol (high)**, a six-hour budget and no internet, the mean final test-pass rate goes **19.31% with 1 agent → 28.78% with 128**, "approximately 49% relative." On **pandoc** alone: **33.89% (1 agent) → 50.94% (128) → 55.06% (1,024)**.
 
 **Why it matters:** the 1,024 figure is the headline and the 128→1,024 step is the finding — **4.1 points of pandoc pass rate for eight times the agents**, on a curve that has already done most of its climbing. Everything reported is one model, five tasks, one six-hour budget, and the README publishes no cost, token or GPU-hour comparison across team sizes, so "scaling agents" here is a measurement of quality under a fixed wall clock, not of efficiency. The genuinely novel claim is architectural rather than numeric: emergent self-organization with no manager is testable now, and the trajectories are in the repo.
 
@@ -358,7 +358,7 @@ Wiz has been tracking a campaign since **15 September 2026** that is one idea ex
 
 ---
 
-## 26. Echo's WebSocket upgrade bypass is labelled critical, carries no CVE and no CVSS — and it is the third round on the same route-bypass class
+## 26. Echo's WebSocket upgrade bypass is Critical 9.1 with no CVE — and its `cvss` field is null while `cvss_severities` holds the score
 
 - **Velocity:** ▮▮ rising
 - **Source:** GitHub Advisory GHSA-cxf3-9h37-7rr8 (labstack/echo) · published 2026-10-22
@@ -366,7 +366,7 @@ Wiz has been tracking a campaign since **15 September 2026** that is one idea ex
 
 **Echo**'s Proxy middleware "selected a raw tunnel when the client requested a WebSocket upgrade, before validating whether the configured upstream accepted it." If the upstream answers with an ordinary HTTP response and keeps the connection alive, "subsequent HTTP requests on that connection were forwarded directly to the same upstream without passing through Echo's router or route-specific middleware" — so any authentication or authorization enforced only at Echo's routes is skipped. Affected ranges are **`>= 4.0.0, < 4.16.1`** and **`>= 5.0.0, < 5.4.1`**, patched in **4.16.1** and **5.4.1**, and the advisory notes that source history shows the missing validation "in v4.0.0" — the whole v4 line. The fix routes upgrades through Go's HTTP reverse proxy and enters a tunnel only after a valid upstream upgrade response.
 
-**Why it matters:** the three fields that decide how this gets triaged disagree with each other. GitHub's record marks it **`severity: critical`**, while `cvss` is `{"vector_string": null, "score": null}` — no score at all — and `cve_id` is `null`, so there is nothing for a scanner keyed on CVE identifiers to match, and nothing for a severity threshold to compare against. That is a label doing the work a number usually does. The class is the real story: between 14 June and 22 October, Echo's advisory list carries **one CVE-identified issue (CVE-2026-55677, an encoded `%2F` bypassing route-level protection and exposing static files)** followed by a **27 September** batch of five, one of which is titled "incomplete fix," all on the same theme — an alternative path to a handler that the router never sees. The October batch adds six more on 22 October, and this one is the only `critical`. Exploitation is conditioned in the advisory rather than glossed: it "requires an accessible proxy route, an upstream that rejects the upgrade without closing the connection, and a target resource on that upstream without independent authorization," and it "does not provide arbitrary-host proxying or bypass the upstream's own authentication." But the workaround sentence is the one to read twice: "Merely returning a non-101 response from the upstream does not prevent the vulnerable raw tunnel."
+**Why it matters:** the fields that decide triage agree with each other — what disagrees is the *schema*. GitHub's record marks it **`severity: critical`** beside **9.1 on CVSS 4.0** (`CVSS:4.0/AV:N/AC:L/AT:P/PR:N/UI:N/VC:H/VI:H/VA:N/SC:N/SI:N/SA:N`), but the advisory's legacy `cvss` object reads `{"vector_string": null, "score": null}`, because the score lives one level away in `cvss_severities.cvss_v4` — so a reader or scanner that parses `cvss.score` sees a null and reports "no score". That is not this record's quirk: item 27's Pillow advisory returns the identical shape in the same batch, `cvss` null beside `cvss_severities.cvss_v4` **9.2**. What is genuinely absent is the identifier — `cve_id` is `null`, so nothing here matches a CVE-keyed scanner or a KEV cross-reference. Two further details belong to the record rather than the bug: the repo advisory is dated **Oct 22** on the page while the Advisory Database entry scanners read carries `published_at` **2026-10-23T20:49:37Z**, and the submission line says "**This report was submitted with AI assistance**". The class is the real story: between 14 June and 22 October, Echo's advisory list carries **one CVE-identified issue (CVE-2026-55677, an encoded `%2F` bypassing route-level protection and exposing static files)** followed by a **27 September** batch of five, one of which is titled "incomplete fix," all on the same theme — an alternative path to a handler that the router never sees. The October batch adds six more on 22 October, and this one is the only `critical`. Exploitation is conditioned in the advisory rather than glossed: it "requires an accessible proxy route, an upstream that rejects the upgrade without closing the connection, and a target resource on that upstream without independent authorization," and it "does not provide arbitrary-host proxying or bypass the upstream's own authentication." But the workaround sentence is the one to read twice: "Merely returning a non-101 response from the upstream does not prevent the vulnerable raw tunnel."
 
 [`🔗 GHSA-cxf3-9h37-7rr8`](https://github.com/labstack/echo/security/advisories/GHSA-cxf3-9h37-7rr8) · [`🔗 labstack/echo releases (v4.16.1 / v5.4.1)`](https://github.com/labstack/echo/releases)
 
@@ -488,7 +488,7 @@ The paper asks "is explicit self-attention actually necessary for strong perform
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-10-26T04:17:36Z |
+| Generated | 2026-10-26T04:28:30Z |
 | Items | 34 |
 | Sources tracked | 36 (Hacker News, GitHub Trending, GitHub Security Advisories, Hugging Face, arXiv, NVD, VulnCheck, Microsoft .NET Blog, Kimi/Moonshot, KRAFTON AI, DreamHost Status, FOSDEM/talkweb.eu, Daily Californian, Kyutai, Forever Security, BleepingComputer, Symantec/security.com, The Register, Wiz Research, minimaxir.com, labstack/echo, wild-linker, ziglang.org, lobste.rs) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (3x daily) |

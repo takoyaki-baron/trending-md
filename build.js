@@ -1513,6 +1513,26 @@ if (fs.existsSync(agentMemPath)) {
       integrityFailures++;
       console.log(`  ⚠ ${loc}/feed/${newestByLoc[loc]}: unclosed inline code span in item(s) ${odd.map(x => `${x.n} (${x.ticks} backticks)`).join(', ')} — an odd count swallows every later item into one <code> block in the rendered page`);
     }
+    // The checked-in latest.md mirror vs the dated file. The dist copy is rebuilt from the DATED
+    // file further down, so the published site cannot go stale — but the repo copy can, and it
+    // does: on 2026-10-26 an in-place correction to item 26 rewrote the dated feeds and left all
+    // three latest.md files carrying the retracted claim, so anything reading the repo (a
+    // git-based agent, a reviewer, the diff) saw text the site no longer served. A correction is
+    // only a correction where every copy of the item moved.
+    // (Written as line comments on purpose: a block comment here would be terminated early by the
+    //  glob `dist/…/feed/latest.md` — the same unclosed-delimiter trap this check exists to catch.)
+    const latestP = path.join(dir, 'latest.md');
+    if (fs.existsSync(latestP)) {
+      const a = fs.readFileSync(latestP, 'utf8');
+      if (a !== src) {
+        const al = a.split('\n');
+        const bl = src.split('\n');
+        let i = 0;
+        while (i < al.length && al[i] === bl[i]) i++;
+        integrityFailures++;
+        console.log(`  ⚠ ${loc}/feed/latest.md is stale — differs from ${newestByLoc[loc]} at line ${i + 1}; the site rebuilds its copy from the dated file, but this checked-in mirror does not follow an in-place correction. Fix: cp ${loc}/feed/${newestByLoc[loc]} ${loc}/feed/latest.md`);
+      }
+    }
   }
   if (newestByLoc.en) {
     const countOf = (loc) => {

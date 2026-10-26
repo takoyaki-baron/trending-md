@@ -1,5 +1,5 @@
 {
- "generated": "2026-10-26T04:17:40.423Z",
+ "generated": "2026-10-26T04:39:36.337Z",
  "files": [
   {
    "file": "2026-10-26.md",
@@ -10,14 +10,14 @@
      "item": 5,
      "verdict": "ok",
      "claim": "3.1 5.9",
-     "detail": "CVE-2026-116192 Primary/disclosure@vulncheck.com"
+     "detail": "CVE-2026-116192 · Primary/disclosure@vulncheck.com"
     },
     {
      "check": "cvss",
      "item": 5,
      "verdict": "ok",
      "claim": "4.0 8.2",
-     "detail": "CVE-2026-116192 Secondary/disclosure@vulncheck.com"
+     "detail": "CVE-2026-116192 · Secondary/disclosure@vulncheck.com"
     },
     {
      "check": "cvss",
@@ -38,35 +38,42 @@
      "item": 10,
      "verdict": "ok",
      "claim": "4.0 9.2",
-     "detail": "CVE-2026-116199 Secondary/disclosure@vulncheck.com"
+     "detail": "CVE-2026-116199 · Secondary/disclosure@vulncheck.com (bound subject GHSA-xf36-wx48-5rqp is not in the global Advisory Database)"
     },
     {
      "check": "cvss",
      "item": 10,
      "verdict": "ok",
      "claim": "3.1 8.1",
-     "detail": "CVE-2026-116199 Primary/disclosure@vulncheck.com"
+     "detail": "CVE-2026-116199 · Primary/disclosure@vulncheck.com (bound subject GHSA-xf36-wx48-5rqp is not in the global Advisory Database)"
     },
     {
      "check": "cvss",
      "item": 12,
      "verdict": "ok",
      "claim": "3.1 7.4",
-     "detail": "CVE-2026-116163 Primary/disclosure@vulncheck.com"
+     "detail": "CVE-2026-116163 · Primary/disclosure@vulncheck.com (bound subject GHSA-rq3w-5c6f-p7wr is not in the global Advisory Database)"
     },
     {
      "check": "cvss",
      "item": 12,
      "verdict": "ok",
      "claim": "4.0 9.1",
-     "detail": "CVE-2026-116163 Secondary/disclosure@vulncheck.com"
+     "detail": "CVE-2026-116163 · Secondary/disclosure@vulncheck.com (bound subject GHSA-rq3w-5c6f-p7wr is not in the global Advisory Database)"
+    },
+    {
+     "check": "cvss",
+     "item": 26,
+     "verdict": "ok",
+     "claim": "4.0 9.1",
+     "detail": "GHSA-cxf3-9h37-7rr8 · cvss_severities.cvss_v4"
     },
     {
      "check": "cvss",
      "item": 27,
      "verdict": "ok",
      "claim": "4.0 9.2",
-     "detail": "CVE-2026-112398 Secondary/security-advisories@github.com"
+     "detail": "CVE-2026-112398 · Secondary/security-advisories@github.com"
     },
     {
      "check": "cvss",
@@ -80,21 +87,14 @@
      "item": 28,
      "verdict": "ok",
      "claim": "4.0 9.2",
-     "detail": "CVE-2026-114509 Secondary/security-advisories@github.com"
+     "detail": "CVE-2026-114509 · Secondary/security-advisories@github.com"
     },
     {
      "check": "issues",
      "item": 29,
-     "verdict": "unsplit-issue-count",
-     "claim": "57,240 issue",
-     "detail": "no issues/PR split in the item (no repo slug to check)"
-    },
-    {
-     "check": "repo",
-     "item": 4,
-     "verdict": "star-drift",
-     "claim": "257 quoted vs 389 now",
-     "detail": "microsoft/Agensh: -34% — reread the number or date the item"
+     "verdict": "ok",
+     "claim": "57240 issues+PRs combined",
+     "detail": "one number for both nouns — that is the composite the counter reports, so nothing is being presented as an issue-only count"
     },
     {
      "check": "repo",

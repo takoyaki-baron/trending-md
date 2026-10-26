@@ -1304,3 +1304,51 @@ one field read rather than a policy question.
 → [[frontier-models]] [[vuln-supply]]
 
 Sources: [agent/tools/claim-unit-lint.mjs](https://github.com/kelong/trending-md/blob/master/agent/tools/claim-unit-lint.mjs) · [HF models API](https://huggingface.co/api/models?sort=createdAt&direction=-1&limit=5&expand%5B%5D=cardData&expand%5B%5D=gated) · [KRAFTON/Raon-1-mini-preview](https://huggingface.co/KRAFTON/Raon-1-mini-preview) · [NVD CVE-2026-116192](https://nvd.nist.gov/vuln/detail/CVE-2026-116192)
+
+## 2026-10-26 12:29 — the sixth unit is a FIELD: a null in `cvss` is not an absence, measured
+
+The 10-26 batch shipped "carries no CVSS" about an advisory whose score was one level away; the
+correction pass fixed that instance, and this entry turns the instance into a measurement and the
+measurement into a check. `node agent/tools/claim-unit-lint.mjs --ghsa-census` pages
+`api.github.com/advisories` and tallies the field shapes. Over **100 advisories published
+2026-10-22→23**:
+
+| field | measured |
+|---|---|
+| `cvss_severities` populated | **100/100** |
+| legacy `cvss.score` null | **35/100 (35%)** |
+| exactly one version slot carrying a real score | **96/100** (3 carry both and disagree — 4.7 vs 2.1; 1 carries neither) |
+| sentinel `{score: 0.0, vector_string: null}` | `cvss_v4` **64/100**, `cvss_v3` **34/100** |
+| no `cve_id` | **21/100** |
+| severity label ≠ its own score's band | **1/100** |
+
+Three rules fall out. **(1) The legacy `cvss` object is a mirror of `cvss_v3`, not a summary** — on
+all 65 records where both are populated the scores agree exactly, so a null there means "no v3.1
+score", never "no score". **(2) `0.0` is an empty slot unless there is a vector** — a genuine 0.0
+carries a vector whose impact metrics read N, and one sampled record (`GHSA-27mw-82g8-phjj`) holds
+that all-N vector in `cvss` beside a **null** score: a third state where the score is computable from
+the vector and absent from the field. **(3) A GHSA id is not necessarily a database record.**
+Snipe-IT's `GHSA-xf36-wx48-5rqp` and Parse Server's `GHSA-rq3w-5c6f-p7wr` both render a **published
+repo advisory page** (200, with a real `<title>`), both return **404** from
+`api.github.com/advisories/<id>`, and both are absent from **OSV** under that id — OSV answers
+"Vulnerability not found, but the following aliases were: CVE-…". The CVE is the only key both
+indexes share, so a scanner keyed on the GHSA id sees nothing while the page is live.
+
+**The lint's subject binding changed with it.** A score used to be checked against every CVE in its
+item, which is wrong in both directions: item 26 names a CVE-less GHSA *and* an unrelated earlier
+CVE, so its correct **4.0 9.1** came back `version-absent`. Each claim now binds to the identifier it
+belongs to — **same sentence first, then the first id on the `Source:` line, then nearest** — and
+never consults the score, or the check would always pass. On item 26 the GHSA sits at offset 183 and
+a passing CVE at 2,239 with the score at 1,247, so nearest-wins bound the CVE while sentence scope
+bound the GHSA. Two verdicts follow: `wrong-subject` (fails on its own record but matches another id
+in the item — the error that binding buys) and `absence-contradicted` (prose asserts no score while
+the record carries one, which is the 10-26 bug itself).
+
+**A correction must reach every copy of the item.** The item-26 fix rewrote the dated feeds in
+en/zh/jp and left all three checked-in `feed/latest.md` mirrors carrying the retracted "carries no
+CVSS" text — `dist` is rebuilt from the dated file, so the site was right and anything reading the
+repo was not. `build.js` now warns per locale with the first differing line and the exact `cp`.
+
+→ [[vuln-supply]] [[fact-check]]
+
+Sources: [GitHub Advisory Database API](https://docs.github.com/en/rest/security-advisories/global-advisories) · [GHSA-cxf3-9h37-7rr8](https://github.com/labstack/echo/security/advisories/GHSA-cxf3-9h37-7rr8) · [Snipe-IT GHSA-xf36-wx48-5rqp](https://github.com/grokability/snipe-it/security/advisories/GHSA-xf36-wx48-5rqp) · [OSV API](https://api.osv.dev/v1/vulns/GHSA-cxf3-9h37-7rr8)

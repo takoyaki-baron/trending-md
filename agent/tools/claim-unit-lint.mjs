@@ -19,11 +19,28 @@
  *      the composite is a cached counter, and it lagged its own parts on free-my-tv (77 vs 21+58).
  *      Prose-only, no network.
  *   B. CVSS VERSION (`--check cvss`) — every (score, version) pair in the item, compared against
- *      the NVD record for the CVEs the item names. Catches the three shapes seen: a score quoted
+ *      the record of the identifier it belongs to. Catches the three shapes seen: a score quoted
  *      against the WRONG version (9.1 is v4.0, not v3.1), a version that the record does not carry
  *      at all, and a score that appears nowhere. One NVD request per feed: the API accepts a
  *      comma-separated `cveId` list (measured 2026-10-26: seven IDs, one call, six records back —
  *      the seventh genuinely has no NVD record).
+ *      **Two subjects, bound per claim** (added 2026-10-26 12:29). The check used to pair every
+ *      score with EVERY CVE in the item, which is wrong in both directions: item 26 names a
+ *      CVE-less GHSA *and* an unrelated earlier CVE, so its correct 4.0 9.1 was reported
+ *      `version-absent`. Each claim now binds to the identifier *nearest* it in the text, and a
+ *      score that fails on its own subject but matches another identifier in the same item is
+ *      `wrong-subject` — the number belongs to a different record, which is a real error and was
+ *      previously invisible. GHSA ids are first-class subjects: `api.github.com/advisories/<id>`
+ *      is fetched only for the GHSA an item actually names (cached 6h, `--max-ghsa`, default 6).
+ *      **A null in one field is not an absence, and `0.0` is not a score** (measured 2026-10-26
+ *      over 100 advisories published 10-22→23): the legacy `cvss` object is a mirror of
+ *      `cvss_v3` (65/100, 0 score mismatches) and is **null on 35/100**, while
+ *      `cvss_severities` is populated on **100/100**; exactly one of the two version slots
+ *      carries a real score on **95/100** (3 carry both, 2 carry neither). An empty slot reads
+ *      `{score: 0.0, vector_string: null}` — a sentinel, not a zero — so the version to quote is
+ *      whichever slot has a **vector**, and the check reports the field it read. The verdict that
+ *      matters most is `absence-contradicted`: prose asserting "no CVSS" while the record carries
+ *      one, which is the bug this whole check was extended for.
  *   C. REPO STATE (`--check repo`) — a star count quoted on a repo that is archived or has not been
  *      pushed in `--stale-days` (default 60), or where the API's own `stargazers_count` disagrees
  *      with the number in the text by more than `--star-tolerance` (default 10%). This is the
@@ -58,6 +75,19 @@
  *  6. A SPELLED-OUT NUMBER IS INVISIBLE. "sixteen harness sections" in a body and "17 harnesses" in
  *     its own title are the same claim, and this lint only sees the digits. That asymmetry is a
  *     finding in itself: the correction pass edits prose, and titles keep the old number.
+ *  7. A SCORE BELONGS TO AN IDENTIFIER, NOT TO AN ITEM. An item can cite two vulns and quote one
+ *     score; checking the union of all records lets any number pass on any item, and narrowing to
+ *     the first CVE reports a correct score as absent. Bind per claim, and keep the cross-check
+ *     (`wrong-subject`) because a score attributed to the wrong record is the error that survives.
+ *  8. `score: 0.0` IS AN EMPTY SLOT UNLESS THERE IS A VECTOR. `{score: 0.0, vector_string: null}`
+ *     means "this version was not scored"; a genuine 0.0 carries a vector whose all-N impact
+ *     metrics compute to zero (seen on GHSA-27mw-82g8-phjj, whose legacy `cvss` holds the vector
+ *     but a null score — a third state, where the score is derivable from the vector and absent
+ *     from the field). Distinguish by `vector_string`, never by the score.
+ *  9. THE LEGACY `cvss` OBJECT IS A MIRROR OF v3.1, NOT A SUMMARY. So a null there says "no v3.1
+ *     score", never "no score"; 100% of the sampled advisories carry v4 in `cvss_severities` and
+ *     the null legacy object is exactly the set that moved to a v4-only shape. A reader that
+ *     parses `cvss.score` sees nothing for ~35% of new records — quote the field you read.
  *
  * Usage:
  *   node agent/tools/claim-unit-lint.mjs --file en/feed/2026-10-26.md
@@ -65,6 +95,7 @@
  *   node agent/tools/claim-unit-lint.mjs --file … --check cvss,repo   # subset
  *   node agent/tools/claim-unit-lint.mjs --files 'en/feed/2026-10-2*.md' --census
  *   node agent/tools/claim-unit-lint.mjs --file … --json --strict     # exit 1 on any finding
+ *   node agent/tools/claim-unit-lint.mjs --ghsa-census [--pages 3]    # field-shape census
  *
  * Exit code is 0 unless `--strict` and a finding was reported (so a pipeline can gate on it).
  * Findings are advisory: a flagged number is a claim to open, not a proven error.
@@ -90,12 +121,13 @@ const STRICT = has('strict');
 const STALE_DAYS = Number(arg('stale-days') ?? 60);
 const STAR_TOLERANCE = Number(arg('star-tolerance') ?? 0.10);
 const MAX_REPOS = Number(arg('max-repos') ?? 8);
+const MAX_GHSA = Number(arg('max-ghsa') ?? 6);
 const CACHE_PATH = arg('cache') ?? 'agent/data/claim-unit-cache.json';
 const CHECKS = new Set((arg('check') ?? 'issues,cvss,repo,count').split(',').map((s) => s.trim()));
 
 const SELFTEST = has('selftest');
-if (!FILE && !FILES && !SELFTEST) {
-  console.error('usage: claim-unit-lint.mjs --file <feed.md> [--no-net] [--check issues,cvss,repo,count] [--strict] [--json] [--census] [--selftest]');
+if (!FILE && !FILES && !SELFTEST && !has('ghsa-census')) {
+  console.error('usage: claim-unit-lint.mjs --file <feed.md> [--no-net] [--check issues,cvss,repo,count] [--strict] [--json] [--census] [--selftest] | --ghsa-census [--pages N]');
   process.exit(2);
 }
 
@@ -155,7 +187,9 @@ function checkIssues(it) {
     issueQuotes.push({ n: toNum(m[1]), at: m.index, ph: m[0] });
   }
   if (!issueQuotes.length) return out;
-  const namesSplit = /\bissues?\b[^.\n]{0,40}\b(?:PRs?|pull requests?)\b|\b(?:PRs?|pull requests?)\b[^.\n]{0,40}\bissues?\b/i.test(t);
+  // "pull requests", "pull-request" and "PRs" are the same word; a hyphen-blind pattern reported
+  // arXiv's "57,240 issue and pull-request threads" as an unsplit count (measured 2026-10-26).
+  const namesSplit = /\bissues?\b[^.\n]{0,40}\b(?:PRs?|pulls?[- ]requests?)\b|\b(?:PRs?|pulls?[- ]requests?)\b[^.\n]{0,40}\bissues?\b/i.test(t);
   if (!namesSplit) {
     out.push({
       check: 'issues', item: it.n, verdict: 'unsplit-issue-count',
@@ -169,9 +203,19 @@ function checkIssues(it) {
   // split named — now check the arithmetic when a composite is also quoted
   const parts = [];
   for (const m of t.matchAll(new RegExp(`${NUM}\\s+(?:open\\s+)?issues?\\b`, 'gi'))) parts.push({ kind: 'issues', n: toNum(m[1]) });
-  for (const m of t.matchAll(new RegExp(`${NUM}\\s+(?:open\\s+)?(?:PRs?|pull requests?)\\b`, 'gi'))) parts.push({ kind: 'prs', n: toNum(m[1]) });
+  for (const m of t.matchAll(new RegExp(`${NUM}\\s+(?:open\\s+)?(?:PRs?|pulls?[- ]requests?)\\b`, 'gi'))) parts.push({ kind: 'prs', n: toNum(m[1]) });
   const issueN = parts.find((p) => p.kind === 'issues')?.n;
   const prN = parts.find((p) => p.kind === 'prs')?.n;
+  // "57,240 issue and pull-request threads" states ONE number for both nouns, and that combined
+  // count is exactly what open_issues_count means — so it is compliant, and the useful thing to
+  // record is that the item quoted the composite the counter actually is.
+  if (issueN != null && prN == null) {
+    const shared = t.match(new RegExp(`${NUM}\\s+(?:open\\s+)?issues?\\s+(?:and|&|\\+)\\s+(?:pulls?[- ]requests?|PRs?)\\b`, 'i'));
+    if (shared) {
+      out.push({ check: 'issues', item: it.n, verdict: 'ok', claim: `${toNum(shared[1])} issues+PRs combined`, detail: 'one number for both nouns — that is the composite the counter reports, so nothing is being presented as an issue-only count' });
+      return out;
+    }
+  }
   if (issueN == null || prN == null) return out;
   out.push({
     check: 'issues', item: it.n, verdict: 'ok',
@@ -248,25 +292,214 @@ function nvdBatch(cves) {
   return map;
 }
 
-function checkCvss(it, nvd) {
+// ── check B helpers: subject binding + the GHSA field model ────────────────────────────────
+const GHSA_RE = /GHSA(-[23456789cfghjmpqrvwx]{4}){3}/g;
+
+/** Identifier mentions with their offset in the SAME stripped text `extractCvss` measures on. */
+function idMentions(t) {
   const out = [];
-  const claims = extractCvss(it.text);
+  for (const m of t.matchAll(/CVE-\d{4}-\d{3,7}/g)) out.push({ id: m[0], at: m.index, kind: 'cve' });
+  for (const m of t.matchAll(GHSA_RE)) out.push({ id: m[0], at: m.index, kind: 'ghsa' });
+  return out.sort((a, b) => a.at - b.at);
+}
+
+/**
+ * The identifier a claim is about. Nearest-mention alone is not enough: an item's subject is
+ * declared in its `Source:` line and its title, and a *different* vuln mentioned 900 characters
+ * later can be narrowly closer to the score than the subject is (item 26: GHSA at 183 vs a
+ * passing CVE at 2,239, score at 1,247). So — sentence scope first, then the declaration:
+ *   1. an identifier in the SAME SENTENCE as the claim → nearest of those;
+ *   2. otherwise the item's primary subject (first id on the `Source:` line, else the title);
+ *   3. otherwise the nearest mention anywhere.
+ * The binding never consults the score, or the check would always pass.
+ */
+function sentences(t) {
+  const out = [];
+  let start = 0;
+  for (const m of t.matchAll(/[.!?]["')\]]*\s+(?=[A-Z“‘"'(])/g)) {
+    out.push({ start, end: m.index + m[0].length });
+    start = m.index + m[0].length;
+  }
+  out.push({ start, end: t.length });
+  return out;
+}
+
+function primarySubject(t, mentions) {
+  if (!mentions.length) return null;
+  const src = t.match(/^.*\bSource:\s*(.*)$/m);
+  if (src) {
+    const line = src[0];
+    const first = mentions.find((m) => m.at >= (src.index ?? 0) && m.at <= (src.index ?? 0) + line.length);
+    if (first) return first;
+  }
+  const titleEnd = t.indexOf('\n');
+  const inTitle = mentions.find((m) => m.at < titleEnd);
+  return inTitle ?? mentions[0];
+}
+
+function bindSubject(claimAt, mentions, ctx) {
+  if (!mentions.length) return null;
+  if (ctx?.sents) {
+    const s = ctx.sents.find((x) => claimAt >= x.start && claimAt < x.end);
+    if (s) {
+      const inside = mentions.filter((m) => m.at >= s.start && m.at < s.end);
+      if (inside.length) {
+        let best = inside[0];
+        for (const m of inside) if (Math.abs(claimAt - m.at) < Math.abs(claimAt - best.at)) best = m;
+        return best;
+      }
+    }
+    if (ctx.primary) return ctx.primary;
+  }
+  let best = mentions[0];
+  let bestD = Math.abs(claimAt - best.at);
+  for (const m of mentions) {
+    const d = Math.abs(claimAt - m.at);
+    if (d < bestD || (d === bestD && m.at <= claimAt && best.at > claimAt)) { best = m; bestD = d; }
+  }
+  return best;
+}
+
+/**
+ * The Advisory Database's field model, which is the sixth unit this check kept getting wrong.
+ * `cvss` is a legacy mirror of `cvss_v3` and is null for the records that moved to v4-only;
+ * `cvss_severities` carries one slot per CVSS version. An unscored slot reads
+ * `{score: 0.0, vector_string: null}` — a sentinel. A real 0.0 carries a vector.
+ */
+function advisoryMetrics(j) {
+  const metrics = [];
+  const push = (o, version, field) => {
+    if (!o || o.score == null) return;
+    if (o.score === 0 && !o.vector_string) return; // empty slot, not a score of zero
+    metrics.push({ version, type: 'GHSA', source: 'security-advisories@github.com', score: o.score, field });
+  };
+  push(j.cvss, '3.1', 'cvss (legacy mirror of cvss_v3)');
+  const sev = j.cvss_severities ?? {};
+  push(sev.cvss_v3, '3.1', 'cvss_severities.cvss_v3');
+  push(sev.cvss_v4, '4.0', 'cvss_severities.cvss_v4');
+  return metrics;
+}
+
+function advisoryState(id) {
+  const key = `ghsa:${id}`;
+  const hit = cache[key];
+  // An error is not a six-hour fact: a rate-limit or a network blip must be re-probed, or the
+  // next run inherits "unreadable" as though it were the record's own state. A 404 is a state,
+  // so it keeps the full TTL — but re-classify entries written before `notInDb` existed.
+  if (hit?.error && !hit.notInDb && /\b404\b|Not Found/i.test(hit.error)) hit.notInDb = true;
+  const ttl = hit?.error && !hit.notInDb ? ERROR_TTL_MS : CACHE_TTL_MS;
+  if (hit && Date.now() - Date.parse(hit.fetched_at) < ttl) return hit;
+  let j;
+  try {
+    const raw = execFileSync('gh', ['api', `advisories/${id}`], { encoding: 'utf8', timeout: 30_000, stdio: ['ignore', 'pipe', 'pipe'] });
+    j = JSON.parse(raw);
+    apiCalls += 1;
+  } catch (e) {
+    // `execFileSync` puts the HTTP status on STDERR ("gh: Not Found (HTTP 404)") — reading only
+    // e.message loses it, which made "404, not in the database" indistinguishable from a blip.
+    const msg = `${e.stderr ?? ''}${e.stdout ?? ''}${e.message ?? ''}`.split('\n').filter((l) => l.trim() && !/^Command failed/.test(l))[0]?.trim() || String(e.message ?? e);
+    // A 404 is a STATE, not a failure: the repo advisory page can render while the GLOBAL
+    // Advisory Database carries no record under that id (measured 2026-10-26 on Snipe-IT's
+    // GHSA-xf36-wx48-5rqp and Parse Server's GHSA-rq3w-5c6f-p7wr — both pages 200, both ids 404
+    // here AND absent from OSV under the GHSA id, which indexes them only by their CVE alias).
+    cache[key] = { fetched_at: new Date().toISOString(), error: /\b404\b|Not Found/i.test(msg) ? 'not-in-advisory-db' : msg, notInDb: /\b404\b|Not Found/i.test(msg) };
+    return cache[key];
+  }
+  cache[key] = {
+    fetched_at: new Date().toISOString(),
+    cve_id: j.cve_id ?? null,
+    severity: j.severity ?? null,
+    published_at: j.published_at ?? null,
+    metrics: advisoryMetrics(j),
+  };
+  return cache[key];
+}
+
+/**
+ * Prose that asserts a score does not exist — the sentence this check was extended to catch.
+ * The trap that made its first version useless: a CORRECTED item describes the wrong reading
+ * ("a reader that parses `cvss.score` … reports "no score""), so the phrase is present and the
+ * claim is the opposite. Only a bare assertion counts: not inside quotation marks, and not
+ * attributed to a reader, scanner, parser or reporter.
+ */
+function noScoreSpans(plain) {
+  const out = [];
+  const re = /\bno\s+(?:cvss|score)(?:\s+(?:at\s+all|published|assigned))?\b|\bwithout\s+(?:a\s+|any\s+)?(?:cvss|score)\b/gi;
+  for (const m of plain.matchAll(re)) {
+    const before = plain.slice(Math.max(0, m.index - 40), m.index);
+    if (/["“'‘]\s*$/.test(before)) continue;               // quoted speech
+    if (/\b(?:report|read|say|see|claim|describ|interpret|parse|treat|render|calls?)\w*\b[^.]{0,24}$/i.test(before)) continue; // attributed
+    out.push({ at: m.index, text: m[0] });
+  }
+  return out;
+}
+function assertsNoScore(plain) {
+  return noScoreSpans(plain).length > 0;
+}
+
+function checkCvss(it, subjects) {
+  const out = [];
+  const t = strip(it.text);
+  const claims = extractCvss(t);
+  const mentions = idMentions(t);
   if (!claims.length) return out;
-  const records = it.cves.filter((c) => nvd.has(c));
+  if (!mentions.length) {
+    for (const cl of claims) {
+      out.push({ check: 'cvss', item: it.n, verdict: 'no-cve-named', claim: `${cl.version} ${cl.score}`, detail: 'a CVSS pair with no CVE or GHSA in the item — the number cannot be checked' });
+    }
+    return out;
+  }
+  const all = [...new Set(mentions.map((m) => m.id))];
+  const union = all.flatMap((id) => (subjects.get(id)?.metrics ?? []).map((m) => ({ id, ...m })));
+  const ctx = { sents: sentences(t), primary: primarySubject(t, mentions) };
+
   for (const cl of claims) {
-    if (!it.cves.length) {
-      out.push({ check: 'cvss', item: it.n, verdict: 'no-cve-named', claim: `${cl.version} ${cl.score}`, detail: 'a CVSS pair with no CVE in the item — the number cannot be checked' });
+    const bound = bindSubject(cl.at, mentions, ctx);
+    const rec = subjects.get(bound.id);
+    if (!rec) {
+      out.push({ check: 'cvss', item: it.n, verdict: 'no-record', claim: `${cl.version} ${cl.score}`, detail: `no record read for ${bound.id} — absence is a registry statement, not a verdict on the score` });
       continue;
     }
-    if (!records.length) {
-      out.push({ check: 'cvss', item: it.n, verdict: 'no-record', claim: `${cl.version} ${cl.score}`, detail: `no NVD record for ${it.cves.join(', ')} — absence is a registry statement, not a verdict on the score` });
+    if (rec.error) {
+      // Unreadable is not wrong. The same vulnerability is usually present under its CVE, so
+      // check that before reporting anything: only an unconfirmable claim is worth a finding.
+      const alt = union.filter((m) => m.id !== bound.id);
+      const hitAlt = alt.find((m) => m.version === cl.version && Math.abs(m.score - cl.score) < 0.05);
+      if (hitAlt) {
+        out.push({
+          check: 'cvss', item: it.n, verdict: 'ok',
+          claim: `${cl.version} ${cl.score}`,
+          detail: `${hitAlt.id} · ${hitAlt.field ?? `${hitAlt.type}/${hitAlt.source}`} (bound subject ${bound.id} is ${rec.error === 'not-in-advisory-db' ? 'not in the global Advisory Database' : `unreadable: ${rec.error}`})`,
+        });
+      } else {
+        out.push({
+          check: 'cvss', item: it.n, verdict: 'advisory-unreadable', claim: `${cl.version} ${cl.score}`,
+          detail: `${bound.id}: ${rec.error === 'not-in-advisory-db' ? 'no record in the global Advisory Database (a published repo page does not imply an ingested advisory)' : rec.error} — "I could not read it" is not "it does not say that"`,
+        });
+      }
       continue;
     }
-    const candidates = records.flatMap((c) => nvd.get(c).metrics.map((m) => ({ cve: c, ...m })));
+    // A record with no metrics at all is the absence case: check it against the rest before calling it.
+    const candidates = rec.metrics.length ? rec.metrics.map((m) => ({ id: bound.id, ...m })) : union;
+    const fallback = !rec.metrics.length && candidates.length;
     const sameVersion = candidates.filter((m) => m.version === cl.version);
-    if (sameVersion.some((m) => Math.abs(m.score - cl.score) < 0.05)) {
-      const m = sameVersion.find((x) => Math.abs(x.score - cl.score) < 0.05);
-      out.push({ check: 'cvss', item: it.n, verdict: 'ok', claim: `${cl.version} ${cl.score}`, detail: `${m.cve} ${m.type}/${m.source}` });
+    const hit = sameVersion.find((m) => Math.abs(m.score - cl.score) < 0.05);
+    if (hit) {
+      out.push({
+        check: 'cvss', item: it.n, verdict: 'ok',
+        claim: `${cl.version} ${cl.score}`,
+        detail: `${hit.id} · ${hit.field ?? `${hit.type}/${hit.source}`}${fallback ? ' (bound record carries none; matched another id in the item)' : ''}`,
+      });
+      continue;
+    }
+    // Fails on its own subject — does it belong to a different identifier in this item?
+    const elsewhere = union.find((m) => m.id !== bound.id && Math.abs(m.score - cl.score) < 0.05);
+    if (elsewhere) {
+      out.push({
+        check: 'cvss', item: it.n, verdict: 'wrong-subject',
+        claim: `${cl.version} ${cl.score}`,
+        detail: `bound to ${bound.id}, which does not carry it — ${cl.score} is on ${elsewhere.id} (${elsewhere.version}, ${elsewhere.field ?? elsewhere.type}); the score belongs to another record in this item`,
+      });
       continue;
     }
     const otherVersion = candidates.filter((m) => m.version !== cl.version);
@@ -276,23 +509,36 @@ function checkCvss(it, nvd) {
       out.push({
         check: 'cvss', item: it.n, verdict: 'version-swapped',
         claim: `${cl.version} ${cl.score}`,
-        detail: `${cl.score} is the ${movedScore.version} score on ${movedScore.cve}; its ${cl.version} metric says ${here || 'nothing'} — quote the version you quote`,
+        detail: `${cl.score} is the ${movedScore.version} score on ${movedScore.id}${movedScore.field ? ` (${movedScore.field})` : ''}; its ${cl.version} metric says ${here || 'nothing'} — quote the version you quote`,
       });
     } else if (!sameVersion.length) {
       out.push({
         check: 'cvss', item: it.n, verdict: 'version-absent',
         claim: `${cl.version} ${cl.score}`,
-        detail: `${it.cves.join(', ')} publish no ${cl.version} metric; the record carries ${otherVersion.map((m) => `${m.version} ${m.score}`).join(', ') || 'none'}`,
+        detail: `${bound.id} publishes no ${cl.version} score; the record carries ${otherVersion.map((m) => `${m.version} ${m.score}${m.field ? ` (${m.field})` : ''}`).join(', ') || 'none'}`,
       });
     } else {
       out.push({
         check: 'cvss', item: it.n, verdict: 'score-mismatch',
         claim: `${cl.version} ${cl.score}`,
-        detail: `NVD's ${cl.version} metric says ${here}`,
+        detail: `${bound.id}'s ${cl.version} score says ${here}${sameVersion[0]?.field ? ` (${sameVersion[0].field})` : ''}`,
       });
     }
   }
-  if (claims.length && /\b(?:Primary|Secondary)\b/.test(it.plain)) {
+  // The absence claim is checked last, bound to the record the sentence is actually about.
+  for (const span of noScoreSpans(t)) {
+    const subj = bindSubject(span.at, mentions, ctx);
+    const own = (subjects.get(subj?.id)?.metrics ?? []).filter((m) => m.score > 0 || m.field?.startsWith('cvss_severities'));
+    const m = own[0] ?? union.filter((x) => x.score > 0)[0];
+    if (!m) continue;
+    out.push({
+      check: 'cvss', item: it.n, verdict: 'absence-contradicted',
+      claim: `prose says "${span.text}"`,
+      detail: `${m.id} carries ${m.version} ${m.score} in ${m.field ?? `${m.type}/${m.source}`} — name the field, not the absence (a null in one field is not an absence)`,
+    });
+    break; // one finding per item is enough to open the question
+  }
+  if (claims.length && /\b(?:Primary|Secondary)\b/.test(t)) {
     out.push({
       check: 'cvss', item: it.n, verdict: 'slot-quoted',
       claim: 'Primary/Secondary',
@@ -307,6 +553,7 @@ let cache = {};
 try { cache = JSON.parse(readFileSync(CACHE_PATH, 'utf8')); } catch { /* first run */ }
 let apiCalls = 0;
 const CACHE_TTL_MS = 6 * 3600 * 1000;
+const ERROR_TTL_MS = 10 * 60 * 1000;
 
 function repoState(slug) {
   const hit = cache[slug];
@@ -420,6 +667,47 @@ async function checkCount(it) {
   return out;
 }
 
+// ── `--ghsa-census`: measure the field model instead of asserting it ────────────────────────
+if (has('ghsa-census')) {
+  const pages = Number(arg('pages') ?? 1);
+  const rows = [];
+  for (let p = 1; p <= pages; p++) {
+    const raw = execFileSync('gh', ['api', `advisories?per_page=100&page=${p}&sort=published&direction=desc`], { encoding: 'utf8', timeout: 60_000, maxBuffer: 64 * 1024 * 1024 });
+    apiCalls += 1;
+    rows.push(...JSON.parse(raw));
+    if (p < pages) await new Promise((r) => setTimeout(r, 500));
+  }
+  const g = (a, k) => (a.cvss_severities ?? {})[k] ?? {};
+  const real = (o) => o.score != null && !(o.score === 0 && !o.vector_string);
+  let legacyNull = 0, sevPop = 0, one = 0, both = 0, neither = 0, sentinel4 = 0, sentinel3 = 0, noCve = 0, bandBad = 0;
+  const band = (s) => (s >= 9 ? 'critical' : s >= 7 ? 'high' : s >= 4 ? 'medium' : s > 0 ? 'low' : 'none');
+  for (const a of rows) {
+    const legacy = a.cvss?.score ?? null;
+    if (legacy == null) legacyNull += 1;
+    if (a.cvss_severities) sevPop += 1;
+    const r3 = real(g(a, 'cvss_v3'));
+    const r4 = real(g(a, 'cvss_v4'));
+    if (r3 && r4) both += 1; else if (r3 || r4) one += 1; else neither += 1;
+    if (g(a, 'cvss_v4').score === 0 && !g(a, 'cvss_v4').vector_string) sentinel4 += 1;
+    if (g(a, 'cvss_v3').score === 0 && !g(a, 'cvss_v3').vector_string) sentinel3 += 1;
+    if (!a.cve_id) noCve += 1;
+    const sc = r4 ? g(a, 'cvss_v4').score : r3 ? g(a, 'cvss_v3').score : null;
+    if (sc != null && a.severity && band(sc) !== a.severity) bandBad += 1;
+  }
+  const n = rows.length;
+  const pct = (x) => `${x}/${n} (${((x / n) * 100).toFixed(1)}%)`;
+  const dates = rows.map((a) => (a.published_at ?? '').slice(0, 10)).sort();
+  console.log(`\nGHSA field census — ${n} advisories, published ${dates[0]} → ${dates.at(-1)}`);
+  console.log(`  legacy cvss.score null          ${pct(legacyNull)}`);
+  console.log(`  cvss_severities populated       ${pct(sevPop)}`);
+  console.log(`  exactly one slot scored         ${pct(one)}   both: ${both}   neither: ${neither}`);
+  console.log(`  sentinel {0.0, no vector}       cvss_v4: ${pct(sentinel4)}   cvss_v3: ${pct(sentinel3)}`);
+  console.log(`  no CVE id                       ${pct(noCve)}`);
+  console.log(`  severity label ≠ score band     ${pct(bandBad)}`);
+  console.log(`\napi.github.com calls: ${apiCalls}`);
+  process.exit(0);
+}
+
 // ── selftest (pure functions only; no network) ──────────────────────────────────────────────
 if (SELFTEST) {
   const mk = (title, body = '') => ({ n: 1, title, body, text: `${title}\n${body}`, plain: strip(`${title}\n${body}`), cves: [], repos: [] });
@@ -430,6 +718,7 @@ if (SELFTEST) {
   t('split named: compliant', checkIssues(mk('t', '4,379 issues and 4,159 PRs')).map((x) => x.verdict), ['ok']);
   t('ratio is not a count', checkIssues(mk('t', 'one issue per twenty-four stargazers')).map((x) => x.verdict), []);
   t('composite lags parts', checkIssues(mk('t', 'open_issues_count reads 77 against 21 issues and 58 PRs')).map((x) => x.verdict).slice(-1), ['compound-lags-parts']);
+  t('hyphenated pull-request is a named split', checkIssues(mk('t', 'mined from **57,240 issue and pull-request threads** across 1,774 repos')).map((x) => x.verdict), ['ok']);
 
   const ver = (s) => extractCvss(s).map((c) => `${c.version}:${c.score}`).sort();
   t('score (CVSS v)', ver('scored **9.1 (CVSS 3.1)**'), ['3.1:9.1']);
@@ -437,6 +726,49 @@ if (SELFTEST) {
   t('score on version', ver('9.2 on CVSS 4.0 and 8.1 on 3.1'), ['3.1:8.1', '4.0:9.2']);
   t('release number is not a version', ver('affected >= 1.37, <= 1.74.1, patched 1.74.2'), []);
   t('out-of-range score dropped', ver('CVSS 4.0 11.4'), []);
+
+  // subject binding — a score belongs to an identifier, not to the item
+  const men = (s) => idMentions(s);
+  const bind = (s) => bindSubject(s.indexOf('SCORE'), men(s));
+  t('bind: score after its own id',
+    bind('see CVE-2026-111111 for 1 point and CVE-2026-222222, rated SCORE nine').id, 'CVE-2026-222222');
+  t('bind: GHSA nearest wins over a distant CVE',
+    bind('CVE-2026-55677 was an earlier bypass. GHSA-cxf3-9h37-7rr8 is the one, SCORE critical').id, 'GHSA-cxf3-9h37-7rr8');
+  t('bind: single id gets every claim',
+    bind('GHSA-5x8w-8jj5-q52h, SCORE').id, 'GHSA-5x8w-8jj5-q52h');
+  t('bind: no id at all', bind('SCORE with no identifier'), null);
+
+  // sentence scope + declared subject — the shape that mis-bound item 26
+  const ctxOf = (s) => ({ sents: sentences(s), primary: primarySubject(s, idMentions(s)) });
+  const bind2 = (s) => {
+    const t = s.replace(/\*\*|\*|`/g, '');
+    return bindSubject(t.indexOf('SCORE'), idMentions(t), ctxOf(t))?.id ?? null;
+  };
+  const echo = '- Source: GitHub Advisory GHSA-cxf3-9h37-7rr8\n\nCritical **9.1 on CVSS 4.0** is the score. '
+    + 'What disagrees is the schema. '
+    + 'The class is the real story: the list carries one CVE-identified issue (CVE-2026-55677, an encoded bypass). SCORE here.';
+  t('bind: a distant passing CVE loses to the declared subject', bind2(echo.split(' SCORE')[0] + ' SCORE'), 'GHSA-cxf3-9h37-7rr8');
+  t('bind: a same-sentence id still wins', bind2('SCORE CVE-2026-111111 is the one'), 'CVE-2026-111111');
+  t('primary: Source line before title before first mention',
+    primarySubject('t CVE-2026-999999\n\n- Source: NVD CVE-2026-111111\nbody', idMentions('t CVE-2026-999999\n\n- Source: NVD CVE-2026-111111\nbody')).id,
+    'CVE-2026-111111');
+
+  // the GHSA field model: a null in one field is not an absence, and 0.0 is a sentinel
+  const fm = (o) => advisoryMetrics(o).map((m) => `${m.version}:${m.score}:${m.field}`);
+  t('field: legacy null, v4 carries the score',
+    fm({ cvss: { score: null, vector_string: null }, cvss_severities: { cvss_v3: { score: 0.0, vector_string: null }, cvss_v4: { score: 9.1, vector_string: 'CVSS:4.0/AV:N' } } }),
+    ['4.0:9.1:cvss_severities.cvss_v4']);
+  t('field: sentinel 0.0 is dropped, both slots present',
+    fm({ cvss: { score: 6.1, vector_string: 'CVSS:3.1/AV:N' }, cvss_severities: { cvss_v3: { score: 6.1, vector_string: 'CVSS:3.1/AV:N' }, cvss_v4: { score: 0.0, vector_string: null } } }),
+    ['3.1:6.1:cvss (legacy mirror of cvss_v3)', '3.1:6.1:cvss_severities.cvss_v3']);
+  t('field: a genuine 0.0 with a vector is a score',
+    fm({ cvss: { score: 0.0, vector_string: 'CVSS:3.1/AV:N/AC:H/PR:H/UI:N/S:U/C:N/I:N/A:N' }, cvss_severities: {} }),
+    ['3.1:0:cvss (legacy mirror of cvss_v3)']);
+
+  // the absence claim — the sentence that shipped twice
+  t('absence: "carries no CVSS" is detected', assertsNoScore('the advisory carries no CVSS at all'), true);
+  t('absence: a field-level null is NOT an absence claim',
+    assertsNoScore('the cvss field is null while cvss_severities holds the score'), false);
 
   for (const c of cases) console.log(`  ${c.pass ? '✓' : '✗'} ${c.name}${c.pass ? '' : ` — got ${JSON.stringify(c.got)}, want ${JSON.stringify(c.want)}`}`);
   const ok = cases.filter((c) => c.pass).length;
@@ -453,6 +785,7 @@ const parsed = paths.map((p) => ({ path: p, items: parseItems(readFileSync(p, 'u
 // under the keyless 5-per-30s ceiling (an unchunked multi-week census would 403 mid-run).
 let nvd = new Map();
 let nvdCalls = 0;
+let ghsaCalls = 0;
 if (!NO_NET && CHECKS.has('cvss')) {
   const cves = [...new Set(parsed.flatMap((f) => f.items.flatMap((it) => it.cves)))];
   const CHUNK = 25;
@@ -460,6 +793,21 @@ if (!NO_NET && CHECKS.has('cvss')) {
     if (i) await new Promise((r) => setTimeout(r, 6_500));
     try { for (const [k, v] of nvdBatch(cves.slice(i, i + CHUNK))) nvd.set(k, v); nvdCalls += 1; } catch { /* offline or rate-limited; the cvss check reports no-record rather than a wrong verdict */ }
   }
+  // GHSA subjects: one call per id an item actually names (a CVE-less GHSA is a subject with no
+  // other way in), capped and cached — so a re-run inside the TTL costs nothing.
+  const ghsas = [...new Set(parsed.flatMap((f) => f.items.flatMap((it) => strip(it.text).match(GHSA_RE) ?? [])))].slice(0, MAX_GHSA);
+  for (const id of ghsas) {
+    const before = apiCalls;
+    advisoryState(id);
+    if (apiCalls > before) ghsaCalls += 1;
+    await new Promise((r) => setTimeout(r, 400));
+  }
+}
+const subjects = new Map();
+for (const [id, rec] of nvd) subjects.set(id, { kind: 'cve', status: rec.status, metrics: rec.metrics });
+for (const id of new Set(parsed.flatMap((f) => f.items.flatMap((it) => strip(it.text).match(GHSA_RE) ?? [])))) {
+  const rec = cache[`ghsa:${id}`];
+  if (rec) subjects.set(id, { kind: 'ghsa', ...rec });
 }
 
 for (const { path: p, items } of parsed) {
@@ -468,7 +816,7 @@ for (const { path: p, items } of parsed) {
 
   for (const it of items) {
     if (CHECKS.has('issues')) findings.push(...checkIssues(it));
-    if (!NO_NET && CHECKS.has('cvss')) findings.push(...checkCvss(it, nvd));
+    if (!NO_NET && CHECKS.has('cvss')) findings.push(...checkCvss(it, subjects));
   }
   if (!NO_NET && CHECKS.has('repo')) for (const it of items) findings.push(...checkRepo(it, budget));
   if (!NO_NET && CHECKS.has('count')) for (const it of items) findings.push(...await checkCount(it));
@@ -479,7 +827,7 @@ for (const { path: p, items } of parsed) {
 
 try { mkdirSync(dirname(CACHE_PATH), { recursive: true }); writeFileSync(CACHE_PATH, JSON.stringify(cache, null, 1)); } catch { /* cache is best-effort */ }
 
-const SEVERITY = { ok: 0, 'no-cve-named': 1, 'no-record': 1, 'slot-quoted': 1, 'star-drift': 2, stale: 2, archived: 2, differs: 2, absent: 2, 'unsplit-issue-count': 3, 'compound-lags-parts': 3, 'version-swapped': 3, 'version-absent': 3, 'score-mismatch': 3, unreadable: 1, 'artifact-unreadable': 1, 'nvd-unavailable': 1 };
+const SEVERITY = { ok: 0, 'no-cve-named': 1, 'no-record': 1, 'slot-quoted': 1, 'star-drift': 2, stale: 2, archived: 2, differs: 2, absent: 2, 'unsplit-issue-count': 3, 'compound-lags-parts': 3, 'version-swapped': 3, 'version-absent': 3, 'score-mismatch': 3, 'wrong-subject': 3, 'absence-contradicted': 3, 'advisory-unreadable': 1, unreadable: 1, 'artifact-unreadable': 1, 'nvd-unavailable': 1 };
 const REAL = (f) => (SEVERITY[f.verdict] ?? 1) >= 2;
 
 const summary = { generated: new Date().toISOString(), files: perFile, api_calls: apiCalls, readme_calls: readmeCalls, nvd_calls: nvdCalls };

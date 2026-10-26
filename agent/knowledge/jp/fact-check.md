@@ -755,3 +755,26 @@ expand[]=gated` 付きのリスト呼び出し10回、カード単位の取得�
 → [[frontier-models]] [[vuln-supply]]
 
 Sources: [agent/tools/claim-unit-lint.mjs](https://github.com/kelong/trending-md/blob/master/agent/tools/claim-unit-lint.mjs) · [HF models API](https://huggingface.co/api/models?sort=createdAt&direction=-1&limit=5&expand%5B%5D=cardData&expand%5B%5D=gated) · [KRAFTON/Raon-1-mini-preview](https://huggingface.co/KRAFTON/Raon-1-mini-preview) · [NVD CVE-2026-116192](https://nvd.nist.gov/vuln/detail/CVE-2026-116192)
+
+## 2026-10-26 12:29 —— 6つ目の単位は「フィールド」：`cvss` の null は不在ではない、そして測定した
+
+10-26 のバッチは、スコアが1階層外にある勧告について「CVSSは一切ない」と書いた。訂正パスはその1件を直したが、本項はその事例を測定に、測定をチェックに変える。`node agent/tools/claim-unit-lint.mjs --ghsa-census` は `api.github.com/advisories` をページングし、フィールドの形を集計する。**2026-10-22→23 に公開された100件の勧告**では：
+
+| フィールド | 実測 |
+|---|---|
+| `cvss_severities` に値あり | **100/100** |
+| レガシー `cvss.score` が null | **35/100（35%）** |
+| 実スコアを持つバージョンスロットがちょうど1つ | **96/100**（3件は両方に持ち互いに矛盾——4.7 対 2.1、1件はどちらもなし） |
+| センチネル `{score: 0.0, vector_string: null}` | `cvss_v4` **64/100**、`cvss_v3` **34/100** |
+| `cve_id` なし | **21/100** |
+| severity ラベルがスコア帯と不一致 | **1/100** |
+
+導かれる規則は3つ。**（1）レガシー `cvss` オブジェクトは `cvss_v3` のミラーであり要約ではない**——両方に値がある65件ではスコアが完全一致するので、そこでの null は「v3.1 のスコアがない」ことを意味し、「スコアがない」ことでは決してない。**（2）ベクタがなければ `0.0` は空きスロット**——本物の 0.0 は影響がすべて N のベクタを伴い、抽出した1件（`GHSA-27mw-82g8-phjj`）はその全Nベクタを `cvss` に持ちながらスコアが **null** である：スコアがベクタから計算でき、フィールドには存在しない第三の状態。**（3）GHSA id は必ずしもデータベースレコードではない。** Snipe-IT の `GHSA-xf36-wx48-5rqp` と Parse Server の `GHSA-rq3w-5c6f-p7wr` はいずれも**公開済みのリポジトリ勧告ページ**を描画し（200、`<title>` も正常）、いずれも `api.github.com/advisories/<id>` から **404** を返し、**OSV** でもその id では見つからない——OSV の応答は「Vulnerability not found, but the following aliases were: CVE-…」。CVE が両インデックス唯一の共通キーであり、GHSA id だけで引くスキャナはページが生きている間も何も見ない。
+
+**lint の主体バインディングも変わった。** 以前は1つのスコアをその項目のすべての CVE に対して照合しており、両方向に誤る：項目26は CVE を持たない GHSA *と* 無関係な過去の CVE を併記するため、正しい **4.0 9.1** が `version-absent` と判定された。現在は各表明が所属する識別子へ束縛される——**まず同一文、次に `Source:` 行の最初の id、最後に最近傍**——そしてスコアは決して参照しない（参照すれば常に通ってしまう）。項目26では GHSA がオフセット183、通りすがりの CVE が2,239、スコアが1,247にあり、最近傍優先では CVE に、文スコープでは GHSA に束縛された。結果として2つの判定が増えた：`wrong-subject`（自身のレコードでは成立せず、項目内の別 id と一致する——束縛が買った検出）と `absence-contradicted`（本文がスコアなしと主張するのにレコードにはある、すなわち10-26のバグそのもの）。
+
+**訂正は項目のすべてのコピーに届かねばならない。** 項目26の修正は en/zh/jp の日付ファイルを書き換えたが、コミット済みの `feed/latest.md` 3つは撤回された「CVSSは一切ない」という文を保持したままだった——`dist` は日付ファイルから再構築されるのでサイトは正しく、リポジトリを読むものは正しくなかった。`build.js` はロケールごとに最初の相違行と実行すべき `cp` を警告するようになった。
+
+→ [[vuln-supply]] [[fact-check]]
+
+Sources: [GitHub Advisory Database API](https://docs.github.com/en/rest/security-advisories/global-advisories) · [GHSA-cxf3-9h37-7rr8](https://github.com/labstack/echo/security/advisories/GHSA-cxf3-9h37-7rr8) · [Snipe-IT GHSA-xf36-wx48-5rqp](https://github.com/grokability/snipe-it/security/advisories/GHSA-xf36-wx48-5rqp) · [OSV API](https://api.osv.dev/v1/vulns/GHSA-cxf3-9h37-7rr8)

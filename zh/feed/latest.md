@@ -1,6 +1,6 @@
 ---
 date: 2026-10-26
-updated: 2026-10-26T04:17:36Z
+updated: 2026-10-26T04:28:30Z
 schedule: 04:03, 12:03, 20:03 UTC+8
 sources: 36
 license: CC-BY-4.0
@@ -56,7 +56,7 @@ license: CC-BY-4.0
 - **Source:** GitHub (microsoft/Agensh) / arXiv 2609.26781 · 2026-10-24 开源
 - **Tags:** `multi-agent` `harness` `microsoft` `programbench` `scaling`
 
-**Agensh** 用一套每个 worker 都相同执行的协作循环取代了中心调度：收集上下文、认领子任务、行动并共享发现、验证、合并——由三块共享基础设施支撑（共享工作区、消息接口、以及保存可复用发现与工作意图的共享上下文板）。仓库为 **MIT**、257 星，发布内容包括"harness、实验启动脚本和复现指南"。在 **ProgramBench 最难的五个任务**上，用 **GPT-5.6-sol（high）**、六小时预算、无网络，平均最终测试通过率从 **1 个智能体的 19.31% 升到 128 个的 28.78%**，"相对提升约 49%"。单看 **pandoc**：**33.89%（1 个）→ 50.94%（128 个）→ 55.06%（1,024 个）**。
+**Agensh** 用一套每个 worker 都相同执行的协作循环取代了中心调度：收集上下文、认领子任务、行动并共享发现、验证、合并——由三块共享基础设施支撑（共享工作区、消息接口、以及保存可复用发现与工作意图的共享上下文板）。仓库为 **MIT**，核对时读到 **389 星**（16 分钟后为 395——这个计数器一直在动），发布内容包括"harness、实验启动脚本和复现指南"。在 **ProgramBench 最难的五个任务**上，用 **GPT-5.6-sol（high）**、六小时预算、无网络，平均最终测试通过率从 **1 个智能体的 19.31% 升到 128 个的 28.78%**，"相对提升约 49%"。单看 **pandoc**：**33.89%（1 个）→ 50.94%（128 个）→ 55.06%（1,024 个）**。
 
 **Why it matters:** 1,024 是标题，而 128→1,024 这一步才是发现——**用八倍的智能体换来 4.1 个百分点的 pandoc 通过率**，而此时曲线已经爬完了大部分高度。所有报告都来自一个模型、五个任务、一个六小时预算，且 README 未发布任何跨团队规模的成本、token 或 GPU 小时对比，所以这里的"扩展智能体"衡量的是固定墙钟时间下的质量，不是效率。真正新颖的主张是架构性的而非数字性的：没有管理者的自组织现在可被测试，而轨迹就在仓库里。
 
@@ -358,7 +358,7 @@ Wiz 从 **2026 年 9 月 15 日**起追踪一场活动，它是同一个想法�
 
 ---
 
-## 26. Echo 的 WebSocket 升级绕过被标为 critical，却没有 CVE 也没有 CVSS——而这是同一类路由绕过问题的第三轮
+## 26. Echo 的 WebSocket 升级绕过是 Critical 9.1 且没有 CVE——它的 `cvss` 字段为 null，而分数在 `cvss_severities` 里
 
 - **Velocity:** ▮▮ rising
 - **Source:** GitHub Advisory GHSA-cxf3-9h37-7rr8（labstack/echo）· 发布于 2026-10-22
@@ -366,7 +366,7 @@ Wiz 从 **2026 年 9 月 15 日**起追踪一场活动，它是同一个想法�
 
 **Echo** 的 Proxy 中间件"在客户端请求 WebSocket 升级时选中了原始隧道，而没有先验证所配置的上游是否接受该升级"。如果上游返回普通 HTTP 响应并保持连接存活，"该连接上后续的 HTTP 请求会被直接转发到同一个上游，不经过 Echo 的路由器或路由级中间件"——于是任何只在 Echo 路由上实施的认证或授权都被跳过。受影响范围是 **`>= 4.0.0, < 4.16.1`** 与 **`>= 5.0.0, < 5.4.1`**，修复于 **4.16.1** 和 **5.4.1**，公告还指出源码历史显示这项缺失的校验"在 v4.0.0 就已存在"——整整一条 v4 线。修复方式是把升级交给 Go 的 HTTP 反向代理，只有在收到有效的上游升级响应后才进入隧道。
 
-**Why it matters:** 决定这条记录如何被分流（triage）的三个字段彼此不一致。GitHub 的记录把它标为 **`severity: critical`**，而 `cvss` 是 `{"vector_string": null, "score": null}`——完全没有分数——`cve_id` 也是 `null`，于是按 CVE 标识扫描的工具匹配不到任何东西，按严重度阈值比较的工具也没有数字可比。这是一个标签在做通常由数字做的活。真正值得看的是这个类别：从 6 月 14 日到 10 月 22 日，Echo 的公告列表里只有**一个问题带 CVE（CVE-2026-55677，编码后的 `%2F` 绕过路由级保护并暴露静态文件）**，随后是 **9 月 27 日**的一批五条、其中一条标题写着"不完整的修复"，主题全同——通往处理器的某条替代路径，路由器根本没看见。10 月这批在 22 日又加了六条，而这一条是唯一的 `critical`。利用条件在公告里写明而非淡化：它"需要一条可访问的代理路由、一个拒绝升级但不关闭连接的上游，以及该上游上一个没有独立授权的目标资源"，并且"不提供任意主机代理，也不绕过上游自身的认证"。但关于临时缓解的那句话要读两遍："仅让上游返回非 101 响应，并不能阻止脆弱的原始隧道。"
+**Why it matters:** 决定分流的字段彼此一致，不一致的是**结构**。GitHub 的记录把它标为 **`severity: critical`**，旁边是 **CVSS 4.0 的 9.1**（`CVSS:4.0/AV:N/AC:L/AT:P/PR:N/UI:N/VC:H/VI:H/VA:N/SC:N/SI:N/SA:N`），但公告里那个遗留的 `cvss` 对象读作 `{"vector_string": null, "score": null}`——因为分数住在隔壁一层 `cvss_severities.cvss_v4`，所以任何解析 `cvss.score` 的阅读器或扫描器只会看到 null，然后报告"没有分数"。这不是这条记录的怪癖：同一批里第 27 条的 Pillow 公告形状完全相同，`cvss` 为 null，`cvss_severities.cvss_v4` 是 **9.2**。真正缺失的是标识符——`cve_id` 为 `null`——所以按 CVE 键匹配的扫描器和 KEV 交叉引用在这里什么都匹配不到。还有两个细节属于这份记录而非这个漏洞：仓库公告页面上写的是 **10 月 22 日**，而扫描器读取的 Advisory Database 条目 `published_at` 是 **2026-10-23T20:49:37Z**；提交栏写着"**This report was submitted with AI assistance**"（本报告在 AI 协助下提交）。真正值得看的是这个类别：从 6 月 14 日到 10 月 22 日，Echo 的公告列表里只有**一个问题带 CVE（CVE-2026-55677，编码后的 `%2F` 绕过路由级保护并暴露静态文件）**，随后是 **9 月 27 日**的一批五条、其中一条标题写着"不完整的修复"，主题全同——通往处理器的某条替代路径，路由器根本没看见。10 月这批在 22 日又加了六条，而这一条是唯一的 `critical`。利用条件在公告里写明而非淡化：它"需要一条可访问的代理路由、一个拒绝升级但不关闭连接的上游，以及该上游上一个没有独立授权的目标资源"，并且"不提供任意主机代理，也不绕过上游自身的认证"。但关于临时缓解的那句话要读两遍："仅让上游返回非 101 响应，并不能阻止脆弱的原始隧道。"
 
 [`🔗 GHSA-cxf3-9h37-7rr8`](https://github.com/labstack/echo/security/advisories/GHSA-cxf3-9h37-7rr8) · [`🔗 labstack/echo 发布（v4.16.1 / v5.4.1）`](https://github.com/labstack/echo/releases)
 
@@ -488,7 +488,7 @@ Issue **#114**——"有时要求括号以消解令人困惑的运算符优先�
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-10-26T04:17:36Z |
+| Generated | 2026-10-26T04:28:30Z |
 | Items | 34 |
 | Sources tracked | 36（Hacker News、GitHub Trending、GitHub Security Advisories、Hugging Face、arXiv、NVD、VulnCheck、Microsoft .NET Blog、Kimi/Moonshot、KRAFTON AI、DreamHost Status、FOSDEM/talkweb.eu、Daily Californian、Kyutai、Forever Security、BleepingComputer、Symantec/security.com、The Register、Wiz Research、minimaxir.com、labstack/echo、wild-linker、ziglang.org、lobste.rs） |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8（每日 3 次） |

