@@ -1,8 +1,8 @@
 ---
 date: 2026-10-26
-updated: 2026-10-26T04:28:30Z
+updated: 2026-10-26T12:34:29Z
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 36
+sources: 40
 license: CC-BY-4.0
 ---
 
@@ -484,13 +484,181 @@ Issue **#114**——"有时要求括号以消解令人困惑的运算符优先�
 
 ---
 
+## 35. C++26 的 DIS 投票失败了——20 票中 12 票赞成、22 票中 9 票反对，这是史上第一份被否决的 C++ 草案
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** train-it.eu（Mateusz Pusz）/ Hacker News · 52 pts · 约 6 小时前（~14:12 UTC+8 10 月 26 日）
+- **Tags:** `cpp26` `iso-ballot` `contracts` `standards`
+
+**C++26** 的国际标准草案（DIS）投票于 **2026 年 10 月 23 日**截止，结果为**否决**。Pusz 报告说，DIS 必须满足的两个条件全部落空：**P（投票）成员中至少三分之二赞成——20 票中 12 票，即 60%**（需要 14 票），以及**所有投票机构中反对不超过 25%——22 票中 9 票，即 41%**（只允许 5 票）。"任何一条单独都会让这份草案失败。"投反对票的九个国家机构是**丹麦、芬兰、伊朗、意大利、日本、卢森堡、罗马尼亚、西班牙和瑞典**；法国和爱尔兰弃权但提交了意见；波兰和美国弃权。C 委员会召集人 Robert Seacord 在次日把结果发在了 LinkedIn 上。Pusz 明确说明了这些数字的所在：**SC22 的官方投票结果"不公开"**——只有各国机构的代表能在 ISO 委员会网站上看到，而他写作时它也不在 ISO 的公开项目页或任何 WG21 文件里。
+
+**Why it matters:** 反射、`std::execution`、库加固和契约现在全都躺在一份 ISO 尚未批准的草案里，而指令规定的四条出路——**八周**投票期的修订调查草案、修订委员会草案、降级为技术规范，或者取消项目——由 SC22 主席选择，且没有时间表。Pusz 说他"确信"反对票是针对契约的，但意见"尚未公布"：指令要求 12 周内提交完整报告，也就是**最迟 2027 年 1 月中旬**。这份报告本身就是这个故事最古怪之处（一次标准投票的否决，其一手文件却是 LinkedIn 帖子）的解法——决定一门语言未来三年的那次投票，并不公开。
+
+[`🔗 train-it.eu — C++26 DIS 投票的结果`](https://train-it.eu/blog/cpp26-contracts-the-ballot-result/) · [`🔗 Hacker News 讨论`](https://news.ycombinator.com/item?id=50239748) · [`🔗 Seacord 的投票结果帖`](https://www.linkedin.com/posts/robertseacord_balloting-has-completed-for-c26-unfortunately-activity-7519795140887035918-5PWL)
+
+---
+
+## 36. VulnCheck 在 48 小时内给 75 条 CVE 记录打了两次分——没有一对数字相同，最大差 2.6 分
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** NVD API 普查（第一手）· 2026 年 10 月 25–26 日发布窗口的 243 条记录
+- **Tags:** `cvss` `nvd-provenance` `vllm` `scoring`
+
+在 NVD 于 **10 月 25–26 日**发布的 **243 条记录**中，**81 条带有 `disclosure@vulncheck.com` 的评分**，其中 **75 条由同一个主体在同一份发现上同时给了 CVSS 3.1 和 CVSS 4.0 两套分数**。把两组数字并排看：**58 条是 4.0 更高，17 条是 3.1 更高，零对相同。**最大正差是 **+2.6**（3.7 → 6.3，共五条）；反向最大是 **−2.1**（3.9 → 1.8）。**75 条里有 31 条连严重度档位都翻转了**：14 条 MEDIUM → HIGH，14 条 LOW → MEDIUM，2 条 HIGH → CRITICAL，还有 1 条 CRITICAL → HIGH。这批里最大的一簇是 **vLLM，共十条记录**，全部是 4.0 更高：四个 Rust gRPC 输入校验缺陷在 **3.1 下是 5.9 MEDIUM，在 4.0 下是 8.2 HIGH**；最高的一条 `CVE-2026-116176`（SSRF，CWE-918）是 **8.2 / 8.8**，手法是把解码地址塞进 `X-Request-Id` 请求头来强制发起对外连接。
+
+**Why it matters:** `Primary`/`Secondary` 只是一个槽位，不是来源——上面两个数字都出自同一方，所以谁也不是谁的独立复核，而把"CVSS 3.1"这个标签贴在 4.0 的数字上，等于为**另一个版本**报了一个真实存在的数字。vLLM 的每一个修复都早于记录：**0.24.0 于 2026-06-30 发布**，记录发布于 10-25（相隔 117 天），0.25.0 于 07-11、0.29.0 于 09-09、0.30.0 于 09-22、0.31.0 于 **10-05**——而 PyPI 上当前的 vLLM 是 **0.32.0（10-18）**，高于所有声明边界，也就是说这十条在有任何人读到它们存在之前几周就已修好。同一窗口里 VulDB 的方向正好相反，并展示出第三种状态：同一发布窗口内的 `CVE-2026-115997` 带着**同一来源的三套分数**——CVSS 2.0 6.5、3.1 6.3、**4.0 2.1**——同一个缺陷横跨 LOW 到 MEDIUM。永远要报版本号。
+
+[`🔗 NVD 2.0 API — 本次查询窗口`](https://services.nvd.nist.gov/rest/json/cves/2.0?pubStartDate=2026-10-25T00:00:00.000&pubEndDate=2026-10-27T00:00:00.000&resultsPerPage=2000) · [`🔗 NVD — CVE-2026-116176（8.2 / 8.8）`](https://nvd.nist.gov/vuln/detail/CVE-2026-116176) · [`🔗 vLLM — GHSA-w9r6-29q4-pvpr`](https://github.com/vllm-project/vllm/security/advisories/GHSA-w9r6-29q4-pvpr)
+
+---
+
+## 37. NVIDIA 开源 SkillSpector——31,132 个 skill 中 26.1% 含漏洞，而它的默认模式会上传被审计的那个 skill
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** github.com/NVIDIA/SkillSpector · 21,710★ · 今日 +203 stars · 最后推送 2026-10-23
+- **Tags:** `agent-skills` `security-scanner` `nvidia` `mcp`
+
+**SkillSpector** 在安装前回答"这个 skill 安全吗"，针对 Claude Code、Codex CLI 和 Gemini CLI 使用的 `SKILL.md` 包。它接受 git 仓库、URL、zip、目录或单个文件；默认做静态分析（**正则、Python AST、YARA**），可再加一层对文件内容的 LLM 评估；会向 **OSV.dev** 查询已知存在漏洞的依赖，并有与 `--no-llm` 兼容的离线兜底；输出终端、JSON、Markdown 或 SARIF。项目是 **Apache-2.0**，创建于 2026-03-21，**21,710 stars、1,912 forks**，**171 个未关闭 issue 与 PR**，最后推送于 **10 月 23 日**，它也是 NVIDIA"Verified Skills"流水线的安全环节。动机数据出自它所实现的论文《Agent Skills in the Wild: An Empirical Study of Security Vulnerabilities at Scale》（Liu 等，2026）：数据集是**来自主流市场的 42,447 个 skill**，其中 **31,132 个被分析**，结果是被分析子集中 **26.1%** 至少含一个漏洞、**5.2%** 表现出可能的恶意意图，而带可执行脚本的 skill 含漏洞的概率高 **2.12 倍**。
+
+**Why it matters:** README 里"信任模型与数据外流"一节比检出率更该先读，因为 **LLM 分析默认开启，并"会把符合分析条件的文件内容发送给所配置的提供商"**——包括 DSSE 载荷与可读的签名元数据——所以用默认设置审计一个不可信的 skill，等于把那个 skill 的内容送给第三方，而 `--no-llm` 才是把它留在本地的开关。第二点是分母：**收集 42,447、分析 31,132，只有 73%**，所以 26.1% 是"通过了分析的那个子集"上的比率，不是整个市场上的比率；而 README 自己的局限一节也列出了分析到不了的地方——非英文内容、图片里的文字、编译或加密的代码，以及只在运行时才显现的行为。第三是规则数：README 说 **17 个类别、71 种模式**，它链接的文档页说 **17 个类别、68 种**——描述同一个分析器的两个手工维护页面，而这正是 skill 扫描器本该在别人仓库里抓到的那类漂移。
+
+[`🔗 github.com/NVIDIA/SkillSpector`](https://github.com/NVIDIA/SkillSpector) · [`🔗 NVIDIA 文档 — 安装前扫描 agent skill`](https://docs.nvidia.com/skills/scanning-agent-skills)
+
+---
+
+## 38. Ornith-1.5 在 10 月悄悄长出第四个尺寸——MIT 的 122B——而博客"两项基准都与 Opus 4.8 持平"在一项上差了三分
+
+- **Velocity:** ▮▮ rising
+- **Source:** huggingface.co/ornith-ai · ornith.ai 博客 · 122B 模型卡创建于 2026-10-16
+- **Tags:** `model-release` `moe` `self-improvement` `open-weights`
+
+**Ornith-1.5** 于 **2026 年 8 月**发布，共三个尺寸——**397B MoE、35B MoE 和 9B 稠密**——做法是把 Ornith-1.0 的自我脚手架循环"从脚手架与 rollout 优化，扩展到**任务生成、脚手架构造与解 rollout 的联合优化**"：模型自己出题、自己造 harness、自己产生 rollout 再拿去做 RL，循环里没有固定的人工任务集。**第四个尺寸出现在 10 月**：`Ornith-1.5-122B`，创建于 **2026-10-16**，**MIT** 许可，`qwen3_5_moe` 架构，62 个 safetensors 分片，**60,210 次下载、182 个赞**，并在 10-20 前后出现 GGUF、FP8、NVFP4 和三套 MLX 版本。模型卡报告 **TerminalBench 2.1 为 81.200**、**CyberGym 为 80.000**——对照 Qwen3.8-Flash-Next 的 83.400/78.000 与 DeepSeek-V4-Flash-0731 的 82.700/76.700。
+
+**Why it matters:** 这里有两条互不相干的误读路径，避开它们的成本都很低。第一是尺寸：发布博客列了**三个**模型，Hub 上现在有**四个**，所以照着博客写出来的任何对比，比较的都不是这个 122B。第二是基准表述——博客一段里说 397B "Terminal-Bench 2.1 得 86.1、DeepSWE 得 56.0，与 Claude Opus 4.8（85.0 与 59.0）表现相当"，下一段就变成"**在两项基准上都与 Claude Opus 4.8 持平**"。86.1 对 85.0 是赢；**56.0 对 59.0 是输三分**，而博客自己括号里的数字就是证据。四个尺寸的权重都真实可下载，这一点比 10 月好几场发布公告做得更好。
+
+[`🔗 Hugging Face — Ornith-1.5-122B 模型卡`](https://huggingface.co/ornith-ai/Ornith-1.5-122B) · [`🔗 ornith.ai — 从自我脚手架到自我改进`](https://ornith.ai/ornith_1_5.html) · [`🔗 HF — Ornith-1.5-397B 权重`](https://huggingface.co/ornith-ai/Ornith-1.5-397B)
+
+---
+
+## 39. SiYuan 的 Windows 修复是一条路径黑名单——`\\?\` 直接走过去，把 API token 当静态资源带走
+
+- **Velocity:** ▮▮ rising
+- **Source:** NVD / GHSA-6gmc-424x-xgpm · CVE-2026-116171 · VulnCheck 为 CNA · 发布于 2026-10-25
+- **Tags:** `cve` `siyuan` `windows` `path-traversal`
+
+`CVE-2026-116171` 描述的是 SiYuan 在 Windows 上 **3.5.4 至 3.8.7 之前**的**敏感路径黑名单绕过**：`IsSensitivePath` 把清洗过的路径与一串禁用前缀做比较，但 **Windows 的扩展长度前缀 `\\?\` 能挺过 `filepath.Clean` 而不匹配任何禁用前缀**。已认证的 API 调用者把它加到 `/api/import/importStdMd` 的 `localPath` 前面，就能把**工作区的 `conf` 文件——包含 API token 与 TLS 私钥——复制进 `assets` 目录**，而该目录是 **SiYuan 对未认证客户端直接提供**的。于是一次带 token 的请求，变成了对"当初认证它的那个 token"的未认证读取。**SiYuan v3.8.7 于 2026-10-14 发布**，比记录早 11 天；v3.8.8 于 10-20 跟进。仓库现有 **46,940 stars**，最后推送 2026-10-26，**36 个未关闭 issue 与 PR**。
+
+**Why it matters:** 这是一次*黑名单*失效，而非一次转义缺陷，失效的原语是平台自己的路径规范化函数——`filepath.Clean` 的定义围绕操作系统的分隔符，它没有任何理由把 `\\?\` 当成前缀而不是两个字符，于是任何"清洗后再做字符串比较"的逻辑都继承了同一个洞。利用形态是后半段：被复制出来的文件是凭据库，而落点是一个产品不做认证就提供的目录，所以记录里那个"已认证"的前置条件并不像字面读到的那样是道坎。NVD **未分析**这条记录——它是 `Deferred`，两套指标都是 **`disclosure@vulncheck.com`** 的 `Secondary`：**CVSS 3.1 下 7.5，CVSS 4.0 下 8.7**，CWE-22——所以引用时要连版本号和该 CNA 一起报。
+
+[`🔗 NVD — CVE-2026-116171`](https://nvd.nist.gov/vuln/detail/CVE-2026-116171) · [`🔗 SiYuan 安全公告 GHSA-6gmc-424x-xgpm`](https://github.com/siyuan-note/siyuan/security/advisories/GHSA-6gmc-424x-xgpm) · [`🔗 SiYuan v3.8.7 发布`](https://github.com/siyuan-note/siyuan/releases/tag/v3.8.7)
+
+---
+
+## 40. Datawiza 的 WordPress 插件是个没人分析过的 9.8——信任两个请求头就等于整个管理员账号
+
+- **Velocity:** ▮▮ rising
+- **Source:** NVD / WPScan · CVE-2026-115214 · 由 CISA-ADP 打分 · 发布于 2026-10-25
+- **Tags:** `cve` `wordpress` `auth-bypass` `cisa-adp`
+
+**CVE-2026-115214**：WordPress 的 Datawiza Proxy Auth Plugin，**1.1.1 之前**版本，"不校验它所信任的用户身份与角色 HTTP 请求头是否来自可信的反向代理，从而允许**未认证攻击者创建并以 WordPress 管理员身份登录**"。NVD 记录状态为 `Received`，**NVD 自有指标为零**；唯一的分数是 **CVSS 3.1 的 9.8**，来源是 **`134c704f-9b21-4f2e-91b3-4a467353bcc0`**——即 **CISA-ADP Vulnrichment**，不是 NVD 也不是厂商——并标注 **CWE-269**（权限管理不当）。CNA 是 **WPScan**，唯一引用是 WPScan 的漏洞页。记录里由 `contact@wpscan.com` 撰写的 `affected[]`，只列了**一个受影响版本：1.1.0，`lessThan` 1.1.1**。
+
+**Why it matters:** 三个细节决定这条该怎么读。第一，那个分数是**第三方写进记录本身的富化结果**——管理员照"9.8"定优先级时，读到的是附在 WPScan 披露上的 CISA 判断，记录里**唯一**一项指标属于 ADP，CNA（WPScan）自己没有加任何分数，而记录唯一的引用是 WPScan 的漏洞页，而不是厂商公告。第二是范围：散文写着"1.1.1 之前"，而 `affected[]` 只列了一个版本，于是还跑 1.0.x 的部署从机器可读字段里读出来是"不受影响"，尽管散文的描述其实覆盖了它——在假定该字段枚举了完整范围之前，先去看插件的变更日志。第三是类别，它在认证之前反复出现：一个本该由反向代理设置的请求头被无条件信任，于是任何能直连源站的东西就是管理员。
+
+[`🔗 NVD — CVE-2026-115214`](https://nvd.nist.gov/vuln/detail/CVE-2026-115214) · [`🔗 WPScan 漏洞 2c6c7d10-2281-4a98-a0d6-769da5cce416`](https://wpscan.com/vulnerability/2c6c7d10-2281-4a98-a0d6-769da5cce416/)
+
+---
+
+## 41. ALTO 用 MXFP4 训练 20B MoE，验证损失与 BF16 相差 0.007——并公布了三种没起作用的技巧
+
+- **Velocity:** ▮▮ rising
+- **Source:** arXiv 2610.32229（Han Wang 等）· 2026-10-23 提交
+- **Tags:** `quantization` `mxfp4` `moe` `training`
+
+论文在 **MLPerf Small MoE Training** 基准上，用 **MXFP4** 微缩放格式训练 **GPT-OSS-20B**（一个 200 亿参数的 MoE）。配方把 1D/2D 混合分块量化、随机 Hadamard 变换和随机舍入，与一个"简化的权重**去振荡**（de-oscillation）方案"组合起来，在全局 batch size 16 的 C4 验证上报告：**16,128 步时 3.3350，BF16 为 3.3283**——差距 **0.007**，"大约填平了"不加去振荡的 MXFP4 所留差距（**3.3418**）的 **50%**。按基准自己的口径——到达验证损失 3.34 所需步数——去振荡把 FP4 相对 BF16 的收敛开销"从 **+20.0% 降到 +5.0%**"。所有实验都跑在"**AMD MI300 硬件上的模拟 MXFP4 kernel**"上，且"墙钟速度未做优化"。
+
+**Why it matters:** 让正面结论变得可读的，恰恰是那些负面结果。差分梯度估计、离群值裁剪和宏块缩放各自都"在算子级显示出 SNR 提升"，却全部在端到端失败——这正是算子级指标会招来的推断，而这篇文章有纪律去跑、并把它报出来。边界是写明的而不是藏起来的：**模拟** kernel，所以不该从它引用任何吞吐数字；是 MoE 而非稠密模型；只有一个基准的质量目标。请把它读作"在单一模型上以声明的 5% 步数代价填平 0.007 损失差"的配方，而不是"FP4 训练已解决"的证据。配方以 **AMD-AGI/ALTO** 形式发布——一个创建于 2025 年 12 月的 Python 库，把 Triton 的 MXFP4/NVFP4/分块 FP8 kernel 接进一个 TorchTitan 分支——所以"模拟 kernel"这条限制说的是*实验*，而不是代码是否存在。
+
+[`🔗 arXiv — Training an MoE LLM in MXFP4`](https://arxiv.org/abs/2610.32229) · [`🔗 github.com/AMD-AGI/ALTO — 该配方所在的训练库`](https://github.com/AMD-AGI/ALTO)
+
+---
+
+## 42. "怪模型还是怪 harness"——52,168 条轨迹说答案是配对，而最好的 harness 随模型变化
+
+- **Velocity:** ▮▮ rising
+- **Source:** arXiv 2610.32483（Shao Zhang 等）· 2026-10-23 提交 · 审稿中的预印本
+- **Tags:** `agents` `harness` `benchmark` `evaluation`
+
+论文主张 agentic 基准分数是**模型-harness 配对的属性，而不是模型的属性**，并构建五个指标来拆开它：**有效完成率**（VCR：不看对错，只看 agent 是否正常结束并交出可评估的结果）、**Model-Harness Fit**、**Cross-Model Fit**、**交互残差**（被组件级汇总掩盖的配对特有强弱项）以及 **Token Load**（含失败尝试）。实验用**四个通用 harness——OpenCode、Codex CLI、Pi CLI 和 DeepAgents——搭配四个核心模型**，外加两个固定的原生模型-harness 系统，跑**六个基准**，覆盖上下文管理、工具使用、长上下文规划、多模态交互与产物交接：计入原生参照与压力条件，共 **111 种评测设置、52,168 条轨迹**。**OpenCode 在跨模型性能上排第一**，**DeepSeek V4 Flash Preview** 在共享的四基准面板上保持了最高的平均 VCR。
+
+**Why it matters:** "harness 排名随模型与基准变化；任务表现与有效完成可能偏向不同的配对，相近的任务分数也可能伴随截然不同的执行画像"——这句话应当终结"不带 harness 就引用单个 agentic 分数"的做法；而 VCR 是让差异可见的那个指标，因为在只看准确率时，"没交出可评估产物"和"交出了错的产物"得分完全相同。结论是审稿中的预印本、111 个设置、由作者自己搭建，所以请把它当作"排名并不稳定"的证明，而不是一张可以引用的排行榜。
+
+[`🔗 arXiv — When Agents Fail: Model or Harness`](https://arxiv.org/abs/2610.32483) · [`🔗 arXiv HTML — 含逐设置表格的全文`](https://arxiv.org/html/2610.32483v1)
+
+---
+
+## 43. 只按"分数涨了没有"退役 agent skill，会删掉本来没人需要的那些——SkillsBench 的 31 次退役里有 28 次建立在没有任何一次运行完整通过的探针上
+
+- **Velocity:** ▮ steady
+- **Source:** arXiv 2610.32322（Yanze Wang 等）· 2026-10-23 提交 · 发布 1,251 个 skill
+- **Tags:** `agent-skills` `evaluation` `skill-retirement` `benchmark`
+
+skill 库"最多约有 **100,000 条**"，而一个已经内化了某个 skill 的模型可以不再需要它——但已发表的规则是靠**增益**（带 skill 与不带 skill 两次运行的差值）来退役，而这个增益"对一个已内化的 skill 和当模型与 skill 都不提供该能力时（作者称为 **uncovered**）**都**接近零"。他们的替代做法是：把 skill 收走，用由它合成出的任务给模型打分，并且"只有当另一个模型能从这个 skill 获益时"才相信高分的无辅助得分——因为"**将近一半的高分来自没有任何模型能获益的任务**"。结果：已发表的增益规则在"每个 skill 只用一道任务"时"删掉了**超过一半的 uncovered skill**"；在 **SkillsBench** 上，"**它的 31 次退役里有 28 次建立在没有任何一次运行完整通过的探针上**"，而按无辅助得分退役"没有可检测的收益损失"；无辅助判定在任务间的可复现性也好于增益规则（**Cohen's κ 0.42 对 0.23**），但**随模型而变**，"所以 hub 必须按模型分别判读"。他们发布了 **1,251 个 skill，含任务与四个模型下的逐项分数**。
+
+**Why it matters:** 这是对测量方法本身的一次测量，而失效并不微妙——标准规则在任务间的一致性（κ 0.23）只勉强高于随机，也就是说照它执行的 hub 大体是在把噪声记成政策。"按模型"那一条是运维的一半：内化是*配对*的属性，这意味着对服务多个模型的 hub 来说，一张全局退役清单是错误的数结构。还要注意，让这一切可核查的正是那次发布——1,251 个 skill、任务以及四个模型下的逐项分数，才是 κ 值可以被重新推导、而不必凭信接受的理由；它们落在 **EverMind-AI/SkillCorpus**（692 stars，最后推送 2026-10-23）里，旁边还有一个同日创建的 `skillcorpus-lifecycle` 数据集。
+
+[`🔗 arXiv — Beyond Gain: Measuring Skill Internalization`](https://arxiv.org/abs/2610.32322) · [`🔗 github.com/EverMind-AI/SkillCorpus`](https://github.com/EverMind-AI/SkillCorpus) · [`🔗 HF 数据集 — skillcorpus-lifecycle`](https://huggingface.co/datasets/EverMind-AI/skillcorpus-lifecycle)
+
+---
+
+## 44. Agent Reach：102,894 stars 换来的，是 agent 够不着的那些平台——14 个渠道里 6 个要登录，而赞助商在卖代理
+
+- **Velocity:** ▮ steady
+- **Source:** github.com/Panniantong/Agent-Reach · 102,894★ · MIT · 最后推送 2026-10-25
+- **Tags:** `agent-tools` `scraping` `mcp` `chinese-platforms`
+
+**Agent Reach** 给 CLI agent 提供了一个统一的命令面，去够它本来够不着的平台：`agent-reach channels` 列出渠道，`agent-reach bilibili search "大模型"` 跑一个。项目是 **MIT**、**Python 3.10+**，创建于 2026-02-24，**102,894 stars、9,128 forks、245 个未关闭 issue 与 PR**，最后推送 2026-10-25。README 自己的表格列了**十四个渠道**：**五个默认开启**（bilibili、v2ex、github、youtube、web），九个可选。诚实之处在依赖列——**六个需要登录**（小红书、boss、reddit、twitter、facebook、instagram），**两个只有部分功能需要登录**（雪球的热帖、linkedin 的站内搜索），小宇宙还需要 Groq 或 OpenAI 的 key 才能转写。三个标注为**实验**。
+
+**Why it matters:** README 开篇把缺口说得很准——登录墙后的功能、视频里的字幕与音频、通用搜索覆盖很差的中文平台、干净的结构化数据——而这个框定好过大多数"给 agent 上网"的项目，后者往往把一个付费墙描述成一种能力。商业模式在同一个文件里就能看到：赞助商区块是**六家厂商，其中四家卖住宅代理或抓取基础设施**（Bright Data、RapidProxy、BrowserAct、CoreClaw），这正是一个"价值在于绕过反爬"的工具最自然的变现方式；在登录墙渠道成为某个工作负载需要代理预算的理由之前，知道这一点是有用的。这里的 star 数衡量的是对缺口的需求，而不是填平缺口的距离。
+
+[`🔗 github.com/Panniantong/Agent-Reach`](https://github.com/Panniantong/Agent-Reach) · [`🔗 英文 README`](https://github.com/Panniantong/Agent-Reach/blob/main/docs/README_en.md)
+
+---
+
+## 45. PaperPilot v0.6.0：一个 Rust PDF 引擎，撑起 MCP、CLI、WASM 与本地 REST API——并声称完全不用 Chromium
+
+- **Velocity:** ▮ steady
+- **Source:** github.com/KrushnaVardhanReddy/PaperPilot · v0.6.0 发布于 2026-10-24 · HN 162 pts
+- **Tags:** `rust` `pdf` `mcp` `wasm`
+
+**PaperPilot** 是一个 Rust 写的 PDF 工具箱，卖点是同一个引擎跑在五个面上：给 Claude Desktop、Cursor 或任意 MCP 客户端用的 **MCP 服务器**（"把这两个 PDF 合并再压缩一下"）、用于批处理的 **CLI**、浏览器里的 **WASM 构建**（"文件在浏览器内存中处理，不上传任何东西"）、带阅读器/标注/差异对比的 **Tauri + Svelte 桌面端**，以及挂在 `localhost:7823` 的**本地 REST API**。README 的说法是**"没有 Chromium，没有 C++ 运行时，没有云端调用。"**它在 **2026-10-24 发布 v0.6.0**，距 **10-20 的 v0.5.0** 只有五天，现有 **392 stars、8 forks、2 个未关闭 issue 与 PR**，最后推送就在今天。它在 Hacker News 上拿到 **162 分**。
+
+**Why it matters:** "没有 Chromium"是关键主张，也是最该自己动手验的一条——Linux 与 Node 上的 PDF 工具十年来为了渲染不得不拖进一个浏览器引擎，而一个 Rust 单二进制就能做合并、拆分、OCR、压缩、旋转和页面差异对比，是实质不同的部署故事，尤其在 MCP 场景下，替代方案是给客户端塞一个重量级子进程。项目还小还年轻——**392 stars** 和 v0.6.0 关于方向，而不是关于畸形 PDF 的长尾，OCR 质量也不是 README 能定的。它值得一个位置，是因为*打包方式*才是有意思的部分：一个引擎、五个入口，而 localhost 默认本身就是把隐私主张写成了架构。
+
+[`🔗 github.com/KrushnaVardhanReddy/PaperPilot`](https://github.com/KrushnaVardhanReddy/PaperPilot) · [`🔗 PaperPilot v0.6.0 发布`](https://github.com/KrushnaVardhanReddy/PaperPilot/releases/tag/v0.6.0) · [`🔗 Hacker News 讨论`](https://news.ycombinator.com/item?id=50238739)
+
+---
+
+## 46. IBM CEO 把开放权重定在"90% 的有效性"、token 成本的"25% 到 10%"——在财报电话会上，且没点名任何基准
+
+- **Velocity:** ▮ steady
+- **Source:** The Register / IBM Q3 财报电话会 · HN 296 pts · 发布于 2026-10-22
+- **Tags:** `open-weights` `inference-cost` `enterprise` `ibm`
+
+在 IBM 的 Q3 财报电话会上，CEO **Arvind Krishna** 给了开放与闭源之间的差距一个数字和一个方向。他说 2024 年闭源模型明显领先——"随便跑个评测，只要够全面而不是偏窄，最强模型可能打 **70** 分，开源模型可能打 **20 或 30**"；到 2025 年底变成"70 对 50"。今天，开放权重模型给出的成本是"**前沿模型 token 成本的 25% 到 10% 之间**。考虑到它们现在**有 90% 的有效性**，这非常有吸引力。"他对企业的表述是："你想要花 10% 的钱、拿到最好模型 90% 的效果，还是愿意付十倍的价格？"——他也承认"有些"任务确实需要贵的模型，但"绝大多数——总结一封邮件、审一份合同、接一个客服电话、起草一封邮件——用便宜得多的答案就能做得一样好"。他自己给的保留是运营层面的而非经济层面的：多数企业"两三个机柜"就能搭起有用的 AI 基础设施，但很多人会卡住——"我的内核工程师在哪？谁去操心底层网络？"
+
+**Why it matters:** 90%/10% 是有人在财报电话会上给出的、关于开放权重商业逻辑最干净的一句陈述，同时也是一个没有出处的数字——没有基准、没有说明是哪对模型、两个数字都没带日期，所以它是一个高管估算，值得权衡而不是当作测量来引用。请把它与本信息流 10 月自己的报道对着读：MiniMax 那个 $0.15/$0.60 的 agent-first Flash 档，以及 Kimi K3.1 Pro 放出权重，正是这个主张背后的机制。关于工程师与采购的那句话，才是企业低估的部分——开放权重带来的 20% 效率提升，是绑在一套必须有人运维的集群上交到手里的，这也是为什么同一场电话会在一段话里既产出"on-prem AI 基础设施兴趣旺盛"，又产出一句用人抱怨。
+
+[`🔗 The Register — IBM CEO 称开放权重模型如今在本地部署上已好得无法抗拒且便宜`](https://www.theregister.com/systems/2026/10/22/ibm-ceo-says-open-weight-models-are-now-irresistibly-good-and-cheap-on-prem/5304640) · [`🔗 Hacker News 讨论`](https://news.ycombinator.com/item?id=50238088)
+
+---
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-10-26T04:28:30Z |
-| Items | 34 |
-| Sources tracked | 36（Hacker News、GitHub Trending、GitHub Security Advisories、Hugging Face、arXiv、NVD、VulnCheck、Microsoft .NET Blog、Kimi/Moonshot、KRAFTON AI、DreamHost Status、FOSDEM/talkweb.eu、Daily Californian、Kyutai、Forever Security、BleepingComputer、Symantec/security.com、The Register、Wiz Research、minimaxir.com、labstack/echo、wild-linker、ziglang.org、lobste.rs） |
+| Generated | 2026-10-26T12:34:29Z |
+| Items | 46 |
+| Sources tracked | 40（Hacker News、GitHub Trending、GitHub Security Advisories、Hugging Face、arXiv、NVD、VulnCheck、Microsoft .NET Blog、Kimi/Moonshot、KRAFTON AI、DreamHost Status、FOSDEM/talkweb.eu、Daily Californian、Kyutai、Forever Security、BleepingComputer、Symantec/security.com、The Register、Wiz Research、minimaxir.com、labstack/echo、wild-linker、ziglang.org、lobste.rs、train-it.eu、ornith.ai、docs.nvidia.com、wpscan.com） |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8（每日 3 次） |
 | Ranking | 速度加权（新鲜度 × 互动加速度 × 信源权威度） |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |

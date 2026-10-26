@@ -1,8 +1,8 @@
 ---
 date: 2026-10-26
-updated: 2026-10-26T04:28:30Z
+updated: 2026-10-26T12:34:29Z
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 36
+sources: 40
 license: CC-BY-4.0
 ---
 
@@ -484,13 +484,181 @@ Issue **#114**——「紛らわしい演算子の優先順位を解消するた
 
 ---
 
+## 35. C++26はDIS投票で否決された——20票中12票の賛成、22票中9票の反対、そして史上初めて否決されたC++ドラフト
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** train-it.eu（Mateusz Pusz）/ Hacker News · 52 pts · 約6時間前（~14:12 UTC+8 10月26日）
+- **Tags:** `cpp26` `iso-ballot` `contracts` `standards`
+
+**C++26**の国際規格草案（DIS）の投票は**2026年10月23日**に締め切られ、**否決**された。Puszによれば、DISが満たすべき二つの条件はどちらも外れた。**P（投票）メンバーの3分の2以上の賛成——20票中12票、すなわち60%**（14票が必要）と、**投票した全機関の反対が25%以下——22票中9票、すなわち41%**（許容は5票）。「どちらか一方だけでも草案は落ちていた」。反対した9か国は**デンマーク、フィンランド、イラン、イタリア、日本、ルクセンブルク、ルーマニア、スペイン、スウェーデン**。フランスとアイルランドはコメント付きで棄権し、ポーランドとアメリカも棄権した。C委員会のコンビナーであるRobert Seacordは翌日、結果をLinkedInに投稿した。Puszは数字の所在を明示している。**SC22の公式投票結果は「公開されていない」**——各国代表だけがISOの委員会サイトで見られ、彼が書いた時点ではISOの公開プロジェクトページにもWG21文書にもなかった。
+
+**Why it matters:** リフレクション、`std::execution`、ライブラリのハードニング、そしてコントラクトは、ISOが承認していないドラフトの中にいる。指令が定める四つの道——**8週間**の投票期間を持つ改訂 enquiry ドラフト、改訂委員会ドラフト、テクニカルスペシフィケーションへの降格、あるいはプロジェクトの取り消し——を選ぶのはSC22議長であり、日程は付いていない。Puszは反対票がコントラクトに関するものだと「確信している」が、コメントは「まだ利用できない」という。指令は12週間以内の完全な報告書を求めており、**遅くとも2027年1月中旬**になる。その報告書こそが、この話の最も奇妙な点——標準投票の否決なのに一次文書がLinkedInの投稿だという点——の解決策になる。言語の次の3年を決める投票が公開されていないのだ。
+
+[`🔗 train-it.eu — C++26 DIS投票の結果`](https://train-it.eu/blog/cpp26-contracts-the-ballot-result/) · [`🔗 Hacker Newsの議論`](https://news.ycombinator.com/item?id=50239748) · [`🔗 Seacordの投票結果投稿`](https://www.linkedin.com/posts/robertseacord_balloting-has-completed-for-c26-unfortunately-activity-7519795140887035918-5PWL)
+
+---
+
+## 36. VulnCheckは48時間で75件のCVEレコードを二度採点した——一致した組は一つもなく、最大差は2.6点
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** NVD APIによる全数調査（第一手）· 2026年10月25〜26日公開分の243レコード
+- **Tags:** `cvss` `nvd-provenance` `vllm` `scoring`
+
+NVDが**10月25〜26日**に公開した**243レコード**のうち、**81件が`disclosure@vulncheck.com`によるスコアを持つ**。そしてそのうち**75件は、同一主体が同一の知見に対してCVSS 3.1とCVSS 4.0の両方で採点している**。並べて読むと、**58件が4.0のほうが高く、17件が3.1のほうが高く、一致した組はゼロ**。最大の正の差は**+2.6**（3.7 → 6.3、5件）、逆方向の最大は**−2.1**（3.9 → 1.8）。**75件のうち31件は深刻度の帯まで反転する**。14件がMEDIUM → HIGH、14件がLOW → MEDIUM、2件がHIGH → CRITICAL、1件がCRITICAL → HIGH。この窓で最大の塊は**vLLMの10件**で、すべて4.0のほうが高い。Rust gRPCの入力検証4件は**3.1で5.9 MEDIUM、4.0で8.2 HIGH**。最上位の`CVE-2026-116176`（SSRF、CWE-918）は**8.2 / 8.8**で、`X-Request-Id`ヘッダにデコード先アドレスを埋め込んで外向き接続を強制する手口だ。
+
+**Why it matters:** `Primary`/`Secondary`はスロットであって来歴ではない。上の二つの数字は同じ主体から出ているので、どちらも独立した検証ではないし、「CVSS 3.1」というラベルを4.0の数値に付ければ、**別バージョン**の実在する数字を引くことになる。vLLMの修正はすべて記録より前だ。**0.24.0が2026-06-30**に出ており、記録の公開は10-25（117日差）。0.25.0が07-11、0.29.0が09-09、0.30.0が09-22、0.31.0が**10-05**。そしてPyPIの現行vLLMは**0.32.0（10-18）**で、どの宣言された境界よりも上にある。つまりこの10件は、誰かがその存在を読めるようになる何週間も前に修正済みだった。同じ窓でVulDBは逆方向に振れており、第三の状態も示す。同じ公開窓の`CVE-2026-115997`は**同一ソースの三つのバージョン**を載せている——CVSS 2.0が6.5、3.1が6.3、**4.0が2.1**——一つのバグがLOWからMEDIUMまで跨いでいる。バージョンは必ず書くこと。
+
+[`🔗 NVD 2.0 API — 今回のクエリ窓`](https://services.nvd.nist.gov/rest/json/cves/2.0?pubStartDate=2026-10-25T00:00:00.000&pubEndDate=2026-10-27T00:00:00.000&resultsPerPage=2000) · [`🔗 NVD — CVE-2026-116176（8.2 / 8.8）`](https://nvd.nist.gov/vuln/detail/CVE-2026-116176) · [`🔗 vLLM — GHSA-w9r6-29q4-pvpr`](https://github.com/vllm-project/vllm/security/advisories/GHSA-w9r6-29q4-pvpr)
+
+---
+
+## 37. NVIDIAがSkillSpectorを公開——31,132件のskillの26.1%に脆弱性、しかも既定モードは監査対象のskillをアップロードする
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** github.com/NVIDIA/SkillSpector · 21,710★ · 本日+203 stars · 最終push 2026-10-23
+- **Tags:** `agent-skills` `security-scanner` `nvidia` `mcp`
+
+**SkillSpector**は「このskillはインストールして安全か」に答える。対象はClaude Code、Codex CLI、Gemini CLIが使う`SKILL.md`バンドル。gitリポジトリ、URL、zip、ディレクトリ、単一ファイルを受け取り、既定で静的解析（**正規表現、Python AST、YARA**）を走らせ、任意でファイル内容のLLM評価を足せる。既知の脆弱な依存は**OSV.dev**に問い合わせ、`--no-llm`と両立するオフラインのフォールバックを持つ。出力はターミナル、JSON、Markdown、SARIF。**Apache-2.0**、2026-03-21作成、**21,710 stars、1,912 forks**、**未クローズissue・PR 171件**、最終pushは**10月23日**。NVIDIAの「Verified Skills」パイプラインのセキュリティ層でもある。動機づけの数字は、これが実装する論文*Agent Skills in the Wild: An Empirical Study of Security Vulnerabilities at Scale*（Liuほか、2026）から来る。データセットは**主要マーケットプレイスの42,447件**で、うち**31,132件が分析され**、分析済みサブセットの**26.1%**が少なくとも一つの脆弱性を含み、**5.2%**が悪意ある意図を示し、実行可能スクリプトを含むskillは脆弱である確率が**2.12倍**高い。
+
+**Why it matters:** READMEの「信頼モデルとデータ流出」節は検出率より先に読むべきだ。**LLM分析は既定で有効で、「分析対象となるファイル内容を設定されたプロバイダへ送信する」**——DSSEペイロードと可読な署名メタデータを含む——ため、信頼できないskillを既定設定で監査することは、そのskillの中身を第三者へ送ることになる。ローカルに留めるフラグが`--no-llm`だ。第二に分母。**収集42,447に対して分析31,132は73%**であり、26.1%は分析を通過したサブセット上の率であって市場全体の率ではない。README自身の限界節も、分析が届かない範囲を列挙している——非英語コンテンツ、画像内の文字、コンパイル済み・暗号化されたコード、実行時にしか現れない挙動。第三にルール数。READMEは**17カテゴリ・71パターン**、リンク先のドキュメントは**17カテゴリ・68パターン**。同じアナライザを説明する手作業保守の二ページであり、これはskillスキャナが他人のリポジトリで捕まえるために存在するドリフトそのものだ。
+
+[`🔗 github.com/NVIDIA/SkillSpector`](https://github.com/NVIDIA/SkillSpector) · [`🔗 NVIDIAドキュメント — agent skillをインストール前にスキャンする`](https://docs.nvidia.com/skills/scanning-agent-skills)
+
+---
+
+## 38. Ornith-1.5は10月に静かに四つ目のサイズを得た——MITの122B——そしてブログの「両ベンチマークでOpus 4.8に並ぶ」は片方で3ポイント足りない
+
+- **Velocity:** ▮▮ rising
+- **Source:** huggingface.co/ornith-ai · ornith.aiブログ · 122Bのモデルカードは2026-10-16作成
+- **Tags:** `model-release` `moe` `self-improvement` `open-weights`
+
+**Ornith-1.5**は**2026年8月**に三つのサイズで登場した——**397B MoE、35B MoE、9B稠密**。Ornith-1.0の自己スキャフォールディングのループを「スキャフォールドとrolloutの最適化から、**タスク生成・スキャフォールド構築・解のrolloutの同時最適化**へ」広げたもので、モデルが自分で課題を出し、自分でハーネスを作り、rolloutを生成してRLする。固定の人手キュレーション済みタスク集合はループに入っていない。**四つ目のサイズが10月に現れた**。`Ornith-1.5-122B`、作成は**2026-10-16**、**MIT**、`qwen3_5_moe`アーキテクチャ、safetensors 62シャード、**ダウンロード60,210・いいね182**、そして10-20前後にGGUF、FP8、NVFP4、MLX三点が追加された。カードの報告は**TerminalBench 2.1が81.200**、**CyberGymが80.000**——Qwen3.8-Flash-Nextの83.400/78.000、DeepSeek-V4-Flash-0731の82.700/76.700と並べられる。
+
+**Why it matters:** ここには無関係な二つの誤読経路があり、どちらも避けるのは安い。第一はサイズ。発表ブログは**三つ**を挙げており、Hubには**四つ**ある。ブログから書かれた比較は、この122Bを何とも比べていないことになる。第二はベンチマークの記述で、ブログはある段落で397Bが「Terminal-Bench 2.1で86.1、DeepSWEで56.0、Claude Opus 4.8（85.0と59.0）と同等の性能」と書き、次の段落で「**両方のベンチマークでClaude Opus 4.8に並ぶ**」と書く。86.1対85.0は勝ち、**56.0対59.0は3ポイントの負け**であり、ブログ自身の括弧がその証拠になっている。四サイズすべての重みが実際にダウンロード可能なのは、10月のいくつかの発表より上だ。
+
+[`🔗 Hugging Face — Ornith-1.5-122Bモデルカード`](https://huggingface.co/ornith-ai/Ornith-1.5-122B) · [`🔗 ornith.ai — 自己スキャフォールディングから自己改善へ`](https://ornith.ai/ornith_1_5.html) · [`🔗 HF — Ornith-1.5-397Bの重み`](https://huggingface.co/ornith-ai/Ornith-1.5-397B)
+
+---
+
+## 39. SiYuanのWindows向け修正はパスの拒否リストだった——`\\?\`は素通りし、APIトークンを静的アセットとして持ち出す
+
+- **Velocity:** ▮▮ rising
+- **Source:** NVD / GHSA-6gmc-424x-xgpm · CVE-2026-116171 · CNAはVulnCheck · 公開2026-10-25
+- **Tags:** `cve` `siyuan` `windows` `path-traversal`
+
+`CVE-2026-116171`は、SiYuanの**Windows上の3.5.4から3.8.7未満**における**機微パス拒否リストの回避**を記述する。`IsSensitivePath`は正規化後のパスを禁止プレフィックスの並びと比較するが、**Windowsの拡張長プレフィックス`\\?\`は`filepath.Clean`を生き延び、どの禁止プレフィックスにも一致しない**。認証済みのAPI呼び出し元が`/api/import/importStdMd`の`localPath`の先頭にこれを付けると、**ワークスペースの`conf`ファイル——APIトークンとTLS秘密鍵を含む——を`assets`へコピーできる**。`assets`はSiYuanが**未認証のクライアントに配信している**ディレクトリだ。つまりトークン付きのリクエストが、そのトークン自体の未認証読み出しに変わる。**SiYuan v3.8.7は2026-10-14にリリース**され、記録より11日早い。v3.8.8は10-20に続いた。リポジトリは**46,940 stars**、最終push 2026-10-26、**未クローズissue・PRは36件**。
+
+**Why it matters:** これはエスケープのバグではなく*拒否リスト*の失敗であり、失敗しているプリミティブはプラットフォーム自身のパス正規化関数だ。`filepath.Clean`はOSの区切り文字を軸に定義されており、`\\?\`を二文字ではなくプレフィックスとして扱う理由を持たない。だから「正規化してから文字列比較する」ロジックはすべて同じ穴を継承する。悪用の形は後半にある。コピーされるのは資格情報の保管庫で、落とし先は製品が認証なしで配信するディレクトリだ。したがって記録の「認証済み」という前提は、字面ほど高い壁ではない。NVDはこのレコードを**分析していない**——状態は`Deferred`で、両方の指標が**`disclosure@vulncheck.com`の`Secondary`**、**CVSS 3.1で7.5、CVSS 4.0で8.7**、CWE-22——なので、引用にはバージョンとCNA名を添えること。
+
+[`🔗 NVD — CVE-2026-116171`](https://nvd.nist.gov/vuln/detail/CVE-2026-116171) · [`🔗 SiYuanセキュリティアドバイザリ GHSA-6gmc-424x-xgpm`](https://github.com/siyuan-note/siyuan/security/advisories/GHSA-6gmc-424x-xgpm) · [`🔗 SiYuan v3.8.7リリース`](https://github.com/siyuan-note/siyuan/releases/tag/v3.8.7)
+
+---
+
+## 40. DatawizaのWordPressプラグインは誰も分析していない9.8——二つのリクエストヘッダを信じることが管理者アカウントそのもの
+
+- **Velocity:** ▮▮ rising
+- **Source:** NVD / WPScan · CVE-2026-115214 · 採点はCISA-ADP · 公開2026-10-25
+- **Tags:** `cve` `wordpress` `auth-bypass` `cisa-adp`
+
+**CVE-2026-115214**：WordPress向けDatawiza Proxy Auth Pluginの**1.1.1未満**は、「信頼するユーザー識別とロールのHTTPリクエストヘッダが信頼されたリバースプロキシ由来かを検証せず、**未認証の攻撃者がWordPress管理者を作成し、その権限で認証できる**」。NVDのレコードは`Received`で、**NVD自身の指標はゼロ**。唯一のスコアは**CVSS 3.1の9.8**で、その出所は**`134c704f-9b21-4f2e-91b3-4a467353bcc0`**、すなわち**CISA-ADP Vulnrichment**——NVDでもベンダーでもない——であり、**CWE-269**（権限管理の不備）が付く。CNAは**WPScan**、参照はWPScanの脆弱性ページのみ。`contact@wpscan.com`が書いたレコードの`affected[]`は、**影響を受けるバージョンを1.1.0（`lessThan` 1.1.1）ただ一つ**しか挙げていない。
+
+**Why it matters:** 三つの細部が読み方を決める。第一に、そのスコアは**第三者によるエンリッチメントがレコード自体に書き込まれたもの**だ。「9.8」で緊急度を決める管理者は、WPScanの開示に添えられたCISAの評価を読んでいるのであり、レコードの**唯一**の指標はADPのもので、CNA（WPScan）は自前のスコアを足しておらず、レコードの参照もベンダーのアドバイザリではなくWPScanの脆弱性ページだけだ。第二に範囲。散文は「1.1.1未満」と言うが`affected[]`は一バージョンしか列挙しないため、1.0.xで動いている配備は機械可読フィールドから「影響なし」と読めてしまう——散文はそれを覆っているのに。フィールドが範囲全体を列挙したと仮定する前に、プラグインの変更履歴を確認すること。第三にクラスで、これは認証の手前に繰り返し現れる。リバースプロキシが設定するはずのヘッダを無条件に信じるので、オリジンへ直接到達できるものはすべて管理者になる。
+
+[`🔗 NVD — CVE-2026-115214`](https://nvd.nist.gov/vuln/detail/CVE-2026-115214) · [`🔗 WPScan脆弱性 2c6c7d10-2281-4a98-a0d6-769da5cce416`](https://wpscan.com/vulnerability/2c6c7d10-2281-4a98-a0d6-769da5cce416/)
+
+---
+
+## 41. ALTOは20B MoEをMXFP4で訓練し、検証損失はBF16と0.007差——そして効かなかった三つの手法も公表した
+
+- **Velocity:** ▮▮ rising
+- **Source:** arXiv 2610.32229（Han Wangほか）· 2026-10-23投稿
+- **Tags:** `quantization` `mxfp4` `moe` `training`
+
+論文は**MLPerf Small MoE Training**ベンチマーク上で、**MXFP4**マイクロスケーリング形式により**GPT-OSS-20B**（200億パラメータのMoE）を訓練する。レシピは1D/2D混合ブロック量子化、ランダム化アダマール変換、確率的丸めを、「簡略化した重みの**脱振動**（de-oscillation）スキーム」と組み合わせる。グローバルバッチサイズ16のC4検証で報告されるのは、**16,128ステップで3.3350、BF16が3.3283**——差は**0.007**であり、脱振動なしのMXFP4（**3.3418**）が残した差の「およそ50%」を埋める。ベンチマーク自身の物差し——検証損失3.34に到達するまでのステップ数——では、脱振動はFP4の収束オーバーヘッドをBF16比で「**+20.0%から+5.0%へ**」削る。すべての実験は「**AMD MI300上のシミュレートされたMXFP4カーネル**」で行われ、「実時間速度は最適化していない」。
+
+**Why it matters:** 肯定的な結果を読めるものにしているのは、むしろ否定的な結果のほうだ。差分的勾配推定、外れ値クリッピング、マクロブロックスケーリングは、いずれも「演算子レベルでSNRの改善を示す」のに、いずれもエンドツーエンドで失敗する。これは演算子レベルの指標が誘う推論そのものであり、この論文はそれを走らせて報告する規律を持っている。限界は隠さず書かれている。**シミュレート**カーネルなのでスループットの数字をここから引用してはいけない。MoEであって稠密モデルではない。品質目標は一つのベンチマークのもの。単一モデルで0.007の損失差を、明示された5%のステップコストで埋めるレシピとして読み、「FP4訓練は解決した」の証拠として読まないこと。レシピは**AMD-AGI/ALTO**として出荷される。2025年12月作成のPythonライブラリで、Triton製のMXFP4/NVFP4/ブロックスケールFP8カーネルをTorchTitanのフォークに配線している。だから「シミュレートされたカーネル」という留保は*実験*についてのものであって、コードの有無についてではない。
+
+[`🔗 arXiv — Training an MoE LLM in MXFP4`](https://arxiv.org/abs/2610.32229) · [`🔗 github.com/AMD-AGI/ALTO — このレシピが載る学習ライブラリ`](https://github.com/AMD-AGI/ALTO)
+
+---
+
+## 42. 「モデルのせいかハーネスのせいか」——52,168本の軌跡は答えは組み合わせだと言い、最良のハーネスはモデルごとに変わる
+
+- **Velocity:** ▮▮ rising
+- **Source:** arXiv 2610.32483（Shao Zhangほか）· 2026-10-23投稿 · 査読中のプレプリント
+- **Tags:** `agents` `harness` `benchmark` `evaluation`
+
+論文は、エージェント型ベンチマークのスコアは**モデルではなくモデルとハーネスの組み合わせの性質**だと主張し、それを分離する五つの尺度を作る。**有効完了率**（VCR：正誤にかかわらず、エージェントが正常に終了し評価可能な成果を出せたか）、**Model-Harness Fit**、**Cross-Model Fit**、**交互作用残差**（構成要素レベルの要約に隠れる組み合わせ固有の強弱）、**Token Load**（失敗した試行を含む）。実験は**四つの汎用ハーネス——OpenCode、Codex CLI、Pi CLI、DeepAgents——に四つの主要モデル**、加えて固定のネイティブなモデル-ハーネス系二つを、**六つのベンチマーク**（コンテキスト管理、ツール使用、長文脈計画、マルチモーダル相互作用、成果物の受け渡し）で走らせる。ネイティブ参照とストレス条件を含め、**111の評価設定、52,168本の軌跡**。**OpenCodeがクロスモデル性能で1位**、**DeepSeek V4 Flash Preview**が共通の4ベンチマーク面板で一貫して高い平均VCRを保つ。
+
+**Why it matters:** 「ハーネスの順位はモデルとベンチマークによって変わる。タスク性能と有効完了は異なる組み合わせを支持しうるし、近いタスクスコアが全く異なる実行プロファイルを伴うこともある」——この一文で、ハーネスを書かずに単一のエージェントスコアを引用する慣行は終わるべきだ。そしてVCRは差を可視化する尺度である。精度だけを見ると、「評価可能な成果物を出せなかったエージェント」と「誤った成果物を出したエージェント」は同じ点になるからだ。査読中のプレプリントで、111設定は著者ら自身が構築したもの。ランキングは引用すべき順位表ではなく、順位が不安定だという証明として扱うこと。
+
+[`🔗 arXiv — When Agents Fail: Model or Harness`](https://arxiv.org/abs/2610.32483) · [`🔗 arXiv HTML — 設定別の表を含む全文`](https://arxiv.org/html/2610.32483v1)
+
+---
+
+## 43. 「スコアが上がったか」だけでagent skillを退役させると、誰も必要としなかったskillが消える——SkillsBenchの31件の退役のうち28件は、どの実行も完全には通らなかったプローブに基づく
+
+- **Velocity:** ▮ steady
+- **Source:** arXiv 2610.32322（Yanze Wangほか）· 2026-10-23投稿 · 1,251件のskillを公開
+- **Tags:** `agent-skills` `evaluation` `skill-retirement` `benchmark`
+
+skillハブは「最大で約**100,000件**」を抱え、skillを内化したモデルはそれを必要としない——しかし公表されている規則は**ゲイン**（skillあり/なしの実行差）で退役させ、そのゲインは「内化済みのskillでも、モデルもskillも能力を提供しない場合（著者らは**uncovered**と呼ぶ）でも」**どちらも**ほぼゼロになる。代替案は、skillを伏せ、そこから合成したタスクでモデルを採点し、高い無支援スコアを「**別のモデルがそのskillからゲインを得るときに限り**」信頼する——「**高いスコアのほぼ半分は、どのモデルも恩恵を受けないタスクから来ている**」からだ。結果は、公表されたゲイン規則を「skillあたり1タスク」で適用すると「uncoveredのskillの**半分以上**を除去する」。**SkillsBench**では「**31件の退役のうち28件が、どの実行も完全には通らなかったプローブに基づく**」一方、無支援スコアで退役させても「検出可能な報酬の損失はない」。無支援の判定はタスク間でよく再現し（**Cohen's κは0.42対0.23**）、しかし**モデルごとに異なる**ので「ハブはモデル別に読まねばならない」。**1,251件のskillをタスクと4モデル下の項目スコア付きで公開**している。
+
+**Why it matters:** これは測定の測定であり、失敗は微妙ではない。標準規則のタスク間一致（κ 0.23）は偶然よりわずかに上程度で、それに従うハブはおおむねノイズを方針として記録している。「モデル別」の但し書きが運用側の半分だ。内化は*組み合わせ*の性質であり、多数のモデルに仕えるハブにとって単一のグローバル退役リストは誤ったデータ構造になる。そして、これを検証可能にしているのは公開物そのものだ。1,251件のskill、タスク、4モデル下の項目スコアがあるからこそ、κの値を信じるのではなく再導出できる。それらは**EverMind-AI/SkillCorpus**（692 stars、最終push 2026-10-23）に置かれ、同じ日に作られた`skillcorpus-lifecycle`データセットが隣にある。
+
+[`🔗 arXiv — Beyond Gain: Measuring Skill Internalization`](https://arxiv.org/abs/2610.32322) · [`🔗 github.com/EverMind-AI/SkillCorpus`](https://github.com/EverMind-AI/SkillCorpus) · [`🔗 HFデータセット — skillcorpus-lifecycle`](https://huggingface.co/datasets/EverMind-AI/skillcorpus-lifecycle)
+
+---
+
+## 44. Agent Reach：エージェントが届かないプラットフォームに102,894 stars——14チャネル中6つはログインが要り、スポンサーはプロキシを売っている
+
+- **Velocity:** ▮ steady
+- **Source:** github.com/Panniantong/Agent-Reach · 102,894★ · MIT · 最終push 2026-10-25
+- **Tags:** `agent-tools` `scraping` `mcp` `chinese-platforms`
+
+**Agent Reach**は、CLIエージェントが本来届かないプラットフォームに一つのコマンド面を与える。`agent-reach channels`で一覧、`agent-reach bilibili search "大模型"`で実行。**MIT**、**Python 3.10+**、2026-02-24作成、**102,894 stars、9,128 forks、未クローズissue・PR 245件**、最終pushは2026-10-25。README自身の表は**14チャネル**を挙げ、**既定で有効なのは5つ**（bilibili、v2ex、github、youtube、web）、残り9つは任意。正直なのは依存の列だ。**6つはログインが必要**（小紅書、boss、reddit、twitter、facebook、instagram）、**2つは一部機能のみログインが必要**（雪球のホット投稿、linkedinのサイト内検索）、小宇宙は文字起こしにGroqかOpenAIのキーが要る。3つは**実験**と明記されている。
+
+**Why it matters:** READMEは冒頭でギャップを正確に名指ししている。ログインウォールの先の機能、動画の字幕と音声、汎用検索の被覆が悪い中国語プラットフォーム、整った構造化データ——この枠づけは、課金の壁を能力として描写しがちな他の「エージェントにネットを」プロジェクトより良い。ビジネスモデルも同じファイルに見える。スポンサー欄は**6社、うち4社がレジデンシャルプロキシやスクレイピング基盤の販売者**（Bright Data、RapidProxy、BrowserAct、CoreClaw）。「価値が対ボット回避にある」ツールにとって最も自然な収益化であり、ログイン必須チャネルがプロキシ予算を必要とする理由になる前に知っておく価値がある。ここでのstar数はギャップへの需要を測っており、ギャップを埋める距離を測ってはいない。
+
+[`🔗 github.com/Panniantong/Agent-Reach`](https://github.com/Panniantong/Agent-Reach) · [`🔗 英語版README`](https://github.com/Panniantong/Agent-Reach/blob/main/docs/README_en.md)
+
+---
+
+## 45. PaperPilot v0.6.0：一つのRust製PDFエンジンをMCP、CLI、WASM、ローカルREST APIの背後に——そしてChromiumを一切使わないと主張する
+
+- **Velocity:** ▮ steady
+- **Source:** github.com/KrushnaVardhanReddy/PaperPilot · v0.6.0リリース 2026-10-24 · HN 162 pts
+- **Tags:** `rust` `pdf` `mcp` `wasm`
+
+**PaperPilot**はRustで書かれたPDFツールキットで、同じエンジンが五つの面で動くことを売りにする。Claude Desktop、Cursor、任意のMCPクライアント向けの**MCPサーバ**（「この2つのPDFを結合して圧縮して」）、バッチ処理用の**CLI**、ブラウザ内の**WASMビルド**（「ファイルはブラウザのメモリ内で処理され、何もアップロードされない」）、ビューア・注釈・差分を備えた**Tauri + Svelteデスクトップアプリ**、そして`localhost:7823`の**ローカルREST API**。READMEの主張は**「Chromiumなし、C++ランタイムなし、クラウド呼び出しなし」**。**2026-10-24にv0.6.0**を出し、**10-20のv0.5.0**から5日、現在**392 stars、8 forks、未クローズissue・PR 2件**、最終pushは本日。Hacker Newsで**162ポイント**に達した。
+
+**Why it matters:** 「Chromiumなし」が決定的な主張であり、自分で試すべき主張でもある。LinuxやNode上のPDFツールは10年間、レンダリングのためにブラウザエンジンを引き込んできた。結合・分割・OCR・圧縮・回転・ページ差分を単一のRustバイナリでこなすのは実質的に別の配備ストーリーであり、とくにMCPの場合、代替案はクライアントに重量級のサブプロセスを渡すことになる。プロジェクトは小さく若い。**392 stars**とv0.6.0は方向についての主張であって、壊れたPDFの長い尾についての主張ではなく、OCRの品質はREADMEでは決着しない。枠を得る価値があるのは*パッケージング*が面白いからだ。一つのエンジン、五つの入口、そしてlocalhost既定はプライバシーの主張をアーキテクチャとして書いたものになっている。
+
+[`🔗 github.com/KrushnaVardhanReddy/PaperPilot`](https://github.com/KrushnaVardhanReddy/PaperPilot) · [`🔗 PaperPilot v0.6.0リリース`](https://github.com/KrushnaVardhanReddy/PaperPilot/releases/tag/v0.6.0) · [`🔗 Hacker Newsの議論`](https://news.ycombinator.com/item?id=50238739)
+
+---
+
+## 46. IBMのCEOはオープンウェイトを「有効性90%」、トークンコスト「25%から10%」と位置づける——決算説明会で、ベンチマークを一つも名指しせずに
+
+- **Velocity:** ▮ steady
+- **Source:** The Register / IBM第3四半期決算説明会 · HN 296 pts · 公開2026-10-22
+- **Tags:** `open-weights` `inference-cost` `enterprise` `ibm`
+
+IBMの第3四半期決算説明会で、CEOの**Arvind Krishna**はオープンとクローズドの差に数字と方向を与えた。2024年はクローズドが明らかに優位で、「何か評価を走らせて、それが狭くなく広範なら、最高モデルが**70**、オープンモデルが**20か30**だった」。2025年後半には「70対50」になった。現在、オープンウェイトモデルは「**フロンティアモデルのトークンコストの25%から10%の間**」で、「**有効性が90%**になったことを考えれば非常に魅力的だ」。企業への言い方はこうだ。「最高のモデルの90%の性能を10%のコストで得たいか、10倍のコストを払いたいか」。高いモデルが必要なタスクも「ある」と認めつつ、「大多数——メールの要約、契約書の確認、顧客対応、メールの起草——はもっと安い答えで同じようにできる」。彼自身の留保は経済ではなく運用にある。多くの企業は「2〜3ラック」で有用なAI基盤を作れるが、多くがつまずく——「カーネルエンジニアはどこにいる？基盤ネットワークを気にする人は？」
+
+**Why it matters:** 90%/10%は、オープンウェイトのビジネスケースについて決算説明会で語られた最も明快な説明であり、同時に出典のない数字でもある。ベンチマークも、どのモデル対かも、どちらの数値の日付もない。したがって引用すべき測定ではなく、重みづけすべき経営者の見積もりだ。本フィードの10月の報道と並べて読むとよい。MiniMaxの$0.15/$0.60というagent-firstなFlash層と、Kimi K3.1 Proの重み公開が、この主張の背後にある機構だ。エンジニアと調達についての一文こそ、企業が計画し損なう部分である。オープンウェイトによる20%の効率改善は、誰かが運用しなければならないクラスタに紐づいて届く。同じ電話会議が一つの段落で「オンプレAI基盤への旺盛な関心」と人員への不満の両方を生んだのはそのためだ。
+
+[`🔗 The Register — IBM CEO、オープンウェイトモデルは今やオンプレで抗いがたく優れ安価だと語る`](https://www.theregister.com/systems/2026/10/22/ibm-ceo-says-open-weight-models-are-now-irresistibly-good-and-cheap-on-prem/5304640) · [`🔗 Hacker Newsの議論`](https://news.ycombinator.com/item?id=50238088)
+
+---
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-10-26T04:28:30Z |
-| Items | 34 |
-| Sources tracked | 36（Hacker News、GitHub Trending、GitHub Security Advisories、Hugging Face、arXiv、NVD、VulnCheck、Microsoft .NET Blog、Kimi/Moonshot、KRAFTON AI、DreamHost Status、FOSDEM/talkweb.eu、Daily Californian、Kyutai、Forever Security、BleepingComputer、Symantec/security.com、The Register、Wiz Research、minimaxir.com、labstack/echo、wild-linker、ziglang.org、lobste.rs） |
+| Generated | 2026-10-26T12:34:29Z |
+| Items | 46 |
+| Sources tracked | 40（Hacker News、GitHub Trending、GitHub Security Advisories、Hugging Face、arXiv、NVD、VulnCheck、Microsoft .NET Blog、Kimi/Moonshot、KRAFTON AI、DreamHost Status、FOSDEM/talkweb.eu、Daily Californian、Kyutai、Forever Security、BleepingComputer、Symantec/security.com、The Register、Wiz Research、minimaxir.com、labstack/echo、wild-linker、ziglang.org、lobste.rs、train-it.eu、ornith.ai、docs.nvidia.com、wpscan.com） |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8（1日3回） |
 | Ranking | 速度加重（新しさ × エンゲージメントの加速度 × 情報源の権威） |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |

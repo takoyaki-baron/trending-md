@@ -1,6 +1,6 @@
 ---
 date: 2026-10-26
-updated: 2026-10-26T04:28:30Z
+updated: 2026-10-26T12:34:29Z
 schedule: 04:03, 12:03, 20:03 UTC+8
 sources: 36
 license: CC-BY-4.0
@@ -484,13 +484,181 @@ The paper asks "is explicit self-attention actually necessary for strong perform
 
 ---
 
+## 35. C++26 failed its DIS ballot — 12 of 20 votes for, 9 of 22 against, and the first C++ draft ever to be disapproved
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** train-it.eu (Mateusz Pusz) / Hacker News · 52 pts · ~6h ago (~14:12 UTC+8 Oct 26)
+- **Tags:** `cpp26` `iso-ballot` `contracts` `standards`
+
+The DIS ballot on **C++26** closed **23 October 2026** and was **Disapproved**. Pusz reports both conditions a Draft International Standard must meet were missed: **at least two-thirds yes from P-voting members — 12 of 20, which is 60%** (14 were needed), and **no more than 25% no from all bodies voting — 9 of 22, which is 41%** (five were allowed). "Either one alone would have failed the draft." The nine No votes came from **Denmark, Finland, Iran, Italy, Japan, Luxembourg, Romania, Spain and Sweden**; France and Ireland abstained with comments; Poland and the United States abstained. Robert Seacord, convenor of the C committee, posted the result on LinkedIn the next day. Pusz is explicit about where the numbers live: the **official SC22 voting result "isn't public"** — only national-body delegates see it on ISO's committee site, and it was not on ISO's public project page or in a WG21 document when he wrote.
+
+**Why it matters:** reflection, `std::execution`, library hardening and contracts are all now in a draft ISO has not approved, and the four remedies in the directives — a revised enquiry draft with an **eight-week** vote, a revised committee draft, demotion to a technical specification, or cancellation — are the SC22 chair's to choose, with no date attached. Pusz says he is "convinced" the No votes were about contracts but that the comments "aren't available yet": the directives require a full report within 12 weeks, so **mid-January 2027 at the latest**. The report itself is the remedy for the oddest part of this story — a standard-ballot defeat whose primary document is a LinkedIn post, because the vote that decides a language's next three years is not published.
+
+[`🔗 train-it.eu — the result of the C++26 DIS ballot`](https://train-it.eu/blog/cpp26-contracts-the-ballot-result/) · [`🔗 Hacker News discussion`](https://news.ycombinator.com/item?id=50239748) · [`🔗 Seacord's ballot result post`](https://www.linkedin.com/posts/robertseacord_balloting-has-completed-for-c26-unfortunately-activity-7519795140887035918-5PWL)
+
+---
+
+## 36. VulnCheck scored 75 CVE records twice in 48 hours — and not one of the pairs agrees, by up to 2.6 points
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** NVD API census (first-hand) · 243 records, Oct 25–26 publication window
+- **Tags:** `cvss` `nvd-provenance` `vllm` `scoring`
+
+Over the **243 records NVD published for October 25–26**, **81 carry a score from `disclosure@vulncheck.com`**, and **75 of those carry the same finding scored under both CVSS 3.1 and CVSS 4.0 by that one party**. Read the two numbers side by side: **58 have the 4.0 score higher, 17 have the 3.1 score higher, and zero pairs agree.** The widest gap is **+2.6** (3.7 → 6.3, five records); the widest in the other direction is **−2.1** (3.9 → 1.8). **31 of the 75 flip severity band**: 14 go MEDIUM → HIGH, 14 LOW → MEDIUM, 2 HIGH → CRITICAL, and one goes CRITICAL → HIGH. The batch's single largest cluster is **vLLM — ten records**, all of them 4.0-higher: four Rust gRPC input-validation bugs sit at **5.9 MEDIUM under 3.1 and 8.2 HIGH under 4.0**, and the top one, `CVE-2026-116176` (SSRF, CWE-918), is **8.2 / 8.8** for a bug that forces outbound connections by embedding a decode address in the `X-Request-Id` header.
+
+**Why it matters:** `Primary`/`Secondary` is a slot, not a provenance — both of these numbers come from the same party, so neither is an independent check, and attaching the label "CVSS 3.1" to a 4.0 figure quotes a real number for a **different** version. Every vLLM fix predates its record: **0.24.0 shipped 2026-06-30** against a record published 2026-10-25 (117 days), 0.25.0 on 07-11, 0.29.0 on 09-09, 0.30.0 on 09-22 and 0.31.0 on **10-05** — and PyPI's current vLLM is **0.32.0 (10-18)**, above every stated bound, so all ten were fixed weeks before anyone could read that they existed. VulDB goes the opposite way in the same window and demonstrates the third state: `CVE-2026-115997`, in the same publication window, carries **three** versions of the same source's score — CVSS 2.0 6.5, 3.1 6.3, **4.0 2.1** — spanning LOW to MEDIUM on one bug. Quote the version, always.
+
+[`🔗 NVD 2.0 API — the queried window`](https://services.nvd.nist.gov/rest/json/cves/2.0?pubStartDate=2026-10-25T00:00:00.000&pubEndDate=2026-10-27T00:00:00.000&resultsPerPage=2000) · [`🔗 NVD — CVE-2026-116176 (8.2 / 8.8)`](https://nvd.nist.gov/vuln/detail/CVE-2026-116176) · [`🔗 vLLM — GHSA-w9r6-29q4-pvpr`](https://github.com/vllm-project/vllm/security/advisories/GHSA-w9r6-29q4-pvpr)
+
+---
+
+## 37. NVIDIA open-sources SkillSpector — 26.1% of 31,132 skills carry a vulnerability, and its default mode uploads the skill it is auditing
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** github.com/NVIDIA/SkillSpector · 21,710★ · +203 stars today · last push 2026-10-23
+- **Tags:** `agent-skills` `security-scanner` `nvidia` `mcp`
+
+**SkillSpector** answers "is this skill safe to install?" before you install it, for the `SKILL.md` bundles used by Claude Code, Codex CLI and Gemini CLI. It takes a git repo, URL, zip, directory or single file; runs static analysis (**regex, Python AST, YARA**) by default plus an optional LLM evaluation of file contents; queries **OSV.dev** for known-vulnerable dependencies with a `--no-llm`-compatible fallback; and emits terminal, JSON, Markdown or SARIF. It is **Apache-2.0**, created 2026-03-21, **21,710 stars and 1,912 forks**, with **171 open issues and pull requests** and its last push on **23 October** — and it is the security tier of NVIDIA's "Verified Skills" pipeline. The motivating numbers come from the paper it implements, *Agent Skills in the Wild: An Empirical Study of Security Vulnerabilities at Scale* (Liu et al., 2026): a dataset of **42,447 skills from major marketplaces**, of which **31,132 were analyzed**, finding **26.1%** of the analyzed subset contain at least one vulnerability, **5.2%** showing likely malicious intent, and skills with executable scripts **2.12×** more likely to be vulnerable.
+
+**Why it matters:** the README's "Trust model and data egress" section matters more than the detection rate, because **LLM analysis is on by default and "sends analyzer-eligible file contents to the configured provider"** — DSSE payloads and readable signing metadata included — so auditing an untrusted skill with default settings ships that skill's contents to a third party, and `--no-llm` is the flag that keeps it local. The denominator is the second thing: **42,447 collected against 31,132 analyzed is 73%**, so 26.1% is a rate over the subset that survived analysis, not over the marketplace, and the README's own limitations section lists what analysis cannot reach — non-English content, text inside images, compiled or encrypted code, and anything that only shows up at runtime. The rule count is the third: the README says **71 patterns across 17 categories**, the docs page it links says **68 across 17** — two hand-maintained pages describing the same analyzer, which is the drift a skill scanner exists to catch in somebody else's repo.
+
+[`🔗 github.com/NVIDIA/SkillSpector`](https://github.com/NVIDIA/SkillSpector) · [`🔗 NVIDIA docs — scan agent skills before installation`](https://docs.nvidia.com/skills/scanning-agent-skills)
+
+---
+
+## 38. Ornith-1.5 quietly grew a fourth size in October — a 122B under MIT — and the blog's "matching Opus 4.8 on both benchmarks" is three points short on one
+
+- **Velocity:** ▮▮ rising
+- **Source:** huggingface.co/ornith-ai · ornith.ai blog · 122B card created 2026-10-16
+- **Tags:** `model-release` `moe` `self-improvement` `open-weights`
+
+**Ornith-1.5** launched in **August 2026** with three sizes — **397B MoE, 35B MoE and 9B dense** — built by extending Ornith-1.0's self-scaffolding loop "from scaffold and rollout optimization to jointly optimizing **task generation, scaffold construction, and solution rollouts**": the model proposes tasks, generates harnesses, produces rollouts and RLs on them, so no fixed human-curated task set is in the loop. A **fourth size appeared in October**: `Ornith-1.5-122B`, created **2026-10-16**, **MIT**, on the `qwen3_5_moe` architecture, 62 safetensors shards, **60,210 downloads** and **182 likes**, with GGUF, FP8, NVFP4 and three MLX builds appearing on 10-20. Its card reports **TerminalBench 2.1 81.200** and **CyberGym 80.000** — against Qwen3.8-Flash-Next's 83.400/78.000 and DeepSeek-V4-Flash-0731's 82.700/76.700.
+
+**Why it matters:** two separate reading errors are available here, and both are cheap to avoid. The first is size: the launch blog lists **three** models and the Hub now carries **four**, so any comparison written from the blog compares the 122B to nothing. The second is the benchmark claim — the blog says the 397B "scores 86.1 on Terminal-Bench 2.1 and 56.0 on DeepSWE, performing on par with Claude Opus 4.8 (85.0 and 59.0)" in one paragraph and then "**matching Claude Opus 4.8 on both benchmarks**" in the next. 86.1 against 85.0 is a win; **56.0 against 59.0 is a three-point loss**, and the blog's own parenthetical is what shows it. Weights are real and downloadable at all four sizes, which is more than several October release announcements managed.
+
+[`🔗 Hugging Face — Ornith-1.5-122B model card`](https://huggingface.co/ornith-ai/Ornith-1.5-122B) · [`🔗 ornith.ai — From Self-Scaffolding to Self-Improvement`](https://ornith.ai/ornith_1_5.html) · [`🔗 HF — Ornith-1.5-397B weights`](https://huggingface.co/ornith-ai/Ornith-1.5-397B)
+
+---
+
+## 39. SiYuan's Windows fix was a path denylist — and `\\?\` walks straight through it, carrying the API token out as a static asset
+
+- **Velocity:** ▮▮ rising
+- **Source:** NVD / GHSA-6gmc-424x-xgpm · CVE-2026-116171 · VulnCheck CNA · published 2026-10-25
+- **Tags:** `cve` `siyuan` `windows` `path-traversal`
+
+`CVE-2026-116171` describes a **sensitive-path denylist bypass** in SiYuan **3.5.4 before 3.8.7 on Windows**: `IsSensitivePath` compares the cleaned path against a list of forbidden prefixes, but the **Windows extended-length prefix `\\?\` survives `filepath.Clean` and matches no forbidden prefix**. An authenticated API caller who prepends it to `localPath` in `/api/import/importStdMd` can copy **workspace `conf` files — including the API token and TLS private keys — into `assets`**, which SiYuan serves to **unauthenticated** clients. So a token-authenticated request turns into an unauthenticated read of the token that authenticated it. **SiYuan v3.8.7 shipped 2026-10-14**, eleven days before the record; v3.8.8 followed on 10-20. The repo is **46,940 stars**, last pushed 2026-10-26, with **36 open issues and pull requests**.
+
+**Why it matters:** this is a *denylist* failing rather than an escaping bug, and the failing primitive is the platform's own path normalizer — `filepath.Clean` is documented in terms of the operating system's separators and has no reason to treat `\\?\` as a prefix rather than two characters, so anything comparing strings after cleaning inherits the hole. The exploitation shape is the second half: the file it copies out is the credential store, and the sink is a directory the product serves without authentication, so the "authenticated" precondition in the record is not the barrier it reads as. NVD has **not analyzed** the record — it is `Deferred`, and both metrics are `Secondary` from **`disclosure@vulncheck.com`**: **7.5 under CVSS 3.1, 8.7 under CVSS 4.0**, CWE-22 — so quote the version with that CNA's name attached.
+
+[`🔗 NVD — CVE-2026-116171`](https://nvd.nist.gov/vuln/detail/CVE-2026-116171) · [`🔗 SiYuan security advisory GHSA-6gmc-424x-xgpm`](https://github.com/siyuan-note/siyuan/security/advisories/GHSA-6gmc-424x-xgpm) · [`🔗 SiYuan v3.8.7 release`](https://github.com/siyuan-note/siyuan/releases/tag/v3.8.7)
+
+---
+
+## 40. Datawiza's WordPress plugin is a 9.8 that nobody has analyzed — trusting two request headers is the whole administrator account
+
+- **Velocity:** ▮▮ rising
+- **Source:** NVD / WPScan · CVE-2026-115214 · CISA-ADP scored · published 2026-10-25
+- **Tags:** `cve` `wordpress` `auth-bypass` `cisa-adp`
+
+**CVE-2026-115214**: the Datawiza Proxy Auth Plugin for WordPress, **before 1.1.1**, "does not verify that the user-identity and role HTTP request headers it trusts originate from a trusted reverse proxy, allowing **unauthenticated attackers to create and authenticate as a WordPress administrator**." NVD's record for it is `Received` with **zero NVD metrics**; the only score is **CVSS 3.1 9.8**, sourced to **`134c704f-9b21-4f2e-91b3-4a467353bcc0`** — **CISA-ADP Vulnrichment**, not NVD and not the vendor — with **CWE-269** (improper privilege management). The CNA is **WPScan**, and the only reference is the WPScan vulnerability page. The record's own `affected[]`, written by `contact@wpscan.com`, names **exactly one affected version: 1.1.0, `lessThan` 1.1.1**.
+
+**Why it matters:** three details decide how to read this one. The score is a **third party's enrichment written into the record itself** — an administrator deciding urgency from "9.8" is reading CISA's assessment attached to a WPScan disclosure: the record's **single** metric belongs to the ADP, the CNA (WPScan) added none of its own, and the record's only reference is WPScan's vulnerability page rather than a vendor advisory. The range is the other: the prose says "before 1.1.1" while `affected[]` lists a single version, so a deployment on an earlier 1.0.x reads as unaffected straight out of the machine-readable field even though the prose would cover it — check the plugin's changelog before assuming the field enumerated the whole range. And the class is the one that keeps recurring in front of authentication: a header that a reverse proxy is supposed to set is trusted unconditionally, so anything that can reach the origin directly is the administrator.
+
+[`🔗 NVD — CVE-2026-115214`](https://nvd.nist.gov/vuln/detail/CVE-2026-115214) · [`🔗 WPScan vulnerability 2c6c7d10-2281-4a98-a0d6-769da5cce416`](https://wpscan.com/vulnerability/2c6c7d10-2281-4a98-a0d6-769da5cce416/)
+
+---
+
+## 41. ALTO trains a 20B MoE in MXFP4 to within 0.007 validation loss of BF16 — and publishes the three techniques that did not work
+
+- **Velocity:** ▮▮ rising
+- **Source:** arXiv 2610.32229 (Han Wang et al.) · submitted 2026-10-23
+- **Tags:** `quantization` `mxfp4` `moe` `training`
+
+The paper trains **GPT-OSS-20B**, a 20-billion-parameter MoE, on the **MLPerf Small MoE Training benchmark** in **MXFP4** microscaling format. The recipe combines hybrid 1D/2D block quantization, randomized Hadamard transforms and stochastic rounding with a "simplified weight **de-oscillation** scheme," and reports on C4 validation at global batch size 16: **3.3350 at 16,128 steps against 3.3283 for BF16** — a gap of **0.007**, closing "roughly 50%" of the gap left by MXFP4 without de-oscillation (**3.3418**). Measured the benchmark's way — steps to reach validation loss 3.34 — de-oscillation cuts the FP4 convergence overhead "from **+20.0% to +5.0%**". Every experiment runs "**simulated MXFP4 kernels on AMD MI300 hardware**" and "wall-clock speed has not been optimized."
+
+**Why it matters:** the negative results are the part that makes the positive one legible. Differential gradient estimation, outlier clipping and macro-block scaling each "show operator-level SNR gains" and each fail end-to-end — which is the exact inference the operator-level metric invites and this paper had the discipline to run and report. The limits are stated rather than hidden: **simulated** kernels, so no throughput number should be quoted from it; an MoE rather than a dense model; and one benchmark's quality target. Read it as a recipe for closing a 0.007 loss gap at a stated 5% step cost on one model, not as evidence that FP4 training is solved. The recipe ships as **AMD-AGI/ALTO**, a Python library first created in December 2025 — Triton MXFP4/NVFP4/block-scaled-FP8 kernels wired into a TorchTitan fork — which is why the "simulated kernels" caveat is about the *experiment* and not about whether the code exists.
+
+[`🔗 arXiv — Training an MoE LLM in MXFP4`](https://arxiv.org/abs/2610.32229) · [`🔗 github.com/AMD-AGI/ALTO — the training library the recipe ships in`](https://github.com/AMD-AGI/ALTO)
+
+---
+
+## 42. "Model or harness?" — 52,168 trajectories say the answer is the pairing, and the best harness changes with the model
+
+- **Velocity:** ▮▮ rising
+- **Source:** arXiv 2610.32483 (Shao Zhang et al.) · submitted 2026-10-23 · preprint under review
+- **Tags:** `agents` `harness` `benchmark` `evaluation`
+
+The paper argues that agentic benchmark numbers are a **property of a model-harness pair, not of a model**, and builds five measures to separate them: **Valid Completion Rate** (does the agent finish normally and deliver an evaluable result, regardless of correctness), **Model-Harness Fit**, **Cross-Model Fit**, **Interaction Residuals** (pairing-specific strengths hidden by component-level summaries), and **Token Load** (including failed attempts). It runs **four harnesses — OpenCode, Codex CLI, Pi CLI and DeepAgents — with four core models**, plus two fixed native model-harness systems, over **six benchmarks** covering context management, tool use, long-context planning, multimodal interaction and artifact handoff: including native references and stress conditions, **111 evaluation settings and 52,168 trajectories**. **OpenCode ranks first in cross-model performance**, and **DeepSeek V4 Flash Preview** holds the highest mean VCR across harnesses on the shared four-benchmark panel.
+
+**Why it matters:** "harness rankings vary across models and benchmarks; task performance and valid completion can favor different pairings, and similar task scores can accompany distinct execution profiles" is the sentence that should end the practice of quoting a single agentic score without its harness — and VCR is the measure that makes the difference visible, because an agent that fails to produce an evaluable artifact and an agent that produces a wrong one are scored identically by accuracy alone. The finding is a preprint under review on 111 settings built by its authors, so treat the ranking as a demonstration that rankings are unstable rather than as a leaderboard to cite.
+
+[`🔗 arXiv — When Agents Fail: Model or Harness`](https://arxiv.org/abs/2610.32483) · [`🔗 arXiv HTML — the full paper with per-setting tables`](https://arxiv.org/html/2610.32483v1)
+
+---
+
+## 43. Retiring an agent skill on "did the score go up" deletes the skills nobody needed — and 28 of 31 SkillsBench retirements rest on probes no run passed
+
+- **Velocity:** ▮ steady
+- **Source:** arXiv 2610.32322 (Yanze Wang et al.) · submitted 2026-10-23 · 1,251 skills released
+- **Tags:** `agent-skills` `evaluation` `skill-retirement` `benchmark`
+
+Skill hubs hold "up to about **100,000 entries**," and a model that has internalized a skill can do without it — but the published rule retires on the **gain** between runs with and without the skill, and the gain is "near zero **both** for an internalized skill and when neither the model nor the skill delivers the capability," a state the authors call **uncovered**. Their alternative withholds the skill, scores the model on a task synthesized from it, and trusts a high unaided score "only when another model gains from the skill, since **nearly half of high scores come from tasks no model benefits from**." Results: a published gain rule applied with one task per skill "removes **over half of the uncovered skills**"; on **SkillsBench**, "**28 of its 31 retirements rest on probes no run passed in full**," while retiring on the unaided score "costs no detectable reward"; and the unaided verdict reproduces across tasks at **Cohen's κ 0.42 against 0.23**, but differs across models, "so a hub must read them per model." They release **1,251 skills with tasks and item scores under four models**.
+
+**Why it matters:** this is a measurement of the measurement, and the failure is not subtle — the standard rule's agreement across tasks (κ 0.23) is barely above chance, so a hub applying it is mostly recording noise as policy. The per-model clause is the operational half: internalization is a property of the *pair*, which means a single global retirement list is the wrong data structure for a hub serving many models. Note that the release is what makes this checkable — the 1,251 skills, tasks and item scores under four models are the reason the κ values can be re-derived instead of taken on faith, and they land in **EverMind-AI/SkillCorpus** (692 stars, pushed 2026-10-23) beside a `skillcorpus-lifecycle` dataset created the same day.
+
+[`🔗 arXiv — Beyond Gain: Measuring Skill Internalization`](https://arxiv.org/abs/2610.32322) · [`🔗 github.com/EverMind-AI/SkillCorpus`](https://github.com/EverMind-AI/SkillCorpus) · [`🔗 HF dataset — skillcorpus-lifecycle`](https://huggingface.co/datasets/EverMind-AI/skillcorpus-lifecycle)
+
+---
+
+## 44. Agent Reach: 102,894 stars for the platforms your agent can't reach — six of fourteen channels need a login, and the sponsors sell the proxies
+
+- **Velocity:** ▮ steady
+- **Source:** github.com/Panniantong/Agent-Reach · 102,894★ · MIT · last push 2026-10-25
+- **Tags:** `agent-tools` `scraping` `mcp` `chinese-platforms`
+
+**Agent Reach** gives a CLI agent one command surface over platforms it otherwise cannot reach: `agent-reach channels` lists them, `agent-reach bilibili search "大模型"` runs one. It is **MIT**, **Python 3.10+**, created 2026-02-24, **102,894 stars, 9,128 forks, 245 open issues and pull requests**, last pushed 2026-10-25. The README's own table lists **fourteen channels**: **five on by default** (bilibili, v2ex, github, youtube, web) and nine optional. The dependency column is the honest part — **six require a login** (xiaohongshu, boss, reddit, twitter, facebook, instagram), **two require one for part of their functions** (xueqiu's hot posts, linkedin's on-site search), and xiaoyuzhou needs a Groq or OpenAI key to transcribe. Three are labelled **实验** (experimental).
+
+**Why it matters:** the README opens by naming the gap precisely — login-walled features, subtitle and audio content, Chinese platforms that general search covers badly, and clean structured data — and that framing is better than most "agent internet access" projects, which tend to describe a paywall as a capability. The business model is visible in the same file: the sponsor block is **six vendors, four of them selling residential proxies or scraping infrastructure** (Bright Data, RapidProxy, BrowserAct, CoreClaw), which is the natural monetization for a tool whose value is getting past anti-bot systems, and it is worth knowing before the login-walled channels become the reason a workload needs a proxy budget. Stars here measure demand for the gap, not the distance to closing it.
+
+[`🔗 github.com/Panniantong/Agent-Reach`](https://github.com/Panniantong/Agent-Reach) · [`🔗 English README`](https://github.com/Panniantong/Agent-Reach/blob/main/docs/README_en.md)
+
+---
+
+## 45. PaperPilot v0.6.0: one Rust PDF engine behind MCP, a CLI, WASM and a local REST API — and it claims no Chromium at all
+
+- **Velocity:** ▮ steady
+- **Source:** github.com/KrushnaVardhanReddy/PaperPilot · release v0.6.0 (2026-10-24) · HN 162 pts
+- **Tags:** `rust` `pdf` `mcp` `wasm`
+
+**PaperPilot** is a PDF toolkit written in Rust whose pitch is that the same engine runs as five surfaces: an **MCP server** for Claude Desktop, Cursor or any MCP client ("merge these two PDFs and compress the result"), a **CLI** for batch work, a **WASM build** in the browser where "files are processed in browser memory, nothing is uploaded," a **Tauri + Svelte desktop app** with viewer, markup and diff, and a **local REST API at `localhost:7823`**. The README's claim is **"No Chromium, no C++ runtime, no cloud calls."** It shipped **v0.6.0 on 2026-10-24**, five days after **v0.5.0** on 10-20, and carries **392 stars, 8 forks and 2 open issues and pull requests**, with the last push today. It reached **162 points** on Hacker News.
+
+**Why it matters:** "no Chromium" is the claim that matters and the one to test yourself — PDF tooling on Linux and in Node has spent a decade pulling a browser engine in for rendering, and a single Rust binary that does merge, split, OCR, compress, rotate and page-diff without one is a materially different deployment story, particularly for the MCP case where the alternative is handing a client a heavyweight subprocess. The project is small and young — **392 stars** and a v0.6.0 is a claim about direction, not about the long tail of malformed PDFs, and OCR quality is not something a README can settle. It is worth a slot because the *packaging* is the interesting part: one engine, five entry points, and the localhost default is the privacy claim stated as an architecture.
+
+[`🔗 github.com/KrushnaVardhanReddy/PaperPilot`](https://github.com/KrushnaVardhanReddy/PaperPilot) · [`🔗 PaperPilot v0.6.0 release`](https://github.com/KrushnaVardhanReddy/PaperPilot/releases/tag/v0.6.0) · [`🔗 Hacker News discussion`](https://news.ycombinator.com/item?id=50238739)
+
+---
+
+## 46. IBM's CEO puts open weights at "90 percent as effective" for "25 percent to 10 percent" of the token cost — on an earnings call, with no benchmark named
+
+- **Velocity:** ▮ steady
+- **Source:** The Register / IBM Q3 earnings call · HN 296 pts · published 2026-10-22
+- **Tags:** `open-weights` `inference-cost` `enterprise` `ibm`
+
+On IBM's Q3 earnings call, CEO **Arvind Krishna** gave the open-versus-closed gap a number and a direction. In 2024, he said, closed models were plainly ahead — "the top model might score a **70**, and the open model might score a **20 or a 30**"; by late 2025 it was "70 to 50." Today, open-weight models deliver "**anywhere from 25 percent to 10 percent of the token cost of the frontier models.** That is very attractive given that they're now **90 percent as effective**." His framing for enterprises: "Would you like something that's 10 percent of the cost if it's 90 percent as good as the best, or do you want to pay that 10 times higher cost?" — and he allows that "some" tasks do need the expensive model while "the vast majority — summarizing an email, examining a contract, answering a customer call, composing an email — can be done as well with the much cheaper answer." His stated caveat is operational, not economic: most businesses can build useful AI infrastructure "in just two or three racks," but many will struggle — "Where are my kernel engineers? Where are the people who worry about the underlying network?"
+
+**Why it matters:** 90%/10% is the cleanest statement of the open-weight business case anyone has put on an earnings call, and it is also an unreferenced number — no benchmark, no model pair, no date attached to either figure, which makes it an executive's estimate to weigh rather than a measurement to cite. Read it against this feed's own October coverage instead: MiniMax's agent-first Flash tier at $0.15/$0.60 and Kimi K3.1 Pro shipping weights are the mechanism behind the claim. The engineer-procurement sentence is the part enterprises under-plan for — a 20% efficiency gain from open weights arrives attached to a cluster somebody has to operate, which is why the same call produced "booming interest in on-prem AI infrastructure" and a staffing complaint in one paragraph.
+
+[`🔗 The Register — IBM CEO says open weight models are now irresistibly good and cheap on-prem`](https://www.theregister.com/systems/2026/10/22/ibm-ceo-says-open-weight-models-are-now-irresistibly-good-and-cheap-on-prem/5304640) · [`🔗 Hacker News discussion`](https://news.ycombinator.com/item?id=50238088)
+
+---
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-10-26T04:28:30Z |
-| Items | 34 |
-| Sources tracked | 36 (Hacker News, GitHub Trending, GitHub Security Advisories, Hugging Face, arXiv, NVD, VulnCheck, Microsoft .NET Blog, Kimi/Moonshot, KRAFTON AI, DreamHost Status, FOSDEM/talkweb.eu, Daily Californian, Kyutai, Forever Security, BleepingComputer, Symantec/security.com, The Register, Wiz Research, minimaxir.com, labstack/echo, wild-linker, ziglang.org, lobste.rs) |
+| Generated | 2026-10-26T12:34:29Z |
+| Items | 46 |
+| Sources tracked | 40 (Hacker News, GitHub Trending, GitHub Security Advisories, Hugging Face, arXiv, NVD, VulnCheck, Microsoft .NET Blog, Kimi/Moonshot, KRAFTON AI, DreamHost Status, FOSDEM/talkweb.eu, Daily Californian, Kyutai, Forever Security, BleepingComputer, Symantec/security.com, The Register, Wiz Research, minimaxir.com, labstack/echo, wild-linker, ziglang.org, lobste.rs, train-it.eu, ornith.ai, docs.nvidia.com, wpscan.com) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (3x daily) |
 | Ranking | Velocity-weighted (recency × engagement acceleration × source authority) |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |

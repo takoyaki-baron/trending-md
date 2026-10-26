@@ -1,9 +1,9 @@
 {
- "generated": "2026-10-26T04:39:36.337Z",
+ "generated": "2026-10-26T12:34:35.225Z",
  "files": [
   {
    "file": "2026-10-26.md",
-   "items": 34,
+   "items": 46,
    "findings": [
     {
      "check": "cvss",
@@ -97,32 +97,95 @@
      "detail": "one number for both nouns — that is the composite the counter reports, so nothing is being presented as an issue-only count"
     },
     {
+     "check": "cvss",
+     "item": 36,
+     "verdict": "ok",
+     "claim": "3.1 6.3",
+     "detail": "CVE-2026-115997 · Primary/cna@vuldb.com"
+    },
+    {
+     "check": "cvss",
+     "item": 36,
+     "verdict": "ok",
+     "claim": "4.0 2.1",
+     "detail": "CVE-2026-115997 · Secondary/cna@vuldb.com"
+    },
+    {
+     "check": "cvss",
+     "item": 36,
+     "verdict": "slot-quoted",
+     "claim": "Primary/Secondary",
+     "detail": "a metric slot is not a provenance — name the source (CNA / nvd@nist.gov / CISA-ADP) instead"
+    },
+    {
+     "check": "issues",
+     "item": 37,
+     "verdict": "ok",
+     "claim": "171 issues+PRs combined",
+     "detail": "one number for both nouns — that is the composite the counter reports, so nothing is being presented as an issue-only count"
+    },
+    {
+     "check": "issues",
+     "item": 39,
+     "verdict": "ok",
+     "claim": "36 issues+PRs combined",
+     "detail": "one number for both nouns — that is the composite the counter reports, so nothing is being presented as an issue-only count"
+    },
+    {
+     "check": "cvss",
+     "item": 40,
+     "verdict": "ok",
+     "claim": "3.1 9.8",
+     "detail": "CVE-2026-115214 · Secondary/134c704f-9b21-4f2e-91b3-4a467353bcc0"
+    },
+    {
+     "check": "issues",
+     "item": 44,
+     "verdict": "ok",
+     "claim": "245 issues+PRs combined",
+     "detail": "one number for both nouns — that is the composite the counter reports, so nothing is being presented as an issue-only count"
+    },
+    {
+     "check": "issues",
+     "item": 45,
+     "verdict": "ok",
+     "claim": "2 issues+PRs combined",
+     "detail": "one number for both nouns — that is the composite the counter reports, so nothing is being presented as an issue-only count"
+    },
+    {
+     "check": "repo",
+     "item": 4,
+     "verdict": "star-drift",
+     "claim": "389 quoted vs 523 now",
+     "detail": "microsoft/Agensh: -26% — reread the number or date the item"
+    },
+    {
      "check": "repo",
      "item": 4,
      "verdict": "ok",
      "claim": "microsoft/Agensh",
-     "detail": "389★, last push 2026-10-23"
+     "detail": "523★, last push 2026-10-23"
     },
     {
      "check": "repo",
      "item": 11,
      "verdict": "ok",
      "claim": "obra/superpowers",
-     "detail": "305139★, last push 2026-10-23"
+     "detail": "305353★, last push 2026-10-23"
     },
     {
      "check": "repo",
      "item": 16,
      "verdict": "ok",
      "claim": "coollabsio/coolify",
-     "detail": "64541★, last push 2026-10-25"
+     "detail": "64863★, last push 2026-10-26"
     },
     {
      "check": "repo",
      "item": 17,
      "verdict": "stale",
      "claim": "multica-ai/andrej-karpathy-skills",
-     "detail": "last push 2026-04-20 (189d) with 223930 stars — is the item about the code or the name?"
+     "detail": "last push 2026-04-20 (189d) with 224144 stars — is the item about the code or the name?"
     },
     {
      "check": "count",
@@ -137,6 +200,27 @@
      "verdict": "ok",
      "claim": "1,024 Agents",
      "detail": "README states it"
+    },
+    {
+     "check": "count",
+     "item": 37,
+     "verdict": "differs",
+     "claim": "31,132 skills",
+     "detail": "README says 42447 skills"
+    },
+    {
+     "check": "count",
+     "item": 37,
+     "verdict": "ok",
+     "claim": "42,447 skills",
+     "detail": "README states it"
+    },
+    {
+     "check": "count",
+     "item": 43,
+     "verdict": "absent",
+     "claim": "1,251 skills",
+     "detail": "the README never states a count of skills — count it yourself, or say \"the README states no total\""
     }
    ]
   }
