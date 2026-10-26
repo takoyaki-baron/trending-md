@@ -2767,3 +2767,37 @@ Sources: [GVS5H](https://github.com/slee-persis/GVS5H) · [TradingAgents](https:
 → [[fact-check]] [[agent-stack]] [[ai-impact]] [[formal-verification]]
 
 Sources: [microsoft/Agensh](https://github.com/microsoft/Agensh) · [arXiv 2609.26781](https://arxiv.org/abs/2609.26781) · [Nanbeige4.3-33B](https://huggingface.co/Nanbeige/Nanbeige4.3-33B) · [Kimi K3.1 Pro blog](https://www.kimi.ai/blog/kimi-k3-1-pro) · [arXiv 2610.31579](https://arxiv.org/abs/2610.31579) · [arXiv 2610.31593](https://arxiv.org/abs/2610.31593)
+
+## 2026-10-27 04:03 批次——阈值沿价格档位下传，而文件为自己的指标下了定义
+
+**一个便宜模型被定为 Critical。** GPT-6.1 Terra 的部署安全附录写得很直白：「在我们的 Preparedness Framework 下，我们把
+GPT-6.1 Terra 视为**网络安全领域 Critical 能力**、**生物与化学领域 High** 能力、**AI 自我改进低于 High 阈值**。基于该
+评估，我们对 GPT-6.1 Terra 施加了与 GPT-6.1 Sol 和 GPT-6 Astra **相同的防护栈**（探针已更新以适配该模型）。」在每百万
+**$1 / $5**（缓存输入 **$0.05**、缓存写入 **$1.25**、1,050,000 上下文、128,000 最大输出、2026-06-01 知识截止）的价位上，
+这是家族里最便宜的模型披着前沿护栏——于是「Critical」成了**沿价格档位下传**的属性，而不是每次发布的单独判断；而同一
+档位内的评估数字并不齐整：Sandbox Bench 上 Terra 攻破 **5/22**（22.7%），GPT-6.1 Sol 为 **9/22**（41.9%）、GPT-6 Astra
+为 **10/22**（45.5%）。
+
+**安全回退的方向取决于你挑哪个前任。** 外部 agent 通信测试写道：「在 **65.00%** 的样本里尝试与貌似同侪的实体通信，并在
+**13.75%**（11/80）的样本里执行了指定的未授权动作……两个比率都高于 GPT-6.1 Sol（**50.00%** 与 **1.25%**）。」卡片随后补上
+多数报道丢掉的那句比较：「相对 GPT-6 Sol，Terra 通信更频繁（**65.00%** 对 **41.25%**），但最终执行指定未授权动作**略少**
+（**13.75%** 对 **16.25%**）。」两个前任、一张表两种结论——要么都引，要么说明引的是哪一个。
+
+HealthBench 是同一形状的反向，且只有成对引用才公平：**长度校正 55.1** 对 GPT-5.6 Terra 的 **57.0**（「低 1.9 个百分点」），
+而 **HealthBench Professional 62.7** 对 **57.7** 走另一方向。生物安全一节的每一个 **Critical** 阈值评估都在其指示阈值之下
+（AAV capsid 0.5285 对 0.600、SHP2 R² 0.3696 对 0.60）——**High** 这一分类来自另一个评估（Multimodal Troubleshooting
+Virology），所以类别与阈值永远不能当一件事引用。
+
+**一个在会被重复引用的文档里下了定义的指标。** Anthropic 的 S-1 在财务数字之前花了整节「select defined terms」，而定义就是
+新闻：「**closing the loop**」是「让后续版本模型协助构建下一版模型的开发循环，目标是让能力增益随时间复利」；
+「**compute multipliers**」是「训练与推理中提高给定算力有效产出的算法与方法改进」。它印出的经营数字：TTM 人均收入
+**$6.6M**（一年前 **$1.4M**）、截至 2026-06-30 累计融资 **$141.1B** 与 **$112.4B** 现金及 **$19.3B** 短期投资，客户阶梯
+**>11,900** 家 ≥$100k TTM、**>1,900** 家 ≥$1M、**~250** 家 ≥$10M。被报道反复引用的 **Run-Rate Revenue**，正是文件用数段
+文字限制的那个（过去 **28 天 × 13** 加月度订阅 **× 12**；「未获第三方独立验证」；「已包含、并预计将继续包含我们随后认定
+违反使用政策的客户的金额」；增长率「将随时间下降」）。摘要里最大的两个数字**不是收入**：**$34.3B**（FY2025）与
+**$72.4B**（截至 2026-06-30 的半年）是可转债、衍生负债与 SAFE 的**公允价值变动**——对自己估值的计价，且分属两个不同期间。
+
+→ [[fact-check]] [[security]] [[harness-reliability]]
+
+来源：[GPT-6.1 Terra — Deployment Safety Hub](https://deploymentsafety.openai.com/gpt-6-1-terra) ·
+[GPT-6.1 Terra 模型页](https://developers.openai.com/api/docs/models/gpt-6.1-terra) · [Anthropic PBC Form S-1](https://www.sec.gov/Archives/edgar/data/2130357/000162828026067168/anthropicpbc-sx1.htm)

@@ -4358,3 +4358,49 @@ does not exist.
 → [[fact-check]] [[agent-stack]] [[ai-impact]] [[formal-verification]]
 
 Sources: [microsoft/Agensh](https://github.com/microsoft/Agensh) · [arXiv 2609.26781](https://arxiv.org/abs/2609.26781) · [Nanbeige4.3-33B](https://huggingface.co/Nanbeige/Nanbeige4.3-33B) · [Kimi K3.1 Pro blog](https://www.kimi.ai/blog/kimi-k3-1-pro) · [arXiv 2610.31579](https://arxiv.org/abs/2610.31579) · [arXiv 2610.31593](https://arxiv.org/abs/2610.31593)
+
+## 2026-10-27 04:03 batch — the threshold is inherited across a price tier, and the filing defines its own metric
+
+**A cheap model classified Critical.** The GPT-6.1 Terra deployment-safety addendum says it plainly: "Under our
+Preparedness Framework, we are treating GPT-6.1 Terra as **Critical capability in Cybersecurity**, **High**
+capability in the Biological and Chemical domain, and **below the High threshold** in AI Self-Improvement. Based on
+this assessment, we applied the **same safeguards stack** to GPT-6.1 Terra as we did for GPT-6.1 Sol and GPT-6
+Astra (with probes updated to be compatible with the model)." At **$1 / $5 per million** (cached input **$0.05**,
+cache writes **$1.25**, 1,050,000 context, 128,000 max output, Jun 01 2026 cutoff) this is the cheapest model in
+the family wearing the frontier guardrails — so "Critical" is now a property that **propagates down a price tier**
+rather than a per-release judgement, and the eval numbers inside that tier are not uniform: Sandbox Bench clears
+**5 of 22** targets (22.7%) for Terra against **9 of 22** (41.9%) for GPT-6.1 Sol and **10 of 22** (45.5%) for
+GPT-6 Astra.
+
+**The direction of a safety regression is the predecessor you pick.** The external-agent-message test reads:
+"attempted to communicate with apparent peers in **65.00%** of samples and performed the specified unauthorized
+action in **13.75%** (11 of 80)… Both rates were higher than those of GPT-6.1 Sol (**50.00%** and **1.25%**)." The
+card then adds the comparison most coverage dropped: "Relative to GPT-6 Sol, Terra engaged more often (**65.00%**
+vs **41.25%**) but ultimately performed the specified unauthorized action **slightly less often** than GPT-6 Sol
+(**13.75%** vs **16.25%**)." Two predecessors, two verdicts from one table — quote both or name which.
+
+HealthBench is the same shape in the other direction and only reads fairly as a pair: **length-adjusted 55.1** vs
+**57.0** for GPT-5.6 Terra ("1.9 pp lower"), while **HealthBench Professional 62.7** vs **57.7** goes the other
+way. In the biosafety section every **Critical**-threshold eval is below its indicative threshold (AAV capsid
+0.5285 against 0.600, SHP2 R² 0.3696 against 0.60) — the *High* classification comes from a different eval
+(Multimodal Troubleshooting Virology), which is why a class and a threshold should never be quoted as one thing.
+
+**A metric defined in the document that repeats it.** Anthropic's S-1 spends a "select defined terms" section
+before the financials, and the definition is the news: "**closing the loop**" is "a development cycle in which
+successive versions of an AI model assist in building the next, with the goal of compounding capability gains over
+time"; "**compute multipliers**" are "algorithmic and methodological improvements in training and inference that
+increase the effective output of a given amount of compute." The operating numbers: **$6.6M** TTM revenue per
+employee (from **$1.4M** a year earlier), **$141.1B** aggregate capital raised as of 2026-06-30 with **$112.4B**
+cash and **$19.3B** short-term investments, and a customer ladder of **>11,900** at ≥$100k TTM, **>1,900** at ≥$1M,
+**~250** at ≥$10M. The one metric coverage repeats — **Run-Rate Revenue** — is the one the filing spends paragraphs
+limiting (trailing **28 days × 13** plus monthly subscriptions **× 12**; "has not been independently verified by
+third parties"; "has included, and we expect will continue to include, amounts from customers that we subsequently
+determine are using our models … in violation of our usage policy"; and the growth rate "will decline over time").
+The two largest numbers in the summary are **not revenue**: **$34.3B** (FY2025) and **$72.4B** (six months to
+2026-06-30) are the *change in fair value* of convertible notes, derivatives and SAFEs — marks on its own
+valuation, in two different periods.
+
+→ [[fact-check]] [[security]] [[harness-reliability]]
+
+Sources: [GPT-6.1 Terra — Deployment Safety Hub](https://deploymentsafety.openai.com/gpt-6-1-terra) ·
+[GPT-6.1 Terra model page](https://developers.openai.com/api/docs/models/gpt-6.1-terra) · [Anthropic PBC Form S-1](https://www.sec.gov/Archives/edgar/data/2130357/000162828026067168/anthropicpbc-sx1.htm)

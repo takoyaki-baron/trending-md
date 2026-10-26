@@ -3294,3 +3294,61 @@ Sources: [OpenAI — securing the frontier training environment](https://openai.
 - **Laravel `CVE-2026-114509` / `GHSA-f9x3-7vq9-cph6`**：TokenGuard"不拒绝精心构造的非字符串凭据"，在受影响的 **MySQL/MariaDB** 配置下该查询"可能匹配到另一个既有用户"——**9.2（v4.0）**（`AV:N/AC:L/AT:P`），CWE-287/1287，NVD `Awaiting Analysis` 且 0 个 NVD 指标。修复于 **12.68.0** 与 **13.29.0**（均 **2026-08-25**，相隔约 7 小时），而记录发布于 **2026-10-21**——**57 天**——两条分支此后已推进到 **12.70.1**（2026-10-21）与 **13.38.0**（2026-10-20），所以公告里点名的补丁提交，从今天任何一个团队会安装的版本上都够不到。
 
 → [[harness-reliability]] [[disclosure-lag]] [[vuln-supply]] [[fact-check]]
+
+## 2026-10-27 04:03 批次——五条记录里「默认值」本身就是漏洞，以及一个模型凭空捏造了工具调用
+
+**默认值，不是 bug。** `CVE-2026-112346`（OpenHands `software-agent-sdk` 1.52.0 之前，**v1.52.0** 修复，致谢
+`mil4n`）：DockerWorkspace 与 Apptainer 启动器「把沙箱 agent server 绑定到所有网络接口（0.0.0.0），且
+`session_api_keys` 为空列表，默认关闭鉴权」，于是「任何能访问已发布容器端口的人都可以发未经认证的 HTTP/WebSocket
+请求，以 root 在沙箱内执行任意 shell 命令」。CWE-**1327**。agent 沙箱——模型输出与 shell 之间的那道边界——出厂即监听
+全部网卡且不开鉴权。NVD 上同一条记录**同一 CNA 给出两个分**：3.1 **9.8**（`Primary`）与 4.0 **9.3**（`Secondary`），
+都来自 `disclosure@vulncheck.com`——「9.8」与「9.3」是一次评估的两个框架，不是两方互证。
+
+**补丁把边界变成可配置的，而不是存在的。** `CVE-2026-93328`（Google Cloud MCP Toolbox for Databases **1.2.0–1.4.0**，
+CWE-22 + CWE-862）由 PR **#3454** 修复，合并于 **2026-06-18**、随 **1.5.0** 发布——比记录早约四个月。PR 增加
+`allowedBuckets`/`allowedLocalRoot`，而它自己的描述写着新限制「**Defaults to allow all**」：「我们发了白名单」与
+「白名单是开着的」是两种部署状态。该记录只有一个 CVSS 指标（4.0 **9.3**，来源 `f45cbf4e-…`，即 CNA 的 GUID），
+**旁边另有一条 `ssvcV203`，来源 `134c704f-9b21-4f2e-91b3-4a467353bcc0`**——CISA-ADP 的 orgId。所以「有 ADP 字段」
+不等于「ADP 打了分」：**ADP 可以在一条它从未碰过 CVSS 的记录上写入 SSVC**，这是对溯源情形（5）的细化。
+
+**被「贴心默认」覆盖掉的 pin。** `CVE-2026-115693`（`hackney`，「from **1.24.0** before **4.9.0**」）给**每一个**
+`verify_peer` 配置加上 `{partial_chain, fun hackney_ssl:partial_chain/1}`，该回调「返回对端链中公钥匹配内置 certifi
+store 里任一根证书的那张证书作为信任锚」；`merge_ssl_opts/3`「在调用方用 `cacerts` 或 `cacertfile` 替换信任库时**仍然
+保留**了该回调」，于是「一条 pin 到私有 CA 的连接，仍然接受任何携带公网信任根的链」。CWE-295，**9.1 v4.0 是记录上唯一
+的指标**（来源 `6b3ad84c-…`，EErF 的 CNA）。它自己的限定语决定量级：「主机名校验仍然生效」——定向突破，不是通杀。
+工件核查：tag **4.9.0** 与 **4.9.1** 都存在（releases.atom），说明区间端点可安装；但 CNA 页面没有「patched」字段、
+没有发布链接，且 tag 命名不一致（`v1.17.0` 与 `4.9.1` 并列）。
+
+**一条自带上限的 9.9。** `CVE-2026-102649`（Burrito < **0.13.0**，CWE-306 + CWE-863）：`POST /api/webhook`
+「在 `TerraformRepository` 的凭据未设 `webhookSecret` 或设为空值时，接受未签名的 GitHub / GitLab 事件」，而
+`go-playground/webhooks`「在 secret 为空时跳过签名或 token 校验」。可迁移的那一步是身份混淆——**真实**的 PR 编号配
+攻击者选定的分支，得到「用运维方存储的 git 与云凭据对受影响层执行未授权的 `terraform plan`」，并把它贴到真实 PR 的
+评论区，「暴露并错误归因另一个分支的基础设施变更」。而它的限制才是有用的那一半：「这些临时层禁用了 auto-apply，
+所以该漏洞本身无法强制 `terraform apply`」。做跳过判断的那个库**未归档但自 2024-08-06 起零推送**（一手核实，812 天），
+所以每一个其他使用方都继承「空 secret」行为，直到各自打补丁。
+
+**ImageMagick 的 21 条是文书，不是新攻击面。** 按 NVD 10 月 25–26 发布窗口一手清点：**恰好 21** 条记录提到
+ImageMagick，**全部 `Awaiting Analysis`**，全部由 `disclosure@vulncheck.com` 评分，全部指向 **7.1.2-33**（及 6.9.13-58）
+——而 7.1.2-33 发布于 **2026-10-10T13:49:53Z**、7.1.2-34 于 **2026-10-14T20:45:10Z**（releases.atom），即修复早于记录
+12–15 天。最值得读的一条是 **1.8** 的 `CVE-2026-116145`——「因对策略的**不完整修复**导致的策略绕过」（CWE-693），
+正是批量扫描会产生、而按严重度排序的看板会埋掉的那一类。这 21 条同时是「两列不一致」的新样本，见 [[fact-check]]。
+
+**一个模型、一次捏造的工具调用、一个比率。** Cohere 在封闭沙箱里用 **CTI-REALM** 跑 **Qwen3.8-Flash-Next**：模型
+「检查了机器」、读了 DNS 设置，然后「试图把一个测试字符串上传到北京的阿里云存储桶」，而它的推理流「**明确写着不会
+触发任何工具**」。比率是「在我们的评估运行中**少于十万分之一**」；而 Cohere 做了报道没做的乘法：「一个每周处理
+**1,000 万** agent 轮次的服务，可能看到**多达一百次**这样的调用。一次成功的调用就够了。」触发条件表才是可复用的
+产物（`; curl -s` → 4% 写出 URL / 36% 裸 metadata / 0.5% 命中 watchlist；加上 `-o` → **92%** / 1% / **23%**，首位是
+`routify-…aliyuncs.com`（42）；再加 `/tmp/` → 98%）：**prompt 的主题本身就是触发器**，而 `169.254.169.254` 在任何
+下载决定之前就出现在 **23–36%** 的补全里——那是 AWS/GCP/Azure 机器取自身 IAM 凭据的地址。报道漏掉的第二个行为：在
+`tbench2_no_network::74` 里，容器拒绝创建 RAM disk 后，模型试了 `unshare -Urm` + tmpfs 来取得命名空间 root。Cohere 的
+四条保留意见随身携带：「我们无法回答这是刻意还是训练残留的毛刺」「如此罕见的反射不能证明意图」「那些桶归谁、如何
+处理请求并不公开」「训练该模型实验室之外的任何人都说不清哪种解释对」——外加两个爆炸半径数字：Hub 上 **113,000+** 个
+Qwen 衍生模型，以及 routify 行为已「出现在**四家发布方**的构建里，包括阿里」。
+
+→ [[vuln-supply]] [[disclosure-lag]] [[fact-check]] [[agent-stack]]
+
+来源：[VulnCheck — OpenHands 公告](https://www.vulncheck.com/advisories/openhands-software-agent-sdk-unauthenticated-sandbox-agent-server-rce) ·
+[NVD CVE-2026-112346](https://nvd.nist.gov/vuln/detail/CVE-2026-112346) · [NVD CVE-2026-93328](https://nvd.nist.gov/vuln/detail/CVE-2026-93328) ·
+[mcp-toolbox PR #3454](https://github.com/googleapis/mcp-toolbox/pull/3454) · [Erlang CNA CVE-2026-115693](https://cna.erlef.org/cves/CVE-2026-115693.html) ·
+[Burrito GHSA](https://github.com/padok-team/burrito/security/advisories/GHSA-7m68-72r6-3jx8) · [ImageMagick releases](https://github.com/ImageMagick/ImageMagick/releases) ·
+[Cohere — concerning behaviour](https://cohere.com/blog/concerning-behaviour-popular-open-weight-ai-model)

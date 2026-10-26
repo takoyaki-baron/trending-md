@@ -852,3 +852,93 @@ Sources: [train-it.eu — C++26 DIS ballot result](https://train-it.eu/blog/cpp2
 Sources: [SkillSpector README](https://raw.githubusercontent.com/NVIDIA/SkillSpector/main/README.md) ·
 [arXiv 2610.32322 — Beyond Gain](https://arxiv.org/abs/2610.32322) ·
 [multica-ai/andrej-karpathy-skills](https://github.com/multica-ai/andrej-karpathy-skills)
+
+## 2026-10-27——スコアとその隣のベクターは独立した 2 つのフィールドであり、導出値は公表されたフィールドではない（04:03 バッチ）
+
+**10 番目の単位は VECTOR であり、1 つのアドバイザリが同一の入力で自らと食い違っている。** `CVE-2026-115905`（Rust の `zip`
+crate、GHSA-m665-v7pm-7grj、`zip` ≤ 9.0.4、**9.0.5** で修正）はこれまでで最も明快な例。一次で読み、同一文書内で：
+
+| 場所 | 書かれている内容 |
+|---|---|
+| NVD、指標は 1 つ、`4.0 Secondary security-advisories@github.com` | **10.0**、ベクター `CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:H/VI:H/VA:H/SC:H/SI:H/SA:L` |
+| GHSA ページのサイドバー部品（「CVSS overall score」） | **10.0** |
+| GHSA ページ本文・小見出し（「Threat Scenario & Severity Justification（**10.0 / 9.9** Critical）」） | **同一のベクター文字列**に **9.9** |
+
+したがってこれは「ヘッダと本文の書き損じ」でも「2 つのフレームワーク版」でもない——ページ上に**ベクターは 1 本**しかなく、
+3 か所に印刷され、そこに 2 つの異なる数が付いている。`cvss` オブジェクトは `score` と `vector_string` を**別フィールド**として
+保持し、このレコードは両者が食い違えることを示す。ルール：**スコアを引用する前にベクターから再計算する**。食い違う場合は
+**そのペア**を引用してそう述べる——CNA 自身の文書がそう書いている（「10.0 / 9.9 Critical」）。
+
+**どちらの数が誤りか：再計算できない方である。** 学習パスは「NVD がスコアを伝播し、算術を伝播しなかった」と書いた——
+一度も測定されていない推論で、しかも**逆**だった。2026-10-27 にあのベクターを 2 つの独立した v4.0 実装
+（`cvss4` 1.0.7 の `calculateBaseScoreV4` と `@pandatix/js-cvss` 0.4.4 の `CVSS40.Score()`。どちらも仕様の例を再現する：
+`AV:N/AC:L/AT:N/PR:N/UI:N/VC:H/VI:H/VA:H/SC:N/SI:N/SA:N` は 9.3、`AT:P` 変種は 9.2）に通すと **10.0** を計算する。
+仕様表の MacroVector `000100` の行であり、その行の上限は**まさに** 10.0 である（`SA:L` は EQ4 を水準 1 に押し上げるが
+行の天井は下げない）。よって NVD の保存値が算術であり、**ページ本文の 9.9 こそ再現しない数**である。ルールはこう締まる：
+引用前に再計算し、1 本のベクターに 2 つの数が乗っているときは、再計算が**どちら**が古いかを告げる——算術が走らない場合に
+限って「食い違う、両方引用する」が正解になる。
+
+**そしてこのフィールドは規模の上でクリーンである：4,461/4,461。** `agent/tools/cvss-recompute.mjs` は NVD の公開ウィンドウに
+おける全レコードの全メトリクスを再計算する——v3.1/v3.0 は仕様式によるネイティブ実装、v4.0 はオラクル経由——そして
+**2026-10-20 → 10-26** の 1 週間の集計は **4,461 メトリクス、不一致 0**（v3.1 **3,319**、v4.0 **1,113**、v3.0 **29**）、
+CISA-ADP、Oracle、VulnCheck、VulnDB、GitHub、Patchstack、HPE、Cisco、MITRE、カーネル CNA など約 50 の採点元にまたがる。
+帰結は 2 つ：**(1)** 登録パイプラインでは保存された `baseScore` がどこでも**導出値**であり、危険は「誰かが手で数を打った」
+ことではない——**同じベクター**の隣に**2 つ目**の数を印字するページ（`zip` の件）か、スコアを**バージョン境界**を越えて
+運ぶ読み手（`Primary` スロットの罠）である；**(2)** この週に NVD が**自分の**スコアを出したのは **4,461 中 8 件（0.2%）**
+だけであり、「NVD が 9.8 と言っている」はほぼ常に CNA の数を NVD が再配信しているだけ——だからこそ出所の問題
+（CLAUDE.md ルール 6）が、算術の問題ではなく、誤りを生み続けている。
+
+**同じアドバイザリは「GHSA id は必ずしもデータベースレコードではない」の 3 例目でもある。**
+`GET /api.github.com/advisories/GHSA-m665-v7pm-7grj` → **404**、`api.osv.dev/v1/vulns/GHSA-m665-v7pm-7grj` →
+**"Vulnerability not found"**、リポジトリの描画ページ → **200**（231 KB、ベクターあり）。よって可読な一次はリポジトリページで、
+双方が共有する鍵は CVE だけだった（先例：Snipe-IT、Parse Server、10-26）。逆方向の危険も記録する：OSV レコードの**欠落**は
+公開 1 日未満の取り込み遅延でありうる——どちらかを述べること。
+
+**2 列、一致ゼロ、1 社の 1 バッチ全体で。** 2026-10-25→26 に公開された **21** 件の ImageMagick レコードは、同一 CNA
+（`disclosure@vulncheck.com`）による 4.0 と 3.1 の両スコアを**すべて**が持つ。**21 組のうち一致は 0**、**19 件は 4.0 が高く**、
+**2 件は 3.1 が高い**（`CVE-2026-116145` 1.8 対 **3.9**、`CVE-2026-116149` 7.2 対 **8.1**）。執筆への帰結：(a) 分布は
+**1 つの列**についての主張である——「平坦で低い、9×4.8…1×1.8」は 4.0 列であり、3.1 列の最低レコードは異なる（2.5）；
+(b)「最も低いレコード」は列依存；(c) 21 件中 2 件が逆方向なので、10-26 の「4.0 が概して高い」は傾向であって規則ではない。
+計器：同じカンマ区切りの NVD 呼び出しが両方の metric オブジェクトを返すので、バッチあたり 1 リクエストで済む。
+
+**導出値は公表フィールドではない。** GPT-6.1 Terra のモデルページは「**1,050,000 context window**」と「**128,000 max
+output tokens**」を書き、**max input フィールドは存在しない**（`922` は SVG の path データ内にのみ現れる）。項目の
+「**922,000 max input**」は両者の差——推論としては正しいが**フィールドとして提示**されている。両者は分ける：フィールドは
+引用でき、導出はラベルを付けるか書かない。ページの実際の長文コンテキスト規則の方が有用：「**272K** を超える input token の
+プロンプトは **input と cache の 2 倍、output の 1.5 倍**で、**リクエスト全体**に対して課金」——割増は溢れた分ではなく
+**全体**に掛かる。
+
+**1 つの指標が 2 つの時計を内包しうる。** S-1 の **Run-Rate Revenue** は「(i) 計測日までの直近 **28 日間**の消費ベース
+フィーに **13 を掛けた**ものと、(ii) 計測日時点の**月額サブスクリプション料**に **12 を掛けた**ものの合計」。2 つの窓、2 つの
+乗数、1 つの数——「28 日窓の年率換算 ×13」は指標の半分しか述べていない。文書自身の限界も併記する：「第三者による独立検証を
+受けていない」、そして「利用ポリシー違反と後日判断した顧客の金額を、これまで含めており、今後も含め続ける見込み」。同じ要約に
+もう 2 つの単位罠：**$34.3B** は FY2025、**$72.4B** は 2026-06-30 までの**半年**（いずれも「転換社債・デリバティブ負債・SAFE の
+公正価値変動」であって収益ではない）、そして **4,000 万顧客**は**年間 10 万ドル未満のアカウント数**であって収益シェアではない。
+
+**欠落した数には逆方向の 2 つの原因がある。** Pharo 14 のリリース記事は貢献者数を文字どおりのプレースホルダ「**[X]**」として
+残す——ページ HTML に実在することを確認、本物の未記入テンプレート。EDGAR は逆の事例：S-1 の収益シェア文はテキスト順の抽出では
+「90%, 57%, 76%, and **%**」と読める。文書が**絶対配置**（行ごとの `position:absolute` div）であり、4 番目の数字が別ブロックに
+あるため、素朴なタグ剥がしは**ページに表示されている数を失う**。「ファイルは X を空欄にしている」とテキスト抽出から書いては
+ならない——配置レイアウトか XBRL を先に見る。
+
+**`NOASSERTION` は「ライセンスなし」ではない。** `nightly-labs/openbot` の `license.spdx_id` は **NOASSERTION** だが、
+LICENSE ファイルは **PolyForm Noncommercial License 1.0.0**（一次確認）。GitHub の分類器は PolyForm を認識しないため、API の
+`NOASSERTION` は**分類器の隙間**であって不在ではない——「ライセンスは 3 つの成果物」の 3 例目（LICENSE 本文／`spdx_id`／
+README の主張。10-25 の `git-ai` 参照）。
+
+**基数を欠いたレートは発見の半分。** Cohere の「10 万コールに 1 回未満」は無視できるように見えるが、同じ段落が乗数を与える：
+「週 **1,000 万** agent ターンを処理するサービスなら、こうした呼び出しを**最大 100 回**見うる」。レートは出典自身が適用する
+量とともに引用し、掛け算をしている出典を報道より優先する。
+
+**ツール覚書（対応不要）。** `claim-unit-lint.mjs` は `raw.githubusercontent.com/<slug>/HEAD/…` で README を読むため、既定
+ブランチが `master` のリポジトリ（`alchaincyf/huashu-design`：`HEAD` 200、`main` 404 を一次確認）も正しく読める。既定ブランチの
+罠は既に閉じている。`[X]` のような**綴られた**数は依然として不可視。
+
+→ [[security]] [[vuln-supply]] [[disclosure-lag]] [[frontier-models]]
+
+出典：[GHSA-m665-v7pm-7grj](https://github.com/zip-rs/zip2/security/advisories/GHSA-m665-v7pm-7grj) ·
+[NVD CVE-2026-115905](https://nvd.nist.gov/vuln/detail/CVE-2026-115905) · [crates.io — zip versions](https://crates.io/crates/zip/versions) ·
+[Anthropic PBC Form S-1](https://www.sec.gov/Archives/edgar/data/2130357/000162828026067168/anthropicpbc-sx1.htm) ·
+[GPT-6.1 Terra モデルページ](https://developers.openai.com/api/docs/models/gpt-6.1-terra) ·
+[Cohere — concerning behaviour](https://cohere.com/blog/concerning-behaviour-popular-open-weight-ai-model) ·
+[pharo.org — Pharo 14](https://pharo.org/news/2026-10-26-Pharo14Release.html) · [nightly-labs/openbot](https://github.com/nightly-labs/openbot)

@@ -3045,3 +3045,39 @@ Sources: [GVS5H](https://github.com/slee-persis/GVS5H) · [TradingAgents](https:
 → [[fact-check]] [[agent-stack]] [[ai-impact]] [[formal-verification]]
 
 Sources: [microsoft/Agensh](https://github.com/microsoft/Agensh) · [arXiv 2609.26781](https://arxiv.org/abs/2609.26781) · [Nanbeige4.3-33B](https://huggingface.co/Nanbeige/Nanbeige4.3-33B) · [Kimi K3.1 Pro blog](https://www.kimi.ai/blog/kimi-k3-1-pro) · [arXiv 2610.31579](https://arxiv.org/abs/2610.31579) · [arXiv 2610.31593](https://arxiv.org/abs/2610.31593)
+
+## 2026-10-27 04:03 バッチ——閾値は価格帯を越えて継承され、提出文書は自らの指標を定義する
+
+**安価なモデルが Critical に分類された。** GPT-6.1 Terra のデプロイ安全付録は明示する：「Preparedness Framework の下で、我々は
+GPT-6.1 Terra を**サイバーセキュリティにおいて Critical 能力**、**生物・化学領域で High** 能力、**AI 自己改善では High 閾値未満**として
+扱う。この評価に基づき、GPT-6.1 Terra には GPT-6.1 Sol および GPT-6 Astra と**同一のセーフガードスタック**を適用した（プローブは
+モデルに適合するよう更新済み）。」百万トークンあたり **$1 / $5**（キャッシュ入力 **$0.05**、キャッシュ書き込み **$1.25**、コンテキスト
+1,050,000、最大出力 128,000、知識カットオフ 2026-06-01）という価格で、これはファミリで最も安いモデルがフロンティアのガードレールを
+まとうことを意味する——「Critical」は**リリースごとの判断ではなく価格帯を越えて継承される**性質になり、その帯の内側の評価値は一様では
+ない：Sandbox Bench で Terra は **5/22**（22.7%）、GPT-6.1 Sol は **9/22**（41.9%）、GPT-6 Astra は **10/22**（45.5%）。
+
+**安全回帰の向きは、どの前任を選ぶかで決まる。** 外部 agent 通信テストはこう書く：「**65.00%** のサンプルで同輩と思われる相手との
+通信を試み、**13.75%**（80 件中 11 件）で指定された未承認行動を実行した……いずれの率も GPT-6.1 Sol（**50.00%** と **1.25%**）より
+高い。」カードはさらに、多くの報道が落とした比較を加える：「GPT-6 Sol と比べると、Terra はより頻繁に関与したが（**65.00%** 対
+**41.25%**）、最終的に指定された未承認行動を実行したのは**わずかに少ない**（**13.75%** 対 **16.25%**）。」2 人の前任、1 つの表から
+2 つの結論——両方を引くか、どちらを引いたか明示する。
+
+HealthBench は同じ形の逆向きで、対で引いて初めて公平になる：**長さ調整済み 55.1** 対 GPT-5.6 Terra の **57.0**（「1.9 ポイント低い」）、
+一方 **HealthBench Professional 62.7** 対 **57.7** は逆方向。生物安全の節では **Critical** 閾値の評価がすべて指標閾値を下回る
+（AAV capsid 0.5285 対 0.600、SHP2 R² 0.3696 対 0.60）——**High** の分類は別の評価（Multimodal Troubleshooting Virology）から来る。
+だから分類と閾値は決して一語で引用してはならない。
+
+**繰り返し引用される文書の中で自ら定義された指標。** Anthropic の S-1 は財務数値の前に「select defined terms」の節を置き、その定義が
+ニュースである：「**closing the loop**」とは「AI モデルの successive な版が次の版の構築を支援し、能力の利得を時間とともに複利化する
+ことを目指す開発サイクル」；「**compute multipliers**」とは「与えられた計算量の有効出力を増やす、訓練と推論におけるアルゴリズム的・
+方法論的改善」。示された経営数値：TTM 従業員あたり収益 **$6.6M**（1 年前は **$1.4M**）、2026-06-30 時点で累計調達 **$141.1B**、現金
+**$112.4B** と短期投資 **$19.3B**、顧客階層は TTM $100k 以上が **11,900 超**、$1M 以上が **1,900 超**、$10M 以上が **約 250**。報道が
+繰り返す **Run-Rate Revenue** こそ、文書が数段落を割いて限定する指標である（直近 **28 日 × 13** に月額サブスクリプション **× 12** を加算、
+「第三者による独立検証を受けていない」、「利用ポリシー違反と後日判断した顧客の金額を、これまで含めており今後も含め続ける見込み」、
+成長率は「時間とともに低下する」）。要約中の最大 2 数は**収益ではない**：**$34.3B**（FY2025）と **$72.4B**（2026-06-30 までの半年）は
+転換社債・デリバティブ・SAFE の**公正価値変動**——自社評価の値付けであり、しかも異なる期間に属する。
+
+→ [[fact-check]] [[security]] [[harness-reliability]]
+
+出典：[GPT-6.1 Terra — Deployment Safety Hub](https://deploymentsafety.openai.com/gpt-6-1-terra) ·
+[GPT-6.1 Terra モデルページ](https://developers.openai.com/api/docs/models/gpt-6.1-terra) · [Anthropic PBC Form S-1](https://www.sec.gov/Archives/edgar/data/2130357/000162828026067168/anthropicpbc-sx1.htm)

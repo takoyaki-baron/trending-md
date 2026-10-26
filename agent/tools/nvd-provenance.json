@@ -1,965 +1,1000 @@
 {
-  "_note": "Per-CVE NVD score-provenance watch (agent/tools/nvd-provenance.mjs). Filed 2026-10-14 after one feed batch carried five CNA-assigned high scores whose NVD records were all still unanalyzed. The event worth catching is a record flipping out of its CNA-only state: vulnStatus changing, an `nvd@nist.gov` metric appearing beside (or replacing) the vendor's, or a KEV add. Keyword search (disclosure-watch's NVD channel) cannot see any of those — the record already exists. Verified live at seed time, 2026-10-14 12:4x UTC+8.",
-  "watch": [
-    {
-      "id": "CVE-2026-48382",
-      "why": "Adobe Experience Manager 10.0, Primary psirt@adobe.com, status Received",
-      "seeded": "2026-10-14 [Received] 3.1 Primary/psirt@adobe.com 10.0, CWE-863, published 10-13"
-    },
-    {
-      "id": "CVE-2026-103849",
-      "why": "Adobe Commerce 10.0, Primary psirt@adobe.com, status Received",
-      "seeded": "2026-10-14 [Received] 3.1 Primary/psirt@adobe.com 10.0, CWE-1336, published 10-13"
-    },
-    {
-      "id": "CVE-2026-89111",
-      "why": "SAP Cloud SDK for Python OAuth2 SSRF 10.0 — Secondary cna@sap.com, status Received",
-      "seeded": "2026-10-14 [Received] 3.1 Secondary/cna@sap.com 10.0, CWE-918, published 10-13"
-    },
-    {
-      "id": "CVE-2026-39919",
-      "why": "Ghostscript JPEG2000 heap overflow 9.8/9.3 — both Secondary disclosure@vulncheck.com, Awaiting Analysis a month on (the build-specific-exploitation item)",
-      "seeded": "2026-10-14 [Awaiting Analysis] 4.0 Secondary/disclosure@vulncheck.com 9.3, 3.1 Secondary/disclosure@vulncheck.com 9.8, CWE-122, published 09-15"
-    },
-    {
-      "id": "CVE-2026-63353",
-      "why": "Siemens SIMATIC S7-1500 stored XSS 9.6, Primary productcert@siemens.com, no fix available",
-      "seeded": "2026-10-14 [Received] 3.1 Primary/productcert@siemens.com 9.6, 4.0 Secondary/productcert@siemens.com 9.4, CWE-79, published 10-13"
-    },
-    {
-      "id": "CVE-2026-96951",
-      "why": "Windows Shell command injection 8.8, KEV'd 10-13, Secondary secure@microsoft.com — the only KEV entry in the set",
-      "seeded": "2026-10-14 [Undergoing Analysis] 3.1 Secondary/secure@microsoft.com 8.8, CWE-77, KEV 2026-10-13, published 10-13"
-    },
-    {
-      "id": "CVE-2026-102764",
-      "why": "BeyondTrust PAM auth bypass 9.8-NVD/9.3-CNA, KEV'd one day post-publication (due 10-19) — vendor trust center lists NO advisory naming it; the advisory would land here as a LASTMOD/references move first",
-      "seeded": "2026-10-17 [Analyzed] 3.1 Primary/nvd@nist.gov 9.8, 4.0 Secondary/CNA 9.3, CWE-290, KEV 2026-10-16, published 10-15"
-    },
-    {
-      "id": "CVE-2025-61624",
-      "why": "Fortinet path traversal 6.5-NVD/6.0-CNA, published April, KEV'd ten months on (due 10-19) — watch for patch-state/reference movement",
-      "seeded": "2026-10-17 [Analyzed] 3.1 Primary/nvd@nist.gov 6.5, 3.1 Secondary/psirt@fortinet.com 6.0, CWE-22, KEV 2026-10-16, published 2026-04-14"
-    },
-    {
-      "id": "CVE-2026-77931",
-      "why": "MoviePilot agent-tool prompt injection → ExecuteCommandTool with confirm_dangerous=true (model-controlled boolean as the whole boundary), VulnCheck CNA, NVD Deferred — agent-exploitable class, KEV plausible; watch Deferred→Analyzed + NVD metric",
-      "seeded": "2026-10-17 [Deferred] 3.1 Primary/disclosure@vulncheck.com 8.8, 4.0 Secondary/disclosure@vulncheck.com 8.7, published 10-15"
-    },
-    {
-      "id": "CVE-2026-110908",
-      "why": "pfSense FRR escapeshellarg() into sed expression → root, MITRE CNA 8.8, internet-facing firewall — KEV plausible; watch Awaiting Analysis→Analyzed (endorsement-vs-own-score case recurring)",
-      "seeded": "2026-10-17 [Awaiting Analysis] 3.1 Secondary/cve@mitre.org 8.8, CWE-78, published 10-15"
-    },
-    {
-      "id": "CVE-2024-47575",
-      "why": "FortiJump — unauth RCE on FortiManager FMG-Access (TCP 541), initial access in Unit 42's PEERSTITCH chain (config exfil covering 500+ managed FortiGates); KEV since 2024-10-23 — watch for reference/state movement on the PEERSTITCH follow-up",
-      "seeded": "2026-10-17 [Analyzed] 3.1 Primary/nvd@nist.gov 9.8, 3.1 Secondary/psirt@fortinet.com 9.8, CWE-306, KEV 2024-10-23, published 2024-10-23"
-    },
-    {
-      "id": "CVE-2024-26009",
-      "why": "Fortinet management impersonation candidate in Unit 42's PEERSTITCH report (medium confidence: this vs reused trust material) — watch for status/state movement",
-      "seeded": "2026-10-17 [Modified] 3.1 Primary/nvd@nist.gov 8.1, 3.1 Secondary/psirt@fortinet.com 8.1, CWE-288, published 2025-08-12"
-    },
-    {
-      "id": "CVE-2026-111444",
-      "why": "Wheels (CFML framework) SQL injection, CVSS 9.8 CNA-assigned by MITRE; NVD record published but Deferred (2026-10-17). Watch for: NVD analysis flip, an nvd@nist.gov metric, KEV add. Feed: en/feed/2026-10-18.md item 15.",
-      "seeded": "2026-10-18 [Deferred] 3.1 Secondary/cve@mitre.org 9.8, CWE-89, published 2026-10-16; fix shipped v4.2.0 10-11, six days before the record"
-    },
-    {
-      "id": "CVE-2026-111911",
-      "why": "phpMyFAQ WebAuthn credential injection → auth bypass (password+TOTP), third-party-scored 9.8 by VulnCheck — no CNA score, NVD record Deferred (2026-10-18). Watch for: NVD analysis flip, an nvd@nist.gov metric, KEV add. Feed: en/feed/2026-10-18.md item 24.",
-      "seeded": "2026-10-18 [Deferred] 3.1 Primary/disclosure@vulncheck.com 9.8, 4.0 Secondary/disclosure@vulncheck.com 9.3, CWE-287, published 2026-10-17; fixed in 4.1.9, GHSA-g6cq-6rqg-6c9p"
-    },
-    {
-      "id": "CVE-2026-111923",
-      "why": "Fleet (device management) unbounded recursion in Apple MDM enrollment plist parsing — ~150-byte binary plist crashes the server; VulnCheck-assigned, NVD Received. Fixed 4.89.0. Watch for: NVD analysis flip, an nvd@nist.gov metric, KEV add. Feed: en/feed/2026-10-18.md item 37.",
-      "seeded": "2026-10-18 [Received] 3.1 Primary/disclosure@vulncheck.com 7.5, 4.0 Secondary/disclosure@vulncheck.com 8.7, CWE-674, published 2026-10-17"
-    },
-    {
-      "id": "CVE-2026-111924",
-      "why": "Fleet gzip memory-exhaustion DoS on unauthenticated endpoints; VulnCheck-assigned, NVD Received. Fixed 4.83.0. Watch for: NVD analysis flip, an nvd@nist.gov metric, KEV add. Feed: en/feed/2026-10-18.md item 37.",
-      "seeded": "2026-10-18 [Received] 3.1 Primary/disclosure@vulncheck.com 7.5, 4.0 Secondary/disclosure@vulncheck.com 8.7, CWE-409, published 2026-10-17"
-    },
-    {
-      "id": "CVE-2026-111927",
-      "why": "Coder GetWorkspaceProxyByHostname prefix-match hostname trust → application_connect API key capture via crafted auth-redirect; VulnCheck-assigned, NVD Received. Fixed 2.29.20/2.33.12/2.34.8/2.35.4. Watch for: NVD analysis flip, an nvd@nist.gov metric, KEV add. Feed: en/feed/2026-10-18.md item 37.",
-      "seeded": "2026-10-18 [Received] 3.1 Primary/disclosure@vulncheck.com 7.7, 4.0 Secondary/disclosure@vulncheck.com 8.7, CWE-522, published 2026-10-17"
-    },
-    {
-      "id": "CVE-2026-111880",
-      "why": "FreeRDP heap OOB write in server NTLM hash-callback path (backward MIC offset writes 16 zero bytes past allocation); VulnCheck-assigned, NVD Received. Fixed 3.32.0. Watch for: NVD analysis flip, an nvd@nist.gov metric, KEV add. Feed: en/feed/2026-10-18.md item 37.",
-      "seeded": "2026-10-18 [Received] 3.1 Primary/disclosure@vulncheck.com 7.4, 4.0 Secondary/disclosure@vulncheck.com 8.3, CWE-787, published 2026-10-17"
-    },
-    {
-      "id": "CVE-2026-112006",
-      "why": "OpenTelemetry Python OTLP http exporter, empty cert env disables TLS verification; Primary disclosure@vulncheck.com 6.5 (3.1), Secondary 8.3 (4.0), status Received — watch for NVD analysis or score",
-      "seeded": "2026-10-19 [Received] 3.1 Primary/disclosure@vulncheck.com 6.5, 4.0 Secondary 8.3, CWE-295, published 10-18"
-    },
-    {
-      "id": "CVE-2026-111998",
-      "why": "Vanus hardcoded admin token, unauth cluster-admin via gateway; Primary disclosure@vulncheck.com 9.8 (3.1); repo vanus-labs/vanus dormant since 2024-03 — watch for NVD analysis",
-      "seeded": "2026-10-19 [Received] 3.1 Primary/disclosure@vulncheck.com 9.8, 4.0 Secondary 9.3, CWE-1392, published 10-18"
-    },
-    {
-      "id": "CVE-2026-112005",
-      "why": "WhoDB DuckDB filesystem escape via query editor; Primary disclosure@vulncheck.com 7.7 (3.1), Secondary 9.2 (4.0), fixed 0.135.0 — watch for NVD analysis",
-      "seeded": "2026-10-19 [Received] 3.1 Primary/disclosure@vulncheck.com 7.7, 4.0 Secondary 9.2, published 10-18"
-    },
-    {
-      "id": "CVE-2026-112051",
-      "why": "Xinference Windows path traversal via model_name; Primary disclosure@vulncheck.com 6.5 (3.1), Secondary 8.3 (4.0) — watch for NVD analysis",
-      "seeded": "2026-10-19 [Received] 3.1 Primary/disclosure@vulncheck.com 6.5, 4.0 Secondary 8.3, CWE-22, published 10-18"
-    },
-    {
-      "id": "CVE-2026-112021",
-      "why": "snac2 heap overflow via \\u0000 in ActivityPub JSON parsed pre-signature-check; Primary disclosure@vulncheck.com 7.5 (3.1), Secondary 8.7 (4.0), fixed 2.93 — watch for NVD analysis",
-      "seeded": "2026-10-19 [Received] 3.1 Primary/disclosure@vulncheck.com 7.5, 4.0 Secondary 8.7, published 10-18"
-    },
-    {
-      "id": "CVE-2026-103091",
-      "why": "Google Agent Mesh (SAM) MCP-proxy self-enroll (thesis 2 / [[security]], 10-19 12:03 batch): misconfigured OIDC lets a remote attacker self-enroll and invoke tools across all connected backends. Google-CNA-scored 4.0 Secondary 9.3 (cve-coordination@google.com), NVD Received — watch Received→Analyzed, an nvd@nist.gov metric, KEV (agent-infrastructure class, same genre as MoviePilot)",
-      "seeded": "2026-10-19 [Received] 4.0 Secondary/cve-coordination@google.com 9.3, CWE-1188,200,306,862,863, published 10-19, not analyzed"
-    },
-    {
-      "id": "CVE-2026-102503",
-      "why": "Google Agent Mesh (SAM) /libp2p-http ingress (thesis 2 / [[security]], 10-19 12:03 batch): routes around the auth the MCP handler enforces, reaching stdio-backed servers unauthenticated — policy enforced in one protocol handler isn't enforcement. Same seed state as its sibling — watch the same movements",
-      "seeded": "2026-10-19 [Received] 4.0 Secondary/cve-coordination@google.com 9.3, CWE-306,862, published 10-19, not analyzed"
-    },
-    {
-      "id": "CVE-2022-0185",
-      "why": "trailing-window lint (10-19 21:01 act): cited 2026-10-15; A heap-based buffer overflow flaw was found in the way the legacy_parse_param function in the Filesystem…",
-      "seeded": "2026-10-19 [Analyzed] 3.1 Primary/nvd@nist.gov 8.4, 3.1 Secondary/134c704f-9b21-4f2e-91b3-4a467353bcc0 8.4, 2.0 Primary/nvd@nist.gov 7.2, CWE-190/CWE-191, KEV 2024-08-21, published 2022-02-11"
-    },
-    {
-      "id": "CVE-2025-71429",
-      "why": "trailing-window lint (10-19 21:01 act): cited 2026-10-13; GPT-SoVITS through 20250606v2pro contains an OS command injection vulnerability in tools/uvr5/vr.py that…",
-      "seeded": "2026-10-19 [Deferred] 4.0 Secondary/disclosure@vulncheck.com 9.3, 3.1 Secondary/disclosure@vulncheck.com 9.8, CWE-78, published 2026-10-12"
-    },
-    {
-      "id": "CVE-2026-0322",
-      "why": "trailing-window lint (10-19 21:01 act): cited 2026-10-15; A remote code execution (RCE) vulnerability in the management interface of Palo Alto Networks PAN-OS®…",
-      "seeded": "2026-10-19 [Analyzed] 4.0 Secondary/psirt@paloaltonetworks.com 8.6, 3.1 Primary/nvd@nist.gov 7.2, CWE-94, KEV 2026-10-14, published 2026-10-14"
-    },
-    {
-      "id": "CVE-2026-103848",
-      "why": "trailing-window lint (10-19 21:01 act): cited 2026-10-14; Adobe Experience Manager is affected by an Improper Neutralization of Special Elements used in an OS Command…",
-      "seeded": "2026-10-19 [Awaiting Analysis] 3.1 Secondary/psirt@adobe.com 9.9, CWE-78, published 2026-10-13"
-    },
-    {
-      "id": "CVE-2026-104935",
-      "why": "trailing-window lint (10-19 21:01 act): cited 2026-10-14; Authentication bypass by spoofing in ICS before version 25.1.3.0 allows a remote unauthenticated attacker to…",
-      "seeded": "2026-10-19 [Analyzed] 3.1 Secondary/3c1d8aa1-5a33-4ea4-8992-aadd6440af75 8.6, CWE-290, KEV 2026-10-13, published 2026-10-13"
-    },
-    {
-      "id": "CVE-2026-105445",
-      "why": "trailing-window lint (10-19 21:01 act): cited 2026-10-14; An Incorrect Privilege Assignment vulnerability in Docker Hub's account-to-organization conversion feature…",
-      "seeded": "2026-10-19 [Awaiting Analysis] 4.0 Secondary/security@docker.com 9.4, CWE-266, published 2026-10-13"
-    },
-    {
-      "id": "CVE-2026-105899",
-      "why": "trailing-window lint (10-19 21:01 act): cited 2026-10-14; ColdFusion is affected by an Unrestricted Upload of File with Dangerous Type vulnerability that could result…",
-      "seeded": "2026-10-19 [Undergoing Analysis] 3.1 Secondary/psirt@adobe.com 10, CWE-434, published 2026-10-13"
-    },
-    {
-      "id": "CVE-2026-106622",
-      "why": "trailing-window lint (10-19 21:01 act): cited 2026-10-14; ColdFusion is affected by a Server-Side Request Forgery (SSRF) vulnerability that could result in privilege…",
-      "seeded": "2026-10-19 [Analyzed] 3.1 Secondary/psirt@adobe.com 10, CWE-918, published 2026-10-13"
-    },
-    {
-      "id": "CVE-2026-108398",
-      "why": "trailing-window lint (10-19 21:01 act): cited 2026-10-14; Untrusted search path in .NET Framework allows an authorized attacker to bypass a security feature…",
-      "seeded": "2026-10-19 [Awaiting Analysis] 3.1 Secondary/secure@microsoft.com 8.8, CWE-426, published 2026-10-13"
-    },
-    {
-      "id": "CVE-2026-108753",
-      "why": "trailing-window lint (10-19 21:01 act): cited 2026-10-13; Agnaistic agnai through 1.0.555 contains a hard-coded credentials vulnerability in…",
-      "seeded": "2026-10-19 [Deferred] 4.0 Secondary/disclosure@vulncheck.com 9.3, 3.1 Secondary/disclosure@vulncheck.com 9.4, CWE-798, published 2026-10-11"
-    },
-    {
-      "id": "CVE-2026-108860",
-      "why": "trailing-window lint (10-19 21:01 act): cited 2026-10-13; BotSharp through 5.2.0 contains an authentication bypass vulnerability that allows unauthenticated remote…",
-      "seeded": "2026-10-19 [Deferred] 4.0 Secondary/disclosure@vulncheck.com 9.3, 3.1 Secondary/disclosure@vulncheck.com 9.1, CWE-321, published 2026-10-11"
-    },
-    {
-      "id": "CVE-2026-109705",
-      "why": "trailing-window lint (10-19 21:01 act): cited 2026-10-14; Sandbox escape, site isolation issue due to incorrect boundary conditions, use-after-free in the Networking…",
-      "seeded": "2026-10-19 [Deferred] 3.1 Secondary/134c704f-9b21-4f2e-91b3-4a467353bcc0 9.6, CWE-416, published 2026-10-13"
-    },
-    {
-      "id": "CVE-2026-110385",
-      "why": "trailing-window lint (10-19 21:01 act): cited 2026-10-15; A remote code execution vulnerability in ONLYOFFICE Document Server versions before10.0.0 allows an…",
-      "seeded": "2026-10-19 [Awaiting Analysis] 4.0 Secondary/cve@mitre.org 8.7, CWE-73, published 2026-10-14"
-    },
-    {
-      "id": "CVE-2026-21589",
-      "why": "trailing-window lint (10-19 21:01 act): cited 2026-10-16; Rejected reason: This CVE's publication may have been a false positive or a mistake. As a result, we have…",
-      "seeded": "2026-10-19 [Rejected] no CVSS published, KEV 2026-10-15, published 2026-10-05"
-    },
-    {
-      "id": "CVE-2026-48383",
-      "why": "trailing-window lint (10-19 21:01 act): cited 2026-10-14; Adobe Experience Manager is affected by an Incorrect Authorization vulnerability that could result in…",
-      "seeded": "2026-10-19 [Undergoing Analysis] 3.1 Secondary/psirt@adobe.com 10, CWE-863, published 2026-10-13"
-    },
-    {
-      "id": "CVE-2026-63350",
-      "why": "trailing-window lint (10-19 21:01 act): cited 2026-10-14; Affected devices do not properly restrict executable content contained in imported trace files. This could…",
-      "seeded": "2026-10-19 [Awaiting Analysis] 4.0 Secondary/productcert@siemens.com 9.4, 3.1 Secondary/productcert@siemens.com 9.6, CWE-95, published 2026-10-13"
-    },
-    {
-      "id": "CVE-2026-63354",
-      "why": "trailing-window lint (10-19 21:01 act): cited 2026-10-14; Affected devices do not properly validate and sanitize visual marker data contained in imported CSV trace…",
-      "seeded": "2026-10-19 [Awaiting Analysis] 4.0 Secondary/productcert@siemens.com 9.4, 3.1 Secondary/productcert@siemens.com 9.6, CWE-79, published 2026-10-13"
-    },
-    {
-      "id": "CVE-2026-66086",
-      "why": "trailing-window lint (10-19 21:01 act): cited 2026-10-13; In the modem OTA stack, there is a possible stack-based buffer overflow due to improper validation of…",
-      "seeded": "2026-10-19 [Awaiting Analysis] 3.1 Secondary/security@unisoc.com 9.8, CWE-121, published 2026-10-12"
-    },
-    {
-      "id": "CVE-2026-76519",
-      "why": "trailing-window lint (10-19 21:01 act): cited 2026-10-15; A vulnerability in the Advanced Malware Protection (AMP) feature of Cisco Secure Email Gateway could allow an…",
-      "seeded": "2026-10-19 [Analyzed] 3.1 Secondary/psirt@cisco.com 9.8, CWE-23, KEV 2026-10-14, published 2026-10-14"
-    },
-    {
-      "id": "CVE-2026-87689",
-      "why": "trailing-window lint (10-19 21:01 act): cited 2026-10-14; The Metasploit Framework Web Service REST API (msf-ws) exposes the credential store through…",
-      "seeded": "2026-10-19 [Awaiting Analysis] 3.1 Secondary/cve@rapid7.com 9.8, CWE-306, published 2026-10-13"
-    },
-    {
-      "id": "CVE-2026-89108",
-      "why": "trailing-window lint (10-19 21:01 act): cited 2026-10-14; SAP Manufacturing Integration and Intelligence does not sufficiently enforce authorization boundaries within…",
-      "seeded": "2026-10-19 [Awaiting Analysis] 3.1 Secondary/cna@sap.com 9.1, CWE-862, published 2026-10-13"
-    },
-    {
-      "id": "CVE-2026-89110",
-      "why": "trailing-window lint (10-19 21:01 act): cited 2026-10-14; SAP NetWeaver Visual Composer does not perform sufficient authorization checks in certain portal…",
-      "seeded": "2026-10-19 [Awaiting Analysis] 3.1 Secondary/cna@sap.com 9.9, CWE-749, published 2026-10-13"
-    },
-    {
-      "id": "CVE-2026-90532",
-      "why": "trailing-window lint (10-19 21:01 act): cited 2026-10-14; Adobe Experience Manager is affected by an Incorrect Authorization vulnerability that could result in…",
-      "seeded": "2026-10-19 [Undergoing Analysis] 3.1 Secondary/psirt@adobe.com 10, CWE-863, published 2026-10-13"
-    },
-    {
-      "id": "CVE-2026-92392",
-      "why": "trailing-window lint (10-19 21:01 act): cited 2026-10-15; During an upload, curl mishandles HTTP/2 `RST_STREAM` received from the server (with reason…",
-      "seeded": "2026-10-19 [Awaiting Analysis] 3.1 Secondary/134c704f-9b21-4f2e-91b3-4a467353bcc0 8.1, CWE-416, published 2026-10-14"
-    },
-    {
-      "id": "CVE-2026-92707",
-      "why": "trailing-window lint (10-19 21:01 act): cited 2026-10-14; MessagePack for C# is a MessagePack serializer for C#. Prior to 2.5.303 and 3.1.9, deserializing…",
-      "seeded": "2026-10-19 [Awaiting Analysis] 3.1 Secondary/security-advisories@github.com 5.3, CWE-1325, published 2026-10-15"
-    },
-    {
-      "id": "CVE-2026-97229",
-      "why": "trailing-window lint (10-19 21:01 act): cited 2026-10-14; GitLab has remediated an issue in GitLab CE/EE affecting all versions from 19.2 before 19.2.8, 19.3 before…",
-      "seeded": "2026-10-19 [Analyzed] 3.1 Secondary/cve@gitlab.com 10, CWE-190, published 2026-10-13"
-    },
-    {
-      "id": "CVE-2026-99999",
-      "why": "trailing-window lint (10-19 21:01 act): cited 2026-10-16; In the Linux kernel, the following vulnerability has been resolved: ipv4: validate checksum_start before…",
-      "seeded": "2026-10-19 [Received] 3.1 Secondary/416baaa9-dc9f-4396-8d5f-8c081fb06d67 9.3, published 2026-10-15"
-    },
-    {
-      "id": "CVE-2026-96652",
-      "why": "Plex plex2shell chain CVE (SSRF, CWE-918) — Secondary CNA scores only, no NVD score",
-      "seeded": "2026-10-20 [Analyzed] 3.1 Secondary/9119a7d8 4.3, 4.0 Secondary/9119a7d8 5.3, CWE-918, published 09-23"
-    },
-    {
-      "id": "CVE-2026-96654",
-      "why": "Plex plex2shell chain CVE (template injection, CWE-84) — Secondary CNA scores only, no NVD score",
-      "seeded": "2026-10-20 [Analyzed] 3.1 Secondary/9119a7d8 6.5, 4.0 Secondary/9119a7d8 6.9, CWE-84, published 09-23"
-    },
-    {
-      "id": "CVE-2026-96655",
-      "why": "Plex plex2shell chain CVE (SSRF, CWE-918) — Secondary CNA scores only, no NVD score",
-      "seeded": "2026-10-20 [Analyzed] 3.1 Secondary/9119a7d8 4.3, 4.0 Secondary/9119a7d8 5.3, CWE-918, published 09-23"
-    },
-    {
-      "id": "CVE-2026-96656",
-      "why": "Plex plex2shell chain CVE (path traversal, CWE-73), highest of the chain at CVSS 4.0 8.6 — Secondary CNA scores only, no NVD score",
-      "seeded": "2026-10-20 [Analyzed] 3.1 Secondary/9119a7d8 7.2, 4.0 Secondary/9119a7d8 8.6, CWE-73, published 09-23"
-    },
-    {
-      "id": "CVE-2026-111057",
-      "why": "mljar Mercury missing-comma blocklist bypass (CWE-185/284), GitHub CNA 10.0 — feed item 34 (10-20) said 'Awaiting Analysis' but the record reads Deferred; watch the status claim hold or invert",
-      "seeded": "2026-10-20 [Deferred] 3.1 Secondary/security-advisories@github.com 10, CWE-185,CWE-284, published 10-19"
-    },
-    {
-      "id": "CVE-2026-111058",
-      "why": "mljar Mercury tokenless-default kernel-execute (CWE-862), GitHub CNA 9.8 — the other half of feed item 34, genuinely Awaiting Analysis at seed",
-      "seeded": "2026-10-20 [Awaiting Analysis] 3.1 Secondary/security-advisories@github.com 9.8, CWE-862, published 10-19"
-    },
-    {
-      "id": "CVE-2026-111862",
-      "why": "Rank Math PRO 3.0.123 supply-chain malware (CWE-506), Wordfence-assigned 9.8 — feed item 36; watch Deferred→Analyzed and any score revision",
-      "seeded": "2026-10-20 [Deferred] 3.1 Primary/security@wordfence.com 9.8, CWE-506, published 10-19"
-    },
-    {
-      "id": "CVE-2026-111943",
-      "why": "Go crypto/x509 eMudhra intermediate distrust — NO NVD record at seed (10-20); Go assigned the ID, policy assigns no CVSS; watch the record land (92707 precedent) and stay metric-free",
-      "seeded": "2026-10-20 NOT IN NVD (Go-assigned ID, no record yet)"
-    },
-    {
-      "id": "CVE-2026-77932",
-      "why": "DB-GPT hardcoded default-compose credentials (CWE-306), VulnCheck-assigned 9.8 — feed item 35; NVD Deferred with VulnCheck Primary; watch for NVD analysis or a divergent NVD score",
-      "seeded": "2026-10-20 [Deferred] 3.1 Primary/disclosure@vulncheck.com 9.8, 4.0 Secondary/disclosure@vulncheck.com 9.3, CWE-306, published 10-20"
-    },
-    {
-      "id": "CVE-2026-77936",
-      "why": "Letta compose.yaml ships without LETTA_SERVER_SECURE (CWE-1188), VulnCheck-assigned 9.8 — feed item 35; NVD still Received at seed; watch Received→Deferred→Analyzed movement",
-      "seeded": "2026-10-20 [Received] 3.1 Primary/disclosure@vulncheck.com 9.8, 4.0 Secondary/disclosure@vulncheck.com 9.3, CWE-1188, published 10-20"
-    },
-    {
-      "id": "CVE-2026-106931",
-      "why": "SiteGuard Server Edition (EG Secure Solutions) WAF — OS command injection CWE-78, the KEV item's urgent add (feed item 12, 10-21): JPCERT-assigned 8.5 v4/7.8 v3.0 (Secondary), KEV-listed Oct 20 with BOD due **Oct 23** — a 3-day federal clock. Watch: does NVD analysis land before the BOD date (Deferred→Analyzed is the story), does an nvd@nist.gov metric appear, does the JPCERT score get endorsed or diverged.",
-      "seeded": "seeded 10-21 [Deferred] 3.0 Secondary/vultures@jpcert.or.jp 7.8, 4.0 Secondary/vultures@jpcert.or.jp 8.5, 0 NVD-scored, CWE-78, published 10-14, lastModified 10-20T20:17Z"
-    },
-    {
-      "id": "CVE-2026-110936",
-      "why": "Siemens Software Center uncontrolled search-path element CWE-427, KEV due Nov 3 (feed item 12). CNA productcert@siemens.com 6.7 v3.1/8.4 v4 (Secondary). Watch: Undergoing→Analyzed flip, any NVD score.",
-      "seeded": "seeded 10-21 [Undergoing Analysis] 3.1 Secondary/productcert@siemens.com 6.7, 4.0 Secondary/productcert@siemens.com 8.4, 0 NVD-scored, CWE-427, published 10-15"
-    },
-    {
-      "id": "CVE-2026-109432",
-      "why": "Camunda 7 expression injection via AdhocQueryValidator.validate() (CWE-917/78) — chains with -109431's authz gap (feed item 14, 10-21): VulnCheck-assigned 9.8 v3.1/9.3 v4. Watch: Deferred→Awaiting→Analyzed movement, NVD endorsement or divergence on the VulnCheck scores.",
-      "seeded": "seeded 10-21 [Deferred] 3.1 Secondary/disclosure@vulncheck.com 9.8, 4.0 Secondary/disclosure@vulncheck.com 9.3, 0 NVD-scored, CWE-78,CWE-917, published 10-19"
-    },
-    {
-      "id": "CVE-2026-109431",
-      "why": "Camunda 7 missing authorization on engine-rest task sub-resources (CWE-639/862) — the REST-surface opener of the chain with -109432 (feed item 14, 10-21): VulnCheck-assigned 8.1 v3.1/8.6 v4. Watch: Awaiting→Analyzed movement; the pair converging on one analysis is the interesting case.",
-      "seeded": "seeded 10-21 [Awaiting Analysis] 3.1 Secondary/disclosure@vulncheck.com 8.1, 4.0 Secondary/disclosure@vulncheck.com 8.6, 0 NVD-scored, CWE-639,CWE-862, published 10-19"
-    },
-    {
-      "id": "CVE-2026-112770",
-      "why": "Craft CMS RCE via Twig `group` filter invoking non-string callables — starts from CONTENT input, not panel access (feed item 15, 10-21). VulnCheck-assigned; note the v3.1 metric is Primary (8.8) beside v4.0 Secondary (8.7) — a within-assigner version split. All-eight context: NVD carries EIGHT Craft records published in the same second (20:17:54Z, one VulnCheck batch), the feed's 'five' undercounted. Watch: analysis movement + NVD divergence.",
-      "seeded": "seeded 10-21 [Deferred] 3.1 Primary/disclosure@vulncheck.com 8.8, 4.0 Secondary/disclosure@vulncheck.com 8.7, 0 NVD-scored, CWE-94, published 10-19T20:17:54Z"
-    },
-    {
-      "id": "CVE-2026-112771",
-      "why": "Craft CMS Twig sandbox allowlist bypass via filter methods (column/contains/filterByValue/index/when…) — one of the three records the feed's five-pack omitted (act pass 10-21: NVD window holds eight, not five). Lowest of the pack: 7.1 v4/6.5 v3.1. Watch: analysis movement.",
-      "seeded": "seeded 10-21 [Deferred] 4.0 Secondary/disclosure@vulncheck.com 7.1, 3.1 Secondary/disclosure@vulncheck.com 6.5, SSVC present, published 10-19T20:17:54Z"
-    },
-    {
-      "id": "CVE-2026-112772",
-      "why": "Craft CMS RCE — authenticated Control Panel users escape the Twig sandbox (sandbox escape 1 of 2, feed item 15). VulnCheck 8.8 v3.1/8.7 v4. Watch: analysis movement.",
-      "seeded": "seeded 10-21 [Deferred] 4.0 Secondary/disclosure@vulncheck.com 8.7, 3.1 Secondary/disclosure@vulncheck.com 8.8, SSVC present, published 10-19T20:17:54Z"
-    },
-    {
-      "id": "CVE-2026-112773",
-      "why": "Craft CMS RCE — authenticated Control Panel users escape the Twig sandbox (sandbox escape 2 of 2, feed item 15). VulnCheck 8.8 v3.1/8.7 v4. Watch: analysis movement.",
-      "seeded": "seeded 10-21 [Deferred] 4.0 Secondary/disclosure@vulncheck.com 8.7, 3.1 Secondary/disclosure@vulncheck.com 8.8, SSVC present, published 10-19T20:17:54Z"
-    },
-    {
-      "id": "CVE-2026-112774",
-      "why": "Craft CMS Yii behavior injection by authenticated administrators (5.8.0–5.11.0, feed item 15). VulnCheck 7.2 v3.1/8.7 v4. Watch: analysis movement.",
-      "seeded": "seeded 10-21 [Deferred] 4.0 Secondary/disclosure@vulncheck.com 8.7, 3.1 Secondary/disclosure@vulncheck.com 7.2, SSVC present, published 10-19T20:17:54Z"
-    },
-    {
-      "id": "CVE-2026-112775",
-      "why": "Craft CMS authentication bypass via verification-code reuse on users/verify* routes (feed item 15). Second within-assigner split: v3.1 Primary 7.5 beside v4.0 Secondary 8.7. Watch: analysis movement.",
-      "seeded": "seeded 10-21 [Deferred] 3.1 Primary/disclosure@vulncheck.com 7.5, 4.0 Secondary/disclosure@vulncheck.com 8.7, 0 NVD-scored, CWE-287, published 10-19T20:17:54Z"
-    },
-    {
-      "id": "CVE-2026-112776",
-      "why": "Craft CMS multi-site authorization bypass — site-scoped GraphQL tokens can mutate OTHER sites' content; **the pack's highest score (9.8 v3.1/9.3 v4)** and one of the three records the feed's five-pack omitted (act pass 10-21). Watch: analysis movement — a 9.3-v4 Deferred VulnCheck record is exactly the endorsement-vs-own-score case.",
-      "seeded": "seeded 10-21 [Deferred] 4.0 Secondary/disclosure@vulncheck.com 9.3, 3.1 Secondary/disclosure@vulncheck.com 9.8, SSVC present, published 10-19T20:17:54Z"
-    },
-    {
-      "id": "CVE-2026-112777",
-      "why": "Craft CMS blocklist bypass in Twig create() — class-name checks are case-sensitive (feed item 15's fourth Twig-escape RCE). VulnCheck 7.2 v3.1/8.7 v4. Watch: analysis movement.",
-      "seeded": "seeded 10-21 [Deferred] 4.0 Secondary/disclosure@vulncheck.com 8.7, 3.1 Secondary/disclosure@vulncheck.com 7.2, SSVC present, published 10-19T20:17:54Z"
-    },
-    {
-      "id": "CVE-2026-113672",
-      "why": "Argo CD Jsonnet repo-server file read 9.9 — Secondary security-advisories@github.com, Undergoing Analysis",
-      "seeded": "2026-10-21 [Undergoing Analysis] 3.1 Secondary/security-advisories@github.com 9.9, CWE-22, published 10-20"
-    },
-    {
-      "id": "CVE-2026-113708",
-      "why": "Argo CD Kustomize --upload-pack RCE 9.9 — Secondary security-advisories@github.com, Undergoing Analysis",
-      "seeded": "2026-10-21 [Undergoing Analysis] 3.1 Secondary/security-advisories@github.com 9.9, CWE-88, published 10-20"
-    },
-    {
-      "id": "CVE-2026-113709",
-      "why": "Argo CD Helm configHome plugin exec 9.9 — Secondary security-advisories@github.com, Undergoing Analysis",
-      "seeded": "2026-10-21 [Undergoing Analysis] 3.1 Secondary/security-advisories@github.com 9.9, CWE-829, published 10-20"
-    },
-    {
-      "id": "CVE-2026-77459",
-      "why": "Argo CD AppProject restriction bypass via PreDelete/PostDelete hooks 9.9 — the fourth CRITICAL in the same release notes",
-      "seeded": "2026-10-21 [Undergoing Analysis] 3.1 Secondary/security-advisories@github.com 9.9, CWE-863, published 10-13"
-    },
-    {
-      "id": "CVE-2026-105312",
-      "why": "StreamsHub Console cross-tenant Kafka control-plane access 9.9 — Secondary secalert@redhat.com, Awaiting Analysis",
-      "seeded": "2026-10-21 [Awaiting Analysis] 3.1 Secondary/secalert@redhat.com 9.9, CWE-269, published 10-20"
-    },
-    {
-      "id": "CVE-2026-111767",
-      "why": "MCP TypeScript SDK taskStore cross-session access 8.6 — Secondary security-advisories@github.com, Deferred",
-      "seeded": "2026-10-21 [Deferred] 3.1 Secondary/security-advisories@github.com 8.6, CWE-639/862, published 10-20"
-    },
-    {
-      "id": "CVE-2026-101296",
-      "why": "Apache Tomcat JNDIRealm bind credential validation fails open for non-GSSAPI SASL (CVSS 9.1, but the score is CISA-ADP's, not Apache's or NVD's) — fixed in 11.0.27 / 10.1.61 / 9.0.123",
-      "seeded": "2026-10-21 [Awaiting Analysis] 4.0 Secondary/134c704f-9b21-4f2e-91b3-4a467353bcc0 9.1, CWE-304, published 10-20"
-    },
-    {
-      "id": "CVE-2026-101356",
-      "why": "Apache Tomcat HTTP/2 request/response mix-up between users after an error during async processing — NVD unanalyzed; watch for an nvd@nist.gov metric appearing beside CISA-ADP's 9.1",
-      "seeded": "2026-10-21 [Awaiting Analysis] 3.1 Secondary/134c704f-9b21-4f2e-91b3-4a467353bcc0 9.1, CWE-362, published 10-20"
-    },
-    {
-      "id": "CVE-2026-103119",
-      "why": "Apache Tomcat AJP response mix-up (buffer under-read splits a response body across requests) — three Important CVEs in one 11.0.27 batch, all ADP-scored 9.1",
-      "seeded": "2026-10-21 [Awaiting Analysis] 3.1 Secondary/134c704f-9b21-4f2e-91b3-4a467353bcc0 9.1, CWE-127, published 10-20"
-    },
-    {
-      "id": "CVE-2026-109618",
-      "why": "PHP session.upload_progress OOM/UAF -> RCE, fixed 8.5.12/8.4.27/8.3.36/8.2.35 (feed 2026-10-22). PHP Foundation states the real score is 9.2; a 10.0 circulated incorrectly. Watch for NVD enrichment: its number and CWE may differ from PHP's.",
-      "seed": "2026-10-22",
-      "lastStatus": null,
-      "lastMetrics": [],
-      "lastKev": null
-    },
-    {
-      "id": "CVE-2026-109619",
-      "why": "PHP stale-state/UAF -> RCE, same release (feed 2026-10-22). Paired with -109618; treat any NVD metric as a separate judgment from PHP's 9.2.",
-      "seed": "2026-10-22",
-      "lastStatus": null,
-      "lastMetrics": [],
-      "lastKev": null
-    },
-    {
-      "id": "CVE-2026-110264",
-      "why": "GitLab CE/EE regex-compiler integer overflow -> unauthenticated RCE, CVSS 10.0 assigned by GitLab (CNA), fixed in 19.5.1 + six backports (feed 2026-10-22). NVD returned 0 results at publication; watch for the record appearing and for whether NVD adopts or revises the 10.0.",
-      "seed": "2026-10-22",
-      "lastStatus": null,
-      "lastMetrics": [],
-      "lastKev": null
-    },
-    {
-      "id": "CVE-2026-113380",
-      "why": "Signal RingRTC FSM queue saturation leaves call media live after hangup, CVSS 4.0 9.3 MITRE-assigned, fixed in 2.72.0 (feed 2026-10-22). Awaiting Analysis at publication; watch for NVD's own v3.1/v4.0 metric and any KEV add.",
-      "seed": "2026-10-22",
-      "lastStatus": null,
-      "lastMetrics": [],
-      "lastKev": null
-    },
-    {
-      "id": "CVE-2026-113620",
-      "why": "Eclipse ioFog Controller operator WebSocket JWT not verified -> unauthenticated exec, CVSS 3.1 9.8 Eclipse-Foundation-assigned, fixed in 3.9.2 (feed 2026-10-22). Awaiting Analysis at publication; watch for an nvd@nist.gov metric and a possible AC revision if UUID knowledge is treated as higher complexity.",
-      "seed": "2026-10-22",
-      "lastStatus": null,
-      "lastMetrics": [],
-      "lastKev": null
-    },
-    {
-      "id": "CVE-2026-114635",
-      "why": "Traefik SNI check skipped when TLS state is nil -> HTTP/2 :scheme http reaches a client-cert router without presenting one, CVSS 3.1 8.7 VulnCheck-assigned, fixed 2.11.58/3.7.14 (feed 2026-10-22). Received, unanalyzed; watch for an nvd@nist.gov metric and whether NVD keeps 8.7 or re-rates the Go-1.27-only precondition.",
-      "seed": "2026-10-22",
-      "lastStatus": null,
-      "lastMetrics": [],
-      "lastKev": null
-    },
-    {
-      "id": "CVE-2026-114637",
-      "why": "Traefik experimental FastProxy pool fails to pin NTLM/Negotiate backend connections to their frontend connection, CVSS 3.1 8.7 VulnCheck-assigned, fixed 3.7.14 (feed 2026-10-22). Received, unanalyzed; one of five pool-identity bugs in the same batch — watch whether NVD scores them identically or splits them.",
-      "seed": "2026-10-22",
-      "lastStatus": null,
-      "lastMetrics": [],
-      "lastKev": null
-    },
-    {
-      "id": "CVE-2026-114639",
-      "why": "Traefik: a socket preauthenticated with Authorization: Negotiate enters the globally shared backend pool and can be handed to an unauthenticated client, CVSS 3.1 8.7 VulnCheck-assigned, fixed 2.11.58/3.7.14 (feed 2026-10-22). Received, unanalyzed.",
-      "seed": "2026-10-22",
-      "lastStatus": null,
-      "lastMetrics": [],
-      "lastKev": null
-    },
-    {
-      "id": "CVE-2026-114640",
-      "why": "Traefik Ingress-NGINX provider forwards client-supplied Ssl-Client-* headers on the plaintext HTTP router -> mTLS impersonation when ssl-redirect is off, CVSS 3.1 8.7 VulnCheck-assigned, fixed 3.7.14 (feed 2026-10-22). Received, unanalyzed.",
-      "seed": "2026-10-22",
-      "lastStatus": null,
-      "lastMetrics": [],
-      "lastKev": null
-    },
-    {
-      "id": "CVE-2026-114641",
-      "why": "Traefik NTLM/Kerberos round-tripper slot read/written without synchronization -> orphaned backend connections or crash, CVSS 3.1 3.7 (4.0 6.3) VulnCheck-assigned, fixed 2.11.58/3.7.14 (feed 2026-10-22). Received, unanalyzed; scored far below its six siblings in the same batch, so watch whether NVD agrees with the 3.7.",
-      "seed": "2026-10-22",
-      "lastStatus": null,
-      "lastMetrics": [],
-      "lastKev": null
-    },
-    {
-      "id": "CVE-2026-114642",
-      "why": "Traefik round-tripper stored in a client-connection slot not keyed by ServersTransport -> one service TLS client config reused for another backend, CVSS 3.1 8.7 VulnCheck-assigned, fixed 2.11.58/3.7.14 (feed 2026-10-22). Received, unanalyzed.",
-      "seed": "2026-10-22",
-      "lastStatus": null,
-      "lastMetrics": [],
-      "lastKev": null
-    },
-    {
-      "id": "CVE-2026-114656",
-      "why": "Traefik mTLS bypass: a negated !Host() matcher counts as a served domain, TLS-options conflict falls back to defaults and skips RequireAndVerifyClientCert, CVSS 3.1 7.5 VulnCheck-assigned, fixed 3.7.13 (feed 2026-10-22). Received, unanalyzed.",
-      "seed": "2026-10-22",
-      "lastStatus": null,
-      "lastMetrics": [],
-      "lastKev": null
-    },
-    {
-      "id": "CVE-2026-114658",
-      "why": "Grav Login plugin missing authorization in login.invite -> page authors obtain superuser accounts via an invitation form in frontmatter, CVSS 3.1 8.8 VulnCheck-assigned, fixed 3.9.13 (feed 2026-10-22). Received, unanalyzed.",
-      "seed": "2026-10-22",
-      "lastStatus": null,
-      "lastMetrics": [],
-      "lastKev": null
-    },
-    {
-      "id": "CVE-2026-114661",
-      "why": "OpenRemote missing authorization on gateway tunnel endpoints -> any authenticated user can open persistent bidirectional TCP circuits into an edge gateway network, CVSS 4.0 9.0 / 3.1 8.5 VulnCheck-assigned, fixed 1.31.0 (feed 2026-10-22). Deferred, unanalyzed.",
-      "seed": "2026-10-22",
-      "lastStatus": null,
-      "lastMetrics": [],
-      "lastKev": null
-    },
-    {
-      "id": "CVE-2026-114662",
-      "why": "Obot CLI login token-request ID chosen by the requester -> unauthenticated attacker sends a login link and fetches a non-expiring API key (account takeover), CVSS 4.0 8.6 / 3.1 8.1 VulnCheck-assigned, fixed 0.26.0 (feed 2026-10-22). Deferred, unanalyzed.",
-      "seed": "2026-10-22",
-      "lastStatus": null,
-      "lastMetrics": [],
-      "lastKev": null
-    },
-    {
-      "id": "CVE-2026-114053",
-      "why": "vLLM mm_processor_kwargs.code_revision → unauthenticated /tokenize RCE 9.2/8.1 — both disclosure@vulncheck.com, Received Seeded from NVD [Received] 3.1 Primary/disclosure@vulncheck.com 8.1, 4.0 Secondary/disclosure@vulncheck.com 9.2, CWE-94, published 10-21.",
-      "seed": "2026-10-22",
-      "lastStatus": null,
-      "lastMetrics": [],
-      "lastKev": null
-    },
-    {
-      "id": "CVE-2026-114049",
-      "why": "vLLM cross-request allowed_token_ids mask leak — both disclosure@vulncheck.com, Received Seeded from NVD [Received] 3.1 Primary/disclosure@vulncheck.com 3.7, 4.0 Secondary/disclosure@vulncheck.com 6.3, CWE-440, published 10-21.",
-      "seed": "2026-10-22",
-      "lastStatus": null,
-      "lastMetrics": [],
-      "lastKev": null
-    },
-    {
-      "id": "CVE-2026-114055",
-      "why": "vLLM uncontrolled multimodal processor params 8.7 v4.0 / 7.5 v3.1 — both disclosure@vulncheck.com, Received Seeded from NVD [Received] 3.1 Secondary/disclosure@vulncheck.com 7.5, 4.0 Secondary/disclosure@vulncheck.com 8.7, CWE-400, published 10-21.",
-      "seed": "2026-10-22",
-      "lastStatus": null,
-      "lastMetrics": [],
-      "lastKev": null
-    },
-    {
-      "id": "CVE-2026-114085",
-      "why": "Trigger.dev supervisor workload server missing cross-tenant auth 8.8 v4.0 / 7.9 v3.1, fixed boundary 4.7.7 — Deferred Seeded from NVD [Deferred] 3.1 Secondary/disclosure@vulncheck.com 7.9, 4.0 Secondary/disclosure@vulncheck.com 8.8, CWE-306, published 10-21.",
-      "seed": "2026-10-22",
-      "lastStatus": null,
-      "lastMetrics": [],
-      "lastKev": null
-    },
-    {
-      "id": "CVE-2026-114087",
-      "why": "Trigger.dev self-hosted default MAGIC_LINK_SECRET auth bypass 9.2 v4.0 / 8.1 v3.1 — Deferred Seeded from NVD [Deferred] 3.1 Primary/disclosure@vulncheck.com 8.1, 4.0 Secondary/disclosure@vulncheck.com 9.2, CWE-653, published 10-21.",
-      "seed": "2026-10-22",
-      "lastStatus": null,
-      "lastMetrics": [],
-      "lastKev": null
-    },
-    {
-      "id": "CVE-2026-114090",
-      "why": "Trigger.dev --mcp server binds all interfaces 7.6 v4.0 — Received Seeded from NVD [Received] 3.1 Secondary/disclosure@vulncheck.com 7.1, 4.0 Secondary/disclosure@vulncheck.com 7.6, CWE-306, published 10-21.",
-      "seed": "2026-10-22",
-      "lastStatus": null,
-      "lastMetrics": [],
-      "lastKev": null
-    },
-    {
-      "id": "CVE-2026-114093",
-      "why": "Trigger.dev CSRF logout 5.3 v4.0 / 4.3 v3.1 — Deferred Seeded from NVD [Deferred] 3.1 Primary/disclosure@vulncheck.com 4.3, 4.0 Secondary/disclosure@vulncheck.com 5.3, CWE-352, published 10-21.",
-      "seed": "2026-10-22",
-      "lastStatus": null,
-      "lastMetrics": [],
-      "lastKev": null
-    },
-    {
-      "id": "CVE-2026-114065",
-      "why": "Trigger.dev tenant filtering bypass via query table placeholders 7.1 v4.0 — Deferred Seeded from NVD [Deferred] 3.1 Secondary/disclosure@vulncheck.com 6.5, 4.0 Secondary/disclosure@vulncheck.com 7.1, CWE-89, published 10-21.",
-      "seed": "2026-10-22",
-      "lastStatus": null,
-      "lastMetrics": [],
-      "lastKev": null
-    },
-    {
-      "id": "CVE-2026-114108",
-      "why": "HKUDS Vibe-Trading require_auth() fails open 9.8 v3.1 / 9.3 v4.0, fixed in 0.1.7 (2026-05-06) — Received Seeded from NVD [Received] 3.1 Primary/disclosure@vulncheck.com 9.8, 4.0 Secondary/disclosure@vulncheck.com 9.3, CWE-306, published 10-21.",
-      "seed": "2026-10-22",
-      "lastStatus": null,
-      "lastMetrics": [],
-      "lastKev": null
-    },
-    {
-      "id": "CVE-2026-114107",
-      "why": "Vibe-Trading indirect prompt injection → BashTool shell=True root RCE 8.8 v3.1 — Received Seeded from NVD [Received] 3.1 Primary/disclosure@vulncheck.com 8.8, 4.0 Secondary/disclosure@vulncheck.com 8.7, published 10-21.",
-      "seed": "2026-10-22",
-      "lastStatus": null,
-      "lastMetrics": [],
-      "lastKev": null
-    },
-    {
-      "id": "CVE-2026-114106",
-      "why": "Vibe-Trading agent file-read path traversal 8.7 v4.0 / 7.5 v3.1 — Received Seeded from NVD [Received] 3.1 Primary/disclosure@vulncheck.com 7.5, 4.0 Secondary/disclosure@vulncheck.com 8.7, CWE-22, published 10-21.",
-      "seed": "2026-10-22",
-      "lastStatus": null,
-      "lastMetrics": [],
-      "lastKev": null
-    },
-    {
-      "id": "CVE-2026-114117",
-      "why": "Vyper optimizer rewrites (msg.value|K) to 1 in ternary branches 8.2 v4.0 / 5.9 v3.1, NO patched release — Received Seeded from NVD [Received] 3.1 Secondary/disclosure@vulncheck.com 5.9, 4.0 Secondary/disclosure@vulncheck.com 8.2, CWE-682, published 10-21.",
-      "seed": "2026-10-22",
-      "lastStatus": null,
-      "lastMetrics": [],
-      "lastKev": null
-    },
-    {
-      "id": "CVE-2026-71195",
-      "why": "OpenStack Manila public-share takeover 9.9, sole metric 3.1 Secondary/cve@mitre.org (OSSA carries no CVSS) — Received Seeded from NVD [Received] 3.1 Secondary/cve@mitre.org 9.9, CWE-863, published 10-21.",
-      "seed": "2026-10-22",
-      "lastStatus": null,
-      "lastMetrics": [],
-      "lastKev": null
-    },
-    {
-      "id": "CVE-2026-114625",
-      "why": "Arista VeloCloud Orchestrator SQL injection, CVSS 9.9, exploited in the wild, Arista-assigned; NO NVD record and NO cveawg record at seed time",
-      "seeded": "2026-10-23 [absent] no NVD record, no cveawg record; 9.9 is Arista's own score"
-    },
-    {
-      "id": "CVE-2026-94300",
-      "why": "ISC BIND 9 GSS-TSIG replay memory corruption; watch for NVD analysis appearing beside ISC's CNA 8.1",
-      "seeded": "2026-10-23 [Awaiting Analysis] 3.1 Secondary/security-officer@isc.org 8.1, CWE-362/CWE-415, published 10-21"
-    },
-    {
-      "id": "CVE-2026-96889",
-      "why": "librsvg UAF reached via sharp/Next.js Image Optimization; Red Hat CNA 7.8, NVD has never analyzed it",
-      "seeded": "2026-10-23 [Awaiting Analysis] 3.1 Secondary/secalert@redhat.com 7.8, CWE-416, published 09-23"
-    },
-    {
-      "id": "CVE-2026-93952",
-      "why": "Arista VeloCloud input validation, KEV-added Sept 2026 — cited as context in the 10-23 VeloCloud item; watch for NVD analysis",
-      "seeded": "2026-10-23 [unchecked] cited as historical context (KEV September addition)"
-    },
-    {
-      "id": "CVE-2026-16812",
-      "why": "Arista VeloCloud OS command injection, KEV-added July 2026 — cited as context in the 10-23 VeloCloud item",
-      "seeded": "2026-10-23 [unchecked] cited as historical context (KEV July addition)"
-    },
-    {
-      "id": "CVE-2025-64702",
-      "why": "quic-go QPACK header amplification (Header Accordions); CVE ID is from 2025, disclosed jointly 10-20/10-22",
-      "seeded": "2026-10-23 [unchecked] CVE ID predates the Oct 2026 coordinated disclosure"
-    },
-    {
-      "id": "CVE-2026-12523",
-      "why": "Cloudflare quiche QPACK header amplification (Header Accordions)",
-      "seeded": "2026-10-23 [unchecked] fixed in quiche 0.29.3"
-    },
-    {
-      "id": "CVE-2025-13945",
-      "why": "Wireshark QPACK header amplification (Header Accordions); CVE ID from 2025",
-      "seeded": "2026-10-23 [unchecked] fixed in 4.6.2 / 4.4.12"
-    },
-    {
-      "id": "CVE-2026-96355",
-      "why": "Drupal Webform template-injection RCE: ADP-only 9.1 on an Awaiting-Analysis record, advisory dated 2026-09-23 (backfill); watch for NVD analysis + whether an nvd@nist.gov metric appears beside CISA-ADP",
-      "seeded": "2026-10-23 [verified] Awaiting Analysis, 1 metric, 0 NVD-scored, 3.1 Secondary/134c704f… (CISA-ADP) 9.1, CWE-1336, published 2026-10-22"
-    },
-    {
-      "id": "CVE-2026-111497",
-      "why": "Brotli decoder OOB write → RCE 9.2 — CVSS 4.0 Secondary cve-coordination@google.com, status Awaiting Analysis",
-      "seeded": "2026-10-23 [Awaiting Analysis] 4.0 Secondary/cve-coordination@google.com 9.2, CWE-252,CWE-787, published 10-22"
-    },
-    {
-      "id": "CVE-2026-114125",
-      "why": "Storybook dev-server preview code injection — CVSS 4.0 Secondary security-advisories@github.com 8.6, status Awaiting Analysis",
-      "seeded": "2026-10-23 [Awaiting Analysis] 4.0 Secondary/security-advisories@github.com 8.6, CWE-1021,CWE-346,CWE-94, published 10-21"
-    },
-    {
-      "id": "CVE-2026-18963",
-      "why": "Keycloak reset-credentials account takeover 9.1 — CVSS 3.1 Secondary secalert@redhat.com, status Awaiting Analysis",
-      "seeded": "2026-10-23 [Awaiting Analysis] 3.1 Secondary/secalert@redhat.com 9.1, CWE-640, published 08-18"
-    },
-    {
-      "id": "CVE-2026-97631",
-      "why": "EDK II PXE driver pre-boot RCE 9.5 — CVSS 4.0 Secondary infosec@edk2.groups.io, status Deferred",
-      "seeded": "2026-10-23 [Deferred] 4.0 Secondary/infosec@edk2.groups.io 9.5, CWE-120,CWE-131,CWE-787, published 10-22"
-    },
-    {
-      "id": "CVE-2026-53942",
-      "why": "conda update.yml '@conda-bot render' pwn request 9.9 — GitHub_M assigned, fixed in commit 9c0f238 (+2/-63); watch for NVD analysis and whether an NVD-authored score differs from GitHub's",
-      "seeded": "2026-10-24 [Awaiting Analysis] 3.1 Secondary/security-advisories@github.com 9.9, CWE-94, published 10-23"
-    },
-    {
-      "id": "CVE-2026-53921",
-      "why": "OpenWrt odhcpd DHCPv6 stack overflow 9.8 — the advisory cell reads 'Patched versions: None' while 24.10.8 (2026-07-26) names it, and 24.10 is EOL; watch for the cell changing and for a 25.12 backport statement",
-      "seeded": "2026-10-24 [Deferred] 3.1 Secondary/security-advisories@github.com 9.8, CWE-121, published 10-23"
-    },
-    {
-      "id": "CVE-2026-53918",
-      "why": "OpenWrt odhcpd use-after-free (dangling first-lease pointer) — same 24.10.8 release; paired with CVE-2026-53921 in the same advisory batch",
-      "seeded": "2026-10-24 seeded from the 24.10.8 release notes; provenance read via nvd-provenance.mjs"
-    },
-    {
-      "id": "CVE-2026-53920",
-      "why": "OpenWrt odhcpd stack memory disclosure — same 24.10.8 release, same odhcpd advisory batch",
-      "seeded": "2026-10-24 seeded from the 24.10.8 release notes; provenance read via nvd-provenance.mjs"
-    },
-    {
-      "id": "CVE-2026-53922",
-      "why": "OpenWrt odhcpd pre-auth DoS via size_t underflow — same 24.10.8 release, same odhcpd advisory batch",
-      "seeded": "2026-10-24 seeded from the 24.10.8 release notes; provenance read via nvd-provenance.mjs"
-    },
-    {
-      "id": "CVE-2026-62948",
-      "why": "OpenWrt stored XSS via a crafted FQDN hostname in a DHCPv6 client — same 24.10.8 release; the one non-odhcpd CVE of the batch",
-      "seeded": "2026-10-24 seeded from the 24.10.8 release notes; provenance read via nvd-provenance.mjs"
-    },
-    {
-      "id": "CVE-2026-89320",
-      "why": "gose HmacShaCryptor.Hash returned HMAC_K(\"\") — constant tag per key; fix only under the eclipse-keypont module path",
-      "seeded": "2026-10-24 [Deferred] 4.0 Secondary/emo@eclipse.org 8.8, CWE-354, published 10-23"
-    },
-    {
-      "id": "CVE-2026-57116",
-      "why": "PraisonAI AgentOS still unauthenticated; advisory published 2026-06-18, record 10-23 (127-day gap)",
-      "seeded": "2026-10-24 [Deferred] 3.1 Secondary/security-advisories@github.com 9.8, CWE-200,306,862, published 10-23"
-    },
-    {
-      "id": "CVE-2026-115727",
-      "why": "AgenticSeek Flask debug=True on all interfaces, Werkzeug PIN derivable; fix is commit 409840c, no release",
-      "seeded": "2026-10-24 [Deferred] 3.1 Secondary/disclosure@vulncheck.com 8.1, 4.0 Secondary/disclosure@vulncheck.com 9.2, CWE-489, published 10-23"
-    },
-    {
-      "id": "CVE-2026-115547",
-      "why": "Okta Access Gateway 9.1 via S:C — admin console escapes to the service account",
-      "seeded": "2026-10-24 [Awaiting Analysis] 3.1 Secondary/psirt@okta.com 9.1, CWE-20,CWE-94, published 10-23"
-    },
-    {
-      "id": "CVE-2026-112862",
-      "why": "One of twelve 9.8 PHP-object-injection records published in one Patchstack window; template-sentence description",
-      "seeded": "2026-10-24 [Deferred] 3.1 Secondary/audit@patchstack.com 9.8, CWE-502, published 10-23"
-    },
-    {
-      "id": "CVE-2026-110447",
-      "why": "Collabora Online CODE Server proxy.php command injection, exploited with web shells since Sep 10 — MITRE's 9.2, NVD Deferred, KEV 10-23",
-      "seeded": "2026-10-24 [Deferred] 4.0 Secondary/cve@mitre.org 9.2, CWE-78, KEV 2026-10-23, published 10-14"
-    },
-    {
-      "id": "CVE-2026-40151",
-      "why": "PraisonAI AgentOS instruction disclosure 5.3 — the FIRST record on the same surface, published 2026-04-09, Analyzed with 0 NVD-scored metrics; still unauthenticated when CVE-2026-57116 filed it at 9.8 in October",
-      "seeded": "2026-10-24 [Analyzed] 3.1 Secondary/security-advisories@github.com 5.3, CWE-200, published 04-09"
-    },
-    {
-      "id": "CVE-2026-112846",
-      "why": "ThemeREX Save Life PHP object injection — one of twelve 9.8s from one Patchstack window, template-sentence record",
-      "seeded": "2026-10-24 [Deferred] 3.1 Secondary/audit@patchstack.com 9.8, CWE-502, published 10-23"
-    },
-    {
-      "id": "CVE-2026-112852",
-      "why": "ThemeREX Helion CWE-502 at 8.1 — the twelfth-sibling row that shows the 9.8 is not invariant across the theme family",
-      "seeded": "2026-10-24 [Deferred] 3.1 Secondary/audit@patchstack.com 8.1, CWE-502, published 10-23"
-    },
-    {
-      "id": "CVE-2025-66208",
-      "why": "Positive control beside CVE-2026-110447 (whose record says the two are different): this one is Analyzed WITH an nvd@nist.gov 9.8 Primary",
-      "seeded": "2026-10-24 [Analyzed] 3.1 Primary/nvd@nist.gov 9.8, 4.0 Secondary/security-advisories@github.com 7.2, CWE-78, published 2025-12-03"
-    },
-    {
-      "id": "CVE-2026-115889",
-      "why": "Wasmtime Cranelift SSA bit-packing overflow — sandbox escape on any arch using the default backend; advisory 10-19, NVD record 4 days later, patched 36.0.19/43.0.0",
-      "seeded": "2026-10-24 [Deferred] 3.1 Secondary/security-advisories@github.com 9.9, CWE-197/CWE-843, published 10-23"
-    },
-    {
-      "id": "CVE-2026-115893",
-      "why": "Wasmtime aarch64 br_table >~256k targets jumps to an arbitrary offset — sandbox escape; same advisory batch as CVE-2026-115889, patched 36.0.19/48.0.7/49.0.4",
-      "seeded": "2026-10-24 [Deferred] 3.1 Secondary/security-advisories@github.com 9.9, CWE-691, published 10-23"
-    },
-    {
-      "id": "CVE-2026-115931",
-      "why": "Postiz self-hosted scheduler 9.9 — signed-in user names an internal helper, file read exposes the session-signing secret; CNA is the project itself, fix 2.6 minutes before the record",
-      "seeded": "2026-10-24 [Received] 3.1 Secondary/4cdc9741-f887-419a-a2fd-acbbd2729276 (postiz) 9.9, CWE-73/CWE-470, published 10-23"
-    },
-    {
-      "id": "CVE-2026-115812",
-      "why": "AWS Multi Model Server path traversal during model-archive extraction — 9.8/9.3 both AMZN-assigned, EOL with no fixed version, so 'unpatched' is permanent",
-      "seeded": "2026-10-24 [Awaiting Analysis] 3.1 Secondary/ff89ba41-3aa1-4d27-914a-91399e9639e5 (AMZN) 9.8, 4.0 Secondary/ff89ba41-3aa1-4d27-914a-91399e9639e5 9.3, CWE-23, published 10-23"
-    },
-    {
-      "id": "CVE-2026-115557",
-      "why": "CPython ssl distrusted_spki.h denylist (eMudhra), PSF-assigned, status Received",
-      "seeded": "2026-10-25 [Received] 4.0 Secondary/cna@python.org 9.4, CWE-299, 0 NVD metrics, published 10-24"
-    },
-    {
-      "id": "CVE-2026-115932",
-      "why": "Postiz media-path traversal to Discord exfil, record PREDATES its fix release v2.25.3 by 1h00m",
-      "seeded": "2026-10-25 [Received] 3.1 Secondary/4cdc9741 9.6, CWE-22/74, 0 NVD metrics, published 10-24T13:16:37Z"
-    },
-    {
-      "id": "CVE-2026-115933",
-      "why": "Postiz shared-secret token-type confusion, record FOLLOWS its fix release by 1h00m51s",
-      "seeded": "2026-10-25 [Received] 3.1 Secondary/4cdc9741 9.9, CWE-290/345/915, 0 NVD metrics, published 10-24T15:17:33Z"
-    },
-    {
-      "id": "CVE-2026-116014",
-      "why": "open62541 OPC UA client integer overflow; NVD record has NO configurations key at all (prose-only range)",
-      "seeded": "2026-10-25 [Received] 3.1 Primary+4.0 Secondary/disclosure@vulncheck.com 8.1/9.2, CWE-190, 0 NVD metrics, published 10-24"
-    },
-    {
-      "id": "CVE-2026-110956",
-      "why": "asVereinbase fail-open auth; 9.8 is CISA-ADP only (provenance case 5)",
-      "seeded": "2026-10-25 [Received] 3.1 Secondary/CISA-ADP 9.8, CWE-287, 0 NVD metrics, published 10-24T06:16:36Z"
-    },
-    {
-      "id": "CVE-2026-115995",
-      "why": "Unitree Go2 chat_go set_volume OS command injection 9.6 — all three CVSS versions cna@vuldb.com, status Received",
-      "seeded": "2026-10-25 [Received] 3.1 Primary/cna@vuldb.com 9.6, 4.0 Secondary/cna@vuldb.com 9.4, 2.0 Secondary/cna@vuldb.com 10, CWE-78, published 10-24"
-    },
-    {
-      "id": "CVE-2026-115929",
-      "why": "MongoDB Compass bundles Electron's own TLS root store carrying the recoverable eMudhra intermediates — cna@mongodb.com, status Received",
-      "seeded": "2026-10-25 [Received] 3.1 Secondary/cna@mongodb.com 6.8, 4.0 Secondary/cna@mongodb.com 7.6, CWE-295, published 10-24"
-    },
-    {
-      "id": "CVE-2022-22706",
-      "why": "Mali GPU page-cache write reused by the 2026 TCL 50C721 root toolkit — re-checks the KEV-listed 2022 record the device exploit leans on",
-      "seeded": "2026-10-25 [Analyzed] 3.1 Primary/nvd@nist.gov 7.8, 2.0 Primary/nvd@nist.gov 4.6, 3.1 Secondary/CISA-ADP 7.8, CWE-119, KEV 2023-03-30, published 2022-03-03"
-    },
-    {
-      "id": "CVE-2026-79844",
-      "why": "HPE ArubaOS auth bypass, HPE-assigned 10.0 on an unanalyzed record (batch 2026-10-25).",
-      "filed": "2026-10-25"
-    },
-    {
-      "id": "CVE-2026-79845",
-      "why": "Listed by coverage as the ArubaOS PAPI auth bypass, but this NVD record is a VulDB Simple Inventory System SQLi — watch whether the ID is reassigned or the record corrected.",
-      "filed": "2026-10-25"
-    },
-    {
-      "id": "CVE-2026-114820",
-      "why": "Oracle Java SE 9.1 (CWE-327) at the October 2026 CPU; CNA-only metric, NVD status Received (batch 2026-10-25).",
-      "filed": "2026-10-25"
-    },
-    {
-      "id": "CVE-2026-116009",
-      "why": "Camaleon CMS path traversal: CVSS 3.1 8.8 / 4.0 8.7 from the same scorer, unanalyzed (batch 2026-10-25).",
-      "filed": "2026-10-25"
-    },
-    {
-      "id": "CVE-2026-116011",
-      "why": "Crow JSON recursion: 3.1 7.5 vs 4.0 8.7 — a 1.2-point spread across CVSS versions (batch 2026-10-25).",
-      "filed": "2026-10-25"
-    },
-    {
-      "id": "CVE-2026-116019",
-      "why": "Grav allowlist bypass, 3.1 8.8 / 4.0 8.7, fixed in 2.2.13 before the record (batch 2026-10-25).",
-      "filed": "2026-10-25"
-    },
-    {
-      "id": "CVE-2022-21894",
-      "why": "Baton Drop, reused by the BlackX UEFI bootkit in 2026 — watch for KEV movement or a first NVD analysis (batch 2026-10-25).",
-      "filed": "2026-10-25"
-    },
-    {
-      "id": "CVE-2026-24834",
-      "why": "Kata Containers fix credited by OpenAI's containment red team (batch 2026-10-25).",
-      "filed": "2026-10-25"
-    },
-    {
-      "id": "CVE-2026-74753",
-      "why": "Kernel fix credited by OpenAI's containment red team (batch 2026-10-25).",
-      "filed": "2026-10-25"
-    },
-    {
-      "id": "CVE-2026-80521",
-      "why": "Kernel fix credited by OpenAI's containment red team (batch 2026-10-25).",
-      "filed": "2026-10-25"
-    },
-    {
-      "id": "CVE-2026-80841",
-      "why": "Kernel fix credited by OpenAI's containment red team (batch 2026-10-25).",
-      "filed": "2026-10-25"
-    },
-    {
-      "id": "CVE-2026-79873",
-      "why": "HPE ArubaOS PAPI AOS-10 auth bypass — the real record behind coverage's fabricated 8th row (9.3, AV:ADJACENT_NETWORK, CRITICAL label); watch whether NVD analyses it or a 10.0 lands.",
-      "filed": "2026-10-25"
-    },
-    {
-      "id": "CVE-2026-116192",
-      "why": "rclone --rc-serve SSRF (2026-10-26). VulnCheck is the CNA and its own container carries BOTH a v3.1 5.9 and a v4.0 8.2; NVD placed them in the Primary(3.1)/Secondary(4.0) slots at Received with 0 nvd@nist.gov metrics. Watch: an NVD-scored metric appearing beside or replacing them, and whether analysis keeps both versions."
-    },
-    {
-      "id": "CVE-2026-116199",
-      "why": "Snipe-IT Google-SSO deactivated-user bypass (2026-10-26). Same CNA, same two-version split (3.1 8.1 / 4.0 9.2), Received, 0 NVD metrics. Watch: analysis, and whether the v3.1-vs-v4.0 gap survives it."
-    },
-    {
-      "id": "CVE-2026-116163",
-      "why": "Parse Server AuthAdapter fail-open bypass (2026-10-26). CNA container says v3.1 7.4 / v4.0 9.1 (the feed first paired 9.1 with 3.1); Received, 0 NVD metrics. Watch: analysis and any NVD-published score."
-    },
-    {
-      "id": "CVE-2026-70197",
-      "why": "Microsoft SocketAsyncEventArgs memory corruption (2026-10-26). Published 2026-10-13 as fixed, then re-fixed in the 2026-10-25 out-of-band release because Oct 13 did not fully address it -- the fix-claimed-then-refixed state. Awaiting Analysis with Microsoft's Secondary 8.1. Watch: analysis plus any advisory revision."
-    },
-    {
-      "id": "CVE-2026-102870",
-      "why": "Microsoft Blazor WebAssembly debugger (2026-10-26), re-fixed with CVE-2026-70197 on 2026-10-25 after the Oct 13 release failed to fully address it. Undergoing Analysis, Microsoft Secondary 8.8. Watch: analysis."
-    },
-    {
-      "id": "CVE-2026-114148",
-      "why": "NO RECORD ANYWHERE at filing (2026-10-26): NVD absent, cveawg returns CVE_RECORD_DNE, while Microsoft cites it in the 2026-10-25 out-of-band .NET post as the Linux tarball ownership issue. Watch: first appearance of a record, and under which assignerShortName."
-    },
-    {
-      "id": "CVE-2026-112398",
-      "why": "Pillow FlashPix heap overflow 9.2 (2026-10-26). GitHub's advisory source (security-advisories@github.com) in the NVD 4.0 Secondary slot, status Undergoing Analysis, 0 nvd@nist.gov metrics; fix 13.0.0 tagged 10-16. Watch: whether NVD publishes its own score and whether the CWE-122/CWE-787 pair is confirmed."
-    },
-    {
-      "id": "CVE-2026-114509",
-      "why": "Laravel TokenGuard non-string credential auth bypass 9.2 (2026-10-26). GitHub's advisory source, Awaiting Analysis, 0 NVD metrics; 12.68.0 and 13.29.0 both tagged 2026-08-25 -- a 57-day fix-then-record lag, so the correction risk is a record that is already stale rather than a moving score. Watch: analysis, and any widening of the affected-configuration prose."
-    },
-    {
-      "id": "CVE-2026-55677",
-      "why": "Echo encoded-slash (%2F) route-protection bypass (2026-10-26), cited as context for the Oct-22 no-CVE critical in the same bypass family. Watch: not scored by any party at filing -- the class is label-only, so the event to catch is a score appearing at all."
-    },
-    {
-      "id": "CVE-2026-115214",
-      "why": "Datawiza Proxy Auth WordPress plugin 9.8 — only metric is CISA-ADP, status Received, no NVD analysis",
-      "seeded": "2026-10-26 [Received] 3.1 Secondary/134c704f-9b21-4f2e-91b3-4a467353bcc0 (CISA-ADP) 9.8, CWE-269, published 10-25"
-    },
-    {
-      "id": "CVE-2026-116171",
-      "why": "SiYuan Windows extended-length-prefix denylist bypass — both metrics Secondary from VulnCheck, status Deferred",
-      "seeded": "2026-10-26 [Deferred] 3.1 Secondary/disclosure@vulncheck.com 7.5 + 4.0 Secondary/disclosure@vulncheck.com 8.7, CWE-22, published 10-25"
-    },
-    {
-      "id": "CVE-2026-116176",
-      "why": "vLLM SSRF via X-Request-Id — 3.1 Primary and 4.0 Secondary from the same CNA disagree by 0.6",
-      "seeded": "2026-10-26 [Received] 3.1 Primary/disclosure@vulncheck.com 8.2 + 4.0 Secondary/disclosure@vulncheck.com 8.8, CWE-918, published 10-25"
-    },
-    {
-      "id": "CVE-2026-115997",
-      "why": "VulDB carries three CVSS versions (2.0/3.1/4.0) of one score from one source, spanning LOW to MEDIUM — the layered case",
-      "seeded": "2026-10-26 [Deferred] 2.0 Secondary/cna@vuldb.com 6.5 + 3.1 Primary/cna@vuldb.com 6.3 + 4.0 Secondary/cna@vuldb.com 2.1, published 10-25"
-    }
-  ]
+ "_note": "Per-CVE NVD score-provenance watch (agent/tools/nvd-provenance.mjs). Filed 2026-10-14 after one feed batch carried five CNA-assigned high scores whose NVD records were all still unanalyzed. The event worth catching is a record flipping out of its CNA-only state: vulnStatus changing, an `nvd@nist.gov` metric appearing beside (or replacing) the vendor's, or a KEV add. Keyword search (disclosure-watch's NVD channel) cannot see any of those — the record already exists. Verified live at seed time, 2026-10-14 12:4x UTC+8.",
+ "watch": [
+  {
+   "id": "CVE-2026-48382",
+   "why": "Adobe Experience Manager 10.0, Primary psirt@adobe.com, status Received",
+   "seeded": "2026-10-14 [Received] 3.1 Primary/psirt@adobe.com 10.0, CWE-863, published 10-13"
+  },
+  {
+   "id": "CVE-2026-103849",
+   "why": "Adobe Commerce 10.0, Primary psirt@adobe.com, status Received",
+   "seeded": "2026-10-14 [Received] 3.1 Primary/psirt@adobe.com 10.0, CWE-1336, published 10-13"
+  },
+  {
+   "id": "CVE-2026-89111",
+   "why": "SAP Cloud SDK for Python OAuth2 SSRF 10.0 — Secondary cna@sap.com, status Received",
+   "seeded": "2026-10-14 [Received] 3.1 Secondary/cna@sap.com 10.0, CWE-918, published 10-13"
+  },
+  {
+   "id": "CVE-2026-39919",
+   "why": "Ghostscript JPEG2000 heap overflow 9.8/9.3 — both Secondary disclosure@vulncheck.com, Awaiting Analysis a month on (the build-specific-exploitation item)",
+   "seeded": "2026-10-14 [Awaiting Analysis] 4.0 Secondary/disclosure@vulncheck.com 9.3, 3.1 Secondary/disclosure@vulncheck.com 9.8, CWE-122, published 09-15"
+  },
+  {
+   "id": "CVE-2026-63353",
+   "why": "Siemens SIMATIC S7-1500 stored XSS 9.6, Primary productcert@siemens.com, no fix available",
+   "seeded": "2026-10-14 [Received] 3.1 Primary/productcert@siemens.com 9.6, 4.0 Secondary/productcert@siemens.com 9.4, CWE-79, published 10-13"
+  },
+  {
+   "id": "CVE-2026-96951",
+   "why": "Windows Shell command injection 8.8, KEV'd 10-13, Secondary secure@microsoft.com — the only KEV entry in the set",
+   "seeded": "2026-10-14 [Undergoing Analysis] 3.1 Secondary/secure@microsoft.com 8.8, CWE-77, KEV 2026-10-13, published 10-13"
+  },
+  {
+   "id": "CVE-2026-102764",
+   "why": "BeyondTrust PAM auth bypass 9.8-NVD/9.3-CNA, KEV'd one day post-publication (due 10-19) — vendor trust center lists NO advisory naming it; the advisory would land here as a LASTMOD/references move first",
+   "seeded": "2026-10-17 [Analyzed] 3.1 Primary/nvd@nist.gov 9.8, 4.0 Secondary/CNA 9.3, CWE-290, KEV 2026-10-16, published 10-15"
+  },
+  {
+   "id": "CVE-2025-61624",
+   "why": "Fortinet path traversal 6.5-NVD/6.0-CNA, published April, KEV'd ten months on (due 10-19) — watch for patch-state/reference movement",
+   "seeded": "2026-10-17 [Analyzed] 3.1 Primary/nvd@nist.gov 6.5, 3.1 Secondary/psirt@fortinet.com 6.0, CWE-22, KEV 2026-10-16, published 2026-04-14"
+  },
+  {
+   "id": "CVE-2026-77931",
+   "why": "MoviePilot agent-tool prompt injection → ExecuteCommandTool with confirm_dangerous=true (model-controlled boolean as the whole boundary), VulnCheck CNA, NVD Deferred — agent-exploitable class, KEV plausible; watch Deferred→Analyzed + NVD metric",
+   "seeded": "2026-10-17 [Deferred] 3.1 Primary/disclosure@vulncheck.com 8.8, 4.0 Secondary/disclosure@vulncheck.com 8.7, published 10-15"
+  },
+  {
+   "id": "CVE-2026-110908",
+   "why": "pfSense FRR escapeshellarg() into sed expression → root, MITRE CNA 8.8, internet-facing firewall — KEV plausible; watch Awaiting Analysis→Analyzed (endorsement-vs-own-score case recurring)",
+   "seeded": "2026-10-17 [Awaiting Analysis] 3.1 Secondary/cve@mitre.org 8.8, CWE-78, published 10-15"
+  },
+  {
+   "id": "CVE-2024-47575",
+   "why": "FortiJump — unauth RCE on FortiManager FMG-Access (TCP 541), initial access in Unit 42's PEERSTITCH chain (config exfil covering 500+ managed FortiGates); KEV since 2024-10-23 — watch for reference/state movement on the PEERSTITCH follow-up",
+   "seeded": "2026-10-17 [Analyzed] 3.1 Primary/nvd@nist.gov 9.8, 3.1 Secondary/psirt@fortinet.com 9.8, CWE-306, KEV 2024-10-23, published 2024-10-23"
+  },
+  {
+   "id": "CVE-2024-26009",
+   "why": "Fortinet management impersonation candidate in Unit 42's PEERSTITCH report (medium confidence: this vs reused trust material) — watch for status/state movement",
+   "seeded": "2026-10-17 [Modified] 3.1 Primary/nvd@nist.gov 8.1, 3.1 Secondary/psirt@fortinet.com 8.1, CWE-288, published 2025-08-12"
+  },
+  {
+   "id": "CVE-2026-111444",
+   "why": "Wheels (CFML framework) SQL injection, CVSS 9.8 CNA-assigned by MITRE; NVD record published but Deferred (2026-10-17). Watch for: NVD analysis flip, an nvd@nist.gov metric, KEV add. Feed: en/feed/2026-10-18.md item 15.",
+   "seeded": "2026-10-18 [Deferred] 3.1 Secondary/cve@mitre.org 9.8, CWE-89, published 2026-10-16; fix shipped v4.2.0 10-11, six days before the record"
+  },
+  {
+   "id": "CVE-2026-111911",
+   "why": "phpMyFAQ WebAuthn credential injection → auth bypass (password+TOTP), third-party-scored 9.8 by VulnCheck — no CNA score, NVD record Deferred (2026-10-18). Watch for: NVD analysis flip, an nvd@nist.gov metric, KEV add. Feed: en/feed/2026-10-18.md item 24.",
+   "seeded": "2026-10-18 [Deferred] 3.1 Primary/disclosure@vulncheck.com 9.8, 4.0 Secondary/disclosure@vulncheck.com 9.3, CWE-287, published 2026-10-17; fixed in 4.1.9, GHSA-g6cq-6rqg-6c9p"
+  },
+  {
+   "id": "CVE-2026-111923",
+   "why": "Fleet (device management) unbounded recursion in Apple MDM enrollment plist parsing — ~150-byte binary plist crashes the server; VulnCheck-assigned, NVD Received. Fixed 4.89.0. Watch for: NVD analysis flip, an nvd@nist.gov metric, KEV add. Feed: en/feed/2026-10-18.md item 37.",
+   "seeded": "2026-10-18 [Received] 3.1 Primary/disclosure@vulncheck.com 7.5, 4.0 Secondary/disclosure@vulncheck.com 8.7, CWE-674, published 2026-10-17"
+  },
+  {
+   "id": "CVE-2026-111924",
+   "why": "Fleet gzip memory-exhaustion DoS on unauthenticated endpoints; VulnCheck-assigned, NVD Received. Fixed 4.83.0. Watch for: NVD analysis flip, an nvd@nist.gov metric, KEV add. Feed: en/feed/2026-10-18.md item 37.",
+   "seeded": "2026-10-18 [Received] 3.1 Primary/disclosure@vulncheck.com 7.5, 4.0 Secondary/disclosure@vulncheck.com 8.7, CWE-409, published 2026-10-17"
+  },
+  {
+   "id": "CVE-2026-111927",
+   "why": "Coder GetWorkspaceProxyByHostname prefix-match hostname trust → application_connect API key capture via crafted auth-redirect; VulnCheck-assigned, NVD Received. Fixed 2.29.20/2.33.12/2.34.8/2.35.4. Watch for: NVD analysis flip, an nvd@nist.gov metric, KEV add. Feed: en/feed/2026-10-18.md item 37.",
+   "seeded": "2026-10-18 [Received] 3.1 Primary/disclosure@vulncheck.com 7.7, 4.0 Secondary/disclosure@vulncheck.com 8.7, CWE-522, published 2026-10-17"
+  },
+  {
+   "id": "CVE-2026-111880",
+   "why": "FreeRDP heap OOB write in server NTLM hash-callback path (backward MIC offset writes 16 zero bytes past allocation); VulnCheck-assigned, NVD Received. Fixed 3.32.0. Watch for: NVD analysis flip, an nvd@nist.gov metric, KEV add. Feed: en/feed/2026-10-18.md item 37.",
+   "seeded": "2026-10-18 [Received] 3.1 Primary/disclosure@vulncheck.com 7.4, 4.0 Secondary/disclosure@vulncheck.com 8.3, CWE-787, published 2026-10-17"
+  },
+  {
+   "id": "CVE-2026-112006",
+   "why": "OpenTelemetry Python OTLP http exporter, empty cert env disables TLS verification; Primary disclosure@vulncheck.com 6.5 (3.1), Secondary 8.3 (4.0), status Received — watch for NVD analysis or score",
+   "seeded": "2026-10-19 [Received] 3.1 Primary/disclosure@vulncheck.com 6.5, 4.0 Secondary 8.3, CWE-295, published 10-18"
+  },
+  {
+   "id": "CVE-2026-111998",
+   "why": "Vanus hardcoded admin token, unauth cluster-admin via gateway; Primary disclosure@vulncheck.com 9.8 (3.1); repo vanus-labs/vanus dormant since 2024-03 — watch for NVD analysis",
+   "seeded": "2026-10-19 [Received] 3.1 Primary/disclosure@vulncheck.com 9.8, 4.0 Secondary 9.3, CWE-1392, published 10-18"
+  },
+  {
+   "id": "CVE-2026-112005",
+   "why": "WhoDB DuckDB filesystem escape via query editor; Primary disclosure@vulncheck.com 7.7 (3.1), Secondary 9.2 (4.0), fixed 0.135.0 — watch for NVD analysis",
+   "seeded": "2026-10-19 [Received] 3.1 Primary/disclosure@vulncheck.com 7.7, 4.0 Secondary 9.2, published 10-18"
+  },
+  {
+   "id": "CVE-2026-112051",
+   "why": "Xinference Windows path traversal via model_name; Primary disclosure@vulncheck.com 6.5 (3.1), Secondary 8.3 (4.0) — watch for NVD analysis",
+   "seeded": "2026-10-19 [Received] 3.1 Primary/disclosure@vulncheck.com 6.5, 4.0 Secondary 8.3, CWE-22, published 10-18"
+  },
+  {
+   "id": "CVE-2026-112021",
+   "why": "snac2 heap overflow via \\u0000 in ActivityPub JSON parsed pre-signature-check; Primary disclosure@vulncheck.com 7.5 (3.1), Secondary 8.7 (4.0), fixed 2.93 — watch for NVD analysis",
+   "seeded": "2026-10-19 [Received] 3.1 Primary/disclosure@vulncheck.com 7.5, 4.0 Secondary 8.7, published 10-18"
+  },
+  {
+   "id": "CVE-2026-103091",
+   "why": "Google Agent Mesh (SAM) MCP-proxy self-enroll (thesis 2 / [[security]], 10-19 12:03 batch): misconfigured OIDC lets a remote attacker self-enroll and invoke tools across all connected backends. Google-CNA-scored 4.0 Secondary 9.3 (cve-coordination@google.com), NVD Received — watch Received→Analyzed, an nvd@nist.gov metric, KEV (agent-infrastructure class, same genre as MoviePilot)",
+   "seeded": "2026-10-19 [Received] 4.0 Secondary/cve-coordination@google.com 9.3, CWE-1188,200,306,862,863, published 10-19, not analyzed"
+  },
+  {
+   "id": "CVE-2026-102503",
+   "why": "Google Agent Mesh (SAM) /libp2p-http ingress (thesis 2 / [[security]], 10-19 12:03 batch): routes around the auth the MCP handler enforces, reaching stdio-backed servers unauthenticated — policy enforced in one protocol handler isn't enforcement. Same seed state as its sibling — watch the same movements",
+   "seeded": "2026-10-19 [Received] 4.0 Secondary/cve-coordination@google.com 9.3, CWE-306,862, published 10-19, not analyzed"
+  },
+  {
+   "id": "CVE-2022-0185",
+   "why": "trailing-window lint (10-19 21:01 act): cited 2026-10-15; A heap-based buffer overflow flaw was found in the way the legacy_parse_param function in the Filesystem…",
+   "seeded": "2026-10-19 [Analyzed] 3.1 Primary/nvd@nist.gov 8.4, 3.1 Secondary/134c704f-9b21-4f2e-91b3-4a467353bcc0 8.4, 2.0 Primary/nvd@nist.gov 7.2, CWE-190/CWE-191, KEV 2024-08-21, published 2022-02-11"
+  },
+  {
+   "id": "CVE-2025-71429",
+   "why": "trailing-window lint (10-19 21:01 act): cited 2026-10-13; GPT-SoVITS through 20250606v2pro contains an OS command injection vulnerability in tools/uvr5/vr.py that…",
+   "seeded": "2026-10-19 [Deferred] 4.0 Secondary/disclosure@vulncheck.com 9.3, 3.1 Secondary/disclosure@vulncheck.com 9.8, CWE-78, published 2026-10-12"
+  },
+  {
+   "id": "CVE-2026-0322",
+   "why": "trailing-window lint (10-19 21:01 act): cited 2026-10-15; A remote code execution (RCE) vulnerability in the management interface of Palo Alto Networks PAN-OS®…",
+   "seeded": "2026-10-19 [Analyzed] 4.0 Secondary/psirt@paloaltonetworks.com 8.6, 3.1 Primary/nvd@nist.gov 7.2, CWE-94, KEV 2026-10-14, published 2026-10-14"
+  },
+  {
+   "id": "CVE-2026-103848",
+   "why": "trailing-window lint (10-19 21:01 act): cited 2026-10-14; Adobe Experience Manager is affected by an Improper Neutralization of Special Elements used in an OS Command…",
+   "seeded": "2026-10-19 [Awaiting Analysis] 3.1 Secondary/psirt@adobe.com 9.9, CWE-78, published 2026-10-13"
+  },
+  {
+   "id": "CVE-2026-104935",
+   "why": "trailing-window lint (10-19 21:01 act): cited 2026-10-14; Authentication bypass by spoofing in ICS before version 25.1.3.0 allows a remote unauthenticated attacker to…",
+   "seeded": "2026-10-19 [Analyzed] 3.1 Secondary/3c1d8aa1-5a33-4ea4-8992-aadd6440af75 8.6, CWE-290, KEV 2026-10-13, published 2026-10-13"
+  },
+  {
+   "id": "CVE-2026-105445",
+   "why": "trailing-window lint (10-19 21:01 act): cited 2026-10-14; An Incorrect Privilege Assignment vulnerability in Docker Hub's account-to-organization conversion feature…",
+   "seeded": "2026-10-19 [Awaiting Analysis] 4.0 Secondary/security@docker.com 9.4, CWE-266, published 2026-10-13"
+  },
+  {
+   "id": "CVE-2026-105899",
+   "why": "trailing-window lint (10-19 21:01 act): cited 2026-10-14; ColdFusion is affected by an Unrestricted Upload of File with Dangerous Type vulnerability that could result…",
+   "seeded": "2026-10-19 [Undergoing Analysis] 3.1 Secondary/psirt@adobe.com 10, CWE-434, published 2026-10-13"
+  },
+  {
+   "id": "CVE-2026-106622",
+   "why": "trailing-window lint (10-19 21:01 act): cited 2026-10-14; ColdFusion is affected by a Server-Side Request Forgery (SSRF) vulnerability that could result in privilege…",
+   "seeded": "2026-10-19 [Analyzed] 3.1 Secondary/psirt@adobe.com 10, CWE-918, published 2026-10-13"
+  },
+  {
+   "id": "CVE-2026-108398",
+   "why": "trailing-window lint (10-19 21:01 act): cited 2026-10-14; Untrusted search path in .NET Framework allows an authorized attacker to bypass a security feature…",
+   "seeded": "2026-10-19 [Awaiting Analysis] 3.1 Secondary/secure@microsoft.com 8.8, CWE-426, published 2026-10-13"
+  },
+  {
+   "id": "CVE-2026-108753",
+   "why": "trailing-window lint (10-19 21:01 act): cited 2026-10-13; Agnaistic agnai through 1.0.555 contains a hard-coded credentials vulnerability in…",
+   "seeded": "2026-10-19 [Deferred] 4.0 Secondary/disclosure@vulncheck.com 9.3, 3.1 Secondary/disclosure@vulncheck.com 9.4, CWE-798, published 2026-10-11"
+  },
+  {
+   "id": "CVE-2026-108860",
+   "why": "trailing-window lint (10-19 21:01 act): cited 2026-10-13; BotSharp through 5.2.0 contains an authentication bypass vulnerability that allows unauthenticated remote…",
+   "seeded": "2026-10-19 [Deferred] 4.0 Secondary/disclosure@vulncheck.com 9.3, 3.1 Secondary/disclosure@vulncheck.com 9.1, CWE-321, published 2026-10-11"
+  },
+  {
+   "id": "CVE-2026-109705",
+   "why": "trailing-window lint (10-19 21:01 act): cited 2026-10-14; Sandbox escape, site isolation issue due to incorrect boundary conditions, use-after-free in the Networking…",
+   "seeded": "2026-10-19 [Deferred] 3.1 Secondary/134c704f-9b21-4f2e-91b3-4a467353bcc0 9.6, CWE-416, published 2026-10-13"
+  },
+  {
+   "id": "CVE-2026-110385",
+   "why": "trailing-window lint (10-19 21:01 act): cited 2026-10-15; A remote code execution vulnerability in ONLYOFFICE Document Server versions before10.0.0 allows an…",
+   "seeded": "2026-10-19 [Awaiting Analysis] 4.0 Secondary/cve@mitre.org 8.7, CWE-73, published 2026-10-14"
+  },
+  {
+   "id": "CVE-2026-21589",
+   "why": "trailing-window lint (10-19 21:01 act): cited 2026-10-16; Rejected reason: This CVE's publication may have been a false positive or a mistake. As a result, we have…",
+   "seeded": "2026-10-19 [Rejected] no CVSS published, KEV 2026-10-15, published 2026-10-05"
+  },
+  {
+   "id": "CVE-2026-48383",
+   "why": "trailing-window lint (10-19 21:01 act): cited 2026-10-14; Adobe Experience Manager is affected by an Incorrect Authorization vulnerability that could result in…",
+   "seeded": "2026-10-19 [Undergoing Analysis] 3.1 Secondary/psirt@adobe.com 10, CWE-863, published 2026-10-13"
+  },
+  {
+   "id": "CVE-2026-63350",
+   "why": "trailing-window lint (10-19 21:01 act): cited 2026-10-14; Affected devices do not properly restrict executable content contained in imported trace files. This could…",
+   "seeded": "2026-10-19 [Awaiting Analysis] 4.0 Secondary/productcert@siemens.com 9.4, 3.1 Secondary/productcert@siemens.com 9.6, CWE-95, published 2026-10-13"
+  },
+  {
+   "id": "CVE-2026-63354",
+   "why": "trailing-window lint (10-19 21:01 act): cited 2026-10-14; Affected devices do not properly validate and sanitize visual marker data contained in imported CSV trace…",
+   "seeded": "2026-10-19 [Awaiting Analysis] 4.0 Secondary/productcert@siemens.com 9.4, 3.1 Secondary/productcert@siemens.com 9.6, CWE-79, published 2026-10-13"
+  },
+  {
+   "id": "CVE-2026-66086",
+   "why": "trailing-window lint (10-19 21:01 act): cited 2026-10-13; In the modem OTA stack, there is a possible stack-based buffer overflow due to improper validation of…",
+   "seeded": "2026-10-19 [Awaiting Analysis] 3.1 Secondary/security@unisoc.com 9.8, CWE-121, published 2026-10-12"
+  },
+  {
+   "id": "CVE-2026-76519",
+   "why": "trailing-window lint (10-19 21:01 act): cited 2026-10-15; A vulnerability in the Advanced Malware Protection (AMP) feature of Cisco Secure Email Gateway could allow an…",
+   "seeded": "2026-10-19 [Analyzed] 3.1 Secondary/psirt@cisco.com 9.8, CWE-23, KEV 2026-10-14, published 2026-10-14"
+  },
+  {
+   "id": "CVE-2026-87689",
+   "why": "trailing-window lint (10-19 21:01 act): cited 2026-10-14; The Metasploit Framework Web Service REST API (msf-ws) exposes the credential store through…",
+   "seeded": "2026-10-19 [Awaiting Analysis] 3.1 Secondary/cve@rapid7.com 9.8, CWE-306, published 2026-10-13"
+  },
+  {
+   "id": "CVE-2026-89108",
+   "why": "trailing-window lint (10-19 21:01 act): cited 2026-10-14; SAP Manufacturing Integration and Intelligence does not sufficiently enforce authorization boundaries within…",
+   "seeded": "2026-10-19 [Awaiting Analysis] 3.1 Secondary/cna@sap.com 9.1, CWE-862, published 2026-10-13"
+  },
+  {
+   "id": "CVE-2026-89110",
+   "why": "trailing-window lint (10-19 21:01 act): cited 2026-10-14; SAP NetWeaver Visual Composer does not perform sufficient authorization checks in certain portal…",
+   "seeded": "2026-10-19 [Awaiting Analysis] 3.1 Secondary/cna@sap.com 9.9, CWE-749, published 2026-10-13"
+  },
+  {
+   "id": "CVE-2026-90532",
+   "why": "trailing-window lint (10-19 21:01 act): cited 2026-10-14; Adobe Experience Manager is affected by an Incorrect Authorization vulnerability that could result in…",
+   "seeded": "2026-10-19 [Undergoing Analysis] 3.1 Secondary/psirt@adobe.com 10, CWE-863, published 2026-10-13"
+  },
+  {
+   "id": "CVE-2026-92392",
+   "why": "trailing-window lint (10-19 21:01 act): cited 2026-10-15; During an upload, curl mishandles HTTP/2 `RST_STREAM` received from the server (with reason…",
+   "seeded": "2026-10-19 [Awaiting Analysis] 3.1 Secondary/134c704f-9b21-4f2e-91b3-4a467353bcc0 8.1, CWE-416, published 2026-10-14"
+  },
+  {
+   "id": "CVE-2026-92707",
+   "why": "trailing-window lint (10-19 21:01 act): cited 2026-10-14; MessagePack for C# is a MessagePack serializer for C#. Prior to 2.5.303 and 3.1.9, deserializing…",
+   "seeded": "2026-10-19 [Awaiting Analysis] 3.1 Secondary/security-advisories@github.com 5.3, CWE-1325, published 2026-10-15"
+  },
+  {
+   "id": "CVE-2026-97229",
+   "why": "trailing-window lint (10-19 21:01 act): cited 2026-10-14; GitLab has remediated an issue in GitLab CE/EE affecting all versions from 19.2 before 19.2.8, 19.3 before…",
+   "seeded": "2026-10-19 [Analyzed] 3.1 Secondary/cve@gitlab.com 10, CWE-190, published 2026-10-13"
+  },
+  {
+   "id": "CVE-2026-99999",
+   "why": "trailing-window lint (10-19 21:01 act): cited 2026-10-16; In the Linux kernel, the following vulnerability has been resolved: ipv4: validate checksum_start before…",
+   "seeded": "2026-10-19 [Received] 3.1 Secondary/416baaa9-dc9f-4396-8d5f-8c081fb06d67 9.3, published 2026-10-15"
+  },
+  {
+   "id": "CVE-2026-96652",
+   "why": "Plex plex2shell chain CVE (SSRF, CWE-918) — Secondary CNA scores only, no NVD score",
+   "seeded": "2026-10-20 [Analyzed] 3.1 Secondary/9119a7d8 4.3, 4.0 Secondary/9119a7d8 5.3, CWE-918, published 09-23"
+  },
+  {
+   "id": "CVE-2026-96654",
+   "why": "Plex plex2shell chain CVE (template injection, CWE-84) — Secondary CNA scores only, no NVD score",
+   "seeded": "2026-10-20 [Analyzed] 3.1 Secondary/9119a7d8 6.5, 4.0 Secondary/9119a7d8 6.9, CWE-84, published 09-23"
+  },
+  {
+   "id": "CVE-2026-96655",
+   "why": "Plex plex2shell chain CVE (SSRF, CWE-918) — Secondary CNA scores only, no NVD score",
+   "seeded": "2026-10-20 [Analyzed] 3.1 Secondary/9119a7d8 4.3, 4.0 Secondary/9119a7d8 5.3, CWE-918, published 09-23"
+  },
+  {
+   "id": "CVE-2026-96656",
+   "why": "Plex plex2shell chain CVE (path traversal, CWE-73), highest of the chain at CVSS 4.0 8.6 — Secondary CNA scores only, no NVD score",
+   "seeded": "2026-10-20 [Analyzed] 3.1 Secondary/9119a7d8 7.2, 4.0 Secondary/9119a7d8 8.6, CWE-73, published 09-23"
+  },
+  {
+   "id": "CVE-2026-111057",
+   "why": "mljar Mercury missing-comma blocklist bypass (CWE-185/284), GitHub CNA 10.0 — feed item 34 (10-20) said 'Awaiting Analysis' but the record reads Deferred; watch the status claim hold or invert",
+   "seeded": "2026-10-20 [Deferred] 3.1 Secondary/security-advisories@github.com 10, CWE-185,CWE-284, published 10-19"
+  },
+  {
+   "id": "CVE-2026-111058",
+   "why": "mljar Mercury tokenless-default kernel-execute (CWE-862), GitHub CNA 9.8 — the other half of feed item 34, genuinely Awaiting Analysis at seed",
+   "seeded": "2026-10-20 [Awaiting Analysis] 3.1 Secondary/security-advisories@github.com 9.8, CWE-862, published 10-19"
+  },
+  {
+   "id": "CVE-2026-111862",
+   "why": "Rank Math PRO 3.0.123 supply-chain malware (CWE-506), Wordfence-assigned 9.8 — feed item 36; watch Deferred→Analyzed and any score revision",
+   "seeded": "2026-10-20 [Deferred] 3.1 Primary/security@wordfence.com 9.8, CWE-506, published 10-19"
+  },
+  {
+   "id": "CVE-2026-111943",
+   "why": "Go crypto/x509 eMudhra intermediate distrust — NO NVD record at seed (10-20); Go assigned the ID, policy assigns no CVSS; watch the record land (92707 precedent) and stay metric-free",
+   "seeded": "2026-10-20 NOT IN NVD (Go-assigned ID, no record yet)"
+  },
+  {
+   "id": "CVE-2026-77932",
+   "why": "DB-GPT hardcoded default-compose credentials (CWE-306), VulnCheck-assigned 9.8 — feed item 35; NVD Deferred with VulnCheck Primary; watch for NVD analysis or a divergent NVD score",
+   "seeded": "2026-10-20 [Deferred] 3.1 Primary/disclosure@vulncheck.com 9.8, 4.0 Secondary/disclosure@vulncheck.com 9.3, CWE-306, published 10-20"
+  },
+  {
+   "id": "CVE-2026-77936",
+   "why": "Letta compose.yaml ships without LETTA_SERVER_SECURE (CWE-1188), VulnCheck-assigned 9.8 — feed item 35; NVD still Received at seed; watch Received→Deferred→Analyzed movement",
+   "seeded": "2026-10-20 [Received] 3.1 Primary/disclosure@vulncheck.com 9.8, 4.0 Secondary/disclosure@vulncheck.com 9.3, CWE-1188, published 10-20"
+  },
+  {
+   "id": "CVE-2026-106931",
+   "why": "SiteGuard Server Edition (EG Secure Solutions) WAF — OS command injection CWE-78, the KEV item's urgent add (feed item 12, 10-21): JPCERT-assigned 8.5 v4/7.8 v3.0 (Secondary), KEV-listed Oct 20 with BOD due **Oct 23** — a 3-day federal clock. Watch: does NVD analysis land before the BOD date (Deferred→Analyzed is the story), does an nvd@nist.gov metric appear, does the JPCERT score get endorsed or diverged.",
+   "seeded": "seeded 10-21 [Deferred] 3.0 Secondary/vultures@jpcert.or.jp 7.8, 4.0 Secondary/vultures@jpcert.or.jp 8.5, 0 NVD-scored, CWE-78, published 10-14, lastModified 10-20T20:17Z"
+  },
+  {
+   "id": "CVE-2026-110936",
+   "why": "Siemens Software Center uncontrolled search-path element CWE-427, KEV due Nov 3 (feed item 12). CNA productcert@siemens.com 6.7 v3.1/8.4 v4 (Secondary). Watch: Undergoing→Analyzed flip, any NVD score.",
+   "seeded": "seeded 10-21 [Undergoing Analysis] 3.1 Secondary/productcert@siemens.com 6.7, 4.0 Secondary/productcert@siemens.com 8.4, 0 NVD-scored, CWE-427, published 10-15"
+  },
+  {
+   "id": "CVE-2026-109432",
+   "why": "Camunda 7 expression injection via AdhocQueryValidator.validate() (CWE-917/78) — chains with -109431's authz gap (feed item 14, 10-21): VulnCheck-assigned 9.8 v3.1/9.3 v4. Watch: Deferred→Awaiting→Analyzed movement, NVD endorsement or divergence on the VulnCheck scores.",
+   "seeded": "seeded 10-21 [Deferred] 3.1 Secondary/disclosure@vulncheck.com 9.8, 4.0 Secondary/disclosure@vulncheck.com 9.3, 0 NVD-scored, CWE-78,CWE-917, published 10-19"
+  },
+  {
+   "id": "CVE-2026-109431",
+   "why": "Camunda 7 missing authorization on engine-rest task sub-resources (CWE-639/862) — the REST-surface opener of the chain with -109432 (feed item 14, 10-21): VulnCheck-assigned 8.1 v3.1/8.6 v4. Watch: Awaiting→Analyzed movement; the pair converging on one analysis is the interesting case.",
+   "seeded": "seeded 10-21 [Awaiting Analysis] 3.1 Secondary/disclosure@vulncheck.com 8.1, 4.0 Secondary/disclosure@vulncheck.com 8.6, 0 NVD-scored, CWE-639,CWE-862, published 10-19"
+  },
+  {
+   "id": "CVE-2026-112770",
+   "why": "Craft CMS RCE via Twig `group` filter invoking non-string callables — starts from CONTENT input, not panel access (feed item 15, 10-21). VulnCheck-assigned; note the v3.1 metric is Primary (8.8) beside v4.0 Secondary (8.7) — a within-assigner version split. All-eight context: NVD carries EIGHT Craft records published in the same second (20:17:54Z, one VulnCheck batch), the feed's 'five' undercounted. Watch: analysis movement + NVD divergence.",
+   "seeded": "seeded 10-21 [Deferred] 3.1 Primary/disclosure@vulncheck.com 8.8, 4.0 Secondary/disclosure@vulncheck.com 8.7, 0 NVD-scored, CWE-94, published 10-19T20:17:54Z"
+  },
+  {
+   "id": "CVE-2026-112771",
+   "why": "Craft CMS Twig sandbox allowlist bypass via filter methods (column/contains/filterByValue/index/when…) — one of the three records the feed's five-pack omitted (act pass 10-21: NVD window holds eight, not five). Lowest of the pack: 7.1 v4/6.5 v3.1. Watch: analysis movement.",
+   "seeded": "seeded 10-21 [Deferred] 4.0 Secondary/disclosure@vulncheck.com 7.1, 3.1 Secondary/disclosure@vulncheck.com 6.5, SSVC present, published 10-19T20:17:54Z"
+  },
+  {
+   "id": "CVE-2026-112772",
+   "why": "Craft CMS RCE — authenticated Control Panel users escape the Twig sandbox (sandbox escape 1 of 2, feed item 15). VulnCheck 8.8 v3.1/8.7 v4. Watch: analysis movement.",
+   "seeded": "seeded 10-21 [Deferred] 4.0 Secondary/disclosure@vulncheck.com 8.7, 3.1 Secondary/disclosure@vulncheck.com 8.8, SSVC present, published 10-19T20:17:54Z"
+  },
+  {
+   "id": "CVE-2026-112773",
+   "why": "Craft CMS RCE — authenticated Control Panel users escape the Twig sandbox (sandbox escape 2 of 2, feed item 15). VulnCheck 8.8 v3.1/8.7 v4. Watch: analysis movement.",
+   "seeded": "seeded 10-21 [Deferred] 4.0 Secondary/disclosure@vulncheck.com 8.7, 3.1 Secondary/disclosure@vulncheck.com 8.8, SSVC present, published 10-19T20:17:54Z"
+  },
+  {
+   "id": "CVE-2026-112774",
+   "why": "Craft CMS Yii behavior injection by authenticated administrators (5.8.0–5.11.0, feed item 15). VulnCheck 7.2 v3.1/8.7 v4. Watch: analysis movement.",
+   "seeded": "seeded 10-21 [Deferred] 4.0 Secondary/disclosure@vulncheck.com 8.7, 3.1 Secondary/disclosure@vulncheck.com 7.2, SSVC present, published 10-19T20:17:54Z"
+  },
+  {
+   "id": "CVE-2026-112775",
+   "why": "Craft CMS authentication bypass via verification-code reuse on users/verify* routes (feed item 15). Second within-assigner split: v3.1 Primary 7.5 beside v4.0 Secondary 8.7. Watch: analysis movement.",
+   "seeded": "seeded 10-21 [Deferred] 3.1 Primary/disclosure@vulncheck.com 7.5, 4.0 Secondary/disclosure@vulncheck.com 8.7, 0 NVD-scored, CWE-287, published 10-19T20:17:54Z"
+  },
+  {
+   "id": "CVE-2026-112776",
+   "why": "Craft CMS multi-site authorization bypass — site-scoped GraphQL tokens can mutate OTHER sites' content; **the pack's highest score (9.8 v3.1/9.3 v4)** and one of the three records the feed's five-pack omitted (act pass 10-21). Watch: analysis movement — a 9.3-v4 Deferred VulnCheck record is exactly the endorsement-vs-own-score case.",
+   "seeded": "seeded 10-21 [Deferred] 4.0 Secondary/disclosure@vulncheck.com 9.3, 3.1 Secondary/disclosure@vulncheck.com 9.8, SSVC present, published 10-19T20:17:54Z"
+  },
+  {
+   "id": "CVE-2026-112777",
+   "why": "Craft CMS blocklist bypass in Twig create() — class-name checks are case-sensitive (feed item 15's fourth Twig-escape RCE). VulnCheck 7.2 v3.1/8.7 v4. Watch: analysis movement.",
+   "seeded": "seeded 10-21 [Deferred] 4.0 Secondary/disclosure@vulncheck.com 8.7, 3.1 Secondary/disclosure@vulncheck.com 7.2, SSVC present, published 10-19T20:17:54Z"
+  },
+  {
+   "id": "CVE-2026-113672",
+   "why": "Argo CD Jsonnet repo-server file read 9.9 — Secondary security-advisories@github.com, Undergoing Analysis",
+   "seeded": "2026-10-21 [Undergoing Analysis] 3.1 Secondary/security-advisories@github.com 9.9, CWE-22, published 10-20"
+  },
+  {
+   "id": "CVE-2026-113708",
+   "why": "Argo CD Kustomize --upload-pack RCE 9.9 — Secondary security-advisories@github.com, Undergoing Analysis",
+   "seeded": "2026-10-21 [Undergoing Analysis] 3.1 Secondary/security-advisories@github.com 9.9, CWE-88, published 10-20"
+  },
+  {
+   "id": "CVE-2026-113709",
+   "why": "Argo CD Helm configHome plugin exec 9.9 — Secondary security-advisories@github.com, Undergoing Analysis",
+   "seeded": "2026-10-21 [Undergoing Analysis] 3.1 Secondary/security-advisories@github.com 9.9, CWE-829, published 10-20"
+  },
+  {
+   "id": "CVE-2026-77459",
+   "why": "Argo CD AppProject restriction bypass via PreDelete/PostDelete hooks 9.9 — the fourth CRITICAL in the same release notes",
+   "seeded": "2026-10-21 [Undergoing Analysis] 3.1 Secondary/security-advisories@github.com 9.9, CWE-863, published 10-13"
+  },
+  {
+   "id": "CVE-2026-105312",
+   "why": "StreamsHub Console cross-tenant Kafka control-plane access 9.9 — Secondary secalert@redhat.com, Awaiting Analysis",
+   "seeded": "2026-10-21 [Awaiting Analysis] 3.1 Secondary/secalert@redhat.com 9.9, CWE-269, published 10-20"
+  },
+  {
+   "id": "CVE-2026-111767",
+   "why": "MCP TypeScript SDK taskStore cross-session access 8.6 — Secondary security-advisories@github.com, Deferred",
+   "seeded": "2026-10-21 [Deferred] 3.1 Secondary/security-advisories@github.com 8.6, CWE-639/862, published 10-20"
+  },
+  {
+   "id": "CVE-2026-101296",
+   "why": "Apache Tomcat JNDIRealm bind credential validation fails open for non-GSSAPI SASL (CVSS 9.1, but the score is CISA-ADP's, not Apache's or NVD's) — fixed in 11.0.27 / 10.1.61 / 9.0.123",
+   "seeded": "2026-10-21 [Awaiting Analysis] 4.0 Secondary/134c704f-9b21-4f2e-91b3-4a467353bcc0 9.1, CWE-304, published 10-20"
+  },
+  {
+   "id": "CVE-2026-101356",
+   "why": "Apache Tomcat HTTP/2 request/response mix-up between users after an error during async processing — NVD unanalyzed; watch for an nvd@nist.gov metric appearing beside CISA-ADP's 9.1",
+   "seeded": "2026-10-21 [Awaiting Analysis] 3.1 Secondary/134c704f-9b21-4f2e-91b3-4a467353bcc0 9.1, CWE-362, published 10-20"
+  },
+  {
+   "id": "CVE-2026-103119",
+   "why": "Apache Tomcat AJP response mix-up (buffer under-read splits a response body across requests) — three Important CVEs in one 11.0.27 batch, all ADP-scored 9.1",
+   "seeded": "2026-10-21 [Awaiting Analysis] 3.1 Secondary/134c704f-9b21-4f2e-91b3-4a467353bcc0 9.1, CWE-127, published 10-20"
+  },
+  {
+   "id": "CVE-2026-109618",
+   "why": "PHP session.upload_progress OOM/UAF -> RCE, fixed 8.5.12/8.4.27/8.3.36/8.2.35 (feed 2026-10-22). PHP Foundation states the real score is 9.2; a 10.0 circulated incorrectly. Watch for NVD enrichment: its number and CWE may differ from PHP's.",
+   "seed": "2026-10-22",
+   "lastStatus": null,
+   "lastMetrics": [],
+   "lastKev": null
+  },
+  {
+   "id": "CVE-2026-109619",
+   "why": "PHP stale-state/UAF -> RCE, same release (feed 2026-10-22). Paired with -109618; treat any NVD metric as a separate judgment from PHP's 9.2.",
+   "seed": "2026-10-22",
+   "lastStatus": null,
+   "lastMetrics": [],
+   "lastKev": null
+  },
+  {
+   "id": "CVE-2026-110264",
+   "why": "GitLab CE/EE regex-compiler integer overflow -> unauthenticated RCE, CVSS 10.0 assigned by GitLab (CNA), fixed in 19.5.1 + six backports (feed 2026-10-22). NVD returned 0 results at publication; watch for the record appearing and for whether NVD adopts or revises the 10.0.",
+   "seed": "2026-10-22",
+   "lastStatus": null,
+   "lastMetrics": [],
+   "lastKev": null
+  },
+  {
+   "id": "CVE-2026-113380",
+   "why": "Signal RingRTC FSM queue saturation leaves call media live after hangup, CVSS 4.0 9.3 MITRE-assigned, fixed in 2.72.0 (feed 2026-10-22). Awaiting Analysis at publication; watch for NVD's own v3.1/v4.0 metric and any KEV add.",
+   "seed": "2026-10-22",
+   "lastStatus": null,
+   "lastMetrics": [],
+   "lastKev": null
+  },
+  {
+   "id": "CVE-2026-113620",
+   "why": "Eclipse ioFog Controller operator WebSocket JWT not verified -> unauthenticated exec, CVSS 3.1 9.8 Eclipse-Foundation-assigned, fixed in 3.9.2 (feed 2026-10-22). Awaiting Analysis at publication; watch for an nvd@nist.gov metric and a possible AC revision if UUID knowledge is treated as higher complexity.",
+   "seed": "2026-10-22",
+   "lastStatus": null,
+   "lastMetrics": [],
+   "lastKev": null
+  },
+  {
+   "id": "CVE-2026-114635",
+   "why": "Traefik SNI check skipped when TLS state is nil -> HTTP/2 :scheme http reaches a client-cert router without presenting one, CVSS 3.1 8.7 VulnCheck-assigned, fixed 2.11.58/3.7.14 (feed 2026-10-22). Received, unanalyzed; watch for an nvd@nist.gov metric and whether NVD keeps 8.7 or re-rates the Go-1.27-only precondition.",
+   "seed": "2026-10-22",
+   "lastStatus": null,
+   "lastMetrics": [],
+   "lastKev": null
+  },
+  {
+   "id": "CVE-2026-114637",
+   "why": "Traefik experimental FastProxy pool fails to pin NTLM/Negotiate backend connections to their frontend connection, CVSS 3.1 8.7 VulnCheck-assigned, fixed 3.7.14 (feed 2026-10-22). Received, unanalyzed; one of five pool-identity bugs in the same batch — watch whether NVD scores them identically or splits them.",
+   "seed": "2026-10-22",
+   "lastStatus": null,
+   "lastMetrics": [],
+   "lastKev": null
+  },
+  {
+   "id": "CVE-2026-114639",
+   "why": "Traefik: a socket preauthenticated with Authorization: Negotiate enters the globally shared backend pool and can be handed to an unauthenticated client, CVSS 3.1 8.7 VulnCheck-assigned, fixed 2.11.58/3.7.14 (feed 2026-10-22). Received, unanalyzed.",
+   "seed": "2026-10-22",
+   "lastStatus": null,
+   "lastMetrics": [],
+   "lastKev": null
+  },
+  {
+   "id": "CVE-2026-114640",
+   "why": "Traefik Ingress-NGINX provider forwards client-supplied Ssl-Client-* headers on the plaintext HTTP router -> mTLS impersonation when ssl-redirect is off, CVSS 3.1 8.7 VulnCheck-assigned, fixed 3.7.14 (feed 2026-10-22). Received, unanalyzed.",
+   "seed": "2026-10-22",
+   "lastStatus": null,
+   "lastMetrics": [],
+   "lastKev": null
+  },
+  {
+   "id": "CVE-2026-114641",
+   "why": "Traefik NTLM/Kerberos round-tripper slot read/written without synchronization -> orphaned backend connections or crash, CVSS 3.1 3.7 (4.0 6.3) VulnCheck-assigned, fixed 2.11.58/3.7.14 (feed 2026-10-22). Received, unanalyzed; scored far below its six siblings in the same batch, so watch whether NVD agrees with the 3.7.",
+   "seed": "2026-10-22",
+   "lastStatus": null,
+   "lastMetrics": [],
+   "lastKev": null
+  },
+  {
+   "id": "CVE-2026-114642",
+   "why": "Traefik round-tripper stored in a client-connection slot not keyed by ServersTransport -> one service TLS client config reused for another backend, CVSS 3.1 8.7 VulnCheck-assigned, fixed 2.11.58/3.7.14 (feed 2026-10-22). Received, unanalyzed.",
+   "seed": "2026-10-22",
+   "lastStatus": null,
+   "lastMetrics": [],
+   "lastKev": null
+  },
+  {
+   "id": "CVE-2026-114656",
+   "why": "Traefik mTLS bypass: a negated !Host() matcher counts as a served domain, TLS-options conflict falls back to defaults and skips RequireAndVerifyClientCert, CVSS 3.1 7.5 VulnCheck-assigned, fixed 3.7.13 (feed 2026-10-22). Received, unanalyzed.",
+   "seed": "2026-10-22",
+   "lastStatus": null,
+   "lastMetrics": [],
+   "lastKev": null
+  },
+  {
+   "id": "CVE-2026-114658",
+   "why": "Grav Login plugin missing authorization in login.invite -> page authors obtain superuser accounts via an invitation form in frontmatter, CVSS 3.1 8.8 VulnCheck-assigned, fixed 3.9.13 (feed 2026-10-22). Received, unanalyzed.",
+   "seed": "2026-10-22",
+   "lastStatus": null,
+   "lastMetrics": [],
+   "lastKev": null
+  },
+  {
+   "id": "CVE-2026-114661",
+   "why": "OpenRemote missing authorization on gateway tunnel endpoints -> any authenticated user can open persistent bidirectional TCP circuits into an edge gateway network, CVSS 4.0 9.0 / 3.1 8.5 VulnCheck-assigned, fixed 1.31.0 (feed 2026-10-22). Deferred, unanalyzed.",
+   "seed": "2026-10-22",
+   "lastStatus": null,
+   "lastMetrics": [],
+   "lastKev": null
+  },
+  {
+   "id": "CVE-2026-114662",
+   "why": "Obot CLI login token-request ID chosen by the requester -> unauthenticated attacker sends a login link and fetches a non-expiring API key (account takeover), CVSS 4.0 8.6 / 3.1 8.1 VulnCheck-assigned, fixed 0.26.0 (feed 2026-10-22). Deferred, unanalyzed.",
+   "seed": "2026-10-22",
+   "lastStatus": null,
+   "lastMetrics": [],
+   "lastKev": null
+  },
+  {
+   "id": "CVE-2026-114053",
+   "why": "vLLM mm_processor_kwargs.code_revision → unauthenticated /tokenize RCE 9.2/8.1 — both disclosure@vulncheck.com, Received Seeded from NVD [Received] 3.1 Primary/disclosure@vulncheck.com 8.1, 4.0 Secondary/disclosure@vulncheck.com 9.2, CWE-94, published 10-21.",
+   "seed": "2026-10-22",
+   "lastStatus": null,
+   "lastMetrics": [],
+   "lastKev": null
+  },
+  {
+   "id": "CVE-2026-114049",
+   "why": "vLLM cross-request allowed_token_ids mask leak — both disclosure@vulncheck.com, Received Seeded from NVD [Received] 3.1 Primary/disclosure@vulncheck.com 3.7, 4.0 Secondary/disclosure@vulncheck.com 6.3, CWE-440, published 10-21.",
+   "seed": "2026-10-22",
+   "lastStatus": null,
+   "lastMetrics": [],
+   "lastKev": null
+  },
+  {
+   "id": "CVE-2026-114055",
+   "why": "vLLM uncontrolled multimodal processor params 8.7 v4.0 / 7.5 v3.1 — both disclosure@vulncheck.com, Received Seeded from NVD [Received] 3.1 Secondary/disclosure@vulncheck.com 7.5, 4.0 Secondary/disclosure@vulncheck.com 8.7, CWE-400, published 10-21.",
+   "seed": "2026-10-22",
+   "lastStatus": null,
+   "lastMetrics": [],
+   "lastKev": null
+  },
+  {
+   "id": "CVE-2026-114085",
+   "why": "Trigger.dev supervisor workload server missing cross-tenant auth 8.8 v4.0 / 7.9 v3.1, fixed boundary 4.7.7 — Deferred Seeded from NVD [Deferred] 3.1 Secondary/disclosure@vulncheck.com 7.9, 4.0 Secondary/disclosure@vulncheck.com 8.8, CWE-306, published 10-21.",
+   "seed": "2026-10-22",
+   "lastStatus": null,
+   "lastMetrics": [],
+   "lastKev": null
+  },
+  {
+   "id": "CVE-2026-114087",
+   "why": "Trigger.dev self-hosted default MAGIC_LINK_SECRET auth bypass 9.2 v4.0 / 8.1 v3.1 — Deferred Seeded from NVD [Deferred] 3.1 Primary/disclosure@vulncheck.com 8.1, 4.0 Secondary/disclosure@vulncheck.com 9.2, CWE-653, published 10-21.",
+   "seed": "2026-10-22",
+   "lastStatus": null,
+   "lastMetrics": [],
+   "lastKev": null
+  },
+  {
+   "id": "CVE-2026-114090",
+   "why": "Trigger.dev --mcp server binds all interfaces 7.6 v4.0 — Received Seeded from NVD [Received] 3.1 Secondary/disclosure@vulncheck.com 7.1, 4.0 Secondary/disclosure@vulncheck.com 7.6, CWE-306, published 10-21.",
+   "seed": "2026-10-22",
+   "lastStatus": null,
+   "lastMetrics": [],
+   "lastKev": null
+  },
+  {
+   "id": "CVE-2026-114093",
+   "why": "Trigger.dev CSRF logout 5.3 v4.0 / 4.3 v3.1 — Deferred Seeded from NVD [Deferred] 3.1 Primary/disclosure@vulncheck.com 4.3, 4.0 Secondary/disclosure@vulncheck.com 5.3, CWE-352, published 10-21.",
+   "seed": "2026-10-22",
+   "lastStatus": null,
+   "lastMetrics": [],
+   "lastKev": null
+  },
+  {
+   "id": "CVE-2026-114065",
+   "why": "Trigger.dev tenant filtering bypass via query table placeholders 7.1 v4.0 — Deferred Seeded from NVD [Deferred] 3.1 Secondary/disclosure@vulncheck.com 6.5, 4.0 Secondary/disclosure@vulncheck.com 7.1, CWE-89, published 10-21.",
+   "seed": "2026-10-22",
+   "lastStatus": null,
+   "lastMetrics": [],
+   "lastKev": null
+  },
+  {
+   "id": "CVE-2026-114108",
+   "why": "HKUDS Vibe-Trading require_auth() fails open 9.8 v3.1 / 9.3 v4.0, fixed in 0.1.7 (2026-05-06) — Received Seeded from NVD [Received] 3.1 Primary/disclosure@vulncheck.com 9.8, 4.0 Secondary/disclosure@vulncheck.com 9.3, CWE-306, published 10-21.",
+   "seed": "2026-10-22",
+   "lastStatus": null,
+   "lastMetrics": [],
+   "lastKev": null
+  },
+  {
+   "id": "CVE-2026-114107",
+   "why": "Vibe-Trading indirect prompt injection → BashTool shell=True root RCE 8.8 v3.1 — Received Seeded from NVD [Received] 3.1 Primary/disclosure@vulncheck.com 8.8, 4.0 Secondary/disclosure@vulncheck.com 8.7, published 10-21.",
+   "seed": "2026-10-22",
+   "lastStatus": null,
+   "lastMetrics": [],
+   "lastKev": null
+  },
+  {
+   "id": "CVE-2026-114106",
+   "why": "Vibe-Trading agent file-read path traversal 8.7 v4.0 / 7.5 v3.1 — Received Seeded from NVD [Received] 3.1 Primary/disclosure@vulncheck.com 7.5, 4.0 Secondary/disclosure@vulncheck.com 8.7, CWE-22, published 10-21.",
+   "seed": "2026-10-22",
+   "lastStatus": null,
+   "lastMetrics": [],
+   "lastKev": null
+  },
+  {
+   "id": "CVE-2026-114117",
+   "why": "Vyper optimizer rewrites (msg.value|K) to 1 in ternary branches 8.2 v4.0 / 5.9 v3.1, NO patched release — Received Seeded from NVD [Received] 3.1 Secondary/disclosure@vulncheck.com 5.9, 4.0 Secondary/disclosure@vulncheck.com 8.2, CWE-682, published 10-21.",
+   "seed": "2026-10-22",
+   "lastStatus": null,
+   "lastMetrics": [],
+   "lastKev": null
+  },
+  {
+   "id": "CVE-2026-71195",
+   "why": "OpenStack Manila public-share takeover 9.9, sole metric 3.1 Secondary/cve@mitre.org (OSSA carries no CVSS) — Received Seeded from NVD [Received] 3.1 Secondary/cve@mitre.org 9.9, CWE-863, published 10-21.",
+   "seed": "2026-10-22",
+   "lastStatus": null,
+   "lastMetrics": [],
+   "lastKev": null
+  },
+  {
+   "id": "CVE-2026-114625",
+   "why": "Arista VeloCloud Orchestrator SQL injection, CVSS 9.9, exploited in the wild, Arista-assigned; NO NVD record and NO cveawg record at seed time",
+   "seeded": "2026-10-23 [absent] no NVD record, no cveawg record; 9.9 is Arista's own score"
+  },
+  {
+   "id": "CVE-2026-94300",
+   "why": "ISC BIND 9 GSS-TSIG replay memory corruption; watch for NVD analysis appearing beside ISC's CNA 8.1",
+   "seeded": "2026-10-23 [Awaiting Analysis] 3.1 Secondary/security-officer@isc.org 8.1, CWE-362/CWE-415, published 10-21"
+  },
+  {
+   "id": "CVE-2026-96889",
+   "why": "librsvg UAF reached via sharp/Next.js Image Optimization; Red Hat CNA 7.8, NVD has never analyzed it",
+   "seeded": "2026-10-23 [Awaiting Analysis] 3.1 Secondary/secalert@redhat.com 7.8, CWE-416, published 09-23"
+  },
+  {
+   "id": "CVE-2026-93952",
+   "why": "Arista VeloCloud input validation, KEV-added Sept 2026 — cited as context in the 10-23 VeloCloud item; watch for NVD analysis",
+   "seeded": "2026-10-23 [unchecked] cited as historical context (KEV September addition)"
+  },
+  {
+   "id": "CVE-2026-16812",
+   "why": "Arista VeloCloud OS command injection, KEV-added July 2026 — cited as context in the 10-23 VeloCloud item",
+   "seeded": "2026-10-23 [unchecked] cited as historical context (KEV July addition)"
+  },
+  {
+   "id": "CVE-2025-64702",
+   "why": "quic-go QPACK header amplification (Header Accordions); CVE ID is from 2025, disclosed jointly 10-20/10-22",
+   "seeded": "2026-10-23 [unchecked] CVE ID predates the Oct 2026 coordinated disclosure"
+  },
+  {
+   "id": "CVE-2026-12523",
+   "why": "Cloudflare quiche QPACK header amplification (Header Accordions)",
+   "seeded": "2026-10-23 [unchecked] fixed in quiche 0.29.3"
+  },
+  {
+   "id": "CVE-2025-13945",
+   "why": "Wireshark QPACK header amplification (Header Accordions); CVE ID from 2025",
+   "seeded": "2026-10-23 [unchecked] fixed in 4.6.2 / 4.4.12"
+  },
+  {
+   "id": "CVE-2026-96355",
+   "why": "Drupal Webform template-injection RCE: ADP-only 9.1 on an Awaiting-Analysis record, advisory dated 2026-09-23 (backfill); watch for NVD analysis + whether an nvd@nist.gov metric appears beside CISA-ADP",
+   "seeded": "2026-10-23 [verified] Awaiting Analysis, 1 metric, 0 NVD-scored, 3.1 Secondary/134c704f… (CISA-ADP) 9.1, CWE-1336, published 2026-10-22"
+  },
+  {
+   "id": "CVE-2026-111497",
+   "why": "Brotli decoder OOB write → RCE 9.2 — CVSS 4.0 Secondary cve-coordination@google.com, status Awaiting Analysis",
+   "seeded": "2026-10-23 [Awaiting Analysis] 4.0 Secondary/cve-coordination@google.com 9.2, CWE-252,CWE-787, published 10-22"
+  },
+  {
+   "id": "CVE-2026-114125",
+   "why": "Storybook dev-server preview code injection — CVSS 4.0 Secondary security-advisories@github.com 8.6, status Awaiting Analysis",
+   "seeded": "2026-10-23 [Awaiting Analysis] 4.0 Secondary/security-advisories@github.com 8.6, CWE-1021,CWE-346,CWE-94, published 10-21"
+  },
+  {
+   "id": "CVE-2026-18963",
+   "why": "Keycloak reset-credentials account takeover 9.1 — CVSS 3.1 Secondary secalert@redhat.com, status Awaiting Analysis",
+   "seeded": "2026-10-23 [Awaiting Analysis] 3.1 Secondary/secalert@redhat.com 9.1, CWE-640, published 08-18"
+  },
+  {
+   "id": "CVE-2026-97631",
+   "why": "EDK II PXE driver pre-boot RCE 9.5 — CVSS 4.0 Secondary infosec@edk2.groups.io, status Deferred",
+   "seeded": "2026-10-23 [Deferred] 4.0 Secondary/infosec@edk2.groups.io 9.5, CWE-120,CWE-131,CWE-787, published 10-22"
+  },
+  {
+   "id": "CVE-2026-53942",
+   "why": "conda update.yml '@conda-bot render' pwn request 9.9 — GitHub_M assigned, fixed in commit 9c0f238 (+2/-63); watch for NVD analysis and whether an NVD-authored score differs from GitHub's",
+   "seeded": "2026-10-24 [Awaiting Analysis] 3.1 Secondary/security-advisories@github.com 9.9, CWE-94, published 10-23"
+  },
+  {
+   "id": "CVE-2026-53921",
+   "why": "OpenWrt odhcpd DHCPv6 stack overflow 9.8 — the advisory cell reads 'Patched versions: None' while 24.10.8 (2026-07-26) names it, and 24.10 is EOL; watch for the cell changing and for a 25.12 backport statement",
+   "seeded": "2026-10-24 [Deferred] 3.1 Secondary/security-advisories@github.com 9.8, CWE-121, published 10-23"
+  },
+  {
+   "id": "CVE-2026-53918",
+   "why": "OpenWrt odhcpd use-after-free (dangling first-lease pointer) — same 24.10.8 release; paired with CVE-2026-53921 in the same advisory batch",
+   "seeded": "2026-10-24 seeded from the 24.10.8 release notes; provenance read via nvd-provenance.mjs"
+  },
+  {
+   "id": "CVE-2026-53920",
+   "why": "OpenWrt odhcpd stack memory disclosure — same 24.10.8 release, same odhcpd advisory batch",
+   "seeded": "2026-10-24 seeded from the 24.10.8 release notes; provenance read via nvd-provenance.mjs"
+  },
+  {
+   "id": "CVE-2026-53922",
+   "why": "OpenWrt odhcpd pre-auth DoS via size_t underflow — same 24.10.8 release, same odhcpd advisory batch",
+   "seeded": "2026-10-24 seeded from the 24.10.8 release notes; provenance read via nvd-provenance.mjs"
+  },
+  {
+   "id": "CVE-2026-62948",
+   "why": "OpenWrt stored XSS via a crafted FQDN hostname in a DHCPv6 client — same 24.10.8 release; the one non-odhcpd CVE of the batch",
+   "seeded": "2026-10-24 seeded from the 24.10.8 release notes; provenance read via nvd-provenance.mjs"
+  },
+  {
+   "id": "CVE-2026-89320",
+   "why": "gose HmacShaCryptor.Hash returned HMAC_K(\"\") — constant tag per key; fix only under the eclipse-keypont module path",
+   "seeded": "2026-10-24 [Deferred] 4.0 Secondary/emo@eclipse.org 8.8, CWE-354, published 10-23"
+  },
+  {
+   "id": "CVE-2026-57116",
+   "why": "PraisonAI AgentOS still unauthenticated; advisory published 2026-06-18, record 10-23 (127-day gap)",
+   "seeded": "2026-10-24 [Deferred] 3.1 Secondary/security-advisories@github.com 9.8, CWE-200,306,862, published 10-23"
+  },
+  {
+   "id": "CVE-2026-115727",
+   "why": "AgenticSeek Flask debug=True on all interfaces, Werkzeug PIN derivable; fix is commit 409840c, no release",
+   "seeded": "2026-10-24 [Deferred] 3.1 Secondary/disclosure@vulncheck.com 8.1, 4.0 Secondary/disclosure@vulncheck.com 9.2, CWE-489, published 10-23"
+  },
+  {
+   "id": "CVE-2026-115547",
+   "why": "Okta Access Gateway 9.1 via S:C — admin console escapes to the service account",
+   "seeded": "2026-10-24 [Awaiting Analysis] 3.1 Secondary/psirt@okta.com 9.1, CWE-20,CWE-94, published 10-23"
+  },
+  {
+   "id": "CVE-2026-112862",
+   "why": "One of twelve 9.8 PHP-object-injection records published in one Patchstack window; template-sentence description",
+   "seeded": "2026-10-24 [Deferred] 3.1 Secondary/audit@patchstack.com 9.8, CWE-502, published 10-23"
+  },
+  {
+   "id": "CVE-2026-110447",
+   "why": "Collabora Online CODE Server proxy.php command injection, exploited with web shells since Sep 10 — MITRE's 9.2, NVD Deferred, KEV 10-23",
+   "seeded": "2026-10-24 [Deferred] 4.0 Secondary/cve@mitre.org 9.2, CWE-78, KEV 2026-10-23, published 10-14"
+  },
+  {
+   "id": "CVE-2026-40151",
+   "why": "PraisonAI AgentOS instruction disclosure 5.3 — the FIRST record on the same surface, published 2026-04-09, Analyzed with 0 NVD-scored metrics; still unauthenticated when CVE-2026-57116 filed it at 9.8 in October",
+   "seeded": "2026-10-24 [Analyzed] 3.1 Secondary/security-advisories@github.com 5.3, CWE-200, published 04-09"
+  },
+  {
+   "id": "CVE-2026-112846",
+   "why": "ThemeREX Save Life PHP object injection — one of twelve 9.8s from one Patchstack window, template-sentence record",
+   "seeded": "2026-10-24 [Deferred] 3.1 Secondary/audit@patchstack.com 9.8, CWE-502, published 10-23"
+  },
+  {
+   "id": "CVE-2026-112852",
+   "why": "ThemeREX Helion CWE-502 at 8.1 — the twelfth-sibling row that shows the 9.8 is not invariant across the theme family",
+   "seeded": "2026-10-24 [Deferred] 3.1 Secondary/audit@patchstack.com 8.1, CWE-502, published 10-23"
+  },
+  {
+   "id": "CVE-2025-66208",
+   "why": "Positive control beside CVE-2026-110447 (whose record says the two are different): this one is Analyzed WITH an nvd@nist.gov 9.8 Primary",
+   "seeded": "2026-10-24 [Analyzed] 3.1 Primary/nvd@nist.gov 9.8, 4.0 Secondary/security-advisories@github.com 7.2, CWE-78, published 2025-12-03"
+  },
+  {
+   "id": "CVE-2026-115889",
+   "why": "Wasmtime Cranelift SSA bit-packing overflow — sandbox escape on any arch using the default backend; advisory 10-19, NVD record 4 days later, patched 36.0.19/43.0.0",
+   "seeded": "2026-10-24 [Deferred] 3.1 Secondary/security-advisories@github.com 9.9, CWE-197/CWE-843, published 10-23"
+  },
+  {
+   "id": "CVE-2026-115893",
+   "why": "Wasmtime aarch64 br_table >~256k targets jumps to an arbitrary offset — sandbox escape; same advisory batch as CVE-2026-115889, patched 36.0.19/48.0.7/49.0.4",
+   "seeded": "2026-10-24 [Deferred] 3.1 Secondary/security-advisories@github.com 9.9, CWE-691, published 10-23"
+  },
+  {
+   "id": "CVE-2026-115931",
+   "why": "Postiz self-hosted scheduler 9.9 — signed-in user names an internal helper, file read exposes the session-signing secret; CNA is the project itself, fix 2.6 minutes before the record",
+   "seeded": "2026-10-24 [Received] 3.1 Secondary/4cdc9741-f887-419a-a2fd-acbbd2729276 (postiz) 9.9, CWE-73/CWE-470, published 10-23"
+  },
+  {
+   "id": "CVE-2026-115812",
+   "why": "AWS Multi Model Server path traversal during model-archive extraction — 9.8/9.3 both AMZN-assigned, EOL with no fixed version, so 'unpatched' is permanent",
+   "seeded": "2026-10-24 [Awaiting Analysis] 3.1 Secondary/ff89ba41-3aa1-4d27-914a-91399e9639e5 (AMZN) 9.8, 4.0 Secondary/ff89ba41-3aa1-4d27-914a-91399e9639e5 9.3, CWE-23, published 10-23"
+  },
+  {
+   "id": "CVE-2026-115557",
+   "why": "CPython ssl distrusted_spki.h denylist (eMudhra), PSF-assigned, status Received",
+   "seeded": "2026-10-25 [Received] 4.0 Secondary/cna@python.org 9.4, CWE-299, 0 NVD metrics, published 10-24"
+  },
+  {
+   "id": "CVE-2026-115932",
+   "why": "Postiz media-path traversal to Discord exfil, record PREDATES its fix release v2.25.3 by 1h00m",
+   "seeded": "2026-10-25 [Received] 3.1 Secondary/4cdc9741 9.6, CWE-22/74, 0 NVD metrics, published 10-24T13:16:37Z"
+  },
+  {
+   "id": "CVE-2026-115933",
+   "why": "Postiz shared-secret token-type confusion, record FOLLOWS its fix release by 1h00m51s",
+   "seeded": "2026-10-25 [Received] 3.1 Secondary/4cdc9741 9.9, CWE-290/345/915, 0 NVD metrics, published 10-24T15:17:33Z"
+  },
+  {
+   "id": "CVE-2026-116014",
+   "why": "open62541 OPC UA client integer overflow; NVD record has NO configurations key at all (prose-only range)",
+   "seeded": "2026-10-25 [Received] 3.1 Primary+4.0 Secondary/disclosure@vulncheck.com 8.1/9.2, CWE-190, 0 NVD metrics, published 10-24"
+  },
+  {
+   "id": "CVE-2026-110956",
+   "why": "asVereinbase fail-open auth; 9.8 is CISA-ADP only (provenance case 5)",
+   "seeded": "2026-10-25 [Received] 3.1 Secondary/CISA-ADP 9.8, CWE-287, 0 NVD metrics, published 10-24T06:16:36Z"
+  },
+  {
+   "id": "CVE-2026-115995",
+   "why": "Unitree Go2 chat_go set_volume OS command injection 9.6 — all three CVSS versions cna@vuldb.com, status Received",
+   "seeded": "2026-10-25 [Received] 3.1 Primary/cna@vuldb.com 9.6, 4.0 Secondary/cna@vuldb.com 9.4, 2.0 Secondary/cna@vuldb.com 10, CWE-78, published 10-24"
+  },
+  {
+   "id": "CVE-2026-115929",
+   "why": "MongoDB Compass bundles Electron's own TLS root store carrying the recoverable eMudhra intermediates — cna@mongodb.com, status Received",
+   "seeded": "2026-10-25 [Received] 3.1 Secondary/cna@mongodb.com 6.8, 4.0 Secondary/cna@mongodb.com 7.6, CWE-295, published 10-24"
+  },
+  {
+   "id": "CVE-2022-22706",
+   "why": "Mali GPU page-cache write reused by the 2026 TCL 50C721 root toolkit — re-checks the KEV-listed 2022 record the device exploit leans on",
+   "seeded": "2026-10-25 [Analyzed] 3.1 Primary/nvd@nist.gov 7.8, 2.0 Primary/nvd@nist.gov 4.6, 3.1 Secondary/CISA-ADP 7.8, CWE-119, KEV 2023-03-30, published 2022-03-03"
+  },
+  {
+   "id": "CVE-2026-79844",
+   "why": "HPE ArubaOS auth bypass, HPE-assigned 10.0 on an unanalyzed record (batch 2026-10-25).",
+   "filed": "2026-10-25"
+  },
+  {
+   "id": "CVE-2026-79845",
+   "why": "Listed by coverage as the ArubaOS PAPI auth bypass, but this NVD record is a VulDB Simple Inventory System SQLi — watch whether the ID is reassigned or the record corrected.",
+   "filed": "2026-10-25"
+  },
+  {
+   "id": "CVE-2026-114820",
+   "why": "Oracle Java SE 9.1 (CWE-327) at the October 2026 CPU; CNA-only metric, NVD status Received (batch 2026-10-25).",
+   "filed": "2026-10-25"
+  },
+  {
+   "id": "CVE-2026-116009",
+   "why": "Camaleon CMS path traversal: CVSS 3.1 8.8 / 4.0 8.7 from the same scorer, unanalyzed (batch 2026-10-25).",
+   "filed": "2026-10-25"
+  },
+  {
+   "id": "CVE-2026-116011",
+   "why": "Crow JSON recursion: 3.1 7.5 vs 4.0 8.7 — a 1.2-point spread across CVSS versions (batch 2026-10-25).",
+   "filed": "2026-10-25"
+  },
+  {
+   "id": "CVE-2026-116019",
+   "why": "Grav allowlist bypass, 3.1 8.8 / 4.0 8.7, fixed in 2.2.13 before the record (batch 2026-10-25).",
+   "filed": "2026-10-25"
+  },
+  {
+   "id": "CVE-2022-21894",
+   "why": "Baton Drop, reused by the BlackX UEFI bootkit in 2026 — watch for KEV movement or a first NVD analysis (batch 2026-10-25).",
+   "filed": "2026-10-25"
+  },
+  {
+   "id": "CVE-2026-24834",
+   "why": "Kata Containers fix credited by OpenAI's containment red team (batch 2026-10-25).",
+   "filed": "2026-10-25"
+  },
+  {
+   "id": "CVE-2026-74753",
+   "why": "Kernel fix credited by OpenAI's containment red team (batch 2026-10-25).",
+   "filed": "2026-10-25"
+  },
+  {
+   "id": "CVE-2026-80521",
+   "why": "Kernel fix credited by OpenAI's containment red team (batch 2026-10-25).",
+   "filed": "2026-10-25"
+  },
+  {
+   "id": "CVE-2026-80841",
+   "why": "Kernel fix credited by OpenAI's containment red team (batch 2026-10-25).",
+   "filed": "2026-10-25"
+  },
+  {
+   "id": "CVE-2026-79873",
+   "why": "HPE ArubaOS PAPI AOS-10 auth bypass — the real record behind coverage's fabricated 8th row (9.3, AV:ADJACENT_NETWORK, CRITICAL label); watch whether NVD analyses it or a 10.0 lands.",
+   "filed": "2026-10-25"
+  },
+  {
+   "id": "CVE-2026-116192",
+   "why": "rclone --rc-serve SSRF (2026-10-26). VulnCheck is the CNA and its own container carries BOTH a v3.1 5.9 and a v4.0 8.2; NVD placed them in the Primary(3.1)/Secondary(4.0) slots at Received with 0 nvd@nist.gov metrics. Watch: an NVD-scored metric appearing beside or replacing them, and whether analysis keeps both versions."
+  },
+  {
+   "id": "CVE-2026-116199",
+   "why": "Snipe-IT Google-SSO deactivated-user bypass (2026-10-26). Same CNA, same two-version split (3.1 8.1 / 4.0 9.2), Received, 0 NVD metrics. Watch: analysis, and whether the v3.1-vs-v4.0 gap survives it."
+  },
+  {
+   "id": "CVE-2026-116163",
+   "why": "Parse Server AuthAdapter fail-open bypass (2026-10-26). CNA container says v3.1 7.4 / v4.0 9.1 (the feed first paired 9.1 with 3.1); Received, 0 NVD metrics. Watch: analysis and any NVD-published score."
+  },
+  {
+   "id": "CVE-2026-70197",
+   "why": "Microsoft SocketAsyncEventArgs memory corruption (2026-10-26). Published 2026-10-13 as fixed, then re-fixed in the 2026-10-25 out-of-band release because Oct 13 did not fully address it -- the fix-claimed-then-refixed state. Awaiting Analysis with Microsoft's Secondary 8.1. Watch: analysis plus any advisory revision."
+  },
+  {
+   "id": "CVE-2026-102870",
+   "why": "Microsoft Blazor WebAssembly debugger (2026-10-26), re-fixed with CVE-2026-70197 on 2026-10-25 after the Oct 13 release failed to fully address it. Undergoing Analysis, Microsoft Secondary 8.8. Watch: analysis."
+  },
+  {
+   "id": "CVE-2026-114148",
+   "why": "NO RECORD ANYWHERE at filing (2026-10-26): NVD absent, cveawg returns CVE_RECORD_DNE, while Microsoft cites it in the 2026-10-25 out-of-band .NET post as the Linux tarball ownership issue. Watch: first appearance of a record, and under which assignerShortName."
+  },
+  {
+   "id": "CVE-2026-112398",
+   "why": "Pillow FlashPix heap overflow 9.2 (2026-10-26). GitHub's advisory source (security-advisories@github.com) in the NVD 4.0 Secondary slot, status Undergoing Analysis, 0 nvd@nist.gov metrics; fix 13.0.0 tagged 10-16. Watch: whether NVD publishes its own score and whether the CWE-122/CWE-787 pair is confirmed."
+  },
+  {
+   "id": "CVE-2026-114509",
+   "why": "Laravel TokenGuard non-string credential auth bypass 9.2 (2026-10-26). GitHub's advisory source, Awaiting Analysis, 0 NVD metrics; 12.68.0 and 13.29.0 both tagged 2026-08-25 -- a 57-day fix-then-record lag, so the correction risk is a record that is already stale rather than a moving score. Watch: analysis, and any widening of the affected-configuration prose."
+  },
+  {
+   "id": "CVE-2026-55677",
+   "why": "Echo encoded-slash (%2F) route-protection bypass (2026-10-26), cited as context for the Oct-22 no-CVE critical in the same bypass family. Watch: not scored by any party at filing -- the class is label-only, so the event to catch is a score appearing at all."
+  },
+  {
+   "id": "CVE-2026-115214",
+   "why": "Datawiza Proxy Auth WordPress plugin 9.8 — only metric is CISA-ADP, status Received, no NVD analysis",
+   "seeded": "2026-10-26 [Received] 3.1 Secondary/134c704f-9b21-4f2e-91b3-4a467353bcc0 (CISA-ADP) 9.8, CWE-269, published 10-25"
+  },
+  {
+   "id": "CVE-2026-116171",
+   "why": "SiYuan Windows extended-length-prefix denylist bypass — both metrics Secondary from VulnCheck, status Deferred",
+   "seeded": "2026-10-26 [Deferred] 3.1 Secondary/disclosure@vulncheck.com 7.5 + 4.0 Secondary/disclosure@vulncheck.com 8.7, CWE-22, published 10-25"
+  },
+  {
+   "id": "CVE-2026-116176",
+   "why": "vLLM SSRF via X-Request-Id — 3.1 Primary and 4.0 Secondary from the same CNA disagree by 0.6",
+   "seeded": "2026-10-26 [Received] 3.1 Primary/disclosure@vulncheck.com 8.2 + 4.0 Secondary/disclosure@vulncheck.com 8.8, CWE-918, published 10-25"
+  },
+  {
+   "id": "CVE-2026-115997",
+   "why": "VulDB carries three CVSS versions (2.0/3.1/4.0) of one score from one source, spanning LOW to MEDIUM — the layered case",
+   "seeded": "2026-10-26 [Deferred] 2.0 Secondary/cna@vuldb.com 6.5 + 3.1 Primary/cna@vuldb.com 6.3 + 4.0 Secondary/cna@vuldb.com 2.1, published 10-25"
+  },
+  {
+   "id": "CVE-2026-115905",
+   "why": "rust zip dual-header (Zip Cloaking) — one vector, two scores: NVD 4.0 10.0 from security-advisories@github.com vs the GHSA body 9.9 for the same SA:L vector; GHSA 404 in api.github.com and absent from OSV",
+   "seeded": "2026-10-27 [Awaiting Analysis] 4.0 Secondary/security-advisories@github.com 10.0, CWE-20, published 10-26; crates.io fix 9.0.5 2026-10-17"
+  },
+  {
+   "id": "CVE-2026-112346",
+   "why": "OpenHands software-agent-sdk — sandbox binds 0.0.0.0 with an empty session_api_keys list; two scores from one CNA (3.1 Primary 9.8 / 4.0 Secondary 9.3)",
+   "seeded": "2026-10-27 [Awaiting Analysis] 3.1 Primary/disclosure@vulncheck.com 9.8 + 4.0 Secondary/disclosure@vulncheck.com 9.3, CWE-1327, published 10-26"
+  },
+  {
+   "id": "CVE-2026-93328",
+   "why": "Google MCP Toolbox path traversal — ADP-enriched without being ADP-scored: CNA GUID carries the CVSS while CISA-ADP writes only ssvcV203",
+   "seeded": "2026-10-27 [Awaiting Analysis] 4.0 Secondary/f45cbf4e-… 9.3 + ssvcV203/134c704f-…, CWE-22, fix PR #3454 merged 2026-06-18"
+  },
+  {
+   "id": "CVE-2026-115693",
+   "why": "hackney partial_chain overrides an explicit trust store — one metric only, 4.0 9.1 from the EErF CNA GUID; fix predates the record",
+   "seeded": "2026-10-27 [Awaiting Analysis] 4.0 Secondary/6b3ad84c-… 9.1, CWE-295, published 10-26; tags 4.9.0 and 4.9.1 exist"
+  },
+  {
+   "id": "CVE-2026-102649",
+   "why": "Burrito unsigned webhook — 9.9 whose own limitation is that auto-apply is disabled; go-playground/webhooks unchanged since 2024-08-06",
+   "seeded": "2026-10-27 [Awaiting Analysis] 3.1 Secondary/security-advisories@github.com 9.9, CWE-306, published 10-26"
+  },
+  {
+   "id": "CVE-2026-116140",
+   "why": "ImageMagick batch member — the two columns disagree (4.0 4.8 / 3.1 3.3); watch for NVD analysis and any score revision",
+   "seeded": "2026-10-27 [Awaiting Analysis] 4.0 Secondary/disclosure@vulncheck.com 4.8 + 3.1 Primary/disclosure@vulncheck.com 3.3, CWE-863, published 10-25"
+  },
+  {
+   "id": "CVE-2026-116145",
+   "why": "ImageMagick 1.8 — an incomplete fix for a policy, i.e. the refix case; the 4.0/3.1 pair inverts (1.8 vs 3.9)",
+   "seeded": "2026-10-27 [Awaiting Analysis] 4.0 Secondary/disclosure@vulncheck.com 1.8 + 3.1 Primary/disclosure@vulncheck.com 3.9, CWE-693, published 10-25"
+  }
+ ]
 }

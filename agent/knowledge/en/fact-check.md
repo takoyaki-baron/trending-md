@@ -1434,3 +1434,106 @@ question is *which of the two is wrong* — on this batch, four out of four were
 Sources: [SkillSpector README](https://raw.githubusercontent.com/NVIDIA/SkillSpector/main/README.md) ·
 [arXiv 2610.32322 — Beyond Gain](https://arxiv.org/abs/2610.32322) ·
 [multica-ai/andrej-karpathy-skills](https://github.com/multica-ai/andrej-karpathy-skills)
+
+## 2026-10-27 — a score and its vector are independent fields; a derived number is not a published one (2026-10-27 04:03 batch)
+
+**The tenth unit is the VECTOR, and one advisory disagrees with itself on one input.** `CVE-2026-115905` (the Rust
+`zip` crate, GHSA-m665-v7pm-7grj, `zip` ≤ 9.0.4, fixed in **9.0.5**) is the cleanest instance so far. Read
+first-hand, in one document:
+
+| where | what it says |
+|---|---|
+| NVD, single metric, `4.0 Secondary security-advisories@github.com` | **10.0**, vector `CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:H/VI:H/VA:H/SC:H/SI:H/SA:L` |
+| the GHSA page's sidebar widget ("CVSS overall score") | **10.0** |
+| the GHSA page's own body / headings ("Threat Scenario & Severity Justification (**10.0 / 9.9** Critical)") | **9.9** for **the same vector string** |
+
+So this is not "header vs body" sloppiness and not two framework versions — there is **only one vector on the
+page**, printed three times, and two different numbers attached to it. A `cvss` object stores `score` and
+`vector_string` as **separate fields**, and this record shows they can disagree. Rule: **recompute a score from
+its vector before quoting either**, and when they disagree, quote the *pair* and say so — the CNA's own document
+does ("10.0 / 9.9 Critical").
+
+**Which number is wrong: the one that does not recompute.** The learn pass wrote "NVD propagated the score, not
+the arithmetic" — an inference, never measured, and it was **backwards**. Run that vector through two
+independent v4.0 implementations on 2026-10-27 (`cvss4` 1.0.7's `calculateBaseScoreV4` and
+`@pandatix/js-cvss` 0.4.4's `CVSS40.Score()`, both reproducing the spec's own examples — 9.3 for
+`AV:N/AC:L/AT:N/PR:N/UI:N/VC:H/VI:H/VA:H/SC:N/SI:N/SA:N`, 9.2 for the `AT:P` variant) and it computes to
+**10.0**, the MacroVector `000100` row of the spec table, whose maximum *is* 10.0 (`SA:L` moves EQ4 to level 1
+without lowering the row's ceiling). So NVD's stored number is the arithmetic and the **page body's 9.9 is the
+number that does not reproduce**. Rule, sharpened: recompute before quoting, and when two numbers ride one
+vector, the recomputation says *which* of them is the stale one — "they disagree, quote both" is only the
+right answer when the arithmetic cannot run.
+
+**And the field is arithmetic-clean at scale: 4,461 of 4,461.** `agent/tools/cvss-recompute.mjs` recomputes
+every metric on every record in an NVD publication window — v3.1/v3.0 natively from the spec equations, v4.0
+through an oracle — and censused the **2026-10-20 → 10-26** week: **4,461 metrics, 0 differ** (v3.1 **3,319**,
+v4.0 **1,113**, v3.0 **29**), across CISA-ADP, Oracle, VulnCheck, VulnDB, GitHub, Patchstack, HPE, Cisco, MITRE,
+the kernel CNA and ~40 others. Two consequences: **(1)** a stored `baseScore` is a *derived* value everywhere in
+the registry pipeline, so the hazard is not "someone typed a number" — it is a page that prints a **second**
+number beside the same vector (the `zip` case) or a reader that carries a score across a **version** boundary
+(the `Primary`-slot trap); **(2)** NVD published its **own** score on only **8 of 4,461** metrics (0.2%) this
+week, so "NVD says 9.8" is almost always a statement about a CNA's number that NVD re-serves — which is why the
+provenance question (CLAUDE.md rule 6) and not the arithmetic question is the one that keeps producing errors.
+
+**The same advisory is also the third "a GHSA id is not necessarily a database record" instance.** `GET
+/api.github.com/advisories/GHSA-m665-v7pm-7grj` → **404**; `api.osv.dev/v1/vulns/GHSA-m665-v7pm-7grj` →
+**"Vulnerability not found"**; the rendered repo page → **200**, 231 KB, vector present. So the readable primary
+was the repo page and the only shared key was the CVE. (Precedent: Snipe-IT and Parse Server, 10-26.) Note the
+inverse hazard too: a *missing* OSV record can be ingest lag on a <1-day-old advisory — say which it is.
+
+**Two columns, zero agreements, over one vendor's whole batch.** All **21** ImageMagick records published
+2026-10-25→26 carry **both** a v4.0 and a v3.1 score from the same CNA (`disclosure@vulncheck.com`); **0 of 21
+pairs are equal**; **19 are higher on 4.0** and **2 are higher on 3.1** (`CVE-2026-116145` 1.8 vs **3.9**;
+`CVE-2026-116149` 7.2 vs **8.1**). Consequences for writing: (a) a distribution is a statement about *one column*
+— the feed's "flat and low, 9×4.8 … 1×1.8" is the v4.0 column, and the v3.1 column has a different lowest record
+(2.5, not 3.9); (b) "the lowest-severity record" is column-dependent; (c) with 2 of 21 going the *other* way, the
+"v4.0 runs higher" tendency from 10-26 is a tendency, not a rule. Instrument: the same comma-separated NVD call
+returns both metric objects, so this costs one request per batch.
+
+**A derived number is not a published field.** The GPT-6.1 Terra model page states "**1,050,000 context window**"
+and "**128,000 max output tokens**" — and **no max-input field at all** (`922` appears in the page only inside SVG
+path data). The item's "**922,000 max input**" is the arithmetic difference, i.e. a sound inference *presented as
+a field*. Keep the two apart: a field can be quoted, a derivation must be labelled (or dropped). The page's actual
+long-context rule is more useful than both: "Prompts with more than **272K** input tokens are priced at **2x input
+and cache rates and 1.5x output for the full request**" — the surcharge is on the **whole request**, not the
+overflow.
+
+**One metric can contain two clocks.** The S-1's **Run-Rate Revenue** is "the sum of (i) our consumption-based fees
+during the trailing **28-day** period … **multiplied by 13**, and (ii) our aggregate **monthly subscription fees**
+as of the measurement date, **multiplied by 12**." Two windows, two multipliers, one number — so "annualizes a
+28-day window × 13" describes half the metric. The filing's own limits are worth quoting with it: it "has not been
+independently verified by third parties" and "has included, and we expect will continue to include, amounts from
+customers that we subsequently determine are using our models … in violation of our usage policy". Two further
+unit traps in the same summary: **$34.3B** is FY2025 and **$72.4B** is the *six months* ended 2026-06-30 (both
+"change in fair value of convertible notes, derivative liabilities, and SAFEs", not revenue), and **40 million
+customers** is a *count of sub-$100k accounts*, not a revenue share.
+
+**A missing number can have two opposite causes.** Pharo 14's release post leaves the contributor count as the
+literal placeholder "**[X]**" — verified present in the page's HTML, a real unfilled template. An EDGAR filing is
+the opposite case: the S-1's revenue-share sentence renders "90%, 57%, 76%, and **%** of total revenue" under a
+text-order extraction because the document is **absolutely positioned** (`position:absolute` divs per line), so the
+fourth digit sits in a different block and a naive strip-and-read *loses* a number the page displays. Never write
+"the filing leaves X blank" from a text extraction — check the positioned layout (or the XBRL) first.
+
+**`NOASSERTION` is not "no license".** `nightly-labs/openbot` reports `license.spdx_id: NOASSERTION` while its
+LICENSE file reads **PolyForm Noncommercial License 1.0.0** (verified). GitHub's classifier does not recognise
+PolyForm, so the API's `NOASSERTION` is a *classifier gap*, not an absence — the third "the license is three
+artifacts" instance (LICENSE text / `spdx_id` / README claim; cf. `git-ai`, 10-25).
+
+**A rate without its base is half a finding.** Cohere's "<one call in **100,000**" reads as negligible until the
+same paragraph supplies the multiplier: "a service handling **10M agent turns a week** could see as many as **a
+hundred** of these calls." Quote rates with the volume the source itself applies them to, and prefer a source that
+does the multiplication to coverage that does not.
+
+**Tooling note (no action needed).** `claim-unit-lint.mjs` reads READMEs at `raw.githubusercontent.com/<slug>/HEAD/…`,
+so a repo whose default branch is `master` (`alchaincyf/huashu-design`, verified 200 at `HEAD`, 404 at `main`) is
+read correctly — the branch-default trap is already closed; the `[X]`-style *spelled-out* number remains invisible.
+
+→ [[security]] [[vuln-supply]] [[disclosure-lag]] [[frontier-models]]
+
+Sources: [GHSA-m665-v7pm-7grj](https://github.com/zip-rs/zip2/security/advisories/GHSA-m665-v7pm-7grj) ·
+[NVD CVE-2026-115905](https://nvd.nist.gov/vuln/detail/CVE-2026-115905) · [crates.io — zip versions](https://crates.io/crates/zip/versions) ·
+[Anthropic PBC Form S-1](https://www.sec.gov/Archives/edgar/data/2130357/000162828026067168/anthropicpbc-sx1.htm) ·
+[GPT-6.1 Terra model page](https://developers.openai.com/api/docs/models/gpt-6.1-terra) ·
+[Cohere — concerning behaviour](https://cohere.com/blog/concerning-behaviour-popular-open-weight-ai-model) ·
+[pharo.org — Pharo 14](https://pharo.org/news/2026-10-26-Pharo14Release.html) · [nightly-labs/openbot](https://github.com/nightly-labs/openbot)

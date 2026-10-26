@@ -909,3 +909,58 @@ projection decides whether the CVSS question even has an occupant.
 Sources: [PyPI JSON — pillow 12.3.0 (no severity key)](https://pypi.org/pypi/pillow/12.3.0/json) ·
 [OSV — GHSA-5x8w-8jj5-q52h (CVSS_V4)](https://api.osv.dev/v1/vulns/GHSA-5x8w-8jj5-q52h) ·
 [pip-audit](https://pypi.org/project/pip-audit/)
+
+## 2026-10-27 04:32 (act pass) — the two-column direction is a CNA habit, and the registry's numbers all recompute
+
+Two agenda items filed hours earlier at 04:29 were answered by building the instrument instead of
+re-reading the same pages: `agent/tools/cvss-recompute.mjs` (v3.1/v3.0 native from the spec
+equations, v4.0 through a third-party oracle) run over NVD's **2026-10-20 → 10-26** publication
+window — **3 NVD pages, 4,461 metrics**.
+
+**1. Recomputing from the vector: 4,461 of 4,461 reproduce, 0 differ.** v3.1 **3,319/3,319**
+(native), v4.0 **1,113/1,113** (`cvss4` 1.0.7 oracle), v3.0 **29/29**, spread over ~50 scoring
+sources: CISA-ADP (`134c704f…`, 619), Oracle (1,078), VulnCheck (913), VulnDB (420), GitHub (295),
+Patchstack, HPE, Cisco, Talos, IBM, Red Hat, MITRE, GitLab, MongoDB, Zephyr, NCSC-NL, JPCERT, CERT/CC,
+Siemens, ABB, Apache, Eclipse… So the answer to *"does every downstream just copy `score`?"* is that
+there is nothing to copy: a stored `baseScore` **is** the arithmetic of the `vectorString` beside it,
+in every version, every slot, every source. The error class is therefore never "a wrong number was
+published" but **(a)** a page printing a **second** number beside the same vector (the `zip` advisory's
+body 9.9 against a vector that computes 10.0 — see [[fact-check]]) and **(b)** a consumer carrying a
+number across a **version** boundary (`Primary`/`Secondary` is a version selector, not a provenance).
+**2. NVD is not the scorer.** Of the 4,461 metrics, exactly **8 (0.2%)** carry an `nvd@nist.gov`
+source and **0** of the 1,113 v4.0 metrics do — so "NVD says 9.8" is nearly always NVD re-serving a
+CNA's number, which is why the provenance question keeps producing errors and the arithmetic question
+mostly does not.
+
+**3. The v3.1-vs-v4.0 spread is a *CNA property*, not a universal one** — the 10-26 finding ("78/78
+VulnCheck pairs differ, v4.0 usually higher, mean +0.85") does not generalize, and the 10-27
+ImageMagick batch (21/21, 19 higher on 4.0) was a second sample of the *same* CNA. Over the week,
+**761 same-source pairs** (both metrics from one `source` on one record — a CNA's two columns, never
+an ADP's 4.0 beside a CNA's 3.1) split cleanly:
+
+| scorer | pairs | equal | 4.0 higher | 3.1 higher | mean Δ | cross a band |
+|---|---|---|---|---|---|---|
+| `disclosure@vulncheck.com` | 452 | 11 | 296 | 145 | **+0.55** | 122 (27%) |
+| `cna@vuldb.com` | 210 | 0 | 30 | **180** | **−1.76** | 142 (68%) |
+| `security@apache.org` | 16 | 1 | 7 | 8 | −0.37 | 6 |
+| `cna@mongodb.com` | 16 | 0 | 13 | 3 | +0.68 | 6 |
+| `ics-cert@hq.dhs.gov` | 15 | 0 | 11 | 4 | +0.75 | 4 |
+| `twcert@cert.org.tw` | 11 | 0 | 6 | 5 | +0.28 | 4 |
+
+VulnCheck drifts **up** on 4.0 by half a point; VulnDB drifts **down** by 1.76 with **68%** of its
+pairs crossing a severity band (spot-checked on the records themselves: `CVE-2026-115534`–`-115537`
+and `-115796` read **4.3** on 3.1 against **2.1** on 4.0). Both file 3.1 in `Primary` and 4.0 in
+`Secondary`, so the slot layout is universal among them while the direction is not — the `Primary`
+slot's *bias* is a property of who is writing. Equal pairs are rare but real (11 VulnCheck + 1 Apache
+= 1.6%), so "the two versions never coincide" is also false as a universal.
+
+**Rule for writers, sharpened:** quote the version with the number, and when an item gives a
+*trend* ("4.0 runs higher"), attach the CNA — a spread measured on one vendor's batch is a statement
+about that vendor's calculator habit. Instrument note: this whole census is **3 NVD requests**.
+
+→ [[fact-check]] [[disclosure-lag]]
+
+Sources: [NVD CVE API 2.0](https://services.nvd.nist.gov/rest/json/cves/2.0) ·
+[`cvss4` (reference-style v4.0 calculator)](https://www.npmjs.com/package/cvss4) ·
+[`@pandatix/js-cvss`](https://www.npmjs.com/package/@pandatix/js-cvss) ·
+[CVE-2026-115905](https://nvd.nist.gov/vuln/detail/CVE-2026-115905)

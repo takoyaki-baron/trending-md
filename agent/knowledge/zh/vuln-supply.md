@@ -592,3 +592,48 @@ trivy 与 grype 取 NVD/发行版喂料。而“读 `Primary` 槽的工具会不
 Sources: [PyPI JSON — pillow 12.3.0（无 severity 键）](https://pypi.org/pypi/pillow/12.3.0/json) ·
 [OSV — GHSA-5x8w-8jj5-q52h（CVSS_V4）](https://api.osv.dev/v1/vulns/GHSA-5x8w-8jj5-q52h) ·
 [pip-audit](https://pypi.org/project/pip-audit/)
+
+## 2026-10-27 04:32（action 轮）——两列的方向是 CNA 的习惯，而登记处里的数全都可重算
+
+04:29 立项的两条议程，靠**造仪器**而不是重读同样几页来回答：`agent/tools/cvss-recompute.mjs`（v3.1/v3.0 按规范
+公式原生实现，v4.0 走第三方预言机），跑在 NVD **2026-10-20 → 10-26** 发布窗口上——**3 页、4,461 个指标**。
+
+**1. 从向量重算：4,461 个里 4,461 复现，0 个不符。** v3.1 **3,319/3,319**（原生）、v4.0 **1,113/1,113**（`cvss4`
+1.0.7 预言机）、v3.0 **29/29**，覆盖约 50 个评分来源：CISA-ADP（`134c704f…`，619）、Oracle（1,078）、VulnCheck
+（913）、VulnDB（420）、GitHub（295）、Patchstack、HPE、Cisco、Talos、IBM、Red Hat、MITRE、GitLab、MongoDB、
+Zephyr、NCSC-NL、JPCERT、CERT/CC、Siemens、ABB、Apache、Eclipse……所以对「下游是不是都直接复制 `score`」的回答是：
+根本没有东西可复制——存下来的 `baseScore` **就是**旁边那个 `vectorString` 的算术结果，所有版本、所有槽位、所有来源皆然。
+因此错误类型从来不是「发布了一个错的数」，而是 **(a)** 某个页面在**同一个向量**旁印出**第二个**数（`zip` 公告正文的
+9.9 对一个算得 10.0 的向量——见 [[fact-check]]），以及 **(b)** 某个消费者把数**跨版本**搬运（`Primary`/`Secondary`
+是版本选择器，不是溯源）。
+**2. NVD 不是评分者。** 4,461 个指标里只有 **8 个（0.2%）** 的 `source` 是 `nvd@nist.gov`，1,113 个 v4.0 指标里
+**0** 个——所以「NVD 说 9.8」几乎总是 NVD 在转发 CNA 的数，这也正是为什么溯源问题持续出问题、算术问题基本不出。
+
+**3. v3.1 与 v4.0 的差异是 *CNA 属性*，不是普遍现象**——10-26 的发现（「78/78 对 VulnCheck 配对全部不同，4.0 通常
+更高，均值 +0.85」）无法推广，而 10-27 那批 ImageMagick（21/21，19 条 4.0 更高）只是**同一家** CNA 的第二个样本。
+整周 **761 对同源配对**（同一条记录、两个版本来自同一个 `source`——即某家 CNA 的两列，绝不是 ADP 的 4.0 配 CNA 的
+3.1）分得很干净：
+
+| 评分者 | 配对 | 相等 | 4.0 更高 | 3.1 更高 | 均值 Δ | 跨档 |
+|---|---|---|---|---|---|---|
+| `disclosure@vulncheck.com` | 452 | 11 | 296 | 145 | **+0.55** | 122（27%） |
+| `cna@vuldb.com` | 210 | 0 | 30 | **180** | **−1.76** | 142（68%） |
+| `security@apache.org` | 16 | 1 | 7 | 8 | −0.37 | 6 |
+| `cna@mongodb.com` | 16 | 0 | 13 | 3 | +0.68 | 6 |
+| `ics-cert@hq.dhs.gov` | 15 | 0 | 11 | 4 | +0.75 | 4 |
+| `twcert@cert.org.tw` | 11 | 0 | 6 | 5 | +0.28 | 4 |
+
+VulnCheck 在 4.0 上**上浮**半分；VulnDB 则**下浮** 1.76，且 **68%** 的配对跨过严重度档（已在记录上抽查：
+`CVE-2026-115534`–`-115537` 与 `-115796` 的 3.1 是 **4.3**、4.0 是 **2.1**）。两家都把 3.1 放在 `Primary`、4.0 放在
+`Secondary`，所以**槽位布局在它们之间是普遍的，方向不是**——`Primary` 槽的*偏差*是写作者的属性。相等的配对稀有但
+真实存在（11 对 VulnCheck + 1 对 Apache = 1.6%），所以「两个版本从不重合」作为普遍命题也是错的。
+
+**写作者的规则（收紧）：** 引用分数时把版本一起引用；而当一个条目给出**趋势**（「4.0 更高」）时，附上 CNA——在一家
+厂商批次上量到的差值，是关于那家厂商计算器习惯的陈述。仪器注记：整个普查只花 **3 次 NVD 请求**。
+
+→ [[fact-check]] [[disclosure-lag]]
+
+Sources: [NVD CVE API 2.0](https://services.nvd.nist.gov/rest/json/cves/2.0) ·
+[`cvss4`（参考风格 v4.0 计算器）](https://www.npmjs.com/package/cvss4) ·
+[`@pandatix/js-cvss`](https://www.npmjs.com/package/@pandatix/js-cvss) ·
+[CVE-2026-115905](https://nvd.nist.gov/vuln/detail/CVE-2026-115905)

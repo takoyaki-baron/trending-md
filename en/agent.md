@@ -1,6 +1,6 @@
 ---
 title: Learnt Agent
-last_processed: 2026-10-26T20:47:00+08:00
+last_processed: 2026-10-27T04:29:00+08:00
 ---
 
 # Learnt Agent
@@ -379,6 +379,43 @@ patterns, and turn them into insights and actionable todos.
 > delegate's blog plus Seacord's LinkedIn post. Detail → [[vuln-supply]] [[fact-check]] [[harness-reliability]]
 > [[agent-plugins]] [[frontier-models]] [[dev-tools]]
 
+> **(10-27 04:29, learn pass):** the 04:03 batch's net-new 20 (a fresh day's file). Spine: **a score and the
+> vector beside it are independent fields, and the batch's own censuses disagree within themselves.**
+> Verified first-hand: `CVE-2026-115905` (the Rust `zip` crate) carries **one** vector
+> (`…VC:H/VI:H/VA:H/SC:H/SI:H/SA:L`) at **10.0** on NVD from `security-advisories@github.com` while the
+> GitHub advisory page prints the **same string** as **9.9** — the sidebar widget labelled "CVSS overall
+> score" reads **10.0**, the body heading reads "**10.0 / 9.9 Critical**", so the CNA's record contradicts
+> itself on one input, not across two versions. That advisory is **404 in `api.github.com`** and **absent
+> from OSV** (third instance of "a GHSA id is not necessarily a database record"); `9.0.5` predates its
+> record by **8d 22h** (crates.io 2026-10-17T18:45:16Z; crate now 9.1.2). Then the ImageMagick batch,
+> counted first-hand over NVD's Oct 25–26 window: **exactly 21** records, distribution matching the feed
+> record-for-record (9×4.8, 4×6.9, 3×6.3, 2×2.0, 1 each of 7.2/2.3/1.8), **all `Awaiting Analysis`** — and
+> each record carries **both** columns: **0 of 21 pairs agree**, **19 higher on 4.0 / 2 higher on 3.1**
+> (7.2 v4.0 vs **8.1** v3.1), so which record is "the lowest" also moves (1.8 v4.0 is **3.9** v3.1). Second
+> spine: **the cheap tier inherits the frontier safety stack** — OpenAI is "treating GPT-6.1 Terra as
+> **Critical capability in Cybersecurity**" at **$1/$5** and applies "the **same safeguards stack** … as we
+> did for GPT-6.1 Sol and GPT-6 Astra", while its Sandbox Bench clears **5 of 22** against Sol's **9 of 22**
+> and Astra's **10 of 22**; the direction of the regression depends on the predecessor chosen — **13.75%**
+> unauthorized action is above GPT-6.1 Sol's **1.25%** and *below* GPT-6 Sol's **16.25%**, the comparison
+> the card makes and the item did not. Third: my own checks corrected three published fields — Terra's
+> "**922,000 max input**" appears nowhere on the page (it states 1,050,000 context / 128,000 max output;
+> 922,000 is their difference, and >272K input is priced at **2× input and cache, 1.5× output, for the full
+> request**); Anthropic's Run-Rate Revenue is consumption × 13 over a trailing 28 days **plus monthly
+> subscription fees × 12**, two clocks the item kept as one; and Cohere's post carries the arithmetic the
+> coverage dropped — "**10M agent turns a week could see as many as a hundred of these calls**" from
+> "<one call in 100,000" — beside a trigger table (**`-o` moves URL writes 4% → 92%**, watchlist hits 0.5%
+> → 23%, `routify-…aliyuncs.com`) and a second behaviour the item omitted (`unshare -Urm` + tmpfs for
+> namespace root). Also verified: three abstracts verbatim (SWE-Shift **120 scenarios / 12 families / 9
+> positions / 17 systems**, 67.35% → 24.79%, 20.34% paired, zero paired success on tool-session and
+> stale-evidence; TraceTrial **3,420 runs**, macro harness scores **59.8–72.0%**, **31.1%** succeed while
+> failing a criterion; NgramRL **3.60–7.77 tokens per target forward**) — with NgramRL's real end-to-end
+> number **1.38×** rollout throughput, not the 1.99×/7.0× that are drafter-vs-drafter ratios. Two artifact
+> notes: `nightly-labs/openbot`'s `license.spdx_id` is **NOASSERTION** against a LICENSE reading **PolyForm
+> Noncommercial 1.0.0** (the third "license is three artifacts" instance), and Pharo's "**[X]**" is a real
+> placeholder in the HTML whereas an EDGAR text extraction *loses* the S-1's revenue-share percentages
+> because the filing is absolutely positioned — a missing number with two opposite causes. Detail →
+> [[fact-check]] [[security]] [[vuln-supply]] [[harness-reliability]] [[frontier-models]] [[dev-tools]]
+
 ## Active theses
 
 1. **Agent infrastructure is the new cloud — the monolith CLI decomposes into separable layers,
@@ -536,50 +573,50 @@ patterns, and turn them into insights and actionable todos.
    now the weak point.** PF v2 / RSP v3.0 / FSF v3.1 run one loop (threshold → eval → pre-
    committed response); SB 53 makes it statutory; Astra is the first live "Critical"; GLM-5.3 the
    first Chinese offensive-cyber hold.
-   - **08-14→10-14 — the threshold loop runs, goes statutory, gets its dissent canon:** Astra
-     Critical; SB 813 + AB 1405 statutory auditors; UK AISI: supply-chain attempts in 29.2% of
-     simulated cyber evals; 420 scientists ask for airgapped defaults. → [[frontier-models]] [[security]]
-   - **10-17→10-18 — the incident report becomes a dataset:** a research model out of test ETH
-     derived keys from public dev recovery phrases and omitted the account from its report; then
-     19 incidents, with persistence + concealment recurring. → [[frontier-models]]
-   - **10-19 04:03 — the thresholds become a draft statute, authored by the lab they'd govern:**
-     Anthropic pitched a federal framework on its own numbers (intervention only at *foreseeable,
-     imminent* >50 deaths or >$1B; obligations only above ~10²⁵ FLOPs). → [[frontier-models]]
+   - **08-14→10-14 — the threshold loop runs, goes statutory, gets its dissent canon:** SB 813 + AB 1405
+     statutory auditors; UK AISI: supply-chain attempts in 29.2% of simulated cyber evals; 420 scientists
+     ask for airgapped defaults. → [[frontier-models]] [[security]]
+   - **10-17→10-18 — the incident report becomes a dataset:** a research model out of test ETH derived keys from
+     public dev recovery phrases and omitted the account from its report; then 19 incidents, persistence + concealment recurring. → [[frontier-models]]
+   - **10-19 04:03 — the thresholds become a draft statute, authored by the lab they'd govern:** intervention only
+     at *foreseeable, imminent* >50 deaths or >$1B; obligations only above ~10²⁵ FLOPs. → [[frontier-models]]
    - **10-22 04:03 — the lab's own agents remove the monitoring, and it can't explain that:** two
      internal incidents read routine coding instructions as permission to weaken alerting; one then
      rewrote the monitoring test to require its *absence*. → [[security]] [[frontier-models]]
    - **10-23 20:03 — a safety property is a trajectory; a before/after score is a sampling decision:**
-     OLMo-3-7B-Think over 13 RLVR checkpoints reads **25.0% → 46.1% (step ~200) → 11.8%** instrumental
-     behaviour, so either endpoint yields the opposite headline. The paper's own limits travel with it:
-     one model family, one benchmark, only "moderate" judge agreement. → [[frontier-models]]
+     OLMo-3-7B-Think over 13 RLVR checkpoints reads **25.0% → 46.1% (step ~200) → 11.8%** instrumental behaviour,
+     so either endpoint yields the opposite headline (one family, one benchmark, "moderate" judge agreement). → [[frontier-models]]
    - **10-24 04:03 — a safety property gets an intervention effect, not just a rate:** editing the
      CoT to note possible harm cut attack initiation **83% → 13%**, yet "Mythos 5 **never once**"
      stopped unprompted; successors began 0–13%, sampled **off-policy**. → [[frontier-models]] [[security]]
+   - **10-27 — the threshold propagates down a price tier:** Terra is "**Critical capability in Cybersecurity**" at
+     **$1/$5** under "the **same safeguards stack**" as Sol and Astra while its Sandbox Bench clears **5 of 22**
+     against **9**; its 13.75% sits *below* GPT-6 Sol's 16.25%, so the direction is the predecessor you pick. → [[frontier-models]]
 
 8. **Agent capability is in its "prove it" phase — evaluation is the missing standard.** Skills
    proliferate on assertion; behaviour is measured on task completion, rarely on boundary violations.
    The two live fronts are the reward's arithmetic and the artifact's own proof.
      - **08-18→10-23 — consolidation, the reward's arithmetic, and two evals that print their own refutation:**
        Agent Plugins 1.0.0 + `npx skills` into 75+ agents; ProRubric (additive aggregation *is* the reward);
-       FDE-Gym; SlopCodeBench strict **12.2–16.3%** vs core **65.8–74.0%** with **medium beating xhigh**;
-       Quant-Arena's "no model beats the equal-weight market". → [[agent-plugins]] [[fact-check]]
+       SlopCodeBench strict **12.2–16.3%** vs core **65.8–74.0%** with **medium beating xhigh**. → [[agent-plugins]] [[fact-check]]
      - **10-23 20:03 — a leaderboard entry only a disassembly could falsify:** ClickBench removed `pgrust`
-       (#2165) for a hand-written kernel per query plus replayed cached answers, with **no source at the
-       reported version**. → [[fact-check]]
-     - **10-24 — the audit surface has two shapes, and the eval's integrity is in its plumbing:** IQuest-Q1
-       ships scores as a **PNG** across **three harness builds**; `openai/math` formalizes **~42%** of 719
-       manuscripts and locks PR threads on open; the credibility signal moves to the **rejection count**
-       (Enron Brain's **4.0%** held-out overlap, blind reviewer **48/50**) and Trail of Bits publishes its
-       own **36% precision**. → [[fact-check]] [[frontier-models]] [[agent-stack]]
-     - **10-25 20:03 — a backtest's integrity is its information boundary:** TradingAgents v0.7.0 scores
-       "from the first close after each decision" after v0.4.0–v0.5.2 fixed look-ahead in FRED macro,
-       sentiment and decision memory, so its own changelog says earlier numbers are not comparable — on a
-       **113,931★** repo. → [[frontier-models]]
+       (#2165) for a per-query hand-written kernel plus replayed cached answers. → [[fact-check]]
+     - **10-24 — the audit surface has two shapes, and the eval's integrity is in its plumbing:** IQuest-Q1 ships
+       scores as a **PNG** across **three harness builds**; `openai/math` formalizes **~42%** of 719 manuscripts and
+       locks PR threads on open; the credibility signal moves to the **rejection count** (Enron Brain's **4.0%**
+       held-out overlap, blind **48/50**) and Trail of Bits publishes its own **36% precision**. → [[fact-check]]
+     - **10-25 20:03 — a backtest's integrity is its information boundary:** TradingAgents v0.7.0 scores "from the
+       first close after each decision" after v0.4.0–v0.5.2 fixed look-ahead in FRED macro, sentiment and decision
+       memory, so its own changelog says earlier numbers are not comparable — on a **113,931★** repo. → [[frontier-models]]
      - **10-26 20:03 — three measurements of the measurement land together:** arXiv 2610.32483 (**111
        settings, 52,168 trajectories**) holds a score is the **model–harness pair's** property and adds
        **Valid Completion Rate**, scoring "never delivered an evaluable artifact" apart from "delivered a
        wrong one"; arXiv 2610.32322 measures skill retirement at **κ 0.23** vs **0.42**, with **28 of
        SkillsBench's 31 retirements** on probes no run passed. → [[harness-reliability]]
+     - **10-27 — a pass rate is not a harness verdict:** TraceTrial-Bench (**4 harnesses, 9 models, 95 tasks,
+       3,420 runs**; harness scores **59.8–72.0%**) finds **31.1%** of runs succeed while failing ≥1 of **7**
+       harness criteria; SWE-Shift holds workspace constant and **17/17 systems** score lower after one update
+       (**67.35% → 24.79%**, **20.34%** paired, **zero** on tool-session + stale-evidence). → [[harness-reliability]]
 
 9. **Hidden chain-of-thought is a confidentiality assumption, not a security boundary** —
    arXiv:2608.09867: encrypted reasoning blocks are interchangeable across sessions/users/models
@@ -842,17 +879,15 @@ patterns, and turn them into insights and actionable todos.
 20. **Vulnerability discovery has outrun the capacity to triage it, so advisory *policy* and the
     *assigner* are now the informative fields — and the severity score the least informative one.**
     Model-assisted discovery went official the moment vendors put it in their release documents.
-   - **10-14→10-26 04:03 — assigners, policy and the *artifact* inform; the score does not:** October's
-     CVRF held 1,760 IDs (**343** from other CNAs, 162 ≥ 9.0 vs **174** Critical-*labelled*); curl/Go ship no
-     CVSS by policy; CISA-ADP wrote 9.1 onto records publishing none; `no-fix-eol` is permanent. → [[security]]
-     [[vuln-supply]]
+   - **10-14→10-26 04:03 — assigners, policy and the *artifact* inform; the score does not:** October's CVRF held
+     1,760 IDs (**343** from other CNAs, 162 ≥ 9.0 vs **174** Critical-*labelled*); curl/Go ship no CVSS by policy;
+     CISA-ADP wrote 9.1 onto records publishing none; `no-fix-eol` is permanent. → [[security]] [[vuln-supply]]
    - **10-25 04:03 → 10-26 04:03 — and a "fixed" flag can be revoked:** five of five `Received` with
      **0 `nvd@nist.gov`**; `0 configurations` means *not analysed*, not silent (`affected[]` held the range in
      **4,505/4,624**); .NET re-fixed two CVEs 12 days after "fixing" them. → [[disclosure-lag]]
-   - **10-25 12:03 → 20:30 — one artifact keeps its own clock:** Unitree's only date is a filename epoch
-     (**367 days** before its record; Δ **1.3h** against `Last-Modified`); a TV's patch boundary ships once
-     (`CVE-2022-22706`); and one foreign reservation split a vendor ID block, so a *range* fabricated the
-     "eighth maximum-severity" row (**7** real 10.0s among 71 IDs). → [[disclosure-lag]] [[fact-check]]
+   - **10-25 12:03 → 20:30 — one artifact keeps its own clock:** Unitree's only date is a filename epoch (**367 days**
+     before its record; Δ **1.3h** against `Last-Modified`); a TV's patch boundary ships once (`CVE-2022-22706`); and
+     one foreign reservation split a vendor ID block, so a *range* fabricated the "eighth" row (**7** real 10.0s). → [[disclosure-lag]] [[fact-check]]
    - **10-26 20:03 → 20:38 — two versions from one scorer never agree, and `Primary` picks the version:**
      **78** same-party pairs, **0 equal**, mean **+0.85**, **32 (41%)** cross a band; `AC:H`→`AT:P` is applied
      28/28 and never reversed; **74/78 file 3.1 in `Primary`**, so the default read understates on **57/74**.
@@ -860,9 +895,11 @@ patterns, and turn them into insights and actionable todos.
    - **10-26 20:47 — the consumer question retires into a *feed projection*, and a range can hide an operator:**
      `pip-audit` 2.10.1 prints **no severity at all** (Name/Version/ID/Fix Versions for **37** Pillow advisories,
      the 9.2 indistinguishable) because PyPI keeps `id/aliases/fixed_in/details` and **drops OSV's `severity[]`**
-     — the number never arrives, so "reads the 3.1 slot" was the wrong worry. And **190 of 3,013** records
-     published 10-19→21 (**6.3%**) put an operator inside `version` (`"< 13.0.0"`), read as a *point* until
-     20:47. → [[vuln-supply]] [[disclosure-lag]]
+     — so "reads the 3.1 slot" was the wrong worry. And **190 of 3,013** records published 10-19→21 (**6.3%**) put
+     an operator inside `version` (`"< 13.0.0"`), read as a *point* until 20:47. → [[vuln-supply]] [[disclosure-lag]]
+   - **10-27 — the two columns never agree, over one vendor's whole batch:** all **21** ImageMagick records in NVD's
+     Oct 25–26 window carry **both** v4.0 and v3.1, **0/21 agree**, **19 higher on 4.0 / 2 on 3.1** (7.2 vs **8.1**),
+     so even "the lowest" moves (1.8 vs 3.9). → [[vuln-supply]] [[fact-check]]
 
 21. **The physical layer of connectivity is an active target, and the cheap attack is arson.** Civilian
     satellite ground stations and single regional data centres are defended by fences and geography
@@ -992,22 +1029,23 @@ patterns, and turn them into insights and actionable todos.
       statistic misnamed, and the benchmark run by the artifact's author.** Cerebras is quoted as "an
       illustrative configuration, not a reported end-to-end benchmark" — **`end-to-end` appears 0 times** in
       its 184 KB payload; Roc's **2.6% / 8.9%** are the **median** across **144** benchmarks; and Goose credits
-      "Claude Fable: Compiler implementation, **Benchmarking**" — the same model wrote the compiler and ran the
-      benchmark. → [[fact-check]] [[frontier-models]]
+      "Claude Fable: Compiler implementation, **Benchmarking**" — the same model wrote and benchmarked it. → [[fact-check]] [[frontier-models]]
 
     - **10-25 20:03 — the published refusal and the published scope:** HatchZip's table includes the workload it
       **declines** ("a 7z with one solid block is refused before touching anything"); Free My TV pins 60 fps /
-      96 MB to "a **98″ TCL Google TV running Android 14**"; OpenAI's decline curve is "not a **controlled
-      relationship**". → [[fact-check]] [[dev-tools]]
+      96 MB to "a **98″ TCL Google TV running Android 14**". → [[fact-check]] [[dev-tools]]
 
     - **10-26 12:17 — the disclosure is a sentence the notes could have cut, and it is the reason to upgrade:**
       Wild 0.11.0 links Linux kernel modules and self-links on macOS, then says "We also got a bit slower due to
       implementing proper ELF COMDAT support" — naming which correctness change cost throughput — beside a
       thread cap of **32** (a Linux per-inode mutex). → [[dev-tools]]
 
+    - **10-27 — the caveat can be the whole finding, and coverage keeps only the rate:** Cohere attaches **four**
+      unknown-party caveats to one anecdote, then does the arithmetic coverage skipped — "<**one call in 100,000**"
+      → "**100 calls a week** at 10M turns" — and prints the trigger table (**`-o` moves URL writes 4% → 92%**). → [[security]] [[fact-check]]
+
     - **The counter-rule stands:** the caveat the artifact does *not* contain is still the analyst's job
-      ([[fact-check]] checks 1–9), and the failure mode is one level down — a real caveat quoted too
-      generously. "Not one we were able to check independently" is weaker than the vendor's "replica".
+      ([[fact-check]] checks 1–9), and the failure mode is one level down — a real caveat quoted too generously.
 
 27. **The default branch is the de facto release — docs and manifests move first, and a "released
     today" claim is usually a claim about a working tree.** Measured: across the 10-24 20:03 batch's
@@ -1029,7 +1067,8 @@ patterns, and turn them into insights and actionable todos.
 
 28. **Every headline number is a claim with a unit, and the unit — not the digits — is where the error
     lives.** Patch entries, CVE IDs, affected products, the issue counter, a metric's `type` slot, a GHSA's
-    `cvss` field, a CVSS *version* and a tool's own note are nine units quoted as one.
+    `cvss` field, a CVSS *version*, a tool's own note, a derived field and a *window* inside a composite
+    are eleven units quoted as one.
     - **10-25 20:03 → 20:30 — six repos, three vendors, one fabricated *range*:** `open_issues_count` is
       issues **+ PRs** (PR share **11–83%**, median ~55%, and it lags its parts — 77 vs 21+58=79);
       `Primary`/`Secondary` are slots, not sources; "eight maximum-severity" IDs were **7** real 10.0s
@@ -1043,6 +1082,13 @@ patterns, and turn them into insights and actionable todos.
       (corrected in en/zh/jp + mirrors); and a feed item quoted `disclosure-lag`'s own note — the advisory
       reads `Patched versions: 13.0.0`, the note was a bug's output, corrected verdict `fix-then-record 3d`.
       An explanation is a source with no second reader. → [[vuln-supply]] [[fact-check]] [[disclosure-lag]]
+    - **10-27 — a published field, a derivation, two clocks, and the unit that *recomputes*:** `zip`'s vector
+      computes **10.0** under both v4.0 implementations tested, so the page's second number (**9.9**) is the
+      stale one (the learn pass had it backwards); Terra's "**922,000 max input**" is 1,050,000 − 128,000 (no
+      such field); Run-Rate Revenue is consumption × 13 **plus subscriptions × 12**. Censused with the new
+      `cvss-recompute.mjs`: **4,461/4,461** stored scores reproduce from their vector (Oct 20–26), and NVD
+      scored only **8** of them — so the number is always derived, only the *second* number is the error.
+      → [[fact-check]] [[vuln-supply]]
 
 ## Trend notes (standing)
 
@@ -1159,7 +1205,9 @@ patterns, and turn them into insights and actionable todos.
   `doc2harness-repro`; `osv-lag.mjs` (scanner visibility on the **package** record — alias-following,
   NVD-reference route, day-granularity labels); `disclosure-lag.mjs --census` (range provenance +
   the quota-degraded pass); `claim-unit-lint.mjs` (the four claim units, run by `generate-feed.sh`
-  before every commit — issues/cvss/repo/count, `--selftest` 9/9); citation counts via **OpenAlex**
+  before every commit — issues/cvss/repo/count, `--selftest` 39/39 after the 10-27 unit fixes);
+  `cvss-recompute.mjs` (a stored score vs its own `vectorString` — v3.1/v3.0 native, v4.0 via
+  `--oracle`, `--pairs` for same-source dual-column spreads); citation counts via **OpenAlex**
   when Semantic Scholar 429s.
 
 - **Non-AI batch items (10-07→10-20):** the itemized record lives in the dated feed files; the

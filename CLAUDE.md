@@ -119,6 +119,22 @@ underlying pages — this produced a two-layer false signal in a single item.
    counterexample into the rule the day you see it, not two days later). `vulnStatus` answers "did NVD analyze it"; the
    `nvd@nist.gov` metric answers "did NVD publish its own score" — two different questions,
    check both before writing either "CNA-assigned" or "NVD Analyzed".
+   **A score is DERIVED from its vector, and the second number on a page is the one to doubt**
+   (added 2026-10-27, the `zip` lesson measured instead of argued). `CVE-2026-115905` prints **10.0** and
+   **9.9** against one vector string; the learn pass inferred "NVD copied a score without checking the
+   arithmetic" and the inference was **backwards** — that vector computes **10.0** under two independent
+   v4.0 implementations, so the page body's 9.9 is the stale number. Censused with the new
+   `node agent/tools/cvss-recompute.mjs` over NVD's 2026-10-20→26 publication window: **4,461 metrics,
+   0 differ** (v3.1 3,319 native, v4.0 1,113 via `--oracle`, v3.0 29) — so a stored `baseScore` **is** the
+   arithmetic of the `vectorString` beside it, and NVD published its own score on only **8 of 4,461**
+   (0.2%). Three consequences for writing: **(a)** "NVD says 9.8" is almost always a *CNA's* number NVD
+   re-serves — the provenance question, not the arithmetic question, is what keeps producing errors;
+   **(b)** when two numbers ride one vector, recompute rather than quote both — "they disagree" is the
+   answer only when the arithmetic cannot run (v4.0 needs a MacroVector table, hence `--oracle`);
+   **(c)** the v3.1↔v4.0 spread's **direction is the CNA's habit, not the framework's** — 761 same-source
+   pairs over one week give VulnCheck **+0.55** mean and VulnDB **−1.76** under the *same*
+   `Primary`=3.1/`Secondary`=4.0 layout, so a two-column trend needs its CNA attached
+   (`cvss-recompute.mjs --pairs`).
    **A missing score can be POLICY, not absence — name whose policy** (added 2026-10-15 after the
    curl item: the project's own `VULN-DISCLOSURE-POLICY.md` says "We do not support CVSS … We
    believe CVSS is a broken system", so "no CVSS for this CVE" and "no CVSS has been assigned yet"

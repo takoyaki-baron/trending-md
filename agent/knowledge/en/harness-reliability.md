@@ -126,3 +126,52 @@ tasks and item scores across four models ship in `EverMind-AI/SkillCorpus`.
 → [[frontier-models]] [[agent-plugins]] [[agent-stack]]
 
 Sources: [arXiv 2610.32483](https://arxiv.org/abs/2610.32483) · [full paper](https://arxiv.org/html/2610.32483v1) · [arXiv 2610.32322](https://arxiv.org/abs/2610.32322) · [EverMind-AI/SkillCorpus](https://github.com/EverMind-AI/SkillCorpus)
+
+## 2026-10-27 — the harness gets its own score, and the drift is not a reasoning failure
+
+Two preprints this week stop treating the harness as a constant, and both are *paired* designs: the same history,
+the same workspace, the same task, with one variable changed.
+
+**TraceTrial-Bench** (arXiv [2610.32285](https://arxiv.org/abs/2610.32285), *Trial by Trace*) organizes harness
+reliability into **seven components** (context, execution, governance, lifecycle, observability, tools,
+verification), builds **95 expert-level, mechanism-oriented tasks** with executable or state-based ground truth,
+and evaluates **4 harnesses × 9 models × 95 tasks = 3,420 runs**. Macro-averaged **harness** scores span
+**59.8% – 72.0%** — and the number that should sit beside every pass rate: "**31.1% of runs achieve task success
+despite failing at least one harness criterion**". Nearly a third of green checkmarks are hiding a broken promise
+from the scaffolding: a silently truncated context, a retried tool call with a changed meaning, a verification
+step that never ran. The method worth borrowing is the **Failure Attribution** module — "explicit mechanism
+chains" so a verdict attaches to a component at run level, not to a score at corpus level.
+
+**SWE-Shift** (arXiv [2610.32196](https://arxiv.org/abs/2610.32196)) attacks the assumption underneath every
+repository benchmark — "that tasks and environments remain unchanged throughout execution". From "the same saved
+history and workspace" a **Clean** continuation runs untouched while a matched **Shifted** continuation "receives a
+task-relevant update"; success requires "completing the current task, preserving still-valid work, and satisfying
+the applicable state and evidence checks". **120 scenarios × 12 change families × 9 scheduled intervention
+positions**, **17 coding-agent systems**: "all of which have lower Shifted than Clean success". **GPT-6 Astra falls
+67.35% → 24.79%**, with **20.34% paired success**, and "**tool/session changes and stale evidence yield zero
+paired success across all systems**". Two methodological virtues: the authors refuse the tidy story ("Late-position
+paired success is lower for some systems and higher for others"), and they name the reusable sentence —
+"success on the unchanged task can coexist with failures to preserve work, recover state, or refresh evidence
+after an update."
+
+**What the two say together.** The failure is not degraded reasoning; it is an agent that keeps citing evidence
+that stopped being true, and a harness that never re-checks. With 10-26's pair (arXiv 2610.32483's score-as-a-
+model–harness-property and 2610.32322's retirement κ), the harness is now measured three ways in a week: as a
+**scored component**, as a **variable under drift**, and as a **pairing effect**. Report a pass rate without a
+harness score and a paired number, and the reader cannot tell which of the three moved.
+
+**The efficiency paper's unit trap (arXiv [2610.32881](https://arxiv.org/abs/2610.32881), NgramRL).** RL
+post-training is dominated by rollout generation — "can exceed **70% of training time**" — and NgramRL drafts from
+"bounded recent rollout history" of the same prompt: no auxiliary model, no drafter training, no persistent
+GPU-resident state. Its headline metric is **not** a speedup: "**3.60–7.77 tokens per target-model forward** in the
+**warm-cache regime**, up to **1.99× more than SuffixDecoding** and **7.0× more than prompt-lookup**". Those two
+ratios are **drafter-vs-drafter** comparisons. The end-to-end number is in the abstract's last sentence and is far
+smaller: the prefetcher "covers **96.6%** of Qwen3-8B outcomes at a candidate budget of 16 and improves measured
+rollout throughput by **1.38×** over synchronous NgramRL, approaching its **1.40×** overlap ceiling". So: **tokens
+committed per forward ≠ training speedup**, and "warm-cache" is load-bearing — the draft source is *this run's own
+rollouts*, so the first rollout of a prompt gets nothing.
+
+→ [[frontier-models]] [[agent-stack]] [[fact-check]] [[token-economics]]
+
+Sources: [arXiv 2610.32285](https://arxiv.org/abs/2610.32285) · [arXiv 2610.32196](https://arxiv.org/abs/2610.32196) ·
+[arXiv 2610.32881](https://arxiv.org/abs/2610.32881)

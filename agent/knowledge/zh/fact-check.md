@@ -827,3 +827,86 @@ Sources: [train-it.eu — C++26 DIS ballot result](https://train-it.eu/blog/cpp2
 Sources: [SkillSpector README](https://raw.githubusercontent.com/NVIDIA/SkillSpector/main/README.md) ·
 [arXiv 2610.32322 — Beyond Gain](https://arxiv.org/abs/2610.32322) ·
 [multica-ai/andrej-karpathy-skills](https://github.com/multica-ai/andrej-karpathy-skills)
+
+## 2026-10-27——分数与它旁边的向量是两个独立字段；推导出来的数不是公布出来的字段（04:03 批次）
+
+**第十个单位是 VECTOR，而一份公告在同一个输入上和自己不一致。** `CVE-2026-115905`（Rust `zip` crate，
+GHSA-m665-v7pm-7grj，`zip` ≤ 9.0.4，**9.0.5** 修复）是迄今最干净的一例。一手读取，同一份文档里：
+
+| 位置 | 它写的 |
+|---|---|
+| NVD，单一指标，`4.0 Secondary security-advisories@github.com` | **10.0**，向量 `CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:H/VI:H/VA:H/SC:H/SI:H/SA:L` |
+| GHSA 页面侧栏部件（「CVSS overall score」） | **10.0** |
+| GHSA 页面正文/小标题（「Threat Scenario & Severity Justification（**10.0 / 9.9** Critical）」） | **同一个向量字符串**却标 **9.9** |
+
+所以这既不是「头部与正文手滑」，也不是两个框架版本——页面上**只有一个向量**、印了三处，却挂着两个不同的分数。
+`cvss` 对象把 `score` 与 `vector_string` 存成**两个独立字段**，这条记录证明它们可以不一致。规则：**引用分数前先从向量
+重算**；两者不一致时引用**这一对**并说明——CNA 自己的文档就是那样写的（「10.0 / 9.9 Critical」）。
+
+**哪一个数才是错的：重算不出来的那个。** 学习轮写下的是「NVD 传播了分数，而不是算术」——一个从未被测量的推论，而且
+方向**反了**。2026-10-27 把那个向量送进两个独立的 v4.0 实现（`cvss4` 1.0.7 的 `calculateBaseScoreV4` 与
+`@pandatix/js-cvss` 0.4.4 的 `CVSS40.Score()`，两者都能复现规范自带示例——`AV:N/AC:L/AT:N/PR:N/UI:N/VC:H/VI:H/VA:H/SC:N/SI:N/SA:N`
+为 9.3、`AT:P` 变体为 9.2），算出来是 **10.0**，即规范表中 MacroVector `000100` 那一行，而该行的上限**就是** 10.0
+（`SA:L` 把 EQ4 推到第 1 级却不降低该行的天花板）。所以 NVD 存的那个数就是算术结果，**页面正文的 9.9 才是复现不出来的
+那个数**。规则由此收紧：引用前先重算；当一个向量上挂着两个数时，重算告诉你**哪一个**是过期的——只有在算术无法运行时，
+「两者不一致、都引用」才是正确答案。
+
+**而且这个字段在规模上是干净的：4,461/4,461。** `agent/tools/cvss-recompute.mjs` 会把一个 NVD 发布窗口内每条记录的
+每个指标都重算——v3.1/v3.0 按规范公式原生实现，v4.0 走预言机——对 **2026-10-20 → 10-26** 一周的普查结果是：
+**4,461 个指标、0 个不符**（v3.1 **3,319**、v4.0 **1,113**、v3.0 **29**），横跨 CISA-ADP、Oracle、VulnCheck、VulnDB、
+GitHub、Patchstack、HPE、Cisco、MITRE、内核 CNA 等约 50 个来源。两个推论：**(1)** 在登记流水线上，存下来的 `baseScore`
+处处是**派生值**，所以危险不是「有人手打了一个数」——而是某个页面在**同一个向量**旁印了**第二个**数（`zip` 案例），
+或者某个读者把分数**跨版本**搬运（`Primary` 槽位陷阱）；**(2)** 这一周 NVD 只为 **4,461 个指标中的 8 个（0.2%）**
+发表了**自己的**分数，所以「NVD 说 9.8」几乎总是关于一个 CNA 的数——而 NVD 只是转发——这正是为什么溯源问题（CLAUDE.md 规则 6）
+而不是算术问题，一直在制造错误。
+
+**同一条公告还是「GHSA id 未必是数据库记录」的第三例。** `GET /api.github.com/advisories/GHSA-m665-v7pm-7grj` →
+**404**；`api.osv.dev/v1/vulns/GHSA-m665-v7pm-7grj` → **"Vulnerability not found"**；仓库渲染页 → **200**、231 KB、
+向量在。于是可读的一手是仓库页，双方共享的键只有 CVE。（先例：Snipe-IT、Parse Server，10-26。）反面风险同样要记：
+一条**缺**OSV 记录可能只是发布不满一天的抓取延迟——要说明是哪一种。
+
+**两列、零一致，覆盖一家厂商整批。** 2026-10-25→26 发布的 **21** 条 ImageMagick 记录，同一 CNA
+（`disclosure@vulncheck.com`）**每一**条都同时带 4.0 与 3.1 两个分；**21 对里 0 对相等**；**19 条 4.0 更高**、
+**2 条 3.1 更高**（`CVE-2026-116145` 1.8 对 **3.9**；`CVE-2026-116149` 7.2 对 **8.1**）。写作后果：(a) 分布是关于
+**某一列**的陈述——「平坦且低，9×4.8…1×1.8」是 4.0 列，3.1 列的最低记录不同（2.5，而非 3.9）；(b)「最低那条」随列
+而变；(c) 21 条里有 2 条反向，所以 10-26 的「4.0 普遍更高」是倾向而非规则。工具：同一次逗号分隔的 NVD 调用即返回
+两个 metric 对象，每批只花一次请求。
+
+**推导值不是公布字段。** GPT-6.1 Terra 模型页写「**1,050,000 context window**」与「**128,000 max output tokens**」，
+**完全没有 max input 字段**（`922` 只出现在 SVG path 数据里）。条目里的「**922,000 max input**」是两者之差——推理正确，
+但**被当成字段**呈现。两者要分开：字段可以引用，推导必须标注（或者不写）。页面真正的长上下文规则更有用：
+「超过 **272K** input token 的请求按 **2 倍 input 与 cache 费率、1.5 倍 output** 计费，且**按整个请求**计」——加价落在
+**全请求**而非溢出部分。
+
+**一个指标里可以装两个时钟。** S-1 的 **Run-Rate Revenue** 是「(i) 截至计量日的**过去 28 天**消费型费用之和**乘以 13**，
+加 (ii) 计量日**月度订阅费**之和**乘以 12**」。两个窗口、两个乘数、一个数——所以「把 28 天窗口年化 ×13」只描述了半个
+指标。该文件自带限定语应一并引用：「未获第三方独立验证」，且「已包含、并预计将继续包含我们随后认定为违反使用政策或
+商业条款的客户的金额」。同一份摘要里还有两个单位陷阱：**$34.3B** 是 FY2025、**$72.4B** 是截至 2026-06-30 的**半年**
+（两者都是「可转债、衍生负债与 SAFE 的公允价值变动」，不是收入）；**4,000 万客户**是**年收入低于 10 万美元的账户数**，
+不是收入占比。
+
+**一个缺失的数字有两种相反成因。** Pharo 14 的发布帖把贡献者人数留成字面占位符「**[X]**」——在页面 HTML 里核实存在，
+是真未填的模板。EDGAR 文件是相反的情形：S-1 的收入占比句在按文本顺序抽取时读成「90%, 57%, 76%, and **%**」，因为该文档
+是**绝对定位**的（逐行 `position:absolute` 的 div），第四个数字落在另一个块里，朴素的剥标签会**丢掉页面上看得见的数**。
+永远不要凭文本抽取写「文件把 X 留空」——先看定位布局或 XBRL。
+
+**`NOASSERTION` 不等于「无许可证」。** `nightly-labs/openbot` 的 `license.spdx_id` 是 **NOASSERTION**，而它的 LICENSE
+文件写的是 **PolyForm Noncommercial License 1.0.0**（一手核实）。GitHub 的分类器不认识 PolyForm，所以 API 的
+`NOASSERTION` 是**分类器缺口**而非缺席——这是「许可证是三个工件」的第三例（LICENSE 文本 / `spdx_id` / README 主张；
+参见 10-25 的 `git-ai`）。
+
+**没有基数的比率只是半个发现。** Cohere 的「十万分之一」看起来可以忽略，直到同一段给出乘数：「一个每周处理 **1,000 万**
+agent 轮次的服务可能看到**多达一百次**这样的调用。」引用比率时带上来源自己用的量级，并优先引用做了乘法的来源。
+
+**工具备注（无需动作）。** `claim-unit-lint.mjs` 通过 `raw.githubusercontent.com/<slug>/HEAD/…` 读 README，所以默认分支
+为 `master` 的仓库（`alchaincyf/huashu-design`：`HEAD` 200、`main` 404，一手核实）会被正确读取——默认分支陷阱已闭合；
+`[X]` 这类**拼写出来的**数字仍然不可见。
+
+→ [[security]] [[vuln-supply]] [[disclosure-lag]] [[frontier-models]]
+
+来源：[GHSA-m665-v7pm-7grj](https://github.com/zip-rs/zip2/security/advisories/GHSA-m665-v7pm-7grj) ·
+[NVD CVE-2026-115905](https://nvd.nist.gov/vuln/detail/CVE-2026-115905) · [crates.io — zip versions](https://crates.io/crates/zip/versions) ·
+[Anthropic PBC Form S-1](https://www.sec.gov/Archives/edgar/data/2130357/000162828026067168/anthropicpbc-sx1.htm) ·
+[GPT-6.1 Terra 模型页](https://developers.openai.com/api/docs/models/gpt-6.1-terra) ·
+[Cohere — concerning behaviour](https://cohere.com/blog/concerning-behaviour-popular-open-weight-ai-model) ·
+[pharo.org — Pharo 14](https://pharo.org/news/2026-10-26-Pharo14Release.html) · [nightly-labs/openbot](https://github.com/nightly-labs/openbot)

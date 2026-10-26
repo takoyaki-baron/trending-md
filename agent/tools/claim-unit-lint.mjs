@@ -147,6 +147,21 @@ const NUM = '(\\d[\\d,]*)';
 const strip = (s) => s.replace(/\*\*|\*|`/g, '');
 const toNum = (s) => Number(String(s).replace(/,/g, ''));
 
+/* A backticked `a/b` is a repo slug only some of the time. The measured counterexample (2026-10-27
+ * batch, item 7) is **Erlang function/arity notation**: ``merge_ssl_opts/3`` and ``partial_chain/1``
+ * are quoted from the `hackney` advisory, and the slug reader spent an `api.github.com` call on
+ * `repos/merge_ssl_opts/3`, got a 404, and reported the item as having an **unreadable repo** — a
+ * finding about the checker, not about the item. So: a bare integer of arity length (0–2 digits)
+ * after a snake_case or `Module.function` identifier is a function reference, not an owner/repo. */
+function backtickSlug(raw) {
+  const [a, b] = raw.split('/');
+  if (!a || !b) return null;
+  if (b === 'main' || b === 'master' || b === 'HEAD') return null;
+  if (/\.(md|json|js|mjs|py|toml|yml|yaml|sh|ts|rs|go|c|cpp|h)$/.test(b)) return null;
+  if (/^\d{1,2}$/.test(b) && (/^[a-z][a-z0-9]*(?:_[a-z0-9]+)+$/.test(a) || /^[A-Z][A-Za-z0-9]*\.[a-zA-Z_]\w*$/.test(a))) return null;
+  return a && b ? raw : null;
+}
+
 function parseItems(text) {
   const lines = text.split('\n');
   const items = [];
@@ -173,11 +188,8 @@ function parseItems(text) {
       if (!/^(features|topics|orgs|sponsors|marketplace|search|about)$/.test(m[1])) repos.add(slug);
     }
     for (const m of it.text.matchAll(/`([\w.-]+\/[\w.-]+)`/g)) {
-      if (/^(main|HEAD|master)$/.test(m[2] ?? '')) continue;
-      const [a, b] = m[1].split('/');
-      if (!a || !b || b === 'main' || b === 'master') continue;
-      if (/\.(md|json|js|mjs|py|toml|yml|yaml|sh|ts|rs|go|c|cpp|h)$/.test(b)) continue;
-      repos.add(m[1]);
+      const slug = backtickSlug(m[1]);
+      if (slug) repos.add(slug);
     }
     it.repos = [...repos];
   }
@@ -592,13 +604,29 @@ function repoState(slug) {
   return cache[slug];
 }
 
+/* A star **delta** is not a star **count** — the second unit error this check made on the same
+ * family of numbers. Item 12 of the 2026-10-27 feed reads `GitHub Trending · +312 stars today`
+ * beside `**1.4k stars**` in its body: 312 is Trending's day-over-day gain and 1.4k is the total,
+ * and the reader took 312 as the total, compared it with the repo's 1,365, and reported a −77%
+ * "star-drift" finding against a correct item. Three spellings are now separated: a signed number
+ * (`+312`), a number followed by a period word (`today`, `this week`, `per day`), and the `1.4k`
+ * suffix that used to be dropped entirely (which is why `1.4k` could not compete with `312`). */
+function starQuotesOf(plain) {
+  const out = [];
+  const re = /([+\-−]?)(\d[\d,]*(?:\.\d+)?)\s*(k)?\s*(?:★|stars?\b)/gi;
+  for (const m of plain.matchAll(re)) {
+    if (m[1]) continue;                                   // signed → a delta, not a count
+    const after = plain.slice(m.index + m[0].length, m.index + m[0].length + 24).toLowerCase();
+    if (/^\s*(?:today|yesterday|this\s+(?:day|week|month)|in\s+the\s+(?:last|past)|\/\s*day|per\s+day|so\s+far|overnight|a\s+day)/.test(after)) continue;
+    const n = toNum(m[2]) * (m[3] ? 1000 : 1);
+    if (Number.isFinite(n)) out.push(n);
+  }
+  return out;
+}
+
 function checkRepo(it, budget) {
   const out = [];
-  const starQuotes = [];
-  for (const m of it.plain.matchAll(new RegExp(`${NUM}\\s*(?:★|stars?)\\b`, 'gi'))) {
-    starQuotes.push(toNum(m[1]));
-  }
-  for (const m of it.plain.matchAll(/★\s*([\d,]+)|\(([+-]?[\d,]+)★/g)) starQuotes.push(toNum(m[1] ?? m[2]));
+  const starQuotes = starQuotesOf(it.plain);
   if (!it.repos.length) return out;
   for (const slug of it.repos.slice(0, 2)) {
     if (budget.left <= 0) break;
@@ -800,6 +828,20 @@ if (SELFTEST) {
   t('ratio is not a count', checkIssues(mk('t', 'one issue per twenty-four stargazers')).map((x) => x.verdict), []);
   t('composite lags parts', checkIssues(mk('t', 'open_issues_count reads 77 against 21 issues and 58 PRs')).map((x) => x.verdict).slice(-1), ['compound-lags-parts']);
   t('hyphenated pull-request is a named split', checkIssues(mk('t', 'mined from **57,240 issue and pull-request threads** across 1,774 repos')).map((x) => x.verdict), ['ok']);
+
+  // star quotes — a delta and a total are different units (the item-12 false finding)
+  t('star delta is not a count', starQuotesOf(strip('Source: GitHub Trending · +312 stars today · nightly-labs')), []);
+  t('k-suffix is read as thousands', starQuotesOf(strip('**1.4k stars**, **174 forks**')), [1400]);
+  t('plain total survives', starQuotesOf(strip('1,030 stars and 12.5k★')), [1030, 12500]);
+  t('week delta skipped', starQuotesOf(strip('up 900 stars this week')), []);
+
+  // repo-slug extraction — the 10-27 arity false positive and what must still be a repo
+  const slugs = (s) => parseItems(`## 1. t\n\n${s}\n`)[0].repos.sort();
+  t('erlang arity is not a repo', slugs('`merge_ssl_opts/3` and `partial_chain/1` in `hackney_ssl:partial_chain/1`'), []);
+  t('elixir arity is not a repo', slugs('`Enum.map/2` and `String.split/3`'), []);
+  t('real repo slug survives', slugs('`obra/superpowers` and `zip-rs/zip2`'), ['obra/superpowers', 'zip-rs/zip2']);
+  t('github url is still a repo', slugs('[advisory](https://github.com/padok-team/burrito/security/advisories/GHSA-x)'), ['padok-team/burrito']);
+  t('file path is not a repo', slugs('`src/lib/json.js` and `docs/readme.md`'), []);
 
   const ver = (s) => extractCvss(s).map((c) => `${c.version}:${c.score}`).sort();
   t('score (CVSS v)', ver('scored **9.1 (CVSS 3.1)**'), ['3.1:9.1']);

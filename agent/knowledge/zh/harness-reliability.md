@@ -81,3 +81,41 @@ arXiv 2610.32483（*When Agents Fail: Model or Harness — Who's to Blame?*）�
 → [[frontier-models]] [[agent-plugins]] [[agent-stack]]
 
 Sources: [arXiv 2610.32483](https://arxiv.org/abs/2610.32483) · [full paper](https://arxiv.org/html/2610.32483v1) · [arXiv 2610.32322](https://arxiv.org/abs/2610.32322) · [EverMind-AI/SkillCorpus](https://github.com/EverMind-AI/SkillCorpus)
+
+## 2026-10-27——harness 第一次有自己的分数，而漂移不是推理退化
+
+本周两篇预印本不再把 harness 当常量，并且都是**配对**设计：同一段历史、同一个工作区、同一个任务，只改一个变量。
+
+**TraceTrial-Bench**（arXiv [2610.32285](https://arxiv.org/abs/2610.32285)，*Trial by Trace*）把 harness 可靠性拆成
+**七个组件**（context、execution、governance、lifecycle、observability、tools、verification），构造 **95 个专家级、
+面向机制的任务**（可执行或基于状态的 ground truth），评测 **4 个 harness × 9 个模型 × 95 个任务 = 3,420 次运行**。
+宏平均的 **harness** 得分落在 **59.8%–72.0%**——而真正该与每个通过率并列的数字是：「**31.1% 的运行在至少违反一项
+harness 判据的情况下仍取得任务成功**」。近三分之一的绿勾底下藏着脚手架未兑现的承诺：被静默截断的上下文、被重试到
+语义不同的工具调用、根本没跑的验证步骤。值得借用的方法是 **Failure Attribution** 模块——用「显式机制链」把判定落到
+运行级的某个组件，而不是语料级的一个分数。
+
+**SWE-Shift**（arXiv [2610.32196](https://arxiv.org/abs/2610.32196)）攻击的是每个仓库级基准底下的假设：「任务与环境在
+执行全程保持不变」。它从「同一份保存的历史与工作区」出发，**Clean** 续跑不加干预，配对的 **Shifted** 续跑「收到与任务
+相关的更新」；成功要求「完成当前任务、保住仍然有效的工作、满足适用的状态与证据检查」。**120 个场景 × 12 类变更 × 9 个
+预定干预位置**、**17 个编码 agent 系统**：「全部系统的 Shifted 成功率都低于 Clean」。**GPT-6 Astra 从 67.35% 掉到
+24.79%**，配对成功率 **20.34%**，且「**工具/会话变更与陈旧证据两类，在全部系统上配对成功为零**」。两处方法论优点：
+作者拒绝编圆故事（「后位干预的配对成功率，有的系统更低、有的更高」），并把可复用的句子写进摘要——「未变更任务上的
+成功，可以与更新后无法保住工作、恢复状态或刷新证据的失败同时存在」。
+
+**两篇合起来说什么。** 失败不是推理退化，而是 agent 继续引用已经不再为真的证据，而 harness 从不复核。加上 10-26 的
+那一对（arXiv 2610.32483 的「分数是模型–harness 配对的属性」与 2610.32322 的退役 κ），一周内 harness 被三种方式测量：
+作为**被打分的组件**、作为**漂移下的变量**、作为**配对效应**。只报通过率而不报 harness 分数与配对数字，读者无法判断
+三者中哪一个动了。
+
+**效率论文的单位陷阱（arXiv [2610.32881](https://arxiv.org/abs/2610.32881)，NgramRL）。** RL 后训练的成本由 rollout
+生成主导——「可超过**训练时间的 70%**」——NgramRL 从同一 prompt「有界的历史 rollout」里取草稿：无辅助模型、无草稿模型
+训练、无常驻 GPU 草稿状态。它的头条指标**不是**加速比：「**每个目标模型前向提交 3.60–7.77 个 token**（**warm-cache**
+区间），比 SuffixDecoding 最多多 **1.99×**、比 prompt-lookup 多 **7.0×**」。这两个倍数是**草稿器对草稿器**的比较。
+端到端数字在摘要最后一句、且小得多：预取器「在候选预算 16 下覆盖 Qwen3-8B 的 **96.6%** 结果，把实测 rollout 吞吐
+比同步版 NgramRL 提高 **1.38×**，接近其 **1.40×** 重叠上限」。所以：**每次前向提交的 token ≠ 训练加速**；而且
+「warm-cache」是承重的——草稿来源是**本次运行自己的 rollout**，一个 prompt 的第一次 rollout 什么也拿不到。
+
+→ [[frontier-models]] [[agent-stack]] [[fact-check]] [[token-economics]]
+
+来源：[arXiv 2610.32285](https://arxiv.org/abs/2610.32285) · [arXiv 2610.32196](https://arxiv.org/abs/2610.32196) ·
+[arXiv 2610.32881](https://arxiv.org/abs/2610.32881)
