@@ -1,9 +1,9 @@
 {
- "generated": "2026-10-25T20:49:10.871Z",
+ "generated": "2026-10-26T04:17:40.423Z",
  "files": [
   {
    "file": "2026-10-26.md",
-   "items": 20,
+   "items": 34,
    "findings": [
     {
      "check": "cvss",
@@ -62,32 +62,67 @@
      "detail": "CVE-2026-116163 Secondary/disclosure@vulncheck.com"
     },
     {
+     "check": "cvss",
+     "item": 27,
+     "verdict": "ok",
+     "claim": "4.0 9.2",
+     "detail": "CVE-2026-112398 Secondary/security-advisories@github.com"
+    },
+    {
+     "check": "cvss",
+     "item": 27,
+     "verdict": "slot-quoted",
+     "claim": "Primary/Secondary",
+     "detail": "a metric slot is not a provenance — name the source (CNA / nvd@nist.gov / CISA-ADP) instead"
+    },
+    {
+     "check": "cvss",
+     "item": 28,
+     "verdict": "ok",
+     "claim": "4.0 9.2",
+     "detail": "CVE-2026-114509 Secondary/security-advisories@github.com"
+    },
+    {
+     "check": "issues",
+     "item": 29,
+     "verdict": "unsplit-issue-count",
+     "claim": "57,240 issue",
+     "detail": "no issues/PR split in the item (no repo slug to check)"
+    },
+    {
+     "check": "repo",
+     "item": 4,
+     "verdict": "star-drift",
+     "claim": "257 quoted vs 389 now",
+     "detail": "microsoft/Agensh: -34% — reread the number or date the item"
+    },
+    {
      "check": "repo",
      "item": 4,
      "verdict": "ok",
      "claim": "microsoft/Agensh",
-     "detail": "261★, last push 2026-10-23"
+     "detail": "389★, last push 2026-10-23"
     },
     {
      "check": "repo",
      "item": 11,
      "verdict": "ok",
      "claim": "obra/superpowers",
-     "detail": "304999★, last push 2026-10-23"
+     "detail": "305139★, last push 2026-10-23"
     },
     {
      "check": "repo",
      "item": 16,
      "verdict": "ok",
      "claim": "coollabsio/coolify",
-     "detail": "64207★, last push 2026-10-25"
+     "detail": "64541★, last push 2026-10-25"
     },
     {
      "check": "repo",
      "item": 17,
      "verdict": "stale",
      "claim": "multica-ai/andrej-karpathy-skills",
-     "detail": "last push 2026-04-20 (188d) with 223763 stars — is the item about the code or the name?"
+     "detail": "last push 2026-04-20 (189d) with 223930 stars — is the item about the code or the name?"
     },
     {
      "check": "count",
