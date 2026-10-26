@@ -1,0 +1,64 @@
+{
+ "generated": "2026-10-26T20:19:27.995Z",
+ "files": [
+  {
+   "file": "2026-10-27.md",
+   "items": 20,
+   "findings": [
+    {
+     "check": "cvss",
+     "item": 8,
+     "verdict": "ok",
+     "claim": "3.1 9.9",
+     "detail": "CVE-2026-102649 · Secondary/security-advisories@github.com"
+    },
+    {
+     "check": "issues",
+     "item": 11,
+     "verdict": "ok",
+     "claim": "104 issues + 143 PRs",
+     "detail": "split named (PR share 58%)"
+    },
+    {
+     "check": "repo",
+     "item": 7,
+     "verdict": "unreadable",
+     "claim": "merge_ssl_opts/3",
+     "detail": "api.github.com: Command failed: gh api repos/merge_ssl_opts/3"
+    },
+    {
+     "check": "repo",
+     "item": 8,
+     "verdict": "stale",
+     "claim": "go-playground/webhooks",
+     "detail": "last push 2024-08-06 (811d) with 1030 stars — is the item about the code or the name?"
+    },
+    {
+     "check": "repo",
+     "item": 11,
+     "verdict": "ok",
+     "claim": "affaan-m/ECC",
+     "detail": "289684★, last push 2026-10-26"
+    },
+    {
+     "check": "count",
+     "item": 11,
+     "verdict": "ok",
+     "claim": "71 agents",
+     "detail": "README states it"
+    },
+    {
+     "check": "count",
+     "item": 11,
+     "verdict": "ok",
+     "claim": "311 skills",
+     "detail": "README states it"
+    }
+   ]
+  }
+ ],
+ "api_calls": 0,
+ "readme_calls": 0,
+ "cited_page_calls": 0,
+ "nvd_calls": 1
+}
