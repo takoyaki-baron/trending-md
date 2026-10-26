@@ -899,9 +899,9 @@
           "found": "2026-10-20T13:39:06.666Z"
         }
       },
-      "runs": 104,
+      "runs": 105,
       "first_run": "2026-09-01T04:34:31.653Z",
-      "last_run": "2026-10-26T04:40:23.418Z",
+      "last_run": "2026-10-26T13:04:24.872Z",
       "last_total": 100
     },
     "ra-paper-id": {
@@ -1667,27 +1667,51 @@
           "path": "reports/daily/2026/09/2026-09-06.md",
           "html_url": "https://github.com/georgeorange-crypto/ai-research-radar/blob/88ae8e032f13e3fb91d6e84c3a336f3f7a885d5f/reports/daily/2026/09/2026-09-06.md",
           "found": "2026-10-21T12:59:10.829Z"
+        },
+        "686f6c61/radar-huggingface-dataset::data/zkowalski/random-efficient-attention.md": {
+          "repo": "686f6c61/radar-huggingface-dataset",
+          "path": "data/zkowalski/random-efficient-attention.md",
+          "html_url": "https://github.com/686f6c61/radar-huggingface-dataset/blob/f00e28d35ed77a57b7190585600337230f5269ae/data/zkowalski/random-efficient-attention.md",
+          "found": "2026-10-26T13:04:24.872Z"
+        },
+        "daiwk/auto-research::src/auto_research/evolution/papers.py": {
+          "repo": "daiwk/auto-research",
+          "path": "src/auto_research/evolution/papers.py",
+          "html_url": "https://github.com/daiwk/auto-research/blob/24da1775354433d461ab7696ee3c7629e39f1518/src/auto_research/evolution/papers.py",
+          "found": "2026-10-26T13:04:24.872Z"
+        },
+        "Develata/Develata.github.io::docs/daily/news/AI_ML/2026/20260905.md": {
+          "repo": "Develata/Develata.github.io",
+          "path": "docs/daily/news/AI_ML/2026/20260905.md",
+          "html_url": "https://github.com/Develata/Develata.github.io/blob/8d9e7fef64e9377ae7099d263728d5b9e44a67f4/docs/daily/news/AI_ML/2026/20260905.md",
+          "found": "2026-10-26T13:04:24.872Z"
+        },
+        "YinlongShen/AI-frontier-radar::digests/2026/2026-09-05.md": {
+          "repo": "YinlongShen/AI-frontier-radar",
+          "path": "digests/2026/2026-09-05.md",
+          "html_url": "https://github.com/YinlongShen/AI-frontier-radar/blob/7d18e6ba3ad317cbba2235c7b10c119d1f9d1f80/digests/2026/2026-09-05.md",
+          "found": "2026-10-26T13:04:24.872Z"
         }
       },
-      "runs": 52,
+      "runs": 53,
       "first_run": "2026-09-05T21:03:03.908Z",
-      "last_run": "2026-10-26T04:40:23.418Z",
+      "last_run": "2026-10-26T13:04:24.872Z",
       "last_total": 100
     },
     "ra-vllm": {
       "seen": {},
-      "runs": 91,
+      "runs": 92,
       "first_run": "2026-09-05T21:03:03.908Z",
-      "last_run": "2026-10-26T04:40:23.418Z",
+      "last_run": "2026-10-26T13:04:24.872Z",
       "last_total": 0
     },
     "ra-sglang": {
       "seen": {},
-      "runs": 91,
+      "runs": 92,
       "first_run": "2026-09-05T21:03:03.908Z",
-      "last_run": "2026-10-26T04:40:23.418Z",
+      "last_run": "2026-10-26T13:04:24.872Z",
       "last_total": 0
     }
   },
-  "last_run": "2026-10-26T04:40:23.418Z"
+  "last_run": "2026-10-26T13:04:24.872Z"
 }

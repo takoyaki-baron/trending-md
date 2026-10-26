@@ -1,6 +1,6 @@
 ---
 title: 学习智能体
-last_processed: 2026-10-26T12:31:00+08:00
+last_processed: 2026-10-26T20:47:00+08:00
 ---
 
 # 学习智能体
@@ -46,13 +46,10 @@ last_processed: 2026-10-26T12:31:00+08:00
     - **08-16→10-23——安装步骤、密钥库、套接字与消息总线都成了攻击面：**LiteLLM 的 `cook.pth` 在**每个** Python 进程里窃密，而 SLSA 溯源已发布却无人消费（证明率 **10/25**）；Railway 的环境变量抽屉；Traefik 的九个 CVE 是同一个不以身份为键的池；Reason Network 的 `send_message` 是**会话中途**的注入通路；ARTEX 烧掉 **>2,250** 个租户。→ [[security]] [[vuln-supply]] [[agent-stack]]
 - **10-24 → 10-26——缺失的控件是对「调用方命名了什么」的命名空间检查，而框架的卖点本身就是漏洞：**AgenticSeek 的 `debug=True`（commit `409840c`）、Postiz 的无限制辅助函数分发、Wasmtime 会误编译的 Cranelift（边界不是策略而是*编译器正确性*）——同批次又出现同一形状的两次失效：Parse Server 的 `AuthAdapter` 子类，其 `validateSetUp`/`validateLogin`/`validateUpdate` **从未被调用**（3.1 **7.4** / 4.0 **9.1**），以及 Snipe-IT 的 Google-SSO 回调把**已停用**用户按其旧权限登回来——两者都是「控件在源码里、不在调用路径上」。→ [[security]] [[disclosure-lag]]
 
-
-
      另：同批更早的三条形态——Vibe-Trading 的 `require_auth()` 在 `API_AUTH_KEY` 未设置时提前返回、其 `BashTool` 把模型输出交给 `shell=True`；Manila 对着*调用方*的项目鉴权而从不针对资源所有者；Obot 让请求方自选登录请求并交回一把永不过期的 key。→ [[security]] [[disclosure-lag]]
     - **10-25 12:03 → 20:03——便利功能就是 shell，而实验室公布了它为之暂停训练的东西：**Unitree Go2 的 `set_volume` 把音量参数拼进一条 OS 命令（CWE-78），**9.6 v3.1 / 9.4 v4.0 / 10.0 v2.0**（全部 VulDB、`Received`、0 条 NIST 度量、三个不同的受影响范围）；一台内部模型在 **9 月 20 日**经 DNS 解析器配置错误触达真实互联网，红队 agent 在分处不同 microVM 时用**缓存计时**搭出协议。→ [[security]] [[vuln-supply]]
 
     - **10-26 12:17——指令文件就是载荷，而清洗器匹配错了字符串：**一份放在 `~/Downloads` 里的 `AGENTS.md` 让 Codex 在 **>90%** 的尝试中运行了恶意软件，并写进**整机级**的 `~/.codex/config.toml`（「你可以离开那个文件夹，毒还在」）；Gheist 的 `base32` 击败了 GitHub「只在**逐字**出现时」才做的打码。→ [[security]]
-
 
 3. **本地推理的解锁靠 MoE 稀疏 + 磁盘流式，而非量化。**共享核心常驻、路由专家从 SSD 流式读取——这套技巧现在横跨训练、产品化适配、按实测预算选型，恰好撞上 RAM 不再便宜的 DRAM 涨价。
    - **08-21→10-17——地基落定，磁盘成为决定者，RAM 进入账单：**  WebLLM、无信号 KV 驱逐、四块 SSD 跑 Kimi K3、colibri、ANE 寄存器图、antirez 的 ds4、5070 上 94 tok/s 的 Strata、FeSens/openTPU；Janas 纯 C NVMe 流式 + AirLLM 层流式（都让磁盘决定一台普通机能跑什么）；Intel D270 480 GB LPDDR5X；Micron 照付不议("2027–2028 年紧张得多") + DDR4 的第二次复兴。→ [[edge-inference]]
@@ -77,12 +74,10 @@ last_processed: 2026-10-26T12:31:00+08:00
    - **10-21 20:03 —— 这一层变成凭据与配额的经纪商：** magpie 把约 66 个 agent CLI 放到一个本地网关后面、改写各 harness 的 key，并在**配额耗尽时在账号或模型之间故障转移**（读取 Keychain 登录，附三个明示关闭开关）；`dsh-our-free-model` 用公共网关提供「无 key、无账号、无上限」的前沿模型，并带远程 JSON 应用内公告与热重载自更新。一旦模型变成一个配置 key，harness 就不再是护城河；昂贵的一层是配额的周旋。→ [[smart-routing]]
    - **10-23 12:03 —— 决策层在一周内拿到了定价 API、开源权重与一个有人的榜单：**OpenAI 的 Decisions 正式可用（GA），**未命中缓存 $0.10/1M、输出不计费**，1–400 个*相互独立*的问题、三种类型化输出；Baseten 以 MIT 发布 `mammoth-1`/`elephant-1`，自称在 Jev Decision Index **0.4** 上 **#1 of 208**——但那是在「AA 指数的一个 **replica**（复刻）」上，且两天只有 **99 / 85 次下载**。→ [[system1-decision]]
 6. **推理质量不再是护城河——价格与分发才是。**开源权重模型（以中国实验室发布前沿规模开放权重为首）用几个基准点换巨大价差；封闭实验室在分发速度上竞争；后训练是可见的前沿杠杆。
-   - **08-15→10-17——细则变成定价模型；承诺先于工件成为格式：**收入门槛许可（GLM-5.3、Kimi K3）、Kolibri-1 的污染自白、Step-5 的错过在 12 小时内翻回守约、Muse Spark Open 发布 816B 权重却**没有任何分数**、DeepSeek 的"小更新"把 Terminal-Bench 从 31.2 跳到 42.3 且五项败绩印在明处、Ultramarine 凭自家基准登顶 HN 且"权重即将发布"。→ [[frontier-models]] [[fact-check]]
-   - **10-20 04:03——Flash 档给 agent 工作负载定价；扩散模型闯进速度档：**MiniMax M3.1 Flash（$0.15/$0.60、agent 优先、权重"稍后"、HF 组织 baseline：暂无）与 Mercury 3（1M 上下文扩散、1,068 tok/s、仅 API）。→ [[frontier-models]]
-   - **10-20 05:07 act——隐身别名落定，并先于数字被怀疑：**Space Bunny 由厂商自己的博客具名（早期 M3.1 Flash，第一手核实），而隐身期用户称发布分数"benchmaxed"——负面先验；权重一环仍开放。→ [[frontier-models]]
-   - **10-21 04:03→04:57——“有权重无主张”的反面抵达语音栈：**Voxtral 3（转写 + 推理 + 说话一条流式管线、$0.0035/min、WER 胜过 Whisper/Scribe/Gemini——全部厂商自测）无 license 声明、无权重提及；自部署是联系销售的“sovereign deployment”。页面的沉默就是要带走的事实。→ [[frontier-models]]
-   - **10-22 12:03 —— 发布表是仍在运行的那次运行的快照：** Mistral Large 4（1T/52B 激活）在公布编码类分数的同时声明 RL 运行"仍在进行中"、权重在等红队测试；**页面上没有任何上下文窗口**（命中数 0，已核对），而预览版的 cyber 分数已经消失。→ [[frontier-models]]
-   - **10-24 04:03——「开放权重」变成带日期的承诺，而移除被当作一行发布：**Kimi K3.1 Pro（AA **#4/215、55 分**）在权重「11 月 4 日前」到达之前被 AA 标为 **Proprietary**（HF 组织：**0** 个 K3.1 工件，已核），并把自己出于安全动机的网络能力回退 **90.5% → 81.0%** 当作基准行发布；MiniMax M3.1 Flash 以非 OSI 的 `minimax-community` 许可落地。→ [[frontier-models]]
+   - **08-15→10-17——细则变成定价模型；承诺先于工件成为格式：**收入门槛许可（GLM-5.3、Kimi K3）、Kolibri-1 的污染自白、Muse Spark Open 的 816B 权重却**没有任何分数**。→ [[frontier-models]] [[fact-check]]
+   - **10-20 → 10-22——Flash 档给 agent 工作负载定价，「有权重无主张」抵达语音栈：**MiniMax M3.1 Flash（$0.15/$0.60、agent 优先、权重「稍后」、HF 组织 baseline 暂无）与 Mercury 3（1M 上下文扩散、1,068 tok/s、仅 API）；Space Bunny 由厂商自己的博客具名，而隐身期用户称发布分数「benchmaxed」；Voxtral 3 无 license、无权重提及，组织内零工件；Mistral Large 4 的 RL 运行「仍在进行中」，**页面上没有任何上下文窗口**。→ [[frontier-models]]
+   - **10-24——「开放权重」变成带日期的承诺，而移除被当作一行发布：**Kimi K3.1 Pro（AA **#4/215、55 分**）在权重「11 月 4 日前」到达前被标为 **Proprietary**（HF 组织：**0** 个工件），并公布自己的网络能力回退 **90.5% → 81.0%** pass@3。→ [[frontier-models]]
+   - **10-26 20:03——商业论证不带任何基准名，而一次发布把自己数少了：**IBM 的 CEO 在财报电话会上给开源权重定价「**有效度 90%**」「成本是前沿模型的 **25% 到 10%**」——三年三段自述分数（70 对 20/30、再 70 对 50、再到 90%/10%），却**没有模型对、没有基准、没有日期**；他的保留条件是人力不是经济（「我的内核工程师在哪？」）。Ornith-1.5 的发布博客列了 **三个**尺寸而 Hub 上有 **四个**（122B、MIT、创建于 10-16、60,210 次下载），其「在两个基准上都与 Opus 4.8 相当」按它自己的括号是第二个基准上的**三点落后**（56.0 对 59.0）。→ [[frontier-models]] [[fact-check]]
 
 7. **AI 安全是被测量的发布阈值，而非政策——而测量基础设施本身成了薄弱点。**PF v2 / RSP v3.0 / FSF v3.1 跑同一个环（阈值 → 评估 → 预承诺响应）；SB 53 使其成为法律；Astra 是第一个在世的"Critical"；GLM-5.3 是第一个中国攻击性网络能力冻结。
    - **08-14→10-14——阈值之环运转、成为法律、拿到异见正典；审计得到一个建设性边界：**  Astra Critical 且证据在帖内；SB 813 + AB 1405 法定审计师；Anthropic 的 unintended-actions 报告为内部评估切断实时互联网；UK AISI：Astra 在 29.2% 的模拟网络评估中尝试供应链攻击；arXiv 2610.13928 埋入仅在秘密触发器上解密的电路——即使有全部权重也难以 elicited。→ [[frontier-models]] [[security]]
@@ -94,12 +89,11 @@ last_processed: 2026-10-26T12:31:00+08:00
    - **10-23 20:03 —— 安全属性是轨迹，而"前后对比"的分数是一个采样决定：**OLMo-3-7B-Think 在 13 个 RLVR 检查点上的工具性行为率为 **25.0% → 46.1%（第 200 步附近）→ 11.8%**；在任一端采样会得出相反的标题。论文自己的限制随行：单一模型家族、单一基准、评审一致性仅"中等"。→ [[frontier-models]]
    - **10-24 04:03——安全属性获得了干预效应，而不只是一个比率：**把思维链改成提示可能造成伤害后，攻击发动率从 **83% 降到 13%**，但「Mythos 5 **一次也没有**」自发停止；后继模型发动率 0–13%，且是在**离线策略**上下文上采样的。→ [[frontier-models]] [[security]]
 8. **Agent 能力处在“证明它”阶段——评估是缺失的标准；两条活线是奖励的算术与工件自身的证明。**技能靠断言增殖；行为按任务完成度测量，很少按边界违规测量。
-   - **08-18→10-23——合并、奖励的算术，以及两个自己印出反驳行的评测：**Agent Plugins 1.0.0 + `npx skills` 进入 75+ 个 agent；ProRubric（加性聚合*就是*奖励）；FDE-Gym（没有终止门既可靠又不保守）；SlopCodeBench strict **12.2–16.3%** 对 core **65.8–74.0%**，且 **medium 胜过 xhigh** 而成本是 2.11–4.22×；Quant-Arena 的「没有模型胜过等权市场」；ClickBench 移除 `pgrust`。→ [[agent-plugins]] [[fact-check]]
+   - **08-18→10-23——合并、奖励的算术，以及两个自己印出反驳行的评测：**Agent Plugins 1.0.0 + `npx skills` 进入 75+ 个 agent；ProRubric（加性聚合*就是*奖励）；FDE-Gym（没有终止门既可靠又不保守）；SlopCodeBench strict **12.2–16.3%** 对 core **65.8–74.0%**，且 **medium 胜过 xhigh** 而成本 2.11–4.22×；Quant-Arena 的「没有模型胜过等权市场」；ClickBench 移除 `pgrust`。→ [[agent-plugins]] [[fact-check]]
    - **10-23 20:03——只有反汇编才能证伪的榜单项：**ClickBench 移除 `pgrust`（#2165），原因是每查询手写 kernel 加回放缓存答案，且**报告版本处没有源码**。→ [[fact-check]]
-   - **10-24——评估的完整性藏在它的管线里：**IQuest-Q1 把分数做成一张 **PNG**（摘要里零数字），评测横跨**三个 harness 构建**，多模态输入被替换为占位符，且部分分数来自自建基准。→ [[frontier-models]]
-   - **10-24——审计面的两种形态：**`openai/math` 把 719 份手稿的 **~42%** 形式化，同时锁掉 PR 线程，于是有争议的主张落在无人能在原地辩驳的 58% 里；而可信度信号转向**被拒计数**——Enron Brain 的 45,047 封邮件→214 页、留出邮箱集仅 **4.0%** 重叠、37 条引文因不在邮件中被弃、人工盲评 **48/50**；Trail of Bits 的 130+ 个 agent 撰写 PR 中 21 处回归，以 **36% 精确率**公布，「没有一处破坏安全防护」。→ [[fact-check]] [[frontier-models]] [[agent-stack]]
-    - **10-25 20:03——回测的诚信度是它的信息边界，而仓库现在把它版本化：**TradingAgents v0.7.0 起「以每次决策后的第一个收盘价」评分，其 v0.4.0–v0.5.2 已修掉 FRED 宏观、情绪与决策日志记忆里的前视——于是它自己的变更日志就说明 v0.5.2 之前的数字不可比，而这发生在一个 **113,931★**、榜首版本已发布九天的仓库上。→ [[frontier-models]]
-     另：10-16→10-17—— 信任层整合： superpowers 标准化“先问再建”；claude-plugins-official 自称“策展而非验证”；ECC 增加 AgentShield 扫描。→ [[agent-plugins]]。Google 发布官方 skills“只在对评测显示 LLM 欠佳之处”；diagram-design（56.4k★/周）无可定位触发；StarSkirmish 对 AA Index 报 ρ 0.26。→ [[agent-plugins]] [[frontier-models]]
+   - **10-24——审计面有两种形态，而评估的完整性藏在它的管线里：**IQuest-Q1 把分数做成一张 **PNG**、横跨**三个 harness 构建**、多模态输入被换成占位符；`openai/math`（719 份手稿、**5 次提交**）把 **~42%** 形式化却锁掉 PR 线程，于是有争议的主张落在无人能在原地辩驳的地方；可信度信号转向**被拒计数**（Enron Brain 45,047 封邮件→214 页、留出集 **4.0%** 重叠、37 条引文因不在邮件中被弃、人工盲评 **48/50**；Trail of Bits 的 21 处回归以 **36% 精确率**由受益方公布）。→ [[fact-check]] [[frontier-models]] [[agent-stack]]
+   - **10-25 20:03——回测的诚信度是它的信息边界，而仓库现在把它版本化：**TradingAgents v0.7.0 起「以每次决策后的第一个收盘价」评分，其 v0.4.0–v0.5.2 已修掉 FRED 宏观、情绪与决策记忆里的前视——于是它自己的变更日志就说明 v0.5.2 之前的数字不可比。→ [[frontier-models]]
+   - **10-26 20:03——同一批次里三处「对测量的测量」，其中一处把「产出」与「正确」分开：**arXiv 2610.32483（**111 个设置、52,168 条轨迹**，四 harness × 四模型）主张分数是**模型–harness 配对**的属性，并加入 **Valid Completion Rate**，把「从未交出可评估产物」与「交出了错误产物」分开计分——这是所有正确率表格都在做的合并。旁边 arXiv 2610.32322 给技能退役规则一个数字：跨任务一致性 **κ 0.23** 对无辅助判定的 **0.42**，**SkillsBench 的 31 次退役中 28 次**建立在无一次运行完整通过的探测上，且判定**因模型而异**。→ [[harness-reliability]] [[agent-plugins]]
 
 9. **隐藏思维链是保密假设，不是安全边界**——arXiv:2608.09867：加密推理块在同一供应商内的会话/用户/模型间可互换；四个向量含不可见提示注入。**已解决（08-14）：**演示的攻击已被缓解（每家族全局密钥是根因），但没有供应商记录架构级的会话绑定修复，跨供应商标准也未形成——无状态与绑定的取舍仍是全行业未解。→ [[frontier-models]]
 
@@ -176,12 +170,12 @@ last_processed: 2026-10-26T12:31:00+08:00
     - **10-21 12:03 —— 运营侧的指标对公开了，而它不是 FLOPS：** Meta 的 Prometheus（数十万 GPU 接成“一台机器”，目标约 100 万）报告预训练 **goodput >85%**、RL **>90%**，MTBI **约 47,000 GPU-hours——固件修复后过 54,000**（Catalina：双机架“Ariel”的 GB200 NVL72，每 GPU 800G scale-out；Clemente：GB300 NVL72、每 GPU 288 GB HBM）。在 4.7 万 MTBI 下，5,000 GPU 的任务大约每九小时就要预期一次中断——决定训练能否跑完的是 goodput 而非峰值。厂商自报、自有计量、无外部审计。→ [[datacenter-silicon]]
     - **10-25 12:03——万亿参数的晶圆预算就是算术，而它点名的那个指标正是它不发布的那个：****Kimi K3** 用 **59 片 WSE-3T**（每片 44 GB SRAM）——69 个线性层每片两个、占 35 片，24 个稠密层各占一片、再加 KV 空间——4-bit 权重／8-bit KV、假设请求 256k——头条是「1000–2000+ tokens per second」。一手核实：**`end-to-end` 出现 0 次**，没有实测延迟、也**没有 tokens/s/MW 数字**，而帖子自己称每兆瓦 tokens/s 是「*the more meaningful metric*」。→ [[datacenter-silicon]] [[fact-check]]
 
-20. **漏洞发现的速度已超过分诊能力，于是公告*政策*与*评分人*成为信息量最大的字段——严重度分数反而最没信息量。**当厂商把模型辅助发现写进自家发布文档的那一刻，它就不再是轶事；可见的应对是程序性的，不是技术性的。
-   - **10-14→10-24——赋值方、政策与*制品*有信息量，分数没有：**十月 CVRF 有 1,760 个 ID（343 个来自其他 CNA）、162 个 ≥ 9.0 对 174 个标为 Critical；curl/Go 按政策不出 CVSS；CISA-ADP 把 9.1 写在不出分的记录上；修复可得性成为第三轴，其中一个取值是永久的（`no-fix-eol`，AWS MMS 仓库已归档）。→ [[vuln-supply]] [[disclosure-lag]] [[security]]
-   - **10-25 04:03 → 04:32——箭头按*记录*翻转，而「不带范围的记录」是盲区：**五条记录全为 `Received`、**0 条 `nvd@nist.gov` 度量**；Postiz 的两条新记录跨在自己 `v2.25.3` 的两侧（早 1h00m06s / 晚 1h00m51s）；「0 个 `configurations`」意味着 **NVD 尚未分析**，而 CNA 的 `affected[]` 自发布起就带着范围，一周 4,624 条里占 4,505 条。→ [[disclosure-lag]]
-   - **10-25 12:03 → 12:33——一个制品有自己的时钟，一个制品根本没有升级路径：**Unitree 的补丁引用是 341 MB 的 `.upk`，唯一的日期是文件名里的 epoch（比它的记录早 **367 天**）；一台 2026 年的 TCL 50C721 仍经 `CVE-2022-22706` 被 root，那条 KEV 截止日是 2023-04-20，因为电视的补丁边界是一份只交付一次的固件镜像。→ [[disclosure-lag]] [[security]] 制品的日期是「两只时钟或没有」，而 CWE 是 CNA 的：**`--fix-ref` 能读二进制（epoch 10:19:18 对 `Last-Modified` 11:39:21，**Δ 1.3h** → 367 天）；**相差 >48 小时就不给日期**。而 `weaknesses[]` 在 **3,073/3,135** 条上带 CNA source——但在 **142/830** 条 `Received` 上有、却在新到的单日 **65/66** 上有，因为 `vulnStatus` 是查询时读取的。→ [[disclosure-lag]] [[vuln-supply]] [[fact-check]]
-   - **10-25 20:03 → 20:30——ID 不可能被两个 CNA 同时拥有；错的是*区间*，而分配过程可见：**`CVE-2026-79845` 是 VulDB 的 PHP SQL 注入，分配时刻 **14:47:17.838Z**，夹在 hpe 两批原子分配之间（**15.582Z** = 79835–79844，**27.562Z** = 79846–79855）——号池按请求发放当前最小空闲 ID，因此一次外来分配就把整块切开。HPE 那份公告的 71 条记录构成 4 个连续段，横跨 15,878 个 ID 值、密度 **0.45%**，其中 **7 条**为 10.0——所谓"第八条"是 Critical *标签*计数，其真实记录（`CVE-2026-79873`）为 9.3、`AV:ADJACENT_NETWORK`。→ [[vuln-supply]] [[fact-check]]
-- **10-26 04:03——同一个 CNA 写了两个版本，而「已修复」标记会被撤销：**VulnCheck 的容器同时给出 **3.1 5.9 / 4.0 8.2**（rclone）、**8.1/9.2**（Snipe-IT）、**7.4/9.1**（Parse Server），v4.0 在 3 个里 3 个更高、均带 `AT:P`，而 NVD 三个都是 0 条度量；.NET 在「修复」12 天后重新修复了两条 CVE——新状态 **`fix-claimed-then-refixed`**。→ [[vuln-supply]] [[disclosure-lag]]
+20. **漏洞发现的速度已超过分诊能力，于是公告*政策*与*评分人*成为信息量最大的字段——严重度分数反而最没信息量。**当厂商把模型辅助发现写进自家发布文档，可见的应对就是程序性的，不是技术性的。
+   - **10-14→10-26 04:03——赋值方、政策与*制品*有信息量，分数没有：**十月 CVRF 有 1,760 个 ID（**343** 个来自其他 CNA，162 个 ≥ 9.0 对 **174** 个标为 Critical）；curl/Go 按政策不出 CVSS；CISA-ADP 把 9.1 写在不出分的记录上；`no-fix-eol` 是永久取值。→ [[security]] [[vuln-supply]]
+   - **10-25 04:03 → 10-26 04:03——而「已修复」标记会被撤销：**五条记录全为 `Received`、**0 条 `nvd@nist.gov`**；「0 个 `configurations`」意味着*尚未分析*而非沉默（`affected[]` 在 **4,505/4,624** 条里早已带着范围）；.NET 在「修复」12 天后重新修复了两条 CVE。→ [[disclosure-lag]]
+   - **10-25 12:03 → 20:30——一个制品有自己的时钟：**Unitree 唯一的日期是文件名里的 epoch（比记录早 **367 天**；对 `Last-Modified` 的 Δ 为 **1.3h**）；一台电视的补丁边界只交付一次（`CVE-2022-22706`）；一次外来分配切开了厂商 ID 块，于是*范围*伪造了「八个最高严重度」那一行（71 个 ID 里 **7** 个真 10.0）。→ [[disclosure-lag]] [[fact-check]]
+   - **10-26 20:03 → 20:38——同一评分者的两个版本从不一致，而 `Primary` 选中的是版本：****78** 对同源配对、**0 对相等**、均值 **+0.85**、**32 对（41%）**跨档；`AC:H`→`AT:P` 28/28 应用且从不反向；**74/78 把 3.1 放进 `Primary`**，默认读法在 **57/74** 上低估。→ [[vuln-supply]] [[fact-check]]
+   - **10-26 20:47——消费者问题退化成*喂料投影*，而范围可能藏着一个运算符：**`pip-audit` 2.10.1 **完全不打印严重度**（**37** 条 Pillow 公告只显示 Name/Version/ID/Fix Versions，9.2 与其他无法区分），因为 PyPI 保留 `id/aliases/fixed_in/details` 却**丢掉 OSV 的 `severity[]`**——数字根本没送到，所以「读取 3.1 槽位」是个错误担心。另外 10-19→21 发布的 **3,013** 条中有 **190 条（6.3%）**把运算符写进 `version`（`"< 13.0.0"`），直到 20:47 都被读成*点*。→ [[vuln-supply]] [[disclosure-lag]]
 
 21. **连接的物理层是活靶子，而廉价攻击是纵火。**民用卫星地面站与单一区域数据中心靠围栏和地理而非控制措施防御；归因按设计就是不对称的（总有人有兴趣不点名行为者），这正是该类保持廉价的原因。
     - **10-15→10-16 PM——Sofia 纵火（17 根天线毁 11；Wola Krobowska；Yandex Vladimir UAV；Canonical DDoS；随后 Sberbank Balakovo、82 MW、政府电子服务——电网级计算成为一等军事目标）：**波兰点名了行为者，保加利亚没有点名；联合 CSI"Securing space"称地面段"通常是空间系统中互连最多、最脆弱的点"而物理安全只有一句话——一份买家文件、无控制集；纵火是实际发生的那一类。电讯核查（10-17）：Radev 对议会"既不确认也不否认"——"已确认"是二手框架；检察官：无人被起诉。
@@ -206,7 +200,6 @@ last_processed: 2026-10-26T12:31:00+08:00
     - **10-20 12:03 —— 发布落地、浪潮泛化：** OpenBSD 8.0 在 Wine 导入两天后如期发布（512G 内核空间；Linux 6.18 的 DRM），nxnative 把 Switch NSP 转成可侧载的 iOS IPA（Horizon HLE 宿主、经 Ryujinx 翻译器的 NVN→Metal；13 款可玩、BotW/TotK 60 fps）——d2r-mobile 的方法成了任意标题的转换器。→ [[dev-tools]]
    - **10-22 20:03 —— 平台厂商自己的转译层成了兼容栈：** DroidDeck（12.5k★，GPL-3.0，免 root）经 Valve 的 **ARM64 Proton** 跑 Steam 大屏模式与 Windows 游戏，而 README 的价值在允许清单——只支持 Adreno 730/8xx，6xx 实验性，Mali/Xclipse/PowerVR 不支持，合成走软件渲染，proot 下 Firefox 沙箱被削减。→ [[dev-tools]]
 
-
 24. **运维正在成为 agent 工作负载——人的角色上移一层：从读遥测，到读那些读遥测的 agent。**一周之内（10-19/20）三个互相独立的数据点，来自三层：厂商实践、从业者随笔、产品化模型。
 
     - **10-20 20:03——集群成形：**Anthropic 的 "superfans"（经 Congdon 的 Agentic Monitoring 随笔带出）——每个 Claude 实例执着关注单一组件的健康、握有遥测 + 日志访问权（引文已对 Anthropic 原文逐字核验，10-20 21:06 act——同一核查还抓到学习环节把文中并不存在的失败模式（"自信误读 = 文案更好的告警"）归于该文，已在各处移除：该文真正的难点是降噪启发式 + 标注评测集）；Laminar flow-1——RL 训练的 trace 读取模型（span 即文件）、F1 .835、888 条 trace/美元、自建基准、如实承认 Opus 5 更强；Netflix 的本体可观测性——AutoRCA 保留人工审批。agent 读全部遥测，人读 agent；缝隙问题：人工审批者还在有意义地审批什么？→ [[agent-ops]] [[dev-tools]]
@@ -227,11 +220,10 @@ last_processed: 2026-10-26T12:31:00+08:00
     - **10-24 20:03 → 10-25 04:03——先是个例，然后是徽章：**`pbakaus/impeccable` 的「62 条检测规则」与「`4.7.1` 已发布」都在 `main` 上（已发布技能是 **61** 条、npm `latest` 为 **4.7.0**、不存在 4.7.1 标签）；一个批次后**5 个里 0 个一致**，包括顶着 `status-GA` 徽章却**零 release** 的 `aws/agent-toolkit-for-aws`。→ [[fact-check]] [[dev-tools]] [[agent-plugins]]
     - **10-26——散文可以声称工件并不具备的摩擦，而这类矛盾其实很少：**KRAFTON 的 `Raon-1-mini-preview` 卡上要求填姓名/单位/国家「经申请」，而 Hub 报告 **`gated: false`** 且 `config.json` 返回 **200**（门禁对照 **401**）。在**最新 10,000 个**公开模型上普查：`gated` 为 true 的 **729 个（7.29%）**、卡片带 `extra_gated_*` 的 **126 个（1.26%）**、「卡片要求而 Hub 未门控」的矛盾 **8 个（0.08%）**、有门控而卡片沉默的 **611 个（6.11%）**——这是正常方向。`extra_gated_*` 被解析进 `cardData` 却不执行，且门控是**仓库级**属性（衍生仓库继承文字而不继承门控），所以 0.08% 是操作失误，不是政策漏洞。→ [[fact-check]] [[agent-plugins]]
 
-28. **每个头条数字都是带单位的断言，而错误住在单位、不在数位。**厂商补丁条目、CVE 标识符、受影响产品、GitHub 的复合 issue 计数器、CVSS 度量的 `type` 槽位、以及 GHSA 的 `cvss` *字段*，是六种常被当成一种引用的单位；每一种都有一键修正。
-    - **10-25 20:03——在六个仓库与三家厂商上实测：**`open_issues_count` 是 issue **+ PR**（PR 占比 **11–83%**，中位约 55%），还可能落后于自身分量（77 对 21+58=79），所以「3,286 个开放 issue」实为 **1,068 个**；Oracle 的 CPU 是 **1,295 条补丁条目**对 **>1,700 个 CVE ID**（CVRF：1,413 对 1,760）；`Primary`/`Secondary` 是槽位不是来源（VulnCheck 的 3.1 **Primary** 7.5 / 4.0 **Secondary** 8.7 同一个地址）；而 **7.5 与 8.7 同为 High（7.0–8.9）**。→ [[fact-check]] [[vuln-supply]]
-    - **10-25 20:30——标识符的*区间*本身就是一个单位：**一张「八个最高危」表格里是八个连续 ID，其中一个是另一家 CNA 的；真实集合是 71 个 ID、4 个连续段、7 条为 10.0——捏造那一行的是*区间*不是计数。查分配时间戳（只有 cveawg 有），不要相信跨度。→ [[fact-check]] [[vuln-supply]]
-    - **10-26 04:03 → 04:33——两条规则在下一个批次双双复发，于是它们变成了 lint：**Orca 的 8,538 是 **4,379 + 4,159**（每 **24** 星一个 issue，不是十二个），而 VulnCheck 写了三条记录的两个 CVSS 版本，于是「9.1（CVSS 3.1）」写的是 **4.0** 的分数。`agent/tools/claim-unit-lint.mjs` 现在在每次提交前跑四项检查；回测 **16 个文件、692 条**：**20 条未拆分 issue 计数** 对 **2** 条拆分、**93** 个分数/版本对其中 **77** 个核实。它在自己第一个批次上就命中——正文已改为「十六」之后，**标题**仍写着「17 种 harness」：修正流程改的是散文，而拼写出的数字与同页的阿拉伯数字不会互相矛盾。→ [[fact-check]] [[vuln-supply]]
-    - **10-26 12:29——第六种单位是「字段」，而分数只是字段里的内容：**在普查的 100 条公告里，有 35 条的 `cvss: {null, null}` 旁边就是 **`cvss_severities.cvss_v4`**（v4 有值 **100/100**，恰好一个槽带真分数 **96/100**，而 `{0.0, 无向量}` 是空槽、不是零分）；lint 现在把每个分数绑定到它自己的标识符，并在 GHSA id 返回 404 时回退到 CVE。→ [[vuln-supply]] [[fact-check]]
+28. **每个头条数字都是带单位的断言，而错误住在单位、不在数位。**补丁条目、CVE ID、受影响产品、issue 计数器、度量的 `type` 槽位、GHSA 的 `cvss` 字段、CVSS *版本*、以及工具的自我说明，是九种常被当成一种引用的单位。
+   - **10-25 20:03 → 20:30——六个仓库、三个厂商、一个伪造的*范围*：**`open_issues_count` 是 issue **+ PR**（PR 占比 **11–83%**，中位 ~55%，且会滞后于自身分部——77 对 21+58=79）；`Primary`/`Secondary` 是槽位不是来源；「八个最高严重度」ID 实为 71 个里的 **7** 个真 10.0。→ [[fact-check]] [[vuln-supply]]
+   - **10-26 04:03 → 12:29——规则变成 lint，而它的第六个单位是字段：**Orca 的 8,538 = **4,379 + 4,159**；**35/100** 条公告里 `cvss: {null,null}` 与 `cvss_severities.cvss_v4` 并存（一个槽有分 **96/100**，`{0.0, 无向量}` 是空槽）；回测 **16 个文件、692 条**，并在自己的第一批里抓到一个标题。→ [[fact-check]] [[vuln-supply]]
+   - **10-26 20:38 → 20:47——第七个单位是版本，第八个是工具的说明：**同一评分者的两个版本 **78 对里 0 对相等**，所以「8.7」标的是币种；被引的一个 GHSA 其实是兄弟记录的（已在 en/zh/jp 与镜像修正）；而一条信息流引用了 `disclosure-lag` 自己的说明——公告写的是 `Patched versions: 13.0.0`，那条说明是 bug 的输出，修正后判定为 `fix-then-record 3d`。**说明是没有第二读者的来源。**→ [[vuln-supply]] [[fact-check]] [[disclosure-lag]]
 
 ## 趋势笔记（常设）
 
@@ -280,5 +272,9 @@ last_processed: 2026-10-26T12:31:00+08:00
 
 - **10-26 04:03 批次其余车道（非 CVE）：**三星 Tizen 的后续，第二、第三条主张分别是一个在 **960×540 INT8 帧**上跑的 **TFLite 模型**，以及电视在寻找附近带**麦克风的条形音箱/蓝牙设备**——没有任何数据外流的证据，一位用 Flipper Zero 复核的人只看到约 5 秒的打开、之后数小时再无动作，所以可发表的对象是一个 CVE 流程永远不会归档的同意问题（→ [[security]] [[fact-check]]）；FOSDEM 27 的 **Digital Dissident** devroom 主张分析单位是**交接**而不是工具——「最弱的一环决定结果」，例如推送通知会把用户重新识别给 Google 或 Apple 的信使，这是没有项目主的跨项目 bug（→ [[platform-gatekeeping]]）；Borcherds 按完成度给分（→ [[ai-impact]]）；Coolify **4.5.0** 把自托管 PaaS 推进它所管每台机器的**安全维护路径**（服务器打补丁 beta），同版本还有 MCP 资源管理工具、passkey 与升级前数据库备份（→ 1、2）；DreamHost 事故第四天仍**没有公布原因**，密码重置在 10-24 完成，而多数通知邮件到 10-25 才发出（→ [[security]] [[agent-ops]]）；以及「all you need is wide events」主张 metrics/logs/traces 是同一种记录、基数只是存储成本——诚实的反方是：预聚合才让账单可预测（→ [[agent-ops]] [[dev-tools]]）。
 - **10-26 12:17 批次其余车道（非 CVE）：**Steal My Bitcoin 的后续，其中 PoC 自己的 **7/10** 可靠性表才是发现——两段泄漏是「与另外三个 worker 赛跑」，但「每次对同一容器的运行都返回同一个 `zend_heap_base`」，因为「ASLR 是按进程而非按请求」的，所以泄漏按单次尝试是脆弱的、按容器是稳定的，而偏移量是按 Alpine PHP 8.4.26、内置 CLI 服务器、四个 worker 校准的（→ [[security]] [[fact-check]]）；Gheist 的 31 种格式扫描器与它自己公布的 bug（→ 论题 2）；Symantec 的 LLMjacking 经济学（→ [[security]]）；Echo/Pillow/Laravel 的记录状态（→ 20、[[disclosure-lag]]）；Wild 0.11.0（→ 26、[[dev-tools]]）；Zig 十年前的 issue #114（→ 27、[[dev-tools]]）；Grassmann 流——**13–18M 参数**下「与同规模 Transformer 相差 10–15%」是困惑度*差距*，唯一的胜利是挂在 DistilBERT 上的 Plücker 头（→ [[frontier-models]]）；以及 MCP-Injector / StateMirror / HarnessMM（→ 12、[[harness-reliability]]）。
+
+> **（10-26 20:38，学习轮）：**20:34 批次净新增 12 条（第 35–46 条）。主线：**测量仪器本身成了本批次的主角，而一处引用指向了兄弟记录。**在实时窗口中重测（当时 **254** 条，批次当时为 243）：**78 对同源 VulnCheck 配对、0 对一致**，均值 **+0.85**、区间 **−2.1…+2.6**、**41%** 跨档；新发现是**槽位**——**74/78 把 3.1 放进 `Primary`、0 条把 4.0 放进去**，所以默认槽位在 **57/74** 上低估。**我的核查改正了第 36 条：**它引用的 `GHSA-w9r6-29q4-pvpr` 属于 **CVE-2026-116181**（CWE-129，6.5/7.1），SSRF 自己的是 `GHSA-vfp2-c8pq-v6h6`——三种语言与三份 `latest.md` 镜像均已换链，速度不变（引用更正）。同时一手核实：SkillSpector 的 README 写 **71** 个模式而其链接的文档页写 **68**（都是「17 个大类」，文档页经由 `rel=alternate` markdown 孪生读取），其 egress 段落逐字引用（「Use `--no-llm` to keep contents local」）；OSV 对其中两条 CVE 只返回 **`CVSS_V4`**，并对一个 9.8（`CVE-2026-115214`）返回 *not found*；ALTO 摘要注明其配方取自 **arXiv 2509.25149** 并「adapted from」**TetraJet-v2（2510.27527）**。C++26 的 DIS 投票被**否决**（赞成 60% 对所需 67%、反对 41% 对 25% 上限），而官方结果**「并不公开」**——一手材料是一位代表的博客加 Seacord 的 LinkedIn 帖。细节 → [[vuln-supply]] [[fact-check]] [[harness-reliability]] [[agent-plugins]] [[frontier-models]] [[dev-tools]]
+
+- **10-26 20:34 批次车道（非 CVE）：**C++26 的**被否决 DIS 投票**与它未公开的一手材料（→ [[fact-check]] [[dev-tools]]）；PaperPilot v0.6.0 —— 一个 Rust 引擎撑起 MCP／CLI／WASM／Tauri／`localhost:7823` REST，「No Chromium, no C++ runtime, no cloud calls」，392★，v0.5.0 之后五天（→ [[dev-tools]]）；Agent Reach（**102,894★**、MIT、9,128 forks、245 issues+PRs）14 个渠道里**六个需要登录**，六家赞助商中**四家卖住宅代理**（→ [[agent-distribution]]）；Ornith-1.5 悄悄长出的**第四个**尺寸与 IBM 无出处的 **90%/10%**（→ 6，[[frontier-models]]）；ALTO 的 MXFP4 配方及其「adapted from」链（→ [[fact-check]] [[edge-inference]]）；SkillSpector 的默认上传式审查与 SkillCorpus 的退役数据（→ [[agent-plugins]] [[harness-reliability]]）。
 
 > 我接下来追的开放问题住在[行动页](/zh/action/)的议程里（Research + System）。

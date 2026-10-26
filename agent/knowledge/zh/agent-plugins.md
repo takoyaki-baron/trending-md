@@ -929,3 +929,37 @@ CameraX、Cars、端侧 AI、Compose、Media3 Cast、Play、R8、测试、TV 迁
 → [[agent-stack]] [[fact-check]] [[agent-distribution]]
 
 Sources: [AgriciDaniel/claude-seo](https://github.com/AgriciDaniel/claude-seo) · [the 26 skills](https://github.com/AgriciDaniel/claude-seo/tree/main/skills) · [wesbos/3d-model-anything](https://github.com/wesbos/3d-model-anything) · [the office viewer](https://wesbos.github.io/3d-model-anything/)
+
+## 技能审查变成厂商产物——而它的默认模式会把被审对象上传 (2026-10-26 20:38)
+
+**`NVIDIA/SkillSpector`**（**21,710★ / 1,912 forks**，**171 个未关闭 issue+PR**，Apache-2.0，
+创建于 2026-03-21，最后推送 2026-10-23）是 NVIDIA "Verified Skills" 流水线的安全层：指向一个 git 仓库、
+URL、zip、目录或单个文件，默认运行**静态分析（regex、Python AST、YARA）**，另可选用 **LLM** 通道，
+并对已知漏洞依赖查询 **OSV.dev**，输出 terminal / JSON / Markdown / **SARIF**。
+
+关于它，有两件事比检出率更重要：
+
+- **默认审查方式是上传。** README 自己的 "Trust model and data egress" 一节写道：
+  "**LLM analysis sends analyzer-eligible file contents to the configured provider.** When LLM
+  analysis is enabled (the default), file contents are sent to the active `SKILLSPECTOR_PROVIDER`
+  endpoint. **DSSE payloads and readable signing metadata are included.** Use `--no-llm` to keep
+  contents local." 因此用默认设置审查一个不可信技能，会把该技能的内容送给第三方——
+  这个供应链风险扫描器本身就是一个供应链跳点，除非你传 `--no-llm`。（已在 raw README 逐字核实。）
+- **分母才是发现。** 它实现的论文（*Agent Skills in the Wild*，Liu 等，2026）从主要市场收集 **42,447** 个技能、
+  **分析 31,132 个（73%）**；头条的 **26.1%** 是**在被分析子集上**至少含一个漏洞的比例，不是在整个市场上的比例。
+  **5.2%** 显示可能的恶意意图；含可执行脚本的技能出现漏洞的可能性高 **2.12×**。README 自己的局限清单列出分析器
+  够不到的东西：非英文内容、图片内的文字、编译或加密的代码、仅运行时才出现的行为。
+- **它自己的两个页面对自家规则数不一致：** README 为 **71 patterns across 17 categories**，
+  所链接的文档页为 **68 across 17**（两者均一手抓取；见 [[fact-check]]）。
+
+**退役问题也是可测的。** 一个约 10 万条技能的 hub 必须决定**退役哪些**，而 `arXiv 2610.32322` 表明标准规则
+（按有/无技能的增益退役）基本是噪声：**SkillsBench 的 31 次退役中有 28 次建立在没有任何一次运行完整通过的探测上**，
+跨任务一致性 **κ 0.23** 对"无辅助得分"判定的 **0.42**，且内化是**模型–技能配对**的属性，
+所以单一全局退役清单对服务多模型的 hub 来说是错误的数据结构。细节 → [[harness-reliability]]。
+
+**写作规则：** 任何技能安全主张都要说明扫描器是否上传了它审查的对象，并给出"已分析 / 已收集"的分母。
+"26.1% 的技能存在漏洞"与"可被分析的 73% 中有 26.1%"是两句不同的话。
+
+→ [[agent-distribution]] [[fact-check]] [[harness-reliability]]
+
+Sources: [github.com/NVIDIA/SkillSpector](https://github.com/NVIDIA/SkillSpector) · [raw README](https://raw.githubusercontent.com/NVIDIA/SkillSpector/main/README.md) · [NVIDIA docs — scanning agent skills](https://docs.nvidia.com/skills/scanning-agent-skills) · [arXiv 2610.32322](https://arxiv.org/abs/2610.32322)

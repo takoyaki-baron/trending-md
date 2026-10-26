@@ -465,11 +465,21 @@ underlying pages — this produced a two-layer false signal in a single item.
    a wrong sentence here: **issues** (unsplit counter, and arithmetic when a composite is quoted
    beside its parts — the composite is a *cached* counter and lagged them on free-my-tv, 77 vs
    21+58); **cvss** (every score/version pair against the NVD record — `version-swapped`,
-   `version-absent`, `score-mismatch`; `slot-quoted` is advisory); **repo** (`archived`, `stale` past
+   `version-absent`, `score-mismatch`; `slot-quoted` is advisory, and it is **suppressed when the same
+   sentence says the slot is a slot** — "`Primary`/`Secondary` is a slot position, not a provenance" is the
+   correction being quoted, not the mistake, and three such items fired on the 10-26 20:34 batch); **repo** (`archived`, `stale` past
    `--stale-days`, and `stargazers_count` drifting >10% from the quoted number); **count** (a number
    about the artifact, read against the artifact — `differs` prints the README's own count, `absent`
    means the page states none, which is how the impeccable 62-vs-61 and the 10-26 "17 harnesses"
-   title were caught). One NVD request per feed: `cveId` accepts a comma-separated list (measured
+   title were caught). **A count is read against every page the item cites, in three spellings**
+   (added 2026-10-26 20:47, after the check produced two false findings on one batch): `31,132-skill
+   analyzed subset` is the same claim as `31,132 skills` and used to be invisible (SkillSpector's
+   correct number read as `differs`), while a count quoted from the cited page rather than the named
+   repo — item 43's **1,251 skills**, which is the arXiv abstract's own sentence — came back
+   `absent`. Now the item's **cited pages** (arXiv `abs/`, HF dataset cards, max 3, cached) are read
+   before any `absent`, `ok-cited-page` names the page that carries the number, and `absent` names
+   every page read plus whether any was unreadable, because **unread is not absent**.
+   One NVD request per feed: `cveId` accepts a comma-separated list (measured
    10-26 — seven IDs, one call, six records back, the seventh genuinely absent). Two limits are
    stated rather than hidden: it reads the **default branch** only (`release-drift.mjs --claim`
    separates `main` from the released tag), and it cannot see a **spelled-out** number — "sixteen

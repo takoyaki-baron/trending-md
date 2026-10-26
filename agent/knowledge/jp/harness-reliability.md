@@ -49,3 +49,37 @@ created: 2026-10-26
 3. **故障モデルを引用する。** ストレスプロファイルは選択であり——issueスレッドから採掘し永久寄りに重み付けしたもの——見出しの割合はその選択の性質である。
 4. **判定可能なものと判断を要するものを分ける。** 幻覚の安い半分は環境に対して判定可能で、高い半分はそうではない。混同すると安い半分が不可能に見える。
 5. **ガードレールにとって遅延は正確性の性質である。** 17.73 s → 1.50 ms が、サンプリング検査を常時検査へ変えた。
+
+## スコアは「ペア」のものであり、「産出できなかった」は別の失敗である (2026-10-26 20:38)
+
+arXiv 2610.32483（*When Agents Fail: Model or Harness — Who's to Blame?*）は、このファイルの前提に必要だった
+主張を与える：agentic ベンチマークの数値はモデルではなく**モデル–ハーネスのペア**の性質であり、
+それを見る方法は**有効完了**と**正しさ**を分けて測ることだ。
+
+- **5つの指標：** Valid Completion Rate（VCR——正しさに関係なく、agent が正常に終了し*評価可能な*結果を
+  出せたか）、Model-Harness Fit、Cross-Model Fit、Interaction Residuals（構成要素レベルの要約に隠れる
+  ペア固有の強弱）、Token Load（失敗した試行を含む）。
+- **規模：** 4つのハーネス——**OpenCode、Codex CLI、Pi CLI、DeepAgents**——×4つのコアモデル、加えて固定の
+  ネイティブ・モデル–ハーネス系2つ、6つのベンチマーク（文脈管理、ツール使用、長文脈計画、マルチモーダル相互作用、
+  成果物の受け渡し）にわたり：**111 設定、52,168 軌跡**。
+- **所見：** **OpenCode がクロスモデル性能で1位**；**DeepSeek V4 Flash Preview** が共有4ベンチパネルで
+  ハーネス横断の最高平均 VCR；著者自身の要約が引用すべき文である——"harness rankings vary across models and
+  benchmarks; task performance and valid completion can favor different pairings, and similar task
+  scores can accompany distinct execution profiles."
+- **なぜ VCR が荷重を支えるのか：** 正解率だけでは、評価可能な成果物を一度も出さなかった agent と、
+  誤った成果物を出した agent が同じ点になる。これは別々の欠陥で直し方も違う（ハーネスの配管 vs モデルの判断）が、
+  標準的なベンチ表はそれを潰してしまう。
+
+**同伴する留保：** 査読中のプレプリントであり、111 設定は著者自身が構築したもの。ランキングが不安定であることの
+実証として読み、引用するリーダーボードとしては読まない。
+
+**同じ問いのスキル側**（arXiv 2610.32322、*Beyond Gain*）：スキルの有無による**利得**で退役を決める規則は、
+利得がゼロ付近になる2つの場合を区別できない——スキルが内化されている場合と、モデルもスキルも能力を提供しない
+場合（**uncovered**）である。4モデルでの実測：**SkillsBench の31件の退役のうち28件は、どの実行も完全には
+通らなかったプローブに依拠している**；利得規則のタスク間一致は **Cohen's κ 0.23** で、無補助スコア判定の
+**0.42** に対し、判定は**モデルごとに異なる**ため hub は "must read them per model"。
+1,251 スキルとタスク・項目別スコア（4モデル）が `EverMind-AI/SkillCorpus` として公開されている。
+
+→ [[frontier-models]] [[agent-plugins]] [[agent-stack]]
+
+Sources: [arXiv 2610.32483](https://arxiv.org/abs/2610.32483) · [full paper](https://arxiv.org/html/2610.32483v1) · [arXiv 2610.32322](https://arxiv.org/abs/2610.32322) · [EverMind-AI/SkillCorpus](https://github.com/EverMind-AI/SkillCorpus)

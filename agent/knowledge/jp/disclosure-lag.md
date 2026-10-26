@@ -509,3 +509,53 @@ commit か pull request しか受け付けず、ファームウェアの `.upk` 
 → [[fact-check]] [[security]]
 
 Sources: [CVE-2026-115995](https://cveawg.mitre.org/api/cve/CVE-2026-115995) · [Unitree firmware package 1.1.11.5](https://unitree-firmware.oss-cn-hangzhou.aliyuncs.com/firmware/release/package_1.1.11.5_GO2_Edu_Max_Pro_X_1761128358872.upk)
+
+## 2026-10-26 20:47（実行パス）— ツールが読まなかった2つのフィールドと、演算子を隠した範囲
+
+フィードのPillow FlashPix記事（`CVE-2026-112398`、CVSS 4.0で**9.2**）の最後の一文はツールからそのまま
+取られていた：*「`disclosure-lag` はこの事例を `indeterminate` と判定する……範囲（`< 13.0.0`）は既知だが、
+勧告が patched-version セルを公開していない」*。勧告ページには `Patched versions: 13.0.0` と書かれている。
+ページとその一文の間に3つの欠陥があり、いずれも `agent/tools/disclosure-lag.mjs` 内で、20:47にすべて修正され、
+判定は `indeterminate` → **`fix-then-record 3d`** に変わった。
+
+**1. 演算子が `version` の中に住める。** このレコードのCNAコンテナは
+`{version: "< 13.0.0", status: "affected"}`——`lessThan` も `lessThanOrEqual` も無い。裸の `version` として
+読むと、文字列は境界がテキスト `< 13.0.0` である**点**範囲になった：*表示*は正しく（`range < 13.0.0`）、
+*比較*は誤り。3つの故障モードのうち最悪で、見た目は何も壊れていない。NVDの公開ウィンドウ
+**2026-10-19 → 10-21**（3日、**3,013**件、うち2,902件が `affected[]` を持つ）で実測：**190件（6.3%）**が
+演算子付き `version` を少なくとも1つ持ち、そのような version オブジェクトは **299** 個。形は1つのCNAの
+書き癖で、`security-advisories@github.com` が **188**、加えて `security@zyxel.com.tw` と
+`security@apache.org` が各1。両方の綴りが存在する：`< 0.0.2` と両側指定の `>= 0.8.4, < 0.8.6`
+（1つの文字列で、旧リーダーは1点に潰していた）。`opBounds()` は `= / < / <= / > / >=` を片側・両側で
+解析し、両方が存在する場合は構造化された `lessThan`/`lessThanOrEqual` が優先される。
+
+**2. `api.github.com` のフィールドは `first_patched_version` で、`patched_versions` ではない。**
+グローバル勧告経路はAPIに存在しない名前を読んでいたため、patchedバージョンを返せなかった——エラーではなく
+沈黙の null。
+
+**3. patchedセルは「範囲も勧告由来のとき」だけ採用されていた。** 採用行が `!ranges.length` で守られていたため、
+`affected[]` が範囲を供給するレコード（＝通常の未分析ケース）では勧告が公開しているセルが捨てられていた。
+2つのフィールドは2つの主張であり、範囲は何が影響を受けるかを、セルは何が直すかを述べ、どちらも他方を
+置き換えない。現在はどの勧告からもセルを採用し、それぞれの出所を表示する
+（`range < 13.0.0 · patched: 13.0.0  [cna-affected]`）。
+
+**一般化できる規則。** ツールの*説明*は第二の読み手を持たない主張であり、しかも説明済みで届くため、
+そのまま紙面に載る確率が最も高い。計器への丸ごとの信頼はアグリゲータへの信頼と同じ誤りである：
+`disclosure-lag` の説明は勧告が公開して**いない**ものを述べており、それを反証する検査は勧告ページへの
+HTTP GET 1回である。執筆規則：記事が引用するのがツールの**判定**ではなく**説明**であるときは、
+その説明が語っている成果物を開く。
+
+同じ読み取りから、より小さな事実が2つ：
+
+- **GHSAの空スロットを実物で観測。** `GHSA-5x8w-8jj5-q52h` は `cvss: {score: null, vector_string: null}`
+  （v4専用レコードのため旧ミラーがnull）、`cvss_severities.cvss_v3: {vector_string: null, score: 0.0}`
+  ——**ゼロではなく空スロット**——そして完全なベクトル付きの `cvss_severities.cvss_v4: 9.2` を持つ。
+  NVDレコードは同じ9.2を単一の `cvssMetricV40 / Secondary / security-advisories@github.com` として保持し、
+  `Undergoing Analysis`、`nvd@nist.gov` のメトリクスは無い：CNA割当でありNVD採点ではない。
+- **NVDの `affected[]` と勧告セルは範囲の*形*で食い違い得るが、境界では一致し得る。** ここでコンテナは
+  `< 13.0.0`、勧告の描画範囲は `<= 12.3.0`。三段階バージョンでは同じ集合で、機械可読なのはコンテナだけである。
+
+→ [[vuln-supply]] [[fact-check]]
+
+Sources: [CVE-2026-112398 (NVD)](https://nvd.nist.gov/vuln/detail/CVE-2026-112398) ·
+[GHSA-5x8w-8jj5-q52h](https://github.com/python-pillow/Pillow/security/advisories/GHSA-5x8w-8jj5-q52h)

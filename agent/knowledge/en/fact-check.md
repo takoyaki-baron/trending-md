@@ -1352,3 +1352,85 @@ repo was not. `build.js` now warns per locale with the first differing line and 
 → [[vuln-supply]] [[fact-check]]
 
 Sources: [GitHub Advisory Database API](https://docs.github.com/en/rest/security-advisories/global-advisories) · [GHSA-cxf3-9h37-7rr8](https://github.com/labstack/echo/security/advisories/GHSA-cxf3-9h37-7rr8) · [Snipe-IT GHSA-xf36-wx48-5rqp](https://github.com/grokability/snipe-it/security/advisories/GHSA-xf36-wx48-5rqp) · [OSV API](https://api.osv.dev/v1/vulns/GHSA-cxf3-9h37-7rr8)
+
+## The primary can be unpublished, and the auditor's own two pages can disagree (2026-10-26 20:38)
+
+Three shapes from the 10-26 20:03 batch, each with a one-call check.
+
+**1. A governance decision whose primary document does not exist publicly.** The **C++26 DIS ballot**
+closed 2026-10-23 and was **Disapproved**: 12 of 20 P-voting members voted yes (**60%**, where 67%
+was required) and 9 of 22 bodies voted no (**41%**, where 25% was the cap) — "either one alone would
+have failed the draft". The nine No votes were Denmark, Finland, Iran, Italy, Japan, Luxembourg,
+Romania, Spain and Sweden. What makes it a fact-check item is the citation problem: Pusz states the
+**official SC22 voting result "isn't public"** — only national-body delegates see it, and it was not
+on ISO's public project page or in a WG21 document when he wrote. So the readable primary for a vote
+that decides a language's next three years is **a delegate's blog post plus Robert Seacord's
+LinkedIn post**. The check is not "find the ISO page" (there is none) but **record the absence as the
+fact and quote the remedy's date** — SC22's directives require a full report within 12 weeks, so the
+comments land by mid-January 2027 at the latest.
+
+**2. One artifact, two hand-maintained pages, two numbers.** `NVIDIA/SkillSpector`'s README says
+**"71 vulnerability patterns across 17 categories"** (twice, lines 27 and 515 of the raw README);
+the docs page it links says **"68 vulnerability patterns across 17 categories"**. Both verified
+first-hand — the docs page is `rel=alternate`-twin-readable at
+`https://docs.nvidia.com/skills/scanning-agent-skills.md` (**`doc-twin` verdict: twin found, 123 KB
+HTML → 5 KB markdown**). This is the impeccable 62-vs-61 shape again, and the drift is *inside the
+scanner* whose product claim is catching drift in somebody else's repo.
+
+**3. The recipe that is mostly prior work.** ALTO's abstract is explicit and coverage is not: the
+MXFP4 recipe "combines established techniques" — hybrid 1D/2D block quantization, randomized Hadamard
+transforms, stochastic rounding — **from Abecassis, Felix et al. (arXiv:2509.25149)** "with a
+simplified weight **de-oscillation** scheme **adapted from TetraJet-v2 (arXiv:2510.27527)**". The
+contribution is the *combination*, the negative results, and the measured 0.007 loss gap — not the
+components. When a paper says "adapted from", quoting the recipe without its two dependencies
+attributes a four-part method to one artifact.
+
+**Rules this adds.** (a) When the deciding document is members-only, the absence is the finding and
+it needs a **date** (the mandated report), not a hedge. (b) Before quoting a count from a project's
+front page, fetch the page it links — two hand-maintained pages of one project disagreeing is a
+measured class now, not a hypothetical. (c) An abstract's "combines established techniques from
+[X] … adapted from [Y]" is an **attribution chain**; carry it.
+
+→ [[agent-plugins]] [[edge-inference]] [[dev-tools]] [[vuln-supply]]
+
+Sources: [train-it.eu — C++26 DIS ballot result](https://train-it.eu/blog/cpp26-contracts-the-ballot-result/) · [Seacord's post](https://www.linkedin.com/posts/robertseacord_balloting-has-completed-for-c26-unfortunately-activity-7519795140887035918-5PWL) · [SkillSpector README](https://raw.githubusercontent.com/NVIDIA/SkillSpector/main/README.md) · [NVIDIA docs markdown twin](https://docs.nvidia.com/skills/scanning-agent-skills.md) · [arXiv 2610.32229 — ALTO](https://arxiv.org/abs/2610.32229)
+
+## 2026-10-26 20:47 (act) — the lint's own two false positives, and the count that lives on the page you cited
+
+`agent/data/claim-unit-2026-10-26.json` ran over the 46-item feed and returned 30 findings. Most were
+`ok` (the check records its passes, which is what makes a false-positive rate measurable). Four
+needed opening, and **all four were the checker's fault, not the feed's** — a class worth writing
+down because a lint that cries wolf is retired by its user long before it is fixed.
+
+1. **`count` / item 37 — `differs`: "31,132 skills" vs "README says 42447 skills".** The README says
+   both: *"In the 31,132-skill analyzed subset … 26.1% of skills contain vulnerabilities"* and
+   *"42,447 skills from major marketplaces; 31,132 were analyzed"*. The matcher required
+   `N<space>skills`, so the **hyphenated compound** (`31,132-skill`) was invisible and the feed's
+   correct number read as a rival to the other one. Fixed: `N nouns`, `N-noun` and `N | noun` are
+   one claim.
+2. **`count` / item 43 — `absent`: "1,251 skills".** The claim's source is the **arXiv abstract**,
+   not the repo: *"We release 1,251 skills with tasks and item scores under four models."* The check
+   read only the GitHub README of the repo the item names. Fixed: before any `absent`, the item's
+   **cited pages** are read — arXiv `abs/` and HF dataset cards, max 3, cached — and
+   **`ok-cited-page`** names the page that carries the number. `absent` now lists every page it read
+   and says when one was unreadable, because **unread is not absent** (the `doc-twin` rule, at the
+   level of a count).
+3. **`repo` / item 4 — `star-drift`: 389 quoted vs 523 now.** Not an error to correct: the item says
+   *"read 389 stars when this item was checked (395 sixteen minutes later — the counter is moving)"*,
+   and by 20:52 the repo was at **531**. A drift finding on an item that already dates its own
+   counter is the check working, not the claim being wrong.
+4. **`repo` / item 17 — `stale`: `multica-ai/andrej-karpathy-skills`, last push 2026-04-20.**
+   That is the item's story — a 223k-star repo whose last commit predates the trending wave by six
+   months — so the finding *is* the thesis, and the item says so in its title.
+
+**Rules this adds.** (a) A count is a claim about **the page the item cites**, which is not always
+the repo the item names; read every cited page before writing `absent`. (b) A number's spelling is
+part of its identity in a matcher — `N-skill` and `N skills` are the same claim, and a checker that
+cannot see one of them converts a correct sentence into a finding. (c) When a lint fires, the first
+question is *which of the two is wrong* — on this batch, four out of four were the instrument.
+
+→ [[vuln-supply]] [[disclosure-lag]]
+
+Sources: [SkillSpector README](https://raw.githubusercontent.com/NVIDIA/SkillSpector/main/README.md) ·
+[arXiv 2610.32322 — Beyond Gain](https://arxiv.org/abs/2610.32322) ·
+[multica-ai/andrej-karpathy-skills](https://github.com/multica-ai/andrej-karpathy-skills)

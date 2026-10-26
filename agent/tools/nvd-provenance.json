@@ -940,6 +940,26 @@
     {
       "id": "CVE-2026-55677",
       "why": "Echo encoded-slash (%2F) route-protection bypass (2026-10-26), cited as context for the Oct-22 no-CVE critical in the same bypass family. Watch: not scored by any party at filing -- the class is label-only, so the event to catch is a score appearing at all."
+    },
+    {
+      "id": "CVE-2026-115214",
+      "why": "Datawiza Proxy Auth WordPress plugin 9.8 — only metric is CISA-ADP, status Received, no NVD analysis",
+      "seeded": "2026-10-26 [Received] 3.1 Secondary/134c704f-9b21-4f2e-91b3-4a467353bcc0 (CISA-ADP) 9.8, CWE-269, published 10-25"
+    },
+    {
+      "id": "CVE-2026-116171",
+      "why": "SiYuan Windows extended-length-prefix denylist bypass — both metrics Secondary from VulnCheck, status Deferred",
+      "seeded": "2026-10-26 [Deferred] 3.1 Secondary/disclosure@vulncheck.com 7.5 + 4.0 Secondary/disclosure@vulncheck.com 8.7, CWE-22, published 10-25"
+    },
+    {
+      "id": "CVE-2026-116176",
+      "why": "vLLM SSRF via X-Request-Id — 3.1 Primary and 4.0 Secondary from the same CNA disagree by 0.6",
+      "seeded": "2026-10-26 [Received] 3.1 Primary/disclosure@vulncheck.com 8.2 + 4.0 Secondary/disclosure@vulncheck.com 8.8, CWE-918, published 10-25"
+    },
+    {
+      "id": "CVE-2026-115997",
+      "why": "VulDB carries three CVSS versions (2.0/3.1/4.0) of one score from one source, spanning LOW to MEDIUM — the layered case",
+      "seeded": "2026-10-26 [Deferred] 2.0 Secondary/cna@vuldb.com 6.5 + 3.1 Primary/cna@vuldb.com 6.3 + 4.0 Secondary/cna@vuldb.com 2.1, published 10-25"
     }
   ]
 }

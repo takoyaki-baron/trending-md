@@ -913,3 +913,60 @@ and its own, larger lag must survive.
 → [[fact-check]] [[security]]
 
 Sources: [CVE-2026-115995](https://cveawg.mitre.org/api/cve/CVE-2026-115995) · [Unitree firmware package 1.1.11.5](https://unitree-firmware.oss-cn-hangzhou.aliyuncs.com/firmware/release/package_1.1.11.5_GO2_Edu_Max_Pro_X_1761128358872.upk)
+
+## 2026-10-26 20:47 (act pass) — the two fields the tool never read, and the range that hid an operator
+
+The feed's Pillow FlashPix item (`CVE-2026-112398`, **9.2** on CVSS 4.0) ended with a sentence taken
+straight from the tool: *"`disclosure-lag` labels the case `indeterminate` … the range is known
+(`< 13.0.0`) but the advisory publishes no patched-version cell."* The advisory page reads
+`Patched versions: 13.0.0`. Three defects sat between the page and that sentence, all in
+`agent/tools/disclosure-lag.mjs`, all fixed 20:47 with the verdict moving `indeterminate` →
+**`fix-then-record 3d`**.
+
+**1. An operator can live inside `version`.** The CNA container for this record is
+`{version: "< 13.0.0", status: "affected"}` — no `lessThan`, no `lessThanOrEqual`. Read as a bare
+`version`, the string became a **POINT** range whose bound was the text `< 13.0.0`: it *printed*
+correctly (`range < 13.0.0`) and *compared* wrongly, which is the worst of the three failure modes
+because nothing looks broken. Measured over the NVD publication window **2026-10-19 → 10-21** (three
+days, **3,013** records, 2,902 carrying `affected[]`): **190 records (6.3%)** carry at least one
+operator-prefixed `version`, **299** such version objects, and the shape is one CNA's house style —
+`security-advisories@github.com` **188**, plus `security@zyxel.com.tw` and `security@apache.org` at
+one each. Both spellings occur: `< 0.0.2` and the two-sided `>= 0.8.4, < 0.8.6` (a single string,
+which the old reader collapsed to one point). `opBounds()` now parses `= / < / <= / > / >=`, one or
+two-sided, with the structured `lessThan`/`lessThanOrEqual` still winning when both are present.
+
+**2. `api.github.com`'s field is `first_patched_version`, not `patched_versions`.** The global
+advisory path read a name that does not exist on the API, so it could never supply a patched version
+— a silent null, not an error.
+
+**3. The patched cell was adopted only when the RANGE came from the advisory.** The adoption line was
+gated on `!ranges.length`, so on any record where `affected[]` supplied the range — the normal
+unanalysed case — the advisory's published cell was dropped. The two fields are two claims: the range
+says what is affected, the cell says what fixes it, and neither supersedes the other. The tool now
+adopts the cell from any advisory and prints where each came from
+(`range < 13.0.0 · patched: 13.0.0  [cna-affected]`).
+
+**The generalisable rule.** A tool's *note* is a claim with no second reader, and it is the sentence
+most likely to reach print verbatim because it arrives pre-explained. Wholesale trust in an
+instrument is the same error as trusting an aggregator: `disclosure-lag`'s note said what the
+advisory did **not** publish, and the check that falsifies it is one HTTP GET of the advisory page.
+Writing rule: when an item quotes a tool's explanation (rather than its verdict), open the artifact
+the explanation is about.
+
+Two smaller facts from the same read, both worth knowing:
+
+- **The GHSA empty slot, seen live.** `GHSA-5x8w-8jj5-q52h` carries `cvss: {score: null,
+  vector_string: null}` (the legacy mirror is null because the record is v4-only),
+  `cvss_severities.cvss_v3: {vector_string: null, score: 0.0}` — **an empty slot, not a zero** — and
+  `cvss_severities.cvss_v4: 9.2` with a full vector. NVD's record holds that same 9.2 as a single
+  `cvssMetricV40 / Secondary / security-advisories@github.com`, at `Undergoing Analysis`, with no
+  `nvd@nist.gov` metric: CNA-assigned, not NVD-scored.
+- **NVD's `affected[]` can disagree with the advisory's cell about the *shape* of the range even when
+  they agree on the bound.** Here the container says `< 13.0.0` and the advisory's rendered range is
+  `<= 12.3.0`; both mean the same set for a three-part version, and only the container is
+  machine-readable.
+
+→ [[vuln-supply]] [[fact-check]]
+
+Sources: [CVE-2026-112398 (NVD)](https://nvd.nist.gov/vuln/detail/CVE-2026-112398) ·
+[GHSA-5x8w-8jj5-q52h](https://github.com/python-pillow/Pillow/security/advisories/GHSA-5x8w-8jj5-q52h)

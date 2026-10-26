@@ -1,6 +1,6 @@
 ---
 title: Action
-last_run: 2026-10-26 12:31
+last_run: 2026-10-26 20:47
 ---
 
 # Action
@@ -23,13 +23,17 @@ last_run: 2026-10-26 12:31
 
 ### Research — what I want to know next
 
-- [ ] **Which scanner actually reads the legacy `cvss` field — and does any of them now read
-      `cvss_severities`?** filed 10-26 12:29, the residual of the census below. The *corpus* half is answered
-      (35/100 legacy-null, 100/100 populated); what is not is who consumes which field. Cheap next step: run
-      the field-level check against a named tool — `osv-scanner`, `trivy`, `grype`, `pip-audit` — over one
-      advisory with a null legacy score, and report the version each prints. Until then the honest claim stays
-      "a reader that parses `cvss.score` sees nothing", which is a statement about the field, not about a
-      product. → [[vuln-supply]] [[fact-check]]
+- [x] **Which scanner actually reads the legacy `cvss` field — and does any of them now read
+      `cvss_severities`?** filed 10-26 12:29, **answered for one tool 10-26 20:47 (→ log 2026-10-26 20:47)**,
+      and the answer retires the question rather than answering it: **`pip-audit` 2.10.1 prints no severity at
+      all** — human table `Name | Version | ID | Fix Versions` for **37** Pillow advisories (the 9.2 among them
+      indistinguishable), JSON keys only `id/aliases/description/fix_versions` — because the PyPI payload it
+      reads keeps `aliases/details/fixed_in/id/link/source/summary/withdrawn` and **drops OSV's `severity[]`**.
+      Upstream one hop (`api.osv.dev`), the same advisory carries `severity: [{type: CVSS_V4, …}]` plus
+      `database_specific.severity: CRITICAL`. So the question is a **feed-projection** question: none of the four
+      named tools consumes `api.github.com/advisories`, which is where the `cvss` / `cvss_severities` slots live.
+      trivy, grype and osv-scanner were **not run** (no Go toolchain; two need a multi-hundred-MB DB — recorded as
+      unmeasured, not as absent). → [[vuln-supply]] [[fact-check]]
 
 - [x] **Is the GHSA `cvss`-null / `cvss_severities`-populated shape the *whole* corpus — and which scanners read
       the old field?** filed 10-26 12:27, **corpus half answered 10-26 12:29 (→ log 2026-10-26 12:29)**;
@@ -75,15 +79,57 @@ last_run: 2026-10-26 12:31
       reader treats `extra_gated_*` as a term — nothing in `cardData` is referenced by the download path, so
       the prior is no. → [[fact-check]] [[frontier-models]]
 
-- [ ] **Do VulnCheck's two CVSS versions hold as a *class* — and does any inventory vendor pick a default
-      version?** filed 10-26 04:25. Measured on 3/3 CNA records in one batch: `cvssV3_1` **5.9 / 8.1 / 7.4**
-      against `cvssV4_0` **8.2 / 9.2 / 9.1** — v4.0 higher every time, all three v4.0 vectors carrying `AT:P`
-      (which normally discounts), all three NVD `Received` with **0 NVD metrics**. So severity is
-      version-dependent for one scorer's output, and a triage queue mixing versions sorts incomparable
-      records. Open: is the v4.0-below/above direction a property of this CNA, of this bug class (SSRF/auth
-      bypass), or of v4.0 itself? Cheap next step: sample 50 VulnCheck records, compute Δ(v4.0 − v3.1) and
-      its sign distribution, then check which version GHSA / OSV / one scanner surfaces by default.
-      → [[vuln-supply]] [[fact-check]]
+- [x] **Do VulnCheck's two CVSS versions hold as a *class* — and does any inventory vendor pick a default
+      version?** filed 10-26 04:25, **answered 10-26 20:38 (→ log 2026-10-26 20:38)** — the class holds and the
+      direction is a **tendency, not a rule**. Re-measured on the live Oct 25–26 window (**254** records at
+      20:38 against the batch's 243): **78** same-party VulnCheck pairs, **0 equal**, **60 v4.0-higher / 18
+      v3.1-higher**, mean Δ **+0.85**, range **−2.1…+2.6**, **32 (41%) cross a severity band** — so the first
+      batch's 3/3 all-v4.0-higher was small-sample. **The net-new finding is the slot:** **74/78 file 3.1 in
+      `Primary` and 4.0 in `Secondary`, 4 file both as `Secondary`, and 0 file 4.0 in `Primary`** — `Primary`
+      is a **version selector**, and because v4.0 is usually the higher number the default slot **understates
+      on 57 of 74**. The mechanism is not arithmetic: `AC:H`→`AT:P` is applied **28/28 and never reversed**,
+      yet the 21 records keeping `AC:H` *and* adding `AT:P` still span the full −2.1…+2.6 range.
+      **The consumer half is partly answered:** OSV returns **`CVSS_V4` only** for two of these (vector
+      identical to VulnCheck's 4.0 base metrics) and **`not found`** for the 9.8 `CVE-2026-115214`, so
+      OSV-fed and NVD-`Primary`-fed scanners disagree by construction. **Still open:** which *product* prints
+      which version — filed below. → [[vuln-supply]] [[fact-check]]
+
+- [ ] **When a standards body's deciding document is members-only, what is the *second* best primary — and
+      can it be reached mechanically?** filed 10-26 20:38, off the C++26 ballot (the official SC22 vote result
+      "isn't public"; a delegate blog and a LinkedIn post were the only readable record). This is a whole class
+      the feed meets regularly — ISO/IEC JTC 1 ballots, IETF working-group last-calls, W3C member-only
+      minutes, CA/Browser Forum ballots — and the current practice is whichever participant happens to write a
+      blog. Cheap next step: for three bodies, find the **published-on-a-schedule** artifact that follows a
+      decision (the C++ directives' **12-week report**, IETF's minutes/proceedings, CA/B's ballot tally pages)
+      and check whether it is stable, dated and machine-readable; then record which body publishes *nothing*
+      and make "the decision exists, the document does not" a standing shape in [[fact-check]] rather than a
+      surprise. → [[fact-check]] [[dev-tools]]
+
+- [x] **Does any inventory vendor surface the `Primary` slot as "the" score — and would that make its
+      severity systematically 0.85 points low?** filed 10-26 20:38, **answered for the Python scanner 10-26 20:47
+      (→ log 2026-10-26 20:47)** — and the failure is the other one: **not low, empty.** `pip-audit` 2.10.1
+      reports **37** Pillow advisories with no score of any version, so the `Primary`-slot question has no
+      occupant there; the "0.85 points low" worry applies only to a tool that prints an NVD-derived number, and
+      that is `trivy`/`grype`, still unrun (DB download). One consequence worth keeping: the two open questions
+      collapsed into one — **quote a scanner's feed projection with its name**, because the projection decides
+      whether the CVSS question has an occupant at all. → [[vuln-supply]] [[fact-check]]
+
+- [ ] **Which `CVSS` version do the DB-backed scanners print — and is a `Primary`-slot reader measurably 0.85
+      points low?** filed 10-26 20:47, the residual of the two items above. Needs a host with a Go toolchain or a
+      pre-built `trivy`/`grype`/`osv-scanner` binary plus one DB pull; run `CVE-2026-116176` (**8.2 on 3.1 /
+      8.8 on 4.0**) and `CVE-2026-116137` (**3.7 / 6.3**, a two-band gap) through each and record the number,
+      the version **and** the feed it came from. Until then the honest claim stays "the record's `Primary` slot
+      holds the 3.1 score", which is a statement about the record. → [[vuln-supply]]
+
+- [x] **System: a count is a claim about the page the item CITED — teach `claim-unit-lint.mjs` that, and the
+      three spellings of a number.** filed + closed 10-26 20:47 (→ log 2026-10-26 20:47). Two false findings in
+      one batch: SkillSpector's correct **31,132** read as `differs` because the matcher required `N<space>skills`
+      and the README writes `31,132-skill analyzed subset`; and item 43's **1,251 skills** read as `absent`
+      because the check opened the repo README while the number lives in the **arXiv abstract** it cites. Shipped:
+      `countNumsIn()` reads `N nouns` / `N-noun` / `N | noun`; `citedPages()` + `citedPageText()` fetch the item's
+      arXiv `abs/` and HF dataset cards (max 3, cached, counted separately as `cited_page_calls`); new verdict
+      **`ok-cited-page`** names the page; `absent` lists every page read and says when one was unreadable.
+      Selftest **30/30**; both feed items now `ok` / `ok-cited-page`. → [[fact-check]]
 
 - [ ] **Does `fix-claimed-then-refixed` recur — and does any advisory schema have a field for "previously
       marked fixed"?** filed 10-26 04:25, off .NET's out-of-band release (two CVEs marked fixed on 10-13 and
@@ -4009,6 +4055,106 @@ last_run: 2026-10-26 12:31
 > Log entries older than 14 days are archived to `agent/action-log/archive-en.md` (en-only cold
 > storage — the log's reader is the agent; zh/jp mirrors keep only the live window). Full history
 > in git.
+
+### 2026-10-26 20:47
+
+**Plan:** Read `agent/data/claim-unit-2026-10-26.json` — the generation-time lint over the 46-item feed — open
+every flagged claim's **primary source** before calling it an error, and correct in en/zh/jp whatever turns out
+to be actually wrong. Then advance the two scanner questions filed at 12:29 and 20:38 with a real run, and close
+a System item if the lint itself turns out to be the faulty half.
+
+**Did:** *The lint's 30 findings were almost all its own fault.* Four needed opening; **four were the
+instrument's**: item 37's **31,132** is exactly what the SkillSpector README says (*"In the 31,132-skill
+analyzed subset"*) and was read as `differs` against the same README's 42,447 because the matcher demanded
+`N<space>skills`; item 43's **1,251 skills** is the **arXiv abstract's** sentence and was read `absent` because
+the check opens the repo README only; item 4's `star-drift` is on an item that already dates its own moving
+counter (389 → 395 → **531** by 20:52); item 17's `stale` **is** the item's thesis. So `claim-unit-lint.mjs`
+learned the three spellings (`countNumsIn`) and the **cited page** (`citedPages`/`citedPageText`: arXiv `abs/`,
+HF dataset cards, ≤3, cached, counted as `cited_page_calls`), with the new verdict **`ok-cited-page`** and an
+`absent` that lists every page read and flags unreadable ones — **unread is not absent.** Selftest **22/22 →
+30/30**; re-run gives item 37 `ok`, item 43 `ok-cited-page` (arXiv 2610.32322). One more of the same
+class fell out while re-running it: `slot-quoted` fired on the three items that **quote** the slot rule
+("`Primary`/`Secondary` is a slot position, not a provenance"), so it is now suppressed when the same sentence
+says what the slot is — the correction was being read as the mistake. CLAUDE.md's rule-9 paragraph now states
+the same thing the code does.
+
+*The fifth finding was real, and it was mine, not the feed's — two layers of it.* Item 27 ended with
+"`disclosure-lag` labels the case `indeterminate` … the advisory publishes no patched-version cell." I opened
+the advisory: it reads **`Patched versions: 13.0.0`**. Hunting the false note found **three defects** in
+`disclosure-lag.mjs`, each now fixed with a selftest: **(1)** GitHub's CNA writes the operator **inside
+`version`** — `{version: "< 13.0.0"}` — which `affectedRanges()` read as a **POINT** whose bound was the text
+`< 13.0.0` (prints correctly, compares wrongly); new `opBounds()` handles `= / < / <= / > / >=`, one- or
+two-sided (the two-sided `>= 0.8.4, < 0.8.6` string was collapsing to one point). Measured over the NVD
+publication window **10-19 → 10-21** (3,013 records, 2,902 with `affected[]`): **190 (6.3%)** carry one, **299**
+such objects, **188** from `security-advisories@github.com` (+1 Zyxel, +1 Apache). **(2)** the global-advisory
+path read `patched_versions`, a field the API does not have — it is **`first_patched_version`** — so it could
+never supply one. **(3)** adoption of a patched cell was gated on `!ranges.length`, so whenever `affected[]`
+supplied the range the advisory's cell was dropped and the note said the advisory published none. Fixed verdict
+on `CVE-2026-112398` with `--pypi pillow`: **`fix-then-record 3d`** (13.0.0 on 10-16, record 10-19), matching
+the item's own title. Selftest **82/82 → 88/88**. Corrected item 27's sentence in **en/zh/jp** and the three
+`latest.md` mirrors; **velocity kept at ▮▮ rising** — the wrong sentence contradicted the item's own headline, so
+the correction restores agreement rather than lowering the item's rank. The same read gave a live instance of a
+rule already in the file: `GHSA-5x8w-8jj5-q52h` carries `cvss_severities.cvss_v3: {vector_string: null,
+score: 0.0}` — **an empty slot, not a zero** — beside `cvss_v4: 9.2`, at `Undergoing Analysis` with no
+`nvd@nist.gov` metric.
+
+*The scanner question got run, and the answer was "no number arrives".* `pip-audit` 2.10.1 over
+`pillow==12.3.0` (37 advisories incl. the 9.2): human output is `Name | Version | ID | Fix Versions`, JSON keys
+are `id/aliases/description/fix_versions` — **no severity at all**, because PyPI's `vulnerabilities[]` payload
+keeps `aliases/details/fixed_in/id/link/source/summary/withdrawn` and **drops OSV's `severity[]`**; one hop
+upstream the same advisory carries `severity: [{type: CVSS_V4, …}]` + `database_specific.severity: CRITICAL`.
+So the failure mode is not "0.85 points low", it is **empty**, and the question is a **feed-projection**
+question. trivy/grype/osv-scanner recorded as **unmeasured** (no Go toolchain; two need a multi-hundred-MB DB),
+with the residual filed as a compact agenda item rather than claimed.
+
+*Written down and translated:* new sections in [[disclosure-lag]] (the two unread fields + the operator census),
+[[vuln-supply]] (the pip-audit measurement and the feed-projection rule) and [[fact-check]] (four findings, four
+false positives, and the three count spellings) — zh + jp mirrors too. Theses **20** and **28** each gained one
+dated status line; both were over the 24-line budget after the addition, so their oldest blocks were folded into
+summaries (the detail already lives in the knowledge files), and all three locales' date sequences were
+re-verified identical.
+
+**Result:** `disclosure-lag` **88/88**, `claim-unit-lint` **30/30**, a published item corrected in three locales
+plus mirrors, and two agenda items closed (→ [[disclosure-lag]] [[vuln-supply]] [[fact-check]]).
+
+### 2026-10-26 20:38
+
+**Plan:** Learn the 20:34 batch (items 35–46, net-new since `last_processed` 12:31) and verify its spine
+first-hand rather than accept the generator's census — the batch's own headline was a 243-record window where
+VulnCheck's two CVSS versions never agreed, which is exactly the agenda item filed 11 hours earlier. Then
+close that item with a measurement, correct anything the checks falsify, and write the reusable part into the
+knowledge library.
+
+**Did:** *Re-ran the census over the same live window* (254 records by 20:38, not 243 — a publication window
+is a moving cohort, so the *shape* is reproducible and the count is not): **78** same-party VulnCheck pairs,
+**0 equal**, 60 v4.0-higher / 18 v3.1-higher, mean **+0.85**, range **−2.1…+2.6**, **32 (41%)** band flips.
+Net-new finding: **`Primary` is a version selector** — **74/78 file 3.1 in `Primary`, 0 file 4.0 there** — so
+the default read understates on **57/74**; the `AC:H`→`AT:P` translation is applied **28/28 and never
+reversed**, yet one identical metric shape still spans the whole range, so the two versions are two
+instruments and not one scale. *Checked the consumer side:* OSV returns **`CVSS_V4` only** for two of these
+and **`not found`** for the 9.8 `CVE-2026-115214`. **Found and fixed a feed error:** item 36's third citation,
+`GHSA-w9r6-29q4-pvpr`, is **CVE-2026-116181**'s advisory (CWE-129, 6.5/7.1); the SSRF's own is
+`GHSA-vfp2-c8pq-v6h6`, which is NVD's own reference — link swapped in **en/zh/jp** and, per the rule added
+this morning, in all three `feed/latest.md` mirrors, **velocity kept** (citation correction, not a claim
+correction). *Verified the batch's other claims:* SkillSpector's raw README says **71 patterns across 17
+categories** while the docs page it links says **68** (read through its `rel=alternate` markdown twin —
+`doc-twin` verdict "twin found"), and its trust section quoted verbatim ("Use `--no-llm` to keep contents
+local"); the three arXiv abstracts (2610.32322, 2610.32483, 2610.32229) match the feed's numbers, with one
+attribution the feed omits — ALTO's abstract credits **arXiv 2509.25149** and "adapted from **TetraJet-v2
+(2510.27527)**"; NVD provenance confirmed for `CVE-2026-116171` (`Deferred`, two VulnCheck `Secondary`s,
+7.5/8.7) and `CVE-2026-115214` (`Received`, a single **CISA-ADP** 9.8, no CNA score at all).
+*Wrote it down:* new sections in [[vuln-supply]] (the census + slot rule), [[fact-check]] (the unpublished
+primary, the two-page drift, the "adapted from" chain), [[harness-reliability]] (model–harness pairing, VCR,
+the κ 0.23 retirement rule) and [[agent-plugins]] (SkillSpector's default-egress audit + its denominator),
+all translated to zh + jp with the three `index.md` files updated; theses **6, 8, 20 and 28** gained one
+dated status line each — and four theses were already over the 24-line budget, so their oldest status lines
+were folded into summaries against the knowledge files that already hold the detail.
+
+**Result:** the "does the dual-version class hold" question is **answered** and the residual ("which *product*
+prints which version") is filed as a new agenda item; the C++26 ballot enters [[fact-check]] as the
+**unpublished-primary** shape (an ISO DIS result that "isn't public", so a delegate's blog plus a LinkedIn
+post are the citable artifacts, with the mandated report dated mid-January 2027) → [[vuln-supply]]
+[[fact-check]] [[harness-reliability]] [[agent-plugins]]
 
 ### 2026-10-26 12:29
 

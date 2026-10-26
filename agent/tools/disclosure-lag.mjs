@@ -456,7 +456,30 @@ function nvdRanges(cve) {
  *   · `status: "unaffected"` entries list the *complement* of the set when `defaultStatus` is
  *     `affected`. That shape is not expressible as ranges here, so it is returned as a note rather
  *     than silently inverted into "everything except these".
+ *   · an OPERATOR can live inside `version` itself — `{version: "< 13.0.0"}` — with
+ *     `lessThan`/`lessThanOrEqual` null. Added 2026-10-26 (the Pillow FlashPix record): GitHub's CNA
+ *     `security-advisories@github.com` emits this shape, and the structured reader turned the string
+ *     into a POINT range whose "version" was `< 13.0.0` — which prints correctly and compares
+ *     wrongly, the worst of the three failure modes. Measured over the 10-19→21 publication window
+ *     (**3,013** records): **190 (6.3%)** carry at least one, **188** of them from that one CNA
+ *     (the other two: `security@zyxel.com.tw`, `security@apache.org`).
  */
+function opBounds(s) {
+  const out = { min: null, minInc: true, max: null, maxInc: false, sawOp: false };
+  for (const part of String(s).split(',')) {
+    const m = part.trim().match(/^(<=|>=|<|>|=)\s*v?(\S+)$/);
+    if (!m) return null;
+    out.sawOp = true;
+    const ver = m[2];
+    if (m[1] === '<=') { out.max = ver; out.maxInc = true; }
+    else if (m[1] === '<') { out.max = ver; out.maxInc = false; }
+    else if (m[1] === '>=') { out.min = ver; out.minInc = true; }
+    else if (m[1] === '>') { out.min = ver; out.minInc = false; }
+    else { out.min = ver; out.max = ver; out.minInc = true; out.maxInc = true; }  // `= 1.2.3`
+  }
+  return out.sawOp && (out.min || out.max) ? out : null;
+}
+
 function affectedRanges(cve) {
   const ranges = [];
   const inverted = [];
@@ -469,18 +492,23 @@ function affectedRanges(cve) {
         continue;                       // do not invert a complement into a range
       }
       for (const v of affectedOnly) {
-        const min = v.version != null && !['0', '*', ''].includes(String(v.version)) ? String(v.version) : null;
+        const rawVer = v.version != null ? String(v.version) : null;
+        const op = rawVer ? opBounds(rawVer) : null;
+        let min = rawVer && !op && !['0', '*', ''].includes(rawVer) ? rawVer : (op ? op.min : null);
+        let minInc = op ? op.minInc : true;
         const less = v.lessThan != null ? String(v.lessThan) : null;
         const lessEq = v.lessThanOrEqual != null ? String(v.lessThanOrEqual) : null;
-        const max = less || lessEq;
+        // The structured bounds win when both spellings are present; the operator form is the fallback.
+        let max = less || lessEq || (op ? op.max : null);
+        let maxInc = (less || lessEq) ? !!lessEq : (op ? op.maxInc : false);
         if (!min && !max) continue;
         if (min && !max) {              // single affected version — a POINT, not an open range
-          ranges.push({ raw: min, min, minInc: true, max: min, maxInc: true, from: 'cna-affected' });
+          ranges.push({ raw: min, min, minInc, max: min, maxInc: true, from: 'cna-affected' });
           continue;
         }
         ranges.push({
-          raw: min ? `${min} ${less ? '<' : '<='} ${max}` : `${less ? '<' : '<='} ${max}`,
-          min, minInc: true, max, maxInc: !!lessEq, from: 'cna-affected',
+          raw: op ? rawVer.trim() : (min ? `${min} ${less ? '<' : '<='} ${max}` : `${less ? '<' : '<='} ${max}`),
+          min, minInc, max, maxInc, from: 'cna-affected',
         });
       }
     }
@@ -578,7 +606,13 @@ async function globalAdvisory(cveId) {
     summary: a.summary || null,
     severity: a.severity || null,
     range: v?.vulnerable_version_range || null,
-    patched: v?.patched_versions || null,
+    /* The field is `first_patched_version` (a string) — `patched_versions` does not exist on the
+       GitHub Advisory API. Until 2026-10-26 this read the wrong name, so the api.github.com path
+       could never supply a patched version at all and every record whose range came from the CNA
+       container fell through to `indeterminate` with the false note "no patched-version cell
+       published" — the Pillow FlashPix record, whose advisory page has read `Patched versions:
+       13.0.0` all along. */
+    patched: v?.first_patched_version || v?.patched_versions || null,
   };
 }
 
@@ -1175,7 +1209,17 @@ function classify({ id, record, nvdRanges: cpes, advisory, timeline, repoAdv, tr
     const pr = proseRange(desc);
     if (pr) { ranges = [pr]; base.sources.range = 'record prose'; base.rangePhrase = pr.phrase; }
   }
-  if (!ranges.length && patchedRaw === null && advisory) patchedRaw = advisory.patched;
+  /* The patched cell is INDEPENDENT of where the RANGE came from. Until 2026-10-26 this adoption
+     was gated on `!ranges.length`, so whenever `affected[]` supplied the range the advisory's
+     patched-version cell was silently dropped and the item was labelled `indeterminate` with the
+     note "range known but no patched-version cell published" — a false statement about the
+     advisory (Pillow's CVE-2026-112398 publishes `Patched versions: 13.0.0`). The two fields are
+     two claims; neither supersedes the other. */
+  if (patchedRaw === null && advisory?.patched) {
+    patchedRaw = advisory.patched;
+    base.sources.patched = advisory.url || `github advisory ${advisory.ghsa || ''}`.trim();
+    base.notes.push(`the patched cell came from the advisory (${patchedRaw}) while the range came from ${base.sources.range || 'the record'} — two fields, read separately`);
+  }
   /* The fix list, when no cell published one — the vendor's own sentence ("… to the latest
      available version: 1.0.10 or 1.1.1 or 1.2.1"), labelled so it is never mistaken for a cell. */
   if (!patchedRaw) {
@@ -1401,6 +1445,20 @@ if (SELFTEST) {
   eq('…so 1.5.6 is affected and 1.5.7 (the fix) is not',
     [inAnyRange('1.5.6', affO.ranges), inAnyRange('1.5.7', affO.ranges)], [true, false]);
   eq('census: the CNA container is its own bucket', rangeBucket({ sources: { range: 'cna-affected' } }), 'cna-affected');
+  /* ── the operator-inside-`version` shape: GitHub CNA, measured 2026-10-26 ── */
+  const affG = affectedRanges({ affected: [{ source: 'security-advisories@github.com',
+    affectedData: [{ versions: [{ version: '< 13.0.0', status: 'affected' }] }] }] });
+  eq('cna: an operator inside `version` is a BOUND, not a point',
+    [affG.ranges[0].min, affG.ranges[0].max, affG.ranges[0].maxInc], [null, '13.0.0', false]);
+  eq('…so 12.3.0 is affected and the fix 13.0.0 is not',
+    [inAnyRange('12.3.0', affG.ranges), inAnyRange('13.0.0', affG.ranges)], [true, false]);
+  eq('…and the raw string keeps the record\'s own spelling', affG.ranges[0].raw, '< 13.0.0');
+  const affG2 = affectedRanges({ affected: [{ affectedData: [{ versions: [
+    { version: '>= 0.8.4, < 0.8.6', status: 'affected' }] }] }] });
+  eq('cna: a two-sided operator string is one range, not one point',
+    [affG2.ranges[0].min, affG2.ranges[0].max, affG2.ranges[0].maxInc], ['0.8.4', '0.8.6', false]);
+  eq('opBounds: `= v` is a point', [opBounds('= 1.2.3').min, opBounds('= 1.2.3').max], ['1.2.3', '1.2.3']);
+  eq('opBounds: a bare version is not an operator string', opBounds('1.2.3'), null);
   eq('prose patched list', prosePatched('Users need to update any Brotli libraries or binaries to the latest available version: 1.0.10 or 1.1.1 or 1.2.1.'), ['1.0.10', '1.1.1', '1.2.1']);
   eq('prose patched ignores an affected range', prosePatched('versions 1.0.3 through 1.2.0 on all platforms'), null);
   eq('as-of cell is a date, not a version', asOfDate('EDK II master as of 2026-09-14'), '2026-09-14');

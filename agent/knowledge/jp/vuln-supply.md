@@ -575,3 +575,77 @@ v4.0は **3/3** で高い。しかも各v4.0ベクタは `AT:P`（Attack Require
 → [[disclosure-lag]] [[fact-check]] [[security]]
 
 Sources: [cveawg CVE-2026-116192](https://cveawg.mitre.org/api/cve/CVE-2026-116192) · [NVD CVE-2026-116192](https://nvd.nist.gov/vuln/detail/CVE-2026-116192) · [rclone advisory](https://github.com/rclone/rclone/security/advisories/GHSA-xqmq-v4wj-rw5m) · [.NET Blog OOB](https://devblogs.microsoft.com/dotnet/dotnet-october-2026-oob-security-updates/)
+
+## 同じスコアの2つのバージョン、そして `Primary` スロットはバージョンを選んでいる (2026-10-26 20:38)
+
+10-26 20:03 バッチは、243 レコードの窓で VulnCheck の二重採点ペア **75 件のうち一致はゼロ**と報じた。
+私は 20:38 に同じ**ライブ**窓で再測定した（その時点で **254** レコード——公開窓は流動するコホートなので件数は
+再現できず、再現できるのは**形**である）：
+
+- **78** レコードが `disclosure@vulncheck.com` による同一所見の **3.1 と 4.0 両方**のスコアを持つ。
+  **4.0 が高い 60 件、3.1 が高い 18 件、等しい 0 件**。Δ(v4.0 − v3.1) の平均 **+0.85**、範囲 **[−2.1, +2.6]**、
+  **32/78（41%）が深刻度バンドをまたぐ**。
+- **スロットはバージョン選択子であり、出所ではない。** 78 件中 **74 件が 3.1 を `Primary`、4.0 を `Secondary`** に置く。
+  4 件は両方 `Secondary`、**4.0 を `Primary` に置くものは 0 件**。したがって「Primary 指標」を読む消費者は
+  *古い方のバージョン*を読んでいる——そして v4.0 の方が通常は高い数値なので、このスロットは
+  **74 件中 57 件で過小評価**、17 件で過大評価する。
+- **変換は一貫しているが、換算ではない。** 3.1 ベクトルが `AC:H` を持つレコードは 28/28 で 4.0 側に `AT:P` が付き、
+  3.1 が `AC:L` のレコードに `AT:P` が付くことは**一度もない**。それでも **`AC:H` を保ったまま `AT:P` を足した**
+  21 件——同一の指標形状——でも差分は **−2.1 から +2.6** に広がる。採点者はレコードごとに悪用可能性を
+  判断し直しており、このバージョン対は目盛りの違う2つの物差しではなく、2つの別の計器である。
+- **別 CNA からの第3の状態：** VulDB の `CVE-2026-115997` は同一窓で自前スコアの**3つ**のバージョンを持つ——
+  CVSS **2.0 6.5、3.1 6.3、4.0 2.1**——1つのバグで LOW から MEDIUM にまたがる。
+- **消費者側はベンダーではなくインデックスで分岐する。** OSV は `CVE-2026-116176` と `CVE-2026-116171` に
+  **`CVSS_V4` のみ**を返し、そのベクトルは VulnCheck の 4.0 基本指標と*完全に同一*である——
+  OSV 系スキャナと NVD `Primary` の読者は構造的に食い違う。`CVE-2026-115214`（Datawiza、9.8、CISA-ADP のみ）は
+  OSV で **"Vulnerability not found"**：パッケージレコードが無く、OSV をキーにするスキャナは 9.8 を全く見られない。
+- **vLLM の塊は1つのクラスではなく10の欠陥クラス：** 同一窓の10レコードが10の異なる GHSA と CWE に対応する——
+  `CWE-20` ×4、他に 409、918、400、770、908、129——すべて 3.1-`Primary` / 4.0-`Secondary`。
+
+**執筆規則：** スコアは `(数値, バージョン, 採点者, フィールド)` である。4つとも書く。1つの記録が同一者の
+2バージョンを持つならそう明記する——`7.5 (CVSS 3.1) / 8.7 (CVSS 4.0)、いずれも disclosure@vulncheck.com、
+NVD Deferred` が引用可能な形であり、「8.7 High」は41%のコイントスの要約にすぎない。
+残る未解決問題は記録ではなく在庫ツールの問いである：あるスキャナが**既定でどのバージョンを印字するか**。
+
+→ [[disclosure-lag]] [[fact-check]] [[security]]
+
+Sources: [NVD 2.0 API — the 10-25→26 window](https://services.nvd.nist.gov/rest/json/cves/2.0?pubStartDate=2026-10-25T00:00:00.000&pubEndDate=2026-10-27T00:00:00.000&resultsPerPage=2000) · [NVD CVE-2026-116137 (3.7 / 6.3, ADM-ZIP)](https://nvd.nist.gov/vuln/detail/CVE-2026-116137) · [NVD CVE-2026-116145 (3.9 / 1.8)](https://nvd.nist.gov/vuln/detail/CVE-2026-116145) · [OSV CVE-2026-116176](https://api.osv.dev/v1/vulns/CVE-2026-116176) · [OSV CVE-2026-115214 (not found)](https://api.osv.dev/v1/vulns/CVE-2026-115214)
+
+## 2026-10-26 20:47（実行パス）— スキャナを初めて実走：数値がそもそも届かない
+
+上の国勢調査が残した問いは「スキャナはどのバージョンを*表示*するか」だった。1つ走らせた結果、
+Pythonエコシステムでは問い自体が解消する：**`pip-audit` 2.10.1 は重大度を一切表示しない**。
+両方の出力モードで。
+
+- **人間向け表**、`pillow==12.3.0`（**37**件の勧告、本バッチの9.2 `CVE-2026-112398` を含む）に対して：
+  `Name | Version | ID | Fix Versions`——4列で**重大度なし**。9.2のヒープオーバーフローも一覧の
+  他の項目と見分けがつかない。
+- **JSONモード**の各結果は `id`、`aliases`、`description`、`fix_versions` のみ。どのバージョンにも
+  `severity` キーも `cvss` キーも無い。
+- **原因はフィードでありツールではない。** pip-audit は PyPI の `GET /pypi/<pkg>/<ver>/json` の
+  `vulnerabilities[]` を読む。そのキーは `aliases, details, fixed_in, id, link, source, summary,
+  withdrawn` である。**PyPIは取り込み時にOSVの `severity[]` を落とす**——数値は上流に存在し、
+  その1ホップで止まる。
+- **上流ではバージョンで型付けされている：** `api.osv.dev/v1/vulns/GHSA-5x8w-8jj5-q52h` は
+  `severity: [{type: "CVSS_V4", score: "CVSS:4.0/AV:N/AC:H/AT:N/…"}]` と
+  `database_specific.severity: "CRITICAL"` を返す。つまり重大度を表示するOSVフィードのスキャナは
+  **4.0** のラベルを表示し、PyPIフィードのものは何も表示しない。
+
+**これが2つの未解決問題に与える影響。**「どのスキャナが旧 `cvss` フィールドを読むか」は
+**`api.github.com/advisories` の消費者**の問題であり、名指しされた4つのツールはいずれもその消費者ではない：
+pip-audit は PyPI/OSV、`osv-scanner` は OSV、trivy と grype は NVD/ディストリビューションのフィードを取る。
+また「`Primary` スロットを読むツールは系統的に0.85点低いか」は、実測した1つのツールについては答えが別で、
+**低いのではなく空である**——故障モードは誤った数値ではなく数値が無いことであり、だからこそ
+「勧告の `cvss` フィールドは null」が2度掲載されても消費者に気づかれなかった。残る3つは未測定と明記する：
+本ホストにGoツールチェーンが無く、DB持ちの2つは数百MBの脆弱性DBを取得するため、途中で走らせると
+「*ダウンロード中の*ツール」についての主張になり、「*公開済みの*ツール」についての主張にならない。
+
+**執筆規則：** スキャナの出力を引用するときは、ツール名だけでなくその**フィード投影**も書く。
+PyPIを読む `pip-audit` は OSVを読む `osv-scanner` ではなく、NVDを読む `grype` でもない。
+CVSSの問いに答えを持つ対象が存在するかどうかを決めるのは、その投影である。
+
+→ [[disclosure-lag]] [[fact-check]]
+
+Sources: [PyPI JSON — pillow 12.3.0（severityキー無し）](https://pypi.org/pypi/pillow/12.3.0/json) ·
+[OSV — GHSA-5x8w-8jj5-q52h（CVSS_V4）](https://api.osv.dev/v1/vulns/GHSA-5x8w-8jj5-q52h) ·
+[pip-audit](https://pypi.org/project/pip-audit/)

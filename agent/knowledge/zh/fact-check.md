@@ -758,3 +758,72 @@ Sources: [agent/tools/claim-unit-lint.mjs](https://github.com/kelong/trending-md
 → [[vuln-supply]] [[fact-check]]
 
 Sources: [GitHub Advisory Database API](https://docs.github.com/en/rest/security-advisories/global-advisories) · [GHSA-cxf3-9h37-7rr8](https://github.com/labstack/echo/security/advisories/GHSA-cxf3-9h37-7rr8) · [Snipe-IT GHSA-xf36-wx48-5rqp](https://github.com/grokability/snipe-it/security/advisories/GHSA-xf36-wx48-5rqp) · [OSV API](https://api.osv.dev/v1/vulns/GHSA-cxf3-9h37-7rr8)
+
+## 一手材料可能并未公开，而审计者自己的两个页面也可能互相矛盾 (2026-10-26 20:38)
+
+10-26 20:03 批次里的三种形状，各配一个一次调用即可完成的检查。
+
+**1. 一个治理决策，其一手文件并不公开存在。** **C++26 DIS 投票**于 2026-10-23 结束，结果为**否决**：
+20 个 P 成员中 12 票赞成（**60%**，要求 67%），22 个投票机构中 9 个反对（**41%**，上限 25%）——
+"任一条件单独成立都足以否决该草案"。九张反对票来自丹麦、芬兰、伊朗、意大利、日本、卢森堡、罗马尼亚、西班牙与瑞典。
+使它成为事实核查条目的是引用问题：Pusz 明确写道**官方 SC22 投票结果"并不公开"**——只有各国代表团成员能在
+ISO 委员会站点看到，他写作时它既不在 ISO 公开项目页上，也不在任何 WG21 文档中。因此一场决定某语言未来三年的投票，
+其可读的一手材料是**一位代表的博客文章加上 Robert Seacord 的 LinkedIn 帖子**。这里的检查不是"去找 ISO 页面"
+（根本没有），而是**把这份缺席本身当作事实记录下来，并引用补救措施的时间点**——SC22 的指令要求 12 周内提交完整报告，
+因此意见最迟在 2027 年 1 月中旬落地。
+
+**2. 一个产物、两个手工维护的页面、两个数字。** `NVIDIA/SkillSpector` 的 README 写
+**"71 vulnerability patterns across 17 categories"**（出现两次，raw README 第 27 与 515 行）；
+它链接的文档页写 **"68 vulnerability patterns across 17 categories"**。两者均一手核实——文档页可通过
+`rel=alternate` 孪生读取，位于 `https://docs.nvidia.com/skills/scanning-agent-skills.md`
+（**`doc-twin` 判定：twin found，123 KB HTML → 5 KB markdown**）。这是 impeccable 62-vs-61 形状的重演，
+而且这处漂移发生在那个"产品承诺就是替别人的仓库抓漂移"的扫描器内部。
+
+**3. 大部分来自前人工作的"配方"。** ALTO 的摘要写得很明确，而报道不是：该 MXFP4 配方"combines established
+techniques"——hybrid 1D/2D block quantization、randomized Hadamard transforms、stochastic rounding——
+**来自 Abecassis, Felix 等（arXiv:2509.25149）**，"with a simplified weight **de-oscillation** scheme
+**adapted from TetraJet-v2 (arXiv:2510.27527)**"。贡献是**组合**、负结果，以及实测的 0.007 损失差，
+而不是组件本身。当论文写"adapted from"，不带两个依赖地引用该配方，就是把一个四部分方法归给一个产物。
+
+**由此新增的规则。**（a）当起决定作用的文件是会员专属时，**缺席就是发现**，并且它需要一个**日期**（被强制要求的报告），
+而不是一句含糊。（b）从项目首页引用数字之前，先抓取它链接的那个页面——同一项目的两个手工页面互相矛盾，如今是
+实测的类别，不是假设。（c）摘要里的 "combines established techniques from [X] … adapted from [Y]" 是一条
+**归属链**，要一并带上。
+
+→ [[agent-plugins]] [[edge-inference]] [[dev-tools]] [[vuln-supply]]
+
+Sources: [train-it.eu — C++26 DIS ballot result](https://train-it.eu/blog/cpp26-contracts-the-ballot-result/) · [Seacord's post](https://www.linkedin.com/posts/robertseacord_balloting-has-completed-for-c26-unfortunately-activity-7519795140887035918-5PWL) · [SkillSpector README](https://raw.githubusercontent.com/NVIDIA/SkillSpector/main/README.md) · [NVIDIA docs markdown twin](https://docs.nvidia.com/skills/scanning-agent-skills.md) · [arXiv 2610.32229 — ALTO](https://arxiv.org/abs/2610.32229)
+
+## 2026-10-26 20:47（执行轮）— lint 自己的两个假阳性，以及“数字住在你引用的那一页上”
+
+`agent/data/claim-unit-2026-10-26.json` 跑过 46 条信息流，返回 30 项发现。多数是 `ok`
+（检查会记录通过项，这才让假阳性率可测）。有四项需要打开，而**四项全是检查器的错，不是信息流的错**——
+这一类值得写下来，因为一个天天喊狼来了的 lint，在被修好之前早就被使用者退役了。
+
+1. **`count` / 第 37 条 — `differs`：“31,132 skills” 对 “README says 42447 skills”。** README 两个都写了：
+   *“In the 31,132-skill analyzed subset … 26.1% of skills contain vulnerabilities”* 和
+   *“42,447 skills from major marketplaces; 31,132 were analyzed”*。匹配器要求 `N<空格>skills`，
+   于是**连字符复合词**（`31,132-skill`）不可见，信息流正确的数字被读成另一个数字的对手。
+   已修：`N nouns`、`N-noun`、`N | noun` 视为同一项主张。
+2. **`count` / 第 43 条 — `absent`：“1,251 skills”。** 该主张的来源是 **arXiv 摘要**，不是仓库：
+   *“We release 1,251 skills with tasks and item scores under four models.”* 检查只读了条目所点仓库的
+   GitHub README。已修：在写下任何 `absent` 之前，读取条目**引用的页面**——arXiv `abs/` 与 HF 数据集卡片，
+   最多 3 页、带缓存——并用 **`ok-cited-page`** 指明承载该数字的页面。`absent` 现在会列出读过的每一页，
+   并说明是否有页面不可读，因为**读不到不等于不存在**（`doc-twin` 的规则，在计数这一层）。
+3. **`repo` / 第 4 条 — `star-drift`：引用 389，现为 523。** 这不是要修的错：条目自己写着
+   *“read 389 stars when this item was checked (395 sixteen minutes later — the counter is moving)”*，
+   到 20:52 该仓库已在 **531**。对一条已经为自己的计数器标注时间的条目报漂移，是检查在工作，不是主张有错。
+4. **`repo` / 第 17 条 — `stale`：`multica-ai/andrej-karpathy-skills`，最后 push 2026-04-20。**
+   这正是条目的故事——一个 22.3 万星、最后提交比这波趋势早六个月的仓库——所以这条发现*就是*论点，
+   条目标题里也这么写了。
+
+**本节新增规则。** (a) 计数是关于**条目所引用页面**的主张，而那不总是条目点名的仓库；在写下 `absent` 之前
+读完每个被引页面。(b) 在匹配器里，数字的**拼写**是它身份的一部分——`N-skill` 与 `N skills` 是同一项主张，
+看不见其中之一的检查器会把正确句子变成一条发现。(c) 当 lint 触发时，第一个问题是*两者中哪个错了*——
+本批四次中，四次都是仪器。
+
+→ [[vuln-supply]] [[disclosure-lag]]
+
+Sources: [SkillSpector README](https://raw.githubusercontent.com/NVIDIA/SkillSpector/main/README.md) ·
+[arXiv 2610.32322 — Beyond Gain](https://arxiv.org/abs/2610.32322) ·
+[multica-ai/andrej-karpathy-skills](https://github.com/multica-ai/andrej-karpathy-skills)

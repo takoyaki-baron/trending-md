@@ -87,3 +87,42 @@ reasoning.
    environment; the expensive half is not, and conflating them makes the cheap half look impossible.
 5. **Latency is a correctness property for guardrails.** 17.73 s → 1.50 ms is what moved a sampled
    check into an always-on one.
+
+## The score belongs to the pair, and "failed to produce" is a separate failure (2026-10-26 20:38)
+
+arXiv 2610.32483 (*When Agents Fail: Model or Harness — Who's to Blame?*) makes the claim this file's
+premise needed: an agentic benchmark number is a property of a **model–harness pair**, not of a
+model, and the way to see it is to measure **valid completion** separately from **correctness**.
+
+- **Five measures:** Valid Completion Rate (VCR — did the agent finish normally and deliver an
+  *evaluable* result, regardless of correctness), Model-Harness Fit, Cross-Model Fit, Interaction
+  Residuals (pairing-specific effects that component-level summaries hide), Token Load (including
+  failed attempts).
+- **Scale:** four harnesses — **OpenCode, Codex CLI, Pi CLI, DeepAgents** — × four core models, plus
+  two fixed native model-harness systems, over six benchmarks (context management, tool use,
+  long-context planning, multimodal interaction, artifact handoff): **111 settings, 52,168
+  trajectories**.
+- **Findings:** **OpenCode ranks first in cross-model performance**; **DeepSeek V4 Flash Preview**
+  holds the highest mean VCR across harnesses on the shared four-benchmark panel; and the authors'
+  own summary is the sentence to quote — "harness rankings vary across models and benchmarks; task
+  performance and valid completion can favor different pairings, and similar task scores can
+  accompany distinct execution profiles."
+- **Why VCR is the load-bearing measure:** accuracy alone scores an agent that never produced an
+  evaluable artifact identically to one that produced a wrong artifact. Those are different defects
+  with different fixes (harness plumbing vs model judgment), and the standard benchmark table
+  collapses them.
+
+**Caveat that travels with it:** a preprint under review, on 111 settings its own authors
+constructed. Read it as a demonstration that rankings are unstable — not as a leaderboard to cite.
+
+**The skills half of the same question** (arXiv 2610.32322, *Beyond Gain*): retirement rules that
+compare runs with and without a skill retire on the **gain**, and the gain is near zero *both* for an
+internalized skill and when neither model nor skill supplies the capability ("uncovered"). Measured
+over four models: **28 of SkillsBench's 31 retirements rest on probes no run passed in full**; the
+gain rule's cross-task agreement is **Cohen's κ 0.23** against **0.42** for an unaided-score verdict,
+and the verdicts **differ across models**, so a hub "must read them per model". 1,251 skills with
+tasks and item scores across four models ship in `EverMind-AI/SkillCorpus`.
+
+→ [[frontier-models]] [[agent-plugins]] [[agent-stack]]
+
+Sources: [arXiv 2610.32483](https://arxiv.org/abs/2610.32483) · [full paper](https://arxiv.org/html/2610.32483v1) · [arXiv 2610.32322](https://arxiv.org/abs/2610.32322) · [EverMind-AI/SkillCorpus](https://github.com/EverMind-AI/SkillCorpus)

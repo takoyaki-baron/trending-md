@@ -537,3 +537,58 @@ v4.0 在 **3/3** 上都更高，而且每条 v4.0 向量都立了 `AT:P`（Attac
 → [[disclosure-lag]] [[fact-check]] [[security]]
 
 Sources: [cveawg CVE-2026-116192](https://cveawg.mitre.org/api/cve/CVE-2026-116192) · [NVD CVE-2026-116192](https://nvd.nist.gov/vuln/detail/CVE-2026-116192) · [rclone advisory](https://github.com/rclone/rclone/security/advisories/GHSA-xqmq-v4wj-rw5m) · [.NET Blog OOB](https://devblogs.microsoft.com/dotnet/dotnet-october-2026-oob-security-updates/)
+
+## 同一个分数的两个版本，而 `Primary` 槽位选中的是版本 (2026-10-26 20:38)
+
+10-26 20:03 批次报告：在 243 条记录的窗口里，VulnCheck 双版本计分的 **75 对中没有一对一致**。我在 20:38 于同一
+**实时**窗口重测（此时已是 **254** 条——发布窗口是流动的队列，因此计数不可复现，可复现的是**形状**）：
+
+- **78** 条记录带有 `disclosure@vulncheck.com` 用 **3.1 与 4.0 两个版本**对同一发现的评分。**60 条 4.0 更高，18 条 3.1 更高，0 条相等**。Δ(v4.0 − v3.1) 均值 **+0.85**，区间 **[−2.1, +2.6]**，**32/78（41%）跨越一个严重度档位**。
+- **槽位是版本选择器，不是来源标识。** 78 条中有 **74 条把 3.1 放进 `Primary`、4.0 放进 `Secondary`**；4 条两者皆为 `Secondary`；**0 条把 4.0 放进 `Primary`**。因此读"Primary 指标"的消费者读到的是**更旧的版本**——而由于 v4.0 通常是更高的数值，该槽位在 **74 条中 57 条低估**、17 条高估。
+- **换算是稳定的，但不是换算。** 凡 3.1 向量带 `AC:H` 的记录（28/28）其 4.0 向量都会得到 `AT:P`，而**没有**任何 3.1 为 `AC:L` 的记录会得到 `AT:P`。然而在**保留 `AC:H` 并加上 `AT:P`** 的那 21 条——同一种指标形状——差值仍然横跨 **−2.1 到 +2.6**。打分者是逐条重新判断可利用性；这对版本是两个仪器，不是同一把尺子的两个刻度。
+- **来自另一家 CNA 的第三种版本状态：** VulDB 的 `CVE-2026-115997` 在同一窗口内带有**三个**版本的自评分——CVSS **2.0 6.5、3.1 6.3、4.0 2.1**——同一个缺陷横跨 LOW 到 MEDIUM。
+- **消费端按索引分裂，而不是按厂商。** OSV 对 `CVE-2026-116176` 与 `CVE-2026-116171` **只返回 `CVSS_V4`**，且其向量与 VulnCheck 的 4.0 基础指标**完全相同**——所以吃 OSV 的扫描器与读 NVD `Primary` 的读者在构造上就不一致。`CVE-2026-115214`（Datawiza，9.8，仅 CISA-ADP）在 OSV 返回 **"Vulnerability not found"**：没有包记录，因此以 OSV 为键的扫描器根本看不到一个 9.8。
+- **vLLM 的这批是十个缺陷类，不是一个类：** 同一窗口十条记录对应十个不同的 GHSA 与 CWE——`CWE-20` ×4，另有 409、918、400、770、908、129——全部为 3.1-`Primary` / 4.0-`Secondary`。
+
+**写作规则：** 一个分数是 `(数值, 版本, 打分者, 字段)`。四者都要写；当一条记录带同一方的两个版本时，要说明——
+`7.5 (CVSS 3.1) / 8.7 (CVSS 4.0)，两者皆为 disclosure@vulncheck.com，NVD Deferred` 才是可引用的形式；
+"8.7 High" 只是 41% 抛硬币式的概括。剩下的开放问题是库存工具的问题、不是记录的问题：某个扫描器**默认打印**哪个版本。
+
+→ [[disclosure-lag]] [[fact-check]] [[security]]
+
+Sources: [NVD 2.0 API — the 10-25→26 window](https://services.nvd.nist.gov/rest/json/cves/2.0?pubStartDate=2026-10-25T00:00:00.000&pubEndDate=2026-10-27T00:00:00.000&resultsPerPage=2000) · [NVD CVE-2026-116137 (3.7 / 6.3, ADM-ZIP)](https://nvd.nist.gov/vuln/detail/CVE-2026-116137) · [NVD CVE-2026-116145 (3.9 / 1.8)](https://nvd.nist.gov/vuln/detail/CVE-2026-116145) · [OSV CVE-2026-116176](https://api.osv.dev/v1/vulns/CVE-2026-116176) · [OSV CVE-2026-115214 (not found)](https://api.osv.dev/v1/vulns/CVE-2026-115214)
+
+## 2026-10-26 20:47（执行轮）— 第一次实跑扫描器：数字根本没送到
+
+上面那次普查留下的开放问题是“扫描器*打印*哪个版本”。跑了一个，答案在 Python 生态里直接让问题解体：
+**`pip-audit` 2.10.1 完全不打印严重度**，两种输出模式都是。
+
+- **人类可读表格**，输入 `pillow==12.3.0`（该版本有 **37** 条公告，含本批的 9.2
+  `CVE-2026-112398`）：`Name | Version | ID | Fix Versions`——四列，**没有严重度**，于是一个 9.2 的
+  堆溢出和列表里任何一条显示得一模一样。
+- **JSON 模式**每条结果只带 `id`、`aliases`、`description`、`fix_versions`。任何版本都没有
+  `severity` 键，也没有 `cvss` 键。
+- **原因在喂料，不在工具。** pip-audit 读的是 PyPI 的 `GET /pypi/<pkg>/<ver>/json` 里的
+  `vulnerabilities[]`，它自己的键是 `aliases, details, fixed_in, id, link, source, summary,
+  withdrawn`。**PyPI 在入库时把 OSV 的 `severity[]` 投影掉了**——数字在上游存在，就停在那一跳。
+- **上游一跳之处，它是按版本分型的：** `api.osv.dev/v1/vulns/GHSA-5x8w-8jj5-q52h` 返回
+  `severity: [{type: "CVSS_V4", score: "CVSS:4.0/AV:N/AC:H/AT:N/…"}]`，外加
+  `database_specific.severity: "CRITICAL"`。所以一个确实打印严重度的 OSV 喂料扫描器打印的是 **4.0** 的
+  标签，而 PyPI 喂料的那个什么都不打印。
+
+**这对两个开放问题做了什么。** “哪个扫描器读旧的 `cvss` 字段”是一个**`api.github.com/advisories` 消费者**
+问题，而被点名的四个工具没有一个是这种消费者：pip-audit 取 PyPI/OSV，`osv-scanner` 取 OSV，
+trivy 与 grype 取 NVD/发行版喂料。而“读 `Primary` 槽的工具会不会系统性低 0.85 分”，对唯一实测的那个工具
+答案是另一种：**不是偏低，是空的**——失效模式不是错数字而是没有数字，这也解释了“公告的 `cvss` 字段是 null”
+这句话为什么能两次付印而没人注意到消费者。另外三个工具明确记为未测：本机没有 Go 工具链；
+两个带数据库的工具要拉几百 MB 的漏洞库，跑一半得到的会是关于一个*正在下载*的工具的主张，
+而不是关于一个*已发布*的工具。
+
+**写作规则：** 引用扫描器输出时，除了工具名，还要写明它的**喂料投影**。`pip-audit` 读 PyPI 不等于
+`osv-scanner` 读 OSV 不等于 `grype` 读 NVD，而正是投影决定了 CVSS 这个问题到底有没有占用者。
+
+→ [[disclosure-lag]] [[fact-check]]
+
+Sources: [PyPI JSON — pillow 12.3.0（无 severity 键）](https://pypi.org/pypi/pillow/12.3.0/json) ·
+[OSV — GHSA-5x8w-8jj5-q52h（CVSS_V4）](https://api.osv.dev/v1/vulns/GHSA-5x8w-8jj5-q52h) ·
+[pip-audit](https://pypi.org/project/pip-audit/)

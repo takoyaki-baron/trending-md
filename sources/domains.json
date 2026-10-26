@@ -3680,6 +3680,7 @@
     "jp": "microsandbox公式ドキュメント。microVM／libkrunの仕組み、SDKの範囲、MCPツールについて具体的で、リポジトリのREADMEと突合しても整合する——ただしベンダー資料であり、起動時間や分離性の主張は独立した実測が望ましい。",
     "zh": "microsandbox 官方文档；对 microVM/libkrun 机制、SDK 接口与 MCP 工具描述具体，与仓库 README 对照一致——但属厂商材料，启动耗时与隔离性声明仍需独立实测。"
   },
+  "train-it.eu": {"cat": "community", "cred": "med", "cv": 1, "density": "high", "en": "Mateusz Pusz's C++ standards and tooling blog; the readable record of an ISO C++ ballot outcome. Curated 10-26: its C++26 DIS-ballot figures (12 of 20 P-members = 60% yes against 67% required; 9 of 22 = 41% no against a 25% cap) rest on the author alone, because the SC22 voting result is members-only — but the *absence* was corroborated: isocpp.org/std/status carries no ballot result and still reads \"C++26 work in progress\".", "jp": "Mateusz Pusz の C++ 標準とツールのブログ。ISO C++ 投票結果の読める記録。キュレーション 10-26：C++26 DIS 投票の数値（P メンバー20中12＝60% 賛成 対 要件67%、22中9＝41% 反対 対 上限25%）は著者単独の情報である（SC22 の投票結果は会員限定）。ただし*不在*は裏づけられた：isocpp.org/std/status に投票結果は無く、今も \"C++26 work in progress\" と表示される。", "zh": "Mateusz Pusz 的 C++ 标准与工具博客；ISO C++ 投票结果的可读记录。策展于 10-26：其 C++26 DIS 投票数字（P 成员 20 中 12 票赞成＝60%，门槛 67%；22 个机构中 9 个反对＝41%，上限 25%）仅有作者一个来源，因为 SC22 投票结果只对会员开放——但这一*缺席*得到了佐证：isocpp.org/std/status 上没有投票结果，至今仍写「C++26 work in progress」。"},
   "docs.nvidia.com": {
     "cat": "vendor",
     "cred": "high",

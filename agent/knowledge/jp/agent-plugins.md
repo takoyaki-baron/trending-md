@@ -1054,3 +1054,40 @@ Sources: [android/skills](https://github.com/android/skills) · [Android エー�
 → [[agent-stack]] [[fact-check]] [[agent-distribution]]
 
 Sources: [AgriciDaniel/claude-seo](https://github.com/AgriciDaniel/claude-seo) · [the 26 skills](https://github.com/AgriciDaniel/claude-seo/tree/main/skills) · [wesbos/3d-model-anything](https://github.com/wesbos/3d-model-anything) · [the office viewer](https://wesbos.github.io/3d-model-anything/)
+
+## スキル審査がベンダー成果物になる——そして既定モードは審査対象をアップロードする (2026-10-26 20:38)
+
+**`NVIDIA/SkillSpector`**（**21,710★ / 1,912 forks**、**171 の未クローズ issue+PR**、Apache-2.0、
+2026-03-21 作成、最終 push 2026-10-23）は NVIDIA "Verified Skills" パイプラインのセキュリティ層である：
+git リポジトリ、URL、zip、ディレクトリ、単一ファイルを渡すと、既定で**静的解析（regex、Python AST、YARA）**を回し、
+任意で **LLM** 評価、既知脆弱な依存には **OSV.dev** 照会を行い、terminal / JSON / Markdown / **SARIF** を出力する。
+
+検出率より大事な点が2つある：
+
+- **既定の審査はアップロードである。** README 自身の "Trust model and data egress" 節がこう書く：
+  "**LLM analysis sends analyzer-eligible file contents to the configured provider.** When LLM
+  analysis is enabled (the default), file contents are sent to the active `SKILLSPECTOR_PROVIDER`
+  endpoint. **DSSE payloads and readable signing metadata are included.** Use `--no-llm` to keep
+  contents local." つまり既定設定で信頼できないスキルを審査すると、そのスキルの中身を第三者に送る——
+  サプライチェーン・リスクのスキャナ自身がサプライチェーンのホップになる。`--no-llm` を渡さない限り。
+  （raw README で逐語確認済み。）
+- **分母こそが所見。** 実装元の論文（*Agent Skills in the Wild*、Liu ら、2026）は主要マーケットプレイスから
+  **42,447** スキルを収集し **31,132（73%）を解析**した；見出しの **26.1%** は*解析済み部分集合*において
+  少なくとも1つの脆弱性を持つ割合であり、マーケットプレイス全体の割合ではない。**5.2%** が悪意の意図を示唆し、
+  実行可能スクリプトを含むスキルは脆弱である可能性が **2.12×**。README 自身の限界一覧は解析器が届かないものを
+  挙げる：非英語コンテンツ、画像内のテキスト、コンパイル済み／暗号化コード、実行時のみ現れる挙動。
+- **自前の2ページでルール数が食い違う：** README は **71 patterns across 17 categories**、
+  リンク先ドキュメントは **68 across 17**（いずれも一次取得；[[fact-check]] 参照）。
+
+**退役の問いも測定されている。** 約10万件のスキルを抱える hub は**どれを退役させるか**を決める必要があり、
+`arXiv 2610.32322` は標準規則（有/無スキルの利得で退役）がほぼノイズだと示す：
+**SkillsBench の31件の退役のうち28件は、どの実行も完全には通らなかったプローブに依拠**し、タスク間一致は **κ 0.23**、
+無補助スコア判定は **0.42**、そして内化は**モデル–スキルのペア**の性質であるため、多モデルに奉仕する hub にとって
+単一のグローバル退役リストは誤ったデータ構造である。詳細 → [[harness-reliability]]。
+
+**執筆規則：** スキル・セキュリティの主張には、スキャナが審査対象をアップロードしたかどうかと、
+「解析済み／収集済み」の分母を必ず書く。「26.1% のスキルが脆弱」と「解析できた 73% のうち 26.1%」は別の文である。
+
+→ [[agent-distribution]] [[fact-check]] [[harness-reliability]]
+
+Sources: [github.com/NVIDIA/SkillSpector](https://github.com/NVIDIA/SkillSpector) · [raw README](https://raw.githubusercontent.com/NVIDIA/SkillSpector/main/README.md) · [NVIDIA docs — scanning agent skills](https://docs.nvidia.com/skills/scanning-agent-skills) · [arXiv 2610.32322](https://arxiv.org/abs/2610.32322)

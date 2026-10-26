@@ -3478,45 +3478,63 @@
     },
     "https://news.ycombinator.com/item?id=50233779": {
       "verdict": "blocked",
-      "streak": 5,
+      "streak": 8,
       "first_seen": "2026-10-25T20:16:02.593Z",
-      "last_seen": "2026-10-26T04:44:05.065Z",
-      "feeds": [
-        "2026-10-26.md"
-      ]
-    },
-    "https://news.ycombinator.com/item?id=50231189": {
-      "verdict": "blocked",
-      "streak": 5,
-      "first_seen": "2026-10-25T20:16:02.593Z",
-      "last_seen": "2026-10-26T04:44:05.065Z",
+      "last_seen": "2026-10-26T13:08:13.339Z",
       "feeds": [
         "2026-10-26.md"
       ]
     },
     "https://news.ycombinator.com/item?id=50233304": {
       "verdict": "blocked",
-      "streak": 5,
+      "streak": 8,
       "first_seen": "2026-10-25T20:16:02.593Z",
-      "last_seen": "2026-10-26T04:44:05.065Z",
+      "last_seen": "2026-10-26T13:08:13.339Z",
       "feeds": [
         "2026-10-26.md"
       ]
     },
     "https://news.ycombinator.com/item?id=50231166": {
       "verdict": "blocked",
-      "streak": 5,
+      "streak": 8,
       "first_seen": "2026-10-25T20:16:02.593Z",
-      "last_seen": "2026-10-26T04:44:05.065Z",
+      "last_seen": "2026-10-26T13:08:13.339Z",
       "feeds": [
         "2026-10-26.md"
       ]
     },
-    "https://news.ycombinator.com/item?id=50233929": {
+    "https://news.ycombinator.com/item?id=50237224": {
       "verdict": "blocked",
       "streak": 5,
-      "first_seen": "2026-10-25T20:16:02.593Z",
-      "last_seen": "2026-10-26T04:44:05.065Z",
+      "first_seen": "2026-10-26T04:13:35.123Z",
+      "last_seen": "2026-10-26T13:08:13.339Z",
+      "feeds": [
+        "2026-10-26.md"
+      ]
+    },
+    "https://news.ycombinator.com/item?id=50239748": {
+      "verdict": "blocked",
+      "streak": 3,
+      "first_seen": "2026-10-26T12:19:03.407Z",
+      "last_seen": "2026-10-26T13:08:13.339Z",
+      "feeds": [
+        "2026-10-26.md"
+      ]
+    },
+    "https://news.ycombinator.com/item?id=50238739": {
+      "verdict": "blocked",
+      "streak": 3,
+      "first_seen": "2026-10-26T12:19:03.407Z",
+      "last_seen": "2026-10-26T13:08:13.339Z",
+      "feeds": [
+        "2026-10-26.md"
+      ]
+    },
+    "https://news.ycombinator.com/item?id=50238088": {
+      "verdict": "blocked",
+      "streak": 3,
+      "first_seen": "2026-10-26T12:19:03.407Z",
+      "last_seen": "2026-10-26T13:08:13.339Z",
       "feeds": [
         "2026-10-26.md"
       ]
@@ -3524,32 +3542,41 @@
     "https://news.ycombinator.com/item?id=50234329": {
       "verdict": "blocked",
       "streak": 2,
-      "first_seen": "2026-10-26T04:13:35.123Z",
-      "last_seen": "2026-10-26T04:44:05.065Z",
+      "first_seen": "2026-10-26T12:25:59.324Z",
+      "last_seen": "2026-10-26T13:08:13.339Z",
       "feeds": [
         "2026-10-26.md"
       ]
     },
-    "https://news.ycombinator.com/item?id=50237224": {
-      "verdict": "blocked",
-      "streak": 2,
-      "first_seen": "2026-10-26T04:13:35.123Z",
-      "last_seen": "2026-10-26T04:44:05.065Z",
-      "feeds": [
-        "2026-10-26.md"
-      ]
-    },
-    "https://news.ycombinator.com/item?id=50235010": {
+    "https://news.ycombinator.com/item?id=50218633": {
       "verdict": "blocked",
       "streak": 1,
-      "first_seen": "2026-10-26T04:44:05.065Z",
-      "last_seen": "2026-10-26T04:44:05.065Z",
+      "first_seen": "2026-10-26T13:08:13.339Z",
+      "last_seen": "2026-10-26T13:08:13.339Z",
+      "feeds": [
+        "2026-10-26.md"
+      ]
+    },
+    "https://news.ycombinator.com/item?id=50233929": {
+      "verdict": "blocked",
+      "streak": 1,
+      "first_seen": "2026-10-26T13:08:13.339Z",
+      "last_seen": "2026-10-26T13:08:13.339Z",
+      "feeds": [
+        "2026-10-26.md"
+      ]
+    },
+    "https://news.ycombinator.com/item?id=50236102": {
+      "verdict": "blocked",
+      "streak": 1,
+      "first_seen": "2026-10-26T13:08:13.339Z",
+      "last_seen": "2026-10-26T13:08:13.339Z",
       "feeds": [
         "2026-10-26.md"
       ]
     }
   },
-  "runs": 98,
+  "runs": 101,
   "first_run": "2026-09-05T12:47:55.004Z",
-  "last_run": "2026-10-26T04:44:05.065Z"
+  "last_run": "2026-10-26T13:08:13.339Z"
 }

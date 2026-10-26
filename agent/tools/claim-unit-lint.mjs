@@ -47,11 +47,20 @@
  *      Void lesson's cheapest half; `api.github.com` is metered, so the budget is `--max-repos`
  *      (default 8) and results are cached for 6h in `agent/data/claim-unit-cache.json`.
  *   D. COUNT CLAIM (`--check count`) — "N harnesses", "N rules", "N install sections": a number
- *      about the ARTIFACT, read against the artifact. The README is fetched from
+ *      about the ARTIFACT, read against the artifact. The repo README is fetched from
  *      `raw.githubusercontent.com` (unmetered) and searched for the same noun with ANY number;
  *      `differs` reports the README's own count, `absent` says the page never states one. This is
  *      the impeccable 62-vs-61 lesson generalised — and it fires on a TITLE, which is where the
  *      10-26 batch's "17 harnesses" survived its own body correction to "sixteen harness sections".
+ *      Two defects it had, both measured on the 10-26 20:34 batch and both fixed: **(1)** the
+ *      matcher required `N <noun>` with a SPACE, so `31,132-skill analyzed subset` was invisible
+ *      and SkillSpector's correct number read as `differs` against the other number in the same
+ *      README; **(2)** it read only the repo README, so a count quoted from the page the item
+ *      actually cites — item 43's **1,251 skills** is the arXiv abstract's sentence — came back
+ *      `absent`. Now: three spellings (`N nouns`, `N-noun`, `N | noun`), and before any `absent`
+ *      the item's **cited pages** are read (arXiv `abs/`, HF dataset cards, max 3, cached), with
+ *      verdict `ok-cited-page` naming the page. `absent` names every page it read and says whether
+ *      any was unreadable, because unread is not absent.
  *
  * TRAPS ENCODED (each measured while writing this, 2026-10-26):
  *  1. A NUMBER NEXT TO "issue" IS NOT AN ISSUE COUNT. "one issue per twenty-four stargazers"
@@ -538,12 +547,20 @@ function checkCvss(it, subjects) {
     });
     break; // one finding per item is enough to open the question
   }
+  /* A `Primary`/`Secondary` mention is a style defect ONLY where the slot stands in for a source.
+     An item that says the rule out loud — "Primary/Secondary is a slot position, not a provenance" —
+     is quoting the correction, not making the mistake, and three such items fired on the 10-26
+     20:34 batch. The same sentence that names the slot must also say what it is. */
   if (claims.length && /\b(?:Primary|Secondary)\b/.test(t)) {
-    out.push({
-      check: 'cvss', item: it.n, verdict: 'slot-quoted',
-      claim: 'Primary/Secondary',
-      detail: 'a metric slot is not a provenance — name the source (CNA / nvd@nist.gov / CISA-ADP) instead',
-    });
+    const states = sentences(t).map((r) => t.slice(r.start, r.end)).filter((s) => /\b(?:Primary|Secondary)\b/.test(s)
+      && /\bslot\b|\bposition\b|not\s+a\s+(?:provenance|source|party)\b/i.test(s));
+    if (!states.length) {
+      out.push({
+        check: 'cvss', item: it.n, verdict: 'slot-quoted',
+        claim: 'Primary/Secondary',
+        detail: 'a metric slot is not a provenance — name the source (CNA / nvd@nist.gov / CISA-ADP) instead',
+      });
+    }
   }
   return out;
 }
@@ -634,6 +651,52 @@ async function readme(slug) {
   return cache[key];
 }
 
+/* A count on a page can appear in three spellings, and reading only one of them manufactures
+ * false findings. `N skills` is the easy one. `N-skill analyzed subset` (a hyphenated compound,
+ * singular head) and a table cell are the same claim. Measured 2026-10-26 on the 20:34 batch:
+ * SkillSpector's README says "In the 31,132-skill analyzed subset … 26.1% of skills contain
+ * vulnerabilities" AND "42,447 skills from major marketplaces; 31,132 were analyzed", yet the
+ * `\\s+skills` matcher saw only 42,447 and reported the feed's correct 31,132 as `differs`. */
+function countNumsIn(body, noun) {
+  const stem = noun.replace(/s$/, '');
+  const re = new RegExp(`(\\d[\\d,]*)\\s*(?:-|\\s|\\|)\\s*${stem}(?:s|es)?\\b`, 'gi');
+  return [...body.matchAll(re)].map((m) => toNum(m[1]));
+}
+
+/* The claim's source is the page the item CITES, not necessarily the repo it names. Item 43's
+ * "1,251 skills released" is the arXiv abstract's sentence; the GitHub README never states it, so
+ * a README-only check reported `absent` on a claim that was verbatim true. arXiv abs pages and HF
+ * dataset cards are fetched here (3 pages per item, cached) before any `absent` is written. */
+function citedPages(plain) {
+  const urls = [];
+  for (const m of plain.matchAll(/https:\/\/arxiv\.org\/abs\/(\d{4}\.\d{4,5})(?:v\d+)?/g)) {
+    urls.push({ url: `https://arxiv.org/abs/${m[1]}`, label: `arXiv ${m[1]}` });
+  }
+  for (const m of plain.matchAll(/https:\/\/huggingface\.co\/datasets\/([\w.-]+\/[\w.-]+)/g)) {
+    urls.push({ url: `https://huggingface.co/datasets/${m[1]}/raw/main/README.md`, label: `HF dataset ${m[1]}`, raw: true });
+  }
+  return [...new Map(urls.map((u) => [u.url, u])).values()].slice(0, 3);
+}
+
+async function citedPageText(page) {
+  const key = `page:${page.url}`;
+  const hit = cache[key];
+  if (hit && Date.now() - Date.parse(hit.fetched_at) < CACHE_TTL_MS) return hit;
+  let text = '';
+  try {
+    const r = await fetch(page.url, { signal: AbortSignal.timeout(15_000) });
+    citedPages_requests += 1;
+    if (r.ok) {
+      const body = await r.text();
+      // An abs page is HTML: keep its text, drop the tags, so a `<blockquote>` abstract reads as prose.
+      text = page.raw ? body : body.replace(/<script[\s\S]*?<\/script>/gi, ' ').replace(/<[^>]+>/g, ' ');
+    }
+  } catch { /* unreadable is a state, not an absence — it is reported as unread this run */ }
+  cache[key] = { fetched_at: new Date().toISOString(), bytes: text.length, text };
+  return cache[key];
+}
+let citedPages_requests = 0;
+
 async function checkCount(it) {
   const out = [];
   const claims = [];
@@ -654,14 +717,32 @@ async function checkCount(it) {
     return out;
   }
   const body = rd.text.replace(/[*_`]/g, '');
+  const unresolved = [];
   for (const cl of claims) {
-    const anyNum = [...body.matchAll(new RegExp(`(\\d[\\d,]*)\\s+${cl.noun}\\b`, 'gi'))].map((m) => toNum(m[1]));
+    const anyNum = countNumsIn(body, cl.noun);
     if (anyNum.includes(cl.n)) {
       out.push({ check: 'count', item: it.n, verdict: 'ok', claim: cl.phrase, detail: `README states it` });
-    } else if (anyNum.length) {
-      out.push({ check: 'count', item: it.n, verdict: 'differs', claim: cl.phrase, detail: `README says ${[...new Set(anyNum)].join(' / ')} ${cl.noun}` });
     } else {
-      out.push({ check: 'count', item: it.n, verdict: 'absent', claim: cl.phrase, detail: `the README never states a count of ${cl.noun} — count it yourself, or say "the README states no total"` });
+      unresolved.push({ cl, anyNum });
+    }
+  }
+  if (unresolved.length) {
+    const pages = citedPages(it.plain);
+    const fetched = [];
+    for (const p of pages) {
+      if (NO_NET) break;
+      const t = await citedPageText(p);
+      if (t.text) fetched.push({ ...p, text: t.text });
+    }
+    for (const { cl, anyNum } of unresolved) {
+      const hit = fetched.find((p) => countNumsIn(p.text.replace(/&nbsp;/g, ' '), cl.noun).includes(cl.n));
+      if (hit) {
+        out.push({ check: 'count', item: it.n, verdict: 'ok-cited-page', claim: cl.phrase, detail: `${hit.label} states it (the repo README does not) — quote the page the number came from` });
+      } else if (anyNum.length) {
+        out.push({ check: 'count', item: it.n, verdict: 'differs', claim: cl.phrase, detail: `README says ${[...new Set(anyNum)].join(' / ')} ${cl.noun}${fetched.length ? `; also read ${fetched.map((p) => p.label).join(', ')}` : ''}` });
+      } else {
+        out.push({ check: 'count', item: it.n, verdict: 'absent', claim: cl.phrase, detail: `no count of ${cl.noun} on ${['README of ' + it.repos[0], ...fetched.map((p) => p.label)].join(' or ')}${pages.length > fetched.length ? ' (some cited pages were unreadable this run — unread is not absent)' : ''} — count it yourself, or say "no page states a total"` });
+      }
     }
   }
   return out;
@@ -770,6 +851,23 @@ if (SELFTEST) {
   t('absence: a field-level null is NOT an absence claim',
     assertsNoScore('the cvss field is null while cvss_severities holds the score'), false);
 
+  // a slot named AS a slot is compliance, not a style defect (three items fired on this 10-26)
+  const emptySubj = new Map([['CVE-2026-111111', { kind: 'cve', status: 'Deferred', metrics: [] }]]);
+  const slots = (s) => checkCvss(mk('t', s), emptySubj).map((x) => x.verdict).filter((v) => v === 'slot-quoted');
+  t('slot: naming the slot as a slot is compliance',
+    slots('CVE-2026-111111 is 9.2 on CVSS 4.0. Primary/Secondary is a slot position, not a provenance.'), []);
+  t('slot: quoting a slot as a source still fires',
+    slots('CVE-2026-111111 is 9.2 on CVSS 4.0, from the Primary metric.'), ['slot-quoted']);
+
+  // the count matcher — three spellings of one claim (measured 2026-10-26 on the 20:34 batch)
+  t('count: "N skills" is read', countNumsIn('a dataset of 42,447 skills from major marketplaces', 'skills'), [42447]);
+  t('count: "N-skill analyzed subset" is the same claim', countNumsIn('In the 31,132-skill analyzed subset, 26.1% carry one', 'skills'), [31132]);
+  t('count: "N were analyzed" is a different sentence, not read', countNumsIn('31,132 were analyzed for the following rates', 'skills'), []);
+  t('count: both spellings together do not double-count a claim',
+    [...new Set(countNumsIn('42,447 skills; 31,132-skill subset', 'skills'))], [42447, 31132]);
+  t('cited pages: arXiv abs is a source for a count', citedPages('see https://arxiv.org/abs/2610.32322 for it').map((p) => p.label), ['arXiv 2610.32322']);
+  t('cited pages: a HF dataset card is read raw', citedPages('https://huggingface.co/datasets/EverMind-AI/skillcorpus-lifecycle').map((p) => p.raw), [true]);
+
   for (const c of cases) console.log(`  ${c.pass ? '✓' : '✗'} ${c.name}${c.pass ? '' : ` — got ${JSON.stringify(c.got)}, want ${JSON.stringify(c.want)}`}`);
   const ok = cases.filter((c) => c.pass).length;
   console.log(`selftest ${ok}/${cases.length}`);
@@ -827,10 +925,10 @@ for (const { path: p, items } of parsed) {
 
 try { mkdirSync(dirname(CACHE_PATH), { recursive: true }); writeFileSync(CACHE_PATH, JSON.stringify(cache, null, 1)); } catch { /* cache is best-effort */ }
 
-const SEVERITY = { ok: 0, 'no-cve-named': 1, 'no-record': 1, 'slot-quoted': 1, 'star-drift': 2, stale: 2, archived: 2, differs: 2, absent: 2, 'unsplit-issue-count': 3, 'compound-lags-parts': 3, 'version-swapped': 3, 'version-absent': 3, 'score-mismatch': 3, 'wrong-subject': 3, 'absence-contradicted': 3, 'advisory-unreadable': 1, unreadable: 1, 'artifact-unreadable': 1, 'nvd-unavailable': 1 };
+const SEVERITY = { ok: 0, 'ok-cited-page': 0, 'no-cve-named': 1, 'no-record': 1, 'slot-quoted': 1, 'star-drift': 2, stale: 2, archived: 2, differs: 2, absent: 2, 'unsplit-issue-count': 3, 'compound-lags-parts': 3, 'version-swapped': 3, 'version-absent': 3, 'score-mismatch': 3, 'wrong-subject': 3, 'absence-contradicted': 3, 'advisory-unreadable': 1, unreadable: 1, 'artifact-unreadable': 1, 'nvd-unavailable': 1 };
 const REAL = (f) => (SEVERITY[f.verdict] ?? 1) >= 2;
 
-const summary = { generated: new Date().toISOString(), files: perFile, api_calls: apiCalls, readme_calls: readmeCalls, nvd_calls: nvdCalls };
+const summary = { generated: new Date().toISOString(), files: perFile, api_calls: apiCalls, readme_calls: readmeCalls, cited_page_calls: citedPages_requests, nvd_calls: nvdCalls };
 if (OUT) {
   try { mkdirSync(dirname(OUT), { recursive: true }); writeFileSync(OUT, JSON.stringify(summary, null, 1)); } catch { /* a missing findings file is not a failed lint */ }
 }

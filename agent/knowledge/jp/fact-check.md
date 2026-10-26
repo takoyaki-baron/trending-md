@@ -778,3 +778,77 @@ Sources: [agent/tools/claim-unit-lint.mjs](https://github.com/kelong/trending-md
 → [[vuln-supply]] [[fact-check]]
 
 Sources: [GitHub Advisory Database API](https://docs.github.com/en/rest/security-advisories/global-advisories) · [GHSA-cxf3-9h37-7rr8](https://github.com/labstack/echo/security/advisories/GHSA-cxf3-9h37-7rr8) · [Snipe-IT GHSA-xf36-wx48-5rqp](https://github.com/grokability/snipe-it/security/advisories/GHSA-xf36-wx48-5rqp) · [OSV API](https://api.osv.dev/v1/vulns/GHSA-cxf3-9h37-7rr8)
+
+## 一次資料は未公開でありうるし、監査者自身の2ページは食い違いうる (2026-10-26 20:38)
+
+10-26 20:03 バッチからの3つの形。それぞれ1コールで確認できる。
+
+**1. 一次文書が公開されていない統治判断。** **C++26 DIS 投票**は 2026-10-23 に終了し**否決**された：
+P メンバー20中12が賛成（**60%**、要件は67%）、投票機関22中9が反対（**41%**、上限は25%）——
+「どちらか一方だけでも草案は否決された」。反対9票はデンマーク、フィンランド、イラン、イタリア、日本、ルクセンブルク、
+ルーマニア、スペイン、スウェーデン。これをファクトチェック項目にするのは引用問題である：Pusz は
+**公式の SC22 投票結果は「公開されていない」**と明記する——各国代表団のメンバーだけが ISO の委員会サイトで見られ、
+彼の執筆時点で ISO の公開プロジェクトページにも WG21 文書にも無かった。したがって言語の今後3年を決める投票の
+読める一次資料は、**代表のブログ記事と Robert Seacord の LinkedIn 投稿**である。ここでの確認は「ISO ページを探す」
+ことではなく（存在しない）、**その不在自体を事実として記録し、救済措置の日付を引用する**ことだ——
+SC22 の指令は12週間以内の完全な報告書を要求するので、コメントは遅くとも 2027年1月中旬に出る。
+
+**2. 1つの成果物、手作業で維持された2ページ、2つの数値。** `NVIDIA/SkillSpector` の README は
+**"71 vulnerability patterns across 17 categories"**（2回、raw README の27行目と515行目）と書き、
+リンク先のドキュメントページは **"68 … across 17 categories"** と書く。どちらも一次確認済み——
+ドキュメント側は `rel=alternate` のツインで読める：`https://docs.nvidia.com/skills/scanning-agent-skills.md`
+（**`doc-twin` 判定：twin found、123 KB HTML → 5 KB markdown**）。impeccable の 62 対 61 の再演であり、
+しかもそのドリフトは「他人のリポジトリのドリフトを捕まえること」を製品主張とするスキャナの内部で起きている。
+
+**3. 大半が先行研究である「レシピ」。** ALTO の要旨は明示的で、報道はそうではない：この MXFP4 レシピは
+"combines established techniques"——hybrid 1D/2D block quantization、randomized Hadamard transforms、
+stochastic rounding——を **Abecassis, Felix ら（arXiv:2509.25149）**から、"with a simplified weight
+**de-oscillation** scheme **adapted from TetraJet-v2 (arXiv:2510.27527)**" としている。
+貢献は**組み合わせ**、負の結果、そして実測 0.007 の損失差であって、構成要素ではない。論文が "adapted from" と
+書くとき、2つの依存を伴わずにレシピを引用することは、4部構成の手法を1つの成果物に帰属させることになる。
+
+**ここから増える規則。**（a）決める文書が会員限定なら、**不在が所見**であり、そこには**日付**（義務づけられた報告）が要る。
+曖昧表現ではいけない。（b）プロジェクトの前面ページから件数を引用する前に、それがリンクするページを取得する——
+同一プロジェクトの手作業2ページの食い違いは、いまや実測されたクラスである。（c）要旨の
+"combines established techniques from [X] … adapted from [Y]" は**帰属の連鎖**であり、一緒に運ぶ。
+
+→ [[agent-plugins]] [[edge-inference]] [[dev-tools]] [[vuln-supply]]
+
+Sources: [train-it.eu — C++26 DIS ballot result](https://train-it.eu/blog/cpp26-contracts-the-ballot-result/) · [Seacord's post](https://www.linkedin.com/posts/robertseacord_balloting-has-completed-for-c26-unfortunately-activity-7519795140887035918-5PWL) · [SkillSpector README](https://raw.githubusercontent.com/NVIDIA/SkillSpector/main/README.md) · [NVIDIA docs markdown twin](https://docs.nvidia.com/skills/scanning-agent-skills.md) · [arXiv 2610.32229 — ALTO](https://arxiv.org/abs/2610.32229)
+
+## 2026-10-26 20:47（実行パス）— lint自身の2つの偽陽性と、「数値は引用したページに住む」
+
+`agent/data/claim-unit-2026-10-26.json` を46件のフィードに対して実行し、30件の指摘が返った。多くは `ok`
+（検査は通過も記録する。だからこそ偽陽性率が測れる）。4件は開く必要があり、**4件ともフィードではなく
+検査器の側の誤り**だった——毎回オオカミ少年を叫ぶlintは、修正される前に使う側から退役させられるので、
+この種は書き留める価値がある。
+
+1. **`count` / 第37項 — `differs`：「31,132 skills」対「README says 42447 skills」。** READMEは両方書いている：
+   *“In the 31,132-skill analyzed subset … 26.1% of skills contain vulnerabilities”* と
+   *“42,447 skills from major marketplaces; 31,132 were analyzed”*。マッチャが `N<空白>skills` を要求したため、
+   **ハイフン複合語**（`31,132-skill`）が見えず、フィードの正しい数値がもう一方の数値の競合物として読まれた。
+   修正済み：`N nouns`、`N-noun`、`N | noun` を同一の主張として扱う。
+2. **`count` / 第43項 — `absent`：「1,251 skills」。** この主張の出所は**arXiv要旨**でありリポジトリではない：
+   *“We release 1,251 skills with tasks and item scores under four models.”* 検査は項目が名指ししたリポジトリの
+   GitHub READMEしか読んでいなかった。修正済み：`absent` を書く前に、項目が**引用しているページ**を読む——
+   arXiv `abs/` とHFデータセットカード、最大3ページ、キャッシュ付き——そして **`ok-cited-page`** が数値を
+   載せているページを名指しする。`absent` は読んだ全ページを列挙し、読めなかったページがあったかを述べる。
+   **読めないことは存在しないことではない**（`doc-twin` の規則を、計数の層で）。
+3. **`repo` / 第4項 — `star-drift`：引用389、現在523。** これは直す誤りではない。項目自身が
+   *“read 389 stars when this item was checked (395 sixteen minutes later — the counter is moving)”* と書き、
+   20:52にはリポジトリは **531** だった。自らのカウンタに時刻を付けた項目へのドリフト指摘は、
+   主張の誤りではなく検査が働いている証拠である。
+4. **`repo` / 第17項 — `stale`：`multica-ai/andrej-karpathy-skills`、最終push 2026-04-20。**
+   それが項目の物語である——22.3万スター、最終コミットがこのトレンドの波より6か月前のリポジトリ——なので、
+   この指摘は*そのまま*テーゼであり、項目のタイトルもそう書いている。
+
+**この節が加える規則。** (a) 計数は**項目が引用したページ**についての主張であり、項目が名指ししたリポジトリとは
+限らない。`absent` を書く前に引用ページをすべて読む。(b) マッチャにおいて数値の**綴り**は身元の一部である——
+`N-skill` と `N skills` は同じ主張であり、片方が見えない検査器は正しい文を指摘に変える。(c) lintが発火したとき、
+最初の問いは*どちらが誤っているか*である——このバッチでは4件中4件が計器だった。
+
+→ [[vuln-supply]] [[disclosure-lag]]
+
+Sources: [SkillSpector README](https://raw.githubusercontent.com/NVIDIA/SkillSpector/main/README.md) ·
+[arXiv 2610.32322 — Beyond Gain](https://arxiv.org/abs/2610.32322) ·
+[multica-ai/andrej-karpathy-skills](https://github.com/multica-ai/andrej-karpathy-skills)

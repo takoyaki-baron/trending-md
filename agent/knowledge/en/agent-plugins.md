@@ -1306,3 +1306,44 @@ separate asset terms for the supplied images.
 → [[agent-stack]] [[fact-check]] [[agent-distribution]]
 
 Sources: [AgriciDaniel/claude-seo](https://github.com/AgriciDaniel/claude-seo) · [the 26 skills](https://github.com/AgriciDaniel/claude-seo/tree/main/skills) · [wesbos/3d-model-anything](https://github.com/wesbos/3d-model-anything) · [the office viewer](https://wesbos.github.io/3d-model-anything/)
+
+## Skill vetting becomes a vendor artifact — and its default mode phones home (2026-10-26 20:38)
+
+**`NVIDIA/SkillSpector`** (**21,710★ / 1,912 forks**, **171 open issues+PRs**, Apache-2.0, created
+2026-03-21, last push 2026-10-23) is the security tier of NVIDIA's "Verified Skills" pipeline: point
+it at a git repo, URL, zip, directory or single file and it runs **static analysis (regex, Python AST,
+YARA)** by default, an **optional** LLM pass, and an **OSV.dev** lookup for known-vulnerable
+dependencies, emitting terminal / JSON / Markdown / **SARIF**.
+
+Two things about it matter more than its detection rate:
+
+- **The default audits by upload.** The README's own "Trust model and data egress" section says
+  "**LLM analysis sends analyzer-eligible file contents to the configured provider.** When LLM
+  analysis is enabled (the default), file contents are sent to the active `SKILLSPECTOR_PROVIDER`
+  endpoint. **DSSE payloads and readable signing metadata are included.** Use `--no-llm` to keep
+  contents local." So auditing an untrusted skill with default settings ships that skill's contents
+  to a third party — the scanner for supply-chain risk is a supply-chain hop unless you pass
+  `--no-llm`. (Verified verbatim in the raw README.)
+- **The denominator is the finding.** The paper it implements (*Agent Skills in the Wild*, Liu et al.
+  2026) collected **42,447** skills from major marketplaces and **analyzed 31,132 (73%)**; the
+  headline **26.1%** carries at least one vulnerability *over the analyzed subset*, not over the
+  marketplace. **5.2%** show likely malicious intent; skills with executable scripts are **2.12×**
+  more likely to be vulnerable. The README's own limitations list what the analyzer cannot reach:
+  non-English content, text inside images, compiled or encrypted code, runtime-only behaviour.
+- **Its two pages disagree on its own rule count:** README **71 patterns across 17 categories**,
+  linked docs page **68 across 17** (both fetched first-hand; see [[fact-check]]).
+
+**The retirement question, measured.** A hub of ~100,000 skills must decide *which* to retire, and
+`arXiv 2610.32322` shows the standard rule (retire on the with/without-skill gain) is mostly noise:
+**28 of SkillsBench's 31 retirements rest on probes no run passed in full**, cross-task agreement is
+**κ 0.23** against **0.42** for an unaided-score verdict, and internalization is a property of the
+**model–skill pair**, so a single global retirement list is the wrong data structure for a hub
+serving many models. Detail → [[harness-reliability]].
+
+**Writing rule:** for any skill-security claim, say whether the scanner uploaded the thing it
+audited, and give the analyzed-vs-collected denominator. "26.1% of skills are vulnerable" and "26.1%
+of the 73% that could be analyzed" are different sentences.
+
+→ [[agent-distribution]] [[fact-check]] [[harness-reliability]]
+
+Sources: [github.com/NVIDIA/SkillSpector](https://github.com/NVIDIA/SkillSpector) · [raw README](https://raw.githubusercontent.com/NVIDIA/SkillSpector/main/README.md) · [NVIDIA docs — scanning agent skills](https://docs.nvidia.com/skills/scanning-agent-skills) · [arXiv 2610.32322](https://arxiv.org/abs/2610.32322)

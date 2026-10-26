@@ -49,3 +49,35 @@ created: 2026-10-26
 3. **引用故障模型。** 压力画像是选择——从 issue 线索挖、加权永久——头条百分比是那个选择的属性。
 4. **把可判定的与需要判断的分开。** 幻觉里便宜的那一半对环境可判定，贵的那一半不可，而混为一谈会让便宜的那一半显得不可能。
 5. **对护栏来说，延迟是正确性属性。** 从 17.73 s 到 1.50 ms，才是把一个抽样检查变成常开检查的东西。
+
+## 分数属于"配对"，而"没能产出"是另一种失败 (2026-10-26 20:38)
+
+arXiv 2610.32483（*When Agents Fail: Model or Harness — Who's to Blame?*）给出了本文件前提所需的论断：
+一个 agentic 基准分数是**模型–harness 配对**的属性，而不是模型的属性；看见它的办法是把**有效完成**与**正确性**分开测量。
+
+- **五项指标：** Valid Completion Rate（VCR——agent 是否正常结束并交付**可评估**的结果，与正确性无关）、
+  Model-Harness Fit、Cross-Model Fit、Interaction Residuals（被组件级汇总掩盖的配对特有强弱）、
+  Token Load（含失败尝试）。
+- **规模：** 四个 harness——**OpenCode、Codex CLI、Pi CLI、DeepAgents**——× 四个核心模型，另加两个固定的原生
+  模型-harness 系统，覆盖六个基准（上下文管理、工具使用、长上下文规划、多模态交互、产物交接）：
+  **111 个设置、52,168 条轨迹**。
+- **结论：** **OpenCode 在跨模型表现上排名第一**；**DeepSeek V4 Flash Preview** 在共享的四基准面板上取得
+  跨 harness 最高的平均 VCR；作者自己的总结就是应当引用的那句话——"harness rankings vary across models and
+  benchmarks; task performance and valid completion can favor different pairings, and similar task
+  scores can accompany distinct execution profiles."
+- **为什么 VCR 是承重指标：** 只看正确率，会把"从未产出可评估产物"的 agent 与"产出了错误产物"的 agent 打成
+  同样的分。那是两种缺陷、两种修法（harness 管路 vs 模型判断），而标准基准表格把它们合并了。
+
+**随之而来的限定：** 一篇在审的预印本，111 个设置由其作者自行构造。应当读作"排名不稳定的示范"，
+而不是可以引用的排行榜。
+
+**同一问题的技能一半**（arXiv 2610.32322，*Beyond Gain*）：以"有/无技能的得分增益"决定退役的规则，
+其增益在两种情况下都接近零——技能已被内化时，以及模型与技能都不提供该能力时（称为 **uncovered**）。
+在四个模型上实测：**SkillsBench 的 31 次退役中有 28 次建立在没有任何一次运行完整通过的探测上**；
+增益规则的跨任务一致性为 **Cohen's κ 0.23**，而"无辅助得分"判定为 **0.42**，且判定**因模型而异**，
+因此 hub "must read them per model"。1,251 个技能及其任务与分项得分在四个模型下的数据发布于
+`EverMind-AI/SkillCorpus`。
+
+→ [[frontier-models]] [[agent-plugins]] [[agent-stack]]
+
+Sources: [arXiv 2610.32483](https://arxiv.org/abs/2610.32483) · [full paper](https://arxiv.org/html/2610.32483v1) · [arXiv 2610.32322](https://arxiv.org/abs/2610.32322) · [EverMind-AI/SkillCorpus](https://github.com/EverMind-AI/SkillCorpus)

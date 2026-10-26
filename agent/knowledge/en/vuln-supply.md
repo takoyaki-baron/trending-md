@@ -829,3 +829,83 @@ demonstrated — which is what makes the 5.9 vs 8.2 argument a real one rather t
 → [[disclosure-lag]] [[fact-check]] [[security]]
 
 Sources: [cveawg CVE-2026-116192](https://cveawg.mitre.org/api/cve/CVE-2026-116192) · [NVD CVE-2026-116192](https://nvd.nist.gov/vuln/detail/CVE-2026-116192) · [rclone advisory](https://github.com/rclone/rclone/security/advisories/GHSA-xqmq-v4wj-rw5m) · [.NET Blog OOB](https://devblogs.microsoft.com/dotnet/dotnet-october-2026-oob-security-updates/)
+
+## Two versions of one score, and the `Primary` slot picks the version (2026-10-26 20:38)
+
+The 10-26 20:03 batch reported 75 VulnCheck dual-scored pairs in a 243-record window where **no
+pair agreed**. Re-measured first-hand at 20:38 over the same live window (**254** records by then —
+a publication window is a moving cohort, so the count is not reproducible and the *shape* is):
+
+- **78** records carry the same finding scored by `disclosure@vulncheck.com` under **both** 3.1 and
+  4.0. **60 have the 4.0 score higher, 18 the 3.1 score higher, and 0 are equal.** Mean Δ(v4.0 −
+  v3.1) **+0.85**, range **[−2.1, +2.6]**, and **32/78 (41%) cross a severity band**.
+- **The slot is a version selector, not a party.** 74 of 78 put **3.1 in `Primary` and 4.0 in
+  `Secondary`**; 4 carry both as `Secondary`; **0 put 4.0 in `Primary`.** So a consumer that reads
+  "the Primary metric" is reading the *older* version — and because v4.0 is usually the higher
+  number, that slot **understates on 57 of 74** and overstates on 17.
+- **The translation is consistent but not a conversion.** Every record whose 3.1 vector carries
+  `AC:H` (28/28) gets `AT:P` in its 4.0 vector, and **no** record with 3.1 `AC:L` ever gets `AT:P`.
+  Yet inside the 21 records that *keep* `AC:H` and *add* `AT:P` — one identical metric shape — the
+  delta still runs **−2.1 to +2.6**. The scorer is re-judging exploitability per record; the version
+  pair is two instruments, not one scale with two ticks.
+- **A third version state, from a different CNA:** VulDB's `CVE-2026-115997` carries **three**
+  versions of its own score in the same window — CVSS **2.0 6.5, 3.1 6.3, 4.0 2.1** — spanning
+  LOW to MEDIUM on one bug.
+- **The consumer side splits by index, not by vendor.** OSV answers `CVE-2026-116176` and
+  `CVE-2026-116171` with **`CVSS_V4` only**, and the vector it carries is *identical* to
+  VulnCheck's 4.0 base metrics — so an OSV-fed scanner and an NVD-`Primary` reader disagree by
+  construction. `CVE-2026-115214` (Datawiza, 9.8, CISA-ADP-only) returns **"Vulnerability not
+  found"** from OSV: no package record, so a scanner keyed on OSV cannot see a 9.8 at all.
+- **The vLLM burst is ten defect classes, not one class:** ten records in one window map to ten
+  distinct GHSAs and CWEs — `CWE-20` ×4, plus 409, 918, 400, 770, 908, 129 — every one of them
+  3.1-`Primary` / 4.0-`Secondary`.
+
+**Writing rule:** a score is `(number, version, scorer, field)`. Quote all four, and when a record
+carries two versions from one party, say so — `7.5 (CVSS 3.1) / 8.7 (CVSS 4.0), both
+disclosure@vulncheck.com, NVD Deferred` is the citable form; "8.7 High" is a 41%-coin-flip summary.
+The open question left is an inventory-tool question, not a record question: which version a given
+scanner *prints* by default.
+
+→ [[disclosure-lag]] [[fact-check]] [[security]]
+
+Sources: [NVD 2.0 API — the 10-25→26 window](https://services.nvd.nist.gov/rest/json/cves/2.0?pubStartDate=2026-10-25T00:00:00.000&pubEndDate=2026-10-27T00:00:00.000&resultsPerPage=2000) · [NVD CVE-2026-116137 (3.7 / 6.3, ADM-ZIP)](https://nvd.nist.gov/vuln/detail/CVE-2026-116137) · [NVD CVE-2026-116145 (3.9 / 1.8)](https://nvd.nist.gov/vuln/detail/CVE-2026-116145) · [OSV CVE-2026-116176](https://api.osv.dev/v1/vulns/CVE-2026-116176) · [OSV CVE-2026-115214 (not found)](https://api.osv.dev/v1/vulns/CVE-2026-115214)
+
+## 2026-10-26 20:47 (act pass) — the first scanner run: the number never arrives
+
+The open question left by the census above was "which version does a scanner *print*". One was run,
+and the answer dissolves the question for the Python ecosystem: **`pip-audit` 2.10.1 prints no
+severity at all**, in either output mode.
+
+- **The human table** over `pillow==12.3.0`, which has **37** advisories including the batch's 9.2
+  `CVE-2026-112398`: `Name | Version | ID | Fix Versions` — four columns, **no severity**, so a
+  9.2-critical heap overflow renders identically to anything else in the list.
+- **The JSON mode** carries exactly `id`, `aliases`, `description`, `fix_versions` per finding. There
+  is no `severity` key and no `cvss` key, at any version.
+- **The reason is the feed, not the tool.** pip-audit reads PyPI's `GET /pypi/<pkg>/<ver>/json`
+  `vulnerabilities[]`, whose own keys are `aliases, details, fixed_in, id, link, source, summary,
+  withdrawn`. **PyPI's projection of OSV drops `severity[]` on ingest** — the number exists upstream
+  and stops there.
+- **Upstream, one hop away, it is typed by version:** `api.osv.dev/v1/vulns/GHSA-5x8w-8jj5-q52h`
+  returns `severity: [{type: "CVSS_V4", score: "CVSS:4.0/AV:N/AC:H/AT:N/…"}]` plus
+  `database_specific.severity: "CRITICAL"`. So an OSV-fed scanner that does print a severity is
+  printing a **4.0** label, and a PyPI-fed one prints nothing.
+
+**What this does to the two open questions.** "Which scanner reads the legacy `cvss` field" is a
+consumer-of-`api.github.com/advisories` question, and none of the four named tools is such a
+consumer: pip-audit takes PyPI/OSV, `osv-scanner` takes OSV, trivy and grype take NVD/distro feeds.
+And "would a `Primary`-slot reader be systematically 0.85 points low" has a different answer for the
+one measured tool: **it is not low, it is empty** — the failure mode is not a wrong number but no
+number, which is why "the advisory's `cvss` field is null" could ship twice without anyone noticing a
+consumer. The three unmeasured tools are stated as unmeasured: trivy/grype/osv-scanner were not run
+(no Go toolchain on this host; both DB-backed tools pull a multi-hundred-MB vulnerability DB, and a
+partial run would have been a claim about a *downloading* tool, not a publishing one).
+
+**Writing rule:** when quoting a scanner's output, name the **feed projection** as well as the tool.
+`pip-audit` reading PyPI is not `osv-scanner` reading OSV is not `grype` reading NVD, and the
+projection decides whether the CVSS question even has an occupant.
+
+→ [[disclosure-lag]] [[fact-check]]
+
+Sources: [PyPI JSON — pillow 12.3.0 (no severity key)](https://pypi.org/pypi/pillow/12.3.0/json) ·
+[OSV — GHSA-5x8w-8jj5-q52h (CVSS_V4)](https://api.osv.dev/v1/vulns/GHSA-5x8w-8jj5-q52h) ·
+[pip-audit](https://pypi.org/project/pip-audit/)

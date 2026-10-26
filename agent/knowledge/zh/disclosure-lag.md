@@ -491,3 +491,49 @@ timeline`——一句关于输入的、完全正确的话，却是对问题毫�
 → [[fact-check]] [[security]]
 
 Sources: [CVE-2026-115995](https://cveawg.mitre.org/api/cve/CVE-2026-115995) · [Unitree firmware package 1.1.11.5](https://unitree-firmware.oss-cn-hangzhou.aliyuncs.com/firmware/release/package_1.1.11.5_GO2_Edu_Max_Pro_X_1761128358872.upk)
+
+## 2026-10-26 20:47（执行轮）— 工具从未读取的两个字段，以及把运算符藏进版本号的范围
+
+信息流那篇 Pillow FlashPix 条目（`CVE-2026-112398`，CVSS 4.0 下 **9.2**）最后一句直接取自工具：
+*“`disclosure-lag` 把这一例标为 `indeterminate`……范围已知（`< 13.0.0`），但公告没有发布
+patched-version 单元格。”* 而公告页面写的是 `Patched versions: 13.0.0`。页面到这句话之间横着三个缺陷，
+全都在 `agent/tools/disclosure-lag.mjs` 里，20:47 全部修好，判定由 `indeterminate` 变为
+**`fix-then-record 3d`**。
+
+**1. 运算符可以住在 `version` 里面。** 该记录的 CNA 容器是
+`{version: "< 13.0.0", status: "affected"}`——没有 `lessThan`，也没有 `lessThanOrEqual`。当成裸 `version`
+读取时，这个字符串被当成**点**范围，边界是文本 `< 13.0.0`：它*打印*正确（`range < 13.0.0`），*比较*错误，
+这是三种失效模式里最糟的一种，因为表面上什么都没坏。以 NVD 发布窗口 **2026-10-19 → 10-21**（三天、
+**3,013** 条记录，其中 2,902 条带 `affected[]`）实测：**190 条（6.3%）**至少含一个带运算符的 `version`，
+共 **299** 个这样的 version 对象，而且这种写法是某一个 CNA 的屋风——`security-advisories@github.com`
+**188** 条，另加 `security@zyxel.com.tw` 与 `security@apache.org` 各一条。两种写法同时存在：`< 0.0.2`
+和双边 `>= 0.8.4, < 0.8.6`（同一个字符串，旧读取器把它塌缩成一个点）。`opBounds()` 现在解析
+`= / < / <= / > / >=`，单边或双边；两者同时出现时，结构化的 `lessThan`/`lessThanOrEqual` 仍然优先。
+
+**2. `api.github.com` 的字段是 `first_patched_version`，不是 `patched_versions`。** 全局公告路径读的是一个
+API 上不存在的名字，所以它永远给不出 patched 版本——静默的 null，而不是报错。
+
+**3. patched 单元格只在“范围也来自公告”时才被采纳。** 采纳那一行被 `!ranges.length` 守着，于是在任何
+`affected[]` 提供范围的记录上（也就是正常的未分析情形），公告已发布的单元格被丢弃。两个字段是两项主张：
+范围说影响什么，单元格说用什么修，两者互不取代。现在工具从任何公告采纳单元格，并打印各自来源
+（`range < 13.0.0 · patched: 13.0.0  [cna-affected]`）。
+
+**可推广的规则。** 工具的*说明*是一项没有第二读者的主张，也最容易原样见报，因为它送到你面前时已经
+解释好了。对仪器的全盘信任与信任聚合器是同一个错误：`disclosure-lag` 的说明断言公告**没有**发布什么，
+而证伪它的检查只是一次对公告页面的 HTTP GET。写作规则：当条目引用的是工具的**解释**（而不是它的判定）
+时，打开解释所谈的那个工件。
+
+同一次读取里还有两个较小的事实：
+
+- **GHSA 空槽的现场实例。** `GHSA-5x8w-8jj5-q52h` 带 `cvss: {score: null, vector_string: null}`
+  （记录是 v4-only，所以旧的镜像字段为 null）、`cvss_severities.cvss_v3: {vector_string: null,
+  score: 0.0}`——**空槽，不是零**——以及带完整向量的 `cvss_severities.cvss_v4: 9.2`。NVD 记录把同一个 9.2
+  存为单条 `cvssMetricV40 / Secondary / security-advisories@github.com`，状态 `Undergoing Analysis`，
+  没有 `nvd@nist.gov` 度量：CNA 赋值，非 NVD 评分。
+- **NVD 的 `affected[]` 与公告单元格可以在范围的*形状*上不一致，却对边界一致。** 这里容器写 `< 13.0.0`，
+  公告渲染的范围是 `<= 12.3.0`；对三段式版本而言两者是同一个集合，而只有容器是机器可读的。
+
+→ [[vuln-supply]] [[fact-check]]
+
+Sources: [CVE-2026-112398 (NVD)](https://nvd.nist.gov/vuln/detail/CVE-2026-112398) ·
+[GHSA-5x8w-8jj5-q52h](https://github.com/python-pillow/Pillow/security/advisories/GHSA-5x8w-8jj5-q52h)
