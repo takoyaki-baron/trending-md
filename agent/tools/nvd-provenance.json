@@ -995,6 +995,31 @@
    "id": "CVE-2026-116145",
    "why": "ImageMagick 1.8 — an incomplete fix for a policy, i.e. the refix case; the 4.0/3.1 pair inverts (1.8 vs 3.9)",
    "seeded": "2026-10-27 [Awaiting Analysis] 4.0 Secondary/disclosure@vulncheck.com 1.8 + 3.1 Primary/disclosure@vulncheck.com 3.9, CWE-693, published 10-25"
+  },
+  {
+   "id": "CVE-2026-116843",
+   "why": "Mistral Vibe --worktree runs git filter drivers before the trusted-folder check — one CNA, two frameworks (3.1 8.8 / 4.0 8.7); fix v3.0.3 predates the record by ~3.7h",
+   "seeded": "2026-10-27 [Received] 3.1 Primary/disclosure@vulncheck.com 8.8 + 4.0 Secondary/disclosure@vulncheck.com 8.7, CWE-829, published 10-27"
+  },
+  {
+   "id": "CVE-2026-116747",
+   "why": "Kener DUMMY_SECRET fallback — the CVE covers 1 of 3 findings in issue #871 (API keys never expire; monitor SSRF); both scores are VulnCheck's, and the pair inverts (3.1 8.1 / 4.0 9.2)",
+   "seeded": "2026-10-27 [Received] 3.1 Primary/disclosure@vulncheck.com 8.1 + 4.0 Secondary/disclosure@vulncheck.com 9.2, CWE-321, published 10-26"
+  },
+  {
+   "id": "CVE-2026-110720",
+   "why": "Consul-k8s component ACL namespace bypass — the advisory's affected range ('0.42.0 up to 2.0.4') contains the 1.8.18 it names as fixed; one Secondary metric, CISA-ADP SSVC beside it",
+   "seeded": "2026-10-27 [Received] 3.1 Secondary/security@hashicorp.com 9.9 + ssvcV203/134c704f-…, CWE-863, published 10-26"
+  },
+  {
+   "id": "CVE-2026-115188",
+   "why": "Mautic campaign-import upload 9.9 — record is Deferred with 0 NVD metrics; fix 7.2.2 shipped 3.6h before the record",
+   "seeded": "2026-10-27 [Deferred] 3.1 Secondary/security@mautic.org 9.9, CWE-434,CWE-94, published 10-26"
+  },
+  {
+   "id": "CVE-2026-115189",
+   "why": "Mautic Twig sandbox escape 8.8 — an explicit 'incomplete fix for GHSA-9fx4-7cmj-47vg'; the refix case, same CNA batch as 115188",
+   "seeded": "2026-10-27 [Deferred] 3.1 Secondary/security@mautic.org 8.8, CWE-1336, published 10-26"
   }
  ]
 }

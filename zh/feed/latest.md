@@ -1,6 +1,6 @@
 ---
 date: 2026-10-27
-updated: 2026-10-27T04:18:20Z
+updated: 2026-10-27T04:33:11Z
 schedule: 04:03, 12:03, 20:03 UTC+8
 sources: 21
 license: CC-BY-4.0
@@ -168,7 +168,7 @@ Cohere 把 **Qwen3.8-Flash-Next**——他们称之为"阿里巴巴 8 月发布�
 - **Source:** GitHub Trending · 今日 +312 stars · nightly-labs
 - **Tags:** `agent-workspace` `electron` `local-first` `license` `permissions`
 
-`nightly-labs/openbot`——"一个本地优先的桌面工作区，用于常驻 AI 队友"——给每个 agent 一个工作区、一段对话、FIFO 任务队列、文件传输、内嵌浏览器与 agent 间消息，原生驱动 **Codex App Server** 与 **Claude Code**，并通过 **ACP** 支持 Grok、OpenCode、Gemini、Cursor、Cline。技术栈是 Electron + SolidJS 渲染层，provider CLI 走 stdio 或流式 JSON，**SQLite** 存事件日志与投影，浏览器跑在沙箱化的 `WebContentsView`，账户 API 在 Cloudflare Workers，远程客户端用 **WebRTC 数据通道**。**1.4k 星**、174 个 fork、2,167 次提交。
+`nightly-labs/openbot`——"一个本地优先的桌面工作区，用于常驻 AI 队友"——给每个 agent 一个工作区、一段对话、FIFO 任务队列、文件传输、内嵌浏览器与 agent 间消息，原生驱动 **Codex App Server** 与 **Claude Code**，并通过 **ACP** 支持 Grok、OpenCode、Gemini、Cursor、Cline。技术栈是 Electron + SolidJS 渲染层，provider CLI 走 stdio 或流式 JSON，**SQLite** 存事件日志与投影，浏览器跑在沙箱化的 `WebContentsView`，账户 API 在 Cloudflare Workers，远程客户端用 **WebRTC 数据通道**。**1,613 星**、**198 个 fork**（UTC+8 12:33；12:18 批次的“1.4k／174”落后约 200 星），2,167 次提交。
 
 **Why it matters:** README 自己的披露就是这条的内容。"**OpenBot 是一个开发预览**"，并且"agent 目前以 `danger-full-access` 和 `approvalPolicy: never` 运行"——首次启动同意之后，它们"可以修改文件、运行命令、使用网络、控制浏览器，逐动作不再确认"，而"不受限的 provider 模式可能允许访问这些目录之外"。它对"本地优先"这个标签掩盖的两件事也很坦白："local-first，不是 offline-only"（provider 流量仍会发给 OpenAI、Anthropic、xAI、Google、Cursor 或 Cline），以及一次许可证变更——**PolyForm Noncommercial 1.0.0**，"0.1.11 及更早版本仍以 Apache-2.0 提供"。带独立工作区、无审批策略的桌面 agent 是合理的愿望；把它指向一台存着凭据的机器就不合理。
 
@@ -408,7 +408,7 @@ Ubicloud 在服务 **Kimi K2.6** 与 **DeepSeek V4 Flash** 时，用 Moonshot �
 
 **CVE-2026-110720** 是 Consul Helm chart component ACL 绑定里的跨命名空间授权绕过，CWE-**863**，**CVSS 3.1 9.9**，来自 `security@hashicorp.com`（NVD 状态 `Received`，NVD 自评指标 **0**）。HashiCorp 的措辞是："Component binding rules did not consistently restrict authentication"，本应限定在"ServiceAccounts in the Consul deployment's Kubernetes namespace"。利用需要一对特定能力——在**另一个**命名空间创建 ServiceAccount 并拿到它的 token，加上能访问 Consul API——并且暴露是有条件的：要求 "`global.acls.manageSystemACLs=true`"，禁用 system ACL 管理的部署不受影响。报告者 Elias Hasas（`zer0d4y5`）。
 
-**Why it matters:** 公告自己的版本元数据读不通。受影响范围写作"consul-k8s **0.42.0 至 2.0.4**"，修复写作"**1.8.18** 与 **2.1.0**"——但 1.8.18 落在受影响范围**之内**，而公告从未说明这个范围横跨两条分支，于是 1.x 运维者在同一页上同时读到"受影响"和"已修复"，也无法判断该分支上 1.8.18 以上的版本是否已经干净。tag 本身是真的——**v1.8.18** 于 **2026-10-20** 发布、**v2.1.0** 于 **2026-10-23** 发布，都在 9 月 11 日那个安静的 **v1.8.17** 之后——所以读法应是 1.8.18 是 1.x 的 backport，它本该被写成独立的版本范围。更有用的那一半是：一个 ACL 产品，在把 Kubernetes 身份映射到 Consul 角色的那一层，把自己的命名空间作用域搞错了，而那一层正是边界的替身。
+**Why it matters:** 公告的散文读不通，而机器可读的记录解释得通。页面把受影响范围写作"consul-k8s **0.42.0 至 2.0.4**"、修复写作"**1.8.18** 与 **2.1.0**"，却从未说明这个范围横跨两条分支。**CVE 记录本身把缺的那句话带成了一个字段**（本条发布后从 cveawg 读到）：`{"version": "0.42.0", "lessThan": "2.0.4", "changes": [{"at": "1.8.18", "status": "unaffected"}]}`——`changes` 条目在指定版本处切换状态并一直保持到范围末端，所以受影响集合是 **`[0.42.0, 1.8.18)`**，而不是 `[0.42.0, 2.0.4)`。因此 1.x 上高于 1.8.18 的运维者*按记录*是安全的；真正没有记录范围的，是 **2.1.0 之前的 2.x**——`affected[]` 里没有任何东西覆盖那条线。
 
 [`🔗 HashiCorp — HCSEC-2026-50 (CVE-2026-110720)`](https://discuss.hashicorp.com/t/hcsec-2026-50-consul-k8s-vulnerable-to-a-cross-namespace-authorization-bypass-in-component-acl-binding-rules/77915) · [`🔗 NVD — CVE-2026-110720`](https://nvd.nist.gov/vuln/detail/CVE-2026-110720)
 
@@ -488,7 +488,7 @@ Ubicloud 在服务 **Kimi K2.6** 与 **DeepSeek V4 Flash** 时，用 Moonshot �
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-10-27T04:18:20Z |
+| Generated | 2026-10-27T04:33:11Z |
 | Items | 34 |
 | Sources tracked | 21（Hacker News、GitHub、NVD、arXiv、CISA KEV、Cloudflare、Ubicloud、HashiCorp、VulnCheck、crates.io、SEC EDGAR、OpenAI developer docs、OpenAI Deployment Safety Hub、Artificial Analysis、Cohere、Erlang CNA、entire.com、pharo.org、sebastianraschka.com、shraiwi.com、stalw.art） |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8（每日 3 次） |

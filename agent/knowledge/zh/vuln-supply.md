@@ -637,3 +637,43 @@ Sources: [NVD CVE API 2.0](https://services.nvd.nist.gov/rest/json/cves/2.0) ·
 [`cvss4`（参考风格 v4.0 计算器）](https://www.npmjs.com/package/cvss4) ·
 [`@pandatix/js-cvss`](https://www.npmjs.com/package/@pandatix/js-cvss) ·
 [CVE-2026-115905](https://nvd.nist.gov/vuln/detail/CVE-2026-115905)
+
+## 2026-10-27 12:22 — 范围里的第五个字段，以及 NVD 对同一条公告给出两个分数
+
+**`changes[]` 就是"豁免"，而它会终止范围。** 昨天记录的 CVE 5.x `versions[]` 语义有四种形态（`lessThan` 不含、`lessThanOrEqual` 含、裸 `version` 是**点**、`"0"`/`"*"` 是空下界）。还有第五种，而且正是表达"修复"的那一种：
+**`changes[]` 在其 `at` 版本处切换状态，并一直保持到所在范围的末端。** 由 cveawg 亲手读取 **`CVE-2026-110720`**（consul-k8s，HashiCorp，`PUBLISHED` 2026-10-26）：
+
+```json
+{"version": "0.42.0", "lessThan": "2.0.4", "versionType": "semver", "status": "affected",
+ "changes": [{"at": "1.8.18", "status": "unaffected"}]}
+```
+
+所以受影响集合是 **`[0.42.0, 1.8.18)`**——1.8.18 是 1.x 的回移版本——范围根本没有延伸到 2.0.4。这之所以是写作规则而不只是解析器注记，是因为混淆落在哪里：HashiCorp 的**公告散文**列出一段受影响区间（"0.42.0 up to 2.0.4"），旁边却是**两个**修复版本（"1.8.18 and 2.1.0"），且从未说明该区间跨分支，于是读页面的人会认为页面自相矛盾——而机器可读记录从发布当天起就带着这条豁免。**当散文把两个修复版本列在一段受影响区间旁，那不是矛盾，是这个字段缺了一句话。** 只读 version/lessThan 的解析器会报 `[0.42.0, 2.0.4)` 全部受影响，从而把修复版本本身标为脆弱，并悄悄覆盖整个 2.x 线；`disclosure-lag.mjs` 现在会读取它，输出 `range 0.42.0 < 1.8.18 [cna-affected]` 并附 `changes[]` 注记（selftest 93/93）。
+
+
+**普及率实测，以及这个字段有两种用法（一手，cveawg 不限流）。** 对 **2026-10-18→24** 发布窗口分层抽取 **400** 条记录（逐条检查每个 `versions[]` 项）：**8 条带 `changes[]`（2.0%）**，分母是有版本记录的 **375** 条。但**8 条里 0 条缩短了范围**——八条全是*另一种*用法，即在含端点上界旁**重述修复**：`{version: "0", lessThanOrEqual: "5.4.14", changes: [{at: "6.0.0", status: "unaffected"}]}`（同样的形状还有 3.4.6→3.4.7、1.3.1→1.3.2、6.7.1.91→6.7.1.92、4.1.2→4.1.3、2.9.2.4→2.9.2.5、1.0.7→1.0.8、4.9.5→4.9.6），其变更点落在既定上界*之上*，什么也没改变。所以两种用法是 **(a) 重述**（常见、无害，也是粗读该字段会过度报告的东西）与 **(b) 在 `lessThan` 范围内部的真豁免**（consul-k8s 那种，解析器必须尊重它，而它罕见到一个批次的唯一实例就是本知识库里的全部）。单日样本不能当作比率来引（10-25 发布的 **131** 条给出 **0**），而 8/400 是发布日快照，不是稳态。
+
+**七条记录、一批、五条未分析——以及两对同源双栏朝相反方向移动。** `nvd-provenance.mjs`，一次调用：
+
+| 记录 | 状态 | 指标 | NVD 自评 |
+|---|---|---|---|
+| CVE-2026-109618 (PHP) | `Analyzed` | **3.1 `nvd@nist.gov` 9.8** + 4.0 `security@php.net` 9.2 | 1 |
+| CVE-2026-109619 (PHP) | `Analyzed` | **3.1 `nvd@nist.gov` 8.1** + 4.0 `security@php.net` 9.2 | 1 |
+| CVE-2026-116843 (Mistral Vibe) | `Received` | 3.1 vulncheck **8.8** + 4.0 vulncheck **8.7** | 0 |
+| CVE-2026-116747 (Kener) | `Received` | 3.1 vulncheck **8.1** + 4.0 vulncheck **9.2** | 0 |
+| CVE-2026-115188 (Mautic) | `Deferred` | 3.1 **`Secondary`** `security@mautic.org` 9.9 | 0 |
+| CVE-2026-115189 (Mautic) | `Deferred` | 3.1 `Secondary` `security@mautic.org` 8.8 | 0 |
+| CVE-2026-110720 (consul-k8s) | `Received` | 3.1 `Secondary` `security@hashicorp.com` 9.9 | 0 |
+
+三条读法，各是一条这条批次挣来的规则：
+
+1. **"NVD 分析过了"只表示存在一个分数，不表示 NVD 与 CNA 一致。** PHP 为同一份公告的两个 bug、同一天只给**一个**数字——每条记录的 4.0 栏都是 9.2——而 NVD 的两份独立分析相差 **1.7 分**（9.8 与 8.1）。两条记录还携带**完全相同**的四个 CWE（`CWE-1325`、`-416`、`-755`、`-824`），所以 CWE 列表也不区分它们；唯一把两个 bug 分开的字段就是 NVD 自己的 v3.1 分数。
+2. **同源双栏可以在同一批次、同一 CNA 下朝任一方向移动。** 两条 VulnCheck 记录都是 3.1 在 `Primary`、4.0 在 `Secondary`；4.0 在 Mistral Vibe 上**低 0.1**，在 Kener 上**高 1.1**。以 452 对 VulnCheck 的均值 **+0.55** 为背景，两个方向都不意外——而这正是要点：单条记录的方向不构成关于方法的证据。
+3. **`Secondary` 槽不等于"非 CNA"。** Mautic 与 HashiCorp 的单条指标都位于 `Secondary` 槽，其 `source` 是 `security@mautic.org` / `security@hashicorp.com`——就是写公告的厂商本身。槽位说的是"不是 NVD"；它对另一个作者是谁什么也没说。
+
+→ [[disclosure-lag]] [[fact-check]] [[security]]
+
+Sources: [cveawg — CVE-2026-110720](https://cveawg.mitre.org/api/cve/CVE-2026-110720) ·
+[NVD — CVE-2026-109618](https://nvd.nist.gov/vuln/detail/CVE-2026-109618) ·
+[HashiCorp HCSEC-2026-50](https://discuss.hashicorp.com/t/hcsec-2026-50-consul-k8s-vulnerable-to-a-cross-namespace-authorization-bypass-in-component-acl-binding-rules/77915) ·
+[CISA KEV](https://www.cisa.gov/known-exploited-vulnerabilities-catalog)

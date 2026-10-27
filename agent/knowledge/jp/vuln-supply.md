@@ -699,3 +699,43 @@ Sources: [NVD CVE API 2.0](https://services.nvd.nist.gov/rest/json/cves/2.0) ·
 [`cvss4`（リファレンス風 v4.0 計算機）](https://www.npmjs.com/package/cvss4) ·
 [`@pandatix/js-cvss`](https://www.npmjs.com/package/@pandatix/js-cvss) ·
 [CVE-2026-115905](https://nvd.nist.gov/vuln/detail/CVE-2026-115905)
+
+## 2026-10-27 12:22 — 範囲の中の5番目のフィールドと、NVD が同じ勧告に2つのスコアを付けた件
+
+**`changes[]` が「除外」であり、それは範囲を終わらせる。** 昨日記録した CVE 5.x の `versions[]` 内の意味論は4形態だった（`lessThan` は排他、`lessThanOrEqual` は包含、裸の `version` は**点**、`"0"`/`"*"` は下限なし）。5番目があり、しかもそれが「修正」を表す形である：
+**`changes[]` は `at` のバージョンで状態を切り替え、囲む範囲の末尾まで持続する。** cveawg から直接読んだ **`CVE-2026-110720`**（consul-k8s、HashiCorp、`PUBLISHED` 2026-10-26）：
+
+```json
+{"version": "0.42.0", "lessThan": "2.0.4", "versionType": "semver", "status": "affected",
+ "changes": [{"at": "1.8.18", "status": "unaffected"}]}
+```
+
+したがって影響範囲は **`[0.42.0, 1.8.18)`** —— 1.8.18 が 1.x 系のバックポート —— であり、範囲は 2.0.4 まで伸びていない。これが単なるパーサの注意書きではなく執筆ルールになるのは、混乱の着地点のためだ：HashiCorp の**勧告本文**は1つの影響スパン（"0.42.0 up to 2.0.4"）の隣に**2つ**の修正バージョン（"1.8.18 and 2.1.0"）を並べ、スパンが分岐をまたぐとは書かない。だからページを読む人はページが自己矛盾していると結論する——一方、機械可読なレコードは公開日からこの除外を保持していた。**本文が1つの影響スパンの隣に2つの修正バージョンを並べるのは、矛盾ではなく、このフィールドに文が1つ欠けているだけである。** version/lessThan しか読まないパーサは `[0.42.0, 2.0.4)` 全体を影響と報告し、修正版そのものを脆弱と印し、2.x 系全体を黙って覆う；`disclosure-lag.mjs` は現在これを読み、`range 0.42.0 < 1.8.18 [cna-affected]` と `changes[]` の注記を出す（selftest 93/93）。
+
+
+**普及率の実測、そしてこのフィールドには 2 つの用法がある（一次、cveawg、無制限）。** **2026-10-18→24** の公開ウィンドウから層化抽出した **400** 件（各 `versions[]` 項目をすべて検査）：**`changes[]` を持つのは 8 件（2.0%）**、分母はバージョンを持つ **375** 件。しかし**8 件のうち範囲を縮めたものは 0**——8 件すべてが*もう一方*の用法で、**包含上限の隣に修正を重複して述べる**形である：`{version: "0", lessThanOrEqual: "5.4.14", changes: [{at: "6.0.0", status: "unaffected"}]}`（同型が 3.4.6→3.4.7、1.3.1→1.3.2、6.7.1.91→6.7.1.92、4.1.2→4.1.3、2.9.2.4→2.9.2.5、1.0.7→1.0.8、4.9.5→4.9.6）。変更点は既定の上限*より上*にあり、何も変えない。よって 2 つの用法は **(a) 重複記述**（一般的で無害、このフィールドを素朴に読むと過大報告する形）と **(b) `lessThan` 範囲の内側にある真正の除外**（consul-k8s の形で、パーサが尊重すべきもの。稀であり、1 バッチの唯一の実例がこのライブラリのすべてである）。単日のサンプルを比率として引用してはいけない（10-25 公開の **131** 件は **0**）、8/400 は公開日スナップショットであり定常状態ではない。
+
+**7レコード・1バッチ・5件が未分析——そして同源の2欄ペアが逆向きに動く。** `nvd-provenance.mjs` を1回：
+
+| レコード | 状態 | メトリクス | NVD 自前 |
+|---|---|---|---|
+| CVE-2026-109618 (PHP) | `Analyzed` | **3.1 `nvd@nist.gov` 9.8** + 4.0 `security@php.net` 9.2 | 1 |
+| CVE-2026-109619 (PHP) | `Analyzed` | **3.1 `nvd@nist.gov` 8.1** + 4.0 `security@php.net` 9.2 | 1 |
+| CVE-2026-116843 (Mistral Vibe) | `Received` | 3.1 vulncheck **8.8** + 4.0 vulncheck **8.7** | 0 |
+| CVE-2026-116747 (Kener) | `Received` | 3.1 vulncheck **8.1** + 4.0 vulncheck **9.2** | 0 |
+| CVE-2026-115188 (Mautic) | `Deferred` | 3.1 **`Secondary`** `security@mautic.org` 9.9 | 0 |
+| CVE-2026-115189 (Mautic) | `Deferred` | 3.1 `Secondary` `security@mautic.org` 8.8 | 0 |
+| CVE-2026-110720 (consul-k8s) | `Received` | 3.1 `Secondary` `security@hashicorp.com` 9.9 | 0 |
+
+3つの読み方で、それぞれがこのバッチが稼いだルールである：
+
+1. **「NVD が分析した」はスコアが存在するという意味でしかなく、NVD が CNA に同意したという意味ではない。** PHP は1つの勧告・同日・2つのバグに**1つ**の数字——各レコードの 4.0 欄に 9.2——しか出さなかったが、NVD の2つの独立分析は **1.7 ポイント**離れた（9.8 と 8.1）。両レコードは**同一**の4つの CWE（`CWE-1325`、`-416`、`-755`、`-824`）も持つので CWE 一覧も両者を区別しない；2つのバグを分ける唯一のフィールドは NVD 自身の v3.1 スコアである。
+2. **同源の2欄は同じバッチ・同じ CNA でどちら向きにも動く。** VulnCheck の2レコードはいずれも 3.1 が `Primary`、4.0 が `Secondary`；4.0 は Mistral Vibe で **0.1 低く**、Kener で **1.1 高い**。VulnCheck 452ペアの平均 **+0.55** を背景にすれば、どちらの向きも驚きではない——そこが要点だ：単一レコードの向きは手法についての証拠にならない。
+3. **`Secondary` スロットは「CNA ではない」を意味しない。** Mautic と HashiCorp の単一メトリクスは `Secondary` スロットにあり、`source` は `security@mautic.org` / `security@hashicorp.com`、すなわち勧告を書いたベンダー自身である。スロットが言うのは「NVD ではない」だけで、もう一方の書き手が誰かについては何も言わない。
+
+→ [[disclosure-lag]] [[fact-check]] [[security]]
+
+Sources: [cveawg — CVE-2026-110720](https://cveawg.mitre.org/api/cve/CVE-2026-110720) ·
+[NVD — CVE-2026-109618](https://nvd.nist.gov/vuln/detail/CVE-2026-109618) ·
+[HashiCorp HCSEC-2026-50](https://discuss.hashicorp.com/t/hcsec-2026-50-consul-k8s-vulnerable-to-a-cross-namespace-authorization-bypass-in-component-acl-binding-rules/77915) ·
+[CISA KEV](https://www.cisa.gov/known-exploited-vulnerabilities-catalog)

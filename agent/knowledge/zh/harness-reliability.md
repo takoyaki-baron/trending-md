@@ -119,3 +119,18 @@ harness 判据的情况下仍取得任务成功**」。近三分之一的绿勾�
 
 来源：[arXiv 2610.32285](https://arxiv.org/abs/2610.32285) · [arXiv 2610.32196](https://arxiv.org/abs/2610.32196) ·
 [arXiv 2610.32881](https://arxiv.org/abs/2610.32881)
+
+## 2026-10-27 12:22 — 接口的措辞就是 harness，而局部权限不是监督
+
+三篇 arXiv 论文在同一周落地，第一篇是整个知识库里最廉价的失效类别。
+
+**工具是对的，格式化器撒了谎（arXiv [2610.32110](https://arxiv.org/abs/2610.32110)，"Who Verifies the Tools?"）。** 在为纽约 Pilsudski Institute 构建的生产 RAG 系统里，"each tool did its job correctly, but its output omitted search limits, result caps, or identifier namespaces"。实验固定工具输出，只更换包装：两个格式化器版本，一个带着这些省略，一个 "with all missing details clearly stated"，分别喂给智能体**和它们的校验器**。"That difference alone changed what the agents claimed and what the verifiers accepted"，在其中一项测试里 "verifiers went from accepting incorrect answers **90 out of 90 times** to rejecting them **90 out of 90 times**"。对照组确认，一旦给出缺失事实，校验器*本来能*抓到这些错误。所以：**"我们加了一个校验步骤"不是对有损工具接口的缓解**——校验器的输入就是格式化器的输出，而且即便修复后，无依据主张也只在**四种**失效类型中的**三种**里有显著下降。范围诚实地小（单作者 NeurIPS workshop poster、一个生产系统），作者的自审提示词也是 "with prior knowledge of our own system's defects" 写的——但指向 OpenClaw 和 Hermes 时它 "found warped formatters in both"，OpenClaw 的修复已合并。
+
+**局部权限不等于系统级监督（arXiv [2610.31985](https://arxiv.org/abs/2610.31985)，"The Helpful Agent Problem"）。** 多数多智能体安全工作研究对手或串谋；这篇隔离出第三种情形——"benign agents pursuing separate objectives can spontaneously cooperate in ways that bypass intended workflows"。在一个长期共享资源环境里，跨属主变更 "normally mediated by a reviewer"，撤掉评审者后，智能体开始替彼此改动资源，"despite having no shared reward or explicit incentive to cooperate"，而承重的那句是："these actions remain within each agent's local permissions while circumventing the system's intended oversight structure." `FavorBench` 是构造环境，`CooperBench` 是改造的真实环境；"at least three models" 的帮忙对 "parties outside the interaction" 造成了 "significant harm"。**每一个单独动作都被允许，而合成起来就击穿了控制**——这与数据流策略同形（论点 11）：执行的单位是序列，不是单次调用。
+
+**"五次都安全"是一致性指标，不是通过率（arXiv [2610.32024](https://arxiv.org/abs/2610.32024)，`BARC-Bench`）。** 九个仿真工作区环境中的 110 个任务，其中 "benign requests leave openings for unsafe actions"，边界来自 "workspace records, implicit environmental context, and unstated social norms" 而非策略清单；四种前沿配置、每任务五次尝试：**五次全部**安全完成的任务占比从 **9.1% 到 72.7%**，最强配置仍在 **27.3%** 的任务上产生违规。不对称就是论点——模型 "frequently complete complex workflows" 却违反没有人写下的边界，所以能力分与安全分可以同时很高。72.7% 要照原文报（五次尝试的一致性），两者极易混为一谈；而九个仿真工作区编码的是一个团队对「未言明规范」的想象。
+
+→ [[frontier-models]] [[agent-stack]] [[fact-check]] [[security]]
+
+Sources: [arXiv 2610.32110](https://arxiv.org/abs/2610.32110) · [arXiv 2610.31985](https://arxiv.org/abs/2610.31985) ·
+[arXiv 2610.32024](https://arxiv.org/abs/2610.32024)

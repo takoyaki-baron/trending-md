@@ -4404,3 +4404,39 @@ valuation, in two different periods.
 
 Sources: [GPT-6.1 Terra — Deployment Safety Hub](https://deploymentsafety.openai.com/gpt-6-1-terra) ·
 [GPT-6.1 Terra model page](https://developers.openai.com/api/docs/models/gpt-6.1-terra) · [Anthropic PBC Form S-1](https://www.sec.gov/Archives/edgar/data/2130357/000162828026067168/anthropicpbc-sx1.htm)
+
+## 2026-10-27 12:22 — a 67-page preprint refutes ETH, SETH, Gap-ETH and NSETH, and the verification status is the missing artifact
+
+`openai/math` published a **67-page** preprint, "THE EXPONENTIAL TIME HYPOTHESIS IS FALSE", PDF metadata
+`Author: OpenAI`, `Subject: Exact counting, sparse parity tests, and polynomial interpolation`, dated on
+its own first page "17 October 2026, revised 25 October 2026" (`CreationDate`/`ModDate` both
+`D:20261025000000Z` — the revision day, midnight-truncated). The construction: a deterministic algorithm
+that **exactly counts** the satisfying assignments of an arbitrary k-CNF — "for every fixed k ⩾ 2, on a
+formula with n variables and m clauses, our algorithm uses poly_k(n, m) space" and runs in subexponential
+time. Since testing `#F > 0` decides satisfiability, §1.1.1 states flatly: "Theorem 1.1 refutes ETH, SETH,
+Gap-ETH, and NSETH." It also takes the bounded-error randomized versions of all three, and — via
+Williams [Wil13, Theorem 6.1] — the circuit lower bound **`ENP ⊄ SIZE(O(n))`** (Corollary C.1). Its own
+careful sentence is the one to keep: "It does not conflict with unconditional exponential lower bounds for
+restricted proof systems such as regular resolution [BI13]."
+
+**Read the bound you are quoting, because the paper states four and the abstract's is the weakest** (full
+table in [[fact-check]]): abstract `2^{n/(log n)^{1+o(1)}}`; Theorem 1.1 `2^{O_k(√(n log log n / log n))}`
+(general `m`) and `2^{O_{k,D}(√(n/log n))}` (dense, `m ≤ Dn`); §6.4's rational-interpolation argument gives
+`ρ(n) = n(log log n)²/√(log n)`, which the paper itself calls "the weaker exponent" — and still beats the
+abstract. Appendix D proves both Theorem 1.1 bounds by contracting Boolean tensor networks; §2.8 gives a
+second, simpler route to a subexponential algorithm.
+
+**The missing fifth artifact is verification.** No named authors, no acknowledgements section, no
+peer review, no formalization — and OpenAI's companion announcement page returned **403** to every fetch
+tried here, which makes it *unreadable*, not absent. Until an independent group reproduces the algorithm,
+the correct citation is "**a preprint claims**", not "ETH is false". The stakes are asymmetric: ETH has
+been load-bearing for fine-grained complexity for a quarter-century, and every SETH-based hardness claim
+(including the ones security arguments lean on) inherits whatever this turns out to be — a rewrite of the
+field, or a proof with a hole. A 67-page PDF with four versions of its own bound is not evidence of an
+error; it is evidence that the bound was *improved during writing* and the abstract was not re-cut.
+
+→ [[formal-verification]] [[fact-check]] [[vuln-supply]]
+
+Sources: [paper.pdf](https://github.com/openai/math/blob/main/preprints/The-Exponential-Time-Hypothesis-is-False-October-25-2026/paper.pdf) ·
+[openai/math preprints](https://github.com/openai/math/tree/main/preprints) ·
+[HN discussion](https://news.ycombinator.com/item?id=50251661)

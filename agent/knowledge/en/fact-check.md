@@ -1537,3 +1537,73 @@ Sources: [GHSA-m665-v7pm-7grj](https://github.com/zip-rs/zip2/security/advisorie
 [GPT-6.1 Terra model page](https://developers.openai.com/api/docs/models/gpt-6.1-terra) ·
 [Cohere — concerning behaviour](https://cohere.com/blog/concerning-behaviour-popular-open-weight-ai-model) ·
 [pharo.org — Pharo 14](https://pharo.org/news/2026-10-26-Pharo14Release.html) · [nightly-labs/openbot](https://github.com/nightly-labs/openbot)
+
+## 2026-10-27 12:22 — five checks the 12:18 batch forced, each one first-hand
+
+**1. A document's abstract can understate its own theorem — so quote the bound you mean.** OpenAI's
+67-page preprints/…/paper.pdf ("ETH is False", `Author: OpenAI`, `CreationDate`/`ModDate` both
+`2026-10-25T00:00:00Z`, no acknowledgements section, no named authors) carries **four** spellings of its
+own running time, and the abstract's is the **weakest**:
+
+| where | bound |
+|---|---|
+| Abstract | `2^{n/(log n)^{1+o(1)}}` |
+| Theorem 1.1 (general `m`) | `2^{O_k(√(n log log n / log n))}` |
+| Theorem 1.1 (dense, `m ≤ Dn`) | `2^{O_{k,D}(√(n / log n))}` |
+| §6.4 rational interpolation — "the **weaker** exponent" | `ρ(n) = n(log log n)²/√(log n) = n/(log n)^{1/2+o(1)}` |
+
+The abstract's exponent is `n/polylog(n)`; the theorem's is `√n·polylog(n)`. The paper's headline is
+*weaker than its own theorem*, and its §6.4 bound — which it calls weaker — still beats the abstract.
+This is the inverse of the usual direction ([[frontier-models]] thesis 26 collects release posts whose
+headline is *stronger* than the artifact), and the check is the same either way: **find every place the
+document states the number and say which one you are quoting.** Quotes verified verbatim from the PDF
+text: "Theorem 1.1 refutes ETH, SETH, Gap-ETH, and NSETH." and "It does not conflict with unconditional
+exponential lower bounds for restricted proof systems such as regular resolution [BI13]." Corollary C.1
+(`ENP ⊄ SIZE(O(n))`) cites Williams [Wil13, Theorem 6.1] — a *2013* implication, not a new result.
+
+**2. Read the SECOND table — a build-speed benchmark's cost is in the runtime table.** `indexable-inc/blaze`
+sells "Rebuild Rust in milliseconds", and its benchmark page is genuinely reproducible (pinned commits per
+project, named machines, median-of-N, raw JSON). What the feed's item omitted is the page's own last chart:
+binaries built by the tool run **1.10–1.18× slower** than cargo's release builds (geometric mean: macOS
+arm64 1.18×, Linux aarch64 1.14×, Linux x86-64 1.10×), with **ripgrep 1.50× slower** on macOS arm64 and
+**words 1.44× slower** on aarch64. A 10–24× build speedup paid for with a 10–18% runtime regression is a
+trade, not a free win, and it is stated by the vendor four tables below the number the coverage quoted.
+
+**3. A marker inside a cell is a claim about the measurement, and "worst" depends on whether you honour it.**
+The same page's biome row reads **2.12 s → 2.38 s (0.9×)** on x86-64 and **8.06 s → 108.75 s (0.1×)** on
+aarch64 — the second marked **`(c)`**, meaning "the daemon handed this edit to cargo". So "the worst row is
+0.9×" is true only if `(c)` cells are excluded, and the page never says to exclude them. Both numbers belong
+in the item, with the marker explained; a headline that picks one and a body that lists both is how a
+reader gets two incompatible facts from one document.
+
+**4. `license: null` has two opposite causes, and REUSE is the benign one.** `stalwartlabs/stalwart` is
+dual-licensed **AGPL-3.0 + SELv2**, and GitHub's API reports `license: null` — because there is **no
+root licence file at all** (first-hand: `LICENSE` 404, `LICENSE.md` 404, `LICENSES/AGPL-3.0-only.txt`
+**200**). The field reads one shape (a root-level `LICENSE`/`COPYING` file GitHub's detector recognises);
+the repo uses the REUSE layout instead. So the same `null` that means "no licence declared"
+(`nightly-labs/openbot`: `NOASSERTION` over a PolyForm Noncommercial file) also means "a licence declared
+somewhere the detector does not look". Three artifacts, as always: **the field**, **the license file(s)**,
+**the release page's claim** — and `null` settles none of them.
+
+**5. Release artifacts: 0 of 4 repos agree, and three of the four mismatches are name collisions, not version
+drift.** `release-drift.mjs` (zero `api.github.com` calls) over the batch's four most-cited repos:
+
+| repo | verdict | what disagrees |
+|---|---|---|
+| `indexable-inc/blaze` | `name-collision` | manifest **0.1.0**; newest tag `23.1.4-e152d9fa2bc2` (an **llvm** tag); npm `blaze` → `blazeui/blaze`; crates.io `blaze` is an unrelated HTTP framework |
+| `stalwartlabs/stalwart` | `name-collision` | release **1.0.0**; npm `stalwart@0.1.0` → `mbrio/stalwart` |
+| `mautic/mautic` | `name-collision` | release **7.2.2**; manifest `package.json` says **0.0.0** (placeholder); npm `mautic@0.0.4` → `fieldcontrol/mautic` |
+| `FrigadeHQ/hob` | `registry-lags-release` | release **0.2.1**; npm `hob@0.0.1` with **no repository field** |
+
+The measured lesson from the 10-24 batch ("only 15% agree") is not mainly about versions: **the common
+failure is that the name is not the repo.** "Install X" resolves to another project's package in three of
+four cases, and the fourth has a registry record with no provenance at all. Check the registry record's own
+`repository` field before quoting any version, and check the tag's *name* before believing it is the
+tool's.
+
+→ [[frontier-models]] [[dev-tools]] [[vuln-supply]] [[disclosure-lag]]
+
+Sources: [paper.pdf](https://github.com/openai/math/blob/main/preprints/The-Exponential-Time-Hypothesis-is-False-October-25-2026/paper.pdf) ·
+[blaze benchmarks](https://github.com/indexable-inc/blaze/blob/main/docs/benchmarks.md) ·
+[stalwart v1.0.0](https://github.com/stalwartlabs/stalwart/releases/tag/v1.0.0) ·
+[FrigadeHQ/hob](https://github.com/FrigadeHQ/hob)

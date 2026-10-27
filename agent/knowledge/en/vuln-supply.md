@@ -964,3 +964,74 @@ Sources: [NVD CVE API 2.0](https://services.nvd.nist.gov/rest/json/cves/2.0) ·
 [`cvss4` (reference-style v4.0 calculator)](https://www.npmjs.com/package/cvss4) ·
 [`@pandatix/js-cvss`](https://www.npmjs.com/package/@pandatix/js-cvss) ·
 [CVE-2026-115905](https://nvd.nist.gov/vuln/detail/CVE-2026-115905)
+
+## 2026-10-27 12:22 — the fifth field inside a range, and one advisory NVD scored twice
+
+**`changes[]` is the exemption, and it ends the range.** Yesterday's list of CVE 5.x semantics inside a
+`versions[]` entry had four forms (`lessThan` exclusive, `lessThanOrEqual` inclusive, a bare `version` a
+*point*, `"0"`/`"*"` a null minimum). There is a fifth, and it is the one that expresses a fix:
+**`changes[]` toggles status at its `at` version and holds to the end of the enclosing range.** Read
+first-hand from cveawg on **`CVE-2026-110720`** (consul-k8s, HashiCorp, `PUBLISHED` 2026-10-26):
+
+```json
+{"version": "0.42.0", "lessThan": "2.0.4", "versionType": "semver", "status": "affected",
+ "changes": [{"at": "1.8.18", "status": "unaffected"}]}
+```
+
+So the affected set is **`[0.42.0, 1.8.18)`** — 1.8.18 is the 1.x backport — and the range does not run
+to 2.0.4 at all. What makes this a writing rule rather than a parser note is where the confusion lands:
+HashiCorp's **bulletin prose** lists one affected span ("0.42.0 up to 2.0.4") beside **two** fix versions
+("1.8.18 and 2.1.0") and never says the span crosses branches, so a reader of the page concludes the
+page contradicts itself — while the machine-readable record carried the exemption from publication day.
+**Prose that lists two fix versions beside one affected span is this field with no sentence.** A parser
+reading only version/lessThan reports `[0.42.0, 2.0.4)` as uniformly affected, which marks the fix
+release vulnerable *and* silently covers the whole 2.x line; `disclosure-lag.mjs` now reads it and prints
+`range 0.42.0 < 1.8.18 [cna-affected]` plus a `changes[]` note (selftest 93/93).
+
+
+**Measured prevalence, and the field has two uses (first-hand, cveawg, unmetered).** Census of the
+**2026-10-18→24** publication window, **400** stratified records (every `versions[]` entry inspected): **8 carry
+`changes[]` (2.0%)**, against **375** records that have versions at all. But **0 of the 8 shorten the range** — all
+eight are the *other* use, a **redundant restatement of the fix beside an inclusive bound**:
+`{version: "0", lessThanOrEqual: "5.4.14", changes: [{at: "6.0.0", status: "unaffected"}]}` (and the same shape at
+3.4.6→3.4.7, 1.3.1→1.3.2, 6.7.1.91→6.7.1.92, 4.1.2→4.1.3, 2.9.2.4→2.9.2.5, 1.0.7→1.0.8, 4.9.5→4.9.6), where the
+change point sits *above* the stated upper bound and changes nothing. So the two uses are **(a) a restatement**
+(common, harmless, and what a naive reader of the field would over-report) and **(b) a genuine exemption inside a
+`lessThan` range** — the consul-k8s shape, which is what a parser must honour and which is rare enough that one
+batch's single instance is the only one in this library. A day's sample is the wrong window to quote as a rate (the
+**131** records published 10-25 gave **0**), and 8/400 is a publication-day snapshot, not a steady state.
+
+**Seven records, one batch, five not analysed — and two same-CNA pairs that move opposite ways.**
+`nvd-provenance.mjs`, one call:
+
+| record | status | metrics | NVD-authored |
+|---|---|---|---|
+| CVE-2026-109618 (PHP) | `Analyzed` | **3.1 `nvd@nist.gov` 9.8** + 4.0 `security@php.net` 9.2 | 1 |
+| CVE-2026-109619 (PHP) | `Analyzed` | **3.1 `nvd@nist.gov` 8.1** + 4.0 `security@php.net` 9.2 | 1 |
+| CVE-2026-116843 (Mistral Vibe) | `Received` | 3.1 vulncheck **8.8** + 4.0 vulncheck **8.7** | 0 |
+| CVE-2026-116747 (Kener) | `Received` | 3.1 vulncheck **8.1** + 4.0 vulncheck **9.2** | 0 |
+| CVE-2026-115188 (Mautic) | `Deferred` | 3.1 **`Secondary`** `security@mautic.org` 9.9 | 0 |
+| CVE-2026-115189 (Mautic) | `Deferred` | 3.1 `Secondary` `security@mautic.org` 8.8 | 0 |
+| CVE-2026-110720 (consul-k8s) | `Received` | 3.1 `Secondary` `security@hashicorp.com` 9.9 | 0 |
+
+Three readings, each a rule the batch earned:
+
+1. **"NVD analysed it" means a score exists, not that NVD agrees with the CNA.** PHP published **one**
+   number for two bugs from one advisory on one day — 9.2 in each record's 4.0 slot — and NVD's two
+   independent analyses landed **1.7 points apart** (9.8 and 8.1). Both records also carry the *same*
+   four CWEs (`CWE-1325`, `-416`, `-755`, `-824`), so the CWE list does not discriminate them either;
+   the only field that separates the two bugs is NVD's own v3.1 score.
+2. **A same-source dual column can move either way, in the same batch, from the same CNA.** Both
+   VulnCheck records file 3.1 in `Primary` and 4.0 in `Secondary`; 4.0 is **0.1 lower** on Mistral Vibe
+   and **1.1 higher** on Kener. With the 452-pair VulnCheck mean at **+0.55**, neither direction is a
+   surprise — which is the point: a per-record direction is not evidence about a method.
+3. **The `Secondary` slot is not "not the CNA."** Mautic's and HashiCorp's single metrics sit in the
+   `Secondary` slot and their `source` is `security@mautic.org` / `security@hashicorp.com` — the vendor
+   that wrote the advisory. The slot says "not NVD"; it says nothing about who else wrote it.
+
+→ [[disclosure-lag]] [[fact-check]] [[security]]
+
+Sources: [cveawg — CVE-2026-110720](https://cveawg.mitre.org/api/cve/CVE-2026-110720) ·
+[NVD — CVE-2026-109618](https://nvd.nist.gov/vuln/detail/CVE-2026-109618) ·
+[HashiCorp HCSEC-2026-50](https://discuss.hashicorp.com/t/hcsec-2026-50-consul-k8s-vulnerable-to-a-cross-namespace-authorization-bypass-in-component-acl-binding-rules/77915) ·
+[CISA KEV](https://www.cisa.gov/known-exploited-vulnerabilities-catalog)

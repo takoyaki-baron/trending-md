@@ -2801,3 +2801,17 @@ Virology），所以类别与阈值永远不能当一件事引用。
 
 来源：[GPT-6.1 Terra — Deployment Safety Hub](https://deploymentsafety.openai.com/gpt-6-1-terra) ·
 [GPT-6.1 Terra 模型页](https://developers.openai.com/api/docs/models/gpt-6.1-terra) · [Anthropic PBC Form S-1](https://www.sec.gov/Archives/edgar/data/2130357/000162828026067168/anthropicpbc-sx1.htm)
+
+## 2026-10-27 12:22 — 一篇 67 页的 preprint 反驳了 ETH、SETH、Gap-ETH 与 NSETH，而缺失的第五件产物是验证状态
+
+`openai/math` 发布了一篇 **67 页** preprint，标题 "THE EXPONENTIAL TIME HYPOTHESIS IS FALSE"，PDF 元数据 `Author: OpenAI`、`Subject: Exact counting, sparse parity tests, and polynomial interpolation`，首页自述日期 "17 October 2026, revised 25 October 2026"（`CreationDate`/`ModDate` 均为 `D:20261025000000Z`——修订当日，被截断到零点）。构造是：一个**精确计数**任意 k-CNF 可满足赋值数的确定性算法——"for every fixed k ⩾ 2, on a formula with n variables and m clauses, our algorithm uses poly_k(n, m) space" 并在次指数时间内运行。由于测试 `#F > 0` 就能判定可满足性，§1.1.1 直接写道："Theorem 1.1 refutes ETH, SETH, Gap-ETH, and NSETH." 它同时推翻三者的有界误差随机版本，并经由 Williams [Wil13, Theorem 6.1] 得到电路下界 **`ENP ⊄ SIZE(O(n))`**（推论 C.1）。该保留的那句谨慎话是："It does not conflict with unconditional exponential lower bounds for restricted proof systems such as regular resolution [BI13]."
+
+**要看你引的是哪个界，因为论文写了四种，而摘要的最弱**（完整表在 [[fact-check]]）：摘要 `2^{n/(log n)^{1+o(1)}}`；定理 1.1 `2^{O_k(√(n log log n / log n))}`（一般 `m`）与 `2^{O_{k,D}(√(n/log n))}`（稠密，`m ≤ Dn`）；§6.4 的有理插值给出 `ρ(n) = n(log log n)²/√(log n)`，论文自称这是 "the weaker exponent"——却仍强于摘要。附录 D 用张量网络收缩证明定理 1.1 的两个界；§2.8 给出通往次指数算法的第二条更简路线。
+
+**缺失的第五件产物是验证。** 无具名作者、无致谢章节、无同行评审、无形式化——而 OpenAI 的配套公告页在这里的每一次抓取都返回 **403**，那意味着*读不到*，不等于不存在。在独立团队复现该算法之前，正确的引用是「**一篇 preprint 声称**」，不是「ETH 是假的」。利害是不对称的：ETH 作为细粒度复杂度的承重假设已二十五年，所有基于 SETH 的硬度论断（包括安全论证所依赖的那些）都继承这篇最终是什么的结论——一次领域重写，或一个带洞的证明。一份对自己界有四种写法、共 67 页的 PDF，不是错误的证据；它是「界在写作过程中被改进了，而摘要没有重切」的证据。
+
+→ [[formal-verification]] [[fact-check]] [[vuln-supply]]
+
+Sources: [paper.pdf](https://github.com/openai/math/blob/main/preprints/The-Exponential-Time-Hypothesis-is-False-October-25-2026/paper.pdf) ·
+[openai/math preprints](https://github.com/openai/math/tree/main/preprints) ·
+[HN discussion](https://news.ycombinator.com/item?id=50251661)

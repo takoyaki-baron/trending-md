@@ -463,6 +463,15 @@ function nvdRanges(cve) {
  *     wrongly, the worst of the three failure modes. Measured over the 10-19→21 publication window
  *     (**3,013** records): **190 (6.3%)** carry at least one, **188** of them from that one CNA
  *     (the other two: `security@zyxel.com.tw`, `security@apache.org`).
+ *   · a FIFTH field lives inside a version object and it ENDS the range: `changes[]`. A `changes`
+ *     entry toggles status at its `at` version and holds to the end of the enclosing range, so
+ *     `{version: "0.42.0", lessThan: "2.0.4", changes: [{at: "1.8.18", status: "unaffected"}]}`
+ *     means affected `[0.42.0, 1.8.18)` — and 1.8.18 is the fix. Added 2026-10-27 (CVE-2026-110720,
+ *     consul-k8s): the bulletin's prose lists one affected span and TWO fix versions ("1.8.18 and
+ *     2.1.0"), so coverage read the page as self-contradictory — but the record's own machine
+ *     readable container carried the exemption in `changes[]`, from publication day. A parser that
+ *     reads only version/lessThan/lessThanOrEqual reports `[0.42.0, 2.0.4)` as uniformly affected:
+ *     it marks the fix release itself as vulnerable AND the whole 2.x line as covered.
  */
 function opBounds(s) {
   const out = { min: null, minInc: true, max: null, maxInc: false, sawOp: false };
@@ -483,6 +492,7 @@ function opBounds(s) {
 function affectedRanges(cve) {
   const ranges = [];
   const inverted = [];
+  const exempt = [];
   for (const a of cve.affected || []) {
     for (const d of a.affectedData || []) {
       const vs = d.versions || [];
@@ -501,6 +511,16 @@ function affectedRanges(cve) {
         // The structured bounds win when both spellings are present; the operator form is the fallback.
         let max = less || lessEq || (op ? op.max : null);
         let maxInc = (less || lessEq) ? !!lessEq : (op ? op.maxInc : false);
+        /* `changes[]` toggles status INSIDE the range and holds to its end, so the first
+           `unaffected` entry ends the affected span (CVE-2026-110720: `at: 1.8.18` is the fix). */
+        for (const c of (Array.isArray(v.changes) ? v.changes : [])) {
+          if (!c || c.at == null || String(c.status) !== 'unaffected') continue;
+          const at = String(c.at);
+          if (min && cmpVer(at, min) <= 0) continue;         // below the range: nothing to end
+          if (max && cmpVer(at, max) >= 0) continue;         // above the stated bound: not a bound
+          max = at; maxInc = false;
+          exempt.push({ at, product: `${d.vendor || '?'}/${d.product || '?'}`, raw: rawVer });
+        }
         if (!min && !max) continue;
         if (min && !max) {              // single affected version — a POINT, not an open range
           ranges.push({ raw: min, min, minInc, max: min, maxInc: true, from: 'cna-affected' });
@@ -513,7 +533,7 @@ function affectedRanges(cve) {
       }
     }
   }
-  return { ranges, inverted };
+  return { ranges, inverted, exempt };
 }
 
 const decode = s => s.replace(/&gt;/g, '>').replace(/&lt;/g, '<').replace(/&quot;/g, '"')
@@ -1246,6 +1266,12 @@ function classify({ id, record, nvdRanges: cpes, advisory, timeline, repoAdv, tr
   if (aff.inverted.length) {
     base.notes.push(`the CNA lists UNAFFECTED versions under a defaultStatus of affected for ${aff.inverted.join(', ')} — a complement, not a range`);
   }
+  if (aff.exempt.length) {
+    /* The range was SHORTENED by the record's own `changes[]`, so the upper bound here is not the
+       one the prose prints — say which field moved it, and never let the two spellings be quoted as
+       one number. */
+    base.notes.push(`the record's affected[] carries changes[] exemptions (${aff.exempt.map(e => `${e.product} unaffected at ${e.at}`).join(', ')}) — the range ends at the fix, and a prose listing of the fix versions beside one affected span is this field with no sentence`);
+  }
 
   if (!ranges.length) {
     /* A DATE-shaped cell is not a failure to parse — it is a different kind of claim, and the
@@ -1458,6 +1484,18 @@ if (SELFTEST) {
   eq('cna: a two-sided operator string is one range, not one point',
     [affG2.ranges[0].min, affG2.ranges[0].max, affG2.ranges[0].maxInc], ['0.8.4', '0.8.6', false]);
   eq('opBounds: `= v` is a point', [opBounds('= 1.2.3').min, opBounds('= 1.2.3').max], ['1.2.3', '1.2.3']);
+  /* ── `changes[]`: the exemption that ends a range (CVE-2026-110720, first-hand 2026-10-27) ── */
+  const affK = affectedRanges({ affected: [{ source: 'security@hashicorp.com', affectedData: [{ vendor: 'HashiCorp',
+    product: 'Tooling', defaultStatus: 'unaffected', versions: [{ version: '0.42.0', lessThan: '2.0.4',
+      versionType: 'semver', status: 'affected', changes: [{ at: '1.8.18', status: 'unaffected' }] }] }] }] });
+  eq('cna: changes[] ends the range at the fix', [affK.ranges[0].max, affK.ranges[0].maxInc], ['1.8.18', false]);
+  eq('…so the 1.x backport is not "affected", and neither is anything above it',
+    [inAnyRange('1.8.17', affK.ranges), inAnyRange('1.8.18', affK.ranges)], [true, false]);
+  eq('…and the exemption is reported, not silently applied', [affK.exempt.length, affK.exempt[0].at], [1, '1.8.18']);
+  const affK2 = affectedRanges({ affected: [{ affectedData: [{ versions: [{ version: '1.0.0', lessThan: '2.0.0',
+    status: 'affected', changes: [{ at: '1.5.0', status: 'affected' }, { at: '3.0.0', status: 'unaffected' }] }] }] }] });
+  eq('cna: a change ABOVE the bound does not widen it', affK2.ranges[0].max, '2.0.0');
+  eq('cna: a change described as affected ends nothing', affK2.exempt.length, 0);
   eq('opBounds: a bare version is not an operator string', opBounds('1.2.3'), null);
   eq('prose patched list', prosePatched('Users need to update any Brotli libraries or binaries to the latest available version: 1.0.10 or 1.1.1 or 1.2.1.'), ['1.0.10', '1.1.1', '1.2.1']);
   eq('prose patched ignores an affected range', prosePatched('versions 1.0.3 through 1.2.0 on all platforms'), null);

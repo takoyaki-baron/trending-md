@@ -88,6 +88,13 @@ underlying pages — this produced a two-layer false signal in a single item.
    reported end-to-end benchmark" — `end-to-end` appears **0 times** in its 184 KB payload).
    When a caveat exists it belongs in **"Why it matters"**, not only in the body: the analysis line is
    what gets quoted onward.
+   **A document can state its number in four places, and the abstract can be the WEAKEST** (added
+   2026-10-27, the `openai/math` ETH preprint): the bound is `2^{n/(log n)^{1+o(1)}}` in the abstract,
+   `2^{O_k(√(n log log n / log n))}` in Theorem 1.1, and `ρ(n) = n(log log n)²/√(log n)` in §6.4 — which
+   the paper itself calls "the weaker exponent" *and which still beats the abstract*. So the usual
+   direction (headline stronger than artifact) is not the only one: name the place you are quoting, and
+   when a vendor ships a build-speed number, read the runtime table too — `indexable-inc/blaze` prints
+   10–24× faster builds beside binaries that run **1.10–1.18× slower** than cargo's.
 5. **The whole source, including its own corrections** — a primary source often *fixes* the record that
    aggregators repeat. Hunt.io's CameraSwarm report explicitly flags CVE-2024-39943 as a mislabel
    circulating in coverage; this feed cited it anyway, having read the parts of the report that matched
@@ -189,7 +196,16 @@ underlying pages — this produced a two-layer false signal in a single item.
    (0.02%)**. So quote which field you read, and never turn one field's absence into a statement
    about the record. CVE 5.x semantics the quote must survive: `lessThan` is **exclusive**,
    `lessThanOrEqual` inclusive; a bare `version` is a **point**, not `[v, ∞)`; `version: "0"`/`"*"`
-   is a **null minimum**. One call:
+   is a **null minimum**; and **`changes[]` is a FIFTH field that ENDS a range** — a change entry
+   toggles status at its `at` version and holds to the range's end, so
+   `{version: "0.42.0", lessThan: "2.0.4", changes: [{at: "1.8.18", status: "unaffected"}]}`
+   (CVE-2026-110720, consul-k8s, read from cveawg 2026-10-27) means affected **`[0.42.0, 1.8.18)`**,
+   not `[0.42.0, 2.0.4)`. The tell in prose is **two fix versions listed beside one affected span**:
+   the bulletin said "0.42.0 up to 2.0.4" fixed by "1.8.18 and 2.1.0" and never mentioned branches,
+   while the machine-readable record had carried the exemption from publication day — so a page that
+   looks self-contradictory is often one missing sentence, and a parser reading only
+   version/lessThan marks the fix release vulnerable *and* silently covers the whole `2.x` line.
+   One call:
    `node agent/tools/disclosure-lag.mjs --range-census --from YYYY-MM-DD --to YYYY-MM-DD` prints the
    table above for any window (re-run it — analysis lands later and the top row moves).
    **An identifier list is a SET, a range is an assumption, and "CVE-X to CVE-Y" is not a citation**
@@ -492,9 +508,35 @@ underlying pages — this produced a two-layer false signal in a single item.
    analyzed subset` is the same claim as `31,132 skills` and used to be invisible (SkillSpector's
    correct number read as `differs`), while a count quoted from the cited page rather than the named
    repo — item 43's **1,251 skills**, which is the arXiv abstract's own sentence — came back
-   `absent`. Now the item's **cited pages** (arXiv `abs/`, HF dataset cards, max 3, cached) are read
+   `absent`. Now the item's **cited pages** are read
    before any `absent`, `ok-cited-page` names the page that carries the number, and `absent` names
    every page read plus whether any was unreadable, because **unread is not absent**.
+   **"Every page" means every URL in the item, not the two patterns that happened to fail first**
+   (added 2026-10-27 12:33). The 10-26 fix covered only arXiv `abs/` and HF dataset cards, so the
+   next batch produced the same false `absent` twice in one file: item 30's "35 of the 38 headline
+   comparisons" is Stalwart's own blog sentence (it greps verbatim out of 114 KB of HTML) and item
+   31's **32 languages** is in `docs/README.md` — the item's *own second link*, while the lint read
+   only the repo-root README. Candidates are now collected from every `https://` in the item, with a
+   GitHub `blob/` link rewritten to its `raw.githubusercontent.com` twin (a linked `.md` **is** the
+   text; a rendered page is a guess), HN threads and repo roots skipped (a thread's numbers are
+   points and comments; a repo root's README is already read), linked files ranked above landing
+   pages under the 3-page cap, and `<script>`/`<style>`/`<noscript>` stripped before the tag strip.
+   And the **head noun is part of the count**: when the number is on the cited page but beside a
+   different noun — Stalwart's "**38** headline comparisons" against the feed's "38 benchmarks" —
+   the verdict is the new advisory `number-other-noun` carrying the page's own wording, because
+   that is the feed's paraphrase and not a page that never states the number.
+   **A score that matches the record has matched a COPY — the record's own arithmetic is the second
+   question** (added 2026-10-27 12:33, settling the open "should the lint refuse a score it cannot
+   reproduce?"). The `cvss` check now recomputes every matched metric's vector through
+   `cvss-recompute.mjs` and emits **`score-not-reproducible`** when the stored number is not what
+   its own `vectorString` yields, so a quoted score that survives is a number with arithmetic
+   behind it rather than a field that agreed with itself. The baseline is measured, not assumed —
+   **4,461 of 4,461** metrics over NVD's 2026-10-20→26 window and **21 of 21** on the 10-27 feed
+   (v3.1 natively, v4.0 through the `--oracle` implementation) reproduce exactly — which is why a
+   disagreement is worth a finding at generation time instead of a nightly sweep. **v4.0 is not
+   computed in-lint** (a 270-row MacroVector table is deliberately not vendored), so a v4.0 claim
+   reports `v4-not-recomputed` silently; no vector at all is `ok`, because unverifiable is not
+   wrong.
    One NVD request per feed: `cveId` accepts a comma-separated list (measured
    10-26 — seven IDs, one call, six records back, the seventh genuinely absent). Two limits are
    stated rather than hidden: it reads the **default branch** only (`release-drift.mjs --claim`

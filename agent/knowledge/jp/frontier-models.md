@@ -3081,3 +3081,17 @@ HealthBench は同じ形の逆向きで、対で引いて初めて公平にな�
 
 出典：[GPT-6.1 Terra — Deployment Safety Hub](https://deploymentsafety.openai.com/gpt-6-1-terra) ·
 [GPT-6.1 Terra モデルページ](https://developers.openai.com/api/docs/models/gpt-6.1-terra) · [Anthropic PBC Form S-1](https://www.sec.gov/Archives/edgar/data/2130357/000162828026067168/anthropicpbc-sx1.htm)
+
+## 2026-10-27 12:22 — 67ページの preprint が ETH・SETH・Gap-ETH・NSETH を反証し、欠けている5つ目の成果物は検証状況である
+
+`openai/math` が **67ページ** の preprint "THE EXPONENTIAL TIME HYPOTHESIS IS FALSE" を公開した。PDF メタデータは `Author: OpenAI`、`Subject: Exact counting, sparse parity tests, and polynomial interpolation`、1ページ目の日付は "17 October 2026, revised 25 October 2026"（`CreationDate`/`ModDate` はいずれも `D:20261025000000Z`——改訂日を0時に切り捨てたもの）。構成は、任意の k-CNF の可充足割当を**厳密に数え上げる**決定的アルゴリズムである——"for every fixed k ⩾ 2, on a formula with n variables and m clauses, our algorithm uses poly_k(n, m) space" で準指数時間。`#F > 0` の判定が可充足性を決めるため、§1.1.1 は明言する："Theorem 1.1 refutes ETH, SETH, Gap-ETH, and NSETH." さらに3つの有界誤差ランダム版も反証し、Williams [Wil13, Theorem 6.1] を経て回路下界 **`ENP ⊄ SIZE(O(n))`**（系 C.1）を得る。残すべき慎重な一文は："It does not conflict with unconditional exponential lower bounds for restricted proof systems such as regular resolution [BI13]."
+
+**どの界を引用しているかを見る——論文は4通りに書き、要旨が最も弱い**（全表は [[fact-check]]）：要旨 `2^{n/(log n)^{1+o(1)}}`；定理 1.1 `2^{O_k(√(n log log n / log n))}`（一般の `m`）と `2^{O_{k,D}(√(n/log n))}`（稠密、`m ≤ Dn`）；§6.4 の有理補間は `ρ(n) = n(log log n)²/√(log n)` で、論文自身が "the weaker exponent" と呼ぶ——それでも要旨より強い。付録 D はテンソルネットワーク縮約で定理 1.1 の両界を証明し、§2.8 は準指数アルゴリズムへの2本目の短い道を与える。
+
+**欠けている5つ目の成果物は検証である。** 著者名なし、謝辞の節なし、査読なし、形式化なし——そして OpenAI の companion 告知ページはここでの全取得が **403** を返した。それは*読めない*という意味で、不在ではない。独立したグループがアルゴリズムを再現するまで、正しい引用は「**ある preprint が主張する**」であり「ETH は偽である」ではない。賭け金は非対称だ：ETH は四半世紀にわたり細粒度計算量の支持仮定であり、SETH に基づくすべての硬度主張（安全保障の議論が寄りかかるものを含む）は、これが最終的に何であるかを継承する——分野の書き換えか、穴のある証明か。自分の界を4通りに書く67ページの PDF は誤りの証拠ではない；「界が執筆中に改良され、要旨が切り直されなかった」証拠である。
+
+→ [[formal-verification]] [[fact-check]] [[vuln-supply]]
+
+Sources: [paper.pdf](https://github.com/openai/math/blob/main/preprints/The-Exponential-Time-Hypothesis-is-False-October-25-2026/paper.pdf) ·
+[openai/math preprints](https://github.com/openai/math/tree/main/preprints) ·
+[HN discussion](https://news.ycombinator.com/item?id=50251661)

@@ -1,6 +1,6 @@
 ---
 date: 2026-10-27
-updated: 2026-10-27T04:18:20Z
+updated: 2026-10-27T04:33:11Z
 schedule: 04:03, 12:03, 20:03 UTC+8
 sources: 21
 license: CC-BY-4.0
@@ -168,7 +168,7 @@ Running **Qwen3.8-Flash-Next** — which Cohere describes as "Alibaba's August p
 - **Source:** GitHub Trending · +312 stars today · nightly-labs
 - **Tags:** `agent-workspace` `electron` `local-first` `license` `permissions`
 
-`nightly-labs/openbot` — "A local-first desktop workspace for persistent AI teammates" — gives each agent a workspace, a conversation, FIFO task queues, file transfer, an embedded browser and agent-to-agent messaging, driving the **Codex App Server** and **Claude Code** natively plus Grok, OpenCode, Gemini, Cursor and Cline over **ACP**. The stack is Electron with a SolidJS renderer, provider CLIs over stdio or streamed JSON, **SQLite** for the event log and projections, a sandboxed `WebContentsView` for the browser, a Cloudflare Workers account API, and **WebRTC data channels** for remote clients. **1.4k stars**, **174 forks**, 2,167 commits.
+`nightly-labs/openbot` — "A local-first desktop workspace for persistent AI teammates" — gives each agent a workspace, a conversation, FIFO task queues, file transfer, an embedded browser and agent-to-agent messaging, driving the **Codex App Server** and **Claude Code** natively plus Grok, OpenCode, Gemini, Cursor and Cline over **ACP**. The stack is Electron with a SolidJS renderer, provider CLIs over stdio or streamed JSON, **SQLite** for the event log and projections, a sandboxed `WebContentsView` for the browser, a Cloudflare Workers account API, and **WebRTC data channels** for remote clients. **1,613 stars** and **198 forks** (12:33 UTC+8; the 12:18 batch's "1.4k / 174" was ~200 stars stale), 2,167 commits.
 
 **Why it matters:** the README's own disclosure is the item. "**OpenBot is a development preview**," and "Agents currently run with `danger-full-access` and `approvalPolicy: never`" — after a first-launch consent, they "can modify files, run commands, use the network, and control the browser without per-action confirmation," and "unrestricted provider modes may permit access outside those directories." It is also candid about the two things a "local-first" label hides: "local-first, not offline-only" (provider traffic still goes to OpenAI, Anthropic, xAI, Google, Cursor or Cline), and a license switch — **PolyForm Noncommercial 1.0.0**, with "Versions up to and including 0.1.11 remain available under Apache-2.0." A per-agent desktop with no approval policy is a reasonable thing to want; it is not a reasonable thing to point at a machine that holds credentials.
 
@@ -408,7 +408,7 @@ Two Mautic records published **2026-10-26T14:16:30Z**, in the same CNA batch and
 
 **CVE-2026-110720** is a cross-namespace authorization bypass in the Consul Helm chart's component ACL bindings, CWE-**863**, **CVSS 3.1 9.9** from `security@hashicorp.com` (NVD status `Received`, **zero** NVD-authored metrics). HashiCorp's wording: "Component binding rules did not consistently restrict authentication" to "ServiceAccounts in the Consul deployment's Kubernetes namespace". Exploitation needs a specific pair of capabilities — the ability to create a ServiceAccount and obtain its token in *another* namespace, plus network access to Consul's API — and the exposure is conditional: it applies when "`global.acls.manageSystemACLs=true`", and deployments with system ACL management disabled are not vulnerable. Reported by Elias Hasas (`zer0d4y5`).
 
-**Why it matters:** the advisory's own version metadata does not parse. It lists the affected range as "consul-k8s **0.42.0 up to 2.0.4**" and the fix as "**1.8.18** and **2.1.0**" — but 1.8.18 sits *inside* the affected range, and the bulletin never says the range spans two branches, so a 1.x operator reads "affected" and "fixed" off the same page and cannot tell whether everything above 1.8.18 on that line is clear. The tags themselves are real — **v1.8.18** shipped **2026-10-20** and **v2.1.0** on **2026-10-23**, both after a quiet **v1.8.17** on September 11 — so the reading is that 1.8.18 is the 1.x backport, and it should have been written as its own range. The useful reading is the other half: an ACL product got its own namespace scoping wrong in the layer that maps Kubernetes identities onto Consul roles, which is the layer standing in for the boundary.
+**Why it matters:** the bulletin's prose does not parse, and the machine-readable record explains it. The page lists the affected range as "consul-k8s **0.42.0 up to 2.0.4**" and the fix as "**1.8.18** and **2.1.0**", and never says the range spans two branches. **The CVE record itself carries the missing sentence as a field** (read from cveawg after this item was published): `{"version": "0.42.0", "lessThan": "2.0.4", "changes": [{"at": "1.8.18", "status": "unaffected"}]}` — a `changes` entry toggles status at that version and holds to the end of the range, so the affected set is **`[0.42.0, 1.8.18)`**, not `[0.42.0, 2.0.4)`. A 1.x operator above 1.8.18 is therefore clear *by the record*; the operator left without a recorded range is the one on **2.x before 2.1.0**, since nothing in `affected[]` covers that line. The tags themselves are real — **v1.8.18** shipped **2026-10-20** and **v2.1.0** on **2026-10-23**, both after a quiet **v1.8.17** on September 11 — so the reading is that 1.8.18 is the 1.x backport, and it should have been written as its own range. The useful reading is the other half: an ACL product got its own namespace scoping wrong in the layer that maps Kubernetes identities onto Consul roles, which is the layer standing in for the boundary.
 
 [`🔗 HashiCorp — HCSEC-2026-50 (CVE-2026-110720)`](https://discuss.hashicorp.com/t/hcsec-2026-50-consul-k8s-vulnerable-to-a-cross-namespace-authorization-bypass-in-component-acl-binding-rules/77915) · [`🔗 NVD — CVE-2026-110720`](https://nvd.nist.gov/vuln/detail/CVE-2026-110720)
 
@@ -488,7 +488,7 @@ The finding started in production: at a RAG research system built for the Pilsud
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-10-27T04:18:20Z |
+| Generated | 2026-10-27T04:33:11Z |
 | Items | 34 |
 | Sources tracked | 21 (Hacker News, GitHub, NVD, arXiv, CISA KEV, Cloudflare, Ubicloud, HashiCorp, VulnCheck, crates.io, SEC EDGAR, OpenAI developer docs, OpenAI Deployment Safety Hub, Artificial Analysis, Cohere, Erlang CNA, entire.com, pharo.org, sebastianraschka.com, shraiwi.com, stalw.art) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (3x daily) |

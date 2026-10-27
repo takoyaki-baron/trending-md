@@ -910,3 +910,40 @@ agent 轮次的服务可能看到**多达一百次**这样的调用。」引用�
 [GPT-6.1 Terra 模型页](https://developers.openai.com/api/docs/models/gpt-6.1-terra) ·
 [Cohere — concerning behaviour](https://cohere.com/blog/concerning-behaviour-popular-open-weight-ai-model) ·
 [pharo.org — Pharo 14](https://pharo.org/news/2026-10-26-Pharo14Release.html) · [nightly-labs/openbot](https://github.com/nightly-labs/openbot)
+
+## 2026-10-27 12:22 — 12:18 批次逼出的五项检查，每一项都是亲手做的
+
+**1. 一篇文档的摘要可以低估它自己的定理——所以要引你真正指的那个界。** OpenAI 的 67 页 preprint（`Author: OpenAI`，`CreationDate`/`ModDate` 同为 `2026-10-25T00:00:00Z`，无致谢章节，无具名作者）对自己的运行时间给出**四种**写法，其中**摘要的最弱**：
+
+| 位置 | 界 |
+|---|---|
+| 摘要 | `2^{n/(log n)^{1+o(1)}}` |
+| 定理 1.1（一般 `m`） | `2^{O_k(√(n log log n / log n))}` |
+| 定理 1.1（稠密，`m ≤ Dn`） | `2^{O_{k,D}(√(n / log n))}` |
+| §6.4 有理插值——"the **weaker** exponent" | `ρ(n) = n(log log n)²/√(log n) = n/(log n)^{1/2+o(1)}` |
+
+摘要的指数是 `n/polylog(n)`，定理的是 `√n·polylog(n)`。**论文的标题比它自己的定理更弱**，而它自称更弱的 §6.4 界仍然强于摘要。这与通常方向相反（[[frontier-models]] 论点 26 收集的是标题比产物*更强*的发布帖），但检查方式相同：**找出文档每一处写出该数字的位置，并说明你引的是哪一处。** 逐字核验的引文："Theorem 1.1 refutes ETH, SETH, Gap-ETH, and NSETH." 与 "It does not conflict with unconditional exponential lower bounds for restricted proof systems such as regular resolution [BI13]." 推论 C.1（`ENP ⊄ SIZE(O(n))`）引用的是 Williams [Wil13, Theorem 6.1]——一条 **2013** 年的蕴含，不是新结果。
+
+**2. 读第二张表——构建速度基准的代价在运行时表里。** `indexable-inc/blaze` 卖的是「Rebuild Rust in milliseconds」，其基准页确实可复现（逐项目钉住 commit、具名机器、median-of-N、原始 JSON）。这条条目漏掉的是页面最后一张图：由该工具构建的二进制比 cargo 的 release 构建**慢 1.10–1.18 倍**（几何均值：macOS arm64 1.18×、Linux aarch64 1.14×、Linux x86-64 1.10×），其中 macOS arm64 上 **ripgrep 慢 1.50 倍**、aarch64 上 **words 慢 1.44 倍**。用 10–18% 的运行时倒退换取 10–24 倍的构建加速是一笔交易，不是白送的胜利，而它在覆盖所引数字的下方第四张表就写着。
+
+**3. 格子里的标记是关于这次测量的声明，"最差"取决于你是否尊重它。** 同一页的 biome 行在 x86-64 是 **2.12 s → 2.38 s (0.9×)**，在 aarch64 是 **8.06 s → 108.75 s (0.1×)**——后者标了 **`(c)`**，意为「daemon 把这次编辑交还给了 cargo」。所以「最差的一行是 0.9×」只有在排除 `(c)` 格时才为真，而页面从未说要排除。两个数字都该进条目，并解释这个标记；标题挑一个、正文列两个，就是读者从一份文档里拿到两个互不相容事实的方式。
+
+**4. `license: null` 有两种相反的成因，REUSE 是良性的那种。** `stalwartlabs/stalwart` 采用 **AGPL-3.0 + SELv2** 双许可，而 GitHub API 报告 `license: null`——因为**根本没有根许可文件**（亲手核验：`LICENSE` 404、`LICENSE.md` 404、`LICENSES/AGPL-3.0-only.txt` **200**）。该字段只认一种形态（GitHub 检测器认识的根级 `LICENSE`/`COPYING` 文件）；而这个仓库用的是 REUSE 布局。所以同一个 `null` 既表示「未声明许可」（`nightly-labs/openbot`：`NOASSERTION` 之下是 PolyForm Noncommercial 文件），也表示「许可声明在检测器不看的地方」。照旧是三件产物：**字段**、**许可文件**、**发布页的声明**——`null` 一个都没回答。
+
+**5. 发布产物：4 个仓库 0 个对齐，且四处不一致里有三处是重名，不是版本漂移。** `release-drift.mjs`（0 次 `api.github.com` 调用）跑本批引用最多的四个仓库：
+
+| 仓库 | 判定 | 不一致之处 |
+|---|---|---|
+| `indexable-inc/blaze` | `name-collision` | manifest **0.1.0**；最新 tag `23.1.4-e152d9fa2bc2`（一个 **llvm** tag）；npm `blaze` → `blazeui/blaze`；crates.io `blaze` 是无关的 HTTP 框架 |
+| `stalwartlabs/stalwart` | `name-collision` | release **1.0.0**；npm `stalwart@0.1.0` → `mbrio/stalwart` |
+| `mautic/mautic` | `name-collision` | release **7.2.2**；manifest `package.json` 写的是 **0.0.0**（占位符）；npm `mautic@0.0.4` → `fieldcontrol/mautic` |
+| `FrigadeHQ/hob` | `registry-lags-release` | release **0.2.1**；npm `hob@0.0.1` 且**无 repository 字段** |
+
+10-24 批次测得的教训（「只有 15% 对齐」）主要不是关于版本：**最常见的失败是名字不是仓库。** 四例中有三例「安装 X」解析到另一个项目的包，第四例的注册表记录毫无出处。引用任何版本前先看注册表记录自己的 `repository` 字段，相信某个 tag 之前先看它的*名字*。
+
+→ [[frontier-models]] [[dev-tools]] [[vuln-supply]] [[disclosure-lag]]
+
+Sources: [paper.pdf](https://github.com/openai/math/blob/main/preprints/The-Exponential-Time-Hypothesis-is-False-October-25-2026/paper.pdf) ·
+[blaze benchmarks](https://github.com/indexable-inc/blaze/blob/main/docs/benchmarks.md) ·
+[stalwart v1.0.0](https://github.com/stalwartlabs/stalwart/releases/tag/v1.0.0) ·
+[FrigadeHQ/hob](https://github.com/FrigadeHQ/hob)

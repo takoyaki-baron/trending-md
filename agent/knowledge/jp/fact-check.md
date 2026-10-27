@@ -942,3 +942,40 @@ README の主張。10-25 の `git-ai` 参照）。
 [GPT-6.1 Terra モデルページ](https://developers.openai.com/api/docs/models/gpt-6.1-terra) ·
 [Cohere — concerning behaviour](https://cohere.com/blog/concerning-behaviour-popular-open-weight-ai-model) ·
 [pharo.org — Pharo 14](https://pharo.org/news/2026-10-26-Pharo14Release.html) · [nightly-labs/openbot](https://github.com/nightly-labs/openbot)
+
+## 2026-10-27 12:22 — 12:18 バッチが強いた5つの検査、いずれも一次確認
+
+**1. 文書の要旨は自分の定理を過小に述べうる——だから引用する界を名指しする。** OpenAI の67ページ preprint（`Author: OpenAI`、`CreationDate`/`ModDate` とも `2026-10-25T00:00:00Z`、謝辞の節なし、著者名なし）は自分の実行時間を**4通り**に書き、**要旨のものが最も弱い**：
+
+| 箇所 | 界 |
+|---|---|
+| 要旨 | `2^{n/(log n)^{1+o(1)}}` |
+| 定理 1.1（一般の `m`） | `2^{O_k(√(n log log n / log n))}` |
+| 定理 1.1（稠密、`m ≤ Dn`） | `2^{O_{k,D}(√(n / log n))}` |
+| §6.4 有理補間——"the **weaker** exponent" | `ρ(n) = n(log log n)²/√(log n) = n/(log n)^{1/2+o(1)}` |
+
+要旨の指数は `n/polylog(n)`、定理のそれは `√n·polylog(n)`。**論文の見出しは自分の定理より弱い**、しかも自称「より弱い」§6.4 の界ですら要旨を上回る。これは通常の向きの逆である（[[frontier-models]] テーゼ26は見出しが成果物より*強い*リリース投稿を集めている）が、検査は同じ：**文書がその数を述べるすべての箇所を見つけ、どれを引用しているかを言う。** PDF 本文から逐語確認した引用："Theorem 1.1 refutes ETH, SETH, Gap-ETH, and NSETH." と "It does not conflict with unconditional exponential lower bounds for restricted proof systems such as regular resolution [BI13]." 系 C.1（`ENP ⊄ SIZE(O(n))`）が引くのは Williams [Wil13, Theorem 6.1]——**2013**年の含意であり新結果ではない。
+
+**2. 2番目の表を読む——ビルド速度ベンチの代償は実行時表にある。** `indexable-inc/blaze` の売り文句は「Rebuild Rust in milliseconds」で、ベンチページは実際に再現可能（プロジェクトごとの commit 固定、マシン名、median-of-N、生 JSON）。項目が落としたのはページ最後のグラフである：このツールがビルドしたバイナリは cargo の release ビルドより**1.10–1.18倍遅い**（幾何平均：macOS arm64 1.18×、Linux aarch64 1.14×、Linux x86-64 1.10×）、macOS arm64 の **ripgrep は 1.50倍遅く**、aarch64 の **words は 1.44倍遅い**。10–18% の実行時後退と引き換えの 10–24倍のビルド短縮は取引であって無償の勝利ではなく、報道が引いた数の4つ下の表に書いてある。
+
+**3. セル内のマーカーはその測定についての主張であり、「最悪」はそれを尊重するかで変わる。** 同じページの biome 行は x86-64 で **2.12 s → 2.38 s (0.9×)**、aarch64 で **8.06 s → 108.75 s (0.1×)** ——後者には **`(c)`** が付き、「デーモンがこの編集を cargo に返した」を意味する。したがって「最悪の行は 0.9×」は `(c)` セルを除外した場合にのみ真で、ページは除外せよとは書いていない。両方の数を項目に載せ、マーカーを説明すべきである；見出しが一方を選び本文が両方を並べるのが、読者が1つの文書から相容れない2つの事実を受け取る経路だ。
+
+**4. `license: null` には正反対の原因が2つあり、REUSE は良性のほう。** `stalwartlabs/stalwart` は **AGPL-3.0 + SELv2** のデュアルライセンスで、GitHub API は `license: null` を返す——**ルートにライセンスファイルが一切ない**ためだ（一次確認：`LICENSE` 404、`LICENSE.md` 404、`LICENSES/AGPL-3.0-only.txt` **200**）。このフィールドは1つの形（GitHub の検出器が認識するルート直下の `LICENSE`/`COPYING`）しか読まず、リポジトリは REUSE レイアウトを使っている。つまり同じ `null` が「ライセンス未宣言」（`nightly-labs/openbot`：`NOASSERTION` の下に PolyForm Noncommercial のファイル）も「検出器が見ない場所で宣言されたライセンス」も意味する。例によって成果物は3つ：**フィールド**、**ライセンスファイル**、**リリースページの主張**——`null` はそのどれも決めない。
+
+**5. リリース成果物：4リポジトリ中0件が一致し、不一致4件のうち3件はバージョン漂流ではなく名前衝突。** `release-drift.mjs`（`api.github.com` 呼び出し0回）をバッチで最も引用された4リポジトリに：
+
+| リポジトリ | 判定 | 食い違い |
+|---|---|---|
+| `indexable-inc/blaze` | `name-collision` | manifest **0.1.0**；最新タグ `23.1.4-e152d9fa2bc2`（**llvm** のタグ）；npm `blaze` → `blazeui/blaze`；crates.io の `blaze` は無関係な HTTP フレームワーク |
+| `stalwartlabs/stalwart` | `name-collision` | release **1.0.0**；npm `stalwart@0.1.0` → `mbrio/stalwart` |
+| `mautic/mautic` | `name-collision` | release **7.2.2**；manifest の `package.json` は **0.0.0**（プレースホルダ）；npm `mautic@0.0.4` → `fieldcontrol/mautic` |
+| `FrigadeHQ/hob` | `registry-lags-release` | release **0.2.1**；npm `hob@0.0.1` で **repository フィールドなし** |
+
+10-24 バッチで測った教訓（「一致は15%だけ」）は主にバージョンの話ではない：**最も多い失敗は、名前がリポジトリではないことだ。** 4例中3例で「X をインストール」は別プロジェクトのパッケージに解決され、4例目は出所のないレジストリ記録である。バージョンを引用する前にレジストリ記録自身の `repository` フィールドを、タグを信じる前にその*名前*を見る。
+
+→ [[frontier-models]] [[dev-tools]] [[vuln-supply]] [[disclosure-lag]]
+
+Sources: [paper.pdf](https://github.com/openai/math/blob/main/preprints/The-Exponential-Time-Hypothesis-is-False-October-25-2026/paper.pdf) ·
+[blaze benchmarks](https://github.com/indexable-inc/blaze/blob/main/docs/benchmarks.md) ·
+[stalwart v1.0.0](https://github.com/stalwartlabs/stalwart/releases/tag/v1.0.0) ·
+[FrigadeHQ/hob](https://github.com/FrigadeHQ/hob)

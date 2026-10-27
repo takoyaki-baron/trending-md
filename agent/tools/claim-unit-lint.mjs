@@ -58,9 +58,22 @@
  *      README; **(2)** it read only the repo README, so a count quoted from the page the item
  *      actually cites — item 43's **1,251 skills** is the arXiv abstract's sentence — came back
  *      `absent`. Now: three spellings (`N nouns`, `N-noun`, `N | noun`), and before any `absent`
- *      the item's **cited pages** are read (arXiv `abs/`, HF dataset cards, max 3, cached), with
- *      verdict `ok-cited-page` naming the page. `absent` names every page it read and says whether
- *      any was unreadable, because unread is not absent.
+ *      the item's **cited pages** are read, with verdict `ok-cited-page` naming the page. `absent`
+ *      names every page it read and says whether any was unreadable, because unread is not absent.
+ *      Generalized 2026-10-27: EVERY `https://` URL in the item is a candidate (a GitHub `blob/`
+ *      link is rewritten to its `raw` twin, HN threads and repo roots skipped, linked files ranked
+ *      above landing pages, max 3, cached). The two-pattern version produced the same false
+ *      `absent` twice in one file — item 30's "38" is Stalwart's blog ("38 headline comparisons")
+ *      and item 31's "32 languages" is the item's own `docs/README.md`. A number found beside a
+ *      DIFFERENT head noun is now the advisory `number-other-noun` (the feed's paraphrase, quoted
+ *      back), not `absent`.
+ *   E. SCORE ARITHMETIC (`--check cvss`) — a score that matches the record has matched its COPY.
+ *      Every matched metric's `vectorString` is recomputed through `cvss-recompute.mjs`; a stored
+ *      number its own vector does not yield is `score-not-reproducible` (severity 2). Baseline,
+ *      measured: 4,461/4,461 NVD metrics over 2026-10-20→26 and 21/21 on the 2026-10-27 feed
+ *      reproduce, so a disagreement is rare and worth a generation-time finding. v4.0 has no
+ *      native implementation here (no vendored MacroVector table) and reports silently; a metric
+ *      with no vector is `ok` — unverifiable is not wrong.
  *
  * TRAPS ENCODED (each measured while writing this, 2026-10-26):
  *  1. A NUMBER NEXT TO "issue" IS NOT AN ISSUE COUNT. "one issue per twenty-four stargazers"
@@ -112,6 +125,9 @@
 import { readFileSync, writeFileSync, mkdirSync, globSync } from 'node:fs';
 import { execFileSync } from 'node:child_process';
 import { dirname, basename } from 'node:path';
+// The score's arithmetic, not just the record's copy of it. `cvss-recompute.mjs` guards its CLI
+// behind an `import.meta.url` check, so importing it costs nothing but the v3.1 equations.
+import { judge } from './cvss-recompute.mjs';
 
 const arg = (name) => {
   const i = process.argv.indexOf(`--${name}`);
@@ -306,7 +322,7 @@ function nvdBatch(cves) {
       const ver = k === 'cvssMetricV31' ? '3.1' : k === 'cvssMetricV40' ? '4.0'
         : k === 'cvssMetricV30' ? '3.0' : k === 'cvssMetricV2' ? '2.0' : null;
       if (!ver) continue;
-      for (const m of arr) metrics.push({ version: ver, type: m.type, source: m.source, score: (m.cvssData ?? {}).baseScore });
+      for (const m of arr) metrics.push({ version: ver, type: m.type, source: m.source, score: (m.cvssData ?? {}).baseScore, vector: (m.cvssData ?? {}).vectorString });
     }
     map.set(c.id, { status: c.vulnStatus, assigner: c.sourceIdentifier, metrics });
   }
@@ -392,7 +408,7 @@ function advisoryMetrics(j) {
   const push = (o, version, field) => {
     if (!o || o.score == null) return;
     if (o.score === 0 && !o.vector_string) return; // empty slot, not a score of zero
-    metrics.push({ version, type: 'GHSA', source: 'security-advisories@github.com', score: o.score, field });
+    metrics.push({ version, type: 'GHSA', source: 'security-advisories@github.com', score: o.score, vector: o.vector_string, field });
   };
   push(j.cvss, '3.1', 'cvss (legacy mirror of cvss_v3)');
   const sev = j.cvss_severities ?? {};
@@ -506,10 +522,32 @@ function checkCvss(it, subjects) {
     const sameVersion = candidates.filter((m) => m.version === cl.version);
     const hit = sameVersion.find((m) => Math.abs(m.score - cl.score) < 0.05);
     if (hit) {
+      /* The claim matches the RECORD. Does the record's own number survive its own vector? Those are
+       * two different facts and this check used to verify only the first — "9.2 (CVSS 4.0)" passed
+       * as soon as some metric said 9.2, whatever the vector beside it computed. The answer decides
+       * how the number may be written: a reproduced score can be quoted bare, a
+       * non-reproducing one cannot.
+       *
+       * Baseline, measured rather than assumed: over NVD's 2026-10-20→26 publication window the
+       * stored `baseScore` IS the arithmetic of its `vectorString` on **4,461 of 4,461** metrics
+       * (`cvss-recompute.mjs --census`), and on the 2026-10-27 feed **21 of 21** reproduce (v3.1
+       * 11/11 natively, v4.0 10/10 through the `--oracle` implementation). So a disagreement is
+       * rare — which is why it is worth a finding at generation time and not a nightly sweep.
+       * v4.0 has no native implementation here (a 270-row MacroVector table is not vendored), so a
+       * v4.0 claim reports `v4-not-recomputed` silently rather than as a finding. */
+      const repro = hit.vector ? judge({ vector: hit.vector, score: hit.score }) : { verdict: 'no-vector' };
+      if (repro.verdict === 'differs') {
+        out.push({
+          check: 'cvss', item: it.n, verdict: 'score-not-reproducible',
+          claim: `${cl.version} ${cl.score}`,
+          detail: `${hit.id} stores ${hit.score} for ${hit.vector}, which computes ${repro.computed} (Δ ${repro.delta > 0 ? '+' : ''}${repro.delta}) — the quoted number is the record's, and the record does not reproduce; say so rather than printing it bare`,
+        });
+        continue;
+      }
       out.push({
         check: 'cvss', item: it.n, verdict: 'ok',
         claim: `${cl.version} ${cl.score}`,
-        detail: `${hit.id} · ${hit.field ?? `${hit.type}/${hit.source}`}${fallback ? ' (bound record carries none; matched another id in the item)' : ''}`,
+        detail: `${hit.id} · ${hit.field ?? `${hit.type}/${hit.source}`}${fallback ? ' (bound record carries none; matched another id in the item)' : ''}${repro.verdict === 'exact' ? ` · vector reproduces ${repro.computed}` : ''}`,
       });
       continue;
     }
@@ -691,19 +729,76 @@ function countNumsIn(body, noun) {
   return [...body.matchAll(re)].map((m) => toNum(m[1]));
 }
 
+/* A count's NOUN is part of the claim, and a paraphrase is not an absence. Stalwart's own post
+ * says "faster in 35 of the 38 headline comparisons"; the feed's title says "wins 35 of 38
+ * benchmarks". The number IS on the page the item cites — only the head noun differs — so the
+ * README-only `absent` was wrong and so is `differs` (which would claim the page prints another
+ * number). Measured 2026-10-27, the first day the cited-page reader covered vendor blogs. */
+function numberNeighbours(body, n) {
+  const alt = n >= 1000 ? `${n.toLocaleString('en-US')}|${n}` : String(n);
+  const re = new RegExp(`\\b(?:${alt})\\b([ \\t]+[\\p{L}\\d][\\p{L}\\d'’-]*(?:[ \\t]+[\\p{L}\\d][\\p{L}\\d'’-]*){0,3})`, 'gu');
+  return [...body.matchAll(re)].map((m) => `${n.toLocaleString('en-US')}${m[1]}`.replace(/\s+/g, ' ').trim()).slice(0, 3);
+}
+
 /* The claim's source is the page the item CITES, not necessarily the repo it names. Item 43's
  * "1,251 skills released" is the arXiv abstract's sentence; the GitHub README never states it, so
- * a README-only check reported `absent` on a claim that was verbatim true. arXiv abs pages and HF
- * dataset cards are fetched here (3 pages per item, cached) before any `absent` is written. */
+ * a README-only check reported `absent` on a claim that was verbatim true.
+ *
+ * The list is EVERY page the item cites, not only the two 10-26 special cases. Measured on the
+ * 2026-10-27 batch: item 30's "35 of the 38 headline comparisons" is Stalwart's own blog sentence
+ * (verifiable: `grep -c` finds it in 114 KB of HTML) and item 31's "32 languages" is in
+ * `docs/README.md` — the item's OWN second link — while the lint read only the repo root README
+ * and reported both as `absent`. Two false findings of the same shape in one file is a reader
+ * defect, not a feed defect.
+ *
+ * Ranking is not incidental: the cap is 3 pages per item, so a linked Markdown file outranks a
+ * landing page (a `.md` blob IS the text; a product page may state nothing), and the order the
+ * item lists them breaks ties. HN item pages are skipped — a discussion's numbers are points and
+ * comments, never "N benchmarks" — and a repo-root link is skipped because its README is read
+ * first anyway. */
+const CITED_SKIP = [
+  /^https:\/\/news\.ycombinator\.com\/item\?id=/, // a thread's numbers are points/comments
+  /^https:\/\/github\.com\/[^/]+\/[^/]+\/?$/,     // repo root — its README is the first read
+  /^https:\/\/github\.com\/trending/,             // a rankings page states no artifact count
+];
 function citedPages(plain) {
-  const urls = [];
-  for (const m of plain.matchAll(/https:\/\/arxiv\.org\/abs\/(\d{4}\.\d{4,5})(?:v\d+)?/g)) {
-    urls.push({ url: `https://arxiv.org/abs/${m[1]}`, label: `arXiv ${m[1]}` });
+  const ranked = [];
+  const seen = new Set();
+  for (const m of plain.matchAll(/https:\/\/[^\s)\]<>"'`]+/g)) {
+    let url = m[0].replace(/[.,;:]+$/, '');
+    if (CITED_SKIP.some((re) => re.test(url))) continue;
+    let label = url.replace(/^https:\/\/(www\.)?/, '');
+    let raw = false;
+    let rank = 1;
+    const arxiv = /^https:\/\/arxiv\.org\/abs\/(\d{4}\.\d{4,5})(?:v\d+)?/.exec(url);
+    const hf = /^https:\/\/huggingface\.co\/datasets\/([\w.-]+\/[\w.-]+)/.exec(url);
+    const blob = /^https:\/\/github\.com\/([\w.-]+)\/([\w.-]+)\/blob\/([^/]+)\/([^?#]+)$/.exec(url);
+    const rawGh = /^https:\/\/raw\.githubusercontent\.com\/([\w.-]+)\/([\w.-]+)\/([^/]+)\/([^?#]+)$/.exec(url);
+    if (arxiv) {
+      url = `https://arxiv.org/abs/${arxiv[1]}`;
+      label = `arXiv ${arxiv[1]}`;
+      rank = 0;
+    } else if (hf) {
+      url = `https://huggingface.co/datasets/${hf[1]}/raw/main/README.md`;
+      label = `HF dataset ${hf[1]}`;
+      raw = true;
+      rank = 0;
+    } else if (blob) {
+      // the file's own text, fetched raw — a docs file is the readable twin of its rendered page
+      url = `https://raw.githubusercontent.com/${blob[1]}/${blob[2]}/${blob[3]}/${blob[4]}`;
+      label = `${blob[1]}/${blob[2]} ${blob[4]}`;
+      raw = true;
+      rank = 0;
+    } else if (rawGh) {
+      label = `${rawGh[1]}/${rawGh[2]} ${rawGh[4]}`;
+      raw = true;
+      rank = 0;
+    }
+    if (seen.has(url)) continue;
+    seen.add(url);
+    ranked.push({ url, label, raw, rank });
   }
-  for (const m of plain.matchAll(/https:\/\/huggingface\.co\/datasets\/([\w.-]+\/[\w.-]+)/g)) {
-    urls.push({ url: `https://huggingface.co/datasets/${m[1]}/raw/main/README.md`, label: `HF dataset ${m[1]}`, raw: true });
-  }
-  return [...new Map(urls.map((u) => [u.url, u])).values()].slice(0, 3);
+  return ranked.sort((a, b) => a.rank - b.rank).slice(0, 3).map(({ rank, ...p }) => p);
 }
 
 async function citedPageText(page) {
@@ -712,12 +807,18 @@ async function citedPageText(page) {
   if (hit && Date.now() - Date.parse(hit.fetched_at) < CACHE_TTL_MS) return hit;
   let text = '';
   try {
-    const r = await fetch(page.url, { signal: AbortSignal.timeout(15_000) });
+    const r = await fetch(page.url, { signal: AbortSignal.timeout(20_000) });
     citedPages_requests += 1;
     if (r.ok) {
-      const body = await r.text();
+      const body = (await r.text()).slice(0, 3_000_000);
       // An abs page is HTML: keep its text, drop the tags, so a `<blockquote>` abstract reads as prose.
-      text = page.raw ? body : body.replace(/<script[\s\S]*?<\/script>/gi, ' ').replace(/<[^>]+>/g, ' ');
+      // `<style>`/`<noscript>` go too — a stylesheet's tokens can spell a noun next to a number.
+      text = page.raw ? body : body
+        .replace(/<(script|style|noscript|svg)[\s\S]*?<\/\1>/gi, ' ')
+        .replace(/<[^>]+>/g, ' ')
+        .replace(/&nbsp;|&#160;/g, ' ')
+        .replace(/&amp;/g, '&').replace(/&#39;|&apos;/g, "'").replace(/&quot;/g, '"')
+        .replace(/&lt;/g, '<').replace(/&gt;/g, '>');
     }
   } catch { /* unreadable is a state, not an absence — it is reported as unread this run */ }
   cache[key] = { fetched_at: new Date().toISOString(), bytes: text.length, text };
@@ -768,6 +869,10 @@ async function checkCount(it) {
         out.push({ check: 'count', item: it.n, verdict: 'ok-cited-page', claim: cl.phrase, detail: `${hit.label} states it (the repo README does not) — quote the page the number came from` });
       } else if (anyNum.length) {
         out.push({ check: 'count', item: it.n, verdict: 'differs', claim: cl.phrase, detail: `README says ${[...new Set(anyNum)].join(' / ')} ${cl.noun}${fetched.length ? `; also read ${fetched.map((p) => p.label).join(', ')}` : ''}` });
+      } else if (fetched.some((p) => numberNeighbours(p.text.replace(/&nbsp;/g, ' '), cl.n).length)) {
+        const hit = fetched.find((p) => numberNeighbours(p.text.replace(/&nbsp;/g, ' '), cl.n).length);
+        const snips = numberNeighbours(hit.text.replace(/&nbsp;/g, ' '), cl.n);
+        out.push({ check: 'count', item: it.n, verdict: 'number-other-noun', claim: cl.phrase, detail: `${cl.n} is on ${hit.label} as “${snips[0]}” — the page's head noun is not “${cl.noun}”, so this is the feed's paraphrase rather than the page's wording; quote what the page says` });
       } else {
         out.push({ check: 'count', item: it.n, verdict: 'absent', claim: cl.phrase, detail: `no count of ${cl.noun} on ${['README of ' + it.repos[0], ...fetched.map((p) => p.label)].join(' or ')}${pages.length > fetched.length ? ' (some cited pages were unreadable this run — unread is not absent)' : ''} — count it yourself, or say "no page states a total"` });
       }
@@ -901,6 +1006,18 @@ if (SELFTEST) {
   t('slot: quoting a slot as a source still fires',
     slots('CVE-2026-111111 is 9.2 on CVSS 4.0, from the Primary metric.'), ['slot-quoted']);
 
+  // the score's own arithmetic (built 2026-10-27; 4,461/4,461 NVD metrics reproduce over a week)
+  const reproSubj = (score) => new Map([['CVE-2026-222222', { kind: 'cve', status: 'Analyzed', metrics: [
+    { version: '3.1', type: 'Primary', source: 'nvd@nist.gov', score, vector: 'CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:C/C:H/I:H/A:H' },
+  ] }]]);
+  const repro = (score) => checkCvss(mk('t', `CVE-2026-222222 is 9.9 on CVSS 3.1.`), reproSubj(score)).map((x) => x.verdict);
+  t('repro: a stored score its own vector yields passes and says so',
+    checkCvss(mk('t', 'CVE-2026-222222 is 10.0 on CVSS 3.1.'), reproSubj(10.0)).map((x) => x.detail.includes('vector reproduces')), [true]);
+  t('repro: a stored score its vector does not yield is a finding', repro(9.9), ['score-not-reproducible']);
+  t('repro: no vector is unverifiable, never a finding',
+    checkCvss(mk('t', 'CVE-2026-222222 is 9.9 on CVSS 3.1.'), new Map([['CVE-2026-222222', { kind: 'cve', status: 'Analyzed', metrics: [
+      { version: '3.1', type: 'Primary', source: 'nvd@nist.gov', score: 9.9 }] }]])).map((x) => x.verdict), ['ok']);
+
   // the count matcher — three spellings of one claim (measured 2026-10-26 on the 20:34 batch)
   t('count: "N skills" is read', countNumsIn('a dataset of 42,447 skills from major marketplaces', 'skills'), [42447]);
   t('count: "N-skill analyzed subset" is the same claim', countNumsIn('In the 31,132-skill analyzed subset, 26.1% carry one', 'skills'), [31132]);
@@ -909,6 +1026,23 @@ if (SELFTEST) {
     [...new Set(countNumsIn('42,447 skills; 31,132-skill subset', 'skills'))], [42447, 31132]);
   t('cited pages: arXiv abs is a source for a count', citedPages('see https://arxiv.org/abs/2610.32322 for it').map((p) => p.label), ['arXiv 2610.32322']);
   t('cited pages: a HF dataset card is read raw', citedPages('https://huggingface.co/datasets/EverMind-AI/skillcorpus-lifecycle').map((p) => p.raw), [true]);
+  // measured 2026-10-27: item 31's "32 languages" is in docs/README.md, the item's own second link
+  t('cited pages: a linked docs file is fetched raw, not rendered',
+    citedPages('[`docs`](https://github.com/FrigadeHQ/hob/blob/main/docs/README.md)').map((p) => [p.url, p.raw]),
+    [['https://raw.githubusercontent.com/FrigadeHQ/hob/main/docs/README.md', true]]);
+  t('cited pages: a repo root is skipped (its README is already read)',
+    citedPages('https://github.com/FrigadeHQ/hob · https://github.com/FrigadeHQ/hob/releases/tag/v0.2.1').map((p) => p.url),
+    ['https://github.com/FrigadeHQ/hob/releases/tag/v0.2.1']);
+  t('cited pages: an HN thread is not a count source',
+    citedPages('https://news.ycombinator.com/item?id=50245945').length, 0);
+  t('cited pages: a linked file outranks a landing page under the cap',
+    citedPages('https://stalw.art/blog/stalwart-1-0/ and https://github.com/stalwartlabs/stalwart/blob/main/README.md').map((p) => p.label),
+    ['stalwartlabs/stalwart README.md', 'stalw.art/blog/stalwart-1-0/']);
+  // measured 2026-10-27 on item 30: the feed's "38 benchmarks" is the post's "35 of the 38 headline comparisons"
+  t('count: the number on the page with another head noun is reported, not called absent',
+    numberNeighbours('Stalwart is faster in 35 of the 38 headline comparisons.', 38), ['38 headline comparisons']);
+  t('count: a number in an unrelated token is still found (the caller decides what it means)',
+    numberNeighbours('released 2026-10-38 by someone', 38).length, 1);
 
   for (const c of cases) console.log(`  ${c.pass ? '✓' : '✗'} ${c.name}${c.pass ? '' : ` — got ${JSON.stringify(c.got)}, want ${JSON.stringify(c.want)}`}`);
   const ok = cases.filter((c) => c.pass).length;
@@ -967,7 +1101,7 @@ for (const { path: p, items } of parsed) {
 
 try { mkdirSync(dirname(CACHE_PATH), { recursive: true }); writeFileSync(CACHE_PATH, JSON.stringify(cache, null, 1)); } catch { /* cache is best-effort */ }
 
-const SEVERITY = { ok: 0, 'ok-cited-page': 0, 'no-cve-named': 1, 'no-record': 1, 'slot-quoted': 1, 'star-drift': 2, stale: 2, archived: 2, differs: 2, absent: 2, 'unsplit-issue-count': 3, 'compound-lags-parts': 3, 'version-swapped': 3, 'version-absent': 3, 'score-mismatch': 3, 'wrong-subject': 3, 'absence-contradicted': 3, 'advisory-unreadable': 1, unreadable: 1, 'artifact-unreadable': 1, 'nvd-unavailable': 1 };
+const SEVERITY = { ok: 0, 'ok-cited-page': 0, 'no-cve-named': 1, 'no-record': 1, 'slot-quoted': 1, 'number-other-noun': 1, 'star-drift': 2, stale: 2, archived: 2, differs: 2, absent: 2, 'unsplit-issue-count': 3, 'compound-lags-parts': 3, 'version-swapped': 3, 'version-absent': 3, 'score-not-reproducible': 2, 'score-mismatch': 3, 'wrong-subject': 3, 'absence-contradicted': 3, 'advisory-unreadable': 1, unreadable: 1, 'artifact-unreadable': 1, 'nvd-unavailable': 1 };
 const REAL = (f) => (SEVERITY[f.verdict] ?? 1) >= 2;
 
 const summary = { generated: new Date().toISOString(), files: perFile, api_calls: apiCalls, readme_calls: readmeCalls, cited_page_calls: citedPages_requests, nvd_calls: nvdCalls };

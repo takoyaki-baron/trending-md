@@ -1,6 +1,6 @@
 ---
 date: 2026-10-27
-updated: 2026-10-27T04:18:20Z
+updated: 2026-10-27T04:33:11Z
 schedule: 04:03, 12:03, 20:03 UTC+8
 sources: 21
 license: CC-BY-4.0
@@ -168,7 +168,7 @@ license: CC-BY-4.0
 - **Source:** GitHub Trending · 本日 +312 stars · nightly-labs
 - **Tags:** `agent-workspace` `electron` `local-first` `license` `permissions`
 
-`nightly-labs/openbot`——「常駐AIチームメイトのためのローカル優先デスクトップワークスペース」——は各エージェントにワークスペース、会話、FIFOタスクキュー、ファイル転送、埋め込みブラウザ、エージェント間メッセージを与え、**Codex App Server** と **Claude Code** をネイティブに、Grok、OpenCode、Gemini、Cursor、Clineを **ACP** 経由で駆動する。構成はElectron＋SolidJSレンダラ、stdioまたはストリームJSON上のプロバイダCLI、イベントログと射影のための **SQLite**、サンドボックス化された `WebContentsView` のブラウザ、Cloudflare WorkersのアカウントAPI、リモートクライアント向けの **WebRTCデータチャネル**。**1.4kスター**、174フォーク、2,167コミット。
+`nightly-labs/openbot`——「常駐AIチームメイトのためのローカル優先デスクトップワークスペース」——は各エージェントにワークスペース、会話、FIFOタスクキュー、ファイル転送、埋め込みブラウザ、エージェント間メッセージを与え、**Codex App Server** と **Claude Code** をネイティブに、Grok、OpenCode、Gemini、Cursor、Clineを **ACP** 経由で駆動する。構成はElectron＋SolidJSレンダラ、stdioまたはストリームJSON上のプロバイダCLI、イベントログと射影のための **SQLite**、サンドボックス化された `WebContentsView` のブラウザ、Cloudflare WorkersのアカウントAPI、リモートクライアント向けの **WebRTCデータチャネル**。**1,613スター**、**198フォーク**（UTC+8 12:33。12:18バッチの「1.4k／174」は約200スター古かった）、2,167コミット。
 
 **Why it matters:** README自身の開示がこの項目の中身だ。「**OpenBotは開発プレビューである**」、そして「エージェントは現在 `danger-full-access` と `approvalPolicy: never` で動作する」——初回起動時の同意の後は「ファイルを変更し、コマンドを実行し、ネットワークを使い、ブラウザを操作できる。動作ごとの確認はない」。そして「無制限のプロバイダモードはこれらのディレクトリ外へのアクセスを許し得る」。「ローカル優先」というラベルが隠す2つについても率直だ。「local-firstであってoffline-onlyではない」（プロバイダのトラフィックは依然OpenAI、Anthropic、xAI、Google、Cursor、Clineへ行く）、そしてライセンス変更——**PolyForm Noncommercial 1.0.0**、「0.1.11およびそれ以前のバージョンはApache-2.0のまま利用可能」。エージェントごとの独立ワークスペースと承認ポリシーなしのデスクトップは合理的な願望だ。資格情報が載ったマシンに向けるのは合理的ではない。
 
@@ -408,7 +408,7 @@ Mauticの二件は **2026-10-26T14:16:30Z**、同一CNAバッチの同一ミリ�
 
 **CVE-2026-110720** はConsul Helmチャートのcomponent ACLバインディングにおける名前空間間の認可バイパス。CWE-**863**、**CVSS 3.1 9.9**、`security@hashicorp.com`（NVD状態 `Received`、NVD自前の指標は **0**）。HashiCorpの文言は「Component binding rules did not consistently restrict authentication」で、本来は「ServiceAccounts in the Consul deployment's Kubernetes namespace」に限定されるべきものだった。悪用には二つの能力が必要で、**別の**名前空間でServiceAccountを作りそのトークンを得ること、そしてConsul APIへの到達性。露出は条件付きで、「`global.acls.manageSystemACLs=true`」の場合に成立し、system ACL管理を無効にした配備は影響を受けない。報告はElias Hasas（`zer0d4y5`）。
 
-**Why it matters:** アドバイザリ自身のバージョン情報が読めない。影響範囲は「consul-k8s **0.42.0 up to 2.0.4**」、修正は「**1.8.18** と **2.1.0**」と書かれるが、1.8.18は影響範囲の**内側**にあり、範囲が二つの系列にまたがることをbulletinは一度も書かない。だから1.xの運用者は同じページから「影響あり」と「修正済み」を同時に読み取り、その系列で1.8.18より上が安全なのかを判断できない。タグ自体は実在する。**v1.8.18** は **2026-10-20**、**v2.1.0** は **2026-10-23** に出ており、どちらも9月11日の静かな **v1.8.17** の後だ。したがって読みは「1.8.18が1.xのバックポート」であり、本来は独立した範囲として書かれるべきだった。有用な読みはもう半分にある。ACL製品がKubernetesの身元をConsulのロールに写す層で、自分自身の名前空間スコープを誤った——その層こそ境界の身代わりである。
+**Why it matters:** 勧告の本文は解析できないが、機械可読なレコードがそれを説明する。ページは影響範囲を「consul-k8s **0.42.0 up to 2.0.4**」、修正を「**1.8.18** と **2.1.0**」と書き、範囲が 2 つの分岐にまたがるとは述べない。**CVE レコード自身が、欠けている一文をフィールドとして持っている**（本項目の公開後に cveawg から読取）：`{"version": "0.42.0", "lessThan": "2.0.4", "changes": [{"at": "1.8.18", "status": "unaffected"}]}`——`changes` エントリはそのバージョンで状態を切り替え、範囲の末尾まで持続する。したがって影響集合は **`[0.42.0, 1.8.18)`** であり、`[0.42.0, 2.0.4)` ではない。よって 1.x で 1.8.18 より上の運用者は*レコード上*は安全であり、記録された範囲を持たないのは **2.1.0 未満の 2.x** の側である——`affected[]` はその系列を覆っていない。
 
 [`🔗 HashiCorp — HCSEC-2026-50 (CVE-2026-110720)`](https://discuss.hashicorp.com/t/hcsec-2026-50-consul-k8s-vulnerable-to-a-cross-namespace-authorization-bypass-in-component-acl-binding-rules/77915) · [`🔗 NVD — CVE-2026-110720`](https://nvd.nist.gov/vuln/detail/CVE-2026-110720)
 
@@ -488,7 +488,7 @@ Mauticの二件は **2026-10-26T14:16:30Z**、同一CNAバッチの同一ミリ�
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-10-27T04:18:20Z |
+| Generated | 2026-10-27T04:33:11Z |
 | Items | 34 |
 | Sources tracked | 21（Hacker News、GitHub、NVD、arXiv、CISA KEV、Cloudflare、Ubicloud、HashiCorp、VulnCheck、crates.io、SEC EDGAR、OpenAI developer docs、OpenAI Deployment Safety Hub、Artificial Analysis、Cohere、Erlang CNA、entire.com、pharo.org、sebastianraschka.com、shraiwi.com、stalw.art） |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8（1日3回） |

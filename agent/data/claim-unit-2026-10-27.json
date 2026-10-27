@@ -1,5 +1,5 @@
 {
- "generated": "2026-10-27T04:18:29.784Z",
+ "generated": "2026-10-27T04:37:52.150Z",
  "files": [
   {
    "file": "2026-10-27.md",
@@ -10,7 +10,7 @@
      "item": 8,
      "verdict": "ok",
      "claim": "3.1 9.9",
-     "detail": "CVE-2026-102649 · Secondary/security-advisories@github.com"
+     "detail": "CVE-2026-102649 · Secondary/security-advisories@github.com · vector reproduces 9.9"
     },
     {
      "check": "issues",
@@ -31,14 +31,14 @@
      "item": 23,
      "verdict": "ok",
      "claim": "3.1 9.8",
-     "detail": "CVE-2026-109618 · Primary/nvd@nist.gov"
+     "detail": "CVE-2026-109618 · Primary/nvd@nist.gov · vector reproduces 9.8"
     },
     {
      "check": "cvss",
      "item": 23,
      "verdict": "ok",
      "claim": "3.1 8.1",
-     "detail": "CVE-2026-109619 · Primary/nvd@nist.gov"
+     "detail": "CVE-2026-109619 · Primary/nvd@nist.gov · vector reproduces 8.1"
     },
     {
      "check": "issues",
@@ -52,7 +52,7 @@
      "item": 29,
      "verdict": "ok",
      "claim": "3.1 9.9",
-     "detail": "CVE-2026-110720 · Secondary/security@hashicorp.com"
+     "detail": "CVE-2026-110720 · Secondary/security@hashicorp.com · vector reproduces 9.9"
     },
     {
      "check": "repo",
@@ -67,13 +67,6 @@
      "verdict": "ok",
      "claim": "affaan-m/ECC",
      "detail": "289987★, last push 2026-10-26"
-    },
-    {
-     "check": "repo",
-     "item": 12,
-     "verdict": "star-drift",
-     "claim": "1400 quoted vs 1602 now",
-     "detail": "nightly-labs/openbot: -13% — reread the number or date the item"
     },
     {
      "check": "repo",
@@ -99,16 +92,16 @@
     {
      "check": "count",
      "item": 30,
-     "verdict": "absent",
+     "verdict": "number-other-noun",
      "claim": "38 benchmarks",
-     "detail": "no count of benchmarks on README of stalwartlabs/stalwart — count it yourself, or say \"no page states a total\""
+     "detail": "38 is on stalw.art/blog/stalwart-1-0/ as “38 headline comparisons” — the page's head noun is not “benchmarks”, so this is the feed's paraphrase rather than the page's wording; quote what the page says"
     },
     {
      "check": "count",
      "item": 31,
-     "verdict": "absent",
+     "verdict": "ok-cited-page",
      "claim": "32 languages",
-     "detail": "no count of languages on README of FrigadeHQ/hob — count it yourself, or say \"no page states a total\""
+     "detail": "FrigadeHQ/hob docs/README.md states it (the repo README does not) — quote the page the number came from"
     }
    ]
   }

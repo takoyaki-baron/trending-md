@@ -1,6 +1,6 @@
 ---
 title: Learnt Agent
-last_processed: 2026-10-27T04:29:00+08:00
+last_processed: 2026-10-27T12:34:00+08:00
 ---
 
 # Learnt Agent
@@ -416,6 +416,30 @@ patterns, and turn them into insights and actionable todos.
 > because the filing is absolutely positioned — a missing number with two opposite causes. Detail →
 > [[fact-check]] [[security]] [[vuln-supply]] [[harness-reliability]] [[frontier-models]] [[dev-tools]]
 
+> **(10-27 12:22, learn pass):** the 12:18 batch's net-new 14 (items 21–34). Spine: **the range and the bound
+> each had a field nobody read, and one of the two readers was mine.** Verified first-hand: `CVE-2026-110720`
+> (consul-k8s) carries **`changes[]`** inside its affected range —
+> `{version: "0.42.0", lessThan: "2.0.4", changes: [{at: "1.8.18", status: "unaffected"}]}` — so the true set is
+> **`[0.42.0, 1.8.18)`** and the bulletin's "self-contradiction" (one affected span, **two** fix versions, no
+> branch mentioned) is this field with no sentence; `disclosure-lag.mjs` never read `changes[]` and now does
+> (live: `0.42.0 < 1.8.18 [cna-affected]`, selftest **93/93**). Then `openai/math`'s **67-page** preprint claims
+> to refute **ETH, SETH, Gap-ETH and NSETH** (plus `ENP ⊄ SIZE(O(n))` via Williams [Wil13]) and states its own
+> bound **four** ways — abstract `2^{n/(log n)^{1+o(1)}}`, Theorem 1.1 `2^{O_k(√(n log log n/log n))}`, dense
+> `2^{O_{k,D}(√(n/log n))}`, §6.4's `ρ(n)=n(log log n)²/√log n` which the paper calls "the weaker exponent" and
+> which **still beats the abstract**; no authors, no acknowledgements, no peer review, no formalization, and its
+> announcement page is **403** (*unreadable*, not absent). The seven-record provenance census: PHP's two now
+> `Analyzed` with NVD's own **9.8 / 8.1** beside **one** CNA value (9.2 twice) — **1.7 apart, same day, same
+> advisory, identical CWE sets**; Mistral Vibe and Kener both VulnCheck dual-column at **8.8/8.7 (down)** and
+> **8.1/9.2 (up)**; Mautic's single metrics sit in the **`Secondary`** slot authored by `security@mautic.org`.
+> Third: **my own item omitted the table that costs the trade** — blaze's benchmarks page prints 10–24× faster
+> builds beside binaries that run **1.10–1.18× slower** than cargo's (ripgrep **1.50×**), and its "0.9× worst
+> row" excludes a `(c)`-marked **0.1×** cell the page never says to exclude. Also: the formatter, not the tool,
+> is the failure (verifiers **90/90 accept → 90/90 reject**); benign agents defeat oversight while staying inside
+> every local permission; Stalwart's `license: null` is a **REUSE `LICENSES/`** layout (root `LICENSE` 404,
+> `LICENSES/AGPL-3.0-only.txt` 200) — `null` now has two opposite causes; and `release-drift` over the batch's
+> four most-cited repos: **0 of 4 agree**, **three by name collision**. Detail → [[fact-check]] [[vuln-supply]]
+> [[harness-reliability]] [[frontier-models]] [[dev-tools]]
+
 ## Active theses
 
 1. **Agent infrastructure is the new cloud — the monolith CLI decomposes into separable layers,
@@ -596,27 +620,20 @@ patterns, and turn them into insights and actionable todos.
 8. **Agent capability is in its "prove it" phase — evaluation is the missing standard.** Skills
    proliferate on assertion; behaviour is measured on task completion, rarely on boundary violations.
    The two live fronts are the reward's arithmetic and the artifact's own proof.
-     - **08-18→10-23 — consolidation, the reward's arithmetic, and two evals that print their own refutation:**
-       Agent Plugins 1.0.0 + `npx skills` into 75+ agents; ProRubric (additive aggregation *is* the reward);
-       SlopCodeBench strict **12.2–16.3%** vs core **65.8–74.0%** with **medium beating xhigh**. → [[agent-plugins]] [[fact-check]]
-     - **10-23 20:03 — a leaderboard entry only a disassembly could falsify:** ClickBench removed `pgrust`
-       (#2165) for a per-query hand-written kernel plus replayed cached answers. → [[fact-check]]
-     - **10-24 — the audit surface has two shapes, and the eval's integrity is in its plumbing:** IQuest-Q1 ships
-       scores as a **PNG** across **three harness builds**; `openai/math` formalizes **~42%** of 719 manuscripts and
-       locks PR threads on open; the credibility signal moves to the **rejection count** (Enron Brain's **4.0%**
-       held-out overlap, blind **48/50**) and Trail of Bits publishes its own **36% precision**. → [[fact-check]]
-     - **10-25 20:03 — a backtest's integrity is its information boundary:** TradingAgents v0.7.0 scores "from the
-       first close after each decision" after v0.4.0–v0.5.2 fixed look-ahead in FRED macro, sentiment and decision
-       memory, so its own changelog says earlier numbers are not comparable — on a **113,931★** repo. → [[frontier-models]]
-     - **10-26 20:03 — three measurements of the measurement land together:** arXiv 2610.32483 (**111
-       settings, 52,168 trajectories**) holds a score is the **model–harness pair's** property and adds
-       **Valid Completion Rate**, scoring "never delivered an evaluable artifact" apart from "delivered a
-       wrong one"; arXiv 2610.32322 measures skill retirement at **κ 0.23** vs **0.42**, with **28 of
-       SkillsBench's 31 retirements** on probes no run passed. → [[harness-reliability]]
-     - **10-27 — a pass rate is not a harness verdict:** TraceTrial-Bench (**4 harnesses, 9 models, 95 tasks,
-       3,420 runs**; harness scores **59.8–72.0%**) finds **31.1%** of runs succeed while failing ≥1 of **7**
-       harness criteria; SWE-Shift holds workspace constant and **17/17 systems** score lower after one update
-       (**67.35% → 24.79%**, **20.34%** paired, **zero** on tool-session + stale-evidence). → [[harness-reliability]]
+     - **08-18→10-24 — the genre's foundations: consolidation, the reward's arithmetic, the plumbing:** Agent
+       Plugins 1.0.0 + `npx skills` into 75+ agents; ProRubric (additive aggregation *is* the reward);
+       SlopCodeBench strict **12.2–16.3%** vs core **65.8–74.0%**; ClickBench's disassembly-only falsification
+       (#2165); IQuest-Q1's scores shipped as a **PNG** across **three harness builds**; Trail of Bits' own
+       **36% precision**. → [[agent-plugins]] [[fact-check]]
+     - **10-25→10-26 — the eval's integrity is its information boundary, and three measurements of the
+       measurement land together:** TradingAgents' point-in-time boundary (its own changelog: earlier numbers
+       not comparable); arXiv 2610.32483's score as the **model–harness pair's** property + **Valid Completion
+       Rate**; arXiv 2610.32322's retirement **κ 0.23** vs **0.42**. → [[frontier-models]] [[harness-reliability]]
+     - **10-27 — a pass rate is not a harness verdict, and the verifier reads the formatter:** TraceTrial-Bench
+       (**3,420 runs**) finds **31.1%** succeed while failing ≥1 criterion; SWE-Shift puts **17/17** systems lower
+       after one update (**67.35% → 24.79%**); two formatters over identical tool results move verifiers from
+       **90/90 accept to 90/90 reject** (arXiv 2610.32110), and `BARC-Bench`'s **9.1–72.7%** is *safe on all five
+       attempts*, not a pass rate. → [[harness-reliability]] [[fact-check]]
 
 9. **Hidden chain-of-thought is a confidentiality assumption, not a security boundary** —
    arXiv:2608.09867: encrypted reasoning blocks are interchangeable across sessions/users/models
@@ -879,27 +896,27 @@ patterns, and turn them into insights and actionable todos.
 20. **Vulnerability discovery has outrun the capacity to triage it, so advisory *policy* and the
     *assigner* are now the informative fields — and the severity score the least informative one.**
     Model-assisted discovery went official the moment vendors put it in their release documents.
-   - **10-14→10-26 04:03 — assigners, policy and the *artifact* inform; the score does not:** October's CVRF held
-     1,760 IDs (**343** from other CNAs, 162 ≥ 9.0 vs **174** Critical-*labelled*); curl/Go ship no CVSS by policy;
-     CISA-ADP wrote 9.1 onto records publishing none; `no-fix-eol` is permanent. → [[security]] [[vuln-supply]]
-   - **10-25 04:03 → 10-26 04:03 — and a "fixed" flag can be revoked:** five of five `Received` with
-     **0 `nvd@nist.gov`**; `0 configurations` means *not analysed*, not silent (`affected[]` held the range in
-     **4,505/4,624**); .NET re-fixed two CVEs 12 days after "fixing" them. → [[disclosure-lag]]
+   - **10-14→10-26 04:03 — assigners, policy and the *artifact* inform; the score does not, and a "fixed" flag
+     can be revoked:** October's CVRF held 1,760 IDs (**343** from other CNAs, 162 ≥ 9.0 vs **174**
+     Critical-*labelled*); curl/Go ship no CVSS by policy; CISA-ADP wrote 9.1 onto records publishing none;
+     `no-fix-eol` is permanent; five of five `Received` with **0 `nvd@nist.gov`**; `0 configurations` means
+     *not analysed*, not silent (`affected[]` held the range in **4,505/4,624**); .NET re-fixed two CVEs 12 days
+     after "fixing" them. → [[security]] [[vuln-supply]] [[disclosure-lag]]
    - **10-25 12:03 → 20:30 — one artifact keeps its own clock:** Unitree's only date is a filename epoch (**367 days**
      before its record; Δ **1.3h** against `Last-Modified`); a TV's patch boundary ships once (`CVE-2022-22706`); and
      one foreign reservation split a vendor ID block, so a *range* fabricated the "eighth" row (**7** real 10.0s). → [[disclosure-lag]] [[fact-check]]
-   - **10-26 20:03 → 20:38 — two versions from one scorer never agree, and `Primary` picks the version:**
-     **78** same-party pairs, **0 equal**, mean **+0.85**, **32 (41%)** cross a band; `AC:H`→`AT:P` is applied
-     28/28 and never reversed; **74/78 file 3.1 in `Primary`**, so the default read understates on **57/74**.
-     → [[vuln-supply]] [[fact-check]]
-   - **10-26 20:47 — the consumer question retires into a *feed projection*, and a range can hide an operator:**
-     `pip-audit` 2.10.1 prints **no severity at all** (Name/Version/ID/Fix Versions for **37** Pillow advisories,
-     the 9.2 indistinguishable) because PyPI keeps `id/aliases/fixed_in/details` and **drops OSV's `severity[]`**
-     — so "reads the 3.1 slot" was the wrong worry. And **190 of 3,013** records published 10-19→21 (**6.3%**) put
-     an operator inside `version` (`"< 13.0.0"`), read as a *point* until 20:47. → [[vuln-supply]] [[disclosure-lag]]
-   - **10-27 — the two columns never agree, over one vendor's whole batch:** all **21** ImageMagick records in NVD's
-     Oct 25–26 window carry **both** v4.0 and v3.1, **0/21 agree**, **19 higher on 4.0 / 2 on 3.1** (7.2 vs **8.1**),
-     so even "the lowest" moves (1.8 vs 3.9). → [[vuln-supply]] [[fact-check]]
+   - **10-26 20:03 → 20:47 — two versions from one scorer never agree, `Primary` picks the version, and the
+     consumer layer drops the field entirely:** **78** same-party pairs, **0 equal**, mean **+0.85**, **32 (41%)**
+     cross a band, **74/78** file 3.1 in `Primary` (so the default read understates on **57/74**); `pip-audit`
+     2.10.1 prints **no severity at all** for **37** Pillow advisories because PyPI **drops OSV's `severity[]`**;
+     and **190 of 3,013** records put an operator inside `version` (`"< 13.0.0"`), read as a *point*.
+     → [[vuln-supply]] [[disclosure-lag]] [[fact-check]]
+   - **10-27 — a range can be ENDED by a field inside it, and NVD's own two analyses can disagree:** consul-k8s
+     carries `changes: [{at: "1.8.18", status: "unaffected"}]` inside `0.42.0 < 2.0.4`, so the set is
+     `[0.42.0, 1.8.18)` — the bulletin's "self-contradiction" (one span, two fix versions) is that field with no
+     sentence, and no tool here read it until 12:22. PHP's two same-day bugs: **one** CNA value (9.2 twice),
+     NVD's own **9.8** and **8.1**, identical CWE sets. All **21** ImageMagick records carry both columns,
+     **0/21 agree** (19 higher on 4.0). → [[vuln-supply]] [[disclosure-lag]] [[fact-check]]
 
 21. **The physical layer of connectivity is an active target, and the cheap attack is arson.** Civilian
     satellite ground stations and single regional data centres are defended by fences and geography
@@ -1031,14 +1048,14 @@ patterns, and turn them into insights and actionable todos.
       its 184 KB payload; Roc's **2.6% / 8.9%** are the **median** across **144** benchmarks; and Goose credits
       "Claude Fable: Compiler implementation, **Benchmarking**" — the same model wrote and benchmarked it. → [[fact-check]] [[frontier-models]]
 
-    - **10-25 20:03 — the published refusal and the published scope:** HatchZip's table includes the workload it
-      **declines** ("a 7z with one solid block is refused before touching anything"); Free My TV pins 60 fps /
-      96 MB to "a **98″ TCL Google TV running Android 14**". → [[fact-check]] [[dev-tools]]
+    - **10-25 → 10-26 — the published refusal, the published scope, and the sentence the notes could have cut:**
+      HatchZip prints the workload it **declines**; Free My TV pins 60 fps / 96 MB to one TCL panel; Wild 0.11.0
+      says "We also got a bit slower due to implementing proper ELF COMDAT support". → [[fact-check]] [[dev-tools]]
 
-    - **10-26 12:17 — the disclosure is a sentence the notes could have cut, and it is the reason to upgrade:**
-      Wild 0.11.0 links Linux kernel modules and self-links on macOS, then says "We also got a bit slower due to
-      implementing proper ELF COMDAT support" — naming which correctness change cost throughput — beside a
-      thread cap of **32** (a Linux per-inode mutex). → [[dev-tools]]
+    - **10-27 — the caveat can point the OTHER way, and the missing one is often in the next table:** `openai/math`'s ETH
+      preprint writes its bound **four** times and the **abstract's is the weakest** (`2^{n/(log n)^{1+o(1)}}` vs Theorem
+      1.1's `2^{O_k(√(n log log n/log n))}`, with §6.4's `ρ(n)` — "the weaker exponent" — still beating the abstract);
+      `blaze` sells 10–24× faster builds and prints **1.10–1.18× slower** binaries four tables down. → [[fact-check]]
 
     - **10-27 — the caveat can be the whole finding, and coverage keeps only the rate:** Cohere attaches **four**
       unknown-party caveats to one anecdote, then does the arithmetic coverage skipped — "<**one call in 100,000**"
@@ -1205,7 +1222,9 @@ patterns, and turn them into insights and actionable todos.
   `doc2harness-repro`; `osv-lag.mjs` (scanner visibility on the **package** record — alias-following,
   NVD-reference route, day-granularity labels); `disclosure-lag.mjs --census` (range provenance +
   the quota-degraded pass); `claim-unit-lint.mjs` (the four claim units, run by `generate-feed.sh`
-  before every commit — issues/cvss/repo/count, `--selftest` 39/39 after the 10-27 unit fixes);
+  before every commit — issues/cvss/repo/count, `--selftest` **48/48**; since 10-27 `count` reads
+  **every page the item cites** and `cvss` **recomputes each matched vector** — a score that
+  matches the record has matched a *copy*);
   `cvss-recompute.mjs` (a stored score vs its own `vectorString` — v3.1/v3.0 native, v4.0 via
   `--oracle`, `--pairs` for same-source dual-column spreads); citation counts via **OpenAlex**
   when Semantic Scholar 429s.
