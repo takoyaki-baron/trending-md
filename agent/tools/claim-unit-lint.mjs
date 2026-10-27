@@ -111,6 +111,26 @@
  *     the null legacy object is exactly the set that moved to a v4-only shape. A reader that
  *     parses `cvss.score` sees nothing for ~35% of new records — quote the field you read.
  *
+ *   F. STOPPING POINTS (`--check temporal`) — ONE VECTOR CAN YIELD THREE NUMBERS AND NVD PUBLISHES
+ *      ONLY ONE OF THEM. `CVE-2026-107656` (FortiSandbox, 2026-10-27 batch) is the calibration:
+ *      Fortinet's own container stores `baseScore: 9.6` beside
+ *      `CVSS:3.1/…/E:F/RL:O/RC:C`, while NVD re-serves the same source at **9.8** with the three
+ *      temporal components **stripped**. Three numbers, one vector — base **9.8**, base × E
+ *      **9.6**, and the full temporal score **9.1**. Recomputing the base can therefore never
+ *      confirm or refute a 9.6, and checking only NVD cannot even see it. So the check reports the
+ *      RECORD SHAPE rather than the prose: for every CVE in the item whose CNA container carries a
+ *      temporal vector, it prints all three stopping points and the number NVD re-serves, and asks
+ *      the writer to name which one is quoted.
+ *      The equation is v3.1's own (§7.2), read off FIRST's specification on 2026-10-27:
+ *      `TemporalScore = Roundup(BaseScore × E × RL × RC)` — a SINGLE Roundup over the flat
+ *      product. (Recomputing step by step gives 9.2 and is wrong for 3.1; a first draft here
+ *      asserted that from memory of the v3.0 layout, which is why the weights and the formula are
+ *      quoted from the spec page rather than recalled.) The weights are the spec's table, and the
+ *      one worth pinning is **RL:W = 0.97**, not the 0.95 an "official fix" neighbour suggests.
+ *      A CNA metric is also a subject in its own right: when NVD does not carry a quoted score but
+ *      the CNA container does, the verdict is `cna-only-score` (naming the container) rather than
+ *      `version-absent` — the record's absence is not the vendor's.
+ *
  * Usage:
  *   node agent/tools/claim-unit-lint.mjs --file en/feed/2026-10-26.md
  *   node agent/tools/claim-unit-lint.mjs --file … --no-net            # check A only (prose)
@@ -127,7 +147,7 @@ import { execFileSync } from 'node:child_process';
 import { dirname, basename } from 'node:path';
 // The score's arithmetic, not just the record's copy of it. `cvss-recompute.mjs` guards its CLI
 // behind an `import.meta.url` check, so importing it costs nothing but the v3.1 equations.
-import { judge } from './cvss-recompute.mjs';
+import { judge, recompute, roundup31 } from './cvss-recompute.mjs';
 
 const arg = (name) => {
   const i = process.argv.indexOf(`--${name}`);
@@ -147,8 +167,11 @@ const STALE_DAYS = Number(arg('stale-days') ?? 60);
 const STAR_TOLERANCE = Number(arg('star-tolerance') ?? 0.10);
 const MAX_REPOS = Number(arg('max-repos') ?? 8);
 const MAX_GHSA = Number(arg('max-ghsa') ?? 6);
+// cveawg is unmetered but not free: one request per CVE, cached 6h, and the cap keeps a
+// 200-CVE census from turning the pre-commit lint into a crawler.
+const MAX_CNA = Number(arg('max-cna') ?? 30);
 const CACHE_PATH = arg('cache') ?? 'agent/data/claim-unit-cache.json';
-const CHECKS = new Set((arg('check') ?? 'issues,cvss,repo,count').split(',').map((s) => s.trim()));
+const CHECKS = new Set((arg('check') ?? 'issues,cvss,temporal,repo,count').split(',').map((s) => s.trim()));
 
 const SELFTEST = has('selftest');
 if (!FILE && !FILES && !SELFTEST && !has('ghsa-census')) {
@@ -452,6 +475,82 @@ function advisoryState(id) {
   return cache[key];
 }
 
+// ── check F helpers: the CNA container + the stopping points of one vector ──────────────────
+/* FIRST, CVSS v3.1 specification §7.2, read off the page on 2026-10-27:
+ *   TemporalScore = Roundup (BaseScore × ExploitCodeMaturity × RemediationLevel × ReportConfidence)
+ * ONE Roundup over the flat product — not the step-by-step form a v3.0 memory supplies (that
+ * recomputes CVE-2026-107656 to 9.2 instead of the spec's 9.1). The weights are that page's own
+ * table; the one worth pinning in a test is **RL:W = 0.97**, next to an Official Fix's 0.95. */
+const TEMPORAL_W = {
+  E: { X: 1, H: 1, F: 0.97, P: 0.94, U: 0.91 },
+  RL: { X: 1, U: 1, W: 0.97, T: 0.96, O: 0.95 },
+  RC: { X: 1, C: 1, R: 0.96, U: 0.92 },
+};
+const TEMPORAL_NAME = { E: 'Exploit Code Maturity', RL: 'Remediation Level', RC: 'Report Confidence' };
+
+/**
+ * Every number one v3.x vector can honestly yield, in increasing order of application:
+ * base, then base × each temporal component applied so far (each with its own Roundup, which is
+ * what "the score if only these were applied" means), and the full temporal score.
+ * Returns null when the vector carries no temporal component — nothing to disambiguate.
+ */
+function temporalStops(vector) {
+  const body = String(vector ?? '').replace(/^CVSS:[^/]+\//, '');
+  const m = {};
+  for (const part of body.split('/')) { const [k, v] = part.split(':'); if (k) m[k] = v; }
+  const applied = ['E', 'RL', 'RC'].filter((k) => m[k] && m[k] !== 'X');
+  if (!applied.length) return null;
+  const base = recompute(vector);
+  if (base.verdict !== 'computed') return null;
+  const stops = [{ label: 'base', score: base.score, applied: [] }];
+  let product = base.score;
+  for (const k of applied) {
+    const w = TEMPORAL_W[k]?.[m[k]];
+    if (w == null) return null; // an unknown metric value has no arithmetic — say nothing
+    product *= w;
+    stops.push({ label: `base×${applied.slice(0, applied.indexOf(k) + 1).join('×')}`, score: roundup31(product), applied: stops.at(-1).applied.concat(k) });
+  }
+  return { base: base.score, applied, stops, full: stops.at(-1).score, vector };
+}
+
+/** The sentence that names which stopping point a stored number sits at. */
+function describeStop(st, score) {
+  const hit = st.stops.filter((s) => Math.abs(s.score - score) < 0.05);
+  const all = st.stops.map((s) => (s.label === 'base' ? `base ${s.score}` : `${s.applied.join('+')} ${s.score}`)).join(', ');
+  const point = hit.length ? ` — that is ${hit.at(-1).label === 'base' ? 'the base score' : `${hit.at(-1).label} with only ${hit.at(-1).applied.join(', ')} applied`}` : ' — which is none of them';
+  return `${point} (${all}; full temporal ${st.full}, FIRST v3.1 §7.2)`;
+}
+
+/**
+ * The CNA container, which is the only place a number NVD normalised away still exists.
+ * `baseScore` is the field's name, not its content: a vendor that publishes a temporal vector may
+ * store a partial product there (Fortinet stores `base × E`). Cached 6h, unmetered, one call per CVE.
+ */
+function cnaState(id) {
+  const key = `cna:${id}`;
+  const hit = cache[key];
+  const ttl = hit?.error ? ERROR_TTL_MS : CACHE_TTL_MS;
+  if (hit && Date.now() - Date.parse(hit.fetched_at) < ttl) return hit;
+  let j;
+  try {
+    j = JSON.parse(execFileSync('curl', ['-s', '--max-time', '20', `https://cveawg.mitre.org/api/cve/${id}`], { encoding: 'utf8', maxBuffer: 8 * 1024 * 1024 }));
+    if (!j?.cveMetadata) throw new Error('not-in-cveawg');
+  } catch (e) {
+    cache[key] = { fetched_at: new Date().toISOString(), error: e.message === 'not-in-cveawg' ? 'not-in-cveawg' : 'unreadable' };
+    return cache[key];
+  }
+  const metrics = [];
+  for (const m of j.containers?.cna?.metrics ?? []) {
+    for (const [k, version] of [['cvssV3_1', '3.1'], ['cvssV3_0', '3.0'], ['cvssV4_0', '4.0']]) {
+      const d = m[k];
+      if (!d) continue;
+      metrics.push({ version, score: d.baseScore, temporalScore: d.temporalScore, vector: d.vectorString, field: `containers.cna.metrics.${k}.baseScore` });
+    }
+  }
+  cache[key] = { fetched_at: new Date().toISOString(), state: j.cveMetadata.state, assigner: j.cveMetadata.assignerShortName, metrics };
+  return cache[key];
+}
+
 /**
  * Prose that asserts a score does not exist — the sentence this check was extended to catch.
  * The trap that made its first version useless: a CORRECTED item describes the wrong reading
@@ -474,7 +573,7 @@ function assertsNoScore(plain) {
   return noScoreSpans(plain).length > 0;
 }
 
-function checkCvss(it, subjects) {
+function checkCvss(it, subjects, cna = new Map()) {
   const out = [];
   const t = strip(it.text);
   const claims = extractCvss(t);
@@ -561,6 +660,21 @@ function checkCvss(it, subjects) {
       });
       continue;
     }
+    /* The vendor's container is a subject in its own right. NVD re-serves a NORMALISED number —
+     * temporal components stripped, so the CNA's own `baseScore` can differ or be the only copy —
+     * and a score that exists only there is not an absent score. Rule 4 applies to the CNA too:
+     * "NVD does not carry it" is a statement about the registry, not about the vendor. */
+    const cnaRec = cna.get(bound.id);
+    const cnaHit = (cnaRec?.metrics ?? []).find((m) => m.version === cl.version && Math.abs(m.score - cl.score) < 0.05);
+    if (cnaHit) {
+      const st = temporalStops(cnaHit.vector);
+      out.push({
+        check: 'cvss', item: it.n, verdict: 'cna-only-score',
+        claim: `${cl.version} ${cl.score}`,
+        detail: `${bound.id}: the CNA container (${cnaRec.assigner ?? 'cna'}) carries ${cl.version} ${cnaHit.score}${st ? describeStop(st, cnaHit.score) : ''} — NVD does not; name the container, because a normalised record is not the vendor's number`,
+      });
+      continue;
+    }
     const otherVersion = candidates.filter((m) => m.version !== cl.version);
     const movedScore = otherVersion.find((m) => Math.abs(m.score - cl.score) < 0.05);
     const here = [...new Set(sameVersion.map((m) => m.score))].join(' / ');
@@ -610,6 +724,38 @@ function checkCvss(it, subjects) {
         claim: 'Primary/Secondary',
         detail: 'a metric slot is not a provenance — name the source (CNA / nvd@nist.gov / CISA-ADP) instead',
       });
+    }
+  }
+  return out;
+}
+
+/**
+ * Check F — the record SHAPE, not the prose. A CVE whose CNA container carries a temporal vector
+ * publishes more than one defensible number, and NVD publishes a different one again; the writer
+ * has to say which they quote, and the prose may not mention a version at all (item 38 quotes 9.8,
+ * 9.6 and 9.1 in one paragraph with no `CVSS 3.1` label anywhere, so every pair-based check in
+ * this file is blind to it). Triggering on the container rather than on the sentence is what makes
+ * it visible.
+ */
+function checkTemporal(it, cna, subjects) {
+  const out = [];
+  const t = strip(it.text);
+  const ids = [...new Set((t.match(/CVE-\d{4}-\d{3,7}/g) ?? []))];
+  for (const id of ids) {
+    const rec = cna.get(id);
+    if (!rec || rec.error) continue;
+    for (const m of rec.metrics ?? []) {
+      const st = temporalStops(m.vector);
+      if (!st) continue;
+      const nvd = (subjects.get(id)?.metrics ?? []).map((x) => `${x.version} ${x.score} (${x.source})`);
+      // Nothing to disambiguate when the vendor's number IS the base and the base is the whole story.
+      if (Math.abs(m.score - st.base) < 0.05 && st.full === st.base) continue;
+      out.push({
+        check: 'temporal', item: it.n, verdict: 'temporal-stopping-point',
+        claim: `${id} · CNA ${m.score} / base ${st.base} / full ${st.full}`,
+        detail: `${rec.assigner ?? 'cna'} stores ${m.version} ${m.score} in \`${m.field}\`${describeStop(st, m.score)}; NVD re-serves ${nvd.join(', ') || 'no metric'} — one vector, so name the stopping point you quote (a field called \`baseScore\` does not have to hold the base)`,
+      });
+      break; // one finding per record is enough to open the question
     }
   }
   return out;
@@ -955,6 +1101,21 @@ if (SELFTEST) {
   t('release number is not a version', ver('affected >= 1.37, <= 1.74.1, patched 1.74.2'), []);
   t('out-of-range score dropped', ver('CVSS 4.0 11.4'), []);
 
+  // stopping points — FIRST v3.1 §7.2: one Roundup over the flat product (CVE-2026-107656)
+  const stops = (v) => { const s = temporalStops(v); return s && { base: s.base, stops: s.stops.map((x) => x.score), full: s.full }; };
+  t('fortisandbox: base / ×E / ×E+RL / ×E+RL+RC',
+    stops('CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H/E:F/RL:O/RC:C'),
+    { base: 9.8, stops: [9.8, 9.6, 9.1, 9.1], full: 9.1 });
+  t('no temporal component is not a stopping-point question',
+    stops('CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H'), null);
+  t('X applies nothing', stops('CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H/E:X'), null);
+  // The weight a memory gets wrong: Remediation Level Workaround is 0.97, and 0.95 would give 9.1.
+  t('RL:W is 0.97, not an official fix\'s 0.95',
+    stops('CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H/E:F/RL:W').full, 9.3);
+  t('a single Roundup over the product, not per-component rounding',
+    stops('CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H/E:U/RL:W'),
+    { base: 9.8, stops: [9.8, 9.0, 8.7], full: 8.7 });
+
   // subject binding — a score belongs to an identifier, not to the item
   const men = (s) => idMentions(s);
   const bind = (s) => bindSubject(s.indexOf('SCORE'), men(s));
@@ -1079,6 +1240,20 @@ if (!NO_NET && CHECKS.has('cvss')) {
 }
 const subjects = new Map();
 for (const [id, rec] of nvd) subjects.set(id, { kind: 'cve', status: rec.status, metrics: rec.metrics });
+// CNA containers (check F): the only place a number NVD normalised away survives. cveawg is
+// unmetered, so the cap is about latency rather than budget — cached entries cost nothing.
+const cna = new Map();
+let cnaCalls = 0;
+if (!NO_NET && (CHECKS.has('cvss') || CHECKS.has('temporal'))) {
+  const ids = [...new Set(parsed.flatMap((f) => f.items.flatMap((it) => strip(it.text).match(/CVE-\d{4}-\d{3,7}/g) ?? [])))].slice(0, MAX_CNA);
+  for (const id of ids) {
+    const fresh = !cache[`cna:${id}`];
+    const st = cnaState(id);
+    if (fresh) cnaCalls += 1;
+    if (!st.error) cna.set(id, st);
+    if (fresh) await new Promise((r) => setTimeout(r, 250));
+  }
+}
 for (const id of new Set(parsed.flatMap((f) => f.items.flatMap((it) => strip(it.text).match(GHSA_RE) ?? [])))) {
   const rec = cache[`ghsa:${id}`];
   if (rec) subjects.set(id, { kind: 'ghsa', ...rec });
@@ -1090,7 +1265,8 @@ for (const { path: p, items } of parsed) {
 
   for (const it of items) {
     if (CHECKS.has('issues')) findings.push(...checkIssues(it));
-    if (!NO_NET && CHECKS.has('cvss')) findings.push(...checkCvss(it, subjects));
+    if (!NO_NET && CHECKS.has('cvss')) findings.push(...checkCvss(it, subjects, cna));
+    if (!NO_NET && CHECKS.has('temporal')) findings.push(...checkTemporal(it, cna, subjects));
   }
   if (!NO_NET && CHECKS.has('repo')) for (const it of items) findings.push(...checkRepo(it, budget));
   if (!NO_NET && CHECKS.has('count')) for (const it of items) findings.push(...await checkCount(it));
@@ -1101,10 +1277,10 @@ for (const { path: p, items } of parsed) {
 
 try { mkdirSync(dirname(CACHE_PATH), { recursive: true }); writeFileSync(CACHE_PATH, JSON.stringify(cache, null, 1)); } catch { /* cache is best-effort */ }
 
-const SEVERITY = { ok: 0, 'ok-cited-page': 0, 'no-cve-named': 1, 'no-record': 1, 'slot-quoted': 1, 'number-other-noun': 1, 'star-drift': 2, stale: 2, archived: 2, differs: 2, absent: 2, 'unsplit-issue-count': 3, 'compound-lags-parts': 3, 'version-swapped': 3, 'version-absent': 3, 'score-not-reproducible': 2, 'score-mismatch': 3, 'wrong-subject': 3, 'absence-contradicted': 3, 'advisory-unreadable': 1, unreadable: 1, 'artifact-unreadable': 1, 'nvd-unavailable': 1 };
+const SEVERITY = { ok: 0, 'ok-cited-page': 0, 'no-cve-named': 1, 'no-record': 1, 'slot-quoted': 1, 'number-other-noun': 1, 'temporal-stopping-point': 1, 'cna-only-score': 1, 'star-drift': 2, stale: 2, archived: 2, differs: 2, absent: 2, 'unsplit-issue-count': 3, 'compound-lags-parts': 3, 'version-swapped': 3, 'version-absent': 3, 'score-not-reproducible': 2, 'score-mismatch': 3, 'wrong-subject': 3, 'absence-contradicted': 3, 'advisory-unreadable': 1, unreadable: 1, 'artifact-unreadable': 1, 'nvd-unavailable': 1 };
 const REAL = (f) => (SEVERITY[f.verdict] ?? 1) >= 2;
 
-const summary = { generated: new Date().toISOString(), files: perFile, api_calls: apiCalls, readme_calls: readmeCalls, cited_page_calls: citedPages_requests, nvd_calls: nvdCalls };
+const summary = { generated: new Date().toISOString(), files: perFile, api_calls: apiCalls, readme_calls: readmeCalls, cited_page_calls: citedPages_requests, nvd_calls: nvdCalls, cna_calls: cnaCalls };
 if (OUT) {
   try { mkdirSync(dirname(OUT), { recursive: true }); writeFileSync(OUT, JSON.stringify(summary, null, 1)); } catch { /* a missing findings file is not a failed lint */ }
 }
@@ -1134,7 +1310,7 @@ if (JSON_OUT) {
     for (const [k, v] of Object.entries(byCheck).sort((a, b) => b[1] - a[1])) console.log(`  ${k.padEnd(8)} ${v}`);
     console.log('  verdicts: ' + Object.entries(byVerdict).map(([k, v]) => `${k}=${v}`).join(' '));
   }
-  console.log(`\napi.github.com calls: ${apiCalls} (cached ${Object.keys(cache).filter((k) => !k.startsWith('readme:')).length} repos) · raw.githubusercontent fetches: ${readmeCalls} (unmetered) · NVD calls: ${nvdCalls}`);
+  console.log(`\napi.github.com calls: ${apiCalls} (cached ${Object.keys(cache).filter((k) => !k.startsWith('readme:')).length} repos) · raw.githubusercontent fetches: ${readmeCalls} (unmetered) · NVD calls: ${nvdCalls} · cveawg calls: ${cnaCalls}`);
 }
 
 const realCount = allFindings.filter(REAL).length;

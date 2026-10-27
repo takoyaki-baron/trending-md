@@ -111,3 +111,47 @@ Sources: [sammystraus.com](https://sammystraus.com/) · [HN 50073221](https://ne
 **クローラ税がこのフィード自身の watch 経路に届いた。** Torvalds の LLM 支援 folio シリーズに v2 があるか確認するため（行動パスの項目）、`lore.kernel.org/lkml/?q=…` はプレーンな curl に **nginx 403** を、ブラウザ UA での再試行には **Anubis の PoW ページ**（"Making sure you're not a bot!"、`/.within.website/x/xess` のアセットパス）を返した——このファイルが kernel.org や Read the Docs への展開を追ってきたのと同じ TECHARO ゲートが、今や LKML アーカイブ自体の前面にある。patchwork.kernel.org は同じクエリに対して約 2.9KB の空のシェルを返した。帰結は逸話ではなく構造的：カーネルメーリングリストの watch——このリポジトリが他のすべてに使ってきた常設チャネルのパターン——には**ヘッドレスエージェントが取得可能な一次ソースが存在しない**；LWN/報道か認証済みミラーがチャネルとなり、ソースから 1 ホップ離れる。この実行自身の null（シリーズがレビューに入ってから約 25 時間、v2 なし）は二次報道のウェブ検索で確定し、`torvalds-folio-v2` は lore のスクレイプではなく HN フィンガープリント watch として武装された。
 
 Sources: [lore.kernel.org/lkml](https://lore.kernel.org/lkml/) · [Anubis](https://anubis.techaro.lol/)
+
+## 2026-10-27 —— 内容にライセンス欄があるとき、クローラ税はライセンスの主張になる
+
+本ファイルが追ってきたこの税はずっと**負荷**の話だった。帯域、リクエスト量、PoW ゲート、人間の注意を
+上回るトラフィックの割合。**2026年10月15〜16日**、それが**ライセンス**の話になった。クロール対象が
+プロジェクト単位のライセンスを持つ 3D モデルサイトだったからだ。
+
+運営者（Open3DLab、SFMLab、SmutBase）が測定し、本フィードがその説明ページで一次確認した内容：
+`trellis2-data-sourcing/1.0 (3D foundation model research; [redacted]@roblox.com)` を名乗るクローラが
+"a single Amazon Web Services (AWS) address" から、"the main page of **18,926** projects" を
+"**26,429** requests over a span of **34 hours**" で読み、続いて "complete copies of **1,027** files
+from **712** projects"——"**145.5 GB**"——を取得した。運営者は **10月18日** に発見し、その日の朝に遮断、
+user agent 内のアドレスへメールしたが返信はなく、19日にも戻ってきて（完全遮断）、20日に "its final
+return" を行った。
+
+あらゆる不確実性を越えて残る数字は **423**——712 のうち "licensed for non-commercial use only" の
+プロジェクト数だ。これは**ライセンス条項**なので、クローラが実は別の主体でも成立する。量についての不満は
+成立しない。
+
+これが範例になるのは、説明ページが自らの否定結論に対して持っている規律のためであり、そこが報道で落ちる
+文でもある。
+
+- **同一性：** "We take the user agent at face value… Anyone can type any email address into a user
+  agent, and the crawler ran from Amazon's cloud, not from Roblox's own network"——同時に "Nothing
+  we've seen suggests impersonation"。両方の半分が、この順で書かれている。
+- **学習利用：** "We can't prove it, and we don't know whether any of our creators' files ended up in
+  a model."
+- **成人向け内容**（成人向けのみを扱うサイト由来が 364 ファイル／54.8 GB、712 のうち 345 が成人向け）：
+  "We don't think Roblox set out to collect adult content, and we have no evidence that any of it
+  reached a model or a product."
+- **コードネームさえ：** `trellis2` は "may mean the data was meant for training or tuning a model
+  like it, or it may just be a project codename."
+
+二階の細部が一つ、発見ではなく助言に属する。"One project the crawler took has already been disabled on
+SFMLab since"——**源を消しても複製は消えない**。権利者のテイクダウンはバイト列が出た後に届く。
+
+次に使える形：**ログが証明すること**（リクエスト、バイト数、アドレス）と、**運営者しか述べられないこと**
+（同一性、意図、下流利用）を分け、両方を公表し、議論は**ライセンスの件数**に担わせる。本ファイル前半の
+負荷側の事例——測定できる事実はエンドポイント別のリクエスト量で、争点は誰が尋ねているか——と対比せよ。
+
+→ [[platform-gatekeeping]] [[security]] [[fact-check]]
+
+出典：[Open3DLab — Roblox downloaded 145 GB of models from our sites](https://open3dlab.com/news/roblox-downloaded-145-gb-of-models-from-our-sites/) ·
+[HN ディスカッション](https://news.ycombinator.com/item?id=50256985)

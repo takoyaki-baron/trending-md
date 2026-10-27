@@ -321,6 +321,17 @@ underlying pages — this produced a two-layer false signal in a single item.
    `published` − NVD record `published`, five states) or `--pkg <name> --ecosystem PyPI --version
    X.Y.Z --cve CVE-…` for the scanner's own question. PYSEC timestamps are midnight-truncated, so
    the tool labels day-granular rows rather than implying a sub-day lag.
+   **And the CNA's own `packageURL` is not a mapping either** (measured 2026-10-27 20:31 on two
+   VulnCheck records). `CVE-2026-116137` states `pkg:npm/adm-zip` `<= 0.6.1` (0.6.1 is npm
+   `latest`, published 2026-09-11) and `CVE-2026-116176` states `pkg:pypi/vllm` `0.9.2 < 0.24.0`;
+   OSV's CVE-level record carries only a **GIT** range in both cases, and the vllm record's
+   `GHSA-vfp2-c8pq-v6h6` alias resolves to **404 in `api.github.com/advisories`** and to
+   "not found, but the following aliases were: CVE-2026-116176" at OSV. Run against both affected
+   versions: **trivy 0.76.1 → 0 and 41 records, grype 0.121.0 → 0 and 41, neither containing either
+   CVE**, while an `adm-zip@0.6.1` install is the newest release there is. So "the CNA declares an
+   ecosystem and a semver range" is not "a scanner can see it" — the package-level advisory
+   (GHSA/PYSEC reaching the global DB *and* OSV) is the whole mapping, and it can lag the CVE
+   indefinitely. A repository-level advisory is not that record.
    **Package-registry state is perishable the same way** (added 2026-09-26, GHAPPIER follow-up):
    "unpublished", "removed", "still downloadable" and "no advisory" for a cited npm/PyPI package
    are version-presence claims that invert without notice — a backdoored version can be
@@ -537,6 +548,21 @@ underlying pages — this produced a two-layer false signal in a single item.
    computed in-lint** (a 270-row MacroVector table is deliberately not vendored), so a v4.0 claim
    reports `v4-not-recomputed` silently; no vector at all is `ok`, because unverifiable is not
    wrong.
+   **A CNA's `baseScore` is a field name, not the base — one vector has three honest numbers**
+   (added 2026-10-27 20:31, the FortiSandbox lecture). `CVE-2026-107656` stores `baseScore: 9.6`
+   beside `CVSS:3.1/…/E:F/RL:O/RC:C`, while NVD re-serves the same source at **9.8** with the
+   temporal components **stripped**: base 9.8, base × E **9.6**, full temporal **9.1**. So "the
+   record says 9.8" and "the vendor says 9.6" are the same vector at different stopping points, and
+   a base-only recompute can neither confirm nor refute the middle one. The lint's `temporal` check
+   now reads the **CNA container** (`cveawg.mitre.org`, unmetered, `--max-cna`, 6h cache) and
+   reports the record's shape — `temporal-stopping-point` — for every CVE whose container carries a
+   temporal vector, because the prose need not mention a version at all (item 38 quotes three
+   numbers with no `CVSS 3.1` label, so every pair-based check is blind to it); a score that exists
+   in the container and not in NVD is `cna-only-score`, not `version-absent`. Equation and weights
+   are quoted from FIRST's v3.1 spec §7.2, **`TemporalScore = Roundup(BaseScore × E × RL × RC)` —
+   one Roundup over the flat product** (per-step rounding gives 9.2: wrong for 3.1, and what a
+   v3.0-shaped memory produces), with **RL:W = 0.97** pinned by a selftest next to Official Fix's
+   0.95. `--selftest` 48→53.
    One NVD request per feed: `cveId` accepts a comma-separated list (measured
    10-26 — seven IDs, one call, six records back, the seventh genuinely absent). Two limits are
    stated rather than hidden: it reads the **default branch** only (`release-drift.mjs --claim`

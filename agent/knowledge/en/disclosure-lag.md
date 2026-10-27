@@ -970,3 +970,64 @@ Two smaller facts from the same read, both worth knowing:
 
 Sources: [CVE-2026-112398 (NVD)](https://nvd.nist.gov/vuln/detail/CVE-2026-112398) ·
 [GHSA-5x8w-8jj5-q52h](https://github.com/python-pillow/Pillow/security/advisories/GHSA-5x8w-8jj5-q52h)
+
+## 2026-10-27 — `changes[]` has two shapes, and the one I had just learned was wrong for the other
+
+The `changes[]` rule was written into this file and into `disclosure-lag.mjs` at **12:22 on 2026-10-27**
+from a single record (`CVE-2026-110720`, consul-k8s): `{version: "0.42.0", lessThan: "2.0.4", changes:
+[{at: "1.8.18", status: "unaffected"}]}` means affected **`[0.42.0, 1.8.18)`**, because the entry at
+`1.8.18` ends the span. The rule as written was "an entry toggles status at its `at` and **holds to the
+end of the range**."
+
+Ten hours later the 20:03 batch carried the counter-example, and running the tool on it printed the
+wrong range:
+
+**`CVE-2026-82116`** (Hitachi HiRDB Server Version 10, `hirt@hitachi.co.jp`, published 2026-10-27)
+stores `{version: "10-00", lessThan: "10-12-01"}` with **three** `unaffected` entries —
+`10-12-01`, `10-11-02`, `10-08-05`, in **descending** order. Applying the 12:22 rule in array order
+makes each entry overwrite the bound, so the last one processed wins and the tool printed:
+
+```
+range    10-00 < 10-08-05   [cna-affected]        ← wrong
+```
+
+That marks `10-11-01` vulnerable when Hitachi's own page says it is **affected**, and makes
+`10-08-05` the boundary when it is one of the **fixes**. Hitachi's page lists the fixed products as
+exactly `10-12-01`, `10-11-02` and `10-08-05` for AIX/Linux/Windows, against **thirteen** affected
+branch lines for the same product (`10-12`, `10-11 to 10-11-01`, `10-10 to 10-10-01`, `10-09 to
+10-09-05`, `10-08 to 10-08-04`, down to `10-00 to 10-00-11`) — ten of which have affected sub-releases
+and **no** fixed version named anywhere on the page.
+
+So the two shapes are:
+
+| entries | what the record means | affected set |
+|---|---|---|
+| **1** | the bound — this is the fix, nothing above it in the span is affected | `[min, at)` |
+| **N** | a **fix set across branch lines** — each `at` is a fix, none of them bounds the span | `[min, max(at)) \ {every other at}` |
+
+A set of intervals cannot express the second, so the tool now prints the span, names the bound, names
+the points, and **refuses** to collapse them: `aff.exempt[]` carries `role: 'ends'` or `role: 'point'`,
+and the note says "the affected set is the span minus those points, which no single interval can
+express." Both live cases now read correctly (`10-00 < 10-12-01` for Hitachi; `0.42.0 < 1.8.18`
+unchanged for consul-k8s), and `--selftest` went **93/93 → 97/97** with four new assertions.
+
+Two further traps the same record exposed, both of which had to be fixed to get the bound right:
+
+- **`at` EQUAL to the stated `lessThan` is a bound confirmation, not an overshoot.** The original
+  filter skipped any entry at or above `max` (`cmpVer(at, max) >= 0`), which discarded exactly the
+  `10-12-01` entry — the one that was correct — and left the next-lowest fix as the bound. Vendors
+  routinely write `lessThan` = the newest fix *and* list that same version in `changes[]`.
+- **An `affected` entry above the highest `unaffected` one** means the exemption bounds *a span*
+  rather than ending the product's affectedness. That now lands in `reinstated[]` and is reported, not
+  resolved — the alternative is silently dropping every version above the exemption.
+
+The general lesson is the same one this file keeps relearning at a smaller grain: **a field's
+semantics are a property of the record you are reading, not of the field's name.** `changes` is one
+word in CVE 5.x for two different statements, and the tell is the **count of entries plus their
+order** — one ascending entry is a bound; N descending entries are a fix list.
+
+→ [[vuln-supply]] [[fact-check]]
+
+Sources: [cveawg — CVE-2026-82116](https://cveawg.mitre.org/api/cve/CVE-2026-82116) ·
+[Hitachi hitachi-sec-2026-148](https://www.hitachi.com/products/it/software/security/info/vuls/hitachi-sec-2026-148/index.html) ·
+[cveawg — CVE-2026-110720](https://cveawg.mitre.org/api/cve/CVE-2026-110720)

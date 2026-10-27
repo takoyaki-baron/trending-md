@@ -1091,3 +1091,55 @@ git リポジトリ、URL、zip、ディレクトリ、単一ファイルを渡�
 → [[agent-distribution]] [[fact-check]] [[harness-reliability]]
 
 Sources: [github.com/NVIDIA/SkillSpector](https://github.com/NVIDIA/SkillSpector) · [raw README](https://raw.githubusercontent.com/NVIDIA/SkillSpector/main/README.md) · [NVIDIA docs — scanning agent skills](https://docs.nvidia.com/skills/scanning-agent-skills) · [arXiv 2610.32322](https://arxiv.org/abs/2610.32322)
+
+## 2026-10-27 —— 残す価値のある skill はプログラムが検査できるものであり、星数はそれを語らない
+
+一つのバッチに三件、まったく異なる著者から、しかも同じ判定に着地した。**機械はその skill の主張を検証
+できるか。** これは本ファイルが K-Dense の「we report no task-level evaluation」以来巡ってきた分割線で
+あり、skill というジャンルの誠実な成員は検査器を同梱する。手がかりは星数ではない。
+
+**`unclebob/ub-mode`**（二日目で 1,558★。API 確認：1,569★、72 forks、**`license: null`**、
+`created 2026-10-25T16:04:09Z`、`pushed 2026-10-25T16:07:59Z`——3分50秒の履歴で、以後動いていない）。
+三つの段階（"First Make it Work"／"Then Make it Right"／"Practice"）は散文だが、ゲートは**同梱ツールが
+出す数値**である。`unclebob/crapper` は各関数を **CRAP < 10** に収める（循環的複雑度・カバレッジ・多項式
+から成る）。`unclebob/dryer` は重複ブロックを **≥ 0.8** の類似度で印す。`unclebob/mutator` はミューテーション
+テストを走らせる。`uml-viewer` はカバレッジ・CRAP・ミューテーションを重ねて描く。これがスタイルガイドと
+ゲートの差であり、本ファイルで初めて、著者がプロンプトではなく*規則*で知られた skill だ。**問題は導入経路
+にある。**「Copy `SKILL.md` into your agent's skills directory as `ub-mode/SKILL.md`」とあり、リポジトリ
+には **LICENSE ファイルがなく、メタデータにも宣言がない**——既定の著作権法の下では「全権利留保」であり、
+企業が共有 skill ディレクトリに貼り付けるのは様式の好みではなくライセンスの問いになる。繰り返す形
+（三例目）：skill ファイルは*実行可能な指示*であり、最もライセンスが確認されない成果物である。
+
+**`morganlinton/BeautifulRust`**（四日で 1,265★、56 forks、MIT）は三つの Agent Skill と lint 設定を
+同梱し、汎用 Agent Skills 形式を狙う（Claude Code、Codex、Copilot、Cursor、Gemini CLI が同じファイルを
+読む）。出所を明示する——Google の Rust Style Guide、公式 Rust API Guidelines、*Effective Rust*、
+*Rust Design Patterns*、Microsoft の Pragmatic Rust Guidelines——そしてほとんど誰もやらないことをする。
+「**Where the sources disagree, the skill picks a side and says why.**」動く二つの skill は検査できる
+二つでもある。`rust-review` は各指摘を名指しの規則に縛り、`lints/` は「a drop-in clippy configuration
+that enforces the machine-checkable rules in CI」——検証可能な半分をモデルに委ねていない。ただし前後比較は
+**一つ**のタスク（小さな semver パーサ）を「what it changes」として提示しており、それは逸話だ。擁護できる
+主張はもっと狭く、もっと良い（すべてのコード例が stable Rust でコンパイルし、すべての lint を現行 clippy
+で確認した）。
+
+**`lyramakesmusic/neuron-explorer`**（六日で 1,378★、159 forks、**`license: null`**、API 確認）は
+Qwen3.5-4B 向けの解釈可能性ツールで、層の全 MLP ニューロンを複数プロンプトで上下に押し、rollout をモデルの
+3D ビューに重ねる。二つの決定がこれを単なるデモ以上のものにする。順位付けに **256 本のランダム方向対照**が
+組み込まれている——「このニューロンが重要」と「この方向が出力を動かした」の差であり、多くの steering 記事が
+飛ばす失敗モードだ。そして第四のパネルは**エージェント**である。「a chat running the `claude` CLI … with
+the explorer as an MCP server」であり、そのエージェントは「reads neurons, cones and lenses, runs the
+live model … moves the map, list and highlights, **and has file tools and a shell in your home
+folder**」。README はこの境界を埋めずに*述べ*、同時に自らの範囲制限（"The server answers only pages and
+tools on this machine"）も添える。同じバッチの OpenHands 9.3——`0.0.0.0` に束縛され鍵リストが空の
+サンドボックスサーバ——と並べると対比が発見になる。**同じリスクの形、逆の開示方向**であり、開示した側は
+ライセンスのない 1,378★ の趣味プロジェクトだ。
+
+本ファイルの一般則：**主張ではなく検査器を引用する。**「enforces CRAP < 10」と「drop-in clippy config」
+は読者が一度の CI 実行で確かめられる性質であり、「enforces disciplined software engineering principles」
+はそうではない。そして skill の価値が*規則*にあるとき、ライセンスは成果物の使える度合いの一部になる——
+チームのディレクトリへ合法的にコピーできない skill の到達可能な利用者は、星数が示すより小さい。
+
+→ [[agent-distribution]] [[fact-check]] [[harness-reliability]]
+
+出典：[github.com/unclebob/ub-mode](https://github.com/unclebob/ub-mode) · [unclebob/crapper](https://github.com/unclebob/crapper) ·
+[github.com/morganlinton/BeautifulRust](https://github.com/morganlinton/BeautifulRust) · [agentskills.io](https://agentskills.io) ·
+[github.com/lyramakesmusic/neuron-explorer](https://github.com/lyramakesmusic/neuron-explorer)

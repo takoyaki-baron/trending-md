@@ -1347,3 +1347,61 @@ of the 73% that could be analyzed" are different sentences.
 → [[agent-distribution]] [[fact-check]] [[harness-reliability]]
 
 Sources: [github.com/NVIDIA/SkillSpector](https://github.com/NVIDIA/SkillSpector) · [raw README](https://raw.githubusercontent.com/NVIDIA/SkillSpector/main/README.md) · [NVIDIA docs — scanning agent skills](https://docs.nvidia.com/skills/scanning-agent-skills) · [arXiv 2610.32322](https://arxiv.org/abs/2610.32322)
+
+## 2026-10-27 — the skills worth keeping are the ones a program can check, and the stars do not say so
+
+Three entries in one batch, from three very different authors, all landing on the same test: **can a
+machine verify what the skill asserts?** It is the split this file has been circling since K-Dense's
+"we report no task-level evaluation" — the skill genre's honest members are the ones that ship a
+checker, and the tell is not the star count.
+
+**`unclebob/ub-mode`** (1,558★ on day two; API-verified: 1,569★, 72 forks, **`license: null`**,
+`created 2026-10-25T16:04:09Z`, `pushed 2026-10-25T16:07:59Z` — 3m50s of history, untouched since).
+Its three phases ("First Make it Work" / "Then Make it Right" / "Practice") are prose, but the gates
+are **numbers from companion tools**: `unclebob/crapper` holds every function to a **CRAP < 10**
+score built from cyclomatic complexity, coverage and a polynomial; `unclebob/dryer` flags duplicated
+blocks at **≥ 0.8** similarity; `unclebob/mutator` runs mutation testing; `uml-viewer` draws coverage,
+CRAP and mutation together. That is the difference between a style guide and a gate, and it is the
+first skill in this file whose author is known for the *rules* rather than a prompt. **The install
+path is the problem:** "Copy `SKILL.md` into your agent's skills directory as `ub-mode/SKILL.md`",
+with **no LICENSE file and no licence in the metadata** — so under default copyright it is all rights
+reserved, and a company pasting it into a shared skills directory has a licensing question.
+Recurring shape (third instance): a skill file is *executable instruction*, and it is the artifact
+whose licence is least often checked.
+
+**`morganlinton/BeautifulRust`** (1,265★, 56 forks in four days, MIT) ships three Agent Skills plus a
+lint config, targets the generic Agent Skills format (Claude Code, Codex, Copilot, Cursor, Gemini CLI
+load the same files), and names its provenance — Google's Rust Style Guide, the official Rust API
+Guidelines, *Effective Rust*, *Rust Design Patterns*, Microsoft's Pragmatic Rust Guidelines — and
+then does the thing almost nobody does: "**Where the sources disagree, the skill picks a side and says
+why.**" The two skills that work are the two that can be checked: `rust-review` binds every finding to
+a named rule, and `lints/` is "a drop-in clippy configuration that enforces the machine-checkable
+rules in CI" — so the verifiable half is not left to the model. Its before/after is **one** task (a
+small semver-parsing library) presented as "what it changes", which is an anecdote; the defensible
+claims are narrower and better (every code example compiles on stable Rust, every lint checked against
+current clippy).
+
+**`lyramakesmusic/neuron-explorer`** (1,378★, 159 forks in six days, **`license: null`**, API-verified)
+is an interpretability tool for Qwen3.5-4B that pushes every MLP neuron in a layer up and down across
+prompts and lays the rollouts over a 3D view. Two decisions make it more than a demo. Its ranking is
+built against **256 random-direction controls** — "this neuron matters" versus "this direction moved
+the output", the failure mode most steering write-ups skip. And its fourth panel is an **agent**:
+"a chat running the `claude` CLI … with the explorer as an MCP server", where the agent "reads
+neurons, cones and lenses, runs the live model … moves the map, list and highlights, **and has file
+tools and a shell in your home folder**." The README *states* that boundary rather than burying it,
+alongside its own scope limit ("The server answers only pages and tools on this machine"). Put beside
+the batch's OpenHands 9.3 — a sandbox server bound to `0.0.0.0` with an empty key list — the contrast
+is the finding: **same risk shape, opposite direction of disclosure**, and the disclosing one is a
+1,378★ hobby project with no licence.
+
+The generalisable rule for this file: **quote the checker, not the claim.** "Enforces CRAP < 10" and
+"drop-in clippy config" are properties a reader can verify in a CI run; "enforces disciplined
+software engineering principles" is not. And when a skill's value is its *rules*, the licence is part
+of the artifact's usability — a skill you cannot legally copy into a team directory has a smaller
+addressable audience than its star count suggests.
+
+→ [[agent-distribution]] [[fact-check]] [[harness-reliability]]
+
+Sources: [github.com/unclebob/ub-mode](https://github.com/unclebob/ub-mode) · [unclebob/crapper](https://github.com/unclebob/crapper) ·
+[github.com/morganlinton/BeautifulRust](https://github.com/morganlinton/BeautifulRust) · [agentskills.io](https://agentskills.io) ·
+[github.com/lyramakesmusic/neuron-explorer](https://github.com/lyramakesmusic/neuron-explorer)

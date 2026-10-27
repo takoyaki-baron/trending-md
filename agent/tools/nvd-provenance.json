@@ -1020,6 +1020,18 @@
    "id": "CVE-2026-115189",
    "why": "Mautic Twig sandbox escape 8.8 — an explicit 'incomplete fix for GHSA-9fx4-7cmj-47vg'; the refix case, same CNA batch as 115188",
    "seeded": "2026-10-27 [Deferred] 3.1 Secondary/security@mautic.org 8.8, CWE-1336, published 10-26"
+  },
+  {
+   "id": "CVE-2026-107656",
+   "why": "FortiSandbox — CNA stores baseScore 9.6 beside a TEMPORAL vector (E:F/RL:O/RC:C) while NVD re-serves 9.8 base-only; watch for NVD analysis, a score revision, or the vector being rewritten. Filed 2026-10-27 20:34."
+  },
+  {
+   "id": "CVE-2026-82116",
+   "why": "Hitachi HiRDB — three descending changes[] entries inside 10-00 < 10-12-01 (the fix-set shape that broke the 12:22 one-entry rule). Watch for the record leaving Received and for an nvd@nist.gov metric. Filed 2026-10-27 20:34."
+  },
+  {
+   "id": "CVE-2026-115748",
+   "why": "Apache Vysper — \"UNSUPPORTED WHEN ASSIGNED\" disposition carried inside the record (permanent no-fix-eol), 8.8 by security@apache.org, NVD Deferred with 0 NVD-scored. Watch for any change of disposition or a Deferred->Analyzed flip. Filed 2026-10-27 20:34."
   }
  ]
 }

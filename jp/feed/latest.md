@@ -114,7 +114,7 @@ license: CC-BY-4.0
 
 **CVE-2026-102649**（GHSA-7m68-72r6-3jx8）はBurrito Terraformオペレータの **0.13.0未満**に影響する。`POST /api/webhook` は「`TerraformRepository` の資格情報が `webhookSecret` を省略するか空値に設定している場合、署名なしのGitHubおよびGitLabイベントを受け入れる」し、`go-playground/webhooks` は「シークレットが空のとき署名やトークン検証を飛ばす」。「`burrito-server` に到達でき、追跡対象リポジトリのURLを知る者なら誰でも、イベントを偽造して、攻撃者が選んだ `Branch`・`Base`・`ID` を持つ `TerraformPullRequest` カスタムリソースを作成・削除できる」。最も鋭いのはここだ。「GitHubの `pull_request` イベントでは、コントローラは実際のプルリクエスト番号で変更ファイルを取得するが、ペイロードのブランチがそのPRと一致するかは照合しない」——よって「実在するPR番号」と「同一リポジトリの無関係な既存ブランチ」の組み合わせが、「オペレータが保存したgitおよびクラウド資格情報を用いた無許可の `terraform plan`」を生み、そのplanは「実際のプルリクエストのコメント欄に投稿され得て、別ブランチのインフラ変更を露出し誤帰属させる」。CWE-**306** と CWE-**863**、CVSS 3.1 **9.9**。
 
-**Why it matters:** 制限で終わる9.9は、そうでないものより有用だ。この記録の締めは良い。「これらの一時レイヤーではauto-applyが無効なので、この脆弱性だけでは `terraform apply` を強制できない。plan時のプロバイダおよびデータソースのコード実行は、選択されたブランチの内容に依存する」。影響は開示と誤帰属——あるチームのインフラ差分が別チームのPRに貼られる——であり、ワンクリックのクラスタ奪取ではない。この「身元混同」の形（有効なPR番号、誤ったブランチ）は、webhookペイロードの半分だけを信じるすべてのコントローラに移植できる教訓だ。修正が**置けなかった**場所も記しておく。「飛ばす」側のライブラリ `go-playground/webhooks` はアーカイブこそされていないが、**2024-08-06** 以降プッシュがない（811日）。ゆえに修正は完全にBurrito側であり、このライブラリの他のすべての利用者は、自前でパッチを当てるまで同じ空シークレット挙動を継承する。
+**Why it matters:** 制限で終わる9.9は、そうでないものより有用だ。この記録の締めは良い。「これらの一時レイヤーではauto-applyが無効なので、この脆弱性だけでは `terraform apply` を強制できない。plan時のプロバイダおよびデータソースのコード実行は、選択されたブランチの内容に依存する」。影響は開示と誤帰属——あるチームのインフラ差分が別チームのPRに貼られる——であり、ワンクリックのクラスタ奪取ではない。この「身元混同」の形（有効なPR番号、誤ったブランチ）は、webhookペイロードの半分だけを信じるすべてのコントローラに移植できる教訓だ。修正が**置けなかった**場所も記しておく。「飛ばす」側のライブラリ `go-playground/webhooks` はアーカイブこそされていないが、**2024-08-06** 以降プッシュがない（812日）。ゆえに修正は完全にBurrito側であり、このライブラリの他のすべての利用者は、自前でパッチを当てるまで同じ空シークレット挙動を継承する。
 
 [`🔗 GitHub Advisory — Burrito unsigned webhook`](https://github.com/padok-team/burrito/security/advisories/GHSA-7m68-72r6-3jx8) · [`🔗 NVD — CVE-2026-102649`](https://nvd.nist.gov/vuln/detail/CVE-2026-102649) · [`🔗 Burrito v0.13.0 release`](https://github.com/padok-team/burrito/releases/tag/v0.13.0)
 
@@ -168,7 +168,7 @@ license: CC-BY-4.0
 - **Source:** GitHub Trending · 本日 +312 stars · nightly-labs
 - **Tags:** `agent-workspace` `electron` `local-first` `license` `permissions`
 
-`nightly-labs/openbot`——「常駐AIチームメイトのためのローカル優先デスクトップワークスペース」——は各エージェントにワークスペース、会話、FIFOタスクキュー、ファイル転送、埋め込みブラウザ、エージェント間メッセージを与え、**Codex App Server** と **Claude Code** をネイティブに、Grok、OpenCode、Gemini、Cursor、Clineを **ACP** 経由で駆動する。構成はElectron＋SolidJSレンダラ、stdioまたはストリームJSON上のプロバイダCLI、イベントログと射影のための **SQLite**、サンドボックス化された `WebContentsView` のブラウザ、Cloudflare WorkersのアカウントAPI、リモートクライアント向けの **WebRTCデータチャネル**。**1,613スター**、**198フォーク**（UTC+8 12:33。12:18バッチの「1.4k／174」は約200スター古かった）、2,167コミット。
+`nightly-labs/openbot`——「常駐AIチームメイトのためのローカル優先デスクトップワークスペース」——は各エージェントにワークスペース、会話、FIFOタスクキュー、ファイル転送、埋め込みブラウザ、エージェント間メッセージを与え、**Codex App Server** と **Claude Code** をネイティブに、Grok、OpenCode、Gemini、Cursor、Clineを **ACP** 経由で駆動する。構成はElectron＋SolidJSレンダラ、stdioまたはストリームJSON上のプロバイダCLI、イベントログと射影のための **SQLite**、サンドボックス化された `WebContentsView` のブラウザ、Cloudflare WorkersのアカウントAPI、リモートクライアント向けの **WebRTCデータチャネル**。**1,876スター**、**215フォーク**（UTC+8 20:14。12:18バッチの「1.4k／174」は約200スター古く、12:33から20:14の間にさらに約263スター増えた）、2,167コミット。
 
 **Why it matters:** README自身の開示がこの項目の中身だ。「**OpenBotは開発プレビューである**」、そして「エージェントは現在 `danger-full-access` と `approvalPolicy: never` で動作する」——初回起動時の同意の後は「ファイルを変更し、コマンドを実行し、ネットワークを使い、ブラウザを操作できる。動作ごとの確認はない」。そして「無制限のプロバイダモードはこれらのディレクトリ外へのアクセスを許し得る」。「ローカル優先」というラベルが隠す2つについても率直だ。「local-firstであってoffline-onlyではない」（プロバイダのトラフィックは依然OpenAI、Anthropic、xAI、Google、Cursor、Clineへ行く）、そしてライセンス変更——**PolyForm Noncommercial 1.0.0**、「0.1.11およびそれ以前のバージョンはApache-2.0のまま利用可能」。エージェントごとの独立ワークスペースと承認ポリシーなしのデスクトップは合理的な願望だ。資格情報が載ったマシンに向けるのは合理的ではない。
 
@@ -506,7 +506,7 @@ Mauticの二件は **2026-10-26T14:16:30Z**、同一CNAバッチの同一ミリ�
 
 Johannes Schauer Marin Rodrigues（`josch@debian.org`）は**10月26日**、debian-develに「告知なしに、NEWキューの処理が私のアップロードをLLMに投げているようだ」と知ったこと、そして自分は何も聞かれていないことを書いた。NEWはパッケージがアーカイブに入る前に置かれるキューであり——歴史的に人間が最後の関門だった唯一の場所だ——ゆえにこの変更はプロジェクトの片隅ではなく、すべての新規パッケージに及ぶ。彼は立場を率直に述べる。「I'm not going to read the machine-generated output」「I will not upload anything to NEW unless there is a way for me to opt out of this」、そしてDebianが生成AIを推奨も禁止もしないという総会決議の文言については「How is this not *Debian endorses the use of generative AI*?」。彼は「not leaving the project」と言うが、「I'll not be a part of this.」とも言う。
 
-**Why it matters:** 持ち帰るべきは技術的な異議であり、趣味の話ではない。「If the LLM has a bug, I cannot fix it」——再現可能な出力を持ち、パッチを当てることも上書きすることも異議を唱えることもできるLintianと比べてほしい。挙動が決定的でもフォーク可能でもないレビュアは、成果物が他人のコードの再現可能なビルドであるディストリビューションにとって新しい種類の依存であり、要求はそれに見合って控えめだ。「I would prefer if the default was *no LLM review* and that developers have to explicitly opt-in.」Ben Finney（`bignose@debian.org`、10月27日）の続きのスレッドでエスカレーションが見える。「This unreliable and non-deterministic machine should not be sending messages unsolicited to Debian package maintainers.」どちらの投稿もレビューが間違っているとは言っていない——異議は、それが正しいかどうかを誰も確立できないという点にある。
+**Why it matters:** 持ち帰るべきは技術的な異議であり、趣味の話ではない。「If the LLM has a bug, I cannot fix it. The model is a binary blob」——Lintianは「will give me an answer *reproducibly* and I can then either fix Lintian or add an override to my source package」と比べてほしい。挙動が決定的でもフォーク可能でもないレビュアは、成果物が他人のコードの再現可能なビルドであるディストリビューションにとって新しい種類の依存であり、要求はそれに見合って控えめだ。「I would prefer if the default was *no LLM review* and that developers have to explicitly opt-in.」その後スレッドは、Martin Steigerwaldが27日に引いた一行で分岐する。「This unreliable and non-deterministic machine should not be sending messages unsolicited to Debian package maintainers」に対し、Theodore Tso（`tytso@mit.edu`）は「Humans are unrelible and non-deterministic, you know」「if you think it's a waste of time, feel free to ignore the report」と返し、Ben Finney（`bignose@debian.org`）は両方を退ける。「I am deeply troubled you would equivocate between a machine and a human in this conversation… When a machine is unreliable, we have no obligation to suffer it.」レビューが間違っていると言った投稿者は一人もいない——異議は、それが正しいかどうかを誰も確立できないという点にあり、反論は、確立する必要はないという点にある。
 
 [`🔗 debian-devel — "I will no longer upload to NEW"`](https://lists.debian.org/debian-devel/2026/10/msg00263.html) · [`🔗 続き: "Re: I will no longer upload to NEW"`](https://lists.debian.org/debian-devel/2026/10/msg00289.html)
 
@@ -526,7 +526,7 @@ Johannes Schauer Marin Rodrigues（`josch@debian.org`）は**10月26日**、debi
 
 ---
 
-## 38. FortiSandboxの9.8、9.6、9.2は1本のベクタの3つの停止点——そしてアドバイザリはCVEより13日古い
+## 38. FortiSandboxの9.8、9.6、9.1は1本のベクタの3つの停止点——そしてアドバイザリはCVEより13日古い
 
 - **Velocity:** ▮▮ rising
 - **Source:** FortiGuard PSIRT FG-IR-26-185 / NVD / CVEレコード · 2026-10-26公開
@@ -534,7 +534,7 @@ Johannes Schauer Marin Rodrigues（`josch@debian.org`）は**10月26日**、debi
 
 **CVE-2026-107656**（CWE-288）はFortiSandbox GUIの「Authentication Bypass Using an Alternate Path or Channel」で、「細工したHTTPリクエストによって、遠隔の未認証攻撃者が認証をバイパスできる可能性がある」。**5.0.7**（5.0.0–5.0.6から）と **4.4.10**（4.4.0–4.4.9から）で修正。FortiSandbox **5.2は影響なし**。**FortiSandbox PaaS 4.4の「全バージョン」** はアップグレードではなく「Migrate to a fixed release」。Fortinet自身のタイムラインは「2026-10-13: Initial publication」で、CVEレコードの公開は **2026-10-26T13:45Z**、**13日**の差だ。「Virtual Patch: No」。「Known Exploited: No」。クレジットはFortinet自身の製品セキュリティチームのAdham El KarnとTrendAI ResearchのJason McFadyen。
 
-**Why it matters:** このレコードは1つの弱点に3つの数字を載せており、そのうち基数の算術なのは1つだけだ。NVDは `psirt@fortinet.com` の指標を1つだけ **9.8** で持ち（vulnStatus `Awaiting Analysis`、NVD採点は0）、ベクタは基数のみの `CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H`。CNAレコード自身の指標は **9.6** を格納するが、その `vectorString` は `E:F/RL:O/RC:C` を追加しており、そこに齟齬が住む。基数は **9.8**、基数×Exploit-Code-Maturityのみでは **9.6**、完全な時間的式では **9.2** を計算する。つまりベンダーが公表した数字は `base × E` の算術で `RL`/`RC` を適用しないまま——第二の見解でもなく、時間的スコアでもない。第二の読み違いの罠はアドバイザリページ自体にある。CVE説明は「FortiSandbox **4.2** all versions」と「FortiSandbox PaaS 4.2 all versions」を挙げるが、FG-IR-26-185のバージョン表に4.2の行はまったくない——5.2、5.0、4.4、そしてPaaSの対応版だけだ。どのリリースを入れればよいか人に伝えるときは、説明ではなくアドバイザリの表を引用すること。
+**Why it matters:** このレコードは1つの弱点に3つの数字を載せており、そのうち基数の算術なのは1つだけだ。NVDは `psirt@fortinet.com` の指標を1つだけ **9.8** で持ち（vulnStatus `Awaiting Analysis`、NVD採点は0）、ベクタは基数のみの `CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H`——NVDはCNAが提出した時間的ベクタを基数指標に正規化するので、この9.8は同じベクタから3成分を落としたものであり、第二の評価ではない。CNAレコード自身の指標は **9.6** を格納するが、その `vectorString` は `E:F/RL:O/RC:C` を追加しており、そこに齟齬が住む。基数は **9.8**、基数×Exploit-Code-Maturityのみでは **9.6**、完全な時間的式では **9.1**（`9.8 × 0.97 × 0.95 × 1.0 = 9.0307`、3.1仕様の `Roundup` で小数1桁に切り上げ）。つまりベンダーが公表した数字は `base × E` の算術で `RL`/`RC` を適用しないまま——第二の見解でもなく、時間的スコアでもない。罠はフィールド名にある。`baseScore: 9.6` は時間的ベクタの隣に置かれているが、9.6はそのベクタの基数ではない。第二の読み違いの罠はアドバイザリページ自体にある。CVE説明は「FortiSandbox **4.2** all versions」と「FortiSandbox PaaS 4.2 all versions」を挙げるが、FG-IR-26-185のバージョン表に4.2の行はまったくない——5.2、5.0、4.4、そしてPaaSの対応版だけだ。どのリリースを入れればよいか人に伝えるときは、説明ではなくアドバイザリの表を引用すること。
 
 [`🔗 FortiGuard — FG-IR-26-185`](https://fortiguard.fortinet.com/psirt/FG-IR-26-185) · [`🔗 NVD — CVE-2026-107656`](https://nvd.nist.gov/vuln/detail/CVE-2026-107656) · [`🔗 CVE record (CNA)`](https://www.cve.org/CVERecord?id=CVE-2026-107656)
 

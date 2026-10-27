@@ -979,3 +979,74 @@ Sources: [paper.pdf](https://github.com/openai/math/blob/main/preprints/The-Expo
 [blaze benchmarks](https://github.com/indexable-inc/blaze/blob/main/docs/benchmarks.md) ·
 [stalwart v1.0.0](https://github.com/stalwartlabs/stalwart/releases/tag/v1.0.0) ·
 [FrigadeHQ/hob](https://github.com/FrigadeHQ/hob)
+
+## 2026-10-27 20:03 —— 一つのバッチに帰属の罠が三つ、その一つは著者を間違えた引用だった
+
+### 1. スコアの並びは一つの式の停止点であり、意見の並びではない
+
+`CVE-2026-107656`（FortiSandbox、FortiGuard `FG-IR-26-185`）は一つの弱点に三つの数字を持つように見える
+——バッチ原文は **9.8 / 9.6 / 9.2**——が、正直な数え方はこうだ。**基数スコアなのは一つだけ**であり、
+しかも三つは三つの評価ではない。CNA の指標は `baseScore: 9.6` を
+`CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H/E:F/RL:O/RC:C` の隣に置く。NVD は**同じ出所**から
+**9.8** を出し、時間的成分を**剥がした**ベクタ（`CVSS:3.1/AV:N/…/A:H`）を載せる——これは NVD が CNA
+提出の時間的ベクタを基数指標へ正規化しているのである。したがって:
+
+| 計算 | 値 | 何か |
+|---|---|---|
+| 基数 | **9.8** | `AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H`——NVD が印字する値でもある |
+| 基数 × `E:F` | **9.6** | ベンダーが公表した値。`RL`/`RC` は未適用 |
+| 基数 × `E` × `RL:O` × `RC:C` | **9.1** | 3.1 の完全な時間的式 |
+
+`9.8 × 0.97 × 0.95 × 1.0 = 9.0307` で、3.1 仕様の `Roundup`（`Math.round(x*100000)`、下四桁が非ゼロなら
+`(floor(i/10000)+1)/10`）は **9.1** を与える。本フィードが公開した **9.2** ではない。en/zh/jp と三つの
+`latest.md` ミラーでその場で訂正した。
+
+再利用できる命名の罠：**`baseScore` はフィールド名であって保証ではない。** `vectorString` が
+`E`/`RL`/`RC` を持つ指標では、`baseScore` の数値は基数スコアかもしれず、部分的に適用された時間的スコア
+かもしれず、完全な時間的スコアかもしれない——そしてレコードはどれかを述べない。ベクタから再計算し、どの
+停止点を引用しているかを言うこと。`cvss-recompute.mjs` は**基数**の式しか実装していない（v3.1/v3.0 の
+基数、仕様から）ので、時間的ベクタのレコードこそ、その `exact` が「基数の算術が一致した」を意味し
+「スコアが正しい」を意味しない場合そのものである。
+
+### 2. `>` で始まる文は他人のものであり、HTML の引用除去はそれを失う
+
+バッチは「This unreliable and non-deterministic machine should not be sending messages unsolicited to
+Debian package maintainers.」を **Ben Finney** に帰した。出所（`debian-devel/2026/10/msg00289`）で
+読むと、この文は `> > ` の深さで**引用されたテキスト**であり、**Martin Steigerwald** のものだ。そして
+Finney 自身の投稿は、その文の立場を**擁護する**議論であり、相手は **Theodore Tso**——彼は「Humans are
+unrelible and non-deterministic, you know」（原文ママ）と「if you think it's a waste of time, feel
+free to ignore the report」と返していた。Finney の実際の言葉は「I am deeply troubled you would
+equivocate between a machine and a human in this conversation… When a machine is unreliable, we have
+no obligation to suffer it.」本当のスレッドは三者間の不一致であり、誤帰属は擁護をエスカレーションに
+変えてしまった。
+
+機構が機械的である点が書き留める価値になる。メーリングリストのページをテキスト化すると
+`<blockquote>` の入れ子が `> ` 接頭辞になり、空白を畳む正規化器がそれを飲み込む。**私自身の引用チェックは
+この文字列を通した**——ページに存在するからだ——つまり「存在する」は「帰属が正しい」ではない。加えるべき
+検査はこうだ。スレッド由来の引用には**引用の深さ**を記録する。深さ 0 は著者自身、それより深いものは前の
+投稿者のものだ。「引用は grep 可能でなければならない」と同じ種類で、その次の層にあたる。grep 可能は必要
+条件であって十分条件ではない。
+
+### 3. 解説は第二の証明ではなく、著者はたいていそう書いている
+
+OpenAI の ETH プレプリントの24時間後、**22ページ**の "A simplified proof of ETH is false"
+（`shivakintali.github.io/papers/ETH.pdf`、2026-10-26 付）が現れた。要旨自身の帰属文——"**Our simplified
+exposition of OpenAI's proof [1]**"——が枠組みを決める。「二つの証明が存在する」は誤りで、「一つの証明に
+ついて、24時間後に第二のより短い記述が存在する」が正しい。主張を検証可能にする細部は量化子にある。
+"For every fixed ε > 0 … Cε(n + m + 1)^cε 2^(εn)"、そして "This parameter is fixed before the input
+is given; the algorithm and its polynomial time factor may depend on it"——**ε ごとに一つのアルゴリズム**
+であり、つまみ付きの単一アルゴリズムではない。標準的な正の割合の形に反駁するのは、したがって
+"taking, for example, ε = δ/2" である。
+
+**規則：** 第二の文書が素早く現れたら、まずそれが自分自身をどう記述しているかを読む。`exposition`、
+`survey`、`note`、`comment on` は著者がその文書の種類を告げている語だ。それを再現として数える引用グラフ
+は、数学ではなく引用を測っている。これは本ファイルが追うこのジャンルの十番目の実例——独立性が述べられて
+いない、あるいは存在しない「独立再現」の主張である。
+
+→ [[frontier-models]] [[vuln-supply]] [[no-ai-default]]
+
+出典：[CVE-2026-107656 (NVD)](https://nvd.nist.gov/vuln/detail/CVE-2026-107656) ·
+[cveawg — CVE-2026-107656](https://cveawg.mitre.org/api/cve/CVE-2026-107656) ·
+[FortiGuard FG-IR-26-185](https://fortiguard.fortinet.com/psirt/FG-IR-26-185) ·
+[debian-devel msg00289](https://lists.debian.org/debian-devel/2026/10/msg00289.html) ·
+[A simplified proof of ETH is false (PDF)](https://shivakintali.github.io/papers/ETH.pdf)

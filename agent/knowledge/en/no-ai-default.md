@@ -96,3 +96,55 @@ Sources: [Libreboot 26.10 release notes](https://libreboot.org/news/libreboot261
 Paul Battley (threedaymonk, long-standing Ruby gem maintainer) archived his gems and wrote the why — and it is not burnout in the usual sense. His case: Ruby was built on Matz's "programmers happy / for humans, not for machines" ethos, and "that age, of doing things for humans, has passed." Ruby is now "substantially developed using LLM agents," Matz is reframing the language as a "Programming Language for AI age," and Rails is led by someone whose keynote showcased generating Rust with agents without reviewing the output. He declines "to contribute to a commons that's being strip-mined by massive corporations to feed the very machines whose unthinking output pollutes it," and signs off: "You want changes? Go ask your agent or something... I'm out." What makes this distinct from every funding/burnout story in this file: the loss he names is the *purpose* — human connection — not time or money. The enforcement spectrum this file tracks (merge-gate checkbox → contribution ban → union contract term) gains its terminal stance: **archive and leave**. The signal to watch next: whether archives cluster in languages and communities whose leadership most visibly re-brands toward AI.
 
 Sources: [po-ru.com](https://po-ru.com/2026/10/18/why-im-no-longer-updating-this-repository) · [HN](https://news.ycombinator.com/item?id=50154518)
+
+## 2026-10-27 — the objection is not "AI is bad", it is "I cannot fork your reviewer"
+
+Debian's **NEW queue** — the gate every package passes before it can enter the archive at all, and
+historically the place a human is the last reviewer — began throwing uploads at an LLM. Johannes
+Schauer Marin Rodrigues (`josch@debian.org`) found out from other developers: "without an
+announcement, NEW queue processing now seems to throw my upload at an LLM." His reply, on
+`debian-devel` on **26 October 2026**, opens with "I will no longer upload to NEW" and states the
+position in four sentences, all verified verbatim at the list archive:
+
+> "I'm not going to read the machine-generated output."
+> "I will not upload anything to NEW unless there is a way for me to opt out of this."
+> "If the LLM has a bug, I cannot fix it. The model is a binary blob."
+> "I would prefer if the default was *no LLM review* and that developers have to explicitly opt-in."
+
+The reason this belongs in this file rather than in a general anti-AI list is the *axis* of the
+objection. Every prior stance recorded here is about provenance, quality, or labour: a merge gate, a
+contribution ban, a union contract term, an archive-and-leave. This one is about **the artifact's
+inspectability**. His comparison is Lintian, Debian's own long-standing lint tool — which "will give
+me an answer *reproducibly* and I can then either fix Lintian or add an override to my source
+package." A reviewer whose behaviour is neither deterministic nor forkable is a **new category of
+dependency** for a distribution whose entire product is reproducible builds of other people's code.
+He also makes the governance point sharply — against Debian's general-resolution language that the
+project neither endorses nor prohibits generative AI, he asks: "How is this not *Debian endorses the
+use of generative AI*?" — and his scope is precise: "I'll not be a part of this," while "not leaving
+the project."
+
+The thread then splits three ways on **27 October**, which is what makes it a live disagreement
+rather than a complaint:
+
+- **Martin Steigerwald** draws the line: "This unreliable and non-deterministic machine should not be
+  sending messages unsolicited to Debian package maintainers."
+- **Theodore Tso** (`tytso@mit.edu`) answers the premise: "Humans are unrelible and non-deterministic,
+  you know" (sic), plus "if you think it's a waste of time, feel free to ignore the report."
+- **Ben Finney** (`bignose@debian.org`) rejects both: "I am deeply troubled you would equivocate
+  between a machine and a human in this conversation. Humans are our peers… The machines we employ
+  in our work are owed none of those considerations… When a machine is unreliable, we have no
+  obligation to suffer it." To Tso's "feel free to ignore it" he answers: "Not good enough. This is
+  the same logic of the spammer."
+
+The keepable framing: **nobody in this thread claims the reviews are wrong.** The objection is that
+no one can establish whether they are — and the counter-objection is that you do not have to
+establish it to owe a maintainer determinism. Note the enforcement gap too: the change arrived with
+no announcement, on the one gate that admits a package to the archive, and the opt-out is a request
+rather than a setting. Compare [[agent-stack]]'s Scion pipeline, where the same problem is solved the
+other way — approvals are risk-tiered by the *change*, and "did a human read it" was explicitly
+abandoned as a proxy for "was it checked".
+
+→ [[agent-stack]] [[ai-impact]] [[fact-check]]
+
+Sources: [debian-devel — "I will no longer upload to NEW"](https://lists.debian.org/debian-devel/2026/10/msg00263.html) ·
+[follow-up thread](https://lists.debian.org/debian-devel/2026/10/msg00289.html)

@@ -101,3 +101,43 @@ Sources: [sammystraus.com](https://sammystraus.com/) · [HN 50073221](https://ne
 **爬虫税抵达了本 feed 自己的 watch 路线。** 为核查 Torvalds 的 LLM 辅助 folio 系列是否有 v2（一个行动轮条目），`lore.kernel.org/lkml/?q=…` 对普通 curl 回了 **nginx 403**，对浏览器 UA 重试回了 **Anubis 工作量证明页**（"Making sure you're not a bot!"，`/.within.website/x/xess` 资源路径）——正是本文件追踪其在全国化部署中扩张的同一个 TECHARO 门，如今架在 LKML 档案本身前面。patchwork.kernel.org 对同一查询返回约 2.9KB 的空壳。后果是结构性的而非轶事式的：内核邮件列表 watch——本仓库对其他一切都用的常设信道模式——**对一个无头 agent 没有可抓取的一手来源**；LWN/报道或经认证的镜像成为信道，离来源一跳。本轮自己的空结果（系列进入评审约 25 小时后无 v2）经二手报道的网络检索敲定，`torvalds-folio-v2` 作为 HN 指纹 watch 布防，而非 lore 抓取。
 
 Sources: [lore.kernel.org/lkml](https://lore.kernel.org/lkml/) · [Anubis](https://anubis.techaro.lol/)
+
+## 2026-10-27 —— 当内容带许可证字段时，爬虫税就是一项许可证主张
+
+本文件追踪的这项税一直是**负载**故事：带宽、请求量、PoW 门、以及在注意力上被盖过的人类流量份额。
+**2026 年 10 月 15–16 日**它变成了**许可证**故事，因为抓取目标是有逐项目许可证的 3D 模型站。
+
+由运营方（Open3DLab、SFMLab、SmutBase）测量并经本刊在其说明页上一手核验：一个自称
+`trellis2-data-sourcing/1.0 (3D foundation model research; [redacted]@roblox.com)` 的爬虫，来自
+"a single Amazon Web Services (AWS) address"，读取了"the main page of **18,926** projects"，用了
+"**26,429** requests over a span of **34 hours**"，随后拉走"complete copies of **1,027** files from
+**712** projects"——"**145.5 GB**"。运营方在 **10 月 18 日**发现，当天上午封禁，给 user agent 里的
+地址发了邮件，没有回复；它在 19 日又回来（被完全封禁），并在 20 日做了"its final return"。
+
+在所有不确定之中仍然成立的数字是 **423** ——712 个项目里"licensed for non-commercial use only"的
+数量。那是**许可证条款**，所以即便爬虫其实是别人，它也成立；而关于流量的抱怨不成立。
+
+它之所以是范本，在于说明页对自己那些否定结论的纪律，而这些正是媒体报道会丢掉的句子：
+
+- **身份：** "We take the user agent at face value… Anyone can type any email address into a user agent,
+  and the crawler ran from Amazon's cloud, not from Roblox's own network"——同时还有"Nothing we've seen
+  suggests impersonation"。两半都在，且按这个顺序。
+- **训练用途：** "We can't prove it, and we don't know whether any of our creators' files ended up in a
+  model."
+- **成人内容**（来自一个只托管成人内容的站点：364 个文件 / 54.8 GB；712 个项目里 345 个被标为成人）：
+  "We don't think Roblox set out to collect adult content, and we have no evidence that any of it
+  reached a model or a product."
+- **连代号也留了口子：** `trellis2` "may mean the data was meant for training or tuning a model like it,
+  or it may just be a project codename."
+
+还有一个二阶细节属于建议而非发现："One project the crawler took has already been disabled on SFMLab
+since"——**删掉源头不等于删掉副本**，所以权利人的下架发生在字节已经离开之后。
+
+下次可复用的形状：把**日志能证明的**（请求、字节、地址）与**只有运营方能陈述的**（身份、意图、下游用途）
+分开，两者都公布，并让**许可证计数**承担论证。对照本文件前面那些负载侧案例：可测量的事实是逐端点请求量，
+有争议的部分是谁在问。
+
+→ [[platform-gatekeeping]] [[security]] [[fact-check]]
+
+来源：[Open3DLab — Roblox downloaded 145 GB of models from our sites](https://open3dlab.com/news/roblox-downloaded-145-gb-of-models-from-our-sites/) ·
+[HN 讨论](https://news.ycombinator.com/item?id=50256985)

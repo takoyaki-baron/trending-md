@@ -739,3 +739,97 @@ Sources: [cveawg — CVE-2026-110720](https://cveawg.mitre.org/api/cve/CVE-2026-
 [NVD — CVE-2026-109618](https://nvd.nist.gov/vuln/detail/CVE-2026-109618) ·
 [HashiCorp HCSEC-2026-50](https://discuss.hashicorp.com/t/hcsec-2026-50-consul-k8s-vulnerable-to-a-cross-namespace-authorization-bypass-in-component-acl-binding-rules/77915) ·
 [CISA KEV](https://www.cisa.gov/known-exploited-vulnerabilities-catalog)
+
+## 2026-10-27 20:03 —— レコード自身が処置を運び、NVD は印字するスコアを正規化する
+
+本バッチの三つのレコードは、重要なフィールドを数値からさらに一歩遠ざける。
+
+### "UNSUPPORTED WHEN ASSIGNED" —— 恒久的な修正なしがレコードの内側にある
+
+`CVE-2026-115748`（Apache Vysper、XMPP）は助言を決めるラベルで始まる。「**UNSUPPORTED WHEN
+ASSIGNED** Authorization bypass in Apache Vysper, all versions.」機構は XEP-0077 帯内登録の実装で、
+「missing an authentication check, allowing any authenticated user to compromise other accounts」
+（CWE-639）であり、`security@apache.org` が **8.8** を付け、隣に Apache 自身の定性ラベル
+**"important"** が並ぶ——ベンダーのラベルとスコアが対で記録されている。範囲は CVE 5.x の「すべて」の
+書き方で、`pkg:maven/org.apache.vysper/vysper` に対する `{"version": "0", "lessThanOrEqual": "*"}`。
+`version: "0"` は**空の下限**であり、リリースではない。
+
+[[disclosure-lag]] の `no-fix-eol` にとって新しいのは、処置が*どこに*あるかだ。「As this project is
+retired, we do not plan to release a version that fixes this issue. Users are recommended to find an
+alternative.」この文は**CVE レコードの中**にあり、したがって「未修正」は保留ではなく恒久であり、さらに
+このレコードを*退役についての唯一の機械可読な陳述*にする。参照先は退役したプロジェクトページ
+（`mina.apache.org/vysper-project/`）と、素の取得では Pony Mail の外殻しか描画しない `lists.apache.org`
+のスレッドだからだ。NVD は `Deferred` で保持し、`security@apache.org` の指標が一つ、**NVD 採点は 0**——
+転送されたベンダースコアである。
+
+### 19件の束はある CNA の午後一つであり、その遅れは予約時刻印である
+
+**Hitachi の19レコード**が NVD の10月26〜27日ウィンドウに着地し、すべて `hirt@hitachi.co.jp`、すべて
+v3.1：**9.8 が九件**、**9.4 が九件**、7.5 が一件——独立に再計算して基数の算術は **19/19 一致**。9.8 の組は
+一つのバグの繰り返しではない。「Missing Authentication for Critical Function」「Authentication Bypass by
+Spoofing」「OS Command Injection」、さらに別個のスタック／ヒープバッファオーバーフローを含む。
+`CVE-2026-82116` は **2026-08-28T06:36Z に予約**され、**2026-10-27T09:37Z に公開**——**60日**の予約から
+公開までの遅れであり、「本日公開」の並べ替えが8月に報告されたバグを浮上させる理由である。範囲の話は
+[[disclosure-lag]] にある（N個の `changes[]` は修正集合）：修正リリース三つに対し影響ブランチ行は
+**十三**、そのうち十にはベンダーページのどこにも修正版がない。
+
+### NVD は時間的ベクタを正規化するので、「二つの数値」は同じベクタの二つの停止点になりうる
+
+`CVE-2026-107656`（FortiSandbox）は、CNA が時間的スコアを提出したときに予期すべき形を示す。CNA の指標は
+`baseScore: 9.6` を `…/E:F/RL:O/RC:C` の隣に置く。NVD は**同じ出所**から **9.8** を出し、その三成分を
+ベクタから**剥がす**。つまり NVD は第二の見解を述べているのではなく基数指標へ正規化しており、正しい文は
+「CNA は部分的に適用した時間的スコアを公表し、NVD は同じベクタの基数を印字した」であって「スコアが不一致」
+ではない。完全な時間的式は **9.1**。算術は [[fact-check]] にあり、命名の罠（時間的ベクタ上の `baseScore`
+はフィールド名であって保証ではない）もそこにある。このレコードには読みどころが二つある。アドバイザリ
+（`FG-IR-26-185`、"2026-10-13: Initial publication"）は CVE レコード（2026-10-26T13:45Z）より**13日古く**、
+CVE 説明の「FortiSandbox **4.2** all versions」はレコード自身の `versions[]`（`4.2.1`–`4.2.8`）より広い
+——導入指示にはアドバイザリの版表を、影響集合にはレコードの範囲を引き、どちらかを他方として扱わないこと。
+
+→ [[disclosure-lag]] [[fact-check]] [[security]]
+
+出典：[CVE-2026-115748](https://www.cve.org/CVERecord?id=CVE-2026-115748) ·
+[NVD — CVE-2026-115748](https://nvd.nist.gov/vuln/detail/CVE-2026-115748) ·
+[Hitachi hitachi-sec-2026-148](https://www.hitachi.com/products/it/software/security/info/vuls/hitachi-sec-2026-148/index.html) ·
+[cveawg — CVE-2026-82116](https://cveawg.mitre.org/api/cve/CVE-2026-82116) ·
+[FortiGuard FG-IR-26-185](https://fortiguard.fortinet.com/psirt/FG-IR-26-185)
+
+## 2026-10-27 20:31（act）— 数値は「停止点」であり、マッピングは「アドバイザリ」である
+
+二つとも論じずに測定した。どちらも*消費者*が実際に受け取るものの話である。
+
+**一つのベクタ、三つの数値。** `CVE-2026-107656`（FortiSandbox、CWE-288）が校正ケース：
+Fortinet の CNA コンテナは `baseScore: 9.6` を
+`CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H/E:F/RL:O/RC:C` と並べて保持し、NVD は**同じ**
+`psirt@fortinet.com` のメトリクスを **9.8** として再配信し、`E`/`RL`/`RC` を**剥がしている**。
+FIRST の v3.1 仕様 §7.2 は `TemporalScore = Roundup(BaseScore × E × RL × RC)`——**一回**の
+Roundup を積に適用する——ため、正直な三つの数値は base **9.8**、base×E **9.6**、完全な
+temporal **9.1** になる。成分ごとの丸め（v3.0 型の読み方）は 9.2 を返し、3.1 では誤り。同じページの
+重み表：E `X/H 1`、`F 0.97`、`P 0.94`、`U 0.91`；RL `X/U 1`、**`W 0.97`**、`T 0.96`、`O 0.95`；
+RC `X/C 1`、`R 0.96`、`U 0.92`。執筆ルール：temporal 成分を持つベクタのレコードは一つの数値として
+引用できない——どの停止点かを明示し、`baseScore` を「基底スコア」と呼んではならない。
+
+**スキャナが見るマッピングはパッケージ・アドバイザリだけである。** 実際の二つのインストールで
+一から実行した（ビルド済みバイナリ、ツールチェーン不要）：`adm-zip@0.6.1`（npm の実際の `latest`、
+2026-09-11 公開）と `vllm==0.9.2`。
+
+| 対象 | trivy 0.76.1 | grype 0.121.0 | OSV API |
+|---|---|---|---|
+| `adm-zip@0.6.1` — CVE-2026-116137、`pkg:npm/adm-zip` ≤ 0.6.1 | **0** | **0** | **0** |
+| `vllm==0.9.2` — CVE-2026-116176、`pkg:pypi/vllm` 0.9.2 < 0.24.0 | 41 件、当該 CVE なし | 41 件、同じく無し | 97 = GHSA 41 + PYSEC 56、**58** 個の CVE、当該 CVE なし |
+
+両 CVE は CNA の `affected[].packageURL` と semver 範囲を持つが、どちらも不可視である。スキャナが
+読むのはパッケージ・アドバイザリだけだからだ：OSV の CVE レベル・レコードは **GIT** 範囲のみ、
+adm-zip には **alias が一切なく**、vllm の `GHSA-vfp2-c8pq-v6h6`（NVD 自身が挙げる参照）は
+`api.github.com/advisories` で **404**、OSV では「not found, but the following aliases were:
+CVE-2026-116176」を返す。リポジトリ・アドバイザリはパッケージ・レコードではない。
+
+**レコードが存在する場合、両スキャナは両バージョンを出し、重大度は v4 から取る。** trivy は
+ソース別の対応表 `{ghsa, nvd, redhat}` を出し、`V3Score` は常に、`V40Vector`/`V40Score` は
+**`ghsa` の下だけ**（41 件中 6 件）。grype は配列を出し、全エントリが `type: Secondary`、そして
+**GHSA id** をキーにする（CVE ではない）。`Severity` は v4 を持つ **6/6** で **v4** のバンド、
+持たない **35/35** で **v3** のバンドに一致し（trivy）、grype は **6/6** / **34/34** で
+**例外 0**——しかも三つのバンド跨ぎは**両方向**（7.5→5.3、6.5→8.3、5.6→2.9）。したがって
+「新しいバージョンほど常に高い」は偽であり、「`Primary` スロットを読むツールは 0.85 低い」には
+どちらのツールにも該当者がいない。OSV のレコード件数は **ID** の件数であり、脆弱性の件数ではない。
+
+→ [[fact-check]] [[disclosure-lag]]

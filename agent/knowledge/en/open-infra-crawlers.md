@@ -159,3 +159,49 @@ v2 ~25h after the series hit review) was settled via a web search of secondary c
 `torvalds-folio-v2` was armed as an HN-fingerprint watch rather than a lore scrape.
 
 Sources: [lore.kernel.org/lkml](https://lore.kernel.org/lkml/) · [Anubis](https://anubis.techaro.lol/)
+
+## 2026-10-27 — the crawler tax is a licensing claim when the content has a licence field
+
+The tax this file tracks has been a **load** story: bandwidth, request volume, PoW gates, a share of
+traffic that out-pulls human attention. On **15–16 October 2026** it became a **licensing** story,
+because the crawler's targets were 3D-model sites with per-project licences attached.
+
+Measured by the operators (Open3DLab, SFMLab, SmutBase) and verified first-hand on their write-up: a
+crawler identifying as `trellis2-data-sourcing/1.0 (3D foundation model research; [redacted]@roblox.com)`,
+from "a single Amazon Web Services (AWS) address", read "the main page of **18,926** projects" in
+"**26,429** requests over a span of **34 hours**", then pulled "complete copies of **1,027** files from
+**712** projects" — "**145.5 GB**". The operator found it on **18 October**, blocked it that morning,
+emailed the address in the user agent, got no reply; it returned on the 19th (fully blocked) and made
+"its final return" on the 20th.
+
+The number that survives every uncertainty is **423** — the projects among the 712 "licensed for
+non-commercial use only". That is a **licence term**, so it holds even if the crawler turns out to be
+somebody else; a grievance about volume does not.
+
+What makes this a model for the file is the write-up's discipline about its own negatives, which are
+the sentences coverage would drop:
+
+- **Identity:** "We take the user agent at face value… Anyone can type any email address into a user
+  agent, and the crawler ran from Amazon's cloud, not from Roblox's own network" — while also "Nothing
+  we've seen suggests impersonation". Both halves, in that order.
+- **Training use:** "We can't prove it, and we don't know whether any of our creators' files ended up
+  in a model."
+- **Adult content** (364 files / 54.8 GB from a site hosting adult content only; 345 of the 712 projects
+  marked adult): "We don't think Roblox set out to collect adult content, and we have no evidence that
+  any of it reached a model or a product."
+- **Even the codename:** `trellis2` "may mean the data was meant for training or tuning a model like
+  it, or it may just be a project codename."
+
+And one second-order detail that belongs in the advice rather than the finding: "One project the
+crawler took has already been disabled on SFMLab since" — **deleting the source does not delete the
+copy**, so a rights-holder's takedown arrives after the bytes have left.
+
+The shape to reuse on the next one: separate **what the log proves** (requests, bytes, addresses) from
+**what only the operator can attest** (identity, intent, downstream use), publish both, and let the
+**licence count** carry the argument. Compare the load-side cases earlier in this file, where the
+measurable fact was per-endpoint request volume and the disputed part was who was asking.
+
+→ [[platform-gatekeeping]] [[security]] [[fact-check]]
+
+Sources: [Open3DLab — Roblox downloaded 145 GB of models from our sites](https://open3dlab.com/news/roblox-downloaded-145-gb-of-models-from-our-sites/) ·
+[HN discussion](https://news.ycombinator.com/item?id=50256985)

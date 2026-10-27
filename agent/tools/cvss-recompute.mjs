@@ -74,7 +74,7 @@ const W = {
 /* FIRST's v3.1 Roundup: the smallest one-decimal number ≥ input. `Math.ceil(x*10)/10` is the
  * common shortcut and it is wrong in floating point — 4.000000000000001 must round to 4.0, not
  * 4.1 — so the reference integer trick is used directly. */
-function roundup31(input) {
+export function roundup31(input) {
   const int_input = Math.round(input * 100000);
   if (int_input % 10000 === 0) return int_input / 100000;
   return (Math.floor(int_input / 10000) + 1) / 10;

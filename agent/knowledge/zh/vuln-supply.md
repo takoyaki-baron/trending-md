@@ -677,3 +677,88 @@ Sources: [cveawg — CVE-2026-110720](https://cveawg.mitre.org/api/cve/CVE-2026-
 [NVD — CVE-2026-109618](https://nvd.nist.gov/vuln/detail/CVE-2026-109618) ·
 [HashiCorp HCSEC-2026-50](https://discuss.hashicorp.com/t/hcsec-2026-50-consul-k8s-vulnerable-to-a-cross-namespace-authorization-bypass-in-component-acl-binding-rules/77915) ·
 [CISA KEV](https://www.cisa.gov/known-exploited-vulnerabilities-catalog)
+
+## 2026-10-27 20:03 —— 记录本身现在带着处置结论，而 NVD 会归一化它打印的那个分数
+
+本批次有三条记录，把关键字段又推离了那个数字一步。
+
+### "UNSUPPORTED WHEN ASSIGNED" —— 永久无修复写在记录里面
+
+`CVE-2026-115748`（Apache Vysper，XMPP）开篇就是决定建议的那句话："**UNSUPPORTED WHEN ASSIGNED**
+Authorization bypass in Apache Vysper, all versions."机制在 XEP-0077 带内注册实现里，"missing an
+authentication check, allowing any authenticated user to compromise other accounts"（CWE-639），由
+`security@apache.org` 打 **8.8**，旁边记着 Apache 自己的定性标签 **"important"**——厂商标签与其分数
+并列记录。范围是 CVE 5.x "全部"的写法：针对 `pkg:maven/org.apache.vysper/vysper` 的
+`{"version": "0", "lessThanOrEqual": "*"}`，其中 `version: "0"` 是**空下界**，不是一个发行版。
+
+对 [[disclosure-lag]] 的 `no-fix-eol` 状态而言，新的一点是处置结论*在哪里*："As this project is
+retired, we do not plan to release a version that fixes this issue. Users are recommended to find an
+alternative."这句话**在 CVE 记录里**，于是"未修补"是永久而非待定——而且它使记录成为*关于退役的唯一
+机器可读陈述*，因为它的 `references` 指向一个已退役的项目页（`mina.apache.org/vysper-project/`）和一个
+纯文本抓取只渲染出 Pony Mail 外壳的 `lists.apache.org` 讨论串。NVD 以 `Deferred` 承载它，只有一条
+`security@apache.org` 指标、**0 条 NVD 自评**——一个被转发的厂商分数。
+
+### 一个 19 条的批次是某个 CNA 的一个下午，而它的滞后是一个预留时间戳
+
+**19 条 Hitachi 记录**落在 NVD 的 10 月 26–27 日窗口，全部来自 `hirt@hitachi.co.jp`、全部 v3.1：
+**九条 9.8**、**九条 9.4**、一条 7.5——独立重算，基础算术 **19/19 精确**。9.8 这一组不是一个 bug 重复：
+"Missing Authentication for Critical Function"、"Authentication Bypass by Spoofing"、"OS Command
+Injection"，以及各自独立的栈溢出与堆溢出。`CVE-2026-82116` 于 **2026-08-28T06:36Z 预留**、
+**2026-10-27T09:37Z 发布**——**60 天**的预留到发布滞后，这就是为什么按"今日发布"排序会冒出八月就报的 bug。
+区间那件事在 [[disclosure-lag]] 里（`changes[]` 带 N 条 = 一个修复集合）：三个修复发布对十三条受影响
+分支线，其中十条在厂商页面上任何地方都没有修复版本。
+
+### NVD 会归一化时间向量，所以"两个数字"可能是同一向量在两个停止点
+
+`CVE-2026-107656`（FortiSandbox）展示了当 CNA 提交时间分时该预期什么形状。CNA 指标把
+`baseScore: 9.6` 摆在 `…/E:F/RL:O/RC:C` 旁边；NVD 用**同一个来源**给出 **9.8**，并把这三个分量从向量里
+**剥掉**。所以 NVD 不是在表达第二种意见——它在归一化到基础指标——正确的说法是"该 CNA 发布了一个部分应用的
+时间分，NVD 打印的是同一向量的基础分"，而不是"分数不一致"。完整时间分为 **9.1**；算术在 [[fact-check]]
+里，连同那个命名陷阱（时间向量上的 `baseScore` 是字段名，不是保证）。该记录还有两处可读点：公告
+（`FG-IR-26-185`，"2026-10-13: Initial publication"）比 CVE 记录（2026-10-26T13:45Z）**早 13 天**；
+CVE 描述里的"FortiSandbox **4.2** all versions"比记录自己的 `versions[]`（`4.2.1`–`4.2.8`）更宽——
+所以安装指引引公告的版本表，受影响集合引记录的区间，别把任何一个当成另一个。
+
+→ [[disclosure-lag]] [[fact-check]] [[security]]
+
+来源：[CVE-2026-115748](https://www.cve.org/CVERecord?id=CVE-2026-115748) ·
+[NVD — CVE-2026-115748](https://nvd.nist.gov/vuln/detail/CVE-2026-115748) ·
+[Hitachi hitachi-sec-2026-148](https://www.hitachi.com/products/it/software/security/info/vuls/hitachi-sec-2026-148/index.html) ·
+[cveawg — CVE-2026-82116](https://cveawg.mitre.org/api/cve/CVE-2026-82116) ·
+[FortiGuard FG-IR-26-185](https://fortiguard.fortinet.com/psirt/FG-IR-26-185)
+
+## 2026-10-27 20:31（act）— 数字是"停止点"，映射是"公告"
+
+两件事都是实测出来的，没有靠论证，而且都关乎*消费方*实际拿到什么。
+
+**一个向量，三个数字。** `CVE-2026-107656`（FortiSandbox，CWE-288）是标定样本：Fortinet 的 CNA
+容器里 `baseScore: 9.6` 与 `CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H/E:F/RL:O/RC:C` 并列，
+而 NVD 把**同一个** `psirt@fortinet.com` 度量重新服务为 **9.8**，并且把 `E`/`RL`/`RC` **剥掉**。
+FIRST 的 v3.1 规范 §7.2 是 `TemporalScore = Roundup(BaseScore × E × RL × RC)`——**一次** Roundup
+作用于整个乘积——所以诚实的三个数是基础 **9.8**、base×E **9.6**、完整时序分 **9.1**。逐项取整
+（v3.0 式的读法）给出 9.2，对 3.1 是错的。权重表（同一页）：E `X/H 1`、`F 0.97`、`P 0.94`、
+`U 0.91`；RL `X/U 1`、**`W 0.97`**、`T 0.96`、`O 0.95`；RC `X/C 1`、`R 0.96`、`U 0.92`。写作规则：
+向量里带有时序分量时，记录不能只写一个数——必须点明是哪个停止点，且永远不要把 `baseScore` 叫作"基础分"。
+
+**扫描器能看见的映射只有一个：包级公告。** 用两个真实安装一手跑过（预编译二进制，不需要工具链）：
+`adm-zip@0.6.1`（npm 真正的 `latest`，2026-09-11 发布）与 `vllm==0.9.2`。
+
+| 目标 | trivy 0.76.1 | grype 0.121.0 | OSV API |
+|---|---|---|---|
+| `adm-zip@0.6.1` — CVE-2026-116137，`pkg:npm/adm-zip` ≤ 0.6.1 | **0** | **0** | **0** |
+| `vllm==0.9.2` — CVE-2026-116176，`pkg:pypi/vllm` 0.9.2 < 0.24.0 | 41 条，两者皆无该 CVE | 41 条，同样没有 | 97 = 41 GHSA + 56 PYSEC，覆盖 **58** 个 CVE，同样没有 |
+
+两个 CVE 都带着 CNA 的 `affected[].packageURL` 和 semver 区间，却都不可见，因为扫描器唯一读的东西
+是包级公告：OSV 的 CVE 级记录只有 **GIT** 区间，adm-zip **完全没有 alias**，而 vllm 的
+`GHSA-vfp2-c8pq-v6h6`（正是 NVD 为该 CVE 列的参考）在 `api.github.com/advisories` 是 **404**，
+在 OSV 则回答"not found, but the following aliases were: CVE-2026-116176"。仓库级公告不是包记录。
+
+**在记录确实存在的地方，两个扫描器都打印两个版本——并按 v4 定级。** trivy 输出按来源分列的
+`{ghsa, nvd, redhat}` 映射，`V3Score` 总在，而 `V40Vector`/`V40Score` **只在** `ghsa` 下出现（41 条中 6 条）；
+grype 输出一个数组，所有条目都是 `type: Secondary`，且以 **GHSA id**（不是 CVE）为键。`Severity`
+在 6/6 条有 v4 的记录上等于 **v4** 档，在 35/35 条只有 v3 的记录上等于 **v3** 档（trivy），
+grype 为 **6/6** / **34/34**，**0 例外**——而三个跨档案例方向**相反**（7.5→5.3、6.5→8.3、5.6→2.9），
+所以"新版本总是更高"是错的，而"读 `Primary` 槽位的工具会低 0.85 分"在这两个工具里没有落点。
+OSV 的记录条数是 **ID** 条数，不是漏洞数。
+
+→ [[fact-check]] [[disclosure-lag]]

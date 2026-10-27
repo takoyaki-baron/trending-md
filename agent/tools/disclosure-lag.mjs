@@ -463,15 +463,26 @@ function nvdRanges(cve) {
  *     wrongly, the worst of the three failure modes. Measured over the 10-19→21 publication window
  *     (**3,013** records): **190 (6.3%)** carry at least one, **188** of them from that one CNA
  *     (the other two: `security@zyxel.com.tw`, `security@apache.org`).
- *   · a FIFTH field lives inside a version object and it ENDS the range: `changes[]`. A `changes`
- *     entry toggles status at its `at` version and holds to the end of the enclosing range, so
- *     `{version: "0.42.0", lessThan: "2.0.4", changes: [{at: "1.8.18", status: "unaffected"}]}`
- *     means affected `[0.42.0, 1.8.18)` — and 1.8.18 is the fix. Added 2026-10-27 (CVE-2026-110720,
- *     consul-k8s): the bulletin's prose lists one affected span and TWO fix versions ("1.8.18 and
- *     2.1.0"), so coverage read the page as self-contradictory — but the record's own machine
- *     readable container carried the exemption in `changes[]`, from publication day. A parser that
- *     reads only version/lessThan/lessThanOrEqual reports `[0.42.0, 2.0.4)` as uniformly affected:
- *     it marks the fix release itself as vulnerable AND the whole 2.x line as covered.
+ *   · a FIFTH field lives inside a version object and it ENDS the range: `changes[]`. Added
+ *     2026-10-27 (CVE-2026-110720, consul-k8s): the bulletin's prose lists one affected span and
+ *     TWO fix versions ("1.8.18 and 2.1.0"), so coverage read the page as self-contradictory — but
+ *     the record's own machine readable container carried the exemption in `changes[]`, from
+ *     publication day. A parser that reads only version/lessThan/lessThanOrEqual reports
+ *     `[0.42.0, 2.0.4)` as uniformly affected: it marks the fix release itself as vulnerable AND
+ *     the whole 2.x line as covered.
+ *     **The "holds to the range's end" reading is only correct for ONE entry.** Measured the same
+ *     day on a second record (CVE-2026-82116, Hitachi HiRDB): `at` **10-12-01, 10-11-02, 10-08-05**
+ *     in DESCENDING order inside `10-00 < 10-12-01`. Applying each entry in array order and letting
+ *     it overwrite the bound yields `10-00 < 10-08-05` — which marks 10-11-01 vulnerable when
+ *     Hitachi's page says it is affected, and makes 10-08-05 the boundary when it is a fix. With N
+ *     entries the record is naming a **fix set across branch lines**, so the span ends at the
+ *     **highest** `at` and the others are exempt **points** inside it: `[10-00, 10-12-01) \ {10-08-05,
+ *     10-11-02}`, a set no single interval can express. Hitachi's own page is the arbiter and it
+ *     lists thirteen affected branch lines for the same product with only three fixed versions — so
+ *     the honest output names the shape and refuses to print one range.
+ *     One entry ⇒ it is the bound. N entries ⇒ highest is the bound, rest are points. An `affected`
+ *     entry above the highest `unaffected` one means the exemption bounds a span rather than ending
+ *     the product's affectedness, and is recorded as `reinstates` rather than resolved.
  */
 function opBounds(s) {
   const out = { min: null, minInc: true, max: null, maxInc: false, sawOp: false };
@@ -493,6 +504,7 @@ function affectedRanges(cve) {
   const ranges = [];
   const inverted = [];
   const exempt = [];
+  const reinstated = [];
   for (const a of cve.affected || []) {
     for (const d of a.affectedData || []) {
       const vs = d.versions || [];
@@ -511,15 +523,39 @@ function affectedRanges(cve) {
         // The structured bounds win when both spellings are present; the operator form is the fallback.
         let max = less || lessEq || (op ? op.max : null);
         let maxInc = (less || lessEq) ? !!lessEq : (op ? op.maxInc : false);
-        /* `changes[]` toggles status INSIDE the range and holds to its end, so the first
-           `unaffected` entry ends the affected span (CVE-2026-110720: `at: 1.8.18` is the fix). */
-        for (const c of (Array.isArray(v.changes) ? v.changes : [])) {
-          if (!c || c.at == null || String(c.status) !== 'unaffected') continue;
+        /* `changes[]` toggles status INSIDE the range. Two shapes occur in the wild, and they are
+           NOT the same function (2026-10-27, measured on both the same day):
+             · ONE `unaffected` entry — it ends the affected span (CVE-2026-110720 consul-k8s:
+               `at: 1.8.18` is the fix, so affected is [0.42.0, 1.8.18)).
+             · N `unaffected` entries — the record is naming a FIX SET across branch lines, not a
+               piecewise bound (CVE-2026-82116 Hitachi HiRDB: `at` 10-12-01, 10-11-02, 10-08-05, in
+               descending order, inside `10-00 < 10-12-01`). Taking the last entry processed — which
+               is what this loop did until it was run on that record — yields `10-00 < 10-08-05`,
+               marking 10-11-01 vulnerable when the advisory says it is AFFECTED and marking
+               10-08-05 itself as the boundary when it is a fix. So the bound is the HIGHEST `at`,
+               and every other entry is an exempt POINT inside the range.
+           An `affected` entry above the highest `unaffected` one would reinstate the range, so that
+           case is recorded rather than a clean end being claimed from it. */
+        const chg = (Array.isArray(v.changes) ? v.changes : []).filter(c => c && c.at != null);
+        const inRange = chg.filter(c => {
           const at = String(c.at);
-          if (min && cmpVer(at, min) <= 0) continue;         // below the range: nothing to end
-          if (max && cmpVer(at, max) >= 0) continue;         // above the stated bound: not a bound
-          max = at; maxInc = false;
-          exempt.push({ at, product: `${d.vendor || '?'}/${d.product || '?'}`, raw: rawVer });
+          if (min && cmpVer(at, min) <= 0) return false;     // below the range: nothing to change
+          /* `at` EQUAL to the stated max is the common shape (vendors write `lessThan` = the newest
+             fix AND list it in `changes[]`), so it is a bound confirmation, not an overshoot — the
+             strict `>= 0` test here discarded exactly that entry and left the next-lowest fix as
+             the bound, which is how Hitachi's 10-12-01 became 10-08-05. */
+          if (max && cmpVer(at, max) > 0) return false;      // above the stated bound: not a bound
+          return true;
+        });
+        const unaff = inRange.filter(c => String(c.status) === 'unaffected').map(c => String(c.at));
+        if (unaff.length) {
+          const hi = unaff.reduce((a, b) => (cmpVer(b, a) > 0 ? b : a));
+          const product = `${d.vendor || '?'}/${d.product || '?'}`;
+          exempt.push({ at: hi, product, raw: rawVer, role: 'ends' });
+          for (const at of unaff) if (at !== hi) exempt.push({ at, product, raw: rawVer, role: 'point' });
+          max = hi; maxInc = false;
+          const above = inRange.filter(c => String(c.status) !== 'unaffected' && cmpVer(String(c.at), hi) > 0);
+          if (above.length) reinstated.push(`${product} affected again at ${above.map(c => String(c.at)).join(', ')}`);
         }
         if (!min && !max) continue;
         if (min && !max) {              // single affected version — a POINT, not an open range
@@ -533,7 +569,7 @@ function affectedRanges(cve) {
       }
     }
   }
-  return { ranges, inverted, exempt };
+  return { ranges, inverted, exempt, reinstated };
 }
 
 const decode = s => s.replace(/&gt;/g, '>').replace(/&lt;/g, '<').replace(/&quot;/g, '"')
@@ -1269,8 +1305,19 @@ function classify({ id, record, nvdRanges: cpes, advisory, timeline, repoAdv, tr
   if (aff.exempt.length) {
     /* The range was SHORTENED by the record's own `changes[]`, so the upper bound here is not the
        one the prose prints — say which field moved it, and never let the two spellings be quoted as
-       one number. */
-    base.notes.push(`the record's affected[] carries changes[] exemptions (${aff.exempt.map(e => `${e.product} unaffected at ${e.at}`).join(', ')}) — the range ends at the fix, and a prose listing of the fix versions beside one affected span is this field with no sentence`);
+       one number. TWO roles, kept apart since 2026-10-27 (Hitachi): an `ends` entry is the bound,
+       and a `point` entry is a fix inside the range that does NOT shorten it. Printing both as "the
+       range ends at the fix" is what turned `[10-00, 10-12-01) minus three fixes` into
+       `[10-00, 10-08-05)`. */
+    const ends = aff.exempt.filter(e => e.role === 'ends');
+    const points = aff.exempt.filter(e => e.role === 'point');
+    let s = `the record's affected[] carries changes[] exemptions (${ends.map(e => `${e.product} unaffected at and above ${e.at}`).join(', ')}) — the range ends at the fix`;
+    if (points.length) s += `, and ${points.length} further fix point(s) sit INSIDE the range without shortening it (${points.map(e => `${e.product} at ${e.at}`).join(', ')}) — the affected set is the span minus those points, which no single interval can express`;
+    s += `; a prose listing of the fix versions beside one affected span is this field with no sentence`;
+    base.notes.push(s);
+  }
+  if (aff.reinstated?.length) {
+    base.notes.push(`changes[] also reinstates the range above the exemption (${aff.reinstated.join('; ')}) — the exemption bounds one span, it does not end the product's affectedness`);
   }
 
   if (!ranges.length) {
@@ -1496,6 +1543,22 @@ if (SELFTEST) {
     status: 'affected', changes: [{ at: '1.5.0', status: 'affected' }, { at: '3.0.0', status: 'unaffected' }] }] }] }] });
   eq('cna: a change ABOVE the bound does not widen it', affK2.ranges[0].max, '2.0.0');
   eq('cna: a change described as affected ends nothing', affK2.exempt.length, 0);
+  /* ── `changes[]` with N entries = a fix SET, not a piecewise bound (CVE-2026-82116, first-hand
+        same day; the one-entry rule above was wrong for this shape and was measured wrong live) ── */
+  const affH = affectedRanges({ affected: [{ affectedData: [{ vendor: 'Hitachi', product: 'HiRDB Server Version 10',
+    defaultStatus: 'unaffected', versions: [{ version: '10-00', lessThan: '10-12-01', versionType: 'custom',
+      status: 'affected', changes: [{ at: '10-12-01', status: 'unaffected' }, { at: '10-11-02', status: 'unaffected' },
+        { at: '10-08-05', status: 'unaffected' }] }] }] }] });
+  eq('cna: N changes[] entries end at the HIGHEST fix, not the last one processed',
+    [affH.ranges[0].max, affH.ranges[0].maxInc], ['10-12-01', false]);
+  eq('cna: …and the lower fixes are points inside the span, not the bound',
+    affH.exempt.filter(e => e.role === 'ends').map(e => e.at), ['10-12-01']);
+  eq('cna: …with the remaining two recorded as exempt points',
+    affH.exempt.filter(e => e.role === 'point').map(e => e.at).sort(), ['10-08-05', '10-11-02']);
+  const affR = affectedRanges({ affected: [{ affectedData: [{ versions: [{ version: '1.0', lessThan: '5.0',
+    status: 'affected', changes: [{ at: '2.0', status: 'unaffected' }, { at: '3.5', status: 'affected' }] }] }] }] });
+  eq('cna: an affected entry ABOVE the exemption is recorded, not resolved',
+    [affR.ranges[0].max, affR.reinstated.length], ['2.0', 1]);
   eq('opBounds: a bare version is not an operator string', opBounds('1.2.3'), null);
   eq('prose patched list', prosePatched('Users need to update any Brotli libraries or binaries to the latest available version: 1.0.10 or 1.1.1 or 1.2.1.'), ['1.0.10', '1.1.1', '1.2.1']);
   eq('prose patched ignores an affected range', prosePatched('versions 1.0.3 through 1.2.0 on all platforms'), null);

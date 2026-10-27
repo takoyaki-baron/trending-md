@@ -963,3 +963,52 @@ URL、zip、目录或单个文件，默认运行**静态分析（regex、Python 
 → [[agent-distribution]] [[fact-check]] [[harness-reliability]]
 
 Sources: [github.com/NVIDIA/SkillSpector](https://github.com/NVIDIA/SkillSpector) · [raw README](https://raw.githubusercontent.com/NVIDIA/SkillSpector/main/README.md) · [NVIDIA docs — scanning agent skills](https://docs.nvidia.com/skills/scanning-agent-skills) · [arXiv 2610.32322](https://arxiv.org/abs/2610.32322)
+
+## 2026-10-27 —— 值得留的 skill 是程序能检查的那种，而星数不会告诉你
+
+一个批次里三条，来自三位很不相同的作者，却都落在同一个判据上：**机器能否验证这个 skill 所断言的东西？**
+这正是本文件自 K-Dense 的"we report no task-level evaluation"起一直绕着转的那条分界——skill 体裁里
+诚实的成员会带上一个检查器，而判别信号不是星数。
+
+**`unclebob/ub-mode`**（第二天 1,558★；API 核验：1,569★、72 forks、**`license: null`**、
+`created 2026-10-25T16:04:09Z`、`pushed 2026-10-25T16:07:59Z`——3 分 50 秒的历史，此后未动）。它
+的三个阶段（"First Make it Work"/"Then Make it Right"/"Practice"）是散文，但闸门是**来自配套工具的
+数字**：`unclebob/crapper` 把每个函数压在 **CRAP < 10** 分之下（由圈复杂度、覆盖率与一个多项式构成）；
+`unclebob/dryer` 以 **≥ 0.8** 相似度标记重复块；`unclebob/mutator` 跑变异测试；`uml-viewer` 把覆盖率、
+CRAP 与变异分画在一起。这就是风格指南与闸门的差别，也是本文件里第一个作者以*规则*而非 prompt 著称的
+skill。**问题在安装路径：**"Copy `SKILL.md` into your agent's skills directory as
+`ub-mode/SKILL.md`"，而仓库里**没有 LICENSE 文件，元数据也没有声明许可证**——于是在默认版权下是
+"保留所有权利"，一家公司把它粘进共享 skills 目录，面对的是许可证问题而不是风格偏好。反复出现的形状
+（第三个实例）：skill 文件是*可执行指令*，而它恰恰是最少被检查许可证的那种产物。
+
+**`morganlinton/BeautifulRust`**（四天 1,265★、56 forks、MIT）带三个 Agent Skill 加一份 lint 配置，
+面向通用 Agent Skills 格式（Claude Code、Codex、Copilot、Cursor、Gemini CLI 加载同一批文件），并
+点名来源——Google 的 Rust Style Guide、官方 Rust API Guidelines、*Effective Rust*、*Rust Design
+Patterns*、微软的 Pragmatic Rust Guidelines——然后做了几乎没人做的事："**Where the sources disagree,
+the skill picks a side and says why.**"两个能工作的 skill 也正是两个可检查的：`rust-review` 把每条
+发现绑定到一条具名规则，`lints/` 是"a drop-in clippy configuration that enforces the
+machine-checkable rules in CI"——于是可验证的那一半没有交给模型。它的前后对比是**一个**任务（一个小型
+semver 解析库），却以"what it changes"呈现，那是轶事；站得住的主张更窄也更好（每个代码示例都在 stable
+Rust 上编译，每条 lint 都对当日 clippy 核对过）。
+
+**`lyramakesmusic/neuron-explorer`**（六天 1,378★、159 forks、**`license: null`**，API 核验）是一个
+面向 Qwen3.5-4B 的可解释性工具：把某一层每个 MLP 神经元在若干 prompt 上上下推，再把 rollout 铺在模型
+的 3D 视图上。两个决定让它不只是 demo。它的排名以 **256 条随机方向对照**为基准——"这个神经元重要"与
+"这个方向动了输出"之差，正是多数 steering 文章跳过的那种失败模式。而它的第四个面板是一个**agent**：
+"a chat running the `claude` CLI … with the explorer as an MCP server"，agent 可以"reads neurons,
+cones and lenses, runs the live model … moves the map, list and highlights, **and has file tools and a
+shell in your home folder**."README 把这条边界*说出来*而不是埋起来，同时附上自己的范围限制（"The
+server answers only pages and tools on this machine"）。和同批次的 OpenHands 9.3——一个绑在 `0.0.0.0`
+上、密钥列表为空的沙箱服务——放在一起，对照就是发现：**同样的风险形状，相反的披露方向**，而披露的那个是
+一个没有许可证的 1,378★ 业余项目。
+
+本文件可泛化的规则：**引检查器，不要引主张。**"enforces CRAP < 10"和"drop-in clippy config"是读者
+能在一次 CI 运行里核验的性质；"enforces disciplined software engineering principles"不是。而当
+skill 的价值就在它的*规则*上时，许可证是产物可用性的一部分——一个你无法合法复制进团队目录的 skill，
+其可触达人群小于它星数所暗示的。
+
+→ [[agent-distribution]] [[fact-check]] [[harness-reliability]]
+
+来源：[github.com/unclebob/ub-mode](https://github.com/unclebob/ub-mode) · [unclebob/crapper](https://github.com/unclebob/crapper) ·
+[github.com/morganlinton/BeautifulRust](https://github.com/morganlinton/BeautifulRust) · [agentskills.io](https://agentskills.io) ·
+[github.com/lyramakesmusic/neuron-explorer](https://github.com/lyramakesmusic/neuron-explorer)

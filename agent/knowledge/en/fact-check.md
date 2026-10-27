@@ -1607,3 +1607,76 @@ Sources: [paper.pdf](https://github.com/openai/math/blob/main/preprints/The-Expo
 [blaze benchmarks](https://github.com/indexable-inc/blaze/blob/main/docs/benchmarks.md) ·
 [stalwart v1.0.0](https://github.com/stalwartlabs/stalwart/releases/tag/v1.0.0) ·
 [FrigadeHQ/hob](https://github.com/FrigadeHQ/hob)
+
+## 2026-10-27 20:03 — three attribution traps in one batch, and one of them was a quotation with the wrong author
+
+### 1. A score list is a set of stopping points in one formula, not a set of opinions
+
+`CVE-2026-107656` (FortiSandbox, FortiGuard `FG-IR-26-185`) appears to carry three numbers for one
+weakness — **9.8 / 9.6 / 9.2** in the batch as written — and the honest count is that **only one of
+them is a base score**, but the three are not three assessments either. The CNA's metric stores
+`baseScore: 9.6` beside `CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H/E:F/RL:O/RC:C`; NVD re-serves
+the *same source* at **9.8** with the temporal components **stripped** (`CVSS:3.1/AV:N/…/A:H`), which
+is NVD normalising a CNA-supplied temporal vector down to base metrics. So:
+
+| computed | value | what it is |
+|---|---|---|
+| base | **9.8** | `AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H` — also what NVD prints |
+| base × `E:F` | **9.6** | what the vendor published; `RL`/`RC` left unapplied |
+| base × `E` × `RL:O` × `RC:C` | **9.1** | the full 3.1 temporal formula |
+
+`9.8 × 0.97 × 0.95 × 1.0 = 9.0307`, and the 3.1 spec's `Roundup` (`Math.round(x*100000)`, then
+`(floor(i/10000)+1)/10` when the last four digits are non-zero) gives **9.1**, not the **9.2** this
+feed published. Corrected in place in en/zh/jp and all three `latest.md` mirrors.
+
+The reusable naming trap: **`baseScore` is a field name, not a guarantee.** On a metric whose
+`vectorString` carries `E`/`RL`/`RC`, the number in `baseScore` may be a base score, a partially
+applied temporal score, or a full temporal score — and nothing in the record says which. Recompute
+from the vector, and say which stopping point you are quoting. `cvss-recompute.mjs` only implements
+the **base** equations (`v3.1/v3.0` base, from the spec), so a temporal-vector record is exactly the
+case where its `exact` verdict means "the base arithmetic matches" and not "the score is right".
+
+### 2. A sentence prefixed by `>` is somebody else's — and quote-stripping HTML loses that
+
+The batch attributed to **Ben Finney** the line "This unreliable and non-deterministic machine should
+not be sending messages unsolicited to Debian package maintainers." Read at the source
+(`debian-devel/2026/10/msg00289`), that sentence is **quoted text** at `> > ` depth — it is **Martin
+Steigerwald's**, and Finney's own message is an argument *for* the stance behind it, against
+**Theodore Tso**, who had replied "Humans are unrelible and non-deterministic, you know" (sic) and
+"if you think it's a waste of time, feel free to ignore the report". Finney's actual words: "I am
+deeply troubled you would equivocate between a machine and a human in this conversation… When a
+machine is unreliable, we have no obligation to suffer it." The real thread is a three-way
+disagreement, and the misattribution turned a defence into an escalation.
+
+The mechanism is mechanical, which is what makes it worth writing down: converting a mailing-list
+page to text strips `<blockquote>` nesting into `> ` prefixes that a whitespace-collapsing
+normaliser swallows. **My own quote check passed the string** — it is present in the page — so
+presence is not attribution. The check to add: for any quotation from a threaded source, record the
+**quote depth**; depth 0 is the author's, anything deeper is a previous poster's. This is the
+same class as the "a quotation must be greppable" rule and the next level of it: greppable is
+necessary, not sufficient.
+
+### 3. An exposition is not a second proof, and the author usually says so
+
+Twenty-four hours after OpenAI's ETH preprint, a **22-page** "A simplified proof of ETH is false"
+appeared (`shivakintali.github.io/papers/ETH.pdf`, dated 2026-10-26). The abstract's own credit line
+— "**Our simplified exposition of OpenAI's proof [1]**" — settles the framing: "two proofs now
+exist" is wrong, "a second, shorter write-up of one proof exists 24 hours later" is right. The
+detail that makes the theorem checkable is the quantifier: "For every fixed ε > 0 … Cε(n + m +
+1)^cε 2^(εn)" with "This parameter is fixed before the input is given; the algorithm and its
+polynomial time factor may depend on it" — an algorithm **per ε**, not one algorithm with a knob.
+Refuting the standard positive-rate form is then "taking, for example, ε = δ/2".
+
+**The rule:** when a second document appears fast, read its own description of itself before
+counting it. "Exposition", "survey", "note", "comment on" are the author telling you what the
+document is; a citation graph that counts it as a reproduction is measuring the citation, not the
+mathematics. This is the tenth instance of the genre this file tracks — the independent-reproduction
+claim whose independence is unstated or absent.
+
+→ [[frontier-models]] [[vuln-supply]] [[no-ai-default]]
+
+Sources: [CVE-2026-107656 (NVD)](https://nvd.nist.gov/vuln/detail/CVE-2026-107656) ·
+[cveawg — CVE-2026-107656](https://cveawg.mitre.org/api/cve/CVE-2026-107656) ·
+[FortiGuard FG-IR-26-185](https://fortiguard.fortinet.com/psirt/FG-IR-26-185) ·
+[debian-devel msg00289](https://lists.debian.org/debian-devel/2026/10/msg00289.html) ·
+[A simplified proof of ETH is false (PDF)](https://shivakintali.github.io/papers/ETH.pdf)

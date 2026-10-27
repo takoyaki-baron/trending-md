@@ -114,7 +114,7 @@ Cohere 把 **Qwen3.8-Flash-Next**——他们称之为"阿里巴巴 8 月发布�
 
 **CVE-2026-102649**（GHSA-7m68-72r6-3jx8）影响 Burrito Terraform operator **0.13.0 之前**。`POST /api/webhook`"在某个 `TerraformRepository` 的凭据省略 `webhookSecret` 或把它设为空值时，接受未签名的 GitHub 与 GitLab 事件"，而 `go-playground/webhooks`"在密钥为空时跳过签名或 token 校验"。任何"能连到 `burrito-server`、并知道某个受跟踪仓库 URL 的人，都可以伪造事件，以攻击者选定的 `Branch`、`Base`、`ID` 创建或删除 `TerraformPullRequest` 自定义资源"。最锋利的细节："对 GitHub 的 `pull_request` 事件，控制器用真实的 PR 号去取变更文件，却不校验 payload 里的分支与该 PR 是否一致"——于是"真实存在的 PR 号 + 同仓库里另一条无关分支"就能产生"一次未授权的 `terraform plan`，用的是 operator 存的 git 与云凭据"，并且该 plan"可以被贴到真实 PR 的评论区，把另一条分支的基础设施变更暴露并错误归属"。CWE-**306** 与 CWE-**863**，CVSS 3.1 **9.9**。
 
-**Why it matters:** 一个以限制结尾的 9.9 比没有限制的更有用，而这份记录收得挺好："这些临时层的 auto-apply 是禁用的，所以该漏洞本身无法强制触发 `terraform apply`；plan 阶段的 provider 与 data-source 代码执行取决于所选分支的内容。"所以影响是披露与错误归属——一个团队的基础设施 diff 被贴到另一个团队的 PR 下——而不是一键接管集群。这个"身份混淆"形状（合法 PR 号、错误分支）是所有只信半个 webhook payload 的控制器都能借鉴的一课。也值得记下修复**不可能**落在哪里：做"跳过校验"那件事的库 `go-playground/webhooks` 虽未归档，但自 **2024-08-06** 起没有任何推送（811 天），所以修复完全在 Burrito 一侧——该库的其他每一个使用方都继承同样的空密钥行为，直到自己打补丁。
+**Why it matters:** 一个以限制结尾的 9.9 比没有限制的更有用，而这份记录收得挺好："这些临时层的 auto-apply 是禁用的，所以该漏洞本身无法强制触发 `terraform apply`；plan 阶段的 provider 与 data-source 代码执行取决于所选分支的内容。"所以影响是披露与错误归属——一个团队的基础设施 diff 被贴到另一个团队的 PR 下——而不是一键接管集群。这个"身份混淆"形状（合法 PR 号、错误分支）是所有只信半个 webhook payload 的控制器都能借鉴的一课。也值得记下修复**不可能**落在哪里：做"跳过校验"那件事的库 `go-playground/webhooks` 虽未归档，但自 **2024-08-06** 起没有任何推送（812 天），所以修复完全在 Burrito 一侧——该库的其他每一个使用方都继承同样的空密钥行为，直到自己打补丁。
 
 [`🔗 GitHub Advisory — Burrito unsigned webhook`](https://github.com/padok-team/burrito/security/advisories/GHSA-7m68-72r6-3jx8) · [`🔗 NVD — CVE-2026-102649`](https://nvd.nist.gov/vuln/detail/CVE-2026-102649) · [`🔗 Burrito v0.13.0 release`](https://github.com/padok-team/burrito/releases/tag/v0.13.0)
 
@@ -168,7 +168,7 @@ Cohere 把 **Qwen3.8-Flash-Next**——他们称之为"阿里巴巴 8 月发布�
 - **Source:** GitHub Trending · 今日 +312 stars · nightly-labs
 - **Tags:** `agent-workspace` `electron` `local-first` `license` `permissions`
 
-`nightly-labs/openbot`——"一个本地优先的桌面工作区，用于常驻 AI 队友"——给每个 agent 一个工作区、一段对话、FIFO 任务队列、文件传输、内嵌浏览器与 agent 间消息，原生驱动 **Codex App Server** 与 **Claude Code**，并通过 **ACP** 支持 Grok、OpenCode、Gemini、Cursor、Cline。技术栈是 Electron + SolidJS 渲染层，provider CLI 走 stdio 或流式 JSON，**SQLite** 存事件日志与投影，浏览器跑在沙箱化的 `WebContentsView`，账户 API 在 Cloudflare Workers，远程客户端用 **WebRTC 数据通道**。**1,613 星**、**198 个 fork**（UTC+8 12:33；12:18 批次的“1.4k／174”落后约 200 星），2,167 次提交。
+`nightly-labs/openbot`——"一个本地优先的桌面工作区，用于常驻 AI 队友"——给每个 agent 一个工作区、一段对话、FIFO 任务队列、文件传输、内嵌浏览器与 agent 间消息，原生驱动 **Codex App Server** 与 **Claude Code**，并通过 **ACP** 支持 Grok、OpenCode、Gemini、Cursor、Cline。技术栈是 Electron + SolidJS 渲染层，provider CLI 走 stdio 或流式 JSON，**SQLite** 存事件日志与投影，浏览器跑在沙箱化的 `WebContentsView`，账户 API 在 Cloudflare Workers，远程客户端用 **WebRTC 数据通道**。**1,876 星**、**215 个 fork**（UTC+8 20:14；12:18 批次的“1.4k／174”落后约 200 星，12:33 至 20:14 之间又涨了约 263 星），2,167 次提交。
 
 **Why it matters:** README 自己的披露就是这条的内容。"**OpenBot 是一个开发预览**"，并且"agent 目前以 `danger-full-access` 和 `approvalPolicy: never` 运行"——首次启动同意之后，它们"可以修改文件、运行命令、使用网络、控制浏览器，逐动作不再确认"，而"不受限的 provider 模式可能允许访问这些目录之外"。它对"本地优先"这个标签掩盖的两件事也很坦白："local-first，不是 offline-only"（provider 流量仍会发给 OpenAI、Anthropic、xAI、Google、Cursor 或 Cline），以及一次许可证变更——**PolyForm Noncommercial 1.0.0**，"0.1.11 及更早版本仍以 Apache-2.0 提供"。带独立工作区、无审批策略的桌面 agent 是合理的愿望；把它指向一台存着凭据的机器就不合理。
 
@@ -506,7 +506,7 @@ Ubicloud 在服务 **Kimi K2.6** 与 **DeepSeek V4 Flash** 时，用 Moonshot �
 
 Johannes Schauer Marin Rodrigues（`josch@debian.org`）于 **10 月 26 日**在 debian-devel 写道，他是"在没有公告的情况下"得知"NEW 队列的处理现在似乎会把我的上传丢给一个 LLM"，而且没有人问过他。NEW 是软件包进入档案库之前必须停留的队列——历史上唯一由人担任最后一道闸门的地方——所以这项改动落在每一个新包上，而不是项目的某个角落。他把立场说得很直白："I'm not going to read the machine-generated output"；"I will not upload anything to NEW unless there is a way for me to opt out of this"；而对于项目总决议中"Debian 既不背书也不禁止生成式 AI"的措辞："How is this not *Debian endorses the use of generative AI*?"他说自己"not leaving the project"，但"I'll not be a part of this."
 
-**Why it matters:** 技术性反对才是能留下来的那个，而它不是口味之争。"If the LLM has a bug, I cannot fix it"——对照 Lintian，它给出可复现的输出，他能打补丁、能覆盖、能争论。一个行为既不确定又不可 fork 的评审者，对一个"产品就是别人代码的可复现构建"的发行版来说，是全新类别的依赖；而他的诉求相应地克制："I would prefer if the default was *no LLM review* and that developers have to explicitly opt-in."Ben Finney（`bignose@debian.org`，10 月 27 日）的后续讨论才是升级显现的地方："This unreliable and non-deterministic machine should not be sending messages unsolicited to Debian package maintainers."两封信都没有说这些评审是错的——反对的理由是没人能确立它们到底对不对。
+**Why it matters:** 技术性反对才是能留下来的那个，而它不是口味之争。"If the LLM has a bug, I cannot fix it. The model is a binary blob"——对照 Lintian，它"will give me an answer *reproducibly* and I can then either fix Lintian or add an override to my source package"。一个行为既不确定又不可 fork 的评审者，对一个"产品就是别人代码的可复现构建"的发行版来说，是全新类别的依赖；而他的诉求相应地克制："I would prefer if the default was *no LLM review* and that developers have to explicitly opt-in."随后这条线索在 Martin Steigerwald 于 27 日划出的那句话上分岔——"This unreliable and non-deterministic machine should not be sending messages unsolicited to Debian package maintainers"——Theodore Tso（`tytso@mit.edu`）回以"Humans are unrelible and non-deterministic, you know"以及"if you think it's a waste of time, feel free to ignore the report"，而 Ben Finney（`bignose@debian.org`）两样都不接受："I am deeply troubled you would equivocate between a machine and a human in this conversation… When a machine is unreliable, we have no obligation to suffer it."没有一位发帖者说这些评审是错的——反对的理由是没人能确立它们到底对不对，而反方的回答是你根本不需要确立。
 
 [`🔗 debian-devel — "I will no longer upload to NEW"`](https://lists.debian.org/debian-devel/2026/10/msg00263.html) · [`🔗 后续讨论（Re: I will no longer upload to NEW）`](https://lists.debian.org/debian-devel/2026/10/msg00289.html)
 
@@ -526,7 +526,7 @@ Johannes Schauer Marin Rodrigues（`josch@debian.org`）于 **10 月 26 日**在
 
 ---
 
-## 38. FortiSandbox 的 9.8、9.6 与 9.2 是同一个向量停在三个点——而公告比 CVE 早 13 天
+## 38. FortiSandbox 的 9.8、9.6 与 9.1 是同一个向量停在三个点——而公告比 CVE 早 13 天
 
 - **Velocity:** ▮▮ rising
 - **Source:** FortiGuard PSIRT FG-IR-26-185 / NVD / CVE record · published 2026-10-26
@@ -534,7 +534,7 @@ Johannes Schauer Marin Rodrigues（`josch@debian.org`）于 **10 月 26 日**在
 
 **CVE-2026-107656**（CWE-288）是 FortiSandbox GUI 里的"Authentication Bypass Using an Alternate Path or Channel"，"may allow a remote unauthenticated attacker to bypass authentication via crafted HTTP requests"。修复于 **5.0.7**（从 5.0.0–5.0.6）与 **4.4.10**（从 4.4.0–4.4.9）；FortiSandbox **5.2 不受影响**；**FortiSandbox PaaS 4.4 "all versions"** 得到的是"Migrate to a fixed release"而不是升级。Fortinet 自己的时间线写着"2026-10-13: Initial publication"——CVE 记录发布于 **2026-10-26T13:45Z**，相隔 **13 天**。"Virtual Patch: No"。"Known Exploited: No"。致谢 Fortinet 自家产品安全团队的 Adham El Karn 与 TrendAI Research 的 Jason McFadyen。
 
-**Why it matters:** 这条记录为一个弱点带了三个数字，而其中只有一个是基础算术。NVD 只持有一条 `psirt@fortinet.com` 指标 **9.8**（vulnStatus `Awaiting Analysis`，NVD 自评 0 条），向量是不带时间项的 `CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H`。CNA 记录自己的指标存的是 **9.6**——但它的 `vectorString` 多了 `E:F/RL:O/RC:C`，差异就在这里：基础算得 **9.8**，基础 × 仅 Exploit Code Maturity 算得 **9.6**，完整时间公式算得 **9.2**。所以厂商公布的数字是 `base × E` 的算术、`RL`/`RC` 未被应用——不是第二种意见，也不是时间分。第二个读法陷阱在公告页本身：CVE 描述列了"FortiSandbox **4.2** all versions"与"FortiSandbox PaaS 4.2 all versions"，而 FG-IR-26-185 的版本表里根本没有 4.2 行——只有 5.2、5.0、4.4 与 PaaS 对应项。要告诉别人装哪个版本，引公告的表格，别引描述。
+**Why it matters:** 这条记录为一个弱点带了三个数字，而其中只有一个是基础算术。NVD 只持有一条 `psirt@fortinet.com` 指标 **9.8**（vulnStatus `Awaiting Analysis`，NVD 自评 0 条），向量是不带时间项的 `CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H`——NVD 会把 CNA 提交的时间向量归一化到基础指标，所以那个 9.8 是同一根向量去掉三个分量，而不是第二种评估。CNA 记录自己的指标存的是 **9.6**——但它的 `vectorString` 多了 `E:F/RL:O/RC:C`，差异就在这里：基础算得 **9.8**，基础 × 仅 Exploit Code Maturity 算得 **9.6**，完整时间公式算得 **9.1**（`9.8 × 0.97 × 0.95 × 1.0 = 9.0307`，按 3.1 规范的 `Roundup` 向上取一位小数）。所以厂商公布的数字是 `base × E` 的算术、`RL`/`RC` 未被应用——不是第二种意见，也不是时间分。陷阱在字段名：`baseScore: 9.6` 就摆在一条时间向量旁边，而 9.6 并不是那条向量的基础分。第二个读法陷阱在公告页本身：CVE 描述列了"FortiSandbox **4.2** all versions"与"FortiSandbox PaaS 4.2 all versions"，而 FG-IR-26-185 的版本表里根本没有 4.2 行——只有 5.2、5.0、4.4 与 PaaS 对应项。要告诉别人装哪个版本，引公告的表格，别引描述。
 
 [`🔗 FortiGuard — FG-IR-26-185`](https://fortiguard.fortinet.com/psirt/FG-IR-26-185) · [`🔗 NVD — CVE-2026-107656`](https://nvd.nist.gov/vuln/detail/CVE-2026-107656) · [`🔗 CVE 记录（CNA）`](https://www.cve.org/CVERecord?id=CVE-2026-107656)
 

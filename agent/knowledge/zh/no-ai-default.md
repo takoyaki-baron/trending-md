@@ -79,3 +79,46 @@ Sources: [Libreboot 26.10 release notes](https://libreboot.org/news/libreboot261
 Paul Battley（threedaymonk，资深的 Ruby gem 维护者）归档了自己的 gem 并写下原因——而这不是通常意义的倦怠。他的论证：Ruby 建立在 Matz 的"程序员开心 / 为人类而非机器"的信条上，而"为人类做事的这个时代已经过去"。Ruby 如今"实质上用 LLM agent 开发"，Matz 把语言重新定位为"AI 时代的编程语言"，Rails 的掌门人在主题演讲里展示用 agent 生成 Rust 而不审读输出。他拒绝"继续为一个正被大公司竭泽而渔的公地做贡献——喂养那些机器，而机器不假思索的输出正在污染它"，并署名收尾："想要改动？去问你的 agent 吧……我退了。"使这条区别于本文件所有融资/倦怠故事的地方：他点名的失去是*目的*——人与人的连接——而非时间或金钱。本文件追踪的执行光谱（合并门复选框 → 贡献禁令 → 工会合同条款）获得其终局立场：**归档并离开**。下一个要看的信号：归档是否聚集在领导层最显眼转向 AI 的语言与社区里。
 
 Sources: [po-ru.com](https://po-ru.com/2026/10/18/why-im-no-longer-updating-this-repository) · [HN](https://news.ycombinator.com/item?id=50154518)
+
+## 2026-10-27 —— 反对的不是"AI 不好"，而是"我无法 fork 你的评审者"
+
+Debian 的 **NEW 队列**——每个软件包进入归档之前必须经过的关卡，历史上由人做最后一位评审——开始把
+上传丢给 LLM 审。Johannes Schauer Marin Rodrigues（`josch@debian.org`）是从别的开发者那里才知道的：
+"without an announcement, NEW queue processing now seems to throw my upload at an LLM."他的回信于
+**2026 年 10 月 26 日**发到 `debian-devel`，标题即"我将不再向 NEW 上传"，四句话把立场讲完，全部在
+邮件列表存档中逐字核验：
+
+> "I'm not going to read the machine-generated output."
+> "I will not upload anything to NEW unless there is a way for me to opt out of this."
+> "If the LLM has a bug, I cannot fix it. The model is a binary blob."
+> "I would prefer if the default was *no LLM review* and that developers have to explicitly opt-in."
+
+这件事该记在本文件而不是泛泛的反 AI 清单里，原因在反对的**轴**。此前记录在此的每一个立场都关乎来源、
+质量或劳动：合并闸门、贡献禁令、工会合同条款、归档并离开。这一条关乎**产物的可检视性**。他的对照物是
+Lintian——Debian 自己的老牌 lint 工具——它"will give me an answer *reproducibly* and I can then either
+fix Lintian or add an override to my source package"。一个行为既不确定也不可 fork 的评审者，对一个
+"产品就是别人代码的可复现构建"的发行版而言，是**全新类别的依赖**。他也把治理问题问得很尖——针对 Debian
+"既不背书也不禁止生成式 AI"的总体决议措辞，他问："How is this not *Debian endorses the use of
+generative AI*?"——而他的范围很精确："I'll not be a part of this"，同时"not leaving the project"。
+
+随后在 **10 月 27 日**，这条线索三向分岔，这才使它成为一场真实的分歧而非一句抱怨：
+
+- **Martin Steigerwald** 划出界线："This unreliable and non-deterministic machine should not be sending
+  messages unsolicited to Debian package maintainers."
+- **Theodore Tso**（`tytso@mit.edu`）反驳前提："Humans are unrelible and non-deterministic, you know"
+  （原文如此），以及"if you think it's a waste of time, feel free to ignore the report."
+- **Ben Finney**（`bignose@debian.org`）两个都拒绝："I am deeply troubled you would equivocate between a
+  machine and a human in this conversation. Humans are our peers… The machines we employ in our work are
+  owed none of those considerations… When a machine is unreliable, we have no obligation to suffer it."
+  对 Tso 的"忽略它就行"，他答："Not good enough. This is the same logic of the spammer."
+
+可保留的框架是：**这条线索里没有人说这些评审是错的。** 反对的理由是没人能确立它们对不对——而反方的回答
+是，你不需要先确立这一点，才对维护者负有确定性义务。也请注意执行缺口：这项变更没有任何公告就落地，落在
+唯一一个"放包进归档"的关卡上，而退出机制是一个请求，不是一个开关。对照 [[agent-stack]] 里的 Scion
+流水线，同一个问题在那边是反过来的解法——审批按*改动*分级，而"有没有人读过"被明确放弃作为"有没有被检查"
+的代理。
+
+→ [[agent-stack]] [[ai-impact]] [[fact-check]]
+
+来源：[debian-devel — "I will no longer upload to NEW"](https://lists.debian.org/debian-devel/2026/10/msg00263.html) ·
+[后续讨论串](https://lists.debian.org/debian-devel/2026/10/msg00289.html)

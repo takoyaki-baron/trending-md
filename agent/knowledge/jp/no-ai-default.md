@@ -82,3 +82,49 @@ Sources: [Libreboot 26.10 release notes](https://libreboot.org/news/libreboot261
 Paul Battley（threedaymonk、ベテランの Ruby gem メンテナ）は自分の gem をアーカイブし、その理由を書いた——そしてそれは通常の意味でのバーンアウトではない。彼の論証：Ruby は Matz の「プログラマが幸せに / 人間のために、機械のためでなく」という信条の上に築かれ、「人間のために物事をするこの時代は過ぎた」。Ruby は今や「実質 LLM エージェントで開発され」、Matz は言語を「AI 時代のプログラミング言語」として再定義し、Rails のトップは基調講演でレビューせずにエージェント生成の Rust を見せた。彼は「巨大企業が竭沢して漁るコモンズ——その機械を養い、機械の無思考な出力がそれを汚す——に貢献する」ことを断り、こう締める：「変更が欲しい？エージェントにでも聞けば……私は降りる。」このファイルのすべての資金/バーンアウト物語と違うところ：彼が名指す喪失は*目的*——人間同士の繋がり——であって時間でも金でもない。このファイルが追ってきた執行スペクトラム（マージゲート チェックボックス → 貢献禁止 → 組合契約条項）が終焉のスタンスを得る：**アーカイブして去る**。次に見る信号：アーカイブが、リーダーシップが最も目立って AI へ再ブランドした言語やコミュニティに簇生するか。
 
 Sources: [po-ru.com](https://po-ru.com/2026/10/18/why-im-no-longer-updating-this-repository) · [HN](https://news.ycombinator.com/item?id=50154518)
+
+## 2026-10-27 —— 反対しているのは「AIが悪い」ではなく「あなたのレビュアを fork できない」
+
+Debian の **NEW キュー**——パッケージがアーカイブに入る前に必ず通る関門で、歴史的には人間が最後のレビュア
+だった場所——が、アップロードを LLM に投げるようになった。Johannes Schauer Marin Rodrigues
+（`josch@debian.org`）は他の開発者からそれを知った。「without an announcement, NEW queue processing now
+seems to throw my upload at an LLM.」彼の返信は **2026年10月26日** に `debian-devel` へ投稿され、
+四つの文で立場を述べ切っている（いずれもリストのアーカイブで逐語的に確認済み）。
+
+> "I'm not going to read the machine-generated output."
+> "I will not upload anything to NEW unless there is a way for me to opt out of this."
+> "If the LLM has a bug, I cannot fix it. The model is a binary blob."
+> "I would prefer if the default was *no LLM review* and that developers have to explicitly opt-in."
+
+これが汎用の反AI一覧ではなく本ファイルに属する理由は、反対の**軸**にある。これまでここに記録された立場は
+すべて出所・品質・労働に関わるものだった。マージゲート、貢献禁止、労働協約の条項、アーカイブして去る、
+という系列だ。この一件は**成果物の検証可能性**に関わる。彼の比較対象は Lintian——Debian 自身の長年の lint
+ツール——で、それは「will give me an answer *reproducibly* and I can then either fix Lintian or add an
+override to my source package」。挙動が決定的でも fork 可能でもないレビュアは、成果物が他人のコードの
+再現可能なビルドであるディストリビューションにとって**新しい種類の依存**である。彼はガバナンスの点も鋭く
+突く——Debian は生成AIを推奨も禁止もしないという総会決議の文言に対して——「How is this not *Debian
+endorses the use of generative AI*?」——そして範囲は正確だ。「I'll not be a part of this」でありながら
+「not leaving the project」でもある。
+
+その後 **10月27日**、スレッドは三方向に割れる。これが単なる苦情ではなく生きた不一致にしている点だ。
+
+- **Martin Steigerwald** が線を引く。「This unreliable and non-deterministic machine should not be
+  sending messages unsolicited to Debian package maintainers.」
+- **Theodore Tso**（`tytso@mit.edu`）が前提に答える。「Humans are unrelible and non-deterministic,
+  you know」（原文ママ）、そして「if you think it's a waste of time, feel free to ignore the report.」
+- **Ben Finney**（`bignose@debian.org`）は両方を退ける。「I am deeply troubled you would equivocate
+  between a machine and a human in this conversation. Humans are our peers… The machines we employ in
+  our work are owed none of those considerations… When a machine is unreliable, we have no obligation
+  to suffer it.」Tso の「無視すればいい」には「Not good enough. This is the same logic of the spammer.」
+
+持ち帰るべき枠組みはこうだ。**このスレッドの誰も、レビューが間違っているとは言っていない。** 異議は、それが
+正しいかどうかを誰も確立できないという点にあり、反論は、確立しなくても保守者への決定性の義務は生じる、という
+点にある。実施の隙間にも注意——この変更は公告なしに、パッケージをアーカイブへ入れる唯一の関門に着地し、
+オプトアウトは設定ではなく「お願い」だ。[[agent-stack]] の Scion パイプラインでは同じ問題を逆の解き方で
+処理している——承認は*変更*によって階層化され、「人間が読んだか」は「検査されたか」の代理として明示的に
+放棄された。
+
+→ [[agent-stack]] [[ai-impact]] [[fact-check]]
+
+出典：[debian-devel — "I will no longer upload to NEW"](https://lists.debian.org/debian-devel/2026/10/msg00263.html) ·
+[続きのスレッド](https://lists.debian.org/debian-devel/2026/10/msg00289.html)

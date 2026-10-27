@@ -1,5 +1,5 @@
 {
- "generated": "2026-10-27T12:17:51.309Z",
+ "generated": "2026-10-27T12:43:41.663Z",
  "files": [
   {
    "file": "2026-10-27.md",
@@ -55,6 +55,13 @@
      "detail": "CVE-2026-110720 · Secondary/security@hashicorp.com · vector reproduces 9.9"
     },
     {
+     "check": "temporal",
+     "item": 38,
+     "verdict": "temporal-stopping-point",
+     "claim": "CVE-2026-107656 · CNA 9.6 / base 9.8 / full 9.1",
+     "detail": "fortinet stores 3.1 9.6 in `containers.cna.metrics.cvssV3_1.baseScore` — that is base×E with only E applied (base 9.8, E 9.6, E+RL 9.1, E+RL+RC 9.1; full temporal 9.1, FIRST v3.1 §7.2); NVD re-serves 3.1 9.8 (psirt@fortinet.com) — one vector, so name the stopping point you quote (a field called `baseScore` does not have to hold the base)"
+    },
+    {
      "check": "issues",
      "item": 41,
      "verdict": "ok",
@@ -88,13 +95,6 @@
      "verdict": "ok",
      "claim": "affaan-m/ECC",
      "detail": "290357★, last push 2026-10-26"
-    },
-    {
-     "check": "repo",
-     "item": 12,
-     "verdict": "star-drift",
-     "claim": "1613 quoted vs 1876 now",
-     "detail": "nightly-labs/openbot: -14% — reread the number or date the item"
     },
     {
      "check": "repo",
@@ -137,5 +137,6 @@
  "api_calls": 0,
  "readme_calls": 0,
  "cited_page_calls": 0,
- "nvd_calls": 1
+ "nvd_calls": 1,
+ "cna_calls": 0
 }

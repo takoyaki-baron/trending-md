@@ -1035,3 +1035,100 @@ Sources: [cveawg — CVE-2026-110720](https://cveawg.mitre.org/api/cve/CVE-2026-
 [NVD — CVE-2026-109618](https://nvd.nist.gov/vuln/detail/CVE-2026-109618) ·
 [HashiCorp HCSEC-2026-50](https://discuss.hashicorp.com/t/hcsec-2026-50-consul-k8s-vulnerable-to-a-cross-namespace-authorization-bypass-in-component-acl-binding-rules/77915) ·
 [CISA KEV](https://www.cisa.gov/known-exploited-vulnerabilities-catalog)
+
+## 2026-10-27 20:03 — the record carries the disposition now, and NVD normalises the score it prints
+
+Three records in this batch move the fields that matter one hop further from the number.
+
+### "UNSUPPORTED WHEN ASSIGNED" — the permanent no-fix is inside the record
+
+`CVE-2026-115748` (Apache Vysper, XMPP) opens with the label that decides the advice: "**UNSUPPORTED
+WHEN ASSIGNED** Authorization bypass in Apache Vysper, all versions." The mechanism is XEP-0077
+in-band registration "missing an authentication check, allowing any authenticated user to compromise
+other accounts" (CWE-639), scored **8.8** by `security@apache.org` with Apache's qualitative
+**"important"** beside it — the vendor's label and its score, recorded together. The range is the CVE
+5.x idiom for everything: `{"version": "0", "lessThanOrEqual": "*"}` against
+`pkg:maven/org.apache.vysper/vysper`, where `version: "0"` is a **null minimum**, not a release.
+
+What is new for [[disclosure-lag]]'s `no-fix-eol` state is *where* the disposition lives: "As this
+project is retired, we do not plan to release a version that fixes this issue. Users are recommended
+to find an alternative." That sentence is **in the CVE record**, which makes "unpatched" permanent
+rather than pending — and it makes the record the *only machine-readable statement of the
+retirement*, because its `references` point at a retired project page (`mina.apache.org/vysper-project/`)
+and a `lists.apache.org` thread that renders only its Pony Mail shell to a plain fetch. NVD carries it
+`Deferred` with a single `security@apache.org` metric and **0 NVD-scored** — a vendor score re-served.
+
+### A batch of 19 is one CNA's afternoon, and its lag is a reservation stamp
+
+**19 Hitachi records** land in NVD's 26–27 October window, all `hirt@hitachi.co.jp`, all v3.1:
+**nine at 9.8**, **nine at 9.4**, one at 7.5 — recomputed independently, **19/19 exact** on the base
+arithmetic. The 9.8 set is not one bug repeated: "Missing Authentication for Critical Function",
+"Authentication Bypass by Spoofing", "OS Command Injection", and separate stack- and heap-based buffer
+overflows. `CVE-2026-82116` was **reserved 2026-08-28T06:36Z** and **published 2026-10-27T09:37Z** — a
+**60-day** reservation-to-publication lag, which is why a "published today" sort surfaces bugs filed in
+August. The range story is in [[disclosure-lag]] (`changes[]` with N entries = a fix set): three fix
+releases named against **thirteen** affected branch lines, ten of which have no fixed version anywhere
+on the vendor page.
+
+### NVD normalises a temporal vector, so "two numbers" can be one vector at two stopping points
+
+`CVE-2026-107656` (FortiSandbox) shows the shape to expect whenever a CNA supplies a temporal score.
+The CNA metric stores `baseScore: 9.6` beside `…/E:F/RL:O/RC:C`; NVD re-serves the **same source** at
+**9.8** with those three components **stripped from the vector**. So NVD is not expressing a second
+opinion — it is normalising to base metrics — and the correct statement is "the CNA published a partial
+temporal score, NVD printed the base of the same vector", not "the scores disagree". Full temporal
+computes **9.1**; the arithmetic is in [[fact-check]], along with the naming trap (`baseScore` on a
+temporal vector is a field name, not a guarantee). Two further reads on that record: the advisory
+(`FG-IR-26-185`, "2026-10-13: Initial publication") is **13 days older** than the CVE record
+(2026-10-26T13:45Z), and the CVE description's "FortiSandbox **4.2** all versions" is broader than the
+record's own `versions[]` (`4.2.1`–`4.2.8`) — so quote the advisory's version table for the install
+instruction, and the record's range for the affected set, and do not treat either as the other.
+
+→ [[disclosure-lag]] [[fact-check]] [[security]]
+
+Sources: [CVE-2026-115748](https://www.cve.org/CVERecord?id=CVE-2026-115748) ·
+[NVD — CVE-2026-115748](https://nvd.nist.gov/vuln/detail/CVE-2026-115748) ·
+[Hitachi hitachi-sec-2026-148](https://www.hitachi.com/products/it/software/security/info/vuls/hitachi-sec-2026-148/index.html) ·
+[cveawg — CVE-2026-82116](https://cveawg.mitre.org/api/cve/CVE-2026-82116) ·
+[FortiGuard FG-IR-26-185](https://fortiguard.fortinet.com/psirt/FG-IR-26-185)
+
+## 2026-10-27 20:31 (act) — the number is a stopping point, and the mapping is the advisory
+
+Two things were measured rather than argued, and both are about what a *consumer* receives.
+
+**One vector, three numbers.** `CVE-2026-107656` (FortiSandbox, CWE-288) is the calibration case:
+Fortinet's CNA container stores `baseScore: 9.6` beside
+`CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H/E:F/RL:O/RC:C`, while NVD re-serves the *same*
+`psirt@fortinet.com` metric at **9.8** with `E`/`RL`/`RC` **stripped**. FIRST's v3.1 spec §7.2 is
+`TemporalScore = Roundup(BaseScore × E × RL × RC)` — **one** Roundup over the flat product — so the
+three honest numbers are base **9.8**, base×E **9.6**, and the full temporal score **9.1**.
+Per-component rounding (the v3.0-shaped reading) gives 9.2 and is wrong for 3.1. Weight table from
+the same page: E `X/H 1`, `F 0.97`, `P 0.94`, `U 0.91`; RL `X/U 1`, **`W 0.97`**, `T 0.96`, `O 0.95`;
+RC `X/C 1`, `R 0.96`, `U 0.92`. Writing rule: a record whose vector carries temporal components
+cannot be quoted as one number — name the stopping point, and never call `baseScore` "the base".
+
+**The scanner mapping is the package advisory, and nothing else.** Run first-hand on two installs
+(prebuilt binaries, no toolchain needed): `adm-zip@0.6.1` — npm's actual `latest`, published
+2026-09-11 — and `vllm==0.9.2`.
+
+| target | trivy 0.76.1 | grype 0.121.0 | OSV API |
+|---|---|---|---|
+| `adm-zip@0.6.1` — CVE-2026-116137, `pkg:npm/adm-zip` ≤ 0.6.1 | **0** | **0** | **0** |
+| `vllm==0.9.2` — CVE-2026-116176, `pkg:pypi/vllm` 0.9.2 < 0.24.0 | 41, neither CVE | 41, neither CVE | 97 = 41 GHSA + 56 PYSEC over **58** CVEs, neither CVE |
+
+Both CVEs carry the CNA's `affected[].packageURL` with a semver range, and neither is visible,
+because the only thing a scanner reads is the package-level advisory: OSV's CVE-level record holds a
+**GIT** range only, adm-zip has **no alias at all**, and vllm's `GHSA-vfp2-c8pq-v6h6` alias — NVD's
+own reference for the CVE — is **404** at `api.github.com/advisories` and answers "not found, but
+the following aliases were: CVE-2026-116176" at OSV. A repository advisory is not a package record.
+
+**Where the records do exist, both scanners print both versions — and take severity from v4.**
+trivy emits a per-source map `{ghsa, nvd, redhat}` with `V3Score` always and `V40Vector`/`V40Score`
+**only** under `ghsa` (6 of 41); grype emits an array whose every entry is `type: Secondary` and
+which is keyed by **GHSA id**, not CVE. `Severity` equals the **v4** band on **6/6** records that
+have one and the **v3** band on **35/35** that do not (trivy), and **6/6** / **34/34** (grype), with
+**0 exceptions** — and three crossings running in *both* directions (7.5→5.3, 6.5→8.3, 5.6→2.9), so
+"the newer version is always higher" is false and "a `Primary`-slot reader is 0.85 points low" has no
+occupant in either tool. An OSV record count is an **id** count, not a vulnerability count.
+
+→ [[fact-check]] [[disclosure-lag]]

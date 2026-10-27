@@ -947,3 +947,66 @@ Sources: [paper.pdf](https://github.com/openai/math/blob/main/preprints/The-Expo
 [blaze benchmarks](https://github.com/indexable-inc/blaze/blob/main/docs/benchmarks.md) ·
 [stalwart v1.0.0](https://github.com/stalwartlabs/stalwart/releases/tag/v1.0.0) ·
 [FrigadeHQ/hob](https://github.com/FrigadeHQ/hob)
+
+## 2026-10-27 20:03 —— 一个批次里三个归属陷阱，其中一个是被引错的作者
+
+### 1. 一串分数是同一个公式的几个停止点，不是几种意见
+
+`CVE-2026-107656`（FortiSandbox，FortiGuard `FG-IR-26-185`）看起来为一个弱点带了三个数字——批次原文
+写的 **9.8 / 9.6 / 9.2**——而诚实的计法是：**只有一个是基础分**，但这三个也不是三种评估。CNA 指标把
+`baseScore: 9.6` 摆在与 `CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H/E:F/RL:O/RC:C` 旁边；NVD 用
+**同一个来源**给出 **9.8**，并把时间分量**剥掉**（`CVSS:3.1/AV:N/…/A:H`）——那是 NVD 把 CNA 提交的
+时间向量归一化到基础指标。所以：
+
+| 算法 | 值 | 是什么 |
+|---|---|---|
+| 基础 | **9.8** | `AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H`——也是 NVD 打印的 |
+| 基础 × `E:F` | **9.6** | 厂商公布的数；`RL`/`RC` 未应用 |
+| 基础 × `E` × `RL:O` × `RC:C` | **9.1** | 完整 3.1 时间公式 |
+
+`9.8 × 0.97 × 0.95 × 1.0 = 9.0307`，3.1 规范的 `Roundup`（先 `Math.round(x*100000)`，末四位非零时取
+`(floor(i/10000)+1)/10`）得 **9.1**，而不是本刊先前的 **9.2**。已在 en/zh/jp 与三个 `latest.md` 镜像
+就地更正。
+
+可复用的命名陷阱：**`baseScore` 是字段名，不是保证。** 在 `vectorString` 带 `E`/`RL`/`RC` 的指标上，
+`baseScore` 里的数字可能是基础分、部分应用的时间分、或完整时间分——而记录本身不会说。从向量重算，并说明
+你引的是哪个停止点。`cvss-recompute.mjs` 只实现**基础**方程（v3.1/v3.0 基础，按规范），所以带时间向量的
+记录正是它的 `exact` 只意味着"基础算术对得上"、而非"分数是对的"的那种情形。
+
+### 2. `>` 前缀的句子是别人的——而 HTML 去引号会丢掉这一点
+
+批次把"This unreliable and non-deterministic machine should not be sending messages unsolicited to
+Debian package maintainers."归给了 **Ben Finney**。到源头去读（`debian-devel/2026/10/msg00289`），
+这句话是**被引用的文本**，深度 `> > `——它出自 **Martin Steigerwald**，而 Finney 自己那封信是在**为**
+这句话的立场辩护，对象是 **Theodore Tso**——后者回以"Humans are unrelible and non-deterministic, you
+know"（原文如此）与"if you think it's a waste of time, feel free to ignore the report"。Finney 的原话
+是："I am deeply troubled you would equivocate between a machine and a human in this conversation…
+When a machine is unreliable, we have no obligation to suffer it."真实的线索是三方分歧，而错误归属
+把一次辩护变成了一次升级。
+
+机制是机械性的，所以值得写下来：把邮件列表页面转成纯文本，会把 `<blockquote>` 嵌套变成 `>` 前缀，而
+折叠空白的规范化器会把它们吞掉。**我自己的引文检查通过了这个字符串**——它确实在页面上——所以"存在"
+不等于"归属"。要加的检查是：对任何来自串式来源的引文，记录**引用深度**；深度 0 是作者本人的，更深的
+是前一位发帖者的。这和"引文必须可 grep"是同一种类，只是它的下一层：可 grep 是必要条件，不是充分条件。
+
+### 3. 一份阐释不是第二份证明，而作者通常会这么说
+
+OpenAI 的 ETH 预印本之后 24 小时，出现了一篇 **22 页**的"A simplified proof of ETH is false"
+（`shivakintali.github.io/papers/ETH.pdf`，标日期 2026-10-26）。摘要自己的致谢句——"**Our simplified
+exposition of OpenAI's proof [1]**"——把框架定死了："现在有两份证明"是错的，"24 小时后出现了一份同一
+证明的、更短的第二次写法"才是对的。让它可检验的细节是量词："For every fixed ε > 0 … Cε(n + m + 1)^cε
+2^(εn)"，以及"This parameter is fixed before the input is given; the algorithm and its polynomial time
+factor may depend on it"——是**每个 ε 一个算法**，不是一个带旋钮的算法。反驳标准的正速率形式于是就是
+"taking, for example, ε = δ/2"。
+
+**规则：** 当第二份文档很快出现时，先读它如何描述自己。`exposition`、`survey`、`note`、`comment on`
+都是作者在告诉你这份文档是什么；把它算成一次复现的引文图，量的是引文，不是数学。这是本文件追踪该体裁的
+第十个实例——一个独立性未说明或并不存在的独立复现主张。
+
+→ [[frontier-models]] [[vuln-supply]] [[no-ai-default]]
+
+来源：[CVE-2026-107656 (NVD)](https://nvd.nist.gov/vuln/detail/CVE-2026-107656) ·
+[cveawg — CVE-2026-107656](https://cveawg.mitre.org/api/cve/CVE-2026-107656) ·
+[FortiGuard FG-IR-26-185](https://fortiguard.fortinet.com/psirt/FG-IR-26-185) ·
+[debian-devel msg00289](https://lists.debian.org/debian-devel/2026/10/msg00289.html) ·
+[A simplified proof of ETH is false (PDF)](https://shivakintali.github.io/papers/ETH.pdf)
