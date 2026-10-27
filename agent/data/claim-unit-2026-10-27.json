@@ -1,9 +1,9 @@
 {
- "generated": "2026-10-26T20:19:27.995Z",
+ "generated": "2026-10-27T04:18:29.784Z",
  "files": [
   {
    "file": "2026-10-27.md",
-   "items": 20,
+   "items": 34,
    "findings": [
     {
      "check": "cvss",
@@ -20,11 +20,39 @@
      "detail": "split named (PR share 58%)"
     },
     {
-     "check": "repo",
-     "item": 7,
-     "verdict": "unreadable",
-     "claim": "merge_ssl_opts/3",
-     "detail": "api.github.com: Command failed: gh api repos/merge_ssl_opts/3"
+     "check": "cvss",
+     "item": 23,
+     "verdict": "ok",
+     "claim": "4.0 9.2",
+     "detail": "CVE-2026-109618 · Secondary/security@php.net"
+    },
+    {
+     "check": "cvss",
+     "item": 23,
+     "verdict": "ok",
+     "claim": "3.1 9.8",
+     "detail": "CVE-2026-109618 · Primary/nvd@nist.gov"
+    },
+    {
+     "check": "cvss",
+     "item": 23,
+     "verdict": "ok",
+     "claim": "3.1 8.1",
+     "detail": "CVE-2026-109619 · Primary/nvd@nist.gov"
+    },
+    {
+     "check": "issues",
+     "item": 26,
+     "verdict": "ok",
+     "claim": "426 issues+PRs combined",
+     "detail": "one number for both nouns — that is the composite the counter reports, so nothing is being presented as an issue-only count"
+    },
+    {
+     "check": "cvss",
+     "item": 29,
+     "verdict": "ok",
+     "claim": "3.1 9.9",
+     "detail": "CVE-2026-110720 · Secondary/security@hashicorp.com"
     },
     {
      "check": "repo",
@@ -38,7 +66,21 @@
      "item": 11,
      "verdict": "ok",
      "claim": "affaan-m/ECC",
-     "detail": "289684★, last push 2026-10-26"
+     "detail": "289987★, last push 2026-10-26"
+    },
+    {
+     "check": "repo",
+     "item": 12,
+     "verdict": "star-drift",
+     "claim": "1400 quoted vs 1602 now",
+     "detail": "nightly-labs/openbot: -13% — reread the number or date the item"
+    },
+    {
+     "check": "repo",
+     "item": 12,
+     "verdict": "ok",
+     "claim": "nightly-labs/openbot",
+     "detail": "1602★, last push 2026-10-27"
     },
     {
      "check": "count",
@@ -53,6 +95,20 @@
      "verdict": "ok",
      "claim": "311 skills",
      "detail": "README states it"
+    },
+    {
+     "check": "count",
+     "item": 30,
+     "verdict": "absent",
+     "claim": "38 benchmarks",
+     "detail": "no count of benchmarks on README of stalwartlabs/stalwart — count it yourself, or say \"no page states a total\""
+    },
+    {
+     "check": "count",
+     "item": 31,
+     "verdict": "absent",
+     "claim": "32 languages",
+     "detail": "no count of languages on README of FrigadeHQ/hob — count it yourself, or say \"no page states a total\""
     }
    ]
   }
