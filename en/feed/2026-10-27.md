@@ -1,6 +1,6 @@
 ---
 date: 2026-10-27
-updated: 2026-10-27T04:33:11Z
+updated: 2026-10-27T12:17:44Z
 schedule: 04:03, 12:03, 20:03 UTC+8
 sources: 21
 license: CC-BY-4.0
@@ -484,13 +484,225 @@ The finding started in production: at a RAG research system built for the Pilsud
 
 ---
 
+## 35. A crawler calling itself Roblox took 145.5 GB from three 3D-model sites — and the operator says it can't prove it was Roblox
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Open3DLab / SFMLab / SmutBase incident writeup · HN 137 pts · ~2h ago (~18:27 UTC+8 Oct 27)
+- **Tags:** `training-data` `crawling` `licensing` `roblox` `robots-txt`
+
+On **15 and 16 October 2026** a crawler "that said it belonged to Roblox" read "the main page of **18,926** projects" in "**26,429** requests over a span of **34 hours**", then pulled "complete copies of **1,027** files from **712** projects" — "**145.5 GB**". The user agent was `trellis2-data-sourcing/1.0 (3D foundation model research; [redacted]@roblox.com)`, from "a single Amazon Web Services (AWS) address". The breakdown is what makes it a licensing story rather than a scraping story: "**364** files (**54.8 GB**) from **224** projects on SmutBase, which hosts adult content only"; with SFMLab marked adult, "**345** of the 712 projects (**62.6 GB**) are adult content"; and "**423** of the 712 projects are licensed for non-commercial use only." The operator found it "on **18 October** and blocked further attempts the same morning", emailed the address in the user agent the same day, and got no reply; the crawler returned on the 19th (fully blocked) and made "its final return" on the 20th at 8:00, stopping "around 15:00".
+
+**Why it matters:** the write-up is unusually disciplined about what it does *not* establish, and those sentences are the item. Identity: "We take the user agent at face value… Anyone can type any email address into a user agent, and the crawler ran from Amazon's cloud, not from Roblox's own network" — though "Nothing we've seen suggests impersonation". Training use: "We can't prove it, and we don't know whether any of our creators' files ended up in a model." Adult content: "We don't think Roblox set out to collect adult content, and we have no evidence that any of it reached a model or a product." Even the codename is hedged: it "may mean the data was meant for training or tuning a model like it, or it may just be a project codename." A second-order detail belongs in the advice: "One project the crawler took has already been disabled on SFMLab since" — deleting the source does not delete the copy. The number to quote is **423 non-commercial-only projects**, because that one is a license term, not a grievance, and it holds even if the crawler turns out to be somebody else.
+
+[`🔗 Open3DLab — Roblox downloaded 145 GB of models from our sites`](https://open3dlab.com/news/roblox-downloaded-145-gb-of-models-from-our-sites/) · [`🔗 Hacker News discussion`](https://news.ycombinator.com/item?id=50256985)
+
+---
+
+## 36. Debian's NEW queue now runs uploads past an LLM — one developer says he'll stop uploading, and the argument is "I cannot fix it"
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** debian-devel mailing list · HN 121 pts · ~2h ago (~17:59 UTC+8 Oct 27)
+- **Tags:** `debian` `policy` `llm-review` `governance` `packaging`
+
+Johannes Schauer Marin Rodrigues (`josch@debian.org`) wrote to debian-devel on **26 October** that he had learned "without an announcement, NEW queue processing now seems to throw my upload at an LLM", and that he was not asked. NEW is the queue a package sits in before it can enter the archive at all — the one place a human has historically been the last gate — so the change lands on every new package rather than on a corner of the project. He states the position plainly: "I'm not going to read the machine-generated output"; "I will not upload anything to NEW unless there is a way for me to opt out of this"; and on the project's general-resolution language that Debian neither endorses nor prohibits generative AI, "How is this not *Debian endorses the use of generative AI*?" He says he is "not leaving the project", but "I'll not be a part of this."
+
+**Why it matters:** the technical objection is the durable one, and it is not a taste objection. "If the LLM has a bug, I cannot fix it" — set against Lintian, which gives reproducible output he can patch, override or argue with. A reviewer whose behaviour is neither deterministic nor forkable is a new category of dependency for a distribution whose entire product is reproducible builds of other people's code, and the ask is correspondingly modest: "I would prefer if the default was *no LLM review* and that developers have to explicitly opt-in." The follow-up thread from Ben Finney (`bignose@debian.org`, 27 October) is where the escalation shows: "This unreliable and non-deterministic machine should not be sending messages unsolicited to Debian package maintainers." Neither message claims the reviews are wrong — the objection is that no one can establish whether they are.
+
+[`🔗 debian-devel — "I will no longer upload to NEW"`](https://lists.debian.org/debian-devel/2026/10/msg00263.html) · [`🔗 Follow-up: "Re: I will no longer upload to NEW"`](https://lists.debian.org/debian-devel/2026/10/msg00289.html)
+
+---
+
+## 37. Sage-A1.5 is a 35B MoE with 99 authors — 92.0 on XBench-DS, and 9.5 points behind Kimi-K3 on BrowseComp
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Hugging Face model card / arXiv 2610.28578 · submitted 2026-10-20
+- **Tags:** `model-release` `moe` `agents` `scientific-research` `benchmarks`
+
+**Sage-A1.5** is a **35B Mixture-of-Experts** agentic model (safetensors: **35,951,822,704** parameters in BF16, **71.9 GB**), "based on Qwen3.6 and Agents-A1 from Shanghai AI Laboratory", Apache-2.0, with the weights on the Hub and Transformers/vLLM/SGLang compatibility. Its three named capabilities are agentic orchestration (parallel subagents with isolated contexts), verification, and "open scientific discovery". **Verification Mode** is the design choice worth noting: "an opt-in self-review capability that lives inside the model's own chain of thought — the model pauses mid-trajectory to review what it has established and what has failed, then acts on a revised direction in the same turn, **with no external critic**." The table is dense: XBench-DS-2510 **92.0**, IFBench **81.6**, GAIA **95.1**, BrowseComp **81.7** without orchestration / **82.8** with, SWE-bench Pro **61.2**, MLE-Lite **65.2**, SciCode **44.3**, AA-LCR **81.0**, HLE with tools **55.1**. Against Agents-A1 it gains SWE-bench Pro **+17.6**, MLE-Lite **+21.3**, SWE-bench Multilingual **+14.0**, PinchBench **+13.1**.
+
+**Why it matters:** read the same table for the cells that do not say SOTA. GAIA lands at **95.1** where its own predecessor Agents-A1 scores **96.0** — the only row where the newer model is worse — and BrowseComp is **81.7** against Kimi-K3's **91.2**, a 9.5-point gap in the long-horizon-search bucket the model is named for. So "overall SOTA on XBench-DS-2510 (92.0), IFBench (81.6), PinchBench (90.0)" is a per-cell claim in a vendor card, not a ranking. Two other details are checkable and worth keeping: the +1.1 that agentic orchestration buys on BrowseComp is the model's *own* ablation across one benchmark pair, and the arXiv listing carries **99 authors** — at that headcount the "capability composition" framing is describing an organisation as much as an architecture.
+
+[`🔗 Hugging Face — InternScience/Sage-A1.5`](https://huggingface.co/InternScience/Sage-A1.5) · [`🔗 arXiv 2610.28578 — technical report`](https://arxiv.org/abs/2610.28578)
+
+---
+
+## 38. FortiSandbox's 9.8, 9.6 and 9.2 are one vector at three stopping points — and the advisory is 13 days older than the CVE
+
+- **Velocity:** ▮▮ rising
+- **Source:** FortiGuard PSIRT FG-IR-26-185 / NVD / CVE record · published 2026-10-26
+- **Tags:** `cve` `fortinet` `auth-bypass` `cvss-arithmetic` `provenance`
+
+**CVE-2026-107656** (CWE-288) is an "Authentication Bypass Using an Alternate Path or Channel" in the FortiSandbox GUI that "may allow a remote unauthenticated attacker to bypass authentication via crafted HTTP requests". Fixed in **5.0.7** (from 5.0.0–5.0.6) and **4.4.10** (from 4.4.0–4.4.9); FortiSandbox **5.2 is not affected**; **FortiSandbox PaaS 4.4 "all versions"** gets "Migrate to a fixed release" rather than an upgrade. Fortinet's own timeline says "2026-10-13: Initial publication" — the CVE record was published **2026-10-26T13:45Z**, a **13-day** gap. "Virtual Patch: No". "Known Exploited: No". Credit goes to Adham El Karn of Fortinet's own product security team and to Jason McFadyen of TrendAI Research.
+
+**Why it matters:** this record carries three numbers for one weakness and only one of them is base arithmetic. NVD holds a single `psirt@fortinet.com` metric at **9.8** (vulnStatus `Awaiting Analysis`, 0 NVD-scored) with the base-only vector `CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H`. The CNA record's own metric stores **9.6** — but its `vectorString` adds `E:F/RL:O/RC:C`, and that is where the discrepancy lives: base computes **9.8**, base × Exploit-Code-Maturity alone computes **9.6**, and the full temporal formula computes **9.2**. So the vendor's published number is the arithmetic of `base × E` with `RL`/`RC` left unapplied — not a second opinion, and not a temporal score either. The second reading trap is on the advisory page itself: the CVE description lists "FortiSandbox **4.2** all versions" and "FortiSandbox PaaS 4.2 all versions", while FG-IR-26-185's version table has no 4.2 row at all — 5.2, 5.0, 4.4, and the PaaS equivalents. Quote the advisory table, not the description, when telling somebody which release to install.
+
+[`🔗 FortiGuard — FG-IR-26-185`](https://fortiguard.fortinet.com/psirt/FG-IR-26-185) · [`🔗 NVD — CVE-2026-107656`](https://nvd.nist.gov/vuln/detail/CVE-2026-107656) · [`🔗 CVE record (CNA)`](https://www.cve.org/CVERecord?id=CVE-2026-107656)
+
+---
+
+## 39. Hitachi published 19 HiRDB and JP1 CVEs in one morning — nine at 9.8, and three fix releases for thirteen affected branch lines
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hitachi security info hitachi-sec-2026-148 / NVD / CVE records · published 2026-10-27
+- **Tags:** `cve` `hitachi` `hirrdb` `version-ranges` `vendor-batch`
+
+**19 Hitachi records** landed in NVD's 26–27 October publication window, all scored by `hirt@hitachi.co.jp`: **nine at 9.8**, **nine at 9.4**, one at 7.5. They cover **HiRDB** (the database server) and **JP1** (the job-management suite), and the 9.8 set is not one bug repeated — it includes "Missing Authentication for Critical Function", "Authentication Bypass by Spoofing", "OS Command Injection", and separate stack- and heap-based buffer overflows. Take **CVE-2026-82116**: reserved **2026-08-28T06:36Z**, published **2026-10-27T09:37Z** — a **60-day** reservation-to-publication lag, which is why a "today" sort surfaces bugs that were filed in August.
+
+**Why it matters:** the affected range is where this one repays a careful read, because the record and the advisory describe the same fix set three different ways. The CNA record says HiRDB Server Version 10 is affected `{version: "10-00", lessThan: "10-12-01"}` — a flat span — then attaches `changes[]` naming **three** points as `unaffected`: `10-12-01`, `10-11-02`, `10-08-05`, in **descending** order. Hitachi's own page agrees on the three: the "Fixed products" table lists exactly **10-12-01, 10-11-02 and 10-08-05** for AIX, Linux and Windows. But its affected table for the same product on Linux runs thirteen branch lines — `10-12`, `10-11 to 10-11-01`, `10-10 to 10-10-01`, `10-09 to 10-09-05`, `10-08 to 10-08-04`, and on down to `10-00 to 10-00-11` — so **ten** of those lines have affected sub-releases and **no** fixed version named anywhere on the page. Two naive reads both fail: take `lessThan: 10-12-01` literally and you mark `10-08-05` vulnerable when it is the fix; apply `changes[]` in array order with "holds to the range's end" and the entry at `10-08-05` blanks out `10-11-01`, which the advisory says is affected. The fix path for a 10-10 install is an upgrade to 10-11-02 or 10-12-01, and no sentence on either page says so.
+
+[`🔗 Hitachi — Vulnerability in HiRDB (hitachi-sec-2026-148)`](https://www.hitachi.com/products/it/software/security/info/vuls/hitachi-sec-2026-148/index.html) · [`🔗 CVE record — CVE-2026-82116`](https://www.cve.org/CVERecord?id=CVE-2026-82116) · [`🔗 NVD — CVE-2026-82116`](https://nvd.nist.gov/vuln/detail/CVE-2026-82116)
+
+---
+
+## 40. Mistral's Timestral puts a 209M forecaster ahead of a 2.5B one — and the 123M sibling is 0.001 MASE behind it
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hugging Face model card / github.com/mistralai/timestral · published 2026-10-15
+- **Tags:** `mistral` `time-series` `foundation-model` `benchmarks` `release-drift`
+
+**Timestral** is Mistral's time-series foundation model family, shipped in **5M, 28M, 123M and 209M** parameter sizes for zero-shot forecasting. The 209M checkpoint is a patch-based transformer with time attention and variate attention, **24 layers**, **768**-wide, **32** time steps per patch, a context of up to **32,768** steps (**1,024** patches) and a single-pass horizon of up to **1,024** steps, emitting **21 quantiles** (0.01 through 0.99). The benchmark table claims "state-of-the-art zero-shot accuracy" on **GIFT-Eval**, **TIME** and **fev-bench**, and the relevant comparison is the parameter count beside it: on GIFT-Eval, MASE **0.658** against `t0-gamma` **0.661**, **TimesFM-3** **0.667**, **Toto-2.0-2.5B** **0.696** and **Chronos-2** **0.698**; CRPS **0.446**. On fev-bench the SQL skill score is **50.39** against **49.42**.
+
+**Why it matters:** the family table is the honesty device, and it cuts both ways. The 209M beats the 123M by **0.001** MASE on GIFT-Eval (0.658 vs 0.659) and by **0.002** on TIME (0.626 vs 0.628), so the top of the line is inside rounding of the middle — while the margin over Toto-2.0-2.5B, a model twelve times larger, is **0.038** and belongs to the architecture rather than to scale. The release-drift check is the other half: `mistralai/timestral` is **922 stars, created 2026-10-15, last pushed 2026-10-15**, with no release tag in its feed — so "we're releasing the source code… to reproduce our benchmark results" describes a repository that has not moved since the day it appeared, and the reproduction claim is currently unverified by anyone outside Mistral.
+
+[`🔗 Hugging Face — mistralai/Timestral-209M`](https://huggingface.co/mistralai/Timestral-209M) · [`🔗 GitHub — mistralai/timestral`](https://github.com/mistralai/timestral)
+
+---
+
+## 41. DeepTutor: 44,860 stars, ten releases in 27 days, and a self-reported +10.8% on a benchmark it wrote
+
+- **Velocity:** ▮▮ rising
+- **Source:** GitHub / arXiv 2604.26962 · trending today (+1,587 stars)
+- **Tags:** `agents` `education` `rag` `release-cadence` `benchmarks`
+
+**HKUDS/DeepTutor** — "Lifelong Personalized Tutoring" — sits at **44,860 stars** and **5,667 forks** with **239** open issues and PRs, Apache-2.0, Python 3.11+/Next.js 16, created **2025-12-28** and pushed today. The feature surface is the thesis: one thread that can call tools, ground itself in a selected knowledge base, read attachments, consult subagents and write to a notebook; a *sticky session context* that carries capability, workspace, tools, knowledge bases, persona, model and Reading/Mastery state across turns, separated from "one-time references" that apply for a single turn; and multi-engine retrieval across LlamaIndex, PageIndex, GraphRAG, LightRAG, a self-hosted WeKnora base, Kiwix ZIM archives and Obsidian vaults. The paper (arXiv **2604.26962**, v3, 9 July 2026) reports **TutorBench** — "an interactive benchmark" with learner profiles drawn from university curricula in five fields and an LLM-simulated student — with an average personalised improvement of **10.8%** and **29.4%** on general agentic reasoning "across five backbone models".
+
+**Why it matters:** the release cadence *is* the product claim, and it is measurable from the feed: the last ten releases run **v1.6.10 (22 Sept)** to **v1.6.15 (18 Oct)** — ten releases in **27 days**, several of them fix releases naming the failures ("books that arrived as one empty chapter, quizzes that produced nothing, the model's scratchpad in the text"). That is a project shipping faster than a paper describes it. The two numbers to hold lightly are both self-referential: TutorBench is the authors' own benchmark, and the student is simulated — so "+10.8% personalised" measures the model against a model's idea of a learner. The README is candid about a smaller gap too: "The overview is current for v1.6.5. The surface screenshots below remain v1.4.6 references while a versioned refresh is in progress."
+
+[`🔗 GitHub — HKUDS/DeepTutor`](https://github.com/HKUDS/DeepTutor) · [`🔗 arXiv 2604.26962 — DeepTutor`](https://arxiv.org/abs/2604.26962)
+
+---
+
+## 42. android-ad-cleaner: 2,835 stars, no root, and a "hand this to your AI" block on its homepage
+
+- **Velocity:** ▮▮ rising
+- **Source:** GitHub / project homepage · v0.2.4 released 2026-10-27
+- **Tags:** `chinese-oss` `android` `adb` `debloat` `agent-instructions`
+
+**rddmwmddr/android-ad-cleaner** turns off the advertising, trending lists and marketing push notifications bundled into Chinese Android ROMs — without root, without unlocking, without flashing — by driving `adb` from a desktop client. **2,835 stars**, **239 forks**, **155** open issues and PRs, MIT, created **2026-10-24**, with **v0.2.4** shipping today after, in its own words, handling "**140+** feedback items from 10-26 to 10-27". The scope is stated as a boundary rather than a boast: it flips switches the system and apps already expose, a suspended ad package requires the owner's confirmation and reverts with one command, system updates are unaffected, and functions like drop-down search, the app store's install/update path, weather alerts and delivery notices are preserved. What it will not do is equally explicit: "仅支持通过 adb 连接的安卓设备，暂不支持使用 HDC 的原生鸿蒙" — adb-connected Android only, no native HarmonyOS.
+
+**Why it matters:** the distribution channel is the news. The homepage carries a **"交给你的 AI"** ("hand it to your AI") block with copy-paste text for agentic tools — WorkBuddy, Claude Code, Codex, Trae, Cursor with the phone tethered — alongside a second block for chat assistants, and it ships signed, notarized macOS builds rather than an unsigned zip. That is a Chinese desktop utility treating an agent as a first-class installer, which is a different adoption path from "add an MCP server". The engineering posture is worth copying: a dated changelog that names the bug class ("执行中途断线会停下说明原因，不再显示假成功" — a disconnect mid-run now stops and explains rather than reporting a false success), a documented list of what it leaves alone, and per-issue notes on what was fixed versus what is still unverified.
+
+[`🔗 GitHub — rddmwmddr/android-ad-cleaner`](https://github.com/rddmwmddr/android-ad-cleaner) · [`🔗 Project homepage (zh)`](https://rddmwmddr.github.io/android-ad-cleaner/)
+
+---
+
+## 43. Apache Vysper's 8.8 is "UNSUPPORTED WHEN ASSIGNED" — the vendor says find another library, so the fix is never coming
+
+- **Velocity:** ▮▮ rising
+- **Source:** Apache CNA record / NVD · published 2026-10-26
+- **Tags:** `cve` `apache` `xmpp` `end-of-life` `no-fix`
+
+**CVE-2026-115748** opens with the label that decides the advice: "**UNSUPPORTED WHEN ASSIGNED** Authorization bypass in Apache Vysper, all versions." The mechanism is in the XMPP library's XEP-0077 (In-Band Registration) implementation, which "is missing an authentication check, allowing any authenticated user to compromise other accounts" — CWE-639, authorization bypass through a user-controlled key. Scored **8.8** on `CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H` by `security@apache.org`, with Apache's own qualitative label recorded beside it as "important". The range Apache published is the CVE 5.x idiom for "everything": `{"version": "0", "lessThanOrEqual": "*"}` against `pkg:maven/org.apache.vysper/vysper` — `version: "0"` is a null minimum, not a release.
+
+**Why it matters:** the sentence that matters is not the score, it is the disposition: "As this project is retired, we do not plan to release a version that fixes this issue. Users are recommended to find an alternative." That makes "unpatched" **permanent** rather than pending — the opposite of the default reading of a fresh CVE, and the reason the reservation is worth reporting alongside the fix. It also sits in the awkward overlap where the advisory cannot be read: the record's `references` point at `mina.apache.org/vysper-project/` (a retired project page) and a `lists.apache.org` thread that renders only its Pony Mail shell to a plain fetch, so the CVE record itself is the only machine-readable statement of the retirement. NVD carries the record as `Deferred` with a single `security@apache.org` metric and 0 NVD-scored — a vendor score NVD re-serves rather than a second assessment.
+
+[`🔗 CVE record — CVE-2026-115748`](https://www.cve.org/CVERecord?id=CVE-2026-115748) · [`🔗 NVD — CVE-2026-115748`](https://nvd.nist.gov/vuln/detail/CVE-2026-115748)
+
+---
+
+## 44. Wikipedia's AI cleanup says the AI share fell from ~20% to 15–16% — and that the detector may simply be losing
+
+- **Velocity:** ▮▮ rising
+- **Source:** IEEE Spectrum / WikiProject AI Cleanup · 2026-10-27
+- **Tags:** `wikipedia` `ai-detection` `content-moderation` `benchmarks`
+
+**WikiProject AI Cleanup** ("WP:AIC") is the volunteer effort, "launched in 2023" out of Discord conversations about cliché-ridden articles, that finds and removes AI-generated Wikipedia material. The detection method has moved from vocabulary to structure: early tells were stock phrases like "stands as a testament" and "rich cultural heritage"; editors now look for the "rule of three" and negative parallelisms when they accumulate, and for behaviour — "five articles of thousands of words each in 5 minutes" is the example given. Citations are the harder signal: inventing sources is now rarer, and the commoner failure is that the model "finds a real source but gets its content completely wrong". Tooling is Pangram, a volunteer-built AI source verifier, and the Wikimedia Foundation's Paste Check. The number: Pangram flagged "perhaps **20 percent** of new articles and drafts as AI-generated" in late 2025, and "in early 2026, that went down to **15 or 16 percent**" — a figure the project calls "a very conservative lower bound", justified by no false positives on pre-ChatGPT content.
+
+**Why it matters:** both directions fit those two numbers and the source refuses to pick. On the decline: "we don't yet know whether that's because our recent policies have had an effect" — English Wikipedia now prohibits editors from using LLMs to generate articles — "or because models are getting more powerful and Pangram hasn't had time to adapt". So "the policies are working" and "the detector is falling behind" are the same chart, and the honest citation carries the uncertainty in the same sentence as the percentage. The scale is also the caveat nobody quotes: the article gives **no** participant count and **no** article count for the project, only the recollection that "A few other editors and I were chatting on Wikipedia's Discord server" — a lower bound measured by a volunteer group of unstated size.
+
+[`🔗 IEEE Spectrum — Wikipedia's cleanup of AI-generated content`](https://spectrum.ieee.org/wikipedia-wikiproject-ai-writing-cleanup) · [`🔗 Wikipedia — WikiProject AI Cleanup`](https://en.wikipedia.org/wiki/Wikipedia:WikiProject_AI_Cleanup)
+
+---
+
+## 45. `ub-mode`: 1,558 stars in two days for Uncle Bob's agent skill — and no licence file to copy it under
+
+- **Velocity:** ▮ steady
+- **Source:** GitHub · created 2026-10-25
+- **Tags:** `agent-skills` `software-engineering` `quality-gates` `licensing` `claude-code`
+
+**unclebob/ub-mode** is "an agent skill that enforces disciplined software engineering principles when writing or changing code", published **2026-10-25** and at **1,558 stars** and **72 forks**, with one open issue or pull request. It is explicitly derived: "loosely based on portions of @poteto's rules (`poteto-mode` / `pstack`), reduced and paired with deterministic quality-gate tools". The structure is three phases — **First Make it Work** (Laziness Protocol, Foundational Thinking, TDD, Redesign From First Principles, Attack the Premise, Subtract Before You Add, boundary and type-system discipline), **Then Make it Right** (fix root causes, sequence work into verifiable units, test behaviour not implementation), **Practice** (keep a log, guard the context window, worktree cleanup, small ordered commits). The distinguishing part is that the gates are numbers from companion tools rather than adjectives: [Crapper](https://github.com/unclebob/crapper) keeps every function under a **CRAP < 10** score built from cyclomatic complexity, coverage and a polynomial; [Dryer](https://github.com/unclebob/dryer) flags duplicated blocks at **≥ 0.8** similarity; [Mutator](https://github.com/unclebob/mutator) runs mutation testing; `uml-viewer` draws coverage, CRAP and mutation scores together.
+
+**Why it matters:** this is the first entry in the skill genre whose author is known for the *rules* rather than the prompt, and the rules are checkable by a program — which is the difference between a style guide and a gate. Installation is the part to be careful with: "Copy `SKILL.md` into your agent's skills directory as `ub-mode/SKILL.md` (for example `~/.claude/skills/ub-mode/SKILL.md`)", with **no LICENSE file in the repository** and no licence declared in its metadata. Under default copyright that is "all rights reserved", so a company pasting it into a shared skills directory has a licensing question, not just a style preference — and an agent-skill file is executable instruction, not a blog post. Two days and 1,558 stars is the genre's normal velocity; the missing licence is the part that does not appear in the star count.
+
+[`🔗 GitHub — unclebob/ub-mode`](https://github.com/unclebob/ub-mode) · [`🔗 GitHub — unclebob/crapper`](https://github.com/unclebob/crapper)
+
+---
+
+## 46. BeautifulRust ships three skills and a clippy config — and says out loud where its five sources disagree
+
+- **Velocity:** ▮ steady
+- **Source:** GitHub · created 2026-10-23
+- **Tags:** `agent-skills` `rust` `clippy` `code-review` `porting`
+
+**morganlinton/BeautifulRust** is **1,265 stars** and **56 forks** in four days, MIT-licensed, with three Agent Skills plus a lint config: `rust-best-practices` loads whenever an agent writes or changes Rust, `rust-review` reads an existing file or crate or diff and writes "a prioritized report where every finding cites the rule it breaks and shows the fix", and `rust-port` moves C, C++, Python, Go or JavaScript to idiomatic Rust "with the same behavior, porting the original tests first so you can prove the two match". It targets the generic Agent Skills format, so Claude Code, OpenAI Codex, GitHub Copilot, Cursor and Gemini CLI all load the same files. The provenance is unusually explicit — **Google's Rust Style Guide**, the official **Rust API Guidelines**, **Effective Rust**, **Rust Design Patterns** and **Microsoft's Pragmatic Rust Guidelines**, each condensed into the skill "so the agent can consult the original reasoning when it needs to" — and, most usefully, "Where the sources disagree, the skill picks a side and says why."
+
+**Why it matters:** the two skills that work are the two that can be checked. `rust-review` binds every finding to a named rule, and `lints/` is "a drop-in clippy configuration that enforces the machine-checkable rules in CI" — so the part a machine can verify is not left to the model. The claim that needs a second look is the demonstration: the README's before/after is **one** task ("a small semver-parsing library") where the unskilled run "produced working code with public fields, no `# Errors` docs, and `unwrap()` in its doc examples" — a real regression class, and also a single anecdote presented as "what it changes". The narrower, defensible claims are the ones to quote: every code example in the skills compiles on stable Rust, and every lint was checked against current clippy.
+
+[`🔗 GitHub — morganlinton/BeautifulRust`](https://github.com/morganlinton/BeautifulRust) · [`🔗 Agent Skills format — agentskills.io`](https://agentskills.io)
+
+---
+
+## 47. neuron-explorer can steer every MLP neuron in Qwen3.5-4B — and its Claude tab gets a shell in your home folder
+
+- **Velocity:** ▮ steady
+- **Source:** GitHub · created 2026-10-21
+- **Tags:** `interpretability` `steering` `qwen` `vllm` `agent-tools`
+
+**lyramakesmusic/neuron-explorer** is **1,373 stars** and **157 forks** in six days, no licence declared, for a specific experiment: "Every MLP neuron in a layer is pushed up and down on a few prompts, every rollout is kept, and the explorer lays the results out over a 3D view of the model." Target: **Qwen3.5-4B**. The sweep runs "on a CUDA 13 GPU pod with the steering fork of vLLM ([RhizoNymph/vllm](https://github.com/RhizoNymph/vllm))" — `neuron_stats.py` over **2,000,000** tokens for the per-layer stats, then `steer_sweep.py` with **256** random-direction controls and `main_rel` doses defined as fractions of the median residual norm leaving the layer ({−0.7, +0.5, +0.8} × three prompts, {+3} × one). Views include a perspective map with attention and MLP per layer, units ranked "by word-cluster mass against random-direction controls", a `fires` filter over your own text, a three-column multi-turn steered chat, and a UMAP of a layer's rollouts coloured by neuron, prompt or dose.
+
+**Why it matters:** two decisions make this more than a demo. The **random-direction control** is built into the ranking, which is the difference between "this neuron matters" and "this direction moved the output" — the failure mode most steering write-ups skip. And the fourth panel is an agent: "a chat running the `claude` CLI (installed and logged in) with the explorer as an MCP server", where the agent "reads neurons, cones and lenses, runs the live model… moves the map, list and highlights, **and has file tools and a shell in your home folder**." The README states that boundary rather than burying it, alongside its own limit — "The server answers only pages and tools on this machine." Worth pairing with today's OpenHands item: same shape of risk, opposite direction of disclosure.
+
+[`🔗 GitHub — lyramakesmusic/neuron-explorer`](https://github.com/lyramakesmusic/neuron-explorer) · [`🔗 RhizoNymph/vllm — steering fork`](https://github.com/RhizoNymph/vllm)
+
+---
+
+## 48. winevdm runs Windows 1.x through 3.1 on 64-bit Windows — its last stable release is from 2023
+
+- **Velocity:** ▮ steady
+- **Source:** GitHub / Hacker News · HN 97 pts · ~11h ago (~09:15 UTC+8 Oct 27)
+- **Tags:** `emulation` `win16` `legacy` `release-drift` `c`
+
+**otya128/winevdm** is "16-bit Windows (Windows 1.x, 2.x, 3.0, 3.1, etc.) on 64-bit Windows" — **3,553 stars**, **208 forks**, **352** open issues and PRs, GPL-2.0, C, created **2015-09-22** and last pushed **2026-10-24**. The mechanism is stated in the README and is the interesting part: "64-bit Windows cannot modify LDT (`NtSetInformationProcess(,ProcessLdtInformation,,)` always returns error)", so the project ships a **CPU emulator** alongside wine-derived Win16→Win32 conversion codes, with "relay routines from 16-bit to 32-bit… autogenerated by convspec" from `.spec` files, plus 16↔32-bit HANDLE conversion and DOS emulation. Installation hijacks a Windows mechanism rather than replacing it: "When 64-bit Windows detects a 16-bit installer, it has a mechanism to start an alternative installer which is not 16-bit. This program uses it."
+
+**Why it matters:** the release-drift check reframes the "16-bit Windows still works in 2026" headline. The newest **stable release is `v0.9.0`, tagged 2023-09-15** — three years before the commits the repo is still taking — so anyone installing from the Releases page is running 2023 code, and current behaviour lives only in AppVeyor CI builds the README calls "unstable". The other thing to quote is the project's own scope limit: "DOS emulation is incomplete and it is recommended to use DOSBox or MS-DOS Player" — a utility that says which half of its advertised job you should not use it for, while a `VDMDOSVER` variable is the only control. That is what makes it a good legacy-compatibility reference: the LDT constraint, the installer hook and the DOS caveat are all failure modes anyone porting a 16-bit path will hit.
+
+[`🔗 GitHub — otya128/winevdm`](https://github.com/otya128/winevdm) · [`🔗 Hacker News discussion`](https://news.ycombinator.com/item?id=50253529)
+
+---
+
+## 49. Since our note on OpenAI's ETH preprint: a 22-page "simplified proof" appeared the next day — and it credits OpenAI's
+
+- **Velocity:** ▮ steady
+- **Source:** shivakintali.github.io (PDF) · dated 2026-10-26
+- **Tags:** `complexity-theory` `eth` `formal-methods` `reproduction` `update`
+
+**Since we covered OpenAI's Exponential Time Hypothesis preprint earlier today (item 21), a third party has published a shorter path through the same theorem.** Shiva Kintali's "A simplified proof of ETH is false", dated **26 October 2026** and **22 pages**, states: "For every fixed ε > 0, we give a deterministic 3-SAT algorithm on n variables and m clauses using Cε(n + m + 1)^cε 2^(εn) bit operations, refuting ETH." The credit line is unambiguous: "**Our simplified exposition of OpenAI's proof [1]** combines sparsification, bounded occurrences, spectral replacement, and rational interpolation." It works against the standard positive-rate formulation — "there is a constant δ > 0 for which no deterministic 3-SAT algorithm runs in 2^(δn)(n + m)^O(1) time" — and refutes it "by taking, for example, ε = δ/2".
+
+**Why it matters:** two things worth keeping that the first wave of coverage drops. First, this is an **exposition, not an independent proof** — the author says so in the abstract, so "two proofs now exist" is the wrong sentence and "a second, shorter write-up of one proof exists 24 hours later" is the right one. Second, the theorem is a **family**: "This parameter is fixed before the input is given; the algorithm and its polynomial time factor may depend on it" — one algorithm for each ε, not a single algorithm with a tunable knob. That distinction is what makes the claim falsifiable rather than a slogan, and it is the first thing a reader checking the result will ask.
+
+[`🔗 A simplified proof of ETH is false (PDF)`](https://shivakintali.github.io/papers/ETH.pdf) · [`🔗 openai/math — preprint directory`](https://github.com/openai/math/tree/main/preprints)
+
+---
+
+---
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-10-27T04:33:11Z |
-| Items | 34 |
-| Sources tracked | 21 (Hacker News, GitHub, NVD, arXiv, CISA KEV, Cloudflare, Ubicloud, HashiCorp, VulnCheck, crates.io, SEC EDGAR, OpenAI developer docs, OpenAI Deployment Safety Hub, Artificial Analysis, Cohere, Erlang CNA, entire.com, pharo.org, sebastianraschka.com, shraiwi.com, stalw.art) |
+| Generated | 2026-10-27T12:17:44Z |
+| Items | 49 |
+| Sources tracked | 30 (Hacker News, GitHub, NVD, arXiv, CISA KEV, Cloudflare, Ubicloud, HashiCorp, VulnCheck, crates.io, SEC EDGAR, OpenAI developer docs, OpenAI Deployment Safety Hub, Artificial Analysis, Cohere, Erlang CNA, entire.com, pharo.org, sebastianraschka.com, shraiwi.com, stalw.art, Open3DLab, debian-devel, Hugging Face, FortiGuard PSIRT, Hitachi, cve.org, IEEE Spectrum, shivakintali.github.io) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (3x daily) |
 | Ranking | Velocity-weighted (recency × engagement acceleration × source authority) |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |

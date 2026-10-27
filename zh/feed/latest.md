@@ -1,6 +1,6 @@
 ---
 date: 2026-10-27
-updated: 2026-10-27T04:33:11Z
+updated: 2026-10-27T12:17:44Z
 schedule: 04:03, 12:03, 20:03 UTC+8
 sources: 21
 license: CC-BY-4.0
@@ -484,13 +484,223 @@ Ubicloud 在服务 **Kimi K2.6** 与 **DeepSeek V4 Flash** 时，用 Moonshot �
 
 ---
 
+## 35. 一个自称 Roblox 的爬虫从三个 3D 模型站点拖走 145.5 GB——而站点运营方说自己无法证明它就是 Roblox
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Open3DLab / SFMLab / SmutBase incident writeup · HN 137 pts · 约 2 小时前（~18:27 UTC+8 10 月 27 日）
+- **Tags:** `training-data` `crawling` `licensing` `roblox` `robots-txt`
+
+**2026 年 10 月 15 与 16 日**，一个"自称属于 Roblox"的爬虫在"**34 小时**内"发出"**26,429** 次请求"，读了"**18,926** 个项目的主页"，随后抓走"**712** 个项目中 **1,027** 个文件的完整副本"——"**145.5 GB**"。它的 user agent 是 `trellis2-data-sourcing/1.0 (3D foundation model research; [redacted]@roblox.com)`，来自"a single Amazon Web Services (AWS) address"。真正让它成为许可证故事、而不只是爬虫故事的，是这份细目："**364** 个文件（**54.8 GB**）来自 SmutBase 上的 **224** 个项目，该站只托管成人内容"；把 SFMLab 标为成人之后，"712 个项目里有 **345** 个（**62.6 GB**）是成人内容"；以及"712 个项目里有 **423** 个仅授权非商业使用"。运营方"在 **10 月 18 日**发现，并于当天上午封禁了后续尝试"，同日给 user agent 里的地址发了邮件，没有回复；爬虫在 19 日回来（被完全挡住），并在 20 日 8:00"最后一次返回"，"约 15:00 停止"。
+
+**Why it matters:** 这份记录对它**未能**确立什么格外克制，而那些句子就是这条新闻。身份："We take the user agent at face value… Anyone can type any email address into a user agent, and the crawler ran from Amazon's cloud, not from Roblox's own network"——不过"Nothing we've seen suggests impersonation"。训练用途："We can't prove it, and we don't know whether any of our creators' files ended up in a model."成人内容："We don't think Roblox set out to collect adult content, and we have no evidence that any of it reached a model or a product."连代号都加了限定：它"may mean the data was meant for training or tuning a model like it, or it may just be a project codename."还有一个二阶细节应该进建议里："One project the crawler took has already been disabled on SFMLab since"——删掉源头不等于删掉副本。要引的数字是 **423 个仅限非商业使用的项目**，因为那是一条许可证条款而不是抱怨，而且即便爬虫最后查明是别人，这一条也依然成立。
+
+[`🔗 Open3DLab — Roblox downloaded 145 GB of models from our sites`](https://open3dlab.com/news/roblox-downloaded-145-gb-of-models-from-our-sites/) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50256985)
+
+---
+
+## 36. Debian 的 NEW 队列现在让上传先过一遍 LLM——一位开发者说他将停止上传，理由是"我没法修它"
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** debian-devel mailing list · HN 121 pts · 约 2 小时前（~17:59 UTC+8 10 月 27 日）
+- **Tags:** `debian` `policy` `llm-review` `governance` `packaging`
+
+Johannes Schauer Marin Rodrigues（`josch@debian.org`）于 **10 月 26 日**在 debian-devel 写道，他是"在没有公告的情况下"得知"NEW 队列的处理现在似乎会把我的上传丢给一个 LLM"，而且没有人问过他。NEW 是软件包进入档案库之前必须停留的队列——历史上唯一由人担任最后一道闸门的地方——所以这项改动落在每一个新包上，而不是项目的某个角落。他把立场说得很直白："I'm not going to read the machine-generated output"；"I will not upload anything to NEW unless there is a way for me to opt out of this"；而对于项目总决议中"Debian 既不背书也不禁止生成式 AI"的措辞："How is this not *Debian endorses the use of generative AI*?"他说自己"not leaving the project"，但"I'll not be a part of this."
+
+**Why it matters:** 技术性反对才是能留下来的那个，而它不是口味之争。"If the LLM has a bug, I cannot fix it"——对照 Lintian，它给出可复现的输出，他能打补丁、能覆盖、能争论。一个行为既不确定又不可 fork 的评审者，对一个"产品就是别人代码的可复现构建"的发行版来说，是全新类别的依赖；而他的诉求相应地克制："I would prefer if the default was *no LLM review* and that developers have to explicitly opt-in."Ben Finney（`bignose@debian.org`，10 月 27 日）的后续讨论才是升级显现的地方："This unreliable and non-deterministic machine should not be sending messages unsolicited to Debian package maintainers."两封信都没有说这些评审是错的——反对的理由是没人能确立它们到底对不对。
+
+[`🔗 debian-devel — "I will no longer upload to NEW"`](https://lists.debian.org/debian-devel/2026/10/msg00263.html) · [`🔗 后续讨论（Re: I will no longer upload to NEW）`](https://lists.debian.org/debian-devel/2026/10/msg00289.html)
+
+---
+
+## 37. Sage-A1.5 是一个 99 位作者的 35B MoE——在它自己的表里两项 SOTA，第三项落后 Kimi-K3 9.5 分
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Hugging Face model card / arXiv 2610.28578 · submitted 2026-10-20
+- **Tags:** `model-release` `moe` `agents` `scientific-research` `benchmarks`
+
+**Sage-A1.5** 是一个 **35B 混合专家（MoE）** agentic 模型（safetensors：BF16 下 **35,951,822,704** 个参数，**71.9 GB**），"based on Qwen3.6 and Agents-A1 from Shanghai AI Laboratory"，Apache-2.0，权重在 Hub 上，兼容 Transformers/vLLM/SGLang。它标称的三项能力是 agentic 编排（带隔离上下文的并行子 agent）、校验，以及"open scientific discovery"。**Verification Mode** 是值得记下的设计选择："an opt-in self-review capability that lives inside the model's own chain of thought — the model pauses mid-trajectory to review what it has established and what has failed, then acts on a revised direction in the same turn, **with no external critic**."表格很密：XBench-DS-2510 **92.0**、IFBench **81.6**、GAIA **95.1**、BrowseComp 无编排 **81.7** / 有编排 **82.8**、SWE-bench Pro **61.2**、MLE-Lite **65.2**、SciCode **44.3**、AA-LCR **81.0**、带工具的 HLE **55.1**。相对 Agents-A1 它拿到 SWE-bench Pro **+17.6**、MLE-Lite **+21.3**、SWE-bench Multilingual **+14.0**、PinchBench **+13.1**。
+
+**Why it matters:** 用同一张表去看那些没写 SOTA 的格子。GAIA 是 **95.1**，而它的前代 Agents-A1 是 **96.0**——这是唯一一行新模型更差——而 BrowseComp 是 **81.7**，对 Kimi-K3 的 **91.2**，在它以之命名的长程检索这一格上差 9.5 分。所以"overall SOTA on XBench-DS-2510 (92.0), IFBench (81.6), PinchBench (90.0)"是厂商模型卡里的逐格声明，不是排名。另外两个可核对的细节也值得留：agentic 编排在 BrowseComp 上买到的 +1.1 是模型**自己**在一对基准上的消融；而 arXiv 页面列了 **99 位作者**——在这个人数上，"capability composition"这套说法描述的既是架构，也是一个组织。
+
+[`🔗 Hugging Face — InternScience/Sage-A1.5`](https://huggingface.co/InternScience/Sage-A1.5) · [`🔗 arXiv 2610.28578 — technical report`](https://arxiv.org/abs/2610.28578)
+
+---
+
+## 38. FortiSandbox 的 9.8、9.6 与 9.2 是同一个向量停在三个点——而公告比 CVE 早 13 天
+
+- **Velocity:** ▮▮ rising
+- **Source:** FortiGuard PSIRT FG-IR-26-185 / NVD / CVE record · published 2026-10-26
+- **Tags:** `cve` `fortinet` `auth-bypass` `cvss-arithmetic` `provenance`
+
+**CVE-2026-107656**（CWE-288）是 FortiSandbox GUI 里的"Authentication Bypass Using an Alternate Path or Channel"，"may allow a remote unauthenticated attacker to bypass authentication via crafted HTTP requests"。修复于 **5.0.7**（从 5.0.0–5.0.6）与 **4.4.10**（从 4.4.0–4.4.9）；FortiSandbox **5.2 不受影响**；**FortiSandbox PaaS 4.4 "all versions"** 得到的是"Migrate to a fixed release"而不是升级。Fortinet 自己的时间线写着"2026-10-13: Initial publication"——CVE 记录发布于 **2026-10-26T13:45Z**，相隔 **13 天**。"Virtual Patch: No"。"Known Exploited: No"。致谢 Fortinet 自家产品安全团队的 Adham El Karn 与 TrendAI Research 的 Jason McFadyen。
+
+**Why it matters:** 这条记录为一个弱点带了三个数字，而其中只有一个是基础算术。NVD 只持有一条 `psirt@fortinet.com` 指标 **9.8**（vulnStatus `Awaiting Analysis`，NVD 自评 0 条），向量是不带时间项的 `CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H`。CNA 记录自己的指标存的是 **9.6**——但它的 `vectorString` 多了 `E:F/RL:O/RC:C`，差异就在这里：基础算得 **9.8**，基础 × 仅 Exploit Code Maturity 算得 **9.6**，完整时间公式算得 **9.2**。所以厂商公布的数字是 `base × E` 的算术、`RL`/`RC` 未被应用——不是第二种意见，也不是时间分。第二个读法陷阱在公告页本身：CVE 描述列了"FortiSandbox **4.2** all versions"与"FortiSandbox PaaS 4.2 all versions"，而 FG-IR-26-185 的版本表里根本没有 4.2 行——只有 5.2、5.0、4.4 与 PaaS 对应项。要告诉别人装哪个版本，引公告的表格，别引描述。
+
+[`🔗 FortiGuard — FG-IR-26-185`](https://fortiguard.fortinet.com/psirt/FG-IR-26-185) · [`🔗 NVD — CVE-2026-107656`](https://nvd.nist.gov/vuln/detail/CVE-2026-107656) · [`🔗 CVE 记录（CNA）`](https://www.cve.org/CVERecord?id=CVE-2026-107656)
+
+---
+
+## 39. Hitachi 一个上午发布 19 个 HiRDB 与 JP1 的 CVE——九个 9.8，三个修复版本对十三条受影响分支线
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hitachi security info hitachi-sec-2026-148 / NVD / CVE records · published 2026-10-27
+- **Tags:** `cve` `hitachi` `hirrdb` `version-ranges` `vendor-batch`
+
+**19 条 Hitachi 记录**落在 NVD 10 月 26–27 日的发布窗口，全部由 `hirt@hitachi.co.jp` 打分：**九个 9.8**、**九个 9.4**、一个 7.5。它们覆盖 **HiRDB**（数据库服务器）与 **JP1**（作业管理套件），而 9.8 那一组不是同一个 bug 重复——里面包括"Missing Authentication for Critical Function"、"Authentication Bypass by Spoofing"、"OS Command Injection"，以及各自独立的基于栈与基于堆的缓冲区溢出。以 **CVE-2026-82116** 为例：预留于 **2026-08-28T06:36Z**，发布于 **2026-10-27T09:37Z**——**60 天**的预留到发布间隔，这正是"今天"排序会把八月就归档的 bug 翻出来的原因。
+
+**Why it matters:** 受影响范围才是这条要细读的地方，因为记录与公告用三种不同方式描述同一组修复。CNA 记录说 HiRDB Server Version 10 受影响 `{version: "10-00", lessThan: "10-12-01"}`——一段平铺的区间——然后挂上 `changes[]` 把**三个**点标为 `unaffected`：`10-12-01`、`10-11-02`、`10-08-05`，顺序是**降序**。Hitachi 自己的页面在这三点上一致："Fixed products"表在 AIX、Linux 与 Windows 上列的正是 **10-12-01、10-11-02 与 10-08-05**。但它对同一产品 Linux 的受影响表跑了十三条分支线——`10-12`、`10-11 to 10-11-01`、`10-10 to 10-10-01`、`10-09 to 10-09-05`、`10-08 to 10-08-04`，一直到 `10-00 to 10-00-11`——于是其中**十条**线有受影响的子版本，而页面上任何地方都没有给出修复版本。两种朴素读法都会失败：把 `lessThan: 10-12-01` 字面理解，你会把 `10-08-05` 标成受影响，而它其实是修复；按数组顺序应用 `changes[]` 并假定"保持到区间末端"，`10-08-05` 那条反而会把 `10-11-01` 抹掉，而公告说它是受影响的。10-10 安装的修复路径是升到 10-11-02 或 10-12-01，而两个页面上都没有一句话这么说。
+
+[`🔗 Hitachi — Vulnerability in HiRDB (hitachi-sec-2026-148)`](https://www.hitachi.com/products/it/software/security/info/vuls/hitachi-sec-2026-148/index.html) · [`🔗 CVE 记录 — CVE-2026-82116`](https://www.cve.org/CVERecord?id=CVE-2026-82116) · [`🔗 NVD — CVE-2026-82116`](https://nvd.nist.gov/vuln/detail/CVE-2026-82116)
+
+---
+
+## 40. Mistral 的 Timestral 用 209M 压过 2.5B 的对手——而 123M 的兄弟只落后 0.001 MASE
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hugging Face model card / github.com/mistralai/timestral · published 2026-10-15
+- **Tags:** `mistral` `time-series` `foundation-model` `benchmarks` `release-drift`
+
+**Timestral** 是 Mistral 的时间序列基础模型家族，以 **5M、28M、123M 与 209M** 四种参数规模发布，用于零样本预测。209M checkpoint 是一个 patch-based transformer，带 time attention 与 variate attention、**24 层**、宽 **768**、每个 patch **32** 个时间步、上下文最多 **32,768** 步（**1,024** 个 patch）、单次前向预测视界最多 **1,024** 步，输出 **21** 个分位数（0.01 到 0.99）。基准表声称在 **GIFT-Eval**、**TIME** 与 **fev-bench** 上达到"state-of-the-art zero-shot accuracy"，而相关的对照是它旁边的参数量：GIFT-Eval 上 MASE **0.658**，对 `t0-gamma` 的 **0.661**、**TimesFM-3** 的 **0.667**、**Toto-2.0-2.5B** 的 **0.696**、**Chronos-2** 的 **0.698**；CRPS **0.446**。fev-bench 上 SQL skill score 是 **50.39** 对 **49.42**。
+
+**Why it matters:** 家族表是那个诚实装置，而它双向都切。209M 在 GIFT-Eval 上只比 123M 好 **0.001** MASE（0.658 对 0.659）、在 TIME 上好 **0.002**（0.626 对 0.628），所以这条产品线的顶端落在中端的舍入范围内——而对 Toto-2.0-2.5B（大十二倍的模型）的 **0.038** 优势属于架构，不属于规模。发布漂移检查是另一半：`mistralai/timestral` 是 **922 stars、创建于 2026-10-15、最后推送 2026-10-15**，其 feed 里没有任何 release tag——所以"we're releasing the source code… to reproduce our benchmark results"描述的，是一个自出现那天起就没动过的仓库，而那个复现声明目前没有 Mistral 之外的任何人验证过。
+
+[`🔗 Hugging Face — mistralai/Timestral-209M`](https://huggingface.co/mistralai/Timestral-209M) · [`🔗 GitHub — mistralai/timestral`](https://github.com/mistralai/timestral)
+
+---
+
+## 41. DeepTutor：44,860 星、27 天十个 release，以及在它自己写的基准上自报 +10.8%
+
+- **Velocity:** ▮▮ rising
+- **Source:** GitHub / arXiv 2604.26962 · trending today (+1,587 stars)
+- **Tags:** `agents` `education` `rag` `release-cadence` `benchmarks`
+
+**HKUDS/DeepTutor**——"Lifelong Personalized Tutoring"——**44,860 星**、**5,667 个 fork**、**239** 个未关闭的 issue 与 PR，Apache-2.0，Python 3.11+/Next.js 16，创建于 **2025-12-28**，今天有推送。功能面就是论点：一条能调用工具、在选定知识库上落地、读附件、咨询子 agent 并写入 notebook 的对话线程；一个 *sticky session context*，跨轮次携带能力、工作区、工具、知识库、persona、模型与 Reading/Mastery 状态，并与只生效一轮的"one-time references"分开；以及跨 LlamaIndex、PageIndex、GraphRAG、LightRAG、自托管 WeKnora 基座、Kiwix ZIM 档案与 Obsidian vault 的多引擎检索。论文（arXiv **2604.26962**，v3，2026 年 7 月 9 日）报告 **TutorBench**——一个"interactive benchmark"，学习者画像取自五个领域的大学课程，学生由 LLM 模拟——个性化提升平均 **10.8%**，通用 agentic 推理 **29.4%**，"across five backbone models"。
+
+**Why it matters:** 发布节奏**就是**产品声明，而且可以从 feed 里量出来：最近十个 release 从 **v1.6.10（9 月 22 日）** 到 **v1.6.15（10 月 18 日）**——**27 天**十个 release，其中几个是点名失败的修复版（"books that arrived as one empty chapter, quizzes that produced nothing, the model's scratchpad in the text"）。这是一个发布速度快过论文描述速度的项目。两个要轻拿的数字都是自指的：TutorBench 是作者自己的基准，学生是模拟的——所以"+10.8% personalised"量的是模型相对另一个模型对学习者的想象。README 对一个小一点的落差也很坦白："The overview is current for v1.6.5. The surface screenshots below remain v1.4.6 references while a versioned refresh is in progress."
+
+[`🔗 GitHub — HKUDS/DeepTutor`](https://github.com/HKUDS/DeepTutor) · [`🔗 arXiv 2604.26962 — DeepTutor`](https://arxiv.org/abs/2604.26962)
+
+---
+
+## 42. android-ad-cleaner：2,835 星、不需要 root，首页上还挂着一个"交给你的 AI"区块
+
+- **Velocity:** ▮▮ rising
+- **Source:** GitHub / project homepage · v0.2.4 released 2026-10-27
+- **Tags:** `chinese-oss` `android` `adb` `debloat` `agent-instructions`
+
+**rddmwmddr/android-ad-cleaner** 关掉中国 Android ROM 里捆绑的广告、热搜榜与营销推送——不 root、不解锁、不刷机——办法是从桌面客户端驱动 `adb`。**2,835 星**、**239 个 fork**、**155** 个未关闭的 issue 与 PR，MIT，创建于 **2026-10-24**，**v0.2.4** 今天发布，按它自己的说法，此前处理了"**140+** 条 10-26 到 10-27 的反馈"。范围被表述为边界而不是吹嘘：它只拨动系统与 App 已经暴露的开关，被停用的广告包需要机主确认、一条命令即可恢复，系统更新不受影响，下拉搜索、应用商店的安装/更新路径、天气预警与快递提示这些功能都被保留。它不做什么同样明确："仅支持通过 adb 连接的安卓设备，暂不支持使用 HDC 的原生鸿蒙"。
+
+**Why it matters:** 分发渠道才是新闻。首页带着一个 **"交给你的 AI"** 区块，里面有供 agent 工具直接复制的文本——WorkBuddy、Claude Code、Codex、Trae、Cursor（手机连着线）——旁边还有第二个给聊天助手的区块，而它发布的是签名并公证过的 macOS 构建，不是一个未签名的 zip。这是一个把 agent 当作一等安装方式的中国桌面工具，与"加一个 MCP server"是完全不同的采用路径。工程姿态值得照抄：带日期的 changelog 点名 bug 类别（"执行中途断线会停下说明原因，不再显示假成功"）、一份写明"不碰什么"的清单，以及逐条注明哪些已修、哪些仍未验证的说明。
+
+[`🔗 GitHub — rddmwmddr/android-ad-cleaner`](https://github.com/rddmwmddr/android-ad-cleaner) · [`🔗 项目主页（zh）`](https://rddmwmddr.github.io/android-ad-cleaner/)
+
+---
+
+## 43. Apache Vysper 的 8.8 是"UNSUPPORTED WHEN ASSIGNED"——厂商说去找别的库，所以修复永远不会来
+
+- **Velocity:** ▮▮ rising
+- **Source:** Apache CNA record / NVD · published 2026-10-26
+- **Tags:** `cve` `apache` `xmpp` `end-of-life` `no-fix`
+
+**CVE-2026-115748** 开头就是那个决定建议方向的标签："**UNSUPPORTED WHEN ASSIGNED** Authorization bypass in Apache Vysper, all versions."机制在这个 XMPP 库的 XEP-0077（In-Band Registration）实现里，它"is missing an authentication check, allowing any authenticated user to compromise other accounts"——CWE-639，通过用户可控键的授权绕过。由 `security@apache.org` 按 `CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H` 打了 **8.8**，旁边记着 Apache 自己的定性标签"important"。Apache 发布的范围是 CVE 5.x 里表示"全部"的惯用写法：针对 `pkg:maven/org.apache.vysper/vysper` 的 `{"version": "0", "lessThanOrEqual": "*"}`——`version: "0"` 是一个空下界，不是一个发布版本。
+
+**Why it matters:** 要紧的那句不是分数，是处置方式："As this project is retired, we do not plan to release a version that fixes this issue. Users are recommended to find an alternative."这让"未修复"成为**永久**而非待定——与人们对一条新鲜 CVE 的默认读法相反，也正是"退役"值得与修复一起报道的原因。它还落在公告读不到的那个尴尬重叠区：记录的 `references` 指向 `mina.apache.org/vysper-project/`（一个已退役的项目页）与一条 `lists.apache.org` 讨论串，后者对普通抓取只渲染 Pony Mail 外壳，所以 CVE 记录本身就是"退役"这件事唯一的机器可读陈述。NVD 把这条记录持为 `Deferred`，只有一条 `security@apache.org` 指标、NVD 自评 0 条——这是 NVD 转售的厂商分数，不是第二次评估。
+
+[`🔗 CVE 记录 — CVE-2026-115748`](https://www.cve.org/CVERecord?id=CVE-2026-115748) · [`🔗 NVD — CVE-2026-115748`](https://nvd.nist.gov/vuln/detail/CVE-2026-115748)
+
+---
+
+## 44. Wikipedia 的 AI 清理项目说 AI 占比从约 20% 降到 15–16%——并且说也许只是检测器在落后
+
+- **Velocity:** ▮▮ rising
+- **Source:** IEEE Spectrum / WikiProject AI Cleanup · 2026-10-27
+- **Tags:** `wikipedia` `ai-detection` `content-moderation` `benchmarks`
+
+**WikiProject AI Cleanup**（"WP:AIC"）是那支志愿队伍，"launched in 2023"，源于 Discord 上关于陈词滥调文章的讨论，负责找出并移除 Wikipedia 上 AI 生成的内容。检测方法已从词汇转向结构：早期的特征是"stands as a testament"、"rich cultural heritage"这类套话；编者现在看"三段式"与否定式排比是否成堆出现，也看行为——"five articles of thousands of words each in 5 minutes"就是给出的例子。引用是更难的信号：编造来源现在少了，更常见的失效是模型"finds a real source but gets its content completely wrong"。工具是 Pangram（志愿者构建的 AI 来源校验器）与 Wikimedia 基金会的 Paste Check。数字：Pangram 在 2025 年末把"perhaps **20 percent** of new articles and drafts as AI-generated"标了出来，而"in early 2026, that went down to **15 or 16 percent**"——项目称这是一个"a very conservative lower bound"，理由是在 ChatGPT 之前的内容上没有假阳性。
+
+**Why it matters:** 两个方向都合得上这两个数字，而来源拒绝选边。关于下降："we don't yet know whether that's because our recent policies have had an effect"——英语 Wikipedia 现在禁止编者用 LLM 生成条目——"or because models are getting more powerful and Pangram hasn't had time to adapt"。所以"政策起作用了"和"检测器在落后"是同一张图，诚实的引用要把不确定性放在与百分比同一句里。规模也是没人引的那个限定：文章没有给出项目的参与者人数，也没有给出条目数量，只有一句回忆——"a few other editors and I were chatting on Wikipedia's Discord server"——一个规模未明的志愿小组测出来的下界。
+
+[`🔗 IEEE Spectrum — Wikipedia's cleanup of AI-generated content`](https://spectrum.ieee.org/wikipedia-wikiproject-ai-writing-cleanup) · [`🔗 Wikipedia — WikiProject AI Cleanup`](https://en.wikipedia.org/wiki/Wikipedia:WikiProject_AI_Cleanup)
+
+---
+
+## 45. `ub-mode`：Uncle Bob 的 agent skill 两天 1,558 星——而没有可据以复制的许可证文件
+
+- **Velocity:** ▮ steady
+- **Source:** GitHub · created 2026-10-25
+- **Tags:** `agent-skills` `software-engineering` `quality-gates` `licensing` `claude-code`
+
+**unclebob/ub-mode** 是"an agent skill that enforces disciplined software engineering principles when writing or changing code"，发布于 **2026-10-25**，现为 **1,558 星**、**72 个 fork**、一个未关闭 issue。它明确是衍生的："loosely based on portions of @poteto's rules (`poteto-mode` / `pstack`), reduced and paired with deterministic quality-gate tools"。结构分三个阶段——**First Make it Work**（Laziness Protocol、Foundational Thinking、TDD、Redesign From First Principles、Attack the Premise、Subtract Before You Add、边界与类型系统纪律）、**Then Make it Right**（修根因、把工作切成可验证单元、测行为而非实现）、**Practice**（记日志、守住上下文窗口、worktree 清理、小步有序提交）。区别在于这些闸门是来自配套工具的数字，而不是形容词：[Crapper](https://github.com/unclebob/crapper) 让每个函数保持在由圈复杂度、覆盖率与一个多项式构成的 **CRAP < 10** 分之下；[Dryer](https://github.com/unclebob/dryer) 以 **≥ 0.8** 的相似度标记重复块；[Mutator](https://github.com/unclebob/mutator) 跑变异测试；`uml-viewer` 把覆盖率、CRAP 与变异分数画在一起。
+
+**Why it matters:** 这是这个 skill 体裁里第一个作者以**规则**而非 prompt 出名的条目，而规则可以由程序检查——这就是风格指南与闸门的区别。安装是要小心的地方："Copy `SKILL.md` into your agent's skills directory as `ub-mode/SKILL.md` (for example `~/.claude/skills/ub-mode/SKILL.md`)"，而**仓库里没有 LICENSE 文件**，元数据里也没有声明许可证。在默认版权下那是"all rights reserved"，所以一家公司把它贴进共享 skills 目录，面对的是许可证问题，而不只是风格偏好——而 agent skill 文件是可执行指令，不是一篇博客。两天 1,558 星是这个体裁的正常速度；缺失的许可证是星数里看不见的那部分。
+
+[`🔗 GitHub — unclebob/ub-mode`](https://github.com/unclebob/ub-mode) · [`🔗 GitHub — unclebob/crapper`](https://github.com/unclebob/crapper)
+
+---
+
+## 46. BeautifulRust 交付三个 skill 与一份 clippy 配置——并把五个来源在哪里互相矛盾讲了出来
+
+- **Velocity:** ▮ steady
+- **Source:** GitHub · created 2026-10-23
+- **Tags:** `agent-skills` `rust` `clippy` `code-review` `porting`
+
+**morganlinton/BeautifulRust** 四天拿到 **1,265 星**、**56 个 fork**，MIT，带三个 Agent Skills 加一份 lint 配置：`rust-best-practices` 在 agent 编写或改动 Rust 时加载，`rust-review` 读一个既有文件、crate 或 diff，写出"a prioritized report where every finding cites the rule it breaks and shows the fix"，`rust-port` 把 C、C++、Python、Go 或 JavaScript 迁成惯用 Rust，"with the same behavior, porting the original tests first so you can prove the two match"。它面向通用的 Agent Skills 格式，所以 Claude Code、OpenAI Codex、GitHub Copilot、Cursor 与 Gemini CLI 加载的是同一批文件。来源异常明确——**Google 的 Rust Style Guide**、官方 **Rust API Guidelines**、**Effective Rust**、**Rust Design Patterns** 与 **Microsoft 的 Pragmatic Rust Guidelines**，每一份都被压缩进 skill，"so the agent can consult the original reasoning when it needs to"——而最有用的是："Where the sources disagree, the skill picks a side and says why."
+
+**Why it matters:** 真正能用的那两个 skill，正是可以被检查的两个。`rust-review` 把每条发现绑到一条具名规则上，而 `lints/` 是"a drop-in clippy configuration that enforces the machine-checkable rules in CI"——机器能验证的那部分没有交给模型。需要再看一眼的是那个示范：README 的前后对比是**一个**任务（"a small semver-parsing library"），未加载 skill 的那一次"produced working code with public fields, no `# Errors` docs, and `unwrap()` in its doc examples"——一类真实的退化，同时也是一条被当作"它改变了什么"来呈现的单一轶事。更窄、更站得住的声明才是该引的：skill 里的每个代码示例都能在 stable Rust 上编译，每条 lint 都对着当时的 clippy 检查过。
+
+[`🔗 GitHub — morganlinton/BeautifulRust`](https://github.com/morganlinton/BeautifulRust) · [`🔗 Agent Skills 格式 — agentskills.io`](https://agentskills.io)
+
+---
+
+## 47. neuron-explorer 能操纵 Qwen3.5-4B 里每一个 MLP 神经元——而它的 Claude 标签页会在你的 home 目录里拿到一个 shell
+
+- **Velocity:** ▮ steady
+- **Source:** GitHub · created 2026-10-21
+- **Tags:** `interpretability` `steering` `qwen` `vllm` `agent-tools`
+
+**lyramakesmusic/neuron-explorer** 六天 **1,373 星**、**157 个 fork**，未声明许可证，做的是一件具体的事："Every MLP neuron in a layer is pushed up and down on a few prompts, every rollout is kept, and the explorer lays the results out over a 3D view of the model."目标是 **Qwen3.5-4B**。扫描跑在"a CUDA 13 GPU pod with the steering fork of vLLM ([RhizoNymph/vllm](https://github.com/RhizoNymph/vllm))"上——`neuron_stats.py` 过 **2,000,000** token 得到逐层统计，再由 `steer_sweep.py` 用 **256** 个随机方向对照，加上以离开该层残差范数中位数比例定义的 `main_rel` 剂量（{−0.7, +0.5, +0.8} × 三个 prompt，{+3} × 一个）。视图包括带逐层 attention 与 MLP 的透视地图、按"by word-cluster mass against random-direction controls"排序的单元、针对你自己文本的 `fires` 过滤器、三列多轮受控对话，以及某一层 rollouts 的 UMAP（按神经元、prompt 或剂量着色）。
+
+**Why it matters:** 两个决定让它不只是 demo。**随机方向对照**被做进了排序本身，这正是"这个神经元重要"与"这个方向挪动了输出"之间的差别——多数 steering 文章跳过的那种失效模式。而第四个面板本身就是一个 agent："a chat running the `claude` CLI (installed and logged in) with the explorer as an MCP server"，其中 agent"reads neurons, cones and lenses, runs the live model… moves the map, list and highlights, **and has file tools and a shell in your home folder**."README 是把这个边界说出来而不是埋起来，同时也没有藏起自己的局限——"The server answers only pages and tools on this machine."值得与今天那条 OpenHands 放在一起看：同一种风险形状，相反的披露方向。
+
+[`🔗 GitHub — lyramakesmusic/neuron-explorer`](https://github.com/lyramakesmusic/neuron-explorer) · [`🔗 RhizoNymph/vllm — steering fork`](https://github.com/RhizoNymph/vllm)
+
+---
+
+## 48. winevdm 在 64 位 Windows 上跑 Windows 1.x 到 3.1——而它最新的稳定版停在 2023 年
+
+- **Velocity:** ▮ steady
+- **Source:** GitHub / Hacker News · HN 97 pts · 约 11 小时前（~09:15 UTC+8 10 月 27 日）
+- **Tags:** `emulation` `win16` `legacy` `release-drift` `c`
+
+**otya128/winevdm** 是"16-bit Windows (Windows 1.x, 2.x, 3.0, 3.1, etc.) on 64-bit Windows"——**3,553 星**、**208 个 fork**、**352** 个未关闭的 issue 与 PR，GPL-2.0，C，创建于 **2015-09-22**，最后推送 **2026-10-24**。机制写在 README 里，也正是有意思的部分："64-bit Windows cannot modify LDT (`NtSetInformationProcess(,ProcessLdtInformation,,)` always returns error)"，所以项目自带一个 **CPU 模拟器**，加上源自 wine 的 Win16→Win32 转换代码，"relay routines from 16-bit to 32-bit… autogenerated by convspec"由 `.spec` 文件生成，另有 16↔32 位 HANDLE 转换与 DOS 模拟。安装方式是劫持 Windows 的一个机制，而不是替换它："When 64-bit Windows detects a 16-bit installer, it has a mechanism to start an alternative installer which is not 16-bit. This program uses it."
+
+**Why it matters:** 发布漂移检查改写了"16 位 Windows 在 2026 年还能跑"这个标题。最新的**稳定版是 `v0.9.0`，tag 于 2023-09-15**——比仓库仍在接收的提交早三年——所以从 Releases 页安装的人跑的是 2023 年的代码，当前行为只存在于 README 称为"unstable"的 AppVeyor CI 构建里。另一句该引的是项目自己的范围限制："DOS emulation is incomplete and it is recommended to use DOSBox or MS-DOS Player"——一个会告诉你"它宣称能做的那部分里哪一半不该用它做"的工具，而 `VDMDOSVER` 变量是唯一的控制项。这正是它作为遗留兼容参考好用的原因：LDT 限制、安装器钩子与 DOS 的限定，都是任何移植 16 位路径的人会撞上的失效模式。
+
+[`🔗 GitHub — otya128/winevdm`](https://github.com/otya128/winevdm) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50253529)
+
+---
+
+## 49. 在我们报道 OpenAI 的 ETH 预印本之后：第二天出现了一份 22 页的"简化证明"——而它署的是 OpenAI 的功劳
+
+- **Velocity:** ▮ steady
+- **Source:** shivakintali.github.io (PDF) · dated 2026-10-26
+- **Tags:** `complexity-theory` `eth` `formal-methods` `reproduction` `update`
+
+**在我们今天早些时候报道 OpenAI 的指数时间假设预印本之后（第 21 条），第三方给出了通过同一定理的一条更短路径。**Shiva Kintali 的"A simplified proof of ETH is false"，日期为 **2026 年 10 月 26 日**、**22 页**，写道："For every fixed ε > 0, we give a deterministic 3-SAT algorithm on n variables and m clauses using Cε(n + m + 1)^cε 2^(εn) bit operations, refuting ETH."致谢那一行毫无歧义："**Our simplified exposition of OpenAI's proof [1]** combines sparsification, bounded occurrences, spectral replacement, and rational interpolation."它针对的是标准的正速率表述——"there is a constant δ > 0 for which no deterministic 3-SAT algorithm runs in 2^(δn)(n + m)^O(1) time"——并"by taking, for example, ε = δ/2"推翻它。
+
+**Why it matters:** 有两件第一波报道会丢掉的事值得留。第一，这是一份**阐释，而不是独立证明**——作者在摘要里就这么说，所以"现在有两个证明"是错的句子，"24 小时后出现了同一个证明的第二份、更短的写法"才对。第二，这个定理是一个**族**："This parameter is fixed before the input is given; the algorithm and its polynomial time factor may depend on it"——每个 ε 一个算法，不是一个带可调旋钮的算法。正是这个区分让该声明可被证伪、而不是一句口号，也是核对结果的读者第一个会问的问题。
+
+[`🔗 A simplified proof of ETH is false (PDF)`](https://shivakintali.github.io/papers/ETH.pdf) · [`🔗 openai/math — preprint 目录`](https://github.com/openai/math/tree/main/preprints)
+
+---
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-10-27T04:33:11Z |
-| Items | 34 |
-| Sources tracked | 21（Hacker News、GitHub、NVD、arXiv、CISA KEV、Cloudflare、Ubicloud、HashiCorp、VulnCheck、crates.io、SEC EDGAR、OpenAI developer docs、OpenAI Deployment Safety Hub、Artificial Analysis、Cohere、Erlang CNA、entire.com、pharo.org、sebastianraschka.com、shraiwi.com、stalw.art） |
+| Generated | 2026-10-27T12:17:44Z |
+| Items | 49 |
+| Sources tracked | 30（Hacker News、GitHub、NVD、arXiv、CISA KEV、Cloudflare、Ubicloud、HashiCorp、VulnCheck、crates.io、SEC EDGAR、OpenAI developer docs、OpenAI Deployment Safety Hub、Artificial Analysis、Cohere、Erlang CNA、entire.com、pharo.org、sebastianraschka.com、shraiwi.com、stalw.art、Open3DLab、debian-devel、Hugging Face、FortiGuard PSIRT、Hitachi、cve.org、IEEE Spectrum、shivakintali.github.io） |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8（每日 3 次） |
 | Ranking | 速度加权（新鲜度 × 互动加速度 × 来源权威） |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |

@@ -1,6 +1,6 @@
 ---
 date: 2026-10-27
-updated: 2026-10-27T04:33:11Z
+updated: 2026-10-27T12:17:44Z
 schedule: 04:03, 12:03, 20:03 UTC+8
 sources: 21
 license: CC-BY-4.0
@@ -484,13 +484,223 @@ Mauticの二件は **2026-10-26T14:16:30Z**、同一CNAバッチの同一ミリ�
 
 ---
 
+## 35. 自らをRobloxと名乗るクローラが3つの3Dモデルサイトから145.5 GBを取得——運営者はRobloxだと証明できないと言う
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Open3DLab / SFMLab / SmutBase インシデント記事 · HN 137 pts · 約2時間前（~18:27 UTC+8 10月27日）
+- **Tags:** `training-data` `crawling` `licensing` `roblox` `robots-txt`
+
+**2026年10月15日と16日**、クローラが「Robloxのものだと名乗って」いて、「**34時間**にわたる**26,429**リクエスト」で「**18,926**プロジェクトのメインページ」を読み、続いて「**712**プロジェクトから**1,027**ファイルの完全なコピー」——「**145.5 GB**」を取得した。ユーザーエージェントは `trellis2-data-sourcing/1.0 (3D foundation model research; [redacted]@roblox.com)` で、「単一のAmazon Web Services (AWS)アドレス」からだった。内訳がこれをスクレイピングではなくライセンスの話にしている。「成人向けコンテンツのみを扱うSmutBaseの**224**プロジェクトから**364**ファイル（**54.8 GB**）」、SFMLabも成人向けと区分されると「712プロジェクトのうち**345**（**62.6 GB**）が成人向けコンテンツ」、そして「712プロジェクトのうち**423**は非商用利用のみのライセンス」だ。運営者はこれを「**10月18日**に発見し、同日朝に以降の試行をブロック」、同日ユーザーエージェントのアドレスへメールしたが返信はなく、クローラは19日に戻り（完全ブロック）、20日8:00に「最後の帰還」をして「15:00頃」に止まった。
+
+**Why it matters:** この記事は自らが*立証しない*ことについて異例に規律正しく、その文こそがこの項目だ。身元については「We take the user agent at face value… Anyone can type any email address into a user agent, and the crawler ran from Amazon's cloud, not from Roblox's own network」——ただし「Nothing we've seen suggests impersonation」。訓練用途については「We can't prove it, and we don't know whether any of our creators' files ended up in a model.」成人向けコンテンツについては「We don't think Roblox set out to collect adult content, and we have no evidence that any of it reached a model or a product.」コードネームすら留保付きだ——「may mean the data was meant for training or tuning a model like it, or it may just be a project codename.」二次的な細部も助言に入れるべきだ。「One project the crawler took has already been disabled on SFMLab since」——供給元を削除してもコピーは削除されない。引用すべき数字は**非商用のみの423プロジェクト**だ。これは不満ではなくライセンス条件であり、クローラが別の誰かだったとしても成立する。
+
+[`🔗 Open3DLab — Roblox downloaded 145 GB of models from our sites`](https://open3dlab.com/news/roblox-downloaded-145-gb-of-models-from-our-sites/) · [`🔗 Hacker News discussion`](https://news.ycombinator.com/item?id=50256985)
+
+---
+
+## 36. DebianのNEWキューがアップロードをLLMに通すようになった——ある開発者はアップロードを止めると言い、論点は「I cannot fix it」だ
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** debian-devel mailing list · HN 121 pts · 約2時間前（~17:59 UTC+8 10月27日）
+- **Tags:** `debian` `policy` `llm-review` `governance` `packaging`
+
+Johannes Schauer Marin Rodrigues（`josch@debian.org`）は**10月26日**、debian-develに「告知なしに、NEWキューの処理が私のアップロードをLLMに投げているようだ」と知ったこと、そして自分は何も聞かれていないことを書いた。NEWはパッケージがアーカイブに入る前に置かれるキューであり——歴史的に人間が最後の関門だった唯一の場所だ——ゆえにこの変更はプロジェクトの片隅ではなく、すべての新規パッケージに及ぶ。彼は立場を率直に述べる。「I'm not going to read the machine-generated output」「I will not upload anything to NEW unless there is a way for me to opt out of this」、そしてDebianが生成AIを推奨も禁止もしないという総会決議の文言については「How is this not *Debian endorses the use of generative AI*?」。彼は「not leaving the project」と言うが、「I'll not be a part of this.」とも言う。
+
+**Why it matters:** 持ち帰るべきは技術的な異議であり、趣味の話ではない。「If the LLM has a bug, I cannot fix it」——再現可能な出力を持ち、パッチを当てることも上書きすることも異議を唱えることもできるLintianと比べてほしい。挙動が決定的でもフォーク可能でもないレビュアは、成果物が他人のコードの再現可能なビルドであるディストリビューションにとって新しい種類の依存であり、要求はそれに見合って控えめだ。「I would prefer if the default was *no LLM review* and that developers have to explicitly opt-in.」Ben Finney（`bignose@debian.org`、10月27日）の続きのスレッドでエスカレーションが見える。「This unreliable and non-deterministic machine should not be sending messages unsolicited to Debian package maintainers.」どちらの投稿もレビューが間違っているとは言っていない——異議は、それが正しいかどうかを誰も確立できないという点にある。
+
+[`🔗 debian-devel — "I will no longer upload to NEW"`](https://lists.debian.org/debian-devel/2026/10/msg00263.html) · [`🔗 続き: "Re: I will no longer upload to NEW"`](https://lists.debian.org/debian-devel/2026/10/msg00289.html)
+
+---
+
+## 37. Sage-A1.5は99人の著者を持つ35B MoE——自前の表で2つのベンチマークSOTA、3つ目ではKimi-K3に9.5ポイント劣る
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Hugging Face model card / arXiv 2610.28578 · 2026-10-20提出
+- **Tags:** `model-release` `moe` `agents` `scientific-research` `benchmarks`
+
+**Sage-A1.5** は **35B Mixture-of-Experts** のagenticモデル（safetensors：BF16で **35,951,822,704** パラメータ、**71.9 GB**）で、「Qwen3.6とShanghai AI LaboratoryのAgents-A1を基に」しており、Apache-2.0、重みはHub上にありTransformers/vLLM/SGLang互換。3つの売りはagenticオーケストレーション（隔離されたコンテキストを持つ並列サブエージェント）、検証、そして「open scientific discovery」だ。設計上の注目点は **Verification Mode** で、「モデル自身の思考連鎖の内側に住むオプトインの自己レビュー能力——モデルは軌跡の途中で立ち止まり、何を確立し何が失敗したかを見直し、同じターン内で修正した方向へ進む、**外部の批評者なしで**」。表は密だ。XBench-DS-2510 **92.0**、IFBench **81.6**、GAIA **95.1**、BrowseComp **81.7**（オーケストレーションなし）／**82.8**（あり）、SWE-bench Pro **61.2**、MLE-Lite **65.2**、SciCode **44.3**、AA-LCR **81.0**、ツールありHLE **55.1**。Agents-A1に対してはSWE-bench Pro **+17.6**、MLE-Lite **+21.3**、SWE-bench Multilingual **+14.0**、PinchBench **+13.1** を稼ぐ。
+
+**Why it matters:** 同じ表を、SOTAと書かれていないセルについて読むこと。GAIAは **95.1** で、前任のAgents-A1は **96.0**——新モデルが劣る唯一の行だ——そしてBrowseCompは **81.7** 対 Kimi-K3の **91.2** で、モデルが名を冠する長距離探索の部門で9.5ポイント差。つまり「XBench-DS-2510 (92.0)、IFBench (81.6)、PinchBench (90.0) で総合SOTA」はベンダーカード内のセル単位の主張であって、順位ではない。検証可能な細部も2つある。BrowseCompでagenticオーケストレーションがもたらす+1.1は、1つのベンチマーク対でのモデル**自身**のアブレーションであり、arXivのリスティングは**99人の著者**を抱える——その人数では「能力の構成」という枠付けはアーキテクチャと同じくらい組織を描写している。
+
+[`🔗 Hugging Face — InternScience/Sage-A1.5`](https://huggingface.co/InternScience/Sage-A1.5) · [`🔗 arXiv 2610.28578 — テクニカルレポート`](https://arxiv.org/abs/2610.28578)
+
+---
+
+## 38. FortiSandboxの9.8、9.6、9.2は1本のベクタの3つの停止点——そしてアドバイザリはCVEより13日古い
+
+- **Velocity:** ▮▮ rising
+- **Source:** FortiGuard PSIRT FG-IR-26-185 / NVD / CVEレコード · 2026-10-26公開
+- **Tags:** `cve` `fortinet` `auth-bypass` `cvss-arithmetic` `provenance`
+
+**CVE-2026-107656**（CWE-288）はFortiSandbox GUIの「Authentication Bypass Using an Alternate Path or Channel」で、「細工したHTTPリクエストによって、遠隔の未認証攻撃者が認証をバイパスできる可能性がある」。**5.0.7**（5.0.0–5.0.6から）と **4.4.10**（4.4.0–4.4.9から）で修正。FortiSandbox **5.2は影響なし**。**FortiSandbox PaaS 4.4の「全バージョン」** はアップグレードではなく「Migrate to a fixed release」。Fortinet自身のタイムラインは「2026-10-13: Initial publication」で、CVEレコードの公開は **2026-10-26T13:45Z**、**13日**の差だ。「Virtual Patch: No」。「Known Exploited: No」。クレジットはFortinet自身の製品セキュリティチームのAdham El KarnとTrendAI ResearchのJason McFadyen。
+
+**Why it matters:** このレコードは1つの弱点に3つの数字を載せており、そのうち基数の算術なのは1つだけだ。NVDは `psirt@fortinet.com` の指標を1つだけ **9.8** で持ち（vulnStatus `Awaiting Analysis`、NVD採点は0）、ベクタは基数のみの `CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H`。CNAレコード自身の指標は **9.6** を格納するが、その `vectorString` は `E:F/RL:O/RC:C` を追加しており、そこに齟齬が住む。基数は **9.8**、基数×Exploit-Code-Maturityのみでは **9.6**、完全な時間的式では **9.2** を計算する。つまりベンダーが公表した数字は `base × E` の算術で `RL`/`RC` を適用しないまま——第二の見解でもなく、時間的スコアでもない。第二の読み違いの罠はアドバイザリページ自体にある。CVE説明は「FortiSandbox **4.2** all versions」と「FortiSandbox PaaS 4.2 all versions」を挙げるが、FG-IR-26-185のバージョン表に4.2の行はまったくない——5.2、5.0、4.4、そしてPaaSの対応版だけだ。どのリリースを入れればよいか人に伝えるときは、説明ではなくアドバイザリの表を引用すること。
+
+[`🔗 FortiGuard — FG-IR-26-185`](https://fortiguard.fortinet.com/psirt/FG-IR-26-185) · [`🔗 NVD — CVE-2026-107656`](https://nvd.nist.gov/vuln/detail/CVE-2026-107656) · [`🔗 CVE record (CNA)`](https://www.cve.org/CVERecord?id=CVE-2026-107656)
+
+---
+
+## 39. Hitachiが1朝にHiRDBとJP1のCVEを19件公開——9件が9.8、13の影響系列に修正リリースは3つ
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hitachi security info hitachi-sec-2026-148 / NVD / CVEレコード · 2026-10-27公開
+- **Tags:** `cve` `hitachi` `hirrdb` `version-ranges` `vendor-batch`
+
+**Hitachiのレコード19件** がNVDの10月26〜27日公開ウィンドウに着地し、すべて `hirt@hitachi.co.jp` が採点した。**9.8が9件**、**9.4が9件**、7.5が1件。対象は **HiRDB**（データベースサーバ）と **JP1**（ジョブ管理スイート）にわたり、9.8の組は1つのバグの繰り返しではない——「Missing Authentication for Critical Function」「Authentication Bypass by Spoofing」「OS Command Injection」、そして別々のスタック／ヒープベースのバッファオーバーフローを含む。**CVE-2026-82116** を取ろう。予約 **2026-08-28T06:36Z**、公開 **2026-10-27T09:37Z**——予約から公開まで **60日** の遅れで、だからこそ「本日」の並べ替えは8月に起案されたバグを浮上させる。
+
+**Why it matters:** 丁寧に読む価値があるのは影響範囲で、レコードとアドバイザリが同じ修正集合を3通りに記述しているからだ。CNAレコードはHiRDB Server Version 10が `{version: "10-00", lessThan: "10-12-01"}` で影響を受けると述べ——平坦な範囲だ——そのうえで **3つ** の点を `unaffected` として `changes[]` に付ける。`10-12-01`、`10-11-02`、`10-08-05`、**降順**で。Hitachi自身のページも3つについては一致する。「Fixed products」表はAIX、Linux、Windowsに対し正確に **10-12-01、10-11-02、10-08-05** を挙げる。しかし同じ製品のLinux向け影響表は13の系列に及び——`10-12`、`10-11 to 10-11-01`、`10-10 to 10-10-01`、`10-09 to 10-09-05`、`10-08 to 10-08-04`、そして `10-00 to 10-00-11` まで——そのうち**10**系列に影響サブリリースがあり、ページのどこにも修正版が名指しされていない。素朴な読み方は2つとも失敗する。`lessThan: 10-12-01` を文字通り取れば、修正版である `10-08-05` を脆弱と印付ける。`changes[]` を「範囲の末尾まで持続する」と配列順に適用すれば、`10-08-05` のエントリが、アドバイザリが影響ありとする `10-11-01` を塗り潰す。10-10の導入にとっての修正経路は10-11-02か10-12-01へのアップグレードで、どちらのページにもそう書いた文はない。
+
+[`🔗 Hitachi — Vulnerability in HiRDB (hitachi-sec-2026-148)`](https://www.hitachi.com/products/it/software/security/info/vuls/hitachi-sec-2026-148/index.html) · [`🔗 CVE record — CVE-2026-82116`](https://www.cve.org/CVERecord?id=CVE-2026-82116) · [`🔗 NVD — CVE-2026-82116`](https://nvd.nist.gov/vuln/detail/CVE-2026-82116)
+
+---
+
+## 40. MistralのTimestralは209Mの予測器を2.5Bの上に置く——そして123Mの弟は0.001 MASE差で後ろにいる
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hugging Face model card / github.com/mistralai/timestral · 2026-10-15公開
+- **Tags:** `mistral` `time-series` `foundation-model` `benchmarks` `release-drift`
+
+**Timestral** はMistralの時系列基盤モデル群で、ゼロショット予測向けに **5M、28M、123M、209M** のパラメータサイズで出荷される。209Mチェックポイントはtime attentionとvariate attentionを備えたパッチベースtransformerで、**24層**、幅 **768**、パッチあたり **32** タイムステップ、最大 **32,768** ステップ（**1,024** パッチ）のコンテキスト、単一パスで最大 **1,024** ステップの予測ホライズン、**21分位**（0.01〜0.99）を出力する。ベンチマーク表は **GIFT-Eval**、**TIME**、**fev-bench** での「state-of-the-art zero-shot accuracy」を主張し、重要な比較対象は隣のパラメータ数だ。GIFT-EvalではMASE **0.658** に対し `t0-gamma` **0.661**、**TimesFM-3** **0.667**、**Toto-2.0-2.5B** **0.696**、**Chronos-2** **0.698**、CRPS **0.446**。fev-benchではSQL skill scoreが **50.39** 対 **49.42**。
+
+**Why it matters:** 一族の表こそが正直さの装置で、それは両方向に効く。209MはGIFT-Evalで123Mに MASE **0.001** 差（0.658 対 0.659）、TIMEで **0.002** 差（0.626 対 0.628）で勝つ——つまり最上位は中間の丸め誤差の内側にあり、一方12倍大きいToto-2.0-2.5Bに対する差は **0.038** で、スケールではなくアーキテクチャに属する。もう半分はリリースドリフトの確認だ。`mistralai/timestral` は **922 stars、作成 2026-10-15、最終プッシュ 2026-10-15** で、フィードにリリースタグがない——つまり「we're releasing the source code… to reproduce our benchmark results」は、現れてから一度も動いていないリポジトリを指しており、再現の主張はいまのところMistralの外の誰にも検証されていない。
+
+[`🔗 Hugging Face — mistralai/Timestral-209M`](https://huggingface.co/mistralai/Timestral-209M) · [`🔗 GitHub — mistralai/timestral`](https://github.com/mistralai/timestral)
+
+---
+
+## 41. DeepTutor：44,860スター、27日で10リリース、そして自作ベンチマークでの自己申告+10.8%
+
+- **Velocity:** ▮▮ rising
+- **Source:** GitHub / arXiv 2604.26962 · 本日トレンド入り（+1,587 stars）
+- **Tags:** `agents` `education` `rag` `release-cadence` `benchmarks`
+
+**HKUDS/DeepTutor**——「Lifelong Personalized Tutoring」——は **44,860スター**、**5,667フォーク**、未解決issue＋PR **239**、Apache-2.0、Python 3.11+/Next.js 16、作成 **2025-12-28** で本日プッシュあり。機能面がそのまま主張だ。ツールを呼び、選択したナレッジベースに接地し、添付を読み、サブエージェントに相談し、ノートブックに書ける1本のスレッド。能力・ワークスペース・ツール・ナレッジベース・ペルソナ・モデル・Reading/Mastery状態をターンをまたいで持ち運ぶ*sticky session context*で、1ターンだけ適用される「one-time references」と切り分けられている。そしてLlamaIndex、PageIndex、GraphRAG、LightRAG、セルフホストのWeKnoraベース、Kiwix ZIMアーカイブ、Obsidian vaultにわたるマルチエンジン検索。論文（arXiv **2604.26962**、v3、2026年7月9日）は **TutorBench**——5分野の大学カリキュラムから引いた学習者プロファイルとLLMシミュレート学生を備えた「interactive benchmark」——を報告し、平均のパーソナライズ改善 **10.8%**、一般的なagentic推論で **29.4%**、「5つのバックボーンモデルにわたって」。
+
+**Why it matters:** リリースのケイデンス*そのもの*が製品の主張であり、それはフィードから測れる。直近10リリースは **v1.6.10（9月22日）** から **v1.6.15（10月18日）**——**27日**で10リリース、いくつかは失敗を名指しする修正リリースだ（「books that arrived as one empty chapter, quizzes that produced nothing, the model's scratchpad in the text」）。論文が描写するより速く出荷するプロジェクトである。軽く持つべき2つの数字はいずれも自己参照的だ。TutorBenchは著者自身のベンチマークで、学生はシミュレーション——だから「+10.8%のパーソナライズ」は、学習者についてのモデルの考えに対するモデルの測定だ。READMEはより小さな齟齬にも率直だ。「The overview is current for v1.6.5. The surface screenshots below remain v1.4.6 references while a versioned refresh is in progress.」
+
+[`🔗 GitHub — HKUDS/DeepTutor`](https://github.com/HKUDS/DeepTutor) · [`🔗 arXiv 2604.26962 — DeepTutor`](https://arxiv.org/abs/2604.26962)
+
+---
+
+## 42. android-ad-cleaner：2,835スター、root不要、そしてホームページに「AIに渡す」ブロック
+
+- **Velocity:** ▮▮ rising
+- **Source:** GitHub / プロジェクトホームページ · v0.2.4 公開 2026-10-27
+- **Tags:** `chinese-oss` `android` `adb` `debloat` `agent-instructions`
+
+**rddmwmddr/android-ad-cleaner** は中国のAndroid ROMに同梱された広告、トレンド一覧、マーケティングプッシュ通知を切る——root不要、ブートローダー解除不要、書き込み不要——デスクトップクライアントから `adb` を駆動して。**2,835スター**、**239フォーク**、未解決issue＋PR **155**、MIT、作成 **2026-10-24**、**v0.2.4** が本日出荷、自らの言葉では「10-26から10-27の**140+**のフィードバック項目」を処理した後だ。範囲は自慢ではなく境界として述べられる。システムとアプリが既に公開しているスイッチを反転させ、停止した広告パッケージは所有者の確認を要し1コマンドで戻り、システム更新は影響を受けず、ドロップダウン検索、アプリストアのインストール／更新経路、天気アラート、配送通知といった機能は保たれる。やらないことも同じくらい明示的だ。「仅支持通过 adb 连接的安卓设备，暂不支持使用 HDC 的原生鸿蒙」——adb接続のAndroidのみ、ネイティブHarmonyOSは不可。
+
+**Why it matters:** ニュースなのは配布チャネルのほうだ。ホームページにはagenticツール向けのコピペ用テキストを載せた**「交给你的AI」**（「hand it to your AI」）ブロック——WorkBuddy、Claude Code、Codex、Trae、端末をテザーしたCursor——がチャットアシスタント向けの第2ブロックと並び、署名・公証済みのmacOSビルドを出荷していて未署名zipではない。中国のデスクトップユーティリティがエージェントを一級のインストーラとして扱っている——「MCPサーバを足す」とは違う導入経路だ。真似する価値があるのはエンジニアリングの姿勢で、バグ種別を名指しする日付付き変更履歴（「执行中途断线会停下说明原因，不再显示假成功」——実行途中の切断は偽の成功を報告せず停止して理由を述べる）、触らないものの一覧、そして直したものと未検証のままのもののissueごとの注記だ。
+
+[`🔗 GitHub — rddmwmddr/android-ad-cleaner`](https://github.com/rddmwmddr/android-ad-cleaner) · [`🔗 プロジェクトホームページ（zh）`](https://rddmwmddr.github.io/android-ad-cleaner/)
+
+---
+
+## 43. Apache Vysperの8.8は「UNSUPPORTED WHEN ASSIGNED」——ベンダーは別のライブラリを探せと言い、修正は永遠に来ない
+
+- **Velocity:** ▮▮ rising
+- **Source:** Apache CNAレコード / NVD · 2026-10-26公開
+- **Tags:** `cve` `apache` `xmpp` `end-of-life` `no-fix`
+
+**CVE-2026-115748** は助言を決めるラベルで始まる。「**UNSUPPORTED WHEN ASSIGNED** Authorization bypass in Apache Vysper, all versions.」機構はXMPPライブラリのXEP-0077（In-Band Registration）実装にあり、「認証チェックを欠き、任意の認証済みユーザーが他のアカウントを侵害できる」——CWE-639、ユーザー制御キーによる認可バイパス。`security@apache.org` により `CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H` で **8.8**、隣にはApache自身の定性ラベル「important」が記録される。Apacheが公開した範囲は「すべて」のCVE 5.x表現だ。`pkg:maven/org.apache.vysper/vysper` に対して `{"version": "0", "lessThanOrEqual": "*"}`——`version: "0"` はリリースではなくヌルの下限だ。
+
+**Why it matters:** 大事な文はスコアではなく処分だ。「As this project is retired, we do not plan to release a version that fixes this issue. Users are recommended to find an alternative.」これが「未修正」を保留ではなく**恒久**にする——新しいCVEの既定の読み方の逆であり、この留保を修正と並べて報じる価値がある理由だ。また、アドバイザリが読めない厄介な重なりにもある。レコードの `references` は `mina.apache.org/vysper-project/`（退役したプロジェクトページ）と、素のfetchにはPony Mailの殻しか返さない `lists.apache.org` のスレッドを指すため、退役についての機械可読な記述はCVEレコードだけだ。NVDはこのレコードを `Deferred` で持ち、`security@apache.org` の指標が1つ、NVD採点は0——第二の評価ではなく、NVDが再給仕するベンダーのスコアである。
+
+[`🔗 CVE record — CVE-2026-115748`](https://www.cve.org/CVERecord?id=CVE-2026-115748) · [`🔗 NVD — CVE-2026-115748`](https://nvd.nist.gov/vuln/detail/CVE-2026-115748)
+
+---
+
+## 44. WikipediaのAI掃除はAIの割合が約20%から15〜16%へ下がったと言う——そして検出器が負けつつあるだけかもしれない
+
+- **Velocity:** ▮▮ rising
+- **Source:** IEEE Spectrum / WikiProject AI Cleanup · 2026-10-27
+- **Tags:** `wikipedia` `ai-detection` `content-moderation` `benchmarks`
+
+**WikiProject AI Cleanup**（「WP:AIC」）は、決まり文句だらけの記事についてのDiscordでの会話から「2023年に始まった」ボランティア活動で、AI生成のWikipedia素材を見つけて除去する。検出法は語彙から構造へ移った。初期の手がかりは「stands as a testament」「rich cultural heritage」のような常套句だったが、いま編集者は「rule of three」や否定並列が積み重なるとき、そして挙動を見る——「5分で数千語の記事を5本」が挙げられる例だ。より難しい信号は引用だ。出典の捏造はいまや稀で、より多い失敗はモデルが「実在する出典を見つけるが、その内容を完全に間違える」ことだ。ツールはボランティア製のAI出典検証器 **Pangram** と、Wikimedia Foundationの **Paste Check**。数字はこうだ。Pangramは2025年後半に「新規記事と下書きの**おそらく20パーセント**」をAI生成と印付けし、「2026年初頭にはそれが**15か16パーセント**に下がった」——プロジェクトはこれを「a very conservative lower bound」と呼び、ChatGPT以前のコンテンツでの偽陽性がないことで正当化する。
+
+**Why it matters:** その2つの数字には両方向が当てはまり、出典は選ぶことを拒む。減少については「we don't yet know whether that's because our recent policies have had an effect」——英語版Wikipediaはいまや編集者がLLMで記事を生成することを禁じている——「or because models are getting more powerful and Pangram hasn't had time to adapt」。つまり「ポリシーが効いている」と「検出器が遅れている」は同じグラフで、正直な引用は割合と同じ文に不確実性を載せる。規模も誰も引用しない留保だ。記事はプロジェクトの参加者数も記事数も**与えない**。「a few other editors and I were chatting on Wikipedia's Discord server」という回想だけだ——人数不明のボランティア集団が測った下限である。
+
+[`🔗 IEEE Spectrum — Wikipedia's cleanup of AI-generated content`](https://spectrum.ieee.org/wikipedia-wikiproject-ai-writing-cleanup) · [`🔗 Wikipedia — WikiProject AI Cleanup`](https://en.wikipedia.org/wiki/Wikipedia:WikiProject_AI_Cleanup)
+
+---
+
+## 45. `ub-mode`：Uncle Bobのagentスキルが2日で1,558スター——そしてコピーするためのライセンスファイルがない
+
+- **Velocity:** ▮ steady
+- **Source:** GitHub · 作成 2026-10-25
+- **Tags:** `agent-skills` `software-engineering` `quality-gates` `licensing` `claude-code`
+
+**unclebob/ub-mode** は「コードを書く・変えるときに規律あるソフトウェア工学の原則を強制するagentスキル」で、**2026-10-25** に公開され、**1,558スター**、**72フォーク**、未解決issueは1件。由来は明示されている。「loosely based on portions of @poteto's rules (`poteto-mode` / `pstack`), reduced and paired with deterministic quality-gate tools」。構造は3段階——**First Make it Work**（Laziness Protocol、Foundational Thinking、TDD、Redesign From First Principles、Attack the Premise、Subtract Before You Add、境界と型システムの規律）、**Then Make it Right**（根本原因を直す、作業を検証可能な単位に区切る、実装ではなく振る舞いをテストする）、**Practice**（ログを残す、コンテキスト窓を守る、worktreeの後片付け、小さく順序立ったコミット）。際立つのは、ゲートが形容詞ではなく相棒ツールの数値である点だ。[Crapper](https://github.com/unclebob/crapper) は循環的複雑度・カバレッジ・多項式から作る **CRAP < 10** スコアの下に全関数を保ち、[Dryer](https://github.com/unclebob/dryer) は **≥ 0.8** の類似度で重複ブロックを印付け、[Mutator](https://github.com/unclebob/mutator) はミューテーションテストを走らせ、`uml-viewer` はカバレッジ・CRAP・ミューテーションスコアをまとめて描く。
+
+**Why it matters:** スキルというジャンルで、著者がプロンプトではなく*ルール*で知られる最初の項目であり、そのルールはプログラムで検査できる——スタイルガイドとゲートの違いだ。注意すべきはインストールの部分だ。「Copy `SKILL.md` into your agent's skills directory as `ub-mode/SKILL.md` (for example `~/.claude/skills/ub-mode/SKILL.md`)」で、**リポジトリにLICENSEファイルはなく**、メタデータにもライセンス宣言がない。既定の著作権法ではこれは「all rights reserved」なので、企業がこれを共有スキルディレクトリに貼るのは単なる好みではなくライセンス上の問題であり、agentスキルのファイルはブログ記事ではなく実行可能な指示だ。2日で1,558スターはこのジャンルの普通の速度で、欠けているライセンスこそがスター数に現れない部分だ。
+
+[`🔗 GitHub — unclebob/ub-mode`](https://github.com/unclebob/ub-mode) · [`🔗 GitHub — unclebob/crapper`](https://github.com/unclebob/crapper)
+
+---
+
+## 46. BeautifulRustは3つのスキルとclippy設定を出荷——そして5つの出典が食い違う箇所を明言する
+
+- **Velocity:** ▮ steady
+- **Source:** GitHub · 作成 2026-10-23
+- **Tags:** `agent-skills` `rust` `clippy` `code-review` `porting`
+
+**morganlinton/BeautifulRust** は4日で **1,265スター**、**56フォーク**、MIT、3つのAgent Skillsとlint設定を備える。`rust-best-practices` はagentがRustを書く・変えるたびに読み込まれ、`rust-review` は既存ファイルやクレートや差分を読み「すべての指摘が破ったルールを引用し修正を示す、優先順位付きのレポート」を書き、`rust-port` はC、C++、Python、Go、JavaScriptを慣用的なRustへ移す——「同じ挙動で、元のテストを先に移植して2つが一致することを証明できるように」。汎用のAgent Skills形式を狙うので、Claude Code、OpenAI Codex、GitHub Copilot、Cursor、Gemini CLIが同じファイルを読む。来歴は異例に明示的だ——**GoogleのRust Style Guide**、公式の **Rust API Guidelines**、**Effective Rust**、**Rust Design Patterns**、**MicrosoftのPragmatic Rust Guidelines** をそれぞれスキルに凝縮し「必要なら元の理由を参照できるように」しており、さらに有用なことに「Where the sources disagree, the skill picks a side and says why.」
+
+**Why it matters:** 機能する2つのスキルは、検査できる2つだ。`rust-review` はすべての指摘を名前のあるルールに結びつけ、`lints/` は「機械が検査できるルールをCIで強制するドロップインのclippy設定」——だから機械が検証できる部分はモデルに委ねられていない。二度見すべき主張はデモのほうだ。READMEのビフォー／アフターは**1つ**のタスク（「小さなsemverパーサライブラリ」）で、スキルなしの実行は「publicフィールド付きで動くコードと、`# Errors` ドキュメントなし、docサンプルに `unwrap()`」を生んだ——実在する退行の型であり、同時に「何が変わるか」として提示された1つの逸話でもある。引用すべきはより狭く防御可能な主張だ。スキル内のすべてのコード例はstable Rustでコンパイルし、すべてのlintは現行のclippyで確認済みである。
+
+[`🔗 GitHub — morganlinton/BeautifulRust`](https://github.com/morganlinton/BeautifulRust) · [`🔗 Agent Skills 形式 — agentskills.io`](https://agentskills.io)
+
+---
+
+## 47. neuron-explorerはQwen3.5-4Bの全MLPニューロンを操作できる——そしてそのClaudeタブはあなたのホームフォルダにシェルを得る
+
+- **Velocity:** ▮ steady
+- **Source:** GitHub · 作成 2026-10-21
+- **Tags:** `interpretability` `steering` `qwen` `vllm` `agent-tools`
+
+**lyramakesmusic/neuron-explorer** は6日で **1,373スター**、**157フォーク**、ライセンス宣言なし、特定の実験のためにある。「層のすべてのMLPニューロンがいくつかのプロンプトで押し上げ・押し下げられ、すべてのrolloutが保持され、explorerがその結果をモデルの3Dビュー上に並べる」。対象は **Qwen3.5-4B**。スイープは「CUDA 13のGPUポッドで、vLLMのステアリングフォーク（[RhizoNymph/vllm](https://github.com/RhizoNymph/vllm)）を使って」走る——`neuron_stats.py` が層ごとの統計のために **2,000,000** トークンを処理し、続いて `steer_sweep.py` が **256** のランダム方向対照と、層を出る残差ノルムの中央値の割合として定義された `main_rel` 用量（{−0.7, +0.5, +0.8} × 3プロンプト、{+3} × 1）で走る。ビューには層ごとのattentionとMLPを含むパースペクティブマップ、「by word-cluster mass against random-direction controls」で順位付けされたユニット、自分のテキストに対する `fires` フィルタ、3カラムのマルチターン・ステア付きチャット、層のrolloutのUMAP（ニューロン・プロンプト・用量で色分け）がある。
+
+**Why it matters:** 2つの判断がこれをデモ以上にしている。**ランダム方向対照** がランキングに組み込まれており、これが「このニューロンが重要だ」と「この方向が出力を動かした」の違いだ——大半のステアリング記事が飛ばす失敗モードである。そして4番目のパネルはエージェントだ。「`claude` CLI（インストール・ログイン済み）をexplorerをMCPサーバとして走らせるチャット」で、エージェントは「ニューロン、コーン、レンズを読み、生きたモデルを走らせ……マップ・リスト・ハイライトを動かし、**そしてあなたのホームフォルダにファイルツールとシェルを持つ**」。READMEはその境界を埋めずに明記し、自身の限界も並べる——「The server answers only pages and tools on this machine.」本日のOpenHandsの項目と並べて読む価値がある。同じ形のリスクで、開示の向きが逆だ。
+
+[`🔗 GitHub — lyramakesmusic/neuron-explorer`](https://github.com/lyramakesmusic/neuron-explorer) · [`🔗 RhizoNymph/vllm — steering fork`](https://github.com/RhizoNymph/vllm)
+
+---
+
+## 48. winevdmは64ビットWindows上でWindows 1.x〜3.1を動かす——最新の安定版リリースは2023年のものだ
+
+- **Velocity:** ▮ steady
+- **Source:** GitHub / Hacker News · HN 97 pts · 約11時間前（~09:15 UTC+8 10月27日）
+- **Tags:** `emulation` `win16` `legacy` `release-drift` `c`
+
+**otya128/winevdm** は「16-bit Windows (Windows 1.x, 2.x, 3.0, 3.1, etc.) on 64-bit Windows」——**3,553スター**、**208フォーク**、未解決issue＋PR **352**、GPL-2.0、C、作成 **2015-09-22**、最終プッシュ **2026-10-24**。機構はREADMEに書かれており、そこが面白いところだ。「64-bit Windows cannot modify LDT (`NtSetInformationProcess(,ProcessLdtInformation,,)` always returns error)」——そこでプロジェクトはwine由来のWin16→Win32変換コードと並べて**CPUエミュレータ**を積み、`.spec` ファイルから「convspecで自動生成」された16→32ビットのリレールーチン、16↔32ビットHANDLE変換、DOSエミュレーションを備える。インストールはWindowsの機構を置き換えるのではなく乗っ取る。「When 64-bit Windows detects a 16-bit installer, it has a mechanism to start an alternative installer which is not 16-bit. This program uses it.」
+
+**Why it matters:** リリースドリフトの確認が「2026年にも16ビットWindowsが動く」という見出しの枠を組み直す。最新の**安定版リリースは `v0.9.0`、タグは2023-09-15**——リポジトリが今も受けているコミットより3年古い——だからReleasesページから入れる人は2023年のコードを走らせており、現在の挙動はREADMEが「unstable」と呼ぶAppVeyor CIビルドにしかない。もう1つ引用すべきはプロジェクト自身の範囲の限界だ。「DOS emulation is incomplete and it is recommended to use DOSBox or MS-DOS Player」——宣伝する仕事の半分をどの用途に使うべきでないかを言うユーティリティで、制御は `VDMDOSVER` 変数だけ。これがこれを良いレガシー互換の参照にする。LDTの制約、インストーラのフック、DOSの注意は、16ビット経路を移植する誰もが踏む失敗モードだ。
+
+[`🔗 GitHub — otya128/winevdm`](https://github.com/otya128/winevdm) · [`🔗 Hacker News discussion`](https://news.ycombinator.com/item?id=50253529)
+
+---
+
+## 49. OpenAIのETHプレプリントに関する本誌の記事以降：翌日に22ページの「簡略化証明」が現れ——OpenAIのものをクレジットしている
+
+- **Velocity:** ▮ steady
+- **Source:** shivakintali.github.io（PDF）· 2026-10-26付
+- **Tags:** `complexity-theory` `eth` `formal-methods` `reproduction` `update`
+
+**本日OpenAIの指数時間仮説プレプリントを扱った直後（項目21）、第三者が同じ定理へのより短い道を公開した。** Shiva Kintaliの「A simplified proof of ETH is false」は **2026年10月26日** 付、**22ページ** で、こう述べる。「For every fixed ε > 0, we give a deterministic 3-SAT algorithm on n variables and m clauses using Cε(n + m + 1)^cε 2^(εn) bit operations, refuting ETH.」クレジットは明白だ。「**Our simplified exposition of OpenAI's proof [1]** combines sparsification, bounded occurrences, spectral replacement, and rational interpolation.」これは標準的な正の率の定式化——「there is a constant δ > 0 for which no deterministic 3-SAT algorithm runs in 2^(δn)(n + m)^O(1) time」——に対して働き、「by taking, for example, ε = δ/2」で反証する。
+
+**Why it matters:** 最初の報道の波が落とす2つの点を残すべきだ。第一に、これは**解説であって独立した証明ではない**——著者が要旨でそう言っているので、「いま2つの証明が存在する」は誤った文で、「1つの証明の2つ目でより短い記述が24時間後に存在する」が正しい文だ。第二に、定理は**族**である。「This parameter is fixed before the input is given; the algorithm and its polynomial time factor may depend on it」——各εに対する1つのアルゴリズムで、調整つまみ付きの単一アルゴリズムではない。その区別が主張をスローガンではなく反証可能にし、結果を検証する読者が最初に問うことだ。
+
+[`🔗 A simplified proof of ETH is false（PDF）`](https://shivakintali.github.io/papers/ETH.pdf) · [`🔗 openai/math — preprint ディレクトリ`](https://github.com/openai/math/tree/main/preprints)
+
+---
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-10-27T04:33:11Z |
-| Items | 34 |
-| Sources tracked | 21（Hacker News、GitHub、NVD、arXiv、CISA KEV、Cloudflare、Ubicloud、HashiCorp、VulnCheck、crates.io、SEC EDGAR、OpenAI developer docs、OpenAI Deployment Safety Hub、Artificial Analysis、Cohere、Erlang CNA、entire.com、pharo.org、sebastianraschka.com、shraiwi.com、stalw.art） |
+| Generated | 2026-10-27T12:17:44Z |
+| Items | 49 |
+| Sources tracked | 30（Hacker News、GitHub、NVD、arXiv、CISA KEV、Cloudflare、Ubicloud、HashiCorp、VulnCheck、crates.io、SEC EDGAR、OpenAI developer docs、OpenAI Deployment Safety Hub、Artificial Analysis、Cohere、Erlang CNA、entire.com、pharo.org、sebastianraschka.com、shraiwi.com、stalw.art、Open3DLab、debian-devel、Hugging Face、FortiGuard PSIRT、Hitachi、cve.org、IEEE Spectrum、shivakintali.github.io） |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8（1日3回） |
 | Ranking | 速度加重（新しさ × エンゲージメントの加速度 × 情報源の権威） |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |
