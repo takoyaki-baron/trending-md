@@ -1,0 +1,58 @@
+{
+ "generated": "2026-10-27T20:16:02.361Z",
+ "files": [
+  {
+   "file": "2026-10-28.md",
+   "items": 19,
+   "findings": [
+    {
+     "check": "cvss",
+     "item": 4,
+     "verdict": "ok",
+     "claim": "3.1 9.3",
+     "detail": "CVE-2026-48356 · Secondary/psirt@adobe.com · vector reproduces 9.3"
+    },
+    {
+     "check": "issues",
+     "item": 10,
+     "verdict": "ok",
+     "claim": "719 issues + 908 PRs",
+     "detail": "split named (PR share 56%)"
+    },
+    {
+     "check": "cvss",
+     "item": 12,
+     "verdict": "ok",
+     "claim": "4.0 9.2",
+     "detail": "CVE-2026-111497 · Secondary/cve-coordination@google.com"
+    },
+    {
+     "check": "repo",
+     "item": 5,
+     "verdict": "ok",
+     "claim": "AxiomMath/CFSG",
+     "detail": "57★, last push 2026-10-27"
+    },
+    {
+     "check": "repo",
+     "item": 10,
+     "verdict": "ok",
+     "claim": "Graphify-Labs/graphify",
+     "detail": "136864★, last push 2026-10-27"
+    },
+    {
+     "check": "count",
+     "item": 10,
+     "verdict": "ok",
+     "claim": "40 languages",
+     "detail": "README states it"
+    }
+   ]
+  }
+ ],
+ "api_calls": 0,
+ "readme_calls": 0,
+ "cited_page_calls": 0,
+ "nvd_calls": 1,
+ "cna_calls": 0
+}
