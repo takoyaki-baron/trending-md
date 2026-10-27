@@ -209,6 +209,9 @@
  *   node disclosure-lag.mjs --ids CVE-… --census --no-github            # degraded mode only
  *   node disclosure-lag.mjs --range-census --from 2026-10-18 --to 2026-10-24  # a whole window
  *   node disclosure-lag.mjs --field-census weaknesses --from 2026-10-18 --to 2026-10-24
+ *   node disclosure-lag.mjs --changes-census --from 2026-10-21 --to 2026-10-27   # changes[] prevalence
+ *   node disclosure-lag.mjs --backlog-census --from 2026-10-21 --to 2026-10-27   # the Received residue
+ *   node disclosure-lag.mjs --changes-census --backlog-census … --window-cache /tmp/win.json  # one fetch
  *   node disclosure-lag.mjs --ids CVE-… --artifact firmware --fix-ref <raw artifact url>
  *   node disclosure-lag.mjs --selftest                       # parsers + the artifact + notes verdicts
  *
@@ -252,9 +255,22 @@ const RANGE_CENSUS = args.includes('--range-census');
 /* The field census: the same per-`vulnStatus` presence table for ANY record field, because the
    range was only the first field whose provenance turned out to matter (2026-10-25 12:33). */
 const FIELD_CENSUS = argOf('--field-census', null);
+/* The `changes[]` census: `affected[].changes[]` was learned from ONE record (consul-k8s) at
+   2026-10-27 12:22 and corrected from a second (Hitachi) at 20:34, so "how often does the shape
+   occur, who writes it, and how many records would a one-entry reader get wrong?" was still
+   unmeasured. Same window, same fetch. */
+const CHANGES_CENSUS = args.includes('--changes-census');
+/* The backlog census: 830 `Received` records over a week carry a CWE 17.1% of the time while one
+   fresh day's `Received` is 98.5% — two readings (queue artefact vs record-quality signal) that
+   predict different assigner distributions. Grouping by assigner and by publication day settles it
+   without asserting anything about NVD's internals. */
+const BACKLOG_CENSUS = args.includes('--backlog-census');
 const CENSUS_FROM = argOf('--from', null);
 const CENSUS_TO = argOf('--to', null);
 const CENSUS_PAGES = Number(argOf('--pages', 6));
+/* A window fetch is ~5–8 minutes of NVD pacing; two censuses over the same window should pay for
+   one. `--window-cache <path>` stores the raw records and reuses them when `from`/`to` match. */
+const WINDOW_CACHE = argOf('--window-cache', null);
 /* One switch, flipped between passes. It blocks ONLY api.github.com — github.com HTML (the
    advisory page, `releases.atom`, the Advisory Database) stays readable, because the whole point
    of the degraded pass is to show which verdicts the quota owns and which survive on HTML alone. */
@@ -505,6 +521,7 @@ function affectedRanges(cve) {
   const inverted = [];
   const exempt = [];
   const reinstated = [];
+  const changeStats = [];
   for (const a of cve.affected || []) {
     for (const d of a.affectedData || []) {
       const vs = d.versions || [];
@@ -536,28 +553,26 @@ function affectedRanges(cve) {
                and every other entry is an exempt POINT inside the range.
            An `affected` entry above the highest `unaffected` one would reinstate the range, so that
            case is recorded rather than a clean end being claimed from it. */
-        const chg = (Array.isArray(v.changes) ? v.changes : []).filter(c => c && c.at != null);
-        const inRange = chg.filter(c => {
-          const at = String(c.at);
-          if (min && cmpVer(at, min) <= 0) return false;     // below the range: nothing to change
-          /* `at` EQUAL to the stated max is the common shape (vendors write `lessThan` = the newest
-             fix AND list it in `changes[]`), so it is a bound confirmation, not an overshoot — the
-             strict `>= 0` test here discarded exactly that entry and left the next-lowest fix as
-             the bound, which is how Hitachi's 10-12-01 became 10-08-05. */
-          if (max && cmpVer(at, max) > 0) return false;      // above the stated bound: not a bound
-          return true;
-        });
-        const unaff = inRange.filter(c => String(c.status) === 'unaffected').map(c => String(c.at));
-        if (unaff.length) {
-          const hi = unaff.reduce((a, b) => (cmpVer(b, a) > 0 ? b : a));
+        const res = resolveChanges({ min, max, changes: v.changes });
+        const unaff = res.points.concat(res.bound ? [res.bound] : []);
+        if (res.bound) {
           const product = `${d.vendor || '?'}/${d.product || '?'}`;
-          exempt.push({ at: hi, product, raw: rawVer, role: 'ends' });
-          for (const at of unaff) if (at !== hi) exempt.push({ at, product, raw: rawVer, role: 'point' });
-          max = hi; maxInc = false;
-          const above = inRange.filter(c => String(c.status) !== 'unaffected' && cmpVer(String(c.at), hi) > 0);
-          if (above.length) reinstated.push(`${product} affected again at ${above.map(c => String(c.at)).join(', ')}`);
+          exempt.push({ at: res.bound, product, raw: rawVer, role: 'ends' });
+          for (const at of res.points) exempt.push({ at, product, raw: rawVer, role: 'point' });
+          max = res.bound; maxInc = false;
+          if (res.reinstated.length) reinstated.push(`${product} affected again at ${res.reinstated.join(', ')}`);
         }
-        if (!min && !max) continue;
+        /* Every resolved entry is kept for the census. `first`/`last` are what a reader taking the
+           first (or last) listed entry would bound at, so `!= bound` counts the records a positional
+           rule gets wrong — the pre-10-27 parser was a LAST-entry reader. */
+        if (res.inRange > 0 || (res.aboveMax || []).length) changeStats.push({ raw: rawVer,
+          entries: unaff.length, kept: res.inRange,
+          bound: res.bound, points: res.points.length, reinstated: res.reinstated.length,
+          naive: res.naive, ats: res.ats,
+          misreadFirst: !!(res.naive && res.bound && res.naive.first !== res.bound),
+          misreadLast: !!(res.naive && res.bound && res.naive.last !== res.bound),
+          aboveMax: (res.aboveMax || []).length,
+          boundConfirms: !!(res.naive && res.bound && res.naive.first === res.bound) });        if (!min && !max) continue;
         if (min && !max) {              // single affected version — a POINT, not an open range
           ranges.push({ raw: min, min, minInc, max: min, maxInc: true, from: 'cna-affected' });
           continue;
@@ -569,7 +584,58 @@ function affectedRanges(cve) {
       }
     }
   }
-  return { ranges, inverted, exempt, reinstated };
+  return { ranges, inverted, exempt, reinstated, changeStats };
+}
+
+/** Resolve one version entry's `changes[]` into the end of its affected span.
+ *
+ *  Kept as its own pure function because TWO readers need the same answer — the probe (which uses
+ *  `bound`) and `--changes-census` (which uses `naive` to count how many records the 10-27 fix
+ *  changed) — and a duplicated rule would drift exactly the way this one did.
+ *
+ *  The three facts it encodes, each measured on a live record:
+ *   1. **The bound is the HIGHEST `unaffected` `at`**, not the last one processed: Hitachi's
+ *      `CVE-2026-82116` lists `10-12-01`, `10-11-02`, `10-08-05` in descending order inside
+ *      `10-00 < 10-12-01`, and a last-wins reader marks 10-11-01 vulnerable and 10-08-05 the fix.
+ *   2. **`at` EQUAL to the stated max is a bound confirmation**, not an overshoot — vendors write
+ *      `lessThan` = the newest fix AND list it in `changes[]`. A strict `> 0` filter discarded that
+ *      entry and fell back to the next-lowest fix.
+ *   3. **`naive` is both positional answers at once** — `{first, last}`, what a reader taking the
+ *      first (or last) listed entry would bound at. It is returned rather than computed at the call
+ *      site because "which entry a reader picks" is the whole defect, and the PRE-10-27 PARSER WAS A
+ *      LAST-ENTRY READER — so `last` is the number that measures the fix's impact, while `first` is
+ *      the rule that happens to be right when a vendor lists its fixes in descending order (Hitachi
+ *      does, which is why the original bug only surfaced on that record and not on its 18 siblings). */
+function resolveChanges({ min, max, changes }) {
+  const chg = (Array.isArray(changes) ? changes : []).filter(c => c && c.at != null);
+  if (!chg.length) return { bound: null, points: [], reinstated: [], inRange: 0, naive: null, aboveMax: [] };
+  const inRange = chg.filter(c => {
+    const at = String(c.at);
+    if (min && cmpVer(at, min) <= 0) return false;     // below the range: nothing to change
+    if (max && cmpVer(at, max) > 0) return false;      // above the stated bound: not a bound
+    return true;
+  });
+  const unaff = inRange.filter(c => String(c.status) === 'unaffected').map(c => String(c.at));
+  const affAt = inRange.filter(c => String(c.status) !== 'unaffected').map(c => String(c.at));
+  /* The OTHER side of the same fact (measured 10-28: 114 of the 139 carriers in one week). A
+     vendor with an INCLUSIVE bound writes the first unaffected release, which is by definition one
+     above `lessThanOrEqual` — Patchstack's `{version:"0", lessThanOrEqual:"3.3.12", changes:[{at:
+     "3.3.13", status:"unaffected"}]}`. It is a bound confirmation read from the far side, not an
+     overshoot, and it must not widen the span. Returning it separately is what lets the census say
+     why "carries changes[]" (139) and "changes the span" (24) are different counts. */
+  const aboveMax = max ? chg.filter(c => String(c.status) === 'unaffected' && cmpVer(String(c.at), max) > 0)
+    .map(c => String(c.at)) : [];
+  if (!unaff.length) return { bound: null, points: [], reinstated: affAt, inRange: inRange.length, naive: null, aboveMax };
+  const hi = unaff.reduce((a, b) => (cmpVer(b, a) > 0 ? b : a));
+  return {
+    bound: hi,
+    points: [...new Set(unaff.filter(x => x !== hi))],
+    reinstated: affAt.filter(at => cmpVer(at, hi) > 0),
+    inRange: inRange.length,
+    naive: { first: unaff[0], last: unaff[unaff.length - 1] },
+    ats: unaff,
+    aboveMax,
+  };
 }
 
 const decode = s => s.replace(/&gt;/g, '>').replace(/&lt;/g, '<').replace(/&quot;/g, '"')
@@ -1559,6 +1625,29 @@ if (SELFTEST) {
     status: 'affected', changes: [{ at: '2.0', status: 'unaffected' }, { at: '3.5', status: 'affected' }] }] }] }] });
   eq('cna: an affected entry ABOVE the exemption is recorded, not resolved',
     [affR.ranges[0].max, affR.reinstated.length], ['2.0', 1]);
+  /* ── `resolveChanges` is the one rule both the probe and `--changes-census` read (added
+        2026-10-28). `naive` is the pre-10-27 FIRST-entry answer, so these pin the exact records the
+        fix changed — which is what the census counts, and the count is worthless if the two readers
+        can disagree about what "changed" means. ── */
+  const rcHitachi = resolveChanges({ min: '10-00', max: '10-12-01',
+    changes: [{ at: '10-12-01', status: 'unaffected' }, { at: '10-11-02', status: 'unaffected' },
+      { at: '10-08-05', status: 'unaffected' }] });
+  eq('resolveChanges: bound is the highest at', rcHitachi.bound, '10-12-01');
+  eq('resolveChanges: Hitachi lists fixes DESCENDING, so the first entry equals the bound',
+    [rcHitachi.naive.first, rcHitachi.naive.last], ['10-12-01', '10-08-05']);
+  eq('resolveChanges: …and the pre-10-27 LAST-entry reader is the one that was wrong',
+    [rcHitachi.naive.last === rcHitachi.bound, rcHitachi.naive.first === rcHitachi.bound], [false, true]);
+  const rcDesc = resolveChanges({ min: '1.0', max: '3.0',
+    changes: [{ at: '2.0', status: 'unaffected' }, { at: '3.0', status: 'unaffected' }] });
+  eq('resolveChanges: an ASCENDING multi-entry list misleads the FIRST-entry reader, not the last',
+    [rcDesc.bound, rcDesc.naive.first, rcDesc.naive.last, rcDesc.points.length], ['3.0', '2.0', '3.0', 1]);
+  const rcEq = resolveChanges({ min: '0.42.0', max: '2.0.4', changes: [{ at: '2.0.4', status: 'unaffected' }] });
+  eq('resolveChanges: at == the stated max confirms the bound',
+    [rcEq.bound, rcEq.naive.first], ['2.0.4', '2.0.4']);
+  const rcAbove = resolveChanges({ min: '1.0', max: '2.0', changes: [{ at: '3.0', status: 'unaffected' }] });
+  eq('resolveChanges: an entry above the stated bound is out of range', [rcAbove.bound, rcAbove.inRange], [null, 0]);
+  const rcNone = resolveChanges({ min: '1.0', max: '2.0', changes: [] });
+  eq('resolveChanges: no changes is not an error', [rcNone.bound, rcNone.naive], [null, null]);
   eq('opBounds: a bare version is not an operator string', opBounds('1.2.3'), null);
   eq('prose patched list', prosePatched('Users need to update any Brotli libraries or binaries to the latest available version: 1.0.10 or 1.1.1 or 1.2.1.'), ['1.0.10', '1.1.1', '1.2.1']);
   eq('prose patched ignores an affected range', prosePatched('versions 1.0.3 through 1.2.0 on all platforms'), null);
@@ -1688,6 +1777,19 @@ async function fetchWindow(from, to) {
     return s;
   };
   from = parseDay(from); to = parseDay(to);
+  /* A window fetch is the expensive unit here (~6.5 s/record-page unauthenticated), so two
+     censuses over the same window must not each pay for it. The cache is keyed on the window
+     itself: a stale file for a different `from`/`to` is refetched rather than silently reused. */
+  if (WINDOW_CACHE && fs.existsSync(WINDOW_CACHE)) {
+    try {
+      const cached = JSON.parse(fs.readFileSync(WINDOW_CACHE, 'utf8'));
+      if (cached.from === from && cached.to === to && Array.isArray(cached.records)) {
+        console.log(`  · window cache hit: ${cached.records.length} records for ${from} → ${to} (${WINDOW_CACHE})`);
+        return { from, to, records: cached.records, total: cached.total };
+      }
+      console.log(`  · window cache is for ${cached.from} → ${cached.to}, not ${from} → ${to}: refetching`);
+    } catch { /* an unreadable cache is a miss, never an error */ }
+  }
   const records = [];
   let total = null;
   for (let start = 0, p = 0; p < CENSUS_PAGES; p++) {
@@ -1702,6 +1804,10 @@ async function fetchWindow(from, to) {
     start += batch.length;
     if (start >= (total || 0) || !batch.length) break;
     await sleep(NVD_PACE);
+  }
+  if (WINDOW_CACHE && records.length) {
+    try { fs.writeFileSync(WINDOW_CACHE, JSON.stringify({ from, to, total, records })); }
+    catch (e) { console.error(`  ⚠ could not write window cache ${WINDOW_CACHE}: ${e.message}`); }
   }
   return { from, to, records, total };
 }
@@ -1884,6 +1990,250 @@ function printFieldCensus(c) {
   console.log('  see whether a value MOVES between publication and analysis — that is the open half.');
 }
 
+/* ── the `changes[]` census (added 2026-10-28) ──
+   Two records taught the rule in twelve hours (consul-k8s at 12:22, Hitachi at 20:34) and both
+   were found by accident, so the shape's *prevalence* was unknown: how many records carry it, who
+   writes it, whether descending order is a Hitachi habit or a CNA-wide idiom, and — the number
+   that matters — how many records a FIRST-ENTRY reader (the parser as it stood before 10-27)
+   would have got wrong. That last one is the only measurement of the fix's own impact.
+
+   It also asks the comparative half: `changes[]` is one of at least three machine-readable
+   spellings of "there are several fix versions". GitHub's CNA writes separate ranges (or the
+   interval syntax `[,2.5.303), [3.0,3.1.9)`); HashiCorp writes one range plus one `changes[]`
+   entry; Hitachi writes one range plus N descending entries. A fourth survives in string fields —
+   Adobe's `lessThanOrEqual "2.4.9, 2.4.8-p5, …"` puts six branch points in one bound — so a comma
+   inside `lessThan`/`lessThanOrEqual` is counted here too. */
+async function changesCensus({ from, to }) {
+  const { records, total } = await fetchWindow(from, to);
+  const verEntries = c => (c.affected || []).flatMap(a => a.affectedData || []).flatMap(x => x.versions || []);
+
+  const rows = records.map(c => {
+    const vs = verEntries(c);
+    const ar = affectedRanges(c);
+    const stats = ar.changeStats;
+    /* Order is a property of ONE entry's list, not of the record: concatenating several carriers
+       mixes two independent lists and reports "mixed" for a record that is descending throughout
+       (measured on the first run — 7 of 18 multi-entry records read `mixed` for exactly that
+       reason). So the ordering is taken from the carrier with the most entries. */
+    const widest = stats.reduce((best, s) => ((s.ats || []).length > ((best?.ats || []).length) ? s : best), null);
+    const ats = widest?.ats || [];
+    const asc = ats.length > 1 && ats.every((x, i) => i === 0 || cmpVer(x, ats[i - 1]) > 0);
+    const desc = ats.length > 1 && ats.every((x, i) => i === 0 || cmpVer(x, ats[i - 1]) < 0);
+    const commaBounds = vs.filter(v => [v.lessThan, v.lessThanOrEqual]
+      .some(b => b != null && String(b).includes(','))).length;
+    /* "Several affected span objects under one product" — the shape GitHub's CNA writes for branch
+       lines. It is NOT the same meaning as `changes[]` (Hitachi puts five spans under one product
+       too, and they are five product versions, not five branches), so the column is named for the
+       shape and the reading is left to the printer. */
+    const multiSpanProducts = (c.affected || []).flatMap(a => a.affectedData || [])
+      .filter(d => (d.versions || []).filter(v => v.status !== 'unaffected').length > 1).length;
+    return {
+      id: c.id, assigner: c.sourceIdentifier || '?', status: c.vulnStatus || '?',
+      hasAffected: (c.affected || []).length > 0, versionEntries: vs.length,
+      hasChangesField: vs.filter(v => Array.isArray(v.changes) && v.changes.length > 0).length,
+      carriers: stats.filter(s => s.kept > 0).length,
+      aboveMaxOnly: stats.length > 0 && stats.every(s => s.kept === 0) && stats.some(s => s.aboveMax > 0),
+      entries: stats.reduce((n, s) => n + s.entries, 0),
+      maxEntries: stats.reduce((n, s) => Math.max(n, s.entries), 0),
+      points: stats.reduce((n, s) => n + s.points, 0),
+      misreadFirst: stats.some(s => s.misreadFirst),
+      misreadLast: stats.some(s => s.misreadLast),
+      boundConfirms: stats.some(s => s.boundConfirms),
+      reinstated: stats.reduce((n, s) => n + s.reinstated, 0),
+      order: ats.length <= 1 ? 'single' : asc ? 'ascending' : desc ? 'descending' : 'mixed',
+      commaBounds, multiSpanProducts,
+      sample: stats.length ? stats.map(s => `${s.raw}: ${(s.ats || []).join(' / ')} → ${s.bound}`).slice(0, 2) : null,
+    };
+  });
+
+  const pct = (n, d) => (d ? ((100 * n) / d).toFixed(1) : '0.0');
+  const withAff = rows.filter(r => r.hasAffected);
+  const carriers = rows.filter(r => r.carriers > 0);
+  const byAssigner = {};
+  for (const r of rows.filter(x => x.hasChangesField > 0)) {
+    const a = (byAssigner[r.assigner] = byAssigner[r.assigner] || { records: 0, inRange: 0, above: 0, multi: 0, first: 0, last: 0, desc: 0 });
+    a.records++;
+    if (r.carriers > 0) a.inRange++;
+    if (r.aboveMaxOnly) a.above++;
+    if (r.maxEntries > 1) a.multi++;
+    if (r.misreadFirst) a.first++;
+    if (r.misreadLast) a.last++;
+    if (r.order === 'descending') a.desc++;
+  }
+  const orderTally = {};
+  for (const r of carriers) orderTally[r.order] = (orderTally[r.order] || 0) + 1;
+  const entryTally = {};
+  for (const r of carriers) entryTally[r.maxEntries] = (entryTally[r.maxEntries] || 0) + 1;
+  return {
+    from, to, totalResults: total, fetched: rows.length,
+    withAffected: withAff.length, carriers: carriers.length,
+    carrierPct: pct(carriers.length, withAff.length),
+    aboveMaxOnly: rows.filter(r => r.aboveMaxOnly).length,
+    multiEntry: carriers.filter(r => r.maxEntries > 1).length,
+    misreadFirst: carriers.filter(r => r.misreadFirst).length,
+    misreadLast: carriers.filter(r => r.misreadLast).length,
+    boundConfirms: carriers.filter(r => r.boundConfirms).length,
+    reinstated: carriers.filter(r => r.reinstated > 0).length,
+    commaBoundRecords: rows.filter(r => r.commaBounds > 0).length,
+    changesFieldRecords: rows.filter(r => r.hasChangesField > 0).length,
+    multiSpanProducts: rows.filter(r => r.multiSpanProducts > 0).length,
+    orderTally, entryTally, byAssigner,
+    rows: rows.filter(r => r.carriers > 0 || r.commaBounds > 0),
+  };
+}
+
+function printChangesCensus(c) {
+  console.log(`affected[].changes[] census — publication window ${c.from} → ${c.to} (UTC)`);
+  console.log(`  NVD reports ${c.totalResults} records; fetched ${c.fetched}`);
+  console.log('');
+  console.log(`  records with affected[]           ${c.withAffected}/${c.fetched}`);
+  console.log(`  …carrying a non-empty changes[]   ${c.changesFieldRecords}`);
+  console.log(`  …whose entries land INSIDE range  ${c.carriers}/${c.withAffected} (${c.carrierPct}% of those with affected[])`);
+  console.log(`  …whose entries sit ABOVE an inclusive max ${c.aboveMaxOnly}` +
+    '   ← a bound confirmation from the far side (Patchstack: `lessThanOrEqual 3.3.12` + `at 3.3.13`)');
+  console.log(`  …with MORE THAN ONE unaffected    ${c.multiEntry}` +
+    (c.multiEntry ? `   ← the shape a single-entry reader gets wrong by construction` : ''));
+  console.log(`  records a FIRST-entry reader would bound differently: ${c.misreadFirst}`);
+  console.log(`  records a LAST-entry reader would bound differently:  ${c.misreadLast}` +
+    '   ← the pre-10-27 parser was a last-entry reader; this is the fix\'s measured impact');
+  console.log(`  records where the FIRST entry EQUALS the stated bound:  ${c.boundConfirms}` +
+    '   ← bound confirmation, not an overshoot (the strict `> 0` filter dropped these)');
+  console.log(`  records with an affected-at entry above the exemption (reinstated): ${c.reinstated}`);
+  console.log('');
+  console.log(`  order of the entries (per record): ${Object.entries(c.orderTally).map(([k, v]) => `${k} ${v}`).join(' · ')}`);
+  console.log(`  unaffected entries in the widest version object: ${Object.entries(c.entryTally).map(([k, v]) => `${k}: ${v}`).join(' · ')}`);
+  console.log('');
+  console.log('  the other spellings of "several fix versions", same window:');
+  console.log(`    comma inside lessThan/lessThanOrEqual   ${c.commaBoundRecords} record(s)   (Adobe-style: six branch points in one string)`);
+  console.log(`    >1 affected span under one product      ${c.multiSpanProducts} record(s)   (branch lines OR disjoint points — same shape, different meaning)`);
+  console.log('');
+  const rows = Object.entries(c.byAssigner).sort((a, b) => b[1].records - a[1].records);
+  console.log('  who writes changes[]  (assigner — carries · in-range · above-max · multi-entry · descending · misreadFirst · misreadLast)');
+  for (const [a, v] of rows.slice(0, 12)) {
+    console.log(`  ${a.padEnd(37).slice(0, 37)} ${String(v.records).padStart(4)} · ${String(v.inRange).padStart(3)} · ${String(v.above).padStart(3)} · ${String(v.multi).padStart(3)} · ${String(v.desc).padStart(3)} · ${String(v.first).padStart(3)} · ${String(v.last).padStart(3)}`);
+  }
+  if (rows.length > 12) console.log(`  …${rows.length - 12} more assigner(s)`);
+  console.log('');
+  for (const r of c.rows.slice(0, 12)) {
+    console.log(`  ${r.id}  [${r.status}] ${r.assigner}  ${r.carriers} carrier(s)  order=${r.order}` +
+      (r.misreadFirst ? '  MISREAD(first)' : '') + (r.misreadLast ? '  MISREAD(last)' : '') +
+      (r.sample ? `\n      ${r.sample.join(' | ')}` : ''));
+  }
+  console.log('');
+  console.log('  A small n here is the finding, not a failure: the shape is rare enough that two records in');
+  console.log('  twelve hours was luck. Re-run on a vendor-batch day — a CNA that files in bulk is where a');
+  console.log('  fix-set spelling either standardises or stays a quirk.');
+}
+
+/* ── the `Received` backlog census (added 2026-10-28) ──
+   The filed question: is the low-CWE `Received` residue a QUEUE artefact (NVD normalises the CVE
+   container into `weaknesses[]` at a processing step, so a raw arrival legitimately has none) or a
+   QUALITY signal (a record nobody can process stalls *because* it is thin)? The week census found
+   830 `Received` records of which 142 (17.1%) carried a CWE, against 65/66 (98.5%) on one fresh
+   day — a contradiction that a single aggregate hides.
+
+   The discriminating measurement is grouping: a queue artefact predicts a smooth distribution
+   across assigners and days (any arrival is equally undigested), a quality signal predicts
+   concentration in a handful of assigners whose records are ALSO thin in description and
+   references. So this prints both, plus the thin-ness columns, and lets the shape answer.
+
+   One property makes the whole table readable: NVD has published NOTHING on a `Received` record,
+   so a CWE it carries is the CNA's own statement — the 17.1% is a census of CNA practice, not of
+   NVD's processing. The `Analyzed` row is the control. */
+async function backlogCensus({ from, to }) {
+  const { records, total } = await fetchWindow(from, to);
+  const rows = records.map(c => {
+    const desc = (c.descriptions || []).find(d => d.lang === 'en')?.value || '';
+    return {
+      id: c.id, status: c.vulnStatus || '?', assigner: c.sourceIdentifier || '?',
+      cwe: (c.weaknesses || []).length > 0,
+      descLen: desc.length,
+      refs: (c.references || []).length,
+      metrics: c.metrics ? Object.keys(c.metrics).length : 0,
+      day: (c.published || '').slice(0, 10),
+    };
+  });
+  const med = xs => {
+    if (!xs.length) return 0;
+    const s = [...xs].sort((a, b) => a - b);
+    return s[Math.floor(s.length / 2)];
+  };
+  const group = (list, keyOf) => {
+    const g = {};
+    for (const r of list) {
+      const k = keyOf(r);
+      const o = (g[k] = g[k] || { n: 0, cwe: 0, refs: [], desc: [], metrics: 0 });
+      o.n++; if (r.cwe) o.cwe++;
+      o.refs.push(r.refs); o.desc.push(r.descLen); o.metrics += r.metrics;
+    }
+    return Object.entries(g).map(([k, o]) => ({
+      key: k, n: o.n, cwe: o.cwe, cwePct: o.n ? (100 * o.cwe) / o.n : 0,
+      medRefs: med(o.refs), medDesc: med(o.desc), medMetrics: o.metrics / o.n,
+    })).sort((a, b) => b.n - a.n);
+  };
+  const byStatus = {};
+  for (const r of rows) (byStatus[r.status] = byStatus[r.status] || []).push(r);
+  const received = rows.filter(r => r.status === 'Received');
+  /* The decisive control for "is the CWE NVD's or the CNA's": a `weaknesses[].source` of
+     `nvd@nist.gov` anywhere in the window. Measured 0 in 3,070 records over 10-21→27, which makes
+     every CWE in the table CNA-supplied — and turns the day-level swing into a composition effect. */
+  const nvdCweSources = records.filter(c => (c.weaknesses || [])
+    .some(w => String(w.source || '').toLowerCase().includes('nist.gov'))).length;
+  return {
+    from, to, totalResults: total, fetched: rows.length, nvdCweSources,
+    status: Object.fromEntries(Object.entries(byStatus).map(([k, list]) => [k, {
+      n: list.length,
+      cwe: list.filter(r => r.cwe).length,
+      medRefs: med(list.map(r => r.refs)),
+      medDesc: med(list.map(r => r.descLen)),
+    }])),
+    receivedAssigners: group(received, r => r.assigner),
+    receivedDays: group(received, r => r.day).sort((a, b) => a.key.localeCompare(b.key)),
+    cweLessAssigners: group(received.filter(r => !r.cwe), r => r.assigner),
+    rows: received.map(r => ({ id: r.id, assigner: r.assigner, cwe: r.cwe, descLen: r.descLen, refs: r.refs, day: r.day })),
+  };
+}
+
+function printBacklogCensus(c) {
+  const pct = (n, d) => (d ? ((100 * n) / d).toFixed(1) : '0.0');
+  console.log(`Received backlog census — publication window ${c.from} → ${c.to} (UTC)`);
+  console.log(`  NVD reports ${c.totalResults} records; fetched ${c.fetched}`);
+  console.log('');
+  console.log('  status              n   carries CWE   median refs   median description');
+  const order = ['Received', 'Awaiting Analysis', 'Undergoing Analysis', 'Deferred', 'Analyzed', 'Modified', 'Rejected'];
+  for (const s of [...order, ...Object.keys(c.status).filter(k => !order.includes(k))]) {
+    const v = c.status[s];
+    if (!v) continue;
+    console.log(`  ${s.padEnd(17)} ${String(v.n).padStart(4)}   ${String(v.cwe).padStart(4)} (${pct(v.cwe, v.n).padStart(5)}%)   ${String(v.medRefs).padStart(11)}   ${String(v.medDesc).padStart(18)}`);
+  }
+  const rec = c.status.Received || { n: 0, cwe: 0 };
+  console.log('');
+  console.log(`  records carrying an nvd@nist.gov CWE source: ${c.nvdCweSources}/${c.fetched}` +
+    (c.nvdCweSources === 0 ? '  ← every CWE in this table is the CNA\'s own statement' : ''));
+  console.log(`  Received carries a CWE on ${rec.cwe}/${rec.n} (${pct(rec.cwe, rec.n)}%), and no record in the window`);
+  console.log('  carries an NVD-sourced one — so this is a census of CNA practice, not of NVD processing.');
+  console.log('');
+  console.log('  Received by publication day  (n · CWE% · median refs · median description)');
+  for (const d of c.receivedDays) {
+    console.log(`    ${d.key}  ${String(d.n).padStart(4)} · ${pct(d.cwe, d.n).padStart(5)}% · ${String(d.medRefs).padStart(3)} · ${String(d.medDesc).padStart(5)}`);
+  }
+  console.log('');
+  console.log('  Received by assigner  (n · CWE% · median refs · median description)  — concentration is the test');
+  for (const a of c.receivedAssigners.slice(0, 15)) {
+    console.log(`    ${a.key.padEnd(37).slice(0, 37)} ${String(a.n).padStart(4)} · ${pct(a.cwe, a.n).padStart(5)}% · ${String(a.medRefs).padStart(3)} · ${String(a.medDesc).padStart(5)}`);
+  }
+  if (c.receivedAssigners.length > 15) console.log(`    …${c.receivedAssigners.length - 15} more assigner(s)`);
+  const top3 = c.receivedAssigners.slice(0, 3).reduce((n, a) => n + a.n, 0);
+  const top3less = c.cweLessAssigners.slice(0, 3).reduce((n, a) => n + a.n, 0);
+  const less = c.receivedAssigners.reduce((n, a) => n + (a.n - a.cwe), 0);
+  console.log('');
+  console.log(`  top 3 assigners hold ${top3}/${rec.n} of Received (${pct(top3, rec.n)}%) and ${top3less}/${less} of the CWE-less ones (${pct(top3less, less)}%)`);
+  console.log('  Read it this way: if the CWE-less records concentrate in a few assigners AND their median');
+  console.log('  description/references are thin, the residue is a property of WHO assigned it (quality);');
+  console.log('  if they spread across assigners at a similar rate, it is the arrival state (queue). Either');
+  console.log('  way the number is CNA practice on the day it was published — re-run, do not quote as a rate.');
+}
+
 /* ── entry ── */
 if (FIELD_CENSUS) {
   const to = CENSUS_TO || new Date(Date.now() - 864e5).toISOString().slice(0, 10);
@@ -1903,12 +2253,29 @@ if (RANGE_CENSUS) {
   process.exit(0);
 }
 
+if (CHANGES_CENSUS || BACKLOG_CENSUS) {
+  const to = CENSUS_TO || new Date(Date.now() - 864e5).toISOString().slice(0, 10);
+  const from = CENSUS_FROM || new Date(Date.parse(`${to}T00:00:00Z`) - 6 * 864e5).toISOString().slice(0, 10);
+  if (CHANGES_CENSUS) {
+    const c = await changesCensus({ from, to });
+    if (JSON_OUT) console.log(JSON.stringify(c, null, 1));
+    else printChangesCensus(c);
+  }
+  if (BACKLOG_CENSUS) {
+    const c = await backlogCensus({ from, to });
+    if (JSON_OUT) console.log(JSON.stringify(c, null, 1));
+    else printBacklogCensus(c);
+  }
+  process.exit(0);
+}
+
 if (!IDS.length && !TRACKERS.length) {
   console.log('nothing to do: pass --ids CVE-…,CVE-… and/or --tracker ZDI-CAN-…' +
     ' [--repo owner/repo | --pypi pkg] [--artifact commit|package|firmware|image]' +
     ' [--fix-ref <commit|pull url|artifact url>] [--debian <srcpkg>] [--range "<expr>"] [--json] [--selftest]' +
     ' [--release-notes <url>[,<url>…]] [--census [--no-github]] [--range-census --from YYYY-MM-DD --to YYYY-MM-DD]' +
-    ' [--field-census <field> --from YYYY-MM-DD --to YYYY-MM-DD]');
+    ' [--field-census <field> --from YYYY-MM-DD --to YYYY-MM-DD]' +
+    ' [--changes-census | --backlog-census --from YYYY-MM-DD --to YYYY-MM-DD [--window-cache <path>]]');
   process.exit(0);
 }
 

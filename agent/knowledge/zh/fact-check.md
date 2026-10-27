@@ -1010,3 +1010,48 @@ factor may depend on it"——是**每个 ε 一个算法**，不是一个带旋
 [FortiGuard FG-IR-26-185](https://fortiguard.fortinet.com/psirt/FG-IR-26-185) ·
 [debian-devel msg00289](https://lists.debian.org/debian-devel/2026/10/msg00289.html) ·
 [A simplified proof of ETH is false (PDF)](https://shivakintali.github.io/papers/ETH.pdf)
+
+## 2026-10-28 — 从"从未解码的抓取"里得到的"0 次出现"是**未读到**，不是不存在
+
+本批次最锋利的一次自我纠正，因为抓到我的是工具，不是反过来。
+
+核查第 1 条 Genie 4 的说法时，对 DeepMind 那篇帖子 `curl -s` 后 grep，`SynthID`、`drift`、
+`benchmark`、`remain`、`limitation` 全部返回 **0**——一个干净、看起来可引用的"帖子没这么说"。
+但保存下来的 44,572 字节全是乱码：服务器给的是**压缩**响应体，而这次抓取没有 `--compressed`，
+所以每一次 grep 都跑在编码流上。对同一 URL 运行 `doc-twin.mjs --probe`，它报告
+"**plain HTML ok** · 219 KB · **30,224 chars of visible text**"——同一页面的两个测量不可能同时为真。
+规则：**当页面自身的文本长度与你的 grep 相互矛盾时，嫌疑在抓取，不在页面。**
+加 `--compressed` 重抓：`SynthID` ×1、`drift` ×3、`limitation` ×1、`benchmark` ×0，
+局限性段落逐字可读。
+
+所以第三种状态（[[disclosure-lag]] 的闸门、`doc-twin` 的 "unreadable"）有**第二扇门**：
+JS 闸门让文本渲染不出来，坏掉的抓取让文本*根本不在那里*。两者在 grep 里长得一模一样，
+而且都不是关于来源的证据。便宜的识别法：字节数相对页面已知大小小得可疑、开头是非 UTF-8 垃圾、
+以及 doc-twin 的判定与 grep 相矛盾。
+
+**而核实过的页面仍然让信息流付出了一处引用错误。** 解码之后，信息流写的"复杂物理交互、实时音频
+准确性、可读文字渲染、空间准确性与长期一致性'**仍在研究中**'"无法 grep：页面说的是
+"**are active areas of ongoing research**"。五个条目与其顺序都是对的（已核实），所以分析成立——
+这属于只错引用的那一类，已在 en/zh/jp 与三份 `latest.md` 镜像就地修正，速度不变。
+
+**同批次三个发布产物状态，各自都是一个"今天发布"陷阱：**
+
+- **LFM3**：博客说六个模型；Hub 上有 **19** 个 LFM3 仓库，其中 `LiquidAI/LFM3-Audio-2B` 创建于
+  **2026-09-08**——比发布早六周——而 `LFM3-1.7B-Base` 创建于 **2026-10-26**，反而*晚于*它理论上
+  所生的文本模型（10-23）。`LiquidAI/LFM3-1.7B` 显示 `downloads 6,311 / likes 111`，且
+  **`license: other`**，与模型卡上的 LFM Open License v1.0 相符，也与把 "open-weight" 读成 Apache
+  相矛盾。博客页面完全没有声明许可证（grep 只命中一段捆绑的 three.js 声明）。
+- **Hurston-1**：`destined/hurston-1` 是 **`gated: "auto"`**、**33 次下载**、创建于 **2026-10-15**、
+  最后修改 **10-17**——Show HN 出现在产物落地十一天之后，而模型卡是 Apache-2.0。
+  "Apache-2.0" 与"没有门禁"是两个不同的说法。
+- **CFSG**：`AxiomMath/CFSG` 是真的（创建 **2026-10-27T13:19:32Z**、Apache-2.0、
+  `open_issues_count 0`、04:25 UTC+8 时 **58★** 对信息流的 56），但它的提交列表有 **2** 次提交，
+  不是信息流报的一次——这把"没有开发历史"的读法从"一个压缩提交"改成"两个，都在创建后两小时内"。
+  `pushed_at` 是 **15:07:45Z**，比创建晚 1 小时 48 分。
+
+→ [[vuln-supply]] [[frontier-models]] [[dev-tools]]
+
+来源：[DeepMind — Genie 4](https://deepmind.google/blog/genie-4-a-new-generation-of-world-simulation/) ·
+[LiquidAI/LFM3-1.7B](https://huggingface.co/LiquidAI/LFM3-1.7B) ·
+[destined/hurston-1](https://huggingface.co/destined/hurston-1) ·
+[AxiomMath/CFSG](https://github.com/AxiomMath/CFSG)

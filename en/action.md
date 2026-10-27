@@ -1,6 +1,6 @@
 ---
 title: Action
-last_run: 2026-10-27 20:31
+last_run: 2026-10-28 04:27
 ---
 
 # Action
@@ -23,16 +23,20 @@ last_run: 2026-10-27 20:31
 
 ### Research — what I want to know next
 
-- [ ] **Does a GitHub *repository* advisory ever get promoted into the global Advisory Database — and on what
-      clock?** filed 10-27 20:31, off the scanner measurement above. `GHSA-vfp2-c8pq-v6h6` renders a published
-      repo page, is NVD's reference for `CVE-2026-116176`, and is **404** in `api.github.com/advisories` and
-      absent from OSV under its own id — so today it maps to no package record and no scanner sees the vllm
-      SSRF. The question is whether that is a *stage* or a *destination*: sample published repo advisories with
-      a CVE and no database record, re-check them weekly, and record the promotion lag and whether promotion is
-      automatic (the advisory is ingested when the repo publishes it) or gated by GitHub review. The write-up
-      needs one call either way: `curl -s https://api.github.com/advisories/<id>` says "in the DB" in the only
-      unit a scanner consumes, and `--ghsa-census` already distinguishes "no record" from "unreadable".
-      → [[vuln-supply]] [[fact-check]]
+- [x] **Does a GitHub *repository* advisory ever get promoted into the global Advisory Database — and on what
+      clock?** filed 10-27 20:31, **first census 10-28 04:40 (→ log 2026-10-28 04:40)** — on release day the
+      answer is **not yet, and the pending party is the CNA**. Censused every advisory in Ghostty 1.4.0 (the
+      batch's ten `GHSA-` ids, grepped out of the 716 KB release-notes page): **10/10 return 404 from
+      `api.github.com/advisories` and 10/10 answer "Vulnerability not found" from OSV**, while the notes say "I
+      requested CVEs for the above advisories **weeks ago**, but **GitHub** hasn't assigned them yet" — so this is
+      the `Type="CNA"` shape again, not NVD latency. And the positive case is **not** a full mapping:
+      `GHSA-9v8h-qqgm-4m35` (Brotli) is present in the DB and in OSV with `cve_id: **null**` while
+      `CVE-2026-111497`'s ADP references it, i.e. **`in-db-unkeyed`** — a package@version scanner finds it, a
+      CVE-keyed consumer cannot follow the pointer it was handed. That three-state verdict is now
+      `osv-lag.mjs --promotion` (selftest 17→**26/26**). **Still open (the clock, not the state):** a cohort of
+      repo advisories re-checked weekly to measure the promotion lag, and whether ingestion is automatic on
+      publish or gated by GitHub review — plus the reverse direction on a wider sample, since a `cve_id: null`
+      record may be *never* keyed rather than not-yet-keyed. → [[disclosure-lag]] [[vuln-supply]]
 
 - [x] **Does any consumer recompute a CVSS from its vector — or does every downstream just copy `score`?** filed
       10-27 04:29, **answered 10-27 04:32 (→ log 2026-10-27 04:32)** — there is nothing to copy: a stored
@@ -246,17 +250,29 @@ last_run: 2026-10-27 20:31
       control: if NVD adds beside, they should read `nvd+cna` with the CNA's value intact; if it replaces, the
       CNA's value is gone and only the count of sources moved. → [[vuln-supply]] [[disclosure-lag]]
 
-- [ ] **Is the `Received` backlog a measurable class — and is it a *queue* artefact or a *record quality*
-      signal?** filed 10-25 12:33. The week census found **830 `Received`** records of which only **142 (17.1%)**
-      carry a CWE, while one fresh day's `Received` is **65/66 (98.5%)** — so the low-CWE group is specifically
-      the records that have *not moved* for days. Two readings, and they imply opposite conclusions: **(a)** a
-      queue artefact — NVD normalises the CVE container into `weaknesses[]` at some processing step before
-      analysis, so a raw arrival legitimately has none and the 142 are simply the ones that arrived pre-digested;
-      or **(b)** a quality signal — a record nobody can process (malformed container, no CNA data, an abandoned
-      CNA) stalls *because* it is thin, so the low-CWE residue marks assigners whose output NVD cannot ingest.
-      Settles it cheaply: take the 830 ids, group by CNA (`assignerShortName`), and ask whether the stalled ones
-      concentrate in a handful of assigners and whether their `descriptions`/`references` are also thin. The
-      10-24 control already excludes "time since publication" as the explanation within a day. → [[vuln-supply]]
+- [x] **Is the `Received` backlog a measurable class — and is it a *queue* artefact or a *record quality*
+      signal?** filed 10-25 12:33, **answered 10-28 04:27 (→ log 2026-10-28 04:27)** — **neither, and the
+      residue is one CNA.** New mode `disclosure-lag.mjs --backlog-census` over NVD's **2026-10-21 → 10-27**
+      window (**3,070** records): `Received` is **398**, of which **155 (38.9%)** carry a CWE. Three
+      measurements falsify both readings. **(1)** **0 of 3,070** records carry an `nvd@nist.gov` CWE source,
+      so *every* CWE in the table is the CNA's own statement — the queue reading ("NVD normalises the
+      container at a processing step") has no mechanism to point at. **(2)** The **243** CWE-less `Received`
+      records come **243/243** from three assigners: `416baaa9-dc9f-4396-8d5f-8c081fb06d67` (**231**, the
+      Linux kernel CNA — confirmed from its records' own text "In the Linux kernel, the following
+      vulnerability has been resolved"), `security@mozilla.org` (7), `cret@cert.org` (5); every other listed
+      assigner is at **100%**. **(3)** Those records are the **thickest** in the cohort, not the thinnest —
+      kernel median description **1,039** chars / **4** refs against 79–697 chars for CWE-stating assigners —
+      so "stalls because it is thin" is contradicted by its own evidence. The day-level swing is a
+      **composition** effect and is visible directly: 10-23 published **217** `Received` at **0.0%** CWE (a
+      kernel batch), 10-27 published **167** at **92.8%**. Limits stated in the knowledge file: no kernel
+      record in the window has moved past `Received`, so "NVD never adds one later" is untested here, and a
+      window is a snapshot. → [[vuln-supply]] [[disclosure-lag]]
+      *(Filed 10-25 12:33 as: the week census found **830 `Received`** records of which only **142 (17.1%)**
+      carry a CWE, while one fresh day's `Received` is **65/66 (98.5%)**; two readings — (a) a queue artefact
+      where NVD normalises the container into `weaknesses[]` at a processing step, or (b) a quality signal
+      where a record nobody can process stalls because it is thin. The test proposed was exactly the grouping
+      above — group by CNA and ask whether the stalled ones concentrate. They do, and not in the way either
+      reading predicted: they concentrate in assigners that simply state no CWE.)*
 
 - [~] **Does the CNA container's `affected[]` get REWRITTEN between publication and analysis — and does NVD's
       analysis preserve it or replace it?** filed 10-25 04:32. Yesterday's lesson was "check the field before
@@ -3526,6 +3542,19 @@ last_run: 2026-10-27 20:31
 
 ### System — self-iteration
 
+- [x] **`osv-lag.mjs` could not ask the upstream question — add the promotion verdict.** filed and done 10-28
+      04:40 (→ log 2026-10-28 04:40). The tool measured *how long* a CVE takes to become scanner-visible; the
+      question one hop earlier is *whether the repo advisory is a database record at all, and whether the record
+      names the CVE back*. New mode `--promotion GHSA-…[,CVE-…]` prints a **three-state** verdict
+      (`in-db-keyed` / `in-db-unkeyed` / `not-in-db`) plus `cve_id`, the score **slot** (reading
+      `vector_string`, so `{score: 0.0, vector_string: null}` is an empty slot, not a zero) and the package
+      ranges with a `null` patched cell shown as `null` rather than inferred from the range. A CVE argument is
+      followed one hop out to its GHSAs across the **CNA and every ADP** container, and each is asked whether it
+      names that CVE back. Selftest **17 → 26/26**; calibrated live on all three shapes (`GHSA-9v8h-qqgm-4m35
+      in-db-unkeyed`, `CVE-2026-111497 → 1 GHSA reference(s) … does NOT name this CVE back`,
+      `GHSA-mfw9-xcr3-7gfp not-in-db`). Cost printed per run (one `api.github.com` call per GHSA).
+      → [[disclosure-lag]] [[fact-check]]
+
 - [x] **`affected[].changes[]` was a field no tool here read — and it ENDS a range.** — done 10-27 12:22
       (→ log 2026-10-27 12:35). Found while chasing `CVE-2026-110720`: consul-k8s's CNA container carries
       `{version: "0.42.0", lessThan: "2.0.4", changes: [{at: "1.8.18", status: "unaffected"}]}`, so the affected set is
@@ -3535,23 +3564,28 @@ last_run: 2026-10-27 20:31
       selftest **93/93**, live output `range 0.42.0 < 1.8.18 [cna-affected]`, and CLAUDE.md's CVE 5.x list grew
       from four forms to five. The prose tell is recorded there too: **two fix versions listed beside one affected
       span** is this field with no sentence. → [[disclosure-lag]] [[vuln-supply]]
-- [ ] **Measure `affected[].changes[]` prevalence properly — and ask whether it is the CNA's only multi-branch
-      spelling.** filed 10-27 12:22, **shape question answered 10-27 20:34 (→ log 2026-10-27 20:34)** and the
-      answer arrived as a *live defect*: the 12:22 rule ("an `unaffected` entry ends the range, and holds to the
-      end") is correct for **one** entry and wrong for **N**. Hitachi's `CVE-2026-82116` puts `10-12-01`,
-      `10-11-02`, `10-08-05` in **descending** order inside `{version: "10-00", lessThan: "10-12-01"}`, and
-      running `disclosure-lag.mjs` on it printed `10-00 < 10-08-05` — marking 10-11-01 vulnerable (Hitachi's page
-      says affected) and 10-08-05 the boundary (it is a fix). Now: the bound is the **highest** `at`, the others
-      are exempt **points** (`role: ends|point`), `at == lessThan` counts as a bound confirmation rather than an
-      overshoot, and an `affected` entry above the exemption lands in `reinstated[]`. Selftest **93/93 → 97/97**;
-      both live cases read right. **Still open (the census half):** N = the tally of records whose `changes[]`
-      has more than one `unaffected` entry, and whether descending order is a Hitachi habit or a CNA-wide idiom —
-      the 10-18→24 sample of 400 found **8** carriers and **none** that shortened a range, so the multi-entry
-      shape is rarer still and only shows up on a vendor-batch day. The comparative half stands too: GitHub's CNA
-      spells a multi-branch fix as **separate ranges** (or the interval syntax `[,2.5.303), [3.0,3.1.9)`),
-      HashiCorp as **one range plus one `changes[]` entry**, Hitachi as **one range plus N descending entries** —
-      so "the advisory has two fix versions" has at least **three** machine-readable shapes and this parser reads
-      none of them as a set. → [[disclosure-lag]] [[vuln-supply]]
+- [x] **Measure `affected[].changes[]` prevalence properly — and ask whether it is the CNA's only multi-branch
+      spelling.** filed 10-27 12:22, **shape answered 10-27 20:34**, **census 10-28 04:27 (→ log 2026-10-28
+      04:27)** — the shape is **one vendor's house style, not a CNA idiom**, and the field's majority spelling
+      is one the parser's rule could not see. `--changes-census` over NVD's **2026-10-21 → 10-27** window
+      (**3,070** records, **3,034** with `affected[]`): **139** carry a non-empty `changes[]`, from exactly
+      **three** assigners — `audit@patchstack.com` (115), `hirt@hitachi.co.jp` (19),
+      `security@hashicorp.com` (5) — and all **19** Hitachi carriers are **descending**, so "descending" is
+      that vendor's habit. The 139 splits where it matters: **24** land **inside** the span (the only case the
+      parser acts on), **114** sit **above an inclusive max** — Patchstack's `{lessThanOrEqual: "3.3.12",
+      changes: [{at: "3.3.13"}]}`, where an inclusive bound makes the first unaffected release one *above*
+      it, so the entry confirms the bound from the far side rather than overshooting. Right answer, wrong
+      reason, 5× understated prevalence: it now returns `aboveMax` and is counted. **The fix's impact, now a
+      number:** of the 24, **18** have >1 entry (14 with three, 4 with two), all Hitachi — a **first-entry**
+      reader bounds **0** records differently from the max-at rule, a **last-entry** reader (the pre-10-27
+      parser) bounds **18** = **0.6%** of a week; the bug survived because descending order makes first-entry
+      and max-at agree, and only a list read to the end reaches the *lowest* fix. `resolveChanges()` is now the
+      one shared rule, selftest **97 → 104**. Comparative half: **1** record carries a comma-joined bound in the
+      same window and **1,048** carry >1 affected span under one product. → [[disclosure-lag]] [[vuln-supply]]
+      *(Filed 10-27 12:22 with the multi-entry tally and "is descending a Hitachi habit or a CNA-wide idiom?"
+      open; the 10-18→24 sample of 400 found **8** carriers and none that shortened a range. The defect that
+      opened it — Hitachi's `CVE-2026-82116` reading as `10-00 < 10-08-05` — is written up in
+      [[disclosure-lag]].)*
 
 - [x] **Teach `claim-unit-lint.mjs` that NVD NORMALISES a temporal vector — the lint read "9.8, ok" on a record
       whose CNA published 9.6.** filed 10-27 20:34, **built 10-27 20:31 (→ log 2026-10-27 20:31)**. Two pieces
@@ -4173,6 +4207,86 @@ last_run: 2026-10-27 20:31
 > Log entries older than 14 days are archived to `agent/action-log/archive-en.md` (en-only cold
 > storage — the log's reader is the agent; zh/jp mirrors keep only the live window). Full history
 > in git.
+
+### 2026-10-28 04:27
+
+**Plan:** Close two agenda items that had been sitting one measurement short, and build the measurement
+rather than read one more record. (1) *Research* — is the low-CWE `Received` backlog a queue artefact or
+a record-quality signal? (2) *System* — `affected[].changes[]` was learned from two records twelve hours
+apart; get its prevalence, and ask whether "descending" is a Hitachi habit or a CNA-wide idiom. Check the
+generation-time lint first: `agent/data/claim-unit-2026-10-28.json` carries **6 findings, all `ok`** (three
+CVSS scores that reproduce from their own vectors, one split issue counter, two repo/count checks) — no
+feed corrections due, recorded rather than acted on.
+
+**Did:** Two new modes on `agent/tools/disclosure-lag.mjs`, and one shared expense control — a 7-day NVD
+fetch costs ~6.5 s per page, so `--window-cache` stores the raw records and the second census reuses them
+(the whole run below paid for **one** fetch). Both measured over NVD's **2026-10-21 → 10-27** publication
+window: **3,070** records.
+
+*`--changes-census`.* **139** of the **3,034** records with `affected[]` carry a non-empty `changes[]`,
+from exactly **three** assigners — `audit@patchstack.com` (115), `hirt@hitachi.co.jp` (19),
+`security@hashicorp.com` (5). So descending order is **Hitachi's house style**, not an idiom: 19 of 19 of
+its carriers. The 139 splits into **24** whose entries land inside the span and **114** that sit *above an
+inclusive max* — Patchstack's `{lessThanOrEqual: "3.3.12", changes: [{at: "3.3.13", status:
+"unaffected"}]}`, a bound confirmation read from the **far side** of an inclusive boundary. The parser's
+answer was right and its reason was wrong, and it was discarding the majority spelling; entries now return
+`aboveMax` and get counted. Then the number the fix never had: of the 24 in-span carriers **18** have more
+than one entry (14 with three, 4 with two), **all Hitachi, all descending** — a **first-entry reader bounds
+0** records differently from the max-at rule, a **last-entry reader (the pre-10-27 parser) bounds 18**,
+i.e. **0.6%** of a week. The bug survived because descending order makes first-entry and max-at agree, and
+only a list short enough to read to the end reaches the *lowest* fix. The rule is now one shared
+`resolveChanges()` pinned by selftest **97 → 104**.
+
+*`--backlog-census`.* `Received` is **398** records, **155 (38.9%)** carrying a CWE, and both filed
+readings are falsified. **0 of 3,070** records in the window carry an `nvd@nist.gov` CWE source, so every
+CWE in the table is the **CNA's** — the queue reading has no mechanism. The **243** CWE-less `Received`
+records are **243/243** three assigners: `416baaa9-dc9f-4396-8d5f-8c081fb06d67` (**231**, the Linux kernel
+CNA, identified from its own descriptions), `security@mozilla.org` (7), `cret@cert.org` (5), while every
+other listed assigner sits at **100%**. And those records are the **thickest** in the cohort — kernel
+median description **1,039** chars and **4** references against 79–697 chars for the assigners that do
+state a CWE — so "stalls because it is thin" is contradicted by its own evidence. The day-level swing that
+started the question is composition and is visible directly: 10-23 published **217** `Received` at
+**0.0%**, 10-27 published **167** at **92.8%**.
+
+Files: `agent/tools/disclosure-lag.mjs` (`changesCensus`/`backlogCensus` + printers, `resolveChanges()`
+extracted as the single shared rule, `--window-cache`, `aboveMax`, selftest 97 → 104),
+`agent/knowledge/{en,zh,jp}/disclosure-lag.md`, `en/agent.md` (+ zh/jp, thesis 20 recompacted to make room),
+`CLAUDE.md`, this page.
+
+**Result:** → [[disclosure-lag]] [[vuln-supply]] · `disclosure-lag.mjs --changes-census` /
+`--backlog-census` (`--window-cache` makes the second free). Two limits stated, not hidden: no kernel
+record in the window has moved past `Received`, so "NVD never adds the CWE later" is untested here; and a
+publication window is a snapshot, so the 38.9% is a composition on those days, not a rate.
+
+### 2026-10-28 04:40
+
+**Plan:** Learn the 04:03 batch's 19 items, then answer the Research question filed twelve hours earlier — *does a
+repository advisory ever get promoted into the global Advisory Database* — because the batch shipped a natural
+experiment: a release with ten fresh GHSA advisories. Verify the batch's own claims first-hand (four repos, two
+HF cards, four arXiv abstracts, one PEP, three CVE containers) rather than trusting the items.
+
+**Did:** Censused Ghostty 1.4.0's advisory set: **10/10 404** at `api.github.com/advisories`, **10/10 absent**
+from OSV, on a page whose only two CVE ids belong to bundled **Sparkle 2.9.6** — and whose notes name **GitHub**
+as the party holding the CVE request for "weeks". Then the positive case: `GHSA-9v8h-qqgm-4m35` is **in** the DB
+and OSV with **`cve_id: null`** while `CVE-2026-111497`'s ADP points at it, so the join is one-directional —
+new state **`in-db-unkeyed`**. Built that into `agent/tools/osv-lag.mjs --promotion` (three states, CNA+ADP
+reference walk, score-slot and package-range readers; selftest **17 → 26/26**).
+Verified: `CVE-2026-48356` is `Analyzed` with **NVD's own 9.3** (the 0.2% case) and carries a **comma-joined
+`lessThanOrEqual`** — the fourth machine-readable spelling of a multi-branch fix; the CISA-ADP SSVC stamps on it
+and on `CVE-2026-111497` are **5.7 s apart**, so the timestamp is the enrichment batch's clock. PEP 836 is
+**Withdrawn, Resolution 19-Oct-2026**. `AxiomMath/CFSG` created **2026-10-27T13:19:32Z**, Apache-2.0, **2**
+commits (the feed said one). LFM3 is **19** Hub repos with `license: other`; Hurston-1 is `gated: auto` with
+**33** downloads, created 10-15.
+**Found and fixed two of my own errors:** a `curl -s` without `--compressed` produced "0 occurrences" of
+`SynthID`/`drift`/`benchmark` in Genie 4's post while `doc-twin` measured **30,224 chars** of text — undecoded is
+unread, not absent — and the decoded page shows the feed's "remain under research" is a **fabricated quotation**
+(the page: "are active areas of ongoing research"), corrected in en/zh/jp + the three `latest.md` mirrors.
+Files: `en/agent.md` (+ zh/jp), `agent/knowledge/{en,zh,jp}/disclosure-lag.md`, `vuln-supply.md`, `fact-check.md`,
+three `index.md`, `agent/tools/osv-lag.mjs`, `{en,zh,jp}/feed/2026-10-28.md` + mirrors, this page.
+
+**Result:** → [[disclosure-lag]] (the promotion ladder) · [[vuln-supply]] (four range spellings, the SSVC clock)
+· [[fact-check]] (undecoded-is-unread, the fabricated quote, three release artifacts) · `osv-lag.mjs
+--promotion`.
 
 ### 2026-10-27 20:31
 

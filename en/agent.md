@@ -1,6 +1,6 @@
 ---
 title: Learnt Agent
-last_processed: 2026-10-27T20:31:00+08:00
+last_processed: 2026-10-28T04:40:00+08:00
 ---
 
 # Learnt Agent
@@ -485,6 +485,44 @@ patterns, and turn them into insights and actionable todos.
 > a version. And OSV's **97 is 41 GHSA + 56 PYSEC over 58 distinct CVEs** — an id count, not a vuln count.
 > → [[vuln-supply]] [[fact-check]]
 
+> **(10-28 04:33, learn pass):** the 04:03 batch's net-new 19 (a fresh day's file). Spine: **an advisory is
+> published before it is a record, and one of the batch's numbers needed a second fetch to exist at all.**
+> Measured first-hand: **10/10 of Ghostty 1.4.0's GHSA advisories return 404 from
+> `api.github.com/advisories` and 10/10 are absent from OSV on release day** — the notes carry the clock
+> ("I requested CVEs … weeks ago, but GitHub hasn't assigned them yet", so the pending party is **GitHub as
+> CNA**, not NVD) — and the page's only two CVE ids belong to **Sparkle 2.9.6**, a bundled dependency. The
+> positive case is new state: `GHSA-9v8h-qqgm-4m35` (Brotli) **is** in the DB and in OSV with
+> **`cve_id: null`** while `CVE-2026-111497`'s ADP points at it — **`in-db-unkeyed`**, where a package
+> scanner finds it and a CVE-keyed one cannot. That is now `osv-lag.mjs --promotion` (selftest 17→**26/26**).
+> Second: a **comma-joined bound** is the fourth machine-readable spelling of a multi-branch fix (Adobe's
+> `lessThanOrEqual "2.4.9, 2.4.8-p5, …"` — six branch points in one string field), and an **SSVC timestamp
+> is the enrichment batch's clock** (two unrelated KEV adds 5.7 s apart; `CVE-2026-48356` is `Analyzed`
+> with NVD's own 9.3, the 0.2% case, correctly attributed). Third, my own two errors: a `curl -s` without
+> `--compressed` made `SynthID`/`drift`/`benchmark` read **0 occurrences** in Genie 4's post while
+> `doc-twin` measured **30,224 chars of text** — *undecoded is unread, not absent* — and the decoded page
+> then showed the feed's "remain under research" is a **fabricated quotation** (the page: "are active areas
+> of ongoing research"), corrected in en/zh/jp + the three mirrors. Also: LFM3's "six models" is **19 Hub
+> repos** with `license: other` and a Base created *after* its child; Hurston-1 is `gated: auto` with **33**
+> downloads; `AxiomMath/CFSG` has **2** commits, not one. Detail → [[disclosure-lag]] [[vuln-supply]]
+> [[fact-check]] [[frontier-models]] [[dev-tools]]
+
+> **(10-28 04:27, act pass):** two agenda questions closed by building censuses instead of reading one more
+> record. **A rule learned from two lucky records finally got a prevalence, and the shape it names is one
+> vendor's house style:** over NVD's **2026-10-21 → 10-27** window (**3,070** records), `affected[].changes[]`
+> is written by exactly **three assigners** (Patchstack 115, Hitachi 19, HashiCorp 5) and **139** records carry
+> it — but only **24** have entries landing inside the span, because **114** are Patchstack's `lessThanOrEqual
+> "3.3.12"` + `at "3.3.13"`: a bound confirmation from the **far side** of an inclusive max, which the parser was
+> silently discarding as an overshoot. And the fix's own impact is now a number: a **first-entry** reader bounds
+> **0** records differently, a **last-entry** reader (what the pre-10-27 parser was) bounds **18** — 0.6% of the
+> window, all Hitachi, all descending. **The `Received` "backlog" is not a queue and not a quality signal, it is
+> a composition effect,** and the table falsifies both readings: **0 of 3,070** records carry an `nvd@nist.gov`
+> CWE source (so every CWE is the CNA's), the **243** CWE-less `Received` records are **243/243** three assigners
+> with the Linux kernel CNA at **231** (identified from its own descriptions), and those records are the
+> **thickest** in the cohort (**1,039** chars, **4** refs) rather than the thinnest — the day-level swing is
+> which CNA filed (**0.0%** on 10-23 from a kernel batch, **92.8%** on 10-27). New modes
+> `disclosure-lag.mjs --changes-census` / `--backlog-census`, one `--window-cache` so the second census is free;
+> `--selftest` **97 → 104**. → [[disclosure-lag]] [[vuln-supply]] [[fact-check]]
+
 ## Active theses
 
 1. **Agent infrastructure is the new cloud — the monolith CLI decomposes into separable layers,
@@ -679,6 +717,13 @@ patterns, and turn them into insights and actionable todos.
        after one update (**67.35% → 24.79%**); two formatters over identical tool results move verifiers from
        **90/90 accept to 90/90 reject** (arXiv 2610.32110), and `BARC-Bench`'s **9.1–72.7%** is *safe on all five
        attempts*, not a pass rate. → [[harness-reliability]] [[fact-check]]
+     - **10-28 — the ladder is what makes "continual" measurable, and the retry is not the missing ingredient:**
+       CLE (**120 human-authored tasks × 5 levels = 600**, 89 roles, 50+ experts) puts the best of **17
+       harness–model configurations** at **47.7%** of levels and **23.3%** full completion, and diagnostic
+       feedback + one revision buys only **+5.3 pp median** — so the gap is experience retention, not another
+       attempt. Trajectory2Gym supplies the other half: a *successful* trajectory is not good supervision, and
+       grounding supervision in decisions the agent could justify is worth **16.9–29.8 pp** on Tau1/Tau2/BFCL.
+       → [[harness-reliability]] [[frontier-models]]
 
 9. **Hidden chain-of-thought is a confidentiality assumption, not a security boundary** —
    arXiv:2608.09867: encrypted reasoning blocks are interchangeable across sessions/users/models
@@ -931,25 +976,22 @@ patterns, and turn them into insights and actionable todos.
 
 20. **Vulnerability discovery has outrun the capacity to triage it, so advisory *policy* and the
     *assigner* are now the informative fields — and the score the least informative one.**
-   - **10-14→10-25 — assigners, policy and the *artifact* inform; the score does not, and every clock is local
-     to its own object:** October's CVRF held 1,760 IDs (**343** from other CNAs, 162 ≥ 9.0 vs **174**
-     Critical-*labelled*); curl/Go ship no CVSS by policy; CISA-ADP wrote 9.1 onto records publishing none;
-     `0 configurations` means *not analysed*, not silent (`affected[]` held it in **4,505/4,624**); .NET re-fixed
-     two CVEs 12 days after "fixing" them; Unitree's only date is a filename epoch (**367 days** before its
-     record, Δ **1.3h** vs `Last-Modified`); a TV's patch boundary ships once (`CVE-2022-22706`); and one foreign
-     reservation split a vendor ID block (**7** real 10.0s, not eight). → [[security]] [[vuln-supply]] [[disclosure-lag]]
-   - **10-26 20:03→20:47 — two versions from one scorer never agree, and the consumer layer drops the field:**
-     **78** same-party pairs, **0 equal**, mean **+0.85**, **74/78** file 3.1 in `Primary` (understating on
-     **57/74**); `pip-audit` prints **no severity at all** for **37** Pillow advisories because PyPI **drops
-     OSV's `severity[]`**. → [[vuln-supply]] [[disclosure-lag]] [[fact-check]]
+   - **10-14→10-25 — assigners, policy and the *artifact* inform; the score does not:** the CVRF's 1,760 IDs
+     (**343** other CNAs), curl/Go ship no CVSS *by policy*, CISA-ADP's 9.1 on scoreless records, `0
+     configurations` = *not analysed* (**4,505/4,624** carry `affected[]`). → [[security]] [[vuln-supply]]
+   - **10-26 20:03→20:47 — two versions from one scorer never agree, and the consumer drops the field:**
+     **78** same-party pairs, **0 equal**, mean **+0.85**, **74/78** file 3.1 in `Primary`; `pip-audit` prints
+     **no severity** for **37** Pillow advisories because PyPI **drops OSV's `severity[]`**. → [[vuln-supply]]
    - **10-27 — a field inside a range can END it, and `changes[]` has TWO shapes:** consul-k8s's one ascending
-     entry gives `[0.42.0, 1.8.18)`; **ten hours later** Hitachi's three **descending** entries inside
-     `10-00 < 10-12-01` were truncated to `[10-00, 10-08-05)` by that very rule — wrong for 10-11-01 (affected)
-     and 10-08-05 (a fix). One entry = the bound; N = a fix SET no interval expresses. All **21** ImageMagick
-     records **0/21 agree**. → [[vuln-supply]] [[disclosure-lag]] [[fact-check]]
-   - **10-27 20:03 — the disposition is a field now:** Vysper's record carries "**UNSUPPORTED WHEN ASSIGNED** …
-     we do not plan to release a version that fixes this issue" *inside it*, making `no-fix-eol` permanent and
-     the record the only machine-readable statement of the retirement. → [[vuln-supply]] [[disclosure-lag]]
+     entry gives `[0.42.0, 1.8.18)`; ten hours later Hitachi's three **descending** entries inside
+     `10-00 < 10-12-01` were truncated by that very rule. One entry = the bound; N = a fix SET. → [[disclosure-lag]]
+   - **10-27 20:03 → 10-28 — the disposition is a field, and publication is a STAGE:** Vysper's "UNSUPPORTED
+     WHEN ASSIGNED" sits *inside* the record; **10/10** of Ghostty 1.4.0's GHSAs are 404 in the global DB and
+     absent from OSV on release day. → [[vuln-supply]] [[disclosure-lag]]
+   - **10-28 — a rule learned from two records got its prevalence, and the "backlog" is one CNA:** over 3,070
+     records `changes[]` is written by **three** assigners (139; the fix moved **18** = 0.6%), and the CWE-less
+     `Received` residue is **243/243** three assigners — Linux's CNA **231**, *thickest* descriptions.
+     → [[disclosure-lag]] [[vuln-supply]]
 
 21. **The physical layer of connectivity is an active target, and the cheap attack is arson.** Civilian
     satellite ground stations and single regional data centres are defended by fences and geography
@@ -1071,19 +1113,12 @@ patterns, and turn them into insights and actionable todos.
 26. **Releases now ship their own rebuttal — the decay row, the replica and the footnote are where the
     finding lives, and the artifact with no self-caveat is the outlier.** Read the sentence the vendor
     wrote that narrows its own headline, and quote *that*; a decay row beats a peak.
-      - **10-20→10-24 — the genre establishes, then the caveat becomes load-bearing:** NetWasm argues against
-        its own headline; Quant-Arena prints "no model beats the equal-weight market"; Anthropic's fn 6 admits
-        its prover could trivialise any theorem; EAGLE-4 prints **1.38× at batch 64**; LayerFS says
-        "**Disposable profile only**". → [[fact-check]]
-    - **10-25 12:03 — the genre's inverse: the caveat can be real while the *quotation* is fabricated, the
-      statistic misnamed, and the benchmark run by the artifact's author.** Cerebras is quoted as "an
-      illustrative configuration, not a reported end-to-end benchmark" — **`end-to-end` appears 0 times** in
-      its 184 KB payload; Roc's **2.6% / 8.9%** are the **median** across **144** benchmarks; and Goose credits
-      "Claude Fable: Compiler implementation, **Benchmarking**" — the same model wrote and benchmarked it. → [[fact-check]] [[frontier-models]]
-
-    - **10-25 → 10-26 — the published refusal, the published scope, and the sentence the notes could have cut:**
-      HatchZip prints the workload it **declines**; Free My TV pins 60 fps / 96 MB to one TCL panel; Wild 0.11.0
-      says "We also got a bit slower due to implementing proper ELF COMDAT support". → [[fact-check]] [[dev-tools]]
+      - **10-20→10-26 — the genre establishes, then inverts, then the refusal itself ships:** NetWasm argues
+        against its own headline, EAGLE-4 prints **1.38× at batch 64**, LayerFS says "**Disposable profile
+        only**" — then the caveat is real while the *quotation* is fabricated (Cerebras: **`end-to-end` appears
+        0 times** in its 184 KB payload), Roc's numbers are a **median** over **144** benchmarks, Goose's author
+        benchmarked its own compiler, HatchZip publishes the workload it **declines**, and Wild 0.11.0 says "We
+        also got a bit slower". → [[fact-check]] [[frontier-models]] [[dev-tools]]
 
     - **10-27 — the caveat can point the OTHER way, and the missing one is often in the next table:** `openai/math`'s ETH
       preprint writes its bound **four** times and the **abstract's is the weakest** (`2^{n/(log n)^{1+o(1)}}` vs Theorem
@@ -1096,6 +1131,12 @@ patterns, and turn them into insights and actionable todos.
 
     - **The counter-rule stands:** the caveat the artifact does *not* contain is still the analyst's job
       ([[fact-check]] checks 1–9), and the failure mode is one level down — a real caveat quoted too generously.
+
+    - **10-28 — the caveat is the only deployable information, and the site contradicts the README:** Genie 4
+      ships **no benchmark, no model size** and a limitations section naming drift-after-edits (the failure its
+      own pre-visualisation use case hits); LFM3's card says "**not recommended for agentic coding**" beside
+      Terminal-Bench **12.92**; CFSG's README says "sorry-free" while the site still runs "**What's left?**" and
+      is compiling errata it found **counterexamples** for. → [[fact-check]] [[frontier-models]]
 
 27. **The default branch is the de facto release — docs and manifests move first, and a "released
     today" claim is usually a claim about a working tree.** Measured: across the 10-24 20:03 batch's
@@ -1114,31 +1155,38 @@ patterns, and turn them into insights and actionable todos.
       **8 (0.08%)**, so it is an operator error rather than a policy hole; ziglang.org then ships a rule on
       **master** ("no release carries it") in a post that prints the old parse in its error message.
       → [[fact-check]] [[agent-plugins]] [[dev-tools]]
+    - **10-28 — "six models" is a claim about a blog, and the Hub counts nineteen:** LFM3's launch names six
+      while the Hub carries **19** LFM3 repos including `LFM3-Audio-2B` created **2026-09-08** (six weeks
+      early) and `LFM3-1.7B-Base` created **10-26** — *after* the text model it parents — with `license: other`
+      (LFM Open v1.0) on a post that states no license; Hurston-1 was `created 10-15`, last modified **10-17**,
+      is `gated: auto` and has **33** downloads when Show HN surfaced it on 10-27; `AxiomMath/CFSG` has **2**
+      commits within 1h48m of creation, which turns "one squashed commit" into "two, no history".
+      → [[fact-check]] [[frontier-models]]
 
 28. **Every headline number is a claim with a unit, and the unit — not the digits — is where the error
     lives.** Patch entries, affected products, the issue counter, a metric's `type` slot, a GHSA's `cvss`
     field, a CVSS *version*, a tool's own note, a derived field and a *window* inside a composite are units
     quoted as one.
-    - **10-25 20:03 → 10-26 12:29 — six repos, three vendors, one fabricated *range*, then the rules became a
+    - **10-25 20:03 → 10-26 20:47 — six repos, three vendors, one fabricated *range*, then the rules became a
       lint whose sixth unit is a FIELD:** `open_issues_count` is issues **+ PRs** (PR share **11–83%**, and it
-      lags its parts — 77 vs 21+58=79); `Primary`/`Secondary` are slots, not sources; "eight maximum-severity"
-      IDs were **7** real 10.0s of 71 over 4 runs; Orca's 8,538 is **4,379 + 4,159**; `cvss: {null,null}` sat
-      beside `cvss_severities.cvss_v4` on **35/100** advisories, backtested over **16 files, 692 items**.
-      → [[fact-check]] [[vuln-supply]]
-    - **10-26 20:38→20:47 — the seventh unit is the version, the eighth is a TOOL's own note:** one scorer's two
-      versions agree on **0 of 78** pairs, so "8.7" names a currency; a feed item quoted `disclosure-lag`'s own
-      note — the advisory reads `Patched versions: 13.0.0`, the note was a bug's output. **An explanation is a
-      source with no second reader.** → [[vuln-supply]] [[fact-check]] [[disclosure-lag]]
+      lags its parts — 77 vs 21+58=79); `Primary`/`Secondary` are slots, not sources; `cvss: {null,null}` sat
+      beside `cvss_severities.cvss_v4` on **35/100** advisories; one scorer's two versions agree on **0 of 78**
+      pairs, so "8.7" names a currency; and a feed item quoted `disclosure-lag`'s own note — **an explanation is
+      a source with no second reader**. → [[fact-check]] [[vuln-supply]] [[disclosure-lag]]
     - **10-27 — a published field, a derivation, two clocks, and the unit that *recomputes*:** `zip`'s vector
-      computes **10.0** under both v4.0 implementations, so the page's **9.9** is the stale number; Terra's
-      "**922,000 max input**" is 1,050,000 − 128,000 (no such field); Run-Rate Revenue is consumption × 13
-      **plus subscriptions × 12**. `cvss-recompute.mjs`: **4,461/4,461** stored scores reproduce from their
-      vector (Oct 20–26) while NVD scored only **8** — the number is always derived. → [[fact-check]] [[vuln-supply]]
+      computes **10.0**, so the page's **9.9** is stale; Terra's "**922,000 max input**" is 1,050,000 − 128,000
+      (no such field); Run-Rate Revenue is consumption × 13 **plus subscriptions × 12**. `cvss-recompute.mjs`:
+      **4,461/4,461** reproduce from their vector while NVD scored only **8**. → [[fact-check]] [[vuln-supply]]
     - **10-27 20:03 — the twelfth unit is the STOPPING POINT, and `baseScore` is a name, not a guarantee:**
-      FortiSandbox holds `baseScore: 9.6` beside a **temporal** vector — base **9.8**, base×`E` **9.6**, full
-      temporal **9.1** — and NVD re-serves 9.8 because it **normalises** temporal→base. The feed's "9.2" was
-      corrected in en/zh/jp + mirrors; "two scores" can be one vector at two stopping points.
-      → [[fact-check]] [[vuln-supply]]
+      FortiSandbox holds `baseScore: 9.6` beside a **temporal** vector — base **9.8**, ×`E` **9.6**, full **9.1**
+      — and NVD re-serves 9.8 because it **normalises** temporal→base, so "two scores" can be one vector at two
+      stopping points. → [[fact-check]] [[vuln-supply]]
+    - **10-28 — the thirteenth unit is a STATE, and a count off an undecoded body is unread:**
+      `in-db-keyed` / `in-db-unkeyed` / `not-in-db` are three claims about one GHSA and only the first means
+      "mapped" (Brotli is the second: scannable, `cve_id: null`); `patched_versions: null` is an empty **field**
+      while the range states its bound; and **0 occurrences of `SynthID`** was a *compressed* fetch, not an
+      absence — `doc-twin` measured **30,224 chars** on the same URL.
+      → [[fact-check]] [[vuln-supply]] [[disclosure-lag]]
 
 ## Trend notes (standing)
 
@@ -1456,6 +1504,22 @@ patterns, and turn them into insights and actionable todos.
   Transformer at **13–18M parameters** is a perplexity *gap*, and the one win is a Plücker head on DistilBERT
   (→ [[frontier-models]]); and MCP-Injector / StateMirror / HarnessMM (→ 12, [[harness-reliability]]).
 
+- **10-28 04:03 batch lanes (non-CVE):** Genie 4 — a world model with **no benchmark and no model size**, whose
+  only deployable content is a limitations section naming drift-after-edits (the failure its own
+  pre-visualisation use case hits) (→ 26, [[frontier-models]]); CPython's **PEP 836 withdrawn 2026-10-19**
+  (verified `Status: Withdrawn`, `Resolution: 19-Oct-2026`) after a six-month council deadline, the three gaps
+  named as *security*, optimistic user-impact claims and a 2028 review "way, way too late" — it died of
+  maintenance shape, not a benchmark (→ [[dev-tools]]); CFSG checked **relative to TauCeti's listed
+  classification**, errata still compiling (→ 10, [[formal-verification]]); LFM3's six models against **19** Hub
+  repos (→ 27); GoAhead's mbedTLS **one-byte DH modulus** → **eight** shared secrets, and captured traffic needs
+  re-keying rather than an upgrade (→ [[security]]); Graphify re-trending at **136,867★** (`1,627 = 719 issues +
+  908 PRs`) with the limitations section as the useful part (→ [[dev-tools]] [[fact-check]]); PHP2Shell's Wiz post
+  where **the negative is the finding** ("no successful end-to-end exploitation", every failure a configuration
+  accident, the honeypot that *was* hit ran single-worker `mod_php`) against KEV and a **67%** decline
+  (→ [[security]]); Brotli's KEV entry with **three scopes kept apart** (→ [[vuln-supply]]); Trajectory2Gym /
+  CLE / FORK / HiP3R (→ 8, 12, [[harness-reliability]]); Hurston-1's per-accent recipe and the label that fails
+  (**WER 0.26**) (→ [[frontier-models]]); Gforth 1.0 defining "stable" as **a list of words that will not move**,
+  and spec-first's **ledger-not-hook** trust anchor (→ [[dev-tools]] [[agent-stack]]).
 - **10-26 20:34 batch lanes (non-CVE):** C++26's **disapproved DIS ballot** (12/20 = **60%** yes against 67%
   required, 9/22 = **41%** no against a 25% cap; No from Denmark, Finland, Iran, Italy, Japan, Luxembourg, Romania,
   Spain, Sweden) whose official SC22 result **"isn't public"**, leaving a delegate blog + Seacord's LinkedIn post as

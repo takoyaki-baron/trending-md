@@ -44,6 +44,9 @@
  *                                                      # the scanner's own question: does THIS
  *                                                      # package@version resolve to THIS CVE
  *   node osv-lag.mjs --ids … --json
+ *   node osv-lag.mjs --promotion GHSA-…[,GHSA-…,CVE-…]   # did the repo advisory become a DB record,
+ *                                                      # and does the record name the CVE back?
+ *                                                      # (3 states: in-db-keyed / in-db-unkeyed / not-in-db)
  *   node osv-lag.mjs --selftest
  *
  * Cost: api.osv.dev is unmetered for this volume; NVD is 5 req/30s unauthenticated (NVD_API_KEY →
@@ -170,6 +173,124 @@ function ghsasFromRefs(refs) {
     .filter(Boolean))];
 }
 
+/* ── the promotion question (--promotion) ───────────────────────────────────────────────────────────
+ *
+ * `osv-lag --ids` asks "how long until a scanner can see this CVE". The other question is upstream of
+ * it: **does a repository advisory ever become a database record at all, and is the join key there
+ * when it does?** Two artifacts share the GHSA id and they are not the same thing:
+ *
+ *   repo advisory   https://github.com/<owner>/<repo>/security/advisories/GHSA-… — published by the
+ *                   maintainer, rendered as a page, and invisible to every scanner
+ *   database record https://api.github.com/advisories/GHSA-… → also ingested into OSV
+ *
+ * MEASURED 2026-10-28 on one release: Ghostty 1.4.0 shipped **ten** GHSA advisories with the notes
+ * saying "I requested CVEs for the above advisories weeks ago, but GitHub hasn't assigned them yet" —
+ * **10/10 return 404 from `api.github.com/advisories` and 10/10 are absent from OSV** on day one. So
+ * publication is a *stage*, not a destination, and release day is not the day a scanner can see it.
+ *
+ * And the positive case is not "fully mapped" either. `GHSA-9v8h-qqgm-4m35` (Brotli, published
+ * 2026-10-22T15:32:49Z) IS a database record — but its **`cve_id` is null** while CVE-2026-111497's
+ * own record names it in an ADP reference. So the link exists in one direction only, and:
+ *   · a scanner querying `PyPI/brotli@1.2.0` finds it (package range `>= 1.0.3, < 1.2.1`)
+ *   · a scanner keyed on the CVE cannot follow it, and neither can `--ids CVE-…` if it stops at aliases
+ * That is why the verdict below has THREE values, not two: `in-db-keyed` / `in-db-unkeyed` / `not-in-db`.
+ *
+ * Two more traps this mode prints rather than assumes: **`patched_versions` can be `null` while the
+ * vulnerable range states its own bound** (Brotli's pip entry: `>= 1.0.3, < 1.2.1`, patched `None`), and
+ * the legacy `cvss` field is null on records that carry `cvss_severities.cvss_v4` — read `vector_string`,
+ * never the score, to tell an empty slot from a real 0.0.
+ */
+const GHSA_API = 'https://api.github.com/advisories';
+const CVE_API = 'https://cveawg.mitre.org/api/cve';
+
+/** The verdict. `cve_id` is the join key a CVE-keyed consumer needs; presence in the DB is not it. */
+function promotionState(dbRecord, osvRec) {
+  const inOsv = !!(osvRec && !osvRec.notFound);
+  if (!dbRecord) return inOsv ? 'osv-only' : 'not-in-db';
+  return dbRecord.cve_id ? 'in-db-keyed' : 'in-db-unkeyed';
+}
+
+/** Which advisory slots carry a score — by `vector_string`, because `{score: 0.0, vector_string: null}`
+ *  is an empty slot and a genuine 0.0 carries a vector. */
+function advisoryScores(rec) {
+  const out = [];
+  const legacy = rec?.cvss || {};
+  if (legacy.vector_string) out.push({ slot: 'cvss (legacy mirror)', version: /^CVSS:4/.test(legacy.vector_string) ? '4.0' : '3.1', score: legacy.score, vector: legacy.vector_string });
+  const sev = rec?.cvss_severities || {};
+  for (const [k, label] of [['cvss_v3', 'cvss_severities.cvss_v3'], ['cvss_v4', 'cvss_severities.cvss_v4']]) {
+    const s = sev[k];
+    if (s && s.vector_string) out.push({ slot: label, version: k === 'cvss_v4' ? '4.0' : '3.1', score: s.score, vector: s.vector_string });
+  }
+  return out;
+}
+
+/** A record's package ranges, with the cell that states its own bound when `patched_versions` is null. */
+function advisoryPackages(rec) {
+  return (rec?.vulnerabilities || []).map(v => ({
+    pkg: `${v.package?.ecosystem || '?'}/${v.package?.name || '?'}`,
+    range: v.vulnerable_version_range || null,
+    patched: v.patched_versions ?? null,
+  }));
+}
+
+/** GHSA ids a CVE record points at — across the CNA container AND every ADP container, because the
+ *  CISA-ADP and the CVE-program ADP carry different reference sets on the same record. */
+function ghsasFromCveRecord(rec) {
+  const refs = [];
+  for (const c of [rec?.containers?.cna, ...(rec?.containers?.adp || [])]) {
+    for (const r of c?.references || []) refs.push(r.url || r);
+  }
+  return ghsasFromRefs(refs);
+}
+
+const PROMOTE = (argOf('--promotion', '') || '').split(',').map(s => s.trim()).filter(Boolean);
+const PROMOTE_MAX = Number(argOf('--max', '20'));
+
+/** One id, whichever kind it is. A GHSA is looked up forward; a CVE is followed one hop out so the
+ *  reverse direction (does the advisory name the CVE back?) is measured rather than assumed. */
+async function promoteOne(id) {
+  const isCve = /^CVE-/i.test(id);
+  const ghsas = [];
+  if (isCve) {
+    const r = await getJson(`${CVE_API}/${encodeURIComponent(id)}`).catch(e => ({ status: 'err', err: e.message }));
+    if (r.status !== 200) return { id, kind: 'cve', state: 'cve-unreadable', detail: r.err || `HTTP ${r.status}`, ghsas: [] };
+    for (const g of ghsasFromCveRecord(r.body).slice(0, 5)) ghsas.push(g);
+    if (!ghsas.length) return { id, kind: 'cve', state: 'cve-names-no-ghsa', ghsas: [] };
+    const rows = [];
+    for (const g of ghsas) {
+      const db = await getJson(`${GHSA_API}/${g}`).catch(e => ({ status: 'err', err: e.message }));
+      const osv = await osvRecord(g);
+      const rec = db.status === 200 ? db.body : null;
+      rows.push({
+        id: g,
+        state: promotionState(rec, osv),
+        db: db.status === 200 ? 'present' : db.status === 404 ? 'absent' : 'unreadable',
+        names_this_cve: !!(rec?.cve_id && rec.cve_id.toUpperCase() === id.toUpperCase()),
+        cve_id: rec?.cve_id ?? null,
+      });
+      await sleep(350);
+    }
+    return { id, kind: 'cve', state: 'followed', ghsas: rows };
+  }
+  const db = await getJson(`${GHSA_API}/${encodeURIComponent(id)}`).catch(e => ({ status: 'err', err: e.message }));
+  const osv = await osvRecord(id);
+  const rec = db.status === 200 ? db.body : null;
+  return {
+    id,
+    kind: 'ghsa',
+    state: promotionState(rec, osv),
+    db: db.status === 200 ? 'present' : db.status === 404 ? 'absent' : 'unreadable',
+    detail: db.err || null,
+    cve_id: rec?.cve_id ?? null,
+    published: rec?.published_at || null,
+    reviewed: rec?.github_reviewed_at || null,
+    severity: rec?.severity || null,
+    scores: advisoryScores(rec),
+    packages: advisoryPackages(rec),
+    osv: osv?.notFound ? 'absent' : 'present',
+  };
+}
+
 /** One CVE, end to end. Aliases are followed to a bounded depth because the graph is shallow
  *  (CVE ↔ GHSA ↔ PYSEC ↔ BIT-node) and a cycle is normal, not exceptional. */
 async function probe(id) {
@@ -283,6 +404,26 @@ if (SELFTEST) {
       'https://github.com/advisories/GHSA-9v8h-qqgm-4m35', 'https://example.com/x']),
     ['GHSA-9v8h-qqgm-4m35']);
   eq('references without a GHSA yield none', ghsasFromRefs(['https://nvd.nist.gov/x']), []);
+  /* ── the promotion verdict: presence in the DB is not the join key ── */
+  eq('a repo advisory absent from the DB is not-in-db', promotionState(null, { notFound: true }), 'not-in-db');
+  eq('absent from the DB but present in OSV is its own state', promotionState(null, { id: 'X' }), 'osv-only');
+  eq('a DB record with a cve_id is keyed', promotionState({ cve_id: 'CVE-2026-111497' }, null), 'in-db-keyed');
+  eq('a DB record with a null cve_id is unkeyed — the Brotli case',
+    promotionState({ cve_id: null }, { id: 'GHSA-9v8h-qqgm-4m35' }), 'in-db-unkeyed');
+  eq('an empty legacy cvss slot is not a score',
+    advisoryScores({ cvss: { score: 0.0, vector_string: null }, cvss_severities: {} }), []);
+  eq('the v4 slot is read when the legacy mirror is null',
+    advisoryScores({ cvss: { score: null, vector_string: null },
+      cvss_severities: { cvss_v4: { score: 9.2, vector_string: 'CVSS:4.0/AV:N/AC:L/AT:P' } } }),
+    [{ slot: 'cvss_severities.cvss_v4', version: '4.0', score: 9.2, vector: 'CVSS:4.0/AV:N/AC:L/AT:P' }]);
+  eq('a null patched cell is null, not the range bound',
+    advisoryPackages({ vulnerabilities: [{ package: { ecosystem: 'pip', name: 'brotli' },
+      vulnerable_version_range: '>= 1.0.3, < 1.2.1', patched_versions: null }] }),
+    [{ pkg: 'pip/brotli', range: '>= 1.0.3, < 1.2.1', patched: null }]);
+  eq('a CVE record reaches GHSA refs across CNA and ADP containers',
+    ghsasFromCveRecord({ containers: { cna: { references: [{ url: 'https://x/y' }] },
+      adp: [{ references: [{ url: 'https://github.com/advisories/GHSA-9v8h-qqgm-4m35' }] }] } }),
+    ['GHSA-9v8h-qqgm-4m35']);
   let pass = 0;
   for (const c of cases) {
     if (c.ok) pass++;
@@ -293,9 +434,52 @@ if (SELFTEST) {
 }
 
 /* ── entry ── */
-if (!IDS.length && !PKG) {
+if (!IDS.length && !PKG && !PROMOTE.length) {
   console.log('nothing to do: pass --ids CVE-…[,CVE-…] [--census] [--json] [--selftest]' +
-    ', or --pkg <name> [--ecosystem PyPI] [--version x.y.z] [--cve CVE-…]');
+    ', --pkg <name> [--ecosystem PyPI] [--version x.y.z] [--cve CVE-…]' +
+    ', or --promotion GHSA-…[,GHSA-…,CVE-…]');
+  process.exit(0);
+}
+
+if (PROMOTE.length) {
+  const ids = PROMOTE.slice(0, PROMOTE_MAX);
+  if (PROMOTE.length > ids.length) console.log(`(${PROMOTE.length} ids given, ${ids.length} checked — --max ${PROMOTE_MAX})\n`);
+  const out = [];
+  for (const id of ids) {
+    try { out.push(await promoteOne(id)); } catch (e) { out.push({ id, state: 'error', detail: e.message }); }
+    await sleep(350);
+  }
+  if (JSON_OUT) {
+    console.log(JSON.stringify({ checked: new Date().toISOString(), results: out }, null, 1));
+    process.exit(0);
+  }
+  const tally = {};
+  for (const r of out) {
+    const leaf = r.state === 'followed' ? r.ghsas : [r];
+    for (const l of leaf) tally[l.state] = (tally[l.state] || 0) + 1;
+  }
+  for (const r of out) {
+    if (r.state === 'error' || r.state === 'cve-unreadable') { console.log(`${r.id}  error  ${r.detail}`); continue; }
+    if (r.state === 'cve-names-no-ghsa') { console.log(`${r.id}  cve-names-no-ghsa — no GHSA id in the CNA or ADP references`); continue; }
+    if (r.state === 'followed') {
+      console.log(`${r.id}  →  ${r.ghsas.length} GHSA reference(s)`);
+      for (const g of r.ghsas) {
+        console.log(`    ${g.id}  ${g.state}  db=${g.db}  cve_id=${g.cve_id || 'null'}` +
+          (g.names_this_cve ? '  ← names this CVE back' : '  ← does NOT name this CVE back'));
+      }
+      console.log('');
+      continue;
+    }
+    console.log(`${r.id}  ${r.state}  db=${r.db}  osv=${r.osv}  cve_id=${r.cve_id || 'null'}`);
+    if (r.published) console.log(`    published ${r.published}${r.reviewed ? ` · reviewed ${r.reviewed}` : ''} · severity ${r.severity || '?'}`);
+    for (const s of r.scores) console.log(`    score    ${s.score} on ${s.version} (${s.slot})`);
+    for (const p of r.packages) console.log(`    package  ${p.pkg}  ${p.range || '(no range)'}  patched=${p.patched === null ? 'null' : `"${p.patched}"`}`);
+    console.log('');
+  }
+  console.log('tally: ' + Object.entries(tally).map(([k, v]) => `${k}×${v}`).join(', ') +
+    `\n  ${ids.length} id(s), ${ids.filter(i => !/^CVE-/i.test(i)).length + out.reduce((n, r) => n + (r.ghsas?.length || 0), 0)} api.github.com call(s).` +
+    `\n  \`in-db-unkeyed\` means a package@version scanner finds it and a CVE-keyed one cannot: the join is one-directional.` +
+    `\n  Every verdict is perishable — \`not-in-db\` is the state at this instant, not a property of the advisory.`);
   process.exit(0);
 }
 

@@ -1050,3 +1050,51 @@ is given; the algorithm and its polynomial time factor may depend on it"——**
 [FortiGuard FG-IR-26-185](https://fortiguard.fortinet.com/psirt/FG-IR-26-185) ·
 [debian-devel msg00289](https://lists.debian.org/debian-devel/2026/10/msg00289.html) ·
 [A simplified proof of ETH is false (PDF)](https://shivakintali.github.io/papers/ETH.pdf)
+
+## 2026-10-28 — デコードしていない取得から出た「0 件」は**未読**であって不在ではない
+
+このバッチで最も鋭い自己捕捉。捕まえたのが道具の側だったからだ。
+
+項目 1 の Genie 4 の主張を確かめるため DeepMind の投稿を `curl -s` して grep したところ、
+`SynthID`、`drift`、`benchmark`、`remain`、`limitation` がすべて **0**——引用できそうな
+「投稿はそう言っていない」という結論が出た。しかし保存された 44,572 バイトは読めないバイト列で、
+サーバは**圧縮**した本文を返しており取得に `--compressed` がなかったため、grep はすべて
+エンコード済みのストリームに対して走っていた。同じ URL に `doc-twin.mjs --probe` をかけると
+「**plain HTML ok** · 219 KB · **30,224 chars of visible text**」——同じページの二つの測定が
+同時に真にはなりえない。規則：**ページ自身の本文長と自分の grep が食い違ったら、疑うべきは
+取得であり、ページではない。** `--compressed` で取り直すと `SynthID` ×1、`drift` ×3、
+`limitation` ×1、`benchmark` ×0、そして制約の段落は逐語で読める。
+
+つまり第三の状態（[[disclosure-lag]] のゲート、`doc-twin` の "unreadable"）には**二つ目の扉**が
+ある：JS ゲートは本文を描画させず、壊れた取得は本文を*そもそもそこに置かない*。どちらも grep では
+同じに見え、どちらも情報源についての証拠ではない。安上がりの見分け方は、ページの既知サイズに比べ
+不自然に小さいバイト数、先頭の非 UTF-8 のゴミ、そして doc-twin の判定と grep の矛盾だ。
+
+**そして検証できたページでもフィードは引用を一つ失った。** デコード後、フィードの
+「複雑な物理相互作用、リアルタイム音声の正確さ、可読な文字描画、空間精度、長期的一貫性はいずれも
+『**remain under research**』」は grep できない：ページは「**are active areas of ongoing research**」
+と書いている。五項目とその順序は正しい（確認済み）ので分析は成立する——引用だけの誤りであり、
+en/zh/jp と三つの `latest.md` ミラーでその場で修正し、速度は据え置いた。
+
+**同じバッチの三つのリリース成果物状態。いずれも「今日リリース」の罠：**
+
+- **LFM3**：ブログは六モデルと言うが、Hub には LFM3 のリポジトリが **19** あり、
+  `LiquidAI/LFM3-Audio-2B` は **2026-09-08** 作成——発表の六週間前——で、
+  `LFM3-1.7B-Base` は **2026-10-26** 作成、つまり親のはずのテキストモデル（10-23）より*後*。
+  `LiquidAI/LFM3-1.7B` は `downloads 6,311 / likes 111`、**`license: other`** で、カードの
+  LFM Open License v1.0 と一致し、「open-weight」を Apache と読むことと矛盾する。ブログのページは
+  ライセンスを一切述べていない（grep は同梱の three.js 表示のみ）。
+- **Hurston-1**：`destined/hurston-1` は **`gated: "auto"`**、**ダウンロード 33**、作成
+  **2026-10-15**、最終更新 **10-17**——成果物が着地して十一日後に Show HN が出た形で、カードは
+  Apache-2.0。「Apache-2.0」と「ゲートなし」は別の主張だ。
+- **CFSG**：`AxiomMath/CFSG` は実在する（作成 **2026-10-27T13:19:32Z**、Apache-2.0、
+  `open_issues_count 0`、04:25 UTC+8 時点 **58★** でフィードの 56）。しかしコミットは **2** 件で、
+  フィードの 1 件ではない——「開発史がない」の読みは「圧縮された 1 コミット」から
+  「作成から二時間以内の 2 コミット」に変わる。`pushed_at` は **15:07:45Z**、作成の 1 時間 48 分後。
+
+→ [[vuln-supply]] [[frontier-models]] [[dev-tools]]
+
+出典：[DeepMind — Genie 4](https://deepmind.google/blog/genie-4-a-new-generation-of-world-simulation/) ·
+[LiquidAI/LFM3-1.7B](https://huggingface.co/LiquidAI/LFM3-1.7B) ·
+[destined/hurston-1](https://huggingface.co/destined/hurston-1) ·
+[AxiomMath/CFSG](https://github.com/AxiomMath/CFSG)

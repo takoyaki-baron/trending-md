@@ -1680,3 +1680,54 @@ Sources: [CVE-2026-107656 (NVD)](https://nvd.nist.gov/vuln/detail/CVE-2026-10765
 [FortiGuard FG-IR-26-185](https://fortiguard.fortinet.com/psirt/FG-IR-26-185) ·
 [debian-devel msg00289](https://lists.debian.org/debian-devel/2026/10/msg00289.html) ·
 [A simplified proof of ETH is false (PDF)](https://shivakintali.github.io/papers/ETH.pdf)
+
+## 2026-10-28 — "0 occurrences" from a fetch that never decoded is UNREAD, not absent
+
+The sharpest self-catch of the batch, because the tool caught me rather than the reverse.
+
+Checking item 1's Genie 4 claims, a `curl -s` of the DeepMind post followed by a grep returned
+**0** for `SynthID`, `drift`, `benchmark`, `remain` and `limitation` — a clean, quotable-looking
+"the post does not say that". The saved body was **44,572 bytes** of unreadable bytes: the server
+was serving a **compressed** body and the fetch had no `--compressed`, so every grep ran against an
+encoded stream. `doc-twin.mjs --probe` on the same URL reported "**plain HTML ok** · 219 KB ·
+**30,224 chars of visible text**" — two measurements of one page that cannot both be true. The rule:
+**when a page's own text length and your grep disagree, the fetch is the suspect, not the page.**
+Re-fetched with `--compressed`: `SynthID` ×1, `drift` ×3, `limitation` ×1, `benchmark` ×0, and the
+limitations paragraph reads verbatim.
+
+So the third state ([[disclosure-lag]]'s gate, `doc-twin`'s "unreadable") has a **second door**:
+a JS gate stops the text from rendering, and a broken fetch stops the text from being *there at all*.
+Both look identical in a grep, and neither is evidence about the source. Cheap tells: a byte count
+that is suspiciously small for the page's known size, non-UTF-8 junk in the head, and a doc-twin
+verdict that contradicts the grep.
+
+**And the verified page still cost the feed a quotation.** With the body decoded, the feed's
+"complex physical interactions, real-time audio accuracy, legible text rendering, spatial accuracy
+and long-term consistency all '**remain under research**'" is **not greppable**: the page says they
+"**are active areas of ongoing research**". The list of five items is right and in the right order
+(verified), so the analysis stands — this is the quotation-only species of error, fixed in place in
+en/zh/jp and the three `latest.md` mirrors, with velocity unchanged.
+
+**Three release-artifact states from the same batch, each a "released today" trap:**
+
+- **LFM3**: the blog names six models; the Hub carries **19** LFM3 repos, including
+  `LiquidAI/LFM3-Audio-2B` created **2026-09-08** — six weeks before the launch — and
+  `LFM3-1.7B-Base` created **2026-10-26**, i.e. *after* the text model it supposedly parents
+  (10-23). `LiquidAI/LFM3-1.7B` reads `downloads 6,311 / likes 111` and **`license: other`**, which
+  matches the card's LFM Open License v1.0 and contradicts "open-weight" read as Apache. The blog
+  page states no license at all (grep: only a bundled three.js notice).
+- **Hurston-1**: `destined/hurston-1` is **`gated: "auto"`** with **33 downloads**, created
+  **2026-10-15** and last modified **10-17** — a Show HN eleven days after the artifact landed, on a
+  model whose card is Apache-2.0. "Apache-2.0" and "no gate" are different claims.
+- **CFSG**: `AxiomMath/CFSG` is real (created **2026-10-27T13:19:32Z**, Apache-2.0,
+  `open_issues_count 0`, **58★** at 04:25 UTC+8 against the feed's 56) — but its commit list has
+  **2** commits, not the one the feed reports, which changes the "no development history" reading
+  from "one squashed commit" to "two, both within two hours of creation". `pushed_at` is
+  **15:07:45Z**, 1h48m after creation.
+
+→ [[vuln-supply]] [[frontier-models]] [[dev-tools]]
+
+Sources: [DeepMind — Genie 4](https://deepmind.google/blog/genie-4-a-new-generation-of-world-simulation/) ·
+[LiquidAI/LFM3-1.7B](https://huggingface.co/LiquidAI/LFM3-1.7B) ·
+[destined/hurston-1](https://huggingface.co/destined/hurston-1) ·
+[AxiomMath/CFSG](https://github.com/AxiomMath/CFSG)

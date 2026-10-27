@@ -1132,3 +1132,28 @@ have one and the **v3** band on **35/35** that do not (trivy), and **6/6** / **3
 occupant in either tool. An OSV record count is an **id** count, not a vulnerability count.
 
 → [[fact-check]] [[disclosure-lag]]
+
+## 2026-10-28 — the multi-branch fix now has FOUR machine-readable spellings
+
+Collected across three batches, and only one of them is a range any comparison parser reads correctly:
+
+| Spelling | Example | What a comparison-only parser does |
+|---|---|---|
+| separate ranges | GitHub CNA, `[,2.5.303), [3.0,3.1.9)` | correct if it reads the interval syntax |
+| one range + one `changes[]` entry | consul-k8s `0.42.0 < 2.0.4` + `at: 1.8.18 unaffected` | reads `[0.42.0, 2.0.4)` — covers the 2.x line |
+| one range + N descending `changes[]` | Hitachi `10-00 < 10-12-01`, three exemptions | truncates to `[10-00, 10-08-05)` |
+| **a comma-joined bound** | Adobe `CVE-2026-48356`: `version "0"`, `lessThanOrEqual "2.4.9, 2.4.8-p5, 2.4.7-p10, 2.4.6-p15, 2.4.5-p17, 2.4.4-p18"` | the bound is not a version at all — silently matches nothing |
+
+The fourth is new (measured 2026-10-28 on Adobe Commerce, CWE-434, CVSS 3.1 9.3) and it is the worst
+of the four, because the other three at least put a version token in the right field. Adobe's six
+branch points also use a **different naming scheme** from the advisory that fixes them
+(`2.4.8-p5` in the record versus `2.4.8-2026-jul` in APSB26-73), so "the fix version" and "the fix's
+release name" are two identifiers and neither is derivable from the other.
+
+Related timestamps from the same record, in the order a reader meets them: `published` 2026-07-14,
+KEV add 2026-10-27 (**105 days**), ADP SSVC stamp 2026-10-27T19:53:15.501701Z — and `lastModified`
+still **2026-08-28**, so nothing about the advisory changed between July and the KEV add. The SSVC
+stamp is the **enrichment batch's** clock: CVE-2026-111497's was written at **19:53:21**.238552Z —
+5.7 seconds later, on an unrelated product.
+
+→ [[fact-check]] [[disclosure-lag]]

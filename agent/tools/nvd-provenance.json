@@ -1032,6 +1032,18 @@
   {
    "id": "CVE-2026-115748",
    "why": "Apache Vysper — \"UNSUPPORTED WHEN ASSIGNED\" disposition carried inside the record (permanent no-fix-eol), 8.8 by security@apache.org, NVD Deferred with 0 NVD-scored. Watch for any change of disposition or a Deferred->Analyzed flip. Filed 2026-10-27 20:34."
+  },
+  {
+   "id": "CVE-2026-48356",
+   "why": "Adobe Commerce / Magento Open Source unrestricted upload (CWE-434), 9.3 NVD-scored beside Adobe's 9.3, published 2026-07-14, KEV-added 2026-10-27 with CISA-ADP SSVC flipped to Exploitation: active at 2026-10-27T19:53:15Z. Watch any further status flip, an added SSP/ADP metric, or a KEV date revision. Filed 2026-10-28 04:09."
+  },
+  {
+   "id": "CVE-2026-115881",
+   "why": "GoAhead OpenSSL-backend CRL never enabled (revoked mTLS certs accepted), CVSS 9.1 per FoxIO advisory GOAHEAD-SA-2026-0006, fixed 6.1.1. NOT IN NVD and CVE_RECORD_DNE at cveawg as of 2026-10-27T20:06Z — watch for the record actually being published by its CNA, which is the event this entry exists for. Filed 2026-10-28 04:09."
+  },
+  {
+   "id": "CVE-2026-115884",
+   "why": "GoAhead LibreSSL legacy-verifier chain-depth bypass (10-cert limit exceeded), 7.4 per GOAHEAD-SA-2026-0004, fixed 6.1.1. NOT IN NVD and CVE_RECORD_DNE at cveawg as of 2026-10-27T20:06Z — watch for publication. Filed 2026-10-28 04:09."
   }
  ]
 }

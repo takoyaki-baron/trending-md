@@ -592,3 +592,156 @@ N 条降序是修复清单。
 来源：[cveawg — CVE-2026-82116](https://cveawg.mitre.org/api/cve/CVE-2026-82116) ·
 [Hitachi hitachi-sec-2026-148](https://www.hitachi.com/products/it/software/security/info/vuls/hitachi-sec-2026-148/index.html) ·
 [cveawg — CVE-2026-110720](https://cveawg.mitre.org/api/cve/CVE-2026-110720)
+
+## 2026-10-28 — 晋升阶梯：已发布的公告只是一个**阶段**，而连接键是单向的
+
+在一个发布日和一条五天前的记录上各测一次，两个答案在性质上不同。
+
+**Ghostty 1.4.0（2026-10-27T19:37Z 发布）带十条 GHSA 公告，而它们全都不是数据库记录。**
+2026-10-28 04:20 UTC+8 一手普查发布说明页（`ghostty.org/docs/install/release-notes/1-4-0`，
+716 KB，可 grep 出十个唯一 `GHSA-` id）与两个索引：**10/10 在
+`api.github.com/advisories/<id>` 返回 404**，**10/10 在 OSV 返回
+`{"code":5,"message":"Vulnerability not found"}`**。发布说明用维护者自己的话给出了时钟——
+"I requested CVEs for the above advisories weeks ago, but GitHub hasn't assigned them yet"——
+所以未完成的一方是**作为 CNA 的 GitHub**，与 10-14 那次 Microsoft CVRF `Type="CNA"` 读取对
+CVE-2026-92707 的预测同形。信息流写的"十条公告、零标识符、扫描器无可匹配"对那十条是对的，
+对页面则差一步就错：**页面上确实出现两个 CVE id**（`CVE-2026-47121`、`CVE-2026-47122`），
+它们属于**捆绑的 macOS 依赖 Sparkle 2.9.6**，不属于 Ghostty。grep `CVE-` 会找到看起来已覆盖、
+实则没有的页面——id 属于哪一件产物，永远是真问题。
+
+**正向的那一例也不是"已映射"。** `GHSA-9v8h-qqgm-4m35`（Brotli 的 pip 公告，
+`published 2026-10-22T15:32:49Z`、`github_reviewed_at 2026-10-23T19:08:08Z`——**+27.6 小时**，
+本文件早已说过要忽略的差值）**确实**是数据库记录，**也确实**在 OSV 里，而它的 **`cve_id` 是
+`null`**，同时 `CVE-2026-111497` 自己的记录从 **ADP** 引用指向它。所以这个链接是单向的：
+
+- 查 `pip/brotli@1.2.0` 的扫描器**能找到**它——记录带 `>= 1.0.3, < 1.2.1`（`brotli`）与
+  `>= 1.0.3, < 1.2.1.0`（`brotlicffi`）；
+- 以 **CVE-2026-111497** 为键的消费方无法顺着它拿到的指针走，因为目标并不回指它。
+
+三种状态而非两种——`in-db-keyed` / `in-db-unkeyed` / `not-in-db`——只有第一种才是"该 CVE 已映射
+到某个包"的通常含义。同一条记录还有一个单位陷阱：**`patched_versions` 是 `null`，尽管脆弱区间
+自己写明了上界**（`< 1.2.1`），所以 "patched: None" 是一个*字段*为空，不是包没修——10-23 的 EDK2
+教训低一层。而 CVE 声明的库区间是 `1.0.3 < 1.0.10`，PyPI 包的是 `< 1.2.1`：**同一个缺陷有两个
+修复版本，一个生态一个**，单独引用任何一个对另一件产物都是错的。
+
+现在这是工具模式而非习惯：`node agent/tools/osv-lag.mjs --promotion GHSA-…[,CVE-…]` 逐 id 打印
+状态、`cve_id`、分数**槽位**（读 `vector_string`，所以 `{score: 0.0, vector_string: null}` 是空槽
+而不是零）与包区间；传 CVE 会向外跟一跳找到它的 GHSA，并逐个追问*该记录是否回指这个 CVE*。
+`--selftest` **17 → 26**。三种形态全部实机校准：`GHSA-9v8h-qqgm-4m35 in-db-unkeyed`、
+`CVE-2026-111497 → 1 GHSA reference(s) … ← does NOT name this CVE back`、
+`GHSA-mfw9-xcr3-7gfp not-in-db`。
+
+**同一批次的两个区间/时间戳单位，比较型解析器都会读错：**
+
+- **逗号拼接的上界是多分支修复的第四种机器可读写法。** Adobe 的 `CVE-2026-48356`（Commerce，
+  CVSS 3.1 9.3）写成 `{version: "0", lessThanOrEqual: "2.4.9, 2.4.8-p5, 2.4.7-p10, 2.4.6-p15,
+  2.4.5-p17, 2.4.4-p18"}`——六个分支点塞在**一个字符串字段**里。对比 GitHub CNA（多个独立区间，
+  或 `[,2.5.303), [3.0,3.1.9)`）、HashiCorp（一个区间 + 一条 `changes[]`）、Hitachi（一个区间 +
+  N 条降序 `changes[]`）。把上界当版本比较的解析器看到的不是一个版本 token，于是静默地什么都不匹配。
+- **SSVC 的 `timestamp` 是富化运行的时钟，不是评估的日期。** CISA-ADP 在 Adobe 记录上标
+  `Exploitation: active` 的时间是 **19:53:15.501701Z**，在 Brotli 记录——另一个缺陷、另一个
+  CNA——是 **19:53:21.238552Z**，**相差 5.7 秒**。两者都是 2026-10-27 的 KEV 新增，所以数值是真的；
+  *精度*是流水线的，两条 CVE 的秒级时间戳相同说明这是同一批，不是巧合。
+
+还有那条保留其尾巴的溯源案例：`CVE-2026-48356` 是 `Analyzed`，**NVD 自己的 `nvd@nist.gov` 9.3**
+与 Adobe 的 `psirt@adobe.com` 9.3 并列——即 0.2% 的情形（10-20→26 窗口 4,461 条指标中 8 条），
+信息流的归属是对的。它的 `lastModified` 到 KEV 新增之前一直是 **2026-08-28**，所以一条记录可以
+静置两个月，然后在公告毫无变化的情况下改变状态。
+
+→ [[vuln-supply]] [[fact-check]]
+
+来源：[Ghostty 1.4.0 发布说明](https://ghostty.org/docs/install/release-notes/1-4-0) ·
+[api.github.com — GHSA-9v8h-qqgm-4m35](https://api.github.com/advisories/GHSA-9v8h-qqgm-4m35) ·
+[cveawg — CVE-2026-111497](https://cveawg.mitre.org/api/cve/CVE-2026-111497) ·
+[cveawg — CVE-2026-48356](https://cveawg.mitre.org/api/cve/CVE-2026-48356) ·
+[NVD — CVE-2026-48356](https://nvd.nist.gov/vuln/detail/CVE-2026-48356)
+
+## 2026-10-28 — 用普查代替两条幸运记录：`changes[]` 只来自三个分配方，而看起来像积压的残留其实只是一个 CNA
+
+建立上面那条规则的两条 `changes[]` 记录都是**偶然**发现的，相隔十二小时。从两条记录得出的规则没有
+流行度，因此 `disclosure-lag.mjs` 增加了两个窗口普查（`--changes-census`、`--backlog-census`）和一个
+共用的成本控制（`--window-cache`，因为一次 7 天的 NVD 抓取每页约 6.5 秒，两次普查不该各付一次）。
+以下全部在 NVD **2026-10-21 → 2026-10-27** 发布窗口上测得：**3,070 条记录**。
+
+### `changes[]`：139 条记录携带，且只由三个分配方书写
+
+在携带 `affected[]` 的 **3,034** 条记录中，**139 条（4.6%）** 带有非空的 `changes[]`。整个窗口里它们
+只来自**三个分配方**——`audit@patchstack.com`（115）、`hirt@hitachi.co.jp`（19）、
+`security@hashicorp.com`（5）。所以"降序"是**某一家厂商的内部习惯**，不是 CNA 通用写法；议程问过这个
+问题，19 条 Hitachi 记录里 19 条就是答案。
+
+139 的拆分比总数更重要：
+
+| 条目落点 | 记录数 | 条目含义 |
+|---|---|---|
+| 落在所述区间**之内** | **24** | 改变上界——解析器唯一真正处理的情形 |
+| 落在**含端上界之上** | **114** | 从**另一侧**确认上界 |
+
+这 114 条是 **Patchstack** 的写法，也是本窗口该字段的多数写法：
+`{version: "0", lessThanOrEqual: "3.3.12", status: "affected", changes: [{at: "3.3.13", status:
+"unaffected"}]}`（`CVE-2026-107435`）。上界是**含端点**时，第一个不受影响的版本按定义就在
+`lessThanOrEqual` **之上一个**，所以 `at: 3.3.13` 是在确认 `≤ 3.3.12`，而不是越界。我们的规则
+（"高于所述上界的条目不是上界"）给出了正确的区间但错误的理由：该条目不是可以丢弃的噪声，而是同一个
+事实在边界另一侧的陈述。它现在作为 `aboveMax` 返回并被计数，这正是工具能打印"139 条携带、24 条改变
+区间"而不是看起来自相矛盾的原因。
+
+### 这次修复自身的影响：3,070 条中的 18 条
+
+在 24 条落在区间内的记录里，**18 条包含不止一个 `unaffected` 条目**（14 条三个、4 条两个），并且
+**18 条全部是 Hitachi，全部降序**。用两种读法测量：
+
+- 取**第一条**的读法，与"取 `at` 最大值"规则的结论相差 **0** 条；
+- 取**最后一条**的读法——**也就是 10-27 之前的解析器**——结论相差 **18** 条。
+
+所以 10-27 的修复改变了**一周记录中 0.6%** 的答案；它之所以能存活下来，原因就写在顺序里：Hitachi
+把修复版本按**降序**列出，于是"第一条"与"取最大值"结论一致，而缺陷只有在列表短到能读到末尾时才触发
+——最后一条是**最低**的修复版本，也就是可能的最小上界。`--selftest` 现为 **104/104**（七条断言钉住
+`resolveChanges`，包括"取第一条会错"的升序情形——本窗口没有出现，但它会出现）。
+
+### `Received` 积压：不是队列，不是质量信号，而是构成效应
+
+归档的问题是：低 CWE 的 `Received` 残留到底标记的是**队列**（NVD 在处理步骤中把容器规范化进
+`weaknesses[]`，所以原始到达本来就没有），还是**质量信号**（无人能处理的记录因为太单薄而卡住）。
+同一张表把两者都否证了。
+
+| 状态 | n | 携带 CWE | 参考文献中位数 | 描述长度中位数 |
+|---|---|---|---|---|
+| **Received** | **398** | **155 (38.9%)** | 3 | **600** |
+| Awaiting Analysis | 1,081 | 763 (70.6%) | 2 | 335 |
+| Undergoing Analysis | 164 | 140 (85.4%) | 2 | 442 |
+| Deferred | 1,351 | 1,152 (85.3%) | 2 | 370 |
+| Analyzed | 40 | 40 (100%) | 2 | 431 |
+| Rejected | 36 | 0 (0%) | 0 | 91 |
+
+三个测量给出结论：
+
+1. **窗口内没有任何一条记录携带 `nvd@nist.gov` 的 CWE 来源——3,070 条中 0 条。** 同一窗口的
+   `--field-census weaknesses` 把 2,250 条携带者拆成 **2,222 条 `cna` · 28 条 `cve@mitre.org` · 0 条
+   `nvd@nist.gov`**，所以那张表里每一个 CWE 都是**赋值方自己的陈述**（MITRE 算作遗留的最后手段 CNA，
+   不算 NVD）。因此 `Received` 记录的 CWE 不可能是 NVD 的处理产物；队列读法根本没有可以指认的机制。
+2. **无 CWE 的记录 100% 来自三个分配方。** 398 条 Received 中有 243 条没有，而前三名分配方占其中
+   **243/243**：`416baaa9-dc9f-4396-8d5f-8c081fb06d67`（**231** 条，Linux 内核 CNA——由其记录自身的
+   描述确认："In the Linux kernel, the following vulnerability has been resolved"）、
+   `security@mozilla.org`（7）、`cret@cert.org`（5）。其余列出的分配方全部是 **100%**——Adobe、
+   GitHub、HackerOne、TeamViewer、VulDB、Autodesk、VulnCheck、SUSE、ICS-CERT。
+3. **无 CWE 的记录是这个队列里最厚实的，不是最单薄的。** 内核的记录描述中位数 **1,039** 字符、参考
+   文献中位数 **4**，而陈述了 CWE 的分配方是 79–697 字符、1–6 条参考文献。"因为太单薄而卡住"的读法被
+   它自己的证据否证。
+
+最初引发这个问题的日级波动因此是一个**构成**效应，且直接可见：2026-10-23 发布了 **217** 条 Received
+记录、CWE 率 **0.0%**（一批内核记录），2026-10-27 发布了 **167** 条、**92.8%**。全周的 38.9% 是
+"那天恰好是谁在申报"的平均值。
+
+**该写什么，不该写什么。**"17% 的滞留记录缺少 CWE"会引出分诊积压的读法，而它其实是在说*谁来分配*。
+站得住的句子是：*一条没有 CWE 的 `Received` 记录，就是它的 CNA 没有陈述 CWE——本窗口里那是一个分配方，
+Linux 内核 CNA，243 条中的 231 条。* 两条限制明说而非隐去：本窗口内**没有任何内核记录越过
+`Received`**，所以"NVD 之后从不补加"在此未被检验；发布窗口是快照——重跑，而不是把百分比当作速率引用。
+
+一次调用（缓存让第二次普查免费）：
+
+```
+node agent/tools/disclosure-lag.mjs --changes-census --backlog-census \
+  --from 2026-10-21 --to 2026-10-27 --window-cache /tmp/nvd-win.json
+```
+
+→ [[vuln-supply]] [[fact-check]]

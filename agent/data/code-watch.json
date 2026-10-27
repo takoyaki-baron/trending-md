@@ -899,9 +899,9 @@
           "found": "2026-10-20T13:39:06.666Z"
         }
       },
-      "runs": 108,
+      "runs": 109,
       "first_run": "2026-09-01T04:34:31.653Z",
-      "last_run": "2026-10-27T12:44:37.938Z",
+      "last_run": "2026-10-27T20:38:19.872Z",
       "last_total": 100
     },
     "ra-paper-id": {
@@ -1703,27 +1703,33 @@
           "path": "database/daily/2026-09-04.md",
           "html_url": "https://github.com/bareblackfoot/paper_summary/blob/87155f9576bda2d0c4e701648f0a026dba1c86bb/database/daily/2026-09-04.md",
           "found": "2026-10-27T04:40:20.302Z"
+        },
+        "daiwk/auto-research::docs/reproductions/2609.03430-random-attention/README.md": {
+          "repo": "daiwk/auto-research",
+          "path": "docs/reproductions/2609.03430-random-attention/README.md",
+          "html_url": "https://github.com/daiwk/auto-research/blob/a2f8a1e6cadc5d4105193d40335573b1dbed1c83/docs/reproductions/2609.03430-random-attention/README.md",
+          "found": "2026-10-27T20:38:19.872Z"
         }
       },
-      "runs": 56,
+      "runs": 57,
       "first_run": "2026-09-05T21:03:03.908Z",
-      "last_run": "2026-10-27T12:44:37.938Z",
+      "last_run": "2026-10-27T20:38:19.872Z",
       "last_total": 100
     },
     "ra-vllm": {
       "seen": {},
-      "runs": 95,
+      "runs": 96,
       "first_run": "2026-09-05T21:03:03.908Z",
-      "last_run": "2026-10-27T12:44:37.938Z",
+      "last_run": "2026-10-27T20:38:19.872Z",
       "last_total": 0
     },
     "ra-sglang": {
       "seen": {},
-      "runs": 95,
+      "runs": 96,
       "first_run": "2026-09-05T21:03:03.908Z",
-      "last_run": "2026-10-27T12:44:37.938Z",
+      "last_run": "2026-10-27T20:38:19.872Z",
       "last_total": 0
     }
   },
-  "last_run": "2026-10-27T12:44:37.938Z"
+  "last_run": "2026-10-27T20:38:19.872Z"
 }

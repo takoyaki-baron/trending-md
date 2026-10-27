@@ -208,6 +208,41 @@ underlying pages — this produced a two-layer false signal in a single item.
    One call:
    `node agent/tools/disclosure-lag.mjs --range-census --from YYYY-MM-DD --to YYYY-MM-DD` prints the
    table above for any window (re-run it — analysis lands later and the top row moves).
+   **`changes[]` has a majority spelling that confirms the bound from the FAR SIDE, and the rule that
+   reads it right can still be right for the wrong reason** (added 2026-10-28, censused over 3,070
+   records). Of **139** records carrying a non-empty `changes[]` in NVD's 2026-10-21→27 window, only
+   **24** have entries landing *inside* the span; **114** are Patchstack's
+   `{version: "0", lessThanOrEqual: "3.3.12", changes: [{at: "3.3.13", status: "unaffected"}]}` —
+   with an **inclusive** bound the first unaffected release is by definition one *above*
+   `lessThanOrEqual`, so the entry confirms `≤ 3.3.12` rather than overshooting it. A parser that
+   treats "above the stated max" as noise gets the right range and the wrong reason, and reports the
+   field's prevalence as 5× too small. And the shape is **one vendor's house style, not a CNA idiom**:
+   the whole window has three writers (`audit@patchstack.com` 115, `hirt@hitachi.co.jp` 19,
+   `security@hashicorp.com` 5), and all 18 multi-entry records are Hitachi **descending** — which is
+   also why the positional bug survived: descending order makes the *first* entry equal the bound, and
+   only a list short enough to read to the end reaches the *lowest* fix. A last-entry reader (the
+   pre-10-27 parser) bounds **18** of 3,070 records differently; a first-entry reader bounds **0**. So
+   when a rule is learned from two records, run the census before quoting its prevalence — and when a
+   count of "carriers" and a count of "records it changes" disagree, ask which side of the boundary
+   the entries sit on. One call:
+   `node agent/tools/disclosure-lag.mjs --changes-census --from YYYY-MM-DD --to YYYY-MM-DD`
+   (`--backlog-census` on the same window answers "is a low-CWE `Received` residue a queue or a
+   quality signal?"; `--window-cache <path>` makes the second census free).
+   **A missing CWE on a `Received` record is the CNA's silence, not a triage backlog — and the
+   "stalled because it is thin" reading is falsified by the records themselves** (added 2026-10-28,
+   measured over the same 3,070-record window). Of **398** `Received` records, **155 (38.9%)** carry a
+   CWE, and **0 of 3,070** records anywhere in the window carry an `nvd@nist.gov` CWE *source* (the
+   same window's `--field-census weaknesses` splits the 2,250 carriers **2,222 `cna` · 28
+   `cve@mitre.org` · 0 `nvd@nist.gov`**) — so every CWE is assigner-supplied and there is no NVD
+   processing step for a "queue" reading to point at.
+   The **243** CWE-less ones come **243/243** from three assigners — `416baaa9-dc9f-4396-8d5f-8c081fb06d67`
+   (**231**, the Linux kernel CNA; identify it from its records' own text, "In the Linux kernel, the
+   following vulnerability has been resolved"), `security@mozilla.org` (7), `cret@cert.org` (5) —
+   while every other listed assigner is at **100%**. And they are the **thickest**, not the thinnest:
+   kernel median description **1,039** chars / **4** references against 79–697 chars for the
+   assigners that do state one. Day-level swings are composition (10-23: **217** `Received` at
+   **0.0%**; 10-27: **167** at **92.8%**), so a week rate is a rate over *which CNA filed that day*
+   — quote the assigner, never the percentage alone.
    **An identifier list is a SET, a range is an assumption, and "CVE-X to CVE-Y" is not a citation**
    (added 2026-10-25 20:30, the HPE ArubaOS eighth row). Coverage printed a "maximum severity" table of
    eight consecutive IDs, `CVE-2026-79844`…`-79851`; one of them, `-79845`, is `VulDB`'s SQL injection in
