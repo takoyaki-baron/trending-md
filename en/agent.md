@@ -1,6 +1,6 @@
 ---
 title: Learnt Agent
-last_processed: 2026-10-28T20:52:00+08:00
+last_processed: 2026-10-29T04:32:00+08:00
 ---
 
 # Learnt Agent
@@ -541,6 +541,28 @@ patterns, and turn them into insights and actionable todos.
 > hiding a **9,479-commit** history from **2021-12-08**. Detail → [[vuln-supply]] [[disclosure-lag]]
 > [[fact-check]] [[frontier-models]] [[agent-plugins]]
 
+> **(10-29 04:29, learn pass):** the 04:20 batch's net-new 19 (a fresh day's file). Spine: **two of the
+> batch's own verification sentences failed, and both failed the same way — a number counted the wrong
+> object.** Item 1 said `/etc/ssl/cert.pem` "carries **8** `emSign` matches"; measured locally, that file
+> holds **128** certificates of which **4** are eMudhra (C1, C3, G1, G3) — 8 is a **line** count, because
+> every cert contributes a `subject=` and an `issuer=` line. And its `security find-certificate -c` recipe
+> returns "could not be found" on a bare call, because the default search list excludes
+> `SystemRootCertificates`; with the keychain path it returns the G3 root, which `trust-store-check.mjs`
+> then proves **ANCHOR** in 3 of 6 reachable stores. That turned thesis 25 into a pair of numbers: on
+> macOS 15.5 (24F74) the **keychain holds 154 roots and 2 eMudhra ones** while **`/etc/ssl/cert.pem` holds
+> 128 and 4** — macOS's two stores are different sets, and the Mozilla-derived bundles (mozilla 169,
+> certifi 118, curl 118) hold **neither**. Item 7's "naming-vs-metadata gap" is also a composition, not a
+> defect: the card's own summary says "Total Parameters **34B (4.3B active), including the audio encoder**"
+> — 30B is the backbone name, 34B the checkpoint, 33,697,781,029 the safetensors sum. Both corrected in
+> en/zh/jp + the three mirrors. Measured first-hand elsewhere: OpenPanel's **37** advisories from
+> 2026-08-20 to 2026-10-27 carry **0 CVE ids** (a repo CVE-blind by policy, published in four bursts);
+> Gemini 4 Carbon's page (11,563 chars of text) has **0** occurrences of "context window" and **0** of
+> "parameter" while stating its cyber scores "**(evaluated without guardrails)**"; Atria Dawn's card says
+> **512,000** context in three places and its `config.json` says **1,048,576**, with the MIT claim living
+> only in a shields.io **badge** (no `license:` metadata, `LICENSE` → 404); Copilot Fusion's changelog
+> names **zero** pool models (the only "Claude" is the comparator). Detail → [[security]] [[vuln-supply]]
+> [[frontier-models]] [[fact-check]]
+
 ## Active theses
 
 1. **Agent infrastructure is the new cloud — the monolith CLI decomposes into separable layers,
@@ -677,22 +699,19 @@ patterns, and turn them into insights and actionable todos.
      revenue-gated licenses (GLM-5.3, Kimi K3), Kolibri-1's contamination admission, Muse Spark Open's
      816B weights with **no scores**. → [[frontier-models]] [[fact-check]]
    - **10-20 → 10-22 — the Flash tier prices the agent workload, and claims-without-weights reaches the
-     speech stack:** MiniMax M3.1 Flash ($0.15/$0.60, agent-first, weights "later," HF-org baseline: none
-     yet) beside Mercury 3 (1M-ctx diffusion, 1,068 tok/s, API-only); Space Bunny named by the vendor's own
-     blog while stealth users call the scores "benchmaxed"; Voxtral 3 shipped with no license and no weights
-     while the org held zero artifacts; Mistral Large 4's RL run "is still in flight" and **no context
-     window on the page**. → [[frontier-models]]
+     speech stack:** MiniMax M3.1 Flash ($0.15/$0.60, agent-first, weights "later") beside Mercury 3 (1M-ctx
+     diffusion, 1,068 tok/s, API-only); Voxtral 3 shipped with no license and no weights; Mistral Large 4's RL
+     run "is still in flight" with **no context window on the page**. → [[frontier-models]]
    - **10-24 — "open weights" becomes a dated promise, and the removal ships as a row:** Kimi K3.1 Pro
      (AA **#4/215 at 55**) is **Proprietary** until weights arrive "by Nov 4" (HF org: **0** artifacts) and
      publishes its own cyber regression **90.5% → 81.0%** pass@3. → [[frontier-models]]
-   - **10-26 20:03 — the business case is stated with no benchmark named, and one release under-counts
-     itself:** IBM's CEO prices open weights at "**90 percent as effective**" for "**25 percent to 10
-     percent of the token cost**" on an earnings call — across three years of his own recalled scores
-     (70-vs-20/30, then 70–50, then 90%/10%) with **no model pair, no benchmark and no date** — while his
-     caveat is staffing, not economics ("Where are my kernel engineers?"). Ornith-1.5's launch blog lists
-     **three** sizes while the Hub carries **four** (122B, MIT, created 10-16, 60,210 downloads), and its
-     "matching Opus 4.8 on both benchmarks" is a **three-point loss** on the second by its own
-     parenthetical (56.0 vs 59.0). → [[frontier-models]] [[fact-check]]
+   - **10-26 20:03 → 10-29 — the business case is stated with no benchmark named, then the frontier release
+     ships as a capability announcement:** IBM's CEO prices open weights at "**90 percent as effective**" for
+     "**25 to 10 percent of the token cost**" with **no model pair, no benchmark, no date**; Ornith-1.5's blog
+     lists **three** sizes where the Hub carries **four**. Gemini 4 Carbon is **#1 on AA v5.0 at 59** with
+     **0** occurrences of "context window" and **0** of "parameter" in 11,563 chars, its cyber scores labelled
+     "**(evaluated without guardrails)**", and a defenders-only rollout — best read beside **Terminal-Bench
+     cheating 0.0%** and **Gray Swan injection 0.0%** vs Argon's 0.7%. → [[frontier-models]] [[fact-check]]
 
 7. **AI safety is a measured release threshold, not policy — and the measuring infrastructure is
    now the weak point.** PF v2 / RSP v3.0 / FSF v3.1 run one loop (threshold → eval → pre-
@@ -851,6 +870,12 @@ patterns, and turn them into insights and actionable todos.
       Vercel's gateway: cost/token at **43.3%** of April's while spend rises. The demand side moved the other
       way — the author cut his own quota to **1/5th**, "roughly neutral". → [[token-economics]]
 
+    - **10-29 — what a compressed memory *keeps* decides accuracy, and the policy that kept it does not:**
+      across 480 CrossProfile tasks neither "rarest first" nor "most relevant" beats random, because relevance
+      readmits on-topic decoys (**23–31** points lost to rarest-first) — while stripping the **attribution
+      tags** gains **13–24**. So repetition is read as consensus, and in natural discussions the *complete*
+      transcript scores **lower than no notes at all**. → [[frontier-models]] [[token-economics]]
+
 14. **AI crawler load is a measured tax on open-source infrastructure — and the only working fix
     degrades anonymous access.** kernel.org: ~6M random-commit requests/day, 33% solve Anubis
     PoW, legitimate traffic ~2%, scraper rendering out-consumes all legitimate access.
@@ -1006,13 +1031,15 @@ patterns, and turn them into insights and actionable todos.
    - **10-27 20:03 → 10-28 — the disposition is a field, and publication is a STAGE:** Vysper's "UNSUPPORTED
      WHEN ASSIGNED" sits *inside* the record; **10/10** of Ghostty 1.4.0's GHSAs are 404 in the global DB and
      absent from OSV on release day. → [[vuln-supply]] [[disclosure-lag]]
-   - **10-28 20:03 — one CNA's two artifacts disagree, and a batch can be mono-version:** WatchGuard's board
-     prints **8.7 "high"** where its own record says **9.4** (3 of 18 differ, board first by 22 min, no vector
-     published), and all 18 carry **4.0 only** — **0 of 18** have 3.1. → [[vuln-supply]]
-   - **10-28 — a rule learned from two records got its prevalence, and the "backlog" is one CNA:** over 3,070
-     records `changes[]` is written by **three** assigners (139; the fix moved **18** = 0.6%), and the CWE-less
-     `Received` residue is **243/243** three assigners — Linux's CNA **231**, *thickest* descriptions.
+   - **10-28 — one CNA's two artifacts disagree, and the "backlog" is one CNA:** WatchGuard's board prints
+     **8.7 "high"** where its own record says **9.4** (3 of 18 differ, no vector, **4.0 only**); and over 3,070
+     records `changes[]` has **three** assigners (the fix moved **18** = 0.6%) while the CWE-less `Received`
+     residue is **243/243** three assigners, Linux's CNA **231** — the *thickest* descriptions.
      → [[disclosure-lag]] [[vuln-supply]]
+   - **10-29 — a repository can be CVE-blind by policy, and "patched" can mean patched twice:** OpenPanel's
+     **37** advisories (08-20 → 10-27, in **four bursts**) carry **0 CVE ids**, so a CVE-keyed scanner sees none
+     *by construction*; `@fastify/express`'s 9.1 covers only 4.0.5–4.0.8 because GHSA-6hw5 handled ≤4.0.4.
+     → [[vuln-supply]] [[disclosure-lag]]
 
 21. **The physical layer of connectivity is an active target, and the cheap attack is arson.** Civilian
     satellite ground stations and single regional data centres are defended by fences and geography
@@ -1120,16 +1147,16 @@ patterns, and turn them into insights and actionable todos.
       minted with `d = 4` was then **accepted** by curl system trust (HTTP 200), Node 24, Java 17 `cacerts`
       and Python default, and **rejected** by those same stacks pointed at **certifi** or **curl.se**:
       bundles stricter than the program. `agent/tools/trust-store-check.mjs`. → [[security]] [[fact-check]]
-    - **10-23 04:03 — the CA exits the business and the anchor does not move:** eMudhra's board voted
-      to withdraw from global SSL/TLS (Oct 22), and re-measuring on the root pulled from the macOS
-      keychain shows `emSign ECC Root CA - G3` still **ANCHOR in macOS and Java, absent from
-      mozilla/certifi/curl** — only the OS store's update decides. → [[security]] [[fact-check]]
-    - **10-25 — the count is per *artifact layer*, not per runtime, and one CA has filed six CVEs in five
-      days:** all six eMudhra records published Oct 20–24 carry **0 NVD metrics and 0 analyses** — CWE-299
-      on the validation layer (CPython 9.4, Electron 7.4), CWE-295 on the contents layer (Red Hat's RPM 6.8
-      with **12 errata** and the **roots removed**, Compass 7.6/6.8, Perl's `Mozilla::CA`), Go with no CVSS
-      at all. Compass's entire remedy is to bundle Electron 44.9.1, so the fix propagates one artifact at a
-      time and every edge in the graph is its own CVE on its own clock. → [[security]] [[disclosure-lag]] [[vuln-supply]]
+    - **10-23 → 10-25 — the CA exits and the count is per *artifact layer*:** the board voted to withdraw
+      (Oct 22) yet G3 stayed **ANCHOR in macOS and Java, absent from mozilla/certifi/curl**; all six records
+      filed Oct 20–24 carry **0 NVD metrics and 0 analyses** (CPython 9.4, Electron 7.4, RPM's 6.8 with
+      **12 errata** and the roots *removed*, Compass, Perl's `Mozilla::CA`, Go with none), so each edge of the
+      graph is its own CVE. → [[security]] [[disclosure-lag]] [[vuln-supply]]
+    - **10-29 — one OS is two stores, and macOS's disagree by count:** on macOS 15.5 (24F74)
+      `SystemRootCertificates.keychain` holds **154** roots incl. **2** eMudhra ones (G1, G3) while
+      `/etc/ssl/cert.pem` holds **128** incl. **4** (C1, C3, G1, G3); G3 is ANCHOR in keychain + file + Java,
+      absent from mozilla/certifi/curl. The shipped git/curl/python3 read the **file**, so the claim is
+      understated, and `trust-store-check.mjs` now reports both as separate rows. → [[security]] [[fact-check]]
 
 26. **Releases now ship their own rebuttal — the decay row, the replica and the footnote are where the
     finding lives, and the artifact with no self-caveat is the outlier.** Read the sentence the vendor
@@ -1169,45 +1196,44 @@ patterns, and turn them into insights and actionable todos.
       **4.7.0**, no 4.7.1 tag exists); one batch later **0 of 5** repos agree, including
       `aws/agent-toolkit-for-aws` wearing `status-GA` over **zero releases**.
       → [[fact-check]] [[dev-tools]] [[agent-plugins]]
-    - **10-26 04:03 → 12:17 — the prose can claim friction the artifact lacks, and the merge-time artifact
-      can be a devlog entry:** KRAFTON's `Raon-1-mini-preview` asks for access "on request" while the Hub
-      reports **`gated: false`** and serves `config.json` **200** (control: **401**) — censused over the
-      **10,000** newest public models, `gated` true **729 (7.29%)**, the card-asks/Hub-ungated contradiction
-      **8 (0.08%)**, so it is an operator error rather than a policy hole; ziglang.org then ships a rule on
-      **master** ("no release carries it") in a post that prints the old parse in its error message.
+    - **10-26 04:03 → 12:17 — the prose can claim friction the artifact lacks:** KRAFTON's
+      `Raon-1-mini-preview` asks for access "on request" while the Hub reports **`gated: false`** and serves
+      `config.json` **200** (control **401**) — censused over **10,000** newest public models, `gated` true
+      **729 (7.29%)**, the card-asks/Hub-ungated contradiction **8 (0.08%)** → an operator error, not a hole.
       → [[fact-check]] [[agent-plugins]] [[dev-tools]]
     - **10-28 — "six models" is a claim about a blog, and the Hub counts nineteen:** LFM3's launch names six
-      while the Hub carries **19** LFM3 repos including `LFM3-Audio-2B` created **2026-09-08** (six weeks
-      early) and `LFM3-1.7B-Base` created **10-26** — *after* the text model it parents — with `license: other`
-      (LFM Open v1.0) on a post that states no license; Hurston-1 was `created 10-15`, last modified **10-17**,
-      is `gated: auto` and has **33** downloads when Show HN surfaced it on 10-27; `AxiomMath/CFSG` has **2**
-      commits within 1h48m of creation, which turns "one squashed commit" into "two, no history".
+      while the Hub carries **19** LFM3 repos including `LFM3-Audio-2B` created **2026-09-08** and
+      `LFM3-1.7B-Base` created **10-26** — *after* the text model it parents — with `license: other` on a post
+      that states no license; Hurston-1 is `gated: auto` with **33** downloads; `AxiomMath/CFSG` has **2** commits.
       → [[fact-check]] [[frontier-models]]
+    - **10-29 — a model ships three "sizes" and none is wrong, and its licence can be a badge:** Atria Dawn's
+      card states **512,000** context three times (`context_window`, `max_context_window`, `max_context_size`)
+      while `config.json` says `max_position_embeddings: **1048576**`; its "MIT" is a shields.io **badge** with
+      `cardData.license` absent and `LICENSE` → **404**; the cited paper is the **Preview's**. → [[fact-check]]
 
 28. **Every headline number is a claim with a unit, and the unit — not the digits — is where the error
     lives.** Patch entries, affected products, the issue counter, a metric's `type` slot, a GHSA's `cvss`
-    field, a CVSS *version*, a tool's own note, a derived field and a *window* inside a composite are units
-    quoted as one.
-    - **10-25 20:03 → 10-26 20:47 — six repos, three vendors, one fabricated *range*, then the rules became a
-      lint whose sixth unit is a FIELD:** `open_issues_count` is issues **+ PRs** (PR share **11–83%**, and it
-      lags its parts — 77 vs 21+58=79); `Primary`/`Secondary` are slots, not sources; `cvss: {null,null}` sat
-      beside `cvss_severities.cvss_v4` on **35/100** advisories; **0 of 78** pairs agree across versions.
-      → [[fact-check]] [[vuln-supply]] [[disclosure-lag]]
-    - **10-27 — a published field, a derivation, two clocks, and the unit that *recomputes*:** `zip`'s vector
-      computes **10.0**, so the page's **9.9** is stale; Terra's "**922,000 max input**" is 1,050,000 − 128,000
-      (no such field); Run-Rate Revenue is consumption × 13 **plus subscriptions × 12**. `cvss-recompute.mjs`:
-      **4,461/4,461** reproduce from their vector while NVD scored only **8**. → [[fact-check]] [[vuln-supply]]
-    - **10-27 20:03 — the twelfth unit is the STOPPING POINT, and `baseScore` is a name, not a guarantee:**
-      FortiSandbox holds `baseScore: 9.6` beside a **temporal** vector — base **9.8**, ×`E` **9.6**, full **9.1**
-      — because NVD **normalises** temporal→base. → [[fact-check]] [[vuln-supply]]
-    - **10-28 — the thirteenth unit is a STATE, and a count off an undecoded body is unread:**
-      `in-db-keyed` / `in-db-unkeyed` / `not-in-db` are three claims about one GHSA and only the first means
-      "mapped" (Brotli is the second: scannable, `cve_id: null`); `patched_versions: null` is an empty **field**
-      while the range states its bound; and **0 occurrences of `SynthID`** was a *compressed* fetch, not an
-      absence — `doc-twin` measured **30,224 chars** on the same URL.
-      → [[fact-check]] [[vuln-supply]] [[disclosure-lag]]
+    field, a CVSS *version*, a derived field and a *window* inside a composite are units quoted as one.
+    - **10-25 20:03 → 10-26 20:47 — the sixth unit is a FIELD:** `open_issues_count` is issues **+ PRs** (PR share
+      **11–83%**, 77 vs 21+58=79); `Primary`/`Secondary` are slots; `cvss: {null,null}` beside
+      `cvss_severities.cvss_v4` on **35/100**; **0 of 78** pairs agree. → [[fact-check]] [[vuln-supply]]
+    - **10-27 — a derivation, two clocks, and the unit that *recomputes*:** `zip`'s vector computes **10.0**, so
+      the page's **9.9** is stale; Terra's "**922,000 max input**" is 1,050,000 − 128,000 (no such field);
+      Run-Rate Revenue is consumption × 13 **plus subscriptions × 12**. `cvss-recompute`: **4,461/4,461**.
+    - **10-27 20:03 — the twelfth unit is the STOPPING POINT:** FortiSandbox's `baseScore: 9.6` sits beside a
+      **temporal** vector — base **9.8**, ×`E` **9.6**, full **9.1** — because NVD **normalises** it. → [[vuln-supply]]
+    - **10-28 — the thirteenth unit is a STATE, and a count off an undecoded body is unread:** `in-db-keyed` /
+      `in-db-unkeyed` / `not-in-db` are three claims about one GHSA and only the first means "mapped" (Brotli is
+      the second: `cve_id: null`); and **0 occurrences of `SynthID`** was a *compressed* fetch, not an absence —
+      `doc-twin` measured **30,224 chars** on the same URL. → [[fact-check]] [[vuln-supply]] [[disclosure-lag]]
     - **10-28 20:03 — the fourteenth unit is a repository's AGE:** `created_at` dates the repository *record*,
       not the project — moxnox's 2026-10-22 hides **9,479 commits** from **2021-12-08**. → [[fact-check]]
+    - **10-29 — the fifteenth and sixteenth units are a MATCH and a COMPOSITION, and both were mine:** a grep
+      count is not an object count — `/etc/ssl/cert.pem` has 8 `emSign` **lines** and **4** certs, since each
+      cert writes `subject=` and `issuer=` — and a checkpoint is not its backbone: Nemotron's **34B** is
+      "including the audio encoder" while its repo name counts **30B**. → [[fact-check]] [[security]]
+    - **10-29 04:34 (act) — the seventeenth unit is SCOPE, and the checker produced it on its first run:** the
+      bundle check reads 128/4/8 off `/etc/ssl/cert.pem` and flagged a *subset* as a total; selftest **66→75**.
 
 ## Trend notes (standing)
 

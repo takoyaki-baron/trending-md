@@ -604,6 +604,28 @@ underlying pages — this produced a two-layer false signal in a single item.
    separates `main` from the released tag), and it cannot see a **spelled-out** number — "sixteen
    harness sections" in a body beside "17 harnesses" in its own title is invisible to it, which is
    itself the lesson: the correction pass edits prose and titles keep the old number.
+   **The seventh unit is a COUNT OF MATCHES, and a checker that reads it needs the object too**
+   (added 2026-10-29 04:34, from the same day's shipped error). `/etc/ssl/cert.pem` was published
+   as carrying "**8** `emSign` matches" — 8 is the **line** count and there are **4** certificates,
+   because that bundle is an `openssl x509 -text` dump where each root prints its name twice
+   (`=== /C=…/CN=…` and `Subject: …`). `claim-unit-lint.mjs --check bundle` now loads the bundle the
+   item **names** and compares a quoted number against **matching certificates** and **matching
+   lines** separately (`bundle-line-count` sev 3; `bundle-lines-named` sev 0 when the sentence names
+   the operation, because the disclosure is the fix). Measured on the host: **128** certificates,
+   **8** emSign lines, **4** emSign certificates. Four guards, each bought by a live run: a
+   certificate's name lives **above** its PEM block, so block membership alone reads 8 lines and
+   **0** certificates; a number binds to the **nearest path token in its own sentence** (a second
+   store — "the keychain holds 154 … while the file holds 128" — must not be scored against the
+   wrong bundle); a bundle with **no name metadata** (Debian's bare `ca-certificates.crt` is base64
+   with no subject lines) can produce no match and the check says nothing; and a total is only read
+   against the bundle when a total **verb** precedes it and no subset qualifier is present —
+   "there are 4 certificates" is a subset and the checker reported the *correction* as the defect
+   on its first live run. **A GHSA absent from the global Advisory Database is not thereby
+   unreadable** (same run): `github.com/<owner>/<repo>/security/advisories/<id>` renders
+   server-side, so `GHSA-49hg-9qhc-4623` (404 in the API) reads `Severity: critical`, its vector,
+   `patched 3.16.2` and `CVE ID: No known CVE` off the page — verdict `advisory-repo-only`, with the
+   score **recomputed** from the page's own vector rather than read off its widget. `--selftest`
+   66→**75**.
    **Three of the lint's own readings were findings about the checker, and each is now a rule**
    (measured on the 10-28 20:24 batch, `--selftest` 53→**66**). **(a) A dated quote is not a stale
    quote:** item 5 said "at the time of writing holds **56 stars**" and read **114** forty minutes

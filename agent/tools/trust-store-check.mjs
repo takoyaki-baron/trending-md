@@ -39,11 +39,26 @@
  *   certifi   PyPI certifi's bundled cacert.pem (what `requests`, and most Python, actually reads)
  *   curl      https://curl.se/ca/cacert.pem (mk-ca-bundle output; most Linux distros ship a variant)
  *   macos     /System/Library/Keychains/SystemRootCertificates.keychain (local, via `security`)
+ *   macos-file /etc/ssl/cert.pem — the SECOND macOS store, added 2026-10-29 after a feed item counted
+ *             one store's lines and published them as another store's certificates. macOS has two
+ *             bundles and they do not contain the same roots: measured on macOS 15.5 (24F74), the
+ *             keychain holds **2** eMudhra roots (G1, G3) while `/etc/ssl/cert.pem` holds **4**
+ *             (C1, C3, G1, G3) — so "macOS still trusts it" is two claims, and OpenSSL/libcurl-style
+ *             stacks read the file, not the keychain. They are reported as separate rows for that
+ *             reason; collapsing them is the error this row exists to prevent.
  *   java      the JVM's `cacerts` (local, via `keytool -list -rfc`)
  *   linux     /etc/ssl/certs/ca-certificates.crt (local, Debian/Ubuntu layout)
  *
  * Local stores are host-specific: on CI you will see `unavailable` for macos/java, and that is the
  * honest answer — report the set you measured, never a universal.
+ *
+ * Two counting traps this tool's own output has to survive (both seen in the wild on 2026-10-29):
+ *   (a) `grep -c <name> /etc/ssl/cert.pem` counts LINES, and every cert contributes a `subject=` and
+ *       an `issuer=` line carrying the same name — so 8 matches there were **4** certificates. Count
+ *       certificates, never matches.
+ *   (b) `security find-certificate -c <CN>` with no keychain argument searches the user's default
+ *       search list, which does NOT include SystemRootCertificates — it answers "could not be found"
+ *       for a root that is anchored. The keychain path is mandatory; a bare `-c` miss proves nothing.
  *
  * Perishability: a bundle is a *snapshot*. certifi/curl/Homebrew change on release; CCADB changes
  * on root-program decisions; Java and macOS ship roots for years. Re-run before publishing any
@@ -81,6 +96,11 @@ const SOURCES = {
     note: 'macOS SystemRootCertificates keychain (`security find-certificate`)',
     run: () => execFileSync('security', ['find-certificate', '-a', '-p',
       '/System/Library/Keychains/SystemRootCertificates.keychain'], { encoding: 'utf8' }),
+  },
+  'macos-file': {
+    kind: 'local',
+    note: '/etc/ssl/cert.pem — the bundle OpenSSL/libcurl-style stacks read on macOS',
+    run: () => fs.readFileSync('/etc/ssl/cert.pem', 'utf8'),
   },
   java: {
     kind: 'local',

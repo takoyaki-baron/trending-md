@@ -514,6 +514,8 @@ const SOURCE_ALIASES = {
   'tech.yahoo.com': 'yahoo.com', 'finance.yahoo.com': 'yahoo.com',
   'en.theblockbeats.news': 'theblockbeats.news',
   'app.primeintellect.ai': 'primeintellect.ai',
+  'git-emudhra.we-have-a-problem.com': 'we-have-a-problem.com',
+  'emudhra.we-have-a-problem.com': 'we-have-a-problem.com',
   'qm.ycombinator.com': 'ycombinator.com',
   'blog.roboflow.com': 'roboflow.com', 'playground.roboflow.com': 'roboflow.com',
   'tip.golang.org': 'go.dev',

@@ -131,10 +131,35 @@
  *      the CNA container does, the verdict is `cna-only-score` (naming the container) rather than
  *      `version-absent` — the record's absence is not the vendor's.
  *
+ *   G. BUNDLE COUNT (`--check bundle`) — a count of MATCHES is not a count of OBJECTS. The 10-29
+ *      feed published `/etc/ssl/cert.pem` as carrying "**8** `emSign` matches"; 8 was right as a
+ *      LINE count and wrong as a CERTIFICATE count, because that bundle is an `openssl x509 -text`
+ *      dump where each root prints its name twice (`=== /C=…/CN=…` and `Subject: …`). Measured on
+ *      the host: **128** certificates, **8** emSign lines, **4** emSign certificates. The check
+ *      loads the bundle the item NAMES and compares a quoted number against matching certificates
+ *      and matching lines separately; `bundle-line-count` (sev 3) is the defect, `bundle-lines-named`
+ *      (sev 0) is the same number with the operation named — the disclosure is the fix. Three
+ *      guards keep it quiet: a bundle with no name metadata (Debian's bare `ca-certificates.crt`)
+ *      can produce no match and says nothing; a number binds to the NEAREST path token in its own
+ *      sentence, so a second store ("the keychain holds 154 … while the file holds 128") is not
+ *      scored against the wrong bundle; and a total is only read against the bundle when a total
+ *      VERB precedes it and no subset qualifier is present — "there are 4 certificates" is a subset
+ *      and reported the correction as the defect on the first live run. Local-only, no network.
+ *
+ *   B (continued). A GHSA that is **not in the global Advisory Database** is still very often a
+ *      readable primary: `github.com/<owner>/<repo>/security/advisories/<id>` renders server-side,
+ *      so `advisory-unreadable` was a finding about the checker. Measured 2026-10-29 on
+ *      `GHSA-49hg-9qhc-4623` (OpenPanel): API **404**, page **200** with `Severity: critical`, the
+ *      vector, `patched 3.16.2` and `CVE ID: No known CVE`. The verdict for a page that renders is
+ *      `advisory-repo-only` (sev 0), and the score is RECOMPUTED from the page's own vector — which
+ *      is how this fallback can confirm a number the API cannot see, and how the item's "no CVE id"
+ *      claim gets checked against the advisory's own CVE-ID row.
+ *
  * Usage:
  *   node agent/tools/claim-unit-lint.mjs --file en/feed/2026-10-26.md
  *   node agent/tools/claim-unit-lint.mjs --file … --no-net            # check A only (prose)
  *   node agent/tools/claim-unit-lint.mjs --file … --check cvss,repo   # subset
+ *   node agent/tools/claim-unit-lint.mjs --file … --check bundle      # local PEM bundle counts
  *   node agent/tools/claim-unit-lint.mjs --files 'en/feed/2026-10-2*.md' --census
  *   node agent/tools/claim-unit-lint.mjs --file … --json --strict     # exit 1 on any finding
  *   node agent/tools/claim-unit-lint.mjs --ghsa-census [--pages 3]    # field-shape census
@@ -172,7 +197,7 @@ const MAX_GHSA = Number(arg('max-ghsa') ?? 6);
 // 200-CVE census from turning the pre-commit lint into a crawler.
 const MAX_CNA = Number(arg('max-cna') ?? 30);
 const CACHE_PATH = arg('cache') ?? 'agent/data/claim-unit-cache.json';
-const CHECKS = new Set((arg('check') ?? 'issues,cvss,temporal,repo,count').split(',').map((s) => s.trim()));
+const CHECKS = new Set((arg('check') ?? 'issues,cvss,temporal,repo,count,bundle').split(',').map((s) => s.trim()));
 
 const SELFTEST = has('selftest');
 if (!FILE && !FILES && !SELFTEST && !has('ghsa-census')) {
@@ -524,6 +549,55 @@ function advisoryState(id) {
   return cache[key];
 }
 
+/* A GHSA that is **not in the global Advisory Database** is still very often a readable
+ * PRIMARY — `github.com/<owner>/<repo>/security/advisories/<id>` renders server-side with the
+ * severity label, the CVSS vector, the affected/patched cells and a `CVE ID` row. Measured
+ * 2026-10-29 on `GHSA-49hg-9qhc-4623` (OpenPanel, feed item 13): `api.github.com/advisories/<id>`
+ * → **404**, while the repo page → **200** with 7,093 chars of text, `Severity: critical`,
+ * `CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:C/C:H/I:H/A:H`, `patched 3.16.2`, and `CVE ID: No known CVE`.
+ * So the check's `advisory-unreadable` was a finding about the CHECKER: not-ingested is a state,
+ * and "I could not read it" was false. The verdict for the readable-but-uningested page is
+ * `advisory-repo-only`, and it recomputes the score from the page's own vector rather than
+ * reading the widget that prints it — which is why this fallback can CONFIRM a number the API
+ * cannot see. Cached 6h; one unmetered `github.com` fetch per CVE-less advisory actually cited. */
+function repoAdvisory(it, id) {
+  const key = `repoghsa:${id}`;
+  const hit = cache[key];
+  if (hit && Date.now() - Date.parse(hit.fetched_at) < CACHE_TTL_MS) return hit;
+  const want = new RegExp(`github\\.com/([\\w.-]+)/([\\w.-]+)/security/advisories/${id}`);
+  const m = want.exec(it.text);
+  if (!m) { cache[key] = { fetched_at: new Date().toISOString(), error: 'no-page-in-item' }; return cache[key]; }
+  // A repo advisories page is the ONLY address for an advisory whose global record is missing, so
+  // the URL the item cites is the whole derivation — there is nothing to guess.
+  let html;
+  try {
+    html = execFileSync('curl', ['-sS', '-m', '20', `https://github.com/${m[1]}/${m[2]}/security/advisories/${id}`],
+      { encoding: 'utf8', maxBuffer: 8 * 1024 * 1024 });
+    repoCalls += 1;
+  } catch (e) {
+    cache[key] = { fetched_at: new Date().toISOString(), error: 'fetch-failed' };
+    return cache[key];
+  }
+  const rec = { fetched_at: new Date().toISOString(), ...parseRepoAdvisory(html) };
+  if (!rec.severity && !rec.vector) { cache[key] = { fetched_at: new Date().toISOString(), error: 'not-an-advisory-page' }; return cache[key]; }
+  cache[key] = rec;
+  return rec;
+}
+
+/** The page's own fields. Split out so the selftest can pin the markers without a network call. */
+function parseRepoAdvisory(html) {
+  const g = (re) => re.exec(html)?.[1]?.trim() ?? null;
+  return {
+    severity: g(/title="Severity:\s*([A-Za-z]+)"/),
+    vector: g(/\b(CVSS:[34]\.[01]\/[^<\s"]+)/),
+    published_at: g(/<relative-time datetime="([^"]+)"/),
+    cve_id: g(/CVE ID<\/h3>\s*<div class="[^"]*"[^>]*>\s*([^<]*?)\s*</),
+    package: g(/Package<\/h2>\s*<div\s*>\s*<span[^>]*>([^<]*)</),
+    affected: g(/Affected versions<\/h2>\s*<div class="[^"]*"\s*>([^<]*)</),
+    patched: g(/Patched versions<\/h2>\s*<div class="[^"]*"\s*>([^<]*)</),
+  };
+}
+
 // ── check F helpers: the CNA container + the stopping points of one vector ──────────────────
 /* FIRST, CVSS v3.1 specification §7.2, read off the page on 2026-10-27:
  *   TemporalScore = Roundup (BaseScore × ExploitCodeMaturity × RemediationLevel × ReportConfidence)
@@ -657,9 +731,32 @@ function checkCvss(it, subjects, cna = new Map()) {
           detail: `${hitAlt.id} · ${hitAlt.field ?? `${hitAlt.type}/${hitAlt.source}`} (bound subject ${bound.id} is ${rec.error === 'not-in-advisory-db' ? 'not in the global Advisory Database' : `unreadable: ${rec.error}`})`,
         });
       } else {
+        /* Before calling an advisory unreadable, ask the REPO page. A GHSA with no global record
+         * can still render a complete advisory — and when it does, the claim is verifiable and the
+         * right verdict is `advisory-repo-only` (2026-10-29 item 13: OpenPanel's
+         * `GHSA-49hg-9qhc-4623`, 404 in the DB, 200 on the page, "No known CVE" in its own CVE-ID
+         * row — which is also how the item's "carries no CVE id" claim gets checked). */
+        const page = rec.error === 'not-in-advisory-db' && bound.kind === 'ghsa' ? repoAdvisory(it, bound.id) : null;
+        if (page && !page.error) {
+          const rp = page.vector ? judge({ vector: page.vector, score: cl.score }) : { verdict: 'no-vector' };
+          const fs = (x) => Number(x).toFixed(1); // a CVSS score is written 9.0, not 9
+          const cells = [page.severity && `Severity ${page.severity}`, page.vector, page.patched && `patched ${page.patched}`, page.cve_id && `CVE ID ${page.cve_id}`].filter(Boolean).join(' · ');
+          if (rp.verdict === 'differs') {
+            out.push({
+              check: 'cvss', item: it.n, verdict: 'score-not-reproducible', claim: `${cl.version} ${cl.score}`,
+              detail: `${bound.id}: not in the global Advisory Database, but the repo page renders ${cells}; its vector computes ${fs(rp.computed)}, not ${cl.score} (Δ ${rp.delta > 0 ? '+' : ''}${rp.delta})`,
+            });
+          } else {
+            out.push({
+              check: 'cvss', item: it.n, verdict: 'advisory-repo-only', claim: `${cl.version} ${cl.score}`,
+              detail: `${bound.id}: not in the global Advisory Database, but the repo page renders (published ${String(page.published_at ?? '').slice(0, 10)}) — ${cells}${rp.verdict === 'exact' ? `; the vector reproduces ${fs(rp.computed)}` : ''} — an advisory that is not ingested is a STATE, not an unreadable page`,
+            });
+          }
+          continue;
+        }
         out.push({
           check: 'cvss', item: it.n, verdict: 'advisory-unreadable', claim: `${cl.version} ${cl.score}`,
-          detail: `${bound.id}: ${rec.error === 'not-in-advisory-db' ? 'no record in the global Advisory Database (a published repo page does not imply an ingested advisory)' : rec.error} — "I could not read it" is not "it does not say that"`,
+          detail: `${bound.id}: ${rec.error === 'not-in-advisory-db' ? 'no record in the global Advisory Database, and no repo page could be read (a published repo page does not imply an ingested advisory — and an uncited one cannot be found)' : rec.error} — "I could not read it" is not "it does not say that"`,
         });
       }
       continue;
@@ -814,6 +911,9 @@ function checkTemporal(it, cna, subjects) {
 let cache = {};
 try { cache = JSON.parse(readFileSync(CACHE_PATH, 'utf8')); } catch { /* first run */ }
 let apiCalls = 0;
+// unmetered `github.com` HTML fetches for the repo-advisory fallback — counted separately, because
+// conflating them with `api.github.com` would make the budget look spent when it is not.
+let repoCalls = 0;
 const CACHE_TTL_MS = 6 * 3600 * 1000;
 const ERROR_TTL_MS = 10 * 60 * 1000;
 
@@ -924,6 +1024,36 @@ function starQuoteSentence(plain, n) {
   return '';
 }
 
+/* Is this slug a Hugging Face model? One unmetered GET, memoised for the run. Returns a short
+ * description ("gated: false, 353 files") or null. Deliberately conservative: only a 200 with a
+ * parseable model record counts, so a network failure returns null and the caller still says
+ * `unreadable` rather than inventing a hub. */
+const HF_CACHE = new Map();
+function hfModel(slug) {
+  if (HF_CACHE.has(slug)) return HF_CACHE.get(slug);
+  let verdict = null;
+  try {
+    const r = execFileSync('curl', ['-sS', '-m', '20', `https://huggingface.co/api/models/${slug}`],
+      { encoding: 'utf8', maxBuffer: 8 * 1024 * 1024 });
+    const j = JSON.parse(r);
+    if (j && j.id) verdict = `huggingface.co/${j.id} (gated: ${j.gated}, ${(j.siblings || []).length} files, created ${String(j.createdAt || '').slice(0, 10)})`;
+  } catch { verdict = null; }
+  HF_CACHE.set(slug, verdict);
+  return verdict;
+}
+
+/* The model-card twin of `readme()`: `huggingface.co/<id>/raw/main/README.md`, unmetered. Returns
+ * `{ text }` (possibly empty) like `readme()`, or null when the hub does not answer 200. */
+async function hfCard(slug) {
+  if (!/^[\w.-]+\/[\w.-]+$/.test(slug)) return null;
+  try {
+    const r = execFileSync('curl', ['-sS', '-m', '30', `https://huggingface.co/${slug}/raw/main/README.md`],
+      { encoding: 'utf8', maxBuffer: 16 * 1024 * 1024 });
+    if (!r || /^Entry not found$/m.test(r)) return null;
+    return { text: r };
+  } catch { return null; }
+}
+
 function checkRepo(it, budget, ageBudget) {
   const out = [];
   const starQuotes = starQuotesOf(it.plain);
@@ -933,6 +1063,15 @@ function checkRepo(it, budget, ageBudget) {
     budget.left -= 1;
     const st = repoState(slug);
     if (st.error) {
+      // A Hugging Face model id is `org/Name` and looks exactly like a repository slug. Two items on
+      // 2026-10-29 (`internlm/Atria-Dawn`, `nvidia/NVIDIA-Nemotron-3.5-Transcribe-30B-A4B`) produced a
+      // bogus `unreadable` each, and the count check then asked for a GitHub README that cannot exist.
+      // Ask the other hub before calling a name unreadable; a 200 there is a model, not a repo.
+      const hf = hfModel(slug);
+      if (hf) {
+        out.push({ check: 'repo', item: it.n, verdict: 'hf-model', claim: slug, detail: `${hf} — a Hugging Face model id, not a GitHub repository (read the card, not a README)` });
+        continue;
+      }
       out.push({ check: 'repo', item: it.n, verdict: 'unreadable', claim: slug, detail: `api.github.com: ${st.error}` });
       continue;
     }
@@ -1065,6 +1204,9 @@ function citedPages(plain) {
     let rank = 1;
     const arxiv = /^https:\/\/arxiv\.org\/abs\/(\d{4}\.\d{4,5})(?:v\d+)?/.exec(url);
     const hf = /^https:\/\/huggingface\.co\/datasets\/([\w.-]+\/[\w.-]+)/.exec(url);
+    // a plain `huggingface.co/<org>/<name>` is a MODEL CARD, and it is the page a count about a model
+    // has to be read against — 2026-10-29 item 7's "40 languages" lives there, not in a GitHub README
+    const hfModelUrl = /^https:\/\/huggingface\.co\/(?!blog\/|datasets\/|spaces\/|papers\/)([\w.-]+\/[\w.-]+)(?:\/|$)/.exec(url);
     const blob = /^https:\/\/github\.com\/([\w.-]+)\/([\w.-]+)\/blob\/([^/]+)\/([^?#]+)$/.exec(url);
     const rawGh = /^https:\/\/raw\.githubusercontent\.com\/([\w.-]+)\/([\w.-]+)\/([^/]+)\/([^?#]+)$/.exec(url);
     if (arxiv) {
@@ -1074,6 +1216,11 @@ function citedPages(plain) {
     } else if (hf) {
       url = `https://huggingface.co/datasets/${hf[1]}/raw/main/README.md`;
       label = `HF dataset ${hf[1]}`;
+      raw = true;
+      rank = 0;
+    } else if (hfModelUrl) {
+      url = `https://huggingface.co/${hfModelUrl[1]}/raw/main/README.md`;
+      label = `HF model ${hfModelUrl[1]}`;
       raw = true;
       rank = 0;
     } else if (blob) {
@@ -1133,9 +1280,15 @@ async function checkCount(it) {
     claims.push({ n, noun, phrase: m[0] });
   }
   if (!claims.length || !it.repos.length) return out;
-  const rd = await readme(it.repos[0]);
-  if (!rd.text) {
-    out.push({ check: 'count', item: it.n, verdict: 'artifact-unreadable', claim: claims.map((c) => c.phrase).join(' | '), detail: `no README at ${it.repos[0]} — open the page before quoting a count` });
+  // A Hugging Face model id has a *card*, not a README, and the card is where a model's counts live
+  // (2026-10-29 item 7: "40 languages" is on the Nemotron card beside "34B (4.3B active)"). Asking
+  // GitHub for a README called an annotated item unreadable; ask the hub the id belongs to.
+  // `readme()` returns an OBJECT even when the fetch failed, so truthiness of the object is the wrong
+  // test — the fallback has to key on `.text` or the hub is never asked (measured 2026-10-29).
+  let rd = await readme(it.repos[0]);
+  if (!rd || !rd.text) rd = await hfCard(it.repos[0]);
+  if (!rd || !rd.text) {
+    out.push({ check: 'count', item: it.n, verdict: 'artifact-unreadable', claim: claims.map((c) => c.phrase).join(' | '), detail: `no README or model card at ${it.repos[0]} — open the page before quoting a count` });
     return out;
   }
   const body = rd.text.replace(/[*_`]/g, '');
@@ -1175,6 +1328,153 @@ async function checkCount(it) {
         out.push({ check: 'count', item: it.n, verdict: 'counted-by-author', claim: cl.phrase, detail: `no page states a ${cl.noun} total, and the item says so — the count is the author's own census` });
       } else {
         out.push({ check: 'count', item: it.n, verdict: 'absent', claim: cl.phrase, detail: `no count of ${cl.noun} on ${['README of ' + it.repos[0], ...fetched.map((p) => p.label)].join(' or ')}${pages.length > fetched.length ? ' (some cited pages were unreadable this run — unread is not absent)' : ''} — count it yourself, or say "no page states a total"` });
+      }
+    }
+  }
+  return out;
+}
+
+// ── check G: a count of MATCHES is not a count of OBJECTS ───────────────────────────────────
+/* The 10-29 feed published `/etc/ssl/cert.pem` "carries **8** `emSign` matches" — and 8 was
+ * right, as a **line** count, and wrong as a **certificate** count, because every certificate in
+ * that bundle writes its name twice (`subject=` and `issuer=`). There were **4** certificates and
+ * the bundle holds **128**. Three runs in one week produced the same species (`grep -c` quoted as
+ * an object count), so it is a unit the lint has to own: the item's number is "true" under one
+ * operation and false under the one a reader assumes.
+ *
+ * The check reads the bundle the item NAMES, on this host, and compares a quoted number against
+ * **matching certificates** and **matching lines** separately. Three things keep it from crying
+ * wolf: (a) only a bundle that carries name metadata can be checked at all — a bare Debian
+ * `ca-certificates.crt` is base64 with no subject lines, so nothing matches and nothing is said;
+ * (b) the number binds to the NEAREST path token in its own sentence, so a second store in the
+ * same sentence ("the keychain holds 154 … while the file holds 128") cannot be scored against the
+ * wrong bundle; (c) a sentence that NAMES the line operation (`grep -c`, `wc -l`, "8 lines") is
+ * `bundle-lines-named`, advisory — the disclosure is the fix, the `slot-quoted` shape again.
+ * `bundle-unavailable` says a named bundle is not on this host: report the set you measured. */
+const BUNDLE_TOKEN_RE = /[\w./~-]+\.(?:pem|crt|cer|p7b|keychain|jks|p12)\b/g;
+const BUNDLE_STOP = new Set([
+  'certificate', 'certificates', 'cert', 'certs', 'subject', 'issuer', 'begin', 'end', 'root',
+  'roots', 'bundle', 'store', 'file', 'keychain', 'lines', 'line', 'trust', 'trusted', 'openssl',
+  'python', 'macos', 'apple', 'system', 'systemroot', 'default', 'https', 'http', 'carries',
+  'holds', 'cert.pem', 'roots.pem',
+]);
+const BUNDLE_LINES_NAMED = /\b(?:lines?|rows?)\b|\bgrep\s+-c\b|\bwc\s+-l\b|\bgrep\s+-c\s/i;
+const BUNDLE_CACHE = new Map();
+
+function loadBundle(p) {
+  if (BUNDLE_CACHE.has(p)) return BUNDLE_CACHE.get(p);
+  let out = null;
+  try {
+    const text = readFileSync(p, 'utf8');
+    /* A certificate's readable name lives ABOVE its PEM block, not inside it: macOS's
+     * `/etc/ssl/cert.pem` is an `openssl x509 -text` dump where each root is preceded by
+     * `=== /C=…/CN=…` and `Subject: …` lines, and the block itself is pure base64. So a
+     * certificate's record is *the preamble since the previous block* plus the block — counting
+     * block membership alone returns 8 lines and **0** certificates (measured 2026-10-29). */
+    const records = [];
+    const re = /-----BEGIN CERTIFICATE-----[\s\S]*?-----END CERTIFICATE-----/g;
+    let last = 0;
+    for (const m of text.matchAll(re)) {
+      records.push({ block: m[0], head: text.slice(last, m.index) });
+      last = m.index + m[0].length;
+    }
+    if (records.length) {
+      // Metadata = everything that is neither a PEM delimiter nor a base64 body line. A Debian
+      // `ca-certificates.crt` carries none, so it can never produce a match and the check stays
+      // silent there rather than inventing 0s.
+      const meta = text.split('\n').filter((l) => l.trim() && !/^-----/.test(l) && !/^[A-Za-z0-9+/=]{20,}$/.test(l.trim()));
+      out = { text, records, total: records.length, meta: meta.join('\n') };
+    }
+  } catch { out = { error: 'unreadable' }; }
+  BUNDLE_CACHE.set(p, out);
+  return out;
+}
+
+function bundleNameStats(b, name) {
+  const re = new RegExp(name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'i');
+  const lines = b.text.split('\n').filter((l) => !/^-----/.test(l) && re.test(l)).length;
+  const certs = b.records.filter((r) => re.test(r.block) || re.test(r.head)).length;
+  return { lines, certs };
+}
+
+/** Proper-noun-ish tokens near the number that actually occur in this bundle's name metadata. */
+function bundleNamesNear(sent, b, at) {
+  const out = [];
+  const meta = b.meta.toLowerCase();
+  for (const m of sent.matchAll(/[A-Za-z][A-Za-z0-9&._-]{3,}/g)) {
+    const w = m[0];
+    if (BUNDLE_STOP.has(w.toLowerCase())) continue;
+    if (Math.abs(m.index - at) > 90) continue;
+    if (!meta.includes(w.toLowerCase())) continue;
+    out.push({ name: w, dist: Math.abs(m.index - at) });
+  }
+  return out.sort((a, b2) => a.dist - b2.dist);
+}
+
+function checkBundle(it) {
+  const out = [];
+  const t = it.text.replace(/\*\*|\*/g, '');
+  const tokens = [...t.matchAll(BUNDLE_TOKEN_RE)].map((m) => ({ path: m[0], at: m.index }));
+  if (!tokens.length) return out;
+  const said = new Set();
+  for (const s of sentences(t)) {
+    const local = tokens.filter((x) => x.at >= s.start && x.at < s.end);
+    if (!local.length) continue;
+    const sent = t.slice(s.start, s.end);
+    for (const nm of sent.matchAll(/(?<![\d.])(\d[\d,]{0,6})(?![\d.])/g)) {
+      const at = s.start + nm.index;
+      const near = local.reduce((a, b) => (Math.abs(b.at - at) < Math.abs(a.at - at) ? b : a));
+      if (Math.abs(near.at - at) > 140) continue;
+      const b = loadBundle(near.path);
+      if (!b) continue; // not a PEM bundle (or not a file we can count)
+      if (b.error) {
+        // Only a `.pem`/`.crt` path is honestly "named but unreadable here"; a keychain or a PKCS#12
+        // is a different container, and calling it unreadable would be a finding about the format.
+        const k = `un:${near.path}`;
+        if (/\.(?:pem|crt|cer|p7b)$/i.test(near.path) && !said.has(k)) {
+          said.add(k);
+          out.push({ check: 'bundle', item: it.n, verdict: 'bundle-unavailable', claim: near.path, detail: 'the item names this bundle and it is not readable on this host — report the set you measured, never a universal' });
+        }
+        continue;
+      }
+      const n = toNum(nm[1]);
+      if (!Number.isFinite(n) || n < 2) continue;
+      const cands = bundleNamesNear(sent, b, nm.index);
+      let hit = null;
+      for (const c of cands) {
+        const st = bundleNameStats(b, c.name);
+        if (st.lines < 2 && st.certs < 2) continue;
+        if (n === st.lines || n === st.certs) { hit = { ...c, ...st }; break; }
+      }
+      if (hit) {
+        const k = `${near.path}|${n}|${hit.name}`;
+        if (said.has(k)) continue;
+        said.add(k);
+        if (hit.lines === hit.certs || n === hit.certs) {
+          out.push({ check: 'bundle', item: it.n, verdict: 'bundle-ok', claim: `${n} × ${hit.name} in ${near.path}`, detail: `${hit.certs} certificate(s) match (${hit.lines} matching line(s)); bundle holds ${b.total}` });
+        } else if (BUNDLE_LINES_NAMED.test(sent)) {
+          out.push({ check: 'bundle', item: it.n, verdict: 'bundle-lines-named', claim: `${n} × ${hit.name} in ${near.path}`, detail: `${n} is the LINE count and the sentence says so — ${hit.certs} certificate(s) match, bundle holds ${b.total}` });
+        } else {
+          out.push({
+            check: 'bundle', item: it.n, verdict: 'bundle-line-count', claim: `${n} × ${hit.name} in ${near.path}`,
+            detail: `${n} is the number of matching LINES — every certificate writes its name as both subject= and issuer= — while only ${hit.certs} CERTIFICATE(S) match in a bundle of ${b.total}; count certificates, or name the operation that produced the count`,
+          });
+        }
+        continue;
+      }
+      // No name matched, but a TOTAL was claimed beside the path: read it against the bundle size.
+      // The total has to be spelled as one — a total verb immediately before the number, and no
+      // subset qualifier — because "there are 4 certificates" is a SUBSET count and comparing it
+      // with the bundle's 128 reported the correction as the defect on the first live run.
+      const totalVerb = /\b(?:holds?|carries|contains|ships|bundles|has)\s*$/i.test(sent.slice(Math.max(0, nm.index - 30), nm.index).replace(/[*`]/g, ''));
+      const subset = /\b(?:including|of which|match(?:es|ed)?|subset|among)\b/i.test(sent);
+      const tail = sent.slice(nm.index + nm[1].length).match(/^[\s*`]*(\d[\d,]{0,6})?[\s*`]*(certificates?|certs?|root certificates?|roots)\b/i);
+      if (totalVerb && !subset && tail && !tail[1]) {
+        const k = `tot:${near.path}|${n}`;
+        if (said.has(k)) continue;
+        said.add(k);
+        if (n === b.total) out.push({ check: 'bundle', item: it.n, verdict: 'bundle-ok', claim: `${n} ${tail[2]} in ${near.path}`, detail: `the bundle holds ${b.total} certificates` });
+        else out.push({ check: 'bundle', item: it.n, verdict: 'bundle-total-mismatch', claim: `${n} ${tail[2]} in ${near.path}`, detail: `the bundle holds ${b.total} certificates — a bundle is a snapshot, so requote it or date the reading` });
       }
     }
   }
@@ -1378,6 +1678,65 @@ if (SELFTEST) {
   t('count: and a bare count with no such disclosure is not suppressed',
     SELF_COUNTED.test(sentenceAround('The repo ships **24** skills in three groups.', '24** skills')), false);
 
+  // a bundle's matches are LINES; its objects are CERTIFICATES (measured 2026-10-29 on /etc/ssl/cert.pem)
+  const pemFixture = [
+    '### eMudhra Inc',
+    '',
+    '=== /C=US/OU=emSign PKI/O=eMudhra Inc/CN=emSign ECC Root CA - C3',
+    'Certificate:',
+    '        Subject: C=US, OU=emSign PKI, O=eMudhra Inc, CN=emSign ECC Root CA - C3',
+    '-----BEGIN CERTIFICATE-----',
+    'MIIB',
+    '-----END CERTIFICATE-----',
+    '=== /C=US/OU=emSign PKI/O=eMudhra Inc/CN=emSign Root CA - C1',
+    'Certificate:',
+    '        Subject: C=US, OU=emSign PKI, O=eMudhra Inc, CN=emSign Root CA - C1',
+    '-----BEGIN CERTIFICATE-----',
+    'MIIB',
+    '-----END CERTIFICATE-----',
+    '=== /C=IN/OU=emSign PKI/CN=emSign ECC Root CA - G3',
+    '        Subject: C=IN, OU=emSign PKI, CN=emSign ECC Root CA - G3',
+    '-----BEGIN CERTIFICATE-----',
+    'MIIB',
+    '-----END CERTIFICATE-----',
+    '=== /C=IN/OU=emSign PKI/CN=emSign Root CA - G1',
+    '        Subject: C=IN, OU=emSign PKI, CN=emSign Root CA - G1',
+    '-----BEGIN CERTIFICATE-----',
+    'MIIB',
+    '-----END CERTIFICATE-----',
+  ].join('\n');
+  const mb = {
+    text: pemFixture,
+    records: [...pemFixture.matchAll(/-----BEGIN CERTIFICATE-----[\s\S]*?-----END CERTIFICATE-----/g)]
+      .map((m, i, arr) => ({ block: m[0], head: pemFixture.slice(i ? arr[i - 1].index + arr[i - 1][0].length : 0, m.index) })),
+    total: 4,
+    meta: 'emSign ECC Root CA - C3\nemSign Root CA - C1\nemSign ECC Root CA - G3\nemSign Root CA - G1',
+  };
+  t('bundle: 8 matches are 8 LINES, and 4 certificates', bundleNameStats(mb, 'emSign'), { lines: 8, certs: 4 });
+  t('bundle: a name counts only if the bundle carries it',
+    bundleNamesNear('carries 8 emSign matches', mb, 9).map((x) => x.name), ['emSign']);
+  t('bundle: a structural word is not a name candidate',
+    bundleNamesNear('carries 8 certificate matches', mb, 9).map((x) => x.name), []);
+  t('bundle: an operation that NAMES the line count is not the defect',
+    BUNDLE_LINES_NAMED.test('grep -c emSign /etc/ssl/cert.pem returns 8'), true);
+  t('bundle: "8 emSign matches" names no operation', BUNDLE_LINES_NAMED.test('the file carries 8 emSign matches'), false);
+  t('bundle: an unreadable path is unavailable, never a count', loadBundle('/nonexistent/bundle.pem')?.error, 'unreadable');
+  // nearest-path binding: a second store in the same sentence must not be scored against the file
+  t('bundle: a keychain token anchors its own number',
+    [...'`SystemRootCertificates.keychain` holds 154 roots while `/etc/ssl/cert.pem` holds 128'.matchAll(BUNDLE_TOKEN_RE)].map((m) => m[0]),
+    ['SystemRootCertificates.keychain', '/etc/ssl/cert.pem']);
+
+  // the repo advisory page is a readable primary even when the global DB has no record (item 13)
+  const adv = parseRepoAdvisory('<span title="Severity: critical" data-view-component="true">Critical</span>'
+    + '<div data-view-component="true" class="mt-2 tmp-mt-2">CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:C/C:H/I:H/A:H</div>'
+    + '<relative-time datetime="2026-10-27T22:12:09Z">Oct 27, 2026</relative-time>'
+    + '<h3 class="mb-2 f6">CVE ID</h3> <div class="color-fg-muted" >No known CVE</div>');
+  t('repo advisory: severity, vector, CVE row are read off the page',
+    [adv.severity, adv.vector, adv.cve_id, adv.published_at],
+    ['critical', 'CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:C/C:H/I:H/A:H', 'No known CVE', '2026-10-27T22:12:09Z']);
+  t('repo advisory: its vector is the arithmetic a claim is checked against',
+    judge({ vector: adv.vector, score: 9.0 }).verdict, 'exact');
+
   for (const c of cases) console.log(`  ${c.pass ? '✓' : '✗'} ${c.name}${c.pass ? '' : ` — got ${JSON.stringify(c.got)}, want ${JSON.stringify(c.want)}`}`);
   const ok = cases.filter((c) => c.pass).length;
   console.log(`selftest ${ok}/${cases.length}`);
@@ -1444,6 +1803,8 @@ for (const { path: p, items } of parsed) {
   }
   if (!NO_NET && CHECKS.has('repo')) for (const it of items) findings.push(...checkRepo(it, budget, ageBudget));
   if (!NO_NET && CHECKS.has('count')) for (const it of items) findings.push(...await checkCount(it));
+  // the bundle check is local-only (it reads the path the item names), so it runs even under --no-net
+  if (CHECKS.has('bundle')) for (const it of items) findings.push(...checkBundle(it));
 
   perFile.push({ file: basename(p), items: items.length, findings });
   allFindings.push(...findings.map((f) => ({ file: basename(p), ...f })));
@@ -1451,10 +1812,10 @@ for (const { path: p, items } of parsed) {
 
 try { mkdirSync(dirname(CACHE_PATH), { recursive: true }); writeFileSync(CACHE_PATH, JSON.stringify(cache, null, 1)); } catch { /* cache is best-effort */ }
 
-const SEVERITY = { ok: 0, 'ok-cited-page': 0, 'no-cve-named': 1, 'no-record': 1, 'slot-quoted': 1, 'counted-by-author': 0, 'number-other-noun': 1, 'temporal-stopping-point': 1, 'cna-only-score': 1, 'star-drift': 2, 'star-dated': 1, 'ok-history': 0, 'history-older-than-record': 2, 'history-unreadable': 1, stale: 2, archived: 2, differs: 2, absent: 2, 'unsplit-issue-count': 3, 'compound-lags-parts': 3, 'version-swapped': 3, 'version-absent': 3, 'score-not-reproducible': 2, 'score-mismatch': 3, 'wrong-subject': 3, 'absence-contradicted': 3, 'advisory-unreadable': 1, unreadable: 1, 'artifact-unreadable': 1, 'nvd-unavailable': 1 };
+const SEVERITY = { ok: 0, 'ok-cited-page': 0, 'no-cve-named': 1, 'no-record': 1, 'slot-quoted': 1, 'counted-by-author': 0, 'number-other-noun': 1, 'temporal-stopping-point': 1, 'cna-only-score': 1, 'star-drift': 2, 'star-dated': 1, 'ok-history': 0, 'history-older-than-record': 2, 'history-unreadable': 1, stale: 2, archived: 2, differs: 2, absent: 2, 'unsplit-issue-count': 3, 'compound-lags-parts': 3, 'version-swapped': 3, 'version-absent': 3, 'score-not-reproducible': 2, 'score-mismatch': 3, 'wrong-subject': 3, 'absence-contradicted': 3, 'advisory-unreadable': 1, 'advisory-repo-only': 0, unreadable: 1, 'artifact-unreadable': 1, 'nvd-unavailable': 1, 'bundle-ok': 0, 'bundle-lines-named': 0, 'bundle-unavailable': 0, 'bundle-line-count': 3, 'bundle-total-mismatch': 2 };
 const REAL = (f) => (SEVERITY[f.verdict] ?? 1) >= 2;
 
-const summary = { generated: new Date().toISOString(), files: perFile, api_calls: apiCalls, readme_calls: readmeCalls, cited_page_calls: citedPages_requests, nvd_calls: nvdCalls, cna_calls: cnaCalls };
+const summary = { generated: new Date().toISOString(), files: perFile, api_calls: apiCalls, readme_calls: readmeCalls, cited_page_calls: citedPages_requests, repo_page_calls: repoCalls, nvd_calls: nvdCalls, cna_calls: cnaCalls };
 if (OUT) {
   try { mkdirSync(dirname(OUT), { recursive: true }); writeFileSync(OUT, JSON.stringify(summary, null, 1)); } catch { /* a missing findings file is not a failed lint */ }
 }
@@ -1484,7 +1845,7 @@ if (JSON_OUT) {
     for (const [k, v] of Object.entries(byCheck).sort((a, b) => b[1] - a[1])) console.log(`  ${k.padEnd(8)} ${v}`);
     console.log('  verdicts: ' + Object.entries(byVerdict).map(([k, v]) => `${k}=${v}`).join(' '));
   }
-  console.log(`\napi.github.com calls: ${apiCalls} (cached ${Object.keys(cache).filter((k) => !k.startsWith('readme:')).length} repos) · raw.githubusercontent fetches: ${readmeCalls} (unmetered) · NVD calls: ${nvdCalls} · cveawg calls: ${cnaCalls}`);
+  console.log(`\napi.github.com calls: ${apiCalls} (cached ${Object.keys(cache).filter((k) => !k.startsWith('readme:')).length} repos) · raw.githubusercontent fetches: ${readmeCalls} (unmetered) · github.com advisory-page fetches: ${repoCalls} (unmetered) · NVD calls: ${nvdCalls} · cveawg calls: ${cnaCalls}`);
 }
 
 const realCount = allFindings.filter(REAL).length;

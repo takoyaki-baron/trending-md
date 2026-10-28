@@ -13735,5 +13735,74 @@
     "en": "The Stanford Daily, the university independent student newspaper — campus-level reporting; useful for named local sources, but legal claims should be checked against court documents.",
     "zh": "《斯坦福每日》，该校独立学生报——校园层面的报道；可用于具名本地信源，但法律主张应以法院文书核对。",
     "jp": "The Stanford Daily は同大学の独立系学生新聞。キャンパス単位の報道。名前の出る地元情報源には有用だが、法的な主張は裁判資料で確認すること。"
+  },
+  "emudhra.we-have-a-problem.com": {
+    "cat": "security",
+    "cred": "high",
+    "density": "high",
+    "cv": 2,
+    "cvlog": [
+      "2026-10-29 — first-hand on a macOS host: `security find-certificate -c \"emSign ECC Root CA - G3\"` returns the root from SystemRootCertificates.keychain and /etc/ssl/cert.pem carries 8 emSign matches, confirming the page's claim that Apple's shipped trust stores still anchor the compromised chain; the HN thread's correction (git validates the system store, so the store is the defect) was folded into the item."
+    ],
+    "en": "Community incident tracker for the eMudhra intermediate-CA compromise (eight intermediates, keys derivable from the certs since April 2025). Best-in-class density: per-OS/per-runtime/Electron patch tables, named roots, runnable check commands, and an Apple-specific follow-up. First-party to the researchers, not a news relay — treat the timeline as authoritative and every unwritten claim as absent. Verified (10-29): Apple-shipped git/curl/python3 still trusted the chain as of 10-28, and macOS 27.2 reversed manual fixes.",
+    "jp": "eMudhra中間CA侵害（中間8件、鍵は2025年4月の証明書作成時から導出可能）のコミュニティ事後追跡サイト。密度は群を抜く：OS別・ランタイム別・Electron別の修正表、名指しされたルート、実行可能な確認コマンド、Apple向けの追加報告。報道の中継ではなく研究者による一次資料——タイムラインは権威として扱い、書かれていない主張は「無い」と読む。検証済み（10-29）：10-28時点でApple同梱のgit/curl/python3は依然この鎖を信頼し、macOS 27.2は手動修正を巻き戻した。",
+    "zh": "eMudhra 中间 CA 失陷事件的社区追踪页（8 个中间证书，私钥自 2025 年 4 月证书创建时起即可导出）。信息密度一流：按操作系统/运行时/Electron 分类的修复表、点名的根证书、可执行的检查命令，以及一份专门针对 Apple 的后续报告。属研究者一手材料而非新闻转述——时间线可作权威，未写出的主张按「不存在」读。已核验（10-29）：截至 10-28，Apple 内置 git/curl/python3 仍信任该链，且 macOS 27.2 撤销了手工修复。"
+  },
+  "nullpt.rs": {
+    "cat": "security",
+    "cred": "med",
+    "density": "high",
+    "cv": 1,
+    "en": "One researcher's reverse-engineering blog (browser fingerprinting, anti-bot internals). Long, artifact-first write-ups with code and decoded payloads, but single-author and self-published — the analysis is checkable only by rerunning the crawl. Verified (10-29): the article body was fetched directly and the bioweapon-named functions, the codePointAt - 917504 shift and the 'SYSTEM OVERRIDE' string are present as described; the author's own caveat that some reads use empty callbacks was carried into the item.",
+    "jp": "ある研究者によるリバースエンジニアリングのブログ（ブラウザフィンガープリント、アンチボットの内部）。コードと復号済みペイロードを伴う長く成果物優先の記事だが、単著の自費出版——分析はクロールを再実行して初めて検証できる。検証済み（10-29）：本文を直接取得し、生物兵器名の関数、codePointAt - 917504のシフト、'SYSTEM OVERRIDE'文字列が記述どおり存在することを確認。いくつかの読み取りが空コールバックを使うという著者自身の但し書きも記事に反映した。",
+    "zh": "一位研究者的逆向工程博客（浏览器指纹、反爬内部实现）。文章长、以产物为先，附代码与解码后的载荷，但属单人自出版——其分析只能靠重跑爬取来验证。已核验（10-29）：直接抓取正文，生物武器命名的函数、codePointAt - 917504 位移与「SYSTEM OVERRIDE」字符串均如文中所述存在；作者自己「部分读取使用空回调」的告诫也已写入条目。"
+  },
+  "surgehq.ai": {
+    "cat": "research",
+    "cred": "med",
+    "density": "high",
+    "cv": 1,
+    "en": "Data-labeling vendor that publishes agent benchmarks (DAYJOB series) built with domain experts. High density on task construction and rubric thresholds, but vendor-authored and self-graded — no independent reproduction, and no formal limitations section. Read the rubric definition before the score. Verified (10-29): 50 environments, 1,789 files and the 10.8/9.6/9.2 pass@1 figures are stated on the post as cited.",
+    "jp": "専門家と組んでエージェントベンチマーク（DAYJOBシリーズ）を公開するデータラベリング企業。タスク構成と採点閾値の記述は高密度だが、自社作成・自社採点——独立再現はなく、正式な限界の節もない。スコアより採点定義を先に読むこと。検証済み（10-29）：50環境、1,789ファイル、pass@1の10.8/9.6/9.2は投稿に引用どおり記載されている。",
+    "zh": "数据标注公司，与领域专家共建并发布智能体基准（DAYJOB 系列）。任务构造与评分门槛写得密度很高，但为自建自评——无独立复现，也没有正式的局限性章节。先读评分定义再读分数。已核验（10-29）：50 个环境、1,789 个文件与 pass@1 的 10.8/9.6/9.2，均与原文一致。"
+  },
+  "atria-asi.ai": {
+    "cat": "vendor",
+    "cred": "med",
+    "density": "med",
+    "cv": 1,
+    "en": "Official site for Shanghai AI Laboratory's Atria model family. The canonical place for the benchmark table and the hosted-API endpoints; the same numbers appear on the Hugging Face model card, so cite whichever you read and note they are lab-reported. Verified (10-29): the HF card states the table 'matches the official website', and the full weights are downloadable rather than 'coming soon'.",
+    "jp": "上海人工知能実験室のAtriaモデルファミリー公式サイト。ベンチマーク表とホスト型APIエンドポイントの正典。同じ数値がHugging Faceのモデルカードにも載るので、読んだ方を引用し、いずれもラボ自己申告であることを明記する。検証済み（10-29）：HFカードは表が「公式サイトと一致する」と述べ、完全な重みは「近日公開」ではなく実際にダウンロード可能。",
+    "zh": "上海人工智能实验室 Atria 模型家族的官方网站。基准表与托管 API 端点的正典出处；同样的数字也出现在 Hugging Face 模型卡上，引用哪一份就注明哪一份，并说明均为实验室自报。已核验（10-29）：HF 模型卡称该表「与官网一致」，且完整权重可下载而非「即将发布」。"
+  },
+  "so-net.ne.jp": {
+    "cat": "vendor",
+    "cred": "high",
+    "density": "high",
+    "cv": 1,
+    "en": "Primary corporate disclosure channel for So-net (Sony Network Communications). Breach notices here are the authoritative record — exact per-service counts, which fields, what was NOT exposed, and the reset timing. Japanese-language only. Verified (10-29): the 2026-10-27 notice's figures (2,585,481 total, 54,401 email+password, 16 bank records) are the ones Help Net Security relays.",
+    "jp": "So-net（ソニーネットワークコミュニケーションズ）の一次開示チャネル。ここの漏えい告知が権威ある記録で、サービス別の正確な件数、項目、漏れなかったもの、リセットの時刻まで載る。日本語のみ。検証済み（10-29）：2026-10-27告知の数値（合計2,585,481件、メール＋パスワード54,401件、銀行16件）はHelp Net Securityが伝えるものと一致。",
+    "zh": "So-net（索尼网络通信）的一手披露渠道。此处的泄露公告即权威记录——按服务的精确条数、字段、哪些未泄露、重置时点。仅日文。已核验（10-29）：2026-10-27 公告中的数字（合计 2,585,481 条、邮箱+密码 54,401 条、银行 16 条）与 Help Net Security 转述的一致。"
+  },
+  "fingerprint.garden": {
+    "cat": "data",
+    "cred": "med",
+    "density": "med",
+    "cv": 1,
+    "en": "Gallery of 1,033 canvas fingerprint renders captured from a Tranco Top-10,000 crawl, clustered by vendor. Useful as a visual index of who is fingerprinting and how; it is one crawl at one time, with no methodology page on the site — the write-up carries the method. Verified (10-29): the site resolves and the nullpt.rs article states the 1,033 figure and the Tranco source.",
+    "jp": "Tranco上位10,000のクロールから採取した1,033枚のcanvasフィンガープリント描画を、ベンダー別にクラスタリングしたギャラリー。誰がどう指紋採取しているかの視覚的索引として有用。ただし1回のクロールであり、サイトに手法ページはない（手法は記事側にある）。検証済み（10-29）：サイトは到達可能で、nullpt.rsの記事が1,033枚とTranco由来を明記している。",
+    "zh": "从 Tranco 前 10,000 爬取中采集的 1,033 张 canvas 指纹渲染图，按厂商聚类。作为「谁在采集、怎么采集」的视觉索引很有用；但它只是一次爬取的快照，站内没有方法学页面（方法写在文章里）。已核验（10-29）：站点可访问，nullpt.rs 文中明示 1,033 张与 Tranco 来源。"
+  },
+  "we-have-a-problem.com": {
+    "cat": "security",
+    "en": "Independent incident site for the eMudhra CA compromise: a timeline of the block across Chrome/Firefox (17 Oct), Microsoft (20 Oct) and Apple products (22 Oct), per-product patched/unpatched tables, and self-check commands (a `git ls-remote` probe, a chain test). High-density primary measurement rather than coverage; ties its claims to artifacts you can run, and states its own limits (CT absence constrains clients that enforce CT, not attackers).",
+    "zh": "eMudhra CA 泄露事件的独立事件站：Chrome/Firefox（10 月 17 日）、微软（10 月 20 日）、Apple 产品（10 月 22 日）的封锁时间线、逐制品的已修/未修表，以及自查命令（`git ls-remote` 探针、链验证）。高密度的第一手测量而非转述报道；把断言系在可执行的制品上，并写明自身局限（CT 的缺席约束的是强制 CT 的客户端，不是攻击者）。",
+    "jp": "eMudhra CA 侵害事件の独立インシデントサイト：Chrome/Firefox（10/17）、Microsoft（10/20）、Apple 製品（10/22）のブロック時系列、製品別の修正済み／未修正表、そして自己確認コマンド（`git ls-remote` プローブ、チェーン検証）。報道の転載ではなく高密度の一次計測で、主張を実行可能な成果物に結びつけ、自らの限界も書く（CT の不在が拘束するのは CT を強制するクライアントであり攻撃者ではない）。",
+    "cred": "high",
+    "density": "high",
+    "cv": 2,
+    "cvlog": [
+      "2026-10-29 — verified the page’s macOS claim first-hand rather than via coverage: `/etc/ssl/cert.pem` on macOS 15.5 (24F74) holds 128 roots incl. 4 eMudhra (C1, C3, G1, G3) while `SystemRootCertificates.keychain` holds 154 incl. 2 (G1, G3), and `trust-store-check.mjs` reads G3 as ANCHOR in keychain + file + Java, absent from mozilla/certifi/curl. Independently measured with `trust-store-check.mjs`, not quoted from the page."
+    ]
   }
 }

@@ -1200,3 +1200,38 @@ fix unit in the same bulletin is a **build number** — `7.4.4 build 9402` → `
 "we're on 7.4.4" is not a patched statement to any inventory tool that reads a version string.
 
 → [[fact-check]] [[disclosure-lag]]
+
+## 2026-10-29 — a repository can be CVE-blind by policy, and "patched" can mean patched twice
+
+**Measured with `gh api repos/Openpanel-dev/openpanel/security-advisories` (37 records, one call):**
+**37** advisories published **2026-08-20T19:11:23Z → 2026-10-27T22:12:09Z**, of which **0 carry a CVE id**
+— and they are not spread evenly. The publication stamps cluster into **four bursts**: 9 on 2026-08-20
+(after 19:11, seven of them inside **4 seconds** at 19:19:04–19:19:08), 4 on 08-26, 4 on 09-04, and **19**
+across 10-11/10-12 (14 of them between 19:18 and 21:11 on 10-11). So two rules hold at once: the *publish
+date* is a workflow stamp, and the CVE absence is a **repository-level policy**, not per-advisory neglect.
+
+The consequence for a consumer is stronger than "no CVE yet": a CVE-keyed scanner cannot see **any** of the
+37, by construction, and nothing about the repo's hygiene would predict it. The advisories carry
+`critical`/`high`/`medium` labels and one of them (GHSA-49hg-9qhc-4623) is an unauthenticated RCE at
+**CVSS 3.1 9.0** — `AV:N/AC:H/PR:N/UI:N/S:C/C:H/I:H/A:H`, recomputed by hand: ISS = 0.914816,
+Impact(S:C) = 7.52×0.885816 − 3.25×0.894816¹⁵ = **6.04774**, Exploitability = 8.22×0.85×0.44×0.85×0.85 =
+**2.22117**, so `Roundup(1.08 × 8.26891) = 9.0`. The `AC:H` is what keeps it out of the ≥9.5 band; `S:C` is
+what pulls the computed base back to 9.0 rather than below critical. Mechanics worth keeping: the endpoint
+decoded attacker-chosen bytes with `sharp`/libvips and checked `Content-Type`, "**but libvips picks its
+decoder from the file's magic bytes**", so every loader (GIF, TIFF, HEIF/AVIF, SVG, BMP) was reachable from
+one parameter; the fix **removed** `/misc/og` and reduced `/misc/favicon` to a hostname lookup rather than
+adding a bounds check. Fix `v3.16.2` at **21:41:57Z**, advisory at **22:12:09Z** — 30 minutes.
+
+**The fix-of-a-fix is a range problem, and two advisories can both say "upgrade".** `@fastify/express`
+`CVE-2026-112362` covers **4.0.5 – 4.0.8**, fixed in **4.0.9** (record: one metric, **0 NVD-scored**, 9.1 in
+NVD's Secondary slot, `CWE-436`, `Awaiting Analysis`). The previous advisory `GHSA-6hw5-45gm-fj88` handled
+**≤ 4.0.4**, patched in **4.0.5** — and it names the mechanism: the plugin "only handles percent-encoding —
+it does not normalize duplicate slashes or strip semicolon-delimited parameters." The new bug is what
+remained: with the non-default `ignoreDuplicateSlashes` on, an absolute-form request target
+(`GET http://host/admin/dashboard`) has its duplicate-slash normalisation collapse the separator after the
+scheme, so Fastify's router matches and runs the handler while the Express layer "passes the original
+un-normalized URL" and `app.use('/admin', authMiddleware)` is skipped. Anyone who pinned 4.0.5 or 4.0.6 on
+the earlier advisory is affected **now**, having done nothing wrong. The semicolon half of the original
+advisory is a *surviving* vector class, not a closed one.
+
+→ [[disclosure-lag]] [[fact-check]] [[security]]

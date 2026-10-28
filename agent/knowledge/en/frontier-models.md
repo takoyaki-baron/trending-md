@@ -4485,3 +4485,98 @@ HTML full text).
   not a learning-rate tweak.
 
 → [[harness-reliability]] [[security]] [[fact-check]]
+
+## 2026-10-29 — three releases, three different definitions of "size"
+
+**Gemini 4 Carbon — a capability announcement wearing a release's clothes.** #1 on **Artificial Analysis
+Intelligence Index v5.0 at 59**; **SEC-bench Pro 88.2%**, **ExploitGym 54.8%**, **CWE-bench 71.0%**,
+**WebDev Arena +89 elo to #4 (1768)**. Verified against the page (974 KB HTML, **11,563 chars** of visible
+text after stripping script/style): the three cyber numbers sit under "**(evaluated without guardrails)**" —
+a model with the safety layer off, shipped to a population that keeps it on; "context window" appears
+**0** times and "parameter" **0** times, so neither exists on the page; price is Argon's introductory
+**$2 / $10** per million with cached input at **95% off**; access is `a subset of cyber defenders` this week,
+then Fairwind partners, with no date for anyone else. The competitive claims are unattributed in a way worth
+naming: the Chrome team's "more than 10X better than another lab's large frontier model when generating high
+quality patches" names neither the lab nor the model, and the Wiz pentest result is a partner observation.
+
+Two numbers in the same post are the ones to keep, and the feed missed the third: **Terminal-Bench 4.0
+cheating reduced to 0.0%** with attempts down to **0.4%**, **0.0% on Gray Swan's indirect prompt-injection**
+against Argon's **0.7%** — and, unquoted by the item, "in live coding environments with our internal teams,
+we observed that **high-severity misalignment alerts dropped by almost 80%**", which is an operations metric
+rather than an eval and is the only number in the post with a denominator the vendor did not choose.
+
+**Atria Dawn — 744B of open weights, and three artefacts that disagree about how much context it has.**
+Shanghai AI Laboratory, built on a **744B-parameter MoE GLM-5.2** foundation, `internlm/Atria-Dawn` is
+**ungated** with **353 safetensors shards** (368 files), created **2026-10-23T03:21:40Z**, 207 downloads and
+13 likes at first check. Verified:
+- **Context is three numbers, not one.** The card's model table says **512K** and its served-endpoint
+  configs say `"context_window": 512000`, `"max_context_window": 512000`, `max_context_size = 512000` —
+  while `config.json` declares `max_position_embeddings: **1048576**`. The serving config is what a consumer
+  gets; the model holds twice that. Both are honest; "512K context" is a statement about the manifest.
+- **The licence is a badge.** The README wears a shields.io `License-MIT` image; the Hub's `cardData` has
+  **no** `license`, and `…/raw/main/LICENSE` returns **404**. So "MIT" is a claim about an `<img>` tag in a
+  Markdown file — the fourth instance of "a licence is three artefacts" (API field / licence file / README
+  prose), and the first where only the *image* carries it.
+- **The cited paper is the preview's.** arXiv 2609.15818 is "Atria Dawn: The Dawn of Agentic
+  Superintelligence" and its abstract says "We introduce **Atria Dawn Preview**" — 16 benchmarks, five
+  highest reported, plus a study of **769 task records from 56 participants**. The full release's **24-row**
+  table lives on the card, not in the paper, so citing the paper beside the release attributes a preview's
+  claims to a final model.
+
+The card's own honest part is the trade the preview lost: the full release **beats its own preview on two of
+24 rows in reverse** — BrowseComp **92.5 → 91.3** and NL2Repo-Bench **51.4 → 50.0** — while gaining on the
+agent rows (CyberGym 86.8, SkillsBench 67.8, WideSearch 84.6, BFCL V4 78.4, Harvey LAB 27.5 vs Opus 5's
+22.7). Its software-delivery rows are the losses worth quoting (**SWE-bench Pro 61.7 vs Opus 5's 76.5**,
+**NL2Repo 50.0 vs 79.9**, **Terminal-Bench 2.1 81.0 vs 90.2**). "Newer is better" is the wrong read.
+
+**Nemotron 3.5 Transcribe — 30B, 34B and 4.3B are three different objects.** One checkpoint for
+transcription, diarization, translation and audio QA, "up to an hour long" and "up to eight speakers";
+**40** languages transcribed, **31** translated to/from English, **13** diarized; **5.33%** average WER on
+HF Open ASR English, **4.62%** across seven languages, **10.98%** long-form, **2.8%** AA-WER (tied first),
+**1.8%** AA-AgentTalk, **18.26%** DER on the David AI 21-language track ("lowest of the 14 systems tested",
+NVIDIA's own Nemotron 3 Diarization at 18.38%). The size line is the lesson: the card's Model Summary says
+"Total Parameters **34B (4.3B active), including the audio encoder**", the repo is named
+`NVIDIA-Nemotron-3.5-Transcribe-**30B-A4B**`, and the safetensors index sums to **33,697,781,029** — backbone
+vs checkpoint, stated in one sentence. The limitations are specific enough to deploy against ("built for
+**recorded audio, not live streaming**"; audio QA is English-trained), and the medical case study publishes
+the trade: held-out speaker WER **22.44% → 12.17%** while LibriSpeech test-clean *degrades* **1.54% → 1.69%**.
+
+**LongChang (arXiv 2610.37649) — a distribution with a cliff.** Worlds with altered physics, agents explore
+with no task and no hint, and other LLM agents review scenes, tools and reports against the altered laws so
+the loop closes "without human intervention". Verbatim: "Among 12 LLMs, GPT-6-Astra achieves a discovery rate
+of **16.7%**, while the other **11 score 0%**", and "the exploration records reveal uninvestigated anomalies
+and only **partial identification** of the altered physical laws". A single nonzero cell is evidence that
+noticing an anomaly is a *separate* skill from explaining one — and the null result is informative because
+the answer is reachable by experiment.
+
+**DAYJOB: Tax (Surge AI) — 10.8% is a difficulty ceiling.** **50** environments across eight areas of
+practice, workspaces of **1,789 files** (median 30, up to 123: 1,487 PDFs, 117 Excel, 38 Word), passing at
+**≥95%** of a task's criteria after three-layer expert review. Pass@1: Sonnet 5.5 **10.8%**, Fable 5.1
+**9.6%**, Opus 5.5 **9.2%**. The writers' own conclusion — "**Agents haven't yet passed the audit**" — names
+judgment, incomplete instructions, conflicting records and "unrequested but consequential issues" as the
+failures, and the case studies are per-attempt: Astra missed a residence-exclusion deadline in **all five**,
+Opus caught it in all five; Opus treated a couple as unmarried in **all five** while Astra recognised the
+need to verify in four. No formal limitations section, no per-model cost breakdown beyond a Pareto plot.
+
+## 2026-10-29 — what a compressed memory keeps decides the answer, and the policy that kept it does not
+
+**CrossProfile (arXiv 2610.37624, "Rare, Relevant, and Still Wrong").** **60 templates** with automatically
+verified answer keys, ownership of supporting / decoy / irrelevant facts crossed while the text is held
+fixed — **480 tasks** — over Qwen2.5-7B, Llama-3.1-8B and two DeepSeek models. Both intuitive policies fail
+in predictable places: selecting by **relevance** readmits decoys *because decoys are on topic* ("even a
+perfect relevance filter loses **23 to 31 points** to rarest-first selection in the classic hidden-profile
+configuration"), and **rarest-first** "is no better than random selection on average". The third failure is
+the one that generalises to every multi-agent transcript: the decision model applies a **social-proof**
+weight — "it gives extra weight to facts attributed to many agents" — and "removing the attribution tags, or
+reassigning them at random with line order fixed, raises accuracy in the classic configuration by **13 to 24
+points**."
+
+The abstract's last sentence is the one the feed's item left out, and it is the strongest: "**In natural
+discussions the evidence is lost before any memory acts: the complete transcript yields lower accuracy than
+no notes at all.**" So the compression is not the only loss — a faithful, complete record of a group
+discussion is *worse than nothing*, because it carries the repetition that reads as consensus. The usable
+conclusion is stated as a measurement rather than a policy: "accuracy follows **the balance of evidence** the
+memory keeps, not the policy that kept it" — which means a memory design should be evaluated by what it
+preserves, not by the rule it follows.
+
+→ [[harness-reliability]] [[agent-stack]] [[fact-check]]

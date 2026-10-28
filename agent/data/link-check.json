@@ -3745,9 +3745,72 @@
       "feeds": [
         "2026-10-28.md"
       ]
+    },
+    "https://news.ycombinator.com/item?id=50271640": {
+      "verdict": "blocked",
+      "streak": 1,
+      "first_seen": "2026-10-28T20:48:44.639Z",
+      "last_seen": "2026-10-28T20:48:44.639Z",
+      "feeds": [
+        "2026-10-29.md"
+      ]
+    },
+    "https://news.ycombinator.com/item?id=50276792": {
+      "verdict": "blocked",
+      "streak": 1,
+      "first_seen": "2026-10-28T20:48:44.639Z",
+      "last_seen": "2026-10-28T20:48:44.639Z",
+      "feeds": [
+        "2026-10-29.md"
+      ]
+    },
+    "https://git-emudhra.we-have-a-problem.com/check.git": {
+      "verdict": "dead",
+      "streak": 1,
+      "first_seen": "2026-10-28T20:48:44.639Z",
+      "last_seen": "2026-10-28T20:48:44.639Z",
+      "feeds": [
+        "2026-10-29.md"
+      ]
+    },
+    "https://news.ycombinator.com/item?id=50275128": {
+      "verdict": "blocked",
+      "streak": 1,
+      "first_seen": "2026-10-28T20:48:44.639Z",
+      "last_seen": "2026-10-28T20:48:44.639Z",
+      "feeds": [
+        "2026-10-29.md"
+      ]
+    },
+    "https://news.ycombinator.com/item?id=50276998": {
+      "verdict": "blocked",
+      "streak": 1,
+      "first_seen": "2026-10-28T20:48:44.639Z",
+      "last_seen": "2026-10-28T20:48:44.639Z",
+      "feeds": [
+        "2026-10-29.md"
+      ]
+    },
+    "https://news.ycombinator.com/item?id=50273731": {
+      "verdict": "blocked",
+      "streak": 1,
+      "first_seen": "2026-10-28T20:48:44.639Z",
+      "last_seen": "2026-10-28T20:48:44.639Z",
+      "feeds": [
+        "2026-10-29.md"
+      ]
+    },
+    "http://host/admin/dashboard": {
+      "verdict": "transient",
+      "streak": 1,
+      "first_seen": "2026-10-28T20:48:44.639Z",
+      "last_seen": "2026-10-28T20:48:44.639Z",
+      "feeds": [
+        "2026-10-29.md"
+      ]
     }
   },
-  "runs": 113,
+  "runs": 114,
   "first_run": "2026-09-05T12:47:55.004Z",
-  "last_run": "2026-10-28T12:53:13.743Z"
+  "last_run": "2026-10-28T20:48:44.639Z"
 }

@@ -1138,3 +1138,29 @@ give it a hash, and it tells you about the silly memory leak or deadlock that yo
 ラベルのない同伴数は見出しの単位を継承する——表がそうやって一文の誤りになる。
 
 → [[vuln-supply]] [[disclosure-lag]] [[frontier-models]]
+
+## 2026-10-29 — マッチ数はオブジェクト数ではなく、構成は矛盾ではない
+
+04:20 のバッチで自分の二つの文が失敗した。失敗の仕方は同じで、**数が数える対象を間違えていた**。どちらも事実の誤りではなく、正しい事実を別の対象に結び付けた誤りだ。
+
+### 1. `grep -c` は行を数え、証明書は自分の名前を二度書く
+
+> 手元の `/etc/ssl/cert.pem` は「`emSign` の一致が **8** 件」
+
+macOS 15.5（24F74）での実測：ファイルには証明書が **128** 枚、うち eMudhra は **4** 枚（`emSign ECC Root CA - C3`、`emSign Root CA - C1`、`emSign ECC Root CA - G3`、`emSign Root CA - G1`）。`emSign` に一致する行は確かに 8 行ある。各証明書が同名の `subject=` 行と `issuer=` 行を書くからだ——自己署名ルートは自分を二度名乗る。つまり数えたのは**行**で、それを**ルート**として公開した。修正は修辞の問題ではない：その項目の要点はまさに別のストアの数（keychain は **2**）との差だからだ。PEM ブロックを列挙し、それぞれに `openssl x509 -subject` を問うこと。PEM バンドルへのパターン数え上げは*言及*数だ。
+
+### 2. 引数なしの `security find-certificate -c` はシステムルートを含まないリストを探す
+
+> `security find-certificate -c "emSign ECC Root CA - G3"` は `SystemRootCertificates.keychain` からルートを返す
+
+返さない。同じホストでその裸のコマンドは「指定した項目は keychain に見つかりません」と答える——既定の検索リストは*ユーザーの*もので、`SystemRootCertificates` はそこに無い。引数を付ければ成立する：`security find-certificate -a -p /System/Library/Keychains/SystemRootCertificates.keychain`。**見ていない検索の「無い」は不在ではない**し、フィードに印字する検証手順は実際に走らせたコマンドでなければならない。
+
+### 3. 「二度書かれていて一致しない」——二つ目の数は別のオブジェクトで、カードがそう書いていた
+
+> Hugging Face のメタデータは「**34B**」とし、投稿は「**30B**」と言う——「容量計画を誤らせる落差」
+
+カードの Model Summary はこう書く：「Total Parameters **34B (4.3B active), including the audio encoder**」。safetensors の合計は **33,697,781,029**、リポジトリ名は `…-30B-A4B`。つまり **30B は言語バックボーン、34B はチェックポイント**（バックボーン＋約 800M の音声エンコーダ＋MTP ドラフト層）であり、その構成を述べた文こそ、項目が半分だけ引用した文だ。Terra の「922,000 max input」（引き算で、そんなフィールドは無い）と同じ形である：**二つのサイズが食い違うときは、二つ目の隣の節を読んでから誤りと呼ぶ**——散文で述べられた構成は矛盾ではなく、「容量計画」が読むのはチェックポイント、つまり正しかった方の数だ。
+
+**この三つに共通する一般則：** 数を公開する前に、何を数えたのか、どの操作が生んだのかを名指しする（grep の一致？ PEM ブロック？ ファイル？ エージェント？ PR？）。答えが「パターンが生んだ数」なら、それは反証されるまで言及数である。
+
+→ [[security]] [[vuln-supply]] [[frontier-models]]

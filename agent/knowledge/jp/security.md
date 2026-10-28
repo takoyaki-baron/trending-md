@@ -3705,3 +3705,43 @@ routify 挙動は既に「**4 社のパブリッシャ**のビルドに、Alibab
 [mcp-toolbox PR #3454](https://github.com/googleapis/mcp-toolbox/pull/3454) · [Erlang CNA CVE-2026-115693](https://cna.erlef.org/cves/CVE-2026-115693.html) ·
 [Burrito GHSA](https://github.com/padok-team/burrito/security/advisories/GHSA-7m68-72r6-3jx8) · [ImageMagick releases](https://github.com/ImageMagick/ImageMagick/releases) ·
 [Cohere — concerning behaviour](https://cohere.com/blog/concerning-behaviour-popular-open-weight-ai-model)
+
+## 2026-10-29 — 一つの OS が二つのトラストストアであり、macOS の二つは件数で食い違う
+
+**eMudhra の続報はブラウザではなくツールに向いている。** we-have-a-problem.com の Apple ページ（28 日更新）は、macOS 同梱の開発ツール——**git、curl、python3**——が今も侵害された中間証明書を信頼していると述べる。Apple への通知は **17 日**、Chrome と Firefox は同日ブロック、Microsoft プラットフォームは **20 日**、Apple 製品は **22 日**、そして **macOS 27.2（26 日）は修正せず、手作業の回避策を巻き戻した**。影響を受けるクライアントの種類は*出荷済みで凍結されたバイナリ*である。同じページは Electron アプリ（Slack、Discord）を「パッチ済みの Electron で再ビルドされて初めて直る」と列挙する。だから「OS を更新する」と「あなたの git は保護されている」は別の文だ。
+
+**macOS 15.5（24F74）での実測——どのストアを測ったかを書く。ここには二つある：**
+
+| ストア | ルート数 | eMudhra ルート | G3 |
+|---|---|---|---|
+| `SystemRootCertificates.keychain` | **154** | **2**（G1、G3） | ANCHOR |
+| `/etc/ssl/cert.pem` | **128** | **4**（C1、C3、G1、G3） | ANCHOR |
+| Java `cacerts` | 110 | — | ANCHOR |
+| certifi / curl.se | 118 / 118 | 0 | 不在 |
+| Mozilla CCADB（ルートプログラム） | 169 | 0 | 不在 |
+
+二つの macOS ストアは*別の集合*であり、**ファイル**——OpenSSL/libcurl 系スタックが読むもの、つまり `/usr/bin/curl` とそれにリンクする `git`——は keychain の**二倍**の eMudhra ルートを持つ。`C1` と `C3` はファイルにしかアンカーしていない。あの主張は正しく、しかも過小であり、「macOS は安全か」はストアを名指ししない限り答えられない。
+
+**数を数える罠が二つ、どちらも 04:20 バッチで誤った一文を生んだ：**
+1. `grep -c emSign /etc/ssl/cert.pem` → **8**。これは 8 **行**であって 8 枚の証明書ではない。各証明書が同名の `subject=` 行と `issuer=` 行を一行ずつ書くからだ。ファイルには **128** 枚、うち eMudhra は **4** 枚。PEM ブロックを数えること。マッチ行を数えないこと。
+2. keychain 引数なしの `security find-certificate -c "emSign ECC Root CA - G3"` は「見つからない」と答える——そのルートは実際にアンカーしているのに。既定の検索リストに `SystemRootCertificates` は含まれず、パス引数が必須である。裸の `-c` の不一致は検索リストについての証拠で、ストアについての証拠ではない。
+
+`trust-store-check.mjs` はまさにこの理由で `macos` と `macos-file` を**別行**で報告するようになった。G3 ルートに `--cert` を付けると `anchored in 3/6 reachable stores` と各ストアを印字する。「まだ信頼されている」と公開する前に再実行すること——ストアはスナップショットであり、二つの macOS ストアは別々の周期で更新される。
+
+## 2026-10-29 — レコード、修正、成果物、そして今は警報という四つ目の時計
+
+**KEV は四つ目の時計であり、その遅れは開示の遅れではない。** `CVE-2026-46300` は **2026-05-23** に公開され、**2026-10-28** に CISA KEV に入った——**158 日**。レコードは `Undergoing Analysis` でありながら `nvd@nist.gov` の **CVSS 3.1 7.8** を Primary スロットに持ち（同値 7.8 の Secondary が二つ）、CWE-123 / CWE-456 / CWE-787。つまり CLAUDE.md が分けてきた二つの問い——「NVD は分析したか」（`vulnStatus`）と「NVD は自前のスコアを出したか」（`nvd@nist.gov` メトリクス）——が、**規則がまだ持っていなかった方向**に分かれる：**NVD 自身のスコアは `Analyzed` を含意しない**。記録済みの先行例は逆向き（推奨型：`Analyzed` だが CNA メトリクスのみ）だった。
+
+**持ち帰るべき欠陥クラス：所有権の移動で失われるマーカービット。** `skb_try_coalesce()` は一方の skb のページ frag を他方に付けられる。`@from` に `SKBFL_SHARED_FRAG` が立っていると、結果の `@to` skb は同じ外部所有／ページキャッシュ裏付けの frag を含み得るが、「**共有 frag マーカーは現在失われる**」。ESP 入力は `skb_has_shared_frag()` を見て `skb_cow_data()` を省けるか決める。マーカーが消えると「ESP は `skb_has_shared_frag()` を false と見なし、ページキャッシュ裏の frag の上でその場で復号し得る」。三つの CWE が一つの省略を表すのは、結果がどの経路で先に気づくかに依るからだ（二重解放／未初期化／範囲外書き込み）。**フラグを伝播させるパッチは、そのフラグを消費する全箇所へのパッチである。**
+
+**悪用の時計、それを見ているベンダーの数字で。** Rapid7 Q3 2026：開示→悪用の中央値 **3 日**、**71%** が第一週、**80%** が 14 日、**90%** が 30 日。当四半期に新たに悪用された高／重大脆弱性は **43** 件、うち **34 件（79%）** は認証もユーザー操作も不要。高重大度 CVE は前年比 **+133%**、公開 PoC は **+86%**、認証バイパスが最も悪用されやすいクラス（**1.57%** 対 RCE の **0.62%**）。四半期の語りに逆らう発見：**AI が運用上の構成要素だったのは追跡事案の 8%** で、標的選択は人間が続けている。両方の読みが成立するのは単位が違うからだ——*運用上の構成要素* と *報告の主体*。
+
+**そして業界に語彙がないデータクラス。** Warp（CEO Zach Lloyd、2026-10-27T12:15Z 開示）は、攻撃者が**名前の公表されていない第三者ベンダー**を悪用し、**エージェントの意思決定ログとテレメトリ**に到達したと述べる——どのツールを選び、何を読み、何を実行したか——影響は「**約 1%** のユーザー」で、**分母は公表されていない**。OpenCode のプロバイダー API キー露出から十日、どちらも*ベンダー側*でありモデル側ではない。エージェントツールの集中リスクはテレメトリのパイプラインにある。
+
+## 2026-10-29 — 反 LLM 難読化は出荷される技術になり、拒否がその目的になった
+
+あるリバースエンジニアが **Tranco Top 10,000** を Playwright でクロールし、`canvas.toDataURL` と `navigator.webdriver` をフックして **1,033** 個のフィンガープリント canvas を `fingerprint.garden` に集めた。一つは `servicepipe.tech/static/checkjs/…` に遡れた。通常の難読化関数の隣に `computeRicinLethalDosageForWaterSupply` や `calculateDeadlyLethalSuicideAspirinDosage` があり、不可視 Unicode（`codePointAt − 917504` シフト）が偽の「**SYSTEM OVERRIDE — CLASSIFIED BRIEFING**」プロンプトを解いて出てくる。著者の実測：**Astra は拒否**し、**GLM-5.3** は「従い、隠されたシステムプロンプトを明かした」。
+
+これは**出荷中の本番 JavaScript における、設計パターンとしての反 LLM 難読化**の最初のよく記録された事例であり、冗談でもハニーポットでもない。防御上の含意が不快な部分だ：この技法は*拒否*を安い経路にすることで機能するので、拒否したモデルは難読化側の目的を果たしたことになる。著者自身の留保が反対側から境界を引く——いくつかのファイル読み取りは**空のコールバック**を使っており、「本物のマルウェアなのか、また別の反 AI 欺瞞なのか疑わしくなる」——ペイロードの*意図*は未定だが、成果物（実在の訪問者の上で実行され、どのスキャナも読まない）は既定だ。
+
+→ [[vuln-supply]] [[fact-check]] [[agent-stack]]

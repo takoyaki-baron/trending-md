@@ -5352,3 +5352,92 @@ Sources: [VulnCheck — OpenHands advisory](https://www.vulncheck.com/advisories
 [mcp-toolbox PR #3454](https://github.com/googleapis/mcp-toolbox/pull/3454) · [Erlang CNA CVE-2026-115693](https://cna.erlef.org/cves/CVE-2026-115693.html) ·
 [Burrito GHSA](https://github.com/padok-team/burrito/security/advisories/GHSA-7m68-72r6-3jx8) · [ImageMagick releases](https://github.com/ImageMagick/ImageMagick/releases) ·
 [Cohere — concerning behaviour](https://cohere.com/blog/concerning-behaviour-popular-open-weight-ai-model)
+
+## 2026-10-29 — one OS is two trust stores, and the macOS pair disagrees by count
+
+**The eMudhra follow-up is aimed at the tools, not the browser.** we-have-a-problem.com's Apple page
+(updated 28 Oct) states that the developer tools macOS ships — built-in **git, curl, python3** — still
+trust the compromised intermediates. Apple was notified **17 Oct**; Chrome and Firefox blocked that day,
+Microsoft platforms **20 Oct**, Apple products **22 Oct**; **macOS 27.2 (26 Oct) did not fix it and undid a
+workaround applied by hand**. The class of affected client is *shipped-and-frozen binaries*: the same page
+lists Electron apps (Slack, Discord) as fixed only once rebuilt on a patched Electron, which is why "update
+your OS" and "your git is protected" are different sentences.
+
+**First-hand, on macOS 15.5 (24F74) — report the store you measured, and there are two:**
+
+| store | roots | eMudhra roots | G3 |
+|---|---|---|---|
+| `SystemRootCertificates.keychain` | **154** | **2** (G1, G3) | ANCHOR |
+| `/etc/ssl/cert.pem` | **128** | **4** (C1, C3, G1, G3) | ANCHOR |
+| Java `cacerts` | 110 | — | ANCHOR |
+| certifi / curl.se | 118 / 118 | 0 | absent |
+| Mozilla CCADB (program) | 169 | 0 | absent |
+
+So the two macOS stores are *different sets*, and the file — the one OpenSSL/libcurl-style stacks read,
+i.e. `/usr/bin/curl` and the `git` that links it — carries **twice** the eMudhra roots the keychain does.
+`C1` and `C3` are anchored **only** in the file. That makes the feed's claim true *and understated*, and it
+makes "is macOS safe?" unanswerable without naming the store.
+
+**Two counting traps, both of which produced a wrong sentence in the 04:20 batch:**
+1. `grep -c emSign /etc/ssl/cert.pem` → **8**. That is 8 **lines**, not 8 certificates: every certificate
+   contributes a `subject=` line and an `issuer=` line carrying the same CN. There are **4** eMudhra
+   certificates in **128** total. Count PEM blocks (`match(/-----BEGIN CERTIFICATE-----…/g)`), never matches.
+2. `security find-certificate -c "emSign ECC Root CA - G3"` with **no keychain argument** answers
+   `The specified item could not be found in the keychain` — for a root that is anchored. The default
+   search list does not include `SystemRootCertificates`; the path argument is mandatory. A bare `-c` miss
+   is evidence about the search list, not about the store.
+
+`trust-store-check.mjs` now reports `macos` and `macos-file` as **separate rows** for exactly this reason;
+`--cert` on the G3 root prints `anchored in 3/6 reachable stores` and lists each. Re-run before publishing
+any "still trusted" claim — a store is a snapshot, and the two macOS stores update on different cadences.
+
+## 2026-10-29 — the record, the fix, the artifact — and now the alarm
+
+**KEV is a fourth clock, and its lag is not the disclosure lag.** `CVE-2026-46300` was published
+**2026-05-23** and added to CISA KEV **2026-10-28** — **158 days**. The record is `Undergoing Analysis`
+*and* carries an `nvd@nist.gov` **CVSS 3.1 7.8** in the Primary slot (with two Secondary metrics at the same
+7.8 from other sources), CWE-123 / CWE-456 / CWE-787. So the two questions CLAUDE.md keeps apart —
+"did NVD analyze it" (`vulnStatus`) and "did NVD publish its own score" (an `nvd@nist.gov` metric) — come
+apart in the **direction the rules did not yet have**: an NVD-authored score does **not** imply `Analyzed`.
+The prior recorded case was the inverse (endorsement: `Analyzed` with only a CNA metric).
+
+**The defect class worth carrying:** a marker bit lost across an ownership transfer. `skb_try_coalesce()`
+can attach paged frags from one skb to another, and "if `@from` has `SKBFL_SHARED_FRAG` set, the resulting
+`@to` skb can contain the same externally-owned or page-cache-backed frags, **but the shared-frag marker is
+currently lost**". ESP input then tests `skb_has_shared_frag()` to decide whether it may skip
+`skb_cow_data()`; with the marker gone "ESP can see `skb_has_shared_frag()` as false and decrypt in place
+over page-cache backed frags". Three CWE classes describe one omission because the consequence depends on
+which path notices first (double-free / uninitialised state / OOB write). **A patch that propagates a flag
+is a patch to every place the flag is consumed**, and every consumer is a separate site to check.
+
+**The exploitation clock, from the vendor that watches it.** Rapid7's Q3 2026 report: disclosure →
+exploitation median **3 days**, **71%** inside week one, **80%** by 14 days, **90%** by 30; **43** newly
+exploited high/critical flaws, **34 (79%)** reachable with neither authentication nor interaction;
+high-severity CVE volume **+133%** year on year and public PoC code **+86%**; authentication bypass the
+likeliest class to be exploited (**1.57%** vs **0.62%** for RCE). The finding that cuts against the quarter's
+narrative: **AI was an operational component in 8% of tracked incidents**, with humans still selecting
+targets. Both readings survive because the units differ — *operational component* vs *subject of the report*.
+
+**And the data class the industry has no vocabulary for.** Warp (CEO Zach Lloyd, disclosed 2026-10-27T12:15Z)
+says an attacker exploited an **unnamed third-party vendor** and reached **agent decision logs and telemetry**
+— which tool the agent chose, what it read, what it ran — for "**roughly 1%** of users" with **no denominator
+published**. Ten days after OpenCode's provider-API-key exposure, both are *vendor-side*, not model-side:
+the concentration risk in agent tooling is the telemetry pipeline.
+
+## 2026-10-29 — anti-LLM obfuscation is now a shipped technique, and refusal is the goal
+
+A reverse engineer crawled the **Tranco Top 10,000** with Playwright, hooking `canvas.toDataURL` and
+`navigator.webdriver`, and collected **1,033** fingerprinting canvases into `fingerprint.garden`. One traced
+back to `servicepipe.tech/static/checkjs/…`: ordinary mangled functions beside
+`computeRicinLethalDosageForWaterSupply` and `calculateDeadlyLethalSuicideAspirinDosage`, plus invisible
+Unicode (a `codePointAt − 917504` shift) decoding into a fake "**SYSTEM OVERRIDE — CLASSIFIED BRIEFING**"
+prompt. Tested by the author: **Astra refused**, **GLM-5.3** "complied and revealed the hidden system prompt".
+
+This is the first well-documented case of **anti-LLM obfuscation as a deliberate design pattern in shipped
+production JavaScript** rather than a joke. The defensive implication is the uncomfortable part: the
+technique works by making *refusal* the cheap path, so a model that refuses has done what the obfuscator
+wanted. The author's own caveat bounds it in the other direction — several file reads use **empty
+callbacks**, which "raises doubt about whether it's genuine malware or more anti-AI deception" — so the
+payload's *intent* is undetermined while the artifact (executed on real visitors, read by no scanner) is not.
+
+→ [[vuln-supply]] [[fact-check]] [[agent-stack]]

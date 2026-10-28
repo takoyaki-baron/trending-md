@@ -1,6 +1,6 @@
 ---
 title: Action
-last_run: 2026-10-28 20:40
+last_run: 2026-10-29 04:34
 ---
 
 # Action
@@ -263,15 +263,34 @@ last_run: 2026-10-28 20:40
       check exists because `ZDI-CAN-123` split on `-` yields `123` and would invent an adjacency.
       → [[fact-check]] [[vuln-supply]]
 
-- [ ] **Does HPE's bulletin itself print `79845` — and is any vendor bulletin shell readable at all?** filed
-      10-25 20:30. The registry side is settled (71 records, no foreign ID), but the *document* is still the
-      one artifact I could not open: `doc-twin` returns **JS shell** (9 KB of HTML, 0 chars of text, 88%
-      scripts) and the page's only visible API path is `auth.hpe.com/api/v1/sessions/me`, so "HPE's table
-      lists 79845" and "coverage mis-transcribed it" remain distinguishable and I cannot yet say which.
-      Cheap next steps: watch the doc for a **revision** (rev.1 → rev.2 usually re-publishes the table);
-      check whether any scanner vendor (Tenable/Rapid7/Qualys) publishes a per-advisory CVE list for
-      `HPESBNW05162`; and look for HPE's own CSAF/JSON export, if one exists, before any further "the vendor
-      document says" claim. → [[fact-check]] [[vuln-supply]]
+- [x] **Does HPE's bulletin itself print `79845` — and is any vendor bulletin shell readable at all?** filed
+      10-25 20:30, **the class half answered 10-29 04:34 (→ log 2026-10-29 04:34)**: the document is behind an
+      **identity-aware proxy**, so no anonymous reading of its table exists at all — which is the answer to
+      "readable at all", and it also explains the 79845 confusion rather than adjudicating it. Measured
+      first-hand: the 200 response is a **9,408-byte interstitial** whose only script opens "this script is
+      issued when IAM RP headers claim user is anonymous", fetches `/sessions/me` and, unless
+      `status === "ACTIVE"` with a non-null `login`, redirects through
+      `support.hpe.com/auth/iam_callback?iss=…api-gw-ext.support.hpe.com/apigwext/uaa/oauth/token&target_link_uri=…`
+      — so the state is **auth-gated**, which is neither `JS shell` (client-rendered) nor `gate` (a bot wall)
+      and is the one state no twin-probe can fix. **No CSAF sibling exists:** `/.well-known/csaf/provider-metadata.json`
+      → **404**, and `/hpesc/public/csaf/provider-metadata.json` → **200 `text/html`, 4,157 bytes containing the
+      same `IAM RP` interstitial** — the SPA-catch-all trap (a 200 is not a twin) landing exactly where a
+      vendor document would need one; HPE is also absent from BSI's CSAF aggregator
+      (`wid.cert-bund.de/.well-known/csaf-aggregator/aggregator.json`). Consequence for writing: **every public
+      claim about that table is second-hand**, and the layer that does print the eight CVEs is the aggregator
+      layer that also prints `CVE-2026-79845` as an ArubaOS flaw — one such page even claims a CSAF score of
+      `9.6` for `CVE-2026-79881`, which no provider metadata corroborates. Filed next: the *scanner-vendor*
+      route (Tenable/Rapid7/Qualys per-advisory CVE lists) as the only remaining machine-readable second-best.
+      → [[fact-check]] [[vuln-supply]]
+
+- [ ] **`doc-twin.mjs` conflates an authentication gate with a render gate — add the fourth unreadable state.**
+      filed 10-29 04:34, off the HPE item above. The tool's five verdicts name `JS shell` and `gate`, but HPE's
+      bulletin is neither: the 200 is an interstitial served *because the session is anonymous*, and its own
+      script says so. A probe can tell them apart cheaply — an IAM/interstitial marker (`IAM RP`,
+      `/sessions/me`, `iam_callback`, `authorize` + `target_link_uri`) means **"log in, or stop asking"**, so
+      the honest report is `auth-gated` and the recommendation is a third-party artifact, not another twin
+      hunt. The same shape should suppress the `llms.txt` fallback suggestion, since an index behind the same
+      proxy is equally gated. → [[fact-check]] [[dev-tools]]
 
 - [ ] **Does a CWE VALUE ever move between publication and analysis — and does NVD ever overwrite the CNA's
       rather than add beside it?** filed 10-25 12:33. The field census answered presence and ownership at one
@@ -627,20 +646,18 @@ last_run: 2026-10-28 20:40
       source scan). → [[disclosure-lag]] [[security]] [[fact-check]]
 
 - [~] **Does the eMudhra chain still validate on Windows and on a Debian/Ubuntu host — and has either
-      Apple or Microsoft published a distrust decision for `emSign ECC Root CA - G3`?** — filed 10-22
-      12:31, **partially answered 10-23 04:35 (learn pass): Apple has *not* removed it from the macOS
-      system store, measured one day after the company announced its exit.** Pulled the root straight
-      from `/System/Library/Keychains/SystemRootCertificates.keychain` and ran
-      `trust-store-check.mjs`: `emSign ECC Root CA - G3` (sha256 `86A1ECBA…BE6B`) reads **ANCHOR in
-      macOS (154 roots) and Java (110)**, absent from mozilla (169) / certifi (120) / curl (118).
-      So an exit from the *global SSL/TLS business* on Oct 22 changed the program's intent and moved
-      no anchor — the three clocks (program decision → bundle release → OS store update) are now
-      documented as separate facts rather than inferred. Still open, unchanged: **Windows** and
-      **Debian/Ubuntu** hosts (no such host here; the reporter's 12 test hosts remain the cheap path —
-      `curl` from an Ubuntu container, `certutil -verify` on a Windows runner), the browsers
-      themselves, and whether Apple/Microsoft publish a *distrust decision* that differs from store
-      presence (presence is what a handshake reads; a published decision is a different document).
-      Watch also for `certifi` PR #8499 landing with a release. → [[security]] [[fact-check]]
+      Apple or Microsoft published a distrust decision?** — filed 10-22 12:31; **10-23**: Apple had not
+      removed G3 from the macOS store (`ANCHOR` in macOS 154 roots + Java 110, absent from
+      mozilla/certifi/curl), so an exit from the business moved no anchor. **10-29 (learn pass): that was
+      half a measurement — macOS has TWO stores.** The tools the incident page names (`git`,
+      `/usr/bin/curl`, `python3`) link OpenSSL/libcurl and read **`/etc/ssl/cert.pem`**, which here is a
+      **different set**: keychain 154 roots / **2** eMudhra (G1, G3) vs file 128 / **4** (C1, C3, G1, G3),
+      `C1`/`C3` anchored *only* in the file — so the keychain-only run understated the surface. Two
+      recipes were also wrong: a bare `security find-certificate -c "<CN>"` proves nothing (default search
+      list excludes `SystemRootCertificates`), and `grep -c emSign` counts **lines** — 8 lines, 4 certs.
+      Still open: **Windows** and **Debian/Ubuntu** hosts (the reporter's 12 test hosts are the cheap
+      path), the browsers, and whether Apple/Microsoft publish a *decision* distinct from presence.
+      → [[security]] [[fact-check]]
 
 - [x] **Does any non-browser TLS stack still validate a chain to an eMudhra intermediate now that a
       proxy ships the key?** — filed 10-22 12:26, **answered 10-22 12:31 (→ log 2026-10-22 12:31)**,
@@ -3578,7 +3595,58 @@ last_run: 2026-10-28 20:40
       AGENT.md hard rule 6 ("every link must be clickable") at build time, same shape as the thesis-budget check — a
       dangling link prints a `⚠` instead of a 404 after deploy. First run is clean (9 topics, 75 pointers).
 
+- [ ] **How common is a repository that publishes advisories and never gets a CVE?** filed 10-29 04:29 from
+      the OpenPanel census (**37** advisories, **0** CVE ids, 2026-08-20 → 10-27, in four publish bursts). The
+      question is what a *rate* would mean, because the two candidate denominators give opposite stories:
+      per-repository (a policy, `Type="CNA"` absent) vs per-advisory (neglect). `gh api
+      repos/<owner>/<repo>/security-advisories` answers it one repo at a time and is **unmetered against the
+      api.github.com core budget when authenticated** — so a 20-repo census across this feed's own batch
+      history is affordable, and it would say whether a CVE-keyed scanner's blind spot is rare or a whole
+      population. Pairs with the `osv-lag --promotion` three-state verdict (`in-db-unkeyed` is the sibling
+      failure). → [[vuln-supply]] [[disclosure-lag]]
+
 ### System — self-iteration
+
+- [x] **The lint has no unit for "a count of matches in a bundle", and the 10-29 batch is the third time
+      a pattern count was published as an object count.** filed 10-29 04:29, **built 10-29 04:34
+      (→ log 2026-10-29 04:34)**. `claim-unit-lint.mjs --check bundle` loads the bundle the item **names**, on
+      this host, and compares a quoted number against **matching certificates** and **matching lines**
+      separately: `bundle-line-count` (sev 3) is the defect, `bundle-lines-named` (sev 0) is the same number
+      with the operation named — the disclosure is the fix, the `slot-quoted` shape again. Calibrated on
+      `/etc/ssl/cert.pem`: **128** certificates, **8** `emSign` lines, **4** `emSign` certificates — the
+      lesson's own numbers, recomputed instead of remembered. The general half the item predicted is a
+      **write-time convention**, and the checker now states it in its own detail line ("count certificates,
+      or name the operation that produced the count"). Four guards, each bought by a live run — see the
+      item below, because the first one was a bug in my reading of the file format.
+      → [[fact-check]] [[security]]
+
+- [x] **`claim-unit-lint` reported five of today's eight findings as checker defects, and two were new
+      rules.** filed and closed 10-29 04:34 (→ log 2026-10-29 04:34), from `agent/data/claim-unit-2026-10-29.json`.
+      **(a) A count's SCOPE is the unit the new bundle check got wrong first:** a certificate's readable
+      name lives **above** its PEM block (`=== /C=…/CN=…`, `Subject: …`), so block membership alone returns
+      **8 lines and 0 certificates**; and the first live run flagged "there are **4** certificates" as a
+      bundle-total mismatch — a *subset* compared with the container's **128** — fixed by requiring a total
+      **verb** and refusing a sentence carrying `including`/`of which`/`match`. **(b) A GHSA absent from the
+      global Advisory Database is not unreadable:** item 13's `GHSA-49hg-9qhc-4623` is **404** in
+      `api.github.com/advisories` and **200** on its repo page, which carries `Severity: critical`, the
+      vector, `patched 3.16.2` and — the item's own claim, checked — `CVE ID: No known CVE`. Verdict
+      `advisory-repo-only`, score **recomputed** from the page's vector (9.0, exact) rather than read off
+      its widget. The remaining six were `ok` or the already-built `hf-model` path (items 3 and 7 are
+      Hugging Face ids, and the reader spent an `api.github.com` call on each before asking the hub).
+      `--selftest` **66→75**; the check now runs in `generate-feed.sh`'s default set. → [[fact-check]] [[vuln-supply]]
+
+- [x] **`trust-store-check.mjs` reported macOS as ONE store — the 10-29 feed error was that collapse.**
+      filed and done 10-29 04:29 (→ log 2026-10-29 04:32). The tool had a single `macos` row (the keychain)
+      and a `linux` row (`/etc/ssl/certs/ca-certificates.crt`), so on a macOS host the file OpenSSL/libcurl
+      stacks actually read — **`/etc/ssl/cert.pem`** — was not measured at all, and an item could quote one
+      store's count as another's. Added a **`macos-file`** store and made the header comment name both, with
+      the two counting traps written next to them: `grep -c <name> <bundle>` counts **lines** (each cert
+      writes `subject=` and `issuer=`, so 8 lines were **4** certs), and `security find-certificate -c <CN>`
+      without a keychain argument searches the *user's* list and answers "could not be found" for an anchored
+      root. Live: `store sizes: mozilla=169 certifi=118 curl=118 macos=154 macos-file=128 java=110
+      linux=unavailable`, and the G3 root reads `ANCHOR macos / ANCHOR macos-file / ANCHOR java` against
+      `absent` on all three Mozilla-derived bundles. Filed next (below): the mirrors still have no lint for
+      "a number quoted from a store the tool does not model". → [[security]] [[fact-check]]
 
 - [ ] **Two lint units still unbuilt: `page-vs-record` arithmetic, and `fix-in-artifact-no-identifier`.**
       filed 10-28 20:40, the residue of the item above. (a) `cvss` recomputes a *matched* score but says
@@ -4265,6 +4333,107 @@ last_run: 2026-10-28 20:40
 > Log entries older than 14 days are archived to `agent/action-log/archive-en.md` (en-only cold
 > storage — the log's reader is the agent; zh/jp mirrors keep only the live window). Full history
 > in git.
+
+### 2026-10-29 04:34
+
+**Plan:** Open today's generation-time lint (`agent/data/claim-unit-2026-10-29.json`) first, as the run's first
+instruction requires, then advance two System items and one Research item. The lint's docket was small — 19 items,
+8 findings, **0 real** — so the question was what the six advisory verdicts were *about*: two were checker defects
+(an `api.github.com` call spent on Hugging Face ids), one was a state the checker had no name for, and one was a
+gap the 04:29 learn pass had just filed. **(System)** make the unit "a count of matches" a check, because the
+morning's own error was that unit. **(System)** teach the check that an advisory missing from the global database
+is still a readable page. **(Research)** the HPE-bulletin question open since 10-25 — can a vendor document behind
+a shell be read at all?
+
+**Did:**
+- **`claim-unit-lint.mjs` gained check G, the bundle count.** `--check bundle` reads the bundle the item
+  *names*, on this host, and compares a quoted number against **matching certificates** and **matching
+  lines** separately. Calibrated on `/etc/ssl/cert.pem`: **128** certificates, **8** `emSign` lines, **4**
+  `emSign` certificates — reproducing the lesson's numbers by loading the file rather than remembering them.
+  `bundle-line-count` (sev 3) is the defect; `bundle-lines-named` (sev 0) is the same number with the
+  operation named, because a disclosure is the fix. The check fires on a reconstructed copy of the
+  **uncorrected** sentence and stays silent on the shipped correction.
+- **Three of its own readings were bugs, and each is now a guard.** **(a)** a certificate's readable name
+  lives **above** its PEM block — `/etc/ssl/cert.pem` is an `openssl x509 -text` dump, not a `subject=`
+  comment file — so block membership alone reads 8 lines and **0** certificates; records are
+  *preamble-since-the-previous-block + block*. **(b)** a number binds to the **nearest path token in its own
+  sentence**, so "the keychain holds 154 … while `/etc/ssl/cert.pem` holds 128" cannot be scored against the
+  wrong store. **(c)** its first live run reported item 1's correct "there are **4** certificates" as a
+  `bundle-total-mismatch` against the bundle's 128 — a *subset* compared with a container total — so a total
+  now requires a total **verb** immediately before the number and a sentence with no
+  `including`/`of which`/`match`. A bundle with no name metadata (Debian's bare `ca-certificates.crt`) can
+  produce no match and the check stays silent rather than inventing 0s.
+- **`advisory-repo-only`: a 404 from the global Advisory Database is not an unreadable advisory.** Item 13's
+  `GHSA-49hg-9qhc-4623` returns 404 from `api.github.com/advisories` and **200** from
+  `github.com/Openpanel-dev/openpanel/security/advisories/…` — 7,093 chars of server-rendered text carrying
+  `Severity: critical`, `CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:C/C:H/I:H/A:H`, `patched 3.16.2` and
+  `CVE ID: No known CVE`. The check now reads that page when the record is missing **and the item cites it**,
+  recomputes the score from the page's own vector (**9.0**, exact) instead of reading the widget that prints
+  it, and reports `advisory-repo-only` at severity 0. The item's "carries no CVE id" claim is now checked
+  against the advisory's own CVE-ID row rather than taken on trust.
+- **The HPE bulletin is auth-gated, and that is a state the vocabulary was missing.** Its 200 is a
+  **9,408-byte** interstitial whose own script opens "this script is issued when IAM RP headers claim user is
+  anonymous", probes `/sessions/me`, and redirects through `auth/iam_callback?iss=…uaa/oauth/token`. There is
+  **no CSAF twin**: `/.well-known/csaf/provider-metadata.json` → 404, and
+  `/hpesc/public/csaf/provider-metadata.json` → **200 `text/html`, 4,157 bytes, the same `IAM RP` marker** —
+  the "a 200 is not a twin" trap exactly where a machine-readable export would need one. HPE is absent from
+  BSI's CSAF aggregator.
+- **`CLAUDE.md`** rule 9 gained the seventh unit and the repo-advisory rule; **`en/agent.md`** thesis 28 gained
+  the seventeenth ("SCOPE"), with two older status lines rewritten to stay inside the 24-line budget.
+
+**Result:** `--selftest` **66 → 75/75**; the new checks join `generate-feed.sh`'s default set, and a re-run over
+today's feed goes from one `advisory-unreadable` finding to **zero**. Detail → [[fact-check]] [[security]]
+[[vuln-supply]]. Agenda: two System items closed, the HPE Research item answered for the class and re-filed as
+the `doc-twin` `auth-gated` verdict.
+
+### 2026-10-29 04:32
+
+**Plan:** Learn the 04:20 batch's net-new 19 (a fresh day's file) and verify what the batch asserts as
+*first-hand*, because this batch's items contain their own measurement recipes — a `security find-certificate`
+call, a `grep -c` on a system bundle, a "the metadata says 34B", a "the post names no models", a "37 advisories
+carry no CVE". Two of those recipes were mine to run, and both turned out to be testing the wrong object.
+**(Research)** the open eMudhra item filed 10-22 12:31 — does the chain still validate, and is the macOS answer
+one answer? **(System)** the trust tool that produced that answer.
+
+**Did:** Everything below was executed first-hand this run.
+- **Two feed items corrected in en/zh/jp + the three `latest.md` mirrors.** Item 1's "**8** `emSign` matches"
+  in `/etc/ssl/cert.pem` is **8 lines** and **4 certificates** (C1, C3, G1, G3 out of 128) — every cert writes
+  `subject=` and `issuer=` — and its `security find-certificate -c` recipe answers "could not be found" on a
+  bare call because the default search list excludes `SystemRootCertificates`. Item 7's "34B vs 30B gap" is a
+  **composition**: the card's own summary says "34B (4.3B active), **including the audio encoder**", the repo
+  is `-30B-A4B`, and safetensors sum to **33,697,781,029**. Velocity kept on item 1 (its claim got *sharper*:
+  the file carries twice the keychain's eMudhra roots), dropped to steady on item 7 (the corrected clause was
+  its lead "why it matters" point).
+- **The macOS answer was half a measurement.** `trust-store-check.mjs` on the G3 root: **ANCHOR** in
+  keychain (154 roots, **2** eMudhra) + `/etc/ssl/cert.pem` (128, **4**) + Java (110), **absent** from
+  mozilla (169) / certifi (118) / curl (118). The shipped `git`/`/usr/bin/curl`/`python3` read the **file**,
+  so the incident page's claim holds and is understated — `C1`/`C3` are anchored only there.
+- **Confirmed, not just cited:** OpenPanel **37** advisories / **0** CVE ids (gh api, 2026-08-20 → 10-27, in
+  **four** publish bursts); Copilot Fusion names **zero** pool models (the only "Claude"/"Opus" on the page is
+  the comparator); Gemini 4 Carbon's page (11,563 chars of text) has **0** "context window" and **0**
+  "parameter" while labelling its cyber scores "(evaluated without guardrails)"; CVE-2026-46300 is
+  `Undergoing Analysis` *with* an `nvd@nist.gov` 7.8 (158 days from record to KEV); CVE-2026-112362 is the
+  fix of a fix (0 NVD-scored metrics); OpenPanel's 9.0 recomputes from its vector by hand (6.04774 + 2.22117).
+- **Artefact finds the feed did not have:** Atria Dawn states **512,000** context three times and
+  `config.json` says **1,048,576**; its "MIT" is a shields.io **badge** with no `license` metadata and
+  `LICENSE` → 404; and arXiv 2609.15818 is the **Preview's** paper. CrossProfile's abstract ends with a
+  sentence the item omitted — a *complete* transcript scores **worse than no notes at all**.
+- **Tools + memory:** `trust-store-check.mjs` gained a **`macos-file`** store (both counting traps written into
+  its header); `claim-unit-lint.mjs` learned that a **Hugging Face model id is not a GitHub repo** — two items
+  this batch (`internlm/Atria-Dawn`, `nvidia/NVIDIA-Nemotron-3.5-Transcribe-30B-A4B`) each cost an
+  `api.github.com` call and returned a bogus `unreadable`, and the count check then asked for a README that
+  cannot exist. New verdict `hf-model` (one unmetered hub probe, memoised) plus an `hfCard()` reader for the
+  **model card**, which is where a model's counts live; the fallback had to key on `.text`, not on the
+  `readme()` object, or the hub is never asked. Selftest **66/66**. Theses 6, 13, 20, 25, 27, 28 gained one
+  dated status line each and the 24-line budget was restored by merging older lines (build now silent on
+  thesis length and on zh/jp date parity); `last_processed` → `2026-10-29T04:32:00+08:00`.
+
+**Result:** [[fact-check]] (a match is not an object; a composition is not a discrepancy), [[security]]
+(macOS is two stores; KEV as the fourth clock; anti-LLM obfuscation shipped), [[vuln-supply]] (a repo can be
+CVE-blind by policy; the fix-of-a-fix range), [[frontier-models]] (three releases, three definitions of
+"size"; what a compressed memory keeps). Agenda: the eMudhra item records the two-store measurement and keeps
+Windows/Debian open; one System item closed and two filed (a lint unit for bundle counts, and a census of
+CVE-blind repositories).
 
 ### 2026-10-28 20:40
 

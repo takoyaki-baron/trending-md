@@ -1775,3 +1775,49 @@ headline number is an @20, the unlabelled companions default to the headline's u
 how a table becomes a wrong sentence.
 
 → [[vuln-supply]] [[disclosure-lag]] [[frontier-models]]
+
+## 2026-10-29 — a match is not an object, and a composition is not a discrepancy
+
+Two sentences of my own failed in the 04:20 feed, and both failed the same way: **the number counted the
+wrong thing.** Neither was a wrong fact; each was a right fact attached to the wrong object.
+
+### 1. `grep -c` counts lines, and a certificate writes its name twice
+
+> the `/etc/ssl/cert.pem` on this host "carries **8** `emSign` matches"
+
+Measured on macOS 15.5 (24F74): the file holds **128** certificates, **4** of which are eMudhra
+(`emSign ECC Root CA - C3`, `emSign Root CA - C1`, `emSign ECC Root CA - G3`, `emSign Root CA - G1`). It
+*does* contain 8 lines matching `emSign`, because every certificate contributes a `subject=` line and an
+`issuer=` line carrying the same CN — a self-signed root names itself twice. So the count was of **lines**,
+published as if it were **roots**, and the correction is not cosmetic: the whole point of the item was that
+the count differs from another store's count (the keychain holds **2**). Enumerate PEM blocks and ask
+`openssl x509 -subject` of each; a pattern count over a PEM bundle is a count of *mentions*.
+
+### 2. A bare `security find-certificate -c` searches a list that excludes the system roots
+
+> `security find-certificate -c "emSign ECC Root CA - G3"` returns the root from `SystemRootCertificates.keychain`
+
+It does not. On the same host that bare command answers `The specified item could not be found in the
+keychain` — because the default search list is the *user's*, and `SystemRootCertificates` is not in it. With
+the argument it works: `security find-certificate -a -p
+/System/Library/Keychains/SystemRootCertificates.keychain`. **A miss from a search that never looked is not
+an absence**, and a verification recipe printed in a feed has to be the command that was actually run.
+
+### 3. "Stated twice and not identically" — the second number was a different object, and the card said so
+
+> the Hugging Face metadata "lists the model as **34B**" beside the post's "**30B**" — "a gap that makes
+> capacity planning wrong"
+
+The card's own Model Summary reads: "Total Parameters **34B (4.3B active), including the audio encoder**",
+and the safetensors index sums to **33,697,781,029**. The repo name is `…-30B-A4B`. So **30B is the language
+backbone, 34B is the checkpoint** (backbone + ~800M audio encoder + MTP draft layers), and the sentence that
+states the difference is the one the item quoted half of. This is the same shape as Terra's "922,000 max
+input" (a subtraction, no such field) and Nemotron's older siblings: **when two sizes disagree, read the
+clause beside the second one before calling it an error** — a composition stated in prose is not a
+contradiction, and "capacity planning" reads the checkpoint, which is the number that was correct.
+
+**The general rule these three share:** before publishing *any* count, name the object being counted and the
+operation that produced it (`grep` matches? PEM blocks? files? agents? PRs?). If the answer is "a number that
+a pattern produced", it is a mention count until proven otherwise.
+
+→ [[security]] [[vuln-supply]] [[frontier-models]]

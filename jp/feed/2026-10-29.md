@@ -16,7 +16,7 @@ license: CC-BY-4.0
 
 eMudhraの事後追跡ページは**10月28日**、Appleに的を絞った発見で更新された。「**10月28日時点で、AppleがmacOSとともに出荷する開発ツール**」——内蔵の**git**、**curl**、**python3**——が、いまも侵害された中間CAを信頼している。Appleには**10月17日**に通知済みで、ChromeとFirefoxは同日にこれらの証明書をブロックし、Microsoftのプラットフォームは**20日**、Apple製品は**22日**にブロックした。**10月26日リリースのmacOS 27.2は問題を直さず、ユーザーが手作業で入れた回避策を巻き戻した**。
 
-**Why it matters:** HNスレッドの最有力の反論は正しい訂正であり、脚注ではなく本文に入れるべきものだ——**gitはバグではない**。gitはシステムのストアに対して検証しており、それは正しい振る舞いだ。バグはストアの側にあり、しかもmacOSには**2つ**あって互いに食い違っている（`/etc/ssl/cert.pem`とKeychain）。手元のmacOSで実測した：`security find-certificate -c "emSign ECC Root CA - G3"`は`SystemRootCertificates.keychain`から当該ルートを返し、`/etc/ssl/cert.pem`には`emSign`の一致が**8**件ある。これが「古いバンドル」より悪い理由は、gitの通信が**ソースコードそのもの**だからだ。事後ページ自身の影響記述は、鍵を持つ攻撃者が「あらゆるウェブサイトやサービスになりすませる」であり、確認コマンドとして`git ls-remote https://git-emudhra.we-have-a-problem.com/check.git`を挙げる——「証明書エラーが出ればあなたのgitは保護されている」。同じページはElectronアプリ（Slack、Discord）を、修正済みElectronで再ビルドして初めて修正が届くものとして挙げており、影響を受けるクライアントの種類は**出荷済みで凍結されたバイナリ**であってブラウザではない。再現する前に`which -a curl`を実行しよう。あのスレッドでは同一マシン上のHomebrew版curlと`/usr/bin/curl`が逆の答えを返した。
+**Why it matters:** HNスレッドの最有力の反論は正しい訂正であり、脚注ではなく本文に入れるべきものだ——**gitはバグではない**。gitはシステムのストアに対して検証しており、それは正しい振る舞いだ。バグはストアの側にあり、しかもmacOSには**2つ**あって互いに食い違っている（`/etc/ssl/cert.pem`とKeychain）。手元のmacOS 15.5で実測したが、この2つのストアは**同じものを入れていない**：`SystemRootCertificates.keychain`は**154**ルートでうちeMudhraが**2**件（`G1`、`G3`）、`/etc/ssl/cert.pem`は**128**ルートでうち**4**件（`C1`、`C3`、`G1`、`G3`）——`C1`と`C3`はファイルにしかアンカーしておらず、そこがOpenSSL/libcurl系バックエンドの読むバンドルだ。（再現時の罠が2つ：引数なしの`security find-certificate -c "emSign ECC Root CA - G3"`は何も返さない。既定の検索リストにシステムルートが入らないためで、keychainのパスを明示する必要がある。そして`grep -c emSign /etc/ssl/cert.pem`は**8**を返すが、それは8**行**——各証明書がsubjectとissuerの両方に自分の名前を書くからで、証明書は4枚だ。）これが「古いバンドル」より悪い理由は、gitの通信が**ソースコードそのもの**だからだ。事後ページ自身の影響記述は、鍵を持つ攻撃者が「あらゆるウェブサイトやサービスになりすませる」であり、確認コマンドとして`git ls-remote https://git-emudhra.we-have-a-problem.com/check.git`を挙げる——「証明書エラーが出ればあなたのgitは保護されている」。同じページはElectronアプリ（Slack、Discord）を、修正済みElectronで再ビルドして初めて修正が届くものとして挙げており、影響を受けるクライアントの種類は**出荷済みで凍結されたバイナリ**であってブラウザではない。再現する前に`which -a curl`を実行しよう。あのスレッドでは同一マシン上のHomebrew版curlと`/usr/bin/curl`が逆の答えを返した。
 
 [`🔗 eMudhraインシデント——Appleの追加報告（10月28日）`](https://emudhra.we-have-a-problem.com/apple.html) · [`🔗 eMudhraインシデント索引（修正済み製品表・タイムライン）`](https://emudhra.we-have-a-problem.com/) · [`🔗 HNディスカッション（905 pts）`](https://news.ycombinator.com/item?id=50271640)
 
@@ -92,15 +92,15 @@ Warp——AIターミナルから「エージェンティック開発環境」�
 
 ---
 
-## 7. Nemotron 3.5 Transcribeは4つの音声タスクを1つのオープン重みにまとめた——だがブログとモデルカードでサイズの記述が食い違う
+## 7. Nemotron 3.5 Transcribeは4つの音声タスクを1つのオープン重みにまとめた——だがその3つの「サイズ」は3つの別オブジェクトだ
 
-- **Velocity:** ▮▮ rising
+- **Velocity:** ▮ steady
 - **Source:** NVIDIA / Hugging Faceブログ · 約5時間前（~23:17 UTC+8 10月28日）
 - **Tags:** `nvidia` `asr` `open-weights` `diarization` `multilingual`
 
 **Nemotron 3.5 Transcribe**は単一のオープン重みチェックポイントで、文字起こし、話者帰属、翻訳、音声質問応答を同時にこなす。「最長1時間」の録音を扱い、「最大8名の話者」をラベル付けする。タスクごとの対応範囲は大きく異なり、ブログもそう明言している。**40言語を文字起こし**し、「そのうち31言語を英語と双方向に翻訳」し、「13言語で話者帰属」する。スコアは、Hugging Face Open ASR英語で**平均WER 5.33%**、オープン重みモデル中1位。**7言語平均4.62%**、**長尺10.98%**。Artificial Analysisの**AA-WER 2.8%**で首位タイ、**AA-AgentTalk 1.8%**に対し次点のオープン重みモデルは2.3%。話者分離はDavid AI 21言語トラックで**DER 18.26%**——「14の被験システム中、最も低い分離誤り率」で、NVIDIA自身のNemotron 3 Diarizationが18.38%だ。
 
-**Why it matters:** このブログにはWER表より値打ちのあるものが2つある。第一に、サイズが2回述べられていて**一致しない**。ブログは「30Bのパラメータのうち約4Bがトークンごとに有効」と書き、同じページのHugging Faceメタデータはモデルを**34B**と記す——容量計画を狂わせる種類の「命名とメタデータ」のずれだ。第二に、制約が実行可能なほど具体的である。「**Transcribeは録音音声向けに作られており、ライブストリーミング向けではない**」、音声質問応答は英語で訓練され、ガイドは「固有名詞、話者の切り替わり、回答を録音と照合して抜き取り確認する」よう求める。続く医療ケースはファインチューニングの正直な姿を示す。ホールドアウト話者のWERは**22.44% → 12.17%**、相対45.8%減。一方LibriSpeech test-cleanは**1.54%から1.69%へ悪化**する——ドメイン調整は1つの領域を買い、引き換えに汎用精度を少し失う。主張ではなく計測された結果だ。
+**Why it matters:** このブログにはWER表より値打ちのあるものが2つある。第一に、サイズは3通りに書かれ、**そのどれも正しい**——ここが誤読しやすいところだ。リポジトリ名は `…-30B-A4B`、モデルカードのModel Summaryは「Total Parameters **34B (4.3B active), including the audio encoder**」、safetensorsの合計は **33,697,781,029**。つまり30Bは言語バックボーン、34Bはチェックポイント全体、4.3Bはアクティブ集合であり、それを突き合わせる一文が同じページにある（`nvidia/NVIDIA-Nemotron-3.5-Transcribe-30B-A4B` で第一手確認）。配備サイズはチェックポイントで見積もる——カードがすでに与えている数だ。第二に、制約が実行可能なほど具体的である。「**Transcribeは録音音声向けに作られており、ライブストリーミング向けではない**」、音声質問応答は英語で訓練され、ガイドは「固有名詞、話者の切り替わり、回答を録音と照合して抜き取り確認する」よう求める。続く医療ケースはファインチューニングの正直な姿を示す。ホールドアウト話者のWERは**22.44% → 12.17%**、相対45.8%減。一方LibriSpeech test-cleanは**1.54%から1.69%へ悪化**する——ドメイン調整は1つの領域を買い、引き換えに汎用精度を少し失う。主張ではなく計測された結果だ。
 
 [`🔗 NVIDIA——Nemotron 3.5 Transcribe（HFブログ）`](https://huggingface.co/blog/nvidia/nemotron-transcribe-granary) · [`🔗 HNディスカッション`](https://news.ycombinator.com/item?id=50275128)
 

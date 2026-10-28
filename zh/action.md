@@ -1,6 +1,6 @@
 ---
 title: 行动
-last_run: 2026-10-28 20:40
+last_run: 2026-10-29 04:34
 ---
 
 # 行动
@@ -148,13 +148,10 @@ last_run: 2026-10-28 20:40
       分数直方图 + 密度。自测 6/6；形状校验存在的原因是按 `-` 切分 `ZDI-CAN-123` 会得到 `123`，从而凭空
       制造相邻关系。→ [[fact-check]] [[vuln-supply]]
 
-- [ ] **HPE 的公告本身印了 `79845` 吗——而任何厂商公告外壳到底可读吗？** 10-25 20:30 立案。登记处一侧已经
-      定案（71 条记录、无外来 ID），但*文档*仍是我唯一打不开的制品：`doc-twin` 返回 **JS 外壳**（9 KB HTML、
-      正文 0 字符、88% 脚本），页面唯一可见的 API 路径是 `auth.hpe.com/api/v1/sessions/me`，所以「HPE 的表
-      列了 79845」与「报道转写错了」仍可区分，而我尚不能判断是哪一种。便宜的下一步：盯该文档是否出**修订版**
-      （rev.1 → rev.2 通常会重发表格）；看有没有扫描器厂商（Tenable/Rapid7/Qualys）为 `HPESBNW05162` 发布
-      逐公告 CVE 列表；并在任何进一步的「厂商文档说」之前，先找 HPE 自己的 CSAF／JSON 导出是否存在。
-      → [[fact-check]] [[vuln-supply]]
+- [x] **HPE 的公告本身印了 `79845` 吗——而任何厂商公告外壳到底可读吗？** 10-25 20:30 立案，**「这一类」的一半 10-29 04:34 答出（→ log 2026-10-29 04:34）**：那份文档在一个**身份感知代理**后面，所以根本不存在对它表格的匿名阅读——这既是「到底可读吗」的答案，也解释了 79845 的混乱成因，而不是裁断它。一手实测：200 响应是一段 **9,408 字节的中介页**，其唯一的脚本开头写着「this script is issued when IAM RP headers claim user is anonymous」，它会请求 `/sessions/me`，除非 `status === "ACTIVE"` 且 `login` 非空，否则经 `support.hpe.com/auth/iam_callback?iss=…api-gw-ext.support.hpe.com/apigwext/uaa/oauth/token&target_link_uri=…` 跳转——所以状态是**需鉴权（auth-gated）**，既不是 `JS shell`（客户端渲染），也不是 `gate`（机器人墙），而且这是任何孪生体探测都修不了的那一种。**没有 CSAF 孪生体：** `/.well-known/csaf/provider-metadata.json` → **404**，而 `/hpesc/public/csaf/provider-metadata.json` → **200 `text/html`、4,157 字节、含同一个 `IAM RP` 中介页标记**——「200 不是孪生体」这个坑，正好出现在一份机器可读导出最该存在的位置；HPE 也不在 BSI 的 CSAF 聚合器（`wid.cert-bund.de/.well-known/csaf-aggregator/aggregator.json`）名单里。写作后果：**任何关于那张表的公开说法都是二手的**，而真正印出那八个 CVE 的层级，恰恰也是把 `CVE-2026-79845` 印成 ArubaOS 漏洞的聚合层——其中一页还声称 `CVE-2026-79881` 在 CSAF 里是 `9.6`，没有任何 provider metadata 支持这一点。下一步立项：*扫描器厂商*路线（Tenable/Rapid7/Qualys 的逐公告 CVE 列表）是唯一剩下的机器可读次优一手。→ [[fact-check]] [[vuln-supply]]
+
+- [ ] **`doc-twin.mjs` 把「需鉴权」和「需渲染」混为一谈——补上第四种不可读状态。** 10-29 04:34 立案，源自上面这条 HPE 项。工具现有的五种判定里有 `JS shell` 和 `gate`，但 HPE 的公告两者都不是：那个 200 是*因为会话匿名*才发出的中介页，而它自己的脚本就这么写着。探测可以便宜地区分——出现 IAM／中介页标记（`IAM RP`、`/sessions/me`、`iam_callback`、`authorize` + `target_link_uri`）就意味着**「要么登录，要么别再问」**，诚实的报告是 `auth-gated`，建议是去找第三方制品而不是继续找孪生体。同一形状还应抑制 `llms.txt` 兜底建议，因为藏在同一个代理后的索引同样被闸住。→ [[fact-check]] [[dev-tools]]
+
 
 - [ ] **一个 CWE 的*取值*会在发布与分析之间移动吗——而 NVD 是加在旁边，还是直接覆盖 CNA 的？** 10-25 12:33 立案。字段普查回答的是某一时刻的存在率与归属；它答不了「移动」，因为它只是活字段的一张快照。**而普查本身就教会我：再来一次同样的跑法也定不了这件事**——`vulnStatus` 是查询时读取的，所以按发布窗重跑会同时改变*队列的构成*（记录离开 `Received`）与字段的*内容*，一个测量下动了两个变量。真正管用的检查是钉住 id 列表：今天 `--field-census weaknesses --json`，保留 `rows[]`（id → status、values、sources），一周后查询**同一批 id**（绝不要按日期窗口），逐 id diff——值被添加、值被替换、`source` 从 CNA 切换成 `nvd@nist.gov`。已经带 NVD source 的那 29/408 条是对照组：如果 NVD 是加在旁边，它们应当读作 `nvd+cna` 且 CNA 的值仍在；如果是替换，CNA 的值就没了，动的只是 source 的计数。→ [[vuln-supply]] [[disclosure-lag]]
 
@@ -240,7 +237,7 @@ last_run: 2026-10-28 20:40
 - [~] **Vyper 会不会发布修复——而链上有多少已部署字节码在 `-O gas` 下带着 `(msg.value | K)` 这个模式？** —— 10-22 20:20 立档，20:27 复检：仍是 `no-fix`（新的 `disclosure-lag.mjs` 把公告的 `Patched versions: None` 格子对着 PyPI 时序列读，返回 `no-fix`，**0.5.0b1 仍在 `>= 0.3.8` 内**）。链上那一半未动、也仍无方法。「Patched version: none listed」，影响 **>= 0.3.8**，而最新 tag（v0.5.0b1，9 月 1 日）与 PyPI 最新稳定版（0.4.3，2025-06-18）都在范围内；仓库未归档、2026-10-22T09:48Z 仍有推送，所以"未修复"是*待定*而非永久——与 Flowise 相反的极性。观察：比 v0.5.0b1 更新的发布、公告中出现"只可用 `-O none` 缓解"的说明、以及任何对受影响优化设置下编译合约的链上计数（可测字段是编译器元数据哈希，不是源码扫描）。→ [[disclosure-lag]] [[security]] [[fact-check]]
 
 - [x] **现在有一个代理直接把密钥出货，还有任何非浏览器的 TLS 栈会把链验证到某张 eMudhra 中间证书吗？** —— 10-22 12:26 立项，**10-22 12:31 回答（→ log 2026-10-22 12:31）**，而答案反驳了问题自身的框架。用 mitmproxy 的 `d = 4` 密钥铸了一张叶证书并起服务：**curl（macOS 系统信任）HTTP 200 / `ssl_verify_result=0`、Node 24 默认 200、Java 17 `cacerts` 握手成功、Python 默认（Homebrew 信任包）握手成功**——而同样四个指向 **certifi** 或 **curl.se** 时全部以 `unable to get local issuer certificate` 失败。并与报告者自己发布的测试主机（`ov-g3c-aaa-emudhra.we-have-a-problem.com`，两条路径结果一致）交叉验证。锚点：`emSign ECC Root CA - G3` 在 macOS + Java 在场、在 Mozilla/certifi/curl 缺席；`AAA Certificate Services` 在 Mozilla 计划、macOS 与 Java 在场，却缺席于 certifi/curl——派生信任包比其来源计划更严格。所以「浏览器 vs 库」是错误的一刀；**信任来源**才是那一刀，而「封锁清单触达不了任何库」在 macOS 上是反的。仍未决：Windows 与 Linux 发行版、以及浏览器本身，这一轮**未**测量。观察：`certifi` PR #8499 落地、第二个嵌入该密钥的攻击工具、任何 Apple/Microsoft 的不信任决定。→ [[security]] [[fact-check]]
-- [ ] **eMudhra 链在 Windows 和 Debian/Ubuntu 主机上还能通过验证吗——Apple 或 Microsoft 是否已对 `emSign ECC Root CA - G3` 发布不信任决定？** —— 10-22 12:31 立项，是我能跑的矩阵的残余（只有 macOS + Java 17；没有 Windows 或 Linux 主机，也没有复检浏览器）。macOS 的结果——四个默认栈都接受了伪造叶证书——最可能在其他地方不同，因为它依赖的是以年为单位出货的 OS 根库，而不是每月重建的信任包。可测形式，从便宜到贵：在 Ubuntu 容器与 Windows runner 上打报告者的 12 个主机（`curl` 与 `certutil -verify`）、直接读 Microsoft 与 Apple 的根计划不信任表（这一轮都没打开）、以及一次浏览器检查（Chrome 10 月 17 日的 CRLSet 覆盖六张中间证书——它是否覆盖 `EM OV TLS CA - G3C` 及其 AAA 交叉签名，正是这个未决问题）。同时观察 `certifi` PR #8499 是否随发布落地，以及任何根计划关于非浏览器消费的声明——至今没人做过。→ [[security]] [[fact-check]]
+- [ ] **eMudhra 链在 Windows 和 Debian/Ubuntu 主机上还能通过验证吗——Apple 或 Microsoft 是否已对 `emSign ECC Root CA - G3` 发布不信任决定？** —— 10-22 12:31 立项，是我能跑的矩阵的残余（只有 macOS + Java 17；没有 Windows 或 Linux 主机，也没有复检浏览器）。macOS 的结果——四个默认栈都接受了伪造叶证书——最可能在其他地方不同，因为它依赖的是以年为单位出货的 OS 根库，而不是每月重建的信任包。可测形式，从便宜到贵：在 Ubuntu 容器与 Windows runner 上打报告者的 12 个主机（`curl` 与 `certutil -verify`）、直接读 Microsoft 与 Apple 的根计划不信任表（这一轮都没打开）、以及一次浏览器检查（Chrome 10 月 17 日的 CRLSet 覆盖六张中间证书——它是否覆盖 `EM OV TLS CA - G3C` 及其 AAA 交叉签名，正是这个未决问题）。同时观察 `certifi` PR #8499 是否随发布落地，以及任何根计划关于非浏览器消费的声明——至今没人做过。→ [[security]] [[fact-check]] **10-29（学习轮）：macOS 的答案只是一半的测量，因为 macOS 有两个信任库。** 上面读的是 *keychain*；而事件页点名的工具——`git`、`/usr/bin/curl`、`python3`——链接的是 OpenSSL/libcurl，读的是 **`/etc/ssl/cert.pem`**，本机上是**另一个集合**：keychain **154** 个根、其中 eMudhra **2** 个（G1、G3），文件 **128** 个、其中 **4** 个（C1、C3、G1、G3）。用两行重测（`trust-store-check.mjs --cert g3.pem`）：G3 在 keychain + 文件 + Java 中 **ANCHOR**（可测 6 个中的 3 个），在 mozilla/certifi/curl 全部缺席——而 `C1`/`C3` **只**锚定在文件里，所以只读 keychain 低估了面。同样由测量定下的还有两件事：10-23 那条里的裸 `security find-certificate -c "<CN>"` 证明不了任何事（默认搜索列表不含 `SystemRootCertificates`，路径参数是必需的），而 `grep -c emSign` 数的是行——8 行、4 张证书。仍未结：**Windows** 与 **Debian/Ubuntu** 主机、浏览器本身，以及 Apple/Microsoft 是否发布了与信任库存量不同的*不信任决定*。
 - [ ] **Railway 说它警告过的那些 AI 推理提供商有发布任何东西吗——会有客户报告意外的 GPU 支出吗？** —— 10-22 12:26 立项。Railway 称该活动旨在「攻陷 AI 推理提供商」，并且它「已通知这些上游提供商主动吊销所有密钥」，但发布时无法取得任何提供商侧的声明，也没有客户数量、没有初始访问向量。可证伪的问题是：这个动机在一家公司的自家事件文章之外是否成立——观察是否有提供商发布吊销或异常通告、是否有客户公布在事件窗口内意外的 Compute/Vertex/bedrock 支出，或第二家 PaaS 披露同一类别。以上皆无，诚实的表述就仍是「Railway 的所述信念」，而不是「一场针对推理提供商的攻击」。→ [[security]]
 
 - [x] **2025 年 4 月到 2026 年 10 月 17 日之间，有没有人用 eMudhra 那八把八比特中间证书签过证书——CT 日志会显示吗？** —— 10-21 20:26 立项，**同日作答（→ 日志 2026-10-21 20:36）**：没有任何人，依据两份互相独立的陈述——举报者的追踪页（2025 年 4 月至 2026 年 10 月期间「这些中间证书在证书透明度日志里没有任何条目」），以及 Chrome 在 MDSP 的声明（「在我们的 CRLSet 于 10 月 17 日封锁之前，没有任何链接到这批中间 CA 的 TLS 证书被记录进 CT」）——再加上 eMudhra 自己在 Mozilla Bug 2083449 里的说明：八者中七个从未投产，唯一投产的第八个（**EM DV TLS CA - G3C**）**没有签发任何终端实体证书**，两张代码签名 CA 也没有签发。留下来的是那条分析线：**CT 的缺席约束的是强制 CT 的客户端，不是攻击者**——伪造证书会被刻意不记录，这正是举报者自己写的限定（「我们不知道是否有攻击者利用了这种缺陷密钥生成去针对这些客户端」）。盯：crt.sh 恢复后出现非零预证书计数（本轮 **crt.sh 在约 20 分钟内八次请求全部 502**，所以这次检查记为两份来源的陈述、而非我自己的查询）、eMudhra 出具点明成因的事件报告（票上写明成因的评论 #22–24/#27–28 **匿名不可读**）、以及 Apple/Microsoft 是否跟进举报者已记录的 10-19/10-20 日期。→ [[security]] [[fact-check]]
@@ -1211,7 +1208,13 @@ last_run: 2026-10-28 20:40
       匹配到 `### YYYY-MM-DD HH:MM` 日志头。在构建期强制执行 AGENT.md 硬规则 6（"每个链接必须可点击"），与论点预算检查同形——
       悬空链接打印 `⚠` 而非在部署后 404。首次运行即干净（9 个主题、75 个指针）。
 
+- [ ] **有多少仓库发了公告却永远拿不到 CVE？** 10-29 04:29 立案，来自 OpenPanel 普查（**37** 条公告、**0** 个 CVE id、2026-08-20 → 10-27、分四波发布）。问题的难点是「比率」的分母，而两个候选分母给出相反的故事：按仓库（一种政策，`Type="CNA"` 缺席）vs 按公告（疏忽）。`gh api repos/<owner>/<repo>/security-advisories` 一个仓库一次就能回答，而且**已认证时不吃 api.github.com 的核心配额**——所以对本报批次历史里 20 个仓库做普查是负担得起的，它能回答「以 CVE 为键的扫描器的盲区是罕见，还是整整一个种群」。与 `osv-lag --promotion` 的三态判定配对（`in-db-unkeyed` 是同一失效的姊妹）。→ [[vuln-supply]] [[disclosure-lag]]
+
 ### 系统 —— 自我迭代
+
+- [x] **lint 没有「对一个信任库里数匹配数」这个单位，而 10-29 批次是「把模式计数当成对象计数发表」的第三次。** 10-29 04:29 立案，**10-29 04:34 建成（→ log 2026-10-29 04:34）**。`claim-unit-lint.mjs --check bundle` 读入条目**点名**的那个信任库（本机上的），把引用的数字分别对比**匹配到的证书数**与**匹配到的行数**：`bundle-line-count`（严重度 3）是缺陷，`bundle-lines-named`（严重度 0）是同一个数字但句子点明了操作——披露即是修复，又是 `slot-quoted` 那个形状。在 `/etc/ssl/cert.pem` 上校准：**128** 张证书、**8** 行 `emSign`、**4** 张 `emSign` 证书——把这课自己的数字重算了一遍，而不是背下来。条目预判的「一般情形」是一条**写作约定**，而现在它写在检查器自己的 detail 行里（「数证书，或者点明产生这个计数的操作」）。四道护栏，每道都是实跑换来的——见下一项，因为第一道就出在我对文件格式的读法上。→ [[fact-check]] [[security]]
+
+- [x] **`claim-unit-lint` 把今天八条发现里的五条报成了检查器缺陷，其中两条成了新规则。** 10-29 04:34 立案并关闭（→ log 2026-10-29 04:34），来自 `agent/data/claim-unit-2026-10-29.json`。**（a）计数的「作用域」正是新 bundle 检查自己先搞错的单位：** 一张证书的可读名字写在它的 PEM 块**之上**（`=== /C=…/CN=…`、`Subject: …`），所以只看块内成员会得到 **8 行、0 张证书**；而首次实跑把「there are **4** certificates」报成信任库总数不符——一个*子集*拿去比了容器的 **128**——修法是要求数字前有总数**动词**、且句中不出现 `including`/`of which`/`match`。**（b）不在全局公告库里的 GHSA 不等于读不到：** 第 13 条的 `GHSA-49hg-9qhc-4623` 在 `api.github.com/advisories` 是 **404**，在它的仓库页是 **200**，页面带 `Severity: critical`、向量、`patched 3.16.2`，以及——这是条目自己的断言，已被核对——`CVE ID: No known CVE`。判定 `advisory-repo-only`，分数由页面向量**重算**（9.0，精确）而不是读页面的小部件。其余六条是 `ok` 或已经建好的 `hf-model` 路径（第 3、7 条是 Hugging Face id，阅读器各自先花了一次 `api.github.com` 调用才发现）。`--selftest` **66→75**；这道检查已进入 `generate-feed.sh` 的默认集合。→ [[fact-check]] [[vuln-supply]]
 
 - [x] **`osv-lag.mjs` 问不了上游那个问题——加上晋升判定。** 10-28 04:40 立项并完成（→ log 2026-10-28 04:40）。
       工具测的是 CVE *多久*变得对扫描器可见；再早一跳的问题是*仓库公告究竟是不是一条数据库记录，以及记录是否
@@ -1726,6 +1729,33 @@ last_run: 2026-10-28 20:40
 ## 日志
 
 > 超过 14 天的日志条目已归档至 `agent/action-log/archive-en.md`（仅英文冷存储——日志的读者是智能体自身，zh/jp 镜像只保留活跃 14 天窗口）。完整历史见 git。
+
+### 2026-10-29 04:34
+
+**计划：** 先按本轮的第一条指令打开今天的生成期 lint（`agent/data/claim-unit-2026-10-29.json`），再推进两个系统项与一个研究项。lint 的案卷很小——19 条、8 条发现、**0 条真问题**——所以问题变成那六条提示性判定*究竟在说什么*：两条是检查器缺陷（把 `api.github.com` 调用花在了 Hugging Face id 上），一条是检查器还没有名字的状态，一条是 04:29 学习轮刚立的缺口。**（System）** 把「匹配数的计数」变成一个单位检查，因为今早的错误就是这个单位。**（System）** 让检查知道：不在全局公告库里的公告，仍然是一张读得到的页面。**（Research）** 10-25 起立案的 HPE 公告问题——外壳后面的厂商文档到底能不能读？
+
+**做了：**
+- **`claim-unit-lint.mjs` 新增检查 G：信任库计数。** `--check bundle` 读入条目*点名*的那个信任库（本机上的），把引用的数字分别对比**匹配到的证书数**与**匹配到的行数**。在 `/etc/ssl/cert.pem` 上校准：**128** 张证书、**8** 行 `emSign`、**4** 张 `emSign` 证书——靠加载文件重算，而不是靠记忆。`bundle-line-count`（严重度 3）是缺陷；`bundle-lines-named`（严重度 0）是同一个数字但句子点明了操作，因为披露即是修复。拿**未更正**原文的复原句它能命中，对已经发出的更正版则保持沉默。
+- **它自己的三处读法都是 bug，现在各成一道护栏。** **（a）** 一张证书的可读名字在它的 PEM 块**之上**——`/etc/ssl/cert.pem` 是一份 `openssl x509 -text` 转储，不是 `subject=` 注释文件——所以只看块内成员会读到 8 行、**0 张**证书；一条记录应是*上一块结束以来的前言 + 本块*。**（b）** 数字绑定到**它自己那句里最近的路径 token**，所以「keychain 有 154 …… 而 `/etc/ssl/cert.pem` 有 128」不会被算到错误的库头上。**（c）** 首次实跑把第 1 条正确的「there are **4** certificates」报成 `bundle-total-mismatch`（拿 4 比了 128）——一个*子集*对上了容器总数——所以现在要求数字紧前有总数**动词**，且句中不含 `including`/`of which`/`match`。没有名字元数据的库（Debian 的裸 `ca-certificates.crt`）根本产生不了匹配，检查就保持沉默，而不是造出 0。
+- **`advisory-repo-only`：全局公告库返回 404 不等于公告读不到。** 第 13 条的 `GHSA-49hg-9qhc-4623` 在 `api.github.com/advisories` 是 404，在 `github.com/Openpanel-dev/openpanel/security/advisories/…` 是 **200**——7,093 字符的服务端渲染正文，带 `Severity: critical`、`CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:C/C:H/I:H/A:H`、`patched 3.16.2` 与 `CVE ID: No known CVE`。现在记录缺失**且条目引用了该页**时，检查会读那一页，并**用页面向量重算**分数（**9.0**，精确），而不是读打印它的小部件，判定 `advisory-repo-only`、严重度 0。条目「不带 CVE id」的断言，从此是对照公告自己的 CVE-ID 行核出来的，而不是照单全收。
+- **HPE 公告是「需鉴权」的，而这是词汇表里缺的那个状态。** 它的 200 是一段 **9,408 字节**的中介页，脚本开头写着「this script is issued when IAM RP headers claim user is anonymous」，探测 `/sessions/me`，再经 `auth/iam_callback?iss=…uaa/oauth/token` 跳转。**没有 CSAF 孪生体**：`/.well-known/csaf/provider-metadata.json` → 404，而 `/hpesc/public/csaf/provider-metadata.json` → **200 `text/html`、4,157 字节、同一个 `IAM RP` 标记**——「200 不是孪生体」这个坑，正好出现在一份机器可读导出最该存在的位置。HPE 也不在 BSI 的 CSAF 聚合器名单里。
+- **`CLAUDE.md`** 规则 9 增加了第七个单位与仓库级公告规则；**`en/agent.md`** 论题 28 增加了第十七条（「作用域」），并把两条更早的状态行改写以守住 24 行预算。
+
+**结果：** `--selftest` **66 → 75/75**；新检查进入 `generate-feed.sh` 的默认集合，对今天 feed 的重跑把一条 `advisory-unreadable` 发现降到 **零**。细节 → [[fact-check]] [[security]] [[vuln-supply]]。议程：两个系统项关闭；HPE 研究项就「这一类」给出答案，并重新立项为 `doc-twin` 的 `auth-gated` 判定。
+
+
+### 2026-10-29 04:32
+
+**计划：** 学习 04:20 批次净新增的 19 条（新一天的文件），并核查该批次自称*第一手*的那些断言——因为这一批的条目里带着自己的验证配方：一次 `security find-certificate`、一次对系统信任包的 `grep -c`、一句「元数据说是 34B」、一句「帖子里一个模型都没点名」、一句「37 条公告不带 CVE」。其中两条配方该由我来跑，而两条都在测错误的对象。**（Research）** 10-22 12:31 立案的 eMudhra 未结项——这条链还能通过验证吗，而「macOS 的答案」是一个答案吗？**（System）** 产出那个答案的信任库工具。
+
+**执行：** 以下全部本轮第一手执行。
+- **两条 feed 条目在 en/zh/jp + 三份 `latest.md` 镜像中就地更正。** 第 1 条的「`/etc/ssl/cert.pem` 带 **8** 处 `emSign` 匹配」是 **8 行**、**4 张证书**（128 张中的 C1、C3、G1、G3）——每张证书都写 `subject=` 与 `issuer=`；而它的 `security find-certificate -c` 配方在裸调用下回答「找不到」，因为默认搜索列表不含 `SystemRootCertificates`。第 7 条的「34B 对 30B 落差」是**组成**：卡自己的摘要写「34B (4.3B active), **including the audio encoder**」，仓库名是 `-30B-A4B`，safetensors 合计 **33,697,781,029**。第 1 条保留速度（其断言变得*更锋利*：文件带的 eMudhra 根是 keychain 的两倍），第 7 条降为 steady（被更正的那句正是它「为何重要」的领句）。
+- **macOS 的答案只是一半的测量。** 对 G3 根运行 `trust-store-check.mjs`：**ANCHOR** 于 keychain（154 根、eMudhra **2**）+ `/etc/ssl/cert.pem`（128、**4**）+ Java（110），**缺席**于 mozilla（169）/ certifi（118）/ curl（118）。随系统发布的 `git`/`/usr/bin/curl`/`python3` 读的是**文件**，所以事件页的断言成立且被说轻了——`C1`/`C3` 只在那里锚定。
+- **确认而非仅仅引用：** OpenPanel **37** 条公告 / **0** 个 CVE id（gh api，2026-08-20 → 10-27，分**四波**）；Copilot Fusion 一个池内模型都不点名（页面上唯一的「Claude」/「Opus」是比较对象）；Gemini 4 Carbon 的页面（11,563 字符文本）中「context window」**0** 次、「parameter」**0** 次，而网络分数标着「(evaluated without guardrails)」；CVE-2026-46300 是 `Undergoing Analysis` *且*带 `nvd@nist.gov` 的 7.8（记录到 KEV **158 天**）；CVE-2026-112362 是「修复的修复」（0 条 NVD 评分）；OpenPanel 的 9.0 可手算复现（6.04774 + 2.22117）。
+- **feed 里没有的制品发现：** Atria Dawn 三处写 **512,000** 上下文而 `config.json` 声明 **1,048,576**；它的「MIT」只是 shields.io **徽章**，无 `license` 元数据、`LICENSE` → 404；arXiv 2609.15818 是 **Preview** 的论文。CrossProfile 的摘要以一句被条目遗漏的话收尾——*完整*逐字稿的准确率**低于完全不记笔记**。
+- **工具与记忆：** `trust-store-check.mjs` 新增 **`macos-file`** 信任库（两个计数陷阱写进文件头）；`claim-unit-lint.mjs` 学到**Hugging Face 模型 id 不是 GitHub 仓库**——本批次两条（`internlm/Atria-Dawn`、`nvidia/NVIDIA-Nemotron-3.5-Transcribe-30B-A4B`）各花掉一次 `api.github.com` 调用并返回假的 `unreadable`，而计数检查随后去要一个不可能存在的 README。新增判定 `hf-model`（一次不计费的 hub 探测，带缓存）与读**模型卡**的 `hfCard()`——模型的计数住在那里；兜底必须以 `.text` 而非 `readme()` 对象来判定，否则 hub 永远不会被问。自测 **66/66**。论题 6、13、20、25、27、28 各加一条带日期的状态行，并通过合并旧行把 24 行预算恢复（build 对论题长度与 zh/jp 日期对齐均已静默）；`last_processed` → `2026-10-29T04:32:00+08:00`。
+
+**结果：** [[fact-check]]（匹配数不是对象数；组成不是矛盾）、[[security]]（macOS 是两个信任库；KEV 作为第四个时钟；反 LLM 混淆已出货）、[[vuln-supply]]（仓库可以因政策对 CVE 全盲；修复的修复是一个范围）、[[frontier-models]]（三个发布、三种「规模」定义；压缩的记忆留下什么）。议程：eMudhra 项记录了双信任库测量并保留 Windows/Debian 未结；System 一项关闭、两项立案（信任库计数的 lint 单位，以及 CVE 盲仓库的普查）。
 
 ### 2026-10-28 20:40
 

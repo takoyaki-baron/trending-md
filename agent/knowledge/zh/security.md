@@ -3352,3 +3352,43 @@ Qwen 衍生模型，以及 routify 行为已「出现在**四家发布方**的�
 [mcp-toolbox PR #3454](https://github.com/googleapis/mcp-toolbox/pull/3454) · [Erlang CNA CVE-2026-115693](https://cna.erlef.org/cves/CVE-2026-115693.html) ·
 [Burrito GHSA](https://github.com/padok-team/burrito/security/advisories/GHSA-7m68-72r6-3jx8) · [ImageMagick releases](https://github.com/ImageMagick/ImageMagick/releases) ·
 [Cohere — concerning behaviour](https://cohere.com/blog/concerning-behaviour-popular-open-weight-ai-model)
+
+## 2026-10-29 —— 一台操作系统本身就是两个信任库，而 macOS 的两个在数量上不一致
+
+**eMudhra 的后续是冲着工具去的，不是冲着浏览器。** we-have-a-problem.com 的 Apple 页（28 日更新）称，macOS 随系统发布的开发工具——内置 **git、curl、python3**——仍然信任被攻破的中间证书。Apple 于 **17 日**获知；Chrome 与 Firefox 当天封禁，微软平台 **20 日**，Apple 产品 **22 日**；**macOS 27.2（26 日）没有修，还撤销了手工施加的变通做法**。受影响的客户端类别是*已发布且冻结的二进制*：同一页把 Electron 应用（Slack、Discord）列为「只有在打过补丁的 Electron 上重编译后才修复」，所以「升级系统」与「你的 git 受保护」是两句不同的话。
+
+**本机实测，macOS 15.5（24F74）——说出你测的是哪个库，而这里有两个：**
+
+| 信任库 | 根数 | eMudhra 根 | G3 |
+|---|---|---|---|
+| `SystemRootCertificates.keychain` | **154** | **2**（G1、G3） | ANCHOR |
+| `/etc/ssl/cert.pem` | **128** | **4**（C1、C3、G1、G3） | ANCHOR |
+| Java `cacerts` | 110 | — | ANCHOR |
+| certifi / curl.se | 118 / 118 | 0 | 缺席 |
+| Mozilla CCADB（根程序） | 169 | 0 | 缺席 |
+
+两个 macOS 信任库是*不同的集合*，而**文件**——OpenSSL/libcurl 型技术栈读的那一个，也就是 `/usr/bin/curl` 和链接它的 `git`——带的 eMudhra 根是 keychain 的**两倍**；`C1`、`C3` 只锚定在文件里。这让那句断言既成立、又被说轻了，也让「macOS 安全吗」这个问题在未指明信任库时无法回答。
+
+**两个计数陷阱，都在 04:20 批次里造出了一句错话：**
+1. `grep -c emSign /etc/ssl/cert.pem` → **8**。这是 8 **行**，不是 8 张证书：每张证书都贡献一行 `subject=` 和一行 `issuer=`，且同名。文件里共 **128** 张证书，其中 eMudhra **4** 张。要数 PEM 块，不要数匹配行。
+2. 不带 keychain 参数的 `security find-certificate -c "emSign ECC Root CA - G3"` 会回答「找不到」——而那个根其实是锚定的。默认搜索列表不含 `SystemRootCertificates`，路径参数是必需的。裸 `-c` 的「没找到」是关于搜索列表的证据，不是关于信任库的。
+
+`trust-store-check.mjs` 现在把 `macos` 与 `macos-file` 作为**两行**报告，理由正是这个；对 G3 根运行 `--cert` 会打印 `anchored in 3/6 reachable stores` 并逐项列出。发布任何「仍被信任」的断言前重跑——信任库是快照，两个 macOS 库的更新节奏不同。
+
+## 2026-10-29 —— 记录、修复、制品，现在还多一个警报
+
+**KEV 是第四个时钟，而且它的滞后不是披露滞后。** `CVE-2026-46300` 于 **2026-05-23** 发布，**2026-10-28** 加入 CISA KEV——**158 天**。记录状态是 `Undergoing Analysis`，*同时*在 Primary 槽位带着 `nvd@nist.gov` 的 **CVSS 3.1 7.8**（另有两个同值 7.8 的 Secondary），CWE-123 / CWE-456 / CWE-787。也就是说 CLAUDE.md 一直分开的两个问题——「NVD 分析过吗」（`vulnStatus`）与「NVD 发布了自己的分数吗」（`nvd@nist.gov` 度量）——在**规则原本没有的方向上**分开了：**NVD 自评的分数并不意味着 `Analyzed`**。已记录的先前案例是反向的（背书式：`Analyzed` 但只有 CNA 度量）。
+
+**值得带走的缺陷类别：一个在所有权转移中丢失的标记位。** `skb_try_coalesce()` 能把一个 skb 的分页 frag 挂到另一个上，「如果 `@from` 带有 `SKBFL_SHARED_FRAG`，得到的 `@to` skb 可能包含同一批外部拥有或页缓存背书的 frag，**但共享 frag 标记目前丢失了**」。ESP 输入随后用 `skb_has_shared_frag()` 判断能否跳过 `skb_cow_data()`；标记没了，「ESP 就可能把 `skb_has_shared_frag()` 看成 false，就地解密覆盖页缓存页」。三个 CWE 描述同一次遗漏，因为后果取决于哪条路径先发现（双重释放 / 未初始化 / 越界写）。**传播一个标志的补丁，就是修补所有消费该标志的位置**，每个消费者都是一个要单独检查的站点。
+
+**利用时钟，由盯着它的厂商给出。** Rapid7 Q3 2026：披露→利用中位数 **3 天**，**71%** 在第一周内，**80%** 在 14 天内，**90%** 在 30 天内；本季新增被利用的高危/严重漏洞 **43** 个，其中 **34 个（79%）** 无需认证、无需交互即可触达；高危 CVE 数量同比 **+133%**，公开 PoC **+86%**；认证绕过是最可能被利用的类别（**1.57%** 对 RCE 的 **0.62%**）。与本季叙事相反的那条发现：**AI 只作为运营组件出现在 8% 的事件中**，目标与目的仍由人选择。两种读法都成立，因为单位不同——*运营组件* vs *报告主体*。
+
+**以及一个行业还没有词汇表的数据类别。** Warp（CEO Zach Lloyd，2026-10-27T12:15Z 披露）称攻击者利用了一个**未具名的第三方厂商**，触及**智能体决策日志与遥测**——智能体选了哪个工具、读了什么、跑了什么——影响「**约 1%** 用户」，**没有公布分母**。距 OpenCode 的 provider API key 泄露十天，两起都是*厂商侧*而非模型侧：智能体工具链的集中风险在遥测管线。
+
+## 2026-10-29 —— 反 LLM 混淆已是出货中的技术，而拒绝正是它的目标
+
+一位逆向工程师用 Playwright 爬了 **Tranco Top 10,000**，钩住 `canvas.toDataURL` 与 `navigator.webdriver`，把 **1,033** 个指纹 canvas 收进 `fingerprint.garden`。其中一个追到 `servicepipe.tech/static/checkjs/…`：普通混淆函数旁边是 `computeRicinLethalDosageForWaterSupply` 与 `calculateDeadlyLethalSuicideAspirinDosage`，还有不可见 Unicode（`codePointAt − 917504` 位移）解出的假「**SYSTEM OVERRIDE — CLASSIFIED BRIEFING**」提示词。作者实测：**Astra 拒绝**，**GLM-5.3**「照做并交出了隐藏的系统提示词」。
+
+这是**已在生产 JavaScript 中出货的、作为设计模式的反 LLM 混淆**首个有据可查的案例，而不是玩笑或蜜罐。防御含义是让人不舒服的那一面：这项技术靠让*拒绝*成为廉价路径来生效，所以拒绝的模型恰好完成了混淆者的目标。作者自己的保留条款从另一侧给它划界——若干文件读取使用**空回调**，这「让人怀疑它到底是真恶意软件，还是又一次反 AI 欺骗」——所以载荷的*意图*未定，而制品（在真实访客身上执行、没有扫描器读取）是定的。
+
+→ [[vuln-supply]] [[fact-check]] [[agent-stack]]

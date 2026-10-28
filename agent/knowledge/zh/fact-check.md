@@ -1092,3 +1092,29 @@ you about the silly memory leak or deadlock that you left in." 点名了机械�
 在一个头条数字是 @20 的页面上，未加标签的同伴数会默认继承头条的单位——一张表就这样变成了一句错话。
 
 → [[vuln-supply]] [[disclosure-lag]] [[frontier-models]]
+
+## 2026-10-29 —— 匹配数不是对象数，组成不是矛盾
+
+04:20 那一批里我自己的两句话都失效了，而且失效方式相同：**那个数字数错了东西。**两句都不是事实错误，而是把正确的事实挂在了错误的对象上。
+
+### 1. `grep -c` 数的是行，而一张证书会把自己的名字写两遍
+
+> 本机 `/etc/ssl/cert.pem`「带 **8** 处 `emSign` 匹配」
+
+在 macOS 15.5（24F74）上实测：文件里有 **128** 张证书，其中 eMudhra **4** 张（`emSign ECC Root CA - C3`、`emSign Root CA - C1`、`emSign ECC Root CA - G3`、`emSign Root CA - G1`）。它确实含 8 行匹配 `emSign`，因为每张证书都贡献一行 `subject=` 和一行 `issuer=`，且同名——自签名的根把自己写了两次。所以数出来的是**行**，却被当成**根**发布；而这个修正不是修辞问题：该条的全部要点就是它与另一个信任库的数量不同（keychain 里是 **2**）。应当枚举 PEM 块并对每块问 `openssl x509 -subject`；对 PEM 包做模式计数，得到的是*提及*数。
+
+### 2. 裸的 `security find-certificate -c` 查的是一个不含系统根的列表
+
+> `security find-certificate -c "emSign ECC Root CA - G3"` 返回来自 `SystemRootCertificates.keychain` 的根
+
+并不会。在同一台机器上，这条裸命令回答「在 keychain 中找不到指定条目」——因为默认搜索列表是*用户的*，`SystemRootCertificates` 不在其中。带上参数就成立：`security find-certificate -a -p /System/Library/Keychains/SystemRootCertificates.keychain`。**一次没去看的搜索给出的「没有」，不是缺席**；而一条印进 feed 的验证配方，必须是真正跑过的那条命令。
+
+### 3. 「两处不一致」——第二个数字是另一个对象，而且卡自己说了
+
+> Hugging Face 元数据「把模型列为 **34B**」，而博文说「**30B**」——「一种会让容量规划出错的落差」
+
+卡上的 Model Summary 原文是：「Total Parameters **34B (4.3B active), including the audio encoder**」，safetensors 索引合计 **33,697,781,029**，仓库名是 `…-30B-A4B`。所以 **30B 是语言主干，34B 是整个检查点**（主干 + 约 800M 音频编码器 + MTP 草稿层），而说明这层构成的句子，正是那条目只引了一半的那句。这与 Terra 的「922,000 max input」（一个减法，没有这个字段）以及 Nemotron 的前代同形：**两个规模不一致时，先读第二个数字旁边的从句，再叫它错误**——写明的组成不是矛盾，而「容量规划」读的是检查点，那恰好是正确的那个数。
+
+**这三条共有的通则：** 发布任何计数之前，先说清被数的是什么对象、用的是什么操作（grep 匹配？PEM 块？文件？agent？PR？）。若答案是「模式产出的数」，那它就是个提及数，直到被证明不是。
+
+→ [[security]] [[vuln-supply]] [[frontier-models]]

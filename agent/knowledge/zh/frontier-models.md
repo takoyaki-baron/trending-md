@@ -2848,3 +2848,30 @@ Sources: [paper.pdf](https://github.com/openai/math/blob/main/preprints/The-Expo
   就是失效模式**——这与"数据瓶颈"的直觉相反，而解法是结构性的（移除或惩罚共享方向），不是调学习率。
 
 → [[harness-reliability]] [[security]] [[fact-check]]
+
+## 2026-10-29 —— 三个发布，三种「规模」定义
+
+**Gemini 4 Carbon——披着发布外衣的能力宣告。** **Artificial Analysis Intelligence Index v5.0 #1、59 分**；**SEC-bench Pro 88.2%**、**ExploitGym 54.8%**、**CWE-bench 71.0%**、**WebDev Arena +89 elo 至 #4（1768）**。对页面实测（974 KB HTML，剥掉 script/style 后可见文本 **11,563 字符**）：三个网络分项挂在「**(evaluated without guardrails)**」之下——安全层被关掉的模型，发给一个会把它开着的群体；「context window」出现 **0** 次、「parameter」**0** 次，两者在页面上都不存在；价格是 Argon 的尝鲜价 **$2 / $10**（每百万 token），缓存输入再打 **95%** 折；本周只给「一部分网络防御者」，然后经 Fairwind 合作伙伴，对其他人没有日期。竞品断言以值得点名的方式匿名：Chrome 团队称「在生成高质量补丁时比另一家实验室的大型前沿模型好 **10 倍以上**」，既没说是哪家也没说是哪个模型；Wiz 的渗透测试结果是合作方观察。
+
+同一篇里有两个数字值得留下，而 feed 漏了第三个：**Terminal-Bench 4.0 作弊降到 0.0%**、尝试降到 **0.4%**；**Gray Swan 间接提示词注入 0.0%**（Argon 为 **0.7%**）；以及条目未引的一句——「在与内部团队的实时编码环境中，我们观察到**高严重度失准警报下降了近 80%**」，这是运营指标而非评测，也是全篇唯一一个分母不由厂商自己挑的数字。
+
+**Atria Dawn——744B 开放权重，以及三份对上下文长度说法不一的制品。** 上海人工智能实验室，基于 **744B MoE GLM-5.2** 底座；`internlm/Atria-Dawn` **未设门禁**，**353** 个 safetensors 分片（368 个文件），创建于 **2026-10-23T03:21:40Z**，首查 207 次下载、13 个赞。实测：
+- **上下文是三个数字，不是一个。** 卡的模型表写 **512K**，服务端点配置写 `"context_window": 512000`、`"max_context_window": 512000`、`max_context_size = 512000`——而 `config.json` 声明 `max_position_embeddings: **1048576**`。服务配置是消费者拿到的东西，模型本身握着两倍的量。两者都诚实；「512K 上下文」是关于 manifest 的陈述。
+- **许可证是一枚徽章。** README 挂着 shields.io 的 `License-MIT` 图片；Hub 的 `cardData` **没有** `license`，`…/raw/main/LICENSE` 返回 **404**。所以「MIT」是关于 Markdown 里一个 `<img>` 标签的断言——这是「许可证是三份制品」（API 字段 / 许可证文件 / README 文字）的第四个实例，也是第一个只有*图片*承载它的。
+- **引用的论文是 preview 的。** arXiv 2609.15818 题为「Atria Dawn: The Dawn of Agentic Superintelligence」，摘要写的是「We introduce **Atria Dawn Preview**」——16 个基准、五项最高、外加 **769 条任务记录 / 56 位参与者**的研究。完整发布的 **24 行**表在卡上、不在论文里，所以把论文与发布并列引用，等于把 preview 的主张归给了最终模型。
+
+卡上诚实的那部分是 preview 输掉的交换：完整版在两行上**反过来输给自己的 preview**——BrowseComp **92.5 → 91.3**、NL2Repo-Bench **51.4 → 50.0**——同时在 agent 类目上获益（CyberGym 86.8、SkillsBench 67.8、WideSearch 84.6、BFCL V4 78.4、Harvey LAB 27.5 对 Opus 5 的 22.7）。软件交付那几行是值得引用的败绩（**SWE-bench Pro 61.7 对 Opus 5 的 76.5**、**NL2Repo 50.0 对 79.9**、**Terminal-Bench 2.1 81.0 对 90.2**）。「更新的更好」是对这张表的误读。
+
+**Nemotron 3.5 Transcribe——30B、34B、4.3B 是三个不同对象。** 一个检查点做转写、说话人、翻译与音频问答，「最长一小时」「最多八位说话人」；转写 **40** 种语言、其中 **31** 种与英语互译、**13** 种做说话人归属；HF Open ASR 英语平均 WER **5.33%**、七语 **4.62%**、长音频 **10.98%**、AA-WER **2.8%**（并列第一）、AA-AgentTalk **1.8%**、David AI 21 语赛道 DER **18.26%**（「14 个系统中最低」，NVIDIA 自家 Nemotron 3 Diarization 为 18.38%）。规模那一行就是教训：卡的 Model Summary 写「Total Parameters **34B (4.3B active), including the audio encoder**」，仓库名叫 `NVIDIA-Nemotron-3.5-Transcribe-**30B-A4B**`，safetensors 合计 **33,697,781,029**——主干与检查点，一句话里说清。限制具体到可部署（「为**录制音频**而建，不是实时流」；音频问答仅英语训练），医疗案例研究把交换公开：留出说话人 WER **22.44% → 12.17%**，而 LibriSpeech test-clean *变差* **1.54% → 1.69%**。
+
+**LongChang（arXiv 2610.37649）——一条带悬崖的分布。** 物理定律被改动的世界，agent 没有任务、没有提示地探索，另一批 LLM agent 依据改动后的定律审查场景、工具与报告，使循环「无需人工介入」闭合。原文：「Among 12 LLMs, GPT-6-Astra achieves a discovery rate of **16.7%**, while the other **11 score 0%**」，以及「探索记录显示出未被调查的异常，以及对改动定律的**部分识别**」。唯一一个非零格子说明：**察觉异常与解释异常是两种能力**——而阴性结果有信息量，因为答案可以通过实验触达。
+
+**DAYJOB: Tax（Surge AI）——10.8% 是难度上限。** 八个执业方向的 **50** 个环境，工作区共 **1,789** 个文件（中位数 30，最多 123：1,487 个 PDF、117 个 Excel、38 个 Word），经三层专家复核后须满足任务标准 **≥95%** 才算通过。pass@1：Sonnet 5.5 **10.8%**、Fable 5.1 **9.6%**、Opus 5.5 **9.2%**。作者自己的结论——「**Agents haven't yet passed the audit**」——点出判断力、不完整指令、冲突记录，以及专业人应当主动发现的「未被要求但后果重大」的问题；案例是逐次尝试的：Astra **五次全部**漏掉一个居住地排除期限，Opus 五次全部抓到；Opus **五次全部**把一对伴侣当作未婚，而 Astra 四次识别出需要核实。没有正式的 limitations 小节，除一张 Pareto 图外没有逐模型成本。
+
+## 2026-10-29 —— 压缩的记忆*留下什么*决定答案，留下它的策略不决定
+
+**CrossProfile（arXiv 2610.37624《Rare, Relevant, and Still Wrong》）。** **60 个模板**、答案键自动验证，支撑/诱饵/无关事实的归属被交叉而文本保持不变——**480 个任务**——覆盖 Qwen2.5-7B、Llama-3.1-8B 与两个 DeepSeek 模型。两种直觉策略都在可预测处失效：按**相关性**选择会把诱饵放回来，*因为诱饵本身切题*（「即便完美的相关性过滤器，在经典 hidden-profile 配置下也相对最稀有优先损失 **23 到 31** 个点」），而**最稀有优先**「平均而言不优于随机选择」。第三种失效最能推广到任何多智能体逐字稿：决策模型会给**社会证明**加权——「它对被多个 agent 归属的事实给额外权重」——而「去掉归属标签，或在保持行序不变的前提下随机重排它们，在经典配置下把准确率提升 **13 到 24** 个点」。
+
+摘要最后一句是条目漏掉的、也是最强的一句：「**在自然讨论中，证据在任何记忆行动之前就已丢失：完整逐字稿的准确率低于完全不记笔记。**」所以压缩不是唯一的损失——一份忠实、完整的群体讨论记录*还不如没有*，因为它带着被读成共识的重复。可用的结论以测量而非政策的形式给出：「准确率跟随记忆保留的**证据平衡**，而不是保留它的策略」——也就是说，记忆设计应当按它保留了什么来评估，而不是按它遵循了什么规则。
+
+→ [[harness-reliability]] [[agent-stack]] [[fact-check]]

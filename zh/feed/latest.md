@@ -16,7 +16,7 @@ license: CC-BY-4.0
 
 eMudhra 事件跟踪页在 **10 月 28 日**更新了一条专门指向 Apple 的发现："截至 10 月 28 日，Apple 随 macOS 发布的开发者工具"——内置的 **git**、**curl** 和 **python3**——仍然信任被攻破的中间证书。Apple 在 **10 月 17 日**就被通知了此事；Chrome 与 Firefox 当天即封锁了这些证书，微软平台在 **20 日**，Apple 产品在 **22 日**。**10 月 26 日发布的 macOS 27.2 并没有修复该问题，还撤销了**用户手工施加的临时修复。
 
-**Why it matters:** HN 讨论里最有力的反驳恰恰是正确的更正，而它应该写进正文而不是压在下面——**git 不是那个 bug**。git 对着系统证书库做校验，这正是它该做的事；bug 在证书库，而 macOS 有**两个**互相不一致的库（`/etc/ssl/cert.pem` 与 Keychain）。本机实测（macOS）：`security find-certificate -c "emSign ECC Root CA - G3"` 能从 `SystemRootCertificates.keychain` 取到该根证书，而 `/etc/ssl/cert.pem` 里有 **8** 处 `emSign` 匹配。这比"证书包过期"更糟的原因在于 git 流量就是**源代码**：事件页自己的影响描述是持有私钥的攻击者"可以冒充任何网站或服务"，并给出自查命令 `git ls-remote https://git-emudhra.we-have-a-problem.com/check.git`——"证书报错意味着你的 git 是受保护的"。同一页面还把 Electron 应用（Slack、Discord）列为只有重新构建在已修复的 Electron 上才能拿到修复，所以受影响的客户端类别是**已发布并冻结的二进制**，而不是浏览器。复现前请先 `which -a curl`：那条讨论线程里，同一台机器上的 Homebrew curl 与 `/usr/bin/curl` 给出了相反的答案。
+**Why it matters:** HN 讨论里最有力的反驳恰恰是正确的更正，而它应该写进正文而不是压在下面——**git 不是那个 bug**。git 对着系统证书库做校验，这正是它该做的事；bug 在证书库，而 macOS 有**两个**互相不一致的库（`/etc/ssl/cert.pem` 与 Keychain）。本机实测（macOS 15.5），而这两个库**装的不是同一批东西**：`SystemRootCertificates.keychain` 有 **154** 个根、其中 eMudhra **2** 个（`G1`、`G3`），而 `/etc/ssl/cert.pem` 有 **128** 个、其中 **4** 个（`C1`、`C3`、`G1`、`G3`）——`C1` 与 `C3` **只**锚定在文件里，那正是 OpenSSL/libcurl 后端读的信任包。（复现时有两个坑：裸跑 `security find-certificate -c "emSign ECC Root CA - G3"` 什么也查不到，因为它的默认搜索列表不含系统根，必须显式传入 keychain 路径；而 `grep -c emSign /etc/ssl/cert.pem` 得到 **8**，那是 8 **行**——每张证书都以 subject 和 issuer 各写一次自己的名字——证书其实是 4 张。）这比"证书包过期"更糟的原因在于 git 流量就是**源代码**：事件页自己的影响描述是持有私钥的攻击者"可以冒充任何网站或服务"，并给出自查命令 `git ls-remote https://git-emudhra.we-have-a-problem.com/check.git`——"证书报错意味着你的 git 是受保护的"。同一页面还把 Electron 应用（Slack、Discord）列为只有重新构建在已修复的 Electron 上才能拿到修复，所以受影响的客户端类别是**已发布并冻结的二进制**，而不是浏览器。复现前请先 `which -a curl`：那条讨论线程里，同一台机器上的 Homebrew curl 与 `/usr/bin/curl` 给出了相反的答案。
 
 [`🔗 eMudhra 事件——Apple 后续（10 月 28 日）`](https://emudhra.we-have-a-problem.com/apple.html) · [`🔗 eMudhra 事件索引（已修复产品表、时间线）`](https://emudhra.we-have-a-problem.com/) · [`🔗 HN 讨论（905 pts）`](https://news.ycombinator.com/item?id=50271640)
 
@@ -92,15 +92,15 @@ Warp——那个从 AI 终端变成"智能体开发环境"的产品——披露�
 
 ---
 
-## 7. Nemotron 3.5 Transcribe 把四个语音任务放进一个开放检查点——而博客和模型卡对它的体积说法不一致
+## 7. Nemotron 3.5 Transcribe 把四个语音任务放进一个开放检查点——而它的三个「体积」是三个不同的对象
 
-- **Velocity:** ▮▮ rising
+- **Velocity:** ▮ steady
 - **Source:** NVIDIA / Hugging Face 博客 · 约 5 小时前（~23:17 UTC+8 10 月 28 日）
 - **Tags:** `nvidia` `asr` `open-weights` `diarization` `multilingual`
 
 **Nemotron 3.5 Transcribe** 是一个单一开放权重检查点，同时做转写、说话人归属、翻译与音频问答，处理"最长一小时"的录音、标注"最多八位说话人"。各任务覆盖差异很大，而博客直说了：它**转写 40 种语言**、"把其中 31 种与英语互译"、"在 13 种语言里做说话人归属"。分数是：Hugging Face Open ASR 英文 **5.33% 平均 WER**，开放权重模型中第一；**七种语言平均 4.62% WER**；**长音频 10.98%**；Artificial Analysis **AA-WER 2.8%**，与并列第一；**AA-AgentTalk 1.8%**，次优开放权重模型为 2.3%。说话人分离在 David AI 21 语言赛道上拿到 **18.26% DER**——"14 个受测系统中最低的分离错误率"，NVIDIA 自家的 Nemotron 3 Diarization 为 18.38%。
 
-**Why it matters:** 这篇博客里有两件事比 WER 表更值钱。第一，体积被说了两次且**不一致**：博客说"其 30B 参数中约 4B 每个 token 激活"，而同一页上的 Hugging Face 元数据把模型标为 **34B**——正是那种会让容量规划出错的"命名与元数据"落差。第二，局限具体到可执行："**Transcribe 面向录制音频，不是实时流**"，音频问答只在英文上训练，指南建议"对照录音抽查人名、说话人切换与答案"。随后的医疗案例展示了微调的诚实版本：留出说话人的 WER **22.44% → 12.17%**，相对降幅 "45.8%"，而 LibriSpeech test-clean **从 1.54% 退化到 1.69%**——也就是说，领域微调买来一个领域，代价是一点通用精度，而且是量出来的而非声称的。
+**Why it matters:** 这篇博客里有两件事比 WER 表更值钱。第一，体积被说了三种说法，而**三种都对**——这才是容易被误读的地方：仓库名是 `…-30B-A4B`，模型卡自己的 Model Summary 写"Total Parameters **34B (4.3B active), including the audio encoder**"，而 safetensors 索引合计 **33,697,781,029**——所以 30B 是语言主干，34B 是整个检查点，4.3B 是激活集，把三者对上号的那句话就在同一页上（已在 `nvidia/NVIDIA-Nemotron-3.5-Transcribe-30B-A4B` 上第一手核实）。做容量规划时按检查点算，而那正是模型卡已经给出的数字。第二，局限具体到可执行："**Transcribe 面向录制音频，不是实时流**"，音频问答只在英文上训练，指南建议"对照录音抽查人名、说话人切换与答案"。随后的医疗案例展示了微调的诚实版本：留出说话人的 WER **22.44% → 12.17%**，相对降幅 "45.8%"，而 LibriSpeech test-clean **从 1.54% 退化到 1.69%**——也就是说，领域微调买来一个领域，代价是一点通用精度，而且是量出来的而非声称的。
 
 [`🔗 NVIDIA——Nemotron 3.5 Transcribe（HF 博客）`](https://huggingface.co/blog/nvidia/nemotron-transcribe-granary) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50275128)
 
