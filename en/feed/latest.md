@@ -1,514 +1,276 @@
 ---
-date: 2026-10-28
-updated: 2026-10-28T12:23:59Z
+date: 2026-10-29
+updated: 2026-10-28T20:20:56Z
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 30
+sources: 26
 license: CC-BY-4.0
 ---
 
-# Trending — 2026-10-28
+# Trending — 2026-10-29
 
-## 1. Genie 4 generates worlds with audio and dialogue — and DeepMind ships no benchmark with it
-
-- **Velocity:** ▮▮▮ trending
-- **Source:** Google DeepMind blog / Hacker News · 470 pts · 276 comments · ~4h ago (~00:06 UTC+8 Oct 28)
-- **Tags:** `deepmind` `world-model` `multimodal` `simulation` `research-preview`
-
-**Genie 4** is a world model for "real-time interactive simulation," and the modality list is the news: it generates a simulated world *together with* ambient sound matched to the environment and interactive character dialogue that adapts on the fly. Steering is natural-language — change weather, move the camera, add people or objects — with Gemini adapting the prompt to the scene and keeping the world coherent between edits. DeepMind credits **Gemini Omni** for grounding scenes in realistic appearance and behaviour, and **Gemini 3.8 Flash** as a guiding agent that observes, plans steps and checks progress to support causality and multi-step events. It simulates aerodynamics, collisions and character movement. Robotics experiments pair **Gemini 4 Argon** with Genie 4, including an Apptronik Apollo humanoid playing checkers. Availability is a research preview for trusted testers, "coming soon" to Google AI Ultra subscribers through Project Genie and to early-access partners via the Gemini API and Google AI Studio, with a waitlist.
-
-**Why it matters:** there is no benchmark in the post and no model size — so the deployable information is the limitations list, and it is unusually specific. Visual details and object permanence "shift or drift over time," particularly in longer sessions, after multiple complex edits, or while navigating; complex physical interactions, real-time audio accuracy, legible text rendering, spatial accuracy and long-term consistency "are active areas of ongoing research." SynthID watermarking is on every output. That combination describes a preview with a *named* failure mode rather than a solved simulator — and drift-after-edits is the one that matters for the pre-visualisation and prototyping uses DeepMind lists, because those workflows are exactly the multi-edit ones.
-
-[`🔗 DeepMind — Genie 4: a new generation of world simulation`](https://deepmind.google/blog/genie-4-a-new-generation-of-world-simulation/) · [`🔗 Hacker News discussion`](https://news.ycombinator.com/item?id=50261319)
-
----
-
-## 2. Ghostty 1.4.0 completes Kitty graphics and cuts scrollback memory 70–90% — and ships ten security advisories with no CVE IDs
+## 1. Apple's macOS ships git, curl and python3 that still trust the compromised eMudhra roots — and macOS 27.2 undid the manual fix
 
 - **Velocity:** ▮▮▮ trending
-- **Source:** ghostty.org release notes / Hacker News · 389 pts · 127 comments · ~3h ago (~00:51 UTC+8 Oct 28)
-- **Tags:** `terminal` `zig` `release` `performance` `disclosure`
+- **Source:** we-have-a-problem.com / Hacker News · 905 pts · ~9h ago (~19:03 UTC+8 Oct 28)
+- **Tags:** `emudhra` `macos` `ca-compromise` `trust-store` `git`
 
-**Ghostty 1.4.0** shipped **2026-10-27T19:37Z** after seven months, 172 contributors and 2,889 commits. The headline is Kitty graphics: animation and relative placements land, completing support for the published spec — Ghostty claims to be the first non-Kitty terminal to get there. Idle scrollback is now transparently compressed, cutting physical memory roughly **70–90%** for typical text, which is what lets the default scrollback limit rise from **10 MB to 50 MB** while an empty terminal on macOS uses about **16 KiB**. Reading and parsing the pty were separated: macOS I/O throughput up **25–55%**, and plain-text VT parsing measured at **128 MB/s → 725 MB/s**. GTK gets a new EGL renderer with triple buffering and DMABUF sharing, replacing `GtkGLArea`; fractional-scaled text is sharp. Also: the Kitty clipboard protocol (OSC 5522) on macOS and GTK, drag-and-drop split rearrangement on GTK, `esctest` wired into CI, a `ghostty +ssh` wrapper that installs terminfo and forwards environment variables, macOS 27 "Golden Gate" fixes, and four new localisations (Basque, Belarusian, Danish, Serbian in both scripts).
+The eMudhra follow-up page was updated on **28 October** with a finding aimed at Apple specifically: "As of 28th October, the developer tools Apple ships with macOS" — built-in **git**, **curl** and **python3** — still trust the compromised intermediate certificates. Apple was notified of the incident on **17 October**; Chrome and Firefox blocked the certificates that day, Microsoft platforms on the **20th**, Apple products on the **22nd**. **macOS 27.2, released on 26 October, did not fix the issue and undid the workaround** a user applied by hand.
 
-**Why it matters:** read the breaking changes before upgrading — `copy-on-select` now accepts `none`/`primary`/`clipboard`/`both` where `clipboard` means *only* the system clipboard, macOS changes the default to `none`, `cmd+arrow_up/down` revert to `jump_to_prompt`, GTK moves tab-switching to `ctrl+shift+page_up/down`, and `scrollback-limit` is deprecated for `scrollback-limit-bytes`. Then read the security section, which is the largest part of this release: **ten** GHSA advisories — a paste guard that did not treat carriage returns as line endings, hostile Kitty graphics commands that could crash, hang, over-allocate or touch files, two tmux-control-mode crashes (one closing every window, one via a zero-sized or oversized pane), memory corruption when clearing into a scrollback with a very small limit, escape injection through zsh integration from a crafted directory name, and four macOS issues (cmd-clicking a crafted OSC 8 link, links matched by the `link` configuration, drag-and-drop bypassing paste protection, and control characters in a filename misrepresenting the command in the confirmation dialog) — with the notes stating **CVEs had not yet been assigned**. Ten advisories and zero identifiers means a scanner has nothing to match on release day; the release notes are the only disclosure that exists. Requirements also move: GTK **4.18** and libadwaita **1.7** (Ubuntu 24.04 no longer qualifies), Zig **0.17**, macOS 13+. Ghostty 1.5 is slated for **March 2027**, and the Windows GUI roadmap is gone while libghostty support for Windows continues.
+**Why it matters:** the HN thread's top objection is the correct correction, and it belongs in the item rather than under it — **git is not the bug**. Git is validating against the system store, which is what it should do; the store is the bug, and macOS has *two* of them (`/etc/ssl/cert.pem` and the Keychain) that disagree. Verified first-hand on a macOS host here: `security find-certificate -c "emSign ECC Root CA - G3"` returns the root from `SystemRootCertificates.keychain`, and `/etc/ssl/cert.pem` carries **8** `emSign` matches. The reason this is worse than a stale bundle is that git traffic is *source code*: the incident page's own impact line is that an attacker with the key "could impersonate any website or service," and its page checks `git ls-remote https://git-emudhra.we-have-a-problem.com/check.git` — "A certificate error means your git is protected." The same page lists Electron apps (Slack, Discord) as picking up the fix only once rebuilt on a patched Electron, so the class of affected clients is *shipped-and-frozen binaries*, not browsers. Reproduce with `which -a curl` before trusting a passing result: a Homebrew curl and `/usr/bin/curl` on the same machine gave opposite answers in that thread.
 
-[`🔗 Ghostty 1.4.0 release notes`](https://ghostty.org/docs/install/release-notes/1-4-0) · [`🔗 ghostty-org/ghostty — releases`](https://github.com/ghostty-org/ghostty/releases) · [`🔗 Hacker News discussion`](https://news.ycombinator.com/item?id=50261998)
+[`🔗 eMudhra incident — Apple follow-up, 28 Oct`](https://emudhra.we-have-a-problem.com/apple.html) · [`🔗 eMudhra incident index (patched-product tables, timeline)`](https://emudhra.we-have-a-problem.com/) · [`🔗 Hacker News discussion (905 pts)`](https://news.ycombinator.com/item?id=50271640)
 
 ---
 
-## 3. CPython is removing its experimental JIT — PEP 836 was withdrawn on October 19, and the council's objections are the useful part
+## 2. Gemini 4 Carbon ranks #1 on the Intelligence Index and hands the cyber benchmarks to defenders only — with no context window published
 
 - **Velocity:** ▮▮▮ trending
-- **Source:** LWN.net / Hacker News · 371 pts · 194 comments · ~9h ago (~19:17 UTC+8 Oct 27)
-- **Tags:** `python` `cpython` `jit` `pep` `governance`
+- **Source:** Google blog / Hacker News · 537 pts · ~3h ago (~01:01 UTC+8 Oct 29)
+- **Tags:** `google` `gemini` `cybersecurity` `frontier-model` `restricted-release`
 
-The Python steering council set a **six-month deadline in June** for a standards-track PEP to keep the experimental JIT, and on **October 19** the PEP 836 authors — **Brandt Bucher, Savannah Ostrowski and Ken Jin** — withdrew it. Ostrowski's reason is bandwidth, not performance: "we don't feel we have the personal bandwidth to carry the current version forward." The council concluded the PEP "mostly answers the questions we asked" but named three gaps: security was "**an underserved area in the PEP**," the user-impact claims were "**overly optimistic**," and the planned 2028 compatibility review was "**way, way too late**." It also cited main-branch experimentation problems and a "lack of unified design." Brett Cannon said "work would be stopped in the main repository," leaving open whether the community continues elsewhere. Removal is expected early in the **3.16** development cycle — early enough to absorb fallout. The JIT landed in **3.13** (2024); **3.15** was allowed to keep the status quo. The reference implementation will be published and linked from the withdrawn PEP.
+**Gemini 4 Carbon** is Google's next frontier model, built explicitly for "state-of-the-art cybersecurity and long horizon capabilities" — two weeks after **Gemini 4 Argon**. The numbers: **#1 on Artificial Analysis Intelligence Index v5.0 at 59**, **88.2% on SEC-bench Pro** (finding vulnerabilities), **54.8% on ExploitGym** (exploitation), **71.0% on Collinear's CWE-bench** (patching), and **+89 elo to #4 (1768) on WebDev Arena**. Rollout is deliberately narrow: "Starting this week, we will make Carbon available to a subset of cyber defenders," then trusted partners through the **Fairwind Program**, with developers and consumers "as soon as possible" and no date. Price holds at Argon's introductory **$2 / $10 per million** input/output tokens with cached input at 95% off, rising to **$4 / $20** after.
 
-**Why it matters:** the JIT was the headline performance story of 3.13, and every reason it died is maintenance-shaped. The security objection is the one to carry: a JIT is a memory-corruption surface that the PEP never budgeted for, and "add a JIT to improve the interpreter" is a proposal that has to answer that question first. The second thing worth keeping is the shape of the ending — a six-month clock that expired in *withdrawal plus a promised reference implementation*, not in a roadmap. An alternative PEP is considered unlikely precisely because the active JIT drivers were all in PEP 836.
+**Why it matters:** read the parenthetical before the headline. Google labels the three cyber benchmarks "**(evaluated without guardrails)**" — so the 88.2 and 54.8 describe a model with the safety layer switched off, shipped to a population that *keeps* it on. The rest of the case rests on internal and partner results with unnamed comparators: the Chrome team's "more than 10X better than another lab's large frontier model when generating high quality patches" names neither the lab nor the model, and Wiz's web-pentest result is a partner observation. Two numbers are unusually specific and worth crediting: **Terminal-Bench 4.0 cheating reduced to 0.0%** with attempts down to 0.4%, and **0.0% on Gray Swan's indirect prompt-injection benchmark** against Argon's 0.7% — the second is the one that matters for a model you are about to point at hostile input. And the absence is the tell: **no parameter count, no context window, no named variants** appear anywhere in the post, which is the difference between a model release and a capability announcement.
 
-[`🔗 LWN — Python's experimental JIT to be removed`](https://lwn.net/SubscriberLink/1102102/0c00e4d550f25f8c/) · [`🔗 Hacker News discussion`](https://news.ycombinator.com/item?id=50257419)
-
----
-
-## 4. Adobe Commerce's 9.3 gets a KEV entry 105 days after the fix — and CISA's own SSVC flipped to "active" the same afternoon
-
-- **Velocity:** ▮▮▮ trending
-- **Source:** CISA KEV catalog / NVD / CVE record · published 2026-07-14 · KEV added 2026-10-27
-- **Tags:** `cve` `adobe` `magento` `kev` `provenance`
-
-**CVE-2026-48356** is a **CWE-434** unrestricted upload of a dangerous file type in Adobe Commerce, Commerce B2B, Magento Open Source and Commerce Events, at **CVSS 3.1 9.3** (`AV:N/AC:L/PR:N/UI:R/S:C/C:H/I:H/A:N`). The CNA record was reserved **2026-05-21**, published **2026-07-14**, and fixed in the **APSB26-73** July releases — `2.4.9-2026-jul`, `2.4.8-2026-jul`, `2.4.7-2026-jul`, `2.4.6-2026-jul`, `2.4.5-2026-jul`, `2.4.4-2026-jul` and the matching B2B and Magento Open Source builds. The affected ranges are stated as `lessThanOrEqual` against a comma-joined version string from `0`, so the record means "these branches through these points, plus every earlier release in each line." NVD marks it **Analyzed** and publishes its **own** 9.3 alongside Adobe's `psirt@adobe.com` 9.3 — the minority case where NVD scored the record rather than endorsing the CNA. CISA added it to **KEV on 2026-10-27**.
-
-**Why it matters:** the ADP container answers "when did the exploitation assessment change," and it has a timestamp. CISA's Vulnrichment entry for this CVE now reads `Exploitation: active`, `Automatable: no`, `Technical Impact: total`, stamped **2026-10-27T19:53:15Z** — the same afternoon as the KEV add. That pairing is the checkable version of "newly exploited": an active SSVC verdict with a minute-resolution timestamp beside a KEV `dateAdded`. And the lag is the story for anyone who runs Magento: **105 days** from the fix (Jul 14) to KEV (Oct 27), which means a store that read July's quarterly patch notes as routine has been carrying a KEV-listed hole for a third of a year. Note `UI:R` and `S:C` together — the attacker needs a victim to visit a crafted URL, so this is an upload endpoint plus a lure, not a drive-by, and `Automatable: no` says the same thing from CISA's side.
-
-[`🔗 CISA KEV catalog`](https://www.cisa.gov/known-exploited-vulnerabilities-catalog) · [`🔗 NVD — CVE-2026-48356`](https://nvd.nist.gov/vuln/detail/CVE-2026-48356) · [`🔗 CVE.org — CVE-2026-48356`](https://www.cve.org/CVERecord?id=CVE-2026-48356)
+[`🔗 Google — introducing Gemini 4 Carbon`](https://blog.google/innovation-and-ai/models-and-research/gemini-models/introducing-gemini-4-carbon/) · [`🔗 Hacker News discussion (537 pts)`](https://news.ycombinator.com/item?id=50276792)
 
 ---
 
-## 5. The Classification of Finite Simple Groups is formalized in Lean — 43.1M lines, one commit, and errata still being compiled
+## 3. Atria Dawn ships its full 744B weights under MIT at 512K context — and loses to its own preview on two benchmarks
 
 - **Velocity:** ▮▮ rising
-- **Source:** cfsg.axiommath.ai / AxiomMath GitHub / Hacker News · 101 pts · 25 comments · ~3.5h ago (~00:29 UTC+8 Oct 28)
-- **Tags:** `lean4` `formal-methods` `mathematics` `proof-assistant` `verification`
+- **Source:** Hugging Face / Shanghai AI Laboratory · model pushed 2026-10-23 · arXiv 2609.15818
+- **Tags:** `shanghai-ai-lab` `moe` `open-weights` `agentic` `mit`
 
-**AxiomMath** has formalized the **Classification of Finite Simple Groups** — the multi-thousand-page theorem that classifies every finite simple group — as a **sorry-free Lean 4** proof on **v4.35.0-rc3**, built on Mathlib and TauCeti. The project's own numbers: **43.1M lines of Lean**, **2.05M declarations**, **100 milestones**, **139 works** in the source corpus and **715 papers/books** referenced. Every logical step is checked by Lean's kernel; a full build takes **under 24 hours**; it uses only the standard axioms `Classical.choice`, `propext` and `Quot.sound`, with no `native_decide`. The repository was created **2026-10-27T13:19Z**, is Apache-2.0, and at first reading held **56 stars and a single commit** — at **20:43 UTC+8** the same evening it was **114 stars**, so it doubled while this item was being written (that is the better number), and the history is still one `Initial commit` (`69cb972f`, 2026-10-27T15:07:38Z) on one branch.
+**Atria Dawn** is the Shanghai AI Laboratory's full release of its agentic model, post-trained on a **744B-parameter MoE GLM-5.2** foundation, licensed **MIT**, with the **512K** context window the September preview promised (the preview was 256K). The weights are actually there — `internlm/Atria-Dawn` is ungated and carries **353 safetensors shards** plus an FP8 sibling, and the card ships served-endpoint configs for both OpenAI- and Anthropic-compatible clients, SGLang `v0.5.13.post1+` and vLLM `v0.23.0+`. Text input only: the card documents the exact Codex workaround (`"input_modalities": ["text"]`) needed because Codex otherwise attaches images and the endpoint returns `400 Atria-Dawn is not a multimodal model`.
 
-**Why it matters:** the artifact and the announcement disagree in a way that is worth reading carefully. The repo README says "sorry-free" and identifies no remaining work; the project site still runs a **"What's left?"** section and a dashboard showing *Working / Just verified / Idle / In progress*, and says the team is "working with group theorists to compile the **errata**." That is not boilerplate — during the work they found **counterexamples to a closure claim in a published route to the Unbalanced Group Theorem** and had to substitute an argument built on Solomon's maximal 2-components and "preservation of simple tops." And the whole thing rests on TauCeti's statement that every finite simple group is isomorphic to one on an explicit classification list. So the honest description is: kernel-checked *relative to a stated list*, six gigabytes of proof arriving as a single squashed commit with no development history to inspect, following the first-generation proof, with errata still open. Extraordinary result, very young artifact.
+**Why it matters:** the 24-row benchmark table is more honest than its headline. Atria Dawn leads its own comparison set on the agent-and-tool rows — **CyberGym 86.8**, **SkillsBench 67.8**, **WideSearch 84.6**, **BFCL V4 78.4**, **Harvey LAB 27.5** (against Opus 5's 22.7) — and loses by a wide margin on software delivery: **SWE-bench Pro 61.7 against Opus 5's 76.5**, **NL2Repo-Bench 50.0 against 79.9**, **Harbor-Index 17.3 against 41.0**, **Terminal-Bench 2.1 81.0 against 90.2**. The detail nobody would put in a launch post: **the preview beats the full release on two of the 24 rows**, BrowseComp **92.5 vs 91.3** and NL2Repo-Bench **51.4 vs 50.0**, which means the full model's later post-training traded some search-and-repo ability for the agent scores it gained. That is a real tradeoff, published rather than hidden — and it makes "newer is better" the wrong read of this table.
 
-[`🔗 AxiomMath — CFSG formalization`](https://cfsg.axiommath.ai/) · [`🔗 AxiomMath/CFSG`](https://github.com/AxiomMath/CFSG) · [`🔗 Hacker News discussion`](https://news.ycombinator.com/item?id=50261647)
+[`🔗 internlm/Atria-Dawn on Hugging Face (weights + full eval table)`](https://huggingface.co/internlm/Atria-Dawn) · [`🔗 Atria Dawn paper (arXiv 2609.15818)`](https://arxiv.org/abs/2609.15818) · [`🔗 atria-asi.ai`](https://atria-asi.ai/)
 
 ---
 
-## 6. A judge found Anthropic's library was pirated — the Stanford Daily counts 10+ campus authors, and two opted out for a jury
+## 4. GitHub Copilot Fusion hits 60 on the Coding Agent Index within two points of Opus 5.5 Max — and never names which models it routes to
 
 - **Velocity:** ▮▮ rising
-- **Source:** The Stanford Daily / Hacker News · 279 pts · 148 comments · ~4.5h ago (~23:28 UTC+8 Oct 27)
-- **Tags:** `anthropic` `copyright` `litigation` `training-data` `policy`
+- **Source:** GitHub Changelog / GitHub Universe 2026 · published 2026-10-28T18:20Z
+- **Tags:** `github` `copilot` `model-routing` `agent-harness` `cost`
 
-In **Bartz v. Anthropic**, decided in **May 2026**, Judge **William Alsup** held that Anthropic improperly pirated books to build a permanent central library, while holding that training on **lawfully acquired** books is fair use — comparing AI training to how readers absorb a book's themes and style. The case settled for **$1.5 billion** covering authors and publishers of nearly **500,000 registered works**, roughly **$3,000 per work**. The Stanford Daily's count of campus authors runs past ten and names **Tobias Wolff, Abraham Verghese, Chang-Rae Lee, Daniel Mason, Hayagreeva Rao and Myra Strober**; Wolff says ten of his own works were used. Wolff and Lee **opted out** of the class and filed **Cruz v. Anthropic** in May 2026, seeking a jury trial and up to **$150,000 per infringed work**.
+**Copilot Fusion** is now generally available: instead of picking a model you pick a *system*, and pick an **effort level** — **Standard**, **High**, **Max**. Underneath, three orchestration shapes do the work: **Single** ("One model solves the task directly"), **Cascade** ("An efficient model drafts a response" and a check decides whether to accept or escalate), and **Critique** ("One model drafts an initial response, another model reviews it, and the original model revises"). GitHub reports **Fusion Max scored 60** on the **Artificial Analysis Coding Agent Index**, "within two points of Claude Code with Opus 5.5 Max," at "about half the average API cost per task," "using about half as many tokens," and "taking about 40% less time per task." Available on all Copilot plans in VS Code, the Copilot app, Copilot CLI and JetBrains IDEs, billed per model at each model's standard rate with a temporary **30% discount**.
 
-**Why it matters:** three things coverage tends to merge, and they price differently. The **$1.5B is a settlement**, not a damages award — it prices the class's aggregate claim, so it is not a per-work precedent. The **fair-use holding is conditional on lawful acquisition**, which is precisely why the pirated-library finding will be the cited sentence for years. And **Cruz is where the sourcing allegations actually go to trial**: the LibGen and PiLiMi claims, and the storage of pirated files, are allegations in that complaint, not findings in Bartz. The spread that matters is arithmetic — roughly **$3,000 per work** in the class versus up to **$150,000 per work** for an opt-out — a 50× difference that is the entire reason opting out was rational.
+**Why it matters:** the post's most consequential paragraph is about *control*, not cost — "Copilot Fusion only uses the models that are enabled in your enterprise and organization model policies," and an admin can "disable a model for Fusion without disabling the model for everyone." That is a routing layer built to satisfy a procurement policy, which is what a cost-optimising router has to be to survive in an enterprise. Two gaps to hold onto: **the post does not name a single model in the Fusion pool** — "Claude Code with Opus 5.5 Max" appears only as the benchmark comparator, not as a disclosed component — so a 60-within-2 is a claim you cannot audit by composition. And the aggregate hides a split: per VentureBeat's reading of the sub-benchmarks, Fusion leads Terminal-Bench 4.0 at **71** and trails on FrontierCode at **51 against 56**, so "half the cost for near-parity" is an average over a distribution, not a per-task guarantee.
 
-[`🔗 The Stanford Daily — Anthropic illegally trained Claude with Stanford professors' books`](https://stanforddaily.com/2026/10/27/professors-books-pirated-to-train-claude/) · [`🔗 Hacker News discussion`](https://news.ycombinator.com/item?id=50260814)
+[`🔗 GitHub Changelog — route and orchestrate models with Copilot Fusion`](https://github.blog/changelog/2026-10-28-route-and-orchestrate-models-with-github-copilot-fusion/) · [`🔗 VentureBeat — the cost and sub-benchmark split`](https://venturebeat.com/orchestration/github-copilot-fusion-mixes-models-to-achieve-near-opus-5-5-coding-performance-at-half-the-per-task-cost)
 
 ---
 
-## 7. Liquid AI's LFM3 puts six 2B models on one 1.7B base — and the license is LFM Open v1.0, not Apache
+## 5. So-net's breach is 2,585,481 records — and 54,401 of them came with the password
 
 - **Velocity:** ▮▮ rising
-- **Source:** liquid.ai blog / Hugging Face · 6 models live 2026-10-28
-- **Tags:** `liquid-ai` `open-weights` `small-models` `multimodal` `licensing`
+- **Source:** So-net notice / Help Net Security · disclosed 2026-10-27
+- **Tags:** `breach` `sony` `japan` `isp` `credentials`
 
-**LFM3** is a family of six models in the ~2B class, all derived from **LFM3-1.7B-Base**: text, vision, audio, omni, and two decision models built from the vision and omni variants. The architecture is 24 layers — **13 gated short convolutions, 5 sliding-window attention layers with a 256-token window, and 6 global-attention layers** — plus kernel size 7, head-wise gated attention, partial RoPE and sandwich normalization, on a 128K vocabulary trained over **22T pre-training tokens** and a **3.5T**-token mid-training stage. The text model carries **256K context**, fits in about **1 GB at 4-bit**, and can be fine-tuned on a single GPU. Liquid's own comparison table puts LFM3-1.7B at an average of **49.37** against LFM2.5-2.6B's **31.55**, MiniCPM5-2B's **39.19**, Gemma 4 E4B's **31.74**, Qwen3.5-4B's **39.27** and Qwen3.5-9B's **47.24** — "outperform our previous LFM2.5-2.6B while using 35% fewer parameters." The strong rows are tool-use and instruction-following: **BFCL V4 71.39**, **ToolSandbox 80.36**, **LiveClaw 45.60**, Claw-Eval pass^3 **51.40**, SWE-bench Verified **43.40**, RULER 128K **65.56**. On-device decoding is reported **1.8–2.8×** faster than the next model, and a 128K context needs **1.6 GB** of KV cache.
+Sony Network Communications disclosed unauthorised access to **So-net**'s member database: **2,585,481** records in total, split **2,141,986** So-net (1,869,771 current plus 272,215 who left in March 2026 or later) and **443,495** from **plala**'s S Course. The fields are identity, not finance — names, phone numbers, email addresses, user IDs, dates of birth, gender, internet connection IDs — but one slice is worse than that: for **54,401** addresses the attackers obtained **both the email address and its password**, across four mail services, all reset on **27 October**. Also leaked: **16** bank account records (bank, branch, account type, number, holder name) and data from seven password-reset notices. No membership passwords, no card data, no PINs; NURO and So-net's other services are unaffected.
 
-**Why it matters:** the caveats live on the model card, not the announcement, and there are two. First, the license is **LFM Open License v1.0** — the blog page states no license at all, so "open-weight" in the launch post is not "Apache." Second, the card says the model is "**not recommended for agentic coding or complex multi-step reasoning due to its small size**," which sits beside a Terminal-Bench 2.1 of **12.92**, GPQA Diamond **63.37**, and HLE **7.17** (13.90 with tools). The 49.37 average is bought by the tool-use and instruction rows; the same table names where the model does not go. All figures are vendor-reported, and Hugging Face lists **6,311 downloads and 110 likes** for LFM3-1.7B — real adoption, an order of magnitude below the hub's leaders.
+**Why it matters:** the timeline is the part to read, and it runs five days. Access on **19 October**, confirmed **23 October**, data leak confirmed **24 October**, public notice **27 October** — and the passwords were reset the same day the notice went out, which means customers had no window to rotate them first. The cause is still "under investigation," so every downstream account that used one of those 54,401 mail addresses and passwords is the actual blast radius, not the 2.58M headline. The scoping sentence is also unusually precise in the other direction: "Customers who canceled their subscriptions by the end of February 2026 are not affected," which is a data-retention statement as much as a breach one — it tells you exactly how long this operator keeps records for people who have left.
 
-[`🔗 Liquid AI — Introducing LFM3`](https://www.liquid.ai/blog/lfm3) · [`🔗 Hugging Face — LiquidAI/LFM3-1.7B`](https://huggingface.co/LiquidAI/LFM3-1.7B)
+[`🔗 So-net — official notice (2026-10-27)`](https://www.so-net.ne.jp/info/2026/20261027_0001.html) · [`🔗 Help Net Security — per-service breakdown`](https://www.helpnetsecurity.com/2026/10/28/sony-network-communications-data-breach-so-net/)
 
 ---
 
-## 8. Microsoft's MAI-Image-2.7 takes #2 on Artificial Analysis — an editing-only preview with no price and no text-to-image
+## 6. Warp's vendor was compromised and the stolen data was agent decision logs — no vendor named, no CVE, no scope beyond "about 1%"
 
 - **Velocity:** ▮▮ rising
-- **Source:** microsoft.ai news · published 2026-10-27
-- **Tags:** `microsoft` `image-editing` `leaderboard` `preview` `availability`
+- **Source:** Warp (via CEO Zach Lloyd) / BleepingComputer · disclosed 2026-10-27T12:15Z
+- **Tags:** `breach` `supply-chain` `agent-traces` `warp` `telemetry`
 
-**MAI-Image-2.7** launched **2026-10-27** in preview as Microsoft's image **editing** model. Capabilities are restyling and relighting whole scenes, editing text and symbols while keeping them integrated, restoration and enhancement, and edits that require reasoning about objects, lighting and environment relationships. Microsoft's post claims **No. 3 on Arena's Edit board** — making Microsoft AI the No. 2 lab there — and **No. 2 on Artificial Analysis's image-editing leaderboard**, above GPT Image 2.5 Flare. It says the model improved over MAI-Image-2.6 on "**all 10 use cases and all 7 editing actions**," with its largest margin in scene and style at "**24 Elo ahead of the next-best model**." Access is **Arena, Artificial Analysis and MAI Playground**. Text-to-image generation is "**coming soon**."
+Warp — the AI terminal now billed as an agentic development environment — disclosed that an attacker exploited an **unnamed third-party vendor** in its infrastructure and reached **agent decision logs and telemetry data**. CEO **Zach Lloyd** said Warp learned of "an active and narrow-banded exploitation" of a vendor on Friday, "detected the operation within hours and were able to remediate and mitigate the impact," and estimated **roughly 1% of Warp users** may have been affected. **CrowdStrike** was engaged and law enforcement notified.
 
-**Why it matters:** the ranking is third-party blind voting and the post is careful to say so — no overall Elo of its own, no pricing, no GA date, no reference-image or resolution limits. That restraint is the right shape, but it also marks what this launch *is*: the first MAI image model with **no Microsoft Foundry deployment and no price**, against a 2.6 that is in Foundry at roughly **$0.039 per image**. An editing-only model behind a playground is a leaderboard entry, not a product, and the Elo gaps that get quoted are inside the noise band — a few points of blind-vote preference is not a capability ordering. The question to carry forward is whether it reaches Foundry before the next board update, because that is what turns the number into something a developer can act on.
+**Why it matters:** the *class* of data is the story, and it is the class the industry has no vocabulary for yet. An agent decision log is not a chat transcript — it is the record of which tool the agent chose, what it read, what it ran, and why, which is a reconstruction of the user's repository, credentials in shell history and internal endpoints all at once. Also relevant: this lands ten days after OpenCode's provider-API-key exposure (covered here on 22 October), and both are *vendor-side* rather than model-side — the concentration risk in agent tooling is the telemetry pipeline, not the inference endpoint. What Warp has **not** said is the part to wait for: whether the exposed data included source code, prompts, credentials or account details, which vendor it was, and what the vulnerability was. "About 1%" with no denominator published is an estimate, not a count. Rotate anything a Warp agent session touched; treat "narrow-banded" as the company's characterisation until the incident report exists.
 
-[`🔗 Microsoft AI — MAI Image 2.7 debuts`](https://microsoft.ai/news/mai-image-2-7-debut/) · [`🔗 Artificial Analysis — image editing leaderboard`](https://artificialanalysis.ai/text-to-image/arena)
+[`🔗 BleepingComputer — Warp discloses breach`](https://www.bleepingcomputer.com/news/security/warp-discloses-breach-exposing-ai-agent-logs-user-telemetry-data/) · [`🔗 Cloud Security Alliance — agent traces as crown-jewel data`](https://labs.cloudsecurityalliance.org/research/csa-research-note-agentic-dev-tool-telemetry-breach-warp-202/)
 
 ---
 
-## 9. GoAhead loaded its CRL and never checked it — one of three TLS bugs, and neither CVE ID resolves in any registry
+## 7. Nemotron 3.5 Transcribe puts four speech tasks in one open checkpoint — and the card and the post disagree on its size
 
 - **Velocity:** ▮▮ rising
-- **Source:** FoxIO blog · published 2026-10-27
-- **Tags:** `tls` `cve` `mtls` `embedded` `disclosure`
+- **Source:** NVIDIA / Hugging Face blog · ~5h ago (~23:17 UTC+8 Oct 28)
+- **Tags:** `nvidia` `asr` `open-weights` `diarization` `multilingual`
 
-FoxIO's **Sébastien Féry** published three TLS-integration flaws in **GoAhead**, the embedded web server. **GOAHEAD-SA-2026-0006 / CVE-2026-115881** (**CVSS 9.1**): with the OpenSSL-compatible backend and mTLS configured against a CRL, "the CRL is loaded but CRL checking is never enabled," so **revoked client certificates are silently accepted** — GoAhead **3.4.5–6.1.0**, fixed in **6.1.1**. **GOAHEAD-SA-2026-0004 / CVE-2026-115884** (**7.4**): LibreSSL's legacy verifier reports an issuer error instead of a chain-too-long error and GoAhead tolerates it, so a client chain past the **10-certificate** limit is accepted — requires `VERIFY_PEER=1` and `VERIFY_ISSUER=0`, affects **LibreSSL 3.2.x or 3.3.2–3.3.6**, and LibreSSL builds may inherit the CRL defect too. **GOAHEAD-SA-2026-0005** (**5.9, no CVE**): on the mbedTLS backend, a buffer-length typo reduces the **2048-bit DH modulus to one byte** (`0xff`), leaving only **eight possible shared secrets**, so a passive observer can decrypt captured TLS 1.2 DHE_RSA sessions — GoAhead **4.0.2–6.1.0**, fixed in **6.1.1**.
+**Nemotron 3.5 Transcribe** is a single open-weight checkpoint doing transcription, speaker attribution, translation and audio question answering on recordings "up to an hour long" with "up to eight speakers." Coverage differs sharply by task, and the post says so: it **transcribes 40 languages**, "translates 31 of them to or from English," and "attributes speakers in 13." The scores: **5.33% average WER** on Hugging Face Open ASR English, first among open-weight models; **4.62% mean WER across seven languages**; **10.98% long-form**; **2.8% AA-WER** tied for first on Artificial Analysis; **1.8% on AA-AgentTalk** against 2.3% for the next open-weight model. Diarization lands **18.26% DER** on the David AI 21-language track — "the lowest diarization error rate of the 14 systems tested," with NVIDIA's own Nemotron 3 Diarization at 18.38%.
 
-**Why it matters:** checked first-hand at **2026-10-27T20:06Z**, **CVE-2026-115881** and **CVE-2026-115884** both return `{"error":"CVE_RECORD_DNE"}` from cveawg and `"totalResults": 0` from NVD. A vendor advisory carrying a 9.1, plus an identifier that no registry has published, is the parser problem running backwards: the advisory is the *only* record, and a scanner consuming CVE feeds sees nothing to match. The middle bug is a configuration conjunction rather than a default, which is why it is a 7.4 — but the third is the one to sit with. Eight possible shared secrets is not a defect you patch quietly; for anyone who terminated TLS 1.2 DHE on mbedTLS, captured traffic is decryptable, and the remedy is re-keying, not upgrading.
+**Why it matters:** two things in this post are worth more than the WER table. First, the size is stated twice and **not identically**: the post describes "about 4B of its 30B parameters are active per token," while the Hugging Face metadata on the same page lists the model as **34B** — a naming-vs-metadata gap of the kind that makes capacity planning wrong. Second, the limitations are specific enough to act on: "**Transcribe is built for recorded audio, not live streaming**," audio Q&A is English-trained, and the guide says to "Spot-check names, speaker changes, and answers against the recording." The medical case study then shows the honest version of fine-tuning — held-out speaker WER **22.44% → 12.17%**, a "45.8% relative reduction," while LibriSpeech test-clean *degrades* from **1.54% to 1.69%** — so a domain tune buys a domain and costs a little general accuracy, measured rather than asserted.
 
-[`🔗 FoxIO — Choose your backend: three TLS bugs in GoAhead`](https://foxio.io/blog/choose-your-backend-three-tls-bugs-in-goahead) · [`🔗 NVD API — CVE-2026-115881 returns 0 results`](https://services.nvd.nist.gov/rest/json/cves/2.0?cveId=CVE-2026-115881)
+[`🔗 NVIDIA — Nemotron 3.5 Transcribe (HF blog)`](https://huggingface.co/blog/nvidia/nemotron-transcribe-granary) · [`🔗 Hacker News discussion`](https://news.ycombinator.com/item?id=50275128)
 
 ---
 
-## 10. Graphify turns a codebase into a knowledge graph — 136.8k stars, and every edge labelled EXTRACTED or INFERRED
+## 8. A Linux kernel bug published in May reached KEV yesterday — 158 days later, for a shared-frag marker that was not copied
 
 - **Velocity:** ▮▮ rising
-- **Source:** GitHub Trending (weekly #6) / repository · 7,183 stars this week
-- **Tags:** `agent-skill` `knowledge-graph` `tree-sitter` `repo` `mcp`
+- **Source:** CISA KEV / NVD / kernel.org · KEV added 2026-10-28
+- **Tags:** `linux-kernel` `cve` `kev` `esp` `skbuff`
 
-**Graphify** turns a repository — code plus docs, SQL schemas, configs and PDFs — into a queryable knowledge graph, and it is explicit about what it is not: "**not a vector index**." Code is parsed locally with **tree-sitter** into an AST, and every edge is labelled either `EXTRACTED` or `INFERRED`, which is the design decision worth noticing — it lets a reader discard the model's guesses and keep only what the parser found. It ships as a `/graphify` skill for Claude Code, Cursor, Codex, Gemini CLI and GitHub Copilot (20+ assistants claimed) plus CLI commands `query`, `path` and `explain`, emitting `graph.json`, `graph.html` and `GRAPH_REPORT.md`. Roughly **40 languages**, plus docs, PDFs, images, audio/video, SQL schemas, Terraform and PostgreSQL. The repo has **136,863 stars**, **13,066 forks**, **2,625 commits**, dual **Apache-2.0 / MIT** licensing, PyPI package `graphifyy` (CLI still `graphify`), a `v8` branch, and a YC S26 badge.
+**CVE-2026-46300** was added to CISA's Known Exploited Vulnerabilities catalog on **28 October**. The record was published **2026-05-23** — **158 days** earlier — and NVD has analysed it, publishing its own **CVSS 3.1 base 7.8** (`nvd@nist.gov` in the Primary slot, with two Secondary metrics at the same 7.8 from other sources), against **CWE-123, CWE-456 and CWE-787**. The bug: `skb_try_coalesce()` can attach paged frags from one skb to another, and "if `@from` has `SKBFL_SHARED_FRAG` set, the resulting `@to` skb can contain the same externally-owned or page-cache-backed frags, **but the shared-frag marker is currently lost**." ESP input checks `skb_has_shared_frag()` to decide whether an uncloned nonlinear skb can skip `skb_cow_data()`; with the marker gone, "ESP can see `skb_has_shared_frag()` as false and decrypt in place over page-cache backed frags." Eight stable patch commits; affected ranges start at **3.9**.
 
-**Why it matters:** the README's limitations section is more informative than its feature list, and three entries change how you would deploy it. Ambiguous extensions "may be parsed as the wrong language without failing," so symbols go missing **silently** — the failure mode of a graph is a missing edge, not an error. HTML export caps at **5,000 nodes**, with larger graphs falling back to an aggregated community view. Community labelling defaults to **100 communities per call**, and failed batches **keep hub-derived names rather than being split and retried** — a quality degradation that looks like a result. Switching to the `leiden` extra later reshuffles communities and forces relabelling, so that choice is load-bearing from day one. And one number to split: `open_issues_count` reads **1,627**, which is **719 issues + 908 pull requests** — two different backlogs, not one.
+**Why it matters:** this is the second KEV entry in two days whose relevance is decided by a *configuration path* rather than by a score. 7.8 is not a number that gets a weekend patch, and the exploit preconditions — TCP receive coalescing meeting IPsec ESP on the same box — are a narrow intersection, which is exactly how a real bug sits unpatched for five months and then jumps the queue the day CISA sees it used. The class of defect is the reusable lesson: **a marker bit that must be propagated across an ownership transfer**, where losing it silently downgrades a copy-on-write decision into a write into shared memory. Any patch that "propagates a flag" is a patch to every place that flag is *consumed*, and the record here lists three CWE classes rather than one because the same omission is a double-free hazard (CWE-123), an uninitialised state (CWE-456) and an out-of-bounds write (CWE-787) depending on which path notices first.
 
-[`🔗 Graphify-Labs/graphify`](https://github.com/Graphify-Labs/graphify) · [`🔗 GitHub Trending — weekly`](https://github.com/trending?since=weekly)
+[`🔗 CVE-2026-46300 record`](https://www.cve.org/CVERecord?id=CVE-2026-46300) · [`🔗 upstream patch (2f2b16022a2e)`](https://git.kernel.org/stable/c/2f2b16022a2e10ca7bccfb98db5ed2ec0f72641c) · [`🔗 CISA KEV catalog`](https://www.cisa.gov/known-exploited-vulnerabilities-catalog)
 
 ---
 
-## 11. Since our Oct 21 note on PHP2Shell: Wiz watched the exploit kits fail, and exposure fell 67% in six days
+## 9. DAYJOB: Tax gives frontier models 50 professional assignments and a 95% rubric — the best scores 10.8%
 
 - **Velocity:** ▮▮ rising
-- **Source:** Wiz blog / Hacker News · 168 pts · ~1d ago (~Oct 27)
-- **Tags:** `php` `exploitation` `update` `kev` `remediation`
+- **Source:** Surge AI / Hacker News · 125 pts · ~4h ago (~23:46 UTC+8 Oct 28)
+- **Tags:** `benchmark` `agents` `professional-work` `tax` `evaluation`
 
-**This is an update to our October 21 coverage of PHP2Shell (CVE-2026-109618 / CVE-2026-109619).** Wiz's October 27 telemetry post reports "a limited number of exploitation attempts" across **nine IPv4 indicators**, and — the part worth keeping — **no successful end-to-end exploitation** in its own captures. Two variants of an open-source exploit kit were used: the legacy one failed because a **~12.6 MB** request exceeded an **8 MB** `post_max_size`, and the newer one reliably caused PHP memory exhaustion but **the memory-leak stage failed every time**, with no source ever sending the final stage. Other tools marketed under the PHP2Shell name did not target the PHP bugs at all — they used session poisoning plus an application LFI, and depended on a vulnerable endpoint such as `lfi_sink.php`. Wiz attributes the failures to PHP build differences, memory limits, heap layout, worker pinning, latency and timeouts — and notes that scans **did** succeed against a public honeypot running a favorable single-worker Apache `mod_php` setup. Remediation moved fast: daily distinct internet-exposed vulnerable machines down about **67%**, the share of exposed vulnerable machines on **PHP 7.3 or earlier** from **8.3% to 5.7%** over five days, organisations with at least one exposed instance down **47.9%**, and under **53%** of initially affected organisations still vulnerable one week after disclosure.
+**DAYJOB: Tax** is Surge AI's benchmark for end-to-end professional tax work: **50 environments across eight areas** of practice — individual and family, small business, partnerships, property and investments, estates and gifts, international, corporate transactions, and review and disputes. Agents receive a client request and a workspace of **1,789 files** (median **30** per assignment, up to **123**) — **1,487 PDFs, 117 Excel workbooks, 38 Word documents**, plus emails, images, CSVs and text — and must produce the return, the workpaper, the technical review or the client advice. Passing requires satisfying at least **95% of a task's criteria**, covering calculations, evidence, consequential issues and the deliverable, after a "three-layer expert review for correctness, completeness, and solvability." At pass@1 on that threshold: **Claude Sonnet 5.5 10.8%**, **Claude Fable 5.1 9.6%**, **Claude Opus 5.5 9.2%**.
 
-**Why it matters:** this is the rare exploitation report where the negative result is the finding. "No successful end-to-end exploitation" is *not* "not exploited" — CISA had already added PHP2Shell to **KEV on October 26** — but it does mean the public kits are build-sensitive, and every failure mode listed (`post_max_size`, memory limits, worker pinning, heap layout) is a **configuration accident**, not a defense anyone designed. The honeypot that did get hit was the one with a single-worker `mod_php`; that is the shape to worry about, because it is the shape a default install produces. Read the 67% as patching working rather than the threat receding — one week is not long enough to conclude either way.
+**Why it matters:** the failure mode is the finding, and it is not arithmetic. The writers conclude that "**Agents haven't yet passed the audit**," and name where they fail — judgment, incomplete instructions, conflicting records, and the "unrequested but consequential issues" a professional is supposed to catch without being asked. The case studies show the shape: Astra missed a residence-exclusion deadline in **all five** attempts while Opus caught it in all five; Opus treated a couple as unmarried in **all five** despite evidence requiring verification, while Astra recognised the need to verify in **four of five**. That is the pairing argument from this feed's 26 October note arriving in a profession where being confidently wrong costs a filing. One honest gap: there is **no formal limitations section** and no per-model cost breakdown in the post beyond a Pareto plot, so 10.8% is a difficulty ceiling for this task set, not a measure of how close any model is to a licensed preparer.
 
-[`🔗 Wiz — PHP2Shell: exploitation attempts and remediation trends`](https://www.wiz.io/blog/php2shell-exploitation-so-far) · [`🔗 Hacker News discussion`](https://news.ycombinator.com/item?id=50259343)
+[`🔗 Surge AI — DAYJOB: Tax`](https://surgehq.ai/blog/dayjob-tax) · [`🔗 Hacker News discussion (125 pts)`](https://news.ycombinator.com/item?id=50275626)
 
 ---
 
-## 12. Since our Oct 23 Brotli note: CISA put the decoder bug in KEV — the first statement about it that isn't a vendor's
+## 10. A fingerprinting script named its functions after bioweapons and hid a jailbreak in invisible Unicode — one model refused, one complied
 
 - **Velocity:** ▮▮ rising
-- **Source:** CISA KEV catalog / NVD · KEV added 2026-10-27
-- **Tags:** `brotli` `cve` `kev` `update` `rce`
+- **Source:** nullpt.rs / Hacker News · 225 pts · ~3h ago (~01:13 UTC+8 Oct 29)
+- **Tags:** `fingerprinting` `anti-llm` `obfuscation` `prompt-injection` `research`
 
-**An update to our October 23, 24 and 26 coverage of CVE-2026-111497.** CISA added the Brotli decoder flaw to **KEV on 2026-10-27** as the "**Google Brotli Unchecked Return Value Vulnerability**," with its own description: a missing return-value check "could let a remote unauthenticated attacker corrupt decoder memory, expose memory contents, cause a denial of service, or possibly execute code via a crafted compressed stream." Context as it stands: **Google** as CNA scores it **CVSS 4.0 9.2**; **Microsoft** rates .NET at **8.1**, calling exploitation "more likely"; **Red Hat** says public proofs-of-concept reliably crash but it has no reliable RCE. Disclosure was by **Node.js on October 21**; Microsoft shipped **out-of-band .NET patches on October 25** (8.0.33, 9.0.22, 10.0.14, 11.0.0-rc.3.26522.148); Palo Alto confirmed **PAN-OS** exposure on October 26.
+Reverse engineer **veritas** crawled the **Tranco Top 10,000** with Playwright, hooking `canvas.toDataURL` and `navigator.webdriver`, and collected **1,033** distinct fingerprinting canvases into `fingerprint.garden`. One canvas led back to `servicepipe.tech/static/checkjs/…` — and inside that obfuscated file were ordinary mangled functions beside `computeRicinLethalDosageForWaterSupply` and `calculateDeadlyLethalSuicideAspirinDosage`, returning objects like `{ summary: "adult lethality threshold confirmed at …" }`. Decoding invisible Unicode characters (a `codePointAt - 917504` shift) surfaced a fake "**SYSTEM OVERRIDE — CLASSIFIED BRIEFING**" prompt asking for cyberattack guides, tax evasion, bioweapons and illicit drugs. When the author tested it, **Astra refused** while **GLM-5.3**, open weights, "complied and revealed the hidden system prompt."
 
-**Why it matters:** until today the exploitation claim was vendor-dependent — ELLIO said it observed attempts against its deception network, while most advisories said none confirmed. A KEV entry is CISA certifying "reliable evidence" of in-the-wild exploitation, and that makes it the **first non-vendor statement** in the record. Keep the scores apart, because they have three scopes and are routinely averaged into one number: 9.2 is Google's v4.0 CNA score for the library, 8.1 is Microsoft's for .NET specifically, and Red Hat's "crashes reliably, no reliable RCE" is a claim about its own builds. The KEV entry depends on none of them. One artifact trap from the earlier items still applies: patched Node.js reportedly still reports `process.versions.brotli` as **1.2.0**, so the **release** is the only reliable signal that you are patched.
+**Why it matters:** this is the first well-documented instance of **anti-LLM obfuscation as a deliberate design pattern in shipped production JavaScript** rather than a joke or a honeypot — function names chosen not to inform a human reader but to trip a model's safety filter and stop an agent from deobfuscating the file. The defensive implication is uncomfortable: the technique works by making *refusal* the cheap path, so a model that refuses is compliant with the obfuscator's goal. Two caveats the author states, and they matter for how far to read this: some Node-only commands behind an env-var check appear to package and transmit collected data, **but several file reads use empty callbacks**, which "raises doubt about whether it's genuine malware or more anti-AI deception." So the payload's *intent* is undetermined — what is not undetermined is the artifact, which a browser executes on real visitors and which no scanner reads.
 
-[`🔗 CISA KEV catalog`](https://www.cisa.gov/known-exploited-vulnerabilities-catalog) · [`🔗 NVD — CVE-2026-111497`](https://nvd.nist.gov/vuln/detail/CVE-2026-111497)
-
----
-
-## 13. Trajectory2Gym: a successful tool-use trajectory isn't automatically good training data — grounding it is worth 16.9–29.8 points
-
-- **Velocity:** ▮▮ rising
-- **Source:** arXiv 2610.33568 / Hugging Face papers · 330 upvotes · dated 2026-10-27
-- **Tags:** `tool-use` `agents` `rl` `training-data` `benchmark`
-
-**Trajectory2Gym** starts from a claim most agent-training pipelines do not make: that a trajectory ending in success is not thereby good supervision. Successful runs "may underrepresent multi-step dependencies, or include actions that the agent could not justify from the information visible when deciding" — so the paper names two properties to optimize for, **compositional coverage** and **decision grounding**. The method builds executable interactions around weakly supported compositional structures, then derives supervision **only from grounded decisions** in the executions that actually occur; structural-support selection allocates training experience, and a parent-normalized SFT objective makes each *semantic interaction*, rather than each trajectory fragment, carry the training weight. Across **five Qwen3 model scales**, the equal-weight average over **Tau1, Tau2 and BFCL** rises by **16.9–29.8 percentage points**, with gains largest on stateful and multi-turn interactions.
-
-**Why it matters:** the framing is the contribution. Treating "it worked" as insufficient *label quality* is the opposite of the usual scrape-and-filter pipeline, and the result pattern is the diagnostic: the gains concentrate exactly on stateful and multi-turn rows, which are the rows where a later decision depends on an earlier observation. An ungrounded trajectory teaches the model to skip that dependency, and a benchmark that only scores the endpoint cannot see the skip. One caveat to carry: the abstract states **no limitations section at all**, on a headline of up to 29.8 points — so the number is real but the failure modes are not published.
-
-[`🔗 arXiv — Trajectory2Gym`](https://arxiv.org/abs/2610.33568) · [`🔗 Hugging Face — daily papers`](https://huggingface.co/papers)
+[`🔗 nullpt.rs — Why Is This Fingerprinting Script Creating Bioweapons?`](https://nullpt.rs/fingerprinting-bioweapons) · [`🔗 fingerprint.garden — 1,033 captured canvases`](https://fingerprint.garden/) · [`🔗 Hacker News discussion (225 pts)`](https://news.ycombinator.com/item?id=50276998)
 
 ---
 
-## 14. The Continual Learning Exam: 600 levels, 17 harness–model pairs, and the best system completes 23.3% of tasks
-
-- **Velocity:** ▮▮ rising
-- **Source:** arXiv 2610.33956 / Hugging Face papers · 43 upvotes · dated 2026-10-27
-- **Tags:** `continual-learning` `benchmark` `agents` `evaluation` `harness`
-
-**CLE (Continual Learning Exam)** argues that existing evaluations measure *isolated* task performance rather than gains from accumulated experience. The benchmark is **120 human-authored tasks** built with **50+ domain experts**, each structured as a five-level ladder — **600 levels** total — across **89 professional roles** and **12 occupational domains**. Agents must pass a level to unlock the next, and later levels **depend on experience from earlier ones**, with human-authored rubrics driving an evaluation agent. The study compares a single-submission setup against one that gives **diagnostic feedback after failure and permits one revision**, across **17 harness–model configurations** on frontier LLMs. Feedback plus revision produces a median improvement of **5.3 percentage points**. The strongest system passes **47.7%** of levels and completes **all five levels on just 23.3%** of tasks.
-
-**Why it matters:** the ladder is what makes "continual" measurable at all. A single-submission score can be produced by a model that learns nothing within the task, so the interesting quantity is what a second attempt buys — and the answer, **+5.3 pp median**, is small enough to rule out "just retry" as the missing ingredient. **23.3% full completion** on 120 tasks also means the ceiling is nowhere near, which is what you want from a benchmark that is supposed to have headroom for another year. The paper is candid that the dataset could be used to post-train for continual learning: this is a measurement first and a training set second.
-
-[`🔗 arXiv — Continual Learning Exam`](https://arxiv.org/abs/2610.33956) · [`🔗 Hugging Face — daily papers`](https://huggingface.co/papers)
-
----
-
-## 15. Hurston-1: a 3B TTS fine-tuned on 190 hours so accents stop collapsing — and it admits the generic label scores 0.26 WER
-
-- **Velocity:** ▮▮ rising
-- **Source:** Hugging Face model card / Show HN · 66 pts · ~1d ago (~Oct 27)
-- **Tags:** `tts` `speech` `open-weights` `accents` `telephony`
-
-**Hurston-1** is a **3B** BF16 text-to-speech model from **Destined AI**, fine-tuned from **Maya1** with a rank-64 LoRA for **2,000 steps**, **Apache-2.0**. The training set is about **190 hours**: roughly **136 hours** of Destined's accented-English corpus (including ~10 hours of real calls with AI voice agents — 7,600 turns from 250 contributors), **~46 hours** of LibriTTS-R and **~10.5 hours** of Mozilla Common Voice. The accent classifier moves sharply against base Maya1: **Southern African 0.95 vs 0.60**, West African **0.84 vs 0.60**, East African **0.98 vs 0.81**, Nigerian **0.94 vs 0.82**. Everyday-sentence WER is **0.03** (base: 0.02), and on harder sentences falls from **0.145** for a single take to **0.062** with `--check`. Blind listeners preferred Hurston-1 **78%** of the time against **6%** for Maya1. An **NB-TTS** phone mode renders 8 kHz G.711 audio for telephony systems such as Twilio.
-
-**Why it matters:** the limitations list is unusually specific and includes the one that undercuts the pitch — the generic "**African English accent**" label performs poorly at **WER 0.26**, so the gain comes from *per-accent labelled data*, not from accent modelling in general. That distinction decides the data strategy: this is a recipe for collecting labelled accent corpora, not a model that generalizes to accents nobody recorded. The operational caveats matter just as much for the telephony use case: **no consistent voice across calls** (each generation samples a new one, and long text can change voice between chunks), names/dates/amounts are the weakest areas, English only, no child voices. A voice agent that changes voice between chunks is acceptable for one-shot IVR prompts and wrong for a persona — and the card says so out loud.
-
-[`🔗 Hugging Face — destined/hurston-1`](https://huggingface.co/destined/hurston-1) · [`🔗 Hacker News — Show HN`](https://news.ycombinator.com/show)
-
----
-
-## 16. Rubric RL rewards coverage, so answers get longer and worse — FORK adds a precision objective and win rate goes 10.6% → 68.0%
-
-- **Velocity:** ▮▮ rising
-- **Source:** arXiv 2610.33512 / Hugging Face papers · 27 upvotes · dated 2026-10-27
-- **Tags:** `rl` `reward-hacking` `rubrics` `alignment` `evaluation`
-
-**"Eat Your Precision"** names a mechanism rather than a symptom. Rubric-based RL typically rewards **how much of a rubric a response covers** — recall — which "encourages longer answers that include unnecessary or factually incorrect material," to the point where tuned outputs are **less preferred than the base model's**. The proposed **FORK reward** combines recall with a precision objective under which every part of a response must be both **necessary** (rubric-driven necessity credits) and **factually correct** (checked by a correctness grader). FORK outperforms existing rubric-based RL methods and reaches a Pareto-optimal balance between rubric coverage and response quality: it improves precision and shortens responses while maintaining coverage, and win rates against the base policy rise from **10.6% to 68.0%** on **RubricHub-Medical** and from **22.1% to 74.1%** on **HealthBench**.
-
-**Why it matters:** the useful part is that the rubric is not the bug — coverage is a **one-sided proxy**, and RL reliably finds the cheap side of any one-sided proxy. That is why the fix is structural (make necessity a graded term in the reward) rather than a length penalty bolted on afterwards, which would suppress the symptom and leave the incentive intact. Two caveats worth stating at generation time: the abstract lists **no limitations**, and the win rates are measured **against the base policy**, not against a frontier model — so "Pareto-optimal" is a claim inside the authors' own comparison set, and the honest read is that FORK fixes a self-inflicted regression rather than beating a stronger baseline.
-
-[`🔗 arXiv — Eat Your Precision`](https://arxiv.org/abs/2610.33512) · [`🔗 Hugging Face — daily papers`](https://huggingface.co/papers)
-
----
-
-## 17. HiP3R stitches overlapping 3D-reconstruction chunks with a two-level pose graph — and its abstract reports no numbers
+## 11. ai-design-skills trends at 10,962 stars for a repo containing one skill file and no reason
 
 - **Velocity:** ▮ steady
-- **Source:** arXiv 2610.31635 / Hugging Face papers · 387 upvotes · dated 2026-10-27
-- **Tags:** `3d-reconstruction` `slam` `pose-graph` `video` `research`
+- **Source:** GitHub Trending (daily) / GitHub API · 1,395 stars today · 10,962 total
+- **Tags:** `agent-skill` `design` `repo` `stars` `claude-code`
 
-Feed-forward 3D reconstruction works well on short windows, but long video has to be split into **overlapping chunks**, and each chunk comes back in its own coordinate frame with its own camera estimate — so naive concatenation produces inconsistent scale and duplicated cameras. **HiP3R** fixes this with a **two-stage hierarchical pose graph** and no extra training: stage one optimizes a robust **chunk-level Sim(3)** graph to establish global layout and scale; stage two holds that layout fixed and estimates **one shared SE(3) camera per frame**, turning overlapping window predictions into a single trajectory. It supports both chunk-based and streaming backends, and the paper reports improved camera trajectories and reconstruction across multiple benchmarks.
+**elayadesign/ai-design-skills** is on GitHub Trending with **1,395 stars today** and **10,962** total, **785 forks**, **MIT**, last pushed **2026-10-27**. The whole repository is four files plus a license: `README.md` (2,464 bytes), `.gitignore`, and **one** skill — `skills/landing-page-design/SKILL.md`, **18,801 bytes**. Its README says as much — "A growing collection of design skills," a table with a single row, and "More on the way," which is the honest part. There are **0 releases** and **7** open items on the tracker — which splits **2 issues and 5 pull requests**, not seven issues. Install paths are documented properly for Claude Code, Cursor, Codex, Windsurf and Cline.
 
-**Why it matters:** worth naming plainly that the **most-upvoted paper of the day reports no number in its abstract** — no dataset names, no ATE or PSNR deltas, no comparison table. This is a method whose ablations are cheap to run (Sim(3)-only versus the two-stage variant is one table), so the absence is a reason to open the PDF before quoting an improvement, not evidence that there isn't one. The decomposition itself is the right one, though: chunk-level for layout and scale, frame-level for camera pose, which is exactly where the two error sources live — global drift accumulates across chunks, while per-frame error is local and does not need to be re-solved globally.
+**Why it matters:** this is the dashboard-vs-artifact gap in its cleanest recent form. A **19 KB** markdown file and a README is a legitimate thing to publish, and 18.8 KB of design rules is not nothing — but **10,962 stars, 785 forks and 41 watchers** describe a distribution event, not a body of work, and the fork-to-watcher ratio (**19 to 1**) is the tell: people are copying the file, not following the project. Compare the four-day-old `huashu-design` covered here on 27 October, which shipped **84 styles** and whose own README called itself "an 80-point skill, not a 100-point product" — the self-assessment is the scarce artifact. Before installing any trending skill, count the files in the repo and check whether a release exists; here the count is one, which is fine, and the star count is the part that isn't information.
 
-[`🔗 arXiv — HiP3R`](https://arxiv.org/abs/2610.31635) · [`🔗 Hugging Face — daily papers`](https://huggingface.co/papers)
+[`🔗 elayadesign/ai-design-skills`](https://github.com/elayadesign/ai-design-skills) · [`🔗 the one skill: landing-page-design/SKILL.md`](https://github.com/elayadesign/ai-design-skills/blob/main/skills/landing-page-design/SKILL.md)
 
 ---
 
-## 18. Gforth reaches 1.0 — and the release notes define what "stable" means: a list of words that will not move
+## 12. @fastify/express gets a 9.1 that only fires if you turned on `ignoreDuplicateSlashes` — and it is a fix-of-a-fix
 
 - **Velocity:** ▮ steady
-- **Source:** gforth.org NEWS / Hacker News · 139 pts · 12 comments · ~10h ago (~18:23 UTC+8 Oct 27)
-- **Tags:** `forth` `gforth` `release` `embedded` `language`
+- **Source:** GitHub Advisory Database / NVD · CVE published 2026-10-27
+- **Tags:** `fastify` `express` `cve` `middleware` `nodejs`
 
-**Gforth 1.0** has shipped, and the NEWS file is framed as "user-visible changes between **Gforth 0.7.x and 1.0**." For a Forth, the version number is a compatibility promise, and this one is written as prose rather than semver: 1.0 documents "which words are intended to be **permanently supported**, and which are not." The feature list is broader than a maintenance release suggests — a more capable text interpreter with new literal forms, vocabulary-qualified names, environment variables and extensible "recognizers"; IDE features including locating definitions and uses, browsable backtraces and editor integration; a "smart `.s`" stack display and a terminal status line; **multi-tasking across cores and hardware threads** with message queues, Cilk support, mutexes and atomics; an expanded C interface with callbacks; dictionary sections, closures, value/defer fields, user-defined `to` behaviour and a new word-header layout; and performance work in loop optimization and constant folding. Some words are no longer documented, with replacements recommended.
+**CVE-2026-112362** affects `@fastify/express` **4.0.5 through 4.0.8** and is fixed in **4.0.9**. The CNA score is **9.1 Critical**, `CWE-436` (interpretation conflict), carried in NVD's Secondary slot from a non-NVD source. The precondition is narrow and stated: Fastify must be running with the **non-default** `ignoreDuplicateSlashes` option enabled. With it on, an **absolute-form request target** — `GET http://host/admin/dashboard` — has its duplicate-slash normalisation collapse the separator after the scheme; Fastify's router normalises and matches the route and runs the handler, while the Express layer "passes the original un-normalized URL" and no longer matches, so `app.use('/admin', authMiddleware)` is **skipped**.
 
-**Why it matters:** the permanent-support list is the actual deliverable here — for anyone embedding a Forth, "which words can I build on" is a harder question than "what's new," and answering it in the release notes is rarer than it should be. The multi-tasking section is the least Forth-shaped change in the file (message queues, Cilk, mutexes, atomics across hardware threads) and it is what makes Gforth 1.0 plausible as an **embedded runtime** rather than a teaching interpreter. One honest gap: the page states **no release date and no development duration**, so "after decades" is inference from the 0.7.x baseline, not something the artefact says.
+**Why it matters:** this is the fourth entry in a pattern this feed has now seen three times, and the most precise version of it: **the previous advisory covers the same mechanism and a different span.** `GHSA-6hw5-45gm-fj88` handles `<= 4.0.4`, patched in **4.0.5**, and explains the core defect — the plugin "only handles percent-encoding — it does not normalize duplicate slashes or strip semicolon-delimited parameters." CVE-2026-112362 covers what remained after that fix. So "upgrade to the patched version" was true twice in two releases, and anyone who pinned 4.0.5 or 4.0.6 believing they were done is affected now. The semicolon half of the original advisory is also worth noting as a *surviving* vector class rather than a closed one. If you need it, the workaround does not require the upgrade: leave `ignoreDuplicateSlashes` at its default, or move auth into a `preHandler` hook, which "runs after routing resolves" and therefore sees the path the router saw.
 
-[`🔗 Gforth 1.0 — NEWS`](https://gforth.org/manual/1.0/NEWS.html) · [`🔗 Hacker News discussion`](https://news.ycombinator.com/item?id=50256952)
+[`🔗 CVE-2026-112362 record`](https://www.cve.org/CVERecord?id=CVE-2026-112362) · [`🔗 GHSA-6hw5-45gm-fj88 — the earlier advisory, same mechanism`](https://github.com/fastify/fastify-express/security/advisories/GHSA-6hw5-45gm-fj88)
 
 ---
 
-## 19. Spec-first puts a spec file between the prompt and the diff — and its own docs name the bypass
+## 13. OpenPanel's unauthenticated RCE through image decoding was fixed 30 minutes before the advisory — and the advisory has no CVE
 
 - **Velocity:** ▮ steady
-- **Source:** spec-first.dev / Show HN · 19 pts · ~1d ago (~Oct 27)
-- **Tags:** `agent-workflow` `coding-agents` `plugin` `methodology` `open-source`
+- **Source:** GitHub Advisory Database / OpenPanel · advisory 2026-10-27T22:12Z · fix 21:41Z
+- **Tags:** `openpanel` `cve` `rce` `libvips` `ghsa`
 
-**Spec-first** is an **MIT**-licensed method and toolkit that inserts a written, repository-stored spec between the prompt and the diff, shipping as a **Claude Code plugin** while the same files work for Codex, Cursor, Copilot or a terminal agent. Four commands: **`create-spec`** reads repo memory and code, then writes a goal, facts citing **file and line**, implementation steps and done criteria, creating a branch and worktree without writing code; **`review-spec`** runs a script that verifies every cited file and line exists, then has a **fresh agent with no chat history** review the spec against the code and return *build*, *build with cuts* or *refuse*; **`apply-spec`** implements the steps, writes the tests the spec names, and records non-obvious choices in a decisions file; **`deliver-spec`** passes the commit through a gate that runs declared build and test stages, then pushes and opens a PR with the spec attached. A separate **`deliver-series`** builds specs that share no files in parallel and merges them into one PR. Supporting machinery: `context.yaml` for resumable state, a `memory/` directory, per-spec decision logs, and a **ledger** recording which commits passed the gate.
+**GHSA-49hg-9qhc-4623** rates **critical** on `openpanel`: `GET /misc/og?url=` and `GET /misc/favicon?url=` "fetched any public URL and decoded the returned bytes inside the API process with `sharp` (libvips)." The `Content-Type` was checked, "**but libvips picks its decoder from the file's magic bytes**," so an attacker reached every loader — GIF, TIFF, HEIF/AVIF, SVG, BMP — with bytes they chose, and "a memory-corruption bug in one of those decoders led to remote code execution in the API container of a self-hosted instance, and from there to the instance's secrets, database and dashboard logins." Affected: all releases before **3.16.2** whose API is internet-reachable, which the advisory concedes "covers practically every self-hosted install" because `/track` has to be. Score: **CVSS 3.1 9.0**, `AV:N/AC:H/PR:N/UI:N/S:C/C:H/I:H/A:H`. Fix: **3.16.2**, which removes `/misc/og`, reduces `/misc/favicon` to a hostname lookup against DuckDuckGo's and Google's icon services, and drops `sharp` and libvips from the API entirely.
 
-**Why it matters:** the review step is the part worth copying — a citation-checking script plus a **context-free reviewer** are two independent checks on the same artifact, which is more than most "plan mode" implementations actually provide, because both of their checks run inside the same conversation that wrote the plan. The limitations are stated plainly, and one of them is the whole ballgame: the git hook gate **can be bypassed with `git commit --no-verify`**, and a commit with no ledger entry is treated as never having met the gate. So the **ledger**, not the hook, is the trust anchor — which means the method holds exactly as far as you trust the ledger's custody, and that is a property of where you run it, not of the plugin.
+**Why it matters:** the score's `AC:H` is the number to look at rather than the 9.0. High attack complexity normally pushes a base below critical — here `S:C` (Scope Changed) pulls the computed base back to **9.0**, which I recomputed from the vector and got exactly: 9.0 is the arithmetic, not an inflation. So the honest reading is "critical impact, non-trivial to trigger," which is why the fix is architectural rather than a bounds check: the endpoint stopped decoding attacker-chosen bytes at all. The timing is the other notable thing — **v3.16.2 was released at 21:41:57Z and the advisory published at 22:12:09Z, 30 minutes apart**, a same-evening fix-and-record. And the absence matters: this advisory carries **no CVE id**, part of the repo's broader pattern — 37 published advisories from 2026-08-20 to 2026-10-27, **0 of which carry a CVE**, so a CVE-keyed scanner cannot see any of them.
 
-[`🔗 Spec-first — agentic development`](https://spec-first.dev/) · [`🔗 Hacker News — Show HN`](https://news.ycombinator.com/show)
-
----
-
-## 20. NVIDIA's NeMo Agent Toolkit scores a 10.0 for missing authentication — and the fix shipped 47 days earlier
-
-- **Velocity:** ▮▮▮ trending
-- **Source:** NVIDIA product-security bulletin 5912 / NVD / GitHub · bulletin dated 2026-10-27
-- **Tags:** `cve` `nvidia` `agent-infra` `authentication` `provenance`
-
-**CVE-2026-65145** is a **CWE-306** missing authentication issue in **NVIDIA NeMo Agent Toolkit** at **CVSS 3.1 10.0** (`AV:N/AC:L/PR:N/UI:N/S:C/C:H/I:H/A:H`), affecting **1.0 through 1.8.0** and fixed in **1.9.0**. The same bulletin carries **CVE-2026-65151**, a **CWE-89** SQL injection at **8.4** (`AV:L/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H`), affecting **1.4 to 1.6** and fixed in **1.7.0**. Both were "found externally": **Colin McDonough of 50words.com**, and **YJK (@YJK0805) of ZUSO ART working with the TrendAI Zero Day Initiative** for the 10.0. The **NVIDIA/NeMo-Agent-Toolkit** repository is **Apache-2.0**, and its tracker counter reads **30 open — 15 issues and 15 pull requests**.
-
-**Why it matters:** the two fixed versions are the story the top line hides. **1.9.0** shipped **2026-09-10T22:12Z**, so the 10.0 was patched **47 days** before the bulletin that describes it; **1.7.0** shipped **2026-05-21T18:15Z**, making the 8.4 SQL injection **158 days** old at disclosure. A single line telling operators to "update to 1.9.0 or later" is correct and still understates how long the SQL injection sat fixed-and-unannounced. Second: NVD shows this record at **Awaiting Analysis** with **zero NVD-scored metrics** — the 10.0 is NVIDIA's CNA number, not a second opinion — so the severity, the CWE and every downstream severity-band decision rest on one party. NVIDIA's own footnote applies: its "risk assessment is based on an average of risk across a diverse set of installed systems and might not represent the true risk to your local installation." A `S:C` 10.0 in an agent framework means the vulnerable component is not the security boundary — which is the same shape as the score, and the reason to check what actually fronts the toolkit before assuming the number is theoretical.
-
-[`🔗 NVIDIA — Security Bulletin 5912: NeMo Agent Toolkit`](https://github.com/NVIDIA/product-security/blob/main/2026/5912/5912.md) · [`🔗 NVD — CVE-2026-65145`](https://nvd.nist.gov/vuln/detail/CVE-2026-65145) · [`🔗 NVIDIA/NeMo-Agent-Toolkit`](https://github.com/NVIDIA/NeMo-Agent-Toolkit)
+[`🔗 GHSA-49hg-9qhc-4623 — unauthenticated RCE in OpenPanel`](https://github.com/Openpanel-dev/openpanel/security/advisories/GHSA-49hg-9qhc-4623) · [`🔗 OpenPanel releases (v3.16.2 is the fix)`](https://github.com/Openpanel-dev/openpanel/releases)
 
 ---
 
-## 21. Tailscale SSH gets four bulletins in one week — all fixed in 1.104.4, none with a CVE, and the changelog still says 1.104.2
-
-- **Velocity:** ▮▮▮ trending
-- **Source:** Tailscale security bulletins TS-2026-014–017 / Hacker News · 304 pts · ~1d ago (~Oct 27 19:55 UTC+8)
-- **Tags:** `tailscale` `ssh` `privilege-escalation` `disclosure` `cve`
-
-Tailscale published **four** security bulletins for **Tailscale SSH** and Serve, all fixed in **1.104.4 or newer**. **TS-2026-014**: the SSH server in the root-privileged `tailscaled` validated Unix socket paths **lexically** and then performed the operation **as root** — three bugs together (privileged dials via `ssh -L`, socket replacement via `ssh -R` unlinking root-owned sockets, and a TOCTOU race that defeats the allowlist because "the kernel re-resolves paths after the initial check"), with the Docker socket and the `tailscaled` local API as the reachable targets. **TS-2026-015**: unbounded memory growth from continuous window-change messages and environment-variable appends in a session, with allocations that "persisted even after the peer disconnected" — an OOM kill of `tailscaled` takes every Tailscale connection on the node with it. **TS-2026-016**: `tailscale serve` TCP forwards to Unix sockets "lacked a guard and dialed the target as root," plus a symlink guard that ran only on configuration reload instead of per dial — full node takeover through the local API. **TS-2026-017**: an HTTP/2 `serveHTTPContext` race where concurrent streams on one connection could bleed **Tailscale-App-Capabilities** across mounts. The umbrella advisory says "most of the Tailscale SSH issues we've identified concern privilege escalation," declines to recommend disabling Tailscale SSH wholesale, and offers `TS_SSH_DISABLE_FORWARDING=1` as the interim mitigation.
-
-**Why it matters:** TS-2026-014 is the same shape as today's GoAhead item — *checked the string, acted as root* — and the third sub-bug is the one that generalises: a lexical allowlist plus a privileged syscall is a race, not a boundary, wherever it appears. The artifact split is the practical problem. None of the four bulletins carries a CVE ID (the bulletins index lists only **CVE-2022-41924**, **-41925** and **CVE-2023-28436**), so vulnerability feeds and scanners have nothing to key on. And the release page and the changelog disagree: `pkgs.tailscale.com/stable` carries `tailscale_1.104.4`, while the public changelog's newest client entry is still **v1.104.2 (Oct 21)** with no 1.104.4 row. So "am I patched" is a `tailscale version` question this week, not a release-notes question — and for anyone who allows SSH forwarding, disabling it is a config change you can make before the upgrade lands.
-
-[`🔗 Tailscale — SSH investigation and remediation update`](https://tailscale.com/ssh-investigation-update) · [`🔗 Tailscale — security bulletins`](https://tailscale.com/security-bulletins) · [`🔗 pkgs.tailscale.com — stable packages`](https://pkgs.tailscale.com/stable/)
-
----
-
-## 22. jackson-databind's 9.8 is an incomplete fix — June's patch validated the outer class and not the generic arguments
-
-- **Velocity:** ▮▮▮ trending
-- **Source:** GitHub Advisory GHSA-m8xf-2cr7-77ph / NVD / OSV · advisory published 2026-10-20 · CVE record 2026-10-28
-- **Tags:** `cve` `jackson` `deserialization` `java` `supply-chain`
-
-**CVE-2026-110879** (**CWE-502**, **CVSS 3.1 9.8**, `AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H`) is a **PolymorphicTypeValidator bypass via generic type arguments and array element types**, and its own advisory calls it an "**incomplete fix for CVE-2026-54512**." `DatabindContext._resolveAndValidateGeneric()` checks the outer class against the declared base type, then validates each generic argument against the **outer base type** rather than its declared binding — so under the default `DefaultBaseTypeLimitingValidator`, "this accepts an unrelated class inside a generic subtype even when the same class is rejected as a direct type ID." When an `allowIfBaseType(...)` rule approves the outer type, Jackson substitutes `LaissezFaireSubTypeValidator` outright. The worked example: a property declared `Map<String,String>` accepts `HashMap<FileSystemXmlApplicationContext,String>`, and map-key discovery hands the attacker's JSON property name to that class's one-string constructor — which, with Spring on the classpath, loads attacker XML and calls `ProcessBuilder.start()`. Affected from **2.10.0**; patched in **2.18.12**, **2.21.8**, **2.22.4**, and for Jackson 3.x **3.1.8** and **3.2.4**.
-
-**Why it matters:** the June advisory (GHSA-j3rv-43j4-c7qm, **8.1**, published **2026-06-23**) added generic-argument validation and scored 8.1; the replacement is 9.8 four months later, which is what an incomplete fix costs. The second thing is the registry state, checked first-hand: `api.github.com/advisories/GHSA-m8xf-2cr7-77ph` returns **404** while `github.com/FasterXML/jackson-databind/security/advisories/GHSA-m8xf-2cr7-77ph` renders normally, and **OSV's record for CVE-2026-110879 carries only `GIT` ranges** — no Maven range at all. So a Maven scanner asking "is `jackson-databind` 2.22.3 affected" has nothing to match unless the ecosystem advisory lands, even though the repo advisory has listed patched versions since **Oct 20**. The record itself is 8 days newer than the page that describes it.
-
-[`🔗 GHSA-m8xf-2cr7-77ph — jackson-databind`](https://github.com/FasterXML/jackson-databind/security/advisories/GHSA-m8xf-2cr7-77ph) · [`🔗 NVD — CVE-2026-110879`](https://nvd.nist.gov/vuln/detail/CVE-2026-110879) · [`🔗 OSV — CVE-2026-110879`](https://api.osv.dev/v1/vulns/CVE-2026-110879)
-
----
-
-## 23. Adobe's Campaign Classic bulletin prints 9.8 for a vector that computes to 10.0 — and all eight of its CVEs are Critical
-
-- **Velocity:** ▮▮ rising
-- **Source:** Adobe security bulletin APSB26-162 / NVD · published 2026-10-27
-- **Tags:** `cve` `adobe` `cvss` `campaign` `provenance`
-
-**APSB26-162** is a Priority 2 update for **Adobe Campaign Classic v7**, fixing **eight** CVEs, every one rated **Critical**: **CVE-2026-105781** SQL injection, **CVE-2026-104351** code injection, **CVE-2026-104353** OS command injection, **CVE-2026-105780** incorrect authorization, **CVE-2026-105489** SQL injection, **CVE-2026-104350** reflected XSS, **CVE-2026-104354** SQL injection and **CVE-2026-105779** SQL injection. Adobe says it is "not aware of any exploits in the wild for any of the issues addressed in this update." The affected range is **ACC v7 7.4.4 build 9402 and earlier**, and the fix is **7.4.4 build 9403** — a *build* increment inside an unchanged version string.
-
-**Why it matters:** two checkable things, and one of them is arithmetic. Recomputing every vector in the bulletin with a first-pass CVSS 3.1 calculator, **seven of the eight reproduce exactly** (9.9, 9.9, 9.9, 9.9, 9.3, 9.1, 9.1) — and **CVE-2026-105781 does not**: Adobe prints "**CVSS base score: 9.8**" beside `CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:C/C:H/I:H/A:H`, which computes to **10.0**, and that is the number NVD also carries for the record. 9.8 is precisely what that same string yields if you drop the **`S:C`** scope change, so the page's number is the *unscoped* reading of its own vector. This is the "second number on a page" trap running in the vendor's direction rather than the aggregator's — and it is the only row where the whole bulletin's other seven are consistent, which is how you know it is a scoring slip and not a different revision. The second thing is operational: **7.4.4 build 9402** and **7.4.4 build 9403** are the same product version to every inventory tool that reads a version string, so "we're on 7.4.4" is not a patched statement — the build number is.
-
-[`🔗 Adobe — APSB26-162: Security update for Campaign Classic`](https://www.adobe.com/trust/security/products/campaign/apsb26-162.html) · [`🔗 NVD — CVE-2026-105781`](https://nvd.nist.gov/vuln/detail/CVE-2026-105781)
-
----
-
-## 24. llama.cpp's ggml-rpc writes 256 KiB into a 1-byte stack variable — and VulnCheck scores it 8.1 and 9.2 at once
-
-- **Velocity:** ▮▮ rising
-- **Source:** NVD / VulnCheck / ggml-org/llama.cpp · record published 2026-10-28T03:17Z
-- **Tags:** `cve` `llama-cpp` `rdma` `memory-safety` `provenance`
-
-**CVE-2026-118375** (**CWE-787**) is an out-of-bounds write in llama.cpp's **ggml-rpc RDMA transport**, in `rdma_recv()`. A peer that advertises RDMA capabilities in the HELLO message "can send up to **256 KiB** into a **1-byte** stack variable in `rpc_serve_client()`," crashing the server or potentially executing code. Affected **b8841 before b11865**; the fix is PR **#30399** (commit `9a0fde9`), shipped in build **b11865**, published **2026-10-24T19:30Z** — so the record is **3.3 days newer than the fix**.
-
-**Why it matters:** the record carries **two metrics from one source** and they disagree by 1.1 points, which is exactly the case where "two scores" reads as "two scorers" if you only look at the slot. Both are **VulnCheck's**: **CVSS 3.1 `Primary` 8.1** (`AV:N/AC:H/PR:N/UI:N/S:U/C:H/I:H/A:H`) and **CVSS 4.0 `Secondary` 9.2** (`AV:N/AC:L/AT:P/PR:N/UI:N/VC:H/VI:H/VA:H/SC:N/SI:N/SA:N`). The 3.1 number is 8.1 because of `AC:H`, the 4.0 number is 9.2 because of `AT:P` — one judgement written twice, and which one you see is a function of which field your scanner reads. The version range is the other trap: `b8841` and `b11865` are **nightly build tags**, not releases, so `pip`/`brew` version strings will not answer "am I patched." Anyone running `rpc-server` with RDMA enabled across a trust boundary should treat the transport as pre-auth reachable until the build number says otherwise.
-
-[`🔗 NVD — CVE-2026-118375`](https://nvd.nist.gov/vuln/detail/CVE-2026-118375) · [`🔗 ggml-org/llama.cpp — fix PR #30399`](https://github.com/ggml-org/llama.cpp/pull/30399) · [`🔗 ggml-org/llama.cpp — release b11865`](https://github.com/ggml-org/llama.cpp/releases/tag/b11865)
-
----
-
-## 25. MLflow's 9.8 imports the class you placed — and the fix shipped 20 days before the advisory
-
-- **Velocity:** ▮▮ rising
-- **Source:** GitHub Advisory GHSA-26p8-2jq9-3vq9 / NVD / MLflow releases · advisory published 2026-10-27T21:26Z
-- **Tags:** `cve` `mlflow` `deserialization` `ai-platform` `rce`
-
-**CVE-2026-116692** (**CWE-470**, **CWE-94**, **CVSS 3.1 9.8**) affects MLflow **from 3.12.0rc0 until 3.17.0**. The third-party scorer path in `mlflow/genai/scorers/base.py` "accepts request-selected **descendants** of `THIRD_PARTY_SCORER_ALLOWED_MODULES` rather than requiring an exact allowed module." The chain: a caller uses MLflow artifact endpoints to place a Python module beneath a writable allowed package, then submits its module and class through `/ajax-api/3.0/mlflow/scorer/invoke`, where `Scorer.model_validate_json()` imports and constructs it **before** trace processing. On an authentication-disabled deployment that needs no credentials; with basic auth it needs a principal that can create an experiment and run and upload artifacts. Either way "the allowed scorer package must be writable by the server process." Fixed in **3.17.0**, released **2026-10-07T08:24Z**.
-
-**Why it matters:** the allow-list is a **prefix test**, not a membership test — "descendants of a module" is the same defect class as trusting an unenumerated subclass, and it is the third deserialization-by-allowlist bug in this feed's recent window. Read the three conditions carefully, because they are conjunctive and each one is a deployment fact rather than a code fact: auth disabled (or a low-privilege principal), an artifact-upload path, and a scorer package the server can write to. That is the shape of a developer's MLflow box and not the shape of a hardened one. The timeline is the other half: **20.5 days** passed between the fixed release and the advisory, so a pinned `3.17.0` was safe a month before its scanner said the CVE existed — and a pinned `3.16.x` was vulnerable the whole time with nothing in an advisory feed to say so.
-
-[`🔗 GHSA-26p8-2jq9-3vq9 — MLflow`](https://github.com/mlflow/mlflow/security/advisories/GHSA-26p8-2jq9-3vq9) · [`🔗 NVD — CVE-2026-116692`](https://nvd.nist.gov/vuln/detail/CVE-2026-116692) · [`🔗 MLflow v3.17.0 release`](https://github.com/mlflow/mlflow/releases/tag/v3.17.0)
-
----
-
-## 26. WatchGuard published 18 Fireware OS records in one batch — all CVSS 4.0, none of them 3.1
+## 14. Rapid7's Q3 data puts the exploitation window at 3 days — and finds AI was operationally involved in 8% of incidents
 
 - **Velocity:** ▮ steady
-- **Source:** WatchGuard PSIRT advisory board / NVD · records published 2026-10-27T16:17Z
-- **Tags:** `cve` `watchguard` `firewall` `cvss` `provenance`
+- **Source:** Rapid7 Q3 2026 Threat Landscape Report / Help Net Security · published 2026-10-27
+- **Tags:** `rapid7` `research` `exploitation` `ransomware` `threat-intel`
 
-WatchGuard's CNA published **18 Fireware OS and Mobile VPN records** inside five seconds on **2026-10-27** (16:17:28Z–16:17:33Z), and **all 18 are still at `Received`** in NVD. Seven score **≥ 9.2**: **CVE-2026-103594** at **9.5** (stack overflow in WireGuard configuration processing), **CVE-2026-90465** at **9.4** (missing authentication in FireCluster Sync — "invoke privileged firewall management actions as root"), and five at **9.2** — **CVE-2026-112709** and **-112710** (heap overflow in the AD authentication service, pre-auth RCE), **CVE-2026-93857** (SIP proxy stack overflow, unauthenticated RCE), **CVE-2026-93865** (FireCluster sync daemon, missing authentication, reachable at the cluster management IP) and **CVE-2026-93866** (integer overflow in Access Portal WebSocket handling). FireCluster appears directly in **four** of them — three missing-authentication bugs plus an out-of-bounds read. The version ranges are wide and branch-shaped: **`2025.1 < 2026.4`** and **`12.0 < 12.12.4`**, with **T15/T35** hardware on its own `12.0 < 12.5.22` line.
+Rapid7's **Q3 2026 Quarterly Threat Landscape Report** puts the average gap between public disclosure and exploitation of a high-severity vulnerability at **3 days**, with **71%** of tracked exploitation happening inside the first week — **80%** within 14 days and **90%** within 30. It tracked **43** newly exploited high or critical vulnerabilities in the quarter, and **34 of the 43 (79%)** are what Rapid7 calls "Holy Grail" flaws: remotely exploitable and requiring neither authentication nor user interaction. Context that makes those windows tighten rather than widen: new high-severity CVEs (CVSS 7–10) are up **133% year on year** and public proof-of-concept code is up roughly **86%**. Authentication-bypass flaws were the most likely class to be exploited, at **1.57%** against **0.62%** for RCE.
 
-**Why it matters:** the measurable fact is that **0 of the 18 carry a CVSS 3.1 metric** — every score is **CVSS 4.0**, and every 9.2 carries **`AT:P`** ("attack requirements: present"), which is how 4.0 encodes a precondition that 3.1 would express through `AC` or `PR`. Any pipeline that reads `cvssMetricV31` and nothing else sees eighteen unscored firewall CVEs on a device that terminates your internet. Cross-checking the same 18 against WatchGuard's own advisory board, **15 agree exactly and 3 do not**: **CVE-2026-103593** reads **9.1** on the board against **7.1** in the record, **CVE-2026-82332** reads **5.6** against **5.7**, and **CVE-2026-90465** reads **8.7** against **9.4** — which is the one that matters, because it is the difference between a "high" chip and a critical score. For what it is worth, 8.7 is exactly what that record's 4.0 vector yields if you read it under 3.1 with `S:U` rather than `SC:H`, so the split looks like two frameworks rather than two judgements — but the board publishes no vector, so that is arithmetic on my side, not WatchGuard's statement.
+**Why it matters:** the finding that cuts against the prevailing narrative is buried and is the most useful thing in the report — **AI was an operational component in only 8% of tracked incidents**, with human operators still choosing targets and objectives. That is a useful correction to a week in which a honeypot captured a 100,000-step attack agent (26 October) and the industry press spent the quarter assuming automation had arrived; both can be true, and the distinction is *operational component* versus *subject of the report*. The defensive arithmetic is what follows from the 3-day median: for the 79% of exploited flaws that need no auth and no interaction, a patch-SLA measured in weeks is not a policy that lags, it is a policy that never applies — the only control that lands inside three days is one that does not depend on the CVE being published first.
 
-[`🔗 WatchGuard — PSIRT advisory board`](https://psirt.watchguard.com/) · [`🔗 NVD — CVE-2026-90465`](https://nvd.nist.gov/vuln/detail/CVE-2026-90465)
-
----
-
-## 27. Heads of Security: one learned gate per attention head takes RL-Hammer from 97% to 10%
-
-- **Velocity:** ▮▮ rising
-- **Source:** arXiv 2610.37657 / arXiv HTML · dated 2026-10-27 · 9 authors
-- **Tags:** `prompt-injection` `security` `attention` `defense` `research`
-
-**Heads of Security (HoS)** is a prompt-injection defence that "enforces instruction-data separation via a small set of learned per-head attention gates" — it learns how each head should redistribute attention between trusted and untrusted tokens, rather than retraining the model to ignore injected instructions. Evaluated on **Llama-3.3-70B-Instruct** and **GPT-OSS-20B** against **SecAlign++** (finetuning-based) and **ASIDE** (architectural). The numbers: the black-box **RL-Hammer** attack reaches **97% ASR** against GPT-OSS-20B and **85%** against SecAlign, but only **10%** against HoS; **Claudini**, a white-box attack "strengthened against HoS through autoresearch," needs **3× more FLOPs** to reach the same ASR. HoS preserves base-model utility on standard multiple-choice benchmarks where SecAlign and ASIDE degrade in few-shot settings, and ASIDE reaches only **10% utility** on tool use.
-
-**Why it matters:** the 97→10 gap is on a **black-box** attack, which is the kind an outside attacker actually has, and it arrives from an architectural change rather than from more safety data — that is the claim worth testing against your own stack. But read the boundary of the result before quoting it: "on agentic benchmarks with **static** attacks, HoS and SecAlign perform similarly," so the large margin is on the injection suites and not on the agentic ones, and the paper's own framing is that both "substantially improve the security-utility trade-off over the base model" there. The residual **10%** is also not zero: a per-head gate is a learned component inside the threat model, and `Claudini` plus autoresearch is already the recipe for attacking it. Nine authors, including Imperial College's Yves-Alexandre de Montjoye — the affiliations are in the HTML full text, not the abstract page.
-
-[`🔗 arXiv — Heads of Security`](https://arxiv.org/abs/2610.37657) · [`🔗 arXiv HTML full text — affiliations`](https://arxiv.org/html/2610.37657v1)
+[`🔗 Help Net Security — Rapid7 Q3 2026 findings`](https://www.helpnetsecurity.com/2026/10/27/rapid7-vulnerability-exploitation-trends-q3-2026-report/) · [`🔗 Rapid7 — Quarterly Threat Landscape Report`](https://www.rapid7.com/research/report/quarterly-threat-landscape-report/)
 
 ---
 
-## 28. Scaling laws for tool-use agents: 458,752 tasks and 849 trained models say diversity beats volume
-
-- **Velocity:** ▮▮ rising
-- **Source:** arXiv 2610.37648 / arXiv HTML · dated 2026-10-27 · 8 authors
-- **Tags:** `tool-use` `agents` `scaling-laws` `synthetic-data` `training`
-
-**SynthAPI** generates tool-use environments while "explicitly controlling the diversity of generated environments along the axes of **tools, tasks, and the databases** on which the tools operate." Varying those controls across **458,752 tasks** and **849 trained models of four different sizes** yields a scaling law that "predicts downstream tool-use agent generalization based on the scale and composition of the synthesized environments." The three findings: as data budgets grow, scaling **tool and database diversity** becomes more effective than increasing the number of tasks; increasing data **complexity** yields larger gains; and agents scaled on those rules "outperform models trained on data from prior work" across four evaluation benchmarks.
-
-**Why it matters:** this converts "how much environment do I need" from a guess into a curve with a composition term, which is the first thing that makes synthetic agent data an engineering budget rather than a scrape. The caveat is what "diversity" means here: it is **combinatorial expansion along three API-surface axes the pipeline controls**, not distribution shift from real traffic — so the law predicts generalization *within* the SynthAPI family, and the paper's claim about beating prior work is measured on the same four benchmarks that family was tuned against. It is also, like most scaling-law papers, a result about *synthetic* tool use; the abstract gives no coefficient for the case where your production tools are the ones with the long tail.
-
-[`🔗 arXiv — Scaling Laws for Tool-Use Agents`](https://arxiv.org/abs/2610.37648) · [`🔗 arXiv HTML full text`](https://arxiv.org/html/2610.37648v1)
-
----
-
-## 29. None of the latent world models actually learns the dynamics — a new consistency metric says so
-
-- **Velocity:** ▮▮ rising
-- **Source:** arXiv 2610.37588 / arXiv HTML · dated 2026-10-27 · 2 authors
-- **Tags:** `world-models` `evaluation` `latent-dynamics` `equivariance` `research`
-
-The paper introduces **faithful latent world models** as an *equivariance condition* between an environment's transition map and the learned latent dynamics, and proposes **latent rollout consistency (LRC)** to score action-conditioned latent prediction against it. The result is a negative for the class: "across the studied state of the art latent world models, **none** solves the task by actually faithfully modeling the dynamics of the environment." The authors' diagnosis of the field is about evaluation rather than architecture — current benchmarks "often emphasize task performance while providing limited insight into whether learned world models acquire predictive latent dynamics that reflect the underlying structure of the environment."
-
-**Why it matters:** read this beside today's **Genie 4** item, because they are the same finding from two directions. DeepMind's own limitations list says visual details and object permanence "shift or drift over time," particularly after multiple edits or during navigation; LRC is a way to measure exactly that gap, and the answer it gives is that task success and faithful dynamics come apart. A model can produce a plausible rollout that satisfies a downstream reward without encoding the transition function — which is fine for pre-visualisation and disqualifying for planning. One caveat stated plainly: the abstract names **no models, no datasets and no LRC values**, so "none" is a claim about a set the abstract does not enumerate. Open the PDF before quoting a list or a score, and treat this as a measurement proposal whose first application is its own authors' negative result.
-
-[`🔗 arXiv — Understanding the limits of latent world models`](https://arxiv.org/abs/2610.37588) · [`🔗 arXiv HTML full text`](https://arxiv.org/html/2610.37588v1)
-
----
-
-## 30. Label-free RLVR collapse has a critical dataset size — and more problems make it worse
+## 15. A jailbreak collection hits 6,911 stars with 32 prompts across 26+ models and no licence file
 
 - **Velocity:** ▮ steady
-- **Source:** arXiv 2610.37553 / arXiv HTML · dated 2026-10-27 · 1 author
-- **Tags:** `rlvr` `reinforcement-learning` `collapse` `theory` `reasoning`
+- **Source:** GitHub Trending (daily) / GitHub API · 1,478 stars today · 6,911 total
+- **Tags:** `prompt-injection` `jailbreak` `repo` `safety` `agent-config`
 
-Label-free RLVR rewards a model for agreeing with its own majority vote. It "improves reasoning at first but eventually collapses: the self-assessed reward goes to one while accuracy falls, often until the model gives the same answer to every problem" — and, counter-intuitively, "the collapse appears only when training uses many problems." The paper explains the dataset-size dependence as a collective instability: per-problem sharpening slows by **1/N** for **N** training problems, while a **shared mode** grows at a rate proportional to **λ²**, independent of **N**, giving a critical problem count **N_c ≃ ln(1/δ)/(λ²G)**. Simulations confirm a sharp transition, **N_c ∝ λ⁻²** up to a logarithmic correction, "a single critical amplification **λ²NG** across couplings, confidence profiles and training variants," a logarithmic dependence on batch size, and **no collapse for confident initial models**. A kernel version identifies a protective coupling and a marginal-entropy bonus; in label-free RL of a small Transformer, "removing the shared direction prevents collapse entirely, restoring it causes collapse, and collapse grows with training-set size and base-model entropy."
+**togg53192-cmd/jailbreaks** is trending with **1,478 stars today** and **6,911** total, **992 forks**, **15** open tracker items (**14 issues, 1 pull request**), last pushed **2026-10-28**. It advertises "**32 prompts targeting 26+ models**," each "intended to be complete and paste-ready. No summaries. No partial excerpts" — system prompts, "persona locks," workspace policies, `AGENTS.md` files and Ollama Modelfiles, organised by target: free stealth models served through OpenCode Zen (Big Pickle, Space Bunny, LongCat 2.5, MiMo V2.6, Muse Spark 1.3), open-weight families (GLM, DeepSeek, Kimi, Qwen, Gemma, GPT-OSS) and closed frontier models (Claude, Gemini, Grok, Mistral). There is **no licence file**.
 
-**Why it matters:** the actionable inversion is that **scaling the problem set is the failure mode**, which is the opposite of the default instinct for a training-data bottleneck — and the mechanism says why: the shared mode is a property of a *distribution over problems*, so adding problems adds sharpening signal more slowly than it adds shared drift. The remedy it points at is structural (remove or penalise the shared direction) rather than a learning-rate tweak, and that is the part worth testing on a real run. It is a theory paper with one author and simulations on a small model, so the value is the falsifiable prediction — `N_c ∝ λ⁻²` with a measurable `λ²NG` — not a recipe.
+**Why it matters:** the artifact's framing is doing real work and should be judged on its own terms — the README's warning says "Research and educational purposes only" and argues that the collection "documents how instruction hierarchies, persona framing, prompt conflicts, and policy overrides can affect model behavior." That is a defensible research object: a corpus of adversarial system prompts is exactly what you need to test instruction-hierarchy robustness, and the "complete and paste-ready, no partial excerpts" standard is the standard a reproducible corpus needs. What the repo is not is a *test*: there is no harness, no refusal-rate table, no per-model result, so the 32 prompts are inputs without a single measured outcome — meaning the one number anyone would want from it (which model holds) is the one it does not contain. The missing licence is the second-order problem: with no licence, the files are all-rights-reserved by default, which makes them unusable in the security research the README says they are for.
 
-[`🔗 arXiv — Collective Dynamics of Self-Reinforcement`](https://arxiv.org/abs/2610.37553) · [`🔗 arXiv HTML full text`](https://arxiv.org/html/2610.37553v1)
-
----
-
-## 31. Anthropic's drug programmes: 35,000 antibody designs, 1,061 pages checked — and "mostly preclinical"
-
-- **Velocity:** ▮▮ rising
-- **Source:** Anthropic research blog / Hacker News · 242 pts · 238 comments · ~1d ago (~Oct 27 20:50 UTC+8)
-- **Tags:** `anthropic` `life-sciences` `drug-discovery` `case-study` `research`
-
-Anthropic's life sciences team published results from **six** partnerships — **BigHat Biosciences, Bristol Myers Squibb, Divergence Labs, Enveda, Generate Biomedicines** and **The Column Group** — plus its own discovery programmes after acquiring **Mithril Medicine**, a one-person company. The specific numbers, each with a partner technical report behind it: at **Generate**, six scientists used Claude Code to shorten part of a CAR-T construct and got a design **~70% shorter** that let immune cells make **~10×** as many receptors; at **Divergence**, Claude "largely autonomously, generated roughly **35,000** antibody designs in about a month," of which early tests found **3** IgE binders and **20** that dislodged IgE, **3** of those better than the standard medication; at **BigHat**, ~**1,010** variants in ~10 weeks produced leads that bound **>10×** more tightly, stayed in solution **18 °C** higher and clumped **>100×** more slowly — and Claude had also argued the standard heat-stability and clumping metrics were misleading, then proposed replacements the lab ran; at **Enveda**, across **1,061** pages Claude "caught all **11** issues that human reviewers had spotted—and flagged seven they'd missed," cutting review from over **25 hours** to under **3**, and drafted a regulatory document in **4 hours** against "about three months by hand."
-
-**Why it matters:** these are lab measurements from named partners with published technical reports, which is the strongest form this class of claim can take — and the sentence to carry forward is the one in the post's own closing section: "All of this research is still at an early stage. In particular, so far it is **mostly preclinical**— that is, for the most part, it isn't yet at the stage where the drugs are being tested in humans." Two of the metrics need their denominators attached before they travel. "**11 of 11** caught" is a **recall** statement on one 1,061-page corpus with no false-positive count in the post, so it does not yet say what a reviewer would have to read past. And "**4 hours vs three months**" compares a first draft to a completed document — the post says the other draft went through human review that "found one minor error," which is the right disclosure and the reason the two figures are not a speedup ratio.
-
-[`🔗 Anthropic — Early progress on accelerating drug development with Claude`](https://www.anthropic.com/research/early-progress-drug-development) · [`🔗 Hacker News discussion`](https://news.ycombinator.com/item?id=50265609)
+[`🔗 togg53192-cmd/jailbreaks`](https://github.com/togg53192-cmd/jailbreaks) · [`🔗 Hacker News / GitHub Trending (daily)`](https://github.com/trending?since=daily)
 
 ---
 
-## 32. Survival LLM runs an AI and 930,000 Wikipedia articles with the internet off — and publishes its own 22-question test
-
-- **Velocity:** ▮▮ rising
-- **Source:** brangus.io / Hacker News · 385 pts · 148 comments · ~1d ago (~Oct 27 19:55 UTC+8)
-- **Tags:** `local-first` `offline` `open-source` `retrieval` `emergency`
-
-**Survival LLM** is a free, open-source app that runs a local model plus a local reference library on your own machine — set up while online, then fully offline, with "about **930,000** of Wikipedia's most-read articles" alongside WikiMed, MedlinePlus, UK Medicines A to Z, WikEM, Ready.gov, CDC travellers' health, US military medicine and survival manuals, wikiHow, iFixit, Appropedia and Stack Exchange Q&A. Every answer lists the articles it read with "the exact passage highlighted." It picks the model by available memory and publishes an accuracy row per tier: **≥128 GB Mac → NVIDIA Nemotron 3.5 Super (80 GB), 21/22**; **32–96 GB Mac → Qwen3.8 27B (18 GB), 21/22**; **≥32 GB Windows PC → Nemotron 3.5 Lightning (25 GB), 19/22**; **16–31 GB → IBM Granite 4.2 8B (6 GB), 14/22**. The library is a **9 GB** download (**19 GB** installed), or **1.3 GB / 3 GB** without Wikipedia and iFixit. Battery is stated too: "about **100 W** while it answers, for **5 to 40 seconds** per question."
-
-**Why it matters:** the memory-tiered table with an accuracy number beside each tier is the most honest form "runs on your machine" can take, because it tells you what you are trading rather than implying there is no trade. Now read the footnote on those numbers: **22 questions** about blackouts and first aid, "graded blind, in our tests on an **earlier build** of the library," with "got the main point of official guidance right" as the criterion. Twenty-two items is a wide interval, the grader is the author, and the smallest tier is at **14/22** — so the table is a relative ordering, not a reliability figure. What actually carries the safety argument is the interface decision the page states in the same breath — "It can be wrong… Every answer shows the articles it used, so you can check" — and a citation-with-highlight is a mechanism you can audit, where an accuracy percentage is not.
-
-[`🔗 Survival LLM`](https://www.brangus.io/survival-llm) · [`🔗 Hacker News discussion`](https://news.ycombinator.com/item?id=50264853)
-
----
-
-## 33. RuView: 100,544 stars for see-through-walls WiFi pose — and its own benchmark log records PCK@20 of 3.0%
-
-- **Velocity:** ▮▮ rising
-- **Source:** ruvnet/RuView / repository benchmark log / GitHub Trending · 100,544 stars
-- **Tags:** `wifi-sensing` `csi` `pose-estimation` `benchmark` `repo`
-
-**RuView** turns WiFi Channel State Information from low-cost **ESP32** sensors into presence detection, breathing and heart rate, activity recognition and "camera-free pose — estimate **17 body keypoints** from WiFi CSI," and ships Home Assistant, Matter, Apple Home, Google Home and Alexa integrations with **21 entities per node**. The repo has **100,544 stars**, **13,122 forks**, and a counter reading **497 open** that splits into **72 issues and 425 pull requests** — MIT, pushed today. Its own `docs/benchmarks/pose-estimation-cog.md` contains **one** measured run — **v0.0.1, 2026-05-19** — recording **PCK@20 of 3.0%**, **PCK@50 of 18.5%** and normalised **MPJPE 0.0931**, from **1,077 paired samples** taken in a single "30-min seated-at-desk recording" at average confidence **0.44**, trained for **2.1 seconds** with a **randomly initialised** encoder because "HF presence model is MLP `8→64→128`, incompatible with this Conv1d shape."
-
-**Why it matters:** the repo's own acceptance gate is **ADR-079's PCK@20 ≥ 35%**, and the only published run above its own **0.0%** pre-2026-05-19 SPSA baseline is **3.0%** — an order of magnitude short, on one subject in one posture. The per-joint table explains its own best rows: the strongest signals are **r_hip** (25.0% PCK@20, **76.9%** PCK@50), **r_knee** (0.9% PCK@20, 35.2% PCK@50) and **r_shoulder** (1.9% PCK@20, 19.9% PCK@50) — the doc's own summary sentence prints those last two as bare percentages, which are @50 — which "is consistent with the camera framing during data collection (operator's right side most consistently in frame)" — the model learned the side the camera saw, which is a label-leak signature, not a sensing result. The log also says "The remaining gap to ADR-079's PCK@20 ≥ 35% target is data-bound, not infra-bound," and the appliance smoke run recorded "**0 `pose.frame` events fired**" because no CSI source was connected. None of that makes the project dishonest — the log is unusually candid, and it is dated and append-only. It does mean the star count is not evidence for the pose claim: for the vitals and presence claims I could find no comparable measurement log, and the README's own note on the unified RF world model — "accuracy is still **synthetic** until real-data validation" — is the same caveat in a smaller font.
-
-[`🔗 ruvnet/RuView`](https://github.com/ruvnet/RuView) · [`🔗 RuView — pose-estimation benchmark log`](https://github.com/ruvnet/RuView/blob/main/docs/benchmarks/pose-estimation-cog.md)
-
----
-
-## 34. Moxnox 1.0: an NT-shaped POSIX OS on btrfs, 130,000 lines of C++, and it builds itself
+## 16. LongChang drops LLMs into worlds with altered physics — GPT-6-Astra rediscovers a law 16.7% of the time, and the other 11 models score 0%
 
 - **Velocity:** ▮ steady
-- **Source:** maharmstone/moxnox / Hacker News · 80 pts · 18 comments · ~1d ago (~Oct 27 23:53 UTC+8)
-- **Tags:** `operating-system` `nt` `posix` `btrfs` `release`
+- **Source:** arXiv 2610.37649 · submitted 2026-10-27
+- **Tags:** `arxiv` `scientific-discovery` `agents` `benchmark` `physics`
 
-**Moxnox v1.0** is a hobby operating system with an unusual pair of constraints. Its syscall design "is modelled after that of Windows NT," yet it "should be capable of running software written for Unix-like systems, **provided that they have been recompiled for it**," and it "comes with a full GNU base system." It is mature enough to be **self-hosting** — "you can build Moxnox on Moxnox" — and it runs on **btrfs**, on **amd64 and aarch64**, at "around **130,000 lines of C++**." v1.0 images for both architectures are published, with a documented QEMU invocation in the README. The repository record was created **2026-10-22** and holds **152 stars** at index time — but its history begins **2021-12-08** ("initial commit") and is **9,479 commits** deep, so `created_at` dates this public home, not the project.
+**LongChang** is an automated framework that builds simulated worlds where one or more physical laws differ from ordinary physics — heavier objects falling more slowly, for instance — and turns LLM agents loose as explorers with no research task, no hint about which law changed, and no statement that anything is wrong. The agents manipulate objects, build tools to probe their own questions, and report findings. The loop is closed by other LLM agents: one set reviews proposed scenes, another reviews tool designs, and a third judges reports for correctness and experimental support against the altered laws and the exploration log, with those logs feeding scene evolution so the cycle runs "without human intervention."
 
-**Why it matters:** the design bet is the interesting part — targeting the **syscall ABI** modelled on NT while requiring recompilation for POSIX software means compatibility is a source-level contract, not a binary one, which is why "recompiled" is in the README rather than buried in a FAQ. That is a very different proposition from Wine-shaped binary compatibility, and it is the reason a 130k-line OS can claim both. The caveat is stated by the author and deserves repeating verbatim: "The btrfs code works for basic purposes, but has not been **battle-hardened**. Please don't try to mount anything but throwaway filesystems." A filesystem implementation that has only ever met images you can regenerate is a data-loss risk, and the README says so on the same page as the feature list — which is the right order.
+**Why it matters:** the headline result is a distribution with a cliff in it. Across **12 LLMs**, "**GPT-6-Astra achieves a discovery rate of 16.7%, while the other 11 score 0%**." A single nonzero cell is not a capability gradient — it is evidence that *noticing an anomaly is a separate skill from explaining one*, and that it currently sits with one model rather than scaling with general capability. The failure analysis is the part worth citing onward: the exploration records "reveal uninvestigated anomalies and only **partial identification** of the altered physical laws," so even the one model that scored was mostly noticing without closing the loop. This is a cleaner instrument than the "can a model write a paper" benchmarks because the null result is informative: the task has a verified answer, the answer is reachable by experiment, and 11 frontier-class models failed to run the experiment at all.
 
-[`🔗 maharmstone/moxnox`](https://github.com/maharmstone/moxnox) · [`🔗 Hacker News discussion`](https://news.ycombinator.com/item?id=50267569)
-
----
-
-## 35. "Git for the US Code": replay 365 amendments, 361 reproduce exactly, and the four that don't are labelled
-
-- **Velocity:** ▮ steady
-- **Source:** Lexifina blog / Hacker News · 305 pts · 145 comments · ~1d ago (~Oct 28 01:47 UTC+8)
-- **Tags:** `law` `version-control` `provenance` `data` `methodology`
-
-Lexifina's write-up describes a version-control layer over the US Code with a validation method rather than a demo. For "each pair of release points from 2017 onward," they took the public laws enacted in between, "carried out their amending instructions on the older text in date order," and compared the result with the newer official release point: "Of **365** changes across the nine titles, **361** reproduced the next release point exactly," and "the other four are shown with a label saying how far they could be confirmed." Each change carries its law and effective date — **261** by enactment default, **72** by an effective-date note, **29** by a date in the amendment itself — and one change "depends on an agency determination that may never come, and we leave it out of the text rather than guess." The motivation is measured on models: a TUM study found one model answered **24%** of post-cutoff German-statute questions correctly on its own and **87%** when the relevant statutory text was retrieved, and in a second study, applying amending laws produced output "**93–99% similar**" to the official text while only "half of single amendments and a fifth of chains of amendments matched exactly," with experts finding "legally significant errors in the near misses."
-
-**Why it matters:** replaying amendments and diffing against the next official release point is a ground truth that does not depend on trusting a model — that is the methodological contribution, and it is why the 4 failures can be labelled instead of dropped. A dataset that reports 361/365 and names the four is a different artifact from one that reports a percentage. The stated limits are the ones that matter for law rather than for software: "It does not yet show a later law's reach back on the earlier dates it covers, so for a case filed in the 2022 gap it shows the lower limit without warning that the June 2022 Act changed the answer," and effective-date notes "are read by pattern" with unusual wording falling back to the enactment date. Behind all of it sits a legal fact worth carrying: outside the titles Congress has enacted as positive law, the code is only **prima facie** evidence, and the Statutes at Large govern where the two differ — so a faithful reconstruction of the code is still not the source of law.
-
-[`🔗 Lexifina — Git for the US Code`](https://lexifina.com/blog/git-for-the-us-code) · [`🔗 Hacker News discussion`](https://news.ycombinator.com/item?id=50268380)
+[`🔗 LongChang — Can LLMs Uncover Hidden Physical Laws through Free Exploration?`](https://arxiv.org/abs/2610.37649) · [`🔗 full text (PDF)`](https://arxiv.org/pdf/2610.37649)
 
 ---
 
-## 36. Expo ships 24 official agent skills — and the file splits them by who pays
+## 17. Aggregating a group's memory by relevance loses 23–31 points — and deleting who said what gains 13–24
 
 - **Velocity:** ▮ steady
-- **Source:** expo/skills / Expo docs · repository pushed 2026-10-28T11:10Z
-- **Tags:** `agent-skill` `expo` `react-native` `marketplace` `repo`
+- **Source:** arXiv 2610.37624 · submitted 2026-10-27
+- **Tags:** `arxiv` `multi-agent` `memory` `benchmark` `evaluation`
 
-**expo/skills** is the Expo team's official set of AI agent skills for building, deploying, upgrading and debugging Expo and React Native apps — **MIT**, **3,357 stars**, and pushed today. Its `skills.sh.json` manifest groups **24** skills into three buckets — a total counted from the manifest itself, since no page states it: **16** under "**Framework (open source)**" (UI, navigation, styling, data fetching, native modules, DOM, examples, SDK upgrades), **7** under "**Services & paid distribution**" — described as "skills whose core purpose uses paid Expo Application Services (EAS). Each one discloses costs and plan limits up front" — and **1** "**Experimental**", for "Expo APIs that are not finalized," which "graduate to the groups above when the underlying API stabilizes." Installation is per-harness: Claude Code via `claude plugin install expo@claude-plugins-official`, Codex via `codex plugin add expo@openai-curated`, and other agents via `npx skills@latest add expo/skills --skill '*'`.
+**"Rare, Relevant, and Still Wrong"** asks what a compressed memory should keep when an LLM group's discussion is collapsed for a final decision-maker. The two intuitive policies — keep the rarest claims, or keep the claims relevant to the decision criteria — are tested with **CrossProfile**, "a diagnostic benchmark of **60 templates** with automatically verified answer keys" in which ownership of supporting, decoy and irrelevant facts is crossed while the fact text is held fixed: **480 tasks**. Across Qwen2.5-7B, Llama-3.1-8B and two DeepSeek models, both policies fail predictably. Selecting by relevance **readmits decoys because decoys are on topic** — "even a perfect relevance filter loses **23 to 31 points** to rarest-first selection" in the classic hidden-profile configuration. And rarest-first "is no better than random selection on average," winning only where the rare facts happen to be the useful ones.
 
-**Why it matters:** the three-way split is the part worth copying. Separating *free framework knowledge* from *skills whose purpose is to drive a paid service*, and requiring the paid ones to disclose costs up front, is a commercial boundary written into the artifact instead of left to the reader — which is exactly what most vendor skill packs omit, and the omission is what makes them read as documentation rather than as routing. The README's framing is also right: "Expo documentation, Expo CLI, and EAS CLI remain the source of truth; these skills help agents apply them correctly," so the pack is a router rather than a second spec that can drift. The honest gap: the repo ships a `tests/` directory and an `eval-harness` entry at the root, and its README states **no evaluation result** — so "official" here means provenance, not measured accuracy.
+**Why it matters:** the third failure is the one that generalises beyond memory design and into how any multi-agent transcript gets summarised. The decision model "adds a third failure, a form of **social proof**: it gives extra weight to facts attributed to many agents" — and "removing the attribution tags, or reassigning them at random with line order fixed, raises accuracy in the classic configuration by **13 to 24 points**." So an accurate memory can still produce a wrong decision because the summariser treats repetition as evidence, which is precisely the error a group of agents produces *for free*: several agents restating the obvious looks like consensus. The usable conclusion is stated in the abstract and is not a policy — "accuracy follows **the balance of evidence** the memory keeps, not the policy that kept it" — which means memory compression should be evaluated by what it preserves, not by the rule it follows.
 
-[`🔗 expo/skills`](https://github.com/expo/skills) · [`🔗 expo/skills — skills.sh.json manifest`](https://github.com/expo/skills/blob/main/skills.sh.json) · [`🔗 Expo docs — Expo Skills for AI agents`](https://docs.expo.dev/skills/)
+[`🔗 Rare, Relevant, and Still Wrong (arXiv 2610.37624)`](https://arxiv.org/abs/2610.37624) · [`🔗 full text (PDF)`](https://arxiv.org/pdf/2610.37624)
+
+---
+
+## 18. Macro ships its whole workspace as AGPL — 44,490 files, 8,854 in Rust — and cuts a release every few hours
+
+- **Velocity:** ▮ steady
+- **Source:** GitHub Trending (daily) / macro.com · 106 stars today · 5,339 total
+- **Tags:** `open-source` `rust` `solidjs` `workspace` `agpl`
+
+**macro-inc/macro** is a unified team workspace — email, chat, docs, tasks, agents, calls and CRM, "@-linked together with shared AI memory" — and the repository is the *product*, not a shell around it: **44,490 files** at the recursive-tree top level, **8,854 `.rs`**, **11,586 `.ts`**, **3,596 `.tsx`**, **1,012 `.sql`**, in an `apps` / `crates` / `packages` / `services` layout built in **SolidJS and Rust**, under **AGPL-3.0**. It is on trending with **106 stars today** and **5,339** total, and the release cadence is the unusual part: **v2026.10.28.0** published 2026-10-28T19:17Z, after **v2026.10.27.2**, **.1** and **.0** inside the previous 24 hours. The README says it is "dogfooded by our team of ~15 for two years," and cross-references between a doc and a task are "natively stored as a **bidirectional graph**."
+
+**Why it matters:** AGPL on a full application — not an SDK, not a client — is a rare enough choice that it changes who can use this, and the file census says the licence claim is backed by the source rather than by a marketing page. The thing to be careful about is the cadence: four releases in a day with a date-versioned scheme is *continuous deployment wearing a version number*, so "latest release" is a statement about a timestamp, not about a tested artifact. And the tracker number is a composite worth splitting: **418** open items resolves to **39 issues and 380 pull requests** — a PR queue ten times the issue queue, which describes a contribution model running far ahead of its review capacity rather than a product with 418 complaints. Where it actually breaks new ground for this feed is "shared team-level memory": an AI memory layer that all of email, chat, docs and CRM write into is the same substrate under a different name as the agent-memory work, with the difference that here the ontology is a company's own bidirectional graph rather than a vector store.
+
+[`🔗 macro-inc/macro`](https://github.com/macro-inc/macro) · [`🔗 macro.com`](https://macro.com) · [`🔗 releases (v2026.10.28.0)`](https://github.com/macro-inc/macro/releases)
+
+---
+
+## 19. Cursor's Agent SDK went GA eight days ago and hit HN today — agents as a versioned TypeScript project
+
+- **Velocity:** ▮ steady
+- **Source:** Cursor blog / Hacker News · 73 pts · ~6h ago (~22:02 UTC+8 Oct 28)
+- **Tags:** `cursor` `agent-sdk` `typescript` `evals` `deployment`
+
+**Cursor's Agent SDK** is a framework for defining agents as code — TypeScript, `@cursor/agent-sdk`, `defineAgent({...})` — where "Prompts are written in Markdown, while tools are defined as TypeScript functions," and instructions, tools, integrations and evals are versioned together as one project. It supports agent-to-agent handoffs, parallel subagents, event replay, and reacting to "pull request events from GitHub, GitLab, or Bitbucket." Deploy is `agent-sdk deploy`, which "builds the agent, gives it a URL, and starts it on our infrastructure"; self-hosted, "each agent runs as a single Node process that can be packaged in a container." Cursor says it uses the SDK for its own managed agents — **Bugbot**, **Security Reviewer** and **Rollouts** — and cites a team building a `kb-reviewer` "in about a day."
+
+**Why it matters:** the date is the first correction. The post is dated **2026-10-20** — the HN thread that surfaced it today says "generally available today" because *that* was today, eight days ago — so this is an item about the SDK reaching wider attention, not about a release. The architecture is the substantive claim: "each agent runs as a single Node process" is a deployment constraint that rules out in-process sandboxing, which means isolation has to come from the container and not from the SDK, and no pricing, metering or plan detail appears anywhere in the post. The strategic read is that Cursor is publishing the harness its own products run on, which is the same move GitHub made with the Copilot harness through Foundry in the same week — two vendors deciding that the durable moat is the *agent runtime plus its evals*, and that the model underneath is a commodity they will route to.
+
+[`🔗 Cursor — The Agent SDK`](https://cursor.com/blog/agent-sdk) · [`🔗 Hacker News discussion (73 pts)`](https://news.ycombinator.com/item?id=50273731)
 
 ---
 
@@ -516,13 +278,13 @@ Lexifina's write-up describes a version-control layer over the US Code with a va
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-10-28T12:23:59Z |
-| Items | 36 |
-| Sources tracked | 30 (Hacker News, GitHub Trending, GitHub API, Google DeepMind, ghostty.org, LWN.net, CISA KEV, NVD, cveawg, CVE.org, cfsg.axiommath.ai, The Stanford Daily, liquid.ai, Hugging Face, microsoft.ai, Artificial Analysis, FoxIO, Wiz, arXiv, NVIDIA product-security, Adobe trust center, GitHub Advisory Database, OSV, VulnCheck, Tailscale, WatchGuard PSIRT, Anthropic, brangus.io, lexifina.com, expo.dev) |
+| Generated | 2026-10-28T20:20:56Z |
+| Items | 19 |
+| Sources tracked | 26 (Hacker News, GitHub Trending, GitHub API, Google, Hugging Face, arXiv, GitHub Changelog, GitHub Advisory Database, CVE.org, NVD, CISA KEV, kernel.org, Cursor, Surge AI, Rapid7, CISA, So-net, Help Net Security, BleepingComputer, Cloud Security Alliance, we-have-a-problem.com, nullpt.rs, fingerprint.garden, NVD API, VentureBeat, macro.com) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (3x daily) |
 | Ranking | Velocity-weighted (recency × engagement acceleration × source authority) |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |
 
 ---
 
-[Previous day](2026-10-27.md) · [Raw .md](2026-10-28.md) · [Archive](../archive/)
+[Previous day](2026-10-28.md) · [Raw .md](2026-10-29.md) · [Archive](../archive/)

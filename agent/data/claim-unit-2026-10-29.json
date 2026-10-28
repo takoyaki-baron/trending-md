@@ -1,0 +1,72 @@
+{
+ "generated": "2026-10-28T20:20:59.363Z",
+ "files": [
+  {
+   "file": "2026-10-29.md",
+   "items": 19,
+   "findings": [
+    {
+     "check": "issues",
+     "item": 11,
+     "verdict": "ok",
+     "claim": "2 issues + 5 PRs",
+     "detail": "split named (PR share 71%)"
+    },
+    {
+     "check": "cvss",
+     "item": 13,
+     "verdict": "advisory-unreadable",
+     "claim": "3.1 9",
+     "detail": "GHSA-49hg-9qhc-4623: no record in the global Advisory Database (a published repo page does not imply an ingested advisory) — \"I could not read it\" is not \"it does not say that\""
+    },
+    {
+     "check": "issues",
+     "item": 15,
+     "verdict": "ok",
+     "claim": "14 issues + 1 PRs",
+     "detail": "split named (PR share 7%)"
+    },
+    {
+     "check": "issues",
+     "item": 18,
+     "verdict": "ok",
+     "claim": "39 issues + 380 PRs",
+     "detail": "split named (PR share 91%)"
+    },
+    {
+     "check": "repo",
+     "item": 3,
+     "verdict": "unreadable",
+     "claim": "internlm/Atria-Dawn",
+     "detail": "api.github.com: Command failed: gh api repos/internlm/Atria-Dawn"
+    },
+    {
+     "check": "repo",
+     "item": 11,
+     "verdict": "ok-history",
+     "claim": "elayadesign/ai-design-skills",
+     "detail": "record 92d, oldest commit 2026-07-29 (~8 commits)"
+    },
+    {
+     "check": "repo",
+     "item": 11,
+     "verdict": "ok",
+     "claim": "elayadesign/ai-design-skills",
+     "detail": "10965★, last push 2026-10-27"
+    },
+    {
+     "check": "repo",
+     "item": 15,
+     "verdict": "ok",
+     "claim": "togg53192-cmd/jailbreaks",
+     "detail": "6918★, last push 2026-10-28"
+    }
+   ]
+  }
+ ],
+ "api_calls": 0,
+ "readme_calls": 0,
+ "cited_page_calls": 0,
+ "nvd_calls": 1,
+ "cna_calls": 0
+}
