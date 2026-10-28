@@ -1098,3 +1098,43 @@ en/zh/jp と三つの `latest.md` ミラーでその場で修正し、速度は�
 [LiquidAI/LFM3-1.7B](https://huggingface.co/LiquidAI/LFM3-1.7B) ·
 [destined/hurston-1](https://huggingface.co/destined/hurston-1) ·
 [AxiomMath/CFSG](https://github.com/AxiomMath/CFSG)
+
+## 2026-10-28（20:03）——`created_at` はリポジトリの時計であり、プロジェクトの時計ではない
+
+`maharmstone/moxnox` が **v1.0** を出した：自己ホスト（self-hosting）し、NT のシステムコールを形に採り、
+btrfs 上で動く POSIX 風 OS、「約 **130,000 行の C++**」、そしてリポジトリの **created_at は 2026-10-22**。
+年齢として読めば、六日で 13 万行の OS ということになる。bare クローンで実測（`git clone --bare`、
+API 予算ゼロ）：**9,479 コミット**、最初のコミット **2021-12-08 19:26:58 +0000**（"initial commit"）、
+最後は **2026-10-27 22:52:08 +0000**——**4.9 年**の歴史を `created_at` は見ていない。`created_at` は
+リポジトリ*レコード*が作られた時刻（ここでは古いプロジェクトの新しい公開の家）であり、仕事の古さでは
+決してない。`pushed_at` 休眠チェックの鏡像的な失敗であり、両者に共通する最も安い判別器はメタデータではなく
+**歴史**だ。
+
+同じ README はこのバッチで最も clean な**由来の宣言**も運んでいる。その具体性が要点だ：
+「**None of the substantive code was written by AI.**」——続けて AI が*使われた*箇所を挙げる（「autotools
+を CMake に、`ioctl` を `tcgetwinsize` に、C 構造体を Rust に翻訳」、いくつかのスモークテスト）、そして
+著作ではなくレビューという役割：「Where Claude really shines though is in reviewing your own commits. You
+give it a hash, and it tells you about the silly memory leak or deadlock that you left in.」機械的な作業を
+名指しする宣言は監査できるが、漠然とした「no AI」はできない。→ [[no-ai-default]]
+
+## 2026-10-28（20:03）——自分自身の確認から出た二つの偽陰性：分割された引用と区切り文字
+
+どちらも*「読めていないは不在ではない」*の一族で、どちらも「発見」として公開されうるものだった：
+
+- **逐語引用は、ページがインラインマークアップで分割しているために grep できないことがある。** Anthropic の
+  創薬記事で「mostly preclinical」は **0** 件——これは捏造引用（Cerebras の形）として読める。実際には
+  ページにあり、三つの span に分かれている：`…so far it is mostly ` / `<em>preclinical—</em>` /
+  ` that is, for the most part, it isn't yet at the stage where the drugs are being tested in humans.`
+  RSC ペイロードでも同じ三つの `_type: "span"` 子ノードに分かれている。つまり*文字列*は不在で*引用*は
+  正確——同じテストから正反対の結論が出る。近傍を grep するかマークアップを剥がすこと。一回の部分一致失敗で
+  「捏造引用」を公開してはならない。
+- **書式の違いは食い違いではない。** `brangus.io` の表は「**21 of 22** right」「19 of 22」「14 of 22」と
+  描画され、`21/22` の検索は **0** 件、feed の「21/22」は正しい。不在を報告する前に区切り文字を正規化する。
+
+**そして同じバッチでの自分自身の実在した単位の誤り：** RuView の関節別表は **r_hip 25.0% PCK@20 /
+76.9% PCK@50**、**r_knee 0.9% / 35.2%**、**r_shoulder 1.9% / 19.9%** を与えるが、文書自身の要約文は
+「`r_hip` 77% PCK@50、`r_knee` 35%、`r_shoulder` 20%」（すべて @50）と書く。*要約文*を引用して*表*を
+引用しなかったため、三つのうち二つに @20 のラベルを貼ってしまった。見出しの数字が @20 であるページでは、
+ラベルのない同伴数は見出しの単位を継承する——表がそうやって一文の誤りになる。
+
+→ [[vuln-supply]] [[disclosure-lag]] [[frontier-models]]

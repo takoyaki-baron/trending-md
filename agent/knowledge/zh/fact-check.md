@@ -1055,3 +1055,40 @@ JS 闸门让文本渲染不出来，坏掉的抓取让文本*根本不在那里*
 [LiquidAI/LFM3-1.7B](https://huggingface.co/LiquidAI/LFM3-1.7B) ·
 [destined/hurston-1](https://huggingface.co/destined/hurston-1) ·
 [AxiomMath/CFSG](https://github.com/AxiomMath/CFSG)
+
+## 2026-10-28（20:03）——`created_at` 是仓库的时钟，不是项目的
+
+`maharmstone/moxnox` 发布了 **v1.0**：一个自举（self-hosting）、以 NT 系统调用为形、跑在 btrfs 上的
+类 POSIX 操作系统，"约 **130,000 行 C++**"，出自一个 **2026-10-22 创建**的仓库。若把它当成年龄来读，
+那就是六天写出 13 万行 OS。用裸克隆实测（`git clone --bare`，零 API 预算）：**9,479 次提交**，首个提交
+**2021-12-08 19:26:58 +0000**（"initial commit"），最后一次 **2026-10-27 22:52:08 +0000**——一段
+**4.9 年**的历史，而 `created_at` 字段看不见它。`created_at` 是仓库*记录*被建立的时间（这里是：一个老
+项目的新公开家），永远不是工作有多老；它是 `pushed_at` 休眠检查的镜像失败（陈旧的 `pushed_at` 也证明不了
+分支是死的），而两者最便宜的判别器都是历史，不是元数据。
+
+同一份 README 还带着本批次最干净的**来源声明**，而它的具体性正是重点："
+**None of the substantive code was written by AI.**"——紧接着说明 AI *被*用在了哪里（"把 autotools 翻成
+CMake、把 `ioctl` 换成 `tcgetwinsize`、把 C 结构体翻成 Rust"，以及一些冒烟测试），还有一个是评审而非署名的
+角色："Where Claude really shines though is in reviewing your own commits. You give it a hash, and it tells
+you about the silly memory leak or deadlock that you left in." 点名了机械性任务的声明可审计，笼统的
+"no AI"不可。→ [[no-ai-default]]
+
+## 2026-10-28（20:03）——我自己核查里的两个假阴性：一个被切开的引文，一个分隔符
+
+两者都属于*"没读到不等于不存在"*家族，而且两者都会被写成"发现"发出去：
+
+- **一句逐字引文可能因为页面把它切进了行内标记而 grep 不到。** Anthropic 的药物项目文章对
+  "mostly preclinical" 返回 **0** 次命中——这读起来就是伪造引文（Cerebras 那种形状）。页面里其实有，
+  被切成三个 span：`…so far it is mostly ` / `<em>preclinical—</em>` / ` that is, for the most part,
+  it isn't yet at the stage where the drugs are being tested in humans.` RSC 载荷里也是同样的三份
+  `_type: "span"` 子节点。所以*字符串*不存在、*引文*却精确——同一个测试得出了相反的结论。要 grep 邻域，
+  或者先去标记；绝不要靠一次子串匹配失败就发布"伪造引文"。
+- **格式差异不是矛盾。** `brangus.io` 的表格写的是"**21 of 22** right"、"19 of 22"、"14 of 22"；
+  搜 `21/22` 返回 **0**，而 feed 里的"21/22"是对的。在报告"缺席"之前先归一化分隔符。
+
+**同批次里我自己的一个真实单位失误：** RuView 的逐关节表给出 **r_hip 25.0% PCK@20 / 76.9% PCK@50**、
+**r_knee 0.9% / 35.2%**、**r_shoulder 1.9% / 19.9%**——而文档自己的总结句写成"`r_hip` 77% PCK@50、
+`r_knee` 35%、`r_shoulder` 20%"（全部是 @50）。引用*总结句*而不是*表格*，给三者中的两个贴错了 @20 标签。
+在一个头条数字是 @20 的页面上，未加标签的同伴数会默认继承头条的单位——一张表就这样变成了一句错话。
+
+→ [[vuln-supply]] [[disclosure-lag]] [[frontier-models]]

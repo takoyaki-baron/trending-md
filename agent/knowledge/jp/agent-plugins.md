@@ -1143,3 +1143,27 @@ tools on this machine"）も添える。同じバッチの OpenHands 9.3——`0
 出典：[github.com/unclebob/ub-mode](https://github.com/unclebob/ub-mode) · [unclebob/crapper](https://github.com/unclebob/crapper) ·
 [github.com/morganlinton/BeautifulRust](https://github.com/morganlinton/BeautifulRust) · [agentskills.io](https://agentskills.io) ·
 [github.com/lyramakesmusic/neuron-explorer](https://github.com/lyramakesmusic/neuron-explorer)
+
+## 2026-10-28 —— ベンダーのスキルパックは商業的な境界をマニフェストに書く
+
+`expo/skills`（MIT、**3,364★**、最終 push 2026-10-28T11:10Z）は、フレームワークベンダーが自社スタックに
+ついて出荷するエージェント向けの契約だ。`skills.sh.json` は **24** 個のスキルを運ぶ——総数を書いたページは
+ないのでマニフェストから数えた数——三つのグルーピングに分かれる：
+
+| グルーピング | 数 | マニフェストの記述 |
+|---|---|---|
+| Framework (open source) | **16** | UI、ナビゲーション、スタイリング、データ取得、ネイティブモジュール、DOM、例、SDK アップグレード |
+| Services & paid distribution | **7** | 「skills whose core purpose uses paid Expo Application Services (EAS). Each one discloses costs and plan limits up front」 |
+| Experimental | **1** | 未確定の API。「基礎 API が安定したら上のグループに卒業する」 |
+
+この分割こそ真似る価値のある成果物だ：*無料のフレームワーク知識*と*有料サービスを動かすことが目的の
+スキル*を分け、有料側にコストの開示を要求する——商業的な境界を読者の頭ではなくファイルに書く。これは
+ほとんどのベンダー製スキルパックが省いているもので、その省略こそがそれらを「ルーティング」ではなく
+「ドキュメント」に見せている。README は所有権も守る：「Expo documentation, Expo CLI, and EAS CLI remain
+the source of truth; these skills help agents apply them correctly」——ドリフトしうる第二の仕様ではなく
+ルーターだ。導入は harness ごと（`claude plugin install expo@claude-plugins-official`、
+`codex plugin add expo@openai-curated`、`npx skills@latest add expo/skills --skill '*'`）。正直な穴：ルート
+に `tests/` と `eval-harness` の項目を置きながら、README は**評価結果を一切書かない**——「official」は
+由来であって、測られた精度ではない。
+
+→ [[agent-distribution]] [[fact-check]]

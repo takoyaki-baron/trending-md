@@ -13645,5 +13645,95 @@
     "en": "Vendor security advisories for its own products. The GS1900 CVE-2026-7273 advisory lists fixed firmware per model (corroborated by the CISA KEV entry) but itself shows no CVSS — the 8.8 exists only in the CNA-assigned CVE record (NVD Deferred). Cross-checked (09-22).",
     "jp": "自社製品のセキュリティ勧告。GS1900 CVE-2026-7273 勧告はモデル別修正ファームウェアを列挙（CISA KEV 掲載と一致）するが、ページ自体に CVSS なし——8.8 は CNA 採点の CVE レコードにのみ存在（NVD Deferred）。突合済み（09-22）。",
     "zh": "厂商自身产品的安全公告。GS1900 CVE-2026-7273 公告按型号列出修复固件（与 CISA KEV 条目互证），但页面本身无 CVSS——8.8 只存在于 CNA 评分的 CVE 记录（NVD Deferred）。已交叉核验（09-22）。"
+  },
+  "api.osv.dev": {
+    "cat": "security",
+    "cred": "high",
+    "density": "high",
+    "cv": 1,
+    "en": "OSV API endpoint (Google) — the machine-readable package-advisory index; answers \"is this package@version affected\". The CVE-level record often lists only GIT ranges, so a package-level advisory is the mapping that decides what a scanner can see.",
+    "zh": "OSV API 端点（Google）——机器可读的包级公告索引，用来回答“这个 package@version 是否受影响”。CVE 级记录常只给 GIT 范围，真正决定扫描器能否匹配的是包级公告。",
+    "jp": "OSV の API エンドポイント（Google）。機械可読なパッケージ単位のアドバイザリ索引で「この package@version は影響を受けるか」に答える。CVE レベルの記録は GIT 範囲のみのことが多く、スキャナが何を見えるかはパッケージ単位のアドバイザリで決まる。"
+  },
+  "brangus.io": {
+    "cat": "other",
+    "cred": "med",
+    "density": "med",
+    "cv": 1,
+    "en": "Personal project site (Survival LLM) — first-party for its own feature and accuracy claims; unusual in publishing its test method, sample size and per-tier results.",
+    "zh": "个人项目站点（Survival LLM）——自身功能与准确率声明的一手来源；少见地公开了测试方法、样本量与分档结果。",
+    "jp": "個人プロジェクトのサイト（Survival LLM）。自らの機能・精度主張の一次情報源。テスト手法・サンプル数・ティア別結果まで公開しているのは珍しい。"
+  },
+  "cfsg.axiommath.ai": {
+    "cat": "research",
+    "cred": "med",
+    "density": "high",
+    "cv": 1,
+    "en": "AxiomMath project site for the Lean 4 formalization of the Classification of Finite Simple Groups — first-party for milestones and dependencies; the artifact actual state belongs to the repo, not this page.",
+    "zh": "AxiomMath 的有限单群分类 Lean 4 形式化项目站——里程碑与依赖关系的一手来源；制品的实际状态属于仓库，而不是这个页面。",
+    "jp": "有限単純群分類の Lean 4 形式化に関する AxiomMath のプロジェクトサイト。マイルストーンと依存関係の一次情報源。成果物の実際の状態はリポジトリ側の情報。"
+  },
+  "docs.expo.dev": {
+    "cat": "vendor",
+    "cred": "high",
+    "density": "high",
+    "cv": 1,
+    "en": "Official Expo documentation — authoritative for Expo/React Native APIs and for the Expo Skills install paths; states itself that the docs and the CLIs remain the source of truth.",
+    "zh": "Expo 官方文档——Expo/React Native API 与 Expo Skills 安装路径的权威来源；它自己也声明文档与 CLI 才是事实来源。",
+    "jp": "Expo 公式ドキュメント。Expo/React Native の API と Expo Skills の導入手順の権威。ドキュメントと CLI が正であると自身で明記している。"
+  },
+  "gforth.org": {
+    "cat": "code",
+    "cred": "high",
+    "density": "med",
+    "cv": 1,
+    "en": "Gforth project site — first-party for release notes; its NEWS file is unusual in documenting which words are permanently supported, which is the compatibility contract for an embedder.",
+    "zh": "Gforth 项目站——发布说明的一手来源；其 NEWS 文件少见地写明了哪些词将永久受支持，这正是嵌入方需要的兼容性契约。",
+    "jp": "Gforth プロジェクトのサイト。リリースノートの一次情報源。NEWS ファイルが「恒久的にサポートされる語」を明記しているのは珍しく、組み込み側が要る互換性契約そのもの。"
+  },
+  "lexifina.com": {
+    "cat": "vendor",
+    "cred": "med",
+    "density": "med",
+    "cv": 1,
+    "en": "Legal-tech vendor blog — first-party for its own US Code reconstruction numbers and method; an engineering write-up rather than a third-party audit, so read its Limits section.",
+    "zh": "法律科技厂商博客——其美国法典重建数字与方法的一手来源；属于工程随笔而非第三方审计，务必读它的 Limits 一节。",
+    "jp": "リーガルテック企業のブログ。米国法典の再構成に関する自社の数値と手法の一次情報源。第三者の監査ではなくエンジニアリング記事なので、Limits の節まで読むこと。"
+  },
+  "microsoft.ai": {
+    "cat": "vendor",
+    "cred": "high",
+    "density": "med",
+    "cv": 1,
+    "en": "Microsoft AI product and news site — first-party launch posts and leaderboard placements; vendor-reported, so verify a cited ranking against the third-party board it names.",
+    "zh": "微软 AI 产品与新闻站——一手发布稿与榜单排名；属厂商自述，引用其排名时应回查它点名的第三方榜单。",
+    "jp": "Microsoft AI の製品・ニュースサイト。ローンチ記事とリーダーボード順位の一次情報源。ベンダー主張なので、引用している第三者ボードで順位を確認すること。"
+  },
+  "pkgs.tailscale.com": {
+    "cat": "vendor",
+    "cred": "high",
+    "density": "med",
+    "cv": 1,
+    "en": "Tailscale package repository — the artifact-level answer to \"did the patched build ship\"; can be ahead of the public changelog page, so check it before saying a fix is unreleased.",
+    "zh": "Tailscale 软件包仓库——在制品层面回答“修复版本是否已发布”；可能领先于公开更新日志页面，因此在断言修复尚未发布前应先查这里。",
+    "jp": "Tailscale のパッケージリポジトリ。修正版が出たかを成果物レベルで答える。公開チェンジログより先行することがあるため、未リリースと書く前に確認する。"
+  },
+  "spec-first.dev": {
+    "cat": "code",
+    "cred": "med",
+    "density": "med",
+    "cv": 1,
+    "en": "Spec-first project site — first-party documentation for a spec-driven agent workflow; states its own bypasses, including that the git hook gate yields to --no-verify.",
+    "zh": "Spec-first 项目站——规范驱动 agent 工作流的一手文档；它自己写明了绕过方式，包括 git hook 闸门可被 --no-verify 绕过。",
+    "jp": "Spec-first のプロジェクトサイト。仕様駆動エージェントワークフローの一次ドキュメント。git hook ゲートが --no-verify で破れることを含め、回避手段を自ら明記している。"
+  },
+  "stanforddaily.com": {
+    "cat": "news",
+    "cred": "med",
+    "density": "med",
+    "cv": 1,
+    "en": "The Stanford Daily, the university independent student newspaper — campus-level reporting; useful for named local sources, but legal claims should be checked against court documents.",
+    "zh": "《斯坦福每日》，该校独立学生报——校园层面的报道；可用于具名本地信源，但法律主张应以法院文书核对。",
+    "jp": "The Stanford Daily は同大学の独立系学生新聞。キャンパス単位の報道。名前の出る地元情報源には有用だが、法的な主張は裁判資料で確認すること。"
   }
 }

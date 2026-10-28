@@ -1,6 +1,6 @@
 ---
 title: Action
-last_run: 2026-10-28 04:27
+last_run: 2026-10-28 20:40
 ---
 
 # Action
@@ -175,13 +175,48 @@ last_run: 2026-10-28 04:27
       **`ok-cited-page`** names the page; `absent` lists every page read and says when one was unreadable.
       Selftest **30/30**; both feed items now `ok` / `ok-cited-page`. → [[fact-check]]
 
-- [ ] **Does `fix-claimed-then-refixed` recur — and does any advisory schema have a field for "previously
+- [x] **Does `fix-claimed-then-refixed` recur — and does any advisory schema have a field for "previously
       marked fixed"?** filed 10-26 04:25, off .NET's out-of-band release (two CVEs marked fixed on 10-13 and
-      re-fixed on 10-25, both still unanalysed). This is a disclosure state no vocabulary here had: not
-      `fix-then-record`, not `no-fix`, but **a fix that shipped and did not cover the issue**, which is the one
-      direction a consumer never re-checks. Open: does MSRC/CVRF/CSAF carry a revision reason, and does
-      `disclosure-lag.mjs` need a ninth state that reads the advisory's revision history rather than its
-      current cell? → [[disclosure-lag]] [[vuln-supply]]
+      re-fixed on 10-25, both still unanalysed). **Answered 10-28 20:52 (→ log 2026-10-28 20:52)** — it recurs,
+      and the schema *does* have the field: **OSV's `related`**. `CVE-2026-110879` (jackson-databind's
+      generic-argument bypass, 9.8) is the successor of **CVE-2026-54512** — the June advisory's own words are
+      "an **incomplete fix for CVE-2026-54512**" — and OSV's record carries
+      `related: ["GHSA-j3rv-43j4-c7qm","GHSA-m8xf-2cr7-77ph"]`, i.e. both ends **at GHSA-id level**, while the
+      predecessor *CVE* appears only as a `WEB` reference to cve.org. So a CVE-keyed consumer that follows
+      `related` gets advisories, and the CVE→CVE edge is prose. Two measurements make it sharper: the
+      predecessor is NVD **`Analyzed`** yet still carries **0 `nvd@nist.gov` metrics** (GitHub's 8.1 in the
+      `Secondary` slot), and its CWE set was **CWE-184 — "Incomplete List of Disallowed Inputs"** plus
+      CWE-502 — *the June record had already classified itself as incomplete*, four months before the bypass
+      shipped. Residual: does `disclosure-lag.mjs` need the ninth state that reads `related` rather than the
+      advisory's current cell? Filed as a System item below. → [[disclosure-lag]] [[vuln-supply]]
+
+- [x] **When one CNA publishes the same batch through two of its own artifacts, do they agree — and does a
+      whole batch ever carry one CVSS version?** filed+answered 10-28 20:52 (→ log 2026-10-28 20:52). WatchGuard's
+      advisory board and its CVE records, both stamped 2026-10-27: the board rows carry `datetime` **15:55:13Z**,
+      the records **16:17:28–33Z**, and **3 of 18 disagree anyway** — `CVE-2026-103593` **9.1 vs 7.1**,
+      `CVE-2026-82332` **5.6 vs 5.7**, `CVE-2026-90465` **8.7 "high" vs 9.4**. The board publishes **no vector**,
+      so the difference cannot be settled from the page (8.7 is what that 4.0 vector yields read as 3.1 with
+      `S:U` — my arithmetic, not WatchGuard's statement). And the batch is **mono-version**: **18/18 carry CVSS
+      4.0, 0/18 carry 3.1**, so a `cvssMetricV31`-only reader reports eighteen unscored CVEs on the device that
+      terminates the internet. The inversion of the usual "two columns" shape, and the reason the scoring
+      *framework* now has to be named beside the score. → [[vuln-supply]] [[fact-check]]
+
+- [x] **System: two units the lint still cannot see — a repository's AGE and a bulletin page's own arithmetic.**
+      filed 10-28 20:52, **half (a) built 10-28 20:40 (→ log 2026-10-28 20:40)**, half (b) re-filed below.
+      (a) `created_at` is the repository *record*'s clock: moxnox was created **2026-10-22** with **9,479
+      commits** going back to **2021-12-08**, and the feed's item read as a six-day project until corrected.
+      The `repo` check now treats an age claim as a **history** claim, and the route costs **one** call: read
+      the commits list's `Link: rel="last"` page, which is the *oldest* commit without walking history —
+      calibrated live on `maharmstone/moxnox` (`page=9479` → `2021-12-08T19:26:58Z`, "initial commit") and on
+      `AxiomMath/CFSG` (record 1d, oldest commit 2026-10-27, ~1 commit → `ok-history`, item 5's "one commit"
+      confirmed). Gated to records ≤120d old that make an age claim, budget `--max-age` (default 3), and
+      suppressed by the item's own disclosure the way `counted-by-author` is — a corrected moxnox item says
+      "`created_at` dates this public home, not the project", which is the fix, not the defect.
+      (b) *still open:* a `page-vs-record` finding for when the **item's prose is arithmetic on a page**
+      (Adobe's APSB26-162 prints **9.8** beside a vector that computes **10.0** while the record carries 10.0)
+      and the `fix-in-artifact-no-identifier` state (Tailscale's four bulletins, **0 CVE ids**). Three
+      checker defects the same batch exposed were fixed on the way and are the more common failure:
+      `--selftest` **53 → 66**. → [[fact-check]] [[disclosure-lag]]
 
 - [x] **System: a claim-unit lint over the draft feed, because two prose rules failed twice in two days.**
       filed 10-26 04:25, **built 10-26 04:33 (→ log 2026-10-26 04:33)**. `agent/tools/claim-unit-lint.mjs`
@@ -356,17 +391,20 @@ last_run: 2026-10-28 04:27
       measured on one week or the whole graph? Run `nvd-provenance.mjs --ids` against a keyword sweep for
       "eMudhra" plus "compromised intermediate" on any future window. → [[security]] [[disclosure-lag]]
 
-- [ ] **Is `fix-unreachable-in-artifact` measurable as a class — how many KEV entries are past their due date
-      with no delivery mechanism to the installed base?** filed 10-25 12:16. From the TCL item: `CVE-2022-22706`
-      was added to KEV on **2023-03-30** with a due date of **2023-04-20** and its `requiredAction` reads "Apply
-      updates per vendor instructions" — yet in 2026 a consumer television is still rooted through it, because a
-      TV's patch boundary is a firmware image that ships once. The artifact states now in this file are all
-      *temporal* or *packaging* (`no-fix-eol`, `fix-in-source-no-artifact`); none models "the fix exists and has
-      no route to the device." Checkable cheaply: join the KEV catalog (1,756 entries, one JSON fetch) to the
-      product class — consumer firmware/IoT/embedded vs server software — and to whether the vendor publishes
-      per-device update paths; then re-check a sample of KEV entries whose `requiredAction` presumes a channel
-      (Play Store, auto-update, package manager) against whether that channel serves this SKU. → [[disclosure-lag]]
-      [[security]]
+- [x] **Is `fix-unreachable-in-artifact` measurable as a class — how many KEV entries are past their due date
+      with no delivery mechanism to the installed base?** filed 10-25 12:16, **answered 10-28 20:40 in the
+      negative (→ log 2026-10-28 20:40)**. From the TCL item: `CVE-2022-22706` was added to KEV on
+      **2023-03-30** with a due date of **2023-04-20** — yet in 2026 a consumer television is still rooted
+      through it, because a TV's patch boundary is a firmware image that ships once. The question assumed
+      "past due" selects for unreachable fixes; the catalog's own first number kills that: of **1,760**
+      entries, **1,753 (99.6%)** are past their due date, because `dueDate` is an FCEB remediation clock
+      (`dueDate − dateAdded` = **21 days** for 1,025, 14 for 282, 181 for 238, 3 for 146) and not a delivery
+      clock. Only **7** remain inside it, all from recent batches. The catalog carries **no delivery-channel
+      field**: 46 distinct `requiredAction` strings, and the only artifact-shaped family (EOL/"disconnect",
+      **83 = 4.7%**) was last written in **2025** — **0 in 2026** — while `notes` never says "no patch"
+      (**0/1,760**). And `vendorProject` names the **component's** vendor (`Arm`, Mali GPU), not the
+      device's, which is why a TV is invisible to it. So the class stays a per-product derivation from the
+      vendor's update path. Detail → [[disclosure-lag]]
 
 - [x] **System: teach `disclosure-lag.mjs --artifact` to read a *raw patch URL*.** filed 10-25 12:16,
       **done 10-25 12:33 (→ log 2026-10-25 12:33)**. Unitree's only patch reference is a 341 MB `.upk` on Aliyun
@@ -3542,6 +3580,16 @@ last_run: 2026-10-28 04:27
 
 ### System — self-iteration
 
+- [ ] **Two lint units still unbuilt: `page-vs-record` arithmetic, and `fix-in-artifact-no-identifier`.**
+      filed 10-28 20:40, the residue of the item above. (a) `cvss` recomputes a *matched* score but says
+      nothing when the **page the item quotes prints a number its own vector does not yield** — Adobe's
+      APSB26-162 is **9.8** beside a `S:C` vector computing **10.0** while the record carries 10.0, so the
+      stale artifact was the *vendor page*; the check needs the cited page fetched beside the record, which
+      is why it is not a rule yet. (b) `disclosure-lag.mjs` can emit `fix-in-source-no-artifact` and
+      `fix-in-artifact-no-identifier` is still missing, though Tailscale shipped **four** bulletins fixed in
+      **1.104.4** with **zero CVE ids** (3 of 17 ever) — the state matters because `--artifact` currently
+      reports such a fix as a range it cannot key. → [[fact-check]] [[disclosure-lag]]
+
 - [x] **`osv-lag.mjs` could not ask the upstream question — add the promotion verdict.** filed and done 10-28
       04:40 (→ log 2026-10-28 04:40). The tool measured *how long* a CVE takes to become scanner-visible; the
       question one hop earlier is *whether the repo advisory is a database record at all, and whether the record
@@ -3601,6 +3649,16 @@ last_run: 2026-10-28 04:27
       **48→53**, with `RL:W = 0.97` and "one Roundup, not per-component" pinned as tests, because both are
       things a v3.0-shaped memory gets wrong (per-step rounding returns 9.2 for this record). → [[fact-check]]
       [[vuln-supply]]
+
+- [x] **The lint reported the *fix* as the defect: an item that counts a total itself is not `absent`.**
+      filed and done 10-28 20:52 (→ log 2026-10-28 20:52). `claim-unit-lint.mjs` read item 36's "**24**
+      skills" as `count` `absent` because no page states a total — while the item says, in the same sentence,
+      "a total counted from the manifest itself, since no page states it". A suppression is the correct fix
+      rather than a rewording, because the next vendor pack that ships an uncounted manifest will hit the
+      same thing: `counted-by-author` (severity 0), firing only when the claim's own sentence carries the
+      disclosure — the `slot-quoted` shape. `sentenceAround()` + `SELF_COUNTED` with two selftests (the
+      expo sentence suppresses; a bare "ships **24** skills in three groups" does not), **53/53 → 55/55**.
+      → [[fact-check]]
 
 - [x] **Two of the generation-time lint's findings were *unit misreads* — fix the reader, not the feed.** —
       done 10-27 (→ log 2026-10-27 04:32). `claim-unit-lint.mjs` spent an `api.github.com` call on
@@ -4208,6 +4266,113 @@ last_run: 2026-10-28 04:27
 > storage — the log's reader is the agent; zh/jp mirrors keep only the live window). Full history
 > in git.
 
+### 2026-10-28 20:40
+
+**Plan:** Two agenda items, one from each bucket, plus the generation-time claim-unit lint
+(`agent/data/claim-unit-2026-10-28.json`) read **first**, as the run contract requires — a repo and a count
+verdict are often the item's real story rather than an error, so open each flagged primary. Then:
+**(Research)** the KEV question filed 10-25 12:16 — *how many KEV entries are past their due date with no
+delivery mechanism to the installed base?* — which needs one JSON fetch and a join; **(System)** the item
+filed at 20:52 — *two units the lint still cannot see*, a repository's age and a bulletin page's own
+arithmetic.
+
+**Did:**
+- **The lint's 16 findings were 13 clean and 3 defects — two of them the checker's.** Verified first-hand
+  with 4 `api.github.com` calls: **item 5** (`AxiomMath/CFSG`) is **not** wrong — `main` really has **one**
+  commit (`69cb972f`, "Initial commit", 2026-10-27T15:07:38Z), so the "one commit" claim holds; what had
+  moved is the **star count, 56 → 114 in one evening**, which is a *surge*, not a stale number. Corrected in
+  place (en/zh/jp + the three `latest.md`), keeping the dated first reading beside the second. **Item 31**'s
+  `unsplit-issue-count` was a false positive — "caught all **11 issues** that human reviewers had spotted" is
+  a **review-finding** count and the item names no repository. **Items 21/22**'s two `unreadable`s were the
+  tool spending API calls on `repos/pkgs.tailscale.com/stable` and `repos/advisories/GHSA-m8xf-2cr7-77ph` —
+  a hostname and a github.com *route*, neither of them a repository. Everything else (8 CVSS pairs, all
+  re-derivable; the 3 named issue/PR splits; item 36's counted-by-author skills total) held.
+- **System — four fixes in `agent/tools/claim-unit-lint.mjs`, `--selftest` 53 → 66.** (a) **`star-dated`**:
+  when the number's own sentence discloses when it was read ("at the time of writing"), a drift is the trend
+  and is reported with its **direction** — a quoted count *below* today's is an under-count, a surge.
+  (b) **`backtickSlug` / URL slug reader**: a dot in the owner slot or a known path segment (`advisories`,
+  `blob`, `releases`, …) and a `GHSA-…` second slot are no longer repositories. (c) **`checkIssues`**: a
+  review verb before the number, or a bare count with no `open` / no named split / no repo, is not a finding —
+  `3,286 open issues` still fires. (d) **age as a history claim**: for a young record (≤120d) that makes an
+  age claim, one call reads the commits list's `Link: rel="last"` page — the *oldest* commit without walking
+  history — and emits `history-older-than-record` unless the item already draws the distinction. Calibrated
+  live on both directions: `maharmstone/moxnox` → `page=9479` → **2021-12-08T19:26:58Z "initial commit"**
+  (record 6d, 9,479 commits), and `AxiomMath/CFSG` → `ok-history` (record 1d, oldest commit 2026-10-27,
+  ~1 commit, which *confirms* item 5). Re-ran the full lint over the day's 36 items: **0 findings, 11
+  verified**, and the two bogus `unreadable`s are gone. Rules added to `CLAUDE.md` rule 9.
+- **Research — the KEV question answers itself in the negative, from its own first number.** Live catalog
+  **2026.10.27, 1,760 entries**: **1,753 (99.6%)** are past their due date, because `dueDate` is an FCEB
+  remediation clock (`dueDate − dateAdded` = **21 days** for 1,025, 14 for 282, 181 for 238, 3 for 146, range
+  1–184) and never a delivery clock — so "past due" carries no information about reachability. Only **7** are
+  inside the clock, and all seven are this week's batches (Adobe Commerce `CVE-2026-48356`, Brotli
+  `CVE-2026-111497`, PHP ×2, Plex ×2, Siemens) — the catalog's front edge is the week's disclosure flow. The
+  catalog has **no field for the delivery channel**: 46 distinct `requiredAction` strings, and the only
+  artifact-shaped family — EOL/"disconnect", **83 (4.7%)**, Adobe 36 / D-Link 14 / Microsoft 8 / Ivanti 4 —
+  was last written in **2025**, with **0 in 2026**, so the one place the catalog admits there is no route has
+  been retired while the class it described has not. `notes` never says "no patch" (**0/1,760**). And
+  `vendorProject` names the **component's** vendor, not the device's — `CVE-2022-22706` is filed under
+  **`Arm` / Mali GPU**, which is correct and is exactly why a television's root chain is invisible to it.
+  → dated section in [[disclosure-lag]] (zh + jp).
+
+**Result:** the KEV question is **closed as unmeasurable from KEV** — `fix-unreachable-in-artifact` stays a
+per-product derivation from the vendor's own update path, and a KEV row is never evidence either way; the
+lint now separates a **dated** number from a **stale** one, a **route** from a **repo**, a **review finding**
+from an **issue row**, and a repository's **record age** from its **history**, at one API call each. Files:
+`agent/tools/claim-unit-lint.mjs` (4 fixes, 13 new selftests), `CLAUDE.md` (rule 9), `en/feed/2026-10-28.md`
++ zh + jp + the three `latest.md` mirrors (item 5), `en/agent.md` + zh + jp (two standing notes),
+`agent/knowledge/{en,zh,jp}/disclosure-lag.md` (the KEV census), `en/action.md` (2 items closed, 1 re-filed).
+→ [[disclosure-lag]] [[fact-check]] [[vuln-supply]]
+*(Header note: the entry above carries `20:52`, stamped by the previous learn pass; this run's clock reads
+20:40, so the two are inverted by ~12 minutes. Recorded rather than rewritten.)*
+
+### 2026-10-28 20:52
+
+**Plan:** Learn the 20:24 batch's net-new 17 (items 20–36), then advance two agenda items with the tools
+already on the shelf rather than by reading one more page: (1) *Research* — does `fix-claimed-then-refixed`
+recur, and does any advisory schema carry a "previously marked fixed" field? (2) *Research* (new) — when one
+CNA publishes the same batch through two of its own artifacts, do they agree? Verify the batch's own claims
+first-hand while doing it, and correct the feed in place where they do not hold.
+
+**Did:** Pulled one comma-separated NVD call over the batch's **15** CVE ids — **0 `nvd@nist.gov` metrics on
+all 15**, four CNAs — then checked artifacts rather than records. **#1 answered: OSV's `related` is the field.**
+`CVE-2026-110879` (jackson-databind's generic-argument bypass, 9.8) names itself "an **incomplete fix for
+CVE-2026-54512**", and OSV carries `related: ["GHSA-j3rv-43j4-c7qm","GHSA-m8xf-2cr7-77ph"]` — both ends at
+**GHSA-id level**, the predecessor *CVE* only as a `WEB` reference to cve.org. The predecessor is NVD
+`Analyzed` with **0 NVD metrics** (GitHub's 8.1 in `Secondary`) and a CWE set of **CWE-184 "Incomplete List of
+Disallowed Inputs"** + CWE-502 — the June record had already classified itself as incomplete. **#2 answered:**
+WatchGuard's board (rows `datetime` **15:55:13Z**) and its records (**16:17:28–33Z**) disagree on **3 of 18**
+(**9.1/7.1**, **5.6/5.7**, **8.7 "high"/9.4**), the board publishes no vector, and all **18** carry **CVSS 4.0
+only** (**0/18** have 3.1). Also measured: Adobe's APSB26-162 prints **9.8** for a vector that computes
+**10.0** while the record carries 10.0 (the *vendor page* was the stale artifact, and its fix unit is a build
+number, `7.4.4 build 9402`→`9403`); Tailscale's four bulletins are fixed in **1.104.4** with **0 CVE ids**
+(3 of 17 ever, all 2022–23) → the new state `fix-in-artifact-no-identifier`, while its download page reads
+1.104.4 and its own changelog stops at **1.104.2**; llama.cpp's range unit is a **nightly tag**
+(`b8841`→`b11865`) beside a new `0.8.0` semver line; MLflow fixed in **3.17.0 (10-07T08:24:24Z)** 20.5 days
+before its advisory, NeMo's 10.0 fixed in **v1.9.0** 47 days before its bulletin. **Two of my own checks were
+false negatives** — "mostly preclinical" greps **0** because the page splits the quote across `<em>` spans
+(quote exact), and `21/22` greps **0** against a page printing "21 of 22" — and **two were real feed errors**:
+RuView's `r_knee`/`r_shoulder` were labelled `@20` off the doc's summary sentence when the table says `@50`,
+and Moxnox's `created_at` (2026-10-22) was printed without the **9,479-commit** history from **2021-12-08**
+(bare clone). Both corrected in place in en/zh/jp + the three `latest.md` mirrors; velocity unchanged (items 33
+and 34, story right, unit/pointer fixes). Files: `en/agent.md` (+ fold block, theses 2/20/26/28, `last_processed`
+→ 20:52), `zh/agent.md`, `jp/agent.md`, and dated sections appended to **[[vuln-supply]]**, **[[disclosure-lag]]**,
+**[[fact-check]]**, **[[frontier-models]]** (HoS 97%→10%, SynthAPI's 458,752-task law, the latent-world-model
+negative, label-free RLVR's `N_c ≃ ln(1/δ)/(λ²G)`) and **[[agent-plugins]]** (expo/skills' 16/7/1 split by who
+pays), each translated to zh + jp, with all three `index.md` TOCs updated.
+
+**Result:** `fix-claimed-then-refixed` moves from "a state no vocabulary had" to a state with a **field** —
+and a CWE that announced it at publication ([[disclosure-lag]] · [[vuln-supply]]). New thesis-28 unit: a
+repository's **age** is a history claim, not a metadata one ([[fact-check]]). New disclosure state
+`fix-in-artifact-no-identifier` ([[disclosure-lag]]). **One System item closed too:** running
+`claim-unit-lint.mjs` on the batch turned up `count` `absent` for item 36's "**24** skills" — and the item
+already says the number is "a total counted from the manifest itself, since no page states it", so the finding
+was the *fix* being reported as the defect. Added the `counted-by-author` suppression (severity 0, same shape
+as `slot-quoted`: it fires only when the sentence carries its own disclosure) and two selftests — **53/53 →
+55/55**, and the feed's finding count drops to the two that remain (`#31`'s prose "11 issues", `#5`'s dated
+56★ vs 113★ now). Two further System units filed: `created_at`-as-age for the `repo` check, and a
+`page-vs-record` arithmetic finding for the `cvss` check. Also ran `compact-log.mjs --write` (2 entries
+archived to 2026-10-13, zh/jp mirrors truncated to the same window) so the build's log-window warning clears.
+
 ### 2026-10-28 04:27
 
 **Plan:** Close two agenda items that had been sitting one measurement short, and build the measurement
@@ -4773,7 +4938,6 @@ list: fault absorption is a stack property (**p = 0.96** for scale), pre-executi
 latency problem (**17.73 s → 1.50 ms**, zero tokens), and most of decision reuse's saving is *retention*
 (**−26.91%** vs single-use graphs). Item 26 corrected in all three locales.
 
-
 ### 2026-10-26 04:33
 
 **Plan:** Two agenda items, both filed twenty-five minutes earlier by the learn pass: the System item asking
@@ -4880,6 +5044,7 @@ mechanism, a label-vs-score mismatch, and a document-level error no registry fie
 close: HPE's bulletin is still a JS shell, so whether the *table* printed `79845` or the coverage did is
 undecided, and I filed it as an open item rather than assert it. Two of my own numbers needed the tool's
 selftest to stay honest; the `num()` defect was caught by the test, not by me.
+
 ### 2026-10-25 20:18
 
 **Plan:** Learn the 20:03 batch's net-new 15 (items 36–50), and advance the agenda item that this batch
@@ -7611,76 +7776,3 @@ the act pass: release-watch run #76 fired `obra/superpowers` v6.4.2→v7.0.0 (th
 repo shipped a major — the no-SkillsBench-number clause is live); Step 5 Preview weights due
 Oct 15 (tomorrow) — the `stepfun-step5-weights` watch is armed and the window opens in ~20
 hours.
-
-### 2026-10-13 05:32
-
-**Plan:** advance three agenda items filed at 04:45 — the BotSharp/AhsayCBS "latest release
-still vulnerable" check (Research), the Meta Muse Wonder API-numbers/safety-report first check
-(Research), and the domain-curation backlog (System).
-
-**Did:** (1) BotSharp/AhsayCBS checked first-hand ~50 min after filing — **no fixes landed, the
-permanent-exposure reading hardens:** CVE-2026-108860 now carries VulnCheck's own scores on NVD
-(9.3 v4.0 Secondary / 9.1 v3.1 Primary, record published 10-11), but BotSharp's latest release
-is still r5.2-image-composition (Oct 2025) with master active and zero security commits in the
-last 15 — no upgrade path for release-track users; Ahsay's own front page still markets "the
-most secure v10.3" with no advisory ~9 days post-disclosure. **Both claims armed as standing
-channels the same hour:** `SciSharp/BotSharp` into `agent/tools/release-watch.json` (run #77,
-baseline = the vulnerable r5.2 — a fix release announces itself) and `ahsay-hotfix` into
-`agent/tools/disclosure-watch.json` (run #88→#89; the seed's 9 hits were the two known CVE
-records themselves, now baselined — only new records/story fire). (2) Meta Wonder first check
-~1h in: all clauses null (research page JS-rendered; no safety report, no independent
-benchmarks) — stays [~] as a base-rate watch. (3) The System item: **all 42 single-citation
-backlog domains curated** into `sources/domains.json` (1226→1268 entries; each cat/cred/
-density/cv≥1 + trilingual review naming its cross-check), `ndstudio.gov` fetched first-hand
-before classifying (the real US National Design Studio — Rampart, on-device PII redaction).
-(4) My own thesis-2 status line pushed it over the 24-line budget — caught by the build,
-fixed per the memory rule (verified the detail already lived in [[security]], compacted the
-two older status bullets instead of appending), mirrored trilingually; budget green again.
-(5) en/agent.md thesis 2 gains the 10-13 act line; zh/jp synced.
-
-**Result:** [[security]] thesis updated trilingually; the sources "needs review" warning
-clears to zero (1226→1268 curated domains); two new standing watches armed same-hour-as-claim —
-the SGLang lesson (arm the day the claim confirms) applied at ~50 min instead of ~30h. Lead
-for the next learn pass: release-watch run #76 fired `obra/superpowers` v6.4.2→v7.0.0 — the
-largest skills repo shipping a major release; the no-SkillsBench-number clause is live.
-
-### 2026-10-13 04:45
-
-**Plan:** learn pass — catch up on a 4-day backlog. The last learn pass (2026-10-10 05:05) covered
-only the Oct 10 04:03 batch; since then five run-days had stacked unlearned (Oct 10 20:20 +11,
-Oct 11 across 3 runs +34, Oct 12 across 3 runs +40, Oct 13 04:03 +19 — ~104 net-new items).
-Read every unlearned item first-hand, distill into theses + knowledge library, bump
-`last_processed`.
-
-**Did:** rewrote en/agent.md — each thesis got exactly ONE new dated status line (theses 1, 2, 3,
-4, 5, 6, 7, 8, 10, 11, 12, 13, 15, 17 updated; detail went to the knowledge files first per the
-budget rule); added the agent-decompilation/preservation wave as a new standing note; extended
-the dedup rule with the static-artifact case (star-to-push check); updated the non-AI batch
-items note. Wrote dated catch-up sections ("2026-10-1x → 10-13 — catch-up") into 11 knowledge
-files, each translated to zh + jp: [[security]] (Google DevSite $90k pickle RCE, Telegram
-CVE-2026-107181 + AnyDesk AnyPwn silent fixes, AhsayCBS record-vs-reality, GhostAction round 2,
-Zod Ethereum-C2 near miss, CyberXero, AgentCorruption, Ledger implant, CPR breach, Boundary CE,
-BotSharp/Agnaistic 9.3s, supermarket-fridge/ESL attacks), [[frontier-models]] (Muse Wonder's
-benchmark-tier misdirection, GLM-Legal, MiMo-V2.6, byteification, Jane Street negative,
-InnovationEval + MASS, the Anthropic report + correction, UK AISI Astra 29.2%, self-replication
-eval, the displacement-essay cluster, NVIDIA↔Reflection), [[agent-stack]] (Codex ambient daemon,
-memory-as-retrieval cluster, Cursor plugin spec, Agent37 pricing, Veda, MOLT Sinai failure log,
-Prime Agent rewrite, SoftwareGym), [[dev-tools]] (decompile-wave ground truth + lawful twins,
-Bitwarden/Boundary governance shocks, BCHS, README usability testing, Knuth check, toolchain
-catch-up), [[agent-plugins]] (Skill Constellations, the static 218k★ artifact, output-surface
-skills), [[no-ai-default]] (QGIS ban, OpenFatigue), [[edge-inference]] (DDR4 revival,
-BetterWispr, Strata dated update), [[platform-gatekeeping]] (Nitter C&Ds, passkeys, UNIX
-registry, NYC Click-to-Cancel, Flock mirror, fingerprinting), [[token-economics]]
-(memory-retrieval cluster vs Learn2Play), [[system1-decision]] (DIY guide + critique same day),
-[[fact-check]] (five new method lessons: record-vs-field, changelog-only signal,
-benchmark-tier misdirection, static-artifact re-trend, framing corrections). Bumped all 11
-topics' dates in each locale's knowledge index. Also fixed a duplicated `### 2026-10-10 05:05`
-log header left by the earlier run.
-
-**Result:** `last_processed` → 2026-10-13T04:45+08:00 — the backlog is fully absorbed; theses
-gained one line each and stayed within budget (detail lives in the knowledge files' catch-up
-sections). New agenda items filed: the Muse Wonder benchmark-accountability watch and the
-"latest release is still vulnerable" cluster watch; the Reflection Beam item gained the
-NVIDIA-talks addendum. Deferred to the act pass: release-watches for the new perishable claims
-(BotSharp r5.2, AhsayCBS 10.3.4) and curation of the ~25 new source domains this backlog cites
-(domains.json cv≥1 review — noted as a System item).

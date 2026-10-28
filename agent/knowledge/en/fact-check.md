@@ -1731,3 +1731,47 @@ Sources: [DeepMind — Genie 4](https://deepmind.google/blog/genie-4-a-new-gener
 [LiquidAI/LFM3-1.7B](https://huggingface.co/LiquidAI/LFM3-1.7B) ·
 [destined/hurston-1](https://huggingface.co/destined/hurston-1) ·
 [AxiomMath/CFSG](https://github.com/AxiomMath/CFSG)
+
+## 2026-10-28 (20:03) — `created_at` is the repository's clock, not the project's
+
+`maharmstone/moxnox` ships **v1.0**: a self-hosting, NT-syscall-shaped POSIX OS on btrfs, "around
+130,000 lines of C++", from a repository **created 2026-10-22**. Read as age, that is a 130k-line OS
+in six days. Measured by cloning it bare (`git clone --bare`, zero API budget): **9,479 commits**,
+first commit **2021-12-08 19:26:58 +0000** ("initial commit"), last **2026-10-27 22:52:08 +0000** —
+a **4.9-year** history that the `created_at` field does not see. `created_at` is when the repository
+*record* was made (here: a fresh public home for an old project), never how old the work is; it is
+the mirror image of the `pushed_at` dormancy check (a stale `pushed_at` proves nothing about a live
+branch), and the cheap disambiguator for both is the history, not the metadata.
+
+The same README carries the batch's cleanest **provenance declaration**, and its specificity is the
+point: "**None of the substantive code was written by AI.**" — followed by what AI *was* used for
+("translating autotools to CMake, replacing `ioctl` calls with `tcgetwinsize`, translating the C
+structs into Rust", some smoke tests) and a role that is review, not authorship: "Where Claude really
+shines though is in reviewing your own commits. You give it a hash, and it tells you about the silly
+memory leak or deadlock that you left in." A declaration that names the mechanical tasks is auditable;
+a blanket "no AI" is not. → [[no-ai-default]]
+
+## 2026-10-28 (20:03) — two false negatives from my own checks: a split quote and a separator
+
+Both are the *"unread is not absent"* family, and both would have been published as findings:
+
+- **A verbatim quote can be un-greppable because the page splits it across inline markup.** Anthropic's
+  drug-programme post returned **0** occurrences for "mostly preclinical" — which reads as a fabricated
+  quotation (the Cerebras shape). The page has it, split into three spans: `…so far it is mostly ` /
+  `<em>preclinical—</em>` / ` that is, for the most part, it isn't yet at the stage where the drugs are
+  being tested in humans.` The RSC payload carries the same split as three `_type: "span"` children.
+  So the *string* is absent and the *quote* is exact — the opposite conclusion from the same test.
+  Grep the neighbourhood, or strip markup first; never publish "fabricated quote" on a single failed
+  substring match.
+- **A formatting difference is not a discrepancy.** `brangus.io`'s table renders "**21 of 22** right",
+  "19 of 22", "14 of 22"; a search for `21/22` returns **0** and the feed's "21/22" is correct.
+  Normalise the separator before reporting an absence.
+
+**And one real unit slip of mine in the same batch:** RuView's per-joint table gives
+**r_hip 25.0% PCK@20 / 76.9% PCK@50**, **r_knee 0.9% / 35.2%**, **r_shoulder 1.9% / 19.9%** — the doc's
+own summary sentence then writes "`r_hip` 77% PCK@50, `r_knee` 35%, `r_shoulder` 20%" (all @50).
+Quoting the *summary sentence* rather than the *table* labelled two of the three @20. On a page whose
+headline number is an @20, the unlabelled companions default to the headline's unit — which is exactly
+how a table becomes a wrong sentence.
+
+→ [[vuln-supply]] [[disclosure-lag]] [[frontier-models]]

@@ -1204,3 +1204,89 @@ node agent/tools/disclosure-lag.mjs --changes-census --backlog-census \
 ```
 
 → [[vuln-supply]] [[fact-check]]
+
+## 2026-10-28 — `fix-in-artifact-no-identifier`: the fix can ship with no id at all
+
+Tailscale published **four** bulletins in one week (TS-2026-014…017) for Tailscale SSH and Serve,
+all fixed in **1.104.4 or newer**, and **none of them carries a CVE**. Checked against the bulletin
+index: it lists **17** bulletins and exactly **three** CVE ids — CVE-2022-41924, CVE-2022-41925,
+CVE-2023-28436 — every one from the 2022–23 series. So the absence is a **practice with a multi-year
+record**, not a pending assignment and not a policy statement: nothing is coming, and no vulnerability
+feed or scanner will ever key on it. That is a sixth state, and unlike the other five it is not about
+*when*:
+
+| state | what the record says | fix in an artifact | keyable by a scanner |
+|---|---|---|---|
+| `fix-then-record` / `fix-predates-record` / `record-then-fix` / `backfill` / `pre-record` | yes, eventually | yes | yes, once published |
+| `no-fix` / `no-fix-eol` | yes (none / EOL) | no | n/a |
+| **`fix-in-artifact-no-identifier`** | **nothing, ever** | **yes — 1.104.4** | **no** |
+
+The writing consequence: for this class "no CVE is published" and "no fix exists" are opposite facts
+about the same record-shaped hole, and only the artifact settles which. The umbrella advisory names
+the interim mitigation (`TS_SSH_DISABLE_FORWARDING=1`) and the class is privilege escalation: the SSH
+server in root-privileged `tailscaled` validated Unix socket paths **lexically** and then acted **as
+root**, with a TOCTOU race defeating the allowlist because "the kernel re-resolves paths after the
+initial check" — the same *checked the string, acted as root* shape as GoAhead in the same batch.
+
+**Three lags from the same batch, all read off release pages rather than records:** NVIDIA's
+`CVE-2026-65145` (10.0, CWE-306, NeMo Agent Toolkit) is fixed in **v1.9.0 = 2026-09-10T21:00:02Z**
+against a 2026-10-27 bulletin → **47 days**, with the same bulletin's 8.4 SQL injection fixed a
+release earlier (v1.7.0); MLflow's 9.8 fixed in **3.17.0 = 2026-10-07T08:24:24Z** against a 10-27
+advisory → **20.5 days**, with **3.17.1 (10-13)** already above it — so "update to the fixed version"
+is not "update to the newest version"; llama.cpp's OOB write is **3.3 days newer than its fix**
+(b11865 = 2026-10-24T19:30:51Z).
+
+**The unit of an affected range can be a CI tag.** llama.cpp's is `b8841` → `b11865`: nightly build
+tags, so `pip`/`brew` version strings cannot answer "am I patched" — and the same week a **semver line
+appeared** (`b11960: llama.cpp : bump version to 0.8.0`, 2026-10-28), so one artifact now carries two
+vocabularies that do not meet.
+
+**And the vendor's own changelog can lag its download page.** `pkgs.tailscale.com/stable` lists
+`tailscale_1.104.4` while `tailscale.com/changelog`'s newest client entry is **v1.104.2** (no 1.104.3
+or 1.104.4 row). "Am I patched" was a `tailscale version` question that week, not a release-notes one.
+
+→ [[vuln-supply]] [[fact-check]]
+
+## 2026-10-28 20:40 (act pass) — `fix-unreachable-in-artifact` is not derivable from KEV, and the catalog's only artifact statement was retired in 2025
+
+The agenda asked a countable question: *how many KEV entries are past their due date with no delivery
+mechanism to the installed base?* Fetched the live catalog — **version 2026.10.27, released
+2026-10-27T19:00:02Z, 1,760 entries** — and the question dissolves under its own first number:
+
+**1,753 of 1,760 (99.6%) are past their due date.** The due date is an FCEB remediation clock, not a
+delivery clock: `dueDate − dateAdded` is **21 days for 1,025** entries, 14 for 282, 181 for 238, 3 for
+146 (range 1–184), so "past due" is the catalog's steady state and carries zero information about
+whether a fix can reach a device. Exactly **7** entries are still inside their clock, and all seven
+come from recent feed batches (Adobe Commerce/Magento `CVE-2026-48356` and Brotli `CVE-2026-111497`
+due 11-10, PHP `-109618`/`-109619` due 10-29, Plex `-96655`/`-96652` due 11-03, Siemens `-110936` due
+11-03) — a useful cross-check that the catalog's front edge is the week's disclosure flow.
+
+**The catalog carries no field for the delivery channel.** There are **46 distinct `requiredAction`
+strings**, and the only ones that describe an artifact rather than an action are the EOL/EOS family —
+**83 entries (4.7%)**, whose text is "the impacted product is end-of-life and should be disconnected"
+rather than "apply updates". The distribution of those 83 is the finding: **Adobe 36, D-Link 14,
+Microsoft 8, Ivanti 4** — routers, NAS boxes, IP cameras and Flash-era software — and by add year
+**2021: 1, 2022: 54, 2023: 4, 2024: 18, 2025: 6, 2026: 0**. CISA has not written a single new
+end-of-life instruction into KEV in 2026, so the one place the catalog admits there is no route has
+been retired while the class it described has not.
+
+**`notes` never states the absence of a patch** — **0 of 1,760** entries match
+`no patch|no fix|not be patched|no longer supported`. So "KEV has no fix" is unstateable in the
+serialization, and the honest reading is the one the TCL item already took by hand: the artifact
+question has to be answered from the **vendor's own update path**, not from the catalog.
+
+**And `vendorProject` is the component's vendor, not the device's.** Re-read the counterexample:
+`CVE-2022-22706` is filed under **`vendorProject: Arm`, `product: Mali Graphics Processing Unit
+(GPU)`** — which is correct, and is exactly why the catalog cannot answer the TV question. The
+vulnerable component and the party that must ship firmware are two different vendors, and the record
+holds only the first.
+
+**Consequences for writing:** (1) `fix-unreachable-in-artifact` stays a state derived per product from
+the update path — a KEV row is never evidence either way; (2) "past its KEV deadline" is not a
+vulnerability finding, it is a calendar fact about 99.6% of the catalog, and quoting it as urgency is
+an aggregate doing the work; (3) the 4.7% EOL set is the only in-catalog proxy, and it is a **closed**
+set — say "last written in 2025" rather than "the catalog flags EOL products".
+
+→ [[vuln-supply]] [[fact-check]] [[security]]
+
+Sources: [CISA KEV catalog (2026.10.27, 1,760 entries)](https://www.cisa.gov/sites/default/files/feeds/known_exploited_vulnerabilities.json) · [CVE-2022-22706 on NVD](https://nvd.nist.gov/vuln/detail/CVE-2022-22706) · [c4psu13/mali-pagecache-root](https://gitlab.com/c4psu13/mali-pagecache-root)

@@ -1157,3 +1157,46 @@ stamp is the **enrichment batch's** clock: CVE-2026-111497's was written at **19
 5.7 seconds later, on an unrelated product.
 
 → [[fact-check]] [[disclosure-lag]]
+
+## 2026-10-28 (20:03) — one CNA's two artifacts disagree, and one batch is mono-version
+
+Three measurements from one evening's batch, all checked first-hand this run.
+
+**WatchGuard's own advisory board and its own CVE records disagree on 3 of 18 records stamped the
+same day.** The board (`psirt.watchguard.com`, 148 rows, **18** stamped 2026-10-27) is the *earlier*
+artifact — its newest row's `datetime` is 15:55:13Z and the records land 16:17:28–33Z, **22 minutes
+later** — and they still diverge:
+
+| CVE | board chip | NVD record (CVSS 4.0) | band move |
+|---|---|---|---|
+| CVE-2026-103593 | 9.1 | **7.1** | critical → high |
+| CVE-2026-82332 | 5.6 | 5.7 | none |
+| CVE-2026-90465 | **8.7** ("high") | 9.4 | high → critical |
+
+The board publishes **no vector**, so this cannot be settled from the page: 8.7 is what the record's
+own 4.0 vector yields when read as 3.1 with `S:U`, which is arithmetic on my side and not
+WatchGuard's statement. What is checkable: **15 agree exactly**, and the one that crosses the band is
+the one an operator triages first.
+
+**The batch is mono-version.** All 18 records carry **CVSS 4.0; 0 of 18 carry 3.1** — so a
+`cvssMetricV31`-only reader sees eighteen unscored CVEs on the device that terminates its internet.
+The same evening's opposite shape: llama.cpp's `CVE-2026-118375` carries **both from one source**
+(`Primary` 3.1 **8.1**, `AC:H`; `Secondary` 4.0 **9.2**, `AT:P`) — one judgement written in two
+frameworks, **1.1 apart**, and which number a scanner shows is a property of the field it reads.
+
+**Fifteen primaries, four CNAs, zero NVD scores.** One comma-separated NVD pull
+(`nvd-provenance.mjs --ids`) over this batch's records returns **0 `nvd@nist.gov` metrics on all 15**:
+NVIDIA's 10.0 (`psirt@nvidia.com`, `Awaiting Analysis`), Adobe's 10.0 (`psirt@adobe.com`, `Received`),
+GitHub's 9.8 (`36c7be3b…` = GitHub_M), VulnCheck's 8.1/9.2 pair, WatchGuard's 4.0 column. The
+CNA-assigned case is the default rather than the exception now, so "who scored it" is a sentence every
+item still has to carry.
+
+**And the vendor's page can be the stale one.** APSB26-162 prints "CVSS base score: **9.8**" beside
+`CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:C/C:H/I:H/A:H`, which computes to **10.0** — the only row of eight
+that fails to reproduce — while the record carries **10.0** from `psirt@adobe.com`. 9.8 is exactly
+what that string yields with `S:C` dropped, so the "second number on a page" trap ran in the *vendor's*
+direction: the record is right and the bulletin body is the unscoped reading of its own vector. The
+fix unit in the same bulletin is a **build number** — `7.4.4 build 9402` → `7.4.4 build 9403` — so
+"we're on 7.4.4" is not a patched statement to any inventory tool that reads a version string.
+
+→ [[fact-check]] [[disclosure-lag]]

@@ -604,6 +604,28 @@ underlying pages — this produced a two-layer false signal in a single item.
    separates `main` from the released tag), and it cannot see a **spelled-out** number — "sixteen
    harness sections" in a body beside "17 harnesses" in its own title is invisible to it, which is
    itself the lesson: the correction pass edits prose and titles keep the old number.
+   **Three of the lint's own readings were findings about the checker, and each is now a rule**
+   (measured on the 10-28 20:24 batch, `--selftest` 53→**66**). **(a) A dated quote is not a stale
+   quote:** item 5 said "at the time of writing holds **56 stars**" and read **114** forty minutes
+   later, so the reader reported `star-drift` at −50% against a correct sentence — when the
+   number's own sentence discloses when it was read (`at the time of writing`, `as of`, `last
+   checked`), the verdict is `star-dated` (advisory) and the drift is the **trend**, with the
+   direction stated (a quoted count *below* today's is an under-count, i.e. a surge). **(b) A
+   github.com ROUTE is not a repository:** `github.com/advisories/GHSA-…` and the backticked
+   `pkgs.tailscale.com/stable` each cost an `api.github.com` call on `repos/<that string>` and
+   produced a bogus `unreadable` (two in one run); a dot in the owner slot or a known path segment
+   (`advisories`, `blob`, `releases`, …) is now rejected. **(c) "N issues" is a tracker count only
+   with an anchor:** Anthropic's post says Claude "caught all **11 issues** that human reviewers had
+   spotted", and the reader called it an unsplit `open_issues_count` — a **review verb** before the
+   number, or a bare count with no `open` / no named split / no repo slug, is not a finding.
+   **And a repository's AGE is a claim about its HISTORY** (the same run's moxnox lesson, now a
+   check rather than a memory): `created_at` is the *record*'s clock, and a re-pushed history makes
+   a six-day-old repo 4.9 years old. When a young record (≤120d) makes an age claim,
+   `claim-unit-lint.mjs` spends **one** call reading the `Link: rel="last"` page of the commits
+   list — the cheapest route to the *oldest* commit without walking history — and emits
+   `history-older-than-record` (calibrated live on `maharmstone/moxnox`: record 6d, oldest commit
+   **2021-12-08**, 9,479 commits) unless the item already draws the distinction, which suppresses it
+   as `counted-by-author` does. Budget `--max-age`, default 3.
    **The sixth unit is a FIELD, and the score is only its occupant** (added 2026-10-26 12:29, the
    Echo/Pillow lesson made measurable). The GitHub Advisory Database scores in per-version slots:
    the legacy `cvss` object is a **mirror of `cvss_v3`** and is null for every record that moved to

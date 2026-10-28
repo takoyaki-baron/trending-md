@@ -2815,3 +2815,36 @@ Virology），所以类别与阈值永远不能当一件事引用。
 Sources: [paper.pdf](https://github.com/openai/math/blob/main/preprints/The-Exponential-Time-Hypothesis-is-False-October-25-2026/paper.pdf) ·
 [openai/math preprints](https://github.com/openai/math/tree/main/preprints) ·
 [HN discussion](https://news.ycombinator.com/item?id=50251661)
+
+## 2026-10-28（20:03）——防御移进了注意力内部，世界模型的否定结论被量了出来
+
+一批四篇论文，摘要逐字读过（引文同时对照 abs 页与 HTML 全文）。
+
+- **Heads of Security / HoS（arXiv 2610.37657，9 位作者——Imperial College London、Tübingen AI Center、
+  ELLIS、MPI-IS、Fraunhofer HHI）。** 一种提示注入防御，通过"一小组可学习的**逐头注意力门**"强制
+  "指令-数据分离"——它学习每个头如何在可信与不可信 token 之间重新分配注意力，而不是把模型微调成
+  "忽略注入指令"。在 Llama-3.3-70B-Instruct 与 GPT-OSS-20B 上：黑盒 **RL-Hammer 97% ASR** 打到
+  GPT-OSS-20B，在 HoS 下只有 **10%**；对 SecAlign 是 **85%**；白盒 **Claudini**"经 autoresearch 针对
+  HoS 加强"，要达到同样 ASR 需要 **3 倍 FLOPs**。边界就在论文自己的句子里："On agentic benchmarks with
+  static attacks, HoS and SecAlign perform similarly and substantially improve the security–utility
+  trade-off over the base model"——所以差距在注入测试集上，agentic 上只是**持平**；ASIDE 在工具使用上
+  只有 **10% 效用**。残余的 10% 是威胁模型内部的另一个可学习组件。
+- **SynthAPI（2610.37648，8 位作者）。** 一条工具使用 agent 的缩放律，跨 **458,752 个任务**与
+  **849 个四尺寸已训练模型**：随着数据预算增长，扩**工具与数据库的多样性**比增加任务数更有效，提高数据
+  **复杂度**收益更大。限定条件是"多样性"是什么——沿管线可控的三个 API 表面轴的组合式扩张——而"超越既有
+  工作"那几行是在该家族被调优过的同样四个基准上量的。一条*合成家族内部*的律；摘要没有给出生产长尾工具
+  情形的系数。
+- **忠实潜世界模型（2610.37588，2 位作者）。** 把"忠实"定义成环境转移映射与学到的潜动力学之间的
+  **等变条件**，提出**潜 rollout 一致性（LRC）**，并给出否定结论："across the studied state of the art
+  latent world models, none solves the task by actually faithfully modeling the dynamics of the
+  environment." 诊断指向评测——基准"强调任务表现，却对学到的世界模型是否获得反映环境底层结构的预测性
+  潜动力学提供了有限洞见"。它与 Genie 4 自己的局限（视觉细节与客体永久性"随时间漂移"）成对：一段满足奖励
+  的 rollout 不必编码转移函数——做预可视化够用，做规划不够。摘要没点名**任何模型、数据集或 LRC 数值**，
+  所以"none"是关于一个未被枚举集合的断言。
+- **无标签 RLVR 崩塌（2610.37553，一位作者）。** 自洽奖励的崩塌*是因为*题集很大：逐题锐化以 **1/N** 变慢，
+  而共享模式以 **∝ λ²** 增长、与 N 无关，于是 `N_c ≃ ln(1/δ)/(λ²G)`，一个控制参数 **λ²NG** 统领耦合、
+  置信度剖面与训练变体。模拟给出尖锐相变，`N_c ∝ λ⁻²`（带对数修正）、对批大小的对数依赖、
+  **初始模型自信时不崩塌**，以及一个核版本：移除共享方向"完全阻止崩塌"。可操作的倒转是——**扩大题集本身
+  就是失效模式**——这与"数据瓶颈"的直觉相反，而解法是结构性的（移除或惩罚共享方向），不是调学习率。
+
+→ [[harness-reliability]] [[security]] [[fact-check]]

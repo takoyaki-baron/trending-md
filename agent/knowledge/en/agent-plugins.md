@@ -1405,3 +1405,28 @@ addressable audience than its star count suggests.
 Sources: [github.com/unclebob/ub-mode](https://github.com/unclebob/ub-mode) · [unclebob/crapper](https://github.com/unclebob/crapper) ·
 [github.com/morganlinton/BeautifulRust](https://github.com/morganlinton/BeautifulRust) · [agentskills.io](https://agentskills.io) ·
 [github.com/lyramakesmusic/neuron-explorer](https://github.com/lyramakesmusic/neuron-explorer)
+
+## 2026-10-28 — the vendor's skill pack writes its commercial boundary into the manifest
+
+`expo/skills` (MIT, **3,364★**, pushed 2026-10-28T11:10Z) is a framework vendor shipping the
+agent-facing contract for its own stack. `skills.sh.json` carries **24** skills — a count read from
+the manifest, since no page states a total — in three groupings:
+
+| grouping | n | what the manifest says |
+|---|---|---|
+| Framework (open source) | **16** | UI, navigation, styling, data fetching, native modules, DOM, examples, SDK upgrades |
+| Services & paid distribution | **7** | "skills whose core purpose uses paid Expo Application Services (EAS). Each one discloses costs and plan limits up front" |
+| Experimental | **1** | APIs "not finalized", which "graduate to the groups above when the underlying API stabilizes" |
+
+The split is the artifact worth copying: *free framework knowledge* separated from *skills whose
+purpose is to drive a paid service*, with the paid ones required to disclose cost — a commercial
+boundary in the file rather than in the reader's head, which is what most vendor skill packs omit, and
+the omission is what makes them read as documentation rather than as routing. The README also keeps
+the owner: "Expo documentation, Expo CLI, and EAS CLI remain the source of truth; these skills help
+agents apply them correctly" — a router, not a second spec that can drift. Install is per-harness
+(`claude plugin install expo@claude-plugins-official`, `codex plugin add expo@openai-curated`,
+`npx skills@latest add expo/skills --skill '*'`). Honest gap: `tests/` and an `eval-harness` entry ship
+at the root and the README states **no evaluation result** — "official" is provenance, not measured
+accuracy.
+
+→ [[agent-distribution]] [[fact-check]]

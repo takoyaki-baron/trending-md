@@ -3095,3 +3095,41 @@ HealthBench は同じ形の逆向きで、対で引いて初めて公平にな�
 Sources: [paper.pdf](https://github.com/openai/math/blob/main/preprints/The-Exponential-Time-Hypothesis-is-False-October-25-2026/paper.pdf) ·
 [openai/math preprints](https://github.com/openai/math/tree/main/preprints) ·
 [HN discussion](https://news.ycombinator.com/item?id=50251661)
+
+## 2026-10-28（20:03）——防御はアテンションの内側へ移り、世界モデルの否定結論が測られた
+
+一批四本の論文。要旨は逐語で読み（引用は abs ページと HTML 全文の両方で確認）、数値は一次で照合した。
+
+- **Heads of Security / HoS（arXiv 2610.37657、9 名——Imperial College London、Tübingen AI Center、
+  ELLIS、MPI-IS、Fraunhofer HHI）。** 「少数の学習された**ヘッド単位のアテンションゲート**」で
+  「指示-データ分離」を強制するプロンプト注入防御。モデルを「注入指示を無視する」よう微調整するのではなく、
+  各ヘッドが信頼できるトークンと信頼できないトークンの間で注意をどう再配分するかを学ぶ。Llama-3.3-70B-
+  Instruct と GPT-OSS-20B で：黒箱 **RL-Hammer 97% ASR**（GPT-OSS-20B）→ HoS 下で **10%**、SecAlign に
+  対して **85%**；白箱 **Claudini** は「autoresearch で HoS に対して強化」され、同じ ASR に **3 倍の
+  FLOPs** を要する。境界は論文自身の一文にある：「On agentic benchmarks with static attacks, HoS and
+  SecAlign perform similarly and substantially improve the security–utility trade-off over the base
+  model」——差は注入スイートにあり、agentic では**同等**。ASIDE はツール使用で **10% の有用性**しか
+  出せない。残る 10% は脅威モデル内部の別の学習済み構成要素だ。
+- **SynthAPI（2610.37648、8 名）。** **458,752 タスク**・**849 の四サイズ学習済みモデル**にわたるツール
+  使用エージェントのスケーリング則：データ予算が増えるにつれ、タスク数を増やすより**ツールとデータベースの
+  多様性**を拡大するほうが効き、データの**複雑さ**を上げるとさらに伸びる。留保は「多様性」の意味——パイプ
+  ラインが制御する三つの API 表面軸に沿った組合せ的拡張——であり、「先行研究を上回る」行はその家族が調整
+  されたのと同じ四つのベンチマークで測られている。合成家族*内部*の法則であり、要旨は生産環境のロングテール
+  について係数を与えない。
+- **忠実な潜在世界モデル（2610.37588、2 名）。** 忠実性を、環境の遷移写像と学習された潜在ダイナミクスの間の
+  **等変条件**として定義し、**latent rollout consistency（LRC）** を提案したうえで否定結論を出す：
+  「across the studied state of the art latent world models, none solves the task by actually faithfully
+  modeling the dynamics of the environment」。診断は評価に向く——ベンチマークは「タスク性能を強調し、
+  学習された世界モデルが環境の下層構造を反映する予測的潜在ダイナミクスを獲得したかについては限られた洞察
+  しか与えない」。Genie 4 自身の限界（視覚的細部と客体永続性が「時間とともに drift する」）と対になる：
+  報酬を満たす rollout は遷移関数を符号化しているとは限らない——事前可視化には十分、計画には不適格。
+  要旨は**モデルもデータセットも LRC 値も**挙げていないので、「none」は列挙されていない集合についての主張だ。
+- **ラベルなし RLVR の崩壊（2610.37553、1 名）。** 自己一致報酬の崩壊は問題集合が大きい*から*起きる：
+  問題ごとの先鋭化は **1/N** で遅くなる一方、共有モードは **∝ λ²** で N に依存せず成長するので
+  `N_c ≃ ln(1/δ)/(λ²G)`、そして単一の制御パラメータ **λ²NG** が結合・信頼度プロファイル・訓練変種を
+  統べる。シミュレーションは鋭い相転移、`N_c ∝ λ⁻²`（対数補正つき）、バッチサイズへの対数依存、
+  **初期モデルが自信を持つ場合は崩壊しない**こと、そして共有方向を除くと「崩壊を完全に防ぐ」カーネル版を
+  与える。実用的な反転は——**問題集合を拡大することが失效モード**——データボトルネックの直感と逆であり、
+  処方は構造的（共有方向を除くか罰する）で、学習率の調整ではない。
+
+→ [[harness-reliability]] [[security]] [[fact-check]]

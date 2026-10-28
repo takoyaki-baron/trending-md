@@ -166,6 +166,7 @@ const STRICT = has('strict');
 const STALE_DAYS = Number(arg('stale-days') ?? 60);
 const STAR_TOLERANCE = Number(arg('star-tolerance') ?? 0.10);
 const MAX_REPOS = Number(arg('max-repos') ?? 8);
+const MAX_AGE = Number(arg('max-age') ?? 3);
 const MAX_GHSA = Number(arg('max-ghsa') ?? 6);
 // cveawg is unmetered but not free: one request per CVE, cached 6h, and the cap keeps a
 // 200-CVE census from turning the pre-commit lint into a crawler.
@@ -198,8 +199,23 @@ function backtickSlug(raw) {
   if (b === 'main' || b === 'master' || b === 'HEAD') return null;
   if (/\.(md|json|js|mjs|py|toml|yml|yaml|sh|ts|rs|go|c|cpp|h)$/.test(b)) return null;
   if (/^\d{1,2}$/.test(b) && (/^[a-z][a-z0-9]*(?:_[a-z0-9]+)+$/.test(a) || /^[A-Z][A-Za-z0-9]*\.[a-zA-Z_]\w*$/.test(a))) return null;
+  // A **hostname** is not an owner: GitHub logins allow alphanumerics and hyphens only, so a dot in
+  // the first segment is never a repo and is almost always a site path quoted in backticks —
+  // `pkgs.tailscale.com/stable` spent an `api.github.com` call on `repos/pkgs.tailscale.com/stable`
+  // and returned a bogus `unreadable` finding against a correct item (measured 2026-10-28, item 21).
+  if (a.includes('.')) return null;
+  // A **GitHub path segment** is not an owner either: `advisories/GHSA-m8xf-2cr7-77ph` is a route
+  // on github.com, not a repository (measured the same run, item 22 — second bogus `unreadable`).
+  // `GHSA-…` in the second slot is the advisory id, for the same reason.
+  if (GH_PATH_SEGMENTS.has(a.toLowerCase())) return null;
+  if (/^GHSA-/i.test(b)) return null;
   return a && b ? raw : null;
 }
+const GH_PATH_SEGMENTS = new Set([
+  'advisories', 'security', 'releases', 'blob', 'tree', 'issues', 'pull', 'pulls', 'commit', 'commits',
+  'actions', 'raw', 'tags', 'settings', 'sponsors', 'topics', 'features', 'about', 'orgs', 'marketplace',
+  'search', 'network', 'forks', 'stargazers', 'watchers', 'discussions', 'wiki', 'compare', 'apps', 'blog',
+]);
 
 function parseItems(text) {
   const lines = text.split('\n');
@@ -224,7 +240,12 @@ function parseItems(text) {
     const repos = new Set();
     for (const m of it.text.matchAll(/github\.com\/([\w.-]+)\/([\w.-]+)/g)) {
       const slug = `${m[1]}/${m[2]}`.replace(/\.git$/, '');
-      if (!/^(features|topics|orgs|sponsors|marketplace|search|about)$/.test(m[1])) repos.add(slug);
+      // A github.com **route** looks exactly like a repository in a URL: `github.com/advisories/
+      // GHSA-…` is the Advisory Database's page for an advisory, not `advisories/GHSA-…` the repo —
+      // it cost an api.github.com call and produced a bogus `unreadable` finding on item 22 (10-28).
+      if (GH_PATH_SEGMENTS.has(m[1].toLowerCase())) continue;
+      if (/^GHSA-/i.test(m[2])) continue;
+      repos.add(slug);
     }
     for (const m of it.text.matchAll(/`([\w.-]+\/[\w.-]+)`/g)) {
       const slug = backtickSlug(m[1]);
@@ -236,20 +257,37 @@ function parseItems(text) {
 }
 
 // ── check A: issue counter ───────────────────────────────────────────────────────────────────
+/* `11 issues` is a tracker count only some of the time. The measured counterexample (2026-10-28,
+ * item 31) is **review findings**: Anthropic's life-sciences post says Claude "caught all 11 issues
+ * that human reviewers had spotted", and the reader reported an unsplit `open_issues_count` against
+ * an item that names no repository and no tracker at all — a finding about the checker. Two
+ * suppressors, both narrow: (a) a **review verb** immediately before the number (`caught`,
+ * `flagged`, `missed`, …) means defects in a document, not rows in a tracker; (b) a bare `N issues`
+ * with no `open` and no repo slug in the item is unverifiable *and* semantically ambiguous, so it is
+ * not a finding. `3,286 open issues` still fires — `open` is the tracker's own word. */
+const REVIEW_VERB = /\b(?:caught|found|flagged|spotted|missed|identified|raised|addresses|addressed|fixed|fixed\s+all)\b[^.;]{0,28}$/i;
 function checkIssues(it) {
   const out = [];
   const t = it.plain;
   const issueQuotes = [];
+  // "pull requests", "pull-request" and "PRs" are the same word; a hyphen-blind pattern reported
+  // arXiv's "57,240 issue and pull-request threads" as an unsplit count (measured 2026-10-26).
+  const namesSplit = /\bissues?\b[^.\n]{0,40}\b(?:PRs?|pulls?[- ]requests?)\b|\b(?:PRs?|pulls?[- ]requests?)\b[^.\n]{0,40}\bissues?\b/i.test(t);
   const re = new RegExp(`${NUM}\\s+(?:open\\s+)?issues?\\b`, 'gi');
   for (const m of t.matchAll(re)) {
     const after = t.slice(m.index + m[0].length, m.index + m[0].length + 24).toLowerCase();
     if (/^ per /.test(after)) continue; // a ratio, not a count
+    const isTrackerWorded = /\bopen\s+issues?\b/i.test(m[0]);
+    // `open issues` is the tracker's own word, so it is a count whatever verb precedes it; only a
+    // bare `N issues` is ambiguous enough for the two suppressors below to apply, and a named split
+    // is itself the anchor (a count of tracker rows, stated correctly).
+    if (!isTrackerWorded && !namesSplit) {
+      if (REVIEW_VERB.test(t.slice(Math.max(0, m.index - 44), m.index))) continue; // defects, not tracker rows
+      if (!it.repos.length) continue; // no tracker anchor anywhere in the item
+    }
     issueQuotes.push({ n: toNum(m[1]), at: m.index, ph: m[0] });
   }
   if (!issueQuotes.length) return out;
-  // "pull requests", "pull-request" and "PRs" are the same word; a hyphen-blind pattern reported
-  // arXiv's "57,240 issue and pull-request threads" as an unsplit count (measured 2026-10-26).
-  const namesSplit = /\bissues?\b[^.\n]{0,40}\b(?:PRs?|pulls?[- ]requests?)\b|\b(?:PRs?|pulls?[- ]requests?)\b[^.\n]{0,40}\bissues?\b/i.test(t);
   if (!namesSplit) {
     out.push({
       check: 'issues', item: it.n, verdict: 'unsplit-issue-count',
@@ -383,6 +421,17 @@ function sentences(t) {
   out.push({ start, end: t.length });
   return out;
 }
+
+/** The sentence a claim lives in — used to read a disclosure the item makes about itself. */
+function sentenceAround(t, phrase) {
+  const i = t.indexOf(phrase);
+  if (i < 0) return '';
+  const r = sentences(t).find((s) => i >= s.start && i < s.end);
+  return r ? t.slice(r.start, r.end) : t.slice(Math.max(0, i - 200), i + 200);
+}
+
+/** An item that says it counted the number itself is not claiming a page says it. */
+const SELF_COUNTED = /\b(?:counted (?:from|it|them|myself|by hand)|no page states (?:a |the )?total|nothing states a total|count(?:ed)? (?:from|off) the (?:manifest|README|file|page)|a total counted)\b/i;
 
 function primarySubject(t, mentions) {
   if (!mentions.length) return null;
@@ -808,7 +857,74 @@ function starQuotesOf(plain) {
   return out;
 }
 
-function checkRepo(it, budget) {
+/* A **dated** quote is not a **stale** quote. The 2026-10-28 feed's item 5 reads "at the time of
+ * writing holds **56 stars**" — true when written, 114 forty minutes later — and the reader reported
+ * `star-drift` at −50%, which is a finding about the clock, not about the item. When the number's own
+ * sentence discloses when it was read, the drift is a **surge signal**: report both readings and the
+ * direction, at advisory severity, instead of asking for a reread. */
+const DATED_QUOTE = /\b(?:at the time of writing|at publish|when (?:this|the) (?:item|entry|note) was written|as of|when (?:we|I) (?:wrote|read) (?:this|it)|at the time of (?:this|writing)|last (?:checked|read))\b/i;
+
+/* A repository's **age** is a claim about its history, and `created_at` is the clock of the *record*.
+ * moxnox (2026-10-28) was created 2026-10-22 carrying 9,479 commits back to 2021-12-08 — a re-pushed
+ * history — so a "six-day-old project" reading was wrong by 4.9 years. The cheap check is one
+ * `Link: rel="last"` hop on the commits list, which yields the **oldest** commit without walking the
+ * history; gated to young records that make an age claim, capped separately from MAX_REPOS. */
+const AGE_N = String.raw`(?:\d+|one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve)`;
+// no trailing `\b`: the usual spelling is `created 2026-10-27T13:19Z`, and `7`→`T` is not a word
+// boundary, so a trailing `\b` silently excluded the most common form (caught by the live run).
+const AGE_CLAIM = new RegExp(String.raw`\b(?:${AGE_N}[- ](?:day|week|month)s?[- ]old|in (?:just |only )?${AGE_N} (?:day|week|month)s?|since (?:its|the) (?:launch|release|creation)|created \d{4}-\d\d-\d\d(?!\d))`, 'i');
+const YOUNG_RECORD_DAYS = 120;
+/* An item that already draws the distinction is not making the mistake the check exists for — the
+ * same disclosure-suppression shape as `counted-by-author` and `slot-quoted`. Moxnox's item, once
+ * corrected, reads "its history begins 2021-12-08 … so `created_at` dates this public home, not the
+ * project"; flagging that would be a finding about the checker. */
+const SELF_DISCLOSED_HISTORY = /\b(?:history (?:begins|goes back|dates)|commits (?:deep|going back)|created_at dates|not the project'?s? (?:history|age)|re-?pushed)\b/i;
+
+function oldestCommit(slug) {
+  const key = `oldest:${slug}`;
+  const hit = cache[key];
+  if (hit && Date.now() - Date.parse(hit.fetched_at) < CACHE_TTL_MS) return hit;
+  try {
+    const head = execFileSync('gh', ['api', `/repos/${slug}/commits?per_page=1`, '--include'], { encoding: 'utf8', timeout: 30_000, stdio: ['ignore', 'pipe', 'ignore'] });
+    apiCalls += 1;
+    const lastPage = /[?&]page=(\d+)>;\s*rel="last"/.exec(head)?.[1] ?? /rel="last"[^>]*[?&]page=(\d+)/.exec(head)?.[1] ?? null;
+    if (!lastPage || lastPage === '1') {
+      // one page of history only (the common case for a young repo): the newest commit IS the
+      // oldest, so the `--include` body already answers it and the second call is not spent.
+      const first = /"date":\s*"([^"]+)"/.exec(head)?.[1] ?? null;
+      cache[key] = { fetched_at: new Date().toISOString(), oldest: first, approx_commits: 1 };
+      return cache[key];
+    }
+    const body = execFileSync('gh', ['api', `/repos/${slug}/commits?per_page=1&page=${lastPage}`], { encoding: 'utf8', timeout: 30_000, stdio: ['ignore', 'pipe', 'ignore'] });
+    apiCalls += 1;
+    const arr = JSON.parse(body);
+    const c = Array.isArray(arr) ? arr[0] : null;
+    cache[key] = {
+      fetched_at: new Date().toISOString(),
+      oldest: c?.commit?.author?.date ?? c?.commit?.committer?.date ?? null,
+      oldest_sha: c?.sha ?? null,
+      approx_commits: lastPage,
+    };
+    return cache[key];
+  } catch (e) {
+    cache[key] = { fetched_at: new Date().toISOString(), error: String(e.message ?? e).split('\n')[0] };
+    return cache[key];
+  }
+}
+
+/** The sentence the *star quote itself* lives in — a bare `indexOf("56")` finds a version first. */
+function starQuoteSentence(plain, n) {
+  const re = /([+\-−]?)(\d[\d,]*(?:\.\d+)?)\s*(k)?\s*(?:★|stars?\b)/gi;
+  for (const m of plain.matchAll(re)) {
+    if (m[1]) continue;
+    if (toNum(m[2]) * (m[3] ? 1000 : 1) !== n) continue;
+    const r = sentences(plain).find((s) => m.index >= s.start && m.index < s.end);
+    return r ? plain.slice(r.start, r.end) : plain.slice(Math.max(0, m.index - 200), m.index + 200);
+  }
+  return '';
+}
+
+function checkRepo(it, budget, ageBudget) {
   const out = [];
   const starQuotes = starQuotesOf(it.plain);
   if (!it.repos.length) return out;
@@ -830,7 +946,38 @@ function checkRepo(it, budget) {
       out.push({ check: 'repo', item: it.n, verdict: 'stale', claim: slug, detail: `last push ${st.pushed_at.slice(0, 10)} (${ageDays}d) with ${st.stars} stars — is the item about the code or the name?` });
     }
     if (biggest != null && st.stars && Math.abs(starDelta) > STAR_TOLERANCE) {
-      out.push({ check: 'repo', item: it.n, verdict: 'star-drift', claim: `${biggest} quoted vs ${st.stars} now`, detail: `${slug}: ${(starDelta * 100).toFixed(0)}% — reread the number or date the item` });
+      const quote = `${biggest}`;
+      const dated = DATED_QUOTE.test(starQuoteSentence(it.plain, biggest));
+      // negative delta = quoted below today's count = the repo grew under the item
+      const dir = starDelta < 0 ? 'the item under-counts a live surge' : 'the item over-counts';
+      out.push({
+        check: 'repo', item: it.n, verdict: dated ? 'star-dated' : 'star-drift',
+        claim: `${biggest} quoted vs ${st.stars} now`,
+        detail: dated
+          ? `${slug}: ${(starDelta * 100).toFixed(0)}% — the item dates this reading, so the drift is the trend (${dir}); quote the second reading too`
+          : `${slug}: ${(starDelta * 100).toFixed(0)}% — reread the number or date the item`,
+      });
+    }
+    // age is a history claim: only young records that say their own age are worth a second hop.
+    const recAgeDays = st.created_at ? Math.round((Date.now() - Date.parse(st.created_at)) / 86_400_000) : null;
+    if (recAgeDays != null && recAgeDays <= YOUNG_RECORD_DAYS && ageBudget.left > 0
+        && AGE_CLAIM.test(it.plain) && !SELF_DISCLOSED_HISTORY.test(it.plain)) {
+      ageBudget.left -= 1;
+      const oc = oldestCommit(slug);
+      if (oc.error) {
+        out.push({ check: 'repo', item: it.n, verdict: 'history-unreadable', claim: slug, detail: `commits API: ${oc.error} — unread is not young` });
+      } else if (oc.oldest) {
+        const histDays = Math.round((Date.now() - Date.parse(oc.oldest)) / 86_400_000);
+        if (histDays > recAgeDays * 2 && histDays - recAgeDays > 60) {
+          out.push({
+            check: 'repo', item: it.n, verdict: 'history-older-than-record',
+            claim: `${slug} record ${recAgeDays}d vs oldest commit ${histDays}d`,
+            detail: `created_at ${st.created_at.slice(0, 10)} but the oldest commit is ${oc.oldest.slice(0, 10)} (~${oc.approx_commits} commits) — a re-pushed history; "N-day-old project" is the record's clock, not the code's`,
+          });
+        } else {
+          out.push({ check: 'repo', item: it.n, verdict: 'ok-history', claim: slug, detail: `record ${recAgeDays}d, oldest commit ${oc.oldest.slice(0, 10)} (~${oc.approx_commits} commits)` });
+        }
+      }
     }
     if (!['archived', 'stale'].includes(out.at(-1)?.verdict) && biggest != null) {
       out.push({ check: 'repo', item: it.n, verdict: 'ok', claim: slug, detail: `${st.stars}★, last push ${st.pushed_at.slice(0, 10)}` });
@@ -1019,6 +1166,13 @@ async function checkCount(it) {
         const hit = fetched.find((p) => numberNeighbours(p.text.replace(/&nbsp;/g, ' '), cl.n).length);
         const snips = numberNeighbours(hit.text.replace(/&nbsp;/g, ' '), cl.n);
         out.push({ check: 'count', item: it.n, verdict: 'number-other-noun', claim: cl.phrase, detail: `${cl.n} is on ${hit.label} as “${snips[0]}” — the page's head noun is not “${cl.noun}”, so this is the feed's paraphrase rather than the page's wording; quote what the page says` });
+      } else if (SELF_COUNTED.test(sentenceAround(it.plain, cl.phrase))) {
+        /* The item already says it counted the number itself. `absent` means "the page states
+           none and the prose does not admit it" — an item that admits it is the fix, not the defect
+           (expo/skills' "24 … a total counted from the manifest itself, since no page states it",
+           measured 2026-10-28). Same species as `slot-quoted`: a suppression that fires only when
+           the sentence itself carries the disclosure. */
+        out.push({ check: 'count', item: it.n, verdict: 'counted-by-author', claim: cl.phrase, detail: `no page states a ${cl.noun} total, and the item says so — the count is the author's own census` });
       } else {
         out.push({ check: 'count', item: it.n, verdict: 'absent', claim: cl.phrase, detail: `no count of ${cl.noun} on ${['README of ' + it.repos[0], ...fetched.map((p) => p.label)].join(' or ')}${pages.length > fetched.length ? ' (some cited pages were unreadable this run — unread is not absent)' : ''} — count it yourself, or say "no page states a total"` });
       }
@@ -1079,6 +1233,11 @@ if (SELFTEST) {
   t('ratio is not a count', checkIssues(mk('t', 'one issue per twenty-four stargazers')).map((x) => x.verdict), []);
   t('composite lags parts', checkIssues(mk('t', 'open_issues_count reads 77 against 21 issues and 58 PRs')).map((x) => x.verdict).slice(-1), ['compound-lags-parts']);
   t('hyphenated pull-request is a named split', checkIssues(mk('t', 'mined from **57,240 issue and pull-request threads** across 1,774 repos')).map((x) => x.verdict), ['ok']);
+  // 2026-10-28 item 31: review findings are not tracker rows
+  t('review defects are not an issue count', checkIssues(mk('t', 'Claude caught all **11 issues** that human reviewers had spotted')).map((x) => x.verdict), []);
+  t('a bare issue count with no repo is not a finding', checkIssues(mk('t', 'the list carries 11 issues overall')).map((x) => x.verdict), []);
+  t('a bare issue count in a repo item still fires', checkIssues({ ...mk('t', 'it has 3,286 issues'), repos: ['a/b'] }).map((x) => x.verdict), ['unsplit-issue-count']);
+  t('open issues fires even after a review verb', checkIssues(mk('t', 'found **3,286 open issues** on the board')).map((x) => x.verdict), ['unsplit-issue-count']);
 
   // star quotes — a delta and a total are different units (the item-12 false finding)
   t('star delta is not a count', starQuotesOf(strip('Source: GitHub Trending · +312 stars today · nightly-labs')), []);
@@ -1090,7 +1249,16 @@ if (SELFTEST) {
   const slugs = (s) => parseItems(`## 1. t\n\n${s}\n`)[0].repos.sort();
   t('erlang arity is not a repo', slugs('`merge_ssl_opts/3` and `partial_chain/1` in `hackney_ssl:partial_chain/1`'), []);
   t('elixir arity is not a repo', slugs('`Enum.map/2` and `String.split/3`'), []);
+  // 2026-10-28 items 21 / 22: a hostname and a github.com route are not repositories
+  t('hostname is not a repo', slugs('download from `pkgs.tailscale.com/stable` today'), []);
+  t('github route is not a repo', slugs('see `advisories/GHSA-m8xf-2cr7-77ph` for the record'), []);
+  t('blob path is not a repo', slugs('`blob/main/docs/x.md`'), []);
   t('real repo slug survives', slugs('`obra/superpowers` and `zip-rs/zip2`'), ['obra/superpowers', 'zip-rs/zip2']);
+  // a dated star quote is a surge signal, not a stale number (2026-10-28 item 5: 56 → 114)
+  t('dated quote detected', DATED_QUOTE.test('at the time of writing holds 56 stars and one commit'), true);
+  t('undated quote is not dated', DATED_QUOTE.test('the repo holds 56 stars and one commit'), false);
+  t('age claim detected', AGE_CLAIM.test('a six-day-old project with 9,479 commits'), true);
+  t('version number is not an age claim', AGE_CLAIM.test('released 1.4.0 with 12 days of work'), false);
   t('github url is still a repo', slugs('[advisory](https://github.com/padok-team/burrito/security/advisories/GHSA-x)'), ['padok-team/burrito']);
   t('file path is not a repo', slugs('`src/lib/json.js` and `docs/readme.md`'), []);
 
@@ -1204,6 +1372,11 @@ if (SELFTEST) {
     numberNeighbours('Stalwart is faster in 35 of the 38 headline comparisons.', 38), ['38 headline comparisons']);
   t('count: a number in an unrelated token is still found (the caller decides what it means)',
     numberNeighbours('released 2026-10-38 by someone', 38).length, 1);
+  // measured 2026-10-28 on item 36 (expo/skills): the page states no total and the item says so
+  t('count: an item that says it counted the number itself is not `absent`',
+    SELF_COUNTED.test(sentenceAround('Its manifest groups **24** skills into three buckets — a total counted from the manifest itself, since no page states it. Installation is per-harness.', '24** skills')), true);
+  t('count: and a bare count with no such disclosure is not suppressed',
+    SELF_COUNTED.test(sentenceAround('The repo ships **24** skills in three groups.', '24** skills')), false);
 
   for (const c of cases) console.log(`  ${c.pass ? '✓' : '✗'} ${c.name}${c.pass ? '' : ` — got ${JSON.stringify(c.got)}, want ${JSON.stringify(c.want)}`}`);
   const ok = cases.filter((c) => c.pass).length;
@@ -1262,13 +1435,14 @@ for (const id of new Set(parsed.flatMap((f) => f.items.flatMap((it) => strip(it.
 for (const { path: p, items } of parsed) {
   const findings = [];
   const budget = { left: MAX_REPOS };
+  const ageBudget = { left: MAX_AGE };
 
   for (const it of items) {
     if (CHECKS.has('issues')) findings.push(...checkIssues(it));
     if (!NO_NET && CHECKS.has('cvss')) findings.push(...checkCvss(it, subjects, cna));
     if (!NO_NET && CHECKS.has('temporal')) findings.push(...checkTemporal(it, cna, subjects));
   }
-  if (!NO_NET && CHECKS.has('repo')) for (const it of items) findings.push(...checkRepo(it, budget));
+  if (!NO_NET && CHECKS.has('repo')) for (const it of items) findings.push(...checkRepo(it, budget, ageBudget));
   if (!NO_NET && CHECKS.has('count')) for (const it of items) findings.push(...await checkCount(it));
 
   perFile.push({ file: basename(p), items: items.length, findings });
@@ -1277,7 +1451,7 @@ for (const { path: p, items } of parsed) {
 
 try { mkdirSync(dirname(CACHE_PATH), { recursive: true }); writeFileSync(CACHE_PATH, JSON.stringify(cache, null, 1)); } catch { /* cache is best-effort */ }
 
-const SEVERITY = { ok: 0, 'ok-cited-page': 0, 'no-cve-named': 1, 'no-record': 1, 'slot-quoted': 1, 'number-other-noun': 1, 'temporal-stopping-point': 1, 'cna-only-score': 1, 'star-drift': 2, stale: 2, archived: 2, differs: 2, absent: 2, 'unsplit-issue-count': 3, 'compound-lags-parts': 3, 'version-swapped': 3, 'version-absent': 3, 'score-not-reproducible': 2, 'score-mismatch': 3, 'wrong-subject': 3, 'absence-contradicted': 3, 'advisory-unreadable': 1, unreadable: 1, 'artifact-unreadable': 1, 'nvd-unavailable': 1 };
+const SEVERITY = { ok: 0, 'ok-cited-page': 0, 'no-cve-named': 1, 'no-record': 1, 'slot-quoted': 1, 'counted-by-author': 0, 'number-other-noun': 1, 'temporal-stopping-point': 1, 'cna-only-score': 1, 'star-drift': 2, 'star-dated': 1, 'ok-history': 0, 'history-older-than-record': 2, 'history-unreadable': 1, stale: 2, archived: 2, differs: 2, absent: 2, 'unsplit-issue-count': 3, 'compound-lags-parts': 3, 'version-swapped': 3, 'version-absent': 3, 'score-not-reproducible': 2, 'score-mismatch': 3, 'wrong-subject': 3, 'absence-contradicted': 3, 'advisory-unreadable': 1, unreadable: 1, 'artifact-unreadable': 1, 'nvd-unavailable': 1 };
 const REAL = (f) => (SEVERITY[f.verdict] ?? 1) >= 2;
 
 const summary = { generated: new Date().toISOString(), files: perFile, api_calls: apiCalls, readme_calls: readmeCalls, cited_page_calls: citedPages_requests, nvd_calls: nvdCalls, cna_calls: cnaCalls };

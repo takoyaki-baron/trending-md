@@ -1,5 +1,5 @@
 {
- "generated": "2026-10-28T12:24:19.376Z",
+ "generated": "2026-10-28T12:39:08.304Z",
  "files": [
   {
    "file": "2026-10-28.md",
@@ -113,9 +113,9 @@
     {
      "check": "count",
      "item": 36,
-     "verdict": "absent",
+     "verdict": "counted-by-author",
      "claim": "24 skills",
-     "detail": "no count of skills on README of expo/skills or expo/skills skills.sh.json or docs.expo.dev/skills/ — count it yourself, or say \"no page states a total\""
+     "detail": "no page states a skills total, and the item says so — the count is the author's own census"
     }
    ]
   }

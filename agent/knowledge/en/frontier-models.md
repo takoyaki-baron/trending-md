@@ -4440,3 +4440,48 @@ error; it is evidence that the bound was *improved during writing* and the abstr
 Sources: [paper.pdf](https://github.com/openai/math/blob/main/preprints/The-Exponential-Time-Hypothesis-is-False-October-25-2026/paper.pdf) ·
 [openai/math preprints](https://github.com/openai/math/tree/main/preprints) ·
 [HN discussion](https://news.ycombinator.com/item?id=50251661)
+
+## 2026-10-28 (20:03) — the defense moves inside attention, and the world-model negative is measured
+
+Four papers from one batch, abstracts read verbatim (quotes checked against both the abs page and the
+HTML full text).
+
+- **Heads of Security / HoS (arXiv 2610.37657, 9 authors — Imperial College London, Tübingen AI Center,
+  ELLIS, MPI-IS, Fraunhofer HHI).** A prompt-injection defence that enforces "instruction-data
+  separation via a small set of learned **per-head attention gates**" — it learns how each head
+  redistributes attention between trusted and untrusted tokens instead of finetuning the model to
+  ignore instructions. On Llama-3.3-70B-Instruct and GPT-OSS-20B: black-box **RL-Hammer 97% ASR** on
+  GPT-OSS-20B → **10%** under HoS, **85%** against SecAlign; the white-box **Claudini**, "strengthened
+  against HoS through autoresearch", needs **3× more FLOPs** to reach the same ASR. The boundary is in
+  the paper's own sentence: "On agentic benchmarks with static attacks, HoS and SecAlign perform
+  similarly and substantially improve the security–utility trade-off over the base model" — so the
+  margin lives on the injection suites and the agentic result is **parity**; ASIDE reaches **10%
+  utility** on tool use. The residual 10% is a learned component inside the threat model.
+- **SynthAPI (2610.37648, 8 authors).** A scaling law for tool-use agents over **458,752 tasks** and
+  **849 trained models** of four sizes: as data budgets grow, scaling **tool and database diversity**
+  becomes more effective than adding tasks, and raising data **complexity** yields larger gains. The
+  caveat is what "diversity" is — combinatorial expansion along three API-surface axes the pipeline
+  controls — and the "outperforms prior work" rows are measured on the same four benchmarks the family
+  was tuned against. A law *inside* a synthetic family; the abstract gives no coefficient for a
+  production tool long tail.
+- **Faithful latent world models (2610.37588, 2 authors).** Defines faithfulness as an **equivariance
+  condition** between the environment's transition map and the learned latent dynamics, proposes
+  **latent rollout consistency (LRC)**, and reports the negative: "across the studied state of the art
+  latent world models, none solves the task by actually faithfully modeling the dynamics of the
+  environment." The diagnosis is about evaluation — benchmarks "emphasize task performance while
+  providing limited insight into whether learned world models acquire predictive latent dynamics".
+  Pairs with Genie 4's own limitation (visual detail and object permanence "shift or drift over time"):
+  a rollout that satisfies a reward need not encode the transition function — fine for pre-visualisation,
+  disqualifying for planning. The abstract names **no models, no datasets and no LRC values**, so
+  "none" is a claim about an unenumerated set.
+- **Label-free RLVR collapse (2610.37553, one author).** Self-agreement rewards collapse *because* the
+  problem set is large: per-problem sharpening slows as **1/N** while a shared mode grows at **∝ λ²**
+  independent of N, so `N_c ≃ ln(1/δ)/(λ²G)` and one control parameter **λ²NG** governs couplings,
+  confidence profiles and training variants. Simulations give a sharp transition with `N_c ∝ λ⁻²` up
+  to a log correction, a logarithmic batch-size dependence, **no collapse for confident initial
+  models**, and a kernel version where removing the shared direction "prevents collapse entirely".
+  The actionable inversion — **scaling the problem set is the failure mode** — is the opposite of the
+  data-bottleneck instinct, and the remedy is structural (remove or penalise the shared direction),
+  not a learning-rate tweak.
+
+→ [[harness-reliability]] [[security]] [[fact-check]]

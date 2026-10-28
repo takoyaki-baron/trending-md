@@ -1012,3 +1012,26 @@ skill 的价值就在它的*规则*上时，许可证是产物可用性的一部
 来源：[github.com/unclebob/ub-mode](https://github.com/unclebob/ub-mode) · [unclebob/crapper](https://github.com/unclebob/crapper) ·
 [github.com/morganlinton/BeautifulRust](https://github.com/morganlinton/BeautifulRust) · [agentskills.io](https://agentskills.io) ·
 [github.com/lyramakesmusic/neuron-explorer](https://github.com/lyramakesmusic/neuron-explorer)
+
+## 2026-10-28 —— 厂商的技能包把自己的商业边界写进了清单
+
+`expo/skills`（MIT，**3,364★**，最后推送 2026-10-28T11:10Z）是一家框架厂商为自己这套技术栈出厂的
+面向 agent 的契约。`skills.sh.json` 带 **24** 个技能——这个数是数清单数出来的，因为没有页面写总数——
+分三组：
+
+| 分组 | 数量 | 清单怎么说 |
+|---|---|---|
+| Framework (open source) | **16** | UI、导航、样式、数据获取、原生模块、DOM、示例、SDK 升级 |
+| Services & paid distribution | **7** | "skills whose core purpose uses paid Expo Application Services (EAS). Each one discloses costs and plan limits up front" |
+| Experimental | **1** | 尚未定型的 API，将"在底层 API 稳定后毕业到上面的分组" |
+
+这个切分才是值得抄的工件：把*免费的框架知识*与*目的是驱动付费服务的技能*分开，并要求付费那组把成本写在
+明面上——这是一条写进文件的商业边界，而不是留在读者脑子里的，也正是大多数厂商技能包缺失的那一块，而缺失
+正是它们读起来像文档而不是像路由的原因。README 还守住了所有权："Expo documentation, Expo CLI, and EAS
+CLI remain the source of truth; these skills help agents apply them correctly"——它是路由器，不是
+第二份会漂移的规范。安装按 harness 分（`claude plugin install expo@claude-plugins-official`、
+`codex plugin add expo@openai-curated`、`npx skills@latest add expo/skills --skill '*'`）。诚实的缺口：
+根目录带 `tests/` 和一个 `eval-harness` 条目，而 README **不写任何评测结果**——"official"是来源，
+不是量出来的准确率。
+
+→ [[agent-distribution]] [[fact-check]]

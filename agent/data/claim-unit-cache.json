@@ -451,7 +451,7 @@
   ]
  },
  "cna:CVE-2026-109618": {
-  "fetched_at": "2026-10-27T20:12:03.058Z",
+  "fetched_at": "2026-10-28T12:14:11.222Z",
   "state": "PUBLISHED",
   "assigner": "php",
   "metrics": [
@@ -464,7 +464,7 @@
   ]
  },
  "cna:CVE-2026-109619": {
-  "fetched_at": "2026-10-27T20:12:04.798Z",
+  "fetched_at": "2026-10-28T12:14:12.931Z",
   "state": "PUBLISHED",
   "assigner": "php",
   "metrics": [
@@ -593,7 +593,7 @@
   ]
  },
  "cna:CVE-2026-48356": {
-  "fetched_at": "2026-10-27T20:11:57.058Z",
+  "fetched_at": "2026-10-28T12:14:05.882Z",
   "state": "PUBLISHED",
   "assigner": "adobe",
   "metrics": [
@@ -607,15 +607,15 @@
   ]
  },
  "cna:CVE-2026-115881": {
-  "fetched_at": "2026-10-27T20:11:59.123Z",
+  "fetched_at": "2026-10-28T12:38:08.545Z",
   "error": "not-in-cveawg"
  },
  "cna:CVE-2026-115884": {
-  "fetched_at": "2026-10-27T20:12:01.132Z",
+  "fetched_at": "2026-10-28T12:38:10.258Z",
   "error": "not-in-cveawg"
  },
  "cna:CVE-2026-111497": {
-  "fetched_at": "2026-10-27T20:12:06.618Z",
+  "fetched_at": "2026-10-28T12:14:14.699Z",
   "state": "PUBLISHED",
   "assigner": "Google",
   "metrics": [
@@ -628,35 +628,493 @@
   ]
  },
  "ghostty-org/ghostty": {
-  "fetched_at": "2026-10-27T20:12:08.607Z",
-  "pushed_at": "2026-10-27T20:05:51Z",
+  "fetched_at": "2026-10-28T12:15:06.101Z",
+  "pushed_at": "2026-10-28T03:42:07Z",
   "created_at": "2022-03-29T17:38:26Z",
   "archived": false,
-  "stars": 62681,
-  "forks": 3741,
+  "stars": 62801,
+  "forks": 3753,
   "license": "MIT"
  },
  "AxiomMath/CFSG": {
-  "fetched_at": "2026-10-27T20:12:10.393Z",
+  "fetched_at": "2026-10-28T12:15:07.839Z",
   "pushed_at": "2026-10-27T15:07:45Z",
   "created_at": "2026-10-27T13:19:32Z",
   "archived": false,
-  "stars": 57,
-  "forks": 5,
+  "stars": 113,
+  "forks": 14,
   "license": "Apache-2.0"
  },
  "Graphify-Labs/graphify": {
-  "fetched_at": "2026-10-27T20:12:12.289Z",
+  "fetched_at": "2026-10-28T12:15:09.467Z",
   "pushed_at": "2026-10-27T18:15:35Z",
   "created_at": "2026-04-03T15:49:07Z",
   "archived": false,
-  "stars": 136864,
-  "forks": 13066,
+  "stars": 137362,
+  "forks": 13102,
   "license": "Apache-2.0"
  },
  "readme:Graphify-Labs/graphify": {
-  "fetched_at": "2026-10-27T20:12:13.810Z",
+  "fetched_at": "2026-10-28T12:15:19.231Z",
   "bytes": 36084,
   "text": "<p align=\"center\">\n  <a href=\"https://graphify.com\"><img src=\"https://raw.githubusercontent.com/Graphify-Labs/graphify/v8/docs/graphify-logo.png\" width=\"360\" height=\"189\" alt=\"Graphify\"/></a>\n</p>\n\n<p align=\"center\">\n  <a href=\"https://trendshift.io/repositories/25296?utm_source=repository-badge&amp;utm_medium=badge&amp;utm_campaign=badge-repository-25296\" target=\"_blank\" rel=\"noopener noreferrer\"><img src=\"https://trendshift.io/api/badge/repositories/25296\" alt=\"Graphify-Labs%2Fgraphify | Trendshift\" width=\"250\" height=\"55\"/></a>\n</p>\n\n<div align=\"center\">\n<details><summary><b>Read this in other languages</b></summary>\n\n<a href=\"README.md\">English</a> | <a href=\"docs/translations/README.zh-CN.md\">简体中文</a> | <a href=\"docs/translations/README.ja-JP.md\">日本語</a> | <a href=\"docs/translations/README.ko-KR.md\">한국어</a> | <a href=\"docs/translations/README.de-DE.md\">Deutsch</a> | <a href=\"docs/translations/README.fr-FR.md\">Français</a> | <a href=\"docs/translations/README.es-ES.md\">Español</a> | <a href=\"docs/translations/README.hi-IN.md\">हिन्दी</a> | <a href=\"docs/translations/README.pt-BR.md\">Português</a> | <a href=\"docs/translations/README.ru-RU.md\">Русский</a> | <a href=\"docs/translations/README.ar-SA.md\">العربية</a> | <a href=\"docs/translations/README.fa-IR.md\">فارسی</a> | <a href=\"docs/translations/README.it-IT.md\">Italiano</a> | <a href=\"docs/translations/README.pl-PL.md\">Polski</a> | <a href=\"docs/translations/README.nl-NL.md\">Nederlands</a> | <a href=\"docs/translations/README.tr-TR.md\">Türkçe</a> | <a href=\"docs/translations/README.uk-UA.md\">Українська</a> | <a href=\"docs/translations/README.vi-VN.md\">Tiếng Việt</a> | <a href=\"docs/translations/README.id-ID.md\">Bahasa Indonesia</a> | <a href=\"docs/translations/README.sv-SE.md\">Svenska</a> | <a href=\"docs/translations/README.el-GR.md\">Ελληνικά</a> | <a href=\"docs/translations/README.ro-RO.md\">Română</a> | <a href=\"docs/translations/README.cs-CZ.md\">Čeština</a> | <a href=\"docs/translations/README.fi-FI.md\">Suomi</a> | <a href=\"docs/translations/README.da-DK.md\">Dansk</a> | <a href=\"docs/translations/README.no-NO.md\">Norsk</a> | <a href=\"docs/translations/README.hu-HU.md\">Magyar</a> | <a href=\"docs/translations/README.th-TH.md\">ภาษาไทย</a> | <a href=\"docs/translations/README.uz-UZ.md\">Oʻzbekcha</a> | <a href=\"docs/translations/README.zh-TW.md\">繁體中文</a> | <a href=\"docs/translations/README.fil-PH.md\">Filipino</a> | <a href=\"docs/translations/README.he-IL.md\">עברית</a>\n\n</details>\n</div>\n\n<p align=\"center\">\n  <a href=\"https://pypi.org/project/graphifyy/\"><img src=\"https://img.shields.io/pypi/v/graphifyy\" alt=\"PyPI\"/></a>\n  <a href=\"https://github.com/Graphify-Labs/graphify/actions/workflows/ci.yml\"><img src=\"https://github.com/Graphify-Labs/graphify/actions/workflows/ci.yml/badge.svg?branch=v8\" alt=\"CI\"/></a>\n  <a href=\"LICENSE\"><img src=\"https://img.shields.io/badge/License-Apache%202.0-blue\" alt=\"License: Apache-2.0\"/></a>\n  <a href=\"https://pepy.tech/project/graphifyy\"><img src=\"https://img.shields.io/pepy/dt/graphifyy?color=blue&label=downloads\" alt=\"Downloads\"/></a>\n  <a href=\"https://docs.graphify.com\"><img src=\"https://img.shields.io/badge/Docs-docs.graphify.com-0b7285?style=flat&logo=readthedocs&logoColor=white\" alt=\"Docs\"/></a>\n  <a href=\"https://app.graphify.com/login\"><img src=\"https://img.shields.io/badge/Graphify%20Cloud-app.graphify.com-118d4f?style=flat&logoColor=white\" alt=\"Graphify Cloud\"/></a>\n  <a href=\"https://discord.gg/graphify\"><img src=\"https://img.shields.io/badge/Discord-Join-5865F2?style=flat&logo=discord&logoColor=white\" alt=\"Discord\"/></a>\n  <a href=\"https://www.youtube.com/@graphifylabs\"><img src=\"https://img.shields.io/badge/YouTube-Graphify%20Labs-FF0000?style=flat&logo=youtube&logoColor=white\" alt=\"YouTube\"/></a>\n  <a href=\"https://www.linkedin.com/company/graphify-labs\"><img src=\"https://img.shields.io/badge/LinkedIn-Graphify%20Labs-0077B5?logo=linkedin\" alt=\"LinkedIn\"/></a>\n  <a href=\"https://www.ycombinator.com/companies/graphify-labs\"><img src=\"https://img.shields.io/badge/Y%20Combinator-S26-F0652F?style=flat&logo=ycombinator&logoColor=white\" alt=\"YC S26\"/></a>\n</p>\n\n<p align=\"center\">\n  <b>Cut agent token spend by 80%.</b> Graphify Cloud is always-on memory that governs your agents, keeps code quality high, and proves correctness with formal verification. <a href=\"https://app.graphify.com/login\"><b>Start a free 14-day trial &rarr;</b></a>\n</p>\n\nType `/graphify` in your AI coding assistant and it maps your entire project (code, docs, PDFs, images, videos) into a **knowledge graph** you can **query instead of grepping** through files.\n\n- **Code maps for free, fully local.** Code is parsed with tree-sitter AST: deterministic, no LLM, nothing leaves your machine. (Docs, PDFs, images and video use your assistant's model, or a configured API key, for a semantic pass.)\n- **Every edge is explained.** Each connection is tagged `EXTRACTED` (explicit in the source) or `INFERRED` (resolved by graphify), so you can tell what was read directly from what was inferred.\n- **Not a vector index.** No embeddings, no vector store: a real graph you traverse. Ask a question, trace the path between two things, or explain one concept.\n\n> [!NOTE]\n> **Want this always-on?** [Graphify Cloud](https://app.graphify.com/login) keeps the graph live across your entire SDLC: monorepo and cross-repo support, formal verification, and code review with a bird's-eye view of your SDLC, plus connectors for Sentry, Jira, and more so incidents and tickets sit in the same graph as your code. **[Start a free 14-day trial at app.graphify.com](https://app.graphify.com/login)**.\n\n<p align=\"center\">\n  <img src=\"https://raw.githubusercontent.com/Graphify-Labs/graphify/v8/docs/graph-hero.png\" alt=\"graphify's interactive graph.html showing the FastAPI codebase as a force-directed knowledge graph with a legend of detected communities\" width=\"900\">\n</p>\n<p align=\"center\">\n  <em>The FastAPI codebase mapped by graphify. Every node is a concept, colors are detected communities, and the whole thing is clickable in graph.html.</em>\n</p>\n\n**Get started** (30 seconds). Needs Python 3.10+ and uv (or pipx):\n\n```bash\nuv tool install graphifyy      # install the CLI (or: pipx install graphifyy)\ngraphify install               # detects your assistant and registers the skill\n```\n\nThen, in your AI assistant:\n\n```\n/graphify .\n```\n\nThat's it. You get **three files**:\n\n```\ngraphify-out/\n├── graph.html       open in any browser: click nodes, filter, search\n├── GRAPH_REPORT.md  the highlights: key concepts, surprising connections, suggested questions\n└── graph.json       the full graph: query it anytime without re-reading your files\n```\n\nThe persisted graph includes `graph.schema_version` so integrations can detect\nincompatible format changes, plus `graph.graphify_version` identifying the\nGraphify release that produced it.\n\n**One install, any assistant, any OS.** Claude Code, Cursor, Codex, Gemini CLI, GitHub Copilot, and 20+ more, on macOS, Linux, and Windows: [pick your platform](#install).\n\n---\n\n## See it in action\n\n<p align=\"center\">\n  <img src=\"https://raw.githubusercontent.com/Graphify-Labs/graphify/v8/docs/demo-path.svg\" alt=\"graphify path query: a terminal asks for the shortest path between FastAPI and ModelField, and the answer lights up hop by hop across the knowledge graph\" width=\"900\">\n</p>\n\nOnce the graph is built you query it instead of reading files. Real output, graphify run on the FastAPI codebase shown above:\n\n```text\n$ graphify explain \"APIRouter\"\nNode: APIRouter\n  Source:    routing.py L2210\n  Community: 2\n  Degree:    47\n\nConnections (47):\n  --> RequestValidationError [uses] [INFERRED]\n  --> Dependant [uses] [INFERRED]\n  --> .get() [method] [EXTRACTED]\n  <-- __init__.py [imports] [EXTRACTED]\n  ...\n\n$ graphify path \"FastAPI\" \"ModelField\"\nShortest path (3 hops):\n  FastAPI --uses--> DefaultPlaceholder <--references-- get_request_handler() --references--> ModelField\n```\n\nEvery edge carries a **confidence tag** (`EXTRACTED` = explicit in the source, `INFERRED` = derived by resolution), so you can tell what was read directly from what was inferred. `graphify query \"<question>\"` returns a scoped subgraph for a plain-language question, and `graphify path A B` traces how any two things connect.\n\n---\n\n## What it does\n\nWhat you get out of the box:\n\n| Capability | What you get |\n|---|---|\n| **God nodes** | The most-connected concepts, so you see what everything flows through |\n| **Communities** | The graph split into subsystems (Leiden), with LLM-free labels |\n| **Cross-file links** | `calls` / `imports` / `inherits` / `mixes_in` resolved across ~40 languages via tree-sitter AST |\n| **Query, path, explain** | Ask a question, trace the path between two things, or explain one concept, all against `graph.json` |\n| **Rationale + doc refs** | `# NOTE:` / `# WHY:` comments and ADR/RFC citations become first-class nodes linked to the code |\n| **Beyond code** | Docs, PDFs, images, and video/audio all map into the same graph |\n| **Local-first** | Code is parsed locally with tree-sitter (no LLM, nothing leaves your machine); only the semantic pass over docs/media calls a backend, and only if you configure one |\n\n> [!TIP]\n> Running this across many repos or a monorepo? [Graphify Cloud](https://app.graphify.com/login) does it continuously and cuts agent token spend by 80%, with cross-repo links, SDLC-wide code review, formal verification, and Sentry/Jira connectors. [Start a free 14-day trial &rarr;](https://app.graphify.com/login)\n\n---\n\n## Benchmarks: 0.497 recall@10, 0 LLM credits\n\n| Benchmark | Metric | graphify | Field |\n|---|---|---|---|\n| LOCOMO (n=300) | recall@10 | **0.497** | mem0 0.048, supermemory 0.149 |\n| LOCOMO (n=300) | QA accuracy | 45.3% | supermemory 49.7%, mem0 27.3% |\n| LongMemEval-S (n=50) | QA accuracy | **76%** | tied with dense RAG |\n| ERPNext cross-tool (n=6) | key-fact coverage | **82.0%** | grep/read baseline 70.8% |\n| Graph build | LLM credits | **0** | per-token for most systems |\n\nEvery system ran on the same harness with the same model and budgets, scored by a judge blind-validated against a second judge (90.6% agreement, Cohen's kappa 0.81). Full per-system tables, the code-intelligence result, and reproduction commands: **[BENCHMARKS.md](./BENCHMARKS.md)**.\n\n---\n\n## Documentation\n\nFull guides and reference live at **[docs.graphify.com](https://docs.graphify.com)**:\n\n- **[Quickstart](https://docs.graphify.com/quickstart)**: build your first graph\n- **[CLI reference](https://docs.graphify.com/reference/overview)**: every command and flag\n- **[Ask better graph questions](https://docs.graphify.com/guides/querying)**: querying patterns\n- **[Configuration](https://docs.graphify.com/reference/configuration)**: environment variables and tuning\n- **[Supported inputs](https://docs.graphify.com/concepts/supported-inputs)**: languages and file types\n- **[Team workflows](https://docs.graphify.com/guides/team-workflows)** and **[PR review](https://docs.graphify.com/guides/pull-requests)**\n- **[Troubleshooting](https://docs.graphify.com/troubleshooting)** and **[How it works](https://docs.graphify.com/concepts/architecture)**\n\n---\n\n## Prerequisites\n\n| Requirement | Minimum | Check | Install |\n|---|---|---|---|\n| Python | 3.10+ | `python --version` | [python.org](https://www.python.org/downloads/) |\n| uv *(recommended)* | any | `uv --version` | `curl -LsSf https://astral.sh/uv/install.sh \\| sh` |\n| pipx *(alternative)* | any | `pipx --version` | `pip install pipx` |\n\n**macOS quick install (Homebrew):**\n```bash\nbrew install python@3.12 uv\n```\n\n**Windows quick install:**\n```powershell\nwinget install astral-sh.uv\n```\n\n**Ubuntu/Debian:**\n```bash\nsudo apt install python3.12 python3-pip pipx\n# or install uv:\ncurl -LsSf https://astral.sh/uv/install.sh | sh\n```\n\n---\n\n## Install\n\n> [!IMPORTANT]\n> **Official package:** The PyPI package is `graphifyy` (double-y). Other `graphify*` packages on PyPI are not affiliated. The CLI command is still `graphify`.\n\nThe official source repository is [Graphify-Labs/graphify](https://github.com/Graphify-Labs/graphify).\n\nThe two-command quickstart is at the top of this README. This section covers the install methods, project-scoped installs, and every supported platform.\n\n**Install methods** (pick one):\n\n```bash\nuv tool install graphifyy   # recommended, isolated env (if 'graphify' isn't found after, run: uv tool update-shell)\npipx install graphifyy      # alternative\npip install graphifyy       # may need PATH setup, see Troubleshooting below\n```\n\nThen run `graphify install` once. It detects which assistant you run and registers the skill, so there is no per-assistant setup. Open your AI assistant and type `/graphify .`\n\nTo install the assistant skill into the current repository instead of your user\nprofile, add `--project`:\n\n```bash\ngraphify install --project\ngraphify install --project --platform codex\n```\n\nProject-scoped installs write under the current directory, for example\n`.claude/skills/graphify/SKILL.md` or `.agents/skills/graphify/SKILL.md` (plus a\n`references/` sidecar the skill loads on demand), and\nprint a `git add` hint for files that can be committed.\nPer-platform commands that support project-scoped installs accept the same flag,\nfor example `graphify claude install --project` or `graphify codex install --project`.\n\n> [!TIP]\n> Hitting `command not found`, a `pip`-on-Mac/Windows issue, PowerShell quoting, `uvx` usage, git-hook PATH quirks, or strict mode? See **[Installation](https://docs.graphify.com/installation)** and **[Troubleshooting](https://docs.graphify.com/troubleshooting)**.\n\n<details>\n<summary><b>Pick your platform</b> (20+ assistants, click to expand)</summary>\n\n| Platform | Install command |\n|----------|----------------|\n| Claude Code (Linux/Mac) | `graphify install` |\n| Claude Code (Windows) | `graphify install` (auto-detected) or `graphify install --platform windows` |\n| CodeBuddy | `graphify install --platform codebuddy` |\n| Codex | `graphify install --platform codex` |\n| OpenCode | `graphify install --platform opencode` |\n| Kilo Code | `graphify install --platform kilo` |\n| GitHub Copilot CLI | `graphify install --platform copilot` |\n| VS Code Copilot Chat | `graphify vscode install` |\n| Aider | `graphify install --platform aider` |\n| OpenClaw | `graphify install --platform claw` |\n| Factory Droid | `graphify install --platform droid` |\n| Trae | `graphify install --platform trae` |\n| Trae CN | `graphify install --platform trae-cn` |\n| Gemini CLI | `graphify install --platform gemini` |\n| Hermes | `graphify install --platform hermes` |\n| Kimi Code | `graphify install --platform kimi` |\n| Amp | `graphify amp install` |\n| Agent Skills (cross-framework) | `graphify install --platform agents` (alias `--platform skills`) |\n| Kiro IDE/CLI | `graphify kiro install` |\n| Pi coding agent | `graphify install --platform pi`, plus `graphify pi guard install` for the native guard |\n| Cursor | `graphify cursor install` |\n| Devin CLI | `graphify devin install` |\n| Google Antigravity | `graphify antigravity install` |\n| Google Antigravity (Windows) | `graphify antigravity install` (auto-detected on Windows) |\n\nCodex users also need `multi_agent = true` under `[features]` in `~/.codex/config.toml` for parallel extraction. CodeBuddy uses the same Agent tool and PreToolUse hook mechanism as Claude Code. Factory Droid uses the `Task` tool for parallel subagent dispatch. OpenClaw and Aider use sequential extraction (parallel agent support is still early on those platforms). Trae uses the Agent tool for parallel subagent dispatch and does **not** support `PreToolUse` hooks, so AGENTS.md is the always-on mechanism.\n\n`--platform agents` (alias `--platform skills`) targets the generic cross-framework [Agent-Skills](https://github.com/anthropics/skills) locations: the spec's user-global `~/.agents/skills/` (read by `npx skills` and spec-compliant frameworks) for a global install, and `./.agents/skills/` for a project (`--project`) install. The bare `graphify install` stays single-platform (Claude Code) by design: use the named `agents` platform when you want the skill discoverable by any framework that reads `.agents/skills`.\n\nPi has no `PreToolUse` hook, so `graphify pi guard install` registers a native Pi extension (via Pi's own `pi install <package directory>`) that runs the installed `graphify hook-guard` before Pi's `read`, `grep`, `find` and search-style `bash` calls. Fresh/stale graph decisions and the `GRAPHIFY_HOOK_STRICT=1` once-per-session indexed-read denial come from that same policy, so Pi matches Claude Code's hook behavior; guidance arrives as a `<system-reminder source=\"graphify\">` steering message. It needs Pi 0.58.4 or newer: earlier versions let a steering message skip the rest of a parallel tool-call batch. The package ships inside the Graphify installation, so install Graphify persistently (`uv tool install graphifyy` or `pipx install graphifyy`, not `uvx`), restart Pi after installing or upgrading, and remove it with `graphify pi guard uninstall`. Only local file targets are inspected; the hook needs `graphify` on an absolute `PATH` entry outside the project, is bounded to a two-second, 256 KiB-in/64 KiB-out call, and fails open. The same package also loads in [Oh My Pi](https://github.com/can1357/oh-my-pi): `omp plugin install \"$(graphify pi guard path)\"`. The registered path contains the Python version and venv, so re-run `graphify pi guard install` after changing either, and remove the old entry with `pi remove <old path>`.\n\n> Codex uses `$graphify` instead of `/graphify`.\n\n</details>\n\n<details>\n<summary><b>Optional extras</b> (install only what you need)</summary>\n\n| Extra | What it adds | Install |\n|---|---|---|\n| `pdf` | PDF extraction | `uv tool install \"graphifyy[pdf]\"` |\n| `office` | `.docx` and `.xlsx` support | `uv tool install \"graphifyy[office]\"` |\n| `google` | Google Sheets rendering | `uv tool install \"graphifyy[google]\"` |\n| `video` | Video/audio transcription (faster-whisper + yt-dlp) | `uv tool install \"graphifyy[video]\"` |\n| `mcp` | MCP stdio server | `uv tool install \"graphifyy[mcp]\"` |\n| `watch` | Auto-rebuild on file changes (`graphify watch`) | `uv tool install \"graphifyy[watch]\"` |\n| `neo4j` | Neo4j push support | `uv tool install \"graphifyy[neo4j]\"` |\n| `falkordb` | FalkorDB push support | `uv tool install \"graphifyy[falkordb]\"` |\n| `svg` | SVG graph export | `uv tool install \"graphifyy[svg]\"` |\n| `leiden` | Leiden community detection (graspologic on Python < 3.13; native backend on 3.13+) | `uv tool install \"graphifyy[leiden]\"` |\n| `ollama` | Ollama local inference | `uv tool install \"graphifyy[ollama]\"` |\n| `openai` | OpenAI / OpenAI-compatible APIs | `uv tool install \"graphifyy[openai]\"` |\n| `gemini` | Google Gemini API | `uv tool install \"graphifyy[gemini]\"` |\n| `anthropic` | Anthropic Claude API (`--backend claude`, uses `ANTHROPIC_API_KEY`) | `uv tool install \"graphifyy[anthropic]\"` |\n| `bedrock` | AWS Bedrock (uses IAM, no API key) | `uv tool install \"graphifyy[bedrock]\"` |\n| `azure` | Azure OpenAI Service (`--backend azure`, uses `AZURE_OPENAI_API_KEY` + `AZURE_OPENAI_ENDPOINT`) | `uv tool install \"graphifyy[openai]\"` |\n| `sql` | SQL schema extraction | `uv tool install \"graphifyy[sql]\"` |\n| `postgres` | Live PostgreSQL introspection (`--postgres DSN`) | `uv tool install \"graphifyy[postgres]\"` |\n| `dm` | BYOND DreamMaker `.dm`/`.dme` AST extraction (may need a C compiler + `python3-dev` if no wheel matches your platform) | `uv tool install \"graphifyy[dm]\"` |\n| `terraform` | Terraform / HCL `.tf`/`.tfvars`/`.hcl` AST extraction | `uv tool install \"graphifyy[terraform]\"` |\n| `pascal` | Pascal / Delphi `.pas`/`.dpr`/`.dpk`/`.inc` AST extraction (more accurate `calls`/`inherits` edges; falls back to a regex extractor when absent) | `uv tool install \"graphifyy[pascal]\"` |\n| `ocaml` | OCaml `.ml`/`.mli` AST extraction | `uv tool install \"graphifyy[ocaml]\"` |\n| `commonlisp` | Common Lisp `.lisp`/`.cl`/`.lsp`/`.asd` AST extraction | `uv tool install \"graphifyy[commonlisp]\"` |\n| `robot` | Robot Framework `.robot`/`.resource` extraction (suites, test cases, keywords, keyword-call and resource/library import edges) | `uv tool install \"graphifyy[robot]\"` |\n| `chinese` | Chinese query segmentation (jieba) | `uv tool install \"graphifyy[chinese]\"` |\n| `all` | Everything above | `uv tool install \"graphifyy[all]\"` |\n\n</details>\n\n---\n\n## Make your assistant always use the graph\n\nRun this once in your project after building a graph:\n\nRun `graphify <platform> install` once in your project, for example `graphify claude install` or `graphify codex install` (or `graphify install --platform <name>`).\n\nThis writes a small config file that tells your assistant to consult the knowledge graph for codebase questions, preferring scoped queries like `graphify query \"<question>\"` over reading the full report or grepping raw files.\n\n- **Hook platforms** (Claude Code, Gemini CLI): a hook fires automatically before search-style tool calls (and, on Claude Code, before reading source files one by one via the Read/Glob tools) and nudges your assistant toward the graph path.\n- **Instruction-file platforms** (Codex, OpenCode, Cursor, etc.): persistent instruction files (`AGENTS.md`, `.cursor/rules/`, etc.) provide the same query-first guidance.\n\n`GRAPH_REPORT.md` is still available for broad architecture review.\n\nExactly which files each platform writes (CodeBuddy's `CODEBUDDY.md` + `PreToolUse` hooks, Codex's `AGENTS.md`, Kilo's native `.kilo` plugin, Cursor's `alwaysApply` rule, and so on) is covered in **[Always-on setup](https://docs.graphify.com/guides/always-on)**.\n\nTo remove graphify from all platforms at once: `graphify uninstall` (add `--purge` to also delete `graphify-out/`). Or use the per-platform command (e.g. `graphify claude uninstall`).\n\n### CLI skills or MCP instructions?\n\nThe instructions installed by `graphify install` and those supplied with a Graphify MCP connection describe different ways to query a graph:\n\n| Setup | Guidance to use | Query access |\n|---|---|---|\n| Local CLI and installed assistant skill | The platform instructions written by `graphify install` | Run `graphify query`, `graphify path`, and `graphify explain` against the local graph (`graphify-out/` by default). |\n| Connected Graphify MCP server | The connection's instructions and the tools listed by that server | Call the listed MCP tools against the graph served by that connection. Tool names and descriptions come from the server. |\n\nBoth encourage scoped graph queries before broad source searches. Choose the instructions that match the tools your assistant can actually access; neither block establishes a universal precedence rule for your assistant's instruction files. If you use both integrations, identify which graph each queries and choose a primary query path instead of copying two unconditional instruction blocks into `AGENTS.md`.\n\n`graphify install` installs the local assistant integration; it does not establish an MCP connection. An MCP client does not need to run local CLI queries to use its connected server. A locally hosted server still needs its own Graphify installation and graph, while a hosted connection may serve a graph that is not present in the client's working directory. If the expected tools are missing, check the relevant CLI installation or MCP connection rather than treating the other setup's instructions as interchangeable.\n\n---\n\n## What's in the report\n\n`GRAPH_REPORT.md` summarizes the god nodes, communities, and key paths for broad architecture review. How the graph is built and what it contains: **[How graphify works](https://docs.graphify.com/concepts/architecture)**.\n\n---\n\n## What files it handles: ~40 languages\n\ngraphify parses ~40 programming languages locally with tree-sitter AST, and maps docs, PDFs, images, and audio/video through an optional semantic pass. Full list: **[Supported inputs](https://docs.graphify.com/concepts/supported-inputs)**.\n\n---\n\n## Common commands\n\n```bash\n/graphify .                        # build graph for current folder\n/graphify ./docs --update          # re-extract only changed files\n/graphify . --cluster-only         # rerun clustering without re-extracting\n/graphify . --cluster-only --resolution 1.5      # more granular communities\n/graphify . --cluster-only --exclude-hubs 99     # suppress utility super-hubs from god-node rankings\n/graphify . --no-viz               # skip the HTML, just the report + JSON\n/graphify . --wiki                 # build a markdown wiki from the graph\ngraphify export callflow-html      # Mermaid architecture/call-flow HTML (auto-regenerates on every git commit if hook is installed)\n\n/graphify query \"what connects auth to the database?\"\n/graphify path \"UserService\" \"DatabasePool\"\n/graphify explain \"RateLimiter\"\n\n/graphify add https://arxiv.org/abs/1706.03762   # fetch a paper and add it\n/graphify add <youtube-url>                       # transcribe and add a video\n\ngraphify hook install              # auto-rebuild on commit + branch checkout (run `graphify update .` after `git pull`: see \"Recommended workflow\" below)\ngraphify merge-graphs a.json b.json              # combine two graphs\n\ngraphify prs                       # PR dashboard: CI state, review status, worktree mapping\ngraphify prs 42                    # deep dive on PR #42 with graph impact\ngraphify prs --triage              # AI ranks your review queue (uses whatever backend is configured)\ngraphify prs --conflicts           # PRs sharing graph communities: merge-order risk\n```\n\nSee the [full command reference](#full-command-reference) below.\n\n---\n\n## Labeling and rendering limits\n\n- **`--batch-size`**: 100 communities per labeling call by default, sized for a ~16k-token context (~150 tokens/community). Use `--batch-size 40` for an 8k window. Context overflow is not split-retried; failed batches keep hub-derived names.\n- **`--missing-only`**: `label --missing-only` keeps existing labels and names only unnamed / `Community N` entries. Use `label` (full relabel) to refresh names after the community set changes.\n- **`.graphify_labels.json.sig`**: records the community membership signature; labels survive a re-cluster only while it matches.\n- **`export html`**: 5,000-node default; above it graphify renders an aggregated community view. Use `--node-limit N`. `GRAPHIFY_VIZ_NODE_LIMIT` / `.graphifyrc` `viz_node_limit=N` apply to `cluster-only`, `update`, `watch`, and hooks, not `export html`.\n- **Leiden fallback**: without the `leiden` extra, clustering silently uses networkx Louvain. Switching later reshuffles every community, so plan a full relabel.\n\n---\n\n## Ignoring files\n\ngraphify honors `.gitignore` and supports `--exclude` patterns and a project `.graphifyignore`. Details: **[Configuration](https://docs.graphify.com/reference/configuration)**.\n\n\n## Project configuration\n\nCreate a `.graphifyrc` in the scan root for settings that belong to the project rather than to one run. One `key=value` per line; lines beginning with `#` are comments.\n\n**Ambiguous extensions.** Some extensions mean different languages in different projects: `.inc` is PHP on pfSense, Pascal in a Delphi tree, SQL or assembly elsewhere; `.h` is C or C++; `.m` is Objective-C or MATLAB. graphify has to pick one global default, and when it picks wrong the file does not fail: it parses as the wrong language and yields a handful of incidental nodes, so the graph looks populated while the real symbols are missing. Declare what the extension means in your repo:\n\n```\n# .graphifyrc\n# A language name:\nlanguage.inc=php\n# Or an extension graphify already knows:\nlanguage.tpl=.ts\n# Baked into the git hooks (see Team setup):\nviz_node_limit=0\n```\n\nThe declaration flows through classification, extractor selection, grammar and resolution, imports, `graphify watch`, and the AST cache (a file re-parsed under a different language never reuses the old entry), and the same `.graphifyrc` is read by `extract`, `update`, the hooks, the MCP server, and the `/graphify` skill. A typo is reported once on stderr and the scan continues with the defaults. How declarations interact with caching, incremental rebuilds, and import resolution: **[Configuration](https://docs.graphify.com/reference/configuration)**.\n\n---\n\n## Team setup\n\nCommit or share the graph so your whole team queries the same context, and review pull requests with graph context. See **[Share context with your team](https://docs.graphify.com/guides/team-workflows)** and **[Review pull requests](https://docs.graphify.com/guides/pull-requests)**.\n\n---\n\n## Using the graph directly\n\nBeyond your AI assistant, query `graph.json` straight from the CLI with `graphify query`, `graphify path`, and `graphify explain`. A name that matches several nodes is refused with the candidates listed rather than guessed. Scripts can read the outcome from the exit code: `0` an answer, `3` an ambiguous name, `4` no matching node. See **[Ask better graph questions](https://docs.graphify.com/guides/querying)** and the **[query reference](https://docs.graphify.com/reference/query)**.\n\n---\n\n## Environment variables\n\nBackends, API keys, hook behavior, and tuning are controlled by environment variables. Full table: **[Configuration](https://docs.graphify.com/reference/configuration)**.\n\n- **Claude CLI model**: `GRAPHIFY_CLAUDE_CLI_MODEL` overrides the model for the `claude-cli` backend (default: Opus). `haiku` or `sonnet` are usually enough for community naming; the semantic extraction pass benefits from a larger model.\n\n---\n\n## Privacy\n\n- **Code files**: processed locally via tree-sitter. Nothing leaves your machine. A code-only corpus requires no API key: `graphify extract` runs fully offline. On a mixed repo, add `--code-only` to index just the code and skip the docs/PDFs/images that would otherwise need an LLM.\n- **Video / audio**: transcribed locally with faster-whisper. Nothing leaves your machine.\n- **Docs, PDFs, images**: sent to your AI assistant for semantic extraction (via the `/graphify` skill, using whatever model your IDE session runs). Headless `graphify extract` requires `GEMINI_API_KEY` / `GOOGLE_API_KEY` (Gemini), `MOONSHOT_API_KEY` (Kimi), `ANTHROPIC_API_KEY` (Claude), `OPENAI_API_KEY` (OpenAI), `DEEPSEEK_API_KEY` (DeepSeek), a running Ollama instance (`OLLAMA_BASE_URL`), AWS credentials via the standard provider chain (Bedrock - no API key needed, uses IAM), or the `claude` CLI binary (Claude Code - no API key needed, uses your Claude subscription). The `--dedup-llm` flag uses the same key.\n- **Data residency**: `graphify extract` auto-detects which provider to use based on which API key is set (priority: Gemini → Kimi → Claude → OpenAI → DeepSeek → Azure → Bedrock → Ollama). When it auto-detects, it prints the exact environment variable that chose the provider, so a run is never a surprise. To choose explicitly, pass `--backend`, or set `GRAPHIFY_BACKEND=<name>`; set `GRAPHIFY_BACKEND=none` to disable all LLM backends (semantic extraction and the `claude -p` labeling fallback) and keep a code-only graph. For code with data-residency requirements, use `GRAPHIFY_BACKEND=ollama` / `--backend ollama` (fully local). Kimi (`MOONSHOT_API_KEY`) routes to Moonshot AI servers in China.\n- **No telemetry**, no usage tracking, no analytics.\n- **Query logging**: every `graphify query`, `graphify path`, `graphify explain`, and MCP `query_graph` call is logged to `~/.cache/graphify-queries.log` in JSON Lines format (timestamp, question, corpus, nodes returned, duration). Full subgraph responses are **not** stored by default. Set `GRAPHIFY_QUERY_LOG_DISABLE=1` to opt out, or `GRAPHIFY_QUERY_LOG=/dev/null` to silence without disabling the code path.\n\n---\n\n## Troubleshooting\n\nCommon install and extraction issues and their fixes: **[Troubleshooting](https://docs.graphify.com/troubleshooting)**.\n\n---\n\n## Full command reference\n\nEvery command and flag, with examples: **[CLI reference](https://docs.graphify.com/reference/overview)**.\n\n---\n\n## Learn more\n\n- [docs.graphify.com](https://docs.graphify.com): full documentation: guides, command reference, and integrations\n- [How it works](docs/how-it-works.md): the extraction pipeline, community detection, confidence scoring, benchmarks\n- [ARCHITECTURE.md](ARCHITECTURE.md): module breakdown, how to add a language\n- [Optional integrations](docs/docker-mcp-sqlite.md): Docker MCP Toolkit + SQLite\n- [The Memory Layer](https://safishamsi.gumroad.com/l/qetvlo): the book on the ideas behind graphify, the architecture end to end\n\n---\n\n## Graphify Cloud\n\n[**Graphify Cloud**](https://app.graphify.com/login) is the always-on layer built on top of graphify. Instead of a graph you rebuild on demand per folder, it keeps one live graph across your entire software development lifecycle:\n\n- **80% fewer tokens**: always-on memory means your agents stop re-reading and re-explaining the codebase every session.\n- **Monorepo and cross-repo**: one connected graph across every service and repository, not a graph per folder.\n- **Formal verification**: check architectural and dependency invariants against the live graph.\n- **Code review with a bird's-eye view of your SDLC**: see how a change ripples across the whole system before you merge.\n- **SDLC connectors**: pull in Sentry, Jira, and more, so incidents, tickets, and code live in one graph.\n- **Always-on**: updates continuously in the background across code, docs, and meetings.\n\n**[Start a free 14-day trial at app.graphify.com &rarr;](https://app.graphify.com/login)**\n\n---\n\n## Contributing\n\nContributions are welcome. See **[CONTRIBUTING.md](CONTRIBUTING.md)** for the development setup, the test and CI-parity commands, the git workflow, and what makes a strong contribution (worked examples and extraction bug reports are the most useful). Architecture and how to add a language: [ARCHITECTURE.md](ARCHITECTURE.md).\n\nNew here? Say hi on [Discord](https://discord.gg/graphify) or in [GitHub Discussions](https://github.com/Graphify-Labs/graphify/discussions).\n\n---\n\n## Contributors\n\n<a href=\"https://github.com/Graphify-Labs/graphify/graphs/contributors\">\n  <img src=\"https://contrib.rocks/image?repo=Graphify-Labs/graphify\" alt=\"graphify contributors\" />\n</a>\n\nMade with [contrib.rocks](https://contrib.rocks).\n\n---\n\n## Translations\n\nThe README is available in 32 languages. Use the language switcher at the top of this file to read it in yours, or browse [`docs/translations/`](docs/translations/). To improve a translation or add a new one, open a pull request against the matching file there.\n\n---\n\n## Building on graphify\n\nBuilding something in the graphify ecosystem? That is encouraged. If your project uses \"graphify\" in its name (for example `graphify-dashboard` or `graphify-action`), please add a short note to your README clarifying that it is community-built and not affiliated with or endorsed by Graphify Labs. \"graphify\" and the graphify logo are marks of Graphify Labs; please do not use them in a way that implies official status.\n\n---\n\n## Community and links\n\n<p align=\"center\">\n  <a href=\"https://graphify.com\"><img src=\"https://img.shields.io/badge/Website-graphify.com-4c1?style=flat&logo=googlechrome&logoColor=white\" alt=\"Website\"/></a>\n  <a href=\"https://discord.gg/graphify\"><img src=\"https://img.shields.io/badge/Discord-Join-5865F2?style=flat&logo=discord&logoColor=white\" alt=\"Discord\"/></a>\n  <a href=\"https://x.com/graphify\"><img src=\"https://img.shields.io/badge/X-graphify-000000?logo=x&logoColor=white\" alt=\"X\"/></a>\n  <a href=\"https://www.youtube.com/@graphifylabs\"><img src=\"https://img.shields.io/badge/YouTube-Graphify%20Labs-FF0000?style=flat&logo=youtube&logoColor=white\" alt=\"YouTube\"/></a>\n  <a href=\"https://github.com/sponsors/safishamsi\"><img src=\"https://img.shields.io/badge/sponsor-safishamsi-ea4aaa?logo=github-sponsors\" alt=\"Sponsor\"/></a>\n  <a href=\"https://safishamsi.gumroad.com/l/qetvlo\"><img src=\"https://img.shields.io/badge/Book-The%20Memory%20Layer-2ea44f?style=flat&logo=gitbook&logoColor=white\" alt=\"The Memory Layer\"/></a>\n</p>\n"
+ },
+ "ghsa:GHSA-m8xf-2cr7-77ph": {
+  "fetched_at": "2026-10-28T12:13:59.534Z",
+  "error": "not-in-advisory-db",
+  "notInDb": true
+ },
+ "ghsa:GHSA-j3rv-43j4-c7qm": {
+  "fetched_at": "2026-10-28T12:14:01.592Z",
+  "cve_id": "CVE-2026-54512",
+  "severity": "high",
+  "published_at": "2026-06-23T21:21:38Z",
+  "metrics": [
+   {
+    "version": "3.1",
+    "type": "GHSA",
+    "source": "security-advisories@github.com",
+    "score": 8.1,
+    "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:H/I:H/A:H",
+    "field": "cvss (legacy mirror of cvss_v3)"
+   },
+   {
+    "version": "3.1",
+    "type": "GHSA",
+    "source": "security-advisories@github.com",
+    "score": 8.1,
+    "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:H/I:H/A:H",
+    "field": "cvss_severities.cvss_v3"
+   }
+  ]
+ },
+ "ghsa:GHSA-26p8-2jq9-3vq9": {
+  "fetched_at": "2026-10-28T12:14:03.736Z",
+  "cve_id": "CVE-2026-116692",
+  "severity": "critical",
+  "published_at": "2026-10-27T21:26:32Z",
+  "metrics": [
+   {
+    "version": "3.1",
+    "type": "GHSA",
+    "source": "security-advisories@github.com",
+    "score": 9.8,
+    "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
+    "field": "cvss (legacy mirror of cvss_v3)"
+   },
+   {
+    "version": "3.1",
+    "type": "GHSA",
+    "source": "security-advisories@github.com",
+    "score": 9.8,
+    "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
+    "field": "cvss_severities.cvss_v3"
+   }
+  ]
+ },
+ "cna:CVE-2026-65145": {
+  "fetched_at": "2026-10-28T12:14:16.526Z",
+  "state": "PUBLISHED",
+  "assigner": "nvidia",
+  "metrics": [
+   {
+    "version": "3.1",
+    "score": 10,
+    "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:C/C:H/I:H/A:H",
+    "field": "containers.cna.metrics.cvssV3_1.baseScore"
+   }
+  ]
+ },
+ "cna:CVE-2026-65151": {
+  "fetched_at": "2026-10-28T12:14:18.575Z",
+  "state": "PUBLISHED",
+  "assigner": "nvidia",
+  "metrics": [
+   {
+    "version": "3.1",
+    "score": 8.4,
+    "vector": "CVSS:3.1/AV:L/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
+    "field": "containers.cna.metrics.cvssV3_1.baseScore"
+   }
+  ]
+ },
+ "cna:CVE-2022-41924": {
+  "fetched_at": "2026-10-28T12:14:20.621Z",
+  "state": "PUBLISHED",
+  "assigner": "GitHub_M",
+  "metrics": [
+   {
+    "version": "3.0",
+    "score": 9.6,
+    "vector": "CVSS:3.0/AV:N/AC:L/PR:N/UI:R/S:C/C:H/I:L/A:H",
+    "field": "containers.cna.metrics.cvssV3_0.baseScore"
+   }
+  ]
+ },
+ "cna:CVE-2023-28436": {
+  "fetched_at": "2026-10-28T12:14:22.669Z",
+  "state": "PUBLISHED",
+  "assigner": "GitHub_M",
+  "metrics": [
+   {
+    "version": "3.1",
+    "score": 5.7,
+    "vector": "CVSS:3.1/AV:A/AC:L/PR:H/UI:R/S:C/C:H/I:N/A:N",
+    "field": "containers.cna.metrics.cvssV3_1.baseScore"
+   }
+  ]
+ },
+ "cna:CVE-2026-110879": {
+  "fetched_at": "2026-10-28T12:14:24.738Z",
+  "state": "PUBLISHED",
+  "assigner": "HeroDevs",
+  "metrics": [
+   {
+    "version": "3.1",
+    "score": 9.8,
+    "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
+    "field": "containers.cna.metrics.cvssV3_1.baseScore"
+   }
+  ]
+ },
+ "cna:CVE-2026-54512": {
+  "fetched_at": "2026-10-28T12:14:26.869Z",
+  "state": "PUBLISHED",
+  "assigner": "GitHub_M",
+  "metrics": [
+   {
+    "version": "3.1",
+    "score": 8.1,
+    "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:H/I:H/A:H",
+    "field": "containers.cna.metrics.cvssV3_1.baseScore"
+   }
+  ]
+ },
+ "cna:CVE-2026-105781": {
+  "fetched_at": "2026-10-28T12:14:28.919Z",
+  "state": "PUBLISHED",
+  "assigner": "adobe",
+  "metrics": [
+   {
+    "version": "3.1",
+    "score": 10,
+    "temporalScore": 10,
+    "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:C/C:H/I:H/A:H",
+    "field": "containers.cna.metrics.cvssV3_1.baseScore"
+   }
+  ]
+ },
+ "cna:CVE-2026-104351": {
+  "fetched_at": "2026-10-28T12:14:30.962Z",
+  "state": "PUBLISHED",
+  "assigner": "adobe",
+  "metrics": [
+   {
+    "version": "3.1",
+    "score": 9.9,
+    "temporalScore": 9.9,
+    "vector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:C/C:H/I:H/A:H",
+    "field": "containers.cna.metrics.cvssV3_1.baseScore"
+   }
+  ]
+ },
+ "cna:CVE-2026-104353": {
+  "fetched_at": "2026-10-28T12:14:32.979Z",
+  "state": "PUBLISHED",
+  "assigner": "adobe",
+  "metrics": [
+   {
+    "version": "3.1",
+    "score": 9.9,
+    "temporalScore": 9.9,
+    "vector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:C/C:H/I:H/A:H",
+    "field": "containers.cna.metrics.cvssV3_1.baseScore"
+   }
+  ]
+ },
+ "cna:CVE-2026-105780": {
+  "fetched_at": "2026-10-28T12:14:35.063Z",
+  "state": "PUBLISHED",
+  "assigner": "adobe",
+  "metrics": [
+   {
+    "version": "3.1",
+    "score": 9.9,
+    "temporalScore": 9.9,
+    "vector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:C/C:H/I:H/A:H",
+    "field": "containers.cna.metrics.cvssV3_1.baseScore"
+   }
+  ]
+ },
+ "cna:CVE-2026-105489": {
+  "fetched_at": "2026-10-28T12:14:37.107Z",
+  "state": "PUBLISHED",
+  "assigner": "adobe",
+  "metrics": [
+   {
+    "version": "3.1",
+    "score": 9.9,
+    "temporalScore": 9.9,
+    "vector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:C/C:H/I:H/A:H",
+    "field": "containers.cna.metrics.cvssV3_1.baseScore"
+   }
+  ]
+ },
+ "cna:CVE-2026-104350": {
+  "fetched_at": "2026-10-28T12:14:39.159Z",
+  "state": "PUBLISHED",
+  "assigner": "adobe",
+  "metrics": [
+   {
+    "version": "3.1",
+    "score": 9.3,
+    "temporalScore": 9.3,
+    "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:C/C:H/I:H/A:N",
+    "field": "containers.cna.metrics.cvssV3_1.baseScore"
+   }
+  ]
+ },
+ "cna:CVE-2026-104354": {
+  "fetched_at": "2026-10-28T12:14:41.197Z",
+  "state": "PUBLISHED",
+  "assigner": "adobe",
+  "metrics": [
+   {
+    "version": "3.1",
+    "score": 9.1,
+    "temporalScore": 9.1,
+    "vector": "CVSS:3.1/AV:N/AC:L/PR:H/UI:N/S:C/C:H/I:H/A:H",
+    "field": "containers.cna.metrics.cvssV3_1.baseScore"
+   }
+  ]
+ },
+ "cna:CVE-2026-105779": {
+  "fetched_at": "2026-10-28T12:14:43.257Z",
+  "state": "PUBLISHED",
+  "assigner": "adobe",
+  "metrics": [
+   {
+    "version": "3.1",
+    "score": 9.1,
+    "temporalScore": 9.1,
+    "vector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:C/C:H/I:L/A:L",
+    "field": "containers.cna.metrics.cvssV3_1.baseScore"
+   }
+  ]
+ },
+ "cna:CVE-2026-118375": {
+  "fetched_at": "2026-10-28T12:14:45.321Z",
+  "state": "PUBLISHED",
+  "assigner": "VulnCheck",
+  "metrics": [
+   {
+    "version": "4.0",
+    "score": 9.2,
+    "vector": "CVSS:4.0/AV:N/AC:L/AT:P/PR:N/UI:N/VC:H/VI:H/VA:H/SC:N/SI:N/SA:N",
+    "field": "containers.cna.metrics.cvssV4_0.baseScore"
+   },
+   {
+    "version": "3.1",
+    "score": 8.1,
+    "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:H/I:H/A:H",
+    "field": "containers.cna.metrics.cvssV3_1.baseScore"
+   }
+  ]
+ },
+ "cna:CVE-2026-116692": {
+  "fetched_at": "2026-10-28T12:14:47.461Z",
+  "state": "PUBLISHED",
+  "assigner": "GitHub_M",
+  "metrics": [
+   {
+    "version": "3.1",
+    "score": 9.8,
+    "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
+    "field": "containers.cna.metrics.cvssV3_1.baseScore"
+   }
+  ]
+ },
+ "cna:CVE-2026-103594": {
+  "fetched_at": "2026-10-28T12:14:49.457Z",
+  "state": "PUBLISHED",
+  "assigner": "WatchGuard",
+  "metrics": [
+   {
+    "version": "4.0",
+    "score": 9.5,
+    "vector": "CVSS:4.0/AV:N/AC:L/AT:P/PR:N/UI:N/VC:H/VI:H/VA:H/SC:H/SI:H/SA:H",
+    "field": "containers.cna.metrics.cvssV4_0.baseScore"
+   }
+  ]
+ },
+ "cna:CVE-2026-90465": {
+  "fetched_at": "2026-10-28T12:14:51.576Z",
+  "state": "PUBLISHED",
+  "assigner": "WatchGuard",
+  "metrics": [
+   {
+    "version": "4.0",
+    "score": 8.7,
+    "vector": "CVSS:4.0/AV:A/AC:L/AT:N/PR:N/UI:N/VC:H/VI:H/VA:H/SC:H/SI:H/SA:H",
+    "field": "containers.cna.metrics.cvssV4_0.baseScore"
+   }
+  ]
+ },
+ "cna:CVE-2026-112709": {
+  "fetched_at": "2026-10-28T12:14:54.108Z",
+  "state": "PUBLISHED",
+  "assigner": "WatchGuard",
+  "metrics": [
+   {
+    "version": "4.0",
+    "score": 9.2,
+    "vector": "CVSS:4.0/AV:N/AC:L/AT:P/PR:N/UI:N/VC:H/VI:H/VA:H/SC:N/SI:N/SA:N",
+    "field": "containers.cna.metrics.cvssV4_0.baseScore"
+   }
+  ]
+ },
+ "cna:CVE-2026-93857": {
+  "fetched_at": "2026-10-28T12:14:56.162Z",
+  "state": "PUBLISHED",
+  "assigner": "WatchGuard",
+  "metrics": [
+   {
+    "version": "4.0",
+    "score": 9.2,
+    "vector": "CVSS:4.0/AV:N/AC:L/AT:P/PR:N/UI:N/VC:H/VI:H/VA:H/SC:N/SI:N/SA:N",
+    "field": "containers.cna.metrics.cvssV4_0.baseScore"
+   }
+  ]
+ },
+ "cna:CVE-2026-93865": {
+  "fetched_at": "2026-10-28T12:14:58.190Z",
+  "state": "PUBLISHED",
+  "assigner": "WatchGuard",
+  "metrics": [
+   {
+    "version": "4.0",
+    "score": 9.2,
+    "vector": "CVSS:4.0/AV:N/AC:L/AT:P/PR:N/UI:N/VC:H/VI:H/VA:H/SC:N/SI:N/SA:N",
+    "field": "containers.cna.metrics.cvssV4_0.baseScore"
+   }
+  ]
+ },
+ "cna:CVE-2026-93866": {
+  "fetched_at": "2026-10-28T12:15:00.154Z",
+  "state": "PUBLISHED",
+  "assigner": "WatchGuard",
+  "metrics": [
+   {
+    "version": "4.0",
+    "score": 9.2,
+    "vector": "CVSS:4.0/AV:N/AC:L/AT:P/PR:N/UI:N/VC:H/VI:H/VA:H/SC:N/SI:N/SA:N",
+    "field": "containers.cna.metrics.cvssV4_0.baseScore"
+   }
+  ]
+ },
+ "cna:CVE-2026-103593": {
+  "fetched_at": "2026-10-28T12:15:02.195Z",
+  "state": "PUBLISHED",
+  "assigner": "WatchGuard",
+  "metrics": [
+   {
+    "version": "4.0",
+    "score": 9.1,
+    "vector": "CVSS:4.0/AV:L/AC:L/AT:P/PR:N/UI:N/VC:N/VI:H/VA:H/SC:N/SI:H/SA:H",
+    "field": "containers.cna.metrics.cvssV4_0.baseScore"
+   }
+  ]
+ },
+ "cna:CVE-2026-82332": {
+  "fetched_at": "2026-10-28T12:15:04.157Z",
+  "state": "PUBLISHED",
+  "assigner": "WatchGuard",
+  "metrics": [
+   {
+    "version": "4.0",
+    "score": 5.6,
+    "vector": "CVSS:4.0/AV:L/AC:L/AT:P/PR:N/UI:A/VC:H/VI:L/VA:N/SC:N/SI:N/SA:N",
+    "field": "containers.cna.metrics.cvssV4_0.baseScore"
+   }
+  ]
+ },
+ "NVIDIA/product-security": {
+  "fetched_at": "2026-10-28T12:15:11.216Z",
+  "pushed_at": "2026-10-27T12:23:44Z",
+  "created_at": "2024-06-18T21:11:50Z",
+  "archived": false,
+  "stars": 32,
+  "forks": 6,
+  "license": null
+ },
+ "NVIDIA/NeMo-Agent-Toolkit": {
+  "fetched_at": "2026-10-28T12:15:13.064Z",
+  "pushed_at": "2026-10-28T00:37:21Z",
+  "created_at": "2025-03-06T17:23:52Z",
+  "archived": false,
+  "stars": 2684,
+  "forks": 811,
+  "license": "Apache-2.0"
+ },
+ "pkgs.tailscale.com/stable": {
+  "fetched_at": "2026-10-28T12:15:14.543Z",
+  "error": "Command failed: gh api repos/pkgs.tailscale.com/stable"
+ },
+ "advisories/GHSA-m8xf-2cr7-77ph": {
+  "fetched_at": "2026-10-28T12:15:16.001Z",
+  "error": "Command failed: gh api repos/advisories/GHSA-m8xf-2cr7-77ph"
+ },
+ "FasterXML/jackson-databind": {
+  "fetched_at": "2026-10-28T12:15:17.689Z",
+  "pushed_at": "2026-10-25T03:04:41Z",
+  "created_at": "2011-12-23T07:17:41Z",
+  "archived": false,
+  "stars": 3755,
+  "forks": 1539,
+  "license": "Apache-2.0"
+ },
+ "readme:maharmstone/moxnox": {
+  "fetched_at": "2026-10-28T12:15:19.590Z",
+  "bytes": 12327,
+  "text": "# Moxnox v1.0\n\nMoxnox is an NT-like, POSIX-compatible hobby OS which runs on btrfs and is\ncapable of self-hosting. That means:\n\n* Its design, such as the choice of syscalls, is modelled after that of Windows\n  NT...\n* ...yet at the same time, it should be capable of running software written for\n  Unix-like systems, provided that they have been recompiled for it, and comes\n  with a full GNU base system\n* It is mature enough that you can build Moxnox on Moxnox\n* And it runs on everybody's favourite Linux filesystem\n\nVersion 1.0 is around 130,000 lines of C++, and runs on amd64 and aarch64.\n\nThe btrfs code works for basic purposes, but has not been battle-hardened.\nPlease don't try to mount anything but throwaway filesystems.\n\n![Screenshot](/screenshot.png?raw=true)\n\n## Running\n\nTo test Moxnox in qemu, download [moxnox-amd64-1.0.img.gz](https://github.com/maharmstone/moxnox/releases/download/v1.0/moxnox-amd64-1.0.img.gz) and [moxnox-kernel-amd64-1.0.efi](https://github.com/maharmstone/moxnox/releases/download/v1.0/moxnox-kernel-amd64-1.0.efi). Run `gunzip moxnox-amd64-1.0.img.gz` to decompress the image.\n\nThen:\n\n```\nqemu-system-x86_64 -M q35 -enable-kvm -cpu host -m 1024 \\\n-smp cores=4,threads=1 \\\n-kernel moxnox-kernel-amd64-1.0.efi \\\n-append \"root=/dev/sda\" \\\n-device ich9-ahci,id=ahci -drive id=disk,file=moxnox-amd64-1.0.img,if=none \\\n-device ide-hd,drive=disk,bus=ahci.0 \\\n-nic user,model=virtio-net-pci \\\n-device qemu-xhci \\\n-device usb-kbd,id=kbd \\\n-device usb-tablet,id=tablet \\\n-serial stdio\n```\n\nYou will need to increase the memory from 1024 MB if you are trying anything\nstrenuous, like self-hosting.\n\nFor ARM, something like the below should work:\n\n```\nqemu-system-aarch64 -M virt -cpu cortex-a76 -m 1024 \\\n-smp cores=4,threads=1 \\\n-kernel moxnox-kernel-aarch64-1.0.efi \\\n-append \"root=/dev/sda\" \\\n-device ich9-ahci,id=ahci -drive id=disk,file=moxnox-aarch64-1.0.img,if=none \\\n-device ide-hd,drive=disk,bus=ahci.0 \\\n-nic user,model=virtio-net-pci \\\n-drive if=pflash,unit=0,file=/usr/share/qemu/edk2-aarch64-code.fd,readonly=on \\\n-device qemu-xhci \\\n-device usb-kbd,id=kbd \\\n-device usb-tablet,id=tablet \\\n-serial stdio\n```\n\n## Installing\n\nFirst, use `gparted` or similar to create a new partition. 32 GB should be\nplenty. I'm calling it `/dev/nvme0n1p99` below - don't get this wrong.\n\nMake sure you have a recent versions of btrfs-progs, as we don't support some\nof the default settings used by the older versions.\n\nPrepare the root drive:\n```\n# mkfs.btrfs /dev/nvme0n1p99\n# mkdir /mnt/moxnox\n# mount /dev/nvme0n1p99 /mnt/moxnox\n# cd /mnt/moxnox\n# wget https://github.com/maharmstone/moxnox/releases/download/v1.0/moxnox-amd64-1.0.tar.gz\n# tar -xvzf moxnox-amd64-1.0.tar.gz\n# rm moxnox-amd64-1.0.tar.gz\n# cd\n# umount /mnt/moxnox\n```\n\nCopy the kernel:\n```\n# mount /boot/efi\n# cd /boot/efi\n# wget https://github.com/maharmstone/moxnox/releases/download/v1.0/moxnox-kernel-amd64-1.0.efi\n```\n\nTo install the boot entry, do something like:\n```\n# efibootmgr -c -d /dev/nvme0n1 -p 1 -L \"Moxnox\" -l '\\moxnox-kernel-amd64-1.0.efi' -u 'root=/dev/nvme0n1p99'\n```\n\n`efibootmgr` likes to change the boot order afterwards, this probably is not\nwhat you want. The names of block devices should be more or less the same on\nLinux and Moxnox.\n\nThe \"EFI\" file is actually a polyglot file that also conforms to the Linux boot\nprotocol, so it *should* also work on non-EFI GRUB. I have not tested this.\nHow to set this up is left as an exercise for the reader.\n\n## Hardware support\n\nFor amd64, everything is compiled for x86-64-v3, which covers more or less\nanything manufactured since 2015 or so. Moxnox automatically uses and enables\nAVX512 if it detects it. For qemu, you need to specify the `q35` machine type;\nthe default `pc` machine is ancient, and doesn't have PCI Express. `microvm`\nworks too.\n\nFor aarch64, we're using LSE atomics, which require ARMv8.1. That means the\nRaspberry Pi 5, but not any earlier models. Moxnox only supports ACPI, not\nDevice Tree, so for the Pi you will also need https://github.com/worproject/rpi5-uefi.\nUnfortunately there is no `raspi5` machine type in qemu, but I have had success\nwith `virt`, and `sbsa-ref` works too.\n\nDevice support:\n* Block devices: NVMe, SATA, SDHCI (i.e. SD cards), virtio-block, USB mass\n  storage\n* Network cards: virtio-net, RTL8168, RTL8125\n* Input devices: USB HID, PS/2 keyboard, PS/2 mouse, virtio-input\n* Graphics: virtio-gpu, GOP framebuffer, VBE, VGA text console (pass `text=80x25`\n  on non-UEFI boots)\n* Serial ports: virtio-console, x86 serial port, PL011 ARM serial port\n* USB: XHCI\n\n## Building\n\nThe easiest way to build is to pull the Docker containers `maharmstone/moxnox-ci-amd64`\nor `maharmstone/moxnox-ci-aarch64`, which contain the cross-compilers for\n`x86_64-pc-moxnox` or `aarch64-pc-moxnox`.\n\nThen in the container:\n\n```\n$ git clone https://github.com/maharmstone/moxnox\n$ cd moxnox\n```\n\nCMake will compile whichever of the submodules are checked out. For a minimal\nsystem:\n```\n$ git submodule update --init --depth 1 ports/acpica/repo ports/freetype/repo ports/gnu-efi/repo ports/harfbuzz/repo ports/libpng/repo ports/mingw-w64/repo ports/zlib/repo ports/musl/repo ports/tre/repo\n```\n\nFor all of the ports, which might take a while:\n```\n$ git submodule update --init --recursive\n```\n\nThen:\n```\n$ mkdir build\n$ cd build\n$ cmake -DCMAKE_TOOLCHAIN_FILE=amd64.cmake -GNinja ..\n```\n\nor\n\n```\n$ cmake -DCMAKE_TOOLCHAIN_FILE=clang-aarch64-native.cmake -GNinja ..\n```\n\nMake sure you specify Ninja - we need this as we're using C++ modules. CMake\ndefaults to Unix Makefiles, which don't work.\n\nFinally:\n```\n$ ninja\n```\n\n`gcc`, `llvm`, and `rust` are not compiled unless explicitly requested due to\ntheir size. `hexyl` and `ripgrep` also need to be specified explicitly due to\ntheir dependency on `rust`.\n\nTo build on Moxnox, as above, but you don't need a toolchain file: `cmake -GNinja ..`.\n`gcc`, `rust`, `hexyl`, and `ripgrep` can't yet be compiled in Moxnox, but\neverything else works (eventually). You may need a lot of RAM and even more\npatience. If CMake complains about `rust-libc`, make sure that you don't have\nthe Rust submodules checked out.\n\n## Licence\n\nThe kernel and first-party programs are licensed under the GPL. The first-party\nDLLs are licensed under the LGPL. The contents of the `modules` directory are\nMIT.\n\nSee the ports submodules for details of their particular licences.\n\n## Ports\n\nCurrent ports:\n\n* bash\n* binutils\n* bison\n* bzip2\n* cairo\n* cmake\n* coreutils\n* curl\n* diffutils\n* expat\n* file\n* findutils\n* flex\n* freetype\n* gawk\n* gcc (amd64 only)\n* git\n* gmp\n* gperf\n* grep\n* gzip\n* harfbuzz\n* hexyl\n* jsoncpp\n* less\n* libarchive\n* libiconv\n* libpng\n* librhash\n* libuv\n* llvm\n* m4\n* make\n* mako\n* markupsafe\n* mesa\n* mpc\n* mpfr\n* nano\n* ncurses\n* netcat\n* ninja\n* openssh\n* openssl\n* patch\n* perl\n* pixman\n* python\n* pyyaml\n* readline\n* ripgrep\n* rust\n* sed\n* tar\n* vim\n* wget\n* xz\n* zlib\n* zstd\n\n## FAQs\n\n### What's missing?\n\nLoads - but this *is* version 1.0. In particular:\n* A GUI\n* Support for different timezones\n* Support for different keyboard layouts\n* Locales and non-UTF-8 character sets\n* Any sort of security\n* Multiple users and groups\n\nFor performance issues and similar:\n* The userspace heap allocator could be a lot quicker (this is the bottleneck\n  when self-hosting)\n* TCP is slow, because we don't negotiate an MSS and keep to the default 64KB\n  window\n* We ought to be doing early writeback on memory pressure\n* There should be an LRU system to drop clean pages from the page cache...\n* ...made worse by the fact that the dentry cache never gets pruned, so inodes\n  stay open until deleted\n\nAnd obviously there should be more ports and hardware support.\n\n## How compatible is it with NT?\n\nThe contract is that the syscalls and low-level interfaces match those of NT,\nbut not the daemons or how the kernel itself is structured. This is in contrast\nto what ReactOS aims to do, which is an exact recreation of Windows.\n\nSo:\n* Binaries are PE format rather than ELF, and have a `.exe` or `.dll` extension\n* C++ exceptions are done through SEH\n* POSIX signals are done through Asynchronous Procedure Calls\n* All the non-kernel kernel-like stuff gets done in `ntdll.dll`\n* The rcx, rdx, r8, r9 calling convention matches that of Windows\n* And its C eccentricities match those of Windows: `sizeof(long) == sizeof(int32_t)`,\n  `sizeof(wchar_t) == sizeof(char16_t)`, `sizeof(long double) == sizeof(double)`.\n\nThere's an awful lot of stuff in NT, but the interesting stuff that's missing\nis tokens, the Registry, and I/O completion ports.\n\nNT has a complex system where there's a virtual filesystem but it's hidden\n(unless you use winobj), with the true path of a file hanging off the name of\nits block device (so `C:\\Windows\\System32` might actually be `\\Device\\HarddiskVolume1\\Windows\\System32`).\nI've not replicated any of that. Paths are POSIX-like: slashes rather than\nbackslashes, `/` as the root filesystem, and mounted directories. Unlike real\nWindows, `NtCreateFile` resolves . and .., to work better with the dentry cache.\n\nOther things I've deliberately not copied are the various forms of transactions,\nwhich were a product of their time, and the idea of paged kernel memory, which\ncauses more problems than it solves.\n\n## How compatible is it with POSIX?\n\nWe have implemented 642 of the ~1,200 functions in POSIX 2024. This is the vast\nmajority of what's used in practice, with `gnulib` papering over some of the\ncracks. Unlike Windows, `fork` is there. I've used `musl` for its mathematical\nand cryptographic functions, and `mingw` for `printf` and some other things,\nand `tre` for its regexes.\n\nThe POSIX functions are split over `ucrtbase`, `iphlpapi`, and `ws2_32`, as on\nWindows, with anything that Windows doesn't implement put in `mnposix`.\n\nI've borrowed liberally from Linux's best ideas: the dentry cache, large folios,\nmapping the whole of physical memory, evdev.\n\nOther POSIX shortcomings:\n\n* AF_UNIX is half-complete. `socketpair` works, including for SCM_RIGHTS (`ssh`\n  uses this), but the normal client-server code doesn't work\n* `mkfifo` creates an inode, but I/O to it does not get redirected to a buffer\n  as it ought to do\n* APCs (i.e. signals) only get delivered when a thread returns from a syscall.\n  So a program doing `while (true) { }` is currently unkillable.\n\n## How do I start sshd?\n\nThere's nothing that automatically starts daemons yet, so manually.\n\nFirst generate the host key:\n```\n# ssh-keygen -A\n```\n\nThere's no passwords yet, so you will need to add a `/root/.ssh/authorized_keys`\nfile so that you can connect. If you have trouble, double-check that /root is\nowned by root, as sshd will ignore this file otherwise.\n\nThen start sshd using its full path:\n```\n# /bin/sshd.exe\n```\n\n## Can this run Windows programs?\n\nNo. Or at least, not yet.\n\nWe deliberately do not implement any Win32 DLLs, bar a few functions in\n`kernelbase` that the mingw runtime wants. A future improvement would be to\nstrip these out entirely, then port across Wine's versions of the Win32 DLLs.\nSome parts of Wine, like `wineserver` and `ntdll`, we would not need as we are\nalready taking care of it ourselves.\n\n## How sloppy is this?\n\nNone of the substantive code was written by AI.\n\nI used AI to help with the mechanical parts of porting (e.g. translating\nautotools to CMake, replacing `ioctl` calls with `tcgetwinsize`, translating\nthe C structs into Rust), as well as to write some of the smoke tests (e.g.\n`cairo-test`, `mesa-test`).\n\nWhere Claude really shines though is in reviewing your own commits. You give it\na hash, and it tells you about the silly memory leak or deadlock that you left\nin, before you can make a fool of yourself.\n\n## Why?\n\nFor funsies. Plus the only way of really learning how something works is to\nhave a go at writing it yourself.\n\nAlso, the NT kernel is *criminally* underrated, and pretty much unknown to\nhobbyists. It had features that Linux took years and years to come up with its\nown design for, such as `eventfd` and `pidfd`.\n\nIt's a shame that Windows keeps shying away from full POSIX compatibility. They\nhad a half-complete version in the early days, then more recently had WSL1, only\nto then abandon it. And Nano Server was another cool idea, only again to be\nitself abandoned. So this is my take on what I wish Windows had been like.\n"
+ },
+ "readme:expo/skills": {
+  "fetched_at": "2026-10-28T12:15:19.921Z",
+  "bytes": 8318,
+  "text": "<p align=\"center\">\n  <a href=\"https://docs.expo.dev/skills/\" target=\"_blank\">\n    <img src=\"assets/expo-skills.png\" alt=\"Expo Skills\" width=\"100%\" />\n  </a>\n</p>\n\n<h3 align=\"center\">Expo Skills</h3>\n\n<p align=\"center\">\n  <a href=\"https://skills.sh/expo/skills\"><img src=\"https://skills.sh/b/expo/skills\" alt=\"skills.sh installs\" /></a>\n  <img src=\"https://img.shields.io/badge/Expo-official-000020\" alt=\"Official Expo\" />\n  <img src=\"https://img.shields.io/badge/license-MIT-blue\" alt=\"MIT license\" />\n</p>\n\n<p align=\"center\">\n  Official AI agent skills from the Expo team for building, deploying, upgrading, and debugging Expo apps.\n</p>\n\n## How It Works\n\nSkills give AI agents focused Expo knowledge: when to use Expo APIs, how to structure common workflows, and which Expo, EAS, React Native, iOS, and Android constraints matter. Expo documentation, Expo CLI, and EAS CLI remain the source of truth; these skills help agents apply them correctly.\n\n## Installation\n\nFor Claude Code or Codex, install the plugin so updates are handled by the official plugin marketplace. For Cursor, OpenCode, and other AI coding agents, use the skills CLI.\n\n| Path | Best for |\n| --- | --- |\n| Plugin install | Claude Code or Codex, with updates handled by their official plugin marketplaces. |\n| Skills CLI | Cursor, OpenCode, GitHub Copilot, Windsurf, Gemini, Cline, AMP, Factory Droid, Antigravity, Kiro CLI, and other AI coding agents. |\n\n### Skills CLI\n\nInstall all Expo skills with the [skills CLI](https://skills.sh/docs/cli):\n\n```text\nnpx skills@latest add expo/skills --skill '*'\n```\n\nThis selects every Expo skill without selecting every agent. The CLI will still ask where to install them; to target one agent directly, add `--agent <agent>`.\n\nFor most agents, this is the only install command you need. Run it from the project root, then restart or refresh your agent session so it can discover the installed `SKILL.md` files.\n\n### Claude Code Plugin\n\nInstall from the official Claude Code plugin marketplace:\n\n```text\nclaude plugin install expo@claude-plugins-official\n```\n\nYou can also run `/plugin install expo@claude-plugins-official` inside Claude Code.\n\n### Codex Plugin\n\nInstall from the OpenAI-curated Codex marketplace:\n\n```text\ncodex plugin add expo@openai-curated\n```\n\nYou can also open `/plugins` in Codex and install `expo` from the OpenAI-curated marketplace.\n\n## Updating\n\nClaude Code and Codex plugin installs are updated through their official plugin marketplaces.\n\nFor skills CLI installs, update installed skills with:\n\n```text\nnpx skills@latest update\n```\n\nTo update a single Expo skill, pass its name:\n\n```text\nnpx skills@latest update expo-router\n```\n\n## Try It\n\nAfter installing, ask your agent Expo-specific questions like:\n\n- \"Build a native-feeling Expo Router screen with tabs, modals, and animations.\"\n- \"Create an EAS workflow that builds previews on pull requests.\"\n- \"Help me upgrade this app to the latest Expo SDK.\"\n- \"Check whether this EAS Update rollout is healthy.\"\n\nAgents choose the right skill from the task context and each skill's description.\n\n## Skills Included\n\nSkills come in two groups so the free vs paid boundary is clear. Each skill's description carries the same label, and every services skill opens with a costs/plan-limits note.\n\n### Start Here\n\nLoad this first for any Expo/EAS task, then route to the specific skill below.\n\n| Skill | Use it for |\n| --- | --- |\n| `expo-overview` | Router and shared setup rules; the entry point when a request is vague or the user hasn't named a specific Expo tool. |\n\n### Framework (open source)\n\nFree, open-source Expo SDK and React Native skills.\n\n| Skill | Use it for |\n| --- | --- |\n| `expo-project-structure` | Folder structure for a new Expo app: `src/` layout, routes-only `app/`, screens, server code, platform-specific files. |\n| `expo-router` | Expo Router navigation: file-based routes, links, native stacks, modals, sheets, native tabs, and headers. |\n| `expo-animation` | Polished React Native animations and gestures with Reanimated, Gesture Handler, Expo Router, and expo-haptics. |\n| `expo-native-ui` | Native-feeling screen styling, semantic colors, controls, icons, media, and visual effects. |\n| `expo-design-system` | In-app design systems: a token theme (color, spacing, typography, radius, shadow, motion), reusable component conventions, and design-system drift audits. |\n| `expo-ui` | `@expo/ui` native components: universal cross-platform first, with SwiftUI and Jetpack Compose for platform-specific needs. |\n| `expo-data-fetching` | API calls, React Query, SWR, caching, offline support, and Expo Router data loaders. |\n| `expo-dom` | Expo DOM components for gradually using web code in native apps. |\n| `expo-web-to-native` | Migrating an existing web/React app (Next.js, Vite, CRA) to a native iOS/Android app with Expo. |\n| `expo-module` | Expo native modules and views with Swift, Kotlin, TypeScript, config plugins, and autolinking. |\n| `expo-brownfield` | Adding Expo or React Native to an existing iOS or Android app. |\n| `expo-dev-client` | Development clients (local builds are free; EAS Build/TestFlight is a paid step). |\n| `expo-examples` | The `expo/examples` repo of `with-*` integrations to adapt or scaffold a new project from. |\n| `expo-app-clip` | iOS App Clip targets, AASA files, associated domains, and Smart App Banners. |\n| `expo-upgrade` | Expo SDK upgrades, dependency conflicts, deprecated packages, and cache cleanup. |\n\n### Services & paid distribution\n\nSkills whose core purpose uses paid Expo Application Services (EAS).\n\n| Skill | Use it for |\n| --- | --- |\n| `eas-app-stores` | Build and submit iOS/Android apps: Expo and other React Native projects, plus existing native apps; TestFlight, profiles, versioning, and metadata. |\n| `eas-hosting` | Deploying Expo websites and Expo Router API routes to EAS Hosting: secrets, custom domains, Cloudflare Workers. |\n| `eas-workflows` | EAS Workflow YAML files and CI/CD automation. |\n| `eas-observe` | EAS Observe setup and launch, route, event, and version metrics. |\n| `eas-update` | EAS Update setup, OTA publishing, runtime compatibility, testing, and debugging. |\n| `eas-update-insights` | EAS Update health, crash rates, launch counts, payload size, and rollout gates. |\n| `eas-simulator` | Run and drive your app on a remote iOS simulator or Android emulator on EAS cloud - from the CLI or an agent, with a live browser preview (iOS only). |\n\n### Experimental\n\nSkills for Expo APIs that are not finalized. Content may change or be retired; skills graduate to the groups above when the underlying API stabilizes. These ship in the separate `expo-experiments` plugin (install it alongside `expo`), or individually via the skills CLI.\n\n| Skill | Use it for |\n| --- | --- |\n| `expo-migrate-module` | Migrating a Swift Expo module from the Modules API 1.0 definition DSL to the 2.0 macro API. |\n\n## Expo MCP Server\n\nSkills teach an agent how Expo work gets done. The [Expo MCP server](https://docs.expo.dev/eas/ai/mcp/) gives it live access to actually do that work: read the latest Expo docs on demand, install compatible dependencies with `npx expo install`, trigger and monitor EAS builds and workflows, pull crash data from TestFlight, and screenshot a running app in the simulator.\n\nThe `expo` plugin bundles this MCP configuration, so Claude Code and Codex plugin installs wire it up automatically. For other agents, or to add it on its own, follow the [Expo MCP setup guide](https://docs.expo.dev/eas/ai/mcp/).\n\n## FAQ\n\n### Which AI coding agents are supported?\n\nUse `npx skills@latest add expo/skills --skill '*'` for Cursor, OpenCode, GitHub Copilot, Windsurf, Gemini, Cline, AMP, Factory Droid, Antigravity, Kiro CLI, and similar AI coding tools.\n\n### Should I install the skills or the plugin?\n\nUse the plugin for Claude Code or Codex; it stays updated through the plugin marketplace. Use `npx skills@latest add expo/skills --skill '*'` for Cursor, OpenCode, and other AI coding agents.\n\n### What is the source of truth?\n\nExpo documentation, Expo CLI, and EAS CLI are the source of truth. These skills teach agents how to apply Expo guidance in real projects.\n\n## Feedback\n\nEvery skill includes instructions to submit specific, actionable feedback with `npx --yes @expo/agent-cli@latest feedback`.\n\n## License\n\nMIT\n"
+ },
+ "page:https://raw.githubusercontent.com/expo/skills/main/skills.sh.json": {
+  "fetched_at": "2026-10-28T12:15:20.328Z",
+  "bytes": 1452,
+  "text": "{\n  \"$schema\": \"https://skills.sh/schemas/skills.sh.schema.json\",\n  \"notGrouped\": \"bottom\",\n  \"groupings\": [\n    {\n      \"title\": \"Framework (open source)\",\n      \"description\": \"Free, open-source Expo SDK and React Native skills: UI, navigation, styling, data fetching, native modules, DOM, examples, and SDK upgrades.\",\n      \"skills\": [\n        \"expo-overview\",\n        \"expo-project-structure\",\n        \"expo-router\",\n        \"expo-animation\",\n        \"expo-native-ui\",\n        \"expo-design-system\",\n        \"expo-ui\",\n        \"expo-data-fetching\",\n        \"expo-dom\",\n        \"expo-web-to-native\",\n        \"expo-module\",\n        \"expo-brownfield\",\n        \"expo-dev-client\",\n        \"expo-examples\",\n        \"expo-app-clip\",\n        \"expo-upgrade\"\n      ]\n    },\n    {\n      \"title\": \"Services & paid distribution\",\n      \"description\": \"Skills whose core purpose uses paid Expo Application Services (EAS). Each one discloses costs and plan limits up front.\",\n      \"skills\": [\n        \"eas-app-stores\",\n        \"eas-hosting\",\n        \"eas-workflows\",\n        \"eas-observe\",\n        \"eas-update\",\n        \"eas-update-insights\",\n        \"eas-simulator\"\n      ]\n    },\n    {\n      \"title\": \"Experimental\",\n      \"description\": \"Skills for Expo APIs that are not finalized. Content may change or be retired; skills graduate to the groups above when the underlying API stabilizes.\",\n      \"skills\": [\n        \"expo-migrate-module\"\n      ]\n    }\n  ]\n}\n"
+ },
+ "page:https://docs.expo.dev/skills/": {
+  "fetched_at": "2026-10-28T12:15:21.845Z",
+  "bytes": 17256,
+  "text": "      Expo Skills for AI agents - Expo documentation                                                                   Docs       Blog    Changelog      Star us on GitHub                                   Hide navigation          Search or Ask AI    ⌘   K       Home     Guides     EAS     Reference     Learn            Get started     Create a project    Set up your environment    Start developing    Next steps      AI     Overview    Expo Skills     MCP Server       AI agents       Agent toolkits     LLMs      Develop     Tools for development    Navigation      User interface       Development builds       Config plugins       Debugging     Database    Authentication     Unit testing      Review     Distributing apps for review    Share previews with your team    Open updates with Orbit      Deploy     Build project for app stores    Submit to app stores     App stores metadata    Send over-the-air updates    Deploy web apps      Monitor     Monitoring services     More     Core concepts    FAQ       Archive     Expo Snack      Discord and forums      Newsletter              This documentation is available as Markdown for AI agents and LLMs. See the   full Markdown index   or append .md to any documentation URL.   Expo Skills for AI agents       Edit page          Copy page         A list of official AI agent skills provided by Expo for building, deploying, and debugging Expo and React Native apps.       Edit page          Copy page           Expo Skills are structured instruction files that teach AI agents how to build, deploy, and debug Expo and React Native apps accurately and efficiently. They work with Claude Code, Cursor, Codex, and other AI agents. \n         The 3 tools you need to build mobile apps with AI  Learn how Expo Skills teach an AI agent to build a habit tracker app from scratch.    \n Install Expo Skills      \n        Claude Code        Codex        Cursor        Other agents        Run the following command to install the official Expo plugin from the  claude-plugins-official  marketplace:      Terminal        Copy         -   claude plugin install expo@claude-plugins-official     You can also run  /plugin install expo@claude-plugins-official  inside a Claude Code session.    From the command line, run the following command to install the official Expo plugin:      Terminal        Copy         -   codex plugin add expo@openai-curated     You can also open  /plugins  in Codex and install  expo  from the  openai-curated  marketplace.    If you have already installed Expo Skills for Claude Code, Codex, or another agent, recent versions of Cursor import them automatically. Open  Settings  >  Rules, Skills, Subagents , make sure  Include third-party Plugins, Skills, and other configs  is enabled (it is on by default), and the Expo Skills appear in the  Skills  list.  If you have not installed Expo Skills yet, run one of the following with the  skills CLI :      Terminal            npm  yarn  pnpm  bun         Copy          -    npx  skills add expo/skills      -    yarn  dlx skills add expo/skills      -    pnpm  dlx skills add expo/skills      -   bunx skills add expo/skills      Then reopen Cursor and verify the skills appear under  Settings  >  Rules, Skills, Subagents  >  Skills .    \n  Skills in Cursor are not shown in the slash command ( / ) menu. They work via auto-discovery when you ask the agent Expo-related questions. \n     Use the  skills CLI  to add Expo Skills to any compatible agent:      Terminal            npm  yarn  pnpm  bun         Copy          -    npx  skills add expo/skills      -    yarn  dlx skills add expo/skills      -    pnpm  dlx skills add expo/skills      -   bunx skills add expo/skills        \n   \n  For Claude Code and Codex, the plugin also registers the  Expo MCP Server , so you do not add it separately. The skills CLI installs skills only. \n  \n Available Expo Skills      \n The following skills are available in the  expo  plugin. Skills name prefixed with  expo-*  skills are used for the Expo open source framework and  eas-*  skills for the EAS services. \n Expo SDK and framework      \n      Skill  Description        expo-animation    Build animations in React Native and Expo, making the decisions in the order that determines whether they feel right — should it animate, which thread it runs on, which properties, spring or timing, how the gesture hands off, how it degrades. Writes the implementation with Reanimated, Gesture Handler, Expo Router and expo-haptics. Use when animating anything in an Expo app, adding gestures, sheets, screen transitions, press feedback or haptics, or fixing motion that stutters on device. For web animation use  animate .      expo-app-clip    Add an iOS App Clip target to an Expo app. Use when the user mentions App Clip, AASA, apple-app-site-association, appclips, smart app banner, or wants to ship a lightweight iOS Clip invoked from a URL alongside their parent app.      expo-brownfield    Integrate Expo and React Native into an existing native iOS or Android app. Use for brownfield, embedding a React Native screen in SwiftUI/UIKit or Kotlin, or AAR/XCFramework packaging. Covers isolated and integrated approaches. For building or distributing a purely native app with EAS, use eas-app-stores.      expo-data-fetching    Use when implementing or debugging ANY network request, API call, or data fetching. Covers fetch API, React Query, SWR, error handling, caching, offline support, loading/empty/error screen states, and Expo Router data loaders ( useLoaderData ).      expo-design-system    Build and maintain a design system inside an Expo app - a reusable theme of design tokens (color, spacing, typography, radius, shadow, motion), reusable component structure with variant/size/state prop conventions, and rules for when to extract a repeated view into a shared component. Use when creating or organizing theme files and design tokens (theme.ts / theme/), extending an existing theme or styling library (NativeWind, Tamagui, Restyle, Unistyles) in its own idiom, standardizing styles so screens (including AI-generated ones) look consistent and polished, fixing an app that looks AI-generated or generic instead of native (the named native-slop tells), building an in-app component library, or auditing an app for design-system drift (hardcoded colors, spacing, fonts). For platform styling specifics (semantic colors, HIG rules, native controls) use expo-native-ui; for folder layout of a new app use expo-project-structure.      expo-dev-client    Build and distribute Expo development clients locally or via TestFlight for internal testing. For production TestFlight releases and store submission, use the eas-app-stores skill.      expo-dom    Use Expo DOM components to run web code in a webview on native and as-is on web. Migrate web code to native incrementally. For the end-to-end migration of a whole web app, use the expo-web-to-native skill.      expo-examples    Expo&#x27;s official example projects - the expo/examples repo of ~70  with-*  integrations (Stripe, Clerk, Supabase, OpenAI, maps, Reanimated, SQLite, Skia, NativeWind, and more). Use when integrating a third-party library or service into an existing Expo app and you want the canonical, version-matched pattern to adapt, or when scaffolding a new project from one with  npx create-expo --example .      expo-module    Guide for creating and writing Expo native modules and views using the Expo Modules API (Swift, Kotlin, TypeScript). Covers module definition DSL, native views, shared objects, config plugins, lifecycle hooks, autolinking, and type system. Use when building or modifying native modules for Expo. Not for migrating an existing Swift module from the definition DSL to the Expo Modules API 2.0 macros; use expo-migrate-module (from the expo-experiments plugin) for that.      expo-native-ui    Build beautiful, native-feeling Expo screens. Covers Apple HIG styling, semantic colors, native controls, SF Symbols, media, visual effects, gradients, storage, and responsive layout. For routing and navigation, use the expo-router skill; for motion and animation, use the expo-animation skill.      expo-overview    Entry point and router for every Expo or EAS task. Load this skill first — before writing code and before choosing another expo-* / eas-* skill — when the request, PRD, or spec mentions Expo, EAS, Expo Go, or an expo-* package, or the project has an  expo  dependency in  package.json . Within that gate it also covers app specs and designs to implement (tabs, stacks, maps, lists, navigation, building from a screenshot), and phrasings like &#x27;implement a mobile app&#x27;, &#x27;make my app look native&#x27;, &#x27;add navigation&#x27;, &#x27;fetch some data&#x27;, &#x27;upgrade my SDK&#x27;, &#x27;add Expo to my existing native app&#x27;, &#x27;ship to the App Store&#x27;, or &#x27;I&#x27;m new to Expo, where do I start&#x27;. A fully specified request (SDK pinned, libraries named, layout given) still routes through here — the shared setup rules still apply. Do NOT load it when neither signal is present: a bare React Native project with no  expo  dependency is not Expo work. Detects the real goal, routes to the right expo-* / eas-* skill, and owns the shared setup rules.      expo-project-structure    Folder structure for a new Expo app. Use when scaffolding or laying out a new Expo project with Expo Router, or deciding where a file should live in one. For new projects only — never restructure an existing app to match.      expo-router    Navigation and routing for Expo Router. Covers file-based routes, groups and dynamic routes, folder organization, Link with previews and context menus, native Stack, page titles, modals and form sheets, NativeTabs, headers and toolbars, and header search bars.      expo-ui    Build native UI with the @expo/ui package: real SwiftUI on iOS and Jetpack Compose on Android. Default to @expo/ui for sheets (BottomSheet), pickers, sliders, toggles, menus, and grouped-form sections — do NOT reach for Reanimated, @gorhom/bottom-sheet, or RN built-in Picker/Switch; use @expo/ui instead. Fall back to RN built-ins only when @expo/ui is missing the component. NOTE: @expo/ui List renders native grouped rows like an iOS Settings screen — it is NOT a virtualized list; use FlatList/FlashList for large datasets. Covers universal components (Host, Column, Row, Button, Text, List, BottomSheet, FieldGroup, Switch, Slider, Picker, Menu), drop-in replacements for RN community libraries, and platform-specific SwiftUI/Jetpack Compose trees. Not for Expo Router navigation, Reanimated, or data fetching.      expo-upgrade    Guidelines for upgrading Expo SDK versions and fixing dependency issues.      expo-web-to-native    Migrate an existing web React app to a native iOS/Android app with Expo. Use when the user wants to turn a website into a mobile app, port a Next.js/Vite/CRA React codebase to React Native, reuse web code on native incrementally, or asks how web idioms (the DOM, CSS, React Router, localStorage, window) map to native. This is the end-to-end migration guide; use the  expo-dom  skill for the DOM-component mechanism itself.      \n Expo Application Services (EAS)      \n      Skill  Description        eas-app-stores    Build and submit iOS and Android apps with EAS to TestFlight, the App Store, or Google Play. Supports Expo and other React Native projects, plus existing native apps. Use for eas.json setup, release pipelines, signing, app versions and build numbers, store submissions, and listing metadata. For Expo websites and API routes, use eas-hosting; for adding React Native screens to a native app, use expo-brownfield.      eas-hosting    Deploy Expo websites and Expo Router API routes to EAS Hosting - export the web bundle, run eas deploy for production and PR preview URLs, manage environment secrets and custom domains, and work within the Cloudflare Workers runtime. Also covers authoring API routes (+api.ts handlers, HTTP methods, request handling, CORS). Use when deploying an Expo web app or API routes, setting up EAS Hosting, or configuring hosting environments and domains. Not for native builds or store releases - use the eas-app-stores skill for those.      eas-observe    Use for anything related to EAS Observe - adding  expo-observe  to an Expo project (AppMetricsRoot/ObserveRoot HOC, markInteractive and ObserveInteractiveMarker, the useObserve hook, the Expo Router / React Navigation integrations for per-route metrics, the expo-image and Reanimated integrations, user-defined events via  Observe.logEvent , error reporting via ObserveErrorBoundary and  Observe.reportError , native crash reporting, source map upload for symbolicated stack traces, and runtime config such as sampleRate and dispatchInDebug), querying via the EAS CLI ( eas observe:metrics-summary ,  observe:metrics ,  observe:routes ,  observe:events ,  observe:session ,  observe:versions ,  observe:errors ,  observe:event ) or the Expo MCP  observe_*  tools, interpreting the resulting metrics (cold/warm launch, TTR, TTI, navigation cold/warm TTR, update download, and the TTI frameRate/device/network params for triaging slow startups), or shipping an Observe integration inside a third-party package.      eas-simulator    Run and control a user&#x27;s app on a remote iOS/Android simulator hosted on EAS cloud. Read before running any  eas simulator:*  commands - it has the current syntax for this experimental API. Use whenever the user needs a simulator they can&#x27;t run locally - &#x27;run my app on a cloud simulator&#x27;, &#x27;use eas simulator to run/install/screenshot my app&#x27;, &#x27;I&#x27;m on Linux/Cursor and need an iOS device&#x27;, &#x27;no sim on this box / headless CI&#x27;, &#x27;let an agent click through my app and screenshot it&#x27;, &#x27;test my dev build on a remote sim with live reload&#x27;, &#x27;stream a sim to my browser&#x27; - even when they don&#x27;t say &#x27;EAS Simulator&#x27; or &#x27;cloud&#x27;. On a host WITHOUT a local simulator (Linux, CI, cloud sandbox) it&#x27;s the default; on macOS, do NOT auto-trigger for a plain &#x27;run on the simulator&#x27; - use it only for a cloud/remote/shareable sim, an iOS version they lack, or an agent-driven session. NOT for local sims (expo run:ios, Xcode, Android Studio), EAS Build/Update, web preview, or physical devices.      eas-update    Configure and use EAS Update for over-the-air JavaScript and asset updates with expo-updates and EAS CLI. Use when setting up OTA updates, running eas update:configure or eas update, publishing to preview/staging/production channels, explaining branches/channels/runtime versions, testing updates, or debugging why an installed build still shows old code. Load for TestFlight, preview, or production updates that do not appear, including questions about cold launches or reopening the app. Not for update health metrics; use eas-update-insights for adoption, crashes, and rollout monitoring.      eas-update-insights    Check the health of published EAS Update: crash rates, install/launch counts, unique users, payload size, and the split between embedded and OTA users per channel. Use when the user asks how an update is performing, whether a rollout is healthy, how many users are on the embedded build vs OTA, or wants to gate CI on update health.      eas-workflows    Helps understand and write EAS workflow YAML files for Expo projects. Use this skill when the user asks about CI/CD or workflows in an Expo or EAS context, mentions .eas/workflows/, or wants help with EAS build pipelines or deployment automation.      \n Example prompts      \n Try the following prompts after installing Expo Skills. Your AI agent will automatically use the appropriate skill: \n      Example prompt  Skill used      Build a settings screen with native-feeling controls   expo-native-ui     Add tab navigation and a modal to my app   expo-router     Set up Tailwind CSS in my Expo project   expo-tailwind-setup     Embed a recharts chart in my native app using web code   expo-dom     Add a SwiftUI picker component to my Expo app   expo-ui     Use Material Design 3 components with Jetpack Compose   expo-ui     How do I deploy my Expo app to the Apple App Store?   eas-app-stores     Create a CI/CD workflow that builds on every PR   eas-workflows     Upgrade my project to the latest Expo SDK   expo-upgrade       \n Additional resources      \n        expo/skills  GitHub repository  Browse the source for all available Expo Skills, or report issues.     \n       Expo MCP Server  Companion AI tooling that gives coding agents direct access to Expo and EAS services.            Previous  (AI)  Overview      Next  (AI)  MCP Server          Was this doc helpful?                   Share your feedback        Ask a question on the forums       Edit this page      View  llms.txt    Last updated on  October 01, 2026       Sign up for the Expo Newsletter     Sign up    Unsubscribe at any time. Read our  privacy policy .      Your Privacy Choices             On this page          Install Expo Skills      Available Expo Skills      Expo SDK and framework      Expo Application Services (EAS)      Example prompts      Additional resources                "
+ },
+ "ggml-org/llama.cpp": {
+  "fetched_at": "2026-10-28T12:44:19.051Z",
+  "pushed_at": "2026-10-28T12:37:48Z",
+  "created_at": "2023-03-10T18:58:00Z",
+  "archived": false,
+  "stars": 132614,
+  "forks": 24894,
+  "license": "MIT"
+ },
+ "mlflow/mlflow": {
+  "fetched_at": "2026-10-28T12:44:32.052Z",
+  "pushed_at": "2026-10-28T12:44:08Z",
+  "created_at": "2018-06-05T16:05:58Z",
+  "archived": false,
+  "stars": 28565,
+  "forks": 6540,
+  "license": "Apache-2.0"
+ },
+ "oldest:AxiomMath/CFSG": {
+  "fetched_at": "2026-10-28T12:44:46.638Z",
+  "oldest": "2026-10-27T15:07:38Z",
+  "oldest_sha": "69cb972f587a3ecc035e092253167ff2e303c962",
+  "approx_commits": "1"
  }
 }
