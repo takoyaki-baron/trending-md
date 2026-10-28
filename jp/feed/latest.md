@@ -1,8 +1,8 @@
 ---
 date: 2026-10-28
-updated: 2026-10-27T20:15:59Z
+updated: 2026-10-28T12:23:59Z
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 24
+sources: 30
 license: CC-BY-4.0
 ---
 
@@ -274,13 +274,251 @@ FoxIOの **Sébastien Féry** が、組み込みWebサーバ **GoAhead** のTLS�
 
 ---
 
+## 20. NVIDIAのNeMo Agent Toolkitは認証欠如で10.0を記録する——そして修正は47日も前に出荷されていた
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** NVIDIA product-security bulletin 5912 / NVD / GitHub · 勧告日 2026-10-27
+- **Tags:** `cve` `nvidia` `agent-infra` `authentication` `provenance`
+
+**CVE-2026-65145** は **NVIDIA NeMo Agent Toolkit** における **CWE-306**（認証欠如）の問題で、**CVSS 3.1 10.0**（`AV:N/AC:L/PR:N/UI:N/S:C/C:H/I:H/A:H`）、**1.0から1.8.0** に影響し **1.9.0** で修正された。同じ勧告には **CVE-2026-65151** も収載されている。**CWE-89** のSQLインジェクションで **8.4**（`AV:L/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H`）、**1.4から1.6** に影響し **1.7.0** で修正。いずれも「外部から発見された」もので、**50words.comのColin McDonough**、そして10.0のほうは **ZUSO ARTのYJK（@YJK0805）がTrendAI Zero Day Initiativeと協働**して報告した。**NVIDIA/NeMo-Agent-Toolkit** リポジトリは **Apache-2.0** で、トラッカーカウンタは **30 open——issue 15件＋pull request 15件** と出ている。
+
+**Why it matters:** 表に出た2つの修正版こそが、見出しの数字が隠している本題だ。**1.9.0** は **2026-09-10T22:12Z** に出荷されており、10.0はそれを説明する勧告より **47日** 前に修正されていた。**1.7.0** は **2026-05-21T18:15Z** なので、8.4のSQLインジェクションは開示時点で **158日** 前のものだ。「1.9.0以降へ更新を」という一行は正しいが、それでもSQLインジェクションが修正済み・未告知のまま放置されていた期間を過小にしか語らない。第二に、NVDはこのレコードを **Awaiting Analysis** と表示し、**NVDが採点した指標はゼロ**——10.0はNVIDIAのCNA番号であり、第二の意見ではない——ので、深刻度もCWEも、下流の深刻度バンド判定もすべて一方の当事者だけに乗っている。NVIDIA自身の脚注も効く。同社の「リスク評価は多様な導入済みシステム全体の平均に基づくもので、あなたのローカル環境の真のリスクを表さないことがある」。エージェントフレームワークにおける `S:C` の10.0は、脆弱なコンポーネントがセキュリティ境界ではないという意味だ——それはスコアと同じ形であり、数字を理論値と決めつける前にツールキットの手前に何があるかを確認すべき理由である。
+
+[`🔗 NVIDIA — Security Bulletin 5912: NeMo Agent Toolkit`](https://github.com/NVIDIA/product-security/blob/main/2026/5912/5912.md) · [`🔗 NVD — CVE-2026-65145`](https://nvd.nist.gov/vuln/detail/CVE-2026-65145) · [`🔗 NVIDIA/NeMo-Agent-Toolkit`](https://github.com/NVIDIA/NeMo-Agent-Toolkit)
+
+---
+
+## 21. Tailscale SSHは1週間で勧告4本——すべて1.104.4で修正、CVEはゼロ、しかも変更履歴はまだ1.104.2のまま
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Tailscale security bulletins TS-2026-014–017 / Hacker News · 304 pts · 約1日前（~10月27日 19:55 UTC+8）
+- **Tags:** `tailscale` `ssh` `privilege-escalation` `disclosure` `cve`
+
+Tailscaleは **Tailscale SSH** とServeについてセキュリティ勧告を**4本**公開し、いずれも **1.104.4以降** で修正された。**TS-2026-014**：root権限で動く `tailscaled` 内のSSHサーバがUnixソケットのパスを**字句的に**検証したうえで、その操作を**rootとして**実行していた——3つのバグの複合だ（`ssh -L` による特権ダイヤル、`ssh -R` でroot所有のソケットをunlinkして差し替える件、そして「カーネルが初期検査の後にパスを再解決する」ため許可リストが破れるTOCTOU競合）。到達可能な標的はDockerソケットと `tailscaled` のローカルAPI。**TS-2026-015**：セッション中の継続的なウィンドウ変更メッセージと環境変数追記によるメモリの無制限増加で、確保は「ピアが切断した後も残った」——`tailscaled` がOOMキルされれば、そのノード上のTailscale接続がすべて道連れになる。**TS-2026-016**：`tailscale serve` のUnixソケットへのTCP転送が「ガードを欠いたまま標的へrootとしてダイヤル」し、さらにsymlinkガードがダイヤルごとではなく設定リロード時にしか走らなかった——ローカルAPI経由のノード完全掌握。**TS-2026-017**：HTTP/2の `serveHTTPContext` 競合で、1つの接続上の並行ストリームがマウント間で **Tailscale-App-Capabilities** を漏らしうる。包括勧告は「我々が特定したTailscale SSHの問題の大半は特権昇格に関するものだ」と述べ、Tailscale SSHの全面無効化は勧めず、暫定緩和として `TS_SSH_DISABLE_FORWARDING=1` を提示している。
+
+**Why it matters:** TS-2026-014は今日のGoAheadの項目と同じ形だ——*文字列を検査し、rootとして実行した*——そして一般化するのは3つ目の副次バグのほうである。字句的許可リストと特権syscallの組み合わせは、どこに現れても境界ではなく競合だ。実務上の問題は成果物の分裂にある。4本の勧告はいずれもCVE番号を持たない（勧告一覧に載るのは **CVE-2022-41924**、**-41925**、**CVE-2023-28436** だけ）ので、脆弱性フィードやスキャナには引っかける鍵が何もない。さらにリリースページと変更履歴が食い違う。`pkgs.tailscale.com/stable` には `tailscale_1.104.4` がある一方、公開変更履歴のクライアント最新項目は依然 **v1.104.2（10月21日）** で、1.104.4の行はない。つまり今週の「自分は修正済みか」はリリースノートの問いではなく `tailscale version` の問いであり、SSH転送を許可している者にとっては、アップグレードが届く前に切れる設定変更がある。
+
+[`🔗 Tailscale — SSH investigation and remediation update`](https://tailscale.com/ssh-investigation-update) · [`🔗 Tailscale — security bulletins`](https://tailscale.com/security-bulletins) · [`🔗 pkgs.tailscale.com — stable packages`](https://pkgs.tailscale.com/stable/)
+
+---
+
+## 22. jackson-databindの9.8は不完全な修正だ——6月のパッチは外側クラスを検証し、ジェネリック引数を見ていなかった
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** GitHub Advisory GHSA-m8xf-2cr7-77ph / NVD / OSV · 勧告公開 2026-10-20 · CVEレコード 2026-10-28
+- **Tags:** `cve` `jackson` `deserialization` `java` `supply-chain`
+
+**CVE-2026-110879**（**CWE-502**、**CVSS 3.1 9.8**、`AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H`）は、**ジェネリック型引数と配列要素型を経由した PolymorphicTypeValidator のバイパス**であり、その勧告自身が「**CVE-2026-54512 の不完全な修正**」と呼んでいる。`DatabindContext._resolveAndValidateGeneric()` は外側クラスを宣言された基底型に対して検査した後、各ジェネリック引数をその宣言された束縛ではなく**外側の基底型**に対して検証する——そのため既定の `DefaultBaseTypeLimitingValidator` の下では、「同じクラスが直接の型IDとしては拒否されるのに、ジェネリックなサブタイプの中では無関係なクラスを受け入れてしまう」。`allowIfBaseType(...)` の規則が外側の型を承認すると、Jacksonは `LaissezFaireSubTypeValidator` に丸ごと差し替える。実例はこうだ。`Map<String,String>` と宣言されたプロパティが `HashMap<FileSystemXmlApplicationContext,String>` を受け入れ、mapキーの発見処理が攻撃者のJSONプロパティ名をそのクラスの単一文字列コンストラクタへ渡す——クラスパスにSpringがあれば、攻撃者のXMLを読み込み `ProcessBuilder.start()` を呼ぶ。影響は **2.10.0** 以降。修正版は **2.18.12**、**2.21.8**、**2.22.4**、Jackson 3.x では **3.1.8** と **3.2.4**。
+
+**Why it matters:** 6月の勧告（GHSA-j3rv-43j4-c7qm、**8.1**、公開 **2026-06-23**）はジェネリック引数の検証を追加して8.1だった。4か月後に置き換わったのが9.8で、これが不完全な修正の値段だ。第二に、直接確認したレジストリの状態。`api.github.com/advisories/GHSA-m8xf-2cr7-77ph` は **404** を返すのに `github.com/FasterXML/jackson-databind/security/advisories/GHSA-m8xf-2cr7-77ph` は正常に描画され、**OSVのCVE-2026-110879レコードは `GIT` 範囲しか持たない**——Maven範囲がまったくない。つまりMavenのスキャナが「`jackson-databind` 2.22.3は影響を受けるか」と問うても、エコシステム向け勧告が着地するまで照合対象がない。リポジトリ勧告は **10月20日** から修正版を列挙しているのに、だ。レコード自体、それを説明するページより8日新しい。
+
+[`🔗 GHSA-m8xf-2cr7-77ph — jackson-databind`](https://github.com/FasterXML/jackson-databind/security/advisories/GHSA-m8xf-2cr7-77ph) · [`🔗 NVD — CVE-2026-110879`](https://nvd.nist.gov/vuln/detail/CVE-2026-110879) · [`🔗 OSV — CVE-2026-110879`](https://api.osv.dev/v1/vulns/CVE-2026-110879)
+
+---
+
+## 23. AdobeのCampaign Classic勧告は10.0と算出されるベクタに9.8を印字する——そして8件のCVEはすべてCritical
+
+- **Velocity:** ▮▮ rising
+- **Source:** Adobe security bulletin APSB26-162 / NVD · 公開 2026-10-27
+- **Tags:** `cve` `adobe` `cvss` `campaign` `provenance`
+
+**APSB26-162** は **Adobe Campaign Classic v7** 向けのPriority 2アップデートで、**8件** のCVEを修正し、そのすべてが **Critical** 判定だ。**CVE-2026-105781** SQLインジェクション、**CVE-2026-104351** コードインジェクション、**CVE-2026-104353** OSコマンドインジェクション、**CVE-2026-105780** 不正確な認可、**CVE-2026-105489** SQLインジェクション、**CVE-2026-104350** 反射型XSS、**CVE-2026-104354** SQLインジェクション、**CVE-2026-105779** SQLインジェクション。Adobeは「本アップデートで対処した問題について、野生での悪用は把握していない」と述べている。影響範囲は **ACC v7 7.4.4 build 9402 以前**、修正は **7.4.4 build 9403**——バージョン文字列が変わらないまま*ビルド番号*だけが上がる。
+
+**Why it matters:** 検証できる点が2つあり、そのうち1つは算術だ。勧告内の全ベクタを素朴なCVSS 3.1計算器で再計算すると、**8件のうち7件は完全に再現する**（9.9、9.9、9.9、9.9、9.3、9.1、9.1）——そして **CVE-2026-105781 だけが再現しない**。Adobeは `CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:C/C:H/I:H/A:H` の隣に「**CVSS base score: 9.8**」と印字しているが、この文字列は **10.0** を算出し、NVDもそのレコードに同じ10.0を載せている。9.8はまさにこの同じ文字列から **`S:C`** のスコープ変更を落としたときの値であり、つまりページの数字は自前のベクタの*スコープなし*の読みだ。これは「ページ上の2番目の数字」という罠が、アグリゲータではなくベンダーの側へ向かって走った例である——そして勧告の他の7件が一貫している唯一の行だからこそ、別リビジョンではなく採点の書き損じだと分かる。第二は運用面。**7.4.4 build 9402** と **7.4.4 build 9403** は、バージョン文字列を読むあらゆる在庫管理ツールにとって同じ製品バージョンなので、「7.4.4です」は修正済みの言明ではない——ビルド番号がそうだ。
+
+[`🔗 Adobe — APSB26-162: Security update for Campaign Classic`](https://www.adobe.com/trust/security/products/campaign/apsb26-162.html) · [`🔗 NVD — CVE-2026-105781`](https://nvd.nist.gov/vuln/detail/CVE-2026-105781)
+
+---
+
+## 24. llama.cppのggml-rpcは1バイトのスタック変数へ256 KiBを書き込む——そしてVulnCheckはそれを8.1と9.2の両方で採点する
+
+- **Velocity:** ▮▮ rising
+- **Source:** NVD / VulnCheck / ggml-org/llama.cpp · レコード公開 2026-10-28T03:17Z
+- **Tags:** `cve` `llama-cpp` `rdma` `memory-safety` `provenance`
+
+**CVE-2026-118375**（**CWE-787**）は llama.cpp の **ggml-rpc RDMAトランスポート** の `rdma_recv()` における境界外書き込みだ。HELLOメッセージでRDMA機能を広告するピアが「`rpc_serve_client()` の**1バイト**のスタック変数へ最大 **256 KiB** を送り込める」ため、サーバがクラッシュするか、潜在的にコード実行に至る。影響は **b11865 より前の b8841**、修正はPR **#30399**（コミット `9a0fde9`）でビルド **b11865** として **2026-10-24T19:30Z** に公開——つまりレコードは**修正より3.3日新しい**。
+
+**Why it matters:** レコードは**同一ソースからの2つの指標**を持ち、それが1.1ポイント食い違う。まさにスロットだけを見ると「2つのスコア」が「2人の採点者」に読めてしまうケースだ。どちらも **VulnCheckのもの**である。**CVSS 3.1 `Primary` 8.1**（`AV:N/AC:H/PR:N/UI:N/S:U/C:H/I:H/A:H`）と **CVSS 4.0 `Secondary` 9.2**（`AV:N/AC:L/AT:P/PR:N/UI:N/VC:H/VI:H/VA:H/SC:N/SI:N/SA:N`）。3.1が8.1なのは `AC:H` のため、4.0が9.2なのは `AT:P` のため——1つの判断が2回書かれたもので、どちらを見るかはスキャナがどのフィールドを読むかの関数にすぎない。バージョン範囲も罠だ。`b8841` と `b11865` は**リリースではなく夜間ビルドのタグ**なので、`pip`/`brew` のバージョン文字列では「修正済みか」に答えられない。信頼境界をまたいでRDMAを有効にした `rpc-server` を動かしている者は、ビルド番号が別を告げるまでこのトランスポートを認証前到達可能として扱うべきだ。
+
+[`🔗 NVD — CVE-2026-118375`](https://nvd.nist.gov/vuln/detail/CVE-2026-118375) · [`🔗 ggml-org/llama.cpp — fix PR #30399`](https://github.com/ggml-org/llama.cpp/pull/30399) · [`🔗 ggml-org/llama.cpp — release b11865`](https://github.com/ggml-org/llama.cpp/releases/tag/b11865)
+
+---
+
+## 25. MLflowの9.8はあなたが置いたクラスをimportする——そして修正は勧告の20日前に出荷されていた
+
+- **Velocity:** ▮▮ rising
+- **Source:** GitHub Advisory GHSA-26p8-2jq9-3vq9 / NVD / MLflow releases · 勧告公開 2026-10-27T21:26Z
+- **Tags:** `cve` `mlflow` `deserialization` `ai-platform` `rce`
+
+**CVE-2026-116692**（**CWE-470**、**CWE-94**、**CVSS 3.1 9.8**）は MLflow の **3.12.0rc0 から 3.17.0 まで** に影響する。`mlflow/genai/scorers/base.py` のサードパーティ採点器経路が「`THIRD_PARTY_SCORER_ALLOWED_MODULES` の**子孫**でリクエストが選んだものを、許可モジュールの完全一致を要求せずに受け入れる」。連鎖はこうだ。呼び出し側がMLflowのアーティファクト端点を使って書き込み可能な許可パッケージの下にPythonモジュールを置き、そのモジュールとクラスを `/ajax-api/3.0/mlflow/scorer/invoke` へ提出する。そこで `Scorer.model_validate_json()` がトレース処理の**前に**それをimportして構築する。認証を無効にした配備なら資格情報は不要。basic認証があっても、実験を作成し実行とアーティファクトのアップロードができる主体があればよい。いずれにせよ「許可された採点器パッケージがサーバプロセスから書き込み可能である」必要がある。修正は **3.17.0**、**2026-10-07T08:24Z** リリース。
+
+**Why it matters:** 許可リストが**メンバーシップ検査ではなく前方一致検査**になっている——「あるモジュールの子孫」を信じるのは、列挙されていないサブクラスを信じるのと同じ欠陥クラスであり、このフィードの直近の窓では3件目の「許可リストによるデシリアライズ」バグだ。3つの条件を丁寧に読むこと。それらは連言で、しかもいずれもコードの事実ではなく配備の事実である。認証が無効（または低権限の主体）、アーティファクトのアップロード経路、そしてサーバが書き込める採点器パッケージ。それは開発者のMLflow環境の形であって、堅牢化された環境の形ではない。もう半分はタイムラインだ。修正リリースと勧告の間に **20.5日** あり、つまり `3.17.0` に固定していた者はスキャナがCVEの存在を告げる1か月前から安全で、`3.16.x` に固定していた者はその間ずっと脆弱で、それを告げるものが勧告フィードに何もなかった。
+
+[`🔗 GHSA-26p8-2jq9-3vq9 — MLflow`](https://github.com/mlflow/mlflow/security/advisories/GHSA-26p8-2jq9-3vq9) · [`🔗 NVD — CVE-2026-116692`](https://nvd.nist.gov/vuln/detail/CVE-2026-116692) · [`🔗 MLflow v3.17.0 release`](https://github.com/mlflow/mlflow/releases/tag/v3.17.0)
+
+---
+
+## 26. WatchGuardはFireware OSのレコード18件を一度に公開した——すべてCVSS 4.0で、3.1は1件もない
+
+- **Velocity:** ▮ steady
+- **Source:** WatchGuard PSIRT advisory board / NVD · レコード公開 2026-10-27T16:17Z
+- **Tags:** `cve` `watchguard` `firewall` `cvss` `provenance`
+
+WatchGuardのCNAは **2026-10-27** の5秒間に（16:17:28Z–16:17:33Z）、**Fireware OS と Mobile VPN のレコード18件**を公開した。そして **18件すべてがNVDでいまだ `Received`** のままだ。7件が **9.2以上**。**CVE-2026-103594** が **9.5**（WireGuard設定処理のスタックオーバーフロー）、**CVE-2026-90465** が **9.4**（FireCluster Syncの認証欠如——「rootとして特権的なファイアウォール管理操作を実行できる」）、そして **9.2** が5件。**CVE-2026-112709** と **-112710**（AD認証サービスのヒープオーバーフロー、認証前RCE）、**CVE-2026-93857**（SIPプロキシのスタックオーバーフロー、未認証RCE）、**CVE-2026-93865**（FireCluster同期デーモン、認証欠如、クラスタ管理IPから到達可能）、**CVE-2026-93866**（Access PortalのWebSocket処理における整数オーバーフロー）。FireClusterはそのうち**4件**に直接現れる——認証欠如のバグ3件と、境界外読み取り1件だ。バージョン範囲は広く、分岐の形をしている。**`2025.1 < 2026.4`** と **`12.0 < 12.12.4`**、**T15/T35** ハードウェアは独自の `12.0 < 12.5.22` 系列。
+
+**Why it matters:** 測定できる事実は、**18件のうちCVSS 3.1指標を持つものが0件**だという点だ。スコアはすべて **CVSS 4.0** で、9.2にはいずれも **`AT:P`**（攻撃要件：あり）が付く。3.1なら `AC` や `PR` で表す前提条件を4.0がこう符号化する。`cvssMetricV31` だけを読むパイプラインは、あなたのインターネットを終端する機器の、採点されていないファイアウォールCVEを18件見ることになる。同じ18件をWatchGuard自身の勧告ボードと突き合わせると、**15件は完全一致し3件は一致しない**。**CVE-2026-103593** はボードが **9.1** でレコードが **7.1**、**CVE-2026-82332** は **5.6** 対 **5.7**、そして **CVE-2026-90465** は **8.7** 対 **9.4**——これが効く1件で、「high」の札とcriticalなスコアの差だからだ。参考までに、8.7はそのレコードの4.0ベクタを `SC:H` ではなく `S:U` として3.1で読んだときの値そのものなので、この食い違いは2つの判断ではなく2つの枠組みに見える——ただしボードはベクタを公開していないので、それはこちらの算術であってWatchGuardの言明ではない。
+
+[`🔗 WatchGuard — PSIRT advisory board`](https://psirt.watchguard.com/) · [`🔗 NVD — CVE-2026-90465`](https://nvd.nist.gov/vuln/detail/CVE-2026-90465)
+
+---
+
+## 27. Heads of Security：注意ヘッドごとに学習ゲートを1つ置くとRL-Hammerが97%から10%へ落ちる
+
+- **Velocity:** ▮▮ rising
+- **Source:** arXiv 2610.37657 / arXiv HTML · 2026-10-27 · 著者9名
+- **Tags:** `prompt-injection` `security` `attention` `defense` `research`
+
+**Heads of Security（HoS）** は「少数の学習済みヘッド単位注意ゲートによって指示とデータの分離を強制する」プロンプトインジェクション防御で、注入された指示を無視するようモデルを再訓練するのではなく、各ヘッドが信頼できるトークンと信頼できないトークンの間で注意をどう再配分すべきかを学習する。**Llama-3.3-70B-Instruct** と **GPT-OSS-20B** で、**SecAlign++**（微調整ベース）と **ASIDE**（アーキテクチャベース）に対して評価されている。数字はこうだ。ブラックボックスの **RL-Hammer** 攻撃は GPT-OSS-20B に対して **97% ASR**、SecAlign に対して **85%** に達するが、HoS に対しては **10%** にとどまる。HoS に対して「autoresearch で強化した」ホワイトボックス攻撃 **Claudini** は、同じASRに届くのに **3倍のFLOPs** を要する。HoS は標準的な多肢選択ベンチマークでベースモデルの有用性を保つが、SecAlign と ASIDE は few-shot 設定で劣化し、ASIDE はツール使用で **10%の有用性** しか出せない。
+
+**Why it matters:** 97→10という差は**ブラックボックス**攻撃——外側の攻撃者が実際に持てる種類のもの——での話であり、しかも安全性データを増やしたのではなくアーキテクチャを変えたことで出ている。それが自前のスタックで検証する価値のある主張だ。ただし引用する前に結果の境界を読むこと。「**静的**攻撃を用いたエージェント系ベンチマークでは、HoSとSecAlignは同程度に機能する」——つまり大きな差はインジェクションのスイートに出ており、エージェント系には出ていない。論文自身の枠組みでも、そこでは両者が「ベースモデルに対してセキュリティと有用性のトレードオフを大きく改善する」とされている。残る **10%** もゼロではない。ヘッド単位のゲートは脅威モデルの内側にある学習済み部品であり、`Claudini` と autoresearch の組み合わせはすでにそれを攻めるレシピだ。著者は9名で、Imperial College の Yves-Alexandre de Montjoye を含む——所属は要旨ページではなくHTML全文に載っている。
+
+[`🔗 arXiv — Heads of Security`](https://arxiv.org/abs/2610.37657) · [`🔗 arXiv HTML 全文 — 所属`](https://arxiv.org/html/2610.37657v1)
+
+---
+
+## 28. ツール使用エージェントのスケーリング則：458,752タスクと849の訓練済みモデルが「量より多様性」を示す
+
+- **Velocity:** ▮▮ rising
+- **Source:** arXiv 2610.37648 / arXiv HTML · 2026-10-27 · 著者8名
+- **Tags:** `tool-use` `agents` `scaling-laws` `synthetic-data` `training`
+
+**SynthAPI** はツール使用環境を生成し、「生成する環境の多様性を、**ツール、タスク、そしてツールが作用するデータベース**という軸に沿って明示的に制御する」。その制御を **458,752タスク** と **4つの異なる規模の849の訓練済みモデル** にわたって振ることで、「合成環境の規模と構成から下流のツール使用エージェントの汎化を予測する」スケーリング則が得られる。知見は3つ。データ予算が増えるにつれ、**ツールとデータベースの多様性**をスケールすることがタスク数を増やすよりも有効になる。データの**複雑さ**を上げると利得が大きくなる。そしてそれらの規則でスケールしたエージェントは「先行研究のデータで訓練したモデルを上回る」——4つの評価ベンチマークでの話だ。
+
+**Why it matters:** これは「環境がどれだけ必要か」を当て推量から、構成項を持つ曲線へ変える。合成エージェントデータをスクレイピングではなくエンジニアリングの予算にする最初の一歩だ。注意すべきは、ここでの「多様性」が何を指すかだ。それは**パイプラインが制御できる3つのAPI表面軸に沿った組み合わせ的拡張**であって、実トラフィックからの分布シフトではない——つまりこの法則が予測するのは SynthAPI ファミリ*内部*の汎化であり、先行研究を上回るという主張も、そのファミリが調整されたのと同じ4つのベンチマークで測られている。また、ほとんどのスケーリング則論文と同様、*合成*のツール使用についての結果だ。本番のツールがロングテールを持つ場合の係数は要旨にない。
+
+[`🔗 arXiv — Scaling Laws for Tool-Use Agents`](https://arxiv.org/abs/2610.37648) · [`🔗 arXiv HTML 全文`](https://arxiv.org/html/2610.37648v1)
+
+---
+
+## 29. 潜在世界モデルはどれも力学を実際には学習していない——新しい一貫性指標がそう告げる
+
+- **Velocity:** ▮▮ rising
+- **Source:** arXiv 2610.37588 / arXiv HTML · 2026-10-27 · 著者2名
+- **Tags:** `world-models` `evaluation` `latent-dynamics` `equivariance` `research`
+
+論文は **faithful latent world models** を、環境の遷移写像と学習された潜在力学の間の*同変条件*として導入し、それに対して行動条件付き潜在予測を採点する **latent rollout consistency（LRC）** を提案する。結果はこのクラスにとって否定だ。「研究対象の最先端潜在世界モデル全体で、環境の力学を実際に忠実にモデル化することでこの課題を解いたものは**1つもない**」。著者による分野の診断はアーキテクチャではなく評価に向かう。現在のベンチマークは「しばしばタスク性能を強調する一方、学習された世界モデルが環境の下層構造を反映する予測的潜在力学を獲得したかについての洞察は限られている」。
+
+**Why it matters:** 今日の **Genie 4** の項目と並べて読むこと。両者は同じ発見を2方向から述べている。DeepMind自身の制約一覧は、視覚的細部と対象の永続性が「時間とともにずれる」、特に複数回の編集後やナビゲーション中に、と書いている。LRCはまさにその差を測る手段であり、それが与える答えは、タスク成功と忠実な力学は別物になる、というものだ。モデルは遷移関数を符号化しないまま、下流の報酬を満たすもっともらしいロールアウトを出せる——プリビズには十分で、計画には致命的だ。率直に言うべき注意が1つ。要旨は**モデル名もデータセットもLRCの値も挙げていない**ので、「1つもない」は要旨が列挙しない集合についての主張だ。一覧やスコアを引用する前にPDFを開き、これは著者自身の否定結果を最初の適用例とする測定提案として扱うこと。
+
+[`🔗 arXiv — Understanding the limits of latent world models`](https://arxiv.org/abs/2610.37588) · [`🔗 arXiv HTML 全文`](https://arxiv.org/html/2610.37588v1)
+
+---
+
+## 30. ラベルなしRLVRの崩壊には臨界データセット規模がある——そして問題数を増やすほど悪化する
+
+- **Velocity:** ▮ steady
+- **Source:** arXiv 2610.37553 / arXiv HTML · 2026-10-27 · 著者1名
+- **Tags:** `rlvr` `reinforcement-learning` `collapse` `theory` `reasoning`
+
+ラベルなしRLVRは、モデルが自身の多数決に同意することを報いる。それは「まず推論を改善するが、やがて崩壊する。自己評価報酬は1へ向かうのに精度は落ち、しばしばモデルがすべての問題に同じ答えを与えるまで続く」——そして直感に反して、「崩壊は訓練が多くの問題を使うときにのみ現れる」。論文はこのデータセット規模依存を集団的不安定性として説明する。問題ごとの先鋭化は **N** 個の問題に対し **1/N** で遅くなる一方、**共有モード**は **N** に依存せず **λ²** に比例する速度で成長する。そこから臨界問題数 **N_c ≃ ln(1/δ)/(λ²G)** が出る。シミュレーションは鋭い転移、**N_c ∝ λ⁻²**（対数補正まで）、「結合・確信度プロファイル・訓練変種にまたがる単一の臨界増幅 **λ²NG**」、バッチサイズへの対数依存、そして**初期モデルが確信的なら崩壊しない**ことを確認する。カーネル版は保護的な結合と周辺エントロピー・ボーナスを同定する。小規模TransformerのラベルなしRLでは、「共有方向を取り除くと崩壊は完全に防がれ、戻すと崩壊が起き、崩壊は訓練集合の大きさとベースモデルのエントロピーとともに大きくなる」。
+
+**Why it matters:** 実行可能な反転は、**問題集合をスケールすることが失敗モードだ**という点で、訓練データのボトルネックに対する既定の直感と逆だ——そして機構がその理由を語る。共有モードは*問題上の分布*の性質なので、問題を足すことは共有ドリフトを足すよりゆっくりしか先鋭化信号を足さない。示される対処は学習率の微調整ではなく構造的（共有方向を取り除くか罰する）であり、実走で検証する価値があるのはそこだ。これは著者1名の理論論文で、小規模モデル上のシミュレーションに支えられている。だから価値は反証可能な予測——測定可能な `λ²NG` を伴う `N_c ∝ λ⁻²`——にあり、レシピにはない。
+
+[`🔗 arXiv — Collective Dynamics of Self-Reinforcement`](https://arxiv.org/abs/2610.37553) · [`🔗 arXiv HTML 全文`](https://arxiv.org/html/2610.37553v1)
+
+---
+
+## 31. Anthropicの創薬プログラム：抗体設計35,000件、1,061ページの点検——そして「ほとんどが前臨床」
+
+- **Velocity:** ▮▮ rising
+- **Source:** Anthropic research blog / Hacker News · 242 pts · 238コメント · 約1日前（~10月27日 20:50 UTC+8）
+- **Tags:** `anthropic` `life-sciences` `drug-discovery` `case-study` `research`
+
+Anthropicのライフサイエンスチームは **6件** の提携先——**BigHat Biosciences、Bristol Myers Squibb、Divergence Labs、Enveda、Generate Biomedicines**、**The Column Group**——の成果と、1人企業 **Mithril Medicine** を買収した後の自社発見プログラムを公開した。具体的な数字はそれぞれパートナーの技術報告に裏打ちされている。**Generate** では6名の科学者がClaude CodeでCAR-T構築物の一部を短縮し、**約70%短い**設計を得て、免疫細胞が受容体を**約10倍**多く作れるようになった。**Divergence** ではClaudeが「ほぼ自律的に、約1か月で**35,000**件の抗体設計を生成し」、初期試験で **3件** のIgE結合株と **20件** のIgEを外す株が見つかり、うち **3件** は標準薬より優れていた。**BigHat** では約 **1,010** 変種を約10週間で作り、**10倍以上**強く結合し、**18 °C** 高い温度まで溶液中に留まり、**100倍以上**遅く凝集するリードが得られた——さらにClaudeは標準的な熱安定性・凝集指標が誤解を招くと論じ、代替案を提案してラボがそれを実行した。**Enveda** では **1,061** ページにわたり、Claudeは「人間のレビュアが見つけた**11件**の問題をすべて捉え、さらに見落としていた7件を指摘した」。レビューは **25時間超** から **3時間未満** へ短縮され、規制文書の草稿は「手作業で約3か月」に対して **4時間** で書かれた。
+
+**Why it matters:** これらは技術報告を公開した名指しのパートナーによるラボ測定であり、この種の主張が取りうる最も強い形だ——そして持ち帰るべき一文は投稿自身の結びにある。「この研究はすべてまだ初期段階にある。特に、現時点では**ほとんどが前臨床**、つまり大半は薬がヒトで試験される段階にはまだ達していない」。2つの指標は、独り歩きさせる前に分母を付ける必要がある。「**11件中11件**を捉えた」は1つの1,061ページのコーパスに対する**再現率**の言明で、投稿に偽陽性の数はない。だからレビュアがどれだけ読み飛ばさねばならないかはまだ語っていない。そして「**4時間 対 3か月**」は初稿と完成文書の比較だ。投稿はもう一方の草稿が人間レビューを受け「軽微な誤りを1件見つけた」と述べており、それが正しい開示であり、2つの数字が速度比にならない理由である。
+
+[`🔗 Anthropic — Early progress on accelerating drug development with Claude`](https://www.anthropic.com/research/early-progress-drug-development) · [`🔗 HN ディスカッション`](https://news.ycombinator.com/item?id=50265609)
+
+---
+
+## 32. Survival LLMはネットを切ったままAIとWikipedia 93万記事を動かす——そして22問の自前テストを公開している
+
+- **Velocity:** ▮▮ rising
+- **Source:** brangus.io / Hacker News · 385 pts · 148コメント · 約1日前（~10月27日 19:55 UTC+8）
+- **Tags:** `local-first` `offline` `open-source` `retrieval` `emergency`
+
+**Survival LLM** は無料のオープンソースアプリで、ローカルモデルとローカル参照ライブラリを自分のマシン上で動かす——オンラインのうちに用意し、その後は完全オフラインで、Wikipediaの最も読まれた記事「約 **930,000** 本」に加えて、WikiMed、MedlinePlus、UK Medicines A to Z、WikEM、Ready.gov、CDC渡航健康情報、米軍の医学・サバイバルマニュアル、wikiHow、iFixit、Appropedia、Stack Exchange のQ&Aを収録する。どの回答も、読んだ記事を「該当箇所をハイライトして」列挙する。モデルは利用可能メモリで選ばれ、階層ごとに精度の行を公開している。**128 GB以上のMac → NVIDIA Nemotron 3.5 Super（80 GB）、21/22**、**32–96 GBのMac → Qwen3.8 27B（18 GB）、21/22**、**32 GB以上のWindows PC → Nemotron 3.5 Lightning（25 GB）、19/22**、**16–31 GB → IBM Granite 4.2 8B（6 GB）、14/22**。ライブラリは **9 GB** のダウンロード（インストール後 **19 GB**）、WikipediaとiFixitを除けば **1.3 GB / 3 GB**。バッテリーについても明記がある。「回答中は約 **100 W**、1問あたり **5〜40秒**」。
+
+**Why it matters:** メモリ階層ごとに精度の数字を添えた表は、「あなたのマシンで動く」が取りうる最も正直な形だ。何を引き換えにしているかを語るのであって、引き換えがないかのように示唆しない。ただしその数字の脚注を読むこと。停電と応急処置についての **22問**、採点は「ライブラリの**より古いビルド**での我々の試験においてブラインドで」行われ、基準は「公式ガイダンスの要点を正しく押さえたか」。22項目は信頼区間が広く、採点者は著者自身で、最小の階層は **14/22**——つまりこの表は相対的な順序であって信頼性の数値ではない。安全性の論拠を実際に担っているのは、同じ段落で述べられるインターフェースの決定だ。「間違うことがある……どの回答も使用した記事を示すので、確認できる」。ハイライト付きの引用は監査できる機構であり、精度の百分率はそうではない。
+
+[`🔗 Survival LLM`](https://www.brangus.io/survival-llm) · [`🔗 HN ディスカッション`](https://news.ycombinator.com/item?id=50264853)
+
+---
+
+## 33. RuView：壁越しのWiFi姿勢推定で100,544スター——そして自前のベンチマーク記録はPCK@20が3.0%
+
+- **Velocity:** ▮▮ rising
+- **Source:** ruvnet/RuView / repository benchmark log / GitHub Trending · 100,544スター
+- **Tags:** `wifi-sensing` `csi` `pose-estimation` `benchmark` `repo`
+
+**RuView** は低コストの **ESP32** センサからのWiFiチャネル状態情報を、在室検知、呼吸と心拍、活動認識、そして「カメラなしの姿勢——WiFi CSIから**17の身体キーポイント**を推定する」に変え、ノードあたり **21エンティティ** のHome Assistant、Matter、Apple Home、Google Home、Alexa連携を出荷する。リポジトリは **100,544スター**、**13,122フォーク**、カウンタは **497 open** で内訳は **issue 72件＋pull request 425件**——MIT、今日プッシュ。自前の `docs/benchmarks/pose-estimation-cog.md` には測定実行が**1回**だけ——**v0.0.1、2026-05-19**——記録されており、**PCK@20 3.0%**、**PCK@50 18.5%**、正規化 **MPJPE 0.0931**。**1,077** の対サンプルから取り、単一の「30分の着席デスク録画」、平均確信度 **0.44**、訓練は **2.1秒**、エンコーダは**ランダム初期化**——「HFの在室モデルはMLP `8→64→128` で、このConv1d形状と互換でない」ためだ。
+
+**Why it matters:** リポジトリ自身の受け入れ基準は **ADR-079のPCK@20 ≥ 35%** であり、公開されている唯一の実行は **3.0%**——1桁足りず、しかも1被験者・1姿勢での話だ。関節ごとの表が最良の行の理由を説明している。最も強い信号は **r_hip**（PCK@20 25.0%、PCK@50 **76.9%**）、**r_knee**（35.2%）、**r_shoulder**（19.9%）で、これは「データ収集中のカメラの枠取り（操作者の右側が最も一貫して映っていた）と整合する」——モデルはカメラが見た側を学んだのであり、それはラベル漏洩の兆候であってセンシングの結果ではない。ログはさらにこう述べる。「ADR-079のPCK@20 ≥ 35%目標への残差はデータ律速であってインフラ律速ではない」。アプライアンスのスモーク実行は「**`pose.frame` イベントは0件発火**」を記録した——CSIソースが接続されていなかったからだ。だからといってプロジェクトが不正直なわけではない。ログは異例に率直で、日付を持ち追記専用だ。ただスター数は姿勢推定の主張の証拠にはならない。バイタルと在室の主張については、比較できる測定ログを見つけられなかった。統合RF世界モデルに関するREADME自身の注記——「実データ検証までは精度は依然**合成**だ」——も、より小さな字で書かれた同じ注意書きである。
+
+[`🔗 ruvnet/RuView`](https://github.com/ruvnet/RuView) · [`🔗 RuView — pose-estimation benchmark log`](https://github.com/ruvnet/RuView/blob/main/docs/benchmarks/pose-estimation-cog.md)
+
+---
+
+## 34. Moxnox 1.0：btrfs上のNT型POSIX OS、C++ 13万行、そして自分で自分をビルドできる
+
+- **Velocity:** ▮ steady
+- **Source:** maharmstone/moxnox / Hacker News · 80 pts · 18コメント · 約1日前（~10月27日 23:53 UTC+8）
+- **Tags:** `operating-system` `nt` `posix` `btrfs` `release`
+
+**Moxnox v1.0** は、奇妙な2つの制約を持つ趣味のOSだ。syscall設計は「Windows NTのそれを範としている」のに、「Unix系向けに書かれたソフトウェアを——**それ向けに再コンパイルされていれば**——動かせるはず」であり、「完全なGNUベースシステムを同梱する」。成熟度は**セルフホスティング**できるほどで、「Moxnox上でMoxnoxをビルドできる」。動作するのは **btrfs** 上、**amd64 と aarch64**、「**C++で約130,000行**」。両アーキテクチャのv1.0イメージが公開され、READMEにQEMU起動例が書かれている。リポジトリは **2026-10-22** に作成され、取得時点で **147スター**。
+
+**Why it matters:** 面白いのは設計上の賭けだ。NTに範を取った**syscall ABI**を狙いつつPOSIXソフトに再コンパイルを要求するということは、互換性がバイナリではなくソースレベルの契約だということであり、「再コンパイル」がFAQの奥ではなくREADMEに書かれている理由でもある。Wine型のバイナリ互換とはまったく別の提案で、13万行のOSが両方を名乗れるのはそのおかげだ。注意書きは著者自身が述べており、逐語で繰り返す価値がある。「btrfsのコードは基本的な用途には動くが、**実戦で鍛えられてはいない**。捨ててよいファイルシステム以外はマウントしないでほしい」。自分で再生成できるイメージとしか出会っていないファイルシステム実装はデータ消失のリスクであり、READMEは機能一覧と同じページでそう書いている——順序として正しい。
+
+[`🔗 maharmstone/moxnox`](https://github.com/maharmstone/moxnox) · [`🔗 HN ディスカッション`](https://news.ycombinator.com/item?id=50267569)
+
+---
+
+## 35. 「米国法典のGit」：改正365件を再生し361件が完全一致、一致しない4件にはラベルが付く
+
+- **Velocity:** ▮ steady
+- **Source:** Lexifina blog / Hacker News · 305 pts · 145コメント · 約1日前（~10月28日 01:47 UTC+8）
+- **Tags:** `law` `version-control` `provenance` `data` `methodology`
+
+Lexifinaの記事は、米国法典に対するバージョン管理層を、デモではなく検証手法とともに説明している。「2017年以降の各リリースポイントの対」について、その間に出た公開法を取り、「改正指示を古いテキストに日付順で適用し」、結果を新しい公式リリースポイントと比較した。「9つのTitleにわたる **365** 件の変更のうち、**361** 件が次のリリースポイントを完全に再現した」、そして「残る4件はどこまで確認できたかを示すラベル付きで表示される」。各変更は法律と発効日を伴う——**261** 件は制定による既定、**72** 件は発効日注記、**29** 件は改正自体に書かれた日付——そして1件は「決して来ないかもしれない行政判断に依存しており、推測するよりテキストから外す」とされる。動機はモデル上で測定されている。TUMの研究では、あるモデルがカットオフ後のドイツ法規の質問に単独で **24%**、関連条文を検索した場合は **87%** 正答した。別の研究では、改正法を適用した出力は公式テキストと「**93〜99%類似**」する一方、「単一の改正が完全一致したのは半数、改正の連鎖では5分の1」で、専門家は「近いはずれに法的に重大な誤り」を見つけた。
+
+**Why it matters:** 改正を再生し次の公式リリースポイントと差分を取ることは、モデルを信頼することに依存しない ground truth だ——それが方法論上の貢献であり、4件の失敗を捨てずにラベル付けできる理由でもある。361/365と報告し、その4件を名指しするデータセットは、百分率だけを報告するものとは別の成果物だ。挙げられた限界は、ソフトウェアではなく法にとって効くものだ。「後法が、それが対象とするより早い日付へ遡って及ぶ効果はまだ示しておらず、2022年の空白に提起された事件については、2022年6月法が答えを変えたという警告なしに下限だけを示す」、そして発効日注記は「パターンで読まれ」、変わった言い回しは制定日にフォールバックする。その背後にある法的な事実も持ち帰る価値がある。議会が実定法として制定したTitleの外では、法典は**一応の（prima facie）**証拠にすぎず、両者が食い違う場合は Statutes at Large が支配する——だから忠実な法典の再構成も、法の源泉にはならない。
+
+[`🔗 Lexifina — Git for the US Code`](https://lexifina.com/blog/git-for-the-us-code) · [`🔗 HN ディスカッション`](https://news.ycombinator.com/item?id=50268380)
+
+---
+
+## 36. Expoは公式エージェントskillを24本出荷した——そしてそのファイルは「誰が金を払うか」で分割している
+
+- **Velocity:** ▮ steady
+- **Source:** expo/skills / Expo docs · リポジトリ最終プッシュ 2026-10-28T11:10Z
+- **Tags:** `agent-skill` `expo` `react-native` `marketplace` `repo`
+
+**expo/skills** はExpoチームによる公式のAIエージェントskill一式で、ExpoとReact Nativeアプリの構築・配備・アップグレード・デバッグを担う——**MIT**、**3,357スター**、今日プッシュ。`skills.sh.json` マニフェストは **24** のskillを3つのバケットに分ける——総数はマニフェスト自体から数えたもので、どのページにも書かれていない。**「Framework (open source)」** の下に **16**（UI、ナビゲーション、スタイリング、データ取得、ネイティブモジュール、DOM、サンプル、SDKアップグレード）、**「Services & paid distribution」** の下に **7**——「中核目的が有料のExpo Application Services（EAS）を使うskill。いずれも費用とプラン制限を事前に開示する」と説明される——そして **「Experimental」** が **1**、「最終化していないExpo API」向けで、「基盤APIが安定すると上のグループへ昇格する」。導入はハーネスごと。Claude Code は `claude plugin install expo@claude-plugins-official`、Codex は `codex plugin add expo@openai-curated`、その他のエージェントは `npx skills@latest add expo/skills --skill '*'`。
+
+**Why it matters:** 真似する価値があるのは3分割のほうだ。*無料のフレームワーク知識*と、*有料サービスの利用を目的とするskill*を分け、有料のものに費用の事前開示を求めるのは、読み手に委ねず成果物に書き込まれた商業的な境界線である——大半のベンダー製skillパックが省略しているもので、その省略こそがそれらを「ルーティング」ではなく「ドキュメント」に見せている。READMEの枠組みも正しい。「Expoのドキュメント、Expo CLI、EAS CLIが引き続き信頼できる唯一の情報源であり、これらのskillはエージェントがそれらを正しく適用するのを助ける」——つまりこのパックは第二の仕様ではなくルータであり、driftしない。正直な穴はこうだ。リポジトリは `tests/` ディレクトリとルートの `eval-harness` 項目を出荷しているのに、READMEは**評価結果を一切述べていない**——したがってここでの「公式」は来歴を意味し、測定された精度を意味しない。
+
+[`🔗 expo/skills`](https://github.com/expo/skills) · [`🔗 expo/skills — skills.sh.json manifest`](https://github.com/expo/skills/blob/main/skills.sh.json) · [`🔗 Expo docs — Expo Skills for AI agents`](https://docs.expo.dev/skills/)
+
+---
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-10-27T20:15:59Z |
-| Items | 19 |
-| Sources tracked | 24（Hacker News、GitHub Trending、GitHub API、Google DeepMind、ghostty.org、LWN.net、CISA KEV、NVD、cveawg、CVE.org、cfsg.axiommath.ai、The Stanford Daily、liquid.ai、Hugging Face、microsoft.ai、Artificial Analysis、FoxIO、Wiz、arXiv） |
+| Generated | 2026-10-28T12:23:59Z |
+| Items | 36 |
+| Sources tracked | 30（Hacker News、GitHub Trending、GitHub API、Google DeepMind、ghostty.org、LWN.net、CISA KEV、NVD、cveawg、CVE.org、cfsg.axiommath.ai、The Stanford Daily、liquid.ai、Hugging Face、microsoft.ai、Artificial Analysis、FoxIO、Wiz、arXiv、NVIDIA product-security、Adobe trust center、GitHub Advisory Database、OSV、VulnCheck、Tailscale、WatchGuard PSIRT、Anthropic、brangus.io、lexifina.com、expo.dev） |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8（1日3回） |
 | Ranking | 速度加重（新しさ × エンゲージメント加速度 × 情報源の権威） |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |

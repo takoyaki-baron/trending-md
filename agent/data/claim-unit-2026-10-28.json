@@ -1,9 +1,9 @@
 {
- "generated": "2026-10-27T20:16:02.361Z",
+ "generated": "2026-10-28T12:24:19.376Z",
  "files": [
   {
    "file": "2026-10-28.md",
-   "items": 19,
+   "items": 36,
    "findings": [
     {
      "check": "cvss",
@@ -27,18 +27,81 @@
      "detail": "CVE-2026-111497 · Secondary/cve-coordination@google.com"
     },
     {
+     "check": "issues",
+     "item": 20,
+     "verdict": "ok",
+     "claim": "15 issues + 15 PRs",
+     "detail": "split named (PR share 50%)"
+    },
+    {
+     "check": "cvss",
+     "item": 20,
+     "verdict": "ok",
+     "claim": "3.1 10",
+     "detail": "CVE-2026-65145 · Secondary/psirt@nvidia.com · vector reproduces 10"
+    },
+    {
+     "check": "cvss",
+     "item": 22,
+     "verdict": "ok",
+     "claim": "3.1 9.8",
+     "detail": "CVE-2026-110879 · Secondary/36c7be3b-2937-45df-85ea-ca7133ea542c · vector reproduces 9.8"
+    },
+    {
+     "check": "cvss",
+     "item": 25,
+     "verdict": "ok",
+     "claim": "3.1 9.8",
+     "detail": "CVE-2026-116692 · Secondary/security-advisories@github.com · vector reproduces 9.8"
+    },
+    {
+     "check": "issues",
+     "item": 31,
+     "verdict": "unsplit-issue-count",
+     "claim": "11 issues",
+     "detail": "no issues/PR split in the item (no repo slug to check)"
+    },
+    {
+     "check": "issues",
+     "item": 33,
+     "verdict": "ok",
+     "claim": "72 issues + 425 PRs",
+     "detail": "split named (PR share 86%)"
+    },
+    {
+     "check": "repo",
+     "item": 5,
+     "verdict": "star-drift",
+     "claim": "56 quoted vs 113 now",
+     "detail": "AxiomMath/CFSG: -50% — reread the number or date the item"
+    },
+    {
      "check": "repo",
      "item": 5,
      "verdict": "ok",
      "claim": "AxiomMath/CFSG",
-     "detail": "57★, last push 2026-10-27"
+     "detail": "113★, last push 2026-10-27"
     },
     {
      "check": "repo",
      "item": 10,
      "verdict": "ok",
      "claim": "Graphify-Labs/graphify",
-     "detail": "136864★, last push 2026-10-27"
+     "detail": "137362★, last push 2026-10-27"
+    },
+    {
+     "check": "repo",
+     "item": 21,
+     "verdict": "unreadable",
+     "claim": "pkgs.tailscale.com/stable",
+     "detail": "api.github.com: Command failed: gh api repos/pkgs.tailscale.com/stable"
+    },
+    {
+     "check": "repo",
+     "item": 22,
+     "verdict": "unreadable",
+     "claim": "advisories/GHSA-m8xf-2cr7-77ph",
+     "detail": "api.github.com: Command failed: gh api repos/advisories/GHSA-m8xf-2cr7-77ph"
     },
     {
      "check": "count",
@@ -46,6 +109,13 @@
      "verdict": "ok",
      "claim": "40 languages",
      "detail": "README states it"
+    },
+    {
+     "check": "count",
+     "item": 36,
+     "verdict": "absent",
+     "claim": "24 skills",
+     "detail": "no count of skills on README of expo/skills or expo/skills skills.sh.json or docs.expo.dev/skills/ — count it yourself, or say \"no page states a total\""
     }
    ]
   }
@@ -53,6 +123,6 @@
  "api_calls": 0,
  "readme_calls": 0,
  "cited_page_calls": 0,
- "nvd_calls": 1,
+ "nvd_calls": 2,
  "cna_calls": 0
 }
