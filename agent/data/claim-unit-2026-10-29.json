@@ -1,9 +1,9 @@
 {
- "generated": "2026-10-28T20:20:59.363Z",
+ "generated": "2026-10-29T04:17:36.453Z",
  "files": [
   {
    "file": "2026-10-29.md",
-   "items": 19,
+   "items": 37,
    "findings": [
     {
      "check": "issues",
@@ -15,9 +15,9 @@
     {
      "check": "cvss",
      "item": 13,
-     "verdict": "advisory-unreadable",
+     "verdict": "advisory-repo-only",
      "claim": "3.1 9",
-     "detail": "GHSA-49hg-9qhc-4623: no record in the global Advisory Database (a published repo page does not imply an ingested advisory) — \"I could not read it\" is not \"it does not say that\""
+     "detail": "GHSA-49hg-9qhc-4623: not in the global Advisory Database, but the repo page renders (published 2026-10-27) — Severity critical · CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:C/C:H/I:H/A:H · patched 3.16.2 · CVE ID No known CVE; the vector reproduces 9.0 — an advisory that is not ingested is a STATE, not an unreadable page"
     },
     {
      "check": "issues",
@@ -34,11 +34,53 @@
      "detail": "split named (PR share 91%)"
     },
     {
+     "check": "cvss",
+     "item": 21,
+     "verdict": "ok",
+     "claim": "3.1 10",
+     "detail": "CVE-2026-97229 · Secondary/cve@gitlab.com · vector reproduces 10"
+    },
+    {
+     "check": "cvss",
+     "item": 23,
+     "verdict": "ok",
+     "claim": "3.1 2.7",
+     "detail": "CVE-2026-41709 · Secondary/security@vmware.com · vector reproduces 2.7"
+    },
+    {
+     "check": "issues",
+     "item": 26,
+     "verdict": "ok",
+     "claim": "35 issues + 67 PRs",
+     "detail": "split named (PR share 66%)"
+    },
+    {
+     "check": "issues",
+     "item": 28,
+     "verdict": "ok",
+     "claim": "92 issues + 61 PRs",
+     "detail": "split named (PR share 40%)"
+    },
+    {
+     "check": "issues",
+     "item": 34,
+     "verdict": "ok",
+     "claim": "38 issues + 11 PRs",
+     "detail": "split named (PR share 22%)"
+    },
+    {
      "check": "repo",
      "item": 3,
-     "verdict": "unreadable",
+     "verdict": "hf-model",
      "claim": "internlm/Atria-Dawn",
-     "detail": "api.github.com: Command failed: gh api repos/internlm/Atria-Dawn"
+     "detail": "huggingface.co/internlm/Atria-Dawn (gated: false, 368 files, created 2026-10-23) — a Hugging Face model id, not a GitHub repository (read the card, not a README)"
+    },
+    {
+     "check": "repo",
+     "item": 7,
+     "verdict": "hf-model",
+     "claim": "nvidia/NVIDIA-Nemotron-3.5-Transcribe-30B-A4B",
+     "detail": "huggingface.co/nvidia/NVIDIA-Nemotron-3.5-Transcribe-30B-A4B (gated: false, 22 files, created 2026-10-07) — a Hugging Face model id, not a GitHub repository (read the card, not a README)"
     },
     {
      "check": "repo",
@@ -52,14 +94,49 @@
      "item": 11,
      "verdict": "ok",
      "claim": "elayadesign/ai-design-skills",
-     "detail": "10965★, last push 2026-10-27"
+     "detail": "11311★, last push 2026-10-27"
     },
     {
      "check": "repo",
      "item": 15,
      "verdict": "ok",
      "claim": "togg53192-cmd/jailbreaks",
-     "detail": "6918★, last push 2026-10-28"
+     "detail": "7363★, last push 2026-10-28"
+    },
+    {
+     "check": "count",
+     "item": 7,
+     "verdict": "ok",
+     "claim": "40 languages",
+     "detail": "README states it"
+    },
+    {
+     "check": "count",
+     "item": 35,
+     "verdict": "number-other-noun",
+     "claim": "36 language",
+     "detail": "36 is on HF model tencent/Hy-SimulMT-30B-A3B-FP8 as “36 seconds” — the page's head noun is not “language”, so this is the feed's paraphrase rather than the page's wording; quote what the page says"
+    },
+    {
+     "check": "count",
+     "item": 35,
+     "verdict": "absent",
+     "claim": "8 model",
+     "detail": "no count of model on README of Tencent-Hunyuan/Hy-SimulMT or HF model tencent/Hy-SimulMT-30B-A3B-FP8 — count it yourself, or say \"no page states a total\""
+    },
+    {
+     "check": "bundle",
+     "item": 1,
+     "verdict": "bundle-ok",
+     "claim": "4 × eMudhra in /etc/ssl/cert.pem",
+     "detail": "4 certificate(s) match (10 matching line(s)); bundle holds 128"
+    },
+    {
+     "check": "bundle",
+     "item": 1,
+     "verdict": "bundle-lines-named",
+     "claim": "8 × emSign in /etc/ssl/cert.pem",
+     "detail": "8 is the LINE count and the sentence says so — 4 certificate(s) match, bundle holds 128"
     }
    ]
   }
@@ -67,6 +144,7 @@
  "api_calls": 0,
  "readme_calls": 0,
  "cited_page_calls": 0,
+ "repo_page_calls": 0,
  "nvd_calls": 1,
  "cna_calls": 0
 }
