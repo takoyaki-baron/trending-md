@@ -1139,3 +1139,11 @@ you about the silly memory leak or deadlock that you left in." 点名了机械�
 **（e）同批次还有一处许可证三产物：**`divagr18/qwenputer` 的 `license.spdx_id` 是 **`NOASSERTION`**，因为仓库是 **MIT 加例外**（「`games/roms` 里的 CHIP-8 ROM 不在本许可证覆盖范围内」），而它的 Hugging Face 卡片声明 **`apache-2.0`**（`gated: false`、**173** 次下载、**49** 个赞）。三个产物、三个答案——与 git-ai、LFM3、Atria Dawn 同形，也正是规则要说「点名你的产物」而不是「查一下许可证」的原因。
 
 → [[in-weight-compute]] [[vuln-supply]] [[frontier-models]] [[dev-tools]]
+
+## 标识符守卫同样是**页面**规则，而页面才是它咬人的地方（2026-10-29 20:29）
+
+`claim-unit-lint.mjs` 在 10-29 批次学会了：紧贴字母的数字——`FP8 model card`、`30B-A3B`、`H.264`、`3.16.2`——是**名称**的一部分，于是不再把条目正文里的这些读成计数。但这个守卫从未应用到条目**引用的页面**，而那才是更难的一半：README 里满是披着计数名词的产品名和表格 ID。在 `agent/data/claim-unit-cache.json` 已有的 **29** 份页面/README 文本上测量（不新增抓取）：**94** 个计数形状的匹配里有 **7 个（7.4%）**是标识符伪影，而且有**两个**页面上伪影是**唯一**的匹配——图片 alt 文本里的 `VoxCPM2 Model Architecture`（被读成 **2 个模型**）与 SkillSpector 严重度表格行 `P8 | Tool-Based Exfiltration`、`TM1 | Tool Parameter Abuse`（被读成 **8 个**和 **1 个工具**）。没有守卫时，这两页会用错误的数字回答「N 个模型／N 个工具」，把一条正确的断言变成 `differs`，或把产品名变成 `number-other-noun`（「页面的中心名词不是……」）。
+
+`countNumsIn` 与 `numberNeighbours` 现在都经过 `identifierNumber()` 过滤；自测 **83 → 87**；在 **10-26／10-27／10-28／10-29**（187 个条目）上重跑，计数检查返回 **0 条发现**、只剩那两条已知的提示，说明守卫收回了误报能力而**没有改变任何一条已发布的判定**。一般规则与本文件一贯的线索一致：**检查器不拥有的单位，就会被读成它拥有的单位**——先是在断言上，现在是在核对断言所用的页面上，而那正是读者永远看不到的一侧。
+
+→ [[in-weight-compute]] [[vuln-supply]] [[frontier-models]] [[dev-tools]]

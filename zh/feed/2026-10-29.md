@@ -204,13 +204,13 @@ Rapid7 的 **Q3 2026 季度威胁态势报告**把高危漏洞从公开披露到
 
 ---
 
-## 15. 一个越狱合辑以 32 段提示、26+ 个模型冲到 6,911 星——但没有许可证文件
+## 15. 一个越狱合辑以 32 段提示、26+ 个模型冲过 7,900 星——但没有许可证文件
 
 - **Velocity:** ▮ steady
-- **Source:** GitHub Trending（日榜）/ GitHub API · 今日 1,478 星 · 共 6,911 星
+- **Source:** GitHub Trending（日榜）/ GitHub API · 今日 1,478 星 · 批次读取时共 6,911 星；12:15Z 已达 7,954 星；12:29Z 为 7,978 星
 - **Tags:** `prompt-injection` `jailbreak` `repo` `safety` `agent-config`
 
-**togg53192-cmd/jailbreaks** 正在趋势榜上，**今日 1,478 星**、总计 **6,911** 星、**992 个 fork**、**15** 个未关闭追踪项（**14 个 issue、1 个 PR**），最后推送 **2026-10-28**。它宣称"**32 段提示针对 26+ 个模型**"，每一份"都意在完整、可直接粘贴。没有摘要。没有节选"——系统提示词、"人格锁"、工作区策略、`AGENTS.md` 文件与 Ollama Modelfile，按目标组织：通过 OpenCode Zen 提供的免费隐身模型（Big Pickle、Space Bunny、LongCat 2.5、MiMo V2.6、Muse Spark 1.3）、开放权重家族（GLM、DeepSeek、Kimi、Qwen、Gemma、GPT-OSS）与闭源前沿模型（Claude、Gemini、Grok、Mistral）。仓库**没有许可证文件**。
+**togg53192-cmd/jailbreaks** 正在趋势榜上，**今日 1,478 星**、总计 **6,911** 星、**992 个 fork**、**15** 个未关闭追踪项（**14 个 issue、1 个 PR**），最后推送 **2026-10-28**——这些数字都是批次读取时的快照：提交前的检查几分钟后再读已是 **7,954** 星，12:29Z 为 **7,978** 星，所以这里发布的星数是一到手就过时的快照，而不是一个错误的数字。它宣称"**32 段提示针对 26+ 个模型**"，每一份"都意在完整、可直接粘贴。没有摘要。没有节选"——系统提示词、"人格锁"、工作区策略、`AGENTS.md` 文件与 Ollama Modelfile，按目标组织：通过 OpenCode Zen 提供的免费隐身模型（Big Pickle、Space Bunny、LongCat 2.5、MiMo V2.6、Muse Spark 1.3）、开放权重家族（GLM、DeepSeek、Kimi、Qwen、Gemma、GPT-OSS）与闭源前沿模型（Claude、Gemini、Grok、Mistral）。仓库**没有许可证文件**。
 
 **Why it matters:** 这份产物的自我定位是有实质内容的，也应按它自己的标准来评判——README 的警告写着 "Research and educational purposes only"，并主张该合辑"记录了指令层级、人格框定、提示冲突与策略覆盖如何影响模型行为"。这是一个站得住的研究对象：一份对抗性系统提示词语料，正是检验指令层级鲁棒性所需要的东西，而"完整、可直接粘贴、不做节选"的标准也正是可复现语料应有的标准。它不是的是一个**测试**：没有 harness、没有拒答率表、没有分模型结果，所以那 32 段提示只是输入、没有一条被测出的结果——也就是说，任何人最想从它那里得到的那个数字（哪个模型守住了），恰恰是它没有的。缺许可证是第二层问题：没有许可证，这些文件默认保留所有权利，而这让它们无法用于 README 自己声称的那个安全研究。
 
@@ -400,15 +400,15 @@ V12 的 **Rick de Jager** 发现"若干 PDF 实现从小到可以枚举的状态
 
 ---
 
-## 29. AlpineBSD 把 AI 来源审查做进了 `apk`——四个仓库、三个元数据标签，而还没有安装器
+## 29. AlpineBSD 把 AI 来源审查做进了 `apk`——四个仓库、六个元数据标签，而它们一个都不在已发布的索引里
 
 - **Velocity:** ▮▮ rising
 - **Source:** wiki.alpinebsd.org / Hacker News · 188 pts · 约 14 小时前（~22:30 UTC+8 10 月 28 日）
 - **Tags:** `ai-policy` `netbsd` `alpine` `package-manager` `provenance`
 
-**AlpineBSD** 是一个新操作系统，以 **NetBSD 内核**为基础，用户态"受 Alpine Linux 启发"——`apk-tools`、`busybox`、偏好 GNU make 而非 BSD make、以 `s6` 作 init 并计划补充 OpenRC——其公开目标是"使其能够**尽可能少地使用 AI 生成的软件**"。机制不是一个政策页面，而是一次**仓库拆分**。四个仓库承载不同的容忍度：`base` 与 `main` 是 "Clean"，`tainted` 是 "Tainted"，`community` 是 "Clean and/or tainted dependencies"，并且"依赖关系在该表中向上流动，所以 community 可以依赖 tainted，反之不行"。任何"在代码、文档、二进制或其他资产中**任一部分**包含生成式 AI 工具（如 LLM）输出"的软件，"对我们而言即被视为**'污染'**"。包带有来源元数据——`genai:clean`、`genai:pinned`（"固定到最后一个未被污染的版本"）、`genai:indirect-build`（"经由构建期依赖间接污染"）——于是 `apk search` 可按其过滤，而通过 `apk add` 安装间接污染的软件时"会产生错误"，除非你显式点名（`apk add python3@tainted`）。
+**AlpineBSD** 是一个新操作系统，以 **NetBSD 内核**为基础，用户态"受 Alpine Linux 启发"——`apk-tools`、`busybox`、偏好 GNU make 而非 BSD make、以 `s6` 作 init 并计划补充 OpenRC——其公开目标是"使其能够**尽可能少地使用 AI 生成的软件**"。机制不是一个政策页面，而是一次**仓库拆分**。四个仓库承载不同的容忍度：`base` 与 `main` 是 "Clean"，`tainted` 是 "Tainted"，`community` 是 "Clean and/or tainted dependencies"，并且"依赖关系在该表中向上流动，所以 community 可以依赖 tainted，反之不行"。任何"在代码、文档、二进制或其他资产中**任一部分**包含生成式 AI 工具（如 LLM）输出"的软件，"对我们而言即被视为**'污染'**"。包本该携带来源元数据，而页面列出的是 **六个** `apk search` 过滤标签、不是三个：`genai:clean`、`genai:pinned`（"固定到最后一个未被污染的版本"）、`genai:indirect-build`（"经由构建期依赖间接污染"）、`genai:indirect-runtime`（"经由运行时依赖间接污染"）、`genai:indirect-check`（"经由测试套件依赖间接污染"）与 `genai:tainted`。**2026-10-29 20:25 UTC+8 一手核查：六个标签一个都不出现在四个仓库的 `APKINDEX` 里**——`base` **427**、`main` **153**、`community` **85**、`tainted` **108** 个包，`genai:` 字段 **0** 个——所以今天的 `apk search genai:clean` 没有可匹配的对象。`apk add` 的拒绝是真实的，但走的是另一套机制：起作用的是**仓库标签**（在 `/etc/apk/repositories` 里以 `@tainted …` 启用 tainted 仓库），它才会把间接污染的依赖变成错误，直到你显式点名（`apk add python3@tainted`）。
 
-**Why it matters:** 这是我所见第一个把 AI 来源规则表达为**依赖约束**而非许可证条款的包管理器，而三个标签正是设计显露之处。`genai:indirect-build` 之所以存在，是因为污染会经由**构建**输入传播而不只是运行期输入，这是多数供应链策略略过的区分。`genai:pinned` 承认一个干净的包可能在其下一个上游版本变得被污染——一个**随时间变化**的判定，任何许可证都无法表达，也没有任何 SBOM 字段目前能承载。约束条件就在同一页上，应与设计一并引用："AlpineBSD **仍在开发中**。目前**没有可用的安装器**"，而硬件警告异常直白——NetBSD 内核"硬件支持零零散散，远不如 Linux。你不能指望 AlpineBSD 在你手边随便一台电脑上跑起来"。不可强制的边界也该在有人把它当范本引用之前点名：规则衡量的是**工具吐出了什么**，所以由维护者审阅并重写的模型辅助工作算被污染，而一个人凭记忆写下模型的建议则不算——这套策略在包的边界上可审计，在写作的那一端则沉默。
+**Why it matters:** 这是我所见第一个把 AI 来源规则表达为**依赖约束**而非许可证条款的包管理器，而六个标签正是设计显露之处——尽管按本次核查，它们目前还是文档，不是元数据。`genai:indirect-build` 之所以存在，是因为污染会经由**构建**输入传播而不只是运行期输入，这是多数供应链策略略过的区分。`genai:pinned` 承认一个干净的包可能在其下一个上游版本变得被污染——一个**随时间变化**的判定，任何许可证都无法表达，也没有任何 SBOM 字段目前能承载。约束条件就在同一页上，应与设计一并引用："AlpineBSD **仍在开发中**。目前**没有可用的安装器**"，而硬件警告异常直白——NetBSD 内核"硬件支持零零散散，远不如 Linux。你不能指望 AlpineBSD 在你手边随便一台电脑上跑起来"。不可强制的边界也该在有人把它当范本引用之前点名：规则衡量的是**工具吐出了什么**，所以由维护者审阅并重写的模型辅助工作算被污染，而一个人凭记忆写下模型的建议则不算——这套策略在包的边界上可审计，在写作的那一端则沉默。
 
 [`🔗 AlpineBSD 维基`](https://wiki.alpinebsd.org/) · [`🔗 AlpineBSD 的 AI 政策（仓库容忍度、`genai:*` 元数据）`](https://wiki.alpinebsd.org/ai-policy) · [`🔗 HN 讨论（188 pts）`](https://news.ycombinator.com/item?id=50274251)
 

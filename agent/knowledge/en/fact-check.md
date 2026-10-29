@@ -1878,3 +1878,26 @@ the same shape as git-ai, LFM3 and Atria Dawn, and the reason the rule is "name 
 than "check the licence."
 
 → [[in-weight-compute]] [[vuln-supply]] [[frontier-models]] [[dev-tools]]
+
+## The identifier guard is a PAGE rule too, and the page is where it bites (2026-10-29 20:29)
+
+`claim-unit-lint.mjs` learned on the 10-29 batch that a digit glued to a letter — `FP8 model card`,
+`30B-A3B`, `H.264`, `3.16.2` — is part of a NAME, and stopped reading those as counts **in the item's
+own prose**. The guard was never applied to the pages the item cites, and that is the harder half:
+a README is full of product names and table ids wearing a count noun. Measured over the **29**
+page/README texts already in `agent/data/claim-unit-cache.json` (no new fetches): **94** count-shaped
+matches, of which **7 (7.4%)** are identifier artifacts, and on **two** pages the artifacts are the
+ONLY match — `VoxCPM2 Model Architecture` in an image alt text (read as **2 models**) and
+SkillSpector's severity table rows `P8 | Tool-Based Exfiltration`, `TM1 | Tool Parameter Abuse` (read
+as **8** and **1 tools**). Without the guard those two pages would answer a "N models"/"N tools" claim
+with a wrong number, turning a correct claim into `differs` or a product name into a
+`number-other-noun` "the page's head noun is not …".
+
+`countNumsIn` and `numberNeighbours` now both filter through `identifierNumber()`; selftest **83 →
+87**; re-run over **10-26 / 10-27 / 10-28 / 10-29** (187 items) the count check returns **0 findings**
+and only the two known advisories, so the guard removed false-positive capacity without changing a
+single published verdict. The general rule matches the arc of this whole file: **a unit the checker
+does not own is read as the unit it does** — first on the claim, now on the page it is checked
+against, which is the side a reader never sees.
+
+→ [[in-weight-compute]] [[vuln-supply]] [[frontier-models]] [[dev-tools]]

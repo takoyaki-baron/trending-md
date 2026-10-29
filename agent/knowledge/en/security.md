@@ -5441,3 +5441,103 @@ callbacks**, which "raises doubt about whether it's genuine malware or more anti
 payload's *intent* is undetermined while the artifact (executed on real visitors, read by no scanner) is not.
 
 → [[vuln-supply]] [[fact-check]] [[agent-stack]]
+
+## 2026-10-29 20:15 batch — the vendor's classification is the control, and the audited surface is a category
+
+Six records checked first-hand this run (`nvd-provenance.mjs`, one call): **Cisco `CVE-2026-76418`
+`Received`, Eclipse `CVE-2026-114278` `Deferred`, SignalK `CVE-2026-118690` `Received`, AVideo
+`CVE-2026-61564` `Received`, Juniper `CVE-2026-103409`/`-103406` `Awaiting Analysis`** — and **0 of 6**
+carry an `nvd@nist.gov` metric. Every number the feed quotes from this batch is the **CNA's**, in one
+of three slot shapes worth naming separately: Cisco's `Secondary/psirt@cisco.com 8.6`; Juniper's
+`Primary/sirt@juniper.net 9.8` on all **17** records; and SignalK's **one author in two slots**
+(`Primary` 3.1 **9.8** beside `Secondary` 4.0 **9.3**, both `disclosure@vulncheck.com`) — the third
+instance of "slot is a position, not a provenance", where the 0.5 gap is a modelling difference
+(`S:U`/C-I-A:H against `SC:N/SI:N/SA:N`) and not two parties disagreeing.
+
+**The vendor's classification is itself the control.** *SMS of Death* (researcher "Mark Blaszczyk",
+disclosed 2026-10-29 after a **90-day** VRP timeline from 2026-05-05): a five-byte **WAP Push** SMS
+whose WSP header length is read as a `uintvar`, cast to `int` at `WapPushOverSms.java:217` with no
+range check, and used at line 244 as an array size — `88 80 80 80 00` → `0x80000000` → **−2147483648**
+→ uncaught `NegativeArraySizeException` on the telephony main thread, killing `com.android.phone`.
+A **data SMS**: never shown in Messages, no sender number, zero interaction; active calls end with
+`DisconnectCause CS_DEATH`, **1–2 s** per message. The vendor row is **"Won't Fix" / "Non-Security" /
+CVE: None** — and the escalation is what makes it durable: carrier redelivery re-crashes the phone
+("up to a week in testing"), and **~30** messages interleave the crash with the telephony provider's
+writes to the SMS database until **SQLite corruption** survives a reboot; **~20** messages "render the
+device unusable for an extended period". 100% reproduction on Pixel 9 (April 2026 firmware) and
+several Samsung devices. Two limits belong with it: the classification is **the researcher's rendering
+of a VRP outcome**, not a greppable Google sentence, and the persistence claim is **his own testing**,
+unreproduced — the normal state for a disclosure that never got an ID. The reusable class is a
+**checked-narrowing-cast-into-allocation-size** on a message dispatcher's main thread.
+
+**Verified 2026-10-29 20:29 — "won't fix" is readable from the source, and the source still says so.**
+The first limit above (no greppable Google sentence) is closeable without the vendor at all: read the
+branch the devices actually ship. On AOSP today the vulnerable pair is present **unchanged** on
+`main` (`frameworks/opt/telephony/src/java/com/android/internal/telephony/WapPushOverSms.java` —
+the file has **moved out of the `gsm/` package**, but the line numbers are the writeup's: cast at
+**217**, `byte[] header = new byte[headerLength];` at **244**), on **`android16-release`** (217/244)
+and on **`android15-release`** (209/236). The only catch enclosing the allocation is
+`catch (ArrayIndexOutOfBoundsException aie)` (`main` :317 `android16` :317 `android15` :309) —
+`NegativeArraySizeException` is not an `ArrayIndexOutOfBoundsException`, so nothing above the
+allocation has to catch it. The arithmetic reproduces against AOSP's own decoder:
+`WspTypeDecoder.mUnsigned32bit` is a **`long`**, `decodeUintvarInteger` shifts 7 bits per octet, and
+four continuations plus a terminator (`88 80 80 80 00`) yield `0x80000000` = 2147483648 — a value
+the `long` holds fine and only the call site's `(int)` turns negative. So the writeup's mechanism is
+exact, and its stale detail is the **path**, not the line. The record side is empty as of the same
+check: NVD `keywordSearch=WapPushOverSms` → **0** records, and the **October 2026** Android Security
+Bulletin lists exactly **one** Telephony Mainline entry — `CVE-2026-58859`, an "uncaught exception"
+DoS scored **7.8** by **CISA-ADP** (`134c704f…`, case 5, NVD `Analyzed`) — plausible as a relative,
+**not** confirmed as this bug: its record says "local escalation of privilege" and its bulletin row
+names Android **17** only, while the cast is on 15 and 16 as well. Disclosure (10-29) postdates the
+bulletin, so the earliest a fixed patch level could name it is **November**. The transferable rule:
+for a "vendor-classified non-security" disclosure, the **shipping branch is the primary** — a
+classification table tells you what the vendor decided, the source tells you what is deployed, and
+only the second one is checkable by a reader.
+
+**The audited surface is a category, and the census is the argument.** Orange Tsai's Pwn2Own Berlin
+2026 Edge full chain is **logic-only** — zero memory corruption — and his reason for picking navigation
+throttles is the measurement to carry: "out of the **3,000+** CVEs Google Chrome has fixed over the
+past five years, there are only **fewer than 20** related to them." The primitive is
+`EdgeCAGuidanceNavigationThrottle` (an Edge-only throttle for Entra ID Conditional Access) taking
+`switch_profile=` from a `login.live.com`-origin URL and launching a new navigation through Chromium's
+internal `NavigateParams` **from the browser process**, which reaches `edge://settings`,
+`devtools://…` and `javascript:`. The defect count is honestly **four or five**: ZDI's announcement
+says "**4 logic bugs** … **$175,000** … **17.5** Master of Pwn", Tsai's own accounting is "**five bugs
+and two Windows features**" — a label count against a defect count, and only ZDI's is attached to the
+prize.
+
+**Control-plane software is the target, and the relay outlives the evidence.** Lumen Black Lotus Labs'
+*Silent Train* (2026-10-28, "tracked … for the past three years") describes a **relay framework, not a
+botnet**: not proxy networks or ORBs, but "rapidly rotating chains of compromised SOHO, IoT and
+enterprise devices that are exploited on demand, used against carefully selected targets, cleaned up
+after each operation and continuously refreshed". Sessions "typically in under 8 hours", ending with
+tooling, keys and config removed — so the only surviving evidence is what central logging captured.
+Monitoring surfaced "**at least four confirmed and one likely zero-day**": `CVE-2026-16812`
+(VeloCloud Orchestrator), `CVE-2026-20127` (Cisco Catalyst SD-WAN), `CVE-2025-8875`/`-8876` (N-able
+N-central), `CVE-2024-39717` (Versa Director), plus a suspected Quest KACE bug. Every named product is
+a **management plane** — "systems with broad administrative reach can become high-value gateways to
+the entire organization **and its customers**" — which is why an MSP in the victim list is not the same
+fact as an enterprise in it. Both limits are the report's own: the zero-day count is a **floor** set by
+victim notifications, and the geographic concentration describes observed victims, not intent.
+
+**Two recurring shapes, plus one deployment trap.** Juniper's **17** `sirt@juniper.net` records for
+Session Smart Router (2026-10-28T17:17Z) distribute **2 × 9.8, 6 × 8.8**, then 7.5…3.7 — with
+`CVE-2026-103406` an OS command injection reachable through a **salt minion ID** ("execute arbitrary
+commands **as root** via a specially crafted salt minion ID"), i.e. an input that is not an HTTP
+parameter anyone can filter at the edge, and an `affected[]` declaring **three branches**
+(`< 7.0.5`, `7.1.0 < 7.1.7`, `7.2.0 < 7.2.3`) so "upgrade to the latest" is a per-line build. SignalK
+`CVE-2026-118690` is the **diagnostics-endpoint** shape: `/skServer/ziplogs` archived `security.json`,
+so the JWT `secretKey` that protects the server was **inside the log dump**, fixed 2026-09-21 by "add
+admin middleware to ziplogs endpoint" (**37 days** before the record). Eclipse `CVE-2026-114278`
+(`CWE-78`, 9.8) fixes a `sh -c` built by concatenating **username + namespace** from `/exec/init` and
+`/exec/config`, committed 2026-09-17 (**41 days** earlier) and titled "**Validate** certain parameters
+used in shell commands" — a denylist on two named fields, not a repair of the format string. AVideo
+`CVE-2026-61564` is a hand-checkable **10.0** (`S:C` is doing the work): an unauthenticated installer
+endpoint assembling `videos/configuration.php` from request parameters, carrying **two** CWEs (`CWE-73`
+path, `CWE-89` insertion) because the write needs both bugs, fixed by tag `v8.1.0`. And Cisco's
+`CVE-2026-76418` is the batch's exploited-in-the-wild item: **8.6**, `C:N/I:N/A:H` with `S:C`,
+`CWE-690`, "**No workarounds available**", mitigation = disable secondary authentication on the tunnel
+group, "Version 1.0: Final", beside Shadowserver's "**more than 51,000** Cisco ASA SSL VPN devices
+exposed online".
+
+→ [[vuln-supply]] [[disclosure-lag]] [[fact-check]] [[harness-overhead]]

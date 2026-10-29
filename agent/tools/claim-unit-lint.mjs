@@ -1213,7 +1213,15 @@ async function readme(slug) {
 function countNumsIn(body, noun) {
   const stem = noun.replace(/s$/, '');
   const re = new RegExp(`(\\d[\\d,]*)\\s*(?:-|\\s|\\|)\\s*${stem}(?:s|es)?\\b`, 'gi');
-  return [...body.matchAll(re)].map((m) => toNum(m[1]));
+  /* The identifier guard applies to PAGE bodies too, and the page is where it bites hardest —
+   * a README is full of product names and table ids that wear a count noun. Measured 2026-10-29
+   * over the 29 page/README texts in `agent/data/claim-unit-cache.json`: **7 of 94** count-shaped
+   * matches are identifier artifacts, and on two pages the artifacts are the ONLY match, so a
+   * correct claim would have been scored against them — `VoxCPM2 Model Architecture` (an image
+   * alt, read as 2 models) and SkillSpector's severity table rows (`P8 | Tool-Based Exfiltration`,
+   * `TM1 | Tool Parameter Abuse`, read as 8 and 1 tools). Same rule, same reason as the claim
+   * side: a digit glued to a letter, or reached through a dot, is part of a name. */
+  return [...body.matchAll(re)].filter((m) => !identifierNumber(body, m.index, m[1])).map((m) => toNum(m[1]));
 }
 
 /* A count's NOUN is part of the claim, and a paraphrase is not an absence. Stalwart's own post
@@ -1224,7 +1232,12 @@ function countNumsIn(body, noun) {
 function numberNeighbours(body, n) {
   const alt = n >= 1000 ? `${n.toLocaleString('en-US')}|${n}` : String(n);
   const re = new RegExp(`\\b(?:${alt})\\b([ \\t]+[\\p{L}\\d][\\p{L}\\d'’-]*(?:[ \\t]+[\\p{L}\\d][\\p{L}\\d'’-]*){0,3})`, 'gu');
-  return [...body.matchAll(re)].map((m) => `${n.toLocaleString('en-US')}${m[1]}`.replace(/\s+/g, ' ').trim()).slice(0, 3);
+  return [...body.matchAll(re)]
+    // The identifier guard, one step deeper: `P8 | Tool-Based` and `VoxCPM2 Model` are the same
+    // artifacts here as in `countNumsIn`, and this matcher feeds `number-other-noun` — a verdict
+    // that would then tell the author to "quote what the page says" about a product name.
+    .filter((m) => !identifierNumber(body, m.index, /^[\d,]+/.exec(m[0])[0]))
+    .map((m) => `${n.toLocaleString('en-US')}${m[1]}`.replace(/\s+/g, ' ').trim()).slice(0, 3);
 }
 
 /* The claim's source is the page the item CITES, not necessarily the repo it names. Item 43's
@@ -1722,6 +1735,13 @@ if (SELFTEST) {
   t('count: "N were analyzed" is a different sentence, not read', countNumsIn('31,132 were analyzed for the following rates', 'skills'), []);
   t('count: both spellings together do not double-count a claim',
     [...new Set(countNumsIn('42,447 skills; 31,132-skill subset', 'skills'))], [42447, 31132]);
+  // measured 2026-10-29 over the cached page corpus: 7 of 94 page-side matches are identifiers,
+  // and on SkillSpector's severity table they are the ONLY match — a table id is not a count
+  t('count: a page-side identifier is not a count (table id row)', countNumsIn('| P8 | Tool-Based Exfiltration |', 'tools'), []);
+  t('count: a product name is not a count (image alt)', countNumsIn('alt="VoxCPM2 Model Architecture"', 'models'), []);
+  t('count: a real page-side count still reads', countNumsIn('ships 12 tools and 3 language packs', 'tools'), [12]);
+  t('count: numberNeighbours skips an identifier number too',
+    numberNeighbours('| P8 | Tool-Based Exfiltration |', 8), []);
   t('cited pages: arXiv abs is a source for a count', citedPages('see https://arxiv.org/abs/2610.32322 for it').map((p) => p.label), ['arXiv 2610.32322']);
   t('cited pages: a HF dataset card is read raw', citedPages('https://huggingface.co/datasets/EverMind-AI/skillcorpus-lifecycle').map((p) => p.raw), [true]);
   // measured 2026-10-27: item 31's "32 languages" is in docs/README.md, the item's own second link

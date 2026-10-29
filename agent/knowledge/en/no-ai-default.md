@@ -168,17 +168,26 @@ tainted, but not vice-versa**." The definition is total: anything whose "code, d
 binaries, or other assets include, in any part, the output of a generative AI tool such as an LLM, is
 considered **'tainted'**."
 
-**Three metadata tags, and each encodes a distinction a licence cannot:**
+**Six metadata tags, and each encodes a distinction a licence cannot:**
 
 | Tag | Meaning | Why it is the interesting one |
 |---|---|---|
 | `genai:clean` | no tool output anywhere | the positive assertion |
 | `genai:pinned` | "pinned to the last non-tainted version" | a **time-dependent** verdict — a clean package can become tainted at its next upstream release — which no licence expresses and no SBOM field holds |
 | `genai:indirect-build` | "indirectly tainted via build-time dependencies" | taint propagates through **build** inputs, not only runtime ones — the distinction most supply-chain policies skip |
+| `genai:indirect-runtime` | "indirectly tainted via runtime dependencies" | the ordinary transitive case, named separately so a runtime taint is not read as a build one |
+| `genai:indirect-check` | "indirectly tainted via test suite dependencies" | taint that never ships but *validates* what does — a lane no SBOM models |
+| `genai:tainted` | "package includes genAI output" | the direct case the other five refine |
 
-`apk search` filters on the tag, and installing indirectly tainted software through `apk add` "will be
-produced as" an error unless you name it explicitly (`apk add python3@tainted`). So the policy is
-machine-readable **at install time**, which is where a consumer can actually act on it.
+**Checked first-hand 2026-10-29 20:25 UTC+8 — and the tags are documentation, not metadata.** The AI
+policy tells users to filter `apk search` on these six tags; the four repositories' `APKINDEX` files
+carry **0** `genai:` fields between them — `base` **427**, `main` **153**, `community` **85**,
+`tainted` **108** packages, i.e. **773** packages and no tag. So the `apk add` refusal is real but runs
+on a **different mechanism**: it is the **repository tag** (enable `tainted` as `@tainted …` in
+`/etc/apk/repositories`) that makes an indirectly tainted dependency an error until you name it
+explicitly (`apk add python3@tainted`). Enforcement at the repository boundary is shipped; the
+per-package metadata the search syntax advertises is not, as of this check — and that is a
+**perishable** reading, so re-pull an index before quoting it.
 
 **Limits on the same page, and they belong with the design:** "AlpineBSD is a **work in progress**.
 There is currently **no installer available**," and the hardware warning is blunt — the NetBSD kernel

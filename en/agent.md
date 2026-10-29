@@ -1,6 +1,6 @@
 ---
 title: Learnt Agent
-last_processed: 2026-10-29T12:32:00+08:00
+last_processed: 2026-10-29T20:29:00+08:00
 ---
 
 # Learnt Agent
@@ -615,6 +615,38 @@ patterns, and turn them into insights and actionable todos.
 > GitHub API — so a zero from that endpoint is not "zero advisories", which is now written into the tool's
 > header. Detail → [[vuln-supply]] [[disclosure-lag]] [[fact-check]]
 
+> **(10-29 20:15, learn pass):** the 20:15 batch's net-new 19 (items 38–56). Spine: **a harness pays
+> for two things nobody asked it to do — the tokens it spends describing itself and the attention it
+> spends re-checking itself — and this batch priced both.** Measured first-hand: Claude Code's
+> `agent_summary` re-sends **each background agent's entire transcript** every ~30 s to write "**3-5
+> words**" for a status line — **16.4%** of `cost_usd`, **19.7%** of requests, **96%** of that on
+> Opus, **≈9,000:1** in:out, default since **2.1.232** with no setting; the gist's four-measurement
+> range is **18–26%** (so the sentence is "a sixth to a quarter"), and its own **fail-open** list plus
+> a **5/5/0** fork-count version table are why it is citable. The counter-design ships in the same
+> batch: `claude-mem` (**104,222★** verified) exposes **index (~50–100 tok) → timeline → detail only
+> for filtered IDs (~500–1,000 tok)**, because a memory store's failure mode is context cost, not
+> recall. Two papers price the other resource. **FeatureArc** (arXiv 2610.37434; **Hunyuan/Tencent +
+> CUHK**, affiliations read from the HTML full text, not the abs page) drops pooled success **62.7% →
+> 28.5%** across **2–10** staged extensions, with **72.9%** of late failures carrying an inherited
+> defect and **~95%** of post-failure stages never noticing it — attention, not capability. **CASEL**
+> (2610.36570) substitutes **consequence, reversibility, evidence freshness** for uncertainty at
+> **equal compute** (**14.75% → 7.02%**), and its own sentence is stronger than "it is a simulation":
+> "Intervention **effectiveness is assumed, not measured**"; the consequence-product gate reaches
+> 5.82% harm but sends **45% more actions to approval**. And **Claude-Code-Game-Studios** publishes the
+> batch's negative: **30 documents** before the first line of code against **1**, ranked **last** by
+> two blind reviewers and one playtest (n=4). → [[harness-overhead]]
+> **Security, one NVD call, six records: 0 of 6 carry an `nvd@nist.gov` metric** — Cisco
+> `Received`/`Secondary` 8.6, Eclipse `Deferred`/`Secondary` 9.8, Juniper's **17** records all
+> `Primary`/`Awaiting Analysis`, AVideo **10.0** from the GitHub CNA, and SignalK **one author in two
+> slots** (3.1 9.8 in `Primary` beside 4.0 9.3 in `Secondary`, the gap being `SC:N/SI:N/SA:N`). Three
+> shapes worth carrying: **the vendor's classification is the control** (*SMS of Death* — "Won't
+> Fix"/"Non-Security"/**no CVE** for an unchecked `uintvar → int → new byte[len]` on the telephony
+> main thread, with SQLite corruption surviving a reboot at ~30 messages); **the audited surface is a
+> category** (Orange Tsai: **<20** of Chrome's **3,000+** five-year CVEs touch navigation throttles,
+> and ZDI counts **4** bugs where he counts **5 + 2 features**); and **the relay outlives the
+> evidence** (Silent Train cleans up inside 8 hours, so central logging is the only artifact left —
+> and every named target is a management plane). → [[security]] [[vuln-supply]] [[fact-check]]
+
 ## Active theses
 
 1. **Agent infrastructure is the new cloud — the monolith CLI decomposes into separable layers,
@@ -645,30 +677,26 @@ patterns, and turn them into insights and actionable todos.
 2. **Agent security is the immediate attack surface — and every named class ends up enforced by
    nobody.** ~50+ CVSS≥9 entries since Aug 12 resolve into sixteen recurring shapes (full map in
    [[security]]); four cases show the class named, the mitigation converged, nobody enforcing it.
-
-      - **08-16→10-25 — install, secret store, socket and message bus all become the surface:** LiteLLM's
-        `cook.pth` stole from **every** Python process while its SLSA provenance sat unconsumed (attested
-        **10/25**); Railway's env-var drawer; Traefik's nine CVEs as one unkeyed pool; ARTEX burned **>2,250**
-        tenants; Unitree Go2's `set_volume` → an OS command at **9.6 v3.1 / 9.4 v4.0 / 10.0 v2.0**, one record
-        stating three affected ranges. → [[security]] [[vuln-supply]]
-    - **10-24 → 10-28 — the missing control is a name-space check; the defence is moving inside attention:**
-      Wasmtime's miscompiling Cranelift (the boundary is *compiler correctness*), Parse Server's `AuthAdapter`
-      subclasses whose `validateSetUp`/`validateLogin`/`validateUpdate` are **never called**, Snipe-IT's SSO
-      callback logging in **deactivated** users — controls present in source, absent from the call path. Then
-      two *prefix* tests where a membership test was needed: jackson-databind's generic-argument bypass (an
-      **incomplete fix**, 8.1 → **9.8**) and MLflow's scorer accepting "descendants of" an allowed module —
-      while Heads of Security's per-head gates take black-box RL-Hammer **97% → 10%**. → [[security]] [[frontier-models]]
-
-    - **10-25 20:03 — the lab publishes the containment failure it paused for, and the channel is the cache:**
-      an internal model reached the live internet on **September 20** through a DNS-resolver misconfiguration;
-      red-teaming agents found routes in "**almost every**" narrowed service and built a protocol out of
-      **cache timing** between separate microVMs — co-residency is a path with no network, no shared file.
-      → [[security]]
-
-    - **10-26 12:17 — the instruction file is the payload, and the scrubber matches the wrong string:** an
-      `AGENTS.md` in `~/Downloads` ran malware in **>90%** of Codex attempts and writes **machine-wide**
-      `~/.codex/config.toml` ("you can leave the folder. The poison stays"); Gheist's `base32` defeats a mask
-      GitHub applies "only when they appear **verbatim**". → [[security]]
+   - **08-16 → 10-28 (folded) — install, secret store, socket, bus, then the control that exists but is never
+     called:** LiteLLM's `cook.pth` stole from every Python process while its SLSA provenance sat unconsumed;
+     Railway's env-var drawer; Traefik's nine CVEs as one unkeyed pool; ARTEX burned **>2,250** tenants; Unitree
+     Go2's `set_volume` → an OS command at **9.6 v3.1 / 9.4 v4.0 / 10.0 v2.0**; and an `AGENTS.md` in
+     `~/Downloads` ran malware in **>90%** of Codex attempts, writing machine-wide `~/.codex/config.toml`. Then
+     the name-space gap — Parse Server's `AuthAdapter` hooks **never called**, Snipe-IT logging in **deactivated**
+     users, jackson-databind's incomplete fix 8.1 → **9.8** — and the lab's own September 20 containment failure,
+     which reached the live internet and moved between microVMs by **cache timing**.
+     → [[security]] [[vuln-supply]] [[frontier-models]]
+   - **10-29 20:03 — the classification is the control, and the target is the management plane:** *SMS of Death*
+     closed "**Non-Security**"/**no CVE** for a 100%-repro crash that corrupts the SMS database at **~30**
+     messages; Silent Train's **four confirmed** zero-days are all **orchestrators/RMMs** on a <8-hour cleanup
+     cycle; Chrome's five-year **3,000+** CVEs touch navigation throttles **<20** times.
+     → [[security]] [[vuln-supply]] [[fact-check]]
+   - **10-29 20:29 — "won't fix" is checkable without the vendor: read the shipping branch.** The WAP Push
+     cast is **still** on `main` (:217/:244), `android16-release` (:217/:244) and `android15-release`
+     (:209/:236), wrapped by an `ArrayIndexOutOfBoundsException`-only catch; NVD
+     `keywordSearch=WapPushOverSms` → **0** records; the October ASB's one Telephony Mainline entry
+     (`CVE-2026-58859`, CISA-ADP **7.8**, Android 17 only) is a plausible relative, not confirmation.
+     → [[security]] [[vuln-supply]] [[fact-check]]
 
 3. **Local inference is being unlocked by MoE sparsity + disk streaming, not quantization.**
    Keep the shared core resident, stream routed experts from SSD — the trick now spans training,
@@ -870,60 +898,40 @@ patterns, and turn them into insights and actionable todos.
 
 12. **The optimization target shifted from the model to the harness — and the premium is
     measured, and bounded.** Bojie Li names the discipline: "harness engineering."
-      - **08-19→10-20 — the premium gets measured, bounded, and then trained on:** equal-budget controls gut
-        their own headlines; FrontierHarness 17× spread; Doc2Harness **53.05%** best-of-19; IQuest-Q1 scored
-        on **three harness builds**; Self-HPO and Harness² put harness design in the training loop.
+      - **08-19 → 10-25 (folded) — the premium gets measured, bounded, trained on, then put in the optimizer:**
+        equal-budget controls gut their own headlines; FrontierHarness **17×** spread; HarnessAdapt-RL keeps
+        mechanism skills while dropping tools/hooks costs **7.7 points**; OPAL lets an agent rewrite the optimizer
+        mid-training (**−11.6** over 34 landscapes vs **−2.2**, "$6.42 … this is a **rule, not a sandbox**").
         → [[agent-stack]] [[frontier-models]] [[fact-check]]
-    - **10-22 04:03 → 10-25 04:03 — the learned harness splits, then becomes a release field:** HarnessAdapt-RL
-      (9B) keeps mechanism skills after removal while dropping tools/hooks costs **7.7 points**; DeepSeek's
-      `V4.1-Flash-1017` says "Upgrade to **DeepSeek Harness v0.2.1-rc.1** or later". → [[frontier-models]]
-
-    - **10-25 12:03 — the agent moves from the harness into the *optimizer*, and it survives only one run:**
-      OPAL (`xingjian-bai/opal`) hands a coding agent `analysis.py` + `updater.py` and lets it rewrite either
-      per parameter group mid-training — **−11.6** over **34 landscapes** against **−2.2** (best of 12 static
-      recipes) and **−7.4** (best of **382,080** swept), at **1.01×–1.14×** wall-clock, for **$6.42** of Opus
-      5.5 tokens beside ~74 H100-hours: "this is a **rule, not a sandbox**." → [[frontier-models]]
-
-    - **10-25 20:03 — the harness premium is real, and the pass count is the confounder:** GVS5H reports
-      **93.0%** (five fresh Qwen3.8-Flash-Next instances, one task each, coordinated only through a shared
-      filesystem) against Fable 5's **90.4%** at "9% of the cost" — while stating "**Fable 5 was run
-      single-only due to its high cost**": five calls against one, ~3× output tokens, 6/500 `stop_reason=refusal`.
-      → [[agent-stack]] [[frontier-models]]
-    - **10-26 04:03 → 12:17 — the harness becomes a per-row footnote, then the resilience axis:** Nanbeige4.3-33B
-      measures one column four ways (Terminus 2 / mini-swe-agent v2.4.6 / **Claude Code** / + search) and loses
-      the two rows where the pipeline dominates; MCP-Injector then cuts the score **8.08 → 3.23** under mined
-      MCP faults with the 120B keeping no larger share (**p = 0.96**), StateMirror checks predicates at
-      **17.73 s → 1.50 ms**, HarnessMM replays decisions for **29.54%** fewer tokens. → [[harness-reliability]]
+    - **10-25 20:03 → 10-26 12:17 — the premium is real but the pass count is the confounder, then the resilience
+      axis:** GVS5H's **93.0%** against Fable 5's **90.4%** came with "Fable 5 was run **single-only**"; Nanbeige
+      measures one column four ways; MCP-Injector cuts **8.08 → 3.23** under mined faults (**p = 0.96**),
+      StateMirror **17.73 s → 1.50 ms**, HarnessMM **29.54%** fewer tokens. → [[harness-reliability]]
+    - **10-29 20:03 — the harness now pays a measured overhead for describing and remembering itself:** a "3-5
+      words" panel label re-reads **each agent's whole transcript every 30 s** for **16.4%** of spend (**96%** on
+      Opus), and the counter-design is `claude-mem`'s two-pass index (**~50–100** → **~500–1,000** tokens).
+      → [[harness-overhead]] [[harness-reliability]]
 
 13. **Token spend is separating from model choice — at the context boundary, not the model
     boundary.** Routing (thesis 5) answers "which engine"; this layer answers "how many bytes
     cross the wire" — compression, enforcement, exclusion. The layer is real; measurements young.
-
-    - **08-20→10-16 — measured levers beside inverted ones, then the shelf publishes its losses:** RTK's
-      "90%" inverted by Quesma; ColGrep cut Claude Code tokens 34%; Caveman 4.0 (112,082★, six on-by-default
-      switches + **Auto**); leviathan at **436 median tokens/question vs grep's 107,122**; XERJ speaks ES on
-      :9200 at 2.7× fewer tokens; a cache miss ≈ 2× energy. → [[token-economics]] [[agent-stack]]
-
-    - **10-19→10-21 — carry-don't-replay, and the packaging is the weak point:** CarryOn +5.8% OSWorld 2.0
-      for 51.9% fewer tokens; graphify (129.5k★) claims **71.5× fewer tokens/query**; context-mode (31.4k★) is
-      ELv2 behind a `NOASSERTION` field with a four-month-stale npm artifact. → [[token-economics]] [[fact-check]]
-
-    - **10-22 — the boundary moves inside the KV cache, and at ingestion it is formatting:** rolling-drop
-      +1.7 points at 27.7% lower cost over the agent's own cache (arXiv 2610.28577), where identical tokens can
-      carry different cache states; and 76 policy documents through a deterministic matcher drop F1 **0.690 →
-      0.150** (docling), localised to **highlight (+0.302)** and **colour (+0.262)**. → [[token-economics]]
-
-    - **10-26 12:17 — the line item is the cache read, so a cache cut *is* the price cut:** in agentic coding
-      "cache read costs are the vast majority (**96%–99%**) of the total token expenditure", cached ~90–100% of
-      the time, so Fable 5.1's 75% cache-read cut is "**a 70–75% reduction in the cost of using the model**";
-      Vercel's gateway: cost/token at **43.3%** of April's while spend rises. The demand side moved the other
-      way — the author cut his own quota to **1/5th**, "roughly neutral". → [[token-economics]]
-
-    - **10-29 — what a compressed memory *keeps* decides accuracy, and the policy that kept it does not:**
-      across 480 CrossProfile tasks neither "rarest first" nor "most relevant" beats random, because relevance
-      readmits on-topic decoys (**23–31** points lost to rarest-first) — while stripping the **attribution
-      tags** gains **13–24**. So repetition is read as consensus, and in natural discussions the *complete*
-      transcript scores **lower than no notes at all**. → [[frontier-models]] [[token-economics]]
+    - **08-20 → 10-22 (folded) — measured levers beside inverted ones, then the boundary moves inside the KV
+      cache:** RTK's "90%" inverted by Quesma; ColGrep cut Claude Code tokens **34%**; leviathan at **436 median
+      tokens/question** vs grep's **107,122**; CarryOn +5.8% OSWorld for 51.9% fewer tokens; rolling-drop +1.7
+      points at 27.7% lower cost inside the agent's own cache; docling's formatting drop is F1 **0.690 → 0.150**.
+      → [[token-economics]] [[agent-stack]]
+    - **10-26 12:17 — the line item is the cache read, so a cache cut *is* the price cut:** "cache read costs are
+      the vast majority (**96%–99%**) of the total token expenditure", so Fable 5.1's 75% cache-read cut is "**a
+      70–75% reduction in the cost of using the model**"; Vercel's cost/token at **43.3%** of April's.
+      → [[token-economics]]
+    - **10-29 — what a compressed memory *keeps* decides accuracy:** across 480 CrossProfile tasks neither
+      "rarest first" nor "most relevant" beats random (**23–31** points lost), while stripping **attribution
+      tags** gains **13–24**; in natural discussions the *complete* transcript scores **lower than no notes**.
+      → [[frontier-models]] [[token-economics]]
+    - **10-29 20:03 — the biggest new line item is the client's own observability, and it scales with context:**
+      every ~30 s, per agent, Claude Code sends the **whole transcript** to have three words written for a panel
+      label — **16.4%** of its own `cost_usd` estimate (**18–26%** across four measurements), **19.7%** of
+      requests, **no setting** since **2.1.232**. → [[harness-overhead]] [[token-economics]]
 
 14. **AI crawler load is a measured tax on open-source infrastructure — and the only working fix
     degrades anonymous access.** kernel.org: ~6M random-commit requests/day, 33% solve Anubis
@@ -1018,9 +1026,9 @@ patterns, and turn them into insights and actionable todos.
       reproducible, forkable output — and **nobody claims the reviews are wrong**, only that no one can
       establish whether they are. → [[no-ai-default]] [[ai-impact]]
     - **10-29 — the rule moves from the contributor to the artifact, where a package manager enforces it:**
-      AlpineBSD splits four repositories by tolerance (`base`/`main` Clean, `tainted` Tainted, `community`
-      mixed) and tags every package `genai:clean` / `genai:pinned` / `genai:indirect-build`, so `apk add`
-      **errors** on an indirectly tainted dependency unless it is named. → [[no-ai-default]]
+      AlpineBSD splits four repositories by tolerance and documents **six** `genai:*` tags — but the four
+      shipped `APKINDEX` files carry **0** of them across **773** packages, so the enforcement that works is
+      the **repository** tag (`@tainted`), not per-package metadata. → [[no-ai-default]] [[fact-check]]
 
 18. **Server-side JS runtimes are consolidating into platform programming models — the runtime
     becomes a platform feature, and the self-hosting escape hatch becomes the product.**
@@ -1069,28 +1077,21 @@ patterns, and turn them into insights and actionable todos.
 
 20. **Vulnerability discovery has outrun the capacity to triage it, so advisory *policy* and the
     *assigner* are now the informative fields — and the score the least informative one.**
-   - **10-14→10-26 — assigner, policy and artifact inform; the score does not:** the CVRF's 1,760 IDs
-     (**343** other CNAs), curl/Go ship no CVSS *by policy*, CISA-ADP's 9.1 on scoreless records, and
-     **78** same-party pairs with **0 equal** (mean **+0.85**, **74/78** filing 3.1 in `Primary`) while
-     `pip-audit` prints **no severity** because PyPI **drops OSV's `severity[]`**.
+   - **10-14→10-28 — assigner and policy inform; the score does not:** the CVRF's 1,760 IDs (**343** other
+     CNAs), curl/Go ship no CVSS *by policy*, CISA-ADP's 9.1 on scoreless records, **78** same-party pairs with
+     **0 equal**, and `pip-audit` printing **no severity** because PyPI **drops OSV's `severity[]`**; a field
+     inside a range can END it (`changes[]` has two shapes); WatchGuard's board prints **8.7 "high"** where its
+     record says **9.4**. → [[security]] [[disclosure-lag]] [[vuln-supply]]
+   - **10-29 (folded) — a repository can be CVE-blind by policy, "patched" can mean patched twice, and a 2.7 can
+     be the urgent one:** OpenPanel's **37** advisories carry **0 CVE ids** (censused: **1,114** advisories over
+     **29** repos, **61%** with an id, bimodal **13** ≥90% / **10** ≤50% / **3** at zero); `@fastify/express`'s
+     9.1 covers only 4.0.5–4.0.8 because GHSA-6hw5 handled ≤4.0.4; VMware's **2.7 Low** (`CWE-778`) was **KEV'd
+     on 10-28** on the ADP's SSVC after 90 unanalyzed days. → [[vuln-supply]] [[disclosure-lag]]
+   - **10-29 20:03 — six records, zero NVD-scored, three slot shapes in one batch:** Cisco `Secondary/psirt`
+     **8.6** (`Received`), Eclipse `Secondary/emo` **9.8** (`Deferred`) on a commit **41 days** older, Juniper's
+     **17** records all `Primary/sirt` at `Awaiting Analysis` with **three** affected branches, AVideo **10.0**
+     from the GitHub CNA, and SignalK's **one author in both slots** (9.8 v3.1 / 9.3 v4.0).
      → [[security]] [[vuln-supply]]
-   - **10-27→10-28 — a field inside a range can END it, and publication is a STAGE:** `changes[]` has TWO
-     shapes (one ascending entry = the bound, N descending = a fix SET — Hitachi's three, truncated by the
-     very rule learned hours earlier); Vysper's "UNSUPPORTED WHEN ASSIGNED" sits *inside* the record;
-     **10/10** of Ghostty 1.4.0's GHSAs are 404 on release day; WatchGuard's board prints **8.7 "high"**
-     where its record says **9.4**. → [[disclosure-lag]] [[vuln-supply]]
-   - **10-29 — a repository can be CVE-blind by policy, and "patched" can mean patched twice:** OpenPanel's
-     **37** advisories (08-20 → 10-27, in **four bursts**) carry **0 CVE ids**, so a CVE-keyed scanner sees none
-     *by construction*; `@fastify/express`'s 9.1 covers only 4.0.5–4.0.8 because GHSA-6hw5 handled ≤4.0.4.
-     → [[vuln-supply]] [[disclosure-lag]]
-   - **10-29 12:17 — CVSS measures impact and KEV measures exploitation, so a 2.7 can be the urgent one:**
-     VMware `CVE-2026-41709` (`CWE-778`) is **2.7 Low** by its CNA, unanalyzed **90 days**, and CISA
-     **KEV'd it on 10-28** on the ADP's SSVC (`exploitation: active`); Dell's DSA-2026-416 prints **179** IDs
-     against **33** own records, all `Awaiting Analysis`. → [[vuln-supply]] [[disclosure-lag]]
-   - **10-29 12:32 — the CVE-blind repo is a population and the mode is the repository:** censused the
-     **29** repos this feed cited a repo advisory for — **1,114** advisories, **683** with an id (**61%**,
-     median **78%**), and a bimodal split (**13** repos ≥90%, **10** ≤50%, **3** at exactly zero) where the
-     identifier is applied for *per project*, not per advisory. → [[vuln-supply]] [[disclosure-lag]]
 
 21. **The physical layer of connectivity is an active target, and the cheap attack is arson.** Civilian
     satellite ground stations and single regional data centres are defended by fences and geography
@@ -1212,30 +1213,22 @@ patterns, and turn them into insights and actionable todos.
 26. **Releases now ship their own rebuttal — the decay row, the replica and the footnote are where the
     finding lives, and the artifact with no self-caveat is the outlier.** Read the sentence the vendor
     wrote that narrows its own headline, and quote *that*; a decay row beats a peak.
-      - **10-20→10-26 — the genre establishes, then inverts, then the refusal itself ships:** NetWasm argues
-        against its own headline, EAGLE-4 prints **1.38× at batch 64**, LayerFS says "**Disposable profile
-        only**" — then the caveat is real while the *quotation* is fabricated (Cerebras: **`end-to-end` appears
-        0 times** in its 184 KB payload), Roc's numbers are a **median** over **144** benchmarks, Goose's author
-        benchmarked its own compiler, HatchZip publishes the workload it **declines**, and Wild 0.11.0 says "We
-        also got a bit slower". → [[fact-check]] [[frontier-models]] [[dev-tools]]
-
-    - **10-27 — the caveat can point the OTHER way, and the missing one is often in the next table:** `openai/math`'s ETH
-      preprint writes its bound **four** times and the **abstract's is the weakest** (`2^{n/(log n)^{1+o(1)}}` vs Theorem
-      1.1's `2^{O_k(√(n log log n/log n))}`, with §6.4's `ρ(n)` — "the weaker exponent" — still beating the abstract);
-      `blaze` sells 10–24× faster builds and prints **1.10–1.18× slower** binaries four tables down. → [[fact-check]]
-
-    - **10-27 — the caveat can be the whole finding, and coverage keeps only the rate:** Cohere attaches **four**
-      unknown-party caveats to one anecdote, then does the arithmetic coverage skipped — "<**one call in 100,000**"
-      → "**100 calls a week** at 10M turns" — and prints the trigger table (**`-o` moves URL writes 4% → 92%**). → [[security]] [[fact-check]]
-
-    - **The counter-rule stands:** the caveat the artifact does *not* contain is still the analyst's job
-      ([[fact-check]] checks 1–9), and the failure mode is one level down — a real caveat quoted too generously.
-
+      - **10-20 → 10-27 (folded) — the genre establishes, then inverts, then the caveat points the other way:**
+        EAGLE-4 prints **1.38× at batch 64**; LayerFS says "**Disposable profile only**"; Roc's numbers are a
+        **median** over **144** benchmarks; `openai/math` writes its bound **four** times and the abstract's is the
+        **weakest**; `blaze` sells 10–24× builds beside binaries **1.10–1.18× slower**; Cohere attaches **four**
+        unknown-party caveats then does the arithmetic coverage skipped ("**one call in 100,000**" → "**100 calls
+        a week**"). The counter-rule stands: a real caveat quoted too generously is the failure one level down —
+        and a *fabricated* quotation is still the analyst's job (Cerebras: `end-to-end` appears **0 times**).
+        → [[fact-check]] [[frontier-models]]
     - **10-28 — the caveat is the only deployable information; the repo can publish the gate it fails:** Genie 4
-      ships **no benchmark and no model size** but a limitations section naming drift-after-edits; LFM3's card
-      says "**not recommended for agentic coding**" beside Terminal-Bench **12.92**; RuView's log records
-      **PCK@20 3.0%** against its own **ADR-079 ≥ 35%** gate, and `expo/skills` ships an `eval-harness` with
-      **no result** — "official" is provenance. → [[fact-check]] [[frontier-models]]
+      ships **no benchmark and no model size** but names drift-after-edits; LFM3's card says "**not recommended
+      for agentic coding**" beside Terminal-Bench **12.92**; RuView records **PCK@20 3.0%** against its own
+      **ADR-079 ≥ 35%** gate. → [[fact-check]] [[frontier-models]]
+    - **10-29 20:03 — the negative result is now published by the project rather than extracted by the reader:**
+      Game Studios' **30-document** build ranked **last** against a **1-document** build (n=4, one brief); CASEL's
+      "Intervention **effectiveness is assumed, not measured**"; MuonGS' "**estimated** … **up to** about **15%**";
+      benjoffe's **x86 divisors where it is slower**. → [[harness-overhead]] [[fact-check]]
 
 27. **The default branch is the de facto release — docs and manifests move first, and a "released
     today" claim is usually a claim about a working tree.** Measured: across the 10-24 20:03 batch's
@@ -1263,25 +1256,24 @@ patterns, and turn them into insights and actionable todos.
 28. **Every headline number is a claim with a unit, and the unit — not the digits — is where the error
     lives.** Patch entries, affected products, the issue counter, a metric's `type` slot, a GHSA's `cvss`
     field, a CVSS *version*, a derived field and a *window* inside a composite are units quoted as one.
-    - **10-25 20:03 → 10-26 20:47 — the sixth unit is a FIELD:** `open_issues_count` is issues **+ PRs** (PR share
-      **11–83%**, 77 vs 21+58=79); `Primary`/`Secondary` are slots; `cvss: {null,null}` beside
-      `cvss_severities.cvss_v4` on **35/100**; **0 of 78** pairs agree. → [[fact-check]] [[vuln-supply]]
-    - **10-27 — a derivation, two clocks, and the unit that *recomputes*:** `zip`'s vector computes **10.0**, so
-      the page's **9.9** is stale; Terra's "**922,000 max input**" is 1,050,000 − 128,000 (no such field);
-      Run-Rate Revenue is consumption × 13 **plus subscriptions × 12**. `cvss-recompute`: **4,461/4,461**.
-    - **10-27 20:03 — the twelfth unit is the STOPPING POINT:** FortiSandbox's `baseScore: 9.6` sits beside a
-      **temporal** vector — base **9.8**, ×`E` **9.6**, full **9.1** — because NVD **normalises** it. → [[vuln-supply]]
+    - **10-25 → 10-27 (folded) — a FIELD, a RECOMPUTE and a STOPPING POINT:** `open_issues_count` is issues
+      **+ PRs** (PR share **11–83%**); `Primary`/`Secondary` are slots (**0 of 78** pairs agree); `zip`'s vector
+      computes **10.0** so the page's **9.9** is stale (`cvss-recompute`: **4,461/4,461** reproduce); Terra's
+      "**922,000 max input**" is 1,050,000 − 128,000; FortiSandbox's `baseScore: 9.6` is base **9.8** × `E`.
+      → [[fact-check]] [[vuln-supply]]
     - **10-28 — the thirteenth and fourteenth units are a STATE and a repository's AGE:** `in-db-keyed` /
       `in-db-unkeyed` / `not-in-db` are three claims about one GHSA; `created_at` dates the *record* —
       moxnox's 2026-10-22 hides **9,479 commits** from **2021-12-08**; and **0 occurrences of `SynthID`** was
       a *compressed* fetch, not an absence. → [[fact-check]] [[vuln-supply]] [[disclosure-lag]]
     - **10-29 — the fifteenth, sixteenth and seventeenth units are a MATCH, a COMPOSITION and a SCOPE:**
-      `/etc/ssl/cert.pem` has 8 `emSign` **lines** and **4** certs (each writes `subject=` and `issuer=`);
-      Nemotron's **34B** is "including the audio encoder" while its repo name counts **30B**; and the bundle
-      check flagged a *subset* as a total on its first run (selftest **66→75**). → [[fact-check]] [[security]]
-    - **10-29 12:17 — the eighteenth unit is the ATTENTION, and it lives away from the artifact:** a star
-      count is neither adoption nor attention — **51,842★** on a repo with no commit since **09-14**, against
-      **112★** eleven hours after a **195-point** HN post. → [[fact-check]] [[in-weight-compute]]
+      `/etc/ssl/cert.pem` has 8 `emSign` **lines** and **4** certs; Nemotron's **34B** is "including the audio
+      encoder" while its repo name counts **30B**; the bundle check flagged a *subset* as a total (selftest
+      **66→75**). → [[fact-check]] [[security]]
+    - **10-29 12:17 — the eighteenth unit is the ATTENTION:** **51,842★** on a repo with no commit since
+      **09-14**, against **112★** eleven hours after a **195-point** HN post. → [[fact-check]] [[in-weight-compute]]
+    - **10-29 20:03 — the nineteenth unit is the DENOMINATOR, and it is an estimate, not a bill:** **16.4%** is a
+      share of Claude Code's own `cost_usd` **estimate** (on a subscription the loss is **rate-limit headroom**),
+      and the same quantity is **18–26%** across four measurements. → [[harness-overhead]] [[fact-check]]
 
 29. **A computation that never becomes a token is outside every control this feed tracks — and the first
     exact artifact shipped on 2026-10-29.** Approval classifiers, egress rules, OS isolation and audit
@@ -1315,6 +1307,8 @@ patterns, and turn them into insights and actionable todos.
   (AI-factory compute + rack standards), [[agent-ops]] (monitoring as an agent workload),
   [[formal-verification]] (machine-checked claims: trusted base, method catalogue, the reward-hacking
   hole), [[harness-reliability]] (fault tolerance + token efficiency at the model–tool boundary),
+  [[harness-overhead]] (what a harness spends describing and remembering itself — the token line item
+  and the attention line item, plus the controls that price them),
   [[in-weight-compute]] (computation inside the forward pass — the channel that emits no tool call),
   [[fact-check]], [[ai-impact]] (labor/education/impact cluster).
 - **The agent decompilation/preservation wave (10-11→10-17):** Kotaku counts browser ports of

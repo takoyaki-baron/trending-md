@@ -1199,6 +1199,50 @@
       "id": "CVE-2026-90717",
       "why": "Dell Data Domain Management Center 9.1 PR:L/S:C, 'could impact other managed Data Domain systems'",
       "seeded": "2026-10-29 [Awaiting Analysis] 3.1 Secondary/security_alert@emc.com 9.1, CWE-290, published 10-28"
+    },
+    {
+      "id": "CVE-2026-76418",
+      "why": "Cisco ASA/FTD SSL VPN DoS, actively exploited; `Received`, only metric is Cisco's `Secondary` 8.6 — watch for NVD analysis or a score change (2026-10-29)"
+    },
+    {
+      "id": "CVE-2026-114278",
+      "why": "Eclipse che-machine-exec 9.8 command injection; `Deferred`, `emo@eclipse.org` in `Secondary`, fix commit 41 days older than the record (2026-10-29)"
+    },
+    {
+      "id": "CVE-2026-118690",
+      "why": "Signal K Server ziplogs JWT-key leak; `Received` with BOTH versions from one author (3.1 9.8 `Primary` / 4.0 9.3 `Secondary`) — the slot-is-not-provenance case (2026-10-29)"
+    },
+    {
+      "id": "CVE-2026-61564",
+      "why": "AVideo unauthenticated installer 10.0 from `security-advisories@github.com`; `Received` (2026-10-29)"
+    },
+    {
+      "id": "CVE-2026-61567",
+      "why": "AVideo live-streaming endpoint, second 10.0 published alongside -61564 (2026-10-29)"
+    },
+    {
+      "id": "CVE-2026-103406",
+      "why": "Juniper Session Smart Router OS command injection via salt minion ID; `Awaiting Analysis`, `Primary/sirt@juniper.net` 9.8 (2026-10-29)"
+    },
+    {
+      "id": "CVE-2026-103409",
+      "why": "Juniper Session Smart Router missing auth → root; `Awaiting Analysis`, `affected[]` declares three branches (2026-10-29)"
+    },
+    {
+      "id": "CVE-2026-20127",
+      "why": "Cisco Catalyst SD-WAN zero-day named in the same report (2026-10-29)"
+    },
+    {
+      "id": "CVE-2025-8875",
+      "why": "N-able N-central zero-day named in the same report (2026-10-29)"
+    },
+    {
+      "id": "CVE-2025-8876",
+      "why": "N-able N-central zero-day named in the same report (2026-10-29)"
+    },
+    {
+      "id": "CVE-2024-39717",
+      "why": "Versa Director zero-day named in the same report (2026-10-29)"
     }
   ]
 }
