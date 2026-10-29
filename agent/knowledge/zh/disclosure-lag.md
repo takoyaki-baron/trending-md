@@ -816,3 +816,23 @@ Flash 时代的软件；按加入年份则为 **2021: 1、2022: 54、2023: 4、2
 → [[vuln-supply]] [[fact-check]] [[security]]
 
 来源：[CISA KEV 目录（2026.10.27，1,760 条）](https://www.cisa.gov/sites/default/files/feeds/known_exploited_vulnerabilities.json) · [CVE-2022-22706 的 NVD 记录](https://nvd.nist.gov/vuln/detail/CVE-2022-22706) · [c4psu13/mali-pagecache-root](https://gitlab.com/c4psu13/mali-pagecache-root)
+
+## 2026-10-29——`version-satisfies-advisory-artifact-vulnerable`：修复可以被*内嵌在*发布里
+
+此前所有状态都在比较两份文档——记录与修复自己的产物。这一条不同：产物已构建、已发布、被正确命名，而且**版本高于已修复版本**，却仍然存在漏洞，因为打好补丁的组件是被*内嵌在*发布里，而不是被发布*命名*的。版本区间看不见它。
+
+**案例（Alpine Linux 的 GitLab，CVE-2026-97229）。**CVSS 3.1 **10.0** 未认证 RCE，`AV:N/AC:L/PR:N/UI:N/S:C/C:H/I:H/A:H`、**CWE-190**：CI/CD 配置中一个特制的正则就能让未认证用户在服务器上执行代码。受影响 **19.2 < 19.2.8、19.3 < 19.3.5、19.4 < 19.4.2**；GitLab 于 **10 月 12 日**发布修复版。缺陷本身在 **Onigmo**——Ruby 内建的正则引擎——所以 GitLab 的修复是"对其内置在自有包与容器镜像中的 Ruby 打的一组补丁"，而上游 Ruby 于 **10 月 23 日**在 **3.3.13 / 3.4.12 / 4.0.9** 中发布。
+
+Alpine 在 **10 月 20–21 日**运行了新注册攻击者的配置（worker 崩溃 **8 次**，其中 **4 次**攻击者"已推进到利用中途"，并下载了 Alpine 自己的 GitLab 容器镜像——"说明他们在针对我们的确切构建做调优"），22 日升到 **19.3.6**，**26 日**发现仍存漏洞，27 日只对开发者开放，28 日彻底重建——重设所有密码、更换 GitLab 的密钥。
+
+**19.3.6 高于已修复的 19.3.5**，于是扫描器做的每一项版本号检查都通过。要带走的是 Alpine 自己的那句话："**如果你用自己的 Ruby（从源码或自有容器镜像）跑 GitLab，而不是用 GitLab 的包，那么升级 GitLab 是不够的。**"
+
+**为什么这是新状态而不是变体。**`fix-in-source-no-artifact`（EDK2）是*修复有了、产物从未构建*；`fix-then-record` 是*产物建好、文书迟到*。这里产物存在、命名正确、且包含缺陷——区间与字节互相矛盾，而区间正是每个消费者都会读的字段。**对工具的后果：**版本区间回答的是"我的版本在公告里吗"，对"缺陷在我的产物里吗"什么也没说；对随包内置的组件，产品区间必须连到*组件自己*的发布线。
+
+**溯源（2026-10-29 12:19 一手核实，`nvd-provenance.mjs`）：**`[Analyzed]`、**1 条指标、NVD 自评 0 条**、`3.1 Secondary/cve@gitlab.com 10`——又是**背书情形**：`Analyzed` 表示 NVD 读过并原样重发了 CNA 的数字。库中第三个独立实例。
+
+**反面发现被写成限制而非健康证明**，而这正是"重建"是正确的而非过度谨慎的原因："成功的利用不会留下崩溃、也不会在 Web 日志留下痕迹"；"攻击当天的部分日志已经丢失"；"我们没有出站网络连接的日志，我们的托管商也没有"。真正可迁移的是校验方法：把 aports 的提交对"一位开发者的 clone 与全部 **45 台构建机**"核对——而不是对可能已被攻陷的服务器核对。
+
+→ [[vuln-supply]] [[fact-check]] [[security]]
+
+来源：[Alpine Linux——GitLab 安全事件 CVE-2026-97229](https://alpinelinux.org/posts/GitLab-security-incident-CVE-2026-97229.html) · [NVD 上的 CVE-2026-97229](https://services.nvd.nist.gov/rest/json/cves/2.0?cveId=CVE-2026-97229) · [HN 讨论](https://news.ycombinator.com/item?id=50282544)

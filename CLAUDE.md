@@ -309,6 +309,23 @@ underlying pages — this produced a two-layer false signal in a single item.
    page before "absent" is written; and **the advisory a CVE is filed against is not always in
    the owning repo** — Keycloak's lives only in the GitHub Advisory Database
    (`/advisories/GHSA-…`) with no NVD reference to it.
+   **A fix can ship with NOTHING to key it, and that is a state rather than a gap** (added
+   2026-10-29 12:32, the sixth artifact state). The five above all assume a record exists to ask
+   about. `node agent/tools/disclosure-lag.mjs --repo <slug> --artifact <mode>` **with no `--ids`**
+   asks the other question: it lists every published advisory carrying no CVE id and joins its
+   patched version to the release that shipped it → **`fix-in-artifact-no-identifier`**. Live on
+   `Openpanel-dev/openpanel`: **37 advisories, 0 CVE ids**, only **10** state a patched version at
+   all, and `GHSA-49hg-9qhc-4623` → **3.16.2 (2026-10-27)**. Waiting for a record is not a remedy
+   here because **none is pending**; the remedy is tracking the vendor's own feed. Measured over the
+   **29** repos this feed had cited a repo advisory for (one `gh api
+   repos/<slug>/security-advisories` call each, authenticated so outside the core budget): **1,114**
+   advisories, **683** with an id (**61%**, median **78%**), and **bimodal** — **13** repos ≥90%,
+   **10** ≤50%, **3** at zero. So the identifier is applied for **per project, not per advisory**,
+   and "N advisories with no CVE" describes a policy, never a triage failure. Two guards on reading
+   that table: **five rows are capped by `per_page=100`**, so the corpus total is a lower bound; and
+   a **zero from this endpoint is not "zero advisories"** — `tailscale/tailscale` returns **3**, all
+   CVE'd, because the bulletins this feed counted live on the vendor's site and never enter the
+   GitHub API.
    **Every verdict above rests on a version range, and the range has a provenance of its own**
    (added 2026-10-24 12:38). `--census` tallies where each range came from — `nvd-cpe`,
    `vendor-advisory` (the page the record links), `advisory-db` (a third party's ingest),

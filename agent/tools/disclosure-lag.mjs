@@ -213,7 +213,22 @@
  *   node disclosure-lag.mjs --backlog-census --from 2026-10-21 --to 2026-10-27   # the Received residue
  *   node disclosure-lag.mjs --changes-census --backlog-census … --window-cache /tmp/win.json  # one fetch
  *   node disclosure-lag.mjs --ids CVE-… --artifact firmware --fix-ref <raw artifact url>
+ *   node disclosure-lag.mjs --repo owner/repo --artifact package   # THE UNKEYED QUESTION (no --ids)
  *   node disclosure-lag.mjs --selftest                       # parsers + the artifact + notes verdicts
+ *
+ * THE SIXTH ARTIFACT STATE — `fix-in-artifact-no-identifier` (added 2026-10-29). The five states above
+ * all assume a record to key on. This one is a repo-level fact that there is none: the project ships
+ * fixes into a release and asks for no CVE, so **`--repo … --artifact <mode>` with no `--ids`** lists
+ * every published advisory that carries no CVE id and joins its patched version to the release that
+ * shipped it. Waiting for a record is not a remedy here because none is pending — the remedy is
+ * tracking the vendor's own advisory feed. Live calibration on `Openpanel-dev/openpanel` (the repo
+ * behind the 10-29 feed's item 13): **37 advisories, 0 CVE ids, 10 of 37 state a patched version at
+ * all**, and its newest one (`GHSA-49hg-9qhc-4623`) joins to `3.16.2` on the release timeline — so the
+ * artifact exists, the fix is installed by upgrading, and nothing machine-readable keys it.
+ * The counter-example matters as much: `tailscale/tailscale` returns only **3** advisories (2022-11
+ * → 2023-03), all with CVE ids, because the bulletins the 10-28 feed counted live on the vendor's own
+ * site and never enter the GitHub API at all — so this state's ABSENCE says nothing about a vendor
+ * who does not use repo advisories. Read the header count before quoting a zero.
  *
  * Cost: NVD is 5 req/30s unauthenticated (NVD_API_KEY → 50/30s); calls are paced. api.github.com is
  * 60/hr unauthenticated and this repo budgets ~5–10 calls per feed run — this is an ad-hoc tool,
@@ -786,7 +801,33 @@ async function repoAdvisories(repo) {
   const { body } = await getJson(`${GH}/repos/${repo}/security-advisories?per_page=100&state=published`,
     { Accept: 'application/vnd.github+json' });
   if (!Array.isArray(body)) return null;
-  return body.map(a => ({ ghsa: a.ghsa_id, cve: a.cve_id || null, date: a.published_at, summary: a.summary }));
+  return body.map(a => ({ ghsa: a.ghsa_id, cve: a.cve_id || null, date: a.published_at, summary: a.summary,
+    // `>= 1.104.4` / `= 1.104.4` — the same cell `--artifact` prints verbatim, carried here so a
+    // fix with no identifier can still be joined to the release that shipped it.
+    patched: (a.vulnerabilities || []).flatMap(v => String(v.patched_versions || '').split(','))
+      .map(s => s.replace(/^[\s<>=]+/, '').trim()).filter(Boolean) }));
+}
+
+/* ── the sixth artifact state: a fix shipped and NOTHING can key it ──
+   Tailscale published four bulletins in one release (1.104.4) with **zero** CVE ids, and 3 of its
+   17 ever carried one (measured 2026-10-28) — so the fix is in an installable artifact and invisible
+   to every CVE-keyed consumer at once. The five existing states all assume a record to key on; this
+   one is the repo-level fact that there is none. It is a DISTINCT state from `no-record`, which
+   means "this CVE has no record yet" — here there is no CVE at all, by the vendor's own practice,
+   so waiting for one is not a plan.
+
+   The join is the release timeline, because the version is the only key the advisory does state.
+   Returns entries whose patched versions are NOT in the timeline too, flagged `unplaced`, so "the
+   fix shipped and I found the release" stays separate from "the advisory names a version this
+   timeline does not carry" (a release feed that only holds recent tags). */
+function unkeyedFixes(advisories, timeline) {
+  if (!advisories?.length) return [];
+  return advisories.filter(a => !a.cve).map(a => {
+    const shipped = a.patched.map(v => ({ v, rel: timelineLookup(timeline, v) })).filter(x => x.rel);
+    return { ghsa: a.ghsa, date: a.date, patched: a.patched, shipped,
+      unplaced: a.patched.filter(v => !shipped.some(s => s.v === v)),
+      latest: shipped.sort((x, y) => (ts(x.rel.date) ?? 0) - (ts(y.rel.date) ?? 0)).at(-1) || null };
+  });
 }
 
 /* ── the artifact layer ──
@@ -1659,6 +1700,17 @@ if (SELFTEST) {
   const v1 = artifactVerdict({ record: {}, advisory: { patched: 'Not patched currently' }, timeline: tl,
     mode: 'firmware', fixRef: { url: 'x', date: '2026-10-15T00:09:14Z', label: 'committed' } });
   eq('EDK2: commit after the newest tag', v1.state, 'fix-in-source-no-artifact');
+  // the sixth state: a fix shipped and nothing can key it (Tailscale's shape, measured 2026-10-28)
+  const unk = unkeyedFixes([
+    { ghsa: 'GHSA-a', cve: 'CVE-2026-1', date: '2026-10-01T00:00:00Z', patched: ['2.0.0'] },
+    { ghsa: 'GHSA-b', cve: null, date: '2026-10-02T00:00:00Z', patched: ['1.104.4'] },
+    { ghsa: 'GHSA-c', cve: null, date: '2026-10-03T00:00:00Z', patched: ['9.9.9'] },
+    { ghsa: 'GHSA-d', cve: null, date: '2026-10-04T00:00:00Z', patched: [] },
+  ], [{ version: '1.104.4', date: '2026-10-02T12:00:00Z' }, { version: '2.0.0', date: '2026-10-05T00:00:00Z' }]);
+  eq('unkeyed: an advisory WITH a CVE is not this state', unk.map(u => u.ghsa), ['GHSA-b', 'GHSA-c', 'GHSA-d']);
+  eq('unkeyed: the patched version joins the release that shipped it', unk[0].latest?.v, '1.104.4');
+  eq('unkeyed: a version the timeline does not carry stays unplaced', unk[1].unplaced, ['9.9.9']);
+  eq('unkeyed: an advisory stating no patched version is still counted', unk[2].patched, []);
   const v2 = artifactVerdict({ record: {}, advisory: { patched: '>= 2026.09' }, timeline: [
     { version: '2026.08', date: '2026-08-21T14:22:24Z' }, { version: '2026.09', date: '2026-09-01T00:00:00Z' }],
     mode: 'firmware', fixRef: { url: 'x', date: '2026-10-15T00:00:00Z', label: 'committed' } });
@@ -2269,7 +2321,10 @@ if (CHANGES_CENSUS || BACKLOG_CENSUS) {
   process.exit(0);
 }
 
-if (!IDS.length && !TRACKERS.length) {
+/* `--repo <slug> --artifact <mode>` with NO `--ids` is the only way to ask the Tailscale question —
+   "does this project ship fixes nobody can key?" — where no CVE exists to pass in. Making `--ids`
+   mandatory there would have required inventing one. */
+if (!IDS.length && !TRACKERS.length && !(REPO && ARTIFACT)) {
   console.log('nothing to do: pass --ids CVE-…,CVE-… and/or --tracker ZDI-CAN-…' +
     ' [--repo owner/repo | --pypi pkg] [--artifact commit|package|firmware|image]' +
     ' [--fix-ref <commit|pull url|artifact url>] [--debian <srcpkg>] [--range "<expr>"] [--json] [--selftest]' +
@@ -2413,6 +2468,30 @@ async function probeAll({ nvdCache = null } = {}) {
 
   for (const t of TRACKERS) {
     results.push(classify({ id: t, record: null, nvdRanges: [], advisory: null, timeline, repoAdv, trackerId: t }));
+  }
+
+  /* The repo-level state, appended once per run: fixes that shipped with no identifier at all.
+     Gated on `--artifact` because it is the artifact axis' answer (does an installable thing carry
+     this fix, and can anything key it), and emitted even with no `--ids` — the only way to ask the
+     Tailscale question, where there is no CVE to pass. */
+  if (ARTIFACT && REPO && repoAdv?.length) {
+    const unkeyed = unkeyedFixes(repoAdv, timeline);
+    const placed = unkeyed.filter(u => u.latest);
+    if (unkeyed.length) {
+      results.push({
+        id: `repo:${REPO}`, kind: 'repo', state: placed.length ? 'fix-in-artifact-no-identifier' : 'unkeyed-unplaced',
+        lagDays: null, advisories: repoAdv.length, unkeyed: unkeyed.length,
+        notes: [
+          `${unkeyed.length} of ${repoAdv.length} published advisories carry NO CVE id — a CVE-keyed scan sees none of them, and waiting for a record is not a remedy because none is pending`,
+          `${unkeyed.filter(u => u.patched.length).length} of ${unkeyed.length} state a patched version at all` +
+            (placed.length
+              ? `; ${placed.length === 1 ? 'one names' : `${placed.length} name`} a version the release timeline carries — e.g. ${placed[0].ghsa} fixed in ${placed[0].latest.v} (${ymd(placed[0].latest.rel.date)})`
+              : '; none of those is in this timeline — the release feed holds only recent tags, so this is a timeline gap, not evidence the fix never shipped'),
+          ...unkeyed.slice(0, 8).map(u => `${u.ghsa} ${u.date ? ymd(u.date) : '(no date)'} · patched ${u.patched.join(', ') || '(none stated)'}${u.latest ? ` → shipped ${u.latest.v} (${ymd(u.latest.rel.date)})` : ' → not in timeline'}`),
+          ...(unkeyed.length > 8 ? [`… ${unkeyed.length - 8} more`] : []),
+        ],
+      });
+    }
   }
   return results;
 }

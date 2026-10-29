@@ -1235,3 +1235,158 @@ the earlier advisory is affected **now**, having done nothing wrong. The semicol
 advisory is a *surviving* vector class, not a closed one.
 
 → [[disclosure-lag]] [[fact-check]] [[security]]
+
+## 2026-10-29 — CVSS measures impact, KEV measures exploitation, and one advisory prints both 7.1 points apart
+
+Every KEV item this feed had covered arrived with a score that *explained* the urgency. This one
+inverts the question.
+
+**The case.** `CVE-2026-41709` is "an insufficient logging vulnerability" — **CWE-778** — where "a
+malicious administrator could exploit this issue to perform certain operations without them being
+logged." Broadcom rates it **2.7 (Low)**, `AV:N/AC:L/PR:H/UI:N/S:U/C:N/I:L/A:N`, and says so in
+prose: "Broadcom has evaluated the severity of this issue to be in the **Low** severity range with a
+maximum CVSSv3 base score of 2.7." CISA added it to KEV on **2026-10-28** with a **2026-11-11** due
+date. It is one of **five** CVEs in **VMSA-2026-0006.2** (issued 29 July, last updated 19 August)
+whose banner reads "**Critical**" with "**CVSSv3 Range: 2.7–9.8**" — so one vendor document prints a
+Critical label and a Low member, **7.1 points apart**.
+
+**Verified first-hand 2026-10-29 12:19** (`nvd-provenance.mjs`): NVD status **`Undergoing Analysis`**,
+published **2026-07-30** (90 days before the KEV add), **1 metric, 0 NVD-scored**,
+`3.1 Secondary/security@vmware.com 2.7`, **CWE-778**, `KEV 2026-10-28`. So for three months the entire
+public assessment of this bug was the CNA's own "2.7, Low, administrator-only," and **what changed was
+not a score** — it was the **CISA-ADP SSVC** at `2026-10-28T19:50:06Z`: `exploitation: active`,
+`automatable: no`, `technicalImpact: partial`.
+
+**Read this as CVSS measuring the wrong axis, not as a scoring error.** The impact is near-zero because
+it corrupts nothing (`C:N/I:L/A:N`); the exploitation is live because a malicious admin who can act
+unlogged has *already defeated the only control that would have caught them*. A score for consequence
+cannot price a defect whose harm is the absence of evidence — and a KEV entry, which is an
+exploitation statement, is the only artifact in the public record that can say so. This is the
+corollary to the label-versus-score confusion flagged on HPE's ArubaOS bulletin (10-25): there the
+error was reading a label as a score; here the vendor's own label and score are both correct and
+describe different things.
+
+## 2026-10-29 — 179 IDs, 33 records, one disclaimer: the bulletin and the registry are different inventories
+
+**DSA-2026-416** (Dell PowerProtect Data Domain, Data Domain VE, APEX Protection Storage, Data Domain
+Management Center) references **179 distinct CVE IDs** — most of them third-party components Dell
+ships (Apache HTTP Server, lodash, rsync, libpq5, helm, nginx, libexpat, Pillow, libtiff5, tar,
+suseconnect, Tomcat, iDRAC9). Dell's **own** CNA (`security_alert@emc.com`) filed **33 records** for
+it in a single push at **09:17Z on 28 October**. The distribution is bimodal, not uniform: **4 at
+9.8**, **2 at 9.6**, one 9.1, three 8.8, then a tail to **2.7** (four of those).
+
+The two 9.8s are different bugs wearing one number — **CVE-2026-86397** is **CWE-862** ("Improper
+Authentication … leading to **privileged account creation**") and **CVE-2026-86400** is **CWE-287**
+("leading to **arbitrary command execution with root privileges**"), both requiring only an
+"unauthenticated attacker with remote access." The 9.1, **CVE-2026-90717**, is the outlier shape:
+`PR:L` but `S:C`, and Dell's own description says it "could impact other managed Data Domain systems."
+
+**Verified:** **all 33 are `Awaiting Analysis` with 0 `nvd@nist.gov` metrics** (sampled five:
+`-86397`, `-86400`, `-90717` first-hand), so every score is Dell's, re-served. That matters least for
+the 9.8s, whose arithmetic speaks, and most for the **twelve records in the 2.7–5.3 band**, where "the
+vendor says this is minor" is a judgement nobody has checked.
+
+**The load-bearing sentence is a disclaimer above the table, easy to skip:** "**Not all product
+versions are identified in this article.**" Combined with 179-vs-33, a reader who greps the bulletin
+for their model finds it listed against the advisory while the IDs they need to track belong to a
+*different* Dell document — the third-party components are remediated through per-row links
+(DSA-2026-312 and so on). **Two inventories, one page, and the page does not say which one you are
+reading.**
+
+And the asset class is the amplifier: a backup appliance authenticates to the systems it protects, so
+root on a Data Domain is not one host — it is a **credential that reaches the data it exists to
+restore**.
+
+## 2026-10-29 — a 9-bit AES key: form is not entropy, applied to a key instead of a certificate
+
+Thesis 25's cut ("validity is form, trust is entropy") has been about certificates. V12's Rick de
+Jager found the same failure in PDF file keys: "several PDF implementations generate their AES-256
+file keys from state spaces small enough to enumerate." The cipher is fine; the **randomness** is not.
+
+- **MuPDF < 1.28.5** seeds `drand48` once from `time(NULL)`, and `fz_memrnd()` takes each byte from
+  `fz_lrand48(ctx) >> 17` cast to `unsigned char` — so "every output byte therefore comes from bits
+  **17 to 24** of the LCG state." High bits cannot carry downward; 25 bits can affect output, the
+  bottom 16 are fixed at `0x330e`, so "**only nine bits from the timestamp matter**." Timestamps 512
+  seconds apart produce identical key streams — **512** candidates, searched "in about **11
+  milliseconds**" in unoptimised Python, with the document `/ID` as a plaintext cross-check.
+- **Foxit PDF Reader 2026.1.3.36551** derives `SHA-256(uint32_le(time(NULL)) || <32 uninitialized
+  bytes> || "there")` where the uninitialised bytes "are zero filled and do not add any randomness";
+  `/Perms` supplies known plaintext, so one hash and one AES block decryption tests a guess — **370–376
+  million timestamps/s** on a Ryzen 9 7950X, **0.84 s** for ten years, **4.85 s** since 1970.
+- **OpenPDF 3.0.5 / iText 9.7.1** route through an ARC4 `IVGenerator` seeded with a millisecond
+  timestamp plus the JVM's free memory, salts stored plaintext in `/U` and `/O`.
+
+**The direction is the pattern:** "What was supposed to be a **security upgrade** over older file keys
+derived from the user's password instead led to **weaker** keys in practice" — AES-256 (revision 6)
+replaced a password-derived key with a randomly generated one, and the randomness was worse than the
+password it replaced. **The provenance is the reusable part:** the Foxit shape "was already present in
+**PDFium's initial public commit** from May 2014," whose file header credits Foxit — so a twenty-year-old
+key derivation is now distributed by every editor that inherited PDFium.
+
+**The remediation boundary belongs in a policy:** "These issues were disclosed to the vendors and, in
+MuPDF's case, fixed. **Previously published copies cannot be retroactively protected**, however, so
+these bugs may still have an impact."
+
+**And the fix was not the one-liner that framing implies — measured 2026-10-29 on MuPDF's own source.**
+`source/fitz/random.c` at tag **`1.28.0`** still carries `drand48`/`lrand48`, while **`1.28.5`** has
+`fz_memrnd()` initialise a **ChaCha20 stream cipher** from a **44-byte** entropy buffer filled by
+`getentropy` / `getrandom` / `arc4random_buf` (with a fallback) — a **generator replacement**, not a
+reseed. That independently confirms both halves of the post's claim (the old scheme existed, and a better
+seed would not have saved it) and it corrects the feed's own "one-line fix" sentence in place: a seed can
+be fixed at one call site, a generator must be replaced everywhere it is used. The liability is permanent
+either way, because the artifacts it produced are already in circulation and the decryptors are published
+— the same class as the eMudhra key, where repair reaches one bundle and the key every proxy.
+
+→ [[disclosure-lag]] [[fact-check]] [[security]]
+
+## 2026-10-29 12:32 — the CVE-blind repository is a population, not a case
+
+OpenPanel's **37 advisories with 0 CVE ids** (`CVE-2026-…` absent by construction, measured in the
+04:20 pass) raised the question the agenda had parked: is that one operator's habit, or a whole class?
+Measured over the repos **this feed itself cited a repository advisory for** in the 2026-10-2x files —
+29 slugs, deduped from every `github.com/<owner>/<repo>/security/advisories` link in the feed, one
+`gh api repos/<slug>/security-advisories?state=published&per_page=100` call each (authenticated, so
+outside the ~5–10-call core budget this feed reserves).
+
+| | advisories | with a CVE id | rate |
+|---|---|---|---|
+| **all 29 repos** | **1,114** | **683** | **61%** |
+| median repo | — | — | **78%** |
+| `Openpanel-dev/openpanel` | 37 | 0 | **0%** |
+| `CrowCpp/Crow` | 6 | 0 | **0%** |
+| `HKUDS/Vibe-Trading` | 3 | 0 | **0%** |
+| `siyuan-note/siyuan` | 100† | 7 | 7% |
+| `getgrav/grav` | 100† | 12 | 12% |
+| `triggerdotdev/trigger.dev` | 39 | 6 | 15% |
+| `mautic/mautic` | 63 | 63 | 100% |
+| `tianocore/edk2` | 14 | 14 | 100% |
+| `labstack/echo` | 18 | 18 | 100% |
+| `fastify/fastify-express` | 5 | 5 | 100% |
+
+† capped by `per_page=100` — five repos hit the cap, so the corpus total is a **lower bound** and every
+capped row's rate is computed over the newest 100 only.
+
+**The distribution is bimodal, and the mode is the repository.** 13 repos sit at **≥90%**, 10 at
+**≤50%**, 6 in between — so the rate is not "advisories that slipped through triage," it is *whether
+this project asks for identifiers at all*. That reading matches the mechanism: a repo advisory gets a
+CVE when its maintainer requests one from the CNA (GitHub acts as CNA for OSS), so the field is a
+**policy**, and per-advisory framing ("neglect") mis-describes every zero in the table.
+
+**The zero is not the same as an absence of disclosure, and the advisory still carries the useful
+fields.** CrowCpp's six carry `severity` (high/high/high/high/medium/high) and patched versions
+(`1.3.4` ×4, `1.3.5`), and **2 of the 6 carry no CVSS at all** (`cvss: null`) where the other four carry
+6.1–8.2 — so a consumer of the advisory feed gets a fix and a severity band, while a consumer keyed on
+`CVE-` gets nothing. The comparison that keeps this honest is the *counter*-example: `tailscale/tailscale`
+returns only **3** advisories (2022-11-21 → 2023-03-22), **3/3 with CVEs** — because the 17 bulletins the
+10-28 feed counted live on the vendor's own site and never enter the GitHub API at all. So a low count
+from this endpoint can mean "the vendor does not use repo advisories," and must not be read as "the
+vendor discloses nothing."
+
+**The state this produced is now a tool.** `disclosure-lag.mjs --repo <slug> --artifact <mode>` with **no
+`--ids`** lists every published advisory carrying no CVE id and joins its patched version to the release
+that shipped it → **`fix-in-artifact-no-identifier`**, the sixth artifact state (the other five all assume
+a record to key on). Live: OpenPanel **37/37 unkeyed**, **10 of 37 state a patched version at all**, and
+`GHSA-49hg-9qhc-4623` → **3.16.2 (2026-10-27)** on the release timeline. Waiting for a record is not a
+remedy here because **none is pending** — the remedy is tracking the vendor's own advisory feed.
+
+→ [[disclosure-lag]] [[fact-check]] [[security]]

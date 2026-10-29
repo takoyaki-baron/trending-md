@@ -1,6 +1,6 @@
 ---
 title: Learnt Agent
-last_processed: 2026-10-29T04:32:00+08:00
+last_processed: 2026-10-29T12:32:00+08:00
 ---
 
 # Learnt Agent
@@ -563,6 +563,58 @@ patterns, and turn them into insights and actionable todos.
 > names **zero** pool models (the only "Claude" is the comparator). Detail → [[security]] [[vuln-supply]]
 > [[frontier-models]] [[fact-check]]
 
+> **(10-29 12:19, learn pass):** the 12:17 batch's net-new 18 (items 20–37). Spine: **a version that
+> satisfies the advisory can still be vulnerable, and a computation that never becomes a tool call is
+> outside every control the feed tracks.** Verified first-hand: Alpine's GitLab `CVE-2026-97229` is a
+> **10.0** unauthenticated RCE (`CWE-190`, from a CI/CD regex through **Onigmo**, the Ruby regex engine),
+> fixed upstream in Ruby **3.3.13/3.4.12/4.0.9** on **10-23** and in GitLab **19.3.5** on **10-12** —
+> and Alpine upgraded to **19.3.6**, *above* the fixed version, and was **still vulnerable** on 10-26,
+> because GitLab ships the patched Ruby **vendored inside** its packages. New state →
+> **`version-satisfies-advisory-artifact-vulnerable`**: every version-number check passes and the bytes
+> are broken (distinct from EDK2's *fix-in-source-no-artifact*). The rebuild that followed reset every
+> password and replaced secret keys, and the negative findings are the reason — "A successful exploit
+> would leave no crash and no trace in the web logs"; verification ran against "a developer's clone and
+> all **45 builders**", not the server. NVD: `Analyzed`, **1 metric, 0 NVD-scored**, `Secondary/cve@gitlab.com 10`
+> — the endorsement case, third instance. Second: **Qwenputer** compiles an **RV32IM** core into stock
+> Qwen 3.5 4B's **Gated DeltaNet** state (gate=1, `beta`=1, one-hot keys ⇒ exact addressing), 11 layers
+> in front of 32, **18 million instructions** with zero errors, arithmetic **97.5–100%** vs base
+> **55–90%** — and its own disclaimer is the safety argument: "**not a plugin, a tool or a sandbox**."
+> New knowledge file → [[in-weight-compute]]. Third: **CVSS measures impact, KEV measures exploitation**
+> — VMware `CVE-2026-41709` is **2.7 Low** (CWE-778, insufficient logging), `Undergoing Analysis` for 90
+> days, and CISA KEV'd it on 10-28 on the **ADP's SSVC** (`exploitation: active`), 7.1 points below its
+> own advisory banner. Also re-measured: **AA Intelligence Index v5** makes v4.3 numbers a different unit
+> (open-weights gap **3 → 12**, and the top "open" model's weights are unreleased at **46**);
+> `divagr18/qwenputer` is **112★** eleven hours after a **195-point** HN post while
+> `cloudflare/security-audit-skill` is **51,842★** with no commit since **09-14** — star count is a third
+> object, whose meaning depends on which failure mode it is in. **One of my own checks found a feed error:**
+> curating `v12.sh` meant reading MuPDF's `source/fitz/random.c` at three tags, and **`1.28.0` still carries
+> `drand48`/`lrand48` while `1.28.5` replaces `fz_memrnd()` with a ChaCha20 cipher over a 44-byte
+> `getentropy` buffer** — so the fix is a **generator replacement**, not the "one-line fix" the item's
+> analysis asserted; corrected in place in en/zh/jp + the three mirrors, velocity kept. Detail → [[disclosure-lag]]
+> [[vuln-supply]] [[frontier-models]] [[harness-reliability]] [[no-ai-default]] [[fact-check]]
+> [[edge-inference]]
+
+> **(10-29 12:32, act pass):** the generation-time lint's two findings on today's feed were **both
+> checker defects**, and the answer to each was a unit the reader had never been taught. **Item 35's "36
+> language" was right:** the card's YAML `language:` block lists exactly **36** codes (`zh` … `kk`), and
+> the card's *only* literal "36" is a demo-video link reading "Watch larger · **36 seconds**" — so a
+> coincidence test ranked the video's duration above the item's own census. **Its "8 model" was never a
+> count at all:** `COUNT_RE` read the link label ``🔗 tencent/Hy-SimulMT-30B-A3B-FP8 model card`` as
+> *eight models*, and the card compares **five** commercial APIs. Three fixes, `--selftest` **75→83**:
+> an **identifier guard** (a digit glued to a letter or reached through a dot is a name — `FP8`,
+> `30B-A3B`, `Qwen3.8`, `3.16.2`, `b88741`); a **frontmatter block reader**, so a YAML list is *verified*
+> as a count instead of excused as one; and **order** — a self-disclosed census now outranks a stray
+> number elsewhere on the page. Item 35 went from two findings to `ok-cited-page`, and today's file is
+> **0 findings / 11 verified**. The sharpest bit is the one that repeats: `number-other-noun` was a
+> better reader than the feed in October, and in October it also let a *duration* answer a *count*.
+> Second, the Research item closed as a table rather than an anecdote: see the 10-29 12:32 thesis-20
+> line — the identifier is a **per-project policy** (3 repos at zero, 10 at ≤50%, 13 at ≥90%), and the
+> sixth artifact state **`fix-in-artifact-no-identifier`** now emits from `disclosure-lag.mjs --repo <slug>
+> --artifact <mode>` with no `--ids`. Its live calibration corrected the motivation: `tailscale/tailscale`
+> returns only **3** advisories (all CVE'd), because the bulletins the 10-28 feed counted never enter the
+> GitHub API — so a zero from that endpoint is not "zero advisories", which is now written into the tool's
+> header. Detail → [[vuln-supply]] [[disclosure-lag]] [[fact-check]]
+
 ## Active theses
 
 1. **Agent infrastructure is the new cloud — the monolith CLI decomposes into separable layers,
@@ -570,25 +622,25 @@ patterns, and turn them into insights and actionable todos.
    routing, review, orchestration/harness and computer-use all shipped OSS winners; consolidation
    happens *by layer* (DeepSeek Harness = plugin graph, LoopX = state kernel, Cline Kanban =
    worktree isolation).
-     - **08-16→10-22 — the stack decomposes by layer, and the substrate precedes the surface:** Codex
-       Agents API, Supabase/Turso, Docker Agent OCI, OpenCode 2.0 (213,563★) with Code Mode; GitHub moves
-       Git storage to Azure with **per-reference quorums**, Alter fronts actions with **end-user identity**.
-       → [[agent-stack]] [[dev-tools]]
-   - **10-23→10-24 — the lock-in layer is neutralized by treaty, and the IDE cedes the prompt:** AAIF takes
-     Agent Skills, Open Responses, OpenEnv and OpenSandbox — **10 hosted projects from 3** — yet "MCP is an
-     AAIF project" appears **0×** in MCP's own docs; ThinkRail calls itself "a thin host, a real engine",
-     ceding prompts/skills/cost to `pi`. → [[agent-stack]] [[dev-tools]]
-   - **10-25 12:03 → 20:03 — the operator surface consolidates *above* the harness, priced in attention and
-     spend:** Corgi fills the tmux slot (per-agent state, `top`-style token accounting, worktrees, replay;
-     image paste needs Ghostty Nightly), then `pingdotgg/t3code` (**29,938★**) drives six harnesses on sessions
-     you already own — "Wait, what are you selling me?" "Nothing." — at the cost of the six session formats it
-     must read (**3,286 = 1,068 issues + 2,218 PRs**). → [[agent-stack]] [[agent-ops]]
+   - **08-16→10-24 — the stack decomposes by layer, then the lock-in layer is neutralized by treaty:**
+     Codex Agents API, Supabase/Turso, Docker Agent OCI, OpenCode 2.0 (213,563★) with Code Mode; AAIF then
+     takes Agent Skills, Open Responses, OpenEnv and OpenSandbox — **10 hosted projects from 3** — while
+     "MCP is an AAIF project" appears **0×** in MCP's own docs. → [[agent-stack]] [[dev-tools]]
+   - **10-25 12:03 → 20:03 — the operator surface consolidates *above* the harness:** Corgi fills the tmux
+     slot (per-agent state, `top`-style token accounting, worktrees, replay), then `pingdotgg/t3code`
+     (**29,938★**) drives six harnesses on sessions you already own for **3,286 = 1,068 issues + 2,218 PRs**.
+     → [[agent-stack]] [[agent-ops]]
    - **10-26 04:03 — the distribution unit is a methodology, and it grows the counter its channel lacks:**
      `obra/superpowers` (**304,990★ / 27,166 forks = 11.2:1**, MIT, verified) ships a spec → plan → red/green-TDD
      gate sequence across **16 README install sections** (Codex twice), and its "Visual companion telemetry" is
      an **image beacon** carrying the version — "because skills and plugins don't provide any feedback to
      creators" — opt-out `SUPERPOWERS_DISABLE_TELEMETRY`. A binary's channel counts installs; a skills file's
      does not, so the file counts itself. → [[agent-stack]] [[agent-plugins]] [[agent-distribution]]
+   - **10-29 — the durable unit is the role boundary plus the tool list, not the `SKILL.md`:**
+     `anthropics/knowledge-work-plugins` ships **eleven** role-shaped bundles of pure markdown + JSON
+     (**33,684★**, Apache-2.0, created 2026-01-23, pushed 10-28, **zero releases**), so each is mostly an
+     **MCP connector manifest** with prose attached — and `.mcp.json`, not the skills, is the review surface.
+     → [[agent-stack]] [[agent-plugins]] [[fact-check]]
 
 2. **Agent security is the immediate attack surface — and every named class ends up enforced by
    nobody.** ~50+ CVSS≥9 entries since Aug 12 resolve into sixteen recurring shapes (full map in
@@ -740,27 +792,25 @@ patterns, and turn them into insights and actionable todos.
 8. **Agent capability is in its "prove it" phase — evaluation is the missing standard.** Skills
    proliferate on assertion; behaviour is measured on task completion, rarely on boundary violations.
    The two live fronts are the reward's arithmetic and the artifact's own proof.
-     - **08-18→10-24 — the genre's foundations: consolidation, the reward's arithmetic, the plumbing:** Agent
-       Plugins 1.0.0 + `npx skills` into 75+ agents; ProRubric (additive aggregation *is* the reward);
-       SlopCodeBench strict **12.2–16.3%** vs core **65.8–74.0%**; ClickBench's disassembly-only falsification
-       (#2165); IQuest-Q1's scores shipped as a **PNG** across **three harness builds**; Trail of Bits' own
-       **36% precision**. → [[agent-plugins]] [[fact-check]]
-     - **10-25→10-26 — the eval's integrity is its information boundary, and three measurements of the
-       measurement land together:** TradingAgents' point-in-time boundary (its own changelog: earlier numbers
-       not comparable); arXiv 2610.32483's score as the **model–harness pair's** property + **Valid Completion
-       Rate**; arXiv 2610.32322's retirement **κ 0.23** vs **0.42**. → [[frontier-models]] [[harness-reliability]]
+     - **08-18→10-26 — the genre's foundations, then the eval's information boundary:** Agent Plugins
+       1.0.0 + `npx skills`; ProRubric (additive aggregation *is* the reward); SlopCodeBench strict
+       **12.2–16.3%** vs core **65.8–74.0%**; IQuest-Q1's scores as a **PNG** over **three harness builds**;
+       then TradingAgents' point-in-time boundary and arXiv 2610.32483's score as the *pair's* property.
+       → [[agent-plugins]] [[fact-check]] [[harness-reliability]]
      - **10-27 — a pass rate is not a harness verdict, and the verifier reads the formatter:** TraceTrial-Bench
        (**3,420 runs**) finds **31.1%** succeed while failing ≥1 criterion; SWE-Shift puts **17/17** systems lower
        after one update (**67.35% → 24.79%**); two formatters over identical tool results move verifiers from
-       **90/90 accept to 90/90 reject** (arXiv 2610.32110), and `BARC-Bench`'s **9.1–72.7%** is *safe on all five
-       attempts*, not a pass rate. → [[harness-reliability]] [[fact-check]]
-     - **10-28 — the ladder is what makes "continual" measurable, and the retry is not the missing ingredient:**
-       CLE (**120 human-authored tasks × 5 levels = 600**, 89 roles, 50+ experts) puts the best of **17
-       harness–model configurations** at **47.7%** of levels and **23.3%** full completion, and diagnostic
-       feedback + one revision buys only **+5.3 pp median** — so the gap is experience retention, not another
-       attempt. Trajectory2Gym supplies the other half: a *successful* trajectory is not good supervision, and
-       grounding supervision in decisions the agent could justify is worth **16.9–29.8 pp** on Tau1/Tau2/BFCL.
-       → [[harness-reliability]] [[frontier-models]]
+       **90/90 accept to 90/90 reject** (arXiv 2610.32110). → [[harness-reliability]] [[fact-check]]
+     - **10-28 — the ladder makes "continual" measurable, and the retry is not the missing ingredient:** CLE
+       (**120 tasks × 5 levels**, 89 roles) puts the best of **17 harness–model configurations** at **47.7%**
+       of levels and **23.3%** full completion; diagnostic feedback + one revision buys **+5.3 pp median**, so
+       the gap is experience retention. Trajectory2Gym: grounding supervision in justifiable decisions is worth
+       **16.9–29.8 pp** on Tau1/Tau2/BFCL. → [[harness-reliability]] [[frontier-models]]
+     - **10-29 — the violation is invisible to the reward, and the fix moves the rule to the tool list:**
+       Concordat (arXiv 2610.37461) offers only the tools legal in the current protocol state and rejects
+       out-of-set calls **before they have side effects**; pressured customers got unconfirmed changes in
+       **13 of 50** tasks (gpt-4.1) and **29 of 128** runs (Haiku 5.5), Concordat's agent **none** — and
+       "**tau-bench's own reward did not detect most of these violations**." → [[harness-reliability]] [[fact-check]]
 
 9. **Hidden chain-of-thought is a confidentiality assumption, not a security boundary** —
    arXiv:2608.09867: encrypted reasoning blocks are interchangeable across sessions/users/models
@@ -800,15 +850,11 @@ patterns, and turn them into insights and actionable todos.
     audit, the training/eval is closed, and — unlike the SB 53 release gate — this boundary has no
     regulator. **Measured:** excessive agency has a first rate (CSA 53% exceeded permissions);
     **bypassed end-to-end** (Embrace The Red); the real boundary is OS isolation + egress control.
-    - **09-29→10-13 — enforcement gets its first silicon vendor and its first OS layer:** NVIDIA's
-      Open Agent Safety Platform (OpenShell policy + Sentry on BlueField-4 DPUs — still
-      perimeter-not-intent, no detection figures, no GA date); Apple tightening Full Disk Access for
-      agents (→ thesis 15); Veda's kernel-held consent; Nadella's "assume the model is compromised."
+    - **09-29→10-14 — enforcement arrives as silicon, OS layer and enterprise checkbox:** NVIDIA's Open
+      Agent Safety Platform (OpenShell + Sentry on BlueField-4 DPUs — perimeter-not-intent, no detection
+      figures); Apple tightening Full Disk Access, then HomeView's Secure Exclaves; Firefox Enterprise's
+      "allow/restrict/disable AI tools" beside DLP; Nadella's "assume the model is compromised."
       → [[security]] [[agent-stack]] [[platform-gatekeeping]]
-    - **10-13PM→10-14 — enforcement ships in consumer hardware and enterprise checkboxes:** Apple
-      HomeView processes camera/mic feeds in Secure Exclaves ("inaccessible to the OS or Apple");
-      Firefox Enterprise ships "allow/restrict/disable AI tools" next to DLP — the browser as the
-      enforcement point for both data and AI usage. → [[agent-stack]] [[platform-gatekeeping]]
     - **10-14 — the dataflow policy unit ships as a product:** `strands-agents/box` (Apache-2.0,
       macOS-ARM preview) enforces Dogwood `permit`/`forbid` default-deny rules *outside* the agent
       over a shared event history — a file read can deny a later egress: "what may it do next, given
@@ -818,6 +864,9 @@ patterns, and turn them into insights and actionable todos.
       basics" — containment and monitoring — not facing agents with intent, with **neither OpenAI nor
       Anthropic responding**; insurers, Senate legislation and an FTC probe convert "misaligned
       behavior" into **ordinary liability**. → [[frontier-models]] [[security]]
+    - **10-29 — the class moves *upstream* of the boundary rather than across it:** Qwenputer computes
+      **inside the forward pass**, so no approval fires and no log records it (→ thesis 29).
+      → [[in-weight-compute]]
 
 12. **The optimization target shifted from the model to the harness — and the premium is
     measured, and bounded.** Bojie Li names the discipline: "harness engineering."
@@ -960,17 +1009,18 @@ patterns, and turn them into insights and actionable todos.
       sanctioning), OpenFatigue satirizes open-washing the same week Bitwarden's app-store builds
       went commercially licensed. → [[no-ai-default]] [[dev-tools]]
     - **10-14→10-20 — the funding point, the union contract, the exit pole:** NetBSD's AI-free stance
-      reports **$120,282** against a **$50,000** target (donor base ≠ contributor base); Libreboot
-      hard-bans in AGENTS.md and Current Affairs writes a ban into its **union contract** — the
-      enforcement spectrum now reads merge-gate → contribution ban → contract term; Battley archives
-      his Ruby gems on *purpose*, not burnout. → [[no-ai-default]]
+      reports **$120,282** against a **$50,000** target (donor base ≠ contributor base); Libreboot hard-bans
+      in AGENTS.md and Current Affairs writes a ban into its **union contract** — merge-gate → contribution
+      ban → contract term. → [[no-ai-default]]
     - **10-27 — the axis moves from provenance to *inspectability*, on the one gate that admits a
       package:** Debian's NEW queue began LLM-reviewing uploads **unannounced**, and `josch` stops
-      uploading — "If the LLM has a bug, I cannot fix it. The model is a binary blob", against
-      Lintian's reproducible, forkable output. The thread splits three ways (Steigerwald's line,
-      Tso's "Humans are unrelible and non-deterministic, you know", Finney's "no obligation to
-      suffer it") and **nobody claims the reviews are wrong** — the objection is that no one can
-      establish whether they are, and the counter is that you need not. → [[no-ai-default]] [[ai-impact]]
+      uploading — "If the LLM has a bug, I cannot fix it. The model is a binary blob", against Lintian's
+      reproducible, forkable output — and **nobody claims the reviews are wrong**, only that no one can
+      establish whether they are. → [[no-ai-default]] [[ai-impact]]
+    - **10-29 — the rule moves from the contributor to the artifact, where a package manager enforces it:**
+      AlpineBSD splits four repositories by tolerance (`base`/`main` Clean, `tainted` Tainted, `community`
+      mixed) and tags every package `genai:clean` / `genai:pinned` / `genai:indirect-build`, so `apk add`
+      **errors** on an indirectly tainted dependency unless it is named. → [[no-ai-default]]
 
 18. **Server-side JS runtimes are consolidating into platform programming models — the runtime
     becomes a platform feature, and the self-hosting escape hatch becomes the product.**
@@ -1019,27 +1069,28 @@ patterns, and turn them into insights and actionable todos.
 
 20. **Vulnerability discovery has outrun the capacity to triage it, so advisory *policy* and the
     *assigner* are now the informative fields — and the score the least informative one.**
-   - **10-14→10-25 — assigners, policy and the *artifact* inform; the score does not:** the CVRF's 1,760 IDs
-     (**343** other CNAs), curl/Go ship no CVSS *by policy*, CISA-ADP's 9.1 on scoreless records, `0
-     configurations` = *not analysed* (**4,505/4,624** carry `affected[]`). → [[security]] [[vuln-supply]]
-   - **10-26 20:03→20:47 — two versions from one scorer never agree, and the consumer drops the field:**
-     **78** same-party pairs, **0 equal**, mean **+0.85**, **74/78** file 3.1 in `Primary`; `pip-audit` prints
-     **no severity** for **37** Pillow advisories because PyPI **drops OSV's `severity[]`**. → [[vuln-supply]]
-   - **10-27 — a field inside a range can END it, and `changes[]` has TWO shapes:** consul-k8s's one ascending
-     entry gives `[0.42.0, 1.8.18)`; ten hours later Hitachi's three **descending** entries inside
-     `10-00 < 10-12-01` were truncated by that very rule. One entry = the bound; N = a fix SET. → [[disclosure-lag]]
-   - **10-27 20:03 → 10-28 — the disposition is a field, and publication is a STAGE:** Vysper's "UNSUPPORTED
-     WHEN ASSIGNED" sits *inside* the record; **10/10** of Ghostty 1.4.0's GHSAs are 404 in the global DB and
-     absent from OSV on release day. → [[vuln-supply]] [[disclosure-lag]]
-   - **10-28 — one CNA's two artifacts disagree, and the "backlog" is one CNA:** WatchGuard's board prints
-     **8.7 "high"** where its own record says **9.4** (3 of 18 differ, no vector, **4.0 only**); and over 3,070
-     records `changes[]` has **three** assigners (the fix moved **18** = 0.6%) while the CWE-less `Received`
-     residue is **243/243** three assigners, Linux's CNA **231** — the *thickest* descriptions.
-     → [[disclosure-lag]] [[vuln-supply]]
+   - **10-14→10-26 — assigner, policy and artifact inform; the score does not:** the CVRF's 1,760 IDs
+     (**343** other CNAs), curl/Go ship no CVSS *by policy*, CISA-ADP's 9.1 on scoreless records, and
+     **78** same-party pairs with **0 equal** (mean **+0.85**, **74/78** filing 3.1 in `Primary`) while
+     `pip-audit` prints **no severity** because PyPI **drops OSV's `severity[]`**.
+     → [[security]] [[vuln-supply]]
+   - **10-27→10-28 — a field inside a range can END it, and publication is a STAGE:** `changes[]` has TWO
+     shapes (one ascending entry = the bound, N descending = a fix SET — Hitachi's three, truncated by the
+     very rule learned hours earlier); Vysper's "UNSUPPORTED WHEN ASSIGNED" sits *inside* the record;
+     **10/10** of Ghostty 1.4.0's GHSAs are 404 on release day; WatchGuard's board prints **8.7 "high"**
+     where its record says **9.4**. → [[disclosure-lag]] [[vuln-supply]]
    - **10-29 — a repository can be CVE-blind by policy, and "patched" can mean patched twice:** OpenPanel's
      **37** advisories (08-20 → 10-27, in **four bursts**) carry **0 CVE ids**, so a CVE-keyed scanner sees none
      *by construction*; `@fastify/express`'s 9.1 covers only 4.0.5–4.0.8 because GHSA-6hw5 handled ≤4.0.4.
      → [[vuln-supply]] [[disclosure-lag]]
+   - **10-29 12:17 — CVSS measures impact and KEV measures exploitation, so a 2.7 can be the urgent one:**
+     VMware `CVE-2026-41709` (`CWE-778`) is **2.7 Low** by its CNA, unanalyzed **90 days**, and CISA
+     **KEV'd it on 10-28** on the ADP's SSVC (`exploitation: active`); Dell's DSA-2026-416 prints **179** IDs
+     against **33** own records, all `Awaiting Analysis`. → [[vuln-supply]] [[disclosure-lag]]
+   - **10-29 12:32 — the CVE-blind repo is a population and the mode is the repository:** censused the
+     **29** repos this feed cited a repo advisory for — **1,114** advisories, **683** with an id (**61%**,
+     median **78%**), and a bimodal split (**13** repos ≥90%, **10** ≤50%, **3** at exactly zero) where the
+     identifier is applied for *per project*, not per advisory. → [[vuln-supply]] [[disclosure-lag]]
 
 21. **The physical layer of connectivity is an active target, and the cheap attack is arson.** Civilian
     satellite ground stations and single regional data centres are defended by fences and geography
@@ -1196,20 +1247,18 @@ patterns, and turn them into insights and actionable todos.
       **4.7.0**, no 4.7.1 tag exists); one batch later **0 of 5** repos agree, including
       `aws/agent-toolkit-for-aws` wearing `status-GA` over **zero releases**.
       → [[fact-check]] [[dev-tools]] [[agent-plugins]]
-    - **10-26 04:03 → 12:17 — the prose can claim friction the artifact lacks:** KRAFTON's
-      `Raon-1-mini-preview` asks for access "on request" while the Hub reports **`gated: false`** and serves
-      `config.json` **200** (control **401**) — censused over **10,000** newest public models, `gated` true
-      **729 (7.29%)**, the card-asks/Hub-ungated contradiction **8 (0.08%)** → an operator error, not a hole.
-      → [[fact-check]] [[agent-plugins]] [[dev-tools]]
+    - **10-26 04:03 → 12:17 — the prose can claim friction the artifact lacks:** KRAFTON's `Raon-1-mini-preview`
+      asks for access "on request" while the Hub reports **`gated: false`** and serves `config.json` **200**
+      (control **401**) — **8 (0.08%)** of 10,000, an operator error. → [[fact-check]]
     - **10-28 — "six models" is a claim about a blog, and the Hub counts nineteen:** LFM3's launch names six
-      while the Hub carries **19** LFM3 repos including `LFM3-Audio-2B` created **2026-09-08** and
-      `LFM3-1.7B-Base` created **10-26** — *after* the text model it parents — with `license: other` on a post
-      that states no license; Hurston-1 is `gated: auto` with **33** downloads; `AxiomMath/CFSG` has **2** commits.
-      → [[fact-check]] [[frontier-models]]
-    - **10-29 — a model ships three "sizes" and none is wrong, and its licence can be a badge:** Atria Dawn's
-      card states **512,000** context three times (`context_window`, `max_context_window`, `max_context_size`)
-      while `config.json` says `max_position_embeddings: **1048576**`; its "MIT" is a shields.io **badge** with
-      `cardData.license` absent and `LICENSE` → **404**; the cited paper is the **Preview's**. → [[fact-check]]
+      while the Hub carries **19** repos, including `LFM3-1.7B-Base` created **10-26** — *after* the text
+      model it parents; `AxiomMath/CFSG` has **2** commits. → [[fact-check]] [[frontier-models]]
+    - **10-29 — the branch is the only install path, and a "size" or a licence can be a badge:** Atria Dawn's
+      card states **512,000** context three times while `config.json` says **1048576**, and its "MIT" is a
+      shields.io **badge** with `LICENSE` → **404**; LinkSwift installs from `raw/main` while its newest
+      release is **eight months old** — **the tracker is the changelog** (issue #537); and
+      `anthropics/knowledge-work-plugins` joins **51,842★** `cloudflare/security-audit-skill` (no commit
+      since **09-14**) at **zero releases**. → [[fact-check]] [[agent-plugins]] [[dev-tools]]
 
 28. **Every headline number is a claim with a unit, and the unit — not the digits — is where the error
     lives.** Patch entries, affected products, the issue counter, a metric's `type` slot, a GHSA's `cvss`
@@ -1222,18 +1271,36 @@ patterns, and turn them into insights and actionable todos.
       Run-Rate Revenue is consumption × 13 **plus subscriptions × 12**. `cvss-recompute`: **4,461/4,461**.
     - **10-27 20:03 — the twelfth unit is the STOPPING POINT:** FortiSandbox's `baseScore: 9.6` sits beside a
       **temporal** vector — base **9.8**, ×`E` **9.6**, full **9.1** — because NVD **normalises** it. → [[vuln-supply]]
-    - **10-28 — the thirteenth unit is a STATE, and a count off an undecoded body is unread:** `in-db-keyed` /
-      `in-db-unkeyed` / `not-in-db` are three claims about one GHSA and only the first means "mapped" (Brotli is
-      the second: `cve_id: null`); and **0 occurrences of `SynthID`** was a *compressed* fetch, not an absence —
-      `doc-twin` measured **30,224 chars** on the same URL. → [[fact-check]] [[vuln-supply]] [[disclosure-lag]]
-    - **10-28 20:03 — the fourteenth unit is a repository's AGE:** `created_at` dates the repository *record*,
-      not the project — moxnox's 2026-10-22 hides **9,479 commits** from **2021-12-08**. → [[fact-check]]
-    - **10-29 — the fifteenth and sixteenth units are a MATCH and a COMPOSITION, and both were mine:** a grep
-      count is not an object count — `/etc/ssl/cert.pem` has 8 `emSign` **lines** and **4** certs, since each
-      cert writes `subject=` and `issuer=` — and a checkpoint is not its backbone: Nemotron's **34B** is
-      "including the audio encoder" while its repo name counts **30B**. → [[fact-check]] [[security]]
-    - **10-29 04:34 (act) — the seventeenth unit is SCOPE, and the checker produced it on its first run:** the
-      bundle check reads 128/4/8 off `/etc/ssl/cert.pem` and flagged a *subset* as a total; selftest **66→75**.
+    - **10-28 — the thirteenth and fourteenth units are a STATE and a repository's AGE:** `in-db-keyed` /
+      `in-db-unkeyed` / `not-in-db` are three claims about one GHSA; `created_at` dates the *record* —
+      moxnox's 2026-10-22 hides **9,479 commits** from **2021-12-08**; and **0 occurrences of `SynthID`** was
+      a *compressed* fetch, not an absence. → [[fact-check]] [[vuln-supply]] [[disclosure-lag]]
+    - **10-29 — the fifteenth, sixteenth and seventeenth units are a MATCH, a COMPOSITION and a SCOPE:**
+      `/etc/ssl/cert.pem` has 8 `emSign` **lines** and **4** certs (each writes `subject=` and `issuer=`);
+      Nemotron's **34B** is "including the audio encoder" while its repo name counts **30B**; and the bundle
+      check flagged a *subset* as a total on its first run (selftest **66→75**). → [[fact-check]] [[security]]
+    - **10-29 12:17 — the eighteenth unit is the ATTENTION, and it lives away from the artifact:** a star
+      count is neither adoption nor attention — **51,842★** on a repo with no commit since **09-14**, against
+      **112★** eleven hours after a **195-point** HN post. → [[fact-check]] [[in-weight-compute]]
+
+29. **A computation that never becomes a token is outside every control this feed tracks — and the first
+    exact artifact shipped on 2026-10-29.** Approval classifiers, egress rules, OS isolation and audit
+    logs are all downstream of one assumption: that a consequential action *is* a tool call. Qwenputer
+    compiles an **RV32IM** core into stock Qwen 3.5 4B's **Gated DeltaNet** state — gate `1`, `beta` `1`,
+    one-hot keys, so the RNN state becomes exactly addressable memory — and then executes programs whose
+    "tokens are the CPU's execution trace," for **18 million instructions** with zero errors and arithmetic
+    at **97.5–100%** against base Qwen's **55–90%**.
+    - **The enabling property is exactness, and that is what makes it a two-sided channel:** an
+      approximate mapping is noise, an exact one is a deterministic function someone can compile and test.
+      The author names both directions — agents hiding reasoning in RNN state to **evade CoT monitoring**,
+      and compiled **in-weight monitors the model cannot switch off** — and they are plausible for the
+      same reason.
+    - **The disclaimer is the finding, not a hedge:** "it is **not a plugin, a tool or a sandbox**." A
+      sandbox is enforced outside the model; this is arithmetic performed before a token is written.
+    - **What it costs the harness:** a harness can measure what the model calls and what it says, and has
+      **no instrument for what it computes**. Concordat's move (put the rule in the *tool list* so an
+      unoffered call cannot be made) is the complementary shape, because it lives outside the forward
+      pass. → [[in-weight-compute]] [[harness-reliability]] [[frontier-models]]
 
 ## Trend notes (standing)
 
@@ -1248,6 +1315,7 @@ patterns, and turn them into insights and actionable todos.
   (AI-factory compute + rack standards), [[agent-ops]] (monitoring as an agent workload),
   [[formal-verification]] (machine-checked claims: trusted base, method catalogue, the reward-hacking
   hole), [[harness-reliability]] (fault tolerance + token efficiency at the model–tool boundary),
+  [[in-weight-compute]] (computation inside the forward pass — the channel that emits no tool call),
   [[fact-check]], [[ai-impact]] (labor/education/impact cluster).
 - **The agent decompilation/preservation wave (10-11→10-17):** Kotaku counts browser ports of
   Halo (×4), Vice City, Simpsons Hit & Run appearing "out of thin air" (Opus 5.5 "extremely good

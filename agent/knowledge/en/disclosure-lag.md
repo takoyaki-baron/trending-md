@@ -1290,3 +1290,51 @@ set — say "last written in 2025" rather than "the catalog flags EOL products".
 → [[vuln-supply]] [[fact-check]] [[security]]
 
 Sources: [CISA KEV catalog (2026.10.27, 1,760 entries)](https://www.cisa.gov/sites/default/files/feeds/known_exploited_vulnerabilities.json) · [CVE-2022-22706 on NVD](https://nvd.nist.gov/vuln/detail/CVE-2022-22706) · [c4psu13/mali-pagecache-root](https://gitlab.com/c4psu13/mali-pagecache-root)
+
+## 2026-10-29 — `version-satisfies-advisory-artifact-vulnerable`: the fix can be vendored *inside* the release
+
+The states so far all compare two documents — the record and the fix's own artifact. This one is
+different: the artifact is built, shipped, publicly named, **and above the fixed version**, and it is
+still vulnerable, because the patched component is *vendored inside* the release rather than *named
+by* it. A version range cannot see it.
+
+**The case (Alpine Linux's GitLab, CVE-2026-97229).** A **CVSS 3.1 10.0** unauthenticated RCE,
+`AV:N/AC:L/PR:N/UI:N/S:C/C:H/I:H/A:H`, **CWE-190**; "a specially crafted regular expression in a
+CI/CD configuration" let an unauthenticated user execute code on the server. Affected
+**19.2 < 19.2.8, 19.3 < 19.3.5, 19.4 < 19.4.2**; GitLab published fixed releases **12 October**. The
+underlying bug is in **Onigmo**, the regex engine built into Ruby — so GitLab's fix is "a set of
+patches to the Ruby that GitLab bundles in its own packages and container images," and upstream Ruby
+shipped it on **23 October** in **3.3.13 / 3.4.12 / 4.0.9**.
+
+Alpine ran a newly registered attacker's configs on **20–21 October** (GitLab workers crashed **8**
+times, the attacker "partway through the exploit" in **4**, and the attacker downloaded Alpine's own
+GitLab container image — "which suggests they were tuning the exploit to our exact build"), upgraded
+to **19.3.6** on the 22nd, found on the **26th** that it was **still vulnerable**, closed GitLab to
+everyone but developers on the 27th, and rebuilt from scratch — every password reset, GitLab's secret
+keys replaced — on the 28th.
+
+**19.3.6 is above the fixed 19.3.5**, so every version-number check a scanner performs passes. The
+sentence to carry out is Alpine's own: "**If you run GitLab with your own Ruby (from source or in
+your own container image) rather than GitLab's packages, upgrading GitLab is not enough.**"
+
+**Why it is a new state and not a variant of the existing ones.** `fix-in-source-no-artifact` (EDK2)
+is *fix present, artifact never built*; `fix-then-record` is *artifact built, paperwork late*. Here the
+artifact exists, is correctly named, and contains the defect — the range and the bytes disagree, and
+the range is the field every consumer reads. **Consequence for the tool:** a version range answers "is
+my version in the advisory" and says nothing about "is the defect in my artifact"; for a vendored
+component the product range must be joined to the *component's* release line, not just the product's.
+
+**Provenance, verified first-hand 2026-10-29 12:19** with `nvd-provenance.mjs`: `[Analyzed]`, **1
+metric, 0 NVD-scored**, `3.1 Secondary/cve@gitlab.com 10` — the **endorsement case** again, where
+`Analyzed` means NVD read it and re-served the CNA's number. Third distinct instance in the library.
+
+**The negative findings are stated as limits, not as a clean bill of health** — and they belong in the
+note, because they are what makes the rebuild correct rather than cautious: "A successful exploit
+would leave no crash and no trace in the web logs"; "Some logs from the attack day are gone"; "We had
+no logging of outbound network connections, and our hosting provider keeps none either." The
+verification method that answers it is the transferable part: aports commits checked against "a
+developer's clone and all **45 builders**" — not against the server the attacker may have owned.
+
+→ [[vuln-supply]] [[fact-check]] [[security]]
+
+Sources: [Alpine Linux — GitLab security incident, CVE-2026-97229](https://alpinelinux.org/posts/GitLab-security-incident-CVE-2026-97229.html) · [CVE-2026-97229 on NVD](https://services.nvd.nist.gov/rest/json/cves/2.0?cveId=CVE-2026-97229) · [HN discussion](https://news.ycombinator.com/item?id=50282544)

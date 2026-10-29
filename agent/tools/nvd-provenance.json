@@ -1179,6 +1179,26 @@
       "id": "CVE-2026-112362",
       "why": "@fastify/express 4.0.5-4.0.8 middleware auth bypass with ignoreDuplicateSlashes; fix-of-a-fix after GHSA-6hw5-45gm-fj88",
       "seeded": "2026-10-29 [Awaiting Analysis] 3.1 Secondary/ce714d77-… 9.1, CWE-436, published 2026-10-27"
+    },
+    {
+      "id": "CVE-2026-41709",
+      "why": "VMware ESX insufficient logging 2.7 (Low) in VMSA-2026-0006.2 — KEV-added 2026-10-28 on CISA-ADP SSVC exploitation:active, the lowest score in a 2.7–9.8 advisory",
+      "seeded": "2026-10-29 [Undergoing Analysis] 3.1 Secondary/security@vmware.com 2.7, CWE-778, published 07-30, KEV 10-28"
+    },
+    {
+      "id": "CVE-2026-86400",
+      "why": "Dell PowerProtect Data Domain 9.8 unauthenticated remote root, DSA-2026-416 — CNA-assigned, NVD unanalyzed",
+      "seeded": "2026-10-29 [Awaiting Analysis] 3.1 Secondary/security_alert@emc.com 9.8, CWE-287, published 10-28"
+    },
+    {
+      "id": "CVE-2026-86397",
+      "why": "Dell PowerProtect Data Domain 9.8 privileged account creation, same DSA-2026-416 batch",
+      "seeded": "2026-10-29 [Awaiting Analysis] 3.1 Secondary/security_alert@emc.com 9.8, CWE-862, published 10-28"
+    },
+    {
+      "id": "CVE-2026-90717",
+      "why": "Dell Data Domain Management Center 9.1 PR:L/S:C, 'could impact other managed Data Domain systems'",
+      "seeded": "2026-10-29 [Awaiting Analysis] 3.1 Secondary/security_alert@emc.com 9.1, CWE-290, published 10-28"
     }
   ]
 }

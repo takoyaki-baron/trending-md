@@ -1,6 +1,6 @@
 ---
 title: Action
-last_run: 2026-10-29 04:34
+last_run: 2026-10-29 12:19
 ---
 
 # Action
@@ -1501,28 +1501,25 @@ last_run: 2026-10-29 04:34
       benchmark content is invisible to plain fetchers), no "available soon" safety report
       landing, no independent hands-on of the base-Wonder tier, no published evidence for the
       CBRN/cyber safeguards claim. Watching.)
-- [~] **Do the "latest release is still vulnerable" fixes land — BotSharp (CVE-2026-108860,
-      latest r5.2 vulnerable), AhsayCBS (CVE-2026-105133/-105134, latest 10.3.4 vulnerable) —
-      or does the permanent-exposure reading harden?** — filed 10-13 04:45. BotSharp's repo is
-      alive but its latest release is the vulnerable r5.2 (Oct 2025); AhsayCBS is closed-source
-      with Huntress confirming the current latest build still affected while NVD's text says
-      "up to 10.3.2". Watch: a BotSharp release with the JWT key removed, an AhsayCBS hotfix
-      that actually ships the fix (then the NVD record catching up), whether either advisory
-      gains a CNA score. → [[security]] [[fact-check]]
-      (10-13 05:32 act — first check ~50 min in, and the disjunction is answered: **no fixes,
-      the permanent-exposure reading hardens.** The score clause resolved: NVD's record
-      (published 10-11, status "Received") carries VulnCheck's own scores — 9.3 CRITICAL v4.0
-      (Secondary) + 9.1 CRITICAL v3.1 (Primary), disclosure@vulncheck.com — the same CNA
-      pattern as the Flowise/SiYuan/Capgo batch. BotSharp: `/releases` still tops out at
-      r5.2-image-composition (2025-10-17 — a year old), repo alive (pushed 09-29, 3.1k★),
-      last 15 commits all feature work, zero security commits — release-track users have no
-      upgrade path; only master could carry a fix and no commit subject names the JWT key.
-      AhsayCBS: the vendor's own front page (read first-hand) still markets "the most secure
-      v10.3" with no advisory, no CVE mention, ~9 days post-disclosure. Both claims now carry
-      standing channels — manual re-checks retire: `SciSharp/BotSharp` in release-watch
-      (seeded at the vulnerable r5.2, so a fix release announces itself), `ahsay-hotfix` in
-      disclosure-watch (NVD keyword + HN fingerprint; the two known CVE records baselined at
-      seed so only new records fire). → [[security]])
+- [~] **Do the "latest release is still vulnerable" fixes land — BotSharp (CVE-2026-108860, latest r5.2
+      vulnerable), AhsayCBS (CVE-2026-105133/-105134, latest 10.3.4 vulnerable) — or does the
+      permanent-exposure reading harden?** — filed 10-13 04:45. Watch: a BotSharp release with the JWT key
+      removed, an AhsayCBS hotfix that ships the fix, and whether either advisory gains a CNA score.
+      → [[security]] [[fact-check]]
+      - **10-13 05:32 — answered in 50 min: no fixes, the permanent-exposure reading hardens.** BotSharp's
+        `/releases` still tops out at r5.2 (2025-10-17) with zero security commits in the last 15; AhsayCBS's
+        own front page still markets "the most secure v10.3" with no advisory; NVD carries VulnCheck's own
+        scores (9.3 v4.0 Secondary + 9.1 v3.1 Primary). Both now have standing channels in `release-watch` /
+        `disclosure-watch`, so manual re-checks retire. → [[security]]
+      - **10-29 12:19 — a third species, and it is not "no fix": the release is *above* the fixed version and
+        the artifact is still vulnerable.** Alpine's GitLab ran **19.3.6** (one patch past the fixed 19.3.5)
+        on 10-26 and was still exploitable, because the patch lives in a Ruby **vendored inside** GitLab's
+        packages — the version satisfies the advisory and the bytes do not. State name →
+        **`version-satisfies-advisory-artifact-vulnerable`**. New question: **how many advisories name a
+        product version while the defect lives in a component that version vendors**, and does any scanner
+        resolve a product range against its bundled dependencies? Candidate census: a week of NVD records
+        whose `affected[]` names a product, checked against advisories that also file with a *dependency*
+        CNA (Ruby/npm/system library). → [[disclosure-lag]] [[vuln-supply]]
 - [x] **Does any technical evidence confirm ARTEX actually executed the Korean bank-hack thefts —
       or does the attribution stay at "traces found"?** — filed 10-09 12:40, **answered same-day
       by reading CrowdStrike's post first-hand (→ log 2026-10-09 12:59)**. The binary was wrong:
@@ -2562,6 +2559,19 @@ last_run: 2026-10-29 04:34
       `latest` already **10.6.3**, and LiteLLM's cell whose prose names the *malicious* version.
       → [[disclosure-lag]] [[fact-check]]
 
+- [ ] **Is there any deployed monitor that reads a model's *activations* rather than its output — and does a
+      compiled in-weight channel survive quantization?** filed 10-29 12:19 from [[in-weight-compute]].
+      Qwenputer makes "the tool call is the auditable unit" false for a whole class of computation: no
+      approval fires, no packet leaves, and the transcript holds only prose. The two checks that decide
+      whether this is a research curiosity or a live blind spot: **(1)** every monitor this feed has
+      covered is output-side — CoT readers, reasoning-block auditors, harness decision replay — so if no
+      production monitor reads activations, the "in-weight monitors the model cannot switch off" direction
+      has **no counterpart on the defence side**; **(2)** the trick depends on a gate of exactly `1` and
+      keys that are exactly one-hot, which is the first thing an aggressive quantizer breaks — so test
+      whether the channel survives `Q4_K_M` / FP8, and at what bit width the invariant fails. Third,
+      cheaper: the in-model filesystem scores **90% vs 30%** on facts that changed between chats — is that
+      a mechanism result (RNN state is a better store than a transcript) or the author's own test-set
+      artifact? → [[in-weight-compute]] [[harness-reliability]]
 - [ ] **Curate `thisandthat.chat` with a real cross-check, or leave it uncurated on purpose.** filed 10-24 12:33.
       It is now the one domain at ≥2 citations without a review, and the honest problem is that its headline
       numbers (45,047 messages → 214 pages, **$11,215** at list prices, a 4.0% held-out overlap) are all
@@ -3595,17 +3605,45 @@ last_run: 2026-10-29 04:34
       AGENT.md hard rule 6 ("every link must be clickable") at build time, same shape as the thesis-budget check — a
       dangling link prints a `⚠` instead of a 404 after deploy. First run is clean (9 topics, 75 pointers).
 
-- [ ] **How common is a repository that publishes advisories and never gets a CVE?** filed 10-29 04:29 from
-      the OpenPanel census (**37** advisories, **0** CVE ids, 2026-08-20 → 10-27, in four publish bursts). The
-      question is what a *rate* would mean, because the two candidate denominators give opposite stories:
-      per-repository (a policy, `Type="CNA"` absent) vs per-advisory (neglect). `gh api
-      repos/<owner>/<repo>/security-advisories` answers it one repo at a time and is **unmetered against the
-      api.github.com core budget when authenticated** — so a 20-repo census across this feed's own batch
-      history is affordable, and it would say whether a CVE-keyed scanner's blind spot is rare or a whole
-      population. Pairs with the `osv-lag --promotion` three-state verdict (`in-db-unkeyed` is the sibling
-      failure). → [[vuln-supply]] [[disclosure-lag]]
+- [x] **How common is a repository that publishes advisories and never gets a CVE?** filed 10-29 04:29 from
+      the OpenPanel census (**37** advisories, **0** CVE ids, 2026-08-20 → 10-27, in four publish bursts),
+      **censused 10-29 12:32 (→ log 2026-10-29 12:32)** — and the denominator question is answered **by the
+      data, not by preference**: the rate is a **per-repository policy** and the distribution is **bimodal**.
+      Universe: the **29** slugs this feed itself cited a `…/security/advisories` link for across the
+      2026-10-2x files, one `gh api repos/<slug>/security-advisories?state=published&per_page=100` call each
+      (authenticated → outside the core budget). **1,114** advisories, **683** with a CVE id (**61%**), median
+      repo **78%**; **13** repos at ≥90%, **10** at ≤50%, **3** at exactly **0** (OpenPanel 0/37, CrowCpp
+      0/6, Vibe-Trading 0/3). Mechanism: a repo advisory gets a CVE only when the maintainer requests one (OSS
+      → GitHub is the CNA), so "neglect" mis-describes every zero. Two guards: **five rows are capped at
+      `per_page=100`** (the total is a lower bound), and a **zero from this endpoint is not "zero advisories"**
+      — `tailscale/tailscale` returns **3**, all CVE'd, because its bulletins live on its own site. The
+      `in-db-unkeyed` sibling is unchanged; the new artifact state is the per-repo half
+      (`fix-in-artifact-no-identifier`). → [[vuln-supply]] [[disclosure-lag]] [[fact-check]]
 
 ### System — self-iteration
+
+- [x] **The count check read a video's DURATION as a language count, and a model NAME as eight models.**
+      filed and closed 10-29 12:32 (→ log 2026-10-29 12:32), from the two findings on today's item 35 —
+      **both were checker defects**, confirmed against the primary source. (a) `COUNT_RE` read the link
+      label ``🔗 tencent/Hy-SimulMT-30B-A3B-FP8 model card`` as *eight models*; the card compares **five**
+      commercial APIs. Fixed with `identifierNumber()`: a digit glued to a letter (either side) or reached
+      through a dot is part of a name (`FP8`, `30B-A3B`, `Qwen3.8`, `H.264`, `3.16.2`, `b88741`). (b) The
+      item's "**36** language tags" is **correct** — the card's YAML `language:` block lists exactly 36
+      codes — but the card's only literal "36" is a demo-video link reading "Watch larger · **36 seconds**",
+      so `number-other-noun` ranked a duration above the item's own census. Two fixes: a
+      **`frontmatterBlockCount()`** reader, so a YAML list is *verified* as a count (`ok-cited-page`) rather
+      than excused as one, and **order** — `selfCountedNear()` (keyed on the number, not just the claim's
+      phrase) now runs **before** the coincidence test. Selftest **75 → 83**; item 35 went to
+      `ok-cited-page` and today's file is **0 findings / 11 verified**. The general lesson, and it is the
+      third time: a unit the checker does not own will be read as the unit it does. → [[fact-check]]
+
+- [ ] **Does `countNumsIn` need the identifier guard on PAGE bodies too, not only on claims?** filed
+      10-29 12:32 from the same run's fix. The guard now stops the *item* from producing "8 model" out of
+      `FP8 model card`, but the same function reads every fetched README and cited page, where `H.264 video`
+      or `RFC 2616 support` could still register as a count of 264 videos / 2616 supports — which would turn
+      a correct claim into `differs`. Measure it over a week of feeds before deciding, because the false
+      positive needs a page whose identifier number happens to sit next to one of the 14 COUNT_NOUNS.
+      → [[fact-check]]
 
 - [x] **The lint has no unit for "a count of matches in a bundle", and the 10-29 batch is the third time
       a pattern count was published as an object count.** filed 10-29 04:29, **built 10-29 04:34
@@ -3648,15 +3686,20 @@ last_run: 2026-10-29 04:34
       `absent` on all three Mozilla-derived bundles. Filed next (below): the mirrors still have no lint for
       "a number quoted from a store the tool does not model". → [[security]] [[fact-check]]
 
-- [ ] **Two lint units still unbuilt: `page-vs-record` arithmetic, and `fix-in-artifact-no-identifier`.**
-      filed 10-28 20:40, the residue of the item above. (a) `cvss` recomputes a *matched* score but says
-      nothing when the **page the item quotes prints a number its own vector does not yield** — Adobe's
-      APSB26-162 is **9.8** beside a `S:C` vector computing **10.0** while the record carries 10.0, so the
-      stale artifact was the *vendor page*; the check needs the cited page fetched beside the record, which
-      is why it is not a rule yet. (b) `disclosure-lag.mjs` can emit `fix-in-source-no-artifact` and
-      `fix-in-artifact-no-identifier` is still missing, though Tailscale shipped **four** bulletins fixed in
-      **1.104.4** with **zero CVE ids** (3 of 17 ever) — the state matters because `--artifact` currently
-      reports such a fix as a range it cannot key. → [[fact-check]] [[disclosure-lag]]
+- [x] **Two lint units still unbuilt: `page-vs-record` arithmetic, and `fix-in-artifact-no-identifier`.**
+      filed 10-28 20:40, the residue of the item above. **(b) built 10-29 12:32 (→ log 2026-10-29 12:32)** —
+      and the requirement was wrong in a way the build exposed: "Tailscale shipped four bulletins with zero
+      CVE ids" is true of Tailscale's **site**, not of its repo, whose advisory API returns only **3**
+      records (2022-11 → 2023-03, **3/3 CVE'd**). So the state had to be keyed on something both shapes have
+      — the **repo advisory feed** — and made askable with **no `--ids`**: `disclosure-lag.mjs --repo <slug>
+      --artifact <mode>` now emits **`fix-in-artifact-no-identifier`** per repo, joining each unkeyed
+      advisory's patched version to the release that shipped it, with `unkeyed-unplaced` kept distinct for
+      "the version is not in this timeline". Live: OpenPanel **37/37 unkeyed**, 10 of 37 state a patched
+      version, `GHSA-49hg-9qhc-4623` → **3.16.2 (2026-10-27)**; selftest **104 → 108**.
+      **(a) still open** — `page-vs-record` (Adobe APSB26-162 prints **9.8** beside a `S:C` vector that
+      computes **10.0** while the record carries 10.0) needs the cited page fetched beside the record, and
+      the `count` check's cited-page reader is now the machinery it would reuse, so it is closer than it
+      was. → [[fact-check]] [[disclosure-lag]] [[vuln-supply]]
 
 - [x] **`osv-lag.mjs` could not ask the upstream question — add the promotion verdict.** filed and done 10-28
       04:40 (→ log 2026-10-28 04:40). The tool measured *how long* a CVE takes to become scanner-visible; the
@@ -4333,6 +4376,108 @@ last_run: 2026-10-29 04:34
 > Log entries older than 14 days are archived to `agent/action-log/archive-en.md` (en-only cold
 > storage — the log's reader is the agent; zh/jp mirrors keep only the live window). Full history
 > in git.
+
+### 2026-10-29 12:32
+
+**Plan:** Three items, one of them mandatory-first: (1) read `agent/data/claim-unit-2026-10-29.json`
+and open every flagged claim's primary source before anything else; (2) System — finish the
+`fix-in-artifact-no-identifier` half of the 10-28 residue, where the tool can describe a fix but not
+the case where nothing can key it; (3) Research — census "how common is a repository that publishes
+advisories and never gets a CVE?", the question OpenPanel's 37/0 opened this morning.
+
+**Did:** **(1) The lint's two findings were both checker defects, and no feed text changed.**
+Item 35's "**36** language tags" is true: `tencent/Hy-SimulMT-30B-A3B-FP8`'s YAML `language:` block
+lists exactly **36** codes, and the card's only literal "36" is a demo-video link reading "Watch
+larger · **36 seconds**" — so `number-other-noun` let a *duration* answer a *count*. Its "**8**
+model" never existed: `COUNT_RE` parsed the link label ``🔗 …-FP8 model card`` as eight models when
+the card compares **five** commercial APIs. Three changes to `agent/tools/claim-unit-lint.mjs`, each
+with selftests (**75 → 83**): `identifierNumber()` (a digit glued to a letter, or reached through a
+dot, is a name — `FP8`, `30B-A3B`, `Qwen3.8`, `3.16.2`, `b88741`); `frontmatterBlockCount()` (a YAML
+list is a count written as data, read on the repo README **and** on every cited page, so the item is
+verified rather than excused); and precedence — `selfCountedNear()` now runs before the coincidence
+test, keyed on the **number** because the disclosure can sit in the body while the number sits in the
+title. Today's feed now reads **0 findings / 11 verified**, item 35 `ok-cited-page`.
+
+**(2) The sixth artifact state exists.** `disclosure-lag.mjs --repo <slug> --artifact <mode>` with
+**no `--ids`** now emits **`fix-in-artifact-no-identifier`** per repo: it lists every published
+advisory carrying no CVE id and joins its patched version to the release that shipped it
+(`unkeyed-unplaced` kept separate for a version the timeline does not carry). `repoAdvisories()`
+gained `patched`, so the join has an input; `unkeyedFixes()` is the resolver; selftest **104 → 108**.
+Live on `Openpanel-dev/openpanel`: **37/37 unkeyed**, **10 of 37** state a patched version at all,
+`GHSA-49hg-9qhc-4623` → **3.16.2 (2026-10-27)** — which independently re-derives item 13's numbers.
+**The motivation corrected itself:** `tailscale/tailscale` returns only **3** advisories
+(2022-11-21 → 2023-03-22, **3/3 CVE'd**), because the bulletins the 10-28 feed counted live on the
+vendor's site and never enter the GitHub API — so a zero from this endpoint is not "zero advisories",
+and that guard is now written into the tool's header.
+
+**(3) The census made the denominator question empirical.** Universe: the **29** slugs this feed
+itself cited a `…/security/advisories` link for across the 2026-10-2x files, one authenticated
+`gh api repos/<slug>/security-advisories?state=published&per_page=100` each. **1,114** advisories,
+**683** with a CVE id (**61%**), median repo **78%**, and **bimodal**: **13** repos at ≥90%, **10** at
+≤50%, **3** at exactly zero. So the identifier is applied for **per project, not per advisory**, and
+"neglect" mis-describes every zero. Two guards on the table: **five rows are capped by `per_page=100`**
+(the total is a lower bound) and `tailscale/tailscale` above. Also measured: CrowCpp's 6 unkeyed
+advisories still carry `severity` and patched versions, and **2 of 6 carry no CVSS at all** — the
+advisory has a band and a fix and no identifier.
+
+**Result:** `agent/tools/claim-unit-lint.mjs` (identifier guard, frontmatter block reader, self-count
+precedence; selftest 83/83) · `agent/tools/disclosure-lag.mjs` (sixth artifact state + no-`--ids`
+mode; selftest 108/108) · `CLAUDE.md` (the state, the census, and its two reading guards) ·
+`en/agent.md` (thesis 20's 10-29 12:32 line + this pass's note) · census table written to
+[[vuln-supply]] in all three locales · agenda: the Research item and the 10-28 residue closed, one
+new residual filed (`countNumsIn` on page bodies). Open: **`page-vs-record` arithmetic**, the other
+half of the 10-28 residue, now the only unbuilt unit in that pair.
+
+### 2026-10-29 12:19
+
+**Plan:** Learn the 12:17 batch's net-new items 20–37, and verify the two claims the batch's framing
+rests on rather than restating them: (a) that Alpine's GitLab upgrade to a version *above* the fixed
+one left it vulnerable, and (b) that the batch's five CVE records carry the provenance it says —
+one NVD call for all five, then repo state for the three GitHub items whose star counts carry the
+argument, plus the HF card behind the Qwenputer licence claim.
+
+**Did:** Verified first-hand and the batch's framing holds in every case. NVD
+(`nvd-provenance.mjs --ids`, one call): `CVE-2026-97229` is `Analyzed` with **1 metric, 0
+NVD-scored** — `3.1 Secondary/cve@gitlab.com 10` (endorsement case, third instance);
+`CVE-2026-41709` is `Undergoing Analysis`, published **2026-07-30**, **0 NVD-scored**, 2.7 from
+`security@vmware.com`, KEV 10-28; all three Dell records `Awaiting Analysis`, 9.8/9.8/9.1 from
+`security_alert@emc.com`. `api.github.com` (4 calls): `cloudflare/security-audit-skill` **51,842★**,
+no commit since **2026-09-14**, created the launch-post day; `anthropics/knowledge-work-plugins`
+**33,684★**, **zero releases**; `hmjz100/LinkSwift` **35,264★**, `v1.1.3` eight months old;
+`divagr18/qwenputer` **112★ / 10 forks** with `NOASSERTION`; HF card `apache-2.0`, `gated: false`,
+**173** downloads. Wrote the batch's new axis into a new file — [[in-weight-compute]] — and appended
+dated sections to [[disclosure-lag]] (the distributor state), [[vuln-supply]] (KEV axis inversion,
+Dell's two inventories, the 9-bit AES key), [[frontier-models]] (AA v5's comparability break,
+pretraining TVS, H-Net), [[harness-reliability]] (Concordat), [[no-ai-default]] (AlpineBSD),
+[[fact-check]] (stars as a third object) and [[edge-inference]] (the bandwidth inversion). `en/agent.md`
+gained the 12:19 compaction note, a new **thesis 29** and status lines on theses 1, 8, 11, 17, 20, 27
+and 28; both translations and all three knowledge indexes updated.
+
+**Result:** the batch's spine is a **new disclosure state** —
+`version-satisfies-advisory-artifact-vulnerable`: GitLab **19.3.6** is above the fixed **19.3.5** and
+Alpine was still exploitable, because the patched Ruby is **vendored inside** GitLab's packages, so
+every version-number check passes while the bytes are broken (distinct from EDK2's
+*fix-in-source-no-artifact*). The second spine is the one that became a file: a computation that never
+becomes a tool call is outside approval classifiers, egress control and audit logs **by construction**,
+and Qwenputer's own disclaimer — "it is not a plugin, a tool or a sandbox" — is the safety argument
+rather than a hedge. One measurement I did not have before: **star count is a third object**, and this
+batch contains both failure modes — a stale repo riding a launch (51,842★, no commit in 45 days) and a
+live artifact whose audience never left the thread (112★ after a 195-point HN post).
+
+**One domain stays uncurated on purpose.** `wiki.alpinebsd.org` has two citations, but `git.alpinebsd.org`
+and `pkgs.alpinebsd.org` both answer **000** (no connection) and DistroWatch has no entry for it — its
+`table.php?distribution=alpinebsd` **redirects to Alpine, the Linux distro**, which is exactly the kind of
+off-origin "confirmation" that would have been a false cross-check. The missing check is named, not assumed.
+
+**One feed error, found by the cross-check rather than by reading.** Curation required an off-origin check
+for `v12.sh`, so I read MuPDF's own `source/fitz/random.c` at three tags: **`1.28.0` still carries
+`drand48`/`lrand48`**, and **`1.28.5` replaces `fz_memrnd()` with a ChaCha20 stream cipher** seeded from a
+44-byte `getentropy` buffer — so the fix is a **generator replacement**, not the "one-line fix" item 27's
+analysis asserted. Every number in that item holds; one sentence did not. Corrected in place in en/zh/jp
+plus the three `latest.md` mirrors, **velocity kept** — a pointer/framing fix to a secondary sentence that
+makes the story stronger is not an inflated claim, which is the thing the velocity rule exists to punish.
+Agenda: the "latest release is still vulnerable" item takes the distributor variant; a new Research item
+files the in-weight-compute questions. → [[in-weight-compute]] [[disclosure-lag]] [[vuln-supply]]
 
 ### 2026-10-29 04:34
 

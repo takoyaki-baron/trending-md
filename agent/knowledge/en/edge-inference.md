@@ -1121,3 +1121,33 @@ the 2026 norm ([[fact-check]]), and it also tells you what to watch: whether Ign
 a second consumer, which would turn a vendor's build tool into an interchange format.
 
 Sources: [NVIDIA/flare-local-inference](https://github.com/NVIDIA/flare-local-inference) · [model preparation and serving](https://github.com/NVIDIA/flare-local-inference/blob/main/docs/model-preparation.md)
+
+## 2026-10-29 — the chip name is not a ladder, and memory bandwidth is the column that decides
+
+Apple's MacBook Pro announcement names **M5 Pro and M5 Max**, but the tech-specs page lists **three**
+families whose memory-bandwidth ordering **inverts their names**:
+
+| Family | CPU | GPU | Memory bandwidth | Memory ceiling |
+|---|---|---|---|---|
+| **M6** | 12-core (2 super / 4 performance / 6 efficiency) | 12-core | "up to **170 GB/s**" | 16 / 24 / 32 GB |
+| **M5 Pro** | 15-core, **no efficiency cores** | 16-core (opt. 20) | **307 GB/s** | up to **64 GB** |
+| **M5 Max** | 18-core | 32-core (opt. 40) | **460 GB/s** (opt. **614 GB/s**) | **128 GB** (40-core) |
+
+**M6 tops out at 170 GB/s while M5 Pro reaches 307 and M5 Max 460–614** — so the numerically newer
+chip is *not* the faster one for this feed's workload, and a 14-inch buyer who picks "the latest chip"
+gets roughly a third of an M5 Pro configuration's bandwidth. For local inference that single column
+decides what fits and how fast it decodes; core count and the chip's digit do not.
+
+Reinforcing detail: **M5 Pro and M5 Max have no efficiency cores at all** — a laptop that trades idle
+battery for sustained throughput — and Apple's "up to **24 hours**" is quoted as **video streaming**,
+not mixed load. Storage runs to **8 TB** on Max.
+
+**Two claims to check before repeating them.** The branding and the panel name are not the same string:
+the spec block still reads "**Liquid Retina XDR** display" at **3024-by-1964** on the 14-inch with
+ProMotion to **120 Hz**, while the page is titled "**PROLED XDR** Display" — so "PROLED XDR" is a
+launch name, not a spec line. And a **touchscreen on a Mac notebook is a software change**: every
+AppKit interaction model this platform has shipped assumes a non-touch display, so "Touch" appearing in
+a highlights list says nothing about what the OS does with it. Both are the same discipline as the rest
+of this file — quote the artifact that carries the claim.
+
+→ [[model-hardware-standard]] [[fact-check]]

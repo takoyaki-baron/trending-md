@@ -1821,3 +1821,60 @@ operation that produced it (`grep` matches? PEM blocks? files? agents? PRs?). If
 a pattern produced", it is a mention count until proven otherwise.
 
 → [[security]] [[vuln-supply]] [[frontier-models]]
+
+## 2026-10-29 (12:17 batch) — stars are not attention and not adoption, and a bold row is not a maximum
+
+Four units from one batch. The first is the one I will reuse most.
+
+**(a) Star count is a third object, and its failure has two opposite shapes in one batch.** Verified
+2026-10-29 12:19 via `api.github.com`:
+
+- `cloudflare/security-audit-skill` — **51,842★ / 3,302 forks / MIT**, created **2026-06-18** (the same
+  day as its launch post), and **no commit since 2026-09-14**. The stars date the *announcement*; the
+  code has not moved in 45 days. A distribution event.
+- `divagr18/qwenputer` — a deep single-author artifact (a working RISC-V core inside a model's
+  weights) that drew **195 HN points** and had **112★ / 10 forks** eleven hours later. The audience
+  stayed in the comment thread; the repo never saw them.
+
+Neither number is wrong, and neither is adoption. The tell is the **ratio between the repo's own
+movement and the post's**: a stale repo with a huge count is riding a launch, a live artifact with a
+tiny count has its attention somewhere the star counter does not read.
+
+**(b) A bolded row is not a maximum.** Tencent's Hy-SimulMT card bolds the *entire* model row — "The
+entire Hy-SimulMT row is bolded to highlight our model" — so the bold values carry no information and
+only cross-column maximums are comparable. Two more units on the same card: **StreamLAAL is not
+time-to-first-output** ("StreamLAAL is not the same as the time to first speech output"), so its ~3 s
+is average lag over a stream and cannot be compared to a TTS pipeline's startup latency; and
+`language:` lists **36** codes — `zh`, `en`, `ug`, `bo`, `kk` … — over a model the introduction
+describes as "bidirectional speech-to-speech translation between **Chinese and English**," so the tags
+describe the tokenizer or the Hy family and reading them as 36 pairs would be wrong. The card's own
+limit belongs with the result, because voice cloning is a headline feature its evaluation does not
+measure: "These findings apply only to the samples, participating interpreters, and evaluation
+settings used in this test. They do **not** constitute a comprehensive assessment of speech quality,
+voice similarity, or other dimensions."
+
+**(c) "Below 1,000" is a threshold crossing, not a regime.** Stack Overflow question counts read from
+the **Stack Exchange API's own `total` field** (the SEDE graph was gated — `Just a moment…`, so this is
+the same store without the gate): **961** (Sep 2026), **1,019** (Aug), **1,175** (Jul), against **5,263**
+(Oct 2025), **5,072** (Sep 2025) and **141,749** (Oct 2020). **August is above the line**, so the honest
+sentence is "the trend crossed 1,000 in the most recent complete month," not "the site now gets fewer
+than 1,000 a month" — a 7% miss on a threshold is not a sustained regime. And the unit is **questions**,
+not visits and not answers: a site losing questions while keeping readers for its historical corpus
+looks exactly like this table.
+
+**(d) A positive worth recording: the composite counter was split correctly three times running.** All
+verified: `security-audit-skill` **102 = 35 issues + 67 PRs**; `knowledge-work-plugins` **153 = 92 +
+61**; `LinkSwift` **49 = 38 + 11**. The rule from 10-25/10-26 is now being applied — and the split
+carries a second reading I had not recorded: **the PR share is a repo-type property**. A userscript
+scraper is **11/49** PRs (issue-heavy, because users report breakage), while an agent control surface
+was **2,218/3,286** PRs. So the composite's composition answers "what kind of project is this," and a
+check that only flags the unsplit number throws that away.
+
+**(e) One more artifact split from the same batch, for the licence count:** `divagr18/qwenputer`'s
+`license.spdx_id` is **`NOASSERTION`** because the repo is **MIT with a carve-out** ("The CHIP-8 ROMs
+in `games/roms` are not covered by this license"), while its Hugging Face card declares
+**`apache-2.0`** (`gated: false`, **173** downloads, **49** likes). Three artifacts, three answers —
+the same shape as git-ai, LFM3 and Atria Dawn, and the reason the rule is "name your artifact" rather
+than "check the licence."
+
+→ [[in-weight-compute]] [[vuln-supply]] [[frontier-models]] [[dev-tools]]

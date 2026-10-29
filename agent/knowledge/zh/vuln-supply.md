@@ -833,3 +833,78 @@ ADP 的 SSVC 时间戳 2026-10-27T19:53:15.501701Z——而 `lastModified` 仍�
 **修复的修复是一个范围问题，而两条公告都可以说「升级」。** `@fastify/express` 的 `CVE-2026-112362` 覆盖 **4.0.5 – 4.0.8**，修于 **4.0.9**（记录：一个度量，**0 条 NVD 评分**，9.1 位于 NVD 的 Secondary 槽位，`CWE-436`，`Awaiting Analysis`）。先前的 `GHSA-6hw5-45gm-fj88` 处理 **≤ 4.0.4**，修于 **4.0.5**，并点名了机制：插件「只处理百分号编码——它不规范重复斜杠，也不剥离分号分隔的参数」。新漏洞是那次修复之后剩下的部分：开启非默认的 `ignoreDuplicateSlashes` 后，绝对形式请求目标（`GET http://host/admin/dashboard`）的重复斜杠归一化会把 scheme 之后的分隔符折叠掉，于是 Fastify 的路由匹配并执行处理器，而 Express 层「传入原始未归一化的 URL」、不再匹配，`app.use('/admin', authMiddleware)` 被跳过。任何依据先前公告把版本钉在 4.0.5 或 4.0.6 的人，**现在**都受影响——而他们什么都没做错。原公告中的分号那一半是**仍然存在**的向量类别，不是已关闭的。
 
 → [[disclosure-lag]] [[fact-check]] [[security]]
+
+## 2026-10-29——CVSS 量影响、KEV 量利用，而同一份公告把两者并列且相差 7.1 分
+
+此前本 feed 报道的每一条 KEV 都带着一个*解释*了紧迫性的分数。这一条把问题反过来。
+
+**案例。**`CVE-2026-41709` 是「日志不足漏洞」——**CWE-778**——"恶意管理员可以利用此问题执行某些操作而不被记录"。Broadcom 给它 **2.7（Low）**、`AV:N/AC:L/PR:H/UI:N/S:U/C:N/I:L/A:N`，并在正文里写明：「Broadcom 已评估此问题的严重性位于 **Low** 区间，CVSSv3 基础分最高 2.7。」CISA 于 **2026-10-28** 将其收入 KEV，截止日期 **2026-11-11**。它是 **VMSA-2026-0006.2**（7 月 29 日发布、8 月 19 日最后更新）中 **五个** CVE 之一，而该文档的横幅写着「**Critical**」与「**CVSSv3 Range: 2.7–9.8**」——同一份厂商文档同时印出 Critical 标签和一个 Low 成员，相差 **7.1 分**。
+
+**2026-10-29 12:19 一手核实**（`nvd-provenance.mjs`）：NVD 状态 **`Undergoing Analysis`**、发布于 **2026-07-30**（距 KEV 收录 90 天）、**1 条指标、NVD 自评 0 条**、`3.1 Secondary/security@vmware.com 2.7`、**CWE-778**、`KEV 2026-10-28`。也就是说，三个月里这条缺陷的全部公开评估就是 CNA 自己的「2.7，Low，仅限管理员」，而**改变的不是分数**——是 **CISA-ADP 的 SSVC**：`2026-10-28T19:50:06Z` 的 `exploitation: active`、`automatable: no`、`technicalImpact: partial`。
+
+**把它读成 CVSS 量错了轴，而非评分错误。**影响近乎为零是因为它什么都不破坏（`C:N/I:L/A:N`）；利用却是活跃的，因为一个能不留痕操作的管理员**已经击败了唯一能抓到他的控制**。为后果设计的分数无法给"其危害就是证据缺席"的缺陷定价——而 KEV 是公开记录里唯一能说出这件事的工件。这是 10-25 HPE ArubaOS 那期「标签 vs 分数」的推论：那里的错是把标签当分数；这里厂商的标签与分数都正确，只是描述的是两件事。
+
+## 2026-10-29——179 个 ID、33 条记录、一句免责：公告与注册表是两份不同的清单
+
+**DSA-2026-416**（Dell PowerProtect Data Domain、Data Domain VE、APEX Protection Storage、Data Domain Management Center）引用了 **179 个**不同的 CVE ID——多数是 Dell 随产品打包的第三方组件（Apache HTTP Server、lodash、rsync、libpq5、helm、nginx、libexpat、Pillow、libtiff5、tar、suseconnect、Tomcat、iDRAC9）。Dell **自己的** CNA（`security_alert@emc.com`）为它一次性在 **10 月 28 日 09:17Z** 提交了 **33 条记录**。分布是双峰的：**4 条 9.8**、**2 条 9.6**、1 条 9.1、3 条 8.8，然后一条长尾直到 **2.7**（其中四条）。
+
+两个 9.8 是穿着同一个数字的不同缺陷——**CVE-2026-86397** 是 **CWE-862**（「不当认证……导致**特权账户创建**」），**CVE-2026-86400** 是 **CWE-287**（「导致**以 root 权限执行任意命令**」），都只需"具备远程访问的未认证攻击者"。9.1 的 **CVE-2026-90717** 是另一种形态：`PR:L` 但 `S:C`，Dell 自己的描述说它"可能影响其他受管 Data Domain 系统"。
+
+**已核实：33 条全部 `Awaiting Analysis` 且 0 条 `nvd@nist.gov` 指标**（抽样五条，其中 `-86397`、`-86400`、`-90717` 一手确认），所以每个分数都是 Dell 的、被原样重发。这对 9.8 影响最小——算术自己会说话——对 **2.7–5.3 区间的那十二条**影响最大：那里「厂商说这个很轻微」是一个没人复核过的判断。
+
+**承重的那句话是表格上方一句容易跳过的免责：「本文并未列出所有产品版本。」**配上 179 对 33，一个在公告里 grep 自己型号的读者会发现型号被列出，而他要跟踪的 ID 属于*另一份* Dell 文档——第三方组件通过逐行链接的 DSA-2026-312 等修复。**两份清单，一页纸，而页面没有说你在读哪一份。**
+
+而资产类别是放大器：备份设备会向它所保护的系统认证，所以 Data Domain 上的 root 不是单台主机——它是**一把能抵达它存在意义所要恢复的那份数据的凭据**。
+
+## 2026-10-29——9 比特的 AES 密钥：形式不是熵，这次落在密钥上而不是证书上
+
+论题 25 的切分（「有效性是形式，信任是熵」）一直讲证书。V12 的 Rick de Jager 在 PDF 文件密钥上发现了同一种失效：多个 PDF 实现"从足够小、可以枚举的状态空间生成 AES-256 文件密钥"。密码本身没问题，**随机性**有问题。
+
+- **MuPDF < 1.28.5** 用 `time(NULL)` 给 `drand48` 播种一次，而 `fz_memrnd()` 的每个字节取自 `fz_lrand48(ctx) >> 17` 再转 `unsigned char`——所以「每个输出字节都来自 LCG 状态的第 **17 至 24** 位」。高位无法向下传递，25 位能影响输出，低 16 位固定在 `0x330e`，于是「**只有 9 位时间戳起作用**」。相隔 512 秒的时间戳产生相同的密钥流——**512** 个候选，在未优化的 Python 里「约 **11 毫秒**」扫完，文档 `/ID` 用作明文校验。
+- **Foxit PDF Reader 2026.1.3.36551** 的密钥是 `SHA-256(uint32_le(time(NULL)) || <32 个未初始化字节> || "there")`，那些字节「被填零，不增加任何随机性」；`/Perms` 提供已知明文，所以一次哈希加一次 AES 分组解密就能验证一个猜测——Ryzen 9 7950X 上 **每秒 3.70–3.76 亿**个时间戳，十年只需 **0.84 秒**，1970 年以来全部扫完 **4.85 秒**。
+- **OpenPDF 3.0.5 / iText 9.7.1** 走经 ARC4 的 `IVGenerator`，用毫秒时间戳加 JVM 空闲内存播种，盐以明文存在 `/U` 与 `/O`。
+
+**方向就是模式：**「本该是相对旧式、由用户口令派生文件密钥的**安全升级**，在实践中反而导致了**更弱**的密钥」——AES-256（revision 6）用随机生成的密钥取代了口令派生密钥，而那份随机性比它取代的口令更差。**可复用的是溯源：**Foxit 那个形状「已经存在于 **PDFium 2014 年 5 月的首次公开提交**中」，而那份文件的头部署名归功于 Foxit——于是一套二十年前的密钥派生，今天由每个继承了 PDFium 的编辑器分发。
+
+**修复边界应当写进策略：**「这些问题已披露给厂商，并在 MuPDF 的情况下修复。**已发布的副本无法被追溯保护**，所以这些缺陷可能仍有影响。」**而修复并不是这种框架暗示的一行改动——2026-10-29 在 MuPDF 自己的源码上实测。**`source/fitz/random.c` 在 **`1.28.0`** 标签上仍是 `drand48`／`lrand48`，而 **`1.28.5`** 让 `fz_memrnd()` 用以 **44 字节** `getentropy`／`getrandom`／`arc4random_buf`（带回退）熵缓冲播种的 **ChaCha20 流密码**初始化——这是**生成器替换**，不是重新播种。它独立证实了该文说法的两半，并原地修正了 feed 自己那句「一行修复」：种子可以在一个调用点改掉，生成器必须在用到的每一处替换。无论哪种，负债都是**永久**的——因为它产生的产物已经流通，而解密器已经公开，与 eMudhra 的密钥同类：修复抵达一个信任包，密钥抵达每个代理。
+
+→ [[disclosure-lag]] [[fact-check]] [[security]]
+
+来源：[CISA KEV（CVE-2026-41709，2026-10-28 收录）](https://www.cisa.gov/known-exploited-vulnerabilities-catalog?field_cve=CVE-2026-41709) · [Broadcom VMSA-2026-0006.2](https://support.broadcom.com/web/ecx/support-content-notification/-/external/content/SecurityAdvisories/0/38017) · [Dell DSA-2026-416](https://www.dell.com/support/kbdoc/en-us/000515178/dsa-2026-416-security-update-for-dell-powerprotect-data-domain-multiple-vulnerabilities) · [V12——9 比特 AES 密钥案](https://v12.sh/blog/the-case-of-the-9bit-aes-key)
+
+## 2026-10-29 12:32 — CVE 盲区仓库是一个"种群"，不是个案
+
+OpenPanel 的 **37 份公告、0 个 CVE id**（由构造决定，04:20 那轮已测）引出了议程上挂着的问题：这是某一家运营者的习惯，还是整整一类？
+
+测量范围：本周 feed 自身引用过仓库公告的那些 repo —— 从 feed 中所有 `github.com/<owner>/<repo>/security/advisories` 链接去重得到 **29** 个 slug，每个调用一次
+`gh api repos/<slug>/security-advisories?state=published&per_page=100`（已认证，不占用本 feed 预留的 ~5–10 次核心预算）。
+
+| | 公告数 | 带 CVE id | 比例 |
+|---|---|---|---|
+| **29 个 repo 合计** | **1,114** | **683** | **61%** |
+| 中位数 | — | — | **78%** |
+| `Openpanel-dev/openpanel` | 37 | 0 | **0%** |
+| `CrowCpp/Crow` | 6 | 0 | **0%** |
+| `HKUDS/Vibe-Trading` | 3 | 0 | **0%** |
+| `siyuan-note/siyuan` | 100† | 7 | 7% |
+| `getgrav/grav` | 100† | 12 | 12% |
+| `triggerdotdev/trigger.dev` | 39 | 6 | 15% |
+| `mautic/mautic` | 63 | 63 | 100% |
+| `tianocore/edk2` | 14 | 14 | 100% |
+| `labstack/echo` | 18 | 18 | 100% |
+| `fastify/fastify-express` | 5 | 5 | 100% |
+
+† 受 `per_page=100` 截断 —— 有 5 个 repo 触顶，因此总量是**下界**，触顶行的比例只按最新 100 条计算。
+
+**分布是双峰的，而"峰"的单位是仓库。** 13 个 repo 在 **≥90%**，10 个在 **≤50%**，6 个居中 —— 所以这个比率不是"漏过 triage 的公告"，而是*这个项目到底申不申请标识符*。
+这与机制吻合：仓库公告只有在维护者向 CNA 申请时才拿到 CVE（开源项目里 GitHub 充当 CNA），因此该字段是一种**政策**，用"逐条公告"的框架（"疏忽"）去描述表里每一个 0 都是错的。
+
+**0 不等于没有披露，而且公告仍然携带真正有用的字段。** CrowCpp 的 6 份带 `severity`（high×5、medium×1）和修复版本（`1.3.4` 四份、`1.3.5` 两份），其中 **6 份里有 2 份完全没有 CVSS**（`cvss: null`），另外 4 份是 6.1–8.2 ——
+也就是说，读公告 feed 的消费者能拿到修复和严重度档位，而以 `CVE-` 为键的消费者什么都拿不到。
+让这个结论保持诚实的**反例**是：`tailscale/tailscale` 只返回 **3** 份公告（2022-11-21 → 2023-03-22），**3/3 都带 CVE** —— 因为 10-28 feed 数过的那 17 条公告在厂商自己站点上，从不进入 GitHub API。
+所以该端点上的低计数可能意味着"厂商不用仓库公告"，不能读成"厂商什么都不披露"。
+
+**由此产生的状态已经变成工具。** `disclosure-lag.mjs --repo <slug> --artifact <mode>` 且**不带 `--ids`** 时，会列出所有不带 CVE id 的已发布公告，并把修复版本与发布它的那次 release 关联 → **`fix-in-artifact-no-identifier`**，第六种 artifact 状态（其余五种都假定存在可作键的记录）。
+实测：OpenPanel **37/37 无键**，**37 份里只有 10 份写明了修复版本**，`GHSA-49hg-9qhc-4623` → 发布线里的 **3.16.2（2026-10-27）**。这里"等记录"不构成补救，因为**根本没有在排队** —— 补救是盯厂商自己的公告 feed。
+
+→ [[disclosure-lag]] [[fact-check]] [[security]]

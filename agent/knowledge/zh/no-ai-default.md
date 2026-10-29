@@ -122,3 +122,29 @@ generative AI*?"——而他的范围很精确："I'll not be a part of this"，
 
 来源：[debian-devel — "I will no longer upload to NEW"](https://lists.debian.org/debian-devel/2026/10/msg00263.html) ·
 [后续讨论串](https://lists.debian.org/debian-devel/2026/10/msg00289.html)
+
+## 2026-10-29——溯源规则变成包管理器里的*依赖约束*
+
+此前的执行谱系是合并闸门 → 贡献禁令 → 合同条款，每一层闸的都是**贡献者**。AlpineBSD 闸的是**产物**，由包管理器来执行——这是第一个能由工具检查、而不必由人读补丁队列的层级。
+
+**项目。**AlpineBSD 是建在 **NetBSD 内核**之上的操作系统，用户态「受 Alpine Linux 启发」——`apk-tools`、`busybox`、偏好 GNU make 而非 BSD make、以 `s6` 为 init、计划支持 OpenRC——其明确目标是「让使用**尽可能少的 AI 生成软件**成为可能」。
+
+**机制是仓库拆分，不是政策页面。**四个仓库容差不同：`base` 与 `main` 为「Clean」，`tainted` 为「Tainted」，`community` 装「Clean 和/或受污染的依赖」，且「**依赖在这张表上向上流动，所以 community 可以依赖 tainted，反之不行**」。定义是全覆盖的：凡「代码、文档、二进制或其他资产在任何部分包含生成式 AI 工具（如 LLM）的输出」，即视为**受污染**。
+
+**三个元数据标签，各自编码了一种许可证无法表达的区分：**
+
+| 标签 | 含义 | 为什么重要 |
+|---|---|---|
+| `genai:clean` | 任何地方都没有工具输出 | 正向断言 |
+| `genai:pinned` | 「钉在最后一个未受污染版本」 | **随时间变化的判定**——一个干净的包在下一次上游发布时可能变脏——没有任何许可证能表达，也没有任何 SBOM 字段承载 |
+| `genai:indirect-build` | 「经由构建期依赖的间接污染」 | 污染经**构建**输入传播，而不仅是运行时——多数供应链策略跳过这一区分 |
+
+`apk search` 可按标签过滤，而通过 `apk add` 安装间接受污染的软件「**会**产生」错误，除非显式点名（`apk add python3@tainted`）。于是策略在**安装时刻**机器可读，这正是消费者能真正采取行动的地方。
+
+**同一页上的限制，应与设计一起引用：**「AlpineBSD 是一个**进行中的工作**。目前**没有可用的安装器**」；硬件警告也很直白——NetBSD 内核「硬件支持零散，远不如 Linux。你不能指望 AlpineBSD 在任何一台随机电脑上工作」。
+
+**不可执行的边缘，应该在有人把它当作范本之前先点名：**规则度量的是**工具输出了什么**。经维护者审阅并重写的模型辅助产出算受污染；凭记忆写下模型建议的代码则不算。策略在包边界上可审计，在创作侧保持沉默——它的强项与漏洞是同一个性质：它只能看见产物，看不见意图。
+
+→ [[dev-tools]] [[fact-check]] [[security]]
+
+来源：[AlpineBSD wiki](https://wiki.alpinebsd.org/) · [AlpineBSD AI 政策](https://wiki.alpinebsd.org/ai-policy) · [HN 讨论（188 分）](https://news.ycombinator.com/item?id=50274251)

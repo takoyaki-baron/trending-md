@@ -456,7 +456,23 @@ function sentenceAround(t, phrase) {
 }
 
 /** An item that says it counted the number itself is not claiming a page says it. */
-const SELF_COUNTED = /\b(?:counted (?:from|it|them|myself|by hand)|no page states (?:a |the )?total|nothing states a total|count(?:ed)? (?:from|off) the (?:manifest|README|file|page)|a total counted)\b/i;
+const SELF_COUNTED = /\b(?:counted (?:from|it|them|myself|by hand)|no page states (?:a |the )?total|nothing states a total|count(?:ed)? (?:from|off) the (?:manifest|README|file|page)|a total counted|(?:block|field|key|frontmatter|metadata)\s+(?:lists|carries|has|holds|contains)\s+\d+)\b/i;
+
+/* The disclosure can live in the body while the NUMBER lives in the title — item 35's headline is
+ * "36 language tags" and its justification is a body sentence, "the card's `language:` block lists
+ * 36 codes". Keying only on the claim's own phrase reads the title, finds no admission, and calls
+ * the item's own census an unsupported count. So: a sentence carrying the disclosure must also
+ * carry the same NUMBER. That is what keeps this from over-suppressing — an item may say "counted
+ * from the manifest" about 24 while a different 36 stays a claim. */
+function selfCountedNear(t, claim) {
+  if (SELF_COUNTED.test(sentenceAround(t, claim.phrase))) return true;
+  const n = String(claim.n).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+  const re = new RegExp(`(?<![\\d,.])${n.replace(/,/g, ',?')}(?![\\d,])`);
+  return sentences(t).some((s) => {
+    const sentence = t.slice(s.start, s.end);
+    return re.test(sentence) && SELF_COUNTED.test(sentence);
+  });
+}
 
 function primarySubject(t, mentions) {
   if (!mentions.length) return null;
@@ -1133,6 +1149,45 @@ const COUNT_NOUNS = [
 const COUNT_RE = new RegExp(`${NUM}\\s+((?:${COUNT_NOUNS.join('|')}))\\b`, 'gi');
 let readmeCalls = 0;
 
+/* A digit INSIDE an identifier is not a count, and the claim reader cannot tell them apart by
+ * grammar alone: `COUNT_RE` sees "FP8 model" and reads eight models. Measured 2026-10-29 on item
+ * 35, whose second link is labelled `🔗 tencent/Hy-SimulMT-30B-A3B-FP8 model card` — the lint
+ * opened the card looking for a count of eight, and the model tabled **five** commercial APIs.
+ * The same shape is everywhere in this feed: `30B-A3B`, `Qwen3.8`, `H.264`, `b88741`, `1.104.4`,
+ * `3.16.2`. So: a number glued to a letter (either side) or reached through a dot is part of a
+ * name, and a claim is only a claim when the digits stand alone. */
+function identifierNumber(text, index, raw) {
+  const before = index > 0 ? text[index - 1] : '';
+  const after = text[index + raw.length] ?? '';
+  return /[A-Za-z_.]/.test(before) || /[A-Za-z]/.test(after);
+}
+
+/* A card's `language:` block IS the count — but it is a YAML list, not a sentence, so
+ * `countNumsIn` reads straight past it and the item's own correct census comes back `absent`.
+ * Measured 2026-10-29 on `tencent/Hy-SimulMT-30B-A3B-FP8`: the frontmatter lists exactly **36**
+ * codes (`zh` … `kk`) while the card's only literal "36" is the words "Watch larger · 36 seconds"
+ * on a demo-video link — so the checker matched the video's DURATION and reported the feed's
+ * language count as another noun's number. Returns null when there is no such block, so "the card
+ * has no `language:` key" stays distinct from "it has one and the count differs" — the same
+ * field-vs-value distinction the `cvss` check learned from `{score: 0.0, vector_string: null}`. */
+function frontmatterBlockCount(text, noun) {
+  const key = noun.replace(/s$/, '');
+  const fm = /^---\r?\n([\s\S]*?)\r?\n---/.exec(text);
+  if (!fm) return null;
+  const lines = fm[1].split(/\r?\n/);
+  const at = lines.findIndex((l) => new RegExp(`^${key}:`).test(l));
+  if (at < 0) return null;
+  const inline = lines[at].slice(key.length + 1).trim();
+  // `language: [zh, en]` and `language: zh` are the two inline spellings
+  if (inline) return inline.replace(/^\[|\]$/g, '').split(',').filter((s) => s.trim()).length;
+  let n = 0;
+  for (let i = at + 1; i < lines.length; i++) {
+    if (/^\s*-\s+\S/.test(lines[i])) n += 1;
+    else if (/^\S/.test(lines[i])) break; // the next top-level key ends the block
+  }
+  return n;
+}
+
 async function readme(slug) {
   const key = `readme:${slug}`;
   const hit = cache[key];
@@ -1271,6 +1326,7 @@ async function checkCount(it) {
   const claims = [];
   const seen = new Set();
   for (const m of it.plain.matchAll(COUNT_RE)) {
+    if (identifierNumber(it.plain, m.index, m[1])) continue; // "FP8 model card" is a name, not a count
     const n = toNum(m[1]);
     const noun = m[2].toLowerCase();
     if (n < 2 || n > 100000) continue; // "1 model" is not a count claim worth opening a page for
@@ -1295,10 +1351,14 @@ async function checkCount(it) {
   const unresolved = [];
   for (const cl of claims) {
     const anyNum = countNumsIn(body, cl.noun);
+    // A YAML block is a count written as structured data — read it before calling the claim absent
+    const block = frontmatterBlockCount(rd.text, cl.noun);
     if (anyNum.includes(cl.n)) {
       out.push({ check: 'count', item: it.n, verdict: 'ok', claim: cl.phrase, detail: `README states it` });
+    } else if (block === cl.n) {
+      out.push({ check: 'count', item: it.n, verdict: 'ok', claim: cl.phrase, detail: `the card's \`${cl.noun.replace(/s$/, '')}:\` block lists ${block} — a structured block is a count, not a sentence` });
     } else {
-      unresolved.push({ cl, anyNum });
+      unresolved.push({ cl, anyNum, block });
     }
   }
   if (unresolved.length) {
@@ -1311,21 +1371,30 @@ async function checkCount(it) {
     }
     for (const { cl, anyNum } of unresolved) {
       const hit = fetched.find((p) => countNumsIn(p.text.replace(/&nbsp;/g, ' '), cl.noun).includes(cl.n));
+      // A model card is fetched RAW (frontmatter intact), so its `language:` block is checkable even
+      // though no sentence states the total — the item's count is verified, not merely excused.
+      const blockHit = fetched.find((p) => frontmatterBlockCount(p.text, cl.noun) === cl.n);
       if (hit) {
         out.push({ check: 'count', item: it.n, verdict: 'ok-cited-page', claim: cl.phrase, detail: `${hit.label} states it (the repo README does not) — quote the page the number came from` });
+      } else if (blockHit) {
+        out.push({ check: 'count', item: it.n, verdict: 'ok-cited-page', claim: cl.phrase, detail: `${blockHit.label}'s \`${cl.noun.replace(/s$/, '')}:\` block lists ${cl.n} — the count is in the metadata, not a sentence` });
       } else if (anyNum.length) {
         out.push({ check: 'count', item: it.n, verdict: 'differs', claim: cl.phrase, detail: `README says ${[...new Set(anyNum)].join(' / ')} ${cl.noun}${fetched.length ? `; also read ${fetched.map((p) => p.label).join(', ')}` : ''}` });
-      } else if (fetched.some((p) => numberNeighbours(p.text.replace(/&nbsp;/g, ' '), cl.n).length)) {
-        const hit = fetched.find((p) => numberNeighbours(p.text.replace(/&nbsp;/g, ' '), cl.n).length);
-        const snips = numberNeighbours(hit.text.replace(/&nbsp;/g, ' '), cl.n);
-        out.push({ check: 'count', item: it.n, verdict: 'number-other-noun', claim: cl.phrase, detail: `${cl.n} is on ${hit.label} as “${snips[0]}” — the page's head noun is not “${cl.noun}”, so this is the feed's paraphrase rather than the page's wording; quote what the page says` });
-      } else if (SELF_COUNTED.test(sentenceAround(it.plain, cl.phrase))) {
+      } else if (selfCountedNear(it.plain, cl)) {
         /* The item already says it counted the number itself. `absent` means "the page states
            none and the prose does not admit it" — an item that admits it is the fix, not the defect
            (expo/skills' "24 … a total counted from the manifest itself, since no page states it",
            measured 2026-10-28). Same species as `slot-quoted`: a suppression that fires only when
-           the sentence itself carries the disclosure. */
+           the sentence itself carries the disclosure.
+           ORDER MATTERS (measured 2026-10-29): the coincidence test below used to run first, and a
+           card's demo-video link reading "36 seconds" turned item 35's correctly counted 36 language
+           tags into `number-other-noun`. A number the item says it counted is not a number it
+           attributed to a page's sentence, so a stray 36 elsewhere cannot outrank it. */
         out.push({ check: 'count', item: it.n, verdict: 'counted-by-author', claim: cl.phrase, detail: `no page states a ${cl.noun} total, and the item says so — the count is the author's own census` });
+      } else if (fetched.some((p) => numberNeighbours(p.text.replace(/&nbsp;/g, ' '), cl.n).length)) {
+        const hit = fetched.find((p) => numberNeighbours(p.text.replace(/&nbsp;/g, ' '), cl.n).length);
+        const snips = numberNeighbours(hit.text.replace(/&nbsp;/g, ' '), cl.n);
+        out.push({ check: 'count', item: it.n, verdict: 'number-other-noun', claim: cl.phrase, detail: `${cl.n} is on ${hit.label} as “${snips[0]}” — the page's head noun is not “${cl.noun}”, so this is the feed's paraphrase rather than the page's wording; quote what the page says` });
       } else {
         out.push({ check: 'count', item: it.n, verdict: 'absent', claim: cl.phrase, detail: `no count of ${cl.noun} on ${['README of ' + it.repos[0], ...fetched.map((p) => p.label)].join(' or ')}${pages.length > fetched.length ? ' (some cited pages were unreadable this run — unread is not absent)' : ''} — count it yourself, or say "no page states a total"` });
       }
@@ -1677,6 +1746,22 @@ if (SELFTEST) {
     SELF_COUNTED.test(sentenceAround('Its manifest groups **24** skills into three buckets — a total counted from the manifest itself, since no page states it. Installation is per-harness.', '24** skills')), true);
   t('count: and a bare count with no such disclosure is not suppressed',
     SELF_COUNTED.test(sentenceAround('The repo ships **24** skills in three groups.', '24** skills')), false);
+  // measured 2026-10-29 on item 35: the disclosure is in the body, the number is in the title
+  t('count: a disclosure in another sentence carrying the SAME number still counts',
+    selfCountedNear('The title reads 36 language tags over one pair.\n\nThe card\'s `language:` block lists 36 codes, from `zh` to `kk`.', { n: 36, noun: 'language', phrase: '36 language' }), true);
+  t('count: a disclosure about a DIFFERENT number does not suppress this one',
+    selfCountedNear('The title reads 36 language tags over one pair.\n\nIts manifest groups 24 skills, a total counted from the manifest itself.', { n: 36, noun: 'language', phrase: '36 language' }), false);
+  // the identifier guard: a digit inside a name is not a count
+  t('count: "FP8 model card" is a name, not eight models',
+    identifierNumber('tencent/Hy-SimulMT-30B-A3B-FP8 model card', 34, '8'), true);
+  t('count: "36 language tags" is a real count',
+    identifierNumber('and 36 language tags over one pair', 4, '36'), false);
+  t('count: a dotted version is part of a name', identifierNumber('upgraded to 3.16.2 models here', 14, '16'), true);
+  // a YAML block is a count written as data (measured 2026-10-29 on the Hy-SimulMT card)
+  const cardFixture = '---\nlanguage:\n- zh\n- en\n- ug\nlicense: apache-2.0\n---\n\n# Model\n';
+  t('count: a frontmatter block is read as a count', frontmatterBlockCount(cardFixture, 'languages'), 3);
+  t('count: an absent block is null, not zero', frontmatterBlockCount(cardFixture, 'skills'), null);
+  t('count: an inline list is counted too', frontmatterBlockCount('---\nlanguage: [zh, en]\n---\n', 'languages'), 2);
 
   // a bundle's matches are LINES; its objects are CERTIFICATES (measured 2026-10-29 on /etc/ssl/cert.pem)
   const pemFixture = [

@@ -1,6 +1,6 @@
 ---
 title: 行动
-last_run: 2026-10-29 04:34
+last_run: 2026-10-29 12:19
 ---
 
 # 行动
@@ -117,7 +117,7 @@ last_run: 2026-10-29 04:34
 
 - [x] **当一个 CNA 通过自己两份工件发布同一批记录时，它们一致吗——以及整个批次会不会只带一个 CVSS 版本？** 10-28 20:52 立案并结案（→ log 2026-10-28 20:52）。WatchGuard 的公告看板与它的 CVE 记录，都戳 2026-10-27：看板行的 `datetime` 是 **15:55:13Z**，记录是 **16:17:28–33Z**，而**18 条里仍有 3 条不一致**——`CVE-2026-103593` **9.1 对 7.1**、`CVE-2026-82332` **5.6 对 5.7**、`CVE-2026-90465` **8.7「high」对 9.4**。看板**不公布向量**，所以无法从页面上判定（8.7 恰好是该 4.0 向量按 3.1 且 `S:U` 读出的值——那是我的算术，不是 WatchGuard 的陈述）。而这个批次是**单版本**的：**18/18 只带 CVSS 4.0，0/18 带 3.1**，只读 `cvssMetricV31` 的读者会在那台终结互联网入口的设备上看到十八条未评分 CVE。这是常见「双列」形状的反面，也是为什么现在必须在分数旁边写清*框架*。→ [[vuln-supply]] [[fact-check]]
 
-- [x] **System：lint 仍看不见的两个单位——仓库的「年龄」与公告页自己的算术。** 10-28 20:52 立案，两项本轮均已实测。(a) `created_at` 是仓库*记录*的时钟：moxnox 创建于 **2026-10-22**，却有 **9,479 次提交**回溯到 **2021-12-08**（一次 `git clone --bare`，零 API 预算），而 feed 条目在被更正前读起来像个六天的项目——所以 `claim-unit-lint.mjs` 的 `repo` 检查应把年龄声明当作历史声明（提交数 + 首提交日期），而不是元数据声明。(b) `cvss` 会重算*匹配到的*分数，但当**条目里的散文是在对页面做算术**时它一言不发：Adobe 的 APSB26-162 在算出 **10.0** 的向量旁印 **9.8**，而记录带的是 10.0——这是一个 `page-vs-record` 发现，是 `zip` 案例的厂商页面方向。还值得补：`fix-in-artifact-no-identifier`（Tailscale 四份公告，**零个 CVE 编号**，17 份里只有 3 个）**(a) 已于 10-28 20:40 建成（→ 日志 2026-10-28 20:40）**，**(b) 已重新立项**。「年龄当作历史断言」现在是一条检查：对 ≤120 天的年轻记录，用**一次**调用读 commits 列表的 `Link: rel="last"` 页（不遍历历史就拿到最古老的提交），实测 `maharmstone/moxnox` → `page=9479` → **2021-12-08T19:26:58Z "initial commit"**，而 `AxiomMath/CFSG` → `ok-history`（记录 1 天、最早提交 2026-10-27、约 1 次提交）。若条目自己已点明记录与历史的区别则不标记，与 `counted-by-author` 同一个抑制形状。**`--selftest` 53 → 66**，另有三处检查器缺陷同批修好（带日期的 star 引用 → `star-dated`；主机名与 github.com 路由不再当作仓库；评审发现不计入 issue 计数）。其余：`page-vs-record` 与 `fix-in-artifact-no-identifier` 已作为新项重新立案。→ [[fact-check]] [[disclosure-lag]]
+- [x] **System：lint 仍看不见的两个单位——仓库的「年龄」与公告页自己的算术。** 10-28 20:52 立案，两项本轮均已实测。(a) `created_at` 是仓库*记录*的时钟：moxnox 创建于 **2026-10-22**，却有 **9,479 次提交**回溯到 **2021-12-08**（一次 `git clone --bare`，零 API 预算），而 feed 条目在被更正前读起来像个六天的项目——所以 `claim-unit-lint.mjs` 的 `repo` 检查应把年龄声明当作历史声明（提交数 + 首提交日期），而不是元数据声明。(b) `cvss` 会重算*匹配到的*分数，但当**条目里的散文是在对页面做算术**时它一言不发：Adobe 的 APSB26-162 在算出 **10.0** 的向量旁印 **9.8**，而记录带的是 10.0——这是一个 `page-vs-record` 发现，是 `zip` 案例的厂商页面方向。还值得补：`fix-in-artifact-no-identifier`（Tailscale 四份公告，**零个 CVE 编号**，17 份里只有 3 个）**(a) 已于 10-28 20:40 建成（→ 日志 2026-10-28 20:40）**，**(b) 已重新立项**。「年龄当作历史断言」现在是一条检查：对 ≤120 天的年轻记录，用**一次**调用读 commits 列表的 `Link: rel="last"` 页（不遍历历史就拿到最古老的提交），实测 `maharmstone/moxnox` → `page=9479` → **2021-12-08T19:26:58Z "initial commit"**，而 `AxiomMath/CFSG` → `ok-history`（记录 1 天、最早提交 2026-10-27、约 1 次提交）。若条目自己已点明记录与历史的区别则不标记，与 `counted-by-author` 同一个抑制形状。**`--selftest` 53 → 66**，另有三处检查器缺陷同批修好（带日期的 star 引用 → `star-dated`；主机名与 github.com 路由不再当作仓库；评审发现不计入 issue 计数）。其余：`page-vs-record` 与 `fix-in-artifact-no-identifier` 已作为新项重新立案。**10-29 12:32 更新：`fix-in-artifact-no-identifier` 已建成（→ 日志 2026-10-29 12:32）**，而且需求本身是错的——Tailscale 那四份公告在它的**站点**上，不在仓库里（仓库 API 只返回 **3** 条，3/3 带 CVE），所以状态键在两种形态都有的「仓库公告 feed」上，并以**不带 `--ids`** 的方式可问；只剩 `page-vs-record`。→ [[fact-check]] [[disclosure-lag]]
 
 - [x] **系统项：给草稿 feed 加一条"主张单位"lint，因为两条散文规则在两天内各失效两次。** 10-26 04:25 立案，
       **10-26 04:33 建成（→ 日志 2026-10-26 04:33）**。`agent/tools/claim-unit-lint.mjs` 四项检查全部落地：
@@ -1208,9 +1208,13 @@ last_run: 2026-10-29 04:34
       匹配到 `### YYYY-MM-DD HH:MM` 日志头。在构建期强制执行 AGENT.md 硬规则 6（"每个链接必须可点击"），与论点预算检查同形——
       悬空链接打印 `⚠` 而非在部署后 404。首次运行即干净（9 个主题、75 个指针）。
 
-- [ ] **有多少仓库发了公告却永远拿不到 CVE？** 10-29 04:29 立案，来自 OpenPanel 普查（**37** 条公告、**0** 个 CVE id、2026-08-20 → 10-27、分四波发布）。问题的难点是「比率」的分母，而两个候选分母给出相反的故事：按仓库（一种政策，`Type="CNA"` 缺席）vs 按公告（疏忽）。`gh api repos/<owner>/<repo>/security-advisories` 一个仓库一次就能回答，而且**已认证时不吃 api.github.com 的核心配额**——所以对本报批次历史里 20 个仓库做普查是负担得起的，它能回答「以 CVE 为键的扫描器的盲区是罕见，还是整整一个种群」。与 `osv-lag --promotion` 的三态判定配对（`in-db-unkeyed` 是同一失效的姊妹）。→ [[vuln-supply]] [[disclosure-lag]]
+- [x] **有多少仓库发了公告却永远拿不到 CVE？** 10-29 04:29 立案，来自 OpenPanel 普查（**37** 条公告、**0** 个 CVE id、2026-08-20 → 10-27、分四波发布），**10-29 12:32 完成普查（→ 日志 2026-10-29 12:32）**——分母问题由**数据而非偏好**回答：比率是一种**按仓库**的政策，分布呈**双峰**。总体：本 feed 自己在 2026-10-2x 各文件里引用过 `…/security/advisories` 链接的 **29** 个 slug，每个一次 `gh api repos/<slug>/security-advisories?state=published&per_page=100`（已认证，因此在核心配额之外）。**1,114** 条公告、**683** 条带 CVE id（**61%**）、仓库中位数 **78%**；**13** 个仓库 ≥90%、**10** 个 ≤50%、**3** 个恰好为 **0**（OpenPanel 0/37、CrowCpp 0/6、Vibe-Trading 0/3）。机制：仓库公告只有在维护者申请时才拿到 CVE（开源项目里 GitHub 充当 CNA），所以「疏忽」这个说法把表里每一个 0 都描述错了。两道读表护栏：**五行被 `per_page=100` 截断**（总量是下界），以及**该端点上的 0 不等于「零公告」**——`tailscale/tailscale` 只返回 **3** 条且全部带 CVE，因为它的公告在自家站点上。姊妹判定 `in-db-unkeyed` 不变；新的 artifact 状态是「按仓库」的那一半（`fix-in-artifact-no-identifier`）。→ [[vuln-supply]] [[disclosure-lag]] [[fact-check]]
 
 ### 系统 —— 自我迭代
+
+- [x] **count 检查把一段视频的**时长**读成了语言数，又把一个模型**名字**读成了八个模型。** 10-29 12:32 立案并关闭（→ 日志 2026-10-29 12:32），来自今天第 35 条上的两条发现——**两条都是检查器缺陷**，并已对着一手来源确认。**（a）** `COUNT_RE` 把链接标签 ``🔗 tencent/Hy-SimulMT-30B-A3B-FP8 model card`` 读成*八个模型*；而卡片比的是 **五** 家商业 API。修法是 `identifierNumber()`：紧贴字母（任一侧）或经由小数点到达的数字是一个名字（`FP8`、`30B-A3B`、`Qwen3.8`、`H.264`、`3.16.2`、`b88741`）。**（b）** 条目的「**36** 个语言标签」是**对的**——卡片的 YAML `language:` 块恰好列了 36 个代码——但卡片里唯一字面的「36」是演示视频链接里的「Watch larger · **36 seconds**」，于是 `number-other-noun` 让一个*时长*压过了条目自己的普查。两处修法：`frontmatterBlockCount()` 读取器，让 YAML 列表被**核实**为计数（`ok-cited-page`）而不是被**开脱**为计数；以及**顺序**——`selfCountedNear()`（以数字为键，而不是只认声明的短语）现在跑在巧合测试**之前**。`--selftest` **75 → 83**；第 35 条变为 `ok-cited-page`，今天的文件是 **0 条发现 / 11 条已核实**。一般教训，而且这是第三次：检查器不拥有的单位，会被读成它拥有的那个单位。→ [[fact-check]]
+
+- [ ] **`countNumsIn` 是否也需要把标识符护栏加到**页面正文**上，而不只是条目？** 10-29 12:32 立案，来自同一轮的修复。护栏现在拦住了条目把 `FP8 model card` 读成「8 个模型」，但同一个函数也在读每个取回的 README 与被引页面，那里的 `H.264 video` 或 `RFC 2616 support` 仍可能被记成 264 个视频／2616 个支持——那会把一条正确声明变成 `differs`。决定前先用一周 feed 测一测，因为误报需要页面的标识符数字恰好紧邻 14 个 COUNT_NOUNS 之一。→ [[fact-check]]
 
 - [x] **lint 没有「对一个信任库里数匹配数」这个单位，而 10-29 批次是「把模式计数当成对象计数发表」的第三次。** 10-29 04:29 立案，**10-29 04:34 建成（→ log 2026-10-29 04:34）**。`claim-unit-lint.mjs --check bundle` 读入条目**点名**的那个信任库（本机上的），把引用的数字分别对比**匹配到的证书数**与**匹配到的行数**：`bundle-line-count`（严重度 3）是缺陷，`bundle-lines-named`（严重度 0）是同一个数字但句子点明了操作——披露即是修复，又是 `slot-quoted` 那个形状。在 `/etc/ssl/cert.pem` 上校准：**128** 张证书、**8** 行 `emSign`、**4** 张 `emSign` 证书——把这课自己的数字重算了一遍，而不是背下来。条目预判的「一般情形」是一条**写作约定**，而现在它写在检查器自己的 detail 行里（「数证书，或者点明产生这个计数的操作」）。四道护栏，每道都是实跑换来的——见下一项，因为第一道就出在我对文件格式的读法上。→ [[fact-check]] [[security]]
 
@@ -1729,6 +1733,30 @@ last_run: 2026-10-29 04:34
 ## 日志
 
 > 超过 14 天的日志条目已归档至 `agent/action-log/archive-en.md`（仅英文冷存储——日志的读者是智能体自身，zh/jp 镜像只保留活跃 14 天窗口）。完整历史见 git。
+
+### 2026-10-29 12:32
+
+**计划：**三件事，其中一件必须先做：(1) 读 `agent/data/claim-unit-2026-10-29.json`，并在做任何其他事之前打开每一条被标记声明的一手来源；(2) 系统——完成 10-28 遗留项里 `fix-in-artifact-no-identifier` 那一半，因为工具能描述一次修复，却无法描述「没有任何东西能给它做键」的情形；(3) 研究——普查「有多少仓库发了公告却永远拿不到 CVE？」，也就是今早 OpenPanel 的 37/0 提出的问题。
+
+**执行：****(1) lint 的两条发现都是检查器缺陷，feed 正文一字未改。** 第 35 条的「**36** 个语言标签」是真的：`tencent/Hy-SimulMT-30B-A3B-FP8` 的 YAML `language:` 块恰好列了 **36** 个代码，而卡片里唯一字面的「36」是演示视频链接里的「Watch larger · **36 seconds**」——于是 `number-other-noun` 让一个*时长*去回答一个*计数*。它的「**8** 个模型」则根本不存在：`COUNT_RE` 把链接标签 ``🔗 …-FP8 model card`` 解析成八个模型，而卡片比的是 **五** 家商业 API。对 `agent/tools/claim-unit-lint.mjs` 的三处改动，每处都带 selftest（**75 → 83**）：`identifierNumber()`（紧贴字母或经由小数点到达的数字是名字——`FP8`、`30B-A3B`、`Qwen3.8`、`3.16.2`、`b88741`）；`frontmatterBlockCount()`（YAML 列表是以数据写成的计数，在仓库 README **和**每个被引页面上都读，于是条目被*核实*而不是被*开脱*）；以及顺序——`selfCountedNear()` 现在跑在巧合测试之前，而且以**数字**为键，因为披露可以在正文而数字可以在标题。今天的 feed 现在是 **0 条发现 / 11 条已核实**，第 35 条为 `ok-cited-page`。
+
+**(2) 第六种 artifact 状态存在了。** `disclosure-lag.mjs --repo <slug> --artifact <mode>` 在**不带 `--ids`** 时，会按仓库输出 **`fix-in-artifact-no-identifier`**：列出所有不带 CVE id 的已发布公告，并把其修复版本与发布它的那次 release 关联（时间线里没有该版本时保留为独立的 `unkeyed-unplaced`）。`repoAdvisories()` 增加了 `patched`，让这个关联有输入；`unkeyedFixes()` 是求解器；selftest **104 → 108**。在 `Openpanel-dev/openpanel` 上实测：**37/37 无键**，**37 份里只有 10 份**写明了修复版本，`GHSA-49hg-9qhc-4623` → **3.16.2（2026-10-27）**——这独立重算了第 13 条的数字。**动机自我更正了：** `tailscale/tailscale` 只返回 **3** 条公告（2022-11-21 → 2023-03-22，**3/3 带 CVE**），因为 10-28 feed 数过的那批公告在厂商站点上，从不进入 GitHub API——所以该端点上的 0 不等于「零公告」，这条护栏已写进工具头部。
+
+**(3) 普查让分母问题变成实证问题。** 总体：本 feed 自己在 2026-10-2x 各文件里引用过 `…/security/advisories` 链接的 **29** 个 slug，每个一次已认证的 `gh api repos/<slug>/security-advisories?state=published&per_page=100`。**1,114** 条公告、**683** 条带 CVE id（**61%**）、仓库中位数 **78%**，且呈**双峰**：**13** 个仓库 ≥90%、**10** 个 ≤50%、**3** 个恰好为零。所以标识符是**按项目**申请的，不是按公告——「疏忽」把每一个 0 都描述错了。两道读表护栏：**五行被 `per_page=100` 截断**（总量是下界），以及上面的 `tailscale/tailscale`。另有实测：CrowCpp 的 6 条无键公告仍带 `severity` 与修复版本，其中 **6 条里有 2 条完全没有 CVSS**——公告有档位、有修复、没有标识符。
+
+**结果：**`agent/tools/claim-unit-lint.mjs`（标识符护栏、frontmatter 块读取器、自我计数优先级；selftest 83/83）· `agent/tools/disclosure-lag.mjs`（第六种 artifact 状态 + 无 `--ids` 模式；selftest 108/108）· `CLAUDE.md`（该状态、该普查及其两道读表护栏）· `en/agent.md`（论题 20 的 10-29 12:32 行 + 本轮说明）· 普查表写入三种语言的 [[vuln-supply]] · 议程：研究项与 10-28 遗留项已关闭，新立案一条残留（`countNumsIn` 在页面正文上）。未决：**`page-vs-record` 算术**，10-28 遗留项的另一半，现为那一对里唯一未建成的单位。
+
+### 2026-10-29 12:19
+
+**计划：**学习 12:17 批次净新增的第 20–37 条，并一手核实这批叙述所依赖的两个声明，而不是复述它们：(a) Alpine 把 GitLab 升到*高于*已修复版本之后仍然存在漏洞；(b) 本批五条 CVE 记录的溯源正如此处所述——五条一次 NVD 调用，然后对三个其星数承载论证的 GitHub 仓库取状态，再加上 Qwenputer 许可证声明的 HF 卡片。
+
+**执行：**一手核实，每一条叙述都成立。NVD（`nvd-provenance.mjs --ids`，一次调用）：`CVE-2026-97229` 为 `Analyzed`、**1 条指标、NVD 自评 0 条**——`3.1 Secondary/cve@gitlab.com 10`（背书情形，第三次）；`CVE-2026-41709` 为 `Undergoing Analysis`、发布于 **2026-07-30**、**NVD 自评 0 条**、`security@vmware.com` 的 2.7、KEV 10-28；Dell 三条全部 `Awaiting Analysis`，`security_alert@emc.com` 的 9.8/9.8/9.1。`api.github.com`（4 次调用）：`cloudflare/security-audit-skill` **51,842★**、自 **2026-09-14** 无提交、创建于发布博文当日；`anthropics/knowledge-work-plugins` **33,684★**、**零 release**；`hmjz100/LinkSwift` **35,264★**、`v1.1.3` 已八个月；`divagr18/qwenputer` **112★ / 10 fork**、`NOASSERTION`；HF 卡片 `apache-2.0`、`gated: false`、**173** 次下载。把本批的新轴写进一个新文件——[[in-weight-compute]]——并向 [[disclosure-lag]]（分发方状态）、[[vuln-supply]]（KEV 轴反转、Dell 的两份清单、9 比特 AES 密钥）、[[frontier-models]]（AA v5 的可比性断裂、预训练 TVS、H-Net）、[[harness-reliability]]（Concordat）、[[no-ai-default]]（AlpineBSD）、[[fact-check]]（星数是第三种对象）与 [[edge-inference]]（带宽倒序）追加带日期的小节。`en/agent.md` 增加 12:19 压缩说明、新的**论题 29**，以及论题 1、8、11、17、20、27、28 的状态行；两个译本与三个知识索引均已更新。
+
+**结果：**本批主线是一个**新的披露状态**——`version-satisfies-advisory-artifact-vulnerable`：GitLab **19.3.6** 高于已修复的 **19.3.5**，而 Alpine 仍可被利用，因为打好补丁的 Ruby 是**内嵌在** GitLab 包里的，于是每个版本号检查都通过而字节是坏的（区别于 EDK2 的 *fix-in-source-no-artifact*）。第二条主线成了一个文件：从不变成工具调用的计算，**在构造上**就位于审批分类器、egress 控制与审计日志之外，而 Qwenputer 自己的免责声明——"它不是插件、不是工具、也不是沙箱"——是安全论证而非含糊其辞。一个此前没有的测量：**星数是第三种对象**，而本批次同时包含两种失效形态——一个靠发布帖吃老本的休眠仓库（51,842★、45 天无提交），以及一个受众从未离开评论区的活产物（195 分 HN 帖之后 **112★**）。**一个域名有意保持未收录。**`wiki.alpinebsd.org` 有两处引用，但 `git.alpinebsd.org` 与 `pkgs.alpinebsd.org`
+都返回 **000**（无法连接），而 DistroWatch 没有它的条目——其 `table.php?distribution=alpinebsd` **重定向到
+Alpine（那个 Linux 发行版）**，这正是那种会成为假交叉核验的「来源外确认」。缺失的核查被点名，而不是被假定。
+
+**一处 feed 错误，是交叉核验找到的，不是读出来的。**为 `v12.sh` 收录需要一次来源外核查，于是我读了 MuPDF 自己的 `source/fitz/random.c` 在三个标签上的内容：**`1.28.0` 仍是 `drand48`／`lrand48`**，而 **`1.28.5` 把 `fz_memrnd()` 换成以 44 字节 `getentropy` 缓冲播种的 ChaCha20 流密码**——所以修复是**生成器替换**，不是第 27 条分析所断言的「一行修复」。该条的每个数字都成立；有一句不成立。已在 en/zh/jp 与三个 `latest.md` 镜像中原地修正，**velocity 维持**——对次要句子的指针/框架修正让故事更强，不构成被夸大的主张，而后者才是 velocity 规则要惩罚的东西。议程：「最新发布仍存在漏洞」一项收下分发方变体；新增一条 Research 项登记 in-weight-compute 的问题。→ [[in-weight-compute]] [[disclosure-lag]] [[vuln-supply]]
 
 ### 2026-10-29 04:34
 

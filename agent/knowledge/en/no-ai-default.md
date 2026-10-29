@@ -148,3 +148,50 @@ abandoned as a proxy for "was it checked".
 
 Sources: [debian-devel — "I will no longer upload to NEW"](https://lists.debian.org/debian-devel/2026/10/msg00263.html) ·
 [follow-up thread](https://lists.debian.org/debian-devel/2026/10/msg00289.html)
+
+## 2026-10-29 — the provenance rule becomes a *dependency constraint* inside the package manager
+
+The enforcement spectrum so far ran merge-gate → contribution ban → contract term, and every tier
+gated the **contributor**. AlpineBSD gates the **artifact**, with the package manager doing the
+enforcing — which is the first tier that can be checked by a tool instead of by a human reading a
+patch queue.
+
+**The project.** AlpineBSD is an OS built on the **NetBSD kernel** with a userspace "inspired by
+Alpine Linux" — `apk-tools`, `busybox`, a preference for GNU make over BSD make, `s6` as init, OpenRC
+planned — whose stated objective is "making it possible to use **as little AI-generated software as
+possible**."
+
+**The mechanism is a repository split, not a policy page.** Four repositories with different
+tolerances: `base` and `main` are "Clean"; `tainted` is "Tainted"; `community` holds "Clean and/or
+tainted dependencies," and "**Dependencies flow upwards on this table, so community can depend on
+tainted, but not vice-versa**." The definition is total: anything whose "code, documentation,
+binaries, or other assets include, in any part, the output of a generative AI tool such as an LLM, is
+considered **'tainted'**."
+
+**Three metadata tags, and each encodes a distinction a licence cannot:**
+
+| Tag | Meaning | Why it is the interesting one |
+|---|---|---|
+| `genai:clean` | no tool output anywhere | the positive assertion |
+| `genai:pinned` | "pinned to the last non-tainted version" | a **time-dependent** verdict — a clean package can become tainted at its next upstream release — which no licence expresses and no SBOM field holds |
+| `genai:indirect-build` | "indirectly tainted via build-time dependencies" | taint propagates through **build** inputs, not only runtime ones — the distinction most supply-chain policies skip |
+
+`apk search` filters on the tag, and installing indirectly tainted software through `apk add` "will be
+produced as" an error unless you name it explicitly (`apk add python3@tainted`). So the policy is
+machine-readable **at install time**, which is where a consumer can actually act on it.
+
+**Limits on the same page, and they belong with the design:** "AlpineBSD is a **work in progress**.
+There is currently **no installer available**," and the hardware warning is blunt — the NetBSD kernel
+has "spotty hardware support, much less so than Linux. You cannot necessarily expect AlpineBSD to work
+on any random computer."
+
+**The unenforceable edge, named before anyone cites this as a model:** the rule measures **what a tool
+emitted**. Model-assisted work that a maintainer reviewed and rewrote is *tainted*; code a person
+wrote from memory of a model's suggestion is *clean*. The policy is auditable at the package boundary
+and silent at the authoring one — so its strength and its hole are the same property: it can only see
+artifacts, and it cannot see intent.
+
+→ [[dev-tools]] [[fact-check]] [[security]]
+
+Sources: [AlpineBSD wiki](https://wiki.alpinebsd.org/) · [AlpineBSD AI policy](https://wiki.alpinebsd.org/ai-policy) ·
+[HN discussion (188 pts)](https://news.ycombinator.com/item?id=50274251)

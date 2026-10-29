@@ -4580,3 +4580,104 @@ memory keeps, not the policy that kept it" — which means a memory design shoul
 preserves, not by the rule it follows.
 
 → [[harness-reliability]] [[agent-stack]] [[fact-check]]
+
+## 2026-10-29 — the benchmark replaced its own instrument, and the open-weights gap tripled on the change
+
+**Artificial Analysis Intelligence Index v5** is live: "**2 new benchmarks and 3 upgrades**" and, in
+the post's own framing, "For the first time, the majority of the Index is built on private datasets" —
+**60%** "based on evaluations with private test sets or held-out answers."
+
+- **In:** **FrontierCode 2.0** (Cognition's private benchmark, **132** tasks in real repositories,
+  "graded on whether a maintainer would merge the agent's change," each run **three times** in AA's
+  harness) and **Terminal-Bench-Science** (**70** agentic research tasks).
+- **Upgraded:** **HLE-Diamond** (a refined **1,000-question** Humanity's Last Exam, split evenly
+  reasoning/knowledge), **AA-Omniscience v1.1**, **CritPt v2** — a private **40-question** hard subset:
+  "the 70 research-level physics questions, minus the 30 that seven frontier models solved in all five
+  attempts at launch."
+- **Removed:** GDPval-AA v2.1, SciCode, AA-LCR v1.1. Weights are four equal 25% quadrants (knowledge
+  work, coding, science, general).
+- **Results:** Claude Opus 5.5 (max) **58**, GPT-6 Astra **57**, GPT-6.1 Sol **55**, Gemini 4 Argon **50**.
+
+**The first consequence is a comparability break, and it is easy to miss:** v4.3's scores are not
+comparable to v5's, so every AA number this feed quoted before v5 is a different unit. And **the post's
+result list is not the leaderboard**: it names four models — Opus 5.5 at **58** on top — while the *same
+day's* earlier batch records Gemini 4 Carbon at "**#1 on Intelligence Index v5.0 at 59**". Both can be
+true only if the four-row list is a subset, and Carbon is indeed absent from it — so the reading to carry
+is **quote the row, not the ranking**, and check whether the model you are comparing against appears in
+the table at all before calling anything "#1" or "the lead".
+
+Three findings worth carrying:
+
+1. **The open-weights gap widened 3 → 12 points**, and the top "open" model is **Kimi K3.1 Pro at 46
+   while its weights are not released** — so the category leader in the open column is not open. Among
+   models you can actually download, **DeepSeek V4.1 Flash 1017 (max)** and **GLM-5.3 (max)** sit at
+   **32**, "below Claude Haiku 5.5 (max, 36)." The widest gaps are on the two newest private
+   evaluations (HLE-Diamond, Terminal-Bench-Science), which is the open/private confound made visible
+   instead of argued: the private sets are exactly where a model trained on public benchmarks loses
+   the most.
+2. **Cost decoupled from score.** GPT-6.1 Sol is within **4 points** of the leader at **$1.27**/task
+   against **$10.04**; the spread across the top ten is "more than **13x**"; Fable 5.1 is the most
+   expensive at **$13.04**.
+3. **Effort is now a bigger lever than model choice.** Opus 5.5 spans **35 at low effort to 58 at
+   max** for **10×** the cost, and Sonnet 5.5's low-to-max span grew from 20 points to **29**. For a
+   buyer this means "which model" is the wrong first question; for a benchmark it means a score
+   without its effort setting is incomplete — the same unit problem as a harness footnote.
+
+The page supplies its own limit: "v5 leaves significant room for progress across all nine
+evaluations, and no single model leads them all" — Opus 5.5 takes three, five other models split the
+remaining six.
+
+## 2026-10-29 — high-variability facts are learned *late* and end up *better*, and the corpus across time is the signal
+
+**"What Improves During Pretraining?"** (arXiv 2610.37631) uses **point-in-time models** — models
+trained on web snapshots from different years — and a **temporal variability score (TVS)** "defined as
+the coefficient of variation of an item's negative log-likelihood across models," where "a higher score
+suggests that the knowledge may be less consistently represented across years of web text."
+
+Six benchmarks and six models later: "low- and high-TVS items are learned **similarly early** in
+training, but high-TVS items **improve faster later on**. At the end of the pretraining run, high-TVS
+items outperform low-TVS items in **34 of 36** model-benchmark settings, with an average advantage of
+**7.3 points** of chance-normalized accuracy," and the effect "is most robust on knowledge-intensive
+tasks, **even when comparing items of similar difficulty**."
+
+**This inverts the intuition** that unstable facts — whose answers changed across the corpus — are the
+noisy ones a model handles worst. The control that makes it credible is the last clause: difficulty is
+held roughly fixed, so 7.3 points is not "easy facts score higher." The mechanism the authors offer is
+consistent with the **curve** rather than the endpoint: both classes improve at the same rate early and
+diverge late, which is what you would expect if the model first fits the stable structure of the
+language and only later has capacity for the version-dependent surface — the part that requires having
+seen *both* the old answer and the new one.
+
+**The curation implication is uncomfortable and useful:** temporal variability is a property of the
+**corpus across time**, so a snapshot-trained model is not merely missing the update — it is missing
+the **training signal that teaches the update**. The limit is that TVS is computed from models rather
+than from data, so scoring a candidate corpus with it costs a training run: a diagnostic for
+understanding pretraining, not yet a filter you can apply to a crawl.
+
+## 2026-10-29 — the byte-level model beat a *retrained* BPE baseline, and names the axis it could not match
+
+Cartesia's first H-Net post makes the comparison honest in the way that costs the headline, then keeps
+the headline anyway. Controls: a **70/20/5/5** English/code/math/multilingual mixture measured **by
+bytes**, every sample "processed as both bytes and BPE tokens, splitting at the same boundaries,"
+scored in **bits-per-byte** — and, the expensive part, an **in-corpus BPE tokenizer retrained on the
+actual distribution**, which "ended up resulting in about a **1.1×** compute gain on both validation
+loss and downstream evals." Against that harder baseline: **1.3×** on validation loss, **2×** on code,
+**2×** out of distribution, "up to **5×** on out-of-domain code."
+
+Part 2 scales against **SmolLM3** and reports "**>10×** compute and data efficiency" at **3.67B**
+against **3.08B** parameters, compute matched "to within **2% FLOPs/byte**."
+
+**The cost is stated rather than buried:** the outer encoder and decoder stages "account for about
+**43%** of the H-Net's FLOPs (compared to **8%** for the embedding and LM head in the tokenized
+Transformer)," and the main network sees roughly **7.6×** compression against ~4.5 bytes per Llama-3
+token — so the saving is real but **spent on new layers rather than banked**. And the methodological
+limit is named: "matching all axes to the baseline **impossible**, as parameters and compute get spent
+in very different ways," which means the 3.67B-vs-3.08B gap is a real cost the FLOPs match does not
+neutralise.
+
+**The anchors are what make this legible** and are the template for any architecture claim now: it
+places itself against Kimi's published multipliers for **Kimi Delta Attention (1.16×)** and **attention
+residuals (1.25×)** instead of against a headline. Whether bytes beat BPE at frontier scale is still
+open; what this establishes is that at 3B, with the tokenizer advantage removed, the gap is not noise.
+
+→ [[harness-reliability]] [[fact-check]] [[token-economics]]

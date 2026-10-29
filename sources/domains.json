@@ -13804,5 +13804,14 @@
     "cvlog": [
       "2026-10-29 — verified the page’s macOS claim first-hand rather than via coverage: `/etc/ssl/cert.pem` on macOS 15.5 (24F74) holds 128 roots incl. 4 eMudhra (C1, C3, G1, G3) while `SystemRootCertificates.keychain` holds 154 incl. 2 (G1, G3), and `trust-store-check.mjs` reads G3 as ANCHOR in keychain + file + Java, absent from mozilla/certifi/curl. Independently measured with `trust-store-check.mjs`, not quoted from the page."
     ]
+  },
+  "v12.sh": {
+    "cat": "security",
+    "cred": "high",
+    "density": "high",
+    "cv": 1,
+    "en": "V12 (security research lab) blog — close-read exploit/crypto write-ups with source-level detail. Cross-checked 2026-10-29: the MuPDF claim (pre-1.28.5 `fz_memrnd` taking each byte from `fz_lrand48() >> 17`, so only 9 bits of `time(NULL)` reached the key) was verified against MuPDF's own source, and `source/fitz/random.c` on `master` carries the replacement — a ChaCha20 stream cipher seeded from a 44-byte `getentropy`/`getrandom`/`arc4random_buf` buffer — which independently confirms both that the old scheme existed and that the fix was a generator replacement, not the reseed the post's own 'one-line fix' framing implies.",
+    "zh": "V12（安全研究实验室）博客——贴近源码细节的漏洞与密码学分析。2026-10-29 交叉核验：MuPDF 的说法（1.28.5 之前的 `fz_memrnd` 每个字节取自 `fz_lrand48() >> 17`，因此只有 `time(NULL)` 的 9 位进入密钥）已对 MuPDF 自身源码核实，且 `master` 上的 `source/fitz/random.c` 载有替代实现——用 44 字节 `getentropy`/`getrandom`/`arc4random_buf` 播种的 ChaCha20 流密码——这独立证实了旧方案确实存在，也证实修复是更换生成器，而不是该文「一行修复」的说法所暗示的重新播种。",
+    "jp": "V12（セキュリティ研究ラボ）のブログ——ソース水準の細部まで踏み込んだ脆弱性・暗号の解説。2026-10-29 に突合：MuPDF の主張（1.28.5 以前の `fz_memrnd` は各バイトを `fz_lrand48() >> 17` から取り、`time(NULL)` の 9 ビットしか鍵に届かない）を MuPDF 自身のソースで確認し、`master` の `source/fitz/random.c` には置換実装——44 バイトの `getentropy`/`getrandom`/`arc4random_buf` で種付けする ChaCha20 ストリーム暗号——があり、旧方式の存在と、修正が「一行修正」という記事自身の枠組みが示唆する再種付けではなく生成器の差し替えであったことの両方を独立に裏づける。"
   }
 }

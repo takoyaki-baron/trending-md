@@ -3748,69 +3748,159 @@
     },
     "https://news.ycombinator.com/item?id=50271640": {
       "verdict": "blocked",
-      "streak": 1,
+      "streak": 2,
       "first_seen": "2026-10-28T20:48:44.639Z",
-      "last_seen": "2026-10-28T20:48:44.639Z",
+      "last_seen": "2026-10-29T04:49:00.776Z",
       "feeds": [
         "2026-10-29.md"
       ]
     },
     "https://news.ycombinator.com/item?id=50276792": {
       "verdict": "blocked",
-      "streak": 1,
+      "streak": 2,
       "first_seen": "2026-10-28T20:48:44.639Z",
-      "last_seen": "2026-10-28T20:48:44.639Z",
+      "last_seen": "2026-10-29T04:49:00.776Z",
       "feeds": [
         "2026-10-29.md"
       ]
     },
     "https://git-emudhra.we-have-a-problem.com/check.git": {
       "verdict": "dead",
-      "streak": 1,
+      "streak": 2,
       "first_seen": "2026-10-28T20:48:44.639Z",
-      "last_seen": "2026-10-28T20:48:44.639Z",
+      "last_seen": "2026-10-29T04:49:00.776Z",
       "feeds": [
         "2026-10-29.md"
       ]
     },
     "https://news.ycombinator.com/item?id=50275128": {
       "verdict": "blocked",
-      "streak": 1,
+      "streak": 2,
       "first_seen": "2026-10-28T20:48:44.639Z",
-      "last_seen": "2026-10-28T20:48:44.639Z",
-      "feeds": [
-        "2026-10-29.md"
-      ]
-    },
-    "https://news.ycombinator.com/item?id=50276998": {
-      "verdict": "blocked",
-      "streak": 1,
-      "first_seen": "2026-10-28T20:48:44.639Z",
-      "last_seen": "2026-10-28T20:48:44.639Z",
+      "last_seen": "2026-10-29T04:49:00.776Z",
       "feeds": [
         "2026-10-29.md"
       ]
     },
     "https://news.ycombinator.com/item?id=50273731": {
       "verdict": "blocked",
-      "streak": 1,
+      "streak": 2,
       "first_seen": "2026-10-28T20:48:44.639Z",
-      "last_seen": "2026-10-28T20:48:44.639Z",
+      "last_seen": "2026-10-29T04:49:00.776Z",
       "feeds": [
         "2026-10-29.md"
       ]
     },
     "http://host/admin/dashboard": {
       "verdict": "transient",
-      "streak": 1,
+      "streak": 2,
       "first_seen": "2026-10-28T20:48:44.639Z",
-      "last_seen": "2026-10-28T20:48:44.639Z",
+      "last_seen": "2026-10-29T04:49:00.776Z",
+      "feeds": [
+        "2026-10-29.md"
+      ]
+    },
+    "https://news.ycombinator.com/item?id=50275626": {
+      "verdict": "blocked",
+      "streak": 1,
+      "first_seen": "2026-10-29T04:49:00.776Z",
+      "last_seen": "2026-10-29T04:49:00.776Z",
+      "feeds": [
+        "2026-10-29.md"
+      ]
+    },
+    "https://news.ycombinator.com/item?id=50282838": {
+      "verdict": "blocked",
+      "streak": 1,
+      "first_seen": "2026-10-29T04:49:00.776Z",
+      "last_seen": "2026-10-29T04:49:00.776Z",
+      "feeds": [
+        "2026-10-29.md"
+      ]
+    },
+    "https://news.ycombinator.com/item?id=50280864": {
+      "verdict": "blocked",
+      "streak": 1,
+      "first_seen": "2026-10-29T04:49:00.776Z",
+      "last_seen": "2026-10-29T04:49:00.776Z",
+      "feeds": [
+        "2026-10-29.md"
+      ]
+    },
+    "https://news.ycombinator.com/item?id=50268868": {
+      "verdict": "blocked",
+      "streak": 1,
+      "first_seen": "2026-10-29T04:49:00.776Z",
+      "last_seen": "2026-10-29T04:49:00.776Z",
+      "feeds": [
+        "2026-10-29.md"
+      ]
+    },
+    "https://github.com/cloudflare/security-audit-skill/blob/main/SKILL.md": {
+      "verdict": "dead",
+      "streak": 1,
+      "first_seen": "2026-10-29T04:49:00.776Z",
+      "last_seen": "2026-10-29T04:49:00.776Z",
+      "feeds": [
+        "2026-10-29.md"
+      ]
+    },
+    "https://news.ycombinator.com/item?id=50280722": {
+      "verdict": "blocked",
+      "streak": 1,
+      "first_seen": "2026-10-29T04:49:00.776Z",
+      "last_seen": "2026-10-29T04:49:00.776Z",
+      "feeds": [
+        "2026-10-29.md"
+      ]
+    },
+    "https://news.ycombinator.com/item?id=50278253": {
+      "verdict": "blocked",
+      "streak": 1,
+      "first_seen": "2026-10-29T04:49:00.776Z",
+      "last_seen": "2026-10-29T04:49:00.776Z",
+      "feeds": [
+        "2026-10-29.md"
+      ]
+    },
+    "https://news.ycombinator.com/item?id=50274251": {
+      "verdict": "blocked",
+      "streak": 1,
+      "first_seen": "2026-10-29T04:49:00.776Z",
+      "last_seen": "2026-10-29T04:49:00.776Z",
+      "feeds": [
+        "2026-10-29.md"
+      ]
+    },
+    "https://news.ycombinator.com/item?id=50282454": {
+      "verdict": "blocked",
+      "streak": 1,
+      "first_seen": "2026-10-29T04:49:00.776Z",
+      "last_seen": "2026-10-29T04:49:00.776Z",
+      "feeds": [
+        "2026-10-29.md"
+      ]
+    },
+    "https://news.ycombinator.com/item?id=50276940": {
+      "verdict": "blocked",
+      "streak": 1,
+      "first_seen": "2026-10-29T04:49:00.776Z",
+      "last_seen": "2026-10-29T04:49:00.776Z",
+      "feeds": [
+        "2026-10-29.md"
+      ]
+    },
+    "https://data.stackexchange.com/stackoverflow/query/1926661": {
+      "verdict": "blocked",
+      "streak": 1,
+      "first_seen": "2026-10-29T04:49:00.776Z",
+      "last_seen": "2026-10-29T04:49:00.776Z",
       "feeds": [
         "2026-10-29.md"
       ]
     }
   },
-  "runs": 114,
+  "runs": 115,
   "first_run": "2026-09-05T12:47:55.004Z",
-  "last_run": "2026-10-28T20:48:44.639Z"
+  "last_run": "2026-10-29T04:49:00.776Z"
 }
