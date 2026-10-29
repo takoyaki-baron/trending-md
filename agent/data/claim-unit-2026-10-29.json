@@ -1,9 +1,9 @@
 {
- "generated": "2026-10-29T04:17:36.453Z",
+ "generated": "2026-10-29T12:15:50.179Z",
  "files": [
   {
    "file": "2026-10-29.md",
-   "items": 37,
+   "items": 56,
    "findings": [
     {
      "check": "issues",
@@ -69,6 +69,20 @@
      "detail": "split named (PR share 22%)"
     },
     {
+     "check": "cvss",
+     "item": 44,
+     "verdict": "ok",
+     "claim": "3.1 9.8",
+     "detail": "CVE-2026-118690 · Primary/disclosure@vulncheck.com · vector reproduces 9.8"
+    },
+    {
+     "check": "cvss",
+     "item": 44,
+     "verdict": "ok",
+     "claim": "4.0 9.3",
+     "detail": "CVE-2026-118690 · Secondary/disclosure@vulncheck.com"
+    },
+    {
      "check": "repo",
      "item": 3,
      "verdict": "hf-model",
@@ -94,14 +108,21 @@
      "item": 11,
      "verdict": "ok",
      "claim": "elayadesign/ai-design-skills",
-     "detail": "11311★, last push 2026-10-27"
+     "detail": "11722★, last push 2026-10-27"
+    },
+    {
+     "check": "repo",
+     "item": 15,
+     "verdict": "star-drift",
+     "claim": "6911 quoted vs 7954 now",
+     "detail": "togg53192-cmd/jailbreaks: -13% — reread the number or date the item"
     },
     {
      "check": "repo",
      "item": 15,
      "verdict": "ok",
      "claim": "togg53192-cmd/jailbreaks",
-     "detail": "7363★, last push 2026-10-28"
+     "detail": "7954★, last push 2026-10-28"
     },
     {
      "check": "count",
@@ -113,16 +134,37 @@
     {
      "check": "count",
      "item": 35,
-     "verdict": "number-other-noun",
+     "verdict": "ok-cited-page",
      "claim": "36 language",
-     "detail": "36 is on HF model tencent/Hy-SimulMT-30B-A3B-FP8 as “36 seconds” — the page's head noun is not “language”, so this is the feed's paraphrase rather than the page's wording; quote what the page says"
+     "detail": "HF model tencent/Hy-SimulMT-30B-A3B-FP8's `language:` block lists 36 — the count is in the metadata, not a sentence"
     },
     {
      "check": "count",
-     "item": 35,
-     "verdict": "absent",
-     "claim": "8 model",
-     "detail": "no count of model on README of Tencent-Hunyuan/Hy-SimulMT or HF model tencent/Hy-SimulMT-30B-A3B-FP8 — count it yourself, or say \"no page states a total\""
+     "item": 49,
+     "verdict": "ok",
+     "claim": "49 agents",
+     "detail": "README states it"
+    },
+    {
+     "check": "count",
+     "item": 49,
+     "verdict": "ok",
+     "claim": "74 skills",
+     "detail": "README states it"
+    },
+    {
+     "check": "count",
+     "item": 49,
+     "verdict": "ok",
+     "claim": "14 rules",
+     "detail": "README states it"
+    },
+    {
+     "check": "count",
+     "item": 55,
+     "verdict": "ok",
+     "claim": "67 tools",
+     "detail": "README states it"
     },
     {
      "check": "bundle",
