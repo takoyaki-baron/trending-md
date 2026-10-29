@@ -228,6 +228,31 @@ underlying pages — this produced a two-layer false signal in a single item.
    `node agent/tools/disclosure-lag.mjs --changes-census --from YYYY-MM-DD --to YYYY-MM-DD`
    (`--backlog-census` on the same window answers "is a low-CWE `Received` residue a queue or a
    quality signal?"; `--window-cache <path>` makes the second census free).
+   **An open-ended bound excludes the newest release far more often than it is wrong, and the fix
+   can be in a field that is not the range** (added 2026-10-30 04:31, the Agno `CVE-2026-119050`
+   case turned into a census). The shape: `versions: [{version: "0", lessThanOrEqual: "3.1.11",
+   status: "affected"}]` with no `unaffected` entry, no `changes[]` and no `lessThan` — an inclusive
+   max and **no named fix** — beside a `packageURL`, so a registry can answer the question the
+   record cannot. Measured over NVD's **2026-10-23 → 10-29** window (**3,421** records): only **10**
+   carry the shape at all (**0.29%**), and **2 of those 10** have a newest release **above** the
+   bound — **both from `disclosure@vulncheck.com`**, which is the `changes[]` lesson repeating: a
+   10-record class with a one-CNA numerator is a *writer's* rate, never an industry one. The two
+   rows then split into opposite causes, and that split is the reusable part: `CVE-2026-117558`
+   (`@ai-sdlc/plugin-mcp-server` ≤ **0.31.2**) names a fix **commit** `717d7ecf` in its own
+   `references[]` (dated 32 minutes after 0.31.2 shipped, carried by 0.32.0) — so the range was
+   **right** and only the machine field was silent — while `CVE-2026-119050` points at no fix
+   anywhere and `v3.1.12` still carries the identical `getattr` at lines 54 and 90. **So
+   `versions[]` naming no fix is not the RECORD naming no fix, and it is not "no fix exists"**: the
+   third place a record names a fix is a `references[]` commit/pull URL. Second answer, and it is a
+   negative worth stating carefully: **no CNA in this window re-issued a range after the release it
+   excluded** — none of the 2 rows has a `lastModified` later than the newest release's upload time
+   — but the sample is **2**, so the finding is "not observed", never "never happens"; and
+   `lastModified` moves for KEV adds and ADP rewrites too, so it is a weak clock for "the CNA
+   looked". One call:
+   `node agent/tools/disclosure-lag.mjs --bound-census --from YYYY-MM-DD --to YYYY-MM-DD`
+   (`--max-pkgs` caps registry lookups; a cap hit prints `unqueried`, never a pass — and **a
+   registry miss is not an answer**, so `newest > bound` proves the range excludes the current
+   release, never that the release is fixed; the newest version's bytes are the test).
    **A missing CWE on a `Received` record is the CNA's silence, not a triage backlog — and the
    "stalled because it is thin" reading is falsified by the records themselves** (added 2026-10-28,
    measured over the same 3,070-record window). Of **398** `Received` records, **155 (38.9%)** carry a
@@ -556,17 +581,47 @@ underlying pages — this produced a two-layer false signal in a single item.
    "9.1 (CVSS 3.1)" where 9.1 was the **4.0** score). So the rule is now a command that runs on every
    batch *before the commit*, and its findings are handed to the act pass:
    `node agent/tools/claim-unit-lint.mjs --file en/feed/YYYY-MM-DD.md --out agent/data/claim-unit-YYYY-MM-DD.json`
-   (wired into `generate-feed.sh` after `feed-stamp.mjs`). Four checks, each a unit that has produced
-   a wrong sentence here: **issues** (unsplit counter, and arithmetic when a composite is quoted
+   (wired into `generate-feed.sh` after `feed-stamp.mjs`, with `--status-watch`). The checks, each a
+   unit that has produced a wrong sentence here: **issues** (unsplit counter, and arithmetic when a
+   composite is quoted
    beside its parts — the composite is a *cached* counter and lagged them on free-my-tv, 77 vs
    21+58); **cvss** (every score/version pair against the NVD record — `version-swapped`,
    `version-absent`, `score-mismatch`; `slot-quoted` is advisory, and it is **suppressed when the same
    sentence says the slot is a slot** — "`Primary`/`Secondary` is a slot position, not a provenance" is the
-   correction being quoted, not the mistake, and three such items fired on the 10-26 20:34 batch); **repo** (`archived`, `stale` past
+   correction being quoted, not the mistake, and three such items fired on the 10-26 20:34 batch);
+   **status** (a prose `vulnStatus` against the record — see the standing-watch paragraph below);
+   **repo** (`archived`, `stale` past
    `--stale-days`, and `stargazers_count` drifting >10% from the quoted number); **count** (a number
    about the artifact, read against the artifact — `differs` prints the README's own count, `absent`
    means the page states none, which is how the impeccable 62-vs-61 and the 10-26 "17 harnesses"
-   title were caught). **A count is read against every page the item cites, in three spellings**
+   title were caught). **`vulnStatus` is a queue position NVD moves on its own, so it is a check and a
+   standing watch** (added 2026-10-30 04:31, the `CVE-2026-97229` regression). The 04:03 batch published
+   "NVD marked the record **`Analyzed`**" for a record that had gone **back** to `Undergoing Analysis`
+   between two of my own checks 27 minutes after its KEV add — CISA-ADP rewrote the container at
+   `19:58:23Z` and NVD `lastModified` followed at `20:17:37Z` — so the rule already in this file
+   ("name who scored it, and in what status") had no executor, which is the same defect the rest of
+   this lint was built to fix. The check binds each status word to the CVE it is nearest (the `cvss`
+   check's sentence → `Source:` line → nearest rule) and compares it to the same single `cveId`-list
+   pull: disagreement is **`status-stale`**, with the direction named (`REGRESSION — the record moved
+   BACK` when the pipeline rank falls, `Received`→`Analyzed`→`Modified`, with `Deferred`/`Rejected` off
+   the scale). Three reading rules came with it, each worth more than the finding: **a transition is
+   not a claim about its first half** — "went `Analyzed` → `Undergoing Analysis`" is the *correct* way
+   to write this, so an arrow makes the status after it current, and two statuses with **no** arrow
+   suppress the sentence entirely rather than coin-flip between them ("`Deferred`, unlike the other
+   three which are `Analyzed`"); **a self-dated disagreement is the trend, not an error**
+   (`status-dated`, advisory — the `star-dated` shape: "when I checked", "as of", "on 10-29"); and
+   **an English verb is not a status** — capitalization is the first filter (`Analyzed` vs
+   `analyzed the binary`) and a bare capitalized token still needs a registry word near it (`NVD`,
+   `record`, `status`, `marked`, …) or backticks. `--status-watch` keeps `agent/data/nvd-status.json`
+   — one row per CVE with the record's own `lastModified` and an append-only history that grows only
+   on a real move — because a single run can only see today, and the *movement* is the event. It
+   **rides the NVD request the `cvss` check already pays for** (no extra call), retains a row for 45
+   days unless it moved, and is what makes "did NVD analyze it" answerable as a trend rather than two
+   snapshots. Calibrated on the day it was built: **1 finding / 1 verified on the uncorrected
+   feed** (item #2 `status-stale` — the record "is Undergoing Analysis (lastModified
+   2026-10-29T20:17:37.330), not Analyzed — REGRESSION") and **0 findings / 2 verified on the
+   corrected one**; `--selftest` 87→**95**.
+   **A count is read against every page the item cites, in three spellings**
    (added 2026-10-26 20:47, after the check produced two false findings on one batch): `31,132-skill
    analyzed subset` is the same claim as `31,132 skills` and used to be invisible (SkillSpector's
    correct number read as `differs`), while a count quoted from the cited page rather than the named

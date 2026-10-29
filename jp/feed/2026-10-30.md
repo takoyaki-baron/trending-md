@@ -12,7 +12,7 @@ license: CC-BY-4.0
 
 ---
 
-## 1. Mistralが1TパラメータのLarge 4の重みを公開——モデルカードは1Mコンテキスト、自社の配備レシピは131K
+## 1. Mistralが1TパラメータのLarge 4の重みを公開——カードは1M、配備レシピは131K、同日の2文書でベンチマークも食い違う
 
 - **Velocity:** ▮▮▮ trending
 - **Source:** Hacker News · 893+ pts · 約6時間前（~22:13 UTC+8）
@@ -22,7 +22,9 @@ Mistralは2026-10-29、Mistral Large 4のオープンウェイトを公開した
 
 最も伝わりにくい数字はコンテキスト長と推論スイッチだ。記事はコンテキスト長を一切書いていない——HFの記事が「about 1T total, 49B active parameter, and a context window of 1M tokens」と補っている——が、同じ記事のvLLMの例は`--max-model-len 131072`を設定し、Inference Endpointsのレシピは「serves up to 131K tokens of context」と述べる。推論については「reasoning cannot be disabled, so using `reasoning_effort`: `none` would still use `high`」だ。主要ベンチマークはTerminal-Bench 4.0が**41%**（プレビューから13ポイント上昇）、Artificial Analysis Coding Agent Indexが**48%**（GLM-5.3と同点で「while using 47% fewer tokens per task」）、BrowseCompが**84.5%**、FinWorkBenchが**73.3%**——ただしBrowseCompでは記事自身の表でKimi K3の91.2%に届いていない。
 
-**Why it matters:** Mistralは自社記事で「we see a potential for uplift to conduct real attacks」と認め、サイバー向け変種を審査済みパートナーに限定している——発表資料としては珍しい。しかし実務上の数字は131Kのほうだ。1Mトークンという主張が、自社のvLLMフラグと自社のホスティングエンドポイントの両方で半分以下に削られているなら、それは仕様表であって配備能力ではない。NVFP4ビルドはさらに「requires NVIDIA Blackwell GPUs」で、単一の512 GB Apple Silicon Ultraに収まるのは2-bit量子化だけだ。
+**同じ日に出た2本目の発表文書は食い違う。** 同日公開のHugging Faceの記事は「As of October 29, 2026, the model is the fifth best open weights model on Artificial Analysis Intelligence index」と述べたうえで、「**28.3% on Terminal-Bench 4**」と合成「Coding Agent Index score of **49.8%**」を報告する——ニュース記事の41%と48%に対してだ。ニュース記事自身のグラフはプレビュー版の**28%**を「self reported」と明記してML4を41%に置いており、2つの文書のうち片方がプレビュー期の数字を正式モデル名で載せていることになる。
+
+**Why it matters:** Mistralは自社記事で「we see a potential for uplift to conduct real attacks」と認め、サイバー向け変種を「rigorous vetting」付きでデザインパートナーに限定している——発表資料としては珍しい。しかし131KはMistralの数字ではない。**モデルカード**は3か所で1Mと書き、Vibe設定では`max_context_length = 1048576`、カード自身のFP8 vLLMレシピは上限を一切設定していない。131Kの2つはどちらも**Hugging Face**の文書（NVFP4レシピの`--max-model-len 131072`と、HF Inference Endpointsの「131K tokens of context」）に由来する。つまり「配備できる数字」は第三者がメモリ節約のために選んだ設定であり、より鋭い欠陥は誰も指摘していないほうだ——同じ発表の2文書が、このリリースの売りであるベンチマークで12.7ポイント食い違っている。NVFP4ビルドはさらに「requires NVIDIA Blackwell GPUs」で、単一の512 GB Apple Silicon Ultraに収まるのは2-bit量子化だけだ。
 
 [`🔗 Mistral — releasing the weights`](https://mistral.ai/news/mistral-large-4-oss/) · [`🔗 Hugging Face — Welcome Le Chonk`](https://huggingface.co/blog/mistral-large4) · [`🔗 mistralai/Mistral-Large-4-1T-A52B`](https://huggingface.co/mistralai/Mistral-Large-4-1T-A52B)
 
@@ -34,7 +36,7 @@ Mistralは2026-10-29、Mistral Large 4のオープンウェイトを公開した
 - **Source:** CISA KEV · カタログ2026.10.29 · 2026-10-29追加
 - **Tags:** `cve` `gitlab` `ruby` `rce` `kev`
 
-CISAは**2026-10-29**、**CVE-2026-97229**を既知の悪用済み脆弱性カタログに追加した。記録は**CVSS 3.1 10.0**——`AV:N/AC:L/PR:N/UI:N/S:C/C:H/I:H/A:H`——でCWE-190（整数オーバーフロー）。このスコアは**GitLab自身のもの**だ（`Secondary`スロットに`cve@gitlab.com`、NVD採点メトリクスは0）。NVDはレコードを`Analyzed`にしたが、独自スコアは公開していない。GitLabは**19.4.2（2026-10-12リリース）**で修正した。NVDは翌日にレコードを公開し、KEVは**修正から17日後**に追随した——レコードからは16日後になる。NVDのレコードにはまだKEVフラグが付いていない——情報源はカタログであって、CVEエントリではない。
+CISAは**2026-10-29**、**CVE-2026-97229**を既知の悪用済み脆弱性カタログに追加した。記録は**CVSS 3.1 10.0**——`AV:N/AC:L/PR:N/UI:N/S:C/C:H/I:H/A:H`——でCWE-190（整数オーバーフロー）。このスコアは**GitLab自身のもの**だ（`Secondary`スロットに`cve@gitlab.com`、NVD採点メトリクスは0）。NVDのレコードは依然**`Undergoing Analysis`**で、メトリクスはその1件だけ——比較できるNVDスコアはまだ存在しない。これは**「追認」のケースではない**（分析済みレコードにCNAのスコアだけが残る形）。GitLabは**19.4.2（2026-10-12リリース）**で修正した。NVDは翌日にレコードを公開し、KEVは**修正から17日後**に追随した——レコードからは16日後になる。NVDのレコードにはまだKEVフラグが付いていない——情報源はカタログであって、CVEエントリではない。
 
 根本原因はGitLabのものではない。Ruby自身の**2026-10-23**のアドバイザリはGitLab割当の4つの識別子を名指ししている——CVE-2026-89078（正規表現パーサのdouble free、PR #13332）、CVE-2026-93577、CVE-2026-97229、CVE-2026-110264——そして明記する。「We have not requested CVE identifiers in Ruby for these fixes, at least for now.」修正は**Ruby 4.0.9、3.4.12、3.3.13**に入った。誰もが頼りたくなる2つの緩和策は機能しない。「`Regexp.timeout` does not protect against these bugs」であり、「Limiting the length of patterns does not reliably protect against them either」——なぜなら「some of them can be triggered by short patterns」だからだ。
 
@@ -50,11 +52,11 @@ CISAは**2026-10-29**、**CVE-2026-97229**を既知の悪用済み脆弱性カ�
 - **Source:** Hacker News · 219+ pts · 約10時間前（~18:42 UTC+8）
 - **Tags:** `php` `pan-os` `kernel` `exploitation` `incident`
 
-Dreamは2026-10-26に連鎖悪用の分析を公開し、10-29に更新した。自動化された一括攻撃で**インターネット露出のPAN-OSファイアウォール24台**がroot化され、続く侵入で内部のファイアウォール管理サーバ1台が落ちた——「bringing the total number of servers exploited to 25」。24台のうち2台は米国政府関連組織のものだった。連鎖は**CVE-2026-109618 / CVE-2026-109619**（PHP2Shell、9.2）で`nobody`権限のコード実行を取り、続いて**CVE-2026-46300**——10月28日にKEVへ入り、昨日の本フィードで扱ったLinuxカーネルの権限昇格——が`/etc/pam.d/su`のpage cacheを上書きし、非特権プロセスからrootへ至る。
+Dreamは2026-10-26に連鎖悪用の分析を公開し、10-29に更新した。自動化された一括攻撃で**インターネット露出のPAN-OSファイアウォール24台**がroot化され、続く侵入で内部のファイアウォール管理サーバ1台が落ちた——「bringing the total number of servers exploited to 25」。24台のうち2台は米国政府関連組織のものだった。さらに攻撃者が横展開した管理サーバは「a third government server」と記されており、政府関連システムは合計**3台**（全体25台）になる。連鎖は**CVE-2026-109618 / CVE-2026-109619**（PHP2Shell、9.2）で`nobody`権限のコード実行を取り、続いて**CVE-2026-46300**——10月28日にKEVへ入り、昨日の本フィードで扱ったLinuxカーネルの権限昇格——が`/etc/pam.d/su`のpage cacheを上書きし、非特権プロセスからrootへ至る。
 
 時系列は非常に速い。政府関連の1台目が**10月23日18:14 UTC**、2台目が**10月24日10:09 UTC**、管理サーバが**10月24日11:35 UTC**——「less than 90 minutes after rooting the second firewall」。大半は放置された。「For 22 of the 24 rooted firewalls, the attacker did nothing beyond planting the webshell.」依然として約**19,000**の指紋取得可能なターゲットが悪用可能だ。
 
-**Why it matters:** 報告書の留保こそが本題だ。Dreamは「What we cannot determine is whether the password spray, backdoor account creation, or SAML key extraction succeeded」と書き、「we do not attribute this activity to a named threat actor」と述べる。報告とともに流布したAIの話について、著者らは明快だ。「we have no direct evidence that the AI tools were specifically used to write the exploit.」単独なら対処可能に見える9.xが2つ、組み合わさると90分未満でゼロ認証からrootに至る——昨日のカーネルの記録とこのPHPの記録を、2件ではなく1件のインシデントとして扱うべき理由がここにある。
+**Why it matters:** 報告書の留保こそが本題だ。Dreamは「What we cannot determine is whether the password spray, backdoor account creation, or SAML key extraction succeeded」と書き、「we do not attribute this activity to a named threat actor」と述べる。報告とともに流布したAIの話について、著者らは帰属を留保したうえで、同じ文の中で逆方向の推論を述べる。「While we have no direct evidence that the AI tools were specifically used to write the exploit or the post-exploitation scripts, the code structure, commenting style, and consistency across ~40 scripts suggest AI-assisted development.」単独なら対処可能に見える9.xが2つ、組み合わさると90分未満でゼロ認証からrootに至る——昨日のカーネルの記録とこのPHPの記録を、2件ではなく1件のインシデントとして扱うべき理由がここにある。
 
 [`🔗 Dream — chained PHP2Shell roots 25 servers`](https://dreamgroup.com/blog/chained-php2shell-exploit-roots-25-servers) · [`🔗 PHP 8.5.12 / 8.4.27 / 8.3.36 / 8.2.35`](https://www.php.net/archive/2026.php) · [`🔗 HNディスカッション`](https://news.ycombinator.com/item?id=50286987)
 

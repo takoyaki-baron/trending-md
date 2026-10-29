@@ -155,11 +155,21 @@
  *      is how this fallback can confirm a number the API cannot see, and how the item's "no CVE id"
  *      claim gets checked against the advisory's own CVE-ID row.
  *
+ *   G. `vulnStatus` is a QUEUE POSITION, not a property of the vulnerability, and NVD moves it
+ *      without the feed doing anything wrong. A prose status claim is checked against the same
+ *      single NVD pull the cvss check pays for (`status-stale`), the direction is named when the
+ *      pipeline rank falls (`REGRESSION`), and `--status-watch` keeps a per-CVE history in
+ *      `agent/data/nvd-status.json` so a backwards move is OBSERVED rather than inferred. Built
+ *      2026-10-30 on the `CVE-2026-97229` case: `Analyzed` → `Undergoing Analysis` 27 minutes after
+ *      its KEV add, when CISA-ADP rewrote the container. Reading rules in the check's header.
+ *
  * Usage:
  *   node agent/tools/claim-unit-lint.mjs --file en/feed/2026-10-26.md
  *   node agent/tools/claim-unit-lint.mjs --file … --no-net            # check A only (prose)
  *   node agent/tools/claim-unit-lint.mjs --file … --check cvss,repo   # subset
  *   node agent/tools/claim-unit-lint.mjs --file … --check bundle      # local PEM bundle counts
+ *   node agent/tools/claim-unit-lint.mjs --file … --status-watch      # + per-CVE status history
+ *   node agent/tools/claim-unit-lint.mjs --status-watch --ids CVE-…   # watch ids, no feed
  *   node agent/tools/claim-unit-lint.mjs --files 'en/feed/2026-10-2*.md' --census
  *   node agent/tools/claim-unit-lint.mjs --file … --json --strict     # exit 1 on any finding
  *   node agent/tools/claim-unit-lint.mjs --ghsa-census [--pages 3]    # field-shape census
@@ -197,11 +207,13 @@ const MAX_GHSA = Number(arg('max-ghsa') ?? 6);
 // 200-CVE census from turning the pre-commit lint into a crawler.
 const MAX_CNA = Number(arg('max-cna') ?? 30);
 const CACHE_PATH = arg('cache') ?? 'agent/data/claim-unit-cache.json';
-const CHECKS = new Set((arg('check') ?? 'issues,cvss,temporal,repo,count,bundle').split(',').map((s) => s.trim()));
+const CHECKS = new Set((arg('check') ?? 'issues,cvss,status,temporal,repo,count,bundle').split(',').map((s) => s.trim()));
 
 const SELFTEST = has('selftest');
-if (!FILE && !FILES && !SELFTEST && !has('ghsa-census')) {
-  console.error('usage: claim-unit-lint.mjs --file <feed.md> [--no-net] [--check issues,cvss,repo,count] [--strict] [--json] [--census] [--selftest] | --ghsa-census [--pages N]');
+const STATUS_WATCH = has('status-watch');
+const EXTRA_IDS = (arg('ids') ?? '').split(',').map((s) => s.trim()).filter(Boolean);
+if (!FILE && !FILES && !SELFTEST && !has('ghsa-census') && !STATUS_WATCH) {
+  console.error('usage: claim-unit-lint.mjs --file <feed.md> [--no-net] [--check issues,cvss,status,repo,count] [--strict] [--json] [--census] [--selftest] [--status-watch [--ids CVE-…]] | --ghsa-census [--pages N]');
   process.exit(2);
 }
 
@@ -410,7 +422,7 @@ function nvdBatch(cves) {
       if (!ver) continue;
       for (const m of arr) metrics.push({ version: ver, type: m.type, source: m.source, score: (m.cvssData ?? {}).baseScore, vector: (m.cvssData ?? {}).vectorString });
     }
-    map.set(c.id, { status: c.vulnStatus, assigner: c.sourceIdentifier, metrics });
+    map.set(c.id, { status: c.vulnStatus, assigner: c.sourceIdentifier, modified: c.lastModified, published: c.published, metrics });
   }
   return map;
 }
@@ -891,6 +903,157 @@ function checkCvss(it, subjects, cna = new Map()) {
   return out;
 }
 
+// ── check G: `vulnStatus`, the one field NVD moves on its own ───────────────────────────────
+/* A status is not a fact about the vulnerability; it is NVD's *queue position*, and it moves
+ * without the feed doing anything wrong. filed 2026-10-30 04:27 after the 04:03 batch's item 2
+ * published "NVD marked the record `Analyzed`" for a record that had gone BACK to `Undergoing
+ * Analysis` 27 minutes after its KEV add — CISA-ADP rewrote the container at 19:58:23Z and NVD
+ * `lastModified` followed at 20:17:37Z. The rule ("name who scored it, and in what status") has
+ * been in CLAUDE.md since 10-14; nothing executed it, which is the same defect the other checks
+ * in this file were built to fix.
+ *
+ * Two things decide whether a mention is a claim at all:
+ *   (a) **capitalization + an anchor.** `Analyzed` capitalized is NVD's word; `analyzed the
+ *       binary` is English and does not match. A backticked token is a claim by construction; a
+ *       bare one needs a registry word near it (`NVD`, `record`, `status`, `marked`, …).
+ *   (b) **a transition names two statuses and is not a claim about the first.** "went
+ *       `Analyzed` → `Undergoing Analysis`" is the CORRECT way to write the 10-30 regression, so
+ *       an arrow disambiguates (the status after it is current) and two statuses without an arrow
+ *       suppress the sentence entirely — "`Deferred`, unlike the other three which are
+ *       `Analyzed`" would otherwise bind the wrong one. A coin-flip is not a finding.
+ * A disagreeing claim that dates itself ("when I checked", "as of", "on 10-29") is `status-dated`
+ * — advisory, the `star-dated` shape: disclose when you read it and the drift is the trend.
+ */
+const NVD_STATUS_VOCAB = ['Undergoing Analysis', 'Awaiting Analysis', 'Analyzed', 'Deferred', 'Received', 'Modified', 'Rejected'];
+/* The pipeline order, for the DIRECTION of a disagreement. `Deferred` and `Rejected` are off it:
+ * one means NVD declined to analyze, the other that the record was withdrawn, so neither is
+ * "earlier" or "later" than `Analyzed`. */
+const STATUS_PIPELINE = { Received: 1, 'Awaiting Analysis': 2, 'Undergoing Analysis': 3, Analyzed: 4, Modified: 5 };
+const STATUS_ANCHOR = /\b(?:NVD|CVE|cveawg|cve\.org|record|status|registry|entry|marked|carries|carried|says|said|lists|listed|remains|still|moved|moves|went|sits|sitting|reads|shows|holds)\b/i;
+const STATUS_DATED = /\b(?:at the time of writing|when I checked|as of|originally|had been|previously|was still|yesterday|last (?:week|month)|on \d{4}-\d{2}-\d{2}|on \d{2}-\d{2})\b/i;
+const STATUS_ARROW = /(?:→|->|—>|becomes|became)/;
+
+function statusMentions(text) {
+  const out = [];
+  const alt = NVD_STATUS_VOCAB.map((s) => s.replace(/ /g, '\\s+')).join('|');
+  const re = new RegExp(`(?<![\\w-])(${alt})(?![\\w-])`, 'g');
+  for (const m of text.matchAll(re)) {
+    const at = m.index;
+    const end = at + m[0].length;
+    const canonical = NVD_STATUS_VOCAB.find((s) => s.toLowerCase() === m[0].replace(/\s+/g, ' ').toLowerCase());
+    if (!canonical) continue;
+    const backticked = text[at - 1] === '`' && text[end] === '`';
+    if (!backticked && !STATUS_ANCHOR.test(text.slice(Math.max(0, at - 90), at))) continue; // English, not a status
+    out.push({ status: canonical, at, end, backticked, phrase: m[0] });
+  }
+  return out;
+}
+
+function checkStatus(it, subjects) {
+  const out = [];
+  const text = it.text;
+  const mentions = statusMentions(text);
+  if (!mentions.length) return out;
+  // Raw text throughout: the offsets must be the same text's, and `CVE-` ids contain none of the
+  // characters `strip()` removes, so there is nothing to gain from stripping here.
+  const ids = idMentions(text);
+  const sents = sentences(text);
+  const ctx = { sents, primary: ids.length ? primarySubject(text, ids) : null };
+  const done = new Set();
+
+  for (const m of mentions) {
+    const s = sents.find((x) => m.at >= x.start && m.at < x.end);
+    if (!s) continue;
+    if (done.has(s.start)) continue;
+    const inSent = mentions.filter((x) => x.at >= s.start && x.at < s.end);
+    const distinct = [...new Set(inSent.map((x) => x.status))];
+    const sentText = text.slice(s.start, s.end);
+    let claim = m;
+    if (distinct.length > 1) {
+      const arrow = sentText.match(STATUS_ARROW);
+      if (!arrow) { done.add(s.start); continue; } // two statuses, no direction — not a claim
+      const arrowAt = s.start + arrow.index;
+      const after = inSent.filter((x) => x.at >= arrowAt);
+      if (!after.length) { done.add(s.start); continue; }
+      claim = after[after.length - 1];
+    }
+    if (!ids.length) {
+      out.push({ check: 'status', item: it.n, verdict: 'status-no-cve', claim: `\`${claim.status}\``,
+        detail: 'a vulnStatus with no CVE id in the item — the queue position cannot be checked, and a status is a claim about a specific record' });
+      done.add(s.start);
+      continue;
+    }
+    const bound = bindSubject(claim.at, ids, ctx);
+    const rec = subjects.get(bound.id);
+    if (!rec) {
+      // Absence is a registry statement: the item may be describing a record NVD genuinely lacks.
+      out.push({ check: 'status', item: it.n, verdict: 'status-no-record', claim: `${bound.id} \`${claim.status}\``,
+        detail: `NVD carries no record for ${bound.id}, so the status claim cannot be checked — that is "not in this registry", not "wrong"` });
+      done.add(s.start);
+      continue;
+    }
+    if (rec.error) { done.add(s.start); continue; } // unreadable is not wrong
+    if (rec.status === claim.status) {
+      out.push({ check: 'status', item: it.n, verdict: 'ok', claim: `${bound.id} \`${claim.status}\``,
+        detail: `${rec.status}${rec.modified ? ` (lastModified ${rec.modified})` : ''}` });
+      done.add(s.start);
+      continue;
+    }
+    const dated = STATUS_DATED.test(sentText);
+    const was = STATUS_PIPELINE[claim.status];
+    const now = STATUS_PIPELINE[rec.status];
+    const direction = was != null && now != null ? (now < was ? 'REGRESSION — the record moved BACK' : 'the record has advanced since')
+      : `one of the two is off the analysis pipeline (${claim.status} → ${rec.status})`;
+    const detail = `${bound.id} is \`${rec.status}\`${rec.modified ? ` (lastModified ${rec.modified})` : ''}, not \`${claim.status}\` — ${direction}; a status is NVD's queue position and it moves without the feed changing`;
+    if (dated) {
+      out.push({ check: 'status', item: it.n, verdict: 'status-dated', claim: `${bound.id} \`${claim.status}\``,
+        detail: `${detail} — the sentence dates itself, so the drift is the TREND rather than an error: re-read and say when` });
+    } else {
+      out.push({ check: 'status', item: it.n, verdict: 'status-stale', claim: `${bound.id} \`${claim.status}\``, detail });
+    }
+    done.add(s.start);
+  }
+  return out;
+}
+
+/**
+ * The `--status-watch` store. A single feed run can only see today, so the *movement* — which is
+ * the event worth catching, and which the 04:27 pass had to reconstruct from four timestamps by
+ * hand — needs a memory across runs. One record per CVE: current status + the NVD stamp + an
+ * append-only history that grows only when the status actually changes. Rides the same one NVD
+ * request the cvss check already pays for; a run with no NVD budget simply writes nothing.
+ */
+const STATUS_STORE = process.env.STATUS_STORE ?? 'agent/data/nvd-status.json';
+function statusWatch(records, now = new Date()) {
+  let db = { cves: {} };
+  try { db = JSON.parse(readFileSync(STATUS_STORE, 'utf8')); } catch { /* first run */ }
+  db.cves = db.cves ?? {};
+  db._note = 'vulnStatus watch (agent/tools/claim-unit-lint.mjs --status-watch). Records the one field NVD moves on its own, so a BACKWARDS move is visible rather than inferred from four timestamps by hand. Filed 2026-10-30 after CVE-2026-97229 went Analyzed → Undergoing Analysis when CISA-ADP rewrote its container 27 minutes after a KEV add. `at` is when this tool observed it; `modified` is the record\'s own lastModified.';
+  const moved = [];
+  for (const [id, rec] of records) {
+    if (!rec || rec.error || !rec.status) continue;
+    const prev = db.cves[id];
+    if (prev && prev.status === rec.status) { prev.modified = rec.modified ?? prev.modified; prev.seen = now.toISOString(); continue; }
+    const was = prev?.status;
+    const entry = { status: rec.status, modified: rec.modified ?? null, seen: now.toISOString() };
+    if (!prev) { db.cves[id] = { ...entry, history: [{ at: now.toISOString(), status: rec.status, modified: rec.modified ?? null }] }; continue; }
+    prev.history = [...(prev.history ?? []), { at: now.toISOString(), status: rec.status, modified: rec.modified ?? null }].slice(-12);
+    Object.assign(prev, entry);
+    const a = STATUS_PIPELINE[was], b = STATUS_PIPELINE[rec.status];
+    moved.push({ id, from: was, to: rec.status, regressed: a != null && b != null && b < a, modified: rec.modified });
+  }
+  /* A watch that only appends becomes a database of every CVE the feed ever cited. A record that
+   * moved is the thing worth keeping, so history length is the retention rule: a single-observation
+   * entry older than the cutoff is a fact the feed has stopped asking about. */
+  const cutoff = now.getTime() - 45 * 86400 * 1000;
+  for (const [id, v] of Object.entries(db.cves)) {
+    if ((v.history?.length ?? 0) > 1) continue;
+    const last = Date.parse(v.seen ?? v.history?.[0]?.at ?? 0);
+    if (Number.isFinite(last) && last < cutoff) delete db.cves[id];
+  }
+  try { mkdirSync(dirname(STATUS_STORE), { recursive: true }); writeFileSync(STATUS_STORE, JSON.stringify(db, null, 1)); } catch { /* best-effort */ }
+  return moved;
+}
 /**
  * Check F — the record SHAPE, not the prose. A CVE whose CNA container carries a temporal vector
  * publishes more than one defensible number, and NVD publishes a different one again; the writer
@@ -1666,6 +1829,29 @@ if (SELFTEST) {
     stops('CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H/E:U/RL:W'),
     { base: 9.8, stops: [9.8, 9.0, 8.7], full: 8.7 });
 
+  // vulnStatus — the field NVD moves on its own (built 2026-10-30 after the `Analyzed` → `Undergoing
+  // Analysis` regression). A status is a queue position, so the check compares prose to the record.
+  const st = (body, status = 'Undergoing Analysis') => checkStatus(mk('t', body),
+    new Map([['CVE-2026-97229', { status, modified: '2026-10-29T20:17:37.000' }]])).map((x) => x.verdict);
+  t('status: the 10-30 defect — prose says Analyzed, the record went back',
+    st('NVD marked the record `Analyzed` for CVE-2026-97229.'), ['status-stale']);
+  t('status: matching the record is verified, with its own stamp',
+    checkStatus(mk('t', 'NVD holds CVE-2026-97229 at `Undergoing Analysis`.'),
+      new Map([['CVE-2026-97229', { status: 'Undergoing Analysis', modified: '2026-10-29T20:17:37.000' }]]))
+      .map((x) => x.detail), ['Undergoing Analysis (lastModified 2026-10-29T20:17:37.000)']);
+  t('status: a transition with an arrow claims the status AFTER it',
+    st('CVE-2026-97229 went `Analyzed` → `Undergoing Analysis`, so the endorsement case does not apply.'), ['ok']);
+  t('status: two statuses and no direction is not a claim',
+    st('CVE-2026-97229 is `Deferred`, unlike the other three which are `Analyzed`.'), []);
+  t('status: a self-dated disagreement is the trend, not an error',
+    st('CVE-2026-97229 was `Analyzed` when I checked it on 10-29.'), ['status-dated']);
+  t('status: the lowercase English verb is not a status',
+    statusMentions('We Analyzed 40 samples of the binary.').length, 0);
+  t('status: a capitalized status with no registry word near it is not a claim',
+    statusMentions('Analyzed results are in the appendix.').length, 0);
+  t('status: a claim with no CVE cannot be checked',
+    checkStatus(mk('t', 'NVD marked the record `Analyzed`.'), new Map()).map((x) => x.verdict), ['status-no-cve']);
+
   // subject binding — a score belongs to an identifier, not to the item
   const men = (s) => idMentions(s);
   const bind = (s) => bindSubject(s.indexOf('SCORE'), men(s));
@@ -1858,8 +2044,8 @@ const parsed = paths.map((p) => ({ path: p, items: parseItems(readFileSync(p, 'u
 let nvd = new Map();
 let nvdCalls = 0;
 let ghsaCalls = 0;
-if (!NO_NET && CHECKS.has('cvss')) {
-  const cves = [...new Set(parsed.flatMap((f) => f.items.flatMap((it) => it.cves)))];
+if (!NO_NET && (CHECKS.has('cvss') || CHECKS.has('status') || STATUS_WATCH)) {
+  const cves = [...new Set([...parsed.flatMap((f) => f.items.flatMap((it) => it.cves)), ...EXTRA_IDS])];
   const CHUNK = 25;
   for (let i = 0; i < cves.length; i += CHUNK) {
     if (i) await new Promise((r) => setTimeout(r, 6_500));
@@ -1876,7 +2062,23 @@ if (!NO_NET && CHECKS.has('cvss')) {
   }
 }
 const subjects = new Map();
-for (const [id, rec] of nvd) subjects.set(id, { kind: 'cve', status: rec.status, metrics: rec.metrics });
+for (const [id, rec] of nvd) subjects.set(id, { kind: 'cve', status: rec.status, modified: rec.modified, metrics: rec.metrics });
+/* The watch is written before the checks run, so a regression found here shows up in the same
+ * report that a stale claim about it would. It records the observation, not a verdict: a move
+ * that no item mentions is still the thing worth catching. */
+let statusMoved = [];
+if (STATUS_WATCH && !NO_NET) {
+  const moved = statusWatch(nvd);
+  statusMoved = moved;
+  if (moved.length) {
+    console.log(`\nSTATUS WATCH (${STATUS_STORE})`);
+    for (const m of moved) {
+      console.log(`  ${m.regressed ? '↩' : '→'} ${m.id}  ${m.from ?? '(new)'} → ${m.to}${m.regressed ? '   REGRESSION — the record moved back' : ''}${m.modified ? `  [lastModified ${m.modified}]` : ''}`);
+    }
+  } else {
+    console.log(`\nSTATUS WATCH (${STATUS_STORE}) — ${nvd.size} record(s) read, nothing moved`);
+  }
+}
 // CNA containers (check F): the only place a number NVD normalised away survives. cveawg is
 // unmetered, so the cap is about latency rather than budget — cached entries cost nothing.
 const cna = new Map();
@@ -1904,6 +2106,7 @@ for (const { path: p, items } of parsed) {
   for (const it of items) {
     if (CHECKS.has('issues')) findings.push(...checkIssues(it));
     if (!NO_NET && CHECKS.has('cvss')) findings.push(...checkCvss(it, subjects, cna));
+    if (!NO_NET && CHECKS.has('status')) findings.push(...checkStatus(it, subjects));
     if (!NO_NET && CHECKS.has('temporal')) findings.push(...checkTemporal(it, cna, subjects));
   }
   if (!NO_NET && CHECKS.has('repo')) for (const it of items) findings.push(...checkRepo(it, budget, ageBudget));
@@ -1917,10 +2120,12 @@ for (const { path: p, items } of parsed) {
 
 try { mkdirSync(dirname(CACHE_PATH), { recursive: true }); writeFileSync(CACHE_PATH, JSON.stringify(cache, null, 1)); } catch { /* cache is best-effort */ }
 
-const SEVERITY = { ok: 0, 'ok-cited-page': 0, 'no-cve-named': 1, 'no-record': 1, 'slot-quoted': 1, 'counted-by-author': 0, 'number-other-noun': 1, 'temporal-stopping-point': 1, 'cna-only-score': 1, 'star-drift': 2, 'star-dated': 1, 'ok-history': 0, 'history-older-than-record': 2, 'history-unreadable': 1, stale: 2, archived: 2, differs: 2, absent: 2, 'unsplit-issue-count': 3, 'compound-lags-parts': 3, 'version-swapped': 3, 'version-absent': 3, 'score-not-reproducible': 2, 'score-mismatch': 3, 'wrong-subject': 3, 'absence-contradicted': 3, 'advisory-unreadable': 1, 'advisory-repo-only': 0, unreadable: 1, 'artifact-unreadable': 1, 'nvd-unavailable': 1, 'bundle-ok': 0, 'bundle-lines-named': 0, 'bundle-unavailable': 0, 'bundle-line-count': 3, 'bundle-total-mismatch': 2 };
+const SEVERITY = { ok: 0, 'ok-cited-page': 0, 'no-cve-named': 1, 'no-record': 1, 'slot-quoted': 1, 'counted-by-author': 0, 'number-other-noun': 1, 'temporal-stopping-point': 1, 'cna-only-score': 1, 'star-drift': 2, 'star-dated': 1, 'ok-history': 0, 'history-older-than-record': 2, 'history-unreadable': 1, stale: 2, archived: 2, differs: 2, absent: 2, 'unsplit-issue-count': 3, 'compound-lags-parts': 3, 'version-swapped': 3, 'version-absent': 3, 'score-not-reproducible': 2, 'score-mismatch': 3, 'wrong-subject': 3, 'absence-contradicted': 3, 'status-stale': 2, 'status-dated': 1, 'status-no-record': 1, 'status-no-cve': 1, 'advisory-unreadable': 1, 'advisory-repo-only': 0, unreadable: 1, 'artifact-unreadable': 1, 'nvd-unavailable': 1, 'bundle-ok': 0, 'bundle-lines-named': 0, 'bundle-unavailable': 0, 'bundle-line-count': 3, 'bundle-total-mismatch': 2 };
 const REAL = (f) => (SEVERITY[f.verdict] ?? 1) >= 2;
 
-const summary = { generated: new Date().toISOString(), files: perFile, api_calls: apiCalls, readme_calls: readmeCalls, cited_page_calls: citedPages_requests, repo_page_calls: repoCalls, nvd_calls: nvdCalls, cna_calls: cnaCalls };
+/* `status_watch` rides the findings file so the act pass sees a backwards move without re-reading
+   the store: the batch's own JSON is the thing it is told to open first. */
+const summary = { generated: new Date().toISOString(), files: perFile, status_watch: statusMoved, api_calls: apiCalls, readme_calls: readmeCalls, cited_page_calls: citedPages_requests, repo_page_calls: repoCalls, nvd_calls: nvdCalls, cna_calls: cnaCalls };
 if (OUT) {
   try { mkdirSync(dirname(OUT), { recursive: true }); writeFileSync(OUT, JSON.stringify(summary, null, 1)); } catch { /* a missing findings file is not a failed lint */ }
 }

@@ -210,6 +210,7 @@
  *   node disclosure-lag.mjs --range-census --from 2026-10-18 --to 2026-10-24  # a whole window
  *   node disclosure-lag.mjs --field-census weaknesses --from 2026-10-18 --to 2026-10-24
  *   node disclosure-lag.mjs --changes-census --from 2026-10-21 --to 2026-10-27   # changes[] prevalence
+ *   node disclosure-lag.mjs --bound-census --from 2026-10-23 --to 2026-10-29     # newest vs stated bound
  *   node disclosure-lag.mjs --backlog-census --from 2026-10-21 --to 2026-10-27   # the Received residue
  *   node disclosure-lag.mjs --changes-census --backlog-census … --window-cache /tmp/win.json  # one fetch
  *   node disclosure-lag.mjs --ids CVE-… --artifact firmware --fix-ref <raw artifact url>
@@ -275,6 +276,14 @@ const FIELD_CENSUS = argOf('--field-census', null);
    occur, who writes it, and how many records would a one-entry reader get wrong?" was still
    unmeasured. Same window, same fetch. */
 const CHANGES_CENSUS = args.includes('--changes-census');
+/* `--bound-census`: is the ecosystem's newest release outside the bound an open-ended record
+   states? `--max-pkgs` caps registry lookups (they are unmetered but paced); a cap hit is
+   printed as `unqueried`, never as a pass. */
+const BOUND_CENSUS = args.includes('--bound-census');
+const MAX_PKGS = Number(argOf('--max-pkgs', 80));
+/* Package-URL prefixes the open-bound census can ask a registry about. Declared up here rather than
+   beside the census because `--selftest` runs before that section is initialised. */
+const REGISTRY_ECOSYSTEMS = { 'pkg:pypi/': 'pypi', 'pkg:npm/': 'npm', 'pkg:cargo/': 'crates.io' };
 /* The backlog census: 830 `Received` records over a week carry a CWE 17.1% of the time while one
    fresh day's `Received` is 98.5% — two readings (queue artefact vs record-quality signal) that
    predict different assigner distributions. Grouping by assigner and by publication day settles it
@@ -1802,6 +1811,23 @@ if (SELFTEST) {
   eq('cwe source: the ADP container', cweSourceKind('CISA-ADP'), 'adp');
   eq('cwe source: MITRE is the last-resort CNA, not the vendor', cweSourceKind('cve@mitre.org'), 'mitre');
   eq('cwe source: absent', cweSourceKind(''), 'none');
+  /* ── the open-bound shape (2026-10-30): a record whose only statement is an inclusive max ──
+     The Agno record verbatim, and the four neighbours that must NOT be counted as the same shape. */
+  const agno = openBoundOf({ affected: [{ source: 'disclosure@vulncheck.com', affectedData: [{
+    vendor: 'agno-agi', product: 'agno', packageURL: 'pkg:pypi/agno',
+    versions: [{ version: '0', lessThanOrEqual: '3.1.11', status: 'affected' }] }] }] });
+  eq('open bound: the Agno shape is an inclusive max with no fix', [agno.bound?.ecosystem, agno.bound?.name, agno.bound?.max], ['pypi', 'agno', '3.1.11']);
+  const ob = (versions, extra = {}) => openBoundOf({ affected: [{ affectedData: [{ packageURL: 'pkg:npm/x', versions, ...extra }] }] }).bound;
+  eq('open bound: an exclusive bound NAMES the fix, so it is not this shape', ob([{ version: '0', lessThan: '2.0.4', status: 'affected' }]), null);
+  eq('open bound: a changes[] entry names the exemption, so it is not this shape',
+    ob([{ version: '0', lessThanOrEqual: '3.3.12', status: 'affected', changes: [{ at: '3.3.13', status: 'unaffected' }] }]), null);
+  eq('open bound: an unaffected complement names the fix', ob([{ version: '0', lessThanOrEqual: '1.0', status: 'unaffected' }]), null);
+  eq('open bound: two spans is a multi-branch range with two maxes, not one claim',
+    ob([{ version: '4.0.0', lessThanOrEqual: '4.5.34', status: 'affected' }, { version: '5.1.0', lessThanOrEqual: '5.1.9', status: 'affected' }]), null);
+  eq('open bound: no packageURL means no registry can answer it',
+    openBoundOf({ affected: [{ affectedData: [{ vendor: 'x', product: 'y', versions: [{ version: '0', lessThanOrEqual: '1.0' }] }] }] }).bound, null);
+  eq('open bound: a scoped npm name is decoded from the purl',
+    openBoundOf({ affected: [{ affectedData: [{ packageURL: 'pkg:npm/%40angular/core', versions: [{ version: '0', lessThanOrEqual: '19.0.0' }] }] }] }).bound?.name, '@angular/core');
   let pass = 0;
   for (const c of cases) {
     if (c.ok) pass++;
@@ -1946,6 +1972,171 @@ function printRangeCensus(c) {
   console.log('  Read a row as "records whose paperwork completed that week", not "vulnerabilities that');
   console.log('  appeared that week" — NVD\'s published date is a workflow timestamp. Re-run this in a');
   console.log('  week: configurations is acquired on analysis, so the top table moves and this one should.');
+}
+
+/* ── the OPEN-BOUND census (added 2026-10-30 04:31) ──
+   Filed 10-30 04:27 from Agno `CVE-2026-119050`: the CNA container says
+   `{version:"0", lessThanOrEqual:"3.1.11", status:"affected"}` and names **no patched version at
+   all**, while `v3.1.12` was on PyPI **16 minutes before** the record — so the release a responder
+   upgrades to sits outside the stated range. That is a shape, not an anecdote, and the two halves
+   are already machine-readable: NVD carries the bound and the `packageURL`, the registry carries
+   the newest release. So the census asks one question per record — is the ecosystem's newest
+   release outside the bound the record states? — and a second one about the record's own clock.
+
+   The selection is deliberately NARROW, because a wide one would put two questions in one number:
+   a record qualifies only when a single `affectedData` entry carries a `packageURL` for an
+   ecosystem we can query (PyPI / npm / crates.io), exactly ONE `versions[]` entry, that entry is
+   `lessThanOrEqual` (an inclusive max = "through X"), and nothing in the record names a fix — no
+   `lessThan` (whose bound IS the fix), no `unaffected` entry, no `changes[]` (whose `at` version is
+   the exemption). Records with several spans are counted and excluded rather than merged, because
+   a multi-branch range has one max per line and "the newest" is not one number. */
+
+function openBoundOf(cve) {
+  const skips = [];
+  const candidates = [];
+  for (const a of cve.affected || []) {
+    for (const d of a.affectedData || []) {
+      const purl = d.packageURL || '';
+      const eco = Object.keys(REGISTRY_ECOSYSTEMS).find(p => purl.startsWith(p));
+      if (!eco) { if (d.versions?.length) skips.push('no-packageurl'); continue; }
+      const vs = d.versions || [];
+      const name = decodeURIComponent(purl.slice(eco.length)).replace(/^@/, '@');
+      if (vs.length !== 1) { skips.push('multi-span'); continue; }
+      const v = vs[0];
+      if (v.status && v.status !== 'affected') { skips.push('no-affected-span'); continue; }
+      if (v.lessThan) { skips.push('names-a-fix'); continue; }
+      if (v.changes?.length) { skips.push('names-a-fix'); continue; }
+      if (!v.lessThanOrEqual) { skips.push('unbounded'); continue; }
+      candidates.push({ ecosystem: REGISTRY_ECOSYSTEMS[eco], name, max: v.lessThanOrEqual, maxInc: true, source: a.source || null });
+    }
+  }
+  if (!candidates.length) return { bound: null, skips };
+  // Two candidate entries with different bounds is the multi-branch shape again, not one claim.
+  const maxes = [...new Set(candidates.map(c => c.max))];
+  if (maxes.length > 1) return { bound: null, skips: [...skips, 'multi-span'] };
+  return { bound: candidates[0], skips };
+}
+
+/** The newest release each registry will tell us about, plus its upload date when it gives one. */
+async function newestRelease(ecosystem, name) {
+  const key = `newest:${ecosystem}:${name}`;
+  if (!globalThis.__newestCache) globalThis.__newestCache = new Map();
+  if (globalThis.__newestCache.has(key)) return globalThis.__newestCache.get(key);
+  let out = null;
+  try {
+    if (ecosystem === 'pypi') {
+      const j = await getJson(`https://pypi.org/pypi/${encodeURIComponent(name)}/json`);
+      const v = j?.body?.info?.version;
+      const files = j?.body?.releases?.[v] || [];
+      out = v ? { version: v, at: files[0]?.upload_time_iso_8601 || null } : null;
+    } else if (ecosystem === 'npm') {
+      const j = await getJson(`https://registry.npmjs.org/${name.replace('/', '%2F')}`);
+      const v = j?.body?.['dist-tags']?.latest;
+      out = v ? { version: v, at: j.body.time?.[v] || null } : null;
+    } else {
+      const j = await getJson(`https://crates.io/api/v1/crates/${encodeURIComponent(name)}`);
+      const v = j?.body?.crate?.max_version;
+      const hit = (j?.body?.versions || []).find(x => x.num === v);
+      out = v ? { version: v, at: hit?.created_at || null } : null;
+    }
+  } catch { out = null; }
+  globalThis.__newestCache.set(key, out);
+  return out;
+}
+
+async function boundCensus({ from, to }) {
+  const { records, total } = await fetchWindow(from, to);
+  const rows = [];
+  const skipTally = {};
+  for (const c of records) {
+    if (c.vulnStatus === 'Rejected') continue;
+    const { bound, skips } = openBoundOf(c);
+    for (const s of skips) skipTally[s] = (skipTally[s] || 0) + 1;
+    if (!bound) continue;
+    rows.push({ id: c.id, assigner: c.sourceIdentifier || '?', modified: c.lastModified || null,
+      published: c.published || null, ...bound, newest: null, verdict: 'unqueried',
+      /* The record has a THIRD place to name a fix, and the census needed live data to see it:
+       * `versions[]` is the field the bound is in, but `references[]` is a separate list and it
+       * is where a CNA records the repairing commit. `CVE-2026-117558` (measured 2026-10-30)
+       * states `≤ 0.31.2` with no `unaffected` entry — and its own references carry the fix
+       * commit `717d7ecf`, dated 32 minutes after 0.31.2 shipped, which `0.32.0` released. So the
+       * range was RIGHT and the field was silent; the opposite of the Agno row, where nothing in
+       * the record points at a fix and the newest release still carries the defect. Reporting the
+       * pointer turns one ambiguous verdict into two distinguishable ones. */
+      fixRefs: (c.references || []).map(r => r.url || '').filter(u => /\/(?:commit|pull|pulls)\//.test(u)) });
+  }
+  const cap = Math.min(rows.length, MAX_PKGS);
+  for (const r of rows.slice(0, cap)) {
+    r.newest = await newestRelease(r.ecosystem, r.name);
+    if (!r.newest) { r.verdict = 'registry-unreadable'; continue; }
+    const cmp = cmpVer(r.newest.version, r.max);
+    if (cmp > 0) {
+      r.verdict = 'newest-outside-bound';
+      /* The second half of the filed question: was the record TOUCHED after that release appeared?
+         `lastModified` moves for KEV adds and ADP rewrites too, so a hit is "the record was reissued
+         without widening the bound", not proof the CNA read the release. */
+      r.afterNewest = !!(r.modified && r.newest.at && Date.parse(r.modified) > Date.parse(r.newest.at));
+    } else {
+      r.verdict = 'newest-inside-bound';
+    }
+    await sleep(120);
+  }
+  for (const r of rows.slice(cap)) r.verdict = 'unqueried';
+  return { from, to, totalResults: total, fetched: records.length, candidates: rows.length, queried: cap, skipTally, rows };
+}
+
+function printBoundCensus(c) {
+  const pct = (n, d) => (d ? ((100 * n) / d).toFixed(1) : '0.0');
+  const q = c.rows.filter(r => r.verdict !== 'unqueried');
+  const out = q.filter(r => r.verdict === 'newest-outside-bound');
+  const inside = q.filter(r => r.verdict === 'newest-inside-bound');
+  const unread = q.filter(r => r.verdict === 'registry-unreadable');
+  console.log(`Open-bound census — publication window ${c.from} → ${c.to} (UTC)`);
+  console.log(`  ${c.fetched} records · ${c.candidates} with an inclusive max and no named fix · ${c.queried} queryable (cap ${MAX_PKGS})`);
+  console.log('');
+  console.log('  ecosystem     n   newest-outside   inside   unreadable');
+  for (const eco of ['pypi', 'npm', 'crates.io']) {
+    const e = q.filter(r => r.ecosystem === eco);
+    if (!e.length) continue;
+    console.log(`  ${eco.padEnd(12)} ${String(e.length).padStart(3)}   ${String(e.filter(r => r.verdict === 'newest-outside-bound').length).padStart(14)}   ${String(e.filter(r => r.verdict === 'newest-inside-bound').length).padStart(6)}   ${String(e.filter(r => r.verdict === 'registry-unreadable').length).padStart(10)}`);
+  }
+  console.log('');
+  console.log(`  newest > bound   ${out.length}/${q.length} (${pct(out.length, q.length)}%)  — the release a responder upgrades to is outside the stated range`);
+  console.log(`  newest <= bound  ${inside.length}/${q.length} (${pct(inside.length, q.length)}%)`);
+  if (unread.length) console.log(`  unreadable       ${unread.length} — a registry miss is not an answer`);
+  const byAsn = {};
+  for (const r of out) byAsn[r.assigner] = (byAsn[r.assigner] || 0) + 1;
+  const totals = {};
+  for (const r of q) totals[r.assigner] = (totals[r.assigner] || 0) + 1;
+  const ranked = Object.entries(byAsn).sort((a, b) => b[1] - a[1]);
+  if (ranked.length) {
+    console.log('');
+    console.log('  by assigner (hit / candidates):');
+    for (const [a, n] of ranked) console.log(`    ${a.padEnd(34)} ${String(n).padStart(3)} / ${String(totals[a]).padStart(3)}  (${pct(n, totals[a])}%)`);
+  }
+  if (out.length) {
+    console.log('');
+    const withRef = out.filter(r => r.fixRefs?.length);
+    console.log(`  of the ${out.length} row(s) whose newest release is outside the bound, ${withRef.length} carry a fix`);
+    console.log('  reference in `references[]` — so `versions[]` naming no fix is not the RECORD naming no fix:');
+    const noRef = out.filter(r => !r.fixRefs?.length);
+    if (noRef.length) console.log(`    no fix pointer at all  ${noRef.map(r => r.id).join(', ')} — these are the rows whose newest bytes are the test`);
+    for (const r of withRef) console.log(`    ${r.id}  fix ref  ${r.fixRefs[0]}`);
+    console.log('');
+    console.log('  rows where the record was REISSUED after the excluded release appeared:');
+    const after = out.filter(r => r.afterNewest);
+    for (const r of after.slice(0, 12)) console.log(`    ${r.id}  ${r.ecosystem}/${r.name}  bound ≤${r.max}  newest ${r.newest.version} (${String(r.newest.at).slice(0, 10)})  lastModified ${String(r.modified).slice(0, 10)}  [${r.assigner}]`);
+    if (!after.length) console.log('    (none — none of them was touched after the newest release)');
+    console.log('');
+    console.log('  all rows:');
+    for (const r of out.slice(0, 20)) console.log(`    ${r.id}  ${r.ecosystem}/${r.name}  ≤${r.max} → ${r.newest.version}${r.afterNewest ? '  (reissued after)' : ''}  [${r.assigner}]`);
+  }
+  const sk = Object.entries(c.skipTally).sort((a, b) => b[1] - a[1]);
+  if (sk.length) console.log(`\n  excluded shapes: ${sk.map(([k, v]) => `${k} ${v}`).join(' · ')}`);
+  console.log('\n  The bound is what the record STATES, not what the maintainer knows: `newest > bound` proves');
+  console.log('  the range excludes the current release, never that the release is fixed. Read the row as a');
+  console.log('  record to open (the newest version\'s bytes are the test), and read the per-assigner split');
+  console.log('  before quoting a rate — this shape was one writer\'s habit for `changes[]`.');
 }
 
 /* ── the field census (added 2026-10-25 12:33) ──
@@ -2305,6 +2496,15 @@ if (RANGE_CENSUS) {
   process.exit(0);
 }
 
+if (BOUND_CENSUS) {
+  const to = CENSUS_TO || new Date(Date.now() - 864e5).toISOString().slice(0, 10);
+  const from = CENSUS_FROM || new Date(Date.parse(`${to}T00:00:00Z`) - 6 * 864e5).toISOString().slice(0, 10);
+  const c = await boundCensus({ from, to });
+  if (JSON_OUT) console.log(JSON.stringify(c, null, 1));
+  else printBoundCensus(c);
+  process.exit(0);
+}
+
 if (CHANGES_CENSUS || BACKLOG_CENSUS) {
   const to = CENSUS_TO || new Date(Date.now() - 864e5).toISOString().slice(0, 10);
   const from = CENSUS_FROM || new Date(Date.parse(`${to}T00:00:00Z`) - 6 * 864e5).toISOString().slice(0, 10);
@@ -2330,7 +2530,7 @@ if (!IDS.length && !TRACKERS.length && !(REPO && ARTIFACT)) {
     ' [--fix-ref <commit|pull url|artifact url>] [--debian <srcpkg>] [--range "<expr>"] [--json] [--selftest]' +
     ' [--release-notes <url>[,<url>…]] [--census [--no-github]] [--range-census --from YYYY-MM-DD --to YYYY-MM-DD]' +
     ' [--field-census <field> --from YYYY-MM-DD --to YYYY-MM-DD]' +
-    ' [--changes-census | --backlog-census --from YYYY-MM-DD --to YYYY-MM-DD [--window-cache <path>]]');
+    ' [--changes-census | --backlog-census | --bound-census --from YYYY-MM-DD --to YYYY-MM-DD [--window-cache <path>]]');
   process.exit(0);
 }
 

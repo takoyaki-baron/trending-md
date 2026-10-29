@@ -2916,3 +2916,41 @@ Cartesia 的 H-Net 第一篇把对照做得诚实到代价显而易见，然后�
 **让它可读的是锚点**，也是如今任何架构主张的模板：它把自己放在 Kimi 公布的 **Kimi Delta Attention（1.16×）**与**注意力残差（1.25×）**乘数旁边，而不是放在某个头条旁。字节能否在前沿规模上胜过 BPE 仍开放；这篇确立的是，在 3B、把分词器优势移除之后，差距不是噪声。
 
 → [[harness-reliability]] [[fact-check]] [[token-economics]]
+
+## 2026-10-30 — Mistral Large 4 权重放出：同一场发布给出两套上下文数字、两套基准
+
+`mistralai/Mistral-Large-4-1T-A52B` 于 **2026-10-29** 开放权重（"Le Chonk"）：总参约 1T / **激活 49B**（含 embedding 与输出层为 52B）、128 个路由专家（每 token 激活 4 个）+ 1 个共享专家、原生多模态，许可证字段是 **`other`** — Mistral Ecosystem Open-Weight License，唯一附加条件是"businesses that operate a Model-as-a-Service offering must obtain a separate commercial license"。仓库为预览版创建于 **2026-09-30**；2026-10-29T14:51Z 时 68 个文件；检查时 1,179 个赞 / 278 次下载；`gated: false`。
+
+### 上下文这个数字存在四处，取值两个
+
+| 产物 | 说法 |
+|---|---|
+| Mistral 模型卡（正文） | "**1M** context length"、"supports a **1M** context window"、"the checkpoint supports a **1M** context window" |
+| Mistral 模型卡，Vibe provider 段 | `max_context_length = 1048576` |
+| Mistral 模型卡，自己的 FP8 vLLM docker 配方 | **完全没有** `--max-model-len` |
+| mistral.ai 新闻稿 | "1M" **0 次**，"131" **0 次**；全文无上下文长度 |
+| Hugging Face 博客，正文 | "a context window of **1M tokens**" |
+| HF 博客，NVFP4 vLLM 配方 | `--max-model-len **131072**` |
+| HF 博客，Inference Endpoints | "serves up to **131K** tokens of context" |
+
+站得住的读法是：**1,048,576 是 checkpoint 声明的能力，131,072 是 Hugging Face 为量化版和托管端点选择的省显存配置。**"厂商在 1M 上自相矛盾"的两半各多算了一层——131K 是第三方的服务参数，不是厂商自己的 flag。真正未解决的是：两份文档都没说**默认部署**拿到多少。
+
+### 两份同日发布文档，两套基准
+
+| 基准 | mistral.ai 新闻稿 | Hugging Face 博客（同日） |
+|---|---|---|
+| Terminal-Bench 4 / 4.0 | **41%**（"improved by 13 percentage points … compared to its public preview"） | **28.3%** |
+| Artificial Analysis Coding Agent Index | **48%**（"effectively tied with … GLM-5.3, while using **47%** fewer tokens per task"） | **49.8%** |
+| BrowseComp | **84.5%**（起点是 **75%** 的 SFT checkpoint；图：GLM-5.3 82.5、DeepSeek V4.1 Flash 83.4、Kimi K3 **91.2**） | 未给 |
+| FinWorkBench（Finch） | **73.3%**（"second only to Kimi K3"） | 未给 |
+| DeepSWE v1.1 / SWE-Atlas-QnA / AutomationBench | 未给 | **61.7% / 59.4% / 59.9%** |
+
+新闻稿自己那张 Terminal-Bench 图把 `ML4 Preview - self reported` 标在 **28%**、ML4 标在 **41%** — 正好是博客里的 **28.3%**。也就是说博客把**预览版**的编码分数挂在正式模型名下，同时给自己盖了"As of **October 29, 2026**"的戳；而 CAI 那一对（48 vs 49.8）走向相反，用"预览/正式"解释不了。**一份发布文档的基准表是有测量日期和 harness 的，而这次发布两者都没写**，这就是两份文档对不上的原因。
+
+新闻稿里另外值得留存的：网络安全的立场 — "we observed the model refusing to comply with black-box attacks against live targets"，但"we see a potential for uplift to conduct real attacks"，因此正在调整护栏，网络优化变体以"rigorous vetting"为条件只给设计合作伙伴；价格 **$0.70 输入 / $0.07 缓存 / $2.10 输出 每百万 token**；本地可行性 — **2-bit** 量化"on a single Apple Silicon Ultra computer with 512 GB"，Q2_K 在单台 M3 Ultra 上 prefill 约 **90 tok/s**（自报），其余都需分布式推理。
+
+**可复用的规则：**当一个版本在同一天发出多份厂商文档时，基准数字是*逐文档*的，分歧本身就是结论 — 不要取平均，也不要在不点名哪一页、哪一天的情况下引用其中任何一个。
+
+→ [[fact-check]] [[edge-inference]] [[token-economics]]
+
+来源：[Mistral——放出权重](https://mistral.ai/news/mistral-large-4-oss/) · [HF——Welcome Le Chonk](https://huggingface.co/blog/mistral-large4) · [模型卡](https://huggingface.co/mistralai/Mistral-Large-4-1T-A52B)

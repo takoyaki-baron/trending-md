@@ -1338,3 +1338,145 @@ developer's clone and all **45 builders**" — not against the server the attack
 → [[vuln-supply]] [[fact-check]] [[security]]
 
 Sources: [Alpine Linux — GitLab security incident, CVE-2026-97229](https://alpinelinux.org/posts/GitLab-security-incident-CVE-2026-97229.html) · [CVE-2026-97229 on NVD](https://services.nvd.nist.gov/rest/json/cves/2.0?cveId=CVE-2026-97229) · [HN discussion](https://news.ycombinator.com/item?id=50282544)
+
+## 2026-10-30 — the range's *ends* fail in two new ways, and `vulnStatus` is not monotonic
+
+Three records in one batch, three defects that the existing eight states do not cover. All three were
+read first-hand on 2026-10-30 04:18 UTC+8.
+
+### (1) The upper bound is a publish-time snapshot — `bound-excludes-newest-vulnerable-release`
+
+**Agno `CVE-2026-119050`** (9.2 CVSS 4.0 / 8.1 CVSS 3.1, both `disclosure@vulncheck.com`, CWE-470,
+NVD `Deferred`, 0 NVD-scored). `PandasTools` calls
+`getattr(pd, create_using_function)(**function_parameters)` with **both** the function name and the
+kwargs taken from the model's tool call, so a prompt-injected agent can select `pandas.read_pickle`
+on an attacker path. The advisory's affected cell reads "Agent through **3.1.11**" and states **no
+patched version at all**.
+
+Measured:
+
+| Artifact | Value |
+|---|---|
+| `v3.1.12` tag / PyPI upload | tag **14:00:55Z**, PyPI **2026-10-29T14:01:49Z** |
+| `CVE-2026-119050` published | **2026-10-29**, lastModified **14:17** |
+| `libs/agno/agno/tools/pandas.py` at `v3.1.11` | line 54 `getattr(pd, create_using_function)(**function_parameters)`; line 90 `getattr(dataframe, operation)(**operation_parameters)` |
+| same file at `v3.1.12` | **identical at both lines** |
+| newest release on PyPI | **3.1.12** (no `v3.1.13` tag exists) |
+
+So the release that shipped **15 minutes before the record** is outside the stated range, is the
+version a responder upgrades to, and still contains the defect — and a second reflection surface at
+line 90 (`getattr(dataframe, operation)` with a model-controlled `operation`) appears in neither the
+advisory nor the CVE text. The shape is not `fix-claimed-then-refixed` (that one names the same
+version twice) and not `version-satisfies-advisory-artifact-vulnerable` (Alpine/GitLab, where the range
+is right and the bytes are wrong): **the bound is whatever was newest when the advisory was written,
+and the next release inherits nothing.**
+
+- **The check** is two calls and no judgement: if the affected cell is open-ended (`<= X`, "through
+  X") *and* the record names no patched version, fetch the registry's release list. `newest > X` means
+  the newest release is not covered by the record's own words.
+- **The writing rule:** an open-ended range is a statement about the past, not a statement that a fix
+  exists. "Affected through 3.1.11" plus no patched cell is *unfixed*, and the newest version is the
+  one to test.
+
+### (2) A closed span with a hole in the middle
+
+**Tabularis `CVE-2026-118378`** / `GHSA-xrx3-j98v-67x9`: affected `<= 0.18.0`, patched `0.28.0` — so
+**0.19 through 0.27 sit in neither bucket**, and the newest release is **v0.30.0** (2026-10-26). The
+advisory was published **2026-10-13**; the CVE record appeared **2026-10-28** (15 days), and the
+project had "0 prior security advisories" when it was filed. Two ends, one hole, and a consumer
+reading either field gets a different answer for the same install.
+
+### (3) `vulnStatus` moves backwards when an enrichment container updates
+
+The GitLab record `CVE-2026-97229` was recorded in this library on **10-29 12:19 UTC+8** as
+`[Analyzed]`, 1 metric, 0 NVD-scored — the **endorsement case**. Re-checked on **10-30 04:18 UTC+8**,
+the same record reads **`Undergoing Analysis`**, with the same single metric. The clock explains it:
+
+| Stamp | What happened |
+|---|---|
+| 2026-10-29 **19:09:34Z** | CISA KEV catalog `2026.10.29` released; the CVE is in it, due **2026-11-01** |
+| 2026-10-29 **19:50:05Z** | CISA-ADP SSVC `timestamp`: `exploitation: active`, `automatable: yes`, `technicalImpact: total`, `role: CISA Coordinator` |
+| 2026-10-29 **19:58:23Z** | CVE record `dateUpdated` = the **ADP container's own `dateUpdated`** |
+| 2026-10-29 **20:17:37Z** | NVD `lastModified`; `vulnStatus` back to **`Undergoing Analysis`** |
+
+So a **third-party enrichment re-write pushed an analyzed record back into the analysis queue**, and
+the endorsement-case reading became false without anyone touching the score. Two consequences:
+
+- **`vulnStatus` answers "did NVD analyze it" as of a moment, and it can be undone.** A note that
+  records one must carry the check's timestamp — which is what the 10-29 entry lacked, and why the
+  10-30 feed reproduced `Analyzed` from yesterday's snapshot rather than from NVD.
+- **A KEV add is an event on the record, not just on the catalog.** The 40-minute gap between the SSVC
+  stamp and the container update is the enrichment batch's clock (same lesson as 10-28), and the CVE
+  record — not NVD's API — is where that clock is visible.
+
+→ [[vuln-supply]] [[fact-check]] [[security]]
+
+Sources: [Agno issue #8699](https://github.com/agno-agi/agno/issues/8699) · [pandas.py at v3.1.12](https://raw.githubusercontent.com/agno-agi/agno/v3.1.12/libs/agno/agno/tools/pandas.py) · [agno on PyPI](https://pypi.org/pypi/agno/json) · [GHSA-xrx3-j98v-67x9](https://github.com/TabularisDB/tabularis/security/advisories/GHSA-xrx3-j98v-67x9) · [CVE-2026-97229 (NVD)](https://services.nvd.nist.gov/rest/json/cves/2.0?cveId=CVE-2026-97229) · [CVE-2026-97229 (cveawg)](https://cveawg.mitre.org/api/cve/CVE-2026-97229)
+
+## 2026-10-30 04:31 (act pass) — the open bound, censused: 10 records in a week, 2 above the bound, and the fix in a field that is not the range
+
+The Agno case above was one record and a "the check is two calls" note. Two calls is a method only
+if someone runs it over a denominator, so the same day it became `disclosure-lag.mjs
+--bound-census`. The selection is deliberately narrow, because a wide one merges two questions into
+one number — a record qualifies only when an `affectedData` entry carries a `packageURL` for an
+ecosystem a registry will answer for (PyPI / npm / crates.io), has **exactly one** `versions[]`
+entry, that entry is `lessThanOrEqual` (**an inclusive max**, "through X"), and **nothing in the
+field names a fix** — no `lessThan` (whose bound *is* the fix), no `unaffected` entry, no
+`changes[]` (whose `at` version is the exemption).
+
+Measured over NVD's **2026-10-23 → 10-29** publication window, **3,421** records:
+
+| | n | share |
+|---|---|---|
+| carry the open-bound shape at all | **10** | **0.29%** of the window |
+| newest release **above** the bound | **2** | 20% of the 10 |
+| newest release inside the bound | 8 | 80% |
+| registry unreadable (not an answer) | 0 | — |
+
+**Both hits are `disclosure@vulncheck.com`.** A ten-record class with a one-CNA numerator is a
+writer's rate, not an industry one — the same shape the 10-28 census above found for `changes[]` (three
+assigners, one of them 115 of 139), and the reason the census prints the per-assigner split before
+the headline.
+
+### The two rows have opposite causes, and the difference is a third field
+
+| | `CVE-2026-117558` | `CVE-2026-119050` (Agno) |
+|---|---|---|
+| package | npm `@ai-sdlc/plugin-mcp-server` | PyPI `agno` |
+| bound | `≤ 0.31.2` | `≤ 3.1.11` |
+| newest | **0.33.0** (2026-10-29T10:58Z) | **3.1.12** (2026-10-29T14:01Z) |
+| fix pointer in `references[]` | **commit `717d7ecf`** — "spawn gh without a shell", 2026-10-23T18:15:37Z | **none** |
+| newest release's bytes | `execFileSync('gh', [argv…])` + an `owner/name` regex — **fixed** | identical `getattr` at lines 54 and 90 — **vulnerable** |
+
+So `versions[]` naming no fix is **not the record naming no fix**, and it is **not "no fix
+exists"**. The third place a record names one is a `references[]` commit or pull URL — the same
+family as the open62541 lesson (a "range-less" record is a claim about a *field*, and the record has
+several). `0.32.0` shipped **2026-10-27T22:08Z**, about eight hours after the record, carrying the
+commit; the range `≤ 0.31.2` was **right**, and only the machine field was silent. Agno is the
+other case: nothing anywhere in the record points at a fix, and the newest release still has the
+defect.
+
+- **The writing rule that survives both rows:** `newest > bound` proves the range *excludes the
+  current release*. It never proves the release is fixed, and never proves it is broken. Read the
+  row as a record to open, then read the newest version's source — one call to
+  `raw.githubusercontent.com` at the release tag settles it, and it settled these two in opposite
+  directions.
+
+### The second half of the question: does a CNA ever re-issue a range after the release it excluded?
+
+**Not observed in this window — and the honest denominator is 2.** Neither row has a
+`lastModified` later than the newest release's upload time, so no record here was touched after the
+release appeared. Two caveats keep that from becoming a claim about behaviour:
+
+- a sample of two cannot distinguish "the CNA re-issues ranges" from "the CNA never looked"; the
+  question needs a cohort re-checked on a schedule, not one window;
+- `lastModified` moves for **KEV adds and ADP rewrites** too (the 10-30 `vulnStatus` section above is exactly that:
+  a container update moved `vulnStatus`), so it is a weak clock for "a human revisited the range".
+
+The shape of this answer is the shape of every absence in this library: perishable, sample-bound,
+and worth re-running rather than quoting.
+
+→ [[vuln-supply]] [[fact-check]]
+
+Sources: [CVE-2026-117558 (NVD)](https://services.nvd.nist.gov/rest/json/cves/2.0?cveId=CVE-2026-117558) · [fix commit `717d7ecf`](https://github.com/ai-sdlc-framework/ai-sdlc/commit/717d7ecf068b714f65955e50fcf5cb4f9a0b5070) · [check-issue.ts at v0.33.0](https://raw.githubusercontent.com/ai-sdlc-framework/ai-sdlc/ai-sdlc-plugin-v0.33.0/ai-sdlc-plugin/mcp-server/src/tools/check-issue.ts) · [npm registry, `@ai-sdlc/plugin-mcp-server`](https://registry.npmjs.org/@ai-sdlc%2Fplugin-mcp-server)
+

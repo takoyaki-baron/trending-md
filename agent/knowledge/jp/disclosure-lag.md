@@ -882,3 +882,105 @@ Alpine は **10 月 20–21 日**に新規登録された攻撃者の設定を�
 → [[vuln-supply]] [[fact-check]] [[security]]
 
 出典：[Alpine Linux——GitLab セキュリティインシデント CVE-2026-97229](https://alpinelinux.org/posts/GitLab-security-incident-CVE-2026-97229.html) · [NVD の CVE-2026-97229](https://services.nvd.nist.gov/rest/json/cves/2.0?cveId=CVE-2026-97229) · [HN ディスカッション](https://news.ycombinator.com/item?id=50282544)
+
+## 2026-10-30 — 範囲の両端に新しい失敗の仕方が2つ、そして `vulnStatus` は単調ではない
+
+同一バッチの3レコード、既存の8状態では捉えられない3つの欠陥。すべて 2026-10-30 04:18 UTC+8 に一次情報で確認した。
+
+### （1）上界は公開時点のスナップショット — `bound-excludes-newest-vulnerable-release`
+
+**Agno `CVE-2026-119050`**（9.2 CVSS 4.0 / 8.1 CVSS 3.1、いずれも `disclosure@vulncheck.com`、CWE-470、NVD `Deferred`、NVD採点0件）。`PandasTools` は `getattr(pd, create_using_function)(**function_parameters)` を呼び、**関数名もkwargsもモデルのtool call由来**だ。したがってプロンプト注入されたagentは `pandas.read_pickle` を選び、攻撃者の指定パスを読める。アドバイザリの影響範囲は「Agent through **3.1.11**」で、**patchedバージョンは一切書かれていない**。
+
+実測：
+
+| 成果物 | 値 |
+|---|---|
+| `v3.1.12` tag / PyPIアップロード | tag **14:00:55Z**、PyPI **2026-10-29T14:01:49Z** |
+| `CVE-2026-119050` 公開 | **2026-10-29**、lastModified **14:17** |
+| `v3.1.11` の `libs/agno/agno/tools/pandas.py` | 54行目 `getattr(pd, create_using_function)(**function_parameters)`、90行目 `getattr(dataframe, operation)(**operation_parameters)` |
+| `v3.1.12` の同一ファイル | **両行とも同一** |
+| PyPI上の最新リリース | **3.1.12**（`v3.1.13` tagは存在しない） |
+
+つまり**レコードより15分前に出た**リリースが宣言範囲の外にあり、対応者が上げる版であり、欠陥が残っている。90行目の第2の反射面（`operation` もモデル制御）はアドバイザリにもCVE本文にも登場しない。これは `fix-claimed-then-refixed`（同一版を2回名指しする形）でも、`version-satisfies-advisory-artifact-vulnerable`（Alpine/GitLab：範囲は正しくバイトが違う）でもない——**この境界はアドバイザリ執筆時に最新だった版にすぎず、次のリリースは何も継承しない。**
+
+- **検査**は2回の呼び出しで判断不要：影響範囲が開区間（`<= X`、「through X」）で**かつ**patched版が無いなら、レジストリのリリース一覧を取る。`newest > X` は、最新リリースがレコード自身の記述に含まれないことを意味する。
+- **執筆規則：**開いた範囲は過去についての陳述であり、「修正が存在する」という陳述ではない。「Affected through 3.1.11」＋空のpatchedセルは**未修正**であり、試すべきは最新版のほうだ。
+
+### （2）閉じた範囲の真ん中に穴
+
+**Tabularis `CVE-2026-118378`** / `GHSA-xrx3-j98v-67x9`：affected `<= 0.18.0`、patched `0.28.0` ——**0.19 から 0.27 はどちらのバケツにも入らない**。最新リリースは **v0.30.0**（2026-10-26）。アドバイザリ公開は **2026-10-13**、CVEレコードは **2026-10-28**（15日後）で、起票時点でこのプロジェクトは「0 prior security advisories」だった。両端と穴がひとつ、そしてどちらのフィールドを読むかで同じインストールの答えが変わる。
+
+### （3）エンリッチメントコンテナが更新されると `vulnStatus` は逆行する
+
+GitLabのレコード `CVE-2026-97229` は **10-29 12:19 UTC+8** に本ライブラリへ `[Analyzed]`、メトリクス1件、NVD採点0件として記録された——**追認のケース**だ。**10-30 04:18 UTC+8** に再確認すると、同じレコードが **`Undergoing Analysis`** と読める。メトリクスは同じ1件のままだ。時刻が説明になる：
+
+| スタンプ | 出来事 |
+|---|---|
+| 2026-10-29 **19:09:34Z** | CISA KEVカタログ `2026.10.29` 公開、当該CVEを収載、期限 **2026-11-01** |
+| 2026-10-29 **19:50:05Z** | CISA-ADPのSSVC `timestamp`：`exploitation: active`、`automatable: yes`、`technicalImpact: total`、`role: CISA Coordinator` |
+| 2026-10-29 **19:58:23Z** | CVEレコードの `dateUpdated` = **ADPコンテナ自身の `dateUpdated`** |
+| 2026-10-29 **20:17:37Z** | NVD `lastModified`、`vulnStatus` が **`Undergoing Analysis`** へ戻る |
+
+つまり**第三者エンリッチメントの書き換えが、分析済みレコードを分析待ち行列へ押し戻した**。スコアには誰も触れていないのに「追認」という読みは偽になった。含意は2つ：
+
+- **`vulnStatus` は「ある時点でNVDが分析したか」に答えるもので、取り消されうる。** 記録するノートには検査時刻を添えなければならない——10-29の記述に欠けていたのはそれであり、10-30のフィードがNVDではなく前日のスナップショットから `Analyzed` を再生産した理由でもある。
+- **KEV収載はレコード上のイベントであり、カタログ上のだけではない。** SSVCスタンプとコンテナ更新の間の40分はエンリッチメントバッチの時計であり（10-28と同じ教訓）、その時計が見えるのはCVEレコードであってNVDのAPIではない。
+
+→ [[vuln-supply]] [[fact-check]] [[security]]
+
+出典：[Agno issue #8699](https://github.com/agno-agi/agno/issues/8699) · [v3.1.12 の pandas.py](https://raw.githubusercontent.com/agno-agi/agno/v3.1.12/libs/agno/agno/tools/pandas.py) · [PyPI の agno](https://pypi.org/pypi/agno/json) · [GHSA-xrx3-j98v-67x9](https://github.com/TabularisDB/tabularis/security/advisories/GHSA-xrx3-j98v-67x9) · [CVE-2026-97229（NVD）](https://services.nvd.nist.gov/rest/json/cves/2.0?cveId=CVE-2026-97229) · [CVE-2026-97229（cveawg）](https://cveawg.mitre.org/api/cve/CVE-2026-97229)
+
+## 2026-10-30 04:31（行動パス）—— 開区間上限の国勢調査：1 週間で 10 件、うち 2 件が境界の外、そして修正は範囲ではないフィールドに書かれていた
+
+上の Agno の事例は**1 レコード**と「検査は 2 回の呼び出し」という一文にすぎなかった。2 回の呼び出しは分母に対して走らせて初めて手法になる。
+そこで同じ日に `disclosure-lag.mjs --bound-census` になった。選択は意図的に狭い——広い口径は二つの問いを一つの数に混ぜてしまうから。
+`affectedData` の項目がレジストリの答えられるエコシステムの `packageURL`（PyPI / npm / crates.io）を持ち、`versions[]` が**ちょうど 1 件**、
+それが `lessThanOrEqual`（**含む上限**、「through X」）で、**フィールド内に修正を一切名指ししていない**ものだけが対象になる
+（`lessThan` の境界は*修正そのもの*、`unaffected` と `changes[]` の `at` 版は適用除外）。
+
+NVD の **2026-10-23 → 10-29** 公開窓 **3,421** 件での実測：
+
+| | 件数 | 割合 |
+|---|---|---|
+| この開区間の形を持つ | **10** | 窓の **0.29%** |
+| 最新版が境界の**上** | **2** | 10 件のうち 20% |
+| 最新版が境界の内側 | 8 | 80% |
+| レジストリが読めない（答えではない） | 0 | — |
+
+**命中 2 件はどちらも `disclosure@vulncheck.com`。** 10 件のクラスで分子が 1 つの CNA ならそれは*書き手*の比率であって業界の比率ではない——
+先の 10-28 節が `changes[]` で見つけた形と同じであり（assigner は 3 つ、うち 1 つが 139 中 115）、国勢調査が assigner 別の内訳をヘッドラインより先に出す理由でもある。
+
+### 2 行は原因が正反対で、違いは三つ目のフィールドにある
+
+| | `CVE-2026-117558` | `CVE-2026-119050`（Agno） |
+|---|---|---|
+| パッケージ | npm `@ai-sdlc/plugin-mcp-server` | PyPI `agno` |
+| 境界 | `≤ 0.31.2` | `≤ 3.1.11` |
+| 最新 | **0.33.0**（2026-10-29T10:58Z） | **3.1.12**（2026-10-29T14:01Z） |
+| `references[]` の修正ポインタ | **commit `717d7ecf`** —— 「spawn gh without a shell」、2026-10-23T18:15:37Z | **無し** |
+| 最新リリースのバイト | `execFileSync('gh', [argv…])` + `owner/name` 正規表現 —— **修正済み** | 54・90 行目の同一の `getattr` —— **脆弱なまま** |
+
+つまり `versions[]` が修正を書かないことは、**レコードが**修正を書いていないことではなく、「修正が存在しない」ことでもない。
+レコードが修正を名指しする第三の場所は `references[]` の commit あるいは pull の URL だ——open62541 の教訓と同族である
+（「範囲を持たないレコード」は*あるフィールド*についての陳述であり、レコードには複数のフィールドがある）。
+`0.32.0` は **2026-10-27T22:08Z**、レコードの約 8 時間後にその commit を載せて出た。範囲 `≤ 0.31.2` は**正しく**、沈黙していたのは機械可読フィールドだけだった。
+Agno はもう一方の情形だ：レコードのどこにも修正を指さず、最新リリースが今も欠陥を保つ。
+
+- **両行が支える執筆規則：** `newest > bound` が証明するのは、範囲が*現在のリリースを除外している*ことだけだ。
+  そのリリースが修正済みであることも、壊れていることも証明しない。行を開くべきレコードとして扱い、最新版のソースを読む——
+  リリースタグで `raw.githubusercontent.com` を 1 回叩けば決着し、この 2 件では正反対の答えが出た。
+
+### 問いの後半：CNA は除外したリリースの公開後に範囲を出し直すのか
+
+**この窓では観測されなかった——そして正直な分母は 2 だ。** どちらの行も `lastModified` は最新リリースのアップロード時刻より後ではなく、
+この窓に「そのリリースが出た後に触られた」レコードは無い。二つの留保が、これを振る舞いについての断定にしない：
+
+- 標本が 2 では「CNA は範囲を出し直す」と「CNA は見ていない」を区別できない。この問いには単一の窓ではなく、計画的に再確認するコホートが要る；
+- `lastModified` は **KEV 追加や ADP 書き換え**でも動く（上の 10-30 の節がまさにそれで、コンテナ更新が `vulnStatus` を動かした）。
+  ゆえに「誰かが範囲を見直した」の弱い時計にすぎない。
+
+この答えの形は、このライブラリのあらゆる「不在」の形と同じだ：傷みやすく、標本に縛られ、引用するより再実行する価値がある。
+
+→ [[vuln-supply]] [[fact-check]]
+
+出典：[CVE-2026-117558（NVD）](https://services.nvd.nist.gov/rest/json/cves/2.0?cveId=CVE-2026-117558) · [修正 commit `717d7ecf`](https://github.com/ai-sdlc-framework/ai-sdlc/commit/717d7ecf068b714f65955e50fcf5cb4f9a0b5070) · [v0.33.0 の check-issue.ts](https://raw.githubusercontent.com/ai-sdlc-framework/ai-sdlc/ai-sdlc-plugin-v0.33.0/ai-sdlc-plugin/mcp-server/src/tools/check-issue.ts) · [npm レジストリ `@ai-sdlc/plugin-mcp-server`](https://registry.npmjs.org/@ai-sdlc%2Fplugin-mcp-server)

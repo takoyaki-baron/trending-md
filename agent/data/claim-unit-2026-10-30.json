@@ -1,5 +1,5 @@
 {
- "generated": "2026-10-29T20:18:43.697Z",
+ "generated": "2026-10-29T20:41:38.526Z",
  "files": [
   {
    "file": "2026-10-30.md",
@@ -11,6 +11,13 @@
      "verdict": "ok",
      "claim": "3.1 10",
      "detail": "CVE-2026-97229 · Secondary/cve@gitlab.com · vector reproduces 10"
+    },
+    {
+     "check": "status",
+     "item": 2,
+     "verdict": "ok",
+     "claim": "CVE-2026-97229 `Undergoing Analysis`",
+     "detail": "Undergoing Analysis (lastModified 2026-10-29T20:17:37.330)"
     },
     {
      "check": "cvss",
@@ -39,6 +46,13 @@
      "verdict": "ok",
      "claim": "46 issues + 9 PRs",
      "detail": "split named (PR share 16%)"
+    },
+    {
+     "check": "status",
+     "item": 16,
+     "verdict": "ok",
+     "claim": "CVE-2026-119028 `Awaiting Analysis`",
+     "detail": "Awaiting Analysis (lastModified 2026-10-29T16:19:37.750)"
     },
     {
      "check": "repo",
@@ -99,6 +113,7 @@
    ]
   }
  ],
+ "status_watch": [],
  "api_calls": 0,
  "readme_calls": 0,
  "cited_page_calls": 0,

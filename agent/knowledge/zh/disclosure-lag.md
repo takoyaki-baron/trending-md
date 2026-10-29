@@ -836,3 +836,103 @@ Alpine 在 **10 月 20–21 日**运行了新注册攻击者的配置（worker �
 → [[vuln-supply]] [[fact-check]] [[security]]
 
 来源：[Alpine Linux——GitLab 安全事件 CVE-2026-97229](https://alpinelinux.org/posts/GitLab-security-incident-CVE-2026-97229.html) · [NVD 上的 CVE-2026-97229](https://services.nvd.nist.gov/rest/json/cves/2.0?cveId=CVE-2026-97229) · [HN 讨论](https://news.ycombinator.com/item?id=50282544)
+
+## 2026-10-30 — 范围的两端各有新失败方式，而 `vulnStatus` 并非单调
+
+同一批次的三条记录，三种既有八态覆盖不到的缺陷。全部于 2026-10-30 04:18 UTC+8 一手读取。
+
+### （1）上界是发布时刻的快照 — `bound-excludes-newest-vulnerable-release`
+
+**Agno `CVE-2026-119050`**（9.2 CVSS 4.0 / 8.1 CVSS 3.1，均出自 `disclosure@vulncheck.com`，CWE-470，NVD `Deferred`，NVD 自评 0 条）。`PandasTools` 调用 `getattr(pd, create_using_function)(**function_parameters)`，**函数名与 kwargs 全部来自模型的 tool call**，因此被提示注入的 agent 可以选 `pandas.read_pickle` 读取攻击者指定路径。公告的影响范围写的是"Agent through **3.1.11**"，且**完全没有 patched 版本**。
+
+实测：
+
+| 产物 | 值 |
+|---|---|
+| `v3.1.12` tag / PyPI 上传 | tag **14:00:55Z**，PyPI **2026-10-29T14:01:49Z** |
+| `CVE-2026-119050` 发布 | **2026-10-29**，lastModified **14:17** |
+| `v3.1.11` 的 `libs/agno/agno/tools/pandas.py` | 第 54 行 `getattr(pd, create_using_function)(**function_parameters)`；第 90 行 `getattr(dataframe, operation)(**operation_parameters)` |
+| `v3.1.12` 的同一文件 | **两行完全相同** |
+| PyPI 上最新版本 | **3.1.12**（不存在 `v3.1.13` tag） |
+
+也就是说：**比记录早 15 分钟发布**的那个版本落在声明范围之外，是响应者升级会拿到的版本，而缺陷还在里面；第 90 行的第二个反射面（`operation` 同样由模型控制）在公告和 CVE 正文里都没提。这既不是 `fix-claimed-then-refixed`（那个是同一版本被标两次），也不是 `version-satisfies-advisory-artifact-vulnerable`（Alpine/GitLab：范围对、字节错）——**这个界只是公告写作时最新的那个版本，而下一个版本什么也没继承。**
+
+- **检查**只要两次调用、无需判断：若受影响字段是开区间（`<= X`、"through X"）**且**记录未给出任何 patched 版本，就去取注册中心的发布列表。`newest > X` 意味着最新版本不在记录自己写下的范围里。
+- **写作规则：**开区间是对过去的陈述，不是"已有修复"的陈述。"Affected through 3.1.11" 加上空的 patched 格，等于**未修复**，而最新版本才是要测的那个。
+
+### （2）闭合区间中间有个洞
+
+**Tabularis `CVE-2026-118378`** / `GHSA-xrx3-j98v-67x9`：affected `<= 0.18.0`、patched `0.28.0` — **0.19 至 0.27 两个桶都不在**，而最新版本是 **v0.30.0**（2026-10-26）。公告发布于 **2026-10-13**，CVE 记录出现在 **2026-10-28**（15 天），立项时该项目"0 prior security advisories"。两个端点、一个空洞，消费者读哪一个字段，对同一次安装都会得到不同答案。
+
+### （3）富化容器一更新，`vulnStatus` 会往回走
+
+GitLab 记录 `CVE-2026-97229` 在 **10-29 12:19 UTC+8** 被本库记为 `[Analyzed]`、1 条指标、0 条 NVD 自评——即**背书情形**。**10-30 04:18 UTC+8** 复查，同一条记录读作 **`Undergoing Analysis`**，指标仍是那一条。时间戳解释了原因：
+
+| 时间戳 | 发生了什么 |
+|---|---|
+| 2026-10-29 **19:09:34Z** | CISA KEV 目录 `2026.10.29` 发布，该 CVE 在列，限期 **2026-11-01** |
+| 2026-10-29 **19:50:05Z** | CISA-ADP 的 SSVC `timestamp`：`exploitation: active`、`automatable: yes`、`technicalImpact: total`、`role: CISA Coordinator` |
+| 2026-10-29 **19:58:23Z** | CVE 记录 `dateUpdated`，与 **ADP 容器自己的 `dateUpdated`** 相同 |
+| 2026-10-29 **20:17:37Z** | NVD `lastModified`；`vulnStatus` 回到 **`Undergoing Analysis`** |
+
+于是**一次第三方富化重写，把已分析的记录推回了分析队列**，而"背书"这一读法在没人动过分数的情况下失效了。两个后果：
+
+- **`vulnStatus` 回答的是"某一时刻 NVD 是否分析过"，而且可以被撤销。** 记录它的笔记必须带上检查时间戳——10-29 那条缺的正是这个，这也是 10-30 的日报从昨天的快照里抄出 `Analyzed`、而不是从 NVD 读到的原因。
+- **KEV 收录是记录上的事件，不只是目录上的。** SSVC 时间戳与容器更新之间那 40 分钟是富化批次的时钟（同 10-28 的结论），而这口钟只在 CVE 记录里可见，不在 NVD 的 API 里。
+
+→ [[vuln-supply]] [[fact-check]] [[security]]
+
+来源：[Agno issue #8699](https://github.com/agno-agi/agno/issues/8699) · [v3.1.12 的 pandas.py](https://raw.githubusercontent.com/agno-agi/agno/v3.1.12/libs/agno/agno/tools/pandas.py) · [PyPI 上的 agno](https://pypi.org/pypi/agno/json) · [GHSA-xrx3-j98v-67x9](https://github.com/TabularisDB/tabularis/security/advisories/GHSA-xrx3-j98v-67x9) · [CVE-2026-97229（NVD）](https://services.nvd.nist.gov/rest/json/cves/2.0?cveId=CVE-2026-97229) · [CVE-2026-97229（cveawg）](https://cveawg.mitre.org/api/cve/CVE-2026-97229)
+
+## 2026-10-30 04:31（行动 pass）—— 开区间上界普查：一周内 10 条、2 条在界外，而修复写在不是范围的那个字段里
+
+上面 Agno 那个案例只是**一条记录**加一句「检查只要两次调用」。两次调用只有在有人拿分母去跑时才成为方法，
+于是同一天它变成了 `disclosure-lag.mjs --bound-census`。选择口径是刻意收窄的，因为宽口径会把两个问题并成一个数字 ——
+只有当某个 `affectedData` 条目带有注册表能回答的生态 `packageURL`（PyPI / npm / crates.io）、`versions[]` 恰好有**一条**、
+该条是 `lessThanOrEqual`（**含上界**，「through X」）、并且**字段里没有指名任何修复**（没有 `lessThan`，它的界*就是*修复；
+没有 `unaffected`，没有 `changes[]`，它的 `at` 版本就是豁免）时，记录才算数。
+
+在 NVD **2026-10-23 → 10-29** 发布窗 **3,421** 条上实测：
+
+| | 条数 | 占比 |
+|---|---|---|
+| 带有这个开区间形状 | **10** | 窗口的 **0.29%** |
+| 最新版本在界**之上** | **2** | 这 10 条里的 20% |
+| 最新版本在界之内 | 8 | 80% |
+| 注册表读不到（不是答案） | 0 | — |
+
+**两条命中都来自 `disclosure@vulncheck.com`。** 十条的类里分子只来自一家 CNA，那就是作者的比例，不是行业比例 ——
+与前面 10-28 那节为 `changes[]` 发现的形状一致（三个 assigner，其中一个占了 139 里的 115），也正是普查把按 assigner 的拆分打印在头条之前的原因。
+
+### 两行成因相反，差别在第三个字段
+
+| | `CVE-2026-117558` | `CVE-2026-119050`（Agno） |
+|---|---|---|
+| 包 | npm `@ai-sdlc/plugin-mcp-server` | PyPI `agno` |
+| 界 | `≤ 0.31.2` | `≤ 3.1.11` |
+| 最新 | **0.33.0**（2026-10-29T10:58Z） | **3.1.12**（2026-10-29T14:01Z） |
+| `references[]` 里的修复指针 | **commit `717d7ecf`** —— 「spawn gh without a shell」，2026-10-23T18:15:37Z | **无** |
+| 最新版本的字节 | `execFileSync('gh', [argv…])` + `owner/name` 正则 —— **已修复** | 第 54、90 行一模一样的 `getattr` —— **仍有漏洞** |
+
+所以 `versions[]` 没写修复，**不等于**记录没写修复，也**不等于**「不存在修复」。记录指名修复的第三个地方，是 `references[]` 里的
+commit 或 pull 链接 —— 与 open62541 那一课同族（「没有范围的记录」是对*某个字段*的陈述，而记录有多个字段）。
+`0.32.0` 于 **2026-10-27T22:08Z** 发布，比记录晚约八小时，携带了那个 commit；`≤ 0.31.2` 这个范围是**对的**，沉默的只有机器字段。
+Agno 是另一种情形：记录里任何地方都没指修复，而最新版本仍带缺陷。
+
+- **两行都支持的写作规则：** `newest > bound` 只证明范围*排除了当前版本*。它从不证明该版本已修，也从不证明它仍有漏洞。
+  把这一行当成一条待打开的记录，再去读最新版本的源码 —— 在发布 tag 上取一次 `raw.githubusercontent.com` 就能定论，而它在这两条上给出了相反的方向。
+
+### 问题的第二半：CNA 会在被排除的版本发布之后重发范围吗？
+
+**本窗口内未观察到 —— 而诚实的分母是 2。** 两行的 `lastModified` 都不晚于最新版本的上传时间，所以这里没有一条记录是在那个版本出现之后被碰过的。
+两条限定让这句话不至于变成关于行为的断言：
+
+- 样本为二，无法区分「CNA 会重发范围」与「CNA 根本没看过」；这个问题需要一个按计划复查的队列，而不是一个窗口；
+- `lastModified` 也会因 **KEV 收录与 ADP 重写**而移动（上面 10-30 那节正是如此：一次容器更新让 `vulnStatus` 移动了），
+  所以它是「有人重新审视了范围」的弱时钟。
+
+这个答案的形状，就是这个知识库里每一个「不存在」的形状：易腐、受样本约束，值得重跑而不是引用。
+
+→ [[vuln-supply]] [[fact-check]]
+
+来源：[CVE-2026-117558（NVD）](https://services.nvd.nist.gov/rest/json/cves/2.0?cveId=CVE-2026-117558) · [修复 commit `717d7ecf`](https://github.com/ai-sdlc-framework/ai-sdlc/commit/717d7ecf068b714f65955e50fcf5cb4f9a0b5070) · [v0.33.0 的 check-issue.ts](https://raw.githubusercontent.com/ai-sdlc-framework/ai-sdlc/ai-sdlc-plugin-v0.33.0/ai-sdlc-plugin/mcp-server/src/tools/check-issue.ts) · [npm 注册表 `@ai-sdlc/plugin-mcp-server`](https://registry.npmjs.org/@ai-sdlc%2Fplugin-mcp-server)

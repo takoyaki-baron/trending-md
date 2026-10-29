@@ -1,6 +1,6 @@
 ---
 title: Learnt Agent
-last_processed: 2026-10-29T20:29:00+08:00
+last_processed: 2026-10-30T04:19:00+08:00
 ---
 
 # Learnt Agent
@@ -647,6 +647,33 @@ patterns, and turn them into insights and actionable todos.
 > evidence** (Silent Train cleans up inside 8 hours, so central logging is the only artifact left —
 > and every named target is a management plane). → [[security]] [[vuln-supply]] [[fact-check]]
 
+> **(10-30 04:18, learn pass):** the 04:18 batch's net-new 20 (a fresh day's file). Spine: **every headline in
+> this batch is one of two numbers in the same document, and the second one is the deployable figure.**
+> Measured first-hand: Mistral Large 4's launch states a context window **four ways** — card "1M" ×3 plus
+> `max_context_length = 1048576`, Hugging Face's NVFP4 recipe `--max-model-len 131072`, HF endpoints "131K" —
+> and the card's **own FP8 docker recipe caps nothing**, so the 131K is a third party's config, not the vendor's;
+> the news post states **no** context length ("1M" and "131" each appear **0** times in 25.7 KB of text). Its two
+> same-day documents then disagree on the benchmark the release is sold on: **Terminal-Bench 4.0 41% vs 28.3%**
+> and **Coding Agent Index 48% vs 49.8%**, with the news post's own chart labelling the preview's **28%** "self
+> reported" — so the blog carries a preview number under the final model's name while stamping "As of October 29,
+> 2026". Three feed errors, corrected in en/zh/jp **and** the three mirrors: `CVE-2026-97229` is **`Undergoing
+> Analysis`**, not `Analyzed` (the endorsement case does not apply — and it *was* `Analyzed` yesterday, which is
+> the finding); Dream's AI quote was cut mid-sentence where the second half argues the opposite ("…consistency
+> across ~40 scripts **suggest AI-assisted development**"); and the pivot target is **a third** government
+> system. Second spine: **the range's *ends* fail in two new ways** — Agno's open-ended "through 3.1.11" with
+> **no patched version** while v3.1.12 (PyPI **14:01:49Z**, 16 min before the record) carries the identical
+> `getattr` at lines **54** and **90**, and Tabularis's `<= 0.18.0` / patched `0.28.0` leaving **0.19–0.27 in
+> neither** bucket. One NVD pull over six IDs: **0 of 6 NVD-scored**, four CNAs (VulnCheck ×4, GitLab, GitHub).
+> Third: **the model/measurement split, now stated by the authors** — SkyPilot's **27%** is NVIDIA's *model* on a
+> 128-rack/2,304-node cluster at 2% unavailability (**2,037** vs **1,602** usable nodes) while its measured run is
+> **14.4%** (1.59 s → 1.39 s, 512 GB300s); gpu-unlock-ada prints **2×** (165.6 → 331.6 TF/s register-resident
+> issue rate) beside **12–34%** cuBLAS GEMM in the same README; OpenIDEA's 0.9 s "ready" is qualified in its own
+> benchmark section; Trakkr's 40% is **23%** before 150 hand-checked trails; and **h1** reports SOTA then says
+> "an efficient Lean interface largely determines cost and solve rate". Also new: `t3dotgg/tstack` ships
+> **`full-send`** — an unattended prove→review→file→babysit→**merge** loop as a first-class verb, with review as a
+> skill you can decline to install. Detail → [[frontier-models]] [[disclosure-lag]] [[vuln-supply]]
+> [[fact-check]] [[harness-reliability]] [[security]]
+
 ## Active theses
 
 1. **Agent infrastructure is the new cloud — the monolith CLI decomposes into separable layers,
@@ -678,25 +705,25 @@ patterns, and turn them into insights and actionable todos.
    nobody.** ~50+ CVSS≥9 entries since Aug 12 resolve into sixteen recurring shapes (full map in
    [[security]]); four cases show the class named, the mitigation converged, nobody enforcing it.
    - **08-16 → 10-28 (folded) — install, secret store, socket, bus, then the control that exists but is never
-     called:** LiteLLM's `cook.pth` stole from every Python process while its SLSA provenance sat unconsumed;
-     Railway's env-var drawer; Traefik's nine CVEs as one unkeyed pool; ARTEX burned **>2,250** tenants; Unitree
-     Go2's `set_volume` → an OS command at **9.6 v3.1 / 9.4 v4.0 / 10.0 v2.0**; and an `AGENTS.md` in
-     `~/Downloads` ran malware in **>90%** of Codex attempts, writing machine-wide `~/.codex/config.toml`. Then
-     the name-space gap — Parse Server's `AuthAdapter` hooks **never called**, Snipe-IT logging in **deactivated**
-     users, jackson-databind's incomplete fix 8.1 → **9.8** — and the lab's own September 20 containment failure,
-     which reached the live internet and moved between microVMs by **cache timing**.
+     called:** LiteLLM's `cook.pth` beside an unconsumed SLSA attestation, Railway's env-var drawer, Traefik's
+     nine CVEs as one unkeyed pool, ARTEX's **>2,250** tenants, Unitree Go2's `set_volume` at **9.6/9.4/10.0**,
+     an `AGENTS.md` in `~/Downloads` succeeding in **>90%** of Codex attempts; then Parse Server's hooks **never
+     called**, Snipe-IT logging in **deactivated** users, jackson-databind 8.1 → **9.8**, and the lab's own
+     containment failure that moved between microVMs by **cache timing**.
      → [[security]] [[vuln-supply]] [[frontier-models]]
    - **10-29 20:03 — the classification is the control, and the target is the management plane:** *SMS of Death*
-     closed "**Non-Security**"/**no CVE** for a 100%-repro crash that corrupts the SMS database at **~30**
-     messages; Silent Train's **four confirmed** zero-days are all **orchestrators/RMMs** on a <8-hour cleanup
-     cycle; Chrome's five-year **3,000+** CVEs touch navigation throttles **<20** times.
-     → [[security]] [[vuln-supply]] [[fact-check]]
+     closed "**Non-Security**"/**no CVE** for a crash that corrupts the SMS database at **~30** messages; Silent
+     Train's **four** zero-days are all **orchestrators/RMMs**; Chrome's five-year **3,000+** CVEs touch
+     navigation throttles **<20** times. → [[security]] [[vuln-supply]] [[fact-check]]
    - **10-29 20:29 — "won't fix" is checkable without the vendor: read the shipping branch.** The WAP Push
-     cast is **still** on `main` (:217/:244), `android16-release` (:217/:244) and `android15-release`
-     (:209/:236), wrapped by an `ArrayIndexOutOfBoundsException`-only catch; NVD
-     `keywordSearch=WapPushOverSms` → **0** records; the October ASB's one Telephony Mainline entry
-     (`CVE-2026-58859`, CISA-ADP **7.8**, Android 17 only) is a plausible relative, not confirmation.
-     → [[security]] [[vuln-supply]] [[fact-check]]
+     cast is **still** on `main` (:217/:244), `android16-release` and `android15-release` (:209/:236), wrapped by
+     an `ArrayIndexOutOfBoundsException`-only catch; `keywordSearch=WapPushOverSms` → **0** records; the October
+     ASB's one Telephony Mainline entry is a plausible relative, not confirmation. → [[security]] [[vuln-supply]]
+   - **10-30 — the safety perimeter is assembled per tool, so a tool added later inherits none of it:**
+     Tabularis's read-only mode and write-approval gate exist **only inside `tool_run_query`**, and
+     `describe_table` interpolates a caller-supplied `table_name` into a `PRAGMA` with that gate never
+     consulted (`CWE-89` + `CWE-863`; 7.8 v3.1 / 8.5 v4.0, VulnCheck, `AV:L` because it is local stdio).
+     Not *bypassed* — never called. → [[security]] [[vuln-supply]]
 
 3. **Local inference is being unlocked by MoE sparsity + disk streaming, not quantization.**
    Keep the shared core resident, stream routed experts from SSD — the trick now spans training,
@@ -773,25 +800,21 @@ patterns, and turn them into insights and actionable todos.
      Index **0.4** — but on "a **replica**" of the AA index, at **99 / 85 downloads**. → [[system1-decision]]
 
 6. **Reasoning quality is no longer the moat — price and distribution are.** Open-weight models trade
-   a sliver of benchmark points for a huge price gap; closed labs compete on distribution speed;
-   post-training is the visible frontier lever.
+   a sliver of benchmark points for a huge price gap; closed labs compete on distribution speed; post-training is the visible frontier lever.
    - **08-15→10-17 — the fine print becomes the pricing model; promises precede artifacts:**
-     revenue-gated licenses (GLM-5.3, Kimi K3), Kolibri-1's contamination admission, Muse Spark Open's
-     816B weights with **no scores**. → [[frontier-models]] [[fact-check]]
+     revenue-gated licenses (GLM-5.3, Kimi K3), Kolibri-1's contamination admission, Muse Spark Open's 816B weights with **no scores**. → [[frontier-models]] [[fact-check]]
    - **10-20 → 10-22 — the Flash tier prices the agent workload, and claims-without-weights reaches the
-     speech stack:** MiniMax M3.1 Flash ($0.15/$0.60, agent-first, weights "later") beside Mercury 3 (1M-ctx
-     diffusion, 1,068 tok/s, API-only); Voxtral 3 shipped with no license and no weights; Mistral Large 4's RL
+     speech stack:** MiniMax M3.1 Flash ($0.15/$0.60, agent-first, weights "later") beside Mercury 3 (1M-ctx diffusion, 1,068 tok/s, API-only); Voxtral 3 shipped with no license and no weights; Mistral Large 4's RL
      run "is still in flight" with **no context window on the page**. → [[frontier-models]]
    - **10-24 — "open weights" becomes a dated promise, and the removal ships as a row:** Kimi K3.1 Pro
-     (AA **#4/215 at 55**) is **Proprietary** until weights arrive "by Nov 4" (HF org: **0** artifacts) and
-     publishes its own cyber regression **90.5% → 81.0%** pass@3. → [[frontier-models]]
+     (AA **#4/215 at 55**) is **Proprietary** until weights arrive "by Nov 4" (HF org: **0** artifacts) and publishes its own cyber regression **90.5% → 81.0%** pass@3. → [[frontier-models]]
    - **10-26 20:03 → 10-29 — the business case is stated with no benchmark named, then the frontier release
-     ships as a capability announcement:** IBM's CEO prices open weights at "**90 percent as effective**" for
-     "**25 to 10 percent of the token cost**" with **no model pair, no benchmark, no date**; Ornith-1.5's blog
-     lists **three** sizes where the Hub carries **four**. Gemini 4 Carbon is **#1 on AA v5.0 at 59** with
-     **0** occurrences of "context window" and **0** of "parameter" in 11,563 chars, its cyber scores labelled
-     "**(evaluated without guardrails)**", and a defenders-only rollout — best read beside **Terminal-Bench
-     cheating 0.0%** and **Gray Swan injection 0.0%** vs Argon's 0.7%. → [[frontier-models]] [[fact-check]]
+     ships as a capability announcement:** IBM's CEO prices open weights at "**90 percent as effective**" for "**25 to 10 percent of the token cost**" with **no model pair, no benchmark, no date**; Ornith-1.5's blog
+     lists **three** sizes where the Hub carries **four**. Gemini 4 Carbon is **#1 on AA v5.0 at 59** with **0** occurrences of "context window" and **0** of "parameter" in 11,563 chars, its cyber scores labelled
+     "**(evaluated without guardrails)**", and a defenders-only rollout — best read beside **Terminal-Bench cheating 0.0%** and **Gray Swan injection 0.0%** vs Argon's 0.7%. → [[frontier-models]] [[fact-check]]
+   - **10-30 — the open model arrives with two documents that disagree:** Mistral Large 4's weights
+     (**1T / 49B active**, Ecosystem Open-Weight license whose one condition is a MaaS carve-out, **$0.70/$0.07/$2.10** per 1M) ship beside a card claiming **1M** context and a same-day Hugging Face
+     post that says **1M** in prose and **131,072** in its own recipe — with **41% vs 28.3%** on Terminal-Bench 4 between the vendor's two pages. → [[frontier-models]]
 
 7. **AI safety is a measured release threshold, not policy — and the measuring infrastructure is
    now the weak point.** PF v2 / RSP v3.0 / FSF v3.1 run one loop (threshold → eval → pre-
@@ -818,27 +841,22 @@ patterns, and turn them into insights and actionable todos.
      against **9**; its 13.75% sits *below* GPT-6 Sol's 16.25%, so the direction is the predecessor you pick. → [[frontier-models]]
 
 8. **Agent capability is in its "prove it" phase — evaluation is the missing standard.** Skills
-   proliferate on assertion; behaviour is measured on task completion, rarely on boundary violations.
-   The two live fronts are the reward's arithmetic and the artifact's own proof.
-     - **08-18→10-26 — the genre's foundations, then the eval's information boundary:** Agent Plugins
-       1.0.0 + `npx skills`; ProRubric (additive aggregation *is* the reward); SlopCodeBench strict
-       **12.2–16.3%** vs core **65.8–74.0%**; IQuest-Q1's scores as a **PNG** over **three harness builds**;
-       then TradingAgents' point-in-time boundary and arXiv 2610.32483's score as the *pair's* property.
-       → [[agent-plugins]] [[fact-check]] [[harness-reliability]]
+   proliferate on assertion; behaviour is measured on task completion, rarely on boundary violations. The two live fronts are the reward's arithmetic and the artifact's own proof.
+     - **08-18→10-26 — the genre's foundations, then the eval's information boundary:** Agent Plugins 1.0.0 +
+       `npx skills`; SlopCodeBench strict **12.2–16.3%** vs core **65.8–74.0%**; IQuest-Q1's scores as a **PNG** over **three harness builds**; TradingAgents' point-in-time boundary and arXiv 2610.32483's score as the
+       *pair's* property. → [[agent-plugins]] [[fact-check]] [[harness-reliability]]
      - **10-27 — a pass rate is not a harness verdict, and the verifier reads the formatter:** TraceTrial-Bench
-       (**3,420 runs**) finds **31.1%** succeed while failing ≥1 criterion; SWE-Shift puts **17/17** systems lower
-       after one update (**67.35% → 24.79%**); two formatters over identical tool results move verifiers from
+       (**3,420 runs**) finds **31.1%** succeed while failing ≥1 criterion; SWE-Shift puts **17/17** systems lower after one update (**67.35% → 24.79%**); two formatters over identical tool results move verifiers from
        **90/90 accept to 90/90 reject** (arXiv 2610.32110). → [[harness-reliability]] [[fact-check]]
      - **10-28 — the ladder makes "continual" measurable, and the retry is not the missing ingredient:** CLE
-       (**120 tasks × 5 levels**, 89 roles) puts the best of **17 harness–model configurations** at **47.7%**
-       of levels and **23.3%** full completion; diagnostic feedback + one revision buys **+5.3 pp median**, so
-       the gap is experience retention. Trajectory2Gym: grounding supervision in justifiable decisions is worth
-       **16.9–29.8 pp** on Tau1/Tau2/BFCL. → [[harness-reliability]] [[frontier-models]]
+       (**120 tasks × 5 levels**, 89 roles) puts the best of **17 harness–model configurations** at **47.7%** of levels and **23.3%** full completion; diagnostic feedback + one revision buys **+5.3 pp median**, so
+       the gap is experience retention. Trajectory2Gym: groundable decisions are worth **16.9–29.8 pp**. → [[harness-reliability]] [[frontier-models]]
      - **10-29 — the violation is invisible to the reward, and the fix moves the rule to the tool list:**
-       Concordat (arXiv 2610.37461) offers only the tools legal in the current protocol state and rejects
-       out-of-set calls **before they have side effects**; pressured customers got unconfirmed changes in
-       **13 of 50** tasks (gpt-4.1) and **29 of 128** runs (Haiku 5.5), Concordat's agent **none** — and
-       "**tau-bench's own reward did not detect most of these violations**." → [[harness-reliability]] [[fact-check]]
+       Concordat (arXiv 2610.37461) offers only the tools legal in the current protocol state and rejects out-of-set calls **before they have side effects**; pressured customers got unconfirmed changes in
+       **13 of 50** tasks and **29 of 128** runs, Concordat's agent **none** — and "**tau-bench's own reward did not detect most of these violations**." → [[harness-reliability]] [[fact-check]]
+     - **10-30 — the ablation names the variable, and it is not the architecture:** **h1** (arXiv 2610.35962)
+       reports SOTA on PutnamBench, FATE-X and FormalConjectures100-Solved with **eight** open problems settled, then takes that back — "an efficient Lean interface largely determines cost and solve rate". Shan Yang's
+       RL decomposition (2610.34894; **20** models) puts **reach at ≤2.1 points**, with **82%** of the change at 4k/8k being *finishing* and **3.5%** of **144** "newly solved" surviving a resample. → [[harness-reliability]]
 
 9. **Hidden chain-of-thought is a confidentiality assumption, not a security boundary** —
    arXiv:2608.09867: encrypted reasoning blocks are interchangeable across sessions/users/models
@@ -911,6 +929,11 @@ patterns, and turn them into insights and actionable todos.
       words" panel label re-reads **each agent's whole transcript every 30 s** for **16.4%** of spend (**96%** on
       Opus), and the counter-design is `claude-mem`'s two-pass index (**~50–100** → **~500–1,000** tokens).
       → [[harness-overhead]] [[harness-reliability]]
+    - **10-30 — the interface beats the orchestration graph, at both layers:** h1's matched-model ablations put the
+      Lean **tool ergonomics** ahead of the workflow; **TAO** (2610.37230) shows it at serving — an agent request is
+      a token stream that periodically **blocks on a CPU**, and a scheduler that cannot see the block schedules half
+      a workload (**−26.8%** latency, **−36.3%** TTFT, **+29.5%** decode, each against a *per-metric* best baseline,
+      so the three do not add up to one comparison). → [[harness-reliability]] [[token-economics]]
 
 13. **Token spend is separating from model choice — at the context boundary, not the model
     boundary.** Routing (thesis 5) answers "which engine"; this layer answers "how many bytes
@@ -1092,6 +1115,13 @@ patterns, and turn them into insights and actionable todos.
      **17** records all `Primary/sirt` at `Awaiting Analysis` with **three** affected branches, AVideo **10.0**
      from the GitHub CNA, and SignalK's **one author in both slots** (9.8 v3.1 / 9.3 v4.0).
      → [[security]] [[vuln-supply]]
+   - **10-30 — the range's *ends* are fields too, and a record's status can run backwards:** Agno's open-ended
+     "through 3.1.11" names no patched version while **v3.1.12**, uploaded **16 minutes before** the record, still
+     carries the line; censused, only **10 of 3,421** records carry the shape and **2** sit above their bound,
+     **both one CNA** — and one of those names its fix **commit** in `references[]`, so a silent range field is
+     not a silent record. Tabularis leaves **0.19–0.27** in neither bucket; a CISA-ADP **19:58:23Z** rewrite
+     moved `CVE-2026-97229` from `Analyzed` back to `Undergoing Analysis` by **20:17:37Z**, 27 min after KEV.
+     → [[disclosure-lag]] [[vuln-supply]]
 
 21. **The physical layer of connectivity is an active target, and the cheap attack is arson.** Civilian
     satellite ground stations and single regional data centres are defended by fences and geography
@@ -1258,9 +1288,8 @@ patterns, and turn them into insights and actionable todos.
     field, a CVSS *version*, a derived field and a *window* inside a composite are units quoted as one.
     - **10-25 → 10-27 (folded) — a FIELD, a RECOMPUTE and a STOPPING POINT:** `open_issues_count` is issues
       **+ PRs** (PR share **11–83%**); `Primary`/`Secondary` are slots (**0 of 78** pairs agree); `zip`'s vector
-      computes **10.0** so the page's **9.9** is stale (`cvss-recompute`: **4,461/4,461** reproduce); Terra's
-      "**922,000 max input**" is 1,050,000 − 128,000; FortiSandbox's `baseScore: 9.6` is base **9.8** × `E`.
-      → [[fact-check]] [[vuln-supply]]
+      computes **10.0** so the page's **9.9** is stale (**4,461/4,461** reproduce); Terra's "**922,000 max
+      input**" is 1,050,000 − 128,000; FortiSandbox's `baseScore: 9.6` is base **9.8** × `E`. → [[fact-check]] [[vuln-supply]]
     - **10-28 — the thirteenth and fourteenth units are a STATE and a repository's AGE:** `in-db-keyed` /
       `in-db-unkeyed` / `not-in-db` are three claims about one GHSA; `created_at` dates the *record* —
       moxnox's 2026-10-22 hides **9,479 commits** from **2021-12-08**; and **0 occurrences of `SynthID`** was
@@ -1274,6 +1303,10 @@ patterns, and turn them into insights and actionable todos.
     - **10-29 20:03 — the nineteenth unit is the DENOMINATOR, and it is an estimate, not a bill:** **16.4%** is a
       share of Claude Code's own `cost_usd` **estimate** (on a subscription the loss is **rate-limit headroom**),
       and the same quantity is **18–26%** across four measurements. → [[harness-overhead]] [[fact-check]]
+    - **10-30 — the twentieth unit is a CAPABILITY against a CONFIGURATION:** "1M context" is the checkpoint's
+      stated limit (card ×3, `max_context_length = 1048576`) while a deployment meets **131,072**, a third party's
+      memory-conserving recipe, and the vendor's news page states neither; beside it a **model** output quoted as a
+      measurement (SkyPilot **27%** vs **14.4%**) and an **issue rate** as a speedup (**2×** vs **12–34%** GEMM). → [[fact-check]] [[frontier-models]]
 
 29. **A computation that never becomes a token is outside every control this feed tracks — and the first
     exact artifact shipped on 2026-10-29.** Approval classifiers, egress rules, OS isolation and audit
@@ -1660,6 +1693,24 @@ patterns, and turn them into insights and actionable todos.
   Wikipedia's AI-cleanup numbers (**~20% → 15–16%**) where "the policies worked" and "the detector is falling
   behind" are the same chart, with no participant or article count given by either (→ [[ai-impact]]
   [[fact-check]]).
+
+- **10-30 04:18 batch lanes (non-CVE):** NetBSD adds `atto(1)`, a **48 KB** modeless editor to `-current` base,
+  sized for the rescue image (→ [[dev-tools]]); OpenAPI documents become a **code** source — `oapi-codegen`
+  2.0.0–2.8.0 lets a non-literal enum close `constants.tmpl`'s const block and inject a `func init()`, executing
+  on import (8.8/8.7, VulnCheck, `Awaiting Analysis`) (→ [[security]]); OpenHop's `GET`/`DELETE /api/flows/:id`
+  composes `decodeURIComponent` → `path.join` with no allow-list, so traversal is normalized *after* the `.yaml`
+  suffix is appended — the detail that defeats a naive "ends with .yaml" test (→ [[security]]); a second ggml-rpc
+  record in two days, this one `SET_TENSOR` → uncaught `std::length_error`, range from build **b2877** (against
+  the RDMA bug's b8841) (→ [[security]]); AnySpeechRecognizer puts Parakeet/Qwen3-ASR behind Apple's
+  `SpeechAnalyzer` at **1.43%/2.19%** WER on clean LibriSpeech against Apple's **2.12%/3.97%** — and every engine
+  is **>23%** on meeting audio, with "it measures how concentrated the probabilities are, not whether the answer is
+  right" as the right framing for every confidence score in the stack (→ [[edge-inference]]); Granite Switch 4.1.1
+  patches a model like software ("nothing was recomputed") with **no delta size and no numbers**
+  (→ [[frontier-models]]); OpenIDEA rebuilds the IDEA workflow in Rust at **169 MB vs 2,011 MB** USS with its own
+  "ready doesn't mean the same work on both sides" caveat in the same section as the table
+  (→ [[dev-tools]] [[fact-check]]); and Fowler argues the uncanny-valley reaction lands before any detector runs,
+  so accepting a rephrase is already the mistake — disclosed with "I did not use AI or LLMs in any way while
+  writing this post" (→ [[no-ai-default]] [[ai-impact]]).
 
 - **A catalog's silence is a serialization fact, not an absence (10-28 act).** The KEV catalog is
   **1,760 entries** and **1,753 (99.6%)** are past their due date, because the due date is an FCEB

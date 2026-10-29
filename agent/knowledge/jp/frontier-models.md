@@ -3201,3 +3201,41 @@ Cartesia の H-Net 第一篇は、見出しの代償になる部分まで正直�
 **読みやすくするのはアンカーであり、いまやあらゆるアーキテクチャ主張の雛形だ：**自らを Kimi が公表した **Kimi Delta Attention（1.16×）**と**アテンション残差（1.25×）**の乗数の隣に置き、見出しの隣には置かない。バイトがフロンティア規模で BPE を上回るかは未決のままだが、この記事が確立したのは、3B でトークナイザの利点を除いたとき差はノイズではない、ということである。
 
 → [[harness-reliability]] [[fact-check]] [[token-economics]]
+
+## 2026-10-30 — Mistral Large 4 の重み公開：同じ発表が2組のコンテキスト数と2組のベンチマークを出す
+
+`mistralai/Mistral-Large-4-1T-A52B` が **2026-10-29** にオープンウェイト化した（「Le Chonk」）。総パラメータ約1T／**アクティブ49B**（embeddingと出力層を含めると52B）、ルーティング専門家128個（トークンあたり4個アクティブ）＋共有1個、ネイティブ・マルチモーダル、ライセンス欄は **`other`**——Mistral Ecosystem Open-Weight Licenseで、唯一の条件は「businesses that operate a Model-as-a-Service offering must obtain a separate commercial license」。リポジトリはプレビュー用に **2026-09-30** 作成、2026-10-29T14:51Z時点で68ファイル、確認時1,179いいね／278ダウンロード、`gated: false`。
+
+### コンテキスト数は4か所に存在し、値は2つ
+
+| 成果物 | 記述 |
+|---|---|
+| Mistralモデルカード（本文） | 「**1M** context length」「supports a **1M** context window」「the checkpoint supports a **1M** context window」 |
+| Mistralカード、Vibeプロバイダ設定 | `max_context_length = 1048576` |
+| Mistralカード自身のFP8 vLLM dockerレシピ | `--max-model-len` を**一切設定しない** |
+| mistral.aiのニュース記事 | 「1M」**0回**、「131」**0回**、コンテキスト長の記述なし |
+| Hugging Faceブログ本文 | 「a context window of **1M tokens**」 |
+| HFブログのNVFP4 vLLMレシピ | `--max-model-len **131072**` |
+| HFブログのInference Endpoints | 「serves up to **131K** tokens of context」 |
+
+残る読み方はこうだ。**1,048,576 はcheckpointが宣言する能力、131,072 はHugging Faceが量子化ビルドとホスト型エンドポイントのために選んだメモリ節約設定である。**「ベンダーが1Mで自ら矛盾している」という話の両半分はそれぞれ一段強すぎる——131Kは第三者の配備パラメータであって、ベンダー自身のフラグではない。本当に未解決なのは、どちらの文書も**既定の配備**が何を得るかを書いていない点だ。
+
+### 同日の2文書、2組のベンチマーク
+
+| ベンチマーク | mistral.aiニュース | Hugging Faceブログ（同日） |
+|---|---|---|
+| Terminal-Bench 4 / 4.0 | **41%**（「improved by 13 percentage points … compared to its public preview」） | **28.3%** |
+| Artificial Analysis Coding Agent Index | **48%**（「effectively tied with … GLM-5.3, while using **47%** fewer tokens per task」） | **49.8%** |
+| BrowseComp | **84.5%**（起点は**75%**のSFTチェックポイント、グラフはGLM-5.3 82.5、DeepSeek V4.1 Flash 83.4、Kimi K3 **91.2**） | 記載なし |
+| FinWorkBench（Finch） | **73.3%**（「second only to Kimi K3」） | 記載なし |
+| DeepSWE v1.1 / SWE-Atlas-QnA / AutomationBench | 記載なし | **61.7% / 59.4% / 59.9%** |
+
+ニュース記事自身のTerminal-Benchのグラフは `ML4 Preview - self reported` を **28%**、ML4を **41%** に置いている——ブログの **28.3%** と一致する。つまりブログは**プレビュー版**のコーディングスコアを正式モデル名で載せ、しかも「As of **October 29, 2026**」と刻んでいる。一方CAIの組（48 vs 49.8）は逆方向にずれ、「プレビュー対正式」では説明できない。**発表文書のベンチマーク表には測定日とハーネスがあり、この発表はどちらも書いていない**——2文書が噛み合わない理由はそこにある。
+
+ニュース記事から残す価値のあるもの：サイバー領域の立場——「we observed the model refusing to comply with black-box attacks against live targets」だが「we see a potential for uplift to conduct real attacks」、ゆえにガードレールを調整中で、サイバー最適化版は「rigorous vetting」付きでデザインパートナー限定；価格は**入力$0.70／キャッシュ$0.07／出力$2.10（100万トークンあたり）**；ローカル実行は**2-bit**量子化が「on a single Apple Silicon Ultra computer with 512 GB」、Q2_KはM3 Ultra 1台でprefill約**90 tok/s**（自己申告）、それ以外は分散推論が必要。
+
+**再利用できる規則：**あるリリースが同日に複数のベンダー文書を出すとき、ベンチマーク数は*文書ごと*であり、食い違いこそが知見だ——平均してはいけないし、どのページのいつの数字かを名指しせずに引用してもいけない。
+
+→ [[fact-check]] [[edge-inference]] [[token-economics]]
+
+出典：[Mistral——重みの公開](https://mistral.ai/news/mistral-large-4-oss/) · [HF——Welcome Le Chonk](https://huggingface.co/blog/mistral-large4) · [モデルカード](https://huggingface.co/mistralai/Mistral-Large-4-1T-A52B)

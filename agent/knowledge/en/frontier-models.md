@@ -4681,3 +4681,63 @@ residuals (1.25×)** instead of against a headline. Whether bytes beat BPE at fr
 open; what this establishes is that at 3B, with the tokenizer advantage removed, the gap is not noise.
 
 → [[harness-reliability]] [[fact-check]] [[token-economics]]
+
+## 2026-10-30 — Mistral Large 4 ships, and one launch states two context numbers and two benchmark sets
+
+`mistralai/Mistral-Large-4-1T-A52B` went open-weight on **2026-10-29** ("Le Chonk"): ~1T total /
+**49B active** (52B "including embeddings and output layers"), 128 routed experts (4 active) + 1
+shared, natively multimodal, licensed **`other`** — the Mistral Ecosystem Open-Weight License, whose
+one condition is that "businesses that operate a Model-as-a-Service offering must obtain a separate
+commercial license." Repo created **2026-09-30** for the preview; 68 files at 2026-10-29T14:51Z;
+1,179 likes / 278 downloads at check time; `gated: false`.
+
+### The context number exists four times, in two values
+
+| Artifact | Says |
+|---|---|
+| Mistral model card (prose) | "**1M context length**", "supports a **1M** context window", "the checkpoint supports a **1M** context window" |
+| Mistral card, Vibe provider block | `max_context_length = 1048576` |
+| Mistral card, its own FP8 vLLM docker recipe | sets **no** `--max-model-len` at all |
+| mistral.ai news post | **0** occurrences of "1M" and **0** of "131"; no context length anywhere |
+| Hugging Face blog, prose | "a context window of **1M tokens**" |
+| HF blog, NVFP4 vLLM recipe | `--max-model-len **131072**` |
+| HF blog, Inference Endpoints | "serves up to **131K** tokens of context" |
+
+The reading that survives: **1,048,576 is the checkpoint's stated capability; 131,072 is Hugging
+Face's memory-conserving configuration for the quantized build and its hosted endpoint.** Both halves
+of the "vendor contradicts itself on 1M" story are one artifact too strong — the 131K is a third
+party's serving choice, not the vendor's own flag. What is genuinely unresolved is that neither
+document says what a **default** deployment gets.
+
+### Two launch documents, same day, two benchmark sets
+
+| Benchmark | mistral.ai news post | Hugging Face blog (same day) |
+|---|---|---|
+| Terminal-Bench 4 / 4.0 | **41%** ("improved by 13 percentage points … compared to its public preview") | **28.3%** |
+| Artificial Analysis Coding Agent Index | **48%** ("effectively tied with … GLM-5.3, while using **47%** fewer tokens per task") | **49.8%** |
+| BrowseComp | **84.5%** (from a **75%** SFT checkpoint; chart: GLM-5.3 82.5, DeepSeek V4.1 Flash 83.4, Kimi K3 **91.2**) | not stated |
+| FinWorkBench (Finch) | **73.3%** ("second only to Kimi K3") | not stated |
+| DeepSWE v1.1 / SWE-Atlas-QnA / AutomationBench | not stated | **61.7% / 59.4% / 59.9%** |
+
+The news post's own Terminal-Bench chart is labelled `ML4 Preview - self reported` at **28%** and ML4
+at **41%** — which is the blog's **28.3%**. So the blog carries the **preview's** coding number under
+the final model's name while stamping itself "As of **October 29, 2026**"; the CAI pair (48 vs 49.8)
+moves the other way and is not explained by a preview/final split. **A launch document's benchmark
+table has a measurement date and a harness, and this launch states neither**, which is why the two do
+not reconcile.
+
+Also from the news post, worth keeping: the cyber position — "we observed the model refusing to
+comply with black-box attacks against live targets" but "we see a potential for uplift to conduct real
+attacks", so the guardrails are being modified and a cyber-optimized variant is restricted to design
+partners under "rigorous vetting"; the price, **$0.70 input / $0.07 cached / $2.10 output per million
+tokens**; and the local fit — the **2-bit** quants run "on a single Apple Silicon Ultra computer with
+512 GB", Q2_K on one M3 Ultra at ~**90 tok/s** prefill (self-reported), everything else needs
+distributed inference.
+
+**The repeatable rule:** when a release ships several vendor-authored documents in a day, the
+benchmark numbers are per-document, and the disagreement is the finding — do not average them, and do
+not quote one without naming which page and which date it carries.
+
+→ [[fact-check]] [[edge-inference]] [[token-economics]]
+
+Sources: [Mistral — releasing the weights](https://mistral.ai/news/mistral-large-4-oss/) · [HF — Welcome Le Chonk](https://huggingface.co/blog/mistral-large4) · [model card](https://huggingface.co/mistralai/Mistral-Large-4-1T-A52B) · [Mistral on the Jev/AA index](https://huggingface.co/mistralai/Mistral-Large-4-1T-A52B)

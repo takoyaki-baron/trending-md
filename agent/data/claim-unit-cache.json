@@ -451,7 +451,7 @@
   ]
  },
  "cna:CVE-2026-109618": {
-  "fetched_at": "2026-10-28T12:14:11.222Z",
+  "fetched_at": "2026-10-29T20:13:03.935Z",
   "state": "PUBLISHED",
   "assigner": "php",
   "metrics": [
@@ -464,7 +464,7 @@
   ]
  },
  "cna:CVE-2026-109619": {
-  "fetched_at": "2026-10-28T12:14:12.931Z",
+  "fetched_at": "2026-10-29T20:13:05.645Z",
   "state": "PUBLISHED",
   "assigner": "php",
   "metrics": [
@@ -1155,7 +1155,7 @@
   "notInDb": true
  },
  "cna:CVE-2026-46300": {
-  "fetched_at": "2026-10-29T12:10:05.850Z",
+  "fetched_at": "2026-10-29T20:13:07.458Z",
   "state": "PUBLISHED",
   "assigner": "Linux",
   "metrics": [
@@ -1255,7 +1255,7 @@
   "patched": "3.16.2"
  },
  "cna:CVE-2026-97229": {
-  "fetched_at": "2026-10-29T12:10:09.217Z",
+  "fetched_at": "2026-10-29T20:12:56.365Z",
   "state": "PUBLISHED",
   "assigner": "GitLab",
   "metrics": [
@@ -1520,5 +1520,247 @@
   "fetched_at": "2026-10-29T12:11:09.045Z",
   "bytes": 10208,
   "text": "<p align=\"center\">\n  <img src=\"https://raw.githubusercontent.com/dmux/minilake/main/minilake_logo.png\" alt=\"minilake — Local Databricks API Emulator\" width=\"400\"/>\n</p>\n\n<h1 align=\"center\">MiniLake</h1>\n<p align=\"center\"><strong>Free, open-source local Databricks emulator for offline development and testing.</strong></p>\n<p align=\"center\">Real SQL & Spark execution · Unity Catalog hierarchy · Databricks SDK compatible · Terraform compatible · MIT licensed</p>\n\n<p align=\"center\">\n  <a href=\"https://github.com/dmux/minilake/releases\"><img src=\"https://img.shields.io/github/v/release/dmux/minilake\" alt=\"GitHub release\"></a>\n  <a href=\"https://github.com/dmux/minilake/actions/workflows/ci.yml\"><img src=\"https://img.shields.io/github/actions/workflow/status/dmux/minilake/ci.yml?branch=main&label=CI\" alt=\"CI\"></a>\n  <a href=\"https://github.com/dmux/minilake/actions/workflows/release.yml\"><img src=\"https://img.shields.io/github/actions/workflow/status/dmux/minilake/release.yml?label=release\" alt=\"Release\"></a>\n  <a href=\"https://github.com/dmux/minilake/pkgs/container/minilake\"><img src=\"https://img.shields.io/badge/ghcr.io-dmux%2Fminilake-blue?logo=github\" alt=\"GHCR image\"></a>\n  <a href=\"https://github.com/dmux/minilake/blob/main/LICENSE\"><img src=\"https://img.shields.io/github/license/dmux/minilake\" alt=\"License\"></a>\n  <img src=\"https://img.shields.io/badge/python-3.11%2B-blue\" alt=\"Python\">\n</p>\n\n<p align=\"center\">\n  <a href=\"https://dmux.github.io/minilake/\"><strong>Website</strong></a> · <a href=\"https://github.com/dmux/minilake/blob/main/docs/index.md\">Documentation</a> · <a href=\"https://github.com/dmux/minilake\">GitHub</a> · <a href=\"https://github.com/dmux/minilake/pkgs/container/minilake\">Container Image (GHCR)</a>\n</p>\n\n---\n\n**MiniLake** is a free, local Databricks API emulator — a single-developer tool for testing\n`databricks-sdk`/Terraform code against real SQL, real Delta Lake, and real Job execution,\nwithout paying for cloud compute.\n\n## Quick Start\n\n```bash\n# Option 1: PyPI\npip install minilake\nminilake --port 8000\n\n# Option 2: GitHub Container Registry\ndocker run -p 8000:8000 ghcr.io/dmux/minilake:latest\n\n# Option 3: Clone and build\ngit clone https://github.com/dmux/minilake && cd minilake\ndocker compose up -d\n\n# Verify (any option)\ncurl http://localhost:8000/_minilake/health\n```\n\nThen open **<http://localhost:8000/ui/>** for the built-in SQL workspace — an\nAthena-style query editor with a data catalog, saved queries and query history\n([details](https://github.com/dmux/minilake/blob/main/docs/ui.md)).\n\nNo account, no API key, no sign-up — and the container image downloads nothing at runtime:\nDuckDB's `delta` extension and the Delta / Unity Catalog Spark jars are baked in at build\ntime, so it works air-gapped ([details](https://github.com/dmux/minilake/blob/main/docs/getting-started.md#offline-use)).\n\nThen point any Databricks client at it:\n\n```python\nfrom databricks.sdk import WorkspaceClient\n\nw = WorkspaceClient(host=\"http://localhost:8000\", token=\"dev\")\nw.catalogs.create(name=\"vendas\")\n```\n\nMore in [Getting Started](https://github.com/dmux/minilake/blob/main/docs/getting-started.md).\n\n## Documentation\n\n| | |\n|---|---|\n| [Getting Started](https://github.com/dmux/minilake/blob/main/docs/getting-started.md) | Install, first catalog and query, internal endpoints |\n| [Web UI](https://github.com/dmux/minilake/blob/main/docs/ui.md) | The built-in SQL workspace at `/ui` |\n| [Configuration](https://github.com/dmux/minilake/blob/main/docs/configuration.md) | Every environment variable, persistence, HTTPS/TLS |\n| [Databricks SDK](https://github.com/dmux/minilake/blob/main/docs/databricks-sdk.md) | Unity Catalog, warehouses, SQL and jobs from Python |\n| [Terraform & Asset Bundles](https://github.com/dmux/minilake/blob/main/docs/terraform.md) | The provider, and `bundle deploy` / `bundle run` |\n| [Spark & Delta Lake](https://github.com/dmux/minilake/blob/main/docs/spark-and-delta.md) | Real Delta files, real Spark jobs, `spark.table()` by name |\n| **[MCP Server](https://github.com/dmux/minilake/blob/main/docs/mcp/index.md)** | **67 tools for LLM agents — [examples](https://github.com/dmux/minilake/blob/main/docs/mcp/examples.md), [tool reference](https://github.com/dmux/minilake/blob/main/docs/mcp/tools.md), [troubleshooting](https://github.com/dmux/minilake/blob/main/docs/mcp/troubleshooting.md)** |\n| [Testing & development](https://github.com/dmux/minilake/blob/main/docs/testing.md) | Running the suite, adding an API group |\n| [Releases & CI/CD](https://github.com/dmux/minilake/blob/main/docs/releases.md) | How a tag becomes a published image |\n| [Feature status](https://github.com/dmux/minilake/blob/main/FEATURES.md) | Endpoint-by-endpoint status and design rationale |\n| [API coverage](https://github.com/dmux/minilake/blob/main/docs/CLI_COVERAGE.md) | Measured: every SDK endpoint probed through the real `databricks` CLI |\n| [Emulation roadmap](https://github.com/dmux/minilake/blob/main/docs/EMULATION_ROADMAP.md) | What is worth building next, with measured gap counts |\n\n## Supported Services\n\n| Service | Status | Notes |\n|---|---|---|\n| **Unity Catalog** (catalogs, schemas, tables, volumes, functions) | ✅ Real | Each catalog = its own DuckDB database (`ATTACH`), native `catalog.schema.table` addressing; a SQL function becomes a real DuckDB macro, callable by its three-part name |\n| **Unity Catalog metastore** | ✅ Real | One synthetic metastore: `current-metastore-assignment`, `metastore_summary`, list/get |\n| **EXTERNAL Delta Tables** | ✅ Real | Real Delta files; `INSERT`/`UPDATE`/`DELETE` via a generated Spark job, reads via `delta_scan()` |\n| **SQL Statement Execution** | ✅ Real | Real DuckDB; `JSON_ARRAY`/`ARROW_STREAM`/`CSV`, `INLINE`/`EXTERNAL_LINKS`; result manifest carries column types |\n| **SQL Warehouses** | ✅ Real | Full CRUD + lifecycle |\n| **Query History** | ✅ Real | `w.query_history.list()` over everything executed, failures included |\n| **Saved Queries** | ✅ Real | `w.queries.*` CRUD with `update_mask` |\n| **Alerts** | ✅ Real | `w.alerts.*` CRUD; conditions are really evaluated against query results, and back `sql_task.alert` |\n| **Web UI** | ✅ Real | Athena-style SQL workspace at `/ui` — see [Web UI](https://github.com/dmux/minilake/blob/main/docs/ui.md) |\n| **Jobs** | ✅ Real | Sibling Docker container execution (Spark) or subprocess fallback; real DAG scheduling (`depends_on`/`run_if`); `runs/submit` one-shot runs; `sql_task.file`/`.query`/`.alert` all execute for real |\n| **Workspace** | ✅ Real | File-backed notebook/script storage; raw-bytes `workspace-files` sync powers `databricks bundle deploy` / `bundle run` |\n| **DBFS & Files API** | ✅ Real | File-backed storage, chunked upload |\n| **Secrets** | ✅ Real | Real CRUD; values only resolvable inside job env vars, never via direct API (matches real Databricks). Scope ACLs are stored and read back, never enforced |\n| **Clusters** | ✅ Real state machine | CRUD + timed lifecycle transitions, `update`/`pin`/`unpin`; **no real Spark compute** (by design) |\n| **Cluster policies & instance pools** | ✅ Real CRUD | Resolve and validate against clusters; never enforced — there is no compute to constrain |\n| **Permissions** | ✅ Real CRUD | Single-user \"allow-all\" default (by design — see Gaps) |\n| **UC Grants** | ✅ Real CRUD | `w.grants.*` and `databricks_grants`, with real privilege **inheritance** (a catalog grant is effective on its schemas and tables); never enforced |\n| **Workspace admin** | ✅ Real CRUD | Git credentials, IP access lists, global init scripts, notification destinations, instance profiles, `workspace-conf` — stored and read back, never enforced |\n| **Legacy SQL (`preview/sql`)** | ✅ Real | Queries, alerts, dashboards, widgets, visualizations, data sources — adapters over the modern stores, so both surfaces see one object |\n| **Identity & SCIM** | ✅ Real CRUD | Current user, plus Users/Groups/ServicePrincipals CRUD, SCIM `PATCH` and filtering. Identities are records, not credentials — see Gaps |\n| **Tokens** | ✅ Real | `w.tokens.*`; the value is returned once, as in the real API — but authenticates nothing |\n| **Persistence** (`MINILAKE_PERSIST=1`) | ✅ Real | JSON snapshot on shutdown, restored on startup |\n| **Unity Catalog protocol for Spark** | ✅ Real | `spark.table(\"cat.sch.tbl\")` resolves against minilake — see [Spark & Delta Lake](https://github.com/dmux/minilake/blob/main/docs/spark-and-delta.md#reading-by-name-with-unity-catalog) |\n| **JupyterLab + PySpark + Delta** (optional) | ✅ Real | `docker compose --profile notebook up` |\n| **MCP Server** (optional, `MINILAKE_MCP=1`) | ✅ Real | 67 tools + resources + prompts at `/mcp` — see [MCP Server](https://github.com/dmux/minilake/blob/main/docs/mcp/index.md) |\n| Repos, multi-language notebooks, DBT/pipeline tasks, DLT, Model Registry, Vector Search, Lakeview/Genie, Delta Sharing | 🚫 Not implemented | Returns `501 NOT_IMPLEMENTED`. For the measured picture, see [API coverage](https://github.com/dmux/minilake/blob/main/docs/CLI_COVERAGE.md) |\n\n## Known Gaps\n\nThese are **deliberate**, not oversights — minilake targets one developer running it\nlocally, not a shared or multi-tenant server:\n\n- **No real authentication** — any token is accepted. SCIM identities and personal access\n  tokens are records, not credentials: creating a user makes no way to sign in, and\n  revoking a token locks nobody out.\n- **No access-control enforcement** — the Permissions API is real CRUD but always allow-all,\n  so a test that passes here says nothing about grants in a real workspace.\n- **No real Spark compute for Clusters** — state machine only; real compute happens through\n  Jobs' sibling containers instead.\n- **Single process, no HA** — and DuckDB's single-writer model means concurrent load\n  contends on locks.\n- **Uneven test coverage** — `jobs.py`, `sql_statements.py` and `unity_catalog.py` are\n  covered mostly on happy paths, not edge cases.\n\n## Contributing\n\nSee [CONTRIBUTING.md](https://github.com/dmux/minilake/blob/main/CONTRIBUTING.md) for the project structure, how to add a new API\ngroup, and the PR checklist.\n\n## License\n\nMIT — see [LICENSE](https://github.com/dmux/minilake/blob/main/LICENSE).\n"
+ },
+ "ghsa:GHSA-xrx3-j98v-67x9": {
+  "fetched_at": "2026-10-29T20:12:54.248Z",
+  "error": "not-in-advisory-db",
+  "notInDb": true
+ },
+ "cna:CVE-2026-89078": {
+  "fetched_at": "2026-10-29T20:12:58.038Z",
+  "state": "PUBLISHED",
+  "assigner": "GitLab",
+  "metrics": [
+   {
+    "version": "3.1",
+    "score": 9.9,
+    "vector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:C/C:H/I:H/A:L",
+    "field": "containers.cna.metrics.cvssV3_1.baseScore"
+   }
+  ]
+ },
+ "cna:CVE-2026-93577": {
+  "fetched_at": "2026-10-29T20:13:00.028Z",
+  "state": "PUBLISHED",
+  "assigner": "GitLab",
+  "metrics": [
+   {
+    "version": "3.1",
+    "score": 9.9,
+    "vector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:C/C:H/I:H/A:H",
+    "field": "containers.cna.metrics.cvssV3_1.baseScore"
+   }
+  ]
+ },
+ "cna:CVE-2026-110264": {
+  "fetched_at": "2026-10-29T20:13:01.979Z",
+  "state": "PUBLISHED",
+  "assigner": "GitLab",
+  "metrics": [
+   {
+    "version": "3.1",
+    "score": 10,
+    "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:C/C:H/I:H/A:H",
+    "field": "containers.cna.metrics.cvssV3_1.baseScore"
+   }
+  ]
+ },
+ "cna:CVE-2026-119050": {
+  "fetched_at": "2026-10-29T20:13:09.160Z",
+  "state": "PUBLISHED",
+  "assigner": "VulnCheck",
+  "metrics": [
+   {
+    "version": "4.0",
+    "score": 9.2,
+    "vector": "CVSS:4.0/AV:N/AC:H/AT:P/PR:N/UI:N/VC:H/VI:H/VA:H/SC:N/SI:N/SA:N",
+    "field": "containers.cna.metrics.cvssV4_0.baseScore"
+   },
+   {
+    "version": "3.1",
+    "score": 8.1,
+    "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:H/I:H/A:H",
+    "field": "containers.cna.metrics.cvssV3_1.baseScore"
+   }
+  ]
+ },
+ "cna:CVE-2026-118378": {
+  "fetched_at": "2026-10-29T20:13:11.132Z",
+  "state": "PUBLISHED",
+  "assigner": "VulnCheck",
+  "metrics": [
+   {
+    "version": "4.0",
+    "score": 8.5,
+    "vector": "CVSS:4.0/AV:L/AC:L/AT:N/PR:N/UI:P/VC:H/VI:H/VA:H/SC:N/SI:N/SA:N",
+    "field": "containers.cna.metrics.cvssV4_0.baseScore"
+   },
+   {
+    "version": "3.1",
+    "score": 7.8,
+    "vector": "CVSS:3.1/AV:L/AC:L/PR:N/UI:R/S:U/C:H/I:H/A:H",
+    "field": "containers.cna.metrics.cvssV3_1.baseScore"
+   }
+  ]
+ },
+ "cna:CVE-2026-119028": {
+  "fetched_at": "2026-10-29T20:13:13.116Z",
+  "state": "PUBLISHED",
+  "assigner": "VulnCheck",
+  "metrics": [
+   {
+    "version": "4.0",
+    "score": 8.7,
+    "vector": "CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:P/VC:H/VI:H/VA:H/SC:N/SI:N/SA:N",
+    "field": "containers.cna.metrics.cvssV4_0.baseScore"
+   },
+   {
+    "version": "3.1",
+    "score": 8.8,
+    "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:H/I:H/A:H",
+    "field": "containers.cna.metrics.cvssV3_1.baseScore"
+   }
+  ]
+ },
+ "cna:CVE-2026-119052": {
+  "fetched_at": "2026-10-29T20:13:15.107Z",
+  "state": "PUBLISHED",
+  "assigner": "VulnCheck",
+  "metrics": [
+   {
+    "version": "4.0",
+    "score": 8.7,
+    "vector": "CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:N/VI:N/VA:H/SC:N/SI:N/SA:N",
+    "field": "containers.cna.metrics.cvssV4_0.baseScore"
+   },
+   {
+    "version": "3.1",
+    "score": 7.5,
+    "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
+    "field": "containers.cna.metrics.cvssV3_1.baseScore"
+   }
+  ]
+ },
+ "cna:CVE-2026-59179": {
+  "fetched_at": "2026-10-29T20:13:17.033Z",
+  "state": "PUBLISHED",
+  "assigner": "GitHub_M",
+  "metrics": [
+   {
+    "version": "3.1",
+    "score": 8.3,
+    "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:H/A:H",
+    "field": "containers.cna.metrics.cvssV3_1.baseScore"
+   }
+  ]
+ },
+ "mistralai/Mistral-Large-4-1T-A52B": {
+  "fetched_at": "2026-10-29T20:13:18.789Z",
+  "error": "Command failed: gh api repos/mistralai/Mistral-Large-4-1T-A52B"
+ },
+ "agno-agi/agno": {
+  "fetched_at": "2026-10-29T20:13:21.857Z",
+  "pushed_at": "2026-10-29T19:49:50Z",
+  "created_at": "2022-05-04T15:23:02Z",
+  "archived": false,
+  "stars": 42951,
+  "forks": 6206,
+  "license": "Apache-2.0"
+ },
+ "TabularisDB/tabularis": {
+  "fetched_at": "2026-10-29T20:13:23.466Z",
+  "pushed_at": "2026-10-29T13:22:51Z",
+  "created_at": "2026-01-26T21:48:07Z",
+  "archived": false,
+  "stars": 5329,
+  "forks": 408,
+  "license": "Apache-2.0"
+ },
+ "mattt/AnySpeechRecognizer": {
+  "fetched_at": "2026-10-29T20:13:25.079Z",
+  "pushed_at": "2026-10-28T19:01:12Z",
+  "created_at": "2026-10-15T18:30:59Z",
+  "archived": false,
+  "stars": 17,
+  "forks": 1,
+  "license": "Apache-2.0"
+ },
+ "t3dotgg/tstack": {
+  "fetched_at": "2026-10-29T20:13:26.657Z",
+  "pushed_at": "2026-10-28T02:38:03Z",
+  "created_at": "2026-10-24T05:00:20Z",
+  "archived": false,
+  "stars": 2373,
+  "forks": 146,
+  "license": "MIT"
+ },
+ "oldest:t3dotgg/tstack": {
+  "fetched_at": "2026-10-29T20:13:29.760Z",
+  "oldest": "2026-10-24T05:00:19Z",
+  "oldest_sha": "6efae364201abc9d9f07443e9caa461f42e51090",
+  "approx_commits": "5"
+ },
+ "JustAResearcher/gpu-unlock-ada": {
+  "fetched_at": "2026-10-29T20:13:31.349Z",
+  "pushed_at": "2026-10-26T04:24:46Z",
+  "created_at": "2026-10-23T21:00:53Z",
+  "archived": false,
+  "stars": 4502,
+  "forks": 576,
+  "license": "GPL-2.0"
+ },
+ "oldest:JustAResearcher/gpu-unlock-ada": {
+  "fetched_at": "2026-10-29T20:13:34.574Z",
+  "oldest": "2026-10-23T20:12:36Z",
+  "oldest_sha": "26c9e370209d8249259866637ce99120212a3af3",
+  "approx_commits": "103"
+ },
+ "Zagitta/gpu-unlock": {
+  "fetched_at": "2026-10-29T20:13:36.118Z",
+  "pushed_at": "2026-10-29T02:30:54Z",
+  "created_at": "2026-10-18T01:28:31Z",
+  "archived": false,
+  "stars": 12983,
+  "forks": 1270,
+  "license": null
+ },
+ "oldest:Zagitta/gpu-unlock": {
+  "fetched_at": "2026-10-29T20:13:39.205Z",
+  "oldest": "2026-09-28T18:24:18Z",
+  "oldest_sha": "0ebdb1c6308b6a2072be5bf04513472942541956",
+  "approx_commits": "37"
+ },
+ "skanderMoalla/h1": {
+  "fetched_at": "2026-10-29T20:13:40.684Z",
+  "error": "Command failed: gh api repos/skanderMoalla/h1"
+ },
+ "ghsa:GHSA-g2vv-83pm-v2hc": {
+  "fetched_at": "2026-10-29T20:15:00.353Z",
+  "error": "not-in-advisory-db",
+  "notInDb": true
+ },
+ "l0ng-ai/openidea": {
+  "fetched_at": "2026-10-29T20:15:03.817Z",
+  "pushed_at": "2026-10-29T15:50:19Z",
+  "created_at": "2026-10-21T12:23:14Z",
+  "archived": false,
+  "stars": 1024,
+  "forks": 98,
+  "license": "Apache-2.0"
+ },
+ "oldest:l0ng-ai/openidea": {
+  "fetched_at": "2026-10-29T20:15:32.022Z",
+  "oldest": "2026-10-22T10:55:10Z",
+  "oldest_sha": "9a2025b76e37babdc8adebdc0014b8f4459c9c10",
+  "approx_commits": "276"
+ },
+ "oapi-codegen/oapi-codegen": {
+  "fetched_at": "2026-10-29T20:15:33.699Z",
+  "pushed_at": "2026-10-28T14:08:11Z",
+  "created_at": "2019-02-27T23:59:59Z",
+  "archived": false,
+  "stars": 8636,
+  "forks": 1060,
+  "license": "Apache-2.0"
  }
 }

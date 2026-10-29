@@ -12,7 +12,7 @@ license: CC-BY-4.0
 
 ---
 
-## 1. Mistral 放出 1T 参数的 Large 4 权重 — 模型卡写 1M 上下文，自家部署配方只有 131K
+## 1. Mistral 放出 1T 参数的 Large 4 权重 — 卡片写 1M，部署配方写 131K，两份同日文档的基准还对不上
 
 - **Velocity:** ▮▮▮ trending
 - **Source:** Hacker News · 893+ pts · ~6h ago (~22:13 UTC+8)
@@ -22,7 +22,9 @@ Mistral 于 2026-10-29 发布了 Mistral Large 4 的开放权重 — 绰号 "Le 
 
 最容易被传错的两个数字是上下文窗口和推理开关。博文从未给出上下文长度 — HF 的文章补上了"about 1T total, 49B active parameter, and a context window of 1M tokens" — 但同一篇文章里的 vLLM 示例设置的是 `--max-model-len 131072`，而 Inference Endpoints 配方"serves up to 131K tokens of context."至于推理开关："reasoning cannot be disabled, so using `reasoning_effort`: `none` would still use `high`."主要基准：Terminal-Bench 4.0 **41%**（比预览版提升 13 个点）、Artificial Analysis Coding Agent Index **48%**（与 GLM-5.3 持平，"while using 47% fewer tokens per task"）、BrowseComp **84.5%**、FinWorkBench **73.3%** — 在博文自己的图表里，BrowseComp 一项落后 Kimi K3 的 91.2%。
 
-**Why it matters:** Mistral 自己在博文里承认"we see a potential for uplift to conduct real attacks"，并把其网络安全变体限制给经过审核的合作伙伴 — 这在发布会文案里并不常见。但真正的操作性数字是那个 131K：一个 1M token 的声明，在你自己的 vLLM 参数和你自己的托管端点里各被砍掉一半还多，那它只是规格表，不是部署能力。NVFP4 版本另外"requires NVIDIA Blackwell GPUs"，而只有 2-bit 量化能装进单台 512 GB 的 Apple Silicon Ultra。
+**自家第二份发布文档就对不上。** 同日发布的 Hugging Face 文章写道"As of October 29, 2026, the model is the fifth best open weights model on Artificial Analysis Intelligence index"，随后给出"**28.3% on Terminal-Bench 4**"和综合"Coding Agent Index score of **49.8%**" — 而新闻稿写的是 41% 和 48%。新闻稿自己的图表把预览版的 **28%** 标为"self reported"、把 ML4 标在 41%，也就是说两份文档里有一份把预览期的数字挂在了正式模型名下。
+
+**Why it matters:** Mistral 自己在博文里承认"we see a potential for uplift to conduct real attacks"，并以"rigorous vetting"为条件把网络安全变体限制给设计合作伙伴 — 这在发布会文案里并不常见。但 131K 并不是 Mistral 的数字：**模型卡**三处写 1M，Vibe 配置里是 `max_context_length = 1048576`，它自己的 FP8 vLLM 配方根本没设上限 — 两个 131K 全部出自 **Hugging Face** 的文档（NVFP4 配方 `--max-model-len 131072`，以及 HF Inference Endpoints 的"131K tokens of context"）。所以那个"可部署数字"是第三方为省显存给出的配置；更值得写的是没人标注的那处：同一场发布的两份文档，在这款模型主打的基准上差了 12.7 个百分点。NVFP4 版本另外"requires NVIDIA Blackwell GPUs"，而只有 2-bit 量化能装进单台 512 GB 的 Apple Silicon Ultra。
 
 [`🔗 Mistral — releasing the weights`](https://mistral.ai/news/mistral-large-4-oss/) · [`🔗 Hugging Face — Welcome Le Chonk`](https://huggingface.co/blog/mistral-large4) · [`🔗 mistralai/Mistral-Large-4-1T-A52B`](https://huggingface.co/mistralai/Mistral-Large-4-1T-A52B)
 
@@ -34,7 +36,7 @@ Mistral 于 2026-10-29 发布了 Mistral Large 4 的开放权重 — 绰号 "Le 
 - **Source:** CISA KEV · catalog 2026.10.29 · added 2026-10-29
 - **Tags:** `cve` `gitlab` `ruby` `rce` `kev`
 
-CISA 于 **2026-10-29** 把 **CVE-2026-97229** 加入已知被利用漏洞目录。该记录是 **CVSS 3.1 10.0** — `AV:N/AC:L/PR:N/UI:N/S:C/C:H/I:H/A:H` — 归为 CWE-190（整数溢出），而这个分数是 **GitLab 自己给的**（`Secondary` 槽位里是 `cve@gitlab.com`，NVD 自评指标为 0）：NVD 把记录标为 `Analyzed`，却没有发布自己的分数。GitLab 在 **19.4.2 中修复，该版本发布于 2026-10-12**；NVD 次日发布记录，KEV 则在**修复后 17 天**跟上 — 即记录发布后 16 天。NVD 记录目前尚未带上 KEV 标记 — 来源是目录本身，不是 CVE 条目。
+CISA 于 **2026-10-29** 把 **CVE-2026-97229** 加入已知被利用漏洞目录。该记录是 **CVSS 3.1 10.0** — `AV:N/AC:L/PR:N/UI:N/S:C/C:H/I:H/A:H` — 归为 CWE-190（整数溢出），而这个分数是 **GitLab 自己给的**（`Secondary` 槽位里是 `cve@gitlab.com`，NVD 自评指标为 0）。NVD 记录目前仍是 **`Undergoing Analysis`**，只有这一个指标，因此还不存在可供对比的 NVD 分数 — 这**不是**"背书"情形（已分析记录只保留 CNA 的分数）。GitLab 在 **19.4.2 中修复，该版本发布于 2026-10-12**；NVD 次日发布记录，KEV 则在**修复后 17 天**跟上 — 即记录发布后 16 天。NVD 记录目前尚未带上 KEV 标记 — 来源是目录本身，不是 CVE 条目。
 
 根因不在 GitLab：Ruby 自己在 **2026-10-23** 的公告里点名了四个 GitLab 分配的编号 — CVE-2026-89078（正则解析器的 double free，PR #13332）、CVE-2026-93577、CVE-2026-97229 和 CVE-2026-110264 — 并明确写道："We have not requested CVE identifiers in Ruby for these fixes, at least for now."修复落在 **Ruby 4.0.9、3.4.12 和 3.3.13**。人们会想到的两个缓解手段都不管用："`Regexp.timeout` does not protect against these bugs"，以及"Limiting the length of patterns does not reliably protect against them either"，因为"some of them can be triggered by short patterns."
 
@@ -50,11 +52,11 @@ CISA 于 **2026-10-29** 把 **CVE-2026-97229** 加入已知被利用漏洞目录
 - **Source:** Hacker News · 219+ pts · ~10h ago (~18:42 UTC+8)
 - **Tags:** `php` `pan-os` `kernel` `exploitation` `incident`
 
-Dream 在 2026-10-26 发布了一份链式利用分析、10-29 更新：一次自动化批量攻击拿下了 **24 台面向互联网的 PAN-OS 防火墙**，随后的一次入侵又攻陷了一台内部防火墙管理服务器，"bringing the total number of servers exploited to 25."这 24 台中有两台属于一个美国政府关联组织。链条是 **CVE-2026-109618 / CVE-2026-109619**（PHP2Shell，9.2）拿到 `nobody` 权限，再叠加 **CVE-2026-46300** — 那个 10 月 28 日进入 KEV、我们昨天日报里写过的 Linux 内核提权漏洞 — 通过覆写 `/etc/pam.d/su` 的 page cache，从一个非特权进程拿到 root。
+Dream 在 2026-10-26 发布了一份链式利用分析、10-29 更新：一次自动化批量攻击拿下了 **24 台面向互联网的 PAN-OS 防火墙**，随后的一次入侵又攻陷了一台内部防火墙管理服务器，"bringing the total number of servers exploited to 25."这 24 台中有两台属于一个美国政府关联组织，而攻击者横向移动拿下的那台管理服务器被描述为"a third government server" — 合计 **三台** 政府关联系统（总数 25）。链条是 **CVE-2026-109618 / CVE-2026-109619**（PHP2Shell，9.2）拿到 `nobody` 权限，再叠加 **CVE-2026-46300** — 那个 10 月 28 日进入 KEV、我们昨天日报里写过的 Linux 内核提权漏洞 — 通过覆写 `/etc/pam.d/su` 的 page cache，从一个非特权进程拿到 root。
 
 时间线非常紧：第一台政府关联防火墙在 **10 月 23 日 18:14 UTC** 被拿下，第二台在 **10 月 24 日 10:09 UTC**，管理服务器在 **10 月 24 日 11:35 UTC** — "less than 90 minutes after rooting the second firewall."大部分机器被放着没动："For 22 of the 24 rooted firewalls, the attacker did nothing beyond planting the webshell."仍有大约 **19,000** 个可指纹识别的目标可被利用。
 
-**Why it matters:** 报告里的保留意见才是重点。Dream 写道"What we cannot determine is whether the password spray, backdoor account creation, or SAML key extraction succeeded"，以及"we do not attribute this activity to a named threat actor."关于随报告一起流传的 AI 说法，作者说得很直白："we have no direct evidence that the AI tools were specifically used to write the exploit."两个单独看都还算可控的 9.x 漏洞，组合起来构成了不到 90 分钟内从零认证到 root 的路径 — 这正是把昨天那个内核记录和这个 PHP 记录当作同一起事件、而非两起事件来对待的理由。
+**Why it matters:** 报告里的保留意见才是重点。Dream 写道"What we cannot determine is whether the password spray, backdoor account creation, or SAML key extraction succeeded"，以及"we do not attribute this activity to a named threat actor."关于随报告一起流传的 AI 说法，作者先是不给归因、随后在同一句里提出相反推断："While we have no direct evidence that the AI tools were specifically used to write the exploit or the post-exploitation scripts, the code structure, commenting style, and consistency across ~40 scripts suggest AI-assisted development."两个单独看都还算可控的 9.x 漏洞，组合起来构成了不到 90 分钟内从零认证到 root 的路径 — 这正是把昨天那个内核记录和这个 PHP 记录当作同一起事件、而非两起事件来对待的理由。
 
 [`🔗 Dream — chained PHP2Shell roots 25 servers`](https://dreamgroup.com/blog/chained-php2shell-exploit-roots-25-servers) · [`🔗 PHP 8.5.12 / 8.4.27 / 8.3.36 / 8.2.35`](https://www.php.net/archive/2026.php) · [`🔗 Hacker News 讨论`](https://news.ycombinator.com/item?id=50286987)
 
