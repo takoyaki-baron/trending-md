@@ -36,6 +36,7 @@
  * Verdicts (one per URL):
  *   twin found (url)    a machine-readable sibling was fetched and verified non-HTML
  *   plain HTML ok       no twin needed — the HTML itself carries visible text
+ *   auth-gated (marker) a login/session interstitial: the page exists, this session may not read it
  *   JS gate (marker)    a blocking interstitial (Cloudflare / DataDome / Akamai / PerimeterX)
  *   JS shell (script %) 200 HTML whose prose is client-rendered — look for llms.txt before citing
  *   no twin             not readable (status / empty body): neither a twin nor the page was read
@@ -68,6 +69,36 @@ const GATES = [
 /* A bare "enable JavaScript" notice is not a gate on its own — many real pages carry it — so it
  * only counts when the page is also tiny or blocked. */
 const SOFT_JS_NOTICE = /(enable|turn on)\s+javascript/i;
+
+/* ── auth markers: a session interstitial, NOT a bot gate ─────────────────────────────────
+ * An anonymous session is served a login interstitial at HTTP 200. The page exists; the server
+ * has decided this session may not have it. That is a different sentence from "the page does not
+ * say that", and it changes the advice: no twin will get past an authentication boundary, so the
+ * second-best artifact is a third party's copy (an aggregator, a vendor mirror, a scanner feed).
+ * Markers are matched on the BODY first, then on the landing URL — a redirect to an identity
+ * provider leaves the marker in the URL, not in any body we ever see. */
+const BODY_AUTH = [
+  ['iam-rp', /IAM\s+RP\b/i],
+  ['sessions-me', /\/sessions\/me\b/],
+  ['iam-callback', /iam_callback/i],
+  ['oidc-authorize', /target_link_uri/i],
+];
+/* URL markers are weaker than body markers and must never fire on their own: a documentation
+ * page about OAuth lives at `/oauth/authorize` exactly as an IdP endpoint does. The one that IS
+ * unambiguous is the identity PROVIDER's own host, so it is named separately; the path forms are
+ * only read when the body is also thin or blocked (probe() enforces that, not this function). */
+const URL_AUTH = [
+  ['login-idp', /^https?:\/\/(accounts\.google\.com|login\.microsoftonline\.com|[^/]*\.okta\.com|login\.salesforce\.com)\//i],
+  ['login-path', /^https?:\/\/[^/]+\/(?:login|signin|sign-in|adfs|saml2?)(?:[/?#]|$)/i],
+];
+
+function authGateFor(body, finalUrl) {
+  const hay = body || '';
+  for (const [name, re] of BODY_AUTH) if (re.test(hay)) return name;
+  const where = finalUrl || '';
+  for (const [name, re] of URL_AUTH) if (re.test(where)) return name;
+  return null;
+}
 
 const isHtml = (ct, body) =>
   /html/i.test(ct || '') || /^\s*(<!doctype html|<html)/i.test(body || '');
@@ -188,6 +219,7 @@ async function probe(url) {
   }
 
   const gate = GATES.find(([, re]) => re.test(original.body || ''));
+  const auth = authGateFor(original.body, original.finalUrl);
   const text = visibleText(original.body || '');
   const scripts = scriptBytes(original.body || '');
   const scriptShare = original.bytes ? scripts / original.bytes : 0;
@@ -198,6 +230,9 @@ async function probe(url) {
   if (pageTwin) {
     verdict = `twin found (${pageTwin.finalUrl})`;
     reason = `${fmt(original.bytes)} ${original.contentType.split(';')[0] || '?'} → ${fmt(pageTwin.bytes)} ${pageTwin.contentType.split(';')[0] || '?'} via ${pageTwin.kind}`;
+  } else if (auth && (original.status >= 400 || text.length < 2000)) {
+    verdict = `auth-gated (${auth})`;
+    reason = `HTTP ${original.status}, login/session interstitial — the page exists but this session may not read it; a twin sits behind the same boundary, so go to a third-party artifact instead of hunting`;
   } else if (gate && (original.status >= 400 || text.length < 2000)) {
     verdict = `JS gate (${gate[0]})`;
     reason = `HTTP ${original.status}, interstitial marker in body, ${text.length} chars of text`;
@@ -219,6 +254,7 @@ async function probe(url) {
     url,
     verdict,
     reason,
+    authGated: verdict.startsWith('auth-gated') ? auth : null,
     twin: pageTwin ? pageTwin.finalUrl : null,
     index: indexTwin ? indexTwin.finalUrl : null,
     original: {
@@ -260,17 +296,38 @@ const CALIBRATION = [
   ['https://modelcontextprotocol.io/docs/getting-started/intro', /^(twin found|JS shell)/],
 ];
 
+/* offline units for the auth classifier — the live calibration cannot reach a gated page on
+ * demand, so the detector is pinned on bodies. Each row is a shape seen or feared in the wild. */
+const AUTH_UNITS = [
+  ['HPE IAM interstitial', `<script>window.__IAM={"iam_callback":"/iam_callback","target_link_uri":"https://x/authorize"}</script>`, 'https://hpe.com/bulletin', 'iam-rp|iam-callback|oidc-authorize'],
+  ['redirect to an IdP', '<html><body>redirecting</body></html>', 'https://login.microsoftonline.com/common/oauth2/authorize?x=1', 'login-idp|login-path'],
+  ['cookie-walled page', '<html><title>Sign in</title></html>', 'https://example.com/login?returnTo=/docs', 'login-path'],
+  ['an OAuth DOC page (must NOT fire)', '<p>Send the user to /authorize with a redirect_uri and state parameter.</p>'.repeat(40), 'https://docs.example.com/oauth/authorize', null],
+  ['an ordinary page (must NOT fire)', '<p>Install the package and run the test suite.</p>'.repeat(40), 'https://example.com/docs/intro', null],
+];
+
 async function main() {
   if (has('--selftest')) {
     let pass = 0;
+    let total = 0;
     for (const [url, re] of CALIBRATION) {
+      total++;
       const r = await probe(url);
       const ok = re.test(r.verdict);
       console.log(`${ok ? 'ok  ' : 'FAIL'} ${url} → ${r.verdict}`);
       if (ok) pass++;
     }
-    console.log(`\nselftest: ${pass}/${CALIBRATION.length} matched`);
-    if (pass !== CALIBRATION.length) process.exitCode = 1;
+    console.log('');
+    for (const [name, body, finalUrl, expect] of AUTH_UNITS) {
+      total++;
+      const got = authGateFor(body, finalUrl);
+      /* the HPE row may match any of three markers — assert the CLASS, not a spelling */
+      const ok = expect === null ? got === null : expect.split('|').includes(got);
+      console.log(`${ok ? 'ok  ' : 'FAIL'} ${name} → ${got ?? 'not gated'}`);
+      if (ok) pass++;
+    }
+    console.log(`\nselftest: ${pass}/${total} matched`);
+    if (pass !== total) process.exitCode = 1;
     return;
   }
   const i = args.indexOf('--probe');

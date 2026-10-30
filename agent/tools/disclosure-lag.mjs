@@ -209,6 +209,8 @@
  *   node disclosure-lag.mjs --ids CVE-… --census --no-github            # degraded mode only
  *   node disclosure-lag.mjs --range-census --from 2026-10-18 --to 2026-10-24  # a whole window
  *   node disclosure-lag.mjs --field-census weaknesses --from 2026-10-18 --to 2026-10-24
+ *   node disclosure-lag.mjs --field-watch weaknesses --from 2026-10-23 --to 2026-10-29  # pin ids
+ *   node disclosure-lag.mjs --field-watch weaknesses                    # re-read the SAME ids
  *   node disclosure-lag.mjs --changes-census --from 2026-10-21 --to 2026-10-27   # changes[] prevalence
  *   node disclosure-lag.mjs --bound-census --from 2026-10-23 --to 2026-10-29     # newest vs stated bound
  *   node disclosure-lag.mjs --backlog-census --from 2026-10-21 --to 2026-10-27   # the Received residue
@@ -1828,6 +1830,28 @@ if (SELFTEST) {
     openBoundOf({ affected: [{ affectedData: [{ vendor: 'x', product: 'y', versions: [{ version: '0', lessThanOrEqual: '1.0' }] }] }] }).bound, null);
   eq('open bound: a scoped npm name is decoded from the purl',
     openBoundOf({ affected: [{ affectedData: [{ packageURL: 'pkg:npm/%40angular/core', versions: [{ version: '0', lessThanOrEqual: '19.0.0' }] }] }] }).bound?.name, '@angular/core');
+  /* ── the field watch (2026-10-30): two observations → the motion list ──
+     The distinction the agenda item turns on is ADD-beside vs REPLACE: same values with a new
+     `nvd` kind is "NVD published its own beside the CNA's"; different values with only an `nvd`
+     kind left is "NVD overwrote it". A checker that only compares value sets cannot tell them
+     apart, and a checker that ignores order would report a reordered list as motion. */
+  const obs = (status, values, kinds, present = true) => ({ status, present, values, kinds });
+  eq('field watch: no change is not motion',
+    compareObservation(obs('Analyzed', ['CWE-190'], ['cna']), obs('Analyzed', ['CWE-190'], ['cna'])), []);
+  eq('field watch: reordered values are not motion',
+    compareObservation(obs('Analyzed', ['CWE-190', 'CWE-122'], ['cna']), obs('Analyzed', ['CWE-122', 'CWE-190'], ['cna'])), []);
+  eq('field watch: NVD adding beside the CNA keeps the value and adds a source',
+    compareObservation(obs('Received', ['CWE-190'], ['cna']), obs('Analyzed', ['CWE-190'], ['cna', 'nvd'])),
+    ['status Received → Analyzed', 'source cna → cna+nvd (NVD now publishes its own)']);
+  eq('field watch: NVD overwriting shows BOTH the value and the source move',
+    compareObservation(obs('Received', ['CWE-190'], ['cna']), obs('Analyzed', ['CWE-122'], ['nvd'])),
+    ['status Received → Analyzed', 'value added: CWE-122', 'value removed: CWE-190', 'source cna → nvd (NVD now publishes its own)']);
+  eq('field watch: a CNA filling in a missing field is an ADDITION, not a replacement',
+    compareObservation(obs('Received', null, null, false), obs('Analyzed', ['CWE-79'], ['cna'])),
+    ['status Received → Analyzed', 'field ADDED']);
+  eq('field watch: a field disappearing is its own event',
+    compareObservation(obs('Analyzed', ['CWE-79'], ['cna']), obs('Rejected', null, null, false)),
+    ['status Analyzed → Rejected', 'field REMOVED']);
   let pass = 0;
   for (const c of cases) {
     if (c.ok) pass++;
@@ -2172,7 +2196,7 @@ async function fieldCensus({ from, to, field }) {
       sources = [...new Set(raw.map(w => w.source || ''))];
       kinds = [...new Set(sources.map(cweSourceKind))];
     }
-    return { id: c.id, status, present, values, sources, kinds };
+    return { id: c.id, status, present, values, sources, kinds, lastModified: c.lastModified || null };
   });
 
   const byStatus = {};
@@ -2231,6 +2255,177 @@ function printFieldCensus(c) {
   console.log('  Same reading rule as the range census: NVD\'s `published` is a workflow timestamp, so a row');
   console.log('  is "records whose paperwork completed that week". Re-run `--json` later and diff per id to');
   console.log('  see whether a value MOVES between publication and analysis — that is the open half.');
+}
+
+/* ── the field watch (added 2026-10-30 12:24) ──
+   `--field-census` is a SNAPSHOT, and the question it cannot answer — "does a CWE VALUE ever move
+   between publication and analysis, and does NVD add beside the CNA or replace it?" — needs two
+   observations of the SAME records. Re-running the publication window is NOT that measurement:
+   `vulnStatus` is read at query time, so a re-run changes the cohort's composition at the same
+   moment the field's content could change. So this keeps a store keyed by CVE id — the pinned id
+   list the agenda item asked for — and drives the re-read off NVD's own `lastModified` for the
+   pinned ids rather than off a date window: any edit bumps `lastModified`, so a lastMod query
+   intersected with the ids is complete for field motion at the cost of one or two calls instead
+   of one per record.
+
+   Two limits stated rather than hidden: `lastModified` is second-granular, so a change landing in
+   the same second as the snapshot is invisible; and it also moves for KEV adds and ADP rewrites
+   that touch nothing we store — that produces a re-read, not a motion, and `compareObservation`
+   reports the empty diff as `no-change` rather than as evidence. */
+const FIELD_WATCH = argOf('--field-watch', null);
+const FIELD_STORE = argOf('--store', 'agent/data/field-watch.json');
+const IF_DUE = Number(argOf('--if-due', 0));
+
+function readFieldStore(path) {
+  try { return JSON.parse(fs.readFileSync(path, 'utf8')); } catch { return { fields: {} }; }
+}
+
+/* a function declaration, not a const: `--selftest` runs near the top of the module and hoisting
+   is the only reason compareObservation() is callable from there at all. */
+function sameSet(a, b) {
+  const A = new Set(a || []), B = new Set(b || []);
+  return A.size === B.size && [...A].every(x => B.has(x));
+}
+
+/** Pure: two observations of one record → the list of things that moved. Order-only differences
+ *  are not motion, and a null → value transition is an ADDITION (the CNA being late is not the
+ *  same event as NVD replacing a value). */
+function compareObservation(prev, next) {
+  const ev = [];
+  if (prev.status && next.status && prev.status !== next.status) ev.push(`status ${prev.status} → ${next.status}`);
+  const wasMuted = !prev.present, isMuted = !next.present;
+  if (!wasMuted && isMuted) ev.push('field REMOVED');
+  if (wasMuted && !isMuted) ev.push('field ADDED');
+  if (!wasMuted && !isMuted) {
+    const before = new Set(prev.values || []), after = new Set(next.values || []);
+    for (const v of after) if (!before.has(v)) ev.push(`value added: ${v}`);
+    for (const v of before) if (!after.has(v)) ev.push(`value removed: ${v}`);
+    if (!sameSet(prev.kinds, next.kinds)) {
+      const pk = (prev.kinds || []), nk = (next.kinds || []);
+      /* the case the agenda item is about: NVD arriving beside the CNA is `cna` → `cna+nvd`, which
+         is an ADDITION; the CNA's value surviving is what makes it "add beside", not "overwrite". */
+      const gained = nk.includes('nvd') && !pk.includes('nvd');
+      ev.push(`source ${pk.join('+') || 'none'} → ${nk.join('+') || 'none'}${gained ? ' (NVD now publishes its own)' : ''}`);
+    }
+  }
+  return ev;
+}
+
+async function fetchLastMod(since) {
+  const records = [];
+  for (let start = 0, p = 0; p < CENSUS_PAGES; p++) {
+    const url = `${NVD}?lastModStartDate=${encodeURIComponent(since)}` +
+      `&lastModEndDate=${encodeURIComponent(new Date().toISOString())}` +
+      `&resultsPerPage=2000&startIndex=${start}`;
+    const { status, body } = await getJson(url, NVD_API_KEY ? { apiKey: NVD_API_KEY } : {});
+    if (!body) throw new Error(`NVD HTTP ${status} for the lastMod query`);
+    const batch = body.vulnerabilities || [];
+    for (const v of batch) if (v.cve) records.push(v.cve);
+    start += batch.length;
+    if (!batch.length || batch.length < 2000 || start >= (body.totalResults || 0)) break;
+    await sleep(NVD_PACE);
+  }
+  return records;
+}
+
+function observe(c, field) {
+  const present = Array.isArray(c[field]) ? c[field].length > 0 : c[field] !== undefined && c[field] !== null;
+  let values = null, kinds = null;
+  if (field === 'weaknesses' && present) {
+    values = [...new Set(c[field].flatMap(w => (w.description || []).filter(d => d.lang === 'en').map(d => d.value)))];
+    kinds = [...new Set(c[field].map(w => w.source || '').map(cweSourceKind))];
+  }
+  return { at: new Date().toISOString(), status: c.vulnStatus || '?', present, values, kinds, lastModified: c.lastModified || null };
+}
+
+async function fieldWatch({ field, from, to, store }) {
+  const s = readFieldStore(store);
+  const f = (s.fields[field] = s.fields[field] || { field, updated: null, rows: {} });
+
+  /* `--if-due <hours>`: the motion this measures has a multi-day period, so a watch wired into a
+     3x-daily pipeline would spend calls re-reading records nothing has touched. A not-due run must
+     NOT advance `updated`, or it would push the next real read further out every pass. */
+  if (!(from && to) && IF_DUE && f.updated) {
+    const ageHours = (Date.now() - Date.parse(f.updated)) / 3.6e6;
+    if (ageHours < IF_DUE) {
+      return { field, store, mode: 'not-due', ageHours: +ageHours.toFixed(1), dueIn: +(IF_DUE - ageHours).toFixed(1), pinned: Object.keys(f.rows).length };
+    }
+  }
+
+  const events = [];
+  let seen = 0, added = 0, moved = 0, reRead = 0;
+
+  let obsList;
+  if (from && to) {
+    const c = await fieldCensus({ from, to, field });
+    obsList = c.rows.map(r => ({ ...r, at: null, present: r.present }));
+    f.window = { from, to };
+  } else {
+    if (!f.updated) throw new Error(`no snapshot for "${field}" in ${store} — run --field-watch ${field} --from YYYY-MM-DD --to YYYY-MM-DD first`);
+    const ids = new Set(Object.keys(f.rows));
+    const touched = (await fetchLastMod(f.updated)).filter(c => ids.has(c.id));
+    obsList = touched.map(c => ({ id: c.id, ...observe(c, field) }));
+    reRead = touched.length;
+  }
+
+  for (const r of obsList) {
+    const next = { at: new Date().toISOString(), status: r.status, present: r.present, values: r.values, kinds: r.kinds, lastModified: r.lastModified };
+    const prev = f.rows[r.id];
+    seen++;
+    if (!prev) {
+      f.rows[r.id] = { first: next.at, history: [next], ...next };
+      added++;
+      continue;
+    }
+    const ev = compareObservation(prev, next);
+    if (ev.length) {
+      prev.history = [...(prev.history || []), next];
+      Object.assign(prev, next);
+      moved++;
+      events.push({ id: r.id, events: ev });
+    } else {
+      /* touched but unchanged — refresh the clocks, keep the history small */
+      prev.status = next.status;
+      prev.lastModified = next.lastModified;
+      prev.version = next.at;
+    }
+  }
+
+  s.fields[field] = { ...f, updated: new Date().toISOString(), observers: (f.observers || 0) + 1 };
+  try {
+    fs.mkdirSync(store.replace(/\/[^/]+$/, ''), { recursive: true });
+    fs.writeFileSync(store, JSON.stringify(s, null, 1));
+  } catch (e) { console.error(`  ⚠ could not write ${store}: ${e.message}`); }
+
+  return {
+    field, store,
+    mode: from && to ? 'snapshot' : 're-read',
+    window: f.window || null,
+    observations: s.fields[field].observers,
+    pinned: Object.keys(s.fields[field].rows).length,
+    seen, added, moved, reRead, events,
+  };
+}
+
+function printFieldWatch(r) {
+  if (r.mode === 'not-due') {
+    console.log(`Field watch — "${r.field}" not due: last observation ${r.ageHours}h ago, next in ${r.dueIn}h ` +
+      `(${r.pinned} pinned ids, store ${r.store})`);
+    return;
+  }
+  console.log(`Field watch — "${r.field}" (${r.mode}) · store ${r.store}`);
+  if (r.window) console.log(`  snapshot window: ${r.window.from} → ${r.window.to}`);
+  console.log(`  observation #${r.observations} · pinned ids ${r.pinned} · read ${r.seen}` +
+    (r.mode === 're-read' ? ` (${r.reRead} of them touched since the last observation)` : ''));
+  console.log(`  new ${r.added} · moved ${r.moved} · unchanged ${r.seen - r.added - r.moved}` +
+    (r.mode === 're-read' && r.seen === 0 ? '  ← nothing moved: no motion observed, which is not "never moves"' : ''));
+  for (const e of r.events.slice(0, 40)) console.log(`  · ${e.id}: ${e.events.join('; ')}`);
+  if (r.events.length > 40) console.log(`  … ${r.events.length - 40} more`);
+  if (r.mode === 'snapshot') {
+    console.log('');
+    console.log('  A first observation can only pin ids. Motion becomes visible on the NEXT re-read:');
+    console.log(`  node agent/tools/disclosure-lag.mjs --field-watch ${r.field} --store ${r.store}`);
+  }
 }
 
 /* ── the `changes[]` census (added 2026-10-28) ──
@@ -2478,6 +2673,13 @@ function printBacklogCensus(c) {
 }
 
 /* ── entry ── */
+if (FIELD_WATCH) {
+  const r = await fieldWatch({ field: FIELD_WATCH, from: CENSUS_FROM, to: CENSUS_TO, store: FIELD_STORE });
+  if (JSON_OUT) console.log(JSON.stringify(r, null, 1));
+  else printFieldWatch(r);
+  process.exit(0);
+}
+
 if (FIELD_CENSUS) {
   const to = CENSUS_TO || new Date(Date.now() - 864e5).toISOString().slice(0, 10);
   const from = CENSUS_FROM || new Date(Date.parse(`${to}T00:00:00Z`) - 6 * 864e5).toISOString().slice(0, 10);
@@ -2530,6 +2732,7 @@ if (!IDS.length && !TRACKERS.length && !(REPO && ARTIFACT)) {
     ' [--fix-ref <commit|pull url|artifact url>] [--debian <srcpkg>] [--range "<expr>"] [--json] [--selftest]' +
     ' [--release-notes <url>[,<url>…]] [--census [--no-github]] [--range-census --from YYYY-MM-DD --to YYYY-MM-DD]' +
     ' [--field-census <field> --from YYYY-MM-DD --to YYYY-MM-DD]' +
+    ' [--field-watch <field> [--from YYYY-MM-DD --to YYYY-MM-DD] [--store <path>]]' +
     ' [--changes-census | --backlog-census | --bound-census --from YYYY-MM-DD --to YYYY-MM-DD [--window-cache <path>]]');
   process.exit(0);
 }

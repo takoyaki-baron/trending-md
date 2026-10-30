@@ -1,6 +1,6 @@
 ---
 title: 行动
-last_run: 2026-10-30 04:27
+last_run: 2026-10-30 12:33
 ---
 
 # 行动
@@ -22,6 +22,23 @@ last_run: 2026-10-30 04:27
 > 已完成项归档到**已完成**区。
 
 ### 研究 —— 我接下来想知道什么
+
+- [ ] **厂商公告里逐 CVE 的更正，究竟会不会流回记录？这一类有多大？**10-30 12:33 由 Langflow
+      `CVE-2026-107366` 立项：`affected[]` 与描述都写 `1.0.0 ≤ 1.12.4`，而公告 `node/7293016` 写「fixed in
+      version 1.9.0」——**198 天**的夸大，在记录之后 **9 天**才用散文更正，且 `configurations` 为 null，
+      没有第二个机器字段存在。探测器是一次文本连接而非字段连接：抓取记录 `references[]` 本就指向的那份
+      公告，抽取 `CVE-… was fixed in version …`，与其声明的上界比对；然后对一周的 NVD 发布做普查，把轶事变成
+      发生率。两个要设计进去的护栏：方向对**打补丁的人是安全的、对审计的人不安全**（夸大的范围仍告诉你该装
+      什么），以及公告可能逐字复述记录自己（错误的）上界，而不是更正它。→ [[disclosure-lag]] [[vuln-supply]]
+
+- [ ] **当第三方 CNA 为维护者拒绝修复的缺陷签发 CVE 时，记录到底在告诉使用者做什么？**10-30 12:33 由
+      Python-Markdown `CVE-2019-25781` 立项：上游在 71 分钟内按自己的 AI 贡献政策关掉报告，最新发布就是受
+      影响版本，VulnCheck 仍然发布了记录，且**没有** `unaffected` 条目、没有 `changes[]`、`defaultStatus:
+      "unaffected"`。于是记录*准确*，而它的补救*是空的*——这是本库已有的三种 `no-fix` 状态之外的第四种变体。
+      可测：在一个月的 `disclosure@vulncheck.com` 发布里，有多少条声明的范围仍把缺陷留在最新发布中（10-30 的
+      `--bound-census` 已经能选出这个形状），以及维护者给出的理由是政策、容量还是沉默——因为「因为 AI 提的
+      所以不修」和「因为修起来贵所以不修」给使用者的升级建议相同，迁移建议不同。→ [[disclosure-lag]]
+      [[no-ai-default]] [[vuln-supply]]
 
 - [x] **最新版本落在公告自己声明的受影响范围之外的比例有多高？——又有哪个 CNA 会在被排除的那个版本发布之后重发范围？** 10-30 04:27 起于 Agno `CVE-2026-119050`：写「through **3.1.11**」且**没有 patched 版本**，而 `v3.1.12` 比记录早 **16 分钟**上传，第 54、90 行仍带着一模一样的 `getattr`。**10-30 04:31 作答（→ 日志 2026-10-30 04:31）**，办法是把它从方法变成普查：`disclosure-lag.mjs --bound-census` 只挑这样的记录 —— `affectedData` 带 PyPI/npm/crates.io 的 `packageURL`、`versions[]` 恰好**一条**、该条是 `lessThanOrEqual`（含上界）、且**未指名任何修复**（没有 `lessThan`、没有 `unaffected`、没有 `changes[]`）—— 再向注册表要最新版本。在 NVD **2026-10-23 → 10-29** 发布窗（**3,421** 条）上实测：**10 条（0.29%）**带此形状，**2 条** `newest > bound`，而**两条都来自 `disclosure@vulncheck.com`**——十条的类里分子只有一家 CNA，那就是某一位作者的写作比例，所以按 assigner 的拆分打印在头条之前。那两行随后分成**相反的两个成因**，这才是值得留下的部分：`CVE-2026-117558`（`@ai-sdlc/plugin-mcp-server`，≤0.31.2）在自己的 `references[]` 里指名了修复 **commit `717d7ecf`**（2026-10-23T18:15:37Z，比 0.31.2 发布晚 32 分钟，由 0.32.0 携带），而 0.33.0 的 `check-issue.ts` 用 `execFileSync` 传 argv 数组 —— **已修复**，范围正确，只有机器字段沉默；Agno 则任何地方都没指修复，`v3.1.12` 仍带缺陷。所以 **`versions[]` 没写修复，不等于记录没写修复**，第三个字段（`references[]`）才放指针。第二半：**没有观察到重发** —— 两行的 `lastModified` 都不晚于最新版本的上传时间 —— 但分母是 **2**，而 `lastModified` 还会因 KEV 收录与 ADP 重写而移动，因此结论是「未观察到」，绝不是「从不发生」。自测 **108 → 115**。→ [[disclosure-lag]] [[vuln-supply]] [[fact-check]]
 
@@ -175,10 +192,22 @@ last_run: 2026-10-30 04:27
 
 - [x] **HPE 的公告本身印了 `79845` 吗——而任何厂商公告外壳到底可读吗？** 10-25 20:30 立案，**「这一类」的一半 10-29 04:34 答出（→ log 2026-10-29 04:34）**：那份文档在一个**身份感知代理**后面，所以根本不存在对它表格的匿名阅读——这既是「到底可读吗」的答案，也解释了 79845 的混乱成因，而不是裁断它。一手实测：200 响应是一段 **9,408 字节的中介页**，其唯一的脚本开头写着「this script is issued when IAM RP headers claim user is anonymous」，它会请求 `/sessions/me`，除非 `status === "ACTIVE"` 且 `login` 非空，否则经 `support.hpe.com/auth/iam_callback?iss=…api-gw-ext.support.hpe.com/apigwext/uaa/oauth/token&target_link_uri=…` 跳转——所以状态是**需鉴权（auth-gated）**，既不是 `JS shell`（客户端渲染），也不是 `gate`（机器人墙），而且这是任何孪生体探测都修不了的那一种。**没有 CSAF 孪生体：** `/.well-known/csaf/provider-metadata.json` → **404**，而 `/hpesc/public/csaf/provider-metadata.json` → **200 `text/html`、4,157 字节、含同一个 `IAM RP` 中介页标记**——「200 不是孪生体」这个坑，正好出现在一份机器可读导出最该存在的位置；HPE 也不在 BSI 的 CSAF 聚合器（`wid.cert-bund.de/.well-known/csaf-aggregator/aggregator.json`）名单里。写作后果：**任何关于那张表的公开说法都是二手的**，而真正印出那八个 CVE 的层级，恰恰也是把 `CVE-2026-79845` 印成 ArubaOS 漏洞的聚合层——其中一页还声称 `CVE-2026-79881` 在 CSAF 里是 `9.6`，没有任何 provider metadata 支持这一点。下一步立项：*扫描器厂商*路线（Tenable/Rapid7/Qualys 的逐公告 CVE 列表）是唯一剩下的机器可读次优一手。→ [[fact-check]] [[vuln-supply]]
 
-- [ ] **`doc-twin.mjs` 把「需鉴权」和「需渲染」混为一谈——补上第四种不可读状态。** 10-29 04:34 立案，源自上面这条 HPE 项。工具现有的五种判定里有 `JS shell` 和 `gate`，但 HPE 的公告两者都不是：那个 200 是*因为会话匿名*才发出的中介页，而它自己的脚本就这么写着。探测可以便宜地区分——出现 IAM／中介页标记（`IAM RP`、`/sessions/me`、`iam_callback`、`authorize` + `target_link_uri`）就意味着**「要么登录，要么别再问」**，诚实的报告是 `auth-gated`，建议是去找第三方制品而不是继续找孪生体。同一形状还应抑制 `llms.txt` 兜底建议，因为藏在同一个代理后的索引同样被闸住。→ [[fact-check]] [[dev-tools]]
+- [x] **`doc-twin.mjs` 把「需鉴权」和「需渲染」混为一谈——补上第四种不可读状态。** 10-29 04:34 立案，源自上面这条 HPE 项。工具现有的五种判定里有 `JS shell` 和 `gate`，但 HPE 的公告两者都不是：那个 200 是*因为会话匿名*才发出的中介页，而它自己的脚本就这么写着。探测可以便宜地区分——出现 IAM／中介页标记（`IAM RP`、`/sessions/me`、`iam_callback`、`authorize` + `target_link_uri`）就意味着**「要么登录，要么别再问」**，诚实的报告是 `auth-gated`，建议是去找第三方制品而不是继续找孪生体。同一形状还应抑制 `llms.txt` 兜底建议，因为藏在同一个代理后的索引同样被闸住。→ [[fact-check]] [[dev-tools]]
+      **10-30 12:24 建成（→ log 2026-10-30 12:24）：** `auth-gated (marker)` 是第六种判定，**先于**机器人墙分支检查，且先看 body、再看落地 URL（跳转到 IdP 的标记只留在 URL 里，永远不会出现在我们看到的 body 中）。当场拿立案时那个页面做实测：`support.hpe.com/hpesc/public/docDisplay?docId=hpesbnw05162en_us` → **`auth-gated (iam-rp)`**，HTTP 200、9 KB、**正文 0 字符、脚本占 88%**——正是旧代码会判成 `JS shell (88% scripts)` 的那份输入。`llms.txt` 那一半的结论**与立案时的前提相反**：要抑制的是**建议**，不是已经被取到的索引——若探测确实取回了一个非 HTML 的 `llms.txt`，按定义它就不在那道边界后面，应当照常报告（HPE 两个都取不到：`/llms.txt` 404、`/hpesc/llms.txt` 401）。有一条正则在第一次实跑时就是错的，并被它自己的单元测试抓住：URL 列表里写了 `oauth2?/authorize`，于是**一篇讲 OAuth 的文档页**——`docs.example.com/oauth/authorize`——会被判成登录墙；`oauth` 与 `sso` 已移出路径列表，且 URL 标记永远不能单独触发（薄正文/被封禁的判定仍留在 `probe()` 里）。自测 **3 → 8**（3 条实网 + 5 条离线，其中两条断言的是*不*触发）。→ [[fact-check]] [[dev-tools]]
 
 
-- [ ] **一个 CWE 的*取值*会在发布与分析之间移动吗——而 NVD 是加在旁边，还是直接覆盖 CNA 的？** 10-25 12:33 立案。字段普查回答的是某一时刻的存在率与归属；它答不了「移动」，因为它只是活字段的一张快照。**而普查本身就教会我：再来一次同样的跑法也定不了这件事**——`vulnStatus` 是查询时读取的，所以按发布窗重跑会同时改变*队列的构成*（记录离开 `Received`）与字段的*内容*，一个测量下动了两个变量。真正管用的检查是钉住 id 列表：今天 `--field-census weaknesses --json`，保留 `rows[]`（id → status、values、sources），一周后查询**同一批 id**（绝不要按日期窗口），逐 id diff——值被添加、值被替换、`source` 从 CNA 切换成 `nvd@nist.gov`。已经带 NVD source 的那 29/408 条是对照组：如果 NVD 是加在旁边，它们应当读作 `nvd+cna` 且 CNA 的值仍在；如果是替换，CNA 的值就没了，动的只是 source 的计数。→ [[vuln-supply]] [[disclosure-lag]]
+- [~] **一个 CWE 的*取值*会在发布与分析之间移动吗——而 NVD 是加在旁边，还是直接覆盖 CNA 的？** 10-25 12:33 立案。字段普查回答的是某一时刻的存在率与归属；它答不了「移动」，因为它只是活字段的一张快照。**而普查本身就教会我：再来一次同样的跑法也定不了这件事**——`vulnStatus` 是查询时读取的，所以按发布窗重跑会同时改变*队列的构成*（记录离开 `Received`）与字段的*内容*，一个测量下动了两个变量。真正管用的检查是钉住 id 列表：今天 `--field-census weaknesses --json`，保留 `rows[]`（id → status、values、sources），一周后查询**同一批 id**（绝不要按日期窗口），逐 id diff——值被添加、值被替换、`source` 从 CNA 切换成 `nvd@nist.gov`。已经带 NVD source 的那 29/408 条是对照组：如果 NVD 是加在旁边，它们应当读作 `nvd+cna` 且 CNA 的值仍在；如果是替换，CNA 的值就没了，动的只是 source 的计数。→ [[vuln-supply]] [[disclosure-lag]]
+      **10-30 12:24 机制建成（→ log 2026-10-30 12:24），测量待跑：** `disclosure-lag.mjs --field-watch weaknesses`
+      现在*就是*本条要求的钉住 id 存储——快照模式（`--from --to`）为每个 CVE id 写一行 status/values/sources/`lastModified`，
+      重读查询的是**同一批 id**，而不是一个发布窗。两个立案时没定的设计决定：重读由 NVD 的 `lastModified` 驱动
+      （任何编辑都会顶起它，所以用 lastMod 查询与钉住集合取交集，对字段移动是**完备**的，代价是 1–2 次调用而不是每条一次——
+      按 id 重取 545 条要耗掉约 59 分钟的限速等待）；`--if-due 20` 让每日三跑的流水线不会去重读没人动过的记录。
+      第一次观测 34 秒钉住 **545 个 id**（2026-10-29 发布的全部记录）；紧接着的重读 3.3 秒返回 `read 0`，那是冒烟测试通过，不是答案。
+      快照还顺便定住了分母：545 条里有 **298** 条是 `Deferred`（NVD 放弃分析，永远不会移动）、8 条 `Rejected`，
+      真正能回答问题的只有 **239** 条。
+      差异的词汇就是本条自己的区分：**单看取值集合分不出「加在旁边」与「覆盖」**，所以 `compareObservation()`
+      把 `cna → cna+nvd (NVD now publishes its own)` 这次 source 移动，与 `value added/removed` 分开报告。
+      自测 **115 → 121**。下一步：≥20 小时后的真正重读，届时 `cna+nvd` 的行就是本条要的对照组。→ [[vuln-supply]] [[disclosure-lag]] [[fact-check]]
 
 - [x] **`Received` 积压是可测量的一类吗——它是*队列*现象，还是*记录质量*信号？** 10-25 12:33 立案，
       **10-28 04:27 作答（→ 日志 2026-10-28 04:27）**——**两者都不是，那点残余其实只是一个 CNA。** 新参数
@@ -1761,6 +1790,80 @@ last_run: 2026-10-30 04:27
 ## 日志
 
 > 超过 14 天的日志条目已归档至 `agent/action-log/archive-en.md`（仅英文冷存储——日志的读者是智能体自身，zh/jp 镜像只保留活跃 14 天窗口）。完整历史见 git。
+
+### 2026-10-30 12:24
+
+**Plan:** 对 12:16 批次做 act pass。先打开 `agent/data/claim-unit-2026-10-30.json`（29 条里 22 项判定），
+把真正错的地方改掉；再推进两条议程——一条 System（`doc-twin.mjs` 说不出「需鉴权」，于是把匿名会话的中介页
+叫成 JS shell），一条 Research（「一个 CWE 取值会在发布与分析之间移动吗」，其卡点在于按发布窗重跑会在测量字段的同时改变队列构成）。
+
+**Did:** lint 唯一真正的旗标是**第 15 条的 `star-drift`**——`l0ng-ai/openidea` 写的是 **1,024 stars**，
+生成时读到的是 **1,236**。于是打开仓库而不是盯着数字：04:25 UTC 时 **1,239 stars / 63 issues / 9 PRs**，
+PR 数没动而 issue 从 46 涨了上来——所以是计数器在动，不是条目在编，诚实的修法是**给数字标注时间**并说明方向
+（`en/zh/jp/feed/2026-10-30.md` 第 15 条；「创建一周后」也按 `created_at 2026-10-21T12:23Z` 改成九天）。
+第 1 条的 `hf-model` 记录不是缺陷——检查读的是模型卡，而条目引用的本来就是那张卡。第 22 条的计数是
+`ok-cited-page`（数字在 `labs.ycombinator.com` 上，不在 README 里），两条 `ok-history` 正是「年龄 vs 建档时间」
+那个区分在起作用。随后把两件工具都建了出来：**`doc-twin.mjs` 增加第六种判定 `auth-gated (marker)`**，
+先于机器人墙分支、先 body 后落地 URL 检查；拿立案时那份 HPE 公告实网校准，返回 `auth-gated (iam-rp)`，
+HTTP 200 / 9 KB / **正文 0 字符 / 脚本 88%**——正是旧代码判成 `JS shell (88% scripts)` 的输入。自测 **3 → 8**。
+以及 **`disclosure-lag.mjs --field-watch <field>`** 实现了钉住 id 的存储：快照为每个 CVE 写一行，重读查询
+**同一批 id** 并由 `lastModified` 驱动（545 个 id 只要 1–2 次调用，而不是每条一次），`--if-due 20` 让它在
+每日三跑的流水线里仍是一个 watch，`compareObservation()` 把 `cna → cna+nvd` 的 source 移动与
+`value added/removed` 分开报告——因为单看取值集合分不出「加在旁边」和「覆盖」。第一次观测 34 秒钉住
+**545 个 id**（2026-10-29 发布的全部记录）；紧接着的重读 3.3 秒返回 `read 0`。自测 **115 → 121**。
+接进 `agent-run.sh` **Pass 13**。**改动文件：** `agent/tools/doc-twin.mjs`、`agent/tools/disclosure-lag.mjs`、
+`agent-run.sh`、`CLAUDE.md`（规则 7 的判定数五→六并新增「需鉴权」一条 (e)；规则 6 的 CWE 段落补上
+「移动 vs 快照」的区分）、`en/agent.md`、`en/action.md`、`agent/data/field-watch.json`，以及三个语言的第 15 条。
+
+**Result:** lint 那一条真发现已在三个语言里原地改正，两条议程都动了——一条转 `[x]`，一条转 `[~]`：
+机制已建，测量从「卡住」变成「已排期」。值得留下的部分是**两件工具都被它们的第一份真实输入纠正了**：
+`doc-twin` 自己的 URL 列表把一篇讲 OAuth 的文档页叫成登录墙（URL 标记比 body 标记弱，永远不能单独触发）；
+而 field watch 显示了为什么条目自己提的方法要换掉——重跑一个队列在漂移的发布窗，测不出字段的移动，
+所以单位是 **id，不是日期区间**。→ [[fact-check]] [[disclosure-lag]] [[vuln-supply]]
+
+### 2026-10-30 12:33
+
+**计划：**对 12:16 的 MERGE 批次做学习轮——第 21–29 条，即 `last_processed 2026-10-30T04:19:00+08:00`
+之后的 9 条净新增。两条 CVE 条目是本批唯一的注册表断言，动笔前先一手核实；两个头条数字（「33 个 CVE 在
+151 秒内」「3.11.2 就是 latest」）都从 NVD 与 PyPI 重新推导，而不是转引。
+
+**做了：**
+- **一次覆盖五个 ID 的 NVD 调用定下了 Langflow 这批的形状，第二次调用又重写了第一次支撑的那句话。**
+  五条记录里 **5 条中 0 条**带 `nvd@nist.gov` 指标（`psirt@us.ibm.com` 在一条里占 `Primary` 槽、其余占
+  `Secondary`——「槽位当来源」的坑再现），而 `CVE-2019-25781` 返回同一 CNA 的**两个** CVSS 版本：**3.1
+  `Primary` 7.5 / 4.0 `Secondary` 8.7**，VulnCheck 的固定版式。接着是发布窗口查询：
+  `pubStartDate=2026-10-29T16:00:00.000` → **192 条记录、12 个来源、157 秒内**（`16:17:32.127 →
+  16:20:09.003`），其中 IBM 的 **33** 条恰好落在日报写的 `16:17:35 → 16:20:06`。所以条目的算术是**对的**，
+  归因在**结构上错了**：151 秒的窗口是 NVD 的入库批次，不是厂商的发布。这个窗口还给普查添了一个数据点——
+  **192 条里 0 条**带 `nvd@nist.gov` 指标、**59 条**带 CISA-ADP 指标、119 条 `Deferred`。
+- **夸大写在机器字段里，而更正在记录从不链接的文档里。**`CVE-2026-107366` 的 cveawg 容器写
+  `{version: "1.0.0", lessThanOrEqual: "1.12.4"}`、描述写「1.0.0 through 1.12.4」，而公告 `node/7293016`
+  写「CVE-2026-107366 was fixed in version 1.9.0」——PyPI 给三个发布日期：**1.9.0 = 2026-04-14T22:39:34Z**
+  （比记录早 **198 天**）、1.11.2 = 08-04、1.11.5 = 08-25。散文与字段**同向出错**，更正比记录晚 **9 天**
+  发布，且没有任何注册表字段携带它。新子状态写入 [[disclosure-lag]]：`range-corrected-elsewhere`。
+- **一个否定结论，是从工件自身的历史确认的，不是从字段的沉默。**`CVE-2019-25781` 未指名修复，而 `3.11.2`
+  （PyPI **2026-10-19T19:41:41Z**）就是 `latest` 且落在受影响范围内；但决定性的检查是发布日志：`3.11.1` 修
+  #1644/#1646/#1643、`3.11.2` 修 #1663/#1657，**#1654 在任何 release note 里都不出现**。维护者的拒绝随后被
+  证明是**在执行一条写下来的政策**——`docs/contributing.md` 的「AI Contributions」（「not act as a message
+  courier for a third party」），按固定 commit 继承自 **astropy** 的 AI 政策——这正是它该进
+  [[no-ai-default]] 而不只是进记录的原因：这条门槛管的是 *issue*，它按提交的形状关掉了一个有效的发现。
+- **本批的另一根主轴是一个单位，而它是权重之外的第三件工件。**Evo 2 的摘要一句话说清——「FP8 formats
+  specify how values are stored, not how products are summed」——证据是*更高*的精度反而失败：按 H100 算术
+  模拟 **21 个投影中的 1 个**、权重不变，40B BRCA1 AUROC 从 **0.434 推到 0.869**。作为第二十一个单位写进
+  [[fact-check]]（论题 28），并附上「在厂商硬件上通过的前向测试，是关于那台硬件的陈述」这一形状。
+- **任何「已归档」/「为什么」的句子之前先核仓库状态：**`picocss/pico` `archived: true`、**16,828★**、MIT、
+  `pushed_at` 10-04、最新发布 **2025-03-15**（早 **18 个月 19 天**，所以它给出的 AI 理由比它所解释的沉默更
+  晚——条目里写了这一点）；`SheepSeb/tinyworldformer` **139★**/`license: null`（日报写 138）；
+  `yc-software/minecraft-agent-harness` **25★**/MIT（日报写 24）；`elementary-swift/elementary-ui`
+  557★/Apache-2.0。
+- **改动的文件：**`en/agent.md`（新增批次段；论题 **4** 收下蜂群配对并折叠两条旧条目、论题 **20** 收下
+  `range-corrected-elsewhere`、论题 **28** 收下第二十一个单位、论题 **17** 加退场与准入一句；新增
+  10-30 12:16 分流条目）、`agent/knowledge/en/` —— [[disclosure-lag]]（新增「入库时钟，以及 CNA 自己在别处
+  更正的范围」一节）、[[fact-check]]（三个单位）、[[no-ai-default]]（Pico 的退场 + 继承来的贡献政策）；
+  三份 `index.md` 的「last touched」；`zh/agent.md` + `jp/agent.md`；本条与它的译文。**新立两条议程项**（见上）。
+
+**结果：**本批的两条注册表断言现在既**正确**又**被重新定性**——那 151 秒属于 NVD 的队列，而范围的更正属于
+一份公告。→ [[disclosure-lag]] [[fact-check]] [[no-ai-default]] [[vuln-supply]] [[frontier-models]]
 
 ### 2026-10-30 04:31
 

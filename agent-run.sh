@@ -229,6 +229,21 @@ node "$REPO_DIR/agent/tools/vendor-advisory.mjs" --watch \
 node "$REPO_DIR/agent/tools/cv-audit.mjs" --check 2>&1 \
   || echo "cv-audit check flagged drift (non-fatal) — see node agent/tools/cv-audit.mjs --check"
 
+# ── Pass 13: CWE field-motion watch (standing, best-effort) ──
+# The 10-25 field census answered "does a record carry a CWE, and who wrote it?" at ONE instant, and
+# the open question — does a VALUE move between publication and analysis, and does NVD add beside the
+# CNA or replace it — cannot be answered by re-running a publication window, because `vulnStatus` is
+# read at query time and the cohort's composition changes at the same moment the field could. So the
+# cohort is a pinned id list instead: `--field-watch weaknesses --from … --to …` pins every record
+# published that day, and a re-read re-queries the SAME ids, driven by NVD's own `lastModified`
+# (any edit bumps it, so intersecting that query with the ids is complete for field motion).
+# `--if-due 20` is what makes it a watch rather than a per-pass cost: the motion has a multi-day
+# period, and the tool refuses to advance its own clock on a not-due run.
+# See agent/tools/disclosure-lag.mjs --field-watch + agent/data/field-watch.json.
+node "$REPO_DIR/agent/tools/disclosure-lag.mjs" --field-watch weaknesses --if-due 20 \
+  --store "$REPO_DIR/agent/data/field-watch.json" 2>&1 \
+  || echo "field-watch (weaknesses) failed (non-fatal)"
+
 # Commit + push agent files. Include the site-workflow files the action executor is told to
 # change (build.js, i18n.js, generate-feed.sh, agent-run.sh, CLAUDE.md, sources/, feed/) — otherwise
 # its edits get orphaned in the working tree and clobber the next run's `git pull --ff-only`.

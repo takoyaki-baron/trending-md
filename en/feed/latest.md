@@ -239,10 +239,10 @@ The NetBSD Foundation announced on 2026-10-28 that `-current` "now includes an a
 ## 15. OpenIDEA rebuilds the JetBrains workflow in Rust — 169 MB against 2,011 MB, on a benchmark its own README qualifies
 
 - **Velocity:** ▮ steady
-- **Source:** GitHub · 1,024 stars · created 2026-10-21
+- **Source:** GitHub · 1,239 stars (measured 2026-10-30 04:25 UTC) · created 2026-10-21
 - **Tags:** `ide` `rust` `tauri` `performance`
 
-`l0ng-ai/openidea` (Apache-2.0) takes the IntelliJ IDEA way of working — keymap, tool windows, search-everywhere — and rebuilds it on a Rust core with Tauri, covering editor, code insight, debugger, Git, terminal, database and HTTP clients for 60+ languages, on macOS, Windows and Linux. At **1,024 stars**, 46 open issues and 9 open pull requests a week after creation, it is the most concrete entry yet in the "rebuild the IDE" genre.
+`l0ng-ai/openidea` (Apache-2.0) takes the IntelliJ IDEA way of working — keymap, tool windows, search-everywhere — and rebuilds it on a Rust core with Tauri, covering editor, code insight, debugger, Git, terminal, database and HTTP clients for 60+ languages, on macOS, Windows and Linux. At **1,239 stars**, 63 open issues and 9 open pull requests nine days after creation — up from 1,024 / 46 / 9 earlier the same morning, so the counters are still moving — it is the most concrete entry yet in the "rebuild the IDE" genre.
 
 The published benchmark opens `freqtrade` (Python, ~770 files) with warm caches, median of 5 runs, against IntelliJ IDEA 2026.2.3 on Windows 11: window with the project **0.9 s vs 3.1 s**, ready **1.1 s vs 13.2 s**, memory (USS, all processes) **169 MB vs 2,011 MB**, CPU time until ready **2.4 s vs 47.9 s**, quit **0.3 s vs 5.9 s**. The README then undercuts its own table: "IDEA analyses Python more deeply, so 'ready' doesn't mean the same work on both sides."
 

@@ -239,10 +239,10 @@ NetBSD 基金会于 2026-10-28 宣布 `-current`"now includes an alternative edi
 ## 15. OpenIDEA 用 Rust 重建 JetBrains 那套工作方式 — 169 MB 对 2,011 MB，而基准表被它自己的 README 打了折
 
 - **Velocity:** ▮ steady
-- **Source:** GitHub · 1,024 stars · created 2026-10-21
+- **Source:** GitHub · 1,239 stars（2026-10-30 04:25 UTC 实测）· created 2026-10-21
 - **Tags:** `ide` `rust` `tauri` `performance`
 
-`l0ng-ai/openidea`（Apache-2.0）把 IntelliJ IDEA 的工作方式 — 键位映射、工具窗口、随处搜索 — 搬到一个 Rust 核心加 Tauri 的原生应用上，覆盖编辑器、代码洞察、调试器、Git、终端、数据库和 HTTP 客户端，支持 60 多种语言，可跑在 macOS、Windows 和 Linux。创建一周后已有 **1,024 stars**、46 个未关 issue 和 9 个未关 PR，是"重造 IDE"这一类里目前最具体的作品。
+`l0ng-ai/openidea`（Apache-2.0）把 IntelliJ IDEA 的工作方式 — 键位映射、工具窗口、随处搜索 — 搬到一个 Rust 核心加 Tauri 的原生应用上，覆盖编辑器、代码洞察、调试器、Git、终端、数据库和 HTTP 客户端，支持 60 多种语言，可跑在 macOS、Windows 和 Linux。创建九天后已有 **1,239 stars**、63 个未关 issue 和 9 个未关 PR——同一天早些时候是 1,024 / 46 / 9，计数器仍在动——是"重造 IDE"这一类里目前最具体的作品。
 
 公开的基准以 warm cache 打开 `freqtrade`（Python，约 770 个文件），取 5 次运行中位数，在 Windows 11 上与 IntelliJ IDEA 2026.2.3 对比：打开项目 **0.9 s 对 3.1 s**，ready **1.1 s 对 13.2 s**，内存（USS，全进程）**169 MB 对 2,011 MB**，ready 前的 CPU 时间 **2.4 s 对 47.9 s**，退出 **0.3 s 对 5.9 s**。然后 README 拆了自己的台："IDEA analyses Python more deeply, so 'ready' doesn't mean the same work on both sides."
 

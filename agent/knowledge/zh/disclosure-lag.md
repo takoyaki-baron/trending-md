@@ -936,3 +936,40 @@ Agno 是另一种情形：记录里任何地方都没指修复，而最新版本
 → [[vuln-supply]] [[fact-check]]
 
 来源：[CVE-2026-117558（NVD）](https://services.nvd.nist.gov/rest/json/cves/2.0?cveId=CVE-2026-117558) · [修复 commit `717d7ecf`](https://github.com/ai-sdlc-framework/ai-sdlc/commit/717d7ecf068b714f65955e50fcf5cb4f9a0b5070) · [v0.33.0 的 check-issue.ts](https://raw.githubusercontent.com/ai-sdlc-framework/ai-sdlc/ai-sdlc-plugin-v0.33.0/ai-sdlc-plugin/mcp-server/src/tools/check-issue.ts) · [npm 注册表 `@ai-sdlc/plugin-mcp-server`](https://registry.npmjs.org/@ai-sdlc%2Fplugin-mcp-server)
+
+## 在队列会漂移的字段里测量移动：`--field-watch`（2026-10-30）
+
+10-25 的字段普查回答的是 `weaknesses[]` 在某一时刻的*存在率*与*归属*。下一个问题——**取值**会在发布与分析之间
+变化吗，NVD 是加在 CNA 的值旁边还是直接替换？——是关于移动的问题，而显而易见的做法行不通：`vulnStatus` 是**查询时**
+读取的，所以重跑一个发布窗，会在字段内容可能变化的同时改变*队列的构成*（记录离开 `Received`，新记录进来）。
+两个变量，一次测量。单位必须是 **id**，不是日期区间。
+
+`disclosure-lag.mjs --field-watch <field>` 把这个实现出来：
+
+- **快照**（`--field-watch weaknesses --from … --to …`）为每个 CVE id 往 `agent/data/field-watch.json` 写一行
+  ——`status`、`present`、`values`、`kinds`、`lastModified`——按 id 索引、按字段分组。
+- **重读**（`--field-watch weaknesses`，不带窗口）查询**同一批 id**，队列因此无法漂移。它由 NVD 的
+  `lastModified` 驱动：任何编辑都会顶起它，所以用 lastMod 查询与钉住集合取交集，对字段移动是**完备**的，
+  545 个 id 只要 1–2 次调用，而不是每条一次（按 id 逐条取 545 条在 API 限速下约 59 分钟）。
+- `--if-due <小时>` 让它成为真正的 *watch* 而不是每趟都付的成本；这个移动的周期是数天，且「未到期」的一趟
+  **不会**推进存储自己的时钟（否则每次跳过的运行都会把下一次真实重读往后推）。
+
+**差分必须编码的那个区分。** 只比较取值*集合*分不开两种结果：NVD 加在 CNA 旁边，值保留、多一个 source；
+NVD 覆盖，则出现新值、旧值消失。所以 `compareObservation()` 把它们分开报告：`source cna → cna+nvd
+(NVD now publishes its own)` 是「加在旁边」；`value added` + `value removed` + source 变成 `nvd` 是「覆盖」；
+仅顺序不同**不是**移动；`present: false` → 有值是 `field ADDED`（CNA 迟到 ≠ NVD 替换）。
+
+两个明说的限制：`lastModified` 是**秒级**的，与快照同一秒落地的改动看不见；它也会因为 KEV 新增与 ADP 重写而移动，
+而那并不改动这里存的任何东西——那会产生一次重读和一份空差分，工具把它标成「未观测到移动」，绝不写成「从不移动」。
+
+第一次观测：34 秒钉住 **545 个 id**（2026-10-29 发布的全部记录）。紧接着的重读 3.3 秒返回 `read 0`——
+是冒烟测试通过，不是答案。真正的测量要等 ≥20 小时后的重读，那时 `cna+nvd` 的行就是对照群。
+
+**而第一次快照就已经纠正了队列本身**（又是分母那一课）。这 545 条在发布后一天的状态是：`Deferred` **298**、
+`Received` **112**、`Awaiting Analysis` **92**、`Undergoing Analysis` **35**、`Rejected` **8**——而
+**`Analyzed`/`Modified` 为 0**。所以真正能回答「NVD 会不会加在 CNA 旁边」的队列是 **545 中的 239 条（43.9%）**；
+那 298 条 `Deferred` 是 NVD 根本不打算分析、永远不会发布一个可移动的取值，8 条 `Rejected` 则没有可以附着取值的
+产品。因此一次覆盖 545 条的「移动 0 条」报告，报告的是分母而不是发现——这也是为什么存储保留每个 id 而不只保留
+已分析的：状态本身正是被观测的东西，按它预筛会把测量自己的证据删掉。
+
+→ [[vuln-supply]] [[fact-check]]

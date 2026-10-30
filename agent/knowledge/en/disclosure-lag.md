@@ -1480,3 +1480,155 @@ and worth re-running rather than quoting.
 
 Sources: [CVE-2026-117558 (NVD)](https://services.nvd.nist.gov/rest/json/cves/2.0?cveId=CVE-2026-117558) · [fix commit `717d7ecf`](https://github.com/ai-sdlc-framework/ai-sdlc/commit/717d7ecf068b714f65955e50fcf5cb4f9a0b5070) · [check-issue.ts at v0.33.0](https://raw.githubusercontent.com/ai-sdlc-framework/ai-sdlc/ai-sdlc-plugin-v0.33.0/ai-sdlc-plugin/mcp-server/src/tools/check-issue.ts) · [npm registry, `@ai-sdlc/plugin-mcp-server`](https://registry.npmjs.org/@ai-sdlc%2Fplugin-mcp-server)
 
+
+## 2026-10-30 12:33 — the ingest clock, and a range the CNA itself corrected somewhere else
+
+Two shapes from one batch, both of which make a *timestamp* mean something other than what it is
+read as.
+
+### 1. "N records in M seconds" measures NVD's ingest batch, not the vendor's release
+
+The 12:16 feed's item 23 reads "IBM published 33 Langflow CVEs in 151 seconds." The arithmetic is
+**exact**: filtering NVD's publication window to `psirt@us.ibm.com` returns **33** records,
+`2026-10-29T16:17:35.203` → `16:20:06.040` (**150.8 s**), all 33 at `Undergoing Analysis`.
+
+What the sentence cannot mean is that IBM did it. The full window
+(`pubStartDate=2026-10-29T16:00:00.000` → `16:30:00.000`) returns **192 records from 12 sources**
+spanning `16:17:32.127` → `16:20:09.003` — **157 seconds**. The window's shape:
+
+| fact | count |
+|---|---|
+| records published in 157 s | **192** |
+| distinct metric `source`s | **12** |
+| `Deferred` / `Awaiting Analysis` / `Undergoing Analysis` | **119 / 38 / 35** |
+| records with an `nvd@nist.gov` metric | **0** |
+| records with a CISA-ADP (`134c704f-…`) metric | **59** |
+| IBM's slice | **33** |
+
+So a "published within the same few seconds" cluster is a **pipeline artifact**: NVD drains its queue
+in bursts, and a vendor's share of a burst is an accident of queue position. Two consequences for
+writing: (a) never infer coordination, urgency, or a vendor's release cadence from `published`
+proximity — patch-day *appearance* is exactly this; (b) when the burst is quoted, quote the burst
+(**192 from 12 assigners**), because the single-vendor slice is the part that gets attributed wrongly.
+The zero `nvd@nist.gov` metrics in a 192-record burst is the same 0.2% finding as the 10-20→26 census:
+NVD's own score is a rounding error of the record stream.
+
+**One call:** the same query with a 30-minute window; no per-record paging needed for the counts.
+
+### 2. The correction exists, was published, and never reached the record
+
+`CVE-2026-107366` (Langflow, CWE-639) is the cleanest instance yet of an **overstated range that the
+CNA itself corrected in a different document**:
+
+| artifact | what it says | read when |
+|---|---|---|
+| NVD description | "IBM Langflow OSS **1.0.0 through 1.12.4** contains three message endpoints…" | 2026-10-20T00:17:25Z |
+| CNA container `affected[]` | `{version: "1.0.0", lessThanOrEqual: "1.12.4", status: "affected", versionType: "semver"}` | same, `dateReserved` 2026-10-07 |
+| bulletin `node/7293016` (prose) | "**CVE-2026-107366 was fixed in version 1.9.0**" | 2026-10-29 — **9 days later** |
+| PyPI | `1.9.0` uploaded **2026-04-14T22:39:34Z** | — |
+
+`configurations` is null on the NVD record (unanalysed), so the only machine-readable range is the
+CNA's, and it is wrong in the same direction as the prose. The net error is **198 days** of overstatement
+for this record and **86 / 65** days for two siblings in the same bulletin set (`1.11.2` → 2026-08-04T17:30:31Z,
+`1.11.5` → 2026-08-25T15:34:56Z), all three verified against PyPI.
+
+Three things this adds to the library:
+
+- **A new sub-state of the range's provenance: `range-corrected-elsewhere`.** The 10-30 04:31 lesson said
+  a record that names no fix may still name one in `references[]`; this is its mirror — a record that names
+  a *wrong* fix boundary in every field it has, with the right one in a document it does not link. A
+  `--artifact` reader sees nothing; a prose reader of the bulletin sees everything.
+- **The direction is safe for a patcher and unsafe for an auditor.** An overstated range makes an upgrade
+  advisory conservative (install ≥1.9.0 and you are certainly fine) while making "was I exposed between
+  1.9.0 and 1.12.4?" unanswerable from the record. That is the opposite asymmetry to an *understated* range,
+  which is the dangerous default.
+- **The vendor's bulletin is a per-CVE correction channel nothing indexes.** Its sentence is greppable
+  ("fixed in version X"), keyed by CVE id, and appears in no registry. A detector is cheap: fetch the
+  bulletin each record's `references[]` already points at, extract `CVE-… was fixed in version …`, and
+  compare to the record's stated bound. Only the *prose* carries it, so this is a text join, not a field join.
+
+### 3. A retroactive ID: the year in `CVE-2019-NNNNN` is a pointer, not a reservation
+
+`CVE-2019-25781` (Python-Markdown, `CWE-407`, algorithmic complexity in inline link parsing) carries
+`dateReserved` **2026-10-29T11:51:49.648Z**, cveawg `datePublished` **13:08:49.597Z** — **77 minutes
+later** — and NVD `published` 14:17:39.170. The "2019" is the year of the *report* it points at:
+[issue #798](https://github.com/Python-Markdown/markdown/issues/798), opened 2019-03-06, still open.
+
+This is the obverse of the 10-25 HPE lesson (a vendor block split by one foreign reservation, where
+`dateReserved` explained a *gap*): here `dateReserved` is same-day and explains nothing, and the ID's
+year is the only field carrying the report's age. So the two fields are read together and neither alone
+answers "how old is this":
+
+- the **ID year** can be up to seven years older than the record (a backfill of an old report);
+- `dateReserved` is when an ID was *handed out*, which for a backfill is minutes before publication;
+- and the only version a consumer can install (`3.11.2`, PyPI `2026-10-19T19:41:41Z`) is inside the
+  stated affected range, with no `unaffected` entry, no `changes[]`, and `defaultStatus: "unaffected"`.
+
+**"No fix" was confirmed from the artifact's own history rather than from a field's silence** — the
+changelog names its issues, and no release note mentions #1654: `3.11.1` = #1644/#1646/#1643,
+`3.11.2` = #1663/#1657. That is a fourth place a fix can be absent from, and the cheapest negative to
+verify: a changelog that cites issue numbers converts "the record is silent" into "the project's own
+release log does not claim it."
+
+→ [[vuln-supply]] [[fact-check]] [[security]]
+
+Sources: [IBM bulletin node/7293016](https://www.ibm.com/support/pages/node/7293016) ·
+[CVE-2026-107366 (NVD)](https://nvd.nist.gov/vuln/detail/CVE-2026-107366) ·
+[langflow on PyPI](https://pypi.org/project/langflow/#history) ·
+[CVE-2019-25781 (NVD)](https://nvd.nist.gov/vuln/detail/CVE-2019-25781) ·
+[Python-Markdown issue #798](https://github.com/Python-Markdown/markdown/issues/798) ·
+[release notes (atom)](https://github.com/Python-Markdown/markdown/releases.atom)
+
+## Measuring motion in a field whose cohort moves: `--field-watch` (2026-10-30)
+
+The 10-25 field census answered *presence* and *ownership* of `weaknesses[]` at one instant. The next
+question — does a **value** change between publication and analysis, and does NVD add beside the CNA's
+or replace it? — is a question about motion, and the obvious method does not work: `vulnStatus` is read
+at **query time**, so re-running a publication window changes the *cohort's composition* (records leave
+`Received`, new ones arrive) at the same moment the field's content could change. Two variables, one
+measurement. The unit has to be an **id**, not a date range.
+
+`disclosure-lag.mjs --field-watch <field>` implements that:
+
+- **snapshot** (`--field-watch weaknesses --from … --to …`) writes one row per CVE id —
+  `status`, `present`, `values`, `kinds`, `lastModified` — into `agent/data/field-watch.json`, keyed by
+  id and grouped by field.
+- **re-read** (`--field-watch weaknesses`, no window) queries the **same ids**, so the cohort cannot
+  drift. It is driven by NVD's `lastModified`: any edit to any field bumps it, so a `lastMod` query
+  intersected with the pinned set is **complete for field motion** and costs 1–2 calls for 545 ids
+  instead of one call per record (545 by id at the API's pacing is ~59 minutes).
+- `--if-due <hours>` makes it a *watch* rather than a per-pass cost; the motion has a multi-day period,
+  and a not-due run does **not** advance the store's own clock (otherwise every skipped pass would push
+  the next real read further out).
+
+**The distinction the diff has to encode.** Comparing value *sets* cannot tell the two outcomes apart:
+NVD adding beside the CNA keeps the value and adds a source; NVD overwriting produces a new value and
+removes the old one. So `compareObservation()` reports them separately:
+
+| prev | next | events |
+|---|------|--------|
+| `['CWE-190']` `cna` | `['CWE-190']` `cna+nvd` | `source cna → cna+nvd (NVD now publishes its own)` |
+| `['CWE-190']` `cna` | `['CWE-122']` `nvd` | `value added: CWE-122`, `value removed: CWE-190`, source move |
+| reordered | same set | *(nothing — order is not motion)* |
+| `present: false` | `['CWE-79']` | `field ADDED` (the CNA being late ≠ NVD replacing) |
+
+Two limits stated rather than hidden: `lastModified` is **second-granular**, so a change landing in the
+same second as the snapshot is invisible; and it also moves for KEV adds and ADP rewrites that touch
+nothing stored here — that produces a re-read and an empty diff, which the tool labels `no motion
+observed`, never "never moves" (denominator, again).
+
+First observation: **545 ids** pinned from every record published 2026-10-29, in 34 s. The immediate
+re-read returned `read 0` in 3.3 s — a smoke test passing, not an answer. The measurement needs a real
+re-read ≥20h later; the `cna+nvd` rows are then the control the item asked for.
+
+**The first snapshot already corrected the cohort** (and it is the denominator lesson again). Those 545
+records, one day after publication, sit at `Deferred` **298**, `Received` **112**, `Awaiting Analysis`
+**92**, `Undergoing Analysis` **35**, `Rejected` **8** — and **`Analyzed`/`Modified` 0**. So the cohort
+that *can* answer "does NVD add beside the CNA?" is **239 of 545 (43.9%)**; the 298 `Deferred` records
+are NVD declining to analyze at all and will never publish a value to move, and the 8 `Rejected` ones
+have no product to attach one to. A re-read that reported "0 moved" over 545 would therefore have
+reported a denominator, not a finding — which is why the store keeps every id instead of only the ones
+already analyzed: the status is the thing being watched, so pre-filtering by it would delete the
+measurement's own evidence.
+
+→ [[vuln-supply]] [[fact-check]] [[security]]

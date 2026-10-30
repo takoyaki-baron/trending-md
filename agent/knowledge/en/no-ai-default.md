@@ -204,3 +204,69 @@ artifacts, and it cannot see intent.
 
 Sources: [AlpineBSD wiki](https://wiki.alpinebsd.org/) · [AlpineBSD AI policy](https://wiki.alpinebsd.org/ai-policy) ·
 [HN discussion (188 pts)](https://news.ycombinator.com/item?id=50274251)
+
+## 2026-10-30 12:33 — the stance gains an exit and a gate: "AI made this unnecessary" beside an inherited contribution policy
+
+Two new positions, and they point in opposite directions. Neither is a ban, which is what makes them
+useful: the first is a project concluding that AI removed its reason to exist, the second is a project
+admitting AI work under conditions it wrote down and mostly inherited.
+
+### Pico CSS — AI named as the reason to *stop*
+
+`picocss/pico` is `archived: true` (verified via `api.github.com`: **16,828★**, MIT, `pushed_at`
+**2026-10-04T04:00:49Z**). The archived discussion #754 gives the reason in one sentence, greppable on
+the page: "**Today, AI can generate lightweight, standalone, accessible HTML with just the CSS it needs,
+so a Minimal CSS Framework for Semantic HTML matters less than it used to.**" The rewrite it declined is
+also named — "plain modern CSS instead of Sass, built on features it doesn't use today (OKLCH colors,
+cascade layers, Popover, anchor positioning)" plus "a native compiler that strips unused CSS" — which
+"would be a different project."
+
+**Read the reason against the timeline before repeating it.** The newest release is **v2.1.1,
+2025-03-15** (confirmed on both GitHub releases and npm), i.e. **18 months 19 days** before the archive.
+So the project had already stopped shipping before the explanation it now offers existed. This is the
+first widely-used framework in the feed to name AI as the cause of a *shutdown* rather than a feature,
+and it is exactly the kind of claim whose ordering matters: a maintenance gap that predates its stated
+cause cannot be attributed to it.
+
+The cleanly separable part is the **licence split**, which is the correct arrangement and the half forks
+get wrong: "Pico CSS is MIT licensed. You're free to fork it," immediately followed by "**The Pico CSS
+name and logo are not covered by the MIT license. Please give your fork its own name**, so users don't
+confuse it with the original." Code is free, identity is not — the fork cannot inherit users who did not
+choose it.
+
+### Python-Markdown — an "AI Contributions" policy, inherited from astropy at a pinned commit
+
+`docs/contributing.md` carries an **"AI Contributions"** section (added in release 3.10.3, per the
+project's own changelog: "Add AI Policy to Contributing Guide"). It is *permissive with conditions*, the
+opposite of a ban, and four clauses carry the weight:
+
+- "Contributors are responsible for all submitted content, regardless of whether generative AI tools
+  were used."
+- "Contributors must be able to explain all changes upon request during review."
+- "Contributors are expected to understand the changes they are proposing, **not act as a message
+  courier for a third party**. Copying and pasting replies to / from a generative AI tool does not count
+  as engaging with the reviewer."
+- "The use of an AI agent to submit a pull request, issue, or comment **autonomously is not permitted**."
+
+Two properties make this different from the stances this file already tracks. **It governs issues and
+comments, not just patches**, so it is an anti-slop gate on *reports* — and it was exercised in exactly
+that mode one week earlier: a reporter filed six quadratic payloads in one issue (#1654), a maintainer
+closed it in **71 minutes** as a duplicate of a 2019 issue with "We just need to get around to the
+refactor" and "I know it is easy to tell AI to find every performance issue, but then just posting a
+novel of them all in a single issue isn't very helpful." And **the policy is copied, not invented**: the
+link reference resolves to **astropy's** AI policy at a **pinned commit**
+(`…/astropy-project/blob/b842b9be…/policies/ai-policy.md`), so the clause set is becoming cross-project
+infrastructure with a traceable lineage — the same structure as a licence, and readable as one.
+
+The interaction worth carrying: a written policy on AI-submitted reports plus a project where
+discovery volume now exceeds triage capacity means **valid findings can be closed for the shape of their
+submission**. CVE-2019-25781 exists, is unfixed, and the newest release is affected; the triage reason
+was volume and provenance, not validity. See [[disclosure-lag]] for the record's side of the same case.
+
+→ [[disclosure-lag]] [[fact-check]] [[dev-tools]]
+
+Sources: [picocss/pico discussion #754](https://github.com/picocss/pico/discussions/754) ·
+[picocss/pico (archived)](https://github.com/picocss/pico) ·
+[Python-Markdown contributing guide](https://raw.githubusercontent.com/Python-Markdown/markdown/master/docs/contributing.md) ·
+[issue #1654](https://github.com/Python-Markdown/markdown/issues/1654) ·
+[astropy AI policy](https://github.com/astropy/astropy-project/blob/b842b9bef3c8d69da73d639ea0254ae17fbc1fd1/policies/ai-policy.md)

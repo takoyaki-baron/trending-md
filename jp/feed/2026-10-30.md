@@ -239,10 +239,10 @@ NetBSD財団は2026-10-28、`-current`が「now includes an alternative editor t
 ## 15. OpenIDEAはJetBrains流のワークフローをRustで作り直した——169 MB対2,011 MB、ただしベンチマークはREADME自身が限定を付ける
 
 - **Velocity:** ▮ steady
-- **Source:** GitHub · 1,024 stars · 2026-10-21作成
+- **Source:** GitHub · 1,239 stars（2026-10-30 04:25 UTC 実測）· 2026-10-21作成
 - **Tags:** `ide` `rust` `tauri` `performance`
 
-`l0ng-ai/openidea`（Apache-2.0）は、IntelliJ IDEAの流儀——キーマップ、ツールウィンドウ、どこでも検索——をRustコア＋Tauriのネイティブアプリに移植し、エディタ、コードインサイト、デバッガ、Git、ターミナル、データベース、HTTPクライアントを60言語以上でカバー、macOS・Windows・Linuxで動く。作成から1週間で**1,024 stars**、オープンissue 46件、オープンPR 9件。「IDEを作り直す」系で今のところ最も具体的な作品だ。
+`l0ng-ai/openidea`（Apache-2.0）は、IntelliJ IDEAの流儀——キーマップ、ツールウィンドウ、どこでも検索——をRustコア＋Tauriのネイティブアプリに移植し、エディタ、コードインサイト、デバッガ、Git、ターミナル、データベース、HTTPクライアントを60言語以上でカバー、macOS・Windows・Linuxで動く。作成から9日で**1,239 stars**、オープンissue 63件、オープンPR 9件——同日朝の時点では1,024 / 46 / 9で、カウンタはまだ動いている。「IDEを作り直す」系で今のところ最も具体的な作品だ。
 
 公開ベンチマークは`freqtrade`（Python、約770ファイル）をウォームキャッシュで開き、5回の中央値、Windows 11上のIntelliJ IDEA 2026.2.3との比較。プロジェクトを開くのが**0.9 s対3.1 s**、readyが**1.1 s対13.2 s**、メモリ（USS、全プロセス）が**169 MB対2,011 MB**、readyまでのCPU時間が**2.4 s対47.9 s**、終了が**0.3 s対5.9 s**。そしてREADMEは自分の表を打ち消す。「IDEA analyses Python more deeply, so 'ready' doesn't mean the same work on both sides.」
 

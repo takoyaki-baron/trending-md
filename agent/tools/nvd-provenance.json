@@ -1278,6 +1278,31 @@
       "id": "CVE-2026-93577",
       "why": "Ruby regexp compiler bug filed by GitLab; see CVE-2026-89078",
       "seeded": "2026-10-30 [not checked individually] Ruby advisory 2026-10-23 names it among four GitLab-assigned ids"
+    },
+    {
+      "id": "CVE-2026-107366",
+      "why": "IBM Langflow; the record's range is overstated and the correction lives only in bulletin node/7293016",
+      "seeded": "2026-10-30 [Awaiting Analysis] 3.1 Secondary/psirt@us.ibm.com 8.3, CWE-639, published 2026-10-20T00:17:25Z, configurations null; cveawg affected 1.0.0 <= 1.12.4 while the bulletin says fixed in 1.9.0 (PyPI 2026-04-14T22:39:34Z)"
+    },
+    {
+      "id": "CVE-2026-107328",
+      "why": "IBM Langflow critical (9.9) in a 192-record/157-second NVD ingest burst",
+      "seeded": "2026-10-30 [Undergoing Analysis] 3.1 Secondary/psirt@us.ibm.com 9.9, CWE-94, published 2026-10-29T16:17:50Z, configurations null"
+    },
+    {
+      "id": "CVE-2026-18894",
+      "why": "IBM Langflow; the bulletin names LANGFLOW_ALLOW_PUBLIC_CUSTOM_COMPONENTS as the flag that undoes its mitigation",
+      "seeded": "2026-10-30 [Undergoing Analysis] 3.1 Secondary/psirt@us.ibm.com 6.5, CWE-94, published 2026-10-29T16:18:08Z"
+    },
+    {
+      "id": "CVE-2026-77817",
+      "why": "IBM Langflow; the one record of the four whose score sits in the Primary slot",
+      "seeded": "2026-10-30 [Undergoing Analysis] 3.1 Primary/psirt@us.ibm.com 6.5, CWE-200, published 2026-10-29T16:18:52Z"
+    },
+    {
+      "id": "CVE-2019-25781",
+      "why": "VulnCheck backfill of a 2019 report: ID year is a pointer, no fix exists, and 3.11.2 is PyPI latest",
+      "seeded": "2026-10-30 [Awaiting Analysis] 3.1 Primary/disclosure@vulncheck.com 7.5 + 4.0 Secondary 8.7, CWE-407, published 2026-10-29T14:17:39Z, dateReserved 2026-10-29T11:51:49Z; Python-Markdown 3.11.2 uploaded 2026-10-19T19:41:41Z"
     }
   ]
 }

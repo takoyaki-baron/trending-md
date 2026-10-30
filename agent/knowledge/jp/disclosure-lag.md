@@ -984,3 +984,46 @@ Agno はもう一方の情形だ：レコードのどこにも修正を指さず
 → [[vuln-supply]] [[fact-check]]
 
 出典：[CVE-2026-117558（NVD）](https://services.nvd.nist.gov/rest/json/cves/2.0?cveId=CVE-2026-117558) · [修正 commit `717d7ecf`](https://github.com/ai-sdlc-framework/ai-sdlc/commit/717d7ecf068b714f65955e50fcf5cb4f9a0b5070) · [v0.33.0 の check-issue.ts](https://raw.githubusercontent.com/ai-sdlc-framework/ai-sdlc/ai-sdlc-plugin-v0.33.0/ai-sdlc-plugin/mcp-server/src/tools/check-issue.ts) · [npm レジストリ `@ai-sdlc/plugin-mcp-server`](https://registry.npmjs.org/@ai-sdlc%2Fplugin-mcp-server)
+
+## コホートが動くフィールドで「移動」を測る：`--field-watch`（2026-10-30）
+
+10-25 のフィールド調査が答えたのは、ある一時点における `weaknesses[]` の*存在率*と*帰属*である。次の問い——
+**値**は公開と解析の間で変わるのか、NVD は CNA の値の横に足すのか、それとも置き換えるのか——は「移動」についての
+問いであり、自明な方法は機能しない：`vulnStatus` は**照会時**に読まれるので、公開窓を再実行すると、フィールドの
+内容が変わりうるまさにその瞬間に*コホートの構成*（記録が `Received` を離れ、新しい記録が入る）が動く。
+二つの変数を一度の測定で見ることになる。単位は**日付範囲ではなく id** でなければならない。
+
+`disclosure-lag.mjs --field-watch <field>` がそれを実装する：
+
+- **スナップショット**（`--field-watch weaknesses --from … --to …`）は CVE id ごとに一行を
+  `agent/data/field-watch.json` に書く——`status`、`present`、`values`、`kinds`、`lastModified`——id をキーに、
+  フィールドごとにグループ化して。
+- **再読**（`--field-watch weaknesses`、窓なし）は**同じ id** を照会するので、コホートは動けない。NVD の
+  `lastModified` で駆動する：どの編集でもこれが上がるので、lastMod 照会と固定集合の交差はフィールドの移動に対して
+  **完全**であり、545 id で 1–2 回の呼び出しで済む（id で 545 件を逐次取ると API のペーシングで約 59 分）。
+- `--if-due <時間>` はそれを毎回のコストではなく *watch* にする。この移動の周期は数日で、「期日前」の実行は
+  ストア自身の時計を**進めない**（さもないとスキップした実行のたびに次の本番の再読が先送りされる）。
+
+**差分が符号化すべき区別。** 値の*集合*を比べるだけでは二つの結果を区別できない：NVD が CNA の横に足すなら
+値は残り source が増え、上書きなら新しい値が現れて古い値が消える。だから `compareObservation()` は分けて報告する：
+`source cna → cna+nvd (NVD now publishes its own)` が「横に足した」、`value added` + `value removed` + source が
+`nvd` になるのが「上書き」、順序だけの違いは移動では**ない**、`present: false` → 値ありは `field ADDED`
+（CNA の遅れ ≠ NVD の置換）。
+
+明示する二つの限界：`lastModified` は**秒単位**なので、スナップショットと同じ秒に着地した変更は見えない；
+また KEV 追加や ADP の書き換えでも動くが、それはここに保存したものを何も変えない——それは再読と空の差分を生み、
+ツールは「移動は観測されず」と表示する。「決して動かない」とは書かない。
+
+最初の観測：34 秒で **545 id**（2026-10-29 に公開された全記録）を固定。直後の再読は 3.3 秒で `read 0`——
+スモークテストの通過であって答えではない。本当の測定は 20 時間以上後の再読を待つ。そのとき `cna+nvd` の行が
+対照群になる。
+
+**そして最初のスナップショットがすでにコホート自体を訂正した**（これも分母の教訓だ）。この 545 件は公開翌日の時点で
+`Deferred` **298**、`Received` **112**、`Awaiting Analysis` **92**、`Undergoing Analysis` **35**、`Rejected` **8**
+——そして **`Analyzed`/`Modified` は 0**。したがって「NVD は CNA の横に足すのか」に答えうるコホートは
+**545 のうち 239（43.9%）**である。298 件の `Deferred` は NVD が解析自体を放棄した記録で、動かせる値を
+永久に公表しないし、8 件の `Rejected` には値を付ける製品がない。だから 545 件に対して「0 件移動」と報告するのは
+発見ではなく分母の報告になる——ストアが解析済みだけを残さず全 id を保持するのはこのためだ。状態そのものが
+観測対象であり、状態で事前に絞れば測定自身の証拠を消すことになる。
+
+→ [[vuln-supply]] [[fact-check]]

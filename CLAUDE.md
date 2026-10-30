@@ -268,6 +268,16 @@ underlying pages — this produced a two-layer false signal in a single item.
    assigners that do state one. Day-level swings are composition (10-23: **217** `Received` at
    **0.0%**; 10-27: **167** at **92.8%**), so a week rate is a rate over *which CNA filed that day*
    — quote the assigner, never the percentage alone.
+   **A CWE is a claim at a time, and the census could not see it move** (added 2026-10-30, the
+   field-watch): every count above is one instant, and the next question — does a value change
+   between publication and analysis, and does NVD add *beside* the CNA's or replace it? — cannot be
+   answered by re-running the window, because `vulnStatus` is read at query time so the cohort's
+   composition moves while the field does. `disclosure-lag.mjs --field-watch weaknesses --from … --to …`
+   pins an id list instead and a later re-read queries the SAME ids, driven by `lastModified` (any
+   edit bumps it, so the intersection is complete and costs 1–2 calls rather than one per record);
+   `--if-due 20` keeps it a watch in a 3x-daily pipeline. The distinction it encodes is
+   **value-sets alone cannot tell "NVD added beside" from "NVD overwrote"** — same values plus an
+   `nvd` source is the first, different values with only `nvd` left is the second.
    **An identifier list is a SET, a range is an assumption, and "CVE-X to CVE-Y" is not a citation**
    (added 2026-10-25 20:30, the HPE ArubaOS eighth row). Coverage printed a "maximum severity" table of
    eight consecutive IDs, `CVE-2026-79844`…`-79851`; one of them, `-79845`, is `VulDB`'s SQL injection in
@@ -511,11 +521,12 @@ underlying pages — this produced a two-layer false signal in a single item.
    **The URL-shaped half is now a tool too** (added 2026-10-23, after one batch produced four
    different shapes): `vendor-advisory.mjs` owns the *CVE*-shaped twins (a known endpoint per
    vendor), while any ordinary page needs the sibling *derived from the URL*.
-   `node agent/tools/doc-twin.mjs --probe <url> [<url> …]` prints one of five verdicts —
-   `twin found (url)` / `plain HTML ok` / `JS gate (marker)` / `JS shell (script %)` / `no twin` —
+   `node agent/tools/doc-twin.mjs --probe <url> [<url> …]` prints one of six verdicts —
+   `twin found (url)` / `plain HTML ok` / `auth-gated (marker)` / `JS gate (marker)` /
+   `JS shell (script %)` / `no twin` —
    plus every candidate it tried (`path.md`, `index.md`, `?format=md`, `?format=json`, root and
    first-segment `llms.txt`, `rel=alternate` markdown links) with each one's status and size.
-   Four judgement calls it encodes, each a hand-made mistake first: **(a) a 200 is not a twin** —
+   Five judgement calls it encodes, each a hand-made mistake first: **(a) a 200 is not a twin** —
    SPA catch-alls answer `200 text/html` for any `.md` path, so a candidate only counts if its body
    is not HTML and not byte-identical to the page; **(b) a redirect is not a miss** —
    `modelcontextprotocol.io/docs/…/intro.md` 307s to a versioned path, and the *final* URL is the
@@ -523,7 +534,15 @@ underlying pages — this produced a two-layer false signal in a single item.
    served a Cloudflare "Just a moment…" 403 and a full 200 HTML minutes apart, so "I could not read
    it" and "it does not say that" are different sentences and only the second is a finding;
    **(d) an index is not a twin** — a 728 KB `llms.txt` on onamae.com is the site's index, not that
-   page's content, so report it as the citation fallback rather than as the page's Markdown twin.
+   page's content, so report it as the citation fallback rather than as the page's Markdown twin;
+   **(e) a login wall is not a render wall** (added 2026-10-30) — HPE's bulletin answers `200` with a
+   9,408-byte interstitial whose own script says it is "issued when IAM RP headers claim user is
+   anonymous", which the old verdict set had to call `JS shell (88% scripts)` — a statement about
+   client rendering that was simply false. An anonymous session being refused is **`auth-gated`**,
+   and no twin gets past it, so the advice is a third-party artifact, not another hunt. Body markers
+   (`IAM RP`, `/sessions/me`, `iam_callback`, `target_link_uri`) are checked before URL ones, and
+   URL markers never fire alone — a doc page about OAuth lives at `/oauth/authorize` too, which is
+   why the path list dropped `oauth` after that false positive failed its own selftest.
    Re-probe before publishing any "the docs say" claim: twins are site configuration and gates are
    per-request.
 

@@ -1901,3 +1901,51 @@ does not own is read as the unit it does** — first on the claim, now on the pa
 against, which is the side a reader never sees.
 
 → [[in-weight-compute]] [[vuln-supply]] [[frontier-models]] [[dev-tools]]
+
+## 2026-10-30 12:33 — "FP8" is a storage claim, "151 seconds" is a pipeline clock, and a changelog is a negative's witness
+
+Three units that were quoted as if they named something else, each settled by opening the artifact.
+
+**1. A precision is a storage format; portability is an arithmetic.** Evo 2 (arXiv
+[2610.39415](https://arxiv.org/abs/2610.39415)) states the defect in its first sentence: "**FP8 formats
+specify how values are stored, not how products are summed; this gap can break checkpoints.**" The
+evidence is that *more* precision breaks it — "natively, **99.996%** of one projection's outputs are
+correctly rounded (**H100: about 30%**), and fp32 accumulation of the same operands fails" — because the
+checkpoint was validated against one GPU's accumulation order, so a bit-exact emulator of that order is
+the compatible artifact and fp32 is not. On an RTX 5070 Ti the 40B's next-base accuracy is **25.7%**
+(near guessing); emulating **one** projection of **21**, weights unchanged, moves 40B BRCA1 AUROC
+**0.434 → 0.869** (H100 **0.868**), and **0.481 → 0.867** on an RTX PRO 6000. The caveats are the
+authors' own: the 1.4% shrink is "measured in-sample" (not the 2.1% it looks like), "**We tested one
+model family but not training origin**", and the recommendation is a release-process ask — "**releases
+should specify reference arithmetic**."
+
+The reusable test, for anyone comparing an FP8 deployment against a published score: a large benchmark
+drop that **disappears when you emulate the reference kernel** was never a model comparison. A forward
+test passing on the vendor's hardware is a statement about that hardware. This is the third artifact
+beside the weights and the licence — the model file declares its precision and says nothing about its
+summation order, so "same weights, same model" is a claim that needs a kernel, not a checksum.
+
+**2. A same-second publication burst is a queue drain.** "33 CVEs in 151 seconds" measured exactly
+(**33** IBM records, `16:17:35.203 → 16:20:06.040`) and means nothing about IBM: the same window holds
+**192 records from 12 assigners** in **157 seconds** (`16:17:32.127 → 16:20:09.003`; 119 `Deferred`,
+38 `Awaiting`, 35 `Undergoing`, **0** with an `nvd@nist.gov` metric, **59** with a CISA-ADP one). The
+unit is **NVD's ingest pass**, and a single vendor's share of it is queue position. Full detail and the
+census table in [[disclosure-lag]].
+
+**3. A changelog that cites issue numbers is how a *negative* is verified.** `CVE-2019-25781` names no
+fix, and the project's own release notes confirm it rather than a field's silence: `3.11.1` fixes
+#1644/#1646/#1643 and `3.11.2` fixes #1663/#1657 — **#1654 appears in no release note** — while `3.11.2`
+(PyPI `2026-10-19T19:41:41Z`) is `latest` and inside the stated affected range. So "no fix" became a
+positive finding, sourced to the artifact's history. The general move: when a record is silent and the
+maintainer responded in the tracker, read the release log for the issue number — a release note that
+cites issues is a negative's witness, and one that does not is not.
+
+**Two more units from this batch, recorded here rather than expanded:** the **year in a CVE id** is a
+pointer to when the report was filed (2019 here) and not a reservation date (2026-10-29T11:51:49.648Z,
+77 minutes before publication); and **"AI made it unnecessary"** is a causal claim whose ordering is
+checkable — Pico CSS names AI as the reason it archived on **2026-10-04**, while its newest release is
+**2025-03-15**, **18 months 19 days** earlier, so the stated cause postdates the silence it explains.
+That does not make it false; it makes it unfalsifiable from the repository, and the item should say so.
+See [[no-ai-default]].
+
+→ [[disclosure-lag]] [[frontier-models]] [[no-ai-default]] [[vuln-supply]]
