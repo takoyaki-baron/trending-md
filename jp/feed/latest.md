@@ -1,8 +1,8 @@
 ---
 date: 2026-10-30
-updated: 2026-10-29T20:18:39Z
+updated: 2026-10-30T04:16:15Z
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 18
+sources: 24
 license: CC-BY-4.0
 ---
 
@@ -328,13 +328,161 @@ Martin Fowlerのblikiの記事は、LLMが生成した散文が人間の反応�
 
 ---
 
+## 21. Binance はホットウォレットから 63 億ドルが流出したと発表 — 同社自身の説明は「DevOps エンジニアのノート PC」で、漏れた鍵ではない
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Hacker News · 913+ pts · ~6h ago (~05:38 UTC+8)
+- **Tags:** `binance` `exchange` `incident` `custody` `ethereum`
+
+Binance は被害を「**around $6.3 billion in stolen assets**」と見積もり、「**Some $3 billion of assets were frozen**」、そのうち「$2.3 billion in USDT and USDC stablecoins altogether」だと述べた。各社の数字は一致せず、しかも同じものを測っていない。Chainalysis は「roughly **$5.9 billion** at the time of the theft」、Arkham は「more than **$5.7 billion** in various cryptos」だがこれはハッカーのウォレットが「at one point」保有していた額 — 残高のスナップショットであって損失ではない。Coinbase の Conor Grogan は「up to **$5.8 billion**」とした。Tether は「over $1.57 billion in USDT」、Circle は「over $800 million in USDC」を凍結した。
+
+争点は仕組みであり、Binance の説明は最初に流れたオンチェーンの物語とは違う。同社の「initial investigation」は、事案が「may involve a **compromised DevOps engineer's laptop**」であり、攻撃者がそれを使って「gain access to a service container and submit unauthorized withdrawal transactions」に至ったとする。直後の一文がこの種の欠陥の見方を変える —「**We have found no evidence of any wallet private key leak.**」同日の早い時点で、SecurityAffairs は未解決の問いを「whether credentials or signing mechanisms were compromised」と列挙し、「Large transfers alone don't prove a hack.」と注意を促していた。
+
+**Why it matters:** 三つの数字が一つの数字として引用される — Binance 自身の影響見積もり、第三者が盗難時点で評価した額、Arkham のウォレットスナップショット — ので、まず直すべきは単位だ。次に仕組み。*サービスコンテナから送信された出金トランザクション*で 63 億ドルが流出する取引所は、署名経路と鍵が別の対象であるアーキテクチャであり、破れた統制は HSM ではなくコンテナ側にある。CoinDesk は見出しが落とした留保も残している —「would be the largest ever crypto attack」は条件付きで、「The transfers alone, however, don't establish whether the funds have become impossible to freeze or recover.」も添えられている。市場はビットコインが「dropped 4.8% to below $77,000」、イーサ −5.7%、BNB −8%、AAVE −11%。
+
+[`🔗 CoinDesk — Binance loses $5.7 billion in largest crypto hack to date`](https://www.coindesk.com/business/2026/10/29/potential-multi-billion-binance-hack-hitting-crypto-markets) · [`🔗 Security Affairs — Binance investigates suspicious transfers worth up to $5.8 billion`](https://securityaffairs.com/202089/hacking/binance-investigates-suspicious-crypto-transfers-worth-up-to-5-8-billion.html) · [`🔗 HNディスカッション`](https://news.ycombinator.com/item?id=50296470)
+
+---
+
+## 22. YC が Minecraft と Mindustry でエージェント群を走らせた — GPT が 6 対 1 で勝ち、ゲームのソースコードまで読んだ
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Hacker News · 215+ pts · ~6h ago (~05:40 UTC+8)
+- **Tags:** `multi-agent` `agent-harness` `benchmark` `minecraft` `mindustry`
+
+YC Labs と Olam Labs は三つのマルチエージェント実験を行い、その背後のハーネスをすべて公開した。`yc-software/minecraft-agent-harness`（MIT、2026-10-29 作成、24 スター）、`olamlabs/multi-agent-mindustry`（GPL-3.0）、`olamlabs/harbor-multiagent`（Apache-2.0、Terminal-Bench の背後にある Harbor フレームワークのフォーク。記事はこれを「runs multiple agents in any environment」と説明する）。
+
+数字は具体的だ。**Civ50**：GPT-6.1 Sol エージェント 50 体、3 時間、目標は一つ「Build a thriving civilization」、約 **5,900 メッセージ**、配給台帳と擬似政府が生まれた。階層はエージェントディレクトリの順序から生じ、「Ada, who was first, became the de facto leader」となった。エージェントの死は計 34 回、うち **初夜に 22 回** — そしてページは自らのグラフに照らして訂正を入れる：「The first-night count in the text is the 22 deaths before minute 20. Two of them fall outside the shaded band.」**Bed Wars**：45 分 × 9 戦、Claude Opus 5.5 が 10 体 対 GPT-6.1 Sol が 10 体 —「GPTs won our series **6–3**.」**Mindustry**：7 戦、約 9.5 時間 —「The GPTs (GPT-6.1 Sol in Codex) won **6-1** against the Claudes (Claude Opus 5.5 in Claude Code) in the 7 games」。第 3 戦は 4 時間 16 分だった。
+
+本当の成果は行動の差だ。GPT 陣営はスペースが消えるまでメッセージを圧縮し（`G7T5FIRSTcourierLIVE`）、Claude 陣営は「+1」による提案・投票の仕組みを発達させた。最も含意の広い発見は「When stuck, GPTs read the source code」 — 行き詰まると Mindustry の公開ソースをウェブから取得し、ユニットと仕組みを理解しようとした。「This did not let them alter the source code of the game.」そして「The Claudes never searched up game code from the web.」
+
+**Why it matters:** あらゆる「エージェント群」の主張を測る物差しは方法論の一文だ —「**We intentionally do no harness-level customization or special memory work.**」これが実験を可読で再現可能にする一方、モデル比較にはならない。モデルは別々のハーネス（Codex と Claude Code）で走っており、6 対 1 は*組み合わせ*についての言明であって、本誌が逆方向から繰り返し行き着いている結論そのものだ。戦術の細部は誠実である — Claude は第 6 戦で防空タレットの「55 of them were loaded with COPPER」で負け、第 7 戦では「a ring of 207 duos fed with graphite」を築いて「the same 24-zenith strike」を止めた。賢いモデルではなく、測定された修正である。
+
+[`🔗 YC Labs — Agents in Games`](https://labs.ycombinator.com/projects/games/index.html) · [`🔗 yc-software/minecraft-agent-harness`](https://github.com/yc-software/minecraft-agent-harness) · [`🔗 olamlabs/multi-agent-mindustry`](https://github.com/olamlabs/multi-agent-mindustry) · [`🔗 HNディスカッション`](https://news.ycombinator.com/item?id=50296486)
+
+---
+
+## 23. IBM は 151 秒で 33 件の Langflow CVE を公開した — そのうち 3 件は 198 日前に修正済みだった
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** NVD / IBM PSIRT · 33 records, 2026-10-29 16:17:35–16:20:06 UTC
+- **Tags:** `cve` `langflow` `agent-platform` `mcp` `disclosure-lag`
+
+「IBM Langflow OSS」に対する 33 件の CVE が、**2 分半の窓**で NVD に入った。Critical が 6 件（**9.9 が 3 件、9.8 が 3 件**）、High が 11 件、Medium が 16 件。スコアはすべて同一の主体 — `psirt@us.ibm.com` によるもので、あるレコードでは `Primary` スロットに、別のレコードでは `Secondary` に置かれている。これはまさにスロットが来歴ではないことの証拠だ。NVD 自身のスコアは公開されていない。その窓のレコードはすべて **`Undergoing Analysis`** のままで（9.9 の一つ CVE-2026-107328 も同様）、`configurations` は全件 null であり、この一群には CPE の範囲が一つも存在しない。製品は `langflow-ai/langflow` — **156,149 スター、MIT**、v1.13.0 は 2026-10-22 公開。ブリテンのコマンドも同じ成果物を指す：`pip install --upgrade "langflow==1.13.0"` と `langflowai/langflow:1.13.0`。
+
+この一群は実際には**三つのブリテン**であり、参照リストは修正の波ごとにきれいに分かれる。`node/7293015`（16 件、「1.0.0 - 1.12.3」→ **1.12.4** へ）、`node/7293016`（13 件、「1.0.0 - 1.12.4」→ **1.12.5**）、`node/7294467`（Langflow 4 件に加え、`security-advisories@github.com` が採点した **Hono** 依存の CVE 3 件、「1.0.0 - 1.12.8」→ **1.13.0**）。これらのリリースは 2026-09-29、2026-10-06、2026-10-22 — 公開の **30、23、7 日前**にあたる。
+
+そして範囲が成立しなくなる。ブリテン 7293016 はこう明言する：「**This bulletin also discloses fixes delivered in prior releases: CVE-2026-107366 was fixed in version 1.9.0; CVE-2026-18894 was fixed in version 1.11.2; and CVE-2026-77817 was fixed in version 1.11.5.**」該当リリースは 2026-04-14、2026-08-04、2026-08-25 — レコードより **198、86、65 日前** — にもかかわらず、各 CVE の説明は今も「1.0.0 through 1.12.4」と書いており、`configurations` が null である以上、この訂正を運ぶフィールドはレコードのどこにもない。CVE-2026-107366 が最悪で、この一群より九日早い **2026-10-20 に単独で公開**され、同じ過大な範囲を抱えたままだ。
+
+**Why it matters:** Langflow の運用者が今日読むべきは MCP 関連の緩和策である。ブリテン 7293016 はこう書く —「Set `LANGFLOW_MCP_SERVER_INTERPRETER_HARDENING=true` to reject direct shell-script execution, and set `LANGFLOW_CUSTOM_COMPONENT_ADMIN_ONLY=true` to block non-admin MCP stdio access」、そして「**These controls do not replace the upgrade**」と添え、さらにそれを打ち消すフラグを名指しする：「Explicitly enabling `LANGFLOW_ALLOW_PUBLIC_CUSTOM_COMPONENTS` permits custom component execution and changes the default protection described for CVE-2026-18894.」ブリテン 7294467 の要約は「**unauthenticated remote code execution exploitable through model context protocol tool enumeration**」を、まとめた四つの問題の一つとして挙げている。そして上限は重大度ではなく開示遅延の測定値だ — 同じ午後に四月・八月・九月・十月の修正が並んだのであり、「今日 33 件の CVE」は書類がいつ閉じたかを述べているにすぎず、コードがいつ変わったかではない。
+
+[`🔗 IBM ブリテン node/7293015（16 件 → 1.12.4）`](https://www.ibm.com/support/pages/node/7293015) · [`🔗 IBM ブリテン node/7293016（13 件 → 1.12.5、MCP 緩和策）`](https://www.ibm.com/support/pages/node/7293016) · [`🔗 IBM ブリテン node/7294467（4 件 + Hono 依存 → 1.13.0）`](https://www.ibm.com/support/pages/node/7294467) · [`🔗 CVE-2026-107328（NVD）`](https://nvd.nist.gov/vuln/detail/CVE-2026-107328)
+
+---
+
+## 24. CVE-2019-25781 の ID は 2019、`dateReserved` は 2026-10-29 — そして修正方針は「そのうちリファクタする」
+
+- **Velocity:** ▮▮ rising
+- **Source:** NVD / cveawg / GitHub · published 2026-10-29 13:08 UTC
+- **Tags:** `cve` `python` `markdown` `redos` `maintenance`
+
+VulnCheck は 2026-10-29 に **CVE-2019-25781** を公開した。**CVSS 3.1 7.5** と **CVSS 4.0 8.7**、いずれも VulnCheck による採点で、CWE-407。説明はこうだ —「Python-Markdown 3.0 through 3.11.2 contains an algorithmic complexity vulnerability in inline link parsing that allows remote attackers to exhaust CPU through unmatched brackets」、`LinkInlineProcessor.getText()` と `getLink()` を「quadratic scans that keep workers busy for minutes」に追い込む。
+
+ID の年は確保された年ではない。このレコードの cveawg `dateReserved` は **2026-10-29T11:51:49.648Z** — 公開の **77 分前**である。2019 という数字は、VulnCheck が原報告を指すために使ったものだ。issue **#798「Parsing [[[[[[… takes quadratic time」は 2019-03-06 に開かれ、今日もオープンのまま**である。
+
+レコードは修正版を一つも挙げていない。CNA コンテナは `affected: [{version: "3.0", lessThanOrEqual: "3.11.2"}]`、`defaultStatus: "unaffected"` で、`unaffected` の項目も `changes[]` もなく、**3.11.2 が PyPI の `latest`**（2026-10-19 アップロード）だ。上流の経緯が理由を語る。2026-10-13、報告者が六つの二次時間ペイロード形状を一つの issue にまとめて **#1654** を開き、「One line of input is enough.」と書いた。メンテナは 71 分後にそれを閉じた —「I would duplicate link discusion to https://github.com/Python-Markdown/markdown/issues/798 … We just need to get around to the refactor」、そして広く引用される一文を添えた：「I know it is easy to tell AI to find every performance issue, but then just posting a novel of them all in a single issue isn't very helpful.」
+
+**Why it matters:** これは日付の形をした信号がそれぞれ別方向に誤る事例で、正直に言えるのはフィールドが支える範囲だけだ。ID は 2019 と言い、`dateReserved` は 2026 年 10 月 29 日と言い、コードは 2019 年に報告され 2026 年 10 月に再報告され、そしてインストールできる唯一のバージョンがレコードの言う「影響を受ける」バージョンである。7.5 と 8.7 の差も同源の組 — 同じ CNA、二つの CVSS バージョン、1.2 ポイント差 — なので、バージョンを添えずにどちらかを引用すれば、誰も責任を負わなくてよい数字が生まれる。ユーザーの Markdown を描画するものすべて — MkDocs、wiki、ドキュメントパイプライン、そして取得した README を変換するあらゆるエージェントハーネス — にとっての実際の結論は、緩和はアップグレードではなくレンダラのタイムアウトだということ。アップグレード先が存在しないからだ。
+
+[`🔗 CVE-2019-25781（NVD）`](https://nvd.nist.gov/vuln/detail/CVE-2019-25781) · [`🔗 Python-Markdown issue #798（2019-03-06 開設、未クローズ）`](https://github.com/Python-Markdown/markdown/issues/798) · [`🔗 Issue #1654（2026-10-13 開設・クローズ）`](https://github.com/Python-Markdown/markdown/issues/1654)
+
+---
+
+## 25. Evo 2 の 40B チェックポイントは Blackwell で 25.7% — 欠けているのは重みではなく、ある一つの射影の総和順序
+
+- **Velocity:** ▮▮ rising
+- **Source:** arXiv 2610.39415 · 2026-10-29
+- **Tags:** `quantization` `fp8` `reproducibility` `gpu` `checkpoints`
+
+著者二名（Xun Ding、Ziyuan Qin）は、仕様の欠陥のように読める一文から始める —「**FP8 formats specify how values are stored, not how products are summed; this gap can break checkpoints.**」DNA 言語モデル Evo 2 は 1B と 40B のチェックポイントに Hopper FP8 を要求すると明記している。二枚の Blackwell（sm_120）GPU 上で両方が開発者自身の前向きテストに落ち（7B は通る）、「on an RTX 5070 Ti the 40B's next-base accuracy is **25.7%**, near guessing」となる。
+
+結論は、この失敗が算術に由来し、数値ノイズではないということだ。Hopper 上では「natively, **99.996%** of one projection's outputs are correctly rounded (**H100: about 30%**), and fp32 accumulation of the same operands fails」 — つまり*精度を上げる*と悪化する。モデルは特定の丸めに対して検証されていたからだ。彼らの H100 FP8 GEMM エミュレータ（mmaemu、「bit-exact on captured 1B projections」）は依存を **1B の 21 個ある射影のうち最初の一つ**に局在させ、そこでは「exact sums fail but pass when shrunk by the H100's 1.4% (measured in-sample), not 2.1%」だという。その一つの射影だけを、重みはそのままでエミュレートすると、「40B BRCA1 variant-classification AUROC from **0.434 to 0.869** (H100: 0.868)」が RTX 5070 Ti で成立し、RTX PRO 6000 では 0.481 から 0.867 に上がる。
+
+**Why it matters:** 限界は著者自身が述べており、主張の外枠をなす —「We tested one model family but not training origin」、そして 1.4% の縮小はサンプル内で測られたものだ。しかし再利用できるのはこの提言である —「**releases should specify reference arithmetic**」。ある GPU の累積順序でのみ再現するチェックポイントは、そのライセンスとファイル形式が示唆する可搬性を持たない。FP8 の重みを配備する人への手がかりは、参照カーネルをエミュレートすると消える大きなベンチマーク低下は、モデルではなくベンダーが検証した matmul を測っているということだ。開発者のハードで前向きテストが通ることは、あなたのハードに対する互換性の言明ではない。
+
+[`🔗 arXiv 2610.39415`](https://arxiv.org/abs/2610.39415) · [`🔗 全文（HTML）`](https://arxiv.org/html/2610.39415v1)
+
+---
+
+## 26. 世界モデルとそのプレイヤーが Pico 2 W に同居する — 26k〜131k パラメータ、1 フレーム 2〜8M 乗加算
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News · 163+ pts · ~8h ago (~04:32 UTC+8)
+- **Tags:** `world-models` `edge` `microcontroller` `transformers` `games`
+
+`SheepSeb/tinyworldformer`（138 スター、2026-10-22 作成、**ライセンスファイルなし**）は二つのネットワークを Raspberry Pi Pico 2 W に載せ、同じコアで動かす。一つ目は現在のフレームと行動から次のフレームと報酬を予測する — **looped transformer、int8、26k〜131k パラメータ、1 フレームあたり 2〜8M 乗加算**。二つ目は行動を選ぶ — 隠れ層二つの MLP、float32、**9k〜16k パラメータ**。どちらもブラウザで WebAssembly として動くので、夢の中を自分で操作できる。
+
+五つのゲームはいずれも数百行の numpy で、ホールドアウト精度表が付く。Breakout **99.99%**、Flappy Bird **100%**、Pong **99.45%**、Pac-Man lite **86.4%**、Doom-lite **83.6%**。ここで「Exact frames」は「the share of held-out transitions where every cell of the predicted frame matches the real game」と定義され、ランダムイベント直後のフレームは除外される。チップ上では「the actor only sees frames the world model generates, and the world model only gets actions from the actor」 — コア 1 が両方を担い、コア 0 が USB と表示を扱う。
+
+**Why it matters:** 精度表の最も弱い行には説明が付いており、それが他の四行を信用できる理由になっている —「Doom-lite's 3D view has 768 cells and a single shaded wall pixel off counts the whole frame as wrong, so its number looks worse than it plays; the game state is almost always right.」これは完全一致指標が当然の挙動をしており、それを黙って再定義せず開示している。面白いのは設計上の制約のほうだ — 一フレームがゲーム状態の全体を保持しなければならないため、隠れ状態はフレームに*描き込む*必要がある（「the ball's heading is part of its token, and Doom-lite has a minimap」）— これは世界モデルとは何かを、ほとんどの論文より明快に述べている。
+
+[`🔗 tinyworldformer — research demo`](https://sheepseb.github.io/stealth/posts/tinyworldformer.html) · [`🔗 SheepSeb/tinyworldformer`](https://github.com/SheepSeb/tinyworldformer) · [`🔗 HNディスカッション`](https://news.ycombinator.com/item?id=50295450)
+
+---
+
+## 27. ElementaryUI は三日間で SSR・永続リアクティブ・keyed リストを揃えた — ブラウザの中の Swift、Apache-2.0
+
+- **Velocity:** ▮ steady
+- **Source:** Hacker News · 74+ pts · ~7h ago (~04:56 UTC+8)
+- **Tags:** `swift` `webassembly` `frontend` `reactive-ui`
+
+`elementary-swift/elementary-ui`（**557 スター、Apache-2.0**、2024-09-29 作成）は「SwiftUI-style apps that run in the browser」を作る — 宣言的 Swift を Embedded Swift 経由で WebAssembly にコンパイルし、`@State`、`@Environment`、`@Reactive` がリアクティブ模型を担う。サイズについて重要な一文は「Full Embedded Swift support means **kB-sized wasm bundles instead of MB**」。v0.8.1 は 2026-10-27 公開。Hacker News に載せたのはその後の三日間のコミットだ —「basic support for SSR/SSG rendering of ElementaryUI views (#145)」「persistent reactive listeners (#146)」「cheaper listener fan-in and inline tracked dependencies (#147)」「allocation-free listener callback for schedulable nodes (#148)」「keyed `ForEach` with `id:` and per-row tracking (#149)」。
+
+**Why it matters:** SSR/SSG と keyed リストの同一性は、デモ用フレームワークと出荷できるフレームワークを分ける二つの機能だ。前者は wasm が読み込まれる前にページが描画されるかを、後者は並べ替えのあと状態が生き残るかを決める。その両方が二歳のプロジェクトに一週間で入った。範囲も暗黙にせず明記されている —「ElementaryUI is an open-source project and not affiliated with or endorsed by Apple Inc.」wasm バンドルが本当に数 KB なら、興味深い問いは Swift がブラウザで動くかではなく、wasm へコンパイルする UI フレームワークが仮想 DOM なしに同一性とハイドレーションの意味論を保てるかであり、それはまさに #146 から #149 が検証しているものだ。
+
+[`🔗 elementary.codes`](https://elementary.codes) · [`🔗 elementary-swift/elementary-ui`](https://github.com/elementary-swift/elementary-ui) · [`🔗 v0.8.1 リリース`](https://github.com/elementary-swift/elementary-ui/releases/tag/0.8.1)
+
+---
+
+## 28. RetroChessBench は棋譜の復元を問い、GPT 6 Astra は 24 回中 22 回失敗 — コード実行を渡しても 18 回
+
+- **Velocity:** ▮ steady
+- **Source:** arXiv 2610.39341 · 2026-10-29
+- **Tags:** `benchmark` `reasoning` `chess` `tool-use`
+
+単著論文（Tidor-Vlad Pricope）は逆行チェスに **12 問**のベンチマークを組む — 合法な履歴を再構成し「distinguish possible events from forced ones」— 「references, rubrics, and a terminal-reward environment」を備え、「exact-length constructions, unique endings, and exhaustive answer sets」を扱う。「two trials per task and condition, **GPT 6 Astra High fails to produce the required final answer in 22/24 attempts without tools and 18/24 with code execution**; mean terminal RL rewards are **14.75% and 27.19%**, respectively.」
+
+失敗の型は採点で消さずに名指しされる —「failed responses reject legal histories and treat temporary obstructions as permanent.」仮説も仮説として提示される。すなわち「limited exposure to these missing explanations in web-derived training data contributes to the observed reasoning failures」であり、なぜなら「online retrograde archives often provide puzzles and final move sequences without detailed derivations」だからだ。
+
+**Why it matters:** 逆行チェスは、本誌が繰り返し戻ってくる問いのきれいな版だ — 明示的で検証可能な規則があり、解の解説がウェブ上にほとんどない領域。数学研究に寄与しながら合法な履歴を再構成できないモデルは矛盾ではない。それは数学的成績が解法の*形*の検索に一部依存している証拠であり、論文自身の結論でもある —「Claims of general intelligence require evidence that models can transfer learnt principles to areas with few worked examples.」14.75% から 27.19% への跳ねは、モデルの結果として読む前にハーネスの結果として読むべきでもある — 同じ課題、同じモデル、道具が一つ増えただけだ。
+
+[`🔗 arXiv 2610.39341`](https://arxiv.org/abs/2610.39341) · [`🔗 全文（HTML）`](https://arxiv.org/html/2610.39341v1)
+
+---
+
+## 29. Pico CSS がアーカイブされた — 16,828 スター、最終リリースは十九か月前、理由として挙がったのは AI
+
+- **Velocity:** ▮ steady
+- **Source:** Hacker News · 62+ pts · ~2h ago (~09:58 UTC+8)
+- **Tags:** `css` `open-source` `maintenance` `frameworks`
+
+「Pico CSS is no longer maintained」という投稿は 2026-10-30 に Hacker News に届いたが、決定はそれより古い。リポジトリは **2026-10-04** にアーカイブされ、投稿も同じ日のものだ。`picocss/pico` は現在 `archived: true`、**16,828 スター**。理由は異例に率直である —「**Today, AI can generate lightweight, standalone, accessible HTML with just the CSS it needs, so a Minimal CSS Framework for Semantic HTML matters less than it used to.**」もう一つの道は書き直しだったが、それは選ばなかった —「plain modern CSS instead of Sass, built on features it doesn't use today (OKLCH colors, cascade layers, Popover, anchor positioning)」に加え「a native compiler that strips unused CSS」が必要で、それは「would be a different project.」だったからだ。
+
+残るもの：「Nothing breaks. npm, the jsDelivr CDN and picocss.com stay online for the long term.」止まるもの：「The repositories are archived. No new issues, PRs or releases.」そしてフォークの条件は、多くのプロジェクトが間違える部分だ —「Pico CSS is MIT licensed. You're free to fork it,」の直後に「**The Pico CSS name and logo are not covered by the MIT license. Please give your fork its own name**, so users don't confuse it with the original.」
+
+**Why it matters:** この理由を引用する前に、タイムラインと突き合わせて読むべきだ。最終リリース **v2.1.1 は 2025-03-15 公開** — GitHub でも npm でも — つまりプロジェクトはアーカイブされる前に**十九か月間**リリースを出していない。「AI が不要にした」という説明は、その説明より前から存在した空白に対して与えられている。だからといって理由が誤りなわけではないが、検証できない。そして本誌の記録では、機能ではなく停止の原因として AI を挙げた最初の広く使われるフレームワークである。きれいに切り分けられるのはライセンスの分割 — コードは MIT、名称は商標 — で、これは正しい取り決めであり、フォークが自分を選んでいない利用者を引き継がない唯一の方法だ。
+
+[`🔗 picocss/pico discussion #754`](https://github.com/picocss/pico/discussions/754) · [`🔗 picocss/pico（アーカイブ済み）`](https://github.com/picocss/pico) · [`🔗 HNディスカッション`](https://news.ycombinator.com/item?id=50298964)
+
+---
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-10-29T20:18:39Z |
-| Items | 20 |
-| Sources tracked | 18（Hacker News、GitHub、NVD、CISA KEV、ベンダーアドバイザリ、arXiv、Hugging Face、ベンダーブログ） |
+| Generated | 2026-10-30T04:16:15Z |
+| Items | 29 |
+| Sources tracked | 24（Hacker News、GitHub、NVD、CISA KEV、cveawg、PyPI、npm、ベンダーアドバイザリ、arXiv、Hugging Face、セキュリティ報道、ベンダーブログ） |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8（1日3回） |
 | Ranking | Velocity-weighted（新しさ × エンゲージメントの加速度 × 情報源の権威） |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |

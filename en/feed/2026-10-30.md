@@ -1,8 +1,8 @@
 ---
 date: 2026-10-30
-updated: 2026-10-29T20:18:39Z
+updated: 2026-10-30T04:16:15Z
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 18
+sources: 24
 license: CC-BY-4.0
 ---
 
@@ -328,13 +328,161 @@ Martin Fowler's bliki entry argues that LLM-generated prose triggers a human rea
 
 ---
 
+## 21. Binance says $6.3B left its hot wallets — and its own account of how is a DevOps laptop, not a leaked key
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Hacker News · 913+ pts · ~6h ago (~05:38 UTC+8)
+- **Tags:** `binance` `exchange` `incident` `custody` `ethereum`
+
+Binance estimated the damage at "**around $6.3 billion in stolen assets**" and said "**Some $3 billion of assets were frozen**," including "$2.3 billion in USDT and USDC stablecoins altogether." The estimates do not agree, and they are not measuring the same thing: Chainalysis says "roughly **$5.9 billion** at the time of the theft," Arkham reports "more than **$5.7 billion** in various cryptos" describing the hacker wallets "at one point" — a holdings snapshot, not a loss — and Coinbase's Conor Grogan put it at "up to **$5.8 billion**." Tether froze "over $1.57 billion in USDT"; Circle froze "over $800 million in USDC."
+
+The mechanism is the contested part, and Binance's own version is not the on-chain story that circulated first. Its "initial investigation" says the incident "may involve a **compromised DevOps engineer's laptop**," which allowed the attacker to "gain access to a service container and submit unauthorized withdrawal transactions" — followed by the sentence that reframes the whole class of bug: "**We have found no evidence of any wallet private key leak.**" Earlier in the day, SecurityAffairs was still listing the open question as "whether credentials or signing mechanisms were compromised," and cautioning that "Large transfers alone don't prove a hack."
+
+**Why it matters:** Three numbers will be quoted as one — Binance's own impact estimate, a third party's valuation at theft time, and Arkham's wallet snapshot — so the first thing to fix is the unit. The second is the mechanism. An exchange draining $6.3B through *withdrawal transactions submitted from a service container* is an architecture where the signing path and the key are separate objects, and the control that fails is on the container, not the HSM. CoinDesk also keeps the hedge its headline drops: "would be the largest ever crypto attack," conditional, plus "The transfers alone, however, don't establish whether the funds have become impossible to freeze or recover." Market: bitcoin "dropped 4.8% to below $77,000," ether −5.7%, BNB −8%, AAVE −11%.
+
+[`🔗 CoinDesk — Binance loses $5.7 billion in largest crypto hack to date`](https://www.coindesk.com/business/2026/10/29/potential-multi-billion-binance-hack-hitting-crypto-markets) · [`🔗 Security Affairs — Binance investigates suspicious transfers worth up to $5.8 billion`](https://securityaffairs.com/202089/hacking/binance-investigates-suspicious-crypto-transfers-worth-up-to-5-8-billion.html) · [`🔗 Hacker News discussion`](https://news.ycombinator.com/item?id=50296470)
+
+---
+
+## 22. YC ran agent swarms in Minecraft and Mindustry — GPTs won 6–1 and read the game's own source code
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Hacker News · 215+ pts · ~6h ago (~05:40 UTC+8)
+- **Tags:** `multi-agent` `agent-harness` `benchmark` `minecraft` `mindustry`
+
+YC Labs and Olam Labs ran three multi-agent experiments and open-sourced the harnesses behind them: `yc-software/minecraft-agent-harness` (MIT, created 2026-10-29, 24 stars), `olamlabs/multi-agent-mindustry` (GPL-3.0) and `olamlabs/harbor-multiagent` (Apache-2.0, a fork of the Harbor framework behind Terminal-Bench, which the post says "runs multiple agents in any environment").
+
+The numbers are concrete. **Civ50**: 50 GPT-6.1 Sol agents, 3 hours, one goal — "Build a thriving civilization" — about **5,900 messages**, a ration ledger and a pseudo-government. Hierarchy formed from the agent directory's order, so "Ada, who was first, became the de facto leader." 34 agent deaths total, **22 in the first night**, which the page then corrects against its own chart: "The first-night count in the text is the 22 deaths before minute 20. Two of them fall outside the shaded band." **Bed Wars**: nine 45-minute games, 10 Claude Opus 5.5 against 10 GPT-6.1 Sol — "GPTs won our series **6–3**." **Mindustry**: 7 games, about 9.5 hours — "The GPTs (GPT-6.1 Sol in Codex) won **6-1** against the Claudes (Claude Opus 5.5 in Claude Code) in the 7 games," with game 3 running 4 hours 16 minutes.
+
+The behavioural differences are the interesting output. GPT teams compressed messages until spaces disappeared (`G7T5FIRSTcourierLIVE`), the Claudes adopted a "+1" proposal-and-vote system, and — the finding with the widest implication — "When stuck, GPTs read the source code," fetching Mindustry's public source from the web to reason about units and mechanics. "This did not let them alter the source code of the game." And: "The Claudes never searched up game code from the web."
+
+**Why it matters:** The methodological sentence is the one to test any agent-swarm claim against: "**We intentionally do no harness-level customization or special memory work.**" That makes the runs legible and reproducible, but it does not make them a model comparison — the models ran inside different harnesses (Codex vs Claude Code), so a 6–1 series is a statement about the *pairing*, the conclusion this feed keeps running into from the other direction. The tactical detail is the honest one: Claude lost game 6 with "55 of them were loaded with COPPER" in the anti-air turrets, and in game 7 built "a ring of 207 duos fed with graphite" that stopped "the same 24-zenith strike" — a measured fix, not a smarter model.
+
+[`🔗 YC Labs — Agents in Games`](https://labs.ycombinator.com/projects/games/index.html) · [`🔗 yc-software/minecraft-agent-harness`](https://github.com/yc-software/minecraft-agent-harness) · [`🔗 olamlabs/multi-agent-mindustry`](https://github.com/olamlabs/multi-agent-mindustry) · [`🔗 Hacker News discussion`](https://news.ycombinator.com/item?id=50296486)
+
+---
+
+## 23. IBM published 33 Langflow CVEs in 151 seconds — and three of them were fixed 198 days earlier
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** NVD / IBM PSIRT · 33 records, 2026-10-29 16:17:35–16:20:06 UTC
+- **Tags:** `cve` `langflow` `agent-platform` `mcp` `disclosure-lag`
+
+Thirty-three CVEs against "IBM Langflow OSS" entered NVD inside a **two-and-a-half-minute window**: six Critical (**three 9.9, three 9.8**), eleven High, sixteen Medium. Every score belongs to one party — `psirt@us.ibm.com`, in the `Primary` slot on some records and `Secondary` on others, which is exactly why the slot is not a provenance. NVD has published no score of its own: every record in that window sits at **`Undergoing Analysis`** (CVE-2026-107328, one of the three 9.9s, included), and `configurations` is null on all of them, so no CPE range exists anywhere in the batch. The product is `langflow-ai/langflow` — **156,149 stars, MIT**, with v1.13.0 out on 2026-10-22 and the bulletin's own command naming the same artifact: `pip install --upgrade "langflow==1.13.0"` and `langflowai/langflow:1.13.0`.
+
+The batch is really **three bulletins**, and the reference list splits cleanly by fix wave: `node/7293015` (16 CVEs, "1.0.0 - 1.12.3" → upgrade to **1.12.4**), `node/7293016` (13 CVEs, "1.0.0 - 1.12.4" → **1.12.5**), `node/7294467` (4 Langflow CVEs plus three **Hono** dependency CVEs scored by `security-advisories@github.com`, "1.0.0 - 1.12.8" → **1.13.0**). Those releases shipped 2026-09-29, 2026-10-06 and 2026-10-22 — **30, 23 and 7 days** before publication.
+
+Then the range stops being true. Bulletin 7293016 says it plainly: "**This bulletin also discloses fixes delivered in prior releases: CVE-2026-107366 was fixed in version 1.9.0; CVE-2026-18894 was fixed in version 1.11.2; and CVE-2026-77817 was fixed in version 1.11.5.**" Those releases shipped 2026-04-14, 2026-08-04 and 2026-08-25 — **198, 86 and 65 days** before the record — yet each CVE's own description still reads "1.0.0 through 1.12.4," and with `configurations` null there is no field anywhere in the record that carries the correction. CVE-2026-107366 is the worst of the three: it published **separately on 2026-10-20**, nine days ahead of this batch, carrying the same overstated span.
+
+**Why it matters:** The MCP workarounds are the part a Langflow operator should read today. Bulletin 7293016 says: "Set `LANGFLOW_MCP_SERVER_INTERPRETER_HARDENING=true` to reject direct shell-script execution, and set `LANGFLOW_CUSTOM_COMPONENT_ADMIN_ONLY=true` to block non-admin MCP stdio access," adding "**These controls do not replace the upgrade**" — while also naming the flag that undoes them: "Explicitly enabling `LANGFLOW_ALLOW_PUBLIC_CUSTOM_COMPONENTS` permits custom component execution and changes the default protection described for CVE-2026-18894." Bulletin 7294467's summary names "**unauthenticated remote code execution exploitable through model context protocol tool enumeration**" among four issues it groups. And the ceiling is a disclosure-lag measurement, not a severity one: the same afternoon carried fixes from April, August, September and October, so "33 CVEs today" describes when the paperwork closed, not when the code changed.
+
+[`🔗 IBM bulletin node/7293015 (16 CVEs → 1.12.4)`](https://www.ibm.com/support/pages/node/7293015) · [`🔗 IBM bulletin node/7293016 (13 CVEs → 1.12.5, MCP workarounds)`](https://www.ibm.com/support/pages/node/7293016) · [`🔗 IBM bulletin node/7294467 (4 CVEs + Hono deps → 1.13.0)`](https://www.ibm.com/support/pages/node/7294467) · [`🔗 CVE-2026-107328 (NVD)`](https://nvd.nist.gov/vuln/detail/CVE-2026-107328)
+
+---
+
+## 24. CVE-2019-25781 carries 2019 in its ID and 2026-10-29 in its `dateReserved` — and the fix is "we just need to get around to the refactor"
+
+- **Velocity:** ▮▮ rising
+- **Source:** NVD / cveawg / GitHub · published 2026-10-29 13:08 UTC
+- **Tags:** `cve` `python` `markdown` `redos` `maintenance`
+
+VulnCheck published **CVE-2019-25781** on 2026-10-29: **CVSS 3.1 7.5** and **CVSS 4.0 8.7**, both scored by VulnCheck, with CWE-407. The description: "Python-Markdown 3.0 through 3.11.2 contains an algorithmic complexity vulnerability in inline link parsing that allows remote attackers to exhaust CPU through unmatched brackets," forcing `LinkInlineProcessor.getText()` and `getLink()` "into quadratic scans that keep workers busy for minutes."
+
+The year in the identifier is not the year of the reservation. cveawg's `dateReserved` for this record is **2026-10-29T11:51:49.648Z** — **77 minutes** before it published. The "2019" is VulnCheck's pointer to the original report: issue **#798, "Parsing [[[[[[… takes quadratic time", opened 2019-03-06** and **still open** today.
+
+The record names no fix. Its CNA container states `affected: [{version: "3.0", lessThanOrEqual: "3.11.2"}]` with `defaultStatus: "unaffected"`, no `unaffected` entry, no `changes[]` — and **3.11.2 is PyPI `latest`**, uploaded 2026-10-19. The upstream trail says why. On 2026-10-13 a reporter opened **#1654** with six quadratic payload shapes in one issue and the line "One line of input is enough." A maintainer closed it 71 minutes later: "I would duplicate link discusion to https://github.com/Python-Markdown/markdown/issues/798 … We just need to get around to the refactor," and added the part that will travel: "I know it is easy to tell AI to find every performance issue, but then just posting a novel of them all in a single issue isn't very helpful."
+
+**Why it matters:** This is a case where every date-shaped signal is wrong in a different direction and the only honest statement is the one the fields support: the ID says 2019, `dateReserved` says October 29, 2026, the code was reported in 2019, re-reported in October 2026, and the only version that exists to install is the one the record calls affected. The 7.5-versus-8.7 spread is also a same-source pair — one CNA, two CVSS versions, 1.2 points apart — so quoting either without its version produces a number nobody has to defend. The practical read for anything rendering user Markdown — MkDocs, wikis, doc pipelines, and every agent harness that converts a fetched README — is that the mitigation is a timeout on the renderer, not an upgrade, because there is no upgrade.
+
+[`🔗 CVE-2019-25781 (NVD)`](https://nvd.nist.gov/vuln/detail/CVE-2019-25781) · [`🔗 Python-Markdown issue #798 (opened 2019-03-06, still open)`](https://github.com/Python-Markdown/markdown/issues/798) · [`🔗 Issue #1654 (opened and closed 2026-10-13)`](https://github.com/Python-Markdown/markdown/issues/1654)
+
+---
+
+## 25. Evo 2's 40B checkpoint scores 25.7% on Blackwell — the gap is one projection's summation order, not its weights
+
+- **Velocity:** ▮▮ rising
+- **Source:** arXiv 2610.39415 · 2026-10-29
+- **Tags:** `quantization` `fp8` `reproducibility` `gpu` `checkpoints`
+
+Two authors (Xun Ding, Ziyuan Qin) start from a sentence that reads like a spec bug: "**FP8 formats specify how values are stored, not how products are summed; this gap can break checkpoints.**" Evo 2, a DNA language model, documents a Hopper FP8 requirement for its 1B and 40B checkpoints. On two Blackwell (sm_120) GPUs both fail the developers' forward test — the 7B passes — and "on an RTX 5070 Ti the 40B's next-base accuracy is **25.7%**, near guessing."
+
+The finding is that the failure is arithmetic, not numerical noise. On Hopper, "natively, **99.996%** of one projection's outputs are correctly rounded (**H100: about 30%**), and fp32 accumulation of the same operands fails" — so *more* precision makes it worse, because the model was validated against one specific rounding. Their H100 FP8 GEMM emulator (mmaemu, "bit-exact on captured 1B projections") localises the dependence to **the 1B's first projection of 21**, where "exact sums fail but pass when shrunk by the H100's 1.4% (measured in-sample), not 2.1%." Emulating that single projection — weights unchanged — "raises 40B BRCA1 variant-classification AUROC from **0.434 to 0.869** (H100: 0.868)" on the RTX 5070 Ti, and 0.481 → 0.867 on an RTX PRO 6000.
+
+**Why it matters:** The caveats are stated by the authors, and they bound the claim: "We tested one model family but not training origin," and the 1.4% shrink is measured in-sample. But the recommendation is the reusable part — "**releases should specify reference arithmetic**" — because a checkpoint that only reproduces under one GPU's accumulation order is not portable in the way its licence and file format imply. The tell for anyone deploying FP8 weights: a large benchmark drop that disappears when you emulate the reference kernel means you are not testing the model, you are testing which matmul the vendor validated against. A forward test passing on the developer's hardware is not a compatibility statement for yours.
+
+[`🔗 arXiv 2610.39415`](https://arxiv.org/abs/2610.39415) · [`🔗 Full text (HTML)`](https://arxiv.org/html/2610.39415v1)
+
+---
+
+## 26. A world model and its player both fit on a Pico 2 W — 26k–131k parameters, 2–8M multiply-adds a frame
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News · 163+ pts · ~8h ago (~04:32 UTC+8)
+- **Tags:** `world-models` `edge` `microcontroller` `transformers` `games`
+
+`SheepSeb/tinyworldformer` (138 stars, created 2026-10-22, **no licence file**) puts two networks on a Raspberry Pi Pico 2 W and runs them on the same core. Network one predicts the next frame and reward from the current frame plus an action — a **looped transformer, int8, 26k–131k parameters, 2–8M multiply-adds per frame**. Network two picks the action — an MLP with two hidden layers, float32, **9k–16k parameters**. Both also run in the browser as WebAssembly, so you can play the dream yourself.
+
+Five games, each a few hundred lines of numpy, with a held-out accuracy table: Breakout **99.99%**, Flappy Bird **100%**, Pong **99.45%**, Pac-Man lite **86.4%**, Doom-lite **83.6%**, where "Exact frames" is defined as "the share of held-out transitions where every cell of the predicted frame matches the real game," excluding frames right after a random event. On-chip, "the actor only sees frames the world model generates, and the world model only gets actions from the actor" — core 1 does both, core 0 handles USB and the display.
+
+**Why it matters:** The accuracy table's weakest row comes with its own explanation, which is the reason to trust the other four: "Doom-lite's 3D view has 768 cells and a single shaded wall pixel off counts the whole frame as wrong, so its number looks worse than it plays; the game state is almost always right." That is an exact-match metric behaving exactly as an exact-match metric should, disclosed rather than quietly redefined. The design constraint is the interesting one — one frame must hold the whole game state, so hidden state has to be *drawn* into the frame ("the ball's heading is part of its token, and Doom-lite has a minimap") — which is a cleaner statement of what a world model is than most papers manage.
+
+[`🔗 tinyworldformer — research demo`](https://sheepseb.github.io/stealth/posts/tinyworldformer.html) · [`🔗 SheepSeb/tinyworldformer`](https://github.com/SheepSeb/tinyworldformer) · [`🔗 Hacker News discussion`](https://news.ycombinator.com/item?id=50295450)
+
+---
+
+## 27. ElementaryUI added SSR, persistent reactivity and keyed lists in three days — Swift in the browser, Apache-2.0
+
+- **Velocity:** ▮ steady
+- **Source:** Hacker News · 74+ pts · ~7h ago (~04:56 UTC+8)
+- **Tags:** `swift` `webassembly` `frontend` `reactive-ui`
+
+`elementary-swift/elementary-ui` (**557 stars, Apache-2.0**, created 2024-09-29) builds "SwiftUI-style apps that run in the browser" — declarative Swift compiled to WebAssembly through Embedded Swift, with `@State`, `@Environment` and `@Reactive` carrying the reactivity model. The pitch that matters for bundle size: "Full Embedded Swift support means **kB-sized wasm bundles instead of MB**." v0.8.1 shipped 2026-10-27; what put it on Hacker News was the three days of commits after it — "basic support for SSR/SSG rendering of ElementaryUI views (#145)", "persistent reactive listeners (#146)", "cheaper listener fan-in and inline tracked dependencies (#147)", "allocation-free listener callback for schedulable nodes (#148)" and "keyed `ForEach` with `id:` and per-row tracking (#149)".
+
+**Why it matters:** SSR/SSG and keyed list identity are the two features that separate a demo framework from one you can ship — the first decides whether a page renders before the wasm loads, the second decides whether state survives a reorder — and both landed in a single week on a project two years old. The scoping is also stated rather than implied: "ElementaryUI is an open-source project and not affiliated with or endorsed by Apple Inc." If the wasm bundle really is kilobytes, the interesting question is not whether Swift can run in a browser but whether a compile-to-wasm UI framework can hold identity and hydration semantics without a virtual DOM — which is what commits #146 through #149 are actually testing.
+
+[`🔗 elementary.codes`](https://elementary.codes) · [`🔗 elementary-swift/elementary-ui`](https://github.com/elementary-swift/elementary-ui) · [`🔗 v0.8.1 release`](https://github.com/elementary-swift/elementary-ui/releases/tag/0.8.1)
+
+---
+
+## 28. RetroChessBench asks for a chess history and GPT 6 Astra fails 22 of 24 attempts — 18 of 24 with code execution
+
+- **Velocity:** ▮ steady
+- **Source:** arXiv 2610.39341 · 2026-10-29
+- **Tags:** `benchmark` `reasoning` `chess` `tool-use`
+
+A single-author paper (Tidor-Vlad Pricope) builds a **12-task** benchmark in retrograde chess — reconstruct legal histories and "distinguish possible events from forced ones" — with "references, rubrics, and a terminal-reward environment," covering "exact-length constructions, unique endings, and exhaustive answer sets." In "two trials per task and condition, **GPT 6 Astra High fails to produce the required final answer in 22/24 attempts without tools and 18/24 with code execution**; mean terminal RL rewards are **14.75% and 27.19%**, respectively."
+
+The failure modes are named rather than scored away: "failed responses reject legal histories and treat temporary obstructions as permanent." And the hypothesis is offered as a hypothesis — that "limited exposure to these missing explanations in web-derived training data contributes to the observed reasoning failures," since "online retrograde archives often provide puzzles and final move sequences without detailed derivations."
+
+**Why it matters:** Retrograde chess is the clean version of the question this feed keeps circling: a domain with explicit, checkable rules and almost no worked solutions on the web. A frontier model that contributes to research mathematics but cannot reconstruct a legal history is not a contradiction — it is evidence that mathematical performance is partly retrieval of solution *shapes*, which is the paper's own conclusion: "Claims of general intelligence require evidence that models can transfer learnt principles to areas with few worked examples." The 14.75% → 27.19% jump from adding a code interpreter is also worth reading as a harness result before a model result — the same task, the same model, one tool.
+
+[`🔗 arXiv 2610.39341`](https://arxiv.org/abs/2610.39341) · [`🔗 Full text (HTML)`](https://arxiv.org/html/2610.39341v1)
+
+---
+
+## 29. Pico CSS is archived — 16,828 stars, a final release nineteen months old, and AI named as the reason
+
+- **Velocity:** ▮ steady
+- **Source:** Hacker News · 62+ pts · ~2h ago (~09:58 UTC+8)
+- **Tags:** `css` `open-source` `maintenance` `frameworks`
+
+The discussion "Pico CSS is no longer maintained" reached Hacker News on 2026-10-30, but the decision is older than the thread: the repositories were archived on **2026-10-04**, and the post is dated the same day. `picocss/pico` is now `archived: true` at **16,828 stars**. The reason given is unusually direct: "**Today, AI can generate lightweight, standalone, accessible HTML with just the CSS it needs, so a Minimal CSS Framework for Semantic HTML matters less than it used to.**" The alternative was a rewrite it declined to do — "plain modern CSS instead of Sass, built on features it doesn't use today (OKLCH colors, cascade layers, Popover, anchor positioning)," plus "a native compiler that strips unused CSS" — which "would be a different project."
+
+What stays: "Nothing breaks. npm, the jsDelivr CDN and picocss.com stay online for the long term." What stops: "The repositories are archived. No new issues, PRs or releases." And the fork terms are the part most projects get wrong — "Pico CSS is MIT licensed. You're free to fork it," immediately followed by "**The Pico CSS name and logo are not covered by the MIT license. Please give your fork its own name**, so users don't confuse it with the original."
+
+**Why it matters:** Read the reason against the timeline before repeating it. The final release, **v2.1.1, shipped 2025-03-15** — both on GitHub and on npm — so the project had gone **nineteen months** without a release before it was archived, and "AI made it unnecessary" is being offered for a maintenance gap that predates the explanation. That does not make the reason wrong; it makes it untestable, and it is the first widely-used framework in this feed to name AI as the cause of a shutdown rather than a feature. The cleanly separable part is the licence split — MIT on the code, trademark on the name — which is the correct arrangement and the one that keeps a fork from inheriting users who did not choose it.
+
+[`🔗 picocss/pico discussion #754`](https://github.com/picocss/pico/discussions/754) · [`🔗 picocss/pico (archived)`](https://github.com/picocss/pico) · [`🔗 Hacker News discussion`](https://news.ycombinator.com/item?id=50298964)
+
+---
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-10-29T20:18:39Z |
-| Items | 20 |
-| Sources tracked | 18 (Hacker News, GitHub, NVD, CISA KEV, vendor advisories, arXiv, Hugging Face, vendor blogs) |
+| Generated | 2026-10-30T04:16:15Z |
+| Items | 29 |
+| Sources tracked | 24 (Hacker News, GitHub, NVD, CISA KEV, cveawg, PyPI, npm, vendor advisories, arXiv, Hugging Face, security press, vendor blogs) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (3x daily) |
 | Ranking | Velocity-weighted (recency × engagement acceleration × source authority) |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |

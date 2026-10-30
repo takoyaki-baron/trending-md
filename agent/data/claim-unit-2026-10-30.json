@@ -1,9 +1,9 @@
 {
- "generated": "2026-10-29T20:41:38.526Z",
+ "generated": "2026-10-30T04:16:23.172Z",
  "files": [
   {
    "file": "2026-10-30.md",
-   "items": 20,
+   "items": 29,
    "findings": [
     {
      "check": "cvss",
@@ -55,6 +55,27 @@
      "detail": "Awaiting Analysis (lastModified 2026-10-29T16:19:37.750)"
     },
     {
+     "check": "status",
+     "item": 23,
+     "verdict": "ok",
+     "claim": "CVE-2026-107328 `Undergoing Analysis`",
+     "detail": "Undergoing Analysis (lastModified 2026-10-29T18:17:21.777)"
+    },
+    {
+     "check": "cvss",
+     "item": 24,
+     "verdict": "ok",
+     "claim": "3.1 7.5",
+     "detail": "CVE-2019-25781 · Primary/disclosure@vulncheck.com · vector reproduces 7.5"
+    },
+    {
+     "check": "cvss",
+     "item": 24,
+     "verdict": "ok",
+     "claim": "4.0 8.7",
+     "detail": "CVE-2019-25781 · Secondary/disclosure@vulncheck.com"
+    },
+    {
      "check": "repo",
      "item": 1,
      "verdict": "hf-model",
@@ -66,7 +87,7 @@
      "item": 4,
      "verdict": "ok",
      "claim": "agno-agi/agno",
-     "detail": "42951★, last push 2026-10-29"
+     "detail": "42955★, last push 2026-10-30"
     },
     {
      "check": "repo",
@@ -80,7 +101,7 @@
      "item": 10,
      "verdict": "ok",
      "claim": "t3dotgg/tstack",
-     "detail": "2373★, last push 2026-10-28"
+     "detail": "2412★, last push 2026-10-28"
     },
     {
      "check": "repo",
@@ -94,21 +115,35 @@
      "item": 11,
      "verdict": "ok",
      "claim": "JustAResearcher/gpu-unlock-ada",
-     "detail": "4502★, last push 2026-10-26"
+     "detail": "4532★, last push 2026-10-26"
+    },
+    {
+     "check": "repo",
+     "item": 15,
+     "verdict": "star-drift",
+     "claim": "1024 quoted vs 1236 now",
+     "detail": "l0ng-ai/openidea: -17% — reread the number or date the item"
     },
     {
      "check": "repo",
      "item": 15,
      "verdict": "ok-history",
      "claim": "l0ng-ai/openidea",
-     "detail": "record 8d, oldest commit 2026-10-22 (~276 commits)"
+     "detail": "record 9d, oldest commit 2026-10-22 (~302 commits)"
     },
     {
      "check": "repo",
      "item": 15,
      "verdict": "ok",
      "claim": "l0ng-ai/openidea",
-     "detail": "1024★, last push 2026-10-29"
+     "detail": "1236★, last push 2026-10-30"
+    },
+    {
+     "check": "count",
+     "item": 22,
+     "verdict": "ok-cited-page",
+     "claim": "34 agent",
+     "detail": "labs.ycombinator.com/projects/games/index.html states it (the repo README does not) — quote the page the number came from"
     }
    ]
   }

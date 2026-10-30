@@ -1,8 +1,8 @@
 ---
 date: 2026-10-30
-updated: 2026-10-29T20:18:39Z
+updated: 2026-10-30T04:16:15Z
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 18
+sources: 24
 license: CC-BY-4.0
 ---
 
@@ -328,13 +328,161 @@ Martin Fowler 的 bliki 文章主张，LLM 生成的散文会触发人的反应 
 
 ---
 
+## 21. Binance 称其热钱包流出 63 亿美元 — 而它自己给的说法是一台开发运维笔记本，不是泄露的私钥
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Hacker News · 913+ pts · ~6h ago (~05:38 UTC+8)
+- **Tags:** `binance` `exchange` `incident` `custody` `ethereum`
+
+Binance 估算损失为"**around $6.3 billion in stolen assets**"，并称"**Some $3 billion of assets were frozen**"，其中包含"$2.3 billion in USDT and USDC stablecoins altogether"。各家数字并不一致，而且它们量的不是同一件事：Chainalysis 说"roughly **$5.9 billion** at the time of the theft"，Arkham 报"more than **$5.7 billion** in various cryptos"，但描述的是黑客钱包"at one point"的持仓 — 那是快照，不是损失；Coinbase 的 Conor Grogan 给的是"up to **$5.8 billion**"。Tether 冻结了"over $1.57 billion in USDT"，Circle 冻结了"over $800 million in USDC"。
+
+机制才是争议所在，而 Binance 的版本并非最先流传的链上叙事。其"initial investigation"称该事件"may involve a **compromised DevOps engineer's laptop**"，攻击者借此"gain access to a service container and submit unauthorized withdrawal transactions" — 紧接着的一句重新定义了这一整类缺陷："**We have found no evidence of any wallet private key leak.**"而当天早些时候，SecurityAffairs 仍把悬而未决的问题列为"whether credentials or signing mechanisms were compromised"，并提醒"Large transfers alone don't prove a hack."
+
+**Why it matters:** 会有三个数字被当作一个来引用 — Binance 自己的影响估算、第三方在盗取时点的估值、Arkham 的钱包快照 — 所以第一件要修的是单位。第二件是机制。一家交易所通过*从服务容器提交的提现交易*流失 63 亿美元，意味着这是签名路径与私钥互为不同对象的架构，失效的控制点在容器上，不在 HSM 上。CoinDesk 还保留了它标题丢掉的限定："would be the largest ever crypto attack" 是条件句，另有"The transfers alone, however, don't establish whether the funds have become impossible to freeze or recover."市场面：比特币"dropped 4.8% to below $77,000"，以太坊 −5.7%，BNB −8%，AAVE −11%。
+
+[`🔗 CoinDesk — Binance loses $5.7 billion in largest crypto hack to date`](https://www.coindesk.com/business/2026/10/29/potential-multi-billion-binance-hack-hitting-crypto-markets) · [`🔗 Security Affairs — Binance investigates suspicious transfers worth up to $5.8 billion`](https://securityaffairs.com/202089/hacking/binance-investigates-suspicious-crypto-transfers-worth-up-to-5-8-billion.html) · [`🔗 Hacker News 讨论`](https://news.ycombinator.com/item?id=50296470)
+
+---
+
+## 22. YC 在 Minecraft 和 Mindustry 里跑智能体集群 — GPT 以 6 比 1 获胜，还去读了游戏源码
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Hacker News · 215+ pts · ~6h ago (~05:40 UTC+8)
+- **Tags:** `multi-agent` `agent-harness` `benchmark` `minecraft` `mindustry`
+
+YC Labs 与 Olam Labs 做了三个多智能体实验，并把背后的 harness 全部开源：`yc-software/minecraft-agent-harness`（MIT，创建于 2026-10-29，24 星）、`olamlabs/multi-agent-mindustry`（GPL-3.0）与 `olamlabs/harbor-multiagent`（Apache-2.0，是 Terminal-Bench 背后 Harbor 框架的分支，文中称它"runs multiple agents in any environment"）。
+
+数字很具体。**Civ50**：50 个 GPT-6.1 Sol 智能体，3 小时，唯一目标"Build a thriving civilization"，约 **5,900 条消息**，长出了配给台账和一套伪政府。层级来自智能体目录的顺序，所以"Ada, who was first, became the de facto leader"。总共 34 次智能体死亡，**首夜 22 次** — 而页面随后对照自己的图表做了更正："The first-night count in the text is the 22 deaths before minute 20. Two of them fall outside the shaded band."**Bed Wars**：九局各 45 分钟，10 个 Claude Opus 5.5 对 10 个 GPT-6.1 Sol —"GPTs won our series **6–3**."**Mindustry**：7 局、约 9.5 小时 —"The GPTs (GPT-6.1 Sol in Codex) won **6-1** against the Claudes (Claude Opus 5.5 in Claude Code) in the 7 games"，其中第 3 局打了 4 小时 16 分。
+
+行为差异才是真正的产出。GPT 阵营把消息压缩到空格消失（`G7T5FIRSTcourierLIVE`），Claude 阵营演化出"+1"式提案投票；而最有普遍含义的一条是"When stuck, GPTs read the source code" — 它们会从网上抓 Mindustry 的公开源码，去理解单位与机制。"This did not let them alter the source code of the game."以及："The Claudes never searched up game code from the web."
+
+**Why it matters:** 方法论那句才是检验任何"智能体集群"结论的尺子："**We intentionally do no harness-level customization or special memory work.**"这让实验可读、可复现，却并不构成模型对比 — 两个模型跑在不同的 harness 里（Codex 对 Claude Code），所以 6 比 1 是关于*配对*的陈述，正是本刊反复从另一个方向撞到的结论。战术细节则很诚实：Claude 在第 6 局输掉，是因为防空炮塔里"55 of them were loaded with COPPER"；第 7 局它们建了"a ring of 207 duos fed with graphite"，挡住了"the same 24-zenith strike" — 靠的是测量出来的修补，不是更聪明的模型。
+
+[`🔗 YC Labs — Agents in Games`](https://labs.ycombinator.com/projects/games/index.html) · [`🔗 yc-software/minecraft-agent-harness`](https://github.com/yc-software/minecraft-agent-harness) · [`🔗 olamlabs/multi-agent-mindustry`](https://github.com/olamlabs/multi-agent-mindustry) · [`🔗 Hacker News 讨论`](https://news.ycombinator.com/item?id=50296486)
+
+---
+
+## 23. IBM 在 151 秒里发布了 33 个 Langflow CVE — 其中三个早在 198 天前就修好了
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** NVD / IBM PSIRT · 33 records, 2026-10-29 16:17:35–16:20:06 UTC
+- **Tags:** `cve` `langflow` `agent-platform` `mcp` `disclosure-lag`
+
+针对"IBM Langflow OSS"的 33 个 CVE 在**两分半钟的窗口**内进入 NVD：6 个严重（**三个 9.9、三个 9.8**）、11 个高危、16 个中危。所有分数都出自同一方 — `psirt@us.ibm.com`，在部分记录里落在 `Primary` 槽、在另一部分落在 `Secondary`，这恰恰说明槽位不是来源。NVD 没有发布自己的分数：该窗口内每一条记录都停在 **`Undergoing Analysis`**（三个 9.9 之一的 CVE-2026-107328 亦然），且 `configurations` 全部为 null，整批没有任何 CPE 范围。产品是 `langflow-ai/langflow` — **156,149 星、MIT**，v1.13.0 于 2026-10-22 发布，而公告里自己的命令指向同一个产物：`pip install --upgrade "langflow==1.13.0"` 与 `langflowai/langflow:1.13.0`。
+
+这批其实是**三份公告**，引用列表按修复波次干净地分开：`node/7293015`（16 个 CVE，"1.0.0 - 1.12.3" → 升级到 **1.12.4**）、`node/7293016`（13 个 CVE，"1.0.0 - 1.12.4" → **1.12.5**）、`node/7294467`（4 个 Langflow CVE 外加三个由 `security-advisories@github.com` 评分的 **Hono** 依赖 CVE，"1.0.0 - 1.12.8" → **1.13.0**）。这些版本分别发布于 2026-09-29、2026-10-06、2026-10-22 — 比披露早 **30、23、7 天**。
+
+然后范围开始不成立。公告 7293016 说得很直白："**This bulletin also discloses fixes delivered in prior releases: CVE-2026-107366 was fixed in version 1.9.0; CVE-2026-18894 was fixed in version 1.11.2; and CVE-2026-77817 was fixed in version 1.11.5.**"对应版本发布于 2026-04-14、2026-08-04、2026-08-25 — 比记录早 **198、86、65 天** — 但每一个 CVE 自己的描述仍写着"1.0.0 through 1.12.4"，而 `configurations` 为 null，记录里没有任何字段承载这个更正。CVE-2026-107366 三者中最糟：它**单独在 2026-10-20 发布**，比这批早九天，带着同样被夸大的区间。
+
+**Why it matters:** MCP 相关的缓解措施是 Langflow 运维者今天最该读的部分。公告 7293016 写道："Set `LANGFLOW_MCP_SERVER_INTERPRETER_HARDENING=true` to reject direct shell-script execution, and set `LANGFLOW_CUSTOM_COMPONENT_ADMIN_ONLY=true` to block non-admin MCP stdio access"，同时补上一句"**These controls do not replace the upgrade**"，并点名会把这些防护推翻的开关："Explicitly enabling `LANGFLOW_ALLOW_PUBLIC_CUSTOM_COMPONENTS` permits custom component execution and changes the default protection described for CVE-2026-18894."公告 7294467 的摘要把"**unauthenticated remote code execution exploitable through model context protocol tool enumeration**"列为它归并的四个问题之一。而上限是披露滞后的测量，不是严重度的测量：同一个下午发的是四月、八月、九月、十月的修复，所以"今天 33 个 CVE"描述的是文书何时闭合，不是代码何时改变。
+
+[`🔗 IBM 公告 node/7293015（16 个 CVE → 1.12.4）`](https://www.ibm.com/support/pages/node/7293015) · [`🔗 IBM 公告 node/7293016（13 个 CVE → 1.12.5，MCP 缓解措施）`](https://www.ibm.com/support/pages/node/7293016) · [`🔗 IBM 公告 node/7294467（4 个 CVE + Hono 依赖 → 1.13.0）`](https://www.ibm.com/support/pages/node/7294467) · [`🔗 CVE-2026-107328（NVD）`](https://nvd.nist.gov/vuln/detail/CVE-2026-107328)
+
+---
+
+## 24. CVE-2019-25781 的编号里写着 2019，`dateReserved` 里写着 2026-10-29 — 而修复方案是"我们总有一天会重构"
+
+- **Velocity:** ▮▮ rising
+- **Source:** NVD / cveawg / GitHub · published 2026-10-29 13:08 UTC
+- **Tags:** `cve` `python` `markdown` `redos` `maintenance`
+
+VulnCheck 于 2026-10-29 发布 **CVE-2019-25781**：**CVSS 3.1 7.5** 与 **CVSS 4.0 8.7**，两个分数都由 VulnCheck 给出，CWE-407。描述为："Python-Markdown 3.0 through 3.11.2 contains an algorithmic complexity vulnerability in inline link parsing that allows remote attackers to exhaust CPU through unmatched brackets"，把 `LinkInlineProcessor.getText()` 与 `getLink()` 逼进"quadratic scans that keep workers busy for minutes"。
+
+编号里的年份不是预留年份。cveawg 为该记录给出的 `dateReserved` 是 **2026-10-29T11:51:49.648Z** — 比发布早 **77 分钟**。那个 2019 是 VulnCheck 指向原始报告的方式：issue **#798，"Parsing [[[[[[… takes quadratic time"，开启于 2019-03-06**，至今**仍然开着**。
+
+该记录没有点名任何修复版本。它的 CNA 容器写着 `affected: [{version: "3.0", lessThanOrEqual: "3.11.2"}]`，`defaultStatus: "unaffected"`，没有 `unaffected` 条目、没有 `changes[]` — 而 **3.11.2 就是 PyPI 的 `latest`**，上传于 2026-10-19。上游的轨迹说明了原因。2026-10-13，一位报告者开了 **#1654**，把一个 issue 里塞进六种二次复杂度载荷，并写下"One line of input is enough."一位维护者在 71 分钟后关掉了它："I would duplicate link discusion to https://github.com/Python-Markdown/markdown/issues/798 … We just need to get around to the refactor"，还加了一句会流传更广的话："I know it is easy to tell AI to find every performance issue, but then just posting a novel of them all in a single issue isn't very helpful."
+
+**Why it matters:** 这是每一个日期形状的信号都用不同方式误导的案件，唯一诚实的说法只能由字段支撑：编号说 2019，`dateReserved` 说 2026 年 10 月 29 日，代码在 2019 年被报告过、在 2026 年 10 月被再次报告，而唯一能安装的版本正是记录称为受影响的版本。7.5 与 8.7 的差距同样是一对同源数字 — 同一个 CNA、两个 CVSS 版本、相差 1.2 分 — 所以不带版本地引用任何一个，都会得出一个没人需要为之负责的数字。对任何渲染用户 Markdown 的东西 — MkDocs、wiki、文档流水线，以及每一个会把抓来的 README 转成文本的 agent harness — 实际结论是：缓解手段是给渲染器加超时，不是升级，因为没有升级可升。
+
+[`🔗 CVE-2019-25781（NVD）`](https://nvd.nist.gov/vuln/detail/CVE-2019-25781) · [`🔗 Python-Markdown issue #798（2019-03-06 开启，仍未关闭）`](https://github.com/Python-Markdown/markdown/issues/798) · [`🔗 Issue #1654（2026-10-13 开启并关闭）`](https://github.com/Python-Markdown/markdown/issues/1654)
+
+---
+
+## 25. Evo 2 的 40B 检查点在 Blackwell 上只有 25.7% — 缺口是一个投影的求和次序，不是权重
+
+- **Velocity:** ▮▮ rising
+- **Source:** arXiv 2610.39415 · 2026-10-29
+- **Tags:** `quantization` `fp8` `reproducibility` `gpu` `checkpoints`
+
+两位作者（Xun Ding、Ziyuan Qin）从一句读起来像规格缺陷的话出发："**FP8 formats specify how values are stored, not how products are summed; this gap can break checkpoints.**"DNA 语言模型 Evo 2 为其 1B 与 40B 检查点明确要求 Hopper FP8。在两块 Blackwell（sm_120）GPU 上，两者都没通过开发者自己的前向测试 — 7B 通过 — 而"on an RTX 5070 Ti the 40B's next-base accuracy is **25.7%**, near guessing."
+
+结论是：这个失败来自算术，而不是数值噪声。在 Hopper 上，"natively, **99.996%** of one projection's outputs are correctly rounded (**H100: about 30%**), and fp32 accumulation of the same operands fails" — 也就是说*更高*的精度反而更糟，因为模型是对着某一种特定舍入验证过的。他们的 H100 FP8 GEMM 模拟器（mmaemu，"bit-exact on captured 1B projections"）把依赖定位到 **1B 的 21 个投影中的第一个**：在那里"exact sums fail but pass when shrunk by the H100's 1.4% (measured in-sample), not 2.1%."只模拟这一个投影、权重不动，就让"40B BRCA1 variant-classification AUROC from **0.434 to 0.869** (H100: 0.868)"在 RTX 5070 Ti 上成立，在 RTX PRO 6000 上从 0.481 升到 0.867。
+
+**Why it matters:** 限定由作者自己给出，并框住了结论的边界："We tested one model family but not training origin"，而 1.4% 的缩放是样本内测得的。但可复用的部分是这个建议 —"**releases should specify reference arithmetic**" — 因为一个只在某块 GPU 的累加次序下才复现的检查点，并不具备其许可证与文件格式所暗示的可移植性。给任何部署 FP8 权重的人的判断线索是：一个在模拟参考内核后消失的大幅基准下跌，说明你测的不是模型，而是厂商对着验证的那次 matmul。前向测试在开发者的硬件上通过，并不是对你这块硬件的兼容性陈述。
+
+[`🔗 arXiv 2610.39415`](https://arxiv.org/abs/2610.39415) · [`🔗 全文（HTML）`](https://arxiv.org/html/2610.39415v1)
+
+---
+
+## 26. 一个世界模型和它的玩家能一起塞进 Pico 2 W — 26k–131k 参数，每帧 2–8M 次乘加
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News · 163+ pts · ~8h ago (~04:32 UTC+8)
+- **Tags:** `world-models` `edge` `microcontroller` `transformers` `games`
+
+`SheepSeb/tinyworldformer`（138 星，创建于 2026-10-22，**没有许可证文件**）把两个网络放进一块 Raspberry Pi Pico 2 W，并跑在同一个核上。网络一从当前帧加动作预测下一帧与奖励 — **looped transformer，int8，26k–131k 参数，每帧 2–8M 次乘加**。网络二选择动作 — 两层隐藏层的 MLP，float32，**9k–16k 参数**。两者也在浏览器里以 WebAssembly 运行，所以你可以亲手玩这个梦。
+
+五个游戏，每个都是几百行 numpy，附一张留出集精度表：Breakout **99.99%**、Flappy Bird **100%**、Pong **99.45%**、Pac-Man lite **86.4%**、Doom-lite **83.6%**，其中"Exact frames"被定义为"the share of held-out transitions where every cell of the predicted frame matches the real game"，并排除随机事件之后的帧。在芯片上，"the actor only sees frames the world model generates, and the world model only gets actions from the actor" — 核 1 负责两者，核 0 负责 USB 与显示。
+
+**Why it matters:** 精度表最弱的那一行自带解释，而正是这一点让人相信另外四行："Doom-lite's 3D view has 768 cells and a single shaded wall pixel off counts the whole frame as wrong, so its number looks worse than it plays; the game state is almost always right."这是精确匹配指标在做它该做的事，而且被披露出来，而不是被悄悄重定义。设计约束才是有意思的部分 — 一帧必须承载整个游戏状态，于是隐藏状态必须被*画进*帧里（"the ball's heading is part of its token, and Doom-lite has a minimap"）— 这比大多数论文都更干净地说明了世界模型究竟是什么。
+
+[`🔗 tinyworldformer — research demo`](https://sheepseb.github.io/stealth/posts/tinyworldformer.html) · [`🔗 SheepSeb/tinyworldformer`](https://github.com/SheepSeb/tinyworldformer) · [`🔗 Hacker News 讨论`](https://news.ycombinator.com/item?id=50295450)
+
+---
+
+## 27. ElementaryUI 三天内补齐 SSR、持久化响应式与 keyed 列表 — 浏览器里的 Swift，Apache-2.0
+
+- **Velocity:** ▮ steady
+- **Source:** Hacker News · 74+ pts · ~7h ago (~04:56 UTC+8)
+- **Tags:** `swift` `webassembly` `frontend` `reactive-ui`
+
+`elementary-swift/elementary-ui`（**557 星、Apache-2.0**，创建于 2024-09-29）构建"SwiftUI-style apps that run in the browser" — 用 Embedded Swift 把声明式 Swift 编译成 WebAssembly，由 `@State`、`@Environment` 与 `@Reactive` 承载响应式模型。对体积最关键的那句是："Full Embedded Swift support means **kB-sized wasm bundles instead of MB**."v0.8.1 于 2026-10-27 发布；把它送上 Hacker News 的是之后三天的提交 —"basic support for SSR/SSG rendering of ElementaryUI views (#145)"、"persistent reactive listeners (#146)"、"cheaper listener fan-in and inline tracked dependencies (#147)"、"allocation-free listener callback for schedulable nodes (#148)"，以及"keyed `ForEach` with `id:` and per-row tracking (#149)"。
+
+**Why it matters:** SSR/SSG 与 keyed 列表身份是把演示框架和能上线的框架分开的两个特性 — 前者决定页面能否在 wasm 加载前渲染，后者决定状态能否在重排后存活 — 而两者在一个两周岁的项目上一周之内落地。边界也被写明而不是暗示："ElementaryUI is an open-source project and not affiliated with or endorsed by Apple Inc."如果 wasm 包真的只有几 KB，那么有意思的问题就不是 Swift 能否在浏览器里跑，而是一个编译到 wasm 的 UI 框架能否在没有虚拟 DOM 的情况下保住身份与 hydration 语义 — 而那正是 #146 到 #149 实际在测的东西。
+
+[`🔗 elementary.codes`](https://elementary.codes) · [`🔗 elementary-swift/elementary-ui`](https://github.com/elementary-swift/elementary-ui) · [`🔗 v0.8.1 发布`](https://github.com/elementary-swift/elementary-ui/releases/tag/0.8.1)
+
+---
+
+## 28. RetroChessBench 要求还原一盘棋的历史，GPT 6 Astra 在 24 次里失败 22 次 — 给了代码执行仍是 18 次
+
+- **Velocity:** ▮ steady
+- **Source:** arXiv 2610.39341 · 2026-10-29
+- **Tags:** `benchmark` `reasoning` `chess` `tool-use`
+
+一篇单作者论文（Tidor-Vlad Pricope）在逆向国际象棋里做了一个 **12 题**基准 — 重建合法历史并"distinguish possible events from forced ones" — 带"references, rubrics, and a terminal-reward environment"，覆盖"exact-length constructions, unique endings, and exhaustive answer sets"。在"two trials per task and condition, **GPT 6 Astra High fails to produce the required final answer in 22/24 attempts without tools and 18/24 with code execution**; mean terminal RL rewards are **14.75% and 27.19%**, respectively."
+
+失败模式被点名而不是被评分抹掉："failed responses reject legal histories and treat temporary obstructions as permanent."而假设被当作假设提出 — 认为"limited exposure to these missing explanations in web-derived training data contributes to the observed reasoning failures"，因为"online retrograde archives often provide puzzles and final move sequences without detailed derivations."
+
+**Why it matters:** 逆向国际象棋是本刊反复绕回的那个问题的干净版本：一个有明确、可校验规则、而网上几乎没有解法的领域。一个能对数学研究有贡献、却还原不出一段合法历史的模型并不自相矛盾 — 这是证据，说明数学表现部分是对解法*形状*的检索，也正是论文自己的结论："Claims of general intelligence require evidence that models can transfer learnt principles to areas with few worked examples."从 14.75% 到 27.19% 这一步，也该在读成模型结论之前先读成 harness 结论 — 同样的题、同样的模型，只多了一个工具。
+
+[`🔗 arXiv 2610.39341`](https://arxiv.org/abs/2610.39341) · [`🔗 全文（HTML）`](https://arxiv.org/html/2610.39341v1)
+
+---
+
+## 29. Pico CSS 已归档 — 16,828 星、最终版本停在十九个月前，给出的理由是 AI
+
+- **Velocity:** ▮ steady
+- **Source:** Hacker News · 62+ pts · ~2h ago (~09:58 UTC+8)
+- **Tags:** `css` `open-source` `maintenance` `frameworks`
+
+"Pico CSS is no longer maintained"这条讨论在 2026-10-30 登上 Hacker News，但决定比帖子更早：仓库于 **2026-10-04** 被归档，帖子也是同一天写的。`picocss/pico` 现在是 `archived: true`，**16,828 星**。给出的理由异常直白："**Today, AI can generate lightweight, standalone, accessible HTML with just the CSS it needs, so a Minimal CSS Framework for Semantic HTML matters less than it used to.**"另一条路是重写，而它选择了不做 —"plain modern CSS instead of Sass, built on features it doesn't use today (OKLCH colors, cascade layers, Popover, anchor positioning)"，加上"a native compiler that strips unused CSS" — 那"would be a different project."
+
+留下的："Nothing breaks. npm, the jsDelivr CDN and picocss.com stay online for the long term."停下的："The repositories are archived. No new issues, PRs or releases."而分叉条款是大多数项目会搞错的那部分 —"Pico CSS is MIT licensed. You're free to fork it,"紧接着"**The Pico CSS name and logo are not covered by the MIT license. Please give your fork its own name**, so users don't confuse it with the original."
+
+**Why it matters:** 在转述这个理由之前，先把它和时间线对照读。最终版本 **v2.1.1 发布于 2025-03-15** — GitHub 与 npm 上都是 — 所以项目在被归档之前已经**十九个月**没有发布过任何版本，而"AI 让它不再必要"这个解释，是针对一个早于该解释的维护空档提出的。这并不说明理由错了，只说明它无法被检验；而它是本刊记录中第一个把 AI 说成关停原因（而非功能）的广泛使用的框架。真正可以干净切分的是许可证的拆分 — 代码用 MIT、名字用商标 — 这是正确的安排，也是唯一能避免分叉继承那些并未选择它的用户的做法。
+
+[`🔗 picocss/pico discussion #754`](https://github.com/picocss/pico/discussions/754) · [`🔗 picocss/pico（已归档）`](https://github.com/picocss/pico) · [`🔗 Hacker News 讨论`](https://news.ycombinator.com/item?id=50298964)
+
+---
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-10-29T20:18:39Z |
-| Items | 20 |
-| Sources tracked | 18（Hacker News、GitHub、NVD、CISA KEV、厂商公告、arXiv、Hugging Face、厂商博客） |
+| Generated | 2026-10-30T04:16:15Z |
+| Items | 29 |
+| Sources tracked | 24（Hacker News、GitHub、NVD、CISA KEV、cveawg、PyPI、npm、厂商公告、arXiv、Hugging Face、安全媒体、厂商博客） |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8（每日 3 次） |
 | Ranking | 速度加权（时效 × 互动加速度 × 来源权威度） |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |
