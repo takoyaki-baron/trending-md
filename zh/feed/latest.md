@@ -1,8 +1,8 @@
 ---
 date: 2026-10-30
-updated: 2026-10-30T04:16:15Z
+updated: 2026-10-30T12:16:26Z
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 24
+sources: 32
 license: CC-BY-4.0
 ---
 
@@ -476,13 +476,259 @@ VulnCheck 于 2026-10-29 发布 **CVE-2019-25781**：**CVSS 3.1 7.5** 与 **CVSS
 
 ---
 
+## 30. Cursor 市场上的官方 Claude Code 扩展在 2.1.313 里带了一个 SSH 后门
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Hacker News · 143+ pts · ~1h ago (~19:05 UTC+8)
+- **Tags:** `supply-chain` `claude-code` `cursor` `ssh-backdoor` `incident`
+
+Phorion 于 2026-10-30 发布安全公告（作者 Calum Hall），披露 **Cursor 市场**上**官方 Claude Code for VS Code** 扩展遭到篡改：被植入后门的扩展包内含一个持久化 SSH 后门，针对 macOS、Linux 与 Windows 各有安装路径，版本号为 **2.1.313**。注入方式是在压缩后的 `extension.js` 前面拼一个立即执行函数，引入 `child_process`、`fs`、`os`、`path`、`http` 与 `crypto`，并且"Node 一加载该文件就执行，早于扩展正常的 `activate` 回调。用户完全不需要与扩展交互，载荷就会触发。"Cursor 已下架该版本，公告称同时从 npm 与 VS Code 注册表撤下了 2.1.313。
+
+整条链分四段。**第一段**把一个由攻击者控制的 Ed25519 公钥追加进 `~/.ssh/authorized_keys`（目录 0700、文件 0600），注释为 `svc-telemetry`；写入前的检查比对的是**注释字符串**而不是密钥本身。随后尝试启动 sshd——Linux 走 `systemctl`/`service`/init.d，macOS 走 `sudo -n systemsetup -setremotelogin on`，Windows 用 PowerShell 安装 OpenSSH Server。**第二段**把第二把内嵌私钥（`svc-telemetry-tun`）写到 `$TMPDIR/.stk_<10 位十六进制>`，然后以用户 `tunnel` 向 `134.209.82[.]225` 建立反向隧道，参数 `-R *:0:localhost:22`，外面包一层脱离终端的 60 秒重试循环，即使 IDE 关闭仍存活。**第三段**做持久化：`~/Library/LaunchAgents/com.apple.sysmond.plist`（`RunAtLoad` + `KeepAlive`）、`@reboot` crontab 条目，或 `SysMon` 计划任务。**第四段**回连：把主机名、用户名、平台、架构、当前目录、`git config --global user.email`、公网 IP，以及最多 **40 个**匹配 `/KEY|TOKEN|SECRET|PASS|AWS|GCP/i` 的**环境变量名**，POST 到 `134.209.82[.]225:8099` 的 `/beacon`——是**变量名，不是值**——同时向 `127.0.0.1:8099` 发一份，而脚本自身并未在该端口监听。
+
+**两项独立的注册表检查印证了这个版本号。** npm 上 `@anthropic-ai/claude-code` 的文档列出 553 个版本，`dist-tags` 为 `latest: 2.1.314`；**2.1.312 发布于 2026-10-27T18:36:10Z，2.1.314 发布于 2026-10-30T00:12:56Z，两者之间没有 2.1.313**。上游 `CHANGELOG.md` 从 `## 2.1.314` 直接跳到 `## 2.1.312`，字符串 `2.1.313` 出现次数为**零**。Anthropic 与 Cursor 双方我都没有找到公开声明，这份公告也没有 CVE。
+
+**Why it matters:** 三个实现缺陷限制了影响半径，而它们都不是防线。macOS 上脚本**不提权**执行 `systemsetup -getremotelogin`，普通用户会得到标准输出上的 `You need administrator access to run this tool... exiting!` 且退出码为 0，`/Off/i` 永远不匹配，于是启用步骤被整段跳过——恶意代码"实际上把'我没权限检查 SSH 是否关闭'当成了'SSH 已经开着'"。这只在一台本就没开远程登录的 Mac 上切断了入站路径；公钥和 LaunchAgent 照样落地。Windows 路径把 PowerShell 交给一个硬编码 `/bin/sh` 的辅助函数。Linux 的 crontab 检查"在重复运行时可能清空用户已有的定时任务"。卸载扩展不会移除其中任何一项——公告给出的处置清单是：杀掉隧道进程、卸载 LaunchAgent、删除 `~/.config/.smt` 与 `.smtk`、移除公钥、轮换所有命中该环境变量过滤器的凭据。而结构性的一点比这次事件更久：IDE 扩展以 IDE 的权限运行，所以扩展宿主在后台写 `~/.ssh/authorized_keys` 本身就是信号，因为"IDE 二进制本身签名是有效的"，而盯着 `echo`/`tee` 的进程规则抓不到 `fs.appendFileSync`。
+
+[`🔗 Phorion — Official Claude Code Extension Compromise`](https://phorion.io/blog/offical-claude-code-vsx-compromise/) · [`🔗 GossiTheDog（Mastodon）`](https://cyberplace.social/@GossiTheDog/117528831681803563) · [`🔗 Hacker News 讨论`](https://news.ycombinator.com/item?id=50302334)
+
+---
+
+## 31. Herdr 发布原生应用 — 窗口本身就是一棵文件树，关掉窗口不会停掉你的 agent
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Hacker News · 241+ pts · ~11h ago (~08:42 UTC+8)
+- **Tags:** `agent-infra` `terminal` `multiplexer` `rust`
+
+`herdrdev/herdr-app`（Apache-2.0，Rust）是一个面向终端与编码 agent 的桌面应用，创建于 2026-10-16，现有 **582 stars**、44 个 fork、83 个未关闭条目，**v0.1.9 发布于 2026-10-30**——CHANGELOG 里同日还有 0.1.8，10-29 有 0.1.7。它是 **herdr-core** 的客户端，README 把 core 描述为"你机器上的一个小服务"："窗口负责排列终端，core 负责运行它们。关闭窗口，它们继续运行。"
+
+两个设计选择把它与 tmux 形态的方案区分开。第一，**agent 派生 agent 是一等动词**——`hc run --bg codex "review my diff. Done: hc send t1"` 起一个助手并指定回报方式；`hc send t3 "take another look"` 中途改它的方向；"报告、退出和'需要你'都会落进其父 agent 的输入里。"侧边栏把每个 agent 归为 Working / Blocked / Done / Idle。第二，**界面就是一个目录**：一切都放在 `~/.config/herdr-app` 下的 `settings.json`、`keys.json`、`layouts/`、`themes/` 和 `mods/`——后者是绘制面板与菜单的小段 JavaScript——并配一份 `AGENTS.md` 告诉 agent 它可以改什么。没有插件 API，也没有需要维护的分叉。SSH 机器会并入同一个侧边栏，远端 agent 只要"远端机器与 core 还在运行"就继续跑。
+
+**Why it matters:** 诚实的句子在 README 里而不是落地页上："重启或 core 崩溃之后，保留下来的窗格会在原来的目录里得到新的 shell，而不是原来的程序。"——所以"关掉它，它们继续跑"对关闭窗口成立，对主机重启不成立，而这正是 tmux 用户会先问的那个区别。另外两条注意事项也写在明处："两个安装脚本都会下载并执行代码"（curl 管道执行与 `irm … | iex`），以及 macOS 预编译包只支持 Apple Silicon，Intel Mac 被要求从源码构建。HN 讨论里主要是长期使用多路复用器的老用户，最尖锐的问题指向守护进程与融资，而不是功能列表——对一个如今横在你和 agent 持有的全部凭据之间的工具来说，这恰恰是对的问题。
+
+[`🔗 herdrdev/herdr-app`](https://github.com/herdrdev/herdr-app) · [`🔗 herdr.dev`](https://herdr.dev) · [`🔗 Hacker News 讨论`](https://news.ycombinator.com/item?id=50298436)
+
+---
+
+## 32. Clover-35B-A3B-Preview 把扩散语言模型推到 35B — 而它的速度数字是在"内部 agent 负载"上测的
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hugging Face Blog · published 2026-10-30
+- **Tags:** `diffusion-lm` `moe` `open-weights` `agentic-coding`
+
+DiffuSpace——即 Dream 7B 背后的团队，那款模型 2025 年 4 月由港大 NLP 组发布，博文称 Dream 系列在 Hub 上已累计超过 **270 万次下载**——于 2026-10-30 发布 **Clover-35B-A3B-Preview**：一个 MoE **扩散**语言模型，总参数 35B / 激活 3B，支持思考模式，Apache 许可，权重挂在 Hugging Face、GitHub 与 ModelScope，推理侧支持 SGLang 与 llama.cpp。
+
+它的基准表是扩散模型在这个规模上交出的最有竞争力的一份：**SWE-bench Verified 73.6**、**Terminal-Bench 2.1 51.7**、**τ³ Overall 65.3**、GPQA Diamond 83.8、ZebraLogic 95.8、AA-LCR 72.0 —— 在它自己的对比里，六项 agent 基准全部第一，对手包括 LLaDA2.2 flash、Mercury 2.5、Qwen3.6-35B-A3B 与 Qwen3.5-35B-A3B。
+
+效率类主张的分母才是关键。**680 tokens/s** 测于"**内部 agent 负载**，单张 NVIDIA GB300，BF16 精度，batch size 1"——不是公开套件，而 batch 1 正是扩散并行解码最占优的区间。H200 上的对比 **515 tokens/s 对 365**，对手是"DFlash2 配置"下同等规模的 Qwen，即某一套特定加速栈，而不是该模型的出厂形态。端侧那个数字最干净：**INT4 跑在 16 GB 显存的 RTX 5070 Ti** 上，MATH-500 **101.8 tokens/s**，对比"同等规模的 MiniCPM 与 Qwen 模型"的 48.5。
+
+**Why it matters:** 让速度主张站得住的是架构改动，而它描述得足够具体、可以被核对：一个**双向 Gated DeltaNet**，"已生成的上下文被高效压缩进 GDN 的循环状态，而当前块内的 token 通过细粒度双向 softmax 注意力交互"；记忆的**读出被当作一个独立信息单元，参与同一层 softmax**；加上可学习的块大小校准，以及一条零初始化、面向右侧上下文的卷积分支。注意事项就在名字里——这是 **Preview**——而这六项 agent 成绩目前没有任何独立评测。可迁移的读法是：这里的"更快"是一个解码**区间**（batch 1、扩散、GB300）加上某个特定基线加速栈的性质；对服务团队来说，680 应视为某一类负载形态的上界。
+
+[`🔗 Hugging Face — Clover-35B-A3B-Preview`](https://huggingface.co/blog/Diffuspace/clover-35b-a3b-preview) · [`🔗 Diffuspace/Clover-35B-A3B-Preview`](https://huggingface.co/Diffuspace/Clover-35B-A3B-Preview) · [`🔗 DiffuSpace/Clover-35B-A3B-Preview`](https://github.com/DiffuSpace/Clover-35B-A3B-Preview)
+
+---
+
+## 33. Elixir 标准库在一个上午出了三个 CVE — 而它自己的文档写错了默认值
+
+- **Velocity:** ▮▮ rising
+- **Source:** NVD / EEF CNA · published 2026-10-30
+- **Tags:** `elixir` `stdlib` `denial-of-service` `cve`
+
+来自 Erlang Ecosystem Foundation 这个 CNA（`6b3ad84c-e1a6-4bf7-a703-f496b71e49db`）的三条记录在 2026-10-30 落地，全部由该 CNA 打分，在 NVD 上全部仍是 `Received`，**NVD 自评指标为 0**。运营上真正要管的是 **CVE-2026-115274**（6.9，CVSS 4.0，CWE-1284）：`JSON.decode/1` 与 `decode!/1` 把每个整数字面量直接交给 `erlang:binary_to_integer/1` 且不限长度，于是"一百万位的字面量能正常解码，但 CPU 开销是同长度字符串的 100 到 300 倍，因此几 MB 的请求体就能把一个调度器占住约一秒"；超过约 129 万位会抛 `SystemLimitError`。那句暴露面要读两遍："由 `phx.new` 生成的应用在 `Plug.Parsers` 里用 `JSON` 解码请求体，**早于路由与鉴权**。"
+
+**CVE-2026-109821**（6.3，CVSS 4.0，`AT:P`）是同一个"数量不受限"形状在 `URI.parse/1` 里的重复：`split_authority/1` 用 `String.to_integer/1` 转换端口且不限长度，最多 1,262,592 位的十进制端口会变成一个大整数，而把 URI 渲染回文本时走 `:erlang.integer_to_binary/1`，在 Erlang/OTP 27、28 与 29.0 上是平方级——"40 万位的端口渲染约 2.6 秒，1 MB 的端口约 18 秒。"大于 65535 的端口同样被接受。**CVE-2026-97209**（5.4，`AV:L`）性质不同：`Mix.Tasks.Deps.Partition.server/4` 通过共享系统临时目录下一个固定名称的目录传递分区配置，并信任读回来的内容，而 `File.mkdir_p/1`"接受一个已存在的目录，却不检查其属主"——于是在同机另一用户先创建该目录的情况下，可以在编译用户身份下执行代码。影响范围仅 `1.20.0-rc.4` 到 `1.20.5` 之前。
+
+**Why it matters:** EEF 自己的技术分析里含有最值得推广的那句话："`JSON.decode/3` 的文档把 `&String.to_integer/1` 写作默认值，**它转换方式相同**"——而代码调用的是 `erlang:binary_to_integer/1`。文档在行为上没错，在函数名上错了，而这正是能躲过评审的一类缺陷。修复版本是 **1.18.6、1.19.7 与 1.20.5**，横跨三条分支线。6.9 这个分数低估了 CVE-2026-115274：它落在请求解码器里，任何路由、plug 或鉴权检查都看不到它，所以按路由限流不是缓解手段——缓解手段是升级。
+
+[`🔗 EEF CNA — CVE-2026-115274（JSON）`](https://cna.erlef.org/cves/CVE-2026-115274.html) · [`🔗 EEF CNA — CVE-2026-109821（URI）`](https://cna.erlef.org/cves/CVE-2026-109821.html) · [`🔗 CVE-2026-115274（NVD）`](https://nvd.nist.gov/vuln/detail/CVE-2026-115274)
+
+---
+
+## 34. Azure 的 API Connections 给了五个完整的跨租户沦陷 — 而其中一次修复重开了上一个洞
+
+- **Velocity:** ▮ steady
+- **Source:** Hacker News · 10+ pts · ~2h ago (~18:06 UTC+8)
+- **Tags:** `azure` `cloud-security` `cross-tenant` `logic-apps`
+
+Binary Security 的 Haakon Wik Gulbrandsrud 于 **2026-10-02** 发表本文，2026-10-30 登上 Hacker News。主张很大，机制很小：Azure 的 **API Connections**（Logic Apps 背后的共享组件）允许一个租户操作另一个租户的连接，并借此操作该连接所认证的后端——Key Vault、Azure SQL、Jira、Salesforce，"实际上没有边界"。链条成立的原因是 ARM 的 `DynamicInvoke` 与 `/extensions/proxy/` 端点能触及共享的 APIM 实例，而该实例对所有连接都有权限，于是请求路径里的穿越（`path/%2e%2e/%2e%2e/%2e%2e/%2e%2e/apim/keyvault/<id>/secrets/<name>/value`）可以读到受害租户的密钥。报告说第一次修复"看起来限制的是允许的路径，而不是底层的 token 问题"；作者随后 SSH 进一个 Standard Logic App 把代码取下来，发现**四个未公开的端点**（`DynamicInvoke`、`DynamicList` 以及另外两个），并用 `DynamicList` 对受害者的 Azure SQL 执行了一条任意 `INSERT`。
+
+后续还有两条。Consumption Logic App 本身没有托管标识，因此对**每一个** Version 1 API Connection 都有隐式访问权，只靠输入校验挡着——而 `host.api.RuntimeUrl` 参数允许工作流指定一个不同于连接自带值的 `runtimeUrl`，只要主机名以 `azure-apihub.net` 结尾。微软的修复在**路径规范化之前**就校验了这个 URL，于是追加一段穿越内容即可通过校验，而 APIM 实例看到的是另一个连接。
+
+**Why it matters:** 回归本身就是可迁移的教训："当微软好不容易凑齐这个路径穿越的修复时，一件意外的事发生了——原本的 `RuntimeUrl` 路径**不再被校验**"——第二次修复抹掉了第一次，这正是把补丁对上某个 payload、而不是对上某个原语时会出现的失效方式。作者自己说出的注意事项，是多数组织跳过的缓解措施："当然，搭建这些连接的人完全可以把访问 token 或密钥的权限收窄，让 API Connection 在后端只有最小权限。不过我猜，这么做的人很少。"所有问题都报告为已修复；这篇文章是一个月前的，对它而言是新的，对互联网不是。
+
+[`🔗 Binary Security — Azure's Weakest Link`](https://www.binarysecurity.no/posts/2026/10/one-root-case) · [`🔗 Hacker News 讨论`](https://news.ycombinator.com/item?id=50301854)
+
+---
+
+## 35. Cloud Foundry 的 `/internal/v3/` 暂存回调没拿到 v4 与 v5 的那条拒绝规则 — 而只读审计员能枚举出 GUID
+
+- **Velocity:** ▮ steady
+- **Source:** NVD / Cloud Foundry Foundation · CVE-2026-59387 · 记录发布于 2026-10-30
+- **Tags:** `cloud-foundry` `access-control` `cve` `privilege-escalation`
+
+**CVE-2026-59387** 得 **8.8（CVSS 3.1）**——`AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H`——由 `security@vmware.com` 分配，在 NVD 上是 `Received`，**没有 NVD 自评分数**。缺陷是一条被扩了两次、第三次漏掉的拒绝名单："Cloud Controller 的 Nginx 路由配置阻止了未认证访问 `/internal/v4/` 与 `/internal/v5/` 端点，却漏掉了针对 `/internal/v3/` 的等效规则。"结果是 `/internal/v3/staging/:guid/droplet_completed` 与 `/internal/v3/staging/:guid/build_completed` "可以从公共 API 监听器访问，且不需要 OAuth 或双向 TLS"。
+
+这买到什么："持有有效 build 或 droplet GUID 的攻击者可以提交一个伪造的暂存回调，把 droplet 转为 STAGED，并在没有关联 package 或 actor 的情况下持久化任意 process metadata 与 sidecar 数据"——而 GUID 并不难拿，因为"**拥有 SpaceAuditor 角色的人可以在没有写权限的情况下枚举 GUID**，这使它成为一次超出预期角色边界的有效提权。"只读角色变成了写入。
+
+**Why it matters:** 两个日期要分开看。Cloud Foundry 的公告日期是 **2026-10-20**，CVE 记录发布于 **2026-10-30**——晚十天，这才是它出现在今天这批里的原因。受影响范围写作"CAPI 至 **v1.245.0**（含）"，修复为 **CAPI v1.246.0 及以上**与 **cf-deployment v60.7.0 及以上**（内含 CAPI v1.247.0）。报告者是 Minseong Kim（mak3bread）。可推广的缺陷是所有"内部端点"故事共有的那一个：把控制表达成**一份被封锁的路径清单**，只要有兄弟版本前缀存在就会失效，而版本前缀恰恰是内部 API 不断堆积的东西。
+
+[`🔗 Cloud Foundry — CVE-2026-59387 公告`](https://www.cloudfoundry.org/blog/cve-2026-59387-broken-access-control-restriction-in-cloud-controller-api/) · [`🔗 CVE-2026-59387（NVD）`](https://nvd.nist.gov/vuln/detail/CVE-2026-59387)
+
+---
+
+## 36. ClickHouse 的 9.5 是未认证 RCE — 而厂商的公开说明只有 28 个词
+
+- **Velocity:** ▮▮ rising
+- **Source:** NVD / ClickHouse CNA · CVE-2026-116366 · published 2026-10-30 11:00 UTC
+- **Tags:** `clickhouse` `cve` `rce` `disclosure`
+
+**CVE-2026-116366** 是 **9.5（CVSS 4.0）**——`AV:N/AC:H/AT:N/PR:N/UI:N/VC:H/VI:H/VA:H/SC:H/SI:H/SA:H`——由 `ClickHouse` 自己分配，预留时间 **2026-10-26T07:54:23Z**，发布 **2026-10-30T11:00:11Z**。四天。NVD 记录停在 `Received`，只带一个指标：CNA 的 9.5，位于 `Secondary` 槽，`nvd@nist.gov` 指标为零——所以这个数字是 ClickHouse 的，不是 NVD 的；CNA 容器未给出 CWE。`AC:H` 是这个向量距离 10.0 的唯一障碍。
+
+机器可读的部分很精确。四条分支范围，全部是排他的 `lessThan` 上界，锚定到 `packages.clickhouse.com` 与 `github.com/ClickHouse/clickhouse`：`26.3 → 26.3.62.3-lts`、`26.8 → 26.8.36.3-lts`、`26.9 → 26.9.27.3-stable`、`26.10 → 26.10.3.7-stable`。厂商变更日志补上了日期与部署说明："**Fixed in ClickHouse v26.10.3.7, 2026-10-30**"，以及"修复已应用于所有 ClickHouse Cloud 与 BYOC 部署。"致谢给到 **Elshad Toklayev**。
+
+**Why it matters:** 除了漏洞本身，其他都在。公开描述只有一句——"An issue has been discovered in ClickHouse Server that, under certain conditions, could allow an unauthenticated user with network access to execute arbitrary code on the ClickHouse Server"——共 28 个词，里面没有**哪些条件**。于是运维要问的两个问题指向相反方向："我是否暴露"无法从披露中回答，但"我是否已修补"可以从四条精确版本界里回答，且是当天。这算高于平均的披露流程（预留、发布与修复都在一周内，范围写在 CNA 容器里而不只是散文里），配了低于平均的描述——实际的后果是：任何在网络上开着监听端口的 ClickHouse 实例，都该按分数和范围升级，而不是按自己的威胁模型。
+
+[`🔗 ClickHouse 安全变更日志`](https://clickhouse.com/docs/resources/changelogs/security-changelog) · [`🔗 CVE-2026-116366（NVD）`](https://nvd.nist.gov/vuln/detail/CVE-2026-116366)
+
+---
+
+## 37. Prefix Executability：agent 可以完成任务，而它的计划从头到尾都不可执行
+
+- **Velocity:** ▮▮ rising
+- **Source:** arXiv 2610.40444 · 2026-10-29
+- **Tags:** `agents` `evaluation` `tool-use` `benchmarks`
+
+四位作者（Amir H. Rezaeian、Weiyi Sun、Yassine Benajiba、Dan Roth）主张，最终任务成功掩盖了真正想知道的事：中间的工具调用轨迹到底跑不跑得通。他们的协议检查"预测出的工具调用序列的每一个前缀，在工具 schema、状态前置条件与数据依赖下是否仍然可执行"，并用五个统计量概括——Prefix Executability 曲线、**First-Error Depth**、Trajectory Executability Rate、按视野归一化的 AUC-PEC 与 Recovery Rate。
+
+实例化落在 **BFCL-v3 multi-turn** 与 **ToolSandbox** 的分层样本上，以及 **τ³-bench** 的 Airline/Retail base 全集。核心结果是一次排名反转："仅看结果与看前缀两种排名会分歧：执行以未经验证的计划为条件的 agent，往往取得比无条件基线更高的最终成功点估计，**同时显著降低 TER 与 AUC-PEC**。"作为验证性干预，"显式的执行前计划检查可以提升可执行前缀的存活率，同时维持有竞争力的最终成功。"
+
+**Why it matters:** 该把它当方法论文读，因为它就是——摘要只定性地报告了这种分歧，没有给出分数、没有逐基准表、也没有效应量，所以谁都不该从里面引一个数字。它确实主张的那一点，正是本刊不断从其他方向撞到的那一点：先做计划的 agent 分数更高，而执行更常出问题，这意味着两个指标不是同一件事的两种分辨率，而是两件彼此权衡的不同的事。若这一点成立，只看终态的评测就是在系统性地挑出那些轨迹会被生产系统拒绝的 agent，而 First-Error Depth 就是告诉你错误落在哪里的那个数字。
+
+[`🔗 arXiv 2610.40444`](https://arxiv.org/abs/2610.40444) · [`🔗 全文（HTML）`](https://arxiv.org/html/2610.40444v1)
+
+---
+
+## 38. 投机解码只在草稿被接受时才省能量 — 超过某个 batch 之后它会变成亏损
+
+- **Velocity:** ▮▮ rising
+- **Source:** arXiv 2610.40287 · 2026-10-29
+- **Tags:** `inference` `energy` `speculative-decoding` `serving`
+
+五位作者（Bole Ma、Ayesha Afzal、Jan Eitzinger、Harald Koestler、Gerhard Wellein）用当下真正起约束作用的单位来核算投机解码："大模型服务受限于机房的电力。每个 token 的能量决定一个数据中心能服务多少 token，而时延目标限制每个用户拿到它们有多快。"测量在生产条件下进行——**SGLang 开启 CUDA graphs，H100 与 H200，batch size 最高 64，覆盖 5 个语料**——结论是一组条件，而不是一个加速比。
+
+四条发现，每条都跟通常的说法相抵。第一，"在稠密模型上，**是验证而非起草主导能量开销**。"第二，"节省随 batch 增大而收缩，因为批处理已经把那笔投机想摊到被接受 token 上的权重读取共享掉了。"第三，"在大 batch 下，block drafter 会把验证推过算术与内存流量之间的平衡点，进入算力受限区间，**此时节省变成亏损**，而接受率低的 drafter 会抬高每 token 能耗。"第四，"用投机去满足更紧的时延目标，会额外付出能量"——也就是说时延收益与能量收益在同一工作点上指向相反方向。
+
+接受率也不是 drafter 自己的属性，这一点最可迁移："我们评测的每一个 drafter 在对话上都比代码上接受得更少；每一个训练过的 drafter 在罗曼什语这种低资源语言上都比英语上接受得更少。"
+
+**Why it matters:** 摘要没有给出任何比值——没有每接受 token 的焦耳数，也没有交叉点的 batch 大小——所以这是发稿前要读、而不是照着摘要引的论文。它确立的是：投机解码主张的正确单位是**在给定 batch 与时延目标下、每被接受 token 的能量**，而同一套配置是省是亏，取决于它服务的是哪个语料。最后那句对调参的人才是有用的："更大的 batch 在不做投机时就已经降低了每 token 能耗。投机只在高接受率时才叠加到这个节省上，而在我们测试的模型上，它几乎没给保持时延的 DVFS 留下余量。"
+
+[`🔗 arXiv 2610.40287`](https://arxiv.org/abs/2610.40287) · [`🔗 全文（HTML）`](https://arxiv.org/html/2610.40287v1)
+
+---
+
+## 39. 一个探针在泄漏发生前抓到 82% 的 agent 调用 — 而一个词袋分类器几乎追平它
+
+- **Velocity:** ▮▮ rising
+- **Source:** arXiv 2610.40588 · 2026-10-29
+- **Tags:** `agent-safety` `interpretability` `monitoring` `multi-agent`
+
+一篇单作者论文（Leonidas Raghav）就 agent 串谋问了一个窄而可检验的问题："输出过滤只检查 agent 已经写出来的东西。监督者能否提前知道一个 agent 即将让步？"设定是六个场景：一个同侪在最多 20 轮里持续施压，让目标泄露一个秘密——比如部署 token——而"目标往往先拒绝，然后让步。"探针在每次模型调用、输出写出之前读取激活。
+
+数字很强：在留出的 **Qwen3-32B** 情节上，阈值设为标记 **5% 的良性调用**时，探针"抓到 **82%** 的泄漏调用"，而"在相近的标记率下，一个零样本决策模型监控器抓到 **26%**"。在 **gpt-oss-20b** 上，对推理过程做的探针达到 **AUROC 0.91**。
+
+然后论文自己拆掉这个标题，这也是它出现在这里的原因："一个在同样调用上训练的词袋分类器表现接近，所以**大部分增益来自用标签训练，而不是来自激活值**。""探针也会标记被允许的披露：它读到的更多是即将发生的披露，而不是违规本身。"以及："预警是短程的，而对任何告警都中止会停掉大多数良性情节，这一点第二次文本检查也修不好。"
+
+**Why it matters:** 82 比 26 是一个关于**监督方式**的主张——训练过的探针对零样本监控器——而词袋的结果说明这份提升主要来自标签，这就把贡献从"机制可解释性有效"重新表述为"廉价的监督式监控器有效，而激活值是一种顺手的特征"。这仍然有用：生成前预警与输出过滤是不同的控制点，而"在生成前发出的预警，可以让监督者在其他 agent 采取行动、或招募在蜂群里扩散之前，拦下即将让步的 agent"这句正是把检测器放在那个位置的论据。只是别把 82% 读成"你需要模型的内部表示"。
+
+[`🔗 arXiv 2610.40588`](https://arxiv.org/abs/2610.40588) · [`🔗 全文（HTML）`](https://arxiv.org/html/2610.40588v1)
+
+---
+
+## 40. 一个 325M 模型在纯推理 NPU 上从零预训练，与 B200 孪生体的 loss 只差 0.0001 — 而方法是申请了专利的
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hugging Face Blog · published 2026-10-26
+- **Tags:** `pretraining` `npu` `hardware` `reproducibility`
+
+VIDRAFT 的 FINAL-Bench 在一颗**商用纯推理 NPU** 上**从随机初始化**预训练了 **VKORE-325M-NPU-Base**，325.6M 参数的 decoder-only 模型，"反向传播在芯片上运行"，"没有使用任何预训练权重"。该次运行覆盖 FineWeb-Edu 的 **50 亿 byte token**，**76,292 步，约四天**。并与一条 B200 GPU 上的对照训练并行进行，"同样的初始化、数据、batch 与学习率日程"。
+
+在**两个模型都没见过的 1,024 个 FineWeb-Edu 文本窗口**上：NPU loss **0.7993**，GPU loss **0.7994**，配对差值 **−0.0001，标准误 0.0007**，且"NPU 模型在 **50.1%** 的窗口上更低"。两套权重与评测脚本都已公开，所以这个主张几分钟内就能复核。
+
+**Why it matters:** 文章给自己提的那个框架问题才是真问题——"主流看法是这类芯片无法训练……训练需要反向传播、优化器状态，以及跨越数万步的数值稳定更新，而推理栈不是为此构建的"——而结果是一次受控对照，这在硬件发布里很少见。但让它可引用的，是它自己那节"我们不主张什么"："**不是一个可用的助手。**这是一个 325M 的 base 模型，用 5B token 训练，作为硬件训练结果发布。**不是速度纪录。**……**不是方法本身。**训练循环与稳定性技术是内部方案，且**正在申请专利**。权重、数据配方、超参与评测完全公开。"也就是说，结果可复现，方法不可——任何人都能核对那个 loss，而没有人能在缺少被保留那一块的情况下复现这次训练。请把 0.0001 读作"在这个规模上，纯推理 NPU 可以把一次预训练跑到与 GPU 持平"，而不是"这就是做法"。
+
+[`🔗 Hugging Face — 在纯推理 NPU 上从零预训练一个 325M 模型`](https://huggingface.co/blog/FINAL-Bench/pretraining-a-325m-language-model-from-zero-on-an) · [`🔗 FINAL-Bench/VKORE-325M-NPU-Base`](https://huggingface.co/FINAL-Bench/VKORE-325M-NPU-Base)
+
+---
+
+## 41. Ai2：在"新颖性评审"提示词里改几个词，GPT-5.4 从 93.5% 掉到 40.9%——低于随机
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hugging Face Blog / arXiv 2610.02022 · published 2026-10-27
+- **Tags:** `evaluation` `research` `benchmarks` `llm-judges`
+
+Ai2 的 **"Old Ideas, Novel Problems"**（Kyle Wiggers 与 Ai2Comms，论文、数据与代码均已发布）检验的是 AI-for-science 系统依赖却很少验证的那个部件：**新颖性评审者**——即被问"这个研究想法是否新"的那个 LLM。标签来自 **ICLR 2026 的同行评审**而非录用结果：**高新颖池**为 **154** 个人类想法，取自所在领域评分前 10% 的录用论文，且评审明确肯定其新颖性、无人提出异议；**低新颖池**为 **145** 个，取自评分后 10% 的拒稿论文，评审提出原创性疑虑、无人给予肯定。一项评审挖掘核对中，标注者与抽取极性的判断在 **50 例里一致 47 例**。
+
+比较了六位评审者——GPT-5.1、GPT-5.2、GPT-5.4、Claude Sonnet 4.5、Claude Opus 4.5、Claude Opus 4.6——在提示词、推理预算、检索、格式与聚合方式上逐项变动。标题式的不稳定：在 Human+Generated 对上，被告知"评审者认为每一对里恰好有一个想法是新的"的 GPT-5.4 得 **93.5%**；改问更简单的"哪个想法是新的"，它得 **40.9%**，低于随机，并且"在同一批对上改变了超过一半的判断"。人类写作的对也未能幸免——同一处改动让 Claude Opus 4.6 在 Human-Only 上移动了 **21 个点**——而且"也不存在普遍更好的提示词"。
+
+**Why it matters:** 最该带出去的一句，是关于已经在用的系统："**检索和额外推理并不能稳定改善判断，而两个专门构建的新颖性评测系统，表现还不如一个简单提示的 Claude Opus 4.6 基线。**"但在引用那个百分比之前，先看标签质量：在 Human+Generated 上，"我们假设生成的想法不如人类写的那么新；这些是**弱标签**，并非对每个想法都经过核实的判断。"论文预判了这个反对意见——一位专家复核了 30 对、并偏向最强评审者答错的那些，在全部 30 对里都选了人类想法，且判定没有一个生成想法是新的——它还指出"我们的许多核心发现根本不依赖标签"，因为"如果两套合理的评测设置对同一对想法给出相反答案，这种不一致本身就揭示了不稳定。"一个措辞变动就摆动 50 个百分点的评审者，测的不是新颖性。
+
+[`🔗 Hugging Face — 我们能信任 LLM 去判断一个研究想法是否新颖吗？`](https://huggingface.co/blog/allenai/novelty-bench) · [`🔗 arXiv 2610.02022`](https://arxiv.org/abs/2610.02022) · [`🔗 allenai/novelty-eval`](https://github.com/allenai/novelty-eval)
+
+---
+
+## 42. DOOMFORMER 把神经网络跑在 DOOM 地图里 — 10,000 张 MNIST 测试图全部精确，容差 0
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News · 99+ pts · ~13h ago (~07:25 UTC+8)
+- **Tags:** `doom` `verification` `neural-networks` `demoscene`
+
+`mottopanikeiku/doomformer`（MIT，Python 3.11+，**36 stars**，创建于 2026-10-20，v0.4.0）把一个整数神经网络编译进一张 DOOM 地图，让游戏引擎来运行它："巫毒娃娃做算术，光照等级与地板高度保存数值。" 一个数是娃娃的人群，一个权重是地上的一条线，一次求和是一个光照等级或一个高度，一个激活是一段楼梯，注意力是一块天花板。MNIST 地图用了 **1,355 个巫毒娃娃**；地图需要 ZDoom（UDMF 与 ACS），仓库用 ViZDoom 1.3.2 搭配 Freedoom 素材运行。
+
+公布的成绩：MNIST 测试图 **10,000 / 10,000** 全对，在 20,000 个随机网络上 **0** 个不一致，"博物馆"地图在**另外 4 个** DOOM 引擎里同样精确。`doomformer mnist` 读四张测试图或你自己的图片，1.5 到 3 分钟；`doomformer ask "what does iddqd do"` 用 189 条 DOOM 事实作答；`doomformer machine subleq all` 在地图上跑一台微型计算机。
+
+**Why it matters:** 这个项目攻击自己的检查，还列成了表，这也是标题成绩可信的原因。篡改一条权重线 → "检查恰好会在跨过那条线的输入上失败。" 在取值范围边界上模糊测试 20,000 个随机网络 → 0 个不一致，且 CI 每次推送都用新种子再跑一遍。对地图的某一行做 **1,004 次**变异 → **抓到 297 次**，并且"没有任何一个漏网的被证明是无害的"。不经 DOOM 把权重从地图里抽回来 → 与源网络相等。给每个读出页面加一个毒值 → "从未运行过的页面无法通过旧值。"然后是那条界限，写得明明白白："每次运行都把地图暴露出的每个值与 NumPy 比较。**这只证明跑过的那批输入，不证明别的。**" MNIST 地图暴露 248 个值；它没有暴露 903 个阶梯计数与 1,351 次门限比较，那些只通过它们喂入的求和被间接检查——而"模糊测试与单元测试在编译器里找到四个 bug。全部已修复。"一件 demoscene 作品，其验证章节比多数生产测试套件更好。
+
+[`🔗 mottopanikeiku/doomformer`](https://github.com/mottopanikeiku/doomformer) · [`🔗 项目站点`](https://mottopanikeiku.github.io/doomformer/) · [`🔗 Hacker News 讨论`](https://news.ycombinator.com/item?id=50297697)
+
+---
+
+## 43. Lasm 把 Lean 4 编译成 WebAssembly — 一个 RealWorld 应用里有 117 条已证定理，而运行时没有内核
+
+- **Velocity:** ▮ steady
+- **Source:** Hacker News · 31+ pts · ~10h ago (~10:05 UTC+8)
+- **Tags:** `lean4` `webassembly` `formal-verification` `dev-tools`
+
+`Millillion/lasm`（MIT，**66 stars**，创建于 2026-09-23）把普通 Lean 4 提前编译成 WebAssembly："一份 Lean 代码可以变成一个 Node 服务、一个无损/边缘函数、一个 WASI/Fastly 模块或一个浏览器应用。因为是 Lean，你可以对你部署的代码证明性质。" `@lasm/cli` 现为 **0.3.5**，发布于 npm **2026-10-28T19:07:10Z**，并把 Lean 精确锁定在 **4.35.0**（`leanprover/lean4:v4.35.0`），自带工具链因此不需要 elan。目标表对一个 0.x 项目来说异常宽，且每一行都声称在 CI 里用该平台自己的本地运行时、镜像或模拟器测过：Node、AWS Lambda（zip 与容器）、Lambda@Edge、Vercel、Netlify、Azure Functions、Google Cloud Functions gen2、Cloudflare Workers、Vercel Edge、Netlify Edge、Deno Deploy、Supabase Edge、Bun、Deno、Fastly Compute、WASI、wasi-http 与浏览器。
+
+**Why it matters:** 有意思的是"限制"那一列，而 README 把它放进了速查表而不是脚注："**运行时不可用：**elaboration、`#eval` 式求值、加载 `.olean`、Lean 内核——这些只在构建期工作。"也就是说，部署出去的产物里没有证明检查器：定理是你交付的那次构建的性质，而不是运行中那个进程的性质。而边缘 / Bun/Deno/WASI/浏览器目标"以 Lean 单线程运行，没有 socket 或进程（除 WASI 外也没有文件）"，比 Node 那一行的"完整运行时（线程、文件、进程、socket）"小得多。旗舰主张——带"**117 条已证定理**"的 Conduit RealWorld 应用——是项目自己在 README 里的计数，未经独立复现；诚实的读法是：它证明了一个全栈应用可以这样写出来。有一个细节值得照抄："按项目政策，CI 从不部署到真实的云账户。"
+
+[`🔗 Millillion/lasm`](https://github.com/Millillion/lasm) · [`🔗 npm 上的 @lasm/cli`](https://www.npmjs.com/package/@lasm/cli) · [`🔗 Hacker News 讨论`](https://news.ycombinator.com/item?id=50299004)
+
+---
+
+## 44. 循环 transformer 并非一致更好 — 增益最终会饱和、反转，或变得不稳定
+
+- **Velocity:** ▮ steady
+- **Source:** arXiv 2610.40325 · 2026-10-29
+- **Tags:** `transformers` `looped-models` `training` `inference`
+
+八位作者（Chanakya Ekbote、Artidoro Pagnoni、Devendra Singh Sachan、Shruti Bhosale、Mike Lewis、Maryam Fazel-Zarandi、Shashank Rajput、Sujan Kumar Gonugondla）在三个彼此权衡的约束下、于从零训练的稠密 decoder-only transformer 上联合研究循环：最多 **1B 参数**、最多 **155B token**、最多 **1.07×10²¹ FLOPs**、最多 **32 层循环**。他们的框架是对的——"循环是否有用，取决于哪个约束在主导：模型大小、训练算力，还是自回归推理效率。"
+
+结论是一组条件而非配方。"循环整个 transformer 通常在固定参数预算下给出最好的质量，而在训练 FLOPs 受限时，循环中间一段层给出更好的回报。""增加循环并非一致有益：增益最终会**饱和、反转，或变得不稳定**。"小的、按循环区分的低秩适配器有帮助，"且随着循环数增加，增益更大"。循环模型的解码变慢，且与循环数成正比，而显然的修法并不干净：Parallel Loop Transformer 通过跨相邻 token 位置传递隐状态让各阶段并发，但"原始形式并不能稳定保留普通循环的质量增益"——要找回它，需要在合并前保留当前 token 的嵌入，并将它与上一 token 的隐状态分别归一化。
+
+**Why it matters:** 摘要没有给出任何基准分数或差值，所以诚实的读法是：这是一篇设计空间论文，而不是一个可以引用的结果。它的价值在负面结论："多加几层循环"是一个有资源约束的工程决定，两侧各有一个失效模式；而论文为并行变体给出的修法，改的是两个隐状态的归一化方式，而不是简单地把它们一起跑。任何正伸手去拿循环权重的人——本周本刊另有两篇论文在测小模型在更多测试时算力下能做什么——都该把"增益最终会饱和、反转，或变得不稳定"读作对整个方向的总结，而不是这一组消融的总结。
+
+[`🔗 arXiv 2610.40325`](https://arxiv.org/abs/2610.40325) · [`🔗 全文（HTML）`](https://arxiv.org/html/2610.40325v1)
+
+---
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-10-30T04:16:15Z |
-| Items | 29 |
-| Sources tracked | 24（Hacker News、GitHub、NVD、CISA KEV、cveawg、PyPI、npm、厂商公告、arXiv、Hugging Face、安全媒体、厂商博客） |
+| Generated | 2026-10-30T12:16:26Z |
+| Items | 44 |
+| Sources tracked | 32（Hacker News、GitHub、NVD、CISA KEV、cveawg、PyPI、npm、厂商公告、CNA 公告、arXiv、Hugging Face、安全研究博客、安全媒体、厂商博客） |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8（每日 3 次） |
 | Ranking | 速度加权（时效 × 互动加速度 × 来源权威度） |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |

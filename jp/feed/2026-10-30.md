@@ -1,8 +1,8 @@
 ---
 date: 2026-10-30
-updated: 2026-10-30T04:16:15Z
+updated: 2026-10-30T12:16:26Z
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 24
+sources: 32
 license: CC-BY-4.0
 ---
 
@@ -476,13 +476,259 @@ ID の年は確保された年ではない。このレコードの cveawg `dateR
 
 ---
 
+## 30. Cursorのマーケットプレイスにあった公式Claude Code拡張の2.1.313にSSHバックドアが仕込まれていた
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Hacker News · 143+ pts · ~1h ago (~19:05 UTC+8)
+- **Tags:** `supply-chain` `claude-code` `cursor` `ssh-backdoor` `incident`
+
+Phorionは2026-10-30、**Cursorマーケットプレイス**上の**公式Claude Code for VS Code**拡張が侵害されていたとするセキュリティアドバイザリ（Calum Hall）を公開した。バックドア入りのバンドルには永続的なSSHバックドアが含まれ、macOS・Linux・Windowsそれぞれのセットアップ経路を持ち、バージョンは**2.1.313**とされている。注入はミニファイされた`extension.js`の先頭に付加されたIIFEで、`child_process`、`fs`、`os`、`path`、`http`、`crypto`を読み込み、「Nodeがファイルを読み込んだ時点で実行され、拡張の通常の`activate`コールバックより先に走る。ユーザーが拡張を操作する必要はない」という。Cursorは当該リリースを削除し、npmとVS Codeレジストリからも2.1.313を撤去したと記事は述べている。
+
+連鎖は4段階。**第1段**は、攻撃者が用意したEd25519公開鍵を`svc-telemetry`というコメント付きで`~/.ssh/authorized_keys`に追記する（ディレクトリ0700、ファイル0600）。追記前のチェックは鍵そのものではなく**コメント文字列**を見ている。続いてsshdの起動を試みる——Linuxは`systemctl`／`service`／init.d、macOSは`sudo -n systemsetup -setremotelogin on`、WindowsはPowerShellでOpenSSH Serverを導入する。**第2段**は2つ目の埋め込み秘密鍵（`svc-telemetry-tun`）を`$TMPDIR/.stk_<16進10桁>`に書き出し、ユーザー`tunnel`として`134.209.82[.]225`へ`-R *:0:localhost:22`でリバーストンネルを張る。これはデタッチされた60秒リトライループに包まれ、IDEを閉じても生き残る。**第3段**は永続化で、`~/Library/LaunchAgents/com.apple.sysmond.plist`（`RunAtLoad`と`KeepAlive`）、`@reboot`のcronエントリ、または`SysMon`スケジュールタスクを置く。**第4段**はビーコンで、ホスト名・ユーザー名・プラットフォーム・アーキテクチャ・カレントディレクトリ・`git config --global user.email`・公開IP、そして`/KEY|TOKEN|SECRET|PASS|AWS|GCP/i`に一致する**環境変数名**を最大**40個**、`134.209.82[.]225:8099`の`/beacon`へPOSTする——**名前であって値ではない**。同時に`127.0.0.1:8099`へも送るが、スクリプト自身はそのポートで待ち受けていない。
+
+**2つの独立したレジストリ確認がこのバージョン番号を裏づける。** npmの`@anthropic-ai/claude-code`は553バージョンを持ち、`dist-tags`は`latest: 2.1.314`。**2.1.312は2026-10-27T18:36:10Z、2.1.314は2026-10-30T00:12:56Zに公開され、その間に2.1.313は存在しない**。上流の`CHANGELOG.md`は`## 2.1.314`から`## 2.1.312`へ直接飛び、文字列`2.1.313`の出現回数は**ゼロ**。AnthropicとCursorの双方について公開声明は見つけられず、このアドバイザリにCVEもない。
+
+**Why it matters:** 影響範囲を縛っている実装バグが3つあるが、いずれも防御ではない。macOSでは`systemsetup -getremotelogin`を**権限昇格せずに**実行するため、一般ユーザーには標準出力へ`You need administrator access to run this tool... exiting!`が出て終了コードは0、`/Off/i`は決して一致せず、有効化の段が丸ごと飛ばされる——マルウェアは「SSHが切れているか確認する権限がない」を「SSHは既に有効」と解釈している。これは元々リモートログインが無効だったMacで inbound 経路を断つだけであり、鍵とLaunchAgentはそのまま残る。Windowsの経路はPowerShellを`/bin/sh`をハードコードしたヘルパーに渡している。Linuxのcrontabチェックは「繰り返し実行すると既存のユーザーcronジョブを消し得る」。拡張をアンインストールしてもどれも消えない——アドバイザリの対処手順は、トンネルのプロセスを殺し、LaunchAgentをアンロードし、`~/.config/.smt`と`.smtk`を削除し、鍵を外し、あの環境変数フィルタに一致する認証情報をローテートすることだ。そして構造的な点は今回の事件より長く残る。IDE拡張はIDEの権限で動くので、拡張ホストがバックグラウンドで`~/.ssh/authorized_keys`を書き換えること自体がシグナルになる。なぜなら「IDEのバイナリ自体は正しく署名されている」からで、`echo`や`tee`を見張るプロセスルールでは`fs.appendFileSync`は捕まらない。
+
+[`🔗 Phorion — Official Claude Code Extension Compromise`](https://phorion.io/blog/offical-claude-code-vsx-compromise/) · [`🔗 GossiTheDog（Mastodon）`](https://cyberplace.social/@GossiTheDog/117528831681803563) · [`🔗 HNディスカッション`](https://news.ycombinator.com/item?id=50302334)
+
+---
+
+## 31. Herdrがネイティブアプリを公開——ウィンドウはファイルツリーで、閉じてもエージェントは止まらない
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Hacker News · 241+ pts · ~11h ago (~08:42 UTC+8)
+- **Tags:** `agent-infra` `terminal` `multiplexer` `rust`
+
+`herdrdev/herdr-app`（Apache-2.0、Rust）はターミナルとコーディングエージェントのためのデスクトップアプリで、2026-10-16作成、現在**582 stars**、44フォーク、未クローズ83件、**v0.1.9は2026-10-30公開**——CHANGELOGには同日の0.1.8、10-29の0.1.7も並ぶ。**herdr-core**のクライアントで、READMEはcoreを「マシン上の小さなサーバ」と説明する。「ウィンドウがターミナルを並べ、coreがそれらを動かす。ウィンドウを閉じても動き続ける。」
+
+tmux的な選択肢と分ける設計判断が2つある。第一に、**エージェントがエージェントを起動するのが一級の動詞**であること——`hc run --bg codex "review my diff. Done: hc send t1"`でヘルパーを起動し、報告方法を指定する。`hc send t3 "take another look"`で実行中に方向を変える。「報告も終了も『あなたが必要』も、親エージェントの入力に落ちる。」サイドバーは各エージェントをWorking／Blocked／Done／Idleに分類する。第二に、**UIがディレクトリそのもの**であること。すべては`~/.config/herdr-app`配下の`settings.json`、`keys.json`、`layouts/`、`themes/`、そしてパネルやメニューを描く小さなJavaScriptである`mods/`に入り、「エージェントが何を変えてよいか」を書いた`AGENTS.md`が添えられる。プラグインAPIも、維持すべきフォークもない。SSHマシンは同じサイドバーに合流し、リモートのエージェントは「リモートマシンとcoreが動いている限り」動き続ける。
+
+**Why it matters:** 正直な一文はランディングページではなくREADMEにある。「再起動やcoreのクラッシュ後、残したペインは元のフォルダで新しいシェルを得る。元のプログラムではない。」つまり「閉じても動き続ける」はウィンドウを閉じる操作に対しては真で、ホストの再起動に対しては真でない——tmux利用者が最初に聞くのはまさにその区別だ。さらに2つの注意も明記されている。「どちらのインストーラもコードをダウンロードして実行する」（curlパイプと`irm … | iex`）、そしてmacOSのプリビルドはApple Siliconのみで、Intel Macはソースからビルドするよう案内される。HNのスレッドは長年のマルチプレクサ利用者が中心で、最も鋭い問いは機能一覧ではなくデーモンと資金調達に向いている——あなたとエージェントが持つ全認証情報の間に今や座っているツールにとって、それは正しい問いだ。
+
+[`🔗 herdrdev/herdr-app`](https://github.com/herdrdev/herdr-app) · [`🔗 herdr.dev`](https://herdr.dev) · [`🔗 HNディスカッション`](https://news.ycombinator.com/item?id=50298436)
+
+---
+
+## 32. Clover-35B-A3B-Previewが拡散LMを35Bへ——そして速度の数字は「社内エージェント負荷」で測られている
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hugging Face Blog · published 2026-10-30
+- **Tags:** `diffusion-lm` `moe` `open-weights` `agentic-coding`
+
+DiffuSpace——Dream 7Bのチームで、あのモデルは2025年4月にHKU NLPグループから公開され、記事によればDreamファミリはHubで**270万ダウンロード**を超えた——は2026-10-30、**Clover-35B-A3B-Preview**を公開した。MoEの**拡散**言語モデルで、総パラメータ35B／アクティブ3B、思考モード付き、Apacheライセンス、重みはHugging Face・GitHub・ModelScopeにあり、推論はSGLangとllama.cppに対応する。
+
+ベンチマーク表は、この規模で拡散モデルが出した中で最も競争力のあるものだ。**SWE-bench Verified 73.6**、**Terminal-Bench 2.1 51.7**、**τ³ Overall 65.3**、GPQA Diamond 83.8、ZebraLogic 95.8、AA-LCR 72.0——自身の比較において6つのエージェントベンチマークすべてで最高スコアだと主張し、相手はLLaDA2.2 flash、Mercury 2.5、Qwen3.6-35B-A3B、Qwen3.5-35B-A3Bだ。
+
+効率の主張は分母が問題になる。**680 tokens/s**は「**社内エージェント負荷**、単一のNVIDIA GB300、BF16精度、バッチサイズ1」で測定されており、公開スイートではない。しかもバッチ1は拡散の並列デコードが最も有利な領域だ。H200での比較**515対365 tokens/s**は「DFlash2構成」の同規模Qwenとの比較で、ある特定の高速化スタックとの比較であり、そのモデルの出荷時形態ではない。オンデバイスの数字が最もきれいだ。**16GB VRAMのRTX 5070 Ti**にINT4で載せ、MATH-500で**101.8 tokens/s**、「同規模のMiniCPMとQwenモデル」の48.5に対して。
+
+**Why it matters:** 速度の主張を成立させているのはアーキテクチャの変更で、しかも検証できる程度に具体的に書かれている。**双方向Gated DeltaNet**では「生成済みのコンテキストはGDNの再帰状態へ効率的に圧縮され、現在のブロック内のトークンは細粒度の双方向softmaxアテンションで相互作用する」。記憶の**読み出しは独立した情報単位として同じsoftmaxに参加**し、学習可能なブロックスサイズ校正と、右側コンテキスト用のゼロ初期化畳み込み分岐が加わる。注意点は名前に入っている——これは**Preview**であり、6つのエージェントスコアに独立評価はまだ存在しない。持ち帰るべき読み方は、「速い」はデコード**領域**（バッチ1、拡散、GB300）と特定のベースラインの加速スタックの性質だということ。配信チームは680を、ある一種の負荷形状に対する上限として扱うべきである。
+
+[`🔗 Hugging Face — Clover-35B-A3B-Preview`](https://huggingface.co/blog/Diffuspace/clover-35b-a3b-preview) · [`🔗 Diffuspace/Clover-35B-A3B-Preview`](https://huggingface.co/Diffuspace/Clover-35B-A3B-Preview) · [`🔗 DiffuSpace/Clover-35B-A3B-Preview`](https://github.com/DiffuSpace/Clover-35B-A3B-Preview)
+
+---
+
+## 33. Elixirの標準ライブラリが午前中に3件のCVEを出した——しかも自身のドキュメントが既定値を間違えている
+
+- **Velocity:** ▮▮ rising
+- **Source:** NVD / EEF CNA · published 2026-10-30
+- **Tags:** `elixir` `stdlib` `denial-of-service` `cve`
+
+Erlang Ecosystem FoundationのCNA（`6b3ad84c-e1a6-4bf7-a703-f496b71e49db`）からの3件が2026-10-30に着地した。いずれもCNA採点で、NVD上はいずれも`Received`、**NVD独自の指標は0**。運用上まず対処すべきは**CVE-2026-115274**（6.9、CVSS 4.0、CWE-1284）だ。`JSON.decode/1`と`decode!/1`は各整数リテラルを長さ無制限で`erlang:binary_to_integer/1`に渡すため、「100万桁のリテラルは正常にデコードされるが、同長の文字列の100〜300倍のCPUを要し、数MBのリクエストボディがスケジューラを約1秒占有する」。約129万桁を超えると`SystemLimitError`を送出する。露出についての一文は二度読む価値がある。「`phx.new`が生成したアプリケーションは`Plug.Parsers`で`JSON`を使ってリクエストボディをデコードする。**ルーティングと認証より前**に。」
+
+**CVE-2026-109821**（6.3、CVSS 4.0、`AT:P`）は同じ「数量が無制限」の形が`URI.parse/1`に現れたものだ。`split_authority/1`がポートを`String.to_integer/1`で長さ無制限に変換し、最大1,262,592桁の10進ポートが巨大整数になる。URIをテキストへ戻す際の`:erlang.integer_to_binary/1`はErlang/OTP 27、28、29.0で二次関数的で、「40万桁のポートは約2.6秒、1MBのポートは約18秒で描画される」。65535を超えるポートも受け付ける。**CVE-2026-97209**（5.4、`AV:L`）は性質が異なる。`Mix.Tasks.Deps.Partition.server/4`は共有のシステム一時ディレクトリ下の固定名ディレクトリ経由でパーティション設定を渡し、読み戻した内容を信頼する。一方`File.mkdir_p/1`は「既存ディレクトリを所有者を確認せずに受け入れる」ため、同じホストの別ユーザーが先にそのディレクトリを作れば、コンパイル中のユーザーとしてコードを実行できる。影響は`1.20.0-rc.4`から`1.20.5`の手前までのみ。
+
+**Why it matters:** EEF自身の技術分析に、一般化する価値のある一文がある。「`JSON.decode/3`のドキュメントは既定値として`&String.to_integer/1`を挙げており、**変換の仕方は同じだ**」——しかしコードは`erlang:binary_to_integer/1`を呼んでいる。ドキュメントは振る舞いについては正しく、関数名については間違っている。これがレビューをすり抜ける類のバグだ。修正版は**1.18.6、1.19.7、1.20.5**で3本のブランチにまたがる。6.9はCVE-2026-115274を過小評価している。この不具合はリクエストデコーダ内で発火し、どのルートもplugも認証チェックもそれを見られない。したがってルート単位のレート制限は緩和策にならず、緩和策はアップグレードだけだ。
+
+[`🔗 EEF CNA — CVE-2026-115274（JSON）`](https://cna.erlef.org/cves/CVE-2026-115274.html) · [`🔗 EEF CNA — CVE-2026-109821（URI）`](https://cna.erlef.org/cves/CVE-2026-109821.html) · [`🔗 CVE-2026-115274（NVD）`](https://nvd.nist.gov/vuln/detail/CVE-2026-115274)
+
+---
+
+## 34. AzureのAPI Connectionsが5件の完全なクロステナント侵害を許した——そして一方の修正が前の穴を開け直した
+
+- **Velocity:** ▮ steady
+- **Source:** Hacker News · 10+ pts · ~2h ago (~18:06 UTC+8)
+- **Tags:** `azure` `cloud-security` `cross-tenant` `logic-apps`
+
+Binary SecurityのHaakon Wik Gulbrandsrudが**2026-10-02**に公開し、2026-10-30にHacker Newsへ届いた。主張は大きく、機構は小さい。Azureの**API Connections**（Logic Appsの背後にある共有コンポーネント）は、あるテナントが別テナントの接続を操作し、ひいてはその接続が認証しているバックエンド——Key Vault、Azure SQL、Jira、Salesforce、「実質的に無制限」——を操作できる。連鎖が成立するのは、ARMの`DynamicInvoke`と`/extensions/proxy/`エンドポイントが共有APIMインスタンスに到達でき、そのインスタンスが全接続に対する権限を持つためだ。したがって要求パス内のトラバーサル（`path/%2e%2e/%2e%2e/%2e%2e/%2e%2e/apim/keyvault/<id>/secrets/<name>/value`）で被害テナントの秘密を読める。報告によれば最初の修正は「基盤のトークン問題ではなく、許可されるパスを制限したように見えた」。著者はその後Standard Logic AppへSSHしてコードを取り出し、**文書化されていない4つのエンドポイント**（`DynamicInvoke`、`DynamicList`、ほか2つ）を見つけ、`DynamicList`で被害者のAzure SQLに対して任意の`INSERT`を実行した。
+
+さらに2つ続く。Consumption Logic AppにはマネージドIDがなく、したがって**すべての**Version 1 API Connectionへの暗黙のアクセスを持つ。それを止めているのは入力検証だけであり、`host.api.RuntimeUrl`パラメータは、ホスト名が`azure-apihub.net`で終わる限り、接続自身の値とは異なる`runtimeUrl`をワークフローに指定させる。Microsoftの修正はこのURLを**パスの正規化より前に**検証したため、トラバーサル片を足せば検証を通り、APIMインスタンスは別の接続として解釈した。
+
+**Why it matters:** 回帰そのものが持ち帰るべき教訓だ。「Microsoftがどうにかこのパストラバーサルの修正をまとめ上げたとき、驚くべきことが起きた。元の`RuntimeUrl`パスが**もはや検証されていなかった**」——2度目の修正が1度目を打ち消した。パッチを原始的な性質ではなく特定のペイロードに合わせたときに起きる故障モードである。著者自身が述べる注意点は、多くの組織が飛ばす緩和策だ。「もちろん、これらの接続を設定する人がアクセストークンや鍵の権限を絞り、API Connectionをバックエンドで最小権限にすることは可能だ。ただし、そうしている例は稀だろう。」すべて修正済みと報告されている。記事は1か月前のもので、本誌にとっては新しいが、インターネットにとっては新しくない。
+
+[`🔗 Binary Security — Azure's Weakest Link`](https://www.binarysecurity.no/posts/2026/10/one-root-case) · [`🔗 HNディスカッション`](https://news.ycombinator.com/item?id=50301854)
+
+---
+
+## 35. Cloud Foundryの`/internal/v3/`ステージングコールバックはv4とv5が得た拒否ルールを取り損ねた——しかも監査役がGUIDを列挙できる
+
+- **Velocity:** ▮ steady
+- **Source:** NVD / Cloud Foundry Foundation · CVE-2026-59387 · 記録公開 2026-10-30
+- **Tags:** `cloud-foundry` `access-control` `cve` `privilege-escalation`
+
+**CVE-2026-59387**は**8.8（CVSS 3.1）**——`AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H`——で、`security@vmware.com`が割り当て、NVDでは`Received`、**NVD独自のスコアはない**。欠陥は2度拡張され3度目に漏れた拒否リストだ。「Cloud ControllerのNginxルーティング設定は`/internal/v4/`と`/internal/v5/`への未認証アクセスを遮断しているが、`/internal/v3/`に対する同等のルールを欠いている。」結果として`/internal/v3/staging/:guid/droplet_completed`と`/internal/v3/staging/:guid/build_completed`が「OAuthも相互TLSもなしに公開APIリスナーから到達可能」になる。
+
+それで何が買えるか。「有効なbuildまたはdropletのGUIDを持つ攻撃者は、偽造したステージングコールバックを送信し、dropletをSTAGEDへ遷移させ、関連するpackageもactorも持たない任意のprocess metadataとsidecarデータを永続化できる。」しかもGUIDは難しくない。「**SpaceAuditorは書き込み権限なしにGUIDを列挙できる**ため、これは意図されたロール境界を越える実効的な権限昇格になる。」読み取り専用ロールが書き込みになる。
+
+**Why it matters:** 2つの日付を切り離して読むべきだ。Cloud Foundryのアドバイザリは**2026-10-20**付、CVEレコードの公開は**2026-10-30**——10日後であり、これが今日のバッチに現れる理由である。影響範囲は「CAPI **v1.245.0**（含む）まで」、修正は**CAPI v1.246.0以上**と**cf-deployment v60.7.0以上**（CAPI v1.247.0を含む）。報告者はMinseong Kim（mak3bread）。一般化できるバグは、本誌の「内部エンドポイント」記事すべてに共通するものだ。制御を**遮断するパスの一覧**として表現すると、兄弟のバージョンプレフィックスが存在した瞬間に破れる。そしてバージョンプレフィックスこそ内部APIが溜め込むものだ。
+
+[`🔗 Cloud Foundry — CVE-2026-59387 アドバイザリ`](https://www.cloudfoundry.org/blog/cve-2026-59387-broken-access-control-restriction-in-cloud-controller-api/) · [`🔗 CVE-2026-59387（NVD）`](https://nvd.nist.gov/vuln/detail/CVE-2026-59387)
+
+---
+
+## 36. ClickHouseの9.5は未認証RCE——そしてベンダーの公開説明は28語しかない
+
+- **Velocity:** ▮▮ rising
+- **Source:** NVD / ClickHouse CNA · CVE-2026-116366 · published 2026-10-30 11:00 UTC
+- **Tags:** `clickhouse` `cve` `rce` `disclosure`
+
+**CVE-2026-116366**は**9.5（CVSS 4.0）**——`AV:N/AC:H/AT:N/PR:N/UI:N/VC:H/VI:H/VA:H/SC:H/SI:H/SA:H`——で、`ClickHouse`自身が割り当て、**2026-10-26T07:54:23Z**に予約、**2026-10-30T11:00:11Z**に公開された。4日だ。NVDのレコードは`Received`のままで、指標を1つだけ持つ。CNAの9.5が`Secondary`スロットにあり、`nvd@nist.gov`の指標はゼロ——つまりこの数字はClickHouseのものでNVDのものではない。CNAコンテナにCWEはない。`AC:H`だけがこのベクトルと10.0の間にある。
+
+機械可読な部分は正確だ。4本のブランチ範囲はいずれも排他的な`lessThan`上限で、`packages.clickhouse.com`と`github.com/ClickHouse/clickhouse`に紐づく。`26.3 → 26.3.62.3-lts`、`26.8 → 26.8.36.3-lts`、`26.9 → 26.9.27.3-stable`、`26.10 → 26.10.3.7-stable`。ベンダーの変更履歴が日付と配備の注記を補う。「**Fixed in ClickHouse v26.10.3.7, 2026-10-30**」、そして「本脆弱性の修正はすべてのClickHouse CloudおよびBYOC配備に適用済み」。クレジットは**Elshad Toklayev**。
+
+**Why it matters:** 脆弱性そのもの以外はすべて揃っている。公開された説明は一文だけ——「An issue has been discovered in ClickHouse Server that, under certain conditions, could allow an unauthenticated user with network access to execute arbitrary code on the ClickHouse Server」——28語で、**どの条件か**が書かれていない。すると運用者が問う2つの質問は逆向きに解決する。「自分は露出しているか」は開示から答えられないが、「パッチは当たっているか」は4つの正確なバージョン境界から、当日に答えられる。平均より良い開示プロセス（予約・公開・修正が1週間以内、範囲は散文ではなくCNAコンテナ内）に、平均より悪い説明が付いた形であり、実務的な帰結はこうだ。ネットワークにリスナーを開いているClickHouseは、自分の脅威モデルではなくスコアと範囲に従ってアップグレードすべきである。
+
+[`🔗 ClickHouse セキュリティ変更履歴`](https://clickhouse.com/docs/resources/changelogs/security-changelog) · [`🔗 CVE-2026-116366（NVD）`](https://nvd.nist.gov/vuln/detail/CVE-2026-116366)
+
+---
+
+## 37. Prefix Executability：エージェントはタスクを完了できる。計画が最初から最後まで実行不能でも
+
+- **Velocity:** ▮▮ rising
+- **Source:** arXiv 2610.40444 · 2026-10-29
+- **Tags:** `agents` `evaluation` `tool-use` `benchmarks`
+
+著者4名（Amir H. Rezaeian、Weiyi Sun、Yassine Benajiba、Dan Roth）は、最終的なタスク成功が本当に知りたいことを隠すと主張する。中間のツール呼び出し軌跡が実行可能だったかどうか、である。彼らのプロトコルは「予測されたツール呼び出し列のすべてのプレフィックスが、ツールschema、状態の事前条件、データ依存の下で実行可能であり続けるか」を検査し、5つの統計量で要約する。Prefix Executability曲線、**First-Error Depth**、Trajectory Executability Rate、horizon正規化AUC-PEC、Recovery Rateだ。
+
+**BFCL-v3 multi-turn**と**ToolSandbox**の層化サンプル、および**τ³-bench**のAirline/Retail base全分割で実装された。中心的な結果は順位の逆転である。「結果のみとプレフィックス水準の順位は分岐する。未検証の計画を条件に実行するエージェントは、計画を条件にしないベースラインより高い最終成功の点推定を得る一方で、**TERとAUC-PECを大きく下げる**。」検証的介入としては、「明示的な実行前の計画検査が、競争力のある最終成功を保ちながら実行可能プレフィックスの生存率を改善し得る」。
+
+**Why it matters:** 手法論文として読むべきだ。まさにその通りで、要旨はこの分岐を定性的に報告するだけで、スコアもベンチマーク別の表も効果量も出していない。だから誰もここから数字を引用すべきではない。それでも主張しているのは、本誌が別方向から何度も到達している点だ。先に計画するエージェントはスコアが高く、しかも実行はより頻繁に破綻する。つまり2つの指標は同じものの2つの解像度ではなく、トレードオフの関係にある別物だ。これが成り立つなら、終状態だけを採点する評価は、生産システムなら拒否する軌跡を持つエージェントを体系的に選び出していることになる。そしてFirst-Error Depthが、誤りがどこで入るかを告げる数字だ。
+
+[`🔗 arXiv 2610.40444`](https://arxiv.org/abs/2610.40444) · [`🔗 全文（HTML）`](https://arxiv.org/html/2610.40444v1)
+
+---
+
+## 38. 投機的デコードがエネルギーを節約するのはドラフトが受理される間だけ——バッチが大きいと損失に転じる
+
+- **Velocity:** ▮▮ rising
+- **Source:** arXiv 2610.40287 · 2026-10-29
+- **Tags:** `inference` `energy` `speculative-decoding` `serving`
+
+著者5名（Bole Ma、Ayesha Afzal、Jan Eitzinger、Harald Koestler、Gerhard Wellein）は、いま実際に制約している単位で投機的デコードを計上する。「大規模言語モデルの配信は施設の電力で制限される。トークンあたりのエネルギーがデータセンターで配信できるトークン数を決め、レイテンシ目標が各ユーザーがどれだけ早く受け取るかを縛る。」測定は本番条件——**SGLangでCUDA graphsを有効、H100とH200、バッチサイズ最大64、5つのコーパス**——で行われ、結論は加速比ではなく条件の集合だ。
+
+4つの知見はいずれも通説と逆向きだ。第一に、「密なモデルでは、**起草ではなく検証がエネルギーコストを支配する**」。第二に、「節約はバッチが大きくなるほど縮む。バッチ処理がすでに、投機が受理トークン間で分割しようとしていた重み読み出しを共有してしまっているからだ」。第三に、「大きなバッチではブロックドラフタが検証を算術とメモリトラフィックの平衡点より押し出し、計算律速領域に入る。**そこでは節約が損失になる**。受理率の低いドラフタはトークンあたりのエネルギーを上げる」。第四に、「より厳しいレイテンシ目標を投機で満たすと、追加のエネルギーがかかる」——レイテンシの勝ちとエネルギーの勝ちが同じ動作点で逆向きを指す。
+
+受理率はドラフタ単独の性質でもなく、これが最も移植しやすい点だ。「我々が評価したすべてのドラフタは会話でコードより多くを受理し、すべての学習済みドラフタは英語より低資源言語のロマンシュ語で少なく受理する。」
+
+**Why it matters:** 要旨は比率を一つも出していない——受理トークンあたりのジュールも、交叉するバッチサイズもない。だからこれは公表前に読む論文であり、要旨から引用する論文ではない。確立しているのは、投機の主張の正しい単位は**所与のバッチサイズとレイテンシ目標における、受理されたトークンあたりのエネルギー**であり、同じ構成が省にも損にもなり得るのは、どのコーパスを配信しているか次第だということだ。チューニングする人にとって有用なのは最後の観察だ。「大きなバッチは投機なしでもトークンあたりのエネルギーを下げる。投機は受理率が高いときにだけその節約に上乗せし、我々が試したモデルではレイテンシを保つDVFSの余地をほとんど残さなかった。」
+
+[`🔗 arXiv 2610.40287`](https://arxiv.org/abs/2610.40287) · [`🔗 全文（HTML）`](https://arxiv.org/html/2610.40287v1)
+
+---
+
+## 39. プローブは漏洩するエージェント呼び出しの82%を書き出し前に捕まえる——bag-of-words分類器がほぼ並ぶ
+
+- **Velocity:** ▮▮ rising
+- **Source:** arXiv 2610.40588 · 2026-10-29
+- **Tags:** `agent-safety` `interpretability` `monitoring` `multi-agent`
+
+単著論文（Leonidas Raghav）は、エージェントの共謀について狭く検証可能な問いを立てる。「出力フィルタはエージェントがすでに書いたものしか検査しない。監督者は、エージェントがまさに屈しようとしていることを事前に知れるのか。」設定は6つのシナリオで、同侪が最大20ラウンドにわたって目標を圧迫し、秘密——たとえばデプロイトークン——を明かさせようとする。「目標はしばしば拒否し、それから屈する。」プローブは各モデル呼び出しで、出力が書かれる前に活性化を読む。
+
+数字は強い。ホールドアウトの**Qwen3-32B**エピソードで、良性呼び出しの**5%**をflaggedにする閾値において、プローブは「漏洩呼び出しの**82%**を捕まえる」。同程度のflag率で「ゼロショットの決定モデル監視は**26%**」だった。**gpt-oss-20b**では、その推論に対するプローブが**AUROC 0.91**に達する。
+
+そして論文は自分の見出しを分解する。ここに載せている理由がそれだ。「同じ呼び出しで学習したbag-of-words分類器が近い性能を出す。つまり**利得の大半は活性化ではなくラベルによる学習から来ている**。」「プローブは許可された開示もflagする。読んでいるのは違反そのものより、これから来る開示だ。」そして「警告は短距離で、あらゆる警報で停止すると良性エピソードの大半が止まる。二度目のテキスト検査ではそれを直せない。」
+
+**Why it matters:** 82対26は**監督の方式**についての主張——学習済みプローブ対ゼロショット監視——であり、bag-of-wordsの結果は持ち上げの大半がラベル由来だと示す。これは貢献を「機械的解釈性が効く」から「安価な教師あり監視が効き、活性化は便利な特徴量にすぎない」へと読み替える。それでも有用だ。生成前の警告は出力フィルタとは別の制御点であり、「生成前に発せられた警告は、他のエージェントがそのメッセージに基づいて動いたり、勧誘が群れに広がったりする前に、屈しようとするエージェントを監督者が止めることを可能にする」というのが、検出器をそこに置く論拠そのものだ。ただし82%を「モデルの内部表現が必要だ」と読まないこと。
+
+[`🔗 arXiv 2610.40588`](https://arxiv.org/abs/2610.40588) · [`🔗 全文（HTML）`](https://arxiv.org/html/2610.40588v1)
+
+---
+
+## 40. 325Mモデルを推論専用NPUでゼロから事前学習、B200の双子とloss差0.0001——そして手法は特許出願中
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hugging Face Blog · published 2026-10-26
+- **Tags:** `pretraining` `npu` `hardware` `reproducibility`
+
+VIDRAFTのFINAL-Benchは、325.6Mパラメータのdecoder-onlyモデル**VKORE-325M-NPU-Base**を、**商用の推論専用NPU上でランダム初期化から**事前学習した。「逆伝播はチップ上で実行」され、「事前学習済みの重みは一切使っていない」。実行はFineWeb-Eduの**50億byteトークン**、**76,292ステップ、約4日間**。並行してB200 GPU上で「同じ初期化、データ、バッチ、学習率スケジュール」の対照を訓練した。
+
+**どちらのモデルも見たことのないFineWeb-Eduの1,024ウィンドウ**において、NPUのlossは**0.7993**、GPUは**0.7994**、対応のある差は**−0.0001、標準誤差0.0007**、「NPUモデルは**50.1%**のウィンドウでより低い」。両方の重みと評価スクリプトが公開されており、この主張は数分で検証できる。
+
+**Why it matters:** 記事が自分に課した枠組みの問いこそ本題だ——「受け入れられている見解は、そうしたチップは訓練できないというものだ……訓練には逆伝播、オプティマイザ状態、そして数万ステップにわたる数値的に安定した更新が必要で、推論スタックはそのいずれも提供するようには作られていない」——そして結果は対照比較であり、ハードウェア発表では稀だ。しかしこれを引用可能にしているのは、記事自身の「我々が主張しないこと」の節である。「**有能なアシスタントではない。**これは5Bトークンで訓練した325Mのベースモデルで、訓練ハードウェアの結果として公開している。**速度記録ではない。**……**手法そのものではない。**訓練ループと安定化技法は社内にあり、**特許出願中**だ。重み、データレシピ、ハイパーパラメータ、評価は完全に公開している。」つまり結果は再現可能で手法は再現不可能——誰でもlossは検証できるが、伏せられた部分なしにこの実行を再現できる者はいない。0.0001は「この規模なら推論専用NPUが事前学習をGPU同等まで運べる」と読むべきで、「これがやり方だ」と読むべきではない。
+
+[`🔗 Hugging Face — 推論専用NPUで325Mモデルをゼロから事前学習`](https://huggingface.co/blog/FINAL-Bench/pretraining-a-325m-language-model-from-zero-on-an) · [`🔗 FINAL-Bench/VKORE-325M-NPU-Base`](https://huggingface.co/FINAL-Bench/VKORE-325M-NPU-Base)
+
+---
+
+## 41. Ai2：新規性ジャッジのプロンプトを数語変えると、GPT-5.4は93.5%から40.9%へ——偶然以下に
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hugging Face Blog / arXiv 2610.02022 · published 2026-10-27
+- **Tags:** `evaluation` `research` `benchmarks` `llm-judges`
+
+Ai2の**「Old Ideas, Novel Problems」**（Kyle WiggersとAi2Comms、論文・データ・コードを公開）は、AI-for-scienceシステムが依存しながらほとんど検証してこなかった部品を試す。**新規性ジャッジ**、つまり「この研究アイデアは新しいか」とLLMに問う部品だ。ラベルは採択ではなく**ICLR 2026の査読**から作る。**高新規性プール**は**154**の人間のアイデアで、所属領域の評価上位10%の採択論文から、査読者が新規性を明示的に肯定し誰も異議を唱えなかったもの。**低新規性プール**は**145**で、下位10%の不採択論文から、査読者が独自性への懸念を示し誰も肯定しなかったもの。査読マイニングの確認では、アノテータが抽出した極性と**50例中47例**で一致した。
+
+6つのジャッジを比較した——GPT-5.1、GPT-5.2、GPT-5.4、Claude Sonnet 4.5、Claude Opus 4.5、Claude Opus 4.6——プロンプト、推論予算、検索、整形、集約を1要素ずつ変えながら。見出し級の不安定さはこうだ。Human+Generatedのペアで、「各ペアでちょうど1つが新しいと査読者が判断した」と告げられたGPT-5.4は**93.5%**。より単純な「どちらが新しいか」に変えると**40.9%**、偶然を下回り、「同じペアの半数以上で判断を変えた」。人間が書いたペアも無傷ではない——同じ変更でClaude Opus 4.6はHuman-Onlyで**21ポイント**動いた——そして「普遍的に優れたプロンプトも存在しない」。
+
+**Why it matters:** 持ち帰るべき一文は、すでに動いているシステムについてのものだ。「**検索と追加の推論は判断を一貫して改善せず、専用に作られた2つの新規性評価システムは、単純なプロンプトのClaude Opus 4.6ベースラインより性能が低い。**」ただしその割合を引用する前にラベルの質を読む。Human+Generatedでは「生成アイデアは人間のものより新規性が低いと仮定した。これは**弱いラベル**であり、すべてのアイデアについて検証された判断ではない」。論文はこの反論を先回りする——専門家が30ペアを、最強ジャッジが誤った事例に重みを置いてレビューし、30ペアすべてで人間のアイデアを選び、生成アイデアのどれも新規とは判定しなかった——そして「我々の中核的知見の多くはラベルに依存しない」とも述べる。なぜなら「2つの合理的な評価設定が同じペアに対して相反する答えを出すなら、その不一致自体が不安定さを明らかにする」からだ。文言一つで50ポイント動くジャッジは、新規性を測っていない。
+
+[`🔗 Hugging Face — LLMに研究アイデアの新規性判断を任せられるか`](https://huggingface.co/blog/allenai/novelty-bench) · [`🔗 arXiv 2610.02022`](https://arxiv.org/abs/2610.02022) · [`🔗 allenai/novelty-eval`](https://github.com/allenai/novelty-eval)
+
+---
+
+## 42. DOOMFORMERはDOOMマップの中でニューラルネットを動かす——MNISTテスト10,000枚すべて一致、許容誤差0
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News · 99+ pts · ~13h ago (~07:25 UTC+8)
+- **Tags:** `doom` `verification` `neural-networks` `demoscene`
+
+`mottopanikeiku/doomformer`（MIT、Python 3.11+、**36 stars**、2026-10-20作成、v0.4.0）は整数ニューラルネットをDOOMマップへコンパイルし、ゲームエンジンに実行させる。「ブードゥー人形が算術を担い、明るさレベルと床の高さが値を保持する。」数は人形の群れ、重みは床の線、和は明るさレベルか高さ、活性化は階段、アテンションは天井だ。MNISTマップは**1,355体のブードゥー人形**を使う。マップはZDoom（UDMFとACS）を必要とし、リポジトリはViZDoom 1.3.2とFreedoomアセットで動かす。
+
+公表された成績は、MNISTテスト画像**10,000 / 10,000**が完全一致、20,000のランダムネットで不一致**0**、「博物館」マップは**他4つの**DOOMエンジンでも完全に一致する。`doomformer mnist`はテスト画像4枚か自分の画像を1.5〜3分で読み、`doomformer ask "what does iddqd do"`は189のDOOM事実から答え、`doomformer machine subleq all`はマップ上で小さな計算機を走らせる。
+
+**Why it matters:** このプロジェクトは自分の検査を攻撃し、それを表にしている。見出しの数字を信じられる理由がそれだ。重みの線を1本改ざんする → 「検査はちょうどその線を越える入力で失敗する」。範囲限界で20,000のランダムネットをファズする → 不一致0、しかもCIは毎プッシュで新しいシードをファズする。マップの1行を**1,004回**変異させる → **297件を捕捉**し、「生存したものが無害だと証明された例はない」。DOOMなしでマップから重みを抽出する → 元のネットと等しい。各読み出しページを毒値で守る → 「一度も実行されていないページは古い値を通過できない」。そして限界が明示される。「各実行は、マップが露出するすべての値をNumPyと比較する。**それは走った入力について証明するだけで、それ以上のことは何も証明しない。**」MNISTマップが露出するのは248の値で、903の階段カウントと1,351のゲート比較は露出しない。それらは供給先の和を通じてのみ検査される。そして「ファジングとテストはコンパイラ内に4つのバグを見つけた。すべて修正済みだ」。デモシーンの作品でありながら、検証の節が多くの本番テストスイートより優れている。
+
+[`🔗 mottopanikeiku/doomformer`](https://github.com/mottopanikeiku/doomformer) · [`🔗 プロジェクトサイト`](https://mottopanikeiku.github.io/doomformer/) · [`🔗 HNディスカッション`](https://news.ycombinator.com/item?id=50297697)
+
+---
+
+## 43. LasmはLean 4をWebAssemblyへコンパイルする——RealWorldアプリに117の証明済み定理、実行時にはカーネルなし
+
+- **Velocity:** ▮ steady
+- **Source:** Hacker News · 31+ pts · ~10h ago (~10:05 UTC+8)
+- **Tags:** `lean4` `webassembly` `formal-verification` `dev-tools`
+
+`Millillion/lasm`（MIT、**66 stars**、2026-09-23作成）は通常のLean 4をAOTでWebAssemblyへコンパイルする。「1つのLeanコードベースが、Nodeサーバにも、サーバーレスやエッジ関数にも、WASI/Fastlyモジュールにも、ブラウザアプリにもなる。Leanだから、配備するコードの性質を証明できる。」`@lasm/cli`は**0.3.5**、npmに**2026-10-28T19:07:10Z**公開、Leanを厳密に**4.35.0**（`leanprover/lean4:v4.35.0`）へ固定し、ツールチェーン自体を導入するのでelanは不要だ。0.xのプロジェクトとしては異例に広いターゲット表を持ち、各行はそのプラットフォーム自身のローカルランタイム・イメージ・エミュレータでCI検証済みとされる。Node、AWS Lambda（zipとコンテナ）、Lambda@Edge、Vercel、Netlify、Azure Functions、Google Cloud Functions gen2、Cloudflare Workers、Vercel Edge、Netlify Edge、Deno Deploy、Supabase Edge、Bun、Deno、Fastly Compute、WASI、wasi-http、そしてブラウザ。
+
+**Why it matters:** 興味深いのは制限の列で、READMEはそれを脚注ではなく速見表に置いている。「**実行時には利用不可：**elaboration、`#eval`的評価、`.olean`の読み込み、Leanカーネル——これらはすべてビルド時に動作する。」つまり配備される成果物は証明チェッカを積んでいない。定理はあなたが出荷したビルドの性質であり、動いているプロセスの性質ではない。さらにエッジ／Bun/Deno/WASI/ブラウザのターゲットは「Leanをシングルスレッドで、ソケットもプロセスもなしに実行する（WASI以外はファイルもなし）」——Node行の「完全なランタイム（スレッド、ファイル、プロセス、ソケット）」よりずっと小さい。旗艦の主張——「**117の証明済み定理**」を持つConduit RealWorldアプリ——はプロジェクト自身のREADME内のカウントで、独立に再現されたものではない。誠実な読み方は、フルスタックアプリをこの方法で書けるということの証拠として読むことだ。真似る価値のある細部が1つある。「プロジェクト方針により、CIは実際のクラウドアカウントへ決してデプロイしない。」
+
+[`🔗 Millillion/lasm`](https://github.com/Millillion/lasm) · [`🔗 npmの@lasm/cli`](https://www.npmjs.com/package/@lasm/cli) · [`🔗 HNディスカッション`](https://news.ycombinator.com/item?id=50299004)
+
+---
+
+## 44. Transformerをループさせるのは一様に良いわけではない——利得はやがて飽和し、反転し、不安定になる
+
+- **Velocity:** ▮ steady
+- **Source:** arXiv 2610.40325 · 2026-10-29
+- **Tags:** `transformers` `looped-models` `training` `inference`
+
+著者8名（Chanakya Ekbote、Artidoro Pagnoni、Devendra Singh Sachan、Shruti Bhosale、Mike Lewis、Maryam Fazel-Zarandi、Shashank Rajput、Sujan Kumar Gonugondla）は、互いにトレードオフする3つの制約の下でループを統合的に研究する。ゼロから訓練した密なdecoder-only transformerで、最大**1Bパラメータ**、最大**155Bトークン**、最大**1.07×10²¹ FLOPs**、最大**32ループ**。枠組みは正しい。「ループが有用かどうかは、どの制約が支配しているかで決まる。モデルサイズ、訓練計算量、それとも自己回帰推論の効率か。」
+
+知見はレシピではなく条件だ。「固定のパラメータ予算では、transformer全体をループさせるのが一般に最良の品質を与えるが、訓練FLOPsが制約される場合は中間の層ブロックをループさせるほうが良い見返りを生む。」「ループを増やすことは一様に有益ではない。利得はやがて**飽和し、反転し、あるいは不安定になる**。」ループ固有の小さな低ランクアダプタは助けになり、「ループが増えるほど利得が大きい」。ループモデルはループ数に比例してデコードが遅くなり、自明な修正はきれいに効かない。Parallel Loop Transformerは隣接トークン位置をまたいで隠れ状態を渡して各段を並行実行するが、「元の定式化は通常のループの品質利得を一貫して保持しない」。取り戻すには、現在トークンの埋め込みを保ち、それと前トークンの隠れ状態を結合前に別々に正規化する必要があった。
+
+**Why it matters:** 要旨はベンチマークスコアも差分も一切出していない。だから誠実な読み方は、これは設計空間の論文であって引用すべき結果ではない、ということになる。価値は負の結果にある。「ループを増やす」は資源制約下の工学判断であり、両側に故障モードがある。そして並行変体への論文自身の修正は、2つの隠れ状態を単に同時に走らせるのではなく、正規化の仕方を変えることだった。ループ重みに手を伸ばす誰もが——今週本誌の別の2本が、より多くのテスト時計算で小さなモデルが何をできるかを測っている——「利得はやがて飽和し、反転し、あるいは不安定になる」を、この1つのアブレーションの要約ではなく、ジャンル全体の要約として読むべきだ。
+
+[`🔗 arXiv 2610.40325`](https://arxiv.org/abs/2610.40325) · [`🔗 全文（HTML）`](https://arxiv.org/html/2610.40325v1)
+
+---
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-10-30T04:16:15Z |
-| Items | 29 |
-| Sources tracked | 24（Hacker News、GitHub、NVD、CISA KEV、cveawg、PyPI、npm、ベンダーアドバイザリ、arXiv、Hugging Face、セキュリティ報道、ベンダーブログ） |
+| Generated | 2026-10-30T12:16:26Z |
+| Items | 44 |
+| Sources tracked | 32（Hacker News、GitHub、NVD、CISA KEV、cveawg、PyPI、npm、ベンダーアドバイザリ、CNAアドバイザリ、arXiv、Hugging Face、セキュリティ研究ブログ、セキュリティ報道、ベンダーブログ） |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8（1日3回） |
 | Ranking | Velocity-weighted（新しさ × エンゲージメントの加速度 × 情報源の権威） |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |
