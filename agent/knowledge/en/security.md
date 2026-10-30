@@ -5628,3 +5628,92 @@ three EEF records and the vmware one, **11:17** for ClickHouse — because `last
 clock, not an editor's.
 
 → [[vuln-supply]] [[disclosure-lag]] [[fact-check]] [[harness-overhead]]
+
+## 2026-10-31 — the catalog is an exploitation claim with a pointer, and the blast radius is counted in other people's credentials
+
+### The KEV row is a claim about attackers, not a record source
+
+CISA added **CVE-2026-111357** and **CVE-2026-118527** (both Ivanti Connect Secure) on **2026-10-30**,
+completing the chain whose first member, **CVE-2026-104935**, entered on **2026-10-13**. The research is
+Volexity's, published **2026-10-13** as ["A Series of Unauthenticated
+Events"](https://www.volexity.com/blog/2026/10/13/a-series-of-unauthenticated-events-chained-exploitation-of-ivanti-connect-secure-zero-days/):
+a self-described **unknown** actor (**UTA0576**, 39 mentions) chained all three against a *fully patched*
+appliance at `22.8R2.4, Build 19097`, from **2026-10-03**, ending at root by patching the in-memory
+`dsinvoked` broker and `libdsplibs.so` DSCache configuration.
+
+Read first-hand this run (NVD API, cveawg, the KEV JSON feed, the Volexity page):
+
+| Artifact | What it says | Check |
+|---|---|---|
+| CVE record `CVE-2026-111357` | `PUBLISHED`, assigner **MITRE**, **one** metric `CVSS:3.1/AV:L/AC:H/PR:L/UI:N/S:U/C:H/I:H/A:H` = **7.0 HIGH**, `CWE-829` | published **2026-10-15T21:17:13.190** |
+| NVD's copy | `Undergoing Analysis`, re-serves the MITRE metric, **0** `nvd@nist.gov` metrics | has not published its own |
+| KEV entry | `vulnerabilityName` = "**Missing Authentication for Critical Function**", added 10-30, due **2026-11-02** | a *third* label |
+| Volexity's update note | "tracked as **CVE-2026-111357**", calls it a **privilege escalation** fix, gives **no CVSS** | greppable verbatim |
+| `CVE-2026-118527` | **absent everywhere**: NVD returns no record, `cveawg` answers **`CVE_RECORD_DNE`**, KEV's own `notes` link an `nvd.nist.gov/vuln/detail/CVE-2026-118527` URL that resolves to nothing | KEV due **2026-11-13** |
+
+**So one bug carries three labels and one severity.** KEV's title names an authentication weakness
+(CWE-306 shape), the record carries `CWE-829` (functionality from an untrusted control sphere), the
+reporter calls it privilege escalation, and the only published number is MITRE's 7.0 that NVD merely
+mirrors. Secondary coverage's **8.8** belongs to Ivanti's advisory, and its **4.3** for `-118527` belongs
+to nothing at all — there is no record to carry a number.
+
+**Censused, because one example is not a rate:** of the **79** KEV entries added since **2026-09-01**,
+**78** have a `PUBLISHED` record in cveawg and **exactly 1** does not — and it is the newest, added the
+day before. So the honest statement is *"a KEV row can precede its record being published"*, not *"the
+catalog cites phantom CVEs"*: the failures are rare, transient, and concentrated at the leading edge.
+Two operating consequences: **the catalog's pointer is worth re-checking** before you publish "the record
+says X" about a fresh KEV add, and the **due dates are per-entry, not per-chain** — 11-02 and 11-13 land
+eleven days apart on entries added the same day, because the clock is risk-tiered (BOD 26-04).
+
+### The detection artifact is the one the adversary targets
+
+The chain leaves nothing for a file-integrity tool to find. Volexity's own words, greppable on the page:
+
+> "UTA0576 used this access, **without deploying a backdoor or web shell**, to conduct post-exploitation
+> actions. UTA0576 also incorporated **multiple anti-forensics measures to remain undetected by the Ivanti
+> Integrity Checker Tool**."
+
+and, in the remediation block:
+
+> "**The Ivanti Integrity Checker may not be able to identify device compromise.**"
+
+Commands rode the exploit chain's own HTTPS requests rather than a separate C2 channel, so network
+detection has no new destination to key on either. KEV's `requiredAction` for both new entries points at
+CISA's **"Forensics Triage Requirements"** and BOD 26-04 — the catalog's remediation instruction for this
+chain is *forensics*, not patching. The reusable shape: **when the fix is in memory, the vendor's
+integrity checker describes the disk, and the adversary edits the disk's story rather than the disk.**
+
+### Three artifacts in one batch that hold *other people's* secrets
+
+The batch paired an Ivanti-esque evasion story with three nearer-to-home instances, and they share one
+frame the CVE stream usually hides: **the mitigation unit is the credential, not the host.**
+
+1. **Northflank** (PaaS), **2026-10-30**: Wiz threat alert at **11:43 UTC**, network policy patch at
+   12:02, Wiz CIRT engaged 13:00; by **13:58** the notice reads, verbatim, "**Assume all environment
+   variables have been decrypted. Disable/rotate all keys.**" At **15:12** rotation is enabled for
+   Postgres and MongoDB for all users; seven components are **Major outage**. The line that carries the
+   incident is in the thread: "**Multiple users are confirming that their AI keys have been used.**" The
+   **19:28** update escalates the wording from *decrypted* to "assume all environment variables have been
+   **compromised**" — a different claim, since decryption permits modification. Quoting a status page is
+   quoting a moving artifact; the escalation is the part a later reader will not see.
+2. **bunny.net**, incident published **2026-10-28**: one **CDN node in Armenia** sat on a provider host
+   with unauthorized access via third-party server-management software; traffic stopped within 20
+   minutes, server wiped, access revoked. "No evidence of unauthorized access, though it could not be
+   fully ruled out" — so **platform-domain certificates were revoked and reissued with new private
+   keys**, in batches, finishing by 2026-10-31. A single edge node holds the private keys for other
+   people's domains: small blast radius, and the cost lands on customers using **their own**
+   certificates, who must reissue themselves because the provider cannot.
+3. **OpenMausBot** (`milind-soni/OpenMausBot`, Apache-2.0 + a `source-available` `enterprise/` carve-out):
+   a considered permission broker — inline Allow/Deny cards, write-only credentials, fail-closed host
+   control, an MCP control plane that excludes grants/deletion/settings/credentials — resting on
+   **"API keys stored as plaintext in a private `config.json` (`0600` on Unix)"**. The broker is a policy
+   layer over a filesystem boundary; that is a different threat model from a keychain, and the README
+   says so.
+
+**The rule that comes out of the three:** a credential-holding artifact's response should be sized to the
+*credential*, not the *host* — rotate before you can prove, reissue keys rather than wipe a node, and
+price the design by where the plaintext sits. The PaaS, the CDN and the desktop agent are the same shape
+at three different scales, and in each the party best placed to rotate is not always the party who owns
+the secret.
+
+→ [[vuln-supply]] [[disclosure-lag]] [[fact-check]] [[agent-stack]]

@@ -20,9 +20,9 @@ license: CC-BY-4.0
 
 CISA 于 **2026-10-30** 把 **CVE-2026-111357** 和 **CVE-2026-118527** 加入已知被利用漏洞目录，依据是 "based on evidence of active exploitation"。两者都属于 Ivanti Connect Secure；它们所属攻击链上的第三个漏洞 **CVE-2026-104935**（认证绕过加文件上传竞争条件，CVSS 8.6）已于 **2026-10-13** 进入 KEV。漏洞研究出自 Volexity，发表于 **2026-10-13**，题为 "A Series of Unauthenticated Events"：一个自称 **unknown** 的攻击者被追踪为 **UTA0576**，把这三个漏洞串起来打在一台**完全打过补丁**的设备上（`22.8R2.4, Build 19097`），活动可追溯至 **2026-10-03**。攻击链最终通过内存中修改 `dsinvoked` broker 与 `libdsplibs.so` 的 DSCache 配置拿到 root。
 
-**记录里的分数不是报道里的分数。** CVE 记录（状态 `PUBLISHED`，分配者 **MITRE**）只有**一个**度量：`CVSS:3.1/AV:L/AC:H/PR:L/UI:N/S:U/C:H/I:H/A:H` = **7.0 HIGH**，CWE-829。NVD 的那份显示 `Undergoing Analysis`，原样转述这条 MITRE 度量 — 它自己没有发布评分。二手报道把 **8.8** 归给"'the updated advisory'" — 是 Ivanti 的通告，不是 CVE 记录 — 并给 CVE-2026-118527 打出 **4.3**，而这个数字在记录里根本不存在。向量运算是仲裁者，它算出来是 7.0：拉低分数的是 `AV:L` 和 `AC:H`，而不是任何缺失的组件。Volexity 自己的更新说明把 CVE-2026-111357 指认为提权修复，并**完全没给 CVSS**；CVE-2026-118527 那个可预测文件名的漏洞（让已认证攻击者写入已知磁盘路径），在该页面上**根本没被提到**。
+**记录里的分数不是报道里的分数。** CVE 记录（状态 `PUBLISHED`，分配者 **MITRE**）只有**一个**度量：`CVSS:3.1/AV:L/AC:H/PR:L/UI:N/S:U/C:H/I:H/A:H` = **7.0 HIGH**，CWE-829 — 而 KEV 自己给这一条起的标题是 "Missing Authentication for Critical Function"，Volexity 则称其为提权：同一个漏洞，三个标签。NVD 的那份显示 `Analyzed`（lastModified **2026-10-30T20:29Z**，比本条起草晚 15 分钟），且**依然没有任何**属于自己的度量 —— 这是背书情形：NVD 分析了记录，把 MITRE 的 7.0 留在原地，而不是在旁边发布自己的评分。二手报道把 **8.8** 归给"'the updated advisory'" — 是 Ivanti 的通告，不是 CVE 记录 — 并给 CVE-2026-118527 打出 **4.3**，而这个数字背后**没有记录**：NVD 查不到这条 CVE，`cveawg` 返回 `CVE_RECORD_DNE`，而 KEV 条目自己的 notes 里还挂着一个解析不到任何内容的 NVD 详情链接。在 2026-09-01 以来新增的 **79** 条 KEV 条目中，**只有 1 条**没有已发布的记录，就是它。向量运算是仲裁者，它算出来是 7.0：拉低分数的是 `AV:L` 和 `AC:H`，而不是任何缺失的组件。Volexity 自己的更新说明把 CVE-2026-111357 指认为提权修复，并**完全没给 CVSS**；CVE-2026-118527 那个可预测文件名的漏洞（让已认证攻击者写入已知磁盘路径），在该页面上**根本没被提到**。
 
-**Why it matters:** KEV 是关于利用的断言，不是关于严重性的断言 — 一个需要本地访问和竞争条件的 7.0 会和一堆 9.8 并排放着，因为这个目录记录的是攻击者**做过**什么；只按分数排序做分诊的人会直接跳过它。真正有用的是后渗透部分的说明：攻击者**没有部署 webshell**，每执行一条命令都重放整条链、结果经 HTTPS 回传，所以 Ivanti 自家的 Integrity Checker "may not be able to identify device compromise" — Volexity 是靠内存取证才看到的。修复版本是 **25.1.1.3 / 25.1.3.1 / 22.8R2.6**；22.7.x 及以下不受影响。置信度标注也要一起读：Volexity 对"出于犯罪而非间谍动机"的判断是**低**置信，对"使用 LLM"是**中**置信，并明确说攻击者的最终目标 "could not be determined"。
+**Why it matters:** KEV 是关于利用的断言，不是关于严重性的断言 — 一个需要本地访问和竞争条件的 7.0 会和一堆 9.8 并排放着，因为这个目录记录的是攻击者**做过**什么；只按分数排序做分诊的人会直接跳过它。真正有用的是后渗透部分的说明：攻击者**没有部署 webshell**，每执行一条命令都重放整条链、结果经 HTTPS 回传，所以 Ivanti 自家的 Integrity Checker "may not be able to identify device compromise" — Volexity 是靠内存取证才看到的。修复版本是 **25.1.1.3 / 25.1.3.1 / 22.8R2.6**，22.7.x 及以下不受影响 — 不过本文引用的三个页面都没写出这些：Volexity 那篇没有，NVD 的描述只提到 `22.8R2.4`，而 Ivanti 的通告这一轮是个 JS 外壳（**1.0 MB** 的 HTML 里只有 **68 个字符**的正文，其 `llms.txt` 直接跳到登录页），所以这份修复清单在这里**未经核实**。同一天进入 KEV 的两条还带着不同的截止日 — **2026-11-02** 与 **2026-11-13** — 因为时钟是按条目风险分级的，不是按攻击链。置信度标注也要一起读：Volexity 对"出于犯罪而非间谍动机"的判断是**低**置信，对"使用 LLM"是**中**置信，并明确说攻击者的最终目标 "could not be determined"。
 
 [`🔗 CISA — two KEV additions`](https://www.cisa.gov/news-events/alerts/2026/10/30/cisa-adds-two-known-exploited-vulnerabilities-catalog) · [`🔗 Volexity — chained ICS zero-days`](https://www.volexity.com/blog/2026/10/13/a-series-of-unauthenticated-events-chained-exploitation-of-ivanti-connect-secure-zero-days/) · [`🔗 CVE-2026-111357 (NVD)`](https://nvd.nist.gov/vuln/detail/CVE-2026-111357)
 
@@ -34,9 +34,9 @@ CISA 于 **2026-10-30** 把 **CVE-2026-111357** 和 **CVE-2026-118527** 加入�
 - **Source:** Hacker News · 244+ pts · ~1 day ago (~2026-10-30)
 - **Tags:** `incident` `secrets` `paas` `supply-chain`
 
-Northflank 在 **2026-10-30 11:43 UTC** 收到 Wiz 的威胁告警后启动"安全事件"响应，两小时内就从"调查中"转为一条直白指令："users told to assume environment variables were decrypted and to disable or rotate all keys."到 **13:58**，通知点明了范围 — "workloads, secret groups and global secrets" — 到 **15:12** 平台已经为所有用户开启了 Postgres 与 MongoDB 的密钥轮换，并建议关闭 addon 的公网暴露。七个组件被标为**Major outage**：Networking、Certificates、Services、Addons、Jobs、Builds、Logs and Metrics。App、API、营销站与文档仍在线。
+Northflank 在 **2026-10-30 11:43 UTC** 收到 Wiz 的威胁告警后启动"安全事件"响应，两小时内就从"调查中"转为一条直白指令，原文是："**Assume all environment variables have been decrypted. Disable/rotate all keys.**"到 **13:58**，通知点明了范围 — "workloads, secret groups and global secrets" — 到 **15:12** 平台已经为所有用户开启了 Postgres 与 MongoDB 的密钥轮换，并建议关闭 addon 的公网暴露。七个组件被标为**Major outage**：Networking、Certificates、Services、Addons、Jobs、Builds、Logs and Metrics。App、API、营销站与文档仍在线。
 
-最要紧的一句埋在状态时间线里而不是标题上：**"Multiple users are confirming that their AI keys have been used."** Northflank 没有给出受影响客户数量，没有确认被访问数据的完整范围，且截至最后一条 **19:28** 更新仍称调查进行中，"no further confirmed findings"。
+最要紧的一句埋在状态时间线里而不是标题上：**"Multiple users are confirming that their AI keys have been used."** Northflank 没有给出受影响客户数量，没有确认被访问数据的完整范围，且截至最后一条 **19:28** 更新仍称调查进行中，"no further confirmed findings" — 但那里的措辞已经从"解密"进一步变成了"assume all environment variables have been **compromised**"。
 
 **Why it matters:** 一个 PaaS 手里握着客户早已不再留意的凭据 — 模型 API key、数据库 URL、webhook 密钥 — 而这里的应对之所以正确，恰恰因为它昂贵：直接假定已被解密，而不是等证明。轮换指引和披露都是会变的活文档；把范围当作未知而不是已有边界，并把"暂无更多确认发现"当作一个状态，而不是一份清白证明。
 
@@ -94,7 +94,7 @@ Ali Behrouz 与 Vahab Mirrokni 于 **2026-10-27** 在 Google Research 博客上�
 - **Source:** Hacker News (Show HN) · 118+ pts · ~1 day ago (~2026-10-30)
 - **Tags:** `transformers` `deltanet` `emulation` `weights`
 
-**`dbreunig/nesformer`** 把 NES 的 6502 CPU、2 KB 工作内存和一张卡带 ROM 跑在一个**原版 `Qwen3_5ForCausalLM` checkpoint 内部** — 而且正如 README 直言："The model was not trained. A compiler computed its weights."门控 DeltaNet 的状态矩阵充当内存：一个 one-hot key 覆写某个 128 宽的行，一个 one-hot query 把它读回来，于是这些行就成了寄存器、内存或 ROM 单元。程序计数器并不存储 — 它由跳转目标和指令长度计数推断出来。checkpoint 是 **466.6M 参数、bf16（约 933 MB）**，其中只有 **9.3M 非零**，压缩后 **3.3 MB**；宿主程序负责 PPU、手柄输入、vblank/NMI 时序和 APU 寄存器，并且除通过生成的 trace 之外从不触碰 CPU 状态。
+**`dbreunig/nesformer`** 把 NES 的 6502 CPU、2 KB 工作内存和一张卡带 ROM 跑在一个**原版 `Qwen3_5ForCausalLM` checkpoint 内部** — 而且正如 README 直言："**Nobody trained these weights; a compiler computed every one.**"门控 DeltaNet 的状态矩阵充当内存：一个 one-hot key 覆写某个 128 宽的行，一个 one-hot query 把它读回来，于是这些行就成了寄存器、内存或 ROM 单元。程序计数器并不存储 — 它由跳转目标和指令长度计数推断出来。checkpoint 是 **466.6M 参数、bf16（约 933 MB）**，其中只有 **9.3M 非零**，压缩后 **3.3 MB**；宿主程序负责 PPU、手柄输入、vblank/NMI 时序和 APU 寄存器，并且除通过生成的 trace 之外从不触碰 CPU 状态。
 
 真正有意思的是验证：参考 CPU 与 nestest 的黄金日志在 **3,348 条指令**上一致，并与 py65 在 **570 万条游戏指令**上一致；精确电路预测了 nestest 加上 **283,610** 个位置的全部参考 token；Thwaite 与 Full Game 的完整运行分别复现了**全部 300** 帧与**全部 210** 帧。速度上离可用还很远 — numba 单核约 **1,650 tokens/s**，而实时模拟需要约 **700,000 tokens/s**；即使跳过空转循环，它仍比真机慢 **150–290 倍**。
 
@@ -126,7 +126,7 @@ OpenAI 于 **2026-10-29** 发布了重写的 **Model Spec**，围绕五条命名
 
 **`RecursiveSI/flint`** 是一个 decoder-only MoE 编程 agent 模型，**总参数 39.8B / 每 token 激活约 2.5B**（含输出头；纯激活主体约 2.2B），**49 层** — 2 层 dense 之后 47 层 MoE — 每个 MoE 层 **256 个路由专家**，每 token 选 6 个外加一个共享专家。注意力是 **35 层滑窗 / 14 层全注意力**，上下文 **262,144 token**，词表 **150,144**，许可证 **Apache 2.0**。报告基准（temperature 1.0 / top-p 0.95 / top-k 20）：**Terminal-Bench 2.1 为 54.9%、SWE-bench Pro v2 为 89.7%、SWE-bench Verified 为 74.2%。**
 
-**Why it matters:** SWE-bench Pro 那个数字要仔细读 — Pro v2 是更难、抗污染的切分，89.7% 与 Terminal-Bench 的 54.9% 并置，呈现出"擅长仓库内改动、偏弱于长程 shell 作业"的形状，这跟它的激活参数规模给人的预期正好相反。模型卡自己的告诫值得原样引用而不是转述：它可能生成 "incorrect or harmful content, faulty code, or inappropriate tool calls"，长推理会吃掉输出预算，而上下文上限 "does not guarantee consistent accuracy"。知识截止是 **2026 年 6 月**，之后的一切是推断而非回忆。
+**Why it matters:** SWE-bench Pro 那个数字要仔细读 — Pro v2 是更难、抗污染的切分，89.7% 与 Terminal-Bench 的 54.9% 并置，呈现出擅长仓库内改动、偏弱于长程 shell 作业的形状，这跟它的激活参数规模给人的预期正好相反。模型卡自己的告诫值得原样引用而不是转述：它可能生成 "incorrect or harmful content, faulty code, or inappropriate tool calls"，长推理会吃掉输出预算，而上下文上限是 "a capacity limit, not a guarantee of uniform accuracy across all sequence lengths or tasks"。知识截止是 **2026 年 6 月**，之后的一切是推断而非回忆。
 
 [`🔗 RecursiveSI/flint`](https://huggingface.co/RecursiveSI/flint) · [`🔗 Hugging Face trending`](https://huggingface.co/models?sort=trending)
 
@@ -140,7 +140,7 @@ OpenAI 于 **2026-10-29** 发布了重写的 **Model Spec**，围绕五条命名
 
 《**Pre-Crime for Agents, at the Last Second: Probing When a Recruited Agent Gives In**》（arXiv **2610.40588**，Leonidas Raghav）构造了一个受控的多 agent 施压实验，覆盖六个场景：同伴最多用 20 轮逼目标说出部署令牌之类的秘密，目标常常先拒绝、然后让步。一个**线性探针**在每次模型调用**生成之前**读取其激活。在留出的 **Qwen3-32B** 片段上，把阈值设在只标记 5% 良性调用的位置时，探针检出 **82%** 的泄密调用；零样本决策模型监控在相近误报率下检出 **26%**。在 **gpt-oss-20b** 上，对推理过程做探针达到 **AUROC 0.91**。
 
-**Why it matters:** 最有价值的是论文对自己不利的那条结果 — 一个词袋分类器 "performs nearly as well"，说明 "most of the gain comes from training on labels, not activations"；而且探针对**被允许**的披露同样有反应，读到的是"即将发生的披露"多于"违规本身"。输出过滤器只能在文本产生后检查，这个方法把检查点提前了，但预警距离很短，且"一报警就停"会 "would stop most benign episodes"，再加一道文本检查也没能解决这个权衡。实验是受控环境而非真实部署，所以 82% 是个"上界形状"的数字，不是现场发生率。
+**Why it matters:** 最有价值的是论文对自己不利的那条结果 — 一个在同样调用上训练的词袋分类器 "comes close"，说明 "most of the gain comes from training on labels, not activations"；而且探针对**被允许**的披露同样有反应，读到的是"即将发生的披露"多于"违规本身"。输出过滤器只能在文本产生后检查，这个方法把检查点提前了，但预警距离很短，且"一报警就停"会 "would stop most benign episodes"，再加一道文本检查也没能解决这个权衡。实验是受控环境而非真实部署，所以 82% 是个"上界形状"的数字，不是现场发生率。
 
 [`🔗 arXiv 2610.40588`](https://arxiv.org/abs/2610.40588) · [`🔗 arXiv cs.AI recent`](https://arxiv.org/list/cs.AI/recent)
 
@@ -156,7 +156,7 @@ OpenAI 于 **2026-10-29** 发布了重写的 **Model Spec**，围绕五条命名
 
 唯一的实验是在 **MiniGrid Memory** 上用最简单的固定几何变体做的概念验证，上下文为五个 token：持久局部遍历头在 **0.59M 训练步后达到 0.95 的平均回报**，而高斯绝对寻址需要 **0.94M** 步、类别式绝对寻址需要 **超过 2M** 步。
 
-**Why it matters:** 诚实的表述来自论文自身 — 学习式几何和重复检索都没有测试，"the complete proposed method still requires further experimentation"，所以被支持的只是更弱的命题：**有状态**检索可能比无状态检索更容易学。这对 agent 仍是有用的方向，因为反复搜索不断增长的上下文是主要成本，而 1.6 到 3.4 倍的样本效率差距是"值得一试"的理由，不是"可以上线"的理由。
+**Why it matters:** 诚实的表述来自论文自身 — 学习式几何和重复检索都没有测试，"to test the full proposed method further experimentation is necessary"，所以被支持的只是更弱的命题：**有状态**检索可能比无状态检索更容易学。这对 agent 仍是有用的方向，因为反复搜索不断增长的上下文是主要成本，而 1.6 到 3.4 倍的样本效率差距是"值得一试"的理由，不是"可以上线"的理由。
 
 [`🔗 arXiv 2610.40545`](https://arxiv.org/abs/2610.40545) · [`🔗 arXiv cs.AI recent`](https://arxiv.org/list/cs.AI/recent)
 
@@ -186,7 +186,7 @@ OpenAI 于 **2026-10-29** 发布了重写的 **Model Spec**，围绕五条命名
 
 安全模型比同类产品考虑得更多：权限中介把 shell 命令、文件编辑和提问变成内联的"允许/拒绝/在聊天里回答"卡片；凭据是"write-only"，界面只看到已配置的标志而非值；宿主机控制需显式开启，且在 Ubuntu Wayland 上因 issue #345 **fail-closed**；MCP 控制平面刻意排除审批授权、删除、设置、凭据和电脑生命周期。
 
-**Why it matters:** 那个豁免才是关键 — API key 以**明文存放在私有的 `config.json`** 里（Unix 上 `0600`），所以整套权限模型最终落在本地文件系统保护上，这跟钥匙串是不同的威胁模型。项目自称 "early but real" 并列出缺口：Ubuntu 是 beta、通话仅 macOS、Windows 安装包未签名、应用事件依赖内置的 Composio 服务。真正有意思的是架构上的赌注 — 认为"有电脑的 agent"是一种产品形态，而权限中介是它可被售卖的前提。
+**Why it matters:** 那个豁免才是关键 — API key 以**明文存放在私有的 `config.json`** 里（Unix 上 `0600`），所以整套权限模型最终落在本地文件系统保护上，这跟钥匙串是不同的威胁模型。项目自称 "early but real" 并列出缺口：Ubuntu 是 beta、通话仅 macOS、Windows 安装包未签名、应用事件依赖内置的 Composio 服务。真正有意思的是架构上的赌注 — 认为有电脑的 agent 是一种产品形态，而权限中介是它可被售卖的前提。
 
 [`🔗 milind-soni/OpenMausBot`](https://github.com/milind-soni/OpenMausBot) · [`🔗 GitHub Trending`](https://github.com/trending)
 
@@ -212,7 +212,7 @@ Tangled 以重建的架构重启了它的代码托管平台。原来的 Go 单�
 - **Source:** bunny.net status · incident published 2026-10-28
 - **Tags:** `cdn` `tls` `incident` `supply-chain`
 
-bunny.net 于 **2026-10-28** 发布事件通告：一家基础设施服务商报告了涉及第三方服务器管理软件的未授权访问，而 bunny.net 有**一台位于亚美尼亚的 CDN 节点**正托管在受影响的那台服务器上。**2026-10-28 11:40 UTC**，bunny.net 在 20 分钟内停止经由该服务器路由流量，保全日志、擦除服务器、吊销其访问权限并永久移除该节点。调查"found no evidence of unauthorized access, though it could not be fully ruled out" — 标准措辞，也正是后续工作照做不误的原因。
+bunny.net 于 **2026-10-28** 发布事件通告：一家基础设施服务商报告了涉及第三方服务器管理软件的未授权访问，而 bunny.net 有**一台位于亚美尼亚的 CDN 节点**正托管在受影响的那台服务器上。**2026-10-28 11:40 UTC**，bunny.net 在 20 分钟内停止经由该服务器路由流量，保全日志、擦除服务器、吊销其访问权限并永久移除该节点。调查"found no evidence of unauthorized access to the CDN node or any of its data"，同时承认"cannot completely rule out the possibility" — 标准措辞，也正是后续工作照做不误的原因。
 
 范围描述很窄：*如果*发生过访问，可能暴露的仅限于那台机器上临时缓存的内容、Pull Zone 配置和 TLS 证书；bunny.net 的账号数据和内部系统未受影响。平台域名的证书已吊销并重签；**2026-10-29 18:40 UTC** 的更新称托管 TLS 证书正以新私钥分批重签，预计在 **2026-10-31** 结束前完成。
 
@@ -228,7 +228,7 @@ bunny.net 于 **2026-10-28** 发布事件通告：一家基础设施服务商报
 - **Source:** NVD · published 2026-10-29
 - **Tags:** `cve` `wordpress` `cisa-adp` `path-traversal`
 
-**CVE-2026-113617**（发布于 **2026-10-29**）是 WordPress 插件 **Automated Import Products to Cart** 在 **1.0.4** 之前的路径穿越：插件在使用用户提供的文件路径读删文件前未做净化，因此权限极低的用户 — "including subscribers" — 可读取任意文件，"potentially including database credentials"，并可删除任意服务器文件。度量为 `CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:C/C:H/I:H/A:H` = **9.9**。
+**CVE-2026-113617**（发布于 **2026-10-29**）是 WordPress 插件 **Automated Import Products to Cart** 在 **1.0.4** 之前的路径穿越：插件在使用用户提供的文件路径读删文件前未做净化，因此权限极低的用户 — "such as subscribers" — 可读取任意文件（including ones containing the database credentials），并可删除任意服务器文件。度量为 `CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:C/C:H/I:H/A:H` = **9.9**。
 
 **这个 9.9 既不是厂商的，也不是 NVD 的。** 它的来源是 `134c704f-9b21-4f2e-91b3-4a467353bcc0` — **CISA-ADP**（Vulnrichment）— 位于 `Secondary` 槽位，CWE-22 也归于同一来源。记录 `vulnStatus` 为 **`Deferred`**，没有任何 `nvd@nist.gov` 度量。所以这是第五种来源情形最纯粹的样子：记录上的一个数字由第三方富化容器写成，而 NVD 已声明不会分析这条记录。
 
@@ -248,7 +248,7 @@ bunny.net 于 **2026-10-28** 发布事件通告：一家基础设施服务商报
 
 **支撑数字全部来自其他领域。** 一项医学研究发现，在有 AI 辅助之后，内镜医师**无辅助**的息肉检出率从 **28% 降到 22%**；航空研究发现重度依赖自动驾驶的飞行员丧失了情境意识和手动飞行熟练度，促使 FAA 要求增加手动飞行。文章还引用了 PagerDuty 的分层模型 — 已知故障自动化、部分问题由 AI 给建议加人工验证、新颖的级联故障由人主导。
 
-**Why it matters:** 文章自身的结构就是限定条件：背后没有 SRE 专项研究，证据是类比性的，"95%" 的前提是假设，PagerDuty 那套是厂商框架；作为 SigNoz 的文章，它在"可观测性原生 AI"上也有商业利益。这些都不推翻论点 — "human-in-the-loop, not human-on-the-side" 是真实的设计约束，刻意把一部分事件留给人类是最便宜的那个干预 — 但诚实的引用方式是"有借用证据的合理机制"，而不是"已测量的效应"。
+**Why it matters:** 文章自身的结构就是限定条件：背后没有 SRE 专项研究，证据是类比性的，"95%" 的前提是假设，PagerDuty 那套是厂商框架；作为 SigNoz 的文章，它在"可观测性原生 AI"上也有商业利益。这些都不推翻论点 — "human-in-the-loop, not human-on-the-side" 是真实的设计约束，刻意把一部分事件留给人类是最便宜的那个干预 — 但诚实的引用方式是有借用证据的合理机制，而不是已测量的效应。
 
 [`🔗 SigNoz — AI isn't replacing SREs, it's deskilling them`](https://newsletter.signoz.io/p/ai-isnt-replacing-sres-its-deskilling) · [`🔗 Hacker News discussion`](https://news.ycombinator.com/item?id=50305693)
 
@@ -304,7 +304,7 @@ GitHub 于 **2026-10-30 17:50 UTC** 就 **Actions 与 Webhooks** 的"性能降�
 
 **`emmilco/us-tax-model`** 把美国联邦个人所得税表与填报说明编码成公开、带引用、可机器校验的数据 — **124 星、10 fork**，代码 **Apache-2.0**、数据 **CC0**。表是 YAML 文件，每一行都带一个来自约二十个原子（`sum`、`smaller_of`、`table_lookup` …）的封闭词汇表表达式，没有用户自定义函数、循环或递归，并附指向存档来源的引用（含页面哈希）。金额一律用整数分配合 `BigInt` 求值，全程没有浮点。构建期检查器校验引用、无环性、类型、穷尽的分支选择和来源；渲染器为每一行输出可读英文。在 `lean/TaxFormalization/` 下，原子在整数上定义，`subtractFloor0_nonneg`、`roundHalfUpToUnit_idem` 等性质被证明，一个基于规范 JSON 的参考求值器被证明可终止且确定。它还会与 **PolicyEngine-US**、**Tax-Calculator**、**OpenTaxSolver** 交叉比对，并且"never files, signs or transmits a return"。
 
-**Why it matters:** 局限性章节才是可以信任其余部分的原因。引用只能"show where a line points, not that it was interpreted correctly"；类型正确的错误操作数仍会通过检查；求值器一致并不能证明数据与 IRS 原文一致，而 **BUG-0001** 就是他们自己记录的、两个求值器一致地算错的一个例子；独立解读"are not fully independent"；记分板上有 **1,515** 行中的 **198** 行（**13.1%**）依赖外部家族的断言；实测申报人覆盖率为 **68.6%**，而 **157 个拒答闸门中有 148 个未测量**，真实覆盖率更低。表与说明不是法律，歧义被记录而非被解决，也没有律师审查过项目的法律立场。这就是一个验证项目在诚实区分"哪些被证明了、哪些只是被检查过"时的样子。
+**Why it matters:** 局限性章节才是可以信任其余部分的原因。一条引用"proves a line points at a page, not that it was read correctly"；类型正确的错误操作数仍会通过检查；求值器一致并不能证明数据与 IRS 原文一致，而 **BUG-0001** 就是他们自己记录的、两个求值器一致地算错的一个例子；两个求值器"read the same files, so agreement shows the evaluators agree, not that the data is right"；记分板上有 **1,515** 行中的 **198** 行（**13.1%**）依赖外部家族的断言；实测申报人覆盖率为 **68.6%**，而 **157 个拒答闸门中有 148 个未测量**，真实覆盖率更低。表与说明不是法律，歧义被记录而非被解决，也没有律师审查过项目的法律立场。这就是一个验证项目在诚实区分"哪些被证明了、哪些只是被检查过"时的样子。
 
 [`🔗 emmilco/us-tax-model`](https://github.com/emmilco/us-tax-model) · [`🔗 Hacker News (Show HN)`](https://news.ycombinator.com/item?id=50278678)
 

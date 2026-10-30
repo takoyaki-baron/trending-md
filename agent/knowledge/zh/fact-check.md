@@ -1163,3 +1163,37 @@ you about the silly memory leak or deadlock that you left in." 点名了机械�
 要带走的一般单位：**缺席断言是关于某个字段的断言，因此任何另一个持有取值的字段都能否证它**——而一个在字段被读取之前写下的缓存，绝不能代替「记录里没有它」（CNA 缓存现在带 schema 版本，正是为此）。
 
 → [[disclosure-lag]] [[vuln-supply]] [[security]]
+
+## 2026-10-31 —— 引号里的句子是关于**字节**的断言，而抽取器是仪器的一部分
+
+同一缺陷的三次发布，而人眼一次都没抓住的原因在于：**这句话读起来是真的**。Cerebras 被引作「an illustrative configuration, not a reported **end-to-end** benchmark」（`end-to-end` 在 184 KB 的载荷里出现 **0** 次）；Northflank 那条「逐字」指令在重读之前一直是转述；10-31 的 feed 把 `nesformer` 的「The model was not trained. A compiler computed its weights.」发了出来，而 README 写的是「**Nobody trained these weights; a compiler computed every one.**」。每一处周围的*分析*都是对的，只有引文是编的——这正是它能活过审阅的原因。
+
+`claim-unit-lint.mjs --check quotation` 现在拥有这个单位。那个文件里其他每一项检查读的都是数字，只有它读字符串；而它的检验是文件里最便宜的，因为页面文本早已被 `count` 检查抓到手里——`page.includes(quote)`。
+
+**它在立案当天产出的那条发现。** 10-31 feed 的第 10 条：「the complete proposed method still requires further experimentation」。arXiv 2610.40545 的摘要写的是「**to test the full proposed method further experimentation is necessary**」。没有数字错、没有状态过期、没有仓库归档——其他每项检查都让这一条通过，而这句话听起来正像作者会写的限制。这是任何旁证数字都抓不到的唯一失效形态。
+
+### 九条护栏，以及最初十三条发现里有八条是检查器自己的错
+
+这才是可复用的部分。**引文检查不能未校准就上线**，因为一段真引文对不上真页面，比一段假引文对不上要常见得多：
+
+1. **标点不是词。** 最初十三条第里有九条是来源继续、而引文以句号、逗号或冒号收尾——Model Spec 的「…reflect the Model Spec, **but** we are…」被发布成「…the Model Spec.」。一个拥有「编造句子」的检查不该报标点漂移，所以包含检验只跑字母与数字。（同一条规则也顺手解决了句尾与「标题的句号被写成逗号」两件事。）
+2. **引号按行配对，奇数行整行跳过。** 错配的 span 会从一段引文的结尾连到下一段的开头；草稿里 29 词与 32 词的「引文」就是这么来的——而对抽出 span 加长度过滤会让错配**更糟**，因为跳过一段很短的 `"95%"` 会把这一行之后的所有配对整体错位。
+3. **去空白回退。** 词中间的 `<em>` 在去标签时会变成空格，硬换行的 README 会把句子断到两行。两边都去空白比较，一次解决两者。
+4. **仓库的 `description` 不是它的 README。** 第 5 条的「Skills for Real Engineers. Straight from my .agents directory.」在 `mattpocock/skills` 的 README 里 grep **0** 次，却在 `description` 字段里逐字存在——而 trending 页显示的正是那一行，所以作者抄的就是它。仓库页面（`github.com/<slug>`，不计费）只在**引文仍未命中时**才抓。
+5. **记录不是页面。** 「In the Linux kernel, the following vulnerability has been resolved」是对 CVE 记录 `descriptions[]` 的引用，任何被引博客都不必承载它。NVD 与 CNA 的 description、KEV 的 `name` + `shortDescription` 都是逐字来源，所以字段引文要对字段核验——CNA 缓存因此升到 **`v: 3`**。
+6. **抽取器的 bug 会被读成伪造。** 页面抓取器解码了 `&#39;` 却没解码 `&#x27;`，于是第 16 条的标题——两个被引页面上都有，其中一个还是 HN 帖子自己的标题——被当成编造的句子。页面缓存因此加了 **`v: 2`**。一般规则：**抽取器是仪器的一部分**，由旧抽取器写下的缓存不能成为新检查的证据——CNA 缓存带 schema 版本本来就是同一个理由。
+7. **省略号是片段。** 每个片段各自成立；只有 ≥6 词的片段能产出发现。
+8. **一段引文可能逐字存在于检查从未打开的页面上。** 什么都没读到时就诚实地报 `quote-not-read`——未读不等于不存在。
+9. **强调引号不是引用，而检查器分辨不出来。** 「good at repository edits, weaker at long-horizon shell work」是 **feed 自己的解读**加了引号。修法是去掉引号，而不是去找来源——它与 `slot-quoted`、`counted-by-author` 同属一类：披露本身（或没有披露）就是那条发现。
+
+### 本批另外四处更正是同一类问题的不同表面
+
+第 **14** 条把 bunny.net 的两句话并进一对引号（「found no evidence of unauthorized access, though it could not be fully ruled out」——页面写的是「…to the CDN node or any of its data」，并另有「cannot completely rule out the possibility」）。第 **20** 条替换了 us-tax-model README 里的两个词（把「proves a line points at a page, not that it was **read** correctly」写成「show where a line points, not that it was **interpreted** correctly」），并把求值器独立性的限定挂到了错误的对象上。第 **8** 条把模型卡的告诫转述后放进了引号（把「a capacity limit, not a guarantee of uniform accuracy across all sequence lengths or tasks」写成「does not guarantee consistent accuracy」）。
+
+合并式转述与替换一个词，比整句编造**更**危险：周围的事实都对得上，而引文看起来像旁证。抓住它们的单位是同一个。
+
+### 校准
+
+未更正的 10-31 feed：**13 条发现 / 9 条已核实**。就地更正四处（第 8、10、14、20 条）并去掉三处强调引号（第 9、12、16 条）之后：**0 条发现 / 15 条已核实**，余下四个 4–5 词的 span 留在 `quote-short`（辅助），而不是升成发现。`--selftest` **109 → 126**，其中十七条属于这条检查。
+
+→ [[disclosure-lag]] [[security]] [[no-ai-default]]

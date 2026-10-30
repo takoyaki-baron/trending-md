@@ -1167,3 +1167,36 @@ the source of truth; these skills help agents apply them correctly」——ド�
 由来であって、測られた精度ではない。
 
 → [[agent-distribution]] [[fact-check]]
+
+## 2026-10-31 — 軸は呼び出し方：skillsリポジトリの構造は「*誰が*各ファイルを起動するか」の主張である
+
+今週、大きなskillsリポジトリが2つ上trendingし、どちらも出荷するものを**増やさず減らした**。構造そのものが発見だ。
+
+### `mattpocock/skills` — 誰が呼ぶかで分けた27のskill
+
+確認時の状態：**307,351★ / 25,863 forks / 1,596 watchers / open issues+PRs 191**（複合カウンタ——issues*と*PRs）、**MIT**、作成**2026-02-03**、10-30にpush。READMEは**総数を書いていない**。自身の一覧から数えると`skills/`配下は**27**で、4群に分かれる：
+
+| 呼び出し方 | 数 | スキル |
+|---|---|---|
+| **ユーザ起動・エンジニアリング** | 11 | `ask-matt`、`grill-with-docs`、`triage`、`improve-codebase-architecture`、`to-spec`、`to-tickets`、`implement`、`implement-spec`、`wayfinder`、`retro`、`setup-matt-pocock-skills` |
+| **モデル起動・エンジニアリング** | 9 | `prototype`、`diagnosing-bugs`、`research`、`tdd`、`domain-modeling`、`codebase-design`、`code-review`、`pr`、`wizard` |
+| **ユーザ起動・生産性** | 5 | `grill-me`、`handoff`、`teach`、`to-questionnaire`、`wait-what` |
+| **モデル起動・生産性** | 2 | `grilling`、`writing-for-agents` |
+
+荷重を支える主張は数ではなく分割のほうだ：**ユーザ起動のskillはワークフローを編成し、モデル起動のskillはagent自身が選ぶ再利用可能な規律を運ぶ——両者を混同することが、技能集を誰も起動しないメニューに変える道だ。** これは検証可能な設計規則であり、本ファイルが10-29に記録した軸（`anthropics/knowledge-work-plugins`、ロール単位の11束、レビュー面は`.mcp.json`）とは別物だ。合わせると：**技能集のレビュー面はファイル数より小さい**——知識労働ではコネクタのマニフェスト、エンジニアリングskillsリポジトリでは呼び出し表であり、その表こそがファイルが読み込まれるかどうかを決めるからだ。
+
+掲げられた設計目標は4つの失敗モード——間違ったものを作る、冗長すぎる、動かないコード、コードベースが「ball of mud」になる——で、提案される処方は意図的に退屈だ。作る前のインタビュー、共有のドメイン用語集とADR、レッド・グリーン・リファクタ、継続的なアーキテクチャ改善。導入はプラグインマーケットプレイスか`npx skills@latest add mattpocock/skills`。「works with any model」は構造が支えるが**どのテストも示していない**移植性の約束で、本ファイルの他のskillsリポジトリと同じ穴だ。
+
+### `Leonxlnx/taste-skill` — 1つのskillに106k★
+
+**106,240★ / 7,184 forks / 295 watchers / open issues+PRs 8**、MIT、作成**2026-02-19**。アートディレクションを供給する：オープンライセンスの参照画像とブラウザ内チェックにより、コーディングagentが汎用レイアウトではなくデザインされたページを出す。現在は**1つの**アクティブskill（`design-taste-frontend`）だけで、残りは作者が別リポジトリへ移した。
+
+統合のほうが信号だ：**価値は参照集合とブラウザチェック——結果が参照に似ているか——にあり、プロンプトの数ではない**。これは以前のデザイン系skillの波が出したのと同じ教訓だ。単一のskillファイルに106,240星は「商品としてのセンス」への需要を測っている。READMEにはそれが機能するかを決めるベンチマーク主張はなく、星数はこのジャンルで唯一その問いに答えられない数字だ。
+
+### skillsリポジトリで見るべきこと
+
+1. **総数は宣言されているか、数えたものか。** 本バッチの2つはどちらも総数を書いていない。片方は27、片方は1で、星数を信じる読者は並び順を逆にする。
+2. **どのファイルがモデル起動可能か、集合はそれを言っているか。** ユーザ起動のskillはトリガー付きの文書であり、モデル起動のskillはharnessが招かれずとも入る振る舞いだ。レビューの負担が違う。
+3. **レビュー面は何か。** `.mcp.json`、呼び出し表、または参照集合——ツリー全体ではない。
+
+→ [[agent-distribution]] [[fact-check]] [[agent-stack]]

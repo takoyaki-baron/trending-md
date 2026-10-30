@@ -3430,3 +3430,47 @@ Qwen 衍生模型，以及 routify 行为已「出现在**四家发布方**的�
 **再说一次流水线时间戳。** 这五条记录带两个 `lastModified`——三条 EEF 与 vmware 那条都是 **09:17**，ClickHouse 是 **11:17**——因为 `lastModified` 是 NVD 的收录时钟，不是编辑者的。
 
 → [[vuln-supply]] [[disclosure-lag]] [[fact-check]] [[harness-overhead]]
+
+## 2026-10-31 — 目录是一条带指针的「利用断言」，而爆炸半径是用别人的凭据来计量的
+
+### KEV 那一行是关于攻击者的断言，不是记录来源
+
+CISA 于 **2026-10-30** 把 **CVE-2026-111357** 与 **CVE-2026-118527**（均属 Ivanti Connect Secure）加入 KEV，补齐了第一条成员 **CVE-2026-104935** 在 **2026-10-13** 进入的那条链。研究出自 Volexity，**2026-10-13** 以「A Series of Unauthenticated Events」发表：一个自称 **unknown** 的攻击者（**UTA0576**，全页出现 39 次）把三条串起来打在一台*完全打好补丁*、版本为 `22.8R2.4, Build 19097` 的设备上，活动自 **2026-10-03** 起，最终通过内存中修改 `dsinvoked` broker 与 `libdsplibs.so` 的 DSCache 配置拿到 root。
+
+本轮一手核对（NVD API、cveawg、KEV 的 JSON feed、Volexity 页面）：
+
+| 工件 | 它说什么 | 核对结果 |
+|---|---|---|
+| CVE 记录 `CVE-2026-111357` | `PUBLISHED`，分配者 **MITRE**，**一个**度量 `CVSS:3.1/AV:L/AC:H/PR:L/UI:N/S:U/C:H/I:H/A:H` = **7.0 HIGH**，`CWE-829` | 发布于 **2026-10-15T21:17:13.190** |
+| NVD 那份 | `Undergoing Analysis`，原样转述 MITRE 的度量，**0** 个 `nvd@nist.gov` 度量 | 自己没有发布评分 |
+| KEV 条目 | `vulnerabilityName` = "**Missing Authentication for Critical Function**"，10-30 加入，截止 **2026-11-02** | *第三个*标签 |
+| Volexity 更新说明 | "tracked as **CVE-2026-111357**"，称之为**提权**修复，**完全没给 CVSS** | 可逐字检索 |
+| `CVE-2026-118527` | **处处不存在**：NVD 无记录，`cveawg` 返回 **`CVE_RECORD_DNE`**，KEV 自己的 `notes` 里挂的 `nvd.nist.gov/vuln/detail/CVE-2026-118527` 链接解析不到任何东西 | KEV 截止 **2026-11-13** |
+
+**所以一个漏洞背着三个标签、一个严重性分数。** KEV 的标题指向认证类弱点（CWE-306 形状），记录里写的是 `CWE-829`（来自不可信控制域的功能），报告方称其为提权，而唯一已发布的数字是 MITRE 的 7.0，NVD 只是照抄。二手报道的 **8.8** 属于 Ivanti 的通告，它给 `-118527` 的 **4.3** 则不属于任何东西——根本没有记录可以承载一个数字。
+
+**做成了普查，因为一个例子不是比率：** 2026-09-01 以来新增的 **79** 条 KEV 条目中，**78** 条在 cveawg 里状态为 `PUBLISHED`，**恰好 1 条**不是——而且它是最新的一条，前一天才加入。所以诚实的表述是「**KEV 行可以先于记录发布**」，而不是「目录引用幽灵 CVE」：这类缺失罕见、短暂、且集中在最前沿。两个操作结论：对新鲜 KEV 条目写「记录说 X」之前，**那个指针值得再查一次**；以及**截止日是按条目而不是按链**给的——同一天加入的两条相差 11 天（11-02 与 11-13），因为时钟是按风险分级的（BOD 26-04）。
+
+### 被攻击者瞄准的，正是那个「检测工件」
+
+这条链没给文件完整性工具留下任何东西。Volexity 自己的话（可在页面上逐字检索）：
+
+> "UTA0576 used this access, **without deploying a backdoor or web shell**, to conduct post-exploitation actions. UTA0576 also incorporated **multiple anti-forensics measures to remain undetected by the Ivanti Integrity Checker Tool**."
+
+以及修复段落里：
+
+> "**The Ivanti Integrity Checker may not be able to identify device compromise.**"
+
+命令走的是漏洞链自己的 HTTPS 请求，而不是独立 C2 通道，所以网络检测也没有新的目的地可以对标。KEV 给这两条新条目的 `requiredAction` 指向 CISA 的 **"Forensics Triage Requirements"** 与 BOD 26-04——对这条链，目录给出的修复指令是*取证*，不是打补丁。可复用的形状：**当修复发生在内存里，厂商的完整性检查器描述的是磁盘，而对手改的是磁盘的叙事，不是磁盘。**
+
+### 同一批次里三个握着*别人*凭据的工件
+
+这批把上面那种规避故事，与三个更靠近自家的例子放在一起，它们共享一个 CVE 流通常藏起来的框架：**缓解的单位是凭据，不是主机。**
+
+1. **Northflank**（PaaS），**2026-10-30**：**11:43 UTC** 收到 Wiz 威胁告警，12:02 打网络策略补丁，13:00 请入 Wiz CIRT；到 **13:58** 通知原文是「**Assume all environment variables have been decrypted. Disable/rotate all keys.**」**15:12** 为所有用户开启 Postgres 与 MongoDB 的轮换；七个组件 **Major outage**。承载这个事件的那句话在线程里：「**Multiple users are confirming that their AI keys have been used.**」**19:28** 的更新把措辞从*已解密*升级为「assume all environment variables have been **compromised**」——这是不同的断言，因为解密允许篡改。引用状态页就是在引用一个会动的工件；那次升级恰恰是后来的读者看不到的部分。
+2. **bunny.net**，事件发布于 **2026-10-28**：**亚美尼亚的一个 CDN 节点**位于一台经第三方服务器管理软件被未授权访问的供应商主机上；20 分钟内停止路由、擦除服务器、吊销访问。结论是「no evidence of unauthorized access, though it could not be fully ruled out」——于是**平台域名的证书被吊销并以新的私钥重签**，分批进行，预计 2026-10-31 前完成。单个边缘节点握着别人域名的私钥：爆炸半径小，同时代价落在使用**自有**证书的客户身上，他们必须自己重签，因为服务商替不了。
+3. **OpenMausBot**（`milind-soni/OpenMausBot`，Apache-2.0 外加 `source-available` 的 `enterprise/` 例外目录）：一套考虑周到的权限 broker——内联 Allow/Deny 卡片、只写凭据、主机控制 fail-closed、MCP 控制面刻意排除授权/删除/设置/凭据——却建立在「**API keys stored as plaintext in a private `config.json` (`0600` on Unix)**」之上。broker 是文件系统边界之上的一层策略；这与钥匙串是不同的威胁模型，README 也是这么说的。
+
+**三条合起来的规则：** 持有凭据的工件，其响应应当按*凭据*而不是*主机*来定尺——在能证明之前先轮换，重签密钥而不是擦节点，并按明文所在的位置给设计定价。PaaS、CDN 和桌面 agent 是同一形状在三个尺度上的显现，而最该做轮换的一方，并不总是拥有那个秘密的一方。
+
+→ [[vuln-supply]] [[disclosure-lag]] [[fact-check]] [[agent-stack]]

@@ -144,13 +144,17 @@ fi
 # Claim-unit lint — the units that have each produced a wrong sentence in this feed: the
 # `open_issues_count` composite quoted as an issue count, a CVSS score quoted against the wrong
 # version, a star count on an archived/stale repo, a count about an artifact that the artifact
-# never states, and (since 2026-10-30) a `vulnStatus` the record has already moved off. Both of
+# never states, (since 2026-10-30) a `vulnStatus` the record has already moved off, and (since
+# 2026-10-31) a sentence in quotation marks that appears nowhere in the source. Both of
 # the first two were written into CLAUDE.md AND the knowledge library and both recurred in the
 # very next batch (10-25 → 10-26), which is why this is a check and not a third rule. Non-fatal by
 # design: a finding is a claim to open, not a proven error, and the act pass (`agent-run.sh`
 # Pass 2) reads the JSON and fixes what is real. `--status-watch` rides the same single NVD
 # request the cvss check already pays for, so the per-CVE status history costs no extra call; it
 # is what makes a BACKWARDS move (Analyzed → Undergoing Analysis) visible instead of inferred.
+# The `quotation` check reuses the `count` check's page cache (unmetered fetches), so it adds no
+# api.github.com calls; it reads the repo page only when a quote is still unmatched, because a
+# repository's DESCRIPTION is not its README.
 # See agent/tools/claim-unit-lint.mjs.
 if [ -f "$FEED_FILE" ]; then
   echo "Linting claim units…"

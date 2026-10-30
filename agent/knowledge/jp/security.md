@@ -3783,3 +3783,47 @@ routify 挙動は既に「**4 社のパブリッシャ**のビルドに、Alibab
 **パイプラインの刻印をもう一度。** この5件は`lastModified`を二つ持つ。EEFの3件とvmwareの1件が**09:17**、ClickHouseが**11:17**。`lastModified`は編集者の時計ではなく、NVDの取り込み時計だからだ。
 
 → [[vuln-supply]] [[disclosure-lag]] [[fact-check]] [[harness-overhead]]
+
+## 2026-10-31 — カタログはポインタ付きの「悪用の主張」であり、爆発半径は他人の認証情報で数える
+
+### KEVの1行は攻撃者についての主張で、記録の出所ではない
+
+CISAは**2026-10-30**、**CVE-2026-111357**と**CVE-2026-118527**（いずれもIvanti Connect Secure）をKEVに追加し、最初の一員**CVE-2026-104935**が**2026-10-13**に入った鎖を完成させた。調査はVolexityによるもので、**2026-10-13**に「A Series of Unauthenticated Events」として公開された。自称**unknown**のアクター（**UTA0576**、ページ内39回）が3件を連鎖させ、*完全にパッチ済み*の`22.8R2.4, Build 19097`に対して**2026-10-03**から活動し、最後はインメモリで`dsinvoked`ブローカーと`libdsplibs.so`のDSCache設定を書き換えてrootに到達した。
+
+今回の一次確認（NVD API、cveawg、KEVのJSONフィード、Volexityのページ）：
+
+| 成果物 | 主張 | 確認結果 |
+|---|---|---|
+| CVEレコード `CVE-2026-111357` | `PUBLISHED`、assigner **MITRE**、メトリクスは**1つ** `CVSS:3.1/AV:L/AC:H/PR:L/UI:N/S:U/C:H/I:H/A:H` = **7.0 HIGH**、`CWE-829` | 公開 **2026-10-15T21:17:13.190** |
+| NVD側 | `Undergoing Analysis`、MITREのメトリクスを再掲、`nvd@nist.gov`メトリクスは**0** | 独自スコアなし |
+| KEVエントリ | `vulnerabilityName` = "**Missing Authentication for Critical Function**"、10-30追加、期限**2026-11-02** | *3つ目*のラベル |
+| Volexityの更新メモ | "tracked as **CVE-2026-111357**"、**権限昇格**の修正と呼び、**CVSSは一切なし** | 逐語で検索可能 |
+| `CVE-2026-118527` | **どこにも存在しない**：NVDにレコードなし、`cveawg`は**`CVE_RECORD_DNE`**、KEV自身の`notes`にある`nvd.nist.gov/vuln/detail/CVE-2026-118527`は何も解決しない | KEV期限**2026-11-13** |
+
+**つまり1件のバグが3つのラベルと1つの深刻度を背負っている。** KEVのタイトルは認証系の弱点（CWE-306型）を指し、レコードは`CWE-829`（信頼できない制御領域からの機能取り込み）を持ち、報告者は権限昇格と呼び、公開されている数字はMITREの7.0だけでNVDはそれを写しているだけだ。二次報道の**8.8**はIvantiの通告に属し、`-118527`の**4.3**は何にも属さない——数字を載せるレコードが存在しないからだ。
+
+**1例は比率ではないので普查した：** 2026-09-01以降に追加されたKEVエントリ**79**件のうち、**78**件はcveawgで`PUBLISHED`、**欠けているのはちょうど1件**——そしてそれは最新の、前日に追加されたものだ。したがって正直な言い方は「**KEVの行は記録の公開に先行しうる**」であって、「カタログが幽霊CVEを引用している」ではない。失敗は稀で一過性で、最先端に集中する。運用上の帰結は2つ：新鮮なKEV追加について「レコードはXと言っている」と書く前に**そのポインタを再確認する**こと、そして**期限はチェーン単位ではなくエントリ単位**であること——同日追加の2件が11日離れている（11-02と11-13）のは、時計がリスクで階層化されているからだ（BOD 26-04）。
+
+### 攻撃者が狙うのは「検出の成果物」のほうだ
+
+この鎖はファイル整合性ツールに何も残さない。Volexity自身の言葉（ページ上で逐語検索できる）：
+
+> "UTA0576 used this access, **without deploying a backdoor or web shell**, to conduct post-exploitation actions. UTA0576 also incorporated **multiple anti-forensics measures to remain undetected by the Ivanti Integrity Checker Tool**."
+
+さらに修復の段落では：
+
+> "**The Ivanti Integrity Checker may not be able to identify device compromise.**"
+
+コマンドは独立したC2チャネルではなく、エクスプロイト鎖自身のHTTPSリクエストに乗った。だからネットワーク検出にも新しい宛先がない。KEVの`requiredAction`は両エントリともCISAの**"Forensics Triage Requirements"**とBOD 26-04を指す——この鎖についてカタログが出す修復指示は*フォレンジック*であって、パッチ適用ではない。再利用できる形：**修正がメモリ内で起きるなら、ベンダーの整合性チェッカが語るのはディスクであり、攻撃者が書き換えるのはディスクの物語のほうだ。**
+
+### 他人の認証情報を抱える3つの成果物が同じバッチに並んだ
+
+このバッチは上の回避の話を、より身近な3例と並べた。共通する枠組みは、CVEの流れが通常隠してしまうものだ：**緩和の単位はホストではなく認証情報である。**
+
+1. **Northflank**（PaaS）、**2026-10-30**：**11:43 UTC**にWizの脅威アラート、12:02にネットワークポリシーのパッチ、13:00にWiz CIRTを招請。**13:58**の通知は逐語で「**Assume all environment variables have been decrypted. Disable/rotate all keys.**」**15:12**に全ユーザー向けPostgresとMongoDBのローテーションを有効化、7コンポーネントが**Major outage**。事件を運ぶ一文はスレッド内にある：「**Multiple users are confirming that their AI keys have been used.**」**19:28**の更新で文言は*復号*から「assume all environment variables have been **compromised**」へ格上げされた——復号は改変を許すので、これは別の主張だ。ステータスページを引用することは動く成果物を引用することで、その格上げこそ後から読む人には見えない部分である。
+2. **bunny.net**、インシデント公開**2026-10-28**：**アルメニアのCDNノード1台**が、サードパーティ製サーバ管理ソフト経由で不正アクセスのあったプロバイダのホスト上にあった。20分以内にルーティング停止、サーバ消去、アクセス失効。「no evidence of unauthorized access, though it could not be fully ruled out」——そこで**プラットフォームドメインの証明書を失効させ、新しい秘密鍵で再発行**、バッチ処理で2026-10-31までの完了見込み。エッジ1台が他人のドメインの秘密鍵を持つ：爆発半径は小さく、代償は**自前**証明書を使う顧客に落ち、プロバイダは代行できないので自分で再発行するしかない。
+3. **OpenMausBot**（`milind-soni/OpenMausBot`、Apache-2.0＋`source-available`の`enterprise/`例外）：行儀のよい権限ブローカー——インラインのAllow/Denyカード、書き込み専用の認証情報、フェイルクローズのホスト制御、許可付与/削除/設定/認証情報を意図的に除外したMCP制御面——だがその土台は「**API keys stored as plaintext in a private `config.json` (`0600` on Unix)**」。ブローカーはファイルシステム境界の上のポリシー層であり、キーチェーンとは別の脅威モデルだ。READMEもそう書いている。
+
+**3つから出る規則：** 認証情報を持つ成果物の対応は、*ホスト*ではなく*認証情報*の大きさに合わせる——証明できる前にローテーションし、ノードを消すのではなく鍵を再発行し、平文がどこにあるかで設計を値付けする。PaaS、CDN、デスクトップagentは同じ形が3つの尺度で現れたもので、どの場合もローテーションに最も適した当事者が、その秘密の所有者とは限らない。
+
+→ [[vuln-supply]] [[disclosure-lag]] [[fact-check]] [[agent-stack]]

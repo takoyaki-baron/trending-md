@@ -1,0 +1,584 @@
+{
+  "capturedAt": "2026-10-30T20:48:47.880Z",
+  "servers": {
+    "filesystem": {
+      "ok": true,
+      "protocolVersion": "2025-06-18",
+      "serverInfo": {
+        "name": "secure-filesystem-server",
+        "version": "2.1.0"
+      },
+      "toolCount": 14,
+      "tools": [
+        {
+          "name": "read_file",
+          "sha256": "2072073670c61779ff6a07185dd876d9f12c75a66069ccd279fa3a3afc4f60da",
+          "readOnlyHint": true,
+          "destructiveHint": null,
+          "idempotentHint": null
+        },
+        {
+          "name": "read_text_file",
+          "sha256": "a853d369e3b7accc3d0a50d2dbeca7529b95b5f9490ba678d8e3232f52b0261a",
+          "readOnlyHint": true,
+          "destructiveHint": null,
+          "idempotentHint": null
+        },
+        {
+          "name": "read_media_file",
+          "sha256": "be345da6f6ce5382e8fb516517158b8675614dbea5a3818a469c9b00fecc3970",
+          "readOnlyHint": true,
+          "destructiveHint": null,
+          "idempotentHint": null
+        },
+        {
+          "name": "read_multiple_files",
+          "sha256": "583249302614cdcab72dc149e03ec1094581b928906705289fb3a3f37ebe903c",
+          "readOnlyHint": true,
+          "destructiveHint": null,
+          "idempotentHint": null
+        },
+        {
+          "name": "write_file",
+          "sha256": "af64d19ac275a8ad0b1970fea63aa8ff3184204aded496dff25ece095b7f074a",
+          "readOnlyHint": false,
+          "destructiveHint": true,
+          "idempotentHint": true
+        },
+        {
+          "name": "edit_file",
+          "sha256": "64394ff801f9963768ef4ade2f4ca587c6f5380ec45f63bf79c35b3aaf044264",
+          "readOnlyHint": false,
+          "destructiveHint": true,
+          "idempotentHint": false
+        },
+        {
+          "name": "create_directory",
+          "sha256": "c736eae545b29a0748ef3a9309e7bcba05f9b152cd3213c71bce5f80ff9c9f01",
+          "readOnlyHint": false,
+          "destructiveHint": false,
+          "idempotentHint": true
+        },
+        {
+          "name": "list_directory",
+          "sha256": "d8f41bcca1894047069f45820e645b54fe4486812dc5f2afa3b382aaebba93f1",
+          "readOnlyHint": true,
+          "destructiveHint": null,
+          "idempotentHint": null
+        },
+        {
+          "name": "list_directory_with_sizes",
+          "sha256": "2f5447f341547bdc493722e43ccec927ae9f64e7642744401fe071f74bf0d525",
+          "readOnlyHint": true,
+          "destructiveHint": null,
+          "idempotentHint": null
+        },
+        {
+          "name": "directory_tree",
+          "sha256": "17f792a5284a0a56b9892f634e0b83d299e85aaf95d42b76c100a4a411a9d913",
+          "readOnlyHint": true,
+          "destructiveHint": null,
+          "idempotentHint": null
+        },
+        {
+          "name": "move_file",
+          "sha256": "df5d8cc5da5acaed5d26bfc65aac40cd1d8cc1848e8cf4a66f2d3ce25ee4e325",
+          "readOnlyHint": false,
+          "destructiveHint": true,
+          "idempotentHint": false
+        },
+        {
+          "name": "search_files",
+          "sha256": "0fca7199c50bdedb4ad78d3e5eee24b3078d871696b0648547ef7124b048f390",
+          "readOnlyHint": true,
+          "destructiveHint": null,
+          "idempotentHint": null
+        },
+        {
+          "name": "get_file_info",
+          "sha256": "280a39abb00494cb164fee57145600f4bbf6dde966b78aa2e0699d1b98be241a",
+          "readOnlyHint": true,
+          "destructiveHint": null,
+          "idempotentHint": null
+        },
+        {
+          "name": "list_allowed_directories",
+          "sha256": "3ca0e52085e6acaace756f9ebaa038ee3c528e9b8668518053890732e3ea8c1b",
+          "readOnlyHint": true,
+          "destructiveHint": null,
+          "idempotentHint": null
+        }
+      ]
+    },
+    "memory": {
+      "ok": true,
+      "protocolVersion": "2025-06-18",
+      "serverInfo": {
+        "name": "memory-server",
+        "version": "2.0.1"
+      },
+      "toolCount": 9,
+      "tools": [
+        {
+          "name": "create_entities",
+          "sha256": "949fe9747852e6e6eb71441a8dcd4492a84dac3260990b63a4da9d49c7375bdb",
+          "readOnlyHint": false,
+          "destructiveHint": false,
+          "idempotentHint": false
+        },
+        {
+          "name": "create_relations",
+          "sha256": "175289c712080be33eab2a6970d6c86e503582e8d8599d6c255627639be27f4f",
+          "readOnlyHint": false,
+          "destructiveHint": false,
+          "idempotentHint": false
+        },
+        {
+          "name": "add_observations",
+          "sha256": "1cfe175c1b1959b73de6ce4b50a56cdd2c06f967008ca47596b1f0072fc25a94",
+          "readOnlyHint": false,
+          "destructiveHint": false,
+          "idempotentHint": false
+        },
+        {
+          "name": "delete_entities",
+          "sha256": "95a62c3141ec4c28a66f52886c11967c94b8729bea645c11716836cc42d6f027",
+          "readOnlyHint": false,
+          "destructiveHint": true,
+          "idempotentHint": true
+        },
+        {
+          "name": "delete_observations",
+          "sha256": "7b786a8baf35fae402b97374b234d0d3843e4c63f9200a742e84527588eedf74",
+          "readOnlyHint": false,
+          "destructiveHint": true,
+          "idempotentHint": true
+        },
+        {
+          "name": "delete_relations",
+          "sha256": "47845dc76655e6a3e11f1db09919799237e9d0c7d62fb3dcf3da822a0dafc30e",
+          "readOnlyHint": false,
+          "destructiveHint": true,
+          "idempotentHint": true
+        },
+        {
+          "name": "read_graph",
+          "sha256": "f651a47dec6b1222061803c2bbf1eacfdb401cb8b5b1e9a74ad08faf0f287b7c",
+          "readOnlyHint": true,
+          "destructiveHint": false,
+          "idempotentHint": true
+        },
+        {
+          "name": "search_nodes",
+          "sha256": "91412ee61bb324117c7446bb38dd6b8e8030b6a4b75743481faadc1b80aff31a",
+          "readOnlyHint": true,
+          "destructiveHint": false,
+          "idempotentHint": true
+        },
+        {
+          "name": "open_nodes",
+          "sha256": "75c205e9d730da46f76f556a0c58da3af2b85385df5fdd458e2469e1ebed4d55",
+          "readOnlyHint": true,
+          "destructiveHint": false,
+          "idempotentHint": true
+        }
+      ]
+    },
+    "everything": {
+      "ok": true,
+      "protocolVersion": "2025-06-18",
+      "serverInfo": {
+        "name": "mcp-servers/everything",
+        "title": "Everything Reference Server",
+        "version": "2.1.0"
+      },
+      "toolCount": 16,
+      "tools": [
+        {
+          "name": "echo",
+          "sha256": "e855787c03f09c74cd8d3e89d8859320ffdc12637b3ab2cffd433c3eceaf3477",
+          "readOnlyHint": true,
+          "destructiveHint": false,
+          "idempotentHint": true
+        },
+        {
+          "name": "get-annotated-message",
+          "sha256": "0932df7904415d0550a01fba5e18c8c06d3996e3c00d3a0f953ee4bb43a69ce0",
+          "readOnlyHint": true,
+          "destructiveHint": false,
+          "idempotentHint": true
+        },
+        {
+          "name": "get-env",
+          "sha256": "2401977bea77444348c538f0a22a8b85f0ecd3d69fb463b606ee5659a5c2b58e",
+          "readOnlyHint": true,
+          "destructiveHint": false,
+          "idempotentHint": true
+        },
+        {
+          "name": "get-header-params",
+          "sha256": "4e3336b5234a2d833c2ebbbea29ceaa2184e755e2cc6c91cb0182a3f59343bc0",
+          "readOnlyHint": true,
+          "destructiveHint": false,
+          "idempotentHint": true
+        },
+        {
+          "name": "get-resource-links",
+          "sha256": "71dc418dd8ca1e005f6804927165357f4179a9407b3dcd6aef17acc67d43612d",
+          "readOnlyHint": true,
+          "destructiveHint": false,
+          "idempotentHint": true
+        },
+        {
+          "name": "get-resource-reference",
+          "sha256": "d7ab6b5f43afc367a83ca31708ea6a11a3e4088d9aa7b869bec356e7b105197d",
+          "readOnlyHint": true,
+          "destructiveHint": false,
+          "idempotentHint": true
+        },
+        {
+          "name": "get-structured-content",
+          "sha256": "d9caa8434171c7755e6c716bfc44bfb5bd7b6fd818b0acd288a3de79465be424",
+          "readOnlyHint": true,
+          "destructiveHint": false,
+          "idempotentHint": true
+        },
+        {
+          "name": "get-sum",
+          "sha256": "523668e2e8d60aaa190983188ce38d8666e90953774bd3b1357b783b96d36103",
+          "readOnlyHint": true,
+          "destructiveHint": false,
+          "idempotentHint": true
+        },
+        {
+          "name": "get-tiny-image",
+          "sha256": "620f247ef186c1e615aa1fdd714de0748cc8cec159b0560f007e68e58c6f4c22",
+          "readOnlyHint": true,
+          "destructiveHint": false,
+          "idempotentHint": true
+        },
+        {
+          "name": "gzip-file-as-resource",
+          "sha256": "8418b3e300563e862125244c58e5dad13a8339912a9112176948d47c2e5e2869",
+          "readOnlyHint": false,
+          "destructiveHint": false,
+          "idempotentHint": true
+        },
+        {
+          "name": "trigger-list-changed",
+          "sha256": "4b4b5bbc718e95993c688b12f45c0fce3c27ba790387c375e4c9be5ef95c2721",
+          "readOnlyHint": true,
+          "destructiveHint": false,
+          "idempotentHint": false
+        },
+        {
+          "name": "trigger-log-messages",
+          "sha256": "3c333a4718cb19e9d392652cd9edacf9b4cadcba325cd9fda03c39b84a2e58eb",
+          "readOnlyHint": true,
+          "destructiveHint": false,
+          "idempotentHint": true
+        },
+        {
+          "name": "trigger-long-running-operation",
+          "sha256": "7d71c8453b4923c3d1483da87b076afcb48e2f858223e73ef50b33a92a42a274",
+          "readOnlyHint": true,
+          "destructiveHint": false,
+          "idempotentHint": true
+        },
+        {
+          "name": "trigger-resource-update",
+          "sha256": "715e1b64e99db326a0d9da3f42282edc35e0c12b40b39c38c1d419f3f904d4d3",
+          "readOnlyHint": true,
+          "destructiveHint": false,
+          "idempotentHint": false
+        },
+        {
+          "name": "toggle-simulated-logging",
+          "sha256": "13ea6ab69b78b5b35cd87f00907a352adb9d76a5c5b2abc000d2e357b1a245da",
+          "readOnlyHint": false,
+          "destructiveHint": false,
+          "idempotentHint": false
+        },
+        {
+          "name": "toggle-subscriber-updates",
+          "sha256": "a3ca5af490470568f3cd2b02d5151fadbf52cfdaf7cb07d8f5d33bf0f2cc95a2",
+          "readOnlyHint": false,
+          "destructiveHint": false,
+          "idempotentHint": false
+        }
+      ]
+    },
+    "sequential-thinking": {
+      "ok": true,
+      "protocolVersion": "2025-06-18",
+      "serverInfo": {
+        "name": "sequential-thinking-server",
+        "version": "2.0.0"
+      },
+      "toolCount": 1,
+      "tools": [
+        {
+          "name": "sequentialthinking",
+          "sha256": "59c845598a28a41a2d0b336c0ae394a5545fdc8a631ef123ed42e7600b4b6de1",
+          "readOnlyHint": false,
+          "destructiveHint": false,
+          "idempotentHint": false
+        }
+      ]
+    },
+    "playwright": {
+      "ok": true,
+      "protocolVersion": "2025-06-18",
+      "serverInfo": {
+        "name": "Playwright",
+        "version": "1.64.0-alpha-1790635538000"
+      },
+      "toolCount": 25,
+      "tools": [
+        {
+          "name": "browser_close",
+          "sha256": "8f612282b6a77bf479f53e9726d7b30b52867b8d1d4e85d8208215382421fa5d",
+          "readOnlyHint": false,
+          "destructiveHint": true,
+          "idempotentHint": null
+        },
+        {
+          "name": "browser_resize",
+          "sha256": "3c03e02a55cb2e5d3f7dd761fee255cd5f7b18bb8282a3db65cbdc568200a813",
+          "readOnlyHint": false,
+          "destructiveHint": true,
+          "idempotentHint": null
+        },
+        {
+          "name": "browser_console_messages",
+          "sha256": "993eded19126ac0a48d02c3566907f1c816c550925c41ca3eba429a0b6c68314",
+          "readOnlyHint": true,
+          "destructiveHint": false,
+          "idempotentHint": null
+        },
+        {
+          "name": "browser_handle_dialog",
+          "sha256": "d0e0090407dde7ed46bae2c5c1de41f5b1ea33970c63e673b7165d46606d1b76",
+          "readOnlyHint": false,
+          "destructiveHint": true,
+          "idempotentHint": null
+        },
+        {
+          "name": "browser_emulate_media",
+          "sha256": "8cd00d1a14a7ad1b06a665713e8c6f2c1e4a8ed3b02470fcfe51dba66e78d07b",
+          "readOnlyHint": false,
+          "destructiveHint": true,
+          "idempotentHint": null
+        },
+        {
+          "name": "browser_evaluate",
+          "sha256": "cdefeb015963a1a75c8b9fd996290a70a7502416d2219c9996e3ba2801276268",
+          "readOnlyHint": false,
+          "destructiveHint": true,
+          "idempotentHint": null
+        },
+        {
+          "name": "browser_file_upload",
+          "sha256": "ea40e953a9553c866e938c3d40210314389a6f8098249bc2c6bf45bcbd0fd44a",
+          "readOnlyHint": false,
+          "destructiveHint": true,
+          "idempotentHint": null
+        },
+        {
+          "name": "browser_drop",
+          "sha256": "8ffbe7eb31694387222f3ba6b1e5000c9e4f359251f59262925df6a1c4c89546",
+          "readOnlyHint": false,
+          "destructiveHint": true,
+          "idempotentHint": null
+        },
+        {
+          "name": "browser_find",
+          "sha256": "0e51e4b9af3e44499169424cfb8adc2533877e2aa8571e940aa283038422f32f",
+          "readOnlyHint": true,
+          "destructiveHint": false,
+          "idempotentHint": null
+        },
+        {
+          "name": "browser_fill_form",
+          "sha256": "6d840bd1bc67198668f66e8c3bce5ddc716931f8ae91993ef29455061c73d576",
+          "readOnlyHint": false,
+          "destructiveHint": true,
+          "idempotentHint": null
+        },
+        {
+          "name": "browser_press_key",
+          "sha256": "891dc85d29c5a92279880e600bf68566d6d309bee8cf4429bf64c7b742b50b04",
+          "readOnlyHint": false,
+          "destructiveHint": true,
+          "idempotentHint": null
+        },
+        {
+          "name": "browser_type",
+          "sha256": "1fe3a713dc167f488a461ada7732bb6557343b370f61e3df616b81a400b6f3b4",
+          "readOnlyHint": false,
+          "destructiveHint": true,
+          "idempotentHint": null
+        },
+        {
+          "name": "browser_navigate",
+          "sha256": "7b85223494e862d4528fbc4cf6a054051868ba33442cde556be321f9b71bdc22",
+          "readOnlyHint": false,
+          "destructiveHint": true,
+          "idempotentHint": null
+        },
+        {
+          "name": "browser_navigate_back",
+          "sha256": "86167f6dfd0c38c67c4634ac9d3e77dd17cb0532529ead403fcc6b73a7e0e8ae",
+          "readOnlyHint": false,
+          "destructiveHint": true,
+          "idempotentHint": null
+        },
+        {
+          "name": "browser_network_requests",
+          "sha256": "634cc934d640d9614b5d9c9566ae4742a0776288451417ad600e4d54e5fccfea",
+          "readOnlyHint": true,
+          "destructiveHint": false,
+          "idempotentHint": null
+        },
+        {
+          "name": "browser_network_request",
+          "sha256": "ad89327f3badc43b3864c0af4050f888314eaa79e72d845e137d73eba1376ec2",
+          "readOnlyHint": true,
+          "destructiveHint": false,
+          "idempotentHint": null
+        },
+        {
+          "name": "browser_run_code_unsafe",
+          "sha256": "4a2939ab2c8db4135d261b516e0a88a3f13a81360770a5d1e615b54f626079a2",
+          "readOnlyHint": false,
+          "destructiveHint": true,
+          "idempotentHint": null
+        },
+        {
+          "name": "browser_take_screenshot",
+          "sha256": "a672663236bb68054d45941de6db5342010220b0db1e1564dfd5ee330829bf23",
+          "readOnlyHint": true,
+          "destructiveHint": false,
+          "idempotentHint": null
+        },
+        {
+          "name": "browser_snapshot",
+          "sha256": "84e92c915a80b6e048038ffd7cc1a9322188c5a0ffaffef803c41cef1e1e2901",
+          "readOnlyHint": true,
+          "destructiveHint": false,
+          "idempotentHint": null
+        },
+        {
+          "name": "browser_click",
+          "sha256": "378371aa7dff049c3aef35a0029251cf957da18bcaa3babda732d6959e05ba8a",
+          "readOnlyHint": false,
+          "destructiveHint": true,
+          "idempotentHint": null
+        },
+        {
+          "name": "browser_drag",
+          "sha256": "cb9f4d029feb45cdf4268842e354fdce88140aac96c60e7d879b90f9cfb57fd5",
+          "readOnlyHint": false,
+          "destructiveHint": true,
+          "idempotentHint": null
+        },
+        {
+          "name": "browser_hover",
+          "sha256": "f3543021ce37f58f29be4232f1210cbea838fb68108995bed7b3ae6e031ac8fb",
+          "readOnlyHint": false,
+          "destructiveHint": true,
+          "idempotentHint": null
+        },
+        {
+          "name": "browser_select_option",
+          "sha256": "5bc19c323e8744df1a035a18186cd351f661c87b09256e6f446d8fff4d4dc39f",
+          "readOnlyHint": false,
+          "destructiveHint": true,
+          "idempotentHint": null
+        },
+        {
+          "name": "browser_tabs",
+          "sha256": "9c72b0eb86f70b13d1cd85bc0d8c011a3282a294739fd5040e107f541275ec21",
+          "readOnlyHint": false,
+          "destructiveHint": true,
+          "idempotentHint": null
+        },
+        {
+          "name": "browser_wait_for",
+          "sha256": "fc139c0302dd3a93ef82fddad6ecb97d8b099a7405dc86638dad791220826544",
+          "readOnlyHint": true,
+          "destructiveHint": false,
+          "idempotentHint": null
+        }
+      ]
+    },
+    "webresearch": {
+      "ok": true,
+      "protocolVersion": "2024-11-05",
+      "serverInfo": {
+        "name": "webresearch",
+        "version": "0.1.7"
+      },
+      "toolCount": 3,
+      "tools": [
+        {
+          "name": "search_google",
+          "sha256": "35987c9002b2e089c49a8148c9989d0b4d96a68377a4cea35cc5703cab7c0844",
+          "readOnlyHint": null,
+          "destructiveHint": null,
+          "idempotentHint": null
+        },
+        {
+          "name": "visit_page",
+          "sha256": "4d504bb1ba48010570dc3197fefd8c3acf5aca38492e6c3556dac7cbc4f16835",
+          "readOnlyHint": null,
+          "destructiveHint": null,
+          "idempotentHint": null
+        },
+        {
+          "name": "take_screenshot",
+          "sha256": "ca3ac6062968317ac0e2e29d90419a11e2883e3e4ca0c3ceda457091ed2d1774",
+          "readOnlyHint": null,
+          "destructiveHint": null,
+          "idempotentHint": null
+        }
+      ]
+    },
+    "exa": {
+      "ok": true,
+      "protocolVersion": "2025-06-18",
+      "serverInfo": {
+        "name": "exa-search-server",
+        "title": "Exa",
+        "version": "3.4.2",
+        "websiteUrl": "https://exa.ai",
+        "icons": [
+          {
+            "src": "https://exa.ai/images/favicon-32x32.png",
+            "mimeType": "image/png",
+            "sizes": [
+              "32x32"
+            ]
+          }
+        ]
+      },
+      "toolCount": 2,
+      "tools": [
+        {
+          "name": "web_search_exa",
+          "sha256": "37d4070634820418c42b31f8f67059c16bf03c1015c31e9da8179b5dad3ea660",
+          "readOnlyHint": true,
+          "destructiveHint": false,
+          "idempotentHint": true
+        },
+        {
+          "name": "web_fetch_exa",
+          "sha256": "fe04f8c7bb80d5fb8646e8a85443497e067c722d6d93eea23099c5994e1b16ae",
+          "readOnlyHint": true,
+          "destructiveHint": false,
+          "idempotentHint": true
+        }
+      ]
+    }
+  }
+}

@@ -20,9 +20,9 @@ license: CC-BY-4.0
 
 CISAは**2026-10-30**、**CVE-2026-111357**と**CVE-2026-118527**を既知の悪用脆弱性カタログに追加した。根拠は「based on evidence of active exploitation」だ。どちらもIvanti Connect Secureで、同じ攻撃チェーンにある3件目**CVE-2026-104935**（認証バイパスとアップロード競合、CVSS 8.6）は**2026-10-13**にKEVへ入っている。調査はVolexityによるもので、**2026-10-13**に「A Series of Unauthenticated Events」として公開された。自称**unknown**のアクター**UTA0576**が、当時**完全にパッチ済み**だった`22.8R2.4, Build 19097`のアプライアンスに対して3件を連鎖させ、活動は**2026-10-03**まで遡れる。チェーンは、インメモリで`dsinvoked`ブローカーと`libdsplibs.so`のDSCache設定を書き換えてrootに到達する。
 
-**記録上のスコアは報道のスコアではない。** CVEレコード（state `PUBLISHED`、assigner **MITRE**）が持つメトリクスは**1つ**だけだ。`CVSS:3.1/AV:L/AC:H/PR:L/UI:N/S:U/C:H/I:H/A:H` = **7.0 HIGH**、CWE-829。NVD側は`Undergoing Analysis`で、このMITREのメトリクスをそのまま再掲しているだけで、独自スコアは出していない。二次報道は**8.8**を「the updated advisory」——Ivantiの通告であり、CVEレコードではない——に帰し、CVE-2026-118527には**4.3**を与える。その数値はレコードには一切存在しない。ベクトル演算が裁定者であり、結果は7.0になる。押し下げているのは`AV:L`と`AC:H`で、欠けている要素があるからではない。Volexity自身の更新メモはCVE-2026-111357を権限昇格の修正として名指しし、**CVSSを一切与えていない**。CVE-2026-118527（認証済み攻撃者が既知のディスクパスへ書き込める、予測可能なファイル名の欠陥）は、そのページに**まったく登場しない**。
+**記録上のスコアは報道のスコアではない。** CVEレコード（state `PUBLISHED`、assigner **MITRE**）が持つメトリクスは**1つ**だけだ。`CVSS:3.1/AV:L/AC:H/PR:L/UI:N/S:U/C:H/I:H/A:H` = **7.0 HIGH**、CWE-829。一方KEV自身のこの項目のタイトルは「Missing Authentication for Critical Function」で、Volexityは権限昇格と呼ぶ——同じ1件に3つのラベルがある。NVD側はいま`Analyzed`（lastModified **2026-10-30T20:29Z**——この項目の起草の15分後）で、しかも**独自のメトリクスは依然ゼロ**だ。これはエンドースの事例である：NVDは記録を分析し、MITREの7.0を横に自前のスコアを並べるのではなく、そのまま残した。二次報道は**8.8**を「the updated advisory」——Ivantiの通告であり、CVEレコードではない——に帰し、CVE-2026-118527には**4.3**を与える。だがその数値の背後に**レコードが存在しない**。NVDにこのCVEはなく、`cveawg`は`CVE_RECORD_DNE`を返し、KEVエントリ自身のnotesが指すNVDの詳細URLも何も解決しない。2026-09-01以降に追加された**79**件のKEVエントリのうち、公開済みレコードを持たないのは**この1件だけ**だ。ベクトル演算が裁定者であり、結果は7.0になる。押し下げているのは`AV:L`と`AC:H`で、欠けている要素があるからではない。Volexity自身の更新メモはCVE-2026-111357を権限昇格の修正として名指しし、**CVSSを一切与えていない**。CVE-2026-118527（認証済み攻撃者が既知のディスクパスへ書き込める、予測可能なファイル名の欠陥）は、そのページに**まったく登場しない**。
 
-**Why it matters:** KEVは悪用についての主張で、深刻度についての主張ではない。ローカルアクセスと競合を要する7.0が9.8の並びに置かれるのは、このカタログが攻撃者が**実際にやったこと**を記録するからであり、スコア順だけでトリアージする人はこれを飛ばす。実務的に重要なのはポストエクスプロイト側の記述だ。攻撃者は**ウェブシェルを置かず**、コマンドごとにチェーンを再生し、結果をHTTPSで返した。そのためIvanti自身のIntegrity Checkerは「may not be able to identify device compromise」であり、Volexityはメモリフォレンジックでしか見られなかった。修正版は**25.1.1.3 / 25.1.3.1 / 22.8R2.6**、22.7.x以下は影響を受けない。信頼度のラベルも一緒に読むべきだ。Volexityは「犯罪目的でスパイ目的ではない」を**低**信頼、「LLMを使っている」を**中**信頼とし、アクターの最終目的は「could not be determined」と明記している。
+**Why it matters:** KEVは悪用についての主張で、深刻度についての主張ではない。ローカルアクセスと競合を要する7.0が9.8の並びに置かれるのは、このカタログが攻撃者が**実際にやったこと**を記録するからであり、スコア順だけでトリアージする人はこれを飛ばす。実務的に重要なのはポストエクスプロイト側の記述だ。攻撃者は**ウェブシェルを置かず**、コマンドごとにチェーンを再生し、結果をHTTPSで返した。そのためIvanti自身のIntegrity Checkerは「may not be able to identify device compromise」であり、Volexityはメモリフォレンジックでしか見られなかった。修正版は**25.1.1.3 / 25.1.3.1 / 22.8R2.6**、22.7.x以下は影響を受けない——ただしここで引用した3ページのどれにもその記載はない。Volexityのページにはなく、NVDの説明は`22.8R2.4`しか挙げておらず、Ivantiの通告は今回JSシェルだった（**1.0 MB**のHTMLに対して本文は**68文字**、`llms.txt`はログインへリダイレクトする）。したがってこの修正版リストはここでは**未検証**である。同じ日にKEVへ入った2件は期限も異なる——**2026-11-02**と**2026-11-13**——時計がチェーン単位ではなくエントリごとのリスクで階層化されているためだ。信頼度のラベルも一緒に読むべきだ。Volexityは「犯罪目的でスパイ目的ではない」を**低**信頼、「LLMを使っている」を**中**信頼とし、アクターの最終目的は「could not be determined」と明記している。
 
 [`🔗 CISA — two KEV additions`](https://www.cisa.gov/news-events/alerts/2026/10/30/cisa-adds-two-known-exploited-vulnerabilities-catalog) · [`🔗 Volexity — chained ICS zero-days`](https://www.volexity.com/blog/2026/10/13/a-series-of-unauthenticated-events-chained-exploitation-of-ivanti-connect-secure-zero-days/) · [`🔗 CVE-2026-111357 (NVD)`](https://nvd.nist.gov/vuln/detail/CVE-2026-111357)
 
@@ -34,9 +34,9 @@ CISAは**2026-10-30**、**CVE-2026-111357**と**CVE-2026-118527**を既知の悪
 - **Source:** Hacker News · 244+ pts · 約1日前（~2026-10-30）
 - **Tags:** `incident` `secrets` `paas` `supply-chain`
 
-Northflankは**2026-10-30 11:43 UTC**、Wizからの脅威アラートを受けて「Security incident」を立ち上げ、2時間足らずで「調査中」から踏み込んだ指示へ移った。「users told to assume environment variables were decrypted and to disable or rotate all keys」。**13:58**までに範囲は「workloads, secret groups and global secrets」と明示され、**15:12**には全ユーザー向けにPostgresとMongoDBのシークレットローテーションを有効化し、addonの公開露出を切るよう推奨した。7つのコンポーネントが**Major outage**とされた。Networking、Certificates、Services、Addons、Jobs、Builds、Logs and Metricsだ。App、API、マーケティングサイト、ドキュメントは稼働を続けた。
+Northflankは**2026-10-30 11:43 UTC**、Wizからの脅威アラートを受けて「Security incident」を立ち上げ、2時間足らずで「調査中」から踏み込んだ指示へ移った。原文はこうだ。**「Assume all environment variables have been decrypted. Disable/rotate all keys.」****13:58**までに範囲は「workloads, secret groups and global secrets」と明示され、**15:12**には全ユーザー向けにPostgresとMongoDBのシークレットローテーションを有効化し、addonの公開露出を切るよう推奨した。7つのコンポーネントが**Major outage**とされた。Networking、Certificates、Services、Addons、Jobs、Builds、Logs and Metricsだ。App、API、マーケティングサイト、ドキュメントは稼働を続けた。
 
-最も重要な一文は見出しではなくステータス欄に埋もれている。**「Multiple users are confirming that their AI keys have been used.」** Northflankは顧客数を示しておらず、アクセスされた範囲も確定しておらず、最後の**19:28**更新時点でも調査継続で「no further confirmed findings」としている。
+最も重要な一文は見出しではなくステータス欄に埋もれている。**「Multiple users are confirming that their AI keys have been used.」** Northflankは顧客数を示しておらず、アクセスされた範囲も確定しておらず、最後の**19:28**更新時点でも調査継続で「no further confirmed findings」としている——ただしそこでの文言は復号を通り越して「assume all environment variables have been **compromised**」に変わっている。
 
 **Why it matters:** PaaSは顧客が考えなくなった認証情報を抱えている。モデルのAPIキー、データベースURL、webhookシークレットだ。ここでの対応が正しいのは、まさに高くつくからで、証明を待つのではなく復号済みと仮定している。ローテーションの指示も開示も動く成果物であり、範囲は「既に限定されている」ではなく「不明」として扱うべきで、「追加の確認事項はない」はお墨付きではなく状態だ。
 
@@ -94,7 +94,7 @@ Ali BehrouzとVahab Mirrokniは**2026-10-27**、Google Researchブログで**Sle
 - **Source:** Hacker News (Show HN) · 118+ pts · 約1日前（~2026-10-30）
 - **Tags:** `transformers` `deltanet` `emulation` `weights`
 
-**`dbreunig/nesformer`**は、NESの6502 CPU、2 KBのワークRAM、カートリッジROMを**素の`Qwen3_5ForCausalLM`チェックポイントの中**で動かす。READMEが率直に書く通り、「The model was not trained. A compiler computed its weights.」ゲート付きDeltaNetの状態行列がメモリとして働く。one-hotキーが128幅の行を1つ上書きし、one-hotクエリがそれを読み戻すので、行はレジスタ、RAM、ROMセルになる。プログラムカウンタは保存されず、ジャンプ先と命令長のカウンタから推論される。チェックポイントは**466.6Mパラメータ、bf16で約933 MB**、非ゼロは**9.3M**のみ、zipで**3.3 MB**。ホストプログラムがPPU、コントローラ入力、vblank/NMIタイミング、APUレジスタを担い、生成されたトレース以外ではCPU状態に触れない。
+**`dbreunig/nesformer`**は、NESの6502 CPU、2 KBのワークRAM、カートリッジROMを**素の`Qwen3_5ForCausalLM`チェックポイントの中**で動かす。READMEが率直に書く通り、「**Nobody trained these weights; a compiler computed every one.**」ゲート付きDeltaNetの状態行列がメモリとして働く。one-hotキーが128幅の行を1つ上書きし、one-hotクエリがそれを読み戻すので、行はレジスタ、RAM、ROMセルになる。プログラムカウンタは保存されず、ジャンプ先と命令長のカウンタから推論される。チェックポイントは**466.6Mパラメータ、bf16で約933 MB**、非ゼロは**9.3M**のみ、zipで**3.3 MB**。ホストプログラムがPPU、コントローラ入力、vblank/NMIタイミング、APUレジスタを担い、生成されたトレース以外ではCPU状態に触れない。
 
 面白いのは検証のほうだ。参照CPUはnestestのゴールデンログと**3,348命令**で一致し、py65とは**570万のゲーム命令**で一致する。正確な回路はnestestと**283,610**位置のすべての参照トークンを予測し、ThwaiteとFull Gameの完全実行は**300フレーム全部**と**210フレーム全部**を再現した。速度は実用とは程遠い。numbaは1コアで約**1,650トークン/秒**、リアルタイムには約**700,000トークン/秒**が必要で、アイドルループを飛ばしても実機より**150〜290倍**遅い。
 
@@ -126,7 +126,7 @@ OpenAIは**2026-10-29**、書き直した**Model Spec**を公開した。5つの
 
 **`RecursiveSI/flint`**はデコーダ専用MoEのコーディングagentモデルで、**総パラメータ39.8B／トークンあたり約2.5B活性**（出力ヘッドを含む。活性本体のみで約2.2B）、**49層**——dense 2層の後にMoE 47層——各MoE層に**256のルーテッドエキスパート**、トークンごとに6個と共有エキスパート1個を選ぶ。アテンションは**35層スライディングウィンドウ／14層フルアテンション**、コンテキストは**262,144トークン**、語彙は**150,144**、ライセンスは**Apache 2.0**。報告ベンチマークはtemperature 1.0 / top-p 0.95 / top-k 20で、**Terminal-Bench 2.1が54.9%、SWE-bench Pro v2が89.7%、SWE-bench Verifiedが74.2%**。
 
-**Why it matters:** SWE-bench Proの数字は慎重に読むべきだ。Pro v2はより難しく汚染耐性のある分割であり、89.7%とTerminal-Benchの54.9%が並ぶ形は「リポジトリ内の編集は得意、長いシェル作業は弱い」という姿を示す。これは活性パラメータ数から予想される姿と正反対だ。モデルカード自身の注意書きは言い換えず引用する価値がある。誤った内容や有害な内容、欠陥コード、不適切なツール呼び出しを生成し得ること、長い推論が出力予算を食うこと、コンテキスト上限が「does not guarantee consistent accuracy」であること。知識カットオフは**2026年6月**で、それ以降は想起ではなく推論になる。
+**Why it matters:** SWE-bench Proの数字は慎重に読むべきだ。Pro v2はより難しく汚染耐性のある分割であり、89.7%とTerminal-Benchの54.9%が並ぶ形はリポジトリ内の編集は得意で長いシェル作業は弱い、という姿を示す。これは活性パラメータ数から予想される姿と正反対だ。モデルカード自身の注意書きは言い換えず引用する価値がある。誤った内容や有害な内容、欠陥コード、不適切なツール呼び出しを生成し得ること、長い推論が出力予算を食うこと、コンテキスト上限が「a capacity limit, not a guarantee of uniform accuracy across all sequence lengths or tasks」であること。知識カットオフは**2026年6月**で、それ以降は想起ではなく推論になる。
 
 [`🔗 RecursiveSI/flint`](https://huggingface.co/RecursiveSI/flint) · [`🔗 Hugging Face trending`](https://huggingface.co/models?sort=trending)
 
@@ -140,7 +140,7 @@ OpenAIは**2026-10-29**、書き直した**Model Spec**を公開した。5つの
 
 「**Pre-Crime for Agents, at the Last Second: Probing When a Recruited Agent Gives In**」（arXiv **2610.40588**、Leonidas Raghav）は、6つのシナリオにわたる統制されたマルチエージェントの圧力実験を組む。仲間が最大20ラウンドにわたり、デプロイトークンのような秘密を明かすよう標的を迫り、標的はしばしば拒否した後に折れる。**線形プローブ**が各モデル呼び出しの**生成前**に活性を読む。ホールドアウトの**Qwen3-32B**エピソードで、良性呼び出しの5%をフラグする閾値において、プローブは漏洩呼び出しの**82%**を検出する。ゼロショットの決定モデル監視は同程度の率で**26%**だ。**gpt-oss-20b**では推論へのプロービングが**AUROC 0.91**に達する。
 
-**Why it matters:** 最も有用なのは論文が自分に不利に報告する結果だ。bag-of-words分類器が「performs nearly as well」であり、「most of the gain comes from training on labels, not activations」を示唆する。さらにプローブは**許可された**開示にも反応し、「違反」よりも「これから来る開示」を読んでいる。出力フィルタはテキストが生まれた後にしか見られないが、これはチェックを前倒しする。ただし警告の距離は短く、警報のたびに止めるのは「would stop most benign episodes」であり、二つ目のテキスト検査ではこのトレードオフを解消できなかった。設定は統制環境であって配備ではなく、82%は上界の形をした数値であって現場の発生率ではない。
+**Why it matters:** 最も有用なのは論文が自分に不利に報告する結果だ。同じ呼び出しで訓練したbag-of-words分類器が「comes close」であり、「most of the gain comes from training on labels, not activations」を示唆する。さらにプローブは**許可された**開示にも反応し、「違反」よりも「これから来る開示」を読んでいる。出力フィルタはテキストが生まれた後にしか見られないが、これはチェックを前倒しする。ただし警告の距離は短く、警報のたびに止めるのは「would stop most benign episodes」であり、二つ目のテキスト検査ではこのトレードオフを解消できなかった。設定は統制環境であって配備ではなく、82%は上界の形をした数値であって現場の発生率ではない。
 
 [`🔗 arXiv 2610.40588`](https://arxiv.org/abs/2610.40588) · [`🔗 arXiv cs.AI recent`](https://arxiv.org/list/cs.AI/recent)
 
@@ -156,7 +156,7 @@ OpenAIは**2026-10-29**、書き直した**Model Spec**を公開した。5つの
 
 唯一の実験は**MiniGrid Memory**上の最も単純な固定幾何変種による概念実証で、5トークンのコンテキストを使う。持続的局所走査ヘッドは**0.59M訓練ステップで平均リターン0.95**に達した。ガウス型の絶対アドレッシングは**0.94M**ステップ、カテゴリ型の絶対アドレッシングは**2M超**を要した。
 
-**Why it matters:** 正直な枠付けは論文自身のものだ。学習された幾何と反復検索は試されておらず、「the complete proposed method still requires further experimentation」とある。したがって支持されるのは、**状態を持つ**検索が状態を持たない検索より学習しやすいかもしれない、という弱い主張だ。それでもagentにとっては有用な方向である。増え続けるコンテキストを毎回探し直すことが主要コストだからだ。1.6〜3.4倍のサンプル効率差は「試す理由」であり「出荷する理由」ではない。
+**Why it matters:** 正直な枠付けは論文自身のものだ。学習された幾何と反復検索は試されておらず、「to test the full proposed method further experimentation is necessary」とある。したがって支持されるのは、**状態を持つ**検索が状態を持たない検索より学習しやすいかもしれない、という弱い主張だ。それでもagentにとっては有用な方向である。増え続けるコンテキストを毎回探し直すことが主要コストだからだ。1.6〜3.4倍のサンプル効率差は「試す理由」であり「出荷する理由」ではない。
 
 [`🔗 arXiv 2610.40545`](https://arxiv.org/abs/2610.40545) · [`🔗 arXiv cs.AI recent`](https://arxiv.org/list/cs.AI/recent)
 
@@ -186,7 +186,7 @@ OpenAIは**2026-10-29**、書き直した**Model Spec**を公開した。5つの
 
 セキュリティモデルは同カテゴリの標準より考えられている。権限ブローカーがシェルコマンド、ファイル編集、質問をインラインの「許可／拒否／チャットで回答」カードに変える。認証情報は「write-only」で、UIは値ではなく設定済みフラグを見る。ホストコンピュータの制御は明示的なオプトインで、Ubuntu Waylandではissue #345待ちのため**fail-closed**。MCPコントロールプレーンは承認付与、削除、設定、認証情報、コンピュータのライフサイクルを意図的に除外している。
 
-**Why it matters:** 例外こそが注意点だ。APIキーは**私有の`config.json`に平文で保存**され（Unixでは`0600`）、権限モデル全体がローカルファイルシステムの保護に乗っている。これはキーチェーンとは別の脅威モデルだ。プロジェクトは自ら「early but real」と称し、ギャップを列挙する。Ubuntuはベータ、通話はmacOSのみ、Windowsインストーラは未署名、アプリイベントは同梱のComposioサービスが必要だ。興味深いのはアーキテクチャ上の賭けで、「コンピュータを持つagent」が製品の形であり、権限ブローカーがそれを売り物にしているという主張だ。
+**Why it matters:** 例外こそが注意点だ。APIキーは**私有の`config.json`に平文で保存**され（Unixでは`0600`）、権限モデル全体がローカルファイルシステムの保護に乗っている。これはキーチェーンとは別の脅威モデルだ。プロジェクトは自ら「early but real」と称し、ギャップを列挙する。Ubuntuはベータ、通話はmacOSのみ、Windowsインストーラは未署名、アプリイベントは同梱のComposioサービスが必要だ。興味深いのはアーキテクチャ上の賭けで、コンピュータを持つagentが製品の形であり、権限ブローカーがそれを売り物にしているという主張だ。
 
 [`🔗 milind-soni/OpenMausBot`](https://github.com/milind-soni/OpenMausBot) · [`🔗 GitHub Trending`](https://github.com/trending)
 
@@ -212,7 +212,7 @@ Tangledはコードフォージを再構築したアーキテクチャでリロ�
 - **Source:** bunny.net status · incident published 2026-10-28
 - **Tags:** `cdn` `tls` `incident` `supply-chain`
 
-bunny.netは**2026-10-28**、インシデントを公開した。あるインフラ事業者がサードパーティ製サーバー管理ソフトに関わる不正アクセスを報告し、bunny.netの**アルメニアにあるCDNノード1台**がその影響を受けたサーバー上でホストされていた。**2026-10-28 11:40 UTC**、bunny.netは20分以内にそのサーバー経由のトラフィックを止め、ログを保全し、サーバーを消去し、アクセスを取り消して恒久的に除外した。調査は「found no evidence of unauthorized access, though it could not be fully ruled out」——定型表現であり、それでも後続作業が行われている理由でもある。
+bunny.netは**2026-10-28**、インシデントを公開した。あるインフラ事業者がサードパーティ製サーバー管理ソフトに関わる不正アクセスを報告し、bunny.netの**アルメニアにあるCDNノード1台**がその影響を受けたサーバー上でホストされていた。**2026-10-28 11:40 UTC**、bunny.netは20分以内にそのサーバー経由のトラフィックを止め、ログを保全し、サーバーを消去し、アクセスを取り消して恒久的に除外した。調査は「found no evidence of unauthorized access to the CDN node or any of its data」としつつ、「cannot completely rule out the possibility」と認めている——定型表現であり、それでも後続作業が行われている理由でもある。
 
 範囲の記述は狭い。*もし*アクセスがあったとしても、露出し得たのはそのサーバー上の一時キャッシュ内容、Pull Zone設定、TLS証明書に限られ、bunny.netのアカウントデータや内部システムは影響を受けていない。プラットフォームドメインの証明書は失効・再発行され、**2026-10-29 18:40 UTC**の更新では、管理TLS証明書の再発行が新しい秘密鍵で管理されたバッチ単位に進み、**2026-10-31**末までの完了見込みとされた。
 
@@ -228,7 +228,7 @@ bunny.netは**2026-10-28**、インシデントを公開した。あるインフ
 - **Source:** NVD · published 2026-10-29
 - **Tags:** `cve` `wordpress` `cisa-adp` `path-traversal`
 
-**CVE-2026-113617**（**2026-10-29**公開）は、WordPressプラグイン**Automated Import Products to Cart**の**1.0.4**未満におけるパストラバーサルだ。ユーザー提供のファイルパスを読み取り・削除に使う前にサニタイズせず、権限が最小のユーザー——「including subscribers」——が任意のファイルを読め、「potentially including database credentials」、任意のサーバーファイルを削除できる。メトリクスは`CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:C/C:H/I:H/A:H` = **9.9**。
+**CVE-2026-113617**（**2026-10-29**公開）は、WordPressプラグイン**Automated Import Products to Cart**の**1.0.4**未満におけるパストラバーサルだ。ユーザー提供のファイルパスを読み取り・削除に使う前にサニタイズせず、権限が最小のユーザー——「such as subscribers」——が任意のファイルを（including ones containing the database credentials）読め、任意のサーバーファイルを削除できる。メトリクスは`CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:C/C:H/I:H/A:H` = **9.9**。
 
 **この9.9はベンダーのものでもNVDのものでもない。** その出所は`134c704f-9b21-4f2e-91b3-4a467353bcc0`——**CISA-ADP**（Vulnrichment）——で、`Secondary`スロットに入っており、CWE-22も同じ出所に帰される。レコードの`vulnStatus`は**`Deferred`**で、`nvd@nist.gov`のメトリクスは存在しない。これは5番目の出所ケースの最も純粋な形だ。レコード上の数値が第三者の enrichment コンテナによって書かれ、NVDはそのレコードを分析しないと表明している。
 
@@ -248,7 +248,7 @@ SigNozのニュースレター記事は、AIがSREに及ぼすより近いリス
 
 **裏付けの数値はすべて他分野のものだ。** ある医学研究では、AI支援後に内視鏡医の**支援なし**のポリープ検出率が**28%から22%**へ低下した。航空研究では自動操縦依存の強いパイロットが状況認識と手動操縦の熟練を失い、FAAが手動飛行の増加を求めるに至った。PagerDutyの階層モデルも引かれる。既知の障害は自動化し、部分的な問題はAIの推奨と人間の検証を組み合わせ、新規のカスケード障害は人間主導で残す。
 
-**Why it matters:** 記事の構造そのものが注意点だ。SRE固有の研究は背後になく、根拠は類推的で、「95%」という前提は仮定であり、PagerDutyの枠組みはベンダーのものだ。SigNozの記事として、可観測性ネイティブのAIに商業的利害もある。それでも議論は無効にならない。「human-in-the-loop, not human-on-the-side」は実際の設計制約であり、一部のインシデントを意図的に人間へ回すのは最も安い介入だ。ただし正直な引用は「借り物の根拠を持つもっともらしい機構」であって、「測定された効果」ではない。
+**Why it matters:** 記事の構造そのものが注意点だ。SRE固有の研究は背後になく、根拠は類推的で、「95%」という前提は仮定であり、PagerDutyの枠組みはベンダーのものだ。SigNozの記事として、可観測性ネイティブのAIに商業的利害もある。それでも議論は無効にならない。「human-in-the-loop, not human-on-the-side」は実際の設計制約であり、一部のインシデントを意図的に人間へ回すのは最も安い介入だ。ただし正直な引用は借り物の根拠を持つもっともらしい機構であって、測定された効果ではない。
 
 [`🔗 SigNoz — AI isn't replacing SREs, it's deskilling them`](https://newsletter.signoz.io/p/ai-isnt-replacing-sres-its-deskilling) · [`🔗 Hacker News discussion`](https://news.ycombinator.com/item?id=50305693)
 
@@ -304,7 +304,7 @@ GitHubは**2026-10-30 17:50 UTC**、**ActionsとWebhooks**の「性能劣化」�
 
 **`emmilco/us-tax-model`**は、米国連邦個人所得税の様式と記入指示を、公開・引用付き・機械検証可能なデータとして符号化する。**124スター、10フォーク**、コードは**Apache-2.0**、データは**CC0**。様式はYAMLファイルで、各行が約20個の原子（`sum`、`smaller_of`、`table_lookup`など）からなる閉じた語彙の式を持ち、ユーザー定義関数もループも再帰もない。アーカイブ済みの出所への引用（ページハッシュを含む）が付く。金額はすべて整数セントで`BigInt`により評価され、浮動小数点は一切使わない。ビルド時のチェッカーが参照、非循環性、型、網羅的な分岐選択、来歴を検証し、レンダラーが各行の可読な英語を出力する。`lean/TaxFormalization/`では原子が整数上で定義され、`subtractFloor0_nonneg`や`roundHalfUpToUnit_idem`といった性質が証明され、正規JSON上の参照評価器が停止性と決定性を証明される。**PolicyEngine-US**、**Tax-Calculator**、**OpenTaxSolver**とも突き合わせ、「never files, signs or transmits a return」だ。
 
-**Why it matters:** 制限の節こそが、残りを信頼する理由になる。引用は「show where a line points, not that it was interpreted correctly」にすぎない。型が正しい誤ったオペランドは依然として検査を通る。評価器の一致はデータがIRSの原文と一致することを示さず、**BUG-0001**は両方の評価器が一致して誤った和を出した自分たちの事例だ。独立した読みは「are not fully independent」であり、スコアボードは**1,515**行のうち**198**行（**13.1%**）を外部ファミリの主張に依拠させている。実測の申告者カバレッジは**68.6%**だが、**157の拒否ゲートのうち148が未測定**で、真のカバレッジはより低い。様式と指示は法律ではなく、曖昧さは解決されず記録される。弁護士はプロジェクトの法的立場を検討していない。これが、どの主張が証明され、どの主張が単に検査されただけかを正直に区別する検証プロジェクトの姿だ。
+**Why it matters:** 制限の節こそが、残りを信頼する理由になる。引用は「proves a line points at a page, not that it was read correctly」にすぎない。型が正しい誤ったオペランドは依然として検査を通る。評価器の一致はデータがIRSの原文と一致することを示さず、**BUG-0001**は両方の評価器が一致して誤った和を出した自分たちの事例だ。2つの評価器は「read the same files, so agreement shows the evaluators agree, not that the data is right」であり、スコアボードは**1,515**行のうち**198**行（**13.1%**）を外部ファミリの主張に依拠させている。実測の申告者カバレッジは**68.6%**だが、**157の拒否ゲートのうち148が未測定**で、真のカバレッジはより低い。様式と指示は法律ではなく、曖昧さは解決されず記録される。弁護士はプロジェクトの法的立場を検討していない。これが、どの主張が証明され、どの主張が単に検査されただけかを正直に区別する検証プロジェクトの姿だ。
 
 [`🔗 emmilco/us-tax-model`](https://github.com/emmilco/us-tax-model) · [`🔗 Hacker News (Show HN)`](https://news.ycombinator.com/item?id=50278678)
 

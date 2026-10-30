@@ -1328,6 +1328,31 @@
    "id": "CVE-2026-97209",
    "why": "Elixir Mix deps.partition insecure temp dir, 4.0 5.4 AV:L CNA=EEF; only 1.20.0-rc.4 before 1.20.5",
    "seeded": "2026-10-30 [Received] 4.0 Secondary/6b3ad84c(cna.erlef) 5.4, CWE-377, rc-only range"
+  },
+  {
+   "id": "CVE-2026-111357",
+   "why": "Ivanti Connect Secure; KEV 10-30, MITRE Secondary 7.0 (AV:L/AC:H) — the first KEV row on this watch whose score is below 8",
+   "seeded": "2026-10-31 [Undergoing Analysis] 3.1 Secondary/cve@mitre.org 7.0, CWE-829, published 10-15, KEV added 10-30 (due 11-02); KEV title says 'Missing Authentication for Critical Function' while the record says CWE-829"
+  },
+  {
+   "id": "CVE-2026-118527",
+   "why": "Ivanti Connect Secure; KEV 10-30 with NO published record anywhere — the watch's job is to catch the record appearing and its score arriving",
+   "seeded": "2026-10-31 [NO RECORD] cveawg CVE_RECORD_DNE, absent from NVD, KEV notes link an NVD detail URL that 404s; KEV due 2026-11-13; 1 of 79 KEV adds since 2026-09-01 in this state"
+  },
+  {
+   "id": "CVE-2026-113617",
+   "why": "Automated Import Products to Cart (WordPress); the purest CISA-ADP-only 9.9 on a Deferred record",
+   "seeded": "2026-10-31 [Deferred] 1 metric, CISA-ADP 9.9 (S:C), CWE-22, published 10-29, 0 NVD-scored"
+  },
+  {
+   "id": "CVE-2026-109516",
+   "why": "Bot for Telegram on WooCommerce; Wordfence 9.8 auth bypass, Deferred",
+   "seeded": "2026-10-31 [Deferred] 3.1 Secondary/security@wordfence.com 9.8, CWE-287, published 10-29, 0 NVD-scored"
+  },
+  {
+   "id": "CVE-2026-42922",
+   "why": "FUXA 1.3.2-2809 /nodered; Talos 9.8 authorization bypass, Deferred",
+   "seeded": "2026-10-31 [Deferred] 3.1 Secondary/talos-cna@cisco.com 9.8, CWE-285, published 10-29, 0 NVD-scored"
   }
  ]
 }

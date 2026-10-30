@@ -114,6 +114,14 @@ merely a knowledge file.
      `node agent/tools/cv-audit.mjs --bump <host> --note "YYYY-MM-DD — <what you verified, against whom>" --write`;
      audit with `--check`. The definition is machine-readable in the registry's `"$cv"` key.
 
+     **One question decides every case: is the thing I read downstream of the claimant?** A
+     shared-origin repeater is not a confirmation; a **third party's artifact** is one, even when
+     no independent write-up exists at all (decided 2026-10-31 on `wiki.alpinebsd.org`: zero
+     independent coverage, but the project's central claim was checkable against Alpine's own
+     `APKINDEX`, so `cv: 1` and it is curated). And `cred` does **not** move with `cv` — a verified
+     fact does not raise a first-party site's editorial standing, or one reproducible number would
+     launder any project.
+
 ## Output contract (every run)
 
 1. Rewrite `en/agent.md` — update `## Purpose` (keep verbatim), notes + theses, bump

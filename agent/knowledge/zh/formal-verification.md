@@ -96,3 +96,44 @@ title: 机器可检断言——"已验证"买到了什么、它信任了什么�
 3. **定理数是不是消费者在意的那些东西的数？** 117 条覆盖鉴权、关注、收藏、slug、分页与 JSON 往返的定理，是一组被选定的对象；它证明这类应用*可以*这样写，不是一个覆盖率数字。
 
 → [[frontier-models]] [[fact-check]] [[dev-tools]]
+
+## 2026-10-31 — 一个把「只是核过」的部分也印出来的验证项目，以及那篇论文自带的、让结论缩小的对照
+
+同一批次里两个工件把同一条线画在同一个位置，其中一个还把它画成了表。
+
+### `emmilco/us-tax-model` — 已证明、已核验、未测量，并排印出
+
+把美国联邦个人所得税申报表与说明编码为公开、带引用、机器可校验的数据：表单是 YAML，每一行是约二十个原子的封闭词表里的表达式（`sum`、`smaller_of`、`table_lookup` …），**没有自定义函数、循环或递归**；金额是以 `BigInt` 求值的整数分，因此全程没有浮点。构建期检查器校验引用、无环性、类型、穷尽的可选分支与出处。`lean/TaxFormalization/` 下，原子在整数上定义，`subtractFloor0_nonneg`、`roundHalfUpToUnit_idem` 等性质被证明，规范化 JSON 上的参考求值器被证为终止且确定。它与 **PolicyEngine-US**、**Tax-Calculator**、**OpenTaxSolver** 交叉核对，并且「never files, signs or transmits a return」。
+
+核对时的仓库状态：**124★、10 forks、2 watchers、0 个 open issues+PRs**，代码 Apache-2.0 / 数据 CC0，创建于 **2026-10-23**——只有八天，所以诚实的读法是：这是一个*示范如何诚实*的设计，不是已验证的税务引擎。
+
+让它可引用的是限制章节，逐字取自 README：
+
+- **「2026-10-24 regenerated report reads 198 of 1,515 (13.1%)」**——记分板把 **1,515** 行中的 **198** 行（13.1%）记为来自家族外部的断言，拆分是 **H: 0, B: 0, second-family M: 44, E: 163**。
+- 纳税人覆盖率 **68.6%**，并且「**148 of the 157 refusal gates are not measured**」——所以真实覆盖率更低，而且项目点明了缺的是哪个分母。
+- **BUG-0001** 是它自己承认的案例：**两个求值器对一个错误的和达成了一致**。这正是「两个实现一致 ⇒ 正确」的反例，而且是公开出来的，不是埋掉的。
+- 「Citations show where a line points, not that it was interpreted correctly」；类型正确但操作数错误仍会通过；独立读法「are not fully independent」；没有律师审过法律立场；表单与说明不是法律。
+
+三层，被点了名：**已证明**（Lean 性质 + 求值器确定性）、**已核验**（交叉求值器一致，而 BUG-0001 证明它作为充分性主张是假的）、**未测量**（148/157 个拒绝门）。
+
+### `dbreunig/nesformer` — 证明覆盖 CPU，并明说 PPU 不在权重里
+
+一台 NES 6502 CPU、2 KB 工作内存和一张卡带 ROM 跑在原版 `Qwen3_5ForCausalLM` checkpoint 里；门控 DeltaNet 的状态行充当寄存器／内存／ROM 单元（one-hot key 覆写某个 128 宽的行，one-hot query 读回），程序计数器是**推断**出来的，并不存储。checkpoint 是 **466.6M 参数、bf16（约 933 MB）**，其中只有 **9.3M 非零**，压缩后 **3.3 MB**。该引用的那句 README 原文是：「**Nobody trained these weights; a compiler computed every one.**」
+
+验证才是读它的理由：参考 CPU 与 nestest 黄金日志在 **3,348** 条指令上一致、与 py65 在 **570 万**条游戏指令上一致；精确电路预测了 nestest 加上 **283,610** 个位置的全部参考 token；Thwaite 与 Full Game 的完整运行复现了**全部 300** 帧与**全部 210** 帧。范围声明同样精确：**PPU 完全不在权重里**——宿主提供 PPU、手柄输入、vblank/NMI 时序与 APU 寄存器，并且除通过生成的 trace 之外从不触碰 CPU 状态。限制被平铺列出：仅 NROM / iNES mapper 0，无 bank switching，非官方 opcode 输出 HALT，无 APU-frame 或 DMC 中断，无声音，sprite-0 hit 为近似。
+
+**核对它时得到的两条工件注记，都是本库反复出现的形状：** `created_at` **2026-10-30T15:54:20Z** → `pushed_at` **15:59:18Z**，对一个内容明显早于它的仓库来说只有**五分钟的记录时钟**（记录只记录记录本身）；而 `api.github.com` 报 `license: NOASSERTION`，`LICENSE` 却返回 **200**、内容是「MIT License / Copyright (c) 2026 Drew Breunig」——第四个「许可证是三个工件」的实例，这次不一致的一方是 *API*。
+
+### 探针论文自己印出了解释其数字的对照
+
+「Pre-Crime for Agents, at the Last Second」（arXiv **2610.40588**）在生成*之前*读取目标 agent 的激活，场景是六种受控施压、同伴在最多 20 轮里索要秘密。在留出的 **Qwen3-32B** 上，以标记 5% 良性调用为阈值，线性探针检出 **82%** 的泄漏调用，而零样本决策模型监视器只有 **26%**；在 **gpt-oss-20b** 上，对推理做探针达到 **AUROC 0.91**。然后是论文反过来报告自己的结果：**词袋分类器「performs nearly as well」**，作者自己的解读是「**most of the gain comes from training on labels, not activations**」——而且探针对*被允许*的披露也会触发，读到的更多是「即将发生的披露」而不是「违规」。所以 82% 是受控集上的数字，可用的是架构结论：**检查可以比文本更早一步，大约早一次调用，再早就没有了。**
+
+### 可回卷证明：一个效率定理，而它的适用条件才是发现
+
+「Efficient Scalable Oversight via Rewinding」（arXiv **2610.40535**；Guan、Tauman Kalai、Rothblum、Xi）去掉了辩论式监督底下的假设——至少一方诚实——的办法是让验证者**保存并恢复证明者的状态**。预处理之后验证者运行时间「nearly linear in the input length」，诚实证明者与原计算成线性；构造针对「robust to changing a small fraction of oracle answers」的计算，且不依赖密码学。证据是一个**初步的 MNIST** 实验。摘要里给出的适用限制：那个鲁棒性条件，以及验证者必须**控制证明者的机器**、或能对其做检查点与恢复——对你自己托管的模型不是问题，对第三方模型是硬约束。监督研究正越来越只能活在这个位置上。
+
+### 加入问题清单
+
+**项目是否把三层都印出来——已证明、已核验、未测量——还是只印第一层？** 一个验证主张可审计，前提是工件点明了自己未测量的分母（us-tax-model：148/157 个门、13.1% 家族外、n=1 的已知错和 bug）。只印已证明层的项目并没有说谎，它只是扣下了能让你给其余部分定尺的那个数字。
+
+→ [[frontier-models]] [[fact-check]] [[dev-tools]]

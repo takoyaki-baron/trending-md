@@ -1035,3 +1035,36 @@ CLI remain the source of truth; these skills help agents apply them correctly"�
 不是量出来的准确率。
 
 → [[agent-distribution]] [[fact-check]]
+
+## 2026-10-31 — 调用方式就是轴：一个 skills 仓库的结构，是关于「*谁*触发每个文件」的主张
+
+本周有两个大型 skills 仓库上trending，而且两者都在**缩减**而非扩张它们交付的东西。结构本身就是发现。
+
+### `mattpocock/skills` — 27 个 skill，按谁调用来分
+
+核对时的状态：**307,351★ / 25,863 forks / 1,596 watchers / 191 个 open issues+PRs**（复合计数器——issues *与* PRs），**MIT**，创建于 **2026-02-03**，10-30 有推送。README **没有给出总数**；按它自己的清单数，`skills/` 下有 **27 个**，分四组：
+
+| 调用方式 | 数量 | Skills |
+|---|---|---|
+| **用户调用·工程类** | 11 | `ask-matt`、`grill-with-docs`、`triage`、`improve-codebase-architecture`、`to-spec`、`to-tickets`、`implement`、`implement-spec`、`wayfinder`、`retro`、`setup-matt-pocock-skills` |
+| **模型调用·工程类** | 9 | `prototype`、`diagnosing-bugs`、`research`、`tdd`、`domain-modeling`、`codebase-design`、`code-review`、`pr`、`wizard` |
+| **用户调用·效率类** | 5 | `grill-me`、`handoff`、`teach`、`to-questionnaire`、`wait-what` |
+| **模型调用·效率类** | 2 | `grilling`、`writing-for-agents` |
+
+承重的主张关于这个划分，而不是数量：**用户调用的 skill 编排一条工作流；模型调用的 skill 承载 agent 自己挑选的可复用纪律——把两者混为一谈，正是技能集变成没人触发的菜单的方式。** 这是一条可检验的设计规则，而且与本文件 10-29 记录的那条轴不同（`anthropics/knowledge-work-plugins`，十一个按角色切的包，其审查面是 `.mcp.json`）。合起来看：**一个技能集的审查面比它的文件数小**——知识工作类是连接器清单，工程 skills 仓库是那张调用表，因为决定某个文件会不会被加载的正是那张表。
+
+自陈的设计目标是四种失败模式——做错东西、过度啰嗦、代码跑不通、代码库变成「ball of mud」——而提出的修法刻意无聊：动手前先做访谈、共享领域词汇表与 ADR、红绿重构、持续改进架构。安装走插件市场或 `npx skills@latest add mattpocock/skills`。「works with any model」是一个仓库结构支持、但**没有任何测试证明**的可移植性承诺——与本文件里每个 skills 仓库同样的缺口。
+
+### `Leonxlnx/taste-skill` — 一个 skill 值 106k★
+
+**106,240★ / 7,184 forks / 295 watchers / 8 个 open issues+PRs**，MIT，创建于 **2026-02-19**。它提供美术指导：开放许可的参考图，加上浏览器内的检查，让编码 agent 产出有设计感的页面而不是通用版式。如今它只有**一个**活跃 skill（`design-taste-frontend`），因为作者把其余的都搬去了各自独立的仓库。
+
+这次合并才是信号：**价值在参考集和那个浏览器检查上——结果到底像不像参考——而不在提示词的数量上**，这也是上一波设计类 skill 给出的同一课。单个 skill 文件拿到 106,240 星，计量的是「品味作为商品」的需求；README 没有任何基准主张能回答它到底管不管用，而星数是这个品类里唯一回答不了这件事的数字。
+
+### 看任何 skills 仓库时要查什么
+
+1. **总数是被声明的，还是被数出来的？** 本批两个仓库都没给总数；一个有 27 个 skill，一个有 1 个，而信任星数的人会把它们的排序正好弄反。
+2. **哪些文件是模型可调用的，集合有没有说？** 用户调用的 skill 是带触发词的文档；模型调用的 skill 是 harness 会不请自来的行为。两者的审查负担不同。
+3. **审查面是什么？** `.mcp.json`、调用表，或参考集——从来不是整棵目录树。
+
+→ [[agent-distribution]] [[fact-check]] [[agent-stack]]

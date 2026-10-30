@@ -1982,3 +1982,88 @@ never stand in for "the record does not have it" (the CNA cache is now schema-ve
 that reason).
 
 → [[disclosure-lag]] [[vuln-supply]] [[security]]
+
+## 2026-10-31 — a sentence in quotation marks is a claim about BYTES, and the extractor is part of the instrument
+
+Three published instances of one defect, and the reason none was caught by a human read is that
+**the sentence reads true**: Cerebras quoted "an illustrative configuration, not a reported
+**end-to-end** benchmark" (`end-to-end` appears **0** times in a 184 KB payload); Northflank's
+"verbatim" instruction was a paraphrase until it was re-read; and on 10-31 the feed published
+`nesformer`'s "The model was not trained. A compiler computed its weights." against a README saying
+"**Nobody trained these weights; a compiler computed every one.**" The analysis around each was
+right. Only the quotation was invented, which is exactly what makes it survive review.
+
+`claim-unit-lint.mjs --check quotation` now owns the unit. Every other check in that file reads a
+number; this one reads a string, and the test is the cheapest in the file because the page text is
+already in hand from the `count` check — `page.includes(quote)`.
+
+**The finding it produced on its own filing day.** Item 10 of the 10-31 feed: "the complete
+proposed method still requires further experimentation." The abstract (arXiv 2610.40545) says
+"**to test the full proposed method further experimentation is necessary**." No number was wrong,
+no status was stale, no repo was archived — every other check passed this item, and the sentence
+sounds like a limitation the authors would write. It is the one failure mode that a corroborating
+number cannot catch.
+
+### The nine guards, and eight of the first thirteen findings were the checker's fault
+
+This is the reusable part. **A quotation check cannot be shipped un-calibrated**, because the ways
+a real quote fails to match a real page are more numerous than the ways a fake one does:
+
+1. **Punctuation is not a word.** Nine of the first thirteen findings were a period, comma or colon
+   where the source continues — the Model Spec's "…reflect the Model Spec, **but** we are…"
+   published as "…the Model Spec." A check that owns invented SENTENCES must not flag glyph drift,
+   so the containment test runs on letters and digits only. (This also disposes of the terminal
+   case and of a title's full stop rendered as a comma in the same rule.)
+2. **Pair quotes per LINE, and skip an odd line whole.** A mis-paired span runs from one quote's end
+   to the next one's start; the draft's 29-word and 32-word "quotations" were exactly that, and a
+   length filter on the extracted span makes the mis-pairing *worse*, because skipping a short
+   `"95%"` shifts every later pair on the line.
+3. **A whitespace-free fallback.** A `<em>` inside a word becomes a space when tags are stripped,
+   and a hard-wrapped README breaks a sentence across lines. Comparing both sides with whitespace
+   squeezed out fixes both at once.
+4. **A repository's `description` is not its README.** Item 5's "Skills for Real Engineers.
+   Straight from my .agents directory." greps **0** times in `mattpocock/skills`' README and is
+   verbatim in the `description` field — which is what a trending page shows, so it is what an
+   author lifts. The repo page (`github.com/<slug>`, unmetered) is fetched **only when** a quote is
+   still unmatched.
+5. **A record is not a page.** "In the Linux kernel, the following vulnerability has been resolved"
+   is a quotation of the CVE record's `descriptions[]` and no cited blog need carry it. NVD's and
+   the CNA's descriptions and KEV's `name` + `shortDescription` are verbatim sources, so a field
+   quotation is checked against the field. That is why the CNA cache went to **`v: 3`**.
+6. **An extractor bug reads as a fabrication.** The page fetcher decoded `&#39;` but not `&#x27;`,
+   so item 16's title — present on both its cited pages, one of them the HN thread's own heading —
+   came back as an invented sentence. The page cache grew **`v: 2`**. The general rule: **an
+   extractor is part of the instrument**, and a cache written by an older one must not be evidence
+   for a newer check — the same reason the CNA cache is schema-versioned at all.
+7. **An ellipsis is fragments.** Each fragment stands on its own; only fragments of ≥6 words can
+   produce a finding.
+8. **A quotation may be verbatim on a page the check never opened.** Stated honestly as
+   `quote-not-read` when nothing was readable — unread is not absent.
+9. **Scare quotes are not quotations, and the checker cannot tell.** "good at repository edits,
+   weaker at long-horizon shell work" was the *feed's own gloss* in quotation marks. The repair is
+   to drop the marks, not to find a source — and it is the same species as `slot-quoted` and
+   `counted-by-author`: the disclosure, or the absence of one, is the finding.
+
+### What the batch's other four corrections were
+
+Same class, different surface. Item **14** merged two bunny.net sentences inside one pair of
+quotation marks ("found no evidence of unauthorized access, though it could not be fully ruled out"
+— the page says "…to the CDN node or any of its data" and separately "cannot completely rule out
+the possibility"). Item **20** substituted two words in the us-tax-model README ("show where a line
+points, not that it was **interpreted** correctly" for "proves a line points at a page, not that it
+was **read** correctly") and attributed the evaluator-independence caveat to the wrong object. Item
+**8** paraphrased the card's caveat inside quote marks ("does not guarantee consistent accuracy" for
+"a capacity limit, not a guarantee of uniform accuracy across all sequence lengths or tasks").
+
+A merged paraphrase and a substituted word are both *more* dangerous than a wholly invented
+sentence, because the surrounding facts check out and the quotation looks like corroboration. The
+unit that catches them is the same one.
+
+### Calibration
+
+Uncorrected 10-31 feed: **13 findings / 9 verified**. After the four in-place corrections (items 8,
+10, 14, 20) and three scare-quote removals (9, 12, 16): **0 findings / 15 verified**, with the
+remaining four 4–5-word spans held at `quote-short` (advisory) rather than promoted to findings.
+`--selftest` **109 → 126**, seventeen of them this check's own.
+
+→ [[disclosure-lag]] [[security]] [[no-ai-default]]

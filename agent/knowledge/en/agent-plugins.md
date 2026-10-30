@@ -1430,3 +1430,61 @@ at the root and the README states **no evaluation result** — "official" is pro
 accuracy.
 
 → [[agent-distribution]] [[fact-check]]
+
+## 2026-10-31 — invocation style is the axis: a skills repo's structure is a claim about *who* triggers each file
+
+Two large skills repos trended in the same week and both reduced, rather than grew, what they ship. The
+structure is the finding.
+
+### `mattpocock/skills` — 27 skills split by who invokes them
+
+Verified at check: **307,351★ / 25,863 forks / 1,596 watchers / 191 open issues+PRs** (the composite
+counter — issues *and* PRs), **MIT**, created **2026-02-03**, pushed 10-30. The README states **no total**;
+counted from its own list, there are **27 skills** in four groups:
+
+| Invocation | Count | Skills |
+|---|---|---|
+| **User-invoked, engineering** | 11 | `ask-matt`, `grill-with-docs`, `triage`, `improve-codebase-architecture`, `to-spec`, `to-tickets`, `implement`, `implement-spec`, `wayfinder`, `retro`, `setup-matt-pocock-skills` |
+| **Model-invoked, engineering** | 9 | `prototype`, `diagnosing-bugs`, `research`, `tdd`, `domain-modeling`, `codebase-design`, `code-review`, `pr`, `wizard` |
+| **User-invoked, productivity** | 5 | `grill-me`, `handoff`, `teach`, `to-questionnaire`, `wait-what` |
+| **Model-invoked, productivity** | 2 | `grilling`, `writing-for-agents` |
+
+The load-bearing claim is about the split, not the count: **user-invoked skills orchestrate a workflow;
+model-invoked skills carry reusable discipline the agent selects itself — and conflating the two is how a
+skill collection becomes a menu nobody triggers.** That is a testable design rule, and it is a different
+axis from the one this file recorded on 10-29 (`anthropics/knowledge-work-plugins`, eleven role-shaped
+bundles whose review surface is `.mcp.json`). Together: **the review surface of a skill collection is
+smaller than its file count** — for knowledge work it is the connector manifest, for an engineering
+skills repo it is the invocation table, because that table is what decides whether a file is ever loaded.
+
+The stated design target is four failure modes — building the wrong thing, excessive verbosity, code
+that does not work, and codebases turning into a "ball of mud" — and the proposed fixes are deliberately
+boring: interview sessions before building, a shared domain glossary and ADRs, red-green-refactor, and
+ongoing architectural improvement. Install is plugin marketplaces or `npx skills@latest add
+mattpocock/skills`. "Works with any model" is a portability promise the repo structure supports and **no
+test demonstrates** — the same gap as every other skills repo in this file.
+
+### `Leonxlnx/taste-skill` — 106k★ for one skill
+
+**106,240★ / 7,184 forks / 295 watchers / 8 open issues+PRs**, MIT, created **2026-02-19**. It supplies
+art direction: openly licensed reference images plus browser-based checks, so a coding agent produces
+designed pages rather than generic layouts. It now contains **one active skill** (`design-taste-frontend`)
+because the author moved the others into separate repositories.
+
+The consolidation is the signal: **the value is in the reference set and the browser check — does the
+result actually look like the reference — not in the number of prompts**, which is the lesson the earlier
+design-skill wave produced too. 106,240 stars for a single skill file measures demand for *taste as a
+commodity*; the README makes no benchmark claim that would settle whether the file works, and a star
+count is the one number in this genre that cannot.
+
+### What to check on any skills repo
+
+1. **Is the total stated, or counted?** Both of this batch's repos state no total; one has 27 skills and
+   one has 1, and a reader who trusts the star count would sort them the wrong way round.
+2. **Which files are model-invocable, and does the collection say?** A user-invoked skill is
+   documentation with a trigger; a model-invoked skill is behaviour the harness will enter unasked.
+   Those have different review burdens.
+3. **What is the review surface?** `.mcp.json`, the invocation table, or the reference set — never the
+   whole tree.
+
+→ [[agent-distribution]] [[fact-check]] [[agent-stack]]

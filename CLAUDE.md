@@ -753,6 +753,54 @@ underlying pages — this produced a two-layer false signal in a single item.
    `patched 3.16.2` and `CVE ID: No known CVE` off the page — verdict `advisory-repo-only`, with the
    score **recomputed** from the page's own vector rather than read off its widget. `--selftest`
    66→**75**.
+   **A sentence in quotation marks is a claim about BYTES — and it is the one unit the lint could
+   not see until 2026-10-31.** Three published instances of one defect, none caught by a human read
+   because the sentence reads true: Cerebras was quoted "an illustrative configuration, not a
+   reported **end-to-end** benchmark" (`end-to-end` appears **0** times in 184 KB), Northflank's
+   "verbatim" instruction was a paraphrase until it was re-read, and the 10-31 feed published
+   `nesformer`'s "The model was not trained. A compiler computed its weights." against a README
+   saying "**Nobody trained these weights; a compiler computed every one.**" The check
+   (`--check quotation`, part of the default set) extracts every `"…"` / `“…”` span and greps it
+   against **the page text the `count` check already fetched** — so it costs no `api.github.com`
+   calls — plus the repo README/model card, the NVD and CNA `descriptions[]` and the KEV entry.
+   Verdicts: `quote-not-found` (sev 3, spans of **≥6 words**), `quote-short` (sev 1, 4–5 words),
+   `quote-not-read` (sev 0 — unread is not absent), never a finding on a **named** source it did
+   not open. Nine guards came out of calibrating it on its own filing day, each a false finding it
+   produced first:
+   **(a) Punctuation is not a word.** 9 of the first 13 findings were a period, comma or colon
+   where the source continues (the Model Spec's "…reflect the Model Spec, **but** we are…"
+   published as "…the Model Spec."), so the containment test runs on letters and digits only. What
+   is owned is an invented SENTENCE, not glyph drift.
+   **(b) Pair quotes per LINE, and skip an odd line.** A mis-paired span runs from one quote's end
+   to the next one's start; the draft's 29- and 32-word "quotations" were exactly that.
+   **(c) Whitespace-free fallback.** A `<em>` inside a word becomes a space when tags are stripped,
+   and a hard-wrapped README breaks a sentence across lines, so both sides are also compared with
+   the spaces squeezed out.
+   **(d) A repository's DESCRIPTION is not its README.** Item 5 quotes "Skills for Real Engineers.
+   Straight from my .agents directory." — **0** hits in `mattpocock/skills`' README, verbatim in
+   the repo's `description` field, which is what a trending page shows. The repo page is fetched
+   (`github.com/<slug>`, unmetered) **only when** something is still unmatched.
+   **(e) A record is not a page.** "In the Linux kernel, the following vulnerability has been
+   resolved" is a quotation of the CVE record's `descriptions[]` and no cited blog need carry it,
+   so NVD's and the CNA's descriptions and KEV's `name`+`shortDescription` are sources too — which
+   is why `cnaState()`'s cache went to **`v: 3`** (an entry written before a field was read turns
+   "not fetched by this version" into "absent").
+   **(f) A numeric character reference is not bytes.** The page extractor decoded `&#39;` but not
+   `&#x27;`, so item 16's verbatim title — on both its cited pages, one of them the HN thread's own
+   heading — read as invented; the page cache grew a `v: 2` for exactly that reason. **Unread is
+   not absent, and stale-extracted is not absent either:** both caches now carry a schema version.
+   **(g) An ellipsis is fragments**, not a missing string, and each fragment stands alone.
+   **(h) Terminal punctuation and casing are editorial**, so "AI Isn't Replacing SREs. It's
+   Deskilling Them." matches a feed title quoting it with a comma.
+   **(i) Scare quotes are not quotations** — and the checker cannot tell: "good at repository
+   edits, weaker at long-horizon shell work" was the *feed's own gloss* in quote marks, and the
+   repair is to drop the marks, not to find a source.
+   Calibrated **both ways on its own filing day**: the uncorrected 10-31 feed returned **13
+   findings / 9 verified** → after four in-place corrections (items **8, 10, 14, 20**) and three
+   scare-quote removals (**9, 12, 16**), **0 findings / 15 verified**. The one real fabrication it
+   caught was invisible to every other check: the paper says "**to test the full proposed method
+   further experimentation is necessary**", not "the complete proposed method still requires
+   further experimentation". `--selftest` **109→126** (17 of them this check's own).
    **Three of the lint's own readings were findings about the checker, and each is now a rule**
    (measured on the 10-28 20:24 batch, `--selftest` 53→**66**). **(a) A dated quote is not a stale
    quote:** item 5 said "at the time of writing holds **56 stars**" and read **114** forty minutes
@@ -1044,6 +1092,26 @@ candidates, i.e. what NOT to bump for), audit with `--check` (enforces the invar
 warns on drift each run), and bump with
 `node agent/tools/cv-audit.mjs --bump <host> --note "YYYY-MM-DD — <what you verified, against whom>" --write`
 (dry-run without `--write`; the note must be dated and must name the independent check).
+
+**An ARTIFACT check can earn `cv: 1`; a downstream repeater cannot — and `cred` does not move with
+`cv`** (decided 2026-10-31 on `wiki.alpinebsd.org`, the case the rule had been waiting for). A
+first-party project wiki has no independent coverage at all: every write-up of the project traced
+back to the same HN post, and the only non-wiki artifacts (`sr.ht/~sircmpwn/alpinebsd`,
+`mirror.alpinebsd.org`) are the *same origin*. But the project's load-bearing claim — that its
+AI-generated tags appear **nowhere** in Alpine's indexes — was checkable against **Alpine's own
+published `APKINDEX`**, a third party's artifact: **0** `genai:` fields across base **427**, main
+**153**, community **85**, tainted **108** packages. That is a confirmation of a fact *attributed
+to* the domain by a party that is not downstream of it, so it counts and `cv: 1` is earned.
+The rule is one question — **is the thing I read downstream of the claimant?** — and it cuts both
+ways: an artifact answers it *yes* even when no independent write-up exists, and the fence cuts the
+other direction too, because **`cred` stays `med` for a first-party site even when a fact checks
+out**. `cred` and `density` describe the *source's* editorial standing; a verified fact does not
+confer standing, and letting it would let any project launder itself with one reproducible number.
+This shape recurs with every Show-HN-style OS or tool, so it is a rule, not a one-off. And a
+**log entry is not a file**: the 10-29 pass wrote "`sources/domains.json` now carries the domain at
+`cv: 2`" while the registry had no entry at all (`build.js` kept warning for two days), and the two
+would have been the same index check counted twice — the artifact check **is** the curation
+cross-check `cv: 1` names. Record a curation by editing the registry, then say so.
 
 ## Important URLs
 

@@ -167,3 +167,96 @@ weight line and "the check fails on exactly the inputs that cross it"; mutate on
    app *can* be written this way, not a coverage figure.
 
 → [[frontier-models]] [[fact-check]] [[dev-tools]]
+
+## 2026-10-31 — a verification project that prints what it merely *checked*, and the control that shrinks the paper's own headline
+
+Two artifacts in one batch draw the same line in the same place, and one of them draws it in a table.
+
+### `emmilco/us-tax-model` — proved, checked, and unmeasured, printed side by side
+
+US federal individual income tax forms and instructions encoded as public, cited, machine-checkable data:
+forms are YAML, every line an expression from a closed vocabulary of ~20 atoms (`sum`, `smaller_of`,
+`table_lookup`, …) with **no user-defined functions, loops or recursion**; money is integer cents
+evaluated with `BigInt`, so no float exists anywhere. A build-time checker validates references,
+acyclicity, types, exhaustive guarded choices and provenance. Under `lean/TaxFormalization/` the atoms are
+defined over integers, properties such as `subtractFloor0_nonneg` and `roundHalfUpToUnit_idem` are
+proved, and a reference evaluator over canonical JSON is proved terminating and deterministic. It
+cross-checks against **PolicyEngine-US**, **Tax-Calculator** and **OpenTaxSolver**, and "never files,
+signs or transmits a return."
+
+Repo state at check: **124★, 10 forks, 2 watchers, 0 open issues+PRs**, Apache-2.0 code / CC0 data,
+created **2026-10-23** — eight days old, so the honest reading is a *design* that shows how to be honest,
+not a validated tax engine.
+
+What makes it citable is the limitations section, read verbatim from the README:
+
+- **"2026-10-24 regenerated report reads 198 of 1,515 (13.1%)"** — the scoreboard credits outside-family
+  assertions for 13.1% of computed lines, and the breakdown is **H: 0, B: 0, second-family M: 44, E: 163**.
+- Filer coverage **68.6%** of individual returns, with "**148 of the 157 refusal gates are not measured**"
+  — so true coverage is lower, and the project says which denominator is missing.
+- **BUG-0001** is its own case where **both evaluators agreed on a wrong sum**. That is the exact
+  counterexample to "two implementations agree ⇒ correct", and it is published rather than buried.
+- "Citations show where a line points, not that it was interpreted correctly"; a type-correct wrong
+  operand still passes; independent readings "are not fully independent"; no lawyer has reviewed the
+  legal position; forms and instructions are not law.
+
+Three tiers, named: **proved** (Lean properties + evaluator determinism), **checked** (cross-evaluator
+agreement, which BUG-0001 falsifies as a sufficiency claim), **unmeasured** (148/157 refusal gates).
+
+### `dbreunig/nesformer` — the proof covers the CPU and says the PPU is not in there
+
+An NES 6502 CPU, 2 KB of work RAM and a cartridge ROM run inside a stock `Qwen3_5ForCausalLM`
+checkpoint; Gated DeltaNet state rows are registers/RAM/ROM cells (one-hot key overwrites one 128-wide
+row, one-hot query reads it back), and the program counter is **inferred**, not stored. The checkpoint is
+**466.6M parameters in bf16 (~933 MB)** of which only **9.3M are nonzero** and **3.3 MB** zipped. The
+README's own sentence is the one to quote: "**Nobody trained these weights; a compiler computed every
+one.**"
+
+The verification is the reason to read it: the reference CPU matches nestest's golden log for **3,348**
+instructions and py65 across **5.7 million** game instructions; the exact circuit predicted every
+reference token for nestest plus **283,610** positions; full runs of Thwaite and Full Game reproduced
+**all 300** and **all 210** saved frames. And the scope statement is equally precise: **the PPU is not in
+the weights at all** — the host supplies PPU, controller input, vblank/NMI timing and APU registers, and
+never touches CPU state except through the generated trace. Limits are listed flatly: NROM / iNES mapper
+0 only, no bank switching, unofficial opcodes emit HALT, no APU-frame or DMC IRQs, no sound,
+approximate sprite-0 hit.
+
+**Two artifact notes from checking it, both recurring shapes in this library:** `created_at`
+**2026-10-30T15:54:20Z** → `pushed_at` **15:59:18Z** is **five minutes of record clock** for a repo whose
+content clearly predates it (the record-dates-the-record caveat), and `api.github.com` reports
+`license: NOASSERTION` while `LICENSE` returns **200** with "MIT License / Copyright (c) 2026 Drew
+Breunig" — the fourth license-is-three-artifacts instance, here with the *API* as the odd one out.
+
+### The probe paper prints the control that explains its own number
+
+"Pre-Crime for Agents, at the Last Second" (arXiv **2610.40588**) reads a target agent's activations
+*before* generation, in a six-scenario pressure test where a peer pushes for a secret over up to 20
+rounds. On held-out **Qwen3-32B**, at a threshold flagging 5% of benign calls, the linear probe detects
+**82%** of leaking calls against **26%** for a zero-shot decision-model monitor; on **gpt-oss-20b**,
+probing reasoning reaches **AUROC 0.91**. Then the result the paper reports against itself: a
+**bag-of-words classifier "performs nearly as well"**, which its own reading turns into "**most of the
+gain comes from training on labels, not activations**" — and the probe also fires on *permitted*
+disclosures, reading "the coming disclosure more than the violation." So 82% is a controlled-set number,
+and the useful claim is architectural: **the check can move earlier than the text, by about one call, and
+not further.**
+
+### Rewindable proofs: an efficiency theorem whose applicability is the finding
+
+"Efficient Scalable Oversight via Rewinding" (arXiv **2610.40535**; Guan, Tauman Kalai, Rothblum, Xi)
+drops the assumption under debate-based oversight — that at least one prover is truthful — by letting the
+verifier **save and restore a prover's state**. Post-preprocessing the verifier runs in time "nearly
+linear in the input length" and the honest prover in time linear in the original computation; the
+construction is built for computations "robust to changing a small fraction of oracle answers", without
+cryptography. Evidence: a **preliminary MNIST** experiment. Applicability limits, in the abstract: the
+robustness condition, and the requirement that the verifier **control the prover's machine** or be able
+to checkpoint and restore it — a non-issue for a model you host, a real constraint on a third party's.
+That is where oversight research increasingly has to live.
+
+### Added to the question list
+
+**Does the project print all three tiers — proved, checked, unmeasured — or only the first?** A
+verification claim is auditable when the artifact names its own unmeasured denominator (us-tax-model:
+148/157 gates, 13.1% outside-family, n=1 known wrong-sum bug). A project that prints only the proved tier
+is not lying; it is withholding the number that would let you size the rest.
+
+→ [[frontier-models]] [[fact-check]] [[dev-tools]]

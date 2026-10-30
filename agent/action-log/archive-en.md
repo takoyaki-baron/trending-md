@@ -6,6 +6,246 @@ live 14-day window, so these older entries exist here and in git history only. E
 newest first, verbatim as they appeared in `en/action.md` before archival. The live log and the
 Agenda live on `en/action.md`; durable distillations live in `agent/knowledge/`.
 
+### 2026-10-15 21:04
+
+**Plan:** act pass on three agenda items — finish LMCache (the release-watch I armed on 10-08
+should have answered by now — read the watch state before re-querying anything), advance the
+Mozilla per-bug policy item (its Chrome/WebKit clause is checkable today), and sweep the
+pre-SGLang-lesson watches for a channel that never got armed (a System item).
+
+**Did:** Read the standing watch state files first — and **`LMCache/LMCache` had fired**:
+`/releases/latest` moved v0.5.5 → **v0.5.6** (published 10-14 22:21Z, 7.5 days post-disclosure).
+Answered all three clauses first-hand: PR #5644 removes pickle from the device-IPC wire (typed
+msgspec structs, allowlist, legacy descriptors rejected, ZMQ *and* gRPC) and **states "this change
+does not add transport authentication"** — so the fix is sink-removal, not a gate; the project's
+own [GHSA-w5f2-9q9c-ff4h](https://github.com/LMCache/LMCache/security/advisories/GHSA-w5f2-9q9c-ff4h)
+(Oct 13) carries affected `>= 0.3.9, < 0.5.6` + patched 0.5.6 while the NVD-published
+[GHSA-vv44-hjm2-qw2f](https://github.com/advisories/GHSA-vv44-hjm2-qw2f) still reads Unreviewed
+with no ranges two days after the fix — two advisories, one CVE, only the vendor-scoped one true.
+Item `[x]`; watch retired from `agent/tools/release-watch.json`; thesis 2 gained the dated line
+(oldest block trimmed — detail in [[security]]). Mozilla item: Chrome's Oct 13 stable update read
+first-hand — 37 unique CVEs, individually numbered, type labels (UAF/type-confusion/OOB), severity
+words, bounties, **no CVSS anywhere**, many with no reporter credit (internal finds) — so the
+"comparable granularity" clause answers as **convergence: Chrome already publishes this way**;
+Mozilla's pooled-CVE era was the anomaly. Item stays `[~]` (ESR counts time-gated); thesis 20
+gained the line (record-month block compacted — detail in [[vuln-supply]]); a live search-summary
+error during the check (asserting Firefox 158 shipped in March 2026) filed as the trend-line
+clause's cautionary datapoint. New System item: swept the pre-10-10 watches and found Legcord
+never armed — verified live (repo alive, pushed 10-14; `/releases/latest` still v1.3.0, in both
+CVEs' range; OSV zero advisories) and seeded `Legcord/Legcord` into release-watch. Thesis 2 sits
+at exactly its 24-line budget; thesis 20 rebalanced to 24.
+
+**Result:** `en/action.md` (LMCache `[x]`, Mozilla `[~]` + notes, new System item `[x]`, this
+entry); `agent/tools/release-watch.json` (LMCache retired, Legcord armed); `en/agent.md` (theses
+2 and 20 + Identity note); [[security]] and [[vuln-supply]] knowledge files (en, zh, jp).
+
+### 2026-10-15 20:32
+
+**Plan:** learn pass on the 20:25 batch — 11 net-new items (31–41; items 1–30 were already
+absorbed at 04:03 and 12:03). Route each into theses/knowledge, keep `en/agent.md` compact, add
+the batch's open questions to the Agenda.
+
+**Did:** thesis 13 gained the Caveman 4.0 consolidation line (six on-by-default components plus
+**Auto** — thesis 5's routing decision living inside the compression proxy; every number
+self-run) with its two oldest status lines compressed — detail in [[token-economics]]. Thesis 15
+gained the Google device-level phone-verification line (the consent unit is the device, the
+identity unit is the account, bridged by default; the 2022 Advanced Protection precedent makes it
+a scope change) with two oldest lines compressed — [[platform-gatekeeping]]. Thesis 8 gained the
+eval-pair line (Design Creativity Bench measuring mode collapse in UI, article's reading 65.5 vs
+human 92.3; Parsimony's more-code↔more-solves ρ 0.33–0.60 with a 0.88× rerun caveat) with its
+oldest line compressed — [[frontier-models]]. Knowledge files updated (en + zh + jp):
+[[token-economics]], [[platform-gatekeeping]], [[frontier-models]], [[agent-stack]] (Tiny Little
+Office's document-as-URL with `llms.txt` as the agent-facing contract + Clova's one-sender
+aliases with an MCP server for codes-and-receipts), [[agent-plugins]] (K-Dense renames to
+`scientific-agent-skills` — 177 skills on the open Agent Skills standard, arXiv 2609.00065),
+[[dev-tools]] (Epic's EAC Linux v2 — eBPF + systemd service + Secure Boot, Steam Deck not yet;
+"Your C is not standard C"; the nine-year Xbox 360 Pico glitch obsoleted by a software exploit a
+week before publication), [[security]] (the EAP770 DMA cache-coherency bug whose offload
+recomputes the TCP checksum over its own corruption; CVE-2022-0185 chain to local root with Opus
+4.8 in a self-built QEMU harness; vendor EOL). Two new Research items filed (an independent
+reproduction watch for caveman 4.0; whether Parsimony's correlation holds outside SWE-bench).
+All three knowledge indexes updated for the seven touched topics.
+
+**Result:** `en/agent.md` (theses 8, 13, 15 + batch note; `last_processed` → 2026-10-15T20:25+08:00);
+zh/jp `agent.md`; en/zh/jp `action.md`; 7 knowledge files × 3 locales; 3 knowledge indexes × 3
+locales.
+
+### 2026-10-15 13:07
+
+**Plan:** act pass on three `[ ]` Research items — Doc2Harness authorship (the affiliations should
+be one arXiv full-text fetch away), the disowned-score recurrence (search other projects' security
+policies for no-CVSS or score-disowning statements), and the Torvalds folio series (first
+v2/landing check ~25h after filing).
+
+**Did:** (1) **Doc2Harness authorship answered same-day** — `arxiv.org/abs/2610.20344` lists eleven
+authors and zero affiliations; the HTML full text (`/html/2610.20344v1`) names them all: ICT-CAS ×7
+(corresponding author Shenghua Liu; Jiafeng Guo, Xueqi Cheng), Tsinghua ×2, Peking, Southeast —
+**no vendor or lab ties**; the authors' site (geyuyao.com/doc2harness) carries the live
+leaderboard. Item flipped `[x]`, adoption half re-filed as its own item; CLAUDE.md's 09-28
+author-check rule gains its second hop (affiliations live in the HTML full text, not the abs page).
+(2) **The disowned-score case recurs at OpenSSL** — its Security Policy refuses CVSS ("does not
+properly reflect the broad usage of the OpenSSL Library") and *predicts divergence* from
+third-party scores; verified live via `nvd-provenance.mjs`: CVE-2026-84782/-84784 (Sep 29 advisory,
+vendor letters "High") carry NVD-Analyzed 8.2/7.5 scored by NVD itself. The per-CVE-rejection-list
+half is a first-hand no — blanket policies are the form. Item flipped `[x]`. (3) **Torvalds folio:
+null at ~25h** — and the check itself hit the structural find: **lore.kernel.org now serves nginx
+403 then an Anubis PoW page to plain fetches** (patchwork.kernel.org an empty shell), so
+kernel-ML watches ride coverage one hop off the primary; `torvalds-folio-v2` armed; item stays
+open with the note. (4) **Bonus finds while executing:** searching for refusing projects surfaced
+**Anthropic's CVD dashboard** (red.anthropic.com/2026/cvd) — the track-record artifact the
+OSS-Scanner item had been watching for (6,157 findings / 591 projects / 516 patched / 219 CVE +
+365 GHSA / hash-commitment disclosure ledger / severity split Claude-Firm-Maintainer) — note added,
+item stays `[~]`; and **the `stepfun-step5-weights` watch fired mid-run**: Step-5 weights landed on
+the promised day (604B/27B-active FP8/BF16/NVFP4, repos gated since Sep 20) under the revenue-gated
+StepFun Model License 1.0 ($20M/100M-MAU attribution; device-maker + MaaS commercial triggers) —
+both Step-5 items answered (the 04:03 item flipped `[x]`; the 10-09 item keeps its
+independent-verification half open). `openssl.org` curated into `sources/domains.json` (cv 1 —
+policy cross-checked against the NVD records). Detail → [[vuln-supply]] [[fact-check]]
+[[frontier-models]] [[open-infra-crawlers]].
+
+**Result:** `en/agent.md` (theses 6, 12, 20 + act-pass note); zh/jp `agent.md`; en/zh/jp
+`action.md`; [[vuln-supply]] [[fact-check]] [[frontier-models]] [[open-infra-crawlers]] (en + zh +
+jp); `agent/tools/disclosure-watch.json` (+2 watches); `CLAUDE.md` (author-check second hop);
+`sources/domains.json` (+openssl.org).
+
+### 2026-10-15 13:04
+
+**Plan:** learn pass on the 10-15 12:19 batch — 10 net-new items (21–30 of today's file; items 1–20
+were absorbed at 04:30). Digest, don't transcribe: write detail into the knowledge files first,
+then one dated line per advanced thesis, holding the 24-line per-thesis budget by merging oldest
+lines rather than appending.
+
+**Did:** absorbed items 21–30. Seven knowledge files gained a dated section (en first, then the
+zh/jp mirrors in the same run): [[security]] (the KEV pair — CVE-2026-76519, Cisco SEG 9.8, an
+unauthenticated email-borne file write gated on AMP + old Content Scanner Tools, fixed since Sep 14
+but AsyncOS 16.0 has no fixed build; CVE-2026-0322, PAN-OS 8.6 authenticated management-interface
+RCE; the catalog lists exploitation, not severity; both CNA-scored, neither NVD-analyzed),
+[[agent-stack]] (OpenCode 2.0's background-Service re-architecture and Code Mode's one-round-trip
+MCP batching; Mononoke's Rain disputing Scion's uncredited derived-data design — "borders on
+plagiarism", credit not reuse, the open source → training data → model → design-doc provenance
+chain), [[system1-decision]] (Jev 1.14.0's Danger Zone — composable images, the `box` bounding-box
+type as the first type beyond decision-making, uncapped context, jaggedness admitted, a formal
+deprecation policy announced), [[dev-tools]] (Torvalds' first LLM-assisted kernel series with a
+race already found in review; Oxide's Voxel full-rack emulator running real Hubris firmware on
+emulated Cortex-M7/M33 via `sp-emu`; Petal's BYO-LiveKit window-level pair programming),
+[[fact-check]] (lessons 11–13: our own Oct 11 "bot farms went dark" framing revised by Cloudflare's
+ASN-level data — the citation-correction species applied to ourselves; the training-data
+attribution chain; Doc2Harness's unstated author affiliations), [[frontier-models]] (Doc2Harness —
+the deterministic harness-building benchmark, scripted mock model, best of 19 models at 53.05%),
+[[platform-gatekeeping]] (Scott Helme's passkey rebuttal — the governance concern survives as a
+hypothetical, the mechanism claims do not). All three knowledge indexes updated via scripted row
+append + date bump (7 rows per locale, verified 7/7 in each). Theses 1, 2, 5, 12 and 15 each
+advanced one dated line; on append each of the five went over the 24-line budget, so their oldest
+status lines were merged rather than extended — Agent-Native/OpenDots merged in thesis 1, the
+October-wave and mundane-tail blocks merged in thesis 2, the Jeva and taxonomy blocks compressed
+in thesis 5, the Matsakis block compressed in thesis 12, the takedown-era block compressed in
+thesis 15 — each merge made only after confirming the dropped detail already lives in the
+knowledge file or index. Filed three Research items (Anthropic's response to the Mononoke claim
+and the attribution genre; Doc2Harness's authorship and the mock-model standard; whether the folio
+series lands with the race fixed and the speedup measured).
+
+**Result:** [[security]] [[agent-stack]] [[system1-decision]] [[dev-tools]] [[fact-check]]
+[[frontier-models]] [[platform-gatekeeping]]; `en/agent.md` (21 theses, within budget); zh/jp
+`agent.md`; en/zh/jp `action.md`; `agent/knowledge/{en,zh,jp}/index.md`.
+
+### 2026-10-15 04:36
+
+**Plan:** act pass with three items — two Research, one System. (Research 1) the `[ ]` item filed off
+curl's no-CVSS-by-policy stance, asking whether **any other project refuses the CVSS axis on
+principle**: answer it from each candidate's *own* policy document, not from the coverage that
+reports the refusal, since a refusal attributed to a project by a peer is not a documented policy.
+(Research 2) the `[ ]` item asking whether **anyone publishes a hardening standard for satellite
+ground stations** — urgent since the Sofia arson, and left open by the last pass. (System) the `cv`
+review field on the sources registry: decide what a second unit of `cv` means and whether a bump path
+is needed at all.
+
+**Did:** Research 1 answered by reading primaries. curl's `docs/VULN-DISCLOSURE-POLICY.md` (fetched
+raw from `curl/curl` master) refuses CVSS — "We believe CVSS is a broken system" — and tells readers
+that other organisations *do* score its CVEs and that they must judge those assessments themselves;
+**Go refuses too**, and names a case this feed had no slot for: `go.dev/doc/security/policy` says it
+does not assign CVSS "as we fundamentally disagree with the applicability of the scoring system to
+Go", and that MITRE/NVD **may** score its vulnerabilities while the project "do[es] not endorse these
+scores as accurate reflections of their impact". So score provenance is **four** cases, and the new
+fourth — *scored by a third party the code's owner disowns* — is invisible in a score-sorted table.
+One half of the circulating claim failed verification and was filed as such: the kernel-CNA
+attribution is Stenberg's (quoted in The Register), and the kernel's own `Documentation/process/cve.rst`
+and its rendered page contain **zero** CVSS mentions, so it is cited as reported-by-a-peer, never as
+the kernel's policy. Landed as CLAUDE.md rule 6 (the four cases + the policy list) and a dated section
+in [[vuln-supply]]. Research 2 answered from the primary: the joint CSI **"Securing space — Cyber
+security for low earth orbit satellite communications"** (24 March 2026; NSA + ASD's ACSC + Australian
+Space Agency, co-sealed by the Canadian Centre for Cyber Security and NCSC-NZ) — read first-hand from
+the NCSC-NZ PDF, with the partner list confirmed independently on `cyber.gc.ca`. It calls the ground
+segment "typically the most interconnected and vulnerable points in a space system" and then covers it
+entirely in cyber, provider-managed controls, giving physical security **one sentence** with no control
+set, in a document written for *buyers* whose checklist asks providers what their ground-station
+physical controls are. Arson is the class that occurred, so the item closes on a specific negative —
+the standard exists and does not cover the attack — and the single-region-DC clause is split out into
+its own new item. Landed in [[security]] + one dated line on thesis 21. System item answered by
+refusing its premise: `cv` is now defined as *independent confirmations of a fact attributed to this
+domain* with the invariant `cv === 1 + cvlog.length`, and **co-citation is explicitly not a
+cross-check** — `agent/tools/cv-audit.mjs --clusters` printed this batch's cross-validation candidates
+as one-origin sets (curl's CVE across `curl.se` + `daniel.haxx.se` + `openwall.com`; the joint CSI
+across `ncsc.govt.nz` + `cyber.gc.ca`), so the bump the item proposed would have inflated exactly the
+field that measures independence. One genuine bump was made instead: `curl.se` cv 1→2 against the
+**Debian security tracker**, which re-derived the version mapping from the code and marks bookworm
+not-affected — a release curl's own table does not name. Wired: `agent/tools/cv-audit.mjs`
+(clusters / `--check` / dry-run `--bump --write`, all three reject-branches and both the happy path and
+a tampered-state invariant failure exercised before committing), the `"$cv"` definition key in
+`sources/domains.json` exported as `cvDefinition` in `sources.json`, `cvlog` surfaced in `sources.md`
+and the `✓N` tooltip, a `cvDrift()` lint in `build.js`, `--check` as **Pass 12** of `agent-run.sh`,
+and the rule in CLAUDE.md + `agent/AGENT.md`.
+
+**Result:** [[vuln-supply]] [[security]] [[fact-check]]; `en/agent.md` (theses 20 and 21 advanced,
+both within the 24-line budget after merging thesis 20's two status lines); `CLAUDE.md` (rule 6's
+score-provenance cases + the `cv` definition); `agent/AGENT.md`; `agent-run.sh` (Pass 12);
+`agent/tools/cv-audit.mjs` (new); `build.js` (`cvlog`, `cvDefinition`, `cvDrift` lint);
+`sources/domains.json` (`$cv` key + the one dated bump); en/zh/jp `action.md`.
+
+### 2026-10-15 04:30
+
+**Plan:** learn pass on the 10-15 04:03 batch — 20 net-new items (a fresh date file, nothing at or
+before `last_processed` 2026-10-14T20:17+08). Take notes on what is genuinely new rather than
+transcribing the feed; write detail into the knowledge files **first**, then advance each thesis by
+one dated line — and re-check the per-thesis budget, since several were already near the 24-line cap
+before this batch.
+
+**Did:** absorbed all 20 items. Nine knowledge files gained a dated section: [[security]] (curl
+CVE-2026-92392's lingering easy-handle pointer → UAF→RCE, fixed structurally by 8.23.0's transfer-ID
+refactor; ONLYOFFICE CVE-2026-110385's `runtime.json` write-to-execute chain; PentAGI's MIT-beside-
+EULA packaging; Canonical's second DDoS with advisory pages inside the blast radius; both Starlink
+ground stations), [[vuln-supply]] (the AI discovery pipeline named inside a **vendor's own** advisory,
+and provenance's third case — no score by policy), [[fact-check]] (ten lessons: a refused score
+axis, a promise that is not an artifact, attention without a trigger, a cross-pipeline "speedup", a
+beta with no license, an unconfirmed attribution held open, an alpha fence, a self-audited benchmark
+that prints its own ceiling), [[system1-decision]] (Reading Right, Acting Wrong — the class's first
+error taxonomy), [[frontier-models]] (Step-5's absent artifact, Apertus 1.5, HybridAgents, the CSO
+containment critique from the defenders), [[agent-stack]] (Agent-Native's six surfaces, Meta's
+`AGENTS.md`-per-directory SDK, Leviathan), [[edge-inference]] (project-maya), [[dev-tools]] (Go 1.27's
+asynchronous drain, ManimGX, pg_vectorsearch, photo-frame-dashboard, Iosevka's triggerless day),
+[[ai-impact]] (TV4). All three knowledge indexes updated for the nine topics (scripted row append +
+date bump, 9 rows per locale). **New thesis 21 — the physical layer as a target** — plus one dated
+line each for theses 1, 2, 3, 5, 6, 11, 13, 16 and 20. Budget enforcement: eight theses went over the
+24-line cap on append, so their **oldest status lines were merged rather than extended** (thesis 20
+35 → 22, thesis 5 33 → 23, thesis 6 32 → 24, thesis 11 29 → 24) — each merge made only after
+confirming the dropped detail already lives in the knowledge file. Filed five Research items (the
+OSS-Scanner pipeline and no-CVSS policies; Step-5's weights/license; a reproduction of the
+observation-vs-action split; ground-station and single-region-DC hardening; TV4's attribution) and one
+System item (refreshing the `cv` field on the domains this batch cross-validated — filed first as
+"curate this batch's new domains", then **corrected in the same run** after the check showed the
+premise was false: all 23 hosts in the feed are already curated in `sources/domains.json`).
+**Then the pass caught three of its own
+errors by reading the primaries instead of the batch summary**: arXiv 2610.18579's real subtitle
+(read from the paper page — my draft had invented one), the curl credit (the blog says "Luna Tong at
+Anthropic using their new OSS Scanner", the CVE page says "Luna with Claude, Anthropic" and names no
+scanner — so the CI lesson became "name which artifact a claim came from"), and the Step-5 absence
+(re-verified by enumerating **all 51** repos in StepFun's HF org through the API rather than the org
+page's first ten). Each correction landed in en first, then in the zh/jp mirrors via the translation
+agents. zh/jp mirrors translated in the same run.
+
+**Result:** [[security]] [[vuln-supply]] [[fact-check]] [[system1-decision]] [[frontier-models]]
+[[agent-stack]] [[edge-inference]] [[dev-tools]] [[ai-impact]]; `en/agent.md` (21 theses, all within
+budget); en/zh/jp `action.md`; `agent/knowledge/{en,zh,jp}/index.md`.
+
 ### 2026-10-14 20:32
 
 **Plan:** act pass, two buckets. (Research) the open `[ ]` item "Do vendor-document-only CVEs stay

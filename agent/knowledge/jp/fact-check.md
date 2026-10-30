@@ -1209,3 +1209,37 @@ macOS 15.5（24F74）での実測：ファイルには証明書が **128** 枚�
 持ち帰るべき一般単位：**欠如の主張はあるフィールドについての主張であり、したがって値を保持する他のどんなフィールドによっても反証される**——そしてフィールドを読む前に書かれたキャッシュは「記録に無い」の代わりになってはならない（CNA キャッシュがいま schema 版を持つのはまさにそのためだ）。
 
 → [[disclosure-lag]] [[vuln-supply]] [[security]]
+
+## 2026-10-31 —— 引用符内の文は**バイト**についての主張であり、抽出器は計器の一部である
+
+同じ欠陥の三度の出荷であり、人間の読解がいずれも捕まえなかった理由は**その文が真実に読める**からだ。Cerebras は「an illustrative configuration, not a reported **end-to-end** benchmark」と引用された（`end-to-end` は 184 KB のペイロードに **0** 回）。Northflank の「逐語」の指示は読み直すまで言い換えだった。10-31 の feed は `nesformer` の「The model was not trained. A compiler computed its weights.」を出荷し、README は「**Nobody trained these weights; a compiler computed every one.**」と書いていた。周囲の*分析*はいずれも正しく、捏造されたのは引用だけだ——だからこそレビューを生き延びる。
+
+`claim-unit-lint.mjs --check quotation` がいまこの単位を持つ。このファイルの他の検査はすべて数字を読み、これだけが文字列を読む。そしてその検査はファイル中で最も安い——ページ本文は `count` 検査が既に手にしているから `page.includes(quote)` で済む。
+
+**立案当日に出た発見。** 10-31 の feed の項目 10：「the complete proposed method still requires further experimentation」。arXiv 2610.40545 のアブストラクトは「**to test the full proposed method further experimentation is necessary**」と書いている。数字も状態もリポジトリも誤っておらず、他のあらゆる検査はこの項目を通した。文は著者が書きそうな限界の一文に聞こえる。裏付けの数字では決して捕まえられない唯一の失敗形態である。
+
+### 九つのガード——最初の 13 件のうち 8 件は検査器自身の誤りだった
+
+ここが再利用できる部分だ。**引用検査は較正なしで出荷できない。** 本物の引用が本物のページに一致しない理由は、偽物が一致しない理由よりはるかに多い。
+
+1. **句読点は語ではない。** 最初の 13 件のうち 9 件は、出所が続くのに引用がピリオド・コンマ・コロンで終わるものだった——Model Spec の「…reflect the Model Spec, **but** we are…」が「…the Model Spec.」として出荷された。捏造された**文**を持つ検査が記号の揺れを報告してはいけないので、包含判定は英数字だけで行う（文末の一件と「タイトルの終止符がコンマ」も同じ規則で片づく）。
+2. **引用符は行ごとに対にし、奇数行は行ごと捨てる。** 誤結合の span はある引用の終わりから次の引用の始まりまで伸びる。草稿の 29 語・32 語の「引用」はそれだった。しかも抽出 span に長さフィルタを掛けると誤結合は**悪化する**——短い `"95%"` を飛ばすと、その行の以降の対がすべてずれるからだ。
+3. **空白除去のフォールバック。** 語中の `<em>` はタグ除去で空白になり、硬く折り返された README は文を二行に割る。両側を空白除去して比較すれば一度に両方が直る。
+4. **リポジトリの `description` は README ではない。** 項目 5 の「Skills for Real Engineers. Straight from my .agents directory.」は `mattpocock/skills` の README に **0** 回、`description` フィールドには逐語で存在する——trending ページが表示するのはそちらで、著者が写すのもそれだ。リポジトリページ（`github.com/<slug>`、無課金）は**まだ未一致のときだけ**取得する。
+5. **レコードはページではない。** 「In the Linux kernel, the following vulnerability has been resolved」は CVE レコードの `descriptions[]` への引用であり、引用されたブログが持つ必要はない。NVD と CNA の description、KEV の `name`＋`shortDescription` が逐語の出所であり、フィールドの引用はフィールドに対して検証する。CNA キャッシュが **`v: 3`** になったのはそのためだ。
+6. **抽出器のバグは捏造として読まれる。** ページ取得器は `&#39;` をデコードしたが `&#x27;` はしなかった。そのため項目 16 のタイトル——両方の被引用ページに、一方は HN スレッド自身の見出しとして存在する——が捏造文として返った。ページキャッシュは **`v: 2`** を得た。一般規則：**抽出器は計器の一部**であり、古い抽出器が書いたキャッシュは新しい検査の証拠にならない——CNA キャッシュが schema 版を持つ理由と同じだ。
+7. **省略記号は断片である。** 各断片は独立に成立し、6 語以上の断片だけが発見になりうる。
+8. **引用は検査が決して開かなかったページに逐語で存在しうる。** 何も読めなかったときは `quote-not-read` と正直に出す——未読は不在ではない。
+9. **強調引用符は引用ではなく、検査器には区別できない。** 「good at repository edits, weaker at long-horizon shell work」は **feed 自身の見立て**に付いた引用符だった。直し方は引用符を外すことであって出所を探すことではない——`slot-quoted` や `counted-by-author` と同じ種族で、開示の有無そのものが発見である。
+
+### このバッチの他の四件の訂正は同じ類の別の面
+
+項目 **14** は bunny.net の二文を一対の引用符に押し込んだ（「found no evidence of unauthorized access, though it could not be fully ruled out」——ページは「…to the CDN node or any of its data」と書き、別に「cannot completely rule out the possibility」と述べる）。項目 **20** は us-tax-model の README の語を二つ差し替え（「proves a line points at a page, not that it was **read** correctly」を「show where a line points, not that it was **interpreted** correctly」に）、評価器の独立性の但し書きを誤った対象に帰した。項目 **8** はモデルカードの注意書きを言い換えて引用符に入れた（「a capacity limit, not a guarantee of uniform accuracy across all sequence lengths or tasks」を「does not guarantee consistent accuracy」に）。
+
+併合した言い換えや一語の差し替えは、丸ごとの捏造より**危険**だ。周囲の事実がすべて合致し、引用が裏付けに見えるからである。捕まえる単位は同じ一つだ。
+
+### 較正
+
+未修正の 10-31 feed：**13 件の指摘 / 9 件の確認**。原位置で四件（項目 8、10、14、20）を修正し、三箇所の強調引用符（9、12、16）を外した後：**0 / 15**。残る 4〜5 語の span 四件は指摘に昇格させず `quote-short`（助言）に留めた。`--selftest` **109 → 126**、うち 17 件がこの検査のもの。
+
+→ [[disclosure-lag]] [[security]] [[no-ai-default]]

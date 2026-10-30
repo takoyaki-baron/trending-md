@@ -207,7 +207,7 @@ const MAX_GHSA = Number(arg('max-ghsa') ?? 6);
 // 200-CVE census from turning the pre-commit lint into a crawler.
 const MAX_CNA = Number(arg('max-cna') ?? 30);
 const CACHE_PATH = arg('cache') ?? 'agent/data/claim-unit-cache.json';
-const CHECKS = new Set((arg('check') ?? 'issues,cvss,status,temporal,cwe,repo,count,bundle').split(',').map((s) => s.trim()));
+const CHECKS = new Set((arg('check') ?? 'issues,cvss,status,temporal,cwe,repo,count,bundle,quotation').split(',').map((s) => s.trim()));
 
 const SELFTEST = has('selftest');
 const STATUS_WATCH = has('status-watch');
@@ -429,7 +429,13 @@ function nvdBatch(cves) {
     for (const w of c.weaknesses ?? []) {
       for (const d of w.description ?? []) cwe.push({ value: d.value, source: w.source, type: w.type });
     }
-    map.set(c.id, { status: c.vulnStatus, assigner: c.sourceIdentifier, modified: c.lastModified, published: c.published, metrics, cwe });
+    /* `descriptions[]` costs nothing — it rides the same record — and it is the only place a
+       quotation OF the record can be checked. A CNA/registry field is not a page: quoting
+       "In the Linux kernel, the following vulnerability has been resolved" is a claim about the
+       record's bytes, and no cited blog page need carry it. Note `Received` records usually have
+       no description at all, which is "not yet", never "states nothing". */
+    const desc = (c.descriptions ?? []).filter((d) => d.lang === 'en').map((d) => d.value).join(' ');
+    map.set(c.id, { status: c.vulnStatus, assigner: c.sourceIdentifier, modified: c.lastModified, published: c.published, metrics, cwe, desc });
   }
   return map;
 }
@@ -718,7 +724,11 @@ function cnaState(id) {
       for (const d of pt.descriptions ?? []) if (d.cweId) cwe.push({ value: d.cweId, origin, description: d.description });
     }
   }
-  cache[key] = { fetched_at: new Date().toISOString(), v: CNA_CACHE_V, state: j.cveMetadata.state, assigner: j.cveMetadata.assignerShortName, metrics, cwe };
+  /* `descriptions[]` — the CNA's own prose, which a `Received` record replaces with nothing on the
+     NVD side. It is a verbatim source for the `quotation` check: an advisory sentence quoted in the
+     feed has bytes in the record, and the record is not a page. */
+  const desc = (j.containers?.cna?.descriptions ?? []).map((d) => d.value).join(' ');
+  cache[key] = { fetched_at: new Date().toISOString(), v: CNA_CACHE_V, state: j.cveMetadata.state, assigner: j.cveMetadata.assignerShortName, metrics, cwe, desc };
   return cache[key];
 }
 
@@ -1222,7 +1232,11 @@ const CACHE_TTL_MS = 6 * 3600 * 1000;
 const ERROR_TTL_MS = 10 * 60 * 1000;
 // Bump when the stored shape grows: a cached entry missing a field the check reads would turn
 // "not fetched by this version" into "absent from the record".
-const CNA_CACHE_V = 2;
+/* v: 2 added `problemTypes` (the cwe check). v: 3 adds `descriptions[]` (the quotation check) —
+   and the bump is the rule, not a tidiness choice: an entry written before a field was read would
+   turn "not fetched by this version" into "absent from the record", which is the exact defect the
+   schema version exists to prevent. A bump forces one refetch per CVE and is unmetered. */
+const CNA_CACHE_V = 3;
 
 function repoState(slug) {
   const hit = cache[slug];
@@ -1572,12 +1586,17 @@ const CITED_SKIP = [
   /^https:\/\/github\.com\/[^/]+\/[^/]+\/?$/,     // repo root — its README is the first read
   /^https:\/\/github\.com\/trending/,             // a rankings page states no artifact count
 ];
-function citedPages(plain) {
+/* `hn` is the ONE skip a quotation has to un-skip: a thread's numbers are points and comments, but
+   its prose is exactly what an item quotes ("Multiple users are confirming that their AI keys have
+   been used." is a status-page line, and a commenter's sentence is no less attributed for being a
+   comment). The order of CITED_SKIP is load-bearing — entry 0 is the HN pattern — so the option
+   filters by INDEX rather than by re-testing the regexes. */
+function citedPages(plain, { hn = false, cap = 3 } = {}) {
   const ranked = [];
   const seen = new Set();
   for (const m of plain.matchAll(/https:\/\/[^\s)\]<>"'`]+/g)) {
     let url = m[0].replace(/[.,;:]+$/, '');
-    if (CITED_SKIP.some((re) => re.test(url))) continue;
+    if (CITED_SKIP.some((re, i) => (i === 0 ? !hn : true) && re.test(url))) continue;
     let label = url.replace(/^https:\/\/(www\.)?/, '');
     let raw = false;
     let rank = 1;
@@ -1617,13 +1636,19 @@ function citedPages(plain) {
     seen.add(url);
     ranked.push({ url, label, raw, rank });
   }
-  return ranked.sort((a, b) => a.rank - b.rank).slice(0, 3).map(({ rank, ...p }) => p);
+  return ranked.sort((a, b) => a.rank - b.rank).slice(0, cap).map(({ rank, ...p }) => p);
 }
 
 async function citedPageText(page) {
   const key = `page:${page.url}`;
   const hit = cache[key];
-  if (hit && Date.now() - Date.parse(hit.fetched_at) < CACHE_TTL_MS) return hit;
+  /* `v` gates the extractor, not the page. Version 2 decodes NUMERIC character references: the
+   * first version handled `&#39;` only, so a page writing `&#x27;` reached every check as
+   * `isn&#x27;t` and item 16's verbatim title quotation — present on both its cited pages, one of
+   * them the HN thread's own heading — read as an invented sentence. An entry written by an older
+   * extractor must not be evidence for the newer one, which is the same rule the CNA cache's `v: 3`
+   * encodes. Refetching is unmetered; only the verdict rested on the stale text. */
+  if (hit && hit.v === PAGE_CACHE_V && Date.now() - Date.parse(hit.fetched_at) < CACHE_TTL_MS) return hit;
   let text = '';
   try {
     const r = await fetch(page.url, { signal: AbortSignal.timeout(20_000) });
@@ -1636,13 +1661,16 @@ async function citedPageText(page) {
         .replace(/<(script|style|noscript|svg)[\s\S]*?<\/\1>/gi, ' ')
         .replace(/<[^>]+>/g, ' ')
         .replace(/&nbsp;|&#160;/g, ' ')
+        .replace(/&#x([0-9a-f]+);/gi, (_, h) => { try { return String.fromCodePoint(parseInt(h, 16)); } catch { return ' '; } })
+        .replace(/&#(\d+);/g, (_, d) => { try { return String.fromCodePoint(Number(d)); } catch { return ' '; } })
         .replace(/&amp;/g, '&').replace(/&#39;|&apos;/g, "'").replace(/&quot;/g, '"')
         .replace(/&lt;/g, '<').replace(/&gt;/g, '>');
     }
   } catch { /* unreadable is a state, not an absence — it is reported as unread this run */ }
-  cache[key] = { fetched_at: new Date().toISOString(), bytes: text.length, text };
+  cache[key] = { v: PAGE_CACHE_V, fetched_at: new Date().toISOString(), bytes: text.length, text };
   return cache[key];
 }
+const PAGE_CACHE_V = 2;
 let citedPages_requests = 0;
 
 async function checkCount(it) {
@@ -1868,6 +1896,236 @@ function checkBundle(it) {
         said.add(k);
         if (n === b.total) out.push({ check: 'bundle', item: it.n, verdict: 'bundle-ok', claim: `${n} ${tail[2]} in ${near.path}`, detail: `the bundle holds ${b.total} certificates` });
         else out.push({ check: 'bundle', item: it.n, verdict: 'bundle-total-mismatch', claim: `${n} ${tail[2]} in ${near.path}`, detail: `the bundle holds ${b.total} certificates — a bundle is a snapshot, so requote it or date the reading` });
+      }
+    }
+  }
+  return out;
+}
+
+// ── check H: a sentence in quotation marks is a claim about BYTES ───────────────────────────
+/* Three published instances of one defect, none caught by a human read because the sentence reads
+ * true. Cerebras was quoted as "an illustrative configuration, not a reported end-to-end benchmark"
+ * and `end-to-end` appears **0** times in its 184 KB payload. Northflank's "verbatim" instruction
+ * was a paraphrase wearing quote marks until it was re-read. And on 2026-10-31 the feed published
+ * `nesformer`'s "The model was not trained. A compiler computed its weights." — which greps **0**
+ * times, the README actually saying "Nobody trained these weights; a compiler computed every one."
+ *
+ * Every other check in this file reads a NUMBER. This one reads a STRING, and the test is the
+ * cheapest in the file: the page text is already fetched (the `count` check pays for it), so the
+ * question is `page.includes(quote)`.
+ *
+ * Five guards, each a way this would otherwise produce a finding about the checker:
+ *   (a) PAIR PER LINE. An odd number of `"` on a line makes every later pair a guess, and a
+ *       mis-paired span runs from the end of one quote to the start of the next — which is where
+ *       the first draft's 29- and 32-word "quotations" came from. An odd line is skipped, counted,
+ *       and reported as coverage rather than mined for a finding.
+ *   (b) GLYPHS AND MARKDOWN. `“…”`, `"…"` and `«…»` are the same claim; `**bold**` inside a quote
+ *       and a `[label](url)` inside a README sentence are both markup, not words. Normalize both
+ *       sides before comparing, and compare case-insensitively (a quote lifted from mid-sentence
+ *       often carries a capital the source does not).
+ *   (c) TAG-SPLIT WORDS (`mostly preclinical`). A `<em>` inside a word becomes a space when tags
+ *       are stripped to `' '`, so every comparison also runs against a whitespace-free form of
+ *       both sides. This is also what makes a hard-wrapped README paragraph match a one-line quote.
+ *   (d) UNREAD IS NOT ABSENT. No readable source → `quote-not-read` (severity 0), never a finding.
+ *       A `</>`-heavy JS shell yields no prose and is exactly that case.
+ *   (e) A RECORD IS NOT A PAGE. "In the Linux kernel, the following vulnerability has been
+ *       resolved" is a quotation of the CVE record's own `descriptions[]`, and a `Received` record
+ *       carries none — which is "not yet", never "states nothing". NVD's description, the CNA
+ *       container's description, and KEV's `vulnerabilityName`/`shortDescription` are all verbatim
+ *       sources, so a field quotation is checked against the field.
+ * An ellipsis inside a quote is legitimate practice: the fragments are checked individually, and
+ * only fragments of ≥6 words can produce a finding.
+ */
+const QUOTE_WORDS_FINDING = 6; // a 6+-word string that appears nowhere is an invented quotation
+const QUOTE_WORDS_SPAN = 4;    // 4–5 words is checked too, but only as an advisory
+
+/* A quotation lifted into a sentence takes THAT sentence's punctuation: the Model Spec's
+ * "…do not yet fully reflect the Model Spec, but we are continually refining" is published as
+ * "…do not yet fully reflect the Model Spec." and ten of eleven words are verbatim. Calibrated on
+ * the 10-31 feed, where **8 of the first 13 findings** were exactly this — a period, comma or
+ * colon where the source continues — and a ninth was a title's full stop rendered as a comma.
+ * So PUNCTUATION IS NOT A WORD: the containment test runs on letters and digits only. What this
+ * check owns is an invented SENTENCE (`interpreted correctly` for `read correctly`, or a sentence
+ * that exists nowhere), not glyph drift, and a reader who fixes glyphs by hand is doing work the
+ * checker cannot pay for. */
+const quoteKey = (s) => s.replace(/['’`]/g, '').replace(/[^\p{L}\p{N}\s]/gu, ' ').replace(/\s+/g, ' ').trim();
+
+/** Every “…” span, paired per LINE — see guard (a). Returns spans plus the lines it could not pair. */
+function quoteSpans(text) {
+  const out = [];
+  let unpaired = 0;
+  for (const line of text.split('\n')) {
+    if (/\]\(https?:\/\//.test(line)) continue; // a link line's quotes are labels, not prose
+    const straight = [];
+    for (let i = 0; i < line.length; i++) if (line[i] === '"') straight.push(i);
+    if (straight.length % 2 === 0) {
+      for (let k = 0; k < straight.length; k += 2) out.push(line.slice(straight[k] + 1, straight[k + 1]));
+    } else if (straight.length) unpaired += 1;
+    for (const m of line.matchAll(/[“„«]([^”“»\n]{1,600})[”“»]/g)) out.push(m[1]);
+  }
+  return { spans: out.filter((s) => !/https?:\/\//.test(s)), unpaired };
+}
+
+/* One normalizer for BOTH sides. The page is a rendered HTML text or a raw README; the item is
+ * Markdown. Whatever markup either carries is not a word, so it goes before the comparison. */
+function normQuote(s) {
+  return String(s)
+    .replace(/<[^>]*>/g, ' ')
+    .replace(/\[([^\]]*)\]\([^)]*\)/g, '$1')   // a Markdown link is its label
+    .replace(/[*`~]/g, '')                     // emphasis, code, strikethrough — `_` stays: snake_case is a word
+    .replace(/[“”„«»]/g, '"')
+    .replace(/[‘’]/g, "'")
+    .replace(/[‐‑‒–—―]/g, '-')
+    .replace(/&nbsp;|&#160;/g, ' ')
+    .replace(/&quot;|&#34;/g, '"').replace(/&#39;|&apos;/g, "'")
+    .replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>')
+    .replace(/\s+/g, ' ')
+    .trim()
+    .toLowerCase();
+}
+const squeeze = (s) => s.replace(/\s+/g, '');
+
+/** A verbatim source, normalized once: `norm` for display, `key` for the test, `tight` guard (c). */
+function quoteSource(label, text) {
+  const norm = normQuote(text);
+  const key = quoteKey(norm);
+  return { label, norm, key, tight: squeeze(key) };
+}
+
+function quoteFragFound(frag, src) {
+  if (frag.key.length < 12) return false;
+  return src.key.includes(frag.key) || src.tight.includes(squeeze(frag.key));
+}
+
+/** How much of an invented quotation the source DOES contain, and what it says next.
+ * The unit is a WORD RUN, not a prefix: the 10-31 correction differs from the fabrication after
+ * three words and then agrees for six more ("a compiler computed every one"), so a prefix reader
+ * would report "3 of 13" about a sentence that is mostly right and point the author at the wrong
+ * repair. The longest run present anywhere in the fragment is the useful hint. */
+function quoteNearest(frag, sources) {
+  const words = frag.key.split(' ');
+  let best = { matched: 0, label: null, next: '', run: '' };
+  for (const s of sources) {
+    for (let i = 0; i < words.length - 1; i++) {
+      for (let j = words.length; j > i + 1; j--) {
+        const run = words.slice(i, j).join(' ');
+        const at = s.key.indexOf(run);
+        if (at < 0) continue;
+        if (j - i > best.matched) {
+          const next = s.key.slice(at + run.length).split(' ').slice(0, 12).join(' ').trim();
+          best = { matched: j - i, label: s.label, next, run };
+        }
+        break; // the longest run starting here is the only one worth comparing
+      }
+    }
+  }
+  return { ...best, total: words.length };
+}
+
+/**
+ * The check, as a pure function of the item and its sources so it can be calibrated without the
+ * network. `sources` is already-normalized (see `quoteSource`).
+ */
+function checkQuotes(it, sources) {
+  const out = [];
+  const { spans, unpaired } = quoteSpans(it.text);
+  const claims = [];
+  const wordsOf = (k) => k.split(' ').filter((w) => /[a-z\p{L}]{2,}/u.test(w)).length;
+  for (const raw of spans) {
+    const norm = normQuote(raw);
+    const words = wordsOf(quoteKey(norm));
+    if (words < QUOTE_WORDS_SPAN) continue;
+    // an ellipsis is legitimate quotation practice — each fragment stands on its own
+    const frags = norm.split(/\s*(?:…|\.\.\.)\s*/).map((s) => quoteKey(s))
+      .filter((k) => wordsOf(k) >= 3).map((k) => ({ key: k, words: wordsOf(k) }));
+    if (!frags.length) continue;
+    claims.push({ norm, words, frags });
+  }
+  if (!claims.length) return out;
+  if (!sources.length) {
+    out.push({ check: 'quotation', item: it.n, verdict: 'quote-not-read', claim: `${claims.length} quotation(s)`, detail: `no cited page, README or record was readable this run — unread is not absent, so nothing is claimed about these quotation(s)${unpaired ? ` (${unpaired} line(s) had an unpaired quote and were skipped)` : ''}` });
+    return out;
+  }
+  let ok = 0;
+  for (const c of claims) {
+    const missing = c.frags.filter((f) => !sources.some((s) => quoteFragFound(f, s)));
+    if (!missing.length) { ok += 1; continue; }
+    const frag = missing.reduce((a, b) => (b.key.length > a.key.length ? b : a));
+    const heavy = frag.words;
+    const near = quoteNearest(frag, sources);
+    const where = `read ${sources.map((s) => s.label).join(', ')}`;
+    const hint = near.matched >= 3
+      ? `${near.label} carries ${near.matched} of ${near.total} words (“${near.run.slice(0, 70)}”) and continues “${near.next.slice(0, 110)}” — use the source's wording, or drop the quotation marks`
+      : `no source carries it (${where}) — if this came from somewhere this item does not cite, cite it; otherwise it is the feed's own words and must not wear quotation marks`;
+    out.push({
+      check: 'quotation', item: it.n,
+      verdict: heavy >= QUOTE_WORDS_FINDING ? 'quote-not-found' : 'quote-short',
+      claim: `“${frag.key.slice(0, 96)}${frag.key.length > 96 ? '…' : ''}”`,
+      detail: `${heavy} words, 0 hits in ${sources.length} readable source(s); ${hint}`,
+    });
+  }
+  if (ok) out.push({ check: 'quotation', item: it.n, verdict: 'ok', claim: `${ok} quotation(s)`, detail: `verbatim in ${sources.length} readable source(s)` });
+  return out;
+}
+
+/* The KEV feed is unmetered and carries `vulnerabilityName` + `shortDescription` — the two fields
+ * this feed most often quotes as "the catalog says". Fetched once per run, kept in memory only:
+ * a 1.5 MB catalog has no business in a per-day cache file. */
+let KEV_ROWS = null;
+function kevFeed() {
+  if (KEV_ROWS) return KEV_ROWS;
+  KEV_ROWS = new Map();
+  try {
+    const raw = execFileSync('curl', ['-s', '--max-time', '40', 'https://www.cisa.gov/sites/default/files/feeds/known_exploited_vulnerabilities.json'], { encoding: 'utf8', maxBuffer: 64 * 1024 * 1024 });
+    for (const v of JSON.parse(raw).vulnerabilities ?? []) {
+      KEV_ROWS.set(v.cveID, { name: v.vulnerabilityName, desc: v.shortDescription, added: v.dateAdded });
+    }
+  } catch { /* a catalog we could not read is not a claim about the item */ }
+  return KEV_ROWS;
+}
+
+async function checkQuote(it, nvd, cna) {
+  if (!it.repos.length && !/https:\/\//.test(it.plain)) return [];
+  const sources = [];
+  // (1) the repo's own README / model card — where a project's words actually are
+  for (const slug of it.repos.slice(0, 2)) {
+    let rd = await readme(slug);
+    if (!rd || !rd.text) rd = await hfCard(slug);
+    if (rd && rd.text) sources.push(quoteSource(`${slug} README`, rd.text));
+  }
+  // (2) every page the item cites, HN threads included (guard for `CITED_SKIP` is elsewhere)
+  for (const p of citedPages(it.plain, { hn: true, cap: 4 })) {
+    const t = await citedPageText(p);
+    if (t.text) sources.push(quoteSource(p.label, t.text));
+  }
+  // (3) the records — a field quotation is a claim about a field, not about a page
+  const cves = it.cves ?? [];
+  const kev = cves.length ? kevFeed() : new Map();
+  for (const id of cves) {
+    const rec = nvd.get(id);
+    if (rec?.desc) sources.push(quoteSource(`${id} NVD description`, rec.desc));
+    const c = cna.get(id);
+    if (c?.desc) sources.push(quoteSource(`${id} CNA description`, c.desc));
+    const k = kev.get(id);
+    if (k) sources.push(quoteSource(`${id} KEV entry`, `${k.name} ${k.desc ?? ''}`));
+  }
+  let out = checkQuotes(it, sources);
+  /* (4) A REPOSITORY'S OWN DESCRIPTION IS NOT ITS README. Item 5 of the 10-31 feed quotes
+   * "Skills for Real Engineers. Straight from my .agents directory." — which greps **0** times in
+   * `mattpocock/skills`' README and is verbatim in the repo's `description` field ("… - mattpocock/
+   * skills"). The trending page shows that line, so it is what an author lifts. Fetched only when
+   * something is still unmatched, and from the repo's HTML (`github.com/<slug>`, unmetered) rather
+   * than `api.github.com`, which is metered and would cost a call per item for one sentence. */
+  if (out.some((f) => f.verdict === 'quote-not-found' || f.verdict === 'quote-short') && !NO_NET) {
+    for (const slug of it.repos.slice(0, 2)) {
+      const page = await citedPageText({ url: `https://github.com/${slug}`, label: `${slug} page`, raw: false });
+      if (!page.text) continue;
+      const more = quoteSource(`${slug} repo page`, page.text);
+      const again = checkQuotes(it, sources.filter((s) => !s.label.startsWith(`${slug} `)).concat(more));
+      const left = again.filter((f) => f.verdict === 'quote-not-found' || f.verdict === 'quote-short');
+      if (left.length < out.filter((f) => f.verdict === 'quote-not-found' || f.verdict === 'quote-short').length) {
+        sources.push(more);
+        out = again;
       }
     }
   }
@@ -2217,6 +2475,55 @@ if (SELFTEST) {
   t('repo advisory: its vector is the arithmetic a claim is checked against',
     judge({ vector: adv.vector, score: 9.0 }).verdict, 'exact');
 
+  // quotation — a sentence in quotation marks is a claim about BYTES (built 2026-10-31 from
+  // `nesformer`, the third instance of a fabricated quote after Cerebras and Northflank)
+  const NES_README = 'Nobody trained these weights; a compiler computed every one.\n'
+    + 'The checkpoint is 466.6M parameters in bf16. It works with any model.';
+  const qsrc = (...texts) => texts.map((t, i) => quoteSource(`page${i}`, t));
+  const qv = (body, ...texts) => checkQuotes(mk('t', body), qsrc(...texts)).map((x) => x.verdict);
+  t('quote: the 10-31 defect — an invented sentence that reads true',
+    qv('as the README states plainly, "The model was not trained. A compiler computed its weights."', NES_README),
+    ['quote-not-found']);
+  t('quote: the corrected sentence is verbatim, so it verifies',
+    qv('the README states plainly, "Nobody trained these weights; a compiler computed every one."', NES_README),
+    ['ok']);
+  t('quote: a quote lifted from mid-sentence matches a capitalised source',
+    qv('it says "nobody trained these weights; a compiler computed every one."', NES_README), ['ok']);
+  t('quote: `**bold**` inside the quotation is markup, not bytes',
+    qv('a flat instruction: "**Nobody trained these weights; a compiler computed every one.**"', NES_README), ['ok']);
+  t('quote: curly quotes in the item match straight quotes in the source',
+    qv('the README says “Nobody trained these weights; a compiler computed every one.”', NES_README), ['ok']);
+  t('quote: a tag-split word still matches (guard c, the “mostly preclinical” false negative)',
+    qv('the README says "nobody trained these weights; a compiler computed every one."', 'Nobody trained these weights; a compiler computed <em>every</em> one.'), ['ok']);
+  t('quote: a hard-wrapped README paragraph still matches',
+    qv('it says "nobody trained these weights; a compiler computed every one."', 'Nobody trained these weights;\na compiler computed every one.'), ['ok']);
+  t('quote: a Markdown link inside the source sentence is its label',
+    qv('the README says "nobody trained these weights; a compiler computed every one."', 'Nobody trained these [weights](https://x.y/z); a compiler computed every one.'), ['ok']);
+  t('quote: an ellipsis is fragments, not a missing string',
+    qv('it says "Nobody trained these weights … a compiler computed every one."', NES_README), ['ok']);
+  t('quote: a 4-word invented phrase is advisory, never a finding',
+    qv('it calls itself "straight from my agents directory"', NES_README), ['quote-short']);
+  t('quote: a title quoted with a comma for its full stop is the same words',
+    qv('the post is headlined "AI isn\'t replacing SREs, it\'s deskilling them"', "AI Isn't Replacing SREs. It's Deskilling Them."), ['ok']);
+  t('quote: no readable source is unread, not absent',
+    checkQuotes(mk('t', 'it says "The model was not trained. A compiler computed its weights."'), []).map((x) => x.verdict),
+    ['quote-not-read']);
+  t('quote: the nearest-source hint reports the run that IS real, not the prefix',
+    checkQuotes(mk('t', 'the README states "Nobody trained these weights, and a compiler computed every one of them."'), qsrc(NES_README))
+      .map((x) => [x.detail.includes('5 of 12 words'), x.detail.includes('a compiler computed every one')]),
+    [[true, true]]);
+  // guard (a): a mis-paired line is skipped, never mined — the 29/32-word “quotations” of the draft
+  t('quote: an odd number of quotes on a line is skipped whole, not paired offline',
+    quoteSpans('it was almost "done" and then "we found more'), { spans: [], unpaired: 1 });
+  t('quote: pairing works after a short span that a length filter would have skipped',
+    quoteSpans('"95%" premise is hypothetical, and "human-in-the-loop, not human-on-the-side" is a constraint.').spans,
+    ['95%', 'human-in-the-loop, not human-on-the-side']);
+  t('quote: a link line is labels, not prose',
+    quoteSpans('[`🔗 A`](https://a.b) · [`🔗 "quoted label"`](https://c.d)').spans.filter((s) => s.includes('quoted')).length, 0);
+  t('quote: a registry field is checked against the record, not the page',
+    checkQuotes(mk('t', 'NVD describes it as "In the Linux kernel, the following vulnerability has been resolved".'),
+      qsrc('In the Linux kernel, the following vulnerability has been resolved: a use-after-free in foo.')).map((x) => x.verdict), ['ok']);
+
   for (const c of cases) console.log(`  ${c.pass ? '✓' : '✗'} ${c.name}${c.pass ? '' : ` — got ${JSON.stringify(c.got)}, want ${JSON.stringify(c.want)}`}`);
   const ok = cases.filter((c) => c.pass).length;
   console.log(`selftest ${ok}/${cases.length}`);
@@ -2233,7 +2540,7 @@ const parsed = paths.map((p) => ({ path: p, items: parseItems(readFileSync(p, 'u
 let nvd = new Map();
 let nvdCalls = 0;
 let ghsaCalls = 0;
-if (!NO_NET && (CHECKS.has('cvss') || CHECKS.has('status') || CHECKS.has('cwe') || STATUS_WATCH)) {
+if (!NO_NET && (CHECKS.has('cvss') || CHECKS.has('status') || CHECKS.has('cwe') || STATUS_WATCH || CHECKS.has('quotation'))) {
   const cves = [...new Set([...parsed.flatMap((f) => f.items.flatMap((it) => it.cves)), ...EXTRA_IDS])];
   const CHUNK = 25;
   for (let i = 0; i < cves.length; i += CHUNK) {
@@ -2272,7 +2579,7 @@ if (STATUS_WATCH && !NO_NET) {
 // unmetered, so the cap is about latency rather than budget — cached entries cost nothing.
 const cna = new Map();
 let cnaCalls = 0;
-if (!NO_NET && (CHECKS.has('cvss') || CHECKS.has('temporal') || CHECKS.has('cwe'))) {
+if (!NO_NET && (CHECKS.has('cvss') || CHECKS.has('temporal') || CHECKS.has('cwe') || CHECKS.has('quotation'))) {
   const ids = [...new Set(parsed.flatMap((f) => f.items.flatMap((it) => strip(it.text).match(/CVE-\d{4}-\d{3,7}/g) ?? [])))].slice(0, MAX_CNA);
   for (const id of ids) {
     // A schema bump forces a refetch, and a refetch is a call: counting only "no entry at all"
@@ -2305,6 +2612,8 @@ for (const { path: p, items } of parsed) {
   if (!NO_NET && CHECKS.has('count')) for (const it of items) findings.push(...await checkCount(it));
   // the bundle check is local-only (it reads the path the item names), so it runs even under --no-net
   if (CHECKS.has('bundle')) for (const it of items) findings.push(...checkBundle(it));
+  // a quotation is a claim about bytes — the page text is already cached by the count check
+  if (!NO_NET && CHECKS.has('quotation')) for (const it of items) findings.push(...await checkQuote(it, nvd, cna));
 
   perFile.push({ file: basename(p), items: items.length, findings });
   allFindings.push(...findings.map((f) => ({ file: basename(p), ...f })));
@@ -2312,7 +2621,7 @@ for (const { path: p, items } of parsed) {
 
 try { mkdirSync(dirname(CACHE_PATH), { recursive: true }); writeFileSync(CACHE_PATH, JSON.stringify(cache, null, 1)); } catch { /* cache is best-effort */ }
 
-const SEVERITY = { ok: 0, 'ok-cited-page': 0, 'no-cve-named': 1, 'no-record': 1, 'slot-quoted': 1, 'counted-by-author': 0, 'number-other-noun': 1, 'temporal-stopping-point': 1, 'cna-only-score': 1, 'star-drift': 2, 'star-dated': 1, 'ok-history': 0, 'history-older-than-record': 2, 'history-unreadable': 1, stale: 2, archived: 2, differs: 2, absent: 2, 'unsplit-issue-count': 3, 'compound-lags-parts': 3, 'version-swapped': 3, 'version-absent': 3, 'score-not-reproducible': 2, 'score-mismatch': 3, 'wrong-subject': 3, 'absence-contradicted': 3, 'status-stale': 2, 'status-dated': 1, 'cwe-absent-but-recorded': 3, 'cwe-mismatch': 3, 'cwe-unreadable': 1, 'status-no-record': 1, 'status-no-cve': 1, 'advisory-unreadable': 1, 'advisory-repo-only': 0, unreadable: 1, 'artifact-unreadable': 1, 'nvd-unavailable': 1, 'bundle-ok': 0, 'bundle-lines-named': 0, 'bundle-unavailable': 0, 'bundle-line-count': 3, 'bundle-total-mismatch': 2 };
+const SEVERITY = { ok: 0, 'ok-cited-page': 0, 'no-cve-named': 1, 'no-record': 1, 'slot-quoted': 1, 'counted-by-author': 0, 'number-other-noun': 1, 'temporal-stopping-point': 1, 'cna-only-score': 1, 'star-drift': 2, 'star-dated': 1, 'ok-history': 0, 'history-older-than-record': 2, 'history-unreadable': 1, stale: 2, archived: 2, differs: 2, absent: 2, 'unsplit-issue-count': 3, 'compound-lags-parts': 3, 'version-swapped': 3, 'version-absent': 3, 'score-not-reproducible': 2, 'score-mismatch': 3, 'wrong-subject': 3, 'absence-contradicted': 3, 'status-stale': 2, 'status-dated': 1, 'cwe-absent-but-recorded': 3, 'cwe-mismatch': 3, 'cwe-unreadable': 1, 'status-no-record': 1, 'status-no-cve': 1, 'advisory-unreadable': 1, 'advisory-repo-only': 0, unreadable: 1, 'artifact-unreadable': 1, 'nvd-unavailable': 1, 'bundle-ok': 0, 'bundle-lines-named': 0, 'bundle-unavailable': 0, 'bundle-line-count': 3, 'bundle-total-mismatch': 2, 'quote-not-found': 3, 'quote-short': 1, 'quote-not-read': 0 };
 const REAL = (f) => (SEVERITY[f.verdict] ?? 1) >= 2;
 
 /* `status_watch` rides the findings file so the act pass sees a backwards move without re-reading

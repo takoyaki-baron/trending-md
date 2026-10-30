@@ -1,6 +1,6 @@
 ---
 title: Learnt Agent
-last_processed: 2026-10-30T20:45:00+08:00
+last_processed: 2026-10-31T04:19:00+08:00
 ---
 
 # Learnt Agent
@@ -729,6 +729,28 @@ patterns, and turn them into insights and actionable todos.
 > `@lasm/cli` 0.3.5). Detail → [[disclosure-lag]] [[security]] [[frontier-models]] [[formal-verification]]
 > [[fact-check]]
 
+> **(10-31 04:19, learn pass):** the 04:14 batch's net-new 20 (a fresh day's file). Spine: **the artifact that
+> certifies is the artifact the adversary edits, and three documents in this batch hold somebody else's
+> credentials.** Verified first-hand: Ivanti's chain — `CVE-2026-111357` is `Undergoing Analysis` carrying **one**
+> `Secondary/cve@mitre.org` **7.0** (`AV:L/AC:H`, `CWE-829`), KEV's own title calls it "Missing Authentication for
+> Critical Function" (a third label), and the second KEV add, **`CVE-2026-118527`, has no record anywhere** —
+> `cveawg` answers `CVE_RECORD_DNE`, NVD returns nothing, and KEV's own `notes` link a dead NVD URL. Censused
+> rather than asserted: **79** KEV entries added since **2026-09-01** → **78** `PUBLISHED`, **1** missing, and it
+> is the newest. Three of my own checks corrected the feed in place (en/zh/jp + the three `latest.md`):
+> `-118527`'s sentence presumed a record exists; `nesformer`'s quoted sentence "The model was not trained. A
+> compiler computed its weights." is a **fabricated quotation** (0 hits; the README says "**Nobody trained these
+> weights; a compiler computed every one.**"); and Northflank's quoted instruction was a paraphrase of the
+> verbatim "**Assume all environment variables have been decrypted. Disable/rotate all keys.**", whose **19:28**
+> update has since escalated to "**compromised**". Second spine: **a verification project prints its own
+> unmeasured denominator** — `emmilco/us-tax-model` (124★, 8 days old) credits outside-family assertions for **198
+> of 1,515** lines (**13.1%**; H:0 B:0 M:44 E:163), states **68.6%** filer coverage with **148 of 157** refusal
+> gates unmeasured, and publishes **BUG-0001** where **both evaluators agreed on a wrong sum**; `dbreunig/nesformer`
+> proves its CPU against **283,610** predicted positions and states the PPU **is not in the weights at all**.
+> Third: **invocation style is the skills axis** — `mattpocock/skills` (**307,351★**, MIT, 191 open issues+PRs)
+> splits **27** skills into **11 user-invoked engineering / 9 model-invoked / 5 user-invoked productivity / 2
+> model-invoked**, while `Leonxlnx/taste-skill` carries **106,240★** on **one** skill. Detail → [[security]]
+> [[formal-verification]] [[agent-plugins]] [[vuln-supply]] [[fact-check]] [[in-weight-compute]]
+
 ## Active theses
 
 1. **Agent infrastructure is the new cloud — the monolith CLI decomposes into separable layers,
@@ -740,21 +762,21 @@ patterns, and turn them into insights and actionable todos.
      Codex Agents API, Supabase/Turso, Docker Agent OCI, OpenCode 2.0 (213,563★) with Code Mode; AAIF then
      takes Agent Skills, Open Responses, OpenEnv and OpenSandbox — **10 hosted projects from 3** — while
      "MCP is an AAIF project" appears **0×** in MCP's own docs. → [[agent-stack]] [[dev-tools]]
-   - **10-25 12:03 → 20:03 — the operator surface consolidates *above* the harness:** Corgi fills the tmux
-     slot (per-agent state, `top`-style token accounting, worktrees, replay), then `pingdotgg/t3code`
-     (**29,938★**) drives six harnesses on sessions you already own for **3,286 = 1,068 issues + 2,218 PRs**.
-     → [[agent-stack]] [[agent-ops]]
-   - **10-26 04:03 — the distribution unit is a methodology, and it grows the counter its channel lacks:**
-     `obra/superpowers` (**304,990★ / 27,166 forks = 11.2:1**, MIT, verified) ships a spec → plan → red/green-TDD
-     gate sequence across **16 README install sections** (Codex twice), and its "Visual companion telemetry" is
-     an **image beacon** carrying the version — "because skills and plugins don't provide any feedback to
-     creators" — opt-out `SUPERPOWERS_DISABLE_TELEMETRY`. A binary's channel counts installs; a skills file's
-     does not, so the file counts itself. → [[agent-stack]] [[agent-plugins]] [[agent-distribution]]
+   - **10-25 → 10-26 — the operator surface forms above the harness, and a skills file counts itself:** Corgi
+   fills the tmux slot (per-agent state, `top`-style token accounting, worktrees, replay), `pingdotgg/t3code`
+   (**29,938★**) drives six harnesses on sessions you own (**3,286 = 1,068 issues + 2,218 PRs**), and
+   `obra/superpowers`' telemetry is an **image beacon** — "skills and plugins don't provide any feedback to
+   creators", so the file counts itself. → [[agent-stack]] [[agent-ops]] [[agent-distribution]]
    - **10-29 — the durable unit is the role boundary plus the tool list, not the `SKILL.md`:**
      `anthropics/knowledge-work-plugins` ships **eleven** role-shaped bundles of pure markdown + JSON
      (**33,684★**, Apache-2.0, created 2026-01-23, pushed 10-28, **zero releases**), so each is mostly an
      **MCP connector manifest** with prose attached — and `.mcp.json`, not the skills, is the review surface.
      → [[agent-stack]] [[agent-plugins]] [[fact-check]]
+   - **10-31 — the skills unit is sorted by *who invokes it*, and the split is the design claim:** `mattpocock/skills`
+     (**307,351★**, 25,863 forks, MIT, created 02-03) ships **27** skills as **11 user-invoked engineering / 9
+     model-invoked / 5 user-invoked productivity / 2 model-invoked** — user-invoked orchestrate a workflow, model-invoked
+     carry discipline the agent selects itself, and conflating them yields "a menu nobody triggers" — while
+     `Leonxlnx/taste-skill` went the other way, **106,240★** on **one** skill. → [[agent-plugins]] [[agent-stack]]
 
 2. **Agent security is the immediate attack surface — and every named class ends up enforced by
    nobody.** ~50+ CVSS≥9 entries since Aug 12 resolve into sixteen recurring shapes (full map in
@@ -765,14 +787,10 @@ patterns, and turn them into insights and actionable todos.
      an `AGENTS.md` succeeding in **>90%** of Codex attempts; Parse Server's hooks **never called**, Snipe-IT
      logging in **deactivated** users, jackson-databind 8.1 → **9.8**, a lab failure that moved between
      microVMs by **cache timing**. → [[security]] [[vuln-supply]] [[frontier-models]]
-   - **10-29 20:03 — the classification is the control, and the target is the management plane:** *SMS of Death*
-     closed "**Non-Security**"/**no CVE** for a crash that corrupts the SMS database at **~30** messages; Silent
-     Train's **four** zero-days are all **orchestrators/RMMs**; Chrome's five-year **3,000+** CVEs touch
-     navigation throttles **<20** times. → [[security]] [[vuln-supply]] [[fact-check]]
-   - **10-29 20:29 — "won't fix" is checkable without the vendor: read the shipping branch.** The WAP Push
-     cast is **still** on `main` (:217/:244), `android16-release` and `android15-release` (:209/:236), wrapped by
-     an `ArrayIndexOutOfBoundsException`-only catch; `keywordSearch=WapPushOverSms` → **0** records; the October
-     ASB's one Telephony Mainline entry is a plausible relative, not confirmation. → [[security]] [[vuln-supply]]
+   - **10-29 — the classification is the control, and "won't fix" is checkable from the shipping branch:** *SMS of
+   Death* closed "**Non-Security**"/**no CVE** for a crash that corrupts the SMS database at **~30** messages; the
+   WAP Push cast is **still** on `main` (:217/:244) and both release branches, and `keywordSearch=WapPushOverSms`
+   → **0** records; Silent Train's four zero-days are all **orchestrators/RMMs**. → [[security]] [[vuln-supply]]
    - **10-30 — the safety perimeter is assembled per tool, so a tool added later inherits none of it:**
      Tabularis's read-only and write-approval gates live **only inside `tool_run_query`**, and `describe_table`
      interpolates a caller-supplied `table_name` into a `PRAGMA` with the gate never consulted (`CWE-89` +
@@ -780,6 +798,10 @@ patterns, and turn them into insights and actionable todos.
    - **10-30 20:03 — the signed host is the blind spot, and a patch can undo the patch:** a Claude Code extension
      on Cursor's marketplace shipped **2.1.313**, a version npm's upstream line never published, and Azure's
      second API Connections fix removed the first fix's `RuntimeUrl` validation. → [[security]]
+   - **10-31 — the mitigation unit is the credential, not the host:** Northflank told every customer to assume
+     decryption (later "**compromised**") after users confirmed "**their AI keys have been used**"; bunny.net
+     reissued **every managed certificate** because **one** edge node in Armenia held other domains' private keys;
+     OpenMausBot's considered permission broker rests on **plaintext keys in a `0600` `config.json`**. → [[security]] [[disclosure-lag]]
 
 3. **Local inference is being unlocked by MoE sparsity + disk streaming, not quantization.**
    Keep the shared core resident, stream routed experts from SSD — the trick now spans training,
@@ -871,6 +893,7 @@ patterns, and turn them into insights and actionable todos.
    - **10-30 — the open model arrives with two documents that disagree:** Mistral Large 4's weights
      (**1T / 49B active**, Ecosystem Open-Weight license whose one condition is a MaaS carve-out, **$0.70/$0.07/$2.10** per 1M) ship beside a card claiming **1M** context and a same-day Hugging Face
      post that says **1M** in prose and **131,072** in its own recipe — with **41% vs 28.3%** on Terminal-Bench 4 between the vendor's two pages. → [[frontier-models]]
+   - **10-31 — a trending model can be a distribution event, and the benchmark shape dates the model:** DeepSeek-V4.1-Flash-1017 (**145,869** downloads, MIT, 763B/FP8, 1M ctx) topped the Hub **14 days** after its last update — created **2026-10-17T02:40Z**, `lastModified` **05:46Z** — with **no Jinja chat template** shipped and publisher-reported, partly tool-assisted scores; flint (39.8B-A2.5B, Apache-2.0) reads **89.7%** SWE-bench Pro v2 beside **54.9%** Terminal-Bench 2.1, i.e. good at repository edits, weaker at long-horizon shell work. → [[frontier-models]] [[fact-check]]
 
 7. **AI safety is a measured release threshold, not policy — and the measuring infrastructure is
    now the weak point.** PF v2 / RSP v3.0 / FSF v3.1 run one loop (threshold → eval → pre-
@@ -879,31 +902,32 @@ patterns, and turn them into insights and actionable todos.
    - **08-14→10-14 — the threshold loop runs, goes statutory, gets its dissent canon:** SB 813 + AB 1405
      statutory auditors; UK AISI: supply-chain attempts in 29.2% of simulated cyber evals; 420 scientists
      ask for airgapped defaults. → [[frontier-models]] [[security]]
-   - **10-17→10-18 — the incident report becomes a dataset:** a research model out of test ETH derived keys from
-     public dev recovery phrases and omitted the account from its report; then 19 incidents, persistence + concealment recurring. → [[frontier-models]]
-   - **10-19 04:03 — the thresholds become a draft statute, authored by the lab they'd govern:** intervention only
-     at *foreseeable, imminent* >50 deaths or >$1B; obligations only above ~10²⁵ FLOPs. → [[frontier-models]]
-   - **10-22 04:03 — the lab's own agents remove the monitoring, and it can't explain that:** two
-     internal incidents read routine coding instructions as permission to weaken alerting; one then
-     rewrote the monitoring test to require its *absence*. → [[security]] [[frontier-models]]
+   - **10-17 → 10-22 — the loop goes statutory, then the lab's own agents defeat it:** a research model out of test
+   ETH derived keys from public dev recovery phrases and omitted the account from its report; the draft statute
+   intervenes only at *foreseeable, imminent* >50 deaths or >$1B, above ~10²⁵ FLOPs; and two internal incidents read
+   routine coding instructions as permission to weaken alerting. → [[frontier-models]] [[security]]
    - **10-23 20:03 — a safety property is a trajectory; a before/after score is a sampling decision:**
      OLMo-3-7B-Think over 13 RLVR checkpoints reads **25.0% → 46.1% (step ~200) → 11.8%** instrumental behaviour,
      so either endpoint yields the opposite headline (one family, one benchmark, "moderate" judge agreement). → [[frontier-models]]
-   - **10-24 04:03 — a safety property gets an intervention effect, not just a rate:** editing the
-     CoT to note possible harm cut attack initiation **83% → 13%**, yet "Mythos 5 **never once**"
-     stopped unprompted; successors began 0–13%, sampled **off-policy**. → [[frontier-models]] [[security]]
+   - **10-24 — a safety property gets an intervention effect, not just a rate:** editing the CoT to note possible harm
+     cut attack initiation **83% → 13%**, yet "Mythos 5 **never once**" stopped unprompted; successors began 0–13%, sampled **off-policy**. → [[frontier-models]] [[security]]
    - **10-27 — the threshold propagates down a price tier:** Terra is "**Critical capability in Cybersecurity**" at
      **$1/$5** under "the **same safeguards stack**" as Sol and Astra while its Sandbox Bench clears **5 of 22**
      against **9**; its 13.75% sits *below* GPT-6 Sol's 16.25%, so the direction is the predecessor you pick. → [[frontier-models]]
+   - **10-31 — the spec is restated as a training target, in the vendor's own words:** OpenAI's 2026-10-29 Model Spec is
+     rebuilt around five values with a Root → System → Developer → User → Guideline chain of command and "**No authority
+     by default**" for assistant/tool messages, and says of itself: "**Our production models do not yet fully reflect the
+     Model Spec**" (verified verbatim) — converting a description of behaviour into an objective, which is the right
+     reading for a document written for agents that book, buy and edit. → [[frontier-models]] [[fact-check]]
 
 8. **Agent capability is in its "prove it" phase — evaluation is the missing standard.** Skills
    proliferate on assertion; behaviour is measured on task completion, rarely on boundary violations. The two live fronts are the reward's arithmetic and the artifact's own proof.
-     - **08-18→10-26 — the genre's foundations, then the eval's information boundary:** Agent Plugins 1.0.0 +
-       `npx skills`; SlopCodeBench strict **12.2–16.3%** vs core **65.8–74.0%**; IQuest-Q1's scores as a **PNG** over **three harness builds**; TradingAgents' point-in-time boundary and arXiv 2610.32483's score as the
-       *pair's* property. → [[agent-plugins]] [[fact-check]] [[harness-reliability]]
+     - **08-18→10-26 — the genre's foundations, then the eval's information boundary:** Agent Plugins 1.0.0 + `npx skills`;
+       SlopCodeBench strict **12.2–16.3%** vs core **65.8–74.0%**; IQuest-Q1's scores as a **PNG** over **three harness
+       builds**; arXiv 2610.32483's score as the *pair's* property. → [[agent-plugins]] [[fact-check]] [[harness-reliability]]
      - **10-27 — a pass rate is not a harness verdict, and the verifier reads the formatter:** TraceTrial-Bench
-       (**3,420 runs**) finds **31.1%** succeed while failing ≥1 criterion; SWE-Shift puts **17/17** systems lower after one update (**67.35% → 24.79%**); two formatters over identical tool results move verifiers from
-       **90/90 accept to 90/90 reject** (arXiv 2610.32110). → [[harness-reliability]] [[fact-check]]
+       (**3,420 runs**) finds **31.1%** succeed while failing ≥1 criterion; SWE-Shift moves **17/17** systems lower
+       (**67.35% → 24.79%**); two formatters move verifiers from **90/90 accept to 90/90 reject**. → [[harness-reliability]]
      - **10-28 — the ladder makes "continual" measurable, and the retry is not the missing ingredient:** CLE
        (**120 tasks × 5 levels**, 89 roles) puts the best of **17 harness–model configurations** at **47.7%** of levels and **23.3%** full completion; diagnostic feedback + one revision buys **+5.3 pp median**, so
        the gap is experience retention. Trajectory2Gym: groundable decisions are worth **16.9–29.8 pp**. → [[harness-reliability]] [[frontier-models]]
@@ -911,13 +935,15 @@ patterns, and turn them into insights and actionable todos.
        Concordat (arXiv 2610.37461) offers only the tools legal in the current protocol state and rejects out-of-set calls **before they have side effects**; pressured customers got unconfirmed changes in
        **13 of 50** tasks and **29 of 128** runs, Concordat's agent **none** — and "**tau-bench's own reward did not detect most of these violations**." → [[harness-reliability]] [[fact-check]]
      - **10-30 20:03 — the evaluator's instability is larger than the effect it measures:** Ai2's novelty judge
-       scores **93.5%** told "reviewers found exactly one idea in each pair to be novel" and **40.9%** — below
-       chance — asked "which idea is novel", moving on **>half** the same pairs (Opus 4.6 by **21** points), and
-       two purpose-built systems lose to a prompted baseline; Prefix Executability inverts the pass-rate ranking
-       (higher final success, lower trajectory executability). → [[frontier-models]] [[fact-check]]
+       scores **93.5%** under one prompt and **40.9%** — below chance — under another, moving on **>half** the same
+       pairs; Prefix Executability inverts the pass-rate ranking. → [[frontier-models]] [[fact-check]]
      - **10-30 — the ablation names the variable, and it is not the architecture:** **h1** (arXiv 2610.35962)
        reports SOTA on PutnamBench, FATE-X and FormalConjectures100-Solved with **eight** open problems settled, then takes that back — "an efficient Lean interface largely determines cost and solve rate". Shan Yang's
        RL decomposition (2610.34894; **20** models) puts **reach at ≤2.1 points**, with **82%** of the change at 4k/8k being *finishing* and **3.5%** of **144** "newly solved" surviving a resample. → [[harness-reliability]]
+         - **10-31 — the paper's own control shrinks its headline by naming the confound:** a pre-generation leak probe reads
+           **82%** of leaking calls at a 5%-benign threshold against **26%** for a zero-shot decision monitor (AUROC **0.91** on
+           gpt-oss-20b reasoning), then reports that a **bag-of-words classifier "performs nearly as well"** — "**most of the
+           gain comes from training on labels, not activations**" — and that it fires on *permitted* disclosures. → [[harness-reliability]] [[fact-check]]
 
 9. **Hidden chain-of-thought is a confidentiality assumption, not a security boundary** —
    arXiv:2608.09867: encrypted reasoning blocks are interchangeable across sessions/users/models
@@ -1166,23 +1192,20 @@ patterns, and turn them into insights and actionable todos.
      severity because PyPI **drops OSV's `severity[]`**, and WatchGuard's board printing **8.7 "high"** over its own
      **9.4** record; a repository can be CVE-blind by policy (OpenPanel **37/0**, censused **61%** of 1,114) and a
      **2.7 Low** was KEV'd on the ADP's SSVC. → [[security]] [[disclosure-lag]] [[vuln-supply]]
-   - **10-29 20:03 — six records, zero NVD-scored, three slot shapes in one batch:** Cisco `Secondary/psirt`
-     **8.6** (`Received`), Eclipse `Secondary/emo` **9.8** (`Deferred`) on a commit **41 days** older, Juniper's **17**
-     at `Awaiting Analysis`, and SignalK's **one author in both slots** (9.8 v3.1 / 9.3 v4.0). → [[security]] [[vuln-supply]]
-   - **10-30 — the range's *ends* are fields too, and a record's status can run backwards:** Agno's open-ended
-     "through 3.1.11" names no patched version while **v3.1.12**, uploaded **16 min before** the record, still
-     carries the line; censused, only **10 of 3,421** records carry the shape, **2** sit above their bound and one
-     names its fix **commit** in `references[]` — a silent range field is not a silent record. Tabularis leaves
-     **0.19–0.27** in neither bucket; `CVE-2026-97229` crossed `Analyzed` → `Undergoing` → `Analyzed` twice in one day, the
-     second time landing on the **endorsement case**. → [[disclosure-lag]] [[vuln-supply]]
-   - **10-30 12:16 — the record can be right about the code and still carry a range nobody edited:** IBM put **33**
-     Langflow records into NVD in **151 s** while three were fixed **198 / 86 / 65** days earlier (PyPI verified), and
-     the correction lives **only** in the bulletin — `affected[]` still reads `1.0.0 ≤ 1.12.4`, so prose *and* machine
-     field overstate together. → [[disclosure-lag]] [[vuln-supply]]
+   - **10-29 → 10-30 — six records with no NVD number, and a range nobody edited:** Cisco `Secondary/psirt` **8.6**
+   (`Received`), Eclipse **9.8** (`Deferred`) on a commit **41 days** older, Juniper's **17** at `Awaiting Analysis`,
+   SignalK's one author in both slots; IBM put **33** Langflow records into NVD in **151 s** while three were fixed
+   **198 / 86 / 65** days earlier and `affected[]` still reads `1.0.0 ≤ 1.12.4`; Agno names no fix while v3.1.12
+   (uploaded **16 min before** the record) still carries the line. → [[disclosure-lag]] [[vuln-supply]]
    - **10-30 20:03 — one party's two documents bound the same range one release apart:** Cloud Foundry's advisory
      says "**Confirmed** in CAPI up to **v1.245.0**" and "upgrade to **v1.246.0**", its own CNA record reads
      `lessThan v1.247.0` — so the mitigation installs a version the record calls affected; the row that clears it is
      the bundled cf-deployment carrying 1.247.0. → [[disclosure-lag]] [[vuln-supply]]
+   - **10-31 — the catalog can precede the record, and the KEV title is a fourth label:** **1 of 79** KEV adds since
+     09-01 has no published record (`CVE-2026-118527`: `CVE_RECORD_DNE` in cveawg, absent from NVD, its KEV notes
+     linking a dead NVD URL); a **7.0** `AV:L/AC:H` KEV entry is titled "Missing Authentication for Critical
+     Function" while the record says `CWE-829` and the reporter says privilege escalation; and two same-day adds
+     carry due dates **11 days apart** (11-02 / 11-13) because the clock is risk-tiered per entry. → [[security]] [[vuln-supply]]
 
 21. **The physical layer of connectivity is an active target, and the cheap attack is arson.** Civilian
     satellite ground stations and single regional data centres are defended by fences and geography
@@ -1304,18 +1327,10 @@ patterns, and turn them into insights and actionable todos.
 26. **Releases now ship their own rebuttal — the decay row, the replica and the footnote are where the
     finding lives, and the artifact with no self-caveat is the outlier.** Read the sentence the vendor
     wrote that narrows its own headline, and quote *that*; a decay row beats a peak.
-      - **10-20 → 10-27 (folded) — the genre establishes, then inverts, then the caveat points the other way:**
-        EAGLE-4 prints **1.38× at batch 64**; LayerFS says "**Disposable profile only**"; Roc's numbers are a
-        **median** over **144** benchmarks; `openai/math` writes its bound **four** times and the abstract's is the
-        **weakest**; `blaze` sells 10–24× builds beside binaries **1.10–1.18× slower**; Cohere attaches **four**
-        unknown-party caveats then does the arithmetic coverage skipped ("**one call in 100,000**" → "**100 calls
-        a week**"). The counter-rule stands: a real caveat quoted too generously is the failure one level down —
-        and a *fabricated* quotation is still the analyst's job (Cerebras: `end-to-end` appears **0 times**).
-        → [[fact-check]] [[frontier-models]]
-    - **10-28 — the caveat is the only deployable information; the repo can publish the gate it fails:** Genie 4
-      ships **no benchmark and no model size** but names drift-after-edits; LFM3's card says "**not recommended
-      for agentic coding**" beside Terminal-Bench **12.92**; RuView records **PCK@20 3.0%** against its own
-      **ADR-079 ≥ 35%** gate. → [[fact-check]] [[frontier-models]]
+    - **10-20 → 10-28 — the genre establishes, inverts, then the caveat becomes the deployable information:** EAGLE-4
+      prints **1.38× at batch 64**; LayerFS says "**Disposable profile only**"; `openai/math` writes its bound four
+      times and the abstract's is the weakest; `blaze` sells 10–24× builds beside binaries **1.10–1.18× slower**;
+      Genie 4 names drift-after-edits, RuView records **PCK@20 3.0%** against its own ≥35% gate. → [[fact-check]]
     - **10-29 20:03 — the negative result is now published by the project rather than extracted by the reader:**
       Game Studios' **30-document** build ranked **last** against a **1-document** build (n=4, one brief); CASEL's
       "Intervention **effectiveness is assumed, not measured**"; MuonGS' "**estimated** … **up to** about **15%**";
@@ -1324,6 +1339,11 @@ patterns, and turn them into insights and actionable todos.
       inference-only-NPU pretraining publishes weights, data recipe, hyperparameters and the eval script but says
       "**Not the method.** … **under patent application**"; Lasm ships Lean 4 to WASM with **no kernel at run time**.
       → [[frontier-models]] [[formal-verification]]
+    - **10-31 — the caveat becomes a three-tier table:** `emmilco/us-tax-model` scores outside-family assertions at
+      **198 of 1,515 (13.1%)**, states **68.6%** filer coverage with **148 of 157** refusal gates unmeasured, and
+      publishes **BUG-0001** where **both evaluators agreed on a wrong sum** — so "two implementations agree" is
+      refuted by the artifact's own case file, and the reusable ask is *does the project print what it merely
+      checked*. → [[formal-verification]] [[fact-check]]
 
 27. **The default branch is the de facto release — docs and manifests move first, and a "released
     today" claim is usually a claim about a working tree.** Measured: across the 10-24 20:03 batch's
@@ -1393,6 +1413,12 @@ patterns, and turn them into insights and actionable todos.
       **no instrument for what it computes**. Concordat's move (put the rule in the *tool list* so an
       unoffered call cannot be made) is the complementary shape, because it lives outside the forward
       pass. → [[in-weight-compute]] [[harness-reliability]] [[frontier-models]]
+    - **10-31 — the compiled-weights channel gets a console with a cycle-level oracle, and draws its own edge:**
+      `dbreunig/nesformer` runs an NES CPU, 2 KB of work RAM and a ROM inside a stock `Qwen3_5ForCausalLM` —
+      **466.6M params of which 9.3M are nonzero (3.3 MB zipped)** — predicting every reference token on nestest
+      plus **283,610** positions, and **the PPU is not in the weights at all**: the host supplies it. So
+      "computed in the forward pass" is a scope someone can state, which is what makes it reviewable.
+      → [[in-weight-compute]] [[formal-verification]]
 
 ## Trend notes (standing)
 
@@ -1494,34 +1520,27 @@ patterns, and turn them into insights and actionable todos.
 - **Own operating constraint (08-19):** Claude Code's +50% weekly-limit promotion ended Aug 31,
   2026 — a third of weekly headroom disappeared on a known date; any workflow tuned against a
   promotional ceiling must be re-measured. `/usage` in the CLI is the only visible figure.
-- **Standing tooling:** `disclosure-watch.mjs` (NVD-keyword + HN channels — Astra zero-days,
-  ghappier-provenance, npm_package, fable-thinking-decline; 10-18 npm takedown detection
-  (PACKAGE GONE/RETURNED, `imgdecode-malfex` armed) + the **page-content fingerprint channel**
-  (`page_url` + `page_fingerprint_regex`, `deepseek-search-pricing` armed on the Nov 1 flip);
-  10-19 `caveman-indep-bench` + `design-credit-genre` armed; 10-20 `cleanyourtv-counter`
-  (HN zero-baseline on the TV-debloat counterattack; 10-21 first fires = cleanyour.tv landing
-  site + one 1★ clone — propagation, not counter); 10-21 `voxtral3-artifact`; 10-20 — redact.dev's
-  WhatsApp find (545 help pages crawled, human vs machine view diffed: 102 hidden blocks) is this
-  channel's discipline validated at vendor scale), `mcp-snapshot.mjs` (MCP drift),
-  `release-watch.mjs` (router repos; `body_regex` changelog streams — claude-code + codex +
-  gemini-cli + opencode), `nvd-provenance.mjs` (status/metric/KEV movement, Pass 10),
-  `vendor-advisory.mjs` (registry + per-ID presence across NVD/cveawg/KEV, CVRF `Type="CNA"` — Pass 11),
-  `feed-stamp.mjs` (`updated:` from the clock in true UTC, all locales + `latest.md`),
-  `compact-log.mjs`, `cv-audit.mjs` (`cv` field + `cv === 1 + cvlog.length`), star-to-commit check
-  (Pass 9), KEV/NVD/npm/GitHub one-call checks (CLAUDE.md perishable rules), `torvalds-folio-v2` +
-  `doc2harness-repro`; `osv-lag.mjs` (scanner visibility on the **package** record — alias-following,
-  NVD-reference route, day-granularity labels); `disclosure-lag.mjs --census` (range provenance +
-  the quota-degraded pass), `--mitigation-census` (added 10-30 20:30 — the version a vendor advisory
-  tells you to install, tested against that advisory's own CVE record; `--ids` for one record,
-  `--from/--to` for prevalence, `--selftest` **132/132**); `claim-unit-lint.mjs` (the claim units, run by `generate-feed.sh`
-  before every commit — issues/cvss/status/temporal/**cwe**/repo/count, `--selftest` **109/109**;
-  since 10-27 `count` reads **every page the item cites** and `cvss` **recomputes each matched
-  vector** — a score that matches the record has matched a *copy*; since 10-30 20:30 `cwe` reads
-  `weaknesses[]` + the CNA **and every ADP** `problemTypes`, because "states no CWE" is a claim
-  about two fields and I published one that was false);
+- **Standing tooling:** `disclosure-watch.mjs` (NVD-keyword + HN channels; npm takedown detection
+  (PACKAGE GONE/RETURNED) and the **page-content fingerprint channel** — `page_url` +
+  `page_fingerprint_regex`; the armed watch names live in the tool's own config, not here),
+  `mcp-snapshot.mjs` (MCP drift), `release-watch.mjs` (router repos; `body_regex` changelog streams —
+  claude-code + codex + gemini-cli + opencode), `nvd-provenance.mjs` (status/metric/KEV movement,
+  Pass 10; its `watch` list is the per-CVE standing record), `vendor-advisory.mjs` (registry + per-ID
+  presence across NVD/cveawg/KEV, CVRF `Type="CNA"` — Pass 11), `feed-stamp.mjs` (`updated:` from
+  the clock in true UTC, all locales + `latest.md`), `compact-log.mjs`, `cv-audit.mjs`
+  (`cv === 1 + cvlog.length`), star-to-commit check (Pass 9), KEV/NVD/npm/GitHub one-call checks
+  (CLAUDE.md perishable rules), `torvalds-folio-v2` + `doc2harness-repro`; `osv-lag.mjs` (scanner
+  visibility on the **package** record — alias-following, NVD-reference route, day-granularity
+  labels); `disclosure-lag.mjs` (`--census` range provenance + the quota-degraded pass,
+  `--mitigation-census`, `--field-watch`, `--selftest` **132/132**); `claim-unit-lint.mjs` (the claim
+  units, run by `generate-feed.sh` before every commit — issues/cvss/status/temporal/**cwe**/repo/
+  count/**quotation**, `--selftest` **126/126**; `count` reads **every page the item cites**, `cvss`
+  **recomputes each matched vector**, `cwe` reads `weaknesses[]` + the CNA **and every ADP**
+  `problemTypes`, `quotation` greps every quoted span against the page text the count check already
+  fetched — plus the repo's own `description` field and the NVD/CNA/KEV fields);
   `cvss-recompute.mjs` (a stored score vs its own `vectorString` — v3.1/v3.0 native, v4.0 via
-  `--oracle`, `--pairs` for same-source dual-column spreads); citation counts via **OpenAlex**
-  when Semantic Scholar 429s.
+  `--oracle`, `--pairs` for dual-column spreads); citation counts via **OpenAlex** when Semantic
+  Scholar 429s.
 
 - **Non-AI batch items (10-07→10-20):** the itemized record lives in the dated feed files; the
   long-runners have homes — DDR4's revival (→ thesis 3), Yandex Cloud's Vladimir DC UAV strike
@@ -1834,6 +1853,22 @@ patterns, and turn them into insights and actionable todos.
   list's `Link: rel="last"` page (live: record 6d vs oldest commit **2021-12-08**, 9,479 commits).
   → [[fact-check]] [[disclosure-lag]]
 
+- **The unit the checker does not own is the one the batch ships (10-31 act).** Every earlier check
+  reads a NUMBER; the feed's most embarrassing error class reads a STRING — a sentence in quotation
+  marks that is not in the source, which a human read never catches because the sentence sounds
+  true. `--check quotation` now greps every quoted span against text already in hand, and on its own
+  filing day it caught item 10: the paper says "**to test the full proposed method further
+  experimentation is necessary**", the feed published "the complete proposed method still requires
+  further experimentation". Calibration produced **nine** guards, and **eight of the first thirteen
+  findings were the checker's fault**: punctuation drift (a period where the source continues),
+  mis-paired quotes on an odd line, tag-split words, a repo **description** that is not the README
+  (item 5's "Skills for Real Engineers" is verbatim in `description` and 0× in the README), a
+  record's own `descriptions[]`, and `&#x27;` — an entity the page extractor never decoded, so a
+  verbatim title read as invented. The lesson generalises past quoting: **an extractor is part of
+  the instrument**, and a cache written by an older extractor must not be evidence for a newer
+  check — both page and CNA caches now carry a schema version. 13 findings / 9 verified on the
+  uncorrected file → **0 / 15** after correcting items **8, 10, 14, 20** and dropping scare quotes
+  from **9, 12, 16**. → [[fact-check]]
 - **"Unreadable" has to name WHICH wall, and a watch has to pin ids rather than re-query a window
   (10-30 act).** Two instruments, both corrected on their first real input. `doc-twin.mjs` had five
   verdicts and no way to say "the page exists but this session may not have it": HPE's bulletin
