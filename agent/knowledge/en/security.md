@@ -486,7 +486,7 @@ Ten recurring shapes, each with a canonical instance:
   `@playwright/mcp` (Microsoft, 24 tools), `@mzxrai/mcp-webresearch` (3), `exa-mcp-server` (2). Fixed a hang
   (`detached: true` + process-group `SIGKILL` — npx grandkids held the stdout write end after completion).
   Snapshot = 66 tools / 7 servers; the canonical four still diff 0/0/0/0 across ~24h.
-  **t4 (08-22 20:28):** the first diff with *third-party* coverage (≈7.5h after t3) — still **0/0/0/0** across
+  **t4 (08-22 20:32):** the first diff with *third-party* coverage (≈7.5h after t3) — still **0/0/0/0** across
   66 tools / 7 servers. That is now four consecutive nulls over ~2 days, and the **sample bias is now the
   finding**: keyless stdio servers are *popular, actively-maintained* ones by construction — the exact subset
   least likely to churn a published contract. A null here bounds the claim (popular servers are stable over
@@ -4065,7 +4065,7 @@ Sources: [HN: OpenCode Hacked](https://news.ycombinator.com/item?id=50133401) ·
 
 Sources: [CVE-2026-111911](https://cveawg.mitre.org/api/cve/CVE-2026-111911) · [VulnCheck advisory](https://www.vulncheck.com/advisories/phpmyfaq-4.0.0-before-4.1.9-authentication-bypass-via-webauthn-credential-injection)
 
-**10-18 20:28 (learn pass): the VulnCheck-scored self-hosted batch — the week's realistic patch list, and `Received` as a status worth reading.** No CVSS ≥9.0 and no KEV additions in the window — but the VulnCheck-scored batch hitting NVD is the patch pass for anyone running MDM, cloud workspaces or RDP gateways. Score provenance on all: **assigned by VulnCheck (disclosure@vulncheck.com); NVD records in `Received` status** — one step earlier in the pipeline than `Deferred`, the scorer-provenance pattern at batch scale (nobody neutral has looked yet, and the record's own status field is what says so). **(1) Fleet** (device management): CVE-2026-111923 (8.7) — unbounded recursion in Apple MDM enrollment plist parsing; a ~150-byte binary plist crashes the server (fixed 4.89.0). CVE-2026-111924 (8.7) — gzip memory-exhaustion DoS on unauthenticated endpoints (fixed 4.83.0). **(2) Coder** (workspaces): CVE-2026-111927 (8.7) — `GetWorkspaceProxyByHostname` validates hostnames with a SIMILAR TO **prefix** match, so any prefix-domain is trusted as a workspace proxy; an attacker-owned domain captures a victim's `application_connect` API key via a crafted auth-redirect (fixed 2.29.20/2.33.12/2.34.8/2.35.4). Hostname allowlists fail the moment the match is a prefix, not an identity. **(3) FreeRDP**: CVE-2026-111880 (8.3) — heap out-of-bounds write in the server NTLM hash-callback path; a crafted AUTHENTICATE_MESSAGE with a backward MIC offset writes 16 zero bytes past the allocation (fixed 3.32.0). The same batch carries a Vikunja CORS localhost-trust account takeover (7.2) and eight more phpMyFAQ CVEs beside CVE-2026-111911. All three repos alive with fixes shipped: Fleet v4.93.0, Coder v2.37.4, FreeRDP 3.32.2.
+**10-18 20:32 (learn pass): the VulnCheck-scored self-hosted batch — the week's realistic patch list, and `Received` as a status worth reading.** No CVSS ≥9.0 and no KEV additions in the window — but the VulnCheck-scored batch hitting NVD is the patch pass for anyone running MDM, cloud workspaces or RDP gateways. Score provenance on all: **assigned by VulnCheck (disclosure@vulncheck.com); NVD records in `Received` status** — one step earlier in the pipeline than `Deferred`, the scorer-provenance pattern at batch scale (nobody neutral has looked yet, and the record's own status field is what says so). **(1) Fleet** (device management): CVE-2026-111923 (8.7) — unbounded recursion in Apple MDM enrollment plist parsing; a ~150-byte binary plist crashes the server (fixed 4.89.0). CVE-2026-111924 (8.7) — gzip memory-exhaustion DoS on unauthenticated endpoints (fixed 4.83.0). **(2) Coder** (workspaces): CVE-2026-111927 (8.7) — `GetWorkspaceProxyByHostname` validates hostnames with a SIMILAR TO **prefix** match, so any prefix-domain is trusted as a workspace proxy; an attacker-owned domain captures a victim's `application_connect` API key via a crafted auth-redirect (fixed 2.29.20/2.33.12/2.34.8/2.35.4). Hostname allowlists fail the moment the match is a prefix, not an identity. **(3) FreeRDP**: CVE-2026-111880 (8.3) — heap out-of-bounds write in the server NTLM hash-callback path; a crafted AUTHENTICATE_MESSAGE with a backward MIC offset writes 16 zero bytes past the allocation (fixed 3.32.0). The same batch carries a Vikunja CORS localhost-trust account takeover (7.2) and eight more phpMyFAQ CVEs beside CVE-2026-111911. All three repos alive with fixes shipped: Fleet v4.93.0, Coder v2.37.4, FreeRDP 3.32.2.
 
 Sources: [NVD: CVE-2026-111927](https://nvd.nist.gov/vuln/detail/CVE-2026-111927) · [fleetdm/fleet](https://github.com/fleetdm/fleet)
 
@@ -5539,5 +5539,92 @@ path, `CWE-89` insertion) because the write needs both bugs, fixed by tag `v8.1.
 `CWE-690`, "**No workarounds available**", mitigation = disable secondary authentication on the tunnel
 group, "Version 1.0: Final", beside Shadowserver's "**more than 51,000** Cisco ASA SSL VPN devices
 exposed online".
+
+→ [[vuln-supply]] [[disclosure-lag]] [[fact-check]] [[harness-overhead]]
+
+## 2026-10-30 20:45 batch — the signed host is the blind spot, and a fix can undo the fix
+
+**The extension channel (item 30).** Phorion's advisory describes a persistent **SSH backdoor** in the
+**official Claude Code for VS Code** extension on the **Cursor Marketplace**, carrying version
+**2.1.313**. Verified first-hand: npm's `@anthropic-ai/claude-code` packument lists **553 versions** with
+`dist-tags.latest` at **2.1.314**, and the timeline reads **2.1.312 2026-10-27T18:36:10.160Z → 2.1.314
+2026-10-30T00:12:56.911Z with no 2.1.313 between them**; the upstream `CHANGELOG.md` contains **zero**
+occurrences of the string. Quotes verified greppable on the advisory page: "as soon as Node loads the
+file", "svc-telemetry", "You need administrator access", "effectively treats", "can wipe existing user
+cron jobs", and the C2 host `134.209.82[.]225`. Four stages: an Ed25519 key appended to
+`~/.ssh/authorized_keys` (comment `svc-telemetry`, matched by *comment* not key) plus an attempt to start
+sshd (macOS: `sudo -n systemsetup -setremotelogin on`); a reverse tunnel from
+`$TMPDIR/.stk_<10 hex>` as user `tunnel`; persistence via LaunchAgent `com.apple.sysmond.plist`
+(`RunAtLoad` + `KeepAlive`), `@reboot` cron, or a `SysMon` scheduled task; and a beacon of hostname,
+user, platform, arch, cwd, `git config --global user.email`, public IP and up to **40 environment-variable
+names** matching `/KEY|TOKEN|SECRET|PASS|AWS|GCP/i` — names, not values — to `/beacon` on `:8099`.
+
+Three lessons, each about a different object:
+
+- **A version string is not an identity across channels.** The marketplace artifact carried a version the
+  upstream release line never published. And an npm **absence** after an incident cannot distinguish
+  *never published* from *unpublished* (the "package-registry state is perishable" rule) — what supports
+  "the official line skipped 2.1.313" is the changelog's own zero occurrences, a separate artifact.
+- **The signature covers the host, not the extension.** The IDE binary is validly signed, the extension
+  runs with the IDE's permissions, and `fs.appendFileSync` on `authorized_keys` is not an `echo`/`tee` —
+  so process rules written against shell-shaped writes miss it. The signal is *the file*, not the command.
+- **Uninstalling the extension removes nothing.** The remediation list is kill the tunnel, unload the
+  LaunchAgent, delete `~/.config/.smt` and `.smtk`, remove the key, and rotate every credential matching
+  that name filter. The three implementation bugs (macOS `systemsetup -getremotelogin` without elevation
+  returns exit 0 so `/Off/i` never matches; the Windows path runs PowerShell through a helper hardcoding
+  `/bin/sh`; the Linux crontab check can wipe existing jobs) bound the blast radius — none is a control.
+
+**A fix that undoes the previous fix (item 34).** Binary Security's Azure **API Connections** report
+(2026-10-02, HN 2026-10-30): ARM's `DynamicInvoke` and `/extensions/proxy/` reach a shared APIM instance
+with rights to *every* connection, so a traversal in the supplied path
+(`path/%2e%2e/%2e%2e/%2e%2e/%2e%2e/apim/keyvault/<id>/secrets/<name>/value`) reads another tenant's Key
+Vault secret. The first fix "seemed to restrict the paths allowed, rather than the underlying token
+issue"; four undocumented endpoints follow (`DynamicInvoke`, `DynamicList`, and two more), and
+`DynamicList` runs an arbitrary SQL `INSERT` against a victim's Azure SQL database. **Consumption Logic
+Apps have no managed identity of their own**, hence implicit access to every Version 1 API Connection held
+back only by input validation, and `host.api.RuntimeUrl` lets a workflow name a `runtimeUrl` that differs
+from the connection's own as long as the host ends in `azure-apihub.net`. The regression is the reusable
+part: "When Microsoft managed to scrape together a fix for this path traversal, a surprising thing
+happened. The original `RuntimeUrl` path was no longer validated" — a patch matched to a **payload**
+rather than to a **primitive**. The author's own mitigation, which most operators skip: scope each
+connection's token or key to minimal backend privileges.
+
+**Three Elixir stdlib records from one CNA (item 33).** All three EEF records are `Received` with **0
+NVD-scored metrics**; all quoted sentences verified on `cna.erlef.org`. `CVE-2026-115274` (**6.9** v4.0,
+`CWE-1284`) — `JSON.decode/1,2` pass every integer literal to `erlang:binary_to_integer/1` unbounded, so a
+one-million-digit literal costs "**100 to 300**" times a same-length string's CPU and "one request body of
+a few megabytes holds a scheduler for about a second"; above ~**1.29 million** digits it raises
+`SystemLimitError`. The exposure sentence is the control lesson: "Applications generated by `phx.new`
+decode request bodies with `JSON` in `Plug.Parsers`, **before routing and authentication**" — so
+per-route rate limiting is not the mitigation. `CVE-2026-109821` (**6.3**, `AT:P`) is the same shape in
+`URI.parse/1`: a port of up to **1,262,592** digits becomes a bignum, a 400,000-digit port renders in
+~2.6 s and 1 MB in ~18 s on OTP 27/28/29.0. `CVE-2026-97209` (**5.4**, `AV:L`) is different in kind —
+`Mix.Tasks.Deps.Partition.server/4` passes config through a fixed-name directory in the shared temp dir,
+and `File.mkdir_p/1` "accepts an existing directory without checking its owner", so a local user who
+creates it first can swap the file and execute as the compiling user; only `1.20.0-rc.4` < `1.20.5` is
+affected. Fixes **1.18.6 / 1.19.7 / 1.20.5**. The form of the bug worth generalising: "The `JSON.decode/3`
+documentation names `&String.to_integer/1` as the default, **which converts the same way**" — the doc is
+right about the behaviour and wrong about the function, which is what survives review.
+
+**Deny-lists fail on sibling version prefixes (item 35).** `CVE-2026-59387`, **8.8** v3.1 from
+`security@vmware.com`, `Received`, 0 NVD-scored, **and no CWE in the record**. Cloud Controller's Nginx
+config blocks unauthenticated `/internal/v4/` and `/internal/v5/` but has no rule for `/internal/v3/`, so
+`/internal/v3/staging/:guid/droplet_completed` is reachable from the public listener without OAuth or
+mTLS, a valid build/droplet GUID lets an attacker forge a staging callback and persist process metadata
+with no package or actor — and "**a SpaceAuditor can enumerate GUIDs without write permissions**", turning
+a read-only role into a write. Reserved 2026-07-04, advisory 2026-10-20, record 2026-10-30. The range
+disagreement between the advisory and the record is written up in [[disclosure-lag]].
+
+**ClickHouse, 9.5, 28 words (item 36).** `CVE-2026-116366` — `AV:N/AC:H/AT:N/PR:N/UI:N/VC:H/VI:H/VA:H/
+SC:H/SI:H/SA:H`, CNA-assigned (`cb7ba516-…`), `Received`, 0 NVD-scored, **`CWE-190` in the CNA container**
+(verified in `cveawg`; the feed's "states no CWE" was wrong and is corrected). Reserved
+2026-10-26T07:54:23Z, published 2026-10-30T11:00:11Z, fixed in **v26.10.3.7** the same day, with four
+exclusive ranges (`26.3 → 26.3.62.3-lts`, `26.8 → 26.8.36.3-lts`, `26.9 → 26.9.27.3-stable`, `26.10 →
+26.10.3.7-stable`). The description is one 28-word sentence with no conditions, so "am I exposed" is
+unanswerable and "am I patched" is answerable same-day.
+
+**The pipeline stamp, once more.** These five records carry two `lastModified` values — **09:17** for the
+three EEF records and the vmware one, **11:17** for ClickHouse — because `lastModified` is NVD's ingest
+clock, not an editor's.
 
 → [[vuln-supply]] [[disclosure-lag]] [[fact-check]] [[harness-overhead]]

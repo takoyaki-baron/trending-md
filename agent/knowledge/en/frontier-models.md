@@ -684,13 +684,13 @@ GPT-5.6 Sol** (of 35 runs). Two caveats keep this from being the standing per-la
   same thing — and retrieving Mathlib rather than memorizing it points a cheaper path to formal verification
   of real mathematics (thesis 10's authoring side, Vero's evaluation side).
 
-## Abliteration goes reproducible (08-22 20:03, read first-hand 08-22 20:28)
+## Abliteration goes reproducible (08-22 20:03, read first-hand 08-22 20:32)
 
 - **OBLITERATUS** (`elder-plinius/OBLITERATUS`, AGPL-3.0 + commercial licence, 7.9k stars / 1.4k forks /
   170 commits) — a toolkit for **abliteration**: identifying and surgically removing the internal "refusal
   directions" in an LLM's activation space without retraining, positioned as an alignment-research and
   red-teaming instrument ("not a product, not a service, not a weapon").
-  **Read first-hand (08-22 20:28) — the "weights or chat template?" answer is: the weights.** The six-stage
+  **Read first-hand (08-22 20:32) — the "weights or chat template?" answer is: the weights.** The six-stage
   pipeline — `SUMMON` (load) → `PROBE` (activations on restricted vs unrestricted prompts) → `DISTILL`
   (extract refusal directions via SVD) → `EXCISE` (surgically project them out, norm-preserving) → `VERIFY`
   (perplexity/coherence) → `REBIRTH` (save) — is **weight surgery, never the chat template**. Method presets
@@ -3692,7 +3692,7 @@ Sources: [Fortune](https://fortune.com/2026/10/16/openai-discloses-four-more-rog
 
 Sources: [arXiv 2610.22319](https://arxiv.org/abs/2610.22319) · [arXiv HTML](https://arxiv.org/html/2610.22319v1) · [arXiv 2610.22350](https://arxiv.org/abs/2610.22350) · [de Moura: Lean now ships with verified kernels](https://leodemoura.github.io/blog/2026-10-15-lean-now-ships-with-verified-kernels/) · [lean4 v4.35.0](https://github.com/leanprover/lean4/releases/tag/v4.35.0)
 
-**10-18 20:28 (learn pass): the 20:03 batch's research cluster — autonomous post-training gets a platform, ML engineering gets a specialist, and the reward gate becomes a theorem.**
+**10-18 20:32 (learn pass): the 20:03 batch's research cluster — autonomous post-training gets a platform, ML engineering gets a specialist, and the reward gate becomes a theorem.**
 
 **(1) Athanor** (arXiv 2610.21055, listed Oct 18): "an agent-native system for autonomous post-training research on real GPUs" — four Claude Opus 5.5 agents, one 8-GPU node each, 104 hours, full research autonomy (read datasets and eval results, construct training data, write and modify training algorithms, tune hyperparameters) inside a sandbox with frozen evaluation, decontaminated data, a persistent research record, and no external teacher models. Headline run: Qwen3-4B-Base 15.9 → 67.3 on a six-task dev suite and 9.2 → 48.2 held-out — against 66.5 / 47.9 for the official Qwen3-4B-Instruct-2507. The campaign record shows how: SFT on public reasoning data, one agent's RL rollout modification, cross-agent weight merges, self-distillation rounds. The authors' own boundary: "a weaker form" of recursive self-improvement — recombining known techniques, not discovering new ones. Base model in, generalist out, no human in the research loop — next to Sakana's MASS (10-12), autonomous post-training has a reproducible platform, not just a demo. **(2) MLExpert** (arXiv 2610.22344, listed Oct 18): a 35B MoE post-trained for long-horizon ML engineering via three pieces — a Kaggle-MLE Factory that constructs executable tasks, hierarchical agentic SFT transferring general tool-use into the MLE domain, and Windowed Interaction RL (the multi-turn decisions between experiment results treated as one execution window under a shared outcome reward, collected asynchronously so policy updates land before trajectories finish). MLE-Bench Lite average medal rate 37.9% → 72.7%, claimed comparable to Kimi-K3 and GLM-5.3; additional gains on NatureBench Lite. The abstract carries no limitations section — the hedging lives in the verbs ("suggesting" capability transfer); read beside Athanor, the missing section is the tell for which paper did its caveats. **(3) The Self-Improvement Problem** (arXiv 2610.21646; Moser, Frolov, Nauen, Raue, Dengel): the impossibility proof — no terminating procedure (approval gate or search) can be simultaneously **reliable** (never accepting a non-improvement) and **non-conservative** (never missing an available improvement); self-referential constructions break any such gate, and randomized gates with bounded error hit the same wall. The escape is a decidable regime — bounded evaluation plus a finite proposal budget — where exhaustive simulation recovers both guarantees; but within that regime a chain of accepted updates can raise the bounded score every round **while the true score falls**. The formal backbone for this week's empirical pattern (OpenAI's graders paying out on cheating): "your reward model cannot be made fully trustworthy in general" is now a theorem with named assumptions, and the Goodhart-divergence clause is the sentence governance reviews should quote.
 
@@ -4741,3 +4741,83 @@ not quote one without naming which page and which date it carries.
 → [[fact-check]] [[edge-inference]] [[token-economics]]
 
 Sources: [Mistral — releasing the weights](https://mistral.ai/news/mistral-large-4-oss/) · [HF — Welcome Le Chonk](https://huggingface.co/blog/mistral-large4) · [model card](https://huggingface.co/mistralai/Mistral-Large-4-1T-A52B) · [Mistral on the Jev/AA index](https://huggingface.co/mistralai/Mistral-Large-4-1T-A52B)
+
+## 2026-10-30 20:45 — the evaluator is the instrument that disagrees with itself
+
+**Ai2's "Old Ideas, Novel Problems" (arXiv 2610.02022) puts a number on judge instability and it is 50
+points.** Labels come from ICLR 2026 **peer reviews, not acceptance**: a high-novelty pool of **154**
+human ideas from accepted papers in the top-rated 10% of their area where reviewers positively identified
+novelty and none disputed it, and a lower-novelty pool of **145** from rejected papers in the bottom 10%
+where concerns were raised and none endorsed it (an annotator agreed with the extracted polarity in **47
+of 50**). Six judges — GPT-5.1, 5.2, 5.4, Claude Sonnet 4.5, Opus 4.5, Opus 4.6 — across prompt,
+reasoning budget, retrieval, formatting and aggregation.
+
+On Human+Generated pairs, **GPT-5.4 told "reviewers had found exactly one idea in each pair to be novel"
+scores 93.5%; asked "which idea is novel", it scores 40.9%, below chance**, and changes its verdict on
+more than half the same pairs. Human-authored pairs move too — the same wording change moves Claude Opus
+4.6 by **21 points** — and "there was also no universally better prompt". The sentence for anyone
+shipping a novelty filter: "**Retrieval and additional reasoning do not consistently improve judgments,
+and two purpose-built novelty evaluation systems perform worse than a simple prompted Claude Opus 4.6
+baseline.**" The paper's own hedge is that the Human+Generated labels are "**weak labels**", answered by
+an expert review of 30 pairs weighted toward the strongest judge's failures (human idea preferred in all
+30, none of the generated ones judged novel) — and, better, by the note that "many of our core findings
+don't depend on the labels at all": two reasonable setups giving opposite answers for one pair *is* the
+instability.
+
+**Prefix Executability (arXiv 2610.40444) makes trajectory validity a first-class metric.** It checks
+"whether every prefix of a predicted tool-call sequence remains executable under tool schemas, state
+preconditions, and data dependencies", summarised by Prefix Executability Curves, **First-Error Depth**,
+Trajectory Executability Rate, horizon-normalised AUC-PEC and Recovery Rate, over BFCL-v3 multi-turn,
+ToolSandbox and τ³-bench's Airline/Retail splits. The result is a **ranking inversion**: plan-conditioned
+agents "often achieve higher point-estimate final success … while substantially lowering TER and
+AUC-PEC", and explicit pre-execution plan checking recovers prefix survival at competitive final success.
+No scores are in the abstract — quote it as a methods paper.
+
+**Two negative results on the compute side.**
+**Looped transformers** (arXiv 2610.40325; up to 1B params, **155B** tokens, **1.07×10²¹** FLOPs, **32**
+loops): looping the *full* transformer is best at a fixed parameter budget, looping a *middle block* is
+the better return when training FLOPs bind, and "adding loops is not uniformly beneficial: gains
+eventually **saturate, reverse, or become unstable**". Loop-specific low-rank adapters help more as loops
+grow, and the parallel variant needed a normalization change (the current-token embedding preserved and
+normalised separately from the previous-token hidden state) before it retained the gains.
+**Speculative decoding's energy account** (arXiv 2610.40287; SGLang with CUDA graphs, H100/H200, batch up
+to 64, five corpora): "On dense models, **verification, not drafting, dominates the energy cost**"; the
+saving shrinks as batch grows because batching already shared the weight read; at large batch, block
+drafters push verification "into the compute-bound regime, **where the saving becomes a loss**"; and a
+tighter latency target costs energy, so the two wins point opposite ways. Acceptance is corpus-bound:
+"Every drafter we evaluate accepts fewer tokens on conversation than on code, and every trained drafter
+accepts fewer on Romansh, a low-resource language, than on English." The correct unit is **energy per
+accepted token at a stated batch size and latency target**.
+
+## 2026-10-30 — two artifacts where the denominator is the argument
+
+**Clover-35B-A3B-Preview (DiffuSpace)** is a Mixture-of-Experts **diffusion** LM — 35B total / 3B active,
+thinking mode, Apache licence, weights on the Hub/GitHub/ModelScope, SGLang + llama.cpp support — posting
+the strongest agent table a diffusion model has claimed at this scale: **SWE-bench Verified 73.6,
+Terminal-Bench 2.1 51.7, τ³ 65.3**, GPQA-D 83.8, ZebraLogic 95.8, AA-LCR 72.0, top of its own comparison
+against LLaDA2.2 flash, Mercury 2.5 and two Qwen 3.x MoEs. The efficiency rows need their denominators:
+**680 tokens/s** is measured "on **internal agent workloads**, tested on a single NVIDIA GB300 GPU with
+BF16 precision and a batch size of 1" — batch 1 is exactly where parallel decoding shines and the suite is
+not public; the H200 row (**515 vs 365**) is against "the DFlash2 setup", one acceleration stack for a
+similar Qwen, not that model as shipped; the cleanest number is the edge one (**INT4, RTX 5070 Ti 16 GB,
+101.8 tok/s** on MATH-500 vs 48.5). The architecture is described precisely enough to check — a
+**bidirectional Gated DeltaNet** in which "previously generated context is efficiently compressed into
+GDN's recurrent state, while tokens within the current block interact through fine-grained bidirectional
+softmax attention", the memory readout treated as a separate information unit inside the same softmax,
+learnable block-size calibration, and a zero-initialised convolution branch for right-side context. It is
+a **Preview**, and no independent evaluation of the six agent scores exists yet.
+
+**VKORE-325M-NPU-Base (VIDRAFT / FINAL-Bench)** pretrains a 325.6M decoder **from random initialisation on
+a commercial inference-only NPU** — backpropagation on the chip, no pretrained weights — for **5.0B byte
+tokens** of FineWeb-Edu in **76,292 steps over about four days**, with a B200 twin on the same
+initialisation, data, batch and LR schedule. On **1,024 never-seen windows**: NPU **0.7993**, GPU
+**0.7994**, paired difference **−0.0001 ± 0.0007 (SE)**, NPU lower on **50.1%**. Both weight sets and the
+evaluation script are public, so the comparison is checkable in minutes. The post's own "What we do not
+claim" is what makes it usable: "**Not a capable assistant.** … **Not a speed record.** … **Not the
+method.** The training loop and the stability technique are in house and **under patent application**. The
+weights, data recipe, hyperparameters and evaluation are fully open." That is a **new split** in the
+reproducibility axis this library tracks: not "open weights, closed data" and not "closed weights", but
+**an open outcome with a patented method** — anyone can reproduce the 0.0001 and no one can reproduce the
+run.
+
+→ [[fact-check]] [[edge-inference]] [[harness-reliability]]

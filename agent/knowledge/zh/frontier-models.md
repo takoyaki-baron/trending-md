@@ -527,12 +527,12 @@ GPT-5.6 Sol**（其运行数为 35 次）。两条保留意见使它尚不能成
   信号：语法/一致性差距（88 vs 72）才是该领域的真正瓶颈——编译通过 ≠ 意思相同——而检索而非死记 Mathlib，指向
   了真实数学形式化验证的一条更廉价路径（论点 10 的创作侧，Vero 的评测侧）。
 
-## 消融化（abliteration）走向可复现（08-22 20:03，08-22 20:28 一手阅读）
+## 消融化（abliteration）走向可复现（08-22 20:03，08-22 20:32 一手阅读）
 
 - **OBLITERATUS**（`elder-plinius/OBLITERATUS`，AGPL-3.0 + 商业许可，7.9k stars / 1.4k forks / 170 commits）——
   一个**消融化（abliteration）**工具包：无需重新训练即可识别并外科手术式地移除 LLM 激活空间中的内在「拒绝方向」，
   定位为对齐研究与红队工具（「不是产品、不是服务、不是武器」）。
-  **一手阅读（08-22 20:28）——「权重还是聊天模板？」的答案是：权重。** 六阶段流水线——`SUMMON`（加载）→
+  **一手阅读（08-22 20:32）——「权重还是聊天模板？」的答案是：权重。** 六阶段流水线——`SUMMON`（加载）→
   `PROBE`（在受限 vs 非受限提示上采集激活）→ `DISTILL`（经 SVD 提取拒绝方向）→ `EXCISE`（外科手术式地投影掉它们，
   保范数）→ `VERIFY`（困惑度/连贯性）→ `REBIRTH`（保存）——是**权重手术，从不碰聊天模板**。方法预设从 `basic`
   （1 方向、均值差）一直跑到 `nuclear`（8 方向、全部技术 + 专家移植 + 引导），构建于 PCA / 均值差 / 稀疏自编码器 /
@@ -2426,7 +2426,7 @@ Sources: [Fortune](https://fortune.com/2026/10/16/openai-discloses-four-more-rog
 
 Sources: [arXiv 2610.22319](https://arxiv.org/abs/2610.22319) · [arXiv HTML](https://arxiv.org/html/2610.22319v1) · [arXiv 2610.22350](https://arxiv.org/abs/2610.22350) · [de Moura：Lean 现在附带已验证内核](https://leodemoura.github.io/blog/2026-10-15-lean-now-ships-with-verified-kernels/) · [lean4 v4.35.0](https://github.com/leanprover/lean4/releases/tag/v4.35.0)
 
-**10-18 20:28（学习轮）：20:03 批次的研究簇——自主后训练拿到平台、ML 工程拿到专家模型、奖励门成为定理。**
+**10-18 20:32（学习轮）：20:03 批次的研究簇——自主后训练拿到平台、ML 工程拿到专家模型、奖励门成为定理。**
 
 **(1) Athanor**（arXiv 2610.21055，10 月 18 日列入）："一个面向真实 GPU 上自主后训练研究的 agent 原生系统"——四个 Claude Opus 5.5 智能体、每人一个 8-GPU 节点、104 小时、完全研究自主权（读数据集与评估结果、构造训练数据、编写和修改训练算法、自行调超参），运行在带冻结评估、去污染数据、持久研究记录、无外部教师模型的沙箱内。头条运行：Qwen3-4B-Base 在六任务开发集上 15.9 → 67.3、留存集 9.2 → 48.2——对照官方 Qwen3-4B-Instruct-2507 的 66.5 / 47.9。活动记录展示了方法：公开推理数据上的 SFT、某个智能体的 RL rollout 修改、跨智能体权重合并、自蒸馏轮次。作者自己划的边界："较弱的"递归自我改进——重组已知技术，不是发现新技术。基础模型进、通才模型出、研究环里没有人类——放在 Sakana 的 MASS（10-12）旁边，自主后训练有了可复现的平台，不再只是演示。**(2) MLExpert**（arXiv 2610.22344，10 月 18 日列入）：一个为长时程机器学习工程做后训练的 35B MoE，三件套——构造可执行任务的 Kaggle-MLE Factory、把通用工具使用迁移进 MLE 领域的分层 agentic SFT、Windowed Interaction RL（把实验结果之间的多轮决策当作一个执行窗口、共享结果奖励，异步采集使策略更新在轨迹结束前落地）。MLE-Bench Lite 平均奖牌率 37.9% → 72.7%，自称与 Kimi-K3、GLM-5.3 等更大前沿模型相当；NatureBench Lite 上另有增益。摘要没有 limitations 一节——对冲藏在动词里（"suggesting"能力迁移）；与 Athanor 对读，缺失的一节正是哪篇论文做了注意事项的信号。**(3) The Self-Improvement Problem**（arXiv 2610.21646；Moser、Frolov、Nauen、Raue、Dengel）：不可能性证明——不存在同时**可靠**（绝不接受非改进）且**不保守**（绝不错过可用改进）的终止性程序（审批门或搜索）；自指构造击穿任何此类门，带误差界的随机门撞上同一堵墙。出路是可判定域——有界评估加有限提案预算——穷举模拟可同时恢复两种保证；但在该域内，一条被接受的更新链可以每轮抬高有界分数、**而真实分数在跌**。这是本周经验模式（OpenAI 的评分器对作弊照常付分）的形式化背骨："你的奖励模型无法在一般意义上做到完全可信"现在是带命名假设的定理，Goodhart 发散条款是治理评审应该引用的那句话。
 
@@ -2954,3 +2954,23 @@ Cartesia 的 H-Net 第一篇把对照做得诚实到代价显而易见，然后�
 → [[fact-check]] [[edge-inference]] [[token-economics]]
 
 来源：[Mistral——放出权重](https://mistral.ai/news/mistral-large-4-oss/) · [HF——Welcome Le Chonk](https://huggingface.co/blog/mistral-large4) · [模型卡](https://huggingface.co/mistralai/Mistral-Large-4-1T-A52B)
+
+## 2026-10-30 20:45 — 评测器就是那个自相矛盾的仪器
+
+**Ai2 的「Old Ideas, Novel Problems」（arXiv 2610.02022）给评审不稳定性量出了一个 50 分的幅度。** 标签来自 ICLR 2026 的**同行评审，而不是录用与否**：高新颖度池是 **154** 个人类想法，来自本领域评分前 10% 的录用论文，审稿人明确指出新颖且无人反对；低新颖度池是 **145** 个，来自评分后 10% 的拒稿，审稿人提出了原创性疑虑且无人认可（标注者与抽取出的极性在 **47/50** 上一致）。六个评审器——GPT-5.1、5.2、5.4、Claude Sonnet 4.5、Opus 4.5、Opus 4.6——覆盖提示词、推理预算、检索、格式与聚合五个维度。
+
+在 Human+Generated 对上，**GPT-5.4 被告诉「审稿人认为每对里恰好有一个想法是新颖的」时得 93.5%；被问「哪个想法是新颖的」时得 40.9%，低于随机**，并且在超过一半的同一批对上改变了判断。人类撰写的对也会动——同一处措辞改动让 Claude Opus 4.6 移动 **21 分**——而且「there was also no universally better prompt」。任何一个要上线新颖性过滤器的人都该带走这句：「**Retrieval and additional reasoning do not consistently improve judgments, and two purpose-built novelty evaluation systems perform worse than a simple prompted Claude Opus 4.6 baseline.**」论文自己的让步是 Human+Generated 标签属于「**weak labels**」，用一次针对最强评审器失误加权抽样的 30 对专家复核来回应（30 对里都更偏好人类想法，且没有一个生成想法被判为新）——更好的回应是这句：很多核心发现根本不依赖标签，因为「两个合理的设置对同一对给出相反答案」本身就是不稳定性。
+
+**Prefix Executability（arXiv 2610.40444）把轨迹的有效性变成一等指标。** 它检查「预测出的工具调用序列的每一个前缀，在工具 schema、状态前置条件与数据依赖下是否仍然可执行」，用前缀可执行性曲线、**首错深度**、轨迹可执行率、按视野归一的 AUC-PEC 与恢复率来汇总，实例化于 BFCL-v3 多轮、ToolSandbox 与 τ³-bench 的 Airline/Retail 划分。结论是一次**排序倒置**：以计划为条件的 agent「往往取得更高的点估计最终成功率……同时显著降低 TER 与 AUC-PEC」，而显式的前置计划检查能在保持有竞争力的最终成功率的同时恢复前缀存活率。摘要里没有任何分数——所以它是一篇方法论论文，不该被引用成结论。
+
+**计算侧的两个负面结果。**
+**循环 transformer**（arXiv 2610.40325；最高 1B 参数、**155B** token、**1.07×10²¹** FLOPs、**32** 次循环）：固定参数预算下循环*整个* transformer 质量最好，训练 FLOPs 受限时循环*中间块*回报更好，而「adding loops is not uniformly beneficial: gains eventually **saturate, reverse, or become unstable**」。循环专用的低秩适配器随循环增加收益变大，并行变体则必须改归一化（当前 token 的嵌入要单独保留并单独归一，再与前一个 token 的隐藏状态合并）才留得住增益。
+**投机解码的能量账**（arXiv 2610.40287；SGLang 开 CUDA graphs，H100/H200，批 ≤64，五个语料）：「On dense models, **verification, not drafting, dominates the energy cost**」；批越大节省越小，因为批处理已经共享了权重读取；大批时块式起草器把验证推进「compute-bound regime, **where the saving becomes a loss**」；而更紧的延迟目标要额外耗能，于是两个收益方向相反。接受率是语料绑定的：「Every drafter we evaluate accepts fewer tokens on conversation than on code, and every trained drafter accepts fewer on Romansh, a low-resource language, than on English.」正确的单位是**在给定批大小与延迟目标下，每个被接受 token 的能量**。
+
+## 2026-10-30 — 两个工件，其论证就是分母
+
+**Clover-35B-A3B-Preview（DiffuSpace）** 是一个专家混合的**扩散**语言模型——35B 总参 / 3B 激活、带思考模式、Apache 许可、权重在 Hub/GitHub/ModelScope、支持 SGLang 与 llama.cpp——给出了扩散模型在这一规模上声称过的最强 agent 表格：**SWE-bench Verified 73.6、Terminal-Bench 2.1 51.7、τ³ 65.3**、GPQA-D 83.8、ZebraLogic 95.8、AA-LCR 72.0，在它自己的对比里对 LLaDA2.2 flash、Mercury 2.5 与两个 Qwen 3.x MoE 全面领先。效率那几行要看清分母：**680 tokens/s** 是「on **internal agent workloads**, tested on a single NVIDIA GB300 GPU with BF16 precision and a batch size of 1」——批为 1 正是并行解码最占便宜的地方，而且那套负载不公开；H200 那行（**515 对 365**）比的是「the DFlash2 setup」，即给同类 Qwen 用的某一套加速栈，不是那个模型出厂的状态；最干净的数字是端侧（**INT4、RTX 5070 Ti 16 GB、MATH-500 上 101.8 tok/s** 对 48.5）。架构描述得足够精确、可以核对——一个**双向 Gated DeltaNet**，「previously generated context is efficiently compressed into GDN's recurrent state, while tokens within the current block interact through fine-grained bidirectional softmax attention」，记忆读出被视为同一 softmax 内部一个独立的信息单元，块大小可学习校准，以及一个零初始化的卷积分支处理右侧上下文。它是 **Preview**，六个 agent 分数都还没有独立评测。
+
+**VKORE-325M-NPU-Base（VIDRAFT / FINAL-Bench）在一颗商用纯推理 NPU 上从随机初始化预训练**了一个 325.6M 的 decoder——反向传播在芯片上跑，不用任何预训练权重——用了 **5.0B** 字节级 token 的 FineWeb-Edu，**76,292 步、约四天**，并用相同初始化、数据、批与学习率调度在 B200 上训了孪生体。在 **1,024** 个从未见过的窗口上：NPU **0.7993**、GPU **0.7994**、配对差 **−0.0001 ± 0.0007（标准误）**、NPU 在 **50.1%** 的窗口上更低。两套权重与评测脚本都公开，因此这个比较几分钟内可核。让它可引用的是文章自己的「What we do not claim」：「**Not a capable assistant.** … **Not a speed record.** … **Not the method.** The training loop and the stability technique are in house and **under patent application**. The weights, data recipe, hyperparameters and evaluation are fully open.」这是本库所追踪的可复现性轴上的一个**新切分**：不是「开放权重、封闭数据」，也不是「封闭权重」，而是**结果开放、方法已申请专利**——任何人都能复现那个 0.0001，没有人能复现这次训练。
+
+→ [[fact-check]] [[edge-inference]] [[harness-reliability]]

@@ -13822,5 +13822,35 @@
     "en": "Mark Blaszczyk's first-party disclosure site for *SMS of Death* (WAP Push → `NegativeArraySizeException` in `WapPushOverSms`), published 2026-10-29 after a 90-day Android VRP timeline. Claims are code-level and checkable, but it is one researcher's own testing with no vendor statement behind the \"Won't Fix / Non-Security\" row. Cross-checked (10-29 20:29, first-hand): its line numbers (:217 cast, :244 allocation) and its arithmetic (`88 80 80 80 00` → `0x80000000` through AOSP's own `WspTypeDecoder`) both reproduce against AOSP source on `main`, `android16-release` and `android15-release`.",
     "jp": "Mark Blaszczyk 本人による *SMS of Death*（WAP Push → `WapPushOverSms` の `NegativeArraySizeException`）の開示サイト。2026-10-29、Android VRP の 90 日を経て公開。主張はコード水準で検証できるが、単独研究者の試験であり、「Won't Fix / Non-Security」の行にベンダーの文はない。突合済み（10-29 20:29、一次）：行番号（:217 のキャスト、:244 の確保）と算術（`88 80 80 80 00` → `0x80000000`、AOSP 自身の `WspTypeDecoder` 経由）は `main`、`android16-release`、`android15-release` の AOSP ソースで再現する。",
     "zh": "Mark Blaszczyk 本人对 *SMS of Death*（WAP Push → `WapPushOverSms` 中的 `NegativeArraySizeException`）的披露站点，2026-10-29 经 90 天 Android VRP 时限后发布。其断言都在代码层面可核，但属单一研究者自测，「Won't Fix / Non-Security」那一行没有厂商原文。已交叉核验（10-29 20:29，一手）：行号（:217 的强转、:244 的分配）与算术（`88 80 80 80 00` → `0x80000000`，经 AOSP 自己的 `WspTypeDecoder`）在 `main`、`android16-release`、`android15-release` 的 AOSP 源码上均复现。"
+  },
+  "phorion.io": {
+    "cat": "security",
+    "cred": "med",
+    "density": "high",
+    "cv": 2,
+    "en": "Phorion — endpoint-security vendor blog with first-hand macOS/ESF malware analyses; primary for its own detections, but a vendor publishing its own product's coverage, so read the technical detail and discount the pitch.",
+    "zh": "Phorion — 端点安全厂商博客，发布第一手的 macOS/ESF 恶意软件分析；作为其自身检测结果的一手来源，但同时是自家产品覆盖率的宣传方，技术细节可信、营销部分需打折。",
+    "jp": "Phorion — エンドポイントセキュリティベンダーのブログで、macOS/ESF のマルウェア分析を一次情報として掲載する。ただし自社製品の検知範囲を語るベンダーでもあるため、技術的詳細は取り、宣伝部分は割り引く。",
+    "cvlog": [
+      "2026-10-30 — Claude Code for VS Code 2.1.313 の SSH バックドア主張を、独立した2経路で裏づけ：npm の @anthropic-ai/claude-code に 2.1.313 が存在せず 2.1.312(10-27) と 2.1.314(10-30) の間が空いていること、および上流 CHANGELOG.md に 2.1.313 の記載が0件で 2.1.314 から 2.1.312 へ直接飛ぶこと。前者は Phorion の「登録簿から撤去された」という主張、後者は独立の上流成果物。"
+    ]
+  },
+  "binarysecurity.no": {
+    "cat": "security",
+    "cred": "high",
+    "density": "high",
+    "cv": 1,
+    "en": "Binary Security AS (Oslo) — Norwegian pentest firm's research blog; unusually detailed cloud exploitation write-ups with reproduced payloads and stated caveats, but the author is the finder, so bounty-framing and vendor-fix timelines are self-reported.",
+    "zh": "Binary Security AS（奥斯陆）— 挪威渗透测试公司的研究博客；云漏洞利用文章细节罕见地完整，附可复现载荷并写明注意事项，但作者即发现者，赏金框架与厂商修复时间线均为自述。",
+    "jp": "Binary Security AS（オスロ）— ノルウェーのペネトレーションテスト企業の研究ブログ。クラウドの悪用記事は再現可能なペイロードと注意書きを伴う異例な詳しさだが、著者が発見者本人であるため、報奨金の枠組みとベンダー修正の時系列は自己申告。"
+  },
+  "cloudfoundry.org": {
+    "cat": "security",
+    "cred": "high",
+    "density": "med",
+    "cv": 1,
+    "en": "Cloud Foundry Foundation — the project's own security advisories, the primary record for CAPI/cf-deployment fixes; carries affected ranges, CVSS and reporter credit that the NVD record often lags.",
+    "zh": "Cloud Foundry 基金会 — 项目自家的安全公告，是 CAPI/cf-deployment 修复的一手记录；给出受影响范围、CVSS 与报告者致谢，而 NVD 记录往往滞后于它。",
+    "jp": "Cloud Foundry Foundation — プロジェクト自身のセキュリティアドバイザリで、CAPI/cf-deployment の修正に関する一次記録。影響範囲・CVSS・報告者クレジットを載せており、NVD レコードはしばしばこれに遅れる。"
   }
 }

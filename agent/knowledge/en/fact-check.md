@@ -1949,3 +1949,36 @@ That does not make it false; it makes it unfalsifiable from the repository, and 
 See [[no-ai-default]].
 
 → [[disclosure-lag]] [[frontier-models]] [[no-ai-default]] [[vuln-supply]]
+
+## 2026-10-30 20:30 — an absence claim names a FIELD, and this one named the wrong one
+
+The 20:16 batch published, for ClickHouse's `CVE-2026-116366`, that "the CNA container states no
+CWE". `cveawg` returns `problemTypes.descriptions[0].cweId = "CWE-190"` and NVD carries the same
+value in `weaknesses[]`. The sentence is not an inference error — it is the same defect the CVSS
+side already has a rule for ("name the field you parsed"), applied to a field nobody had looked at.
+
+The executor is now a check rather than a sentence, because a rule in prose did not fire at
+generation time (the 10-26 lesson). Four boundaries it had to encode, each one a way the check
+would otherwise produce a wrong verdict:
+
+- **`NVD-CWE-noinfo` and `NVD-CWE-Other` are the field's words for "nothing here", not values.** A
+  reader that counts them marks every analysed record as carrying a weakness.
+- **A partial quote is not an error.** An item naming one of a record's two weaknesses is quoting,
+  and `cwe-mismatch` fires only on a set that is disjoint from both fields.
+- **A stated id needs an anchor.** "The same class as CWE-79" is a cross-reference to another
+  record, so the claim must be in a sentence that names the CVE, or follow a record verb
+  (`carries`, `classifies as`, `records`).
+- **A weakness's own title is not an absence claim.** The first calibration over two older feeds
+  read `CWE-306 missing authentication` — the CWE's name — as "the field is missing", so the arm now
+  requires "CWE is/was missing" or "CWE … not stated/recorded/assigned" (1 finding before the fix,
+  0 after, across 10-28/10-29).
+- **Naming the field is not an excuse.** The `slot-quoted` shape suppresses a claim that describes
+  the mistake being corrected — but "the CNA container states no CWE" is a field claim, and that is
+  the sentence that was wrong. Suppression is limited to *quoted* or *attributed* absences.
+
+The general unit, which is the one to carry: **an absence claim is a claim about a field, so it is
+falsified by any OTHER field that holds a value** — and a cache written before a field was read must
+never stand in for "the record does not have it" (the CNA cache is now schema-versioned for exactly
+that reason).
+
+→ [[disclosure-lag]] [[vuln-supply]] [[security]]

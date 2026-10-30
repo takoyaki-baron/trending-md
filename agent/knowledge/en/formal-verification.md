@@ -114,3 +114,56 @@ same semantics, and (b) whether the 64 MB bound is ever the thing an attacker ne
 bound is a real constraint only if the parser refuses larger inputs at the same boundary.
 
 Sources: [Anthropic — LLMs are making formal software verification feasible at scale](https://www.anthropic.com/research/formal-verification) · [HN thread](https://news.ycombinator.com/item?id=50202217)
+
+## 2026-10-30 — a proof is a property of the build, not of the process
+
+Two artifacts in one batch ship verification to places the 10-22 run did not: one to WASM, one into a
+game engine. Both state, in their own words, **what stops being checked once the thing is deployed** —
+and that sentence is the reusable part.
+
+**Lasm (`Millillion/lasm`, MIT, 66★, created 2026-09-23, `@lasm/cli` 0.3.5 on npm 2026-10-28T19:07:10Z)
+ahead-of-time compiles ordinary Lean 4 to WebAssembly.** It pins `leanprover/lean4:v4.35.0` exactly and
+installs the toolchain itself. The target table is unusually wide for a 0.x project — Node, Lambda,
+Lambda@Edge, Vercel, Netlify, Azure Functions, Cloud Functions gen2, Workers, Deno Deploy, Supabase Edge,
+Bun, Deno, Fastly Compute, WASI, wasi-http, browsers — and each row is claimed CI-tested against the
+platform's own runtime. Its quick-facts table puts the limit where a reader cannot miss it:
+
+> **Not available at run time:** elaboration, `#eval`-style evaluation, loading `.olean`, Lean's kernel —
+> all of these work at build time.
+
+So the deployed artifact carries **no proof checker**: the theorems are a property of the build you
+shipped, and the process running it neither re-checks nor could. Two more limits are in the same table
+rather than a footnote: edge/Bun/Deno/WASI/browser targets "run Lean single-threaded, without sockets or
+processes (and without files, except on WASI)", against the Node row's full runtime. The flagship claim —
+the Conduit RealWorld app with **117 proved theorems** — is the project's own count (README, `npm run
+proofs`, "no `sorry`, standard axioms only", CI job `conduit.yml`), not independently reproduced; and
+"by project policy CI never deploys to a real cloud account", which is exactly the right policy and also
+means the cloud rows are build-artifact tests rather than deployments.
+
+**DOOMFORMER (`mottopanikeiku/doomformer`, MIT, 36★, created 2026-10-20, v0.4.0) compiles an integer
+neural network into a DOOM map** and lets the engine do the arithmetic: voodoo dolls are numbers, weights
+are lines on the floor, a sum is a light level or a plane height, an activation a staircase, attention a
+ceiling. The MNIST map uses **1,355 dolls**. Published: **10,000 / 10,000** test digits exact, **0**
+mismatches across **20,000** fuzzed nets, and **4** other DOOM engines running the "museum" map exactly.
+Then the part that makes the headline citable — it attacks its own check in a table: tamper with one
+weight line and "the check fails on exactly the inputs that cross it"; mutate one map line **1,004** times
+→ **297 caught**, and "no survivor is proven harmless"; guard every readout page with a poison value →
+"a page that never runs cannot pass old values". And the limit, plainly:
+
+> Every run compares each value the map exposes with NumPy. **That proves the inputs that ran, nothing
+> more.** The MNIST map exposes 248 values; it does not expose its 903 staircase counts or 1,351 gate
+> comparisons.
+
+**Added to the question list (applies to any "verified" claim):**
+
+1. **Where does the checker live after deployment?** A kernel, a `lake check`, or a NumPy comparator that
+   runs at build time is a claim about the build. Ask what the *installed* artifact can still prove — for
+   Lasm the answer is "nothing beyond ordinary compiled code".
+2. **How many values does the check touch, out of how many the artifact computes?** DOOMFORMER's honest
+   denominator is 248 exposed of 2,502-odd internal values (903 staircases + 1,351 comparisons). A
+   verification that covers the outputs proves the outputs.
+3. **Is the count of theorems a count of things a consumer cares about?** 117 theorems over authorization,
+   follows, favorites, slugs, pagination and JSON round trips is a set somebody chose; it is evidence the
+   app *can* be written this way, not a coverage figure.
+
+→ [[frontier-models]] [[fact-check]] [[dev-tools]]

@@ -253,6 +253,26 @@ underlying pages — this produced a two-layer false signal in a single item.
    (`--max-pkgs` caps registry lookups; a cap hit prints `unqueried`, never a pass — and **a
    registry miss is not an answer**, so `newest > bound` proves the range excludes the current
    release, never that the release is fixed; the newest version's bytes are the test).
+   **A vendor's advised install version can fall inside its own CVE record's range — and that is a
+   text join, not a field join** (added 2026-10-30 20:30, filed from Cloud Foundry `CVE-2026-59387`).
+   `node agent/tools/disclosure-lag.mjs --mitigation-census --from … --to …` (or `--ids CVE-…` for a
+   record in hand) fetches the advisory each `references[]` entry points at, extracts the versions it
+   tells a reader to install, and compares them with the record's own bounds. It reproduces the
+   filing case first-hand: the advisory's "Upgrade CAPI to **v1.246.0** or greater" sits inside the
+   CNA's `{version: "0", lessThan: "v1.247.0"}`, and only the *other product row*
+   (`cf-deployment 60.7.0 — Includes CAPI v1.247.0`) clears it. **Four guards, each bought by a live
+   run**: "Confirmed/tested up to X" is where the reporter stopped, never a fix or a bound; a
+   **bundled product line** ("Includes CAPI v1.247.0") is a different artifact; **ranges must not be
+   pooled across products** (CAPI `1.246.0` is trivially "< 60.7.0", so a version is paired with the
+   product its own sentence names, and an unnamed product on a multi-product record is
+   `product-ambiguous`, not a hit); and **the first reference is not necessarily the record's own
+   advisory** — Jackson's incomplete-fix follow-up lists the ORIGINAL advisory first, whose page says
+   "Fixed in 2.18.8" for the *earlier* CVE, so a page naming CVEs and none of them the subject is
+   `page-other-advisory` and the next reference gets a turn (≤2 fetches). "Latest release" is
+   deliberately **not** a fix phrase: every README carries it, and the first live run read Xerte's
+   badge as a remediation. First measured sample: **40 pages of 1,126 candidates** over
+   2026-10-28→29 — 0 `mitigation-inside-range`, 2 `product-ambiguous`, 6 unreadable — so read the
+   prevalence as *unmeasured*, and the filing case as *reproduced*.
    **A missing CWE on a `Received` record is the CNA's silence, not a triage backlog — and the
    "stalled because it is thin" reading is falsified by the records themselves** (added 2026-10-28,
    measured over the same 3,070-record window). Of **398** `Received` records, **155 (38.9%)** carry a
@@ -609,6 +629,22 @@ underlying pages — this produced a two-layer false signal in a single item.
    sentence says the slot is a slot** — "`Primary`/`Secondary` is a slot position, not a provenance" is the
    correction being quoted, not the mistake, and three such items fired on the 10-26 20:34 batch);
    **status** (a prose `vulnStatus` against the record — see the standing-watch paragraph below);
+   **cwe** (added 2026-10-30 20:30 from a published error of my own: item 36 said ClickHouse's
+   `CVE-2026-116366` "CNA container states no CWE" while `cveawg` returned `CWE-190` — so **"states
+   no CWE" is a claim about TWO fields**, and the check reads both, `weaknesses[]` from the same
+   single NVD pull plus `problemTypes` from the CNA **and every ADP** container. Verdicts:
+   `cwe-absent-but-recorded` and `cwe-mismatch`; `NVD-CWE-noinfo`/`NVD-CWE-Other` are the field's
+   words for *nothing here* and never count as a value; a **partial quote is not an error** (an item
+   naming one of a record's two weaknesses is quoting), a stated id must be **anchored to the record**
+   (its own sentence names the CVE, or a record verb precedes it — "the same class as CWE-79" is a
+   cross-reference, not this record's classification), and only a **quoted or attributed** absence is
+   suppressed, because "the CNA container states no…" *is* the claim that was wrong. The CNA cache
+   is schema-versioned (`v: 2`) for exactly this reason: an entry written before the field was read
+   would turn "not fetched by this version" into "absent from the record"), and the **first
+   calibration over older feeds produced the fifth boundary**: the regex's "CWE … missing" arm read
+   **`CWE-306 missing authentication`** — a weakness's own NAME — as an absence claim, so only
+   "CWE is/was missing" and "CWE … not stated/recorded/assigned" count (10-28/10-29 feeds: 1 finding
+   before the fix, 0 after, 9 verified);
    **repo** (`archived`, `stale` past
    `--stale-days`, and `stargazers_count` drifting >10% from the quoted number); **count** (a number
    about the artifact, read against the artifact — `differs` prints the README's own count, `absent`

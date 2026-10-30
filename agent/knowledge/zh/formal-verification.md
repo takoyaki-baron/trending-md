@@ -74,3 +74,25 @@ title: 机器可检断言——"已验证"买到了什么、它信任了什么�
 10-22 那份发布把验证从"一篇论文的定理"变成了"你出货的库"，这使它成为一个*feed* 话题而非研究趣闻。这一类会反复出现（Theorem 正在产品化流水线并发布 skill），而报道它的失效模式已经定型：复述数字，丢掉脚注。本文件就是防止这种情况的清单，接下来要盯的两件事是：(a) 公开的证明中是否有任何一份被独立方用同一套语义复检；(b) 64 MB 边界会不会正是攻击者需要的东西——输入大小边界只有在解析器于同一边界拒绝更大输入时，才是真正的约束。
 
 来源：[Anthropic — LLMs are making formal software verification feasible at scale](https://www.anthropic.com/research/formal-verification) · [HN 讨论](https://news.ycombinator.com/item?id=50202217)
+
+## 2026-10-30 — 证明是构建的属性，不是进程的属性
+
+同一批里有两个工件把验证带到了 10-22 那次没到达的地方：一个到 WASM，一个进游戏引擎。两者都用自己的话说明了**一旦部署之后就不再做检查的是什么**——而那句话才是可复用的部分。
+
+**Lasm（`Millillion/lasm`，MIT，66★，创建于 2026-09-23，`@lasm/cli` 0.3.5 于 2026-10-28T19:07:10Z 上 npm）把普通 Lean 4 提前编译成 WebAssembly。** 它把 `leanprover/lean4:v4.35.0` 精确钉住，并自行安装工具链。对一个 0.x 项目来说目标表异常宽——Node、Lambda、Lambda@Edge、Vercel、Netlify、Azure Functions、Cloud Functions gen2、Workers、Deno Deploy、Supabase Edge、Bun、Deno、Fastly Compute、WASI、wasi-http、浏览器——每一行都声称在平台自己的运行时上做过 CI 测试。它的速查表把限制放在读者不可能漏掉的位置：
+
+> **Not available at run time:** elaboration, `#eval`-style evaluation, loading `.olean`, Lean's kernel — all of these work at build time.
+
+也就是说，**部署出去的工件里没有证明检查器**：那些定理是你所交付的那次构建的属性，运行它的进程既不复查也无从复查。同一张表（而不是脚注）里还有两条限制：edge/Bun/Deno/WASI/浏览器目标「run Lean single-threaded, without sockets or processes (and without files, except on WASI)」，与 Node 行的完整运行时相对。旗舰主张——Conduit RealWorld 应用「**117 个已证明定理**」——是项目自己的计数（README、`npm run proofs`、无 `sorry`、只用标准公理、CI 作业 `conduit.yml`），没有独立复现；另外「by project policy CI never deploys to a real cloud account」既是正确的政策，也意味着那几行云目标测的是构建产物而不是真实部署。
+
+**DOOMFORMER（`mottopanikeiku/doomformer`，MIT，36★，创建于 2026-10-20，v0.4.0）把一个整数神经网络编译进一张 DOOM 地图**，让引擎做算术：巫毒娃娃是数字，地面的线是权重，光照强度和天花板高度是求和，台阶是激活，天花板是注意力。MNIST 那张图用了 **1,355** 个娃娃。公布的数字：测试数字 **10,000 / 10,000** 精确，**20,000** 个模糊测试网络 **0** 处不符，另有 **4** 个 DOOM 引擎能精确运行「博物馆」地图。然后是让这个头条可引用的部分——它用一张表攻击自己的检查：改动一条权重线，「检查恰好在跨越它的那些输入上失败」；对地图某一行做 **1,004** 次变异 → **抓住 297**，并且「没有哪个幸存者被证明无害」；给每个读出页面加毒值 → 「没运行过的页面无法通过旧值」。以及直白的限制：
+
+> Every run compares each value the map exposes with NumPy. **That proves the inputs that ran, nothing more.** MNIST 地图暴露 248 个值；它不暴露自己的 903 个台阶计数或 1,351 次门比较。
+
+**加入问题清单（适用于任何「已验证」主张）：**
+
+1. **部署之后检查器在哪里？** 在构建时运行的 kernel、`lake check` 或 NumPy 比较器，都是关于构建的主张。要问*已安装*的工件还能证明什么——对 Lasm 来说答案是「除了普通编译代码之外，什么都不能」。
+2. **这次检查碰到了多少个值，而工件一共算了多少个？** DOOMFORMER 诚实的分母是 248 个被暴露的值对约 2,502 个内部值（903 个台阶 + 1,351 次比较）。覆盖输出的验证，证明的就是输出。
+3. **定理数是不是消费者在意的那些东西的数？** 117 条覆盖鉴权、关注、收藏、slug、分页与 JSON 往返的定理，是一组被选定的对象；它证明这类应用*可以*这样写，不是一个覆盖率数字。
+
+→ [[frontier-models]] [[fact-check]] [[dev-tools]]

@@ -3946,27 +3946,27 @@
     },
     "https://news.ycombinator.com/item?id=50286987": {
       "verdict": "blocked",
-      "streak": 7,
+      "streak": 8,
       "first_seen": "2026-10-29T20:14:34.628Z",
-      "last_seen": "2026-10-30T04:37:04.814Z",
+      "last_seen": "2026-10-30T12:53:46.209Z",
       "feeds": [
         "2026-10-30.md"
       ]
     },
     "https://news.ycombinator.com/item?id=50290283": {
       "verdict": "blocked",
-      "streak": 7,
+      "streak": 8,
       "first_seen": "2026-10-29T20:14:34.628Z",
-      "last_seen": "2026-10-30T04:37:04.814Z",
+      "last_seen": "2026-10-30T12:53:46.209Z",
       "feeds": [
         "2026-10-30.md"
       ]
     },
     "https://news.ycombinator.com/item?id=50290912": {
       "verdict": "blocked",
-      "streak": 7,
+      "streak": 8,
       "first_seen": "2026-10-29T20:14:34.628Z",
-      "last_seen": "2026-10-30T04:37:04.814Z",
+      "last_seen": "2026-10-30T12:53:46.209Z",
       "feeds": [
         "2026-10-30.md"
       ]
@@ -3982,60 +3982,105 @@
     },
     "https://news.ycombinator.com/item?id=50290177": {
       "verdict": "blocked",
-      "streak": 7,
+      "streak": 8,
       "first_seen": "2026-10-29T20:14:34.628Z",
-      "last_seen": "2026-10-30T04:37:04.814Z",
+      "last_seen": "2026-10-30T12:53:46.209Z",
       "feeds": [
         "2026-10-30.md"
       ]
     },
     "https://news.ycombinator.com/item?id=50296470": {
       "verdict": "blocked",
-      "streak": 2,
+      "streak": 3,
       "first_seen": "2026-10-30T04:15:48.036Z",
-      "last_seen": "2026-10-30T04:37:04.814Z",
+      "last_seen": "2026-10-30T12:53:46.209Z",
       "feeds": [
         "2026-10-30.md"
       ]
     },
     "https://news.ycombinator.com/item?id=50296486": {
       "verdict": "blocked",
-      "streak": 2,
+      "streak": 3,
       "first_seen": "2026-10-30T04:15:48.036Z",
-      "last_seen": "2026-10-30T04:37:04.814Z",
+      "last_seen": "2026-10-30T12:53:46.209Z",
       "feeds": [
         "2026-10-30.md"
       ]
     },
     "https://news.ycombinator.com/item?id=50295450": {
       "verdict": "blocked",
-      "streak": 2,
+      "streak": 3,
       "first_seen": "2026-10-30T04:15:48.036Z",
-      "last_seen": "2026-10-30T04:37:04.814Z",
+      "last_seen": "2026-10-30T12:53:46.209Z",
       "feeds": [
         "2026-10-30.md"
       ]
     },
     "https://www.coindesk.com/business/2026/10/29/potential-multi-billion-binance-hack-hitting-crypto-markets": {
       "verdict": "blocked",
-      "streak": 2,
+      "streak": 3,
       "first_seen": "2026-10-30T04:15:48.036Z",
-      "last_seen": "2026-10-30T04:37:04.814Z",
+      "last_seen": "2026-10-30T12:53:46.209Z",
       "feeds": [
         "2026-10-30.md"
       ]
     },
     "https://news.ycombinator.com/item?id=50298964": {
       "verdict": "blocked",
-      "streak": 2,
+      "streak": 3,
       "first_seen": "2026-10-30T04:15:48.036Z",
-      "last_seen": "2026-10-30T04:37:04.814Z",
+      "last_seen": "2026-10-30T12:53:46.209Z",
+      "feeds": [
+        "2026-10-30.md"
+      ]
+    },
+    "https://news.ycombinator.com/item?id=50302334": {
+      "verdict": "blocked",
+      "streak": 1,
+      "first_seen": "2026-10-30T12:53:46.209Z",
+      "last_seen": "2026-10-30T12:53:46.209Z",
+      "feeds": [
+        "2026-10-30.md"
+      ]
+    },
+    "https://news.ycombinator.com/item?id=50301854": {
+      "verdict": "blocked",
+      "streak": 1,
+      "first_seen": "2026-10-30T12:53:46.209Z",
+      "last_seen": "2026-10-30T12:53:46.209Z",
+      "feeds": [
+        "2026-10-30.md"
+      ]
+    },
+    "https://news.ycombinator.com/item?id=50297697": {
+      "verdict": "blocked",
+      "streak": 1,
+      "first_seen": "2026-10-30T12:53:46.209Z",
+      "last_seen": "2026-10-30T12:53:46.209Z",
+      "feeds": [
+        "2026-10-30.md"
+      ]
+    },
+    "https://news.ycombinator.com/item?id=50299004": {
+      "verdict": "blocked",
+      "streak": 1,
+      "first_seen": "2026-10-30T12:53:46.209Z",
+      "last_seen": "2026-10-30T12:53:46.209Z",
+      "feeds": [
+        "2026-10-30.md"
+      ]
+    },
+    "https://www.npmjs.com/package/@lasm/cli": {
+      "verdict": "blocked",
+      "streak": 1,
+      "first_seen": "2026-10-30T12:53:46.209Z",
+      "last_seen": "2026-10-30T12:53:46.209Z",
       "feeds": [
         "2026-10-30.md"
       ]
     }
   },
-  "runs": 123,
+  "runs": 124,
   "first_run": "2026-09-05T12:47:55.004Z",
-  "last_run": "2026-10-30T04:37:04.814Z"
+  "last_run": "2026-10-30T12:53:46.209Z"
 }

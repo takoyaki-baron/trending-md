@@ -1,5 +1,5 @@
 {
- "generated": "2026-10-30T12:16:31.580Z",
+ "generated": "2026-10-30T12:29:50.813Z",
  "files": [
   {
    "file": "2026-10-30.md",
@@ -15,9 +15,16 @@
     {
      "check": "status",
      "item": 2,
-     "verdict": "status-stale",
-     "claim": "CVE-2026-97229 `Undergoing Analysis`",
-     "detail": "CVE-2026-97229 is `Analyzed` (lastModified 2026-10-30T10:36:26.950), not `Undergoing Analysis` — the record has advanced since; a status is NVD's queue position and it moves without the feed changing"
+     "verdict": "ok",
+     "claim": "CVE-2026-97229 `Analyzed`",
+     "detail": "Analyzed (lastModified 2026-10-30T10:36:26.950)"
+    },
+    {
+     "check": "status",
+     "item": 2,
+     "verdict": "ok",
+     "claim": "CVE-2026-97229 `Analyzed`",
+     "detail": "Analyzed (lastModified 2026-10-30T10:36:26.950)"
     },
     {
      "check": "cvss",
@@ -155,9 +162,9 @@
     {
      "check": "repo",
      "item": 15,
-     "verdict": "star-drift",
+     "verdict": "star-dated",
      "claim": "1239 quoted vs 1477 now",
-     "detail": "l0ng-ai/openidea: -16% — reread the number or date the item"
+     "detail": "l0ng-ai/openidea: -16% — the item dates this reading, so the drift is the trend (the item under-counts a live surge); quote the second reading too"
     },
     {
      "check": "repo",
@@ -183,15 +190,7 @@
    ]
   }
  ],
- "status_watch": [
-  {
-   "id": "CVE-2026-97229",
-   "from": "Undergoing Analysis",
-   "to": "Analyzed",
-   "regressed": false,
-   "modified": "2026-10-30T10:36:26.950"
-  }
- ],
+ "status_watch": [],
  "api_calls": 0,
  "readme_calls": 0,
  "cited_page_calls": 0,

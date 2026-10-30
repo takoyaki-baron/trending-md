@@ -1,6 +1,6 @@
 ---
 date: 2026-10-30
-updated: 2026-10-30T12:16:26Z
+updated: 2026-10-30T12:29:55Z
 schedule: 04:03, 12:03, 20:03 UTC+8
 sources: 32
 license: CC-BY-4.0
@@ -36,7 +36,7 @@ The numbers that travel least well are the context window and the reasoning swit
 - **Source:** CISA KEV · catalog 2026.10.29 · added 2026-10-29
 - **Tags:** `cve` `gitlab` `ruby` `rce` `kev`
 
-CISA added **CVE-2026-97229** to the Known Exploited Vulnerabilities catalog on **2026-10-29**. The record is a **CVSS 3.1 10.0** — `AV:N/AC:L/PR:N/UI:N/S:C/C:H/I:H/A:H` — with CWE-190 (integer overflow), and the score is **GitLab's own** (`cve@gitlab.com` in the `Secondary` slot, 0 NVD-scored metrics). NVD's record sits at **`Undergoing Analysis`** with that single metric, so there is no NVD score to compare it against yet — this is *not* the endorsement case, where an analyzed record keeps only the CNA's number. GitLab fixed it in **19.4.2, released 2026-10-12**; NVD published the record the next day, and KEV followed **17 days after the fix** — 16 after the record. The NVD record does not yet carry the KEV flag — the catalog is the source, not the CVE entry.
+CISA added **CVE-2026-97229** to the Known Exploited Vulnerabilities catalog on **2026-10-29**. The record is a **CVSS 3.1 10.0** — `AV:N/AC:L/PR:N/UI:N/S:C/C:H/I:H/A:H` — with CWE-190 (integer overflow), and the score is **GitLab's own** (`cve@gitlab.com` in the `Secondary` slot, 0 NVD-scored metrics). NVD's record now reads **`Analyzed`** (`lastModified` **2026-10-30T10:36Z**) and still carries that one `cve@gitlab.com` metric with **0** `nvd@nist.gov` metrics — so it **is** the endorsement case: NVD analysed the record and let GitLab's 10.0 stand as its score. The record went `Undergoing Analysis` → `Analyzed` at **10:36Z** the same day, which is why the status is a claim about a timestamp and not about the item. GitLab fixed it in **19.4.2, released 2026-10-12**; NVD published the record the next day, and KEV followed **17 days after the fix** — 16 after the record. The NVD record does not yet carry the KEV flag — the catalog is the source, not the CVE entry.
 
 The root cause is not GitLab's: Ruby's own advisory on **2026-10-23** names four GitLab-assigned identifiers — CVE-2026-89078 (double free in the regexp parser, PR #13332), CVE-2026-93577, CVE-2026-97229 and CVE-2026-110264 — and states plainly, "We have not requested CVE identifiers in Ruby for these fixes, at least for now." Fixes landed in **Ruby 4.0.9, 3.4.12 and 3.3.13**. Two mitigations people will reach for do not work: "`Regexp.timeout` does not protect against these bugs," and "Limiting the length of patterns does not reliably protect against them either," because "some of them can be triggered by short patterns."
 
@@ -239,10 +239,10 @@ The NetBSD Foundation announced on 2026-10-28 that `-current` "now includes an a
 ## 15. OpenIDEA rebuilds the JetBrains workflow in Rust — 169 MB against 2,011 MB, on a benchmark its own README qualifies
 
 - **Velocity:** ▮ steady
-- **Source:** GitHub · 1,239 stars (measured 2026-10-30 04:25 UTC) · created 2026-10-21
+- **Source:** GitHub · 1,239 stars as of 2026-10-30 04:25 UTC · created 2026-10-21
 - **Tags:** `ide` `rust` `tauri` `performance`
 
-`l0ng-ai/openidea` (Apache-2.0) takes the IntelliJ IDEA way of working — keymap, tool windows, search-everywhere — and rebuilds it on a Rust core with Tauri, covering editor, code insight, debugger, Git, terminal, database and HTTP clients for 60+ languages, on macOS, Windows and Linux. At **1,239 stars**, 63 open issues and 9 open pull requests nine days after creation — up from 1,024 / 46 / 9 earlier the same morning, so the counters are still moving — it is the most concrete entry yet in the "rebuild the IDE" genre.
+`l0ng-ai/openidea` (Apache-2.0) takes the IntelliJ IDEA way of working — keymap, tool windows, search-everywhere — and rebuilds it on a Rust core with Tauri, covering editor, code insight, debugger, Git, terminal, database and HTTP clients for 60+ languages, on macOS, Windows and Linux. At **1,239 stars as of 04:25 UTC** (1,477 by 12:30 UTC), 63 open issues and 9 open pull requests nine days after creation — up from 1,024 / 46 / 9 earlier the same morning, so the counters are still moving — it is the most concrete entry yet in the "rebuild the IDE" genre.
 
 The published benchmark opens `freqtrade` (Python, ~770 files) with warm caches, median of 5 runs, against IntelliJ IDEA 2026.2.3 on Windows 11: window with the project **0.9 s vs 3.1 s**, ready **1.1 s vs 13.2 s**, memory (USS, all processes) **169 MB vs 2,011 MB**, CPU time until ready **2.4 s vs 47.9 s**, quit **0.3 s vs 5.9 s**. The README then undercuts its own table: "IDEA analyses Python more deeply, so 'ready' doesn't mean the same work on both sides."
 
@@ -570,7 +570,7 @@ Two more findings follow. Consumption Logic Apps have no managed identity of the
 
 What that buys: "An attacker with a valid build or droplet GUID can submit a forged staging callback, transition a droplet to STAGED, and persist arbitrary process metadata and sidecar data with no associated package or actor" — and the GUID is not the hard part, because "**a SpaceAuditor can enumerate GUIDs without write permissions**, making this an effective privilege escalation beyond the intended role boundary." A read-only role becomes a write.
 
-**Why it matters:** Two dates are worth keeping apart. The Cloud Foundry advisory is dated **2026-10-20**; the CVE record published **2026-10-30** — ten days later, which is why this appears in a batch about today. Affected is stated as "CAPI up to **v1.245.0** (inclusive)," with fixes in **CAPI v1.246.0 or greater** and **cf-deployment v60.7.0 or greater** (which carries CAPI v1.247.0). Reported by Minseong Kim (mak3bread). The generalisable bug is the one every internal-endpoint story in this feed has: a control expressed as a *list of blocked paths* fails the moment a sibling version prefix exists, and version prefixes are exactly what internal APIs accumulate.
+**Why it matters:** Two dates are worth keeping apart. The Cloud Foundry advisory is dated **2026-10-20**; the CVE record published **2026-10-30** — ten days later, which is why this appears in a batch about today. Affected is stated as "**Confirmed** in CAPI up to **v1.245.0** (inclusive)" — a *testing* statement, not a fixed boundary — and the mitigation line recommends "Upgrade CAPI to **v1.246.0** or greater." The CNA's own record disagrees by one release: its `affected[]` reads `{"version": "0", "lessThan": "v1.247.0"}`, so **1.246.0 is still inside the affected range**, and the row that clears it is the other one — cf-deployment **v60.7.0** "Includes CAPI **v1.247.0**." Reported by Minseong Kim (mak3bread). The generalisable bug is the one every internal-endpoint story in this feed has: a control expressed as a *list of blocked paths* fails the moment a sibling version prefix exists, and version prefixes are exactly what internal APIs accumulate.
 
 [`🔗 Cloud Foundry — CVE-2026-59387 advisory`](https://www.cloudfoundry.org/blog/cve-2026-59387-broken-access-control-restriction-in-cloud-controller-api/) · [`🔗 CVE-2026-59387 (NVD)`](https://nvd.nist.gov/vuln/detail/CVE-2026-59387)
 
@@ -582,7 +582,7 @@ What that buys: "An attacker with a valid build or droplet GUID can submit a for
 - **Source:** NVD / ClickHouse CNA · CVE-2026-116366 · published 2026-10-30 11:00 UTC
 - **Tags:** `clickhouse` `cve` `rce` `disclosure`
 
-**CVE-2026-116366** is a **9.5 (CVSS 4.0)** — `AV:N/AC:H/AT:N/PR:N/UI:N/VC:H/VI:H/VA:H/SC:H/SI:H/SA:H` — assigned by `ClickHouse` itself, reserved **2026-10-26T07:54:23Z** and published **2026-10-30T11:00:11Z**. Four days. NVD's record sits at `Received` carrying exactly one metric — the CNA's 9.5, in the `Secondary` slot, with zero `nvd@nist.gov` metrics — so the number is ClickHouse's, not NVD's; the CNA container states no CWE. `AC:H` is the only thing standing between this vector and a 10.0.
+**CVE-2026-116366** is a **9.5 (CVSS 4.0)** — `AV:N/AC:H/AT:N/PR:N/UI:N/VC:H/VI:H/VA:H/SC:H/SI:H/SA:H` — assigned by `ClickHouse` itself, reserved **2026-10-26T07:54:23Z** and published **2026-10-30T11:00:11Z**. Four days. NVD's record sits at `Received` carrying exactly one metric — the CNA's 9.5, in the `Secondary` slot, with zero `nvd@nist.gov` metrics — so the number is ClickHouse's, not NVD's; the CNA container carries **CWE-190** (integer overflow or wraparound), checked first-hand in `cveawg`. `AC:H` is the only thing standing between this vector and a 10.0.
 
 The machine-readable record is precise where it matters. Four branch ranges, all exclusive `lessThan` bounds anchored to `packages.clickhouse.com` and `github.com/ClickHouse/clickhouse`: `26.3 → 26.3.62.3-lts`, `26.8 → 26.8.36.3-lts`, `26.9 → 26.9.27.3-stable`, `26.10 → 26.10.3.7-stable`. The vendor changelog adds the date and the deployment note: "**Fixed in ClickHouse v26.10.3.7, 2026-10-30**," and "A fix for this vulnerability has been applied to all ClickHouse Cloud and BYOC deployments." Credit goes to **Elshad Toklayev**.
 
@@ -726,7 +726,7 @@ The findings are conditions rather than a recipe. "Looping the full transformer 
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-10-30T12:16:26Z |
+| Generated | 2026-10-30T12:29:55Z |
 | Items | 44 |
 | Sources tracked | 32 (Hacker News, GitHub, NVD, CISA KEV, cveawg, PyPI, npm, vendor advisories, CNA advisories, arXiv, Hugging Face, security research blogs, security press, vendor blogs) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (3x daily) |

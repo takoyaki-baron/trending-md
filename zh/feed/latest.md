@@ -1,6 +1,6 @@
 ---
 date: 2026-10-30
-updated: 2026-10-30T12:16:26Z
+updated: 2026-10-30T12:29:55Z
 schedule: 04:03, 12:03, 20:03 UTC+8
 sources: 32
 license: CC-BY-4.0
@@ -36,7 +36,7 @@ Mistral 于 2026-10-29 发布了 Mistral Large 4 的开放权重 — 绰号 "Le 
 - **Source:** CISA KEV · catalog 2026.10.29 · added 2026-10-29
 - **Tags:** `cve` `gitlab` `ruby` `rce` `kev`
 
-CISA 于 **2026-10-29** 把 **CVE-2026-97229** 加入已知被利用漏洞目录。该记录是 **CVSS 3.1 10.0** — `AV:N/AC:L/PR:N/UI:N/S:C/C:H/I:H/A:H` — 归为 CWE-190（整数溢出），而这个分数是 **GitLab 自己给的**（`Secondary` 槽位里是 `cve@gitlab.com`，NVD 自评指标为 0）。NVD 记录目前仍是 **`Undergoing Analysis`**，只有这一个指标，因此还不存在可供对比的 NVD 分数 — 这**不是**"背书"情形（已分析记录只保留 CNA 的分数）。GitLab 在 **19.4.2 中修复，该版本发布于 2026-10-12**；NVD 次日发布记录，KEV 则在**修复后 17 天**跟上 — 即记录发布后 16 天。NVD 记录目前尚未带上 KEV 标记 — 来源是目录本身，不是 CVE 条目。
+CISA 于 **2026-10-29** 把 **CVE-2026-97229** 加入已知被利用漏洞目录。该记录是 **CVSS 3.1 10.0** — `AV:N/AC:L/PR:N/UI:N/S:C/C:H/I:H/A:H` — 归为 CWE-190（整数溢出），而这个分数是 **GitLab 自己给的**（`Secondary` 槽位里是 `cve@gitlab.com`，NVD 自评指标为 0）。NVD 记录现在读作 **`Analyzed`**（`lastModified` **2026-10-30T10:36Z**），仍然只带那一个 `cve@gitlab.com` 指标、**0** 个 `nvd@nist.gov` 指标 — 所以它**就是**"背书"情形：NVD 分析了这条记录，并让 GitLab 的 10.0 作为分数留下。同日它走过了 `Undergoing Analysis` → `Analyzed`（**10:36Z**），这正是为什么状态是对某个时间戳的断言，而不是对某条目的断言。GitLab 在 **19.4.2 中修复，该版本发布于 2026-10-12**；NVD 次日发布记录，KEV 则在**修复后 17 天**跟上 — 即记录发布后 16 天。NVD 记录目前尚未带上 KEV 标记 — 来源是目录本身，不是 CVE 条目。
 
 根因不在 GitLab：Ruby 自己在 **2026-10-23** 的公告里点名了四个 GitLab 分配的编号 — CVE-2026-89078（正则解析器的 double free，PR #13332）、CVE-2026-93577、CVE-2026-97229 和 CVE-2026-110264 — 并明确写道："We have not requested CVE identifiers in Ruby for these fixes, at least for now."修复落在 **Ruby 4.0.9、3.4.12 和 3.3.13**。人们会想到的两个缓解手段都不管用："`Regexp.timeout` does not protect against these bugs"，以及"Limiting the length of patterns does not reliably protect against them either"，因为"some of them can be triggered by short patterns."
 
@@ -239,10 +239,10 @@ NetBSD 基金会于 2026-10-28 宣布 `-current`"now includes an alternative edi
 ## 15. OpenIDEA 用 Rust 重建 JetBrains 那套工作方式 — 169 MB 对 2,011 MB，而基准表被它自己的 README 打了折
 
 - **Velocity:** ▮ steady
-- **Source:** GitHub · 1,239 stars（2026-10-30 04:25 UTC 实测）· created 2026-10-21
+- **Source:** GitHub · 1,239 stars（截至 2026-10-30 04:25 UTC）· created 2026-10-21
 - **Tags:** `ide` `rust` `tauri` `performance`
 
-`l0ng-ai/openidea`（Apache-2.0）把 IntelliJ IDEA 的工作方式 — 键位映射、工具窗口、随处搜索 — 搬到一个 Rust 核心加 Tauri 的原生应用上，覆盖编辑器、代码洞察、调试器、Git、终端、数据库和 HTTP 客户端，支持 60 多种语言，可跑在 macOS、Windows 和 Linux。创建九天后已有 **1,239 stars**、63 个未关 issue 和 9 个未关 PR——同一天早些时候是 1,024 / 46 / 9，计数器仍在动——是"重造 IDE"这一类里目前最具体的作品。
+`l0ng-ai/openidea`（Apache-2.0）把 IntelliJ IDEA 的工作方式 — 键位映射、工具窗口、随处搜索 — 搬到一个 Rust 核心加 Tauri 的原生应用上，覆盖编辑器、代码洞察、调试器、Git、终端、数据库和 HTTP 客户端，支持 60 多种语言，可跑在 macOS、Windows 和 Linux。创建九天后已有 **1,239 stars（截至 04:25 UTC；12:30 UTC 已是 1,477）**、63 个未关 issue 和 9 个未关 PR——同一天早些时候是 1,024 / 46 / 9，计数器仍在动——是"重造 IDE"这一类里目前最具体的作品。
 
 公开的基准以 warm cache 打开 `freqtrade`（Python，约 770 个文件），取 5 次运行中位数，在 Windows 11 上与 IntelliJ IDEA 2026.2.3 对比：打开项目 **0.9 s 对 3.1 s**，ready **1.1 s 对 13.2 s**，内存（USS，全进程）**169 MB 对 2,011 MB**，ready 前的 CPU 时间 **2.4 s 对 47.9 s**，退出 **0.3 s 对 5.9 s**。然后 README 拆了自己的台："IDEA analyses Python more deeply, so 'ready' doesn't mean the same work on both sides."
 
@@ -570,7 +570,7 @@ Binary Security 的 Haakon Wik Gulbrandsrud 于 **2026-10-02** 发表本文，20
 
 这买到什么："持有有效 build 或 droplet GUID 的攻击者可以提交一个伪造的暂存回调，把 droplet 转为 STAGED，并在没有关联 package 或 actor 的情况下持久化任意 process metadata 与 sidecar 数据"——而 GUID 并不难拿，因为"**拥有 SpaceAuditor 角色的人可以在没有写权限的情况下枚举 GUID**，这使它成为一次超出预期角色边界的有效提权。"只读角色变成了写入。
 
-**Why it matters:** 两个日期要分开看。Cloud Foundry 的公告日期是 **2026-10-20**，CVE 记录发布于 **2026-10-30**——晚十天，这才是它出现在今天这批里的原因。受影响范围写作"CAPI 至 **v1.245.0**（含）"，修复为 **CAPI v1.246.0 及以上**与 **cf-deployment v60.7.0 及以上**（内含 CAPI v1.247.0）。报告者是 Minseong Kim（mak3bread）。可推广的缺陷是所有"内部端点"故事共有的那一个：把控制表达成**一份被封锁的路径清单**，只要有兄弟版本前缀存在就会失效，而版本前缀恰恰是内部 API 不断堆积的东西。
+**Why it matters:** 两个日期要分开看。Cloud Foundry 的公告日期是 **2026-10-20**，CVE 记录发布于 **2026-10-30**——晚十天，这才是它出现在今天这批里的原因。受影响范围写作"**经确认**存在于 CAPI 至 **v1.245.0**（含）"——这是一句*测试过*的陈述，不是修复边界——而缓解措施那一行写的是"把 CAPI 升级到 **v1.246.0** 及以上"。该 CNA 自己的记录差了一个版本：`affected[]` 是 `{"version": "0", "lessThan": "v1.247.0"}`，所以 **1.246.0 仍在受影响范围内**，真正越过边界的是另一行——cf-deployment **v60.7.0**"内含 CAPI **v1.247.0**"。报告者是 Minseong Kim（mak3bread）。可推广的缺陷是所有"内部端点"故事共有的那一个：把控制表达成**一份被封锁的路径清单**，只要有兄弟版本前缀存在就会失效，而版本前缀恰恰是内部 API 不断堆积的东西。
 
 [`🔗 Cloud Foundry — CVE-2026-59387 公告`](https://www.cloudfoundry.org/blog/cve-2026-59387-broken-access-control-restriction-in-cloud-controller-api/) · [`🔗 CVE-2026-59387（NVD）`](https://nvd.nist.gov/vuln/detail/CVE-2026-59387)
 
@@ -582,7 +582,7 @@ Binary Security 的 Haakon Wik Gulbrandsrud 于 **2026-10-02** 发表本文，20
 - **Source:** NVD / ClickHouse CNA · CVE-2026-116366 · published 2026-10-30 11:00 UTC
 - **Tags:** `clickhouse` `cve` `rce` `disclosure`
 
-**CVE-2026-116366** 是 **9.5（CVSS 4.0）**——`AV:N/AC:H/AT:N/PR:N/UI:N/VC:H/VI:H/VA:H/SC:H/SI:H/SA:H`——由 `ClickHouse` 自己分配，预留时间 **2026-10-26T07:54:23Z**，发布 **2026-10-30T11:00:11Z**。四天。NVD 记录停在 `Received`，只带一个指标：CNA 的 9.5，位于 `Secondary` 槽，`nvd@nist.gov` 指标为零——所以这个数字是 ClickHouse 的，不是 NVD 的；CNA 容器未给出 CWE。`AC:H` 是这个向量距离 10.0 的唯一障碍。
+**CVE-2026-116366** 是 **9.5（CVSS 4.0）**——`AV:N/AC:H/AT:N/PR:N/UI:N/VC:H/VI:H/VA:H/SC:H/SI:H/SA:H`——由 `ClickHouse` 自己分配，预留时间 **2026-10-26T07:54:23Z**，发布 **2026-10-30T11:00:11Z**。四天。NVD 记录停在 `Received`，只带一个指标：CNA 的 9.5，位于 `Secondary` 槽，`nvd@nist.gov` 指标为零——所以这个数字是 ClickHouse 的，不是 NVD 的；CNA 容器带有 **CWE-190**（整数溢出或回绕），已在 `cveawg` 中第一手核实。`AC:H` 是这个向量距离 10.0 的唯一障碍。
 
 机器可读的部分很精确。四条分支范围，全部是排他的 `lessThan` 上界，锚定到 `packages.clickhouse.com` 与 `github.com/ClickHouse/clickhouse`：`26.3 → 26.3.62.3-lts`、`26.8 → 26.8.36.3-lts`、`26.9 → 26.9.27.3-stable`、`26.10 → 26.10.3.7-stable`。厂商变更日志补上了日期与部署说明："**Fixed in ClickHouse v26.10.3.7, 2026-10-30**"，以及"修复已应用于所有 ClickHouse Cloud 与 BYOC 部署。"致谢给到 **Elshad Toklayev**。
 
@@ -726,7 +726,7 @@ Ai2 的 **"Old Ideas, Novel Problems"**（Kyle Wiggers 与 Ai2Comms，论文、�
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-10-30T12:16:26Z |
+| Generated | 2026-10-30T12:29:55Z |
 | Items | 44 |
 | Sources tracked | 32（Hacker News、GitHub、NVD、CISA KEV、cveawg、PyPI、npm、厂商公告、CNA 公告、arXiv、Hugging Face、安全研究博客、安全媒体、厂商博客） |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8（每日 3 次） |

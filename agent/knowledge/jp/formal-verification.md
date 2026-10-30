@@ -74,3 +74,25 @@ title: 機械検証される主張——「検証済み」が買うもの、そ�
 10-22 の発表は、検証を「論文の定理」から「あなたが出荷するライブラリ」へ移した。それによりこれは研究的好奇心ではなく*フィード*の話題になった。この種は今後反復する（Theorem はパイプラインを製品化し skill を出している）し、報道側の失敗様式も定まっている——数値を繰り返し、脚注を落とす。本ファイルはそれを防ぐチェックリストであり、次に見るべき 2 点は、(a) 公開された証明のいずれかが第三者によって同じ意味論で再検査されるか、(b) 64 MB の境界が攻撃者に必要なものそのものにならないか——入力サイズの境界は、パーサが同じ境界で大きな入力を拒否するときにだけ実効的な制約になる。
 
 出典：[Anthropic — LLMs are making formal software verification feasible at scale](https://www.anthropic.com/research/formal-verification) · [HN スレッド](https://news.ycombinator.com/item?id=50202217)
+
+## 2026-10-30 — 証明はビルドの性質であり、プロセスの性質ではない
+
+同じバッチの二つの成果物は、10-22の実行が届かなかった場所へ検証を運ぶ。一つはWASMへ、一つはゲームエンジンの中へ。どちらも**配備後に検査されなくなるもの**を自分の言葉で書いており、その一文が持ち帰る部分だ。
+
+**Lasm（`Millillion/lasm`、MIT、66★、2026-09-23作成、`@lasm/cli` 0.3.5がnpmに2026-10-28T19:07:10Z公開）は通常のLean 4をAOTでWebAssemblyにコンパイルする。** `leanprover/lean4:v4.35.0`を厳密に固定し、ツールチェーン自体を導入する。0.xのプロジェクトとしては異例に広いターゲット表——Node、Lambda、Lambda@Edge、Vercel、Netlify、Azure Functions、Cloud Functions gen2、Workers、Deno Deploy、Supabase Edge、Bun、Deno、Fastly Compute、WASI、wasi-http、ブラウザ——で、各行はプラットフォーム自身のランタイムに対するCI試験済みとされている。制限は、読み手が見落とせない位置に置かれている：
+
+> **Not available at run time:** elaboration, `#eval`-style evaluation, loading `.olean`, Lean's kernel — all of these work at build time.
+
+つまり配備された成果物は**証明チェッカを含まない**。定理は出荷したビルドの性質であり、実行プロセスは再検査しないし、できもしない。同じ表（脚注ではなく）にさらに二つの制限がある。edge/Bun/Deno/WASI/ブラウザのターゲットは「run Lean single-threaded, without sockets or processes (and without files, except on WASI)」であり、Node行のフルランタイムとは別物だ。看板の主張——Conduit RealWorldアプリの「**117の証明済み定理**」——はプロジェクト自身の数（README、`npm run proofs`、`sorry`なし、標準公理のみ、CIジョブ`conduit.yml`）で、独立再現はない。さらに「by project policy CI never deploys to a real cloud account」は正しい方針であり、同時にクラウド行が実配備ではなくビルド成果物の試験であることを意味する。
+
+**DOOMFORMER（`mottopanikeiku/doomformer`、MIT、36★、2026-10-20作成、v0.4.0）は整数ニューラルネットをDOOMマップにコンパイルし**、算術をエンジンにやらせる。ブードゥー人形が数、床の線が重み、光量や天井高が和、階段が活性化、天井がアテンションだ。MNISTマップは**1,355体**の人形を使う。公表値は、テスト数字**10,000 / 10,000**完全一致、**20,000**個のファズ済みネットで不一致**0**、そして別の**4**つのDOOMエンジンが「museum」マップを正確に実行する。そのうえで見出しを引用可能にする部分——自分の検査を表で攻撃する：重み線を一つ改ざんすると「検査はそれを跨ぐ入力で正確に落ちる」、マップの一行を**1,004**回変異させると**297**件検出、しかも「生存者はどれも無害と証明されていない」、各読み出しページに毒値を置くと「一度も走らないページは古い値を通過できない」。そして率直な限界：
+
+> Every run compares each value the map exposes with NumPy. **That proves the inputs that ran, nothing more.** MNISTマップは248個の値を露出するが、903個の階段カウントや1,351回のゲート比較は露出しない。
+
+**問いリストへの追加（「検証済み」という主張すべてに適用）：**
+
+1. **配備後、チェッカはどこにいるか。** ビルド時に走るカーネル、`lake check`、NumPy比較器はいずれもビルドについての主張だ。*インストールされた*成果物が何を証明できるかを問う——Lasmの答えは「通常のコンパイル済みコード以外は何も」である。
+2. **検査はいくつの値に触れ、成果物は全部でいくつ計算するか。** DOOMFORMERの正直な分母は、露出248対内部約2,502（903の階段＋1,351の比較）。出力を覆う検証は、出力を証明する。
+3. **定理数は、利用者が気にするものの数か。** 認可、フォロー、お気に入り、slug、ページネーション、JSON往復にわたる117の定理は、誰かが選んだ集合だ。このアプリをこのように書けるという証拠であって、カバレッジの数字ではない。
+
+→ [[frontier-models]] [[fact-check]] [[dev-tools]]

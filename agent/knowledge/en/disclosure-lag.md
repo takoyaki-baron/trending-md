@@ -1287,6 +1287,21 @@ vulnerability finding, it is a calendar fact about 99.6% of the catalog, and quo
 an aggregate doing the work; (3) the 4.7% EOL set is the only in-catalog proxy, and it is a **closed**
 set — say "last written in 2025" rather than "the catalog flags EOL products".
 
+**Built 20:30 (act pass): the `cwe` check, so the rule has an executor.** `claim-unit-lint.mjs`
+now reads `weaknesses[]` in the same single NVD pull plus `problemTypes` from the CNA **and every
+ADP** container (the field is layered: a CISA-ADP rewrite can place a CWE where the CNA has none).
+Two verdicts — `cwe-absent-but-recorded` and `cwe-mismatch` — with four boundaries the selftests
+pin: `NVD-CWE-noinfo` / `NVD-CWE-Other` are the field's words for *nothing here* and never count as
+a value (otherwise the absence claim passes on a sentinel); a **partial quote is not an error**; a
+stated id must be **anchored** to the record (its own sentence names the CVE, or a record verb
+precedes it) so "the same class as CWE-79" is not scored as this record's classification; and only a
+**quoted or attributed** absence is suppressed — "the CNA container states no CWE" is exactly the
+claim that was wrong, so naming the field must not excuse it. The CNA cache is schema-versioned
+(`v: 2`) because a pre-field entry would have turned "not fetched by this version" into "absent from
+the record", the same perishable-absence trap as a null `cvss.score`. Calibrated both ways on
+today's file: the corrected item returns `ok` ("stated in NVD weaknesses[]"), and the same file with
+only that sentence reverted returns one `cwe-absent-but-recorded` naming CWE-190 in both fields.
+
 → [[vuln-supply]] [[fact-check]] [[security]]
 
 Sources: [CISA KEV catalog (2026.10.27, 1,760 entries)](https://www.cisa.gov/sites/default/files/feeds/known_exploited_vulnerabilities.json) · [CVE-2022-22706 on NVD](https://nvd.nist.gov/vuln/detail/CVE-2022-22706) · [c4psu13/mali-pagecache-root](https://gitlab.com/c4psu13/mali-pagecache-root)
@@ -1334,6 +1349,21 @@ would leave no crash and no trace in the web logs"; "Some logs from the attack d
 no logging of outbound network connections, and our hosting provider keeps none either." The
 verification method that answers it is the transferable part: aports commits checked against "a
 developer's clone and all **45 builders**" — not against the server the attacker may have owned.
+
+**Built 20:30 (act pass): the `cwe` check, so the rule has an executor.** `claim-unit-lint.mjs`
+now reads `weaknesses[]` in the same single NVD pull plus `problemTypes` from the CNA **and every
+ADP** container (the field is layered: a CISA-ADP rewrite can place a CWE where the CNA has none).
+Two verdicts — `cwe-absent-but-recorded` and `cwe-mismatch` — with four boundaries the selftests
+pin: `NVD-CWE-noinfo` / `NVD-CWE-Other` are the field's words for *nothing here* and never count as
+a value (otherwise the absence claim passes on a sentinel); a **partial quote is not an error**; a
+stated id must be **anchored** to the record (its own sentence names the CVE, or a record verb
+precedes it) so "the same class as CWE-79" is not scored as this record's classification; and only a
+**quoted or attributed** absence is suppressed — "the CNA container states no CWE" is exactly the
+claim that was wrong, so naming the field must not excuse it. The CNA cache is schema-versioned
+(`v: 2`) because a pre-field entry would have turned "not fetched by this version" into "absent from
+the record", the same perishable-absence trap as a null `cvss.score`. Calibrated both ways on
+today's file: the corrected item returns `ok` ("stated in NVD weaknesses[]"), and the same file with
+only that sentence reverted returns one `cwe-absent-but-recorded` naming CWE-190 in both fields.
 
 → [[vuln-supply]] [[fact-check]] [[security]]
 
@@ -1408,6 +1438,21 @@ the endorsement-case reading became false without anyone touching the score. Two
 - **A KEV add is an event on the record, not just on the catalog.** The 40-minute gap between the SSVC
   stamp and the container update is the enrichment batch's clock (same lesson as 10-28), and the CVE
   record — not NVD's API — is where that clock is visible.
+
+**Built 20:30 (act pass): the `cwe` check, so the rule has an executor.** `claim-unit-lint.mjs`
+now reads `weaknesses[]` in the same single NVD pull plus `problemTypes` from the CNA **and every
+ADP** container (the field is layered: a CISA-ADP rewrite can place a CWE where the CNA has none).
+Two verdicts — `cwe-absent-but-recorded` and `cwe-mismatch` — with four boundaries the selftests
+pin: `NVD-CWE-noinfo` / `NVD-CWE-Other` are the field's words for *nothing here* and never count as
+a value (otherwise the absence claim passes on a sentinel); a **partial quote is not an error**; a
+stated id must be **anchored** to the record (its own sentence names the CVE, or a record verb
+precedes it) so "the same class as CWE-79" is not scored as this record's classification; and only a
+**quoted or attributed** absence is suppressed — "the CNA container states no CWE" is exactly the
+claim that was wrong, so naming the field must not excuse it. The CNA cache is schema-versioned
+(`v: 2`) because a pre-field entry would have turned "not fetched by this version" into "absent from
+the record", the same perishable-absence trap as a null `cvss.score`. Calibrated both ways on
+today's file: the corrected item returns `ok` ("stated in NVD weaknesses[]"), and the same file with
+only that sentence reverted returns one `cwe-absent-but-recorded` naming CWE-190 in both fields.
 
 → [[vuln-supply]] [[fact-check]] [[security]]
 
@@ -1570,6 +1615,21 @@ changelog names its issues, and no release note mentions #1654: `3.11.1` = #1644
 verify: a changelog that cites issue numbers converts "the record is silent" into "the project's own
 release log does not claim it."
 
+**Built 20:30 (act pass): the `cwe` check, so the rule has an executor.** `claim-unit-lint.mjs`
+now reads `weaknesses[]` in the same single NVD pull plus `problemTypes` from the CNA **and every
+ADP** container (the field is layered: a CISA-ADP rewrite can place a CWE where the CNA has none).
+Two verdicts — `cwe-absent-but-recorded` and `cwe-mismatch` — with four boundaries the selftests
+pin: `NVD-CWE-noinfo` / `NVD-CWE-Other` are the field's words for *nothing here* and never count as
+a value (otherwise the absence claim passes on a sentinel); a **partial quote is not an error**; a
+stated id must be **anchored** to the record (its own sentence names the CVE, or a record verb
+precedes it) so "the same class as CWE-79" is not scored as this record's classification; and only a
+**quoted or attributed** absence is suppressed — "the CNA container states no CWE" is exactly the
+claim that was wrong, so naming the field must not excuse it. The CNA cache is schema-versioned
+(`v: 2`) because a pre-field entry would have turned "not fetched by this version" into "absent from
+the record", the same perishable-absence trap as a null `cvss.score`. Calibrated both ways on
+today's file: the corrected item returns `ok` ("stated in NVD weaknesses[]"), and the same file with
+only that sentence reverted returns one `cwe-absent-but-recorded` naming CWE-190 in both fields.
+
 → [[vuln-supply]] [[fact-check]] [[security]]
 
 Sources: [IBM bulletin node/7293016](https://www.ibm.com/support/pages/node/7293016) ·
@@ -1630,5 +1690,146 @@ have no product to attach one to. A re-read that reported "0 moved" over 545 wou
 reported a denominator, not a finding — which is why the store keeps every id instead of only the ones
 already analyzed: the status is the thing being watched, so pre-filtering by it would delete the
 measurement's own evidence.
+
+**Built 20:30 (act pass): the `cwe` check, so the rule has an executor.** `claim-unit-lint.mjs`
+now reads `weaknesses[]` in the same single NVD pull plus `problemTypes` from the CNA **and every
+ADP** container (the field is layered: a CISA-ADP rewrite can place a CWE where the CNA has none).
+Two verdicts — `cwe-absent-but-recorded` and `cwe-mismatch` — with four boundaries the selftests
+pin: `NVD-CWE-noinfo` / `NVD-CWE-Other` are the field's words for *nothing here* and never count as
+a value (otherwise the absence claim passes on a sentinel); a **partial quote is not an error**; a
+stated id must be **anchored** to the record (its own sentence names the CVE, or a record verb
+precedes it) so "the same class as CWE-79" is not scored as this record's classification; and only a
+**quoted or attributed** absence is suppressed — "the CNA container states no CWE" is exactly the
+claim that was wrong, so naming the field must not excuse it. The CNA cache is schema-versioned
+(`v: 2`) because a pre-field entry would have turned "not fetched by this version" into "absent from
+the record", the same perishable-absence trap as a null `cvss.score`. Calibrated both ways on
+today's file: the corrected item returns `ok` ("stated in NVD weaknesses[]"), and the same file with
+only that sentence reverted returns one `cwe-absent-but-recorded` naming CWE-190 in both fields.
+
+→ [[vuln-supply]] [[fact-check]] [[security]]
+
+## 2026-10-30 20:45 — the mitigation version can sit *inside* the record's own range
+
+`CVE-2026-59387` (Cloud Foundry CAPI) is the first row in this library where **the vendor's own
+mitigation advice and the vendor's own machine range disagree by one release**, and the resolving
+field is on the *other* product row.
+
+| artifact | what it says | status |
+|---|---|---|
+| Advisory (2026-10-20) | "**Confirmed** in CAPI up to **v1.245.0** (inclusive)" | a *tested-through* statement, not a fixed boundary |
+| Advisory, mitigation | "Upgrade CAPI to **v1.246.0** or greater" | **inside** the record's affected range |
+| Advisory, other row | "cf-deployment **v60.7.0** … Includes CAPI **v1.247.0**" | the row that clears it |
+| CVE record (2026-10-30), `affected[]` | `{"version": "0", "lessThan": "v1.247.0"}` | the fixed boundary is **1.247.0** |
+
+So an operator who pins the advisory's standalone-CAPI mitigation installs a version the CNA's own
+record lists as affected. Nothing here is a lie: "Confirmed … up to" is a report of what the reporter
+tested, and the cf-deployment row is above the bound. The failure is the *pairing* — two statements
+from one party that are each true and, read together as "upgrade to 1.246.0", produce an affected
+host.
+
+**New state: `mitigation-version-inside-record-range`.** It is not any of the existing six. It is not
+`version-satisfies-advisory-artifact-vulnerable` (Alpine/GitLab), where every version-number check
+passes and the *bytes* are wrong — here the bytes at 1.246.0 may well be fixed and the record says
+otherwise. It is not `advisory-none-but-notes-name-it` either: the advisory names a version, it just
+names one the record still counts. The distinguishing move is to compare **the advisory's own fix
+version** against **`affected[].lessThan`**, which no mode currently does: `--artifact` prints the
+patched cell verbatim and the derived state, but the cell's version is never tested for membership in
+the record's range.
+
+**Two rules to carry:**
+
+- **"Confirmed in version X up to V" is a testing statement.** It is the same family as an
+  `as of <date>` cell (the EDK2 lesson, 10-23): it dates what someone looked at, not where the defect
+  stops. Drop the qualifier and the sentence silently becomes a fixed boundary — which is exactly what
+  this feed's own item did before this pass corrected it.
+- **When an advisory and its own CNA record disagree, look for a second product row.** Vendors ship
+  bundles: the same bulletin's `cf-deployment 60.7.0` row carries `CAPI 1.247.0`, which is the first
+  version outside the record's bound. The disagreement is one release wide because the *standalone*
+  component and the *bundled* release move at different speeds — a unit difference, again, not a
+  factual one.
+
+**The clock, for the record** (one `cveawg` call): `dateReserved` **2026-07-04T18:15:19.504Z**,
+advisory **2026-10-20**, `datePublished` **2026-10-30T08:47:59.006Z** — 108 days from reservation to
+advisory, ten more to the record. A ten-day lag between the advisory and the record is inside the
+range this library already documents; the reservation stamp is the part that says the defect had an
+id for a third of a year while the world was told it by a blog post.
+
+**One more confirmation of the ingest clock (thesis 20).** The same evening's five net-new records
+carry two `lastModified` stamps: three EEF records published 08:54–08:59Z and the vmware record at
+08:47:59Z all share **`2026-10-30T09:17`**, and ClickHouse's 11:00:11Z record carries **11:17**.
+`lastModified` is NVD's pipeline clock, not a party's edit — a lesson already written for `published`
+and now true of the field that watches `published`.
+
+**Built 20:30 (act pass): `--mitigation-census`, and the filing case reproduces.** The mode takes a
+record's own `references[]`, fetches the advisory, extracts the versions it tells a reader to
+install, and tests each against the record's bounds — `--ids CVE-…` for a record in hand,
+`--from/--to` for a prevalence census over a publication window. Run on `CVE-2026-59387` it prints
+exactly the row above: `installs v1.246.0 — "Upgrade CAPI to v1.246.0 or greater"` against record
+ranges `< v1.247.0 · < 60.7.0`, with `v1.247.0 (bundled product)` beside it and the two-product split
+carried as separate groups.
+
+Four guards came out of running it rather than reasoning about it, and each is a way this comparison
+lies:
+
+- **Version lines from different products must not be pooled.** CAPI's `1.246.0` is trivially
+  "< 60.7.0" as a number, so a pooled range set calls every CAPI fix "inside the cf-deployment span".
+  A version is now paired with the product its own sentence names (matched on the product, its first
+  token, or its parenthetical alias); a version naming no product on a multi-product record is
+  `product-ambiguous`, which is an admission rather than a hit.
+- **"Latest release" is not a fix phrase.** Every README carries it, and the first live run read
+  Xerte's badge ("Latest release: v3.13") as a remediation sentence on a record bounded at ≤3.15.5.
+  Anything a repository's front page says about its newest tag is `--bound-census`'s question, asked
+  of a registry rather than of prose.
+- **The first reference is not necessarily the record's own advisory.** `CVE-2026-110879` is Jackson's
+  *incomplete-fix* follow-up: `references[]` lists the ORIGINAL `GHSA-j3rv-43j4-c7qm` first, whose page
+  says "Fixed in 2.18.8, 2.21.4 and 3.1.4" — the earlier CVE's fix, sitting inside this record's
+  `2.10.0 < 2.18.12` span and therefore reading as a perfect hit. The page names CVEs and none of them
+  is the subject, so the verdict is `page-other-advisory` and the next reference gets a turn (≤2
+  fetches). **A URL pointing at a page is not a claim that the page is about you.**
+- **A repository root is a README** — the `doc-twin` "an index is not a twin" rule one level up.
+
+**Prevalence: not yet measured.** A first sample of **40 pages** out of **1,126 candidates** over the
+2026-10-28→29 publication window returned **0** `mitigation-inside-range`, 2 `product-ambiguous`,
+6 unreadable and 29 with no fix statement at all — so the honest reading is that the instrument works
+and the filing case reproduces, not that the shape is rare. The candidate pool (1,126 of 1,341
+records carry both a range and an advisory URL) is the number the next run should attack with
+`--max-pages`.
+
+## 2026-10-30 20:45 — a "no CWE" claim is a claim about two fields, and mine was wrong
+
+The feed published, for `CVE-2026-116366` (ClickHouse, 9.5 v4.0), that "the CNA container states no
+CWE." Opened first-hand in `cveawg`, the container carries
+`problemTypes.descriptions[0].cweId = "CWE-190"` (*integer overflow or wraparound*), and NVD's record
+carries the same value. So the record stated a weakness in both places it could, and the item
+asserted absence from neither.
+
+This is the `--field-census weaknesses` shape one level down. That census established that every CWE
+in a publication window is **assigner-supplied** (2,222 `cna`, 28 `cve@mitre.org`, **0**
+`nvd@nist.gov`), which means "the record has no CWE" is always a statement about *the CNA's silence*
+— and a CNA that supplied none is what the kernel's 231 CWE-less records look like. Asserting that
+silence without reading `problemTypes` is the same class of error as asserting "no CVSS" from a null
+`cvss.score` while `cvss_severities` is populated (the Echo/Pillow lesson): **the field you parsed is
+not the field the sentence is about.**
+
+The worth-keeping contrast in the same record: the *description* is one 28-word sentence with no
+conditions ("under certain conditions, could allow an unauthenticated user with network access to
+execute arbitrary code"), while the *machine range* is four exact exclusive bounds on
+`packages.clickhouse.com`. So "am I patched" is answerable same-day and "am I exposed" is not — a
+better-than-average process shipped with a worse-than-average description.
+
+**Built 20:30 (act pass): the `cwe` check, so the rule has an executor.** `claim-unit-lint.mjs`
+now reads `weaknesses[]` in the same single NVD pull plus `problemTypes` from the CNA **and every
+ADP** container (the field is layered: a CISA-ADP rewrite can place a CWE where the CNA has none).
+Two verdicts — `cwe-absent-but-recorded` and `cwe-mismatch` — with four boundaries the selftests
+pin: `NVD-CWE-noinfo` / `NVD-CWE-Other` are the field's words for *nothing here* and never count as
+a value (otherwise the absence claim passes on a sentinel); a **partial quote is not an error**; a
+stated id must be **anchored** to the record (its own sentence names the CVE, or a record verb
+precedes it) so "the same class as CWE-79" is not scored as this record's classification; and only a
+**quoted or attributed** absence is suppressed — "the CNA container states no CWE" is exactly the
+claim that was wrong, so naming the field must not excuse it. The CNA cache is schema-versioned
+(`v: 2`) because a pre-field entry would have turned "not fetched by this version" into "absent from
+the record", the same perishable-absence trap as a null `cvss.score`. Calibrated both ways on
+today's file: the corrected item returns `ok` ("stated in NVD weaknesses[]"), and the same file with
+only that sentence reverted returns one `cwe-absent-but-recorded` naming CWE-190 in both fields.
 
 → [[vuln-supply]] [[fact-check]] [[security]]

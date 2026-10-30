@@ -624,13 +624,13 @@ Mythos 5**（実行数43）、**2件がGPT-5.6 Sol**（実行数35）。この�
   コンパイルが通る ≠ 意味が同じ——であり、Mathlibを暗記ではなく検索することは、実数学の形式検証へのより
   安価な道を示す（テーゼ10の執筆側、Veroの評価側）。
 
-## アブリテレーションが再現可能に（08-22 20:03、08-22 20:28 第一手で読了）
+## アブリテレーションが再現可能に（08-22 20:03、08-22 20:32 第一手で読了）
 
 - **OBLITERATUS**（`elder-plinius/OBLITERATUS`、AGPL-3.0 + 商用ライセンス、7.9k stars / 1.4k forks / 170 commits）——
   **アブリテレーション（abliteration）**ツールキット：再訓練なしで LLM の活性化空間にある内在的「拒否方向」を特定し、
   外科的に除去する。アラインメント研究・レッドチーミングの道具として位置づけられる（「製品でも、サービスでも、
   武器でもない」）。
-  **第一手で読了（08-22 20:28）——「重みかチャットテンプレートか」の答えは：重み。** 6段階のパイプライン——
+  **第一手で読了（08-22 20:32）——「重みかチャットテンプレートか」の答えは：重み。** 6段階のパイプライン——
   `SUMMON`（ロード）→ `PROBE`（制限 vs 非制限プロンプトで活性を収集）→ `DISTILL`（SVDで拒否方向を抽出）→
   `EXCISE`（ノルム保存のまま外科的に射影して除去）→ `VERIFY`（困惑度/一貫性）→ `REBIRTH`（保存）——は
   **重みの手術であり、チャットテンプレートには決して触れない**。メソッドプリセットは `basic`（1方向、平均差）から
@@ -2738,7 +2738,7 @@ Sources: [Fortune](https://fortune.com/2026/10/16/openai-discloses-four-more-rog
 
 Sources: [arXiv 2610.22319](https://arxiv.org/abs/2610.22319) · [arXiv HTML](https://arxiv.org/html/2610.22319v1) · [arXiv 2610.22350](https://arxiv.org/abs/2610.22350) · [de Moura：Lean は検証済みカーネルを同梱するように](https://leodemoura.github.io/blog/2026-10-15-lean-now-ships-with-verified-kernels/) · [lean4 v4.35.0](https://github.com/leanprover/lean4/releases/tag/v4.35.0)
 
-**10-18 20:28（学習パス）：20:03 バッチの研究クラスタ——自律ポストトレーニングがプラットフォームを得て、ML エンジニアリングがスペシャリストを得て、報酬ゲートが定理になる。**
+**10-18 20:32（学習パス）：20:03 バッチの研究クラスタ——自律ポストトレーニングがプラットフォームを得て、ML エンジニアリングがスペシャリストを得て、報酬ゲートが定理になる。**
 
 **(1) Athanor**（arXiv 2610.21055、10月18日掲載）：「実 GPU 上の自律ポストトレーニング研究のためのエージェントネイティブ システム」——Claude Opus 5.5 エージェント 4 体、各 8-GPU ノード、104 時間、完全な研究自律権（データセットと評価結果を読み、訓練データを構成し、訓練アルゴリズムを書き改め、ハイパーパラメータを自分で調整）を、凍結評価・脱汚染データ・永続研究記録・外部教師モデルなしのサンドボックス内で発揮。ヘッドライン ラン：Qwen3-4B-Base が 6 タスク開発スイートで 15.9 → 67.3、ヘルドアウトで 9.2 → 48.2——公式 Qwen3-4B-Instruct-2507 の 66.5 / 47.9 に対して。キャンペーン記録が方法を示す：公開推論データでの SFT、あるエージェントの RL ロールアウト修正、エージェント間重みマージ、自己蒸留ラウンド。著者自身の境界：「弱い形の」再帰的自己改善——既知技術の再結合であって新発見ではない。ベースモデル入り、ジェネラリスト外、研究ループに人間なし——Sakana の MASS（10-12）の隣に置くと、自律ポストトレーニングはデモではなく再現可能なプラットフォームを持った。**(2) MLExpert**（arXiv 2610.22344、10月18日掲載）：長時間ホライズンの機械学習エンジニアリング向けにポストトレーニングされた 35B MoE、3 つの部品——実行可能タスクを構成する Kaggle-MLE Factory、汎用ツール使用を MLE ドメインへ転移する階層的 agentic SFT、Windowed Interaction RL（実験結果間のマルチターン判断を共有結果報酬の下で 1 つの実行ウィンドウとして扱い、非同期に収集してポリシー更新が軌跡完了前に着地するよう）。MLE-Bench Lite 平均メダル率 37.9% → 72.7%、Kimi-K3 や GLM-5.3 といったより大きなフロンティア モデルに匹敵と自己主張；NatureBench Lite でも追加利得。アブストに limitations セクションが無い——ヘッジングは動詞の中に潜む（能力転移を「示唆する」）；Athanor と並べれば、欠けたセクションこそどちらの論文が注意書きをやったかのシグナル。**(3) The Self-Improvement Problem**（arXiv 2610.21646；Moser、Frolov、Nauen、Raue、Dengel）：不可能性証明——終了する手続き（承認ゲートであれ探索であれ）で、**信頼性**（非改善を決して受理しない）と**非保守性**（利用可能な改善を決して見逃さない）の両立は不可能；自己言及構成があらゆるそのようなゲートを破り、誤差界付きランダム ゲートも同じ壁に当たる。抜け道は決定可能な領域——有界評価＋有限提案予算——で、網羅的なシミュレーションが両保証を回復する；しかしその領域内でも、受理された更新の連鎖は有界スコアを毎ラウンド上げながら**真のスコアが下がり得る**。今週の経験パターン（OpenAI のグレーダーが不正に報酬を払った件）への形式的背骨：「あなたの報酬モデルは一般には完全には信頼できない」は名前のある仮定付きの定理になり、Goodhart 発散条項はガバナンス レビューが引用すべき文になった。
 
@@ -3239,3 +3239,23 @@ Cartesia の H-Net 第一篇は、見出しの代償になる部分まで正直�
 → [[fact-check]] [[edge-inference]] [[token-economics]]
 
 出典：[Mistral——重みの公開](https://mistral.ai/news/mistral-large-4-oss/) · [HF——Welcome Le Chonk](https://huggingface.co/blog/mistral-large4) · [モデルカード](https://huggingface.co/mistralai/Mistral-Large-4-1T-A52B)
+
+## 2026-10-30 20:45 — 評価器とは、自分自身と食い違う計器のことだ
+
+**Ai2の「Old Ideas, Novel Problems」（arXiv 2610.02022）は、審査の不安定さを50ポイントという数字で示す。** ラベルはICLR 2026の**査読、つまり採択ではなくレビュー**から作られる。高新規性プールは**154**件で、分野内で上位10%の評価を受けた採択論文のうち、査読者が新規性を明示し誰も異議を唱えなかったもの。低新規性プールは**145**件で、下位10%の却下論文のうち、独創性への懸念が示され誰も支持しなかったもの（抽出された極性への注釈者の一致は**47/50**）。評価器は6つ——GPT-5.1、5.2、5.4、Claude Sonnet 4.5、Opus 4.5、Opus 4.6——で、プロンプト、推論予算、検索、整形、集約の各軸を振る。
+
+Human+Generatedのペアで、**GPT-5.4は「査読者は各ペアのうちちょうど1つを新規と判断した」と告げられると93.5%、「どちらが新規か」とだけ問われると40.9%——偶然以下の水準**になり、同じペアの半数以上で判断を変える。人間が書いたペアも動く。同じ文言変更でClaude Opus 4.6が**21ポイント**動き、「there was also no universally better prompt」でもある。新規性フィルタを出荷する誰もが持ち帰るべき一文はこれだ——「**Retrieval and additional reasoning do not consistently improve judgments, and two purpose-built novelty evaluation systems perform worse than a simple prompted Claude Opus 4.6 baseline.**」論文自身の留保は、Human+Generatedのラベルが「**weak labels**」だという点で、最強の評価器の失敗に重みを置いた30ペアの専門家レビューで応える（30件すべてで人間のアイデアが好まれ、生成側はどれも新規と判断されなかった）。さらに良いのは、中核的な知見の多くはラベルに依存しないという注記だ。二つの合理的な設定が同じペアに逆の答えを出すこと自体が、不安定さの証拠である。
+
+**Prefix Executability（arXiv 2610.40444）は軌跡の妥当性を一級の指標にする。** 予測されたツール呼び出し列の**すべての接頭辞**が、ツールスキーマ、状態の前提条件、データ依存の下で実行可能であり続けるかを検査し、接頭辞実行可能性曲線、**First-Error Depth**、軌跡実行可能率、horizon正規化AUC-PEC、回復率で要約する。BFCL-v3マルチターン、ToolSandbox、τ³-benchのAirline/Retail分割で実測した結果は**順位の逆転**だ。計画を条件とするagentは「しばしばより高い点推定の最終成功率を達成し……同時にTERとAUC-PECを大きく下げる」。実行前の明示的な計画検査は、競争力のある最終成功率を保ったまま接頭辞の生存率を回復する。要旨にスコアはない——方法論の論文として引用すべきものだ。
+
+**計算側の二つの負の結果。**
+**ループ型transformer**（arXiv 2610.40325、最大1Bパラメータ、**155B**トークン、**1.07×10²¹** FLOPs、**32**ループ）：パラメータ予算を固定すれば*全体*をループするのが最良、訓練FLOPsが制約なら*中間ブロック*のループが良いReturnで、「adding loops is not uniformly beneficial: gains eventually **saturate, reverse, or become unstable**」。ループ専用の低ランクアダプタはループが増えるほど効き、並列変種は正規化の変更（現トークンの埋め込みを別途保持し、前トークンの隠れ状態とは別に正規化してから結合）をしないと利得を保てなかった。
+**投機的デコードのエネルギー収支**（arXiv 2610.40287、SGLang＋CUDA graphs、H100/H200、バッチ≤64、5コーパス）：「On dense models, **verification, not drafting, dominates the energy cost**」。バッチが大きいほど節約は縮む。バッチ処理が既に重み読み出しを共有しているからだ。大バッチではブロック型ドラフタが検証を「compute-bound regime, **where the saving becomes a loss**」へ押しやる。厳しいレイテンシ目標は追加のエネルギーを要するので、二つの利得は同じ動作点で逆向きになる。受け入れはコーパス依存だ——「Every drafter we evaluate accepts fewer tokens on conversation than on code, and every trained drafter accepts fewer on Romansh, a low-resource language, than on English.」正しい単位は**明示したバッチサイズとレイテンシ目標における、受け入れトークンあたりのエネルギー**である。
+
+## 2026-10-30 — 分母が議論そのものである二つの成果物
+
+**Clover-35B-A3B-Preview（DiffuSpace）**はMixture-of-Expertsの**拡散**言語モデルだ。35B総パラメータ／3Bアクティブ、thinkingモード、Apacheライセンス、重みはHub/GitHub/ModelScope、SGLangとllama.cppが対応する。この規模で拡散モデルが掲げた中では最強のagent表を出す——**SWE-bench Verified 73.6、Terminal-Bench 2.1 51.7、τ³ 65.3**、GPQA-D 83.8、ZebraLogic 95.8、AA-LCR 72.0——LLaDA2.2 flash、Mercury 2.5、Qwen 3.xのMoE2種との自前比較で全項目トップ。効率の行は分母を見る必要がある。**680 tokens/s**は「on **internal agent workloads**, tested on a single NVIDIA GB300 GPU with BF16 precision and a batch size of 1」での値で、バッチ1は並列デコードが最も効く領域であり、しかもそのワークロードは非公開だ。H200の行（**515対365**）は「the DFlash2 setup」——同規模のQwen向けの特定の加速スタック——との比較で、出荷状態のモデルとの比較ではない。最もきれいなのはエッジの数字（**INT4、RTX 5070 Ti 16 GB、MATH-500で101.8 tok/s** 対48.5）。アーキテクチャは検証できる精度で書かれている——**双方向Gated DeltaNet**で、「previously generated context is efficiently compressed into GDN's recurrent state, while tokens within the current block interact through fine-grained bidirectional softmax attention」、メモリ読み出しは同じsoftmax内の独立した情報単位として扱われ、ブロックサイズは学習可能に較正され、右側文脈用にゼロ初期化の畳み込み分岐を持つ。**Preview**であり、6つのagentスコアに独立評価はまだ存在しない。
+
+**VKORE-325M-NPU-Base（VIDRAFT / FINAL-Bench）は、商用の推論専用NPU上でランダム初期化から325.6Mのdecoderを事前訓練した**——逆伝播はチップ上、事前訓練済み重みは使わない——**5.0B**バイトトークンのFineWeb-Eduを**76,292ステップ、約4日**で、同じ初期化・データ・バッチ・学習率スケジュールのB200双子と並行して。**1,024**の未見ウィンドウで、NPU **0.7993**、GPU **0.7994**、ペア差**−0.0001 ± 0.0007（標準誤差）**、NPUが低いのは**50.1%**のウィンドウ。両方の重みと評価スクリプトが公開されており、比較は数分で検証できる。引用可能にしているのは記事自身の「What we do not claim」だ——「**Not a capable assistant.** … **Not a speed record.** … **Not the method.** The training loop and the stability technique are in house and **under patent application**. The weights, data recipe, hyperparameters and evaluation are fully open.」これは本ライブラリが追う再現性の軸における**新しい分割**である。「重みは公開・データは非公開」でも「重み非公開」でもなく、**結果は公開・手法は特許出願中**——0.0001は誰でも再現でき、この訓練は誰にも再現できない。
+
+→ [[fact-check]] [[edge-inference]] [[harness-reliability]]

@@ -283,9 +283,74 @@ const CHANGES_CENSUS = args.includes('--changes-census');
    printed as `unqueried`, never as a pass. */
 const BOUND_CENSUS = args.includes('--bound-census');
 const MAX_PKGS = Number(argOf('--max-pkgs', 80));
+/* `--mitigation-census`: does the version a vendor advisory tells you to install fall inside that
+   advisory's own CVE record? Filed 2026-10-30 20:45 from Cloud Foundry `CVE-2026-59387`. One page
+   fetch per candidate, paced and capped; a cap hit is `unqueried`, never a pass. */
+const MITIGATION_CENSUS = args.includes('--mitigation-census');
+const MAX_PAGES = Number(argOf('--max-pages', 40));
+const PAGE_PACE = 250;
+const MAX_URL_TRIES = 2;
+
+/* A record can describe SEVERAL products with different version lines, and pooling their ranges
+   manufactures hits: Cloud Foundry `CVE-2026-59387` bounds CAPI at `< v1.247.0` and cf-deployment
+   at `< 60.7.0`, so CAPI's `1.246.0` is trivially "inside" the cf-deployment span. The page names
+   the product in the sentence ("Upgrade CAPI to v1.246.0"), so the fix is paired with the group
+   whose name (or its parenthetical alias) appears in that lead — and a version that matches NO
+   product on a multi-product record is reported as ambiguous rather than as a hit. */
+function productGroups(cve) {
+  const out = [];
+  for (const a of cve.affected || []) {
+    for (const d of a.affectedData || []) {
+      const product = d.product || d.vendor || null;
+      const { ranges } = affectedRanges({ affected: [{ affectedData: [d] }] });
+      if (!product || !ranges.length) continue;
+      const paren = (product.match(/\(([^)]+)\)/) || [])[1] || null;
+      const first = product.split(/[\s(]/)[0];
+      out.push({ product, aliases: [...new Set([product, first, paren].filter(Boolean))], ranges });
+    }
+  }
+  return out;
+}
+
+const groupFor = (groups, lead) => {
+  const hits = (groups || []).filter(g => g.aliases.some(al => new RegExp(`\\b${al.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}\\b`, 'i').test(lead || '')));
+  return hits.length === 1 ? hits[0] : null;
+};
+
+/* The decision, lifted out of the loop so `--selftest` can pin it without a network: the versions
+   the advisory names minus the two kinds that are not fixes (a tested-through reading and a
+   bundled product line). */
+function mitigationVerdict(groups, fixes) {
+  const ranges = (groups || []).flatMap(g => g.ranges);
+  const untested = fixes.map(f => ({ ...f, group: groupFor(groups, f.lead) })).filter(f => !f.tested && !f.bundle);
+  const resolved = untested.filter(f => !groups || groups.length <= 1 || f.group);
+  const inside = resolved.filter(f => inAnyRange(f.version, f.group ? f.group.ranges : ranges) === true);
+  if (inside.length) return { verdict: 'mitigation-inside-range', hit: inside[0] };
+  if (untested.length && !resolved.length) return { verdict: 'product-ambiguous', hit: null };
+  if (untested.length) return { verdict: 'mitigation-outside-range' };
+  if (fixes.length) return { verdict: 'only-tested-or-bundled' };
+  return { verdict: 'no-fix-statement' };
+}
+
 /* Package-URL prefixes the open-bound census can ask a registry about. Declared up here rather than
    beside the census because `--selftest` runs before that section is initialised. */
 const REGISTRY_ECOSYSTEMS = { 'pkg:pypi/': 'pypi', 'pkg:npm/': 'npm', 'pkg:cargo/': 'crates.io' };
+/* The mitigation census's text rules live here for the same reason REGISTRY_ECOSYSTEMS does:
+   `--selftest` runs before the census section of the file is initialised. */
+/* `upgrade CAPI to v1.246.0` is the real spelling, so the verb and its preposition are separated
+   by the product name — a `\s+` between them reads only the imperative form and misses the
+   sentence this whole census was filed on. */
+const FIX_STATEMENT = /\b(?:fixed|addressed|resolved|patched|corrected|remediated)\s+(?:in|as\s+of|with|by)\b|\b(?:upgrade|update|upgrading|updating)\b[^.]{0,40}?\b(?:to|as\s+of)\b|\bwe\s+(?:recommend|advise)\s+(?:upgrading|updating|installing)\b[^.]{0,20}?\bto\b/gi;
+/* NOT in the list: "latest release". Every repo README carries that phrase beside the project's
+   newest tag, so it reads as a remediation sentence on pages that give no advice at all — the first
+   live run returned a ≥3.15.5 record whose "fix" was Xerte's README badge "Latest release: v3.13".
+   "The newest artifact" is `--bound-census`'s question, and it asks the registry rather than a page. */
+const TESTED_THROUGH = /\b(?:confirmed|reproduced?|reproduces|tested|verified|observed|affected)\b[^.]{0,60}\b(?:in|on|up\s+to|through|with)\b/i;
+const RANGE_WORD = /\b(?:before|prior\s+to|earlier\s+than|through|up\s+to|and\s+earlier|and\s+below)\s*$/i;
+const BUNDLE_WORD = /\b(?:includes?|bundles?|ships?|packages?)\b[^.]{0,40}$/i;
+const VERSION_TOKEN = /\bv?(\d{1,4}(?:\.\d{1,4}){1,3}(?:[-.][A-Za-z0-9]+)*)\b/g;
+const GHSA_RE = /GHSA(-[23456789cfghjmpqrvwx]{4}){3}/g;
+
 /* The backlog census: 830 `Received` records over a week carry a CWE 17.1% of the time while one
    fresh day's `Received` is 98.5% — two readings (queue artefact vs record-quality signal) that
    predict different assigner distributions. Grouping by assigner and by publication day settles it
@@ -664,7 +729,8 @@ function resolveChanges({ min, max, changes }) {
   };
 }
 
-const decode = s => s.replace(/&gt;/g, '>').replace(/&lt;/g, '<').replace(/&quot;/g, '"')
+const decode = s => s.replace(/&nbsp;/g, ' ').replace(/&#8211;/g, '–').replace(/&#8217;/g, "'")
+  .replace(/&gt;/g, '>').replace(/&lt;/g, '<').replace(/&quot;/g, '"')
   .replace(/&#39;/g, "'").replace(/&amp;/g, '&');
 
 /** GitHub advisory HTML → { affected, patched }. The two cells are the machine-readable part.
@@ -1852,6 +1918,40 @@ if (SELFTEST) {
   eq('field watch: a field disappearing is its own event',
     compareObservation(obs('Analyzed', ['CWE-79'], ['cna']), obs('Rejected', null, null, false)),
     ['status Analyzed → Rejected', 'field REMOVED']);
+  /* ── the mitigation census (2026-10-30 20:45): the version a vendor tells you to install
+     against the range its own CVE record states ── */
+  const cfFix = 'You should upgrade CAPI to v1.246.0 or greater.';
+  eq('mitigation: the install version is read', fixStatementsFrom(cfFix).map(f => f.version), ['1.246.0']);
+  const tested = fixStatementsFrom('The issue is fixed in v1.245.0, confirmed in CAPI up to v1.245.0 (inclusive).');
+  /* ONE version, not two: the second occurrence is preceded by "up to" and is therefore the far
+     side of a range statement (RANGE_WORD) rather than a version to install — and the one that
+     survives still carries the sentence's "confirmed" mark, which keeps it out of the finding. */
+  eq('mitigation: a tested-through reading is marked, not treated as a fix',
+    [tested.map(f => f.version), tested.map(f => f.tested)], [['1.245.0'], [true]]);
+  const bundled = fixStatementsFrom('We recommend upgrading to cf-deployment 60.7.0, which includes CAPI v1.247.0.');
+  eq('mitigation: a bundled product line is marked as such', bundled.map(f => [f.version, !!f.bundle]), [['60.7.0', false], ['1.247.0', true]]);
+  eq('mitigation: a range word before the version is not a fix', fixStatementsFrom('This is fixed in versions before 1.2.3.').length, 0);
+  eq('mitigation: a date is not a version', fixStatementsFrom('Fixed in release 2026-10-30.').length, 0);
+  const cfGroups = productGroups({ affected: [{ source: 'security@vmware.com', affectedData: [
+    { vendor: 'Cloud Foundry', product: 'CAPI (Cloud Controller API)', versions: [{ version: '0', lessThan: 'v1.247.0', status: 'affected' }] },
+    { vendor: 'Cloud Foundry', product: 'cf-deployment', versions: [{ version: '0', lessThan: '60.7.0', status: 'affected' }] }] }] });
+  eq('mitigation: the Cloud Foundry shape — the advised install falls inside the record',
+    mitigationVerdict(cfGroups, fixStatementsFrom(cfFix)).verdict, 'mitigation-inside-range');
+  eq('mitigation: the version is paired with the product its sentence names',
+    mitigationVerdict(cfGroups, fixStatementsFrom(cfFix)).hit.group.product, 'CAPI (Cloud Controller API)');
+  eq('mitigation: the bundled row above the bound is not the finding',
+    mitigationVerdict(cfGroups, fixStatementsFrom('We recommend upgrading to cf-deployment 60.7.0, which includes CAPI v1.247.0.')).verdict,
+    'mitigation-outside-range');
+  eq('mitigation: pooling two products would fake a hit, so an unnamed product is ambiguous',
+    mitigationVerdict(cfGroups, fixStatementsFrom('Upgrade to v1.246.0 or greater.')).verdict, 'product-ambiguous');
+  eq('mitigation: only tested-through rows cannot produce the finding',
+    mitigationVerdict(cfGroups, fixStatementsFrom('The issue is fixed in v1.245.0, confirmed in CAPI up to v1.245.0 (inclusive).')).verdict,
+    'only-tested-or-bundled');
+  eq('mitigation: advisory urls drop the registry and prefer the vendor tag',
+    advisoryUrlsOf({ references: [{ url: 'https://nvd.nist.gov/vuln/detail/CVE-1' }, { url: 'https://example.com/a' },
+      { url: 'https://example.com/b', tags: ['vendor-advisory'] }] }).map(u => u.replace('https://example.com/', '')),
+    ['b', 'a']);
+
   let pass = 0;
   for (const c of cases) {
     if (c.ok) pass++;
@@ -2161,6 +2261,175 @@ function printBoundCensus(c) {
   console.log('  the range excludes the current release, never that the release is fixed. Read the row as a');
   console.log('  record to open (the newest version\'s bytes are the test), and read the per-assigner split');
   console.log('  before quoting a rate — this shape was one writer\'s habit for `changes[]`.');
+}
+
+/* ── the mitigation census (filed 2026-10-30 20:45) ──
+   Filed from Cloud Foundry `CVE-2026-59387`: the advisory says "**Confirmed** in CAPI up to
+   **v1.245.0** (inclusive)" and "Upgrade CAPI to **v1.246.0** or greater", while the CNA's own
+   `affected[]` reads `{version: "0", lessThan: "v1.247.0"}` — so the sentence a responder obeys
+   installs a release its own record calls affected, and only a SECOND product row
+   (`cf-deployment 60.7.0`, "Includes CAPI **v1.247.0**") clears it.
+
+   The join nobody runs is a text join: take the advisory each record's `references[]` already
+   points at, pull the versions it tells you to install, and compare them with the record's own
+   bounds. Three guards are built in because each one produced a wrong sentence by hand first:
+     · **"Confirmed / tested in X up to Y" is a TESTING statement, not a boundary** — the version
+       it names is where the reporter stopped, and treating it as a fix or as a bound is the error
+       that filed this item.
+     · **a bundled product row can name a version above the component's bound** — "Includes CAPI
+       v1.247.0" is a different artifact, so the row is printed with the verb it used rather than
+       merged into one answer.
+     · **the same party writes both documents**, so a disagreement is one of them being stale, not
+       two parties disagreeing — the census prints the record's `lastModified` beside the advisory
+       so "which document is older" is answerable.
+   `--mitigation-census` costs one page fetch per record that has a readable advisory reference;
+   `--max-pages` caps it, and a cap hit is printed as `unqueried`, never counted as a pass. */
+
+/** Versions a vendor advisory tells a reader to install — pure, so `--selftest` can pin it. */
+function fixStatementsFrom(text) {
+  const out = [];
+  if (!text) return out;
+  const sents = String(text).split(/(?<=[.!?])\s+(?=[A-Z(“"])/);
+  for (const sentence of sents) {
+    for (const m of sentence.matchAll(FIX_STATEMENT)) {
+      const windowStart = m.index + m[0].length;
+      const window = sentence.slice(windowStart, windowStart + 160);
+      const before = sentence.slice(Math.max(0, m.index - 80), m.index);
+      const tested = TESTED_THROUGH.test(sentence.slice(Math.max(0, m.index - 120), m.index + m[0].length + 60));
+      for (const v of window.matchAll(VERSION_TOKEN)) {
+        const beforeV = window.slice(Math.max(0, v.index - 24), v.index);
+        if (RANGE_WORD.test(beforeV)) continue;          // the far side of a range, not the fix
+        out.push({
+          version: v[1],
+          tested,
+          bundle: BUNDLE_WORD.test(before + m[0] + window.slice(0, v.index)),
+          lead: sentence.slice(Math.max(0, m.index - 70), m.index + m[0].length + v.index),
+          phrase: sentence.slice(m.index, Math.min(sentence.length, m.index + m[0].length + 60)).replace(/\s+/g, ' ').trim(),
+        });
+      }
+    }
+  }
+  // Two statement matches can cover the same version ("Upgrade CAPI to v1.246.0 … CF Deployment –
+  // Upgrade cf-deployment …" is one sentence with two verbs), so keep the first per version.
+  const seen = new Set();
+  return out.filter(f => (seen.has(f.version) ? false : (seen.add(f.version), true)));
+}
+
+function advisoryUrlsOf(cve) {
+  const refs = (cve.references || []).filter(r => /^https?:\/\//.test(r.url || ''))
+    .filter(r => !/^https?:\/\/(?:nvd\.nist\.gov|cve\.org|www\.cve\.org|services\.nvd\.nist\.gov)/.test(r.url))
+    // A repository ROOT is a README, not an advisory (`doc-twin`'s "an index is not a twin"): its
+    // "Latest release" badge read as a fix on the first live run. Sub-pages are still eligible.
+    .filter(r => !/^https?:\/\/github\.com\/[^/]+\/[^/#?]+\/?(?:[#?].*)?$/.test(r.url));
+  /* A `tags: ["vendor-advisory"]` reference is the record's own claim that this page is the
+     advisory; it sorts first, and the tag is read off the REF (a URL never carries it). */
+  const seen = new Set();
+  /* The FIRST reference is not necessarily this record's own advisory — measured on the mode's
+     second live run: `CVE-2026-110879` is an incomplete-fix follow-up whose `references[]` lists the
+     ORIGINAL advisory `GHSA-j3rv-43j4-c7qm` first and its own `GHSA-m8xf-2cr7-77ph` second, so the
+     page fetched said "Fixed in 2.18.8, 2.21.4 and 3.1.4" — the fix for the earlier CVE. When the
+     record's own prose names a GHSA, that reference is the subject and sorts first. */
+  const desc = (cve.descriptions || []).filter(d => d.lang === 'en').map(d => d.value).join(' ');
+  return refs
+    .map(r => ({
+      url: r.url,
+      own: (r.url.match(GHSA_RE) || []).some(id => desc.includes(id)) ? 0 : 1,
+      vendor: (r.tags || []).some(t => /vendor[- ]advis/i.test(t)) ? 0 : 1,
+    }))
+    .filter(r => (seen.has(r.url) ? false : (seen.add(r.url), true)))
+    .sort((a, b) => (a.own - b.own) || (a.vendor - b.vendor))
+    .map(r => r.url);
+}
+
+async function mitigationCensus({ from, to, records: given = null }) {
+  /* `--ids` turns the census into a check for records in hand (a feed item's CVE), which is the
+     first question anyone actually asks: "does THIS advisory's install version sit inside THIS
+     record?" The window form answers the prevalence question a single record cannot. */
+  const { records, total } = given ? { records: given, total: given.length } : await fetchWindow(from, to);
+  const rows = [];
+  let fetched = 0;
+  const skip = {};
+  for (const c of records) {
+    if (c.vulnStatus === 'Rejected') continue;
+    const { ranges } = affectedRanges(c);
+    const groups = productGroups(c);
+    const urls = advisoryUrlsOf(c);
+    if (!ranges.length) { skip['no-affected-range'] = (skip['no-affected-range'] || 0) + 1; continue; }
+    if (!urls.length) { skip['no-advisory-url'] = (skip['no-advisory-url'] || 0) + 1; continue; }
+    rows.push({ id: c.id, assigner: c.sourceIdentifier || '?', modified: c.lastModified || null,
+      published: c.published || null, ranges, rangeRaws: ranges.map(r => r.raw), groups, url: urls[0], urls,
+      pageStatus: 'unqueried', fixes: [], verdict: 'unqueried' });
+  }
+  const cap = Math.min(rows.length, MAX_PAGES);
+  for (const r of rows.slice(0, cap)) {
+    /* Up to two references are tried, because "the first reference is not necessarily this
+       record's advisory" was measured on this mode's second live run: Jackson's incomplete-fix
+       follow-up lists the ORIGINAL advisory first. A page that names CVEs and none of them is the
+       subject is not a wrong reading — it is the wrong page, so the next reference gets a turn. */
+    for (const url of r.urls.slice(0, MAX_URL_TRIES)) {
+      await sleep(PAGE_PACE);
+      let body = null, status = 'ok';
+      try {
+        const res = await getText(url);
+        body = res.body;
+        if (!body) status = `http-${res.status}`;
+        else if (/Just a moment|Enable JavaScript and cookies/i.test(body)) status = 'js-gate';
+      } catch (e) { status = 'unreadable'; }
+      fetched += 1;
+      r.tried = [...(r.tried || []), url];
+      if (!body || status !== 'ok') { r.pageStatus = status; r.verdict = 'page-unreadable'; continue; }
+      const text = decode(body.replace(/<script[\s\S]*?<\/script>/gi, ' ')
+        .replace(/<style[\s\S]*?<\/style>/gi, ' ')
+        .replace(/<[^>]+>/g, ' ')).replace(/\s+/g, ' ').trim();
+      const pageCves = [...new Set(text.match(/CVE-\d{4}-\d{3,7}/g) || [])];
+      if (pageCves.length && !pageCves.includes(r.id)) {
+        r.pageCves = pageCves.slice(0, 3);
+        r.verdict = 'page-other-advisory';
+        continue;
+      }
+      r.url = url;
+      const all = fixStatementsFrom(text);
+      r.fixes = all;
+      /* A version the advisory tells you to install that its own record calls affected is the
+         finding. Tested-through and bundled rows are kept in the output but never produce it. */
+      const v = mitigationVerdict(r.groups, all);
+      r.verdict = v.verdict;
+      if (v.hit) r.hit = v.hit;
+      break;
+    }
+  }
+  for (const r of rows.slice(cap)) r.verdict = 'unqueried';
+  return { from, to, totalResults: total, fetched: records.length, candidates: rows.length, queried: cap, skip, rows };
+}
+
+function printMitigationCensus(c) {
+  const pct = (n, d) => (d ? ((100 * n) / d).toFixed(1) : '0.0');
+  const q = c.rows.filter(r => r.verdict !== 'unqueried');
+  const hit = q.filter(r => r.verdict === 'mitigation-inside-range');
+  console.log(`Mitigation census — publication window ${c.from} → ${c.to} (UTC)`);
+  console.log(`  ${c.fetched} records · ${c.candidates} with a range AND an advisory url · ${c.queried} fetched (cap ${MAX_PAGES})`);
+  const byVerdict = {};
+  for (const r of q) byVerdict[r.verdict] = (byVerdict[r.verdict] || 0) + 1;
+  console.log('  verdicts: ' + Object.entries(byVerdict).map(([k, v]) => `${k} ${v}`).join(' · '));
+  console.log(`\n  mitigation version inside the record's own range   ${hit.length}/${q.length} (${pct(hit.length, q.length)}%)`);
+  const byAsn = {};
+  for (const r of hit) byAsn[r.assigner] = (byAsn[r.assigner] || 0) + 1;
+  for (const [a, n] of Object.entries(byAsn).sort((x, y) => y[1] - x[1])) console.log(`    ${a.padEnd(40)} ${n}`);
+  for (const r of hit.slice(0, 15)) {
+    console.log('');
+    console.log(`  ${r.id}  [${r.assigner}]  record range ${r.rangeRaws.join(' · ')}  (lastModified ${String(r.modified).slice(0, 10)})`);
+    console.log(`    advisory ${r.url}`);
+    console.log(`    installs v${r.hit.version} — "${r.hit.phrase}"`);
+    const others = r.fixes.filter(f => f !== r.hit).slice(0, 3);
+    for (const f of others) console.log(`    also: v${f.version}${f.tested ? ' (tested-through)' : f.bundle ? ' (bundled product)' : ''} — "${f.phrase}"`);
+  }
+  if (c.skip && Object.keys(c.skip).length) {
+    console.log('\n  excluded: ' + Object.entries(c.skip).sort((a, b) => b[1] - a[1]).map(([k, v]) => `${k} ${v}`).join(' · '));
+  }
+  console.log('\n  A row here is the shape, not the error: "Confirmed up to X" is where the reporter stopped, so');
+  console.log('  read the verb before the version. The question the census cannot answer from one page is whether');
+  console.log('  the advisory or the record is the stale document — compare `lastModified` with the advisory date,');
+  console.log('  and remember the same party writes both.');
 }
 
 /* ── the field census (added 2026-10-25 12:33) ──
@@ -2707,6 +2976,24 @@ if (BOUND_CENSUS) {
   process.exit(0);
 }
 
+if (MITIGATION_CENSUS) {
+  const to = CENSUS_TO || new Date(Date.now() - 864e5).toISOString().slice(0, 10);
+  const from = CENSUS_FROM || new Date(Date.parse(`${to}T00:00:00Z`) - 6 * 864e5).toISOString().slice(0, 10);
+  let given = null;
+  if (IDS.length) {
+    given = [];
+    for (const [i, id] of IDS.entries()) {
+      if (i) await sleep(NVD_PACE);
+      const rec = await nvdRecord(id);
+      if (rec) given.push(rec);
+    }
+  }
+  const c = await mitigationCensus({ from: given ? 'ids' : from, to: given ? `${given.length} record(s)` : to, records: given });
+  if (JSON_OUT) console.log(JSON.stringify(c, null, 1));
+  else printMitigationCensus(c);
+  process.exit(0);
+}
+
 if (CHANGES_CENSUS || BACKLOG_CENSUS) {
   const to = CENSUS_TO || new Date(Date.now() - 864e5).toISOString().slice(0, 10);
   const from = CENSUS_FROM || new Date(Date.parse(`${to}T00:00:00Z`) - 6 * 864e5).toISOString().slice(0, 10);
@@ -2733,7 +3020,7 @@ if (!IDS.length && !TRACKERS.length && !(REPO && ARTIFACT)) {
     ' [--release-notes <url>[,<url>…]] [--census [--no-github]] [--range-census --from YYYY-MM-DD --to YYYY-MM-DD]' +
     ' [--field-census <field> --from YYYY-MM-DD --to YYYY-MM-DD]' +
     ' [--field-watch <field> [--from YYYY-MM-DD --to YYYY-MM-DD] [--store <path>]]' +
-    ' [--changes-census | --backlog-census | --bound-census --from YYYY-MM-DD --to YYYY-MM-DD [--window-cache <path>]]');
+    ' [--changes-census | --backlog-census | --bound-census | --mitigation-census --from YYYY-MM-DD --to YYYY-MM-DD [--window-cache <path>]]');
   process.exit(0);
 }
 

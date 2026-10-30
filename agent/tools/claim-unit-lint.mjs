@@ -207,7 +207,7 @@ const MAX_GHSA = Number(arg('max-ghsa') ?? 6);
 // 200-CVE census from turning the pre-commit lint into a crawler.
 const MAX_CNA = Number(arg('max-cna') ?? 30);
 const CACHE_PATH = arg('cache') ?? 'agent/data/claim-unit-cache.json';
-const CHECKS = new Set((arg('check') ?? 'issues,cvss,status,temporal,repo,count,bundle').split(',').map((s) => s.trim()));
+const CHECKS = new Set((arg('check') ?? 'issues,cvss,status,temporal,cwe,repo,count,bundle').split(',').map((s) => s.trim()));
 
 const SELFTEST = has('selftest');
 const STATUS_WATCH = has('status-watch');
@@ -422,7 +422,14 @@ function nvdBatch(cves) {
       if (!ver) continue;
       for (const m of arr) metrics.push({ version: ver, type: m.type, source: m.source, score: (m.cvssData ?? {}).baseScore, vector: (m.cvssData ?? {}).vectorString });
     }
-    map.set(c.id, { status: c.vulnStatus, assigner: c.sourceIdentifier, modified: c.lastModified, published: c.published, metrics });
+    /* `weaknesses[]` is a FIELD the cvss read already pays for and never parsed. `NVD-CWE-noinfo`
+       and `NVD-CWE-Other` are the field's words for "nothing here", not CWE ids, so they are kept
+       as values and filtered at use (a test for absence must not read them as presence). */
+    const cwe = [];
+    for (const w of c.weaknesses ?? []) {
+      for (const d of w.description ?? []) cwe.push({ value: d.value, source: w.source, type: w.type });
+    }
+    map.set(c.id, { status: c.vulnStatus, assigner: c.sourceIdentifier, modified: c.lastModified, published: c.published, metrics, cwe });
   }
   return map;
 }
@@ -681,13 +688,16 @@ function cnaState(id) {
   const key = `cna:${id}`;
   const hit = cache[key];
   const ttl = hit?.error ? ERROR_TTL_MS : CACHE_TTL_MS;
-  if (hit && Date.now() - Date.parse(hit.fetched_at) < ttl) return hit;
+  // `v` gates the cache schema: entries written before the cwe read carry no `problemTypes`, and a
+  // missing array would read as "the container states no CWE" — the exact claim this check exists
+  // to test. A schema-less hit is stale, not evidence.
+  if (hit && hit.v === CNA_CACHE_V && Date.now() - Date.parse(hit.fetched_at) < ttl) return hit;
   let j;
   try {
     j = JSON.parse(execFileSync('curl', ['-s', '--max-time', '20', `https://cveawg.mitre.org/api/cve/${id}`], { encoding: 'utf8', maxBuffer: 8 * 1024 * 1024 }));
     if (!j?.cveMetadata) throw new Error('not-in-cveawg');
   } catch (e) {
-    cache[key] = { fetched_at: new Date().toISOString(), error: e.message === 'not-in-cveawg' ? 'not-in-cveawg' : 'unreadable' };
+    cache[key] = { fetched_at: new Date().toISOString(), v: CNA_CACHE_V, error: e.message === 'not-in-cveawg' ? 'not-in-cveawg' : 'unreadable' };
     return cache[key];
   }
   const metrics = [];
@@ -698,7 +708,17 @@ function cnaState(id) {
       metrics.push({ version, score: d.baseScore, temporalScore: d.temporalScore, vector: d.vectorString, field: `containers.cna.metrics.${k}.baseScore` });
     }
   }
-  cache[key] = { fetched_at: new Date().toISOString(), state: j.cveMetadata.state, assigner: j.cveMetadata.assignerShortName, metrics };
+  /* problemTypes is CVE 5.x's weakness field, and it exists in the CNA container AND in every ADP
+     container. A CISA-ADP rewrite can therefore place a CWE where the CNA has none — the same
+     layered-record shape the score check already names, so the origin is carried, not flattened. */
+  const cwe = [];
+  const containers = [['cna', j.containers?.cna], ...Object.entries(j.containers?.adp ?? {}).map(([k, v]) => [`adp${k ? `[${k}]` : ''}`, v])];
+  for (const [origin, c] of containers) {
+    for (const pt of c?.problemTypes ?? []) {
+      for (const d of pt.descriptions ?? []) if (d.cweId) cwe.push({ value: d.cweId, origin, description: d.description });
+    }
+  }
+  cache[key] = { fetched_at: new Date().toISOString(), v: CNA_CACHE_V, state: j.cveMetadata.state, assigner: j.cveMetadata.assignerShortName, metrics, cwe };
   return cache[key];
 }
 
@@ -1086,6 +1106,111 @@ function checkTemporal(it, cna, subjects) {
   return out;
 }
 
+// ── check G: the weakness field ────────────────────────────────────────────────────────────────
+/* "States no CWE" is a claim about TWO fields, and I published one on 2026-10-30 that was false:
+ * item 36 said ClickHouse's CVE-2026-116366 "CNA container states no CWE" while `cveawg` returns
+ * `problemTypes.descriptions[0].cweId = "CWE-190"` (and NVD carries it too). The rule that would
+ * have caught it is the one already written for scores — name the field, then read it — so the
+ * executor is a check rather than another sentence.
+ *
+ * Two shapes only:
+ *   - `cwe-absent-but-recorded` — an absence claim on a record that carries a CWE id in either
+ *     field (`weaknesses[]` is NVD's, `problemTypes` is the CNA/ADP's).
+ *   - `cwe-mismatch` — a stated CWE id set that is DISJOINT from both fields. A partial quote is
+ *     not an error: an item naming one of a record's two weaknesses is quoting, not misstating.
+ * Suppression is narrow, and the narrowness is the point: an item that names the field it read
+ * ("the CNA container states no…") is still making the claim and must fire — that is the exact
+ * sentence that was wrong. Only a *quoted* or *attributed* absence is suppressed, because a
+ * correction that reproduces the mistaken reading must not be scored as the mistake.
+ */
+/* The second half used to read `CWE … missing` within 24 characters, and the first calibration over
+   an older feed caught it reading **CWE-306 "missing authentication"** — a weakness's own NAME — as
+   an absence claim about the field. An identifier followed by an adjective from its title is not a
+   claim; only "CWE is/was missing" and "CWE … not stated/recorded/assigned" are. */
+const CWE_ABSENT = /\b(?:no|without|states?\s+no|carries?\s+no|names?\s+no|records?\s+no|assigns?\s+no|has\s+no|lists?\s+no)\s+(?:an?\s+|any\s+)?CWE\b|\bCWE\b\s+(?:is|was)\s+(?:absent|missing|not\s+(?:stated|recorded|assigned))\b|\bCWE\b[^.]{0,14}\bnot\s+(?:stated|recorded|assigned)\b/gi;
+const CWE_NOISE = /^NVD-CWE-(?:noinfo|Other)$/i; // the field's words for "nothing here"
+const CWE_ID = /\bCWE-\d{1,5}\b/g;
+const CWE_ANCHOR = /\b(?:carries|carried|lists?|listed|names?|named|records?|recorded|assigns?|assigned|classif\w+|categor\w+|states?|stated|maps?\s+to|weakness(?:es)?)\b[^.;]{0,12}$/i;
+
+function cweClaims(plain) {
+  const out = [];
+  for (const m of plain.matchAll(CWE_ABSENT)) {
+    const before = plain.slice(Math.max(0, m.index - 40), m.index);
+    if (/["“'‘]\s*$/.test(before)) continue;                                       // quoted speech
+    if (/\b(?:report|read|say|see|claim|describ|interpret|parse|treat|render|calls?)\w*\b[^.]{0,24}$/i.test(before)) continue; // attributed to a reader
+    out.push({ kind: 'absent', at: m.index, phrase: m[0] });
+  }
+  for (const m of plain.matchAll(CWE_ID)) {
+    out.push({ kind: 'stated', at: m.index, value: m[0], phrase: m[0] });
+  }
+  return out.sort((a, b) => a.at - b.at);
+}
+
+function checkCwe(it, subjects, cna) {
+  const out = [];
+  const t = strip(it.text);
+  const claims = cweClaims(t);
+  if (!claims.length) return out;
+  const mentions = idMentions(t);
+  if (!mentions.length) return out; // no subject → nothing to read (and not an error: CWE describes a class)
+  const ctx = { sents: sentences(t), primary: primarySubject(t, mentions) };
+  const seen = new Set();
+
+  for (const cl of claims) {
+    const bound = bindSubject(cl.at, mentions, ctx);
+    if (!bound || bound.kind !== 'cve') continue; // a GHSA has no weaknesses field of its own
+    const key = `${bound.id}:${cl.kind}`;
+    if (seen.has(key)) continue;
+    seen.add(key);
+    const nvd = subjects.get(bound.id);
+    const rec = cna?.get(bound.id);
+    const nvdRead = !!nvd && !nvd.error;
+    const cnaRead = !!rec && !rec.error;
+    const values = [
+      ...(nvdRead ? (nvd.cwe ?? []).filter((w) => !CWE_NOISE.test(w.value)).map((w) => ({ value: w.value, origin: `NVD weaknesses[] (${w.source})` })) : []),
+      ...(cnaRead ? (rec.cwe ?? []).map((w) => ({ value: w.value, origin: `${w.origin} problemTypes` })) : []),
+    ];
+    const ids = [...new Set(values.map((v) => v.value))];
+    const where = values.map((v) => `${v.value} in ${v.origin}`).join(' · ');
+
+    if (cl.kind === 'absent') {
+      if (ids.length) {
+        out.push({ check: 'cwe', item: it.n, verdict: 'cwe-absent-but-recorded', claim: `${bound.id} “${cl.phrase}”`,
+          detail: `${bound.id} carries ${where} — the absence claim is about a field, and this one has a value; an absence asserted from a different field (or from coverage) is the recurring defect, re-run \`nvd-provenance.mjs --ids ${bound.id}\` or read cveawg before writing it` });
+        continue;
+      }
+      if (nvdRead && cnaRead) {
+        out.push({ check: 'cwe', item: it.n, verdict: 'ok', claim: `${bound.id} no CWE`,
+          detail: `absent from both fields read first-hand (NVD weaknesses[], cna/adp problemTypes)${cl.phrase.toLowerCase().includes('cna') ? '' : ''} — the absence is a field fact, not a coverage gap` });
+      } else {
+        out.push({ check: 'cwe', item: it.n, verdict: 'cwe-unreadable', claim: `${bound.id} “${cl.phrase}”`,
+          detail: `only ${[nvdRead && 'NVD weaknesses[]', cnaRead && 'cna problemTypes'].filter(Boolean).join(' + ') || 'neither field'} could be read — an unread field is not an absent value` });
+      }
+      continue;
+    }
+
+    // stated set — only a CLASSIFICATION claim about this record, not every mention of a CWE id
+    // ("a similar CWE-79 pattern" is a cross-reference, and scoring it against the subject's record
+    // would manufacture a mismatch). Anchored = its own sentence names the CVE, or a record verb
+    // sits just before it.
+    const sent = ctx.sents.find((x) => cl.at >= x.start && cl.at < x.end);
+    const inOwnSentence = !!sent && mentions.some((m) => m.at >= sent.start && m.at < sent.end && m.id === bound.id);
+    const before60 = t.slice(Math.max(0, cl.at - 60), cl.at);
+    if (!inOwnSentence && !CWE_ANCHOR.test(before60)) continue;
+    if (!nvdRead && !cnaRead) {
+      out.push({ check: 'cwe', item: it.n, verdict: 'cwe-unreadable', claim: `${bound.id} ${cl.value}`, detail: 'neither NVD nor cveawg could be read — unverifiable is not wrong' });
+      continue;
+    }
+    if (ids.includes(cl.value)) {
+      out.push({ check: 'cwe', item: it.n, verdict: 'ok', claim: `${bound.id} ${cl.value}`, detail: `stated in ${values.find((v) => v.value === cl.value).origin}` });
+    } else {
+      out.push({ check: 'cwe', item: it.n, verdict: 'cwe-mismatch', claim: `${bound.id} ${cl.value}`,
+        detail: `${bound.id} records ${ids.length ? where : 'no CWE id at all (its values are the field\'s "nothing here" sentinels)'} — the item\'s stated set is disjoint from both fields` });
+    }
+  }
+  return out;
+}
+
 // ── check C: repo state ─────────────────────────────────────────────────────────────────────
 let cache = {};
 try { cache = JSON.parse(readFileSync(CACHE_PATH, 'utf8')); } catch { /* first run */ }
@@ -1095,6 +1220,9 @@ let apiCalls = 0;
 let repoCalls = 0;
 const CACHE_TTL_MS = 6 * 3600 * 1000;
 const ERROR_TTL_MS = 10 * 60 * 1000;
+// Bump when the stored shape grows: a cached entry missing a field the check reads would turn
+// "not fetched by this version" into "absent from the record".
+const CNA_CACHE_V = 2;
 
 function repoState(slug) {
   const hit = cache[slug];
@@ -1192,6 +1320,24 @@ function oldestCommit(slug) {
 }
 
 /** The sentence the *star quote itself* lives in — a bare `indexOf("56")` finds a version first. */
+/* A dated item may already carry the second reading — item 15 of 10-30 reads "**1,239 stars as of
+ * 04:25 UTC**, 1,477 by 12:30 UTC" and the checker, which only recognises a number followed by
+ * `stars`/`★`, saw one quote and advised "quote the second reading too" about a sentence that had
+ * it. Only the ADVICE changes: a higher number with its own clock (`by 12:30 UTC`, `now`, `later`)
+ * ANYWHERE in the item means the drift is already disclosed, so the finding says so rather than
+ * asking for work that is done — and it must scan the whole item, because item 15's quote sits on
+ * the `Source:` line while its second reading sits in the body, two "sentences" apart under a
+ * splitter that breaks only on punctuation. Deliberately narrow — an unrelated large number (a
+ * memory total, say) carries no clock and must not read as a second star count. */
+function laterReading(sent, biggest) {
+  for (const m of sent.matchAll(/\b(\d[\d,]{2,})\b/g)) {
+    const n = toNum(m[1]);
+    if (!(n > biggest)) continue;
+    const after = sent.slice(m.index + m[0].length, m.index + m[0].length + 30);
+    if (/^\s*(?:by|as\s+of|at)\s+\d{1,2}:\d{2}\b/i.test(after) || /^\s*(?:now|later|since)\b/i.test(after)) return n;
+  }
+  return null;
+}
 function starQuoteSentence(plain, n) {
   const re = /([+\-−]?)(\d[\d,]*(?:\.\d+)?)\s*(k)?\s*(?:★|stars?\b)/gi;
   for (const m of plain.matchAll(re)) {
@@ -1268,11 +1414,13 @@ function checkRepo(it, budget, ageBudget) {
       const dated = DATED_QUOTE.test(starQuoteSentence(it.plain, biggest));
       // negative delta = quoted below today's count = the repo grew under the item
       const dir = starDelta < 0 ? 'the item under-counts a live surge' : 'the item over-counts';
+      const later = dated ? laterReading(it.plain, biggest) : null;
       out.push({
         check: 'repo', item: it.n, verdict: dated ? 'star-dated' : 'star-drift',
         claim: `${biggest} quoted vs ${st.stars} now`,
         detail: dated
-          ? `${slug}: ${(starDelta * 100).toFixed(0)}% — the item dates this reading, so the drift is the trend (${dir}); quote the second reading too`
+          ? `${slug}: ${(starDelta * 100).toFixed(0)}% — the item dates this reading, so the drift is the trend (${dir})`
+            + (later ? `; it already quotes the later reading (${later}), so nothing to correct` : '; quote the second reading too')
           : `${slug}: ${(starDelta * 100).toFixed(0)}% — reread the number or date the item`,
       });
     }
@@ -1801,6 +1949,11 @@ if (SELFTEST) {
   t('real repo slug survives', slugs('`obra/superpowers` and `zip-rs/zip2`'), ['obra/superpowers', 'zip-rs/zip2']);
   // a dated star quote is a surge signal, not a stale number (2026-10-28 item 5: 56 → 114)
   t('dated quote detected', DATED_QUOTE.test('at the time of writing holds 56 stars and one commit'), true);
+  // 2026-10-30 item 15: the item already quoted the second reading, and the advice said to add it
+  t('a later reading in the same sentence is recognised',
+    laterReading('At 1,239 stars as of 04:25 UTC (1,477 by 12:30 UTC), 63 open issues and 9 PRs', 1239), 1477);
+  t('an unrelated larger number is not a later reading',
+    laterReading('At 1,239 stars as of 04:25 UTC, using 2,011 MB of memory', 1239), null);
   t('undated quote is not dated', DATED_QUOTE.test('the repo holds 56 stars and one commit'), false);
   t('age claim detected', AGE_CLAIM.test('a six-day-old project with 9,479 commits'), true);
   t('version number is not an age claim', AGE_CLAIM.test('released 1.4.0 with 12 days of work'), false);
@@ -1851,6 +2004,42 @@ if (SELFTEST) {
     statusMentions('Analyzed results are in the appendix.').length, 0);
   t('status: a claim with no CVE cannot be checked',
     checkStatus(mk('t', 'NVD marked the record `Analyzed`.'), new Map()).map((x) => x.verdict), ['status-no-cve']);
+
+  // weakness field — "states no CWE" is a claim about TWO fields (built 2026-10-30 from item 36,
+  // where I published that sentence about a record whose CNA container said CWE-190)
+  const cw = (body, nvdCwe = ['CWE-190'], cnaCwe = [{ value: 'CWE-190', origin: 'cna' }], rec = true) =>
+    checkCwe(mk('t', body),
+      new Map([['CVE-2026-116366', { status: 'Received', metrics: [], cwe: nvdCwe.map((v) => ({ value: v, source: 'cna' })) }]]),
+      new Map(rec ? [['CVE-2026-116366', { state: 'PUBLISHED', assigner: 'ClickHouse', metrics: [], cwe: cnaCwe }]] : [])).map((x) => x.verdict);
+  t('cwe: the 10-30 defect — "the CNA container states no CWE" on a record that has one',
+    cw('CVE-2026-116366 is a 9.5. The CNA container states no CWE.'), ['cwe-absent-but-recorded']);
+  t('cwe: naming the field that was read is still the claim, so it still fires',
+    cw('CVE-2026-116366. NVD weaknesses[] carries no CWE.'), ['cwe-absent-but-recorded']);
+  t('cwe: the corrected sentence is verified and says which field holds it',
+    checkCwe(mk('t', 'CVE-2026-116366. The CNA container carries CWE-190.'), new Map([['CVE-2026-116366', { cwe: [] }]]),
+      new Map([['CVE-2026-116366', { cwe: [{ value: 'CWE-190', origin: 'cna' }] }]])).map((x) => x.detail),
+    ['stated in cna problemTypes']);
+  t('cwe: a quoted or attributed absence is a correction, not the mistake',
+    cw('CVE-2026-116366. A reader that parses the field reports "no CWE" here.'), []);
+  t('cwe: NVD-CWE-noinfo is "nothing here", not a weakness',
+    checkCwe(mk('t', 'CVE-2026-116366. The CNA container states no CWE.'), new Map([['CVE-2026-116366', { cwe: [{ value: 'NVD-CWE-noinfo', source: 'nvd@nist.gov' }] }]]),
+      new Map([['CVE-2026-116366', { cwe: [] }]])).map((x) => x.verdict), ['ok']);
+  t('cwe: a disjoint stated id is a mismatch',
+    cw('CVE-2026-116366 is classified as CWE-79 by the vendor.'), ['cwe-mismatch']);
+  t('cwe: a partial quote of a two-value record is not an error',
+    cw('CVE-2026-116366 is classified as CWE-190 by the vendor.', ['CWE-190'], [{ value: 'CWE-190', origin: 'cna' }, { value: 'CWE-20', origin: 'cna' }]), ['ok']);
+  t('cwe: a cross-reference to another class is not this record\'s classification',
+    cw('CVE-2026-116366. It is the same class as CWE-79 elsewhere.'), []);
+  t('cwe: an unread CNA container cannot turn into an absent value',
+    cw('CVE-2026-116366. The CNA container states no CWE.', [], [], false), ['cwe-unreadable']);
+  t('cwe: no CVE in the item is not a claim to check',
+    checkCwe(mk('t', 'The container states no CWE.'), new Map(), new Map()).length, 0);
+  /* Calibrated on the 2026-10-28 feed's item 20: "a CWE-306 missing authentication issue" is the
+     weakness's NAME, and the first version of the regex read the adjective as an absence claim. */
+  t('cwe: a weakness title is not an absence claim',
+    cw('CVE-2026-116366 is a CWE-190 missing bounds-check issue.'), ['ok']);
+  t('cwe: "CWE is missing" is still a claim',
+    cw('CVE-2026-116366. The CWE is missing from the record.'), ['cwe-absent-but-recorded']);
 
   // subject binding — a score belongs to an identifier, not to the item
   const men = (s) => idMentions(s);
@@ -2044,7 +2233,7 @@ const parsed = paths.map((p) => ({ path: p, items: parseItems(readFileSync(p, 'u
 let nvd = new Map();
 let nvdCalls = 0;
 let ghsaCalls = 0;
-if (!NO_NET && (CHECKS.has('cvss') || CHECKS.has('status') || STATUS_WATCH)) {
+if (!NO_NET && (CHECKS.has('cvss') || CHECKS.has('status') || CHECKS.has('cwe') || STATUS_WATCH)) {
   const cves = [...new Set([...parsed.flatMap((f) => f.items.flatMap((it) => it.cves)), ...EXTRA_IDS])];
   const CHUNK = 25;
   for (let i = 0; i < cves.length; i += CHUNK) {
@@ -2062,7 +2251,7 @@ if (!NO_NET && (CHECKS.has('cvss') || CHECKS.has('status') || STATUS_WATCH)) {
   }
 }
 const subjects = new Map();
-for (const [id, rec] of nvd) subjects.set(id, { kind: 'cve', status: rec.status, modified: rec.modified, metrics: rec.metrics });
+for (const [id, rec] of nvd) subjects.set(id, { kind: 'cve', status: rec.status, modified: rec.modified, metrics: rec.metrics, cwe: rec.cwe });
 /* The watch is written before the checks run, so a regression found here shows up in the same
  * report that a stale claim about it would. It records the observation, not a verdict: a move
  * that no item mentions is still the thing worth catching. */
@@ -2083,10 +2272,12 @@ if (STATUS_WATCH && !NO_NET) {
 // unmetered, so the cap is about latency rather than budget — cached entries cost nothing.
 const cna = new Map();
 let cnaCalls = 0;
-if (!NO_NET && (CHECKS.has('cvss') || CHECKS.has('temporal'))) {
+if (!NO_NET && (CHECKS.has('cvss') || CHECKS.has('temporal') || CHECKS.has('cwe'))) {
   const ids = [...new Set(parsed.flatMap((f) => f.items.flatMap((it) => strip(it.text).match(/CVE-\d{4}-\d{3,7}/g) ?? [])))].slice(0, MAX_CNA);
   for (const id of ids) {
-    const fresh = !cache[`cna:${id}`];
+    // A schema bump forces a refetch, and a refetch is a call: counting only "no entry at all"
+    // reported cna_calls 0 on the run that rewrote 5 entries at CNA_CACHE_V.
+    const fresh = cache[`cna:${id}`]?.v !== CNA_CACHE_V;
     const st = cnaState(id);
     if (fresh) cnaCalls += 1;
     if (!st.error) cna.set(id, st);
@@ -2108,6 +2299,7 @@ for (const { path: p, items } of parsed) {
     if (!NO_NET && CHECKS.has('cvss')) findings.push(...checkCvss(it, subjects, cna));
     if (!NO_NET && CHECKS.has('status')) findings.push(...checkStatus(it, subjects));
     if (!NO_NET && CHECKS.has('temporal')) findings.push(...checkTemporal(it, cna, subjects));
+    if (!NO_NET && CHECKS.has('cwe')) findings.push(...checkCwe(it, subjects, cna));
   }
   if (!NO_NET && CHECKS.has('repo')) for (const it of items) findings.push(...checkRepo(it, budget, ageBudget));
   if (!NO_NET && CHECKS.has('count')) for (const it of items) findings.push(...await checkCount(it));
@@ -2120,7 +2312,7 @@ for (const { path: p, items } of parsed) {
 
 try { mkdirSync(dirname(CACHE_PATH), { recursive: true }); writeFileSync(CACHE_PATH, JSON.stringify(cache, null, 1)); } catch { /* cache is best-effort */ }
 
-const SEVERITY = { ok: 0, 'ok-cited-page': 0, 'no-cve-named': 1, 'no-record': 1, 'slot-quoted': 1, 'counted-by-author': 0, 'number-other-noun': 1, 'temporal-stopping-point': 1, 'cna-only-score': 1, 'star-drift': 2, 'star-dated': 1, 'ok-history': 0, 'history-older-than-record': 2, 'history-unreadable': 1, stale: 2, archived: 2, differs: 2, absent: 2, 'unsplit-issue-count': 3, 'compound-lags-parts': 3, 'version-swapped': 3, 'version-absent': 3, 'score-not-reproducible': 2, 'score-mismatch': 3, 'wrong-subject': 3, 'absence-contradicted': 3, 'status-stale': 2, 'status-dated': 1, 'status-no-record': 1, 'status-no-cve': 1, 'advisory-unreadable': 1, 'advisory-repo-only': 0, unreadable: 1, 'artifact-unreadable': 1, 'nvd-unavailable': 1, 'bundle-ok': 0, 'bundle-lines-named': 0, 'bundle-unavailable': 0, 'bundle-line-count': 3, 'bundle-total-mismatch': 2 };
+const SEVERITY = { ok: 0, 'ok-cited-page': 0, 'no-cve-named': 1, 'no-record': 1, 'slot-quoted': 1, 'counted-by-author': 0, 'number-other-noun': 1, 'temporal-stopping-point': 1, 'cna-only-score': 1, 'star-drift': 2, 'star-dated': 1, 'ok-history': 0, 'history-older-than-record': 2, 'history-unreadable': 1, stale: 2, archived: 2, differs: 2, absent: 2, 'unsplit-issue-count': 3, 'compound-lags-parts': 3, 'version-swapped': 3, 'version-absent': 3, 'score-not-reproducible': 2, 'score-mismatch': 3, 'wrong-subject': 3, 'absence-contradicted': 3, 'status-stale': 2, 'status-dated': 1, 'cwe-absent-but-recorded': 3, 'cwe-mismatch': 3, 'cwe-unreadable': 1, 'status-no-record': 1, 'status-no-cve': 1, 'advisory-unreadable': 1, 'advisory-repo-only': 0, unreadable: 1, 'artifact-unreadable': 1, 'nvd-unavailable': 1, 'bundle-ok': 0, 'bundle-lines-named': 0, 'bundle-unavailable': 0, 'bundle-line-count': 3, 'bundle-total-mismatch': 2 };
 const REAL = (f) => (SEVERITY[f.verdict] ?? 1) >= 2;
 
 /* `status_watch` rides the findings file so the act pass sees a backwards move without re-reading

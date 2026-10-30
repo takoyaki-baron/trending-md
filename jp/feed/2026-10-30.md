@@ -1,6 +1,6 @@
 ---
 date: 2026-10-30
-updated: 2026-10-30T12:16:26Z
+updated: 2026-10-30T12:29:55Z
 schedule: 04:03, 12:03, 20:03 UTC+8
 sources: 32
 license: CC-BY-4.0
@@ -36,7 +36,7 @@ Mistralは2026-10-29、Mistral Large 4のオープンウェイトを公開した
 - **Source:** CISA KEV · カタログ2026.10.29 · 2026-10-29追加
 - **Tags:** `cve` `gitlab` `ruby` `rce` `kev`
 
-CISAは**2026-10-29**、**CVE-2026-97229**を既知の悪用済み脆弱性カタログに追加した。記録は**CVSS 3.1 10.0**——`AV:N/AC:L/PR:N/UI:N/S:C/C:H/I:H/A:H`——でCWE-190（整数オーバーフロー）。このスコアは**GitLab自身のもの**だ（`Secondary`スロットに`cve@gitlab.com`、NVD採点メトリクスは0）。NVDのレコードは依然**`Undergoing Analysis`**で、メトリクスはその1件だけ——比較できるNVDスコアはまだ存在しない。これは**「追認」のケースではない**（分析済みレコードにCNAのスコアだけが残る形）。GitLabは**19.4.2（2026-10-12リリース）**で修正した。NVDは翌日にレコードを公開し、KEVは**修正から17日後**に追随した——レコードからは16日後になる。NVDのレコードにはまだKEVフラグが付いていない——情報源はカタログであって、CVEエントリではない。
+CISAは**2026-10-29**、**CVE-2026-97229**を既知の悪用済み脆弱性カタログに追加した。記録は**CVSS 3.1 10.0**——`AV:N/AC:L/PR:N/UI:N/S:C/C:H/I:H/A:H`——でCWE-190（整数オーバーフロー）。このスコアは**GitLab自身のもの**だ（`Secondary`スロットに`cve@gitlab.com`、NVD採点メトリクスは0）。NVDのレコードは現在**`Analyzed`**（`lastModified` **2026-10-30T10:36Z**）で、依然として `cve@gitlab.com` の指標1件だけを持ち、`nvd@nist.gov` の指標は**0**——つまりこれは**「追認」のケースそのもの**だ。NVDはレコードを分析し、GitLabの10.0をスコアとして据え置いた。同日、レコードは`Undergoing Analysis` → `Analyzed`（**10:36Z**）と動いた。状態は項目ではなくタイムスタンプについての主張だからだ。GitLabは**19.4.2（2026-10-12リリース）**で修正した。NVDは翌日にレコードを公開し、KEVは**修正から17日後**に追随した——レコードからは16日後になる。NVDのレコードにはまだKEVフラグが付いていない——情報源はカタログであって、CVEエントリではない。
 
 根本原因はGitLabのものではない。Ruby自身の**2026-10-23**のアドバイザリはGitLab割当の4つの識別子を名指ししている——CVE-2026-89078（正規表現パーサのdouble free、PR #13332）、CVE-2026-93577、CVE-2026-97229、CVE-2026-110264——そして明記する。「We have not requested CVE identifiers in Ruby for these fixes, at least for now.」修正は**Ruby 4.0.9、3.4.12、3.3.13**に入った。誰もが頼りたくなる2つの緩和策は機能しない。「`Regexp.timeout` does not protect against these bugs」であり、「Limiting the length of patterns does not reliably protect against them either」——なぜなら「some of them can be triggered by short patterns」だからだ。
 
@@ -239,10 +239,10 @@ NetBSD財団は2026-10-28、`-current`が「now includes an alternative editor t
 ## 15. OpenIDEAはJetBrains流のワークフローをRustで作り直した——169 MB対2,011 MB、ただしベンチマークはREADME自身が限定を付ける
 
 - **Velocity:** ▮ steady
-- **Source:** GitHub · 1,239 stars（2026-10-30 04:25 UTC 実測）· 2026-10-21作成
+- **Source:** GitHub · 1,239 stars（2026-10-30 04:25 UTC時点）· 2026-10-21作成
 - **Tags:** `ide` `rust` `tauri` `performance`
 
-`l0ng-ai/openidea`（Apache-2.0）は、IntelliJ IDEAの流儀——キーマップ、ツールウィンドウ、どこでも検索——をRustコア＋Tauriのネイティブアプリに移植し、エディタ、コードインサイト、デバッガ、Git、ターミナル、データベース、HTTPクライアントを60言語以上でカバー、macOS・Windows・Linuxで動く。作成から9日で**1,239 stars**、オープンissue 63件、オープンPR 9件——同日朝の時点では1,024 / 46 / 9で、カウンタはまだ動いている。「IDEを作り直す」系で今のところ最も具体的な作品だ。
+`l0ng-ai/openidea`（Apache-2.0）は、IntelliJ IDEAの流儀——キーマップ、ツールウィンドウ、どこでも検索——をRustコア＋Tauriのネイティブアプリに移植し、エディタ、コードインサイト、デバッガ、Git、ターミナル、データベース、HTTPクライアントを60言語以上でカバー、macOS・Windows・Linuxで動く。作成から9日で**1,239 stars（04:25 UTC時点、12:30 UTCには1,477）**、オープンissue 63件、オープンPR 9件——同日朝の時点では1,024 / 46 / 9で、カウンタはまだ動いている。「IDEを作り直す」系で今のところ最も具体的な作品だ。
 
 公開ベンチマークは`freqtrade`（Python、約770ファイル）をウォームキャッシュで開き、5回の中央値、Windows 11上のIntelliJ IDEA 2026.2.3との比較。プロジェクトを開くのが**0.9 s対3.1 s**、readyが**1.1 s対13.2 s**、メモリ（USS、全プロセス）が**169 MB対2,011 MB**、readyまでのCPU時間が**2.4 s対47.9 s**、終了が**0.3 s対5.9 s**。そしてREADMEは自分の表を打ち消す。「IDEA analyses Python more deeply, so 'ready' doesn't mean the same work on both sides.」
 
@@ -570,7 +570,7 @@ Binary SecurityのHaakon Wik Gulbrandsrudが**2026-10-02**に公開し、2026-10
 
 それで何が買えるか。「有効なbuildまたはdropletのGUIDを持つ攻撃者は、偽造したステージングコールバックを送信し、dropletをSTAGEDへ遷移させ、関連するpackageもactorも持たない任意のprocess metadataとsidecarデータを永続化できる。」しかもGUIDは難しくない。「**SpaceAuditorは書き込み権限なしにGUIDを列挙できる**ため、これは意図されたロール境界を越える実効的な権限昇格になる。」読み取り専用ロールが書き込みになる。
 
-**Why it matters:** 2つの日付を切り離して読むべきだ。Cloud Foundryのアドバイザリは**2026-10-20**付、CVEレコードの公開は**2026-10-30**——10日後であり、これが今日のバッチに現れる理由である。影響範囲は「CAPI **v1.245.0**（含む）まで」、修正は**CAPI v1.246.0以上**と**cf-deployment v60.7.0以上**（CAPI v1.247.0を含む）。報告者はMinseong Kim（mak3bread）。一般化できるバグは、本誌の「内部エンドポイント」記事すべてに共通するものだ。制御を**遮断するパスの一覧**として表現すると、兄弟のバージョンプレフィックスが存在した瞬間に破れる。そしてバージョンプレフィックスこそ内部APIが溜め込むものだ。
+**Why it matters:** 2つの日付を切り離して読むべきだ。Cloud Foundryのアドバイザリは**2026-10-20**付、CVEレコードの公開は**2026-10-30**——10日後であり、これが今日のバッチに現れる理由である。影響範囲は「**Confirmed** in CAPI up to **v1.245.0**（含む）」——これは*検証した*範囲を示す文であり、修正境界ではない——で、緩和策の行は「CAPIを**v1.246.0**以上へアップグレード」と書く。ところが同じCNA自身のレコードは1リリース分ずれる。`affected[]`は`{"version": "0", "lessThan": "v1.247.0"}`であり、**1.246.0は依然として影響範囲の内側**にある。境界を越えるのはもう一方の行、cf-deployment **v60.7.0**（CAPI **v1.247.0**を含む）だ。報告者はMinseong Kim（mak3bread）。一般化できるバグは、本誌の「内部エンドポイント」記事すべてに共通するものだ。制御を**遮断するパスの一覧**として表現すると、兄弟のバージョンプレフィックスが存在した瞬間に破れる。そしてバージョンプレフィックスこそ内部APIが溜め込むものだ。
 
 [`🔗 Cloud Foundry — CVE-2026-59387 アドバイザリ`](https://www.cloudfoundry.org/blog/cve-2026-59387-broken-access-control-restriction-in-cloud-controller-api/) · [`🔗 CVE-2026-59387（NVD）`](https://nvd.nist.gov/vuln/detail/CVE-2026-59387)
 
@@ -582,7 +582,7 @@ Binary SecurityのHaakon Wik Gulbrandsrudが**2026-10-02**に公開し、2026-10
 - **Source:** NVD / ClickHouse CNA · CVE-2026-116366 · published 2026-10-30 11:00 UTC
 - **Tags:** `clickhouse` `cve` `rce` `disclosure`
 
-**CVE-2026-116366**は**9.5（CVSS 4.0）**——`AV:N/AC:H/AT:N/PR:N/UI:N/VC:H/VI:H/VA:H/SC:H/SI:H/SA:H`——で、`ClickHouse`自身が割り当て、**2026-10-26T07:54:23Z**に予約、**2026-10-30T11:00:11Z**に公開された。4日だ。NVDのレコードは`Received`のままで、指標を1つだけ持つ。CNAの9.5が`Secondary`スロットにあり、`nvd@nist.gov`の指標はゼロ——つまりこの数字はClickHouseのものでNVDのものではない。CNAコンテナにCWEはない。`AC:H`だけがこのベクトルと10.0の間にある。
+**CVE-2026-116366**は**9.5（CVSS 4.0）**——`AV:N/AC:H/AT:N/PR:N/UI:N/VC:H/VI:H/VA:H/SC:H/SI:H/SA:H`——で、`ClickHouse`自身が割り当て、**2026-10-26T07:54:23Z**に予約、**2026-10-30T11:00:11Z**に公開された。4日だ。NVDのレコードは`Received`のままで、指標を1つだけ持つ。CNAの9.5が`Secondary`スロットにあり、`nvd@nist.gov`の指標はゼロ——つまりこの数字はClickHouseのものでNVDのものではない。CNAコンテナには**CWE-190**（整数オーバーフロー／ラップアラウンド）が入っており、`cveawg`で一次確認した。`AC:H`だけがこのベクトルと10.0の間にある。
 
 機械可読な部分は正確だ。4本のブランチ範囲はいずれも排他的な`lessThan`上限で、`packages.clickhouse.com`と`github.com/ClickHouse/clickhouse`に紐づく。`26.3 → 26.3.62.3-lts`、`26.8 → 26.8.36.3-lts`、`26.9 → 26.9.27.3-stable`、`26.10 → 26.10.3.7-stable`。ベンダーの変更履歴が日付と配備の注記を補う。「**Fixed in ClickHouse v26.10.3.7, 2026-10-30**」、そして「本脆弱性の修正はすべてのClickHouse CloudおよびBYOC配備に適用済み」。クレジットは**Elshad Toklayev**。
 
@@ -726,7 +726,7 @@ Ai2の**「Old Ideas, Novel Problems」**（Kyle WiggersとAi2Comms、論文・�
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-10-30T12:16:26Z |
+| Generated | 2026-10-30T12:29:55Z |
 | Items | 44 |
 | Sources tracked | 32（Hacker News、GitHub、NVD、CISA KEV、cveawg、PyPI、npm、ベンダーアドバイザリ、CNAアドバイザリ、arXiv、Hugging Face、セキュリティ研究ブログ、セキュリティ報道、ベンダーブログ） |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8（1日3回） |
