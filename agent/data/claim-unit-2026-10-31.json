@@ -1,0 +1,116 @@
+{
+ "generated": "2026-10-30T20:14:55.438Z",
+ "files": [
+  {
+   "file": "2026-10-31.md",
+   "items": 20,
+   "findings": [
+    {
+     "check": "status",
+     "item": 1,
+     "verdict": "ok",
+     "claim": "CVE-2026-111357 `Undergoing Analysis`",
+     "detail": "Undergoing Analysis (lastModified 2026-10-30T18:17:20.603)"
+    },
+    {
+     "check": "status",
+     "item": 15,
+     "verdict": "ok",
+     "claim": "CVE-2026-113617 `Deferred`",
+     "detail": "Deferred (lastModified 2026-10-29T15:18:27.920)"
+    },
+    {
+     "check": "status",
+     "item": 15,
+     "verdict": "ok",
+     "claim": "CVE-2026-113617 `Deferred`",
+     "detail": "Deferred (lastModified 2026-10-29T15:18:27.920)"
+    },
+    {
+     "check": "status",
+     "item": 15,
+     "verdict": "ok",
+     "claim": "CVE-2026-113617 `Deferred`",
+     "detail": "Deferred (lastModified 2026-10-29T15:18:27.920)"
+    },
+    {
+     "check": "status",
+     "item": 15,
+     "verdict": "ok",
+     "claim": "CVE-2026-109516 `Deferred`",
+     "detail": "Deferred (lastModified 2026-10-29T14:56:26.107)"
+    },
+    {
+     "check": "repo",
+     "item": 5,
+     "verdict": "ok",
+     "claim": "mattpocock/skills",
+     "detail": "307348★, last push 2026-10-30"
+    },
+    {
+     "check": "repo",
+     "item": 8,
+     "verdict": "hf-model",
+     "claim": "RecursiveSI/flint",
+     "detail": "huggingface.co/RecursiveSI/flint (gated: false, 37 files, created 2026-10-21) — a Hugging Face model id, not a GitHub repository (read the card, not a README)"
+    },
+    {
+     "check": "repo",
+     "item": 12,
+     "verdict": "ok",
+     "claim": "milind-soni/OpenMausBot",
+     "detail": "8429★, last push 2026-10-30"
+    },
+    {
+     "check": "repo",
+     "item": 18,
+     "verdict": "hf-model",
+     "claim": "deepseek-ai/DeepSeek-V4.1-Flash-1017",
+     "detail": "huggingface.co/deepseek-ai/DeepSeek-V4.1-Flash-1017 (gated: false, 83 files, created 2026-10-17) — a Hugging Face model id, not a GitHub repository (read the card, not a README)"
+    },
+    {
+     "check": "repo",
+     "item": 19,
+     "verdict": "ok",
+     "claim": "Leonxlnx/taste-skill",
+     "detail": "106237★, last push 2026-10-30"
+    },
+    {
+     "check": "repo",
+     "item": 20,
+     "verdict": "ok",
+     "claim": "emmilco/us-tax-model",
+     "detail": "124★, last push 2026-10-30"
+    },
+    {
+     "check": "count",
+     "item": 5,
+     "verdict": "counted-by-author",
+     "claim": "27 skills",
+     "detail": "no page states a skills total, and the item says so — the count is the author's own census"
+    },
+    {
+     "check": "count",
+     "item": 5,
+     "verdict": "counted-by-author",
+     "claim": "9 model",
+     "detail": "no page states a model total, and the item says so — the count is the author's own census"
+    },
+    {
+     "check": "count",
+     "item": 5,
+     "verdict": "counted-by-author",
+     "claim": "2 model",
+     "detail": "no page states a model total, and the item says so — the count is the author's own census"
+    }
+   ]
+  }
+ ],
+ "status_watch": [],
+ "api_calls": 0,
+ "readme_calls": 0,
+ "cited_page_calls": 0,
+ "repo_page_calls": 0,
+ "nvd_calls": 1,
+ "cna_calls": 0
+}

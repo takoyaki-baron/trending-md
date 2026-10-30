@@ -268,6 +268,66 @@
      "modified": "2026-10-30T11:17:32.540"
     }
    ]
+  },
+  "CVE-2026-104935": {
+   "status": "Analyzed",
+   "modified": "2026-10-13T19:24:36.243",
+   "seen": "2026-10-30T20:14:52.585Z",
+   "history": [
+    {
+     "at": "2026-10-30T20:14:52.585Z",
+     "status": "Analyzed",
+     "modified": "2026-10-13T19:24:36.243"
+    }
+   ]
+  },
+  "CVE-2026-111357": {
+   "status": "Undergoing Analysis",
+   "modified": "2026-10-30T18:17:20.603",
+   "seen": "2026-10-30T20:14:52.585Z",
+   "history": [
+    {
+     "at": "2026-10-30T20:14:52.585Z",
+     "status": "Undergoing Analysis",
+     "modified": "2026-10-30T18:17:20.603"
+    }
+   ]
+  },
+  "CVE-2026-109516": {
+   "status": "Deferred",
+   "modified": "2026-10-29T14:56:26.107",
+   "seen": "2026-10-30T20:14:52.585Z",
+   "history": [
+    {
+     "at": "2026-10-30T20:14:52.585Z",
+     "status": "Deferred",
+     "modified": "2026-10-29T14:56:26.107"
+    }
+   ]
+  },
+  "CVE-2026-42922": {
+   "status": "Deferred",
+   "modified": "2026-10-29T16:21:34.310",
+   "seen": "2026-10-30T20:14:52.585Z",
+   "history": [
+    {
+     "at": "2026-10-30T20:14:52.585Z",
+     "status": "Deferred",
+     "modified": "2026-10-29T16:21:34.310"
+    }
+   ]
+  },
+  "CVE-2026-113617": {
+   "status": "Deferred",
+   "modified": "2026-10-29T15:18:27.920",
+   "seen": "2026-10-30T20:14:52.585Z",
+   "history": [
+    {
+     "at": "2026-10-30T20:14:52.585Z",
+     "status": "Deferred",
+     "modified": "2026-10-29T15:18:27.920"
+    }
+   ]
   }
  },
  "_note": "vulnStatus watch (agent/tools/claim-unit-lint.mjs --status-watch). Records the one field NVD moves on its own, so a BACKWARDS move is visible rather than inferred from four timestamps by hand. Filed 2026-10-30 after CVE-2026-97229 went Analyzed → Undergoing Analysis when CISA-ADP rewrote its container 27 minutes after a KEV add. `at` is when this tool observed it; `modified` is the record's own lastModified."
