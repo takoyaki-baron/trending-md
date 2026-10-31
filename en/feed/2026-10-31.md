@@ -1,6 +1,6 @@
 ---
 date: 2026-10-31
-updated: 2026-10-30T20:14:50Z
+updated: 2026-10-31T04:19:32Z
 schedule: 04:03, 12:03, 20:03 UTC+8
 sources: 17
 license: CC-BY-4.0
@@ -310,13 +310,267 @@ GitHub opened an investigation at **17:50 UTC on 2026-10-30** for "degraded perf
 
 ---
 
+## 21. Anthropic's Claude found a zero-click root RCE in the Linux kernel — 48 minutes to leak KASLR, and Akamai is now advising its customers
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Anthropic Frontier Red Team · published 2026-10-27 · CVE record 2026-10-15
+- **Tags:** `cve` `linux-kernel` `rce` `anthropic` `mptcp`
+
+**CVE-2026-98432** is a race-condition use-after-free in the kernel's IPv4 TCP path, and the write-up is Anthropic's: the Frontier Red Team says an internal research model wrote a full exploit chain that reaches root on a server exposing a **Multipath TCP listener**, with no credentials and no user interaction. The record is the Linux kernel CNA's (assigner `Linux`, `PUBLISHED` **2026-10-15T12:08Z**, reserved **2026-09-25**), carries **one** metric — `CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H` = **9.8** — and **no CWE at all** (`problemTypes` is `null` in the CNA container, so the absence is a statement about the CNA's own field, not about NVD's parse). NVD's copy is at **`Received`**, last modified **2026-10-30T16:18Z**.
+
+The bug is the one the kernel commit names: `ipv4: free inet_opt and ireq_opt after an RCU grace period`. `tcp_v4_syn_recv_sock()` transfers ownership of `ireq->ireq_opt` to the child socket without copying it; another CPU handling a **retransmitted SYN** sends a SYNACK from `tcp_check_req()`, reading the same options under `rcu_read_lock()` only; `inet_sock_destruct()` frees `inet_opt` with a plain `kfree()` rather than `kfree_rcu()`, so `ip_options_build()` can read a freed object. The CNA's own `AV:N` justification (written in the metric's `scenarios[]` field, not in the description) is precise about the prerequisite — an unauthenticated peer supplies IPv4 Record Route or Timestamp bytes in a TCP SYN — and the request-socket **migration** path (`net.ipv4.tcp_migrate_req=1` or a BPF reuseport selector) is the second half — that is the path MPTCP exercises. Eight fix commits across stable branches are listed in `references[]`, all keyed as `versionType: git` from the introducing commit `079096f103fa` (the one that installed syn_recv requests into ehash).
+
+**Why it matters:** the operational fallout is the story today, not the score. Anthropic's timeline is blunt — "it takes 48 minutes to leak a kernel pointer and another five minutes to reach the shell command execution" — and the enabling property is retry-until-success, because a lost race only drops the handshake and never crashes the box. That changes what patching means for shared hosts: **Akamai** opened a Linode customer advisory at **18:10 UTC on 2026-10-30**, said at **01:55 UTC on 10-31** that it is deploying mitigations and that "At this time, we have no evidence of this vulnerability being exploited on the Akamai Compute platform", and told customers to apply upstream OS updates. Meanwhile the **Go security team** warned that since **Go 1.24** programs enable MPTCP by default on Linux listen sockets, so a Go server can be in scope without anyone asking for it — `GODEBUG=multipathtcp=0` or `godebug multipathtcp=0` in `go.mod` exists as a stopgap, but the same post says "disabling MPTCP on a program-by-program basis is a fragile mitigation" and that "The best fix for this vulnerability is to upgrade to a patched kernel version." Read the two claims apart: Anthropic's PoC needs MPTCP; Go's warning is that the underlying bug is not MPTCP-specific and a system with no MPTCP listener may be reachable by a different route.
+
+[`🔗 Anthropic — discovering and exploiting vulnerabilities with Claude`](https://www.anthropic.com/research/discovering-vulnerabilities-with-claude) · [`🔗 oss-security — protecting Go programs against CVE-2026-98432`](https://www.openwall.com/lists/oss-security/2026/10/30/1) · [`🔗 Akamai/Linode — customer security advisory`](https://status.linode.com/incidents/nt58zhx3pmgm) · [`🔗 CVE-2026-98432 (NVD)`](https://nvd.nist.gov/vuln/detail/CVE-2026-98432)
+
+---
+
+## 22. LXD's mutual TLS trusted every certificate in the chain — 10.0, and any trusted user's public cert was enough
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Ubuntu Discourse · advisory 2026-10-28 · CVE published 2026-10-30
+- **Tags:** `cve` `lxd` `tls` `auth-bypass` `canonical`
+
+**CVE-2026-112816** is an authentication bypass in **LXD** (and **MicroCloud**): the daemon's mutual-TLS check "compared all peer certificates sent by the client to known trust store entries", so an attacker who can reach the HTTPS API and holds **someone else's public client certificate** can authenticate as that identity by placing it as an **intermediary** certificate in their own chain. Canonical's advisory states the mechanism in one line — "only the leaf certificate proves ownership of the signing key" — and the impact: "The vulnerability allows an attacker that is able to reach the LXD HTTPS API to authenticate as any trusted TLS client, for which the attacker has the public certificate." Depending on the victim's privilege that is **root on the host**, since an admin client can drive the daemon. In MicroCloud the shape is worse: an attacker can "intercept the public TLS certificate of a joining cluster member" and then authenticate as that member.
+
+Canonical says the bug "was referred to us from the Incus project", credits `stgraber`, and shipped fixes on **2026-10-29** across four LXD channels and two MicroCloud channels — **6.10.1**, **5.21.9**, **5.0.11**, **4.0.15**, **microcloud 2.1.5** and **3.4.1** — applied with `snap refresh lxd` / `snap refresh microcloud`, with the point releases still rolling from `candidate` to `stable`. The CVE container (assigner **canonical**, `PUBLISHED` **2026-10-30T16:42Z**) carries **CVSS 4.0 at 10.0** from `security@ubuntu.com` — `AV:N/AC:L/AT:N/PR:N/UI:N` with all three impacts High in both the vulnerable and subsequent systems — plus **CWE-295**, and four affected ranges written as semver (`4.0.14 < 4.0.15`, `5.0.10 < 5.0.11`, `5.21.8 < 5.21.9`, `6.9.0 < 6.10.1`). NVD's copy is **`Deferred`** and carries no metric of its own.
+
+**Why it matters:** this is the rare 10.0 whose cause is a **comparison over the wrong set** rather than a memory bug or a missing check — every certificate in a client-supplied chain was matched against the trust store, so the trust store's contents become signable credentials. It also gives you a clean field-level caveat: the advisory's fix table covers **six** snap versions across **two** products, while the CVE record's `affected[]` names **one** product (LXD) and four ranges — MicroCloud's 2.1.5 and 3.4.1 exist only on the prose page, so a reader who trusts the machine-readable record alone cannot tell that MicroCloud is in scope. Anyone running LXD as a privileged management plane should treat the public half of every client certificate as a leaked credential until patched, and re-check which channel a given snap is actually tracking, because "latest" and "stable" are not the same thing during a progressive rollout.
+
+[`🔗 Ubuntu Discourse — Canonical LXD and MicroCloud advisory`](https://discourse.ubuntu.com/t/security-advisory-critical-vulnerability-found-in-canonical-lxd-and-microcloud/90557) · [`🔗 CVE-2026-112816 (NVD)`](https://nvd.nist.gov/vuln/detail/CVE-2026-112816) · [`🔗 Hacker News discussion`](https://news.ycombinator.com/item?id=50310937)
+
+---
+
+## 23. Seven of 305 code GGUF tags in the official Ollama library solve almost nothing — and they match an uncalibrated rebuild tensor for tensor
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** arXiv · 2609.05881 (v3) · code and audit data released
+- **Tags:** `quantization` `gguf` `reproducibility` `benchmark` `research`
+
+"**Broken on Arrival: Non-Functional Quantized LLM Artifacts in Public Model Registries and How to Catch Them**" (arXiv **2609.05881**, Aditi Patodiya) tests **all 305 eligible code-capable GGUF tags** across **15 model lines** in the official Ollama library plus **22** popular Hugging Face community files, screening with 15 code tasks and retesting suspects on all **164 HumanEval+** tasks. **Seven official tags (2.3%) solved at most six of them** — all low-bit quantizations of models with at most **four billion** parameters. The paper's own control is the finding: five suspects rebuilt from the original weights "matched our uncalibrated rebuilds tensor for tensor, so none was corrupted", followed by the line worth quoting, "**Exact reproducibility did not imply function.**"
+
+The mechanism is calibration, not bit-width alone. With weights, toolchain and tensor mix held fixed, adding an **importance matrix** raised `Qwen2.5-Coder-3B` at three quantization levels **from zero to 76–113 of 164 tasks**; the same uncalibrated recipe left the smaller `Qwen2.5-Coder-1.5B` working, which is why the paper says the recipe alone does not predict failure. On the other side, "None of 66 sampled tags that passed the screen was non-functional" — so the cheap screen is not producing false alarms in the sample. **v3** of the paper revises one earlier diagnosis: a community `deepseek-coder-6.7B` file pair fails for **lack of a chat template**, not by backend, and the release adds a test for it.
+
+**Why it matters:** registries publish downloads and likes, not functional tests, and every "runs on a laptop" recommendation inherits that gap — the artifact you downloaded can be byte-identical to what the publisher built and still score zero. Two operational consequences: for **≤4B models at low bit-width**, run a task-level smoke test before trusting the tag, not a checksum; and when a tag fails, the fix is often to **switch to a calibrated quantization** of the same model rather than to suspect corruption. The audit data and a `quantcheck` tool ship with the paper, so the screen is reproducible; what is not yet established is how the failure rate scales above 15 model lines or on non-code tasks, which the study does not test.
+
+[`🔗 arXiv 2609.05881`](https://arxiv.org/abs/2609.05881) · [`🔗 Hugging Face — daily papers`](https://huggingface.co/papers)
+
+---
+
+## 24. pgAdmin's `\copy` guard checked one quoting dialect and psql parses another — 9.9, and it is a bypass of June's fix
+
+- **Velocity:** ▮▮ rising
+- **Source:** NVD / cveawg · CVE published 2026-10-30T20:17Z · assigner PostgreSQL
+- **Tags:** `cve` `pgadmin` `postgresql` `command-injection`
+
+**CVE-2026-116241** is a command injection in pgAdmin 4's **Import/Export Data** tool: pgAdmin wraps a user's query export in a `psql \copy (...) TO` command and checks the query's parentheses are balanced so nothing can escape the wrapper. The check "rejected a backslash inside a single-quoted string but not inside a double-quoted identifier, where it treated the next double quote as closing the identifier" — while psql's `\copy` parser "applies the connection's escape character to whichever quote opened a token", so with `standard_conforming_strings` off a backslash-escaped double quote does **not** close the identifier. Two parsers, two beliefs about where a string ends; the attacker sets the session variable.
+
+The record is assigned by **PostgreSQL** (`PUBLISHED`, **2026-10-30T20:17Z**) with **two** metrics from the CNA — `CVSS:3.1/…/PR:L/UI:N/S:C/…` = **9.9** and a CVSS 4.0 vector at **9.4** — plus **two** weaknesses, **CWE-78** and **CWE-115** (misinterpretation of input), and the CNA's own note that this is a bypass of the fix for **CVE-2026-17566**, inheriting its threat model and `S:C` rationale. NVD's copy is at **`Received`** and carries no `nvd@nist.gov` metric. The affected range is written as `{version: "0", lessThan: "9.19"}`.
+
+**Why it matters:** the fix predates the record by a week and the artefact by a day — commit **`9be31a0`** is dated **2026-10-23T18:47Z**, and pgAdmin **9.19** was uploaded to PyPI on **2026-10-29T15:36Z** — while the tracking issue **#10663** is still **open** with the body "Internal tracking: pending fix for 9.19" and "Details will be published with the pgAdmin 4 9.19 release notes", so the disclosure order is commit → release → record → notes. The repo's tag feed still shows `REL-9_18` (2026-09-17), so "is it fixed" has to be answered from PyPI, not from tags. The transferable lesson is the bug class: a sanitizer is only as correct as its model of the **consumer's** grammar, and any parse that depends on a session setting (`standard_conforming_strings`) the caller can flip is a sanitizer that can be turned off from the other side.
+
+[`🔗 CVE-2026-116241 (NVD)`](https://nvd.nist.gov/vuln/detail/CVE-2026-116241) · [`🔗 pgAdmin commit 9be31a0`](https://github.com/pgadmin-org/pgadmin4/commit/9be31a019f780647fb689c458408c8803263c812) · [`🔗 pgAdmin issue #10663`](https://github.com/pgadmin-org/pgadmin4/issues/10663)
+
+---
+
+## 25. A WordPress cache plugin is a 10.0 with no official patch — reported in September, in NVD on October 29
+
+- **Velocity:** ▮▮ rising
+- **Source:** Patchstack · published 2026-10-13 · NVD record 2026-10-29
+- **Tags:** `cve` `wordpress` `rce` `unpatched` `patchstack`
+
+**CVE-2026-61991** is an unauthenticated remote code execution in the WordPress plugin **AjaxLoadMore Cache** at or below **3.1.1**, classified **CWE-94** (code injection) by the assigner **Patchstack**. The Patchstack entry is unusually bare and unusually direct about the remediation state: the patched-version cell reads "**No official patch available**", the entry carries "No VDP", the required privilege is **unauthenticated**, and the CVSS is **10**. The plugin's own distribution page is the place to check whether that is still true, because "no patch" is a perishable state.
+
+The timeline is the part worth reading: reported by **Julieta** on **2026-09-12**, published by Patchstack on **2026-10-13**, and only entering NVD on **2026-10-29T16:18Z** — **47 days** from report to record, **16** of them with a public exploit description and no code fix. NVD's copy is **`Deferred`**, carries exactly one metric (`CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:C/C:H/I:H/A:H` = **10.0**, source `audit@patchstack.com`, `Secondary`), and no `nvd@nist.gov` metric at all — so the 10.0 is the finder's number, re-served by NVD, on a record NVD has said it will not analyse.
+
+**Why it matters:** a 10.0 with no patch has only two honest remedies — remove the plugin, or virtual-patch it — and Patchstack's own mitigation is the second: "Patchstack has issued a mitigation rule to block any attacks until an official patch becomes available." That sentence is a vendor's product offering, not a fix, and it works only behind their WAF. The scoring detail matters too: `S:C` on a `PR:N` code-injection is what makes it 10.0 rather than 9.8, and here it is defensible, because code execution in a plugin runs in the scope of the whole WordPress install and its database. What the record cannot tell you is whether the plugin is still installed anywhere that matters — that is a version-presence question, and it belongs in an inventory, not in a CVE feed.
+
+[`🔗 Patchstack — AjaxLoadMore Cache advisory`](https://patchstack.com/database/wordpress/plugin/ajax-load-more-cache/vulnerability/wordpress-ajaxloadmore-cache-plugin-3-1-1-remote-code-execution-rce-vulnerability) · [`🔗 CVE-2026-61991 (NVD)`](https://nvd.nist.gov/vuln/detail/CVE-2026-61991)
+
+---
+
+## 26. Progress shipped two WS_FTP fixes three months apart — and the 10.0 is the one that hands over administrative credentials
+
+- **Velocity:** ▮▮ rising
+- **Source:** NVD · published 2026-10-29T16:19Z · both `Awaiting Analysis`
+- **Tags:** `cve` `ws-ftp` `progress` `credentials` `rce`
+
+Two Progress **WS_FTP Server** records landed in the same minute on **2026-10-29**, both Windows, both scored by `security@progress.com`, both still `Awaiting Analysis` at NVD. **CVE-2026-84295** is **CWE-287** improper authentication — "an unauthenticated remote attacker to access sensitive information, including administrative credentials" — in versions prior to **2024.0.6** and **2025.0.3**; its vector is `CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:C/C:H/I:H/A:H` = **10.0**. **CVE-2026-90868** is **CWE-78** OS command injection, `PR:L`, "under certain configurations", in versions prior to **2024.0.7** and **2025.0.4**, at **9.9**. The CNA's container adds **CWE-522** (insufficiently protected credentials) beside CWE-287 on the first one.
+
+**The two fix levels are the interesting part.** The authentication bug is fixed at `2024.0.6` / `2025.0.3`; the command-injection bug is fixed at `2024.0.7` / `2025.0.4`. An operator who applied the advisory's first fix and stopped is running a build that still contains the second bug — and a file-transfer server is exactly the class of host where "administrative credentials" plus "arbitrary command execution" is a single chain rather than two findings. The only reference on either record is a `progress.lightning.force.com` Knowledge article that redirects to a SAML login, so on this pass the vendor's own patch guidance could not be read: treat the version numbers as the record's claim rather than the advisory's, and confirm them against the vendor's page from an authenticated session.
+
+**Why it matters:** `S:C` on a `PR:N` authentication bypass is the pattern that has produced most of this month's 10.0s, and it is correct here — the credential store is outside the vulnerable component, so the impact crosses a security authority. The practical instruction is version arithmetic, not triage: `2025.0.3` is *not* the fixed release for the RCE, and the naming (`2024.0.x` and `2025.0.x` on parallel lines) makes it easy to stop one increment early. Neither record is KEV-listed and neither has an NVD-authored score, so nothing here claims exploitation — it is a patch-ahead-of-use item, and the missing NVD analysis is why the record's own CWEs are worth quoting with their source.
+
+[`🔗 CVE-2026-84295 (NVD)`](https://nvd.nist.gov/vuln/detail/CVE-2026-84295) · [`🔗 CVE-2026-90868 (NVD)`](https://nvd.nist.gov/vuln/detail/CVE-2026-90868)
+
+---
+
+## 27. Same tools, two interfaces: MCP and CLI diverge on 94.3% of paired trajectories — and a repair layer gains up to 9 points
+
+- **Velocity:** ▮▮ rising
+- **Source:** arXiv · 2610.34298 · 2026-10-25
+- **Tags:** `mcp` `agents` `tool-use` `benchmark` `research`
+
+"**Matched Capabilities, Different Behaviors: A Controlled Study of MCP and CLI Interfaces for Language Agents**" (arXiv **2610.34298**; Zhenning Shi, Liang Pang, Yongqi Li) builds **MICA** — Matched Interface Comparison and Analysis — which renders MCP and CLI from a **shared semantic action contract** and routes decoded actions through the **same runtime**, so capability, environment and execution are held fixed and only the model-facing representation changes. Across **six models** and **three interactive environments**, matched interfaces produce "substantial differences in task performance and interaction cost", and paired natural trajectories show structured divergence in **94.3% of 2,004 episodes**, with early differences propagating through subsequent interaction.
+
+The repair half is **DART** — Decoupled Action Realization and Targeted Repair — which "preserves validated semantic commitments while repairing interface-specific realization". It improves benchmark score in **all six** evaluated settings by up to **9.0 points** and reduces MCP token cost in **all three** environments by up to **27.1k tokens per task**.
+
+**Why it matters:** the paper's claim is narrow and that is what makes it usable — it does not say MCP is better or worse than a CLI, it says the choice of interface is a **confounder** in every agent benchmark and every "tool use" comparison, and that matched-state probes can localize whether a failure came from capability presentation, realization, or feedback. The cost number is the operational one: a 27.1k-token gap per task on the same semantic work is a budget line, not a style preference. Two caveats the abstract leaves open: the six models and three environments are not named there, and the 9.0-point gain is an upper bound across settings rather than a mean — read the tables before quoting it as typical.
+
+[`🔗 arXiv 2610.34298`](https://arxiv.org/abs/2610.34298) · [`🔗 Hugging Face — daily papers`](https://huggingface.co/papers)
+
+---
+
+## 28. Multi-token prediction's gradient is half self-distillation and half noise — removing the noise is a one-line change
+
+- **Velocity:** ▮▮ rising
+- **Source:** arXiv · 2610.38331 · preprint
+- **Tags:** `training` `mtp` `speculative-decoding` `research`
+
+"**Multi-Token Prediction Done Right**" (arXiv **2610.38331**, Jayden Teoh) decomposes the MTP cross-entropy gradient exactly into a **KL self-distillation term** that pulls each MTP head toward the model's own next-token distribution — which is what makes speculative decoding faster — and a **residual** with a low signal-to-noise ratio that "buries the useful KL signal", increasingly so with scale. The proposed fix exploits a fact about tied heads: when two distributions share a linear output head, the gradient of their KL divergence can be recovered exactly from the two cross-entropy gradients via straight-through routing, so **Soft-MTP** backpropagates only the KL term while reusing the existing NTP and MTP cross-entropy computations — one line of code, no new parameters, no vocabulary-sized logit matrices, no measurable overhead, and compatible with fused cross-entropy kernels.
+
+The reported results span **167M to 1.2B parameters**: lower NTP perplexity, faster speculative decoding and higher zero-shot accuracy than standard MTP at every scale; lower MTP perplexity from **689M** onward; stronger math and code reasoning after fine-tuning at 1.2B; and parity-to-better against direct KL minimization on most metrics. Both DeepSeek- and Meta-style MTP layouts are supported.
+
+**Why it matters:** MTP is now a standard pre-training ingredient precisely because it is cheap, and this paper's argument is that part of what the cheap version learns is noise — the kind of finding that changes a training recipe without changing a model. Treat it as a strong hypothesis rather than a settled result: this is a single-author preprint, the largest scale tested is 1.2B — well under where the paper says the residual gets worse — and "no measurable overhead" is an implementation claim about fused kernels that has to be re-measured on another stack. The right next test is the one the paper does not run: does the advantage survive at the scale where standard MTP is actually deployed.
+
+[`🔗 arXiv 2610.38331`](https://arxiv.org/abs/2610.38331) · [`🔗 Hugging Face — daily papers`](https://huggingface.co/papers)
+
+---
+
+## 29. Baidu's Unlimited-OCR-2 bounds the working set instead of the window — and its SOTA table is an image
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hugging Face · baidu/Unlimited-OCR-2 · released 2026-10-27
+- **Tags:** `ocr` `vision-language` `long-context` `mit` `baidu`
+
+**`baidu/Unlimited-OCR-2`** is an **MIT**-licensed image-text-to-text model released **2026-10-27**, with **24,276 downloads** and **457 likes** on the Hub, and it ships beside a new dataset, **MarathonDocBench**, for "ultra-long document parsing". The mechanism is **SR-SWA**, sparse reference sliding-window attention: the model "compresses text-visual attention interactions from ultra-long sequences down to a fixed-size set of working references (e.g., 512 tokens)", which bounds compute so that "per-step decoding latency and memory footprint nearly constant regardless of document length". Multi-page parsing is a single request — the prompt is `"<PAGE><image>" * num_pages + "Multi page parsing."` — so cross-page context is available and every page emits one `<PAGE>` marker in order.
+
+**Why it matters:** "unlimited" is a claim about the **working set**, not about an unbounded context window, and the card is honest at the level of mechanism while being opaque at the level of numbers: the SOTA sentence says it "Achieves state-of-the-art performance across both dozens-of-pages benchmarks (e.g. MPDocBench) and extreme hundred-page benchmarks (e.g. MarathonDocBench)", and the actual leaderboard is a **PNG** (`assets/leaderboard.png`), so no figure in it can be quoted or checked without an OCR pass. The most useful part of the release is the serving appendix: a custom SGLang wheel, a page-window scheduler that reuses the previous window's KV tail, `--mem-fraction-static 0.7` because 0.75 OOMs past 32 concurrent requests, and the explicit trade-off that a smaller page window lowers peak memory but loses cross-page merging at window boundaries. That is what "unlimited" costs in practice — a tunable window plus a memory budget — and it is stated more clearly here than in most long-context releases.
+
+[`🔗 baidu/Unlimited-OCR-2`](https://huggingface.co/baidu/Unlimited-OCR-2) · [`🔗 baidu/Unlimited-OCR`](https://github.com/baidu/Unlimited-OCR) · [`🔗 Hugging Face — trending`](https://huggingface.co/models)
+
+---
+
+## 30. Firezone replaced two years of patching boringtun with a sans-IO WireGuard — and its 45× is a ratio, not a measurement
+
+- **Velocity:** ▮▮ rising
+- **Source:** Firezone blog · 2026-10-31 · firezone/sanstun
+- **Tags:** `wireguard` `rust` `networking` `sans-io` `apache`
+
+**`firezone/sanstun`** (Apache-2.0, created **2026-10-02**, 37 stars) is a sans-IO Rust implementation of the WireGuard state machine, announced today by Thomas Eizinger. The premise is that IO, **time and randomness** all move out of the library: the only public entry point that parses a datagram is `Interface::receive`, which applies rate limits, generates cookie replies and returns a typed message; the constructors for `HandshakeInitiation` and friends are **crate-private**, so a caller cannot reach `Tunnel::handle_handshake_initiation` without having passed the rate limiter first. That is a protocol invariant enforced by the type system rather than by documentation — and the post's argument is that forgetting the limiter is exactly the bug that would never show up under normal operation.
+
+The performance design is the second half. `Tunnel::begin_encapsulate` does **not** encrypt: it checks the session, reserves a packet counter, advances timers and returns a `PendingEncapsulate` that implements `Send`, so ChaCha20-Poly1305 work can move to a worker thread while counter bookkeeping stays on the owner thread. The published `cargo bench data_path` numbers make the split visible: `begin_encapsulate` **20.8 ns** at both 64 B and 1280 B, `encrypt` **226 ns** at 64 B and **933 ns** at 1280 B, `begin_decapsulate` **37.6 ns**, `commit_decapsulate` **17.5 ns**.
+
+**Why it matters:** the headline number the post offers has its own disclaimer attached — "If we move the actual encryption to another thread, this hints at a potential speedup of more than 45x!" is immediately followed by "An effective speedup of 45x is hard to achieve in practice because it ignores the cost of passing `PendingEncapsulate` to another thread and assumes no other overhead is introduced." So 45× is bookkeeping-versus-crypto at 1280 B, not a throughput result, and the honest reading is that the benchmark shows the bookkeeping is **2%** of the work at MTU-sized packets. The other thing worth noting is the project's own history: Firezone patched its `boringtun` fork for more than two years — "more than 70 PRs" excluding dependency bumps — before concluding that API compatibility with upstream was the constraint, which is a more useful argument for rewriting a protocol library than any microbenchmark.
+
+[`🔗 Firezone — introducing sanstun`](https://www.firezone.dev/blog/introducing-sanstun) · [`🔗 firezone/sanstun`](https://github.com/firezone/sanstun)
+
+---
+
+## 31. Anthropic's `skills` repo is at 185k stars with no top-level licence — the licence is per folder, and four of them are not open source
+
+- **Velocity:** ▮▮ rising
+- **Source:** GitHub Trending (weekly) · +1,888 this week · 185,417 total
+- **Tags:** `agent-skills` `anthropic` `licensing` `mit`
+
+**`anthropics/skills`** — "Public repository for Agent Skills" — is trending again this week with **+1,888 stars** (**295** today, **185,417** total, **21,904** forks, **1,450** open issues), last pushed **2026-10-28**. The tree is small and load-bearing: `skills/` with **19** skill folders — counted from the directory listing, no page states a total — plus `spec/`, `template/` and `.claude-plugin/`, and **no `LICENSE` file at the root** (the path 404s) — the only licence-adjacent file at top level is `THIRD_PARTY_NOTICES.md`.
+
+The licence is inside the README and it is **two licences in one repo**: "Many skills in this repo are open source (Apache 2.0). We've also included the document creation & editing skills that power Claude's document capabilities … in the `skills/docx`, `skills/pdf`, `skills/pptx`, and `skills/xlsx` subfolders" — and of those, "These are **source-available, not open source**", shared "as a reference for more complex skills that are actively used in a production AI application." The README also carries a disclaimer that the skills are "provided for demonstration and educational purposes only" and that "the implementations and behaviors you receive from Claude may differ from what is shown".
+
+**Why it matters:** this is the repository a large fraction of the agent-skills ecosystem is copying from, and the thing being copied is not uniformly licensed — four of nineteen folders are reference material you can read but not reuse, and a repo-level "public" badge does not distinguish them. If you vendor skills into a product, enumerate per folder rather than per repo, and treat the README's own "may differ" clause as the vendor saying the shipped behaviour is not this code. The raw counts are also a reminder to use the right unit: **1,450** is issues **plus** pull requests on this repo, not 1,450 open issues.
+
+[`🔗 anthropics/skills`](https://github.com/anthropics/skills) · [`🔗 GitHub Trending (weekly)`](https://github.com/trending?since=weekly)
+
+---
+
+## 32. Context is not free even when it is cached — prefill energy grows quadratically with input length
+
+- **Velocity:** ▮ steady
+- **Source:** arXiv · 2610.39621 · 2026-10-30
+- **Tags:** `energy` `prefill` `agents` `long-context` `research`
+
+"**The Real Cost of Context: Predicting Compute Time and Energy Consumption in LLM Prefill and Decode Phases**" (arXiv **2610.39621**; Lars Krupp, Daniel Geißler, Francisco M. Calatrava-Nicolas, Stefan Gerd Fritsch, Paul Lukowicz, Jakob Karolus) starts from a measurement problem: agentic architectures "substantially increased token consumption", but existing estimates count generated **output** tokens and ignore the large input contexts agents carry. The authors profile compute time and energy across a wide range of prefill and decode lengths and fit generalized linear models to the results.
+
+The scaling is the result: **decode** compute time and energy scale **linearly** with output length, while **prefill** shows **both linear and quadratic** scaling with input length — so input context "becomes a relevant factor for large-context workloads". They also show compute time is a reliable proxy for energy consumption when direct measurement is unavailable, which is what makes the framework usable for proprietary API models.
+
+**Why it matters:** the quadratic term is the part that changes design decisions, because it says the cost of an agent's growing history is not proportional to its size — doubling the context can cost more than twice as much, and the penalty lands in the phase everyone treats as "just reading". For anything that buys latency by sending more context rather than retrieving less, that is a direct argument for retrieval and compaction over long prompts. Two limits worth stating: the fits are per-model and per-hardware, so the coefficients do not transfer between deployments; and the claim that compute time serves as a reliable proxy for energy consumption is calibrated on the authors' own measurements, not on a vendor's metering, so it estimates a hosted model's energy rather than billing you for the tokens you actually pay for.
+
+[`🔗 arXiv 2610.39621`](https://arxiv.org/abs/2610.39621) · [`🔗 arXiv cs.AI recent`](https://arxiv.org/list/cs.AI/recent)
+
+---
+
+## 33. An autonomous lab rejected its own positive result — the agents caught drift in their reference measurements and rewrote the protocol
+
+- **Velocity:** ▮ steady
+- **Source:** arXiv · 2610.40589 · 2026-10-30
+- **Tags:** `ai-for-science` `agents` `self-checking` `research`
+
+"**Collaborative AI agents for autonomous experimental research with solid-state quantum spins**" (arXiv **2610.40589**; El Mustapha Mansouri, Eikichi Kimura, Masato Koga, Keigo Arai) builds a laboratory where LLM-based agents "assess one another's work and can stop or redirect investigations" — generating and rejecting research questions, requiring separate theoretical checks, and designing experiments to challenge their own claims. The setting is ensembles of quantum spins in diamond: the agents derived the **minimum number of calibration settings** needed to predict responses to a defined family of microwave pulse sequences, checked the result computationally, and then designed experiments to distinguish between competing predictions.
+
+Then the interesting thing happened. An initial experiment **agreed** with the theoretical predictions, and repeated reference measurements showed the **signal was drifting** during data collection. The agents "therefore treated the result as inconclusive and revised the measurement protocol without relaxing the acceptance criteria" — and the revised experiment met those criteria and supported the predictions.
+
+**Why it matters:** confirmatory runs are cheap to produce and hard to distrust, and the capability on display here is not the derivation but the **refusal**: an agent system that discards a favourable measurement because its own control drifted is the difference between a lab notebook and a press release. The paper's own framing is what makes it citable — it opens by noting that recent AI systems "may draw conclusions that the evidence does not support", which is the failure this study is built to avoid. Read it as one system, one physics setting and one successful escalation of acceptance criteria; what is not tested is whether the same disagreement machinery still works when the agents' own theoretical claim is the thing that is wrong.
+
+[`🔗 arXiv 2610.40589`](https://arxiv.org/abs/2610.40589) · [`🔗 arXiv cs.AI recent`](https://arxiv.org/list/cs.AI/recent)
+
+---
+
+## 34. Spark-X2.6-4B keeps X2.5's architecture and takes the gains from post-training — and ships the comparison as an SVG
+
+- **Velocity:** ▮ steady
+- **Source:** Hugging Face · XHToken/Spark-X2.6-4B · updated 2026-10-31
+- **Tags:** `open-weights` `on-device` `agents` `apache`
+
+**`XHToken/Spark-X2.6-4B`** is a **4B**, **Apache-2.0**, English-and-Chinese general-purpose model aimed at on-device agents, with **923 likes** and **12,515 downloads** on the Hub and a card revised today. The release note is explicit that nothing architectural changed: "Spark-X2.6-4B retains exactly the same architecture as Spark-X2.5-4B, achieving its capability gains through improved post-training." The functional addition is a **controllable thinking budget** with three levels — none, low, high — so an application can trade reasoning against latency and cost per request.
+
+The claims are large and unsourced in text: the card says it achieves "state-of-the-art performance among similarly sized open-source models, matching or even surpassing models with approximately 9B parameters", and the benchmark section renders as a single **SVG** (`images/all_benchmark.svg`) with no table beside it. On the infrastructure side the card is unusually thorough for an on-device model — native `spark2_5` support in `llama.cpp` from build **b10828**, Ollama **0.34.1+**, MLX through the project's own `Spark-MLX-LLM`, LM Studio, and a community WebGPU/ONNX demo built on the official INT4 weights.
+
+**Why it matters:** post-training-only gains on a fixed architecture are the cheapest kind of model improvement and the hardest to audit, because there is no new mechanism to inspect — only a table, and here the table is a picture. Treat "matches 9B models" as a positioning claim until someone re-runs it on a harness both models were evaluated on, and treat the three thinking levels as the actually shippable feature: it is the part that changes what an on-device agent can do under a fixed token budget. The distribution list is the honest signal — llama.cpp, Ollama, MLX and LM Studio support at launch means the weights are runnable today, which is more than the benchmark image can say.
+
+[`🔗 XHToken/Spark-X2.6-4B`](https://huggingface.co/XHToken/Spark-X2.6-4B) · [`🔗 Hugging Face — trending`](https://huggingface.co/models)
+
+---
+
+## 35. A single training algorithm for pretraining, SFT and RL — with staged training as a special case
+
+- **Velocity:** ▮ steady
+- **Source:** arXiv · 2610.40564 · 67 pages
+- **Tags:** `training` `rl` `pretraining` `research`
+
+"**Training Foundation Models with a Single Algorithm**" (arXiv **2610.40564**; Yuda Song, Alvin Zhang, Fahim Tajwar, Daman Arora, Jeff Schneider, Daniel Khashabi, Ruslan Salakhutdinov, J. Andrew Bagnell, Aarti Singh, Andrea Zanette) argues that the algorithmic separation between pretraining, midtraining, supervised fine-tuning and RL "is not fundamental". The construction derives RL objectives as **maximum-likelihood fitting to model-generated target distributions**, which places all four stages under one likelihood-based trainer; conventional staged training then becomes "a special case", and the lifecycle reduces to choosing *which data to train on, in what proportions, and when*. They instantiate it as a system that mixes static data and RL generations inside a single trainer.
+
+The reported result is directional rather than numeric in the abstract: across "controlled and real-world experiments", unified training "improves the accuracy-compute tradeoff and task coverage while preserving broader capabilities, and provides a stronger starting point for continual learning". The paper is **67 pages** with **31 figures** and **22 tables**, so the ablations exist — they are just not in the paragraph everyone will quote.
+
+**Why it matters:** if the framing holds, the pipeline stops being four jobs with four owners and becomes one training loop with a data-mixing schedule, which is a much bigger organisational claim than a benchmark win — and the paper is careful to present it as groundwork for "a unified science of foundation-model training" rather than a turnkey recipe. Read the tables before the thesis: "preserving broader capabilities" is precisely the axis where staged RL usually costs something, and a single-algorithm trainer that improves target tasks while quietly eroding general capability would look identical in an abstract. The affiliation list is also worth noting for the usual reason — a result this structural needs independent reproduction, not adoption on the strength of a 67-page appendix.
+
+[`🔗 arXiv 2610.40564`](https://arxiv.org/abs/2610.40564) · [`🔗 Hugging Face — daily papers`](https://huggingface.co/papers)
+
+---
+
+## 36. Scribd told the world on October 1 and its customers one at a time from October 26 — and the notice names the payment fields
+
+- **Velocity:** ▮ steady
+- **Source:** Hacker News · 60+ pts · ~1h ago (~2026-10-31T02:46Z)
+- **Tags:** `incident` `breach` `notification` `scribd`
+
+A **Tell HN** posted at **02:46 UTC on 2026-10-31** carries the notification letter a Scribd customer received on **Monday 2026-10-26**, sent "on behalf of Scribd, Inc., the parent company of **Scribd, Slideshare, Everand, and Fable**" by **Epiq**, the company's notification partner. The scope named in the letter is specific: the third party "may have accessed your email address and the following of your information: last 4 digits of your credit card and country, credit card issuer, credit card expiry date, payment history (not including credit card details)". It states there is "no evidence that this data has been misused" and directs recipients to a call centre.
+
+Scribd's own help-centre article is dated **October 01, 2026** and says the same thing at a different resolution: an unauthorized third party "was able to gain access to our systems" and "used their access to reach other internal systems", and "For most accounts, this involved basic account information. For a smaller number of accounts, more sensitive information was involved." It says notices are being sent "in phases", that "If you haven't gotten one, it doesn't necessarily mean you weren't affected", and recommends password resets on all four brands.
+
+**Why it matters:** the disclosure dates are the story — a public help-centre post on **October 1**, notices to individuals beginning **October 26**, and a front-page discussion on **October 31** in which commenters report receiving the same letter "a few hours ago" on October 30. A phased notification means the absence of an email is not evidence of safety, and the letter's own field list is the part to act on: card expiry, issuer and last-four plus email is a good enough set to make a convincing billing or account-recovery pretext, which is exactly why the letter's next section is about phishing. There is no CVE here and nothing to patch — the only controls are the ones on the account, and the timeline says they should have been applied a month ago.
+
+[`🔗 Hacker News — Tell HN: Scribd Breached`](https://news.ycombinator.com/item?id=50312756) · [`🔗 Scribd — information about the recent security incident`](https://support.scribd.com/hc/en-us/articles/53787421531284)
+
+---
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-10-30T20:14:50Z |
-| Items | 20 |
-| Sources tracked | 17 (Hacker News, GitHub, arXiv, Hugging Face, CISA KEV, NVD, CISA-ADP, Google Research, OpenAI, Volexity, bunny.net, Northflank, GitHub Status, SigNoz, Tangled, TNW) |
+| Generated | 2026-10-31T04:19:32Z |
+| Items | 36 |
+| Sources tracked | 23 (Hacker News, GitHub, arXiv, Hugging Face, CISA KEV, NVD, cveawg, CISA-ADP, Google Research, OpenAI, Anthropic, Volexity, Ubuntu Discourse, Patchstack, Firezone, Akamai/Linode, Go Security, bunny.net, Northflank, GitHub Status, SigNoz, Tangled, TNW) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (3x daily) |
 | Ranking | Velocity-weighted (recency × engagement acceleration × source authority) |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |

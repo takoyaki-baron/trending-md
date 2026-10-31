@@ -1,16 +1,16 @@
 {
- "generated": "2026-10-30T20:48:06.892Z",
+ "generated": "2026-10-31T04:19:50.328Z",
  "files": [
   {
    "file": "2026-10-31.md",
-   "items": 20,
+   "items": 36,
    "findings": [
     {
      "check": "status",
      "item": 1,
      "verdict": "ok",
      "claim": "CVE-2026-111357 `Analyzed`",
-     "detail": "Analyzed (lastModified 2026-10-30T20:29:25.850)"
+     "detail": "Analyzed (lastModified 2026-10-31T04:18:16.040)"
     },
     {
      "check": "status",
@@ -41,11 +41,81 @@
      "detail": "Deferred (lastModified 2026-10-29T14:56:26.107)"
     },
     {
+     "check": "status",
+     "item": 21,
+     "verdict": "ok",
+     "claim": "CVE-2026-98432 `Received`",
+     "detail": "Received (lastModified 2026-10-30T16:18:00.497)"
+    },
+    {
+     "check": "cwe",
+     "item": 21,
+     "verdict": "ok",
+     "claim": "CVE-2026-98432 no CWE",
+     "detail": "absent from both fields read first-hand (NVD weaknesses[], cna/adp problemTypes) — the absence is a field fact, not a coverage gap"
+    },
+    {
+     "check": "status",
+     "item": 22,
+     "verdict": "ok",
+     "claim": "CVE-2026-112816 `Deferred`",
+     "detail": "Deferred (lastModified 2026-10-31T04:18:16.660)"
+    },
+    {
+     "check": "status",
+     "item": 24,
+     "verdict": "ok",
+     "claim": "CVE-2026-116241 `Received`",
+     "detail": "Received (lastModified 2026-10-30T20:17:03.813)"
+    },
+    {
+     "check": "cwe",
+     "item": 24,
+     "verdict": "ok",
+     "claim": "CVE-2026-17566 CWE-78",
+     "detail": "stated in NVD weaknesses[] (f86ef6dc-4d3a-42ad-8f28-e6d5547a5007)"
+    },
+    {
+     "check": "status",
+     "item": 25,
+     "verdict": "ok",
+     "claim": "CVE-2026-61991 `Deferred`",
+     "detail": "Deferred (lastModified 2026-10-30T19:18:29.310)"
+    },
+    {
+     "check": "cwe",
+     "item": 25,
+     "verdict": "ok",
+     "claim": "CVE-2026-61991 CWE-94",
+     "detail": "stated in NVD weaknesses[] (audit@patchstack.com)"
+    },
+    {
+     "check": "status",
+     "item": 26,
+     "verdict": "ok",
+     "claim": "CVE-2026-84295 `Awaiting Analysis`",
+     "detail": "Awaiting Analysis (lastModified 2026-10-30T18:18:13.827)"
+    },
+    {
+     "check": "cwe",
+     "item": 26,
+     "verdict": "ok",
+     "claim": "CVE-2026-84295 CWE-287",
+     "detail": "stated in NVD weaknesses[] (security@progress.com)"
+    },
+    {
+     "check": "cwe",
+     "item": 26,
+     "verdict": "ok",
+     "claim": "CVE-2026-90868 CWE-78",
+     "detail": "stated in NVD weaknesses[] (security@progress.com)"
+    },
+    {
      "check": "repo",
      "item": 5,
      "verdict": "ok",
      "claim": "mattpocock/skills",
-     "detail": "307348★, last push 2026-10-30"
+     "detail": "307589★, last push 2026-10-30"
     },
     {
      "check": "repo",
@@ -59,7 +129,7 @@
      "item": 12,
      "verdict": "ok",
      "claim": "milind-soni/OpenMausBot",
-     "detail": "8429★, last push 2026-10-30"
+     "detail": "8807★, last push 2026-10-30"
     },
     {
      "check": "repo",
@@ -73,14 +143,14 @@
      "item": 19,
      "verdict": "ok",
      "claim": "Leonxlnx/taste-skill",
-     "detail": "106237★, last push 2026-10-30"
+     "detail": "106425★, last push 2026-10-31"
     },
     {
      "check": "repo",
      "item": 20,
      "verdict": "ok",
      "claim": "emmilco/us-tax-model",
-     "detail": "124★, last push 2026-10-30"
+     "detail": "129★, last push 2026-10-30"
     },
     {
      "check": "count",
@@ -102,6 +172,13 @@
      "verdict": "counted-by-author",
      "claim": "2 model",
      "detail": "no page states a model total, and the item says so — the count is the author's own census"
+    },
+    {
+     "check": "count",
+     "item": 31,
+     "verdict": "counted-by-author",
+     "claim": "19 skill",
+     "detail": "no page states a skill total, and the item says so — the count is the author's own census"
     },
     {
      "check": "quotation",
@@ -206,6 +283,118 @@
      "item": 20,
      "verdict": "ok",
      "claim": "3 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 21,
+     "verdict": "ok",
+     "claim": "4 quotation(s)",
+     "detail": "verbatim in 6 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 22,
+     "verdict": "ok",
+     "claim": "5 quotation(s)",
+     "detail": "verbatim in 5 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 23,
+     "verdict": "ok",
+     "claim": "4 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 24,
+     "verdict": "ok",
+     "claim": "4 quotation(s)",
+     "detail": "verbatim in 8 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 25,
+     "verdict": "ok",
+     "claim": "2 quotation(s)",
+     "detail": "verbatim in 4 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 26,
+     "verdict": "ok",
+     "claim": "1 quotation(s)",
+     "detail": "verbatim in 6 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 27,
+     "verdict": "ok",
+     "claim": "3 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 28,
+     "verdict": "ok",
+     "claim": "2 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 29,
+     "verdict": "ok",
+     "claim": "4 quotation(s)",
+     "detail": "verbatim in 4 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 30,
+     "verdict": "ok",
+     "claim": "2 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 31,
+     "verdict": "ok",
+     "claim": "6 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 32,
+     "verdict": "ok",
+     "claim": "3 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 33,
+     "verdict": "ok",
+     "claim": "4 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 34,
+     "verdict": "ok",
+     "claim": "2 quotation(s)",
+     "detail": "verbatim in 4 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 35,
+     "verdict": "ok",
+     "claim": "4 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 36,
+     "verdict": "ok",
+     "claim": "7 quotation(s)",
      "detail": "verbatim in 2 readable source(s)"
     }
    ]

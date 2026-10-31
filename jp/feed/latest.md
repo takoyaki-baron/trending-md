@@ -1,6 +1,6 @@
 ---
 date: 2026-10-31
-updated: 2026-10-30T20:14:50Z
+updated: 2026-10-31T04:19:32Z
 schedule: 04:03, 12:03, 20:03 UTC+8
 sources: 17
 license: CC-BY-4.0
@@ -310,13 +310,267 @@ GitHubは**2026-10-30 17:50 UTC**、**ActionsとWebhooks**の「性能劣化」�
 
 ---
 
+## 21. Anthropic の Claude が Linux カーネルにゼロクリック root RCE を発見 — KASLR リークに 48 分、Akamai は顧客への通知を開始
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Anthropic Frontier Red Team · published 2026-10-27 · CVE record 2026-10-15
+- **Tags:** `cve` `linux-kernel` `rce` `anthropic` `mptcp`
+
+**CVE-2026-98432** はカーネルの IPv4 TCP 経路における競合状態由来の use-after-free で、その詳細は Anthropic によるものだ。Frontier Red Team によれば、社内の研究モデルが完全な攻撃チェーンを書き、**Multipath TCP リスナー**を公開しているサーバー上で、資格情報もユーザー操作もなしに root に到達した。レコードは Linux カーネル CNA のもので（assigner `Linux`、`PUBLISHED` **2026-10-15T12:08Z**、予約は **2026-09-25**）、指標は**ひとつだけ** — `CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H` = **9.8** — で、**CWE は一切ない**（CNA コンテナの `problemTypes` が `null` なので、この「無い」は NVD の解析結果ではなく CNA 自身のフィールドについての記述だ）。NVD 側は **`Received`**、最終更新は **2026-10-30T16:18Z**。
+
+欠陥はカーネルのコミット名が示すとおりのものだ — `ipv4: free inet_opt and ireq_opt after an RCU grace period`。`tcp_v4_syn_recv_sock()` は `ireq->ireq_opt` の所有権をコピーせずに子ソケットへ移す。別の CPU が**再送された SYN** を処理して `tcp_check_req()` から SYNACK を送るとき、同じオプションを `rcu_read_lock()` の下で読むだけであり、`inet_sock_destruct()` は `kfree_rcu()` ではなく素の `kfree()` で `inet_opt` を解放するため、`ip_options_build()` が解放済みのオブジェクトを読む。CNA の `AV:N` の根拠（度量の `scenarios[]` フィールドに書かれており、description ではない）は前提を正確に述べている — 未認証のピアが TCP SYN に IPv4 Record Route または Timestamp バイトを載せる — そして request socket の**マイグレーション**経路（`net.ipv4.tcp_migrate_req=1` または BPF reuseport セレクタ）が残る半分で、MPTCP が踏むのはそこだ。`references[]` には安定ブランチ向けの修正コミットが 8 本並び、いずれも導入コミット `079096f103fa`（syn_recv リクエストを ehash に載せたコミット）からの `versionType: git` 範囲として書かれている。
+
+**Why it matters:** 今日の主題は点数の話ではなく運用側の波及だ。Anthropic のタイムラインは率直で、48 分でカーネルポインタをリークし、そこから 5 分でシェルコマンド実行に至る。効いている性質は「競合に負けてもハンドシェイクが落ちるだけでマシンは落ちない」ため、成功するまで無限に再試行できることだ。これは共有ホストにおける「パッチを当てる」の意味を変える。**Akamai** は **2026-10-30 18:10 UTC** に Linode 顧客向けのセキュリティ勧告を開き、**10-31 01:55 UTC** には緩和策を展開中であり "At this time, we have no evidence of this vulnerability being exploited on the Akamai Compute platform" と述べ、上流の OS アップデートを適用するよう顧客に伝えた。一方 **Go セキュリティチーム**は、**Go 1.24** 以降 Go プログラムが Linux の listen ソケットで MPTCP を既定で有効にするため、誰も要求していなくても Go サーバーが対象に入り得ると警告した。`GODEBUG=multipathtcp=0` や `go.mod` の `godebug multipathtcp=0` は応急処置だが、同じ投稿が "disabling MPTCP on a program-by-program basis is a fragile mitigation"、そして "The best fix for this vulnerability is to upgrade to a patched kernel version." とも書いている。二つの主張は分けて読むべきだ — Anthropic の PoC は MPTCP を必要とするが、Go の警告は根底のバグが MPTCP 固有ではなく、MPTCP リスナーのないシステムも別経路で到達可能かもしれないという話だ。
+
+[`🔗 Anthropic — discovering and exploiting vulnerabilities with Claude`](https://www.anthropic.com/research/discovering-vulnerabilities-with-claude) · [`🔗 oss-security — protecting Go programs against CVE-2026-98432`](https://www.openwall.com/lists/oss-security/2026/10/30/1) · [`🔗 Akamai/Linode — customer security advisory`](https://status.linode.com/incidents/nt58zhx3pmgm) · [`🔗 CVE-2026-98432 (NVD)`](https://nvd.nist.gov/vuln/detail/CVE-2026-98432)
+
+---
+
+## 22. LXD の相互 TLS はチェーン上の全証明書を信頼していた — 10.0、任意の信頼済みユーザーの公開証明書で足りる
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Ubuntu Discourse · advisory 2026-10-28 · CVE published 2026-10-30
+- **Tags:** `cve` `lxd` `tls` `auth-bypass` `canonical`
+
+**CVE-2026-112816** は **LXD**（および **MicroCloud**）の認証バイパスだ。デーモンの相互 TLS 検証は "compared all peer certificates sent by the client to known trust store entries"。つまり HTTPS API に到達でき、**他人の公開クライアント証明書**を入手できる攻撃者は、それを自分のチェーンの**中間**証明書として置くことで、その身元として認証できてしまう。Canonical の勧告は仕組みを一行で言い切る — "only the leaf certificate proves ownership of the signing key" — そして影響はこうだ："The vulnerability allows an attacker that is able to reach the LXD HTTPS API to authenticate as any trusted TLS client, for which the attacker has the public certificate." 被害者の権限次第でこれは**ホストの root** になる。管理者クライアントはデーモンを操作できるからだ。MicroCloud では形がさらに悪く、攻撃者は "intercept the public TLS certificate of a joining cluster member" を行い、そのメンバーとして認証できる。
+
+Canonical はこの欠陥が "was referred to us from the Incus project" だと述べ、`stgraber` に謝辞を記し、**2026-10-29** に LXD 4 チャネルと MicroCloud 2 チャネルで修正を出した — **6.10.1**、**5.21.9**、**5.0.11**、**4.0.15**、**microcloud 2.1.5**、**3.4.1** — `snap refresh lxd` / `snap refresh microcloud` で適用し、ポイントリリースはいまだ `candidate` から `stable` へ段階展開中だ。CVE コンテナ（assigner **canonical**、`PUBLISHED` **2026-10-30T16:42Z**）は **CVSS 4.0 = 10.0**（`security@ubuntu.com` 由来、`AV:N/AC:L/AT:N/PR:N/UI:N` で影響三項目が脆弱側・後続側とも High）と **CWE-295** を持ち、影響範囲は semver で 4 本（`4.0.14 < 4.0.15`、`5.0.10 < 5.0.11`、`5.21.8 < 5.21.9`、`6.9.0 < 6.10.1`）。NVD 側は **`Deferred`** で、独自の度量はひとつも持たない。
+
+**Why it matters:** メモリ破壊でもチェック漏れでもなく、**比較対象の集合を間違えた**ことが原因の 10.0 は珍しい。クライアントが送ってきたチェーン上の全証明書がトラストストアと照合されたので、トラストストアの中身がそのまま署名可能な資格情報になった。ここには綺麗なフィールド単位の注意点もある。勧告の修正表は**二つの**製品にまたがる**六つ**の snap バージョンを挙げるが、CVE レコードの `affected[]` が名指しするのは**一つ**の製品（LXD）と 4 本の範囲だけだ。MicroCloud の 2.1.5 と 3.4.1 は本文ページにしか存在せず、機械可読レコードだけを信じる読者には MicroCloud が対象だと分からない。LXD を特権的な管理プレーンとして動かしているなら、パッチ適用まで全クライアント証明書の公開部分を漏洩済み資格情報として扱い、その snap が実際にどのチャネルを追っているかを再確認すべきだ。段階展開の最中では "latest" と "stable" は同じものではない。
+
+[`🔗 Ubuntu Discourse — Canonical LXD and MicroCloud advisory`](https://discourse.ubuntu.com/t/security-advisory-critical-vulnerability-found-in-canonical-lxd-and-microcloud/90557) · [`🔗 CVE-2026-112816 (NVD)`](https://nvd.nist.gov/vuln/detail/CVE-2026-112816) · [`🔗 Hacker News discussion`](https://news.ycombinator.com/item?id=50310937)
+
+---
+
+## 23. 公式 Ollama ライブラリのコード系 GGUF 305 タグのうち 7 つはほぼ何も解けない — そして未較正の再ビルドとテンソル単位で一致する
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** arXiv · 2609.05881 (v3) · code and audit data released
+- **Tags:** `quantization` `gguf` `reproducibility` `benchmark` `research`
+
+"**Broken on Arrival: Non-Functional Quantized LLM Artifacts in Public Model Registries and How to Catch Them**"（arXiv **2609.05881**、Aditi Patodiya）は、公式 Ollama ライブラリの **15 モデル系列**にわたる**コード系 GGUF タグ 305 件すべて**と、Hugging Face のコミュニティ人気ファイル **22 件**を対象に、15 個のコードタスクでスクリーニングし、疑わしいものを **HumanEval+ 全 164 タスク**で再評価した。**公式タグ 7 件（2.3%）は最大でも 6 問しか解けなかった** — いずれも**40 億**パラメータ以下のモデルの低ビット量子化だ。論文自身の対照が発見そのものだ。元の重みから再ビルドした 5 件は "matched our uncalibrated rebuilds tensor for tensor, so none was corrupted" であり、続く一文が引用に値する — "**Exact reproducibility did not imply function.**"
+
+機構はビット幅だけでなく較正にある。重み・ツールチェーン・テンソル構成を固定したまま **importance matrix** を加えると、`Qwen2.5-Coder-3B` は 3 つの量子化水準で**ゼロから 164 問中 76〜113 問**へ上がった。同じ未較正レシピでも小さい `Qwen2.5-Coder-1.5B` は動作し続けたので、論文はレシピ単独では失敗を予測できないと述べる。逆側では、スクリーニングを通ったタグのうち標本 66 件について "None of 66 sampled tags that passed the screen was non-functional" — 安価なスクリーニングはこの標本では誤警報を出していない。論文の **v3** は以前の判断をひとつ訂正している。コミュニティの `deepseek-coder-6.7B` ファイル対の失敗はバックエンドではなく**チャットテンプレートの欠如**によるもので、そのためのテストが追加された。
+
+**Why it matters:** レジストリが公開しているのはダウンロード数と「いいね」であって機能テストではない。「ノート PC で動く」という推薦はすべてこの穴を引き継ぐ — ダウンロードした成果物が公開元のビルドとバイト単位で同一でも、スコアはゼロになり得る。運用上の帰結は二つ。**4B 以下の低ビット量子化**では、チェックサムではなくタスクレベルのスモークテストを信頼の前提にすること。そしてタグが失敗したときの対処は、破損を疑うより同一モデルの**較正済み量子化に乗り換える**ことであることが多い。監査データと `quantcheck` ツールが論文とともに公開されており、このスクリーニングは再現可能だ。未確立なのは、15 モデル系列の外やコード以外のタスクで失敗率がどう変わるかで、この研究はそこを測っていない。
+
+[`🔗 arXiv 2609.05881`](https://arxiv.org/abs/2609.05881) · [`🔗 Hugging Face — daily papers`](https://huggingface.co/papers)
+
+---
+
+## 24. pgAdmin の `\copy` ガードは一方の引用方言しか見ておらず、psql はもう一方を解析する — 9.9、しかも 6 月の修正のバイパス
+
+- **Velocity:** ▮▮ rising
+- **Source:** NVD / cveawg · CVE published 2026-10-30T20:17Z · assigner PostgreSQL
+- **Tags:** `cve` `pgadmin` `postgresql` `command-injection`
+
+**CVE-2026-116241** は pgAdmin 4 の **Import/Export Data** ツールにおけるコマンドインジェクションだ。pgAdmin はユーザーのクエリ出力を `psql \copy (...) TO` で包み、ラッパーから逃げ出せないようクエリの括弧の対応を検査する。この検査は "rejected a backslash inside a single-quoted string but not inside a double-quoted identifier, where it treated the next double quote as closing the identifier"。一方 psql の `\copy` パーサは "applies the connection's escape character to whichever quote opened a token" なので、`standard_conforming_strings` が off のとき、バックスラッシュでエスケープされた二重引用符は識別子を**閉じない**。二つのパーサ、二つの「文字列がどこで終わるか」という信念。そしてそのセッション変数を設定するのは攻撃者だ。
+
+レコードは **PostgreSQL** が割り当て（`PUBLISHED`、**2026-10-30T20:17Z**）、CNA の度量は**二つ** — `CVSS:3.1/…/PR:L/UI:N/S:C/…` = **9.9** と CVSS 4.0 ベクトルで **9.4** — さらに弱点も**二つ**、**CWE-78** と **CWE-115**（入力の解釈誤り**）**。CNA はこれが **CVE-2026-17566** の修正のバイパスであり、その脅威モデルと `S:C` の根拠を引き継ぐと注記している。NVD 側は **`Received`** で `nvd@nist.gov` の度量はない。影響範囲は `{version: "0", lessThan: "9.19"}` と書かれている。
+
+**Why it matters:** 修正はレコードより一週間早く、成果物より一日早い — コミット **`9be31a0`** は **2026-10-23T18:47Z**、pgAdmin **9.19** は **2026-10-29T15:36Z** に PyPI へ上がっている — 一方で追跡 issue **#10663** はいまだ**オープン**で、本文は "Internal tracking: pending fix for 9.19" と "Details will be published with the pgAdmin 4 9.19 release notes"。開示順序はコミット → リリース → レコード → ノートだ。リポジトリのタグフィードは今も `REL-9_18`（2026-09-17）しか示さないので、「直ったか」はタグではなく PyPI で答えるしかない。持ち帰るべき教訓はこのバグの型だ。サニタイザは**消費者側の文法**のモデルが正しいときだけ正しく、呼び出し側が切り替えられるセッション設定（`standard_conforming_strings`）に依存する解析は、反対側からスイッチを切れるサニタイザである。
+
+[`🔗 CVE-2026-116241 (NVD)`](https://nvd.nist.gov/vuln/detail/CVE-2026-116241) · [`🔗 pgAdmin commit 9be31a0`](https://github.com/pgadmin-org/pgadmin4/commit/9be31a019f780647fb689c458408c8803263c812) · [`🔗 pgAdmin issue #10663`](https://github.com/pgadmin-org/pgadmin4/issues/10663)
+
+---
+
+## 25. WordPress のキャッシュプラグインが「公式パッチなし」の 10.0 — 9 月に報告され、NVD に載ったのは 10 月 29 日
+
+- **Velocity:** ▮▮ rising
+- **Source:** Patchstack · published 2026-10-13 · NVD record 2026-10-29
+- **Tags:** `cve` `wordpress` `rce` `unpatched` `patchstack`
+
+**CVE-2026-61991** は WordPress プラグイン **AjaxLoadMore Cache**（**3.1.1** 以下）の未認証リモートコード実行で、割り当て元 **Patchstack** により **CWE-94**（コードインジェクション）に分類されている。Patchstack のエントリは異例に簡素で、修正状況については異例に直接的な表現をしている。修正バージョンの欄は "**No official patch available**"、エントリは "No VDP"、必要権限は**未認証**、CVSS は **10**。プラグイン自身の配布ページが「まだパッチがない」を確認する場所だ。パッチ不在は失効する主張だからである。
+
+読む価値があるのはタイムラインだ。**Julieta** が **2026-09-12** に報告、Patchstack が **2026-10-13** に公開、NVD に入ったのは **2026-10-29T16:18Z** — 報告からレコードまで **47 日**、うち **16 日**は「攻撃手法が公開済みでコード修正は未提供」だった。NVD 側は **`Deferred`** で、度量はひとつだけ（`CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:C/C:H/I:H/A:H` = **10.0**、出所 `audit@patchstack.com`、`Secondary`）、`nvd@nist.gov` の度量はない — つまりこの 10.0 は発見者の数字を NVD が再掲したもので、しかもこのレコードは NVD が解析しないと表明している。
+
+**Why it matters:** パッチのない 10.0 に対する誠実な対処は二つしかない — プラグインを外すか、仮想パッチを当てるか。Patchstack の緩和策は後者だ。"Patchstack has issued a mitigation rule to block any attacks until an official patch becomes available." この一文はベンダーの製品であって修正ではなく、彼らの WAF の後ろでしか効かない。採点の細部も効く。`PR:N` のコードインジェクションで **10.0** にするのは `S:C` であり、ここでは妥当だ。プラグイン内のコード実行は WordPress インストール全体とそのデータベースの範囲で走るからである。レコードが答えられないのは、そのプラグインがいま重要度の高い場所に残っているかどうかだ。それはバージョン存在の問いであり、CVE フィードではなく棚卸しの仕事である。
+
+[`🔗 Patchstack — AjaxLoadMore Cache advisory`](https://patchstack.com/database/wordpress/plugin/ajax-load-more-cache/vulnerability/wordpress-ajaxloadmore-cache-plugin-3-1-1-remote-code-execution-rce-vulnerability) · [`🔗 CVE-2026-61991 (NVD)`](https://nvd.nist.gov/vuln/detail/CVE-2026-61991)
+
+---
+
+## 26. Progress の WS_FTP 修正は三か月差で二回 — 10.0 のほうは管理者資格情報を渡してしまう
+
+- **Velocity:** ▮▮ rising
+- **Source:** NVD · published 2026-10-29T16:19Z · both `Awaiting Analysis`
+- **Tags:** `cve` `ws-ftp` `progress` `credentials` `rce`
+
+Progress **WS_FTP Server** のレコード二件が **2026-10-29** の同じ分に到着した。どちらも Windows、どちらも `security@progress.com` による採点、どちらも NVD では `Awaiting Analysis` のままだ。**CVE-2026-84295** は **CWE-287** の認証不備で、"an unauthenticated remote attacker to access sensitive information, including administrative credentials" — **2024.0.6** と **2025.0.3** より前のバージョンが対象。ベクトルは `CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:C/C:H/I:H/A:H` = **10.0**。**CVE-2026-90868** は **CWE-78** の OS コマンドインジェクションで `PR:L`、"under certain configurations"、**2024.0.7** と **2025.0.4** より前が対象、**9.9**。CNA コンテナは前者に CWE-287 と並べて **CWE-522**（資格情報の保護不備）も付けている。
+
+**二つの修正水準こそが要点だ。** 認証の欠陥は `2024.0.6` / `2025.0.3` で修正され、コマンドインジェクションは `2024.0.7` / `2025.0.4` で修正される。勧告の最初の修正だけ当てて止めた運用者は、二つ目の欠陥が残るビルドを動かし続ける — そしてファイル転送サーバーは「管理者資格情報」と「任意コマンド実行」が二つの所見ではなく一本のチェーンになる典型だ。両レコードの reference は `progress.lightning.force.com` の Knowledge 記事ひとつだけで、それは SAML ログインへリダイレクトされる。したがって今回ベンダー自身の修正ガイダンスは読めていない。バージョン番号は勧告の主張ではなくレコードの主張として扱い、認証済みセッションでベンダーのページと突き合わせてほしい。
+
+**Why it matters:** `PR:N` の認証バイパスに付く `S:C` は、今月の 10.0 の大半を生んだパターンであり、ここでも正しい — 資格情報ストアは脆弱なコンポーネントの外にあり、影響はセキュリティ境界を越える。実務的な指示はトリアージではなくバージョンの算術だ。`2025.0.3` はあの RCE の**修正版ではない**し、`2024.0.x` と `2025.0.x` が並行する命名は一歩手前で止まりやすくする。どちらも KEV になく、NVD 自前のスコアもないので、ここに悪用の主張はない — 使われる前に当てる項目であり、NVD が解析していないことこそ、レコード自身の CWE を出所付きで引用する価値がある理由だ。
+
+[`🔗 CVE-2026-84295 (NVD)`](https://nvd.nist.gov/vuln/detail/CVE-2026-84295) · [`🔗 CVE-2026-90868 (NVD)`](https://nvd.nist.gov/vuln/detail/CVE-2026-90868)
+
+---
+
+## 27. 同じ道具、二つのインターフェース：MCP と CLI は対応する軌跡の 94.3% で食い違う — 修復層は最大 9 点を稼ぐ
+
+- **Velocity:** ▮▮ rising
+- **Source:** arXiv · 2610.34298 · 2026-10-25
+- **Tags:** `mcp` `agents` `tool-use` `benchmark` `research`
+
+"**Matched Capabilities, Different Behaviors: A Controlled Study of MCP and CLI Interfaces for Language Agents**"（arXiv **2610.34298**、Zhenning Shi、Liang Pang、Yongqi Li）は **MICA**（Matched Interface Comparison and Analysis）を作る。**共有のセマンティック動作契約**から MCP と CLI を描画し、デコードされた動作を**同じランタイム**に流すことで、能力・環境・実行を固定し、モデルに向き合う表現だけを変える。**6 モデル**と**3 つの対話環境**で、対応するインターフェースは "substantial differences in task performance and interaction cost" を生み、対応付けた自然軌跡では **2,004 エピソードのうち 94.3%** に構造的な分岐が現れ、初期の差がその後の対話へ伝播する。
+
+修復側は **DART** — Decoupled Action Realization and Targeted Repair — で、これは "preserves validated semantic commitments while repairing interface-specific realization"。評価した**全 6 設定**でベンチマークスコアを最大 **9.0 点**改善し、**全 3 環境**で MCP のトークンコストをタスク当たり最大 **27.1k** 削減する。
+
+**Why it matters:** 論文の主張は狭く、狭いからこそ使える。MCP が CLI より良いとも悪いとも言っておらず、インターフェースの選択がすべてのエージェントベンチマークと「ツール利用」比較における**交絡因子**であり、対応状態のプローブが失敗の由来（能力の提示か、実現か、フィードバックか）を局所化できると言っている。運用上の数字はコストのほうだ。同じ意味作業でタスク当たり 27.1k トークンの差は、趣味の問題ではなく予算の行である。摘要が開いたままにしている注意点は二つ。6 モデルと 3 環境は摘要では名指しされておらず、9.0 点は設定をまたぐ上限であって平均ではない。典型値として引用する前に表を読むべきだ。
+
+[`🔗 arXiv 2610.34298`](https://arxiv.org/abs/2610.34298) · [`🔗 Hugging Face — daily papers`](https://huggingface.co/papers)
+
+---
+
+## 28. マルチトークン予測の勾配は半分が自己蒸留、半分がノイズ — ノイズを外すのは一行の変更
+
+- **Velocity:** ▮▮ rising
+- **Source:** arXiv · 2610.38331 · preprint
+- **Tags:** `training` `mtp` `speculative-decoding` `research`
+
+"**Multi-Token Prediction Done Right**"（arXiv **2610.38331**、Jayden Teoh）は、MTP の交差エントロピー勾配を正確に分解する。各 MTP ヘッドをモデル自身の次トークン分布へ引き寄せる **KL 自己蒸留項**（これが投機的デコードを速くする）と、信号対雑音比の低い**残差**であり、後者は "buries the useful KL signal"、しかも規模とともに強まる。提案される修正は、共有ヘッドについての事実を利用する。二つの分布が同じ線形出力ヘッドを共有するとき、それらの KL ダイバージェンスの勾配は二つの交差エントロピー勾配から straight-through の勾配ルーティングで正確に復元できる。そこで **Soft-MTP** は KL 項だけを逆伝播し、既存の NTP と MTP の交差エントロピー計算を再利用する — 一行のコード変更、追加パラメータなし、語彙サイズの logit 行列不要、測定可能なオーバーヘッドなし、融合交差エントロピーカーネルと互換。
+
+報告結果は **167M から 1.2B パラメータ**にわたる。すべての規模で標準 MTP より NTP パープレキシティが低く、投機的デコードが速く、ゼロショット精度が高い。**689M** 以降は MTP パープレキシティも低い。1.2B では微調整後に数学とコードの推論が強い。多くの指標で KL 直接最小化と同等以上。DeepSeek 型と Meta 型の両方の MTP 構成をサポートする。
+
+**Why it matters:** MTP が標準の事前学習材料になったのは安いからであり、この論文の主張は「安い版が学ぶものの一部はノイズだ」という点にある — モデルを変えずに学習レシピを変える種類の発見だ。ただし強い仮説として扱うべきで、確定した結果ではない。単著のプレプリントで、検証された最大規模は 1.2B — 論文自身が残差の悪化を言う規模よりずっと小さい — そして「測定可能なオーバーヘッドなし」は融合カーネルに関する実装上の主張で、別のスタックで測り直す必要がある。次にやるべき試験は論文がやっていないものだ。標準 MTP が実際に配備される規模で、この優位が残るかどうか。
+
+[`🔗 arXiv 2610.38331`](https://arxiv.org/abs/2610.38331) · [`🔗 Hugging Face — daily papers`](https://huggingface.co/papers)
+
+---
+
+## 29. Baidu の Unlimited-OCR-2 はウィンドウではなく作業集合を有界にする — そして SOTA 表は画像である
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hugging Face · baidu/Unlimited-OCR-2 · released 2026-10-27
+- **Tags:** `ocr` `vision-language` `long-context` `mit` `baidu`
+
+**`baidu/Unlimited-OCR-2`** は **MIT** ライセンスの画像テキスト→テキストモデルで **2026-10-27** に公開され、Hub で **24,276 ダウンロード**、**457 いいね**。新データセット **MarathonDocBench**（超長期文書解析向け）と同時に登場した。機構は **SR-SWA**（疎な参照スライディングウィンドウ注意）で、モデルは "compresses text-visual attention interactions from ultra-long sequences down to a fixed-size set of working references (e.g., 512 tokens)"。これにより計算量が有界になり、"per-step decoding latency and memory footprint nearly constant regardless of document length" になる。複数ページ解析は単一リクエストで、プロンプトは `"<PAGE><image>" * num_pages + "Multi page parsing."`。ページ間文脈が使え、各ページは順に `<PAGE>` マーカーを 1 つ出力する。
+
+**Why it matters:** "unlimited" は**作業集合**についての主張であって、無界のコンテキストウィンドウについての主張ではない。カードは機構の水準では誠実だが、数値の水準では不透明だ。SOTA の文は "Achieves state-of-the-art performance across both dozens-of-pages benchmarks (e.g. MPDocBench) and extreme hundred-page benchmarks (e.g. MarathonDocBench)" と書き、実際のリーダーボードは **PNG**（`assets/leaderboard.png`）なので、そこにある数字は OCR しない限り引用も検証もできない。今回のリリースで最も有用なのは配備の付録だ。カスタム SGLang wheel、前ウィンドウの KV 末尾を再利用するページウィンドウスケジューラ、32 同時リクエスト超で 0.75 が OOM になるため `--mem-fraction-static 0.7`、そしてページウィンドウを小さくするとピークメモリは下がるがウィンドウ境界でページ間マージを失うという明示的なトレードオフ。これが「unlimited」の実際のコスト — 調整可能なウィンドウとメモリ予算 — であり、多くの長文脈リリースより明確に書かれている。
+
+[`🔗 baidu/Unlimited-OCR-2`](https://huggingface.co/baidu/Unlimited-OCR-2) · [`🔗 baidu/Unlimited-OCR`](https://github.com/baidu/Unlimited-OCR) · [`🔗 Hugging Face — trending`](https://huggingface.co/models)
+
+---
+
+## 30. Firezone は boringtun への 2 年にわたるパッチを sans-IO WireGuard で置き換えた — 45× は比であって測定ではない
+
+- **Velocity:** ▮▮ rising
+- **Source:** Firezone blog · 2026-10-31 · firezone/sanstun
+- **Tags:** `wireguard` `rust` `networking` `sans-io` `apache`
+
+**`firezone/sanstun`**（Apache-2.0、**2026-10-02** 作成、37 スター）は WireGuard 状態機械の sans-IO Rust 実装で、本日 Thomas Eizinger が発表した。前提は IO、**時間、乱数**をすべてライブラリの外に出すことだ。データグラムを解析する唯一の公開入口は `Interface::receive` で、これがレート制限を適用し、cookie 応答を生成し、型付きメッセージを返す。`HandshakeInitiation` などのコンストラクタは **crate プライベート**なので、呼び出し側はレート制限器を通らずに `Tunnel::handle_handshake_initiation` へ到達できない。これは型システムで強制されたプロトコル不変条件であり、記事の主張は「レート制限を忘れることこそ通常運用では決して露見しないバグだ」という点にある。
+
+性能設計は残る半分だ。`Tunnel::begin_encapsulate` は**暗号化しない**。セッションを確認し、パケットカウンタを予約し、タイマーを進め、`Send` を実装する `PendingEncapsulate` を返す。これにより ChaCha20-Poly1305 の処理をワーカースレッドへ移し、カウンタの記帳はオーナースレッドに残せる。公開された `cargo bench data_path` の数字がその分割を見せる。`begin_encapsulate` は 64 B と 1280 B でともに **20.8 ns**、`encrypt` は 64 B で **226 ns**、1280 B で **933 ns**、`begin_decapsulate` は **37.6 ns**、`commit_decapsulate` は **17.5 ns**。
+
+**Why it matters:** 記事が見出しに出す数字には自前の免責が付いている。"If we move the actual encryption to another thread, this hints at a potential speedup of more than 45x!" の直後に "An effective speedup of 45x is hard to achieve in practice because it ignores the cost of passing `PendingEncapsulate` to another thread and assumes no other overhead is introduced." と続く。つまり 45× は 1280 B における記帳と暗号処理の比であってスループットの結果ではなく、誠実な読み方は「MTU サイズのパケットでは記帳は仕事の **2%** にすぎない」だ。もう一つ記す価値があるのはプロジェクト自身の来歴で、Firezone は依存更新を除いても "more than 70 PRs" に及ぶパッチを 2 年続けた末に、上流との API 互換性こそが制約だと結論した。これはプロトコルライブラリの書き直しを正当化するのに、どんなマイクロベンチマークより有用な論拠である。
+
+[`🔗 Firezone — introducing sanstun`](https://www.firezone.dev/blog/introducing-sanstun) · [`🔗 firezone/sanstun`](https://github.com/firezone/sanstun)
+
+---
+
+## 31. Anthropic の `skills` リポジトリは 185k スターでトップレベルにライセンスがない — ライセンスはフォルダ単位で、うち 4 つはオープンソースではない
+
+- **Velocity:** ▮▮ rising
+- **Source:** GitHub Trending (weekly) · +1,888 this week · 185,417 total
+- **Tags:** `agent-skills` `anthropic` `licensing` `mit`
+
+**`anthropics/skills`** — "Public repository for Agent Skills" — が今週もトレンド入りしている。**+1,888 スター**（今日 **295**、合計 **185,417**、**21,904** fork、オープン issue **1,450**）、最終 push は **2026-10-28**。ツリーは小さく、しかし要となる。`skills/` にスキルのフォルダが **19** 個 — ディレクトリ一覧から数えたもので、総数を述べるページはない — 加えて `spec/`、`template/`、`.claude-plugin/` があり、**ルートに `LICENSE` はない**（そのパスは 404）。トップレベルでライセンスに近い唯一のファイルは `THIRD_PARTY_NOTICES.md` だ。
+
+ライセンスは README の中にあり、しかも**ひとつのリポジトリに二種類**ある。"Many skills in this repo are open source (Apache 2.0)." だが "We've also included the document creation & editing skills that power Claude's document capabilities … in the `skills/docx`, `skills/pdf`, `skills/pptx`, and `skills/xlsx` subfolders" があり、これらの "These are **source-available, not open source**" として "a reference for more complex skills that are actively used in a production AI application" のために共有されている。README にはさらに、スキルは "provided for demonstration and educational purposes only" であり "the implementations and behaviors you receive from Claude may differ from what is shown" という免責も付く。
+
+**Why it matters:** これはエージェントスキル生態系の大きな部分が写しているリポジトリで、写されているもののライセンスは一様ではない。19 のフォルダのうち 4 つは読めるが再利用できない参照物であり、リポジトリ単位の public バッジでは区別できない。スキルを製品に vendor するなら、リポジトリ単位ではなくフォルダ単位で棚卸しし、README の「一致しないかもしれない」という一文を、出荷される挙動はこのコードではないというベンダーの表明として扱うべきだ。生の数字は単位の取り方も思い出させる。**1,450** はこのリポジトリの issue **と** pull request の合計であり、オープン issue が 1,450 件という意味ではない。
+
+[`🔗 anthropics/skills`](https://github.com/anthropics/skills) · [`🔗 GitHub Trending (weekly)`](https://github.com/trending?since=weekly)
+
+---
+
+## 32. コンテキストはキャッシュされても無料ではない — prefill のエネルギーは入力長に対して二次で伸びる
+
+- **Velocity:** ▮ steady
+- **Source:** arXiv · 2610.39621 · 2026-10-30
+- **Tags:** `energy` `prefill` `agents` `long-context` `research`
+
+"**The Real Cost of Context: Predicting Compute Time and Energy Consumption in LLM Prefill and Decode Phases**"（arXiv **2610.39621**、Lars Krupp、Daniel Geißler、Francisco M. Calatrava-Nicolas、Stefan Gerd Fritsch、Paul Lukowicz、Jakob Karolus）は測定の問題から始まる。エージェント構成は "substantially increased token consumption" を招いたが、既存の見積もりは生成された**出力**トークンだけを数え、エージェントが抱える大きな入力コンテキストを無視している。著者らは prefill と decode の長さを広く変えて計算時間と消費エネルギーを計測し、その結果に一般化線形モデルを当てた。
+
+結論はスケーリングだ。**decode** の計算時間とエネルギーは出力長に**線形**、**prefill** は入力長に対して**線形と二次の両方**で伸びる。したがって入力コンテキストは "becomes a relevant factor for large-context workloads"。さらに、直接のエネルギー計測ができない場合に計算時間がエネルギーの信頼できる代理になることを示す。これがクローズドな API モデルにこの枠組みを使える理由だ。
+
+**Why it matters:** 設計判断を変えるのは二次の項だ。エージェントの伸び続ける履歴のコストは規模に比例せず、コンテキストを倍にすると二倍より高くつき得る。しかもその罰則は誰もが「読むだけ」と見なす段階に落ちる。取得を減らすのではなくコンテキストを増やして遅延を買う設計すべてに対して、これは検索と圧縮を選ぶ直接の根拠になる。二つの限界は明記すべきだ。当てはめはモデルごと・ハードウェアごとで、係数は配備間で移らない。「計算時間をエネルギー代理とする」も著者自身の計測で較正されたものでベンダーの計量ではないため、ホストされたモデルのエネルギーを見積もる話であり、実際に支払うトークン課金の話ではない。
+
+[`🔗 arXiv 2610.39621`](https://arxiv.org/abs/2610.39621) · [`🔗 arXiv cs.AI recent`](https://arxiv.org/list/cs.AI/recent)
+
+---
+
+## 33. 自律実験室が自分の好ましい結果を棄却した — エージェントは参照測定のドリフトを見つけ、手順を書き換えた
+
+- **Velocity:** ▮ steady
+- **Source:** arXiv · 2610.40589 · 2026-10-30
+- **Tags:** `ai-for-science` `agents` `self-checking` `research`
+
+"**Collaborative AI agents for autonomous experimental research with solid-state quantum spins**"（arXiv **2610.40589**、El Mustapha Mansouri、Eikichi Kimura、Masato Koga、Keigo Arai）は、LLM ベースのエージェント同士が "assess one another's work and can stop or redirect investigations" する実験室を作る。研究設問を生成し棄却し、独立した理論検証を要求し、自らの主張に挑む実験を設計する。舞台はダイヤモンド中の量子スピン集団で、エージェントはマイクロ波パルス列の族に対する応答を予測するのに必要な**最小の較正設定数**を導き、計算で確認し、競合する予測を判別する実験を設計した。
+
+そこからが面白い。初回の実験は理論予測と**一致**したが、参照測定の反復で収集中に**信号がドリフト**していたことが分かる。エージェントは "therefore treated the result as inconclusive and revised the measurement protocol without relaxing the acceptance criteria" — 改訂した実験はその基準を満たし、予測を支持した。
+
+**Why it matters:** 追認的な実行は作りやすく、疑いにくい。ここで示されている能力は導出ではなく**拒否**だ。自分の対照がドリフトしたという理由で好都合な測定を捨てるエージェント系は、実験ノートとプレスリリースの差そのものになる。論文の枠付けが引用可能にしている点も大きい。冒頭で近年の AI システムは "may draw conclusions that the evidence does not support" と述べており、本研究はその失敗を避けるために組まれている。ひとつの系、ひとつの物理設定、一度の受入基準の引き上げとして読むべきで、検証されていないのは「エージェント自身の理論的主張こそが誤っているとき、同じ不一致の仕組みが機能するか」である。
+
+[`🔗 arXiv 2610.40589`](https://arxiv.org/abs/2610.40589) · [`🔗 arXiv cs.AI recent`](https://arxiv.org/list/cs.AI/recent)
+
+---
+
+## 34. Spark-X2.6-4B は X2.5 のアーキテクチャを保ち、改善はすべて後学習から — 比較は SVG で出荷される
+
+- **Velocity:** ▮ steady
+- **Source:** Hugging Face · XHToken/Spark-X2.6-4B · updated 2026-10-31
+- **Tags:** `open-weights` `on-device` `agents` `apache`
+
+**`XHToken/Spark-X2.6-4B`** は **4B**、**Apache-2.0**、英語と中国語の汎用モデルで、オンデバイスエージェントを狙う。Hub で **923 いいね**、**12,515 ダウンロード**、カードは本日改訂された。リリースノートはアーキテクチャが変わっていないことを明言する。"Spark-X2.6-4B retains exactly the same architecture as Spark-X2.5-4B, achieving its capability gains through improved post-training." 機能面の追加は**制御可能な思考予算**で、none、low、high の三水準。アプリケーションはリクエストごとに推論と遅延・コストを天秤にかけられる。
+
+主張は大きく、本文に根拠がない。カードは "state-of-the-art performance among similarly sized open-source models, matching or even surpassing models with approximately 9B parameters" と述べ、ベンチマーク節は単一の **SVG**（`images/all_benchmark.svg`）として描画され、隣に表はない。インフラ側の記述はオンデバイスモデルとしては異例に詳しい。`llama.cpp` はビルド **b10828** 以降で `spark2_5` をネイティブサポート、Ollama **0.34.1+**、プロジェクト自身の `Spark-MLX-LLM` 経由の MLX、LM Studio、そして公式 INT4 重みを使ったコミュニティの WebGPU/ONNX デモ。
+
+**Why it matters:** 固定アーキテクチャ上で後学習だけで得た改善は最も安く、最も監査しにくい種類のモデル改良だ。検査すべき新しい機構がなく、あるのは表ひとつ — そしてここではその表が絵である。両方のモデルを同じハーネスで走らせた再現が出るまで、「9B に匹敵」は位置づけの主張として扱うべきだ。一方、三水準の思考予算は実際に出荷できる機能として扱ってよい。固定のトークン予算下でオンデバイスエージェントが何をできるかを変えるのはそこだからだ。正直な信号は配布先の一覧で、llama.cpp、Ollama、MLX、LM Studio が同時対応ということは重みが今日動くということであり、それはベンチマーク画像より多くを語る。
+
+[`🔗 XHToken/Spark-X2.6-4B`](https://huggingface.co/XHToken/Spark-X2.6-4B) · [`🔗 Hugging Face — trending`](https://huggingface.co/models)
+
+---
+
+## 35. 事前学習も SFT も RL もひとつの訓練アルゴリズムで — 段階型訓練は特殊ケースになる
+
+- **Velocity:** ▮ steady
+- **Source:** arXiv · 2610.40564 · 67 pages
+- **Tags:** `training` `rl` `pretraining` `research`
+
+"**Training Foundation Models with a Single Algorithm**"（arXiv **2610.40564**、Yuda Song、Alvin Zhang、Fahim Tajwar、Daman Arora、Jeff Schneider、Daniel Khashabi、Ruslan Salakhutdinov、J. Andrew Bagnell、Aarti Singh、Andrea Zanette）は、事前学習・midtraining・教師あり微調整・RL の間のアルゴリズム的な分離は "is not fundamental" と主張する。構成は RL の目的関数を**モデルが生成した目標分布への最尤フィッティング**として導出し、四つの段階すべてをひとつの尤度ベース訓練器に収める。従来の段階型訓練は "a special case" になり、ライフサイクルは*どのデータを、どの割合で、いつ訓練するか*の選択に還元される。彼らはこれを、静的データと RL 生成を単一の訓練器で混ぜるシステムとして実装する。
+
+摘要の結果は方向性であって数値ではない。"controlled and real-world experiments" を通じて、統一訓練は "improves the accuracy-compute tradeoff and task coverage while preserving broader capabilities, and provides a stronger starting point for continual learning" とする。論文は **67 ページ**、**31 図**、**22 表**で、アブレーションは存在する — ただ、誰もが引用する段落にはない。
+
+**Why it matters:** この枠組みが成立すれば、パイプラインは四人の担当者が持つ四つの仕事ではなく、データ混合スケジュールを持つひとつの訓練ループになる。それはベンチマークの勝利よりはるかに大きな組織論的主張であり、論文自身も「統一された基盤モデル訓練の科学」の土台として提示していて、出来合いのレシピとは言っていない。主張より先に表を読むべきだ。"preserving broader capabilities" は段階型 RL が通常代償を払う軸そのもので、目的タスクを改善しつつ汎用能力を静かに削る単一アルゴリズム訓練器は、摘要では同じに見える。著者の所属もいつもの理由で注目に値する。これほど構造的な結果は採用ではなく独立再現を必要とする。
+
+[`🔗 arXiv 2610.40564`](https://arxiv.org/abs/2610.40564) · [`🔗 Hugging Face — daily papers`](https://huggingface.co/papers)
+
+---
+
+## 36. Scribd は 10 月 1 日に世界へ、10 月 26 日から顧客ひとりずつへ — 通知は支払い項目を名指ししている
+
+- **Velocity:** ▮ steady
+- **Source:** Hacker News · 60+ pts · ~1h ago (~2026-10-31T02:46Z)
+- **Tags:** `incident` `breach` `notification` `scribd`
+
+**2026-10-31 02:46 UTC** の **Tell HN** が、Scribd の顧客が **2026-10-26 月曜**に受け取った通知書を掲載している。差出人は通知代行会社 **Epiq** で、"on behalf of Scribd, Inc., the parent company of **Scribd, Slideshare, Everand, and Fable**" とある。範囲は具体的だ。第三者が "may have accessed your email address and the following of your information: last 4 digits of your credit card and country, credit card issuer, credit card expiry date, payment history (not including credit card details)"。文書は "no evidence that this data has been misused" と述べ、コールセンターの番号を案内する。
+
+Scribd 自身のヘルプセンター記事の日付は **2026 年 10 月 1 日**で、同じことを別の解像度で述べている。未承認の第三者が "was able to gain access to our systems"、そして "used their access to reach other internal systems"。さらに "For most accounts, this involved basic account information. For a smaller number of accounts, more sensitive information was involved." 通知は段階的に送付中で、"If you haven't gotten one, it doesn't necessarily mean you weren't affected" とし、四ブランドすべてでのパスワード再設定を勧めている。
+
+**Why it matters:** 開示の日付こそが主題だ。**10 月 1 日**の公開ヘルプページ、**10 月 26 日**に始まった個人宛通知、そして **10 月 31 日**にフロントページへ上がった議論 — そこではコメント投稿者が 10 月 30 日の "a few hours ago" に同じ手紙を受け取ったと書いている。段階的通知は、メールが来ていないことが安全の証拠にならないことを意味する。そして手紙の項目一覧こそが行動すべき部分だ。カードの有効期限、発行会社、下 4 桁にメールアドレスが揃えば、請求やアカウント回復を装う説得力を十分に持つ。だからこそ次の節がフィッシングの話になる。ここに CVE はなく当てるパッチもない。制御点はアカウント側にしかなく、タイムラインはそれが一か月前に済んでいるべきだったと言っている。
+
+[`🔗 Hacker News — Tell HN: Scribd Breached`](https://news.ycombinator.com/item?id=50312756) · [`🔗 Scribd — information about the recent security incident`](https://support.scribd.com/hc/en-us/articles/53787421531284)
+
+---
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-10-30T20:14:50Z |
-| Items | 20 |
-| Sources tracked | 17 (Hacker News, GitHub, arXiv, Hugging Face, CISA KEV, NVD, CISA-ADP, Google Research, OpenAI, Volexity, bunny.net, Northflank, GitHub Status, SigNoz, Tangled, TNW) |
+| Generated | 2026-10-31T04:19:32Z |
+| Items | 36 |
+| Sources tracked | 23 (Hacker News, GitHub, arXiv, Hugging Face, CISA KEV, NVD, cveawg, CISA-ADP, Google Research, OpenAI, Anthropic, Volexity, Ubuntu Discourse, Patchstack, Firezone, Akamai/Linode, Go Security, bunny.net, Northflank, GitHub Status, SigNoz, Tangled, TNW) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (3x daily) |
 | Ranking | Velocity-weighted (recency × engagement acceleration × source authority) |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |
