@@ -1,0 +1,221 @@
+{
+ "generated": "2026-10-31T20:35:43.223Z",
+ "files": [
+  {
+   "file": "2026-11-01.md",
+   "items": 20,
+   "findings": [
+    {
+     "check": "cwe",
+     "item": 8,
+     "verdict": "ok",
+     "claim": "CVE-2026-63393 CWE-502",
+     "detail": "stated in NVD weaknesses[] (security-advisories@github.com)"
+    },
+    {
+     "check": "cvss",
+     "item": 9,
+     "verdict": "ok",
+     "claim": "4.0 9.3",
+     "detail": "CVE-2026-119597 · Secondary/disclosure@vulncheck.com"
+    },
+    {
+     "check": "cvss",
+     "item": 9,
+     "verdict": "ok",
+     "claim": "3.1 9.8",
+     "detail": "CVE-2026-119597 · Primary/disclosure@vulncheck.com · vector reproduces 9.8"
+    },
+    {
+     "check": "issues",
+     "item": 12,
+     "verdict": "ok",
+     "claim": "3 issues + 4 PRs",
+     "detail": "split named (PR share 57%)"
+    },
+    {
+     "check": "repo",
+     "item": 3,
+     "verdict": "unreadable",
+     "claim": "anthropic/claude-opus-4.6",
+     "detail": "api.github.com: Command failed: gh api repos/anthropic/claude-opus-4.6"
+    },
+    {
+     "check": "repo",
+     "item": 3,
+     "verdict": "stale",
+     "claim": "moonshotai/kimi-k2",
+     "detail": "last push 2026-01-21 (284d) with 11112 stars — is the item about the code or the name?"
+    },
+    {
+     "check": "repo",
+     "item": 5,
+     "verdict": "hf-model",
+     "claim": "nvidia/NVIDIA-Nemotron-3.5-Bolt-E4B-4GB",
+     "detail": "huggingface.co/nvidia/NVIDIA-Nemotron-3.5-Bolt-E4B-4GB (gated: false, 9 files, created 2026-10-05) — a Hugging Face model id, not a GitHub repository (read the card, not a README)"
+    },
+    {
+     "check": "repo",
+     "item": 8,
+     "verdict": "unreadable",
+     "claim": "plugins/sql",
+     "detail": "api.github.com: Command failed: gh api repos/plugins/sql"
+    },
+    {
+     "check": "repo",
+     "item": 9,
+     "verdict": "ok",
+     "claim": "AIDotNet/OpenDeepWiki",
+     "detail": "3651★, last push 2026-10-23"
+    },
+    {
+     "check": "repo",
+     "item": 10,
+     "verdict": "ok",
+     "claim": "vercel-labs/agent-desktop",
+     "detail": "3983★, last push 2026-10-31"
+    },
+    {
+     "check": "quotation",
+     "item": 1,
+     "verdict": "ok",
+     "claim": "3 quotation(s)",
+     "detail": "verbatim in 10 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 2,
+     "verdict": "ok",
+     "claim": "4 quotation(s)",
+     "detail": "verbatim in 4 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 3,
+     "verdict": "ok",
+     "claim": "4 quotation(s)",
+     "detail": "verbatim in 4 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 4,
+     "verdict": "ok",
+     "claim": "8 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 5,
+     "verdict": "ok",
+     "claim": "4 quotation(s)",
+     "detail": "verbatim in 3 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 6,
+     "verdict": "ok",
+     "claim": "3 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 7,
+     "verdict": "ok",
+     "claim": "4 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 8,
+     "verdict": "ok",
+     "claim": "1 quotation(s)",
+     "detail": "verbatim in 6 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 9,
+     "verdict": "ok",
+     "claim": "1 quotation(s)",
+     "detail": "verbatim in 5 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 10,
+     "verdict": "ok",
+     "claim": "6 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 11,
+     "verdict": "ok",
+     "claim": "1 quotation(s)",
+     "detail": "verbatim in 3 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 12,
+     "verdict": "ok",
+     "claim": "7 quotation(s)",
+     "detail": "verbatim in 1 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 13,
+     "verdict": "ok",
+     "claim": "7 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 14,
+     "verdict": "ok",
+     "claim": "6 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 15,
+     "verdict": "ok",
+     "claim": "9 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 16,
+     "verdict": "ok",
+     "claim": "7 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 17,
+     "verdict": "ok",
+     "claim": "7 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 19,
+     "verdict": "ok",
+     "claim": "6 quotation(s)",
+     "detail": "verbatim in 1 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 20,
+     "verdict": "ok",
+     "claim": "6 quotation(s)",
+     "detail": "verbatim in 1 readable source(s)"
+    }
+   ]
+  }
+ ],
+ "status_watch": [],
+ "api_calls": 0,
+ "readme_calls": 0,
+ "cited_page_calls": 0,
+ "repo_page_calls": 0,
+ "nvd_calls": 1,
+ "cna_calls": 0
+}

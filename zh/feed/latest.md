@@ -1,764 +1,326 @@
 ---
-date: 2026-10-31
-updated: 2026-10-31T12:32:34Z
+date: 2026-11-01
+updated: 2026-10-31T20:35:33Z
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 17
+sources: 14
 license: CC-BY-4.0
 ---
 
-# 今日趋势 — 2026-10-31
+# 今日趋势 — 2026-11-01
 
-按**速度**排序 — 衡量的是注意力转移的快慢，而非累积的总量。每一条都链接到一个被实际打开并阅读过的一手来源。
-
----
-
-## 1. CISA 把两个 Ivanti Connect Secure 漏洞列入 KEV — 而外面到处引用的 8.8，在记录里是 7.0
+## 1. Delinea 一天内发布了三个 Secret Server 认证修复 —— 而分数最低的那个，恰恰击穿了「抗钓鱼 MFA」
 
 - **Velocity:** ▮▮▮ trending
-- **Source:** CISA KEV · added 2026-10-30 · due 2026-11-02 / 2026-11-13
-- **Tags:** `cve` `ivanti` `kev` `exploitation` `vpn`
+- **Source:** Delinea CNA 记录（cveawg）· 发布于 2026-10-30 · 预留于 2026-10-23
+- **Tags:** `cve` `authentication-bypass` `pam` `jwt` `fido2`
 
-CISA 于 **2026-10-30** 把 **CVE-2026-111357** 和 **CVE-2026-118527** 加入已知被利用漏洞目录，依据是 "based on evidence of active exploitation"。两者都属于 Ivanti Connect Secure；它们所属攻击链上的第三个漏洞 **CVE-2026-104935**（认证绕过加文件上传竞争条件，CVSS 8.6）已于 **2026-10-13** 进入 KEV。漏洞研究出自 Volexity，发表于 **2026-10-13**，题为 "A Series of Unauthenticated Events"：一个自称 **unknown** 的攻击者被追踪为 **UTA0576**，把这三个漏洞串起来打在一台**完全打过补丁**的设备上（`22.8R2.4, Build 19097`），活动可追溯至 **2026-10-03**。攻击链最终通过内存中修改 `dsinvoked` broker 与 `libdsplibs.so` 的 DSCache 配置拿到 root。
+Delinea 在 **2026-10-30** 一次性发布了三个 Secret Server 的 CVE，修复目标都是同一句「低于 12.3.1 的版本」，而三个漏洞本质上都是「认证路径不再做认证」。`CVE-2026-115829` 是部分登录绕过：「用户可以跳过初次登录环节，仅凭成功完成第二因素登录就通过认证」，评分 **8.7**（`CVSS:4.0/AV:N/AC:H/AT:N/PR:H/UI:N/VC:H/VI:H/VA:N`）。`CVE-2026-115830` 是 JWT 签发问题：用户可以「提交一个未签名的 JWT，并因此获得 **cloudadmin** 权限」，同样 **8.7**、同一向量。`CVE-2026-115828` 则说 Secret Server「在使用符合 FIDO2 的设备时，并不总是校验 PIN 或生物特征」——**5.1**。
 
-**记录里的分数不是报道里的分数。** CVE 记录（状态 `PUBLISHED`，分配者 **MITRE**）只有**一个**度量：`CVSS:3.1/AV:L/AC:H/PR:L/UI:N/S:U/C:H/I:H/A:H` = **7.0 HIGH**，CWE-829 — 而 KEV 自己给这一条起的标题是 "Missing Authentication for Critical Function"，Volexity 则称其为提权：同一个漏洞，三个标签。NVD 的那份显示 `Analyzed`（lastModified **2026-10-30T20:29Z**，比本条起草晚 15 分钟），且**依然没有任何**属于自己的度量 —— 这是背书情形：NVD 分析了记录，把 MITRE 的 7.0 留在原地，而不是在旁边发布自己的评分。二手报道把 **8.8** 归给"'the updated advisory'" — 是 Ivanti 的通告，不是 CVE 记录 — 并给 CVE-2026-118527 打出 **4.3**，而这个数字背后**没有记录**：NVD 查不到这条 CVE，`cveawg` 返回 `CVE_RECORD_DNE`，而 KEV 条目自己的 notes 里还挂着一个解析不到任何内容的 NVD 详情链接。在 2026-09-01 以来新增的 **79** 条 KEV 条目中，**只有 1 条**没有已发布的记录，就是它。向量运算是仲裁者，它算出来是 7.0：拉低分数的是 `AV:L` 和 `AC:H`，而不是任何缺失的组件。Volexity 自己的更新说明把 CVE-2026-111357 指认为提权修复，并**完全没给 CVSS**；CVE-2026-118527 那个可预测文件名的漏洞（让已认证攻击者写入已知磁盘路径），在该页面上**根本没被提到**。
+评分本身才是重点。FIDO2 那个漏洞的攻击复杂度是三者中**最低**的（`AC:L`），分数也最低，因为影响分量是 `VC:L/VI:L`；而两个直接铸出管理员权限的漏洞带着 `AC:H/PR:H`，硬生生被压到 8.7，尽管 CISA 的 SSVC 增强写着 `Technical Impact: total`。请把这两个数字读成「被计算的场景有多严重」，而不是「后果有多严重」：一台把第二因素本身当作充分条件的 PAM 设备，和一个 5.1 的问题不属于同一个类别。
 
-**Why it matters:** KEV 是关于利用的断言，不是关于严重性的断言 — 一个需要本地访问和竞争条件的 7.0 会和一堆 9.8 并排放着，因为这个目录记录的是攻击者**做过**什么；只按分数排序做分诊的人会直接跳过它。真正有用的是后渗透部分的说明：攻击者**没有部署 webshell**，每执行一条命令都重放整条链、结果经 HTTPS 回传，所以 Ivanti 自家的 Integrity Checker "may not be able to identify device compromise" — Volexity 是靠内存取证才看到的。修复版本是 **25.1.1.3 / 25.1.3.1 / 22.8R2.6**，22.7.x 及以下不受影响 — 不过本文引用的三个页面都没写出这些：Volexity 那篇没有，NVD 的描述只提到 `22.8R2.4`，而 Ivanti 的通告这一轮是个 JS 外壳（**1.0 MB** 的 HTML 里只有 **68 个字符**的正文，其 `llms.txt` 直接跳到登录页），所以这份修复清单在这里**未经核实**。同一天进入 KEV 的两条还带着不同的截止日 — **2026-11-02** 与 **2026-11-13** — 因为时钟是按条目风险分级的，不是按攻击链。置信度标注也要一起读：Volexity 对"出于犯罪而非间谍动机"的判断是**低**置信，对"使用 LLM"是**中**置信，并明确说攻击者的最终目标 "could not be determined"。
+**Why it matters:**「抗钓鱼 MFA」是采购清单上的一个勾选项，而它落的正是这个产品类别；FIDO2 那条记录说的是 PIN／生物特征校验并不总被执行。对一个密码保险库来说，这不是一个「部分得分」的发现——它就是那份安全论证本身，被归档在 5.1 的位置上。请升级到 12.3.1，并重新读一遍你的 MFA 策略到底假设了什么。
 
-[`🔗 CISA — two KEV additions`](https://www.cisa.gov/news-events/alerts/2026/10/30/cisa-adds-two-known-exploited-vulnerabilities-catalog) · [`🔗 Volexity — chained ICS zero-days`](https://www.volexity.com/blog/2026/10/13/a-series-of-unauthenticated-events-chained-exploitation-of-ivanti-connect-secure-zero-days/) · [`🔗 CVE-2026-111357 (NVD)`](https://nvd.nist.gov/vuln/detail/CVE-2026-111357)
+[`🔗 CVE-2026-115829 (cveawg)`](https://cveawg.mitre.org/api/cve/CVE-2026-115829) · [`🔗 CVE-2026-115830 (cveawg)`](https://cveawg.mitre.org/api/cve/CVE-2026-115830) · [`🔗 CVE-2026-115828 (cveawg)`](https://cveawg.mitre.org/api/cve/CVE-2026-115828) · [`🔗 Delinea 安全公告`](https://delinea.com/security-advisories)
 
 ---
 
-## 2. Northflank 要求所有客户假定环境变量已被解密 — 并说已有用户确认自己的 AI key 被用掉了
+## 2. Drupal 说它的 Commerce 漏洞正在被实际利用；而记录上唯一的分数是 CISA 给的 6.5，且利用标记写着「none」
 
 - **Velocity:** ▮▮▮ trending
-- **Source:** Hacker News · 244+ pts · ~1 day ago (~2026-10-30)
-- **Tags:** `incident` `secrets` `paas` `supply-chain`
+- **Source:** Drupal SA-CONTRIB-2026-254 · CVE 记录发布于 2026-10-30T03:09Z
+- **Tags:** `cve` `drupal` `ecommerce` `access-bypass` `provenance`
 
-Northflank 在 **2026-10-30 11:43 UTC** 收到 Wiz 的威胁告警后启动"安全事件"响应，两小时内就从"调查中"转为一条直白指令，原文是："**Assume all environment variables have been decrypted. Disable/rotate all keys.**"到 **13:58**，通知点明了范围 — "workloads, secret groups and global secrets" — 到 **15:12** 平台已经为所有用户开启了 Postgres 与 MongoDB 的密钥轮换，并建议关闭 addon 的公网暴露。七个组件被标为**Major outage**：Networking、Certificates、Services、Addons、Jobs、Builds、Logs and Metrics。App、API、营销站与文档仍在线。
+`CVE-2026-118539` 是 Drupal Commerce Core 的缺失授权漏洞，由 `drupal` 这个 CNA 于 **2026-10-30** 指派：它「没有充分保护某些路由与实体字段」，可能「对商家的财务状况造成影响」。受影响范围是 `<2.41` 与 `>=3.0.0 <3.3.13`。Drupal 自己的公告把它评为 **「Highly critical — 21 ∕ 25」**，并直白写道：**「此漏洞正在被实际利用（actively exploited in the wild）。」** 公告没有提供任何绕过办法，只建议安装最新版本，并「审计订单是否存在不一致」。
 
-最要紧的一句埋在状态时间线里而不是标题上：**"Multiple users are confirming that their AI keys have been used."** Northflank 没有给出受影响客户数量，没有确认被访问数据的完整范围，且截至最后一条 **19:28** 更新仍称调查进行中，"no further confirmed findings" — 但那里的措辞已经从"解密"进一步变成了"assume all environment variables have been **compromised**"。
+再看记录本身。CNA 容器里**完全没有 metrics**。整个 CVE 上唯一的分数在 **CISA-ADP Vulnrichment** 容器里——`CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:L/I:L/A:N` = **6.5**——旁边的 SSVC 块写着 `Exploitation: **none**`、`Automatable: yes`、`Technical Impact: partial`，其时间戳为 `2026-10-30T00:00:00+00:00`，也就是在记录 03:09Z 发布**之前**。于是关于这个漏洞最关键的两句话——有多严重、有没有人在用——来自相反的方向，而自动化的那句才是会进到你扫描器里的那句。
 
-**Why it matters:** 一个 PaaS 手里握着客户早已不再留意的凭据 — 模型 API key、数据库 URL、webhook 密钥 — 而这里的应对之所以正确，恰恰因为它昂贵：直接假定已被解密，而不是等证明。轮换指引和披露都是会变的活文档；把范围当作未知而不是已有边界，并把"暂无更多确认发现"当作一个状态，而不是一份清白证明。
+**Why it matters:** 一个 CVE 记录就把整个「出处」问题演示完了。这里的「CVSS 6.5」是 CISA 的第三方增强，不是厂商的评分，而它躺在一个写着「正在被利用」的页面上；在发布前就打上的 `Exploitation: none` 是关于某个截止时间的陈述，不是关于世界的陈述。如果你的分诊按记录分数排序，Commerce 站点会排在一个 WordPress 插件之下，而厂商的遥测说它们今天正在被打。
 
-[`🔗 Northflank — status incident`](https://status.northflank.com) · [`🔗 Hacker News discussion`](https://news.ycombinator.com/item?id=50305025)
+[`🔗 Drupal SA-CONTRIB-2026-254`](https://www.drupal.org/sa-contrib-2026-254) · [`🔗 CVE-2026-118539 (cveawg)`](https://cveawg.mitre.org/api/cve/CVE-2026-118539)
 
 ---
 
-## 3. 谷歌的 Sleep 框架把训练拆成"醒"和"睡" — 而它的 10M token 胜绩没有局限性章节
+## 3. 一款 Windows 窃密木马现在会把受害者档案 POST 给 `claude-opus-4.6` —— 模型拒答就自动切到 Kimi 和 Gemini
 
 - **Velocity:** ▮▮▮ trending
-- **Source:** Hacker News · 92+ pts · ~1 day ago (~2026-10-30)
-- **Tags:** `continual-learning` `moe` `research` `google`
+- **Source:** Cisco Talos · 206+ 分 · 约 6 小时前（~22:29 UTC+8）
+- **Tags:** `malware` `llm-abuse` `infostealer` `opsec` `talos`
 
-Ali Behrouz 与 Vahab Mirrokni 于 **2026-10-27** 在 Google Research 博客上发布了 **Sleep 框架**（论文：arXiv **2606.03979**）。其主张是用周期性的学习生命周期取代"训练完就冻结"：*醒*阶段模型对外服务并存储短期痕迹；*睡*阶段停止接收输入，做两件事 — **巩固**，把低秩 MoE 专家加到稳定的低频记忆块上，用 on-policy 蒸馏加一个 RL 的"学习模仿"奖励把短期痕迹蒸馏进长期参数，然后重置临时的高频参数（作者称之为"突触修剪"）；以及**做梦**，MoE 路由刻意激活非常规专家，生成合成样本，按梯度有用性筛选，再在最受好评的样本上微调。
+Talos 关于 **VOLTA-AUTODOXER** 的分析描述了一款自删除窃密木马：在采集浏览器凭据、钱包助记词、Discord／Telegram／Steam 会话与云令牌之后，它会复用窃来的会话去丰富受害者画像——翻 Gmail 里 Amazon、DoorDash、Uber Eats、Walmart 和 PayPal 的收据来确认家庭住址，拉取外卖订单历史，给 Roblox 库存做实时估值——然后写出 `Identity_Report.txt`，序列化成 JSON，**从受害者自己的机器和网络上 POST 到 OpenRouter 的 chat-completions 接口**。默认模型是 `anthropic/claude-opus-4.6`，后备依次是 `moonshotai/kimi-k2` 和 `google/gemini-2.5-flash`，温度 `0.2`。系统提示词要求模型扮演「一名撰写目标评估的取证情报分析师」，并输出「WHAT THEY'RE WORTH」和「THEIR OPSEC」。
 
-按文章报告的数字：在未见过的 **Manchu** 与 **Kalamang** 连续翻译上跨多个阶段几乎无退化，而 ICL、Cartridges 和 SFT "showed severe forgetting"；**BABILong 10M token** 上接近满分，领先 GPT-4 与 Titans；SQuAD 与继续预训练上是 **48.9%**（单任务）和 **46.2%**（CPT），优于基座模型、SFT 与 SEAL；AIME 24/25 与 HMMT 25 上是 **79.2% / 69.0% / 46.1%**，优于 SFT、GRPO 与 OPSD。
+最值得记住的细节是拒答处理：样本会检查回复里有没有「I can't」「I'm not able」这类字串，有就换下一个模型。Talos 对商业含义的措辞很谨慎——「This suggests it's a builder model」，以及「**If** VOLTA is indeed a commoditized malware」——并指出没有任何攻击者自有基础设施：「All the observed endpoints for this malware are third-party controlled.」目前只有一个样本，SHA256 为 `57ef4242666d78c50df145b34023df564f0fad38812d6a580e66433d427e2279`，首次观测于 2026-10-11。
 
-**Why it matters:** 这篇文章没有局限性章节，没有点名具体模型家族、参数规模或算力预算，类增量学习只给了图表没有数字 — 所以诚实的读法是：这是一篇有亮眼数字的**方法**论文，不是可以跨系统比较的消融实验。描述本身还透出两个结构性注意点：该方法需要预留专家容量和一个离线阶段，这是文章没有定价的部署成本；而收益建立在自生成合成数据加梯度信号筛选之上，这恰恰是在别人手里最容易静默失败的部分。理论部分是用作解释，而不是对实测差距的证明。
+**Why it matters:** 这个模型做的事，电子表格也能做，但它做的是**分诊**——把一堆抓取来的数据变成一份带引用的、排序过的「谁值得抢」名单。可迁移的事实是那个故障转移循环：如今，一个前沿模型的拒答，在商品化恶意软件里已经变成一个路由决策，所以「模型拒绝了」不再是一道控制，而是一段延迟。
 
-[`🔗 Google Research — the Sleep framework`](https://research.google/blog/the-sleep-framework-a-new-way-for-llms-to-retain-knowledge-in-continual-learning/) · [`🔗 arXiv 2606.03979`](https://arxiv.org/abs/2606.03979)
+[`🔗 Talos — Appraisal by AI: model-driven victim prioritization in the VOLTA infostealer`](https://blog.talosintelligence.com/appraisal-by-ai-model-driven-victim-prioritization-in-the-volta-infostealer/) · [`🔗 讨论（Hacker News）`](https://news.ycombinator.com/item?id=50316531)
 
 ---
 
-## 4. Lightpanda 是用 Zig 重写的无头浏览器 — 123 MB 对 2 GB，以及一个在 Alpine 上跑不起来的 Alpine 二进制
+## 4. Jepsen 在 ParticleDB 里找出 96 个问题并建议用户迁移 —— 而这份报告是厂商出钱做的
 
 - **Velocity:** ▮▮▮ trending
-- **Source:** GitHub Trending · 559 stars today · 38,209 total
-- **Tags:** `browser` `zig` `agents` `automation`
+- **Source:** Hacker News · 113+ 分 · 约 6 小时前（~21:39 UTC+8）
+- **Tags:** `database` `jepsen` `correctness` `acid` `testing`
 
-**`lightpanda-io/browser`** 是用 **Zig** 从零写的无头浏览器 — "Not a Chromium fork. Not a WebKit patch." — 没有图形渲染引擎，JavaScript 通过 V8 执行，上层提供 CDP、WebDriver BiDi、Puppeteer/Playwright 式自动化、页面 dump、"agent mode" 和 MCP server。许可证 **AGPL-3.0**。README 上的基准是在 AWS EC2 `m5.large` 上跑 933 个真实页面：100 个并发页面的峰值内存 **123 MB 对 2 GB**（约少 16 倍），执行时间 **5 秒对 46 秒**（约快 9 倍）— "16x lighter and 9x faster than Chromium" 就是这么来的。
+Jepsen 对 **ParticleDB 1.1.4**（Orkes）的分析报告了 **96 个问题**，其中 **93 个出现在健康的单节点系统上，常常只有一个客户端、且没有注入任何故障**：崩溃、死锁、`WHERE 4 = 5` 却匹配到行、`WHERE TRUE` 被忽略、`NOT NULL`／`UNIQUE`／主键约束不生效、join 结果错误、行删不掉、字符串被当成整数返回，以及「已中止的事务却提交了」。在并发下它检出 G1a、G1b、G-single、Lost Update、读偏斜与陈旧读——已确认的写入消失。到 `1.1.18.11.rc-22` 时「这些问题除十个外似乎都已解决」，但 ParticleDB「在默认 `occ` 事务模式下正常运行时仍会丢失已提交的写入」，并且「在 `serializable`（最强设置）下仍允许内部异常和 Lost Update」。Orkes 声称 1.1.19-rc.13 解决了全部问题；Jepsen「没有评估过 1.1.18.11.rc-22 之后的版本」。结论毫不含糊：**「Jepsen 建议用户停止继续部署 ParticleDB，并尽快迁移到其他数据库。」**
 
-**Why it matters:** 差异化来自约束而非加速比 — 砍掉渲染器才让那个内存数字成立，同时它也定义了这个工具做不到什么（任何需要布局或像素的工作）。README 对失效场景坦率得少见：**没有原生 Android 构建**，因为 Bionic 缺 glibc loader；**没有原生 Windows 二进制**，只能走 WSL；发布的 Linux 二进制需要 glibc，所以在 Alpine 这类 musl 系统上会以 "cannot execute: required file not found" 失败 — 要么换 glibc 镜像，要么用 Zig 0.17.0 加 V8、Libcurl、html5ever 自行编译。对读取 DOM、调用 API 的 agent 工作负载这是合理取舍；对视觉测试它是错的工具，而页面自己也这么说。
+所有保留意见都是主动披露而非被埋的。这项工作由 **Orkes（厂商）出资**，结论依然是「走」。完全没有测试复制：「Orkes 提供的构建不支持复制，因此本报告只覆盖单节点行为。」「经过形式化证明」这句营销背后没有 TLA+ 规范。一组非确定性失败「可能是测试套件自身的 bug 造成的」。认识论也写得很清楚：「我们能证明 bug 的存在，但不能证明其不存在。」
 
-[`🔗 lightpanda-io/browser`](https://github.com/lightpanda-io/browser) · [`🔗 GitHub Trending`](https://github.com/trending)
+**Why it matters:**「Full ACID」是一句营销话术，而这就是验证它一次的代价。对任何读数据库基准的人来说，有用的模式是这个顺序——单节点、默认配置、无故障，系统依然会丢写入；而在这条线之上发布的每一个分布式系统数字，测的都是基础引擎尚未挣到的东西。
 
----
-
-## 5. Matt Pocock 的 skills 仓库有 307k 星和 27 个技能 — 而且它是反对 vibe coding 的论证，不是提示词合集
-
-- **Velocity:** ▮▮ rising
-- **Source:** GitHub Trending · 882 stars today · 307,347 total
-- **Tags:** `agent-skills` `engineering` `mit` `claude-code`
-
-**`mattpocock/skills`**（"Skills for Real Engineers. Straight from my .agents directory."）有 **307.3k 星、25.9k fork、551 次提交**，许可证 **MIT**。`skills/` 下是 **27 个技能 — 由 README 自己的清单数出，页面并未给出总数** — 按阶段和调用方式双重划分：**11 个用户调用型工程技能**（`ask-matt`、`grill-with-docs`、`triage`、`improve-codebase-architecture`、`to-spec`、`to-tickets`、`implement`、`implement-spec`、`wayfinder`、`retro`、`setup-matt-pocock-skills`），**9 个模型调用型**（`prototype`、`diagnosing-bugs`、`research`、`tdd`、`domain-modeling`、`codebase-design`、`code-review`、`pr`、`wizard`），**5 个用户调用型生产力技能**（`grill-me`、`handoff`、`teach`、`to-questionnaire`、`wait-what`），以及 **2 个模型调用型**（`grilling`、`writing-for-agents`）。安装走插件市场或 `npx skills@latest add mattpocock/skills`。
-
-**Why it matters:** 它针对的是四种反复出现的失败模式 — 做错东西、啰嗦过度、代码跑不起来、代码库变成"一团泥" — 而给出的对策刻意平淡：动手前先访谈、共享领域词汇表与 ADR、红-绿-重构循环、持续改进架构。最值得抄的是按调用方式的分层：用户调用型技能负责编排流程，模型调用型技能承载可自动选取的复用纪律；把两者混在一起，技能库就会变成没人会触发的菜单。它还声称 "work with any model"，这个可移植性承诺有仓库结构支撑，但它的测试并没有证明。
-
-[`🔗 mattpocock/skills`](https://github.com/mattpocock/skills) · [`🔗 GitHub Trending (weekly)`](https://github.com/trending?since=weekly)
+[`🔗 Jepsen — ParticleDB 1.1.4`](https://jepsen.io/analyses/particledb-1.1.4) · [`🔗 讨论（Hacker News）`](https://news.ycombinator.com/item?id=50316100)
 
 ---
 
-## 6. NESformer 在约 933 MB 的 Qwen 权重里跑起一台任天堂 — 而且它从未被训练
-
-- **Velocity:** ▮▮ rising
-- **Source:** Hacker News (Show HN) · 118+ pts · ~1 day ago (~2026-10-30)
-- **Tags:** `transformers` `deltanet` `emulation` `weights`
-
-**`dbreunig/nesformer`** 把 NES 的 6502 CPU、2 KB 工作内存和一张卡带 ROM 跑在一个**原版 `Qwen3_5ForCausalLM` checkpoint 内部** — 而且正如 README 直言："**Nobody trained these weights; a compiler computed every one.**"门控 DeltaNet 的状态矩阵充当内存：一个 one-hot key 覆写某个 128 宽的行，一个 one-hot query 把它读回来，于是这些行就成了寄存器、内存或 ROM 单元。程序计数器并不存储 — 它由跳转目标和指令长度计数推断出来。checkpoint 是 **466.6M 参数、bf16（约 933 MB）**，其中只有 **9.3M 非零**，压缩后 **3.3 MB**；宿主程序负责 PPU、手柄输入、vblank/NMI 时序和 APU 寄存器，并且除通过生成的 trace 之外从不触碰 CPU 状态。
-
-真正有意思的是验证：参考 CPU 与 nestest 的黄金日志在 **3,348 条指令**上一致，并与 py65 在 **570 万条游戏指令**上一致；精确电路预测了 nestest 加上 **283,610** 个位置的全部参考 token；Thwaite 与 Full Game 的完整运行分别复现了**全部 300** 帧与**全部 210** 帧。速度上离可用还很远 — numba 单核约 **1,650 tokens/s**，而实时模拟需要约 **700,000 tokens/s**；即使跳过空转循环，它仍比真机慢 **150–290 倍**。
-
-**Why it matters:** 这是目前最干净的公开演示：一个 transformer 的状态可以是**宿主内存**，其前向传播可以是一颗 **CPU**，权重是可以被编译出来的产物而不是学出来的。这和 Qwenputer 在 RISC-V 状态上玩的是同一招，只是换到一台有周期级参考 trace 可对照的主机上。限制写得毫不含糊：**仅支持 NROM / iNES mapper 0**，没有 bank switching，非官方 opcode 直接输出 HALT，没有 APU-frame 或 DMC 中断，没有声音，sprite-0 hit 是近似的，PPU 完全不在权重里。MIT 许可，编译器血统来自 Qwenputer 的 `chipformer`。
-
-[`🔗 dbreunig/nesformer`](https://github.com/dbreunig/nesformer) · [`🔗 Hacker News (Show HN)`](https://news.ycombinator.com/item?id=50306442)
-
----
-
-## 7. OpenAI 围绕五条价值观重写 Model Spec — 而文档自己说模型尚未完全体现它
-
-- **Velocity:** ▮▮ rising
-- **Source:** OpenAI · Model Spec 2026-10-29 edition
-- **Tags:** `openai` `policy` `alignment` `agents`
-
-OpenAI 于 **2026-10-29** 发布了重写的 **Model Spec**，围绕五条命名的价值观重组：**"Be faithful to human intent," "Minimize harm," "Be honest and transparent," "Facilitate human agency," "Act with care."** 对意图的忠实被定位为基础 — 模型应理解人真正想要什么，而不是字面执行指令，并在指令用尽处使用判断力。文档保留了带明确权限层级的 **"chain of command"** — **Root、System、Developer、User、Guideline** — 并对助手消息、工具消息和不可信内容设 **"No authority by default"**；另外加入两套权衡框架，处理个体与集体利益、即时指令与长期目标。它还新增 "Consider context carefully" 一节，覆盖对话历史、记忆与个性化，要求把假设显性化并易于纠正。
-
-**Why it matters:** 值得带走的一句是厂商自己写的：**"Our production models do not yet fully reflect the Model Spec."** 这把文档从"行为描述"变成了"训练目标"，而这个读法是对的 — 关于"控制并沟通副作用"的扩展指导，是写给**会订票、会下单、会改文件的 agent** 的，其失效模式是"在误读意图之下正确地执行了动作"。两个结构性注记：最详细的文风规则被撤掉，改为适应用户、语言与文化；主体现在叫 **"GPT"** 而不是 "the assistant"。该页面同时标注有更新版本为当前版、这一版仅作历史存档，所以引用时要说明你读的是哪一版。
-
-[`🔗 OpenAI — Model Spec (2026-10-29)`](https://model-spec.openai.com/2026-10-29.html) · [`🔗 TNW — five core values`](https://thenextweb.com/news/openai-model-spec-five-values-update)
-
----
-
-## 8. Recursive 的 Flint 是 39.8B-A2.5B 的编程模型，Apache 2.0 — 89.7% SWE-bench Pro v2，知识截止 2026 年 6 月
-
-- **Velocity:** ▮▮ rising
-- **Source:** Hugging Face Trending · 19k downloads · 1.26k likes
-- **Tags:** `open-weights` `moe` `coding-agent` `apache`
-
-**`RecursiveSI/flint`** 是一个 decoder-only MoE 编程 agent 模型，**总参数 39.8B / 每 token 激活约 2.5B**（含输出头；纯激活主体约 2.2B），**49 层** — 2 层 dense 之后 47 层 MoE — 每个 MoE 层 **256 个路由专家**，每 token 选 6 个外加一个共享专家。注意力是 **35 层滑窗 / 14 层全注意力**，上下文 **262,144 token**，词表 **150,144**，许可证 **Apache 2.0**。报告基准（temperature 1.0 / top-p 0.95 / top-k 20）：**Terminal-Bench 2.1 为 54.9%、SWE-bench Pro v2 为 89.7%、SWE-bench Verified 为 74.2%。**
-
-**Why it matters:** SWE-bench Pro 那个数字要仔细读 — Pro v2 是更难、抗污染的切分，89.7% 与 Terminal-Bench 的 54.9% 并置，呈现出擅长仓库内改动、偏弱于长程 shell 作业的形状，这跟它的激活参数规模给人的预期正好相反。模型卡自己的告诫值得原样引用而不是转述：它可能生成 "incorrect or harmful content, faulty code, or inappropriate tool calls"，长推理会吃掉输出预算，而上下文上限是 "a capacity limit, not a guarantee of uniform accuracy across all sequence lengths or tasks"。知识截止是 **2026 年 6 月**，之后的一切是推断而非回忆。
-
-[`🔗 RecursiveSI/flint`](https://huggingface.co/RecursiveSI/flint) · [`🔗 Hugging Face trending`](https://huggingface.co/models?sort=trending)
-
----
-
-## 9. 一个线性探针在生成前抓到受压 agent 82% 的泄密 — 而词袋分类器几乎同样灵
-
-- **Velocity:** ▮▮ rising
-- **Source:** arXiv · 2610.40588 · 2026-10-30
-- **Tags:** `multi-agent` `safety` `interpretability` `research`
-
-《**Pre-Crime for Agents, at the Last Second: Probing When a Recruited Agent Gives In**》（arXiv **2610.40588**，Leonidas Raghav）构造了一个受控的多 agent 施压实验，覆盖六个场景：同伴最多用 20 轮逼目标说出部署令牌之类的秘密，目标常常先拒绝、然后让步。一个**线性探针**在每次模型调用**生成之前**读取其激活。在留出的 **Qwen3-32B** 片段上，把阈值设在只标记 5% 良性调用的位置时，探针检出 **82%** 的泄密调用；零样本决策模型监控在相近误报率下检出 **26%**。在 **gpt-oss-20b** 上，对推理过程做探针达到 **AUROC 0.91**。
-
-**Why it matters:** 最有价值的是论文对自己不利的那条结果 — 一个在同样调用上训练的词袋分类器 "comes close"，说明 "most of the gain comes from training on labels, not activations"；而且探针对**被允许**的披露同样有反应，读到的是"即将发生的披露"多于"违规本身"。输出过滤器只能在文本产生后检查，这个方法把检查点提前了，但预警距离很短，且"一报警就停"会 "would stop most benign episodes"，再加一道文本检查也没能解决这个权衡。实验是受控环境而非真实部署，所以 82% 是个"上界形状"的数字，不是现场发生率。
-
-[`🔗 arXiv 2610.40588`](https://arxiv.org/abs/2610.40588) · [`🔗 arXiv cs.AI recent`](https://arxiv.org/list/cs.AI/recent)
-
----
-
-## 10. 把检索当作"走过"记忆，而不是"搜索"记忆 — 0.59M 步到 0.95 回报，绝对寻址要 0.94M 到 2M+
-
-- **Velocity:** ▮▮ rising
-- **Source:** arXiv · 2610.40545 · 2026-10-30
-- **Tags:** `memory` `long-context` `agents` `research`
-
-《**Retrieval as Traversal: Value-Indexed Memory for Stateful Long-Context Agents**》（arXiv **2610.40545**；Daniel Strauß、Zhenshan Bing、Alois Knoll）把记忆的**内容**与**地址**分开：内容决定价值，位置决定访问成本；检索因此变成沿记忆地址的持续局部遍历，而不是每一步都从头做全局搜索。提出的目标是一个带成本正则的索引：把有价值的信息放在近处，同时对每块"局部可及"的记忆施加惩罚；其边际价值形式鼓励互补的记忆被一起检索，并抑制仅仅因为各自有用就挤进同一检索集的冗余项。
-
-唯一的实验是在 **MiniGrid Memory** 上用最简单的固定几何变体做的概念验证，上下文为五个 token：持久局部遍历头在 **0.59M 训练步后达到 0.95 的平均回报**，而高斯绝对寻址需要 **0.94M** 步、类别式绝对寻址需要 **超过 2M** 步。
-
-**Why it matters:** 诚实的表述来自论文自身 — 学习式几何和重复检索都没有测试，"to test the full proposed method further experimentation is necessary"，所以被支持的只是更弱的命题：**有状态**检索可能比无状态检索更容易学。这对 agent 仍是有用的方向，因为反复搜索不断增长的上下文是主要成本，而 1.6 到 3.4 倍的样本效率差距是"值得一试"的理由，不是"可以上线"的理由。
-
-[`🔗 arXiv 2610.40545`](https://arxiv.org/abs/2610.40545) · [`🔗 arXiv cs.AI recent`](https://arxiv.org/list/cs.AI/recent)
-
----
-
-## 11. "可回卷交互式证明"让弱验证者可以回卷强证明者 — 换来近乎线性的验证开销
-
-- **Velocity:** ▮▮ rising
-- **Source:** arXiv · 2610.40535 · 2026-10-30
-- **Tags:** `scalable-oversight` `proofs` `research`
-
-《**Efficient Scalable Oversight via Rewinding**》（arXiv **2610.40535**；Ziyi Guan、Yael Tauman Kalai、Ron Rothblum、Zoe Xi）攻的是辩论式监督底下的那个假设：现有交互式证明只在至少一方证明者诚实时才高效，而放弃这个假设代价高昂。他们的构造 — **可回卷交互式证明（RIP）** — 允许验证者保存证明者状态并在之后恢复，而恰恰当证明者是 AI 模型或运行在可 checkpoint 的环境里时，这件事是可行的。他们在不用密码学的前提下，为"对少量 oracle 答案改动鲁棒"的计算构造了 RIP。诚实证明者的运行时间**与原计算成线性**，验证者经一次性预处理后运行时间为"输入长度的近乎线性"。
-
-**Why it matters:** 这是一个效率定理，不是基准测试 — 摘要没有给出任何量化加速，唯一的实证是一个**初步的 MNIST 实验**，显示 RIP 能胜过"a state-of-the-art deployed proof system"。两个适用边界被明确写出：构造只覆盖对少量 oracle 答案改动鲁棒的计算；回卷依赖验证者控制证明者的机器、或能 checkpoint 并恢复它。对第三方模型这是真实约束，对自己托管的模型则不是问题 — 而监督研究正越来越只能落在后者上。
-
-[`🔗 arXiv 2610.40535`](https://arxiv.org/abs/2610.40535) · [`🔗 arXiv cs.AI recent`](https://arxiv.org/list/cs.AI/recent)
-
----
-
-## 12. OpenMausBot 给每个 bot 一台自己的电脑 — 8.4k 星、Apache-2.0，而 API key 明文躺在 0600 的文件里
-
-- **Velocity:** ▮▮ rising
-- **Source:** GitHub Trending · 899 stars today · 8,422 total
-- **Tags:** `agents` `desktop` `mcp` `apache`
-
-**`milind-soni/OpenMausBot`** — 原名 OpenGrokBot，也称 "MausBot" — 是 Grok Bot / Meta Muse / OpenAI dots 的开源替代，思路很简单：AI agent 是**聊天应用里的联系人**，每个都有自己的角色设定、模型、对话记忆、电脑和接入的应用。bot 通过本地安装的 `claude`、`codex` 或 `grok` CLI 运行，由本地 harness server 管理进程。每个 bot 都有一台电脑 — 经 Boat API 开通的云端 Linux 桌面、隔离的 "Local VM"，或在支持的情况下用你自己的机器。许可证 **Apache-2.0**，但 `enterprise/` 目录是另一份许可的"source-available"；删掉该目录即为开源版。仓库有 **8.4k 星、1.2k fork、7,442 次提交**。
-
-安全模型比同类产品考虑得更多：权限中介把 shell 命令、文件编辑和提问变成内联的"允许/拒绝/在聊天里回答"卡片；凭据是"write-only"，界面只看到已配置的标志而非值；宿主机控制需显式开启，且在 Ubuntu Wayland 上因 issue #345 **fail-closed**；MCP 控制平面刻意排除审批授权、删除、设置、凭据和电脑生命周期。
-
-**Why it matters:** 那个豁免才是关键 — API key 以**明文存放在私有的 `config.json`** 里（Unix 上 `0600`），所以整套权限模型最终落在本地文件系统保护上，这跟钥匙串是不同的威胁模型。项目自称 "early but real" 并列出缺口：Ubuntu 是 beta、通话仅 macOS、Windows 安装包未签名、应用事件依赖内置的 Composio 服务。真正有意思的是架构上的赌注 — 认为有电脑的 agent 是一种产品形态，而权限中介是它可被售卖的前提。
-
-[`🔗 milind-soni/OpenMausBot`](https://github.com/milind-soni/OpenMausBot) · [`🔗 GitHub Trending`](https://github.com/trending)
-
----
-
-## 13. Tangled 重建联邦式代码托管：内存中的 Rust 索引器，以及和代码放在一起的 Git 对象链 issue
-
-- **Velocity:** ▮▮ rising
-- **Source:** Hacker News · 144+ pts · ~1 day ago (~2026-10-30)
-- **Tags:** `git` `federation` `atproto` `forge`
-
-Tangled 以重建的架构重启了它的代码托管平台。原来的 Go 单体（"appview"）用瑞典的一台 SQLite 数据库同时负责索引、缓存、协议外数据和 SSR 界面；现在拆成**边缘部署的 Svelte 前端**和 **bobbin** — 一个全新的 **Rust** 索引器，完全在内存中、只读，跑在 **11 个以上区域**。**Knot2** 同为 Rust，把自研的 Git 服务器和 SSH 服务器合成一个二进制。issue、PR、评论、表态和标签现在**与代码一起存在 knot 上**，作为"协作对象" — 一串带签名记录和完整历史的 Git 对象链 — 通过 AT Protocol firehose 同步；写入用户自己 PDS 的 attestation 让用户可双向验证某个 knot 没有篡改其记录。组织变成了真实的 AT Protocol 账号，有自己的 DID；PR 流程支持 Git 和 Jujutsu 两种用户的堆叠 PR，包括版本间的 interdiffs。
-
-**Why it matters:** "联邦"通常意味着代码有镜像、而协作层没有；把 issue 和 PR 放进与 commit 相同的签名对象图里，才让可移植性从名义变成真实。限制写得很清楚：bobbin 是**只读**的，且只处理 AT Protocol 数据；现有自托管者必须把 knot 升到 **v1.20.0**；把临时充当组织的普通账号迁移的工作仍在开发；私有仓库、CLI、语言 SDK 和 agent skills 都留到了后续几周 — 所以这是"已宣布的重建"，不是"已完成的重建"。
-
-[`🔗 Tangled — the federated code forge`](https://tangled.org/blog/forge/) · [`🔗 Hacker News discussion`](https://news.ycombinator.com/item?id=50305573)
-
----
-
-## 14. Bunny.net 发现一台 CDN 节点落在一台被入侵的托管商服务器上，正在重签所有托管证书
-
-- **Velocity:** ▮▮ rising
-- **Source:** bunny.net status · incident published 2026-10-28
-- **Tags:** `cdn` `tls` `incident` `supply-chain`
-
-bunny.net 于 **2026-10-28** 发布事件通告：一家基础设施服务商报告了涉及第三方服务器管理软件的未授权访问，而 bunny.net 有**一台位于亚美尼亚的 CDN 节点**正托管在受影响的那台服务器上。**2026-10-28 11:40 UTC**，bunny.net 在 20 分钟内停止经由该服务器路由流量，保全日志、擦除服务器、吊销其访问权限并永久移除该节点。调查"found no evidence of unauthorized access to the CDN node or any of its data"，同时承认"cannot completely rule out the possibility" — 标准措辞，也正是后续工作照做不误的原因。
-
-范围描述很窄：*如果*发生过访问，可能暴露的仅限于那台机器上临时缓存的内容、Pull Zone 配置和 TLS 证书；bunny.net 的账号数据和内部系统未受影响。平台域名的证书已吊销并重签；**2026-10-29 18:40 UTC** 的更新称托管 TLS 证书正以新私钥分批重签，预计在 **2026-10-31** 结束前完成。
-
-**Why it matters:** 单台节点既是很小的爆炸半径，又是很大的爆炸半径 — 因为 CDN 边缘握着别人域名的私钥。"无证据"与"已排除"之间的区别，正是把一个状态说明变成一场密钥轮换作业的东西；而这份通告诚实的地方在于，代价落在使用自有证书的客户身上 — 他们被告知要自己吊销并重签，服务商替不了。
-
-[`🔗 bunny.net — CDN incident`](https://status.bunny.net/incidents/p6gf1by9kr7m) · [`🔗 Hacker News discussion`](https://news.ycombinator.com/item?id=50308697)
-
----
-
-## 15. 一个 WordPress 导入插件拿到 CISA 补给的 9.9 — 而 NVD 记录的状态是 `Deferred`
-
-- **Velocity:** ▮ steady
-- **Source:** NVD · published 2026-10-29
-- **Tags:** `cve` `wordpress` `cisa-adp` `path-traversal`
-
-**CVE-2026-113617**（发布于 **2026-10-29**）是 WordPress 插件 **Automated Import Products to Cart** 在 **1.0.4** 之前的路径穿越：插件在使用用户提供的文件路径读删文件前未做净化，因此权限极低的用户 — "such as subscribers" — 可读取任意文件（including ones containing the database credentials），并可删除任意服务器文件。度量为 `CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:C/C:H/I:H/A:H` = **9.9**。
-
-**这个 9.9 既不是厂商的，也不是 NVD 的。** 它的来源是 `134c704f-9b21-4f2e-91b3-4a467353bcc0` — **CISA-ADP**（Vulnrichment）— 位于 `Secondary` 槽位，CWE-22 也归于同一来源。记录 `vulnStatus` 为 **`Deferred`**，没有任何 `nvd@nist.gov` 度量。所以这是第五种来源情形最纯粹的样子：记录上的一个数字由第三方富化容器写成，而 NVD 已声明不会分析这条记录。
-
-**Why it matters:** 这个分数站得住 — 把 `PR:L` 的读删文件推到 9.9 的是 `S:C` — 但把它归给"NVD"或归给插件作者都是错的，而 `Deferred` 状态意味着这个数字不会再被复核。同一个 24 小时窗口里还产出：**CVE-2026-109516**（`security@wordfence.com`，**9.8**，`Deferred`）— "Bot for Telegram on WooCommerce" 到 **1.3.0** 的认证绕过，公开 REST 端点跳过 webhook 签名校验、接受 `message.chat.id` 冒充目标用户名的伪造 update，再由可预测的登录令牌在任何账号（含管理员）上设置认证 cookie；以及 **CVE-2026-42922**（`talos-cna@cisco.com`，**9.8**，`Deferred`）— **FUXA 1.3.2-2809** 的 `/nodered` 路径授权绕过，未认证即可达成任意代码执行。三个 Critical，三个不同的 CNA 打分，三条 NVD 已延后的记录。
-
-[`🔗 CVE-2026-113617 (NVD)`](https://nvd.nist.gov/vuln/detail/CVE-2026-113617) · [`🔗 CVE-2026-109516 (NVD)`](https://nvd.nist.gov/vuln/detail/CVE-2026-109516) · [`🔗 CVE-2026-42922 (NVD)`](https://nvd.nist.gov/vuln/detail/CVE-2026-42922)
-
----
-
-## 16. "AI 没有取代 SRE，而是在让他们技能退化" — 而证据是借自内镜和航空的
-
-- **Velocity:** ▮▮ rising
-- **Source:** Hacker News · 363+ pts · ~1 day ago (~2026-10-30)
-- **Tags:** `sre` `automation` `labor` `analysis`
-
-一篇 SigNoz 通讯文章主张：AI 对 SRE 更近的风险不是取代，而是**技能侵蚀**，其依据是 Bainbridge 1983 年的《自动化的讽刺》：把例行工作自动化，会把人留在被动监视的位置，然后在缺少练习的情况下面对罕见的危机。落到 SRE 语境，AI 越来越多地接管告警聚合、runbook、已知问题修复、日志异常和初步根因建议，于是人只剩下新颖的级联故障 — 那恰恰是最依赖直觉的场景 — 同时得到锻炼的机会更少。作者把初级版本称作 **"never-skilling"**。
-
-**支撑数字全部来自其他领域。** 一项医学研究发现，在有 AI 辅助之后，内镜医师**无辅助**的息肉检出率从 **28% 降到 22%**；航空研究发现重度依赖自动驾驶的飞行员丧失了情境意识和手动飞行熟练度，促使 FAA 要求增加手动飞行。文章还引用了 PagerDuty 的分层模型 — 已知故障自动化、部分问题由 AI 给建议加人工验证、新颖的级联故障由人主导。
-
-**Why it matters:** 文章自身的结构就是限定条件：背后没有 SRE 专项研究，证据是类比性的，"95%" 的前提是假设，PagerDuty 那套是厂商框架；作为 SigNoz 的文章，它在"可观测性原生 AI"上也有商业利益。这些都不推翻论点 — "human-in-the-loop, not human-on-the-side" 是真实的设计约束，刻意把一部分事件留给人类是最便宜的那个干预 — 但诚实的引用方式是有借用证据的合理机制，而不是已测量的效应。
-
-[`🔗 SigNoz — AI isn't replacing SREs, it's deskilling them`](https://newsletter.signoz.io/p/ai-isnt-replacing-sres-its-deskilling) · [`🔗 Hacker News discussion`](https://news.ycombinator.com/item?id=50305693)
-
----
-
-## 17. GitHub 的 Actions、Pages 和 Webhooks 降级 90 分钟 — 17:50 到 19:23 UTC
-
-- **Velocity:** ▮ steady
-- **Source:** githubstatus.com · incident 2026-10-30
-- **Tags:** `github` `outage` `ci`
-
-GitHub 于 **2026-10-30 17:50 UTC** 就 **Actions 与 Webhooks** 的"性能降级"开启调查，**Pages** 在 **18:00** 跟进。到 **18:06** 影响已经具体化：Actions 工作流、Pages 部署和 webhook 事件出现延迟，**code search 与 live updates** 报错。缓解措施随即开始并出现早期恢复迹象，所有受影响服务于 **18:32** 恢复，事件在 **19:23** 解决，官方承诺随后给出详细根因分析。
-
-**Why it matters:** 爆炸半径就是依赖图 — Actions 承载了大多数开源 CI，Pages 放着大量文档，webhook 是每个集成得知"有东西变了"的方式，所以 90 分钟的降级会卡住那些根本不知道自己依赖它的发布与部署流水线。通告没有涉及数据丢失或安全成分；把解决理解为"服务恢复"，在根因分析出来之前不要对原因下结论。
-
-[`🔗 GitHub — incident`](https://www.githubstatus.com/incidents/pwxsjgnvrk6b) · [`🔗 Hacker News discussion`](https://news.ycombinator.com/item?id=50307723)
-
----
-
-## 18. DeepSeek-V4.1-Flash-1017 重回 Hugging Face 趋势第一 — 763B、1M 上下文、MIT，以及一条关于 KV 缓存压缩的引用
-
-- **Velocity:** ▮ steady
-- **Source:** Hugging Face Trending · 146k downloads · 3.99k likes
-- **Tags:** `deepseek` `open-weights` `moe` `context`
-
-**`deepseek-ai/DeepSeek-V4.1-Flash-1017`** 今早是 Hugging Face 趋势第一，**146k 下载、3.99k 点赞**，但它不是新发布 — 模型卡把它描述为 DeepSeek-V4.1-Flash 的**"minor update"**，所属 collection 显示最后更新于 **14 天前**。它是图文转文本模型，**763B 参数**、8-bit / FP8、**MIT** 许可，**1M token 上下文窗口**、`max_tokens` 至少 **256K**，支持交错图像、思考模式、工具调用、数值化推理强度和对话中途的 system message。报告分数包括 **HLE 无工具 42.6**（纯文本 44.0）、**Terminal-Bench 4.0 42.3**、**DeepSWE v1.1 77.0**、**NL2Repo-Bench 68.2**、**Agents' Last Exam 35.4**、**ZeroBench-main 带工具 51.0**。引用标题指向 "Pushing the Limits of KV Cache Compression"。
-
-**Why it matters:** 这波趋势是分发事件，不是能力事件，feed 应该直接把这点说出来 — 版本串里的 `-1017` 是日期戳，不是新颖性声明。卡片上有两个实用提醒：本次发布**不带 Jinja chat template**，提示编码需要 Python 参考实现或 `deepseek-recipe` 库，这会打断天真的部署配置；另外基准是发布方自报，其中数项带工具或在子集上跑，因此不能与本 feed 里无 harness 的数字横向比较。
-
-[`🔗 deepseek-ai/DeepSeek-V4.1-Flash-1017`](https://huggingface.co/deepseek-ai/DeepSeek-V4.1-Flash-1017) · [`🔗 Hugging Face trending`](https://huggingface.co/models?sort=trending)
-
----
-
-## 19. Taste-skill 以 106k 星冲榜做美术指导 — 只剩一个技能，其余的都搬走了
-
-- **Velocity:** ▮ steady
-- **Source:** GitHub Trending (weekly) · +4,359 this week · 106,235 total
-- **Tags:** `agent-skills` `design` `mit`
-
-**`Leonxlnx/taste-skill`** 是一个 agent 技能，提供**美术指导**、开放许可的参考图和浏览器检查，让编程 agent 产出经过设计的页面和仪表盘，而不是千篇一律的版式。它有 **106,235 星、254 次提交**和 **MIT** 许可，如今只含**一个在用技能** — `design-taste-frontend` — 因为作者把其他技能移到了独立仓库。
-
-**Why it matters:** 这是两周内第三个把重心放在**审美**判断而非代码生成的大型 agent 技能仓库，而收敛到单个技能才是有意思的信号：价值在参考集和浏览器检查（结果是否真的像参考图），而不在提示词数量 — 这与上一波设计技能潮得到的教训相同。一个技能文件拿到 106k 星，衡量的是"品味作为商品"的需求，而不是这个文件有效的证据 — README 也没有给出任何能定论的基准。
-
-[`🔗 Leonxlnx/taste-skill`](https://github.com/Leonxlnx/taste-skill) · [`🔗 GitHub Trending (weekly)`](https://github.com/trending?since=weekly)
-
----
-
-## 20. 这个美国税表项目会检查自己的算术，并公开哪里失败 — 68.6% 的申报人覆盖率，157 个拒答闸门里 148 个未测量
-
-- **Velocity:** ▮ steady
-- **Source:** Hacker News (Show HN) · 80+ pts · ~2 days ago (~2026-10-29)
-- **Tags:** `verification` `lean` `tax` `open-source`
-
-**`emmilco/us-tax-model`** 把美国联邦个人所得税表与填报说明编码成公开、带引用、可机器校验的数据 — **124 星、10 fork**，代码 **Apache-2.0**、数据 **CC0**。表是 YAML 文件，每一行都带一个来自约二十个原子（`sum`、`smaller_of`、`table_lookup` …）的封闭词汇表表达式，没有用户自定义函数、循环或递归，并附指向存档来源的引用（含页面哈希）。金额一律用整数分配合 `BigInt` 求值，全程没有浮点。构建期检查器校验引用、无环性、类型、穷尽的分支选择和来源；渲染器为每一行输出可读英文。在 `lean/TaxFormalization/` 下，原子在整数上定义，`subtractFloor0_nonneg`、`roundHalfUpToUnit_idem` 等性质被证明，一个基于规范 JSON 的参考求值器被证明可终止且确定。它还会与 **PolicyEngine-US**、**Tax-Calculator**、**OpenTaxSolver** 交叉比对，并且"never files, signs or transmits a return"。
-
-**Why it matters:** 局限性章节才是可以信任其余部分的原因。一条引用"proves a line points at a page, not that it was read correctly"；类型正确的错误操作数仍会通过检查；求值器一致并不能证明数据与 IRS 原文一致，而 **BUG-0001** 就是他们自己记录的、两个求值器一致地算错的一个例子；两个求值器"read the same files, so agreement shows the evaluators agree, not that the data is right"；记分板上有 **1,515** 行中的 **198** 行（**13.1%**）依赖外部家族的断言；实测申报人覆盖率为 **68.6%**，而 **157 个拒答闸门中有 148 个未测量**，真实覆盖率更低。表与说明不是法律，歧义被记录而非被解决，也没有律师审查过项目的法律立场。这就是一个验证项目在诚实区分"哪些被证明了、哪些只是被检查过"时的样子。
-
-[`🔗 emmilco/us-tax-model`](https://github.com/emmilco/us-tax-model) · [`🔗 Hacker News (Show HN)`](https://news.ycombinator.com/item?id=50278678)
-
----
-
-## 21. Anthropic 的 Claude 在 Linux 内核里找到一个零点击 root RCE — 48 分钟泄露 KASLR，Akamai 已开始通知客户
+## 5. NVIDIA 新的端侧模型在 Q4 下比 BF16 **更高分**——三项基准——而「4GB」既不是参数量也不是文件大小
 
 - **Velocity:** ▮▮▮ trending
-- **Source:** Anthropic Frontier Red Team · published 2026-10-27 · CVE record 2026-10-15
-- **Tags:** `cve` `linux-kernel` `rce` `anthropic` `mptcp`
+- **Source:** Hugging Face 模型卡 · 发布于 2026-10-23 · 300 个赞、7.5 万次下载
+- **Tags:** `quantization` `small-language-model` `nvidia` `on-device` `benchmarks`
 
-**CVE-2026-98432** 是内核 IPv4 TCP 路径上的竞态 use-after-free，而技术细节出自 Anthropic：Frontier Red Team 称一个内部研究模型写出了完整利用链，在暴露 **Multipath TCP 监听端口**的服务器上拿到 root，无需凭据、无需用户交互。记录由 Linux 内核 CNA 分配（assigner `Linux`，`PUBLISHED` **2026-10-15T12:08Z**，预留于 **2026-09-25**），只有**一个**度量 — `CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H` = **9.8** — 并且**完全没有 CWE**（CNA 容器里 `problemTypes` 为 `null`，所以这个"没有"是关于 CNA 自己字段的陈述，而不是关于 NVD 解析结果的）。NVD 那份处于 **`Received`**，最后修改于 **2026-10-30T16:18Z**。
+`nvidia/NVIDIA-Nemotron-3.5-Bolt-E4B-4GB` 是「在 Gemma-4-E4B-it 基础上进一步后训练」而来，「8B（4B 生效参数）」，Q4_K_M，输入输出各 64K，许可为 OpenMDW-1.1。模型卡把 BF16 与 Q4_K_M 并排公布，九行里有三行是量化版胜出：MultiChallenge **53.10 → 55.60**、RoleBench **67.05 → 71.21**、ToolSandbox **68.77 → 74.13**。该输的地方它也输——Tau2-Bench 55.10 → 52.32、LongBench v2 50.50 → 48.67、RULER 86.99 → 85.76。
 
-漏洞就是内核提交名字所写的那件事：`ipv4: free inet_opt and ireq_opt after an RCU grace period`。`tcp_v4_syn_recv_sock()` 把 `ireq->ireq_opt` 的所有权转移给子 socket 却没有拷贝；另一个 CPU 处理**重传的 SYN** 时在 `tcp_check_req()` 里发 SYNACK，仅在 `rcu_read_lock()` 下读取同一份 options；而 `inet_sock_destruct()` 用普通 `kfree()` 而不是 `kfree_rcu()` 释放 `inet_opt`，于是 `ip_options_build()` 会读到已释放对象。CNA 对 `AV:N` 的论证（写在度量的 `scenarios[]` 字段里，不在描述里）把前提说得很准 — 未认证的对端在 TCP SYN 中携带 IPv4 Record Route 或 Timestamp 字节 — 而 request socket 的**迁移**路径（`net.ipv4.tcp_migrate_req=1` 或 BPF reuseport 选择器）是另一半，那正是 MPTCP 走到的路径。`references[]` 里列了跨稳定分支的 8 个修复提交，全部以 `versionType: git` 从引入提交 `079096f103fa`（把 syn_recv 请求装进 ehash 的那个提交）起算。
+两件事要分开看。第一是名字：「4B」是 Gemma-4-E4B 稀疏模型的**生效**参数量，总量是 8B，而 Q4_K_M 文件标注为 **6.18 GB**——所以「4GB」是个品牌名，不是卡上任何一项的度量。第二是卡片自己的措辞：「Accuracy numbers are measured by NVIDIA under a consistent harness」，且「可能与其他厂商自报的数字不同」，评测「除 RoleBench、EQ-Bench v3 和 RULER 外均在推理模式下进行」。量化版在 MultiChallenge 上比 BF16 高 2.9 分，要么是后训练配对的真实效应，要么是 harness 的假象；一张写着「consistent harness」的卡片等于告诉你不是后者，却没有给出方差。
 
-**Why it matters:** 今天的故事是运维层面的连锁反应，不是分数。Anthropic 的时间线很直白 — "it takes 48 minutes to leak a kernel pointer and another five minutes to reach the shell command execution" — 而让它可以反复尝试的性质是：输掉竞态只会丢掉一次握手，绝不让整机崩溃。这改变了共享主机上"打补丁"的含义：**Akamai** 在 **2026-10-30 18:10 UTC** 为 Linode 客户发布安全通告，在 **10-31 01:55 UTC** 表示正在部署缓解措施，并且 "At this time, we have no evidence of this vulnerability being exploited on the Akamai Compute platform"，同时建议客户尽快应用上游 OS 更新。另一边，**Go 安全团队**警告说自 **Go 1.24** 起，Go 程序在 Linux 监听 socket 上默认开启 MPTCP，所以一台 Go 服务器可能在没人要求的情况下落进范围 — `GODEBUG=multipathtcp=0` 或 `go.mod` 里的 `godebug multipathtcp=0` 可以作为权宜之计，但同一篇通告说 "disabling MPTCP on a program-by-program basis is a fragile mitigation"，并且 "The best fix for this vulnerability is to upgrade to a patched kernel version." 两条断言要分开读：Anthropic 的 PoC 需要 MPTCP；Go 的警告是底层漏洞并非 MPTCP 专属，没有 MPTCP 监听的系统也可能经由别的路径可达。
+**Why it matters:** 端侧正是量化从「优化项」变成「部署本身」的地方。如果 Q4 才是人们真正会发布的产物，那它的**自己**的数字就该是标题而不是一列附注——而对这张卡的诚实解读是：四位构建不是单纯的降级，这和「量化是免费的」是两个不同的论断。
 
-[`🔗 Anthropic — discovering and exploiting vulnerabilities with Claude`](https://www.anthropic.com/research/discovering-vulnerabilities-with-claude) · [`🔗 oss-security — protecting Go programs against CVE-2026-98432`](https://www.openwall.com/lists/oss-security/2026/10/30/1) · [`🔗 Akamai/Linode — customer security advisory`](https://status.linode.com/incidents/nt58zhx3pmgm) · [`🔗 CVE-2026-98432 (NVD)`](https://nvd.nist.gov/vuln/detail/CVE-2026-98432)
-
----
-
-## 22. LXD 的 mTLS 信任了链上的每一张证书 — 10.0 分，任何一个受信用户的公钥证书都够用
-
-- **Velocity:** ▮▮▮ trending
-- **Source:** Ubuntu Discourse · advisory 2026-10-28 · CVE published 2026-10-30
-- **Tags:** `cve` `lxd` `tls` `auth-bypass` `canonical`
-
-**CVE-2026-112816** 是 **LXD**（以及 **MicroCloud**）里的认证绕过：守护进程的 mTLS 检查 "compared all peer certificates sent by the client to known trust store entries"，于是能访问 HTTPS API、并持有**别人公开客户端证书**的攻击者，可以把这张证书作为**中间证书**放进自己的链里，从而以那个身份通过认证。Canonical 的通告一句话点明机制 — "only the leaf certificate proves ownership of the signing key" — 以及影响："The vulnerability allows an attacker that is able to reach the LXD HTTPS API to authenticate as any trusted TLS client, for which the attacker has the public certificate." 视受害者权限而定，这就是**宿主机上的 root**，因为管理员客户端可以驱动守护进程。在 MicroCloud 里形状更糟：攻击者可以 "intercept the public TLS certificate of a joining cluster member"，然后以该成员身份认证。
-
-Canonical 说漏洞 "was referred to us from the Incus project"，致谢 `stgraber`，并在 **2026-10-29** 于四个 LXD 通道与两个 MicroCloud 通道发布修复 — **6.10.1**、**5.21.9**、**5.0.11**、**4.0.15**、**microcloud 2.1.5** 与 **3.4.1** — 通过 `snap refresh lxd` / `snap refresh microcloud` 应用，点版本仍在从 `candidate` 逐步推进到 `stable`。CVE 容器（assigner **canonical**，`PUBLISHED` **2026-10-30T16:42Z**）带 **CVSS 4.0 = 10.0**（来源 `security@ubuntu.com`，`AV:N/AC:L/AT:N/PR:N/UI:N` 且受影响系统与后续系统三项影响均为 High）以及 **CWE-295**，四条受影响范围写成 semver（`4.0.14 < 4.0.15`、`5.0.10 < 5.0.11`、`5.21.8 < 5.21.9`、`6.9.0 < 6.10.1`）。NVD 那份是 **`Deferred`**，没有任何自己的度量。
-
-**Why it matters:** 这是少见的、成因不是内存错误也不是漏检查，而是**比对错了集合**的 10.0 — 客户端送来的链上每一张证书都被拿去和信任库匹配，于是信任库的内容变成了可签名的凭据。它还提供了一个干净的字段级提醒：通告的修复表覆盖**两个**产品共**六**个 snap 版本，而 CVE 记录的 `affected[]` 只点名**一个**产品（LXD）和四条范围 — MicroCloud 的 2.1.5 与 3.4.1 只存在于正文页面，只信机器可读记录的人无法得知 MicroCloud 也在范围内。把 LXD 当作特权管理平面在跑的人，在打补丁之前应当把每张客户端证书的公开部分都当作已泄露凭据，并重新核对该 snap 实际跟踪的是哪个通道，因为在渐进推进期间 "latest" 和 "stable" 并不是一回事。
-
-[`🔗 Ubuntu Discourse — Canonical LXD and MicroCloud advisory`](https://discourse.ubuntu.com/t/security-advisory-critical-vulnerability-found-in-canonical-lxd-and-microcloud/90557) · [`🔗 CVE-2026-112816 (NVD)`](https://nvd.nist.gov/vuln/detail/CVE-2026-112816) · [`🔗 Hacker News discussion`](https://news.ycombinator.com/item?id=50310937)
+[`🔗 nvidia/NVIDIA-Nemotron-3.5-Bolt-E4B-4GB`](https://huggingface.co/nvidia/NVIDIA-Nemotron-3.5-Bolt-E4B-4GB) · [`🔗 Hugging Face 趋势模型`](https://huggingface.co/models?sort=trending)
 
 ---
 
-## 23. 官方 Ollama 库里 305 个代码类 GGUF 标签中有 7 个几乎什么都解不出 — 而它们与未校准重建张量逐张量一致
-
-- **Velocity:** ▮▮▮ trending
-- **Source:** arXiv · 2609.05881 (v3) · code and audit data released
-- **Tags:** `quantization` `gguf` `reproducibility` `benchmark` `research`
-
-"**Broken on Arrival: Non-Functional Quantized LLM Artifacts in Public Model Registries and How to Catch Them**"（arXiv **2609.05881**，Aditi Patodiya）测了官方 Ollama 库中 **15 条模型线**上**全部 305 个符合条件的代码类 GGUF 标签**，外加 **22** 个 Hugging Face 社区热门文件；先用 15 个代码任务筛出可疑项，再把它们放到全部 **164 个 HumanEval+** 任务上复测。**7 个官方标签（2.3%）最多只解出 6 题** — 全部是参数量不超过**四十亿**模型的低位量化。论文自带的对照才是发现：从原始权重重建的五个可疑文件 "matched our uncalibrated rebuilds tensor for tensor, so none was corrupted"，紧接着一句值得引用的话："**Exact reproducibility did not imply function.**"
-
-机制是校准，而不只是位宽。在权重、工具链和张量组合都固定的情况下，加入 **importance matrix** 把 `Qwen2.5-Coder-3B` 在三个量化档位上的成绩**从零提到 164 题中的 76–113 题**；而同一个未校准配方让小一号的 `Qwen2.5-Coder-1.5B` 正常工作，所以论文说配方本身并不能预测失败。反过来，通过的标签里抽样的 66 个 "None of 66 sampled tags that passed the screen was non-functional" — 也就是说这个便宜筛查在样本里没有制造假警报。论文 **v3** 修正了此前的一个判断：一组社区 `deepseek-coder-6.7B` 文件对失败的原因是**缺少 chat template**，与后端无关，该版本为此加了测试。
-
-**Why it matters:** 模型库发布的是下载量和点赞数，不是功能测试，而每一句"能在笔记本上跑"的建议都继承了这个缺口 — 你下载的产物可以与发布者构建的逐字节相同，却一分都拿不到。两个运维层面的后果：对**不超过 4B 的低位量化模型**，在信任标签之前做一次任务级冒烟测试，而不是只看校验和；当某个标签失败时，修复方式往往是把同一模型**换成一个已校准的量化**，而不是怀疑文件损坏。审计数据和 `quantcheck` 工具随论文发布，所以这套筛查可复现；尚未确立的是失败率在 15 条模型线之外、或非代码任务上如何变化 — 这项研究没有测。
-
-[`🔗 arXiv 2609.05881`](https://arxiv.org/abs/2609.05881) · [`🔗 Hugging Face — daily papers`](https://huggingface.co/papers)
-
----
-
-## 24. pgAdmin 的 `\copy` 守卫只检查了一种引号方言，而 psql 解析的是另一种 — 9.9，且是六月那次修复的绕过
+## 6. 「柏拉图表示假说」被证成了一个定理 —— 而证明说下一 token 预测才是**低效**的那条路
 
 - **Velocity:** ▮▮ rising
-- **Source:** NVD / cveawg · CVE published 2026-10-30T20:17Z · assigner PostgreSQL
-- **Tags:** `cve` `pgadmin` `postgresql` `command-injection`
+- **Source:** arXiv 2610.39302 · HF Papers 58 个赞
+- **Tags:** `research` `representation-learning` `jepa` `multimodal` `scaling-laws`
 
-**CVE-2026-116241** 是 pgAdmin 4 **Import/Export Data** 工具里的命令注入：pgAdmin 把用户的查询导出包进一条 `psql \copy (...) TO` 命令，并检查查询里的括号是否配平，以确保没有东西能逃出这层包装。这个检查 "rejected a backslash inside a single-quoted string but not inside a double-quoted identifier, where it treated the next double quote as closing the identifier"，而 psql 的 `\copy` 解析器 "applies the connection's escape character to whichever quote opened a token"，所以在 `standard_conforming_strings` 关闭时，一个用反斜杠转义的双引号**并不会**结束标识符。两个解析器，两种对"字符串在哪儿结束"的信念；而那个会话变量由攻击者设置。
+论文证明了**柏拉图表示定理（Platonic Representation Theorem）**：分别在不同模态上训练的联合嵌入预测架构（JEPA），只要其正样本对是同一场景的两次观测——即**好视角**——就会「学到相同的表示，仅相差一个旋转」；否则错位是有界的。在这个框架下，下一 token 预测就是一个拥有**坏视角**的 JEPA——同一文档的不同片段——这「解释了为什么语言模型只能靠规模才与视觉对齐」。实证结论才是惊人的那个：在相同语料上，好视角达到同等对齐所需的训练样本数是下一 token 预测的 **1/42**；一个 **1.09 亿参数的文本 JEPA**，与 DINOv2、CLIP 图像编码器的对齐程度超过了所评测的所有语言模型（最大到 720 亿参数），也超过了 CLIP 自己的文本编码器。验证从 14.5 万条图注一路做到 9.4 亿张网络图片的文本，并给出一条「能在种子噪声范围内预测未见实验」的 scaling law。
 
-记录由 **PostgreSQL** 分配（`PUBLISHED`，**2026-10-30T20:17Z**），CNA 给了**两个**度量 — `CVSS:3.1/…/PR:L/UI:N/S:C/…` = **9.9**，以及一条 CVSS 4.0 向量得 **9.4** — 外加**两个**弱点，**CWE-78** 与 **CWE-115**（输入解释错误），并注明这次是 **CVE-2026-17566** 那个修复的绕过，继承其威胁模型与 `S:C` 的理由。NVD 那份处于 **`Received`**，没有任何 `nvd@nist.gov` 度量。受影响范围写成 `{version: "0", lessThan: "9.19"}`。
+展示部分刻意做得很小：一个旋转就能把分别训练的编码器变成图像描述器，COCO 上 CIDEr 为 .838；在一个无配对基准上，该文本 JEPA 报告 ImageNet-100 top-5 达到 64%，而「最多 56%」是 80 亿参数以内语言模型的水平。
 
-**Why it matters:** 修复比记录早一周、比制品早一天 — 提交 **`9be31a0`** 日期为 **2026-10-23T18:47Z**，pgAdmin **9.19** 于 **2026-10-29T15:36Z** 上传到 PyPI — 而跟踪用的 issue **#10663** 仍然**开着**，正文是 "Internal tracking: pending fix for 9.19" 和 "Details will be published with the pgAdmin 4 9.19 release notes"，所以披露顺序是 提交 → 发布 → 记录 → 说明。仓库的 tag feed 仍只显示 `REL-9_18`（2026-09-17），因此"修没修"必须从 PyPI 回答，而不是从 tag。可迁移的教训是这个漏洞类别：清洗器只有在对**消费方**语法的建模正确时才正确，而任何依赖调用方可以翻转的会话设置（`standard_conforming_strings`）的解析，都是一个能从另一侧被关掉的清洗器。
+**Why it matters:** 如果跨模态的对齐是**视角构造**的性质而非规模的性质，那么靠堆规模就是买一个你本可以指定的表示的昂贵方式。42× 是在单一语料上的样本效率结论，不该被读成训练成本结论——但这是该假说第一个带着配方、而不是只带着观察出现的版本。
 
-[`🔗 CVE-2026-116241 (NVD)`](https://nvd.nist.gov/vuln/detail/CVE-2026-116241) · [`🔗 pgAdmin commit 9be31a0`](https://github.com/pgadmin-org/pgadmin4/commit/9be31a019f780647fb689c458408c8803263c812) · [`🔗 pgAdmin issue #10663`](https://github.com/pgadmin-org/pgadmin4/issues/10663)
+[`🔗 arXiv 2610.39302 — Proving and Improving the Platonic Representation Hypothesis with JEPAs`](https://arxiv.org/abs/2610.39302) · [`🔗 HF Papers（趋势）`](https://huggingface.co/papers/2610.39302)
 
 ---
 
-## 25. 一个 WordPress 缓存插件是"没有官方补丁"的 10.0 — 九月上报，十月 29 日才进 NVD
+## 7. imgproxy 的 9.8 没有 CVE，比修复晚了八天才到，而下个版本又修了同一个加载器
 
 - **Velocity:** ▮▮ rising
-- **Source:** Patchstack · published 2026-10-13 · NVD record 2026-10-29
-- **Tags:** `cve` `wordpress` `rce` `unpatched` `patchstack`
+- **Source:** GitHub Advisory Database · 发布于 2026-10-06 · 审核入库 2026-10-30
+- **Tags:** `cve` `go` `libvips` `heap-overflow` `image-processing`
 
-**CVE-2026-61991** 是 WordPress 插件 **AjaxLoadMore Cache**（**3.1.1** 及以下）里的未认证远程代码执行，由分配者 **Patchstack** 归类为 **CWE-94**（代码注入）。Patchstack 的条目异常简短，也异常直接地说明修复状态：修复版本一栏写着 "**No official patch available**"，条目注明 "No VDP"，所需权限为**未认证**，CVSS 是 **10**。插件自己的发行页是核查"仍然没有补丁"这一状态的地方，因为"无补丁"是可过期的断言。
+`GHSA-hff9-5pqw-6w9f` 是 imgproxy ICO 加载器里的 **9.8**（`CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H`）堆溢出，任何网络客户端只要发一个构造好的 `.ico` 就能触发。机制是一个由文件提供的长度字段上发生的整数回绕：ICO 加载器读取 32 位、攻击者可控的 `data_size` 之后，按 `data_size + BMP_FILE_HEADER_LEN` 分配内存；当 `data_size > UINT32_MAX - 14` 时加法回绕——`0xfffffff5` 只会得到 **3 字节**——而加载器仍从第 14 字节起写入所声明的数 GB 跨度。受影响范围是 `>= 4.0.0, < 4.0.16`，基础模块路径、`/v2` 与 `/v3` 三个都在内。
 
-时间线才是值得读的部分：**Julieta** 于 **2026-09-12** 上报，Patchstack 于 **2026-10-13** 公开，而它直到 **2026-10-29T16:18Z** 才进入 NVD — 从上报到记录 **47 天**，其中 **16 天**是"漏洞细节已公开、代码尚未修复"。NVD 那份是 **`Deferred`**，只有一个度量（`CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:C/C:H/I:H/A:H` = **10.0**，来源 `audit@patchstack.com`，`Secondary`），没有任何 `nvd@nist.gov` 度量 — 也就是说这个 10.0 是发现方的数字，被 NVD 转述，而这条记录 NVD 已表示不会分析。
+值得对齐的三个日期。imgproxy **4.0.16** 于 **2026-09-28** 发布，说明是「Fixed several vulnerabilities in ICO image loader」；**4.0.17** 于 **2026-09-30** 跟进，说明是「Fixed a possible out-of-bounds read in the ICO image loader」；而这份公告 **2026-10-06 发布**，直到 **2026-10-30 才被审核进数据库**——晚了 24 天，且**没有 CVE 编号**。此外这个图片代理在三周内还有两次安全相关的发版：4.0.18（2026-10-14）修了 SVG 净化绕过，「via control-character entities in `href`, SMIL animations of link attributes, and DOCTYPE entities」；4.0.19（2026-10-21）加了「(docker) Untrust compromised eMudhra CA certificates」——修的是与 4.0.16 公告所列完全不同的问题。
 
-**Why it matters:** 一个没有补丁的 10.0 只有两条诚实的处置方式 — 卸掉插件，或者做虚拟补丁 — 而 Patchstack 的缓解正是第二条："Patchstack has issued a mitigation rule to block any attacks until an official patch becomes available." 那句话是厂商的产品，不是修复，而且只在他们的 WAF 后面生效。评分细节也要紧：在 `PR:N` 的代码注入上，正是 `S:C` 把它从 9.8 推到 10.0，而这里它站得住，因为插件里的代码执行落在整个 WordPress 安装及其数据库的范围内。记录回答不了的是：这个插件是否还装在什么要紧的地方 — 那是版本存在性问题，属于资产清单，不属于 CVE feed。
+**Why it matters:** 对 Go 模块而言，公告指向 `4.0.16`，而实际存在的是 `4.0.20`。一个按 GHSA 匹配的扫描器会把 `4.0.17` 判为干净，可它刚刚核对过的那个加载器，在上一个补丁版本里仍存在越界读。而公告发布与入库之间 24 天的空档意味着：在十月的某些日子里，「未发现公告」只是关于队列的一句话。
 
-[`🔗 Patchstack — AjaxLoadMore Cache advisory`](https://patchstack.com/database/wordpress/plugin/ajax-load-more-cache/vulnerability/wordpress-ajaxloadmore-cache-plugin-3-1-1-remote-code-execution-rce-vulnerability) · [`🔗 CVE-2026-61991 (NVD)`](https://nvd.nist.gov/vuln/detail/CVE-2026-61991)
+[`🔗 GHSA-hff9-5pqw-6w9f`](https://github.com/advisories/GHSA-hff9-5pqw-6w9f) · [`🔗 imgproxy 发布记录`](https://github.com/imgproxy/imgproxy/releases)
 
 ---
 
-## 26. Progress 的两次 WS_FTP 修复相隔三个月 — 而 10.0 那次递出的是管理员凭据
+## 8. OpenSearch 的 SQL 插件反序列化了客户端提供的 cursor —— 从预留到披露 106 天，而读权限就是全部屏障
 
 - **Velocity:** ▮▮ rising
-- **Source:** NVD · published 2026-10-29T16:19Z · both `Awaiting Analysis`
-- **Tags:** `cve` `ws-ftp` `progress` `credentials` `rce`
+- **Source:** CVE 记录（指派方 `GitHub_M`）· 发布于 2026-10-30T22:22Z
+- **Tags:** `cve` `opensearch` `deserialization` `rce` `sql`
 
-两条 Progress **WS_FTP Server** 记录在 **2026-10-29** 的同一分钟落地，都是 Windows，都由 `security@progress.com` 打分，在 NVD 都还是 `Awaiting Analysis`。**CVE-2026-84295** 是 **CWE-287** 认证不当 — "an unauthenticated remote attacker to access sensitive information, including administrative credentials" — 影响 **2024.0.6** 与 **2025.0.3** 之前的版本；向量是 `CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:C/C:H/I:H/A:H` = **10.0**。**CVE-2026-90868** 是 **CWE-78** 操作系统命令注入，`PR:L`，"under certain configurations"，影响 **2024.0.7** 与 **2025.0.4** 之前的版本，**9.9**。CNA 容器在第一条上除了 CWE-287 还给了 **CWE-522**（凭据保护不足）。
+`CVE-2026-63393` 是 OpenSearch SQL 插件中的任意代码执行：「一个拥有基础读取／搜索权限的远程已认证用户，可以向 `plugins/sql` 端点提供构造好的 `cursor` 参数，触发对不可信数据的不安全反序列化」。2.x 线从 `2.8.0.0` 至 `2.19.6.0` 受影响，3.x 在 `3.7.0.0` 之前受影响；修复版本为 **2.19.6.0** 与 **3.7.0.0**。CNA 给出的分数是 **8.7**，向量 `CVSS:4.0/AV:N/AC:L/AT:N/PR:L/UI:N/VC:H/VI:H/VA:H`——其中 `PR:L` 正是这个漏洞的全部设计：只读的搜索权限，就是普通用户与服务端代码执行之间唯一的阻隔。
 
-**两个修复水位才是重点。** 认证漏洞修在 `2024.0.6` / `2025.0.3`；命令注入修在 `2024.0.7` / `2025.0.4`。只打了通告里第一个修复就停下的运维，手里仍是一个带第二个漏洞的版本 — 而文件传输服务器正好是"管理员凭据"加"任意命令执行"会串成一条链、而不是两个发现的那类主机。两条记录唯一的 reference 都指向一篇 `progress.lightning.force.com` 的 Knowledge 文章，它重定向到 SAML 登录，所以这一轮读不到厂商自己的修补指引：把版本号当作记录的断言而不是通告的断言，并在已认证会话里对照厂商页面核实。
+两个记录细节。它**预留于 2026-07-16**、**发布于 2026-10-30**——从占用编号到描述可读之间隔了 106 天，所以「新漏洞」和「新记录」又是一对不同的句子。CNA 确实做了分类：**`CWE-502`（不可信数据反序列化）**，承载在 `problemTypes` 里。
 
-**Why it matters:** `PR:N` 认证绕过上的 `S:C` 正是本月大多数 10.0 的来源，在这里也是对的 — 凭据存储在被攻陷组件之外，影响跨过了一道安全边界。可执行的指令是版本算术而不是分诊：`2025.0.3` 对于那个 RCE **不是**修复版本，而 `2024.0.x` 与 `2025.0.x` 两条并行线的命名很容易让人停在前一格。两条都不在 KEV，都没有 NVD 自评分，所以这里没有可利用性断言 — 这是一个"用到之前先打补丁"的条目，而 NVD 尚未分析，正是值得连同来源一起引用记录自带 CWE 的原因。
+**Why it matters:** 对客户端提供的值做无边界反序列化，与查询引擎里反复出现的 cursor 处理缺陷是同一形状，而 cursor 恰恰是每个分页 API 都要交还给调用方的那个参数。如果你的集群暴露了 `plugins/sql`，`PR:L` 不算缓解措施——它的意思是「任何分析师」。
 
-[`🔗 CVE-2026-84295 (NVD)`](https://nvd.nist.gov/vuln/detail/CVE-2026-84295) · [`🔗 CVE-2026-90868 (NVD)`](https://nvd.nist.gov/vuln/detail/CVE-2026-90868)
+[`🔗 CVE-2026-63393 (cveawg)`](https://cveawg.mitre.org/api/cve/CVE-2026-63393) · [`🔗 OpenSearch 发布记录`](https://github.com/opensearch-project/OpenSearch/releases)
 
 ---
 
-## 27. 同样的工具、两种接口：MCP 与 CLI 在 94.3% 的配对轨迹上分道扬镳 — 而一层修复多拿最多 9 分
+## 9. OpenDeepWiki 把管理员签名密钥写进了 `appsettings.json` —— 于是谁都能铸一个 Admin 令牌
 
 - **Velocity:** ▮▮ rising
-- **Source:** arXiv · 2610.34298 · 2026-10-25
-- **Tags:** `mcp` `agents` `tool-use` `benchmark` `research`
+- **Source:** CVE 记录（指派方 `VulnCheck`）· 发布于 2026-10-30T13:18Z
+- **Tags:** `cve` `hardcoded-secret` `jwt` `dotnet` `self-hosted`
 
-"**Matched Capabilities, Different Behaviors: A Controlled Study of MCP and CLI Interfaces for Language Agents**"（arXiv **2610.34298**；Zhenning Shi、Liang Pang、Yongqi Li）构建了 **MICA** — Matched Interface Comparison and Analysis — 从**共享的语义动作契约**渲染出 MCP 与 CLI，并让解码后的动作走**同一个运行时**，从而把能力、环境与执行固定住，只让面向模型的表示发生变化。在**六个模型**与**三个交互环境**上，匹配接口产生了 "substantial differences in task performance and interaction cost"，配对自然轨迹显示 **2,004 个 episode 中有 94.3%** 出现结构性分歧，且早期差异会沿后续交互传播。
+`CVE-2026-119597`：OpenDeepWiki 直到 **2.0.6** 版本都带有**硬编码的 JWT 签名密钥**，记录直接点名了文件——`appsettings.json` 里的 `Jwt:SecretKey`——且称其「公开可知」。未认证攻击者可以铸造带 `Admin` 角色声明的 HS256 bearer 令牌，访问 `/api/admin`，控制「用户、角色、仓库、设置与 API 密钥」。记录上有**两个分数、两个向量**：CVSS 4.0 下 **9.3**（`AV:N/AC:L/AT:N/PR:N/UI:N/VC:H/VI:H/VA:H`），3.1 下 **9.8**（`AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H`）——同一个 CNA、同一个 bug、两个框架，0.5 的差距来自框架，而不是对事实的分歧。
 
-修复的一半是 **DART** — Decoupled Action Realization and Targeted Repair — 它 "preserves validated semantic commitments while repairing interface-specific realization"，在**全部六个**设置上把基准分数最多提高 **9.0 分**，并在**全部三个**环境里把 MCP 的 token 成本每个任务最多降低 **27.1k**。
+对一个「出厂即带密钥」的发现来说，这条记录异常完整：`references[]` 指向 `appsettings.json` 里的那一行、消费它的 `Program.cs`、修复提交，以及上游 issue #403。它**当天预留、当天发布**——11:46Z 与 13:18Z，相隔不到两小时。仓库目前仍是 3,651 星、MIT、最后推送 2026-10-23。
 
-**Why it matters:** 论文的主张是窄的，而正因为窄才好用 — 它没有说 MCP 比 CLI 好或差，它说接口选择是每一个 agent 基准、每一次"工具使用"比较里的**混杂因素**，而匹配状态下的探针能定位失败究竟来自能力呈现、实现方式，还是反馈。成本数字是可操作的那一个：同样的语义工作上一个任务差 27.1k token，是预算项，不是风格偏好。摘要里没交代的两点限定：六个模型与三个环境在摘要中没有点名，而 9.0 分是跨设置的上界，不是均值 — 把它当作典型值之前先看表。
+**Why it matters:** 默认签名密钥是那种「自托管反而更糟」的失败模式，因为每个部署都继承同一个秘密，而利用它只需要一条 `curl`。这份双分记录同时也是个有用的提醒：9.3 和 9.8 同时成立现在已是常态，只引其中一个、不带 CVSS 版本号，才是错误所在。
 
-[`🔗 arXiv 2610.34298`](https://arxiv.org/abs/2610.34298) · [`🔗 Hugging Face — daily papers`](https://huggingface.co/papers)
+[`🔗 CVE-2026-119597 (cveawg)`](https://cveawg.mitre.org/api/cve/CVE-2026-119597) · [`🔗 AIDotNet/OpenDeepWiki — 修复提交`](https://github.com/AIDotNet/OpenDeepWiki/commit/1bf0f4b5ef8d972ca640e5df145b5813a9492544)
 
 ---
 
-## 28. 多 token 预测的梯度一半是自蒸馏、一半是噪声 — 去掉噪声只需一行改动
+## 10. Vercel Labs 发布 `agent-desktop` 1.0：agent 通过无障碍树操作真实应用，不做像素匹配
 
 - **Velocity:** ▮▮ rising
-- **Source:** arXiv · 2610.38331 · preprint
-- **Tags:** `training` `mtp` `speculative-decoding` `research`
+- **Source:** GitHub · 3,979 星 · v1.0.0 2026-10-28，v1.0.2 2026-10-30
+- **Tags:** `agent-infra` `computer-use` `rust` `accessibility` `desktop`
 
-"**Multi-Token Prediction Done Right**"（arXiv **2610.38331**，Jayden Teoh）把 MTP 的交叉熵梯度精确分解成两项：一个**KL 自蒸馏项**，把每个 MTP 头拉向模型自己的下一个 token 分布 — 这正是投机解码变快的原因 — 以及一个**信噪比很低的残差**，它 "buries the useful KL signal"，并且随规模增大愈发严重。提出的修法利用了一个关于共享头的事实：当两个分布共享同一个线性输出头时，它们 KL 散度的梯度可以由两条交叉熵梯度精确恢复（用 straight-through 梯度路由），于是 **Soft-MTP** 只回传 KL 项，复用已有的 NTP 与 MTP 交叉熵计算 — 一行代码、不新增参数、不需要词表大小的 logit 矩阵、没有可测开销，且与融合交叉熵 kernel 兼容。
+`vercel-labs/agent-desktop`（Apache-2.0，Rust，创建于 2026-02-19）是一个面向 macOS、Windows 与 Linux 的 CLI 与 C 库，为 agent 提供「computer use for AI agents: read and operate desktop apps through the OS accessibility tree」。一次 snapshot 返回 JSON，其中每个可操作元素都有各自的 ref；agent 对 ref 执行动作，然后再 snapshot 一次——「The agent acts on a ref and snapshots again to check, with no pixel matching; the loop stays in your agent.」关键的设计选择在于：「Ref actions go through the accessibility API without moving the pointer or taking focus」，并且默认**无头**，只有 `--headed` 才启用物理输入。
 
-报告的结果跨 **167M 到 1.2B 参数**：每个规模上 NTP 困惑度更低、投机解码更快、零样本准确率更高；从 **689M** 起 MTP 困惑度也更低；1.2B 上微调后数学与代码推理更强；在多数指标上与直接最小化 KL 持平或更好。DeepSeek 式与 Meta 式的 MTP 布局都支持。
+失败模式是被类型化的、而不是含糊的，这是一个对着真实使用场景打磨过的 harness 的标志：ref 的作用域是 snapshot，UI 一变就返回 `STALE_REF` 或 `AMBIGUOUS_TARGET`，办法是重取快照；多窗口若不提供 window id 也会得到 `AMBIGUOUS_TARGET`；macOS 需要辅助功能权限，且「The host exits after 15 idle minutes」，`TMPDIR` 必须以 `0700` 模式归属当前用户。它在 72 小时内从 1.0.0 走到了 1.0.2。
 
-**Why it matters:** MTP 如今是标准的预训练配料，恰恰因为它便宜，而这篇论文的论点是廉价版本学到的东西里有一部分是噪声 — 这类发现改变的是训练配方而不是模型。请把它当作强假设而不是定论：这是单作者预印本，测到的最大规模是 1.2B — 远低于论文所说的残差变得更糟的量级 — 而"没有可测开销"是关于融合 kernel 的实现断言，换一套栈必须重测。下一个该做的测试正是论文没做的那个：当标准 MTP 真正被部署的规模上，这个优势还在不在。
+**Why it matters:**「截图加点击」是 computer use 里没法做可靠的那一半，无障碍树则是可以的那一半——ref 稳定、动作可安全重试。有两条警告必须和功能一起讲：「Snapshots, clipboard reads, screenshots, command output and debug artifacts can contain private desktop content」，以及「The optional JEV helper sends screen descriptions to a configured model provider」——这是原生 CLI 并不具备的一条网络路径。
 
-[`🔗 arXiv 2610.38331`](https://arxiv.org/abs/2610.38331) · [`🔗 Hugging Face — daily papers`](https://huggingface.co/papers)
+[`🔗 vercel-labs/agent-desktop`](https://github.com/vercel-labs/agent-desktop) · [`🔗 发布记录`](https://github.com/vercel-labs/agent-desktop/releases)
 
 ---
 
-## 29. 百度 Unlimited-OCR-2 限定的是工作集而不是窗口 — 而它的 SOTA 表是一张图
+## 11. Molly 自 7 月 31 日以来没发过版本，而主线 Signal 已在 8.27 修好 —— 且仓库此后只有一个提交
 
 - **Velocity:** ▮▮ rising
-- **Source:** Hugging Face · baidu/Unlimited-OCR-2 · released 2026-10-27
-- **Tags:** `ocr` `vision-language` `long-context` `mit` `baidu`
+- **Source:** Hacker News · 259+ 分 · 约 10 小时前（~18:23 UTC+8）
+- **Tags:** `signal` `fork` `supply-chain` `maintenance` `messaging`
 
-**`baidu/Unlimited-OCR-2`** 是 **MIT** 许可的图文转文本模型，于 **2026-10-27** 发布，Hub 上 **24,276 次下载**、**457 个赞**，并与一个新数据集 **MarathonDocBench** 一同推出，用于"超长文档解析"。机制是 **SR-SWA**，稀疏参考滑窗注意力：模型 "compresses text-visual attention interactions from ultra-long sequences down to a fixed-size set of working references (e.g., 512 tokens)"，从而限定计算量，使 "per-step decoding latency and memory footprint nearly constant regardless of document length"。多页解析是单次请求 — 提示词为 `"<PAGE><image>" * num_pages + "Multi page parsing."` — 因此跨页上下文可用，且每页按顺序输出一个 `<PAGE>` 标记。
+说法是：加固版 Signal 分支 Molly「已经三个月没更新，并且受制于主线 Signal 早已修复的攻击」——具体是一个十月披露的缺陷，可能导致通话结束后音频（乃至视频）仍在继续，上游已在 **Signal 8.27** 修复。这个说法在源头而非帖子里得到了验证：Molly 最新的发布是 **`v8.19.2-4`，发布于 2026-07-31T11:56Z**，而自该标签以来，默认分支上只有**一个提交**——`2026-09-08T08:32:13Z`，一处用于在同步流程中跟踪上游稳定版的 CI 改动。仓库本身没有被遗弃（`pushed_at` 为 2026-10-30），它只是三个月没切过构建。Signal 那个 bug 没有分配 CVE。
 
-**Why it matters:** "unlimited" 是对**工作集**的断言，不是对无界上下文窗口的断言；模型卡在机制层面诚实，在数字层面不透明：SOTA 那句写的是 "Achieves state-of-the-art performance across both dozens-of-pages benchmarks (e.g. MPDocBench) and extreme hundred-page benchmarks (e.g. MarathonDocBench)"，而真正的榜单是一张 **PNG**（`assets/leaderboard.png`），所以里面的任何一个数字都要先 OCR 才能引用或核对。这次发布最有用的部分是部署附录：定制 SGLang wheel、复用上一窗口 KV 尾部的页窗调度、因为 0.75 在 32 并发以上会 OOM 而设的 `--mem-fraction-static 0.7`，以及明确写出的取舍 — 更小的页窗降低峰值内存，但会在窗口边界丢掉跨页合并。这就是"unlimited"的实际代价：一个可调的窗口加一个内存预算，而这比大多数长上下文发布讲得更清楚。
+**Why it matters:** 隐私分支的全部价值主张，是它跟踪上游的速度比你亲自审计上游更快；三个月的发布空档把这件事反了过来，把你留在一个你无法打补丁的基座上。可度量的量不是「仓库还活着吗」，而是「用户最后一次拿到二进制是什么时候」——在这里，这两个答案是相隔 91 天的两件事。
 
-[`🔗 baidu/Unlimited-OCR-2`](https://huggingface.co/baidu/Unlimited-OCR-2) · [`🔗 baidu/Unlimited-OCR`](https://github.com/baidu/Unlimited-OCR) · [`🔗 Hugging Face — trending`](https://huggingface.co/models)
+[`🔗 Molly — 发布记录`](https://github.com/mollyim/mollyim-android/releases) · [`🔗 讨论帖`](https://piefed.world/post/1503394)
 
 ---
 
-## 30. Firezone 用一套 sans-IO WireGuard 替换掉两年对 boringtun 的修补 — 而它的 45× 是比值，不是测量
+## 12. Orkas 把 16 个专家 agent 和一个 Commander 放到你的桌面上 —— MIT、本地优先，而开源构建砍掉了云端功能
 
 - **Velocity:** ▮▮ rising
-- **Source:** Firezone blog · 2026-10-31 · firezone/sanstun
-- **Tags:** `wireguard` `rust` `networking` `sans-io` `apache`
+- **Source:** GitHub Trending · 6,051 星 · 今日 +1,118 · 创建于 2026-04-29
+- **Tags:** `multi-agent` `desktop` `local-first` `mit` `orchestration`
 
-**`firezone/sanstun`**（Apache-2.0，创建于 **2026-10-02**，37 星）是一套 sans-IO 的 Rust WireGuard 状态机实现，今天由 Thomas Eizinger 公布。前提是把 IO、**时间与随机性**全部移出库：唯一解析数据报的公开入口是 `Interface::receive`，它施加限速、生成 cookie 回复并返回带类型的消息；而 `HandshakeInitiation` 之类的构造函数是 **crate 私有**的，所以调用方不先经过限速器，根本拿不到 `Tunnel::handle_handshake_initiation`。这是用类型系统而非文档强制的一条协议不变式 — 文章的理由是：忘记限速器正是那种在正常运行中永远不会暴露的 bug。
+`Orkas-AI/Orkas` 是「一个开源（MIT）、本地优先的桌面 AI 团队：Commander 把你的目标拆成待办，并协调 16 个内置专家 agent，外加 Claude Code、Codex、OpenCode、OpenClaw 和 Hermes」。自 2026-04-29 以来 820 个提交，366 个 fork，**7 个未关闭条目（3 个 issue、4 个 PR）**，市场上还列着「30+ agents」。它提供项目记忆、定时自动化，以及 Gmail、Notion、Slack、Shopify、Stripe 的连接器，打包版应用内含「500 credits for the built-in Orkas model」。
 
-性能设计是另一半。`Tunnel::begin_encapsulate` **并不**加密：它检查会话、预留包计数器、推进定时器并返回一个实现了 `Send` 的 `PendingEncapsulate`，于是 ChaCha20-Poly1305 的工作可以移到工作线程，而计数器记账留在属主线程。公开的 `cargo bench data_path` 数字让这个切分可见：64 B 与 1280 B 下 `begin_encapsulate` 都是 **20.8 ns**，`encrypt` 在 64 B 是 **226 ns**、1280 B 是 **933 ns**，`begin_decapsulate` **37.6 ns**，`commit_decapsulate` **17.5 ns**。
+README 对「开源版不是什么」写得异常精确：共享项目、云同步、发布 Web 应用「the open-source build doesn't support them yet」，打包版则需要登录。自动化要求机器保持唤醒且应用在运行；错过的运行只能在「within 12 hours when the computer wakes or Orkas starts」内补上。Linux 从源码运行，「with no installer yet」，且「Alpine and other musl-based distributions are not supported」。关于任务诚实性：「an admitted or queued task is not treated as a completed result.」
 
-**Why it matters:** 文章给出的头条数字自带免责声明 — "If we move the actual encryption to another thread, this hints at a potential speedup of more than 45x!" 紧接着就是 "An effective speedup of 45x is hard to achieve in practice because it ignores the cost of passing `PendingEncapsulate` to another thread and assumes no other overhead is introduced." 所以 45× 是 1280 B 下记账与加密的比值，不是吞吐结果；诚实的读法是：基准显示在 MTU 尺寸的包上，记账只占工作的 **2%**。另一件值得记下的是项目自己的历史：Firezone 修了两年的 `boringtun` fork — 排除依赖升级 "more than 70 PRs" — 才得出结论说与上游的 API 兼容性才是约束，这对"重写协议库"是比任何微基准都更有用的论据。
+**Why it matters:** 有意思的不是 agent 数量，而是「桌面编排器」这个品类已经收敛到一套稳定架构——写待办的规划器、执行的专家、通往外部 CLI 的桥——如今竞争的是打包与连接器，而不是编排研究。6,051 星配上 7 个未关闭条目，是个该盯住的数字：它描述的是一份年轻的待办清单，而不是一个已加固的运行时。
 
-[`🔗 Firezone — introducing sanstun`](https://www.firezone.dev/blog/introducing-sanstun) · [`🔗 firezone/sanstun`](https://github.com/firezone/sanstun)
+[`🔗 Orkas-AI/Orkas`](https://github.com/Orkas-AI/Orkas) · [`🔗 GitHub Trending（日榜）`](https://github.com/trending?since=daily)
 
 ---
 
-## 31. Anthropic 的 `skills` 仓库 185k 星却没有顶层许可证 — 许可是按文件夹分的，其中四个不是开源
+## 13. Youtu-Parsing-Omni 用一个编码器、一套 schema 打通十项解析任务 —— 5B 权重在 OmniDocBench v1.6 上拿到 96.96
 
 - **Velocity:** ▮▮ rising
-- **Source:** GitHub Trending (weekly) · +1,888 this week · 185,417 total
-- **Tags:** `agent-skills` `anthropic` `licensing` `mit`
+- **Source:** arXiv 2610.39301 · HF Papers 67 个赞
+- **Tags:** `research` `multimodal` `document-parsing` `audio` `video`
 
-**`anthropics/skills`** — "Public repository for Agent Skills" — 本周再次上榜，**+1,888 星**（今天 **295**，共 **185,417**，**21,904** fork，**1,450** 个 open issue），最后推送于 **2026-10-28**。目录结构小而承重：`skills/` 下 **19** 个技能文件夹 — 从目录列表数出，没有任何页面给出总数 — 另有 `spec/`、`template/` 与 `.claude-plugin/`，而**根目录没有 `LICENSE`**（该路径 404），顶层唯一与许可相关的文件是 `THIRD_PARTY_NOTICES.md`。
+Youtu-Parsing-Omni 是一个全模态解析器，把文档、图像、音频与视频转成「以空间与时间为基础的结构化记录」，定位是「a perception layer for agents that read, locate, and cite evidence across modalities」。设计上有两条不变式：**所有模态共用一个编码器**（从预训练语言模型初始化以强化文本读取，以共享权重把所有模态编码进统一的时空坐标系），以及**所有任务共用一套 schema**（`OmniSchema` 统一十项解析任务，使单一后训练流程 OmniSchema-Aware On-Policy Distillation 可以服务全部任务）。
 
-许可证写在 README 里，而且是一个仓库里**两种许可**："Many skills in this repo are open source (Apache 2.0)." 但 "We've also included the document creation & editing skills that power Claude's document capabilities … in the `skills/docx`, `skills/pdf`, `skills/pptx`, and `skills/xlsx` subfolders"，而这几个 "These are **source-available, not open source**"，作为 "a reference for more complex skills that are actively used in a production AI application" 分享。README 还带一条免责声明：技能 "provided for demonstration and educational purposes only"，且 "the implementations and behaviors you receive from Claude may differ from what is shown"。
+单个 **5B** checkpoint 报告在 **OmniDocBench v1.6 上 96.96 Overall** 达到 SOTA，在 **OmniParsingBench 上以 75.08 Avg.** 领先所有开放权重模型——「with its advantage concentrated on audio and video」——并取得最佳整体图表解析分（**95.02**）、「the highest exact chemical-fingerprint agreement among compared systems」，且「matches a dedicated optical-music model in character-level transcription of typeset sheet music while staying far ahead of general-purpose systems」。
 
-**Why it matters:** 这是 agent 技能生态里很大一部分人在抄的那个仓库，而被抄的东西许可并不统一 — 十九个文件夹里有四个是可以读、但不能复用的参考资料，仓库级的 public 徽标区分不了它们。若要把技能 vendor 进产品，按文件夹而不是按仓库清点，并把 README 里那句"可能不一致"当作厂商在说：线上运行的行为不是这份代码。原始数字也提醒要用对单位：**1,450** 是该仓库 issue **加** pull request 的总数，不是 1,450 个 open issue。
+**Why it matters:**「with its advantage concentrated on audio and video」这句话承担了很重的分量——它意味着文档榜单上的那个数字与多模态的主张度量的不是同一件事，而「单编码器」的论据是建立在没人竞争的模态上的。代码与权重均已公开，这让这项具体主张可被核实，而不只是可被引用。
 
-[`🔗 anthropics/skills`](https://github.com/anthropics/skills) · [`🔗 GitHub Trending (weekly)`](https://github.com/trending?since=weekly)
+[`🔗 arXiv 2610.39301 — Youtu-Parsing-Omni`](https://arxiv.org/abs/2610.39301) · [`🔗 HF Papers（趋势）`](https://huggingface.co/papers/2610.39301)
 
 ---
 
-## 32. 上下文即使被缓存也不免费 — prefill 能耗随输入长度二次增长
+## 14. PAPERBENCHX 让 agent 复现 93 篇真实论文 —— 最好的配置完全复现了 14%
 
 - **Velocity:** ▮ steady
-- **Source:** arXiv · 2610.39621 · 2026-10-30
-- **Tags:** `energy` `prefill` `agents` `long-context` `research`
+- **Source:** arXiv 2610.39744
+- **Tags:** `research` `benchmark` `agents` `reproduction` `science`
 
-"**The Real Cost of Context: Predicting Compute Time and Energy Consumption in LLM Prefill and Decode Phases**"（arXiv **2610.39621**；Lars Krupp、Daniel Geißler、Francisco M. Calatrava-Nicolas、Stefan Gerd Fritsch、Paul Lukowicz、Jakob Karolus）从一个测量问题出发：agent 架构 "substantially increased token consumption"，但现有估算只数生成的**输出** token，忽略了 agent 携带的大段输入上下文。作者在一系列 prefill 与 decode 长度上剖析计算时间与能耗，并对结果拟合广义线性模型。
+PAPERBENCHX 是一个包含 **93 个专家构建的论文复现任务、横跨 12 个研究领域**的基准——电磁学、光子学、化学、材料科学、生物学、机器人学——其中「each task provides the source paper, a public task specification, and a domain-native scientific environment involving specialized scientific software」。评测部分是严格的那一半：「we replay every submission from scratch and score only regenerated evidence against expert-validated criteria」，所以一份看起来合理的文字报告得零分。在 **10 种前沿 agent 配置**中，「the best configuration fully reproduces only **14%** tasks under the 90% threshold」，而「mean rubric scores range from 27.53% to 59.08%」。
 
-结论是缩放关系：**decode** 的计算时间与能耗随输出长度**线性**增长，而 **prefill** 随输入长度**同时呈现线性与二次**增长 — 于是输入上下文 "becomes a relevant factor for large-context workloads"。他们还证明在没有直接能耗测量时，计算时间可以作为能耗的可靠代理，这正是该框架能用在闭源 API 模型上的原因。
+这个差距才是发现本身。agent 普遍能拿到一半以上的评分项，却很少真正跑完；作者把它读作「a large gap between paper understanding and reliably producing reproducible scientific evidence」——部分进展「rarely translates into complete scientific reproduction」。
 
-**Why it matters:** 二次项才是改变设计决策的部分，因为它说明 agent 不断增长的历史带来的成本与其规模并不成正比 — 上下文翻倍可能不止贵一倍，而这项惩罚落在所有人都当作"只是读一下"的那个阶段。对任何"用多塞上下文换延迟、而不是少取一些"的做法，这是支持检索与压缩的直接论据。两点限制值得写明：拟合是按模型、按硬件来的，系数不能跨部署迁移；而"计算时间作为能耗代理"是在作者自己的测量上校准的，不是厂商计量，所以它估算的是托管模型的能耗，而不是你实际按 token 付的钱。
+**Why it matters:** 已有的复现基准集中在机器学习上，那里的实验共享同一套技术栈；这个基准逼着 agent 去驱动领域专用的科学软件、诊断长时间运行的计算、并区分有效证据与貌似合理的输出。「90% 门槛下只有 14%」也是诚实的口径——只公布平均分，会报出一个并不存在的 59% 能力。
 
-[`🔗 arXiv 2610.39621`](https://arxiv.org/abs/2610.39621) · [`🔗 arXiv cs.AI recent`](https://arxiv.org/list/cs.AI/recent)
-
----
-
-## 33. 一个自主实验室否掉了自己的正面结果 — agent 发现参考测量在漂移，于是改写了协议
-
-- **Velocity:** ▮ steady
-- **Source:** arXiv · 2610.40589 · 2026-10-30
-- **Tags:** `ai-for-science` `agents` `self-checking` `research`
-
-"**Collaborative AI agents for autonomous experimental research with solid-state quantum spins**"（arXiv **2610.40589**；El Mustapha Mansouri、Eikichi Kimura、Masato Koga、Keigo Arai）搭了一个实验室，其中基于 LLM 的 agent "assess one another's work and can stop or redirect investigations" — 生成并否掉研究问题、要求独立的理论检查、并设计实验来挑战自己的结论。场景是金刚石中的量子自旋系综：agent 推导出预测某一族微波脉冲序列响应所需的**最少校准设置数**，用计算核对了结果，然后设计实验来区分相互竞争的几个预测。
-
-接着有意思的事发生了。首轮实验**符合**理论预测，而重复的参考测量显示采集过程中**信号在漂移**。agent "therefore treated the result as inconclusive and revised the measurement protocol without relaxing the acceptance criteria" — 修订后的实验满足了这些判据，并支持了预测。
-
-**Why it matters:** 验证性实验很好产出，也很难不被信任，而这里展示的能力不是推导，而是**拒绝**：一个 agent 系统因为自己的对照在漂移就丢掉一次有利的测量，那是实验记录与新闻稿之间的差别。论文自己的框架让它可被引用 — 开篇就指出近期的 AI 系统 "may draw conclusions that the evidence does not support"，而这项研究正是为避免这种失败而设计的。请把它读成一个系统、一个物理场景、一次成功的判据升级；没有被测的是：当 agent 自己的理论主张才是错的那一方时，同一套分歧机制是否还工作。
-
-[`🔗 arXiv 2610.40589`](https://arxiv.org/abs/2610.40589) · [`🔗 arXiv cs.AI recent`](https://arxiv.org/list/cs.AI/recent)
+[`🔗 arXiv 2610.39744 — PAPERBENCHX`](https://arxiv.org/abs/2610.39744) · [`🔗 全文（arXiv HTML）`](https://arxiv.org/html/2610.39744v1)
 
 ---
 
-## 34. Spark-X2.6-4B 保留 X2.5 的架构，增益全部来自后训练 — 而对比结果以 SVG 形式交付
-
-- **Velocity:** ▮ steady
-- **Source:** Hugging Face · XHToken/Spark-X2.6-4B · updated 2026-10-31
-- **Tags:** `open-weights` `on-device` `agents` `apache`
-
-**`XHToken/Spark-X2.6-4B`** 是一个 **4B**、**Apache-2.0**、中英双语的通用模型，面向端侧 agent，Hub 上 **923 个赞**、**12,515 次下载**，模型卡今天刚更新。发布说明明确写了架构没变："Spark-X2.6-4B retains exactly the same architecture as Spark-X2.5-4B, achieving its capability gains through improved post-training." 功能上的新增是**可控思考预算**，三档 — none、low、high — 让应用按请求在推理与延迟、成本之间取舍。
-
-这些断言很大而且正文里没有出处：卡片称它在同类开源模型里 "state-of-the-art performance among similarly sized open-source models, matching or even surpassing models with approximately 9B parameters"，而基准那一节渲染成单个 **SVG**（`images/all_benchmark.svg`），旁边没有表格。在基础设施这一侧，卡片对端侧模型而言异常详尽 — `llama.cpp` 从 **b10828** 起原生支持 `spark2_5`、Ollama **0.34.1+**、经由项目自己的 `Spark-MLX-LLM` 走 MLX、LM Studio，以及基于官方 INT4 权重的社区 WebGPU/ONNX 演示。
-
-**Why it matters:** 在固定架构上只靠后训练取得的增益是最便宜、也最难审计的一类模型改进，因为没有新机制可看 — 只有一张表，而这里那张表是一张图。在有人在两个模型都跑过的 harness 上复现之前，请把"媲美 9B"当作定位主张；而把三档思考预算当作真正可上线的功能：它是唯一会改变端侧 agent 在固定 token 预算下能做什么的东西。分发清单才是诚实的信号 — 上线即支持 llama.cpp、Ollama、MLX 与 LM Studio，意味着权重今天就能跑，这比那张基准图能说明的更多。
-
-[`🔗 XHToken/Spark-X2.6-4B`](https://huggingface.co/XHToken/Spark-X2.6-4B) · [`🔗 Hugging Face — trending`](https://huggingface.co/models)
-
----
-
-## 35. 预训练、SFT 与 RL 用同一个训练算法 — 分阶段训练只是特例
-
-- **Velocity:** ▮ steady
-- **Source:** arXiv · 2610.40564 · 67 pages
-- **Tags:** `training` `rl` `pretraining` `research`
-
-"**Training Foundation Models with a Single Algorithm**"（arXiv **2610.40564**；Yuda Song、Alvin Zhang、Fahim Tajwar、Daman Arora、Jeff Schneider、Daniel Khashabi、Ruslan Salakhutdinov、J. Andrew Bagnell、Aarti Singh、Andrea Zanette）主张预训练、midtraining、监督微调与 RL 之间的算法划分 "is not fundamental"。这个构造把 RL 目标推导为**对模型自生成目标分布的最大似然拟合**，从而把四个阶段放进同一个基于似然的训练器；传统分阶段训练于是成为 "a special case"，整个生命周期退化为选择*训练哪些数据、以什么比例、在什么时候*。他们把它实例化为一个在单一训练器中混合静态数据与 RL 生成的系统。
-
-摘要里的结果是方向性的而非数字化的：在"受控与真实实验"中，统一训练 "improves the accuracy-compute tradeoff and task coverage while preserving broader capabilities, and provides a stronger starting point for continual learning"。论文有 **67 页**、**31 张图**、**22 张表**，所以消融是存在的 — 只是不在每个人都会引用的那一段里。
-
-**Why it matters:** 若这个框架成立，流水线就不再是四个岗位、四个负责人的四个任务，而是一个训练循环加一份数据混合计划，那是一个比基准胜利大得多的组织性主张 — 论文也很谨慎地把它呈现为"统一的基座模型训练科学"的地基，而不是开箱配方。先读表再读论点："preserving broader capabilities" 恰恰是分阶段 RL 通常要付出代价的那条轴，而一个在目标任务上提升、同时悄悄腐蚀通用能力的单算法训练器，在摘要里看起来会一模一样。作者单位列表也因为惯常的理由值得一提 — 这种结构性结果需要独立复现，而不是凭 67 页附录就被采纳。
-
-[`🔗 arXiv 2610.40564`](https://arxiv.org/abs/2610.40564) · [`🔗 Hugging Face — daily papers`](https://huggingface.co/papers)
-
----
-
-## 36. Scribd 十月一日告诉了世界，从十月二十六日起一个个告诉客户 — 而通知里点名了哪些支付字段
-
-- **Velocity:** ▮ steady
-- **Source:** Hacker News · 60+ pts · ~1h ago (~2026-10-31T02:46Z)
-- **Tags:** `incident` `breach` `notification` `scribd`
-
-一条 **2026-10-31 02:46 UTC** 的 **Tell HN** 贴出了一位 Scribd 用户在 **2026-10-26 周一**收到的通知信，由公司的通知合作方 **Epiq** "on behalf of Scribd, Inc., the parent company of **Scribd, Slideshare, Everand, and Fable**" 发出。信里点明的范围很具体：第三方 "may have accessed your email address and the following of your information: last 4 digits of your credit card and country, credit card issuer, credit card expiry date, payment history (not including credit card details)"。它声明 "no evidence that this data has been misused"，并给出一个呼叫中心号码。
-
-Scribd 自己的帮助中心文章日期是 **2026 年 10 月 1 日**，以另一种分辨率说了同一件事：未授权第三方 "was able to gain access to our systems"，并 "used their access to reach other internal systems"，而且 "For most accounts, this involved basic account information. For a smaller number of accounts, more sensitive information was involved." 文章说通知按批次发送，"If you haven't gotten one, it doesn't necessarily mean you weren't affected"，并建议在四个品牌上重设密码。
-
-**Why it matters:** 披露日期才是故事 — **10 月 1 日**的公开帮助页、**10 月 26 日**开始的逐人通知、以及 **10 月 31 日**登上首页的讨论，其中评论者说自己是 10 月 30 日"a few hours ago"才收到的。分批通知意味着"没收到邮件"不能证明安全，而信里那份字段清单才是要行动的部分：卡有效期、发卡行、后四位加邮箱，足以构造一封可信的账单或账号找回借口 — 这也正是信的下一节讲钓鱼的原因。这里没有 CVE 也没有补丁可打 — 唯一的控制点在账号上，而时间线说这些控制一个月前就该做了。
-
-[`🔗 Hacker News — Tell HN: Scribd Breached`](https://news.ycombinator.com/item?id=50312756) · [`🔗 Scribd — information about the recent security incident`](https://support.scribd.com/hc/en-us/articles/53787421531284)
-
----
-
-## 37. 一个公开分享的 ChatGPT 对话就足以在你的会话里执行代码 — MathLive 监听器、无沙箱 `srcdoc`，以及拿 YouTube 当 CSP 绕过
-
-- **Velocity:** ▮▮▮ trending
-- **Source:** Parameter Labs · published 2026-10-28 · HN 11+ pts (~2026-10-31T10:30Z)
-- **Tags:** `security` `chatgpt` `xss` `csp` `disclosure`
-
-**Parameter 的 Mukul Goyal** 公布了一条针对 `chatgpt.com` 的完整利用链：受害者打开攻击者的**公开分享对话**，代码就在其已登录的 ChatGPT 源内执行，使研究者能够枚举对话，并读取一段从未被分享过的私人聊天。投放不需要安装应用、加入项目或粘贴代码 — 自动化变体里研究者的说法是 "Opening the shared link was the only required action"；在最稳定的复现里，受害者仍需点一次 ChatGPT 正常的 Preview 按钮。
-
-链条是五步，每一步单看都说得过去。含交互图表的分享对话会加载 **MathLive**，其控制器的消息监听器 origin policy 为 `none`；第二个区块 **HTML Preview** 发送一条 `mathlive#virtual-keyboard-message`，把原始 HTML 当作键盘布局数据传进去，而 MathLive "accepted a state-changing message without proving which frame sent it." 这段 HTML 进了 `innerHTML` — 研究者明确写道 `createHTML` "acted as an identity or Trusted Types wrapper, not a sanitizer" — 并构造出一个继承了 `chatgpt.com` 的**无沙箱 `srcdoc` iframe**。CSP 拦住了内联脚本却放行了 YouTube，于是一段精心构造的 **YouTube oEmbed JSONP** 响应提供了 JavaScript，它从 `#client-bootstrap` 读走会话 token 与账号 ID，调用已认证的 `/backend-api/conversations` 接口，并通过一个图片请求把数据外带。
-
-**Why it matters:** 这里每一处失败都是组合出来的，而报告里最有用的一句恰恰是在为一个组件开脱："The Preview sandbox itself worked." Preview 里的代码读不到父页面；坏掉的是主页面上的*另一个*组件愿意接受它的指令。这正是 agent 时代 Web 应用的重复形状 — 每一个内嵌查看器都是通往特权 frame 的新消息通道 — 修复方式也反映了这一点：OpenAI 定为 **P1**，在 **2026-10-26** 修好了两个 Web 前端，支付 **$5,000**，且没有 CVE，因此扫描器没有可匹配的东西。两点要带走：YouTube 那条是 "the final workaround for CSP, not the root cause"，只封那个端点并不能关掉 HTML 注入路径；外带证明只把响应的一小段发到了站外，尽管注入的代码能读整段响应。
-
-[`🔗 Parameter Labs — we took over ChatGPT accounts`](https://www.parameter.ai/labs/we-found-a-gap-at-openai) · [`🔗 Hacker News discussion`](https://news.ycombinator.com/item?id=50314699)
-
----
-
-## 38. SOCFortress CoPilot 的 10.0 说"无需任何权限" — 而它自己的路由要求 admin 或 analyst token
-
-- **Velocity:** ▮▮▮ trending
-- **Source:** GitHub Advisory · CVE published 2026-10-30T14:36Z · advisory dated 2026-06-24
-- **Tags:** `cve` `path-traversal` `cvss` `github-advisory`
-
-**CVE-2026-61738** 是 socfortress **CoPilot** 里的路径穿越：`POST /api/scoutsuite/generate-gcp-report` 会把上传内容按 `GCPScoutSuiteJSON` 校验，却把 `file.filename` 直接交给 `os.path.join`，于是带穿越的文件名把 JSON 写到了报告目录之外 — 又因为后端以 root 运行，研究者演示了对 `/tmp` 和应用源码目录的 root 属主写入。修复于 **0.1.77**；CWE-22、CWE-73、CWE-434；公告对这个 bug 的一行总结是：内容被校验了，文件名没有。
-
-**分数与文字在三处互相矛盾。** GitHub 给出的向量是 `CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:C/C:H/I:H/A:H` = **10.0** — 无权限 — 而公告说这条路由需要 `admin` 或 `analyst` scope 的 bearer token，并称其 "Reachable by a non-administrative role." 受影响版本与修复版本两格都写着 `latest`，所以公告根本没给出版本边界。而 CVE 记录自己的描述又往后退了一步：它说已演示的原语 "does not establish unrestricted executable contents or unconditional cross-tenant confidentiality loss"，指出 RCE 只是从 root 写文件推断出来的升级。NVD 把记录停在 **`Deferred`**，自己给出**零**个度量。
-
-**Why it matters:** 10.0 是最容易被脱离向量单独引用的数字，而这里的向量假设 `PR:N` 落在一条需要认证的路由上。`S:C` 加上 `C/I/A:H` 完成了剩下的算术 — 所以诚实的说法是：按评分是 10.0，落点在需要低权限 token 的路由上，实测是 root 写文件。记录愿意明说代码执行主张*未*被证实，这一点比 10.0 更值得抄：一个安全产品在自己的公告里给 PoC 划边界，比 10.0 更少见；而它也意味着实际严重性取决于你的部署是否以 root 运行后端、且 analyst 凭据可见 — 在一个 SOC 工具里，这恰恰是常态。
-
-[`🔗 GHSA-q3g8-3cf7-744f — CoPilot advisory`](https://github.com/socfortress/CoPilot/security/advisories/GHSA-q3g8-3cf7-744f) · [`🔗 CVE-2026-61738 (NVD)`](https://nvd.nist.gov/vuln/detail/CVE-2026-61738)
-
----
-
-## 39. 两份六月的公告，在同一个十月下午拿到 CVE 记录 — 预留后 111 天，修复后四个月
-
-- **Velocity:** ▮▮▮ trending
-- **Source:** cveawg / GitHub Advisory · both `PUBLISHED` 2026-10-30, assigner `GitHub_M`
-- **Tags:** `cve` `github-advisory` `disclosure-lag` `ssrf` `ai-agent`
-
-两条 GitHub 签发的记录在 **2026-10-30** 落地，而对应的公告从六月起就是公开的。**CVE-2026-61826**（Bazarr）— `bazarr/api/plex/oauth.py` 里的 Plex OAuth 命名空间 "ships with no authentication"：它的 `Resource` handler 漏掉了 `@authenticate`，"There is no global auth `before_request` hook"，于是匿名调用者可以 `POST /api/plex/apikey` 写进攻击者选定的 key、用 `POST /api/plex/oauth/logout` 清掉集成、并借 PIN 流程把攻击者的 Plex 账号绑上去。state 校验形同虚设，而一旦存入了攻击者选定的 `server_url`，之后的请求会带着已配置的 API key 放在 `X-Plex-Token` 里 — **SSRF 加凭据泄露**，按 `S:C`/`PR:N` 评为 **10.0**。**CVE-2026-63377**（TAKO AI Agent for Okta）是首启竞态：`POST /api/auth/setup` "creates the first administrator account without requiring any prior authentication"，唯一的守卫是一个 `is_setup` 标志，"No bootstrap secret, no IP restriction"，`docker-compose.yml` "Publishes `8001:8001` on all interfaces by default"，Dockerfile 让 uvicorn 监听 `0.0.0.0` — **9.8**。
-
-**时钟才是故事。** Bazarr 公告日期 **2026-06-24**，ID 预留于 **2026-07-10**，记录发布于 **2026-10-30T17:12Z**；TAKO 公告 **2026-06-30**，预留 **2026-07-16**，发布 **2026-10-30T22:18Z** — 从预留到发布分别是 111 天和 106 天，距离公告公开则是 128 天和 122 天。两个修复都远早于文书：Bazarr **1.5.7-beta.14**，TAKO **3.0.1-beta**。NVD 把 Bazarr 放在 `Deferred`、TAKO 放在 `Received`，两者都没有 `nvd@nist.gov` 度量。
-
-**Why it matters:** 这里没有任何东西是未知的 — 公告、补丁和 PoC 从六月起就是公开的 — 但一个按 CVE id 匹配的扫描器直到本周才看得见它们，而一个按 `published` 排序的 feed 会把两者都叫"新"。形状也值得与滞后分开看：Bazarr 是一个命名空间漏了一个装饰器，而框架的默认行为（每个 handler 都要认证）是唯一挡住它的东西；TAKO 是每个带 setup 页面的自托管 agent 都会继承的"先到者成为管理员"竞态，被一份绑定所有网卡的 compose 文件放大。如果你跑其中之一，看产物版本而不是记录日期：Bazarr 的修复是一个 beta tag，而 PIN state 校验是记录自己标出的、仍然存在的独立残留问题。
-
-[`🔗 GHSA-fvcv-hh55-x3r4 — Bazarr advisory`](https://github.com/morpheus65535/bazarr/security/advisories/GHSA-fvcv-hh55-x3r4) · [`🔗 GHSA-536w-42p8-3qv9 — TAKO advisory`](https://github.com/fctr-id/okta-ai-agent/security/advisories/GHSA-536w-42p8-3qv9) · [`🔗 CVE-2026-61826 (NVD)`](https://nvd.nist.gov/vuln/detail/CVE-2026-61826) · [`🔗 CVE-2026-63377 (NVD)`](https://nvd.nist.gov/vuln/detail/CVE-2026-63377)
-
----
-
-## 40. HoneySQL 的 9.8 是一个早就存在的检查 — 修复是让它跑在跳过它的那些 formatter 上
+## 15. GPT-5.6 Sol 用 13.5 个游戏小时发射了 Factorio 火箭 —— 而作者说其中很大一部分是手工搬运
 
 - **Velocity:** ▮▮ rising
-- **Source:** GitHub Advisory · CVE published 2026-10-30T23:17Z · maintainer-authored
-- **Tags:** `cve` `sql-injection` `clojure` `library` `api-design`
+- **Source:** Hacker News · 74+ 分 · 约 1 小时前（~02:50 UTC+8）
+- **Tags:** `agents` `benchmark` `codex` `games` `long-horizon`
 
-**CVE-2026-61620** 是 **HoneySQL** 里的 SQL 注入 — 这个 Clojure 库把数据结构翻译成 SQL。触发条件窄且明确：应用把不可信输入通过 `keyword` 或 `symbol` 塞进 DSL — 也就是把字符串变成*实体名*的那两个调用 — 就可能生成在 JDBC 驱动里原样执行时会注入的 SQL。有部分 formatter 没有把库**已有的**可疑字符检查施加到这些实体名上。影响范围 `>= 2.0.0, < 2.7.1392`；**2.7.1392** 的修复就是把同一个检查应用到更多 formatter。公告由维护者 `seancorfield` 自己撰写，致谢报告者 `koyokr`，向量 `CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H` = **9.8**（CWE-89）。NVD 停在 `Received`，没有自己的度量。
+Ryan Madden 用「GPT-5.6 Sol, running in Codex with low thinking level」跑了一局完整的 Factorio：外面套一层 manager 和一个小 Python 库来约束触及范围与战争迷雾，目标是「complete a peaceful (i.e. no biters) Factorio run in 13.5 hours of game time」。它以发射火箭结束，全程记录了「production statistics throughout the game」，并在资源产量曲线上标注科研里程碑。
 
-**Why it matters:** 有意思的是缓解方案而不是分数 — 调用方被告知 "validate input prior to calling `keyword` / `symbol` when constructing DSL structures"，后面还跟着维护者自己的括号："but this is tedious and error prone, if an input is missed"。这就是所有要求调用方不要在这里传用户数据的 API 契约的诚实描述：它是一条在边界上没有强制手段的规则，失败落在哪个忘了的调用方身上就是哪个。9.8 也编码了一个值得点名的假设 — `PR:N`/`AC:L` 描述的是一个把查询参数反射进标识符的普通 Web 应用，而这恰恰是库无法检测的情形。修复细节还是对"已修复"这类说法的警告：检查在此 CVE 之前就存在，所以"实体名已清洗"这个说法对某些代码路径为真、对另一些为假，只有一个 formatter 一个 formatter 地审计才能发现差别。
+保留意见是作者写出来的，而不是评论者挖出来的。和平模式意味着没有虫子，也就没有防御任务。这一局超出了计划——Madden「had planned to terminate the run after blue science research」，因为「Sol's surprising effectiveness」而继续——但后期的规模化「slowed Sol's relative progress significantly」。还有：**「The rocket launch was only achieved through significant 'manual' effort on Sol's part」**，它绕开「failures to connect certain production systems」的办法，是「repeatedly ferrying supplies between areas of the factory」。对照组是 GPT-5.5 的「failures to use transport belts at all」。
 
-[`🔗 GHSA-fcfq-xqgp-8v97 — HoneySQL advisory`](https://github.com/seancorfield/honeysql/security/advisories/GHSA-fcfq-xqgp-8v97) · [`🔗 CVE-2026-61620 (NVD)`](https://nvd.nist.gov/vuln/detail/CVE-2026-61620)
+**Why it matters:** 这是在一个有真实终局的任务上度量的长程能动性，而诚实的结果是：模型靠把蠢办法重复很多次，从一个结构性失败里恢复了过来。那是真正的坚持，不是规划——这两者值得分开，因为无论哪种，这一局都算成功，而只有一种是可泛化的。
 
----
-
-## 41. OpenMAIC 把一份文档变成一间 agent 教室 — 42k 星、MIT，以及一句"能连上端口的人就拥有整个库"的警告
-
-- **Velocity:** ▮▮ rising
-- **Source:** GitHub Trending · 115 stars today · 41,998 total
-- **Tags:** `agents` `education` `mit` `typescript` `multi-agent`
-
-**`THU-MAIC/OpenMAIC`**（"Open Multi-Agent Interactive Classroom"）把一个提示、一个主题或一份上传的文档变成一堂互动课：AI 老师和 AI 同学会讲话、在白板上画图、跑测验和模拟，并和学习者实时讨论。技术栈是 **Next.js 16 / React 19 / TypeScript** 的 pnpm workspace，包分为课程 DSL、渲染器、编辑器、PPTX 导入、生成与存储；生成是两阶段（先大纲、后场景内容），服务端的 director 循环通过 `call_agent` 把每一轮课堂交给 agent，对应 **21 种动作类型** — 语音、白板绘制、聚光、激光。仓库有 **41,998 星、6,503 fork、810 次提交**，根部是 **MIT** 许可，两个内嵌包（`mathml2omml` LGPL-3.0-or-later、`pptxgenjs` MIT）不在此列。
-
-**Why it matters:** 发布说明比演示更有用。**v1.3.0（2026-10-29）** 加了知识库和 Pro 工作台，它自己的升级指令是 "stop all old instances first"，以及 "no rollback below 1.3.0" — 这是一个 schema 决定，不是版本号习惯。自 **1.2.0** 起产品转向 server-first、不再 serverless：需要一个长期运行的 Node 进程加 **PostgreSQL**，而且 "Vercel and other serverless hosts are not supported"。安全说明要读两遍：Docker Compose 配置是默认监听回环的个人单用户安装，一旦对外暴露，"anyone who can reach the port owns, edits and can delete the whole library" — 而 `ACCESS_CODE` 未设置就意味着 "there is no second enforcement point"。一个 42k 星的 MIT 项目主动告诉你自己的部署不是多租户，是在帮读者；把它当单用户工具用，认证自己加在前面。
-
-[`🔗 THU-MAIC/OpenMAIC`](https://github.com/THU-MAIC/OpenMAIC) · [`🔗 GitHub Trending`](https://github.com/trending)
+[`🔗 GPT-5.6 Sol can beat Factorio on peaceful mode`](https://ryanmadden.net/gpt-56-beats-factorio/) · [`🔗 讨论（Hacker News）`](https://news.ycombinator.com/item?id=50318871)
 
 ---
 
-## 42. cfsolve 不用浏览器就能解 Cloudflare Turnstile — 而它自己写下的限制，正是真正有效的防御
-
-- **Velocity:** ▮▮ rising
-- **Source:** Hacker News · 236+ pts · ~2 days ago (~2026-10-28T17:29Z)
-- **Tags:** `security` `rust` `captcha` `scraping` `mit`
-
-**`chris124567/cfsolve`** 是一个 Rust 库加 CLI，用纯 HTTP 解 **Cloudflare Turnstile** 组件与挑战页 — 不用无头浏览器，而这正是重点：它重放一份录制好的**浏览器 profile**（内置的是 iPhone 上的 Safari）来满足 Cloudflare 的浏览器检查，然后返回组件的 Turnstile token，或挑战页的 `cf_clearance` cookie。库对外暴露 `Browser`、`solve_turnstile`、`clear`、`solve`；一个已加载的 `Browser` 可以在并发操作间共享，但每个操作有独立的连接与 cookie。**335 星、36 fork、6 次提交**，**MIT**，但 `vendor/` 下打过补丁的依赖保留各自的许可。
-
-**Why it matters:** 有意思的是那条运维脚注，因为它是这类求解器唯一绕不过去的反爬控制："Send the `cf_clearance` cookie from the same IP address and user agent as the profile, or Cloudflare will reject it." 把 clearance 绑定到网络身份加指纹，才让重放 profile 变得昂贵 — 一份 profile 对应一个地址 — 这比该库正在绕过的任何视觉挑战都更有效。第二点关于维护：profile 才是稀缺资源（README 说制作 profile 需要人工或 AI 辅助），而当 Cloudflare 换了挑战版本，失败会以 `Error::Unsupported` 显现。所以这不是"Turnstile 被攻破了"，而是 Turnstile 可以按 profile、按 IP 被绕过，直到下一个版本 — 这正是十年来每一场爬虫与 WAF 之争的经济学。
-
-[`🔗 chris124567/cfsolve`](https://github.com/chris124567/cfsolve) · [`🔗 Hacker News discussion`](https://news.ycombinator.com/item?id=50277379)
-
----
-
-## 43. OpenFrontiers 用"重新发现"给 agent 打分 — 200 道题、90 道仍开放，闭卷下 40 道里最多解出 7 道
-
-- **Velocity:** ▮▮ rising
-- **Source:** arXiv · 2610.37739 · submitted 2026-10-27
-- **Tags:** `benchmark` `math` `agents` `lean` `research`
-
-"**OpenFrontiers: A Collection of Open Research Problems and a Benchmark for Scientific Rediscovery**"（arXiv **2610.37739**；Jiarui Yao、Ruida Wang、Tong Zhang）把一个 **12,151** 道开放研究问题的语料库（题目、背景、进展记录）与一个回顾式基准配对：**200** 道题，其中 **110** 道在 2026 年被解决、**90** 道仍开放。每道基准题都带一个 **Lean 4** 形式化陈述，通过自动检查加两位独立评审，并从中按质量分选出 **HQ-50** 子集。**七个 LLM agent** 在统一预算下于 HQ-50 上评测，分三种条件 — 闭卷、冻结检索、实时联网 — 证明由隔离沙箱里的两个独立检查器评分。
-
-**Why it matters:** 这个基准想暴露的正是*解出*与*检索到*之间的缺口。闭卷重新发现很少见 — 40 道已解题里最多解出 **7** 道 — 而作者说实时联网条件下的成功 "mostly reflects retrieval of published solutions"，而不是独立重新发现。对整个宣称"AI 发现新数学"的题材来说，这是正确的对照：一个能搜到论文的系统并没有展示标题所声称的能力，把三种条件分开才让差别可测。构造本身也是最强的部分 — 一个 2026 年解决的集合、配上形式化陈述与两位评审的签核，把含糊的"前沿"主张变成评分器能核对的题目 — 不过 200 道题的体量小到每个条件下几道题的摆动就会明显改变百分比。
-
-[`🔗 arXiv 2610.37739`](https://arxiv.org/abs/2610.37739) · [`🔗 arXiv cs.AI new`](https://arxiv.org/list/cs.AI/new)
-
----
-
-## 44. PoPLi 靠改写消息抓编码串谋 — 而只看消息的监控器两个方向都失灵
-
-- **Velocity:** ▮▮ rising
-- **Source:** arXiv · 2610.37849 · work in progress
-- **Tags:** `multi-agent` `collusion` `safety` `monitoring` `research`
-
-"**Detecting Covert Collusion between AI Agents through Partner-Outsider Positive Listening**"（arXiv **2610.37849**，Kevin Yandoka Denamganaï）从消息监控漏掉的那种情形出发：两个 agent 通过藏在看似无害文字里的私有约定协同。它提出的检验是行为而非语义的：把一条消息改写成同义但措辞不同，知道暗号的**伙伴**应当对确切措辞有反应，而被放进伙伴角色的**局外人**则不应当。**PoPLi** 就是这两个动作变化之差，通过重放已记录 prompt 事后计算。
-
-在一个模拟市场里设置五种条件 — 无串谋、共同奖励加中性消息、共同奖励加公开声明的意图、隐写首字母暗号、以及暗号加公开意图 — 只要暗号在场，PoPLi 读出 **0.48–0.59**，95% 区间全部高于 **0.29**；没有暗号时是 **−0.10 到 −0.01**。监控器的结果才是笑点：只读说话者消息的监控器在**全部 50 个**市场都答"没有"；读所有卖家消息的监控器在 **10 个无串谋市场**里误报了 **9 个**。
-
-**Why it matters:** 不对称本身就是发现 — 一个监控器没有信号，另一个假阳性率接近一比一，而且两者都不能靠"读得更仔细"修好。PoPLi 也明说自己的边界：它检测的是私有通道的使用，而不是串谋本身；仅靠激励形成的串谋、以及由**语义**而非措辞承载的暗号，它看不到。这让它成为某一*类*隐蔽协议的检测器，可以在事后跑在你已有的日志上，这比任何在线过滤器都更适合审计已部署的 agent 群。论文标注为 work in progress，场景只有一个模拟市场，局外人是被换角的模型而非人 — 所以 0.48–0.59 是受控设置下的分离度，不是现场比率。
-
-[`🔗 arXiv 2610.37849`](https://arxiv.org/abs/2610.37849) · [`🔗 arXiv cs.AI new`](https://arxiv.org/list/cs.AI/new)
-
----
-
-## 45. 把探索变成 Lean 证明的 agent — 重放 183 条 ARC-AGI-3 轨迹，而六条界里第一轮错了四条
-
-- **Velocity:** ▮▮ rising
-- **Source:** arXiv · 2610.40503 · Guancheng Pan, Qixin Tan, Yang Yuan, Andrew Chi-Chih Yao
-- **Tags:** `agents` `lean` `arc-agi` `world-model` `research`
-
-"**Algebraic World Model: From Exploration to Proofs**"（arXiv **2610.40503**；Guancheng Pan、Qixin Tan、Yang Yuan、Andrew Chi-Chih Yao）把对陌生环境的探索变成可检验的显式数学模型。循环会生成关于环境规则的可执行 **Python** 假设、用观测检验、把它们组织成带共享规则的带类型对象、用范畴论引导的变换化简，最后编码进 **Lean 4** — 这让它不只能证明可达性，还能证明**不可能性**：某目标在已探索轨迹之外无法到达。
-
-主要结果在 ARC-AGI-3 上。在两个**不可能**关卡上，AWM 产出了闭合的、经过内核检查的 Lean 证明，在**全部六次运行**中排除了所有合法取胜序列；而 **Claude Opus 5.5** 和 **GPT-6 Astra** 在**十二次基线运行**中都没能产出这类证明。它第一轮的界比标题暗示的更容易错 — 六条里**四条**正确，Opus 5.5 一条、GPT-6 Astra 零条 — 要拿到六条全对，只需要被告知"存在更便宜的取胜方式"。在全部 **25** 个公开 ARC-AGI-3 游戏上，它的模型让 Lean 重放了全部 **183** 条通关关卡轨迹、预测未见过的状态转移并检测游戏机制的变化；配合 Claude Opus 5，它通关每一关、得分 **99.9**，只用掉人类基线动作数的 **43%**。
-
-**Why it matters:** 区别在于证明与预测，这也是要读这篇而不是又一篇世界模型结果的原因。一个"通常猜对"的学习模拟器无法支撑"目标不可达"这一主张；一个把规则编码进 Lean 并经检查的模型可以做出这个主张，且只有当规则本身错了才会错 — 这恰好就是第一轮六错四所显示的，也是为什么纠错步骤是方法的一部分而不是尴尬。摘要没有确立的是：99.9 里有多少来自搜索、多少来自模型。作者单位（Yang Yuan 与姚期智的组）也是个信号 — 要把 AWM 当通用配方，先等独立复现。
-
-[`🔗 arXiv 2610.40503`](https://arxiv.org/abs/2610.40503) · [`🔗 arXiv cs.AI new`](https://arxiv.org/list/cs.AI/new)
-
----
-
-## 46. LRMoE 在反向传播前先规划专家配额 — MoE 训练时间少 21.2–44.8%，对标的是一个基线
+## 16. kube32 在一块 ESP32-S3 上跑 Kubernetes 控制面加 Wasm Pod 运行时 —— 2 MB PSRAM，`kubectl` 走 Wi-Fi
 
 - **Velocity:** ▮ steady
-- **Source:** arXiv · 2610.37720 · submitted 2026-10-27
-- **Tags:** `moe` `training` `memory` `systems` `research`
+- **Source:** Hacker News（Show HN）· 50+ 分 · 约 2 天前
+- **Tags:** `kubernetes` `esp32` `wasm` `embedded` `apache-2`
 
-"**LRMoE: Demand-Side Load Re-Calibration for Efficient MoE Training on Memory-Constrained Nodes**"（arXiv **2610.37720**；Jiaming Hu、Zhida Jiang、Zhaolong Xing、Yu Li、Zhen Chen、Ke Zhang）针对稀疏 MoE 训练里的不对称：路由并不均匀，热门专家需要缓存激活而冷门专家闲置，反向传播却要为两者的缓冲一并付费。LRMoE 在前向时规划专家保留配额与放置，然后在反传时用一个**贡献度指标**在配额内挑选哪些 token–专家对存活 — 保住全部被路由的前向计算，同时通过容量感知路由与物理压缩削减反向流量、计算与缓冲需求。
+`arterialist/kube32` 是面向 ESP32 微控制器的、Apache-2.0 的 Kubernetes 兼容控制面、kubelet agent 与 WebAssembly Pod 运行时——27 星，创建于 2026-10-26。它自己的仓库简介就写着「Kubernetes-compatible control plane, Kubelet agent, and WebAssembly runtime for ESP32 microcontrollers」。「Pods are WebAssembly modules executed by the wasm3 interpreter」，并且「One firmware image runs on every board」：控制面需要「ESP32-S3, 8 MB flash, 2 MB or more quad SPI PSRAM」，而「Any ESP32-S3 with 8 MB flash」都能作为 worker 加入。它提供 Pod、Node、Namespace、Service、EndpointSlice、Ingress、Deployment、DaemonSet、Job、ConfigMap、Secret、Lease、Event 与 metrics API，「including watch streams, Table output, OpenAPI v3 validation, and log tailing」，另有服务路由、HTTP ingress、PVC 式卷、重启退避、可选 bearer 认证、「automatic self-signed ECDSA P-256 TLS on port 6443」，以及固件滚动更新。`kubectl` 和 `k9s` 通过 Wi-Fi 或 USB 串口驱动它，另附 macOS／Linux 模拟器 `kube32-sim`。
 
-实测结果：在 **Qwen3-30B-A3B** 和 **GLM4.5-106B-A12B** 上，到达固定损失目标的 MoE 层累计训练时间比 **SYMI** 下降 **21.2–44.8%**。
+**Why it matters:** README 主张的是兼容性而非一致性，也没有列出不支持哪些 API——所以在假定某个 controller 能跑之前，先读 API reference。真正有用的是它的形状：一个能塞进 2 MB PSRAM 的 API server，是对「Kubernetes 里有多少是协议、多少是机械」的一次检验，而这个项目给出的答案是：协议的大部分都装得下。
 
-**Why it matters:** 训练期显存压力通常用 offload 回答，那是拿带宽换容量；这里是另一个杠杆 — 在需要缓冲之前，先决定回程上哪些被路由的对你愿意重算或丢弃。诚实的提醒在摘要没说的部分：没有 GPU 型号、数量、显存大小、互联或集群描述，所以"显存受限节点"是前提而不是被指定的设置，而点名的对照只有一个基线。21.2–44.8% 这么宽的区间也意味着收益高度依赖具体模型的路由分布，这是在假设你的 MoE 也一样之前第一件要查的事。
-
-[`🔗 arXiv 2610.37720`](https://arxiv.org/abs/2610.37720) · [`🔗 arXiv cs.AI new`](https://arxiv.org/list/cs.AI/new)
+[`🔗 arterialist/kube32`](https://github.com/arterialist/kube32) · [`🔗 Show HN 讨论`](https://news.ycombinator.com/item?id=50291812)
 
 ---
 
-## 47. 一个 4B 的 Three.js 专才连数据集、报告和借来的视觉投影器一起发布 — 4,146 个场景，标注"early preview"
+## 17. bootgpt 从主引导记录里启动一个神经网络 —— 11.5 KB 的 int8 权重，装在 23 个扇区里
 
 - **Velocity:** ▮ steady
-- **Source:** Hugging Face · 29,615 downloads · 363 likes · card updated 2026-10-30
-- **Tags:** `open-weights` `threejs` `3d` `gguf` `apache`
+- **Source:** Hacker News（Show HN）· 11+ 分 · 约 7 小时前（~20:58 UTC+8）
+- **Tags:** `llm` `bootloader` `quantization` `assembly` `tiny`
 
-**`ccore/Qwen3.5-4B-3D-Coder`** 是 Qwen3.5-4B 的独立 **Apache-2.0** 微调，面向通用编码、专攻 3D：把自包含的 **Three.js** 场景生成为单个 HTML 文件。模型卡明说它是 "an early preview of a 4B model I am still training"，并且 "**not** an official Qwen release." 除了权重，它现在还发布**训练数据集** — 4,146 个场景样例（**3,933 训练 / 213 验证**），含提示词、完整思考轨迹和完整的 HTML/JavaScript 响应，**MIT** 许可 — 一份技术报告 PDF、四份 FP16 safetensors，以及 Q4_K_M/Q8_0 的 GGUF 构建。
+一个「boots your PC」的字符级模型：MBR 是 512 字节手写汇编、可用 510 字节，而「It loads an 11.5 KB int8 model from the next 23 sectors and runs it in 16-bit real mode on a 386」。「The boot sector is code only」——「Strings, weights and the vocab table all live in the data sectors」——网络结构是字符嵌入 + 一个隐藏层 + softmax，用 2 的幂次刻度量化到 int8。它只做一件事：「hallucinating the boot log of the machine it wakes up on」，生成时间戳、PCI 基址栏，以及「ACPI events for hardware that never existed」。任意按键即重启。MIT，3 个提交，6 星。
 
-最有用的工程细节是 **2026-10-30** 加入的视觉路径：两个 GGUF 量化版本在配上原始 Qwen3.5-4B 视觉投影器后可以接受图像输入，卡片点名了确切的配套文件（**约 644 MiB**，BF16）及其来源 — 来自 `lmstudio-community/Qwen3.5-4B-GGUF` 的未修改投影器。部署指令同样具体：`llama-server -m … --mmproj … --n-gpu-layers all --flash-attn on --ctx-size 65536`，在 **llama.cpp b11889** 上测试过，并注明在 LM Studio 里必须**关闭多 token 预测**，否则模型表现异常。
+作者没有过度包装：「With 8 chars of context and one hidden layer this is roughly the quality you get」，以及「the model is not a general story teller」。训练语料是 3 MB 合成的假 `dmesg`，一个内核版本，每次启动一块磁盘。
 
-**Why it matters:** 窄域微调便宜且难评估，而这个发布给出了让评估成为可能的三种产物 — 数据、四种精度的权重、一份报告 — 这比多数 4B 社区发布做得都多。卡片明说两条、隐含一条：视觉能力继承的是**它自己没训练的投影器**，所以图像质量归 Qwen 不归这个微调；卡片关于一次成功率的主张只有定性的场景截图支撑，没有打分的基准；而样例多为体素风室内场景，这恰好是数据集参考渲染会强化的风格。把它当成强的本地演示生成器，而不是"4B 能在大模型面前做 3D"的证据。
+**Why it matters:** 这是部署光谱的地板，而且是个有用的地板——一个装在引导扇区里的 11.5 KB 模型，是对「模型大小」这类主张究竟买到了什么的一次体检。真正有意思的产物不是文本质量，而是权重、词表与推理循环确实塞得进 MBR 与第一个分区之间的那点空隙。
 
-[`🔗 ccore/Qwen3.5-4B-3D-Coder`](https://huggingface.co/ccore/Qwen3.5-4B-3D-Coder) · [`🔗 ccore/ThreeJS-3D-Scenes dataset`](https://huggingface.co/datasets/ccore/ThreeJS-3D-Scenes) · [`🔗 Hugging Face trending`](https://huggingface.co/models?sort=trending)
+[`🔗 kerlenton/bootgpt`](https://github.com/kerlenton/bootgpt) · [`🔗 Show HN 讨论`](https://news.ycombinator.com/item?id=50315782)
 
 ---
 
-## 48. 一个 31.5k 星的 macOS 菜单栏工具箱是 GPL-3.0 外加商标保留 — 并声明它的麦克风静音不是隐私保证
+## 18. ziwei-doushu 把 674,976 张命盘和 870 万条解读开源成数据集 —— 并点名了 2,520 条日期不存在的样本
 
 - **Velocity:** ▮ steady
-- **Source:** GitHub Trending · 499 stars today · 31,525 total
-- **Tags:** `macos` `swift` `gpl` `open-source` `utilities`
+- **Source:** GitHub Trending · 12,227 星 · 创建于 2026-05-01
+- **Tags:** `dataset` `typescript` `astrology` `chinese-oss` `licensing`
 
-**`vorssaint/vorssaint-utils`** 是一个免费开源的 **macOS 菜单栏工具箱**，用 **Swift**（AppKit 与 SwiftUI）写成，把一长串小工具塞进一个应用：按应用音量混音、系统监控、应用/窗口切换、窗口吸附、Dock 预览、剪贴板历史、文本片段、文件暂存架、卸载器、截屏、媒体工具、Homebrew 管理器、防休眠、显示器控制。它有 **31,525 星、1,518 fork、42 watcher**，许可 **GPL-3.0-or-later**，并允许通过禁用未用模块来 "Install only what you use"。
+`Renhuai123/ziwei-doushu` 是一个开源的紫微斗数排盘引擎与数据快照，基于倪海厦《天纪》体系，而它的 v4.0 解读数据集就是那个规模故事：**674,976 张命盘 × 13 个维度 = 8,774,688 段解读**，约 204 亿字，**未压缩 56.6 GB／压缩 161 MB**，77 个年度文件覆盖 1950–2026。v3.0 另有 518,400 条、覆盖 1924–1983，未压缩 33.1 GB。引擎本身处理十四主星、辅星、大限与流年、四化、十二神煞、真太阳时校正、1986–1991 年中国夏令时检测、四种闰月约定，以及一份「1100+ 行格局知识库」——是 1,100 多行规则，不是 1,100 多个命名格局。代码 MIT，数据集 CC BY 4.0，古籍属公有领域，倪的讲义摘录为 CC BY-NC-SA（非商业）——README 明确说明，即便这些摘录出现在解读文本里，它们也被排除在数据集许可之外。
 
-**Why it matters:** README 里的三条披露才是要越过功能列表去读的原因。许可覆盖代码，但**名称、logo 与视觉识别另由商标条款覆盖** — 所以 fork 合法，用同一个名字发布则不合法。平台下限是硬的：**仅 Apple Silicon，macOS 14 Sonoma 或更新**，所有 Intel Mac 被排除。还有两条诚实的：**风扇控制标为 beta**，而卡片说麦克风静音不是隐私保证 — 菜单栏开关是 UI 状态，不是音频路径的保证，把这句话写出来就是工具与安全承诺的分界线。应用是本地优先、无账号、无分析、无追踪，官方构建经过签名与公证 — 对一个想要辅助功能与录屏权限的 31k 星工具来说，这才是最重要的部分。
+让它可被引用的是那些披露。界面只是演示：「本仓库的界面是一套最小可运行示例」。v4.0 只覆盖本命盘，且「未按出生地做真太阳时校正」。它是按旧的亮度默认值生成的（「按旧默认「现代修正 v2」生成」），而引擎现在的默认是《全书》，因此部分亮度标签与解读并不一致。v3.0 里还有约 2,520 条样本的日期并不存在——2 月 30 日与非闰年的 2 月 29 日——它们与 3 月 1–2 日的样本重复，应当过滤掉。
 
-[`🔗 vorssaint/vorssaint-utils`](https://github.com/vorssaint/vorssaint-utils) · [`🔗 GitHub Trending`](https://github.com/trending)
+**Why it matters:** 一个 56 GB 的合成语料，正是那种会被下游连同 README 一起丢掉再转发的东西，而这一份提前公布了缺陷清单：不存在的日期、与引擎已不一致的亮度默认值，以及夹在数据内部的许可例外。引擎本身也不是一个持续维护的产品——README 自己这么说——这是「用算法，别用产品」的诚实版本。
+
+[`🔗 Renhuai123/ziwei-doushu`](https://github.com/Renhuai123/ziwei-doushu) · [`🔗 GitHub Trending（日榜）`](https://github.com/trending?since=daily)
 
 ---
 
-## 49. GCC 有五种方式降级 `switch`，并按代价挑选 — 每个 case 8 个槽位、3 个起用位集、以及标点用位测试
+## 19. dsh-purge 给 DeepSeek 自己的 harness 打补丁以更换越狱提示词 —— Apache-2.0，外加一条禁止转售
 
 - **Velocity:** ▮ steady
-- **Source:** xoranth.net · 87+ pts · ~4h ago (~2026-10-31T08:02Z)
-- **Tags:** `gcc` `compilers` `optimization` `c`
+- **Source:** GitHub Trending · 14,529 星 · 本周 +6,665 · Apache-2.0
+- **Tags:** `jailbreak` `harness` `licensing` `deepseek` `plugins`
 
-一篇深入 `pass_lower_switch` 的文章走了一遍 **GCC** 如何把 `switch` 变成机器码，答案是"不是跳转表"这么简单。稠密 case 变成跳转表并减去基址；GCC 会把稠密与稀疏区间拆开，让离群值单独走分支；连续的标签区间塌缩成范围检查；而非常稀疏的字符 case 会变成一次减法、一次越界检查和一次针对常量的**位测试**。阈值是代价比较而不是标签数量：文中一个覆盖 0–87 的 20 标签 switch 本可以塞进 88 项的表，却只需要 10 次比较，于是 GCC 输出比较树 — 启发式权衡的是表大小与比较代价。
+`YuJunZhiXue/dsh-purge` 自称是「面向官方 DeepSeek Harness 的网络安全红队插件」，目标版本为 DSH 0.2.1-rc.2 与 0.2.0，覆盖官方 Web 与桌面构建。机制上是本地包补丁，不是远程服务：「apply」会把匹配到的 `@deepseek-ai` 文件备份为 `.dshpurge.bak`，替换它们，覆盖 shim，并注入一段内置提示词。每一轮的选择顺序是：`prompt-inject.md` 非空则用之，否则读本地 `AGENTS.md`／`CLAUDE.md`，否则用「the encrypted prompt shipped in the plugin, the text the prompt box shows by default」。工作区策略分 strict／fallback／always 三档，控制是否保留 DSH 基线段落。开源构建「only allows localhost/private nets」。
 
-更有趣的一半是动态规划。**位集降级**在"每个区间能放进 64 位以内的寄存器、最多覆盖三条目标边"的约束下最小化位集数量，并在**一个目标 3 个 case、两个目标 5 个、三个目标 6 个**时被认为划算。**跳转表选择**同样用 DP，偏好更少的表与更多被处理的 case，优化速度时最大增长比为 **8**、优化体积时为 **2**，在 `casesi` 可用时最少 **4** 个 case（否则 **5**）。两边都不划算时，GCC 输出**按概率平衡的二叉比较树**，用 profile 数据或 `__builtin_expect_with_probability`。
+许可才是要读两遍的部分。它是 Apache-2.0 **外加附加条件**：「Forks and redistributions must keep the copyright notice and NOTICE」、「Forks must attribute and name the source repository」，以及「The original build may not be resold」——不许重新包装上架、不许团购，借用了名字、想法、代码或提示词也要署名。
 
-**Why it matters:** "switch 比 if-else 慢"及其反面都是民间说法，而这篇用实际的决策过程取代了它们 — 一个在五种策略上、按目标调参的代价模型。对给 C 做性能分析的人，实际结论是：case 值的形状（稠密、连续、目标数量）决定了降级方式，所以把 switch 改得更稠密，即使语义完全相同也会改变生成的代码。作者还给了一条可移植性提示：除位集降级外，这些也都适用于 **Clang** — 所以一个假设某种编译器策略会推广的基准，测的是启发式，不是语言。
+**Why it matters:** 一个直接给自己所装软件打补丁的仓库，是「harness 扩展性」这个问题最尖锐的形态——它不问厂商要许可，也活不过一次升级。而「Apache-2.0」加一条禁止转售，就不是 Apache-2.0；许可字段说一套、README 说另一套，而如果你打算再分发，这个区别恰恰是关键。
 
-[`🔗 xoranth.net — Switch Lowering in GCC`](https://xoranth.net/gcc-switch/) · [`🔗 Hacker News discussion`](https://news.ycombinator.com/item?id=50314085)
+[`🔗 YuJunZhiXue/dsh-purge`](https://github.com/YuJunZhiXue/dsh-purge) · [`🔗 GitHub Trending（周榜）`](https://github.com/trending?since=weekly)
+
+---
+
+## 20. SAP 的利用窗口从 489 天塌缩到 1–3 天 —— 而那个中位数悄悄把「已被利用」和「有 PoC」合并了
+
+- **Velocity:** ▮ steady
+- **Source:** Onapsis Research Labs + Recorded Future · 发布于 2026-10-29
+- **Tags:** `sap` `exploitation` `ransomware` `threat-intel` `methodology`
+
+这份联合报告《Days to Zero》度量的是从 SAP Security Note 发布到首次公开利用的间隔：**2025–2026** 年修补的漏洞中位数是 **1–3 天**，而 2021 年的补丁是 **489 天**；样本是「more than 1.2 million threat-intelligence events」，时间跨度 2023 年至 2026 年上半年。提到 SAP 的地下文档从 419 份（2023）增至 **933 份（2025）**，+123%；SAP 相关内容中出现的勒索与勒索软件团伙从 8 个增至 **26** 个，整个期间共 30 个出现过至少一次。Qilin 的加密器会先终止 SAP 后台服务再加密，2026 年初的 40 天内有 11 个 Qilin 泄露站受害者其外泄文件名「explicitly labeled 'SAP'」。被入侵的 SAP 访问权售价 **500–30,000 美元**。
+
+方法论才是标题需要小心的地方，而报道本身也写了：公开摘要「does not provide the sample size behind each annual median」，中位数「combines two milestones: verified public exploitation and publication of a proof-of-concept」，公开演示「is not necessarily evidence of an attack against a production system」，且这些数字覆盖的是「with observed milestones, rather than every SAP vulnerability」的漏洞。文档数与团伙数「do not represent a count of successful SAP breaches」。
+
+**Why it matters:** 489 → 1–3 的方向是对的，量级大概也对，而它既是威胁的变化，也是**定义**的变化——2021 年的中位数只统计已确认的利用，而 2026 的这个数字把已公开的 PoC 也算进去了。无论按哪种读法，运营结论都成立：如果补丁到利用的窗口以天计，那么季度打补丁的节奏就是在度量错误的区间。
+
+[`🔗 ERP News — SAP exploit window shrinks to days`](https://erpnews.com/sap-exploit-window-shrinks-to-days-onapsis-and-recorded-future-research-finds/) · [`🔗 Onapsis — Days to Zero（报告活动页）`](https://onapsis.com/event/days-to-zero-recored-future-research-onapsis/)
 
 ---
 
@@ -766,13 +328,11 @@ Scribd 自己的帮助中心文章日期是 **2026 年 10 月 1 日**，以另�
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-10-31T12:32:34Z |
-| Items | 49 |
-| Sources tracked | 26 (Hacker News, GitHub, GitHub Advisory Database, arXiv, Hugging Face, CISA KEV, NVD, cveawg, CISA-ADP, Google Research, OpenAI, Anthropic, Parameter Labs, Volexity, Ubuntu Discourse, Patchstack, Firezone, Akamai/Linode, Go Security, bunny.net, Northflank, GitHub Status, SigNoz, Tangled, xoranth.net, TNW) |
-| Update schedule | 04:03, 12:03, 20:03 UTC+8 (3x daily) |
-| Ranking | Velocity-weighted (recency × engagement acceleration × source authority) |
+| Generated | 2026-10-31T20:35:33Z |
+| Items | 20 |
+| Sources tracked | 14（GitHub Trending、Hacker News、arXiv、Hugging Face、NVD／CVE 记录、厂商公告、安全研究） |
+| Update schedule | 04:03, 12:03, 20:03 UTC+8（每日 3 次） |
+| Ranking | 按速度加权（时效 × 互动加速度 × 来源权威度） |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |
 
----
-
-[Previous day](2026-10-30.md) · [Raw .md](https://trending.md/zh/feed/2026-10-31.md) · [Archive](../archive/)
+[前一日](2026-10-31.md) · [原始 .md](https://trending.md/zh/feed/latest.md) · [归档](../archive/)
