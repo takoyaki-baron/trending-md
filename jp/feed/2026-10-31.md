@@ -1,6 +1,6 @@
 ---
 date: 2026-10-31
-updated: 2026-10-31T04:19:32Z
+updated: 2026-10-31T12:32:34Z
 schedule: 04:03, 12:03, 20:03 UTC+8
 sources: 17
 license: CC-BY-4.0
@@ -564,13 +564,211 @@ Scribd 自身のヘルプセンター記事の日付は **2026 年 10 月 1 日*
 
 ---
 
+## 37. 公開共有された ChatGPT の会話ひとつでセッション内でコードが動く — MathLive のリスナー、サンドボックスなしの `srcdoc`、そして CSP 回避に YouTube
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Parameter Labs · published 2026-10-28 · HN 11+ pts (~2026-10-31T10:30Z)
+- **Tags:** `security` `chatgpt` `xss` `csp` `disclosure`
+
+**Parameter の Mukul Goyal** は `chatgpt.com` に対する完全な攻撃チェーンを公開した。被害者が攻撃者の**公開共有会話**を開くだけで、ログイン済みの ChatGPT オリジン内でコードが実行され、研究者は会話を列挙し、一度も共有されていない非公開チャットを読むことができた。配信にはアプリのインストールもプロジェクト参加もコードの貼り付けも不要で、自動化版について研究者は "Opening the shared link was the only required action" と書いている。最も安定した再現では、被害者は ChatGPT 標準の Preview ボタンを一度押す必要があった。
+
+連鎖は 5 段階で、どれも単体では筋が通っている。インタラクティブなグラフを含む共有会話は **MathLive** を読み込み、そのコントローラは origin policy が `none` のメッセージリスナーを設置する。2 つ目のブロック **HTML Preview** が `mathlive#virtual-keyboard-message` を送り、生の HTML をキーボードレイアウトのデータとして渡す。MathLive は "accepted a state-changing message without proving which frame sent it." その HTML は `innerHTML` に到達し — 研究者は `createHTML` が "acted as an identity or Trusted Types wrapper, not a sanitizer" だったと明記している — `chatgpt.com` を継承する**サンドボックスなしの `srcdoc` iframe** を作った。CSP はインラインスクリプトを止めたが YouTube は許可していたため、細工した **YouTube oEmbed JSONP** の応答が JavaScript を供給し、`#client-bootstrap` からセッショントークンとアカウント ID を読み、認証済みの `/backend-api/conversations` を呼び、画像リクエストでデータを持ち出した。
+
+**Why it matters:** ここでの失敗はすべて組み合わせで生じており、報告書で最も有用な一文はむしろ構成要素を免責するものだ。"The Preview sandbox itself worked." Preview 内のコードは親ページを読めなかった。壊れていたのは、主ページの*別の*構成要素がその指示を受け入れたことだ。これはエージェント時代の Web アプリに繰り返し現れる形で、埋め込みビューアはすべて特権フレームへの新しいメッセージ経路になる。修復もそれを反映している。OpenAI は **P1** と評価し、**2026-10-26** に両方の Web フロントエンドを修正し、**$5,000** を支払った。CVE はなく、スキャナが照合できるものは何も残らない。持ち帰るべき注意は 2 つ。YouTube 経由は "the final workaround for CSP, not the root cause" であり、そのエンドポイントだけを塞いでも HTML 注入経路は閉じない。持ち出しの証明は応答のごく一部だけを外部送信したが、注入されたコードは全体を読めた。
+
+[`🔗 Parameter Labs — we took over ChatGPT accounts`](https://www.parameter.ai/labs/we-found-a-gap-at-openai) · [`🔗 Hacker News discussion`](https://news.ycombinator.com/item?id=50314699)
+
+---
+
+## 38. SOCFortress CoPilot の 10.0 は「権限不要」と言う — しかし当のルートは admin か analyst のトークンを要求する
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** GitHub Advisory · CVE published 2026-10-30T14:36Z · advisory dated 2026-06-24
+- **Tags:** `cve` `path-traversal` `cvss` `github-advisory`
+
+**CVE-2026-61738** は socfortress **CoPilot** のパストラバーサルだ。`POST /api/scoutsuite/generate-gcp-report` はアップロード内容を `GCPScoutSuiteJSON` として検証するが、`file.filename` をそのまま `os.path.join` に渡すため、トラバーサルを含むファイル名で JSON がレポートディレクトリの外へ書かれる。バックエンドが root で動くため、研究者は `/tmp` とアプリケーションのソースディレクトリへの root 所有の書き込みを実演した。**0.1.77** で修正。CWE-22、CWE-73、CWE-434。アドバイザリの一行要約は、内容は検証されるがファイル名は検証されない、というものだ。
+
+**スコアと文章は 3 か所で食い違う。** GitHub が付けたベクトルは `CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:C/C:H/I:H/A:H` = **10.0** で権限不要だが、アドバイザリはこのルートが `admin` または `analyst` スコープの bearer トークンを要求し、"Reachable by a non-administrative role" だと述べている。影響版と修正版の欄はいずれも `latest` で、バージョン境界はまったく示されていない。さらに CVE レコード自身の説明は見出しから後退している。実演されたプリミティブは "does not establish unrestricted executable contents or unconditional cross-tenant confidentiality loss" であり、RCE は root 書き込みからの推測的な昇格だとしている。NVD はレコードを **`Deferred`** に置き、独自の指標を**ゼロ**しか持たない。
+
+**Why it matters:** 10.0 はベクトルを伴わずに引用されやすい数字であり、ここではそのベクトルが認証ありのルートに `PR:N` を仮定している。`S:C` と `C/I/A:H` が残りの計算を済ませる。だから正直な言い方は、スコア上は 10.0、低権限トークンが必要なルート、実演は root ファイル書き込み、となる。コード実行の主張が*確立していない*とレコードが明言している点こそ、10.0 より真似する価値がある。セキュリティ製品が自社アドバイザリで PoC の限界を採点するのは 10.0 より珍しく、実務上の深刻度はバックエンドを root で動かし analyst 資格情報が見える配置かどうかにかかっている — SOC ツールではそれが通常だ。
+
+[`🔗 GHSA-q3g8-3cf7-744f — CoPilot advisory`](https://github.com/socfortress/CoPilot/security/advisories/GHSA-q3g8-3cf7-744f) · [`🔗 CVE-2026-61738 (NVD)`](https://nvd.nist.gov/vuln/detail/CVE-2026-61738)
+
+---
+
+## 39. 6 月のアドバイザリ 2 件が同じ 10 月の午後に CVE レコードを得た — 予約から 111 日、修正から 4 か月
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** cveawg / GitHub Advisory · both `PUBLISHED` 2026-10-30, assigner `GitHub_M`
+- **Tags:** `cve` `github-advisory` `disclosure-lag` `ssrf` `ai-agent`
+
+GitHub が発行した 2 件のレコードが **2026-10-30** に着地した。いずれも 6 月から公開されていたアドバイザリに対応する。**CVE-2026-61826**（Bazarr）— `bazarr/api/plex/oauth.py` の Plex OAuth 名前空間は "ships with no authentication" で、`Resource` ハンドラが `@authenticate` を欠き、"There is no global auth `before_request` hook" であるため、匿名の呼び出し元が `POST /api/plex/apikey` で攻撃者の選んだキーを永続化し、`POST /api/plex/oauth/logout` で連携を無効化し、PIN フロー経由で攻撃者の Plex アカウントを紐付けられる。state 検証は実効性がなく、攻撃者の `server_url` が保存されると以後のリクエストは設定済み API キーを `X-Plex-Token` に載せる — **SSRF と資格情報漏えい**で、`S:C`/`PR:N` により **10.0**。**CVE-2026-63377**（TAKO AI Agent for Okta）は初回起動の競合で、`POST /api/auth/setup` は "creates the first administrator account without requiring any prior authentication"。守りは `is_setup` フラグだけで、"No bootstrap secret, no IP restriction"、`docker-compose.yml` は "Publishes `8001:8001` on all interfaces by default"、Dockerfile は uvicorn を `0.0.0.0` で起動する — **9.8**。
+
+**時計こそが主題だ。** Bazarr のアドバイザリは **2026-06-24**、ID 予約は **2026-07-10**、レコード公開は **2026-10-30T17:12Z**。TAKO は **2026-06-30**、予約 **2026-07-16**、公開 **2026-10-30T22:18Z** — 予約から公開まで 111 日と 106 日、アドバイザリ公開からは 128 日と 122 日。修正はいずれもはるかに早く出ている。Bazarr **1.5.7-beta.14**、TAKO **3.0.1-beta**。NVD は Bazarr を `Deferred`、TAKO を `Received` に置き、どちらも `nvd@nist.gov` の指標を持たない。
+
+**Why it matters:** ここで未知だったものは何もない。アドバイザリもパッチも PoC も 6 月から公開されている。それでも CVE ID で照合するスキャナは今週まで見えず、`published` で並べるフィードは両方を「新着」と呼ぶ。形も遅延と分けて読むべきだ。Bazarr は 1 つの名前空間にデコレータが 1 つ足りない話で、フレームワークの既定（全ハンドラを認証する）だけがバグを止めていた。TAKO はセットアップ画面を持つ自前ホスト型エージェントが必ず引き継ぐ「先着が管理者になる」競合で、全インターフェースに束縛する compose ファイルがそれを増幅する。どちらかを運用しているなら、レコードの日付ではなく成果物のバージョンを見ること。Bazarr の修正は beta タグで、PIN state 検証はレコード自身が記す未解決の残件だ。
+
+[`🔗 GHSA-fvcv-hh55-x3r4 — Bazarr advisory`](https://github.com/morpheus65535/bazarr/security/advisories/GHSA-fvcv-hh55-x3r4) · [`🔗 GHSA-536w-42p8-3qv9 — TAKO advisory`](https://github.com/fctr-id/okta-ai-agent/security/advisories/GHSA-536w-42p8-3qv9) · [`🔗 CVE-2026-61826 (NVD)`](https://nvd.nist.gov/vuln/detail/CVE-2026-61826) · [`🔗 CVE-2026-63377 (NVD)`](https://nvd.nist.gov/vuln/detail/CVE-2026-63377)
+
+---
+
+## 40. HoneySQL の 9.8 は既に存在していた検査だった — 修正はそれを飛ばしていた formatter に通すこと
+
+- **Velocity:** ▮▮ rising
+- **Source:** GitHub Advisory · CVE published 2026-10-30T23:17Z · maintainer-authored
+- **Tags:** `cve` `sql-injection` `clojure` `library` `api-design`
+
+**CVE-2026-61620** は **HoneySQL** の SQL インジェクションだ。データ構造を SQL に変換する Clojure ライブラリで、引き金は狭く明示的である。信頼できない入力を `keyword` や `symbol` で DSL に渡す — つまり文字列を*エンティティ名*に変える呼び出し — アプリケーションは、JDBC ドライバがそのまま実行すると注入になる SQL を生成し得る。一部の formatter が、ライブラリに**既にあった**不審文字検査をこれらのエンティティ名に適用していなかった。影響範囲は `>= 2.0.0, < 2.7.1392`、**2.7.1392** の修正は同じ検査をより多くの formatter に適用すること。アドバイザリはメンテナの `seancorfield` 自身が書き、報告者 `koyokr` をクレジットし、ベクトルは `CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H` = **9.8**（CWE-89）。NVD は `Received` のままで独自指標を持たない。
+
+**Why it matters:** 興味深いのはスコアではなく回避策のほうだ。呼び出し元は "validate input prior to calling `keyword` / `symbol` when constructing DSL structures" と言われ、メンテナ自身の括弧が続く — "but this is tedious and error prone, if an input is missed"。これは、ここにユーザーデータを渡すなと利用者に告げる API 契約すべての正直な描写である。境界での強制手段がない規則で、失敗は忘れた呼び出し元に落ちる。9.8 は名付ける価値のある仮定も符号化している。`PR:N`/`AC:L` はクエリパラメータを識別子に反映する普通の Web アプリを想定しており、それはまさにライブラリが検出できないケースだ。修正の詳細は「対応済み」という主張への警告でもある。検査はこの CVE より前から存在したので、「エンティティ名はサニタイズ済み」という主張はある経路では真、別の経路では偽であり、formatter ごとの監査でしか差は見つからない。
+
+[`🔗 GHSA-fcfq-xqgp-8v97 — HoneySQL advisory`](https://github.com/seancorfield/honeysql/security/advisories/GHSA-fcfq-xqgp-8v97) · [`🔗 CVE-2026-61620 (NVD)`](https://nvd.nist.gov/vuln/detail/CVE-2026-61620)
+
+---
+
+## 41. OpenMAIC は文書をエージェントの教室に変える — 42k スター、MIT、そして「ポートに届く者はライブラリ全体を所有する」という警告
+
+- **Velocity:** ▮▮ rising
+- **Source:** GitHub Trending · 115 stars today · 41,998 total
+- **Tags:** `agents` `education` `mit` `typescript` `multi-agent`
+
+**`THU-MAIC/OpenMAIC`**（"Open Multi-Agent Interactive Classroom"）は、プロンプトやトピック、アップロードした文書からインタラクティブな授業を作る。AI 教師と AI クラスメートが話し、ホワイトボードに描き、クイズやシミュレーションを走らせ、学習者とリアルタイムに議論する。スタックは **Next.js 16 / React 19 / TypeScript** の pnpm ワークスペースで、コース DSL、レンダラ、エディタ、PPTX インポータ、生成、ストレージのパッケージに分かれる。生成は 2 段階（アウトライン、次にシーン内容）で、サーバー側のディレクタループが `call_agent` を通じて各ターンをエージェントに渡し、**21 種類のアクション** — 発話、ホワイトボード描画、スポットライト、レーザー — を扱う。**41,998 スター、6,503 フォーク、810 コミット**、ルートは **MIT**（同梱の `mathml2omml` は LGPL-3.0-or-later、`pptxgenjs` は MIT で別扱い）。
+
+**Why it matters:** デモよりリリースノートのほうが有用だ。**v1.3.0（2026-10-29）** はナレッジベースと Pro ワークベンチを追加し、アップグレード指示は "stop all old instances first"、そして "no rollback below 1.3.0" — バージョン慣行ではなくスキーマの決定だ。**1.2.0** 以降は server-first で serverless ではなくなり、長時間動く Node プロセスと **PostgreSQL** を必要とし、"Vercel and other serverless hosts are not supported" と明記する。セキュリティの記述は二度読むべきだ。Docker Compose 構成は既定でループバックを listen する個人向け単一ユーザー導入で、外部に出すと "anyone who can reach the port owns, edits and can delete the whole library"。`ACCESS_CODE` 未設定は "there is no second enforcement point" を意味する。42k スターの MIT プロジェクトが自らの配置がマルチテナントでないと告げるのは読者への親切であり、単一ユーザーツールとして扱い、認証は自分で前に置くべきだ。
+
+[`🔗 THU-MAIC/OpenMAIC`](https://github.com/THU-MAIC/OpenMAIC) · [`🔗 GitHub Trending`](https://github.com/trending)
+
+---
+
+## 42. cfsolve はブラウザなしで Cloudflare Turnstile を解く — そして自ら記した制限が、実際に効く防御である
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News · 236+ pts · ~2 days ago (~2026-10-28T17:29Z)
+- **Tags:** `security` `rust` `captcha` `scraping` `mit`
+
+**`chris124567/cfsolve`** は **Cloudflare Turnstile** のウィジェットとチャレンジページを素の HTTP で解く Rust ライブラリ兼 CLI だ。ヘッドレスブラウザを使わないことが要点で、記録済みの**ブラウザプロファイル**（同梱は iPhone の Safari）を再生して Cloudflare のブラウザ検査を通し、ウィジェットには Turnstile トークン、チャレンジページには `cf_clearance` Cookie を返す。ライブラリは `Browser`、`solve_turnstile`、`clear`、`solve` を公開し、読み込んだ `Browser` は並行処理で共有できるが接続と Cookie は操作ごとに分かれる。**335 スター、36 フォーク、6 コミット**、**MIT**（ただし `vendor/` のパッチ済み依存は各ライセンス）。
+
+**Why it matters:** 面白いのは運用上の脚注で、これがこの種のソルバに対して唯一耐えるアンチボット制御だからだ。"Send the `cf_clearance` cookie from the same IP address and user agent as the profile, or Cloudflare will reject it." clearance をネットワーク識別子と指紋に結び付けることが、プロファイル再生を高コストにする — 1 プロファイルにつき 1 アドレス — そしてこれはライブラリが回避しているどの視覚チャレンジより強い防御だ。2 点目は保守性で、プロファイルこそが希少資源（README は作成に手作業か AI 支援が要ると書く）であり、Cloudflare が新しいチャレンジビルドを出すと失敗は `Error::Unsupported` として現れる。つまり Turnstile が破られたという話ではなく、プロファイル単位・IP 単位で次のビルドまで回避できるという話であり、スクレイパと WAF の 10 年来の経済学と同じだ。
+
+[`🔗 chris124567/cfsolve`](https://github.com/chris124567/cfsolve) · [`🔗 Hacker News discussion`](https://news.ycombinator.com/item?id=50277379)
+
+---
+
+## 43. OpenFrontiers はエージェントを「再発見」で採点する — 200 問、うち 90 問は未解決、閉本では 40 問中最大 7 問
+
+- **Velocity:** ▮▮ rising
+- **Source:** arXiv · 2610.37739 · submitted 2026-10-27
+- **Tags:** `benchmark` `math` `agents` `lean` `research`
+
+"**OpenFrontiers: A Collection of Open Research Problems and a Benchmark for Scientific Rediscovery**"（arXiv **2610.37739**、Jiarui Yao、Ruida Wang、Tong Zhang）は、**12,151** 問の未解決研究問題コーパス（問題文、背景、進捗記録）と、回顧的ベンチマーク **200** 問を組み合わせる。うち **110** 問は 2026 年に解決済み、**90** 問は未解決だ。各ベンチマーク項目には **Lean 4** の形式化文が付き、自動検査と 2 名の独立レビューを通り、品質スコアで **HQ-50** の部分集合が選ばれる。**7 つの LLM エージェント**が標準予算の下、閉本・凍結検索・ライブ Web の 3 条件で評価され、証明は隔離サンドボックス内の 2 つの独立チェッカが採点する。
+
+**Why it matters:** このベンチマークが暴くのは*解くこと*と*検索すること*の差だ。閉本での再発見はまれで、解決済み 40 問のうち最大 **7** 問にとどまり、著者らはライブ Web 条件での成功は "mostly reflects retrieval of published solutions" であり独立した再発見ではないと述べる。これは AI が新しい数学を発見すると主張するジャンル全体への正しい対照だ。論文を見つけられるシステムは、見出しが主張する能力を示していない。3 条件を分けることが差を測れるようにする。構成自体も最も強い部分で、2026 年に解決された集合と形式化文・2 名レビューの署名が、曖昧な「フロンティア」主張を採点者が確認できる項目に変える。ただし 200 問は小さく、条件ごとに数問動くだけで割合は大きく変わる。
+
+[`🔗 arXiv 2610.37739`](https://arxiv.org/abs/2610.37739) · [`🔗 arXiv cs.AI new`](https://arxiv.org/list/cs.AI/new)
+
+---
+
+## 44. PoPLi はメッセージを言い換えて符号付き共謀を捕まえる — メッセージだけを見る監視は両方向で失敗した
+
+- **Velocity:** ▮▮ rising
+- **Source:** arXiv · 2610.37849 · work in progress
+- **Tags:** `multi-agent` `collusion` `safety` `monitoring` `research`
+
+"**Detecting Covert Collusion between AI Agents through Partner-Outsider Positive Listening**"（arXiv **2610.37849**、Kevin Yandoka Denamganaï）は、メッセージ監視が見落とすケースから始める。2 つのエージェントが、無害に見える文章に載せた私的な取り決めで協調する場合だ。提案される検査は意味ではなく行動に基づく。意味を保ったまま言い換えると、符号を知る**パートナー**は正確な文言に反応し、パートナーの役に置かれた**部外者**は反応しないはずだ。**PoPLi** はその 2 つの行動変化の差で、記録済みプロンプトの再生により事後計算される。
+
+5 条件 — 共謀なし、共同報酬＋中立的メッセージ、共同報酬＋公然の意図、隠れた頭文字符号、符号＋公然の意図 — の模擬市場で、符号があるとき PoPLi は **0.48–0.59**（95% 区間はすべて **0.29** 超）、符号がないときは **−0.10 から −0.01** だった。監視の結果が落ちだ。話者メッセージだけを読む監視は **50 市場すべて**で「なし」と答え、全売り手のメッセージを読む監視は**共謀なしの 10 市場のうち 9** を誤検知した。
+
+**Why it matters:** 非対称性こそが発見だ。一方の監視は信号を持たず、他方は偽陽性率がほぼ 1 で、どちらも「もっと注意深く読む」では直らない。PoPLi は自らの境界も明示する。検出するのは私的チャネルの使用であり共謀そのものではなく、インセンティブだけによる共謀や、文言ではなく**意味**に載った符号は見えない。これは*ある種*の隠れたプロトコルの検出器であり、既に持っているログに対して事後で走らせられる点で、オンラインフィルタより配備済みエージェント群の監査に向く。work in progress であり、設定は 1 つの模擬市場、部外者は役を入れ替えたモデルであって人間ではない。0.48–0.59 は統制された設定での分離度であり、現場の率ではない。
+
+[`🔗 arXiv 2610.37849`](https://arxiv.org/abs/2610.37849) · [`🔗 arXiv cs.AI new`](https://arxiv.org/list/cs.AI/new)
+
+---
+
+## 45. 探索を Lean の証明に変えるエージェント — ARC-AGI-3 の 183 軌跡を再生し、6 つの界のうち 4 つは初回で誤り
+
+- **Velocity:** ▮▮ rising
+- **Source:** arXiv · 2610.40503 · Guancheng Pan, Qixin Tan, Yang Yuan, Andrew Chi-Chih Yao
+- **Tags:** `agents` `lean` `arc-agi` `world-model` `research`
+
+"**Algebraic World Model: From Exploration to Proofs**"（arXiv **2610.40503**、Guancheng Pan、Qixin Tan、Yang Yuan、Andrew Chi-Chih Yao）は、未知の環境の探索を検証可能な明示的数学模型に変える。ループは環境規則についての実行可能な **Python** 仮説を生成し、観測で検証し、共有規則を持つ型付きオブジェクトに整理し、圏論に導かれた変換で簡約し、**Lean 4** に符号化する。これにより到達可能性だけでなく**不可能性** — 探索済み軌跡の外では目標に到達できないこと — を証明できる。
+
+主な結果は ARC-AGI-3 にある。2 つの**不可能**なレベルで、AWM は閉じたカーネル検査済みの Lean 証明を生成し、**6 回すべての実行**で合法な勝利系列を排除した。一方 **Claude Opus 5.5** と **GPT-6 Astra** は**12 回のベースライン実行**でそのような証明を出せなかった。初回の界は見出しが示すより誤りが多く、6 つのうち **4 つ**が正しく、Opus 5.5 は 1 つ、GPT-6 Astra は 0 だった。6 つすべてに届くには「より安い勝利が存在する」とだけ告げられればよかった。公開 ARC-AGI-3 全 **25** ゲームで、そのモデルは Lean に **183** の勝利軌跡を再生させ、未見の遷移を予測し、ゲーム機構の変化を検出した。Claude Opus 5 と組み合わせると全レベルを **99.9** でクリアし、人間ベースラインの行動数の **43%** しか使わなかった。
+
+**Why it matters:** 区別は証明と予測にあり、これが別のワールドモデル結果ではなくこの論文を読む理由だ。「たいてい当たる」学習シミュレータは、目標に到達できないという主張を支えられない。規則を Lean に符号化して検査したモデルはその主張ができ、誤るのは規則自体が誤っているときだけだ — それが初回 6 中 4 の誤りが示すことであり、修正段階が恥ではなく手法の一部である理由でもある。摘要が確立していないのは、99.9 のどこまでが探索から来てどこまでがモデルから来たかだ。著者所属（Yang Yuan と姚期智のグループ）も、AWM を汎用レシピとして扱う前に独立再現を待つべきという信号である。
+
+[`🔗 arXiv 2610.40503`](https://arxiv.org/abs/2610.40503) · [`🔗 arXiv cs.AI new`](https://arxiv.org/list/cs.AI/new)
+
+---
+
+## 46. LRMoE は逆伝播の前に専門家クォータを計画する — MoE 学習時間 21.2–44.8% 減、比較対象は 1 つのベースライン
+
+- **Velocity:** ▮ steady
+- **Source:** arXiv · 2610.37720 · submitted 2026-10-27
+- **Tags:** `moe` `training` `memory` `systems` `research`
+
+"**LRMoE: Demand-Side Load Re-Calibration for Efficient MoE Training on Memory-Constrained Nodes**"（arXiv **2610.37720**、Jiaming Hu、Zhida Jiang、Zhaolong Xing、Yu Li、Zhen Chen、Ke Zhang）は疎な MoE 学習の非対称性を突く。ルーティングは不均一で、人気の専門家は活性を保持する必要があり、遊んでいる専門家もあり、逆伝播は両方のバッファ代を払う。LRMoE は順伝播中に専門家の保持クォータと配置を計画し、逆伝播中に**寄与度指標**でクォータ内で生き残るトークン–専門家ペアを選ぶ。ルーティングされた順伝播の計算はすべて保ちつつ、容量を意識したルーティングと物理的コンパクションで逆方向の通信・計算・バッファ需要を削る。
+
+実測は **Qwen3-30B-A3B** と **GLM4.5-106B-A12B** で、固定損失目標までの MoE 層累積学習時間が **SYMI** 比 **21.2–44.8%** 減った。
+
+**Why it matters:** 学習時のメモリ圧はふつう offload で答えるが、それは帯域を容量に交換する取引だ。こちらはもう一方のレバーで、バッファが必要になる前に、戻りで再計算または破棄してよいルーティング済みペアを決める。正直な注意は摘要が語らない部分にある。GPU の型番、基数、メモリ量、インターコネクト、クラスタ構成の記述がなく、「メモリ制約ノード」は前提であって特定された設定ではない。比較として名指しされるのも 1 つのベースラインだけだ。21.2–44.8% という広い幅は、利得が対象モデルのルーティング分布に強く依存することをも意味し、自分の MoE も同じだと仮定する前に確認すべき最初の点である。
+
+[`🔗 arXiv 2610.37720`](https://arxiv.org/abs/2610.37720) · [`🔗 arXiv cs.AI new`](https://arxiv.org/list/cs.AI/new)
+
+---
+
+## 47. 4B の Three.js 専任モデルがデータセット・レポート・借り物の視覚プロジェクタを一緒に公開 — 4,146 シーン、"early preview" の表示付き
+
+- **Velocity:** ▮ steady
+- **Source:** Hugging Face · 29,615 downloads · 363 likes · card updated 2026-10-30
+- **Tags:** `open-weights` `threejs` `3d` `gguf` `apache`
+
+**`ccore/Qwen3.5-4B-3D-Coder`** は Qwen3.5-4B の独立した **Apache-2.0** ファインチューンで、汎用コーディングに 3D 特化を加えたものだ。自己完結した **Three.js** シーンを単一 HTML ファイルとして生成する。カードは "an early preview of a 4B model I am still training" であり、"**not** an official Qwen release." と明記する。重みに加えて**学習データセット** — 4,146 シーン例（**3,933 学習 / 213 検証**）、プロンプト・完全な思考トレース・完全な HTML/JavaScript 応答を含み **MIT** — 技術レポート PDF、4 シャードの FP16 safetensors、Q4_K_M/Q8_0 の GGUF ビルドを公開する。
+
+最も有用な実装詳細は **2026-10-30** に追加された視覚経路だ。2 つの GGUF 量子化は元の Qwen3.5-4B 視覚プロジェクタと組み合わせると画像入力を受け付ける。カードは正確な同梱ファイル（**約 644 MiB**、BF16）とその出所 — `lmstudio-community/Qwen3.5-4B-GGUF` の未改変プロジェクタ — を名指しする。提供手順も具体的で、`llama-server -m … --mmproj … --n-gpu-layers all --flash-attn on --ctx-size 65536`、**llama.cpp b11889** で検証済み、LM Studio では**マルチトークン予測を無効**にしないと挙動が崩れると注記する。
+
+**Why it matters:** 狭域ファインチューンは安く作れて評価が難しく、このリリースは評価を可能にする 3 つの成果物 — データ、4 精度の重み、レポート — を出しており、ほとんどの 4B コミュニティ公開より多い。カードが明示する 2 点と含意する 1 点がある。画像対応は**自分が学習していないプロジェクタ**を継承するので画像品質は Qwen のものでありファインチューンのものではない。ワンショット成功率の主張はスコア付きベンチマークではなく定性的なスクリーンショットに支えられている。例はボクセル風の室内が中心で、それはデータセットの参照レンダーが強化するスタイルでもある。強いローカルデモ生成器として扱い、4B が 3D で大規模コーダに並ぶ証拠とはしないこと。
+
+[`🔗 ccore/Qwen3.5-4B-3D-Coder`](https://huggingface.co/ccore/Qwen3.5-4B-3D-Coder) · [`🔗 ccore/ThreeJS-3D-Scenes dataset`](https://huggingface.co/datasets/ccore/ThreeJS-3D-Scenes) · [`🔗 Hugging Face trending`](https://huggingface.co/models?sort=trending)
+
+---
+
+## 48. 31.5k スターの macOS メニューバーツールキットは GPL-3.0 と商標の別扱い — そしてマイクミュートはプライバシー保証ではないと明言する
+
+- **Velocity:** ▮ steady
+- **Source:** GitHub Trending · 499 stars today · 31,525 total
+- **Tags:** `macos` `swift` `gpl` `open-source` `utilities`
+
+**`vorssaint/vorssaint-utils`** は無料・オープンソースの **macOS メニューバーツールキット**で、**Swift**（AppKit と SwiftUI）製だ。アプリ別音量ミキサー、システム監視、アプリ/ウィンドウ切替、ウィンドウスナップ、Dock プレビュー、クリップボード履歴、テキストスニペット、ファイルシェルフ、アンインストーラ、画面キャプチャ、メディアツール、Homebrew マネージャ、スリープ防止、ディスプレイ制御を 1 つのアプリにまとめる。**31,525 スター、1,518 フォーク、42 ウォッチャー**、**GPL-3.0-or-later** で、未使用モジュールを無効化して "Install only what you use" できる。
+
+**Why it matters:** 機能一覧を越えて読むべき理由は README の 3 つの開示にある。ライセンスはコードを覆うが、**名称・ロゴ・視覚的アイデンティティは別途商標条項で覆われる** — フォークは合法でも同じ名前で配布するのは違法だ。プラットフォームの下限は厳格で、**Apple Silicon のみ、macOS 14 Sonoma 以降**、Intel Mac はすべて除外される。そして正直な 2 点。**ファン制御は beta と表示**され、カードはマイクミュートがプライバシー保証ではないと明言している。メニューバーのトグルは UI 状態であって音声経路の保証ではなく、そう書くことがユーティリティとセキュリティ主張の境界になる。アプリはローカルファーストでアカウントも分析も追跡もなく、公式ビルドは署名・公証済みであり、アクセシビリティと画面収録の権限を求める 31k スターのツールにとってそこが最も重要な部分だ。
+
+[`🔗 vorssaint/vorssaint-utils`](https://github.com/vorssaint/vorssaint-utils) · [`🔗 GitHub Trending`](https://github.com/trending)
+
+---
+
+## 49. GCC は `switch` を 5 通りに降ろし、コストで選ぶ — case あたり 8 スロット、3 件でビットセット、記号にはビットテスト
+
+- **Velocity:** ▮ steady
+- **Source:** xoranth.net · 87+ pts · ~4h ago (~2026-10-31T08:02Z)
+- **Tags:** `gcc` `compilers` `optimization` `c`
+
+`pass_lower_switch` を深く辿る記事が、**GCC** が `switch` を機械語に変える過程を説明する。答えは「ジャンプテーブル」だけではない。密な case は基数を引いたジャンプテーブルになり、GCC は密と疎の領域を分割して外れ値に独自の分岐を与え、連続したラベル範囲は範囲検査に畳まれ、非常に疎な文字 case は減算・境界検査・定数に対する**ビットテスト**になる。閾値はラベル数ではなくコスト比較だ。0–87 を覆う 20 ラベルの switch は 88 項目の表に入るが比較は 10 回で済むため、GCC は比較木を出す — ヒューリスティックは表の大きさと比較コストを秤にかけている。
+
+より面白い半分は動的計画法だ。**ビットセット降級**は、各範囲が 64 ビット未満のレジスタに収まり最大 3 つの遷移先辺を覆うという制約の下でビットセット数を最小化し、**遷移先 1 つなら 3 case、2 つなら 5、3 つなら 6** で有益とされる。**ジャンプテーブル選択**も DP で、表が少なく処理 case が多い方を好み、速度最適化で最大成長比 **8**、サイズ最適化で **2**、`casesi` が使える場合の最小 case 数は **4**（なければ **5**）。どちらも勝たなければ、GCC はプロファイルデータや `__builtin_expect_with_probability` を使って**確率で釣り合った二分比較木**を出す。
+
+**Why it matters:** switch が if-else より遅いという俗説もその逆も民間伝承であり、この記事はそれを実際の決定手順 — 5 つの戦略に対する、ターゲットごとに調整されたコストモデル — で置き換える。C をプロファイリングする人への実務的な結論は、case 値の形（密度、連続性、遷移先数）が降級方式を選ぶということだ。switch をより密に書き換えると、意味が同一でも生成コードが変わり得る。著者は移植性の注意も添える。ビットセット降級を除き、これらは **Clang** にも当てはまる。あるコンパイラの戦略が一般化すると仮定したベンチマークは、言語ではなくヒューリスティックを測っている。
+
+[`🔗 xoranth.net — Switch Lowering in GCC`](https://xoranth.net/gcc-switch/) · [`🔗 Hacker News discussion`](https://news.ycombinator.com/item?id=50314085)
+
+---
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-10-31T04:19:32Z |
-| Items | 36 |
-| Sources tracked | 23 (Hacker News, GitHub, arXiv, Hugging Face, CISA KEV, NVD, cveawg, CISA-ADP, Google Research, OpenAI, Anthropic, Volexity, Ubuntu Discourse, Patchstack, Firezone, Akamai/Linode, Go Security, bunny.net, Northflank, GitHub Status, SigNoz, Tangled, TNW) |
+| Generated | 2026-10-31T12:32:34Z |
+| Items | 49 |
+| Sources tracked | 26 (Hacker News, GitHub, GitHub Advisory Database, arXiv, Hugging Face, CISA KEV, NVD, cveawg, CISA-ADP, Google Research, OpenAI, Anthropic, Parameter Labs, Volexity, Ubuntu Discourse, Patchstack, Firezone, Akamai/Linode, Go Security, bunny.net, Northflank, GitHub Status, SigNoz, Tangled, xoranth.net, TNW) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (3x daily) |
 | Ranking | Velocity-weighted (recency × engagement acceleration × source authority) |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |

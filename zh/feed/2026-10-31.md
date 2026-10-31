@@ -1,6 +1,6 @@
 ---
 date: 2026-10-31
-updated: 2026-10-31T04:19:32Z
+updated: 2026-10-31T12:32:34Z
 schedule: 04:03, 12:03, 20:03 UTC+8
 sources: 17
 license: CC-BY-4.0
@@ -564,13 +564,211 @@ Scribd 自己的帮助中心文章日期是 **2026 年 10 月 1 日**，以另�
 
 ---
 
+## 37. 一个公开分享的 ChatGPT 对话就足以在你的会话里执行代码 — MathLive 监听器、无沙箱 `srcdoc`，以及拿 YouTube 当 CSP 绕过
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Parameter Labs · published 2026-10-28 · HN 11+ pts (~2026-10-31T10:30Z)
+- **Tags:** `security` `chatgpt` `xss` `csp` `disclosure`
+
+**Parameter 的 Mukul Goyal** 公布了一条针对 `chatgpt.com` 的完整利用链：受害者打开攻击者的**公开分享对话**，代码就在其已登录的 ChatGPT 源内执行，使研究者能够枚举对话，并读取一段从未被分享过的私人聊天。投放不需要安装应用、加入项目或粘贴代码 — 自动化变体里研究者的说法是 "Opening the shared link was the only required action"；在最稳定的复现里，受害者仍需点一次 ChatGPT 正常的 Preview 按钮。
+
+链条是五步，每一步单看都说得过去。含交互图表的分享对话会加载 **MathLive**，其控制器的消息监听器 origin policy 为 `none`；第二个区块 **HTML Preview** 发送一条 `mathlive#virtual-keyboard-message`，把原始 HTML 当作键盘布局数据传进去，而 MathLive "accepted a state-changing message without proving which frame sent it." 这段 HTML 进了 `innerHTML` — 研究者明确写道 `createHTML` "acted as an identity or Trusted Types wrapper, not a sanitizer" — 并构造出一个继承了 `chatgpt.com` 的**无沙箱 `srcdoc` iframe**。CSP 拦住了内联脚本却放行了 YouTube，于是一段精心构造的 **YouTube oEmbed JSONP** 响应提供了 JavaScript，它从 `#client-bootstrap` 读走会话 token 与账号 ID，调用已认证的 `/backend-api/conversations` 接口，并通过一个图片请求把数据外带。
+
+**Why it matters:** 这里每一处失败都是组合出来的，而报告里最有用的一句恰恰是在为一个组件开脱："The Preview sandbox itself worked." Preview 里的代码读不到父页面；坏掉的是主页面上的*另一个*组件愿意接受它的指令。这正是 agent 时代 Web 应用的重复形状 — 每一个内嵌查看器都是通往特权 frame 的新消息通道 — 修复方式也反映了这一点：OpenAI 定为 **P1**，在 **2026-10-26** 修好了两个 Web 前端，支付 **$5,000**，且没有 CVE，因此扫描器没有可匹配的东西。两点要带走：YouTube 那条是 "the final workaround for CSP, not the root cause"，只封那个端点并不能关掉 HTML 注入路径；外带证明只把响应的一小段发到了站外，尽管注入的代码能读整段响应。
+
+[`🔗 Parameter Labs — we took over ChatGPT accounts`](https://www.parameter.ai/labs/we-found-a-gap-at-openai) · [`🔗 Hacker News discussion`](https://news.ycombinator.com/item?id=50314699)
+
+---
+
+## 38. SOCFortress CoPilot 的 10.0 说"无需任何权限" — 而它自己的路由要求 admin 或 analyst token
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** GitHub Advisory · CVE published 2026-10-30T14:36Z · advisory dated 2026-06-24
+- **Tags:** `cve` `path-traversal` `cvss` `github-advisory`
+
+**CVE-2026-61738** 是 socfortress **CoPilot** 里的路径穿越：`POST /api/scoutsuite/generate-gcp-report` 会把上传内容按 `GCPScoutSuiteJSON` 校验，却把 `file.filename` 直接交给 `os.path.join`，于是带穿越的文件名把 JSON 写到了报告目录之外 — 又因为后端以 root 运行，研究者演示了对 `/tmp` 和应用源码目录的 root 属主写入。修复于 **0.1.77**；CWE-22、CWE-73、CWE-434；公告对这个 bug 的一行总结是：内容被校验了，文件名没有。
+
+**分数与文字在三处互相矛盾。** GitHub 给出的向量是 `CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:C/C:H/I:H/A:H` = **10.0** — 无权限 — 而公告说这条路由需要 `admin` 或 `analyst` scope 的 bearer token，并称其 "Reachable by a non-administrative role." 受影响版本与修复版本两格都写着 `latest`，所以公告根本没给出版本边界。而 CVE 记录自己的描述又往后退了一步：它说已演示的原语 "does not establish unrestricted executable contents or unconditional cross-tenant confidentiality loss"，指出 RCE 只是从 root 写文件推断出来的升级。NVD 把记录停在 **`Deferred`**，自己给出**零**个度量。
+
+**Why it matters:** 10.0 是最容易被脱离向量单独引用的数字，而这里的向量假设 `PR:N` 落在一条需要认证的路由上。`S:C` 加上 `C/I/A:H` 完成了剩下的算术 — 所以诚实的说法是：按评分是 10.0，落点在需要低权限 token 的路由上，实测是 root 写文件。记录愿意明说代码执行主张*未*被证实，这一点比 10.0 更值得抄：一个安全产品在自己的公告里给 PoC 划边界，比 10.0 更少见；而它也意味着实际严重性取决于你的部署是否以 root 运行后端、且 analyst 凭据可见 — 在一个 SOC 工具里，这恰恰是常态。
+
+[`🔗 GHSA-q3g8-3cf7-744f — CoPilot advisory`](https://github.com/socfortress/CoPilot/security/advisories/GHSA-q3g8-3cf7-744f) · [`🔗 CVE-2026-61738 (NVD)`](https://nvd.nist.gov/vuln/detail/CVE-2026-61738)
+
+---
+
+## 39. 两份六月的公告，在同一个十月下午拿到 CVE 记录 — 预留后 111 天，修复后四个月
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** cveawg / GitHub Advisory · both `PUBLISHED` 2026-10-30, assigner `GitHub_M`
+- **Tags:** `cve` `github-advisory` `disclosure-lag` `ssrf` `ai-agent`
+
+两条 GitHub 签发的记录在 **2026-10-30** 落地，而对应的公告从六月起就是公开的。**CVE-2026-61826**（Bazarr）— `bazarr/api/plex/oauth.py` 里的 Plex OAuth 命名空间 "ships with no authentication"：它的 `Resource` handler 漏掉了 `@authenticate`，"There is no global auth `before_request` hook"，于是匿名调用者可以 `POST /api/plex/apikey` 写进攻击者选定的 key、用 `POST /api/plex/oauth/logout` 清掉集成、并借 PIN 流程把攻击者的 Plex 账号绑上去。state 校验形同虚设，而一旦存入了攻击者选定的 `server_url`，之后的请求会带着已配置的 API key 放在 `X-Plex-Token` 里 — **SSRF 加凭据泄露**，按 `S:C`/`PR:N` 评为 **10.0**。**CVE-2026-63377**（TAKO AI Agent for Okta）是首启竞态：`POST /api/auth/setup` "creates the first administrator account without requiring any prior authentication"，唯一的守卫是一个 `is_setup` 标志，"No bootstrap secret, no IP restriction"，`docker-compose.yml` "Publishes `8001:8001` on all interfaces by default"，Dockerfile 让 uvicorn 监听 `0.0.0.0` — **9.8**。
+
+**时钟才是故事。** Bazarr 公告日期 **2026-06-24**，ID 预留于 **2026-07-10**，记录发布于 **2026-10-30T17:12Z**；TAKO 公告 **2026-06-30**，预留 **2026-07-16**，发布 **2026-10-30T22:18Z** — 从预留到发布分别是 111 天和 106 天，距离公告公开则是 128 天和 122 天。两个修复都远早于文书：Bazarr **1.5.7-beta.14**，TAKO **3.0.1-beta**。NVD 把 Bazarr 放在 `Deferred`、TAKO 放在 `Received`，两者都没有 `nvd@nist.gov` 度量。
+
+**Why it matters:** 这里没有任何东西是未知的 — 公告、补丁和 PoC 从六月起就是公开的 — 但一个按 CVE id 匹配的扫描器直到本周才看得见它们，而一个按 `published` 排序的 feed 会把两者都叫"新"。形状也值得与滞后分开看：Bazarr 是一个命名空间漏了一个装饰器，而框架的默认行为（每个 handler 都要认证）是唯一挡住它的东西；TAKO 是每个带 setup 页面的自托管 agent 都会继承的"先到者成为管理员"竞态，被一份绑定所有网卡的 compose 文件放大。如果你跑其中之一，看产物版本而不是记录日期：Bazarr 的修复是一个 beta tag，而 PIN state 校验是记录自己标出的、仍然存在的独立残留问题。
+
+[`🔗 GHSA-fvcv-hh55-x3r4 — Bazarr advisory`](https://github.com/morpheus65535/bazarr/security/advisories/GHSA-fvcv-hh55-x3r4) · [`🔗 GHSA-536w-42p8-3qv9 — TAKO advisory`](https://github.com/fctr-id/okta-ai-agent/security/advisories/GHSA-536w-42p8-3qv9) · [`🔗 CVE-2026-61826 (NVD)`](https://nvd.nist.gov/vuln/detail/CVE-2026-61826) · [`🔗 CVE-2026-63377 (NVD)`](https://nvd.nist.gov/vuln/detail/CVE-2026-63377)
+
+---
+
+## 40. HoneySQL 的 9.8 是一个早就存在的检查 — 修复是让它跑在跳过它的那些 formatter 上
+
+- **Velocity:** ▮▮ rising
+- **Source:** GitHub Advisory · CVE published 2026-10-30T23:17Z · maintainer-authored
+- **Tags:** `cve` `sql-injection` `clojure` `library` `api-design`
+
+**CVE-2026-61620** 是 **HoneySQL** 里的 SQL 注入 — 这个 Clojure 库把数据结构翻译成 SQL。触发条件窄且明确：应用把不可信输入通过 `keyword` 或 `symbol` 塞进 DSL — 也就是把字符串变成*实体名*的那两个调用 — 就可能生成在 JDBC 驱动里原样执行时会注入的 SQL。有部分 formatter 没有把库**已有的**可疑字符检查施加到这些实体名上。影响范围 `>= 2.0.0, < 2.7.1392`；**2.7.1392** 的修复就是把同一个检查应用到更多 formatter。公告由维护者 `seancorfield` 自己撰写，致谢报告者 `koyokr`，向量 `CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H` = **9.8**（CWE-89）。NVD 停在 `Received`，没有自己的度量。
+
+**Why it matters:** 有意思的是缓解方案而不是分数 — 调用方被告知 "validate input prior to calling `keyword` / `symbol` when constructing DSL structures"，后面还跟着维护者自己的括号："but this is tedious and error prone, if an input is missed"。这就是所有要求调用方不要在这里传用户数据的 API 契约的诚实描述：它是一条在边界上没有强制手段的规则，失败落在哪个忘了的调用方身上就是哪个。9.8 也编码了一个值得点名的假设 — `PR:N`/`AC:L` 描述的是一个把查询参数反射进标识符的普通 Web 应用，而这恰恰是库无法检测的情形。修复细节还是对"已修复"这类说法的警告：检查在此 CVE 之前就存在，所以"实体名已清洗"这个说法对某些代码路径为真、对另一些为假，只有一个 formatter 一个 formatter 地审计才能发现差别。
+
+[`🔗 GHSA-fcfq-xqgp-8v97 — HoneySQL advisory`](https://github.com/seancorfield/honeysql/security/advisories/GHSA-fcfq-xqgp-8v97) · [`🔗 CVE-2026-61620 (NVD)`](https://nvd.nist.gov/vuln/detail/CVE-2026-61620)
+
+---
+
+## 41. OpenMAIC 把一份文档变成一间 agent 教室 — 42k 星、MIT，以及一句"能连上端口的人就拥有整个库"的警告
+
+- **Velocity:** ▮▮ rising
+- **Source:** GitHub Trending · 115 stars today · 41,998 total
+- **Tags:** `agents` `education` `mit` `typescript` `multi-agent`
+
+**`THU-MAIC/OpenMAIC`**（"Open Multi-Agent Interactive Classroom"）把一个提示、一个主题或一份上传的文档变成一堂互动课：AI 老师和 AI 同学会讲话、在白板上画图、跑测验和模拟，并和学习者实时讨论。技术栈是 **Next.js 16 / React 19 / TypeScript** 的 pnpm workspace，包分为课程 DSL、渲染器、编辑器、PPTX 导入、生成与存储；生成是两阶段（先大纲、后场景内容），服务端的 director 循环通过 `call_agent` 把每一轮课堂交给 agent，对应 **21 种动作类型** — 语音、白板绘制、聚光、激光。仓库有 **41,998 星、6,503 fork、810 次提交**，根部是 **MIT** 许可，两个内嵌包（`mathml2omml` LGPL-3.0-or-later、`pptxgenjs` MIT）不在此列。
+
+**Why it matters:** 发布说明比演示更有用。**v1.3.0（2026-10-29）** 加了知识库和 Pro 工作台，它自己的升级指令是 "stop all old instances first"，以及 "no rollback below 1.3.0" — 这是一个 schema 决定，不是版本号习惯。自 **1.2.0** 起产品转向 server-first、不再 serverless：需要一个长期运行的 Node 进程加 **PostgreSQL**，而且 "Vercel and other serverless hosts are not supported"。安全说明要读两遍：Docker Compose 配置是默认监听回环的个人单用户安装，一旦对外暴露，"anyone who can reach the port owns, edits and can delete the whole library" — 而 `ACCESS_CODE` 未设置就意味着 "there is no second enforcement point"。一个 42k 星的 MIT 项目主动告诉你自己的部署不是多租户，是在帮读者；把它当单用户工具用，认证自己加在前面。
+
+[`🔗 THU-MAIC/OpenMAIC`](https://github.com/THU-MAIC/OpenMAIC) · [`🔗 GitHub Trending`](https://github.com/trending)
+
+---
+
+## 42. cfsolve 不用浏览器就能解 Cloudflare Turnstile — 而它自己写下的限制，正是真正有效的防御
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News · 236+ pts · ~2 days ago (~2026-10-28T17:29Z)
+- **Tags:** `security` `rust` `captcha` `scraping` `mit`
+
+**`chris124567/cfsolve`** 是一个 Rust 库加 CLI，用纯 HTTP 解 **Cloudflare Turnstile** 组件与挑战页 — 不用无头浏览器，而这正是重点：它重放一份录制好的**浏览器 profile**（内置的是 iPhone 上的 Safari）来满足 Cloudflare 的浏览器检查，然后返回组件的 Turnstile token，或挑战页的 `cf_clearance` cookie。库对外暴露 `Browser`、`solve_turnstile`、`clear`、`solve`；一个已加载的 `Browser` 可以在并发操作间共享，但每个操作有独立的连接与 cookie。**335 星、36 fork、6 次提交**，**MIT**，但 `vendor/` 下打过补丁的依赖保留各自的许可。
+
+**Why it matters:** 有意思的是那条运维脚注，因为它是这类求解器唯一绕不过去的反爬控制："Send the `cf_clearance` cookie from the same IP address and user agent as the profile, or Cloudflare will reject it." 把 clearance 绑定到网络身份加指纹，才让重放 profile 变得昂贵 — 一份 profile 对应一个地址 — 这比该库正在绕过的任何视觉挑战都更有效。第二点关于维护：profile 才是稀缺资源（README 说制作 profile 需要人工或 AI 辅助），而当 Cloudflare 换了挑战版本，失败会以 `Error::Unsupported` 显现。所以这不是"Turnstile 被攻破了"，而是 Turnstile 可以按 profile、按 IP 被绕过，直到下一个版本 — 这正是十年来每一场爬虫与 WAF 之争的经济学。
+
+[`🔗 chris124567/cfsolve`](https://github.com/chris124567/cfsolve) · [`🔗 Hacker News discussion`](https://news.ycombinator.com/item?id=50277379)
+
+---
+
+## 43. OpenFrontiers 用"重新发现"给 agent 打分 — 200 道题、90 道仍开放，闭卷下 40 道里最多解出 7 道
+
+- **Velocity:** ▮▮ rising
+- **Source:** arXiv · 2610.37739 · submitted 2026-10-27
+- **Tags:** `benchmark` `math` `agents` `lean` `research`
+
+"**OpenFrontiers: A Collection of Open Research Problems and a Benchmark for Scientific Rediscovery**"（arXiv **2610.37739**；Jiarui Yao、Ruida Wang、Tong Zhang）把一个 **12,151** 道开放研究问题的语料库（题目、背景、进展记录）与一个回顾式基准配对：**200** 道题，其中 **110** 道在 2026 年被解决、**90** 道仍开放。每道基准题都带一个 **Lean 4** 形式化陈述，通过自动检查加两位独立评审，并从中按质量分选出 **HQ-50** 子集。**七个 LLM agent** 在统一预算下于 HQ-50 上评测，分三种条件 — 闭卷、冻结检索、实时联网 — 证明由隔离沙箱里的两个独立检查器评分。
+
+**Why it matters:** 这个基准想暴露的正是*解出*与*检索到*之间的缺口。闭卷重新发现很少见 — 40 道已解题里最多解出 **7** 道 — 而作者说实时联网条件下的成功 "mostly reflects retrieval of published solutions"，而不是独立重新发现。对整个宣称"AI 发现新数学"的题材来说，这是正确的对照：一个能搜到论文的系统并没有展示标题所声称的能力，把三种条件分开才让差别可测。构造本身也是最强的部分 — 一个 2026 年解决的集合、配上形式化陈述与两位评审的签核，把含糊的"前沿"主张变成评分器能核对的题目 — 不过 200 道题的体量小到每个条件下几道题的摆动就会明显改变百分比。
+
+[`🔗 arXiv 2610.37739`](https://arxiv.org/abs/2610.37739) · [`🔗 arXiv cs.AI new`](https://arxiv.org/list/cs.AI/new)
+
+---
+
+## 44. PoPLi 靠改写消息抓编码串谋 — 而只看消息的监控器两个方向都失灵
+
+- **Velocity:** ▮▮ rising
+- **Source:** arXiv · 2610.37849 · work in progress
+- **Tags:** `multi-agent` `collusion` `safety` `monitoring` `research`
+
+"**Detecting Covert Collusion between AI Agents through Partner-Outsider Positive Listening**"（arXiv **2610.37849**，Kevin Yandoka Denamganaï）从消息监控漏掉的那种情形出发：两个 agent 通过藏在看似无害文字里的私有约定协同。它提出的检验是行为而非语义的：把一条消息改写成同义但措辞不同，知道暗号的**伙伴**应当对确切措辞有反应，而被放进伙伴角色的**局外人**则不应当。**PoPLi** 就是这两个动作变化之差，通过重放已记录 prompt 事后计算。
+
+在一个模拟市场里设置五种条件 — 无串谋、共同奖励加中性消息、共同奖励加公开声明的意图、隐写首字母暗号、以及暗号加公开意图 — 只要暗号在场，PoPLi 读出 **0.48–0.59**，95% 区间全部高于 **0.29**；没有暗号时是 **−0.10 到 −0.01**。监控器的结果才是笑点：只读说话者消息的监控器在**全部 50 个**市场都答"没有"；读所有卖家消息的监控器在 **10 个无串谋市场**里误报了 **9 个**。
+
+**Why it matters:** 不对称本身就是发现 — 一个监控器没有信号，另一个假阳性率接近一比一，而且两者都不能靠"读得更仔细"修好。PoPLi 也明说自己的边界：它检测的是私有通道的使用，而不是串谋本身；仅靠激励形成的串谋、以及由**语义**而非措辞承载的暗号，它看不到。这让它成为某一*类*隐蔽协议的检测器，可以在事后跑在你已有的日志上，这比任何在线过滤器都更适合审计已部署的 agent 群。论文标注为 work in progress，场景只有一个模拟市场，局外人是被换角的模型而非人 — 所以 0.48–0.59 是受控设置下的分离度，不是现场比率。
+
+[`🔗 arXiv 2610.37849`](https://arxiv.org/abs/2610.37849) · [`🔗 arXiv cs.AI new`](https://arxiv.org/list/cs.AI/new)
+
+---
+
+## 45. 把探索变成 Lean 证明的 agent — 重放 183 条 ARC-AGI-3 轨迹，而六条界里第一轮错了四条
+
+- **Velocity:** ▮▮ rising
+- **Source:** arXiv · 2610.40503 · Guancheng Pan, Qixin Tan, Yang Yuan, Andrew Chi-Chih Yao
+- **Tags:** `agents` `lean` `arc-agi` `world-model` `research`
+
+"**Algebraic World Model: From Exploration to Proofs**"（arXiv **2610.40503**；Guancheng Pan、Qixin Tan、Yang Yuan、Andrew Chi-Chih Yao）把对陌生环境的探索变成可检验的显式数学模型。循环会生成关于环境规则的可执行 **Python** 假设、用观测检验、把它们组织成带共享规则的带类型对象、用范畴论引导的变换化简，最后编码进 **Lean 4** — 这让它不只能证明可达性，还能证明**不可能性**：某目标在已探索轨迹之外无法到达。
+
+主要结果在 ARC-AGI-3 上。在两个**不可能**关卡上，AWM 产出了闭合的、经过内核检查的 Lean 证明，在**全部六次运行**中排除了所有合法取胜序列；而 **Claude Opus 5.5** 和 **GPT-6 Astra** 在**十二次基线运行**中都没能产出这类证明。它第一轮的界比标题暗示的更容易错 — 六条里**四条**正确，Opus 5.5 一条、GPT-6 Astra 零条 — 要拿到六条全对，只需要被告知"存在更便宜的取胜方式"。在全部 **25** 个公开 ARC-AGI-3 游戏上，它的模型让 Lean 重放了全部 **183** 条通关关卡轨迹、预测未见过的状态转移并检测游戏机制的变化；配合 Claude Opus 5，它通关每一关、得分 **99.9**，只用掉人类基线动作数的 **43%**。
+
+**Why it matters:** 区别在于证明与预测，这也是要读这篇而不是又一篇世界模型结果的原因。一个"通常猜对"的学习模拟器无法支撑"目标不可达"这一主张；一个把规则编码进 Lean 并经检查的模型可以做出这个主张，且只有当规则本身错了才会错 — 这恰好就是第一轮六错四所显示的，也是为什么纠错步骤是方法的一部分而不是尴尬。摘要没有确立的是：99.9 里有多少来自搜索、多少来自模型。作者单位（Yang Yuan 与姚期智的组）也是个信号 — 要把 AWM 当通用配方，先等独立复现。
+
+[`🔗 arXiv 2610.40503`](https://arxiv.org/abs/2610.40503) · [`🔗 arXiv cs.AI new`](https://arxiv.org/list/cs.AI/new)
+
+---
+
+## 46. LRMoE 在反向传播前先规划专家配额 — MoE 训练时间少 21.2–44.8%，对标的是一个基线
+
+- **Velocity:** ▮ steady
+- **Source:** arXiv · 2610.37720 · submitted 2026-10-27
+- **Tags:** `moe` `training` `memory` `systems` `research`
+
+"**LRMoE: Demand-Side Load Re-Calibration for Efficient MoE Training on Memory-Constrained Nodes**"（arXiv **2610.37720**；Jiaming Hu、Zhida Jiang、Zhaolong Xing、Yu Li、Zhen Chen、Ke Zhang）针对稀疏 MoE 训练里的不对称：路由并不均匀，热门专家需要缓存激活而冷门专家闲置，反向传播却要为两者的缓冲一并付费。LRMoE 在前向时规划专家保留配额与放置，然后在反传时用一个**贡献度指标**在配额内挑选哪些 token–专家对存活 — 保住全部被路由的前向计算，同时通过容量感知路由与物理压缩削减反向流量、计算与缓冲需求。
+
+实测结果：在 **Qwen3-30B-A3B** 和 **GLM4.5-106B-A12B** 上，到达固定损失目标的 MoE 层累计训练时间比 **SYMI** 下降 **21.2–44.8%**。
+
+**Why it matters:** 训练期显存压力通常用 offload 回答，那是拿带宽换容量；这里是另一个杠杆 — 在需要缓冲之前，先决定回程上哪些被路由的对你愿意重算或丢弃。诚实的提醒在摘要没说的部分：没有 GPU 型号、数量、显存大小、互联或集群描述，所以"显存受限节点"是前提而不是被指定的设置，而点名的对照只有一个基线。21.2–44.8% 这么宽的区间也意味着收益高度依赖具体模型的路由分布，这是在假设你的 MoE 也一样之前第一件要查的事。
+
+[`🔗 arXiv 2610.37720`](https://arxiv.org/abs/2610.37720) · [`🔗 arXiv cs.AI new`](https://arxiv.org/list/cs.AI/new)
+
+---
+
+## 47. 一个 4B 的 Three.js 专才连数据集、报告和借来的视觉投影器一起发布 — 4,146 个场景，标注"early preview"
+
+- **Velocity:** ▮ steady
+- **Source:** Hugging Face · 29,615 downloads · 363 likes · card updated 2026-10-30
+- **Tags:** `open-weights` `threejs` `3d` `gguf` `apache`
+
+**`ccore/Qwen3.5-4B-3D-Coder`** 是 Qwen3.5-4B 的独立 **Apache-2.0** 微调，面向通用编码、专攻 3D：把自包含的 **Three.js** 场景生成为单个 HTML 文件。模型卡明说它是 "an early preview of a 4B model I am still training"，并且 "**not** an official Qwen release." 除了权重，它现在还发布**训练数据集** — 4,146 个场景样例（**3,933 训练 / 213 验证**），含提示词、完整思考轨迹和完整的 HTML/JavaScript 响应，**MIT** 许可 — 一份技术报告 PDF、四份 FP16 safetensors，以及 Q4_K_M/Q8_0 的 GGUF 构建。
+
+最有用的工程细节是 **2026-10-30** 加入的视觉路径：两个 GGUF 量化版本在配上原始 Qwen3.5-4B 视觉投影器后可以接受图像输入，卡片点名了确切的配套文件（**约 644 MiB**，BF16）及其来源 — 来自 `lmstudio-community/Qwen3.5-4B-GGUF` 的未修改投影器。部署指令同样具体：`llama-server -m … --mmproj … --n-gpu-layers all --flash-attn on --ctx-size 65536`，在 **llama.cpp b11889** 上测试过，并注明在 LM Studio 里必须**关闭多 token 预测**，否则模型表现异常。
+
+**Why it matters:** 窄域微调便宜且难评估，而这个发布给出了让评估成为可能的三种产物 — 数据、四种精度的权重、一份报告 — 这比多数 4B 社区发布做得都多。卡片明说两条、隐含一条：视觉能力继承的是**它自己没训练的投影器**，所以图像质量归 Qwen 不归这个微调；卡片关于一次成功率的主张只有定性的场景截图支撑，没有打分的基准；而样例多为体素风室内场景，这恰好是数据集参考渲染会强化的风格。把它当成强的本地演示生成器，而不是"4B 能在大模型面前做 3D"的证据。
+
+[`🔗 ccore/Qwen3.5-4B-3D-Coder`](https://huggingface.co/ccore/Qwen3.5-4B-3D-Coder) · [`🔗 ccore/ThreeJS-3D-Scenes dataset`](https://huggingface.co/datasets/ccore/ThreeJS-3D-Scenes) · [`🔗 Hugging Face trending`](https://huggingface.co/models?sort=trending)
+
+---
+
+## 48. 一个 31.5k 星的 macOS 菜单栏工具箱是 GPL-3.0 外加商标保留 — 并声明它的麦克风静音不是隐私保证
+
+- **Velocity:** ▮ steady
+- **Source:** GitHub Trending · 499 stars today · 31,525 total
+- **Tags:** `macos` `swift` `gpl` `open-source` `utilities`
+
+**`vorssaint/vorssaint-utils`** 是一个免费开源的 **macOS 菜单栏工具箱**，用 **Swift**（AppKit 与 SwiftUI）写成，把一长串小工具塞进一个应用：按应用音量混音、系统监控、应用/窗口切换、窗口吸附、Dock 预览、剪贴板历史、文本片段、文件暂存架、卸载器、截屏、媒体工具、Homebrew 管理器、防休眠、显示器控制。它有 **31,525 星、1,518 fork、42 watcher**，许可 **GPL-3.0-or-later**，并允许通过禁用未用模块来 "Install only what you use"。
+
+**Why it matters:** README 里的三条披露才是要越过功能列表去读的原因。许可覆盖代码，但**名称、logo 与视觉识别另由商标条款覆盖** — 所以 fork 合法，用同一个名字发布则不合法。平台下限是硬的：**仅 Apple Silicon，macOS 14 Sonoma 或更新**，所有 Intel Mac 被排除。还有两条诚实的：**风扇控制标为 beta**，而卡片说麦克风静音不是隐私保证 — 菜单栏开关是 UI 状态，不是音频路径的保证，把这句话写出来就是工具与安全承诺的分界线。应用是本地优先、无账号、无分析、无追踪，官方构建经过签名与公证 — 对一个想要辅助功能与录屏权限的 31k 星工具来说，这才是最重要的部分。
+
+[`🔗 vorssaint/vorssaint-utils`](https://github.com/vorssaint/vorssaint-utils) · [`🔗 GitHub Trending`](https://github.com/trending)
+
+---
+
+## 49. GCC 有五种方式降级 `switch`，并按代价挑选 — 每个 case 8 个槽位、3 个起用位集、以及标点用位测试
+
+- **Velocity:** ▮ steady
+- **Source:** xoranth.net · 87+ pts · ~4h ago (~2026-10-31T08:02Z)
+- **Tags:** `gcc` `compilers` `optimization` `c`
+
+一篇深入 `pass_lower_switch` 的文章走了一遍 **GCC** 如何把 `switch` 变成机器码，答案是"不是跳转表"这么简单。稠密 case 变成跳转表并减去基址；GCC 会把稠密与稀疏区间拆开，让离群值单独走分支；连续的标签区间塌缩成范围检查；而非常稀疏的字符 case 会变成一次减法、一次越界检查和一次针对常量的**位测试**。阈值是代价比较而不是标签数量：文中一个覆盖 0–87 的 20 标签 switch 本可以塞进 88 项的表，却只需要 10 次比较，于是 GCC 输出比较树 — 启发式权衡的是表大小与比较代价。
+
+更有趣的一半是动态规划。**位集降级**在"每个区间能放进 64 位以内的寄存器、最多覆盖三条目标边"的约束下最小化位集数量，并在**一个目标 3 个 case、两个目标 5 个、三个目标 6 个**时被认为划算。**跳转表选择**同样用 DP，偏好更少的表与更多被处理的 case，优化速度时最大增长比为 **8**、优化体积时为 **2**，在 `casesi` 可用时最少 **4** 个 case（否则 **5**）。两边都不划算时，GCC 输出**按概率平衡的二叉比较树**，用 profile 数据或 `__builtin_expect_with_probability`。
+
+**Why it matters:** "switch 比 if-else 慢"及其反面都是民间说法，而这篇用实际的决策过程取代了它们 — 一个在五种策略上、按目标调参的代价模型。对给 C 做性能分析的人，实际结论是：case 值的形状（稠密、连续、目标数量）决定了降级方式，所以把 switch 改得更稠密，即使语义完全相同也会改变生成的代码。作者还给了一条可移植性提示：除位集降级外，这些也都适用于 **Clang** — 所以一个假设某种编译器策略会推广的基准，测的是启发式，不是语言。
+
+[`🔗 xoranth.net — Switch Lowering in GCC`](https://xoranth.net/gcc-switch/) · [`🔗 Hacker News discussion`](https://news.ycombinator.com/item?id=50314085)
+
+---
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-10-31T04:19:32Z |
-| Items | 36 |
-| Sources tracked | 23 (Hacker News, GitHub, arXiv, Hugging Face, CISA KEV, NVD, cveawg, CISA-ADP, Google Research, OpenAI, Anthropic, Volexity, Ubuntu Discourse, Patchstack, Firezone, Akamai/Linode, Go Security, bunny.net, Northflank, GitHub Status, SigNoz, Tangled, TNW) |
+| Generated | 2026-10-31T12:32:34Z |
+| Items | 49 |
+| Sources tracked | 26 (Hacker News, GitHub, GitHub Advisory Database, arXiv, Hugging Face, CISA KEV, NVD, cveawg, CISA-ADP, Google Research, OpenAI, Anthropic, Parameter Labs, Volexity, Ubuntu Discourse, Patchstack, Firezone, Akamai/Linode, Go Security, bunny.net, Northflank, GitHub Status, SigNoz, Tangled, xoranth.net, TNW) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (3x daily) |
 | Ranking | Velocity-weighted (recency × engagement acceleration × source authority) |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |

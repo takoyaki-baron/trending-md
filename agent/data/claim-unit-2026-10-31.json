@@ -1,9 +1,9 @@
 {
- "generated": "2026-10-31T04:19:50.328Z",
+ "generated": "2026-10-31T12:32:56.467Z",
  "files": [
   {
    "file": "2026-10-31.md",
-   "items": 36,
+   "items": 49,
    "findings": [
     {
      "check": "status",
@@ -111,11 +111,25 @@
      "detail": "stated in NVD weaknesses[] (security@progress.com)"
     },
     {
+     "check": "status",
+     "item": 38,
+     "verdict": "ok",
+     "claim": "CVE-2026-61738 `Deferred`",
+     "detail": "Deferred (lastModified 2026-10-30T17:13:54.187)"
+    },
+    {
+     "check": "status",
+     "item": 40,
+     "verdict": "ok",
+     "claim": "CVE-2026-61620 `Received`",
+     "detail": "Received (lastModified 2026-10-30T23:17:11.647)"
+    },
+    {
      "check": "repo",
      "item": 5,
      "verdict": "ok",
      "claim": "mattpocock/skills",
-     "detail": "307589★, last push 2026-10-30"
+     "detail": "307868★, last push 2026-10-30"
     },
     {
      "check": "repo",
@@ -129,7 +143,7 @@
      "item": 12,
      "verdict": "ok",
      "claim": "milind-soni/OpenMausBot",
-     "detail": "8807★, last push 2026-10-30"
+     "detail": "9205★, last push 2026-10-31"
     },
     {
      "check": "repo",
@@ -143,14 +157,14 @@
      "item": 19,
      "verdict": "ok",
      "claim": "Leonxlnx/taste-skill",
-     "detail": "106425★, last push 2026-10-31"
+     "detail": "106651★, last push 2026-10-31"
     },
     {
      "check": "repo",
      "item": 20,
      "verdict": "ok",
      "claim": "emmilco/us-tax-model",
-     "detail": "129★, last push 2026-10-30"
+     "detail": "131★, last push 2026-10-31"
     },
     {
      "check": "count",
@@ -396,6 +410,90 @@
      "verdict": "ok",
      "claim": "7 quotation(s)",
      "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 37,
+     "verdict": "ok",
+     "claim": "5 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 38,
+     "verdict": "ok",
+     "claim": "2 quotation(s)",
+     "detail": "verbatim in 5 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 39,
+     "verdict": "ok",
+     "claim": "5 quotation(s)",
+     "detail": "verbatim in 10 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 40,
+     "verdict": "ok",
+     "claim": "2 quotation(s)",
+     "detail": "verbatim in 5 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 41,
+     "verdict": "ok",
+     "claim": "5 quotation(s)",
+     "detail": "verbatim in 1 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 42,
+     "verdict": "ok",
+     "claim": "1 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 43,
+     "verdict": "ok",
+     "claim": "2 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 44,
+     "verdict": "ok",
+     "claim": "1 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 45,
+     "verdict": "ok",
+     "claim": "1 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 46,
+     "verdict": "ok",
+     "claim": "1 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 47,
+     "verdict": "ok",
+     "claim": "2 quotation(s)",
+     "detail": "verbatim in 5 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 48,
+     "verdict": "ok",
+     "claim": "1 quotation(s)",
+     "detail": "verbatim in 1 readable source(s)"
     }
    ]
   }

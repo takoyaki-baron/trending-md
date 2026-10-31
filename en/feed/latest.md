@@ -1,6 +1,6 @@
 ---
 date: 2026-10-31
-updated: 2026-10-31T04:19:32Z
+updated: 2026-10-31T12:32:34Z
 schedule: 04:03, 12:03, 20:03 UTC+8
 sources: 17
 license: CC-BY-4.0
@@ -564,13 +564,211 @@ Scribd's own help-centre article is dated **October 01, 2026** and says the same
 
 ---
 
+## 37. A shared ChatGPT conversation was enough to run code inside your session — a MathLive listener, an unsandboxed `srcdoc`, and YouTube as the CSP bypass
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Parameter Labs · published 2026-10-28 · HN 11+ pts (~2026-10-31T10:30Z)
+- **Tags:** `security` `chatgpt` `xss` `csp` `disclosure`
+
+**Parameter's Mukul Goyal** published a full chain against `chatgpt.com`: a victim who opened an attacker's **public shared conversation** had code run inside their authenticated ChatGPT origin, letting the researchers enumerate conversations and read a private chat that had never been shared. The delivery needs no app install, no project membership and no pasted code — in the automated variant the researchers say "Opening the shared link was the only required action", and in the most stable reproduction the victim still clicked ChatGPT's normal Preview button once.
+
+The chain is five steps, each individually defensible. A shared conversation containing an interactive graph loads **MathLive**, whose controller installs a message listener with an origin policy of `none`; a second block, **HTML Preview**, sends a `mathlive#virtual-keyboard-message` carrying raw HTML as keyboard-layout data, and MathLive "accepted a state-changing message without proving which frame sent it." That HTML reached `innerHTML` — the researchers are explicit that `createHTML` "acted as an identity or Trusted Types wrapper, not a sanitizer" — and built an **unsandboxed `srcdoc` iframe** that inherited `chatgpt.com`. CSP blocked inline script but allowed YouTube, so a crafted **YouTube oEmbed JSONP** response supplied the JavaScript, which read the session token and account ID from `#client-bootstrap`, called the authenticated `/backend-api/conversations` endpoints and exfiltrated data via an image request.
+
+**Why it matters:** the failures here are compositional, and the report's most useful line is the one that clears a component: "The Preview sandbox itself worked." Code inside Preview could not read the parent page; what broke was that *another* component on the main page was willing to take instructions from it. That is the recurring shape for agent-era web apps — every embedded viewer is a new message channel into the privileged frame — and the remediation reflects it: OpenAI rated it **P1**, fixed both web frontends on **2026-10-26**, and paid **$5,000**, with no CVE and therefore nothing for a scanner to match. Two caveats to carry: the YouTube workaround was "the final workaround for CSP, not the root cause", so blocking that endpoint alone would not close the HTML-injection path; and the exfiltration proof sent only a small piece of the response off-site even though the injected code could read the whole thing.
+
+[`🔗 Parameter Labs — we took over ChatGPT accounts`](https://www.parameter.ai/labs/we-found-a-gap-at-openai) · [`🔗 Hacker News discussion`](https://news.ycombinator.com/item?id=50314699)
+
+---
+
+## 38. SOCFortress CoPilot's 10.0 says no privileges required — and its own route is gated on an admin or analyst token
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** GitHub Advisory · CVE published 2026-10-30T14:36Z · advisory dated 2026-06-24
+- **Tags:** `cve` `path-traversal` `cvss` `github-advisory`
+
+**CVE-2026-61738** is a path traversal in socfortress **CoPilot**: `POST /api/scoutsuite/generate-gcp-report` validates the uploaded body as `GCPScoutSuiteJSON` but passes `file.filename` straight into `os.path.join`, so a traversal filename writes the JSON outside the report directory — and because the backend runs as root, the researcher demonstrated root-owned writes into `/tmp` and the application source directory. Fixed in **0.1.77**; CWE-22, CWE-73 and CWE-434; the advisory's one-line summary of the bug is that the content is validated and the filename is not.
+
+**The score and the prose disagree in three separate places.** The GitHub-scored vector is `CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:C/C:H/I:H/A:H` = **10.0** — no privileges — while the advisory says the route requires a bearer token for the `admin` or `analyst` scope and calls it "Reachable by a non-administrative role." The affected and patched cells both read `latest`, so the advisory names no version boundary at all. And the CVE record's own description retreats from the headline: it says the demonstrated primitive "does not establish unrestricted executable contents or unconditional cross-tenant confidentiality loss", noting that the RCE is an inferred escalation from a root file write. NVD holds the record at **`Deferred`** with **zero** metrics of its own.
+
+**Why it matters:** a 10.0 is the one number most likely to be quoted without its vector, and here the vector assumes `PR:N` on a route that authenticates. `S:C` plus `C/I/A:H` then does the rest of the arithmetic — so the honest statement is 10.0 as scored, on a route that needs a low-privilege token, for a demonstrated root file write. The record's willingness to say the code-execution claim is *not* established is the part worth copying: a security product's own advisory grading its PoC's limits is rarer than the 10.0, and it means the practical severity depends on whether your deployment runs the backend as root with an analyst-visible credential — which, in a SOC tool, is the normal case.
+
+[`🔗 GHSA-q3g8-3cf7-744f — CoPilot advisory`](https://github.com/socfortress/CoPilot/security/advisories/GHSA-q3g8-3cf7-744f) · [`🔗 CVE-2026-61738 (NVD)`](https://nvd.nist.gov/vuln/detail/CVE-2026-61738)
+
+---
+
+## 39. Two June advisories got their CVE records in the same October afternoon — 111 days after reservation, four months after the fix
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** cveawg / GitHub Advisory · both `PUBLISHED` 2026-10-30, assigner `GitHub_M`
+- **Tags:** `cve` `github-advisory` `disclosure-lag` `ssrf` `ai-agent`
+
+Two GitHub-issued records landed on **2026-10-30** for advisories that had been public since June. **CVE-2026-61826** (Bazarr) — the Plex OAuth namespace in `bazarr/api/plex/oauth.py` "ships with no authentication": its `Resource` handlers omit `@authenticate`, "There is no global auth `before_request` hook", so anonymous callers can `POST /api/plex/apikey` to persist an attacker-chosen key, clear the integration with `POST /api/plex/oauth/logout`, and bind an attacker's Plex account through the PIN flow. The state check is non-enforcing, and once an attacker-chosen `server_url` is stored, later requests carry the configured API key in `X-Plex-Token` — **SSRF plus credential exposure**, scored `S:C`/`PR:N` = **10.0**. **CVE-2026-63377** (TAKO AI Agent for Okta) is the first-run race: `POST /api/auth/setup` "creates the first administrator account without requiring any prior authentication", guarded only by an `is_setup` flag, with "No bootstrap secret, no IP restriction", a `docker-compose.yml` that "Publishes `8001:8001` on all interfaces by default" and a Dockerfile that starts uvicorn on `0.0.0.0` — **9.8**.
+
+**The clocks are the story.** The Bazarr advisory is dated **2026-06-24**, the ID was reserved **2026-07-10**, and the record was published **2026-10-30T17:12Z**; TAKO's advisory is **2026-06-30**, reserved **2026-07-16**, published **2026-10-30T22:18Z** — 111 and 106 days from reservation to publication, 128 and 122 days after the advisories went public. Both fixes shipped long before the paperwork: Bazarr **1.5.7-beta.14**, TAKO **3.0.1-beta**. NVD holds Bazarr at `Deferred` and TAKO at `Received`, neither with an `nvd@nist.gov` metric.
+
+**Why it matters:** nothing here was unknown — the advisories, the patches and the PoCs have been public since June — but a scanner keyed on CVE ids could not see either until this week, and a feed sorting by `published` would call both "new". The shapes are also worth separating from the lag: Bazarr is one missing decorator on one namespace, where the framework's own default (authenticate every handler) was the only thing preventing the bug; TAKO is the "first administrator wins" race that every self-hosted agent with a setup page inherits, made worse by a compose file that binds all interfaces. If you run either, check the artefact version, not the record date: Bazarr's fix is a beta tag, and the PIN-state check is a separate, still-open residual the record itself flags.
+
+[`🔗 GHSA-fvcv-hh55-x3r4 — Bazarr advisory`](https://github.com/morpheus65535/bazarr/security/advisories/GHSA-fvcv-hh55-x3r4) · [`🔗 GHSA-536w-42p8-3qv9 — TAKO advisory`](https://github.com/fctr-id/okta-ai-agent/security/advisories/GHSA-536w-42p8-3qv9) · [`🔗 CVE-2026-61826 (NVD)`](https://nvd.nist.gov/vuln/detail/CVE-2026-61826) · [`🔗 CVE-2026-63377 (NVD)`](https://nvd.nist.gov/vuln/detail/CVE-2026-63377)
+
+---
+
+## 40. HoneySQL's 9.8 is a check that already existed — the fix is to run it on the formatters that skipped it
+
+- **Velocity:** ▮▮ rising
+- **Source:** GitHub Advisory · CVE published 2026-10-30T23:17Z · maintainer-authored
+- **Tags:** `cve` `sql-injection` `clojure` `library` `api-design`
+
+**CVE-2026-61620** is SQL injection in **HoneySQL**, the Clojure library that turns data structures into SQL. The trigger is narrow and explicit: applications that take untrusted input and put it into the DSL through `keyword` or `symbol` — the calls that turn a string into an *entity name* — can produce SQL that, executed unchanged by a JDBC driver, injects. Some formatters did not apply the library's **existing** suspicious-character check to those entity names. Affected range `>= 2.0.0, < 2.7.1392`; the fix in **2.7.1392** is to apply that same check to more formatters. The advisory is authored by the maintainer, `seancorfield`, credits reporter `koyokr`, and carries `CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H` = **9.8** (CWE-89). NVD holds it at `Received` with no metric of its own.
+
+**Why it matters:** the interesting sentence is the workaround, not the score — callers are told to "validate input prior to calling `keyword` / `symbol` when constructing DSL structures", with the maintainer's own parenthesis attached: "but this is tedious and error prone, if an input is missed". That is the honest description of every API contract that tells callers not to pass user data here: it is a rule with no enforcement at the boundary, and the failure lands on whichever caller forgot. The 9.8 also encodes an assumption worth naming — `PR:N`/`AC:L` describes a standard web app that reflects a query parameter into an identifier, which is exactly the case the library cannot detect. The remediation detail is a warning about closure claims: the check existed before this CVE, so a claim that entity names are sanitized was true of some code paths and false of others, and only a per-formatter audit would have found the difference.
+
+[`🔗 GHSA-fcfq-xqgp-8v97 — HoneySQL advisory`](https://github.com/seancorfield/honeysql/security/advisories/GHSA-fcfq-xqgp-8v97) · [`🔗 CVE-2026-61620 (NVD)`](https://nvd.nist.gov/vuln/detail/CVE-2026-61620)
+
+---
+
+## 41. OpenMAIC turns a document into a classroom of agents — 42k stars, MIT, and a warning that anyone who reaches the port owns the library
+
+- **Velocity:** ▮▮ rising
+- **Source:** GitHub Trending · 115 stars today · 41,998 total
+- **Tags:** `agents` `education` `mit` `typescript` `multi-agent`
+
+**`THU-MAIC/OpenMAIC`** ("Open Multi-Agent Interactive Classroom") takes a prompt, topic or uploaded document and builds an interactive lesson: AI teachers and AI classmates that speak, draw on a whiteboard, run quizzes and simulations, and discuss with the learner in real time. The stack is **Next.js 16 / React 19 / TypeScript** in a pnpm workspace with packages for the course DSL, renderer, editor, PPTX importer, generation and storage; generation is two-stage (outline, then scene content), and a server-side director loop hands each classroom turn to an agent through `call_agent` against **21 action types** — speech, whiteboard drawing, spotlight, laser. It carries **41,998 stars, 6,503 forks, 810 commits** and the root **MIT** licence, with two bundled packages (`mathml2omml` LGPL-3.0-or-later, `pptxgenjs` MIT) excluded from it.
+
+**Why it matters:** the release notes are more useful than the demo. **v1.3.0 (2026-10-29)** adds a knowledge base and a Pro workbench, and its own upgrade instruction is "stop all old instances first" with "no rollback below 1.3.0" — a schema decision, not a version bump. Since **1.2.0** the product is server-first and no longer serverless: it needs a long-running Node process plus **PostgreSQL**, and "Vercel and other serverless hosts are not supported". The security note is the one to read twice: the Docker Compose setup is a personal single-user install that listens on loopback by default, and if you expose it, "anyone who can reach the port owns, edits and can delete the whole library" — with `ACCESS_CODE` unset meaning "there is no second enforcement point". A 42k-star MIT project that tells you its own deployment is not multi-tenant is doing the reader a favour; treat it as a single-user tool and put the auth in front of it yourself.
+
+[`🔗 THU-MAIC/OpenMAIC`](https://github.com/THU-MAIC/OpenMAIC) · [`🔗 GitHub Trending`](https://github.com/trending)
+
+---
+
+## 42. cfsolve solves Cloudflare Turnstile without a browser — and the limitation it documents is the defense that actually works
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News · 236+ pts · ~2 days ago (~2026-10-28T17:29Z)
+- **Tags:** `security` `rust` `captcha` `scraping` `mit`
+
+**`chris124567/cfsolve`** is a Rust library and CLI that solves **Cloudflare Turnstile** widgets and challenge pages over plain HTTP — no headless browser, which is the whole point: it replays a recorded **browser profile** (the bundled one is Safari on iPhone) to satisfy Cloudflare's browser checks, then returns either a Turnstile token for a widget or a `cf_clearance` cookie for a challenge page. The library exposes `Browser`, `solve_turnstile`, `clear` and `solve`; one loaded `Browser` can be shared across concurrent operations, with separate connections and cookies per operation. **335 stars, 36 forks, 6 commits**, **MIT** except the patched dependencies under `vendor/`, which keep their own licences.
+
+**Why it matters:** the interesting content is the operational footnote, because it is the anti-bot control that survives this class of solver: "Send the `cf_clearance` cookie from the same IP address and user agent as the profile, or Cloudflare will reject it." Binding clearance to a network identity plus a fingerprint is what makes a replayed profile expensive — one profile, one address — and it is a better defense than any visual challenge the library is bypassing. The second note is about maintenance: profiles are the scarce resource (the README says producing them is manual or AI-assisted work), and failures surface as `Error::Unsupported` when Cloudflare ships a new challenge build. So this is not a claim that Turnstile is broken; it is that Turnstile is defeatable per profile, per IP, until the next build, which is the same economics every scraper-versus-WAF story has had for a decade.
+
+[`🔗 chris124567/cfsolve`](https://github.com/chris124567/cfsolve) · [`🔗 Hacker News discussion`](https://news.ycombinator.com/item?id=50277379)
+
+---
+
+## 43. OpenFrontiers scores agents on rediscovery — 200 problems, 90 still open, and at most 7 of 40 solved closed-book
+
+- **Velocity:** ▮▮ rising
+- **Source:** arXiv · 2610.37739 · submitted 2026-10-27
+- **Tags:** `benchmark` `math` `agents` `lean` `research`
+
+"**OpenFrontiers: A Collection of Open Research Problems and a Benchmark for Scientific Rediscovery**" (arXiv **2610.37739**; Jiarui Yao, Ruida Wang, Tong Zhang) pairs a **12,151**-problem corpus of open research questions — statements, context and progress notes — with a retrospective benchmark of **200** problems: **110 resolved in 2026** and **90 still open**. Every benchmark item carries a **Lean 4** formal statement that passed automated checks plus two independent reviews, and a **HQ-50** subset is selected by quality score. **Seven LLM agents** were evaluated on HQ-50 under a standardised budget in three conditions — closed-book, frozen retrieval, and live web — with proofs graded by two independent checkers in an isolated sandbox.
+
+**Why it matters:** the result the benchmark was built to expose is the gap between *solving* and *retrieving*. Closed-book rediscovery was rare — at most **7 of 40** resolved problems — and the authors say success in the live-web condition "mostly reflects retrieval of published solutions" rather than independent rediscovery. That is the right control for the entire genre of AI that claims to discover new mathematics: a system that can find the paper is not demonstrating the capability the headline claims, and separating the three conditions is what makes the difference measurable. The construction is also the strongest part — a resolved-in-2026 set with formal statements and two-reviewer sign-off turns a vague "frontier" claim into items a grader can check — though the 200-item benchmark is small enough that per-condition swings of a few problems move the percentage a lot.
+
+[`🔗 arXiv 2610.37739`](https://arxiv.org/abs/2610.37739) · [`🔗 arXiv cs.AI new`](https://arxiv.org/list/cs.AI/new)
+
+---
+
+## 44. PoPLi catches coded collusion by rewording the message — and the message-only monitors failed in both directions
+
+- **Velocity:** ▮▮ rising
+- **Source:** arXiv · 2610.37849 · work in progress
+- **Tags:** `multi-agent` `collusion` `safety` `monitoring` `research`
+
+"**Detecting Covert Collusion between AI Agents through Partner-Outsider Positive Listening**" (arXiv **2610.37849**, Kevin Yandoka Denamganaï) starts from the case message monitoring misses: two agents coordinating through a private convention carried in otherwise harmless text. The proposed test is behavioural rather than semantic. Reword a message without changing its meaning; a **partner** that knows the code should react to the exact wording, while an **outsider** dropped into the partner's role should not. **PoPLi** is the difference between those two action changes, computed retrospectively by replaying logged prompts.
+
+In a simulated market with five conditions — no collusion, joint reward with neutral messages, joint reward with openly stated intent, a covert first-letter code, and the code with stated intent — PoPLi read **0.48–0.59** whenever the code was present, with all 95% intervals above **0.29**, and **−0.10 to −0.01** without it. The monitors are the punchline: a monitor reading only the speaker's messages answered "no" in **all 50** markets, and a monitor reading every seller's messages flagged **9 of 10** no-collusion markets.
+
+**Why it matters:** the asymmetry is the finding — one monitor has no signal, the other has a false-positive rate near one, and neither can be fixed by reading harder. PoPLi also states its own boundary plainly: it detects the use of a private channel, not collusion as such, and it cannot see collusion through incentives alone or codes carried by meaning rather than wording. That makes it a detector for a *class* of covert protocol, runnable after the fact on logs you already have, which is a better fit for auditing deployed agent fleets than any online filter. It is marked work in progress, the setting is one simulated market, and the outsider is a re-roled model rather than a human — so read 0.48–0.59 as separation in a controlled setup, not a field rate.
+
+[`🔗 arXiv 2610.37849`](https://arxiv.org/abs/2610.37849) · [`🔗 arXiv cs.AI new`](https://arxiv.org/list/cs.AI/new)
+
+---
+
+## 45. An agent that turns exploration into Lean proofs — 183 ARC-AGI-3 trajectories replayed, and four of six bounds wrong on the first pass
+
+- **Velocity:** ▮▮ rising
+- **Source:** arXiv · 2610.40503 · Guancheng Pan, Qixin Tan, Yang Yuan, Andrew Chi-Chih Yao
+- **Tags:** `agents` `lean` `arc-agi` `world-model` `research`
+
+"**Algebraic World Model: From Exploration to Proofs**" (arXiv **2610.40503**; Guancheng Pan, Qixin Tan, Yang Yuan, Andrew Chi-Chih Yao) turns exploration of an unfamiliar environment into an explicit mathematical model that can be checked. The loop generates executable **Python** hypotheses about the environment's rules, tests them against observations, organises them into typed objects with shared rules, simplifies them through category-theory-guided transformations, and encodes the result in **Lean 4** — which is what lets it prove not just reachability but **impossibility**: that a goal cannot be reached outside the explored trajectories.
+
+The headline results are on ARC-AGI-3. On two **impossible** game levels, AWM produced closed, kernel-checked Lean proofs ruling out every legal winning sequence across **all six runs**, while **Claude Opus 5.5** and **GPT-6 Astra** produced no such proofs in **twelve baseline runs**. Its first-pass bounds were wrong more often than the headline suggests — **four of six** correct, against one for Opus 5.5 and none for GPT-6 Astra — and reaching six of six required being told only that a cheaper win existed. Across all **25** public ARC-AGI-3 games its models let Lean replay all **183** winning level trajectories, predict unseen transitions and detect changes in game mechanics; with Claude Opus 5 it cleared every level at **99.9** using **43%** of the human baseline's actions.
+
+**Why it matters:** the distinction is proof versus prediction, and it is the reason to read this paper rather than another world-model result. A learned simulator that is usually right is unusable for the claim that a goal cannot be reached; a Lean-checked model that encodes the rules can make that claim and is wrong only if the rules are wrong — which is exactly what the four-of-six first pass shows, and why the correction step is part of the method rather than an embarrassment. What the abstract does not establish is how much of the 99.9 came from the search versus the model, and the affiliation list (Yang Yuan and Andrew Yao's group) is a signal to look for independent reproduction before treating AWM as a general recipe.
+
+[`🔗 arXiv 2610.40503`](https://arxiv.org/abs/2610.40503) · [`🔗 arXiv cs.AI new`](https://arxiv.org/list/cs.AI/new)
+
+---
+
+## 46. LRMoE plans expert quotas before the backward pass — 21.2–44.8% less MoE training time, against one baseline
+
+- **Velocity:** ▮ steady
+- **Source:** arXiv · 2610.37720 · submitted 2026-10-27
+- **Tags:** `moe` `training` `memory` `systems` `research`
+
+"**LRMoE: Demand-Side Load Re-Calibration for Efficient MoE Training on Memory-Constrained Nodes**" (arXiv **2610.37720**; Jiaming Hu, Zhida Jiang, Zhaolong Xing, Yu Li, Zhen Chen, Ke Zhang) attacks the asymmetry in sparse MoE training: routing is uneven, so some experts are hot and need their activations buffered while others idle, and the backward pass pays for the buffers of both. LRMoE plans expert retention quotas and placement during the forward pass, then uses a **contribution metric** during backpropagation to choose which token–expert pairs survive inside those quotas — preserving all routed forward computations while cutting backward traffic, computation and buffer demand through capacity-aware routing and physical compaction.
+
+The measured result: on **Qwen3-30B-A3B** and **GLM4.5-106B-A12B**, cumulative MoE-layer training time to fixed-loss targets fell by **21.2–44.8%** versus **SYMI**.
+
+**Why it matters:** training-time memory pressure is usually answered by offloading, which trades bandwidth for capacity; this is the other lever — decide *which* of the routed pairs you are willing to recompute or drop on the way back, before you need the buffer. The honest caveat is in what the abstract does not say: there is no GPU model, count, memory size, interconnect or cluster description, so "memory-constrained nodes" is a premise rather than a specified setting, and the only comparison named is one baseline. A 21.2–44.8% spread that wide also implies the gain depends heavily on the routing distribution of the model in question, which is the first thing to check before assuming your MoE sees the same.
+
+[`🔗 arXiv 2610.37720`](https://arxiv.org/abs/2610.37720) · [`🔗 arXiv cs.AI new`](https://arxiv.org/list/cs.AI/new)
+
+---
+
+## 47. A 4B Three.js specialist ships its dataset, its report and a borrowed vision projector — 4,146 scenes, labelled "early preview"
+
+- **Velocity:** ▮ steady
+- **Source:** Hugging Face · 29,615 downloads · 363 likes · card updated 2026-10-30
+- **Tags:** `open-weights` `threejs` `3d` `gguf` `apache`
+
+**`ccore/Qwen3.5-4B-3D-Coder`** is an independent **Apache-2.0** fine-tune of Qwen3.5-4B aimed at general coding with a 3D speciality: generating self-contained **Three.js** scenes as single HTML files. The card is explicit that it is "an early preview of a 4B model I am still training" and "**not** an official Qwen release." Alongside the weights it now publishes the **training dataset** — 4,146 scene examples (**3,933 train / 213 validation**) with prompts, full thinking traces and complete HTML/JavaScript responses, under **MIT** — a technical report PDF, FP16 safetensors in four shards, and Q4_K_M/Q8_0 GGUF builds.
+
+The most useful engineering detail is the vision path added **2026-10-30**: the two GGUF quantizations accept images when loaded with the original Qwen3.5-4B vision projector, with the card naming the exact companion file (**~644 MiB**, BF16) and its provenance — the unmodified projector from `lmstudio-community/Qwen3.5-4B-GGUF`. Serving instructions are equally specific: `llama-server -m … --mmproj … --n-gpu-layers all --flash-attn on --ctx-size 65536`, tested on **llama.cpp b11889**, and a note that LM Studio must have **multi-token prediction disabled** or the model misbehaves.
+
+**Why it matters:** narrow fine-tunes are cheap to produce and hard to evaluate, and this one publishes the three artefacts that make evaluation possible — data, weights at four precisions, and a report — which is more than most 4B community releases do. Two limits the card states and one it implies: image support inherits a **projector it did not train**, so image quality is Qwen's, not the fine-tune's; the card's own claim about one-shot success rests on qualitative scene screenshots rather than a scored benchmark; and the examples are voxel-style interiors, which is a style the dataset's reference renders would reinforce. Treat it as a strong local demo generator, not as evidence that 4B models match larger coders on 3D.
+
+[`🔗 ccore/Qwen3.5-4B-3D-Coder`](https://huggingface.co/ccore/Qwen3.5-4B-3D-Coder) · [`🔗 ccore/ThreeJS-3D-Scenes dataset`](https://huggingface.co/datasets/ccore/ThreeJS-3D-Scenes) · [`🔗 Hugging Face trending`](https://huggingface.co/models?sort=trending)
+
+---
+
+## 48. A macOS menu bar toolkit at 31.5k stars is GPL-3.0 with a trademark carve-out — and its mic mute is not a privacy guarantee
+
+- **Velocity:** ▮ steady
+- **Source:** GitHub Trending · 499 stars today · 31,525 total
+- **Tags:** `macos` `swift` `gpl` `open-source` `utilities`
+
+**`vorssaint/vorssaint-utils`** is a free, open-source **macOS menu bar toolkit** in **Swift** (AppKit and SwiftUI) that folds a long list of small utilities into one app: per-app volume mixer, system monitoring, an app/window switcher, window snapping, Dock previews, clipboard history, text snippets, a file shelf, an uninstaller, screen capture, media tools, a Homebrew manager, keep-awake and display controls. It carries **31,525 stars, 1,518 forks** and **42 watchers**, is **GPL-3.0-or-later**, and lets you "Install only what you use" by disabling unused modules.
+
+**Why it matters:** three disclosures in the README are the reason to read past the feature list. The licence covers the code, but the **name, logo and visual identity are covered separately by trademark terms** — so a fork is legal and shipping it under the same name is not. The platform floor is hard: **Apple Silicon only, macOS 14 Sonoma or newer**, which excludes every Intel Mac. And the honest ones: **Fan Control is labelled beta**, and the card says microphone mute is not a privacy guarantee — a menu bar toggle is a UI state, not an audio-path guarantee, and saying so is the difference between a utility and a security claim. The app is local-first with no account, analytics or tracking, and official builds are signed and notarized, which for a 31k-star utility that wants accessibility and screen-recording permissions is the part that matters most.
+
+[`🔗 vorssaint/vorssaint-utils`](https://github.com/vorssaint/vorssaint-utils) · [`🔗 GitHub Trending`](https://github.com/trending)
+
+---
+
+## 49. GCC has five ways to lower a `switch` and picks between them by cost — 8 slots per case, bitsets at 3, and a bit test for punctuation
+
+- **Velocity:** ▮ steady
+- **Source:** xoranth.net · 87+ pts · ~4h ago (~2026-10-31T08:02Z)
+- **Tags:** `gcc` `compilers` `optimization` `c`
+
+A deep dive into `pass_lower_switch` walks through how **GCC** turns a `switch` into machine code, and the answer is not "a jump table". Dense cases become a jump table with the base subtracted; GCC will split dense and sparse regions so an outlier gets its own branch; contiguous label ranges collapse into range checks; and very sparse character cases become a subtract, a bounds check and a **bit test** against a constant. The thresholds are cost comparisons rather than label counts: the post describes a 20-label switch over 0–87 that would fit an 88-entry table but needs only 10 comparisons, so GCC emits a comparison tree — the heuristic weighs table size against comparison cost.
+
+The more interesting half is the dynamic programming. **Bitset lowering** minimises the number of bitsets subject to each range fitting a register under 64 bits and covering at most three destination edges, and is considered beneficial at **3 cases for one destination, 5 for two, 6 for three**. **Jump-table selection** also uses DP, preferring fewer tables and more handled cases, with a maximum growth ratio of **8** when optimising for speed and **2** for size, and a minimum case threshold of **4** where `casesi` is available (**5** otherwise). If neither wins, GCC emits a **probability-balanced binary comparison tree**, using profile data or `__builtin_expect_with_probability`.
+
+**Why it matters:** the belief that switch is slower than if-else, and its inverse, are both folklore, and this is the post that replaces them with the actual decision procedure — a cost model over five strategies, tuned per target. The practical takeaway for anyone profiling C is that the shape of your case values (density, contiguity, destination count) selects the lowering, so restructuring a switch to be dense can change the generated code even when the semantics are identical. One portability note from the author: all of these except bitset lowering also apply to **Clang**, so a benchmark that assumes one compiler's strategy generalises is measuring the heuristic, not the language.
+
+[`🔗 xoranth.net — Switch Lowering in GCC`](https://xoranth.net/gcc-switch/) · [`🔗 Hacker News discussion`](https://news.ycombinator.com/item?id=50314085)
+
+---
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-10-31T04:19:32Z |
-| Items | 36 |
-| Sources tracked | 23 (Hacker News, GitHub, arXiv, Hugging Face, CISA KEV, NVD, cveawg, CISA-ADP, Google Research, OpenAI, Anthropic, Volexity, Ubuntu Discourse, Patchstack, Firezone, Akamai/Linode, Go Security, bunny.net, Northflank, GitHub Status, SigNoz, Tangled, TNW) |
+| Generated | 2026-10-31T12:32:34Z |
+| Items | 49 |
+| Sources tracked | 26 (Hacker News, GitHub, GitHub Advisory Database, arXiv, Hugging Face, CISA KEV, NVD, cveawg, CISA-ADP, Google Research, OpenAI, Anthropic, Parameter Labs, Volexity, Ubuntu Discourse, Patchstack, Firezone, Akamai/Linode, Go Security, bunny.net, Northflank, GitHub Status, SigNoz, Tangled, xoranth.net, TNW) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (3x daily) |
 | Ranking | Velocity-weighted (recency × engagement acceleration × source authority) |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |
