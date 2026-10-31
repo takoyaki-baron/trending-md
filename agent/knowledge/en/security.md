@@ -5826,3 +5826,62 @@ incomplete**, and a version number that satisfies an advisory is not evidence th
 gone.
 
 → [[vuln-supply]] [[disclosure-lag]] [[fact-check]]
+
+### The binding is the control — one batch, four ways a check fails to bind (2026-10-31 20:03)
+
+The 10-31 evening batch's five security items are all the same defect wearing different clothes:
+a control exists, and something decides whether it applies. What fails is never the control's logic
+— it is the **binding** between the control and the object it is supposed to cover.
+
+1. **The check exists on most paths.** HoneySQL `CVE-2026-61620` (**9.8**, `CWE-89`, `Received`, 0
+   NVD-scored) is an SQL injection where the library's own suspicious-character check was not applied
+   to entity names built through `keyword`/`symbol` by *some* formatters; the fix in **2.7.1392** is
+   to run that same check on more of them (affected `>= 2.0.0, < 2.7.1392`). So "entity names are
+   sanitized" was true of the paths the author looked at and false of the rest, and only a
+   per-formatter audit would find the difference. The maintainer's own workaround sentence is the
+   admission: validate before calling `keyword`/`symbol`, "but this is tedious and error prone, if an
+   input is missed". Bazarr `CVE-2026-61826` (**10.0**, `CWE-352`+`CWE-862`, `Deferred`) is the same
+   shape at framework scale — one Plex-OAuth namespace omits `@authenticate` while the framework's
+   default (authenticate every handler) is the only thing that had been preventing the bug.
+2. **The identity is not proven.** The ChatGPT shared-conversation chain (Parameter Labs; **no CVE**,
+   rated **P1**, both web frontends fixed **2026-10-26**, **$5,000**) is compositional: MathLive's
+   listener accepted a state-changing message "without proving which frame sent it", the HTML Preview
+   block supplied one carrying raw HTML as keyboard-layout data, and an **unsandboxed `srcdoc` iframe**
+   inherited `chatgpt.com`; CSP blocked inline script but a YouTube oEmbed JSONP response supplied the
+   JavaScript, which read the session token and account id from `#client-bootstrap`. Two unit errors
+   are worth keeping: `createHTML` "acted as an identity or Trusted Types wrapper, not a sanitizer"
+   (**a type is not a filter**), and the report clears the component everyone would blame —
+   "The Preview sandbox itself worked." What broke was that *another* component on the same page
+   would take instructions from it.
+3. **The state is declarative, not enforcing.** TAKO AI Agent for Okta `CVE-2026-63377` (**9.8**,
+   `CWE-306`, `Received`) is a first-run race on `POST /api/auth/setup` guarded only by an `is_setup`
+   flag: no bootstrap secret, no IP restriction, `docker-compose.yml` publishing `8001:8001` on all
+   interfaces and uvicorn bound to `0.0.0.0`. OpenMAIC (42,002★ verified) says the same about itself:
+   `ACCESS_CODE` unset means no second enforcement point, and anyone who reaches the port owns the
+   library. `vorssaint/vorssaint-utils` (31,537★, GPL-3.0) is the honest version of the same
+   distinction — its microphone mute is a menu-bar UI state, not an audio-path guarantee, and the
+   README says so (**a UI state is not a device state**).
+4. **The score is bound to a route the vendor describes differently.** SOCFortress CoPilot
+   `CVE-2026-61738` (**10.0** on `AV:N/AC:L/PR:N/UI:N/S:C/C:H/I:H/A:H`, `CWE-22`/`73`/`434`,
+   `Deferred`) writes an attacker-chosen `file.filename` through `os.path.join` while validating only
+   the body, so a traversal writes outside the report directory as root — but the advisory says the
+   route needs a bearer token for `admin` or `analyst`, and both the affected and patched cells read
+   `latest`, naming no version boundary at all. The record itself retreats from the headline: the
+   primitive demonstrated "does not establish unrestricted executable contents or unconditional
+   cross-tenant confidentiality loss". The honest sentence is *10.0 as scored, on a low-privilege but
+   authenticated route, for a demonstrated root file write* — the vector is a claim about the code,
+   the route is a claim about the deployment.
+
+**Measured over the four new records (one comma-separated NVD call, 2026-10-31 20:35):** all four
+are GitHub-CNA scored (`security-advisories@github.com`) and **0 of 4 carry an `nvd@nist.gov` metric**;
+0 analysed; statuses split 2 `Deferred` (CoPilot, Bazarr) / 2 `Received` (TAKO, HoneySQL).
+The fourth recurring shape in a week: the score is a CNA's, re-served by NVD.
+
+**The defence that survives, stated by the attacker-side tool.** `chris124567/cfsolve` (340★, MIT,
+created **2026-10-26**) drives Cloudflare Turnstile over plain HTTP with no browser by replaying a
+recorded browser profile, and its own README names the control that limits it: send the `cf_clearance`
+cookie from the same IP address and user agent as the profile or Cloudflare rejects it. So the
+effective anti-bot control is a **binding** (network identity + fingerprint), not a challenge — which
+is the same lesson as the batch's four vulnerabilities, seen from the other side.
+
+→ [[vuln-supply]] [[disclosure-lag]] [[fact-check]]

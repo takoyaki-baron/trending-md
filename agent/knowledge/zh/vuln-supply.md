@@ -925,3 +925,36 @@ OpenPanel 的 **37 份公告、0 个 CVE id**（由构造决定，04:20 那轮�
 **`CVE-2026-61991`**（AjaxLoadMore Cache ≤ **3.1.1**，`CWE-94`，`audit@patchstack.com` 的 **10.0**，NVD `Deferred`）：Patchstack 条目的 patched 单元写「**No official patch available**」，条目带「**No VDP**」，所需权限为**未认证**。时钟：**Julieta** 于 **2026-09-12** 报告、Patchstack **2026-10-13** 发布、NVD **2026-10-29T16:18Z**——报告到记录 **47 天**，其中 **16 天**公开且已有利用描述而无代码修复。唯一的缓解是「Patchstack has issued a mitigation rule to block any attacks until an official patch becomes available」——一件 **WAF 产品**，不是修复，且在他们的边缘之外无效。
 
 → [[disclosure-lag]] [[security]] [[fact-check]]
+
+### 目录可以**先于**登记处，这是延迟，不是缺席
+
+`CVE-2026-118527`（Ivanti Connect Secure，`CWE-340`）于 **2026-10-30** 被加入 CISA 的 KEV 目录，
+而 `cveawg` 返回 `CVE_RECORD_DNE`、NVD 一无所有——那条 KEV 记录自己的 `notes` 还链着一个解析不到的
+NVD 详情页。一天后再读：**仍无记录**，目录版本 `2026.10.30`。用 `agent/tools/kev-record-watch.mjs`
+对 **2026-09-01** 以来新增的 **79** 行做了普查（KEV 的 JSON 与 `cveawg` 都不计量，所以这次普查的
+计量调用为零）：
+
+| 判定 | 行数 | 含义 |
+|---|---|---|
+| `record-at-add` | **76** | 记录在 KEV 收录时或之前已存在——常态 |
+| `record-after-add` | **2** | 记录在 KEV 收录**次日**才发布 |
+| `record-pending` | **1** | 尚无记录（`CVE-2026-118527`，1 天） |
+
+中位延迟 **−5 天**，区间 **−4161 … +1 天**。两条 `record-after-add` 已在登记处逐条核对：
+`CVE-2026-85706`（GitLab）收录 **09-11**、发布 **09-12T02:46:31Z**，09-04 预留；`CVE-2026-87886`
+（Acronis）收录 **09-16**、发布 **09-17T22:57:18Z**，09-09 预留。而 −4161 那一端本身是另一种形状：
+一批 **2015** 年的 CVE（`CVE-2015-3306`、`-5477`）在 **2026-10-08** 被收录——所以 KEV 收录是关于
+*当下是否被利用*的陈述，从来不是关于*当时何时披露*的。
+
+**这句话必须写对的三件事。** `cveawg` 的 **404 是一个已预留、记录尚未发布的 ID——绝不是
+「CISA 列了一个不存在的 CVE」**；正因为预留，KEV 才引用得到它。**`dueDate` 不是这个时钟**——它是
+FCEB 的修复期限，会独立移动（同一天新增的两行分别是 11-02 和 11-13）。而 **`dateAdded` 不带时间**，
+所以由它推出的一切延迟都是**日粒度**：要说「次日」，不要写成「+1 天」仿佛知道小时。`catalogVersion`
+同样是个日期，所以「10-30 收录」意为「存在于 10-30 这一批」，不是某一小时。
+
+可复用的规则：**两份本该在某件事上一致的政府文书，其实是两个时钟**，而答案是整个窗口上的分布，
+不是一行。一行说「无记录」；79 行说「目录比登记处慢约 5 天，偶尔反超一天」。`--watch` 维护
+`agent/data/kev-record-state.json`，只在真正变动时追加，因为 `MISSING → PUBLISHED` 才是唯一能界定
+延迟的观测——单次快照做不到。
+
+→ [[disclosure-lag]] [[security]] [[fact-check]]

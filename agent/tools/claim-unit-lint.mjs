@@ -214,7 +214,7 @@ const CHECKS = new Set((arg('check') ?? 'issues,cvss,status,temporal,cwe,repo,co
 const SELFTEST = has('selftest');
 const STATUS_WATCH = has('status-watch');
 const EXTRA_IDS = (arg('ids') ?? '').split(',').map((s) => s.trim()).filter(Boolean);
-if (!FILE && !FILES && !SELFTEST && !has('ghsa-census') && !has('quotation-census') && !STATUS_WATCH) {
+if (!FILE && !FILES && !SELFTEST && !has('ghsa-census') && !has('quotation-census') && !has('commit-quote-census') && !STATUS_WATCH) {
   console.error('usage: claim-unit-lint.mjs --file <feed.md> [--no-net] [--check issues,cvss,status,repo,count] [--strict] [--json] [--census] [--selftest] [--status-watch [--ids CVE-…]] | --ghsa-census [--pages N]');
   process.exit(2);
 }
@@ -1961,6 +1961,39 @@ function checkBundle(it) {
 const QUOTE_WORDS_FINDING = 6; // a 6+-word string that appears nowhere is an invented quotation
 const QUOTE_WORDS_SPAN = 4;    // 4–5 words is checked too, but only as an advisory
 
+/* THE COMMIT TITLE IS A SOURCE CLASS OF ITS OWN, AND ITS ABSENCE PROVES NOTHING.
+ * Filed 2026-10-31 12:32 from item 27 of the 10-30 feed, which quotes five commit subjects —
+ * "allocation-free listener callback for schedulable nodes (#148)" among them — read off a repo's
+ * commit list. Every class the check read came back empty, so a true sentence was reported as an
+ * invented one (`quote-not-found`, sev 3). `(#NNN)` inside a quotation is the tell, and the shape
+ * is the same on GitLab and Gitea.
+ *
+ * Censused before designing (`--commit-quote-census` over **84 feeds / 3,160 items / 8,039 quoted
+ * spans**): **6** spans end in a `(#N)` — **0.075%**, in **2 items** (10-04 item 3's System76
+ * commit, 10-30 item 27's five). So the class is small and concentrated, which decided between the
+ * two candidate designs rather than the anecdote doing it: the fetch is cheap and the suppression
+ * would be permanent.
+ *
+ * The source is `commits.atom`, unmetered (no `api.github.com` call), and fetched only for an item
+ * that still has an unmatched span of this shape — at most two requests, one per repo slug the item
+ * names. It resolved **6 of 6** spans in the census, both filing cases included — verbatim, and with
+ * a date (`2026-09-30T15:45:00Z` for System76's, a month before the check first misread it).
+ *
+ * THE GUARD IS THE HALF THAT MATTERS: that feed carries **20 entries**, the most recent commits on
+ * the DEFAULT BRANCH. A PR merged before that window, or onto another branch, is absent from a feed
+ * that simply cannot reach it. So the commit list is a POSITIVE source only — finding the title is
+ * proof, not finding it is not (the "unread is not absent" rule, applied to a source whose coverage
+ * limit is measured rather than assumed). An unmatched span of this shape therefore reports
+ * `quote-unreadable-source` (severity 0) instead of a finding, and says how far back the feed reached.
+ * Two live refutations of the naive reading, both from the census: a repo with 20 commits since
+ * yesterday and one with 20 since a month ago read identically to this check. */
+const COMMIT_QUOTE_RE = /\(#\d+\)\s*$/u;
+
+/** Is this span a commit/PR subject? Tested on the RAW span (backticks and all) — `keyed
+ *  \`ForEach\` with \`id:\` and per-row tracking (#149)` ends in the token even though the words
+ *  before it are markup. */
+const isCommitQuote = (raw) => COMMIT_QUOTE_RE.test(String(raw).trim());
+
 /* A quotation lifted into a sentence takes THAT sentence's punctuation: the Model Spec's
  * "…do not yet fully reflect the Model Spec, but we are continually refining" is published as
  * "…do not yet fully reflect the Model Spec." and ten of eleven words are verbatim. Calibrated on
@@ -2095,7 +2128,7 @@ function checkQuotes(it, sources, ctx = {}) {
     const frags = norm.split(/\s*(?:…|\.\.\.)\s*/).map((s) => quoteKey(s))
       .filter((k) => wordsOf(k) >= 3).map((k) => ({ key: k, words: wordsOf(k) }));
     if (!frags.length) continue;
-    claims.push({ norm, words, frags, wrapped: wrapped.has(raw) });
+    claims.push({ norm, words, frags, wrapped: wrapped.has(raw), commit: isCommitQuote(raw) });
   }
   if (!claims.length) return out;
   if (!sources.length) {
@@ -2103,9 +2136,16 @@ function checkQuotes(it, sources, ctx = {}) {
     return out;
   }
   let ok = 0;
+  const unreadable = [];
   for (const c of claims) {
     const missing = c.frags.filter((f) => !sources.some((s) => quoteFragFound(f, s)));
     if (!missing.length) { ok += 1; continue; }
+    /* A commit title can only be REFUTED by a source that can reach the whole history, and none of
+     * ours can: `commits.atom` holds 20 entries on the default branch, so "not on the commit list"
+     * is a statement about the window, not about the repo. Report it as unread rather than absent —
+     * the same call this check already makes for a 429 or a JS shell, for a source whose coverage
+     * limit is now measured. The span's own `(#N)` is the tell (see COMMIT_QUOTE_RE). */
+    if (c.commit) { unreadable.push(c); continue; }
     const frag = missing.reduce((a, b) => (b.key.length > a.key.length ? b : a));
     const heavy = frag.words;
     const near = quoteNearest(frag, sources);
@@ -2130,6 +2170,14 @@ function checkQuotes(it, sources, ctx = {}) {
       detail: `${heavy} words, 0 hits in ${sources.length} readable source(s)${unread ? `, ${unread} cited page(s) unread` : ''}${c.wrapped ? ', quotation spans a hard-wrapped line (recovered by the bounded join)' : ''}; ${hint}`,
     });
   }
+  if (unreadable.length) {
+    const reach = ctx.commitReach ? `commit list read to ${ctx.commitReach}` : 'no commit list was readable';
+    out.push({
+      check: 'quotation', item: it.n, verdict: 'quote-unreadable-source',
+      claim: `${unreadable.length} commit-title quotation(s)`,
+      detail: `a commit subject is quoted (${unreadable.map((c) => `“${c.norm.slice(0, 48)}${c.norm.length > 48 ? '…' : ''}”`).join(', ')}) and ${reach} — the feed carries the most recent commits on the default branch only, so a title it does not carry is not thereby absent; cite the commit or PR URL`,
+    });
+  }
   if (ok) out.push({ check: 'quotation', item: it.n, verdict: 'ok', claim: `${ok} quotation(s)`, detail: `verbatim in ${sources.length} readable source(s)` });
   return out;
 }
@@ -2148,6 +2196,37 @@ function kevFeed() {
     }
   } catch { /* a catalog we could not read is not a claim about the item */ }
   return KEV_ROWS;
+}
+
+/* The only unmetered view of a repo's commit SUBJECTS. `api.github.com` would cost a call per item
+ * for one sentence; this costs none, and it is the artifact the author actually read (a trending
+ * page, a commit list, a PR title). Returns the concatenated titles as one text plus the reach of
+ * the window, because the reach is the whole caveat: **20 entries, default branch only**. */
+const COMMIT_LIST_CACHE = new Map();
+async function commitList(slug) {
+  if (COMMIT_LIST_CACHE.has(slug)) return COMMIT_LIST_CACHE.get(slug);
+  const res = { text: '', entries: 0, oldest: null };
+  try {
+    const r = await fetch(`https://github.com/${slug}/commits.atom`, { signal: AbortSignal.timeout(20_000) });
+    citedPages_requests += 1;
+    if (r.ok) {
+      const body = (await r.text()).slice(0, 500_000);
+      const titles = [];
+      const stamps = [];
+      for (const m of body.matchAll(/<entry>([\s\S]*?)<\/entry>/g)) {
+        const ti = /<title>([\s\S]*?)<\/title>/.exec(m[1]);
+        if (ti) titles.push(ti[1].replace(/\s+/g, ' ').trim());
+        const up = /<updated>([^<]+)<\/updated>/.exec(m[1]);
+        if (up) stamps.push(up[1].trim());
+      }
+      res.text = titles.join('\n');
+      res.entries = titles.length;
+      // `updated` is newest-first in this feed, but sort rather than trust the order
+      if (stamps.length) res.oldest = stamps.sort()[0];
+    }
+  } catch { /* a feed we could not read is not a claim about the item */ }
+  COMMIT_LIST_CACHE.set(slug, res);
+  return res;
 }
 
 async function checkQuote(it, nvd, cna) {
@@ -2197,6 +2276,24 @@ async function checkQuote(it, nvd, cna) {
         sources.push(more);
         out = again;
       }
+    }
+  }
+  /* (5) THE COMMIT LIST — a commit subject lives in no README, release page or article, so it is the
+   * one class this check can CONFIRM but never refute. One unmetered request per affected item; the
+   * second run decides, and an item whose titles are all in the window goes from a false sev-3
+   * finding to `ok` (the census's 6 of 6 resolved this way, both filing cases included). */
+  if (out.some((f) => f.verdict === 'quote-unreadable-source') && !NO_NET) {
+    let entries = 0;
+    let oldest = null;
+    for (const slug of it.repos.slice(0, 2)) {
+      const cl = await commitList(slug);
+      if (!cl.text) continue;
+      sources.push(quoteSource(`${slug} commit list`, cl.text));
+      if (cl.entries > entries) entries = cl.entries;
+      if (cl.oldest && (!oldest || cl.oldest < oldest)) oldest = cl.oldest;
+    }
+    if (entries) {
+      out = checkQuotes(it, sources, { unread, commitReach: `to ${oldest ?? 'an unknown date'} (${entries} entries)` });
     }
   }
   return out;
@@ -2340,6 +2437,53 @@ if (has('ghsa-census')) {
   console.log(`  no CVE id                       ${pct(noCve)}`);
   console.log(`  severity label ≠ score band     ${pct(bandBad)}`);
   console.log(`\napi.github.com calls: ${apiCalls}`);
+  process.exit(0);
+}
+
+// ── `--commit-quote-census`: is the commit-title class big enough to deserve a source? ──────
+/* Filed 2026-10-31 12:32 with the design undecided between (a) a third source class and (b) a
+ * suppression verdict. The census decided it, and not by argument: scan every quoted span in the
+ * corpus for a `(#N)` tail, then (with `--net`) try to resolve each against `commits.atom` — which
+ * is (a)'s entire case. If the unmetered feed carries them, one request beats a permanent silence.
+ * Prints the count either way, so the prevalence below is re-measurable rather than remembered. */
+if (has('commit-quote-census')) {
+  const CQ_PATHS = paths.length ? paths : globSync('en/feed/2026-*.md').sort();
+  const rows = [];
+  const tot = { items: 0, spans: 0, pr: 0, itemsWithPr: 0 };
+  for (const p of CQ_PATHS) {
+    const items = parseItems(readFileSync(p, 'utf8'));
+    const r = { file: basename(p), items: items.length, spans: 0, pr: 0, hits: [] };
+    for (const it of items) {
+      tot.items += 1;
+      const { spans } = quoteSpans(it.text);
+      r.spans += spans.length; tot.spans += spans.length;
+      for (const s of spans) if (isCommitQuote(s)) { r.pr += 1; tot.pr += 1; r.hits.push({ it: it.n, span: s.trim(), repos: it.repos.slice(0, 2) }); }
+    }
+    if (r.pr) tot.itemsWithPr += 1;
+    rows.push(r);
+  }
+  console.log(`commit-title quotations over ${rows.length} file(s) / ${tot.items} item(s): ${tot.pr} span(s) in ${tot.itemsWithPr} item(s) = ${((tot.pr / Math.max(1, tot.spans)) * 100).toFixed(3)}% of ${tot.spans} quoted spans`);
+  for (const r of rows) if (r.pr) for (const h of r.hits) console.log(`  ${r.file} #${h.it}  ${h.span.slice(0, 96)}   [${h.repos.join(', ') || 'no repo slug'}]`);
+  if (has('net')) {
+    // the decisive question for design (a): does the unmetered commit list actually carry them?
+    const bySlug = new Map();
+    let resolved = 0, tried = 0;
+    for (const r of rows) for (const h of r.hits) {
+      let found = null;
+      for (const slug of h.repos) {
+        if (!bySlug.has(slug)) bySlug.set(slug, await commitList(slug));
+        const cl = bySlug.get(slug);
+        if (!cl.text) continue;
+        const src = quoteSource(`${slug} commit list`, cl.text);
+        const key = quoteKey(normQuote(h.span));
+        if (quoteFragFound({ key, tight: squeeze(key) }, src)) { found = { slug, ...cl }; break; }
+      }
+      tried += 1;
+      if (found) resolved += 1;
+      console.log(`  ${found ? 'RESOLVED    ' : 'NOT ON LIST '} ${h.span.slice(0, 72)}${found ? `  ← ${found.slug} (${found.entries} entries, oldest ${found.oldest})` : ''}`);
+    }
+    console.log(`\n  resolved ${resolved}/${tried} from commits.atom — and an unresolved one is NOT absent: the feed holds 20 entries on the default branch only`);
+  }
   process.exit(0);
 }
 
@@ -2705,6 +2849,27 @@ if (SELFTEST) {
   t('quote: a registry field is checked against the record, not the page',
     checkQuotes(mk('t', 'NVD describes it as "In the Linux kernel, the following vulnerability has been resolved".'),
       qsrc('In the Linux kernel, the following vulnerability has been resolved: a use-after-free in foo.')).map((x) => x.verdict), ['ok']);
+
+  // THE COMMIT TITLE (filed 2026-10-31 12:32, item 27 of the 10-30 feed) — a source class whose
+  // absence proves nothing, because `commits.atom` carries 20 entries on the default branch.
+  const EL = 'basic support for SSR/SSG rendering of ElementaryUI views (#145)\n'
+    + 'allocation-free listener callback for schedulable nodes (#148)\n';
+  t('commit: a (#N) tail is the tell, markup and all',
+    [isCommitQuote('allocation-free listener callback for schedulable nodes (#148)'),
+      isCommitQuote('keyed `ForEach` with `id:` and per-row tracking (#149)'),
+      isCommitQuote('the README says "Nobody trained these weights"')],
+    [true, true, false]);
+  t('commit: absent from every page is UNREAD, never an invented quotation',
+    qv('the three days of commits after it — "allocation-free listener callback for schedulable nodes (#148)"', 'Nothing about it here.'),
+    ['quote-unreadable-source']);
+  t('commit: the commit list confirms it, and then it verifies',
+    qv('the commits after it — "allocation-free listener callback for schedulable nodes (#148)"', EL), ['ok']);
+  // …and the same words WITHOUT the tail are an ordinary quotation, so the class stays narrow
+  t('commit: the same words with no (#N) tail are still a normal quotation',
+    qv('it shipped "allocation-free listener callback for schedulable nodes"', 'Nothing about it here.'), ['quote-not-found']);
+  t('commit: a mixed item still judges its non-commit quotations',
+    checkQuotes(mk('t', 'it says "the model was not trained at all here today" and "allocation-free listener callback for schedulable nodes (#148)"'), qsrc('Nothing about it here.')).map((x) => x.verdict),
+    ['quote-not-found', 'quote-unreadable-source']);
 
   for (const c of cases) console.log(`  ${c.pass ? '✓' : '✗'} ${c.name}${c.pass ? '' : ` — got ${JSON.stringify(c.got)}, want ${JSON.stringify(c.want)}`}`);
   const ok = cases.filter((c) => c.pass).length;

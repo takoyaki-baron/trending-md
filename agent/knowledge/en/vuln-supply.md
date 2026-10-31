@@ -1430,4 +1430,38 @@ public with a described exploit and no code fix. The only mitigation offered is 
 rule to block any attacks until an official patch becomes available" — a **WAF product**, not a fix, and worthless
 outside their edge. `S:C` on `PR:N` code injection is what makes it 10.0 rather than 9.8, and here it is defensible.
 
+### The catalog can be AHEAD of the registry, and that is a lag, not an absence
+
+`CVE-2026-118527` (Ivanti Connect Secure, `CWE-340`) was added to CISA's KEV catalog on **2026-10-30**
+while `cveawg` answered `CVE_RECORD_DNE` and NVD had nothing — and the KEV row's own `notes` link an
+NVD detail URL that resolves to nothing. Read again a day later: **still no record**, catalog version
+`2026.10.30`. Measured rather than argued, with `agent/tools/kev-record-watch.mjs` over the **79** rows
+added since **2026-09-01** (KEV's JSON and `cveawg` are both unmetered, so the census costs zero
+metered calls):
+
+| verdict | rows | meaning |
+|---|---|---|
+| `record-at-add` | **76** | the record existed at or before the KEV add — the normal case |
+| `record-after-add` | **2** | the record was **published the day after** the KEV add |
+| `record-pending` | **1** | no record yet (`CVE-2026-118527`, 1 day) |
+
+Median lag **−5d**, range **−4161 … +1d**. The two `record-after-add` rows, verified at the registry:
+`CVE-2026-85706` (GitLab) added **09-11**, published **09-12T02:46:31Z**, reserved 09-04; `CVE-2026-87886`
+(Acronis) added **09-16**, published **09-17T22:57:18Z**, reserved 09-09. And the −4161 end is its own
+shape: a batch of **2015** CVEs (`CVE-2015-3306`, `-5477`) added on **2026-10-08**, so a KEV add is a
+statement about exploitation *now*, never about disclosure *then*.
+
+**Three things the sentence must get right.** A `cveawg` **404 is a RESERVED id whose record is
+unpublished — never "CISA listed a CVE that does not exist"**; the reservation is why KEV can cite it
+at all. **`dueDate` is not this clock** — it is the FCEB remediation deadline and moves independently
+(11-02 vs 11-13 on two rows added the same day). And **`dateAdded` carries no time**, so every lag
+derived from it is **day-granular**: say "the following day", never "+1d" as though hours were known.
+`catalogVersion` is likewise a date, so "added 10-30" means "present in the 10-30 batch", not an hour.
+
+The reusable rule: **two government artifacts that should agree on one event are two clocks**, and the
+answer is a distribution over a window, not a row. One row said "record-less"; 79 rows said "the
+catalog runs about 5 days behind the registry and occasionally ahead of it by a day". `--watch` keeps
+`agent/data/kev-record-state.json` and appends only on a real move, because `MISSING → PUBLISHED` is
+the only observation that bounds the lag — a single snapshot cannot.
+
 → [[disclosure-lag]] [[security]] [[fact-check]]

@@ -3517,3 +3517,48 @@ CISA 于 **2026-10-30** 把 **CVE-2026-111357** 与 **CVE-2026-118527**（均属
 原本活在论题 2 折叠状态行里的一行，连同标识符留在这里：六月那份公告（GHSA-j3rv-43j4-c7qm，**8.1**，发布于 **2026-06-23**）加了泛型参数校验；四个月后的 **`CVE-2026-110879`**（**9.8**、`CWE-502`）自称「**incomplete fix**」，因为 `DatabindContext._resolveAndValidateGeneric()` 是把每个泛型参数对照**外层**基类型校验，而不是它自己声明的绑定——于是 `Map<String,String>` 会接受 `HashMap<FileSystemXmlApplicationContext,String>`，后者的单字符串构造器加载攻击者的 XML。这与 WS_FTP 的两级修复、以及 Azure 第二次 API Connections 修复撤销第一次的 `RuntimeUrl` 校验是同一形状：**第二次修复才告诉你第一次并不完整**，而一个满足公告的版本号不是「公告里的 bug 已消失」的证据。
 
 → [[vuln-supply]] [[disclosure-lag]] [[fact-check]]
+
+### 控制还在，缺的是绑定——一批里四种「检查没绑到对象」的形态（2026-10-31 20:03）
+
+10-31 晚批的五个安全条目其实是同一个缺陷换了衣服：控制存在，然后由某个东西决定它是否适用。
+真正失效的从来不是控制的逻辑，而是**控制与它所应覆盖的对象之间的绑定**。
+
+1. **检查只覆盖了大多数路径。** HoneySQL `CVE-2026-61620`（**9.8**、`CWE-89`、`Received`、0 条 NVD 打分）
+   是一处 SQL 注入：库自带的可疑字符检查，*某些* formatter 从未应用到经 `keyword`/`symbol` 构造的实体名上；
+   **2.7.1392** 的修复就是把同一检查跑在更多 formatter 上（受影响 `>= 2.0.0, < 2.7.1392`）。所以「实体名已被
+   消毒」这句话，对作者看过的路径成立，对其余路径不成立，只有逐 formatter 审计才能发现差别。维护者自己的
+   绕过句就是承认：在调用 `keyword`/`symbol` 前先校验输入，"but this is tedious and error prone, if an input
+   is missed"。Bazarr `CVE-2026-61826`（**10.0**、`CWE-352`+`CWE-862`、`Deferred`）是同一形态的框架级版本——
+   一个 Plex OAuth 命名空间漏了 `@authenticate`，而「每个 handler 都鉴权」的框架默认值，一直是唯一挡住它
+   的东西。
+2. **身份没有被证明。** ChatGPT 共享对话链（Parameter Labs；**无 CVE**，评级 **P1**，两个 Web 前端
+   **2026-10-26** 修好，**$5,000**）是组合式的：MathLive 的监听器接受了改变状态的消息却「没有证明是哪一帧
+   发来的」，HTML Preview 块把原始 HTML 当作键盘布局数据送进去，一个**未加 sandbox 的 `srcdoc` iframe**
+   继承了 `chatgpt.com`；CSP 挡住了内联脚本，但 YouTube oEmbed 的 JSONP 响应供上了 JavaScript，后者从
+   `#client-bootstrap` 读走会话令牌与账号 id。两个单位错误值得记住：`createHTML` 起的是「identity 或
+   Trusted Types 包装器」的作用，「**而不是消毒器**」（**类型不是过滤器**）；而报告反倒替最该被怀疑的组件
+   开脱——「The Preview sandbox itself worked.」坏的是同一页面上*另一个*组件愿意听它的话。
+3. **状态是声明式的，不是执行式的。** TAKO AI Agent for Okta `CVE-2026-63377`（**9.8**、`CWE-306`、
+   `Received`）是 `POST /api/auth/setup` 上的首次运行竞态，唯一守卫是一个 `is_setup` 标志：没有 bootstrap
+   密钥、没有 IP 限制，`docker-compose.yml` 把 `8001:8001` 发布到所有接口，uvicorn 绑在 `0.0.0.0`。
+   OpenMAIC（已核实 **42,002★**）对自己说的是同一件事：`ACCESS_CODE` 未设置就意味着没有第二道执行点，任何
+   能连上端口的人都拥有整个书库。`vorssaint/vorssaint-utils`（**31,537★**、GPL-3.0）是同一区分的诚实版本
+   ——它的麦克风静音是菜单栏的 UI 状态，不是音频通路的保证，README 自己也这么说（**UI 状态不是设备状态**）。
+4. **分数绑定在一条与厂商描述不符的路由上。** SOCFortress CoPilot `CVE-2026-61738`（**10.0**，向量
+   `AV:N/AC:L/PR:N/UI:N/S:C/C:H/I:H/A:H`，`CWE-22`/`73`/`434`，`Deferred`）只校验请求体，却把攻击者指定的
+   `file.filename` 直接交给 `os.path.join`，于是穿越写可以在报告目录之外以 root 落盘——但公告说该路由需要
+   `admin` 或 `analyst` 作用域的 bearer token，而 affected 与 patched 两格都写作 `latest`，根本没给版本边界。
+   记录自己也从标题上后退：所演示的原语「does not establish unrestricted executable contents or unconditional
+   cross-tenant confidentiality loss」。诚实的句子是*按评分是 10.0，在需要低权限但已鉴权的路由上，实现的是
+   一次以 root 写文件*——向量是关于代码的断言，路由是关于部署的断言。
+
+**四条新记录实测（2026-10-31 20:35，一次逗号分隔的 NVD 调用）：**四条全部由 GitHub CNA
+（`security-advisories@github.com`）打分，**4 条中 0 条带 `nvd@nist.gov` 指标**，0 条已分析；状态是 2 条
+`Deferred`（CoPilot、Bazarr）/ 2 条 `Received`（TAKO、HoneySQL）。这已是连续第四批 NVD 没写自己的任何数字。
+
+**真正起作用的防线，由攻击方工具自己说出来。** `chris124567/cfsolve`（340★、MIT、建于 **2026-10-26**）靠
+回放录制的浏览器 profile，在纯 HTTP 上驱动 Cloudflare Turnstile，而它的 README 指名了限制它的那道控制：
+`cf_clearance` cookie 必须来自与该 profile 相同的 IP 与 user agent，否则 Cloudflare 会拒绝。所以有效的反
+机器人控制是一次**绑定**（网络身份 + 指纹），而不是一道挑战——这与本批四个漏洞是同一课的背面。
+
+→ [[vuln-supply]] [[disclosure-lag]] [[fact-check]]

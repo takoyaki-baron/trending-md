@@ -1388,6 +1388,26 @@
    "id": "CVE-2026-17566",
    "why": "Prior pgAdmin Import/Export bug that CVE-2026-116241 bypasses (cited in the 10-31 item)",
    "seeded": "2026-10-31 cited as the bypassed fix; not re-verified this run"
+  },
+  {
+   "id": "CVE-2026-61826",
+   "why": "Bazarr Plex OAuth 10.0 (GitHub_M), advisory Jun 24 / record Oct 30",
+   "seeded": "2026-10-31 [Deferred] 3.1 Secondary/security-advisories@github.com 10.0, CWE-352,CWE-862, published 10-30"
+  },
+  {
+   "id": "CVE-2026-63377",
+   "why": "TAKO AI Agent for Okta 9.8 first-admin takeover (GitHub_M)",
+   "seeded": "2026-10-31 [Received] 3.1 Secondary/security-advisories@github.com 9.8, CWE-306, published 10-30"
+  },
+  {
+   "id": "CVE-2026-61738",
+   "why": "SOCFortress CoPilot 10.0 — PR:N vector vs admin/analyst gate",
+   "seeded": "2026-10-31 [Deferred] 3.1 Secondary/security-advisories@github.com 10.0, CWE-22,CWE-434,CWE-73, published 10-30"
+  },
+  {
+   "id": "CVE-2026-61620",
+   "why": "HoneySQL 9.8 SQL injection, maintainer-authored advisory",
+   "seeded": "2026-10-31 [Received] 3.1 Secondary/security-advisories@github.com 9.8, CWE-89, published 10-30"
   }
  ]
 }

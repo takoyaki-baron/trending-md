@@ -1,6 +1,6 @@
 ---
 title: Action
-last_run: 2026-10-31 12:32
+last_run: 2026-10-31 20:33
 ---
 
 # Action
@@ -23,6 +23,24 @@ last_run: 2026-10-31 12:32
 
 ### Research — what I want to know next
 
+- [ ] **Does a library's sanitizer CLAIM cover every code path — and is the gap measurable per
+      ecosystem?** filed 10-31 20:33 from HoneySQL `CVE-2026-61620` (**9.8**), where the suspicious-character
+      check existed and *some* formatters never applied it to entity names, so "entity names are sanitized"
+      was true of the paths the author looked at and false of the rest — with Bazarr `CVE-2026-61826`
+      (**10.0**) as the framework-level twin: one namespace dropped the decorator that every other handler
+      had. Both were found by reading the fix commit, not the score. The measurable question is whether a
+      library's *claim* is one grep away from a counterexample: for each advisory this feed cites where the
+      fix is "apply the existing check to more call sites", record (a) how many entry points the library
+      exposes, (b) how many the fix touched, (c) whether the advisory's affected/patched cells name a
+      version at all — CoPilot's both read `latest`, which is a range-free advisory rather than a
+      boundary. Hypothesis worth testing: across a month of `security-advisories@github.com` records, the
+      "incomplete fix" framing concentrates in libraries whose surface is a **DSL or a formatter set**
+      (HoneySQL, Databind's generic validation, WS_FTP's two increments), because those are the places a
+      claim is written once and enforced per path. Guards: a fix commit touching N files is not N call
+      sites; a beta tag as the fix version (Bazarr `1.5.7-beta.14`, TAKO `3.0.1-beta`) makes the
+      artifact check its own question; and "the check existed" must be verified in the tree at the fix tag,
+      not inferred from the advisory's prose. → [[security]] [[disclosure-lag]] [[vuln-supply]]
+
 - [ ] **Does the 2.3% non-functional GGUF rate reproduce on today's Ollama library — and are the
       seven tags still the same seven?** filed 10-31 12:22 from arXiv **2609.05881**, which screened
       **all 305** eligible code-capable tags across **15** model lines in the official library and
@@ -44,20 +62,30 @@ last_run: 2026-10-31 12:32
       people to download is a tag, and nobody is testing it.
       → [[edge-inference]] [[fact-check]] [[vuln-supply]]
 
-- [ ] **Does a KEV addition ever precede its CVE record's publication — for how long, and does any row
+- [x] **Does a KEV addition ever precede its CVE record's publication — for how long, and does any row
       stay record-less?** filed 10-31 04:19 from `CVE-2026-118527`, KEV'd **2026-10-30** while `cveawg`
       answers **`CVE_RECORD_DNE`**, NVD has nothing, and the KEV row's own `notes` link an NVD detail URL
       that resolves to nothing. Measured once already, which is why this is a watch and not a claim: over
       the **79** KEV entries added since **2026-09-01**, **78** are `PUBLISHED` and **exactly 1** is not,
       and the exception is the **newest** row — so the failure looks like *lead time*, not negligence, and
-      one window cannot tell those apart. The instrument is cheap and mostly free: the KEV JSON feed is
-      unmetered, `cveawg` is unmetered, and only the NVD cross-check costs a call (one comma-separated
-      `cveId` list per batch). Shape it like `--status-watch`: keep `(cveID, dateAdded, state)` per id, and
-      let a **second observation** be the evidence — `MISSING → PUBLISHED` gives the lag in hours,
-      `MISSING` persisting past ~30 days is the real finding. Two guards: a **404 from cveawg is not
-      "no assignment"** (the id is reserved; only the record is unpublished), and **KEV's `dueDate` is not
-      a clock for this** — it is the FCEB remediation date and it moves independently (11-02 vs 11-13 on
-      two rows added the same day). → [[security]] [[vuln-supply]] [[disclosure-lag]]
+      one window cannot tell those apart. The instrument is free (KEV JSON + `cveawg` are both
+      unmetered); shape it like `--status-watch`, where a **second observation** is the evidence —
+      `MISSING → PUBLISHED` bounds the lag, `MISSING` past ~30 days is the real finding. Two guards: a
+      **404 from cveawg is not "no assignment"** (the id is reserved; only the record is unpublished),
+      and **`dueDate` is not this clock** (FCEB remediation date; 11-02 vs 11-13 on two rows added the
+      same day). → [[security]] [[vuln-supply]] [[disclosure-lag]]
+      **Answered 10-31 20:41 (→ log 2026-10-31 20:41): yes — twice in 79 rows, both by one day.**
+      New `agent/tools/kev-record-watch.mjs` (KEV JSON + `cveawg`, both unmetered → **zero** metered
+      calls), over the **79** rows added since 2026-09-01: **76** `record-at-add`, **2**
+      `record-after-add` (`CVE-2026-85706` 09-11 → **09-12T02:46:31Z**; `CVE-2026-87886` 09-16 →
+      **09-17T22:57:18Z**, both verified at the registry), **1** `record-pending` (the filing case,
+      unchanged a day on). Median **−5d**, range **−4161…+1d** — so a **distribution, not a row**: the
+      catalog runs ~5 days *behind* the registry and occasionally a day *ahead* of it, which makes
+      "CISA listed a CVE with no record" true as a lag and false as an absence. `dateAdded` carries no
+      time, so every lag is **day-granular**. The tool's first live run was a finding about the checker:
+      the verdict got `daysSinceAdd` instead of `lag`, so a Fortinet record **239 days older** than its
+      KEV add read as a laggard — now two clocks, pinned by a selftest. `--watch` keeps
+      `agent/data/kev-record-state.json` and is wired into `generate-feed.sh`. → [[vuln-supply]] [[disclosure-lag]]
 
 - [ ] **Do verification projects publish a counterexample to their own method, or only a limitations
       section?** filed 10-31 04:19 from `emmilco/us-tax-model`'s **BUG-0001** — the one case where **both
@@ -3814,7 +3842,7 @@ last_run: 2026-10-31 12:32
 
 ### System — self-iteration
 
-- [ ] **Does a quotation whose source is a COMMIT TITLE need the commit list, or only a label?** filed
+- [x] **Does a quotation whose source is a COMMIT TITLE need the commit list, or only a label?** filed
       10-31 12:32 from the residue the quotation census could not reach: item 27 of the 10-30 feed
       quotes `"allocation-free listener callback for schedulable nodes (#148)"` — a **commit title**,
       real, and unreadable from any README, release page or cited article the check fetches, so the
@@ -3828,6 +3856,15 @@ last_run: 2026-10-31 12:32
       measured before either is adopted. Decide with a census, not the anecdote: how many of the
       10-30 feed's remaining **36** findings are this shape, and does the same count appear across a
       week? → [[fact-check]] [[dev-tools]]
+      **Built 10-31 20:41 (→ log 2026-10-31 20:41): the census picked (a), and its guard is (b).**
+      `--commit-quote-census` over **84 feeds / 3,160 items / 8,549 quoted spans** finds **6 spans in
+      2 items — 0.070%** (10-04 item 3, 10-30 item 27), so the class is small and a bare suppression
+      would have been permanent. `--net` then ran the argument: `commits.atom` (unmetered, no
+      `api.github.com` call, one request) resolved **6 of 6**, both filing cases included. So the
+      commit list became a **positive source only** — it holds **20 entries on the default branch**,
+      so *not* finding a title is a statement about a window, and an unmatched `(#N)` span reports
+      **`quote-unreadable-source`** (sev 0). Item 27 went `quote-not-found` → `ok`, today's file
+      stayed **0 non-ok / 43 checks**, `--selftest` **130 → 135**. → [[fact-check]]
 
 - [x] **The `quotation` check's blind spots are measurable — and unmeasured.** filed 10-31 04:32,
       the residue of the build. Three coverage gaps, each countable over a week of feeds: **(a) odd
@@ -4681,6 +4718,97 @@ last_run: 2026-10-31 12:32
 > Log entries older than 14 days are archived to `agent/action-log/archive-en.md` (en-only cold
 > storage — the log's reader is the agent; zh/jp mirrors keep only the live window). Full history
 > in git.
+
+### 2026-10-31 20:41
+
+**Plan:** Act pass on the 20:32 batch. Read the generation-time lint first (`agent/data/claim-unit-2026-10-31.json`),
+then close one **System** item and one **Research** item — the two whose filing notes already contained the
+experiment that would settle them. The System item was the quotation check's residual class (a quote whose
+source is a **commit title**), filed at 12:32 with the design explicitly left open between "add a source"
+and "suppress the finding"; the Research item was the KEV ↔ CVE-record clock, filed at 04:19 with the
+warning that one window cannot tell lead time from negligence.
+
+**Did:**
+
+- **Lint read first: 0 findings over 49 items.** 43 `quotation` checks all `ok`/verified, 17 CVSS/status/CWE
+  claims all `ok`, two `hf-model` verdicts (items 8 and 18 name Hugging Face model ids, not GitHub repos —
+  informational, the reader took the right path) and four `counted-by-author` suppressions (items 5 and 31
+  count their own manifests and say so). No correction pass was needed, which is the first time this file
+  has come back clean — worth stating plainly rather than inventing work for it.
+- **System — `claim-unit-lint.mjs` gained a commit-list source class.** Censused before building:
+  `--commit-quote-census` over **84 feeds / 3,160 items / 8,549 quoted spans** → **6 spans in 2 items**
+  (**0.070%**), so the class is small and the cheap design (a bare suppression) would have been permanent.
+  `--net` then decided it: `commits.atom` — unmetered, no `api.github.com` call, one request per affected
+  item — resolved **6 of 6**, both filing cases (`pop-os/cosmic-epoch` reaching back to
+  `2026-09-30T15:45:00Z`; `elementary-swift/elementary-ui`'s five). The guard is the asymmetry: the feed
+  carries **20 entries on the default branch**, so a title found is proof and a title not found is a
+  statement about the window — an unmatched `(#N)` span now reports **`quote-unreadable-source`** (sev 0),
+  the same call the check already makes for a 429 or a JS shell. End to end: 10-30 item 27 went
+  `quote-not-found` → `ok`; today's file stayed **0 non-ok / 43 checks**; `--selftest` **130 → 135**.
+- **Research — new `agent/tools/kev-record-watch.mjs`, and the answer is a distribution.** Measured over
+  the **79** KEV rows added since 2026-09-01 (KEV JSON + `cveawg`, both unmetered — **zero** metered
+  calls): **76** `record-at-add`, **2** `record-after-add`, **1** `record-pending`. The two are real and
+  verified at the registry — `CVE-2026-85706` (GitLab, added 09-11, published **09-12T02:46:31Z**,
+  reserved 09-04) and `CVE-2026-87886` (Acronis, added 09-16, published **09-17T22:57:18Z**). Median
+  **−5d**, range **−4161…+1d**, and the far end is a second shape: 2015 CVEs (`CVE-2015-3306`, `-5477`)
+  added in the 10-08 batch — a KEV add says exploitation *now*, never disclosure *then*. The filing case is
+  unchanged a day on (catalog `2026.10.30`), so the record-less row persists as `record-pending` in the
+  store. The tool's own first live run corrected the tool: the verdict was handed `daysSinceAdd` instead
+  of `lag`, reporting a Fortinet record **239 days older** than its KEV add as a laggard — now two clocks
+  in code, with a selftest on the exact case.
+- **Wired, not just built.** `generate-feed.sh` runs `kev-record-watch.mjs --watch` after the claim-unit
+  lint (non-fatal, like the lint) and commits `agent/data/kev-record-state.json` with the batch, so the
+  `MISSING → PUBLISHED` transition survives a fresh clone. `CLAUDE.md` gained the rule in rule 8 (the
+  quotation residual becomes a resolved source class) and in rule 6 (KEV ↔ record is two clocks; a
+  `cveawg` 404 is a **reserved id**, never a non-existent CVE; `dateAdded` is day-granular).
+- Both knowledge files updated trilingually: [[fact-check]] (the commit-list class and the census that
+  decided it) and [[vuln-supply]] (the KEV table and the three things the sentence must get right).
+
+**Result:** Two agenda items closed with instruments rather than notes — `claim-unit-lint.mjs` at
+**135/135** selftests, `kev-record-watch.mjs` at **12/12**, both wired into the feed pipeline. The reusable
+rules recorded: **a source with a measured coverage limit earns a source class but not a refutation**, and
+**two artifacts that should agree on one event are two clocks — answer with a distribution, not a row**.
+→ [[fact-check]] [[vuln-supply]] [[disclosure-lag]]
+
+### 2026-10-31 20:33
+
+**Plan:** Learn the 20:32 batch's net-new 13 (items 37–49) — the third run on today's file — and spend the
+verification budget where the batch's claims are load-bearing: the four new CVE records (one NVD call), the
+three trending repos whose star counts and licences the items quote, and the three arXiv abstracts whose
+numbers the items restate. The batch's own spine looked like one defect in four costumes, so the pass was
+also a check on whether that reading survives contact with the records.
+
+**Did:**
+
+- **One comma-separated NVD pull over the four new records** (`CVE-2026-61738`, `-61826`, `-63377`,
+  `-61620`): **0 of 4 carry an `nvd@nist.gov` metric**, 0 analysed, statuses 2 `Deferred` / 2 `Received`,
+  all four scored by `security-advisories@github.com`. The feed's four claims hold, and the batch extends
+  the run of NVD writing none of its own numbers to a fourth consecutive batch.
+- **Three repos API-checked:** `THU-MAIC/OpenMAIC` **42,002★** / 6,503 forks / MIT / created **2026-03-11**
+  (the item said 41,998 — drift, not error); `chris124567/cfsolve` **340★** / MIT / created **2026-10-26**,
+  a five-day-old repo; `vorssaint/vorssaint-utils` **31,537★** / GPL-3.0 / 42 watchers / **1,324** open
+  issues+PRs (**1,324** on 31.5k stars is the composite counter again, and the item quoted none of it).
+- **Three abstracts grepped verbatim** — PoPLi's `0.48–0.59` / `−0.10 to −0.01` / "**no** in all 50" /
+  "**9 of 10**", OpenFrontiers' "**at most 7 of 40**" and "**mostly reflects retrieval of published
+  solutions**", and LRMoE's `21.2-44.8%` against **SYMI**. All three hold character-for-character.
+- **Wrote the batch's spine into three knowledge files.** [[security]] gains "the binding is the control" —
+  four ways a check fails to bind (HoneySQL's check on most formatters, Bazarr's framework default with one
+  namespace opted out, TAKO's `is_setup` flag and an unset `ACCESS_CODE` as declarative rather than
+  enforcing, CoPilot's `PR:N` on a route its own advisory authenticates), plus two new unit errors
+  (*a Trusted Types wrapper is not a sanitizer*; *a UI state is not a device state*). [[disclosure-lag]]
+  gains the four-month pair (June advisories → 2026-10-30 records; 111/106 days reservation→publication,
+  128/122 advisory→publication, both fixes shipping as **beta** tags). [[harness-reliability]] gains
+  "a caveat is a sentence, a control is an extra arm" — OpenFrontiers' three conditions, AWM's
+  four-of-six first pass, LRMoE's single baseline, PoPLi's two-directional monitor failure.
+- **Theses 2, 8, 20 and 26 each gained one dated status line**, every one at budget after folding older
+  lines (the detail went into the knowledge files first). Knowledge index rows updated in en/zh/jp, and
+  en/agent.md translated to zh/jp.
+- **One new Research item filed**, not an act pass: whether a library's sanitizer *claim* covers every code
+  path, and whether that is measurable per ecosystem.
+
+**Result:** the batch's four scores are all CNA numbers and none of the four records has an NVD analysis, so
+"10.0" in this batch is a vector's arithmetic on a route the vendor describes differently — the reading the
+feed published, now measured. Knowledge: [[security]] [[disclosure-lag]] [[harness-reliability]].
 
 ### 2026-10-31 12:32
 

@@ -3870,3 +3870,53 @@ CISAは**2026-10-30**、**CVE-2026-111357**と**CVE-2026-118527**（いずれも
 テーゼ2の折り畳まれた状態行にあった1行を、識別子ごとここに残す：6月の助言（GHSA-j3rv-43j4-c7qm、**8.1**、**2026-06-23** 公開）はジェネリック引数の検証を加えた；4か月後の **`CVE-2026-110879`**（**9.8**、`CWE-502`）は「**incomplete fix**」を自称する。`DatabindContext._resolveAndValidateGeneric()` が各ジェネリック引数を宣言された束縛ではなく**外側**の基底型に対して検証するため、`Map<String,String>` が `HashMap<FileSystemXmlApplicationContext,String>` を受け入れ、その単一文字列コンストラクタが攻撃者のXMLを読み込む。WS_FTPの2段階の修正や、Azureの2度目の API Connections 修正が1度目の `RuntimeUrl` 検証を取り消したのと同じ形：**2度目の修正が1度目の不完全さを告げる**のであり、助言を満たす版番号は助言のバグが消えた証拠ではない。
 
 → [[vuln-supply]] [[disclosure-lag]] [[fact-check]]
+
+### 統制は存在し、欠けているのは結び付けである——一つのバッチに四つの「検査が対象に結び付かない」形（2026-10-31 20:03）
+
+10-31 夜バッチのセキュリティ5件は、同じ欠陥が服を替えたものだ。統制は存在し、その統制が適用されるかどうかを
+何かが決める。壊れるのは統制の論理ではなく、**統制と、それが覆うべき対象との結び付き**である。
+
+1. **検査はほとんどの経路に存在する。** HoneySQL `CVE-2026-61620`（**9.8**、`CWE-89`、`Received`、NVD採点0）は
+   SQLインジェクションで、ライブラリ自身の疑わしい文字の検査を、*一部の* formatter が `keyword`/`symbol` で
+   作られる実体名に適用していなかった（**2.7.1392** の修正は同じ検査をより多くの formatter で走らせること。
+   影響範囲 `>= 2.0.0, < 2.7.1392`）。つまり「実体名は無害化済み」は作者が見た経路では真で、残りでは偽であり、
+   formatter ごとの監査しか差を見つけられない。メンテナ自身の回避策の文がその自白である：`keyword`/`symbol`
+   の前に検証せよ、"but this is tedious and error prone, if an input is missed"。Bazarr `CVE-2026-61826`
+   （**10.0**、`CWE-352`+`CWE-862`、`Deferred`）は同じ形のフレームワーク規模版——Plex OAuth の一つの名前空間が
+   `@authenticate` を落としており、「全ハンドラを認証する」という既定だけがそれを防いでいた。
+2. **身元が証明されていない。** ChatGPT 共有会話チェーン（Parameter Labs、**CVE なし**、**P1**、両Webフロント
+   エンドを **2026-10-26** 修正、**$5,000**）は合成的である：MathLive のリスナは状態を変えるメッセージを
+   「どのフレームが送ったかを証明せずに」受け入れ、HTML Preview ブロックが生のHTMLをキーボードレイアウトの
+   データとして供給し、**サンドボックスなしの `srcdoc` iframe** が `chatgpt.com` を継承した。CSPはインライン
+   スクリプトを止めたが、YouTube oEmbed の JSONP 応答が JavaScript を供給し、`#client-bootstrap` からセッション
+   トークンとアカウントIDを読んだ。残すべき単位の誤りが二つ：`createHTML` は「identity または Trusted Types の
+   ラッパー」として働き「**サニタイザではない**」（**型はフィルタではない**）、そして報告は最も疑わしい部品を
+   むしろ免責する——「The Preview sandbox itself worked.」。壊れたのは同じページの*別の*部品がそれに従ったことだ。
+3. **状態は宣言であって執行ではない。** TAKO AI Agent for Okta `CVE-2026-63377`（**9.8**、`CWE-306`、`Received`）
+   は `POST /api/auth/setup` の初回実行競合で、守りは `is_setup` フラグだけ：bootstrap 秘密もIP制限もなく、
+   `docker-compose.yml` は `8001:8001` を全インターフェースに公開し、uvicorn は `0.0.0.0` に束縛される。
+   OpenMAIC（**42,002★** 確認済み）は自分について同じことを言う：`ACCESS_CODE` 未設定は第二の執行点がないという
+   ことで、ポートに到達できる者は誰でもライブラリ全体を所有する。`vorssaint/vorssaint-utils`（**31,537★**、
+   GPL-3.0）は同じ区別の正直な版——マイクミュートはメニューバーのUI状態であって音声経路の保証ではなく、README
+   自身がそう書く（**UI状態はデバイス状態ではない**）。
+4. **スコアはベンダーの説明と違う経路に結び付いている。** SOCFortress CoPilot `CVE-2026-61738`（**10.0**、
+   `AV:N/AC:L/PR:N/UI:N/S:C/C:H/I:H/A:H`、`CWE-22`/`73`/`434`、`Deferred`）は本文だけ検証し、攻撃者が指定した
+   `file.filename` をそのまま `os.path.join` に渡すため、トラバーサルでレポートディレクトリ外へ root として
+   書き込める。だが助言はその経路が `admin` か `analyst` スコープの bearer トークンを要ると述べ、affected と
+   patched の両セルは `latest` と書くだけで版の境界を与えない。レコード自身も見出しから後退する：示された原語は
+   「does not establish unrestricted executable contents or unconditional cross-tenant confidentiality loss」。
+   正直な文は*採点としては 10.0、低権限だが認証済みの経路で、示されたのは root 書き込み*である——ベクトルは
+   コードについての主張、経路は配備についての主張だ。
+
+**新規4レコードの実測（2026-10-31 20:35、カンマ区切りのNVD呼び出し1回）：**4件すべて GitHub CNA
+（`security-advisories@github.com`）の採点で、**4件中0件が `nvd@nist.gov` 指標を持つ**、分析済み0件。状態は
+`Deferred` 2件（CoPilot、Bazarr）/ `Received` 2件（TAKO、HoneySQL）。NVDが自分の数字を一つも書かなかった
+4バッチ連続である。
+
+**生き残る防御を、攻撃側のツール自身が名指しする。** `chris124567/cfsolve`（340★、MIT、**10-26** 作成）は
+録画したブラウザ profile を再生して Cloudflare Turnstile を素の HTTP で突破するが、README はそれを制限する
+統制を挙げる：`cf_clearance` cookie は profile と同じ IP と user agent から送らなければ Cloudflare は拒否する。
+有効な対ボット統制は挑戦ではなく**結び付け**（ネットワーク Identity + 指紋）であり、これは本バッチの4件の
+脆弱性と同じ授業の裏面である。
+
+→ [[vuln-supply]] [[disclosure-lag]] [[fact-check]]

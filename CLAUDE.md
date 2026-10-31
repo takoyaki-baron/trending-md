@@ -341,6 +341,23 @@ underlying pages — this produced a two-layer false signal in a single item.
    so; never silently pick one. **`no record` is perishable like every other absence** — both
    negatives this tool was filed against (`CVE-2026-92707`, `CVE-2026-110264`) acquired NVD
    records within days, so re-run before quoting one.
+   **A KEV row and its CVE record are two clocks, and the catalog can be AHEAD** (added 2026-10-31
+   20:41, from `CVE-2026-118527`: KEV'd 2026-10-30, `cveawg` 404 a day later, its own `notes`
+   linking an NVD URL that resolves to nothing). Measured with the new
+   `node agent/tools/kev-record-watch.mjs --since YYYY-MM-DD` (KEV's JSON and `cveawg` are both
+   **unmetered** — zero `api.github.com`, zero NVD calls): of the **79** rows added since
+   **2026-09-01**, **76** had a record at or before their KEV add, **2** published *the day after*
+   it (`CVE-2026-85706` added 09-11 → published 09-12T02:46Z; `CVE-2026-87886` added 09-16 →
+   published 09-17T22:57Z), and **1** was still unpublished a day on. So "CISA listed a CVE the
+   registry has no record of" is **true as a lag and false as an absence**, and the sentence must say
+   which. Three things to write correctly: **`cveawg` 404 is a RESERVED id whose record is
+   unpublished — never "does not exist"** (the reservation is why KEV can cite it at all); **`dueDate`
+   is not this clock** (it is the FCEB remediation deadline and moves independently); and **`dateAdded`
+   carries no time**, so every lag from it is **day-granular** — "the following day", not "+1d" as if
+   hours were known. The catalog's own `catalogVersion` is a date, so "added 10-30" means "present in
+   the 10-30 batch", not an hour. `--watch` keeps `agent/data/kev-record-state.json` and appends only
+   on a real move (`MISSING → PUBLISHED` is the only evidence that bounds the lag); a row unpublished
+   past **30 days** is the finding rather than another pending row.
    **"Patched" is a claim about an artifact, and the record, the commit and the thing a consumer
    installs are three different objects** (added 2026-10-23, the EDK2 lesson). Every state above
    is *temporal*; none answers "can I install the fix". EDK2's 9.5 pre-boot RCE has PR **#13302**
@@ -820,9 +837,20 @@ underlying pages — this produced a two-layer false signal in a single item.
    stays `quote-short` (sev 1) with the unread count named when something did. Calibrated both
    ways: 10-31 returns **0 findings / 31 verified before and after**, 10-30's three escalations were
    all confirmed by opening the sources and corrected in place (items **20, 29, 41**, en+zh+jp),
-   `--selftest` **126→130**. **What the census cannot reach is the quoting source that is a commit
-   list**: item 27's `"allocation-free listener callback for schedulable nodes (#148)"` is a commit
-   TITLE, real and unreadable from a README — the residual class, filed to the Agenda.
+   `--selftest` **126→130**. **What the census could not reach was the quoting source that is a
+   commit list** — item 27's `"allocation-free listener callback for schedulable nodes (#148)"` is a
+   commit TITLE, real and unreadable from a README — **and it is now a source class since 2026-10-31
+   20:41.** Censused before building (`--commit-quote-census`): **6 spans in 2 items over 84 feeds /
+   3,160 items / 8,549 quoted spans — 0.070%**, so the class is small and the suppression design
+   would have been permanent. `commits.atom` (unmetered, no `api.github.com` call, and fetched only for an
+   item that still has an unmatched span — at most two requests, one per repo slug) resolved **6 of 6** incl. both filing cases, and item 27 went `quote-not-found` →
+   `ok` with the 10-31 file still **0 non-ok / 43 checks**; `--selftest` **130→135**. **The guard is
+   the half that matters: that feed carries 20 entries on the DEFAULT BRANCH, so the commit list is a
+   POSITIVE source only** — finding the title is proof, not finding it is a statement about a window.
+   An unmatched `(#N)` span therefore reports **`quote-unreadable-source`** (sev 0), the same call the
+   check already makes for a 429 or a JS shell. The transferable rule: **a source with a measured
+   coverage limit earns a source class but not a refutation — ask "can this source reach the thing at
+   all?" before letting its silence become a finding.**
    **Three of the lint's own readings were findings about the checker, and each is now a rule**
    (measured on the 10-28 20:24 batch, `--selftest` 53→**66**). **(a) A dated quote is not a stale
    quote:** item 5 said "at the time of writing holds **56 stars**" and read **114** forty minutes

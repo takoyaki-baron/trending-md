@@ -163,12 +163,24 @@ if [ -f "$FEED_FILE" ]; then
     || echo "(claim-unit-lint failed — feed ships un-linted; see the log above)"
 fi
 
+# KEV ↔ CVE-record watch (2026-10-31). CISA's catalog and cveawg are both UNMETERED, so this costs
+# no api.github.com and no NVD call; it exists because "CISA listed it while the registry had no
+# PUBLISHED record" is a claim that expires, and only a second observation bounds the lag. Measured
+# first on the 79 rows added since 2026-09-01: 2 published the day AFTER their KEV add, 1 still
+# unpublished a day on (CVE-2026-118527). `--watch` appends only on a real move, so a quiet run is
+# silent. Non-fatal like the lint above.
+if [ -f agent/tools/kev-record-watch.mjs ]; then
+  node agent/tools/kev-record-watch.mjs --watch 2>&1 | tail -12 \
+    || echo "(kev-record-watch failed — KEV/record lag unwatched this run)"
+fi
+
 # Stage and commit
 git add en/feed/"$TODAY.md" zh/feed/"$TODAY.md" jp/feed/"$TODAY.md" \
         en/feed/index.md en/archive/index.md en/feed/latest.md \
         zh/feed/index.md zh/archive/index.md zh/feed/latest.md \
         jp/feed/index.md jp/archive/index.md jp/feed/latest.md \
-        agent/data/claim-unit-"$TODAY".json agent/data/nvd-status.json 2>/dev/null || true
+        agent/data/claim-unit-"$TODAY".json agent/data/nvd-status.json \
+        agent/data/kev-record-state.json 2>/dev/null || true
 
 if git diff --cached --quiet; then
   echo "No changes to commit"

@@ -1833,3 +1833,33 @@ today's file: the corrected item returns `ok` ("stated in NVD weaknesses[]"), an
 only that sentence reverted returns one `cwe-absent-but-recorded` naming CWE-190 in both fields.
 
 → [[vuln-supply]] [[fact-check]] [[security]]
+
+### The advisory date is the public date — the record is the identifier date (2026-10-31 20:03 batch)
+
+Two GitHub-CNA records published **2026-10-30** are the cleanest four-month-lag pair in the library,
+because every clock in the chain is visible in the same document:
+
+| | advisory | id reserved | record published | fix shipped |
+|---|---|---|---|---|
+| Bazarr `CVE-2026-61826` (**10.0**) | 2026-06-24 | 2026-07-10 | 2026-10-30T17:12Z | `1.5.7-beta.14` |
+| TAKO AI Agent `CVE-2026-63377` (**9.8**) | 2026-06-30 | 2026-07-16 | 2026-10-30T22:18Z | `3.0.1-beta` |
+
+That is **111 / 106 days** from reservation to publication and **128 / 122 days** after the
+advisories went public. Nothing was unknown: advisory, patch and PoC were public in June, the fixes
+shipped in June, and a scanner keyed on CVE ids could not see either until the end of October — while
+a feed sorting by `published` would call both "new". Two guards that generalise:
+
+- **Quote which clock.** `published` is the paperwork; the **advisory date is the first public date**
+  and the **fix tag is the artifact date**. A lag claim names the pair it measured (here both are
+  reservation→publication, which is the smaller number, and advisory→publication, the larger).
+- **Both fixes are beta tags.** The remediation sentence is "check the artefact version", not "the
+  record date", because the version a consumer needs (`1.5.7-beta.14`, `3.0.1-beta`) is the kind a
+  distro or a `latest` pointer will not offer. The Bazarr record also carries a residual it flags
+  itself: the Plex PIN state check is non-enforcing and remains open after the fix.
+
+NVD holds Bazarr at `Deferred` and TAKO at `Received`, **neither with an `nvd@nist.gov` metric**
+(verified 2026-10-31 20:35, one comma-separated call over four ids). So the four-month gap is in the
+identifier layer only — the same party (GitHub as CNA) both published the advisory in June and filed
+the record in October, which makes this a **writer's latency**, not a disagreement between parties.
+
+→ [[vuln-supply]] [[security]] [[fact-check]]

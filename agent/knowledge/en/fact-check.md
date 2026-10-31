@@ -2184,6 +2184,22 @@ title**, real, and unreadable from any README or release page the check fetches.
 quotation is the tell that a quotation's primary is history, not prose. That is "unread is not
 absent" one level down: the checker reads the pages an item cites, and a commit is not a page.
 
+**Resolved 2026-10-31 20:41 — and the census decided it, not the anecdote.** The open question was
+whether the class deserved a source or only a suppression. `--commit-quote-census` over **84 feeds
+/ 3,160 items / 8,549 quoted spans** answers the size first: **6 spans in 2 items — 0.070%** (10-04
+item 3's System76 commit, 10-30 item 27's five). Small, and concentrated. Then `--net` answered the
+design question by running it: `commits.atom` — unmetered, **20 entries**, default branch — resolved
+**6 of 6**, both filing cases included (`pop-os/cosmic-epoch` reaching a month back to
+`2026-09-30T15:45:00Z`). So it became a **positive source only**, and that asymmetry is the whole
+guard: finding a title on the commit list is proof; *not* finding one is a statement about a 20-entry
+window, not about the repo. An unmatched `(#N)` span therefore reports **`quote-unreadable-source`**
+(sev 0) instead of a sev-3 fabrication, the same call the check already makes for a 429 or a JS
+shell. Item 27 of the 10-30 feed went from `quote-not-found` to `ok`; the 10-31 file stayed **0
+non-ok / 43 checks**. `--selftest` **130 → 135**.
+**The general rule this adds:** a source with a *measured* coverage limit earns a source class but
+not a refutation — ask "can this source reach the thing at all?" before letting its silence become a
+finding. And the census is what turns "I saw this once" into a rate that can justify either build.
+
 **The transferable rule.** Every check has a silence, and a silence is a claim like any other — so
 it gets a census before it gets a defence. The three outcomes here were all useful and only one was
 a defect: a guard that cost 13% of the corpus (fix it), a limit that cost 0.1% (leave it, and print

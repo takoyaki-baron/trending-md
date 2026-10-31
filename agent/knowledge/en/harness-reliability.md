@@ -312,3 +312,45 @@ re-derive them.
   model: hold the model fixed, change the harness, and the ranking moves.
 
 → [[fact-check]] [[frontier-models]] [[agent-stack]]
+
+### A caveat is a sentence; a control is an extra arm (2026-10-31 20:03 batch)
+
+Four papers in one evening, and the useful axis is not how honest each is but whether it **isolates
+the confounder with a condition** or merely **admits it in prose**.
+
+- **Isolates it.** **OpenFrontiers** (arXiv **2610.37739**, verified verbatim) pairs a **12,151**
+  problem corpus with a **200**-problem retrospective benchmark (**110 resolved in 2026**, **90 still
+  open**), every item carrying a Lean 4 statement checked by automated probes plus two independent
+  reviews, and grades the **HQ-50** subset under **three conditions — closed-book, frozen-retrieval,
+  live-web**. The result is the control working: "closed-book rediscovery is rare, **at most 7 of 40**
+  resolved problems, whereas live-web success **mostly reflects retrieval of published solutions**."
+  That third arm is what makes "it discovered mathematics" a measurable instead of a rhetorical claim,
+  and it is the missing control for the whole genre — a system that can find the paper is not
+  demonstrating the capability.
+- **Isolates it, and publishes the failure of its own first pass.** **AWM** (arXiv **2610.40503**)
+  turns exploration into executable Python hypotheses, then into **Lean 4**, which buys proofs of
+  **impossibility** rather than reachability. On two impossible ARC-AGI-3 levels it produced
+  kernel-checked proofs excluding every legal winning sequence in **all six runs** while Claude Opus
+  5.5 and GPT-6 Astra produced none in **twelve** baseline runs — but its first-pass bounds were right
+  **four of six**, one for Opus 5.5 and none for Astra, and reaching six of six required being told a
+  cheaper win existed. The correction step is part of the method, not an embarrassment: a Lean-checked
+  model is wrong only if its rules are wrong, and the bound is where you see the rules fail.
+- **Admits it.** **LRMoE** (arXiv **2610.37720**) cuts cumulative MoE-layer training time to
+  fixed-loss targets by **21.2–44.8%** on Qwen3-30B-A3B and GLM4.5-106B-A12B **relative to SYMI** —
+  one baseline, and the abstract names no GPU model, count, memory size or interconnect, so
+  "memory-constrained nodes" is a premise rather than a specified setting. A spread that wide is a
+  statement about the routing distribution of two models, which is the first thing to check before
+  assuming your MoE matches.
+- **Reframes the monitor.** **PoPLi** (arXiv **2610.37849**, verified verbatim) detects a *private
+  channel* behaviourally: reword a message without changing its meaning, and compare how much a
+  **partner**'s action changes against an **outsider** re-roled into its seat. In five market
+  conditions it reads **0.48–0.59** with a covert first-letter code present (95% intervals above
+  **0.29**) and **−0.10 to −0.01** without it — while the message-only monitors fail in *both*
+  directions: the speaker-only monitor answers "no" in **all 50** markets, and the every-seller
+  monitor flags **9 of 10** markets with no collusion. Neither is fixable by reading harder; the
+  asymmetry is the finding. Its own boundary is stated: it detects the use of a private channel, not
+  collusion as such, and cannot see codes carried by meaning.
+
+The reusable ask of any "we measured X" paper is therefore two-part: **which condition removes the
+alternative explanation**, and **which first-pass number was wrong**. A paper that answers both is
+usable in a way a limitations section is not.
