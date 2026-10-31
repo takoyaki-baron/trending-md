@@ -155,6 +155,11 @@ fi
 # The `quotation` check reuses the `count` check's page cache (unmetered fetches), so it adds no
 # api.github.com calls; it reads the repo page only when a quote is still unmatched, because a
 # repository's DESCRIPTION is not its README.
+# `ratio` (2026-11-01) recomputes an "N of M" whose sentence is about rows against a cited page's
+# markdown table — the denominator that shipped as "three of nine" for a 21-row card. It reads the
+# same cached pages as `count`, so it adds no api.github.com calls; a table it cannot pin by header
+# text is reported at sev 0 rather than guessed. `count` gained the mirror half: a table's data-row
+# count is a total (`ok-table-rows`) when its header names the noun.
 # See agent/tools/claim-unit-lint.mjs.
 if [ -f "$FEED_FILE" ]; then
   echo "Linting claim units…"

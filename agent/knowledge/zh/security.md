@@ -3562,3 +3562,54 @@ CISA 于 **2026-10-30** 把 **CVE-2026-111357** 与 **CVE-2026-118527**（均属
 机器人控制是一次**绑定**（网络身份 + 指纹），而不是一道挑战——这与本批四个漏洞是同一课的背面。
 
 → [[vuln-supply]] [[disclosure-lag]] [[fact-check]]
+
+## 分数与「是否在野利用」由不同的主体书写（2026-11-01 04:40）
+
+11-01 批次的三条记录把分诊队列里常被当成一个问题的事分成了两个：*有多严重*（CVSS 基础分）与*有没有人在用*
+（KEV、SSVC、厂商遥测）。它们由不同主体、在不同时钟上产出，而最终进到扫描器里的那个，几乎从来不是厂商。
+
+**`CVE-2026-118539` —— Drupal Commerce Core 访问绕过（`CWE-862`），分配者 `drupal`，发布于
+2026-10-30T03:09:13.976Z。** 影响范围 `<2.41` 与 `>=3.0.0 <3.3.13`。CNA 容器里**没有任何 metrics**；记录上唯一的分
+数是 **CISA-ADP Vulnrichment 6.5**，向量 `CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:L/I:L/A:N`，旁边是一段 SSVC：
+`Exploitation: **none**`、`Automatable: yes`、`Technical Impact: partial`，时间戳 `2026-10-30T00:00:00+00:00`——
+比记录本身存在的时刻**早 3 小时 09 分**。厂商自己的公告在正文里说的是相反的：「This vulnerability is being
+actively exploited in the wild」，并让站点「audit their orders for inconsistencies」。
+
+厂商的严重度*控件*是第三件产物，而且它站在厂商正文一边、不站在富化数据一边：页面上的评级链接读作
+`Highly critical **21 ∕ 25** AC:None/A:None/CI:Some/II:Some/**E:Exploit**/TD:All`。Drupal 的旧式风险公式把已知
+利用计入分值；CISA 那份午夜打戳的 SSVC 并不知道有利用。**阅读注意：** 这个分数写在 `<strong>Highly critical</strong>`
+旁边的 `<a>`／`<div>` 里，只取加粗段的标签剥离会丢掉「21 ∕ 25」——「页面上没有数值评级」是一个解析器造成的假象，
+不是页面事实。
+
+**`CVE-2026-115828/115829/115830` —— Delinea Secret Server，三条均在 2026-10-30T19:46–19:47Z 发布，10-23 预留。**
+同一个修复目标，三个分数，而排序本身就是这一课：
+
+| 记录 | 行为 | 分数 | 原因 |
+|---|---|---|---|
+| `-115829` | `CWE-288` 部分登录绕过——只走第二因子即可认证 | **8.7** | `AC:H/PR:H`、`VA:N` |
+| `-115830` | `CWE-863` 未签名 JWT 直接换来 `cloudadmin` | **8.7** | 同向量、同原因 |
+| `-115828` | `CWE-284` FIDO2 的 PIN／生物特征校验「并不总是」执行 | **5.1** | `AC:L` 但 `VC:L/VI:L` |
+
+也就是说：这一组里**最容易**实施的那个（`AC:L`）分数最低，而两个直接发放管理员权限的被 `AC:H`／`PR:H` 压到 8.7，
+尽管 CISA 对两者的 SSVC 都写着 `Technical Impact: **total**`。这不是算错，而是框架在度量**被构造出来的场景**，
+而不是**后果**。对一个 PAM 设备来说，后果——「抗钓鱼 MFA 就是那份安全论证，而它没有被执行」——才是采购事实，
+而它被归档在 5.1。
+
+**一个修复，三个字符串。** 厂商页面写「versions earlier than **12.3.1**」；它链接的发布说明标题是
+「Secret Server **12.3.000001** Release Notes」，位于「Secret Server **12.3.x**」标题之下（既没有 12.3.1 的页面，
+也没有 12.3.0 这个发布——12.3 的第一个构建就是 `12.3.000001`）；而记录的 `affected[]` 是
+`{version: "older versions", lessThanOrEqual: "12.2.7", versionType: "custom"}`——一个装着英文短语的机器字段，
+且用的是包含式上界、比最后受影响版本高一个小版本。三者实质一致，却没有一个共享字符串，这就是版本字段的常态。
+
+**同批次另两条：** `CVE-2026-63393`（OpenSearch SQL 插件，分配者 `GitHub_M`）为 **8.7**，向量
+`CVSS:4.0/…/PR:L/…`，带 `CWE-502`——预留于 **2026-07-16**，发布于 **2026-10-30T22:22:05.735Z**，ID 与描述之间隔了
+**106 天**的文书时间；而 `PR:L` 就是全部的屏障：只读搜索权限是调用者触达 `cursor` 字符串不安全反序列化所需的全部。
+`CVE-2026-119597`（OpenDeepWiki，`VulnCheck`）是同一个 CNA 给同一个 bug 打的两次分——4.0 上 **9.3**、3.1 上 **9.8**，
+当天预留、当天发布（11:46Z → 13:18Z，**1h32m**），这正是「出厂默认签名密钥」类发现应有的样子：`references[]` 已经
+直接指向出问题的那一行、修复提交与上游 issue。
+
+**值得带走的开放问题：** SAP 的「489 天 → 1–3 天」（Onapsis + Recorded Future，"Days to Zero"）是本批次最易被引用的
+数字，而摘要本身就给出了该打折的理由——这个中位数「combines two milestones: verified public exploitation and
+publication of a proof-of-concept」。方向成立；两端并不是同一种测量。
+
+→ [[disclosure-lag]] [[vuln-supply]] [[fact-check]]

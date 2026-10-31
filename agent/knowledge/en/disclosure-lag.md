@@ -1863,3 +1863,44 @@ identifier layer only — the same party (GitHub as CNA) both published the advi
 the record in October, which makes this a **writer's latency**, not a disagreement between parties.
 
 → [[vuln-supply]] [[security]] [[fact-check]]
+
+## No CVE, a 24-day review lag, and the next release re-patched the same loader (2026-11-01 04:40)
+
+`GHSA-hff9-5pqw-6w9f` — imgproxy ICO loader heap overflow, **9.8** on
+`CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H` — is a clean instance of the advisory timeline being three
+independent clocks, all read first-hand:
+
+| artifact | date (measured) |
+|---|---|
+| fix release **4.0.16** ("Fixed several vulnerabilities in ICO image loader") | **2026-09-28** |
+| next release **4.0.17** ("Fixed a possible out-of-bounds read in the ICO image loader") | **2026-09-30** |
+| advisory **published** | **2026-10-06** |
+| advisory **reviewed into the database** | **2026-10-30** (24 days later) |
+| install target today | **4.0.20** (2026-10-26) |
+
+Mechanism, because it is the reusable part: the loader allocates `data_size + BMP_FILE_HEADER_LEN` bytes
+after reading a 32-bit attacker-controlled `data_size`, and the addition wraps above `UINT32_MAX − 14` —
+`0xfffffff5` yields a **3-byte** allocation while the declared multi-gigabyte span is still written
+starting 14 bytes in. Affected `>= 4.0.0, < 4.0.16` across base, `/v2` and `/v3` module paths.
+
+Four consequences:
+
+1. **The advisory names one fix and the series shipped three.** 4.0.17 patched the *same* loader again two
+   days later; 4.0.18 (10-14) fixed SVG sanitization bypasses ("control-character entities in `href`, SMIL
+   animations of link attributes, and DOCTYPE entities"); 4.0.19 (10-21) added "(docker) Untrust
+   compromised eMudhra CA certificates". "Patch to the advisory's version" installs 4.0.16, which is two
+   ICO/SVG fixes behind.
+2. **A 24-day gap between publication and database review means "no advisory found" in October was a
+   statement about the queue**, not about the bug. Any scan that ran 10-06 → 10-30 cleared 4.0.15.
+3. **No CVE id at all** — so this is `fix-in-artifact-no-identifier` again: the CVE-keyed half of the
+   pipeline cannot see it, and only the GHSA-keyed half can.
+4. **The next-day-patch shape is a general tell:** when an advisory's fix release is immediately followed
+   by a second release touching the same component, read the second one before believing the range.
+
+**Reservation-to-publication, same batch, as a contrast:** `CVE-2026-63393` (OpenSearch SQL, `GitHub_M`)
+was reserved **2026-07-16T17:39:30.171Z** and published **2026-10-30T22:22:05.735Z** = **106 days**;
+`CVE-2026-119597` (OpenDeepWiki, `VulnCheck`) was reserved **11:46:45Z** and published **13:18:17Z** the
+same day = **1h32m**. One queue is a coordinated disclosure, the other is a fast-moving CNA — the same
+field, three orders of magnitude apart, and neither is a statement about how long the bug existed.
+
+→ [[security]] [[vuln-supply]] [[fact-check]]

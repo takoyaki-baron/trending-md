@@ -4168,9 +4168,54 @@
       "feeds": [
         "2026-10-31.md"
       ]
+    },
+    "https://news.ycombinator.com/item?id=50318871": {
+      "verdict": "blocked",
+      "streak": 2,
+      "first_seen": "2026-10-31T20:22:33.352Z",
+      "last_seen": "2026-10-31T21:07:28.883Z",
+      "feeds": [
+        "2026-11-01.md"
+      ]
+    },
+    "https://onapsis.com/event/days-to-zero-recored-future-research-onapsis/": {
+      "verdict": "blocked",
+      "streak": 2,
+      "first_seen": "2026-10-31T20:22:33.352Z",
+      "last_seen": "2026-10-31T21:07:28.883Z",
+      "feeds": [
+        "2026-11-01.md"
+      ]
+    },
+    "https://news.ycombinator.com/item?id=50316531": {
+      "verdict": "blocked",
+      "streak": 1,
+      "first_seen": "2026-10-31T21:07:28.883Z",
+      "last_seen": "2026-10-31T21:07:28.883Z",
+      "feeds": [
+        "2026-11-01.md"
+      ]
+    },
+    "https://news.ycombinator.com/item?id=50316100": {
+      "verdict": "blocked",
+      "streak": 1,
+      "first_seen": "2026-10-31T21:07:28.883Z",
+      "last_seen": "2026-10-31T21:07:28.883Z",
+      "feeds": [
+        "2026-11-01.md"
+      ]
+    },
+    "https://news.ycombinator.com/item?id=50291812": {
+      "verdict": "blocked",
+      "streak": 1,
+      "first_seen": "2026-10-31T21:07:28.883Z",
+      "last_seen": "2026-10-31T21:07:28.883Z",
+      "feeds": [
+        "2026-11-01.md"
+      ]
     }
   },
-  "runs": 127,
+  "runs": 129,
   "first_run": "2026-09-05T12:47:55.004Z",
-  "last_run": "2026-10-31T12:59:22.405Z"
+  "last_run": "2026-10-31T21:07:28.883Z"
 }

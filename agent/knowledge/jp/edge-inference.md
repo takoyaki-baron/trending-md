@@ -273,3 +273,36 @@ GGUF監査（arXiv **2609.05881**、単位の完全な分析は [[fact-check]]�
 論文自身が述べる限界：15モデル系列、コードタスクのみ、誤検知側は66タグの標本。したがってその母集団外の失敗率は未測定。
 
 → [[fact-check]] [[frontier-models]] [[agent-stack]]
+
+## 実際に出荷される成果物が 4-bit ビルドなら、その列こそが結果である（2026-11-01 04:40）
+
+`nvidia/NVIDIA-Nemotron-3.5-Bolt-E4B-4GB`（HF、`license: other` / `openmdw-1.1`、`base_model` は
+`…Bolt-E4B-BF16`、関係は `quantized`）は NVIDIA が「Gemma-4-E4B-it からさらに対話後学習した」モデルである。
+その命名は三つの異なる測定で、すべて一次確認した。
+
+- **「4B」** は Gemma-4-E4B という疎モデルの*実効*パラメータ数。カード自身の表は「Total Parameters |
+  **8B (4B effective)**」と書く。
+- **「4GB」** はブランド名。Hub 上の Q4_K_M ファイルは **6,180,446,208 バイト = 6.18 GB**。
+- **64K** はコンテキスト（入力・出力とも）で、これは本物だ（カード内の llama.cpp レシピに `-c 65536`）。
+
+オンデバイスは量子化が「最適化」から「配備」に変わる場所なので、Q4 の列は差分ではなく見出しとして読むべきだ。
+**21** 行のうち Q4_K_M が同一モデルの BF16 を上回るのは **7** 行 — 決定的なものが四つ（ToolSandbox +5.36、
+RelyToolBench +6.13、RoleBench +4.16、MultiChallenge +2.50）、ノイズ内が三つ（+0.21…+0.32）— で、14 行で負ける。
+最大の下落は長いコンテキスト側に集まる（RULER 64K で 86.99→85.76、LongBench v2 48K で 50.50→48.67、
+Tau2-Bench 55.10→52.32）。よって「4 ビット版は厳密なダウングレードではない」はカードが支持し、
+「量子化は無料」は支持しない。
+
+引用可能にしている開示が二つある。「Accuracy numbers are measured by NVIDIA under a **consistent harness** (NeMo
+Gym); they may differ from vendors' self-reported numbers」、そして「evaluations are conducted in reasoning mode
+except for RoleBench, EQ-Bench v3, and RULER」— つまりカードはハーネスを述べるが**分散は述べない**ので、読者は
+MultiChallenge の +2.9 を実行ノイズから切り離せない。日付も同様で、カード内の Model Dates 表は
+「Hugging Face **10/23/2026**」と書くが、Hub の `createdAt` は **2026-10-05** — リポジトリはカードが公開と呼ぶ
+18 日前に作られうる。リリースドリフト軸のモデル側の形である。
+
+**同バッチの対照、スペクトルの床:** `kerlenton/bootgpt` は 512 バイトの MBR の後、**23 セクタ**に **11.5 KB** の
+int8 文字レベルモデルを置き、386 の 16 ビットリアルモードで動かす（「The boot sector is code only — strings,
+weights and the vocab table all live in the data sectors」）。著者は上限ではなく限界を書く:「With 8 chars of
+context and one hidden layer this is roughly the quality you get」、「the model is not a general story teller」。
+MBR 内の 11.5 KB からスマートフォン上の 6.18 GB まで、「モデルの大きさ」とはどの成果物を入れたかの話である。
+
+→ [[frontier-models]] [[fact-check]]

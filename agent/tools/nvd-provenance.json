@@ -1408,6 +1408,36 @@
    "id": "CVE-2026-61620",
    "why": "HoneySQL 9.8 SQL injection, maintainer-authored advisory",
    "seeded": "2026-10-31 [Received] 3.1 Secondary/security-advisories@github.com 9.8, CWE-89, published 10-30"
+  },
+  {
+   "id": "CVE-2026-115828",
+   "why": "Delinea Secret Server FIDO2 PIN/biometric check not always validated, 5.1 CNA v4.0",
+   "seeded": "2026-11-01 [Received] 4.0 Secondary/1443cd92-d354-46d2-9290-d812316ca43a 5.1, CWE-284, published 10-30"
+  },
+  {
+   "id": "CVE-2026-115829",
+   "why": "Delinea Secret Server partial login bypass (second factor alone authenticates), 8.7 CNA v4.0",
+   "seeded": "2026-11-01 [Received] 4.0 Secondary/1443cd92-d354-46d2-9290-d812316ca43a 8.7, CWE-288, published 10-30"
+  },
+  {
+   "id": "CVE-2026-115830",
+   "why": "Delinea Secret Server unsigned JWT returns cloudadmin, 8.7 CNA v4.0",
+   "seeded": "2026-11-01 [Received] 4.0 Secondary/1443cd92-d354-46d2-9290-d812316ca43a 8.7, CWE-863, published 10-30"
+  },
+  {
+   "id": "CVE-2026-118539",
+   "why": "Drupal Commerce Core access bypass, actively exploited per vendor, only score is CISA-ADP 6.5",
+   "seeded": "2026-11-01 [Awaiting Analysis] 3.1 Secondary/134c704f-9b21-4f2e-91b3-4a467353bcc0 6.5, CWE-862 (mlhess@drupal.org), published 10-30"
+  },
+  {
+   "id": "CVE-2026-119597",
+   "why": "OpenDeepWiki hard-coded JWT signing key -> admin token forgery; NVD status Deferred",
+   "seeded": "2026-11-01 [Deferred] 3.1 Primary/disclosure@vulncheck.com 9.8 + 4.0 Secondary 9.3, CWE-321, published 10-30"
+  },
+  {
+   "id": "CVE-2026-63393",
+   "why": "OpenSearch SQL plugin unsafe cursor deserialization -> RCE",
+   "seeded": "2026-11-01 [Received] 4.0 Secondary/security-advisories@github.com 8.7, CWE-502, published 10-30"
   }
  ]
 }

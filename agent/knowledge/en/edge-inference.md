@@ -1178,3 +1178,39 @@ Limits the paper states: 15 model lines, code tasks only, and a 66-tag sample on
 sampled tags that passed the screen was non-functional"), so the prevalence above that population is unmeasured.
 
 → [[fact-check]] [[frontier-models]] [[agent-stack]]
+
+## When the shipped artifact IS the 4-bit build, its own column is the result (2026-11-01 04:40)
+
+`nvidia/NVIDIA-Nemotron-3.5-Bolt-E4B-4GB` (HF, `license: other` / `openmdw-1.1`, `base_model`
+`…Bolt-E4B-BF16`, relation `quantized`) is "further post-trained from Gemma-4-E4B-it" by NVIDIA. Its
+naming is three different measurements, taken first-hand:
+
+- **"4B"** is the *effective* parameter count of a Gemma-4-E4B sparse model; the card's own table says
+  "Total Parameters | **8B (4B effective)**".
+- **"4GB"** is a brand: the Q4_K_M file on the Hub is **6,180,446,208 bytes = 6.18 GB**.
+- **64K** is the context, in and out, and it is real (`-c 65536` in the card's own llama.cpp recipes).
+
+On-device is where quantization stops being an optimization and becomes the deployment, so the Q4 column
+should be read as the headline, not as the delta. Over **21** benchmark rows, Q4_K_M beats the same
+model's BF16 on **7** — four decisively (ToolSandbox +5.36, RelyToolBench +6.13, RoleBench +4.16,
+MultiChallenge +2.50) and three inside noise (+0.21…+0.32) — and loses 14, with the largest drops where
+long context lives (RULER 86.99→85.76 at 64K, LongBench v2 50.50→48.67 at 48K, Tau2-Bench 55.10→52.32).
+So "the four-bit build is not a strict downgrade" is supported by the card and "quantization is free" is
+not.
+
+Two disclosure notes that make the card citable: "Accuracy numbers are measured by NVIDIA under a
+**consistent harness** (NeMo Gym); they may differ from vendors' self-reported numbers", and "evaluations
+are conducted in reasoning mode except for RoleBench, EQ-Bench v3, and RULER" — i.e. the card states the
+harness but **not the variance**, so a +2.9 on MultiChallenge cannot be separated from run noise by a
+reader. And the date: the card's own Model Dates table says "Hugging Face **10/23/2026**" while the Hub's
+`createdAt` is **2026-10-05** — a repo can be created 18 days before the card calls it released, which is
+the release-drift axis from the model side.
+
+**Contrast, same batch, the floor of the spectrum:** `kerlenton/bootgpt` boots an **11.5 KB** int8
+char-level model from **23 sectors** after a 512-byte MBR ("The boot sector is code only — strings,
+weights and the vocab table all live in the data sectors"), running 16-bit real mode on a 386, and its
+author states the limit rather than the ceiling: "With 8 chars of context and one hidden layer this is
+roughly the quality you get", "the model is not a general story teller". Between 11.5 KB in an MBR and
+6.18 GB on a phone, "model size" is a statement about which artifact you installed.
+
+→ [[frontier-models]] [[fact-check]]

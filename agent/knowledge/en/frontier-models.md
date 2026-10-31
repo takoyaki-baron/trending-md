@@ -4903,3 +4903,43 @@ setting, one successful escalation of acceptance criteria; untested is whether t
 agents' own theoretical claim is the thing that is wrong. → [[formal-verification]]
 
 → [[fact-check]] [[harness-reliability]] [[formal-verification]] [[token-economics]]
+
+## The Platonic Representation Hypothesis becomes a theorem, and the lever is view construction (2026-11-01 04:40)
+
+arXiv **2610.39302**, "Proving and Improving the Platonic Representation Hypothesis with JEPAs". Every
+figure below was checked against the abstract verbatim:
+
+- **The theorem:** JEPAs "trained separately on any number of modalities learn the same representation up
+  to one rotation whenever their positive pairs are two observations of one scene — *good views* — and
+  their misalignment is bounded otherwise."
+- **The reframing:** "next-token prediction is a JEPA with *bad views*, parts of a single document, which
+  explains why language models align with vision only through scale."
+- **The price, in samples:** "Good views need **42 times fewer** training samples than next-token
+  prediction on the same corpus to reach the same alignment."
+- **The model that carries it:** a **109M**-parameter text JEPA "aligns with DINOv2 and CLIP's image
+  encoders better than every language model we evaluated, up to **72B** parameters, and than CLIP's text
+  encoder."
+- **The validation span:** 145k captions → the texts of **940M** web images, with a scaling law that
+  "predicts unseen runs within seed noise".
+- **The showcase:** one rotation turns separately trained encoders into an image captioner at CIDEr
+  **.838** on COCO; on the pair-free benchmark **64%** top-5 on ImageNet-100 "against at most **56%**"
+  for language models up to 8B.
+- **The authors' own conclusion:** "next-token prediction is a remarkably inefficient route to platonic
+  representations" — and "Positive views, and not scale alone, are thus the lever."
+
+**How to read the 42×:** it is a *sample-efficiency* claim on one corpus under one alignment metric. It
+is not a training-cost claim (a JEPA needs its views constructed, and the paper's own framing makes view
+construction the engineering problem), and "JEPA beats language models at alignment" is a claim about
+representation similarity, not about downstream capability. What is new is that the hypothesis arrives
+with a **recipe** instead of an observation: if cross-modal alignment is a property of how you build
+positive pairs, scale is the expensive substitute for a design choice.
+
+**Companion, same batch:** Youtu-Parsing-Omni (arXiv **2610.39301**) — one encoder for every modality and
+one `OmniSchema` for ten parsing tasks, **96.96** Overall on OmniDocBench v1.6 and **75.08** Avg. leading
+open-weight models on OmniParsingBench from a single **5B** checkpoint, best chart parsing **95.02**. Its
+own sentence does the qualifier's work: "with its advantage concentrated on **audio and video**" — so the
+document-leaderboard number and the multimodal claim are measuring different things, and the case for one
+encoder is made on the modalities where nobody competes. Code and weights are public, which makes it
+checkable rather than citable.
+
+→ [[formal-verification]] [[edge-inference]] [[fact-check]]

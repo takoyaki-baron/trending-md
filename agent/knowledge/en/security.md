@@ -5885,3 +5885,62 @@ effective anti-bot control is a **binding** (network identity + fingerprint), no
 is the same lesson as the batch's four vulnerabilities, seen from the other side.
 
 → [[vuln-supply]] [[disclosure-lag]] [[fact-check]]
+
+## The score and the exploitation flag are written by different parties (2026-11-01 04:40)
+
+Three records in the 11-01 batch separate two questions that a triage queue treats as one: *how bad is it*
+(a CVSS base score) and *is anyone using it* (KEV, SSVC, vendor telemetry). They are produced by different
+parties on different clocks, and the one that reaches a scanner is almost never the vendor.
+
+**`CVE-2026-118539` — Drupal Commerce Core access bypass (`CWE-862`), assigner `drupal`, published
+2026-10-30T03:09:13.976Z.** Affected `<2.41` and `>=3.0.0 <3.3.13`. The CNA container carries **zero
+metrics**; the only score on the record is **CISA-ADP Vulnrichment 6.5** on
+`CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:L/I:L/A:N`, beside an SSVC block reading `Exploitation: **none**`,
+`Automatable: yes`, `Technical Impact: partial` — timestamped `2026-10-30T00:00:00+00:00`, i.e. **3h09m
+before the record existed**. The vendor's own advisory says the opposite in prose: "This vulnerability is
+being actively exploited in the wild", "audit their orders for inconsistencies".
+
+The vendor's severity *widget* is a third artifact and it agrees with the vendor's prose, not the
+enrichment: the page's rating link reads `Highly critical **21 ∕ 25**
+AC:None/A:None/CI:Some/II:Some/**E:Exploit**/TD:All`. Drupal's legacy risk formula prices a known exploit
+in; CISA's SSVC, stamped at midnight, does not know about one. **Reading note:** the fraction lives inside
+an `<a>`/`<div>` beside `<strong>Highly critical</strong>`, so a tag-strip that only takes the bold run
+loses "21 ∕ 25" — a "the page states no numeric rating" finding is a parser artifact, not a page fact.
+
+**`CVE-2026-115828/115829/115830` — Delinea Secret Server, all three published 2026-10-30T19:46–19:47Z,
+reserved 10-23.** One fix target, three scores, and the ordering is the lesson:
+
+| record | what it does | score | why |
+|---|---|---|---|
+| `-115829` | `CWE-288` partial login bypass — second factor alone authenticates | **8.7** | `AC:H/PR:H`, `VA:N` |
+| `-115830` | `CWE-863` unsigned JWT yields `cloudadmin` | **8.7** | same vector, same reason |
+| `-115828` | `CWE-284` FIDO2 PIN/biometric check "not always" enforced | **5.1** | `AC:L` but `VC:L/VI:L` |
+
+So the *easiest* attack in the set (`AC:L`) scores lowest, and the two that mint administrator rights are
+docked to 8.7 by `AC:H`/`PR:H` even though CISA's SSVC on both says `Technical Impact: **total**`. That is
+not a scoring error; it is the framework measuring **the computed scenario** rather than **the outcome**.
+For a PAM appliance the outcome — "phishing-resistant MFA was the assurance argument and it was not
+enforced" — is the procurement fact, and it is filed at 5.1.
+
+**One fix, three strings.** The vendor page says "versions earlier than **12.3.1**"; the release notes it
+links are titled "Secret Server **12.3.000001** Release Notes" under a "Secret Server **12.3.x**" heading
+(there is no 12.3.1 page and no 12.3.0 release — the first 12.3 build is `12.3.000001`); and the record's
+`affected[]` is `{version: "older versions", lessThanOrEqual: "12.2.7", versionType: "custom"}` — a
+machine field holding an English phrase, with an inclusive bound one minor above the last affected release.
+All three agree in substance and none of them share a string, which is the normal state of a version field.
+
+**Also in this batch:** `CVE-2026-63393` (OpenSearch SQL plugin, assigner `GitHub_M`) is **8.7** on
+`CVSS:4.0/…/PR:L/…` with `CWE-502` — reserved **2026-07-16**, published **2026-10-30T22:22:05.735Z**,
+**106 days** of paperwork between the id and the description, and `PR:L` is the entire barrier: read-only
+search permission is all a caller needs to reach unsafe deserialization of a `cursor` string.
+`CVE-2026-119597` (OpenDeepWiki, `VulnCheck`) is one bug scored twice by one CNA — **9.3** on 4.0 and
+**9.8** on 3.1 — reserved and published the same day (11:46Z → 13:18Z, **1h32m**), which is what a
+shipped-default-signing-key finding looks like when `references[]` already points at the offending line,
+the fixing commit and the upstream issue.
+
+**Open question worth carrying:** SAP's "489 days → 1–3 days" (Onapsis + Recorded Future, "Days to Zero")
+is the batch's most quotable number and the summary itself gives the reason to discount its magnitude —
+the median "combines two milestones: verified public exploitation and publication of a proof-of-concept".
+Direction survives; the two endpoints are not the same measurement.
+
+→ [[disclosure-lag]] [[vuln-supply]] [[fact-check]]

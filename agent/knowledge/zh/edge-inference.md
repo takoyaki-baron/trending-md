@@ -263,3 +263,33 @@ GGUF 普查（arXiv **2609.05881**，完整单位分析见 [[fact-check]]）先�
 论文自己声明的限度：15 个模型线、只测代码任务，误报一侧是 66 个 tag 的样本，所以该总体之外的失败率仍未测量。
 
 → [[fact-check]] [[frontier-models]] [[agent-stack]]
+
+## 当真正交付的产物就是 4-bit 构建时，它自己那一列才是结果（2026-11-01 04:40）
+
+`nvidia/NVIDIA-Nemotron-3.5-Bolt-E4B-4GB`（HF，`license: other` / `openmdw-1.1`，`base_model` 为
+`…Bolt-E4B-BF16`、关系 `quantized`）是 NVIDIA「在 Gemma-4-E4B-it 基础上进一步后训练」而来。它的命名是三件不同的
+测量，全部一手核对：
+
+- **「4B」** 是 Gemma-4-E4B 稀疏模型的*生效*参数量；卡自己的表格写「Total Parameters | **8B (4B effective)**」。
+- **「4GB」** 是品牌名：Hub 上 Q4_K_M 文件是 **6,180,446,208 字节 = 6.18 GB**。
+- **64K** 是上下文，输入输出各 64K，且是真的（卡内 llama.cpp 配方里 `-c 65536`）。
+
+端侧正是量化从「优化」变成「部署」的地方，所以 Q4 那一列应当被当作头条来读，而不是当作增量。在 **21** 行基准里，
+Q4_K_M 胜过同一模型 BF16 的有 **7** 行——四项是决定性的（ToolSandbox +5.36、RelyToolBench +6.13、RoleBench +4.16、
+MultiChallenge +2.50），三项在噪声内（+0.21…+0.32）——输掉 14 行，跌幅最大的恰好落在长上下文（RULER 64K 上
+86.99→85.76、LongBench v2 48K 上 50.50→48.67、Tau2-Bench 55.10→52.32）。所以「四位构建不是严格降级」有卡片支持，
+「量化是免费的」没有。
+
+两条让这张卡可引用的披露：「Accuracy numbers are measured by NVIDIA under a **consistent harness** (NeMo Gym);
+they may differ from vendors' self-reported numbers」，以及「evaluations are conducted in reasoning mode except for
+RoleBench, EQ-Bench v3, and RULER」——也就是说卡片给出了 harness，却**没有给出方差**，读者无法把 MultiChallenge 上的
++2.9 与运行噪声分开。以及日期：卡内 Model Dates 表写「Hugging Face **10/23/2026**」，而 Hub 的 `createdAt` 是
+**2026-10-05**——仓库可以在卡片宣称发布之前 18 天就已创建，这正是发布漂移轴在模型侧的形态。
+
+**同批次对照，光谱的地板：** `kerlenton/bootgpt` 在 512 字节 MBR 之后把 **11.5 KB** 的 int8 字符级模型放进
+**23 个扇区**，运行在 386 的 16 位实模式（「The boot sector is code only — strings, weights and the vocab table
+all live in the data sectors」），而作者给出的是上限不是下限：「With 8 chars of context and one hidden layer this
+is roughly the quality you get」、「the model is not a general story teller」。从 MBR 里的 11.5 KB 到手机上的
+6.18 GB，「模型多大」说的其实是你装了哪一件产物。
+
+→ [[frontier-models]] [[fact-check]]

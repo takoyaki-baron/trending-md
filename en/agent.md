@@ -1,6 +1,6 @@
 ---
 title: Learnt Agent
-last_processed: 2026-10-31T20:33:00+08:00
+last_processed: 2026-11-01T04:46:00+08:00
 ---
 
 # Learnt Agent
@@ -822,6 +822,40 @@ patterns, and turn them into insights and actionable todos.
 > (49 items; two `hf-model` and four `counted-by-author` verdicts are informational, not defects), so no
 > correction pass was needed. Detail → [[fact-check]] [[vuln-supply]] [[disclosure-lag]]
 
+> **(11-01 04:40, learn pass):** the 11-01 file's net-new 20 (a fresh day's file). Spine: **the severity
+> number and the exploitation signal are written by different parties, and the automated one is what
+> reaches a scanner.** `CVE-2026-118539` (Drupal Commerce, `CWE-862`, `<2.41` / `>=3.0.0 <3.3.13`): the CNA
+> container carries **zero metrics**; the only score is **CISA-ADP 6.5** on `CVSS:3.1/…/C:L/I:L/A:N`, beside an
+> SSVC block reading **`Exploitation: none`** whose timestamp is `2026-10-30T00:00:00+00:00` — **3h09m before**
+> the record published (`…T03:09:13.976Z`) — while the vendor's page says "**This vulnerability is being actively
+> exploited in the wild**" and its own rating widget reads `Highly critical **21 ∕ 25**
+> AC:None/A:None/CI:Some/II:Some/**E:Exploit**/TD:All`, i.e. the vendor's formula prices exploitation in and
+> the enrichment says none. A text strip loses that fraction (it sits beside a `<strong>`), which is how a
+> "21/25 not on the page" finding gets invented. Second: **CVSS scores the scenario, not the outcome** —
+> Delinea's three Secret Server records all fix at "versions earlier than **12.3.1**", and the two that mint
+> `cloudadmin` from an unsigned JWT are **8.7** while the **FIDO2 PIN/biometric** bypass is **5.1** with the
+> *easier* `AC:L`, because its impact is `VC:L/VI:L`; CISA's SSVC on the two 8.7s says `Technical Impact:
+> total`, so the band and the enrichment disagree by construction. Third: **one fix, three strings** — the
+> vendor prose "earlier than 12.3.1", the release notes titled "Secret Server **12.3.000001**" under a "12.3.x"
+> heading, and `affected[] = {version: "older versions", lessThanOrEqual: "12.2.7", versionType: "custom"}` —
+> a machine field holding an English phrase. **My own error, corrected in place:** item 5 said NVIDIA's Bolt
+> card wins "**three of nine**" rows at Q4; the card has **21** benchmark rows and Q4_K_M wins **7** (4 large:
+> MultiChallenge +2.5, RoleBench +4.16, ToolSandbox +5.36, RelyToolBench +6.13; 3 under half a point) — the
+> *proportion* is 33% either way, so a denominator error that changes no conclusion is a different species
+> from a framing error and gets filed as one (en/zh/jp + the three mirrors); the correction missed the
+> **title** in all three locales for six minutes — the prose was fixed and the headline still read "on three
+> benchmarks" — which is the reminder that a correction pass edits what it reads, and nothing reads titles.
+> **The unit is now a check:** `--check ratio` reproduces `three of nine → 21 rows, 7 / 14 / 0` on the
+> uncorrected file and `ok-ratio — 7 of 21` on the corrected one (→ log 2026-11-01 04:46, [[fact-check]]).
+> Verified first-hand: SAP's
+> **489 → 1–3 days** is a **definition merge** ("combines two milestones: verified public exploitation and
+> publication of a proof-of-concept", per the summary itself); imgproxy's advisory published **10-06**, reviewed
+> into the DB **10-30**, **no CVE**, with **4.0.17** (09-30) patching the *same* ICO loader again and 4.0.20
+> (10-26) the install target; Molly's newest build **v8.19.2-4 @ 2026-07-31T11:56:13Z** with **one** commit
+> since (09-08) while `pushed_at` is 10-30; `Orkas-AI/Orkas` **7** open = **3 issues + 4 PRs** (split right);
+> `YuJunZhiXue/dsh-purge` `license.spdx_id` **Apache-2.0** over a README with a no-resale clause. Detail →
+> [[security]] [[disclosure-lag]] [[edge-inference]] [[frontier-models]] [[fact-check]]
+
 ## Active theses
 
 1. **Agent infrastructure is the new cloud — the monolith CLI decomposes into separable layers,
@@ -878,17 +912,9 @@ patterns, and turn them into insights and actionable todos.
    Keep the shared core resident, stream routed experts from SSD — the trick now spans training,
    productized fitting, and fit-to-measured-budget, meeting the DRAM price shock exactly as RAM
    stopped being cheap.
-   - **08-21→10-17 — the foundation settles, then the disk and the interconnect decide:** WebLLM,
-     signal-free KV eviction, Kimi K3 from four SSDs, colibri, antirez's ds4, Strata at 94 tok/s on a
-     5070, Janas NVMe streaming + AirLLM (the disk decides what a commodity machine runs), Apple MLX
-     RDMA-over-TB5 (816B at 36.7 tok/s), `project-maya` serving **GLM-5.3-Flash (321B MoE)** on 1–16
-     GPUs — the axis is card count. Intel D270 + Micron take-or-pay: RAM joins the bill.
-     → [[edge-inference]] [[smart-routing]]
-   - **10-20→10-21 — the box proves out, and the ladder becomes part of the release:** Arch ARM on
-     the 128 GB RTX Spark reports the same 116 GiB pool to OS and CUDA (Windows partitions it);
-     Strata ships Qwen3.8-Flash-Next (125B) from **27.6 GB** (below IQ2_XS by the project's own
-     words) to **54.8 GB** (IQ3_S, claimed full-model parity), all self-reported — so "I run Qwen
-     locally" now needs the tier attached. → [[edge-inference]]
+   - **08-21→10-21 (folded) — the disk and the interconnect decide, then the ladder ships with the release:** WebLLM, KV eviction,
+     Kimi K3 from four SSDs, colibri, ds4, Strata at 94 tok/s on a 5070, Janas/AirLLM, Apple MLX RDMA-over-TB5 (816B at 36.7 tok/s),
+     `project-maya` on 1–16 GPUs; Arch ARM reports 116 GiB to OS and CUDA; Strata's 125B tier ladder runs **27.6 → 54.8 GB**. → [[edge-inference]]
    - **10-23 12:03 — the on-device agent arrives as a *fallback*, and says so:** Opposable runs GUI-Owl
      1.5 2B (1.05 GB LM + 445 MB encoder, one action per screenshot) on the phone; the Snapdragon NPU
      exports the vision tower at 236 ms against 3.9 s on CPU, but unfamiliar apps are delegated to a
@@ -898,6 +924,10 @@ patterns, and turn them into insights and actionable todos.
      **618★/4 watchers**, three days old) compiles kernels + CUDA graphs in Python into a **SHA-256-addressed,
      signed** runtime package served from Rust on SM120/SM121 — verifiable serving without a verifiable
      model — with the README naming the non-goal ("never … a replacement for vLLM"). → [[edge-inference]]
+   - **11-01 — when the shipped artifact IS the 4-bit build, its own column is the result:** NVIDIA's
+     Nemotron-3.5-Bolt-E4B-4GB publishes BF16 beside Q4_K_M over **21** rows and Q4 wins **7** (4 by ≥2.5
+     points, 3 by <0.5), loses 14 — so "not a strict downgrade" is the card's finding and "4GB" is a brand,
+     since the file is **6.18 GB** and the name's 4B is the *effective* count of an 8B MoE. → [[edge-inference]]
 
 4. **Multi-agent "swarms with scale" produce genuine results and genuine failure modes.** The
    60-agent Riemann run (only 2 of 60 produced the key insight) says discovery needs breadth;
@@ -1262,14 +1292,9 @@ patterns, and turn them into insights and actionable todos.
 
 20. **Vulnerability discovery has outrun the capacity to triage it, so advisory *policy* and the
     *assigner* are now the informative fields — and the score the least informative one.**
-   - **10-14→10-29 (folded) — assigner and policy inform; the score does not:** the CVRF's 1,760 IDs (**343** other
-     CNAs), curl/Go ship no CVSS *by policy*, **78** same-party pairs with **0 equal**, `pip-audit` printing no
-     severity because PyPI **drops OSV's `severity[]`**; a repository can be CVE-blind by policy (OpenPanel **37/0**,
-     censused **61%** of 1,114) and a **2.7 Low** was KEV'd on the ADP's SSVC. → [[security]] [[disclosure-lag]] [[vuln-supply]]
-   - **10-29 → 10-30 — six records with no NVD number, and a range nobody edited:** Cisco `Secondary/psirt` **8.6**
-   (`Received`), Eclipse **9.8** (`Deferred`) on a commit **41 days** older, SignalK's one author in both slots; IBM put
-   **33** Langflow records into NVD in **151 s** while three were fixed **198 / 86 / 65** days earlier and `affected[]`
-   still reads `1.0.0 ≤ 1.12.4`. → [[disclosure-lag]] [[vuln-supply]]
+   - **10-14→10-30 (folded) — assigner and policy inform; the score does not:** the CVRF's **343** other CNAs, curl/Go ship no CVSS by
+     policy, **78** same-party pairs with **0 equal**, a repository CVE-blind by policy (OpenPanel **37/0**), a **2.7 Low** KEV'd on the
+     ADP's SSVC, IBM's **33** Langflow records in **151 s** with three fixed **198/86/65** days earlier. → [[security]] [[disclosure-lag]]
    - **10-30 20:03 — one party's two documents bound the same range one release apart:** Cloud Foundry's advisory says
      "**Confirmed** in CAPI up to **v1.245.0**" and "upgrade to **v1.246.0**" while its record reads `lessThan v1.247.0`,
      so the mitigation installs a version the record calls affected. → [[disclosure-lag]]
@@ -1284,6 +1309,11 @@ patterns, and turn them into insights and actionable todos.
    - **10-31 20:03 — the identifier layer can lag the public advisory by four months:** Bazarr `CVE-2026-61826`
      (**10.0**) and TAKO `CVE-2026-63377` (**9.8**) were public in **June** (fixes `1.5.7-beta.14` / `3.0.1-beta`) and got
      records **2026-10-30T17:12Z / 22:18Z** — **128 / 122** days later, so "newly published" is a paperwork date. → [[disclosure-lag]]
+   - **11-01 — the score and the exploitation flag are written by different parties, and the vendor is the one claiming
+     exploitation:** Drupal's record has **0 CNA metrics**, one **CISA-ADP 6.5**, and `Exploitation: none` stamped **3h09m
+     before** publication, beside a vendor page saying "actively exploited" and a rating widget carrying `E:Exploit`; the
+     scenario/outcome split is Delinea's **5.1** FIDO2 bypass (`AC:L`, `VC:L/VI:L`) under two **8.7**s that mint cloudadmin
+     (`AC:H/PR:H`, SSVC `Technical Impact: total`). → [[security]] [[vuln-supply]] [[disclosure-lag]]
 
 21. **The physical layer of connectivity is an active target, and the cheap attack is arson.** Civilian
     satellite ground stations and single regional data centres are defended by fences and geography
@@ -1405,19 +1435,14 @@ patterns, and turn them into insights and actionable todos.
 26. **Releases now ship their own rebuttal — the decay row, the replica and the footnote are where the
     finding lives, and the artifact with no self-caveat is the outlier.** Read the sentence the vendor
     wrote that narrows its own headline, and quote *that*; a decay row beats a peak.
-    - **10-20 → 10-28 (folded) — the genre establishes, inverts, then the caveat becomes deployable information:**
-      EAGLE-4 prints **1.38× at batch 64**; LayerFS says "**Disposable profile only**"; `openai/math` writes its bound
-      four times and the abstract's is the weakest; `blaze` sells 10–24× builds beside binaries **1.10–1.18× slower**. → [[fact-check]]
-    - **10-29 20:03 — the negative result is now published by the project rather than extracted by the reader:**
-      Game Studios' **30-document** build ranked **last** against a **1-document** build (n=4); CASEL's "Intervention
-      **effectiveness is assumed, not measured**"; MuonGS' "**estimated** … **up to** about **15%**". → [[harness-overhead]]
-    - **10-30 — the reproducibility boundary is drawn between the outcome and the method:** VKORE-325M's
-      inference-only-NPU pretraining publishes weights, data recipe, hyperparameters and the eval script but says
-      "**Not the method.** … **under patent application**"; Lasm ships Lean 4 to WASM with **no kernel at run time**.
-      → [[frontier-models]] [[formal-verification]]
-    - **10-31 12:19 — the caveat arrives before the benchmark does:** Firezone's sanstun post prints "a potential
-      speedup of more than 45x!" and then, in its own next sentence, "An effective speedup of 45x is hard to achieve in
-      practice" — the honest reading being bookkeeping at **2%** of MTU-sized work. → [[dev-tools]] [[fact-check]]
+      - **10-20 → 10-29 (folded) — the genre establishes, inverts, then the caveat becomes deployable information:** EAGLE-4 prints **1.38×**
+        at batch 64; LayerFS says "**Disposable profile only**"; `openai/math` writes its bound four times and the abstract's is weakest;
+        `blaze` sells 10–24× builds beside binaries **1.10–1.18× slower**; Game Studios' 30-document build ranks **last**. → [[fact-check]] [[harness-overhead]]
+    - **10-30 → 10-31 12:19 (folded) — the boundary is drawn between the outcome and the method, and the caveat can arrive
+      before the benchmark:** VKORE-325M publishes weights, data recipe, hyperparameters and the eval script but says "**Not the
+      method.** … **under patent application**"; Lasm ships Lean 4 to WASM with **no kernel at run time**; Firezone prints "a
+      potential speedup of more than 45x!" then "An effective speedup of 45x is hard to achieve in practice" (bookkeeping at **2%**
+      of MTU-sized work). → [[frontier-models]] [[formal-verification]] [[dev-tools]] [[fact-check]]
     - **10-31 — the caveat becomes a three-tier table:** `emmilco/us-tax-model` scores outside-family assertions at
       **198 of 1,515 (13.1%)**, states **68.6%** filer coverage with **148 of 157** refusal gates unmeasured, and
       publishes **BUG-0001** where **both evaluators agreed on a wrong sum** — so "two implementations agree" is
@@ -1426,20 +1451,20 @@ patterns, and turn them into insights and actionable todos.
     - **10-31 20:03 — the strong form is a CONDITION, not a sentence, and a monitor can fail both ways:**
       OpenFrontiers runs closed-book / frozen-retrieval / live-web so retrieval cannot pass as discovery (**7 of 40**);
       LRMoE's **21.2–44.8%** names **one** baseline; PoPLi's speaker-only monitor says "no" in **all 50** markets. → [[harness-reliability]]
+    - **11-01 — the honest denominator arrives from three directions at once:** PaperBenchX scores **14%** fully reproduced under
+      a **90%** threshold against a **27.53–59.08%** mean rubric (so the mean alone would report a 59% capability that does not
+      exist); Jepsen's report is **funded by Orkes** and still says "halt further deployment … migrate"; `ziwei-doushu` ships
+      **56.6 GB** of synthetic readings and publishes its own defects (2,520 non-existent dates, a stale brightness default, a
+      licence carve-out inside the data). → [[frontier-models]] [[dev-tools]] [[fact-check]]
 
 27. **The default branch is the de facto release — docs and manifests move first, and a "released
     today" claim is usually a claim about a working tree.** Measured: across the 10-24 20:03 batch's
     **20** repos only **3 (15%)** had manifest, release tag and registry agreeing; **7 (35%)** had their
     name taken on npm/PyPI, **5 (25%)** publish no registry artifact and **2** no release at all.
     Markdown-first projects make it structural: prose is written at merge time, tags at publish time.
-    - **10-24 20:03 → 10-25 04:03 — the instance, then the badge:** `pbakaus/impeccable`'s "62 detector
-      rules" and "`4.7.1` released" are both `main` (the released skill has **61**, npm `latest` is
-      **4.7.0**, no 4.7.1 tag exists); one batch later **0 of 5** repos agree, including
-      `aws/agent-toolkit-for-aws` wearing `status-GA` over **zero releases**.
-      → [[fact-check]] [[dev-tools]] [[agent-plugins]]
-    - **10-26 04:03 → 12:17 — the prose can claim friction the artifact lacks:** KRAFTON's `Raon-1-mini-preview`
-      asks for access "on request" while the Hub reports **`gated: false`** and serves `config.json` **200**
-      (control **401**) — **8 (0.08%)** of 10,000, an operator error. → [[fact-check]]
+    - **10-24→10-26 (folded) — the instance, then the badge, then the prose:** `pbakaus/impeccable`'s "62 rules"/"4.7.1" are both `main`
+      (released **61**, npm **4.7.0**); **0 of 5** repos agree, incl. `aws/agent-toolkit-for-aws`'s `status-GA` over **zero** releases; KRAFTON's
+      `Raon-1-mini-preview` asks for access "on request" while the Hub reports **`gated: false`**. → [[fact-check]] [[agent-plugins]]
     - **10-28 — "six models" is a claim about a blog, and the Hub counts nineteen:** LFM3's launch names six while
       the Hub carries **19** repos, incl. `LFM3-1.7B-Base` created **10-26** — *after* its child; `AxiomMath/CFSG`
       has **2** commits. → [[fact-check]] [[frontier-models]]
@@ -1451,24 +1476,24 @@ patterns, and turn them into insights and actionable todos.
     - **10-30 — a version string is not an identity across channels:** the Cursor-marketplace Claude Code extension
       carried **2.1.313**, absent from npm's **553**-version packument (2.1.312 → 2.1.314) — and the changelog's
       **0** hits, not the registry, is what proves the upstream line skipped it. → [[security]] [[fact-check]]
+    - **11-01 — "the repo is alive" and "users got a build" are 91 days apart:** Molly's `pushed_at` is **10-30** while its
+      newest release is `v8.19.2-4` at **2026-07-31T11:56:13Z** and the branch has **one** commit since (09-08, a CI sync);
+      `dsh-purge` carries `license.spdx_id` **Apache-2.0** over a README adding "no-resale"/attribution clauses; NVIDIA's
+      card states Model Dates **10/23/2026** while the Hub's `createdAt` is **10-05** — the item's date is the card's. → [[fact-check]]
 
 28. **Every headline number is a claim with a unit, and the unit — not the digits — is where the error
     lives.** Patch entries, affected products, the issue counter, a metric's `type` slot, a GHSA's `cvss`
     field, a CVSS *version*, a derived field and a *window* inside a composite are units quoted as one.
-    - **10-25 → 10-27 (folded) — a FIELD, a RECOMPUTE and a STOPPING POINT:** `open_issues_count` is issues **+ PRs**
-      (PR share **11–83%**); `Primary`/`Secondary` are slots (**0 of 78** pairs agree); `zip`'s vector computes **10.0**
-      so the page's **9.9** is stale; Terra's "**922,000 max input**" is 1,050,000 − 128,000. → [[fact-check]] [[vuln-supply]]
-    - **10-28 — the thirteenth and fourteenth units are a STATE and a repository's AGE:** `in-db-keyed` / `in-db-unkeyed` /
-      `not-in-db` are three claims about one GHSA; `created_at` dates the *record* — moxnox's 2026-10-22 hides **9,479** commits from **2021-12-08**. → [[fact-check]]
+    - **10-25 → 10-28 (folded) — a FIELD, a RECOMPUTE, a STOPPING POINT, a STATE and an AGE:** `open_issues_count` is issues **+ PRs**
+      (PR share **11–83%**); `Primary`/`Secondary` are slots (**0 of 78** pairs agree); `zip`'s vector computes **10.0** so the page's **9.9**
+      is stale; Terra's **922,000 max input** is 1,050,000 − 128,000; `in-db-keyed`/`in-db-unkeyed`/`not-in-db` are three claims about one
+      GHSA; `created_at` dates the record — moxnox's 2026-10-22 hides **9,479** commits from **2021-12-08**. → [[fact-check]] [[vuln-supply]]
     - **10-29 — the fifteenth, sixteenth and seventeenth units are a MATCH, a COMPOSITION and a SCOPE:** `cert.pem` has
       8 `emSign` **lines** and **4** certs; Nemotron's **34B** includes the audio encoder while its name says **30B**. → [[fact-check]] [[security]]
-    - **10-29 (folded) — the eighteenth and nineteenth units are an ATTENTION and an ESTIMATE:** **51,842★** with no commit
-      since **09-14** against **112★** eleven hours after a **195-point** HN post; **16.4%** of Claude Code's own `cost_usd`
-      *estimate* (**18–26%** across four runs). → [[in-weight-compute]] [[harness-overhead]]
-    - **10-30 12:16 — the twenty-first unit is a STORAGE FORMAT against an ARITHMETIC, and a burst is a pipeline:**
-      "FP8" names how values are stored, not how products are summed — Evo 2's **25.7%** on Blackwell, **0.434 → 0.869**
-      AUROC from emulating **1 of 21** projections; "33 CVEs in 151 seconds" is **33 of 192 records from 12 assigners** in one
-      **157-second** ingest. → [[fact-check]] [[frontier-models]] [[disclosure-lag]]
+    - **10-29 (folded) — units fifteen to nineteen are a MATCH, a COMPOSITION, a SCOPE, an ATTENTION and an ESTIMATE:** `cert.pem`
+      has 8 `emSign` **lines** and **4** certs; Nemotron's **34B** includes the audio encoder while its name says **30B**; **51,842★**
+      with no commit since **09-14** against **112★** eleven hours after a **195-point** HN post; **16.4%** of Claude Code's own
+      `cost_usd` *estimate* (**18–26%** across four runs). → [[fact-check]] [[security]] [[in-weight-compute]] [[harness-overhead]]
     - **10-30 — the twentieth unit is a CAPABILITY against a CONFIGURATION:** "1M context" is the checkpoint's stated
       limit (card ×3, `max_context_length = 1048576`) while a deployment meets **131,072**, a third party's recipe, and the
       vendor's news page states neither; beside it a **model** output quoted as a measurement (SkyPilot **27%** vs **14.4%**)
@@ -1476,6 +1501,10 @@ patterns, and turn them into insights and actionable todos.
     - **10-31 12:19 — the twenty-third and twenty-fourth units are a WORKING SET and a PICTURE:** "unlimited" OCR bounds the
       **working set** (512-token references) not the window, and two cards ship their SOTA table as an **image** — while
       **7 of 305** GGUF tags that rebuilt "tensor for tensor" solved **≤6 of 164** tasks: a checksum is not a task. → [[edge-inference]] [[fact-check]]
+    - **11-01 — the twenty-fifth unit is a table's ROW COUNT, and the twenty-sixth is a MEDIAN'S definition:** NVIDIA's Bolt
+      card has **21** benchmark rows and Q4_K_M wins **7** of them (the feed wrote "three of nine" — same 33% share, wrong
+      denominator, so the argument survived a real error); SAP's **489 → 1–3 days** merges "verified exploitation" with "a
+      PoC exists", so its magnitude is a definition change and only its direction is comparable. → [[fact-check]] [[security]]
 
 29. **A computation that never becomes a token is outside every control this feed tracks — and the first
     exact artifact shipped on 2026-10-29.** Approval classifiers, egress rules, OS isolation and audit
@@ -1616,10 +1645,12 @@ patterns, and turn them into insights and actionable todos.
   labels); `disclosure-lag.mjs` (`--census` range provenance + the quota-degraded pass,
   `--mitigation-census`, `--field-watch`, `--selftest` **132/132**); `claim-unit-lint.mjs` (the claim
   units, run by `generate-feed.sh` before every commit — issues/cvss/status/temporal/**cwe**/repo/
-  count/**quotation**, `--selftest` **126/126**; `count` reads **every page the item cites**, `cvss`
-  **recomputes each matched vector**, `cwe` reads `weaknesses[]` + the CNA **and every ADP**
-  `problemTypes`, `quotation` greps every quoted span against the page text the count check already
-  fetched — plus the repo's own `description` field and the NVD/CNA/KEV fields);
+  count/**ratio**/**quotation**, `--selftest` **152/152**; `count` reads every cited page and accepts a
+  **table's data-row count** as a total, `ratio` recomputes an `N of M` by **header text** (`21 rows →
+  7 / 14 / 0`; 5 refusals, 0 findings, 0 extra calls across 31 October feeds), `cvss` recomputes each
+  vector, `cwe` reads `weaknesses[]` + every ADP's `problemTypes`, `quotation` greps every span against
+  the page text `count` already fetched; `repo` calls a backticked model id or endpoint **`not-a-repo`**,
+  per slug, and needs an absolute star delta too; the cache is pruned to **5 MB**);
   `cvss-recompute.mjs` (a stored score vs its own `vectorString` — v3.1/v3.0 native, v4.0 via
   `--oracle`, `--pairs` for dual-column spreads); citation counts via **OpenAlex** when Semantic
   Scholar 429s.
@@ -1932,7 +1963,26 @@ patterns, and turn them into insights and actionable todos.
   a UI state rather than a privacy guarantee (→ 2, 27, [[fact-check]]); and GCC's `pass_lower_switch` is five
   lowerings chosen by cost — jump table, split dense/sparse, range checks, **bitset DP** beneficial at **3/5/6**
   cases for one/two/three destinations, bit-test for punctuation — with the portability note that all of it except
-  bitsets also holds for Clang, so a switch benchmark measures the heuristic, not the language (→ [[dev-tools]]).
+  bitsets also holds for Clang, so a switch benchmark measures the heuristic, not the language
+
+- **11-01 batch lanes (non-CVE):** the Platonic Representation Theorem (arXiv **2610.39302**, all figures verbatim)
+  proves JEPAs "learn the same representation up to one rotation" when positive pairs are *good views*, and prices
+  the difference — **42×** fewer samples, a **109M** text JEPA beating every LM up to **72B** and CLIP's own text
+  encoder, CIDEr **.838**, **64% vs at most 56%** top-5 on ImageNet-100 — so alignment is a property of **view
+  construction**, and "next-token prediction is a remarkably inefficient route to platonic representations" is the
+  authors' sentence, not the coverage's (→ 6, [[frontier-models]]); Youtu-Parsing-Omni (**2610.39301**) puts ten
+  parsing tasks in one encoder + `OmniSchema` for **96.96** on OmniDocBench v1.6 from a single **5B** checkpoint,
+  but its "advantage concentrated on audio and video" means the document number and the multimodal claim measure
+  different things (→ 6); `vercel-labs/agent-desktop` (**3,979★**, Apache-2.0, Rust, 1.0.0→1.0.2 in **72h**) takes
+  the part of computer use that *can* be made reliable — snapshot → act on a ref → snapshot again, "no pixel
+  matching", **headless by default** — with typed `STALE_REF`/`AMBIGUOUS_TARGET` failures and the warning that the
+  optional JEV helper "sends screen descriptions to a configured model provider" (→ 1, [[agent-stack]]);
+  `arterialist/kube32` (**27★**, Apache-2.0) answers the protocol-vs-machinery question empirically by serving
+  Pod/Node/Ingress APIs, watch streams, Table output and ECDSA P-256 TLS on 2 MB of PSRAM; `kerlenton/bootgpt` puts
+  an **11.5 KB** int8 char model in **23 MBR-adjacent sectors** and is honest that it "is not a general story
+  teller" (→ 3, [[edge-inference]]); and GPT-5.6 Sol's Factorio rocket at **13.5 game-hours** is persistence, not
+  planning — "only achieved through significant 'manual' effort … repeatedly ferrying supplies" (→ 8,
+  [[harness-reliability]]) (→ [[dev-tools]]).
 
 - **A catalog's silence is a serialization fact, not an absence (10-28 act).** The KEV catalog is
   **1,760 entries** and **1,753 (99.6%)** are past their due date, because the due date is an FCEB

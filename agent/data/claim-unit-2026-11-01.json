@@ -1,5 +1,5 @@
 {
- "generated": "2026-10-31T20:35:43.223Z",
+ "generated": "2026-10-31T21:03:27.534Z",
  "files": [
   {
    "file": "2026-11-01.md",
@@ -36,30 +36,37 @@
     {
      "check": "repo",
      "item": 3,
-     "verdict": "unreadable",
+     "verdict": "not-a-repo",
      "claim": "anthropic/claude-opus-4.6",
-     "detail": "api.github.com: Command failed: gh api repos/anthropic/claude-opus-4.6"
+     "detail": "named in backticks but the sentence is about a “model”, not a project — a model id or an endpoint path is not a repository claim, so archived/stale cannot answer here"
     },
     {
      "check": "repo",
      "item": 3,
-     "verdict": "stale",
+     "verdict": "not-a-repo",
      "claim": "moonshotai/kimi-k2",
-     "detail": "last push 2026-01-21 (284d) with 11112 stars — is the item about the code or the name?"
+     "detail": "named in backticks but the sentence is about a “model”, not a project — a model id or an endpoint path is not a repository claim, so archived/stale cannot answer here"
+    },
+    {
+     "check": "repo",
+     "item": 3,
+     "verdict": "not-a-repo",
+     "claim": "google/gemini-2.5-flash",
+     "detail": "named in backticks but the sentence is about a “model”, not a project — a model id or an endpoint path is not a repository claim, so archived/stale cannot answer here"
     },
     {
      "check": "repo",
      "item": 5,
-     "verdict": "hf-model",
+     "verdict": "not-a-repo",
      "claim": "nvidia/NVIDIA-Nemotron-3.5-Bolt-E4B-4GB",
-     "detail": "huggingface.co/nvidia/NVIDIA-Nemotron-3.5-Bolt-E4B-4GB (gated: false, 9 files, created 2026-10-05) — a Hugging Face model id, not a GitHub repository (read the card, not a README)"
+     "detail": "named in backticks but the sentence is about a “model”, not a project — a model id or an endpoint path is not a repository claim, so archived/stale cannot answer here"
     },
     {
      "check": "repo",
      "item": 8,
-     "verdict": "unreadable",
+     "verdict": "not-a-repo",
      "claim": "plugins/sql",
-     "detail": "api.github.com: Command failed: gh api repos/plugins/sql"
+     "detail": "named in backticks but the sentence is about a “parameter”, not a project — a model id or an endpoint path is not a repository claim, so archived/stale cannot answer here"
     },
     {
      "check": "repo",
@@ -74,6 +81,55 @@
      "verdict": "ok",
      "claim": "vercel-labs/agent-desktop",
      "detail": "3983★, last push 2026-10-31"
+    },
+    {
+     "check": "repo",
+     "item": 12,
+     "verdict": "ok",
+     "claim": "Orkas-AI/Orkas",
+     "detail": "6069★, last push 2026-10-31"
+    },
+    {
+     "check": "repo",
+     "item": 16,
+     "verdict": "ok-history",
+     "claim": "arterialist/kube32",
+     "detail": "record 6d, oldest commit 2026-10-26 (~156 commits)"
+    },
+    {
+     "check": "repo",
+     "item": 16,
+     "verdict": "ok",
+     "claim": "arterialist/kube32",
+     "detail": "27★, last push 2026-10-30"
+    },
+    {
+     "check": "repo",
+     "item": 17,
+     "verdict": "ok",
+     "claim": "kerlenton/bootgpt",
+     "detail": "8★, last push 2026-10-31"
+    },
+    {
+     "check": "count",
+     "item": 5,
+     "verdict": "ok-table-rows",
+     "claim": "21 benchmarks",
+     "detail": "HF model nvidia/NVIDIA-Nemotron-3.5-Bolt-E4B-4GB: a table headed “Benchmark” has 21 data rows — a row count is a count"
+    },
+    {
+     "check": "count",
+     "item": 5,
+     "verdict": "ok-table-rows",
+     "claim": "21 benchmark",
+     "detail": "HF model nvidia/NVIDIA-Nemotron-3.5-Bolt-E4B-4GB: a table headed “Benchmark” has 21 data rows — a row count is a count"
+    },
+    {
+     "check": "ratio",
+     "item": 5,
+     "verdict": "ok-ratio",
+     "claim": "7 of 21",
+     "detail": "7 of 21 reproduces — HF model card nvidia/NVIDIA-Nemotron-3.5-Bolt-E4B-4GB: 21 rows, “Nemotron-3.5 Bolt-E4B BF16” vs “Nemotron-3.5 Bolt-E4B-4GB Q4_K_M” → 7 / 14 / 0 (B>A / B<A / tie)"
     },
     {
      "check": "quotation",
@@ -213,8 +269,8 @@
  ],
  "status_watch": [],
  "api_calls": 0,
- "readme_calls": 0,
- "cited_page_calls": 0,
+ "readme_calls": 23,
+ "cited_page_calls": 34,
  "repo_page_calls": 0,
  "nvd_calls": 1,
  "cna_calls": 0

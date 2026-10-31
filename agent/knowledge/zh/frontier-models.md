@@ -3006,3 +3006,35 @@ Cartesia 的 H-Net 第一篇把对照做得诚实到代价显而易见，然后�
 展示出来的能力是**拒绝**，不是推导；论文自己的框架使它可引用：开篇即指出近期系统「may draw conclusions that the evidence does not support」。一个系统、一个物理场景、一次成功的判据升级；没测的是当 agent 自己的理论断言才是错的那一方时，这套机制是否还成立。→ [[formal-verification]]
 
 → [[fact-check]] [[harness-reliability]] [[formal-verification]] [[token-economics]]
+
+## 柏拉图表示假说变成定理，而杠杆是「视图的构造」（2026-11-01 04:40）
+
+arXiv **2610.39302**，《Proving and Improving the Platonic Representation Hypothesis with JEPAs》。以下每个数字都已
+逐字对照摘要核对：
+
+- **定理：** 分别在任意多个模态上训练的 JEPA，「learn the same representation up to one rotation whenever their
+  positive pairs are two observations of one scene — *good views* — and their misalignment is bounded otherwise」。
+- **重述：** 「next-token prediction is a JEPA with *bad views*, parts of a single document, which explains why
+  language models align with vision only through scale」。
+- **代价，以样本计：** 「Good views need **42 times fewer** training samples than next-token prediction on the same
+  corpus to reach the same alignment」。
+- **承载它的模型：** 一个 **109M** 参数的文本 JEPA，「aligns with DINOv2 and CLIP's image encoders better than every
+  language model we evaluated, up to **72B** parameters, and than CLIP's text encoder」。
+- **验证跨度：** 从 145k 条说明文字到 **940M** 张网络图片的文本，其缩放律「predicts unseen runs within seed noise」。
+- **演示：** 一次旋转就把分别训练的编码器变成图像描述器，COCO 上 CIDEr **.838**；在无配对基准上，ImageNet-100 top-5
+  为 **64%**，「against at most **56%**」，对手是最大 8B 的语言模型。
+- **作者自己的结论：** 「next-token prediction is a remarkably inefficient route to platonic representations」，
+  以及「Positive views, and not scale alone, are thus the lever.」
+
+**怎么读这个 42×：** 它是在一个语料、一个对齐度量下的*样本效率*断言，不是训练成本断言（JEPA 需要构造视图，而论文
+自己的框架把视图构造变成了工程问题）；「JEPA 在对齐上胜过语言模型」是关于表示相似性的断言，不是关于下游能力的断言。
+新的地方在于：这个假说第一次带着**配方**而不是观察出现——如果跨模态对齐是「如何构造正样本对」的属性，
+那么规模只是设计选择的一件昂贵替代品。
+
+**同批次对照：** Youtu-Parsing-Omni（arXiv **2610.39301**）——所有模态共用一个编码器、十个解析任务共用一个
+`OmniSchema`，单一 **5B** checkpoint 在 OmniDocBench v1.6 上 **96.96** Overall、在 OmniParsingBench 上以
+**75.08** Avg. 领先所有开放权重模型，图表解析最佳 **95.02**。它自己那句话替读者做完了限定：
+「with its advantage concentrated on **audio and video**」——也就是说文档榜首的数字与多模态的断言在度量不同的东西，
+而「一个编码器」的理由恰恰建立在没人竞争的那些模态上。代码与权重公开，这让它可核验，而不只是可引用。
+
+→ [[formal-verification]] [[edge-inference]] [[fact-check]]

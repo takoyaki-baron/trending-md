@@ -1,6 +1,6 @@
 ---
 date: 2026-11-01
-updated: 2026-10-31T20:35:33Z
+updated: 2026-10-31T20:38:42Z
 schedule: 04:03, 12:03, 20:03 UTC+8
 sources: 14
 license: CC-BY-4.0
@@ -32,9 +32,9 @@ Delinea 在 **2026-10-30** 一次性发布了三个 Secret Server 的 CVE，修�
 
 `CVE-2026-118539` 是 Drupal Commerce Core 的缺失授权漏洞，由 `drupal` 这个 CNA 于 **2026-10-30** 指派：它「没有充分保护某些路由与实体字段」，可能「对商家的财务状况造成影响」。受影响范围是 `<2.41` 与 `>=3.0.0 <3.3.13`。Drupal 自己的公告把它评为 **「Highly critical — 21 ∕ 25」**，并直白写道：**「此漏洞正在被实际利用（actively exploited in the wild）。」** 公告没有提供任何绕过办法，只建议安装最新版本，并「审计订单是否存在不一致」。
 
-再看记录本身。CNA 容器里**完全没有 metrics**。整个 CVE 上唯一的分数在 **CISA-ADP Vulnrichment** 容器里——`CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:L/I:L/A:N` = **6.5**——旁边的 SSVC 块写着 `Exploitation: **none**`、`Automatable: yes`、`Technical Impact: partial`，其时间戳为 `2026-10-30T00:00:00+00:00`，也就是在记录 03:09Z 发布**之前**。于是关于这个漏洞最关键的两句话——有多严重、有没有人在用——来自相反的方向，而自动化的那句才是会进到你扫描器里的那句。
+再看记录本身。CNA 容器里**完全没有 metrics**。整个 CVE 上唯一的分数在 **CISA-ADP Vulnrichment** 容器里——`CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:L/I:L/A:N` = **6.5**——旁边的 SSVC 块写着 `Exploitation: **none**`、`Automatable: yes`、`Technical Impact: partial`，其时间戳为 `2026-10-30T00:00:00+00:00`。这个时间戳是**日期，不是时钟**，把它当瞬间读会凭空造出一个故事：看上去比 03:09Z 发布**早** 3 小时 09 分，但本 feed 引用的其他记录里同一个零点形状落在**次日**零点（比各自发布晚 **0.2 至 10.4 小时**），而这条记录自己的 ADP 容器 `dateUpdated` 是 `2026-10-31T03:56:19Z`——发布后整整一天。在本 feed 引用的、带 SSVC 块的 **271** 条记录里数了一遍：**206** 条是真正的瞬时戳，其中 **196 条晚于发布、没有一条早于发布**；另外 **65** 条是零点取整。所以这次增强是在公告已经存在之后才跑的，`none` 是 CISA 在 Drupal 那句「正在被利用」已经写在页面上时给出的答案。关于这个漏洞最关键的两句话——有多严重、有没有人在用——依然来自相反的方向，而自动化的那句才是会进到你扫描器里的那句。
 
-**Why it matters:** 一个 CVE 记录就把整个「出处」问题演示完了。这里的「CVSS 6.5」是 CISA 的第三方增强，不是厂商的评分，而它躺在一个写着「正在被利用」的页面上；在发布前就打上的 `Exploitation: none` 是关于某个截止时间的陈述，不是关于世界的陈述。如果你的分诊按记录分数排序，Commerce 站点会排在一个 WordPress 插件之下，而厂商的遥测说它们今天正在被打。
+**Why it matters:** 一个 CVE 记录就把整个「出处」问题演示完了。这里的「CVSS 6.5」是 CISA 的第三方增强，不是厂商的评分，而它躺在一个写着「正在被利用」的页面上；一个在厂商发出警告一天之后才写下的 `Exploitation: none` 并不是第二意见——它是同一个分诊问题被回答了一次「none」，之后就再没有人重新问过。如果你的分诊按记录分数排序，Commerce 站点会排在一个 WordPress 插件之下，而厂商的遥测说它们今天正在被打。
 
 [`🔗 Drupal SA-CONTRIB-2026-254`](https://www.drupal.org/sa-contrib-2026-254) · [`🔗 CVE-2026-118539 (cveawg)`](https://cveawg.mitre.org/api/cve/CVE-2026-118539)
 
@@ -72,13 +72,13 @@ Jepsen 对 **ParticleDB 1.1.4**（Orkes）的分析报告了 **96 个问题**，
 
 ---
 
-## 5. NVIDIA 新的端侧模型在 Q4 下比 BF16 **更高分**——三项基准——而「4GB」既不是参数量也不是文件大小
+## 5. NVIDIA 新的端侧模型在 Q4 下比 BF16 **更高分**——21 项基准里赢下 7 项——而「4GB」既不是参数量也不是文件大小
 
 - **Velocity:** ▮▮▮ trending
 - **Source:** Hugging Face 模型卡 · 发布于 2026-10-23 · 300 个赞、7.5 万次下载
 - **Tags:** `quantization` `small-language-model` `nvidia` `on-device` `benchmarks`
 
-`nvidia/NVIDIA-Nemotron-3.5-Bolt-E4B-4GB` 是「在 Gemma-4-E4B-it 基础上进一步后训练」而来，「8B（4B 生效参数）」，Q4_K_M，输入输出各 64K，许可为 OpenMDW-1.1。模型卡把 BF16 与 Q4_K_M 并排公布，九行里有三行是量化版胜出：MultiChallenge **53.10 → 55.60**、RoleBench **67.05 → 71.21**、ToolSandbox **68.77 → 74.13**。该输的地方它也输——Tau2-Bench 55.10 → 52.32、LongBench v2 50.50 → 48.67、RULER 86.99 → 85.76。
+`nvidia/NVIDIA-Nemotron-3.5-Bolt-E4B-4GB` 是「在 Gemma-4-E4B-it 基础上进一步后训练」而来，「8B（4B 生效参数）」，Q4_K_M，输入输出各 64K，许可为 OpenMDW-1.1。模型卡把 BF16 与 Q4_K_M 并排公布，共 **21** 行基准，其中量化版胜出 **7** 行：MultiChallenge **53.10 → 55.60**、RoleBench **67.05 → 71.21**、ToolSandbox **68.77 → 74.13**、RelyToolBench **63.16 → 69.29**，另有三个不到半分的小幅领先（Brevity 82.52 → 82.84、IFBench 63.79 → 64.00、RAGTruth 77.59 → 77.88）。剩下 14 行是输的——Tau2-Bench 55.10 → 52.32、LongBench v2 50.50 → 48.67、RULER 86.99 → 85.76 是跌幅最大的几项。
 
 两件事要分开看。第一是名字：「4B」是 Gemma-4-E4B 稀疏模型的**生效**参数量，总量是 8B，而 Q4_K_M 文件标注为 **6.18 GB**——所以「4GB」是个品牌名，不是卡上任何一项的度量。第二是卡片自己的措辞：「Accuracy numbers are measured by NVIDIA under a consistent harness」，且「可能与其他厂商自报的数字不同」，评测「除 RoleBench、EQ-Bench v3 和 RULER 外均在推理模式下进行」。量化版在 MultiChallenge 上比 BF16 高 2.9 分，要么是后训练配对的真实效应，要么是 harness 的假象；一张写着「consistent harness」的卡片等于告诉你不是后者，却没有给出方差。
 
@@ -328,7 +328,7 @@ Ryan Madden 用「GPT-5.6 Sol, running in Codex with low thinking level」跑了
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-10-31T20:35:33Z |
+| Generated | 2026-10-31T20:38:42Z |
 | Items | 20 |
 | Sources tracked | 14（GitHub Trending、Hacker News、arXiv、Hugging Face、NVD／CVE 记录、厂商公告、安全研究） |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8（每日 3 次） |

@@ -202,6 +202,8 @@ const CENSUS = has('census');
 const STRICT = has('strict');
 const STALE_DAYS = Number(arg('stale-days') ?? 60);
 const STAR_TOLERANCE = Number(arg('star-tolerance') ?? 0.10);
+// a relative drift on a tiny count is not a wrong claim (2026-11-01: 6★ → 8★ in one batch)
+const STAR_MIN_DELTA = Number(arg('star-min-delta') ?? 5);
 const MAX_REPOS = Number(arg('max-repos') ?? 8);
 const MAX_AGE = Number(arg('max-age') ?? 3);
 const MAX_GHSA = Number(arg('max-ghsa') ?? 6);
@@ -209,13 +211,17 @@ const MAX_GHSA = Number(arg('max-ghsa') ?? 6);
 // 200-CVE census from turning the pre-commit lint into a crawler.
 const MAX_CNA = Number(arg('max-cna') ?? 30);
 const CACHE_PATH = arg('cache') ?? 'agent/data/claim-unit-cache.json';
-const CHECKS = new Set((arg('check') ?? 'issues,cvss,status,temporal,cwe,repo,count,bundle,quotation').split(',').map((s) => s.trim()));
+// committed file: a text budget, not an entry count — three pages were 5 MB of the 19 MB a census made.
+// 5 MB of TEXT is ~7 MB on disk (JSON escapes newlines); 8 MB was an 11 MB file, bigger than the 9.9 MB
+// it was meant to bound.
+const CACHE_BYTES = Number(arg('cache-bytes') ?? 5_000_000);
+const CHECKS = new Set((arg('check') ?? 'issues,cvss,status,temporal,cwe,repo,count,ratio,bundle,quotation').split(',').map((s) => s.trim()));
 
 const SELFTEST = has('selftest');
 const STATUS_WATCH = has('status-watch');
 const EXTRA_IDS = (arg('ids') ?? '').split(',').map((s) => s.trim()).filter(Boolean);
 if (!FILE && !FILES && !SELFTEST && !has('ghsa-census') && !has('quotation-census') && !has('commit-quote-census') && !STATUS_WATCH) {
-  console.error('usage: claim-unit-lint.mjs --file <feed.md> [--no-net] [--check issues,cvss,status,repo,count] [--strict] [--json] [--census] [--selftest] [--status-watch [--ids CVE-…]] | --ghsa-census [--pages N]');
+  console.error('usage: claim-unit-lint.mjs --file <feed.md> [--no-net] [--check issues,cvss,status,repo,count,ratio] [--strict] [--json] [--census] [--selftest] [--status-watch [--ids CVE-…]] | --ghsa-census [--pages N]');
   process.exit(2);
 }
 
@@ -256,6 +262,29 @@ const GH_PATH_SEGMENTS = new Set([
   'search', 'network', 'forks', 'stargazers', 'watchers', 'discussions', 'wiki', 'compare', 'apps', 'blog',
 ]);
 
+/* A backticked `a/b` is a repo only when the sentence is about a PROJECT. The third, fourth and
+ * fifth measured counterexamples all landed on the 2026-11-01 04:35 batch in one run:
+ *   · `anthropic/claude-opus-4.6` — an OpenRouter model id in "The default model is …" (404 from
+ *     `api.github.com`, reported as an **unreadable repository**);
+ *   · `moonshotai/kimi-k2` — the same sentence, a real GitHub repo that the item never discusses
+ *     (11112★, last push 2026-01-21), so the staleness check answered a question nobody asked;
+ *   · `plugins/sql` — the OpenSearch SQL **endpoint** in "…the `plugins/sql` endpoint…".
+ * The tell is context, not shape: a model id and a route are both `a/b`, and both live in
+ * sentences about a technical string rather than an artifact. A github.com URL is proof and is
+ * never suppressed; backticks are not, so the suppression is REPORTED (`not-a-repo`, sev 0)
+ * rather than applied silently — a check that disappears quietly is a check you lose. */
+const TECHNICAL_NOUN = /\b(?:models?|model\s+ids?|endpoints?|parameters?|params?|routes?|paths?|headers?|APIs?|fields?|ids?|identifiers?|fallbacks?|prompts?|temperature|URLs?|payloads?|arguments?|args?|query\s+string|slugs?)\b/i;
+const PROJECT_TERMS = /\b(?:repos?(?:itory)?s?|README|releases?|stars?|open[-\s]?source|github|projects?|librar(?:y|ies)|packages?|SDKs?|CLIs?|source\s+code|maintainers?|commits?)\b/i;
+
+function sentenceInText(text, index) {
+  const before = text.slice(0, index);
+  const m = [...before.matchAll(/[.!?]["')\]]*\s+/g)].pop();
+  const start = m ? m.index + m[0].length : 0;
+  const tail = text.slice(index);
+  const e = /[.!?]["')\]]*(\s|$)/.exec(tail);
+  return text.slice(start, e ? index + e.index + 1 : Math.min(text.length, index + 240));
+}
+
 function parseItems(text) {
   const lines = text.split('\n');
   const items = [];
@@ -286,9 +315,31 @@ function parseItems(text) {
       if (/^GHSA-/i.test(m[2])) continue;
       repos.add(slug);
     }
+    /* A slug can occur twice and be ONE thing: item 8 names `plugins/sql` in the quoted advisory
+       ("…to the `plugins/sql` endpoint…") and again in its own analysis ("If your cluster exposes
+       `plugins/sql`…"). Judging each occurrence separately let the second one through and spent an
+       `api.github.com` call on `repos/plugins/sql`, so the decision is per SLUG: every occurrence is
+       read, and the strongest one decides. */
+    const backticked = new Map();
     for (const m of it.text.matchAll(/`([\w.-]+\/[\w.-]+)`/g)) {
       const slug = backtickSlug(m[1]);
-      if (slug) repos.add(slug);
+      if (!slug) continue;
+      if (!backticked.has(slug)) backticked.set(slug, []);
+      backticked.get(slug).push(sentenceInText(it.text, m.index));
+    }
+    for (const [slug, sents] of backticked) {
+      // a github.com link for the same slug is proof, and a slug in the TITLE is the item's subject
+      const linked = it.text.includes(`github.com/${slug}`);
+      const subject = it.title.includes(slug);
+      const why = sents.map((s) => (s.match(TECHNICAL_NOUN) ?? [])[0]).find(Boolean);
+      it.notRepo ??= [];
+      if (!linked && !subject && why && !sents.some((s) => PROJECT_TERMS.test(s))) {
+        /* Kept in `repos` and only skipped by `checkRepo`: the `count`/`ratio` checks look a slug up
+           as an ARTIFACT to read a card from, which a model id supports and a repository claim does
+           not. Dropping it here would also have cost item 5 its table-row verification. */
+        it.notRepo.push({ slug, why: why.toLowerCase() });
+      }
+      repos.add(slug);
     }
     it.repos = [...repos];
   }
@@ -1387,19 +1438,35 @@ function hfModel(slug) {
  * `{ text }` (possibly empty) like `readme()`, or null when the hub does not answer 200. */
 async function hfCard(slug) {
   if (!/^[\w.-]+\/[\w.-]+$/.test(slug)) return null;
+  /* Cached like `readme()`: a census over a month of feeds asks the hub once per model id, not once
+   * per item that names it, and the `ratio` check reads the same card the `count` check already
+   * paid for. Unmetered is not free — a curl per item is most of a census run's wall clock. */
+  const key = `hfcard:${slug}`;
+  const hit = cache[key];
+  if (hit && Date.now() - Date.parse(hit.fetched_at) < CACHE_TTL_MS) return hit.text ? { text: hit.text } : null;
+  let text = null;
   try {
     const r = execFileSync('curl', ['-sS', '-m', '30', `https://huggingface.co/${slug}/raw/main/README.md`],
       { encoding: 'utf8', maxBuffer: 16 * 1024 * 1024 });
-    if (!r || /^Entry not found$/m.test(r)) return null;
-    return { text: r };
-  } catch { return null; }
+    if (r && !/^Entry not found$/m.test(r)) text = r;
+  } catch { /* unreadable is a state, not an absence */ }
+  cache[key] = { fetched_at: new Date().toISOString(), bytes: text ? text.length : 0, text: text ?? '' };
+  return text ? { text } : null;
 }
 
 function checkRepo(it, budget, ageBudget) {
   const out = [];
   const starQuotes = starQuotesOf(it.plain);
+  // the suppressions are named, not silent — the class is measurable only if it is printed
+  for (const { slug, why } of it.notRepo ?? []) {
+    out.push({
+      check: 'repo', item: it.n, verdict: 'not-a-repo', claim: slug,
+      detail: `named in backticks but the sentence is about a “${why}”, not a project — a model id or an endpoint path is not a repository claim, so archived/stale cannot answer here`,
+    });
+  }
   if (!it.repos.length) return out;
-  for (const slug of it.repos.slice(0, 2)) {
+  const technical = new Set((it.notRepo ?? []).map((x) => x.slug));
+  for (const slug of it.repos.filter((s) => !technical.has(s)).slice(0, 2)) {
     if (budget.left <= 0) break;
     budget.left -= 1;
     const st = repoState(slug);
@@ -1425,7 +1492,12 @@ function checkRepo(it, budget, ageBudget) {
     } else if (ageDays > STALE_DAYS) {
       out.push({ check: 'repo', item: it.n, verdict: 'stale', claim: slug, detail: `last push ${st.pushed_at.slice(0, 10)} (${ageDays}d) with ${st.stars} stars — is the item about the code or the name?` });
     }
-    if (biggest != null && st.stars && Math.abs(starDelta) > STAR_TOLERANCE) {
+    /* A relative tolerance on a SMALL count is not a tolerance. Measured 2026-11-01 on item 17,
+       a 7-hour-old Show HN repo quoted at "3 commits, 6 stars": two stars arrived while the batch
+       was being written, which is a 25% drift and a finding on a number nobody could act on. The
+       floor makes the check about the claim being wrong rather than about the ratio. */
+    if (biggest != null && st.stars && Math.abs(starDelta) > STAR_TOLERANCE
+        && Math.abs(biggest - st.stars) >= STAR_MIN_DELTA) {
       const quote = `${biggest}`;
       const dated = DATED_QUOTE.test(starQuoteSentence(it.plain, biggest));
       // negative delta = quoted below today's count = the repo grew under the item
@@ -1732,6 +1804,14 @@ async function checkCount(it) {
         out.push({ check: 'count', item: it.n, verdict: 'ok-cited-page', claim: cl.phrase, detail: `${hit.label} states it (the repo README does not) — quote the page the number came from` });
       } else if (blockHit) {
         out.push({ check: 'count', item: it.n, verdict: 'ok-cited-page', claim: cl.phrase, detail: `${blockHit.label}'s \`${cl.noun.replace(/s$/, '')}:\` block lists ${cl.n} — the count is in the metadata, not a sentence` });
+      } else if (tableRowHit(fetched, cl)) {
+        /* A table's data rows ARE its count, and a card whose totals live only in a table states
+           no sentence for `countNumsIn` to read. Measured 2026-11-01 on item 5: the Bolt card's
+           "21 benchmark rows" is 21 pipe-rows under a `Benchmark` header and no sentence anywhere,
+           so the claim fell through to `number-other-noun` against a *landing page* ("21 days
+           ago") — a false finding whose suggested fix was to misquote a correct item. The guard is
+           the header: the table must NAME the noun, or the row count is a coincidence. */
+        out.push({ check: 'count', item: it.n, verdict: 'ok-table-rows', claim: cl.phrase, detail: `${tableRowHit(fetched, cl).label}: a table headed “${tableRowHit(fetched, cl).header}” has ${cl.n} data rows — a row count is a count` });
       } else if (anyNum.length) {
         out.push({ check: 'count', item: it.n, verdict: 'differs', claim: cl.phrase, detail: `README says ${[...new Set(anyNum)].join(' / ')} ${cl.noun}${fetched.length ? `; also read ${fetched.map((p) => p.label).join(', ')}` : ''}` });
       } else if (selfCountedNear(it.plain, cl)) {
@@ -1755,6 +1835,238 @@ async function checkCount(it) {
     }
   }
   return out;
+}
+
+// ── check E: a ratio over a TABLE's rows ────────────────────────────────────────────────────
+/* The 2026-11-01 04:35 batch published NVIDIA's Bolt card as winning **"three of nine"** rows at
+ * Q4_K_M. The card has **21** benchmark rows and Q4_K_M wins **7** of them, and nothing in the lint
+ * could see it: `count` greps for a number beside a noun, and the card states no such sentence at
+ * all — its totals ARE the table, so the claim was scored against a *landing page* and came back
+ * `number-other-noun` (the model-name fix below). A careful read does not catch this either, and
+ * that is the point: the three rows the item names are the three **largest** wins, so the rounding
+ * is invisible from the examples and only the denominator is wrong.
+ *
+ * So the unit is a markdown table's ROW COUNT, the cheapest recompute in the feed. The reader is
+ * deliberately timid, because a table matched by POSITION would happily compare "which model"
+ * against "score" and produce a confident wrong answer:
+ *   (a) both columns must be named by the item, matched by **header text** — never by index;
+ *   (b) no third column may compete — it refuses rather than approximating, reported as
+ *       `table-columns-unresolved`, sev 0: a table it could not pin is not a table that disagrees;
+ *   (c) a row counts only when **both** cells are pure numbers after stripping bold and links — a
+ *       cell holding prose is not a score and is counted as `unparsed`, never as a loss;
+ *   (d) ties are a third count, printed, because "wins 7 of 21" and "wins 7 of 21 with 2 ties" are
+ *       different claims about a 21-row table;
+ *   (e) the check does not decide DIRECTION — it reports both `B>A` and `B<A` and accepts a
+ *       numerator that matches either, since the left/right order of two headers is the vendor's
+ *       layout and the item's "wins" is the item's wording. */
+const ROW_VOCAB = /\b(?:rows?|benchmarks?|columns?|tasks?|tests?|comparisons?|entries|settings|head-to-head|tables?|charts?)\b/i;
+
+/* Word numbers are how the wrong denominator was written — "three of nine", not "3 of 9" — so a
+ * digits-only reader would have missed the filing case entirely. Bounded on purpose: the compound
+ * form (`twenty-one`) is the only many-word spelling English uses for small numbers. */
+const NUM_WORDS = {
+  one: 1, two: 2, three: 3, four: 4, five: 5, six: 6, seven: 7, eight: 8, nine: 9, ten: 10,
+  eleven: 11, twelve: 12, thirteen: 13, fourteen: 14, fifteen: 15, sixteen: 16, seventeen: 17,
+  eighteen: 18, nineteen: 19, twenty: 20, thirty: 30, forty: 40, fifty: 50, sixty: 60,
+  seventy: 70, eighty: 80, ninety: 90,
+};
+const NUM_WORD_ALT = String.raw`(?:${Object.keys(NUM_WORDS).join('|')})(?:-(?:one|two|three|four|five|six|seven|eight|nine))?`;
+const RATIO_TOKEN = String.raw`(\d[\d,]*|${NUM_WORD_ALT})`;
+const RATIO_RE = new RegExp(String.raw`\b${RATIO_TOKEN}\s+(?:of|out\s+of)\s+${RATIO_TOKEN}\b`, 'gi');
+
+function numToken(s) {
+  const w = String(s).toLowerCase();
+  if (/^\d/.test(w)) return toNum(w);
+  const [head, tail] = w.split('-');
+  return (NUM_WORDS[head] ?? 0) + (tail ? (NUM_WORDS[tail] ?? 0) : 0);
+}
+
+function sentenceAt(t, i) {
+  const r = sentences(t).find((s) => i >= s.start && i < s.end);
+  return r ? t.slice(r.start, r.end) : t.slice(Math.max(0, i - 200), i + 200);
+}
+
+/** `7 of 21` / `three of nine` — only when the sentence is talking about rows of something. */
+function ratioClaims(plain) {
+  const out = [];
+  for (const m of plain.matchAll(RATIO_RE)) {
+    const a = numToken(m[1]);
+    const b = numToken(m[2]);
+    if (!a || !b || a < 2 || b < 2 || a > b || b > 100000) continue;
+    const sent = sentenceAt(plain, m.index);
+    if (!ROW_VOCAB.test(sent)) continue;
+    if (identifierNumber(plain, m.index, m[1])) continue;
+    out.push({ a, b, phrase: m[0].replace(/\s+/g, ' '), sent });
+  }
+  return out;
+}
+
+/** A cell is text once its markup is gone — bold, links and `<br>` are formatting, not data. */
+function tableCell(raw) {
+  return raw
+    .replace(/<br\s*\/?>/gi, ' ')
+    .replace(/\[([^\]]*)\]\([^)]*\)/g, '$1')
+    // `**bold**` and `` `code` `` are formatting; an INTERNAL underscore is not. Measured on the
+    // Bolt card, whose Q4_K_M column header lost its separators to a blanket `[*_`]` strip and
+    // stopped matching the item — the column the item is about became invisible to the matcher.
+    .replace(/\*\*|`/g, '')
+    .replace(/(^|[^A-Za-z0-9])_+|_+(?![A-Za-z0-9])/g, '$1')
+    .replace(/&nbsp;|&#160;/g, ' ')
+    .trim();
+}
+
+/** A score cell is a NUMBER, not "53.10 (best)". Prose in a cell is `unparsed`, never a value. */
+function tableNumber(cell) {
+  const c = String(cell).replace(/\s+/g, '').replace(/,/g, '');
+  if (!/^-?\d+(?:\.\d+)?%?$/.test(c)) return null;
+  const n = Number(c.replace('%', ''));
+  return Number.isFinite(n) ? n : null;
+}
+
+/** Markdown tables only — a `<table>` in HTML has no column headers to match by, and guessing is
+ *  the one thing this check must not do. */
+function mdTables(text) {
+  const lines = String(text).split(/\r?\n/);
+  const out = [];
+  for (let i = 0; i + 1 < lines.length; i++) {
+    if (!/^\s*\|/.test(lines[i])) continue;
+    if (!/^\s*\|?[\s:|-]*-[\s:|-]*\|?\s*$/.test(lines[i + 1])) continue;
+    const cells = (l) => l.trim().replace(/^\|/, '').replace(/\|$/, '').split('|').map(tableCell);
+    const header = cells(lines[i]);
+    const rows = [];
+    let j = i + 2;
+    for (; j < lines.length && /^\s*\|/.test(lines[j]); j++) {
+      const c = cells(lines[j]);
+      if (c.every((x) => !x || /^:?-{3,}:?$/.test(x))) continue;
+      rows.push(c);
+    }
+    i = j - 1;
+    // a header with no words is an unlabelled spec table (`| | |`) — nothing to match a column by
+    if (rows.length >= 3 && header.some((h) => /[A-Za-z]{2}/.test(h))) out.push({ header, rows });
+  }
+  return out;
+}
+
+const HEADER_STOP = new Set(['the', 'and', 'for', 'with', 'from', 'it', 'its', 'a', 'an', 'of', 'in', 'on', 'at', 'to', 'v', 'vs', 's', 'b', 'e']);
+
+/** The `count` check's table half: a table whose HEADER names the claim's noun is a count of that
+ *  noun, row by row. Without the header guard, any 21-row table would "verify" any 21 of anything. */
+function tableRowHit(pages, cl) {
+  const stem = cl.noun.replace(/s$/, '').replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  for (const pg of pages) {
+    for (const tb of mdTables(pg.text)) {
+      if (tb.rows.length !== cl.n) continue;
+      const header = tb.header.find((h) => new RegExp(`\\b${stem}`, 'i').test(h));
+      if (header) return { label: pg.label, header: header.trim() };
+    }
+  }
+  return null;
+}
+function headerTokens(h) {
+  return [...new Set(String(h)
+    .split(/[^A-Za-z0-9_.+-]+/)
+    .map((s) => s.replace(/^[.+-]+|[.+-]+$/g, ''))
+    .filter((s) => s.length >= 2 && /[A-Za-z]/.test(s) && !HEADER_STOP.has(s.toLowerCase())))];
+}
+/** How much of a column header the item actually names. `Gemma4` does not match `Gemma-4`, which is
+ *  correct: a header the item never mentions must not win a slot because two of its words are common. */
+function columnScore(tokens, plain) {
+  return tokens.filter((tk) => new RegExp(`(^|[^A-Za-z0-9])${tk.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}([^A-Za-z0-9]|$)`, 'i').test(plain)).length;
+}
+
+/** Pick the one table (and the one column pair) the item is talking about, or say why not. */
+function pickRatioTable(pages, plain) {
+  let sawTable = false;
+  let best = null;
+  for (const pg of pages) {
+    for (const tb of mdTables(pg.text)) {
+      sawTable = true;
+      const scores = tb.header.map((h) => columnScore(headerTokens(h), plain));
+      const order = scores.map((s, i) => [s, i]).sort((x, y) => y[0] - x[0] || x[1] - y[1]);
+      if (order.length < 2 || order[0][0] < 2 || order[1][0] < 2) continue;
+      const [s1, i1] = order[0];
+      const [s2, i2] = order[1];
+      const outside = order.slice(2).reduce((m, [s]) => Math.max(m, s), 0);
+      if (outside >= s2) continue; // a third column competes for the same words — refuse
+      const [a, b] = i1 < i2 ? [i1, i2] : [i2, i1];
+      const score = s1 + s2;
+      if (!best || score > best.score || (score === best.score && tb.rows.length > best.table.rows.length)) {
+        best = { page: pg.label, table: tb, a, b, score };
+      }
+    }
+  }
+  if (best) return best;
+  return sawTable ? { unresolved: true } : null;
+}
+
+/** Rows where both cells are numbers. `B` is the RIGHT-hand column of the pair as laid out. */
+function tableWins(table, a, b) {
+  let wins = 0;
+  let losses = 0;
+  let ties = 0;
+  let unparsed = 0;
+  for (const row of table.rows) {
+    const va = tableNumber(row[a] ?? '');
+    const vb = tableNumber(row[b] ?? '');
+    if (va == null || vb == null) { unparsed += 1; continue; }
+    if (vb > va) wins += 1;
+    else if (vb < va) losses += 1;
+    else ties += 1;
+  }
+  return { wins, losses, ties, unparsed };
+}
+
+async function checkRatio(it) {
+  const out = [];
+  const claims = ratioClaims(it.plain);
+  if (!claims.length) return out;
+  const pages = [];
+  if (it.repos.length) {
+    let rd = await readme(it.repos[0]);
+    if (rd && rd.text) pages.push({ label: `${it.repos[0]} README`, text: rd.text });
+    else {
+      // a model id has a CARD, and naming a card "README" misreports where a number came from
+      const card = await hfCard(it.repos[0]);
+      if (card && card.text) pages.push({ label: `HF model card ${it.repos[0]}`, text: card.text });
+    }
+  }
+  if (!NO_NET) {
+    for (const p of citedPages(it.plain)) {
+      const t = await citedPageText(p);
+      if (t.text) pages.push({ label: p.label, text: t.text });
+    }
+  }
+  const pick = pickRatioTable(pages, it.plain);
+  if (!pick) return out; // no parseable table ⇒ say nothing
+  if (pick.unresolved) {
+    out.push({
+      check: 'ratio', item: it.n, verdict: 'table-columns-unresolved',
+      claim: claims.map((c) => c.phrase).join(' | '),
+      detail: `a cited page carries a table, but no column pair is named by the item strongly enough to pin — count the rows by hand rather than let a positional match decide`,
+    });
+    return out;
+  }
+  const { wins, losses, ties, unparsed } = tableWins(pick.table, pick.a, pick.b);
+  const rows = wins + losses + ties;
+  if (rows < 3) return out;
+  return out.concat(ratioFindings(it.n, claims, pick, { wins, losses, ties, unparsed, rows }));
+}
+
+/** Split from the fetch so the verdict is testable without a network. */
+function ratioFindings(itemN, claims, pick, { wins, losses, ties, unparsed, rows }) {
+  const hA = pick.table.header[pick.a];
+  const hB = pick.table.header[pick.b];
+  const shape = `${pick.page}: ${rows} rows${unparsed ? ` (+${unparsed} unparsed)` : ''}, “${hA}” vs “${hB}” → ${wins} / ${losses} / ${ties} (B>A / B<A / tie)`;
+  return claims.map((cl) => {
+    const numOk = cl.a === wins || cl.a === losses || cl.a === ties;
+    const denOk = cl.b === rows;
+    return numOk && denOk
+      ? { check: 'ratio', item: itemN, verdict: 'ok-ratio', claim: cl.phrase, detail: `${cl.a} of ${cl.b} reproduces — ${shape}` }
+      : {
+        check: 'ratio', item: itemN, verdict: 'ratio-row-count', claim: cl.phrase,
+        detail: `“${cl.phrase}” does not reproduce — ${shape}. The denominator is the table's row count and the numerator is one of its directions; quote the pair the table prints`,
+      };
+  });
 }
 
 // ── check G: a count of MATCHES is not a count of OBJECTS ───────────────────────────────────
@@ -2726,9 +3038,59 @@ if (SELFTEST) {
   t('count: a dotted version is part of a name', identifierNumber('upgraded to 3.16.2 models here', 14, '16'), true);
   // a YAML block is a count written as data (measured 2026-10-29 on the Hy-SimulMT card)
   const cardFixture = '---\nlanguage:\n- zh\n- en\n- ug\nlicense: apache-2.0\n---\n\n# Model\n';
+
   t('count: a frontmatter block is read as a count', frontmatterBlockCount(cardFixture, 'languages'), 3);
   t('count: an absent block is null, not zero', frontmatterBlockCount(cardFixture, 'skills'), null);
   t('count: an inline list is counted too', frontmatterBlockCount('---\nlanguage: [zh, en]\n---\n', 'languages'), 2);
+
+  /* The ratio-over-rows check (built 2026-11-01 from published item 5). The fixture is the Bolt
+     card's real benchmark table, trimmed and with the two columns the item names; the claim
+     fixture is the ORIGINAL sentence that shipped, "three of nine". */
+  const tbFixture = [
+    '| Benchmark | Nemotron-3.5<br>Bolt-E4B<br>BF16 | Gemma4<br>E4B-it<br>BF16 | Nemotron-3.5<br>Bolt-E4B-4GB<br>Q4_K_M |',
+    '|---|---:|---:|---:|',
+    '| [MultiChallenge](https://labs.scale.com/x) | **53.10** | 42.08 | **55.60** |',
+    '| [RoleBench](https://github.com/x/y) | **67.05** | 49.95 | **71.21** |',
+    '| RoleMRC | **80.63** | 74.62 | **79.12** |',
+    '| EQ-Bench v3 | 39.40 | **41.17** | 38.15 |',
+    '| Brevity Benchmark | **82.52** | 79.99 | **82.84** |',
+    '| BFCL-v3 | 68.51 | 66.39 | 67.31 |',
+    '',
+  ].join('\n');
+  const tbPlain = '`nvidia/NVIDIA-Nemotron-3.5-Bolt-E4B-4GB` is further post-trained from Gemma-4-E4B-it at 8B (4B effective), Q4_K_M, 64K. The card publishes BF16 and Q4_K_M side by side, and on three of nine rows the quantized build wins.';
+  const tb = mdTables(tbFixture);
+  t('ratio: a markdown table parses with its header intact', [tb.length, tb[0].rows.length, tb[0].header[3]], [1, 6, 'Nemotron-3.5 Bolt-E4B-4GB Q4_K_M']);
+  t('ratio: bold and links are stripped from cells', [tb[0].rows[0][0], tb[0].rows[0][1]], ['MultiChallenge', '53.10']);
+  t('ratio: the shipped "three of nine rows" is a claim', ratioClaims(tbPlain).map((c) => [c.a, c.b]), [[3, 9]]);
+  t('ratio: word numbers up to a compound', [numToken('three'), numToken('twenty-one'), numToken('21')], [3, 21, 21]);
+  t('ratio: a ratio with no row vocabulary is not a table claim', ratioClaims('It covered 6 of 36 problems in that run.'), []);
+  t('ratio: a numerator above its denominator is not a ratio (PCK@20 of 3.5)', ratioClaims('scores PCK@20 of 3 in the log'), []);
+  const pick = pickRatioTable([{ label: 'card', text: tbFixture }], tbPlain);
+  t('ratio: columns are matched by header text, not position', [pick.a, pick.b, pick.page], [1, 3, 'card']);
+  t('ratio: wins/losses/ties are counted per row', tableWins(pick.table, pick.a, pick.b), { wins: 3, losses: 3, ties: 0, unparsed: 0 });
+  // the filing case end to end, without the network: the shipped sentence is a finding, the
+  // corrected pair is not
+  t('ratio: the shipped "three of nine" against a 6-row table is a finding',
+    ratioFindings(1, ratioClaims(tbPlain), pick, { ...tableWins(pick.table, pick.a, pick.b), rows: 6 }).map((f) => f.verdict),
+    ['ratio-row-count']);
+  t('ratio: a claim that matches both counts passes',
+    ratioFindings(1, [{ a: 3, b: 6, phrase: '3 of 6' }], pick, { ...tableWins(pick.table, pick.a, pick.b), rows: 6 }).map((f) => f.verdict),
+    ['ok-ratio']);
+  t('ratio: a right numerator with a wrong denominator still fires',
+    ratioFindings(1, [{ a: 3, b: 9, phrase: '3 of 9' }], pick, { ...tableWins(pick.table, pick.a, pick.b), rows: 6 }).map((f) => f.verdict),
+    ['ratio-row-count']);
+  t('ratio: a three-way tie for the best column pair refuses instead of approximating', (() => {
+    const amb = '| Benchmark | A | B | C |\n|---|---:|---:|---:|\n| x | 1 | 2 | 3 |\n| y | 2 | 1 | 3 |\n| z | 3 | 3 | 1 |\n';
+    return pickRatioTable([{ label: 'p', text: amb }], 'A and B and C, 2 of 3 rows').unresolved;
+  })(), true);
+  t('ratio: a table it cannot pin is reported as a state, never as a disagreement',
+    Object.keys(pickRatioTable([{ label: 'p', text: '| Metric | Alpha | Beta |\n|---|---:|---:|\n| x | 1 | 2 |\n| y | 2 | 1 |\n| z | 3 | 3 |' }], 'nothing named here, 2 of 3 rows')), ['unresolved']);
+  t('ratio: no table anywhere says nothing at all', pickRatioTable([{ label: 'p', text: 'no pipes here' }], tbPlain), null);
+  // the `count` half: a card whose total IS its table states no sentence, so the rows are the count
+  t('count: a table headed with the noun verifies the count', tableRowHit([{ label: 'card', text: tbFixture }], { n: 6, noun: 'benchmarks' }), { label: 'card', header: 'Benchmark' });
+  t('count: a table that does not name the noun verifies nothing', tableRowHit([{ label: 'card', text: tbFixture }], { n: 6, noun: 'languages' }), null);
+  t('count: a row count that differs from the claim is not a hit', tableRowHit([{ label: 'card', text: tbFixture }], { n: 9, noun: 'benchmarks' }), null);
+
 
   // a bundle's matches are LINES; its objects are CERTIFICATES (measured 2026-10-29 on /etc/ssl/cert.pem)
   const pemFixture = [
@@ -2957,6 +3319,7 @@ for (const { path: p, items } of parsed) {
   }
   if (!NO_NET && CHECKS.has('repo')) for (const it of items) findings.push(...checkRepo(it, budget, ageBudget));
   if (!NO_NET && CHECKS.has('count')) for (const it of items) findings.push(...await checkCount(it));
+  if (!NO_NET && CHECKS.has('ratio')) for (const it of items) findings.push(...await checkRatio(it));
   // the bundle check is local-only (it reads the path the item names), so it runs even under --no-net
   if (CHECKS.has('bundle')) for (const it of items) findings.push(...checkBundle(it));
   // a quotation is a claim about bytes — the page text is already cached by the count check
@@ -2966,9 +3329,25 @@ for (const { path: p, items } of parsed) {
   allFindings.push(...findings.map((f) => ({ file: basename(p), ...f })));
 }
 
-try { mkdirSync(dirname(CACHE_PATH), { recursive: true }); writeFileSync(CACHE_PATH, JSON.stringify(cache, null, 1)); } catch { /* cache is best-effort */ }
+/* The cache is COMMITTED, so its growth is a repo cost, not a disk cost: a month-wide census of the
+ * `count`/`ratio` checks pushed its page corpus from 9.9 MB to 19 MB in one run. Text-bearing keys
+ * (`page:`, `readme:`, `hfcard:`) are bounded to the most recently fetched N; the small structured
+ * keys (repo state, `cna:`, `ghsa:`) are kept whole because they are the ones a re-run saves a call
+ * on. Dropping a page is cheap — every one of them is refetched unmetered. */
+const cacheBytes = (e) => (e && typeof e.text === 'string' ? e.text.length : 0);
+const textish = Object.keys(cache).filter((k) => /^(page|readme|hfcard):/.test(k));
+textish.sort((a, b) => Date.parse(cache[b].fetched_at ?? 0) - Date.parse(cache[a].fetched_at ?? 0));
+let keptBytes = 0;
+for (const k of textish) {
+  keptBytes += cacheBytes(cache[k]);
+  if (keptBytes > CACHE_BYTES) delete cache[k];
+}
+try {
+  mkdirSync(dirname(CACHE_PATH), { recursive: true });
+  writeFileSync(CACHE_PATH, JSON.stringify(cache, null, 1));
+} catch { /* cache is best-effort */ }
 
-const SEVERITY = { ok: 0, 'ok-cited-page': 0, 'no-cve-named': 1, 'no-record': 1, 'slot-quoted': 1, 'counted-by-author': 0, 'number-other-noun': 1, 'temporal-stopping-point': 1, 'cna-only-score': 1, 'star-drift': 2, 'star-dated': 1, 'ok-history': 0, 'history-older-than-record': 2, 'history-unreadable': 1, stale: 2, archived: 2, differs: 2, absent: 2, 'unsplit-issue-count': 3, 'compound-lags-parts': 3, 'version-swapped': 3, 'version-absent': 3, 'score-not-reproducible': 2, 'score-mismatch': 3, 'wrong-subject': 3, 'absence-contradicted': 3, 'status-stale': 2, 'status-dated': 1, 'cwe-absent-but-recorded': 3, 'cwe-mismatch': 3, 'cwe-unreadable': 1, 'status-no-record': 1, 'status-no-cve': 1, 'advisory-unreadable': 1, 'advisory-repo-only': 0, unreadable: 1, 'artifact-unreadable': 1, 'nvd-unavailable': 1, 'bundle-ok': 0, 'bundle-lines-named': 0, 'bundle-unavailable': 0, 'bundle-line-count': 3, 'bundle-total-mismatch': 2, 'quote-not-found': 3, 'quote-paraphrase': 2, 'quote-short': 1, 'quote-not-read': 0 };
+const SEVERITY = { ok: 0, 'ok-cited-page': 0, 'no-cve-named': 1, 'no-record': 1, 'slot-quoted': 1, 'counted-by-author': 0, 'number-other-noun': 1, 'temporal-stopping-point': 1, 'cna-only-score': 1, 'star-drift': 2, 'star-dated': 1, 'ok-history': 0, 'history-older-than-record': 2, 'history-unreadable': 1, stale: 2, archived: 2, differs: 2, absent: 2, 'unsplit-issue-count': 3, 'compound-lags-parts': 3, 'version-swapped': 3, 'version-absent': 3, 'score-not-reproducible': 2, 'score-mismatch': 3, 'wrong-subject': 3, 'absence-contradicted': 3, 'status-stale': 2, 'status-dated': 1, 'cwe-absent-but-recorded': 3, 'cwe-mismatch': 3, 'cwe-unreadable': 1, 'status-no-record': 1, 'status-no-cve': 1, 'advisory-unreadable': 1, 'advisory-repo-only': 0, unreadable: 1, 'artifact-unreadable': 1, 'nvd-unavailable': 1, 'ratio-row-count': 3, 'ok-ratio': 0, 'not-a-repo': 0, 'ok-table-rows': 0, 'table-columns-unresolved': 0, 'bundle-ok': 0, 'bundle-lines-named': 0, 'bundle-unavailable': 0, 'bundle-line-count': 3, 'bundle-total-mismatch': 2, 'quote-not-found': 3, 'quote-paraphrase': 2, 'quote-short': 1, 'quote-not-read': 0 };
 const REAL = (f) => (SEVERITY[f.verdict] ?? 1) >= 2;
 
 /* `status_watch` rides the findings file so the act pass sees a backwards move without re-reading

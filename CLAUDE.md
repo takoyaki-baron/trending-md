@@ -715,6 +715,43 @@ underlying pages — this produced a two-layer false signal in a single item.
    different noun — Stalwart's "**38** headline comparisons" against the feed's "38 benchmarks" —
    the verdict is the new advisory `number-other-noun` carrying the page's own wording, because
    that is the feed's paraphrase and not a page that never states the number.
+   **A ratio's denominator is a TABLE'S ROW COUNT, and `--check ratio` recomputes it**
+   (added 2026-11-01 04:35 from a published error, built 04:46). The feed wrote that NVIDIA's Bolt card
+   wins "**three of nine**" rows at Q4_K_M; the card has **21** benchmark rows and Q4_K_M wins **7**. No
+   existing check could see it — `count` greps a number beside a noun and the card states no such
+   sentence (its totals *are* the table), and a careful read survives the error because the three named
+   rows are the three **largest** wins, so only the denominator is wrong while the proportion (3/9 =
+   7/21 = 33%) is identical. `ratio` reads every `N of M` whose sentence is about rows, finds a cited
+   page carrying a markdown table, and recomputes both numbers. Five guards, each a way it would
+   otherwise be wrong: **columns match by header text, never by position**, and the best pair must beat
+   every other column outright — a tie for second is `table-columns-unresolved` (sev 0), because a table
+   it could not pin is not a table that disagrees (the Bolt pair is **columns 1 and 5**, so an
+   adjacency rule would refuse the one case the check exists for); **word numbers are read** (`three of
+   nine`, not just `3 of 9` — the error shipped spelled out); **`Q4_K_M` survives markup stripping** (a
+   blanket `[*_`] strip turned the header into `Q4KM` and the column stopped matching itself; only
+   *edge* underscores are emphasis); **prose in a cell is `unparsed`, never a loss**, with ties printed
+   as a third count; and **direction is not decided** — the numerator may match either `B>A` or `B<A`,
+   because left/right is the vendor's layout, so both counts are printed. Calibrated both ways on the
+   filing case (`ratio-row-count … 21 rows → 7 / 14 / 0` uncorrected, `ok-ratio — 7 of 21` corrected);
+   **census over the 31 October feeds: 5 items fired, all sev-0 refusals, 0 findings, 0 `ok-ratio`, and
+   0 extra `api.github.com` calls** because it reads the pages `count` already fetched. The same run
+   gained the `count` half: a cited page's table whose **header names the claim's noun** and whose
+   data-row count equals the number is `ok-table-rows`, placed before `number-other-noun` — which is
+   what killed the corrected item's own false finding (`21 is on huggingface.co/models as "21 days
+   ago"`, from a landing page outranking the card).
+   **And a backticked `a/b` is a repo only when the sentence is about a project** (same batch): three
+   false `repo` findings in one file — `anthropic/claude-opus-4.6` (an OpenRouter model id, 404 →
+   "unreadable repository"), `moonshotai/kimi-k2` (the *same sentence*, a real repo the item never
+   discusses, 11,112★ → a staleness verdict on a question nobody asked) and `plugins/sql` (an endpoint)
+   — all resolved by `not-a-repo` (sev 0): a github.com URL is proof, a slug in the title is the
+   subject, and otherwise `model` / `endpoint` / `parameter` / `fallback` / `temperature` in the
+   slug's own sentence means it is a technical string. Decided **per slug, not per occurrence** (item 8
+   names `plugins/sql` twice and a per-occurrence rule let the second through for an `api.github.com`
+   call), and the slug stays in `repos` so `count`/`ratio` can still read a model card. Two smaller
+   guards from the same run: a **star delta needs an absolute floor** as well as a relative one (two
+   stars arriving on a 7-hour-old Show HN repo read as a 25% drift), and `claim-unit-cache.json` is
+   **committed**, so its text-bearing entries are pruned to a **5 MB** budget at write time (a
+   month-wide census took it 9.9 MB → 19 MB, 5 MB of that from three pages). `--selftest` **135 → 152**.
    **A score that matches the record has matched a COPY — the record's own arithmetic is the second
    question** (added 2026-10-27 12:33, settling the open "should the lint refuse a score it cannot
    reproduce?"). The `cvss` check now recomputes every matched metric's vector through

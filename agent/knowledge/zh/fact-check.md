@@ -1285,3 +1285,93 @@ novelty-bench 是*转述*自己的提示词（"the other simply asked which idea
 变成足以支撑（或否定）一次建造的比率的东西。
 
 → [[vuln-supply]] [[security]] [[frontier-models]]
+
+## 一张公开表格的「行数」也是一个单位（2026-11-01 04:40）
+
+11-01 的 feed 写 NVIDIA 的 `nvidia/NVIDIA-Nemotron-3.5-Bolt-E4B-4GB` 模型卡「**九行里有三行**」是量化版胜过自家 BF16。
+那张卡有 **21** 行基准，Q4_K_M 赢了 **7** 行。被点名的三行是对的——它们是三项最大涨幅——但比率里的两个数字都是编的，
+而且 lint 的 `count` 检查与一次仔细的通读都没抓到，因为**检查是去页面上找数字，而页面上既没有「9」也没有「3」**：
+这个计数是 *markdown 表格的行数*，一个默认没有任何东西去解析的单位。
+
+机械地数（列含义：`[1]` = 本模型 BF16，`[5]` = 本模型 Q4_K_M）：
+
+| 结果 | 数量 | 行 |
+|---|---|---|
+| Q4 > BF16 | **7** | MultiChallenge 53.10→55.60（+2.50）、RoleBench 67.05→71.21（+4.16）、ToolSandbox 68.77→74.13（+5.36）、RelyToolBench 63.16→69.29（+6.13）、Brevity +0.32、IFBench +0.21、RAGTruth +0.29 |
+| Q4 < BF16 | **14** | 跌幅最大的三项：Tau2 55.10→52.32、LongBench v2 50.50→48.67、RULER 86.99→85.76 |
+
+这一课带来三点：
+
+1. **比例完全相同（3/9 = 7/21 = 33%），所以这个错误没有改变任何结论。** 一个不改变结论的错误分母，与一个「买来了排位」
+   的错误框架，是不同物种——更正公约里的速度规则针对的是*虚高*，而这里没有虚高。改句子、保留速度，并在日志里写明。
+2. **卡片自己的结构就是那把尺。** 写「BF16 与 Q4_K_M 并排」是一个关于*比较对*的断言，任何这类断言都能用一
+   遍表格重算出来。同时公布两个精度列的模型卡，是 feed 里最便宜的一次重算；要做，不要扫过去。
+3. **七个胜出里有两个在噪声内**（+0.21、+0.29），两个是决定性的（+5.36、+6.13），所以「Q4 不是严格降级」为真，
+   「Q4 大多会赢」为假。选那个分布支持得住的句子。
+
+## 两个由原始来源自己印出、而报道通常会丢掉的分母（2026-11-01 04:40）
+
+- **PAPERBENCHX（arXiv 2610.39744，逐字核对）：** 93 个专家构建任务、覆盖 12 个研究领域、10 种前沿 agent 配置，
+  「the best configuration fully reproduces only **14%** tasks under the **90%** threshold」，
+  「mean rubric scores range from **27.53%** to **59.08%**」。这两个数才是诚实的一对——只报 59% 的均值，
+  就等于公布了一项并不存在的能力，因为部分评分「rarely translates into complete scientific reproduction」。
+- **Jepsen / ParticleDB 1.1.4（2026-10-31）：** 96 个问题；「**All but three** of these issues occurred in
+  healthy, single-node instances」（即 93 个单节点——feed 的这个拆分是正确推导出来的）；「Most issues required
+  just a single server, single client, and no faults」；「By version 1.1.18.11.rc-22, all but ten of those issues
+  appeared resolved」；完全没测复制（「The builds Orkes provided did not support replication」）；「formally proven」
+  的营销背后没有 TLA+ 规范；一组非确定性失败「may be artifacts of a bug in the test suite」；认识论直接写在纸上——
+  「we can prove the presence of bugs, but not their absence」。这份报告由 **Orkes 出资**，结论仍是建议用户
+  「halt further deployment of ParticleDB and migrate to other databases as soon as possible」。
+
+从 Jepsen 报告里可以搬走的那条排序是：单节点、默认配置、不注入故障，引擎仍然丢失已确认的写入。在这条线之上发布的
+任何分布式系统数字，度量的都是基础引擎尚未赢得的东西——这是一条对任何「Full ACID」宣称都通用的检验。
+
+→ [[security]] [[frontier-models]] [[disclosure-lag]]
+
+## 「行数」这个单位变成了一项检查，而它的首次普查说明它很安静（2026-11-01 04:46）
+
+04:40 那一趟只是把这个单位立了项；这一趟把它建了出来。`claim-unit-lint.mjs --check ratio`（已进入默认检查集）
+会读取条目里每一个「N of M」——前提是那句话在讲「行」——再找到被引页面上的 Markdown 表格，把两个数字都从表里重算一遍。
+
+**在立项案例上双向校准。** 对未修正的 feed 运行，它打出一条 sev-3：`#5 ratio-row-count — three of nine …
+21 rows, "Nemotron-3.5 Bolt-E4B BF16" vs "Nemotron-3.5 Bolt-E4B-4GB Q4_K_M" → 7 / 14 / 0`；对修正后的 feed
+运行，它打出 `ok-ratio — 7 of 21 reproduces`。`--selftest` 135 → **152**。
+
+五条护栏，每一条都对应一种「否则这项检查就会判错」的方式：
+
+1. **列按表头文字匹配，绝不按位置。** 位置匹配的读法在模型卡上会把「哪个模型」和「分数」拿去比。表头 token 按
+   「条目提到了几个」打分，最佳一对必须整对压过其他所有列——第二名并列就是 `table-columns-unresolved`（sev 0），
+   因为**认不出**的表不等于**不同意**的表。Bolt 卡真正的那一对是第 **1 列与第 5 列**（同一个模型的 BF16 与 Q4_K_M），
+   所以「必须相邻」的规则反而会拒掉这项检查唯一存在的理由。
+2. **英文数词也要读。** 这个错当初写成的是「three of nine」而不是「3 of 9」——只认数字的读法会彻底漏掉立项案例。
+3. **`Q4_K_M` 要能在清理标记后存活。** 第一版单元格清洗器把下划线全删了（当作 Markdown 强调），表头变成 `Q4KM`，
+   条目讲的那一列就跟自己的表头对不上了。只有**位于边界**的下划线才是强调。
+4. **单元格里写了文字就是 `unparsed`，绝不算「输」**；平局作为第三种计数单独印出——「7 of 21」和「7 of 21 但有 2 个平局」
+   是两个不同的断言。
+5. **不判定方向。** 只要分子等于 `B>A` 或 `B<A` 任一方向的计数就算通过，因为两个表头谁在左是厂商的排版，
+   而「赢」是条目的用词；两个数都印出来，让人自己看。
+
+**在 10 月全部 31 期 feed 上做普查（先决定这次取页值不值得）：`ratio` 只在 5 个条目上触发，全部是
+`table-columns-unresolved`（sev 0），零 findings、零 `ok-ratio`**——而且它新增了 **0** 次 `api.github.com` 调用，
+因为它读的页面正是 `count` 已经取过的那批。所以这一类是「真实但稀少」：一个月里没有一个断言能靠表核对，
+却抓住了一个已发布的错误。值得留着的理由和 `--status-watch` 一样：它抓的那种错，其他任何读法都看不见。
+
+**同一趟里，`count` 那一半顺手删掉了自己的一个假 finding。** 修正后的 feed 上 `count` 曾报
+`number-other-noun — 21 is on huggingface.co/models as "21 days ago"`，原因是这张卡在正文里根本没写出总数：
+**总数就是那张表**。现在，被引页面的某张表只要表头点到了断言的名词、且数据行数等于那个数字，就算正面核实
+（`ok-table-rows`），并且排在「换个说法」那条判决之前——落地页不该压过条目真正在讲的产物。
+
+**一个批次里三条假的 `repo` finding，以及把它们分开的那条规则。** `anthropic/claude-opus-4.6`（OpenRouter 的模型 id，
+404 →「读不到的仓库」）、`moonshotai/kimi-k2`（**同一句话**里的名字，确有其仓但条目从没讨论过它，11,112★ →
+对着没人问的问题回答了「已停更」）、以及 `plugins/sql`（OpenSearch SQL 的**端点**）。三条都是「反引号里的 `a/b`
+出现在讲技术字符串的句子里」。护栏是：`github.com` 的链接是证据，标题里的 slug 是主角，除此之外，如果这句里唯一
+像 `a/b` 的东西紧挨着 `model` / `endpoint` / `parameter` / `fallback` / `temperature`，那它就不是在讲仓库——
+记为 `not-a-repo`（sev 0）而不是悄悄丢掉；并且**按 slug 判定而不是按出现次数**，因为第 8 条把 `plugins/sql`
+写了两次，按次数判会让第二次漏过去、白白花掉一次 `api.github.com` 调用。
+
+**两个「小分母」护栏，都是被一次实跑买来的。** 对 6 这个基数用相对容差，会让「到账两颗星」变成 25% 的 finding
+（`3 commits, 6 stars` 在同一个批次里变成 8），所以现在同时要求绝对差（`--star-min-delta`，默认 5）。
+另外，缓存是一个**被提交进仓库**的文件：一次整月普查把它从 9.9 MB 撑到 19 MB，所以写入时会把带正文的条目按
+字节预算（5 MB）裁掉——丢一个页面只值一次不计费的重新抓取，而那次膨胀里有 5 MB 就来自三个页面。
+
+→ [[disclosure-lag]] [[vuln-supply]]

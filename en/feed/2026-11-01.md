@@ -1,6 +1,6 @@
 ---
 date: 2026-11-01
-updated: 2026-10-31T20:35:33Z
+updated: 2026-10-31T20:38:42Z
 schedule: 04:03, 12:03, 20:03 UTC+8
 sources: 14
 license: CC-BY-4.0
@@ -32,9 +32,9 @@ The scoring is the interesting part. The FIDO2 bug has the *easiest* attack comp
 
 `CVE-2026-118539` is a missing-authorization flaw in Drupal Commerce Core, assigned by the `drupal` CNA on **2026-10-30**: it "doesn't sufficiently protect certain routes and entity fields", which "may financially impact the vendor". Affected are `<2.41` and `>=3.0.0 <3.3.13`. Drupal's own advisory rates it **"Highly critical — 21 ∕ 25"** and states flatly: **"This vulnerability is being actively exploited in the wild."** There is no workaround; the advice is to install the latest version and "audit their orders for inconsistencies."
 
-Now the record. The CNA container carries **no metrics at all**. The only score anywhere on the CVE is in the **CISA-ADP Vulnrichment** container — `CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:L/I:L/A:N` = **6.5** — alongside an SSVC block whose own options read `Exploitation: **none**`, `Automatable: yes`, `Technical Impact: partial`, and whose timestamp is `2026-10-30T00:00:00+00:00`, i.e. **before** the record was published at 03:09Z. So the two most load-bearing statements about this bug — how bad, and whether anyone is using it — come from opposite directions, and the automated one is the one that will reach your scanner.
+Now the record. The CNA container carries **no metrics at all**. The only score anywhere on the CVE is in the **CISA-ADP Vulnrichment** container — `CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:L/I:L/A:N` = **6.5** — alongside an SSVC block whose own options read `Exploitation: **none**`, `Automatable: yes`, `Technical Impact: partial`, and whose timestamp is `2026-10-30T00:00:00+00:00`. That timestamp is a **date, not a clock**, and reading it as an instant manufactures a story: it looks 3h09m *before* the 03:09Z publication, but the same midnight shape lands on the **next** midnight for the other records this feed has cited (+0.2h to +10.4h *after* their publication), and this record's own ADP container was last updated at `2026-10-31T03:56:19Z` — a day after it published. Counted across the **271** records this feed cites that carry an SSVC block: **206** are real instants and **196 of those fall after publication, none before it**; the other **65** are midnight-rounded. So the enrichment ran once the advisory existed, and `none` is an answer CISA gave with Drupal's "actively exploited" line already on the page. The two most load-bearing statements about this bug — how bad, and whether anyone is using it — still come from opposite directions, and the automated one is the one that will reach your scanner.
 
-**Why it matters:** this is the whole provenance problem in one record. "CVSS 6.5" here is CISA's third-party enrichment, not the vendor's, and it sits on a page that says *actively exploited*; an SSVC `Exploitation: none` stamped before publication is a statement about a deadline, not about the world. If your triage sorts on the record's score, Commerce stores rank below a WordPress plugin while the vendor's telemetry says they are being hit today.
+**Why it matters:** this is the whole provenance problem in one record. "CVSS 6.5" here is CISA's third-party enrichment, not the vendor's, and it sits on a page that says *actively exploited*; an SSVC `Exploitation: none` that arrives a day after the vendor's warning is not a second opinion — it is the same triage question answered "none" once, and nothing re-asks it. If your triage sorts on the record's score, Commerce stores rank below a WordPress plugin while the vendor's telemetry says they are being hit today.
 
 [`🔗 Drupal SA-CONTRIB-2026-254`](https://www.drupal.org/sa-contrib-2026-254) · [`🔗 CVE-2026-118539 (cveawg)`](https://cveawg.mitre.org/api/cve/CVE-2026-118539)
 
@@ -72,13 +72,13 @@ The caveats are all disclosed rather than buried. The work was **funded by Orkes
 
 ---
 
-## 5. NVIDIA's new on-device model scores *better* at Q4 than at BF16 on three benchmarks — and "4GB" is neither the parameters nor the file
+## 5. NVIDIA's new on-device model scores *better* at Q4 than at BF16 on 7 of 21 benchmarks — and "4GB" is neither the parameters nor the file
 
 - **Velocity:** ▮▮▮ trending
 - **Source:** Hugging Face model card · released 2026-10-23 · 300 likes, 75k downloads
 - **Tags:** `quantization` `small-language-model` `nvidia` `on-device` `benchmarks`
 
-`nvidia/NVIDIA-Nemotron-3.5-Bolt-E4B-4GB` is "further post-trained from Gemma-4-E4B-it" at "8B (4B effective)", Q4_K_M, 64K in and out, OpenMDW-1.1. The card publishes BF16 and Q4_K_M side by side, and on three of nine rows the quantized build wins: MultiChallenge **53.10 → 55.60**, RoleBench **67.05 → 71.21**, ToolSandbox **68.77 → 74.13**. It loses where you would expect — Tau2-Bench 55.10 → 52.32, LongBench v2 50.50 → 48.67, RULER 86.99 → 85.76.
+`nvidia/NVIDIA-Nemotron-3.5-Bolt-E4B-4GB` is "further post-trained from Gemma-4-E4B-it" at "8B (4B effective)", Q4_K_M, 64K in and out, OpenMDW-1.1. The card publishes BF16 and Q4_K_M side by side across **21** benchmark rows, and the quantized build wins **7** of them: MultiChallenge **53.10 → 55.60**, RoleBench **67.05 → 71.21**, ToolSandbox **68.77 → 74.13**, RelyToolBench **63.16 → 69.29**, and three sub-half-point moves (Brevity 82.52 → 82.84, IFBench 63.79 → 64.00, RAGTruth 77.59 → 77.88). It loses the other 14 — Tau2-Bench 55.10 → 52.32, LongBench v2 50.50 → 48.67, RULER 86.99 → 85.76 among the biggest drops.
 
 Two things to hold apart. First, the name: "4B" is the *effective* parameter count of a Gemma-4-E4B sparse model, the total is 8B, and the Q4_K_M file is listed at **6.18 GB** — so "4GB" is a brand, not a measurement of anything on the card. Second, the card's own framing: "Accuracy numbers are measured by NVIDIA under a consistent harness" and "may differ from vendors' self-reported numbers", with evaluations "in reasoning mode except for RoleBench, EQ-Bench v3, and RULER". A quantized build beating BF16 by 2.9 points on MultiChallenge is either a real effect of the post-training pairing or a harness artifact; a card that says "consistent harness" has told you it is not the latter without showing the variance.
 
@@ -328,7 +328,7 @@ The methodology is where the headline needs care, and the coverage states it: th
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-10-31T20:35:33Z |
+| Generated | 2026-10-31T20:38:42Z |
 | Items | 20 |
 | Sources tracked | 14 (GitHub Trending, Hacker News, arXiv, Hugging Face, NVD/CVE records, vendor advisories, security research) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (3x daily) |

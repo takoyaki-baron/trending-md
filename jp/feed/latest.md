@@ -1,6 +1,6 @@
 ---
 date: 2026-11-01
-updated: 2026-10-31T20:35:33Z
+updated: 2026-10-31T20:38:42Z
 schedule: 04:03, 12:03, 20:03 UTC+8
 sources: 14
 license: CC-BY-4.0
@@ -32,9 +32,9 @@ Delinea は **2026-10-30** に Secret Server 向けの CVE を三件公開した
 
 `CVE-2026-118539` は Drupal Commerce Core の認可欠落で、`drupal` CNA により **2026-10-30** に割り当てられた。「特定のルートとエンティティフィールドを十分に保護しておらず」、それが「ベンダーの財務に影響しうる」。影響範囲は `<2.41` と `>=3.0.0 <3.3.13`。Drupal 自身のアドバイザリはこれを **「Highly critical — 21 ∕ 25」** と評価し、こう明言する。**「This vulnerability is being actively exploited in the wild.」** 回避策の記載はなく、推奨は最新版の導入と「注文に不整合がないか監査する」ことだ。
 
-問題はレコードの側にある。CNA コンテナには **metrics が一切ない**。この CVE 上で唯一のスコアは **CISA-ADP Vulnrichment** コンテナにあり、`CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:L/I:L/A:N` = **6.5**。並ぶ SSVC ブロックは `Exploitation: **none**`、`Automatable: yes`、`Technical Impact: partial` で、タイムスタンプは `2026-10-30T00:00:00+00:00`——レコードが 03:09Z に公開される**前**だ。つまりこの脆弱性について最も重要な二つの文——どれくらい悪いか、誰かが使っているか——が逆向きの出所から来ており、スキャナに届くのは自動化された方だ。
+問題はレコードの側にある。CNA コンテナには **metrics が一切ない**。この CVE 上で唯一のスコアは **CISA-ADP Vulnrichment** コンテナにあり、`CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:L/I:L/A:N` = **6.5**。並ぶ SSVC ブロックは `Exploitation: **none**`、`Automatable: yes`、`Technical Impact: partial` で、タイムスタンプは `2026-10-30T00:00:00+00:00` である。この値は**日付であって時計ではない**。瞬間として読むと話が一つ出来上がってしまう——03:09Z の公開より 3時間09分**前**に見えるが、このフィードが引用した他の記録では同じ真夜中の形が**翌日**の真夜中に落ち（それぞれの公開より **0.2〜10.4 時間後**）、この記録自身の ADP コンテナの `dateUpdated` は `2026-10-31T03:56:19Z`——公開の丸一日後だ。このフィードが引用した SSVC ブロックを持つ **271** 件を数えると、**206** 件が本物の瞬間値で、そのうち **196 件が公開より後、公開より前はゼロ**。残る **65** 件が真夜中への丸めだ。つまり enrichment は勧告が存在してから走っており、`none` は Drupal の「実際に悪用されている」がすでにページに載っている状態で CISA が出した答えである。この脆弱性について最も重要な二つの文——どれくらい悪いか、誰かが使っているか——は依然として逆向きの出所から来ており、スキャナに届くのは自動化された方だ。
 
-**Why it matters:** この一件でプロヴェナンス問題が全部出ている。ここでの「CVSS 6.5」は CISA の第三者エンリッチメントであってベンダーの評価ではなく、それが「実悪用中」と書かれたページに載っている。公開前に押された `Exploitation: none` は世界についての陳述ではなく、ある締め切りについての陳述だ。トリアージがレコードのスコアで並べるなら、Commerce サイトは WordPress プラグインより下に沈む——ベンダーのテレメトリが「今日叩かれている」と言っている間に。
+**Why it matters:** この一件でプロヴェナンス問題が全部出ている。ここでの「CVSS 6.5」は CISA の第三者エンリッチメントであってベンダーの評価ではなく、それが「実悪用中」と書かれたページに載っている。ベンダーの警告から一日後に書かれた `Exploitation: none` は第二の意見ではない。同じトリアージの問いに一度だけ「none」と答えたもので、誰も問い直していないのだ。トリアージがレコードのスコアで並べるなら、Commerce サイトは WordPress プラグインより下に沈む——ベンダーのテレメトリが「今日叩かれている」と言っている間に。
 
 [`🔗 Drupal SA-CONTRIB-2026-254`](https://www.drupal.org/sa-contrib-2026-254) · [`🔗 CVE-2026-118539 (cveawg)`](https://cveawg.mitre.org/api/cve/CVE-2026-118539)
 
@@ -72,13 +72,13 @@ Jepsen による **ParticleDB 1.1.4**（Orkes）の分析は **96 件の問題**
 
 ---
 
-## 5. NVIDIA の新しいオンデバイスモデルは Q4 の方が BF16 より**高スコア** — 三つのベンチマークで。そして「4GB」はパラメータ数でもファイルサイズでもない
+## 5. NVIDIA の新しいオンデバイスモデルは Q4 の方が BF16 より**高スコア** — 21 ベンチマーク中 7 項目で。そして「4GB」はパラメータ数でもファイルサイズでもない
 
 - **Velocity:** ▮▮▮ trending
 - **Source:** Hugging Face モデルカード · 公開 2026-10-23 · 300 いいね、7.5 万ダウンロード
 - **Tags:** `quantization` `small-language-model` `nvidia` `on-device` `benchmarks`
 
-`nvidia/NVIDIA-Nemotron-3.5-Bolt-E4B-4GB` は「Gemma-4-E4B-it からさらに対話後学習した」モデルで、「8B（4B 実効）」、Q4_K_M、入出力各 64K、ライセンスは OpenMDW-1.1。カードは BF16 と Q4_K_M を並べて公開しており、九行のうち三行で量子化版が勝つ。MultiChallenge **53.10 → 55.60**、RoleBench **67.05 → 71.21**、ToolSandbox **68.77 → 74.13**。負けるところは負ける。Tau2-Bench 55.10 → 52.32、LongBench v2 50.50 → 48.67、RULER 86.99 → 85.76。
+`nvidia/NVIDIA-Nemotron-3.5-Bolt-E4B-4GB` は「Gemma-4-E4B-it からさらに対話後学習した」モデルで、「8B（4B 実効）」、Q4_K_M、入出力各 64K、ライセンスは OpenMDW-1.1。カードは BF16 と Q4_K_M を並べて公開しており、**21** 行のベンチマークのうち **7** 行で量子化版が勝つ。MultiChallenge **53.10 → 55.60**、RoleBench **67.05 → 71.21**、ToolSandbox **68.77 → 74.13**、RelyToolBench **63.16 → 69.29**、さらに 0.5 点未満の僅差が三つ（Brevity 82.52 → 82.84、IFBench 63.79 → 64.00、RAGTruth 77.59 → 77.88）。残り 14 行は負けで、Tau2-Bench 55.10 → 52.32、LongBench v2 50.50 → 48.67、RULER 86.99 → 85.76 が最も大きい下落。
 
 二つを切り離して読む。第一に名前。「4B」は Gemma-4-E4B という疎モデルの**実効**パラメータ数で、総量は 8B、Q4_K_M ファイルは **6.18 GB** と記載されている。つまり「4GB」はブランド名であって、カード上の何かの測定値ではない。第二にカード自身の言い回し。「Accuracy numbers are measured by NVIDIA under a consistent harness」であり「他社の自己申告値とは異なりうる」、評価は「RoleBench、EQ-Bench v3、RULER を除き推論モードで実施」。量子化版が MultiChallenge で BF16 を 2.9 点上回るのは、後学習の組み合わせの実効果か、ハーネスの産物か。「consistent harness」と書くカードは後者ではないと告げているが、分散は示していない。
 
@@ -328,7 +328,7 @@ PC を「boots your PC」する文字レベルモデル。MBR は手書きアセ
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-10-31T20:35:33Z |
+| Generated | 2026-10-31T20:38:42Z |
 | Items | 20 |
 | Sources tracked | 14（GitHub Trending、Hacker News、arXiv、Hugging Face、NVD／CVE レコード、ベンダーアドバイザリ、セキュリティ研究） |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8（1 日 3 回） |

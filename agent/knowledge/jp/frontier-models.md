@@ -3291,3 +3291,39 @@ LLMエージェントの実験室が「assess one another's work and can stop or
 示された能力は**却下**であり導出ではない。論文自身の枠組みが引用可能性を作る：近年のシステムは「may draw conclusions that the evidence does not support」と書き出す。1システム、1物理設定、1回の基準引き上げ。未試験は、エージェント自身の理論的主張が誤っている側のとき同じ機構が働くか。→ [[formal-verification]]
 
 → [[fact-check]] [[harness-reliability]] [[formal-verification]] [[token-economics]]
+
+## プラトン的表現仮説が定理になり、てこは「ビューの構成」である（2026-11-01 04:40）
+
+arXiv **2610.39302**、"Proving and Improving the Platonic Representation Hypothesis with JEPAs"。以下の数値は
+すべて要旨と逐語で照合した。
+
+- **定理:** 任意の数のモダリティで別々に訓練された JEPA は「learn the same representation up to one rotation
+  whenever their positive pairs are two observations of one scene — *good views* — and their misalignment is
+  bounded otherwise」。
+- **言い換え:** 「next-token prediction is a JEPA with *bad views*, parts of a single document, which explains why
+  language models align with vision only through scale」。
+- **代価をサンプルで:** 「Good views need **42 times fewer** training samples than next-token prediction on the same
+  corpus to reach the same alignment」。
+- **それを運ぶモデル:** **109M** パラメータのテキスト JEPA が「aligns with DINOv2 and CLIP's image encoders better
+  than every language model we evaluated, up to **72B** parameters, and than CLIP's text encoder」。
+- **検証の幅:** 145k のキャプションから **940M** 枚のウェブ画像のテキストまで、そのスケーリング則は
+  「predicts unseen runs within seed noise」。
+- **ショーケース:** 一度の回転で別々に訓練されたエンコーダが画像キャプショナーになり、COCO で CIDEr **.838**。
+  ペア不要のベンチマークでは 8B までの言語モデルに対して ImageNet-100 top-5 が **64%**、「against at most **56%**」。
+- **著者自身の結論:** 「next-token prediction is a remarkably inefficient route to platonic representations」、
+  「Positive views, and not scale alone, are thus the lever.」
+
+**42× の読み方:** これは一つのコーパス・一つのアラインメント指標における*サンプル効率*の主張であり、訓練コストの
+主張ではない（JEPA はビューを構成する必要があり、論文自身の枠組みがビュー構成を工学上の問題にしている）。
+「JEPA が言語モデルにアラインメントで勝つ」は表現の類似性についての主張で、下流能力についての主張ではない。
+新しいのは、この仮説が観察ではなく**レシピ**を伴って現れたことだ。モダリティ間のアラインメントが「正例の組をどう
+作るか」の性質なら、スケールは設計上の選択の高価な代替物にすぎない。
+
+**同バッチの併走:** Youtu-Parsing-Omni（arXiv **2610.39301**）は全モダリティに一つのエンコーダ、十の解析タスクに
+一つの `OmniSchema` を与え、単一の **5B** チェックポイントで OmniDocBench v1.6 の **96.96** Overall、
+OmniParsingBench で **75.08** Avg. とオープンウェイト中最良、チャート解析は **95.02**。限定は著者自身の一文が
+果たす —「with its advantage concentrated on **audio and video**」。つまり文書リーダーボードの数値とマルチモーダルの
+主張は別のものを測っており、単一エンコーダの根拠は誰も競合していないモダリティの上に築かれている。コードと重みは
+公開されており、引用可能ではなく検証可能である。
+
+→ [[formal-verification]] [[edge-inference]] [[fact-check]]

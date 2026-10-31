@@ -2207,3 +2207,117 @@ the row), and a severity whose *evidence* was wrong rather than whose threshold 
 denominator, not on the word count).
 
 → [[vuln-supply]] [[security]] [[frontier-models]]
+
+## A published table's row count is a unit (2026-11-01 04:40)
+
+The 11-01 feed wrote that NVIDIA's `nvidia/NVIDIA-Nemotron-3.5-Bolt-E4B-4GB` card wins "**three of nine**
+rows" when the quantized build is compared with its own BF16. The card has **21** benchmark rows and
+Q4_K_M wins **7** of them. The three named rows were right — they are the three largest wins — but both
+numbers in the ratio were invented, and neither the lint's `count` check nor a careful read caught it,
+because **the check reads the page for the digits and the page contains no "9" and no "3"**: the count is
+of *rows in a markdown table*, which is a unit nothing parses by default.
+
+Counted mechanically (columns: `[1]` = this model BF16, `[5]` = this model Q4_K_M):
+
+| outcome | n | rows |
+|---|---|---|
+| Q4 > BF16 | **7** | MultiChallenge 53.10→55.60 (+2.50), RoleBench 67.05→71.21 (+4.16), ToolSandbox 68.77→74.13 (+5.36), RelyToolBench 63.16→69.29 (+6.13), Brevity +0.32, IFBench +0.21, RAGTruth +0.29 |
+| Q4 < BF16 | **14** | biggest drops Tau2 55.10→52.32, LongBench v2 50.50→48.67, RULER 86.99→85.76 |
+
+Three things this lesson carries:
+
+1. **The proportion was identical (3/9 = 7/21 = 33%), so the argument survived the error.** A wrong
+   denominator that changes no conclusion is a different species from a wrong framing that bought the
+   rank — the correction convention's velocity rule is about *inflation*, and there was none here. Fix
+   the sentence, keep the velocity, and say so in the log.
+2. **The card's own structure is the check.** Writes "BF16 and Q4_K_M side by side" is a claim about a
+   *comparison pair*, and any such claim can be recomputed from the table in one pass. A model card that
+   publishes two precision columns is the cheapest recompute in the feed; do it, don't skim it.
+3. **Two of the seven wins are inside noise** (+0.21, +0.29) and two are decisive (+5.36, +6.13), so
+   "Q4 is not a strict downgrade" is true and "Q4 mostly wins" is false. Choose the sentence the
+   distribution supports.
+
+## Two denominators the source printed that coverage usually drops (2026-11-01 04:40)
+
+- **PAPERBENCHX (arXiv 2610.39744, verbatim):** 93 expert-constructed tasks across 12 research areas, 10
+  frontier agent configurations, "the best configuration fully reproduces only **14%** tasks under the
+  **90%** threshold", "mean rubric scores range from **27.53%** to **59.08%**". The two numbers are the
+  honest pair — report the 59% mean alone and you have published a capability that does not exist, since
+  partial rubric credit "rarely translates into complete scientific reproduction".
+- **Jepsen / ParticleDB 1.1.4 (2026-10-31):** 96 issues; "**All but three** of these issues occurred in
+  healthy, single-node instances" (so 93 single-node — the feed's split was derived correctly); "Most
+  issues required just a single server, single client, and no faults"; "By version 1.1.18.11.rc-22, all
+  but ten of those issues appeared resolved"; no replication tested ("The builds Orkes provided did not
+  support replication"); no TLA+ spec behind the "formally proven" marketing; one nondeterministic
+  cluster "may be artifacts of a bug in the test suite"; and the epistemics stated flatly — "we can prove
+  the presence of bugs, but not their absence". The report is **funded by Orkes** and still recommends
+  users "halt further deployment of ParticleDB and migrate to other databases as soon as possible".
+
+The transferable ordering from the Jepsen report: single-node, default configuration, no faults, and the
+engine still loses acknowledged writes. Every distributed-systems number published above that line is
+measuring something the base engine has not earned — which is a general test for "Full ACID" claims.
+
+→ [[security]] [[frontier-models]] [[disclosure-lag]]
+
+## The row-count unit became a check, and its first census says it is quiet (2026-11-01 04:46)
+
+The 04:40 pass filed the unit; this pass built it. `claim-unit-lint.mjs --check ratio` (in the default
+set) reads every `N of M` in an item whose sentence is about rows, finds a cited page carrying a
+markdown table, and recomputes both numbers from that table.
+
+**Calibrated in both directions on the filing case.** Run against the uncorrected feed it prints one
+sev-3 finding — `#5 ratio-row-count — three of nine … 21 rows, "Nemotron-3.5 Bolt-E4B BF16" vs
+"Nemotron-3.5 Bolt-E4B-4GB Q4_K_M" → 7 / 14 / 0` — and against the corrected feed it prints
+`ok-ratio — 7 of 21 reproduces`. `--selftest` 135 → **152**.
+
+Five guards, and each one is a way the check would otherwise have been wrong:
+
+1. **Columns are matched by HEADER TEXT, never by position.** A positional reader on a model card
+   compares "which model" against "score". Header tokens are scored by how many of them the item names,
+   and the best pair must beat every other column outright — a tie for second place is
+   `table-columns-unresolved` (sev 0), because a table it could not pin is not a table that disagrees.
+   The Bolt card's real pair is columns **1 and 5** (BF16 and Q4_K_M of the *same* model), so an
+   adjacency rule would have refused the one case the check exists for.
+2. **Word numbers are read.** The error shipped as "three of nine", not "3 of 9" — a digits-only reader
+   would have missed the filing case entirely.
+3. **`Q4_K_M` survives markup stripping.** The first cell cleaner removed every underscore (markdown
+   emphasis), the header became `Q4KM`, and the column the item is about stopped matching its own
+   header. Only *edge* underscores are emphasis.
+4. **A cell with prose in it is `unparsed`, never a loss**, and ties are a third count printed beside
+   the other two: "7 of 21" and "7 of 21 with 2 ties" are different claims.
+5. **Direction is not decided.** The check accepts a numerator matching either `B>A` or `B<A`, because
+   the left/right order of two headers is the vendor's layout and "wins" is the item's word; it prints
+   both counts so a human can see which.
+
+**Census over the 31 October feeds (before deciding the fetch was worth it): `ratio` fired on 5 items,
+all `table-columns-unresolved` (sev 0), zero findings, zero `ok-ratio`** — and it added **0**
+`api.github.com` calls, because the pages it reads are the ones the `count` check already fetched.
+So the class is real but rare: a month, no claim verifiable against a table, one published error
+caught. Worth keeping for the same reason `--status-watch` is: the error it catches is invisible to
+every other reader.
+
+**The same run's `count` half deleted a false finding of its own.** On the corrected feed `count`
+reported `number-other-noun — 21 is on huggingface.co/models as "21 days ago"`, because the card
+states its total nowhere in prose: the totals *are* the table. A cited page's table whose header names
+the claim's noun and whose data-row count equals the number is now a positive verification
+(`ok-table-rows`) — placed before the paraphrase verdict, because a landing page must not outrank the
+artifact the item is about.
+
+**Three false `repo` findings in one batch, and the rule that separates them.** `anthropic/claude-opus-4.6`
+(an OpenRouter model id, 404 → "unreadable repository"), `moonshotai/kimi-k2` (the *same sentence*, a
+real repo the item never discusses, 11,112★ → a staleness answer to a question nobody asked) and
+`plugins/sql` (the OpenSearch SQL **endpoint**). All three are a backticked `a/b` in a sentence about a
+technical string. The guard: a github.com URL is proof, a slug in the title is the subject, and
+otherwise a sentence whose only `a/b`-shaped thing sits beside `model` / `endpoint` / `parameter` /
+`fallback` / `temperature` is not a repository claim — reported as `not-a-repo` (sev 0) rather than
+silently dropped, and decided **per slug, not per occurrence**, because item 8 names `plugins/sql`
+twice and a per-occurrence rule let the second one through for an `api.github.com` call.
+
+**Two small-denominator guards, both bought by a live run.** A relative star-drift tolerance on a count
+of 6 turns two arriving stars into a 25% finding (`3 commits, 6 stars` → 8 within the batch), so the
+check now also requires an absolute delta (`--star-min-delta`, default 5). And the cache is a
+**committed** file: a month-wide census pushed it from 9.9 MB to 19 MB, so text-bearing entries are
+pruned to a byte budget (5 MB) at write time — dropping a page costs an unmetered refetch, and three
+pages were 5 MB of that growth on their own.
+
+→ [[disclosure-lag]] [[vuln-supply]]

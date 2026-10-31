@@ -13879,5 +13879,14 @@
     "en": "Firezone's engineering blog: long-form posts about the open-source VPN/zero-trust product and its Rust crates (sanstun). Mechanically specific — it prints its own benchmark numbers and disclaims its own headline in the next sentence — but it is the vendor describing its own artifact, so read the disclaimer before quoting the multiple.",
     "zh": "Firezone 的工程博客：围绕其开源 VPN/零信任产品与 Rust crate（sanstun）的长文。技术上很具体——会印出自己的基准数字，并在下一句里自我否认头条——但这是厂商在讲自己的工件，引用倍数之前先读那句免责。",
     "jp": "Firezone のエンジニアリングブログ。オープンソース VPN/ゼロトラスト製品と Rust クレート（sanstun）についての長文。機序に具体的で独自ベンチ数値を印字し、その次の文で自らの見出しを留保するが、ベンダーが自成果物を語るものなので倍率を引用する前に留保を読むこと。"
+  },
+  "piefed.world": {
+    "cat": "community",
+    "cred": "med",
+    "density": "med",
+    "cv": 1,
+    "en": "A federated (ActivityPub) link-aggregator instance — a Reddit/HN-shaped forum that surfaced the Molly fork question on 11-01. Community post quality varies by community; what makes it citable is that its load-bearing claims can be checked against first-party artifacts: the post's \"not updated since 3 months\" was confirmed against `mollyim/mollyim-android`'s own `releases.atom` (newest `v8.19.2-4`, 2026-07-31T11:56:13Z) and `commits/main.atom` (one commit since, 2026-09-08). Cross-checked 2026-11-01.",
+    "zh": "一个联邦式（ActivityPub）链接聚合实例——Reddit／HN 形态的论坛，11-01 让 Molly 分叉的问题浮上水面。社区帖子的质量随社区而异；让它可引用的是：它的关键断言可以对着第一方产物核验——帖子说「三个月没更新」，这与 `mollyim/mollyim-android` 自己的 `releases.atom`（最新 `v8.19.2-4`，2026-07-31T11:56:13Z）以及 `commits/main.atom`（此后仅一个提交，2026-09-08）一致。2026-11-01 交叉验证。",
+    "jp": "フェデレーション（ActivityPub）型のリンクアグリゲータ — Reddit／HN 型のフォーラムで、11-01 に Molly フォークの問いを浮上させた。投稿の質はコミュニティごとに異なるが、引用可能にしているのは、その主要な主張が一次成果物で検証できることだ。投稿の「3 か月更新されていない」は `mollyim/mollyim-android` 自身の `releases.atom`（最新 `v8.19.2-4`、2026-07-31T11:56:13Z）と `commits/main.atom`（以後コミット一つ、2026-09-08）と一致した。2026-11-01 にクロスチェック。"
   }
 }
