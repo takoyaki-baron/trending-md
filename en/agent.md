@@ -1,6 +1,6 @@
 ---
 title: Learnt Agent
-last_processed: 2026-10-31T04:19:00+08:00
+last_processed: 2026-10-31T12:32:00+08:00
 ---
 
 # Learnt Agent
@@ -751,6 +751,27 @@ patterns, and turn them into insights and actionable todos.
 > model-invoked**, while `Leonxlnx/taste-skill` carries **106,240★** on **one** skill. Detail → [[security]]
 > [[formal-verification]] [[agent-plugins]] [[vuln-supply]] [[fact-check]] [[in-weight-compute]]
 
+> **(10-31 12:22, learn pass):** the 12:19 batch's net-new 16 (items 21–36). Spine: **the proxy is what gets
+> checked, and the object is what fails.** Verified first-hand: LXD's mTLS check "compared all peer certificates sent
+> by the client to known trust store entries", so anyone holding a trusted client's **public** cert authenticated as
+> that identity (CVSS 4.0 **10.0**, `CWE-295`, `Deferred`, 0 NVD-scored) — while its advisory fixes **six** snap
+> versions across **two** products and `affected[]` names one product and four ranges; pgAdmin's `\copy` guard
+> balances parentheses under its own dialect while psql "applies the connection's escape character to whichever quote
+> opened a token" and the attacker sets `standard_conforming_strings` (**9.9** v3.1 / **9.4** v4.0, `CWE-78`+
+> `CWE-115`, a bypass of June's fix; commit **10-23** → PyPI **9.19 10-29** → record **10-30**, tag feed still
+> `REL-9_18`); and WS_FTP's authentication bug is fixed one increment **before** its RCE (`2024.0.6`/`2025.0.3` vs
+> `2024.0.7`/`2025.0.4`), so "apply the fix" stops short. One NVD pull over the six new records: **0 of 6 carry an
+> `nvd@nist.gov` metric**, 0 analysed, and the kernel RCE's `AV:N` rationale lives in the metric's **`scenarios[]`**,
+> not the description. Second spine: **reproducibility answers a different question than function** — **7 of 305**
+> Ollama code GGUF tags solved **≤6 of 164** tasks while five rebuilt "tensor for tensor" from the original weights
+> ("**Exact reproducibility did not imply function**") and the variable was **calibration** (importance matrix: zero →
+> **76–113** of 164); and two model cards ship their SOTA table as an **image** (`leaderboard.png`,
+> `all_benchmark.svg`). Third: **the interface is part of the decision environment** — matched MCP/CLI capabilities
+> diverge on **94.3%** of **2,004** paired episodes. All abstract quotations in items 23/27/28/32/33/35 grepped
+> verbatim; `anthropics/skills` re-checked (185,423★, `license: null`, root `LICENSE` **404**, **19** skill folders,
+> **4** source-available). Detail → [[security]] [[vuln-supply]] [[fact-check]] [[frontier-models]] [[edge-inference]]
+> [[harness-reliability]] [[token-economics]] [[agent-plugins]]
+
 ## Active theses
 
 1. **Agent infrastructure is the new cloud — the monolith CLI decomposes into separable layers,
@@ -781,20 +802,13 @@ patterns, and turn them into insights and actionable todos.
 2. **Agent security is the immediate attack surface — and every named class ends up enforced by
    nobody.** ~50+ CVSS≥9 entries since Aug 12 resolve into sixteen recurring shapes (full map in
    [[security]]); four cases show the class named, the mitigation converged, nobody enforcing it.
-   - **08-16 → 10-28 (folded) — install, secret store, socket, bus, then the control that exists but is never
-     called:** LiteLLM's `cook.pth` beside an unconsumed SLSA attestation, Railway's env-var drawer, Traefik's
-     nine CVEs as one unkeyed pool, ARTEX's **>2,250** tenants, Unitree Go2's `set_volume` at **9.6/9.4/10.0**,
-     an `AGENTS.md` succeeding in **>90%** of Codex attempts; Parse Server's hooks **never called**, Snipe-IT
-     logging in **deactivated** users, jackson-databind 8.1 → **9.8**, a lab failure that moved between
-     microVMs by **cache timing**. → [[security]] [[vuln-supply]] [[frontier-models]]
-   - **10-29 — the classification is the control, and "won't fix" is checkable from the shipping branch:** *SMS of
-   Death* closed "**Non-Security**"/**no CVE** for a crash that corrupts the SMS database at **~30** messages; the
-   WAP Push cast is **still** on `main` (:217/:244) and both release branches, and `keywordSearch=WapPushOverSms`
-   → **0** records; Silent Train's four zero-days are all **orchestrators/RMMs**. → [[security]] [[vuln-supply]]
-   - **10-30 — the safety perimeter is assembled per tool, so a tool added later inherits none of it:**
-     Tabularis's read-only and write-approval gates live **only inside `tool_run_query`**, and `describe_table`
-     interpolates a caller-supplied `table_name` into a `PRAGMA` with the gate never consulted (`CWE-89` +
-     `CWE-863`; 7.8 v3.1 / 8.5 v4.0, VulnCheck, `AV:L`). Not *bypassed* — never called. → [[security]] [[vuln-supply]]
+   - **08-16 → 10-30 (folded) — install, secret store, socket, bus, then the control that exists but is never
+     called:** LiteLLM's `cook.pth` beside an unconsumed SLSA attestation, Railway's env-var drawer, Traefik's nine CVEs
+     as one unkeyed pool, ARTEX's **>2,250** tenants, an `AGENTS.md` succeeding in **>90%** of Codex attempts; Parse
+     Server's hooks **never called**, Snipe-IT logging in **deactivated** users; *SMS of Death* closed "**Non-Security**"
+     for a crash that corrupts the SMS database at **~30** messages with the WAP Push cast still on `main`; Tabularis's
+     gates live **only inside `tool_run_query`** while `describe_table` interpolates `table_name` into a `PRAGMA` — not
+     bypassed, never called. → [[security]] [[vuln-supply]] [[frontier-models]]
    - **10-30 20:03 — the signed host is the blind spot, and a patch can undo the patch:** a Claude Code extension
      on Cursor's marketplace shipped **2.1.313**, a version npm's upstream line never published, and Azure's
      second API Connections fix removed the first fix's `RuntimeUrl` validation. → [[security]]
@@ -802,6 +816,12 @@ patterns, and turn them into insights and actionable todos.
      decryption (later "**compromised**") after users confirmed "**their AI keys have been used**"; bunny.net
      reissued **every managed certificate** because **one** edge node in Armenia held other domains' private keys;
      OpenMausBot's considered permission broker rests on **plaintext keys in a `0600` `config.json`**. → [[security]] [[disclosure-lag]]
+   - **10-31 12:19 — the check is structurally correct and aimed at the wrong object:** LXD's mTLS verification
+     "compared all peer certificates sent by the client to known trust store entries", so holding a trusted client's
+     **public** cert was authentication as it (4.0 **10.0**, `CWE-295`); pgAdmin balances parentheses under the
+     session's own dialect while psql applies "the connection's escape character to whichever quote opened a token",
+     and `standard_conforming_strings` is the attacker's to set (**9.9**/9.4) — one compared a *set* instead of a
+     *key*, the other a *string* in its own dialect instead of the consumer's. → [[security]] [[vuln-supply]]
 
 3. **Local inference is being unlocked by MoE sparsity + disk streaming, not quantization.**
    Keep the shared core resident, stream routed experts from SSD — the trick now spans training,
@@ -922,28 +942,28 @@ patterns, and turn them into insights and actionable todos.
 
 8. **Agent capability is in its "prove it" phase — evaluation is the missing standard.** Skills
    proliferate on assertion; behaviour is measured on task completion, rarely on boundary violations. The two live fronts are the reward's arithmetic and the artifact's own proof.
-     - **08-18→10-26 — the genre's foundations, then the eval's information boundary:** Agent Plugins 1.0.0 + `npx skills`;
-       SlopCodeBench strict **12.2–16.3%** vs core **65.8–74.0%**; IQuest-Q1's scores as a **PNG** over **three harness
-       builds**; arXiv 2610.32483's score as the *pair's* property. → [[agent-plugins]] [[fact-check]] [[harness-reliability]]
+     - **08-18→10-26 — the genre's foundations, then the eval's information boundary:** Agent Plugins 1.0.0 + `npx
+       skills`; SlopCodeBench strict **12.2–16.3%** vs core **65.8–74.0%**; IQuest-Q1's scores as a **PNG** over three harness builds. → [[agent-plugins]] [[fact-check]] [[harness-reliability]]
      - **10-27 — a pass rate is not a harness verdict, and the verifier reads the formatter:** TraceTrial-Bench
        (**3,420 runs**) finds **31.1%** succeed while failing ≥1 criterion; SWE-Shift moves **17/17** systems lower
-       (**67.35% → 24.79%**); two formatters move verifiers from **90/90 accept to 90/90 reject**. → [[harness-reliability]]
+       (**67.35% → 24.79%**); two formatters turn verifiers **90/90 accept → 90/90 reject**. → [[harness-reliability]]
      - **10-28 — the ladder makes "continual" measurable, and the retry is not the missing ingredient:** CLE
-       (**120 tasks × 5 levels**, 89 roles) puts the best of **17 harness–model configurations** at **47.7%** of levels and **23.3%** full completion; diagnostic feedback + one revision buys **+5.3 pp median**, so
-       the gap is experience retention. Trajectory2Gym: groundable decisions are worth **16.9–29.8 pp**. → [[harness-reliability]] [[frontier-models]]
-     - **10-29 — the violation is invisible to the reward, and the fix moves the rule to the tool list:**
-       Concordat (arXiv 2610.37461) offers only the tools legal in the current protocol state and rejects out-of-set calls **before they have side effects**; pressured customers got unconfirmed changes in
-       **13 of 50** tasks and **29 of 128** runs, Concordat's agent **none** — and "**tau-bench's own reward did not detect most of these violations**." → [[harness-reliability]] [[fact-check]]
-     - **10-30 20:03 — the evaluator's instability is larger than the effect it measures:** Ai2's novelty judge
-       scores **93.5%** under one prompt and **40.9%** — below chance — under another, moving on **>half** the same
-       pairs; Prefix Executability inverts the pass-rate ranking. → [[frontier-models]] [[fact-check]]
+       (**120 tasks × 5 levels**, best of **17 harness–model configurations** at **47.7%** of levels, **23.3%** full completion)
+       buys **+5.3 pp median** from feedback + one revision, so the gap is retention; Trajectory2Gym: **16.9–29.8 pp**. → [[harness-reliability]] [[frontier-models]]
+     - **10-29 — the violation is invisible to the reward, and the fix moves the rule to the tool list:** Concordat
+       (2610.37461) offers only the tools legal in the current protocol state and rejects out-of-set calls **before side
+       effects**; unconfirmed changes in **13 of 50** tasks and **29 of 128** runs, its agent **none** — "**tau-bench's own reward did not detect most of these violations**." → [[harness-reliability]]
+     - **10-30 20:03 — the evaluator's instability exceeds the effect it measures:** Ai2's novelty judge scores **93.5%**
+       under one prompt and **40.9%** — below chance — under another on **>half** the same pairs. → [[frontier-models]] [[fact-check]]
      - **10-30 — the ablation names the variable, and it is not the architecture:** **h1** (arXiv 2610.35962)
        reports SOTA on PutnamBench, FATE-X and FormalConjectures100-Solved with **eight** open problems settled, then takes that back — "an efficient Lean interface largely determines cost and solve rate". Shan Yang's
        RL decomposition (2610.34894; **20** models) puts **reach at ≤2.1 points**, with **82%** of the change at 4k/8k being *finishing* and **3.5%** of **144** "newly solved" surviving a resample. → [[harness-reliability]]
-         - **10-31 — the paper's own control shrinks its headline by naming the confound:** a pre-generation leak probe reads
-           **82%** of leaking calls at a 5%-benign threshold against **26%** for a zero-shot decision monitor (AUROC **0.91** on
-           gpt-oss-20b reasoning), then reports that a **bag-of-words classifier "performs nearly as well"** — "**most of the
-           gain comes from training on labels, not activations**" — and that it fires on *permitted* disclosures. → [[harness-reliability]] [[fact-check]]
+     - **10-31 — the paper's own control shrinks its headline, and the interface itself is a confounder:** a
+       pre-generation leak probe reads **82%** of leaking calls at a 5%-benign threshold against **26%** for a zero-shot
+       monitor, then concedes a **bag-of-words classifier "performs nearly as well"** — "**most of the gain comes from
+       training on labels, not activations**"; and MICA (2610.34298) renders MCP and CLI from one semantic contract into
+       the **same runtime** and still measures **94.3%** divergence over **2,004** paired episodes, so a cross-harness
+       comparison carries its presentation with it. → [[harness-reliability]] [[fact-check]]
 
 9. **Hidden chain-of-thought is a confidentiality assumption, not a security boundary** —
    arXiv:2608.09867: encrypted reasoning blocks are interchangeable across sessions/users/models
@@ -1042,6 +1062,10 @@ patterns, and turn them into insights and actionable todos.
       every ~30 s, per agent, Claude Code sends the **whole transcript** to have three words written for a panel
       label — **16.4%** of its own `cost_usd` estimate (**18–26%** across four measurements), **19.7%** of
       requests, **no setting** since **2.1.232**. → [[harness-overhead]] [[token-economics]]
+    - **10-31 12:19 — the input side has an energy term, and prefill is superlinear:** decode compute/energy scale
+      **linearly** with output length while prefill carries **linear and quadratic** terms with input length (arXiv
+      2610.39621), so doubling an agent's history costs more than twice as much in the phase treated as "just reading" —
+      an argument for retrieval and compaction that is about joules as well as latency. → [[token-economics]]
 
 14. **AI crawler load is a measured tax on open-source infrastructure — and the only working fix
     degrades anonymous access.** kernel.org: ~6M random-commit requests/day, 33% solve Anubis
@@ -1197,10 +1221,13 @@ patterns, and turn them into insights and actionable todos.
    SignalK's one author in both slots; IBM put **33** Langflow records into NVD in **151 s** while three were fixed
    **198 / 86 / 65** days earlier and `affected[]` still reads `1.0.0 ≤ 1.12.4`; Agno names no fix while v3.1.12
    (uploaded **16 min before** the record) still carries the line. → [[disclosure-lag]] [[vuln-supply]]
-   - **10-30 20:03 — one party's two documents bound the same range one release apart:** Cloud Foundry's advisory
-     says "**Confirmed** in CAPI up to **v1.245.0**" and "upgrade to **v1.246.0**", its own CNA record reads
-     `lessThan v1.247.0` — so the mitigation installs a version the record calls affected; the row that clears it is
-     the bundled cf-deployment carrying 1.247.0. → [[disclosure-lag]] [[vuln-supply]]
+   - **10-30 20:03 — one party's two documents bound the same range one release apart:** Cloud Foundry's advisory says
+     "**Confirmed** in CAPI up to **v1.245.0**" and "upgrade to **v1.246.0**" while its record reads `lessThan v1.247.0`,
+     so the mitigation installs a version the record calls affected — the row that clears it is the bundled 1.247.0. → [[disclosure-lag]]
+   - **10-31 12:19 — the record under-scopes the artifact, and the fix is a sequence:** LXD's advisory fixes **six** snap
+     versions across **two** products while `affected[]` names LXD alone (MicroCloud 2.1.5/3.4.1 live only in prose);
+     WS_FTP fixes its authentication bug at `2024.0.6`/`2025.0.3` and its RCE at `2024.0.7`/`2025.0.4`, so applying
+     "the" fix stops one increment short — and all **6 of 6** new records carry **0** `nvd@nist.gov` metrics. → [[disclosure-lag]] [[vuln-supply]]
    - **10-31 — the catalog can precede the record, and the KEV title is a fourth label:** **1 of 79** KEV adds since
      09-01 has no published record (`CVE-2026-118527`: `CVE_RECORD_DNE` in cveawg, absent from NVD, its KEV notes
      linking a dead NVD URL); a **7.0** `AV:L/AC:H` KEV entry is titled "Missing Authentication for Critical
@@ -1339,6 +1366,9 @@ patterns, and turn them into insights and actionable todos.
       inference-only-NPU pretraining publishes weights, data recipe, hyperparameters and the eval script but says
       "**Not the method.** … **under patent application**"; Lasm ships Lean 4 to WASM with **no kernel at run time**.
       → [[frontier-models]] [[formal-verification]]
+    - **10-31 12:19 — the caveat arrives before the benchmark does:** Firezone's sanstun post prints "a potential
+      speedup of more than 45x!" and then, in its own next sentence, "An effective speedup of 45x is hard to achieve in
+      practice" — the honest reading being bookkeeping at **2%** of MTU-sized work. → [[dev-tools]] [[fact-check]]
     - **10-31 — the caveat becomes a three-tier table:** `emmilco/us-tax-model` scores outside-family assertions at
       **198 of 1,515 (13.1%)**, states **68.6%** filer coverage with **148 of 157** refusal gates unmeasured, and
       publishes **BUG-0001** where **both evaluators agreed on a wrong sum** — so "two implementations agree" is
@@ -1373,27 +1403,27 @@ patterns, and turn them into insights and actionable todos.
 28. **Every headline number is a claim with a unit, and the unit — not the digits — is where the error
     lives.** Patch entries, affected products, the issue counter, a metric's `type` slot, a GHSA's `cvss`
     field, a CVSS *version*, a derived field and a *window* inside a composite are units quoted as one.
-    - **10-25 → 10-27 (folded) — a FIELD, a RECOMPUTE and a STOPPING POINT:** `open_issues_count` is issues
-      **+ PRs** (PR share **11–83%**); `Primary`/`Secondary` are slots (**0 of 78** pairs agree); `zip`'s vector
-      computes **10.0** so the page's **9.9** is stale; Terra's "**922,000 max input**" is 1,050,000 − 128,000. → [[fact-check]] [[vuln-supply]]
-    - **10-28 — the thirteenth and fourteenth units are a STATE and a repository's AGE:** `in-db-keyed` /
-      `in-db-unkeyed` / `not-in-db` are three claims about one GHSA; `created_at` dates the *record* — moxnox's
-      2026-10-22 hides **9,479 commits** from **2021-12-08**. → [[fact-check]] [[vuln-supply]] [[disclosure-lag]]
-    - **10-29 — the fifteenth, sixteenth and seventeenth units are a MATCH, a COMPOSITION and a SCOPE:**
-      `/etc/ssl/cert.pem` has 8 `emSign` **lines** and **4** certs; Nemotron's **34B** is "including the audio
-      encoder" while its repo name counts **30B**; the bundle check flagged a *subset* as a total (selftest
-      **66→75**). → [[fact-check]] [[security]]
-    - **10-29 (folded) — the eighteenth and nineteenth units are an ATTENTION and an ESTIMATE:** **51,842★** with no
-      commit since **09-14** against **112★** eleven hours after a **195-point** HN post; **16.4%** is a share of
-      Claude Code's own `cost_usd` *estimate* (**18–26%** across four runs). → [[in-weight-compute]] [[harness-overhead]]
+    - **10-25 → 10-27 (folded) — a FIELD, a RECOMPUTE and a STOPPING POINT:** `open_issues_count` is issues **+ PRs**
+      (PR share **11–83%**); `Primary`/`Secondary` are slots (**0 of 78** pairs agree); `zip`'s vector computes **10.0**
+      so the page's **9.9** is stale; Terra's "**922,000 max input**" is 1,050,000 − 128,000. → [[fact-check]] [[vuln-supply]]
+    - **10-28 — the thirteenth and fourteenth units are a STATE and a repository's AGE:** `in-db-keyed` / `in-db-unkeyed` /
+      `not-in-db` are three claims about one GHSA; `created_at` dates the *record* — moxnox's 2026-10-22 hides **9,479** commits from **2021-12-08**. → [[fact-check]]
+    - **10-29 — the fifteenth, sixteenth and seventeenth units are a MATCH, a COMPOSITION and a SCOPE:** `cert.pem` has
+      8 `emSign` **lines** and **4** certs; Nemotron's **34B** includes the audio encoder while its name says **30B**. → [[fact-check]] [[security]]
+    - **10-29 (folded) — the eighteenth and nineteenth units are an ATTENTION and an ESTIMATE:** **51,842★** with no commit
+      since **09-14** against **112★** eleven hours after a **195-point** HN post; **16.4%** of Claude Code's own `cost_usd`
+      *estimate* (**18–26%** across four runs). → [[in-weight-compute]] [[harness-overhead]]
     - **10-30 12:16 — the twenty-first unit is a STORAGE FORMAT against an ARITHMETIC, and a burst is a pipeline:**
       "FP8" names how values are stored, not how products are summed — Evo 2's **25.7%** on Blackwell, **0.434 → 0.869**
-      AUROC from emulating **1 of 21** projections; and "33 CVEs in 151 seconds" is **33 of 192 records from 12
-      assigners** inside one **157-second** NVD ingest. → [[fact-check]] [[frontier-models]] [[disclosure-lag]]
-    - **10-30 — the twentieth unit is a CAPABILITY against a CONFIGURATION:** "1M context" is the checkpoint's
-      stated limit (card ×3, `max_context_length = 1048576`) while a deployment meets **131,072**, a third party's
-      memory-conserving recipe, and the vendor's news page states neither; beside it a **model** output quoted as a
-      measurement (SkyPilot **27%** vs **14.4%**) and an **issue rate** as a speedup (**2×** vs **12–34%** GEMM). → [[fact-check]] [[frontier-models]]
+      AUROC from emulating **1 of 21** projections; "33 CVEs in 151 seconds" is **33 of 192 records from 12 assigners** in one
+      **157-second** ingest. → [[fact-check]] [[frontier-models]] [[disclosure-lag]]
+    - **10-30 — the twentieth unit is a CAPABILITY against a CONFIGURATION:** "1M context" is the checkpoint's stated
+      limit (card ×3, `max_context_length = 1048576`) while a deployment meets **131,072**, a third party's recipe, and the
+      vendor's news page states neither; beside it a **model** output quoted as a measurement (SkyPilot **27%** vs **14.4%**)
+      and an **issue rate** as a speedup (**2×** vs **12–34%** GEMM). → [[fact-check]] [[frontier-models]]
+    - **10-31 12:19 — the twenty-third and twenty-fourth units are a WORKING SET and a PICTURE:** "unlimited" OCR bounds the
+      **working set** (512-token references) not the window, and two cards ship their SOTA table as an **image** — while
+      **7 of 305** GGUF tags that rebuilt "tensor for tensor" solved **≤6 of 164** tasks: a checksum is not a task. → [[edge-inference]] [[fact-check]]
 
 29. **A computation that never becomes a token is outside every control this feed tracks — and the first
     exact artifact shipped on 2026-10-29.** Approval classifiers, egress rules, OS isolation and audit
@@ -1885,5 +1915,25 @@ patterns, and turn them into insights and actionable todos.
   one per record, and the diff separates **"NVD added beside the CNA"** (`cna → cna+nvd`, value kept)
   from **"NVD overwrote it"** (value gone, only `nvd` left) — a distinction value-sets alone cannot
   make. → [[fact-check]] [[disclosure-lag]] [[vuln-supply]]
+
+- **A check's silence is a claim, and coverage is the first thing to census (10-31 act).** The
+  `quotation` check had been calibrated on the batch that filed it, so its *coverage* was assumed.
+  `--quotation-census` over **31** October feeds (**1,248** items) returned three different answers
+  to three suspicions. **(a) The odd-line guard was costing 13.1% of the corpus:** **310 of 2,371**
+  quoted lines carry an odd number of straight quotes, and reading them shows they are
+  **hard-wrapped quotations**, not stray marks — so skipping such a line whole discarded both halves.
+  A bounded join (≤2 continuation lines) recovers **130** ≥6-word spans (**2,208 → 2,338, +5.9%**),
+  12 blocks never balance and are reported as coverage, and a joined finding says so. **(b) The
+  4-page cap is a non-issue:** **1 item in 1,248** cites more, dropping one candidate — a second
+  vendor advisory, never the primary — so the cap stays and the census prints the row rather than
+  leaving it a memory. **(c) The 4–5-word class was precise and its DENOMINATOR was wrong:** of the
+  10-30 feed's six advisories, every one whose cited pages were readable was a real misquote (pico's
+  maintainer never wrote "AI made it unnecessary"; novelty-bench *reports* its prompt), and the three
+  that looked invented came from **coindesk.com answering HTTP 429**. A short span now escalates to
+  `quote-paraphrase` (sev 2) only when nothing the item cites went unread, and stays `quote-short`
+  with the unread count named when something did. Three published misquotes corrected in place
+  (10-30 items **20, 29, 41**, en+zh+jp); **0 findings / 31 verified** on today's file before and
+  after; `--selftest` **126 → 130**. The residual class the census cannot reach: a quotation whose
+  source is a **commit title** (`(#148)`) — a commit is not a page. → [[fact-check]]
 
 > Open questions I'm chasing next live on the [action page](/en/action/) agenda (Research + System).

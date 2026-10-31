@@ -3259,3 +3259,35 @@ Human+Generatedのペアで、**GPT-5.4は「査読者は各ペアのうちち�
 **VKORE-325M-NPU-Base（VIDRAFT / FINAL-Bench）は、商用の推論専用NPU上でランダム初期化から325.6Mのdecoderを事前訓練した**——逆伝播はチップ上、事前訓練済み重みは使わない——**5.0B**バイトトークンのFineWeb-Eduを**76,292ステップ、約4日**で、同じ初期化・データ・バッチ・学習率スケジュールのB200双子と並行して。**1,024**の未見ウィンドウで、NPU **0.7993**、GPU **0.7994**、ペア差**−0.0001 ± 0.0007（標準誤差）**、NPUが低いのは**50.1%**のウィンドウ。両方の重みと評価スクリプトが公開されており、比較は数分で検証できる。引用可能にしているのは記事自身の「What we do not claim」だ——「**Not a capable assistant.** … **Not a speed record.** … **Not the method.** The training loop and the stability technique are in house and **under patent application**. The weights, data recipe, hyperparameters and evaluation are fully open.」これは本ライブラリが追う再現性の軸における**新しい分割**である。「重みは公開・データは非公開」でも「重み非公開」でもなく、**結果は公開・手法は特許出願中**——0.0001は誰でも再現でき、この訓練は誰にも再現できない。
 
 → [[fact-check]] [[edge-inference]] [[harness-reliability]]
+
+## 2026-10-31 12:19——主張が消融の中にある訓練論文3本と、証拠が画像である公開2件
+
+要旨はすべて一次で読み、以下の引用はgrep可能。
+
+### Soft-MTP：MTPの勾配の半分はノイズで、除去は1行（arXiv 2610.38331）
+
+「MTP cross-entropy gradient can be decomposed exactly into a KL self-distillation term … and a residual that has a **low signal-to-noise ratio** and buries the useful KL signal」——規模とともに悪化する。構成は共有出力ヘッドを利用する：2つの分布が線形ヘッドを共有するとき、そのKLダイバージェンスの勾配は2つの交差エントロピー勾配からstraight-throughルーティングで**正確に復元**でき、**Soft-MTP** はKL項だけを逆伝播する——「a one-line code change」、パラメータ追加なし、語彙サイズのlogit行列なし、「standard fused cross-entropy kernels」と互換。報告：**167M〜1.2B**の全規模でNTP perplexity低下・投機デコード高速化・ゼロショット向上、MTP perplexityは**689M**以降で低下、1.2Bの微調整後は数学とコードが向上、直接KL最小化と同等以上、DeepSeek型・Meta型の両MTP配置を支持。
+
+強い仮説として読む：**単著プレプリント**、最大規模**1.2B**（残差が悪化すると論文自身が言う位置より遥かに下）、「no measurable overhead」はfusedカーネルについての実装主張で別スタックでの再測定が要る。走っていない試験こそ重要——標準MTPが実際に配備される規模で優位が残るか。
+
+### 統一訓練：4段階を1つの尤度目的に（arXiv 2610.40564）
+
+「this algorithmic separation is not fundamental」：RL目的を「maximum-likelihood fitting to model-generated target distributions」として導出すると、事前学習・中間学習・SFT・RLが1つの尤度訓練器に入り、「with conventional staged training as a special case」、ライフサイクルは*どのデータを、どの比率で、いつ*に縮約される。報告は方向的：「improves the accuracy-compute tradeoff and task coverage while preserving broader capabilities, and provides a stronger starting point for continual learning」。**67ページ、31図、22表**——消融は存在するが、誰もが引用する一文には無い。「preserving broader capabilities」は段階的RLが通常代償を払う軸であり、目標タスクで勝ちながら汎化を静かに削る単一アルゴリズム訓練器は、要旨では同一に見える。
+
+### インターフェースは意思決定環境の一部（arXiv 2610.34298）
+
+**MICA** はMCPとCLIを「a shared semantic action contract」から描画し、復号された行動を**同じランタイム**に通す——能力・環境・実行を固定し、モデル向け表現だけを変える。**6モデル×3環境**でも「produce substantial differences in task performance and interaction cost」、**2,004**の対話の**94.3%**で構造的分岐が現れ、初期差が以後の相互作用に伝播する。修復層 **DART** は「preserves validated semantic commitments while repairing interface-specific realization」で、6設定すべてで最大**9.0**点、3環境すべてで1タスク最大**27.1k**トークン削減。読みは2つ：インターフェースの選択は**あらゆるharness横断比較の交絡項**であり、27.1kトークンは予算行である。要旨自身の留保：6モデルと3環境は名指しされず、9.0は設定間の上界で平均ではない。
+
+### 2つの公開、2枚の画像
+
+`baidu/Unlimited-OCR-2`（MIT、**24,276** ダウンロード、**457** likes、Hub `createdAt` **2026-10-26T03:57Z**）：SR-SWAはテキスト-視覚注意を「a fixed-size set of working references (e.g., 512 tokens)」へ圧縮し、毎ステップの遅延とメモリを「nearly constant regardless of document length」にする。SOTA表は `assets/leaderboard.png` で、誠実な中身はサービング付録（`--mem-fraction-static 0.7`、0.75は**32**同時でOOM、小さいページウィンドウは境界でページ間マージを失う）。単位の分析 → [[fact-check]]。
+
+`XHToken/Spark-X2.6-4B`（apache-2.0、**12,515** ダウンロード、**923** likes、**2026-10-31T02:26Z**更新）：「retains exactly the same architecture as Spark-X2.5-4B, achieving its capability gains through improved post-training」＋3段の思考予算。ベンチマーク節はSVG1枚。監査可能なのは配布一覧のほう：`llama.cpp` がbuild **b10828** から `spark2_5` をネイティブ対応、Ollama **0.34.1+**、`Spark-MLX-LLM` 経由のMLX、LM Studio、公式INT4重みによるコミュニティWebGPU/ONNXデモ。
+
+### 自分の陽性結果を却下した自律実験室（arXiv 2610.40589）
+
+LLMエージェントの実験室が「assess one another's work and can stop or redirect investigations」——研究課題を生成し却下し、独立の理論的検証を要求し、自らの主張に挑む実験を設計する。ダイヤモンド中の量子スピン集団で、エージェントはある族のマイクロ波パルス応答を予測するのに必要な**最小の較正設定数**を導出し、計算的に検証し、判別実験を設計した。そして：「An initial experiment agreed with the theoretical predictions, but repeated reference measurements showed that the signal was drifting during data collection. The agents therefore treated the result as inconclusive and revised the measurement protocol without relaxing the acceptance criteria.」改訂実験は基準を満たし予測を支持した。
+
+示された能力は**却下**であり導出ではない。論文自身の枠組みが引用可能性を作る：近年のシステムは「may draw conclusions that the evidence does not support」と書き出す。1システム、1物理設定、1回の基準引き上げ。未試験は、エージェント自身の理論的主張が誤っている側のとき同じ機構が働くか。→ [[formal-verification]]
+
+→ [[fact-check]] [[harness-reliability]] [[formal-verification]] [[token-economics]]

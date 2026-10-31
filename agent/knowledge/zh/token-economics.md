@@ -392,3 +392,13 @@ Sources: [mksglu/context-mode](https://github.com/mksglu/context-mode) · [npm: 
 为什么它属于上下文边界层而不是「serving」：被优化的对象正是整个论题所谈的那一个——agent 向前携带多少字节——而「agent 自己的工作记忆是一种可调度资源（而不是 prompt 的涌现属性）」这个发现，是该层第一个模型本身可以操作的版本。这是推理引擎的改动，不是包装：任何放在 API 前面的代理都无法丢弃服务器持有的 cache。
 
 Sources: [arXiv: Cache Engineering for Agents](https://arxiv.org/abs/2610.28577) · [arXiv PDF](https://arxiv.org/pdf/2610.28577)
+
+## 2026-10-31 12:19——输入端也有能量项，而 prefill 是超线性的
+
+"**The Real Cost of Context**"（arXiv **2610.39621**）从这个文件反复发现的记账缺口出发：agentic 架构「substantially increased token consumption」，而现有估算「focus primarily on generated output tokens while overlooking the impact of the large input contexts characteristic of agentic workflows」。
+
+结果来自对 prefill 与 decode 长度的广义线性模型拟合：**decode** 的计算时间与能耗随输出长度**线性**增长，**prefill** 则随输入长度同时带**线性与二次**项。于是 agent 增长的历史，成本并不与体量成正比——把上下文翻倍可能花掉两倍以上，而且罚在所有人都当作「只是在读」的那个阶段。作者还报告「compute time serves as a reliable proxy for energy consumption when direct energy measurements are unavailable」，这才让框架对闭源 API 可用。
+
+两条限度让它不至于变成计费工具：拟合**按模型、按硬件**，系数不跨部署迁移；计算时间代能量的标定是对作者自己的测量，而不是厂商的计量——它估算的是托管模型的**能耗**，不是你的**账单**。设计结论是方向性的、且两条限度下都成立：凡是靠多送上下文而不是少检索来换延迟的，边际 token 不是边际成本，**压缩与检索既是延迟决策也是能量决策**。
+
+→ [[frontier-models]] [[harness-overhead]] [[agent-stack]]

@@ -2,7 +2,7 @@
  "fields": {
   "weaknesses": {
    "field": "weaknesses",
-   "updated": "2026-10-30T04:28:35.278Z",
+   "updated": "2026-10-31T05:32:04.386Z",
    "rows": {
     "CVE-2026-118585": {
      "first": "2026-10-30T04:28:29.604Z",
@@ -3884,7 +3884,8 @@
      "kinds": [
       "cna"
      ],
-     "lastModified": "2026-10-29T18:17:39.413"
+     "lastModified": "2026-10-30T08:17:00.560",
+     "version": "2026-10-31T05:32:04.385Z"
     },
     "CVE-2026-93008": {
      "first": "2026-10-30T04:28:29.605Z",
@@ -3938,7 +3939,8 @@
      "kinds": [
       "cna"
      ],
-     "lastModified": "2026-10-29T14:18:00.690"
+     "lastModified": "2026-10-30T07:16:35.220",
+     "version": "2026-10-31T05:32:04.385Z"
     },
     "CVE-2019-25781": {
      "first": "2026-10-30T04:28:29.605Z",
@@ -4686,7 +4688,8 @@
      "kinds": [
       "cna"
      ],
-     "lastModified": "2026-10-29T14:18:00.480"
+     "lastModified": "2026-10-30T08:17:00.737",
+     "version": "2026-10-31T05:32:04.385Z"
     },
     "CVE-2026-93010": {
      "first": "2026-10-30T04:28:29.605Z",
@@ -4713,7 +4716,8 @@
      "kinds": [
       "cna"
      ],
-     "lastModified": "2026-10-29T14:18:00.640"
+     "lastModified": "2026-10-30T08:17:01.083",
+     "version": "2026-10-31T05:32:04.385Z"
     },
     "CVE-2026-107014": {
      "first": "2026-10-30T04:28:29.605Z",
@@ -4790,14 +4794,30 @@
        "values": null,
        "kinds": null,
        "lastModified": "2026-10-29T16:21:34.310"
+      },
+      {
+       "at": "2026-10-31T05:32:04.385Z",
+       "status": "Deferred",
+       "present": true,
+       "values": [
+        "CWE-284"
+       ],
+       "kinds": [
+        "cna"
+       ],
+       "lastModified": "2026-10-30T19:18:01.653"
       }
      ],
-     "at": "2026-10-30T04:28:29.605Z",
+     "at": "2026-10-31T05:32:04.385Z",
      "status": "Deferred",
-     "present": false,
-     "values": null,
-     "kinds": null,
-     "lastModified": "2026-10-29T16:21:34.310"
+     "present": true,
+     "values": [
+      "CWE-284"
+     ],
+     "kinds": [
+      "cna"
+     ],
+     "lastModified": "2026-10-30T19:18:01.653"
     },
     "CVE-2026-107018": {
      "first": "2026-10-30T04:28:29.605Z",
@@ -4893,14 +4913,30 @@
        "values": null,
        "kinds": null,
        "lastModified": "2026-10-29T16:21:34.310"
+      },
+      {
+       "at": "2026-10-31T05:32:04.385Z",
+       "status": "Deferred",
+       "present": true,
+       "values": [
+        "CWE-732"
+       ],
+       "kinds": [
+        "cna"
+       ],
+       "lastModified": "2026-10-30T19:18:01.823"
       }
      ],
-     "at": "2026-10-30T04:28:29.605Z",
+     "at": "2026-10-31T05:32:04.385Z",
      "status": "Deferred",
-     "present": false,
-     "values": null,
-     "kinds": null,
-     "lastModified": "2026-10-29T16:21:34.310"
+     "present": true,
+     "values": [
+      "CWE-732"
+     ],
+     "kinds": [
+      "cna"
+     ],
+     "lastModified": "2026-10-30T19:18:01.823"
     },
     "CVE-2026-107024": {
      "first": "2026-10-30T04:28:29.605Z",
@@ -5000,7 +5036,8 @@
      "kinds": [
       "cna"
      ],
-     "lastModified": "2026-10-29T15:18:54.943"
+     "lastModified": "2026-10-30T19:18:11.877",
+     "version": "2026-10-31T05:32:04.385Z"
     },
     "CVE-2026-115601": {
      "first": "2026-10-30T04:28:29.605Z",
@@ -5027,7 +5064,8 @@
      "kinds": [
       "cna"
      ],
-     "lastModified": "2026-10-29T15:18:54.943"
+     "lastModified": "2026-10-30T19:18:12.597",
+     "version": "2026-10-31T05:32:04.385Z"
     },
     "CVE-2026-115605": {
      "first": "2026-10-30T04:28:29.605Z",
@@ -5081,7 +5119,8 @@
      "kinds": [
       "cna"
      ],
-     "lastModified": "2026-10-29T15:18:54.943"
+     "lastModified": "2026-10-30T19:18:12.833",
+     "version": "2026-10-31T05:32:04.385Z"
     },
     "CVE-2026-115706": {
      "first": "2026-10-30T04:28:29.605Z",
@@ -5097,10 +5136,22 @@
         "cna"
        ],
        "lastModified": "2026-10-30T04:18:17.853"
+      },
+      {
+       "at": "2026-10-31T05:32:04.385Z",
+       "status": "Analyzed",
+       "present": true,
+       "values": [
+        "CWE-639"
+       ],
+       "kinds": [
+        "cna"
+       ],
+       "lastModified": "2026-10-30T18:17:22.483"
       }
      ],
-     "at": "2026-10-30T04:28:29.605Z",
-     "status": "Awaiting Analysis",
+     "at": "2026-10-31T05:32:04.385Z",
+     "status": "Analyzed",
      "present": true,
      "values": [
       "CWE-639"
@@ -5108,7 +5159,7 @@
      "kinds": [
       "cna"
      ],
-     "lastModified": "2026-10-30T04:18:17.853"
+     "lastModified": "2026-10-30T18:17:22.483"
     },
     "CVE-2026-115707": {
      "first": "2026-10-30T04:28:29.605Z",
@@ -5124,10 +5175,22 @@
         "cna"
        ],
        "lastModified": "2026-10-30T04:18:17.983"
+      },
+      {
+       "at": "2026-10-31T05:32:04.385Z",
+       "status": "Analyzed",
+       "present": true,
+       "values": [
+        "CWE-538"
+       ],
+       "kinds": [
+        "cna"
+       ],
+       "lastModified": "2026-10-30T18:17:22.607"
       }
      ],
-     "at": "2026-10-30T04:28:29.605Z",
-     "status": "Awaiting Analysis",
+     "at": "2026-10-31T05:32:04.385Z",
+     "status": "Analyzed",
      "present": true,
      "values": [
       "CWE-538"
@@ -5135,7 +5198,7 @@
      "kinds": [
       "cna"
      ],
-     "lastModified": "2026-10-30T04:18:17.983"
+     "lastModified": "2026-10-30T18:17:22.607"
     },
     "CVE-2026-115708": {
      "first": "2026-10-30T04:28:29.605Z",
@@ -5151,10 +5214,22 @@
         "cna"
        ],
        "lastModified": "2026-10-30T04:18:18.110"
+      },
+      {
+       "at": "2026-10-31T05:32:04.385Z",
+       "status": "Analyzed",
+       "present": true,
+       "values": [
+        "CWE-59"
+       ],
+       "kinds": [
+        "cna"
+       ],
+       "lastModified": "2026-10-30T18:17:22.733"
       }
      ],
-     "at": "2026-10-30T04:28:29.605Z",
-     "status": "Awaiting Analysis",
+     "at": "2026-10-31T05:32:04.385Z",
+     "status": "Analyzed",
      "present": true,
      "values": [
       "CWE-59"
@@ -5162,7 +5237,7 @@
      "kinds": [
       "cna"
      ],
-     "lastModified": "2026-10-30T04:18:18.110"
+     "lastModified": "2026-10-30T18:17:22.733"
     },
     "CVE-2026-115709": {
      "first": "2026-10-30T04:28:29.605Z",
@@ -5178,10 +5253,22 @@
         "cna"
        ],
        "lastModified": "2026-10-30T04:18:18.233"
+      },
+      {
+       "at": "2026-10-31T05:32:04.385Z",
+       "status": "Analyzed",
+       "present": true,
+       "values": [
+        "CWE-59"
+       ],
+       "kinds": [
+        "cna"
+       ],
+       "lastModified": "2026-10-30T18:17:22.847"
       }
      ],
-     "at": "2026-10-30T04:28:29.605Z",
-     "status": "Awaiting Analysis",
+     "at": "2026-10-31T05:32:04.385Z",
+     "status": "Analyzed",
      "present": true,
      "values": [
       "CWE-59"
@@ -5189,7 +5276,7 @@
      "kinds": [
       "cna"
      ],
-     "lastModified": "2026-10-30T04:18:18.233"
+     "lastModified": "2026-10-30T18:17:22.847"
     },
     "CVE-2026-115711": {
      "first": "2026-10-30T04:28:29.605Z",
@@ -5205,10 +5292,22 @@
         "cna"
        ],
        "lastModified": "2026-10-30T04:18:18.380"
+      },
+      {
+       "at": "2026-10-31T05:32:04.385Z",
+       "status": "Analyzed",
+       "present": true,
+       "values": [
+        "CWE-538"
+       ],
+       "kinds": [
+        "cna"
+       ],
+       "lastModified": "2026-10-30T18:17:22.977"
       }
      ],
-     "at": "2026-10-30T04:28:29.605Z",
-     "status": "Awaiting Analysis",
+     "at": "2026-10-31T05:32:04.385Z",
+     "status": "Analyzed",
      "present": true,
      "values": [
       "CWE-538"
@@ -5216,7 +5315,7 @@
      "kinds": [
       "cna"
      ],
-     "lastModified": "2026-10-30T04:18:18.380"
+     "lastModified": "2026-10-30T18:17:22.977"
     },
     "CVE-2026-115712": {
      "first": "2026-10-30T04:28:29.605Z",
@@ -5232,10 +5331,22 @@
         "cna"
        ],
        "lastModified": "2026-10-29T17:18:01.623"
+      },
+      {
+       "at": "2026-10-31T05:32:04.385Z",
+       "status": "Analyzed",
+       "present": true,
+       "values": [
+        "CWE-863"
+       ],
+       "kinds": [
+        "cna"
+       ],
+       "lastModified": "2026-10-30T15:08:16.533"
       }
      ],
-     "at": "2026-10-30T04:28:29.605Z",
-     "status": "Awaiting Analysis",
+     "at": "2026-10-31T05:32:04.385Z",
+     "status": "Analyzed",
      "present": true,
      "values": [
       "CWE-863"
@@ -5243,7 +5354,7 @@
      "kinds": [
       "cna"
      ],
-     "lastModified": "2026-10-29T17:18:01.623"
+     "lastModified": "2026-10-30T15:08:16.533"
     },
     "CVE-2026-115713": {
      "first": "2026-10-30T04:28:29.605Z",
@@ -5259,10 +5370,22 @@
         "cna"
        ],
        "lastModified": "2026-10-30T04:18:18.523"
+      },
+      {
+       "at": "2026-10-31T05:32:04.385Z",
+       "status": "Analyzed",
+       "present": true,
+       "values": [
+        "CWE-59"
+       ],
+       "kinds": [
+        "cna"
+       ],
+       "lastModified": "2026-10-30T15:07:50.060"
       }
      ],
-     "at": "2026-10-30T04:28:29.605Z",
-     "status": "Awaiting Analysis",
+     "at": "2026-10-31T05:32:04.385Z",
+     "status": "Analyzed",
      "present": true,
      "values": [
       "CWE-59"
@@ -5270,7 +5393,7 @@
      "kinds": [
       "cna"
      ],
-     "lastModified": "2026-10-30T04:18:18.523"
+     "lastModified": "2026-10-30T15:07:50.060"
     },
     "CVE-2026-116387": {
      "first": "2026-10-30T04:28:29.605Z",
@@ -5297,7 +5420,8 @@
      "kinds": [
       "cna"
      ],
-     "lastModified": "2026-10-29T15:18:54.943"
+     "lastModified": "2026-10-30T19:18:13.790",
+     "version": "2026-10-31T05:32:04.385Z"
     },
     "CVE-2026-116406": {
      "first": "2026-10-30T04:28:29.605Z",
@@ -5486,7 +5610,8 @@
      "kinds": [
       "cna"
      ],
-     "lastModified": "2026-10-29T15:18:54.943"
+     "lastModified": "2026-10-30T19:18:17.673",
+     "version": "2026-10-31T05:32:04.385Z"
     },
     "CVE-2026-118092": {
      "first": "2026-10-30T04:28:29.605Z",
@@ -5648,7 +5773,8 @@
      "kinds": [
       "cna"
      ],
-     "lastModified": "2026-10-29T15:18:54.943"
+     "lastModified": "2026-10-30T19:18:23.553",
+     "version": "2026-10-31T05:32:04.385Z"
     },
     "CVE-2026-27063": {
      "first": "2026-10-30T04:28:29.605Z",
@@ -5675,7 +5801,8 @@
      "kinds": [
       "cna"
      ],
-     "lastModified": "2026-10-29T15:18:54.943"
+     "lastModified": "2026-10-30T19:18:23.653",
+     "version": "2026-10-31T05:32:04.385Z"
     },
     "CVE-2026-39737": {
      "first": "2026-10-30T04:28:29.605Z",
@@ -5756,7 +5883,8 @@
      "kinds": [
       "cna"
      ],
-     "lastModified": "2026-10-29T15:18:54.943"
+     "lastModified": "2026-10-30T19:18:24.877",
+     "version": "2026-10-31T05:32:04.385Z"
     },
     "CVE-2026-48884": {
      "first": "2026-10-30T04:28:29.605Z",
@@ -5837,7 +5965,8 @@
      "kinds": [
       "cna"
      ],
-     "lastModified": "2026-10-29T15:18:54.943"
+     "lastModified": "2026-10-30T19:18:26.000",
+     "version": "2026-10-31T05:32:04.385Z"
     },
     "CVE-2026-54853": {
      "first": "2026-10-30T04:28:29.605Z",
@@ -5999,7 +6128,8 @@
      "kinds": [
       "cna"
      ],
-     "lastModified": "2026-10-29T16:30:07.917"
+     "lastModified": "2026-10-30T18:17:13.587",
+     "version": "2026-10-31T05:32:04.385Z"
     },
     "CVE-2026-101288": {
      "first": "2026-10-30T04:28:29.605Z",
@@ -6015,10 +6145,22 @@
         "cna"
        ],
        "lastModified": "2026-10-30T04:17:30.880"
+      },
+      {
+       "at": "2026-10-31T05:32:04.385Z",
+       "status": "Analyzed",
+       "present": true,
+       "values": [
+        "CWE-94"
+       ],
+       "kinds": [
+        "cna"
+       ],
+       "lastModified": "2026-10-30T18:17:14.300"
       }
      ],
-     "at": "2026-10-30T04:28:29.605Z",
-     "status": "Undergoing Analysis",
+     "at": "2026-10-31T05:32:04.385Z",
+     "status": "Analyzed",
      "present": true,
      "values": [
       "CWE-94"
@@ -6026,7 +6168,7 @@
      "kinds": [
       "cna"
      ],
-     "lastModified": "2026-10-30T04:17:30.880"
+     "lastModified": "2026-10-30T18:17:14.300"
     },
     "CVE-2026-102590": {
      "first": "2026-10-30T04:28:29.605Z",
@@ -6042,10 +6184,22 @@
         "cna"
        ],
        "lastModified": "2026-10-29T16:17:40.337"
+      },
+      {
+       "at": "2026-10-31T05:32:04.385Z",
+       "status": "Analyzed",
+       "present": true,
+       "values": [
+        "CWE-918"
+       ],
+       "kinds": [
+        "cna"
+       ],
+       "lastModified": "2026-10-30T13:33:53.350"
       }
      ],
-     "at": "2026-10-30T04:28:29.605Z",
-     "status": "Undergoing Analysis",
+     "at": "2026-10-31T05:32:04.385Z",
+     "status": "Analyzed",
      "present": true,
      "values": [
       "CWE-918"
@@ -6053,7 +6207,7 @@
      "kinds": [
       "cna"
      ],
-     "lastModified": "2026-10-29T16:17:40.337"
+     "lastModified": "2026-10-30T13:33:53.350"
     },
     "CVE-2026-103092": {
      "first": "2026-10-30T04:28:29.605Z",
@@ -6069,10 +6223,22 @@
         "cna"
        ],
        "lastModified": "2026-10-29T18:17:21.297"
+      },
+      {
+       "at": "2026-10-31T05:32:04.385Z",
+       "status": "Analyzed",
+       "present": true,
+       "values": [
+        "CWE-284"
+       ],
+       "kinds": [
+        "cna"
+       ],
+       "lastModified": "2026-10-30T13:33:37.257"
       }
      ],
-     "at": "2026-10-30T04:28:29.605Z",
-     "status": "Undergoing Analysis",
+     "at": "2026-10-31T05:32:04.385Z",
+     "status": "Analyzed",
      "present": true,
      "values": [
       "CWE-284"
@@ -6080,7 +6246,7 @@
      "kinds": [
       "cna"
      ],
-     "lastModified": "2026-10-29T18:17:21.297"
+     "lastModified": "2026-10-30T13:33:37.257"
     },
     "CVE-2026-104308": {
      "first": "2026-10-30T04:28:29.605Z",
@@ -6096,10 +6262,22 @@
         "cna"
        ],
        "lastModified": "2026-10-29T16:17:43.123"
+      },
+      {
+       "at": "2026-10-31T05:32:04.385Z",
+       "status": "Analyzed",
+       "present": true,
+       "values": [
+        "CWE-78"
+       ],
+       "kinds": [
+        "cna"
+       ],
+       "lastModified": "2026-10-30T13:33:02.020"
       }
      ],
-     "at": "2026-10-30T04:28:29.605Z",
-     "status": "Undergoing Analysis",
+     "at": "2026-10-31T05:32:04.385Z",
+     "status": "Analyzed",
      "present": true,
      "values": [
       "CWE-78"
@@ -6107,7 +6285,7 @@
      "kinds": [
       "cna"
      ],
-     "lastModified": "2026-10-29T16:17:43.123"
+     "lastModified": "2026-10-30T13:33:02.020"
     },
     "CVE-2026-104309": {
      "first": "2026-10-30T04:28:29.605Z",
@@ -6123,10 +6301,22 @@
         "cna"
        ],
        "lastModified": "2026-10-29T20:17:24.093"
+      },
+      {
+       "at": "2026-10-31T05:32:04.385Z",
+       "status": "Analyzed",
+       "present": true,
+       "values": [
+        "CWE-22"
+       ],
+       "kinds": [
+        "cna"
+       ],
+       "lastModified": "2026-10-30T13:32:48.193"
       }
      ],
-     "at": "2026-10-30T04:28:29.605Z",
-     "status": "Undergoing Analysis",
+     "at": "2026-10-31T05:32:04.385Z",
+     "status": "Analyzed",
      "present": true,
      "values": [
       "CWE-22"
@@ -6134,7 +6324,7 @@
      "kinds": [
       "cna"
      ],
-     "lastModified": "2026-10-29T20:17:24.093"
+     "lastModified": "2026-10-30T13:32:48.193"
     },
     "CVE-2026-104310": {
      "first": "2026-10-30T04:28:29.605Z",
@@ -6150,10 +6340,22 @@
         "cna"
        ],
        "lastModified": "2026-10-29T16:17:43.370"
+      },
+      {
+       "at": "2026-10-31T05:32:04.385Z",
+       "status": "Analyzed",
+       "present": true,
+       "values": [
+        "CWE-918"
+       ],
+       "kinds": [
+        "cna"
+       ],
+       "lastModified": "2026-10-30T13:32:40.460"
       }
      ],
-     "at": "2026-10-30T04:28:29.605Z",
-     "status": "Undergoing Analysis",
+     "at": "2026-10-31T05:32:04.385Z",
+     "status": "Analyzed",
      "present": true,
      "values": [
       "CWE-918"
@@ -6161,7 +6363,7 @@
      "kinds": [
       "cna"
      ],
-     "lastModified": "2026-10-29T16:17:43.370"
+     "lastModified": "2026-10-30T13:32:40.460"
     },
     "CVE-2026-104312": {
      "first": "2026-10-30T04:28:29.605Z",
@@ -6177,10 +6379,22 @@
         "cna"
        ],
        "lastModified": "2026-10-29T16:17:43.497"
+      },
+      {
+       "at": "2026-10-31T05:32:04.385Z",
+       "status": "Analyzed",
+       "present": true,
+       "values": [
+        "CWE-22"
+       ],
+       "kinds": [
+        "cna"
+       ],
+       "lastModified": "2026-10-30T13:32:25.910"
       }
      ],
-     "at": "2026-10-30T04:28:29.605Z",
-     "status": "Undergoing Analysis",
+     "at": "2026-10-31T05:32:04.385Z",
+     "status": "Analyzed",
      "present": true,
      "values": [
       "CWE-22"
@@ -6188,7 +6402,7 @@
      "kinds": [
       "cna"
      ],
-     "lastModified": "2026-10-29T16:17:43.497"
+     "lastModified": "2026-10-30T13:32:25.910"
     },
     "CVE-2026-104314": {
      "first": "2026-10-30T04:28:29.605Z",
@@ -6204,10 +6418,22 @@
         "cna"
        ],
        "lastModified": "2026-10-29T18:17:21.480"
+      },
+      {
+       "at": "2026-10-31T05:32:04.385Z",
+       "status": "Analyzed",
+       "present": true,
+       "values": [
+        "CWE-522"
+       ],
+       "kinds": [
+        "cna"
+       ],
+       "lastModified": "2026-10-30T13:31:37.413"
       }
      ],
-     "at": "2026-10-30T04:28:29.605Z",
-     "status": "Undergoing Analysis",
+     "at": "2026-10-31T05:32:04.385Z",
+     "status": "Analyzed",
      "present": true,
      "values": [
       "CWE-522"
@@ -6215,7 +6441,7 @@
      "kinds": [
       "cna"
      ],
-     "lastModified": "2026-10-29T18:17:21.480"
+     "lastModified": "2026-10-30T13:31:37.413"
     },
     "CVE-2026-104315": {
      "first": "2026-10-30T04:28:29.605Z",
@@ -6231,10 +6457,22 @@
         "cna"
        ],
        "lastModified": "2026-10-29T16:17:43.750"
+      },
+      {
+       "at": "2026-10-31T05:32:04.385Z",
+       "status": "Analyzed",
+       "present": true,
+       "values": [
+        "CWE-918"
+       ],
+       "kinds": [
+        "cna"
+       ],
+       "lastModified": "2026-10-30T13:31:19.470"
       }
      ],
-     "at": "2026-10-30T04:28:29.605Z",
-     "status": "Undergoing Analysis",
+     "at": "2026-10-31T05:32:04.385Z",
+     "status": "Analyzed",
      "present": true,
      "values": [
       "CWE-918"
@@ -6242,7 +6480,7 @@
      "kinds": [
       "cna"
      ],
-     "lastModified": "2026-10-29T16:17:43.750"
+     "lastModified": "2026-10-30T13:31:19.470"
     },
     "CVE-2026-104316": {
      "first": "2026-10-30T04:28:29.605Z",
@@ -6258,10 +6496,22 @@
         "cna"
        ],
        "lastModified": "2026-10-29T20:17:24.257"
+      },
+      {
+       "at": "2026-10-31T05:32:04.385Z",
+       "status": "Analyzed",
+       "present": true,
+       "values": [
+        "CWE-285"
+       ],
+       "kinds": [
+        "cna"
+       ],
+       "lastModified": "2026-10-30T13:31:03.840"
       }
      ],
-     "at": "2026-10-30T04:28:29.605Z",
-     "status": "Undergoing Analysis",
+     "at": "2026-10-31T05:32:04.385Z",
+     "status": "Analyzed",
      "present": true,
      "values": [
       "CWE-285"
@@ -6269,7 +6519,7 @@
      "kinds": [
       "cna"
      ],
-     "lastModified": "2026-10-29T20:17:24.257"
+     "lastModified": "2026-10-30T13:31:03.840"
     },
     "CVE-2026-104317": {
      "first": "2026-10-30T04:28:29.605Z",
@@ -6285,10 +6535,22 @@
         "cna"
        ],
        "lastModified": "2026-10-30T04:17:39.887"
+      },
+      {
+       "at": "2026-10-31T05:32:04.385Z",
+       "status": "Analyzed",
+       "present": true,
+       "values": [
+        "CWE-502"
+       ],
+       "kinds": [
+        "cna"
+       ],
+       "lastModified": "2026-10-30T18:17:15.127"
       }
      ],
-     "at": "2026-10-30T04:28:29.605Z",
-     "status": "Undergoing Analysis",
+     "at": "2026-10-31T05:32:04.385Z",
+     "status": "Analyzed",
      "present": true,
      "values": [
       "CWE-502"
@@ -6296,7 +6558,7 @@
      "kinds": [
       "cna"
      ],
-     "lastModified": "2026-10-30T04:17:39.887"
+     "lastModified": "2026-10-30T18:17:15.127"
     },
     "CVE-2026-104324": {
      "first": "2026-10-30T04:28:29.605Z",
@@ -6312,10 +6574,22 @@
         "cna"
        ],
        "lastModified": "2026-10-30T04:17:40.577"
+      },
+      {
+       "at": "2026-10-31T05:32:04.385Z",
+       "status": "Analyzed",
+       "present": true,
+       "values": [
+        "CWE-502"
+       ],
+       "kinds": [
+        "cna"
+       ],
+       "lastModified": "2026-10-30T18:17:15.247"
       }
      ],
-     "at": "2026-10-30T04:28:29.605Z",
-     "status": "Undergoing Analysis",
+     "at": "2026-10-31T05:32:04.385Z",
+     "status": "Analyzed",
      "present": true,
      "values": [
       "CWE-502"
@@ -6323,7 +6597,7 @@
      "kinds": [
       "cna"
      ],
-     "lastModified": "2026-10-30T04:17:40.577"
+     "lastModified": "2026-10-30T18:17:15.247"
     },
     "CVE-2026-104328": {
      "first": "2026-10-30T04:28:29.605Z",
@@ -6339,10 +6613,22 @@
         "cna"
        ],
        "lastModified": "2026-10-30T04:17:40.770"
+      },
+      {
+       "at": "2026-10-31T05:32:04.385Z",
+       "status": "Analyzed",
+       "present": true,
+       "values": [
+        "CWE-94"
+       ],
+       "kinds": [
+        "cna"
+       ],
+       "lastModified": "2026-10-30T13:29:55.707"
       }
      ],
-     "at": "2026-10-30T04:28:29.605Z",
-     "status": "Undergoing Analysis",
+     "at": "2026-10-31T05:32:04.385Z",
+     "status": "Analyzed",
      "present": true,
      "values": [
       "CWE-94"
@@ -6350,7 +6636,7 @@
      "kinds": [
       "cna"
      ],
-     "lastModified": "2026-10-30T04:17:40.770"
+     "lastModified": "2026-10-30T13:29:55.707"
     },
     "CVE-2026-104331": {
      "first": "2026-10-30T04:28:29.605Z",
@@ -6366,10 +6652,22 @@
         "cna"
        ],
        "lastModified": "2026-10-29T16:17:44.370"
+      },
+      {
+       "at": "2026-10-31T05:32:04.385Z",
+       "status": "Analyzed",
+       "present": true,
+       "values": [
+        "CWE-918"
+       ],
+       "kinds": [
+        "cna"
+       ],
+       "lastModified": "2026-10-30T13:29:24.130"
       }
      ],
-     "at": "2026-10-30T04:28:29.605Z",
-     "status": "Undergoing Analysis",
+     "at": "2026-10-31T05:32:04.385Z",
+     "status": "Analyzed",
      "present": true,
      "values": [
       "CWE-918"
@@ -6377,7 +6675,7 @@
      "kinds": [
       "cna"
      ],
-     "lastModified": "2026-10-29T16:17:44.370"
+     "lastModified": "2026-10-30T13:29:24.130"
     },
     "CVE-2026-104339": {
      "first": "2026-10-30T04:28:29.605Z",
@@ -6393,10 +6691,22 @@
         "cna"
        ],
        "lastModified": "2026-10-30T04:17:40.963"
+      },
+      {
+       "at": "2026-10-31T05:32:04.385Z",
+       "status": "Analyzed",
+       "present": true,
+       "values": [
+        "CWE-94"
+       ],
+       "kinds": [
+        "cna"
+       ],
+       "lastModified": "2026-10-30T13:29:15.737"
       }
      ],
-     "at": "2026-10-30T04:28:29.605Z",
-     "status": "Undergoing Analysis",
+     "at": "2026-10-31T05:32:04.385Z",
+     "status": "Analyzed",
      "present": true,
      "values": [
       "CWE-94"
@@ -6404,7 +6714,7 @@
      "kinds": [
       "cna"
      ],
-     "lastModified": "2026-10-30T04:17:40.963"
+     "lastModified": "2026-10-30T13:29:15.737"
     },
     "CVE-2026-106036": {
      "first": "2026-10-30T04:28:29.605Z",
@@ -6508,14 +6818,30 @@
        "values": null,
        "kinds": null,
        "lastModified": "2026-10-29T16:30:07.917"
+      },
+      {
+       "at": "2026-10-31T05:32:04.385Z",
+       "status": "Deferred",
+       "present": true,
+       "values": [
+        "CWE-284"
+       ],
+       "kinds": [
+        "cna"
+       ],
+       "lastModified": "2026-10-30T19:18:01.993"
       }
      ],
-     "at": "2026-10-30T04:28:29.605Z",
+     "at": "2026-10-31T05:32:04.385Z",
      "status": "Deferred",
-     "present": false,
-     "values": null,
-     "kinds": null,
-     "lastModified": "2026-10-29T16:30:07.917"
+     "present": true,
+     "values": [
+      "CWE-284"
+     ],
+     "kinds": [
+      "cna"
+     ],
+     "lastModified": "2026-10-30T19:18:01.993"
     },
     "CVE-2026-107029": {
      "first": "2026-10-30T04:28:29.605Z",
@@ -6611,14 +6937,30 @@
        "values": null,
        "kinds": null,
        "lastModified": "2026-10-29T16:30:07.917"
+      },
+      {
+       "at": "2026-10-31T05:32:04.385Z",
+       "status": "Deferred",
+       "present": true,
+       "values": [
+        "CWE-284"
+       ],
+       "kinds": [
+        "cna"
+       ],
+       "lastModified": "2026-10-30T19:18:02.163"
       }
      ],
-     "at": "2026-10-30T04:28:29.605Z",
+     "at": "2026-10-31T05:32:04.385Z",
      "status": "Deferred",
-     "present": false,
-     "values": null,
-     "kinds": null,
-     "lastModified": "2026-10-29T16:30:07.917"
+     "present": true,
+     "values": [
+      "CWE-284"
+     ],
+     "kinds": [
+      "cna"
+     ],
+     "lastModified": "2026-10-30T19:18:02.163"
     },
     "CVE-2026-107035": {
      "first": "2026-10-30T04:28:29.605Z",
@@ -6714,14 +7056,30 @@
        "values": null,
        "kinds": null,
        "lastModified": "2026-10-29T16:30:07.917"
+      },
+      {
+       "at": "2026-10-31T05:32:04.385Z",
+       "status": "Deferred",
+       "present": true,
+       "values": [
+        "CWE-732"
+       ],
+       "kinds": [
+        "cna"
+       ],
+       "lastModified": "2026-10-30T19:18:02.330"
       }
      ],
-     "at": "2026-10-30T04:28:29.605Z",
+     "at": "2026-10-31T05:32:04.385Z",
      "status": "Deferred",
-     "present": false,
-     "values": null,
-     "kinds": null,
-     "lastModified": "2026-10-29T16:30:07.917"
+     "present": true,
+     "values": [
+      "CWE-732"
+     ],
+     "kinds": [
+      "cna"
+     ],
+     "lastModified": "2026-10-30T19:18:02.330"
     },
     "CVE-2026-107040": {
      "first": "2026-10-30T04:28:29.605Z",
@@ -6802,10 +7160,22 @@
         "cna"
        ],
        "lastModified": "2026-10-30T04:18:01.017"
+      },
+      {
+       "at": "2026-10-31T05:32:04.385Z",
+       "status": "Analyzed",
+       "present": true,
+       "values": [
+        "CWE-78"
+       ],
+       "kinds": [
+        "cna"
+       ],
+       "lastModified": "2026-10-30T18:17:18.360"
       }
      ],
-     "at": "2026-10-30T04:28:29.606Z",
-     "status": "Undergoing Analysis",
+     "at": "2026-10-31T05:32:04.385Z",
+     "status": "Analyzed",
      "present": true,
      "values": [
       "CWE-78"
@@ -6813,7 +7183,7 @@
      "kinds": [
       "cna"
      ],
-     "lastModified": "2026-10-30T04:18:01.017"
+     "lastModified": "2026-10-30T18:17:18.360"
     },
     "CVE-2026-107327": {
      "first": "2026-10-30T04:28:29.606Z",
@@ -6829,10 +7199,22 @@
         "cna"
        ],
        "lastModified": "2026-10-30T04:18:01.257"
+      },
+      {
+       "at": "2026-10-31T05:32:04.385Z",
+       "status": "Analyzed",
+       "present": true,
+       "values": [
+        "CWE-862"
+       ],
+       "kinds": [
+        "cna"
+       ],
+       "lastModified": "2026-10-30T18:17:18.517"
       }
      ],
-     "at": "2026-10-30T04:28:29.606Z",
-     "status": "Undergoing Analysis",
+     "at": "2026-10-31T05:32:04.385Z",
+     "status": "Analyzed",
      "present": true,
      "values": [
       "CWE-862"
@@ -6840,7 +7222,7 @@
      "kinds": [
       "cna"
      ],
-     "lastModified": "2026-10-30T04:18:01.257"
+     "lastModified": "2026-10-30T18:17:18.517"
     },
     "CVE-2026-107328": {
      "first": "2026-10-30T04:28:29.606Z",
@@ -6856,10 +7238,22 @@
         "cna"
        ],
        "lastModified": "2026-10-30T04:18:02.890"
+      },
+      {
+       "at": "2026-10-31T05:32:04.385Z",
+       "status": "Analyzed",
+       "present": true,
+       "values": [
+        "CWE-94"
+       ],
+       "kinds": [
+        "cna"
+       ],
+       "lastModified": "2026-10-30T13:28:42.137"
       }
      ],
-     "at": "2026-10-30T04:28:29.606Z",
-     "status": "Undergoing Analysis",
+     "at": "2026-10-31T05:32:04.385Z",
+     "status": "Analyzed",
      "present": true,
      "values": [
       "CWE-94"
@@ -6867,7 +7261,7 @@
      "kinds": [
       "cna"
      ],
-     "lastModified": "2026-10-30T04:18:02.890"
+     "lastModified": "2026-10-30T13:28:42.137"
     },
     "CVE-2026-107329": {
      "first": "2026-10-30T04:28:29.606Z",
@@ -6883,10 +7277,22 @@
         "cna"
        ],
        "lastModified": "2026-10-30T04:18:03.613"
+      },
+      {
+       "at": "2026-10-31T05:32:04.385Z",
+       "status": "Analyzed",
+       "present": true,
+       "values": [
+        "CWE-94"
+       ],
+       "kinds": [
+        "cna"
+       ],
+       "lastModified": "2026-10-30T18:17:18.667"
       }
      ],
-     "at": "2026-10-30T04:28:29.606Z",
-     "status": "Undergoing Analysis",
+     "at": "2026-10-31T05:32:04.385Z",
+     "status": "Analyzed",
      "present": true,
      "values": [
       "CWE-94"
@@ -6894,7 +7300,7 @@
      "kinds": [
       "cna"
      ],
-     "lastModified": "2026-10-30T04:18:03.613"
+     "lastModified": "2026-10-30T18:17:18.667"
     },
     "CVE-2026-108494": {
      "first": "2026-10-30T04:28:29.606Z",
@@ -6948,7 +7354,8 @@
      "kinds": [
       "cna"
      ],
-     "lastModified": "2026-10-29T16:20:19.663"
+     "lastModified": "2026-10-30T19:18:08.080",
+     "version": "2026-10-31T05:32:04.385Z"
     },
     "CVE-2026-110186": {
      "first": "2026-10-30T04:28:29.606Z",
@@ -6964,10 +7371,22 @@
         "cna"
        ],
        "lastModified": "2026-10-30T04:18:07.693"
+      },
+      {
+       "at": "2026-10-31T05:32:04.385Z",
+       "status": "Analyzed",
+       "present": true,
+       "values": [
+        "CWE-94"
+       ],
+       "kinds": [
+        "cna"
+       ],
+       "lastModified": "2026-10-30T18:17:19.793"
       }
      ],
-     "at": "2026-10-30T04:28:29.606Z",
-     "status": "Undergoing Analysis",
+     "at": "2026-10-31T05:32:04.385Z",
+     "status": "Analyzed",
      "present": true,
      "values": [
       "CWE-94"
@@ -6975,7 +7394,7 @@
      "kinds": [
       "cna"
      ],
-     "lastModified": "2026-10-30T04:18:07.693"
+     "lastModified": "2026-10-30T18:17:19.793"
     },
     "CVE-2026-110190": {
      "first": "2026-10-30T04:28:29.606Z",
@@ -6991,10 +7410,22 @@
         "cna"
        ],
        "lastModified": "2026-10-29T18:17:22.243"
+      },
+      {
+       "at": "2026-10-31T05:32:04.385Z",
+       "status": "Analyzed",
+       "present": true,
+       "values": [
+        "CWE-22"
+       ],
+       "kinds": [
+        "cna"
+       ],
+       "lastModified": "2026-10-30T13:26:13.943"
       }
      ],
-     "at": "2026-10-30T04:28:29.606Z",
-     "status": "Undergoing Analysis",
+     "at": "2026-10-31T05:32:04.385Z",
+     "status": "Analyzed",
      "present": true,
      "values": [
       "CWE-22"
@@ -7002,7 +7433,7 @@
      "kinds": [
       "cna"
      ],
-     "lastModified": "2026-10-29T18:17:22.243"
+     "lastModified": "2026-10-30T13:26:13.943"
     },
     "CVE-2026-110192": {
      "first": "2026-10-30T04:28:29.606Z",
@@ -7018,10 +7449,22 @@
         "cna"
        ],
        "lastModified": "2026-10-29T16:17:56.227"
+      },
+      {
+       "at": "2026-10-31T05:32:04.385Z",
+       "status": "Analyzed",
+       "present": true,
+       "values": [
+        "CWE-522"
+       ],
+       "kinds": [
+        "cna"
+       ],
+       "lastModified": "2026-10-30T13:26:03.463"
       }
      ],
-     "at": "2026-10-30T04:28:29.606Z",
-     "status": "Undergoing Analysis",
+     "at": "2026-10-31T05:32:04.385Z",
+     "status": "Analyzed",
      "present": true,
      "values": [
       "CWE-522"
@@ -7029,7 +7472,7 @@
      "kinds": [
       "cna"
      ],
-     "lastModified": "2026-10-29T16:17:56.227"
+     "lastModified": "2026-10-30T13:26:03.463"
     },
     "CVE-2026-110193": {
      "first": "2026-10-30T04:28:29.606Z",
@@ -7045,10 +7488,22 @@
         "cna"
        ],
        "lastModified": "2026-10-30T04:18:08.300"
+      },
+      {
+       "at": "2026-10-31T05:32:04.385Z",
+       "status": "Analyzed",
+       "present": true,
+       "values": [
+        "CWE-94"
+       ],
+       "kinds": [
+        "cna"
+       ],
+       "lastModified": "2026-10-30T13:25:44.260"
       }
      ],
-     "at": "2026-10-30T04:28:29.606Z",
-     "status": "Undergoing Analysis",
+     "at": "2026-10-31T05:32:04.385Z",
+     "status": "Analyzed",
      "present": true,
      "values": [
       "CWE-94"
@@ -7056,7 +7511,7 @@
      "kinds": [
       "cna"
      ],
-     "lastModified": "2026-10-30T04:18:08.300"
+     "lastModified": "2026-10-30T13:25:44.260"
     },
     "CVE-2026-110196": {
      "first": "2026-10-30T04:28:29.606Z",
@@ -7072,10 +7527,22 @@
         "cna"
        ],
        "lastModified": "2026-10-30T04:18:08.700"
+      },
+      {
+       "at": "2026-10-31T05:32:04.385Z",
+       "status": "Analyzed",
+       "present": true,
+       "values": [
+        "CWE-862"
+       ],
+       "kinds": [
+        "cna"
+       ],
+       "lastModified": "2026-10-30T18:17:19.913"
       }
      ],
-     "at": "2026-10-30T04:28:29.606Z",
-     "status": "Undergoing Analysis",
+     "at": "2026-10-31T05:32:04.385Z",
+     "status": "Analyzed",
      "present": true,
      "values": [
       "CWE-862"
@@ -7083,7 +7550,7 @@
      "kinds": [
       "cna"
      ],
-     "lastModified": "2026-10-30T04:18:08.700"
+     "lastModified": "2026-10-30T18:17:19.913"
     },
     "CVE-2026-110200": {
      "first": "2026-10-30T04:28:29.606Z",
@@ -7099,10 +7566,22 @@
         "cna"
        ],
        "lastModified": "2026-10-29T16:17:56.640"
+      },
+      {
+       "at": "2026-10-31T05:32:04.385Z",
+       "status": "Analyzed",
+       "present": true,
+       "values": [
+        "CWE-312"
+       ],
+       "kinds": [
+        "cna"
+       ],
+       "lastModified": "2026-10-30T13:25:10.213"
       }
      ],
-     "at": "2026-10-30T04:28:29.606Z",
-     "status": "Undergoing Analysis",
+     "at": "2026-10-31T05:32:04.385Z",
+     "status": "Analyzed",
      "present": true,
      "values": [
       "CWE-312"
@@ -7110,7 +7589,7 @@
      "kinds": [
       "cna"
      ],
-     "lastModified": "2026-10-29T16:17:56.640"
+     "lastModified": "2026-10-30T13:25:10.213"
     },
     "CVE-2026-110244": {
      "first": "2026-10-30T04:28:29.606Z",
@@ -7126,10 +7605,22 @@
         "cna"
        ],
        "lastModified": "2026-10-29T18:17:22.410"
+      },
+      {
+       "at": "2026-10-31T05:32:04.385Z",
+       "status": "Analyzed",
+       "present": true,
+       "values": [
+        "CWE-22"
+       ],
+       "kinds": [
+        "cna"
+       ],
+       "lastModified": "2026-10-30T13:24:56.787"
       }
      ],
-     "at": "2026-10-30T04:28:29.606Z",
-     "status": "Undergoing Analysis",
+     "at": "2026-10-31T05:32:04.385Z",
+     "status": "Analyzed",
      "present": true,
      "values": [
       "CWE-22"
@@ -7137,7 +7628,7 @@
      "kinds": [
       "cna"
      ],
-     "lastModified": "2026-10-29T18:17:22.410"
+     "lastModified": "2026-10-30T13:24:56.787"
     },
     "CVE-2026-110245": {
      "first": "2026-10-30T04:28:29.606Z",
@@ -7153,10 +7644,22 @@
         "cna"
        ],
        "lastModified": "2026-10-29T16:17:56.973"
+      },
+      {
+       "at": "2026-10-31T05:32:04.385Z",
+       "status": "Analyzed",
+       "present": true,
+       "values": [
+        "CWE-287"
+       ],
+       "kinds": [
+        "cna"
+       ],
+       "lastModified": "2026-10-30T13:24:46.960"
       }
      ],
-     "at": "2026-10-30T04:28:29.606Z",
-     "status": "Undergoing Analysis",
+     "at": "2026-10-31T05:32:04.385Z",
+     "status": "Analyzed",
      "present": true,
      "values": [
       "CWE-287"
@@ -7164,7 +7667,7 @@
      "kinds": [
       "cna"
      ],
-     "lastModified": "2026-10-29T16:17:56.973"
+     "lastModified": "2026-10-30T13:24:46.960"
     },
     "CVE-2026-110309": {
      "first": "2026-10-30T04:28:29.606Z",
@@ -7180,10 +7683,22 @@
         "cna"
        ],
        "lastModified": "2026-10-30T04:18:09.050"
+      },
+      {
+       "at": "2026-10-31T05:32:04.385Z",
+       "status": "Analyzed",
+       "present": true,
+       "values": [
+        "CWE-94"
+       ],
+       "kinds": [
+        "cna"
+       ],
+       "lastModified": "2026-10-30T13:24:29.523"
       }
      ],
-     "at": "2026-10-30T04:28:29.606Z",
-     "status": "Undergoing Analysis",
+     "at": "2026-10-31T05:32:04.385Z",
+     "status": "Analyzed",
      "present": true,
      "values": [
       "CWE-94"
@@ -7191,7 +7706,7 @@
      "kinds": [
       "cna"
      ],
-     "lastModified": "2026-10-30T04:18:09.050"
+     "lastModified": "2026-10-30T13:24:29.523"
     },
     "CVE-2026-111730": {
      "first": "2026-10-30T04:28:29.606Z",
@@ -7517,7 +8032,8 @@
      "kinds": [
       "cna"
      ],
-     "lastModified": "2026-10-29T16:17:58.810"
+     "lastModified": "2026-10-30T14:16:38.440",
+     "version": "2026-10-31T05:32:04.385Z"
     },
     "CVE-2026-115793": {
      "first": "2026-10-30T04:28:29.606Z",
@@ -7625,7 +8141,8 @@
      "kinds": [
       "cna"
      ],
-     "lastModified": "2026-10-29T16:20:19.663"
+     "lastModified": "2026-10-30T19:18:14.763",
+     "version": "2026-10-31T05:32:04.385Z"
     },
     "CVE-2026-116864": {
      "first": "2026-10-30T04:28:29.606Z",
@@ -7652,7 +8169,8 @@
      "kinds": [
       "cna"
      ],
-     "lastModified": "2026-10-29T16:20:19.663"
+     "lastModified": "2026-10-30T19:18:15.717",
+     "version": "2026-10-31T05:32:04.385Z"
     },
     "CVE-2026-116865": {
      "first": "2026-10-30T04:28:29.606Z",
@@ -7679,7 +8197,8 @@
      "kinds": [
       "cna"
      ],
-     "lastModified": "2026-10-29T16:20:19.663"
+     "lastModified": "2026-10-30T19:18:15.827",
+     "version": "2026-10-31T05:32:04.385Z"
     },
     "CVE-2026-116866": {
      "first": "2026-10-30T04:28:29.606Z",
@@ -7706,7 +8225,8 @@
      "kinds": [
       "cna"
      ],
-     "lastModified": "2026-10-29T16:20:19.663"
+     "lastModified": "2026-10-30T19:18:15.937",
+     "version": "2026-10-31T05:32:04.385Z"
     },
     "CVE-2026-116867": {
      "first": "2026-10-30T04:28:29.606Z",
@@ -7787,7 +8307,8 @@
      "kinds": [
       "cna"
      ],
-     "lastModified": "2026-10-29T16:20:19.663"
+     "lastModified": "2026-10-30T19:18:16.053",
+     "version": "2026-10-31T05:32:04.385Z"
     },
     "CVE-2026-118073": {
      "first": "2026-10-30T04:28:29.606Z",
@@ -7814,7 +8335,8 @@
      "kinds": [
       "cna"
      ],
-     "lastModified": "2026-10-29T16:20:19.663"
+     "lastModified": "2026-10-30T19:18:16.153",
+     "version": "2026-10-31T05:32:04.385Z"
     },
     "CVE-2026-118074": {
      "first": "2026-10-30T04:28:29.606Z",
@@ -7841,7 +8363,8 @@
      "kinds": [
       "cna"
      ],
-     "lastModified": "2026-10-29T16:20:19.663"
+     "lastModified": "2026-10-30T19:18:16.267",
+     "version": "2026-10-31T05:32:04.385Z"
     },
     "CVE-2026-118075": {
      "first": "2026-10-30T04:28:29.606Z",
@@ -7922,7 +8445,8 @@
      "kinds": [
       "cna"
      ],
-     "lastModified": "2026-10-29T16:20:19.663"
+     "lastModified": "2026-10-30T19:18:16.367",
+     "version": "2026-10-31T05:32:04.385Z"
     },
     "CVE-2026-118078": {
      "first": "2026-10-30T04:28:29.606Z",
@@ -7949,7 +8473,8 @@
      "kinds": [
       "cna"
      ],
-     "lastModified": "2026-10-29T16:20:19.663"
+     "lastModified": "2026-10-30T19:18:16.493",
+     "version": "2026-10-31T05:32:04.385Z"
     },
     "CVE-2026-118079": {
      "first": "2026-10-30T04:28:29.606Z",
@@ -7976,7 +8501,8 @@
      "kinds": [
       "cna"
      ],
-     "lastModified": "2026-10-29T16:20:19.663"
+     "lastModified": "2026-10-30T19:18:16.663",
+     "version": "2026-10-31T05:32:04.386Z"
     },
     "CVE-2026-118080": {
      "first": "2026-10-30T04:28:29.606Z",
@@ -8057,7 +8583,8 @@
      "kinds": [
       "cna"
      ],
-     "lastModified": "2026-10-29T16:20:19.663"
+     "lastModified": "2026-10-30T19:18:16.797",
+     "version": "2026-10-31T05:32:04.386Z"
     },
     "CVE-2026-118083": {
      "first": "2026-10-30T04:28:29.606Z",
@@ -8084,7 +8611,8 @@
      "kinds": [
       "cna"
      ],
-     "lastModified": "2026-10-29T16:20:19.663"
+     "lastModified": "2026-10-30T19:18:16.913",
+     "version": "2026-10-31T05:32:04.386Z"
     },
     "CVE-2026-118084": {
      "first": "2026-10-30T04:28:29.606Z",
@@ -8111,7 +8639,8 @@
      "kinds": [
       "cna"
      ],
-     "lastModified": "2026-10-29T16:20:19.663"
+     "lastModified": "2026-10-30T19:18:17.033",
+     "version": "2026-10-31T05:32:04.386Z"
     },
     "CVE-2026-118085": {
      "first": "2026-10-30T04:28:29.606Z",
@@ -8138,7 +8667,8 @@
      "kinds": [
       "cna"
      ],
-     "lastModified": "2026-10-29T16:20:19.663"
+     "lastModified": "2026-10-30T19:18:17.143",
+     "version": "2026-10-31T05:32:04.386Z"
     },
     "CVE-2026-118673": {
      "first": "2026-10-30T04:28:29.606Z",
@@ -8343,10 +8873,22 @@
         "cna"
        ],
        "lastModified": "2026-10-29T16:18:05.127"
+      },
+      {
+       "at": "2026-10-31T05:32:04.386Z",
+       "status": "Analyzed",
+       "present": true,
+       "values": [
+        "CWE-122"
+       ],
+       "kinds": [
+        "cna"
+       ],
+       "lastModified": "2026-10-31T00:50:05.270"
       }
      ],
-     "at": "2026-10-30T04:28:29.606Z",
-     "status": "Undergoing Analysis",
+     "at": "2026-10-31T05:32:04.386Z",
+     "status": "Analyzed",
      "present": true,
      "values": [
       "CWE-122"
@@ -8354,7 +8896,7 @@
      "kinds": [
       "cna"
      ],
-     "lastModified": "2026-10-29T16:18:05.127"
+     "lastModified": "2026-10-31T00:50:05.270"
     },
     "CVE-2026-119125": {
      "first": "2026-10-30T04:28:29.606Z",
@@ -8937,10 +9479,22 @@
         "cna"
        ],
        "lastModified": "2026-10-29T20:17:31.043"
+      },
+      {
+       "at": "2026-10-31T05:32:04.386Z",
+       "status": "Analyzed",
+       "present": true,
+       "values": [
+        "CWE-94"
+       ],
+       "kinds": [
+        "cna"
+       ],
+       "lastModified": "2026-10-30T13:23:56.927"
       }
      ],
-     "at": "2026-10-30T04:28:29.606Z",
-     "status": "Undergoing Analysis",
+     "at": "2026-10-31T05:32:04.386Z",
+     "status": "Analyzed",
      "present": true,
      "values": [
       "CWE-94"
@@ -8948,7 +9502,7 @@
      "kinds": [
       "cna"
      ],
-     "lastModified": "2026-10-29T20:17:31.043"
+     "lastModified": "2026-10-30T13:23:56.927"
     },
     "CVE-2026-20942": {
      "first": "2026-10-30T04:28:29.606Z",
@@ -8964,10 +9518,22 @@
         "cna"
        ],
        "lastModified": "2026-10-29T16:18:08.703"
+      },
+      {
+       "at": "2026-10-31T05:32:04.386Z",
+       "status": "Undergoing Analysis",
+       "present": true,
+       "values": [
+        "CWE-1021"
+       ],
+       "kinds": [
+        "cna"
+       ],
+       "lastModified": "2026-10-30T14:17:05.497"
       }
      ],
-     "at": "2026-10-30T04:28:29.606Z",
-     "status": "Awaiting Analysis",
+     "at": "2026-10-31T05:32:04.386Z",
+     "status": "Undergoing Analysis",
      "present": true,
      "values": [
       "CWE-1021"
@@ -8975,7 +9541,7 @@
      "kinds": [
       "cna"
      ],
-     "lastModified": "2026-10-29T16:18:08.703"
+     "lastModified": "2026-10-30T14:17:05.497"
     },
     "CVE-2026-27394": {
      "first": "2026-10-30T04:28:29.606Z",
@@ -9002,7 +9568,8 @@
      "kinds": [
       "cna"
      ],
-     "lastModified": "2026-10-29T16:20:19.663"
+     "lastModified": "2026-10-30T19:18:23.763",
+     "version": "2026-10-31T05:32:04.386Z"
     },
     "CVE-2026-42690": {
      "first": "2026-10-30T04:28:29.606Z",
@@ -9083,7 +9650,8 @@
      "kinds": [
       "cna"
      ],
-     "lastModified": "2026-10-29T16:20:19.663"
+     "lastModified": "2026-10-30T19:18:24.983",
+     "version": "2026-10-31T05:32:04.386Z"
     },
     "CVE-2026-42701": {
      "first": "2026-10-30T04:28:29.606Z",
@@ -9110,7 +9678,8 @@
      "kinds": [
       "cna"
      ],
-     "lastModified": "2026-10-29T16:20:19.663"
+     "lastModified": "2026-10-30T19:18:25.100",
+     "version": "2026-10-31T05:32:04.386Z"
     },
     "CVE-2026-48200": {
      "first": "2026-10-30T04:28:29.606Z",
@@ -9164,7 +9733,8 @@
      "kinds": [
       "cna"
      ],
-     "lastModified": "2026-10-29T16:20:19.663"
+     "lastModified": "2026-10-30T19:18:26.373",
+     "version": "2026-10-31T05:32:04.386Z"
     },
     "CVE-2026-54857": {
      "first": "2026-10-30T04:28:29.606Z",
@@ -9191,7 +9761,8 @@
      "kinds": [
       "cna"
      ],
-     "lastModified": "2026-10-29T16:20:19.663"
+     "lastModified": "2026-10-30T19:18:26.473",
+     "version": "2026-10-31T05:32:04.386Z"
     },
     "CVE-2026-54858": {
      "first": "2026-10-30T04:28:29.606Z",
@@ -9272,7 +9843,8 @@
      "kinds": [
       "cna"
      ],
-     "lastModified": "2026-10-29T16:20:19.663"
+     "lastModified": "2026-10-30T19:18:26.580",
+     "version": "2026-10-31T05:32:04.386Z"
     },
     "CVE-2026-54864": {
      "first": "2026-10-30T04:28:29.606Z",
@@ -9299,7 +9871,8 @@
      "kinds": [
       "cna"
      ],
-     "lastModified": "2026-10-29T16:20:19.663"
+     "lastModified": "2026-10-30T19:18:26.680",
+     "version": "2026-10-31T05:32:04.386Z"
     },
     "CVE-2026-54865": {
      "first": "2026-10-30T04:28:29.606Z",
@@ -9326,7 +9899,8 @@
      "kinds": [
       "cna"
      ],
-     "lastModified": "2026-10-29T16:20:19.663"
+     "lastModified": "2026-10-30T19:18:26.933",
+     "version": "2026-10-31T05:32:04.386Z"
     },
     "CVE-2026-54866": {
      "first": "2026-10-30T04:28:29.606Z",
@@ -9407,7 +9981,8 @@
      "kinds": [
       "cna"
      ],
-     "lastModified": "2026-10-29T16:20:19.663"
+     "lastModified": "2026-10-30T19:18:29.167",
+     "version": "2026-10-31T05:32:04.386Z"
     },
     "CVE-2026-61991": {
      "first": "2026-10-30T04:28:29.606Z",
@@ -9434,7 +10009,8 @@
      "kinds": [
       "cna"
      ],
-     "lastModified": "2026-10-29T16:20:19.663"
+     "lastModified": "2026-10-30T19:18:29.310",
+     "version": "2026-10-31T05:32:04.386Z"
     },
     "CVE-2026-61992": {
      "first": "2026-10-30T04:28:29.606Z",
@@ -9461,7 +10037,8 @@
      "kinds": [
       "cna"
      ],
-     "lastModified": "2026-10-29T16:20:19.663"
+     "lastModified": "2026-10-30T19:18:29.490",
+     "version": "2026-10-31T05:32:04.386Z"
     },
     "CVE-2026-61993": {
      "first": "2026-10-30T04:28:29.606Z",
@@ -9542,7 +10119,8 @@
      "kinds": [
       "cna"
      ],
-     "lastModified": "2026-10-29T16:20:19.663"
+     "lastModified": "2026-10-30T19:18:29.623",
+     "version": "2026-10-31T05:32:04.386Z"
     },
     "CVE-2026-61997": {
      "first": "2026-10-30T04:28:29.606Z",
@@ -9569,7 +10147,8 @@
      "kinds": [
       "cna"
      ],
-     "lastModified": "2026-10-29T16:20:19.663"
+     "lastModified": "2026-10-30T19:18:29.807",
+     "version": "2026-10-31T05:32:04.386Z"
     },
     "CVE-2026-61998": {
      "first": "2026-10-30T04:28:29.606Z",
@@ -9596,7 +10175,8 @@
      "kinds": [
       "cna"
      ],
-     "lastModified": "2026-10-29T16:20:19.663"
+     "lastModified": "2026-10-30T19:18:29.960",
+     "version": "2026-10-31T05:32:04.386Z"
     },
     "CVE-2026-62001": {
      "first": "2026-10-30T04:28:29.606Z",
@@ -9677,7 +10257,8 @@
      "kinds": [
       "cna"
      ],
-     "lastModified": "2026-10-29T16:20:19.663"
+     "lastModified": "2026-10-30T19:18:30.120",
+     "version": "2026-10-31T05:32:04.386Z"
     },
     "CVE-2026-62004": {
      "first": "2026-10-30T04:28:29.606Z",
@@ -9704,7 +10285,8 @@
      "kinds": [
       "cna"
      ],
-     "lastModified": "2026-10-29T16:20:19.663"
+     "lastModified": "2026-10-30T19:18:30.270",
+     "version": "2026-10-31T05:32:04.386Z"
     },
     "CVE-2026-62005": {
      "first": "2026-10-30T04:28:29.606Z",
@@ -9731,7 +10313,8 @@
      "kinds": [
       "cna"
      ],
-     "lastModified": "2026-10-29T16:20:19.663"
+     "lastModified": "2026-10-30T19:18:30.410",
+     "version": "2026-10-31T05:32:04.386Z"
     },
     "CVE-2026-62006": {
      "first": "2026-10-30T04:28:29.606Z",
@@ -9812,7 +10395,8 @@
      "kinds": [
       "cna"
      ],
-     "lastModified": "2026-10-29T16:20:19.663"
+     "lastModified": "2026-10-30T19:18:30.557",
+     "version": "2026-10-31T05:32:04.386Z"
     },
     "CVE-2026-62010": {
      "first": "2026-10-30T04:28:29.606Z",
@@ -9839,7 +10423,8 @@
      "kinds": [
       "cna"
      ],
-     "lastModified": "2026-10-29T16:20:19.663"
+     "lastModified": "2026-10-30T19:18:30.697",
+     "version": "2026-10-31T05:32:04.386Z"
     },
     "CVE-2026-62011": {
      "first": "2026-10-30T04:28:29.606Z",
@@ -9866,7 +10451,8 @@
      "kinds": [
       "cna"
      ],
-     "lastModified": "2026-10-29T16:20:19.663"
+     "lastModified": "2026-10-30T19:18:30.843",
+     "version": "2026-10-31T05:32:04.386Z"
     },
     "CVE-2026-62012": {
      "first": "2026-10-30T04:28:29.606Z",
@@ -9947,7 +10533,8 @@
      "kinds": [
       "cna"
      ],
-     "lastModified": "2026-10-29T16:20:19.663"
+     "lastModified": "2026-10-30T19:18:30.960",
+     "version": "2026-10-31T05:32:04.386Z"
     },
     "CVE-2026-62015": {
      "first": "2026-10-30T04:28:29.606Z",
@@ -9974,7 +10561,8 @@
      "kinds": [
       "cna"
      ],
-     "lastModified": "2026-10-29T16:20:19.663"
+     "lastModified": "2026-10-30T19:18:31.087",
+     "version": "2026-10-31T05:32:04.386Z"
     },
     "CVE-2026-62016": {
      "first": "2026-10-30T04:28:29.606Z",
@@ -10001,7 +10589,8 @@
      "kinds": [
       "cna"
      ],
-     "lastModified": "2026-10-29T16:20:19.663"
+     "lastModified": "2026-10-30T19:18:31.203",
+     "version": "2026-10-31T05:32:04.386Z"
     },
     "CVE-2026-62017": {
      "first": "2026-10-30T04:28:29.606Z",
@@ -10082,7 +10671,8 @@
      "kinds": [
       "cna"
      ],
-     "lastModified": "2026-10-29T16:20:19.663"
+     "lastModified": "2026-10-30T19:18:32.357",
+     "version": "2026-10-31T05:32:04.386Z"
     },
     "CVE-2026-66911": {
      "first": "2026-10-30T04:28:29.606Z",
@@ -10152,10 +10742,22 @@
         "cna"
        ],
        "lastModified": "2026-10-29T16:18:52.667"
+      },
+      {
+       "at": "2026-10-31T05:32:04.386Z",
+       "status": "Analyzed",
+       "present": true,
+       "values": [
+        "CWE-200"
+       ],
+       "kinds": [
+        "cna"
+       ],
+       "lastModified": "2026-10-30T13:22:05.700"
       }
      ],
-     "at": "2026-10-30T04:28:29.606Z",
-     "status": "Undergoing Analysis",
+     "at": "2026-10-31T05:32:04.386Z",
+     "status": "Analyzed",
      "present": true,
      "values": [
       "CWE-200"
@@ -10163,7 +10765,7 @@
      "kinds": [
       "cna"
      ],
-     "lastModified": "2026-10-29T16:18:52.667"
+     "lastModified": "2026-10-30T13:22:05.700"
     },
     "CVE-2026-77819": {
      "first": "2026-10-30T04:28:29.606Z",
@@ -10179,10 +10781,22 @@
         "cna"
        ],
        "lastModified": "2026-10-29T16:18:53.477"
+      },
+      {
+       "at": "2026-10-31T05:32:04.386Z",
+       "status": "Analyzed",
+       "present": true,
+       "values": [
+        "CWE-22"
+       ],
+       "kinds": [
+        "cna"
+       ],
+       "lastModified": "2026-10-30T13:21:49.103"
       }
      ],
-     "at": "2026-10-30T04:28:29.606Z",
-     "status": "Undergoing Analysis",
+     "at": "2026-10-31T05:32:04.386Z",
+     "status": "Analyzed",
      "present": true,
      "values": [
       "CWE-22"
@@ -10190,7 +10804,7 @@
      "kinds": [
       "cna"
      ],
-     "lastModified": "2026-10-29T16:18:53.477"
+     "lastModified": "2026-10-30T13:21:49.103"
     },
     "CVE-2026-84294": {
      "first": "2026-10-30T04:28:29.606Z",
@@ -10246,7 +10860,8 @@
      "kinds": [
       "cna"
      ],
-     "lastModified": "2026-10-30T04:18:25.237"
+     "lastModified": "2026-10-30T18:18:13.827",
+     "version": "2026-10-31T05:32:04.386Z"
     },
     "CVE-2026-84296": {
      "first": "2026-10-30T04:28:29.606Z",
@@ -10275,7 +10890,8 @@
      "kinds": [
       "cna"
      ],
-     "lastModified": "2026-10-30T04:18:25.387"
+     "lastModified": "2026-10-30T18:18:13.973",
+     "version": "2026-10-31T05:32:04.386Z"
     },
     "CVE-2026-85330": {
      "first": "2026-10-30T04:28:29.606Z",
@@ -10291,10 +10907,22 @@
         "cna"
        ],
        "lastModified": "2026-10-29T16:19:31.237"
+      },
+      {
+       "at": "2026-10-31T05:32:04.386Z",
+       "status": "Analyzed",
+       "present": true,
+       "values": [
+        "CWE-863"
+       ],
+       "kinds": [
+        "cna"
+       ],
+       "lastModified": "2026-10-31T00:49:05.627"
       }
      ],
-     "at": "2026-10-30T04:28:29.606Z",
-     "status": "Awaiting Analysis",
+     "at": "2026-10-31T05:32:04.386Z",
+     "status": "Analyzed",
      "present": true,
      "values": [
       "CWE-863"
@@ -10302,7 +10930,7 @@
      "kinds": [
       "cna"
      ],
-     "lastModified": "2026-10-29T16:19:31.237"
+     "lastModified": "2026-10-31T00:49:05.627"
     },
     "CVE-2026-85890": {
      "first": "2026-10-30T04:28:29.606Z",
@@ -10318,10 +10946,22 @@
         "cna"
        ],
        "lastModified": "2026-10-30T04:18:25.537"
+      },
+      {
+       "at": "2026-10-31T05:32:04.386Z",
+       "status": "Undergoing Analysis",
+       "present": true,
+       "values": [
+        "CWE-415"
+       ],
+       "kinds": [
+        "cna"
+       ],
+       "lastModified": "2026-10-30T18:18:14.130"
       }
      ],
-     "at": "2026-10-30T04:28:29.606Z",
-     "status": "Awaiting Analysis",
+     "at": "2026-10-31T05:32:04.386Z",
+     "status": "Undergoing Analysis",
      "present": true,
      "values": [
       "CWE-415"
@@ -10329,7 +10969,7 @@
      "kinds": [
       "cna"
      ],
-     "lastModified": "2026-10-30T04:18:25.537"
+     "lastModified": "2026-10-30T18:18:14.130"
     },
     "CVE-2026-85897": {
      "first": "2026-10-30T04:28:29.606Z",
@@ -10345,10 +10985,22 @@
         "cna"
        ],
        "lastModified": "2026-10-30T04:18:25.693"
+      },
+      {
+       "at": "2026-10-31T05:32:04.386Z",
+       "status": "Undergoing Analysis",
+       "present": true,
+       "values": [
+        "CWE-122"
+       ],
+       "kinds": [
+        "cna"
+       ],
+       "lastModified": "2026-10-30T18:18:14.307"
       }
      ],
-     "at": "2026-10-30T04:28:29.606Z",
-     "status": "Awaiting Analysis",
+     "at": "2026-10-31T05:32:04.386Z",
+     "status": "Undergoing Analysis",
      "present": true,
      "values": [
       "CWE-122"
@@ -10356,7 +11008,7 @@
      "kinds": [
       "cna"
      ],
-     "lastModified": "2026-10-30T04:18:25.693"
+     "lastModified": "2026-10-30T18:18:14.307"
     },
     "CVE-2026-85899": {
      "first": "2026-10-30T04:28:29.606Z",
@@ -10372,10 +11024,22 @@
         "cna"
        ],
        "lastModified": "2026-10-30T04:18:25.860"
+      },
+      {
+       "at": "2026-10-31T05:32:04.386Z",
+       "status": "Undergoing Analysis",
+       "present": true,
+       "values": [
+        "CWE-416"
+       ],
+       "kinds": [
+        "cna"
+       ],
+       "lastModified": "2026-10-30T18:18:14.470"
       }
      ],
-     "at": "2026-10-30T04:28:29.606Z",
-     "status": "Awaiting Analysis",
+     "at": "2026-10-31T05:32:04.386Z",
+     "status": "Undergoing Analysis",
      "present": true,
      "values": [
       "CWE-416"
@@ -10383,7 +11047,7 @@
      "kinds": [
       "cna"
      ],
-     "lastModified": "2026-10-30T04:18:25.860"
+     "lastModified": "2026-10-30T18:18:14.470"
     },
     "CVE-2026-88077": {
      "first": "2026-10-30T04:28:29.606Z",
@@ -10399,10 +11063,22 @@
         "cna"
        ],
        "lastModified": "2026-10-30T04:18:28.003"
+      },
+      {
+       "at": "2026-10-31T05:32:04.386Z",
+       "status": "Undergoing Analysis",
+       "present": true,
+       "values": [
+        "CWE-190"
+       ],
+       "kinds": [
+        "cna"
+       ],
+       "lastModified": "2026-10-30T18:18:15.730"
       }
      ],
-     "at": "2026-10-30T04:28:29.606Z",
-     "status": "Awaiting Analysis",
+     "at": "2026-10-31T05:32:04.386Z",
+     "status": "Undergoing Analysis",
      "present": true,
      "values": [
       "CWE-190"
@@ -10410,7 +11086,7 @@
      "kinds": [
       "cna"
      ],
-     "lastModified": "2026-10-30T04:18:28.003"
+     "lastModified": "2026-10-30T18:18:15.730"
     },
     "CVE-2026-88078": {
      "first": "2026-10-30T04:28:29.606Z",
@@ -10426,10 +11102,22 @@
         "cna"
        ],
        "lastModified": "2026-10-29T16:19:53.540"
+      },
+      {
+       "at": "2026-10-31T05:32:04.386Z",
+       "status": "Undergoing Analysis",
+       "present": true,
+       "values": [
+        "CWE-347"
+       ],
+       "kinds": [
+        "cna"
+       ],
+       "lastModified": "2026-10-30T14:17:10.467"
       }
      ],
-     "at": "2026-10-30T04:28:29.606Z",
-     "status": "Awaiting Analysis",
+     "at": "2026-10-31T05:32:04.386Z",
+     "status": "Undergoing Analysis",
      "present": true,
      "values": [
       "CWE-347"
@@ -10437,7 +11125,7 @@
      "kinds": [
       "cna"
      ],
-     "lastModified": "2026-10-29T16:19:53.540"
+     "lastModified": "2026-10-30T14:17:10.467"
     },
     "CVE-2026-88090": {
      "first": "2026-10-30T04:28:29.606Z",
@@ -10453,10 +11141,22 @@
         "cna"
        ],
        "lastModified": "2026-10-30T04:18:28.177"
+      },
+      {
+       "at": "2026-10-31T05:32:04.386Z",
+       "status": "Undergoing Analysis",
+       "present": true,
+       "values": [
+        "CWE-843"
+       ],
+       "kinds": [
+        "cna"
+       ],
+       "lastModified": "2026-10-30T18:18:15.893"
       }
      ],
-     "at": "2026-10-30T04:28:29.606Z",
-     "status": "Awaiting Analysis",
+     "at": "2026-10-31T05:32:04.386Z",
+     "status": "Undergoing Analysis",
      "present": true,
      "values": [
       "CWE-843"
@@ -10464,7 +11164,7 @@
      "kinds": [
       "cna"
      ],
-     "lastModified": "2026-10-30T04:18:28.177"
+     "lastModified": "2026-10-30T18:18:15.893"
     },
     "CVE-2026-90861": {
      "first": "2026-10-30T04:28:29.606Z",
@@ -10493,7 +11193,8 @@
      "kinds": [
       "cna"
      ],
-     "lastModified": "2026-10-30T04:18:28.687"
+     "lastModified": "2026-10-30T18:18:16.590",
+     "version": "2026-10-31T05:32:04.386Z"
     },
     "CVE-2026-90862": {
      "first": "2026-10-30T04:28:29.606Z",
@@ -10522,7 +11223,8 @@
      "kinds": [
       "cna"
      ],
-     "lastModified": "2026-10-29T16:24:53.840"
+     "lastModified": "2026-10-30T18:18:16.713",
+     "version": "2026-10-31T05:32:04.386Z"
     },
     "CVE-2026-90863": {
      "first": "2026-10-30T04:28:29.606Z",
@@ -10551,7 +11253,8 @@
      "kinds": [
       "cna"
      ],
-     "lastModified": "2026-10-30T04:18:28.807"
+     "lastModified": "2026-10-30T18:18:16.837",
+     "version": "2026-10-31T05:32:04.386Z"
     },
     "CVE-2026-90864": {
      "first": "2026-10-30T04:28:29.606Z",
@@ -10580,7 +11283,8 @@
      "kinds": [
       "cna"
      ],
-     "lastModified": "2026-10-30T04:18:28.927"
+     "lastModified": "2026-10-30T18:18:16.967",
+     "version": "2026-10-31T05:32:04.386Z"
     },
     "CVE-2026-90865": {
      "first": "2026-10-30T04:28:29.606Z",
@@ -10609,7 +11313,8 @@
      "kinds": [
       "cna"
      ],
-     "lastModified": "2026-10-30T04:18:29.047"
+     "lastModified": "2026-10-30T18:18:17.093",
+     "version": "2026-10-31T05:32:04.386Z"
     },
     "CVE-2026-90866": {
      "first": "2026-10-30T04:28:29.606Z",
@@ -10638,7 +11343,8 @@
      "kinds": [
       "cna"
      ],
-     "lastModified": "2026-10-30T04:18:29.170"
+     "lastModified": "2026-10-30T18:18:17.220",
+     "version": "2026-10-31T05:32:04.386Z"
     },
     "CVE-2026-90867": {
      "first": "2026-10-30T04:28:29.606Z",
@@ -10665,7 +11371,8 @@
      "kinds": [
       "cna"
      ],
-     "lastModified": "2026-10-30T04:18:29.290"
+     "lastModified": "2026-10-30T18:18:17.340",
+     "version": "2026-10-31T05:32:04.386Z"
     },
     "CVE-2026-90868": {
      "first": "2026-10-30T04:28:29.606Z",
@@ -10694,7 +11401,8 @@
      "kinds": [
       "cna"
      ],
-     "lastModified": "2026-10-30T04:18:29.410"
+     "lastModified": "2026-10-30T18:18:17.463",
+     "version": "2026-10-31T05:32:04.386Z"
     },
     "CVE-2026-90869": {
      "first": "2026-10-30T04:28:29.606Z",
@@ -10723,7 +11431,8 @@
      "kinds": [
       "cna"
      ],
-     "lastModified": "2026-10-29T16:24:53.840"
+     "lastModified": "2026-10-30T18:18:17.587",
+     "version": "2026-10-31T05:32:04.386Z"
     },
     "CVE-2026-90870": {
      "first": "2026-10-30T04:28:29.606Z",
@@ -10752,7 +11461,8 @@
      "kinds": [
       "cna"
      ],
-     "lastModified": "2026-10-29T16:24:53.840"
+     "lastModified": "2026-10-30T18:18:17.703",
+     "version": "2026-10-31T05:32:04.386Z"
     },
     "CVE-2026-90871": {
      "first": "2026-10-30T04:28:29.606Z",
@@ -10781,7 +11491,8 @@
      "kinds": [
       "cna"
      ],
-     "lastModified": "2026-10-29T16:24:53.840"
+     "lastModified": "2026-10-30T18:18:17.843",
+     "version": "2026-10-31T05:32:04.386Z"
     },
     "CVE-2026-90872": {
      "first": "2026-10-30T04:28:29.606Z",
@@ -10810,7 +11521,8 @@
      "kinds": [
       "cna"
      ],
-     "lastModified": "2026-10-30T04:18:29.550"
+     "lastModified": "2026-10-30T18:18:19.807",
+     "version": "2026-10-31T05:32:04.386Z"
     },
     "CVE-2026-90991": {
      "first": "2026-10-30T04:28:29.606Z",
@@ -10826,10 +11538,22 @@
         "cna"
        ],
        "lastModified": "2026-10-29T18:17:36.830"
+      },
+      {
+       "at": "2026-10-31T05:32:04.386Z",
+       "status": "Analyzed",
+       "present": true,
+       "values": [
+        "CWE-770"
+       ],
+       "kinds": [
+        "cna"
+       ],
+       "lastModified": "2026-10-30T13:21:38.413"
       }
      ],
-     "at": "2026-10-30T04:28:29.606Z",
-     "status": "Undergoing Analysis",
+     "at": "2026-10-31T05:32:04.386Z",
+     "status": "Analyzed",
      "present": true,
      "values": [
       "CWE-770"
@@ -10837,7 +11561,7 @@
      "kinds": [
       "cna"
      ],
-     "lastModified": "2026-10-29T18:17:36.830"
+     "lastModified": "2026-10-30T13:21:38.413"
     },
     "CVE-2026-93570": {
      "first": "2026-10-30T04:28:29.606Z",
@@ -10907,10 +11631,22 @@
         "cna"
        ],
        "lastModified": "2026-10-30T04:18:29.947"
+      },
+      {
+       "at": "2026-10-31T05:32:04.386Z",
+       "status": "Analyzed",
+       "present": true,
+       "values": [
+        "CWE-287"
+       ],
+       "kinds": [
+        "cna"
+       ],
+       "lastModified": "2026-10-30T18:18:20.320"
       }
      ],
-     "at": "2026-10-30T04:28:29.606Z",
-     "status": "Undergoing Analysis",
+     "at": "2026-10-31T05:32:04.386Z",
+     "status": "Analyzed",
      "present": true,
      "values": [
       "CWE-287"
@@ -10918,7 +11654,7 @@
      "kinds": [
       "cna"
      ],
-     "lastModified": "2026-10-30T04:18:29.947"
+     "lastModified": "2026-10-30T18:18:20.320"
     },
     "CVE-2026-96187": {
      "first": "2026-10-30T04:28:29.606Z",
@@ -10934,10 +11670,22 @@
         "cna"
        ],
        "lastModified": "2026-10-29T16:20:08.253"
+      },
+      {
+       "at": "2026-10-31T05:32:04.386Z",
+       "status": "Undergoing Analysis",
+       "present": true,
+       "values": [
+        "CWE-843"
+       ],
+       "kinds": [
+        "cna"
+       ],
+       "lastModified": "2026-10-30T14:17:11.230"
       }
      ],
-     "at": "2026-10-30T04:28:29.606Z",
-     "status": "Awaiting Analysis",
+     "at": "2026-10-31T05:32:04.386Z",
+     "status": "Undergoing Analysis",
      "present": true,
      "values": [
       "CWE-843"
@@ -10945,7 +11693,7 @@
      "kinds": [
       "cna"
      ],
-     "lastModified": "2026-10-29T16:20:08.253"
+     "lastModified": "2026-10-30T14:17:11.230"
     },
     "CVE-2026-96192": {
      "first": "2026-10-30T04:28:29.606Z",
@@ -10961,10 +11709,22 @@
         "cna"
        ],
        "lastModified": "2026-10-30T04:18:30.280"
+      },
+      {
+       "at": "2026-10-31T05:32:04.386Z",
+       "status": "Analyzed",
+       "present": true,
+       "values": [
+        "CWE-416"
+       ],
+       "kinds": [
+        "cna"
+       ],
+       "lastModified": "2026-10-31T00:47:17.857"
       }
      ],
-     "at": "2026-10-30T04:28:29.606Z",
-     "status": "Awaiting Analysis",
+     "at": "2026-10-31T05:32:04.386Z",
+     "status": "Analyzed",
      "present": true,
      "values": [
       "CWE-416"
@@ -10972,7 +11732,7 @@
      "kinds": [
       "cna"
      ],
-     "lastModified": "2026-10-30T04:18:30.280"
+     "lastModified": "2026-10-31T00:47:17.857"
     },
     "CVE-2026-96196": {
      "first": "2026-10-30T04:28:29.606Z",
@@ -10988,10 +11748,22 @@
         "cna"
        ],
        "lastModified": "2026-10-30T04:18:30.417"
+      },
+      {
+       "at": "2026-10-31T05:32:04.386Z",
+       "status": "Undergoing Analysis",
+       "present": true,
+       "values": [
+        "CWE-184"
+       ],
+       "kinds": [
+        "cna"
+       ],
+       "lastModified": "2026-10-30T18:18:20.730"
       }
      ],
-     "at": "2026-10-30T04:28:29.606Z",
-     "status": "Awaiting Analysis",
+     "at": "2026-10-31T05:32:04.386Z",
+     "status": "Undergoing Analysis",
      "present": true,
      "values": [
       "CWE-184"
@@ -10999,7 +11771,7 @@
      "kinds": [
       "cna"
      ],
-     "lastModified": "2026-10-30T04:18:30.417"
+     "lastModified": "2026-10-30T18:18:20.730"
     },
     "CVE-2026-96198": {
      "first": "2026-10-30T04:28:29.606Z",
@@ -11015,10 +11787,22 @@
         "cna"
        ],
        "lastModified": "2026-10-30T04:18:30.547"
+      },
+      {
+       "at": "2026-10-31T05:32:04.386Z",
+       "status": "Undergoing Analysis",
+       "present": true,
+       "values": [
+        "CWE-122"
+       ],
+       "kinds": [
+        "cna"
+       ],
+       "lastModified": "2026-10-30T18:18:20.877"
       }
      ],
-     "at": "2026-10-30T04:28:29.606Z",
-     "status": "Awaiting Analysis",
+     "at": "2026-10-31T05:32:04.386Z",
+     "status": "Undergoing Analysis",
      "present": true,
      "values": [
       "CWE-122"
@@ -11026,7 +11810,7 @@
      "kinds": [
       "cna"
      ],
-     "lastModified": "2026-10-30T04:18:30.547"
+     "lastModified": "2026-10-30T18:18:20.877"
     },
     "CVE-2026-96199": {
      "first": "2026-10-30T04:28:29.606Z",
@@ -11042,10 +11826,22 @@
         "cna"
        ],
        "lastModified": "2026-10-30T04:18:30.710"
+      },
+      {
+       "at": "2026-10-31T05:32:04.386Z",
+       "status": "Undergoing Analysis",
+       "present": true,
+       "values": [
+        "CWE-122"
+       ],
+       "kinds": [
+        "cna"
+       ],
+       "lastModified": "2026-10-30T18:18:21.023"
       }
      ],
-     "at": "2026-10-30T04:28:29.606Z",
-     "status": "Awaiting Analysis",
+     "at": "2026-10-31T05:32:04.386Z",
+     "status": "Undergoing Analysis",
      "present": true,
      "values": [
       "CWE-122"
@@ -11053,7 +11849,7 @@
      "kinds": [
       "cna"
      ],
-     "lastModified": "2026-10-30T04:18:30.710"
+     "lastModified": "2026-10-30T18:18:21.023"
     },
     "CVE-2026-96203": {
      "first": "2026-10-30T04:28:29.606Z",
@@ -11069,10 +11865,22 @@
         "cna"
        ],
        "lastModified": "2026-10-30T04:18:30.887"
+      },
+      {
+       "at": "2026-10-31T05:32:04.386Z",
+       "status": "Undergoing Analysis",
+       "present": true,
+       "values": [
+        "CWE-416"
+       ],
+       "kinds": [
+        "cna"
+       ],
+       "lastModified": "2026-10-30T18:18:21.170"
       }
      ],
-     "at": "2026-10-30T04:28:29.606Z",
-     "status": "Awaiting Analysis",
+     "at": "2026-10-31T05:32:04.386Z",
+     "status": "Undergoing Analysis",
      "present": true,
      "values": [
       "CWE-416"
@@ -11080,7 +11888,7 @@
      "kinds": [
       "cna"
      ],
-     "lastModified": "2026-10-30T04:18:30.887"
+     "lastModified": "2026-10-30T18:18:21.170"
     },
     "CVE-2023-7357": {
      "first": "2026-10-30T04:28:29.606Z",
@@ -11096,10 +11904,22 @@
         "cna"
        ],
        "lastModified": "2026-10-29T17:17:54.467"
+      },
+      {
+       "at": "2026-10-31T05:32:04.386Z",
+       "status": "Awaiting Analysis",
+       "present": true,
+       "values": [
+        "CWE-829"
+       ],
+       "kinds": [
+        "cna"
+       ],
+       "lastModified": "2026-10-30T19:37:07.073"
       }
      ],
-     "at": "2026-10-30T04:28:29.606Z",
-     "status": "Received",
+     "at": "2026-10-31T05:32:04.386Z",
+     "status": "Awaiting Analysis",
      "present": true,
      "values": [
       "CWE-829"
@@ -11107,7 +11927,7 @@
      "kinds": [
       "cna"
      ],
-     "lastModified": "2026-10-29T17:17:54.467"
+     "lastModified": "2026-10-30T19:37:07.073"
     },
     "CVE-2025-12523": {
      "first": "2026-10-30T04:28:29.606Z",
@@ -11123,10 +11943,22 @@
         "cna"
        ],
        "lastModified": "2026-10-29T17:17:55.800"
+      },
+      {
+       "at": "2026-10-31T05:32:04.386Z",
+       "status": "Deferred",
+       "present": true,
+       "values": [
+        "CWE-862"
+       ],
+       "kinds": [
+        "cna"
+       ],
+       "lastModified": "2026-10-30T19:39:14.897"
       }
      ],
-     "at": "2026-10-30T04:28:29.606Z",
-     "status": "Received",
+     "at": "2026-10-31T05:32:04.386Z",
+     "status": "Deferred",
      "present": true,
      "values": [
       "CWE-862"
@@ -11134,7 +11966,7 @@
      "kinds": [
       "cna"
      ],
-     "lastModified": "2026-10-29T17:17:55.800"
+     "lastModified": "2026-10-30T19:39:14.897"
     },
     "CVE-2026-107043": {
      "first": "2026-10-30T04:28:29.606Z",
@@ -11146,14 +11978,22 @@
        "values": null,
        "kinds": null,
        "lastModified": "2026-10-29T17:17:56.630"
+      },
+      {
+       "at": "2026-10-31T05:32:04.386Z",
+       "status": "Deferred",
+       "present": false,
+       "values": null,
+       "kinds": null,
+       "lastModified": "2026-10-30T19:39:14.897"
       }
      ],
-     "at": "2026-10-30T04:28:29.606Z",
-     "status": "Received",
+     "at": "2026-10-31T05:32:04.386Z",
+     "status": "Deferred",
      "present": false,
      "values": null,
      "kinds": null,
-     "lastModified": "2026-10-29T17:17:56.630"
+     "lastModified": "2026-10-30T19:39:14.897"
     },
     "CVE-2026-107044": {
      "first": "2026-10-30T04:28:29.606Z",
@@ -11165,14 +12005,30 @@
        "values": null,
        "kinds": null,
        "lastModified": "2026-10-29T17:17:56.780"
+      },
+      {
+       "at": "2026-10-31T05:32:04.386Z",
+       "status": "Deferred",
+       "present": true,
+       "values": [
+        "CWE-732"
+       ],
+       "kinds": [
+        "cna"
+       ],
+       "lastModified": "2026-10-30T19:39:14.897"
       }
      ],
-     "at": "2026-10-30T04:28:29.606Z",
-     "status": "Received",
-     "present": false,
-     "values": null,
-     "kinds": null,
-     "lastModified": "2026-10-29T17:17:56.780"
+     "at": "2026-10-31T05:32:04.386Z",
+     "status": "Deferred",
+     "present": true,
+     "values": [
+      "CWE-732"
+     ],
+     "kinds": [
+      "cna"
+     ],
+     "lastModified": "2026-10-30T19:39:14.897"
     },
     "CVE-2026-107045": {
      "first": "2026-10-30T04:28:29.606Z",
@@ -11184,14 +12040,22 @@
        "values": null,
        "kinds": null,
        "lastModified": "2026-10-29T17:17:56.933"
+      },
+      {
+       "at": "2026-10-31T05:32:04.386Z",
+       "status": "Deferred",
+       "present": false,
+       "values": null,
+       "kinds": null,
+       "lastModified": "2026-10-30T19:39:14.897"
       }
      ],
-     "at": "2026-10-30T04:28:29.606Z",
-     "status": "Received",
+     "at": "2026-10-31T05:32:04.386Z",
+     "status": "Deferred",
      "present": false,
      "values": null,
      "kinds": null,
-     "lastModified": "2026-10-29T17:17:56.933"
+     "lastModified": "2026-10-30T19:39:14.897"
     },
     "CVE-2026-107046": {
      "first": "2026-10-30T04:28:29.606Z",
@@ -11203,14 +12067,22 @@
        "values": null,
        "kinds": null,
        "lastModified": "2026-10-29T17:17:57.077"
+      },
+      {
+       "at": "2026-10-31T05:32:04.386Z",
+       "status": "Deferred",
+       "present": false,
+       "values": null,
+       "kinds": null,
+       "lastModified": "2026-10-30T19:39:14.897"
       }
      ],
-     "at": "2026-10-30T04:28:29.606Z",
-     "status": "Received",
+     "at": "2026-10-31T05:32:04.386Z",
+     "status": "Deferred",
      "present": false,
      "values": null,
      "kinds": null,
-     "lastModified": "2026-10-29T17:17:57.077"
+     "lastModified": "2026-10-30T19:39:14.897"
     },
     "CVE-2026-107047": {
      "first": "2026-10-30T04:28:29.606Z",
@@ -11226,10 +12098,22 @@
         "cna"
        ],
        "lastModified": "2026-10-29T20:17:24.890"
+      },
+      {
+       "at": "2026-10-31T05:32:04.386Z",
+       "status": "Deferred",
+       "present": true,
+       "values": [
+        "CWE-732"
+       ],
+       "kinds": [
+        "cna"
+       ],
+       "lastModified": "2026-10-30T19:39:14.897"
       }
      ],
-     "at": "2026-10-30T04:28:29.606Z",
-     "status": "Received",
+     "at": "2026-10-31T05:32:04.386Z",
+     "status": "Deferred",
      "present": true,
      "values": [
       "CWE-732"
@@ -11237,7 +12121,7 @@
      "kinds": [
       "cna"
      ],
-     "lastModified": "2026-10-29T20:17:24.890"
+     "lastModified": "2026-10-30T19:39:14.897"
     },
     "CVE-2026-107048": {
      "first": "2026-10-30T04:28:29.606Z",
@@ -11249,14 +12133,22 @@
        "values": null,
        "kinds": null,
        "lastModified": "2026-10-29T17:17:57.370"
+      },
+      {
+       "at": "2026-10-31T05:32:04.386Z",
+       "status": "Deferred",
+       "present": false,
+       "values": null,
+       "kinds": null,
+       "lastModified": "2026-10-30T19:39:14.897"
       }
      ],
-     "at": "2026-10-30T04:28:29.606Z",
-     "status": "Received",
+     "at": "2026-10-31T05:32:04.386Z",
+     "status": "Deferred",
      "present": false,
      "values": null,
      "kinds": null,
-     "lastModified": "2026-10-29T17:17:57.370"
+     "lastModified": "2026-10-30T19:39:14.897"
     },
     "CVE-2026-107049": {
      "first": "2026-10-30T04:28:29.606Z",
@@ -11268,14 +12160,30 @@
        "values": null,
        "kinds": null,
        "lastModified": "2026-10-29T17:17:57.510"
+      },
+      {
+       "at": "2026-10-31T05:32:04.386Z",
+       "status": "Deferred",
+       "present": true,
+       "values": [
+        "CWE-863"
+       ],
+       "kinds": [
+        "cna"
+       ],
+       "lastModified": "2026-10-30T19:39:14.897"
       }
      ],
-     "at": "2026-10-30T04:28:29.606Z",
-     "status": "Received",
-     "present": false,
-     "values": null,
-     "kinds": null,
-     "lastModified": "2026-10-29T17:17:57.510"
+     "at": "2026-10-31T05:32:04.386Z",
+     "status": "Deferred",
+     "present": true,
+     "values": [
+      "CWE-863"
+     ],
+     "kinds": [
+      "cna"
+     ],
+     "lastModified": "2026-10-30T19:39:14.897"
     },
     "CVE-2026-107050": {
      "first": "2026-10-30T04:28:29.606Z",
@@ -11287,14 +12195,22 @@
        "values": null,
        "kinds": null,
        "lastModified": "2026-10-29T17:17:57.650"
+      },
+      {
+       "at": "2026-10-31T05:32:04.386Z",
+       "status": "Awaiting Analysis",
+       "present": false,
+       "values": null,
+       "kinds": null,
+       "lastModified": "2026-10-30T19:37:07.073"
       }
      ],
-     "at": "2026-10-30T04:28:29.606Z",
-     "status": "Received",
+     "at": "2026-10-31T05:32:04.386Z",
+     "status": "Awaiting Analysis",
      "present": false,
      "values": null,
      "kinds": null,
-     "lastModified": "2026-10-29T17:17:57.650"
+     "lastModified": "2026-10-30T19:37:07.073"
     },
     "CVE-2026-107051": {
      "first": "2026-10-30T04:28:29.606Z",
@@ -11306,14 +12222,22 @@
        "values": null,
        "kinds": null,
        "lastModified": "2026-10-29T17:17:57.787"
+      },
+      {
+       "at": "2026-10-31T05:32:04.386Z",
+       "status": "Deferred",
+       "present": false,
+       "values": null,
+       "kinds": null,
+       "lastModified": "2026-10-30T19:39:14.897"
       }
      ],
-     "at": "2026-10-30T04:28:29.606Z",
-     "status": "Received",
+     "at": "2026-10-31T05:32:04.386Z",
+     "status": "Deferred",
      "present": false,
      "values": null,
      "kinds": null,
-     "lastModified": "2026-10-29T17:17:57.787"
+     "lastModified": "2026-10-30T19:39:14.897"
     },
     "CVE-2026-107052": {
      "first": "2026-10-30T04:28:29.606Z",
@@ -11329,10 +12253,22 @@
         "cna"
        ],
        "lastModified": "2026-10-29T20:17:25.060"
+      },
+      {
+       "at": "2026-10-31T05:32:04.386Z",
+       "status": "Deferred",
+       "present": true,
+       "values": [
+        "CWE-276"
+       ],
+       "kinds": [
+        "cna"
+       ],
+       "lastModified": "2026-10-30T19:39:14.897"
       }
      ],
-     "at": "2026-10-30T04:28:29.606Z",
-     "status": "Received",
+     "at": "2026-10-31T05:32:04.386Z",
+     "status": "Deferred",
      "present": true,
      "values": [
       "CWE-276"
@@ -11340,7 +12276,7 @@
      "kinds": [
       "cna"
      ],
-     "lastModified": "2026-10-29T20:17:25.060"
+     "lastModified": "2026-10-30T19:39:14.897"
     },
     "CVE-2026-107053": {
      "first": "2026-10-30T04:28:29.606Z",
@@ -11352,14 +12288,22 @@
        "values": null,
        "kinds": null,
        "lastModified": "2026-10-29T17:17:58.050"
+      },
+      {
+       "at": "2026-10-31T05:32:04.386Z",
+       "status": "Deferred",
+       "present": false,
+       "values": null,
+       "kinds": null,
+       "lastModified": "2026-10-30T19:39:14.897"
       }
      ],
-     "at": "2026-10-30T04:28:29.606Z",
-     "status": "Received",
+     "at": "2026-10-31T05:32:04.386Z",
+     "status": "Deferred",
      "present": false,
      "values": null,
      "kinds": null,
-     "lastModified": "2026-10-29T17:17:58.050"
+     "lastModified": "2026-10-30T19:39:14.897"
     },
     "CVE-2026-107055": {
      "first": "2026-10-30T04:28:29.606Z",
@@ -11371,14 +12315,30 @@
        "values": null,
        "kinds": null,
        "lastModified": "2026-10-29T17:17:58.190"
+      },
+      {
+       "at": "2026-10-31T05:32:04.386Z",
+       "status": "Deferred",
+       "present": true,
+       "values": [
+        "CWE-732"
+       ],
+       "kinds": [
+        "cna"
+       ],
+       "lastModified": "2026-10-30T19:39:14.897"
       }
      ],
-     "at": "2026-10-30T04:28:29.606Z",
-     "status": "Received",
-     "present": false,
-     "values": null,
-     "kinds": null,
-     "lastModified": "2026-10-29T17:17:58.190"
+     "at": "2026-10-31T05:32:04.386Z",
+     "status": "Deferred",
+     "present": true,
+     "values": [
+      "CWE-732"
+     ],
+     "kinds": [
+      "cna"
+     ],
+     "lastModified": "2026-10-30T19:39:14.897"
     },
     "CVE-2026-107056": {
      "first": "2026-10-30T04:28:29.606Z",
@@ -11390,14 +12350,22 @@
        "values": null,
        "kinds": null,
        "lastModified": "2026-10-29T17:17:58.320"
+      },
+      {
+       "at": "2026-10-31T05:32:04.386Z",
+       "status": "Deferred",
+       "present": false,
+       "values": null,
+       "kinds": null,
+       "lastModified": "2026-10-30T19:39:14.897"
       }
      ],
-     "at": "2026-10-30T04:28:29.606Z",
-     "status": "Received",
+     "at": "2026-10-31T05:32:04.386Z",
+     "status": "Deferred",
      "present": false,
      "values": null,
      "kinds": null,
-     "lastModified": "2026-10-29T17:17:58.320"
+     "lastModified": "2026-10-30T19:39:14.897"
     },
     "CVE-2026-107057": {
      "first": "2026-10-30T04:28:29.606Z",
@@ -11409,14 +12377,22 @@
        "values": null,
        "kinds": null,
        "lastModified": "2026-10-29T17:17:58.457"
+      },
+      {
+       "at": "2026-10-31T05:32:04.386Z",
+       "status": "Deferred",
+       "present": false,
+       "values": null,
+       "kinds": null,
+       "lastModified": "2026-10-30T19:39:14.897"
       }
      ],
-     "at": "2026-10-30T04:28:29.606Z",
-     "status": "Received",
+     "at": "2026-10-31T05:32:04.386Z",
+     "status": "Deferred",
      "present": false,
      "values": null,
      "kinds": null,
-     "lastModified": "2026-10-29T17:17:58.457"
+     "lastModified": "2026-10-30T19:39:14.897"
     },
     "CVE-2026-107058": {
      "first": "2026-10-30T04:28:29.606Z",
@@ -11432,10 +12408,22 @@
         "cna"
        ],
        "lastModified": "2026-10-29T20:17:25.220"
+      },
+      {
+       "at": "2026-10-31T05:32:04.386Z",
+       "status": "Deferred",
+       "present": true,
+       "values": [
+        "CWE-287"
+       ],
+       "kinds": [
+        "cna"
+       ],
+       "lastModified": "2026-10-30T19:39:14.897"
       }
      ],
-     "at": "2026-10-30T04:28:29.606Z",
-     "status": "Received",
+     "at": "2026-10-31T05:32:04.386Z",
+     "status": "Deferred",
      "present": true,
      "values": [
       "CWE-287"
@@ -11443,7 +12431,7 @@
      "kinds": [
       "cna"
      ],
-     "lastModified": "2026-10-29T20:17:25.220"
+     "lastModified": "2026-10-30T19:39:14.897"
     },
     "CVE-2026-107059": {
      "first": "2026-10-30T04:28:29.606Z",
@@ -11455,14 +12443,22 @@
        "values": null,
        "kinds": null,
        "lastModified": "2026-10-29T17:17:58.797"
+      },
+      {
+       "at": "2026-10-31T05:32:04.386Z",
+       "status": "Awaiting Analysis",
+       "present": false,
+       "values": null,
+       "kinds": null,
+       "lastModified": "2026-10-30T19:03:27.583"
       }
      ],
-     "at": "2026-10-30T04:28:29.606Z",
-     "status": "Received",
+     "at": "2026-10-31T05:32:04.386Z",
+     "status": "Awaiting Analysis",
      "present": false,
      "values": null,
      "kinds": null,
-     "lastModified": "2026-10-29T17:17:58.797"
+     "lastModified": "2026-10-30T19:03:27.583"
     },
     "CVE-2026-107060": {
      "first": "2026-10-30T04:28:29.606Z",
@@ -11474,14 +12470,30 @@
        "values": null,
        "kinds": null,
        "lastModified": "2026-10-29T17:17:58.933"
+      },
+      {
+       "at": "2026-10-31T05:32:04.386Z",
+       "status": "Awaiting Analysis",
+       "present": true,
+       "values": [
+        "CWE-732"
+       ],
+       "kinds": [
+        "cna"
+       ],
+       "lastModified": "2026-10-30T19:18:03.053"
       }
      ],
-     "at": "2026-10-30T04:28:29.606Z",
-     "status": "Received",
-     "present": false,
-     "values": null,
-     "kinds": null,
-     "lastModified": "2026-10-29T17:17:58.933"
+     "at": "2026-10-31T05:32:04.386Z",
+     "status": "Awaiting Analysis",
+     "present": true,
+     "values": [
+      "CWE-732"
+     ],
+     "kinds": [
+      "cna"
+     ],
+     "lastModified": "2026-10-30T19:18:03.053"
     },
     "CVE-2026-115805": {
      "first": "2026-10-30T04:28:29.606Z",
@@ -11497,10 +12509,22 @@
         "cna"
        ],
        "lastModified": "2026-10-30T04:18:18.673"
+      },
+      {
+       "at": "2026-10-31T05:32:04.386Z",
+       "status": "Awaiting Analysis",
+       "present": true,
+       "values": [
+        "CWE-78"
+       ],
+       "kinds": [
+        "cna"
+       ],
+       "lastModified": "2026-10-30T18:17:23.107"
       }
      ],
-     "at": "2026-10-30T04:28:29.606Z",
-     "status": "Received",
+     "at": "2026-10-31T05:32:04.386Z",
+     "status": "Awaiting Analysis",
      "present": true,
      "values": [
       "CWE-78"
@@ -11508,7 +12532,7 @@
      "kinds": [
       "cna"
      ],
-     "lastModified": "2026-10-30T04:18:18.673"
+     "lastModified": "2026-10-30T18:17:23.107"
     },
     "CVE-2026-118758": {
      "first": "2026-10-30T04:28:29.606Z",
@@ -11524,10 +12548,22 @@
         "cna"
        ],
        "lastModified": "2026-10-29T21:17:16.737"
+      },
+      {
+       "at": "2026-10-31T05:32:04.386Z",
+       "status": "Awaiting Analysis",
+       "present": true,
+       "values": [
+        "CWE-22"
+       ],
+       "kinds": [
+        "cna"
+       ],
+       "lastModified": "2026-10-30T17:18:03.880"
       }
      ],
-     "at": "2026-10-30T04:28:29.606Z",
-     "status": "Received",
+     "at": "2026-10-31T05:32:04.386Z",
+     "status": "Awaiting Analysis",
      "present": true,
      "values": [
       "CWE-22"
@@ -11535,7 +12571,7 @@
      "kinds": [
       "cna"
      ],
-     "lastModified": "2026-10-29T21:17:16.737"
+     "lastModified": "2026-10-30T17:18:03.880"
     },
     "CVE-2026-118759": {
      "first": "2026-10-30T04:28:29.606Z",
@@ -11552,10 +12588,23 @@
         "cna"
        ],
        "lastModified": "2026-10-29T17:18:06.630"
+      },
+      {
+       "at": "2026-10-31T05:32:04.386Z",
+       "status": "Awaiting Analysis",
+       "present": true,
+       "values": [
+        "CWE-200",
+        "CWE-862"
+       ],
+       "kinds": [
+        "cna"
+       ],
+       "lastModified": "2026-10-30T18:17:24.807"
       }
      ],
-     "at": "2026-10-30T04:28:29.606Z",
-     "status": "Received",
+     "at": "2026-10-31T05:32:04.386Z",
+     "status": "Awaiting Analysis",
      "present": true,
      "values": [
       "CWE-200",
@@ -11564,7 +12613,7 @@
      "kinds": [
       "cna"
      ],
-     "lastModified": "2026-10-29T17:18:06.630"
+     "lastModified": "2026-10-30T18:17:24.807"
     },
     "CVE-2026-118760": {
      "first": "2026-10-30T04:28:29.606Z",
@@ -11581,10 +12630,23 @@
         "cna"
        ],
        "lastModified": "2026-10-29T17:18:06.770"
+      },
+      {
+       "at": "2026-10-31T05:32:04.386Z",
+       "status": "Awaiting Analysis",
+       "present": true,
+       "values": [
+        "CWE-639",
+        "CWE-862"
+       ],
+       "kinds": [
+        "cna"
+       ],
+       "lastModified": "2026-10-30T17:18:03.880"
       }
      ],
-     "at": "2026-10-30T04:28:29.606Z",
-     "status": "Received",
+     "at": "2026-10-31T05:32:04.386Z",
+     "status": "Awaiting Analysis",
      "present": true,
      "values": [
       "CWE-639",
@@ -11593,7 +12655,7 @@
      "kinds": [
       "cna"
      ],
-     "lastModified": "2026-10-29T17:18:06.770"
+     "lastModified": "2026-10-30T17:18:03.880"
     },
     "CVE-2026-118761": {
      "first": "2026-10-30T04:28:29.606Z",
@@ -11609,10 +12671,22 @@
         "cna"
        ],
        "lastModified": "2026-10-29T21:17:16.853"
+      },
+      {
+       "at": "2026-10-31T05:32:04.386Z",
+       "status": "Awaiting Analysis",
+       "present": true,
+       "values": [
+        "CWE-409"
+       ],
+       "kinds": [
+        "cna"
+       ],
+       "lastModified": "2026-10-30T17:18:03.880"
       }
      ],
-     "at": "2026-10-30T04:28:29.606Z",
-     "status": "Received",
+     "at": "2026-10-31T05:32:04.386Z",
+     "status": "Awaiting Analysis",
      "present": true,
      "values": [
       "CWE-409"
@@ -11620,7 +12694,7 @@
      "kinds": [
       "cna"
      ],
-     "lastModified": "2026-10-29T21:17:16.853"
+     "lastModified": "2026-10-30T17:18:03.880"
     },
     "CVE-2026-118762": {
      "first": "2026-10-30T04:28:29.606Z",
@@ -11663,10 +12737,22 @@
         "cna"
        ],
        "lastModified": "2026-10-29T17:18:07.230"
+      },
+      {
+       "at": "2026-10-31T05:32:04.386Z",
+       "status": "Deferred",
+       "present": true,
+       "values": [
+        "CWE-522"
+       ],
+       "kinds": [
+        "cna"
+       ],
+       "lastModified": "2026-10-30T19:39:14.897"
       }
      ],
-     "at": "2026-10-30T04:28:29.606Z",
-     "status": "Received",
+     "at": "2026-10-31T05:32:04.386Z",
+     "status": "Deferred",
      "present": true,
      "values": [
       "CWE-522"
@@ -11674,7 +12760,7 @@
      "kinds": [
       "cna"
      ],
-     "lastModified": "2026-10-29T17:18:07.230"
+     "lastModified": "2026-10-30T19:39:14.897"
     },
     "CVE-2026-118764": {
      "first": "2026-10-30T04:28:29.606Z",
@@ -11690,10 +12776,22 @@
         "cna"
        ],
        "lastModified": "2026-10-29T17:18:07.380"
+      },
+      {
+       "at": "2026-10-31T05:32:04.386Z",
+       "status": "Awaiting Analysis",
+       "present": true,
+       "values": [
+        "CWE-405"
+       ],
+       "kinds": [
+        "cna"
+       ],
+       "lastModified": "2026-10-30T23:17:09.437"
       }
      ],
-     "at": "2026-10-30T04:28:29.606Z",
-     "status": "Received",
+     "at": "2026-10-31T05:32:04.386Z",
+     "status": "Awaiting Analysis",
      "present": true,
      "values": [
       "CWE-405"
@@ -11701,7 +12799,7 @@
      "kinds": [
       "cna"
      ],
-     "lastModified": "2026-10-29T17:18:07.380"
+     "lastModified": "2026-10-30T23:17:09.437"
     },
     "CVE-2026-118765": {
      "first": "2026-10-30T04:28:29.606Z",
@@ -11717,10 +12815,22 @@
         "cna"
        ],
        "lastModified": "2026-10-29T21:17:16.967"
+      },
+      {
+       "at": "2026-10-31T05:32:04.386Z",
+       "status": "Awaiting Analysis",
+       "present": true,
+       "values": [
+        "CWE-335"
+       ],
+       "kinds": [
+        "cna"
+       ],
+       "lastModified": "2026-10-30T19:37:07.073"
       }
      ],
-     "at": "2026-10-30T04:28:29.606Z",
-     "status": "Received",
+     "at": "2026-10-31T05:32:04.386Z",
+     "status": "Awaiting Analysis",
      "present": true,
      "values": [
       "CWE-335"
@@ -11728,7 +12838,7 @@
      "kinds": [
       "cna"
      ],
-     "lastModified": "2026-10-29T21:17:16.967"
+     "lastModified": "2026-10-30T19:37:07.073"
     },
     "CVE-2026-119115": {
      "first": "2026-10-30T04:28:29.606Z",
@@ -11744,10 +12854,22 @@
         "cna"
        ],
        "lastModified": "2026-10-29T17:18:07.667"
+      },
+      {
+       "at": "2026-10-31T05:32:04.386Z",
+       "status": "Awaiting Analysis",
+       "present": true,
+       "values": [
+        "CWE-863"
+       ],
+       "kinds": [
+        "cna"
+       ],
+       "lastModified": "2026-10-30T17:07:53.700"
       }
      ],
-     "at": "2026-10-30T04:28:29.606Z",
-     "status": "Received",
+     "at": "2026-10-31T05:32:04.386Z",
+     "status": "Awaiting Analysis",
      "present": true,
      "values": [
       "CWE-863"
@@ -11755,7 +12877,7 @@
      "kinds": [
       "cna"
      ],
-     "lastModified": "2026-10-29T17:18:07.667"
+     "lastModified": "2026-10-30T17:07:53.700"
     },
     "CVE-2026-11587": {
      "first": "2026-10-30T04:28:29.606Z",
@@ -11771,10 +12893,22 @@
         "cna"
        ],
        "lastModified": "2026-10-29T17:18:08.167"
+      },
+      {
+       "at": "2026-10-31T05:32:04.386Z",
+       "status": "Deferred",
+       "present": true,
+       "values": [
+        "CWE-89"
+       ],
+       "kinds": [
+        "cna"
+       ],
+       "lastModified": "2026-10-30T19:39:14.897"
       }
      ],
-     "at": "2026-10-30T04:28:29.606Z",
-     "status": "Received",
+     "at": "2026-10-31T05:32:04.386Z",
+     "status": "Deferred",
      "present": true,
      "values": [
       "CWE-89"
@@ -11782,7 +12916,7 @@
      "kinds": [
       "cna"
      ],
-     "lastModified": "2026-10-29T17:18:08.167"
+     "lastModified": "2026-10-30T19:39:14.897"
     },
     "CVE-2026-62374": {
      "first": "2026-10-30T04:28:29.606Z",
@@ -11799,10 +12933,23 @@
         "cna"
        ],
        "lastModified": "2026-10-29T17:18:10.143"
+      },
+      {
+       "at": "2026-10-31T05:32:04.386Z",
+       "status": "Deferred",
+       "present": true,
+       "values": [
+        "CWE-176",
+        "CWE-754"
+       ],
+       "kinds": [
+        "cna"
+       ],
+       "lastModified": "2026-10-30T19:39:14.897"
       }
      ],
-     "at": "2026-10-30T04:28:29.606Z",
-     "status": "Received",
+     "at": "2026-10-31T05:32:04.386Z",
+     "status": "Deferred",
      "present": true,
      "values": [
       "CWE-176",
@@ -11811,7 +12958,7 @@
      "kinds": [
       "cna"
      ],
-     "lastModified": "2026-10-29T17:18:10.143"
+     "lastModified": "2026-10-30T19:39:14.897"
     },
     "CVE-2026-102260": {
      "first": "2026-10-30T04:28:29.606Z",
@@ -11827,10 +12974,22 @@
         "cna"
        ],
        "lastModified": "2026-10-29T18:17:21.160"
+      },
+      {
+       "at": "2026-10-31T05:32:04.386Z",
+       "status": "Awaiting Analysis",
+       "present": true,
+       "values": [
+        "CWE-863"
+       ],
+       "kinds": [
+        "cna"
+       ],
+       "lastModified": "2026-10-30T19:37:07.073"
       }
      ],
-     "at": "2026-10-30T04:28:29.606Z",
-     "status": "Received",
+     "at": "2026-10-31T05:32:04.386Z",
+     "status": "Awaiting Analysis",
      "present": true,
      "values": [
       "CWE-863"
@@ -11838,7 +12997,7 @@
      "kinds": [
       "cna"
      ],
-     "lastModified": "2026-10-29T18:17:21.160"
+     "lastModified": "2026-10-30T19:37:07.073"
     },
     "CVE-2026-107347": {
      "first": "2026-10-30T04:28:29.606Z",
@@ -11854,10 +13013,22 @@
         "cna"
        ],
        "lastModified": "2026-10-29T18:17:21.940"
+      },
+      {
+       "at": "2026-10-31T05:32:04.386Z",
+       "status": "Awaiting Analysis",
+       "present": true,
+       "values": [
+        "CWE-59"
+       ],
+       "kinds": [
+        "cna"
+       ],
+       "lastModified": "2026-10-30T19:37:07.073"
       }
      ],
-     "at": "2026-10-30T04:28:29.606Z",
-     "status": "Received",
+     "at": "2026-10-31T05:32:04.386Z",
+     "status": "Awaiting Analysis",
      "present": true,
      "values": [
       "CWE-59"
@@ -11865,7 +13036,7 @@
      "kinds": [
       "cna"
      ],
-     "lastModified": "2026-10-29T18:17:21.940"
+     "lastModified": "2026-10-30T19:37:07.073"
     },
     "CVE-2026-116566": {
      "first": "2026-10-30T04:28:29.606Z",
@@ -11892,7 +13063,8 @@
      "kinds": [
       "cna"
      ],
-     "lastModified": "2026-10-30T01:16:44.213"
+     "lastModified": "2026-10-30T18:17:23.903",
+     "version": "2026-10-31T05:32:04.386Z"
     },
     "CVE-2026-118766": {
      "first": "2026-10-30T04:28:29.606Z",
@@ -11908,10 +13080,22 @@
         "cna"
        ],
        "lastModified": "2026-10-29T18:17:28.693"
+      },
+      {
+       "at": "2026-10-31T05:32:04.386Z",
+       "status": "Awaiting Analysis",
+       "present": true,
+       "values": [
+        "CWE-918"
+       ],
+       "kinds": [
+        "cna"
+       ],
+       "lastModified": "2026-10-30T19:37:07.073"
       }
      ],
-     "at": "2026-10-30T04:28:29.606Z",
-     "status": "Received",
+     "at": "2026-10-31T05:32:04.386Z",
+     "status": "Awaiting Analysis",
      "present": true,
      "values": [
       "CWE-918"
@@ -11919,7 +13103,7 @@
      "kinds": [
       "cna"
      ],
-     "lastModified": "2026-10-29T18:17:28.693"
+     "lastModified": "2026-10-30T19:37:07.073"
     },
     "CVE-2026-118767": {
      "first": "2026-10-30T04:28:29.606Z",
@@ -11935,10 +13119,22 @@
         "cna"
        ],
        "lastModified": "2026-10-29T18:17:28.853"
+      },
+      {
+       "at": "2026-10-31T05:32:04.386Z",
+       "status": "Awaiting Analysis",
+       "present": true,
+       "values": [
+        "CWE-158"
+       ],
+       "kinds": [
+        "cna"
+       ],
+       "lastModified": "2026-10-30T19:37:07.073"
       }
      ],
-     "at": "2026-10-30T04:28:29.606Z",
-     "status": "Received",
+     "at": "2026-10-31T05:32:04.386Z",
+     "status": "Awaiting Analysis",
      "present": true,
      "values": [
       "CWE-158"
@@ -11946,7 +13142,7 @@
      "kinds": [
       "cna"
      ],
-     "lastModified": "2026-10-29T18:17:28.853"
+     "lastModified": "2026-10-30T19:37:07.073"
     },
     "CVE-2026-118768": {
      "first": "2026-10-30T04:28:29.606Z",
@@ -11962,10 +13158,22 @@
         "cna"
        ],
        "lastModified": "2026-10-29T18:17:28.997"
+      },
+      {
+       "at": "2026-10-31T05:32:04.386Z",
+       "status": "Awaiting Analysis",
+       "present": true,
+       "values": [
+        "CWE-347"
+       ],
+       "kinds": [
+        "cna"
+       ],
+       "lastModified": "2026-10-30T19:37:07.073"
       }
      ],
-     "at": "2026-10-30T04:28:29.606Z",
-     "status": "Received",
+     "at": "2026-10-31T05:32:04.386Z",
+     "status": "Awaiting Analysis",
      "present": true,
      "values": [
       "CWE-347"
@@ -11973,7 +13181,7 @@
      "kinds": [
       "cna"
      ],
-     "lastModified": "2026-10-29T18:17:28.997"
+     "lastModified": "2026-10-30T19:37:07.073"
     },
     "CVE-2026-118769": {
      "first": "2026-10-30T04:28:29.606Z",
@@ -11991,10 +13199,24 @@
         "cna"
        ],
        "lastModified": "2026-10-29T21:17:17.080"
+      },
+      {
+       "at": "2026-10-31T05:32:04.386Z",
+       "status": "Awaiting Analysis",
+       "present": true,
+       "values": [
+        "CWE-125",
+        "CWE-681",
+        "CWE-787"
+       ],
+       "kinds": [
+        "cna"
+       ],
+       "lastModified": "2026-10-30T19:37:07.073"
       }
      ],
-     "at": "2026-10-30T04:28:29.606Z",
-     "status": "Received",
+     "at": "2026-10-31T05:32:04.386Z",
+     "status": "Awaiting Analysis",
      "present": true,
      "values": [
       "CWE-125",
@@ -12004,7 +13226,7 @@
      "kinds": [
       "cna"
      ],
-     "lastModified": "2026-10-29T21:17:17.080"
+     "lastModified": "2026-10-30T19:37:07.073"
     },
     "CVE-2026-51851": {
      "first": "2026-10-30T04:28:29.606Z",
@@ -12016,14 +13238,22 @@
        "values": null,
        "kinds": null,
        "lastModified": "2026-10-29T18:17:32.153"
+      },
+      {
+       "at": "2026-10-31T05:32:04.386Z",
+       "status": "Deferred",
+       "present": false,
+       "values": null,
+       "kinds": null,
+       "lastModified": "2026-10-30T19:39:14.897"
       }
      ],
-     "at": "2026-10-30T04:28:29.606Z",
-     "status": "Received",
+     "at": "2026-10-31T05:32:04.386Z",
+     "status": "Deferred",
      "present": false,
      "values": null,
      "kinds": null,
-     "lastModified": "2026-10-29T18:17:32.153"
+     "lastModified": "2026-10-30T19:39:14.897"
     },
     "CVE-2026-51863": {
      "first": "2026-10-30T04:28:29.606Z",
@@ -12035,14 +13265,22 @@
        "values": null,
        "kinds": null,
        "lastModified": "2026-10-29T18:17:32.293"
+      },
+      {
+       "at": "2026-10-31T05:32:04.386Z",
+       "status": "Deferred",
+       "present": false,
+       "values": null,
+       "kinds": null,
+       "lastModified": "2026-10-30T19:39:14.897"
       }
      ],
-     "at": "2026-10-30T04:28:29.606Z",
-     "status": "Received",
+     "at": "2026-10-31T05:32:04.386Z",
+     "status": "Deferred",
      "present": false,
      "values": null,
      "kinds": null,
-     "lastModified": "2026-10-29T18:17:32.293"
+     "lastModified": "2026-10-30T19:39:14.897"
     },
     "CVE-2026-51902": {
      "first": "2026-10-30T04:28:29.606Z",
@@ -12054,14 +13292,22 @@
        "values": null,
        "kinds": null,
        "lastModified": "2026-10-29T18:17:32.417"
+      },
+      {
+       "at": "2026-10-31T05:32:04.386Z",
+       "status": "Deferred",
+       "present": false,
+       "values": null,
+       "kinds": null,
+       "lastModified": "2026-10-30T19:39:14.897"
       }
      ],
-     "at": "2026-10-30T04:28:29.606Z",
-     "status": "Received",
+     "at": "2026-10-31T05:32:04.386Z",
+     "status": "Deferred",
      "present": false,
      "values": null,
      "kinds": null,
-     "lastModified": "2026-10-29T18:17:32.417"
+     "lastModified": "2026-10-30T19:39:14.897"
     },
     "CVE-2026-51903": {
      "first": "2026-10-30T04:28:29.606Z",
@@ -12073,14 +13319,22 @@
        "values": null,
        "kinds": null,
        "lastModified": "2026-10-29T18:17:32.547"
+      },
+      {
+       "at": "2026-10-31T05:32:04.386Z",
+       "status": "Deferred",
+       "present": false,
+       "values": null,
+       "kinds": null,
+       "lastModified": "2026-10-30T19:39:14.897"
       }
      ],
-     "at": "2026-10-30T04:28:29.606Z",
-     "status": "Received",
+     "at": "2026-10-31T05:32:04.386Z",
+     "status": "Deferred",
      "present": false,
      "values": null,
      "kinds": null,
-     "lastModified": "2026-10-29T18:17:32.547"
+     "lastModified": "2026-10-30T19:39:14.897"
     },
     "CVE-2026-51905": {
      "first": "2026-10-30T04:28:29.606Z",
@@ -12092,14 +13346,30 @@
        "values": null,
        "kinds": null,
        "lastModified": "2026-10-29T18:17:32.660"
+      },
+      {
+       "at": "2026-10-31T05:32:04.386Z",
+       "status": "Deferred",
+       "present": true,
+       "values": [
+        "CWE-284"
+       ],
+       "kinds": [
+        "cna"
+       ],
+       "lastModified": "2026-10-30T19:39:14.897"
       }
      ],
-     "at": "2026-10-30T04:28:29.606Z",
-     "status": "Received",
-     "present": false,
-     "values": null,
-     "kinds": null,
-     "lastModified": "2026-10-29T18:17:32.660"
+     "at": "2026-10-31T05:32:04.386Z",
+     "status": "Deferred",
+     "present": true,
+     "values": [
+      "CWE-284"
+     ],
+     "kinds": [
+      "cna"
+     ],
+     "lastModified": "2026-10-30T19:39:14.897"
     },
     "CVE-2026-51912": {
      "first": "2026-10-30T04:28:29.606Z",
@@ -12111,14 +13381,22 @@
        "values": null,
        "kinds": null,
        "lastModified": "2026-10-29T18:17:32.783"
+      },
+      {
+       "at": "2026-10-31T05:32:04.386Z",
+       "status": "Deferred",
+       "present": false,
+       "values": null,
+       "kinds": null,
+       "lastModified": "2026-10-30T19:39:14.897"
       }
      ],
-     "at": "2026-10-30T04:28:29.606Z",
-     "status": "Received",
+     "at": "2026-10-31T05:32:04.386Z",
+     "status": "Deferred",
      "present": false,
      "values": null,
      "kinds": null,
-     "lastModified": "2026-10-29T18:17:32.783"
+     "lastModified": "2026-10-30T19:39:14.897"
     },
     "CVE-2026-60111": {
      "first": "2026-10-30T04:28:29.606Z",
@@ -12153,10 +13431,22 @@
         "cna"
        ],
        "lastModified": "2026-10-29T21:17:08.327"
+      },
+      {
+       "at": "2026-10-31T05:32:04.386Z",
+       "status": "Awaiting Analysis",
+       "present": true,
+       "values": [
+        "CWE-284"
+       ],
+       "kinds": [
+        "cna"
+       ],
+       "lastModified": "2026-10-30T17:44:35.820"
       }
      ],
-     "at": "2026-10-30T04:28:29.606Z",
-     "status": "Received",
+     "at": "2026-10-31T05:32:04.386Z",
+     "status": "Awaiting Analysis",
      "present": true,
      "values": [
       "CWE-284"
@@ -12164,7 +13454,7 @@
      "kinds": [
       "cna"
      ],
-     "lastModified": "2026-10-29T21:17:08.327"
+     "lastModified": "2026-10-30T17:44:35.820"
     },
     "CVE-2026-103094": {
      "first": "2026-10-30T04:28:29.606Z",
@@ -12180,10 +13470,22 @@
         "cna"
        ],
        "lastModified": "2026-10-29T21:17:08.447"
+      },
+      {
+       "at": "2026-10-31T05:32:04.386Z",
+       "status": "Awaiting Analysis",
+       "present": true,
+       "values": [
+        "CWE-256"
+       ],
+       "kinds": [
+        "cna"
+       ],
+       "lastModified": "2026-10-30T17:44:35.820"
       }
      ],
-     "at": "2026-10-30T04:28:29.606Z",
-     "status": "Received",
+     "at": "2026-10-31T05:32:04.386Z",
+     "status": "Awaiting Analysis",
      "present": true,
      "values": [
       "CWE-256"
@@ -12191,7 +13493,7 @@
      "kinds": [
       "cna"
      ],
-     "lastModified": "2026-10-29T21:17:08.447"
+     "lastModified": "2026-10-30T17:44:35.820"
     },
     "CVE-2026-118772": {
      "first": "2026-10-30T04:28:29.606Z",
@@ -12207,10 +13509,22 @@
         "cna"
        ],
        "lastModified": "2026-10-29T19:17:19.563"
+      },
+      {
+       "at": "2026-10-31T05:32:04.386Z",
+       "status": "Awaiting Analysis",
+       "present": true,
+       "values": [
+        "CWE-1333"
+       ],
+       "kinds": [
+        "cna"
+       ],
+       "lastModified": "2026-10-30T19:37:07.073"
       }
      ],
-     "at": "2026-10-30T04:28:29.606Z",
-     "status": "Received",
+     "at": "2026-10-31T05:32:04.386Z",
+     "status": "Awaiting Analysis",
      "present": true,
      "values": [
       "CWE-1333"
@@ -12218,7 +13532,7 @@
      "kinds": [
       "cna"
      ],
-     "lastModified": "2026-10-29T19:17:19.563"
+     "lastModified": "2026-10-30T19:37:07.073"
     },
     "CVE-2026-118773": {
      "first": "2026-10-30T04:28:29.606Z",
@@ -12234,10 +13548,22 @@
         "cna"
        ],
        "lastModified": "2026-10-29T19:17:19.720"
+      },
+      {
+       "at": "2026-10-31T05:32:04.386Z",
+       "status": "Awaiting Analysis",
+       "present": true,
+       "values": [
+        "CWE-400"
+       ],
+       "kinds": [
+        "cna"
+       ],
+       "lastModified": "2026-10-30T19:37:07.073"
       }
      ],
-     "at": "2026-10-30T04:28:29.606Z",
-     "status": "Received",
+     "at": "2026-10-31T05:32:04.386Z",
+     "status": "Awaiting Analysis",
      "present": true,
      "values": [
       "CWE-400"
@@ -12245,7 +13571,7 @@
      "kinds": [
       "cna"
      ],
-     "lastModified": "2026-10-29T19:17:19.720"
+     "lastModified": "2026-10-30T19:37:07.073"
     },
     "CVE-2026-118774": {
      "first": "2026-10-30T04:28:29.606Z",
@@ -12261,10 +13587,22 @@
         "cna"
        ],
        "lastModified": "2026-10-29T19:17:19.863"
+      },
+      {
+       "at": "2026-10-31T05:32:04.386Z",
+       "status": "Undergoing Analysis",
+       "present": true,
+       "values": [
+        "CWE-347"
+       ],
+       "kinds": [
+        "cna"
+       ],
+       "lastModified": "2026-10-30T17:07:53.700"
       }
      ],
-     "at": "2026-10-30T04:28:29.606Z",
-     "status": "Received",
+     "at": "2026-10-31T05:32:04.386Z",
+     "status": "Undergoing Analysis",
      "present": true,
      "values": [
       "CWE-347"
@@ -12272,7 +13610,7 @@
      "kinds": [
       "cna"
      ],
-     "lastModified": "2026-10-29T19:17:19.863"
+     "lastModified": "2026-10-30T17:07:53.700"
     },
     "CVE-2026-118775": {
      "first": "2026-10-30T04:28:29.606Z",
@@ -12288,10 +13626,22 @@
         "cna"
        ],
        "lastModified": "2026-10-29T21:17:17.180"
+      },
+      {
+       "at": "2026-10-31T05:32:04.386Z",
+       "status": "Undergoing Analysis",
+       "present": true,
+       "values": [
+        "CWE-190"
+       ],
+       "kinds": [
+        "cna"
+       ],
+       "lastModified": "2026-10-30T17:18:03.880"
       }
      ],
-     "at": "2026-10-30T04:28:29.606Z",
-     "status": "Received",
+     "at": "2026-10-31T05:32:04.386Z",
+     "status": "Undergoing Analysis",
      "present": true,
      "values": [
       "CWE-190"
@@ -12299,7 +13649,7 @@
      "kinds": [
       "cna"
      ],
-     "lastModified": "2026-10-29T21:17:17.180"
+     "lastModified": "2026-10-30T17:18:03.880"
     },
     "CVE-2026-118776": {
      "first": "2026-10-30T04:28:29.606Z",
@@ -12316,10 +13666,23 @@
         "cna"
        ],
        "lastModified": "2026-10-29T19:17:20.147"
+      },
+      {
+       "at": "2026-10-31T05:32:04.386Z",
+       "status": "Undergoing Analysis",
+       "present": true,
+       "values": [
+        "CWE-20",
+        "CWE-354"
+       ],
+       "kinds": [
+        "cna"
+       ],
+       "lastModified": "2026-10-30T17:07:53.700"
       }
      ],
-     "at": "2026-10-30T04:28:29.606Z",
-     "status": "Received",
+     "at": "2026-10-31T05:32:04.386Z",
+     "status": "Undergoing Analysis",
      "present": true,
      "values": [
       "CWE-20",
@@ -12328,7 +13691,7 @@
      "kinds": [
       "cna"
      ],
-     "lastModified": "2026-10-29T19:17:20.147"
+     "lastModified": "2026-10-30T17:07:53.700"
     },
     "CVE-2026-118777": {
      "first": "2026-10-30T04:28:29.606Z",
@@ -12344,10 +13707,22 @@
         "cna"
        ],
        "lastModified": "2026-10-29T19:17:20.283"
+      },
+      {
+       "at": "2026-10-31T05:32:04.386Z",
+       "status": "Undergoing Analysis",
+       "present": true,
+       "values": [
+        "CWE-1321"
+       ],
+       "kinds": [
+        "cna"
+       ],
+       "lastModified": "2026-10-30T17:17:16.110"
       }
      ],
-     "at": "2026-10-30T04:28:29.606Z",
-     "status": "Received",
+     "at": "2026-10-31T05:32:04.386Z",
+     "status": "Undergoing Analysis",
      "present": true,
      "values": [
       "CWE-1321"
@@ -12355,7 +13730,7 @@
      "kinds": [
       "cna"
      ],
-     "lastModified": "2026-10-29T19:17:20.283"
+     "lastModified": "2026-10-30T17:17:16.110"
     },
     "CVE-2026-118778": {
      "first": "2026-10-30T04:28:29.606Z",
@@ -12371,10 +13746,22 @@
         "cna"
        ],
        "lastModified": "2026-10-29T19:17:20.420"
+      },
+      {
+       "at": "2026-10-31T05:32:04.386Z",
+       "status": "Undergoing Analysis",
+       "present": true,
+       "values": [
+        "CWE-476"
+       ],
+       "kinds": [
+        "cna"
+       ],
+       "lastModified": "2026-10-30T17:07:53.700"
       }
      ],
-     "at": "2026-10-30T04:28:29.606Z",
-     "status": "Received",
+     "at": "2026-10-31T05:32:04.386Z",
+     "status": "Undergoing Analysis",
      "present": true,
      "values": [
       "CWE-476"
@@ -12382,7 +13769,7 @@
      "kinds": [
       "cna"
      ],
-     "lastModified": "2026-10-29T19:17:20.420"
+     "lastModified": "2026-10-30T17:07:53.700"
     },
     "CVE-2026-118779": {
      "first": "2026-10-30T04:28:29.606Z",
@@ -12399,10 +13786,23 @@
         "cna"
        ],
        "lastModified": "2026-10-29T21:17:17.287"
+      },
+      {
+       "at": "2026-10-31T05:32:04.386Z",
+       "status": "Undergoing Analysis",
+       "present": true,
+       "values": [
+        "CWE-400",
+        "CWE-1333"
+       ],
+       "kinds": [
+        "cna"
+       ],
+       "lastModified": "2026-10-30T17:18:03.880"
       }
      ],
-     "at": "2026-10-30T04:28:29.606Z",
-     "status": "Received",
+     "at": "2026-10-31T05:32:04.386Z",
+     "status": "Undergoing Analysis",
      "present": true,
      "values": [
       "CWE-400",
@@ -12411,7 +13811,7 @@
      "kinds": [
       "cna"
      ],
-     "lastModified": "2026-10-29T21:17:17.287"
+     "lastModified": "2026-10-30T17:18:03.880"
     },
     "CVE-2026-118780": {
      "first": "2026-10-30T04:28:29.606Z",
@@ -12428,10 +13828,23 @@
         "cna"
        ],
        "lastModified": "2026-10-29T19:17:20.703"
+      },
+      {
+       "at": "2026-10-31T05:32:04.386Z",
+       "status": "Undergoing Analysis",
+       "present": true,
+       "values": [
+        "CWE-295",
+        "CWE-471"
+       ],
+       "kinds": [
+        "cna"
+       ],
+       "lastModified": "2026-10-30T17:07:53.700"
       }
      ],
-     "at": "2026-10-30T04:28:29.606Z",
-     "status": "Received",
+     "at": "2026-10-31T05:32:04.386Z",
+     "status": "Undergoing Analysis",
      "present": true,
      "values": [
       "CWE-295",
@@ -12440,7 +13853,7 @@
      "kinds": [
       "cna"
      ],
-     "lastModified": "2026-10-29T19:17:20.703"
+     "lastModified": "2026-10-30T17:07:53.700"
     },
     "CVE-2026-118781": {
      "first": "2026-10-30T04:28:29.606Z",
@@ -12456,10 +13869,22 @@
         "cna"
        ],
        "lastModified": "2026-10-29T19:17:20.843"
+      },
+      {
+       "at": "2026-10-31T05:32:04.386Z",
+       "status": "Undergoing Analysis",
+       "present": true,
+       "values": [
+        "CWE-835"
+       ],
+       "kinds": [
+        "cna"
+       ],
+       "lastModified": "2026-10-30T17:18:03.880"
       }
      ],
-     "at": "2026-10-30T04:28:29.606Z",
-     "status": "Received",
+     "at": "2026-10-31T05:32:04.386Z",
+     "status": "Undergoing Analysis",
      "present": true,
      "values": [
       "CWE-835"
@@ -12467,7 +13892,7 @@
      "kinds": [
       "cna"
      ],
-     "lastModified": "2026-10-29T19:17:20.843"
+     "lastModified": "2026-10-30T17:18:03.880"
     },
     "CVE-2026-118782": {
      "first": "2026-10-30T04:28:29.606Z",
@@ -12484,10 +13909,23 @@
         "cna"
        ],
        "lastModified": "2026-10-29T19:17:20.983"
+      },
+      {
+       "at": "2026-10-31T05:32:04.386Z",
+       "status": "Undergoing Analysis",
+       "present": true,
+       "values": [
+        "CWE-354",
+        "CWE-1284"
+       ],
+       "kinds": [
+        "cna"
+       ],
+       "lastModified": "2026-10-30T17:18:03.880"
       }
      ],
-     "at": "2026-10-30T04:28:29.606Z",
-     "status": "Received",
+     "at": "2026-10-31T05:32:04.386Z",
+     "status": "Undergoing Analysis",
      "present": true,
      "values": [
       "CWE-354",
@@ -12496,7 +13934,7 @@
      "kinds": [
       "cna"
      ],
-     "lastModified": "2026-10-29T19:17:20.983"
+     "lastModified": "2026-10-30T17:18:03.880"
     },
     "CVE-2026-119168": {
      "first": "2026-10-30T04:28:29.606Z",
@@ -12512,10 +13950,22 @@
         "cna"
        ],
        "lastModified": "2026-10-29T19:17:21.120"
+      },
+      {
+       "at": "2026-10-31T05:32:04.386Z",
+       "status": "Awaiting Analysis",
+       "present": true,
+       "values": [
+        "CWE-59"
+       ],
+       "kinds": [
+        "cna"
+       ],
+       "lastModified": "2026-10-30T19:37:07.073"
       }
      ],
-     "at": "2026-10-30T04:28:29.606Z",
-     "status": "Received",
+     "at": "2026-10-31T05:32:04.386Z",
+     "status": "Awaiting Analysis",
      "present": true,
      "values": [
       "CWE-59"
@@ -12523,7 +13973,7 @@
      "kinds": [
       "cna"
      ],
-     "lastModified": "2026-10-29T19:17:21.120"
+     "lastModified": "2026-10-30T19:37:07.073"
     },
     "CVE-2026-119249": {
      "first": "2026-10-30T04:28:29.606Z",
@@ -12539,10 +13989,22 @@
         "cna"
        ],
        "lastModified": "2026-10-29T21:17:20.567"
+      },
+      {
+       "at": "2026-10-31T05:32:04.386Z",
+       "status": "Awaiting Analysis",
+       "present": true,
+       "values": [
+        "CWE-1327"
+       ],
+       "kinds": [
+        "cna"
+       ],
+       "lastModified": "2026-10-30T17:44:35.820"
       }
      ],
-     "at": "2026-10-30T04:28:29.606Z",
-     "status": "Received",
+     "at": "2026-10-31T05:32:04.386Z",
+     "status": "Awaiting Analysis",
      "present": true,
      "values": [
       "CWE-1327"
@@ -12550,7 +14012,7 @@
      "kinds": [
       "cna"
      ],
-     "lastModified": "2026-10-29T21:17:20.567"
+     "lastModified": "2026-10-30T17:44:35.820"
     },
     "CVE-2026-119250": {
      "first": "2026-10-30T04:28:29.606Z",
@@ -12566,10 +14028,22 @@
         "cna"
        ],
        "lastModified": "2026-10-29T21:17:20.667"
+      },
+      {
+       "at": "2026-10-31T05:32:04.386Z",
+       "status": "Awaiting Analysis",
+       "present": true,
+       "values": [
+        "CWE-73"
+       ],
+       "kinds": [
+        "cna"
+       ],
+       "lastModified": "2026-10-30T17:44:35.820"
       }
      ],
-     "at": "2026-10-30T04:28:29.606Z",
-     "status": "Received",
+     "at": "2026-10-31T05:32:04.386Z",
+     "status": "Awaiting Analysis",
      "present": true,
      "values": [
       "CWE-73"
@@ -12577,7 +14051,7 @@
      "kinds": [
       "cna"
      ],
-     "lastModified": "2026-10-29T21:17:20.667"
+     "lastModified": "2026-10-30T17:44:35.820"
     },
     "CVE-2026-119251": {
      "first": "2026-10-30T04:28:29.606Z",
@@ -12593,10 +14067,22 @@
         "cna"
        ],
        "lastModified": "2026-10-29T21:17:20.790"
+      },
+      {
+       "at": "2026-10-31T05:32:04.386Z",
+       "status": "Awaiting Analysis",
+       "present": true,
+       "values": [
+        "CWE-284"
+       ],
+       "kinds": [
+        "cna"
+       ],
+       "lastModified": "2026-10-30T17:44:35.820"
       }
      ],
-     "at": "2026-10-30T04:28:29.606Z",
-     "status": "Received",
+     "at": "2026-10-31T05:32:04.386Z",
+     "status": "Awaiting Analysis",
      "present": true,
      "values": [
       "CWE-284"
@@ -12604,7 +14090,7 @@
      "kinds": [
       "cna"
      ],
-     "lastModified": "2026-10-29T21:17:20.790"
+     "lastModified": "2026-10-30T17:44:35.820"
     },
     "CVE-2026-41216": {
      "first": "2026-10-30T04:28:29.606Z",
@@ -12620,10 +14106,22 @@
         "cna"
        ],
        "lastModified": "2026-10-29T19:17:21.710"
+      },
+      {
+       "at": "2026-10-31T05:32:04.386Z",
+       "status": "Awaiting Analysis",
+       "present": true,
+       "values": [
+        "CWE-825"
+       ],
+       "kinds": [
+        "cna"
+       ],
+       "lastModified": "2026-10-30T18:17:30.177"
       }
      ],
-     "at": "2026-10-30T04:28:29.606Z",
-     "status": "Received",
+     "at": "2026-10-31T05:32:04.386Z",
+     "status": "Awaiting Analysis",
      "present": true,
      "values": [
       "CWE-825"
@@ -12631,7 +14129,7 @@
      "kinds": [
       "cna"
      ],
-     "lastModified": "2026-10-29T19:17:21.710"
+     "lastModified": "2026-10-30T18:17:30.177"
     },
     "CVE-2026-42057": {
      "first": "2026-10-30T04:28:29.606Z",
@@ -12647,10 +14145,22 @@
         "cna"
        ],
        "lastModified": "2026-10-29T19:17:21.837"
+      },
+      {
+       "at": "2026-10-31T05:32:04.386Z",
+       "status": "Awaiting Analysis",
+       "present": true,
+       "values": [
+        "CWE-825"
+       ],
+       "kinds": [
+        "cna"
+       ],
+       "lastModified": "2026-10-30T18:17:30.293"
       }
      ],
-     "at": "2026-10-30T04:28:29.606Z",
-     "status": "Received",
+     "at": "2026-10-31T05:32:04.386Z",
+     "status": "Awaiting Analysis",
      "present": true,
      "values": [
       "CWE-825"
@@ -12658,7 +14168,7 @@
      "kinds": [
       "cna"
      ],
-     "lastModified": "2026-10-29T19:17:21.837"
+     "lastModified": "2026-10-30T18:17:30.293"
     },
     "CVE-2026-58118": {
      "first": "2026-10-30T04:28:29.606Z",
@@ -12731,10 +14241,22 @@
         "cna"
        ],
        "lastModified": "2026-10-29T21:17:30.567"
+      },
+      {
+       "at": "2026-10-31T05:32:04.386Z",
+       "status": "Awaiting Analysis",
+       "present": true,
+       "values": [
+        "CWE-284"
+       ],
+       "kinds": [
+        "cna"
+       ],
+       "lastModified": "2026-10-30T17:44:35.820"
       }
      ],
-     "at": "2026-10-30T04:28:29.606Z",
-     "status": "Received",
+     "at": "2026-10-31T05:32:04.386Z",
+     "status": "Awaiting Analysis",
      "present": true,
      "values": [
       "CWE-284"
@@ -12742,7 +14264,7 @@
      "kinds": [
       "cna"
      ],
-     "lastModified": "2026-10-29T21:17:30.567"
+     "lastModified": "2026-10-30T17:44:35.820"
     },
     "CVE-2026-8822": {
      "first": "2026-10-30T04:28:29.606Z",
@@ -12758,10 +14280,22 @@
         "cna"
        ],
        "lastModified": "2026-10-29T19:17:28.173"
+      },
+      {
+       "at": "2026-10-31T05:32:04.386Z",
+       "status": "Awaiting Analysis",
+       "present": true,
+       "values": [
+        "CWE-787"
+       ],
+       "kinds": [
+        "cna"
+       ],
+       "lastModified": "2026-10-30T18:18:16.343"
       }
      ],
-     "at": "2026-10-30T04:28:29.606Z",
-     "status": "Received",
+     "at": "2026-10-31T05:32:04.386Z",
+     "status": "Awaiting Analysis",
      "present": true,
      "values": [
       "CWE-787"
@@ -12769,7 +14303,7 @@
      "kinds": [
       "cna"
      ],
-     "lastModified": "2026-10-29T19:17:28.173"
+     "lastModified": "2026-10-30T18:18:16.343"
     },
     "CVE-2026-8824": {
      "first": "2026-10-30T04:28:29.606Z",
@@ -12785,10 +14319,22 @@
         "cna"
        ],
        "lastModified": "2026-10-29T19:17:28.330"
+      },
+      {
+       "at": "2026-10-31T05:32:04.386Z",
+       "status": "Awaiting Analysis",
+       "present": true,
+       "values": [
+        "CWE-787"
+       ],
+       "kinds": [
+        "cna"
+       ],
+       "lastModified": "2026-10-30T18:18:16.467"
       }
      ],
-     "at": "2026-10-30T04:28:29.606Z",
-     "status": "Received",
+     "at": "2026-10-31T05:32:04.386Z",
+     "status": "Awaiting Analysis",
      "present": true,
      "values": [
       "CWE-787"
@@ -12796,7 +14342,7 @@
      "kinds": [
       "cna"
      ],
-     "lastModified": "2026-10-29T19:17:28.330"
+     "lastModified": "2026-10-30T18:18:16.467"
     },
     "CVE-2026-9535": {
      "first": "2026-10-30T04:28:29.606Z",
@@ -12812,10 +14358,22 @@
         "cna"
        ],
        "lastModified": "2026-10-29T19:17:29.923"
+      },
+      {
+       "at": "2026-10-31T05:32:04.386Z",
+       "status": "Awaiting Analysis",
+       "present": true,
+       "values": [
+        "CWE-125"
+       ],
+       "kinds": [
+        "cna"
+       ],
+       "lastModified": "2026-10-30T18:18:21.757"
       }
      ],
-     "at": "2026-10-30T04:28:29.606Z",
-     "status": "Received",
+     "at": "2026-10-31T05:32:04.386Z",
+     "status": "Awaiting Analysis",
      "present": true,
      "values": [
       "CWE-125"
@@ -12823,7 +14381,7 @@
      "kinds": [
       "cna"
      ],
-     "lastModified": "2026-10-29T19:17:29.923"
+     "lastModified": "2026-10-30T18:18:21.757"
     },
     "CVE-2026-9536": {
      "first": "2026-10-30T04:28:29.606Z",
@@ -12839,10 +14397,22 @@
         "cna"
        ],
        "lastModified": "2026-10-29T19:17:30.047"
+      },
+      {
+       "at": "2026-10-31T05:32:04.386Z",
+       "status": "Awaiting Analysis",
+       "present": true,
+       "values": [
+        "CWE-122"
+       ],
+       "kinds": [
+        "cna"
+       ],
+       "lastModified": "2026-10-30T18:18:21.873"
       }
      ],
-     "at": "2026-10-30T04:28:29.606Z",
-     "status": "Received",
+     "at": "2026-10-31T05:32:04.386Z",
+     "status": "Awaiting Analysis",
      "present": true,
      "values": [
       "CWE-122"
@@ -12850,7 +14420,7 @@
      "kinds": [
       "cna"
      ],
-     "lastModified": "2026-10-29T19:17:30.047"
+     "lastModified": "2026-10-30T18:18:21.873"
     },
     "CVE-2026-119186": {
      "first": "2026-10-30T04:28:29.606Z",
@@ -12867,10 +14437,23 @@
         "cna"
        ],
        "lastModified": "2026-10-29T21:17:18.350"
+      },
+      {
+       "at": "2026-10-31T05:32:04.386Z",
+       "status": "Undergoing Analysis",
+       "present": true,
+       "values": [
+        "CWE-354",
+        "CWE-1284"
+       ],
+       "kinds": [
+        "cna"
+       ],
+       "lastModified": "2026-10-30T17:18:03.880"
       }
      ],
-     "at": "2026-10-30T04:28:29.606Z",
-     "status": "Received",
+     "at": "2026-10-31T05:32:04.386Z",
+     "status": "Undergoing Analysis",
      "present": true,
      "values": [
       "CWE-354",
@@ -12879,7 +14462,7 @@
      "kinds": [
       "cna"
      ],
-     "lastModified": "2026-10-29T21:17:18.350"
+     "lastModified": "2026-10-30T17:18:03.880"
     },
     "CVE-2026-119187": {
      "first": "2026-10-30T04:28:29.606Z",
@@ -12895,10 +14478,22 @@
         "cna"
        ],
        "lastModified": "2026-10-29T20:17:29.647"
+      },
+      {
+       "at": "2026-10-31T05:32:04.386Z",
+       "status": "Analyzed",
+       "present": true,
+       "values": [
+        "CWE-674"
+       ],
+       "kinds": [
+        "cna"
+       ],
+       "lastModified": "2026-10-31T00:42:57.670"
       }
      ],
-     "at": "2026-10-30T04:28:29.606Z",
-     "status": "Received",
+     "at": "2026-10-31T05:32:04.386Z",
+     "status": "Analyzed",
      "present": true,
      "values": [
       "CWE-674"
@@ -12906,7 +14501,7 @@
      "kinds": [
       "cna"
      ],
-     "lastModified": "2026-10-29T20:17:29.647"
+     "lastModified": "2026-10-31T00:42:57.670"
     },
     "CVE-2026-119188": {
      "first": "2026-10-30T04:28:29.606Z",
@@ -12923,10 +14518,23 @@
         "cna"
        ],
        "lastModified": "2026-10-29T20:17:29.783"
+      },
+      {
+       "at": "2026-10-31T05:32:04.386Z",
+       "status": "Undergoing Analysis",
+       "present": true,
+       "values": [
+        "CWE-248",
+        "CWE-476"
+       ],
+       "kinds": [
+        "cna"
+       ],
+       "lastModified": "2026-10-30T17:18:03.880"
       }
      ],
-     "at": "2026-10-30T04:28:29.606Z",
-     "status": "Received",
+     "at": "2026-10-31T05:32:04.386Z",
+     "status": "Undergoing Analysis",
      "present": true,
      "values": [
       "CWE-248",
@@ -12935,7 +14543,7 @@
      "kinds": [
       "cna"
      ],
-     "lastModified": "2026-10-29T20:17:29.783"
+     "lastModified": "2026-10-30T17:18:03.880"
     },
     "CVE-2026-119189": {
      "first": "2026-10-30T04:28:29.606Z",
@@ -12951,10 +14559,22 @@
         "cna"
        ],
        "lastModified": "2026-10-29T20:17:29.923"
+      },
+      {
+       "at": "2026-10-31T05:32:04.386Z",
+       "status": "Undergoing Analysis",
+       "present": true,
+       "values": [
+        "CWE-295"
+       ],
+       "kinds": [
+        "cna"
+       ],
+       "lastModified": "2026-10-30T17:18:03.880"
       }
      ],
-     "at": "2026-10-30T04:28:29.606Z",
-     "status": "Received",
+     "at": "2026-10-31T05:32:04.386Z",
+     "status": "Undergoing Analysis",
      "present": true,
      "values": [
       "CWE-295"
@@ -12962,7 +14582,7 @@
      "kinds": [
       "cna"
      ],
-     "lastModified": "2026-10-29T20:17:29.923"
+     "lastModified": "2026-10-30T17:18:03.880"
     },
     "CVE-2026-119190": {
      "first": "2026-10-30T04:28:29.606Z",
@@ -12979,10 +14599,23 @@
         "cna"
        ],
        "lastModified": "2026-10-29T21:17:18.450"
+      },
+      {
+       "at": "2026-10-31T05:32:04.386Z",
+       "status": "Undergoing Analysis",
+       "present": true,
+       "values": [
+        "CWE-295",
+        "CWE-436"
+       ],
+       "kinds": [
+        "cna"
+       ],
+       "lastModified": "2026-10-30T17:18:03.880"
       }
      ],
-     "at": "2026-10-30T04:28:29.606Z",
-     "status": "Received",
+     "at": "2026-10-31T05:32:04.386Z",
+     "status": "Undergoing Analysis",
      "present": true,
      "values": [
       "CWE-295",
@@ -12991,7 +14624,7 @@
      "kinds": [
       "cna"
      ],
-     "lastModified": "2026-10-29T21:17:18.450"
+     "lastModified": "2026-10-30T17:18:03.880"
     },
     "CVE-2026-119191": {
      "first": "2026-10-30T04:28:29.606Z",
@@ -13008,10 +14641,23 @@
         "cna"
        ],
        "lastModified": "2026-10-29T20:17:30.197"
+      },
+      {
+       "at": "2026-10-31T05:32:04.386Z",
+       "status": "Analyzed",
+       "present": true,
+       "values": [
+        "CWE-400",
+        "CWE-674"
+       ],
+       "kinds": [
+        "cna"
+       ],
+       "lastModified": "2026-10-31T00:41:12.507"
       }
      ],
-     "at": "2026-10-30T04:28:29.606Z",
-     "status": "Received",
+     "at": "2026-10-31T05:32:04.386Z",
+     "status": "Analyzed",
      "present": true,
      "values": [
       "CWE-400",
@@ -13020,7 +14666,7 @@
      "kinds": [
       "cna"
      ],
-     "lastModified": "2026-10-29T20:17:30.197"
+     "lastModified": "2026-10-31T00:41:12.507"
     },
     "CVE-2026-119193": {
      "first": "2026-10-30T04:28:29.606Z",
@@ -13036,10 +14682,22 @@
         "cna"
        ],
        "lastModified": "2026-10-29T20:17:30.340"
+      },
+      {
+       "at": "2026-10-31T05:32:04.386Z",
+       "status": "Awaiting Analysis",
+       "present": true,
+       "values": [
+        "CWE-379"
+       ],
+       "kinds": [
+        "cna"
+       ],
+       "lastModified": "2026-10-30T17:18:03.880"
       }
      ],
-     "at": "2026-10-30T04:28:29.606Z",
-     "status": "Received",
+     "at": "2026-10-31T05:32:04.386Z",
+     "status": "Awaiting Analysis",
      "present": true,
      "values": [
       "CWE-379"
@@ -13047,7 +14705,7 @@
      "kinds": [
       "cna"
      ],
-     "lastModified": "2026-10-29T20:17:30.340"
+     "lastModified": "2026-10-30T17:18:03.880"
     },
     "CVE-2026-119194": {
      "first": "2026-10-30T04:28:29.606Z",
@@ -13063,10 +14721,22 @@
         "cna"
        ],
        "lastModified": "2026-10-29T20:17:30.480"
+      },
+      {
+       "at": "2026-10-31T05:32:04.386Z",
+       "status": "Awaiting Analysis",
+       "present": true,
+       "values": [
+        "CWE-407"
+       ],
+       "kinds": [
+        "cna"
+       ],
+       "lastModified": "2026-10-30T17:18:03.880"
       }
      ],
-     "at": "2026-10-30T04:28:29.606Z",
-     "status": "Received",
+     "at": "2026-10-31T05:32:04.386Z",
+     "status": "Awaiting Analysis",
      "present": true,
      "values": [
       "CWE-407"
@@ -13074,7 +14744,7 @@
      "kinds": [
       "cna"
      ],
-     "lastModified": "2026-10-29T20:17:30.480"
+     "lastModified": "2026-10-30T17:18:03.880"
     },
     "CVE-2026-119195": {
      "first": "2026-10-30T04:28:29.606Z",
@@ -13090,10 +14760,22 @@
         "cna"
        ],
        "lastModified": "2026-10-29T21:17:18.553"
+      },
+      {
+       "at": "2026-10-31T05:32:04.386Z",
+       "status": "Awaiting Analysis",
+       "present": true,
+       "values": [
+        "CWE-407"
+       ],
+       "kinds": [
+        "cna"
+       ],
+       "lastModified": "2026-10-30T17:18:03.880"
       }
      ],
-     "at": "2026-10-30T04:28:29.606Z",
-     "status": "Received",
+     "at": "2026-10-31T05:32:04.386Z",
+     "status": "Awaiting Analysis",
      "present": true,
      "values": [
       "CWE-407"
@@ -13101,7 +14783,7 @@
      "kinds": [
       "cna"
      ],
-     "lastModified": "2026-10-29T21:17:18.553"
+     "lastModified": "2026-10-30T17:18:03.880"
     },
     "CVE-2026-119196": {
      "first": "2026-10-30T04:28:29.606Z",
@@ -13117,10 +14799,22 @@
         "cna"
        ],
        "lastModified": "2026-10-29T20:17:30.770"
+      },
+      {
+       "at": "2026-10-31T05:32:04.386Z",
+       "status": "Awaiting Analysis",
+       "present": true,
+       "values": [
+        "CWE-407"
+       ],
+       "kinds": [
+        "cna"
+       ],
+       "lastModified": "2026-10-30T17:18:03.880"
       }
      ],
-     "at": "2026-10-30T04:28:29.606Z",
-     "status": "Received",
+     "at": "2026-10-31T05:32:04.386Z",
+     "status": "Awaiting Analysis",
      "present": true,
      "values": [
       "CWE-407"
@@ -13128,7 +14822,7 @@
      "kinds": [
       "cna"
      ],
-     "lastModified": "2026-10-29T20:17:30.770"
+     "lastModified": "2026-10-30T17:18:03.880"
     },
     "CVE-2026-119197": {
      "first": "2026-10-30T04:28:29.606Z",
@@ -13144,10 +14838,22 @@
         "cna"
        ],
        "lastModified": "2026-10-29T20:17:30.907"
+      },
+      {
+       "at": "2026-10-31T05:32:04.386Z",
+       "status": "Awaiting Analysis",
+       "present": true,
+       "values": [
+        "CWE-407"
+       ],
+       "kinds": [
+        "cna"
+       ],
+       "lastModified": "2026-10-30T17:18:03.880"
       }
      ],
-     "at": "2026-10-30T04:28:29.606Z",
-     "status": "Received",
+     "at": "2026-10-31T05:32:04.386Z",
+     "status": "Awaiting Analysis",
      "present": true,
      "values": [
       "CWE-407"
@@ -13155,7 +14861,7 @@
      "kinds": [
       "cna"
      ],
-     "lastModified": "2026-10-29T20:17:30.907"
+     "lastModified": "2026-10-30T17:18:03.880"
     },
     "CVE-2026-51831": {
      "first": "2026-10-30T04:28:29.606Z",
@@ -13167,14 +14873,22 @@
        "values": null,
        "kinds": null,
        "lastModified": "2026-10-29T20:17:31.450"
+      },
+      {
+       "at": "2026-10-31T05:32:04.386Z",
+       "status": "Awaiting Analysis",
+       "present": false,
+       "values": null,
+       "kinds": null,
+       "lastModified": "2026-10-30T19:37:07.073"
       }
      ],
-     "at": "2026-10-30T04:28:29.606Z",
-     "status": "Received",
+     "at": "2026-10-31T05:32:04.386Z",
+     "status": "Awaiting Analysis",
      "present": false,
      "values": null,
      "kinds": null,
-     "lastModified": "2026-10-29T20:17:31.450"
+     "lastModified": "2026-10-30T19:37:07.073"
     },
     "CVE-2026-51832": {
      "first": "2026-10-30T04:28:29.606Z",
@@ -13186,14 +14900,22 @@
        "values": null,
        "kinds": null,
        "lastModified": "2026-10-29T20:17:31.570"
+      },
+      {
+       "at": "2026-10-31T05:32:04.386Z",
+       "status": "Awaiting Analysis",
+       "present": false,
+       "values": null,
+       "kinds": null,
+       "lastModified": "2026-10-30T19:37:07.073"
       }
      ],
-     "at": "2026-10-30T04:28:29.606Z",
-     "status": "Received",
+     "at": "2026-10-31T05:32:04.386Z",
+     "status": "Awaiting Analysis",
      "present": false,
      "values": null,
      "kinds": null,
-     "lastModified": "2026-10-29T20:17:31.570"
+     "lastModified": "2026-10-30T19:37:07.073"
     },
     "CVE-2026-67203": {
      "first": "2026-10-30T04:28:29.606Z",
@@ -13258,7 +14980,8 @@
      "kinds": [
       "cna"
      ],
-     "lastModified": "2026-10-29T20:17:36.557"
+     "lastModified": "2026-10-30T17:17:30.957",
+     "version": "2026-10-31T05:32:04.386Z"
     },
     "CVE-2026-119198": {
      "first": "2026-10-30T04:28:29.606Z",
@@ -13274,10 +14997,22 @@
         "cna"
        ],
        "lastModified": "2026-10-29T21:17:18.653"
+      },
+      {
+       "at": "2026-10-31T05:32:04.386Z",
+       "status": "Awaiting Analysis",
+       "present": true,
+       "values": [
+        "CWE-73"
+       ],
+       "kinds": [
+        "cna"
+       ],
+       "lastModified": "2026-10-30T17:18:03.880"
       }
      ],
-     "at": "2026-10-30T04:28:29.606Z",
-     "status": "Received",
+     "at": "2026-10-31T05:32:04.386Z",
+     "status": "Awaiting Analysis",
      "present": true,
      "values": [
       "CWE-73"
@@ -13285,7 +15020,7 @@
      "kinds": [
       "cna"
      ],
-     "lastModified": "2026-10-29T21:17:18.653"
+     "lastModified": "2026-10-30T17:18:03.880"
     },
     "CVE-2026-119199": {
      "first": "2026-10-30T04:28:29.606Z",
@@ -13302,10 +15037,23 @@
         "cna"
        ],
        "lastModified": "2026-10-29T21:17:18.797"
+      },
+      {
+       "at": "2026-10-31T05:32:04.386Z",
+       "status": "Awaiting Analysis",
+       "present": true,
+       "values": [
+        "CWE-200",
+        "CWE-538"
+       ],
+       "kinds": [
+        "cna"
+       ],
+       "lastModified": "2026-10-30T17:18:03.880"
       }
      ],
-     "at": "2026-10-30T04:28:29.606Z",
-     "status": "Received",
+     "at": "2026-10-31T05:32:04.386Z",
+     "status": "Awaiting Analysis",
      "present": true,
      "values": [
       "CWE-200",
@@ -13314,7 +15062,7 @@
      "kinds": [
       "cna"
      ],
-     "lastModified": "2026-10-29T21:17:18.797"
+     "lastModified": "2026-10-30T17:18:03.880"
     },
     "CVE-2026-119200": {
      "first": "2026-10-30T04:28:29.606Z",
@@ -13332,10 +15080,24 @@
         "cna"
        ],
        "lastModified": "2026-10-29T21:17:18.943"
+      },
+      {
+       "at": "2026-10-31T05:32:04.386Z",
+       "status": "Awaiting Analysis",
+       "present": true,
+       "values": [
+        "CWE-41",
+        "CWE-436",
+        "CWE-863"
+       ],
+       "kinds": [
+        "cna"
+       ],
+       "lastModified": "2026-10-30T17:18:03.880"
       }
      ],
-     "at": "2026-10-30T04:28:29.606Z",
-     "status": "Received",
+     "at": "2026-10-31T05:32:04.386Z",
+     "status": "Awaiting Analysis",
      "present": true,
      "values": [
       "CWE-41",
@@ -13345,7 +15107,7 @@
      "kinds": [
       "cna"
      ],
-     "lastModified": "2026-10-29T21:17:18.943"
+     "lastModified": "2026-10-30T17:18:03.880"
     },
     "CVE-2026-119201": {
      "first": "2026-10-30T04:28:29.606Z",
@@ -13361,10 +15123,22 @@
         "cna"
        ],
        "lastModified": "2026-10-29T21:17:19.077"
+      },
+      {
+       "at": "2026-10-31T05:32:04.386Z",
+       "status": "Awaiting Analysis",
+       "present": true,
+       "values": [
+        "CWE-552"
+       ],
+       "kinds": [
+        "cna"
+       ],
+       "lastModified": "2026-10-30T17:18:03.880"
       }
      ],
-     "at": "2026-10-30T04:28:29.606Z",
-     "status": "Received",
+     "at": "2026-10-31T05:32:04.386Z",
+     "status": "Awaiting Analysis",
      "present": true,
      "values": [
       "CWE-552"
@@ -13372,7 +15146,7 @@
      "kinds": [
       "cna"
      ],
-     "lastModified": "2026-10-29T21:17:19.077"
+     "lastModified": "2026-10-30T17:18:03.880"
     },
     "CVE-2026-119202": {
      "first": "2026-10-30T04:28:29.606Z",
@@ -13388,10 +15162,22 @@
         "cna"
        ],
        "lastModified": "2026-10-29T21:17:19.217"
+      },
+      {
+       "at": "2026-10-31T05:32:04.386Z",
+       "status": "Deferred",
+       "present": true,
+       "values": [
+        "CWE-1333"
+       ],
+       "kinds": [
+        "cna"
+       ],
+       "lastModified": "2026-10-30T19:39:14.897"
       }
      ],
-     "at": "2026-10-30T04:28:29.606Z",
-     "status": "Received",
+     "at": "2026-10-31T05:32:04.386Z",
+     "status": "Deferred",
      "present": true,
      "values": [
       "CWE-1333"
@@ -13399,7 +15185,7 @@
      "kinds": [
       "cna"
      ],
-     "lastModified": "2026-10-29T21:17:19.217"
+     "lastModified": "2026-10-30T19:39:14.897"
     },
     "CVE-2026-119203": {
      "first": "2026-10-30T04:28:29.606Z",
@@ -13415,10 +15201,22 @@
         "cna"
        ],
        "lastModified": "2026-10-29T21:17:19.377"
+      },
+      {
+       "at": "2026-10-31T05:32:04.386Z",
+       "status": "Undergoing Analysis",
+       "present": true,
+       "values": [
+        "CWE-835"
+       ],
+       "kinds": [
+        "cna"
+       ],
+       "lastModified": "2026-10-30T17:18:03.880"
       }
      ],
-     "at": "2026-10-30T04:28:29.606Z",
-     "status": "Received",
+     "at": "2026-10-31T05:32:04.386Z",
+     "status": "Undergoing Analysis",
      "present": true,
      "values": [
       "CWE-835"
@@ -13426,7 +15224,7 @@
      "kinds": [
       "cna"
      ],
-     "lastModified": "2026-10-29T21:17:19.377"
+     "lastModified": "2026-10-30T17:18:03.880"
     },
     "CVE-2026-119204": {
      "first": "2026-10-30T04:28:29.606Z",
@@ -13442,10 +15240,22 @@
         "cna"
        ],
        "lastModified": "2026-10-29T21:17:19.527"
+      },
+      {
+       "at": "2026-10-31T05:32:04.386Z",
+       "status": "Undergoing Analysis",
+       "present": true,
+       "values": [
+        "CWE-400"
+       ],
+       "kinds": [
+        "cna"
+       ],
+       "lastModified": "2026-10-30T17:18:03.880"
       }
      ],
-     "at": "2026-10-30T04:28:29.606Z",
-     "status": "Received",
+     "at": "2026-10-31T05:32:04.386Z",
+     "status": "Undergoing Analysis",
      "present": true,
      "values": [
       "CWE-400"
@@ -13453,7 +15263,7 @@
      "kinds": [
       "cna"
      ],
-     "lastModified": "2026-10-29T21:17:19.527"
+     "lastModified": "2026-10-30T17:18:03.880"
     },
     "CVE-2026-119205": {
      "first": "2026-10-30T04:28:29.606Z",
@@ -13469,10 +15279,22 @@
         "cna"
        ],
        "lastModified": "2026-10-29T21:17:19.677"
+      },
+      {
+       "at": "2026-10-31T05:32:04.386Z",
+       "status": "Undergoing Analysis",
+       "present": true,
+       "values": [
+        "CWE-835"
+       ],
+       "kinds": [
+        "cna"
+       ],
+       "lastModified": "2026-10-30T17:18:03.880"
       }
      ],
-     "at": "2026-10-30T04:28:29.606Z",
-     "status": "Received",
+     "at": "2026-10-31T05:32:04.386Z",
+     "status": "Undergoing Analysis",
      "present": true,
      "values": [
       "CWE-835"
@@ -13480,7 +15302,7 @@
      "kinds": [
       "cna"
      ],
-     "lastModified": "2026-10-29T21:17:19.677"
+     "lastModified": "2026-10-30T17:18:03.880"
     },
     "CVE-2026-119206": {
      "first": "2026-10-30T04:28:29.606Z",
@@ -13496,10 +15318,22 @@
         "cna"
        ],
        "lastModified": "2026-10-29T21:17:19.817"
+      },
+      {
+       "at": "2026-10-31T05:32:04.386Z",
+       "status": "Undergoing Analysis",
+       "present": true,
+       "values": [
+        "CWE-400"
+       ],
+       "kinds": [
+        "cna"
+       ],
+       "lastModified": "2026-10-30T17:18:03.880"
       }
      ],
-     "at": "2026-10-30T04:28:29.606Z",
-     "status": "Received",
+     "at": "2026-10-31T05:32:04.386Z",
+     "status": "Undergoing Analysis",
      "present": true,
      "values": [
       "CWE-400"
@@ -13507,7 +15341,7 @@
      "kinds": [
       "cna"
      ],
-     "lastModified": "2026-10-29T21:17:19.817"
+     "lastModified": "2026-10-30T17:18:03.880"
     },
     "CVE-2026-119207": {
      "first": "2026-10-30T04:28:29.606Z",
@@ -13524,10 +15358,23 @@
         "cna"
        ],
        "lastModified": "2026-10-29T21:17:19.953"
+      },
+      {
+       "at": "2026-10-31T05:32:04.386Z",
+       "status": "Undergoing Analysis",
+       "present": true,
+       "values": [
+        "CWE-400",
+        "CWE-405"
+       ],
+       "kinds": [
+        "cna"
+       ],
+       "lastModified": "2026-10-30T17:18:03.880"
       }
      ],
-     "at": "2026-10-30T04:28:29.606Z",
-     "status": "Received",
+     "at": "2026-10-31T05:32:04.386Z",
+     "status": "Undergoing Analysis",
      "present": true,
      "values": [
       "CWE-400",
@@ -13536,7 +15383,7 @@
      "kinds": [
       "cna"
      ],
-     "lastModified": "2026-10-29T21:17:19.953"
+     "lastModified": "2026-10-30T17:18:03.880"
     },
     "CVE-2026-119208": {
      "first": "2026-10-30T04:28:29.606Z",
@@ -13552,10 +15399,22 @@
         "cna"
        ],
        "lastModified": "2026-10-29T21:17:20.090"
+      },
+      {
+       "at": "2026-10-31T05:32:04.386Z",
+       "status": "Undergoing Analysis",
+       "present": true,
+       "values": [
+        "CWE-400"
+       ],
+       "kinds": [
+        "cna"
+       ],
+       "lastModified": "2026-10-30T17:18:03.880"
       }
      ],
-     "at": "2026-10-30T04:28:29.606Z",
-     "status": "Received",
+     "at": "2026-10-31T05:32:04.386Z",
+     "status": "Undergoing Analysis",
      "present": true,
      "values": [
       "CWE-400"
@@ -13563,7 +15422,7 @@
      "kinds": [
       "cna"
      ],
-     "lastModified": "2026-10-29T21:17:20.090"
+     "lastModified": "2026-10-30T17:18:03.880"
     },
     "CVE-2026-119209": {
      "first": "2026-10-30T04:28:29.606Z",
@@ -13580,10 +15439,23 @@
         "cna"
        ],
        "lastModified": "2026-10-29T21:17:20.230"
+      },
+      {
+       "at": "2026-10-31T05:32:04.386Z",
+       "status": "Analyzed",
+       "present": true,
+       "values": [
+        "CWE-400",
+        "CWE-770"
+       ],
+       "kinds": [
+        "cna"
+       ],
+       "lastModified": "2026-10-31T00:39:43.507"
       }
      ],
-     "at": "2026-10-30T04:28:29.606Z",
-     "status": "Received",
+     "at": "2026-10-31T05:32:04.386Z",
+     "status": "Analyzed",
      "present": true,
      "values": [
       "CWE-400",
@@ -13592,7 +15464,7 @@
      "kinds": [
       "cna"
      ],
-     "lastModified": "2026-10-29T21:17:20.230"
+     "lastModified": "2026-10-31T00:39:43.507"
     },
     "CVE-2026-119210": {
      "first": "2026-10-30T04:28:29.606Z",
@@ -13609,10 +15481,23 @@
         "cna"
        ],
        "lastModified": "2026-10-29T21:17:20.403"
+      },
+      {
+       "at": "2026-10-31T05:32:04.386Z",
+       "status": "Awaiting Analysis",
+       "present": true,
+       "values": [
+        "CWE-20",
+        "CWE-73"
+       ],
+       "kinds": [
+        "cna"
+       ],
+       "lastModified": "2026-10-30T17:18:03.880"
       }
      ],
-     "at": "2026-10-30T04:28:29.606Z",
-     "status": "Received",
+     "at": "2026-10-31T05:32:04.386Z",
+     "status": "Awaiting Analysis",
      "present": true,
      "values": [
       "CWE-20",
@@ -13621,7 +15506,7 @@
      "kinds": [
       "cna"
      ],
-     "lastModified": "2026-10-29T21:17:20.403"
+     "lastModified": "2026-10-30T17:18:03.880"
     },
     "CVE-2026-119276": {
      "first": "2026-10-30T04:28:29.606Z",
@@ -13638,10 +15523,23 @@
         "cna"
        ],
        "lastModified": "2026-10-29T21:17:20.907"
+      },
+      {
+       "at": "2026-10-31T05:32:04.386Z",
+       "status": "Awaiting Analysis",
+       "present": true,
+       "values": [
+        "CWE-130",
+        "CWE-789"
+       ],
+       "kinds": [
+        "cna"
+       ],
+       "lastModified": "2026-10-30T17:18:03.880"
       }
      ],
-     "at": "2026-10-30T04:28:29.606Z",
-     "status": "Received",
+     "at": "2026-10-31T05:32:04.386Z",
+     "status": "Awaiting Analysis",
      "present": true,
      "values": [
       "CWE-130",
@@ -13650,7 +15548,7 @@
      "kinds": [
       "cna"
      ],
-     "lastModified": "2026-10-29T21:17:20.907"
+     "lastModified": "2026-10-30T17:18:03.880"
     },
     "CVE-2026-119277": {
      "first": "2026-10-30T04:28:29.606Z",
@@ -13667,10 +15565,23 @@
         "cna"
        ],
        "lastModified": "2026-10-29T21:17:21.067"
+      },
+      {
+       "at": "2026-10-31T05:32:04.386Z",
+       "status": "Awaiting Analysis",
+       "present": true,
+       "values": [
+        "CWE-125",
+        "CWE-130"
+       ],
+       "kinds": [
+        "cna"
+       ],
+       "lastModified": "2026-10-30T17:18:03.880"
       }
      ],
-     "at": "2026-10-30T04:28:29.606Z",
-     "status": "Received",
+     "at": "2026-10-31T05:32:04.386Z",
+     "status": "Awaiting Analysis",
      "present": true,
      "values": [
       "CWE-125",
@@ -13679,7 +15590,7 @@
      "kinds": [
       "cna"
      ],
-     "lastModified": "2026-10-29T21:17:21.067"
+     "lastModified": "2026-10-30T17:18:03.880"
     },
     "CVE-2026-119278": {
      "first": "2026-10-30T04:28:29.606Z",
@@ -13696,10 +15607,23 @@
         "cna"
        ],
        "lastModified": "2026-10-29T21:17:21.237"
+      },
+      {
+       "at": "2026-10-31T05:32:04.386Z",
+       "status": "Awaiting Analysis",
+       "present": true,
+       "values": [
+        "CWE-129",
+        "CWE-789"
+       ],
+       "kinds": [
+        "cna"
+       ],
+       "lastModified": "2026-10-30T17:07:53.700"
       }
      ],
-     "at": "2026-10-30T04:28:29.606Z",
-     "status": "Received",
+     "at": "2026-10-31T05:32:04.386Z",
+     "status": "Awaiting Analysis",
      "present": true,
      "values": [
       "CWE-129",
@@ -13708,7 +15632,7 @@
      "kinds": [
       "cna"
      ],
-     "lastModified": "2026-10-29T21:17:21.237"
+     "lastModified": "2026-10-30T17:07:53.700"
     },
     "CVE-2026-119279": {
      "first": "2026-10-30T04:28:29.606Z",
@@ -13725,10 +15649,23 @@
         "cna"
        ],
        "lastModified": "2026-10-29T21:17:21.387"
+      },
+      {
+       "at": "2026-10-31T05:32:04.386Z",
+       "status": "Awaiting Analysis",
+       "present": true,
+       "values": [
+        "CWE-130",
+        "CWE-190"
+       ],
+       "kinds": [
+        "cna"
+       ],
+       "lastModified": "2026-10-30T17:18:03.880"
       }
      ],
-     "at": "2026-10-30T04:28:29.606Z",
-     "status": "Received",
+     "at": "2026-10-31T05:32:04.386Z",
+     "status": "Awaiting Analysis",
      "present": true,
      "values": [
       "CWE-130",
@@ -13737,7 +15674,7 @@
      "kinds": [
       "cna"
      ],
-     "lastModified": "2026-10-29T21:17:21.387"
+     "lastModified": "2026-10-30T17:18:03.880"
     },
     "CVE-2026-119280": {
      "first": "2026-10-30T04:28:29.606Z",
@@ -13754,10 +15691,23 @@
         "cna"
        ],
        "lastModified": "2026-10-29T21:17:21.553"
+      },
+      {
+       "at": "2026-10-31T05:32:04.386Z",
+       "status": "Awaiting Analysis",
+       "present": true,
+       "values": [
+        "CWE-20",
+        "CWE-789"
+       ],
+       "kinds": [
+        "cna"
+       ],
+       "lastModified": "2026-10-30T17:18:03.880"
       }
      ],
-     "at": "2026-10-30T04:28:29.606Z",
-     "status": "Received",
+     "at": "2026-10-31T05:32:04.386Z",
+     "status": "Awaiting Analysis",
      "present": true,
      "values": [
       "CWE-20",
@@ -13766,7 +15716,7 @@
      "kinds": [
       "cna"
      ],
-     "lastModified": "2026-10-29T21:17:21.553"
+     "lastModified": "2026-10-30T17:18:03.880"
     },
     "CVE-2026-119281": {
      "first": "2026-10-30T04:28:29.606Z",
@@ -13782,10 +15732,22 @@
         "cna"
        ],
        "lastModified": "2026-10-29T21:17:21.710"
+      },
+      {
+       "at": "2026-10-31T05:32:04.386Z",
+       "status": "Awaiting Analysis",
+       "present": true,
+       "values": [
+        "CWE-838"
+       ],
+       "kinds": [
+        "cna"
+       ],
+       "lastModified": "2026-10-30T17:18:03.880"
       }
      ],
-     "at": "2026-10-30T04:28:29.606Z",
-     "status": "Received",
+     "at": "2026-10-31T05:32:04.386Z",
+     "status": "Awaiting Analysis",
      "present": true,
      "values": [
       "CWE-838"
@@ -13793,7 +15755,7 @@
      "kinds": [
       "cna"
      ],
-     "lastModified": "2026-10-29T21:17:21.710"
+     "lastModified": "2026-10-30T17:18:03.880"
     },
     "CVE-2026-119325": {
      "first": "2026-10-30T04:28:29.606Z",
@@ -13809,10 +15771,22 @@
         "cna"
        ],
        "lastModified": "2026-10-29T21:17:21.870"
+      },
+      {
+       "at": "2026-10-31T05:32:04.386Z",
+       "status": "Deferred",
+       "present": true,
+       "values": [
+        "CWE-639"
+       ],
+       "kinds": [
+        "cna"
+       ],
+       "lastModified": "2026-10-30T19:23:25.493"
       }
      ],
-     "at": "2026-10-30T04:28:29.606Z",
-     "status": "Received",
+     "at": "2026-10-31T05:32:04.386Z",
+     "status": "Deferred",
      "present": true,
      "values": [
       "CWE-639"
@@ -13820,7 +15794,7 @@
      "kinds": [
       "cna"
      ],
-     "lastModified": "2026-10-29T21:17:21.870"
+     "lastModified": "2026-10-30T19:23:25.493"
     },
     "CVE-2026-13303": {
      "first": "2026-10-30T04:28:29.606Z",
@@ -13836,10 +15810,22 @@
         "cna"
        ],
        "lastModified": "2026-10-29T21:17:22.000"
+      },
+      {
+       "at": "2026-10-31T05:32:04.386Z",
+       "status": "Awaiting Analysis",
+       "present": true,
+       "values": [
+        "CWE-918"
+       ],
+       "kinds": [
+        "cna"
+       ],
+       "lastModified": "2026-10-30T19:37:07.073"
       }
      ],
-     "at": "2026-10-30T04:28:29.606Z",
-     "status": "Received",
+     "at": "2026-10-31T05:32:04.386Z",
+     "status": "Awaiting Analysis",
      "present": true,
      "values": [
       "CWE-918"
@@ -13847,7 +15833,7 @@
      "kinds": [
       "cna"
      ],
-     "lastModified": "2026-10-29T21:17:22.000"
+     "lastModified": "2026-10-30T19:37:07.073"
     },
     "CVE-2026-61576": {
      "first": "2026-10-30T04:28:29.606Z",
@@ -13874,7 +15860,8 @@
      "kinds": [
       "cna"
      ],
-     "lastModified": "2026-10-29T21:17:27.440"
+     "lastModified": "2026-10-30T16:17:57.253",
+     "version": "2026-10-31T05:32:04.386Z"
     },
     "CVE-2026-115943": {
      "first": "2026-10-30T04:28:29.606Z",
@@ -13890,10 +15877,22 @@
         "cna"
        ],
        "lastModified": "2026-10-30T02:17:08.467"
+      },
+      {
+       "at": "2026-10-31T05:32:04.386Z",
+       "status": "Deferred",
+       "present": true,
+       "values": [
+        "CWE-95"
+       ],
+       "kinds": [
+        "cna"
+       ],
+       "lastModified": "2026-10-30T19:39:14.897"
       }
      ],
-     "at": "2026-10-30T04:28:29.606Z",
-     "status": "Received",
+     "at": "2026-10-31T05:32:04.386Z",
+     "status": "Deferred",
      "present": true,
      "values": [
       "CWE-95"
@@ -13901,7 +15900,7 @@
      "kinds": [
       "cna"
      ],
-     "lastModified": "2026-10-30T02:17:08.467"
+     "lastModified": "2026-10-30T19:39:14.897"
     },
     "CVE-2026-119282": {
      "first": "2026-10-30T04:28:29.606Z",
@@ -13918,10 +15917,23 @@
         "cna"
        ],
        "lastModified": "2026-10-29T22:17:00.887"
+      },
+      {
+       "at": "2026-10-31T05:32:04.386Z",
+       "status": "Awaiting Analysis",
+       "present": true,
+       "values": [
+        "CWE-78",
+        "CWE-88"
+       ],
+       "kinds": [
+        "cna"
+       ],
+       "lastModified": "2026-10-30T19:37:07.073"
       }
      ],
-     "at": "2026-10-30T04:28:29.606Z",
-     "status": "Received",
+     "at": "2026-10-31T05:32:04.386Z",
+     "status": "Awaiting Analysis",
      "present": true,
      "values": [
       "CWE-78",
@@ -13930,7 +15942,7 @@
      "kinds": [
       "cna"
      ],
-     "lastModified": "2026-10-29T22:17:00.887"
+     "lastModified": "2026-10-30T19:37:07.073"
     },
     "CVE-2026-119283": {
      "first": "2026-10-30T04:28:29.606Z",
@@ -13957,7 +15969,8 @@
      "kinds": [
       "cna"
      ],
-     "lastModified": "2026-10-29T22:17:01.167"
+     "lastModified": "2026-10-30T17:17:17.740",
+     "version": "2026-10-31T05:32:04.386Z"
     },
     "CVE-2026-119284": {
      "first": "2026-10-30T04:28:29.606Z",
@@ -13984,7 +15997,8 @@
      "kinds": [
       "cna"
      ],
-     "lastModified": "2026-10-29T22:17:01.327"
+     "lastModified": "2026-10-30T17:17:17.850",
+     "version": "2026-10-31T05:32:04.386Z"
     },
     "CVE-2026-119285": {
      "first": "2026-10-30T04:28:29.606Z",
@@ -14001,10 +16015,23 @@
         "cna"
        ],
        "lastModified": "2026-10-29T22:17:01.367"
+      },
+      {
+       "at": "2026-10-31T05:32:04.386Z",
+       "status": "Awaiting Analysis",
+       "present": true,
+       "values": [
+        "CWE-346",
+        "CWE-942"
+       ],
+       "kinds": [
+        "cna"
+       ],
+       "lastModified": "2026-10-30T19:37:07.073"
       }
      ],
-     "at": "2026-10-30T04:28:29.606Z",
-     "status": "Received",
+     "at": "2026-10-31T05:32:04.386Z",
+     "status": "Awaiting Analysis",
      "present": true,
      "values": [
       "CWE-346",
@@ -14013,7 +16040,7 @@
      "kinds": [
       "cna"
      ],
-     "lastModified": "2026-10-29T22:17:01.367"
+     "lastModified": "2026-10-30T19:37:07.073"
     },
     "CVE-2026-119286": {
      "first": "2026-10-30T04:28:29.606Z",
@@ -14030,10 +16057,23 @@
         "cna"
        ],
        "lastModified": "2026-10-29T22:17:01.517"
+      },
+      {
+       "at": "2026-10-31T05:32:04.386Z",
+       "status": "Awaiting Analysis",
+       "present": true,
+       "values": [
+        "CWE-400",
+        "CWE-401"
+       ],
+       "kinds": [
+        "cna"
+       ],
+       "lastModified": "2026-10-30T19:37:07.073"
       }
      ],
-     "at": "2026-10-30T04:28:29.606Z",
-     "status": "Received",
+     "at": "2026-10-31T05:32:04.386Z",
+     "status": "Awaiting Analysis",
      "present": true,
      "values": [
       "CWE-400",
@@ -14042,7 +16082,7 @@
      "kinds": [
       "cna"
      ],
-     "lastModified": "2026-10-29T22:17:01.517"
+     "lastModified": "2026-10-30T19:37:07.073"
     },
     "CVE-2026-119317": {
      "first": "2026-10-30T04:28:29.606Z",
@@ -14054,14 +16094,30 @@
        "values": null,
        "kinds": null,
        "lastModified": "2026-10-29T22:17:01.670"
+      },
+      {
+       "at": "2026-10-31T05:32:04.386Z",
+       "status": "Awaiting Analysis",
+       "present": true,
+       "values": [
+        "CWE-284"
+       ],
+       "kinds": [
+        "cna"
+       ],
+       "lastModified": "2026-10-30T17:44:35.820"
       }
      ],
-     "at": "2026-10-30T04:28:29.606Z",
-     "status": "Received",
-     "present": false,
-     "values": null,
-     "kinds": null,
-     "lastModified": "2026-10-29T22:17:01.670"
+     "at": "2026-10-31T05:32:04.386Z",
+     "status": "Awaiting Analysis",
+     "present": true,
+     "values": [
+      "CWE-284"
+     ],
+     "kinds": [
+      "cna"
+     ],
+     "lastModified": "2026-10-30T17:44:35.820"
     },
     "CVE-2026-45049": {
      "first": "2026-10-30T04:28:29.606Z",
@@ -14077,10 +16133,22 @@
         "cna"
        ],
        "lastModified": "2026-10-29T22:17:02.400"
+      },
+      {
+       "at": "2026-10-31T05:32:04.386Z",
+       "status": "Awaiting Analysis",
+       "present": true,
+       "values": [
+        "CWE-201"
+       ],
+       "kinds": [
+        "cna"
+       ],
+       "lastModified": "2026-10-30T19:37:07.073"
       }
      ],
-     "at": "2026-10-30T04:28:29.606Z",
-     "status": "Received",
+     "at": "2026-10-31T05:32:04.386Z",
+     "status": "Awaiting Analysis",
      "present": true,
      "values": [
       "CWE-201"
@@ -14088,7 +16156,7 @@
      "kinds": [
       "cna"
      ],
-     "lastModified": "2026-10-29T22:17:02.400"
+     "lastModified": "2026-10-30T19:37:07.073"
     },
     "CVE-2026-61645": {
      "first": "2026-10-30T04:28:29.606Z",
@@ -14104,10 +16172,22 @@
         "cna"
        ],
        "lastModified": "2026-10-29T22:17:04.963"
+      },
+      {
+       "at": "2026-10-31T05:32:04.386Z",
+       "status": "Deferred",
+       "present": true,
+       "values": [
+        "CWE-434"
+       ],
+       "kinds": [
+        "cna"
+       ],
+       "lastModified": "2026-10-30T19:39:14.897"
       }
      ],
-     "at": "2026-10-30T04:28:29.606Z",
-     "status": "Received",
+     "at": "2026-10-31T05:32:04.386Z",
+     "status": "Deferred",
      "present": true,
      "values": [
       "CWE-434"
@@ -14115,7 +16195,7 @@
      "kinds": [
       "cna"
      ],
-     "lastModified": "2026-10-29T22:17:04.963"
+     "lastModified": "2026-10-30T19:39:14.897"
     },
     "CVE-2026-61654": {
      "first": "2026-10-30T04:28:29.606Z",
@@ -14171,7 +16251,8 @@
      "kinds": [
       "cna"
      ],
-     "lastModified": "2026-10-29T22:17:05.407"
+     "lastModified": "2026-10-30T17:17:26.620",
+     "version": "2026-10-31T05:32:04.386Z"
     },
     "CVE-2026-61673": {
      "first": "2026-10-30T04:28:29.606Z",
@@ -14216,10 +16297,24 @@
         "cna"
        ],
        "lastModified": "2026-10-29T22:17:05.603"
+      },
+      {
+       "at": "2026-10-31T05:32:04.386Z",
+       "status": "Deferred",
+       "present": true,
+       "values": [
+        "CWE-94",
+        "CWE-862",
+        "CWE-1336"
+       ],
+       "kinds": [
+        "cna"
+       ],
+       "lastModified": "2026-10-30T17:13:54.187"
       }
      ],
-     "at": "2026-10-30T04:28:29.606Z",
-     "status": "Received",
+     "at": "2026-10-31T05:32:04.386Z",
+     "status": "Deferred",
      "present": true,
      "values": [
       "CWE-94",
@@ -14229,7 +16324,7 @@
      "kinds": [
       "cna"
      ],
-     "lastModified": "2026-10-29T22:17:05.603"
+     "lastModified": "2026-10-30T17:13:54.187"
     },
     "CVE-2026-61719": {
      "first": "2026-10-30T04:28:29.606Z",
@@ -14272,10 +16367,22 @@
         "cna"
        ],
        "lastModified": "2026-10-29T23:16:54.270"
+      },
+      {
+       "at": "2026-10-31T05:32:04.386Z",
+       "status": "Awaiting Analysis",
+       "present": true,
+       "values": [
+        "CWE-502"
+       ],
+       "kinds": [
+        "cna"
+       ],
+       "lastModified": "2026-10-30T19:37:07.073"
       }
      ],
-     "at": "2026-10-30T04:28:29.606Z",
-     "status": "Received",
+     "at": "2026-10-31T05:32:04.386Z",
+     "status": "Awaiting Analysis",
      "present": true,
      "values": [
       "CWE-502"
@@ -14283,7 +16390,7 @@
      "kinds": [
       "cna"
      ],
-     "lastModified": "2026-10-29T23:16:54.270"
+     "lastModified": "2026-10-30T19:37:07.073"
     },
     "CVE-2026-107238": {
      "first": "2026-10-30T04:28:29.606Z",
@@ -14299,10 +16406,22 @@
         "cna"
        ],
        "lastModified": "2026-10-29T23:16:54.760"
+      },
+      {
+       "at": "2026-10-31T05:32:04.386Z",
+       "status": "Awaiting Analysis",
+       "present": true,
+       "values": [
+        "CWE-502"
+       ],
+       "kinds": [
+        "cna"
+       ],
+       "lastModified": "2026-10-30T19:37:07.073"
       }
      ],
-     "at": "2026-10-30T04:28:29.606Z",
-     "status": "Received",
+     "at": "2026-10-31T05:32:04.386Z",
+     "status": "Awaiting Analysis",
      "present": true,
      "values": [
       "CWE-502"
@@ -14310,7 +16429,7 @@
      "kinds": [
       "cna"
      ],
-     "lastModified": "2026-10-29T23:16:54.760"
+     "lastModified": "2026-10-30T19:37:07.073"
     },
     "CVE-2026-107239": {
      "first": "2026-10-30T04:28:29.606Z",
@@ -14326,10 +16445,22 @@
         "cna"
        ],
        "lastModified": "2026-10-29T23:16:54.887"
+      },
+      {
+       "at": "2026-10-31T05:32:04.386Z",
+       "status": "Awaiting Analysis",
+       "present": true,
+       "values": [
+        "CWE-23"
+       ],
+       "kinds": [
+        "cna"
+       ],
+       "lastModified": "2026-10-30T19:37:07.073"
       }
      ],
-     "at": "2026-10-30T04:28:29.606Z",
-     "status": "Received",
+     "at": "2026-10-31T05:32:04.386Z",
+     "status": "Awaiting Analysis",
      "present": true,
      "values": [
       "CWE-23"
@@ -14337,7 +16468,7 @@
      "kinds": [
       "cna"
      ],
-     "lastModified": "2026-10-29T23:16:54.887"
+     "lastModified": "2026-10-30T19:37:07.073"
     },
     "CVE-2026-112211": {
      "first": "2026-10-30T04:28:29.606Z",
@@ -14373,10 +16504,23 @@
         "cna"
        ],
        "lastModified": "2026-10-29T23:17:02.190"
+      },
+      {
+       "at": "2026-10-31T05:32:04.386Z",
+       "status": "Deferred",
+       "present": true,
+       "values": [
+        "CWE-295",
+        "CWE-306"
+       ],
+       "kinds": [
+        "cna"
+       ],
+       "lastModified": "2026-10-30T19:39:14.897"
       }
      ],
-     "at": "2026-10-30T04:28:29.606Z",
-     "status": "Received",
+     "at": "2026-10-31T05:32:04.386Z",
+     "status": "Deferred",
      "present": true,
      "values": [
       "CWE-295",
@@ -14385,14 +16529,14 @@
      "kinds": [
       "cna"
      ],
-     "lastModified": "2026-10-29T23:17:02.190"
+     "lastModified": "2026-10-30T19:39:14.897"
     }
    },
    "window": {
     "from": "2026-10-29",
     "to": "2026-10-29"
    },
-   "observers": 2
+   "observers": 3
   }
  }
 }

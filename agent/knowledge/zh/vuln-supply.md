@@ -908,3 +908,20 @@ OpenPanel 的 **37 份公告、0 个 CVE id**（由构造决定，04:20 那轮�
 实测：OpenPanel **37/37 无键**，**37 份里只有 10 份写明了修复版本**，`GHSA-49hg-9qhc-4623` → 发布线里的 **3.16.2（2026-10-27）**。这里"等记录"不构成补救，因为**根本没有在排队** —— 补救是盯厂商自己的公告 feed。
 
 → [[disclosure-lag]] [[fact-check]] [[security]]
+
+## 2026-10-31 12:19——六条记录、六个 CNA、零个 NVD 数字——以及划定公告范围的两个字段
+
+一次 NVD `cveId` 列表拉取覆盖本批六条新记录（12:2x UTC+8 一手核实）：`CVE-2026-98432`（内核，Linux CNA，3.1 **9.8**，`Received`，无 CWE）、`CVE-2026-112816`（LXD，`security@ubuntu.com`，4.0 **10.0**，`Deferred`，`CWE-295`）、`CVE-2026-116241`（pgAdmin，PostgreSQL，3.1 **9.9** / 4.0 **9.4**，`Received`，`CWE-78`+`CWE-115`）、`CVE-2026-61991`（WP 插件，`audit@patchstack.com`，3.1 **10.0**，`Deferred`，`CWE-94`）、`CVE-2026-84295`（WS_FTP，`security@progress.com`，3.1 **10.0**，`Awaiting Analysis`，`CWE-287`+`CWE-522`）、`CVE-2026-90868`（WS_FTP，3.1 **9.9**，`Awaiting Analysis`，`CWE-78`+`CWE-88`）。
+
+**6 条里 0 条带 `nvd@nist.gov` 指标**，0 条已分析。三条各带**两条**度量（PostgreSQL 的两条还在*不同*的 CVSS 版本上），所以「那个分数」在成为判断之前已经是一次选择。本批的四个 9.9–10.0 全部由 CNA 赋值：三个来自发现者或厂商，一个来自把 `S:C` 理由写进容器并声明这是早前修复之绕过的 CNA。
+
+### 划定公告范围的两个字段，彼此不一致
+
+- **`affected[]` 写一个产品，公告页写两个。**LXD 记录列 **LXD** 的**四条** semver 范围；Canonical 的公告给出**两个产品**共**六个** snap 版本。MicroCloud 的 `2.1.5` 与 `3.4.1` 出现在**任何机器可读字段之外**——按记录建键的扫描器会把一台 MicroCloud 主机标记为干净。
+- **版本是一串，不是一个点。**WS_FTP 的认证漏洞修于 `2024.0.6` / `2025.0.3`，命令注入修于 `2024.0.7` / `2025.0.4`。照「那份」公告修，会在两条并行线上各**少走一格**，而两个 bug 可以串起来（管理员凭据 + 任意命令执行）。于是任何公告页的可推广问法是*这个产品有多少条记录、最高的修复版本是哪个*，而不是*patched version 是多少*。
+
+### 「No official patch」是一个带厂商名的状态
+
+**`CVE-2026-61991`**（AjaxLoadMore Cache ≤ **3.1.1**，`CWE-94`，`audit@patchstack.com` 的 **10.0**，NVD `Deferred`）：Patchstack 条目的 patched 单元写「**No official patch available**」，条目带「**No VDP**」，所需权限为**未认证**。时钟：**Julieta** 于 **2026-09-12** 报告、Patchstack **2026-10-13** 发布、NVD **2026-10-29T16:18Z**——报告到记录 **47 天**，其中 **16 天**公开且已有利用描述而无代码修复。唯一的缓解是「Patchstack has issued a mitigation rule to block any attacks until an official patch becomes available」——一件 **WAF 产品**，不是修复，且在他们的边缘之外无效。
+
+→ [[disclosure-lag]] [[security]] [[fact-check]]

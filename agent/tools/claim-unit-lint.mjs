@@ -173,6 +173,8 @@
  *   node agent/tools/claim-unit-lint.mjs --files 'en/feed/2026-10-2*.md' --census
  *   node agent/tools/claim-unit-lint.mjs --file … --json --strict     # exit 1 on any finding
  *   node agent/tools/claim-unit-lint.mjs --ghsa-census [--pages 3]    # field-shape census
+ *   node agent/tools/claim-unit-lint.mjs --quotation-census --files 'en/feed/2026-1*.md'
+ *                                                                    # the quotation blind spots
  *
  * Exit code is 0 unless `--strict` and a finding was reported (so a pipeline can gate on it).
  * Findings are advisory: a flagged number is a claim to open, not a proven error.
@@ -212,7 +214,7 @@ const CHECKS = new Set((arg('check') ?? 'issues,cvss,status,temporal,cwe,repo,co
 const SELFTEST = has('selftest');
 const STATUS_WATCH = has('status-watch');
 const EXTRA_IDS = (arg('ids') ?? '').split(',').map((s) => s.trim()).filter(Boolean);
-if (!FILE && !FILES && !SELFTEST && !has('ghsa-census') && !STATUS_WATCH) {
+if (!FILE && !FILES && !SELFTEST && !has('ghsa-census') && !has('quotation-census') && !STATUS_WATCH) {
   console.error('usage: claim-unit-lint.mjs --file <feed.md> [--no-net] [--check issues,cvss,status,repo,count] [--strict] [--json] [--census] [--selftest] [--status-watch [--ids CVE-…]] | --ghsa-census [--pages N]');
   process.exit(2);
 }
@@ -1935,6 +1937,26 @@ function checkBundle(it) {
  *       sources, so a field quotation is checked against the field.
  * An ellipsis inside a quote is legitimate practice: the fragments are checked individually, and
  * only fragments of ≥6 words can produce a finding.
+ *
+ * THE BLIND SPOTS, MEASURED 2026-10-31 (`--quotation-census` over 31 October feeds, 1,248 items):
+ *   (a) ODD LINES were **310 of 2,371 quoted lines (13.1%)** — and reading them shows they are not
+ *       stray marks but **hard-wrapped quotations**, the opener ending one line and the closer
+ *       starting the next. Skipping such a line whole discarded both halves, so 13% of quoted lines
+ *       were never judged. A BOUNDED JOIN now absorbs up to two following lines and pairs the block:
+ *       **≥6-word spans judged 2,208 → 2,338 (+130, +5.9%)**, 12 blocks left unbalanced (reported as
+ *       coverage, never mined). A joined finding says so in its detail.
+ *   (b) THE PAGE CAP of 4 is **not** a defect: across the same 1,248 items **1** (0.1%) cites more
+ *       than four pages, dropping a single candidate — a second vendor advisory beside the same CVE,
+ *       not the item's primary. Left at 4; the census prints the row so the claim is re-measurable.
+ *   (c) THE 4–5-WORD CLASS is precise and its denominator was the problem. On the 10-30 feed's six
+ *       advisories, **every one whose cited pages were readable was a real defect** (pico's "AI made
+ *       it unnecessary" is nowhere on the maintainer's discussion; novelty-bench's "which idea is
+ *       novel" reports the prompt as "asked which idea was novel"), one was a spelling normalisation,
+ *       and the three that looked invented were **HTTP 429 from coindesk.com** — unread. So a short
+ *       span escalates to `quote-paraphrase` (sev 2) only when **nothing the item cites went
+ *       unread**, and stays `quote-short` (sev 1) with the unread count named in its detail when
+ *       something did. Calibrated both ways: the 10-31 file returns 0 findings / 31 verified before
+ *       and after, and the 10-30 file's three escalations were all real after opening the sources.
  */
 const QUOTE_WORDS_FINDING = 6; // a 6+-word string that appears nowhere is an invented quotation
 const QUOTE_WORDS_SPAN = 4;    // 4–5 words is checked too, but only as an advisory
@@ -1950,20 +1972,53 @@ const QUOTE_WORDS_SPAN = 4;    // 4–5 words is checked too, but only as an adv
  * checker cannot pay for. */
 const quoteKey = (s) => s.replace(/['’`]/g, '').replace(/[^\p{L}\p{N}\s]/gu, ' ').replace(/\s+/g, ' ').trim();
 
-/** Every “…” span, paired per LINE — see guard (a). Returns spans plus the lines it could not pair. */
+/** Every “…” span, paired per LINE — see guard (a) — plus a BOUNDED JOIN for a wrapped quotation.
+ * Measured 2026-10-31 over 31 October feeds (1,248 items): **310 of 2,371 quoted lines (13.1%)**
+ * carry an odd number of straight quotes, and reading the samples shows what they are — not stray
+ * marks but **hard-wrapped quotations**, a quote opened at the end of one source line and closed at
+ * the start of the next ("…showing "known outdoor surveillance cameras and / license plate readers":
+ * Flock Safety ALPRs…"). Skipping such a line whole therefore discarded BOTH halves, so 13% of the
+ * feed's quoted lines were never judged at all — including, plausibly, wrapped fabrications.
+ * So an odd line now OPENS A BLOCK that absorbs following lines until the count is even (at most
+ * two continuations, 600 chars), and the block is paired as one line. Two limits keep the original
+ * guard's protection: a line left odd with nothing following it is still `unpaired` and reported as
+ * coverage, and a block that never balances is also unpaired rather than mined. */
 function quoteSpans(text) {
   const out = [];
+  const joined = []; // spans that only exist because a wrapped line was joined — reported, not hidden
   let unpaired = 0;
-  for (const line of text.split('\n')) {
+  const lines = text.split('\n');
+  const pairsIn = (s) => {
+    const at = [];
+    for (let i = 0; i < s.length; i++) if (s[i] === '"') at.push(i);
+    return at;
+  };
+  for (let li = 0; li < lines.length; li++) {
+    const line = lines[li];
     if (/\]\(https?:\/\//.test(line)) continue; // a link line's quotes are labels, not prose
-    const straight = [];
-    for (let i = 0; i < line.length; i++) if (line[i] === '"') straight.push(i);
+    const straight = pairsIn(line);
     if (straight.length % 2 === 0) {
       for (let k = 0; k < straight.length; k += 2) out.push(line.slice(straight[k] + 1, straight[k + 1]));
-    } else if (straight.length) unpaired += 1;
+    } else if (straight.length) {
+      // a wrapped quotation: absorb the next line(s) until the quote count balances
+      let block = line;
+      let used = 0;
+      while (pairsIn(block).length % 2 === 1 && used < 2 && li + 1 < lines.length) {
+        // a link line is labels, not prose — never absorb one into a quotation
+        if (/\]\(https?:\/\//.test(lines[li + 1])) break;
+        li += 1; used += 1;
+        block = `${block} ${lines[li]}`;
+        if (block.length > 600) break;
+      }
+      const at = pairsIn(block);
+      if (at.length % 2 === 0) {
+        if (used) for (let k = 0; k < at.length; k += 2) joined.push(block.slice(at[k] + 1, at[k + 1]));
+        for (let k = 0; k < at.length; k += 2) out.push(block.slice(at[k] + 1, at[k + 1]));
+      } else unpaired += 1;
+    }
     for (const m of line.matchAll(/[“„«]([^”“»\n]{1,600})[”“»]/g)) out.push(m[1]);
   }
-  return { spans: out.filter((s) => !/https?:\/\//.test(s)), unpaired };
+  return { spans: out.filter((s) => !/https?:\/\//.test(s)), unpaired, joined: joined.filter((s) => !/https?:\/\//.test(s)) };
 }
 
 /* One normalizer for BOTH sides. The page is a rendered HTML text or a raw README; the item is
@@ -2026,9 +2081,10 @@ function quoteNearest(frag, sources) {
  * The check, as a pure function of the item and its sources so it can be calibrated without the
  * network. `sources` is already-normalized (see `quoteSource`).
  */
-function checkQuotes(it, sources) {
+function checkQuotes(it, sources, ctx = {}) {
   const out = [];
-  const { spans, unpaired } = quoteSpans(it.text);
+  const { spans, unpaired, joined } = quoteSpans(it.text);
+  const wrapped = new Set(joined ?? []);
   const claims = [];
   const wordsOf = (k) => k.split(' ').filter((w) => /[a-z\p{L}]{2,}/u.test(w)).length;
   for (const raw of spans) {
@@ -2039,7 +2095,7 @@ function checkQuotes(it, sources) {
     const frags = norm.split(/\s*(?:…|\.\.\.)\s*/).map((s) => quoteKey(s))
       .filter((k) => wordsOf(k) >= 3).map((k) => ({ key: k, words: wordsOf(k) }));
     if (!frags.length) continue;
-    claims.push({ norm, words, frags });
+    claims.push({ norm, words, frags, wrapped: wrapped.has(raw) });
   }
   if (!claims.length) return out;
   if (!sources.length) {
@@ -2054,14 +2110,24 @@ function checkQuotes(it, sources) {
     const heavy = frag.words;
     const near = quoteNearest(frag, sources);
     const where = `read ${sources.map((s) => s.label).join(', ')}`;
+    const unread = ctx.unread ?? 0;
     const hint = near.matched >= 3
       ? `${near.label} carries ${near.matched} of ${near.total} words (“${near.run.slice(0, 70)}”) and continues “${near.next.slice(0, 110)}” — use the source's wording, or drop the quotation marks`
       : `no source carries it (${where}) — if this came from somewhere this item does not cite, cite it; otherwise it is the feed's own words and must not wear quotation marks`;
+    /* A 4–5-word span is the one class whose severity has to be EARNED, because a short phrase can
+     * fail to match for a dull reason (a page this item cites was a JS shell). Measured 2026-10-31
+     * on the 10-30 feed's six advisories: **every one whose cited pages were all readable was a real
+     * defect** (pico's "AI made it unnecessary", novelty-bench's "which idea is novel"), the one that
+     * was a spelling normalisation was still a real difference, and the three whose source returned
+     * **HTTP 429** (coindesk.com) were unread — so the class is precise and only its denominator was
+     * contaminated. Hence `quote-paraphrase` (sev 2) when nothing was unread, `quote-short` (sev 1)
+     * when something was: unread is not absent, and the severity is what says so. */
+    const paraphrase = heavy < QUOTE_WORDS_FINDING && unread === 0 && (near.matched >= 3 || sources.length >= 2);
     out.push({
       check: 'quotation', item: it.n,
-      verdict: heavy >= QUOTE_WORDS_FINDING ? 'quote-not-found' : 'quote-short',
+      verdict: heavy >= QUOTE_WORDS_FINDING ? 'quote-not-found' : (paraphrase ? 'quote-paraphrase' : 'quote-short'),
       claim: `“${frag.key.slice(0, 96)}${frag.key.length > 96 ? '…' : ''}”`,
-      detail: `${heavy} words, 0 hits in ${sources.length} readable source(s); ${hint}`,
+      detail: `${heavy} words, 0 hits in ${sources.length} readable source(s)${unread ? `, ${unread} cited page(s) unread` : ''}${c.wrapped ? ', quotation spans a hard-wrapped line (recovered by the bounded join)' : ''}; ${hint}`,
     });
   }
   if (ok) out.push({ check: 'quotation', item: it.n, verdict: 'ok', claim: `${ok} quotation(s)`, detail: `verbatim in ${sources.length} readable source(s)` });
@@ -2094,9 +2160,13 @@ async function checkQuote(it, nvd, cna) {
     if (rd && rd.text) sources.push(quoteSource(`${slug} README`, rd.text));
   }
   // (2) every page the item cites, HN threads included (guard for `CITED_SKIP` is elsewhere)
+  // `unread` counts candidates that produced no text (a 429, a JS shell, a paywall) — the
+  // denominator the advisory severity needs, so "not found" is never read as "not there".
+  let unread = 0;
   for (const p of citedPages(it.plain, { hn: true, cap: 4 })) {
     const t = await citedPageText(p);
     if (t.text) sources.push(quoteSource(p.label, t.text));
+    else unread += 1;
   }
   // (3) the records — a field quotation is a claim about a field, not about a page
   const cves = it.cves ?? [];
@@ -2109,27 +2179,127 @@ async function checkQuote(it, nvd, cna) {
     const k = kev.get(id);
     if (k) sources.push(quoteSource(`${id} KEV entry`, `${k.name} ${k.desc ?? ''}`));
   }
-  let out = checkQuotes(it, sources);
+  let out = checkQuotes(it, sources, { unread });
   /* (4) A REPOSITORY'S OWN DESCRIPTION IS NOT ITS README. Item 5 of the 10-31 feed quotes
    * "Skills for Real Engineers. Straight from my .agents directory." — which greps **0** times in
    * `mattpocock/skills`' README and is verbatim in the repo's `description` field ("… - mattpocock/
    * skills"). The trending page shows that line, so it is what an author lifts. Fetched only when
    * something is still unmatched, and from the repo's HTML (`github.com/<slug>`, unmetered) rather
    * than `api.github.com`, which is metered and would cost a call per item for one sentence. */
-  if (out.some((f) => f.verdict === 'quote-not-found' || f.verdict === 'quote-short') && !NO_NET) {
+  if (out.some((f) => f.verdict === 'quote-not-found' || f.verdict === 'quote-short' || f.verdict === 'quote-paraphrase') && !NO_NET) {
     for (const slug of it.repos.slice(0, 2)) {
       const page = await citedPageText({ url: `https://github.com/${slug}`, label: `${slug} page`, raw: false });
       if (!page.text) continue;
       const more = quoteSource(`${slug} repo page`, page.text);
-      const again = checkQuotes(it, sources.filter((s) => !s.label.startsWith(`${slug} `)).concat(more));
-      const left = again.filter((f) => f.verdict === 'quote-not-found' || f.verdict === 'quote-short');
-      if (left.length < out.filter((f) => f.verdict === 'quote-not-found' || f.verdict === 'quote-short').length) {
+      const again = checkQuotes(it, sources.filter((s) => !s.label.startsWith(`${slug} `)).concat(more), { unread });
+      const left = again.filter((f) => f.verdict === 'quote-not-found' || f.verdict === 'quote-short' || f.verdict === 'quote-paraphrase');
+      if (left.length < out.filter((f) => f.verdict === 'quote-not-found' || f.verdict === 'quote-short' || f.verdict === 'quote-paraphrase').length) {
         sources.push(more);
         out = again;
       }
     }
   }
   return out;
+}
+
+// ── `--quotation-census`: measure the check's own blind spots ───────────────────────────────
+/* Filed 2026-10-31 04:32 as the residue of building check H. Three coverage gaps, each countable
+ * and none counted:
+ *   (a) ODD LINES — a line whose straight quotes cannot be paired is skipped WHOLE, so a line
+ *       carrying one good quotation and one stray mark loses both. The size of that loss was
+ *       never measured.
+ *   (b) THE PAGE CAP — `checkQuote` opens at most **4** cited pages per item, so a five-link
+ *       item's fifth page is unread and a verbatim quotation from it comes back `quote-not-found`
+ *       against a source the check never opened: the "unread is not absent" failure it otherwise
+ *       avoids, in the shape of a finding rather than a silence.
+ *   (c) THE 4–5-WORD ADVISORY CLASS — `quote-short` is sev 1, and on its filing batch 3 of 5
+ *       were real paraphrases, so the rate decides whether the verdict belongs at sev 2.
+ * Local-only: every number here is computed from feed text already on disk.
+ */
+if (has('quotation-census')) {
+  const QC_PATHS = paths.length ? paths : globSync('en/feed/2026-*.md').sort();
+  const QC_CAP = 4; // must match the `cap: 4` in checkQuote
+  const wordsOf = (k) => k.split(' ').filter((w) => /[a-z\p{L}]{2,}/u.test(w)).length;
+  const rows = [];
+  const tot = {
+    items: 0, itemsWithQuotes: 0, spans: 0, spans6: 0, before6: 0, unpairedBlocks: 0,
+    quoteLines: 0, oddLines: 0, oddJoined: 0, oddSpans6Recovered: 0, oddExamples: [],
+    overCapItems: 0, droppedPages: 0, droppedRank0: 0, overCapWithQuote: 0, maxCandidates: 0, capExamples: [],
+  };
+  /* The PRE-JOIN reader, kept so the census can report what the bounded join changed rather than
+   * asserting it helped: pair per line, skip a line whose quotes do not balance. */
+  const lineOnlySpans = (text) => {
+    const out = [];
+    for (const line of text.split('\n')) {
+      if (/\]\(https?:\/\//.test(line)) continue;
+      const at = [...line.matchAll(/"/g)].map((m) => m.index);
+      if (at.length % 2 === 0) for (let k = 0; k < at.length; k += 2) out.push(line.slice(at[k] + 1, at[k + 1]));
+      for (const m of line.matchAll(/[“„«]([^”“»\n]{1,600})[”“»]/g)) out.push(m[1]);
+    }
+    return out.filter((s) => !/https?:\/\//.test(s));
+  };
+  for (const p of QC_PATHS) {
+    const items = parseItems(readFileSync(p, 'utf8'));
+    const r = { file: basename(p), items: items.length, spans: 0, spans6: 0, before6: 0, oddLines: 0, unpairedBlocks: 0, recovered: 0, overCap: 0, dropped: 0, droppedRank0: 0, overCapWithQuote: 0 };
+    for (const it of items) {
+      tot.items += 1;
+      const { spans, unpaired } = quoteSpans(it.text);
+      const big = spans.filter((s) => wordsOf(quoteKey(normQuote(s))) >= QUOTE_WORDS_FINDING);
+      const before = lineOnlySpans(it.text).filter((s) => wordsOf(quoteKey(normQuote(s))) >= QUOTE_WORDS_FINDING).length;
+      r.spans += spans.length; tot.spans += spans.length;
+      r.spans6 += big.length; tot.spans6 += big.length;
+      r.before6 += before; tot.before6 += before;
+      tot.unpairedBlocks += unpaired; r.unpairedBlocks += unpaired;
+      if (spans.length) tot.itemsWithQuotes += 1;
+      // (a) odd lines: the population the pre-join reader skipped, and how much of it balances now
+      for (const line of it.text.split('\n')) {
+        if (!line.includes('"') || /\]\(https?:\/\//.test(line)) continue;
+        tot.quoteLines += 1;
+        if ((line.match(/"/g) ?? []).length % 2 === 0) continue;
+        tot.oddLines += 1; r.oddLines += 1;
+      }
+      // (b) the cap: how many candidates does a 4-page slice drop, and are they the good ones?
+      const all = citedPages(it.plain, { hn: true, cap: 99 });
+      const kept = all.slice(0, QC_CAP);
+      const dropped = all.slice(QC_CAP);
+      if (all.length > tot.maxCandidates) { tot.maxCandidates = all.length; tot.maxExample = `${basename(p)} #${it.n} (${all.length})`; }
+      if (dropped.length) {
+        tot.overCapItems += 1; r.overCap += 1;
+        tot.droppedPages += dropped.length; r.dropped += dropped.length;
+        if (big.length) { tot.overCapWithQuote += 1; r.overCapWithQuote += 1; }
+        // `rank 0` is the class the ranking deliberately puts FIRST — a raw Markdown twin, an
+        // arXiv abstract, an HF card — so a cap that drops rank 1 while keeping rank 0 is fine,
+        // and one that drops rank 0 is dropping the cheapest primary in the item.
+        const rank0 = dropped.filter((k) => /^arXiv /.test(k.label) || /^HF (model|dataset) /.test(k.label) || /\.(md|json|txt|rst)$/i.test(k.label));
+        tot.droppedRank0 += rank0.length; r.droppedRank0 += rank0.length;
+        tot.capExamples.push(`${basename(p)} #${it.n}: kept ${kept.map((k) => k.label).join(', ')} | DROPPED ${dropped.map((k) => k.label).join(', ')}${big.length ? `  ← ${big.length} 6+-word quotation(s)` : ''}`);
+      }
+    }
+    rows.push(r);
+  }
+  console.log(`QUOTATION CENSUS — ${tot.items} item(s) over ${rows.length} file(s)\n`);
+  console.log(`(a) ODD LINES — quoted lines ${tot.quoteLines}, odd ${tot.oddLines} (${((tot.oddLines / Math.max(1, tot.quoteLines)) * 100).toFixed(1)}% of quoted lines), blocks that never balanced ${tot.unpairedBlocks}`);
+  console.log(`    ≥${QUOTE_WORDS_FINDING}-word spans judged BEFORE the join ${tot.before6} → AFTER ${tot.spans6} (+${tot.spans6 - tot.before6}, ${(((tot.spans6 - tot.before6) / Math.max(1, tot.before6)) * 100).toFixed(1)}% more)`);
+  console.log(`(b) PAGE CAP ${QC_CAP} — items over the cap ${tot.overCapItems} (${((tot.overCapItems / Math.max(1, tot.items)) * 100).toFixed(1)}%), pages dropped ${tot.droppedPages}, rank-0 dropped ${tot.droppedRank0}`);
+  console.log(`    items that BOTH drop a page and carry a ≥${QUOTE_WORDS_FINDING}-word quotation: ${tot.overCapWithQuote}  ← the population that can yield a false quote-not-found`);
+  console.log(`    max candidates in one item: ${tot.maxCandidates}${tot.maxExample ? ` (${tot.maxExample})` : ''}`);
+  for (const e of tot.capExamples.slice(0, 12)) console.log(`      ${e}`);
+  // (c) the advisories already recorded, from the batch files the pipeline wrote
+  const qFiles = globSync('agent/data/claim-unit-*.json').sort();
+  const tallies = { 'quote-not-found': 0, 'quote-short': 0, 'quote-not-read': 0, ok: 0 };
+  const qRows = [];
+  for (const qf of qFiles) {
+    let j; try { j = JSON.parse(readFileSync(qf, 'utf8')); } catch { continue; }
+    const f = (j.files ?? []).flatMap((x) => x.findings ?? []).filter((x) => x.check === 'quotation');
+    const c = { file: basename(qf), 'quote-not-found': 0, 'quote-short': 0, 'quote-not-read': 0, ok: 0 };
+    for (const x of f) if (x.verdict in c) { c[x.verdict] += 1; tallies[x.verdict] += 1; }
+    if (f.length) qRows.push(c);
+  }
+  const twoWay = tallies['quote-not-found'] + tallies['quote-short'];
+  console.log(`\n(c) THE ADVISORY CLASS — over ${qRows.length} batch file(s): quote-not-found ${tallies['quote-not-found']}, quote-short ${tallies['quote-short']} (${((tallies['quote-short'] / Math.max(1, twoWay)) * 100).toFixed(0)}% of both), ok ${tallies.ok}`);
+  for (const c of qRows) if (c['quote-short'] || c['quote-not-found']) console.log(`      ${c.file}: ${c['quote-not-found']} not-found · ${c['quote-short']} short`);
+  console.log('\n  per file: ' + rows.map((r) => `${r.file.replace('.md', '')} ${r.spans} spans/${r.spans6} big`).join(' · '));
+  process.exit(0);
 }
 
 // ── `--ghsa-census`: measure the field model instead of asserting it ────────────────────────
@@ -2514,7 +2684,19 @@ if (SELFTEST) {
     [[true, true]]);
   // guard (a): a mis-paired line is skipped, never mined — the 29/32-word “quotations” of the draft
   t('quote: an odd number of quotes on a line is skipped whole, not paired offline',
-    quoteSpans('it was almost "done" and then "we found more'), { spans: [], unpaired: 1 });
+    (({ spans, unpaired }) => ({ spans, unpaired }))(quoteSpans('it was almost "done" and then "we found more')),
+    { spans: [], unpaired: 1 });
+  t('quote: a joined span is reported as joined, so a finding can name its provenance',
+    quoteSpans('it says "one two three\nfour five six" here').joined, ['one two three four five six']);
+  // …but a WRAPPED quotation is the common case, measured at 13.1% of quoted lines over 31 feeds:
+  // the opener ends one line and the closer starts the next, and skipping both lost the span.
+  t('quote: a hard-wrapped quotation is joined across the line break, not discarded',
+    quoteSpans('it showed "known outdoor surveillance cameras and\nlicense plate readers": Flock Safety ALPRs').spans,
+    ['known outdoor surveillance cameras and license plate readers']);
+  t('quote: a block that never balances is still unpaired rather than mined',
+    quoteSpans('a "one b\ntwo c\nthree d').unpaired, 1);
+  t('quote: a balanced line still pairs exactly as before, and its neighbour is untouched',
+    quoteSpans('"first" is here\n"second" is there').spans, ['first', 'second']);
   t('quote: pairing works after a short span that a length filter would have skipped',
     quoteSpans('"95%" premise is hypothetical, and "human-in-the-loop, not human-on-the-side" is a constraint.').spans,
     ['95%', 'human-in-the-loop, not human-on-the-side']);
@@ -2621,7 +2803,7 @@ for (const { path: p, items } of parsed) {
 
 try { mkdirSync(dirname(CACHE_PATH), { recursive: true }); writeFileSync(CACHE_PATH, JSON.stringify(cache, null, 1)); } catch { /* cache is best-effort */ }
 
-const SEVERITY = { ok: 0, 'ok-cited-page': 0, 'no-cve-named': 1, 'no-record': 1, 'slot-quoted': 1, 'counted-by-author': 0, 'number-other-noun': 1, 'temporal-stopping-point': 1, 'cna-only-score': 1, 'star-drift': 2, 'star-dated': 1, 'ok-history': 0, 'history-older-than-record': 2, 'history-unreadable': 1, stale: 2, archived: 2, differs: 2, absent: 2, 'unsplit-issue-count': 3, 'compound-lags-parts': 3, 'version-swapped': 3, 'version-absent': 3, 'score-not-reproducible': 2, 'score-mismatch': 3, 'wrong-subject': 3, 'absence-contradicted': 3, 'status-stale': 2, 'status-dated': 1, 'cwe-absent-but-recorded': 3, 'cwe-mismatch': 3, 'cwe-unreadable': 1, 'status-no-record': 1, 'status-no-cve': 1, 'advisory-unreadable': 1, 'advisory-repo-only': 0, unreadable: 1, 'artifact-unreadable': 1, 'nvd-unavailable': 1, 'bundle-ok': 0, 'bundle-lines-named': 0, 'bundle-unavailable': 0, 'bundle-line-count': 3, 'bundle-total-mismatch': 2, 'quote-not-found': 3, 'quote-short': 1, 'quote-not-read': 0 };
+const SEVERITY = { ok: 0, 'ok-cited-page': 0, 'no-cve-named': 1, 'no-record': 1, 'slot-quoted': 1, 'counted-by-author': 0, 'number-other-noun': 1, 'temporal-stopping-point': 1, 'cna-only-score': 1, 'star-drift': 2, 'star-dated': 1, 'ok-history': 0, 'history-older-than-record': 2, 'history-unreadable': 1, stale: 2, archived: 2, differs: 2, absent: 2, 'unsplit-issue-count': 3, 'compound-lags-parts': 3, 'version-swapped': 3, 'version-absent': 3, 'score-not-reproducible': 2, 'score-mismatch': 3, 'wrong-subject': 3, 'absence-contradicted': 3, 'status-stale': 2, 'status-dated': 1, 'cwe-absent-but-recorded': 3, 'cwe-mismatch': 3, 'cwe-unreadable': 1, 'status-no-record': 1, 'status-no-cve': 1, 'advisory-unreadable': 1, 'advisory-repo-only': 0, unreadable: 1, 'artifact-unreadable': 1, 'nvd-unavailable': 1, 'bundle-ok': 0, 'bundle-lines-named': 0, 'bundle-unavailable': 0, 'bundle-line-count': 3, 'bundle-total-mismatch': 2, 'quote-not-found': 3, 'quote-paraphrase': 2, 'quote-short': 1, 'quote-not-read': 0 };
 const REAL = (f) => (SEVERITY[f.verdict] ?? 1) >= 2;
 
 /* `status_watch` rides the findings file so the act pass sees a backwards move without re-reading

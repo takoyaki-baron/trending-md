@@ -429,3 +429,13 @@ Sources: [mksglu/context-mode](https://github.com/mksglu/context-mode) · [npm: 
 これが「サービング」ではなくコンテキスト境界の層に属する理由：最適化される対象がこのテーゼ全体の主題と同じもの——エージェントが先へ運ぶバイト数——であり、エージェント自身のワーキングメモリが（プロンプトの創発的性質ではなく）スケジュール可能な資源であるという発見は、モデル自身が操作できるこの層の最初の版だからだ。それはサービングエンジンの変更であり、ラッパーではない：API の前段に置いたプロキシは、サーバが保持するキャッシュを drop できない。
 
 Sources: [arXiv：Cache Engineering for Agents](https://arxiv.org/abs/2610.28577) · [arXiv PDF](https://arxiv.org/pdf/2610.28577)
+
+## 2026-10-31 12:19——入力側にもエネルギー項があり、prefillは超線形である
+
+"**The Real Cost of Context**"（arXiv **2610.39621**）は、このファイルが繰り返し見つけてきた会計の穴から始まる：エージェント的アーキテクチャは「substantially increased token consumption」を招いたが、既存の見積りは「focus primarily on generated output tokens while overlooking the impact of the large input contexts characteristic of agentic workflows」。
+
+prefillとdecodeの長さを広く掃引した一般化線形モデルの結果：**decode**の計算時間とエネルギーは出力長に**線形**、**prefill**は入力長に**線形項と二次項の両方**を持つ。したがってエージェントの伸びる履歴のコストは体積に比例せず、コンテキストを倍にすると2倍を超えることがあり、しかも罰は誰もが「ただ読むだけ」と扱う段に落ちる。さらに「compute time serves as a reliable proxy for energy consumption when direct energy measurements are unavailable」と報告し、これが閉じたAPIモデルに枠組みを使えるものにしている。
+
+請求ツールにしない2つの限界：フィットは**モデル別・ハードウェア別**で係数は配備間を移らない。計算時間をエネルギーの代理とする較正は著者自身の測定に対してであり、ベンダーの計量ではない——推定するのはホストされたモデルの**エネルギー**であって、あなたの**請求額**ではない。設計上の帰結は方向的で、両限界の下でも残る：コンテキストを多く送って検索を減らすことで遅延を買うものにとって、限界トークンは限界コストではなく、**圧縮と検索は遅延の決定であると同時にエネルギーの決定**である。
+
+→ [[frontier-models]] [[harness-overhead]] [[agent-stack]]

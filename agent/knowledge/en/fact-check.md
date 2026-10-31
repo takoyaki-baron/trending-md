@@ -2067,3 +2067,127 @@ remaining four 4–5-word spans held at `quote-short` (advisory) rather than pro
 `--selftest` **109 → 126**, seventeen of them this check's own.
 
 → [[disclosure-lag]] [[security]] [[no-ai-default]]
+
+## 2026-10-31 12:19 — four more units: a WORKING SET, a PICTURE, a CHECKSUM and a FOLDER
+
+### The table is an image, and an image is not a table
+
+Two of the batch's model releases ship their headline comparison as a **rendered asset** with no table beside it:
+`baidu/Unlimited-OCR-2` says it "Achieves state-of-the-art performance across both dozens-of-pages benchmarks (e.g.
+MPDocBench) and extreme hundred-page benchmarks (e.g. MarathonDocBench)" and renders the leaderboard as
+`assets/leaderboard.png`; `XHToken/Spark-X2.6-4B` claims to match "models with approximately 9B parameters" and ships
+`images/all_benchmark.svg`. So a number in either card cannot be quoted or checked without an OCR pass over the
+asset — and a screenshot cannot be diffed the way a table can when the vendor revises it. The check is mechanical:
+**grep the card's benchmark section for `<table>` or `|`; a card whose entire evidence is `![...](...)` or an SVG link
+has published a picture of a claim.** The corollary is that "SOTA" in such a card is a positioning statement, and the
+auditable parts of both releases are elsewhere — for Spark it is the distribution list (`spark2_5` in `llama.cpp`
+from build **b10828**, Ollama **0.34.1+**, MLX, LM Studio), for OCR-2 it is the serving appendix.
+
+### "Unlimited" is a claim about the working set, not the window
+
+Unlimited-OCR-2's mechanism is **SR-SWA** (sparse reference sliding-window attention): text-visual attention is
+"compress[ed] … down to a fixed-size set of working references (e.g., 512 tokens)", which bounds compute so that
+"per-step decoding latency and memory footprint nearly constant regardless of document length". Multi-page parsing is
+one request (`"<PAGE><image>" * num_pages + "Multi page parsing."`), and the cost is stated in the appendix: a page
+window that reuses the previous window's KV tail, `--mem-fraction-static 0.7` because 0.75 OOMs past **32** concurrent
+requests, and the explicit trade that a smaller page window lowers peak memory but **loses cross-page merging at
+window boundaries**. This is the 10-30 "1M context vs 131K deployment" unit one layer deeper: the product name counts
+the *bounded* quantity, and the unbounded one is a tunable window plus a memory budget.
+
+Hub state checked first-hand: `baidu/Unlimited-OCR-2` MIT, **24,276** downloads, **457** likes, `createdAt`
+**2026-10-26T03:57Z** (the item said "released 2026-10-27" — the Hub's own creation timestamp is a day earlier);
+`XHToken/Spark-X2.6-4B` apache-2.0, **12,515** downloads, **923** likes, last modified **2026-10-31T02:26Z**.
+
+### A checksum and a task are different questions
+
+"**Broken on Arrival: Non-Functional Quantized LLM Artifacts in Public Model Registries and How to Catch Them**"
+(arXiv **2609.05881**; Aditi Patodiya) screened **all 305** eligible code-capable GGUF tags across **15** model lines in
+the official Ollama library plus **22** Hugging Face community files with a 15-task code screen, then retested suspects
+on all **164** HumanEval+ tasks. **Seven official tags (2.3%) solved at most six**; all were low-bit quantizations of
+models with **≤4B** parameters.
+
+The control is the finding: five suspects rebuilt from original weights "matched our uncalibrated rebuilds tensor for
+tensor, so none was corrupted" — followed by the sentence to keep, "**Exact reproducibility did not imply function.**"
+The mechanism is **calibration**, not bit-width: with weights, toolchain and tensor mix fixed, adding an importance
+matrix took `Qwen2.5-Coder-3B` from **zero to 76–113 of 164** at three quantization levels, while the same recipe left
+`Qwen2.5-Coder-1.5B` functional — so the recipe alone does not predict failure. False-alarm side: "None of 66 sampled
+tags that passed the screen was non-functional." **v3** revises one earlier diagnosis: a community
+`deepseek-coder-6.7B` pair fails for **lack of a chat template**, not by backend.
+
+So there are three verification units stacked on one artifact — *is the file the publisher's* (hash), *does it load*
+(load test), *does it do the task* (task screen) — and a registry publishes **downloads and likes**, which are none of
+them. The operational rule: for **≤4B models at low bit-width**, run a task-level smoke test before trusting a tag, and
+when one fails, prefer **switching to a calibrated quantization** of the same model over suspecting corruption.
+
+### A licence can be per folder, and the repo-level badge is the fourth artifact
+
+`anthropics/skills` (checked first-hand: **185,423★**, **21,904** forks, `open_issues_count` **1,450**, `pushed_at`
+**2026-10-28T19:20Z**, **`license: null`**) has **no root `LICENSE`** — the path 404s — and a root listing of
+`.claude-plugin`, `.gitignore`, `README.md`, `THIRD_PARTY_NOTICES.md`, `skills`, `spec`, `template`. The licence is in
+the README and it is **two licences in one repo**: "Many skills in this repo are open source (Apache 2.0). We've also
+included the document creation & editing skills … in the `skills/docx`, `skills/pdf`, `skills/pptx`, and `skills/xlsx`
+subfolders", of which "These are **source-available, not open source**". `skills/` holds **19** folders (counted from
+the contents API: `academy-guide`, `algorithmic-art`, `brand-guidelines`, `canvas-design`, `claude-api`,
+`discernment-nudge`, `doc-coauthoring`, `docx`, `frontend-design`, `internal-comms`, `mcp-builder`, `pdf`, `pptx`,
+`skill-creator`, `slack-gif-creator`, `theme-factory`, `web-artifacts-builder`, `webapp-testing`, `xlsx`) — so **4 of
+19** are read-only-by-licence. The README also says the skills are "provided for demonstration and educational purposes
+only" and that "the implementations and behaviors you receive from Claude may differ from what is shown", which is the
+vendor stating that the shipped behaviour is not this code.
+
+The licence now has **four** artifact shapes in the library: a registry/API field (`NOASSERTION`, or `null`), a root
+`LICENSE` file (or its 404), a README statement, and a badge. Enumerating per **folder** is the only unit that answers
+"can I vendor this".
+
+→ [[security]] [[vuln-supply]] [[frontier-models]] [[agent-plugins]]
+
+## 2026-10-31 12:32 (act) — a checker's silence is a claim: 13.1% of the feed's quoted lines were never judged
+
+The `quotation` check was built on 2026-10-31 and calibrated on one batch, so its own coverage was
+assumed rather than measured. The census (`claim-unit-lint.mjs --quotation-census`, no network) ran
+over **31** October feeds / **1,248** items and turned three suspicions into three different answers.
+
+**1. Odd lines were 13.1% of the corpus, and they were not stray marks.** A line whose straight
+quotes do not pair up was skipped *whole*, to avoid the mis-pairing that produced the check's first
+29- and 32-word phantom "quotations". Reading the 310 skipped lines shows what they actually are:
+**hard-wrapped quotations** — the opener ends one source line, the closer starts the next
+("…showing "known outdoor surveillance cameras and / license plate readers": Flock Safety ALPRs…").
+So every wrapped quotation lost both halves, and the guard protected the check by blinding it.
+A bounded join (≤2 continuation lines, 600 chars) now pairs the block: **≥6-word spans judged
+2,208 → 2,338 (+130, +5.9%)**; **12** blocks never balance and are reported as coverage, never
+mined. A joined span is flagged in the finding's own detail, so a wrapped quotation is visible as
+such rather than silently normalized into the rest.
+
+**2. The 4-page cap is a non-issue, and the useful artifact is the row that says so.** Across the
+same 1,248 items exactly **1** cites more than four pages, dropping **1** candidate — a second vendor
+advisory beside the same CVE, never the item's primary. The temptation was to "fix" the cap by
+raising it; the census says the fix buys nothing and costs fetches. Leaving it at 4 is now a
+*measured* decision that prints its own denominator on every run.
+
+**3. The 4–5-word advisory class was precise; its denominator was contaminated.** Six advisories on
+the 10-30 feed. Opening each: **every one whose cited pages were readable was a real defect** —
+pico's maintainer wrote "AI can generate lightweight, standalone, accessible HTML with just the CSS
+it needs", never "AI made it unnecessary"; novelty-bench *reports* its prompt ("the other simply
+asked which idea was novel") rather than quoting it, and the feed had turned that reported speech
+into a prompt string; Fowler's page spells it "skeptism", so the feed's "skepticism" was a silent
+typo fix inside quotation marks. The three that looked invented came from **coindesk.com answering
+HTTP 429** — one cited page that produced no text at all. So the class's *precision* was never the
+problem: the failures were `unread`, and a severity that cannot see unread is a severity that
+punishes the checker's own network luck. A 4–5-word span now escalates to **`quote-paraphrase`
+(sev 2) only when nothing the item cites went unread**, and stays `quote-short` (sev 1) with the
+unread count named in the detail when something did. Calibrated both ways: the 10-31 file returns
+**0 findings / 31 verified** before and after the change, and the three escalations on 10-30 were
+each confirmed by opening the source and corrected in place (items **20, 29, 41**, en+zh+jp).
+
+**The residual class the census cannot reach: the quoting source is a commit list.** Item 27 of the
+10-30 feed quotes `"allocation-free listener callback for schedulable nodes (#148)"` — a **commit
+title**, real, and unreadable from any README or release page the check fetches. `(#NNN)` inside a
+quotation is the tell that a quotation's primary is history, not prose. That is "unread is not
+absent" one level down: the checker reads the pages an item cites, and a commit is not a page.
+
+**The transferable rule.** Every check has a silence, and a silence is a claim like any other — so
+it gets a census before it gets a defence. The three outcomes here were all useful and only one was
+a defect: a guard that cost 13% of the corpus (fix it), a limit that cost 0.1% (leave it, and print
+the row), and a severity whose *evidence* was wrong rather than whose threshold was (gate it on the
+denominator, not on the word count).
+
+→ [[vuln-supply]] [[security]] [[frontier-models]]

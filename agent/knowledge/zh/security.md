@@ -3474,3 +3474,46 @@ CISA 于 **2026-10-30** 把 **CVE-2026-111357** 与 **CVE-2026-118527**（均属
 **三条合起来的规则：** 持有凭据的工件，其响应应当按*凭据*而不是*主机*来定尺——在能证明之前先轮换，重签密钥而不是擦节点，并按明文所在的位置给设计定价。PaaS、CDN 和桌面 agent 是同一形状在三个尺度上的显现，而最该做轮换的一方，并不总是拥有那个秘密的一方。
 
 → [[vuln-supply]] [[disclosure-lag]] [[fact-check]] [[agent-stack]]
+
+### 检查瞄错了宾语——两个灾难性认证漏洞，同一类
+
+**LXD / MicroCloud，`CVE-2026-112816`。**守护进程的 mTLS 校验「把客户端送来的**所有**对端证书与已知信任库条目比对」。于是只要能访问 HTTPS API、并持有**别人**的公开客户端证书，把它作为**中间证书**塞进自己的链，就能以那个身份认证。Canonical 用一句话道破缺陷也是规则本身：「only the leaf certificate proves ownership of the signing key」；影响是「authenticate as any trusted TLS client, for which the attacker has the public certificate」——对管理员客户端而言就是主机 root。MicroCloud 更糟：攻击者可以「intercept the public TLS certificate of a joining cluster member」然后*成为*它。由 **Incus** 项目转交，致谢 `stgraber`。
+
+记录：赋值方 `canonical`、`PUBLISHED` **2026-10-30T16:42Z**、`security@ubuntu.com` 的 **CVSS 4.0 = 10.0**（`AV:N/AC:L/AT:N/PR:N/UI:N`，脆弱系统与后续系统三项影响均为 High）、**`CWE-295`**、NVD **`Deferred`**、**0** 条 `nvd@nist.gov` 指标（一手核实）。修复于 **2026-10-29** 跨六个 snap 通道发布——LXD **6.10.1 / 5.21.9 / 5.0.11 / 4.0.15**、MicroCloud **2.1.5 / 3.4.1**，点版本仍在 `candidate` → `stable` 滚出，所以滚动期间「latest」与「stable」不是同一件事。
+
+**可复用的部分是范围缺口：**公告的表覆盖**两个产品共六个版本**，而 `affected[]` 只写**一个**产品、**四条** semver 范围（`4.0.14 < 4.0.15`、`5.0.10 < 5.0.11`、`5.21.8 < 5.21.9`、`6.9.0 < 6.10.1`）。MicroCloud 的修复版本**只存在于正文**，只信机器可读记录的读者根本看不出 MicroCloud 在范围内。
+
+**pgAdmin 4，`CVE-2026-116241`。**Import/Export Data 把用户的导出查询包进 `psql \copy (...) TO`，并校验括号配平。该检查「rejected a backslash inside a single-quoted string but not inside a double-quoted identifier, where it treated the next double quote as closing the identifier」，而 psql「applies the connection's escape character to whichever quote opened a token」。当 `standard_conforming_strings` **关闭**时，反斜杠转义的双引号并不闭合标识符，查询于是逃出包装。两个解析器、两套关于字符串在哪结束的信念，而选哪一套的会话变量由攻击者设置。
+
+记录：赋值方 `PostgreSQL`、`PUBLISHED` **2026-10-30T20:17Z**、CNA **两条**度量（**9.9** v3.1、`PR:L/UI:N/S:C`；**9.4** v4.0）、**两个**弱点 **`CWE-78`** 与 **`CWE-115`**，并自述这是 **`CVE-2026-17566`** 修复的绕过、继承其 `S:C` 理由。NVD `Received`、0 条 NVD 打分。工件顺序：commit **`9be31a0`**——**作者日期 2026-10-23T18:47:28Z、提交者日期 2026-10-24T14:06:13Z**，同一个修复上挂着两只钟（提交信息「Reject a backslash in a double-quoted identifier in the Import/Export Data query export. #10663」）→ PyPI **9.19** **2026-10-29T15:36:19Z**（一手核对、为 `latest`）→ 记录 **10-30 20:17Z** → 说明（issue **#10663** 仍开着：「Internal tracking: pending fix for 9.19」）。仓库 tag feed 仍显示 `REL-9_18`（2026-09-17），所以**「修没修」要从 PyPI 回答，不是从 tag。**
+
+**这一类：**消毒器的正确性上限就是它对**消费方**文法的建模；而依赖调用方可翻转的设置的检查，是对方能关掉的控制。LXD 与 pgAdmin 是同一缺陷的两层——一个比**集合**而不是**密钥**，另一个用**自己的方言**而不是消费方的文法比**字符串**。
+
+### WS_FTP：相隔三个月的两次修复，而 10.0 是交出管理员凭据的那个
+
+同一分钟发布，**2026-10-29T16:19Z**，都是 Windows、都是 `security@progress.com`、都在 `Awaiting Analysis`、都是 **0** 条 NVD 打分：
+
+| CVE | 类别 | 分数 | 修复于 |
+|-----|------|------|--------|
+| `CVE-2026-84295` | `CWE-287`（+`CWE-522`）——「unauthenticated remote attacker to access sensitive information, including administrative credentials」 | **10.0**（`S:C`） | **2024.0.6** / **2025.0.3** |
+| `CVE-2026-90868` | `CWE-78`（+`CWE-88`）——OS 命令注入，`PR:L`，「under certain configurations」 | **9.9** | **2024.0.7** / **2025.0.4** |
+
+照着第一份公告修完就停的人，运行的构建里仍有第二个 bug，两条产品线各差一个增量。在一台文件传输服务器上，「administrative credentials」加「arbitrary command execution」是一条链而不是两个发现。两条记录唯一的引用是一个跳转到 SAML 登录的 `progress.lightning.force.com` 知识库文章，所以厂商自己的修补指引这一轮**读不到**——版本号是记录的断言，不是公告的。
+
+### 第一个带运维后果的 AI 发现内核 RCE：`CVE-2026-98432`
+
+内核 IPv4 TCP 路径上的竞态 UAF，由 **Anthropic 前沿红队**撰写，研究模型产出了完整利用链。修复提交标题即机制：`ipv4: free inet_opt and ireq_opt after an RCU grace period`。记录：Linux CNA、`PUBLISHED` **2026-10-15T12:08Z**、预留 **2026-09-25**、**一条**度量 `CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H` = **9.8**、**完全没有 CWE**（CNA 容器里 `problemTypes` 为 `null`，这是对 CNA 自己字段的陈述，不是 NVD 解析的结果）。NVD `Received`、0 条 NVD 打分。八个跨 stable 分支的修复提交，全部 `versionType: git`，以引入提交 `079096f103fa` 为键。
+
+**没人读的字段：**`AV:N` 的理由写在度量的 **`scenarios[]`** 里而不是描述里——未认证对端在 TCP SYN 中携带 IPv4 Record Route 或 Timestamp 字节。**运维那一半：**「48 分钟泄漏一个内核指针，再五分钟拿到 shell 命令执行」，使能属性是**重试直到成功**——输掉竞态只丢掉握手、机器不崩，所以共享主机可以无限次被尝试。**Akamai** 于 **2026-10-30 18:10 UTC** 开出 Linode 客户公告，**10-31 01:55 UTC** 称正在部署缓解且「no evidence of this vulnerability being exploited on the Akamai Compute platform」。**Go 安全团队**警告：自 **Go 1.24** 起程序在 Linux 监听套接字上默认启用 MPTCP，所以没人主动要也会中；`GODEBUG=multipathtcp=0` / `go.mod` 的 `godebug multipathtcp=0` 只是权宜，原文说「disabling MPTCP on a program-by-program basis is a fragile mitigation」以及「The best fix for this vulnerability is to upgrade to a patched kernel version」。两句要分开读：Anthropic 的 PoC 需要 MPTCP；Go 的警告是底层 bug 并非 MPTCP 专属。
+
+### Scribd：公开文章与私人通知走的是两只钟
+
+帮助中心文章日期 **2026-10-01**——未授权第三方「was able to gain access to our systems」并「used their access to reach other internal systems」；「For most accounts, this involved basic account information. For a smaller number of accounts, more sensitive information was involved」；通知「in phases」发出，且「If you haven't gotten one, it doesn't necessarily mean you weren't affected」。个人信件（Epiq 代表 Scribd、Slideshare、Everand、Fable）自 **2026-10-26** 起发出，点名字段：「last 4 digits of your credit card and country, credit card issuer, credit card expiry date, payment history (not including credit card details)」。**2026-10-31 02:46 UTC** 的 Tell HN 附上了那封信，评论者称自己在 10-30「a few hours ago」收到。没有 CVE，没有补丁可打。
+
+→ [[vuln-supply]] [[disclosure-lag]] [[fact-check]] [[frontier-models]]
+
+### 从论题 2 折叠出来——给自己加分的「不完整修复」
+
+原本活在论题 2 折叠状态行里的一行，连同标识符留在这里：六月那份公告（GHSA-j3rv-43j4-c7qm，**8.1**，发布于 **2026-06-23**）加了泛型参数校验；四个月后的 **`CVE-2026-110879`**（**9.8**、`CWE-502`）自称「**incomplete fix**」，因为 `DatabindContext._resolveAndValidateGeneric()` 是把每个泛型参数对照**外层**基类型校验，而不是它自己声明的绑定——于是 `Map<String,String>` 会接受 `HashMap<FileSystemXmlApplicationContext,String>`，后者的单字符串构造器加载攻击者的 XML。这与 WS_FTP 的两级修复、以及 Azure 第二次 API Connections 修复撤销第一次的 `RuntimeUrl` 校验是同一形状：**第二次修复才告诉你第一次并不完整**，而一个满足公告的版本号不是「公告里的 bug 已消失」的证据。
+
+→ [[vuln-supply]] [[disclosure-lag]] [[fact-check]]

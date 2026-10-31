@@ -3827,3 +3827,46 @@ CISAは**2026-10-30**、**CVE-2026-111357**と**CVE-2026-118527**（いずれも
 **3つから出る規則：** 認証情報を持つ成果物の対応は、*ホスト*ではなく*認証情報*の大きさに合わせる——証明できる前にローテーションし、ノードを消すのではなく鍵を再発行し、平文がどこにあるかで設計を値付けする。PaaS、CDN、デスクトップagentは同じ形が3つの尺度で現れたもので、どの場合もローテーションに最も適した当事者が、その秘密の所有者とは限らない。
 
 → [[vuln-supply]] [[disclosure-lag]] [[fact-check]] [[agent-stack]]
+
+### 検査は正しい構造で、狙った対象が違う——壊滅的な認証バグ2件、同じクラス
+
+**LXD / MicroCloud、`CVE-2026-112816`。**デーモンのmTLS検証は「クライアントが送ってきた**すべての**ピア証明書を既知のトラストストア項目と比較」していた。したがってHTTPS APIに到達でき、**他人の公開クライアント証明書**を持つ者は、それを**中間**証明書として自分の鎖に入れるだけでその主体として認証できる。Canonicalの一文は欠陥であり規則でもある：「only the leaf certificate proves ownership of the signing key」。影響は「authenticate as any trusted TLS client, for which the attacker has the public certificate」——管理者クライアントならホストのroot。MicroCloudはさらに悪く、「intercept the public TLS certificate of a joining cluster member」してその主体に*なる*。**Incus**プロジェクトからの転送、`stgraber`への謝辞。
+
+レコード：assigner `canonical`、`PUBLISHED` **2026-10-30T16:42Z**、`security@ubuntu.com` の **CVSS 4.0 = 10.0**（`AV:N/AC:L/AT:N/PR:N/UI:N`、影響3項は脆弱系・後続系ともHigh）、**`CWE-295`**、NVD **`Deferred`**、`nvd@nist.gov` 指標 **0**（一次確認）。修正は **2026-10-29** に6つのsnapチャネルへ——LXD **6.10.1 / 5.21.9 / 5.0.11 / 4.0.15**、MicroCloud **2.1.5 / 3.4.1**。ポイント版は `candidate` → `stable` を転がっている最中なので、「latest」と「stable」は同じものではない。
+
+**再利用できるのはスコープの欠落：**助言の表は**2製品・6版**を覆うが、`affected[]` は**1製品・4範囲**しか書かない（`4.0.14 < 4.0.15`、`5.0.10 < 5.0.11`、`5.21.8 < 5.21.9`、`6.9.0 < 6.10.1`）。MicroCloudの修正版は**本文にしか存在せず**、機械可読レコードだけを信じる読者にはMicroCloudが範囲内だと分からない。
+
+**pgAdmin 4、`CVE-2026-116241`。**Import/Export Dataはユーザーのエクスポートクエリを `psql \copy (...) TO` に包み、括弧の釣り合いを検証する。その検査は「rejected a backslash inside a single-quoted string but not inside a double-quoted identifier, where it treated the next double quote as closing the identifier」だったが、psqlは「applies the connection's escape character to whichever quote opened a token」。`standard_conforming_strings` が**off**なら、バックスラッシュでエスケープされた二重引用符は識別子を閉じない——クエリは包みの外へ出る。2つのパーサ、文字列がどこで終わるかについての2つの信念、そしてどちらを選ぶかのセッション変数は攻撃者が設定する。
+
+レコード：assigner `PostgreSQL`、`PUBLISHED` **2026-10-30T20:17Z**、CNAの**2**指標（**9.9** v3.1、`PR:L/UI:N/S:C`／**9.4** v4.0）、**2**つの弱点 **`CWE-78`**・**`CWE-115`**、そしてこれは **`CVE-2026-17566`** 修正の回避であり `S:C` の根拠を引き継ぐとCNA自身が書く。NVD `Received`、NVD採点0。成果物の順序：commit **`9be31a0`**——**author date 2026-10-23T18:47:28Z、committer date 2026-10-24T14:06:13Z**、1つの修正に2つの時計（「Reject a backslash in a double-quoted identifier in the Import/Export Data query export. #10663」）→ PyPI **9.19** **2026-10-29T15:36:19Z**（一次確認、`latest`）→ レコード **10-30 20:17Z** → ノート（issue **#10663** は「Internal tracking: pending fix for 9.19」のまま開いている）。リポジトリのtag feedは今も `REL-9_18`（2026-09-17）なので、**「直ったか」はtagではなくPyPIから答える。**
+
+**このクラス：**サニタイザの正しさの上限は**消費側**の文法についてのモデルであり、呼び出し側が反転できる設定に依存する検査は、相手が切れる制御である。LXDとpgAdminは同じ欠陥の2層——一方は**鍵**ではなく**集合**を、他方は消費側の文法ではなく**自方言**で**文字列**を比べていた。
+
+### WS_FTP：3か月差の2つの修正、10.0は管理者資格情報を渡すほう
+
+同じ分に公開、**2026-10-29T16:19Z**、いずれもWindows、`security@progress.com`、`Awaiting Analysis`、NVD採点 **0**：
+
+| CVE | クラス | スコア | 修正済み |
+|-----|--------|--------|----------|
+| `CVE-2026-84295` | `CWE-287`（+`CWE-522`）——「unauthenticated remote attacker to access sensitive information, including administrative credentials」 | **10.0**（`S:C`） | **2024.0.6** / **2025.0.3** |
+| `CVE-2026-90868` | `CWE-78`（+`CWE-88`）——OSコマンド注入、`PR:L`、「under certain configurations」 | **9.9** | **2024.0.7** / **2025.0.4** |
+
+最初の助言どおり直して止めた運用者のビルドには2つ目のバグが残り、各系統で1増分ずつ手前になる。ファイル転送サーバでは「administrative credentials」＋「arbitrary command execution」は2つの所見ではなく1本の鎖。両レコードの唯一の参照はSAMLログインへリダイレクトする `progress.lightning.force.com` のナレッジ記事なので、ベンダー自身の修正指引はこの回**読めなかった**——版番号はレコードの主張であって助言のものではない。
+
+### AIが見つけた最初の運用影響付きカーネルRCE：`CVE-2026-98432`
+
+カーネルIPv4 TCP経路の競合UAFで、**Anthropic Frontier Red Team**の執筆、研究モデルが完全なエクスプロイト連鎖を生成した。修正コミットの題名がそのまま機序：`ipv4: free inet_opt and ireq_opt after an RCU grace period`。レコード：Linux CNA、`PUBLISHED` **2026-10-15T12:08Z**、予約 **2026-09-25**、指標は**1つ** `CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H` = **9.8**、**CWEは皆無**（CNAコンテナの `problemTypes` が `null`——これはCNA自身のフィールドについての陳述で、NVDの解析結果ではない）。NVD `Received`、NVD採点0。stableブランチ横断で8つの修正コミット、すべて `versionType: git`、導入コミット `079096f103fa` をキーとする。
+
+**誰も読まないフィールド：**`AV:N` の根拠は説明文ではなくメトリクスの **`scenarios[]`** にある——未認証の相手がTCP SYNにIPv4 Record RouteまたはTimestampのバイトを載せる。**運用側：**「カーネルポインタの漏洩に48分、そこからシェルコマンド実行まで5分」、可能にしているのは**成功するまでの再試行**——競合に負けてもハンドシェイクが落ちるだけでマシンは落ちないため、共有ホストは無限に試される。**Akamai** は **2026-10-30 18:10 UTC** にLinode顧客向け助言を開き、**10-31 01:55 UTC** に緩和を展開中で「no evidence of this vulnerability being exploited on the Akamai Compute platform」と述べた。**Goセキュリティチーム**は、**Go 1.24** 以降LinuxのlistenソケットでMPTCPが既定で有効になるため、誰も望まないのにスコープ入りしうると警告。`GODEBUG=multipathtcp=0` や `go.mod` の `godebug multipathtcp=0` は暫定で、「disabling MPTCP on a program-by-program basis is a fragile mitigation」「The best fix for this vulnerability is to upgrade to a patched kernel version」。2つは分けて読む：AnthropicのPoCはMPTCPを要するが、Goの警告は根因がMPTCP固有でないことだ。
+
+### Scribd：公開記事と個別通知は別の時計で動く
+
+ヘルプセンター記事の日付は **2026-10-01**——未承認の第三者が「was able to gain access to our systems」し「used their access to reach other internal systems」；「For most accounts, this involved basic account information. For a smaller number of accounts, more sensitive information was involved」；通知は「in phases」で、しかも「If you haven't gotten one, it doesn't necessarily mean you weren't affected」。個別通知（EpiqがScribd、Slideshare、Everand、Fableの代理で）は **2026-10-26** から始まり、項目を名指しする：「last 4 digits of your credit card and country, credit card issuer, credit card expiry date, payment history (not including credit card details)」。**2026-10-31 02:46 UTC** のTell HNがその手紙を載せ、コメント者は10-30に「a few hours ago」受け取ったと書く。CVEは無く、直すものも無い。
+
+→ [[vuln-supply]] [[disclosure-lag]] [[fact-check]] [[frontier-models]]
+
+### テーゼ2から折り畳んだもの——自らのスコアを上げた「不完全な修正」
+
+テーゼ2の折り畳まれた状態行にあった1行を、識別子ごとここに残す：6月の助言（GHSA-j3rv-43j4-c7qm、**8.1**、**2026-06-23** 公開）はジェネリック引数の検証を加えた；4か月後の **`CVE-2026-110879`**（**9.8**、`CWE-502`）は「**incomplete fix**」を自称する。`DatabindContext._resolveAndValidateGeneric()` が各ジェネリック引数を宣言された束縛ではなく**外側**の基底型に対して検証するため、`Map<String,String>` が `HashMap<FileSystemXmlApplicationContext,String>` を受け入れ、その単一文字列コンストラクタが攻撃者のXMLを読み込む。WS_FTPの2段階の修正や、Azureの2度目の API Connections 修正が1度目の `RuntimeUrl` 検証を取り消したのと同じ形：**2度目の修正が1度目の不完全さを告げる**のであり、助言を満たす版番号は助言のバグが消えた証拠ではない。
+
+→ [[vuln-supply]] [[disclosure-lag]] [[fact-check]]

@@ -1068,3 +1068,13 @@ CLI remain the source of truth; these skills help agents apply them correctly"�
 3. **审查面是什么？** `.mcp.json`、调用表，或参考集——从来不是整棵目录树。
 
 → [[agent-distribution]] [[fact-check]] [[agent-stack]]
+
+## 2026-10-31 12:19——参考仓库的许可证按文件夹分，十九个里有四个不可复用
+
+`anthropics/skills`——「Public repository for Agent Skills」，也是这片生态大量复制的目录树——本周在 trending：**+1,888★**（今日 **295**，总计 **185,423**、**21,904** fork、`open_issues_count` **1,450** = issue **+ PR**、`pushed_at` **2026-10-28T19:20Z**、`license: null`、`archived: false`；均一手核对）。
+
+结构小而承重：`skills/` 下 **19** 个文件夹（按 contents API 计数），加 `spec/`、`template/`、`.claude-plugin/` 与 `THIRD_PARTY_NOTICES.md`——而且**根目录没有 `LICENSE`**（404）。许可证写在 README 里，且**一个仓库两套**：「Many skills in this repo are open source (Apache 2.0). We've also included the document creation & editing skills … in the `skills/docx`, `skills/pdf`, `skills/pptx`, and `skills/xlsx` subfolders」，其中「These are **source-available, not open source**」，理由是「as a reference for more complex skills that are actively used in a production AI application」。
+
+所以 vendoring 的单位是**文件夹**而不是仓库，**19 个里 4 个**按许可证只可读。另有两条改变「买到了什么」：「provided for demonstration and educational purposes only」，以及「the implementations and behaviors you receive from Claude may differ from what is shown」——厂商明说实际发货的行为不是这份代码。同一个仓库还给了本批的单位提醒：**1,450** 是复合 issue 计数器，不是 1,450 个 issue。
+
+→ [[fact-check]] [[agent-stack]] [[dev-tools]]

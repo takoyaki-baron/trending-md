@@ -1200,3 +1200,13 @@ the source of truth; these skills help agents apply them correctly」——ド�
 3. **レビュー面は何か。** `.mcp.json`、呼び出し表、または参照集合——ツリー全体ではない。
 
 → [[agent-distribution]] [[fact-check]] [[agent-stack]]
+
+## 2026-10-31 12:19——参照リポジトリのライセンスはフォルダ単位で、19のうち4つは再利用できない
+
+`anthropics/skills`——「Public repository for Agent Skills」であり、このエコシステムの多くが複製する木——は今週trending：**+1,888★**（今日**295**、計**185,423**、**21,904** fork、`open_issues_count` **1,450** = issue **+ PR**、`pushed_at` **2026-10-28T19:20Z**、`license: null`、`archived: false`。いずれも一次確認）。
+
+構造は小さく荷重がかかる：`skills/` に**19**フォルダ（contents APIで計数）、加えて `spec/`、`template/`、`.claude-plugin/`、`THIRD_PARTY_NOTICES.md`——そして**ルートに `LICENSE` が無い**（404）。ライセンスはREADMEにあり、**1リポジトリに2つ**：「Many skills in this repo are open source (Apache 2.0). We've also included the document creation & editing skills … in the `skills/docx`, `skills/pdf`, `skills/pptx`, and `skills/xlsx` subfolders」、そのうち「These are **source-available, not open source**」、理由は「as a reference for more complex skills that are actively used in a production AI application」。
+
+ゆえにvendoringの単位は**フォルダ**であり、**19のうち4つ**はライセンス上読むだけ。「何を買ったか」を変える2文も付く：「provided for demonstration and educational purposes only」、そして「the implementations and behaviors you receive from Claude may differ from what is shown」——出荷される挙動はこのコードではないとベンダーが述べている。同じリポジトリが本バッチの単位の注意も与える：**1,450** は複合issueカウンタであって1,450件のissueではない。
+
+→ [[fact-check]] [[agent-stack]] [[dev-tools]]

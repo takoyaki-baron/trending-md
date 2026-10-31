@@ -982,3 +982,20 @@ OpenPanel の **37 件のアドバイザリ、CVE id は 0 件**（構造上そ�
 実測：OpenPanel は **37/37 が鍵なし**、**37 件のうち修正バージョンを明記するのは 10 件のみ**、`GHSA-49hg-9qhc-4623` → リリース系列の **3.16.2（2026-10-27）**。ここでは「記録を待つ」は**対処**にならない —— **待っている記録は存在しない**からだ。対処はベンダー自身のアドバイザリ feed を追うことである。
 
 → [[disclosure-lag]] [[fact-check]] [[security]]
+
+## 2026-10-31 12:19——6つのレコード、6つのCNA、NVDの数字はゼロ——そして助言の範囲を決める2つのフィールド
+
+1回のNVD `cveId` リスト取得で本バッチの新規6件を確認（12:2x UTC+8、一次確認）：`CVE-2026-98432`（カーネル、Linux CNA、3.1 **9.8**、`Received`、CWEなし）、`CVE-2026-112816`（LXD、`security@ubuntu.com`、4.0 **10.0**、`Deferred`、`CWE-295`）、`CVE-2026-116241`（pgAdmin、PostgreSQL、3.1 **9.9** / 4.0 **9.4**、`Received`、`CWE-78`+`CWE-115`）、`CVE-2026-61991`（WPプラグイン、`audit@patchstack.com`、3.1 **10.0**、`Deferred`、`CWE-94`）、`CVE-2026-84295`（WS_FTP、3.1 **10.0**、`Awaiting Analysis`、`CWE-287`+`CWE-522`）、`CVE-2026-90868`（WS_FTP、3.1 **9.9**、`Awaiting Analysis`、`CWE-78`+`CWE-88`）。
+
+**6件中0件が `nvd@nist.gov` 指標を持つ**、分析済み0件。3件は**2つ**の指標を載せ（PostgreSQLの2つは*異なる*CVSSバージョン）、「あのスコア」は判断になる前にすでに選択である。本バッチの9.9–10.0は4件すべてCNA割当：3件は発見者かベンダー、1件は `S:C` の根拠をコンテナに書き以前の修正の回避だと明言するCNA。
+
+### 範囲を決める2つのフィールドは食い違う
+
+- **`affected[]` は1製品、助言ページは2製品。**LXDのレコードは**LXD**の**4**範囲を列挙し、Canonicalの助言は**2製品・6**スナップ版を出す。MicroCloudの `2.1.5` と `3.4.1` は**どの機械可読フィールドにも無い**——レコードをキーにするスキャナはMicroCloudホストをクリーンと印字する。
+- **バージョンは列であって点ではない。**WS_FTPの認証バグは `2024.0.6` / `2025.0.3`、コマンド注入は `2024.0.7` / `2025.0.4` で直る。「あの」助言どおり直すと各系統で**1増分手前**で止まり、2つのバグは連鎖する（管理者資格情報＋任意コマンド実行）。だから任意の助言ページへの一般化した問いは*この製品に何件のレコードがあり、最も高い修正版はどれか*であって、*patched version は何か*ではない。
+
+### 「No official patch」はベンダー名を伴う状態である
+
+**`CVE-2026-61991`**（AjaxLoadMore Cache ≤ **3.1.1**、`CWE-94`、`audit@patchstack.com` の **10.0**、NVD `Deferred`）：Patchstackエントリの patched セルは「**No official patch available**」、条目は「**No VDP**」、必要権限は**未認証**。時計：**Julieta** が **2026-09-12** に報告、Patchstack が **2026-10-13** に公開、NVD が **2026-10-29T16:18Z**——報告から**47日**、うち**16日**は攻撃記述が公開されコード修正が無い状態。唯一の緩和は「Patchstack has issued a mitigation rule to block any attacks until an official patch becomes available」——**WAF製品**であって修正ではなく、彼らのエッジの外では無意味。
+
+→ [[disclosure-lag]] [[security]] [[fact-check]]

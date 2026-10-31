@@ -1353,6 +1353,41 @@
    "id": "CVE-2026-42922",
    "why": "FUXA 1.3.2-2809 /nodered; Talos 9.8 authorization bypass, Deferred",
    "seeded": "2026-10-31 [Deferred] 3.1 Secondary/talos-cna@cisco.com 9.8, CWE-285, published 10-29, 0 NVD-scored"
+  },
+  {
+   "id": "CVE-2026-98432",
+   "why": "Linux kernel ipv4 UAF zero-click RCE (Anthropic PoC, MPTCP); 9.8 Linux CNA, no CWE, status Received — watch for Analysis/KEV",
+   "seeded": "2026-10-31 [Received] 3.1 Secondary/416baaa9 (kernel CNA) 9.8, no CWE, published 10-15"
+  },
+  {
+   "id": "CVE-2026-112816",
+   "why": "Canonical LXD mTLS chain auth bypass; CVSS4 10.0 security@ubuntu.com, NVD Deferred",
+   "seeded": "2026-10-31 [Deferred] 4.0 Secondary/security@ubuntu.com 10.0, CWE-295, published 10-30"
+  },
+  {
+   "id": "CVE-2026-116241",
+   "why": "pgAdmin 4 \\copy command injection; PostgreSQL CNA 9.9 (3.1) / 9.4 (4.0), status Received, fix commit 10-23",
+   "seeded": "2026-10-31 [Received] 3.1+4.0 Secondary/PostgreSQL 9.9/9.4, CWE-78+CWE-115, published 10-30"
+  },
+  {
+   "id": "CVE-2026-61991",
+   "why": "AjaxLoadMore Cache WordPress RCE, Patchstack 10.0, no official patch, NVD Deferred",
+   "seeded": "2026-10-31 [Deferred] 3.1 Secondary/audit@patchstack.com 10.0, CWE-94, published 10-29"
+  },
+  {
+   "id": "CVE-2026-84295",
+   "why": "Progress WS_FTP unauth credential exposure 10.0; Awaiting Analysis",
+   "seeded": "2026-10-31 [Awaiting Analysis] 3.1 Secondary/security@progress.com 10.0, CWE-287, published 10-29"
+  },
+  {
+   "id": "CVE-2026-90868",
+   "why": "Progress WS_FTP OS command injection 9.9; Awaiting Analysis",
+   "seeded": "2026-10-31 [Awaiting Analysis] 3.1 Secondary/security@progress.com 9.9, CWE-78, published 10-29"
+  },
+  {
+   "id": "CVE-2026-17566",
+   "why": "Prior pgAdmin Import/Export bug that CVE-2026-116241 bypasses (cited in the 10-31 item)",
+   "seeded": "2026-10-31 cited as the bypassed fix; not re-verified this run"
   }
  ]
 }

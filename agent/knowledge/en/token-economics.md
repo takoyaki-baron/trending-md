@@ -561,3 +561,26 @@ prompt) is the first version of that layer that the model itself can operate. It
 change, not a wrapper: no proxy in front of the API can drop cache the server holds.
 
 Sources: [arXiv: Cache Engineering for Agents](https://arxiv.org/abs/2610.28577) · [arXiv PDF](https://arxiv.org/pdf/2610.28577)
+
+## 2026-10-31 12:19 — the input side has an energy term, and prefill is superlinear
+
+"**The Real Cost of Context: Predicting Compute Time and Energy Consumption in LLM Prefill and Decode Phases**"
+(arXiv **2610.39621**; Krupp, Geißler, Calatrava-Nicolas, Fritsch, Lukowicz, Karolus) starts from the accounting gap
+this file keeps finding: agentic architectures "substantially increased token consumption", yet estimates "focus
+primarily on generated output tokens while overlooking the impact of the large input contexts characteristic of agentic
+workflows."
+
+The result, from generalized linear model fits over a wide sweep of prefill and decode lengths: **decode** compute time
+and energy scale **linearly** with output length, while **prefill** shows **both linear and quadratic** terms with input
+length. So the cost of an agent's growing history is not proportional to its size — doubling the context can cost more
+than twice as much, **in the phase everyone treats as "just reading"**. They also report that "compute time serves as a
+reliable proxy for energy consumption when direct energy measurements are unavailable", which is what makes the framework
+usable for closed API models.
+
+Two limits that keep this from being a billing tool: the fits are **per-model and per-hardware**, so coefficients do not
+transfer between deployments, and the compute-time-as-proxy calibration is against the authors' own measurements rather
+than a vendor's metering — it estimates a hosted model's *energy*, not your *invoice*. The design consequence is
+directional and survives both limits: for anything that buys latency by sending more context instead of retrieving less,
+the marginal token is not the marginal cost, and **compaction/retrieval is an energy decision as well as a latency one**.
+
+→ [[frontier-models]] [[harness-overhead]] [[agent-stack]]

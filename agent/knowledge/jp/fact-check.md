@@ -1243,3 +1243,81 @@ macOS 15.5（24F74）での実測：ファイルには証明書が **128** 枚�
 未修正の 10-31 feed：**13 件の指摘 / 9 件の確認**。原位置で四件（項目 8、10、14、20）を修正し、三箇所の強調引用符（9、12、16）を外した後：**0 / 15**。残る 4〜5 語の span 四件は指摘に昇格させず `quote-short`（助言）に留めた。`--selftest` **109 → 126**、うち 17 件がこの検査のもの。
 
 → [[disclosure-lag]] [[security]] [[no-ai-default]]
+
+## 2026-10-31 12:19——さらに4つの単位：作業集合、一枚の画像、チェックサム、フォルダ
+
+### 表は画像であり、画像は表ではない
+
+本バッチの2つのモデル公開は、見出しの比較を**レンダリング済み資産**で出し、隣に表を置かない：`baidu/Unlimited-OCR-2` は「Achieves state-of-the-art performance across both dozens-of-pages benchmarks (e.g. MPDocBench) and extreme hundred-page benchmarks (e.g. MarathonDocBench)」と述べ、リーダーボードは `assets/leaderboard.png`；`XHToken/Spark-X2.6-4B` は「models with approximately 9B parameters」に匹敵すると主張し、`images/all_benchmark.svg` を出す。よってどちらのカードの数字も、OCRを通さずには引用も検証もできない——そしてスクリーンショットは、ベンダーが改訂したときに表のようにはdiffできない。検査は機械的である：**カードのベンチマーク節で `<table>` か `|` をgrepする。証拠の全体が `![...](...)` かSVGリンクなら、そのカードは「主張の画像」を公開している。**帰結として、そうしたカードの「SOTA」はポジショニング表明であり、監査可能な部分は別にある——Sparkでは配布一覧（`llama.cpp` がbuild **b10828** から `spark2_5` をネイティブ対応、Ollama **0.34.1+**、MLX、LM Studio）、OCR-2ではサービング付録。
+
+### 「unlimited」はウィンドウではなく作業集合についての主張
+
+Unlimited-OCR-2の機序は **SR-SWA**：テキスト-視覚の注意を「compress[ed] … down to a fixed-size set of working references (e.g., 512 tokens)」に圧縮し、計算を束縛して「per-step decoding latency and memory footprint nearly constant regardless of document length」にする。複数ページ解析は1リクエスト（`"<PAGE><image>" * num_pages + "Multi page parsing."`）、代償は付録に書かれる：前ウィンドウのKV末尾を再利用するページウィンドウ、`--mem-fraction-static 0.7`（0.75は同時**32**リクエスト超でOOM）、そしてページウィンドウを小さくするとピークメモリは下がるが**ウィンドウ境界でページ間マージを失う**という明示的なトレード。これは10-30の「1Mコンテキスト対131Kデプロイ」という単位の一段下：製品名が数えるのは**束縛された**量で、束縛されていないのは調整可能なウィンドウ＋メモリ予算。
+
+一次確認したHub状態：`baidu/Unlimited-OCR-2` はMIT、**24,276** ダウンロード、**457** likes、`createdAt` **2026-10-26T03:57Z**（項目は「released 2026-10-27」——Hub自身の作成時刻は1日早い）；`XHToken/Spark-X2.6-4B` はapache-2.0、**12,515** ダウンロード、**923** likes、最終更新 **2026-10-31T02:26Z**。
+
+### チェックサムとタスクは別の問い
+
+"**Broken on Arrival**"（arXiv **2609.05881**）はOllama公式ライブラリの**15**モデル系列にわたる**305**のコード対応GGUFタグすべてと、Hugging Faceの**22**のコミュニティファイルを15問のコード・スクリーンで走査し、疑わしいものを**164**問のHumanEval+で再試験した。**7つの公式タグ（2.3%）が最大6問**しか解かず、いずれも**≤4B**パラメータの低位量子化だった。
+
+対照が発見そのもの：疑わしい5件を元の重みから再ビルドすると「matched our uncalibrated rebuilds tensor for tensor, so none was corrupted」——続く一文が残すべきもの、「**Exact reproducibility did not imply function.**」変数はビット幅ではなく**較正**：重み・ツールチェーン・テンソル構成を固定したままimportance matrixを加えると、`Qwen2.5-Coder-3B` は3つの量子化水準で**ゼロから164問中76–113問**に上がり、同じ未較正レシピでも `Qwen2.5-Coder-1.5B` は動き続けた——レシピ単独では失敗を予測できない。誤検知側：「None of 66 sampled tags that passed the screen was non-functional」。**v3** は以前の診断を1つ訂正する：コミュニティの `deepseek-coder-6.7B` の組はバックエンドではなく**チャットテンプレートの欠落**で失敗する。
+
+つまり1つの成果物に検証単位が3層積まれている——*ファイルは公開者のものか*（ハッシュ）、*ロードするか*（ロード試験）、*タスクを解くか*（タスク・スクリーン）——そしてレジストリが公開するのは**ダウンロード数とlikes**で、3層のどれでもない。運用規則：**≤4Bの低位**はタグを信じる前にタスク級のスモークテストを走らせ、失敗したら破損を疑う前に**同じモデルの較正済み量子化に替える**。
+
+### ライセンスはフォルダ単位でありえ、リポジトリ級バッジは4つ目の成果物
+
+`anthropics/skills`（一次確認：**185,423★**、**21,904** fork、`open_issues_count` **1,450**、`pushed_at` **2026-10-28T19:20Z**、**`license: null`**）は**ルートに `LICENSE` が無い**（404）。ルートは `.claude-plugin`、`.gitignore`、`README.md`、`THIRD_PARTY_NOTICES.md`、`skills`、`spec`、`template` のみ。ライセンスはREADMEにあり、**1リポジトリに2つ**：「Many skills in this repo are open source (Apache 2.0). We've also included the document creation & editing skills … in the `skills/docx`, `skills/pdf`, `skills/pptx`, and `skills/xlsx` subfolders」、そのうち「These are **source-available, not open source**」。`skills/` は**19**フォルダ（contents APIで計数）なので、**19のうち4つ**が「読めるが再利用できない」。READMEはさらに「provided for demonstration and educational purposes only」「the implementations and behaviors you receive from Claude may differ from what is shown」と書き、出荷される挙動はこのコードではないとベンダー自身が述べている。
+
+ライセンスはこのライブラリで**4つ**の成果物形態を取る：レジストリ/APIフィールド（`NOASSERTION` か `null`）、ルートの `LICENSE` ファイル（またはその404）、READMEの陳述、バッジ。「vendorできるか」に答える単位は**フォルダ**だけである。
+
+→ [[security]] [[vuln-supply]] [[frontier-models]] [[agent-plugins]]
+
+## 2026-10-31 12:32（act）— チェッカーの沈黙もまた一つの主張である：全フィードの引用行の13.1%は判定されていなかった
+
+`quotation` チェックは 2026-10-31 に作られ、1バッチで校正されただけなので、そのカバレッジは
+測定ではなく前提だった。国勢調査（`claim-unit-lint.mjs --quotation-census`、ネットワーク不要）を
+**31** の10月フィード・**1,248** 項目に対して実行し、3つの疑いを3つの異なる答えに変えた。
+
+**1. 奇数引用行はコーパスの13.1%を占め、しかもそれは雑な記号ではなかった。** 直引用符が対にならない行は
+丸ごとスキップされていた——チェック最初の29語・32語の「幻の引用」を生んだ誤ペアリングを避けるためだ。
+スキップされた310行を読むと、その正体は**ハードラップされた引用**であることがわかる。開き引用符が行末に、
+閉じ引用符が次の行頭に来る形（「…showing "known outdoor surveillance cameras and / license plate
+readers": Flock Safety ALPRs…」）で、つまり折り返された引用は両半分とも失われていた。ガードは
+チェックを守る代わりに盲目にしていた。上限付きの結合（継続は最大2行・600文字）でブロック単位に
+対にするようにし、**6語以上の引用は 2,208 → 2,338（+130、+5.9%）** に増えた。**12** のブロックは
+最後まで釣り合わず、カバレッジとして報告され、掘り下げには使わない。結合で生じた引用は指摘の
+詳細に明記されるので、「折り返し引用」は可視化され、黙って正規化されることはない。
+
+**2. 4ページ上限は欠陥ではなく、有益な成果は「問題ない」と示すその行のほうだ。** 同じ1,248項目で
+4ページを超えるのは**1**件だけで、落ちた候補も**1**件——同じCVEに並ぶ2つ目のベンダー勧告であり、
+項目の主ソースでは決してない。当時の誘惑は上限を上げることだったが、調査はその修正が何も買わず
+取得回数だけ増やすと言っている。上限を4に据え置くことは今や*測定された*決定であり、実行のたびに
+自分の分母を印字する。
+
+**3. 4〜5語の助言クラスは精度が高く、汚染されていたのは分母だった。** 10-30 フィードの6件の助言。
+1件ずつ原典を開くと、**引用ページが読めたものはすべて実在の欠陥**だった——pico のメンテナは
+「AI can generate lightweight, standalone, accessible HTML with just the CSS it needs」と書いており、
+「AI made it unnecessary」とは一度も書いていない。novelty-bench は自分のプロンプトを*伝聞*として
+述べており（「the other simply asked which idea was novel」）、フィードはその伝聞をプロンプト文字列の
+引用に変えていた。Fowler のページは「skeptism」という綴りで、フィードの「skepticism」は引用符の
+中の黙った誤字修正だった。捏造に見えた3件は **coindesk.com の HTTP 429** によるもので、その引用
+ページは本文を一切返していなかった。つまりこのクラスの*精度*は問題ではなく、失敗は「未読」であり、
+未読が見えない重大度はチェッカー自身のネットワーク運を罰するだけだ。いま4〜5語の引用は、
+**項目が引用するページに未読が一つも無いときだけ** **`quote-paraphrase`（sev 2）** に上がり、
+未読があれば `quote-short`（sev 1）のまま、詳細に未読件数を明記する。双方向で校正済み：
+10-31 のファイルは変更前後とも **0件の指摘 / 31件検証**、10-30 の3件の昇格はいずれも原典を開いて
+確認し、その場で訂正した（第 **20・29・41** 項目、en+zh+jp の3言語）。
+
+**調査が届かない残存クラス：引用元そのものが commit リストである場合。** 10-30 の第27項目は
+`"allocation-free listener callback for schedulable nodes (#148)"` を引用している——これは**commit
+タイトル**で、実在するが、チェッカーが取得する README や release ページからは読めない。引用符の
+中に `(#NNN)` があるのは「その引用の原文は散文ではなく履歴にある」という合図だ。これは
+「未読は不在ではない」のもう一段下で、チェッカーは項目が引用するページを読むが、commit はページ
+ではない。
+
+**移植できるルール。** どのチェッカーにも沈黙があり、沈黙は他の主張と同じく扱うべきものだ——だから
+防衛線の前に国勢調査を与える。ここでの3つの結果はすべて役に立ったが、欠陥だったのは1つだけ：
+コーパスの13%を犠牲にしていたガード（直す）、0.1%しか犠牲にしていない上限（残し、その行を印字する）、
+そして*閾値*ではなく*根拠*が間違っていた重大度（語数ではなく分母で格付けする）。
+
+→ [[vuln-supply]] [[security]] [[frontier-models]]

@@ -5717,3 +5717,112 @@ at three different scales, and in each the party best placed to rotate is not al
 the secret.
 
 → [[vuln-supply]] [[disclosure-lag]] [[fact-check]] [[agent-stack]]
+
+### The check was aimed at the wrong object — two catastrophic auth bugs, one class
+
+**LXD / MicroCloud, `CVE-2026-112816`.** The daemon's mutual-TLS verification "compared all peer certificates
+sent by the client to known trust store entries". So an attacker who can reach the HTTPS API and holds
+**somebody else's public client certificate** authenticates as that identity by putting it in their own chain as
+an **intermediary**. Canonical's one-line statement of the defect is also the rule: "only the leaf certificate
+proves ownership of the signing key." The impact sentence is equally direct — "authenticate as any trusted TLS
+client, for which the attacker has the public certificate" — and with an admin client that is root on the host.
+MicroCloud is worse in kind: the attacker can "intercept the public TLS certificate of a joining cluster member"
+and then *be* that member. Referred from the **Incus** project, credited `stgraber`.
+
+Record: assigner `canonical`, `PUBLISHED` **2026-10-30T16:42Z**, **CVSS 4.0 = 10.0** from `security@ubuntu.com`
+(`AV:N/AC:L/AT:N/PR:N/UI:N`, all impacts High in the vulnerable *and* subsequent systems), **`CWE-295`**, NVD
+**`Deferred`** with **0** `nvd@nist.gov` metrics (checked first-hand). Fixes shipped **2026-10-29** across six snap
+channels — LXD **6.10.1 / 5.21.9 / 5.0.11 / 4.0.15**, MicroCloud **2.1.5 / 3.4.1** — with point releases still
+rolling `candidate` → `stable`, so "latest" and "stable" are not the same thing during the rollout.
+
+**The scoping gap is the reusable part:** the advisory's table covers **six versions across two products**, while
+`affected[]` names **one** product and **four** semver ranges (`4.0.14 < 4.0.15`, `5.0.10 < 5.0.11`,
+`5.21.8 < 5.21.9`, `6.9.0 < 6.10.1`). MicroCloud's fix versions exist **only in prose**, so a reader who trusts the
+machine-readable record alone cannot tell MicroCloud is in scope at all.
+
+**pgAdmin 4, `CVE-2026-116241`.** Import/Export Data wraps a user's export query in a `psql \copy (...) TO` command
+and validates that the parentheses balance. The check "rejected a backslash inside a single-quoted string but not
+inside a double-quoted identifier, where it treated the next double quote as closing the identifier" — while psql
+"applies the connection's escape character to whichever quote opened a token". With `standard_conforming_strings`
+**off**, a backslash-escaped double quote does not close the identifier, so the query escapes the wrapper. Two
+parsers, two beliefs about where the string ends, and the attacker sets the session variable that picks which.
+
+Record: assigner `PostgreSQL`, `PUBLISHED` **2026-10-30T20:17Z**, **two** CNA metrics — **9.9** (`CVSS:3.1`,
+`PR:L/UI:N/S:C`) and **9.4** (4.0) — **two** weaknesses, **`CWE-78`** and **`CWE-115`**, and the CNA's own note that
+this bypasses the fix for **`CVE-2026-17566`**, inheriting its `S:C` rationale. NVD `Received`, 0 NVD-scored.
+Order of artifacts: commit **`9be31a0`** — **author date 2026-10-23T18:47:28Z, committer date 2026-10-24T14:06:13Z**, two clocks on one fix ("Reject a backslash in a double-quoted identifier in the Import/Export Data query export. #10663") → PyPI **9.19** **2026-10-29T15:36:19Z** (checked first-hand; `latest`) → record
+**10-30 20:17Z** → notes (still unpublished: issue **#10663** reads "Internal tracking: pending fix for 9.19").
+The repo's tag feed still shows `REL-9_18` (2026-09-17), so **"is it fixed" is answered from PyPI, not from tags.**
+
+**The class:** a sanitizer is only as correct as its model of the **consumer's** grammar, and a check that depends
+on a setting the caller can flip is a control the other side can turn off. LXD and pgAdmin are the same defect at
+two layers — one compared a *set* instead of a *key*, the other compared a *string* under its own dialect instead
+of the consumer's.
+
+### WS_FTP: two fixes three months apart, and the 10.0 is the credential handover
+
+Both published in the same minute, **2026-10-29T16:19Z**, both Windows, both `security@progress.com`, both
+`Awaiting Analysis`, both **0 NVD-scored**:
+
+| CVE | Class | Score | Fixed before |
+|-----|-------|-------|--------------|
+| `CVE-2026-84295` | `CWE-287` (+`CWE-522`) — "unauthenticated remote attacker to access sensitive information, including administrative credentials" | **10.0** (`S:C`) | **2024.0.6** / **2025.0.3** |
+| `CVE-2026-90868` | `CWE-78` (+`CWE-88`) — OS command injection, `PR:L`, "under certain configurations" | **9.9** | **2024.0.7** / **2025.0.4** |
+
+An operator who applies the first advisory's fix and stops is running a build that still contains the second bug,
+one increment behind on each line. On a file-transfer server, "administrative credentials" plus "arbitrary command
+execution" is a single chain rather than two findings. The only reference on either record is a
+`progress.lightning.force.com` Knowledge article that redirects to a SAML login, so the vendor's own patch guidance
+was **unreadable** on this pass — the version numbers are the record's claim, not the advisory's.
+
+### The first AI-found kernel RCE with operational fallout: `CVE-2026-98432`
+
+A race-condition use-after-free in the kernel's IPv4 TCP path, written up by **Anthropic's Frontier Red Team**, whose
+research model produced the exploit chain. Kernel commit text: `ipv4: free inet_opt and ireq_opt after an RCU grace
+period`. `tcp_v4_syn_recv_sock()` transfers `ireq->ireq_opt` to the child socket without copying; a CPU handling a
+**retransmitted SYN** reads the same options under `rcu_read_lock()` only; `inet_sock_destruct()` frees `inet_opt`
+with a plain `kfree()` rather than `kfree_rcu()`, so `ip_options_build()` can read freed memory. The
+**request-socket migration** path (`net.ipv4.tcp_migrate_req=1`, or a BPF reuseport selector) is what MPTCP exercises.
+
+Record: Linux CNA, `PUBLISHED` **2026-10-15T12:08Z**, reserved **2026-09-25**, **one** metric —
+`CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H` = **9.8** — and **no CWE at all** (`problemTypes` is `null` in the
+CNA container, so that is a statement about the CNA's own field, not NVD's parse). NVD **`Received`**, 0 NVD-scored.
+Eight fix commits across stable branches, all `versionType: git`, keyed from the introducing commit `079096f103fa`.
+
+**The field nobody reads:** the `AV:N` justification lives in the metric's **`scenarios[]`**, not the description — an
+unauthenticated peer supplies IPv4 Record Route or Timestamp bytes in a TCP SYN. **The operational half:** "it takes
+48 minutes to leak a kernel pointer and another five minutes to reach the shell command execution", and the enabling
+property is **retry-until-success** — a lost race drops the handshake and never crashes the box, so a shared host is
+re-attackable indefinitely. **Akamai** opened a Linode customer advisory **18:10 UTC 2026-10-30**, said at
+**01:55 UTC 10-31** that it is deploying mitigations with "no evidence of this vulnerability being exploited on the
+Akamai Compute platform". **Go Security** warned that since **Go 1.24** programs enable MPTCP by default on Linux
+listen sockets, so a Go server can be in scope without anyone asking; `GODEBUG=multipathtcp=0` / `godebug
+multipathtcp=0` in `go.mod` is a stopgap, but "disabling MPTCP on a program-by-program basis is a fragile mitigation"
+and "The best fix for this vulnerability is to upgrade to a patched kernel version." Read the two apart: Anthropic's
+PoC needs MPTCP; Go's warning is that the underlying bug is not MPTCP-specific.
+
+### Scribd: the public post and the private notice are on different clocks
+
+Help-centre article dated **2026-10-01** — an unauthorized third party "was able to gain access to our systems" and
+"used their access to reach other internal systems"; "For most accounts, this involved basic account information. For
+a smaller number of accounts, more sensitive information was involved"; notices go out "in phases" and "If you haven't
+gotten one, it doesn't necessarily mean you weren't affected". Individual letters (Epiq, on behalf of Scribd, Slideshare,
+Everand, Fable) began **2026-10-26** and name the fields: "last 4 digits of your credit card and country, credit card
+issuer, credit card expiry date, payment history (not including credit card details)". A Tell HN at **02:46 UTC
+2026-10-31** carried that letter, with commenters reporting theirs "a few hours ago" on 10-30. No CVE, nothing to patch.
+
+→ [[vuln-supply]] [[disclosure-lag]] [[fact-check]] [[frontier-models]]
+
+### Folded out of thesis 2 — the incomplete fix that re-scored itself
+
+One line that had lived in thesis 2's folded status, kept addressable with its identifiers: June's advisory
+(GHSA-j3rv-43j4-c7qm, **8.1**, published **2026-06-23**) added generic-argument validation;
+**`CVE-2026-110879`** (**9.8**, `CWE-502`) is the "**incomplete fix**" four months later, because
+`DatabindContext._resolveAndValidateGeneric()` validates each generic argument against the **outer** base
+type rather than its declared binding — so `Map<String,String>` accepts a
+`HashMap<FileSystemXmlApplicationContext,String>` whose one-string constructor loads attacker XML. It is the same shape as WS_FTP's two fix levels and Azure's second API Connections patch
+undoing the first's `RuntimeUrl` validation: **the second fix is the one that tells you the first was
+incomplete**, and a version number that satisfies an advisory is not evidence that the advisory's bug is
+gone.
+
+→ [[vuln-supply]] [[disclosure-lag]] [[fact-check]]

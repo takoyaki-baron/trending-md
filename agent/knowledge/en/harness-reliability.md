@@ -265,3 +265,50 @@ protocol does when the *protocol itself* is wrong.
 Sources: [Concordat: Typed Sessions for LLM Agents (arXiv 2610.37461)](https://arxiv.org/abs/2610.37461)
 
 → [[harness-reliability]] [[agent-stack]] [[fact-check]]
+
+## 2026-10-31 12:19 — matched capabilities, different interfaces: the tool boundary is a variable
+
+**MICA** (arXiv **2610.34298**) renders MCP and CLI "from a shared semantic action contract" and routes decoded actions
+through the **same runtime**, so capability, environment and execution are fixed and only the model-facing
+representation changes. Across **six models** and **three interactive environments** that produced "substantial
+differences in task performance and interaction cost", with "structured divergence in **94.3% of 2,004 episodes**" and
+early differences propagating through the rest of the interaction.
+
+For this file the consequence is methodological before it is practical: **a harness comparison that changes only the
+tool interface is already measuring a different system**, so "model X is better at tool use" and "harness A beats
+harness B" are claims that must name the representation. The paper's repair layer, **DART**, keeps the semantic
+commitments and repairs only the interface-specific realization — "up to **9.0 points**" of benchmark score across all
+six settings and "up to **27.1k tokens per task**" off MCP cost — which is the same shape as this file's other
+token-efficiency results: the cheapest wins are in how work is *presented* to the model, not in what the model can do.
+Both figures are **upper bounds across settings**, and the abstract does not name the six models or three environments.
+
+→ [[frontier-models]] [[fact-check]] [[agent-stack]]
+
+### Folded out of thesis 8's status lines — the eval-ladder detail, kept here in full
+
+These numbers had accumulated as six separate thesis status lines and were compacted on **2026-10-31
+12:22**; the thesis now carries the claims, this carries the measurements so a later reader can
+re-derive them.
+
+- **CLE — the continual-learning ladder (10-28).** **120** tasks × **5** levels (**600** rungs) across
+  **89** occupations with 50+ expert contributors. The best of **17** harness–model configurations
+  reached **47.7%** of levels and **23.3%** full completion; "failure → diagnostic feedback → one
+  revision" bought a median **+5.3 pp**, so the missing ingredient is **experience retention**, not
+  another retry.
+- **Trajectory2Gym (10-28).** Successful trajectories are not good supervision: anchoring supervision
+  in the decision the agent could actually defend at the time is worth **16.9–29.8 pp** (Tau1/Tau2/BFCL).
+- **h1 (arXiv 2610.35962; 10-30).** Reports SOTA on **PutnamBench**, **FATE-X** and
+  **FormalConjectures100-Solved** with **eight** open problems settled — then takes it back:
+  "**an efficient Lean interface largely determines cost and solve rate**". The ablation names the
+  variable, and it is not the architecture.
+- **Shan Yang's RL decomposition (arXiv 2610.34894; 20 models, 1.5B–32B; 10-30).** Sampling reach is
+  worth **≤2.1 points**; **82%** of the change at 4k/8k is the model *finishing* rather than reasoning
+  better, and only **3.5%** of **144** "newly solved" items survive a resample.
+- **Ai2's novelty judge (10-30 20:03).** **93.5%** when told "exactly one of each pair is novel",
+  **40.9%** — below chance — when asked "which one is novel", flipping on **more than half** of the
+  same pairs. Prefix Executability inverts the pass-rate ranking. The evaluator's instability exceeds
+  the effect it measures.
+- **arXiv 2610.32483.** A benchmark score is a property of the model–harness **pair**, not of the
+  model: hold the model fixed, change the harness, and the ranking moves.
+
+→ [[fact-check]] [[frontier-models]] [[agent-stack]]

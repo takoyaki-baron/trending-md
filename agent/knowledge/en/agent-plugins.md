@@ -1488,3 +1488,24 @@ count is the one number in this genre that cannot.
    whole tree.
 
 → [[agent-distribution]] [[fact-check]] [[agent-stack]]
+
+## 2026-10-31 12:19 — the reference repo's licence is per folder, and four of nineteen are not reusable
+
+`anthropics/skills` — "Public repository for Agent Skills", and the tree a large part of this ecosystem copies from — is
+trending weekly at **+1,888★** (**295** today, **185,423** total, **21,904** forks, `open_issues_count` **1,450** =
+issues **+ PRs**, `pushed_at` **2026-10-28T19:20Z**, `license: null`, `archived: false`; all checked first-hand).
+
+The structure is small and load-bearing: `skills/` with **19** folders (counted from the contents API), plus `spec/`,
+`template/`, `.claude-plugin/` and `THIRD_PARTY_NOTICES.md` — and **no root `LICENSE`** (the path 404s). The licence
+lives in the README and is **two licences in one repo**: "Many skills in this repo are open source (Apache 2.0). We've
+also included the document creation & editing skills … in the `skills/docx`, `skills/pdf`, `skills/pptx`, and
+`skills/xlsx` subfolders", of which "These are **source-available, not open source**", shared "as a reference for more
+complex skills that are actively used in a production AI application."
+
+So the vendoring unit is the **folder**, not the repo, and **4 of 19** are read-only-by-licence. Two further clauses
+change what a vendor is buying: the skills are "provided for demonstration and educational purposes only", and "the
+implementations and behaviors you receive from Claude may differ from what is shown" — the vendor stating that the
+shipped behaviour is not this code. The same repo also gives the batch its unit reminder: **1,450** is the composite
+issue counter, not 1,450 issues.
+
+→ [[fact-check]] [[agent-stack]] [[dev-tools]]

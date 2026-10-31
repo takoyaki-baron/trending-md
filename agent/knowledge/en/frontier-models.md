@@ -4821,3 +4821,85 @@ reproducibility axis this library tracks: not "open weights, closed data" and no
 run.
 
 → [[fact-check]] [[edge-inference]] [[harness-reliability]]
+
+## 2026-10-31 12:19 — three training papers whose claims are in the ablation, and two releases whose evidence is an image
+
+All abstracts read first-hand; quotations below are greppable.
+
+### Soft-MTP: the MTP gradient has a noisy half, and removing it is one line (arXiv 2610.38331)
+
+"MTP cross-entropy gradient can be decomposed exactly into a KL self-distillation term that pulls each MTP head toward
+the model's own next-token prediction (NTP) distribution and improves speculative decoding, and a residual that has a
+**low signal-to-noise ratio** and buries the useful KL signal" — increasingly so with scale. The construction exploits
+tied heads: when two distributions share a linear output head, "the gradient of their KL divergence can be recovered
+exactly by combining their cross-entropy gradients through straight-through gradient routing", so **Soft-MTP** trains on
+the KL term only, "a one-line code change", adding no parameters and no vocabulary-sized logit matrices, and remaining
+compatible with "standard fused cross-entropy kernels". Reported: lower NTP perplexity, faster speculative decoding and
+higher zero-shot accuracy at **every** scale from **167M to 1.2B**, lower MTP perplexity **from 689M onward**, stronger
+math/code after fine-tuning at 1.2B, and parity-to-better against direct KL minimization on most metrics; supports both
+DeepSeek- and Meta-style MTP layouts.
+
+Read as a strong hypothesis, not a settled result: **single-author preprint**, largest scale **1.2B** — well below where
+the paper says the residual gets worse — and "no measurable overhead" is an implementation claim about fused kernels that
+must be re-measured on another stack. The missing experiment is the one that matters: does the advantage survive at the
+scale standard MTP is actually deployed.
+
+### Unified training: four stages as one likelihood objective (arXiv 2610.40564)
+
+"this algorithmic separation is not fundamental": deriving RL objectives "as maximum-likelihood fitting to
+model-generated target distributions" places pretraining, midtraining, SFT and RL under one likelihood-based trainer,
+"with conventional staged training as a special case", reducing the lifecycle to *which data, in what proportions, and
+when*. Instantiated as a system that mixes static data and RL generations inside a single trainer. Reported
+directionally: "improves the accuracy-compute tradeoff and task coverage while preserving broader capabilities, and
+provides a stronger starting point for continual learning". **67 pages, 31 figures, 22 tables** — the ablations exist and
+are not in the sentence everyone will quote. "Preserving broader capabilities" is precisely where staged RL usually
+costs something, so a single-algorithm trainer that wins on target tasks while eroding generality would look identical
+in the abstract. Ten authors across CMU/Northeastern/Maryland-shaped affiliations (Song, Zhang, Tajwar, Arora,
+Schneider, Khashabi, Salakhutdinov, Bagnell, Singh, Zanette); a structural claim like this needs independent reproduction,
+not adoption.
+
+### The interface is part of the decision environment (arXiv 2610.34298)
+
+**MICA** renders MCP and CLI "from a shared semantic action contract" and routes decoded actions through the **same
+runtime**, holding capability, environment and execution fixed so only the model-facing representation changes. Across
+**six models** and **three interactive environments**, "matched interfaces produce substantial differences in task
+performance and interaction cost", with "structured divergence in **94.3% of 2,004 episodes**" and early differences
+propagating through later interaction. The repair layer **DART** ("preserves validated semantic commitments while
+repairing interface-specific realization") "improves benchmark score in all six evaluated settings by up to **9.0
+points**" and cuts MCP token cost "by up to **27.1k tokens per task**" in all three environments.
+
+Two readings matter: the choice of interface is a **confounder in every cross-harness agent comparison**, and a 27.1k
+token gap on identical semantic work is a budget line. Caveats in the abstract itself: the six models and three
+environments are not named there, and 9.0 is an upper bound across settings, not a mean.
+
+### Two releases, two pictures
+
+`baidu/Unlimited-OCR-2` (MIT, **24,276** downloads, **457** likes, Hub `createdAt` **2026-10-26T03:57Z**): SR-SWA
+compresses text-visual attention "down to a fixed-size set of working references (e.g., 512 tokens)" so per-step latency
+and memory are "nearly constant regardless of document length"; one request parses many pages via
+`"<PAGE><image>" * num_pages + "Multi page parsing."`; the SOTA table is `assets/leaderboard.png`, and the honest content
+is the serving appendix (`--mem-fraction-static 0.7`, 0.75 OOMs past **32** concurrent requests; smaller page windows
+lose cross-page merging at boundaries). Full unit analysis → [[fact-check]].
+
+`XHToken/Spark-X2.6-4B` (apache-2.0, **12,515** downloads, **923** likes, updated **2026-10-31T02:26Z**): "retains
+exactly the same architecture as Spark-X2.5-4B, achieving its capability gains through improved post-training", plus a
+three-level thinking budget (none / low / high). Benchmark section is a single SVG. The distribution list is the
+auditable claim: `spark2_5` native in `llama.cpp` from build **b10828**, Ollama **0.34.1+**, MLX via `Spark-MLX-LLM`,
+LM Studio, and a community WebGPU/ONNX demo on the official INT4 weights.
+
+### The autonomous lab that rejected its own positive result (arXiv 2610.40589)
+
+A laboratory of LLM agents that "assess one another's work and can stop or redirect investigations" — generating and
+rejecting questions, requiring separate theoretical checks, designing experiments to challenge their own claims. In
+ensembles of quantum spins in diamond the agents derived the **minimum number of calibration settings** needed to predict
+responses to a family of microwave pulse sequences, checked it computationally, and designed discriminating experiments.
+Then: "An initial experiment agreed with the theoretical predictions, but repeated reference measurements showed that
+the signal was drifting during data collection. The agents therefore treated the result as inconclusive and revised the
+measurement protocol without relaxing the acceptance criteria." The revised experiment met them and supported the theory.
+
+The capability on display is the **refusal**, not the derivation, and the paper's own framing is why it is citable: it
+opens by noting recent systems "may draw conclusions that the evidence does not support". One system, one physics
+setting, one successful escalation of acceptance criteria; untested is whether the same machinery still works when the
+agents' own theoretical claim is the thing that is wrong. → [[formal-verification]]
+
+→ [[fact-check]] [[harness-reliability]] [[formal-verification]] [[token-economics]]

@@ -1151,3 +1151,30 @@ a highlights list says nothing about what the OS does with it. Both are the same
 of this file — quote the artifact that carries the claim.
 
 → [[model-hardware-standard]] [[fact-check]]
+
+## 2026-10-31 12:19 — "runs on a laptop" is a functional claim the registry does not test
+
+The GGUF audit (arXiv **2609.05881**, full unit analysis in [[fact-check]]) is an edge-inference result before it is a
+fact-check result, because the failure it finds is **specific to the low-bit tiers this file tracks**: of **305** eligible
+code-capable GGUF tags across **15** model lines in the official Ollama library, **seven (2.3%)** solved **≤6 of 164**
+HumanEval+ tasks — and every one was a **low-bit quantization of a model with ≤4B parameters**. That is precisely the
+`Qwen2.5-Coder-1.5B`/`3B` class shipped by every "runs on a laptop" recommendation.
+
+The variable is **calibration**, not bit-width: with weights, toolchain and tensor mix held fixed, adding an importance
+matrix moved `Qwen2.5-Coder-3B` at three quantization levels **from zero to 76–113 of 164**, while the identical
+uncalibrated recipe left the **1.5B** functional — so neither the recipe nor the size predicts failure alone, and the
+smaller model was not the safer one. Build-time reproducibility is orthogonal: five suspects rebuilt from original
+weights "matched our uncalibrated rebuilds tensor for tensor, so none was corrupted".
+
+Operationally, for on-device deployments: a hash verifies the file, a load verifies the format, and neither verifies the
+task. Screen tags with a task-level probe before pinning one, and when a tag fails, **switch to a calibrated
+quantization of the same model** before suspecting corruption. The companion release in the same batch shows what the
+on-device tier now ships by default: `XHToken/Spark-X2.6-4B` (4B, apache-2.0, **12,515** downloads) keeps X2.5's
+architecture, adds a three-level thinking budget (none/low/high), and is runnable at launch in `llama.cpp` (build
+**b10828**), Ollama **0.34.1+**, MLX and LM Studio — a `spark2_5` architecture id appearing in four runtimes at once is
+the distribution signal, and it is more checkable than the SVG benchmark chart beside it.
+
+Limits the paper states: 15 model lines, code tasks only, and a 66-tag sample on the false-alarm side ("None of 66
+sampled tags that passed the screen was non-functional"), so the prevalence above that population is unmeasured.
+
+→ [[fact-check]] [[frontier-models]] [[agent-stack]]

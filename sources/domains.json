@@ -13861,5 +13861,23 @@
     "en": "AlpineBSD project wiki (first-party, single page) — a NetBSD kernel with an Alpine-inspired userspace and an explicit policy of no LLM output in the base system. Credible as the project's statement of intent, not as evidence the OS works: there is no installer and the author says so. Curated on a first-hand artifact check, not on coverage.",
     "jp": "AlpineBSD のプロジェクト Wiki（一次情報・単一ページ）——NetBSD カーネルに Alpine 風のユーザーランドを組み合わせ、ベースシステムに LLM 出力を入れない方針を明示する。意図の表明としては信頼できるが、OS が動く証拠ではない（インストーラは無く、本人がそう書いている）。カバレッジではなく一次アーティファクトの確認でキュレーションした。",
     "zh": "AlpineBSD 项目 wiki（第一方、单页）——NetBSD 内核配 Alpine 风格用户态，明确声明基础系统不含 LLM 输出。作为项目意图的陈述可信，但不能当作系统可用的证据：没有安装器，作者自己也这么说。策展依据是一次第一手产物核验，而非报道覆盖。"
+  },
+  "discourse.ubuntu.com": {
+    "cat": "vendor",
+    "cred": "high",
+    "density": "medium",
+    "cv": 1,
+    "en": "Canonical's community forum, where LXD/MicroCloud and other Ubuntu security advisories are published with mechanism, fix table and mitigation commands. Field-level caveat worth carrying: this page scoped a fix to two products while the CVE record's affected[] named one, so read both.",
+    "zh": "Canonical 的社区论坛，LXD/MicroCloud 等 Ubuntu 安全公告在此发布，含机制、修复表与缓解命令。值得带走的一条字段级提醒：本页把修复范围写成两个产品，而 CVE 记录的 affected[] 只写一个，两边都要读。",
+    "jp": "Canonical のコミュニティフォーラムで、LXD/MicroCloud などの Ubuntu セキュリティ助言が機序・修正表・緩和コマンド付きで公開される。持ち帰るべきフィールド上の注意：このページは修正を2製品に及ぼしたが CVE レコードの affected[] は1製品しか書かない。両方を読むこと。"
+  },
+  "firezone.dev": {
+    "cat": "vendor",
+    "cred": "med",
+    "density": "high",
+    "cv": 1,
+    "en": "Firezone's engineering blog: long-form posts about the open-source VPN/zero-trust product and its Rust crates (sanstun). Mechanically specific — it prints its own benchmark numbers and disclaims its own headline in the next sentence — but it is the vendor describing its own artifact, so read the disclaimer before quoting the multiple.",
+    "zh": "Firezone 的工程博客：围绕其开源 VPN/零信任产品与 Rust crate（sanstun）的长文。技术上很具体——会印出自己的基准数字，并在下一句里自我否认头条——但这是厂商在讲自己的工件，引用倍数之前先读那句免责。",
+    "jp": "Firezone のエンジニアリングブログ。オープンソース VPN/ゼロトラスト製品と Rust クレート（sanstun）についての長文。機序に具体的で独自ベンチ数値を印字し、その次の文で自らの見出しを留保するが、ベンダーが自成果物を語るものなので倍率を引用する前に留保を読むこと。"
   }
 }

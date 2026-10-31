@@ -801,6 +801,28 @@ underlying pages — this produced a two-layer false signal in a single item.
    caught was invisible to every other check: the paper says "**to test the full proposed method
    further experimentation is necessary**", not "the complete proposed method still requires
    further experimentation". `--selftest` **109→126** (17 of them this check's own).
+   **The check's own blind spots are censused now, and one of them was costing 13% of the corpus**
+   (added 2026-10-31 12:32, `--quotation-census` over **31** October feeds / **1,248** items). **(a)
+   Odd lines were `unpaired` and skipped WHOLE — and they are not stray marks: they are
+   hard-wrapped quotations**, the opener ending one line and the closer starting the next, so
+   **310 of 2,371 quoted lines (13.1%)** contributed none of their spans. A bounded join (≤2
+   continuation lines, 600 chars) now pairs the block: **≥6-word spans judged 2,208 → 2,338
+   (+130, +5.9%)**, 12 blocks never balance and are reported as coverage, and a joined finding
+   says so in its own detail line. **(b) The 4-page cap is NOT a defect and stays at 4** — **1 item
+   in 1,248 (0.1%)** cites more, dropping one candidate (a second vendor advisory beside the same
+   CVE, never the item's primary); the census prints the row so the claim is re-measurable rather
+   than remembered. **(c) The 4–5-word advisory class was precise and its DENOMINATOR was wrong**:
+   on the 10-30 feed's six advisories **every one whose cited pages were readable was a real defect**
+   (pico's maintainer never wrote "AI made it unnecessary"; novelty-bench *reports* the prompt as
+   "asked which idea was novel"), one was a spelling normalisation, and the three that looked
+   invented came from **coindesk.com answering HTTP 429** — unread, not absent. So a short span
+   now escalates to **`quote-paraphrase` (sev 2) only when nothing the item cites went unread**, and
+   stays `quote-short` (sev 1) with the unread count named when something did. Calibrated both
+   ways: 10-31 returns **0 findings / 31 verified before and after**, 10-30's three escalations were
+   all confirmed by opening the sources and corrected in place (items **20, 29, 41**, en+zh+jp),
+   `--selftest` **126→130**. **What the census cannot reach is the quoting source that is a commit
+   list**: item 27's `"allocation-free listener callback for schedulable nodes (#148)"` is a commit
+   TITLE, real and unreadable from a README — the residual class, filed to the Agenda.
    **Three of the lint's own readings were findings about the checker, and each is now a rule**
    (measured on the 10-28 20:24 batch, `--selftest` 53→**66**). **(a) A dated quote is not a stale
    quote:** item 5 said "at the time of writing holds **56 stars**" and read **114** forty minutes

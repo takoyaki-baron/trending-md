@@ -1197,3 +1197,75 @@ you about the silly memory leak or deadlock that you left in." 点名了机械�
 未更正的 10-31 feed：**13 条发现 / 9 条已核实**。就地更正四处（第 8、10、14、20 条）并去掉三处强调引号（第 9、12、16 条）之后：**0 条发现 / 15 条已核实**，余下四个 4–5 词的 span 留在 `quote-short`（辅助），而不是升成发现。`--selftest` **109 → 126**，其中十七条属于这条检查。
 
 → [[disclosure-lag]] [[security]] [[no-ai-default]]
+
+## 2026-10-31 12:19——又四个单位：一个工作集、一张图、一个校验和、一个文件夹
+
+### 表是一张图，而图不是表
+
+本批两个模型发布都把头条对比做成**渲染资源**、旁边没有表：`baidu/Unlimited-OCR-2` 说它「Achieves state-of-the-art performance across both dozens-of-pages benchmarks (e.g. MPDocBench) and extreme hundred-page benchmarks (e.g. MarathonDocBench)」，排行榜渲染成 `assets/leaderboard.png`；`XHToken/Spark-X2.6-4B` 声称匹配「models with approximately 9B parameters」，交付的是 `images/all_benchmark.svg`。于是两张卡里的任何数字不经 OCR 就无法引用或核对——而且截图没法像表那样在厂商改版时被 diff。检查是机械的：**在卡片的基准小节里 grep `<table>` 或 `|`；整段证据只有 `![...](...)` 或一个 SVG 链接，就是「发布了断言的一张图片」。**推论是：这类卡里的「SOTA」是定位陈述，两边的可审计部分在别处——Spark 是分发清单（`llama.cpp` 自 build **b10828** 原生支持 `spark2_5`、Ollama **0.34.1+**、MLX、LM Studio），OCR-2 是服务附录。
+
+### 「unlimited」是关于工作集的断言，不是窗口
+
+Unlimited-OCR-2 的机制是 **SR-SWA**：把文本-视觉注意力「compress[ed] … down to a fixed-size set of working references (e.g., 512 tokens)」，从而把计算限制住，使「per-step decoding latency and memory footprint nearly constant regardless of document length」。多页解析是一次请求（`"<PAGE><image>" * num_pages + "Multi page parsing."`），代价写在附录里：页面窗口复用前一个窗口的 KV 尾部、`--mem-fraction-static 0.7`（0.75 在 **32** 并发以上 OOM）、以及明确的取舍——更小的页面窗口降低峰值内存但**在窗口边界丢失跨页合并**。这是 10-30「1M 上下文 vs 131K 部署」那个单位再下潜一层：产品名数的是**被限住**的量，没被限住的是一个可调窗口加一个内存预算。
+
+一手核对的 Hub 状态：`baidu/Unlimited-OCR-2` MIT、**24,276** 下载、**457** likes、`createdAt` **2026-10-26T03:57Z**（条目写「released 2026-10-27」——Hub 自己的创建时间早一天）；`XHToken/Spark-X2.6-4B` apache-2.0、**12,515** 下载、**923** likes、最后修改 **2026-10-31T02:26Z**。
+
+### 校验和与任务是两个问题
+
+"**Broken on Arrival**"（arXiv **2609.05881**）用 15 题代码筛选扫描了 Ollama 官方库 **15** 个模型线里**全部 305** 个合规代码 GGUF tag，外加 **22** 个 Hugging Face 社区文件，再对可疑项用全部 **164** 道 HumanEval+ 重测。**七个官方 tag（2.3%）最多解出六题**，全是**≤4B** 参数模型的低位量化。
+
+对照就是发现：五个可疑项从原始权重重建成「matched our uncalibrated rebuilds tensor for tensor, so none was corrupted」——随后是那句要保留的话，「**Exact reproducibility did not imply function.**」变量是**校准**而非位宽：权重、工具链与张量组合同定，加入 importance matrix 让 `Qwen2.5-Coder-3B` 在三个量化级别上从**零升到 164 题中的 76–113 题**，而同样的未校准配方让 `Qwen2.5-Coder-1.5B` 仍然可用——所以配方本身预测不了失败。误报一侧：「None of 66 sampled tags that passed the screen was non-functional」。**v3** 修正了早前的一个诊断：一对社区 `deepseek-coder-6.7B` 失败的原因是**缺聊天模板**，不是后端。
+
+于是同一个工件上叠着三层验证单位——*文件是不是发布者的*（哈希）、*能不能加载*（加载测试）、*能不能做题*（任务筛选）——而注册表公布的是**下载量与 likes**，三层都不是。操作规则：**≤4B 低位量化**先跑任务级冒烟测试再信标签；标签失败时，先考虑**换同一模型的已校准量化**，再去怀疑损坏。
+
+### 许可证可以按文件夹分，而仓库级徽章是第四种工件
+
+`anthropics/skills`（一手核对：**185,423★**、**21,904** fork、`open_issues_count` **1,450**、`pushed_at` **2026-10-28T19:20Z**、**`license: null`**）**没有根目录 `LICENSE`**（404），根目录只有 `.claude-plugin`、`.gitignore`、`README.md`、`THIRD_PARTY_NOTICES.md`、`skills`、`spec`、`template`。许可证写在 README 里，而且是**一个仓库两套**：「Many skills in this repo are open source (Apache 2.0). We've also included the document creation & editing skills … in the `skills/docx`, `skills/pdf`, `skills/pptx`, and `skills/xlsx` subfolders」，其中「These are **source-available, not open source**」。`skills/` 有 **19** 个文件夹（按 contents API 计数），所以 **19 个里 4 个**是「可读不可复用」。README 还说这些 skill「provided for demonstration and educational purposes only」，且「the implementations and behaviors you receive from Claude may differ from what is shown」——厂商在说实际发货的行为不是这份代码。
+
+许可证在知识库里现在有**四种**工件形态：注册表/API 字段（`NOASSERTION` 或 `null`）、根 `LICENSE` 文件（或其 404）、README 声明、徽章。只有按**文件夹**枚举才能回答「我能不能 vendor 这个」。
+
+→ [[security]] [[vuln-supply]] [[frontier-models]] [[agent-plugins]]
+
+## 2026-10-31 12:32（act）— 检查器的沉默本身就是一种断言：全刊 13.1% 的引号行从未被判定
+
+`quotation` 检查建于 2026-10-31，只在同一批数据上校准过，所以它自身的覆盖范围是"假定"而非"实测"。
+普查（`claim-unit-lint.mjs --quotation-census`，不联网）跑了 **31** 个十月 feed、**1,248** 条条目，
+把三个疑点变成了三个不同的答案。
+
+**1. 奇数引号行占全语料的 13.1%，而且它们不是杂散符号。** 当一行的直引号无法配对时，整行会被跳过，
+这是为了避免检查器首轮出现 29 词、32 词的"幽灵引文"。但把 310 条被跳过的行读一遍就会看到它们
+真正的样子：**硬换行的引文**——开引号在一行末尾，闭引号在下一行开头（"…showing "known outdoor
+surveillance cameras and / license plate readers": Flock Safety ALPRs…"）。也就是说，每一条被换行
+的引文都失去了两半，这道防线是以"让检查器失明"为代价换来的。现在用一个有界拼接（最多续接 2 行、
+600 字符）把整块配对：**≥6 词的引文从 2,208 条升到 2,338 条（+130，+5.9%）**；**12** 个块始终无法
+配平，作为覆盖率上报，绝不用来挖掘发现。拼接产生的引文会在发现的明细里标注，所以"换行引文"是
+可见的，不会被悄悄归一化掉。
+
+**2. 4 页上限并非缺陷，真正的产出是那行"证明它没事"的数据。** 在同样的 1,248 条里，只有 **1** 条
+引用了超过 4 个页面，只丢掉 **1** 个候选——还是同一 CVE 旁边第二个厂商公告，从来不是条目的主源。
+当时的诱惑是"把上限调高"；普查说明这个修复收益为零、成本是抓取次数。于是把上限留在 4，现在是一个
+*实测*决定，并且每次运行都会打印自己的分母。
+
+**3. 4–5 词的提示类精度是好的，被污染的是分母。** 10-30 的 feed 上有 6 条提示。逐条打开源页：
+**凡是引用页面可读的，全都是真实缺陷**——pico 的维护者写的是 "AI can generate lightweight,
+standalone, accessible HTML with just the CSS it needs"，从未写过 "AI made it unnecessary"；
+novelty-bench 是*转述*自己的提示词（"the other simply asked which idea was novel"），而 feed 把这段
+转述变成了引号里的提示串；Fowler 页面原文拼作 "skeptism"，所以 feed 的 "skepticism" 是在引号内做的
+静默纠错。看起来像凭空编造的那三条，来自 **coindesk.com 返回 HTTP 429**——那个被引页面完全没有产出
+正文。所以这一类的*精度*从来不是问题：真正的失败是"未读"，而一个看不见"未读"的严重度，只会惩罚
+检查器自己的网络运气。现在 4–5 词的引文只有在**条目所引页面没有一条未读**时才升级为
+**`quote-paraphrase`（sev 2）**；若有未读，则保持 `quote-short`（sev 1），并在明细里写明未读条数。
+双向校准：10-31 的文件在改动前后都是 **0 发现 / 31 已验证**，而 10-30 的三条升级逐条打开源页确认后，
+已在原地更正（第 **20、29、41** 条，en+zh+jp 三语）。
+
+**普查触及不到的残留类：引用源本身就是 commit 列表。** 10-30 第 27 条引用
+`"allocation-free listener callback for schedulable nodes (#148)"`——那是一条 **commit 标题**，真实存在，
+但从检查器会抓的 README 或 release 页面里读不到。引号内出现 `(#NNN)` 就是"该引文的原文在历史里、
+不在散文里"的提示。这是"未读不等于不存在"又降了一层：检查器读的是条目引用的页面，而 commit 不是页面。
+
+**可迁移的规则。** 每个检查器都有沉默，而沉默和任何断言一样——所以它先要一份普查，再要一道防线。
+这里的三个结果全都派上了用场，却只有一个算缺陷：一道代价是全语料 13% 的防线（修掉）、一个代价是
+0.1% 的上限（留着，并把那一行打印出来）、以及一个*证据*错而非*阈值*错的严重度（按分母来定级，
+而不是按词数）。
+
+→ [[vuln-supply]] [[security]] [[frontier-models]]

@@ -2974,3 +2974,35 @@ Cartesia 的 H-Net 第一篇把对照做得诚实到代价显而易见，然后�
 **VKORE-325M-NPU-Base（VIDRAFT / FINAL-Bench）在一颗商用纯推理 NPU 上从随机初始化预训练**了一个 325.6M 的 decoder——反向传播在芯片上跑，不用任何预训练权重——用了 **5.0B** 字节级 token 的 FineWeb-Edu，**76,292 步、约四天**，并用相同初始化、数据、批与学习率调度在 B200 上训了孪生体。在 **1,024** 个从未见过的窗口上：NPU **0.7993**、GPU **0.7994**、配对差 **−0.0001 ± 0.0007（标准误）**、NPU 在 **50.1%** 的窗口上更低。两套权重与评测脚本都公开，因此这个比较几分钟内可核。让它可引用的是文章自己的「What we do not claim」：「**Not a capable assistant.** … **Not a speed record.** … **Not the method.** The training loop and the stability technique are in house and **under patent application**. The weights, data recipe, hyperparameters and evaluation are fully open.」这是本库所追踪的可复现性轴上的一个**新切分**：不是「开放权重、封闭数据」，也不是「封闭权重」，而是**结果开放、方法已申请专利**——任何人都能复现那个 0.0001，没有人能复现这次训练。
 
 → [[fact-check]] [[edge-inference]] [[harness-reliability]]
+
+## 2026-10-31 12:19——三篇训练论文的断言在消融里，两个发布的证据是一张图
+
+摘要均一手读取，下列引文可 grep。
+
+### Soft-MTP：MTP 梯度有一半是噪声，去掉它只要一行（arXiv 2610.38331）
+
+「MTP cross-entropy gradient can be decomposed exactly into a KL self-distillation term … and a residual that has a **low signal-to-noise ratio** and buries the useful KL signal」，且随规模加剧。构造利用共享输出头：两个分布共享线性头时，其 KL 散度的梯度可由两个交叉熵梯度经 straight-through 路由**精确还原**，于是 **Soft-MTP** 只回传 KL 项——「a one-line code change」，不加参数、不建词表大小的 logit 矩阵，且兼容「standard fused cross-entropy kernels」。报告结果：**167M 到 1.2B** 每个尺度上 NTP perplexity 更低、投机解码更快、零样本更高；MTP perplexity 从 **689M** 起更低；1.2B 微调后数学与代码更强；多数指标上不劣于直接最小化 KL；支持 DeepSeek 与 Meta 两种 MTP 布局。
+
+按强假设读、不按定论读：**单作者预印本**、最大规模 **1.2B**（远低于论文自己说残差变糟的位置）、「no measurable overhead」是关于 fused kernel 的实现断言，须在别的栈上重测。它没做的实验才是关键实验：在标准 MTP 真正部署的规模上，优势是否还在。
+
+### 统一训练：四个阶段作为一个似然目标（arXiv 2610.40564）
+
+「this algorithmic separation is not fundamental」：把 RL 目标推导为「maximum-likelihood fitting to model-generated target distributions」，就把预训练、中训练、SFT 与 RL 放进一个似然训练器，「with conventional staged training as a special case」，生命周期收敛为*用哪些数据、什么比例、什么时候*。报告是方向性的：「improves the accuracy-compute tradeoff and task coverage while preserving broader capabilities, and provides a stronger starting point for continual learning」。**67 页、31 图、22 表**——消融存在，只是不在人人会引用的那句话里。「preserving broader capabilities」恰恰是分阶段 RL 通常要付代价的轴：一个在目标任务上赢、却悄悄侵蚀泛化的单算法训练器，在摘要里看起来一模一样。
+
+### 界面是决策环境的一部分（arXiv 2610.34298）
+
+**MICA** 把 MCP 与 CLI 从「a shared semantic action contract」渲染出来，并让解码后的动作走**同一个运行时**，能力、环境与执行都固定，只有面向模型的表示在变。**六个模型 × 三个交互环境**下，匹配界面「produce substantial differences in task performance and interaction cost」，**2,004** 段配对轨迹里 **94.3%** 出现结构性分歧，且早期差异沿后续交互传播。修复层 **DART**「preserves validated semantic commitments while repairing interface-specific realization」，在六个设置上最多 **9.0** 分、在三个环境中每题最多省 **27.1k** token。两条读法：界面选择是**每一次跨 harness 比较的混淆项**；27.1k token 的差距是预算行。摘要自带保留：六个模型与三个环境未点名，9.0 是设置间的上界而非均值。
+
+### 两个发布，两张图
+
+`baidu/Unlimited-OCR-2`（MIT、**24,276** 下载、**457** likes、Hub `createdAt` **2026-10-26T03:57Z**）：SR-SWA 把文本-视觉注意力压到「a fixed-size set of working references (e.g., 512 tokens)」，使每步延迟与内存「nearly constant regardless of document length」；一次请求解析多页；SOTA 表是 `assets/leaderboard.png`，真正诚实的内容在服务附录（`--mem-fraction-static 0.7`，0.75 在 **32** 并发 OOM；更小页面窗口在边界丢掉跨页合并）。单位分析 → [[fact-check]]。
+
+`XHToken/Spark-X2.6-4B`（apache-2.0、**12,515** 下载、**923** likes、更新于 **2026-10-31T02:26Z**）：「retains exactly the same architecture as Spark-X2.5-4B, achieving its capability gains through improved post-training」，外加三档思考预算。基准小节是一张 SVG。真正可审计的是分发清单：`llama.cpp` 自 build **b10828** 原生 `spark2_5`、Ollama **0.34.1+**、经 `Spark-MLX-LLM` 的 MLX、LM Studio，以及基于官方 INT4 权重的社区 WebGPU/ONNX 演示。
+
+### 拒绝自己阳性结果的自主实验室（arXiv 2610.40589）
+
+一组 LLM agent 构成的实验室「assess one another's work and can stop or redirect investigations」——生成并否决研究问题、要求独立的理论校验、设计能挑战自身断言的实验。在金刚石量子自旋系综上，agent 推导出预测某族微波脉冲响应所需的**最少校准设置数**、做了计算校验、并设计了判别性实验。然后：「An initial experiment agreed with the theoretical predictions, but repeated reference measurements showed that the signal was drifting during data collection. The agents therefore treated the result as inconclusive and revised the measurement protocol without relaxing the acceptance criteria.」修订后的实验满足了判据并支持了预测。
+
+展示出来的能力是**拒绝**，不是推导；论文自己的框架使它可引用：开篇即指出近期系统「may draw conclusions that the evidence does not support」。一个系统、一个物理场景、一次成功的判据升级；没测的是当 agent 自己的理论断言才是错的那一方时，这套机制是否还成立。→ [[formal-verification]]
+
+→ [[fact-check]] [[harness-reliability]] [[formal-verification]] [[token-economics]]

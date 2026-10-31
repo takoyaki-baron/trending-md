@@ -1390,3 +1390,44 @@ a record to key on). Live: OpenPanel **37/37 unkeyed**, **10 of 37 state a patch
 remedy here because **none is pending** — the remedy is tracking the vendor's own advisory feed.
 
 → [[disclosure-lag]] [[fact-check]] [[security]]
+
+## 2026-10-31 12:19 — six records, six CNAs, zero NVD numbers — and the two fields that scope an advisory
+
+One NVD `cveId`-list pull over the batch's six new records (checked first-hand at 12:2x UTC+8):
+
+| CVE | Assigner (metric source) | Version | Score | `vulnStatus` | CWE |
+|-----|--------------------------|---------|-------|--------------|-----|
+| `CVE-2026-98432` (kernel) | Linux CNA | 3.1 | 9.8 | `Received` | none (`problemTypes: null`) |
+| `CVE-2026-112816` (LXD) | `security@ubuntu.com` | 4.0 | 10.0 | `Deferred` | `CWE-295` |
+| `CVE-2026-116241` (pgAdmin) | PostgreSQL | 3.1 / 4.0 | 9.9 / 9.4 | `Received` | `CWE-78`, `CWE-115` |
+| `CVE-2026-61991` (WP plugin) | `audit@patchstack.com` | 3.1 | 10.0 | `Deferred` | `CWE-94` |
+| `CVE-2026-84295` (WS_FTP) | `security@progress.com` | 3.1 | 10.0 | `Awaiting Analysis` | `CWE-287`, `CWE-522` |
+| `CVE-2026-90868` (WS_FTP) | `security@progress.com` | 3.1 | 9.9 | `Awaiting Analysis` | `CWE-78`, `CWE-88` |
+
+**0 of 6 carry an `nvd@nist.gov` metric**, and 0 of 6 are analysed. Three of the six carry **two** metrics
+(Patchstack and Canonical one each; PostgreSQL two, on *different* CVSS versions), so "the score" is already a
+choice before it is a judgement. The batch's four 9.9–10.0s are all CNA-assigned: three from the finder or the
+vendor, one from a CNA whose container carries the `S:C` rationale and says it is a bypass of an earlier fix.
+
+### Two fields scope an advisory, and they disagree
+
+- **`affected[]` is one product; the advisory page is two.** LXD's record lists **four** semver ranges for **LXD**;
+  the Canonical discourse advisory ships **six** snap versions across **LXD and MicroCloud**. MicroCloud's `2.1.5` and
+  `3.4.1` appear in **no machine-readable field** — a scanner keyed on the record marks a MicroCloud host clean.
+- **The version is a sequence, not a point.** WS_FTP's authentication bug is fixed at `2024.0.6` / `2025.0.3`; its
+  command-injection bug at `2024.0.7` / `2025.0.4`. Applying "the" advisory's fix stops **one increment early** on
+  each parallel line, and the two bugs chain (administrative credentials + arbitrary command execution). The
+  generalisable question for any advisory page is therefore *how many records share this product, and which fix is
+  the highest* — not *what is the patched version*.
+
+### "No official patch" is a state with a vendor attached
+
+**`CVE-2026-61991`** (AjaxLoadMore Cache ≤ **3.1.1**, `CWE-94`, **10.0** from `audit@patchstack.com`, NVD
+`Deferred`): the Patchstack entry's patched-version cell reads "**No official patch available**", the entry carries
+"**No VDP**", and the required privilege is **unauthenticated**. Clock: reported by **Julieta** **2026-09-12**,
+published by Patchstack **2026-10-13**, in NVD **2026-10-29T16:18Z** — **47 days** report-to-record, **16** of them
+public with a described exploit and no code fix. The only mitigation offered is "Patchstack has issued a mitigation
+rule to block any attacks until an official patch becomes available" — a **WAF product**, not a fix, and worthless
+outside their edge. `S:C` on `PR:N` code injection is what makes it 10.0 rather than 9.8, and here it is defensible.
+
+→ [[disclosure-lag]] [[security]] [[fact-check]]
