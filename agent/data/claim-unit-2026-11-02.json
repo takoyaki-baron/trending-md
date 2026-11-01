@@ -1,0 +1,179 @@
+{
+ "generated": "2026-11-01T20:25:07.994Z",
+ "files": [
+  {
+   "file": "2026-11-02.md",
+   "items": 18,
+   "findings": [
+    {
+     "check": "status",
+     "item": 1,
+     "verdict": "ok",
+     "claim": "CVE-2026-98432 `Received`",
+     "detail": "Received (lastModified 2026-10-31T21:16:53.683)"
+    },
+    {
+     "check": "cvss",
+     "item": 18,
+     "verdict": "ok",
+     "claim": "4.0 9.3",
+     "detail": "CVE-2026-120209 · Secondary/disclosure@vulncheck.com"
+    },
+    {
+     "check": "cvss",
+     "item": 18,
+     "verdict": "ok",
+     "claim": "3.1 9.8",
+     "detail": "CVE-2026-120209 · Primary/disclosure@vulncheck.com · vector reproduces 9.8"
+    },
+    {
+     "check": "repo",
+     "item": 4,
+     "verdict": "ok-history",
+     "claim": "deepseek-ai/dsh-superagent-prototype",
+     "detail": "record 1d, oldest commit 2026-10-31 (~1 commits)"
+    },
+    {
+     "check": "repo",
+     "item": 4,
+     "verdict": "ok",
+     "claim": "deepseek-ai/dsh-superagent-prototype",
+     "detail": "6857★, last push 2026-10-31"
+    },
+    {
+     "check": "repo",
+     "item": 5,
+     "verdict": "ok",
+     "claim": "pingdotgg/t3code",
+     "detail": "37522★, last push 2026-11-01"
+    },
+    {
+     "check": "repo",
+     "item": 11,
+     "verdict": "ok",
+     "claim": "JetBrains/thinkrail",
+     "detail": "6941★, last push 2026-11-01"
+    },
+    {
+     "check": "repo",
+     "item": 12,
+     "verdict": "ok-history",
+     "claim": "wangzan101/Mika",
+     "detail": "record 3d, oldest commit 2026-10-29 (~351 commits)"
+    },
+    {
+     "check": "repo",
+     "item": 12,
+     "verdict": "ok",
+     "claim": "wangzan101/Mika",
+     "detail": "3741★, last push 2026-11-01"
+    },
+    {
+     "check": "quotation",
+     "item": 1,
+     "verdict": "ok",
+     "claim": "2 quotation(s)",
+     "detail": "verbatim in 6 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 2,
+     "verdict": "ok",
+     "claim": "1 quotation(s)",
+     "detail": "verbatim in 11 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 3,
+     "verdict": "ok",
+     "claim": "2 quotation(s)",
+     "detail": "verbatim in 6 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 4,
+     "verdict": "ok",
+     "claim": "4 quotation(s)",
+     "detail": "verbatim in 4 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 5,
+     "verdict": "ok",
+     "claim": "5 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 6,
+     "verdict": "ok",
+     "claim": "1 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 7,
+     "verdict": "ok",
+     "claim": "2 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 8,
+     "verdict": "ok",
+     "claim": "1 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 12,
+     "verdict": "ok",
+     "claim": "3 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 13,
+     "verdict": "ok",
+     "claim": "3 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 14,
+     "verdict": "ok",
+     "claim": "1 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 15,
+     "verdict": "ok",
+     "claim": "3 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 16,
+     "verdict": "ok",
+     "claim": "1 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 17,
+     "verdict": "ok",
+     "claim": "9 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    }
+   ]
+  }
+ ],
+ "status_watch": [],
+ "api_calls": 0,
+ "readme_calls": 0,
+ "cited_page_calls": 3,
+ "repo_page_calls": 0,
+ "nvd_calls": 1,
+ "cna_calls": 0
+}
