@@ -1,6 +1,6 @@
 ---
 date: 2026-11-01
-updated: 2026-10-31T20:38:42Z
+updated: 2026-11-01T04:23:05Z
 schedule: 04:03, 12:03, 20:03 UTC+8
 sources: 14
 license: CC-BY-4.0
@@ -324,13 +324,258 @@ Ryan Madden 用「GPT-5.6 Sol, running in Codex with low thinking level」跑了
 
 ---
 
+## 21. WordPress 的升级暂存目录既可预测又可被 Web 访问 —— 于是写入 `wp-config.php` 的可以是任何一个访客
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Wordfence CNA 记录（cveawg）· 发布于 2026-10-31T05:33Z · 预留于 2026-10-30T17:17Z
+- **Tags:** `cve` `wordpress` `toctou` `rce` `upgrade`
+
+`CVE-2026-119977` 是 WordPress 核心里的未认证远程代码执行，而描述只有一句话：「这是由于完整包核心升级过程中使用了可预测、可被 Web 访问的暂存路径。这使得未认证攻击者可以在升级窗口内于服务器上执行代码。」它被归为 **`CWE-367`（TOCTOU 竞态）**，评分 **8.1**，向量是 `CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:H/I:H/A:H`——同一个向量把 `AC:L` 换回去就是大家熟悉的 9.8，所以这半分的折扣完全来自那场竞态。受影响集合是 **25 个分支区间**，从 `4.7.0 → 4.7.38` 一直到 `7.1.0 → 7.1.3`，`defaultStatus` 为 `unaffected`；修复版本是 **7.1.4**，发布于 **2026-10-28**。
+
+改动本身比描述更有信息量，因为它往同一个函数里加了三个防护。7.1.3 里 `unpack_package()` 用包名给工作目录命名——`$working_dir = $upgrade_folder . basename( basename( $package, '.tmp' ), '.zip' );`——而 `$upgrade_folder` 是 `wp_content_dir() . 'upgrade/'`，它是要被 Web 服务的。7.1.4 里同一个调用改走新的 `get_working_dir_name()`，追加 `'-' . wp_generate_password( 16, false )`；升级目录还多了一个 `index.php`，注释写着「升级目录是会被 Web 服务的。像核心对 wp-content 及其插件、主题目录所做的那样，阻止它被列目录，这样下面创建的工作目录名就无法通过目录索引被发现」。第三个防护在 `update-core.php`，复制步骤的 `$skip` 数组多了一项：`'wp-config.php'`，注释是「永远不要复制 wp-config.php，它可能已经被写入工作目录」。
+
+最后这句话点出了载荷。`wp-admin/setup-config.php` 是核心里唯一会写 `wp-config.php` 的地方，而它正是记录中的第四个引用——若不拦，复制步骤会把它从暂存树搬进站点根目录，PHP 在下一个请求就会执行它。这三点防护里有两个是加固，只有 `$skip` 这一项真正移除了代码执行原语。
+
+**Why it matters:** 自动更新是一台 WordPress 主机上最受信任的写入路径，而一个可预测的名字加上一个可列目录的目录，把「站点自己更新自己」变成了任何人都能去抢的东西。把 7.1.4 的发布公告和这条记录并排读，数字就对不上了：公告在安全更新下列出 **13** 项，对这一个是这么写的——「WordPress 升级过程中的一处弱点，可能导致升级窗口内的远程代码执行」——也就是说这条 CVE 只覆盖了那个 RCE，其余十二项在这里没有记录。该版本里有两条 XSS 的致谢给了 Anthropic。
+
+[`🔗 CVE-2026-119977（cveawg）`](https://cveawg.mitre.org/api/cve/CVE-2026-119977) · [`🔗 WordPress 7.1.4 发布公告`](https://wordpress.org/news/2026/10/wordpress-7-1-4/) · [`🔗 7.1.4 版 `update-core.php`（`wp-config.php` 的跳过项）`](https://github.com/WordPress/wordpress-develop/blob/7.1.4/src/wp-admin/includes/update-core.php)
+
+---
+
+## 22. Jpom 的 9.8 只需要一个写着 `is not null` 的 HTTP 头 —— 而最新版本本身就在受影响区间内
+
+- **Velocity:** ▮▮ rising
+- **Source:** VulnCheck CNA 记录（cveawg）· 发布于 2026-10-31T17:25Z · 预留于 2026-10-31T11:44Z
+- **Tags:** `cve` `auth-bypass` `java` `injection` `unpatched`
+
+`CVE-2026-120201`：Jpom **2.10.0 至 2.11.12** 允许未认证攻击者通过往 `JPOM-USER-TOKEN` 头里塞进一个条件表达式而成为**超级管理员**。「攻击者可以发送类似 `is not null` 的值，Hutool 的 Condition 解析器会把它当作运算符，随后通过 Jpom 的脚本功能执行命令。」CNA 给了**两个框架下的两个分数**——CVSS 3.1 的 **9.8**（`AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H`）与 4.0 的 **9.3**（`…/VC:H/VI:H/VA:H`）——弱点归为 `CWE-943`（数据查询逻辑中的特殊元素中和不当），因为这个头值被当作表达式交给查询构造器，而不是作为值绑定。记录的 `packageURL` 是 `pkg:maven/org.dromara.jpom/server`，`references[]` 指向 `LoginInterceptor.java#L146` 那一行。
+
+然后是记录里没有的那一半。最新的标签版本是 **`v2.11.12`，发布于 2025-05-06**——受影响区间的上界就是发布列表的上界，而 `defaultStatus` 是 `unaffected`，意味着它上面什么都没有。仓库（`dromara/Jpom`，1,951 星，`NOASSERTION` 许可）的 `pushed_at` 是 **2026-02-06**，也就是大约九个月没有提交、十八个月没有发版。NVD 的状态是 **`Deferred`**（2026-11-01 核查），NVD 自评的分数为零。
+
+**Why it matters:** 注入本身很漂亮——一个 HTTP 头变成运算符，是 `' OR 1=1` 在 Java 世界的表亲——但可执行的事实是：「升级到修复版本」在这里没有指涉对象。这是昨天 Agno 那个形状的反向结局：那个区间比修复落后一个版本，而这个区间根本没有修复版本，所以缓解手段是暴露面（谁能连到这个端口），而不是版本卫生。在写下「升级」之前先看项目是否还活着，因为一个休眠的仓库会让「未修复」变成永久的，而不是暂时的。
+
+[`🔗 CVE-2026-120201（cveawg）`](https://cveawg.mitre.org/api/cve/CVE-2026-120201) · [`🔗 VulnCheck 公告`](https://www.vulncheck.com/advisories/jpom-2.10.0-through-2.11.12-authentication-bypass-via-jpom-user-token-header) · [`🔗 dromara/Jpom 发布页`](https://github.com/dromara/Jpom/releases)
+
+---
+
+## 23. 红帽在一个早上发了四个 konflux-ci CVE —— 每一个都以不同方式泄露流水线自己的凭据
+
+- **Velocity:** ▮▮ rising
+- **Source:** 红帽 CNA 记录（cveawg）· 发布于 2026-10-31T08:55–08:57Z
+- **Tags:** `cve` `ci-cd` `supply-chain` `secrets` `red-hat`
+
+四条记录落在**两分钟**之内（`08:55:09Z` 到 `08:57:35Z`），全部由红帽 CNA（`secalert@redhat.com`）指派，在 NVD 上全部是 `Received`、NVD 自评分数为**零**，而每一条都是同一套交付系统里的一道不同边界：
+
+- **`CVE-2026-116086` — 8.8**，`CWE-94`。「拥有触发自动化工作流运行权限的攻击者可造成信息泄露：向工作流脚本提供精心构造的 issue 标题」——标题未净化就进了数据查询，于是可以注入过滤指令，「API 凭据、部署密钥与内部备注等敏感信息」出现在工作流日志里。
+- **`CVE-2026-114217` — 8.6**，`CWE-312`。CI 自动化「把敏感的 GitHub 访问令牌以明文形式存放在 runner 上，执行结束后也不清理」——`AV:L/PR:N/UI:R/S:C`，任何能本地接触 runner 的人都继承了仓库权限。
+- **`CVE-2026-116964` — 8.4**，`CWE-94`。拿到仓库写权限后，注入到环境导出脚本里的 shell 命令会让清单同步脚本「动态求值未经验证的脚本输出」→ CDI 环境内的代码执行，`PR:H/UI:R/S:C`。
+- **`CVE-2026-117681` — 8.0**，`CWE-295`，也是这一组里唯一的 `AV:A`。UI 代理「在没有默认服务证书颁发机构的环境里，会自动对内部后端的 TLS 证书校验关闭」——同时仍然附加「一个带用户模拟权限的集群级认证令牌」，于是能拦截这段流量的相邻网络攻击者直接拿到集群管理员。
+
+**Why it matters:** 分数最高的那个只需要 CI 系统里**最低**的权限——能触发工作流——而分数最低的那个反而升级得最远。按分数排序会把分诊做反：想要集群的攻击者挑 8.0，想要一份「该偷什么」清单的攻击者挑 8.8。四条里有三条共享同一个教训：issue 标题、环境变量和清单文件在被 shell、查询或求值器读取之前，都只是「数据」。
+
+[`🔗 CVE-2026-116086`](https://cveawg.mitre.org/api/cve/CVE-2026-116086) · [`🔗 CVE-2026-114217`](https://cveawg.mitre.org/api/cve/CVE-2026-114217) · [`🔗 CVE-2026-116964`](https://cveawg.mitre.org/api/cve/CVE-2026-116964) · [`🔗 CVE-2026-117681`](https://cveawg.mitre.org/api/cve/CVE-2026-117681)
+
+---
+
+## 24. Apache MINA 的 9.8 落在一个只有两个里程碑的预发布分支上，而厂商说不修
+
+- **Velocity:** ▮ steady
+- **Source:** Apache CNA 记录（cveawg）· 发布于 2026-10-31T20:17Z · 预留于 2026-10-28T17:16Z
+- **Tags:** `cve` `deserialization` `java` `apache` `unsupported`
+
+`CVE-2026-118636`：「MINA 3.0 codec 模块中的 `JavaNativeMessageDecoder` 对帧字节调用 `ObjectInputStream.readObject()` 且没有类过滤器，因此任何把它放在不可信对端之前的应用都暴露于 gadget 链 RCE。」受影响是 `3.0.0` 到 **`3.0.0-M2`**——两个预发布里程碑——而记录以厂商自己的判词开头：「**UNSUPPORTED WHEN ASSIGNED**」，接着是「由于 3.0.0 分支已停止活动，我们不计划发布修复此问题的版本」。记录给出的补救办法是**降级**：「建议用户使用最新的 Apache MINA 2.2.X 分支。」分数 **9.8**（`CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H`），由 Apache 指派；弱点是 `CWE-502`，NVD 处于 `Received`。
+
+**Why it matters:** 未过滤的 `readObject()` 是 Java 世界最经典的 RCE 原语，9.8 当之无愧，但决定行动的是区间——这不是「MINA 有漏洞」，而是「一条已废弃分支的里程碑构建有漏洞，而修复办法就是你之前用的那个版本」。与 10 月 27 日 Vysper 那条同形：`UNSUPPORTED WHEN ASSIGNED` 是对分支生命周期的陈述，缓解手段是迁移，而不是等补丁窗口。
+
+[`🔗 CVE-2026-118636（cveawg）`](https://cveawg.mitre.org/api/cve/CVE-2026-118636) · [`🔗 Apache MINA 公告（lists.apache.org）`](https://lists.apache.org/thread.html/h76nwcrkvsffhsk2kq6cjzc6srtnty7x)
+
+---
+
+## 25. Sign in with Apple 会把一个 `user` 字段交给浏览器 —— 而 Elixir 的 `assent` 把它合并**覆盖**在已验证的令牌之上
+
+- **Velocity:** ▮▮ rising
+- **Source:** EEF CNA 记录（cveawg）· 发布于 2026-10-30T23:55Z
+- **Tags:** `cve` `authentication` `oidc` `elixir` `claim-confusion`
+
+`CVE-2026-117656` 在 `CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:H/VI:H/VA:N` 上是 **9.3**，描述读起来就是一个教科书式的合并顺序 bug：Apple「把用户的姓名以 `user` 表单参数的形式 POST 到回调端点，而这个参数由浏览器提交、由客户端控制」，`Assent.Strategy.Apple.callback/2` 会解析它，`fetch_user/2` 则「把它合并覆盖在已验证 ID 令牌的声明之上，于是未经验证的映射获胜」。攻击者用自己的 Apple ID 完成 Sign in with Apple、改掉 `user`，「就能替换 `sub`、`email` 以及任何其他声明」——于是任何按返回的 subject 或 email 查找、关联或授权账号的应用，就把别人的账号交了出去。影响 `assent` **0.1.25 起、低于 0.3.2**；分类是 `CWE-290`（冒充绕过认证）加 **`CWE-349`（接受与可信数据混在一起的多余不可信数据）**。
+
+来源值得单独说清楚，因为记录中唯一的那个分数看起来像插槽之争、其实不是：NVD 把 **9.3 标为 `Secondary`，来源是 EEF 分配者的 UUID**——也就是 CNA 给自己的记录评了分，而 NVD 尚未分析（`Received`，2026-11-01 核查）。引用包括 GitHub 公告 `GHSA-9fr5-g44g-9526`、EEF 页面、一条 OSV 记录，以及修复提交 `a2d331e8`。
+
+**Why it matters:** `user` 字段是 Sign in with Apple 流程里唯一走浏览器、而不是走签名令牌的那一块——它只在首次授权时出现，这也正是各个解析器把它当作便利字段而非凭据的原因。合并方向就是整个漏洞：一组已验证的声明可以**覆盖**不可信的声明，而反过来合并的库，等于悄悄把 OIDC 本来要防的账号劫持又装了回来。
+
+[`🔗 CVE-2026-117656（cveawg）`](https://cveawg.mitre.org/api/cve/CVE-2026-117656) · [`🔗 GHSA-9fr5-g44g-9526`](https://github.com/pow-auth/assent/security/advisories/GHSA-9fr5-g44g-9526) · [`🔗 EEF CVE 页面`](https://cna.erlef.org/cves/CVE-2026-117656.html)
+
+---
+
+## 26. Anthropic 说水印不影响质量 —— 而该方法自己的补充材料说它牺牲的是多样性，同时一篇新论文从可检测性这一侧下手
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News · 36+ 分 · 约 6 小时前（约 05:50 UTC+8）
+- **Tags:** `watermarking` `llm` `evaluation` `eu-ai-act` `research`
+
+Anthropic 关于水印文本的说明页写得很直白：「Watermarking does not impact the quality of Claude's output.」这个周末被顶起来的博客则去翻 Anthropic 方法所依据的那份文件——Google SynthID-Text 的补充材料——并引了那句限定它的话：「While single-sequence non-distortion guarantees the quality of each individual response, it does not necessarily preserve diversity across multiple responses」，并补充说这可能「lower the overall quality of a system which generates many responses then selects the best one」。这个区别在单条回复的评测里是看不见的，而厂商的人类研究正是那么做的：Natzir Turrado 用论文自己的设置在开放模型上复现 SynthID-Text 的过程中，同一个提示采样五次，水印模型有五次之四开头几乎一模一样（「My heart still sings/dances when I think back to my trip to the quaint coastal town of…」），而未加水印的版本有三种不同的开头。
+
+研究侧这周有推进。**TextSeal2**（`arXiv 2610.40613`）用高斯 copula 把多个密钥合并成一个虚拟密钥，「keeps its signal under speculative decoding」——被拒绝的草稿令牌会用同一套密钥重新赛跑——并且「adds no measurable inference latency」。在输出令牌多样性相同的前提下，它以 `10^-3` 的假阳性率比前代多检出 **8 到 22 个百分点**的 100 令牌回答；在投机解码下，在相同接受率下比 TextSeal 与 textGrain 分别多检出 **18 和 22 个百分点**。
+
+**Why it matters:** 这场争论其实不是「有损 vs 无损」，而是分母。无失真保证按构造就是「每一条序列」的，所以厂商的主张和反复重试的现实可以同时成立，而用户真正看到的症状（按重试，又拿回同一段）完全活在这个缝隙里。一个在不触碰多样性的前提下多拿 8–22 个百分点的检测器是有用的方向，因为它移除的是取舍本身，而不是争论取舍——但这三份都是别人的评测，没有一份是在 Claude 上做的回归研究。
+
+[`🔗 Anthropic — Claude 文本水印如何工作`](https://www.anthropic.com/news/claude-text-watermark) · [`🔗 AI text watermarking and quality loss`](https://blog.keyvan.net/p/ai-text-watermarking-and-quality) · [`🔗 TextSeal2（arXiv 2610.40613）`](https://arxiv.org/abs/2610.40613) · [`🔗 讨论（Hacker News）`](https://news.ycombinator.com/item?id=50320599)
+
+---
+
+## 27. L3G-World 让世界模型的记忆随场景大小增长、而不是随流的长度增长 —— 9 FPS，显存渲染快 359 倍
+
+- **Velocity:** ▮▮ rising
+- **Source:** arXiv 2610.40614 · HF Papers 38 赞
+- **Tags:** `research` `world-model` `gaussian-splatting` `real-time` `video`
+
+交互式世界模型只有一个缩放问题、两副面孔：保留最近 N 帧，一致性会随视野衰减；保留显式 3D 场景，记忆会随流长度增长。**L3G-World** 提出「潜在 3D 高斯记忆」（Latent 3D Gaussian Memory），其中「记忆更新器在新观测到的区域生成高斯并细化已有的，使记忆随场景范围增长，而不是随流长度增长」。关键技巧很小但承重：每个高斯存一个 **VAE 潜特征**，于是记忆「可以直接渲染进 DiT 的潜空间，无需 VAE 重新编码」——此前的 3D 记忆要重新编码 RGB 渲染，这正是让循环慢到无法交互的原因。
+
+报告数字（表述为「针对每项指标，相对于最高效的既有 3D 记忆基线」）：**3D 图元最多少 38.6 倍**、**记忆更新快 3.2 倍**、**记忆渲染快 359 倍**，实时生成达到 **9 FPS**。
+
+**Why it matters:** 「针对每项指标」这个说法很诚实，也正是要保留的——三个比值对着三个可能不同的基线，是三个事实而不是一个加速比，而 359× 最容易被单独引用。设计主张经得起这个保留：把记忆的上界系于「范围」而不是「时间」，正是交互式世界的成本独立于「你逛了多久」的原因，而这是结构性的修复，不是更快的实现。
+
+[`🔗 arXiv 2610.40614 — L3G-World`](https://arxiv.org/abs/2610.40614) · [`🔗 HF Papers（趋势）`](https://huggingface.co/papers/2610.40614)
+
+---
+
+## 28. SpecSlot 把图像的细节量与全局注意力的序列长度解耦
+
+- **Velocity:** ▮ steady
+- **Source:** arXiv 2610.40647 · HF Papers 36 赞
+- **Tags:** `research` `diffusion` `image-generation` `attention` `efficiency`
+
+像素空间的生成式 Transformer 每个 patch 一个 token，于是细节越细、全局注意力序列越长、代价平方级上升。这篇论文的观察是这种耦合并不必要：低频结构受益于全局交换，高频细节是局部的。**SpecSlot** 把每个空间锚点扩展成多个槽，每个槽「拥有一段不相交的 DCT 系数」；只有每个锚点里最低频的那个槽参与全局注意力，所有槽在局部交互——从而把锚点密度与频谱细分分开。一个空间头对频谱预测做局部修正，生成状态、目标与损失仍留在像素空间。
+
+实测：ImageNet-256 上与**算力对齐**的 JiT 对照模型 FID 相当且收敛更快；ImageNet-512 上相对该对照 FID 改善 **2.84** 且算力少 **3.9%**，与 JiT-B/16 只差 0.69 FID 而成本低 **38.2%**；文生图上在 DPG-Bench 上超过 JiT-B/8 **1.06**，前向成本低 **40.6%**。
+
+**Why it matters:** 这本质上是一个频域论证穿上了架构改动的外衣，而「算力对齐的对照」正是让它可以被核对的东西——多数效率论文拿来比的是一个从未调到同预算的基线。与更大模型之间那 0.69 FID 的差距才是诚实的表述：这买到的是「单位算力下的持平」，不是新的质量上限。
+
+[`🔗 arXiv 2610.40647 — Read, Allocate, Route`](https://arxiv.org/abs/2610.40647) · [`🔗 HF Papers（趋势）`](https://huggingface.co/papers/2610.40647)
+
+---
+
+## 29. `idol` 把一张照片在两秒内变成一百万个高斯 —— 而它的两个输入编码器是门控的
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hugging Face 模型卡 · 218 赞 · 2,367 次下载 · 创建于 2026-10-28
+- **Tags:** `image-to-3d` `gaussian-splatting` `apache-2` `vision` `release`
+
+`speridlabs/idol` 输入「物体的一张图」，输出「多达一百万个 3D 高斯，包括照片从未展示过的那几面」——具体是 **1,048,576** 个高斯，写成标准的 3DGS `.ply`，外加处理后的输入图和预测相机。它会自己抠背景、重新取景，运行在 **7.2 GB 显存**上，模型卡称它「can run in under 2 seconds」。权重约 **3 GB**，许可 **Apache-2.0**，SDK 在另一个仓库（`speridlabs/idol-sdk`，Python 3.10+、PyTorch 2.5+、NVIDIA CUDA）。
+
+部署约束写在第一步的说明里，而不是脚注：idol 通过两个**门控**的 Hugging Face 模型读取输入——`facebook/dinov3-vith16plus-pretrain-lvd1689m` 与 `black-forest-labs/FLUX.2-dev`（只取 VAE）——所以要「用 Hugging Face 账号接受它们的条款，然后登录一次」；没有权限时它「会在下载任何东西之前停下，并说明缺什么」。
+
+**Why it matters:** 一个 Apache-2.0 的产物藏在门控编码器后面，就不是可复现的流水线，而这正是如今多数开放 3D 与视频模型的发货形状：权重宽松、输入受限。这对离线构建、CI，以及任何假定「模型卡上的许可覆盖了你实际要下载的东西」的分发来说都要紧。四天里 218 赞对 2,367 次下载，也仍然是那个常见的趋势偏斜——注意力远比使用先到。
+
+[`🔗 speridlabs/idol（模型卡）`](https://huggingface.co/speridlabs/idol) · [`🔗 speridlabs/idol-sdk`](https://github.com/speridlabs/idol-sdk)
+
+---
+
+## 30. 在 140 字符的 demo 上继续预训练，困惑度从 28.63 降到 8.57 —— 而作者说输出丢了点味道
+
+- **Velocity:** ▮ steady
+- **Source:** Hacker News · 48+ 分 · 约 10 小时前（约 02:08 UTC+8）
+- **Tags:** `research` `continued-pretraining` `code-generation` `perplexity` `demoscene`
+
+一篇讲怎么教模型说 **Dwitter** 语言的文章——140 字符的 JavaScript demo，整个效果就压在几个紧凑表达式里。作者在语料上做了继续预训练，并测量了前后的 surprisal：在 **30 条留出的 dweet** 上，**困惑度从 28.63 降到 8.57**，降幅最大的是「那些不熟悉的编程习语」，而不是普通代码。课程表来自社区自己：Dwitter 给每条投稿打「awesomeness」分，作者按它取了前 5,000 条。
+
+这份报告保留了多数文章会剪掉的那一半。程序变得更一致了，而在作者自己的判断里，它们少了某种味道——这正是上面那条水印新闻从另一侧描述的同一个取舍。文章还给出了这个领域「为什么难生成而不只是稀有」的干净论证：拿一条 140 字符的程序，删掉最后 30 个字符，即便字母表只有 64 个符号，「也有约 1.5 x 10^54 种可能的补全串」，而几乎全部无效或无趣。
+
+**Why it matters:** 可测的那一半（困惑度降 3.3 倍）与不可测的那一半（输出不再有趣）被一起报告，这在领域自适应类文章里很少见，而这恰恰是「要不要做风格微调」的决策所需要的。可迁移的技术是课程表——用社区自己的评分而不是长度或时间给语料排序，小数据集就开始表现得像一个精选过的数据集。
+
+[`🔗 Post training a model to explore Demoscenes`](https://datavorous.com/writing/demoscener/) · [`🔗 讨论（Hacker News）`](https://news.ycombinator.com/item?id=50318442)
+
+---
+
+## 31. Karpathy 用一个上午把 Hacker News 评论做成了一个 YouTube —— 4 万条评论收敛成 6,454 个视频
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Hacker News · 882+ 分 · 约 8 小时前（约 03:56 UTC+8）
+- **Tags:** `agents` `claude-code` `personal-software` `recommendation` `vibe-coding`
+
+起点是一句抱怨，产物是 [hackertube.org](https://hackertube.org/)：不要算法推荐，只要「Hacker News 上被推荐过的那些视频」。按描述，构建过程是：Opus 5.5 跑在 Claude Code 桌面版里、中等思考强度，「下载了 HackerNews 的全部评论，过滤，然后用 Sonnet 在一个 Workflow（Claude Code 的功能）里跑，去掉垃圾，最终收敛到 4 万条推荐了某个 YouTube 视频的评论」——得到 **6,454 个视频**，由「少数几个人在 2007–2026 年间」在 **150 个话题**下推荐过。界面是 YouTube 的克隆，但有三处刻意的不同：用视频的 **50% 帧**而不是上传封面；所有状态放在本地浏览器会话里、没有账号；导出站点数据「交给你的 agent，让它轻松做出自己的版本」。
+
+诚实的账目写在补充里。唯一的手工活是申请一个 Google Cloud API key、开一台 VPS、买一个域名；之后的部署、加固、优化全部交了出去。Karpathy 自己的总结是：「I don't actually do anything resembling traditional engineering anymore.」
+
+**Why it matters:** 故事是数据集，不是速度。十九年的 HN 评论是一份「人类精选过」的推荐语料，只是从没有人按**目标对象**给它建过索引，而模型在这里干的活是抽取与去重，不是生成——恰恰是 agent 输出可以对着来源逐条核对的那一类任务。「两小时」是真的，也是误导的：那口钟从语料、key 和服务器都存在之后才开始走。
+
+[`🔗 HackerTube — karpathy`](https://karpathy.bearblog.dev/hacker-tube/) · [`🔗 hackertube.org`](https://hackertube.org/) · [`🔗 讨论（Hacker News）`](https://news.ycombinator.com/item?id=50319510)
+
+---
+
+## 32. Memdoor 把 GVS5H 的五轮 harness 重建成一个 YAML 工作流 —— 9.8/10，对 Fable 5 的 8.0，50 次运行全部公开
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Hacker News · 124+ 分 · 约 5 小时前（约 06:46 UTC+8）
+- **Tags:** `agents` `benchmark` `reproduction` `go` `self-hosted`
+
+`guregodevo/memdoor`（Apache-2.0、Go、单一静态二进制、创建于 2026-10-05、**32 星**）在自己的 README 里下了个大注：「五个 Qwen3.8-27B agent 在 LiveCodeBench Hard 上击败 Fable 5，作为一个 Memdoor 工作流」——GVS5H 的 harness「用作者的原始 prompt 与循环重建，跑他们列表上的前十题、每题五轮：均值 **9.8/10**，作者自己的 harness 是 9.6，Fable 5 单次调用是 8.0。50 次运行全部公开：每一次请求、回复、程序和评分器输出。」
+
+先读范围再读标题。十道题、五轮、一个模型家族，以及对原 harness 的 **0.2 分优势**——在十道题上这完全落在运行间噪声里，所以结论是「复现」，不是「改进」。真正承重的比较是 9.8 对 **单次调用 8.0**，那才是 GVS5H 那条线的主张：27B 模型跑五轮比前沿模型跑一次更有价值，而不是 27B 更强。
+
+它外面的工具才是可复用的部分：工作流是带内置检查与审批门禁的文件，一个显式的决策模型坐在聊天模型前面以削减 token 开销，运行可以落在通过 SSH 连上的机器上而窗口留在你的笔记本，退出码就是回执——`0` 完成、`2` 失败、`1` 停止、`3` 停在审批门禁。无账号，遥测默认关闭。
+
+**Why it matters:** 这正是原结果所需要的复现——由无关作者给出的第二份实现，公开全部轨迹而不是一张汇总表——同时也提醒：「击败 Fable 5」继承了一个十道题切分的全部保留条件。可迁移的产物是 harness：一个不指定模型、能指向本地运行时的工作流，正是「基准」与「产品」的差别。
+
+[`🔗 guregodevo/memdoor`](https://github.com/guregodevo/memdoor) · [`🔗 team-solve 工作流`](https://github.com/guregodevo/memdoor/tree/main/examples/workflows/team-solve) · [`🔗 讨论（Hacker News）`](https://news.ycombinator.com/item?id=50320995)
+
+---
+
+## 33. Prospero 是一个 C++ 写的编码 harness，主张这个品类不该吃掉几个 GB 内存
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News · 181+ 分 · 约 16 小时前（约 19:54 UTC+8）
+- **Tags:** `agent-infra` `coding-harness` `cpp` `local-llm` `desktop-control`
+
+Chris Wellons 的抱怨很具体：好的开放权重模型已经能在消费级硬件上跑，但「多数 harness 是用 Web 技术栈构建的，吃掉巨量内存」，而 harness 本质上只是一个网络客户端粘着一个子进程。**Prospero**（`skeeto/prospero`，**Unlicense**，93 星，创建于 2026-10-21，**v0.10.0** 发布于 2026-11-01T03:56Z）是一个用他自己 C++ 风格写的 Dear ImGui 停靠式应用，主张是「比其他 harness 少用大约两个数量级的资源，且不牺牲功能」。
+
+功能清单才是让这个资源主张变得有意思而非苦行的部分：子 agent、agent 之间互发消息，以及一个可部署到 SSH 或 WSL 上的无头引擎，让 Linux 机器干活而 UI 留在本地并可以重新接回。配置是 INI 文件，可以 `include` 一个 URL——URL include 受限制，并有「一条硬规则，禁止任何可能出现在 shell 命令里的东西」，同时文章也承认一份共享配置「可以通过把某个环境变量当作 API key 并提供它控制的端点来把它抽出来」。它不内置任何 provider，且「不能用你的 Claude 订阅」——你自己带 llama.cpp、OpenRouter 或 API key。
+
+**Why it matters:** 资源主张是设计目标，不是测量——文章没有给出任何基线，所以「两个数量级」是一个待你用自己机器上的 harness 进程去核实的靶子。底下的论证是成立的，而且一行 `top` 就能测：当 harness 比它驱动的东西还大时，OOM killer 的选择就不再可预测，而文章里那个 fuzz 战役的例子——几小时后回来看，harness 没了、目标毫发无损——正是这件事不再只是审美抱怨的地方。注意这个拆分：仓库是 Unlicense 的 harness，另有一个 Professional Edition 内嵌了跨架构桌面控制的引擎。
+
+[`🔗 skeeto/prospero`](https://github.com/skeeto/prospero) · [`🔗 Prospero: a new coding harness for a more civilized age`](https://nullprogram.com/blog/2026/10/31/) · [`🔗 讨论（Hacker News）`](https://news.ycombinator.com/item?id=50315226)
+
+---
+
+## 34. Pivot 靠多干 69% 的活让 GROUP BY 更快 —— 那个核是内存受限，不是忙
+
+- **Velocity:** ▮▮ rising
+- **Source:** Pivot 博客 · 发布于 2026-10-28
+- **Tags:** `databases` `performance` `cpu` `cache` `clickbench`
+
+查询是 ClickBench 99M 行 hits 表上的 `SELECT count(*), UserID FROM hits GROUP BY UserID`，大约 **1,700 万个不同分组**，绑定到 EPYC 9124 的一个核上，以便读那些计数器。朴素的哈希表聚合要 **3.9 秒**，预热后 **3.6 秒**。`perf stat` 说出了有意思的部分：**50.1%** 的槽位卡在内存上（`backend_bound_memory`），只有 **16.1%** 在退休微操作，从 DRAM 拉了 76,190,837 次按需填充。
+
+修法是 radix 分区，而且它故意更费事：对每个 key 做哈希，取高 12 位，把行推进 **4,096** 个分区之一，再逐个分区聚合成一张小哈希表。每一行仍然要被哈希并插入一次——现在还多了一次分区写入。结果是 **3.3 秒**、预热后 **2.7 秒**；内存停顿降到 **23.5%**，退休率升到 **32.2%**，退休操作数从 **11,431,618,219 涨到 19,350,459,182**——大约**多 69% 的指令**换**少 25% 的时间**。
+
+**Why it matters:** 这是「CPU 100%」与「CPU 在干活」是两个不同测量值的最小干净演示，也说明在缓存是瓶颈时「拿指令换 DRAM 等待」这笔交易几乎总是划算的。诊断成本是单个核上的一次 `perf stat`；不做的代价则是看着利用率的曲线，去得出「查询引擎效率低」的结论，而它其实只是在等。
+
+[`🔗 It's the memory latency, stupid`](https://pivotlake.io/blog/its-the-memory-latency-stupid/) · [`🔗 ClickBench`](https://benchmark.clickhouse.com/)
+
+---
+
+## 35. Contra 的带注释 NES 反汇编现在能在浏览器里跑 —— 6502 汇编，转写成 C，再编译成 WebAssembly
+
+- **Velocity:** ▮ steady
+- **Source:** Hacker News · 69+ 分 · 约 9 小时前（约 03:18 UTC+8）
+- **Tags:** `retro` `wasm` `reverse-engineering` `nes` `cc65`
+
+`epoyraz/nes-contra-us` 是 *Contra*（美版）与 *Probotector* 的带注释反汇编，「以及把汇编重新组装成与游戏逐字节一致产物的构建脚本」，用 **cc65** 对着合法提供的 `baserom.nes`（MD5 `7BDAD8B4A7A56A634C9649D20BD3011B`）编译——仓库既不含 ROM 也不含全部资源，`assets.txt` 记录了每份资源在基础镜像里的偏移与长度，供构建时抽取。新的是那个移植：仓库现在带着 `port/`（`contra_core`、`platform_sdl`、`platform_web`）与 `web/`，线上页面加载一个 Emscripten 模块工厂（`MODULARIZE`、`EXPORT_NAME=ContraModule`），于是游戏跑的是转写出来的 C，而不是在模拟器里跑 ROM。
+
+保留条件全是仓库形状的：**4 星**、**没有许可文件**，而 README 讲的是反汇编与重新组装，不是浏览器移植——也就是说 WebAssembly 构建是个你需要自己去读的目录，而不是一个有文档的发布物。
+
+**Why it matters:** 逐字节一致是其他一切的前提，也是最容易被跳过的一步——一份不能重新组装出同一 ROM 的反汇编，无法告诉你对游戏逻辑的转写是否忠实，因为你没有可比对的基准。许可缺口在这里值得同等重量：一份完整的、受版权保护游戏的反汇编且没有 LICENSE 文件，首先是一个再分发问题，其次才是代码质量问题，这也大概正是为什么 README 里写着 ROM 哈希要求，而构建产物不在仓库里。
+
+[`🔗 epoyraz/nes-contra-us`](https://github.com/epoyraz/nes-contra-us) · [`🔗 浏览器可玩版本`](https://epoyraz.github.io/nes-contra-us/) · [`🔗 讨论（Hacker News）`](https://news.ycombinator.com/item?id=50319169)
+
+---
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-10-31T20:38:42Z |
-| Items | 20 |
-| Sources tracked | 14（GitHub Trending、Hacker News、arXiv、Hugging Face、NVD／CVE 记录、厂商公告、安全研究） |
+| Generated | 2026-11-01T04:23:05Z |
+| Items | 35 |
+| Sources tracked | 21（GitHub Trending、Hacker News、arXiv、Hugging Face、NVD／CVE 记录、cveawg CNA、CISA KEV、CISA-ADP、厂商公告、WordPress、VulnCheck、Apache、红帽、EEF、Anthropic、Google Research、Pivot、ClickBench、nullprogram、Datavorous、speridlabs） |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8（每日 3 次） |
 | Ranking | 按速度加权（时效 × 互动加速度 × 来源权威度） |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |

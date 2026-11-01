@@ -1,6 +1,6 @@
 ---
 date: 2026-11-01
-updated: 2026-10-31T20:38:42Z
+updated: 2026-11-01T04:23:05Z
 schedule: 04:03, 12:03, 20:03 UTC+8
 sources: 14
 license: CC-BY-4.0
@@ -324,13 +324,258 @@ The methodology is where the headline needs care, and the coverage states it: th
 
 ---
 
+## 21. WordPress's upgrade staging directory was predictable and web-served — so a visitor could be the one writing `wp-config.php`
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Wordfence CNA record (cveawg) · published 2026-10-31T05:33Z · reserved 2026-10-30T17:17Z
+- **Tags:** `cve` `wordpress` `toctou` `rce` `upgrade`
+
+`CVE-2026-119977` is unauthenticated remote code execution in WordPress core, and the description is one sentence: "This is due to predictable, web-accessible staging paths used during full-package core upgrades. This makes it possible for unauthenticated attackers to execute code on the server during the upgrade window." It is classified **`CWE-367` (TOCTOU race condition)** and scored **8.1** on `CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:H/I:H/A:H` — the identical vector with `AC:L` is the familiar 9.8, so the half-point discount is entirely the race. The affected set is **25 branch ranges**, `4.7.0 → 4.7.38` through `7.1.0 → 7.1.3`, with `defaultStatus: unaffected`; the fix is **7.1.4**, released **2026-10-28**.
+
+The diff is more instructive than the description, because it adds three guards to one function. In 7.1.3, `unpack_package()` names its working directory after the package — `$working_dir = $upgrade_folder . basename( basename( $package, '.tmp' ), '.zip' );` — and `$upgrade_folder` is `wp_content_dir() . 'upgrade/'`, which is served. In 7.1.4 the same call goes through a new `get_working_dir_name()` that appends `'-' . wp_generate_password( 16, false )`, and the upgrade folder gets an `index.php`, under the comment "The upgrade directory is web-served. Keep it from being listed, as core does for wp-content and its plugins and themes directories, so the name of the working directory created below cannot be discovered from a directory index." The third guard is in `update-core.php`, where the copy step's `$skip` array gains one entry: `'wp-config.php'`, with the note "Never copy a wp-config.php, which could have been written to the working directory."
+
+That last line names the payload. `wp-admin/setup-config.php` is the only thing in core that writes a `wp-config.php`, and it is the fourth reference in the record — the copy step would otherwise carry it out of the staging tree and into the site root, where PHP executes it on the next request. Two of those three guards are hardening; only the `$skip` entry removes the code-execution primitive.
+
+**Why it matters:** an auto-update is the most trusted write path on a WordPress host, and a predictable name in a browsable directory turns a site that updates itself into something an anonymous visitor can race. Read the 7.1.4 announcement beside the record and the numbers stop matching: the release notes list **13** items under security updates and describe this one only as "A weakness in the WordPress upgrade process which can lead to remote code execution during the upgrade window" — so the CVE covers the RCE and the other twelve items have no record here. Two of the XSS reports in that release are credited to Anthropic.
+
+[`🔗 CVE-2026-119977 (cveawg)`](https://cveawg.mitre.org/api/cve/CVE-2026-119977) · [`🔗 WordPress 7.1.4 release notes`](https://wordpress.org/news/2026/10/wordpress-7-1-4/) · [`🔗 `class-wp-upgrader.php` at 7.1.4 (the random working dir)`](https://github.com/WordPress/wordpress-develop/blob/7.1.4/src/wp-admin/includes/class-wp-upgrader.php) · [`🔗 `update-core.php` at 7.1.4 (the `wp-config.php` skip)`](https://github.com/WordPress/wordpress-develop/blob/7.1.4/src/wp-admin/includes/update-core.php)
+
+---
+
+## 22. Jpom's 9.8 is one HTTP header reading `is not null` — and the newest release is inside its own affected range
+
+- **Velocity:** ▮▮ rising
+- **Source:** VulnCheck CNA record (cveawg) · published 2026-10-31T17:25Z · reserved 2026-10-31T11:44Z
+- **Tags:** `cve` `auth-bypass` `java` `injection` `unpatched`
+
+`CVE-2026-120201`: Jpom **2.10.0 through 2.11.12** lets an unauthenticated attacker become **super-administrator** by putting a condition into the `JPOM-USER-TOKEN` header. "Attackers can send a value like `is not null`, which Hutool's Condition parser treats as an operator, then execute commands through Jpom's script features." The CNA carries **two scores on two frameworks** — **9.8** at CVSS 3.1 (`AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H`) and **9.3** at 4.0 (`…/VC:H/VI:H/VA:H`) — and the weakness is `CWE-943` (improper neutralization of special elements in data query logic), because the header value is handed to a query builder as an expression rather than bound as a value. The record's `packageURL` is `pkg:maven/org.dromara.jpom/server` and the `references[]` point at the exact `LoginInterceptor.java#L146`.
+
+Then the operational half, which is not in the record. The newest tagged release is **`v2.11.12`, published 2025-05-06** — the top of the affected range is the top of the release list, and `defaultStatus` is `unaffected`, meaning nothing above it exists. The repo (`dromara/Jpom`, 1,951 stars, `NOASSERTION` licence) shows `pushed_at` of **2026-02-06**, so there has been no commit in roughly nine months and no release in eighteen. NVD's status is **`Deferred`**, checked 2026-11-01, with zero NVD-scored metrics.
+
+**Why it matters:** the injection is the satisfying part — a header value become an operator is the Java cousin of `' OR 1=1` — but the actionable fact is that there is no fixed version to patch to. This is the Agno shape from yesterday with the opposite ending: that range was one release behind the fix, this one has no fix release at all, so the mitigation is exposure (who can reach the port) and not version hygiene. Check whether the project is alive before writing "upgrade", because a dormant repo makes "unpatched" permanent rather than pending.
+
+[`🔗 CVE-2026-120201 (cveawg)`](https://cveawg.mitre.org/api/cve/CVE-2026-120201) · [`🔗 VulnCheck advisory`](https://www.vulncheck.com/advisories/jpom-2.10.0-through-2.11.12-authentication-bypass-via-jpom-user-token-header) · [`🔗 dromara/Jpom releases`](https://github.com/dromara/Jpom/releases)
+
+---
+
+## 23. Red Hat published four konflux-ci CVEs in one morning — and each one leaks the pipeline's credentials a different way
+
+- **Velocity:** ▮▮ rising
+- **Source:** Red Hat CNA records (cveawg) · published 2026-10-31T08:55–08:57Z
+- **Tags:** `cve` `ci-cd` `supply-chain` `secrets` `red-hat`
+
+Four records landed inside **two minutes** (`08:55:09Z` to `08:57:35Z`), all assigned by the Red Hat CNA (`secalert@redhat.com`), all `Received` on NVD with **zero** NVD-scored metrics, and each one is a different boundary in the same delivery system:
+
+- **`CVE-2026-116086` — 8.8**, `CWE-94`. "An attacker with permission to trigger automated workflow runs can cause an information disclosure by providing crafted issue titles to workflow scripts" — the title reaches a data query unsanitised, so filter commands can be injected and "sensitive information such as API credentials, deployment keys, and internal notes" surfaces in the workflow log.
+- **`CVE-2026-114217` — 8.6**, `CWE-312`. CI automation "store sensitive GitHub access tokens in plaintext on the runner without cleaning them up after execution" — `AV:L/PR:N/UI:R/S:C`, so anyone with local access to the runner inherits repository rights.
+- **`CVE-2026-116964` — 8.4**, `CWE-94`. With repository write access, shell commands injected into environment export scripts make manifest-synchronisation scripts "dynamically evaluate unvalidated script output" → code execution in the CDI environment, `PR:H/UI:R/S:C`.
+- **`CVE-2026-117681` — 8.0**, `CWE-295`, and the only `AV:A` in the set. The UI proxy "automatically disables Transport Layer Security (TLS) certificate verification for connections to internal backend services in environments lacking a default service certificate authority" — while still attaching "a cluster-scoped authentication token with user impersonation rights", so an adjacent-network attacker who intercepts that traffic gets cluster admin.
+
+**Why it matters:** the highest-scored one needs the *lowest* privilege in a CI system — permission to trigger a workflow — and the lowest-scored one is the one that escalates furthest. Sorting these by score gets the triage backwards: an attacker who wants the cluster takes 8.0, and an attacker who wants a list of what to steal takes 8.8. The shared lesson across three of the four is that an issue title, an environment variable and a manifest are all "data" right up until a shell, a query or an evaluator reads them.
+
+[`🔗 CVE-2026-116086`](https://cveawg.mitre.org/api/cve/CVE-2026-116086) · [`🔗 CVE-2026-114217`](https://cveawg.mitre.org/api/cve/CVE-2026-114217) · [`🔗 CVE-2026-116964`](https://cveawg.mitre.org/api/cve/CVE-2026-116964) · [`🔗 CVE-2026-117681`](https://cveawg.mitre.org/api/cve/CVE-2026-117681)
+
+---
+
+## 24. Apache MINA's 9.8 sits on a two-milestone pre-release branch the vendor says it will not fix
+
+- **Velocity:** ▮ steady
+- **Source:** Apache CNA record (cveawg) · published 2026-10-31T20:17Z · reserved 2026-10-28T17:16Z
+- **Tags:** `cve` `deserialization` `java` `apache` `unsupported`
+
+`CVE-2026-118636`: "`JavaNativeMessageDecoder` in the MINA 3.0 codec module calls `ObjectInputStream.readObject()` on frame bytes with no class filter, so an application that puts it in front of an untrusted peer is open to gadget-chain RCE." Affected is `3.0.0` through **`3.0.0-M2`** — two pre-release milestones — and the record opens with the vendor's own verdict: "**UNSUPPORTED WHEN ASSIGNED**", followed by "As the 3.0.0 branch is inactive, we do not plan to release a version that fixes this issue." The remedy in the record is a **downgrade**: "Users are recommended to use the latest Apache MINA 2.2.X branch." Score is **9.8** (`CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H`), assigned by Apache; the weakness is `CWE-502` and NVD is at `Received`.
+
+**Why it matters:** an unfiltered `readObject()` is the canonical Java RCE primitive and it deserves the 9.8, but the range is the part that decides what to do — this is not a statement that MINA is vulnerable; it is that a milestone build of an abandoned branch is vulnerable, and the remedy is the version you were on before. Same shape as the Vysper record on October 27: `UNSUPPORTED WHEN ASSIGNED` is a statement about a branch's lifecycle, and the mitigation is migration, not a patch window.
+
+[`🔗 CVE-2026-118636 (cveawg)`](https://cveawg.mitre.org/api/cve/CVE-2026-118636) · [`🔗 Apache MINA announcement (lists.apache.org)`](https://lists.apache.org/thread.html/h76nwcrkvsffhsk2kq6cjzc6srtnty7x)
+
+---
+
+## 25. Sign in with Apple hands the browser a `user` field — and Elixir's `assent` merged it *over* the verified token
+
+- **Velocity:** ▮▮ rising
+- **Source:** EEF CNA record (cveawg) · published 2026-10-30T23:55Z
+- **Tags:** `cve` `authentication` `oidc` `elixir` `claim-confusion`
+
+`CVE-2026-117656` is **9.3** on `CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:H/VI:H/VA:N`, and the description reads like a textbook merge-order bug: Apple "posts the user's name to the callback endpoint in a `user` form parameter that the browser submits and the client controls", `Assent.Strategy.Apple.callback/2` decodes it, and `fetch_user/2` "merges it over the claims of the verified ID token, so the unverified map wins". An attacker completes Sign in with Apple with their own Apple ID, edits `user`, and "can replace `sub`, `email`, and any other claim" — so any application that links or authorises accounts by the returned subject or email hands over the account. Affects `assent` from **0.1.25 before 0.3.2**; the classification is `CWE-290` (authentication bypass by spoofing) plus **`CWE-349` (acceptance of extraneous untrusted data with trusted data)**.
+
+The provenance is worth separating out, because the record's single metric looks like a slot disagreement and is not: NVD shows the **9.3 as `Secondary`, sourced to the EEF assigner's UUID** — the CNA scored its own record, and NVD has not analysed it (`Received`, checked 2026-11-01). References include the GitHub advisory `GHSA-9fr5-g44g-9526`, the EEF page, an OSV entry, and fix commit `a2d331e8`.
+
+**Why it matters:** the `user` field is the one piece of a Sign in with Apple flow that travels through the browser instead of the signed token — it exists only on first authorisation, which is exactly why parsers treat it as a convenience rather than a credential. Merge direction is the entire vulnerability: a verified claim set may *overlay* an untrusted one, and a library that merges the other way silently re-introduces the account-linking takeover that OIDC was built to prevent.
+
+[`🔗 CVE-2026-117656 (cveawg)`](https://cveawg.mitre.org/api/cve/CVE-2026-117656) · [`🔗 GHSA-9fr5-g44g-9526`](https://github.com/pow-auth/assent/security/advisories/GHSA-9fr5-g44g-9526) · [`🔗 EEF CVE page`](https://cna.erlef.org/cves/CVE-2026-117656.html)
+
+---
+
+## 26. Anthropic says watermarking doesn't affect quality — the method's own supplement says it costs diversity, and a new scheme attacks the detectability side
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News · 36+ pts · ~6h ago (~05:50 UTC+8)
+- **Tags:** `watermarking` `llm` `evaluation` `eu-ai-act` `research`
+
+Anthropic's watermarked-text explainer states it plainly: "Watermarking does not impact the quality of Claude's output." The blog that resurfaced this weekend goes to the document Anthropic's method rests on — Google's SynthID-Text supplement — and quotes the sentence that qualifies it: "While single-sequence non-distortion guarantees the quality of each individual response, it does not necessarily preserve diversity across multiple responses", adding that this "could lower the overall quality of a system which generates many responses then selects the best one". That distinction is invisible to a single-response evaluation, which is how the vendor's human study was run: five samples of the same prompt from a watermarked model came back with 4 of 5 openings near-identical ("My heart still sings/dances when I think back to my trip to the quaint coastal town of…"), against three that opened differently unwatermarked, in Natzir Turrado's reproduction, who reproduced SynthID-Text on an open model with the paper's own settings.
+
+The research direction moved this week. **TextSeal2** (`arXiv 2610.40613`) merges multiple keys into a single virtual key through a Gaussian copula, "keeps its signal under speculative decoding" — rejected draft tokens are re-raced with the same keys — "and adds no measurable inference latency". At equal output-token diversity it detects **8 to 22 percentage points more** 100-token answers than its predecessor at a false-positive rate of `10^-3`, and under speculative decoding **18 and 22 points** more than TextSeal and textGrain at the same acceptance rate.
+
+**Why it matters:** the argument is not really about quality versus no-quality — it is about the denominator. A distortion-free guarantee is per-sequence by construction, so the vendor claim and the retry-heavy reality can both be true, and the user-visible symptom (pressing retry and getting the same paragraph back) lives entirely in the gap. A detector that gains 8–22 points without touching diversity is the useful direction, because it removes the trade-off rather than arguing about it — but all three of these are someone else's evaluation, and none of them is a regression study on Claude.
+
+[`🔗 Anthropic — How Claude's text watermark works`](https://www.anthropic.com/news/claude-text-watermark) · [`🔗 AI text watermarking and quality loss`](https://blog.keyvan.net/p/ai-text-watermarking-and-quality) · [`🔗 TextSeal2 (arXiv 2610.40613)`](https://arxiv.org/abs/2610.40613) · [`🔗 Discussion (Hacker News)`](https://news.ycombinator.com/item?id=50320599)
+
+---
+
+## 27. L3G-World ties a world model's memory to scene size instead of stream length — 9 FPS, at 359× faster memory rendering
+
+- **Velocity:** ▮▮ rising
+- **Source:** arXiv 2610.40614 · 38 upvotes on HF Papers
+- **Tags:** `research` `world-model` `gaussian-splatting` `real-time` `video`
+
+Interactive world models have one scaling problem in two costumes: keep the last N frames and consistency decays with horizon, or keep an explicit 3D scene and memory grows with the stream. **L3G-World** proposes a Latent 3D Gaussian Memory in which "the memory updater spawns Gaussians in newly observed regions and refines existing ones, so that the memory grows with scene extent rather than stream length". The enabling trick is small and load-bearing: each Gaussian stores a **VAE latent feature**, so the memory "allowing the memory to be rendered directly into the DiT's latent space without VAE re-encoding" — prior 3D memories re-encode RGB renderings, which is what made the loop too slow to be interactive.
+
+Reported against "the most efficient prior 3D-memory baseline for each metric": **up to 38.6× fewer 3D primitives**, **3.2× faster memory updates**, **359× faster memory rendering**, and real-time generation at **9 FPS**.
+
+**Why it matters:** "for each metric" is the honest phrasing and the one to keep — three ratios measured against three potentially different baselines are three facts, not one speedup, and the 359× is the one most likely to be quoted alone. The design claim survives that caveat, though: bounding memory by extent rather than by time is what makes an interactive world's cost independent of how long someone explores it, and that is a structural fix rather than a faster implementation.
+
+[`🔗 arXiv 2610.40614 — L3G-World`](https://arxiv.org/abs/2610.40614) · [`🔗 HF Papers (trending)`](https://huggingface.co/papers/2610.40614)
+
+---
+
+## 28. SpecSlot decouples an image's detail from the length of its global attention sequence
+
+- **Velocity:** ▮ steady
+- **Source:** arXiv 2610.40647 · 36 upvotes on HF Papers
+- **Tags:** `research` `diffusion` `image-generation` `attention` `efficiency`
+
+Pixel-space generative transformers spend one token per patch, so finer detail means a longer global attention sequence and quadratically worse cost. The paper's observation is that this coupling is unnecessary: low-frequency structure benefits from global exchange, high-frequency detail is local. **SpecSlot** expands each spatial anchor into multiple slots, each owning "a disjoint band of DCT coefficients", lets only the lowest-frequency slot from each anchor join global attention, and keeps all slots interacting locally — separating anchor density from spectral subdivision. A spatial head adds a local correction to the spectral prediction; the generative state, target and loss stay in pixel space.
+
+Measured: ImageNet-256 reaches comparable FID to a **FLOPs-matched** JiT control while converging faster; ImageNet-512 improves FID by **2.84** over that control with **3.9% fewer FLOPs**, landing within 0.69 FID of JiT-B/16 at **38.2% lower cost**; text-to-image beats JiT-B/8 on DPG-Bench by **1.06** at **40.6% lower forward cost**.
+
+**Why it matters:** the claim is a frequency argument dressed as an architecture change, and the FLOPs-matched control is what makes it checkable — most efficiency papers compare against a baseline that was never tuned to the same budget. The 0.69-FID gap to a bigger model is the honest framing: this buys parity per unit compute, not a new quality ceiling.
+
+[`🔗 arXiv 2610.40647 — Read, Allocate, Route`](https://arxiv.org/abs/2610.40647) · [`🔗 HF Papers (trending)`](https://huggingface.co/papers/2610.40647)
+
+---
+
+## 29. `idol` turns one photo into a million Gaussians in under two seconds — and its two input encoders are gated
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hugging Face model card · 218 likes · 2,367 downloads · created 2026-10-28
+- **Tags:** `image-to-3d` `gaussian-splatting` `apache-2` `vision` `release`
+
+`speridlabs/idol` takes "one picture of an object in" and returns "up to a million 3D Gaussians out, including the sides the picture never showed" — specifically **1,048,576** Gaussians written as a standard 3DGS `.ply`, plus the post-processed input and a predicted camera. It removes the background and reframes the object itself, runs in **7.2 GB of VRAM**, and the card says it "can run in under 2 seconds". Weights are about **3 GB**, the licence is **Apache-2.0**, and the SDK is a separate repo (`speridlabs/idol-sdk`, Python 3.10+, PyTorch 2.5+, NVIDIA CUDA).
+
+The deployment constraint is in step one of the instructions rather than a footnote. Idol reads its input through two **gated** Hugging Face models — `facebook/dinov3-vith16plus-pretrain-lvd1689m` and `black-forest-labs/FLUX.2-dev` (VAE only) — so "accept their terms with your Hugging Face account, then log in once"; without that access it "stops before downloading anything and says what is missing".
+
+**Why it matters:** an Apache-2.0 artifact behind a gated encoder stack is not a reproducible pipeline, and this is the shape most open 3D and video models now ship in: permissive weights, restricted inputs. That matters for offline builds, CI, and any distribution that assumes the licence on the model card covers what you actually have to download. The 218 likes against 2,367 downloads in four days is also the usual trending skew — attention arrives well before usage.
+
+[`🔗 speridlabs/idol (model card)`](https://huggingface.co/speridlabs/idol) · [`🔗 speridlabs/idol-sdk`](https://github.com/speridlabs/idol-sdk)
+
+---
+
+## 30. Continued pretraining on 140-character demos cuts perplexity 28.63 → 8.57 — and the author says the output lost its charm
+
+- **Velocity:** ▮ steady
+- **Source:** Hacker News · 48+ pts · ~10h ago (~02:08 UTC+8)
+- **Tags:** `research` `continued-pretraining` `code-generation` `perplexity` `demoscene`
+
+A write-up about teaching a model the language of **Dwitter** — 140-character JavaScript demos, where a program's entire effect is a handful of packed expressions. The author continued pretraining on the corpus and measured surprisal before and after: across **30 held-out dweets, perplexity fell from 28.63 to 8.57**, with the largest drops on "the unfamiliar programming idioms" rather than on ordinary code. The curriculum came from the community itself: Dwitter scores every submission for "awesomeness", and the top 5,000 were ranked by it.
+
+The report keeps the part most posts cut. The programs got more consistent and, in the author's own assessment, lost a certain charm — which is the same trade the watermarking item above describes from the other side. There is also a clean argument for why the domain is hard to generate rather than merely rare: strip the last 30 characters from a 140-character program and, even over a 64-symbol alphabet, "there are almost 1.5 x 10^54 possible completion strings"; almost all are invalid or uninteresting.
+
+**Why it matters:** the measurable half (perplexity down 3.3×) and the unmeasurable half (the output stopped being interesting) are reported together, which is rare for a domain-adaptation post and is exactly what a style-fine-tuning decision needs. The curriculum is the transferable technique — rank a corpus by the community's own score rather than by length or recency, and a small dataset starts behaving like a curated one.
+
+[`🔗 Post training a model to explore Demoscenes`](https://datavorous.com/writing/demoscener/) · [`🔗 Discussion (Hacker News)`](https://news.ycombinator.com/item?id=50318442)
+
+---
+
+## 31. Karpathy built a YouTube out of Hacker News comments in a morning — 40,000 comments narrowed to 6,454 videos
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Hacker News · 882+ pts · ~8h ago (~03:56 UTC+8)
+- **Tags:** `agents` `claude-code` `personal-software` `recommendation` `vibe-coding`
+
+The setup is a complaint and the artifact is [hackertube.org](https://hackertube.org/): instead of the algorithm's recommendations, "whatever videos have been recommended on Hacker News". The build, as described: Opus 5.5 running in Claude Code on medium effort "downloaded all comments of HackerNews, filtered them, ran Sonnet over them in a Workflow (Claude Code feature), got rid of spam, and narrowed everything down to 40K comments recommending a YouTube video" — **6,454 videos** mentioned "by a few people on HN from 2007-2026 across 150 topics". The UI is a YouTube clone with three deliberate differences: it uses the **50% frame** of each video instead of the uploaded thumbnail, keeps all state in the local browser session with no accounts, and exports the site's data "to give to your agent to easily create your own version".
+
+The honest accounting is in the edit. The only manual work was a Google Cloud API key, booting a VPS, and buying a domain; everything after — deploy, secure, harden, optimise — was delegated. Karpathy's own summary: "I don't actually do anything resembling traditional engineering anymore."
+
+**Why it matters:** the dataset is the story, not the speed. Nineteen years of HN comments are a human-curated recommendation corpus that had never been indexed by *target*, and the model's job here was extraction and deduplication, not generation — which is the task class where an agent's output is checkable against the source. The "two hours" is a real number and a misleading one: it starts after the corpus, the key and the server exist.
+
+[`🔗 HackerTube — karpathy`](https://karpathy.bearblog.dev/hacker-tube/) · [`🔗 hackertube.org`](https://hackertube.org/) · [`🔗 Discussion (Hacker News)`](https://news.ycombinator.com/item?id=50319510)
+
+---
+
+## 32. Memdoor rebuilds GVS5H's five-pass harness as a YAML workflow — 9.8 of 10 against Fable 5's 8.0, with all 50 runs published
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Hacker News · 124+ pts · ~5h ago (~06:46 UTC+8)
+- **Tags:** `agents` `benchmark` `reproduction` `go` `self-hosted`
+
+`guregodevo/memdoor` (Apache-2.0, Go, one static binary, created 2026-10-05, **32 stars**) makes a large claim in its own README: "Five Qwen3.8-27B agents beat Fable 5 on LiveCodeBench Hard, as a Memdoor workflow" — the GVS5H harness "rebuilt with the authors' exact prompts and loop, on the first ten problems of their list, five passes each: a mean of **9.8 of 10**, against 9.6 for the authors' own harness and 8.0 for Fable 5 in a single call. All 50 runs are published: every request, reply, program and grader output."
+
+Read the scope before the headline. Ten problems, five passes, one model family, and a **0.2 margin** over the original harness — on ten problems that is well inside run-to-run noise, so the finding is "reproduces", not "improves". The comparison that carries weight is 9.8 against **8.0 for a single call**, which is the actual claim of the GVS5H line: five passes of a 27B model are worth more than one call of a frontier model, not that the 27B is better.
+
+The tool around it is the reusable part: workflows are files with built-in checks and approval gates, an explicit decision model sits in front of the chat model to cut token spend, runs can live on a box reached over SSH while the window stays on your laptop, and the exit code is the receipt — `0` done, `2` failed, `1` stopped, `3` stopped at an approval gate. No account, telemetry off unless enabled.
+
+**Why it matters:** this is the reproduction the original result needed — a second implementation by unrelated authors, publishing every trace instead of a summary table — and it is also a reminder that "beats Fable 5" inherits every caveat of a ten-problem split. The transferable artifact is the harness: a workflow that names no model and can point at a local runtime is the difference between a benchmark and a product.
+
+[`🔗 guregodevo/memdoor`](https://github.com/guregodevo/memdoor) · [`🔗 team-solve workflow`](https://github.com/guregodevo/memdoor/tree/main/examples/workflows/team-solve) · [`🔗 Discussion (Hacker News)`](https://news.ycombinator.com/item?id=50320995)
+
+---
+
+## 33. Prospero is a coding harness in C++ that argues the category should not need gigabytes of RAM
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News · 181+ pts · ~16h ago (~19:54 UTC+8)
+- **Tags:** `agent-infra` `coding-harness` `cpp` `local-llm` `desktop-control`
+
+Chris Wellons' complaint is specific: the good open-weight models now run on consumer hardware, but most "are built with web stacks, and consume enormous amounts of memory" when a harness is essentially a network client glued to a subprocess. **Prospero** (`skeeto/prospero`, **Unlicense**, 93 stars, created 2026-10-21, **v0.10.0** released 2026-11-01T03:56Z) is a Dear ImGui docking application in his own C++ style, and the claim is "around two orders of magnitude fewer resources than other harnesses without sacrificing features".
+
+The feature list is the part that makes the resource claim interesting rather than ascetic: subagents, agent-to-agent messaging, and a headless engine deployable over SSH or WSL so a Linux box runs the work while the UI stays local and is re-attachable. Config is an INI file that can `include` a URL — with includes-by-URL restricted and "a hard rule against anything which might appear in shell command", while the post concedes a shared config "can extract an environment variable by using it as an API key and supplying an endpoint it controls". There is no provider built in, and "You can't use your Claude subscription" — you bring llama.cpp, OpenRouter, or an API key.
+
+**Why it matters:** the resource claim is a design goal, not a measurement — the post names no baseline, so "two orders of magnitude" is a target to verify against your own harness process. The argument underneath it is sound and testable in one line of `top`: when the harness is larger than the thing it is driving, the OOM killer's choice stops being predictable, and the post's fuzz-campaign example — checking back hours later to find the harness gone and the target untouched — is where that stops being an aesthetic complaint. Note the split: the repo is the Unlicense harness, and a separate Professional Edition embeds engines for cross-architecture desktop control.
+
+[`🔗 skeeto/prospero`](https://github.com/skeeto/prospero) · [`🔗 Prospero: a new coding harness for a more civilized age`](https://nullprogram.com/blog/2026/10/31/) · [`🔗 Discussion (Hacker News)`](https://news.ycombinator.com/item?id=50315226)
+
+---
+
+## 34. Pivot made GROUP BY faster by doing 69% more work — the core was memory-bound, not busy
+
+- **Velocity:** ▮▮ rising
+- **Source:** Pivot blog · published 2026-10-28
+- **Tags:** `databases` `performance` `cpu` `cache` `clickbench`
+
+The query is `SELECT count(*), UserID FROM hits GROUP BY UserID` over ClickBench's 99M-row hits table, giving roughly **17 million unique groups**, pinned to one core of an EPYC 9124 so the counters are readable. The naive hash-table aggregation takes **3.9s**, then **3.6s warm**. `perf stat` says the interesting thing: **50.1%** of slots are stalled on memory (`backend_bound_memory`) and only **16.1%** are retiring a micro-op, with 76,190,837 demand fills from DRAM.
+
+The fix is radix partitioning, and it is deliberately more work: hash each key, take the top 12 bits, push the row into one of **4,096** partitions, then aggregate one partition at a time into a small hash table. Every row is hashed and inserted exactly as before — plus a partition write. The result is **3.3s**, then **2.7s warm**; memory stalls drop to **23.5%**, retiring rises to **32.2%**, and retired operations go from **11,431,618,219 to 19,350,459,182** — about **69% more instructions** for **25% less time**.
+
+**Why it matters:** this is the cleanest small demonstration that "CPU at 100%" and "CPU doing work" are different measurements, and that the trade — trade DRAM waits for instructions — is almost always worth taking when the cache is the constraint. The diagnostic costs one `perf stat` on one pinned core; the alternative is reading a utilisation graph and concluding the query engine is inefficient when it is in fact waiting.
+
+[`🔗 It's the memory latency, stupid`](https://pivotlake.io/blog/its-the-memory-latency-stupid/) · [`🔗 ClickBench`](https://benchmark.clickhouse.com/)
+
+---
+
+## 35. Contra's annotated NES disassembly now runs in a browser — 6502 assembly, transcribed to C, compiled to WebAssembly
+
+- **Velocity:** ▮ steady
+- **Source:** Hacker News · 69+ pts · ~9h ago (~03:18 UTC+8)
+- **Tags:** `retro` `wasm` `reverse-engineering` `nes` `cc65`
+
+`epoyraz/nes-contra-us` is an annotated disassembly of *Contra* (US) and *Probotector* "and the build script(s) to reassemble the assembly into a byte-for-byte match of the game", built with **cc65** against a legally-supplied `baserom.nes` (MD5 `7BDAD8B4A7A56A634C9649D20BD3011B`) — the repo ships neither the ROM nor all the assets, and `assets.txt` records each asset's offset and length in the base image so the build can extract them. What is new is the port: the repo now carries `port/` (`contra_core`, `platform_sdl`, `platform_web`) and `web/`, and the live page loads an Emscripten module factory (`MODULARIZE`, `EXPORT_NAME=ContraModule`) so the game runs from the transcribed C rather than from a ROM in an emulator.
+
+The caveats are all repo-shaped: **4 stars**, **no licence file**, and the README documents the disassembly and the reassembly, not the browser port — so the WebAssembly build is a directory you have to read rather than a documented release.
+
+**Why it matters:** byte-exactness is the precondition for everything else, and it is the part that is easy to skip — a disassembly that does not reassemble to the same ROM cannot tell you whether your transcription of the game logic is faithful, because you have no ground truth to diff against. The licence gap deserves equal weight here: a complete disassembly of a copyrighted game with no LICENSE file is a redistribution question before it is a code-quality one, which is presumably why the ROM hash requirement is in the README and the built artifact is not in the repo.
+
+[`🔗 epoyraz/nes-contra-us`](https://github.com/epoyraz/nes-contra-us) · [`🔗 Playable browser build`](https://epoyraz.github.io/nes-contra-us/) · [`🔗 Discussion (Hacker News)`](https://news.ycombinator.com/item?id=50319169)
+
+---
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-10-31T20:38:42Z |
-| Items | 20 |
-| Sources tracked | 14 (GitHub Trending, Hacker News, arXiv, Hugging Face, NVD/CVE records, vendor advisories, security research) |
+| Generated | 2026-11-01T04:23:05Z |
+| Items | 35 |
+| Sources tracked | 21 (GitHub Trending, Hacker News, arXiv, Hugging Face, NVD/CVE records, cveawg CNAs, CISA KEV, CISA-ADP, vendor advisories, WordPress, VulnCheck, Apache, Red Hat, EEF, Anthropic, Google Research, Pivot, ClickBench, nullprogram, Datavorous, speridlabs) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (3x daily) |
 | Ranking | Velocity-weighted (recency × engagement acceleration × source authority) |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |

@@ -1,6 +1,6 @@
 ---
 date: 2026-11-01
-updated: 2026-10-31T20:38:42Z
+updated: 2026-11-01T04:23:05Z
 schedule: 04:03, 12:03, 20:03 UTC+8
 sources: 14
 license: CC-BY-4.0
@@ -324,13 +324,258 @@ PC を「boots your PC」する文字レベルモデル。MBR は手書きアセ
 
 ---
 
+## 21. WordPress のアップグレード用ステージング先は予測可能で Web から到達できた — だから `wp-config.php` を書くのは訪問者でもよかった
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Wordfence CNA レコード（cveawg）· 公開 2026-10-31T05:33Z · 予約 2026-10-30T17:17Z
+- **Tags:** `cve` `wordpress` `toctou` `rce` `upgrade`
+
+`CVE-2026-119977` は WordPress コアの未認証リモートコード実行で、説明は一文でこうだ。「これはフルパッケージのコアアップグレード時に使われる、予測可能で Web から到達可能なステージングパスに起因する。これにより未認証の攻撃者がアップグレード期間中にサーバー上でコードを実行できる。」分類は **`CWE-367`（TOCTOU 競合状態）**、スコアは **8.1** で `CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:H/I:H/A:H` — 同じベクトルの `AC:L` はお馴染みの 9.8 なので、この 0.5 分の差はまるごと競合状態のものだ。影響範囲は **25 本のブランチ区間**、`4.7.0 → 4.7.38` から `7.1.0 → 7.1.3` までで `defaultStatus` は `unaffected`。修正版は **7.1.4**、公開は **2026-10-28**。
+
+説明より差分のほうが情報量が多い。同じ関数に三つの防護が足されているからだ。7.1.3 の `unpack_package()` は作業ディレクトリをパッケージ名で命名していた — `$working_dir = $upgrade_folder . basename( basename( $package, '.tmp' ), '.zip' );` — そして `$upgrade_folder` は `wp_content_dir() . 'upgrade/'`、つまり Web で配信される場所だ。7.1.4 では同じ呼び出しが新しい `get_working_dir_name()` を通り、`'-' . wp_generate_password( 16, false )` を付ける。さらにアップグレード用ディレクトリに `index.php` が置かれ、コメントはこう説明する —「アップグレード用ディレクトリは Web で配信される。コアが wp-content やそのプラグイン・テーマのディレクトリに対して行っているように、ディレクトリ一覧に出ないようにして、下で作られる作業ディレクトリ名がディレクトリインデックスから分からないようにする」。三つ目の防護は `update-core.php` にあり、コピー処理の `$skip` 配列に一項目が加わる — `'wp-config.php'`、注記は「wp-config.php は決してコピーしない。作業ディレクトリに書き込まれている可能性がある」。
+
+この最後の一行がペイロードを名指ししている。コアの中で `wp-config.php` を書くのは `wp-admin/setup-config.php` だけで、それがレコードの四番目の参照先だ — 止めなければコピー処理がそれをステージングツリーからサイトルートへ運び、PHP が次のリクエストで実行する。この三つの防護のうち二つは堅牢化であり、コード実行のプリミティブを実際に取り除いているのは `$skip` の一項目だけだ。
+
+**Why it matters:** 自動更新は WordPress ホスト上で最も信頼された書き込み経路であり、予測可能な名前と一覧可能なディレクトリの組み合わせは、「サイトが自分自身を更新する」という事実を、匿名の訪問者が奪い合える何かに変える。7.1.4 のアナウンスとこのレコードを並べて読むと数字が合わない。アナウンスはセキュリティ更新の下に **13** 項目を挙げ、この一件については「WordPress のアップグレードプロセスにおける弱点で、アップグレード期間中のリモートコード実行につながりうる」としか書いていない — つまりこの CVE はその RCE だけを覆っており、残り十二項目はここに記録がない。同リリースでは XSS 二件の謝辞が Anthropic に贈られている。
+
+[`🔗 CVE-2026-119977（cveawg）`](https://cveawg.mitre.org/api/cve/CVE-2026-119977) · [`🔗 WordPress 7.1.4 リリースノート`](https://wordpress.org/news/2026/10/wordpress-7-1-4/) · [`🔗 7.1.4 の `class-wp-upgrader.php`（ランダムな作業ディレクトリ）`](https://github.com/WordPress/wordpress-develop/blob/7.1.4/src/wp-admin/includes/class-wp-upgrader.php) · [`🔗 7.1.4 の `update-core.php`（`wp-config.php` のスキップ）`](https://github.com/WordPress/wordpress-develop/blob/7.1.4/src/wp-admin/includes/update-core.php)
+
+---
+
+## 22. Jpom の 9.8 に必要なのは `is not null` と書かれた HTTP ヘッダー一本 — そして最新リリースは影響範囲の内側にある
+
+- **Velocity:** ▮▮ rising
+- **Source:** VulnCheck CNA レコード（cveawg）· 公開 2026-10-31T17:25Z · 予約 2026-10-31T11:44Z
+- **Tags:** `cve` `auth-bypass` `java` `injection` `unpatched`
+
+`CVE-2026-120201`：Jpom **2.10.0 から 2.11.12** は、`JPOM-USER-TOKEN` ヘッダーに条件式を差し込むだけで未認証の攻撃者が**スーパー管理者**になれる。「攻撃者は `is not null` のような値を送信でき、Hutool の Condition パーサーはそれを演算子として扱い、その後 Jpom のスクリプト機能を通じてコマンドを実行する。」CNA は**二つのフレームワークで二つのスコア**を載せている — CVSS 3.1 の **9.8**（`AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H`）と 4.0 の **9.3**（`…/VC:H/VI:H/VA:H`）。弱点は `CWE-943`（データクエリロジックにおける特殊要素の中和不備）で、ヘッダー値が値として束縛されるのではなく式としてクエリビルダに渡されるためだ。レコードの `packageURL` は `pkg:maven/org.dromara.jpom/server`、`references[]` は `LoginInterceptor.java#L146` を指す。
+
+そのあとに、レコードに書かれていない半分がある。最新のタグ付きリリースは **`v2.11.12`、公開 2025-05-06** — 影響範囲の上限がリリース一覧の上限そのもので、`defaultStatus` は `unaffected`、つまりその上には何も存在しない。リポジトリ（`dromara/Jpom`、1,951 スター、`NOASSERTION` ライセンス）の `pushed_at` は **2026-02-06** で、およそ九か月コミットがなく、十八か月リリースがない。NVD のステータスは **`Deferred`**（2026-11-01 時点）、NVD 自身のスコアはゼロ。
+
+**Why it matters:** インジェクションの形は美しい — HTTP ヘッダーが演算子になるのは `' OR 1=1` の Java 版のいとこだ — が、実行可能な事実は「修正版へ上げる」に参照先がないことだ。これは昨日の Agno と同じ形で結末が逆である。あちらの範囲は修正より一リリース遅れていたが、こちらの範囲には修正リリースが存在しない。したがって緩和はバージョン衛生ではなく露出（誰がそのポートに届くか）になる。「アップグレード」と書く前にプロジェクトが生きているかを確認すべきだ。休眠したリポジトリは「未修正」を一時的なものではなく恒久的なものにする。
+
+[`🔗 CVE-2026-120201（cveawg）`](https://cveawg.mitre.org/api/cve/CVE-2026-120201) · [`🔗 VulnCheck アドバイザリ`](https://www.vulncheck.com/advisories/jpom-2.10.0-through-2.11.12-authentication-bypass-via-jpom-user-token-header) · [`🔗 dromara/Jpom リリース`](https://github.com/dromara/Jpom/releases)
+
+---
+
+## 23. Red Hat が konflux-ci の CVE を一つの朝に四件公開 — どれもパイプライン自身の資格情報が漏れる別々の経路だ
+
+- **Velocity:** ▮▮ rising
+- **Source:** Red Hat CNA レコード（cveawg）· 公開 2026-10-31T08:55–08:57Z
+- **Tags:** `cve` `ci-cd` `supply-chain` `secrets` `red-hat`
+
+四件のレコードが**二分以内**（`08:55:09Z` から `08:57:35Z`）に着地した。すべて Red Hat CNA（`secalert@redhat.com`）による割り当てで、NVD 上はすべて `Received`、NVD 自身のスコアは**ゼロ**。そして四件それぞれが、同じデリバリシステムの別々の信頼境界だ。
+
+- **`CVE-2026-116086` — 8.8**、`CWE-94`。「自動ワークフロー実行を起動する権限を持つ攻撃者が、細工した issue タイトルをワークフロースクリプトに与えることで情報漏えいを引き起こせる」 — タイトルがサニタイズされずにデータクエリへ入り、フィルタコマンドを注入できるため、「API 資格情報、デプロイ鍵、内部メモといった機密情報」がワークフローログに現れる。
+- **`CVE-2026-114217` — 8.6**、`CWE-312`。CI 自動化が「機密性の高い GitHub アクセストークンを runner 上に平文で保存し、実行後も片付けない」 — `AV:L/PR:N/UI:R/S:C`、つまり runner にローカル到達できる者は誰でもリポジトリ権限を継承する。
+- **`CVE-2026-116964` — 8.4**、`CWE-94`。リポジトリへの書き込み権限があれば、環境エクスポートスクリプトに注入したシェルコマンドによってマニフェスト同期スクリプトが「未検証のスクリプト出力を動的に評価」し、CDI 環境でのコード実行になる（`PR:H/UI:R/S:C`）。
+- **`CVE-2026-117681` — 8.0**、`CWE-295`、この集合で唯一の `AV:A`。UI プロキシは「デフォルトのサービス認証局がない環境で、内部バックエンドへの接続に対する TLS 証明書検証を自動的に無効化する」 — そのまま「ユーザー偽装権限を持つクラスタスコープの認証トークン」を付けるので、その通信を傍受できる隣接ネットワークの攻撃者はクラスタ管理者を手に入れる。
+
+**Why it matters:** 最高スコアの一件に必要なのは CI システムで**最も低い**権限 — ワークフローを起動できること — であり、最低スコアの一件が最も遠くまで昇格する。スコア順に並べるとトリアージは逆になる。クラスタが欲しい攻撃者は 8.0 を取り、何を盗むべきかの一覧が欲しい攻撃者は 8.8 を取る。四件のうち三件が共有する教訓は、issue タイトルも環境変数もマニフェストも、シェルやクエリや評価器がそれを読むその瞬間までは単なる「データ」だということだ。
+
+[`🔗 CVE-2026-116086`](https://cveawg.mitre.org/api/cve/CVE-2026-116086) · [`🔗 CVE-2026-114217`](https://cveawg.mitre.org/api/cve/CVE-2026-114217) · [`🔗 CVE-2026-116964`](https://cveawg.mitre.org/api/cve/CVE-2026-116964) · [`🔗 CVE-2026-117681`](https://cveawg.mitre.org/api/cve/CVE-2026-117681)
+
+---
+
+## 24. Apache MINA の 9.8 は二つのマイルストーンだけのプレリリース系列にあり、ベンダーは修正しないと言う
+
+- **Velocity:** ▮ steady
+- **Source:** Apache CNA レコード（cveawg）· 公開 2026-10-31T20:17Z · 予約 2026-10-28T17:16Z
+- **Tags:** `cve` `deserialization` `java` `apache` `unsupported`
+
+`CVE-2026-118636`：「MINA 3.0 codec モジュールの `JavaNativeMessageDecoder` はフレームのバイト列に対してクラスフィルタなしで `ObjectInputStream.readObject()` を呼ぶため、信頼できない相手の前に置いたアプリケーションは gadget チェーンによる RCE に開かれる。」影響は `3.0.0` から **`3.0.0-M2`** まで — プレリリースのマイルストーン二つ — であり、レコードはベンダー自身の判定で始まる：「**UNSUPPORTED WHEN ASSIGNED**」、続けて「3.0.0 ブランチは活動停止しているため、この問題を修正するバージョンをリリースする予定はない」。レコードが示す対処は**ダウングレード**だ：「ユーザーには最新の Apache MINA 2.2.X ブランチの利用を推奨する」。スコアは **9.8**（`CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H`）で Apache による割り当て、弱点は `CWE-502`、NVD は `Received`。
+
+**Why it matters:** フィルタのない `readObject()` は Java における古典的な RCE プリミティブであり 9.8 は妥当だが、行動を決めるのは範囲のほうだ。これは「MINA が脆弱」ではなく、「活動停止したブランチのマイルストーンビルドが脆弱で、対処は以前使っていたバージョンに戻すこと」である。10 月 27 日の Vysper の一件と同じ形だ。`UNSUPPORTED WHEN ASSIGNED` はブランチのライフサイクルについての陳述であり、緩和はパッチ待ちではなく移行になる。
+
+[`🔗 CVE-2026-118636（cveawg）`](https://cveawg.mitre.org/api/cve/CVE-2026-118636) · [`🔗 Apache MINA アナウンス（lists.apache.org）`](https://lists.apache.org/thread.html/h76nwcrkvsffhsk2kq6cjzc6srtnty7x)
+
+---
+
+## 25. Sign in with Apple は `user` フィールドをブラウザに渡す — そして Elixir の `assent` はそれを検証済みトークンの**上に**マージした
+
+- **Velocity:** ▮▮ rising
+- **Source:** EEF CNA レコード（cveawg）· 公開 2026-10-30T23:55Z
+- **Tags:** `cve` `authentication` `oidc` `elixir` `claim-confusion`
+
+`CVE-2026-117656` は `CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:H/VI:H/VA:N` で **9.3**。説明はマージ順序の教科書的なバグそのものだ。Apple は「ユーザーの名前を `user` フォームパラメータとしてコールバックエンドポイントに POST し、そのパラメータはブラウザが送信し、クライアントが制御する」。`Assent.Strategy.Apple.callback/2` がそれをデコードし、`fetch_user/2` が「検証済み ID トークンのクレームの上にマージするので、未検証のマップが勝つ」。攻撃者は自分の Apple ID で Sign in with Apple を完了して `user` を書き換えるだけで、「`sub`、`email`、その他のあらゆるクレームを差し替えられる」 — つまり返ってきた subject や email でアカウントを検索・紐付け・認可するアプリは、そのまま他人のアカウントを渡してしまう。影響は `assent` **0.1.25 から 0.3.2 未満**。分類は `CWE-290`（なりすましによる認証バイパス）と **`CWE-349`（信頼されたデータと余計な信頼できないデータの受容）**。
+
+出所は分けて書く価値がある。レコード唯一のスコアはスロットの不一致に見えてそうではない。NVD は **9.3 を `Secondary` として表示し、その出所は EEF の割り当て者 UUID** だ — つまり CNA が自分のレコードにスコアを付けたのであり、NVD はまだ分析していない（`Received`、2026-11-01 時点）。参照には GitHub アドバイザリ `GHSA-9fr5-g44g-9526`、EEF のページ、OSV のエントリ、修正コミット `a2d331e8` が含まれる。
+
+**Why it matters:** `user` フィールドは Sign in with Apple の流れのうち、署名済みトークンではなくブラウザを通る唯一の部分だ。初回認可時にしか現れないからこそ、各パーサーはそれを資格情報ではなく便利フィールドとして扱う。マージの向きが脆弱性の全体である。検証済みのクレーム集合は信頼できないものを**上書き**してよいが、逆にマージするライブラリは OIDC が防ごうとしていたアカウント連携の乗っ取りを静かに呼び戻す。
+
+[`🔗 CVE-2026-117656（cveawg）`](https://cveawg.mitre.org/api/cve/CVE-2026-117656) · [`🔗 GHSA-9fr5-g44g-9526`](https://github.com/pow-auth/assent/security/advisories/GHSA-9fr5-g44g-9526) · [`🔗 EEF CVE ページ`](https://cna.erlef.org/cves/CVE-2026-117656.html)
+
+---
+
+## 26. Anthropic は透かしが品質に影響しないと言う — だが手法自身の補足資料は多様性を犠牲にすると書き、新しい論文は検出可能性の側から攻める
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News · 36+ pts · 約 6 時間前（約 05:50 UTC+8）
+- **Tags:** `watermarking` `llm` `evaluation` `eu-ai-act` `research`
+
+Anthropic の透かし説明ページははっきり書いている：「Watermarking does not impact the quality of Claude's output.」この週末に再浮上したブログは、その手法が依拠する文書 — Google の SynthID-Text の補足資料 — を開き、それを限定する一文を引く：「While single-sequence non-distortion guarantees the quality of each individual response, it does not necessarily preserve diversity across multiple responses」。そしてこれは「lower the overall quality of a system which generates many responses then selects the best one」になりうると付け加える。この区別は単一応答の評価では見えない。そしてベンダーの人間評価はまさにそうやって行われた。Natzir Turrado が論文自身の設定でオープンモデル上に SynthID-Text を再現した中では、同じプロンプトの五回のサンプルのうち四回の書き出しがほぼ同一だった（「My heart still sings/dances when I think back to my trip to the quaint coastal town of…」）。透かしなしでは三つが異なる書き出しになった。
+
+研究側は今週動いた。**TextSeal2**（`arXiv 2610.40613`）は複数の鍵をガウスコピュラで単一の仮想鍵に統合し、「keeps its signal under speculative decoding」 — 棄却されたドラフトトークンは同じ鍵で再レースされる — さらに「adds no measurable inference latency」。出力トークン多様性が同じ条件で、偽陽性率 `10^-3` において前世代より **8〜22 パーセントポイント多く** 100 トークン回答を検出し、投機的デコーディング下では同じ受容率で TextSeal と textGrain をそれぞれ **18 と 22 ポイント**上回る。
+
+**Why it matters:** この議論は「損失か無損失か」ではなく分母の話だ。無歪み保証は構造上「一つの系列」についてのものなので、ベンダーの主張とリトライを繰り返す現実は同時に成り立ちうる。そしてユーザーに見える症状（リトライを押すと同じ段落が返ってくる）は完全にその隙間に住んでいる。多様性に触れずに 8〜22 ポイントを得る検出器は有用な方向だ。それはトレードオフを論じるのではなく取り除くからだ。ただしこの三つはいずれも他者の評価であり、Claude についての回帰研究は一つもない。
+
+[`🔗 Anthropic — Claude のテキスト透かしの仕組み`](https://www.anthropic.com/news/claude-text-watermark) · [`🔗 AI text watermarking and quality loss`](https://blog.keyvan.net/p/ai-text-watermarking-and-quality) · [`🔗 TextSeal2（arXiv 2610.40613）`](https://arxiv.org/abs/2610.40613) · [`🔗 議論（Hacker News）`](https://news.ycombinator.com/item?id=50320599)
+
+---
+
+## 27. L3G-World は世界モデルの記憶をストリーム長ではなくシーン規模に結びつける — 9 FPS、メモリ描画は 359 倍高速
+
+- **Velocity:** ▮▮ rising
+- **Source:** arXiv 2610.40614 · HF Papers 38 いいね
+- **Tags:** `research` `world-model` `gaussian-splatting` `real-time` `video`
+
+インタラクティブな世界モデルのスケーリング問題は一つで、顔が二つある。直近 N フレームを保持すれば一貫性が視野とともに崩れ、明示的な 3D シーンを保持すれば記憶がストリーム長とともに増える。**L3G-World** は Latent 3D Gaussian Memory を提案し、「記憶更新器が新たに観測された領域にガウスを生成し、既存のものを精緻化するので、記憶はストリーム長ではなくシーン範囲とともに増える」。効いている小さな工夫は、各ガウスが **VAE 潜在特徴**を保持することだ。これにより記憶は「VAE で再エンコードすることなく DiT の潜在空間へ直接描画できる」。従来の 3D 記憶は RGB レンダリングを再エンコードしていたが、それがループをインタラクティブにできないほど遅くしていた原因だ。
+
+報告値（「各指標について、最も効率的な既存 3D 記憶ベースラインに対して」）：**3D プリミティブは最大 38.6 分の 1**、**記憶更新が 3.2 倍高速**、**記憶描画が 359 倍高速**、リアルタイム生成は **9 FPS**。
+
+**Why it matters:** 「各指標について」という言い方が誠実で、まさに残すべき部分だ。三つの比を三つの（おそらく異なる）ベースラインに対して測ったものは、一つの高速化ではなく三つの事実である。そして 359 倍が最も単独で引用されやすい。それでも設計上の主張はその留保に耐える。記憶の上限を「時間」ではなく「範囲」に結びつけることが、インタラクティブな世界のコストを「どれだけ歩き回ったか」から独立させる理由であり、これは実装の高速化ではなく構造的な修正だ。
+
+[`🔗 arXiv 2610.40614 — L3G-World`](https://arxiv.org/abs/2610.40614) · [`🔗 HF Papers（トレンド）`](https://huggingface.co/papers/2610.40614)
+
+---
+
+## 28. SpecSlot は画像の細部量をグローバル注意の系列長から切り離す
+
+- **Velocity:** ▮ steady
+- **Source:** arXiv 2610.40647 · HF Papers 36 いいね
+- **Tags:** `research` `diffusion` `image-generation` `attention` `efficiency`
+
+ピクセル空間の生成 Transformer はパッチあたり 1 トークンなので、細部を細かくするほどグローバル注意の系列が長くなり、コストは二乗で増える。論文の観察は、この結合が不要だということだ。低周波の構造はグローバルな交換から恩恵を受け、高周波の細部は局所的だ。**SpecSlot** は各空間アンカーを複数のスロットに展開し、各スロットが「互いに素な DCT 係数の帯域」を持ち、各アンカーの最低周波スロットだけがグローバル注意に参加し、すべてのスロットは局所的に相互作用する — アンカー密度とスペクトル細分を分離する。空間ヘッドがスペクトル予測に局所補正を加え、生成状態・目標・損失はピクセル空間に留まる。
+
+実測：ImageNet-256 では **FLOPs を揃えた** JiT 対照と同等の FID に、より速い収束で到達。ImageNet-512 ではその対照より FID が **2.84** 改善し、FLOPs は **3.9% 少ない**。JiT-B/16 とは 0.69 FID 差でコストは **38.2% 低い**。テキストからの画像生成では DPG-Bench で JiT-B/8 を **1.06** 上回り、順伝播コストは **40.6% 低い**。
+
+**Why it matters:** 本質は周波数についての議論がアーキテクチャ変更の衣装を着ているもので、「FLOPs を揃えた対照」がそれを検証可能にしている。多くの効率化論文は、同じ予算に調整されたことのないベースラインと比べている。より大きなモデルとの 0.69 FID 差こそ正直な表現だ。これが買うのは「単位計算量あたりの同等性」であり、新しい品質の天井ではない。
+
+[`🔗 arXiv 2610.40647 — Read, Allocate, Route`](https://arxiv.org/abs/2610.40647) · [`🔗 HF Papers（トレンド）`](https://huggingface.co/papers/2610.40647)
+
+---
+
+## 29. `idol` は一枚の写真を二秒足らずで百万のガウスに変える — ただし入力エンコーダ二つはゲート付きだ
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hugging Face モデルカード · 218 いいね · 2,367 ダウンロード · 作成 2026-10-28
+- **Tags:** `image-to-3d` `gaussian-splatting` `apache-2` `vision` `release`
+
+`speridlabs/idol` は「物体の一枚の写真」を入力に、「最大百万の 3D ガウス、写真が決して見せなかった側面も含めて」を出力する。具体的には **1,048,576** 個のガウスを標準的な 3DGS の `.ply` として書き出し、処理済みの入力画像と予測カメラも添える。背景除去と再フレーミングは自分で行い、**7.2 GB の VRAM** で動き、モデルカードは「can run in under 2 seconds」と書く。重みは約 **3 GB**、ライセンスは **Apache-2.0**、SDK は別リポジトリ（`speridlabs/idol-sdk`、Python 3.10+、PyTorch 2.5+、NVIDIA CUDA）。
+
+配備上の制約は脚注ではなく手順の一段目に書かれている。idol は入力の読み取りに**ゲート付き**の Hugging Face モデル二つ — `facebook/dinov3-vith16plus-pretrain-lvd1689m` と `black-forest-labs/FLUX.2-dev`（VAE のみ） — を使うので、「Hugging Face アカウントで利用条件に同意し、一度ログインする」必要がある。権限がない場合、idol は「何かをダウンロードする前に停止し、何が欠けているかを告げる」。
+
+**Why it matters:** Apache-2.0 の成果物がゲート付きエンコーダの後ろにあるのは再現可能なパイプラインではない。そしてこれは現在のオープンな 3D・動画モデルの多くが出荷される形だ。重みは寛容、入力は制限。これはオフラインビルド、CI、そして「モデルカードのライセンスが実際にダウンロードするものを覆う」と仮定するあらゆる配布にとって重要になる。四日で 218 いいねに対し 2,367 ダウンロードというのも、いつものトレンドの偏りだ。注目は使用よりずっと先に来る。
+
+[`🔗 speridlabs/idol（モデルカード）`](https://huggingface.co/speridlabs/idol) · [`🔗 speridlabs/idol-sdk`](https://github.com/speridlabs/idol-sdk)
+
+---
+
+## 30. 140 文字のデモで継続事前学習すると困惑度は 28.63 から 8.57 に下がる — が、作者は出力が味を失ったと言う
+
+- **Velocity:** ▮ steady
+- **Source:** Hacker News · 48+ pts · 約 10 時間前（約 02:08 UTC+8）
+- **Tags:** `research` `continued-pretraining` `code-generation` `perplexity` `demoscene`
+
+**Dwitter** の言語をモデルに教える話だ。140 文字の JavaScript デモで、効果全体が少数の詰め込んだ式に乗っている。著者はそのコーパスで継続事前学習を行い、前後で surprisal を測った。**30 個のホールドアウト dweet** で**困惑度は 28.63 から 8.57 へ**低下し、最も大きく下がったのは普通のコードではなく「不慣れなプログラミングの慣用句」だった。カリキュラムはコミュニティ自身から来ている。Dwitter は投稿ごとに「awesomeness」スコアを付け、著者はそれで上位 5,000 件を取った。
+
+この報告は、多くの記事が切り落とす半分を残している。プログラムはより一貫性を持つようになり、著者自身の評価では、ある種の味を失った。これは上の透かしの話題が反対側から述べているのと同じトレードオフだ。さらに、この領域が「希少なだけでなく生成が難しい」理由について明快な論証もある。140 文字のプログラムから最後の 30 文字を削ると、アルファベットが 64 記号しかなくても「約 1.5 x 10^54 通りの補完文字列」があり、そのほとんどすべてが無効か退屈だ。
+
+**Why it matters:** 測れる半分（困惑度 3.3 分の 1）と測れない半分（出力が面白くなくなった）が一緒に報告されている。これはドメイン適応の記事では珍しく、まさに「スタイル微調整をするかどうか」の判断に必要なものだ。移植可能な技術はカリキュラムのほうで、長さや新しさではなくコミュニティ自身のスコアでコーパスを並べると、小さなデータセットがキュレーション済みのように振る舞い始める。
+
+[`🔗 Post training a model to explore Demoscenes`](https://datavorous.com/writing/demoscener/) · [`🔗 議論（Hacker News）`](https://news.ycombinator.com/item?id=50318442)
+
+---
+
+## 31. Karpathy は午前中に Hacker News のコメントから YouTube を作った — 4 万件のコメントが 6,454 本の動画になった
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Hacker News · 882+ pts · 約 8 時間前（約 03:56 UTC+8）
+- **Tags:** `agents` `claude-code` `personal-software` `recommendation` `vibe-coding`
+
+出発点は不満で、成果物は [hackertube.org](https://hackertube.org/) だ。アルゴリズムの推薦ではなく「Hacker News で推薦されてきた動画」を並べる。説明されている構築手順はこうだ。Claude Code のデスクトップ版で中程度の思考強度で動く Opus 5.5 が「HackerNews の全コメントをダウンロードし、フィルタし、Sonnet を Workflow（Claude Code の機能）で走らせ、スパムを除き、YouTube 動画を推薦している 4 万件のコメントに絞り込んだ」 — 結果は **6,454 本の動画**で、「2007–2026 年に少数の人が」**150 のトピック**にわたって推薦したものだ。UI は YouTube のクローンだが、意図的に三か所が違う。アップロードされたサムネイルではなく動画の **50% フレーム**を使う。状態はすべてローカルなブラウザセッションに置きアカウントを持たない。そしてサイトのデータを「あなたのエージェントに渡して自分の版を簡単に作れるように」エクスポートできる。
+
+正直な収支は追記に書かれている。手作業は Google Cloud の API キー取得、VPS の起動、ドメインの購入だけ。その後のデプロイ、堅牢化、最適化はすべて委ねた。Karpathy 自身の総括は「I don't actually do anything resembling traditional engineering anymore.」
+
+**Why it matters:** 主役は速度ではなくデータセットだ。十九年分の HN コメントは人間がキュレーションした推薦コーパスでありながら、**対象**で索引されたことがなかった。そしてここでモデルがやったのは生成ではなく抽出と重複排除で、まさにエージェントの出力を出所と突き合わせて検証できる種類の作業だ。「二時間」は本物の数字であり、同時に誤解を招く。その時計はコーパスとキーとサーバーが存在してから動き出す。
+
+[`🔗 HackerTube — karpathy`](https://karpathy.bearblog.dev/hacker-tube/) · [`🔗 hackertube.org`](https://hackertube.org/) · [`🔗 議論（Hacker News）`](https://news.ycombinator.com/item?id=50319510)
+
+---
+
+## 32. Memdoor は GVS5H の五パス harness を YAML ワークフローとして再構築 — 9.8/10 対 Fable 5 の 8.0、50 回の実行をすべて公開
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Hacker News · 124+ pts · 約 5 時間前（約 06:46 UTC+8）
+- **Tags:** `agents` `benchmark` `reproduction` `go` `self-hosted`
+
+`guregodevo/memdoor`（Apache-2.0、Go、単一の静的バイナリ、作成 2026-10-05、**32 スター**）は README で大きな賭けに出ている。「五つの Qwen3.8-27B エージェントが LiveCodeBench Hard で Fable 5 を上回る、Memdoor ワークフローとして」 — GVS5H の harness を「著者の正確なプロンプトとループで再構築し、彼らのリストの最初の十問、各五パス：平均 **9.8/10**、著者自身の harness は 9.6、Fable 5 の単一呼び出しは 8.0。50 回の実行はすべて公開：リクエスト、応答、プログラム、グレーダ出力のすべて。」
+
+見出しより先に範囲を読む。十問、五パス、一つのモデル系列、そして元の harness に対する **0.2 の差** — 十問ではこれは実行間のノイズに完全に収まるので、結論は「改善」ではなく「再現」だ。重みを持つ比較は 9.8 対 **単一呼び出しの 8.0** であり、それが GVS5H の主張そのものだ。27B を五回走らせるのはフロンティアモデルを一度呼ぶより価値がある、という話であって、27B が強いという話ではない。
+
+その周りの道具のほうが再利用可能な部分だ。ワークフローは組み込みのチェックと承認ゲートを持つファイルで、明示的な決定モデルがチャットモデルの前に座ってトークン費用を削り、実行は SSH 越しのマシンに置いたままウィンドウは手元のノートPCに残せる。終了コードがそのまま領収書になる — `0` 完了、`2` 失敗、`1` 停止、`3` 承認ゲートで停止。アカウント不要、テレメトリは有効にしない限りオフ。
+
+**Why it matters:** これは元の結果に必要だった再現だ。無関係な著者による第二の実装で、要約表ではなくすべての軌跡を公開している。同時に「Fable 5 を上回る」が十問の分割の留保をすべて引き継ぐことも思い出させる。移植可能な成果物は harness のほうだ。モデルを名指しせずローカル実行環境を指せるワークフローは、「ベンチマーク」と「製品」の違いそのものだ。
+
+[`🔗 guregodevo/memdoor`](https://github.com/guregodevo/memdoor) · [`🔗 team-solve ワークフロー`](https://github.com/guregodevo/memdoor/tree/main/examples/workflows/team-solve) · [`🔗 議論（Hacker News）`](https://news.ycombinator.com/item?id=50320995)
+
+---
+
+## 33. Prospero は C++ で書かれたコーディング harness で、このカテゴリに数 GB のメモリは要らないと主張する
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News · 181+ pts · 約 16 時間前（約 19:54 UTC+8）
+- **Tags:** `agent-infra` `coding-harness` `cpp` `local-llm` `desktop-control`
+
+Chris Wellons の不満は具体的だ。優れたオープンウェイトモデルは今やコンシューマ向けハードウェアで動くのに、「ほとんどの harness は Web スタックで作られ、膨大なメモリを食う」。だが harness の本質はサブプロセスに貼り付いたネットワーククライアントにすぎない。**Prospero**（`skeeto/prospero`、**Unlicense**、93 スター、作成 2026-10-21、**v0.10.0** 公開 2026-11-01T03:56Z）は彼自身の C++ スタイルで書かれた Dear ImGui のドッキングアプリで、主張は「機能を犠牲にせず、他の harness よりおよそ二桁少ないリソース」。
+
+機能一覧のほうが、このリソース主張を禁欲的ではなく興味深いものにしている。サブエージェント、エージェント間のメッセージング、そして SSH や WSL 越しに配備できるヘッドレスエンジン — Linux マシンが仕事をし、UI はローカルに残って後から再接続できる。設定は INI ファイルで URL を `include` でき、URL include は制限され、「シェルコマンドに現れうるものは一切禁止するという固い規則」がある。一方で記事は、共有設定が「環境変数を API キーとして使い、自分が制御するエンドポイントを渡すことで、その環境変数を抽出できる」ことも認めている。プロバイダは内蔵せず、「Claude のサブスクリプションは使えない」。llama.cpp、OpenRouter、API キーは自分で持ち込む。
+
+**Why it matters:** リソースの主張は測定ではなく設計目標だ。記事はベースラインを一つも挙げていないので、「二桁」は自分の環境の harness プロセスに対して確かめるべき的になる。その下の議論は妥当で、`top` 一行で測れる。harness が駆動対象より大きいとき、OOM killer の選択は予測できなくなる。記事のファジングキャンペーンの例 — 数時間後に戻ると harness が消え、ターゲットは無傷 — は、これが美学の不平ではなくなる地点だ。分割に注意：リポジトリは Unlicense の harness で、クロスアーキテクチャのデスクトップ制御エンジンを内蔵する Professional Edition は別物だ。
+
+[`🔗 skeeto/prospero`](https://github.com/skeeto/prospero) · [`🔗 Prospero: a new coding harness for a more civilized age`](https://nullprogram.com/blog/2026/10/31/) · [`🔗 議論（Hacker News）`](https://news.ycombinator.com/item?id=50315226)
+
+---
+
+## 34. Pivot は 69% 多く仕事をして GROUP BY を速くした — そのコアはビジーではなくメモリ律速だった
+
+- **Velocity:** ▮▮ rising
+- **Source:** Pivot ブログ · 公開 2026-10-28
+- **Tags:** `databases` `performance` `cpu` `cache` `clickbench`
+
+クエリは ClickBench の 99M 行 hits テーブルに対する `SELECT count(*), UserID FROM hits GROUP BY UserID` で、およそ **1,700 万の異なるグループ**。カウンタを読めるよう EPYC 9124 の一コアに固定する。素朴なハッシュテーブル集約は **3.9 秒**、ウォームで **3.6 秒**。`perf stat` が面白いことを言う。スロットの **50.1%** がメモリで停止し（`backend_bound_memory`）、マイクロオペをリタイアしているのは **16.1%** だけ。DRAM からのデマンドフィルは 76,190,837 回。
+
+修正は radix パーティショニングで、意図的に仕事を増やす。各キーをハッシュし上位 12 ビットを取り、行を **4,096** のパーティションの一つへ押し込み、その後パーティションごとに小さなハッシュテーブルへ集約する。各行は相変わらず一度ハッシュされ挿入される — 加えてパーティションへの書き込みが一回増える。結果は **3.3 秒**、ウォームで **2.7 秒**。メモリ停止は **23.5%** に下がり、リタイア率は **32.2%** に上がり、リタイアした演算数は **11,431,618,219 から 19,350,459,182** へ — およそ **69% 多い命令**で **25% 短い時間**。
+
+**Why it matters:** 「CPU 100%」と「CPU が仕事をしている」は別の測定値だという、最小で清潔なデモであり、キャッシュが制約のとき「DRAM 待ちを命令と交換する」取引がほぼ常に割に合うことも示す。診断コストは固定した一コアでの `perf stat` 一回。やらない場合の代償は、利用率のグラフを見て「クエリエンジンの効率が悪い」と結論することであり、実際にはそれは待っているだけだ。
+
+[`🔗 It's the memory latency, stupid`](https://pivotlake.io/blog/its-the-memory-latency-stupid/) · [`🔗 ClickBench`](https://benchmark.clickhouse.com/)
+
+---
+
+## 35. Contra の注釈付き NES 逆アセンブリがブラウザで動く — 6502 アセンブリを C に書き起こし、WebAssembly にコンパイル
+
+- **Velocity:** ▮ steady
+- **Source:** Hacker News · 69+ pts · 約 9 時間前（約 03:18 UTC+8）
+- **Tags:** `retro` `wasm` `reverse-engineering` `nes` `cc65`
+
+`epoyraz/nes-contra-us` は *Contra*（US）と *Probotector* の注釈付き逆アセンブリで、「アセンブリをゲームとバイト単位で一致する成果物へ再アセンブルするビルドスクリプト」を伴う。**cc65** を使い、合法的に用意した `baserom.nes`（MD5 `7BDAD8B4A7A56A634C9649D20BD3011B`）に対してビルドする — リポジトリは ROM も全アセットも含まず、`assets.txt` が各アセットのベースイメージ内のオフセットと長さを記録してビルド時に抽出させる。新しいのは移植のほうだ。リポジトリは `port/`（`contra_core`、`platform_sdl`、`platform_web`）と `web/` を持ち、公開ページは Emscripten のモジュールファクトリ（`MODULARIZE`、`EXPORT_NAME=ContraModule`）を読み込む。つまり動いているのは書き起こされた C であり、エミュレータ上の ROM ではない。
+
+留保はすべてリポジトリの形をしている。**4 スター**、**ライセンスファイルなし**、そして README が説明するのは逆アセンブリと再アセンブリであってブラウザ移植ではない — つまり WebAssembly ビルドは自分で読むべきディレクトリであり、文書化されたリリースではない。
+
+**Why it matters:** バイト単位の一致は他のすべての前提であり、最も飛ばされやすい段階でもある。同じ ROM に再アセンブルできない逆アセンブリは、ゲームロジックの書き起こしが忠実かどうかを教えてくれない。差分を取る基準がないからだ。ライセンスの欠落にも同じ重さを与えるべきだ。著作権のあるゲームの完全な逆アセンブリに LICENSE ファイルがないのは、コード品質の問題である前に再配布の問題である。README に ROM ハッシュ要件が書かれ、ビルド成果物がリポジトリにないのは、おそらくそのためだ。
+
+[`🔗 epoyraz/nes-contra-us`](https://github.com/epoyraz/nes-contra-us) · [`🔗 ブラウザで遊べるビルド`](https://epoyraz.github.io/nes-contra-us/) · [`🔗 議論（Hacker News）`](https://news.ycombinator.com/item?id=50319169)
+
+---
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-10-31T20:38:42Z |
-| Items | 20 |
-| Sources tracked | 14（GitHub Trending、Hacker News、arXiv、Hugging Face、NVD／CVE レコード、ベンダーアドバイザリ、セキュリティ研究） |
+| Generated | 2026-11-01T04:23:05Z |
+| Items | 35 |
+| Sources tracked | 21（GitHub Trending、Hacker News、arXiv、Hugging Face、NVD／CVE レコード、cveawg CNA、CISA KEV、CISA-ADP、ベンダーアドバイザリ、WordPress、VulnCheck、Apache、Red Hat、EEF、Anthropic、Google Research、Pivot、ClickBench、nullprogram、Datavorous、speridlabs） |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8（1 日 3 回） |
 | Ranking | 速度加重（新しさ × エンゲージメント加速度 × 出所の権威） |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |

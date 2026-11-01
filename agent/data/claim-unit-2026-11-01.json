@@ -1,9 +1,9 @@
 {
- "generated": "2026-10-31T21:03:27.534Z",
+ "generated": "2026-11-01T04:23:09.822Z",
  "files": [
   {
    "file": "2026-11-01.md",
-   "items": 20,
+   "items": 35,
    "findings": [
     {
      "check": "cwe",
@@ -32,6 +32,104 @@
      "verdict": "ok",
      "claim": "3 issues + 4 PRs",
      "detail": "split named (PR share 57%)"
+    },
+    {
+     "check": "cwe",
+     "item": 21,
+     "verdict": "ok",
+     "claim": "CVE-2026-119977 CWE-367",
+     "detail": "stated in NVD weaknesses[] (security@wordfence.com)"
+    },
+    {
+     "check": "cvss",
+     "item": 22,
+     "verdict": "ok",
+     "claim": "3.1 9.8",
+     "detail": "CVE-2026-120201 · Primary/disclosure@vulncheck.com · vector reproduces 9.8"
+    },
+    {
+     "check": "cvss",
+     "item": 22,
+     "verdict": "ok",
+     "claim": "4.0 9.3",
+     "detail": "CVE-2026-120201 · Secondary/disclosure@vulncheck.com"
+    },
+    {
+     "check": "status",
+     "item": 22,
+     "verdict": "ok",
+     "claim": "CVE-2026-120201 `Deferred`",
+     "detail": "Deferred (lastModified 2026-10-31T18:17:08.023)"
+    },
+    {
+     "check": "cwe",
+     "item": 22,
+     "verdict": "ok",
+     "claim": "CVE-2026-120201 CWE-943",
+     "detail": "stated in NVD weaknesses[] (disclosure@vulncheck.com)"
+    },
+    {
+     "check": "status",
+     "item": 23,
+     "verdict": "ok",
+     "claim": "CVE-2026-116086 `Received`",
+     "detail": "Received (lastModified 2026-10-31T09:16:33.223)"
+    },
+    {
+     "check": "cwe",
+     "item": 23,
+     "verdict": "ok",
+     "claim": "CVE-2026-116086 CWE-94",
+     "detail": "stated in NVD weaknesses[] (secalert@redhat.com)"
+    },
+    {
+     "check": "cwe",
+     "item": 23,
+     "verdict": "ok",
+     "claim": "CVE-2026-114217 CWE-312",
+     "detail": "stated in NVD weaknesses[] (secalert@redhat.com)"
+    },
+    {
+     "check": "cwe",
+     "item": 23,
+     "verdict": "ok",
+     "claim": "CVE-2026-116964 CWE-94",
+     "detail": "stated in NVD weaknesses[] (secalert@redhat.com)"
+    },
+    {
+     "check": "cwe",
+     "item": 23,
+     "verdict": "ok",
+     "claim": "CVE-2026-117681 CWE-295",
+     "detail": "stated in NVD weaknesses[] (secalert@redhat.com)"
+    },
+    {
+     "check": "status",
+     "item": 24,
+     "verdict": "ok",
+     "claim": "CVE-2026-118636 `Received`",
+     "detail": "Received (lastModified 2026-10-31T21:16:53.203)"
+    },
+    {
+     "check": "cwe",
+     "item": 24,
+     "verdict": "ok",
+     "claim": "CVE-2026-118636 CWE-502",
+     "detail": "stated in NVD weaknesses[] (security@apache.org)"
+    },
+    {
+     "check": "status",
+     "item": 25,
+     "verdict": "ok",
+     "claim": "CVE-2026-117656 `Received`",
+     "detail": "Received (lastModified 2026-10-31T00:16:51.340)"
+    },
+    {
+     "check": "cwe",
+     "item": 25,
+     "verdict": "ok",
+     "claim": "CVE-2026-117656 CWE-290",
+     "detail": "stated in NVD weaknesses[] (6b3ad84c-e1a6-4bf7-a703-f496b71e49db)"
     },
     {
      "check": "repo",
@@ -78,37 +176,65 @@
     {
      "check": "repo",
      "item": 10,
+     "verdict": "star-drift",
+     "claim": "3979 quoted vs 4547 now",
+     "detail": "vercel-labs/agent-desktop: -12% — reread the number or date the item"
+    },
+    {
+     "check": "repo",
+     "item": 10,
      "verdict": "ok",
      "claim": "vercel-labs/agent-desktop",
-     "detail": "3983★, last push 2026-10-31"
+     "detail": "4547★, last push 2026-11-01"
     },
     {
      "check": "repo",
      "item": 12,
      "verdict": "ok",
      "claim": "Orkas-AI/Orkas",
-     "detail": "6069★, last push 2026-10-31"
+     "detail": "6595★, last push 2026-11-01"
     },
     {
      "check": "repo",
      "item": 16,
      "verdict": "ok-history",
      "claim": "arterialist/kube32",
-     "detail": "record 6d, oldest commit 2026-10-26 (~156 commits)"
+     "detail": "record 6d, oldest commit 2026-10-26 (~187 commits)"
     },
     {
      "check": "repo",
      "item": 16,
      "verdict": "ok",
      "claim": "arterialist/kube32",
-     "detail": "27★, last push 2026-10-30"
+     "detail": "27★, last push 2026-11-01"
+    },
+    {
+     "check": "repo",
+     "item": 17,
+     "verdict": "star-drift",
+     "claim": "6 quoted vs 25 now",
+     "detail": "kerlenton/bootgpt: -76% — reread the number or date the item"
     },
     {
      "check": "repo",
      "item": 17,
      "verdict": "ok",
      "claim": "kerlenton/bootgpt",
-     "detail": "8★, last push 2026-10-31"
+     "detail": "25★, last push 2026-10-31"
+    },
+    {
+     "check": "repo",
+     "item": 29,
+     "verdict": "not-a-repo",
+     "claim": "facebook/dinov3-vith16plus-pretrain-lvd1689m",
+     "detail": "named in backticks but the sentence is about a “models”, not a project — a model id or an endpoint path is not a repository claim, so archived/stale cannot answer here"
+    },
+    {
+     "check": "repo",
+     "item": 29,
+     "verdict": "not-a-repo",
+     "claim": "black-forest-labs/FLUX.2-dev",
+     "detail": "named in backticks but the sentence is about a “models”, not a project — a model id or an endpoint path is not a repository claim, so archived/stale cannot answer here"
     },
     {
      "check": "count",
@@ -263,14 +389,112 @@
      "verdict": "ok",
      "claim": "6 quotation(s)",
      "detail": "verbatim in 1 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 21,
+     "verdict": "ok",
+     "claim": "4 quotation(s)",
+     "detail": "verbatim in 8 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 22,
+     "verdict": "ok",
+     "claim": "1 quotation(s)",
+     "detail": "verbatim in 6 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 23,
+     "verdict": "ok",
+     "claim": "6 quotation(s)",
+     "detail": "verbatim in 12 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 24,
+     "verdict": "ok",
+     "claim": "3 quotation(s)",
+     "detail": "verbatim in 4 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 25,
+     "verdict": "ok",
+     "claim": "3 quotation(s)",
+     "detail": "verbatim in 6 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 26,
+     "verdict": "ok",
+     "claim": "6 quotation(s)",
+     "detail": "verbatim in 4 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 27,
+     "verdict": "ok",
+     "claim": "3 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 28,
+     "verdict": "ok",
+     "claim": "1 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 29,
+     "verdict": "ok",
+     "claim": "5 quotation(s)",
+     "detail": "verbatim in 3 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 30,
+     "verdict": "ok",
+     "claim": "2 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 31,
+     "verdict": "ok",
+     "claim": "1 quotation(s)",
+     "detail": "verbatim in 3 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 32,
+     "verdict": "ok",
+     "claim": "2 quotation(s)",
+     "detail": "verbatim in 3 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 33,
+     "verdict": "ok",
+     "claim": "6 quotation(s)",
+     "detail": "verbatim in 3 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 35,
+     "verdict": "ok",
+     "claim": "1 quotation(s)",
+     "detail": "verbatim in 3 readable source(s)"
     }
    ]
   }
  ],
  "status_watch": [],
  "api_calls": 0,
- "readme_calls": 23,
- "cited_page_calls": 34,
+ "readme_calls": 0,
+ "cited_page_calls": 0,
  "repo_page_calls": 0,
  "nvd_calls": 1,
  "cna_calls": 0
