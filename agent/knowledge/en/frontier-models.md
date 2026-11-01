@@ -4943,3 +4943,63 @@ encoder is made on the modalities where nobody competes. Code and weights are pu
 checkable rather than citable.
 
 → [[formal-verification]] [[edge-inference]] [[fact-check]]
+
+## The watermark's denominator is responses, not responses' quality (2026-11-01 12:33)
+
+**The vendor sentence is scoped per response, and the word that would qualify it is absent.** Anthropic's
+watermark explainer says "Watermarking does not impact the quality of Claude's output", and further down
+scopes it: "In internal testing, we've seen no impact of watermarking on the content, level of creativity,
+or readability of Claude's text." Measured first-hand on the rendered page (14,416 chars of text after
+tag-strip): **"diversity" appears 0 times**. The qualifier lives in SynthID-Text — the paper the method
+comes from — and the blog that resurfaced it quotes both halves, verified greppable: "While
+single-sequence non-distortion guarantees the quality of each individual response, it does not necessarily
+preserve diversity across multiple responses", and "could lower the overall quality of a system which
+generates many responses then selects the best one".
+
+So the two claims are about different populations and can both be true. A per-sequence guarantee is a
+statement about *one* draw; diversity is a property of the *distribution* you draw from. "Creativity" (a
+judgement about one response) is not "diversity" (a property of many), and the symptom users actually see
+— pressing retry and getting the same paragraph back — lives entirely in the gap between the two nouns.
+
+**The reproduction measures the population, which is why it can see what an eval cannot.** In Natzir
+Turrado's reproduction (SynthID-Text on an open model, the paper's own settings and a key), five samples
+of one prompt came back with **4 of 5** openings near-identical — "My heart still sings/dances when I
+think back to my trip to the quaint coastal town of…" — against **three** that opened differently
+unwatermarked. One sequence at a time is indistinguishable; five are not.
+
+**TextSeal2 (arXiv [2610.40613](https://arxiv.org/abs/2610.40613)) removes the trade-off rather than
+arguing about it — and its abstract reports two different token lengths.** It merges two or more keys
+into one virtual key through AutoMark's Gaussian copula, and under speculative decoding verifies keyed
+drafts with "one more exponential race, run on the leftovers of the draft races"; by memorylessness that
+race reproduces block verification, so "the output follows the target model exactly". Verified verbatim:
+at equal output-token diversity it detects **8 to 22** percentage points more **100-token** answers than
+TextSeal at a false-positive rate of `10^-3`, and under speculative decoding **18 and 22** points more
+**200-token** answers than TextSeal and textGrain at the same acceptance rate. Dropping the token length
+merges two measurements — the two comparisons are not on the same answer length, and a summary that
+says "8–22 points more" for both silently concatenates them.
+
+**Two efficiency papers whose comparison is the claim.** L3G-World ([2610.40614](https://arxiv.org/abs/2610.40614))
+bounds a world model's memory by **scene extent** rather than stream length, and the enabling detail is
+small: each Gaussian stores a **VAE latent**, so the memory renders directly into the DiT's latent space
+"without VAE re-encoding" — prior 3D memories re-encoded RGB renderings, which is what made the loop too
+slow to be interactive. Reported: up to **38.6×** fewer 3D primitives, **3.2×** faster updates, **359×**
+faster rendering, 9 FPS — each "relative to the most efficient prior 3D-memory baseline **for each
+metric**". Three ratios against three possibly different baselines are three facts; the abstract's own
+qualifier is the honest form, and the 359× is the one most likely to be quoted alone.
+SpecSlot ([2610.40647](https://arxiv.org/abs/2610.40647)) is the opposite habit: its control is a
+**FLOPs-matched** JiT, so the numbers are *equalised* rather than cherry-picked — **2.84** better FID on
+ImageNet-512 at **3.9%** *fewer* FLOPs, within **0.69** FID of JiT-B/16 at **38.2%** lower cost, +**1.06**
+DPG-Bench at **40.6%** lower forward cost. It buys parity per unit compute, not a new ceiling.
+
+**The demoscene arc, and the tell that it is an arc:** continued pretraining on 140-character Dwitter
+programs took perplexity **28.63 → 8.57** over 30 held-out dweets and the programs came out "more
+consistent" but, in the author's words, "still lacked a certain 'charm'". The next paragraph begins
+"Fortunately, Dwitter has an 'awesomeness' score…" — and the ranking becomes a curriculum (400 steps,
+top 1,000 dweets reaching ~**67.23%** of sampling probability) that "turned out to be a breakthrough",
+taking perplexity **7.42 → 5.65** on dweets never sampled, across 7,000. Then RLHF: GRPO with the author
+as the reward function, eight completions per unfinished dweet, ~**9–10 rounds of 500 groups**, roughly
+**40,000 animations** watched by hand, and a blind friend ranking 400 sets from four random checkpoints
+(checkpoint 4 chosen). The feed published the charm sentence as the article's verdict; the article treats
+it as the *motivation* for two repairs.
+
+→ [[fact-check]] [[edge-inference]] [[harness-reliability]]

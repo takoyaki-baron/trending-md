@@ -582,6 +582,38 @@ underlying pages — this produced a two-layer false signal in a single item.
    why the path list dropped `oauth` after that false positive failed its own selftest.
    Re-probe before publishing any "the docs say" claim: twins are site configuration and gates are
    per-request.
+   **(f) a wall is a (URL, CLIENT STRING, REQUEST) triple — no single user agent is right, and neither is
+   one request** (added 2026-11-01 12:39, measured on two hosts hours apart with the verdict **inverted**
+   between them, then censused over a month). `drupal.org`'s advisory answers a **3,038-byte "Client
+   Challenge"** — 226 chars of visible text — to a Chrome UA on three consecutive requests, and **34,311
+   bytes of advisory to `curl/8.7.1`, `Wget/1.21`, `python-requests/2.31.0` and a request with no UA at
+   all**; `karpathy.bearblog.dev/hacker-tube/` does the opposite, **404 / 9 bytes** to `curl` and to no-UA,
+   **200 / 14,966 bytes** to a browser UA. So a reader that names one client reports a live page as
+   unreadable, and "the page does not say that" is then a statement about the checker. Both content
+   readers now carry **two** client strings and retry only when the first comes back a wall
+   (`claim-unit-lint.mjs`'s `CLIENT_STRINGS`, `doc-twin.mjs`'s `--ua-census`), and a wall entry is cached
+   for **10 minutes, not 6 hours** — a gate is per-request and a six-hour cache turns one unlucky fetch
+   into half a day of "unread". `link-check.mjs` deliberately stays status-based: a wall is still a live
+   link, so liveness and readability are different questions and only the second needs a second client.
+   **Censused over all 1,300 cited URLs of 31 feeds** (`--days 31`), 1,299 rows, three corrections later:
+   **1,131 `same` · 63 `both-walled` · 27 `browser-walled` · 8 `named-walled` · 15 `differs` · 28
+   `rate-limited`** — **3.85%** read by one client and refused by the other. `bleepingcomputer.com` is
+   refused **6/6** to the browser UA and served to `curl` (the host this file already records as "403
+   interstitial, 200 real HTML minutes apart" — the client string is the cheaper explanation);
+   `sec.gov` is the mirror image (200/**1.57 MB** to the browser, 403 to `curl`); and `differs` is its own
+   shape — a `lists.debian.org` post is **16 characters** to a browser UA and **3.6 KB** to `curl`. Two
+   classifier corrections are part of the rule: a **500** is not a wall and a **404** is not a wall, and
+   **a 429 is the census's own footprint** — 26 of the first pass's 89 `both-walled` rows were
+   `huggingface.co` throttling the census itself, i.e. the run dressed as a page property.
+   **And the wall is not stable per (URL, client) either:** the filing page was browser-walled at 12:40
+   and **identical for both clients** twenty minutes later, while a different advisory on the same host
+   was walled in the same run. Client string, request (cold vs warm session) and rate are three axes, so
+   the rule that survives is operational: retry with a second string, cache a wall briefly, and never let
+   "unread" become "absent".
+   One call to size the class over a window:
+   `node agent/tools/doc-twin.mjs --ua-census --days 7 [--max 300]` → per-URL `same` / `browser-walled` /
+   `named-walled` / `both-walled` / `differs` / `rate-limited` / `gone` / `unreachable` / `client-error`,
+   then a **per-host** table, because a gate is a property of the host.
 
 8. **"Released today" is a claim about three artifacts, and the newsroom default is to read the wrong
    one.** (added 2026-10-24, the impeccable lesson.) The feed wrote that `pbakaus/impeccable`'s `4.7.1`
@@ -663,7 +695,15 @@ underlying pages — this produced a two-layer false signal in a single item.
    "CWE is/was missing" and "CWE … not stated/recorded/assigned" count (10-28/10-29 feeds: 1 finding
    before the fix, 0 after, 9 verified);
    **repo** (`archived`, `stale` past
-   `--stale-days`, and `stargazers_count` drifting >10% from the quoted number); **count** (a number
+   `--stale-days`, and a star count that moved — **by SIGN, not by percentage** (added 2026-11-01 12:39):
+   the lint runs minutes after the batch, so the only thing it can watch is the repo moving *under* the
+   item, and at that timescale stars move one way — `quoted < now` is a rising repo (`star-surge`, sev 1,
+   the drift *is* the trend; date the reading if the number will be re-used) while `quoted > now` is a
+   number the repo does not carry (`star-drift`, sev 2). The age-scaled tolerance this replaced would not
+   have worked: no curve separates a launch from an error, because an HN front page doubles a 254-day repo
+   (`vercel-labs/agent-desktop` 3,979 → 4,547) as readily as a 1-day one (`kerlenton/bootgpt` 6 → 25).
+   Both of those were sev-2 findings against correct items on the day the rule shipped; after it, **0**);
+   **count** (a number
    about the artifact, read against the artifact — `differs` prints the README's own count, `absent`
    means the page states none, which is how the impeccable 62-vs-61 and the 10-26 "17 harnesses"
    title were caught). **`vulnStatus` is a queue position NVD moves on its own, so it is a check and a

@@ -1083,3 +1083,38 @@ NVD 对 Bazarr 保持 `Deferred`、对 TAKO 保持 `Received`，**两者都没�
 一个是动作很快的 CNA——同一个字段，相差三个数量级，而两者都不是关于漏洞存在了多久的陈述。
 
 → [[security]] [[vuln-supply]] [[fact-check]]
+
+## 两个范围的顶端就是产品的顶端，以及一个由三道护栏构成的修复 (2026-11-01 12:33)
+
+**一个范围的顶端停在新版本上，就等于没点名任何修复；而仓库的时钟决定这是永久还是待定。**
+`CVE-2026-120201`（Jpom，VulnCheck 指派）：未认证攻击者把 `is not null` 放进 `JPOM-USER-TOKEN` 头，
+Hutool 的条件解析器把它当运算符求值，于是拿到超级管理员；`CWE-943`，`2.10.0` 至 `2.11.12`，
+`defaultStatus: unaffected`。第一手核对：`releases.atom` 里最新的 tag 就是 `v2.11.12`，时间
+**2025-05-06T06:49:10Z**——范围顶端就是发行列表顶端，上面没有任何版本可升；`pushed_at` 是
+**2026-02-06**，安静了九个月；NVD 为 `Deferred`，**0 条 NVD 自评指标**（CNA 自己带两条：3.1 **9.8** 在
+`Primary`、4.0 **9.3** 在 `Secondary`，来源都是 `disclosure@vulncheck.com`——槽位是选择器，不是第二个主体）。
+这是 10-30 Agno 那个形状的反面结局：那个范围**比修复落后一个版本**，这个范围根本没有修复版本，所以缓解手段是
+暴露面（谁能访问这个端口），不是版本卫生。仓库是休眠但**未归档**——这点很重要：归档会让「未修补」变成永久，
+休眠只是让它待定。
+
+**补救可以指向后方的版本，而任何只朝前的范围状态都表达不了它。** `CVE-2026-118636`（Apache MINA）是 3.0
+codec 模块里未加过滤的 `ObjectInputStream.readObject()`，**9.8**，`CWE-502`，影响 `3.0.0` 至
+**`3.0.0-M2`**——一个记录自己都称已死分支的两个预发布里程碑：「UNSUPPORTED WHEN ASSIGNED」「As the 3.0.0
+branch is inactive, we do not plan to release a version that fixes this issue」，而补救是**降级**：
+「Users are recommended to use the latest Apache MINA 2.2.X branch.」`disclosure-lag.mjs` 里每个状态都假定修复
+在受影响范围之上，所以「*补救版本位于范围下界之下*」是这套分类还没命名的一个状态——也是 Vysper（10-27）之后
+第二例 `UNSUPPORTED WHEN ASSIGNED`；它反复出现是结构性的：被放弃的里程碑分支永远不会出修复构建，迁移是唯一的
+补丁。
+
+**一个 CVE、十三条发布说明、三道护栏里只有一道是修复。** WordPress 7.1.4 带着 `CVE-2026-119977`：整包升级
+过程中可预测、可被 Web 访问的暂存路径（`CWE-367`，**8.1**，向量 `AV:N/AC:H/…`——把 `AC:L` 代入同一向量就是
+熟悉的 9.8，所以那半分折扣完全来自竞态）。读 7.1.4 的 diff，三道护栏落在同一个函数里：工作目录追加
+`'-' . wp_generate_password(16, false)`；升级目录加一个 `index.php`，「so the name of the working directory
+created below cannot be discovered from a directory index」；以及 `update-core.php` 的复制步骤在 `$skip` 里
+加了一项 `'wp-config.php'`——「Never copy a wp-config.php, which could have been written to the working
+directory」。只有第三道去掉了代码执行的原语，另外两道只是加固发现路径。而这条公告是它安全栏目里 **13** 项之
+一（按页面自己的列表数——第 14 个 `<li>` 是分享按钮，这就是 `<li>` 计数会变成 14 的原因）：CVE 覆盖那一条 RCE，
+另外十二项在这里没有记录，其中两条 XSS 署名 Anthropic，而第十三项是「An update to the bundled root
+certificates due to the eMudhra revocation」——论文 25 的那条 CA 故事进到了一个 CMS 的内置信任库，且没有 CVE。
+
+→ [[security]] [[vuln-supply]] [[fact-check]]

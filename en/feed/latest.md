@@ -471,7 +471,7 @@ The deployment constraint is in step one of the instructions rather than a footn
 
 ---
 
-## 30. Continued pretraining on 140-character demos cuts perplexity 28.63 → 8.57 — and the author says the output lost its charm
+## 30. Continued pretraining on 140-character demos cuts perplexity 28.63 → 8.57 — and charm then took two more stages
 
 - **Velocity:** ▮ steady
 - **Source:** Hacker News · 48+ pts · ~10h ago (~02:08 UTC+8)
@@ -479,9 +479,9 @@ The deployment constraint is in step one of the instructions rather than a footn
 
 A write-up about teaching a model the language of **Dwitter** — 140-character JavaScript demos, where a program's entire effect is a handful of packed expressions. The author continued pretraining on the corpus and measured surprisal before and after: across **30 held-out dweets, perplexity fell from 28.63 to 8.57**, with the largest drops on "the unfamiliar programming idioms" rather than on ordinary code. The curriculum came from the community itself: Dwitter scores every submission for "awesomeness", and the top 5,000 were ranked by it.
 
-The report keeps the part most posts cut. The programs got more consistent and, in the author's own assessment, lost a certain charm — which is the same trade the watermarking item above describes from the other side. There is also a clean argument for why the domain is hard to generate rather than merely rare: strip the last 30 characters from a 140-character program and, even over a 64-symbol alphabet, "there are almost 1.5 x 10^54 possible completion strings"; almost all are invalid or uninteresting.
+The report keeps the part most posts cut, and it is a stage rather than an ending. After continued pretraining alone the programs were "more consistent" and, in the author's words, "still lacked a certain 'charm'". Two further stages follow. First the awesomeness ranking becomes a curriculum — weights stepped over **400 training steps** until the top 1,000 dweets held roughly **67%** of the sampling probability — which "turned out to be a breakthrough", taking perplexity from **7.42 to 5.65** even on dweets never sampled in training. Then RLHF: GRPO with the author himself as the reward function, eight completions per unfinished dweet, ~**9–10 rounds of 500 groups** each, roughly **40,000 animations watched** by hand, and a blind friend ranking 400 sets from four randomly chosen checkpoints — checkpoint 4 won. There is also a clean argument for why the domain is hard to generate rather than merely rare: strip the last 30 characters from a 140-character program and, even over a 64-symbol alphabet, "there are almost 1.5 x 10^54 possible completion strings"; almost all are invalid or uninteresting.
 
-**Why it matters:** the measurable half (perplexity down 3.3×) and the unmeasurable half (the output stopped being interesting) are reported together, which is rare for a domain-adaptation post and is exactly what a style-fine-tuning decision needs. The curriculum is the transferable technique — rank a corpus by the community's own score rather than by length or recency, and a small dataset starts behaving like a curated one.
+**Why it matters:** the measurable half (perplexity down 3.3×) and the unmeasurable half (charm) are reported together, which is rare for a domain-adaptation post — but the unmeasurable half is reported as a *problem the author then fixed twice*, not as a verdict on continued pretraining. Read to the end and the transferable technique is the pipeline rather than the score: rank a corpus by the community's own signal, then put a human in the reward position when the metric stops seeing the thing you care about.
 
 [`🔗 Post training a model to explore Demoscenes`](https://datavorous.com/writing/demoscener/) · [`🔗 Discussion (Hacker News)`](https://news.ycombinator.com/item?id=50318442)
 

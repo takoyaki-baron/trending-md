@@ -13888,5 +13888,14 @@
     "en": "A federated (ActivityPub) link-aggregator instance — a Reddit/HN-shaped forum that surfaced the Molly fork question on 11-01. Community post quality varies by community; what makes it citable is that its load-bearing claims can be checked against first-party artifacts: the post's \"not updated since 3 months\" was confirmed against `mollyim/mollyim-android`'s own `releases.atom` (newest `v8.19.2-4`, 2026-07-31T11:56:13Z) and `commits/main.atom` (one commit since, 2026-09-08). Cross-checked 2026-11-01.",
     "zh": "一个联邦式（ActivityPub）链接聚合实例——Reddit／HN 形态的论坛，11-01 让 Molly 分叉的问题浮上水面。社区帖子的质量随社区而异；让它可引用的是：它的关键断言可以对着第一方产物核验——帖子说「三个月没更新」，这与 `mollyim/mollyim-android` 自己的 `releases.atom`（最新 `v8.19.2-4`，2026-07-31T11:56:13Z）以及 `commits/main.atom`（此后仅一个提交，2026-09-08）一致。2026-11-01 交叉验证。",
     "jp": "フェデレーション（ActivityPub）型のリンクアグリゲータ — Reddit／HN 型のフォーラムで、11-01 に Molly フォークの問いを浮上させた。投稿の質はコミュニティごとに異なるが、引用可能にしているのは、その主要な主張が一次成果物で検証できることだ。投稿の「3 か月更新されていない」は `mollyim/mollyim-android` 自身の `releases.atom`（最新 `v8.19.2-4`、2026-07-31T11:56:13Z）と `commits/main.atom`（以後コミット一つ、2026-09-08）と一致した。2026-11-01 にクロスチェック。"
+  },
+  "hackertube.org": {
+    "cat": "community",
+    "cred": "med",
+    "density": "med",
+    "cv": 1,
+    "en": "Karpathy's HackerTube — a YouTube-style front end over videos recommended in Hacker News comments (6,454 videos across 150 topics, 2007–2026), with a downloadable data export. First-party (one author, no editorial layer), but its load-bearing artifact is checkable: /data serves the file manifest (videos.json, mentions.json, taxonomy.json, related.json, embedding_ids.json) and an HN commenter located it independently (artifact check = the cv:1 curation cross-check, not an extra confirmation).",
+    "zh": "Karpathy 的 HackerTube——把 Hacker News 评论里被推荐过的视频做成 YouTube 式前端（2007–2026、150 个话题、6,454 个视频），并提供数据导出。第一方站点（单一作者、无编辑层），但它的关键工件可核验：/data 提供文件清单（videos.json、mentions.json、taxonomy.json、related.json、embedding_ids.json），且有一位 HN 评论者独立找到了它。",
+    "jp": "Karpathy の HackerTube——Hacker News のコメントで推薦された動画を YouTube 風のフロントエンドにしたもの（2007–2026、150 トピック、6,454 本）で、データのエクスポートも提供する。第一者サイト（単一著者・編集層なし）だが、要となる成果物は検証できる：/data がファイル目録（videos.json、mentions.json、taxonomy.json、related.json、embedding_ids.json）を返し、HN のコメント投稿者が独力でそれを見つけている。"
   }
 }

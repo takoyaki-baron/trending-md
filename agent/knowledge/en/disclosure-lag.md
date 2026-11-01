@@ -1904,3 +1904,44 @@ same day = **1h32m**. One queue is a coordinated disclosure, the other is a fast
 field, three orders of magnitude apart, and neither is a statement about how long the bug existed.
 
 → [[security]] [[vuln-supply]] [[fact-check]]
+
+## Two ranges whose top is the end of the product, and one fix that is three guards (2026-11-01 12:33)
+
+**A range that ends at the newest release names no fix, and the repo's clock decides whether that is
+permanent or pending.** `CVE-2026-120201` (Jpom, VulnCheck-assigned): an unauthenticated attacker sends
+`is not null` in the `JPOM-USER-TOKEN` header and Hutool's condition parser evaluates it as an operator,
+yielding super-administrator; `CWE-943`, `2.10.0` through `2.11.12`, `defaultStatus: unaffected`. Checked
+first-hand: `releases.atom`'s newest tag **is** `v2.11.12` at **2025-05-06T06:49:10Z**, so the top of the
+range is the top of the release list and there is nothing above it to upgrade to; `pushed_at` is
+**2026-02-06**, nine months quiet; NVD is `Deferred` with **0 NVD-scored metrics** (the CNA carries both,
+3.1 **9.8** in `Primary` and 4.0 **9.3** in `Secondary`, both `disclosure@vulncheck.com` — the slot is a
+selector, not a second party). This is the Agno shape from 10-30 with the opposite ending: that range was
+**one release behind the fix**, this one has no fix release at all, so the mitigation is exposure (who can
+reach the port) and not version hygiene. The repo is dormant but **not archived** — which matters, because
+an archived repo makes "unpatched" permanent and a dormant one only makes it pending.
+
+**The remedy can point backwards, which no forward-only range state models.** `CVE-2026-118636` (Apache
+MINA) is an unfiltered `ObjectInputStream.readObject()` in the 3.0 codec module, **9.8**, `CWE-502`,
+affected `3.0.0` → **`3.0.0-M2`** — two pre-release milestones of a branch the record itself calls dead:
+"UNSUPPORTED WHEN ASSIGNED", "As the 3.0.0 branch is inactive, we do not plan to release a version that
+fixes this issue", and the remedy is a **downgrade**: "Users are recommended to use the latest Apache MINA
+2.2.X branch." Every state in `disclosure-lag.mjs` assumes a fix at or above the affected range, so a
+*remedy below the range's floor* is a state the taxonomy does not yet name — the second instance of
+`UNSUPPORTED WHEN ASSIGNED` after Vysper (10-27), and the reason it recurs is structural: an abandoned
+milestone branch never gets a fixed build, so migration is the only patch.
+
+**One CVE, thirteen release-note items, and three guards of which one is the fix.** WordPress 7.1.4 ships
+`CVE-2026-119977`: predictable, web-served staging paths during full-package core upgrades (`CWE-367`,
+**8.1** on `AV:N/AC:H/…` — the identical vector at `AC:L` is the familiar 9.8, so the discount is entirely
+the race). Reading the 7.1.4 diff, three guards land in one function: the working directory gains
+`'-' . wp_generate_password(16, false)`, the upgrade folder gains an `index.php` "so the name of the
+working directory created below cannot be discovered from a directory index", and `update-core.php`'s copy
+step adds `'wp-config.php'` to `$skip` — "Never copy a wp-config.php, which could have been written to the
+working directory". Only the third removes the code-execution primitive; the other two are hardening of the
+discovery path. And the release note is one of **13** items in its security section (counted from the
+page's own list — the 14th `<li>` is a share button, which is how a `<li>` count becomes 14): the CVE
+covers the RCE and the other twelve have no record here, two of the XSS reports being credited to
+Anthropic, and the thirteenth being "An update to the bundled root certificates due to the eMudhra
+revocation" — the CA story from thesis 25 arriving in a CMS's bundled trust store, with no CVE.
+
+→ [[security]] [[vuln-supply]] [[fact-check]]

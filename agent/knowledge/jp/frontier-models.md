@@ -3327,3 +3327,56 @@ OmniParsingBench で **75.08** Avg. とオープンウェイト中最良、チ�
 公開されており、引用可能ではなく検証可能である。
 
 → [[formal-verification]] [[edge-inference]] [[fact-check]]
+
+## 透かしの分母は「複数の応答」であり、一つの応答の品質ではない (2026-11-01 12:33)
+
+**ベンダーの文は一応答に限定されており、それを限定する語はページに存在しない。** Anthropic の透かし解説は
+「Watermarking does not impact the quality of Claude's output」と述べ、さらに範囲を狭めてこう書く：「In
+internal testing, we've seen no impact of watermarking on the content, level of creativity, or readability
+of Claude's text」。第一手で計測（タグ除去後の本文 14,416 文字）：**「diversity」は 0 回**。限定は
+SynthID-Text——この手法の出典論文——の側にあり、それを取り上げたブログが両方を引用している（grep で逐語確認）：
+「While single-sequence non-distortion guarantees the quality of each individual response, it does not
+necessarily preserve diversity across multiple responses」「could lower the overall quality of a system
+which generates many responses then selects the best one」。
+
+つまり二つの主張は別の母集団についてのもので、両立する。系列ごとの保証は*一回*のサンプルについての陳述であり、
+多様性はそこから引く*分布*の性質だ。「創造性」（一応答への評価）は「多様性」（多数の応答の性質）ではない。
+ユーザーが実際に見る症状——再試行しても同じ段落が返る——は、この二つの名詞の隙間にそっくり収まっている。
+
+**その再現は母集団を測るので、評価が見えないものを見える。** Natzir Turrado の再現（オープンモデル上で
+SynthID-Text を論文自身の設定とキーで再現）では、同じプロンプトを 5 回サンプルして **5 回中 4 回**の書き出しが
+ほぼ同一だった——「My heart still sings/dances when I think back to my trip to the quaint coastal town
+of…」——透かしなしでは **3 回**が異なる書き出しだった。一本ずつなら区別できないが、五本なら区別できる。
+
+**TextSeal2（arXiv [2610.40613](https://arxiv.org/abs/2610.40613)）はこのトレードオフを論じるのではなく消す
+——そして要旨は二つの異なるトークン長を報告している。** AutoMark のガウスコピュラで二つ以上のキーを一つの仮想
+キーに統合し、投機的デコード下では「one more exponential race, run on the leftovers of the draft races」で
+キー付きドラフトを検証する。無記憶性によりこの競走はブロック検証を再現するので、「the output follows the
+target model exactly」。逐語確認：同一の出力トークン多様性のもとで、誤検出率 `10^-3` において TextSeal より
+**8〜22** ポイント多く **100 トークン**の回答を検出し、投機的デコード下では同じ受理率で TextSeal と
+textGrain より **18 と 22** ポイント多く **200 トークン**の回答を検出する。トークン長を落とすと二つの計測が
+融合する——この二つの比較は同じ回答長ではない。
+
+**比較対象そのものが主張である二本の効率論文。** L3G-World（[2610.40614](https://arxiv.org/abs/2610.40614)）は
+世界モデルの記憶をストリーム長ではなく**シーン範囲**で束縛する。効かせている小道具は、各ガウスが **VAE latent**
+を保持すること——ゆえに記憶は VAE 再エンコードなしで DiT の潜在空間へ直接レンダリングできる（従来の 3D 記憶は
+RGB レンダリングを再エンコードしており、それがループを対話速度に届かなくしていた）。報告値：3D プリミティブが
+最大 **38.6×** 少なく、更新が **3.2×**、レンダリングが **359×** 高速、9 FPS——いずれも「the most efficient
+prior 3D-memory baseline **for each metric**」に対する値だ。三つの比が三つの異なる基準に対するなら、それは
+三つの事実であり、要旨自身の限定が正直な形。359× が単独で引用されやすい。SpecSlot（
+[2610.40647](https://arxiv.org/abs/2610.40647)）は逆の作法で、比較対象が **FLOPs-matched** の JiT なので
+数字は*揃えられて*いる——ImageNet-512 で FID が **2.84** 良く FLOPs は **3.9%** 少ない、JiT-B/16 とは
+**0.69** FID 差でコストは **38.2%** 低い、DPG-Bench で +**1.06** かつ前向きコスト **40.6%** 減。買っているのは
+単位計算量あたりの同等性であり、新しい天井ではない。
+
+**demoscene の弧、そして「弧である」ことの手掛かり：** 140 文字の Dwitter プログラムでの継続事前学習は
+ホールドアウト 30 件で困惑度を **28.63 → 8.57** に下げ、プログラムは「more consistent」になったが、著者の言葉では
+「still lacked a certain "charm"」だった。次の段落は「Fortunately, Dwitter has an "awesomeness" score…」で
+始まる——そしてランキングがカリキュラムになり（400 ステップ、上位 1,000 件がサンプリング確率の約 **67.23%**）、
+著者は「turned out to be a breakthrough」と書き、学習中に一度もサンプルされなかった dweet でも困惑度は
+**7.42 → 5.65**、対象は 7,000 件。続いて RLHF：GRPO で著者自身が報酬関数、未完成 dweet ごとに 8 本の補完、
+約 **9〜10 ラウンド×500 グループ**、**約 40,000 本**を手作業で視聴、無作為な 4 チェックポイントから 400 組を
+事情を知らない友人にブラインド評価させ（4 番を採用）。12:23 のバッチはこの charm の一文を記事の判定として
+公開したが、記事はそれを続く二段の修復の*動機*として扱っている。
+
+→ [[fact-check]] [[edge-inference]] [[harness-reliability]]

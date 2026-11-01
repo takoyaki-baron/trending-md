@@ -1,5 +1,5 @@
 {
- "generated": "2026-11-01T04:23:09.822Z",
+ "generated": "2026-11-01T04:31:42.624Z",
  "files": [
   {
    "file": "2026-11-01.md",
@@ -267,23 +267,44 @@
     {
      "check": "quotation",
      "item": 2,
-     "verdict": "ok",
-     "claim": "4 quotation(s)",
-     "detail": "verbatim in 4 readable source(s)"
+     "verdict": "quote-not-read",
+     "claim": "“doesnt sufficiently protect certain routes and entity fields”",
+     "detail": "8 words, 0 hits in 3 readable source(s), but 1 cited page(s) went unread (drupal.org/sa-contrib-2026-254 served a bot wall) — unread is not absent, so this is not called a fabrication; open those page(s) before publishing"
+    },
+    {
+     "check": "quotation",
+     "item": 2,
+     "verdict": "quote-short",
+     "claim": "“may financially impact the vendor”",
+     "detail": "5 words, 0 hits in 3 readable source(s), 1 cited page(s) unread; no source carries it (read cveawg.mitre.org/api/cve/CVE-2026-118539, CVE-2026-118539 NVD description, CVE-2026-118539 CNA description) — if this came from somewhere this item does not cite, cite it; otherwise it is the feed's own words and must not wear quotation marks"
+    },
+    {
+     "check": "quotation",
+     "item": 2,
+     "verdict": "quote-not-read",
+     "claim": "“this vulnerability is being actively exploited in the wild”",
+     "detail": "9 words, 0 hits in 3 readable source(s), but 1 cited page(s) went unread (drupal.org/sa-contrib-2026-254 served a bot wall) — unread is not absent, so this is not called a fabrication; open those page(s) before publishing"
+    },
+    {
+     "check": "quotation",
+     "item": 2,
+     "verdict": "quote-short",
+     "claim": "“audit their orders for inconsistencies”",
+     "detail": "5 words, 0 hits in 3 readable source(s), 1 cited page(s) unread; no source carries it (read cveawg.mitre.org/api/cve/CVE-2026-118539, CVE-2026-118539 NVD description, CVE-2026-118539 CNA description) — if this came from somewhere this item does not cite, cite it; otherwise it is the feed's own words and must not wear quotation marks"
     },
     {
      "check": "quotation",
      "item": 3,
      "verdict": "ok",
      "claim": "4 quotation(s)",
-     "detail": "verbatim in 4 readable source(s)"
+     "detail": "verbatim in 3 readable source(s)"
     },
     {
      "check": "quotation",
      "item": 4,
      "verdict": "ok",
      "claim": "8 quotation(s)",
-     "detail": "verbatim in 2 readable source(s)"
+     "detail": "verbatim in 1 readable source(s)"
     },
     {
      "check": "quotation",
@@ -360,7 +381,7 @@
      "item": 15,
      "verdict": "ok",
      "claim": "9 quotation(s)",
-     "detail": "verbatim in 2 readable source(s)"
+     "detail": "verbatim in 1 readable source(s)"
     },
     {
      "check": "quotation",
@@ -374,7 +395,7 @@
      "item": 17,
      "verdict": "ok",
      "claim": "7 quotation(s)",
-     "detail": "verbatim in 2 readable source(s)"
+     "detail": "verbatim in 1 readable source(s)"
     },
     {
      "check": "quotation",
@@ -457,7 +478,7 @@
      "check": "quotation",
      "item": 30,
      "verdict": "ok",
-     "claim": "2 quotation(s)",
+     "claim": "4 quotation(s)",
      "detail": "verbatim in 2 readable source(s)"
     },
     {

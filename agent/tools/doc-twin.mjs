@@ -31,6 +31,7 @@
  * Usage:
  *   node agent/tools/doc-twin.mjs --probe <url> [<url> ...]
  *   node agent/tools/doc-twin.mjs --probe <url> --json
+ *   node agent/tools/doc-twin.mjs --ua-census [--days 7] [--max 300]   # the client-string class
  *   node agent/tools/doc-twin.mjs --selftest        # the four calibrated shapes, asserts verdicts
  *
  * Verdicts (one per URL):
@@ -306,7 +307,145 @@ const AUTH_UNITS = [
   ['an ordinary page (must NOT fire)', '<p>Install the package and run the test suite.</p>'.repeat(40), 'https://example.com/docs/intro', null],
 ];
 
+/* ── UA census: is the block a *client string* rather than a page? ────────────────────────────
+ * A wall is not a property of a URL; it is a property of a (URL, client string) pair, and the two
+ * directions both exist in this feed's corpus, measured a few hours apart on 2026-11-01:
+ *   · `drupal.org/sa-contrib-2026-254` → 3,038-byte "Client Challenge" to a Chrome UA (three
+ *     consecutive requests), 34,311 bytes of advisory to `curl/8.7.1`, `Wget`, `python-requests`
+ *     and to **no UA at all**.
+ *   · `karpathy.bearblog.dev/hacker-tube/` → 404 / 9 bytes to `curl/*` and to no UA, 14,966 bytes
+ *     to a browser UA.
+ * So one client string is never right, and a checker that names only one reports a live page as
+ * unreadable — or, worse, reports "the page does not say that". This mode measures the class over
+ * the feed's own citations: every cited URL is fetched twice, and the pair is classified.
+ *
+ *   node agent/tools/doc-twin.mjs --ua-census [--feed-dir en/feed] [--days 7] [--max 300]
+ *                                   [--concurrency 6] [--json]
+ *
+ * Verdicts: `same` (both read, similar size) · `browser-walled` (only the named client reads) ·
+ * `named-walled` (only the browser reads) · `both-walled` · `differs` (both read, sizes far apart)
+ * · `unreadable` (neither). A host with any gated row is the host to name in the write-up; the
+ * report is per-host because the rule is per-host.
+ */
+const CLIENT_A = { label: 'browser', ua: UA };
+const CLIENT_B = { label: 'named', ua: 'curl/8.7.1 trending-md-doc-twin/1.0' };
+const WALL_RE = /client challenge|enable javascript|javascript is disabled|just a moment|checking your browser|attention required|access denied|verify you are human|cf-chl|ddos protection by|请启用 ?javascript|请稍候/i;
+/* short AND says what it is — length alone would refuse a genuinely short page (the same two-test
+ * rule claim-unit-lint's `isBlockShell` uses, deliberately kept in step with it) */
+const isWall = (status, text) => {
+  if (status >= 400) return true;
+  const t = (text || '').trim();
+  if (!t) return status === 0;   // a 200 with no visible text is a shell, not a page
+  return t.length < 1200 && WALL_RE.test(t.slice(0, 900));
+};
+async function fetchAs(url, ua) {
+  try {
+    const res = await fetch(url, { redirect: 'follow', headers: { 'user-agent': ua, accept: '*/*' }, signal: AbortSignal.timeout(TIMEOUT_MS) });
+    const body = await res.text();
+    /* the WALL test runs on the *visible* text, not the bytes: drupal.org's challenge is 3,038
+     * bytes of HTML wrapping 226 chars of prose, so a byte-length test reads it as a real page
+     * (measured — the first run of this census classified the filing case as `differs`). */
+    const text = visibleText(body);
+    return { status: res.status, bytes: Buffer.byteLength(body), text, wall: isWall(res.status, text) };
+  } catch (e) {
+    return { status: 0, bytes: 0, text: '', wall: true, error: e.message };
+  }
+}
+/* A 5xx is not a wall and a 404 is not a wall — the first run of this census called a
+ * `fortiguard.fortinet.com` page `named-walled` because the named client got a **500** while the
+ * browser got **9,915 chars of advisory**, and lumped dead links into `both-walled`. A client-string
+ * claim needs both sides to have *answered*: one client refused, the other served prose. */
+const kindOf = (r) => {
+  if (r.status === 0) return 'unreachable';
+  if (r.status === 404 || r.status === 410) return 'gone';
+  /* **429 is the census's own footprint, not the page's.** The full 1,300-URL run rate-limited
+   * `huggingface.co` on 28 URLs and the first classifier filed all of them as `both-walled`, which
+   * would have published this run's own throttling as a page property — 26 of the 89 `both-walled`
+   * rows were this. A rate limiter answers on a timescale; a gate answers per request. */
+  if (r.status === 429) return 'rate-limited';
+  if (r.status >= 500) return 'error';
+  if (r.wall) return 'wall';
+  return 'ok';
+};
+function classifyUaPair(a, b) {
+  const ka = kindOf(a), kb = kindOf(b);
+  if ([ka, kb].includes('unreachable')) return 'unreachable';
+  if ([ka, kb].includes('gone')) return 'gone';
+  if (ka === 'rate-limited' || kb === 'rate-limited') return 'rate-limited';
+  if (ka === 'wall' && kb === 'wall') return 'both-walled';
+  if (ka === 'wall') return 'browser-walled';   // the named client was served
+  if (kb === 'wall') return 'named-walled';     // the browser was served
+  if (ka !== 'ok' || kb !== 'ok') return 'client-error';  // one side 5xx'd — not a gate
+  const lo = Math.min(a.text.length, b.text.length);
+  const hi = Math.max(a.text.length, b.text.length);
+  if (hi > 0 && hi / Math.max(lo, 1) > 1.5) return 'differs';
+  return 'same';
+}
+async function uaCensus() {
+  const { readFileSync, readdirSync } = await import('node:fs');
+  const { join } = await import('node:path');
+  const feedDir = argOf('--feed-dir', 'en/feed');
+  const days = Number(argOf('--days', '7'));
+  const max = Number(argOf('--max', '300'));
+  const conc = Number(argOf('--concurrency', '6'));
+  /* An API endpoint or a repo page is not a prose source: it answers JSON or a rendered page whose
+   * UA behaviour says nothing about citations a reader would click. */
+  const SKIP = /^https?:\/\/(api\.github\.com|raw\.githubusercontent\.com|news\.ycombinator\.com|cveawg\.mitre\.org|services\.nvd\.nist\.gov|nvd\.nist\.gov|github\.com|www\.github\.com|huggingface\.co\/[^/]+\/[^/]+\/raw\/)/;
+  const files = readdirSync(feedDir).filter(f => /^\d{4}-\d{2}-\d{2}\.md$/.test(f)).sort().slice(-days);
+  const urls = new Set();
+  for (const f of files) {
+    const text = readFileSync(join(feedDir, f), 'utf8');
+    for (const m of text.matchAll(/https?:\/\/[^\s)`|>'"]+/g)) {
+      const u = m[0].replace(/[.,;]+$/, '');
+      if (!SKIP.test(u)) urls.add(u);
+    }
+  }
+  const list = [...urls].slice(0, max);
+  const rows = [];
+  let cursor = 0;
+  const hostGap = 700;
+  const lastReq = {};
+  await Promise.all(Array.from({ length: Math.min(conc, list.length) }, async () => {
+    while (cursor < list.length) {
+      const url = list[cursor++];
+      let host = '';
+      try { host = new URL(url).hostname; } catch { continue; }
+      const wait = hostGap - (Date.now() - (lastReq[host] ?? 0));
+      if (wait > 0) await new Promise(r => setTimeout(r, wait));
+      lastReq[host] = Date.now();
+      const a = await fetchAs(url, CLIENT_A.ua);
+      const b = await fetchAs(url, CLIENT_B.ua);
+      rows.push({ url, host, verdict: classifyUaPair(a, b), browser: `${a.status}/${a.text.length}`, named: `${b.status}/${b.text.length}` });
+    }
+  }));
+  const tally = {};
+  for (const r of rows) tally[r.verdict] = (tally[r.verdict] ?? 0) + 1;
+  const byHost = {};
+  for (const r of rows) {
+    if (r.verdict === 'same') continue;
+    (byHost[r.host] ??= []).push(r);
+  }
+  if (has('--json')) {
+    console.log(JSON.stringify({ files, urls: list.length, tally, hosts: byHost, rows }, null, 2));
+    return;
+  }
+  console.log(`ua-census: ${list.length} cited URL(s) over ${files.length} feed(s) (${files[0]} … ${files.at(-1)})`);
+  console.log(`  ${Object.entries(tally).sort((x, y) => y[1] - x[1]).map(([k, v]) => `${k} ${v}`).join(' · ')}`);
+  const gated = rows.filter(r => r.verdict !== 'same');
+  if (!gated.length) {
+    console.log('  no client-string disagreement in this window — the class is empty here, which is a measurement, not a proof');
+    return;
+  }
+  console.log('\n  per host (a wall is a property of the host, not of the page):');
+  for (const [host, rs] of Object.entries(byHost).sort((x, y) => y[1].length - x[1].length)) {
+    const kinds = [...new Set(rs.map(r => r.verdict))].join(', ');
+    console.log(`  ${String(rs.length).padStart(3)}  ${host} — ${kinds}`);
+    for (const r of rs.slice(0, 3)) console.log(`        ${r.verdict}  browser ${r.browser}  named ${r.named}  ${r.url}`);
+  }
+}
+
 async function main() {
+  if (has('--ua-census')) return uaCensus();
   if (has('--selftest')) {
     let pass = 0;
     let total = 0;
@@ -333,7 +472,7 @@ async function main() {
   const i = args.indexOf('--probe');
   const urls = i === -1 ? [] : args.slice(i + 1).filter(a => /^https?:\/\//.test(a));
   if (!urls.length) {
-    console.log('doc-twin: nothing to probe. Usage: --probe <url> [<url> ...] | --selftest');
+    console.log('doc-twin: nothing to probe. Usage: --probe <url> [<url> ...] | --ua-census [--days N] | --selftest');
     return;
   }
   const out = [];

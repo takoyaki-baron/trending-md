@@ -216,3 +216,30 @@ Sources: [arXiv 2610.32110](https://arxiv.org/abs/2610.32110) · [arXiv 2610.319
 **初回のどの数字が誤っていたか**。両方に答える論文は使える。limitations の節はそうではない。
 
 → [[fact-check]] [[frontier-models]] [[agent-stack]]
+
+## 二つの harness の主張、二つの欠けた基準 (2026-11-01 12:33)
+
+**マージンまで報告する再現は、見出しだけの再現よりはるかに有用だ。** `guregodevo/memdoor`（Apache-2.0、
+Go、単一静的バイナリ、2026-10-05 作成、確認時 **34★**）は GVS5H の五段 harness を YAML ワークフローとして
+作り直し、こう書く：「Five Qwen3.8-27B agents beat Fable 5 on LiveCodeBench Hard」——「the first ten problems
+of their list, five passes each」で平均 **9.8 / 10**、原著者の harness が **9.6**、Fable 5 の単一呼び出しが
+**8.0**、そして **50** 回の実行すべて（リクエスト・応答・プログラム・採点出力）を公開。動詞より先に分母を読む：
+10 問、5 パス、1 モデル系、原著 harness との差は **0.2**——n=10 では実行間ノイズの範囲内であり、結論は
+「再現した」であって「改善した」ではない。効く比較は 9.8 対 **8.0 の単一呼び出し**で、これが GVS5H 本来の主張
+（27B を 5 回 ≈ フロンティアモデル 1 回）だ。再利用できるのは harness のほう：ワークフローはファイルで承認
+ゲートを持ち、チャットモデルの手前に明示的な決定モデルがあり、終了コードが実行を自己申告する——`0` 完了、
+`2` 失敗、`1` 停止、`3` 承認ゲートで停止。
+
+**基準のない資源の主張は設計目標であって計測ではない。** `skeeto/prospero`（**93★**、Unlicense、2026-10-21
+作成、`releases.atom` で v0.10.0 は **2026-11-01T03:56:27Z**）は Dear ImGui の C++ harness で、主張は
+「around two orders of magnitude fewer resources than other harnesses without sacrificing features」。
+比較対象の harness も計測も示されていないので、正直な読みは*目標であって結果ではない*。その下の議論は `top`
+一行で検証できる：harness が駆動対象より大きくなると OOM killer の選択は予測できなくなり、記事の fuzz の例
+（数時間後に戻ると harness だけが消え、対象は無傷）はそこで美的な不満ではなくなる。主張を面白くしているのは
+機能表だ——サブエージェント、エージェント間メッセージ、SSH や WSL に配備できるヘッドレスエンジンとローカルに
+残して再接続できる UI——そして限界も同じ記事にある：プロバイダは同梱せず（「You can't use your Claude
+subscription」）、URL による include は制限され、「a hard rule against anything which might appear in shell
+command」、そして**別個の Professional Edition** がクロスアーキテクチャのデスクトップ制御エンジンを内蔵する。
+だからリポジトリの Unlicense は製品全体を覆わない。
+
+→ [[harness-overhead]] [[agent-stack]] [[fact-check]]

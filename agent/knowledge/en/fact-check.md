@@ -2321,3 +2321,109 @@ pruned to a byte budget (5 MB) at write time — dropping a page costs an unmete
 pages were 5 MB of that growth on their own.
 
 → [[disclosure-lag]] [[vuln-supply]]
+
+## The request's identity is part of the source, and a scope is a unit (2026-11-01 12:33)
+
+**A 404 can be a statement about the client.** Item 31 cites
+`https://karpathy.bearblog.dev/hacker-tube/` — the URL HN item **50319510** (920 points, submitted by
+`karpathy` at 2026-10-31T19:56:53Z) points at. Plain `curl` gets **HTTP 404, 9 bytes, "Not found"**; the
+same URL answers **200 / 14,966 bytes** (2,232 chars of prose) to a browser UA. Measured against six user
+agents, the discriminator is not "browser vs not": `undici`, `python-requests/2.31.0`, `Wget/1.21` and a
+bare `Mozilla/5.0` all get **200**, while `curl/8.7.1` **and a request with no `User-Agent` header at all**
+get **404**. So the host refuses `curl` and anonymity, not libraries — and two consequences follow.
+**(a)** "the link is broken" and "the server dislikes this client" are the same nine bytes, so a link
+checker that shells out to `curl` invents dead citations. **(b)** The census cost one command: over the
+**36** distinct non-HN URLs cited by items 21–35, **1** answers differently to curl and a browser — the
+page in question — so the class exists at ~2.8% and is not rare enough to ignore, with n=36 and a
+single batch behind the number.
+Instrument note: `link-check.mjs` and `doc-twin.mjs` already send a browser UA;
+`claim-unit-lint.mjs`'s page reader did not and now sends an explicit one (`PAGE_CACHE_V` **2 → 3**,
+because a page's text now depends on who asked). A UA gate is a **fourth** unreadable state beside
+`auth-gated`, `JS gate` and `JS shell`, and the honest verdict is still `unread` — never `absent`.
+
+**The twenty-seventh unit is a SCOPE — the population a number was measured over.** Thesis 28 has counted
+units that were a field, a recompute, a stopping point, a match, a composition, a row count and a
+definition. This batch supplies the plainest one yet, five times: **10 problems** × 5 passes (memdoor's
+9.8 against 9.6); **30 held-out dweets** (perplexity); **one pinned core** (Pivot's 50.1%
+`backend_bound_memory`); **one branch** (`3.0.0`–`3.0.0-M2`, not "MINA"); and **responses before
+selection** (watermark diversity). In each case the digits are right and the population is what decides
+what they mean — which is why the correction below is a scope error rather than an arithmetic one.
+
+**A mid-article finding is not the article's finding.** The 12:23 batch's item 30 published "the output
+lost its charm" as the demoscene post's verdict. The source says the programs were "more consistent" but
+"still lacked a certain 'charm'" — and the *next paragraph* starts "Fortunately, Dwitter has an
+'awesomeness' score…" and reports two further stages (a curriculum that "turned out to be a breakthrough",
+then RLHF with the author as reward) that repair it. The tell is mechanical and worth grepping for: a
+sentence introducing a problem is usually followed by `Fortunately`, `Then`, or `This turned out to be`.
+Corrected in place in en/zh/jp plus the three `latest.md` mirrors, under the claim-correction rule (the
+item's velocity was already at the floor, so nothing moved). Same family as the Cerebras and Genie
+quotation lessons: **read to the end of the document before publishing its middle as its conclusion**, and
+treat any multi-stage post as a sequence whose later stages can invert the earlier verdict.
+
+→ [[frontier-models]] [[security]] [[disclosure-lag]]
+
+## Two units a number cannot have, and a wall that belongs to a client string (2026-11-01 12:39)
+
+**An under-count is a surge; an over-count is a drift.** The generation-time lint runs minutes after the
+batch is written, so the only movement it can watch is the repo moving *under* the item — and at that
+timescale stars move one way. The 12:23 batch produced **two sev-2 `star-drift` findings against two
+correct items**: `kerlenton/bootgpt` quoted at **6★** and reading **25★** an hour later (record created
+2026-10-30T21:28:17Z, **1.3 days** old), and `vercel-labs/agent-desktop` quoted at **3,979★** and reading
+**4,547★** (+14%) on a **254-day** record that shipped **1.0.0 → 1.0.2 inside 72 hours**. The agenda item
+that filed this proposed an age-scaled tolerance, and the age was the wrong axis: **no percentage
+separates a launch from an error**, because an HN front page doubles a six-month repo as readily as a
+six-hour one. What does separate them is the **sign** — `quoted < now` is what a rising repo looks like,
+`quoted > now` is a number the repo does not carry (a star count does not fall on a batch timescale
+without a deletion, a purge or a typo). `starVerdict()` now returns `star-surge` (sev 1, advisory, with
+the growth and the launch window named when the record is ≤30 days old) for the first and `star-drift`
+(sev 2) for the second. Calibrated on today's file (**2 findings → 0, 55 verified**) and generalized on a
+**full day old** feed: the 10-31 file returns exactly one star row, `milind-soni/OpenMausBot`
+**8,400 → 9,795 (+14%)** — which is what an item written yesterday *should* look like and used to be a
+finding. `--selftest` **156 → 164**.
+
+**A wall is a (URL, client string) pair, and the two directions both exist in this corpus.** The same run
+measured two hosts whose gates point opposite ways, hours apart:
+
+| host | browser UA | named `curl/8.7.1` UA |
+|---|---|---|
+| `drupal.org/sa-contrib-2026-254` | **200 / 226 chars** (a 3,038-byte "Client Challenge") | **200 / 4,354 chars** (the advisory, both quoted sentences verbatim) |
+| `karpathy.bearblog.dev/hacker-tube/` | **200 / 14,966 bytes** | **404 / 9 bytes "Not found"** |
+
+So "this checker sends a browser UA" and "this checker sends curl" are both wrong statements about a
+source, and the only usable rule is that a wall on one string is not a wall on the other. Both content
+readers now carry two and retry only after a wall (`claim-unit-lint.mjs`'s `CLIENT_STRINGS`,
+`doc-twin.mjs`'s `--ua-census`), and a wall entry is cached for **10 minutes, not 6 hours**: a gate is
+per-request, and a six-hour cache turns one unlucky fetch into half a day of "unread" — which is the
+`unread is not absent` rule leaking in through the cache. `link-check.mjs` deliberately stays
+status-based: a wall is still a live link, so liveness and readability are different questions.
+
+**The class, measured.** `doc-twin.mjs --ua-census --days 31` fetches every eligible cited URL twice
+(browser UA, named curl UA) and classifies the pair. All **1,300** eligible URLs across **31** feeds
+(2026-10-02 → 2026-11-01), **1,299** rows returned:
+
+| verdict | n | meaning |
+|---|---|---|
+| `same` | 1,131 | both clients read it, similar text |
+| `both-walled` | 63 | neither client string is served — `thehackernews.com`, `npmjs.com`, `reuters.com` (401), `wsj.com`, `ft.com`, `arstechnica.com` |
+| `browser-walled` | 27 | **the browser UA is the one refused** — `bleepingcomputer.com` **6/6** (403/16B → 200/7–8 KB), `commandline.microsoft.com` (403 → **201,056 chars**), `adobe.com` 2/2 (403 → 11,452/4,014), `news.microsoft.com`, `intel.com`, `tangled.org`, `facebook.com`, `politico.com`, and one `drupal.org` advisory |
+| `named-walled` | 8 | the browser is served, the named client refused — `sec.gov` (200/**1.57 MB** → 403/2,992), `courtlistener.com`, `fortune.com`, `nyc.gov`, `dell.com`, `api.stackexchange.com` (200 → **400**) |
+| `differs` | 15 | both answer, text differs — `lists.debian.org` (**16 chars** vs 3.6–5.3 KB), `openwrt.org` (**912** vs 16,901), `git.kernel.org` (1,337 vs 4,311), `reddit.com` (267 vs 6), `codeberg.org`, `developer.chrome.com`, five Discourse forums |
+| `rate-limited` | 28 | **the census's own footprint, not the page's** — 26 of these are `huggingface.co` 429s from this run's own request rate |
+| `gone` / `unreachable` / `client-error` | 10 / 13 / 4 | not client-string claims: a 404, no connection, or a 5xx |
+
+**3.85%** (50 of 1,299) are read by one client and refused by the other, and `differs` is a fifth shape
+worth its own line: a Debian mailing-list post is **16 characters** to a browser UA and **3.6 KB** to
+curl, so "the page says" depends on which reader was used. The host that matters most is
+`bleepingcomputer.com` — one of the feed's most-cited security sources, refused **6 of 6** to the
+browser UA `claim-unit-lint` sent **first**, which is also the host CLAUDE.md records as "403
+interstitial, 200 real HTML minutes apart": a cheaper and reproducible explanation than time.
+
+**And the drupal.org result corrects the rule one step further: the wall is not stable per (URL, client)
+either.** The filing case `sa-contrib-2026-254` was **browser-walled** at 12:40 (226 chars to Chrome on
+three consecutive requests, 4,354 to `curl`) and **`same`** in this census twenty minutes later
+(4,354 both), while a *different* advisory on the same host, `sa-contrib-2026-175`, was browser-walled in
+the same run. So there are three axes — the client string, the request (a cold session versus a warm
+one), and the rate — and no static rule covers them. What survives as a rule is the operational one:
+**retry with a second client string, cache a wall briefly, and never let "unread" become "absent".**
+
+→ [[fact-check]] [[security]] [[dev-tools]]

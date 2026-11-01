@@ -354,3 +354,34 @@ the confounder with a condition** or merely **admits it in prose**.
 The reusable ask of any "we measured X" paper is therefore two-part: **which condition removes the
 alternative explanation**, and **which first-pass number was wrong**. A paper that answers both is
 usable in a way a limitations section is not.
+
+## Two harness claims, two missing baselines (2026-11-01 12:33)
+
+**A reproduction that reports its own margin is more useful than one that reports its headline.**
+`guregodevo/memdoor` (Apache-2.0, Go, one static binary, created 2026-10-05, **34★** at check) rebuilds
+the GVS5H five-pass harness as a YAML workflow and states: "Five Qwen3.8-27B agents beat Fable 5 on
+LiveCodeBench Hard" — a mean of **9.8 of 10** "on the first ten problems of their list, five passes each",
+against **9.6** for the authors' own harness and **8.0** for Fable 5 in a single call, with all **50**
+runs published. Read the denominator before the verb: ten problems, five passes, one model family, and a
+**0.2** margin over the original harness — inside run-to-run noise at n=10, so the finding is
+*reproduces*, not *improves*. The comparison that carries weight is 9.8 against **8.0 for a single call**,
+which is GVS5H's actual claim (five passes of a 27B ≈ one call of a frontier model), not "the 27B is
+better". The reusable part is the harness: workflows as files with approval gates, an explicit decision
+model in front of the chat model, and an exit-code contract that makes the run report itself — `0` done,
+`2` failed, `1` stopped, `3` stopped at an approval gate.
+
+**A resource claim with no baseline is a design target.** `skeeto/prospero` (**93★**, Unlicense, created
+2026-10-21, v0.10.0 released **2026-11-01T03:56:27Z** per `releases.atom`) is a Dear ImGui C++ harness
+whose claim is "around two orders of magnitude fewer resources than other harnesses without sacrificing
+features". No harness is named and no measurement is given, so the honest reading is *goal, not result* —
+and the argument underneath it is testable in one line of `top`: when the harness is larger than the
+thing it drives, the OOM killer's choice stops being predictable, and the post's fuzz-campaign example
+(coming back hours later to find the harness gone and the target untouched) is where that stops being an
+aesthetic complaint. The feature list is what makes the claim interesting rather than ascetic — subagents,
+agent-to-agent messaging, and a headless engine deployable over SSH or WSL, with the UI local and
+re-attachable — and the limits are stated in the same post: no provider built in ("You can't use your
+Claude subscription"), config includes-by-URL restricted, "a hard rule against anything which might appear
+in shell command", and a **separate Professional Edition** that embeds engines for cross-architecture
+desktop control, so the repo's Unlicense does not cover the whole product.
+
+→ [[harness-overhead]] [[agent-stack]] [[fact-check]]

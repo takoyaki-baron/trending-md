@@ -201,9 +201,21 @@ const OUT = arg('out');
 const CENSUS = has('census');
 const STRICT = has('strict');
 const STALE_DAYS = Number(arg('stale-days') ?? 60);
+// A browser UA for page reads — the same one link-check.mjs and doc-twin.mjs send, because some
+// hosts answer 404 to anything else and that 404 is a statement about the client, not the page.
+const UA = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0 Safari/537.36 trending-md-claim-unit-lint/1.0';
+/* Two client strings, because the walls point in opposite directions on different hosts (see
+ * `citedPageText`): a browser UA is refused by drupal.org and required by bearblog, so the second
+ * is tried only when the first came back a wall. The named one is not `Mozilla`-shaped — that is
+ * the point of it. */
+const CLIENT_STRINGS = [UA, 'curl/8.7.1 trending-md-claim-unit-lint/1.0'];
 const STAR_TOLERANCE = Number(arg('star-tolerance') ?? 0.10);
 // a relative drift on a tiny count is not a wrong claim (2026-11-01: 6★ → 8★ in one batch)
 const STAR_MIN_DELTA = Number(arg('star-min-delta') ?? 5);
+/* A repo in its launch window multiplies, and a launch is not a drift (2026-11-01 12:39). The
+ * check runs minutes after the batch was written, so it only ever watches a repo move *under* the
+ * item — and at that timescale stars move in **one direction**. See `starVerdict()`. */
+const SURGE_LAUNCH_DAYS = Number(arg('launch-days') ?? 30);
 const MAX_REPOS = Number(arg('max-repos') ?? 8);
 const MAX_AGE = Number(arg('max-age') ?? 3);
 const MAX_GHSA = Number(arg('max-ghsa') ?? 6);
@@ -1454,6 +1466,46 @@ async function hfCard(slug) {
   return text ? { text } : null;
 }
 
+/* **An under-count is a surge; an over-count is a drift** (2026-11-01 12:39 — this replaces the
+ * age-scaling the 12:33 agenda proposed, because the age was the wrong axis). The lint runs minutes
+ * after the batch is written, so the only movement it can watch is the repo moving *under* the
+ * item — and at that timescale stars move one way: the number was true when it was written and the
+ * repo grew. Two live cases from the 12:23 batch, both quoted correctly and both reported as sev-2
+ * findings: `kerlenton/bootgpt` 6★ → 25★ on a **1.3-day-old** record and `vercel-labs/agent-desktop`
+ * 3,979 → 4,547 (+12%) on a 254-day one. No percentage separates those from an error — an HN launch
+ * doubles an old repo as readily as a new one — so the DIRECTION does the work: quoted < now is what
+ * a rising repo looks like (advisory: the drift *is* the trend, and the advice is to date the
+ * reading if the number will be re-used), while quoted > now is a number the repo does not support
+ * right now (a star count does not fall on a batch timescale without a deletion or a typo) and keeps
+ * sev 2. Record age only colours the advice: a young record is in its launch window, where growth is
+ * expected rather than notable. Pure, so `--selftest` pins every arm without an api.github.com call. */
+function starVerdict({ slug, quoted, now, recAgeDays = null, dated = false }) {
+  if (quoted == null || !now) return null;
+  const gap = quoted - now;
+  if (Math.abs(gap) < STAR_MIN_DELTA) return null;
+  const delta = gap / now;
+  if (!(Math.abs(delta) > STAR_TOLERANCE)) return null;
+  const pct = Math.abs(delta * 100).toFixed(0);
+  if (delta > 0) {
+    return {
+      verdict: 'star-drift', direction: 'over', quoted, now,
+      detail: `${slug}: ${quoted} quoted vs ${now} now (+${pct}%) — the repo does not carry the number the item states; reread it`,
+    };
+  }
+  const spread = `${quoted} → ${now} (+${pct}%, ${now - quoted} stars)`;
+  if (dated) {
+    return {
+      verdict: 'star-dated', direction: 'under', quoted, now,
+      detail: `${slug}: ${spread} — the item dates this reading, so the drift is the trend`,
+    };
+  }
+  const launch = recAgeDays != null && recAgeDays <= SURGE_LAUNCH_DAYS;
+  return {
+    verdict: 'star-surge', direction: 'under', quoted, now,
+    detail: `${slug}: ${spread} since the batch was written${launch ? ` on a ${recAgeDays}-day-old record (launch window)` : ''} — a rising count is not a wrong one; date the reading if the number will be re-used`,
+  };
+}
+
 function checkRepo(it, budget, ageBudget) {
   const out = [];
   const starQuotes = starQuotesOf(it.plain);
@@ -1486,7 +1538,7 @@ function checkRepo(it, budget, ageBudget) {
     const pushed = Date.parse(st.pushed_at);
     const ageDays = Math.round((Date.now() - pushed) / 86_400_000);
     const biggest = starQuotes.length ? Math.max(...starQuotes) : null;
-    const starDelta = biggest && st.stars ? (biggest - st.stars) / st.stars : 0;
+    const recAgeDays = st.created_at ? Math.round((Date.now() - Date.parse(st.created_at)) / 86_400_000) : null;
     if (st.archived) {
       out.push({ check: 'repo', item: it.n, verdict: 'archived', claim: slug, detail: `archived: true, last push ${st.pushed_at.slice(0, 10)} — an archived repo makes "unfixed" permanent, not pending` });
     } else if (ageDays > STALE_DAYS) {
@@ -1496,24 +1548,22 @@ function checkRepo(it, budget, ageBudget) {
        a 7-hour-old Show HN repo quoted at "3 commits, 6 stars": two stars arrived while the batch
        was being written, which is a 25% drift and a finding on a number nobody could act on. The
        floor makes the check about the claim being wrong rather than about the ratio. */
-    if (biggest != null && st.stars && Math.abs(starDelta) > STAR_TOLERANCE
-        && Math.abs(biggest - st.stars) >= STAR_MIN_DELTA) {
-      const quote = `${biggest}`;
-      const dated = DATED_QUOTE.test(starQuoteSentence(it.plain, biggest));
-      // negative delta = quoted below today's count = the repo grew under the item
-      const dir = starDelta < 0 ? 'the item under-counts a live surge' : 'the item over-counts';
-      const later = dated ? laterReading(it.plain, biggest) : null;
-      out.push({
-        check: 'repo', item: it.n, verdict: dated ? 'star-dated' : 'star-drift',
-        claim: `${biggest} quoted vs ${st.stars} now`,
-        detail: dated
-          ? `${slug}: ${(starDelta * 100).toFixed(0)}% — the item dates this reading, so the drift is the trend (${dir})`
-            + (later ? `; it already quotes the later reading (${later}), so nothing to correct` : '; quote the second reading too')
-          : `${slug}: ${(starDelta * 100).toFixed(0)}% — reread the number or date the item`,
-      });
+    const sv = starVerdict({
+      slug, quoted: biggest, now: st.stars, recAgeDays,
+      dated: biggest != null && DATED_QUOTE.test(starQuoteSentence(it.plain, biggest)),
+    });
+    if (sv) {
+      /* The dated arm still owes one piece of advice the predicate cannot know: whether the item
+         already carries a *later* reading, in which case there is no work left to do. */
+      if (sv.verdict === 'star-dated') {
+        const later = laterReading(it.plain, biggest);
+        sv.detail += later
+          ? `; it already quotes the later reading (${later}), so nothing to correct`
+          : '; quote the second reading too';
+      }
+      out.push({ check: 'repo', item: it.n, verdict: sv.verdict, claim: `${sv.quoted} quoted vs ${sv.now} now`, detail: sv.detail });
     }
     // age is a history claim: only young records that say their own age are worth a second hop.
-    const recAgeDays = st.created_at ? Math.round((Date.now() - Date.parse(st.created_at)) / 86_400_000) : null;
     if (recAgeDays != null && recAgeDays <= YOUNG_RECORD_DAYS && ageBudget.left > 0
         && AGE_CLAIM.test(it.plain) && !SELF_DISCLOSED_HISTORY.test(it.plain)) {
       ageBudget.left -= 1;
@@ -1713,6 +1763,18 @@ function citedPages(plain, { hn = false, cap = 3 } = {}) {
   return ranked.sort((a, b) => a.rank - b.rank).slice(0, cap).map(({ rank, ...p }) => p);
 }
 
+/* A bot wall is short and says what it is. Both conditions are required: a legitimately short page
+ * (an error note, a stub) must still count as read, and a long article that happens to open with
+ * "just a moment" is a page. 1,200 chars is comfortably below any advisory and comfortably above
+ * every challenge page measured (226–305 chars across drupal.org, and 750 for a typical Cloudflare
+ * interstitial). */
+const BLOCK_SHELL_RE = /client challenge|enable javascript|javascript is disabled|just a moment|checking your browser|attention required|access denied|verify you are human|cf-chl|ddos protection by|请启用 ?javascript|请稍候/;
+function isBlockShell(text) {
+  const t = String(text ?? '').trim();
+  if (!t) return true;
+  return t.length < 1_200 && BLOCK_SHELL_RE.test(t.slice(0, 900).toLowerCase());
+}
+
 async function citedPageText(page) {
   const key = `page:${page.url}`;
   const hit = cache[key];
@@ -1722,16 +1784,38 @@ async function citedPageText(page) {
    * them the HN thread's own heading — read as an invented sentence. An entry written by an older
    * extractor must not be evidence for the newer one, which is the same rule the CNA cache's `v: 3`
    * encodes. Refetching is unmetered; only the verdict rested on the stale text. */
-  if (hit && hit.v === PAGE_CACHE_V && Date.now() - Date.parse(hit.fetched_at) < CACHE_TTL_MS) return hit;
+  /* A **wall is per-request**, so it must not be cached like a page: `drupal.org/sa-contrib-2026-254`
+     served a 3 KB "Client Challenge" to the 12:31 run and **34,311 bytes of advisory** to a plain
+     `curl` nine minutes later (measured 2026-11-01 12:40, both quotations in the item verbatim on
+     the page). A 6-hour TTL on the wall would have turned one unlucky request into half a day of
+     "unread", which is the `unread is not absent` rule leaking in through the cache. So an entry
+     that holds a wall — or no text at all — gets the error TTL. */
+  const hitWall = hit && (isBlockShell(hit.text) || !hit.text);
+  if (hit && hit.v === PAGE_CACHE_V && Date.now() - Date.parse(hit.fetched_at) < (hitWall ? ERROR_TTL_MS : CACHE_TTL_MS)) return hit;
   let text = '';
-  try {
-    const r = await fetch(page.url, { signal: AbortSignal.timeout(20_000) });
-    citedPages_requests += 1;
-    if (r.ok) {
+  /* The UA is part of the request, and **no single client string is right** — measured 2026-11-01
+   * on two hosts a few hours apart, with the verdict inverted between them:
+   *  · `karpathy.bearblog.dev/hacker-tube/` answers **404 / 9 bytes "Not found"** to `curl/*` *and*
+   *    to a request with no UA header, and **200 / 14,966 bytes** (2,232 chars of prose, the
+   *    6,454-video paragraph in it) to `undici`, `python-requests`, `Wget` and a bare `Mozilla/5.0`
+   *    — the URL HN item 50319510 (920 points, submitted by its author) points at.
+   *  · `drupal.org/sa-contrib-2026-254` answers a **3,038-byte "Client Challenge"** to a
+   *    Chrome-shaped UA (three consecutive requests, 1s apart) and **34,311 bytes of advisory** —
+   *    both quoted sentences verbatim in it — to `curl/8.7.1`, `Wget/1.21`, `python-requests/2.31.0`
+   *    and a request with **no** UA at all.
+   * So the gate is a *client string*, never "browser vs not", and a wall on ONE string is not a
+   * wall on the other. Retry with the second before recording unread: this is the difference
+   * between "the page does not say that" and "I could not read it", which is the rule the whole
+   * check rests on. Only paid when the first attempt came back a wall, and both are unmetered. */
+  for (const ua of CLIENT_STRINGS) {
+    try {
+      const r = await fetch(page.url, { signal: AbortSignal.timeout(20_000), headers: { 'user-agent': ua, accept: 'text/html,application/xhtml+xml,*/*' } });
+      citedPages_requests += 1;
+      if (!r.ok) continue;
       const body = (await r.text()).slice(0, 3_000_000);
       // An abs page is HTML: keep its text, drop the tags, so a `<blockquote>` abstract reads as prose.
       // `<style>`/`<noscript>` go too — a stylesheet's tokens can spell a noun next to a number.
-      text = page.raw ? body : body
+      const t = page.raw ? body : body
         .replace(/<(script|style|noscript|svg)[\s\S]*?<\/\1>/gi, ' ')
         .replace(/<[^>]+>/g, ' ')
         .replace(/&nbsp;|&#160;/g, ' ')
@@ -1739,12 +1823,20 @@ async function citedPageText(page) {
         .replace(/&#(\d+);/g, (_, d) => { try { return String.fromCodePoint(Number(d)); } catch { return ' '; } })
         .replace(/&amp;/g, '&').replace(/&#39;|&apos;/g, "'").replace(/&quot;/g, '"')
         .replace(/&lt;/g, '<').replace(/&gt;/g, '>');
-    }
-  } catch { /* unreadable is a state, not an absence — it is reported as unread this run */ }
+      // keep the longest read: a wall is short by construction, but a truncated 200 also arrives
+      if (t.length > text.length) text = t;
+      if (!isBlockShell(t)) break;
+    } catch { /* unreadable is a state, not an absence — it is reported as unread this run */ }
+  }
   cache[key] = { v: PAGE_CACHE_V, fetched_at: new Date().toISOString(), bytes: text.length, text };
+  /* the short TTL above reads this entry's own contents, so a wall re-fetches after 10 minutes
+     rather than being stored as fact for six hours */
   return cache[key];
 }
-const PAGE_CACHE_V = 2;
+/* v3 names its client (see `citedPageText`). A page's text now depends on who asked, and an entry
+   fetched anonymously is not evidence about what a named client sees — the same rule the CNA
+   cache's schema version encodes. */
+const PAGE_CACHE_V = 3;
 let citedPages_requests = 0;
 
 async function checkCount(it) {
@@ -2475,11 +2567,22 @@ function checkQuotes(it, sources, ctx = {}) {
      * contaminated. Hence `quote-paraphrase` (sev 2) when nothing was unread, `quote-short` (sev 1)
      * when something was: unread is not absent, and the severity is what says so. */
     const paraphrase = heavy < QUOTE_WORDS_FINDING && unread === 0 && (near.matched >= 3 || sources.length >= 2);
+    /* A FABRICATION CLAIM NEEDS A COMPLETE DENOMINATOR — the same rule the 4–5-word class already
+     * follows (guard (c) of the 10-31 calibration), now applied where it costs the most: a 6+-word
+     * span found nowhere is `quote-not-found` (sev 3) only when **every cited page was read**.
+     * With a page unread it is `quote-not-read` (sev 0), and the detail names which page and why,
+     * because the sentence may be sitting on a wall — measured 2026-11-01, when one unread Drupal
+     * advisory turned four correct quotations into sev-3 findings about this feed. */
+    const walled = unread > 0;
     out.push({
       check: 'quotation', item: it.n,
-      verdict: heavy >= QUOTE_WORDS_FINDING ? 'quote-not-found' : (paraphrase ? 'quote-paraphrase' : 'quote-short'),
+      verdict: heavy < QUOTE_WORDS_FINDING
+        ? (paraphrase ? 'quote-paraphrase' : 'quote-short')
+        : (walled ? 'quote-not-read' : 'quote-not-found'),
       claim: `“${frag.key.slice(0, 96)}${frag.key.length > 96 ? '…' : ''}”`,
-      detail: `${heavy} words, 0 hits in ${sources.length} readable source(s)${unread ? `, ${unread} cited page(s) unread` : ''}${c.wrapped ? ', quotation spans a hard-wrapped line (recovered by the bounded join)' : ''}; ${hint}`,
+      detail: walled && heavy >= QUOTE_WORDS_FINDING
+        ? `${heavy} words, 0 hits in ${sources.length} readable source(s), but ${unread} cited page(s) went unread${ctx.shells?.length ? ` (${ctx.shells.slice(0, 3).join(', ')} served a bot wall)` : ''} — unread is not absent, so this is not called a fabrication; open those page(s) before publishing${c.wrapped ? ', quotation spans a hard-wrapped line (recovered by the bounded join)' : ''}`
+        : `${heavy} words, 0 hits in ${sources.length} readable source(s)${unread ? `, ${unread} cited page(s) unread` : ''}${c.wrapped ? ', quotation spans a hard-wrapped line (recovered by the bounded join)' : ''}; ${hint}`,
     });
   }
   if (unreadable.length) {
@@ -2554,10 +2657,18 @@ async function checkQuote(it, nvd, cna) {
   // `unread` counts candidates that produced no text (a 429, a JS shell, a paywall) — the
   // denominator the advisory severity needs, so "not found" is never read as "not there".
   let unread = 0;
+  const shells = [];
   for (const p of citedPages(it.plain, { hn: true, cap: 4 })) {
     const t = await citedPageText(p);
-    if (t.text) sources.push(quoteSource(p.label, t.text));
-    else unread += 1;
+    /* A PAGE THAT ANSWERS IS NOT A PAGE THAT WAS READ. `drupal.org` serves a 3 KB, 226-char
+     * "Client Challenge … JavaScript is disabled in your browser" every time a UA claims a browser
+     * (measured 2026-11-01 on `sa-contrib-2026-254`, the one reference in `CVE-2026-118539`'s
+     * record). It was counted as a readable source, so four quotations from that advisory came
+     * back `quote-not-found` (sev 3) against an item whose only page carrying them was unread —
+     * the exact "unread is not absent" failure this check exists to avoid, in the shape of a
+     * finding. A wall is unfetched text, so it belongs in the unread denominator. */
+    if (t.text && !isBlockShell(t.text)) sources.push(quoteSource(p.label, t.text));
+    else { unread += 1; if (t.text) shells.push(p.label); }
   }
   // (3) the records — a field quotation is a claim about a field, not about a page
   const cves = it.cves ?? [];
@@ -2570,7 +2681,7 @@ async function checkQuote(it, nvd, cna) {
     const k = kev.get(id);
     if (k) sources.push(quoteSource(`${id} KEV entry`, `${k.name} ${k.desc ?? ''}`));
   }
-  let out = checkQuotes(it, sources, { unread });
+  let out = checkQuotes(it, sources, { unread, shells });
   /* (4) A REPOSITORY'S OWN DESCRIPTION IS NOT ITS README. Item 5 of the 10-31 feed quotes
    * "Skills for Real Engineers. Straight from my .agents directory." — which greps **0** times in
    * `mattpocock/skills`' README and is verbatim in the repo's `description` field ("… - mattpocock/
@@ -2839,6 +2950,18 @@ if (SELFTEST) {
   t('an unrelated larger number is not a later reading',
     laterReading('At 1,239 stars as of 04:25 UTC, using 2,011 MB of memory', 1239), null);
   t('undated quote is not dated', DATED_QUOTE.test('the repo holds 56 stars and one commit'), false);
+  /* 2026-11-01 12:39 — the two sev-2 false findings from the 12:23 batch, one line each. A rising
+     count is the trend, not an error; a count above the repo's own is the error. */
+  const sv = (o) => (starVerdict({ slug: 'a/b', ...o }) ?? {}).verdict ?? null;
+  t('under-count on a young repo is a surge, not a drift', sv({ quoted: 6, now: 25, recAgeDays: 1 }), 'star-surge');
+  t('under-count on an old repo is a surge too', sv({ quoted: 3979, now: 4547, recAgeDays: 254 }), 'star-surge');
+  t('a dated under-count stays the trend reading', sv({ quoted: 56, now: 114, recAgeDays: 3, dated: true }), 'star-dated');
+  t('over-count is still a drift in either window', sv({ quoted: 4547, now: 3979, recAgeDays: 254 }), 'star-drift');
+  t('over-count on a young repo is still a drift', sv({ quoted: 25, now: 6, recAgeDays: 1 }), 'star-drift');
+  t('a small absolute gap is not a finding', sv({ quoted: 6, now: 8, recAgeDays: 1 }), null);
+  t('within tolerance is not a finding', sv({ quoted: 1000, now: 1080, recAgeDays: 200 }), null);
+  t('the launch window is named in the detail',
+    /launch window/.test((starVerdict({ slug: 'a/b', quoted: 6, now: 25, recAgeDays: 1 }) ?? {}).detail ?? ''), true);
   t('age claim detected', AGE_CLAIM.test('a six-day-old project with 9,479 commits'), true);
   t('version number is not an age claim', AGE_CLAIM.test('released 1.4.0 with 12 days of work'), false);
   t('github url is still a repo', slugs('[advisory](https://github.com/padok-team/burrito/security/advisories/GHSA-x)'), ['padok-team/burrito']);
@@ -3184,6 +3307,20 @@ if (SELFTEST) {
   t('quote: no readable source is unread, not absent',
     checkQuotes(mk('t', 'it says "The model was not trained. A compiler computed its weights."'), []).map((x) => x.verdict),
     ['quote-not-read']);
+  /* A page that answers 200 with a bot wall is unfetched text, and a fabrication claim needs every
+   * cited page read. Both halves added 2026-11-01 after one unread Drupal advisory produced four
+   * sev-3 findings about the feed. */
+  t('quote: a "Client Challenge" page is a wall, not a source',
+    isBlockShell('Client Challenge JavaScript is disabled in your browser. Please enable JavaScript to proceed. A required part of this site couldn’t load.'),
+    true);
+  t('quote: a short page with no wall marker is still read',
+    isBlockShell('Deprecated: this function is removed in 3.0. Use `open()` instead. See the migration note for details and two worked examples.'), false);
+  t('quote: a long article that merely says "just a moment" is a page',
+    isBlockShell('just a moment of your time — this is a long post. ' + 'x'.repeat(1_400)), false);
+  t('quote: an unread cited page demotes a 6-word miss from fabricated to unread',
+    [checkQuotes(mk('t', 'it states "this vulnerability is being actively exploited in the wild"'), qsrc('Nothing of the kind here.'), { unread: 1 }).map((x) => x.verdict),
+      checkQuotes(mk('t', 'it states "this vulnerability is being actively exploited in the wild"'), qsrc('Nothing of the kind here.'), { unread: 0 }).map((x) => x.verdict)],
+    [['quote-not-read'], ['quote-not-found']]);
   t('quote: the nearest-source hint reports the run that IS real, not the prefix',
     checkQuotes(mk('t', 'the README states "Nobody trained these weights, and a compiler computed every one of them."'), qsrc(NES_README))
       .map((x) => [x.detail.includes('5 of 12 words'), x.detail.includes('a compiler computed every one')]),
@@ -3347,7 +3484,7 @@ try {
   writeFileSync(CACHE_PATH, JSON.stringify(cache, null, 1));
 } catch { /* cache is best-effort */ }
 
-const SEVERITY = { ok: 0, 'ok-cited-page': 0, 'no-cve-named': 1, 'no-record': 1, 'slot-quoted': 1, 'counted-by-author': 0, 'number-other-noun': 1, 'temporal-stopping-point': 1, 'cna-only-score': 1, 'star-drift': 2, 'star-dated': 1, 'ok-history': 0, 'history-older-than-record': 2, 'history-unreadable': 1, stale: 2, archived: 2, differs: 2, absent: 2, 'unsplit-issue-count': 3, 'compound-lags-parts': 3, 'version-swapped': 3, 'version-absent': 3, 'score-not-reproducible': 2, 'score-mismatch': 3, 'wrong-subject': 3, 'absence-contradicted': 3, 'status-stale': 2, 'status-dated': 1, 'cwe-absent-but-recorded': 3, 'cwe-mismatch': 3, 'cwe-unreadable': 1, 'status-no-record': 1, 'status-no-cve': 1, 'advisory-unreadable': 1, 'advisory-repo-only': 0, unreadable: 1, 'artifact-unreadable': 1, 'nvd-unavailable': 1, 'ratio-row-count': 3, 'ok-ratio': 0, 'not-a-repo': 0, 'ok-table-rows': 0, 'table-columns-unresolved': 0, 'bundle-ok': 0, 'bundle-lines-named': 0, 'bundle-unavailable': 0, 'bundle-line-count': 3, 'bundle-total-mismatch': 2, 'quote-not-found': 3, 'quote-paraphrase': 2, 'quote-short': 1, 'quote-not-read': 0 };
+const SEVERITY = { ok: 0, 'ok-cited-page': 0, 'no-cve-named': 1, 'no-record': 1, 'slot-quoted': 1, 'counted-by-author': 0, 'number-other-noun': 1, 'temporal-stopping-point': 1, 'cna-only-score': 1, 'star-drift': 2, 'star-dated': 1, 'star-surge': 1, 'ok-history': 0, 'history-older-than-record': 2, 'history-unreadable': 1, stale: 2, archived: 2, differs: 2, absent: 2, 'unsplit-issue-count': 3, 'compound-lags-parts': 3, 'version-swapped': 3, 'version-absent': 3, 'score-not-reproducible': 2, 'score-mismatch': 3, 'wrong-subject': 3, 'absence-contradicted': 3, 'status-stale': 2, 'status-dated': 1, 'cwe-absent-but-recorded': 3, 'cwe-mismatch': 3, 'cwe-unreadable': 1, 'status-no-record': 1, 'status-no-cve': 1, 'advisory-unreadable': 1, 'advisory-repo-only': 0, unreadable: 1, 'artifact-unreadable': 1, 'nvd-unavailable': 1, 'ratio-row-count': 3, 'ok-ratio': 0, 'not-a-repo': 0, 'ok-table-rows': 0, 'table-columns-unresolved': 0, 'bundle-ok': 0, 'bundle-lines-named': 0, 'bundle-unavailable': 0, 'bundle-line-count': 3, 'bundle-total-mismatch': 2, 'quote-not-found': 3, 'quote-paraphrase': 2, 'quote-short': 1, 'quote-not-read': 0 };
 const REAL = (f) => (SEVERITY[f.verdict] ?? 1) >= 2;
 
 /* `status_watch` rides the findings file so the act pass sees a backwards move without re-reading

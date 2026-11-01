@@ -207,3 +207,28 @@ Sources: [arXiv 2610.32110](https://arxiv.org/abs/2610.32110) · [arXiv 2610.319
 两者都答的论文是可用的，而一段 limitations 不是。
 
 → [[fact-check]] [[frontier-models]] [[agent-stack]]
+
+## 两条 harness 断言，两个缺失的基线 (2026-11-01 12:33)
+
+**一次把 margin 一起报出来的复现，比只报标题的复现有用得多。** `guregodevo/memdoor`（Apache-2.0，Go，
+单静态二进制，建于 2026-10-05，检查时 **34★**）把 GVS5H 的五轮 harness 重建成 YAML 工作流，并写道：
+「Five Qwen3.8-27B agents beat Fable 5 on LiveCodeBench Hard」——在「the first ten problems of their list,
+five passes each」上是 **9.8 / 10** 的均值，原作者自己的 harness 是 **9.6**，而 Fable 5 单次调用是 **8.0**，
+并且公开全部 **50** 次运行的请求、回复、程序与评分器输出。先看分母再看动词：十道题、五轮、一个模型族，相对
+原 harness 的差距是 **0.2**——n=10 时这在运行间噪声之内，所以结论是「复现了」，不是「更好」。真正有分量的
+比较是 9.8 对 **8.0 的单次调用**，那才是 GVS5H 原本的主张（27B 跑五轮 ≈ 前沿模型调用一次），而不是「27B 更强」。
+可复用的部分是 harness 本身：工作流是文件、带检查与审批门，聊天模型前面有一个显式的决策模型，退出码让运行
+自己汇报——`0` 完成、`2` 失败、`1` 停止、`3` 停在审批门。
+
+**没有基线的资源断言是设计目标，不是测量。** `skeeto/prospero`（**93★**，Unlicense，建于 2026-10-21，
+`releases.atom` 里 v0.10.0 发布于 **2026-11-01T03:56:27Z**）是一个 Dear ImGui 的 C++ harness，主张是
+「around two orders of magnitude fewer resources than other harnesses without sacrificing features」。
+没有点名任何 harness，也没有给任何测量，所以诚实的读法是*目标，不是结果*——而它下面的论证一行 `top` 就能验：
+当 harness 比它驱动的程序还大时，OOM killer 的选择就不再可预测，而文中的 fuzz 例子（几小时后回来，harness
+没了、目标一点没动）就是这件事不再只是审美抱怨的地方。让这个主张变得有意思而不是苦行的是功能表——子 agent、
+agent 间消息、可部署到 SSH 或 WSL 的无头引擎而 UI 留在本地并可重连——而限度写在同一篇里：不带任何 provider
+（「You can't use your Claude subscription」），按 URL include 被限制，「a hard rule against anything
+which might appear in shell command」，以及一个**独立的 Professional Edition** 内嵌跨架构桌面控制引擎——
+所以仓库的 Unlicense 并不覆盖整个产品。
+
+→ [[harness-overhead]] [[agent-stack]] [[fact-check]]

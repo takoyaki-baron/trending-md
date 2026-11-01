@@ -1141,3 +1141,43 @@ NVD は Bazarr を `Deferred`、TAKO を `Received` に置き、**どちらも `
 CNA であり、同じフィールドが三桁離れている。そしてどちらも、バグがどれだけ前から存在したかについての陳述ではない。
 
 → [[security]] [[vuln-supply]] [[fact-check]]
+
+## 上端が製品の終端である二つの範囲と、三道のガードでできた一つの修正 (2026-11-01 12:33)
+
+**範囲の上端が最新リリースに一致するなら、それは修正を何も名指していない——そしてリポジトリの時計が、それが
+恒久か保留かを決める。** `CVE-2026-120201`（Jpom、VulnCheck 割当）：未認証の攻撃者が `JPOM-USER-TOKEN`
+ヘッダに `is not null` を入れ、Hutool の条件パーサがそれを演算子として評価し、スーパー管理者になれる。
+`CWE-943`、`2.10.0` から `2.11.12`、`defaultStatus: unaffected`。第一手で確認：`releases.atom` の最新タグは
+まさに `v2.11.12`（**2025-05-06T06:49:10Z**）で、範囲の上端はリリース一覧の上端そのもの——上に上げる先が無い。
+`pushed_at` は **2026-02-06** で九か月静か。NVD は `Deferred` で **NVD 自前の指標は 0 件**（CNA は両方を持つ：
+3.1 **9.8** が `Primary`、4.0 **9.3** が `Secondary`、いずれも `disclosure@vulncheck.com`——スロットは選択子で
+あって第二の主体ではない）。これは 10-30 の Agno と逆の結末だ：あの範囲は**修正より一リリース遅れて**いたが、
+こちらには修正リリースが存在しない。ゆえに緩和はバージョン衛生ではなく露出面（誰がポートに到達できるか）。
+リポジトリは休眠だが**アーカイブされていない**——これは重要で、アーカイブは「未修正」を恒久にし、休眠は保留に
+するだけだ。
+
+**緩和が範囲の後方を指すことがあり、前方のみの範囲状態はそれを表現できない。** `CVE-2026-118636`
+（Apache MINA）は 3.0 コーデックモジュールの無フィルタな `ObjectInputStream.readObject()` で、**9.8**、
+`CWE-502`、影響は `3.0.0` から **`3.0.0-M2`**——レコード自身が死んだと呼ぶブランチの二つのプレリリース
+マイルストーン。「UNSUPPORTED WHEN ASSIGNED」「As the 3.0.0 branch is inactive, we do not plan to release a
+version that fixes this issue」、そして緩和は**ダウングレード**：「Users are recommended to use the latest
+Apache MINA 2.2.X branch.」`disclosure-lag.mjs` のどの状態も修正が範囲以上にあると仮定しているので、
+「*緩和版が範囲の下限より下*」はこの分類がまだ名付けていない状態だ——Vysper（10-27）に続く
+`UNSUPPORTED WHEN ASSIGNED` の二例目であり、再発するのは構造的だから：放棄されたマイルストーンブランチに
+修正ビルドは永遠に来ず、移行だけがパッチになる。
+
+**一つの CVE、十三項目のリリースノート、三道のガードのうち修正は一道。** WordPress 7.1.4 は
+`CVE-2026-119977` を積む：フルパッケージのコア更新時に使われる、予測可能でウェブから到達できるステージング
+パス（`CWE-367`、**8.1**、`AV:N/AC:H/…`——同じベクトルで `AC:L` なら見慣れた 9.8 なので、差は完全に競合による
+もの）。7.1.4 の差分を読むと、三道のガードが一つの関数に入る：作業ディレクトリに
+`'-' . wp_generate_password(16, false)` を追加、更新ディレクトリに `index.php` を置き「so the name of the
+working directory created below cannot be discovered from a directory index」、そして `update-core.php`
+のコピー段で `$skip` に `'wp-config.php'` を追加——「Never copy a wp-config.php, which could have been
+written to the working directory」。コード実行の原語を消すのは三道目だけで、他は発見経路の強化にすぎない。
+そしてこの告知はセキュリティ節の **13** 項目の一つ（ページ自身のリストを数えた——14 番目の `<li>` は
+シェアボタンで、これが `<li>` 数が 14 になる理由）：CVE が覆うのはその RCE 一本で、残り十二項目にここでの
+レコードは無く、XSS 二件は Anthropic のクレジット、十三項目目は「An update to the bundled root
+certificates due to the eMudhra revocation」——テーゼ 25 の CA の話が、CVE なしで CMS の同梱トラストストアに
+到達した。
+
+→ [[security]] [[vuln-supply]] [[fact-check]]

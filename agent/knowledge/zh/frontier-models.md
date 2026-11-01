@@ -3038,3 +3038,53 @@ arXiv **2610.39302**，《Proving and Improving the Platonic Representation Hypo
 而「一个编码器」的理由恰恰建立在没人竞争的那些模态上。代码与权重公开，这让它可核验，而不只是可引用。
 
 → [[formal-verification]] [[edge-inference]] [[fact-check]]
+
+## 水印的分母是「多个回答」，而不是「一个回答的质量」(2026-11-01 12:33)
+
+**厂商那句话的范围是单个回答，而能给它加限定的那个词不在页面上。** Anthropic 的水印说明写着
+「Watermarking does not impact the quality of Claude's output」，再往下把范围收得更紧：「In internal
+testing, we've seen no impact of watermarking on the content, level of creativity, or readability of
+Claude's text.」第一手测量（渲染后的页文本 14,416 字符）：**「diversity」出现 0 次**。限定语在
+SynthID-Text——方法本身出自的论文——里，转载它的博客把两半都引了出来，逐字可 grep：「While
+single-sequence non-distortion guarantees the quality of each individual response, it does not
+necessarily preserve diversity across multiple responses」，以及「could lower the overall quality of a
+system which generates many responses then selects the best one」。
+
+所以两个断言说的是不同的总体，而且可以同时为真。逐序列的保证是对*一次*采样的陈述；多样性是所采样的*分布*的
+属性。「创造性」（对一个回答的判断）不是「多样性」（对许多回答的属性），而用户真正看到的症状——反复重试拿回
+同一段——恰好整个落在这两个名词之间的缝里。
+
+**那次复现测的是总体，所以它看得见评测看不见的东西。** 在 Natzir Turrado 的复现里（在开源模型上复现
+SynthID-Text，用论文自己的设置和一把 key），同一个 prompt 采五次，**5 次里有 4 次**开头几乎一样——
+「My heart still sings/dances when I think back to my trip to the quaint coastal town of…」——而未加水印
+的模型有**三次**开头不同。一次一条序列分辨不出来，五条就能。
+
+**TextSeal2（arXiv [2610.40613](https://arxiv.org/abs/2610.40613)）不是在争论这个取舍，而是把它消掉——
+而它的摘要报了两种不同的 token 长度。** 它通过 AutoMark 的高斯 copula 把两把或多把 key 合并成一把虚拟 key，
+在投机解码下用「one more exponential race, run on the leftovers of the draft races」校验带 key 的草稿；
+由无记忆性，这次竞速复现了块校验，于是「the output follows the target model exactly」。逐字核实：在相同输出
+token 多样性下，它在误报率 `10^-3` 上比 TextSeal 多检出 **8 到 22** 个百分点的 **100-token** 答案；在投机解码
+下，相同接受率时比 TextSeal 和 textGrain 分别多 **18 和 22** 个百分点的 **200-token** 答案。把 token 长度
+去掉就会把两个测量拼成一个——这两组比较并不在同一个答案长度上，而一句「多 8–22 个百分点」会把它们悄悄合并。
+
+**两篇效率论文，比较对象本身就是断言。** L3G-World（[2610.40614](https://arxiv.org/abs/2610.40614)）把世界
+模型的记忆绑定在**场景范围**而不是流长度上，而让这件事成立的小细节是：每个高斯存一个 **VAE latent**，于是记忆
+可以直接渲染进 DiT 的 latent 空间、无需 VAE 回转码——此前的 3D 记忆要把 RGB 渲染再编码一遍，这让整个循环慢到
+不可能实时。报告的数字：3D 基元最多少 **38.6×**、更新快 **3.2×**、渲染快 **359×**、9 FPS——每一项都是相对
+「the most efficient prior 3D-memory baseline **for each metric**」。三个比值对着三个可能不同的基线，是三个事实；
+摘要自己那句限定才是诚实的写法，而 359× 最容易被单独引用。SpecSlot（
+[2610.40647](https://arxiv.org/abs/2610.40647)）的习性相反：它的对照是 **FLOPs-matched** 的 JiT，所以数字是
+被*拉平*而不是被挑出来的——ImageNet-512 上 FID 好 **2.84** 且 FLOPs 还少 **3.9%**，256 上距 JiT-B/16 只差
+**0.69** FID 而成本低 **38.2%**，DPG-Bench 上 +**1.06** 而前向成本低 **40.6%**。它买的是单位算力上的对等，
+不是新的质量上限。
+
+**demoscene 那条弧线，以及「它是一条弧线」的破绽：** 在 140 字符的 Dwitter 程序上做继续预训练，30 条留出
+dweet 上困惑度从 **28.63 降到 8.57**，程序变得「more consistent」，但用作者的话说「still lacked a certain
+『charm』」。下一段开头是「Fortunately, Dwitter has an『awesomeness』score…」——于是排名变成课程表（400 步，
+前 1,000 条 dweet 占到约 **67.23%** 的采样概率），作者称它「turned out to be a breakthrough」，在训练中从未
+采到的 dweet 上把困惑度从 **7.42 降到 5.65**，覆盖 7,000 条。接着是 RLHF：用 GRPO、作者本人当奖励函数，
+每条未完成的 dweet 采八个补全，约 **9–10 轮、每轮 500 组**，手工看约 **40,000 个动画**，再请一位不知情的朋友
+对四个随机 checkpoint 的 400 组做盲评（选中第 4 个）。12:23 那批把这个 charm 句当成了文章的判决，而文章把它
+当成随后两次修复的*动机*。
+
+→ [[fact-check]] [[edge-inference]] [[harness-reliability]]

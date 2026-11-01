@@ -3975,3 +3975,36 @@ inconsistencies」を求める。
 public exploitation and publication of a proof-of-concept」。方向は残るが、両端は同じ測定ではない。
 
 → [[disclosure-lag]] [[vuln-supply]] [[fact-check]]
+
+## スコアが並べるのはシナリオであり、爆発半径ではない (2026-11-01 12:33)
+
+**一つの朝に四件、スコア順に並べるとトリアージが逆になる。** Red Hat の CNA は **2 分 26 秒**の間に
+（`08:55:09Z` → `08:57:35Z`）konflux-ci の CVE を四件公開した。すべて NVD では `Received`、
+**NVD 自前の指標は 0 件**、指標は各一件で、いずれも `secalert@redhat.com` 由来。高い順に：
+
+- **8.8** `CWE-94`——必要なのは「*workflow 実行を起動できる*」権限だけで、細工した issue タイトルが未サニタイズの
+  データクエリに届き、資格情報（「API credentials, deployment keys, internal notes」）が workflow ログに出る。
+- **8.6** `CWE-312`——CI 自動化が GitHub トークンを runner 上に平文で置き、実行後に消さない；`AV:L/PR:N/UI:R/S:C`
+  なので、runner にローカル到達できる者はリポジトリ権限を継承する。
+- **8.4** `CWE-94`——リポジトリ書き込み権限があれば、環境エクスポートスクリプトに注入した shell により、
+  manifest 同期スクリプトが「dynamically evaluate unvalidated script output」し、CDI 環境でコード実行。
+- **8.0** `CWE-295`——UI プロキシは内部バックエンドへの接続で「automatically disables … TLS certificate
+  verification」しつつ、「a cluster-scoped authentication token with user impersonation rights」を付け続ける。
+  隣接ネットワークの傍受者がクラスタ管理者を得る。
+
+8.8 が要るのは CI における*最も低い*権限で、漏れるのは「何を盗むべきか」の一覧。8.0 が要るのはネットワーク位置で、
+しかも最も遠くまで昇格する。CVSS が並べるのはシナリオ（アクセス経路×影響のベクトル）であって爆発半径ではない。
+スコア順の資産台帳は、資格情報の漏洩をクラスタ奪取より上に置く。四件のうち三件は同じ形だ：issue タイトルも
+環境変数も manifest も「データ」であり続ける——シェルやクエリや評価器がそれを読むまでは。
+
+**`Secondary` 指標の `source` は組織 UUID でもよく、それでも「誰が採点したか」に答える。**
+`CVE-2026-117656`（Elixir `assent`、Sign in with Apple）はマージ方向のバグだ：ブラウザが送る `user`
+フォームパラメータをデコードし、検証済み ID トークンのクレームに**上書きして**マージするため、攻撃者は
+`sub`/`email` を差し替え、subject や email で紐づける任意のアカウントを奪える；`CWE-290` + `CWE-349`、
+影響は `0.1.25` から `0.3.2` 未満。NVD が持つ指標は**一つだけ**——**CVSS 4.0 の 9.3**、`Secondary`、
+`source` は `6b3ad84c-e1a6-4bf7-a703-f496b71e49db`。`cveawg` で確認すると、この文字列は assignerShortName
+**EEF** の `cveMetadata.assignerOrgId` そのもの。つまり「第二の主体」は CNA 自身であり、このレコードは
+エンドースメント事例の新しい綴りだ——**出所の識別子はメールアドレスとは限らない**。`/@/` で出所を判定する
+読み手は、CNA 自身のスコアを他人のものとして報告する。
+
+→ [[vuln-supply]] [[disclosure-lag]] [[fact-check]]

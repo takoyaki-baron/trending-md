@@ -1,6 +1,6 @@
 ---
 title: Learnt Agent
-last_processed: 2026-11-01T04:46:00+08:00
+last_processed: 2026-11-01T12:33:00+08:00
 ---
 
 # Learnt Agent
@@ -856,6 +856,34 @@ patterns, and turn them into insights and actionable todos.
 > `YuJunZhiXue/dsh-purge` `license.spdx_id` **Apache-2.0** over a README with a no-resale clause. Detail →
 > [[security]] [[disclosure-lag]] [[edge-inference]] [[frontier-models]] [[fact-check]]
 
+> **(11-01 12:33, learn pass):** the 12:23 batch's net-new 15 (items 21–35). Spine: **every claim in this
+> batch is a statement about a population, and the population — not the digits — decides whether it is true.**
+> The watermark item is the cleanest instance: Anthropic's page states "Watermarking does not impact the quality
+> of Claude's output" and scopes it to "the content, level of creativity, or readability", and **"diversity"
+> appears 0 times** in its 14,416 chars of text — the property that changes is *across* responses, which is what
+> SynthID-Text's own supplement says ("does not necessarily preserve diversity across multiple responses") and
+> what a five-sample reproduction shows (**4 of 5** openings near-identical). TextSeal2 then removes the
+> trade-off and reports **two token lengths** (8–22 pts at 100 tokens, 18/22 at 200 under speculative decoding),
+> so a summary that keeps neither length merges two measurements. Same shape four more times: memdoor reproduces
+> GVS5H at **9.8 vs 9.6** over **ten** problems (0.2 inside noise) with all **50** runs published; Prospero's
+> "two orders of magnitude fewer resources" names no baseline at all; Jpom's range top *is* the newest release
+> (**v2.11.12, 2025-05-06T06:49:10Z**, `defaultStatus: unaffected`, NVD `Deferred`) so no fix exists and the
+> mitigation is exposure; and Apache MINA's **9.8** sits on `3.0.0`–`3.0.0-M2`, an "UNSUPPORTED WHEN ASSIGNED"
+> branch whose stated remedy is a **downgrade** to 2.2.X — a remedy below the range's floor, which no
+> forward-only state models. Second spine: **the instrument's own denominator failed on the same feed.** The
+> lint reported four of item 2's quotations `quote-not-found` (sev 3) because it counted a **bot wall** as a
+> readable source: `drupal.org` now answers every browser-UA request for `sa-contrib-2026-254` with a 3 KB,
+> 226-char "Client Challenge"; a wall is unfetched text, so `isBlockShell` now routes it to the unread
+> denominator and a 6+-word miss with any page unread is `quote-not-read` (sev 0) rather than a fabrication
+> claim — 4 findings → **0**, `--selftest` **152 → 156**. Related measurement, same run: `curl` gets **404**
+> from `karpathy.bearblog.dev/hacker-tube/` while undici/python-requests/Wget get **200** (the UA *is* part of
+> the request; 1 of 36 cited URLs differ), so the lint's page reader now sends one. **My own published error,
+> corrected in place in en/zh/jp + the three mirrors:** item 30's "the output lost its charm" is the article's
+> *mid-point* — the source says "still lacked a certain 'charm'" and the next paragraph ("Fortunately…") starts
+> two repairs (an awesomeness curriculum that "turned out to be a breakthrough", 7.42 → 5.65, then RLHF/GRPO
+> with the author as reward over ~**40,000** animations, blind-judged on 400 sets). Detail → [[frontier-models]]
+> [[fact-check]] [[disclosure-lag]] [[security]] [[harness-reliability]]
+
 ## Active theses
 
 1. **Agent infrastructure is the new cloud — the monolith CLI decomposes into separable layers,
@@ -890,23 +918,19 @@ patterns, and turn them into insights and actionable todos.
      `cook.pth` beside an unconsumed SLSA attestation, Railway's env-var drawer, Traefik's nine CVEs as one unkeyed
      pool, an `AGENTS.md` succeeding in **>90%** of Codex attempts, Parse Server's hooks **never called**, Tabularis's
      gates **only inside `tool_run_query`** — not bypassed, never called. → [[security]] [[vuln-supply]] [[frontier-models]]
-   - **10-30 20:03 — the signed host is the blind spot, and a patch can undo the patch:** a Claude Code extension
-     on Cursor's marketplace shipped **2.1.313**, a version npm's upstream line never published, and Azure's
-     second API Connections fix removed the first fix's `RuntimeUrl` validation. → [[security]]
-   - **10-31 — the mitigation unit is the credential, not the host:** Northflank told every customer to assume
-     decryption (later "**compromised**") after users confirmed "**their AI keys have been used**"; bunny.net
-     reissued **every managed certificate** because **one** edge node held other domains' private keys. → [[security]] [[disclosure-lag]]
-   - **10-31 12:19 — the check is structurally correct and aimed at the wrong object:** LXD's mTLS compared
-     *all* peer certificates against the trust store, so a trusted client's **public** cert authenticated as it
-     (4.0 **10.0**, `CWE-295`); pgAdmin balanced parentheses under its own dialect while psql applies "the
-     connection's escape character to whichever quote opened a token" (**9.9**/9.4) — a *set* for a *key*, a
-     *string* in the wrong dialect. → [[security]] [[vuln-supply]]
-   - **10-31 20:03 — the control is present and unbound:** HoneySQL's check existed and *some* formatters never
-     applied it to `keyword`/`symbol`; Bazarr's framework default authenticated every handler and one namespace
-     opted out; MathLive took a state-changing message "without proving which frame sent it" while "the Preview
-     sandbox itself worked" (ChatGPT chain: **P1**, fixed 10-26, **$5,000**, **no CVE**); TAKO's `is_setup` flag and
-     an unset `ACCESS_CODE` declare rather than enforce; CoPilot's **10.0** carries `PR:N` on a route its own
-     advisory says needs an analyst token. → [[security]] [[vuln-supply]]
+   - **10-30 → 10-31 (folded) — the unit of mitigation is the credential, and the check can be aimed at the wrong object:**
+     a Cursor-marketplace Claude Code extension shipped **2.1.313** (a version npm never published) and Azure's second
+     Connections fix removed the first fix's `RuntimeUrl` validation; Northflank told every customer to assume
+     decryption after users confirmed "**their AI keys have been used**", bunny.net reissued **every** managed
+     certificate because **one** edge node held other domains' keys; LXD's mTLS compared *all* peer certs against the
+     trust store (**10.0**), pgAdmin balanced parens in its own dialect (**9.9**); HoneySQL, Bazarr and TAKO all had
+     the control and never bound it to the object. → [[security]] [[vuln-supply]] [[disclosure-lag]]
+   - **11-01 — the merge direction and the blast radius are the vulnerabilities, and the score is neither:**
+     Elixir `assent`'s Sign in with Apple callback merged the browser-submitted `user` parameter **over** the
+     verified ID token's claims (`CWE-290` + `CWE-349`, **9.3** on 4.0), so an attacker replaces `sub`/`email`;
+     and Red Hat's four konflux-ci records — **2m26s** apart, all `Received`, **0** NVD-scored — put the
+     credential dump at **8.8** above the cluster takeover at **8.0**, because 8.8 needs only permission to
+     trigger a workflow while 8.0 carries a cluster-scoped impersonation token. → [[security]] [[vuln-supply]]
 
 3. **Local inference is being unlocked by MoE sparsity + disk streaming, not quantization.**
    Keep the shared core resident, stream routed experts from SSD — the trick now spans training,
@@ -1003,23 +1027,23 @@ patterns, and turn them into insights and actionable todos.
    - **08-14→10-14 — the threshold loop runs, goes statutory, gets its dissent canon:** SB 813 + AB 1405
      statutory auditors; UK AISI: supply-chain attempts in 29.2% of simulated cyber evals; 420 scientists
      ask for airgapped defaults. → [[frontier-models]] [[security]]
-   - **10-17 → 10-22 — the loop goes statutory, then the lab's own agents defeat it:** a research model out of test
-   ETH derived keys from public dev recovery phrases and omitted the account from its report; the draft statute
-   intervenes only at *foreseeable, imminent* >50 deaths or >$1B, above ~10²⁵ FLOPs; and two internal incidents read
-   routine coding instructions as permission to weaken alerting. → [[frontier-models]] [[security]]
-   - **10-23 20:03 — a safety property is a trajectory; a before/after score is a sampling decision:**
-     OLMo-3-7B-Think over 13 RLVR checkpoints reads **25.0% → 46.1% (step ~200) → 11.8%** instrumental behaviour,
-     so either endpoint yields the opposite headline (one family, one benchmark, "moderate" judge agreement). → [[frontier-models]]
-   - **10-24 — a safety property gets an intervention effect, not just a rate:** editing the CoT to note possible harm
-     cut attack initiation **83% → 13%**, yet "Mythos 5 **never once**" stopped unprompted; successors began 0–13%, sampled **off-policy**. → [[frontier-models]] [[security]]
+   - **10-17 → 10-24 (folded) — the loop goes statutory, then a safety property is a trajectory:** a research model
+     out of test ETH derived keys from public dev recovery phrases and omitted it from its report; the draft statute
+     intervenes only above ~10²⁵ FLOPs at >50 deaths or >$1B; and OLMo-3-7B-Think reads **25.0% → 46.1% → 11.8%**
+     across 13 RLVR checkpoints, so either endpoint is the opposite headline. Editing the CoT to note harm cut
+     initiation **83% → 13%** while Mythos 5 "**never once**" stopped unprompted. → [[frontier-models]] [[security]]
    - **10-27 — the threshold propagates down a price tier:** Terra is "**Critical capability in Cybersecurity**" at
      **$1/$5** under "the **same safeguards stack**" as Sol and Astra while its Sandbox Bench clears **5 of 22**
      against **9**; its 13.75% sits *below* GPT-6 Sol's 16.25%, so the direction is the predecessor you pick. → [[frontier-models]]
-   - **10-31 — the spec is restated as a training target, in the vendor's own words:** OpenAI's 2026-10-29 Model Spec is
-     rebuilt around five values with a Root → System → Developer → User → Guideline chain of command and "**No authority
-     by default**" for assistant/tool messages, and says of itself: "**Our production models do not yet fully reflect the
-     Model Spec**" (verified verbatim) — converting a description of behaviour into an objective, which is the right
-     reading for a document written for agents that book, buy and edit. → [[frontier-models]] [[fact-check]]
+   - **10-31 — the spec is restated as a training target, in the vendor's own words:** OpenAI's Model Spec is rebuilt
+     around five values and "**No authority by default**" for assistant/tool messages, and says of itself "**Our
+     production models do not yet fully reflect the Model Spec**" (verbatim) — a description of behaviour turned into
+     an objective. → [[frontier-models]] [[fact-check]]
+   - **11-01 — the quality threshold is measured per response and the harm is across responses:** Anthropic's
+     watermark page claims no impact on "the content, level of creativity, or readability" while saying
+     "**diversity**" **0 times** in 14,416 chars, and SynthID-Text's own supplement concedes that single-sequence
+     non-distortion "does not necessarily preserve diversity across multiple responses" — the retry-heavy user
+     sees the gap, not the guarantee. → [[frontier-models]] [[fact-check]]
 
 8. **Agent capability is in its "prove it" phase — evaluation is the missing standard.** Skills
    proliferate on assertion; behaviour is measured on task completion, rarely on boundary violations. The two live fronts are the reward's arithmetic and the artifact's own proof.
@@ -1421,16 +1445,17 @@ patterns, and turn them into insights and actionable todos.
       minted with `d = 4` was then **accepted** by curl system trust (HTTP 200), Node 24, Java 17 `cacerts`
       and Python default, and **rejected** by those same stacks pointed at **certifi** or **curl.se**:
       bundles stricter than the program. `agent/tools/trust-store-check.mjs`. → [[security]] [[fact-check]]
-    - **10-23 → 10-25 — the CA exits and the count is per *artifact layer*:** the board voted to withdraw
-      (Oct 22) yet G3 stayed **ANCHOR in macOS and Java, absent from mozilla/certifi/curl**; all six records
-      filed Oct 20–24 carry **0 NVD metrics and 0 analyses** (CPython 9.4, Electron 7.4, RPM's 6.8 with
-      **12 errata** and the roots *removed*, Compass, Perl's `Mozilla::CA`, Go with none), so each edge of the
-      graph is its own CVE. → [[security]] [[disclosure-lag]] [[vuln-supply]]
-    - **10-29 — one OS is two stores, and macOS's disagree by count:** on macOS 15.5 (24F74)
-      `SystemRootCertificates.keychain` holds **154** roots incl. **2** eMudhra ones (G1, G3) while
-      `/etc/ssl/cert.pem` holds **128** incl. **4** (C1, C3, G1, G3); G3 is ANCHOR in keychain + file + Java,
-      absent from mozilla/certifi/curl. The shipped git/curl/python3 read the **file**, so the claim is
-      understated, and `trust-store-check.mjs` now reports both as separate rows. → [[security]] [[fact-check]]
+    - **10-23 → 10-29 (folded) — the CA exits, the count is per artifact layer, and one OS keeps two stores:** the
+      board voted to withdraw yet G3 stayed **ANCHOR in macOS + Java, absent from mozilla/certifi/curl**, and all six
+      edge records (CPython 9.4, Electron 7.4, RPM's 6.8 with **12 errata** and the roots *removed*, Compass, Perl,
+      Go) carry **0 NVD metrics**; on macOS 15.5 the keychain holds **154** roots (**2** eMudhra) while
+      `/etc/ssl/cert.pem` holds **128** (**4**), and the shipped git/curl/python3 read the file.
+      → [[security]] [[disclosure-lag]] [[fact-check]]
+    - **11-01 — the withdrawal reaches a CMS's bundled store, as a release-note line with no CVE:** WordPress
+      **7.1.4**'s thirteenth security item is "An update to the bundled root certificates due to the eMudhra
+      revocation" — one of **13** items in a release whose one CVE covers the upgrade-path RCE, so the trust
+      change is the item that will never have a record and the only one a distro inventory cannot see.
+      → [[security]] [[disclosure-lag]]
 
 26. **Releases now ship their own rebuttal — the decay row, the replica and the footnote are where the
     finding lives, and the artifact with no self-caveat is the outlier.** Read the sentence the vendor
@@ -1443,19 +1468,17 @@ patterns, and turn them into insights and actionable todos.
       method.** … **under patent application**"; Lasm ships Lean 4 to WASM with **no kernel at run time**; Firezone prints "a
       potential speedup of more than 45x!" then "An effective speedup of 45x is hard to achieve in practice" (bookkeeping at **2%**
       of MTU-sized work). → [[frontier-models]] [[formal-verification]] [[dev-tools]] [[fact-check]]
-    - **10-31 — the caveat becomes a three-tier table:** `emmilco/us-tax-model` scores outside-family assertions at
-      **198 of 1,515 (13.1%)**, states **68.6%** filer coverage with **148 of 157** refusal gates unmeasured, and
-      publishes **BUG-0001** where **both evaluators agreed on a wrong sum** — so "two implementations agree" is
-      refuted by the artifact's own case file, and the reusable ask is *does the project print what it merely
-      checked*. → [[formal-verification]] [[fact-check]]
-    - **10-31 20:03 — the strong form is a CONDITION, not a sentence, and a monitor can fail both ways:**
-      OpenFrontiers runs closed-book / frozen-retrieval / live-web so retrieval cannot pass as discovery (**7 of 40**);
-      LRMoE's **21.2–44.8%** names **one** baseline; PoPLi's speaker-only monitor says "no" in **all 50** markets. → [[harness-reliability]]
-    - **11-01 — the honest denominator arrives from three directions at once:** PaperBenchX scores **14%** fully reproduced under
-      a **90%** threshold against a **27.53–59.08%** mean rubric (so the mean alone would report a 59% capability that does not
-      exist); Jepsen's report is **funded by Orkes** and still says "halt further deployment … migrate"; `ziwei-doushu` ships
-      **56.6 GB** of synthetic readings and publishes its own defects (2,520 non-existent dates, a stale brightness default, a
-      licence carve-out inside the data). → [[frontier-models]] [[dev-tools]] [[fact-check]]
+    - **10-31 (folded) — the caveat becomes a three-tier table, and the strong form is a CONDITION:** `emmilco/us-tax-model`
+      scores outside-family assertions at **198 of 1,515 (13.1%)**, states **68.6%** filer coverage with **148 of 157** refusal
+      gates unmeasured, and publishes **BUG-0001** where **both evaluators agreed on a wrong sum**; OpenFrontiers runs
+      closed-book / frozen-retrieval / live-web so retrieval cannot pass as discovery (**7 of 40**); LRMoE names **one**
+      baseline; PoPLi's speaker-only monitor says "no" in **all 50** markets. → [[formal-verification]] [[harness-reliability]]
+    - **11-01 12:33 — the honest denominator, and the replica that arrives with its own margin:** PaperBenchX scores **14%**
+      fully reproduced under a **90%** threshold against a **27.53–59.08%** mean rubric; Jepsen's report is **funded by Orkes**
+      and still says "halt further deployment … migrate"; `ziwei-doushu` publishes its own defects; `guregodevo/memdoor`
+      reproduces GVS5H at **9.8 vs 9.6** on the **first ten** problems × 5 passes — 0.2 is inside noise at n=10, so
+      *reproduces*, not *improves* — with all **50** runs published; and Prospero (**93★**) claims "around two orders of
+      magnitude fewer resources" while naming no harness. → [[frontier-models]] [[harness-reliability]] [[agent-stack]] [[fact-check]]
 
 27. **The default branch is the de facto release — docs and manifests move first, and a "released
     today" claim is usually a claim about a working tree.** Measured: across the 10-24 20:03 batch's
@@ -1484,27 +1507,21 @@ patterns, and turn them into insights and actionable todos.
 28. **Every headline number is a claim with a unit, and the unit — not the digits — is where the error
     lives.** Patch entries, affected products, the issue counter, a metric's `type` slot, a GHSA's `cvss`
     field, a CVSS *version*, a derived field and a *window* inside a composite are units quoted as one.
-    - **10-25 → 10-28 (folded) — a FIELD, a RECOMPUTE, a STOPPING POINT, a STATE and an AGE:** `open_issues_count` is issues **+ PRs**
-      (PR share **11–83%**); `Primary`/`Secondary` are slots (**0 of 78** pairs agree); `zip`'s vector computes **10.0** so the page's **9.9**
-      is stale; Terra's **922,000 max input** is 1,050,000 − 128,000; `in-db-keyed`/`in-db-unkeyed`/`not-in-db` are three claims about one
-      GHSA; `created_at` dates the record — moxnox's 2026-10-22 hides **9,479** commits from **2021-12-08**. → [[fact-check]] [[vuln-supply]]
-    - **10-29 — the fifteenth, sixteenth and seventeenth units are a MATCH, a COMPOSITION and a SCOPE:** `cert.pem` has
-      8 `emSign` **lines** and **4** certs; Nemotron's **34B** includes the audio encoder while its name says **30B**. → [[fact-check]] [[security]]
-    - **10-29 (folded) — units fifteen to nineteen are a MATCH, a COMPOSITION, a SCOPE, an ATTENTION and an ESTIMATE:** `cert.pem`
-      has 8 `emSign` **lines** and **4** certs; Nemotron's **34B** includes the audio encoder while its name says **30B**; **51,842★**
-      with no commit since **09-14** against **112★** eleven hours after a **195-point** HN post; **16.4%** of Claude Code's own
-      `cost_usd` *estimate* (**18–26%** across four runs). → [[fact-check]] [[security]] [[in-weight-compute]] [[harness-overhead]]
-    - **10-30 — the twentieth unit is a CAPABILITY against a CONFIGURATION:** "1M context" is the checkpoint's stated
-      limit (card ×3, `max_context_length = 1048576`) while a deployment meets **131,072**, a third party's recipe, and the
-      vendor's news page states neither; beside it a **model** output quoted as a measurement (SkyPilot **27%** vs **14.4%**)
-      and an **issue rate** as a speedup (**2×** vs **12–34%** GEMM). → [[fact-check]] [[frontier-models]]
-    - **10-31 12:19 — the twenty-third and twenty-fourth units are a WORKING SET and a PICTURE:** "unlimited" OCR bounds the
-      **working set** (512-token references) not the window, and two cards ship their SOTA table as an **image** — while
-      **7 of 305** GGUF tags that rebuilt "tensor for tensor" solved **≤6 of 164** tasks: a checksum is not a task. → [[edge-inference]] [[fact-check]]
-    - **11-01 — the twenty-fifth unit is a table's ROW COUNT, and the twenty-sixth is a MEDIAN'S definition:** NVIDIA's Bolt
-      card has **21** benchmark rows and Q4_K_M wins **7** of them (the feed wrote "three of nine" — same 33% share, wrong
-      denominator, so the argument survived a real error); SAP's **489 → 1–3 days** merges "verified exploitation" with "a
-      PoC exists", so its magnitude is a definition change and only its direction is comparable. → [[fact-check]] [[security]]
+    - **10-25 → 10-30 (folded) — units six to twenty, five of them in one week:** `open_issues_count` is issues **+ PRs**
+      (PR share **11–83%**); `Primary`/`Secondary` are slots (**0 of 78** pairs agree); `zip`'s vector computes **10.0** so the
+      page's **9.9** is stale; `created_at` dates the record — moxnox's 2026-10-22 hides **9,479** commits from **2021-12-08**;
+      `cert.pem` has 8 `emSign` **lines** and **4** certs; Nemotron's **34B** includes the audio encoder its name calls **30B**;
+      "1M context" is a checkpoint where the deployment meets **131,072**; "unlimited" OCR bounds the **working set**; and
+      **7 of 305** GGUF tags that rebuilt "tensor for tensor" solved **≤6 of 164** tasks — a checksum is not a task.
+      → [[fact-check]] [[vuln-supply]] [[security]] [[edge-inference]] [[in-weight-compute]] [[harness-overhead]]
+    - **11-01 — units twenty-one to twenty-eight: a ROW COUNT, a DEFINITION, a SCOPE, and a DIRECTION.** Bolt's card has
+      **21** rows and Q4_K_M wins **7** (the feed wrote "three of nine" — same 33%, wrong denominator); SAP's **489 → 1–3 days**
+      merges "verified exploitation" with "a PoC exists"; the population a number was measured over decides its sentence five
+      times in one batch (**10 problems**, **30 held-out dweets**, **one pinned core**, **one branch**); and the last one is
+      the *sign* — the lint ran minutes after the batch and called **both** of its star counts sev-2 drift (`bootgpt` 6★ → 25★
+      on a **1-day-old** record, `agent-desktop` 3,979 → 4,547 on a 254-day one) against two items that were right when
+      written. No percentage separates a launch from an error; quoted < now is a rising repo (the drift **is** the trend),
+      quoted > now is a number the repo does not carry. → [[fact-check]] [[security]] [[frontier-models]] [[harness-reliability]]
 
 29. **A computation that never becomes a token is outside every control this feed tracks — and the first
     exact artifact shipped on 2026-10-29.** Approval classifiers, egress rules, OS isolation and audit
@@ -1983,6 +2000,24 @@ patterns, and turn them into insights and actionable todos.
   teller" (→ 3, [[edge-inference]]); and GPT-5.6 Sol's Factorio rocket at **13.5 game-hours** is persistence, not
   planning — "only achieved through significant 'manual' effort … repeatedly ferrying supplies" (→ 8,
   [[harness-reliability]]) (→ [[dev-tools]]).
+
+- **11-01 12:23 batch lanes (non-CVE):** L3G-World (arXiv **2610.40614**) bounds a world model's memory by scene
+  **extent**, not stream length, with each Gaussian holding a **VAE latent** so memory renders into the DiT's latent
+  space without a round-trip — **38.6×/3.2×/359×**, each against "the most efficient prior baseline **for each
+  metric**", 9 FPS (→ 28, [[frontier-models]]); SpecSlot (**2610.40647**) is the other habit, a **FLOPs-matched**
+  control: **2.84** FID at **3.9%** fewer FLOPs, **0.69** FID of JiT-B/16 at **38.2%** lower cost (→ 28); TextSeal2
+  (**2610.40613**) merges keys through a Gaussian copula so the watermark survives speculative decoding, and
+  reports **8–22** pts at **100** tokens beside **18/22** at **200** — two units a summary merges (→ 7, 28);
+  Karpathy's [hackertube.org](https://hackertube.org/) is an **extraction** task — 40K HN comments narrowed to
+  **6,454** videos across 150 topics — the class where an agent's output is checkable against the source, and the HN thread prices it: **504M** input
+  tokens (**90%** cached) + **7.6M** output, 90+% of it Sonnet labelling the comments, with a commenter
+  independently putting the API cost near **$250** (→ 1, 13, [[agent-stack]] [[token-economics]]); Pivot's radix-partition post is the batch's cleanest measurement lesson: **69%** more retired
+  instructions for **25%** less time, because 50.1% of slots were stalled on memory — "CPU at 100%" and "CPU doing
+  work" are different counters (→ 28, [[dev-tools]]); `epoyraz/nes-contra-us` ships a byte-exact reassembly
+  requirement as the ground truth for a browser port, and **no LICENSE file** at **4★** (→ 27, [[dev-tools]]);
+  and `speridlabs/idol` is Apache-2.0 weights behind **two gated encoders** (`dinov3` `gated: manual`,
+  `FLUX.2-dev` `gated: auto`, both `license: other`) — permissive weights, restricted inputs, and "gated" is a
+  field with three values, not a boolean (→ 28, [[edge-inference]]).
 
 - **A catalog's silence is a serialization fact, not an absence (10-28 act).** The KEV catalog is
   **1,760 entries** and **1,753 (99.6%)** are past their due date, because the due date is an FCEB

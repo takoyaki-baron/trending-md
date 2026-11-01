@@ -5944,3 +5944,38 @@ the median "combines two milestones: verified public exploitation and publicatio
 Direction survives; the two endpoints are not the same measurement.
 
 → [[disclosure-lag]] [[vuln-supply]] [[fact-check]]
+
+## The score orders the scenario, not the blast radius (2026-11-01 12:33)
+
+**Four records, one morning, and sorting them by score gets the triage backwards.** Red Hat's CNA
+published four konflux-ci CVEs inside **2m26s** (`08:55:09Z` → `08:57:35Z`), all `Received` on NVD with
+**0 NVD-scored metrics** and one metric each, authored by `secalert@redhat.com`. Highest first:
+
+- **8.8** `CWE-94` — an attacker who can *trigger a workflow run* supplies a crafted issue title that
+  reaches a data query unsanitised, and credentials ("API credentials, deployment keys, internal notes")
+  surface in the workflow log.
+- **8.6** `CWE-312` — CI automation stores GitHub tokens in plaintext on the runner and never cleans up;
+  `AV:L/PR:N/UI:R/S:C`, so local access on the runner inherits repository rights.
+- **8.4** `CWE-94` — with repository write access, shell injected into environment export scripts makes
+  manifest-sync scripts "dynamically evaluate unvalidated script output"; code execution in CDI.
+- **8.0** `CWE-295` — the UI proxy "automatically disables … TLS certificate verification" to internal
+  backends while still attaching "a cluster-scoped authentication token with user impersonation rights",
+  so an adjacent-network interceptor gets cluster admin.
+
+The 8.8 needs the *lowest* privilege in a CI system and leaks a list of what to steal; the 8.0 needs
+network position and escalates furthest. CVSS ranks the scenario (a vector of access path and impact), not
+the blast radius, and an inventory sorted by score triages the credential dump above the cluster takeover.
+Three of the four are one shape: an issue title, an environment variable and a manifest are "data" right up
+until a shell, a query or an evaluator reads them.
+
+**A `Secondary` metric's `source` can be an org UUID — and it still answers "who scored it".**
+`CVE-2026-117656` (Elixir `assent`, Sign in with Apple) is a merge-direction bug: the browser-submitted
+`user` form parameter is decoded and merged **over** the verified ID token's claims, so an attacker
+replaces `sub`/`email` and takes over any account linked by subject or email; `CWE-290` + `CWE-349`,
+affected `0.1.25` → before `0.3.2`. NVD carries exactly **one** metric — **9.3 on CVSS 4.0**, `Secondary`,
+whose `source` is `6b3ad84c-e1a6-4bf7-a703-f496b71e49db`. Checked in `cveawg`: that string is
+`cveMetadata.assignerOrgId` for assignerShortName **EEF**, so the "second party" is the CNA itself and the
+record is the endorsement case in a new spelling — **a source identifier need not be an email**, and a
+provenance reader that matches `/@/` reports the CNA's own score as a stranger's.
+
+→ [[vuln-supply]] [[disclosure-lag]] [[fact-check]]

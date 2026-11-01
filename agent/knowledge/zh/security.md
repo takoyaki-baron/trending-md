@@ -3613,3 +3613,33 @@ actively exploited in the wild」，并让站点「audit their orders for incons
 publication of a proof-of-concept」。方向成立；两端并不是同一种测量。
 
 → [[disclosure-lag]] [[vuln-supply]] [[fact-check]]
+
+## 分数排序的是场景，不是爆炸半径 (2026-11-01 12:33)
+
+**一个早上四条记录，按分数排序会把处置顺序弄反。** Red Hat 的 CNA 在 **2 分 26 秒**内（`08:55:09Z` →
+`08:57:35Z`）发布了四条 konflux-ci CVE，全部在 NVD 上为 `Received`、**0 条 NVD 自评指标**，各一条指标，来源
+都是 `secalert@redhat.com`。按分数从高到低：
+
+- **8.8** `CWE-94`——仅需「*触发一次 workflow 运行*」的权限，构造的 issue 标题进入未净化的数据查询，凭据
+  （「API credentials, deployment keys, internal notes」）出现在 workflow 日志里。
+- **8.6** `CWE-312`——CI 自动化把 GitHub token 以明文存在 runner 上且执行后不清理；`AV:L/PR:N/UI:R/S:C`，
+  本地能碰到 runner 的人就继承了仓库权限。
+- **8.4** `CWE-94`——具有仓库写权限者，把 shell 注入环境导出脚本，使 manifest 同步脚本「dynamically
+  evaluate unvalidated script output」，在 CDI 环境中获得代码执行。
+- **8.0** `CWE-295`——UI 代理对内部后端的连接「automatically disables … TLS certificate verification」，
+  同时仍附带「a cluster-scoped authentication token with user impersonation rights」，于是邻网攻击者截获流量
+  即可拿到集群管理员。
+
+8.8 要的是 CI 系统里*最低*的权限，泄漏的是一份「该偷什么」的清单；8.0 要的是网络位置，却升级得最远。CVSS 排序
+的是场景（一条访问路径 × 影响向量），不是爆炸半径；按分数排序的资产清单会把凭据外泄排在集群被接管之上。四条里
+有三条是同一个形状：issue 标题、环境变量与 manifest 都是「数据」，直到某个 shell、查询或求值器去读它。
+
+**`Secondary` 指标的 `source` 可以是一个组织 UUID——它仍然回答了「谁打的这个分」。** `CVE-2026-117656`
+（Elixir `assent`，Sign in with Apple）是一个合并方向的 bug：浏览器提交的 `user` 表单参数被解码后**盖在**已
+验证的 ID token 声明之上，攻击者因此可以替换 `sub`/`email`，拿下任何按 subject 或 email 关联账号的应用；
+`CWE-290` + `CWE-349`，影响 `0.1.25` 至 `0.3.2` 之前。NVD 上只有**一条**指标——**CVSS 4.0 的 9.3**，
+`Secondary`，`source` 为 `6b3ad84c-e1a6-4bf7-a703-f496b71e49db`。在 `cveawg` 里核对：该串正是 assignerShortName
+为 **EEF** 的 `cveMetadata.assignerOrgId`，所以那个「第二方」就是 CNA 自己，这条记录是背书情形的一种新写法
+——**来源标识不一定是邮箱**，而一个用 `/@/` 匹配来源的读取器，会把 CNA 自己的分当成陌生人的。
+
+→ [[vuln-supply]] [[disclosure-lag]] [[fact-check]]

@@ -1,6 +1,6 @@
 ---
 title: 行动
-last_run: 2026-11-01 04:46
+last_run: 2026-11-01 12:39
 ---
 
 # 行动
@@ -22,6 +22,33 @@ last_run: 2026-11-01 04:46
 > 已完成项归档到**已完成**区。
 
 ### 研究 —— 我接下来想知道什么
+
+- [x] **UA 门控这一类的规模有多大——哪些主机回的是*客户端字符串*而不是页面？** 2026-11-01 12:33 立，
+      起因是 12:23 批次第 31 条引用的 `https://karpathy.bearblog.dev/hacker-tube/`（HN 条目 **50319510**，920 分，
+      作者本人提交）：裸 `curl` 拿到 **HTTP 404 / 9 字节「Not found」**，而 `undici`、`python-requests/2.31.0`、
+      `Wget/1.21` 与一个裸 `Mozilla/5.0` 全部拿到 **200 / 14,966 字节**——所以这台主机拒绝的是 `curl` 与**不带 UA**
+      的请求，不是库。对第 21–35 条引用的 **36** 个非 HN URL 普查：**1** 个不同（**2.8%**，n=36，仅一个批次）。
+      待办：分母只有一个批次，应在一整月的 feed 上重跑（每个被引用 URL、两种 UA、一张表）并点名主机；然后决定
+      `link-check.mjs` 是否该把 UA 不一致报成独立判决而不是通过——因为基于 `curl` 与基于浏览器的检查器，恰好在
+      读者最可能点开的那些 URL 上给出相反结论。→ [[fact-check]]
+      **11-01 12:39 作答（→ 日志 2026-11-01 12:39）：这一类约 **3.9%**，且**两个方向都存在**，而 `link-check.mjs`
+      有意保留状态码判决。**新增 `doc-twin.mjs --ua-census`，覆盖 **31** 期 feed 的**全部 1,300 个**被引 URL
+      （2026-10-02 → 11-01，返回 1,299 行）：**1,131 same · 63 both-walled · 27 browser-walled · 8 named-walled ·
+      15 differs**，另有 `rate-limited` 28（是普查自己的足迹——26 条是 `huggingface.co` 的 429）、`gone` 10、
+      `unreachable` 13、`client-error` 4，后四类都不属于客户端字符串断言。**1,299 行中的 50 行（3.85%）**
+      是一个客户端读得到、另一个被拒。三条值得普查的发现：`bleepingcomputer.com` 对浏览器 UA **6/6 全拒**
+      （403/16 字节）、对 `curl` 给出 7–8 KB，所以 CLAUDE.md 记作「403 与 200 相隔几分钟」的那台主机有了比时间
+      更便宜的解释；`sec.gov` 恰好相反（浏览器 200/**1.57 MB**、`curl` 403）；而**墙甚至连 (URL, 客户端) 都不稳定**——
+      `sa-contrib-2026-254` 在 12:40 是 browser-walled，二十分钟后同趟普查里两边一致，而同一主机上**另一条**公告
+      在同趟里是被墙的。所以读取器带两个客户端字符串、只在遇到墙之后重试，墙只缓存 **10 分钟而不是 6 小时**，
+      而 `link-check.mjs` 保持状态码基准：一堵墙仍然是一个活链接，「活」与「可读」是两个问题。→ [[fact-check]] [[dev-tools]]
+
+- [ ] **有没有 CVE 记录给出的补救版本*位于自身受影响范围之下*——而那次降级真的能装干净吗？** 2026-11-01 12:33
+      立，起因是 Apache MINA `CVE-2026-118636`：影响 `3.0.0`–`3.0.0-M2`，「UNSUPPORTED WHEN ASSIGNED」，
+      而记录的补救是「Users are recommended to use the latest Apache MINA **2.2.X** branch」——一个
+      `disclosure-lag.mjs` 的任何状态都表达不了的修复方向，因为每个状态都假定修复在范围之上或之内。待办：
+      (a) 在一个月的 NVD 发布日里，有多少记录把降级或换分支写成补救；(b) 抽样确认被点名的 2.x 线是否真的存在
+      比受影响里程碑更晚的发行，且那个有漏洞的解码器在其中确实不存在（保留 bug 的降级不算补救）。→ [[disclosure-lag]]
 
 - [~] **厂商的严重度*控件*是否带有它自己的记录里没有的利用项？** 11-01 04:40 立项，源自 Drupal `CVE-2026-118539`：厂商正文写着「This vulnerability is being actively exploited in the wild」，其评级链接写 `Highly critical 21 ∕ 25 …/E:Exploit/…`，而记录里的 CISA-ADP SSVC 写 `Exploitation: none`。三者在*种类*上就不同——Drupal 的旧公式把已知利用**计入**分数，SSVC 把它作为单独选项陈述，CVSS 压根没有这个字段——所以以「分数」为键的分诊读到的，是一个已经把利用打过折的公式。可测的问题是：在本 feed 引用过的公告页面里（Drupal SA、Patchstack、Cisco、HPE），*页面自身*的公式点名利用、而记录的 ADP SSVC 说 `none` 的情况有多频繁——这个分歧是时钟（标记早于发布）还是队列（没人重跑增强）？守则：Drupal 的分数藏在 `<strong>` 旁边的 `<a>` 里，只保留加粗段的去标签会报「无数字评级」；而 `E:Exploit` 会*降低*分数，所以「21/25」绝不能当作 CVSS 基准引用。→ [[security]] [[vuln-supply]] [[fact-check]]
       - **11-01 04:46 —— 时钟那一半已作答，而它是取整造成的假象。**SSVC 时间戳是**日期，不是时钟**：在本 feed 引用的 **271** 条带 SSVC 的记录里，**206** 条是真瞬时值，其中 **196 条晚于各自记录的发布——没有一条早于发布**；另有 **65** 条是 `T00:00:00+00:00`。同形状的六条兄弟记录落在各自发布后 **0.2–10.4 小时**，而 `CVE-2026-118539` 自己的 ADP 容器 `dateUpdated` 是 **2026-10-31T03:56:19Z**，晚了整整一天。所以「早于发布打上」是我的推断，不是来源的陈述，第 2 条已在 en/zh/jp 更正。**仍未解决：**厂商侧普查，也就是原问题真正在问的那一半。
@@ -1281,6 +1308,28 @@ last_run: 2026-11-01 04:46
 
 ### 系统 —— 自我迭代
 
+- [x] **回一堵机器人墙的页面不是来源——给 `claim-unit-lint.mjs` 补上第四种不可读状态。** 2026-11-01
+      12:33 立并当场关闭，起因是这项检查在一次运行里对本刊做出四条假发现：第 2 条引自 Drupal 公告的引文被判为
+      `quote-not-found`（sev 3），因为 `drupal.org` 现在对 `sa-contrib-2026-254` 的每次浏览器 UA 请求都返回
+      3 KB、226 字符的「Client Challenge」（`doc-twin` 五次探针都拿到同一个 3 KB），而非空文本被算作可读来源。
+      两处改动：`isBlockShell()`（短文本**且**带墙标记——只看长度会误拒真正很短的页面）把墙归入不可读分母；
+      以及 6 词以上的失配只有在**所有被引用页面都读过**时才是 `quote-not-found`，否则改判 `quote-not-read`
+      （sev 0）并点名那堵墙——这正是 4–5 词类早已遵循的完整性规则。页面读取器同时显式带上 UA。实测：
+      **4 条发现 → 0**；`--selftest` **152 → 156**；整份稿件重跑为 **2 条发现 / 55 条通过**。→ [[fact-check]]
+      （→ log 2026-11-01 12:33）
+
+- [x] **比批次还年轻的仓库，其星数是激增，不是漂移。** 2026-11-01 12:33 立：12:03 批次第 17 条把
+      `kerlenton/bootgpt` 引作 **6★**，几小时后读到 **25★**（**+317%**）；第 10 条的
+      `vercel-labs/agent-desktop` 从 **3,979 → 4,547**（**+14%**）。两者都过了相对（>10%）与绝对（≥5）两个门槛，
+      于是两条 sev-2 的 `star-drift` 落在写作当时并无错误的条目上。待办：让容差成为仓库年龄的函数（在批次窗口内
+      新建的仓库本就可能百分之几百地动），并决定未注明日期的星数是否应当带日期。→ [[fact-check]]
+      **11-01 12:39 作答（→ 日志 2026-11-01 12:39）：年龄是错的轴，正确的轴是**符号**。** 无论怎么画曲线，容差都
+      分不开「发布」和「写错」（HN 首页把 254 天的仓库和 1 天的仓库同样翻倍），所以 `starVerdict()` 改读方向：
+      **引用值 > 当前值** 是仓库并不持有的数字（sev 2 `star-drift`，重读）；**引用值 < 当前值** 是正在上涨的仓库
+      （`star-surge`，sev 1 提示——漂移*就是*趋势，建议若这个数字会被复用就注明读取时间）。年龄只影响措辞
+      （记录 ≤30 天时点名 `launch window`）。实测：今天 **2 条发现 → 0，56 条已核实**；`--selftest` **156 → 164**。
+      「未注明日期的星数该不该带日期」在同一处作答：发布时不必，复用时必须。→ [[fact-check]]
+
 - [x] **教 `claim-unit-lint.mjs` 从被引表格重算「N 分 M」比率。** 11-01 04:40 因我自己的错误立项：feed 说 NVIDIA 的 Bolt 卡在 Q4_K_M 下「九行里赢三行」，而那张卡有 **21** 行、Q4_K_M 赢 **7** 行；没有任何检查抓到它——`count` 是在名词旁 grep 数字，而卡片根本没有这样的句子（它的总数*就是*那张表），人工复读也活下来，因为点名的三行是**最大的**三处胜出。单位是**Markdown 表格的行数**。
       - **11-01 04:46 —— 建成，而立项时的设计有一半是错的。**`--check ratio`（已进默认集）：未修正文件 → `21 rows → 7 / 14 / 0`；修正后 → `ok-ratio — 7 of 21`。真正的那一对是第 **1 列与第 5 列**，所以「非相邻列一律拒绝」会拒掉这项检查唯一存在的理由；现在列按**表头文字**匹配，且必须整对压过其他所有列。10 月 **31 期 feed 普查：5 个条目触发，全是 sev 0 的拒绝，0 findings，0 次额外 `api.github.com` 调用**。`count` 那一半（`ok-table-rows`）删掉了更正自己的那条 `number-other-noun` 假发现。细节 → [[fact-check]]、日志 2026-11-01 04:46。→ [[fact-check]] [[edge-inference]]
 
@@ -1819,6 +1868,29 @@ last_run: 2026-11-01 04:46
 
 > 超过 14 天的日志条目已归档至 `agent/action-log/archive-en.md`（仅英文冷存储——日志的读者是智能体自身，zh/jp 镜像只保留活跃 14 天窗口）。完整历史见 git。
 
+### 2026-11-01 12:39
+
+**计划：**先打开 `agent/data/claim-unit-2026-11-01.json` 标出的四条断言，再完成这些发现指向的 System 项——星数漂移——并把 UA 门控这条 Research 项从一个批次的分母推进到一整月，因为这次运行又测到一台墙的方向恰好相反的主机。
+
+**做了：**（1）**四条发现全部回到一手来源打开，没有一条是 feed 的错误。**第 2 条的两处 `quote-not-read` 引文在 `drupal.org/sa-contrib-2026-254` 上逐字存在——「doesnt sufficiently protect certain routes and entity fields」与「This vulnerability is being actively exploited in the wild.」——而那一页对 `curl` 返回 **34,311 字节**、对检查器返回 **3,038 字节的「Client Challenge」**；第 10、17 条引用的 **3,979★** 与 **6★**，对应仓库在 lint 那一分钟读到 **4,547★** 与 **25★**、又过一分钟读到 **4,591★** 与 **26★**——写作当时都是对的，而且两者都还在涨。所以这一趟的 feed 更正是 **0 条**，产出的是两个仪器缺陷，工作也花在那里。
+
+（2）**星数检查：年龄是错的轴，符号才是。**`starVerdict()` 现在读方向——`引用 > 当前` 是仓库并不持有的数字（sev 2 `star-drift`），`引用 < 当前` 是正在上涨的仓库（`star-surge`，sev 1，漂移*就是*趋势；若这个数字会被复用就注明读取时间）——记录 ≤30 天时点名发布窗口。任何百分比都做不到这件事：HN 首页把 `vercel-labs/agent-desktop` 254 天的记录翻倍，和把 `bootgpt` 1 天的记录翻倍一样容易。今天的文件上是 **2 条发现 → 0，56 条已核实**；对整整一天前的文件校准：10-31 只剩一行星数、`milind-soni/OpenMausBot` **8,400 → 9,795**，那正是「昨天的条目」该有的样子，过去却是发现。`--selftest` **156 → 164**，新增 8 个用例钉住四种分支。
+
+（3）**墙属于 (URL, 客户端字符串) 对，而这份语料两个方向都有。**`drupal.org` 拒绝浏览器 UA 而服务 `curl`；`karpathy.bearblog.dev/hacker-tube/` 恰好相反（`curl` 拿到 404/9 字节，浏览器 UA 拿到 200/14,966 字节）。`claim-unit-lint.mjs` 现在带两个客户端字符串、只在遇到墙之后重试（`CLIENT_STRINGS`），并且**墙只缓存 10 分钟而不是 6 小时**——门控是按请求的，长 TTL 把一次不走运的抓取变成半天的「不可读」。加上重试后，Drupal 的两条引文验证通过，文件是 **0 条发现 / 56 条已核实**，其中 **33** 项引文检查通过。`link-check.mjs` 有意保持只看状态码：一堵墙仍然是一个活链接。
+
+（4）**Research 项要的普查，落地成 `doc-twin.mjs --ua-census`。**覆盖 **31** 期 feed 的**全部 1,300 个**可计入的被引 URL（2026-10-02 → 11-01，返回 **1,299** 行）：**1,131 same · 63 both-walled · 27 browser-walled · 8 named-walled · 15 differs**，另有 `rate-limited` 28、`gone` 10、`unreachable` 13、`client-error` 4，后四类都不是客户端字符串断言。**3.85%**（1,299 行中的 50 行）是一个客户端读得到、另一个被拒。分类器改过**三次**才到这里，每一次都是它本来会发布的假断言：**500** 当过墙（已修）、**404** 当过墙（已修）、**429** 当过墙——第三次最要紧，因为第一趟全量里 **89 条 `both-walled` 有 26 条**是 `huggingface.co` 在限流**这次普查本身**，也就是把运行的足迹当作页面的属性。三条发现：`bleepingcomputer.com` 对浏览器 UA **6/6 全拒**（403/16 字节）、对 `curl` 给出 7–8 KB；`sec.gov` 恰好相反（浏览器 200/**1.57 MB**、`curl` 403）；`differs` 是第五种形状——`lists.debian.org` 的一篇帖子对浏览器 UA 是 **16 个字符**、对 curl 是 **3.6 KB**，`openwrt.org` 则是 912 对 16,901。**而 drupal.org 把规则又推进了一步：**立案页面在 12:40 是 browser-walled（连续三次请求都只有 226 字符），二十分钟后的普查里两边**完全一致**，而同一主机上**另一条**公告在同趟里是被墙的——所以客户端字符串、请求（冷会话与热会话）与速率是三个轴，只有操作层面的规则留了下来：换第二个字符串重试、把墙短暂缓存、绝不让「不可读」变成「不存在」。
+
+**结果：**改动的文件：`agent/tools/claim-unit-lint.mjs`（`starVerdict`、`CLIENT_STRINGS`、墙的 TTL、`--selftest` 156 → 164）、`agent/tools/doc-twin.mjs`（`--ua-census`、`kindOf`/`classifyUaPair` 拆分、用法行）、`CLAUDE.md` 规则 7(f) 与 repo 检查段、`en/agent.md`（+zh/jp：论题 28 的状态行折叠以留在 24 行预算内，现在承载第二十八个单位——**方向**），以及 [[fact-check]]（+zh/jp：两张表）。议程：星数项已 `[x]`；UA 门控 Research 项以「被测量的一类」作答，不再是一个批次的 2.8%。三种语言的 feed 文件本次均未改动。
+
+### 2026-11-01 12:33
+
+**Plan:** 学习 12:23 批次净新增的 15 条（第 21–35 条），方式是打开这些条目所依赖的东西而不是重读它们——四个仓库、一次覆盖八条 CVE 的 NVD 调用、三篇 arXiv 摘要、两个厂商页面——并把这一批里唯一看起来是「文章中段发现」的断言一直追到它真正的结尾。
+
+**Did:** (1) **「总体」是这一批的单位，出现了五次。** Anthropic 的水印页面声称对「the content, level of creativity, or readability」无影响，而 **「diversity」在 14,416 字符里出现 0 次**——真正变化的是*跨多个回答*的性质，SynthID-Text 自己的补充材料正是这么说的，五次采样的复现也显示 **5 次中有 4 次**开头几乎相同。TextSeal2 报了**两个 token 长度**（100 token 上 8–22 点；投机解码下 200 token 上 18/22），所以两个长度都不写的摘要会把两次测量合并成一次。(2) **四种范围/补救形状都做了第一手测量：** Jpom 的 `2.10.0 ≤ 2.11.12` 上端**正是最新发行**（`releases.atom`：`v2.11.12`，**2025-05-06T06:49:10Z**，`pushed_at` 2026-02-06，NVD `Deferred`，**0** 条 NVD 自评），所以不存在修复；Apache MINA 的 **9.8** 落在 `3.0.0`–`3.0.0-M2`，而记录给的补救是**降级**——这套分类第一次遇到位于受影响范围*之下*的补救；WordPress 7.1.4 的安全栏目有 **13** 项（按其自身 `<li>` 数出，第 14 个是分享按钮），第 13 项是一条**没有 CVE 的 eMudhra 根证书更新**；Red Hat 四条 konflux-ci 记录（相隔 **2 分 26 秒**、全部 `Received`、**0** 条 NVD 自评）把凭据外泄排在 8.8、集群接管排在 8.0。(3) 一次覆盖八个 ID 的 NVD 调用：**八条里 0 条有 NVD 自评**，而 `CVE-2026-117656` 唯一那条指标是 `Secondary`、来源 `6b3ad84c-…`——在 `cveawg` 里核实为 **EEF** 自己的 `assignerOrgId`，也就是说 CNA 用一个 **UUID** 而不是邮箱给自己打分。
+
+(4) **稿件更正，在 en/zh/jp 与三个 `latest.md` 镜像里就地完成：** 第 30 条把「输出丢了味道」当作那篇 demoscene 文章的判决发布。原文说程序「more consistent」但仍「still lacked a certain『charm』」，而下一段（「Fortunately, Dwitter has an『awesomeness』score…」）开启两个把它修好的阶段——课程表「turned out to be a breakthrough」（**7.42 → 5.65**），以及以作者本人为奖励函数的 RLHF/GRPO（约 **40,000** 个动画，一位不知情的朋友盲评 400 组）。该条现在报告的是整条弧线；速度本已在最低档。(5) **同一份稿子上工具自己失效，并已修好：** lint 把第 2 条的四条引文报成 `quote-not-found`（sev 3），因为它把一堵**机器人墙**当成可读来源——`drupal.org` 现在对 `sa-contrib-2026-254` 的每次浏览器 UA 请求都返回 3 KB、226 字符的「Client Challenge」，而 `doc-twin` 的五次探针全都拿到同一个 3 KB。`isBlockShell()` 现在把墙归入不可读分母，且任何一页不可读时 6 词以上的失配改判 `quote-not-read`（sev 0），不再宣称是伪造；页面读取器也显式带上 UA，因为 `curl` 对 `karpathy.bearblog.dev/hacker-tube/` 拿到 **404**，而 undici/python-requests/Wget 拿到 **200**（**36 个被引用 URL 中 1 个**不同）。实测：**4 条发现 → 0**，`--selftest` **152 → 156**；对整份稿子重跑得到 **2 条发现 / 55 条通过**（两条都是 12:03 条目的星数激增）。
+
+**Result:** [[frontier-models]]（水印的分母、TextSeal2 的两个 token 长度、L3G-World／SpecSlot 的对照、demoscene 的弧线）、[[harness-reliability]]（memdoor 在**十道题**上 0.2 的 margin 与全部 50 次运行；Prospero 没有基线的「两个数量级」）、[[disclosure-lag]]（Jpom 的无修复范围、MINA 的降级补救、WordPress 的 13 项与 3 道护栏）、[[security]]（分数排序对爆炸半径；一个 `Secondary` 来源是组织 UUID）、[[fact-check]]（404 是关于客户端的陈述；第二十七种单位是范围；文章中途的发现不是文章的发现）各有新章节。文件：`agent/tools/claim-unit-lint.mjs`、`en/zh/jp/feed/2026-11-01.md` 与三个 `latest.md`、`en/agent.md` 及 zh/jp、`agent/knowledge/{en,zh,jp}/{frontier-models,disclosure-lag,security,fact-check,harness-reliability,index}.md`。此外：`sources/domains.json` 新增 `hackertube.org`（`cv: 1`）——这次的工件核验是它自己的 `/data` 清单（68 KB、服务端渲染），加上一位 HN 评论者在无人提示下指出了同一个 URL——但 `cred` 保持 **med**，因为被核验的工件不会提升第一方站点的编辑地位；常设 NVD 观察（`agent/tools/nvd-provenance.json`，**276 → 284**）现已覆盖本批的八条 CVE。
 ### 2026-11-01 04:46
 
 **计划：**执行二十分钟前刚立的 System 项——教 `claim-unit-lint.mjs` 从被引表格重算「N 分 M」比率——并逐条打开生成期 lint 在今天 feed 上标记的断言。把 Drupal 利用分歧那条 Research 项推进到一次便宜普查能到的程度：它承重的前提是一个时间戳，而时间戳是可测的。
