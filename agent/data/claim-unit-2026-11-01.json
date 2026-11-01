@@ -1,9 +1,9 @@
 {
- "generated": "2026-11-01T04:31:42.624Z",
+ "generated": "2026-11-01T12:35:31.197Z",
  "files": [
   {
    "file": "2026-11-01.md",
-   "items": 35,
+   "items": 48,
    "findings": [
     {
      "check": "cwe",
@@ -132,6 +132,34 @@
      "detail": "stated in NVD weaknesses[] (6b3ad84c-e1a6-4bf7-a703-f496b71e49db)"
     },
     {
+     "check": "status",
+     "item": 36,
+     "verdict": "ok",
+     "claim": "CVE-2026-118598 `Received`",
+     "detail": "Received (lastModified 2026-10-31T10:16:37.923)"
+    },
+    {
+     "check": "issues",
+     "item": 37,
+     "verdict": "ok",
+     "claim": "469 issues+PRs combined",
+     "detail": "one number for both nouns — that is the composite the counter reports, so nothing is being presented as an issue-only count"
+    },
+    {
+     "check": "status",
+     "item": 39,
+     "verdict": "ok",
+     "claim": "CVE-2026-120194 `Awaiting Analysis`",
+     "detail": "Awaiting Analysis (lastModified 2026-10-31T10:16:38.440)"
+    },
+    {
+     "check": "cwe",
+     "item": 39,
+     "verdict": "ok",
+     "claim": "CVE-2026-120194 CWE-835",
+     "detail": "stated in NVD weaknesses[] (secalert@redhat.com)"
+    },
+    {
      "check": "repo",
      "item": 3,
      "verdict": "not-a-repo",
@@ -176,51 +204,58 @@
     {
      "check": "repo",
      "item": 10,
-     "verdict": "star-drift",
-     "claim": "3979 quoted vs 4547 now",
-     "detail": "vercel-labs/agent-desktop: -12% — reread the number or date the item"
+     "verdict": "star-surge",
+     "claim": "3979 quoted vs 5604 now",
+     "detail": "vercel-labs/agent-desktop: 3979 → 5604 (+29%, 1625 stars) since the batch was written — a rising count is not a wrong one; date the reading if the number will be re-used"
     },
     {
      "check": "repo",
      "item": 10,
      "verdict": "ok",
      "claim": "vercel-labs/agent-desktop",
-     "detail": "4547★, last push 2026-11-01"
+     "detail": "5604★, last push 2026-11-01"
+    },
+    {
+     "check": "repo",
+     "item": 12,
+     "verdict": "star-surge",
+     "claim": "6051 quoted vs 7069 now",
+     "detail": "Orkas-AI/Orkas: 6051 → 7069 (+14%, 1018 stars) since the batch was written — a rising count is not a wrong one; date the reading if the number will be re-used"
     },
     {
      "check": "repo",
      "item": 12,
      "verdict": "ok",
      "claim": "Orkas-AI/Orkas",
-     "detail": "6595★, last push 2026-11-01"
+     "detail": "7069★, last push 2026-11-01"
     },
     {
      "check": "repo",
      "item": 16,
      "verdict": "ok-history",
      "claim": "arterialist/kube32",
-     "detail": "record 6d, oldest commit 2026-10-26 (~187 commits)"
+     "detail": "record 6d, oldest commit 2026-10-26 (~190 commits)"
     },
     {
      "check": "repo",
      "item": 16,
      "verdict": "ok",
      "claim": "arterialist/kube32",
-     "detail": "27★, last push 2026-11-01"
+     "detail": "31★, last push 2026-11-01"
     },
     {
      "check": "repo",
      "item": 17,
-     "verdict": "star-drift",
-     "claim": "6 quoted vs 25 now",
-     "detail": "kerlenton/bootgpt: -76% — reread the number or date the item"
+     "verdict": "star-surge",
+     "claim": "6 quoted vs 40 now",
+     "detail": "kerlenton/bootgpt: 6 → 40 (+85%, 34 stars) since the batch was written on a 2-day-old record (launch window) — a rising count is not a wrong one; date the reading if the number will be re-used"
     },
     {
      "check": "repo",
      "item": 17,
      "verdict": "ok",
      "claim": "kerlenton/bootgpt",
-     "detail": "25★, last push 2026-10-31"
+     "detail": "40★, last push 2026-10-31"
     },
     {
      "check": "repo",
@@ -267,44 +302,23 @@
     {
      "check": "quotation",
      "item": 2,
-     "verdict": "quote-not-read",
-     "claim": "“doesnt sufficiently protect certain routes and entity fields”",
-     "detail": "8 words, 0 hits in 3 readable source(s), but 1 cited page(s) went unread (drupal.org/sa-contrib-2026-254 served a bot wall) — unread is not absent, so this is not called a fabrication; open those page(s) before publishing"
-    },
-    {
-     "check": "quotation",
-     "item": 2,
-     "verdict": "quote-short",
-     "claim": "“may financially impact the vendor”",
-     "detail": "5 words, 0 hits in 3 readable source(s), 1 cited page(s) unread; no source carries it (read cveawg.mitre.org/api/cve/CVE-2026-118539, CVE-2026-118539 NVD description, CVE-2026-118539 CNA description) — if this came from somewhere this item does not cite, cite it; otherwise it is the feed's own words and must not wear quotation marks"
-    },
-    {
-     "check": "quotation",
-     "item": 2,
-     "verdict": "quote-not-read",
-     "claim": "“this vulnerability is being actively exploited in the wild”",
-     "detail": "9 words, 0 hits in 3 readable source(s), but 1 cited page(s) went unread (drupal.org/sa-contrib-2026-254 served a bot wall) — unread is not absent, so this is not called a fabrication; open those page(s) before publishing"
-    },
-    {
-     "check": "quotation",
-     "item": 2,
-     "verdict": "quote-short",
-     "claim": "“audit their orders for inconsistencies”",
-     "detail": "5 words, 0 hits in 3 readable source(s), 1 cited page(s) unread; no source carries it (read cveawg.mitre.org/api/cve/CVE-2026-118539, CVE-2026-118539 NVD description, CVE-2026-118539 CNA description) — if this came from somewhere this item does not cite, cite it; otherwise it is the feed's own words and must not wear quotation marks"
+     "verdict": "ok",
+     "claim": "4 quotation(s)",
+     "detail": "verbatim in 4 readable source(s)"
     },
     {
      "check": "quotation",
      "item": 3,
      "verdict": "ok",
      "claim": "4 quotation(s)",
-     "detail": "verbatim in 3 readable source(s)"
+     "detail": "verbatim in 4 readable source(s)"
     },
     {
      "check": "quotation",
      "item": 4,
      "verdict": "ok",
      "claim": "8 quotation(s)",
-     "detail": "verbatim in 1 readable source(s)"
+     "detail": "verbatim in 2 readable source(s)"
     },
     {
      "check": "quotation",
@@ -381,7 +395,7 @@
      "item": 15,
      "verdict": "ok",
      "claim": "9 quotation(s)",
-     "detail": "verbatim in 1 readable source(s)"
+     "detail": "verbatim in 2 readable source(s)"
     },
     {
      "check": "quotation",
@@ -395,7 +409,7 @@
      "item": 17,
      "verdict": "ok",
      "claim": "7 quotation(s)",
-     "detail": "verbatim in 1 readable source(s)"
+     "detail": "verbatim in 2 readable source(s)"
     },
     {
      "check": "quotation",
@@ -505,9 +519,100 @@
     {
      "check": "quotation",
      "item": 35,
+     "verdict": "quote-not-found",
+     "claim": "“and the build script s to reassemble the assembly into a byte for byte match of the game”",
+     "detail": "16 words, 0 hits in 3 readable source(s); epoyraz/nes-contra-us README carries 3 of 18 words (“byte for byte”) and continues “with cc65 no rom data is included in this repository contra” — use the source's wording, or drop the quotation marks"
+    },
+    {
+     "check": "quotation",
+     "item": 36,
      "verdict": "ok",
-     "claim": "1 quotation(s)",
+     "claim": "3 quotation(s)",
+     "detail": "verbatim in 7 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 37,
+     "verdict": "ok",
+     "claim": "2 quotation(s)",
      "detail": "verbatim in 3 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 38,
+     "verdict": "ok",
+     "claim": "3 quotation(s)",
+     "detail": "verbatim in 4 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 39,
+     "verdict": "ok",
+     "claim": "3 quotation(s)",
+     "detail": "verbatim in 5 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 40,
+     "verdict": "ok",
+     "claim": "2 quotation(s)",
+     "detail": "verbatim in 8 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 41,
+     "verdict": "ok",
+     "claim": "5 quotation(s)",
+     "detail": "verbatim in 3 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 42,
+     "verdict": "ok",
+     "claim": "5 quotation(s)",
+     "detail": "verbatim in 3 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 43,
+     "verdict": "ok",
+     "claim": "7 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 44,
+     "verdict": "ok",
+     "claim": "5 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 45,
+     "verdict": "ok",
+     "claim": "4 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 46,
+     "verdict": "ok",
+     "claim": "5 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 47,
+     "verdict": "ok",
+     "claim": "5 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 48,
+     "verdict": "ok",
+     "claim": "3 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
     }
    ]
   }
