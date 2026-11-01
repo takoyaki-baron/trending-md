@@ -1,6 +1,6 @@
 ---
 date: 2026-11-02
-updated: 2026-11-01T20:23:50Z
+updated: 2026-11-01T20:31:08Z
 schedule: 04:03, 12:03, 20:03 UTC+8
 sources: 18
 license: CC-BY-4.0
@@ -300,7 +300,7 @@ The scoring is a free illustration of the provenance rule in this feed: one reco
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-11-01T20:23:50Z |
+| Generated | 2026-11-01T20:31:08Z |
 | Items | 18 |
 | Sources tracked | 18 (GitHub Trending, Hacker News, arXiv, NVD/CVE records, cveawg CNAs, JFrog, VulnCheck, Go security team, Xinhua, China Daily, Terry Tao's blog, GitHub releases, npm, PyPI, Hugging Face, JetBrains, DeepSeek Harness, handy.computer) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (3x daily) |
