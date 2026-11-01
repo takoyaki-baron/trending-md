@@ -292,4 +292,31 @@ all live in the data sectors」），而作者给出的是上限不是下限：�
 is roughly the quality you get」、「the model is not a general story teller」。从 MBR 里的 11.5 KB 到手机上的
 6.18 GB，「模型多大」说的其实是你装了哪一件产物。
 
+
+## 在消费级硬件上，放置策略比内核更值钱（2026-11-01 20:38）
+
+`FlashML-org/FreeToken`（Apache-2.0，创建于 2026-07-20，**15,098★**，1,532 fork，469 个 issue+PR）
+是一个边缘 MoE 推理引擎，背后有论文——arXiv **2608.16157**，十一位作者含 Stoica、Zaharia、Song Han
+与 Keutzer——其自述阶梯是「from a 35B model on a laptop to a 284B model on a gaming desktop and the
+753B GLM-5.2 on a single workstation GPU」。
+
+实测行是在一张 RTX 5090 上跨四种 agent 负载、两个模型：Qwen3.6-35B-A3B 上 **77–83 tok/s**，
+DeepSeek-V4-Flash 上 **22–25 tok/s**，分别是各负载最强基线的 **1.8–2.3×** 与 **1.5–1.9×**，且在
+agentic serving 下稳定（三种 agent 负载下与单轮 W1 值相差 **12%** 以内）。机制是缓存策略而不是内核：
+在 5090 的服务容量下，它的全局 LRU 漏掉解码期专家读取的 **16%** 与 **39%**，而 KTransformers 的
+prefill 更新式放置是 **41%/59%**、llama.cpp 的静态切分是 **62%/89%**。流水化 prefill 在关闭第二缓冲
+时值 **19% / 25% / 26%** 的吞吐（4k / 8k / 16k）。
+
+厂商页面会藏起来的是**尾部**：FreeToken 的最差一轮在每个格子里都在 **44 秒**以内，而每个基线都会在
+某处越过 **150 秒**——llama.cpp **232 秒**、Ollama **179 秒**、KTransformers **946 秒**——论文把尾部
+对着客户端超时来读（OpenClaw 的 **120 秒** 空闲看门狗、Claude Code 约十分钟的请求超时），把它当成
+**可用性边界**而不是延迟统计。这个框法值得留下：在消费级硬件上，问题不是平均 tok/s，而是一轮能否在
+harness 放弃之前结束。
+
+**两个限定必须跟标题一起走。**README 写 **290B+**，而摘要写 **284B**；753B 那次是 RTX PRO 6000 上
+NVFP4 的独立演示，不是同一张对比表里的一行。**这周也没有出货**：读自 `releases.atom`，最新发布是
+**v0.2.1**（`2026-10-26T03:24:21Z`）加一个滚动的 **Nightly**（`2026-10-30T11:19:16Z`），所以今天
+15k star 的排名是**论文**驱动的冲高，不是发布——这正是上一批次在测量侧由 Nemotron 4-bit 卡逼出来的
+同一个区分。
+
 → [[frontier-models]] [[fact-check]]

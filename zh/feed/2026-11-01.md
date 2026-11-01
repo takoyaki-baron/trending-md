@@ -559,11 +559,11 @@ Chris Wellons 的抱怨很具体：好的开放权重模型已经能在消费级
 - **Source:** Hacker News · 69+ 分 · 约 9 小时前（约 03:18 UTC+8）
 - **Tags:** `retro` `wasm` `reverse-engineering` `nes` `cc65`
 
-`epoyraz/nes-contra-us` 是 *Contra*（美版）与 *Probotector* 的带注释反汇编，「以及把汇编重新组装成与游戏逐字节一致产物的构建脚本」，用 **cc65** 对着合法提供的 `baserom.nes`（MD5 `7BDAD8B4A7A56A634C9649D20BD3011B`）编译——仓库既不含 ROM 也不含全部资源，`assets.txt` 记录了每份资源在基础镜像里的偏移与长度，供构建时抽取。新的是那个移植：仓库现在带着 `port/`（`contra_core`、`platform_sdl`、`platform_web`）与 `web/`，线上页面加载一个 Emscripten 模块工厂（`MODULARIZE`、`EXPORT_NAME=ContraModule`），于是游戏跑的是转写出来的 C，而不是在模拟器里跑 ROM。
+`epoyraz/nes-contra-us` 是 *Contra*（美版）与 *Probotector* 的**原生 C 移植**，按它自己的 README，建在「[vermiceli](https://github.com/vermiceli/nes-contra-us)'s annotated disassembly (itself started from Trax's work)」之上，「the original assembly and docs still liv[ing] in `src/` and `docs/`」。移植是逐帧对照原版校验的：「a Mesen 2 recording is replayed through the C core and every frame's RAM, nametables, palette, OAM, CHR, PPU registers, sound-engine state and final pixels are compared」（`port/tools/parity_telemetry.c`），而它的说法是「Stages 1–4 are identical over the whole 40k-frame recording, including sound」。`./build.sh` 仍会「reassembles the original ROM byte-for-byte with cc65」，对着合法提供的 `baserom.nes`（MD5 `7BDAD8B4A7A56A634C9649D20BD3011B`）；README 自己的浏览器一节写着「you supply your own `Contra (US)` ROM (it is never uploaded or shipped)」——线上页面加载一个 Emscripten 模块工厂（`MODULARIZE`、`EXPORT_NAME=ContraModule`），于是游戏跑的是转写出来的 C，而不是在模拟器里跑 ROM，另有一个走 WebRTC 锁步的在线双人模式。
 
-保留条件全是仓库形状的：**4 星**、**没有许可文件**，而 README 讲的是反汇编与重新组装，不是浏览器移植——也就是说 WebAssembly 构建是个你需要自己去读的目录，而不是一个有文档的发布物。
+保留条件全是仓库形状的：**4 星**、**没有许可文件**，以及一份仓库无法随附的基准——逐帧一致这个说法只能由手里有同一份 `Contra`（美版）镜像的人复核，所以 README 写出了 MD5，却从不给出 ROM 本身。
 
-**Why it matters:** 逐字节一致是其他一切的前提，也是最容易被跳过的一步——一份不能重新组装出同一 ROM 的反汇编，无法告诉你对游戏逻辑的转写是否忠实，因为你没有可比对的基准。许可缺口在这里值得同等重量：一份完整的、受版权保护游戏的反汇编且没有 LICENSE 文件，首先是一个再分发问题，其次才是代码质量问题，这也大概正是为什么 README 里写着 ROM 哈希要求，而构建产物不在仓库里。
+**Why it matters:** 逐帧对照的校验装置才是「反编译」这类说法诚实的样子——不是「玩起来一样」，而是把 **40,000 帧**逐通道比过，点名通过的关卡（1–4）、不替其余关卡作保，并且背后还有重新组装的校验兜底。许可缺口值得同等重量：一份完整的、受版权保护游戏的移植且没有 LICENSE 文件，首先是一个再分发问题，其次才是代码质量问题；而这里仓库的解法是把除 ROM 之外的一切源码都发出来。
 
 [`🔗 epoyraz/nes-contra-us`](https://github.com/epoyraz/nes-contra-us) · [`🔗 浏览器可玩版本`](https://epoyraz.github.io/nes-contra-us/) · [`🔗 讨论（Hacker News）`](https://news.ycombinator.com/item?id=50319169)
 
@@ -635,7 +635,7 @@ Chris Wellons 的抱怨很具体：好的开放权重模型已经能在消费级
 
 有意思的是 `affected[]` 字段。它列出 **RHEL 7、8、9、10** 加两个 OpenShift RHCOS 包，每一项都带 `packageName: json-glib` 和 `defaultStatus: affected`——**却没有任何版本号**。也就是说，这条记录告诉你哪些发行版带它，却不告诉你哪些版本受影响；任何直接用上游 json-glib 的人，都没有一个能和 `pkg-config --modversion` 对照的东西。它倒是带了一条异常具体的缓解建议：「在修复可用之前，不要用 `json_path_query()` 或 `json_path_compile()`／`json_path_match()` 去求值不可信的 JSONPath 表达式……尤其要拒绝或避免指定负步长的切片表达式。」
 
-时间线要当时间线来读。`datePublic` 是 **2026-10-29**，而 `timeline[]` 两条分别是 2026-10-29T00:00:00Z 的「Made public」和 **2026-10-30**T00:00:00Z 的「Reported to Red Hat」——厂商是在问题公开**之后**一天才被告知的，而且两个时间戳都被截断到零点，所以它们是按天粒度的说法，背后并没有时钟。
+时间线要当时间线来读——还要看它存在于哪个字段。这条记录**根本没有 `datePublic`** 字段；日期是 `timeline[]` 的两条：2026-10-29T00:00:00Z 的「Made public」和 **2026-10-30**T00:00:00Z 的「Reported to Red Hat」——所以厂商是在问题公开**之后**一天才被告知的，而且两个时间戳都被截断到零点，这使它们成为按天粒度的说法，背后并没有时钟。
 
 **Why it matters:** JSONPath 表达式在很多软件里就是用户输入——保存的过滤器、查询串、仪表盘参数——而死循环不是你让 supervisor 重启的那种崩溃。严重性标签不如形状重要：`Important` 旁边一个 NVD 尚未分析的 7.5，意味着你扫描器上打印的是红帽自己的数字；而修复是 `gitlab.gnome.org/GNOME/json-glib`（issue #96）里的一个补丁，不是一个你能查到的版本号。
 
@@ -651,7 +651,7 @@ Chris Wellons 的抱怨很具体：好的开放权重模型已经能在消费级
 
 VulnCheck 发布了一批上限都写成 `<= 9.0.2` 的记录。五条是「使用未初始化」的泄露，会把进程内存写进解码输出：`CVE-2026-120243`（Go2Meeting——「一个过短的 Kempf 调色板，使 `kempf_restore_buf()` 把未初始化的栈字节复制出去」）、`-120244`（PCX，被截断的 RLE 扫描行让 `pcx_decode_frame()` 把 `av_malloc()` 缓冲区内容复制进可见像素）、`-120245`（sunrast）、`-120246`（CDXL，未填充的 HAM 调色板条目）、以及 `-120247`（Huffyuv）。第六条第 `CVE-2026-120210` 是 IMF 解复用器的路径穿越：`ASSETMAP` 的 `Path` 元素未经校验，于是 `..` 或绝对路径可以「解复用本地 MXF 文件、探测文件是否存在与大小，或触发服务端请求」。
 
-六条都带 **5.5**——对于「通过像素缓冲区把未初始化内存读出去」这是对的数字，如果你的管线在替别人解码不可信媒体，它就偏低了。
+五条泄露记录各带**两栏**分数（`Primary` 里 CVSS 3.1 的 `5.5`，`Secondary` 里 4.0 的 **6.8**；这两个槽位不是来源，两栏都是同一个 CNA 对自己两个版本给出的 `disclosure@vulncheck.com` 分数）。5.5 对于「通过像素缓冲区把未初始化内存读出去」是对的，如果你的管线在替别人解码不可信媒体，它就偏低了。路径穿越那条分数反而更**低**：`CVE-2026-120210` 在 3.1 上是 **4.3**、在 4.0 上是 **5.3**。七条在 NVD 上都处于 `Received`，**0 条有 NVD 自评分数**。
 
 日期才是有操作价值的部分。**n9.0.2** 发布于 **2026-09-18**，**n8.1.3** 是 **2026-09-21**；修复是提交——`edad2d0d` 针对 Go2Meeting 的调色板索引，日期 **2026-10-02**；`ecd5dfc3` 针对截断 PCX 扫描行的清零，日期 **2026-10-03**——加上上游 PR 24858、24868 与 25341。每一个修复都晚于这两个 tag，所以记录自己的边界是准确的，而没有可升级的目标：没有任何一个 FFmpeg 发布版本带上它们。
 

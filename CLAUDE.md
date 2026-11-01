@@ -273,6 +273,54 @@ underlying pages — this produced a two-layer false signal in a single item.
    badge as a remediation. First measured sample: **40 pages of 1,126 candidates** over
    2026-10-28→29 — 0 `mitigation-inside-range`, 2 `product-ambiguous`, 6 unreadable — so read the
    prevalence as *unmeasured*, and the filing case as *reproduced*.
+   **A remedy can point BELOW the record's own range, and the record's own span can contain nothing
+   at all** (added 2026-11-01 20:49, filed from Apache MINA `CVE-2026-118636` and censused over NVD's
+   2026-10-25→31 publication window, **3,461** records). MINA's `affected[]` is
+   `{version: "3.0.0", lessThanOrEqual: "3.0.0-M2", versionType: "maven"}` — an **empty** span under
+   its own comparator (`3.0.0-M2` sorts before `3.0.0`) — beside "we do not plan to release a version
+   that fixes this issue" and "use the latest Apache MINA **2.2.X** branch". Every `disclosure-lag`
+   state assumes a fix at or above the range, so this class had no bucket.
+   `node agent/tools/disclosure-lag.mjs --remedy-census --from … --to … [--window-cache <path>]`
+   reads the record's own prose (branch lines first, then point fixes, then the record's
+   `versions[].status`) and splits: **761 above (22.0%) · 2 inside · 3 inside-other-line · 1 below
+   (0.03%) · 9 `eol-line-upgrade` · 4 `no-fix-no-remedy` · 2,681 no statement (77.5%)**. Read the no-statement
+   row as a property of the RECORD, not of the vendor: CNA descriptions are descriptions, and
+   Wordfence's 68 records carry no remediation sentence at all because theirs lives on the advisory
+   page (`--mitigation-census`'s question). Four guards, each bought by a wrong number first:
+   **(a) `noFix` and direction are ORTHOGONAL** — Apache Camel `CVE-2026-101259` says three release
+   lines "reached end of life … and will not receive a fix" **while naming 4.23.0 above the range**,
+   so the refusal is scoped to a LINE while MINA's is scoped to the PRODUCT; collapsing them into one
+   "unsupported" bucket put 8 Apache records in the wrong class on the first run;
+   **(b) a fix set names one version PER BRANCH** — Backstage `CVE-2026-115923`'s spans are
+   `< 3.9.2` and `>= 4.0.0, < 4.0.2`, so "below every minimum" read its own fix `3.9.2` as a
+   downgrade and produced **34 of the first pass's 36** below-range rows. A boundary is matched on
+   the **numeric core** (FileBrowser's `< 1.5.2-stable` beside "fixed in 1.5.2-stable"), and a
+   version the record itself lists as `unaffected` **outranks any comparator** (VulDB's `1.3R` is
+   segment-wise *below* `1.295`, and the record says it is the fix);
+   **(c) a remedy sentence about another CVE is not this record's remedy** — WPScan's "regression of
+   CVE-2023-4643, which was fixed in 4.1.3 and reintroduced in 4.1.4" is a history of an older bug;
+   **(d) a git range is not a version range** — 211 of the first week's "empty spans" were
+   `<sha>`…`<sha>` from the kernel and NVD-assigned git ranges, ordered by a comparator with no
+   meaning for a hash, so both bounds must *look* like versions before the comparator runs at all.
+   **The registry arm is the half that decides whether a below-range remedy is usable**: MINA's 2.2
+   line has **11** releases on Maven Central (newest **2.2.10**), and
+   `org/apache/mina/codec/delimited/serialization/JavaNativeMessageDecoder.class` is present in
+   `mina-codec-3.0.0-M2.jar` and **absent** from `mina-core-2.2.10.jar` (468 classes) — so the
+   recommendation is installable and lacks the named decoder, while *absence of the class is not
+   absence of the bug*.
+   **And 2.5% of the week's records state a span that contains nothing** — **87 of 3,461**: **86**
+   write a POINT as a range (`{version: X, lessThan: X}`, where the intent is plainly "everything
+   before X") and **1** inverts its bounds. **73 of the 86 are `chrome-cve-admin@google.com`**, 10
+   Tanium, 1 each Nextcloud/HackerOne, Checkmk and OpenText — a **house style**, so quote the
+   assigner and never the rate. What a scanner does with such a span is untested; that the span
+   contains nothing is the record's own arithmetic.
+   **A record can name the product and never a release** (the same week, the second question filed
+   11-01): **44** records carry an `affected[]` entry with a product and **no `versions[]`**, and
+   **44/44 are `secalert@redhat.com`** — the json-glib `CVE-2026-120194` shape (six RHEL/RHCOS
+   products, `defaultStatus: affected`, nothing to compare a `--modversion` against). `--range-census`
+   cannot see it because it asks whether a record carries a range, and these records carry a
+   PRODUCT; the operational content is the CNA's own prose, and whether the advisory in
+   `references[]` names the version the record omits is still **unmeasured**.
    **A missing CWE on a `Received` record is the CNA's silence, not a triage backlog — and the
    "stalled because it is thin" reading is falsified by the records themselves** (added 2026-10-28,
    measured over the same 3,070-record window). Of **398** `Received` records, **155 (38.9%)** carry a

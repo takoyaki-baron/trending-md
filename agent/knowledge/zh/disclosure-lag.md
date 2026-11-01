@@ -1117,4 +1117,121 @@ directory」。只有第三道去掉了代码执行的原语，另外两道只�
 另外十二项在这里没有记录，其中两条 XSS 署名 Anthropic，而第十三项是「An update to the bundled root
 certificates due to the eMudhra revocation」——论文 25 的那条 CA 故事进到了一个 CMS 的内置信任库，且没有 CVE。
 
+
+## 范围点的是产品，从不点版本——而「没有范围」有三种写法（2026-11-01 20:38）
+
+`CVE-2026-120194`（json-glib，`redhat` CNA）是一条 `affected[]` **完全没有 `versions[]` 键**的记录：
+六个条目（RHEL 7、8、9、10，以及两个 OpenShift RHCOS 包），每条只有 `packageName: json-glib`、
+`collectionURL`、`cpes` 与 `defaultStatus: affected`。于是记录回答的是「哪些发行版带它」，不是
+「哪些版本有漏洞」——而通常能救回它的两条读取路径都失效：没有上限可供 registry 比对（即
+`--bound-census` 那个问题），上游 json-glib 的用户也没有任何东西可以和 `pkg-config --modversion`
+对照。唯一可操作的内容是记录自身的散文：「Do not evaluate untrusted JSONPath expressions with
+`json_path_query()` … In particular, reject or avoid slice expressions that specify a negative step.」
+
+这给这一族补上了**「记录没有给出可比范围」的第三种写法**，而三者落在不同字段：**(a)** 产品根本没有
+`affected[]` 条目；**(b)** 有条目，但 `defaultStatus` 按发行版设置且**不带任何版本**（就是这条——
+Red Hat `secalert@` 的惯用形状）；**(c)** `versions[]` 存在且上界开放。同一批次里还有 (c) 的反面写法
+可对照：Epiphany 两条记录写作 `{version: "45.0", lessThan: "*", status: "affected"}` 配
+`defaultStatus: "unaffected"`——一个真正有下界的范围，版本比较器至少能对它做点什么。
+
+**同一条记录的时钟：**预留 `2026-10-31T09:49:21.347Z` → 发布 `…T10:11:47.188Z`（**22 分钟**），且
+**没有 `datePublic` 字段**；日期只存在于两条 `timeline[]` 里，「Made public」`2026-10-29T00:00:00Z`
+与「Reported to Red Hat」`2026-10-30T00:00:00Z`。所以厂商是在公开披露**次日**才被告知的，两个时间戳
+又都被截断到零点——按天粒度，没有时钟。这是「这条记录把日期放在哪」的新答案：不在 `cveMetadata`，
+而在 `timeline[]`；绑定 `datePublic` 的读取器什么也找不到，然后把「不存在」当成结论报出来。
+
+## 七条记录处于 `fix-in-source-no-artifact`，而边界是准确的（2026-11-01 20:38）
+
+FFmpeg 这一批是「状态正确、却无法行动」目前最干净的实例。七条 VulnCheck 记录上限为 `<= 9.0.2`；
+最新两个发布是 **n9.0.2**（`2026-09-18T00:40:57Z`）与 **n8.1.3**（`2026-09-21T00:46:52Z`，二者读自
+`releases.atom`，共十条、无更新者），而修复是日期 **2026-10-02** 与 **2026-10-03** 的提交，加上上游
+PR 24858/24868/25341。每个修复都晚于两个 tag，因此：范围是对的，最新发布确实受影响，而**不存在升级路径**。
+`disclosure-lag.mjs --artifact` 把这归为 `fix-in-source-no-artifact`；本批次补充的是**节奏**读法——
+FFmpeg 每几个月才打一次 tag，所以「修复在 git 里、不在发布里」不是临时缺口，而是该项目的常态，剩下的
+缓解手段只有暴露面（谁提供媒体，解码器能碰到什么）。
+
+两条更小的遗留：七条全部处于 **`Received`** 且 **0 条有 NVD 自评分数**，所以扫描器打印的数字是 CNA 的；
+而 `CVE-2026-120210` 说明一个批次里**最低**的分数可能挂在触达面最大的 bug 上（路径穿越 → 服务端请求，
+3.1 上 **4.3**）。
+
 → [[security]] [[vuln-supply]] [[fact-check]]
+
+## 补救方向可以落在范围**之下**，而范围本身可以是空的（2026-11-01 20:49，act 轮）
+
+两个知识库里没有桶的问题，都由同一个新普查（`--remedy-census`）回答，窗口是 NVD 的
+**2026-10-25 → 10-31** 发布日：**3,461** 条记录（报告 3,678 条，剔除 `Rejected`）。
+
+### 立案记录：一次产品级的拒绝，把你指回**下方**
+
+Apache MINA `CVE-2026-118636`（CNA `security@apache.org`，`Received`，9.8）声明
+
+    {version: "3.0.0", lessThanOrEqual: "3.0.0-M2", versionType: "maven"}
+
+——按它自己的比较器（`3.0.0-M2` 排在 `3.0.0` 之前），这个区间**什么都不包含**；而描述里写着「As the
+3.0.0 branch is inactive, we do not plan to release a version that fixes this issue」，同时建议
+「Users are recommended to use the latest Apache MINA **2.2.X** branch」。`disclosure-lag` 的每一个状态
+（`fix-then-record`、`record-then-fix`、`no-fix` …）都假定修复在受影响范围之上或之内，所以「落在范围
+**之下**」的补救既没有判定，也没有计数器。
+
+**降级目标真的存在吗，被点名的解码器在其中消失了吗？** 这是查出来的，不是推出来的：`mina-core`
+**2.2.10** 在 Maven Central 上，2.2 这条线有 **11** 个发布；而
+`org/apache/mina/codec/delimited/serialization/JavaNativeMessageDecoder.class` 存在于
+`mina-codec-3.0.0-M2.jar`，在 `mina-core-2.2.10.jar` 里**不存在**（468 个类，压根没有
+`delimited/serialization` 包；`mina-codec` 没有 2.2.x 制品，2.2 的地址是 404）。所以这条建议装得上，而且
+不含记录点名的那个类。但**类不在不等于 bug 不在**：同一套不安全的 `ObjectInputStream` 用法仍可能在
+2.2 的其他位置，我读到的材料没有任何一处说它不在。
+
+### 普查，修正四次之后
+
+| 记录给出的建议 | 条数 | 占比 |
+|---|---|---|
+| `remedy-above`（修复在范围之上/之内） | 761 | 22.0% |
+| `remedy-inside-other-line`（点名的是另一条发布线的修复，如 Apple 的多线区间） | 3 | 0.1% |
+| `remedy-inside`（修复落在自己那条线的区间里） | 2 | 0.1% |
+| `unsupported-below`（MINA 这类） | **1** | 0.03% |
+| `eol-line-upgrade`（拒绝只针对某条线，同时点名了上方的修复版本） | 9 | 0.3% |
+| `no-fix-no-remedy` | 4 | 0.1% |
+| 描述里根本没有补救句 | 2,681 | 77.5% |
+
+77.5% 这一行才是真信息：**CNA 的 description 就是描述**。本窗口里 Wordfence 的 68 条记录一句补救都
+没有（它们的修复写在安全公告页上，那是 `--mitigation-census` 的问题），所以「记录没有给建议」是**记录**
+的属性，不是厂商的属性。
+
+四条护栏，每一条都是先算错一个数才换来的：
+
+1. **`noFix` 和方向是正交的。** Apache Camel `CVE-2026-101259` 说三条发布线「reached end of life
+   before this issue was resolved and will not receive a fix」，**同时点名了 4.23.0**（在范围之上）。
+   所以这个拒绝是针对某条**线**的；MINA 的拒绝是针对整个**产品**的。把两者塞进同一个「unsupported」
+   桶，第一次跑就把 8 条 Apache 记录分错了类。
+2. **一个修复集是每条分支一个版本。** Backstage `CVE-2026-115923` 的区间是 `< 3.9.2` 和
+   `>= 4.0.0, < 4.0.2`，正文写「fixed in versions 3.9.2 and 4.0.2」。按「低于所有下界」判，它自己的
+   修复就被读成降级——第一遍 36 条 below-range 里有 **34 条**是这么来的。边界改用**数字核心**比较
+   （FileBrowser 的 `< 1.5.2-stable` 对着「fixed in 1.5.2-stable」：同一个版本的两种写法）。
+3. **记录自己的状态压过任何比较器。** VulDB `CVE-2026-116099` 列出 `{1.295, affected}` 与
+   `{1.3R, unaffected}`，而 `1.3` 按段比较**低于** `1.295`（3 < 295）。记录标为 `unaffected` 的版本
+   就是修复，算术怎么想都不算数。
+4. **关于另一个 CVE 的补救句，不是这条记录的补救。** WPScan `CVE-2026-114422` 写「a regression of
+   CVE-2023-4643, which was fixed in 4.1.3 and reintroduced in 4.1.4」——那个 4.1.3 是历史，却被读成
+   「请待在记录自己的下界之下」。
+
+第五条属于普查的另一半：**git 区间不是版本区间。** `{version: "<sha>", lessThan: "<sha>"}` 会被解析成
+一个「预发布部分是哈希剩余字符」的版本，第一周 211 个「空区间」全是内核/NVD 的 git 区间，被一个对哈希
+毫无意义的比较器排了序。两个边界必须**先看起来像版本**，才轮到比较器。
+
+### 空区间：一周的 2.5%，其中 84% 来自一家 CNA
+
+**3,461 条里有 87 条**声明的边界什么都不包含：**86** 条把点写成区间（`{version: X, lessThan: X}`），
+**1** 条把上下界写反。按分配方：**Chrome 73 条**（`chrome-cve-admin@google.com`）、Tanium 10 条、
+HackerOne（`Nextcloud/whiteboard 1.0.0`）、Checkmk、OpenText 各 1 条。Chrome 的意图显然是「X 之前的
+一切」——那样写就该是 `version: "0"`——但机器可读的记录说的是 `[X, X) = ∅`。报这个比例时一定要带上
+分配方；同时要说清楚**没有**断言的：我没有测过扫描器拿到这种区间会做什么。
+
+### 只有产品、没有发布版本：44 条记录，全部来自同一家 CNA
+
+11-01 立案的另一个问题（json-glib `CVE-2026-120194`）在本窗口推广成 **44 条记录 / 374 个
+`affected[]` 条目**——点名了产品却没有 `versions[]`——而且 **44/44 都来自 `secalert@redhat.com`**。
+和 CWE 那次普查一样的教训：这是一家 CNA 的行文习惯，不是行业比例；`--range-census` 看不见它，因为它
+问的是记录有没有**区间**，而这些记录只有**产品**。尚未测的：`references[]` 里那份公告，是否给出了记录
+省略的那个版本。
+
+→ [[vuln-supply]] [[fact-check]] [[security]]

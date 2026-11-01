@@ -214,6 +214,8 @@
  *   node disclosure-lag.mjs --changes-census --from 2026-10-21 --to 2026-10-27   # changes[] prevalence
  *   node disclosure-lag.mjs --bound-census --from 2026-10-23 --to 2026-10-29     # newest vs stated bound
  *   node disclosure-lag.mjs --backlog-census --from 2026-10-21 --to 2026-10-27   # the Received residue
+ *   node disclosure-lag.mjs --remedy-census --from 2026-10-25 --to 2026-10-31    # advice vs its own range
+ *   node disclosure-lag.mjs --remedy-census --from … --to … --window-cache /tmp/w.json  # reuse the fetch
  *   node disclosure-lag.mjs --changes-census --backlog-census … --window-cache /tmp/win.json  # one fetch
  *   node disclosure-lag.mjs --ids CVE-… --artifact firmware --fix-ref <raw artifact url>
  *   node disclosure-lag.mjs --repo owner/repo --artifact package   # THE UNKEYED QUESTION (no --ids)
@@ -350,6 +352,35 @@ const RANGE_WORD = /\b(?:before|prior\s+to|earlier\s+than|through|up\s+to|and\s+
 const BUNDLE_WORD = /\b(?:includes?|bundles?|ships?|packages?)\b[^.]{0,40}$/i;
 const VERSION_TOKEN = /\bv?(\d{1,4}(?:\.\d{1,4}){1,3}(?:[-.][A-Za-z0-9]+)*)\b/g;
 const GHSA_RE = /GHSA(-[23456789cfghjmpqrvwx]{4}){3}/g;
+
+/* ── the remedy census (added 2026-11-01 20:49) ──────────────────────────────────────────────
+   Filed from Apache MINA `CVE-2026-118636`: the affected span is `3.0.0 <= 3.0.0-M2`, the record
+   says "As the 3.0.0 branch is inactive, we do not plan to release a version that fixes this
+   issue", and the remedy it does give is "use the latest Apache MINA **2.2.X** branch" — a
+   direction BELOW the affected range. Every state in this tool assumes a fix at or above the
+   range, so that class had no bucket, and neither did a second cheap thing the same record shows:
+   the span is EMPTY under its own comparator (`3.0.0-M2` sorts before `3.0.0`), so a reader that
+   lowercases the two tokens into a range has a range that contains nothing.
+   Rules live up here for the same reason `REGISTRY_ECOSYSTEMS` does: `--selftest` runs before the
+   census section is initialised. */
+const REMEDY_CENSUS = args.includes('--remedy-census');
+/* "We do not plan to release a version that fixes this issue", "won't fix", "UNSUPPORTED WHEN
+   ASSIGNED", "end of life". Kept separate from the remedy DIRECTION because the two co-occur on
+   the filing record: a no-fix statement beside a branch recommendation is the shape, and a census
+   that only looks for one of them reports the other as "no statement". */
+const NO_FIX_MARKER = /\bUNSUPPORTED WHEN ASSIGNED\b|\b(?:do not|don't|will not|won't)\s+(?:plan to\s+)?(?:release|fix|be fixed|issue)\b|\bno fix (?:is |will be )?(?:planned|available|provided)\b|\bend[- ]of[- ]life\b|\bEOL\b/i;
+/* An explicit downgrade verb — the strongest form, and the one that can never be read as an upgrade. */
+const DOWNGRADE_VERB = /\b(?:downgrade|downgrading|roll(?:ing)?\s*back|revert(?:ing)?\s+to|stay(?:ing)?\s+on|remain(?:ing)?\s+on)\b/i;
+/* A remedy that names a RELEASE LINE rather than a point: "use the latest Apache MINA 2.2.X
+   branch", "upgrade to the 4.2 line", "migrate to 1.8.x". The trailing line-word is what makes it a
+   branch recommendation; without it a bare version is `--mitigation-census`'s question. */
+const BRANCH_LINE = /\b(?:use|using|upgrade|upgrading|update|updating|move|moving|switch|switching|migrate|migrating|recommend(?:ed|s|ing)?|advis(?:e|ed|ing))\b[^.]{0,80}?\bv?(\d{1,3}(?:\.\d{1,3})?)(?:\.(?:\d{1,3}|[xX*]))?(?![\d.])[^.]{0,24}?\b(?:branch|line|series|release)\b/i;
+/* The ordinary remedy — a point release, not a line: "Update to version 3.1.12 or later". Present
+   so the census can show the CONTRAST (how many records advise above the range) instead of
+   reporting 99% "no statement" and making the below-range class look like the only kind of advice
+   that exists. The verb is what keeps an affected-version sentence out of it. */
+const POINT_FIX = /\b(?:update|upgrade|upgrading|updating|fixed|addressed|patched|resolved|remediated)\b[^.]{0,60}?\b(?:to|in|as\s+of)\b[^.]{0,24}?\bv?(\d{1,4}(?:\.\d{1,4}){1,3}(?:(?:[-._])?[A-Za-z]{1,3}\d?)?)(?!\d)(?!\.\d)/i;
+const MAX_REMEDY_LOOKUPS = Number(argOf('--max-remedy', 20));
 
 /* The backlog census: 830 `Received` records over a week carry a CWE 17.1% of the time while one
    fresh day's `Received` is 98.5% — two readings (queue artefact vs record-quality signal) that
@@ -1947,6 +1978,57 @@ if (SELFTEST) {
   eq('mitigation: only tested-through rows cannot produce the finding',
     mitigationVerdict(cfGroups, fixStatementsFrom('The issue is fixed in v1.245.0, confirmed in CAPI up to v1.245.0 (inclusive).')).verdict,
     'only-tested-or-bundled');
+  /* ── the remedy census (2026-11-01 20:49): what the record advises, against its own range ──
+     The filing record verbatim (`CVE-2026-118636`), whose remedy points BELOW its span, plus the
+     four neighbours that must not be read as the same shape. */
+  const minaCna = {
+    descriptions: [{ lang: 'en', value: '**UNSUPPORTED WHEN ASSIGNED**\n\nJavaNativeMessageDecoder in the MINA 3.0 codec module calls ObjectInputStream.readObject().\n\nAs the 3.0.0 branch is inactive, we do not plan to release a version that fixes this issue. \n\nUsers are recommended to use the latest Apache MINA 2.2.X branch.' }],
+    affected: [{ affectedData: [{ vendor: 'Apache Software Foundation', product: 'Apache MINA',
+      packageURL: 'pkg:maven/org.apache.mina/mina-core',
+      versions: [{ status: 'affected', version: '3.0.0', lessThanOrEqual: '3.0.0-M2', versionType: 'maven' }],
+      defaultStatus: 'unaffected' }] }] };
+  const mr = remedyOf(minaCna);
+  eq('remedy: a product-wide no-fix statement beside a branch BELOW is unsupported-below', mr.kind, 'unsupported-below');
+  eq('remedy: the branch line is read out of "recommended to use the latest … 2.2.X branch"', mr.named, '2.2');
+  eq('remedy: the branch sits BELOW the affected span', mr.direction, 'below');
+  eq('remedy: 3.0.0 with lessThanOrEqual 3.0.0-M2 is an EMPTY span under its own comparator',
+    emptySpan({ min: '3.0.0', minInc: true, max: '3.0.0-M2', maxInc: true }), true);
+  eq('remedy: an ordinary inclusive span is not empty',
+    emptySpan({ min: '3.0.0', minInc: true, max: '3.0.4', maxInc: true }), false);
+  eq('remedy: a point span with an exclusive end is empty',
+    emptySpan({ min: '1.2', minInc: true, max: '1.2', maxInc: false }), true);
+  eq('remedy: an upgrade to a line ABOVE the range is not a downgrade',
+    remedyOf({ descriptions: [{ lang: 'en', value: 'Users should upgrade to the 4.2 branch.' }],
+      affected: [{ affectedData: [{ product: 'x', versions: [{ version: '3.0.0', lessThan: '3.0.9' }] }] }] }).kind,
+    'remedy-above');
+  eq('remedy: "we will not fix" with no direction is no-fix-no-remedy',
+    remedyOf({ descriptions: [{ lang: 'en', value: 'The vendor will not fix this issue.' }], affected: [] }).kind,
+    'no-fix-no-remedy');
+  eq('remedy: prose with no advice is not a remedy', remedyOf({ descriptions: [{ lang: 'en', value: 'A heap overflow was found.' }], affected: [] }).kind,
+    'no-remedy-statement');
+  /* Four guards, each bought by a live run of the week census. */
+  eq('remedy: a fix set names one version PER BRANCH, so Backstage\'s 3.9.2 is a boundary not a downgrade',
+    remedyOf({ descriptions: [{ lang: 'en', value: 'Prior to 3.9.2 and from 4.0.0 until 4.0.2. This issue is fixed in versions 3.9.2 and 4.0.2.' }],
+      affected: [{ affectedData: [{ product: 'backstage', versions: [{ version: '< 3.9.2' }, { version: '>= 4.0.0, < 4.0.2' }] }] }] }).kind,
+    'remedy-above');
+  eq('remedy: "fixed in 1.5.2-stable" is the boundary its span already names',
+    remedyOf({ descriptions: [{ lang: 'en', value: 'Prior to 1.5.2-stable and 2.0.1-beta. This issue is fixed in 1.5.2-stable and 2.0.1-beta.' }],
+      affected: [{ affectedData: [{ product: 'filebrowser', versions: [{ version: '< 1.5.2-stable' }, { version: '>= 2.0.0-beta, < 2.0.1-beta' }] }] }] }).kind,
+    'remedy-above');
+  eq('remedy: a version the record itself marks unaffected is a fix, whatever the comparator says',
+    remedyOf({ descriptions: [{ lang: 'en', value: 'Upgrading to version 1.3R is capable of addressing this issue.' }],
+      affected: [{ affectedData: [{ product: 'x', versions: [{ version: '1.295', status: 'affected' }, { version: '1.3R', status: 'unaffected' }] }] }] }).kind,
+    'remedy-above');
+  eq('remedy: a version quoted about ANOTHER cve is not this record\'s remedy',
+    remedyOf({ descriptions: [{ lang: 'en', value: 'This is a regression of CVE-2023-4643, which was fixed in 4.1.3 and reintroduced in 4.1.4.' }],
+      affected: [{ affectedData: [{ product: 'x', versions: [{ version: '4.1.4', lessThan: '4.2.3' }] }] }] }).kind,
+    'no-remedy-statement');
+  eq('remedy: a git-SHA range is not a version range',
+    emptySpan({ min: '24f41e23dcbd9d07cde270a8141490e8f79251f5', minInc: true, max: 'e37463307304b26bc8fd606322e5c4d8f7f060e5', maxInc: false }), false);
+  eq('remedy: Chrome\'s point-as-range is empty (version X, lessThan X)',
+    emptySpan({ min: '156.0.8078.73', minInc: true, max: '156.0.8078.73', maxInc: false }), true);
+  eq('remedy: an open-ended span with lessThan "*" is not empty',
+    emptySpan({ min: '45.0', minInc: true, max: '*', maxInc: false }), false);
   eq('mitigation: advisory urls drop the registry and prefer the vendor tag',
     advisoryUrlsOf({ references: [{ url: 'https://nvd.nist.gov/vuln/detail/CVE-1' }, { url: 'https://example.com/a' },
       { url: 'https://example.com/b', tags: ['vendor-advisory'] }] }).map(u => u.replace('https://example.com/', '')),
@@ -1972,6 +2054,9 @@ if (SELFTEST) {
    NVD's `pubStartDate`/`pubEndDate` are publication windows, NOT event dates (the 10-22 lesson:
    `published` is a workflow timestamp), so read a row here as "records whose paperwork completed
    that week", never as "vulnerabilities that appeared that week". */
+/* Progress notes belong on stderr when the caller asked for JSON — a cache hit line on stdout made
+   the machine-readable mode unparseable, which is a defect in the output contract, not in the caller. */
+const note = m => (JSON_OUT ? console.error(m) : console.log(m));
 async function fetchWindow(from, to) {
   const parseDay = s => {
     const d = new Date(`${s}T00:00:00.000Z`);
@@ -1986,10 +2071,10 @@ async function fetchWindow(from, to) {
     try {
       const cached = JSON.parse(fs.readFileSync(WINDOW_CACHE, 'utf8'));
       if (cached.from === from && cached.to === to && Array.isArray(cached.records)) {
-        console.log(`  · window cache hit: ${cached.records.length} records for ${from} → ${to} (${WINDOW_CACHE})`);
+        note(`  · window cache hit: ${cached.records.length} records for ${from} → ${to} (${WINDOW_CACHE})`);
         return { from, to, records: cached.records, total: cached.total };
       }
-      console.log(`  · window cache is for ${cached.from} → ${cached.to}, not ${from} → ${to}: refetching`);
+      note(`  · window cache is for ${cached.from} → ${cached.to}, not ${from} → ${to}: refetching`);
     } catch { /* an unreadable cache is a miss, never an error */ }
   }
   const records = [];
@@ -2941,6 +3026,273 @@ function printBacklogCensus(c) {
   console.log('  way the number is CNA practice on the day it was published — re-run, do not quote as a rate.');
 }
 
+/* ── the remedy census: what does the record offer, and is it at or below the range? ─────────────
+   Two questions the library had no bucket for, both filed on 2026-11-01:
+   (a) the DOWNGRADE / branch-switch remedy — `CVE-2026-118636` (Apache MINA) declares `3.0.0` to
+       `3.0.0-M2` affected, says the 3.0 branch is inactive and "we do not plan to release a version
+       that fixes this issue", and tells users to be on the **2.2.X** branch. A fix below the range
+       is a state no `disclosure-lag` verdict can express, and a consumer who upgrades has none.
+   (b) the VERSION-LESS `affected[]` — `CVE-2026-120194` (json-glib) names six products with
+       `defaultStatus: affected` and no `versions[]` at all, so neither a registry lookup nor
+       `--modversion` has anything to bind to. `--range-census` cannot see it: it asks whether a
+       record carries an affected RANGE, and this record carries an affected PRODUCT.
+   Both are read off one window fetch, so `--window-cache` makes the second free. */
+function remedyOf(cve) {
+  const desc = (cve.descriptions || []).filter(d => d.lang === 'en').map(d => d.value).join('\n');
+  const ranges = affectedRanges(cve).ranges;
+  const noFix = NO_FIX_MARKER.test(desc);
+  const downgradeVerb = DOWNGRADE_VERB.test(desc);
+  /* A remedy sentence about ANOTHER CVE is not this record's remedy. WPScan's `CVE-2026-114422`
+     says "fixed in 4.1.3 and **reintroduced** in 4.1.4" — that 4.1.3 is the historical fix of
+     `CVE-2023-4643`, quoted to explain a regression, and the first run read it as advice to
+     downgrade below the record's own `4.1.4` minimum. The tell is a CVE id or a reintroduction
+     word in the SAME sentence as the version. */
+  const sentences = desc.split(/(?<=[.!?])\s+/);
+  const foreign = re => sentences.some(x => re.test(x) && /CVE-\d{4}-\d{4,}/.test(x)) ||
+    (sentences.some(x => re.test(x)) && /\b(?:regress(?:ion|ed)|reintroduced|re-introduced)\b/i.test(
+      sentences.find(x => re.test(x)) || ''));
+  const mRaw = desc.match(BRANCH_LINE);
+  const pRaw = mRaw ? null : desc.match(POINT_FIX);
+  const m = mRaw && !foreign(BRANCH_LINE) ? mRaw : null;
+  const point = pRaw && !foreign(POINT_FIX) ? pRaw : null;
+  const named = m ? m[1] : (point ? point[1] : null);
+  /* A version that sits ON a span's bound is the span's own edge — the fix (`< 3.9.2` beside
+     "fixed in 3.9.2"), never a point inside it and never something below it. The first live run
+     read Backstage's `CVE-2026-115923` as a below-range remedy for exactly this reason: its two
+     spans are `< 3.9.2` and `>= 4.0.0, < 4.0.2`, so the fix `3.9.2` is below the SECOND span's
+     minimum while being the first span's fix. A fix set names one version PER BRANCH, so "below
+     every minimum" is not a question any single number can answer until boundaries are excluded. */
+  /* A boundary is matched on the NUMERIC CORE: FileBrowser's span ends at `1.5.2-stable` and its
+     prose says "fixed in 1.5.2-stable", but a token reader that stops at the digits yields `1.5.2`,
+     which compares unequal to `1.5.2-stable` and lands below the record's OTHER branch minimum —
+     the Backstage error in a different disguise. Two spellings of one release are one boundary. */
+  const core = v => parseVer(v).nums.slice(0, 4).join('.');
+  const isBoundary = v => ranges.some(r => (r.min && core(v) === core(r.min)) || (r.max && core(v) === core(r.max)));
+  /* `0`/`*` is a NULL bound (CLAUDE.md's CVE-5.x rule), and Apple writes every span as `0 < X`, so a
+     naive minimum list makes every named version look "above" a `0` that is not a bound at all. */
+  const realMin = r => (r.min && !['0', '*', ''].includes(String(r.min))) ? r.min : null;
+  const lineOf = v => parseVer(v).nums.slice(0, 2).join('.');
+  /* The record's OWN status list outranks any comparator: VulDB's `CVE-2026-116099` states
+     `{1.295, affected}` and `{1.3R, unaffected}`, and segment-wise `1.3` sorts BELOW `1.295`
+     (3 < 295) — so the arithmetic reads the fix as a downgrade while the record says the opposite.
+     A version the record itself marks unaffected is a fix, and no comparison should override it. */
+  const statedFix = named && (cve.affected || []).some(x => (x.affectedData || []).some(d =>
+    (d.versions || []).some(v => v.status === 'unaffected' && core(v.version) === core(named))));
+  let direction = null;
+  if (statedFix) direction = 'above';
+  else if (named && ranges.length) {
+    const inside = inAnyRange(named, ranges);
+    if (inside === true && !isBoundary(named)) {
+      /* A fix named for one release LINE inside another line's span is the multi-line collapse —
+         Apple's `0 < 27.2` span covers both the 26.x and 27.x lines, and "fixed in macOS Sequoia
+         15.8.2 / Tahoe 26.7.2 / Golden Gate 27.2" names one fix per line. It is NOT "the fix sits
+         inside its own affected range", which is the alarming reading this kind must not steal. */
+      const span = ranges.find(r => inRange(named, r));
+      direction = (span?.max && lineOf(named) !== lineOf(span.max)) ? 'inside-other-line' : 'inside';
+    } else if (!isBoundary(named) && ranges.some(realMin) && ranges.filter(realMin).every(r => cmpVer(named, realMin(r)) < 0)) {
+      direction = 'below';
+    } else direction = 'above';
+  }
+  let kind;
+  /* `noFix` and `direction` are ORTHOGONAL, and collapsing them into one "unsupported" bucket was
+     the first run's second error: Apache Camel's `CVE-2026-101259` says three release lines "reached
+     end of life … and will not receive a fix" while naming `4.23.0` above the range — the refusal is
+     scoped to a LINE, not to the record. MINA's refusal is scoped to the PRODUCT. */
+  if (noFix && named) kind = direction === 'below' ? 'unsupported-below' : 'eol-line-upgrade';
+  else if (noFix) kind = 'no-fix-no-remedy';
+  else if (downgradeVerb && direction === 'below') kind = 'downgrade-below';
+  else if (direction === 'below') kind = 'remedy-below';
+  else if (direction === 'inside') kind = 'remedy-inside';
+  else if (direction === 'inside-other-line') kind = 'remedy-inside-other-line';
+  else if (direction === 'above') kind = 'remedy-above';
+  else if (named) kind = 'remedy-no-range';
+  else kind = 'no-remedy-statement';
+  return { kind, named, noFix, direction, desc };
+}
+
+/* A range whose own bounds exclude each other (`3.0.0` with `lessThanOrEqual: 3.0.0-M2`) contains
+   nothing under the comparator the record itself declares (`versionType: maven`), and a reader who
+   trusts "min … max" as a span is describing a circle. Counted separately from the remedy because
+   it is a property of the RANGE, not of the advice. */
+function emptySpan(r) {
+  /* `*` (and `0`) is a NULL bound, not a version — `{version: "45.0", lessThan: "*"}` is an
+     open-ended range, and the first run of this census read four of them as "min sorts above max"
+     because `parseVer('*')` yields no numeric segments. Censused before the fix: 4 of 4 false. */
+  const nullBound = v => v == null || ['*', '0', ''].includes(String(v));
+  if (nullBound(r.min) || nullBound(r.max)) return false;
+  /* A GIT range is not a version range: `{version: "24f41e23…", lessThan: "e37463…"}` compares
+     two commit SHAs, whose leading digits parse as a version number and whose "pre-release" is the
+     rest of the hash. 211 of the first week-wide run's "empty spans" were exactly this — the
+     kernel CNA and `nvd@nist.gov`-style git ranges, ordered by a comparator that has no meaning
+     for a hash. So both bounds must LOOK like versions before the comparator is asked at all. */
+  const VERSIONISH = /^v?\d{1,6}(?:\.\d{1,6}){0,5}(?:[-._][A-Za-z0-9]+)*$/;
+  if (!VERSIONISH.test(String(r.min)) || !VERSIONISH.test(String(r.max))) return false;
+  const c = cmpVer(r.min, r.max);
+  if (c > 0) return true;
+  return c === 0 && !(r.minInc && r.maxInc);
+}
+
+/** A span as prose, with a null bound spelled `∞` rather than echoed as `*` (which is not a version). */
+function spanText(r) {
+  if (!r) return '—';
+  const nullBound = v => v == null || ['*', '0', ''].includes(String(v));
+  const lo = nullBound(r.min) ? null : `${r.minInc ? '>=' : '>'}${r.min}`;
+  const hi = nullBound(r.max) ? null : `${r.maxInc ? '<=' : '<'}${r.max}`;
+  return lo || hi ? `${lo || '*'} ${hi || '∞'}` : '—';
+}
+
+/** Does the named release LINE have a release at or above it in the registry this record points at?
+    pypi/npm/crates answer over JSON; maven has no JSON index, and its `maven-metadata.xml` is the
+    version list — the only extra fetcher this census needs. Returns null when nothing can answer. */
+async function lineReleases(purl, line) {
+  const eco = Object.keys(REGISTRY_ECOSYSTEMS).find(p => purl.startsWith(p));
+  const wants = String(line).replace(/^v/, '');
+  let versions = null;
+  let registry = null;
+  if (eco) {
+    const name = decodeURIComponent(purl.slice(eco.length));
+    registry = REGISTRY_ECOSYSTEMS[eco];
+    if (registry === 'pypi') {
+      const j = await getJson(`https://pypi.org/pypi/${encodeURIComponent(name)}/json`);
+      versions = j.body ? Object.keys(j.body.releases || {}) : null;
+    } else if (registry === 'npm') {
+      const j = await getJson(`https://registry.npmjs.org/${name.replace('/', '%2F')}`);
+      versions = j.body ? Object.keys(j.body.versions || {}) : null;
+    } else {
+      const j = await getJson(`https://crates.io/api/v1/crates/${encodeURIComponent(name)}`);
+      versions = j.body ? (j.body.versions || []).map(v => v.num) : null;
+    }
+  } else if (purl.startsWith('pkg:maven/')) {
+    const [group, artifact] = decodeURIComponent(purl.slice('pkg:maven/'.length)).split('/');
+    if (!group || !artifact) return null;
+    registry = 'maven';
+    const url = `https://repo.maven.apache.org/maven2/${group.replace(/\./g, '/')}/${artifact}/maven-metadata.xml`;
+    const { status, body } = await getText(url);
+    versions = status === 200 && body ? [...body.matchAll(/<version>([^<]+)<\/version>/g)].map(m => m[1]) : null;
+  } else return null;
+  if (!versions) return null;
+  const onLine = versions.filter(v => {
+    const p = parseVer(v);
+    const w = parseVer(wants);
+    return p.nums[0] === w.nums[0] && (p.nums[1] ?? 0) === (w.nums[1] ?? 0);
+  }).sort(cmpVer);
+  return { registry, line: wants, count: onLine.length, latest: onLine.at(-1) || null,
+    exists: onLine.length > 0 };
+}
+
+async function remedyCensus({ from, to }) {
+  const { records, total } = await fetchWindow(from, to);
+  const rows = [];
+  const emptyTally = [];
+  const versionless = [];
+  for (const c of records) {
+    if (c.vulnStatus === 'Rejected') continue;
+    const assigner = c.sourceIdentifier || '?';
+    const ranges = affectedRanges(c).ranges;
+    /* Two shapes of empty, and they are different errors: the record wrote a POINT as a range
+       (`version: X, lessThan: X` — Chrome's 73 records, where the intent is plainly "everything
+       before X"), or it wrote the bounds the wrong way round (MINA's `3.0.0` … `3.0.0-M2`). */
+    const empty = ranges.filter(emptySpan).map(r => {
+      const core = v => parseVer(String(v)).nums.slice(0, 4).join('.');
+      return { ...r, shape: core(r.min) === core(r.max) ? 'point-as-range' : 'inverted' };
+    });
+    if (empty.length) emptyTally.push({ id: c.id, assigner, shape: empty[0].shape,
+      shapes: [...new Set(empty.map(e => e.shape))], span: empty.slice(0, 3).map(spanText) });
+    /* The version-less product: an `affected[]` entry that names a product (or a packageURL) and
+       carries no `versions[]` — the json-glib shape. Counted per ENTRY and per RECORD, because one
+       record can name six products and that is the interesting number on the filing case. */
+    let vl = 0, named = 0;
+    for (const a of c.affected || []) {
+      for (const d of a.affectedData || []) {
+        const product = d.product || d.packageName || d.packageURL;
+        if (!product) continue;
+        named++;
+        if (!(d.versions || []).length) vl++;
+      }
+    }
+    if (vl) versionless.push({ id: c.id, assigner, entries: vl, named, products: (c.affected || []).flatMap(a => a.affectedData || []).map(d => d.product || d.packageName).filter(Boolean).slice(0, 4) });
+    const r = remedyOf(c);
+    rows.push({ id: c.id, assigner, status: c.vulnStatus, kind: r.kind, named: r.named,
+      ranges: ranges.length, purl: (c.affected || []).flatMap(a => a.affectedData || []).map(d => d.packageURL).find(Boolean) || null,
+      span: ranges.length ? spanText(ranges[0]) : null,
+      noFix: r.noFix });
+  }
+
+  /* The registry arm, capped and named when capped: does the downgrade target the record points at
+     actually exist as a release? A branch recommendation to a line with no release is not a remedy. */
+  const candidates = rows.filter(r => ['unsupported-below', 'remedy-below', 'downgrade-below'].includes(r.kind) && r.purl && r.named);
+  let queried = 0, unqueried = 0;
+  for (const r of candidates) {
+    if (queried >= MAX_REMEDY_LOOKUPS) { unqueried++; continue; }
+    queried++;
+    const lr = await lineReleases(r.purl, r.named);
+    r.lineCheck = lr ? (lr.exists ? `line-exists (${lr.count} on ${lr.line}, newest ${lr.latest})` : `line-MISSING (${lr.registry})`)
+      : 'no-registry';
+  }
+
+  const byKind = {};
+  for (const r of rows) {
+    const k = (byKind[r.kind] = byKind[r.kind] || { n: 0, assigners: {} });
+    k.n++; k.assigners[r.assigner] = (k.assigners[r.assigner] || 0) + 1;
+  }
+  const topAssigner = o => Object.entries(o).sort((a, b) => b[1] - a[1])[0] || ['—', 0];
+  return { from, to, totalResults: total, fetched: rows.length, byKind: Object.fromEntries(
+    Object.entries(byKind).map(([k, v]) => [k, { n: v.n, top: topAssigner(v.assigners) }])),
+    rows, emptyTally, versionless, queried, unqueried,
+    samples: rows.filter(r => ['unsupported-below', 'remedy-below', 'downgrade-below', 'eol-line-upgrade'].includes(r.kind)).slice(0, 12) };
+}
+
+function printRemedyCensus(c) {
+  const pct = (n, d) => (d ? ((100 * n) / d).toFixed(1) : '0.0');
+  console.log(`Remedy census — publication window ${c.from} → ${c.to} (UTC)`);
+  console.log(`  NVD reports ${c.totalResults} records; fetched ${c.fetched} (Rejected excluded)`);
+  console.log('');
+  console.log('  what the record advises          n      top assigner');
+  const order = ['remedy-above', 'remedy-inside', 'remedy-inside-other-line', 'remedy-below', 'downgrade-below',
+    'unsupported-below', 'eol-line-upgrade', 'no-fix-no-remedy', 'remedy-no-range', 'no-remedy-statement'];
+  for (const k of [...order, ...Object.keys(c.byKind).filter(x => !order.includes(x))]) {
+    const v = c.byKind[k];
+    if (!v) continue;
+    console.log(`  ${k.padEnd(30)} ${String(v.n).padStart(4)} (${pct(v.n, c.fetched).padStart(5)}%)  ${v.top[0]} ${v.top[1]}`);
+  }
+  const below = ['remedy-below', 'downgrade-below', 'unsupported-below']
+    .reduce((n, k) => n + (c.byKind[k]?.n || 0), 0);
+  console.log('');
+  console.log(`  remedies at or BELOW the affected range: ${below}/${c.fetched} (${pct(below, c.fetched)}%)`);
+  console.log('  — a fix direction no disclosure-lag verdict can express, because every state assumes a fix at or above the range.');
+  console.log('');
+  console.log(`  empty spans (the record's own bounds contain nothing under CVE 5.x semantics): ${c.emptyTally.length}`);
+  const shapeCount = {};
+  for (const e of c.emptyTally) for (const sh of e.shapes) shapeCount[sh] = (shapeCount[sh] || 0) + 1;
+  for (const [sh, n] of Object.entries(shapeCount).sort((x, y) => y[1] - x[1])) console.log(`    ${sh.padEnd(16)} ${String(n).padStart(4)}`);
+  const emptyBy = {};
+  for (const e of c.emptyTally) emptyBy[e.assigner] = (emptyBy[e.assigner] || 0) + 1;
+  console.log('    by assigner:');
+  for (const [a, n] of Object.entries(emptyBy).sort((x, y) => y[1] - x[1]).slice(0, 6)) console.log(`      ${a.padEnd(35).slice(0, 35)} ${String(n).padStart(4)}`);
+  for (const e of c.emptyTally.slice(0, 5)) console.log(`    e.g. ${e.id}  ${e.assigner.slice(0, 28).padEnd(28)}  ${e.span.join(' ; ')}`);
+  console.log('');
+  const vlRecs = c.versionless.length;
+  const vlEntries = c.versionless.reduce((n, v) => n + v.entries, 0);
+  console.log(`  version-less affected[] (a product named, no versions[]): ${vlRecs} record(s) / ${vlEntries} entr(ies)`);
+  const vlBy = {};
+  for (const v of c.versionless) vlBy[v.assigner] = (vlBy[v.assigner] || 0) + 1;
+  for (const [a, n] of Object.entries(vlBy).sort((x, y) => y[1] - x[1]).slice(0, 10)) console.log(`    ${a.padEnd(37).slice(0, 37)} ${String(n).padStart(4)}`);
+  for (const v of c.versionless.slice(0, 6)) console.log(`    e.g. ${v.id} (${v.entries}/${v.named} entries) ${v.products.join(', ').slice(0, 70)}`);
+  if (c.samples.length) {
+    console.log('');
+    console.log('  the below-range / unsupported samples (registry arm: does the named LINE have a release?)');
+    for (const r of c.samples) {
+      console.log(`    ${r.id}  ${r.kind.padEnd(22)} names ${String(r.named ?? '—').padEnd(8)} range ${r.span || '—'}`);
+      console.log(`      ${r.assigner}${r.lineCheck ? ` · ${r.lineCheck}` : ''}`);
+    }
+    if (c.unqueried) console.log(`    …${c.unqueried} row(s) unqueried (--max-remedy ${MAX_REMEDY_LOOKUPS} cap hit) — unqueried, not a pass`);
+  }
+  console.log('');
+  console.log('  Read it this way: the kind counts are one publication week and move with which CNA filed;');
+  console.log('  a line-MISSING row means the record recommends a branch that has no release in its own');
+  console.log('  registry, while line-exists does NOT mean the bug is absent there — nobody tested that.');
+}
+
 /* ── entry ── */
 if (FIELD_WATCH) {
   const r = await fieldWatch({ field: FIELD_WATCH, from: CENSUS_FROM, to: CENSUS_TO, store: FIELD_STORE });
@@ -2994,6 +3346,15 @@ if (MITIGATION_CENSUS) {
   process.exit(0);
 }
 
+if (REMEDY_CENSUS) {
+  const to = CENSUS_TO || new Date(Date.now() - 864e5).toISOString().slice(0, 10);
+  const from = CENSUS_FROM || new Date(Date.parse(`${to}T00:00:00Z`) - 6 * 864e5).toISOString().slice(0, 10);
+  const c = await remedyCensus({ from, to });
+  if (JSON_OUT) console.log(JSON.stringify(c, null, 1));
+  else printRemedyCensus(c);
+  process.exit(0);
+}
+
 if (CHANGES_CENSUS || BACKLOG_CENSUS) {
   const to = CENSUS_TO || new Date(Date.now() - 864e5).toISOString().slice(0, 10);
   const from = CENSUS_FROM || new Date(Date.parse(`${to}T00:00:00Z`) - 6 * 864e5).toISOString().slice(0, 10);
@@ -3020,7 +3381,7 @@ if (!IDS.length && !TRACKERS.length && !(REPO && ARTIFACT)) {
     ' [--release-notes <url>[,<url>…]] [--census [--no-github]] [--range-census --from YYYY-MM-DD --to YYYY-MM-DD]' +
     ' [--field-census <field> --from YYYY-MM-DD --to YYYY-MM-DD]' +
     ' [--field-watch <field> [--from YYYY-MM-DD --to YYYY-MM-DD] [--store <path>]]' +
-    ' [--changes-census | --backlog-census | --bound-census | --mitigation-census --from YYYY-MM-DD --to YYYY-MM-DD [--window-cache <path>]]');
+    ' [--changes-census | --backlog-census | --bound-census | --mitigation-census | --remedy-census --from YYYY-MM-DD --to YYYY-MM-DD [--window-cache <path>]]');
   process.exit(0);
 }
 

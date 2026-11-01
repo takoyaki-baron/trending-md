@@ -305,4 +305,33 @@ weights and the vocab table all live in the data sectors」）。著者は上限
 context and one hidden layer this is roughly the quality you get」、「the model is not a general story teller」。
 MBR 内の 11.5 KB からスマートフォン上の 6.18 GB まで、「モデルの大きさ」とはどの成果物を入れたかの話である。
 
+
+## コンシューマー向けハードウェアでは、配置ポリシーのほうがカーネルより価値がある（2026-11-01 20:38）
+
+`FlashML-org/FreeToken`（Apache-2.0、2026-07-20 作成、**15,098★**、1,532 フォーク、issue+PR 469）は
+エッジ向け MoE サービングエンジンで、背後に論文がある——arXiv **2608.16157**、Stoica、Zaharia、
+Song Han、Keutzer を含む十一名——その梯子は「from a 35B model on a laptop to a 284B model on a
+gaming desktop and the 753B GLM-5.2 on a single workstation GPU」。
+
+実測行は RTX 5090 上、四つのエージェント workload と二つのモデル：Qwen3.6-35B-A3B で **77–83 tok/s**、
+DeepSeek-V4-Flash で **22–25 tok/s**、各 workload の最強ベースラインの **1.8–2.3×** と **1.5–1.9×**、
+エージェント serving 下でも安定（三つのエージェント workload で単一ターン W1 値の **12%** 以内）。
+機構はカーネルではなくキャッシュ方針だ：5090 のサービング容量で、グローバル LRU はデコード時の
+エキスパート読み出しの **16%** と **39%** を外す。KTransformers の prefill 更新型配置は
+**41%/59%**、llama.cpp の静的分割は **62%/89%**。パイプライン化 prefill は第二バッファを切ると
+4k / 8k / 16k で **19% / 25% / 26%** のスループットに相当する。
+
+ベンダーページが埋めるのは**テール**のほうだ：FreeToken の最悪ターンはどのセルでも **44 秒**未満に
+収まるが、各ベースラインはどこかで **150 秒**を越える——llama.cpp **232 秒**、Ollama **179 秒**、
+KTransformers **946 秒**。論文はテールをクライアント側のタイムアウト（OpenClaw の **120 秒**アイドル
+ウォッチドッグ、Claude Code の約十分のリクエストタイムアウト）に照らし、遅延統計ではなく
+**可用性の境界**として読む。残すべき枠組みはこれだ：コンシューマー機では問いは平均 tok/s ではなく、
+ハーネスが諦める前にターンが終わるかどうかである。
+
+**二つの注記は見出しと一緒に運ぶ。**README は **290B+**、摘要は **284B**。753B の実行は RTX PRO 6000 の
+NVFP4 による別のデモで、同じ比較表の行ではない。**今週も何も出ていない**：`releases.atom` から、
+最新リリースは **v0.2.1**（`2026-10-26T03:24:21Z`）とローリングの **Nightly**
+（`2026-10-30T11:19:16Z`）だけなので、今日の 15k star は**論文**起点の急騰であってリリースではない
+——一つ前のバッチで Nemotron の 4-bit カードが測定側に強いたのと同じ区別だ。
+
 → [[frontier-models]] [[fact-check]]

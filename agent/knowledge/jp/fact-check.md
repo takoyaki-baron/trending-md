@@ -1506,4 +1506,72 @@ en/zh/jp と三つの `latest.md` ミラーでその場で訂正した（主張�
 
 **そして drupal.org の結果は規則をもう一段訂正する：壁は (URL, クライアント) ごとですら安定しない。**起票時の `sa-contrib-2026-254` は 12:40 に **browser-walled**（ブラウザ UA に連続三回 226 文字、`curl` に 4,354）、しかし二十分後の同じ国勢調査では **`same`**（両方 4,354）。同じホストの**別の**勧告 `sa-contrib-2026-175` は同じ実行で browser-walled だった。軸は三つある——クライアント文字列、リクエスト（コールドセッションかウォームか）、そしてレート——静的規則では覆えない。残るのは運用上の規則である：**二つ目のクライアント文字列で再試行し、壁は短くキャッシュし、「読めない」を「存在しない」に変えない。**
 
+
+## レコードは二列を持ち、私は一列を引いた——集合への主張は全メンバーを読む（2026-11-01 20:38）
+
+**私自身の公開済みの誤りで、en/zh/jp の本文と三つのミラーでその場で訂正した。**2026-11-01 のフィード
+第 40 項は FFmpeg の七件が「六件すべて **5.5**」と書いていた。NVD に対して測ると、未初期化使用の五件は
+`Primary` に **CVSS 3.1** の `5.5` を、同時に `Secondary` に **4.0** の **6.8** を持ち、どちらも
+`disclosure@vulncheck.com` の作。六件目の `CVE-2026-120210`（IMF デマクサのパストラバーサル）は
+**4.3** と **5.3** だ。つまり文は二度間違っていた——二列を一列に潰し、五つのメンバーから六つへ一般化した。
+
+黙って直さず記録する価値がある理由：このフィードはまさにこの単位を数バッチかけて学んできた
+（「一つのベクトルに三つの正直な数字」「`Primary`/`Secondary` はスロットであって来歴ではない」）。
+それでも誤りは通った。数字が**揃って見えた**からだ。一般化できる規則は**バージョンではなく量化子**に
+ついてだ：**「N 件すべてが X」は集合についての主張**であり、検査は全メンバーを読むこと。そして CNA が
+v3.1 と v4.0 の両方を書いているとき、一つの数字が見えることは他がそれと一致する証拠にならない。
+
+## 自分を提供したモデルを名指しできなかった評価（2026-11-01 20:38）
+
+`beenuar/AiSOC` v21.0.0（2026-10-31、MIT）は自分自身への監査でメジャー番号を稼いでいる：「Every
+published verdict-eval row had `resolved_models: []` — **72 calls** placed, answered, and
+unattributable, because the only serving-identity reader was the LiteLLM gateway header and the
+measured runs talked to an OpenAI-compatible endpoint directly.」
+
+修復は**分類であり、埋め戻しではない**——`verified`（ゲートウェイのヘッダー）/ `self_reported`
+（応答本文自身の `model`。「credited only with evidence it came from the body」で、本文に名前がないとき
+langchain は要求名へフォールバックするため）/ `unattributed` / `serving_mismatch` / `no_calls`。
+スコアカードは `provenance_status` を持ち、「the benchmark table gained an Attribution column with the
+five historical rows reading **'unverified'** rather than receiving invented attribution」。誰も保証
+していない呼び出しに紐づく清算測定は、認可するのではなく**ブロック**するようになった。同じリリースは
+利益だけでなくコストも書く：識別子が欠けると相関グルーピングが狭まり、「reduction moving
+**42.6% → 24.5%** because unrelated alerts stop counting as grouped」（固定した検出形状のコホートで
+実測：以前は 36 のクロスルール事象グループ、以後はゼロ）。
+
+エージェント評価で「提供者の来歴」フィールドを出すものはほとんどないので、ここが再利用できる部分だ
+——ベンチマークが公表する数字は**呼び出し**についての数字で、その呼び出しには身元があり、身元はヘッダー
+から読むか、本文から推測するか、存在しないかのどれかである。これに照らすと反例は同じリポジトリにある：
+`docs/audit/REPOSITORY_REALITY.md` は **2026-09-23「against v8.1.0」**の日付で、changelog の最新項目は
+**21.0.0**——WORKING / PARTIAL / BROKEN / DEMO-ONLY の棚卸し（実測 **22 / 4 / 1 / 4**）はコードの時計で
+古びる。それこそがこの文書が捕まえるために書かれた失敗そのものだ。**現状文書はバージョン刻印付きの
+スナップショットであり、読むべきはその刻印である。**
+
+## 重なりを隠す中央値と、下がりえないランキング（2026-11-01 20:38）
+
+Nolan Lawson の十二フレームワークのエージェント構築（Opus 5.5 の high effort、各五回、費用／実時間／
+トークン／Lighthouse／JS バイトを公開）が引用に耐えるのは、中央値の隣に区間を印字しているからだ：
+**Hono+htmx $2.67**（2.23–3.19）、**Astro $2.76**（2.16–3.63）、**Nuxt $2.82**（2.39–4.25）、
+**Angular $4.97**（3.19–6.82）で **9.76M** トークン（4.92–14.94）・**17.2 分**（9.8–23.7）。実際に
+送出された JS は Astro **0 KiB**、vanilla 7、Hono+htmx 18、SvelteKit 36、Nuxt 84、Angular 93、
+React Router 115、TanStack Start 118、Next.js 142。数値はすべてページから一次取得し、それを限定する
+文も一緒に取った——「this is not a perfect experiment」「this entire benchmark could be cheated by
+just pre-generating all the HTML files as static assets」「The benchmark itself is largely
+vibe-coded」、そして本人が結論ではなく**推測**と明示した一文（「I have a strong suspicion … that the
+current crop of MCPs and skills may be doing more harm than good」）。読み方を決めるのは著者自身の
+この一行だ：React Router の最安実行（**$2.82**）は「still cheaper than the most expensive version of
+Hono+htmx（**$3.19**）」——つまり中央値の順序は一回ごとの順序ではなく、$2.67 と $4.97 だけを引く要約は
+この表を正直にしている重なりを落としている。
+
+`shiyu-coder/Kronos` は同じ教訓をパイプラインの反対側で示す：**44,930★、本日 +611**、MIT、そして
+デフォルトブランチの最新コミットは **2026-04-13T12:38:49Z**（`commits.atom` から、六か月半前）。
+star と fork は**減らない累積カウンタ**なので、trending の順位は一年前のものでありうる——リポジトリは
+一度のローンチでランクインし続け、2026-10-29 の二件の欠陥報告は放置されたままだ：**#423**
+（「decode_s2: rotary positions collapse to 0 in the single-query cross-attention
+(train/inference mismatch)」）と **#422**（予測が入力窓の平均へ引かれる。既知の +2.1% ドリフトを持つ
+合成ランダムウォークで、30 系列の平均 20 本予測が −10.4%）。いずれも同一の報告者で、コメントは合計
+一件、しかも本人のもの。**トラッカー内の申し立てであり、公表された知見ではない**——金融基盤モデルに
+ついては、コミット日と未処理の欠陥一覧こそモデルカードが持たない二つのフィールドだ。
+
+**もう一件、この回を書き終えたあとに生成時 lint が見つけたもの——一段落に三つ誤りで、原因は 1.4 KB の README を開かなかったことだけ。**同じフィードの第 35 項は `epoyraz/nes-contra-us` を「注釈付き逆アセンブリ」と呼んだが、README の一行目は「A port of the NES game _Contra_ (US) from 6502 assembly to C, and from C to WebAssembly」であり、「built on **vermiceli**'s annotated disassembly (itself started from Trax's work)」——つまり著者を一段上流へ移してしまっていた。さらに「and the build script(s) to reassemble the assembly into a byte-for-byte match of the game」と引用したが、この文は**四つの可読ソースのどこにも存在しない**（README の実際の行は「`./build.sh` still reassembles the original ROM byte-for-byte with cc65」）。そして留保として「the README documents the disassembly and the reassembly, not the browser port」と書いたが、README には **Play in the browser** の節、WebRTC の二人対戦、移植を検証する装置（`port/tools/parity_telemetry.c`：Mesen 2 の記録を C コアで再生し、RAM・ネームテーブル・パレット・OAM・CHR・PPU・音・最終ピクセルを毎フレーム比較、「Stages 1–4 are identical over the whole 40k-frame recording」）が載っている。再利用できる規則：**移植やフォークであるリポジトリには二つの身元があり、一行目を読んでいない項目は取り違える**——そして最も勤勉に聞こえる留保（「README が説明するのは X であって Y ではない」）はページ全体についての主張なので、印象ではなく検索を要する。
+
 → [[fact-check]] [[security]] [[dev-tools]]

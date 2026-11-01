@@ -13897,5 +13897,23 @@
     "en": "Karpathy's HackerTube — a YouTube-style front end over videos recommended in Hacker News comments (6,454 videos across 150 topics, 2007–2026), with a downloadable data export. First-party (one author, no editorial layer), but its load-bearing artifact is checkable: /data serves the file manifest (videos.json, mentions.json, taxonomy.json, related.json, embedding_ids.json) and an HN commenter located it independently (artifact check = the cv:1 curation cross-check, not an extra confirmation).",
     "zh": "Karpathy 的 HackerTube——把 Hacker News 评论里被推荐过的视频做成 YouTube 式前端（2007–2026、150 个话题、6,454 个视频），并提供数据导出。第一方站点（单一作者、无编辑层），但它的关键工件可核验：/data 提供文件清单（videos.json、mentions.json、taxonomy.json、related.json、embedding_ids.json），且有一位 HN 评论者独立找到了它。",
     "jp": "Karpathy の HackerTube——Hacker News のコメントで推薦された動画を YouTube 風のフロントエンドにしたもの（2007–2026、150 トピック、6,454 本）で、データのエクスポートも提供する。第一者サイト（単一著者・編集層なし）だが、要となる成果物は検証できる：/data がファイル目録（videos.json、mentions.json、taxonomy.json、related.json、embedding_ids.json）を返し、HN のコメント投稿者が独力でそれを見つけている。"
+  },
+  "jetstream.security": {
+    "cat": "security",
+    "cred": "med",
+    "cv": 1,
+    "density": "med",
+    "en": "A security vendor's research blog. Carries first-hand prompt-injection analysis; cross-checked 2026-11-01 against independent Brazilian legal-press coverage of the same ruling (Migalhas, ConJur, Poder360) — the Parauapebas labour-court decision, its 10% penalty and the hidden white-on-white instruction all match, while the two accounts disagree on whether the *lawyers* or the *law firms* were fined, so read its legal-party framing with care.",
+    "jp": "セキュリティベンダーのリサーチブログ。プロンプトインジェクションの一次分析を載せる。2026-11-01 に同じ判断を扱ったブラジルの法律メディア（Migalhas、ConJur、Poder360）と突合済み：Parauapebas 労働裁判所の決定、10% の制裁、白地に白文字の隠し指示はいずれも一致したが、「弁護士」と「法律事務所」のどちらが制裁されたかで記述が食い違う。法的当事者の書き方は慎重に。",
+    "zh": "一家安全厂商的研究博客，刊载第一手的提示注入分析。已于 2026-11-01 与报道同一裁决的巴西法律媒体（Migalhas、ConJur、Poder360）交叉核验：Parauapebas 劳动法院的裁决、10% 罚款与白字白底的隐藏指令均一致，但被罚主体究竟是**律师**还是**律所**，两方说法不同——引用其法律主体表述时需谨慎。"
+  },
+  "migalhas.com.br": {
+    "cat": "news",
+    "cred": "high",
+    "cv": 1,
+    "density": "med",
+    "en": "Brazilian legal-affairs news outlet, widely cited in Lusophone legal practice. Primary-language reporting on court decisions with case numbers and judge names; cross-checked 2026-11-01 against JetStream's independent English analysis of the Parauapebas prompt-injection ruling (facts match, party naming differs).",
+    "jp": "ブラジルの法律メディア。ポルトガル語圏の法務で広く引用される。裁判所の決定を事件番号・裁判官名つきで一次言語で報じる。2026-11-01 に Parauapebas のプロンプトインジェクション判断について JetStream の独立した英語分析と突合済み（事実は一致、当事者の呼称は相違）。",
+    "zh": "巴西法律新闻媒体，在葡语法律实务中被广泛引用。以葡语一手报道法院裁决，附案号与法官姓名。已于 2026-11-01 就 Parauapebas 提示注入裁决与 JetStream 的独立英文分析交叉核验（事实一致，当事人称谓不同）。"
   }
 }

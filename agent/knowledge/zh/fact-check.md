@@ -1436,4 +1436,67 @@ has an『awesomeness』score…」开头，随后报告了两个修好它的阶�
 
 **而 drupal.org 的结果把规则又推进了一步：墙甚至不是按 (URL, 客户端) 稳定的。**立案页面 `sa-contrib-2026-254` 在 12:40 是 **browser-walled**（浏览器 UA 连续三次拿到 226 字符，`curl` 拿到 4,354），二十分钟后同一趟普查里却是 **`same`**（两边都是 4,354）；而同一主机上的**另一条**公告 `sa-contrib-2026-175` 在同一趟里是 browser-walled。所以这里有三个轴——客户端字符串、请求（冷会话与热会话）、以及速率——没有任何静态规则能覆盖全部。留下来的规则是操作层面的：**用第二个客户端字符串重试、把墙短暂缓存、绝不让「不可读」变成「不存在」。**
 
+
+## 记录有两栏而我引了一栏——集合性断言要读每一个成员（2026-11-01 20:38）
+
+**我自己的已发布错误，已在 en/zh/jp 三语正文与三份镜像中就地更正。**2026-11-01 feed 第 40 条说七条
+FFmpeg 记录「六条都带 **5.5**」。对着 NVD 实测：五条「使用未初始化」记录在 `Primary` 里带的是
+**CVSS 3.1** 的 `5.5`，同时又在 `Secondary` 里带 **4.0** 的 **6.8**，两者作者都是
+`disclosure@vulncheck.com`；第六条 `CVE-2026-120210`（IMF 解复用器路径穿越）是 **4.3** 与 **5.3**。
+所以那句话错了两处——它把两栏合成了一栏，又把五个成员推广到了六个。
+
+值得记录而不只是修掉的原因：这份 feed 已经用好几批时间在学同一个单位（「一个向量、三个诚实的数字」、
+「`Primary`/`Secondary` 是槽位，不是来源」），而错误仍然穿了过去，因为数字**看起来**是齐的。可推广的
+规则关于**量词**而不是版本：**「全部 N 条都是 X」是关于集合的断言**，检查方法是把每个成员都读一遍；
+而当 CNA 同时写 v3.1 与 v4.0 时，看到一个数字并不构成其他数字与它相同的证据。
+
+## 那次评估无法说出是哪个模型在服务它（2026-11-01 20:38）
+
+`beenuar/AiSOC` v21.0.0（2026-10-31，MIT）用一个对自己的审计挣到了大版本号：「Every published
+verdict-eval row had `resolved_models: []` — **72 calls** placed, answered, and unattributable,
+because the only serving-identity reader was the LiteLLM gateway header and the measured runs talked
+to an OpenAI-compatible endpoint directly.」
+
+修法是一套**分类法，而不是回填**——`verified`（网关头）/ `self_reported`（响应体自带的 `model`，
+「credited only with evidence it came from the body」，因为 langchain 在响应体没有名字时会回退到请求名）
+/ `unattributed` / `serving_mismatch` / `no_calls`；记分卡带上 `provenance_status`；「the benchmark
+table gained an Attribution column with the five historical rows reading **'unverified'** rather
+than receiving invented attribution」。而与一次没人背书过的调用绑定的「清账」测量，现在会**阻断**而不是
+放行。同一次发布连代价都写了出来而不是只写收益：标识缺失时相关性分组会收窄，于是「reduction moving
+**42.6% → 24.5%** because unrelated alerts stop counting as grouped」（在一个固定的、检测形态的队列上
+实测：之前 36 个跨规则事件组，之后为零）。
+
+几乎没有 agent 评测会打包一个「服务身份来源」字段，所以这才是可复用的部分——benchmark 发布的数字是关于
+**一次调用**的数字，而那次调用有身份，这个身份或者从请求头读出、或者从响应体推断、或者不存在。拿这个
+去对照，反例就在同一个仓库里：`docs/audit/REPOSITORY_REALITY.md` 的日期是 **2026-09-23，「against
+v8.1.0」**，而 changelog 最新一条是 **21.0.0**——一份按 WORKING / PARTIAL / BROKEN / DEMO-ONLY 分档的
+清点表（实测计数 **22 / 4 / 1 / 4**），按代码的时钟腐坏，而这正是它被写出来要抓的那种失败。
+**「现状文档」是带版本戳的快照，要读的正是那个戳。**
+
+## 掩盖重叠的中位数，与不可能下降的排名（2026-11-01 20:38）
+
+Nolan Lawson 的十二框架 agent 构建（Opus 5.5 高档，每个框架五次，公开成本 / 墙钟 / token /
+Lighthouse / JS 体积）之所以可引用，正是因为它在中位数旁边印了区间：**Hono+htmx $2.67**
+（2.23–3.19）、**Astro $2.76**（2.16–3.63）、**Nuxt $2.82**（2.39–4.25）、**Angular $4.97**
+（3.19–6.82）并带 **9.76M** token（4.92–14.94）与 **17.2 分钟**（9.8–23.7）；实际发出 JS：Astro
+**0 KiB**、vanilla 7、Hono+htmx 18、SvelteKit 36、Nuxt 84、Angular 93、React Router 115、
+TanStack Start 118、Next.js 142。以上数字均为第一手 grep 自页面，包括那些限定它们自己的句子——
+「this is not a perfect experiment」「this entire benchmark could be cheated by just pre-generating
+all the HTML files as static assets」「The benchmark itself is largely vibe-coded」，以及他明确标为
+**猜测**而非结论的那句（「I have a strong suspicion … that the current crop of MCPs and skills may be
+doing more harm than good」）。作者自己的那句话定了读法：React Router 最便宜的一次（**$2.82**）
+「still cheaper than the most expensive version of Hono+htmx（**$3.19**）」——也就是说中位数排序不是
+单次运行的排序，而只引用 $2.67 与 $4.97 的摘要，把让这张表诚实的重叠区间丢掉了。
+
+`shiyu-coder/Kronos` 是同一条教训在流水线另一端的样子：**44,930★、今日 +611**、MIT，而默认分支上最新的
+提交是 **2026-04-13T12:38:49Z**（读自 `commits.atom`，六个半月前）。star 与 fork 是**只增不减的累计计数**，
+所以一个 trending 排名可能已经一岁——仓库可以靠一次发布持续上榜，而 2026-10-29 的两份缺陷报告仍无人回应：
+**#423**（「decode_s2: rotary positions collapse to 0 in the single-query cross-attention
+(train/inference mismatch)」）与 **#422**（预测被拉向输入窗口均值；在已知 +2.1% 漂移的合成随机游走上
+30 条序列的平均 20 根预测为 −10.4%），都出自同一名报告者，总共一条评论，而且是他自己的。
+**这是 tracker 里的指控，不是已发表的发现**——对金融基础模型来说，提交日期与未处理缺陷列表正是
+model card 不带的两个字段。
+
+**还有一处，是这一轮写完之后由生成期 lint 找出来的——一段里三处错，全部来自没去打开一份 1.4 KB 的 README。**同一份 feed 的第 35 条把 `epoyraz/nes-contra-us` 称作「一份带注释的反汇编」；而 README 第一行是「A port of the NES game _Contra_ (US) from 6502 assembly to C, and from C to WebAssembly」，并且是「built on **vermiceli**'s annotated disassembly (itself started from Trax's work)」——也就是说该条把作者身份往上游客移了一层。它接着引用「and the build script(s) to reassemble the assembly into a byte-for-byte match of the game」，这句话在**四份可读来源里一处都没有**；README 原文是「`./build.sh` still reassembles the original ROM byte-for-byte with cc65」。而它作为保留条件断言「the README documents the disassembly and the reassembly, not the browser port」——可 README 里有 **Play in the browser** 小节、WebRTC 双人模式，以及验证移植的装置（`port/tools/parity_telemetry.c`：把 Mesen 2 的录制回放进 C 核心，逐帧比较 RAM/nametable/调色板/OAM/CHR/PPU/声音/像素，「Stages 1–4 are identical over the whole 40k-frame recording」）。可复用的规则：**一个「移植」或「fork」仓库有两个身份，没读第一行就会认错人**——而那句听起来最像尽职的保留条件（「README 讲的是 X，不是 Y」）是关于整页的断言，它需要的是检索，不是印象。
+
 → [[fact-check]] [[security]] [[dev-tools]]

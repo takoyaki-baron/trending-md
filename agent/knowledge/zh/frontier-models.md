@@ -3087,4 +3087,47 @@ dweet 上困惑度从 **28.63 降到 8.57**，程序变得「more consistent」�
 对四个随机 checkpoint 的 400 组做盲评（选中第 4 个）。12:23 那批把这个 charm 句当成了文章的判决，而文章把它
 当成随后两次修复的*动机*。
 
+
+## 功劳记给了归一化器，重排器变成了技能，而控制分数不再暗示一个模型（2026-11-01 20:38）
+
+一个批次的四条全新研究条目，全都是关于**一个结果到底是在讲哪个变量**的论证。
+
+**权重归一化的收益其实是学习率调度（arXiv 2610.40362）。**论文的主张是：报告中的增益「are driven
+primarily by the induced **effective learning rate (ELR)** trajectory rather than by
+normalization alone」，并且「Matching ELR trajectories largely collapses the training loss dynamics
+of WN and WD」——也就是说证伪是内建的，因为把同一条 ELR 路径套到 weight decay 上就能复现同样的动力学。
+在一次 **128B token** 的 MoE 预训练上，其提出的 **AIR**（affine inverse-square-root，`1/√t` 衰减
+加仿射调整，以在有限时长内命中预设的峰值与末端速率）胜过 cosine，「reduc[es] terminal training loss
+by approximately **0.01** relative to cosine at matched cumulative LR」。数值不大，可迁移的是审稿
+问题：**一个不报告自身调度的归一化/正则化收益，是一次未控制的比较**；而后期调度「attenuates the
+effect of earlier LR choices」，所以差异表现为末端损失的差值而不是曲线形状。
+
+**重排器变成常驻主干上的一个技能（arXiv 2610.40454，Glance）。**它不再同时常驻重排器与生成器，而是给
+生成器加「a lightweight decision adapter and pointer head to score candidate passages from a
+**shared prefill**」，代价是「approximately **0.1 GiB** of additional memory per decision skill」，
+跑在一个 9B 主干上。**39 分钟**的 MS MARCO 微调后：SciFact 上 **0.741** nDCG@10、NFCorpus 上
+**0.345**，对照 `bge-reranker-v2-m3` 的 **0.721** / **0.326**；在 **300** 道 HotpotQA 上，被选中的
+上下文让答案 F1 提升 **0.045**，配对 bootstrap 95% 置信区间 **[0.014, 0.076]**；在**一次**共享
+prefill 之上打分，候选数到 **200（43k token）**时仍在提升，此时比 cross-encoder 高 **0.058**。
+量级本身就是主张——把重排做成*技能*是从服务图里去掉第二件产物——而论文自己的范围句就是边界：
+「evaluation currently covers two retrieval datasets, one QA dataset and one backbone family.」
+
+**控制分数不是模型学到了环境的证据（arXiv 2610.40637，world2vec）。**抱怨说得很直接：「World models
+can achieve strong control performance without faithfully capturing the dynamics of their
+environment, limiting their potential for mechanistic interpretability and scientific discovery.」
+world2vec「without reward information directly from observations and actions」学习潜动力学，主张
+「at least one order of magnitude fewer parameters than DreamerV3, TD-MPC2 and LeWM」、从像素出发的
+连续控制 SOTA，以及「accurate system identification across a benchmark of **71 attractors**」。
+参数比是关于**规模**的比——不是算力、不是精度——而摘要对控制与系统辨识两项测量都没给误差棒，所以
+「faithfully reproduce」是该被检验的主张，而不是可用作结论的发现。
+
+**发型是一个集合，不是序列（arXiv 2610.40599，HairDeck）。**风格化游戏头发由 hair card 构成——
+美术摆放的、几何本身就是头发的带状片。此前唯一的生成器 CHARM「decodes a hairstyle
+autoregressively as a long sequence of control points」；HairDeck 把卡片发型当作「an unordered
+set of artist-defined primitives」，「each card is a single token, and a set diffusion transformer
+denoises all cards together」，并从一张图同时产卡片与 spring-bone 链：在 CHARM 自己的测试集上
+Chamfer 距离低 **44%**、卡片朝向误差「more than half」、生成快 **33×**。这种重框法超出了头发：
+任何「一组互相独立、没有规范顺序的原语」构成的资产，一旦不再假装它有顺序，就会得到更短的序列和更便宜的
+解码器。范围是一类很窄的资产，在先前方法的基准上测量，有项目页但尚无独立复现。
+
 → [[fact-check]] [[edge-inference]] [[harness-reliability]]

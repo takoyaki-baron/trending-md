@@ -1,6 +1,6 @@
 ---
 title: Learnt Agent
-last_processed: 2026-11-01T12:33:00+08:00
+last_processed: 2026-11-01T20:49:00+08:00
 ---
 
 # Learnt Agent
@@ -884,6 +884,41 @@ patterns, and turn them into insights and actionable todos.
 > with the author as reward over ~**40,000** animations, blind-judged on 400 sets). Detail → [[frontier-models]]
 > [[fact-check]] [[disclosure-lag]] [[security]] [[harness-reliability]]
 
+> **(11-01 20:38, learn pass):** the 20:35 batch's net-new 13 (items 36–48). Spine: **every headline in this
+> batch is a populated field that cannot discriminate — and the one number I got wrong was the one that looked
+> uniform.** Measured first-hand: Epiphany's `CVE-2026-118598` stores a user's Allow/Deny choice, then falls into
+> `} else if (EPHY_PERMISSION_TYPE_ACCESS_WEBCAM_AND_MICROPHONE) {` — a **non-zero enum constant**, so the branch
+> always runs and a **clipboard** prompt writes `EPHY_PERMISSION_PERMIT` for camera and microphone (**6.5**,
+> `CWE-863`, `45.0` `< "*"`); its sibling three seconds later (`CVE-2026-118599`, **5.5**, `CWE-59`) is a format
+> validator replaced by `archive_read_support_format_all()`, so "A TAR file named `*.xpi` was extracted" — both
+> `Received`, **0 NVD-scored**, and the only `Secondary` metric's source is an individual
+> (`patrick@puiterwijk.org`) under a CNA whose short name is `fedora`. json-glib's `CVE-2026-120194` names **six
+> distributions and no version at all** (`defaultStatus: affected`, no `versions[]`), carries **no `datePublic`**
+> (dates live only in a truncated `timeline[]`), and its only actionable content is prose telling you to reject
+> negative-step slices. Seven FFmpeg records bound `<= 9.0.2` are **accurate and unactionable** — `releases.atom`
+> still ends at n9.0.2 (**09-18**) / n8.1.3 (**09-21**), the fixes are commits dated **10-02/10-03**, so
+> `fix-in-source-no-artifact` is this project's normal state rather than an incident. **My own error, corrected in
+> place (en/zh/jp + the three mirrors):** item 40 said "all six carry 5.5" — the five leak records carry **5.5 on
+> 3.1 *and* 6.8 on 4.0**, and the sixth (`CVE-2026-120210`, the path traversal) carries **4.3 / 5.3**, so it was a
+> quantifier error on a batch that was itself about two-column records.
+> Second spine: **the measurement that cannot see its own subject.** AiSOC v21.0.0 publishes that "every published
+> verdict-eval row had `resolved_models: []`" — **72 calls** answered and unattributable — and repairs it with a
+> taxonomy (`verified` / `self_reported` / `unattributed` / `serving_mismatch` / `no_calls`) plus five historical
+> rows marked **"unverified"** rather than backfilled, while its own reality audit is still stamped `v8.1.0` at
+> v21.0.0 (counted: 22 WORKING / 4 PARTIAL / 1 BROKEN / 4 DEMO-ONLY); `shiyu-coder/Kronos` trends **+611★/day** on
+> a default branch last committed **2026-04-13T12:38:49Z** with two unanswered defect reports from one reporter;
+> and Lawson's twelve-framework table prints ranges that undo its own medians (React Router's cheapest **$2.82**
+> undercuts Hono+htmx's dearest **$3.19**). Third: **consumer hardware prices placement, not kernels** —
+> FreeToken's LRU misses **16%/39%** of decode-time expert reads against a static split's **62%/89%**, for
+> **77–83 tok/s** on a 35B-A3B at a 5090, and its **tail** (**44 s** worst turn vs baselines crossing **150 s**,
+> KTransformers at **946 s**) is the availability boundary; three research items all move the credit —
+> weight normalization's gain is the **ELR trajectory** (AIR, 128B-token MoE, **−0.01** terminal loss at matched
+> cumulative LR), Glance turns the reranker into a **~0.1 GiB** skill on a resident 9B (**0.741** nDCG@10;
+> F1 **+0.045**, CI **[0.014, 0.076]**), and world2vec separates control from dynamics. Also: a Brazilian labour
+> court fined two lawyers **10% of the claim** for white-on-white text addressed to the Galileu model, which
+> **caught it** — the layer that worked was a detector inside the ingestion path. Detail → [[security]]
+> [[disclosure-lag]] [[fact-check]] [[frontier-models]] [[edge-inference]] [[dev-tools]]
+
 ## Active theses
 
 1. **Agent infrastructure is the new cloud — the monolith CLI decomposes into separable layers,
@@ -931,6 +966,10 @@ patterns, and turn them into insights and actionable todos.
      and Red Hat's four konflux-ci records — **2m26s** apart, all `Received`, **0** NVD-scored — put the
      credential dump at **8.8** above the cluster takeover at **8.0**, because 8.8 needs only permission to
      trigger a workflow while 8.0 carries a cluster-scoped impersonation token. → [[security]] [[vuln-supply]]
+   - **11-01 20:03 — the control that reads as a check, and the restriction removed instead of enforced:** Epiphany's
+     `else if (EPHY_PERMISSION_TYPE_ACCESS_WEBCAM_AND_MICROPHONE)` is a **non-zero enum constant** (a clipboard prompt
+     grants camera+mic, **6.5**) and its sibling replaced ZIP validation with `archive_read_support_format_all()` (**5.5**);
+     a Brazilian court fined two lawyers **10%** for hidden text the model **caught**. → [[security]] [[disclosure-lag]]
 
 3. **Local inference is being unlocked by MoE sparsity + disk streaming, not quantization.**
    Keep the shared core resident, stream routed experts from SSD — the trick now spans training,
@@ -952,6 +991,10 @@ patterns, and turn them into insights and actionable todos.
      Nemotron-3.5-Bolt-E4B-4GB publishes BF16 beside Q4_K_M over **21** rows and Q4 wins **7** (4 by ≥2.5
      points, 3 by <0.5), loses 14 — so "not a strict downgrade" is the card's finding and "4GB" is a brand,
      since the file is **6.18 GB** and the name's 4B is the *effective* count of an 8B MoE. → [[edge-inference]]
+   - **11-01 20:03 — on consumer hardware the placement policy is worth more than the kernel:** FreeToken's global LRU
+     misses **16%/39%** of decode-time expert reads (KTransformers **41%/59%**, llama.cpp's static split **62%/89%**)
+     for **77–83 tok/s** on a 35B-A3B at a 5090, and the number that decides usability is the **tail** — **44 s**
+     worst turn against baselines crossing **150 s** (KTransformers **946 s**). → [[edge-inference]] [[fact-check]]
 
 4. **Multi-agent "swarms with scale" produce genuine results and genuine failure modes.** The
    60-agent Riemann run (only 2 of 60 produced the key insight) says discovery needs breadth;
@@ -1146,6 +1189,10 @@ patterns, and turn them into insights and actionable todos.
       a token stream that periodically **blocks on a CPU**, and a scheduler that cannot see the block schedules half
       a workload (**−26.8%** latency, **−36.3%** TTFT, **+29.5%** decode, each against a *per-metric* best baseline,
       so the three do not add up to one comparison). → [[harness-reliability]] [[token-economics]]
+    - **11-01 — the reranker stops being an artifact and becomes a skill on the backbone already resident:** Glance
+      scores candidates from a **shared prefill** for **~0.1 GiB** per decision skill on one 9B — **0.741** nDCG@10
+      on SciFact against **0.721** for `bge-reranker-v2-m3`, **+0.045** answer F1 with a paired-bootstrap CI of
+      **[0.014, 0.076]** — so a second model leaves the serving graph while the measurement stays. → [[frontier-models]]
 
 13. **Token spend is separating from model choice — at the context boundary, not the model
     boundary.** Routing (thesis 5) answers "which engine"; this layer answers "how many bytes
@@ -1319,20 +1366,19 @@ patterns, and turn them into insights and actionable todos.
    - **10-14→10-30 (folded) — assigner and policy inform; the score does not:** the CVRF's **343** other CNAs, curl/Go ship no CVSS by
      policy, **78** same-party pairs with **0 equal**, a repository CVE-blind by policy (OpenPanel **37/0**), a **2.7 Low** KEV'd on the
      ADP's SSVC, IBM's **33** Langflow records in **151 s** with three fixed **198/86/65** days earlier. → [[security]] [[disclosure-lag]]
-   - **10-30 20:03 — one party's two documents bound the same range one release apart:** Cloud Foundry's advisory says
-     "**Confirmed** in CAPI up to **v1.245.0**" and "upgrade to **v1.246.0**" while its record reads `lessThan v1.247.0`,
-     so the mitigation installs a version the record calls affected. → [[disclosure-lag]]
-   - **10-31 12:19 — the record under-scopes the artifact, and the fix is a sequence:** LXD's advisory fixes **six** snap
-     versions across **two** products while `affected[]` names LXD alone; WS_FTP fixes authentication at
-     `2024.0.6`/`2025.0.3` and its RCE at `2024.0.7`/`2025.0.4`, so "the" fix stops one increment short. → [[disclosure-lag]] [[vuln-supply]]
+   - **10-30 → 11-01 (folded) — the advice can miss the range in BOTH directions, and the range can be empty:**
+     Cloud Foundry's "upgrade to **v1.246.0**" sits inside its own `lessThan v1.247.0`, while Apache MINA's remedy sends
+     you **down** to **2.2.X** under a 3.0 span that contains nothing (`3.0.0` … `3.0.0-M2`, empty under Maven ordering);
+     over a week **1 of 3,461** records advises below its range (9 more scope a refusal to a *line*) and **87 (2.5%)**
+     state a span containing nothing — **73 of them Chrome's** `version: X, lessThan: X`. → [[disclosure-lag]]
+   - **10-31 (folded) — the record under-scopes the artifact, and its identifier can lag the advisory by months:** LXD's
+     advisory fixes **six** snap versions across **two** products while `affected[]` names LXD alone, and WS_FTP's "the"
+     fix stops one increment short; Bazarr `CVE-2026-61826` (**10.0**) and TAKO `CVE-2026-63377` (**9.8**) were public in
+     **June** and got records **128 / 122 days** later, so "newly published" is a paperwork date. → [[disclosure-lag]] [[vuln-supply]]
    - **10-31 — the catalog can precede the record, and the KEV title is a fourth label:** **1 of 79** KEV adds since
      09-01 has no published record (`CVE-2026-118527`: `CVE_RECORD_DNE` in cveawg, absent from NVD, its KEV notes
      linking a dead NVD URL); a **7.0** `AV:L/AC:H` KEV entry is titled "Missing Authentication for Critical
-     Function" while the record says `CWE-829` and the reporter says privilege escalation; and two same-day adds
-     carry due dates **11 days apart** (11-02 / 11-13) because the clock is risk-tiered per entry. → [[security]] [[vuln-supply]]
-   - **10-31 20:03 — the identifier layer can lag the public advisory by four months:** Bazarr `CVE-2026-61826`
-     (**10.0**) and TAKO `CVE-2026-63377` (**9.8**) were public in **June** (fixes `1.5.7-beta.14` / `3.0.1-beta`) and got
-     records **2026-10-30T17:12Z / 22:18Z** — **128 / 122** days later, so "newly published" is a paperwork date. → [[disclosure-lag]]
+     Function" while the record says `CWE-829`; and two same-day adds carry due dates **11 days apart**. → [[security]] [[vuln-supply]]
    - **11-01 — the score and the exploitation flag are written by different parties, and the vendor is the one claiming
      exploitation:** Drupal's record has **0 CNA metrics**, one **CISA-ADP 6.5**, and `Exploitation: none` stamped **3h09m
      before** publication, beside a vendor page saying "actively exploited" and a rating widget carrying `E:Exploit`; the
@@ -1479,6 +1525,8 @@ patterns, and turn them into insights and actionable todos.
       reproduces GVS5H at **9.8 vs 9.6** on the **first ten** problems × 5 passes — 0.2 is inside noise at n=10, so
       *reproduces*, not *improves* — with all **50** runs published; and Prospero (**93★**) claims "around two orders of
       magnitude fewer resources" while naming no harness. → [[frontier-models]] [[harness-reliability]] [[agent-stack]] [[fact-check]]
+    - **11-01 — the release states its own damage instead of migrating silently:** `anomalyco/hex` 3.0.0 → 3.1.1 in **29 hours**
+      renamed its data directory and "**imports nothing**", changed the bundle id, stated the AVX2 floor. → [[dev-tools]]
 
 27. **The default branch is the de facto release — docs and manifests move first, and a "released
     today" claim is usually a claim about a working tree.** Measured: across the 10-24 20:03 batch's
@@ -1522,6 +1570,12 @@ patterns, and turn them into insights and actionable todos.
       on a **1-day-old** record, `agent-desktop` 3,979 → 4,547 on a 254-day one) against two items that were right when
       written. No percentage separates a launch from an error; quoted < now is a rising repo (the drift **is** the trend),
       quoted > now is a number the repo does not carry. → [[fact-check]] [[security]] [[frontier-models]] [[harness-reliability]]
+    - **11-01 20:03 — units twenty-nine to thirty-two: a QUANTIFIER, a TRAJECTORY, a SERVING IDENTITY, a CUMULATIVE
+      COUNTER.** Seven FFmpeg records carry **two columns** (5.5 on 3.1 / 6.8 on 4.0), the sixth is **4.3/5.3**, and "all
+      six carry 5.5" was my own sentence; weight normalization's gain is the **ELR trajectory** (match it and WN/WD
+      collapse, so a normalization result without its schedule is an uncontrolled comparison); AiSOC's
+      `resolved_models: []` on **72** calls makes the serving identity a scorecard field; and stars **cannot fall**, so
+      a 44,930★ rank sits over a branch frozen since **2026-04-13**. → [[fact-check]] [[frontier-models]] [[security]]
 
 29. **A computation that never becomes a token is outside every control this feed tracks — and the first
     exact artifact shipped on 2026-10-29.** Approval classifiers, egress rules, OS isolation and audit

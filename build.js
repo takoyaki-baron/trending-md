@@ -951,11 +951,23 @@ if (tailReview.length) {
    An earlier multi-byte edit split a zh/jp table row mid-character, leaving UTF-8-as-Latin-1
    fragments (ä¸..., ï¼...) that rendered as stray text below the table — found 2026-09-07 in
    agent/knowledge/{zh,jp}/index.md. The signature is exact: mojibake is Latin-1/cp1252 decoding
-   of UTF-8 bytes, so every corrupted pair is an accented-Latin (U+00C0–FF) or C1-control
-   (U+0080–9F) char adjacent to another — text that no legitimate en/zh/jp content contains
-   (single accented chars like the ñ in Jalapeño or the í in Jiří never pair). Warn each build so
-   the next split byte is one edit, not a month of rendered garbage. */
-const MOJIBAKE_RE = new RegExp('[\\u0080-\\u009F\\u00C0-\\u00FF]{2}|[\\u00C0-\\u00FF][\\u0080-\\u009F]|[\\u0080-\\u009F][\\u00C0-\\u00FF]');
+   of UTF-8 bytes, so a corrupted fragment is accented-Latin (U+00C0–FF) or C1-control
+   (U+0080–9F) chars, adjacent. **"Any adjacent pair" was too broad (2026-11-01):** this run
+   quoted a Brazilian filing — "ANTENÇÃO, INTELIGÊNCIA ARTIFICIAL … PETIÇÃO" — which pairs Ç+Ã
+   twice, and the old rule reported **4 corrupted lines** across en/zh/jp for text that is
+   perfectly decoded. Adjacent diacritics are normal in Portuguese/Spanish, and the first
+   over-correction then flagged 68 lines of legitimate typography ("——“"，"3×—", Czech "áš"),
+   because cp1252's – — ‘ ’ “ ” and š œ are ordinary prose too. So the rule now fires only on
+   shapes no legitimate text produces: a **C1 control**; a **run of 3+** Latin-1 letters (a
+   single pair is a word; double-decoded UTF-8 leaves runs, since real lead bytes C2–F4 all land
+   in U+00C2–FF); or a pair whose second char is a **punctuation/superscript** decode
+   (© ® † ‡ ƒ • … ¸ ¼ ½) — never a letter, a dash or a quote. Warn each build so the next split
+   byte is one edit, not a month of rendered garbage. Pinned by hand: "ANTENÇÃO", "PETIÇÃO",
+   "——“", "3×—", "áš" silent; "Ã©", "ä¸­æ–‡", "Ã‡ÃƒÃ•O", "ï¼ˆ", a lone U+0097 hit. */
+const MOJIBAKE_RE = new RegExp(
+  '[\\u0080-\\u009F]' // a C1 control never appears in legitimate text
+  + '|[\\u00A0-\\u00FF]{3}' // a run of Latin-1 letters; 2 is a normal Portuguese/Spanish pair (ÇÃO)
+  + '|[\\u00C2-\\u00FF][\\u00A9\\u00AE\\u00A2\\u00A3\\u00A5\\u00A7\\u00B0\\u00B7\\u00B8\\u00B9\\u00B2\\u00B3\\u00BC\\u00BD\\u00BE\\u2020\\u2021\\u0192\\u2022\\u2026\\u2030\\u2122\\u02C6\\u02DC]'); // second char is a punctuation/superscript decode — never a letter, a dash or a quote
 const mojiScanDirs = [path.join(ROOT, 'agent')];
 const mojiScanFiles = ['agent.md', 'action.md', 'about.md'].flatMap(f =>
   ['en', 'zh', 'jp'].map(l => path.join(ROOT, l, f)));

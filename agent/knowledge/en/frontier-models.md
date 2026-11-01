@@ -5002,4 +5002,55 @@ as the reward function, eight completions per unfinished dweet, ~**9–10 rounds
 (checkpoint 4 chosen). The feed published the charm sentence as the article's verdict; the article treats
 it as the *motivation* for two repairs.
 
+
+## The credit went to the normalizer, the reranker became a skill, and control stopped implying a model (2026-11-01 20:38)
+
+Four net-new research items in one batch, all of them arguments about **which variable a result is
+about**.
+
+**Weight normalization's win is the learning-rate schedule (arXiv 2610.40362).** The paper's claim is
+that the reported gains "are driven primarily by the induced **effective learning rate (ELR)**
+trajectory rather than by normalization alone", and that "Matching ELR trajectories largely collapses
+the training loss dynamics of WN and WD" — i.e. the falsification is built in, because applying the
+same ELR path to weight decay reproduces the dynamics. On a **128B-token** MoE pretraining its proposal
+**AIR** (affine inverse-square-root, a `1/√t` decay plus an affine adjustment to hit prescribed peak
+and terminal rates over a finite horizon) beats cosine and "reduc[es] terminal training loss by
+approximately **0.01** relative to cosine at matched cumulative LR". Small, and the transferable part is
+the review question: **a normalization/regularization win that does not report its schedule is an
+uncontrolled comparison**, and late-stage scheduling "attenuates the effect of earlier LR choices",
+which is why the differences show up as a terminal-loss delta rather than a curve.
+
+**The reranker becomes a skill on a resident backbone (arXiv 2610.40454, Glance).** Instead of keeping
+a reranker and a generator resident, the generator gets "a lightweight decision adapter and pointer
+head to score candidate passages from a **shared prefill**", at "approximately **0.1 GiB** of additional
+memory per decision skill" on one 9B backbone. After **39 minutes** of MS MARCO fine-tuning: **0.741**
+nDCG@10 on SciFact and **0.345** on NFCorpus, against **0.721** / **0.326** for `bge-reranker-v2-m3`;
+on **300** HotpotQA questions the selected context improves answer F1 by **0.045** with a
+paired-bootstrap 95% CI of **[0.014, 0.076]**; reranking keeps improving to **200 candidates (43k
+tokens)** scored out of one prefill, where it beats the cross-encoder by **0.058**. The scale is the
+claim — reranking as a *skill* removes a second artifact from the serving graph — and the paper's own
+scope line is the limit: "evaluation currently covers two retrieval datasets, one QA dataset and one
+backbone family."
+
+**A control score is not evidence the model learned the environment (arXiv 2610.40637, world2vec).**
+The complaint is stated plainly: "World models can achieve strong control performance without
+faithfully capturing the dynamics of their environment, limiting their potential for mechanistic
+interpretability and scientific discovery." world2vec learns latent dynamics "without reward
+information directly from observations and actions", claims "at least one order of magnitude fewer
+parameters than DreamerV3, TD-MPC2 and LeWM", SOTA continuous control from pixels, and "accurate system
+identification across a benchmark of **71 attractors**". The parameter ratio is a ratio about size —
+not compute, not accuracy — and the abstract reports no error bars for either the control or the
+identification measurement, so "faithfully reproduce" is the claim to test rather than the finding.
+
+**A hairstyle is a set, not a sequence (arXiv 2610.40599, HairDeck).** Stylized game hair is built
+from hair cards — artist-placed ribbons whose geometry *is* the hair. The one prior generator, CHARM,
+"decodes a hairstyle autoregressively as a long sequence of control points"; HairDeck treats the card
+hairstyle as "an unordered set of artist-defined primitives", where "each card is a single token, and
+a set diffusion transformer denoises all cards together", and emits both cards and spring-bone chains
+from one image: **44%** lower Chamfer distance, card-orientation error "more than half", **33×**
+faster generation, on CHARM's own test set. The reframing generalises past hair: any asset that is a
+collection of independent primitives with no canonical order gets a shorter sequence and a cheaper
+decoder once you stop pretending it has one. Scope is one narrow asset class on the prior method's
+benchmark, with a project page and no independent replication.
+
 → [[fact-check]] [[edge-inference]] [[harness-reliability]]

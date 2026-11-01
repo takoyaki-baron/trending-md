@@ -822,6 +822,31 @@ Sources: [OBS Studio 33.0.0](https://github.com/obsproject/obs-studio/releases/t
 
 **3. 两天之内，两条独立的路走上非 Apple ARM64——兼容浪潮的下一级台阶。**`Snapintosh/Snapintosh`（**919★**，创建于 2026-10-22）以 **EL2 monitor** 身份在 **ASUS Zenbook A16 / Snapdragon X2 Elite** 上启动 **macOS 27（26A428）**，运行**未经修改**的 Apple `kernelcache`（SPTM 与 TXM 调用、16 KiB 页表转换、设备模型），图形走笔记本自身的 **Adreno X2-90**，经由为它新写的驱动栈（`AdrenoMetal.bundle`、`AdrenoX2` IOGPU kext、`AdrenoDisplay`，以及把 Apple 的 AIR 着色器 IR 翻译到 Mesa `ir3` 的 **`air2ir3`**）——没有软件渲染路径；启动与日志经 USB-C 走一台跑 macOS 27 的 Mac 主机，用 `q1n1`（Asahi `m1n1` 的 fork）。`UniXNU/UniXNU`（**928★**，创建于 2026-10-19，BSD-2-Clause-Patent）走**另一个方向**：一个「**像 OpenCore**」的通用 UEFI 环境与驱动加载系统，在非 Apple ARM64 上跑 iOS/macOS，拆成 SoC 支持（`UniXNU-sm8550-common`）、设备仓（`UniXNU-sheng`，小米平板 6S Pro，Adreno740）与设备固件仓，配迁移通知与成文「Port a device」路径。状态表才是产物：Snapintosh 的写着带 GPU 加速的桌面可用，而流畅度仍在*进行中*，Wi-Fi 只能经主机代理（「从 macOS Wi-Fi 菜单加入还不行」），音频/摄像头/蓝牙/休眠/外接显示**不支持**；一台机器，别的都不行。虚拟机型与 UEFI 型，现在是通往同一地点的两条活路。
 
+
+## 一个大版本说「什么都不导入」，那就是重装；AVX2 门槛是一行需求说明（2026-11-01 20:38）
+
+`anomalyco/hex`——Rust 写的本地优先听写工具，MIT，**2,527★**——在 **29 小时**内从 **3.0.0 → 3.1.1**
+（读自 `releases.atom`：`2026-10-31T00:39:34Z` → `2026-11-01T01:40:43Z` → `2026-11-01T05:44:37Z`）。
+大版本是一次改名，而发布说明没有软化它：「Hex 3.0 starts fresh. It keeps its data in a folder named
+`hex` instead of `voice-control` and **imports nothing**, so settings, History, meeting recordings,
+and downloaded models start empty and the first launch downloads a speech model again.」macOS 的
+bundle identifier 变成 `anomaly.hex`，「signed by Anomaly, so macOS treats it as a new app」；麦克风、
+辅助功能、录屏权限都要重新授予；而且「2.3.1 doesn't update to 3.0 by itself」。
+
+两条值得留下的发布工程笔记。**第一，明说「这是一次重装」是这类更新唯一诚实的形式**——静默迁移的失败
+模式是用户的历史没了而他不知道发生过，而说清楚的代价只是一段话。**第二，硬件门槛属于需求说明，不属于
+崩溃：**`3.1.0` 在 Windows 与 Linux x64 上要求「a 2013 or newer processor with **AVX2** (Intel
+Haswell / AMD Excavator or later)」，并「on an older processor Hex shows a message and quits instead
+of crashing」——四小时后的 `3.1.1` 则是因为 `3.1.0`「quit silently at launch for anyone who had used a
+recent Dev build」，只要「a setting it can't read is in its settings file」。放弃 2013 年前的 CPU 是
+一个关于「这个应用为谁而做」的真实决定；把它写成需求行，正是这件事与一堆支持工单的区别。
+
+**同一批次还给框架选择标了价，而且这笔账会重复发生。**Nolan Lawson 的十二框架 agent 构建报告每个生成
+应用 **Hono+htmx $2.67**、**Angular $4.97**，最贵的构建用 **9.76M** token 而 Nuxt 是 **3.85M**，
+**Astro 8.2 分钟** 对 **Angular 17.2 分钟**——成本按 Claude Code 的 API 价格计算，而不是作者自己的花费。
+最终产出的 bundle 完全是另一种排序（**Astro 0 KiB**、Next.js **142 KiB**），而这正是值得留下的点：
+token 账单与产物体积是同一个选择的两种不同测量，谁都不蕴含对方。
+
 → [[security]] [[fact-check]] [[agent-stack]]
 
 Sources: [xevrion/hatchzip](https://github.com/xevrion/hatchzip) · [heldercorreia/speedcrunch v1.1.0](https://github.com/heldercorreia/speedcrunch/releases/tag/v1.1.0) · [Snapintosh](https://github.com/Snapintosh/Snapintosh) · [UniXNU](https://github.com/UniXNU/UniXNU)

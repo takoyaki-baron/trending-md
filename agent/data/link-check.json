@@ -4171,63 +4171,90 @@
     },
     "https://news.ycombinator.com/item?id=50318871": {
       "verdict": "blocked",
-      "streak": 3,
+      "streak": 5,
       "first_seen": "2026-10-31T20:22:33.352Z",
-      "last_seen": "2026-11-01T05:00:51.058Z",
+      "last_seen": "2026-11-01T13:03:57.418Z",
       "feeds": [
         "2026-11-01.md"
       ]
     },
     "https://onapsis.com/event/days-to-zero-recored-future-research-onapsis/": {
       "verdict": "blocked",
-      "streak": 3,
+      "streak": 5,
       "first_seen": "2026-10-31T20:22:33.352Z",
-      "last_seen": "2026-11-01T05:00:51.058Z",
+      "last_seen": "2026-11-01T13:03:57.418Z",
       "feeds": [
         "2026-11-01.md"
       ]
     },
     "https://news.ycombinator.com/item?id=50316531": {
       "verdict": "blocked",
-      "streak": 2,
+      "streak": 4,
       "first_seen": "2026-10-31T21:07:28.883Z",
-      "last_seen": "2026-11-01T05:00:51.058Z",
+      "last_seen": "2026-11-01T13:03:57.418Z",
       "feeds": [
         "2026-11-01.md"
       ]
     },
     "https://news.ycombinator.com/item?id=50316100": {
       "verdict": "blocked",
-      "streak": 2,
+      "streak": 4,
       "first_seen": "2026-10-31T21:07:28.883Z",
-      "last_seen": "2026-11-01T05:00:51.058Z",
-      "feeds": [
-        "2026-11-01.md"
-      ]
-    },
-    "https://news.ycombinator.com/item?id=50315782": {
-      "verdict": "blocked",
-      "streak": 1,
-      "first_seen": "2026-11-01T05:00:51.058Z",
-      "last_seen": "2026-11-01T05:00:51.058Z",
+      "last_seen": "2026-11-01T13:03:57.418Z",
       "feeds": [
         "2026-11-01.md"
       ]
     },
     "https://news.ycombinator.com/item?id=50320599": {
       "verdict": "blocked",
-      "streak": 1,
+      "streak": 3,
       "first_seen": "2026-11-01T05:00:51.058Z",
-      "last_seen": "2026-11-01T05:00:51.058Z",
+      "last_seen": "2026-11-01T13:03:57.418Z",
       "feeds": [
         "2026-11-01.md"
       ]
     },
-    "https://news.ycombinator.com/item?id=50319510": {
+    "https://news.ycombinator.com/item?id=50315226": {
       "verdict": "blocked",
-      "streak": 1,
+      "streak": 3,
       "first_seen": "2026-11-01T05:00:51.058Z",
-      "last_seen": "2026-11-01T05:00:51.058Z",
+      "last_seen": "2026-11-01T13:03:57.418Z",
+      "feeds": [
+        "2026-11-01.md"
+      ]
+    },
+    "https://news.ycombinator.com/item?id=50291812": {
+      "verdict": "blocked",
+      "streak": 2,
+      "first_seen": "2026-11-01T12:27:44.231Z",
+      "last_seen": "2026-11-01T13:03:57.418Z",
+      "feeds": [
+        "2026-11-01.md"
+      ]
+    },
+    "https://news.ycombinator.com/item?id=50320995": {
+      "verdict": "blocked",
+      "streak": 2,
+      "first_seen": "2026-11-01T12:27:44.231Z",
+      "last_seen": "2026-11-01T13:03:57.418Z",
+      "feeds": [
+        "2026-11-01.md"
+      ]
+    },
+    "https://news.ycombinator.com/item?id=50322173": {
+      "verdict": "blocked",
+      "streak": 2,
+      "first_seen": "2026-11-01T12:27:44.231Z",
+      "last_seen": "2026-11-01T13:03:57.418Z",
+      "feeds": [
+        "2026-11-01.md"
+      ]
+    },
+    "https://news.ycombinator.com/item?id=50323088": {
+      "verdict": "blocked",
+      "streak": 2,
+      "first_seen": "2026-11-01T12:27:44.231Z",
+      "last_seen": "2026-11-01T13:03:57.418Z",
       "feeds": [
         "2026-11-01.md"
       ]
@@ -4235,8 +4262,8 @@
     "https://news.ycombinator.com/item?id=50318442": {
       "verdict": "blocked",
       "streak": 1,
-      "first_seen": "2026-11-01T05:00:51.058Z",
-      "last_seen": "2026-11-01T05:00:51.058Z",
+      "first_seen": "2026-11-01T13:03:57.418Z",
+      "last_seen": "2026-11-01T13:03:57.418Z",
       "feeds": [
         "2026-11-01.md"
       ]
@@ -4244,23 +4271,14 @@
     "https://news.ycombinator.com/item?id=50319169": {
       "verdict": "blocked",
       "streak": 1,
-      "first_seen": "2026-11-01T05:00:51.058Z",
-      "last_seen": "2026-11-01T05:00:51.058Z",
-      "feeds": [
-        "2026-11-01.md"
-      ]
-    },
-    "https://news.ycombinator.com/item?id=50315226": {
-      "verdict": "blocked",
-      "streak": 1,
-      "first_seen": "2026-11-01T05:00:51.058Z",
-      "last_seen": "2026-11-01T05:00:51.058Z",
+      "first_seen": "2026-11-01T13:03:57.418Z",
+      "last_seen": "2026-11-01T13:03:57.418Z",
       "feeds": [
         "2026-11-01.md"
       ]
     }
   },
-  "runs": 130,
+  "runs": 132,
   "first_run": "2026-09-05T12:47:55.004Z",
-  "last_run": "2026-11-01T05:00:51.058Z"
+  "last_run": "2026-11-01T13:03:57.418Z"
 }

@@ -559,11 +559,11 @@ Chris Wellons の不満は具体的だ。優れたオープンウェイトモデ
 - **Source:** Hacker News · 69+ pts · 約 9 時間前（約 03:18 UTC+8）
 - **Tags:** `retro` `wasm` `reverse-engineering` `nes` `cc65`
 
-`epoyraz/nes-contra-us` は *Contra*（US）と *Probotector* の注釈付き逆アセンブリで、「アセンブリをゲームとバイト単位で一致する成果物へ再アセンブルするビルドスクリプト」を伴う。**cc65** を使い、合法的に用意した `baserom.nes`（MD5 `7BDAD8B4A7A56A634C9649D20BD3011B`）に対してビルドする — リポジトリは ROM も全アセットも含まず、`assets.txt` が各アセットのベースイメージ内のオフセットと長さを記録してビルド時に抽出させる。新しいのは移植のほうだ。リポジトリは `port/`（`contra_core`、`platform_sdl`、`platform_web`）と `web/` を持ち、公開ページは Emscripten のモジュールファクトリ（`MODULARIZE`、`EXPORT_NAME=ContraModule`）を読み込む。つまり動いているのは書き起こされた C であり、エミュレータ上の ROM ではない。
+`epoyraz/nes-contra-us` は *Contra*（US）と *Probotector* の**ネイティブ C 移植**で、自身の README によれば「[vermiceli](https://github.com/vermiceli/nes-contra-us)'s annotated disassembly (itself started from Trax's work)」の上に築かれ、「the original assembly and docs still liv[ing] in `src/` and `docs/`」。移植はオリジナルと**フレーム単位**で突き合わせて検証される：「a Mesen 2 recording is replayed through the C core and every frame's RAM, nametables, palette, OAM, CHR, PPU registers, sound-engine state and final pixels are compared」（`port/tools/parity_telemetry.c`）であり、主張は「Stages 1–4 are identical over the whole 40k-frame recording, including sound」。`./build.sh` は今も「reassembles the original ROM byte-for-byte with cc65」で、合法的に用意した `baserom.nes`（MD5 `7BDAD8B4A7A56A634C9649D20BD3011B`）に対して走る。README のブラウザ節は「you supply your own `Contra` (US) ROM (it is never uploaded or shipped)」と書き、公開ページは Emscripten のモジュールファクトリ（`MODULARIZE`、`EXPORT_NAME=ContraModule`）を読み込む——つまり動いているのは書き起こされた C であり、エミュレータ上の ROM ではない。WebRTC でロックステップするオンライン二人対戦もある。
 
-留保はすべてリポジトリの形をしている。**4 スター**、**ライセンスファイルなし**、そして README が説明するのは逆アセンブリと再アセンブリであってブラウザ移植ではない — つまり WebAssembly ビルドは自分で読むべきディレクトリであり、文書化されたリリースではない。
+留保はすべてリポジトリの形をしている。**4 スター**、**ライセンスファイルなし**、そしてリポジトリが同梱できない基準データ — フレーム一致の主張は同じ *Contra*（US）のイメージを持つ者しか検証できない。だから README は MD5 を書き、ROM 自体は決して書かない。
 
-**Why it matters:** バイト単位の一致は他のすべての前提であり、最も飛ばされやすい段階でもある。同じ ROM に再アセンブルできない逆アセンブリは、ゲームロジックの書き起こしが忠実かどうかを教えてくれない。差分を取る基準がないからだ。ライセンスの欠落にも同じ重さを与えるべきだ。著作権のあるゲームの完全な逆アセンブリに LICENSE ファイルがないのは、コード品質の問題である前に再配布の問題である。README に ROM ハッシュ要件が書かれ、ビルド成果物がリポジトリにないのは、おそらくそのためだ。
+**Why it matters:** フレーム単位の一致検証こそ、逆コンパイルの主張の誠実な形だ——「同じように動く」ではなく、**40,000 フレーム**をチャネルごとに比較し、通ったステージ（1–4）を名指しして残りは主張しない。背後には再アセンブリの検証も控えている。ライセンスの欠落にも同じ重さを与えるべきだ。著作権のあるゲームの完全な移植に LICENSE ファイルがないのは、コード品質の問題である前に再配布の問題であり、ここではリポジトリが ROM 以外のすべてのソースを出すことでそれを解いている。
 
 [`🔗 epoyraz/nes-contra-us`](https://github.com/epoyraz/nes-contra-us) · [`🔗 ブラウザで遊べるビルド`](https://epoyraz.github.io/nes-contra-us/) · [`🔗 議論（Hacker News）`](https://news.ycombinator.com/item?id=50319169)
 
@@ -635,7 +635,7 @@ Chris Wellons の不満は具体的だ。優れたオープンウェイトモデ
 
 興味深いのは `affected[]` のほうだ。**RHEL 7、8、9、10** と OpenShift の RHCOS パッケージ二件が並び、いずれも `packageName: json-glib` と `defaultStatus: affected` を持つ——**バージョンは一つもない**。つまりこのレコードは、どのディストリビューションが同梱しているかは教えるが、どのリリースが脆弱かは教えない。上流の json-glib を直接使っている人には、`pkg-config --modversion` と突き合わせる相手が存在しない。代わりに、異例なほど具体的な回避策が載っている。「修正が利用可能になるまで、信頼できない JSONPath 式を `json_path_query()` や `json_path_compile()`／`json_path_match()` で評価しないこと……とくに負のステップを指定するスライス式は拒否するか避けること」。
 
-タイムラインはタイムラインとして読むべきだ。`datePublic` は **2026-10-29**、そして `timeline[]` の二項目は 2026-10-29T00:00:00Z の「Made public」と **2026-10-30**T00:00:00Z の「Reported to Red Hat」。ベンダーが知らされたのは問題が公開された**翌日**で、しかも両方の刻印は真夜中に切り捨てられている。つまりこれらは日単位の主張であり、背後に時計はない。
+タイムラインはタイムラインとして読むべきだ——そして、それがどのフィールドにあるかを見るべきだ。このレコードは `datePublic` フィールドを**持っていない**。日付は `timeline[]` の二項目、2026-10-29T00:00:00Z の「Made public」と **2026-10-30**T00:00:00Z の「Reported to Red Hat」だ。つまりベンダーが知らされたのは問題が公開された**翌日**で、しかも両方の刻印は真夜中に切り捨てられているため、日単位の主張であり背後に時計はない。
 
 **Why it matters:** JSONPath 式は多くのソフトウェアでユーザー入力だ——保存されたフィルタ、クエリ文字列、ダッシュボードのパラメータ——そしてハングは supervisor が再起動してくれる類のクラッシュではない。重大度ラベルより形のほうが重要だ。`Important` の隣に NVD が未分析の 7.5 があるということは、スキャナが印字する数字は Red Hat 自身のものであり、修正は `gitlab.gnome.org/GNOME/json-glib`（issue #96）へのパッチであって、調べられるバージョン番号ではない。
 
@@ -651,7 +651,7 @@ Chris Wellons の不満は具体的だ。優れたオープンウェイトモデ
 
 VulnCheck は上限をいずれも `<= 9.0.2` と書いた一群を公開した。五件は「未初期化の使用」による情報漏えいで、プロセスメモリをデコード出力に載せる。`CVE-2026-120243`（Go2Meeting——「短い Kempf パレットにより `kempf_restore_buf()` が未初期化のスタックバイトをコピーする」）、`-120244`（PCX、切り詰められた RLE スキャンラインで `pcx_decode_frame()` が `av_malloc()` バッファの中身を可視ピクセルへコピーする）、`-120245`（sunrast）、`-120246`（CDXL、未充填の HAM パレット項目）、`-120247`（Huffyuv）。六件目の `CVE-2026-120210` は IMF デマクサのパストラバーサルで、`ASSETMAP` の `Path` 要素が検証されないため、`..` や絶対パスが「ローカルの MXF ファイルをデマクスし、ファイルの存在やサイズを探り、サーバーサイドリクエストを誘発する」。
 
-六件すべてが **5.5** を持つ。ピクセルバッファ経由で未初期化メモリを読み出す件としては妥当な数字だが、あなたのパイプラインが他人に代わって信頼できないメディアをデコードしているなら低すぎる。
+漏えい系の五件は CNA のスコアを**二列**で持つ（`Primary` に CVSS 3.1 の `5.5`、`Secondary` に 4.0 の **6.8**。このスロットは来歴ではなく、どちらも同じ CNA が自らの二つのバージョンに付けた `disclosure@vulncheck.com` のスコアだ）。5.5 はピクセルバッファ経由で未初期化メモリを読み出す件としては妥当な数字だが、あなたのパイプラインが他人に代わって信頼できないメディアをデコードしているなら低すぎる。パストラバーサルのほうがスコアは*低い*——`CVE-2026-120210` は 3.1 で **4.3**、4.0 で **5.3**。七件すべてが NVD では `Received` にあり、**NVD 自身のスコアは 0 件**だ。
 
 実務的に有用なのは日付のほうだ。**n9.0.2** は **2026-09-18**、**n8.1.3** は **2026-09-21** に出ている。修正はコミットだ——Go2Meeting のパレット索引を扱う `edad2d0d` が **2026-10-02**、切り詰められた PCX スキャンラインのゼロ埋めを扱う `ecd5dfc3` が **2026-10-03**——加えて上流 PR 24858、24868、25341。どの修正も両方のタグより後なので、レコード自身の境界は正確で、上げる先が存在しない。どの FFmpeg リリースもこれらの修正を積んでいない。
 

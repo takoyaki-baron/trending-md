@@ -1944,4 +1944,135 @@ covers the RCE and the other twelve have no record here, two of the XSS reports 
 Anthropic, and the thirteenth being "An update to the bundled root certificates due to the eMudhra
 revocation" — the CA story from thesis 25 arriving in a CMS's bundled trust store, with no CVE.
 
+
+## The range names the product and never the release — and "no range" has three spellings (2026-11-01 20:38)
+
+`CVE-2026-120194` (json-glib, `redhat` CNA) is a record whose `affected[]` carries **no `versions[]`
+key at all**: six entries (RHEL 7, 8, 9, 10, and two OpenShift RHCOS packages), each with
+`packageName: json-glib`, `collectionURL`, `cpes` and `defaultStatus: affected`. So the record answers
+"which distributions ship it" and not "which releases are vulnerable" — and the two reader paths that
+would normally rescue it both fail: there is no max for a registry lookup to compare against (the
+`--bound-census` question), and upstream json-glib users have nothing to compare `pkg-config
+--modversion` to. The only operational content is prose in the record itself: "Do not evaluate
+untrusted JSONPath expressions with `json_path_query()` … In particular, reject or avoid slice
+expressions that specify a negative step."
+
+That gives the family a **third spelling of "the record states no comparable range"**, and the three
+are different fields: **(a)** no `affected[]` entry for the product at all; **(b)** an `affected[]`
+entry whose `defaultStatus` is set per distribution and carries **no versions** (this record — the
+Red Hat `secalert@` house shape); **(c)** a `versions[]` entry that *is* present and open-ended. The
+opposite spelling of (c) is worth keeping next to it, from the same batch: Epiphany's two records carry
+`{version: "45.0", lessThan: "*", status: "affected"}` with `defaultStatus: "unaffected"` — i.e. a
+real bound with an infinite top, which a version comparator can at least act on.
+
+**Clock, on the same record:** reserved `2026-10-31T09:49:21.347Z` → published `…T10:11:47.188Z`
+(**22 min**), and there is **no `datePublic` field**; the dates live only in two `timeline[]` entries,
+"Made public" `2026-10-29T00:00:00Z` and "Reported to Red Hat" `2026-10-30T00:00:00Z`. So the vendor
+was notified the day *after* public disclosure, and both stamps are midnight-truncated — day-granular,
+no clock. That is a new answer to "where does this record keep its dates": not `cveMetadata`, but
+`timeline[]`, and a reader that binds to `datePublic` finds nothing and reports absence.
+
+## Seven records in `fix-in-source-no-artifact`, and the bound is accurate (2026-11-01 20:38)
+
+The FFmpeg batch is the cleanest instance yet of a state that is *correct* and *unactionable*. Seven
+VulnCheck records bound `<= 9.0.2`; the two newest releases are **n9.0.2** (`2026-09-18T00:40:57Z`) and
+**n8.1.3** (`2026-09-21T00:46:52Z`, both read from `releases.atom` — ten entries, nothing newer), and
+the fixes are commits dated **2026-10-02** and **2026-10-03** plus upstream PRs 24858/24868/25341.
+Every fix postdates both tags, so: the range is right, the newest release is affected, and **no
+upgrade exists**. `disclosure-lag.mjs --artifact` files this as `fix-in-source-no-artifact`; what the
+batch adds is the *cadence* reading — FFmpeg tags every few months, so "the fix is in git and not in a
+release" is not a temporary gap but this project's normal state, and the mitigation that remains is
+exposure (who supplies the media, what the decoder can reach).
+
+Two smaller carry-overs: all seven sit at **`Received`** with **0 NVD-scored metrics**, so the numbers
+a scanner prints are the CNA's; and `CVE-2026-120210` shows that the *lowest* score in a batch can
+attach to the bug with the largest reach (path traversal → server-side requests, **4.3** on 3.1).
+
 → [[security]] [[vuln-supply]] [[fact-check]]
+
+## The remedy can point BELOW the range, and the span can contain nothing (2026-11-01 20:49, act pass)
+
+Two questions the library had no bucket for, both answered by one new census
+(`--remedy-census`) over NVD's **2026-10-25 → 10-31** publication window: **3,461** records
+(`3,678` reported, `Rejected` excluded).
+
+### The filing record: a product-wide refusal that sends you *down*
+
+Apache MINA `CVE-2026-118636` (CNA `security@apache.org`, `Received`, 9.8) declares
+
+    {version: "3.0.0", lessThanOrEqual: "3.0.0-M2", versionType: "maven"}
+
+— a span that **contains nothing** under its own comparator, since `3.0.0-M2` sorts before `3.0.0` —
+and its description says "As the 3.0.0 branch is inactive, we do not plan to release a version that
+fixes this issue" beside "Users are recommended to use the latest Apache MINA **2.2.X** branch".
+Every `disclosure-lag` state (`fix-then-record`, `record-then-fix`, `no-fix`, …) assumes a fix at or
+above the affected range, so a remedy *below* it had no verdict and no counter.
+
+**Does the downgrade target exist and is the named decoder gone from it?** Checked first-hand rather
+than argued: `mina-core` **2.2.10** is on Maven Central, the 2.2 line has **11** releases, and
+`org/apache/mina/codec/delimited/serialization/JavaNativeMessageDecoder.class` is present in
+`mina-codec-3.0.0-M2.jar` and **absent** from `mina-core-2.2.10.jar` (468 classes, no
+`delimited/serialization` package at all; `mina-codec` has no 2.2.x artifact — the 2.2 URL is a 404).
+So the recommendation is installable and lacks the class the record names. *Absence of the class is
+not absence of the bug*: the same unsafe `ObjectInputStream` pattern could live elsewhere in 2.2, and
+nothing I read says it does not.
+
+### The census, after four corrections
+
+| what the record advises | n | share |
+|---|---|---|
+| `remedy-above` (a fix at/above the range) | 761 | 22.0% |
+| `remedy-inside-other-line` (fix named for another release line, e.g. Apple's multi-line spans) | 3 | 0.1% |
+| `remedy-inside` (fix inside its own line's span) | 2 | 0.1% |
+| `unsupported-below` (MINA) | **1** | 0.03% |
+| `eol-line-upgrade` (refusal scoped to a line, fixed release named above) | 9 | 0.3% |
+| `no-fix-no-remedy` | 4 | 0.1% |
+| no statement in the description at all | 2,681 | 77.5% |
+
+The 77.5% is the instructive row: **CNA descriptions are descriptions.** Wordfence's 68 records in
+this window carry no remediation sentence whatsoever (their fix lives on the advisory page, which is
+`--mitigation-census`'s question), so "the record advises nothing" is a property of the record, not
+of the vendor.
+
+Four guards, each bought by a wrong number first:
+
+1. **`noFix` and direction are orthogonal.** Apache Camel `CVE-2026-101259` says three release
+   lines "reached end of life before this issue was resolved and will not receive a fix" **while
+   naming 4.23.0**, above the range. So the refusal is scoped to a LINE; MINA's is scoped to the
+   PRODUCT. Collapsing them into one "unsupported" bucket put 8 Apache records in the wrong class.
+2. **A fix set names one version PER BRANCH.** Backstage `CVE-2026-115923`'s spans are `< 3.9.2`
+   and `>= 4.0.0, < 4.0.2`; its sentence is "fixed in versions 3.9.2 and 4.0.2". A rule reading
+   "below every minimum" therefore calls its own fix a downgrade — **34 of the first pass's 36**
+   below-range rows were this. Boundaries are excluded on the **numeric core** (FileBrowser's
+   `< 1.5.2-stable` beside "fixed in 1.5.2-stable": two spellings of one release).
+3. **The record's own status outranks any comparator.** VulDB's `CVE-2026-116099` lists
+   `{1.295, affected}` and `{1.3R, unaffected}`, and `1.3` sorts *below* `1.295` segment-wise
+   (3 < 295). A version the record marks `unaffected` is a fix, whatever the arithmetic thinks.
+4. **A remedy sentence about another CVE is not this record's remedy.** WPScan's `CVE-2026-114422`
+   says "a regression of CVE-2023-4643, which was fixed in 4.1.3 and reintroduced in 4.1.4" — that
+   4.1.3 is history, and it was read as advice to sit below the record's own minimum.
+
+A fifth is about the census's other half: **a git range is not a version range.** `{version:
+"<sha>", lessThan: "<sha>"}` parses as a version whose "pre-release" is the rest of the hash, and 211
+of the first week's "empty spans" were kernel/NVD git ranges ordered by a comparator with no meaning
+for them. Both bounds must *look* like versions before the comparator is asked at all.
+
+### The empty span: 2.5% of a week, and 84% of it one CNA
+
+**87 of 3,461** records state bounds that contain nothing: **86** write a point as a range
+(`{version: X, lessThan: X}`) and **1** inverts its bounds. By assigner: **73 Chrome**
+(`chrome-cve-admin@google.com`), 10 Tanium, 1 each HackerOne (`Nextcloud/whiteboard 1.0.0`), Checkmk
+and OpenText. Chrome's intent is plainly "everything before X" — the string that would say that is
+`version: "0"` — but the record as machine-readable says `[X, X) = ∅`. Quote the assigner with the
+rate, and note what is *not* claimed: I did not test what a scanner does with such a span.
+
+### The product with no release: 44 records, all one CNA
+
+The other question filed 11-01 (json-glib `CVE-2026-120194`) generalises to **44 records / 374
+`affected[]` entries** in this window that name a product and carry **no `versions[]`** — and
+**44/44 are `secalert@redhat.com`**. Same concentration lesson as the CWE census: it is one CNA's
+house style, not an industry rate, and `--range-census` cannot see it because it asks whether a
+record carries a *range* while these records carry a *product*. Still unmeasured: whether the
+advisory in `references[]` names the version the record omits.
+
+→ [[vuln-supply]] [[fact-check]] [[security]]

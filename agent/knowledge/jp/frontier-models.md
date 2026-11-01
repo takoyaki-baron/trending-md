@@ -3379,4 +3379,50 @@ prior 3D-memory baseline **for each metric**」に対する値だ。三つの比
 事情を知らない友人にブラインド評価させ（4 番を採用）。12:23 のバッチはこの charm の一文を記事の判定として
 公開したが、記事はそれを続く二段の修復の*動機*として扱っている。
 
+
+## 功績は正規化器に、リランカーはスキルに、そして制御スコアはモデルを含意しなくなった（2026-11-01 20:38）
+
+一つのバッチに新規研究が四件、いずれも**結果がどの変数についての話か**という議論である。
+
+**重み正規化の利益は学習率スケジュール（arXiv 2610.40362）。**主張は、報告された利得は「are driven
+primarily by the induced **effective learning rate (ELR)** trajectory rather than by
+normalization alone」で、「Matching ELR trajectories largely collapses the training loss dynamics
+of WN and WD」——同じ ELR 経路を weight decay に与えれば同じ力学が再現されるので、反証は内蔵されて
+いる。**128B トークン**の MoE 事前学習で、提案する **AIR**（affine inverse-square-root、`1/√t` 減衰に
+アフィン調整を加え、有限期間で指定のピークと終端レートに合わせる）は cosine を上回り、
+「reduc[es] terminal training loss by approximately **0.01** relative to cosine at matched
+cumulative LR」。小さいが、持ち帰るのはレビューの問いだ：**スケジュールを報告しない正規化・正則化の
+利得は、統制されていない比較である。**後期スケジュールは「attenuates the effect of earlier LR
+choices」なので、差は曲線ではなく終端損失の差として現れる。
+
+**リランカーは常駐バックボーン上のスキルになる（arXiv 2610.40454、Glance）。**リランカーと生成器を
+同居させる代わりに、生成器へ「a lightweight decision adapter and pointer head to score candidate
+passages from a **shared prefill**」を足す。コストは 9B バックボーン一つに対し「approximately
+**0.1 GiB** of additional memory per decision skill」。**39 分**の MS MARCO 微調整で SciFact
+**0.741** nDCG@10、NFCorpus **0.345**（`bge-reranker-v2-m3` は **0.721** / **0.326**）、HotpotQA
+**300** 問では選択文脈が回答 F1 を **0.045** 改善し、ペア bootstrap の 95% 区間は **[0.014, 0.076]**。
+一つの共有 prefill から採点し、候補 **200（43k トークン）**まで改善が続き、そこでは cross-encoder を
+**0.058** 上回る。主張は規模のほうだ——リランキングを*スキル*にするとサービンググラフから二つ目の
+成果物が消える——そして論文自身の範囲の一文が限界になる：「evaluation currently covers two retrieval
+datasets, one QA dataset and one backbone family.」
+
+**制御スコアはモデルが環境を学んだ証拠ではない（arXiv 2610.40637、world2vec）。**不満は率直に書かれる：
+「World models can achieve strong control performance without faithfully capturing the dynamics of
+their environment, limiting their potential for mechanistic interpretability and scientific
+discovery.」world2vec は「without reward information directly from observations and actions」潜在
+力学を学び、「at least one order of magnitude fewer parameters than DreamerV3, TD-MPC2 and LeWM」、
+ピクセルからの連続制御 SOTA、「accurate system identification across a benchmark of **71
+attractors**」を主張する。パラメータ比は**大きさ**の比——計算量でも精度でもない——そして摘要は制御にも
+同定にも誤差棒を出さないので、「faithfully reproduce」は検証されるべき主張であって、引用できる発見ではない。
+
+**髪型は系列ではなく集合（arXiv 2610.40599、HairDeck）。**様式化されたゲームの髪はヘアカード——美術が
+配置した、幾何そのものが髪である帯——で作られる。唯一の既存生成器 CHARM は「decodes a hairstyle
+autoregressively as a long sequence of control points」。HairDeck はカード髪型を「an unordered set
+of artist-defined primitives」として扱い、「each card is a single token, and a set diffusion
+transformer denoises all cards together」、一枚の画像からカードとスプリングボーン鎖を同時に出す。
+CHARM 自身のテストセットで Chamfer 距離 **44%** 減、カード向き誤差「more than half」、生成 **33×**
+高速。この枠組み換えは髪を超えて一般化する：規範的な順序を持たない独立プリミティブの集まりである資産は、
+順序があるふりをやめれば短い系列と安いデコーダを得る。範囲は狭い資産クラス一つ、先行手法のベンチマーク上、
+プロジェクトページはあるが独立再現はまだない。
+
 → [[fact-check]] [[edge-inference]] [[harness-reliability]]

@@ -1180,4 +1180,130 @@ written to the working directory」。コード実行の原語を消すのは三
 certificates due to the eMudhra revocation」——テーゼ 25 の CA の話が、CVE なしで CMS の同梱トラストストアに
 到達した。
 
+
+## 範囲は製品を指し、リリースを指さない——そして「範囲がない」には三つの綴りがある（2026-11-01 20:38）
+
+`CVE-2026-120194`（json-glib、`redhat` CNA）は `affected[]` に **`versions[]` キーをまったく持たない**
+レコードだ：六つの項目（RHEL 7・8・9・10、OpenShift RHCOS の二パッケージ）がそれぞれ
+`packageName: json-glib`、`collectionURL`、`cpes`、`defaultStatus: affected` だけを持つ。つまりこの
+レコードが答えるのは「どのディストリビューションが同梱しているか」で、「どのリリースが脆弱か」ではない
+——通常これを救う二つの読み手はどちらも失敗する：レジストリ照合に使える上限が存在せず（`--bound-census`
+の問い）、上流 json-glib の利用者には `pkg-config --modversion` と突き合わせる相手がない。実務的な中身は
+レコード自身の散文だけだ：「Do not evaluate untrusted JSONPath expressions with `json_path_query()` …
+In particular, reject or avoid slice expressions that specify a negative step.」
+
+これで「レコードが比較可能な範囲を示していない」に**三つ目の綴り**が加わる。三つは別のフィールドだ：
+**(a)** その製品の `affected[]` 項目が存在しない；**(b)** 項目はあるが `defaultStatus` がディストリビューション
+単位で、**バージョンを一つも持たない**（本件——Red Hat `secalert@` の家風）；**(c)** `versions[]` が
+存在し上界が開いている。(c) の裏返しも同じバッチにある：Epiphany の二件は
+`{version: "45.0", lessThan: "*", status: "affected"}` に `defaultStatus: "unaffected"` を組み合わせて
+おり、下限のある本物の範囲で、バージョン比較器が少なくとも何かできる形だ。
+
+**同じレコードの時計：**予約 `2026-10-31T09:49:21.347Z` → 公開 `…T10:11:47.188Z`（**22 分**）、そして
+**`datePublic` フィールドは存在しない**。日付は `timeline[]` の二項目だけにあり、「Made public」
+`2026-10-29T00:00:00Z` と「Reported to Red Hat」`2026-10-30T00:00:00Z`。つまりベンダーが知らされたのは
+公開の**翌日**で、両方の刻印は真夜中に切り捨てられており、日単位で時計を持たない。これは「このレコードは
+日付をどこに置くか」への新しい答えだ：`cveMetadata` ではなく `timeline[]` にあり、`datePublic` に
+束縛する読み手は何も見つけられず、不在を結論として報告してしまう。
+
+## 七件が `fix-in-source-no-artifact` にあり、境界は正確である（2026-11-01 20:38）
+
+FFmpeg の一群は「正しいが行動に結びつかない」状態の最もきれいな例だ。VulnCheck の七件は上限
+`<= 9.0.2`、最新リリースは **n9.0.2**（`2026-09-18T00:40:57Z`）と **n8.1.3**
+（`2026-09-21T00:46:52Z`、いずれも `releases.atom` の十件から、これより新しいものはない）で、修正は
+**2026-10-02** と **2026-10-03** のコミットに上流 PR 24858/24868/25341。どの修正も両タグより後なので、
+範囲は正しく、最新リリースは影響を受け、**アップグレード先は存在しない**。`disclosure-lag.mjs
+--artifact` はこれを `fix-in-source-no-artifact` に分類するが、このバッチが加えるのは **cadence** の
+読み方だ——FFmpeg は数か月ごとにしかタグを打たないので、「修正は git にありリリースにはない」は一時的な
+隙間ではなくこのプロジェクトの常態であり、残る緩和は露出面（誰がメディアを供給し、デコーダが何に到達
+できるか）だけになる。
+
+小さな持ち越し二点：七件すべてが **`Received`** で **NVD スコア 0** なので、スキャナが印字する数字は
+CNA のものだ。そして `CVE-2026-120210` は、バッチ内で**最小**のスコアが最も到達範囲の広いバグに付きうる
+ことを示す（パストラバーサル → サーバーサイドリクエスト、3.1 で **4.3**）。
+
 → [[security]] [[vuln-supply]] [[fact-check]]
+
+## 緩和策が範囲の**下**を指すことがあり、範囲そのものが空になりうる（2026-11-01 20:49、act パス）
+
+ライブラリにバケツが無かった二つの問いを、一つの新しいセンサス（`--remedy-census`）が答える。窓は NVD の
+**2026-10-25 → 10-31** 公開日で、**3,461** レコード（報告 3,678、`Rejected` を除外）。
+
+### 起票レコード：製品全体の拒否が、あなたを**下**へ送る
+
+Apache MINA `CVE-2026-118636`（CNA `security@apache.org`、`Received`、9.8）は
+
+    {version: "3.0.0", lessThanOrEqual: "3.0.0-M2", versionType: "maven"}
+
+と宣言する。これは自身の比較器では（`3.0.0-M2` は `3.0.0` より前に並ぶため）**何も含まない**範囲であり、
+説明文には「As the 3.0.0 branch is inactive, we do not plan to release a version that fixes this
+issue」と、**2.2.X ブランチ**を使うよう勧める一文が並ぶ。`disclosure-lag` のどの状態
+（`fix-then-record`、`record-then-fix`、`no-fix` …）も修正が範囲の上か中にあると仮定しているので、
+範囲の**下**を指す緩和策には判定もカウンタも無かった。
+
+**ダウングレード先は実在するのか、名指しされたデコーダはそこから消えているのか。** 議論ではなく実測：
+`mina-core` **2.2.10** は Maven Central にあり、2.2 系は **11** リリース。そして
+`org/apache/mina/codec/delimited/serialization/JavaNativeMessageDecoder.class` は
+`mina-codec-3.0.0-M2.jar` に存在し、`mina-core-2.2.10.jar` には**存在しない**（468 クラス、そもそも
+`delimited/serialization` パッケージが無い。`mina-codec` に 2.2.x の成果物は無く、2.2 の URL は 404）。
+つまりこの勧告はインストール可能で、名指しされたクラスを含まない。ただし**クラスが無いことはバグが無い
+ことではない**：同じ不安全な `ObjectInputStream` の使い方が 2.2 の別の場所に残りうる。
+
+### 四度の修正を経たセンサス
+
+| レコードが示す助言 | 件数 | 割合 |
+|---|---|---|
+| `remedy-above`（修正が範囲の上/中） | 761 | 22.0% |
+| `remedy-inside-other-line`（別のリリース線の修正を名指し。Apple の複数線スパンなど） | 3 | 0.1% |
+| `remedy-inside`（自分の線のスパン内に修正） | 2 | 0.1% |
+| `unsupported-below`（MINA 型） | **1** | 0.03% |
+| `eol-line-upgrade`（拒否は線に限られ、上の修正版を名指し） | 9 | 0.3% |
+| `no-fix-no-remedy` | 4 | 0.1% |
+| 説明文に緩和の文が全く無い | 2,681 | 77.5% |
+
+77.5% の行こそが情報である：**CNA の description は説明文**なのだ。この窓の Wordfence の 68 レコードには
+緩和の一文が一切無い（修正はアドバイザリのページにあり、それは `--mitigation-census` の問い）。だから
+「レコードが何も助言しない」は**レコード**の性質であり、ベンダーの性質ではない。
+
+四つのガードは、いずれも先に数字を間違えてから得たもの：
+
+1. **`noFix` と方向は直交する。** Apache Camel `CVE-2026-101259` は三つのリリース線が「reached end of
+   life before this issue was resolved and will not receive a fix」と述べつつ、範囲の上にある **4.23.0**
+   を名指しする。拒否は**線**に限定されている。MINA の拒否は**製品**に限定されている。両者を一つの
+   「unsupported」バケツに入れると、初回で Apache の 8 件が誤分類された。
+2. **修正集合は分岐ごとに一つの版を名指しする。** Backstage `CVE-2026-115923` のスパンは `< 3.9.2` と
+   `>= 4.0.0, < 4.0.2` で、本文は「fixed in versions 3.9.2 and 4.0.2」。「全ての下限より下」で判定すると
+   自分の修正がダウングレードになる——初回の below-range 36 件のうち **34 件**がこれだった。境界は
+   **数字コア**で比較する（FileBrowser の `< 1.5.2-stable` と「fixed in 1.5.2-stable」は同じリリースの
+   二つの綴り）。
+3. **レコード自身の状態がどんな比較器にも優先する。** VulDB `CVE-2026-116099` は `{1.295, affected}` と
+   `{1.3R, unaffected}` を並べ、`1.3` は区間比較で `1.295` より**下**（3 < 295）。レコードが
+   `unaffected` と記した版は修正であり、算術の結論は採用しない。
+4. **別の CVE についての緩和文は、このレコードの緩和ではない。** WPScan `CVE-2026-114422` の
+   「a regression of CVE-2023-4643, which was fixed in 4.1.3 and reintroduced in 4.1.4」の 4.1.3 は
+   履歴であり、それを「記録自身の下限より下にいろ」という助言として読んでしまった。
+
+五つ目はセンサスの残り半分について：**git の範囲はバージョンの範囲ではない。**
+`{version: "<sha>", lessThan: "<sha>"}` は「プレリリース部分がハッシュの残り」の版として解析され、
+最初の週の「空スパン」211 件はすべてカーネル/NVD の git 範囲だった。両端が**バージョンに見える**ことを
+先に確かめ、それから比較器に尋ねる。
+
+### 空スパン：一週間の 2.5%、その 84% は一つの CNA
+
+**3,461 件中 87 件**が、何も含まない境界を宣言している：**86** 件が点を範囲として書き
+（`{version: X, lessThan: X}`）、**1** 件が上下を逆に書いた。割当者別では **Chrome 73 件**
+（`chrome-cve-admin@google.com`）、Tanium 10 件、HackerOne（`Nextcloud/whiteboard 1.0.0`）、Checkmk、
+OpenText が各 1 件。Chrome の意図は明らかに「X より前のすべて」——そう書くなら `version: "0"` だが、
+機械可読なレコードは `[X, X) = ∅` と言っている。割合を引用するときは割当者を添えること。そして
+**主張していない**ことも明記する：スキャナがこのスパンをどう扱うかは検証していない。
+
+### 製品だけがありリリースが無い：44 レコード、すべて同一 CNA
+
+11-01 に起票したもう一つの問い（json-glib `CVE-2026-120194`）は、この窓で **44 レコード / 374 個の
+`affected[]` エントリ**に一般化する——製品を名指しし `versions[]` を持たない——そして
+**44/44 が `secalert@redhat.com`**。CWE のセンサスと同じ教訓：これは一つの CNA の書き方であり、
+業界の割合ではない。`--range-census` には見えない。問いが「範囲」の有無で、これらのレコードは
+「製品」しか持たないからだ。未計測：`references[]` のアドバイザリが、レコードが省いた版を名指しして
+いるかどうか。
+
+→ [[vuln-supply]] [[fact-check]] [[security]]

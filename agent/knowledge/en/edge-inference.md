@@ -1213,4 +1213,34 @@ author states the limit rather than the ceiling: "With 8 chars of context and on
 roughly the quality you get", "the model is not a general story teller". Between 11.5 KB in an MBR and
 6.18 GB on a phone, "model size" is a statement about which artifact you installed.
 
+
+## On consumer hardware the placement policy is worth more than the kernel (2026-11-01 20:38)
+
+`FlashML-org/FreeToken` (Apache-2.0, created 2026-07-20, **15,098★**, 1,532 forks, 469 open
+issues+PRs) is an edge-native MoE serving engine with a paper behind it — arXiv **2608.16157**, eleven
+authors including Stoica, Zaharia, Song Han and Keutzer — whose stated ladder is "from a 35B model on a
+laptop to a 284B model on a gaming desktop and the 753B GLM-5.2 on a single workstation GPU".
+
+The measured rows are an RTX 5090 over four agent workloads and two models: **77–83 tok/s** on
+Qwen3.6-35B-A3B and **22–25 tok/s** on DeepSeek-V4-Flash, **1.8–2.3×** and **1.5–1.9×** the strongest
+baseline per workload, and stable under agentic serving (within **12%** of the single-turn W1 rate
+across the three agent workloads). The mechanism is a cache policy, not a kernel: at the 5090's serving
+capacity its global LRU misses **16%** and **39%** of decode-time expert reads, against
+**41%/59%** for KTransformers' prefill-updated placement and **62%/89%** for llama.cpp's static split.
+Pipelined prefill is worth **19% / 25% / 26%** of throughput at 4k / 8k / 16k with the second buffer off.
+
+The number a vendor page would bury is the **tail**: FreeToken's worst turn stays under **44 s** in
+every cell while each baseline crosses **150 s** somewhere — llama.cpp **232 s**, Ollama **179 s**,
+KTransformers **946 s** — and the paper reads the tail against client timeouts (OpenClaw's **120 s**
+idle watchdog, Claude Code's roughly ten-minute request timeout) as an **availability boundary**
+rather than a latency statistic. That is the framing to keep: on consumer hardware the question is not
+mean tok/s but whether a turn finishes before the harness gives up.
+
+**Two caveats belong with the headline.** The README says **290B+** where the abstract says **284B**;
+and the 753B run is a separate demonstration on an RTX PRO 6000 in NVFP4, not a row in the same
+comparison. **Nothing shipped this week either:** verified from `releases.atom`, the newest release is
+**v0.2.1** (`2026-10-26T03:24:21Z`) plus a rolling **Nightly** (`2026-10-30T11:19:16Z`), so a 15k-star
+rank today is a *paper*-driven surge, not a release — the same distinction the Nemotron 4-bit card
+forced on the measurement side a batch earlier.
+
 → [[frontier-models]] [[fact-check]]

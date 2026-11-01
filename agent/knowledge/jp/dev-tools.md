@@ -882,6 +882,35 @@ Sources: [OBS Studio 33.0.0](https://github.com/obsproject/obs-studio/releases/t
 
 **3. 二日で二つの独立した道が非 Apple ARM64 に到達する——互換性の波の次の段。**`Snapintosh/Snapintosh`（**919★**、2026-10-22 作成）は **EL2 モニタ**として **ASUS Zenbook A16 / Snapdragon X2 Elite** 上で **macOS 27（26A428）** を起動し、**未改変**の Apple `kernelcache` を走らせる（SPTM と TXM の呼び出し、16 KiB ページテーブル変換、デバイスモデル）。描画はノート自身の **Adreno X2-90** を、このために書かれたドライバスタック経由で使う（`AdrenoMetal.bundle`、`AdrenoX2` IOGPU kext、`AdrenoDisplay`、そして Apple の AIR シェーダ IR を Mesa `ir3` へ翻訳する **`air2ir3`**）——ソフトウェア描画の経路はない。起動とログは USB-C 経由で macOS 27 の Mac ホストへ、`q1n1`（Asahi の `m1n1` の fork）を使う。`UniXNU/UniXNU`（**928★**、2026-10-19 作成、BSD-2-Clause-Patent）は**別方向**から：非 Apple ARM64 で iOS/macOS を動かす「**OpenCore のような**」汎用 UEFI 環境・ドライバ読込システムで、SoC サポート（`UniXNU-sm8550-common`）、デバイスリポジトリ（`UniXNU-sheng`、Xiaomi Pad 6S Pro、Adreno740）、デバイスファームウェアの 3 リポジトリに分かれ、移行通知と文書化された「Port a device」手順を持つ。状態表こそ成果物だ：Snapintosh は GPU 加速つきデスクトップ起動が動く一方、滑らかさは*進行中*、Wi-Fi はホストプロキシ経由のみ（「macOS の Wi-Fi メニューからの参加はまだ動かない」）、音声・カメラ・Bluetooth・スリープ・外部ディスプレイは**非対応**。1 台のみ、他は不可。ハイパーバイザ型と UEFI 型が、いま同じ場所への二つの生きた道である。
 
+
+## 「何もインポートしない」と言うメジャー版は再インストールであり、AVX2 の床は要件の一行である（2026-11-01 20:38）
+
+`anomalyco/hex`——Rust 製のローカルファースト音声入力、MIT、**2,527★**——は **29 時間**で
+**3.0.0 → 3.1.1** へ動いた（`releases.atom` から：`2026-10-31T00:39:34Z` → `2026-11-01T01:40:43Z` →
+`2026-11-01T05:44:37Z`）。メジャー版は改名で、ノートはそれを柔らげない：「Hex 3.0 starts fresh. It
+keeps its data in a folder named `hex` instead of `voice-control` and **imports nothing**, so
+settings, History, meeting recordings, and downloaded models start empty and the first launch
+downloads a speech model again.」macOS の bundle identifier は `anomaly.hex` になり、「signed by
+Anomaly, so macOS treats it as a new app」、マイク・アクセシビリティ・画面収録の権限はすべて再付与が
+必要で、「2.3.1 doesn't update to 3.0 by itself」。
+
+残す価値のあるリリース工学のノートが二つ。**第一に、「これは再インストールだ」と書いたノートは、その
+更新の唯一誠実な形である**——黙った移行の失敗モードは、履歴が消えたことに本人が気づかないことで、それを
+書くコストは一段落で済む。**第二に、ハードウェアの床はクラッシュではなく要件に属する：**`3.1.0` は
+Windows と Linux x64 で「a 2013 or newer processor with **AVX2** (Intel Haswell / AMD Excavator or
+later)」を要求し、「on an older processor Hex shows a message and quits instead of crashing」。
+四時間後の `3.1.1` は、`3.1.0` が「quit silently at launch for anyone who had used a recent Dev
+build」だったこと——「a setting it can't read is in its settings file」——のために存在する。2013 年
+以前の CPU を切るのは「このアプリは誰のためのものか」という実際の決定であり、それを要件の行として印字
+することが、その決定をサポートキューと分ける。
+
+**同じバッチはフレームワーク選択に値段を付け、しかもそれは繰り返し発生する。**Nolan Lawson の十二
+フレームワークのエージェント構築は、生成アプリ一件あたり **Hono+htmx $2.67**、**Angular $4.97** を
+報告し、最も高い構築は **9.76M** トークン（Nuxt は **3.85M**）、**Astro 8.2 分** 対 **Angular 17.2 分**
+——コストは Claude Code の API 価格で計算され、著者自身の支出ではない。最終バンドルはまったく別の順序で
+（**Astro 0 KiB**、Next.js **142 KiB**）、ここが残すべき点だ：トークン請求と成果物サイズは同じ選択に
+ついての二つの異なる測定であり、どちらも他方を含意しない。
+
 → [[security]] [[fact-check]] [[agent-stack]]
 
 Sources: [xevrion/hatchzip](https://github.com/xevrion/hatchzip) · [heldercorreia/speedcrunch v1.1.0](https://github.com/heldercorreia/speedcrunch/releases/tag/v1.1.0) · [Snapintosh](https://github.com/Snapintosh/Snapintosh) · [UniXNU](https://github.com/UniXNU/UniXNU)

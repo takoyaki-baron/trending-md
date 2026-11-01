@@ -1251,6 +1251,36 @@ progress*, Wi-Fi only via a host proxy ("joining from the macOS Wi-Fi menu does 
 cameras/Bluetooth/sleep/external displays **not supported**; one machine, nothing else. Hypervisor-shaped
 and UEFI-shaped are now both live routes to the same place.
 
+
+## A major version that says "imports nothing" is a reinstall, and the AVX2 floor is a requirements line (2026-11-01 20:38)
+
+`anomalyco/hex` — local-first voice dictation in Rust, MIT, **2,527★** — moved **3.0.0 → 3.1.1 in 29
+hours** (verified from `releases.atom`: `2026-10-31T00:39:34Z` → `2026-11-01T01:40:43Z` →
+`2026-11-01T05:44:37Z`). The major version is a rename and the notes do not soften it: "Hex 3.0 starts
+fresh. It keeps its data in a folder named `hex` instead of `voice-control` and **imports nothing**, so
+settings, History, meeting recordings, and downloaded models start empty and the first launch downloads
+a speech model again." The macOS bundle identifier becomes `anomaly.hex`, "signed by Anomaly, so macOS
+treats it as a new app"; microphone, accessibility and screen-recording permissions must all be
+re-granted; and "2.3.1 doesn't update to 3.0 by itself".
+
+Two release-engineering notes worth carrying. **First, a note that says "this is a reinstall" is the
+only honest form of that update** — the silent-migration failure mode is a user whose history is gone
+and who does not know it happened, and the cost of saying so is one paragraph. **Second, a hardware
+floor belongs in requirements, not in a crash:** `3.1.0` requires "a 2013 or newer processor with
+**AVX2** (Intel Haswell / AMD Excavator or later)" on Windows and Linux x64 and, "on an older processor
+Hex shows a message and quits instead of crashing" — and `3.1.1`, four hours later, exists because
+`3.1.0` "quit silently at launch for anyone who had used a recent Dev build" when "a setting it can't
+read is in its settings file". Dropping pre-2013 CPUs is a real decision about who the application is
+for; printing it as a requirement is what separates that from a support queue.
+
+**The same batch puts a price on framework choice, and it is recurring.** Nolan Lawson's twelve-
+framework agent build reports **Hono+htmx $2.67** and **Angular $4.97** per generated app, with
+**9.76M** tokens for the most expensive build against Nuxt's **3.85M**, and **Astro 8.2 min** against
+**Angular 17.2 min** — costs computed at Claude Code API prices rather than the author's own spend.
+The shipped bundle is a separate ordering entirely (**Astro 0 KiB**, Next.js **142 KiB**), which is
+the point worth keeping: the token bill and the artifact size are two different measurements of the
+same choice, and neither implies the other.
+
 → [[security]] [[fact-check]] [[agent-stack]]
 
 Sources: [xevrion/hatchzip](https://github.com/xevrion/hatchzip) · [heldercorreia/speedcrunch v1.1.0](https://github.com/heldercorreia/speedcrunch/releases/tag/v1.1.0) · [Snapintosh](https://github.com/Snapintosh/Snapintosh) · [UniXNU](https://github.com/UniXNU/UniXNU)

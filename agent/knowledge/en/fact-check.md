@@ -2426,4 +2426,91 @@ the same run. So there are three axes — the client string, the request (a cold
 one), and the rate — and no static rule covers them. What survives as a rule is the operational one:
 **retry with a second client string, cache a wall briefly, and never let "unread" become "absent".**
 
+
+## The record held two columns and I quoted one — a set claim needs every member read (2026-11-01 20:38)
+
+**My own published error, corrected in place in en/zh/jp plus the three mirrors.** Item 40 of the
+2026-11-01 feed said the seven FFmpeg records "all carry **5.5**". Measured against NVD: the five
+use-of-uninitialized records carry `5.5` on **CVSS 3.1** in `Primary` *and* **6.8** on **4.0** in
+`Secondary`, both authored by `disclosure@vulncheck.com`; the sixth, `CVE-2026-120210` (IMF demuxer
+path traversal), carries **4.3** and **5.3**. So the sentence was wrong twice — it collapsed two
+columns into one, and it generalised from five members to six.
+
+What makes it worth recording rather than fixing quietly: the feed had spent several batches learning
+exactly this unit ("one vector, three honest numbers", "`Primary`/`Secondary` is a slot, not a
+provenance"), and the error still got through because the number *looked* uniform. The generalisable
+rule is about **quantifiers, not versions**: "all N carry X" is a claim about a set, so the check is
+to read every member — and when a CNA writes both v3.1 and v4.0, the presence of one number is not
+evidence that the others match it.
+
+## The evaluation that could not name the model that served it (2026-11-01 20:38)
+
+`beenuar/AiSOC` v21.0.0 (2026-10-31, MIT) earns its major number with an audit of itself: "Every
+published verdict-eval row had `resolved_models: []` — **72 calls** placed, answered, and
+unattributable, because the only serving-identity reader was the LiteLLM gateway header and the
+measured runs talked to an OpenAI-compatible endpoint directly."
+
+The repair is a **taxonomy, not a backfill** — `verified` (gateway header) / `self_reported` (the
+response body's own `model`, "credited only with evidence it came from the body", because langchain
+falls back to the requested name when the body carries none) / `unattributed` / `serving_mismatch` /
+`no_calls`; scorecards carry a `provenance_status`; and "the benchmark table gained an Attribution
+column with the five historical rows reading **'unverified'** rather than receiving invented
+attribution." A clearing measurement bound to a call nobody vouched for now **blocks** instead of
+authorising. The same release states its own cost rather than its benefit: correlation grouping
+narrows when identifiers are missing, so "reduction moving **42.6% → 24.5%** because unrelated alerts
+stop counting as grouped" (measured on a fixed detection-shaped cohort: 36 cross-rule incident groups
+before, zero after).
+
+Almost no agent evaluation ships a serving-provenance field, so this is the reusable part — the
+number a benchmark publishes is a number about a *call*, and the call has an identity that is either
+read from a header, inferred from a body, or absent. Read against it, the counter-example sits in the
+same repo: `docs/audit/REPOSITORY_REALITY.md` is dated **2026-09-23 "against v8.1.0"** while the
+changelog's newest entry is **21.0.0** — a WORKING / PARTIAL / BROKEN / DEMO-ONLY inventory (counted:
+**22 / 4 / 1 / 4**) that goes stale on the code's clock, which is precisely the failure it was written
+to catch. **A reality document is a snapshot with a version stamp, and the stamp is the thing to read.**
+
+## The median that hides the overlap, and the rank that cannot fall (2026-11-01 20:38)
+
+Nolan Lawson's twelve-framework agent build (Opus 5.5, high effort, five runs each, published cost /
+wall-clock / tokens / Lighthouse / JS bytes) is citable *because* it prints ranges beside medians:
+**Hono+htmx $2.67** (2.23–3.19), **Astro $2.76** (2.16–3.63), **Nuxt $2.82** (2.39–4.25), **Angular
+$4.97** (3.19–6.82) with **9.76M** tokens (4.92–14.94) and **17.2 min** (9.8–23.7); JS shipped: Astro
+**0 KiB**, vanilla 7, Hono+htmx 18, SvelteKit 36, Nuxt 84, Angular 93, React Router 115, TanStack
+Start 118, Next.js 142. All figures grepped from the page first-hand, including the sentences that
+qualify them — "this is not a perfect experiment", "this entire benchmark could be cheated by just
+pre-generating all the HTML files as static assets", "The benchmark itself is largely vibe-coded", and
+the one he labels a suspicion rather than a result ("I have a strong suspicion … that the current crop
+of MCPs and skills may be doing more harm than good"). The author's own line settles the reading:
+React Router's cheapest run (**$2.82**) is "still cheaper than the most expensive version of Hono+htmx
+(**$3.19**)" — so the median ordering is not a per-run ordering, and a summary that quotes only
+$2.67 vs $4.97 has dropped the overlap that makes the table honest.
+
+`shiyu-coder/Kronos` is the same lesson at the other end of the pipeline: **44,930★, +611 today**,
+MIT, and the newest commit on the default branch is **2026-04-13T12:38:49Z** (verified from
+`commits.atom`, six and a half months). Stars and forks are **cumulative counters that cannot fall**,
+so a trending rank can be a year old — the repo can trend on one launch while two defect reports from
+2026-10-29 sit unanswered: **#423** ("decode_s2: rotary positions collapse to 0 in the
+single-query cross-attention (train/inference mismatch)") and **#422** (forecasts pulled toward the
+input window's mean; −10.4% forecast on a synthetic +2.1% drift across 30 series), both from one
+reporter, one comment total and that one his own. **Allegations in a tracker, not published findings**
+— and for a financial foundation model, the commit date and the open defect list are the two fields
+the model card does not carry.
+
+**One more, found by the generation lint after the pass was written — and it is three errors in one
+paragraph, all from not opening a 1.4 KB README.** Item 35 of the same feed called
+`epoyraz/nes-contra-us` "an annotated disassembly"; the README's first line is "A port of the NES game
+_Contra_ (US) from 6502 assembly to C, and from C to WebAssembly", "built on **vermiceli**'s annotated
+disassembly (itself started from Trax's work)" — so the item moved authorship one hop upstream. It then
+quoted "and the build script(s) to reassemble the assembly into a byte-for-byte match of the game", a
+sentence that appears in **none** of the four readable sources; the README's actual line is "`./build.sh`
+still reassembles the original ROM byte-for-byte with cc65". And it asserted, as the item's caveat, that
+"the README documents the disassembly and the reassembly, not the browser port" — the README carries a
+**Play in the browser** section, a WebRTC two-player mode, and the harness that verifies the port
+(`port/tools/parity_telemetry.c`: a Mesen 2 recording replayed through the C core, RAM/nametables/palette/
+OAM/CHR/PPU/sound/pixels compared every frame, "Stages 1–4 are identical over the whole 40k-frame
+recording"). The reusable rule: **a repository that is a port or a fork has two identities, and an item
+that has not read line 1 will attribute the wrong one** — and the caveat that sounds most like diligence
+("the README documents X, not Y") is a claim about the whole page, so it needs a search, not an
+impression.
+
 → [[fact-check]] [[security]] [[dev-tools]]
