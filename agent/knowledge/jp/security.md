@@ -4085,3 +4085,55 @@ DOCUMENTOS」。Galileu は**これを検出し、隠し内容として印を付
 し、制裁額も割合と約 1.6 万ドルの両方で報じられている。
 
 → [[vuln-supply]] [[disclosure-lag]] [[fact-check]]
+
+## 境界は「デプロイ」が決める — そして 1 本のレコードが今や二度採点する（2026-11-02 04:31）
+
+同一バッチの JFrog CNA の 3 レコード（`reefs@jfrog.com`、すべて `Received`、**NVD 採点 0 件**）は、今年の
+agent 基盤の中心問題を 3 通りに述べている。起点はどれも「workspace トークンを持つテナント」。
+
+**Prefab UI — `CVE-2026-120338`、そして文書そのものが告発。** Generative UI サンドボックスは Deno 子
+プロセス内の Pyodide で呼び出し元の Python を実行する。**0.14.0 から 0.20.2** までランチャーは Deno を無制限
+で起動し、Deno API を JS グローバルに残したため、Pyodide の `js` プロキシ経由で Python から
+`Deno.readTextFileSync`／`writeTextFileSync` を直接呼べた（サーバの OS ユーザ権限で読み書き、venv の
+`site-packages` に `.pth` を書いて永続化）。典型的な遠隔経路は FastMCP の GenerativeUI provider で、
+`generate_prefab_ui` を登録しツールの `code` 引数をそのサンドボックスへ転送する。CNA は**1 レコードに
+シナリオ付き CVSS v3.1 を 2 つ**公開した——**10.0**（`PR:N`、`S:C`）は「GenerativeUI 有効・Deno 導入済み・
+認証未設定の FastMCP サーバ」、**9.9**（`PR:L`、`S:C`）は認証済みクライアント——**NVD の複製は 10.0 だけを
+保持する**。CWE-94 が CWE-269／CWE-693 と並ぶ。修正は **0.21.0**（PyPI `2026-10-26T19:00:11Z`、レコードの
+**6 日前**、`latest` は既に 0.21.1）、コミット `030f074`／PR 538：コードを受け取る**前に** Deno の読み書き・
+ネットワーク権限を剥奪し、`--no-prompt` で起動して権限要求で取り戻せなくし、ブートストラップのネットワークを
+`cdn.jsdelivr.net` に限定する。
+
+**Beta9 — 9.9 が 3 つ、主張は 1 文。** `CVE-2026-120307` はサンドボックスのファイル API：
+`getHostPathFromContainerPath` がコンテナパスの残りをマウント元に `filepath.Join` で連結するが、この関数は
+接頭辞チェックの**後に** `..` を正規化するため、十分な数の親セグメントで任意の絶対パスを指せる。アップロード、
+ダウンロード、stat、list、find-in-files、replace-in-files、delete-file のすべてが同じ helper を呼び、読み取り
+のみの検証で worker pod の **Kubernetes service account token** を取得した——同梱のリモートノード用マニフェスト
+はそれを **`cluster-admin`** に束ねている。`CVE-2026-120308` はボリューム接続：id が自分の workspace のものか
+を誰も確認せず、`..` で worker のファイルシステム根に潰れて読み書きマウントされる。`CVE-2026-120306` はイメージ
+ビルド：`BUILDAH_ISOLATION=chroot` を設定しながら `--isolation` を渡さないため、`RUN` 行は pod の PID・
+ネットワーク・IPC・ユーザ名前空間を uid 0 のまま保持し `CAP_DAC_OVERRIDE` を持ち、`/proc/1/root` は worker
+自身のファイルシステムになる。修正は**レコードの 47 日前**に出荷済み：worker **0.1.756**
+（`2026-09-15T04:03:56Z`）と gateway **0.1.776**（`04:04:15Z`、タグページで確認）。最新 worker は **0.1.821**
+（10-31）。是正は構造的（`os.OpenRoot`、チェック導入前に保存された stub にもマウント検証、OCI の私有名前空間
+分離）で、「アップグレード」が物語の全部であり、CVE ID は最後に届く。
+
+**AJ-Report — `CVE-2026-120209`。** ハードコードされた JWT 秘密鍵が `≤ 1.7.1` の share token に署名するため、
+`Share-Token` をオフラインで偽造できる。`reportCode` を `dataSet` にして `testTransform` に到達すれば、要求内の
+スクリプトが **`GroovyClassLoader`** に届く——偽造段階は無操作で、未認証 RCE。同一 CNA の二つの数字はどちらも
+正直：**3.1 9.8**（NVD `Primary`）と **4.0 9.3**（`Secondary`）、差は `SC:N/SI:N/SA:N`。
+`defaultStatus: unaffected` と `"0"` の下限は**空の最小値**で、「全履歴」ではない。公開は
+`2026-10-31T17:25:56Z`（cveawg）／`18:17Z`（NVD）——本 feed が最初に印字した `11-01` ではなく、それは同じ瞬間の
+UTC+8 の日付（→ [[fact-check]]）。
+
+**前提条件は言語ランタイムの既定値でありうる。** `CVE-2026-98432`（IPv4 TCP ハンドシェイクの
+use-after-free：ピアのオプションを半開 request socket に保存し、完了時に**複製せず**全接続 socket へ渡し、close
+時に解放する一方で別 CPU が応答を組み立てる）は **2026-10-15** からレコードがあったが、**Go 1.24 が MPTCP を
+listen socket の既定にした**こと、そして実演された攻撃が MPTCP listener を必要としたことで表面化した。Go の
+回答（oss-security、10-30）が保持すべき形：「**The best fix for this vulnerability is to upgrade to a patched
+kernel version**」、プログラム単位の無効化は「**a fragile mitigation**」、「**Accidentally leaving a single
+MPTCP listener exposed will still leave a system vulnerable**」、`multipathtcp=0` は**主モジュールの** `go`
+ディレクティブで決まる（`go 1.23` なら旧挙動）、go.dev/doc/godebug 参照。つまり遠隔・アプリ前段のカーネルバグが
+アプリの棚卸し問題になった：先に数えるべきは Go サービスで、listener を置いたのはそれらである。
+
+→ [[disclosure-lag]] [[vuln-supply]] [[fact-check]] [[agent-stack]]

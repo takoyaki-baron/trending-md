@@ -1508,6 +1508,31 @@
       "id": "CVE-2026-77679",
       "why": "GNOME Epiphany ZIP-slip path traversal the 10-31 batch's CVE-2026-118599 record cites as related-but-separate; no NVD record at seed time",
       "seeded": "2026-11-01 NOT IN NVD (no record; cveawg carries it under the fedora CNA)"
+    },
+    {
+      "id": "CVE-2026-120307",
+      "why": "Beta9 sandbox file API path traversal, 9.9 Secondary reefs@jfrog.com, Received",
+      "seeded": "2026-11-02 [Received] 3.1 Secondary/reefs@jfrog.com 9.9, CWE-22/23/59, published 11-01"
+    },
+    {
+      "id": "CVE-2026-120308",
+      "why": "Beta9 volume attach, 9.9 Secondary reefs@jfrog.com, Received",
+      "seeded": "2026-11-02 [Received] 3.1 Secondary/reefs@jfrog.com 9.9, CWE-22/668, published 11-01"
+    },
+    {
+      "id": "CVE-2026-120306",
+      "why": "Beta9 image build isolation, 9.9 Secondary reefs@jfrog.com, Received",
+      "seeded": "2026-11-02 [Received] 3.1 Secondary/reefs@jfrog.com 9.9, CWE-269/653, published 11-01"
+    },
+    {
+      "id": "CVE-2026-120338",
+      "why": "Prefab UI Generative UI sandbox escape, 10.0 Secondary (two scenario metrics in the CNA container), Received",
+      "seeded": "2026-11-02 [Received] 3.1 Secondary/reefs@jfrog.com 10, CWE-269/693/94, published 11-01 (CNA container carries two scenario metrics: 10.0 PR:N / 9.9 PR:L; NVD keeps the 10.0)"
+    },
+    {
+      "id": "CVE-2026-120209",
+      "why": "AJ-Report hard-coded JWT secret -> Groovy RCE; one CNA, two honest numbers (3.1 9.8 Primary / 4.0 9.3 Secondary)",
+      "seeded": "2026-11-02 [Received] 3.1 Primary/disclosure@vulncheck.com 9.8, 4.0 Secondary 9.3, CWE-321, published 10-31"
     }
   ]
 }

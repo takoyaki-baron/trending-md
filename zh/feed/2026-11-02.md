@@ -283,7 +283,7 @@ On-policy 自蒸馏让教师模型以特权参考为条件；现有方法要么�
 ## 18. AJ-Report 用硬编码的 JWT 密钥签发分享令牌 —— 一条记录，9.3 与 9.8 两个分
 
 - **Velocity:** ▮ steady
-- **Source:** VulnCheck CNA（cveawg）· 预留于 2026-10-31T11:44Z · 发布于 2026-11-01
+- **Source:** VulnCheck CNA（cveawg）· 预留于 2026-10-31T11:44Z · 发布于 2026-10-31T17:25Z
 - **Tags:** `cve` `hardcoded-secret` `jwt` `rce` `groovy`
 
 `CVE-2026-120209` 说的是 AJ-Report **1.7.1 及之前**用**硬编码的 JWT 密钥**签发分享令牌，于是攻击者可以离线伪造合法的 `Share-Token`。伪造一个 `reportCode` 为 `dataSet` 的令牌，访问 `testTransform` 端点，请求里的脚本就会进入 **`GroovyClassLoader`** —— 无需认证的远程代码执行，而且伪造这一步完全不需要与服务端交互。项目仓库在 Gitee（`anji-plus/report`），记录引用了硬编码密钥的那份 `JwtUtil.java` 源码。

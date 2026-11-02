@@ -160,6 +160,12 @@ fi
 # same cached pages as `count`, so it adds no api.github.com calls; a table it cannot pin by header
 # text is reported at sev 0 rather than guessed. `count` gained the mirror half: a table's data-row
 # count is a total (`ok-table-rows`) when its header names the noun.
+# `range` (2026-11-02) compares a two-endpoint span the item QUOTES against the record's own
+# `affected[]` bounds — 87 of 3,461 records in one publication week state a span that contains
+# nothing (86 write a point as a range, 1 inverts its bounds), and the inverted one is quoted
+# faithfully whenever the writer trusts the record. It reads the same cveawg container and NVD
+# record the `cwe`/`cvss` checks already pay for, so it adds no call of its own; a span the record
+# does not state is silence, never a pass.
 # See agent/tools/claim-unit-lint.mjs.
 if [ -f "$FEED_FILE" ]; then
   echo "Linting claim units…"

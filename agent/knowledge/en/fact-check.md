@@ -2514,3 +2514,165 @@ that has not read line 1 will attribute the wrong one** — and the caveat that 
 impression.
 
 → [[fact-check]] [[security]] [[dev-tools]]
+
+## A publish date is a calendar day in the record's own clock (2026-11-02 04:31)
+
+The 11-02 feed's item 18 printed `CVE-2026-120209` as "published **2026-11-01**". cveawg's
+`datePublished` is `2026-10-31T17:25:56.161Z` and NVD's `published` is `2026-10-31T18:17:09.263` — the
+quoted day is the **UTC+8 date of the same instant**, i.e. the host's calendar, not the record's. This
+is the `updated:` trap (CLAUDE.md, 2026-10-23) one layer out: a date without a zone is a claim, and here
+the claim was silently local. Corrected in place in en/zh/jp plus the three `latest.md` mirrors, and
+made a check rather than a rule: `claim-unit-lint.mjs --check date` reads every publish **cue**
+("published"/"disclosed" — never "fixed", "released" or "reserved", because NVD carries no
+`dateReserved` and a reservation date is *unverifiable*, not wrong), binds it the way the `cvss` check
+binds a subject (its own sentence's id → the item's single CVE → every cited record agreeing on the day),
+and compares against `published` parsed **as UTC when the `Z` is absent**. Verdicts `date-local-shift`
+(sev 2) and `date-mismatch` (sev 2); a missing record is silence. Calibrated both ways on the filing
+day: **1 finding / 24 verified** on the uncorrected feed, **0 / 24** after; `--selftest` **164 → 171**.
+Two instrumentation notes: the subjects map had to start carrying `published` at all (it had copied only
+status/metrics/cwe, so the first live run was silent for a structural reason, not a clean one), and the
+guard that lets a multi-CVE Source line be checked is **unanimity** among the cited records — without it
+one date would be scored against whichever id happened to be primary.
+
+**Same batch, three more units, all in the batch's own prose.**
+
+- **A conditional severity loses its condition one hop downstream.** Prefab's `CVE-2026-120338` carries
+  **two scenario-labelled CVSS v3.1 metrics** (10.0 unauthenticated / 9.9 authenticated); NVD's copy
+  carries the 10.0 alone. So "the record says 10.0" is true and incomplete: the number is the
+  unauthenticated-posture variant, and the deployment in front of it is the variable. Quote the scenario
+  with the score.
+- **An attributed judgement is not the source's own.** Xinhua reports the Apple/Qwen integration with the
+  facts that matter (developer beta **Nov 4**, iOS **27.3** in December, opt-in, no training on requests
+  or responses, device *and* account region both China) and then attributes the interpretation to a named
+  person: "**Wang Xiaojie, an AI expert at Beijing University of Posts and Telecommunications**, said this
+  is the first time a top global consumer hardware maker has used a Chinese large model as the primary
+  system-level AI backbone." The feed's "why it matters" states that as its own conclusion. Keep the
+  attribution — it is a defensible judgement *because* it is someone's.
+- **A four-day-old repo's extraordinary claim is usually a composition — and the credits are the place to
+  check.** `valentderah/totk-pc-recomp` (**3,102★**, created 2026-10-29T12:32Z) claims a static
+  recompilation of *Tears of the Kingdom* to native x86-64 with a Vulkan renderer, which the 10-11→10-17
+  wave priced at **600–700B tokens / months**. Its own `docs/architecture.md` resolves it in a table:
+  **LAS Recomp** supplies the ARM64→C lifter, **MacNativeGames** supplies the TotK-specific host (it
+  already ran 1.0.0–1.4.3 on Apple silicon), and the port "writes the parts neither has" — a scaling
+  lifter and a Vulkan back end for the NVN front end. The claim is true and the timeline is explained by
+  prior art, which is exactly the distinction a reader of "4 days" needs. (The feed's item did not say
+  this; the reproducible part is the README's "**No game files are included**" and "the result contains
+  the game. It is for your own use. Do not share it.")
+- **Re-publication across days is a dedup state the learner must own.** Item 7 of the 11-02 feed is
+  TextSeal2 (**2610.40613**), learned on 11-01 12:23 with the numbers already archived; the feed's dedup
+  is scoped to one day's file, so a story can return on the next calendar day and read as new. Skip it in
+  the notes, and name it as a re-publication rather than a development.
+
+→ [[fact-check]] [[security]] [[dev-tools]] [[disclosure-lag]] [[ai-impact]]
+
+## The span is a unit too — and the record can state one that contains nothing (2026-11-02 04:43)
+
+Filed from the 11-01 feed's Apache MINA item, which writes: "Affected is `3.0.0` through
+**`3.0.0-M2`**". Every word of that is the record's own — cveawg returns
+`{version: "3.0.0", lessThanOrEqual: "3.0.0-M2", versionType: "maven"}` — and the span is
+**empty**, because under semver-ish ordering a prerelease sorts *before* its release, so
+`3.0.0-M2 < 3.0.0` and the closed interval `[3.0.0, 3.0.0-M2]` holds nothing. A scanner told
+"affected: 3.0.0 up to 3.0.0-M2" is being handed an empty set; a reader told it believes a
+milestone patch was issued. Neither is what the record means to say ("the 3.0.0 line, while it
+existed"), and only the arithmetic shows it.
+
+This is the same family as the other units in this file — a number whose *referent* is not what
+the sentence implies — but with a twist worth naming: **the fact-check of the quotation passes.**
+Every downstream check this agent runs would confirm the item: the string is in the record, the
+score is right, the CWE is right, the publication date lands on the right day. The error, if there
+is one, lives in the arithmetic *between* two quoted fields, which no grep can see.
+
+### The measurement behind it
+
+`disclosure-lag.mjs --remedy-census` over NVD's 2026-10-25 → 10-31 publication window (3,461
+records, `Rejected` excluded) found **87 records (2.5%)** whose stated span contains nothing:
+**86** write a point as a range (`{version: X, lessThan: X}`, **73 of them
+`chrome-cve-admin@google.com`** — a house style, so quote the assigner and never the rate) and
+**1** inverts its bounds (MINA). Details → [[disclosure-lag]].
+
+### What became a check, and the two things that made it wrong first
+
+`claim-unit-lint.mjs --check range` (in the default set; `--selftest` **171 → 184**, +13 for this check alone — **194** by the end of the same day's date work). It reads the
+same two artifacts the `cvss`/`cwe` checks already pay for — the CNA container (`affected[]`,
+normalised to `{min, minInc, max, maxInc, product, versionType, changes[]}`, cached under
+`CNA_CACHE_V: 3 → 4`) and NVD's `configurations[]` as the fallback — extracts every two-endpoint
+version span from the item's prose, binds it to a CVE the way the other checks do, and compares.
+Verdicts: `span-empty` (sev 2 — the record's own span is vacuous and the item quoted it),
+`span-inverted` (sev 3 — the item's own endpoints run high-to-low, which the record does not),
+`span-unverifiable` (sev 0 — a git range, or a version span for a record whose only bounds are
+those revisions), `ok-span`.
+
+Two defects it had on its first two hours, each found by a selftest or a live run:
+
+- **A sentence-final period is not part of a version.** The token's own character class includes
+  `.` so that `1.2.3-build.4` survives, which meant `3.0.0-M2.` (end of sentence) failed to equal
+  the record's `3.0.0-M2` — the record match collapsed, the span fell through to the *item-voice*
+  arm, and a faithful quotation was reported as the writer's inversion. The MINA filing case is
+  exactly this shape, so the first version of the check got its own filing case wrong. Fixed with
+  `cleanVer()` (trailing `.,;:` stripped), pinned by the selftest.
+- **The record's emptiness and the item's arithmetic are different findings** and need different
+  names, because the remedies differ: one is a sentence to add, the other a number to fix. They
+  were one verdict for twenty minutes.
+
+Three guards, each a false positive the design would otherwise produce:
+
+- **`0` and `*` are NULL bounds, not versions** — CVE 5.x's null minimum means "unbounded", and
+  the AJ-Report-shaped record (`version: "0"`, `≤ 1.7.1`) is open-ended, never empty.
+- **`through` is a range in this corpus's voice; `to` is also how measurements are written.** A
+  `through`/dash span anchors on one endpoint matching a record bound; a `to` span needs *both*
+  endpoints to be the record's own bounds. Without this, "detection went from 41.39% to 56.97"
+  and "0.96 to 0.86" are version spans.
+- **Equal endpoints are not empty under an inclusive end.** `1.2.3 through 1.2.3` is one version;
+  only a `lessThan` (exclusive) upper bound makes the pair vacuous. The predicate is the
+  record's field, not the prose's joiner.
+
+→ [[fact-check]] [[disclosure-lag]] [[vuln-supply]]
+
+## The date census: ten of eleven findings were the checker's (2026-11-02 04:43)
+
+The open question was how large the local-date class is — how many publish dates across the corpus are
+the host's UTC+8 day rather than the record's. Re-running `--check date` over **33 feeds**
+(2026-10-01 → 11-02, **351** distinct CVEs, one NVD `cveId`-list pull per 25) answered it, and then
+answered a question I had not asked.
+
+**The first pass returned 55 verdicts: 44 `ok`, 10 `date-mismatch`, 1 `date-local-shift`.** I opened
+all eleven. **Ten were the checker's**, and every one was a publish cue whose subject was an artefact:
+
+| cue in the feed | what it was about |
+|---|---|
+| `Source: Unit 42 · published 2026-10-14` | the newsroom's article |
+| `fixed in v0.1.7, published 2026-05-06` · `7.1.2-33 was published on 2026-10-10` · `fixed in v3.0.3, published 2026-10-26T21:38Z` | **release** dates |
+| `worker 0.1.756 and gateway 0.1.776 — both published 2026-09-15T04:03Z` | a pair of fix releases |
+| `published by Patchstack on 2026-10-13` · `Source: Patchstack · published 2026-10-13` | the vendor's own publication |
+| `Behrouz … published the Sleep framework on 2026-10-27` | an author's post |
+| `Source: CVE Program (cveawg) / Postiz advisories · published …` | a registry line that the artefact test read as "advisories" |
+
+Two were **the regex**: `\b` after the day fails on an ISO instant, because `1` and `T` are both word
+characters — so `published 2026-10-31T09:29Z · reserved 2026-10-28` skipped the instant and scored the
+*reserved* day, and `CVE published 2026-10-30T14:36Z · advisory dated 2026-06-24` scored the advisory's.
+One was **two clocks**: `CVE-2026-117656` is `2026-10-30T23:55:23Z` in cveawg and
+`2026-10-31T00:16:51Z` in NVD — 21 minutes apart, on different calendar days — so a correct "published
+2026-10-30" was reported against the wrong registry's day.
+
+**What the fixes are** (`--selftest` **194/194**, +23 on the day): five cue suppressors (a cue followed
+by `the`/`a`/`by`; a version *attached* to the cue through a short tail of punctuation, a dash, `both`,
+`was`/`is`, after stripping markdown emphasis — `**v0.1.7**,` otherwise reads as no version at all; an
+artefact noun in the preceding clause; and a `Source:` line decided **only** by whether it names the
+registry, because a source *name* is made of the very words the artefact test looks for); a digit
+lookahead instead of `\b`; and a two-clock comparison that accepts either registry's day and **says
+which one it matched**.
+
+**The answer to the question that was asked:** after the fixes the same 33 feeds return **73 verdicts,
+72 matching a record's day and 1 `date-local-shift`** — the 10-25 item on Postiz, whose `Source:` line
+names cveawg and then writes `published 2026-10-24` against a record published `2026-10-23T23:17:43Z`
+(70 minutes before midnight). So the class is **real but rare — 1 in 73 checkable claims (1.4%)**, and
+every instance moves the story one day later in the reader's eye, which is enough to turn "fixed before
+the record" into "after".
+
+The transferable shape: **a cue word is not a subject.** "Published" attaches to whatever noun is
+nearest, and in a feed that cites articles, releases and advisories beside records, the nearest noun is
+usually not the record. The census is what made the rate visible — 18% false positives was invisible in
+a single-run calibration of 1 finding / 24 verified, because that day's items happened to have no
+release lines.
+
+→ [[fact-check]] [[disclosure-lag]]

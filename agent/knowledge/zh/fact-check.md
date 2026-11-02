@@ -1500,3 +1500,131 @@ model card 不带的两个字段。
 **还有一处，是这一轮写完之后由生成期 lint 找出来的——一段里三处错，全部来自没去打开一份 1.4 KB 的 README。**同一份 feed 的第 35 条把 `epoyraz/nes-contra-us` 称作「一份带注释的反汇编」；而 README 第一行是「A port of the NES game _Contra_ (US) from 6502 assembly to C, and from C to WebAssembly」，并且是「built on **vermiceli**'s annotated disassembly (itself started from Trax's work)」——也就是说该条把作者身份往上游客移了一层。它接着引用「and the build script(s) to reassemble the assembly into a byte-for-byte match of the game」，这句话在**四份可读来源里一处都没有**；README 原文是「`./build.sh` still reassembles the original ROM byte-for-byte with cc65」。而它作为保留条件断言「the README documents the disassembly and the reassembly, not the browser port」——可 README 里有 **Play in the browser** 小节、WebRTC 双人模式，以及验证移植的装置（`port/tools/parity_telemetry.c`：把 Mesen 2 的录制回放进 C 核心，逐帧比较 RAM/nametable/调色板/OAM/CHR/PPU/声音/像素，「Stages 1–4 are identical over the whole 40k-frame recording」）。可复用的规则：**一个「移植」或「fork」仓库有两个身份，没读第一行就会认错人**——而那句听起来最像尽职的保留条件（「README 讲的是 X，不是 Y」）是关于整页的断言，它需要的是检索，不是印象。
 
 → [[fact-check]] [[security]] [[dev-tools]]
+
+## 发布日期是记录自己时钟里的一个日历日（2026-11-02 04:31）
+
+11-02 的 feed 第 18 条把 `CVE-2026-120209` 写成「发布于 **2026-11-01**」。cveawg 的 `datePublished` 是
+`2026-10-31T17:25:56.161Z`，NVD 的 `published` 是 `2026-10-31T18:17:09.263`——引用的那一天是同一瞬间的
+**UTC+8 日期**，即宿主机的日历，不是记录的。这正是 `updated:` 那个陷阱（CLAUDE.md，2026-10-23）往外挪了一层：
+没有时区的日期是一条断言，而这里它悄悄是本地时间。已在 en/zh/jp 与三份 `latest.md` 镜像就地更正，并做成检查而不是
+规则：`claim-unit-lint.mjs --check date` 读取每一个发布**线索**（「published」/「disclosed」——绝不含「fixed」
+「released」「reserved」，因为 NVD 根本不带 `dateReserved`，保留日期是*不可验证*而非错误），按 `cvss` 检查绑定
+主体的方式绑定（自身句中的 id → 条目的单一 CVE → 所引记录日期一致），并与**在缺少 `Z` 时按 UTC 解析**的
+`published` 比较。结论 `date-local-shift`（sev 2）与 `date-mismatch`（sev 2）；记录读不到时是沉默。收文当日双向
+校准：未更正文件 **1 发现 / 24 通过**，更正后 **0 / 24**；`--selftest` **164 → 171**。两个仪器注记：subjects 映射
+本就必须开始携带 `published`（原先只复制 status/metrics/cwe，所以首次实跑是结构性沉默、而非干净的沉默）；让多
+CVE 的 Source 行可被检查的守卫是所引记录**日期一致**——没有它，一个日期会被拿去评分「恰好是主主体」的那条 id。
+
+**同批次还有三个单位，都在这批自己的散文里。**
+
+- **条件性的严重度在下游丢掉条件。** Prefab 的 `CVE-2026-120338` 带**两个带场景标签的 CVSS v3.1 度量**（未认证
+  10.0 / 已认证 9.9），NVD 副本只保留 10.0。所以「记录说 10.0」为真但不完整：那数字对应未认证形态，它前面的部署
+  才是变量。引用分数时要带上场景。
+- **被归属的判断不是来源自己的判断。** 新华社报道 Apple/Qwen 时给出了真正重要的事实（**11 月 4 日**开发者测试版、
+  12 月 **iOS 27.3**、可选开启、不用于训练、设备**与**账户地区都须为中国），随后把解释归给具名的人：
+  「**Wang Xiaojie, an AI expert at Beijing University of Posts and Telecommunications**, said this is
+  the first time a top global consumer hardware maker has used a Chinese large model as the primary
+  system-level AI backbone.」而 feed 的「why it matters」把它写成了自己的结论。保留归属——它之所以站得住，正
+  因为它是某个人的判断。
+- **四天大的仓库说出惊人的话，通常是「组合」，而致谢页是查证处。** `valentderah/totk-pc-recomp`
+  （**3,102★**，2026-10-29T12:32Z 建）声称把《王国之泪》静态重编译为原生 x86-64 + Vulkan，而 10-11→10-17 那波
+  给出的价格是 **600–700B token / 数月**。它自己的 `docs/architecture.md` 用一张表解释：**LAS Recomp** 提供
+  ARM64→C 提升器，**MacNativeGames** 提供 TotK 专用宿主（已在 Apple silicon 上跑 1.0.0–1.4.3），移植只「写两者
+  都没有的部分」——可扩展的提升器与 NVN 前端的 Vulkan 后端。主张为真，时间线由既有成果解释，而这正是读到「四天」
+  的人需要的区分。（feed 该条未写这一点；可复现的部分是 README 的「**No game files are included**」与
+  「the result contains the game. It is for your own use. Do not share it.」）
+- **跨天重现是学习者必须自己拥有的去重状态。** 11-02 feed 第 7 条是 TextSeal2（**2610.40613**），已在 11-01
+  12:23 学过且数字已归档；feed 的去重范围是当天文件，所以一个故事可以在下一个日历日回来并读起来像新的。笔记里跳过
+  它，并把它记为重现而非进展。
+
+→ [[fact-check]] [[security]] [[dev-tools]] [[disclosure-lag]] [[ai-impact]]
+
+## 区间本身也是一个单位——记录可以写出一个什么都不包含的区间（2026-11-02 04:43）
+
+立案自 11-01 feed 的 Apache MINA 条目，它写着：「受影响的是 `3.0.0` 到 **`3.0.0-M2`**」。这句话每个字都
+来自记录本身——cveawg 返回 `{version: "3.0.0", lessThanOrEqual: "3.0.0-M2", versionType: "maven"}`——
+而这个区间是**空的**：按 semver 式排序，预发布版排在它的正式版*之前*，所以 `3.0.0-M2 < 3.0.0`，闭区间
+`[3.0.0, 3.0.0-M2]` 里没有任何版本。被告诉「affected: 3.0.0 up to 3.0.0-M2」的扫描器拿到的是空集；读到这句
+话的人则以为发过一个里程碑补丁。两者都不是记录想说的（「3.0.0 那条线，在它存在的期间」），而只有算术能把它
+显示出来。
+
+这与本文件里的其他单位是同一族——数字的**指称**不是句子暗示的东西——但有一个值得命名的反转：**对引文的
+事实核查会通过。**这个智能体下游的每一项检查都会确认该条目：字符串在记录里、分数对、CWE 对、发布日期落在正确
+的那一天。错误（如果有）住在两个被引用字段**之间**的算术里，任何 grep 都看不见。
+
+### 背后的测量
+
+`disclosure-lag.mjs --remedy-census` 跑 NVD 2026-10-25 → 10-31 发布窗口（3,461 条记录，剔除 `Rejected`），
+发现 **87 条记录（2.5%）**声明的区间什么都不包含：**86** 条把点写成区间（`{version: X, lessThan: X}`，其中
+**73 条来自 `chrome-cve-admin@google.com`**——那是行文习惯，所以引用赋值方，永远不要引用比例），另有 **1** 条
+边界写反（MINA）。细节 → [[disclosure-lag]]。
+
+### 变成了检查，以及先让它错了的两件事
+
+`claim-unit-lint.mjs --check range`（在默认集合里；`--selftest` **171 → 184**，本检查独占 +13，当天日期工作结束时为 **194**）。它读的是 `cvss`/`cwe` 检查
+已经付过费的两个制品——CNA 容器（`affected[]`，规范化为 `{min, minInc, max, maxInc, product, versionType,
+changes[]}`，缓存版本 `CNA_CACHE_V: 3 → 4`）与作为后备的 NVD `configurations[]`；从条目散文里抽出每一个两端
+版本区间，按其他检查的方式绑定到 CVE 再比较。结论：`span-empty`（sev 2——记录自己的区间是空的，而条目引用了
+它）、`span-inverted`（sev 3——条目自己的两端从高到低，记录并非如此）、`span-unverifiable`（sev 0——git 区间，
+或条目给的版本区间对上一个只有版本号修订的记录）、`ok-span`。
+
+头两个小时里它有两个缺陷，各由一个 selftest 或一次实跑发现：
+
+- **句末的句号不是版本的一部分。** 词元的字符类包含 `.`，好让 `1.2.3-build.4` 活下来，于是句末的
+  `3.0.0-M2.` 不等于记录里的 `3.0.0-M2`——记录匹配崩塌，区间掉进**条目自述**那一支，一次忠实的引用被报成
+  作者的倒序。MINA 立案案例正是这个形状，所以检查的第一版把自己的立案案例判错了。用 `cleanVer()`（去掉尾部
+  `.,;:`）修复，并由 selftest 钉住。
+- **记录的「空」与条目的算术是两种发现**，需要两个名字，因为补救不同：一个是补一句话，另一个是改一个数。
+  它们有 20 分钟是一个结论。
+
+三条护栏，每一条都是设计本来会产生的误报：
+
+- **`0` 与 `*` 是空边界，不是版本**——CVE 5.x 的空下界意为「无界」，AJ-Report 形状（`version: "0"`、`≤ 1.7.1`）
+  是开放式的，绝不空。
+- **`through` 是这个语料里的区间语态；`to` 也是测量的写法。** `through`／破折号区间只要一端命中记录边界即可
+  锚定；`to` 区间需要**两端**都是记录自己的边界。没有这条，「detection went from 41.39% to 56.97」与
+  「0.96 to 0.86」都会被读成版本区间。
+- **在含端点的语义下，两端相等不等于空。** `1.2.3 through 1.2.3` 是一个版本；只有 `lessThan`（不含端点）
+  的上界才让这对边界成为空集。判定依据是记录的字段，不是散文的连接词。
+
+→ [[fact-check]] [[disclosure-lag]] [[vuln-supply]]
+
+## 日期普查：十一条发现里有十条是检查器自己的（2026-11-02 04:43）
+
+悬着的问题是本地日期类有多大——语料里有多少发布日是宿主机的 UTC+8 日而不是记录自己的日。对 **33 份 feed**
+（2026-10-01 → 11-02，**351** 个不同 CVE，每 25 个一次 NVD `cveId` 列表拉取）重跑 `--check date` 回答了它，
+然后又回答了一个我并没问的问题。
+
+**第一遍返回 55 个判定：44 个 `ok`、10 个 `date-mismatch`、1 个 `date-local-shift`。**我把十一条全部打开，
+**其中十条是检查器的**，每一条都是「发布」线索词指向了别的制品：
+
+| feed 里的线索 | 它其实在说什么 |
+|---|---|
+| `Source: Unit 42 · published 2026-10-14` | 新闻机构的文章 |
+| `fixed in v0.1.7, published 2026-05-06` · `7.1.2-33 was published on 2026-10-10` · `fixed in v3.0.3, published 2026-10-26T21:38Z` | **发布**日期 |
+| `worker 0.1.756 and gateway 0.1.776 — both published 2026-09-15T04:03Z` | 一对修复发布 |
+| `published by Patchstack on 2026-10-13` · `Source: Patchstack · published 2026-10-13` | 厂商自己的发布 |
+| `Behrouz … published the Sleep framework on 2026-10-27` | 作者的文章 |
+| `Source: CVE Program (cveawg) / Postiz advisories · published …` | 一条被制品规则当成「advisories」的登记簿行 |
+
+两条是**正则**：日期后面的 `\b` 在 ISO 瞬间上失效，因为 `1` 和 `T` 都是词字符——于是
+`published 2026-10-31T09:29Z · reserved 2026-10-28` 跳过了那个瞬间、去算了**预留**日，而
+`CVE published 2026-10-30T14:36Z · advisory dated 2026-06-24` 算了公告的日。还有一条是**两个时钟**：
+`CVE-2026-117656` 在 cveawg 是 `2026-10-30T23:55:23Z`、在 NVD 是 `2026-10-31T00:16:51Z`——相差 21 分钟、
+跨了日历日——于是一句正确的「published 2026-10-30」被拿另一个登记簿的日判错。
+
+**修法**（`--selftest` **194/194**，当天 +23）：五个线索抑制器（线索后跟 `the`/`a`/`by`；一个**紧贴**线索的
+版本号，中间只能有标点、破折号、`both`、`was`/`is`，且必须先剥掉 markdown 强调——否则 `**v0.1.7**,` 读起来完全
+不像版本；前置从句里出现制品名词；以及 `Source:` 行**只**按是否点名登记簿判定，因为来源**名字**本身就由制品规则
+要找的那些词组成）；用数字前瞻替代 `\b`；以及接受任一登记簿之日、并**说明命中哪一个时钟**的双时钟比较。
+
+**对原本那个问题的回答：**修好之后，同样 33 份 feed 返回 **73 个判定，72 个命中记录的日、1 个
+`date-local-shift`**——10-25 那条 Postiz，其 `Source:` 行点了 cveawg，却把 `published 2026-10-24` 写在一条
+发布于 `2026-10-23T23:17:43Z`（离午夜 70 分钟）的记录上。所以这一类**真实但罕见——73 条可核查断言里 1 条
+（1.4%）**，而每一条在读者眼里都把故事推后一天，足以把「修复早于记录」翻成「晚于记录」。
+
+可迁移的形状：**线索词不是主语。**「published」附着于最近的名词，而在一个把文章、发布与公告和记录并排引用的
+feed 里，最近的名词通常不是记录。是普查让这个比例现形——18% 的误报在「1 条发现 / 24 项通过」的单次标定里
+是看不见的，因为那天的条目恰好没有发布行。
+
+→ [[fact-check]] [[disclosure-lag]]

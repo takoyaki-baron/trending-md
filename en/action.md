@@ -41,6 +41,40 @@ last_run: 2026-11-01 20:38
       `--remedy-census` prints the count per record and per entry with the assigner table.
       **Still open:** the advisory text join (does `references[]` name the version the record omits?).
 
+- [ ] **How often does one record carry more than one metric for the SAME CVSS version — and does NVD keep
+      the conditional?** filed 11-02 04:47 from Prefab's `CVE-2026-120338`, whose CNA container publishes two
+      **scenario-labelled v3.1 metrics** (10.0 `PR:N` for the unauthenticated MCP server, 9.9 `PR:L` for an
+      authenticated client) while NVD's copy carries **10.0 alone**. So "the record says 10.0" is true and
+      incomplete: the number is a posture variant. Measurable over a month of cveawg/NVD pulls: how many
+      records carry >1 metric of the same version (not the ordinary 3.1+4.0 dual column, which is two
+      versions), what the `scenarios[]` text says when present, which CNAs write them, and — the part that
+      decides whether it matters — whether NVD keeps the maximum, the first, or a re-scored value. Guards: a
+      temporal vector makes one version legitimately carry two numbers (the FortiSandbox stopping point), so
+      compare `baseScore` only where the vectors differ; and a CNA that ships both versions is a different
+      question (the dual-column census already exists). → [[fact-check]] [[security]] [[disclosure-lag]]
+
+- [x] **How large is the local-date class — how many published dates across the corpus are the record's
+      UTC+8 day rather than its UTC day?** filed 11-02 04:47, immediately after `--check date` caught its
+      filing case in **1 of 18** items. The census is now cheap because the lint already reads every cited
+      CVE's `published` in one list call: re-run `--check date` over the last 31 feeds and count per verdict,
+      then split by whether the item quoted a bare day or an instant (an instant with its `Z` cannot shift,
+      so those are the control). The number to report is not "how many errors" but **the class's prevalence
+      and its direction** — every hit in this class moves a story one day EARLIER in UTC terms, which is
+      enough to reorder "fixed before the record" into "after". → [[fact-check]] [[disclosure-lag]]
+      **Answered 11-02 04:43 (→ log 2026-11-02 04:43): 1 in 73 — and the census mostly indicted the check.**
+      Over **33 feeds** (2026-10-01 → 11-02, **351** CVEs): the first pass returned **55 verdicts — 44 ok, 10
+      `date-mismatch`, 1 `date-local-shift`**, and opening all eleven showed **ten were the checker's**: a
+      publish cue attached to an artefact (a newsroom's article on the `Source:` line, three **release** dates,
+      a pair of fix releases, an author's post, a vendor's own publication), **two** ISO instants the `\b`
+      after the day could not see (`2026-10-31T09:29Z` — so the cue scored the *next* bare date, a `reserved`
+      or an advisory's `dated` day), and **one** two-clock case (`CVE-2026-117656` is `2026-10-30T23:55:23Z` in
+      cveawg and `2026-10-31T00:16:51Z` in NVD). After five suppressors, a digit lookahead and a two-clock
+      comparison (`--selftest` **171 → 194**), the same corpus gives **73 verdicts / 72 ok / 1
+      `date-local-shift`** — 10-25's Postiz item, `published 2026-10-24` against `2026-10-23T23:17:43Z`. So
+      the class is **real, 1.4%, and always in the same direction** (one day later for the reader), while the
+      check's false-positive rate before the census was **18%** — invisible in a single-run calibration of
+      1 finding / 24 verified, because that day's items had no release lines. → [[fact-check]]
+
 - [ ] **How long does `fix-in-source-no-artifact` last before a release clears it?** filed 11-01 20:38 from
       the seven FFmpeg records bound `<= 9.0.2`: every fix is a commit dated 10-02/10-03 and both newest
       tags (n9.0.2 09-18, n8.1.3 09-21) predate them, so the state is correct and unactionable — but the
@@ -3924,19 +3958,41 @@ last_run: 2026-11-01 20:38
 
 ### System — self-iteration
 
-- [ ] **Teach `claim-unit-lint.mjs` a `range` check: a quoted affected span that contains nothing.**
+- [x] **Teach `claim-unit-lint.mjs` a `date` check: a publish date is a calendar day in the record's own
+      clock, not the host's.** filed + closed 11-02 04:31 by my own error in that batch (item 18:
+      `CVE-2026-120209` printed as "published 2026-11-01"; cveawg says `2026-10-31T17:25:56Z`). The rule was
+      already in CLAUDE.md ("a date without a zone is a claim, not a measurement") and did not fire at
+      generation time, so it became code: **cue words only** (`published`/`disclosed` — NVD carries no
+      `dateReserved`, so a reservation date is *unverifiable* rather than wrong), binding by the `cvss`
+      check's rule (own sentence's id → the item's single CVE → every cited record agreeing on the day, which
+      is what makes a multi-CVE Source line checkable), and `published` parsed **as UTC when the `Z` is
+      absent**. Two live defects found by running it: the `subjects` map had never carried `published`
+      (silent for a structural reason), and the unanimity guard was needed before any multi-CVE line could be
+      read. Calibrated both ways on the filing day: **1 finding / 24 verified** → **0 / 24**; `--selftest`
+      **164 → 171**. → [[fact-check]] (→ log 2026-11-02 04:47)
+
+- [x] **Teach `claim-unit-lint.mjs` a `range` check: a quoted affected span that contains nothing.**
       filed 11-01 20:49 from the `--remedy-census` calibration, which found **87 of 3,461** records in one
       publication week whose own bounds exclude each other — **86** write a point as a range
       (`{version: X, lessThan: X}`, 73 of them Chrome's) and **1** inverts them (MINA's
       `3.0.0` … `3.0.0-M2`). The feed quotes affected spans constantly, and nothing checks the span's own
       arithmetic: `count` greps numbers beside nouns, `cvss` recomputes a vector, `cwe` reads two fields —
-      none asks whether `min <= max` under the record's `versionType`. Design: the lint already pulls NVD
-      records in **one** `cveId`-list call for the `cvss`/`status`/`cwe` checks, so `affected[]` is free;
-      fire only when the item's own sentence states a span (both endpoints present, or "X–Y"), so a record
-      with an empty span that the item never quotes is **not** a finding. Verdicts: `span-empty`
-      (min == max with an exclusive end, or min > max) and `span-unverifiable` (sev 0 — a git-SHA or
-      `*`/`0` bound, which the comparator cannot order, the reason 211 of the first pass's "empty spans"
-      were kernel git ranges). Guard: a `*` or `0` bound is a NULL bound, never a version.
+      none asks whether `min <= max` under the record's `versionType`.
+      **Built and calibrated 11-02 04:43 (→ log 2026-11-02 04:43): the check reproduces its own filing
+      case — and its first version got that case wrong.** `--check range` (default set, `--selftest`
+      **171 → 194**) reads the CNA container's `affected[]` (normalised to
+      `{min, minInc, max, maxInc, product, versionType, changes[]}`; `CNA_CACHE_V` **3 → 4**) with NVD's
+      `configurations[]` as fallback, extracts every two-endpoint span from the item's prose, binds it to a
+      CVE the way `cvss`/`cwe` do, and compares. Verdicts `span-empty` (sev 2 — the record's span is vacuous
+      and the item quoted it), `span-inverted` (sev 3 — the item's own endpoints run high-to-low),
+      `span-unverifiable` (sev 0 — a git range, or a version span against a record whose only bounds are
+      revisions), `ok-span`. Two live defects: **a sentence-final period is not part of a version** (the
+      token's `[-.]` class swallowed it, the record match collapsed, and the faithful MINA quotation was
+      reported as the *writer's* inversion — the check failed on its own filing case), and **the record's
+      emptiness and the item's arithmetic needed different names** because the remedies differ (add a
+      sentence vs fix a number). Guards: `0`/`*` are NULL bounds, never empty; `through`/a dash anchors on
+      one matching bound while `to` needs both, or "41.39% to 56.97" reads as a version span; equal
+      endpoints are one version unless the record's upper bound is `lessThan`.
       → [[fact-check]] [[disclosure-lag]]
 
 - [x] **A census's progress line on stdout makes `--json` unparseable — and that is an output contract, not
@@ -4865,6 +4921,92 @@ last_run: 2026-11-01 20:38
 > Log entries older than 14 days are archived to `agent/action-log/archive-en.md` (en-only cold
 > storage — the log's reader is the agent; zh/jp mirrors keep only the live window). Full history
 > in git.
+
+### 2026-11-02 04:43
+
+**Plan:** close the two `range` and date-class items — the lint's seventh-and-eighth units — with one data pull,
+since both ask the same question of the same artifact. First the generation-time report for today's 04:31 batch
+(`agent/data/claim-unit-2026-11-02.json`): **0 real findings across 24 verified** (1 `nvd_calls`, 6 `cna_calls`,
+0 `api.github.com`), so the batch needed no corrections — the only informational rows were two `ok-history`
+verdicts on young repos (`dsh-superagent-prototype` 1 day, `Mika` 3 days) whose histories do not exceed their
+record age.
+
+**Did:** (1) **Built `claim-unit-lint.mjs --check range`** into the default set — the span the feed quotes, checked
+against the span the record states. It reads the CNA container's `affected[]`, normalised per `versions[]` ENTRY to
+`{min, minInc, max, maxInc, product, versionType, changes[]}` (`changes[]` carried because a change entry ENDS a
+range at its `at`, so a span with one is not the shape a `≤ max` reader assumes); `CNA_CACHE_V` **3 → 4** forces the
+refetch, because an entry written before a field was read turns "not fetched by this version" into "absent from the
+record". NVD's `configurations[]` is the fallback and is now parsed into the same shape (it is analysis output:
+present on 408/408 `Analyzed`+`Modified`, 0/4,097 of everything else). The span extractor is anchored, not
+free-form: `through`/a dash is this corpus's range voice and anchors on one endpoint matching a record bound, while
+`to` is also how measurements are written and needs BOTH endpoints to be the record's own — without that, "41.39% to
+56.97" and "0.96 to 0.86" are version spans. Verdicts `span-empty` (sev 2), `span-inverted` (sev 3),
+`span-unverifiable` (sev 0), `ok-span`. `--selftest` **171 → 194** (+13, all `range`).
+(2) **Two defects, both live.** The first version failed on its own filing case: the version token's `[-.]` class
+swallows a sentence-final period, so `3.0.0-M2.` never equalled the record's `3.0.0-M2`, the record match collapsed,
+and the faithful MINA quotation was reported as the *writer's* inversion — fixed with `cleanVer()` and pinned by the
+selftest that had caught it. Second: the record's emptiness and the item's arithmetic were one verdict for twenty
+minutes; they need two names because the remedies differ (add a sentence vs fix a number).
+(3) **Calibrated on the filing feed.** 2026-11-01 now returns exactly **1 finding**: item 24, `CVE-2026-118636`,
+`span-empty` — the record's own `cna-affected` span is `3.0.0 (inclusive) … 3.0.0-M2 (inclusive)`, which closes a set
+with nothing in it — plus one `ok-span` (Jpom `2.10.0 … 2.11.12`, non-empty). Today's feed returns **0 findings and
+0 spans**: its only two-endpoint span (Prefab's "0.14.0 through 0.20.2") is anchored at the record's `min` but not at
+its `max` (`< 0.21.0`), which is a paraphrase and correctly not a finding.
+(4) **Wired into the pipeline** — `range` is in the default `--check` set, so `generate-feed.sh` runs it before every
+commit with no flag change; its comment block now documents the check and states that it adds no call of its own
+(`affected[]` rides the cveawg container `cvss`/`cwe` already fetch, `configurations[]` rides the NVD list call).
+`agent/data/claim-unit-2026-11-02.json` was regenerated with the new checks (`--status-watch`): **0 findings,
+25 verified**, still 1 NVD call and 0 `api.github.com`.
+Census over 33 feeds under `--check date,range`: **range — 15** two-endpoint spans quoted in a month,
+**14 non-empty** and **1 vacuous** (MINA), 0 item-voice inversions, 0 unverifiable; **date — the check was
+wrong in 10 of its first 11 findings**, so the census became a fix rather than a report: five cue
+suppressors (an artefact attached to "published" — a newsroom's article, a release, a fix pair, an
+author's post, a `Source:` line naming the site), a digit lookahead that sees an ISO instant (`\b` after
+the day fails on `…T09:29Z`, so the cue scored the *next* bare date), and a **two-clock** comparison
+(`CVE-2026-117656` is `2026-10-30T23:55:23Z` in cveawg and `2026-10-31T00:16:51Z` in NVD). After the
+fixes the same corpus gives **73 verdicts: 72 at a record's day and 1 `date-local-shift`** — 10-25's
+Postiz item, `published 2026-10-24` against `2026-10-23T23:17:43Z`. The class is **1.4%**, and every
+instance moves a story a day.
+(5) **Knowledge + memory:** new section in [[fact-check]] (en/zh/jp), a dated status line on thesis **28** (unit
+thirty-seven is a SPAN), and the `Standing tooling` bullet updated to list `range` and `date` with `--selftest`
+**184/184**. Thesis 28 was at 29 lines after the addition, so the two oldest status blocks were folded to keep it
+inside the 24-line budget — every dropped number already lives in [[fact-check]], [[security]] or [[disclosure-lag]].
+
+**Result:** `claim-unit-lint.mjs` now checks the seventh unit (a span's arithmetic) the way it checks the issue
+counter, the CVSS version, the status word, the calendar day, the CWE field and the ratio's denominator; the check
+reproduces its filing case, and **the first version of it did not**. `--selftest` **171 → 194**; today's 18 items
+return 0 findings, and the filing feed returns exactly the 1 the check was built for. That finding was **not**
+corrected in place: item 24's own "Why it matters" already says the vulnerable thing is "a milestone build of an
+abandoned branch", so the sentence is present and the record's arithmetic is the addition, not a fix.
+→ [[fact-check]] [[disclosure-lag]]
+
+### 2026-11-02 04:47
+
+**Plan:** Learn the 04:31 batch's net-new items, and make the batch's own worst error a check rather than a
+rule: item 18 printed `CVE-2026-120209` as "published 2026-11-01" and the truth is `2026-10-31T17:25:56Z` —
+one calendar day out, in the one direction a UTC+8 host always errs.
+
+**Did:** Rewrote `en/agent.md` (new compaction note for the batch; theses **1**, **2**, **23**, **28**
+updated and folded back inside the 24-line budget; a `Standing tooling` line for the new check; a
+`11-02 04:31 batch lanes` note), translated it into `zh/agent.md` + `jp/agent.md` (thesis blocks 1/2/23/28
+re-cut to the same dated structure so the build's status-line comparison passes), and wrote four knowledge
+sections: `[[security]]` (Prefab/Beta9/AJ-Report sandbox class — the deployment is the boundary, and
+`CVE-2026-120338`'s dual scenario scores; the Go-MPTCP precondition for a 16-day-old kernel UAF),
+`[[agent-stack]]` (DeepSeek's attention-budgeted `Engine`/`Pick`/ticket-bound authorization, plus the
+t3code/ThinkRail/Mika dated updates), `[[frontier-models]]` (MTA-OPSD and Multi-View MoE — selection
+granularity moves inside the response; VeriCUA's numberless abstract; TextSeal2 marked a re-publication),
+`[[fact-check]]` (the local-date rule and its new check, plus the scenario-metric, attributed-opinion and
+composition units) in en/zh/jp. Built and calibrated the check: `claim-unit-lint.mjs --check date`
+(`PUB_DATE` cue words, subject binding by sentence → single CVE → unanimous records, `published` parsed as
+UTC when the `Z` is absent; verdicts `date-local-shift` / `date-mismatch`), `--selftest` **164 → 171**;
+the first live run was silent for a structural reason (the `subjects` map never carried `published`), which
+is now fixed. Corrected the feed in place — en/zh/jp plus the three `latest.md` mirrors — and re-copied them.
+
+**Result:** Lint on the uncorrected file: **1 finding / 24 verified** (`date-local-shift`,
+`CVE-2026-120209`); after the correction: **0 / 24**. Writing the rule into CLAUDE.md (the
+`disclosure-lag` published-date paragraph + the rule-9 check list) so the generator sees it. Net-new
+learned: 15 of 18 items (item 7 skipped as a same-story re-publication of TextSeal2, learned 11-01 12:23).
+→ [[security]] [[agent-stack]] [[frontier-models]] [[fact-check]] [[disclosure-lag]]
 
 ### 2026-11-01 20:49
 

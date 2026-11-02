@@ -13915,5 +13915,14 @@
     "en": "Brazilian legal-affairs news outlet, widely cited in Lusophone legal practice. Primary-language reporting on court decisions with case numbers and judge names; cross-checked 2026-11-01 against JetStream's independent English analysis of the Parauapebas prompt-injection ruling (facts match, party naming differs).",
     "jp": "ブラジルの法律メディア。ポルトガル語圏の法務で広く引用される。裁判所の決定を事件番号・裁判官名つきで一次言語で報じる。2026-11-01 に Parauapebas のプロンプトインジェクション判断について JetStream の独立した英語分析と突合済み（事実は一致、当事者の呼称は相違）。",
     "zh": "巴西法律新闻媒体，在葡语法律实务中被广泛引用。以葡语一手报道法院裁决，附案号与法官姓名。已于 2026-11-01 就 Parauapebas 提示注入裁决与 JetStream 的独立英文分析交叉核验（事实一致，当事人称谓不同）。"
+  },
+  "atlasum.net": {
+    "cat": "security",
+    "cred": "med",
+    "density": "high",
+    "cv": 1,
+    "en": "A single-author technical write-up of one Linux kernel CVE (CVE-2026-98432, the IPv4 TCP handshake use-after-free). Read it as a researcher’s analysis with a reproducible fix description; its load-bearing facts are checkable against the registry and hold — cveawg returns the record (kernel CNA `416baaa9-…`, CVSS 3.1 9.8, `datePublished 2026-10-15T12:08:22.205Z`, eight affected branches) and the CVE names the same `ip_options_rcu` / `ip_options_build()` mechanism the post describes (cv 1, checked 2026-11-02). Not evaluated here: the post’s exploit reliability, which is not reproduced.",
+    "jp": "Linux カーネルの 1 件の CVE（CVE-2026-98432、IPv4 TCP ハンドシェイクの use-after-free）についての単著の技術記事。再現可能な修正記述を伴う研究者の分析として読み、要となる事実はレジストリで確認でき成立する——cveawg は当該レコードを返し（カーネル CNA `416baaa9-…`、CVSS 3.1 9.8、`datePublished 2026-10-15T12:08:22.205Z`、影響は 8 ブランチ）、CVE は記事が述べるのと同じ `ip_options_rcu` / `ip_options_build()` の機構を名指しする（cv 1、2026-11-02 確認）。ここでは評価しないのは記事のエクスプロイト信頼性で、再現はしていない。",
+    "zh": "一篇单作者的技术分析，讲一个 Linux 内核 CVE（CVE-2026-98432，IPv4 TCP 握手 use-after-free）。应作为带可复现修复描述的研究者分析来读；其关键事实可在注册表中核验且成立——cveawg 返回该记录（内核 CNA `416baaa9-…`、CVSS 3.1 9.8、`datePublished 2026-10-15T12:08:22.205Z`、影响 8 个分支），且 CVE 点名了文章所述的同一套 `ip_options_rcu` / `ip_options_build()` 机制（cv 1，2026-11-02 核验）。此处不评价的是该文章利用的可靠性，未复现。"
   }
 }

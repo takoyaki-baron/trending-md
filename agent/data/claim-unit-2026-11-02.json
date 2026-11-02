@@ -1,5 +1,5 @@
 {
- "generated": "2026-11-01T20:31:13.873Z",
+ "generated": "2026-11-01T21:27:00.611Z",
  "files": [
   {
    "file": "2026-11-02.md",
@@ -11,6 +11,27 @@
      "verdict": "ok",
      "claim": "CVE-2026-98432 `Received`",
      "detail": "Received (lastModified 2026-10-31T21:16:53.683)"
+    },
+    {
+     "check": "date",
+     "item": 1,
+     "verdict": "ok",
+     "claim": "CVE-2026-98432 published 2026-10-15",
+     "detail": "NVD published 2026-10-15T13:17:13.987 (2026-10-15 UTC) · cveawg datePublished 2026-10-15T12:08:22.205Z (2026-10-15 UTC) — the two clocks differ; 2026-10-15 is the NVD published day"
+    },
+    {
+     "check": "date",
+     "item": 2,
+     "verdict": "ok",
+     "claim": "CVE-2026-120307 published 2026-11-01",
+     "detail": "NVD published 2026-11-01T13:18:01.497 (2026-11-01 UTC) · cveawg datePublished 2026-11-01T12:49:51.981Z (2026-11-01 UTC) — the two clocks differ; 2026-11-01 is the NVD published day"
+    },
+    {
+     "check": "date",
+     "item": 3,
+     "verdict": "ok",
+     "claim": "CVE-2026-120338 published 2026-11-01",
+     "detail": "NVD published 2026-11-01T16:18:14.970 (2026-11-01 UTC) · cveawg datePublished 2026-11-01T15:24:54.158Z (2026-11-01 UTC) — the two clocks differ; 2026-11-01 is the NVD published day"
     },
     {
      "check": "cvss",
@@ -25,6 +46,13 @@
      "verdict": "ok",
      "claim": "3.1 9.8",
      "detail": "CVE-2026-120209 · Primary/disclosure@vulncheck.com · vector reproduces 9.8"
+    },
+    {
+     "check": "date",
+     "item": 18,
+     "verdict": "ok",
+     "claim": "CVE-2026-120209 published 2026-10-31",
+     "detail": "NVD published 2026-10-31T18:17:09.263 (2026-10-31 UTC) · cveawg datePublished 2026-10-31T17:25:56.161Z (2026-10-31 UTC) — the two clocks differ; 2026-10-31 is the NVD published day"
     },
     {
      "check": "repo",
@@ -172,7 +200,7 @@
  "status_watch": [],
  "api_calls": 0,
  "readme_calls": 0,
- "cited_page_calls": 2,
+ "cited_page_calls": 0,
  "repo_page_calls": 0,
  "nvd_calls": 1,
  "cna_calls": 0

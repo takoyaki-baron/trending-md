@@ -2337,3 +2337,41 @@ Sources: [corgi.computer](https://corgi.computer/) · [HN 50214373](https://news
 → [[frontier-models]] [[dev-tools]] [[token-economics]]
 
 Sources: [pingdotgg/t3code](https://github.com/pingdotgg/t3code) · [slee-persis/GVS5H](https://github.com/slee-persis/GVS5H) · [TradingAgents v0.7.0](https://github.com/TauricResearch/TradingAgents/releases/tag/v0.7.0)
+
+## 予算化される資源は「人の注意力」、認可は作業項目に結び付く（2026-11-02 04:31）
+
+`deepseek-ai/dsh-superagent-prototype` は **2026-10-31T09:32:46Z** 作成、**12:05:51Z** に push（**履歴 2.5
+時間**）、**6,877★／687 fork**、**リリース 0**、MIT。README は他のプロジェクトが埋める免責を冒頭に置く：
+「**Research prototype for reference only, not an official DeepSeek product**」「much of the engineering
+done by coding agents」、そして「Some designs discussed in the article are directions for future
+development and are **not implemented in this prototype**」。読む価値があるのは、この正直さが装飾ではなく
+構造的だという点で、設計全体が `docs/000-philosophy.md` の一行から導かれている——「**Take as little human
+attention as possible, and give as much value as possible**」。
+
+持ち出せる三つの導出：
+
+- **誰も頼んでいない仕事はまず「記録だけ」。** 頼まれたとき、または**文書化されたチームルール**が許すときにだけ
+  動き、依頼外の作業は「本来何をしたか」を記録するモードから始まる。自律 agent の既定の逆であり、「本来何をした
+  か」を何よりも先にレビュー可能にする。
+- **単一の書き手と、役割ごとに絞られた読み。** 唯一の `Engine` が Trigger／Thread／Decision／Ticket／
+  Assignment の書き手で、`Intake`／`Evals`／`Tickets`／`Assignments`／`Replies` に分かれ依存は一方向。呼び出し
+  側は自分の役割の `Pick`（`EngineForSources`／`EngineForExecutor`／`EngineForPeople`）しか受け取らない。
+  インターフェースが権限そのもの。
+- **認可はチケットに伴い、セッションには伴わない。** 対象が「それに何をしてよいか」を運ぶので、セッションは生き
+  続けることで権限を積み増せない——人間のクリックを一瞬に限定するあらゆるモーダル承認とは逆向きの結び付け。
+
+**同じバッチの日付更新。** `pingdotgg/t3code` は **37,548★**（10-25 は 29,938）、安定版 **v0.1.6**
+（`2026-10-31T10:52:24Z`、npm `t3` の `latest` **0.1.6** は `10:53:56Z` で **92 秒**後）、それ以上は nightly
+（`v0.1.7-nightly.20261101.4035`）。README は今も「We are very very early in this project. Expect bugs」「We
+are (mostly) not accepting contributions yet」と言い、37k スターがプロセス非公開のプロジェクトに載っている
+——「truly open」はライセンスの主張で、コントリビューションの主張ではない。`JetBrains/thinkrail`
+（**6,945★**、Apache-2.0、v0.4.0-nightly.2）は IDE 形の双子で、モデルも agent も持たず `pi` coding agent を
+包み、各タスクを**独立した `git worktree`**（自前のブランチと作業ディレクトリ）に切る。PR のマージ／クローズで
+ワークスペースは「棚」に載る——並列 agent が UI の約束ではなく git の事実になる。代償は nightly のみであること。
+`wangzan101/Mika`（**3,745★**、Apache-2.0、10-29 作成）は端末側：Android agent が**隠れたバックグラウンド画面**
+でアプリを操作し（無線デバッグで一度ペアリング）、アプリ API もアプリ別連携も使わない。会話ごとの arm64 Linux
+サンドボックス、**既定は Ask モード**（課金前に尋ね、毎タップでは尋ねない）、ログイン・確認コード・支払いは
+ユーザに戻す。そして「**There is no Mika server**」——鍵と記憶は端末で暗号化され、外向き通信は更新確認のみ。
+README 自身が取引を明記する：第三者のアプリの自動化は「may break their terms of service」。
+
+→ [[security]] [[dev-tools]] [[token-economics]] [[agent-plugins]]

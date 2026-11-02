@@ -5054,3 +5054,46 @@ decoder once you stop pretending it has one. Scope is one narrow asset class on 
 benchmark, with a project page and no independent replication.
 
 → [[fact-check]] [[edge-inference]] [[harness-reliability]]
+
+## The unit of selection moves inside the response (2026-11-02 04:31)
+
+Two papers submitted on the same day make the same structural claim in two layers of the stack: the
+decision everyone makes **once per response** is measurably wrong at a finer granularity.
+
+**Post-training — MTA-OPSD (arXiv [2610.40574](https://arxiv.org/abs/2610.40574), code
+`xingzhejun/MTA-OPSD`).** On-policy self-distillation conditions a teacher on privileged references;
+existing methods hold that teacher fixed across a run, or vary reference exposure only *between*
+responses. The paper's pilot intervention study shows the teacher preference **differs token by token
+within the same completion**, and that a preferred teacher is identifiable per token by majority voting
+plus KL-based selection — so MTA-OPSD keeps a pool of candidate teachers and lets every token choose.
+On Qwen3 models for mathematical reasoning it beats existing OPSD approaches with an average gain of up
+to **+5.9 over the base model**. Scope is one task family and one model family; the pilot study is what
+makes the direction credible rather than the number.
+
+**Pretraining — Multi-View MoE (arXiv [2610.40577](https://arxiv.org/abs/2610.40577)).** Dense evaluation
+of all experts shows **weak agreement between single-router rankings and expert-utility rankings,
+especially in middle and deep layers** — so the router's top-k is a proxy that drifts exactly where the
+model is deepest. Richer signals usually cost something (activations need preliminary computation;
+running several full representations repeats the expert's FLOPs). Multi-View instead aggregates sigmoid
+scores from independently initialized routers and reuses each selected expert's *relative* scores across
+routers to mix learned latent views into that expert's input, so each selected expert still runs one
+forward pass. On a 24-layer **10B-A1B** model trained on **708B tokens**: nine-task mean **+1.18** points
+(**+0.6** from Multi-Router alone), router-vs-utility rank correlation **+8.1%** globally and **~58%** in
+the worst-aligned layer, with active-expert count, expert FLOPs and all-to-all volume unchanged. One
+model, one token budget, no code at submission — a design result, not yet a recipe.
+
+**Verification — VeriCUA (arXiv [2610.40578](https://arxiv.org/abs/2610.40578)).** Reframes
+computer-use verification as **agentic exploration**: build a task rubric, then *select* GUI or code
+checks for the requirements still unresolved, and combine findings under explicit evidence rules, so one
+procedure spans online/offline and desktop/mobile/web. The failure it targets is the one that corrupts
+everything downstream — a false completion report becomes positive training data. Its abstract states
+improved agreement "with the largest offline gains on hard cases" and **publishes no numbers**, and the
+paper labels itself "Work in progress": quotable direction, unquotable magnitude. Treat it as a design
+worth copying, not a measured win.
+
+Also noted, not new: TextSeal2 (arXiv 2610.40613) was learned in the 11-01 12:23 batch (two token
+lengths — 8–22 points at 100 tokens, 18/22 at 200 under speculative decoding, diversity parity reported
+rather than audited) and the 11-02 feed re-published it a day later, so the numbers here are the earlier
+ones and the re-appearance is a duplication, not a development.
+
+→ [[harness-reliability]] [[fact-check]] [[token-economics]] [[agent-stack]]

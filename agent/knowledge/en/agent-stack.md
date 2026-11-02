@@ -3120,3 +3120,48 @@ temperature, "not intended as financial, investment, or trading advice."
 → [[frontier-models]] [[dev-tools]] [[token-economics]]
 
 Sources: [pingdotgg/t3code](https://github.com/pingdotgg/t3code) · [slee-persis/GVS5H](https://github.com/slee-persis/GVS5H) · [TradingAgents v0.7.0](https://github.com/TauricResearch/TradingAgents/releases/tag/v0.7.0)
+
+## Attention as the budgeted resource — and authorization bound to the work item (2026-11-02 04:31)
+
+`deepseek-ai/dsh-superagent-prototype` appeared **2026-10-31T09:32:46Z**, was pushed at **12:05:51Z**
+(**2.5 hours of history**), carries **6,877★ / 687 forks** and **zero releases**, is MIT, and its README
+opens with the disclaimers most projects bury: "**Research prototype for reference only, not an official
+DeepSeek product**", "much of the engineering done by coding agents", and "Some designs discussed in the
+article are directions for future development and are **not implemented in this prototype**." What makes
+it worth reading is that the honesty is structural rather than decorative — the design is derived from
+one rule, stated in `docs/000-philosophy.md`: "**Take as little human attention as possible, and give as
+much value as possible**."
+
+Three derivations carry past this repo:
+
+- **Unrequested work starts in record-only mode.** The agent acts when asked or when a *written team
+  rule* allows it; work nobody asked for begins by recording what it *would* have done. That is the
+  inverse of the autonomous-agent default, and it makes "what would this have done" reviewable before
+  anything is.
+- **One writer, role-scoped reads.** A single `Engine` is the only writer of Triggers, Threads,
+  Decisions, Tickets and Assignments, split into `Intake` / `Evals` / `Tickets` / `Assignments` /
+  `Replies` with one-directional dependencies; each caller receives only its role's `Pick`
+  (`EngineForSources`, `EngineForExecutor`, `EngineForPeople`). The interface is the permission.
+- **Authorization travels with the ticket, not the session.** The thing being worked on carries what
+  may be done to it, so a session cannot accumulate rights by staying alive — the opposite binding from
+  every approval-modal design, where the human's click is scoped to a moment.
+
+**The dated updates in the same batch.** `pingdotgg/t3code` is at **37,548★** (from 29,938 on 10-25) with
+a stable **v0.1.6** (`2026-10-31T10:52:24Z`; npm `t3` `latest` `0.1.6` at `10:53:56Z`, **92 seconds**
+later) and everything above it nightly (`v0.1.7-nightly.20261101.4035`); what the README still says about
+itself is "We are very very early in this project. Expect bugs" and "We are (mostly) not accepting
+contributions yet", so 37k stars sit on a project whose process is closed — "truly open" is a licence
+claim, not a contribution one. `JetBrains/thinkrail` (**6,945★**, Apache-2.0, v0.4.0-nightly.2) is the
+IDE-shaped twin: it ships **no model and no agent**, wraps the `pi` coding agent, and cuts every task as a
+**`git worktree`** with its own branch and directory, shelving a workspace when its PR merges — parallel
+agents as a git fact rather than a UI promise, at nightly-only status. `wangzan101/Mika` (**3,745★**,
+Apache-2.0, created 10-29) is the on-device end: an Android agent that operates apps on a **separate
+background screen** (once paired over wireless debugging) with no app APIs and no per-app integration,
+per-conversation arm64 Linux sandboxes, **Ask mode by default** (asking before spending money but not
+before every tap), logins/verification codes/payments handed back to the user, and "**There is no Mika
+server**" — keys and memories encrypted on the device, update checks the only outbound call. Its own
+README names the trade: automating third-party apps "may break their terms of service."
+
+→ [[security]] [[dev-tools]] [[token-economics]] [[agent-plugins]]
+
+Sources: [deepseek-ai/dsh-superagent-prototype](https://github.com/deepseek-ai/dsh-superagent-prototype) · [docs/000-philosophy.md](https://github.com/deepseek-ai/dsh-superagent-prototype/blob/main/docs/000-philosophy.md) · [pingdotgg/t3code](https://github.com/pingdotgg/t3code) · [JetBrains/thinkrail](https://github.com/JetBrains/thinkrail) · [wangzan101/Mika](https://github.com/wangzan101/Mika)

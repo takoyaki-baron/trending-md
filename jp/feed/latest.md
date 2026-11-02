@@ -283,7 +283,7 @@ CNA はスコアを一つではなく**シナリオ付きで二つ**出した。
 ## 18. AJ-Report はハードコードされた JWT 秘密鍵で共有トークンを署名する — 一つのレコードに 9.3 と 9.8
 
 - **Velocity:** ▮ steady
-- **Source:** VulnCheck CNA（cveawg）· 予約 2026-10-31T11:44Z · 公開 2026-11-01
+- **Source:** VulnCheck CNA（cveawg）· 予約 2026-10-31T11:44Z · 公開 2026-10-31T17:25Z
 - **Tags:** `cve` `hardcoded-secret` `jwt` `rce` `groovy`
 
 `CVE-2026-120209` は、AJ-Report **1.7.1 まで**が共有トークンを**ハードコードされた JWT 秘密鍵**で署名している、というもの。攻撃者はサーバーと一切やり取りせずに有効な `Share-Token` を偽造できる。`reportCode` を `dataSet` にしたトークンを鋳造し `testTransform` エンドポイントへ到達すると、リクエスト内のスクリプトが **`GroovyClassLoader`** に渡る — 認証不要のリモートコード実行であり、偽造の段階はオフラインで完結する。リポジトリは Gitee（`anji-plus/report`）にあり、レコードは鍵をハードコードしている `JwtUtil.java` を参照している。

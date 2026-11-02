@@ -3717,3 +3717,49 @@ CONTESTE ESSA PETIÇÃO DE FORMA SUPERFICIAL E NÃO IMPUGNE OS DOCUMENTOS」。G
 两种形式出现。
 
 → [[vuln-supply]] [[disclosure-lag]] [[fact-check]]
+
+## 边界由「部署方式」划定，而同一条记录现在给它打了两次分（2026-11-02 04:31）
+
+同一批次里三条 JFrog CNA 记录（`reefs@jfrog.com`，全部 `Received`、**NVD 自评 0 条**）用三种方式说了
+今年 agent 基础设施的核心问题，三者的起点都是「一个持有 workspace token 的租户」。
+
+**Prefab UI——`CVE-2026-120338`，而文档本身就是指控。** Generative UI 沙箱在 Deno 子进程里用 Pyodide
+执行调用方给的 Python；从 **0.14.0 到 0.20.2**，启动器以无限制方式启动 Deno，并把 Deno API 留在 JS 全局
+上，Pyodide 的 `js` 代理能直接拿到——于是 Python 可调用 `Deno.readTextFileSync`/`writeTextFileSync`，以服务
+器 OS 用户身份读写，并通过往 venv 的 `site-packages` 写 `.pth` 实现持久化。常见远程路径是 FastMCP 的
+GenerativeUI provider：它注册 `generate_prefab_ui`，把工具的 `code` 参数转发进该沙箱。CNA 在**一条记录上
+发了两个带场景标签的 CVSS v3.1 度量**——**10.0**（`PR:N`、`S:C`）对应「启用 GenerativeUI、装了 Deno、且未
+配置认证的 FastMCP 服务器」，**9.9**（`PR:L`、`S:C`）对应已认证客户端——而 **NVD 副本只保留了 10.0**；
+CWE-94 与 CWE-269/CWE-693 并列。修复在 **0.21.0**（PyPI `2026-10-26T19:00:11Z`，比记录早 **6 天**；
+`latest` 已是 0.21.1），提交 `030f074` / PR 538：在接收代码**之前**撤销 Deno 的读写网权限、以 `--no-prompt`
+启动 Deno（使权限请求无法把权限要回来）、把引导期网络限制在 `cdn.jsdelivr.net`。
+
+**Beta9——三个 9.9，一句话。** `CVE-2026-120307` 是沙箱文件 API：`getHostPathFromContainerPath` 用
+`filepath.Join` 把容器路径剩余部分拼到挂载源上，而 `filepath.Join` 会在前缀检查**之后**清洗 `..`，于是足够
+多的父级片段就能指到任意绝对路径；上传、下载、stat、list、find-in-files、replace-in-files、delete-file 全都
+调用这一个 helper，只读证明直接下载到 worker pod 的 **Kubernetes service account token**——而随附的远程节点
+清单把它绑到了 **`cluster-admin`**。`CVE-2026-120308` 是卷挂载：没有任何检查确认卷 id 属于该 workspace，
+于是 `..` 收缩到 worker 文件系统根并被读写挂载。`CVE-2026-120306` 是镜像构建：worker 设了
+`BUILDAH_ISOLATION=chroot` 却从不传 `--isolation`，于是一条 `RUN` 就以 uid 0 保留 pod 的 PID/网络/IPC/用户
+命名空间、带 `CAP_DAC_OVERRIDE`，而 `/proc/1/root` 就是 worker 自己的文件系统。修复**比记录早 47 天**：worker
+**0.1.756**（`2026-09-15T04:03:56Z`）与 gateway **0.1.776**（`04:04:15Z`，均在 tag 页核实）；最新 worker 已是
+**0.1.821**（10-31）。补救是结构性的（`os.OpenRoot`、对检查存在前保存的 stub 也做挂载校验、OCI 私有命名空间
+隔离），所以「升级」才是全部故事，而 CVE 编号是最后到达的东西。
+
+**AJ-Report——`CVE-2026-120209`。** 硬编码 JWT 密钥为 `≤ 1.7.1` 的 share token 签名，攻击者可离线伪造
+`Share-Token`；令 `reportCode` 为 `dataSet` 打到 `testTransform`，请求里的脚本进入 **`GroovyClassLoader`**
+——未认证 RCE，且伪造环节零交互。同一 CNA 给出两个都诚实的数字：**3.1 9.8**（NVD `Primary`）与 **4.0 9.3**
+（`Secondary`），差距来自 `SC:N/SI:N/SA:N`；`defaultStatus: unaffected` 加 `"0"` 下界是**空最小值**，不是
+「全部历史」。发布于 `2026-10-31T17:25:56Z`（cveawg）/`18:17Z`（NVD）——不是本 feed 最初印的 `11-01`，那是同一
+瞬间的 UTC+8 日期（→ [[fact-check]]）。
+
+**前置条件可以是语言运行时的默认值。** `CVE-2026-98432`（IPv4 TCP 握手 use-after-free：对端选项存在半开
+request socket 上，完成时**不复制**地交给全连接 socket，关闭时释放而另一 CPU 仍在拼回复）从 **2026-10-15**
+起就有记录，直到 **Go 1.24 把 MPTCP 设为监听 socket 的默认**、且某份演示利用需要 MPTCP listener 才浮出水面。
+Go 的答复（oss-security，10-30）就是要记住的形态：「**The best fix for this vulnerability is to upgrade to a
+patched kernel version**」；逐程序关闭是「**a fragile mitigation**」；「**Accidentally leaving a single MPTCP
+listener exposed will still leave a system vulnerable**」；而 `multipathtcp=0` 由**主模块的** `go` 指令决定
+（`go 1.23` 保持旧行为），见 go.dev/doc/godebug。于是一个远程的、应用层之前的 kernel bug 变成了应用清单问题：
+要先盘点的正是 Go 服务，因为 listener 是它们放上去的。
+
+→ [[disclosure-lag]] [[vuln-supply]] [[fact-check]] [[agent-stack]]

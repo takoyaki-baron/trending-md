@@ -283,7 +283,7 @@ He makes six concrete proposals: "Evaluate all work as if it is AI-assisted"; "M
 ## 18. AJ-Report signs share tokens with a hard-coded JWT secret — one record, a 9.3 and a 9.8
 
 - **Velocity:** ▮ steady
-- **Source:** VulnCheck CNA (cveawg) · reserved 2026-10-31T11:44Z · published 2026-11-01
+- **Source:** VulnCheck CNA (cveawg) · reserved 2026-10-31T11:44Z · published 2026-10-31T17:25Z
 - **Tags:** `cve` `hardcoded-secret` `jwt` `rce` `groovy`
 
 `CVE-2026-120209` says AJ-Report **through 1.7.1** signs share tokens with a **hard-coded JWT secret**, so an attacker can forge a valid `Share-Token` offline. Mint a token with `reportCode` set to `dataSet`, reach the `testTransform` endpoint, and the request's script reaches a **`GroovyClassLoader`** — unauthenticated remote code execution, with the forgery step requiring no interaction with the server at all. The project's own repository is on Gitee (`anji-plus/report`), and the record cites the `JwtUtil.java` source that hard-codes the key.

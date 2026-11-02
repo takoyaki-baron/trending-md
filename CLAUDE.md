@@ -389,6 +389,38 @@ underlying pages — this produced a two-layer false signal in a single item.
    so; never silently pick one. **`no record` is perishable like every other absence** — both
    negatives this tool was filed against (`CVE-2026-92707`, `CVE-2026-110264`) acquired NVD
    records within days, so re-run before quoting one.
+   **A record's `published` quoted as a calendar day can be the HOST's day, not its own — and that
+   is now a check, not a rule** (added 2026-11-02 04:31, filed by the feed's own item 18:
+   `CVE-2026-120209` written as "published 2026-11-01" against cveawg's
+   `datePublished 2026-10-31T17:25:56Z`, i.e. the same instant's **UTC+8** date — the `updated:`
+   trap one layer over). `claim-unit-lint.mjs --check date` (in the default set) reads every
+   publish **cue** ("published"/"disclosed", never "fixed"/"released"/"reserved" — NVD carries no
+   `dateReserved`, so a reservation date is unverifiable rather than wrong), binds it the way the
+   `cvss` check binds a subject (its own sentence's id → the item's single CVE → every cited record
+   agreeing on the day), and compares against the record's `published` parsed **as UTC when the `Z`
+   is absent**. Verdicts `date-local-shift` (sev 2 — the quoted day is the instant's UTC+8 date)
+   and `date-mismatch` (sev 2); a record it cannot read is silence, never a finding. Calibrated
+   both ways on its filing day: **1 finding / 24 verified** before the correction, **0 / 24**
+   after; `--selftest` 164 → **171**.
+   **A "published" cue is about an ARTEFACT ten times before it is about the record, and there are TWO
+   clocks** (added 2026-11-02 04:43, from the 33-feed census: **10 of the check's first 11 findings were
+   the checker's**). Every one of the ten was a cue whose subject was something else — a newsroom's
+   article date on the `Source:` line ("Unit 42 · published 2026-10-14"), a release ("fixed in
+   `v0.1.7`, published 2026-05-06"; "7.1.2-33 was published on 2026-10-10"), a pair of fix releases
+   ("worker 0.1.756 and gateway 0.1.776 — both published 2026-09-15"), a vendor's own publication
+   ("published by Patchstack on 2026-10-13"), an author's post ("published the Sleep framework on
+   2026-10-27"), or a `Source:` line naming the site rather than the registry. Five suppressors now
+   encode that: cue followed by `the`/`a`/`by`; a version ATTACHED to the cue (the short tail is
+   punctuation, a dash, `both`, `was`/`is` — markdown emphasis must be stripped first, or `**v0.1.7**,`
+   reads as no version); an artefact noun in the preceding clause; and a `Source:` line that names no
+   registry. Two further defects the census found in the regex itself: **`\b` after the day fails on an
+   ISO instant** (`2026-10-31T09:29Z` — `1` and `T` are both word characters), so the cue skipped the
+   instant and scored the *next* bare date in the sentence (a `reserved` day, an advisory's `dated`
+   day); and the comparison read **NVD's `published` only**, while cveawg's `datePublished` is a
+   different clock — `CVE-2026-117656` is `2026-10-30T23:55:23Z` there and `2026-10-31T00:16:51Z` in
+   NVD, 21 minutes apart on different calendar days, so a correct "published 2026-10-30" was a
+   finding. A claim now matches EITHER clock's day and the verdict names the one that matched; the
+   CNA container carries `datePublished` under `CNA_CACHE_V: 5`. `--selftest` 171 → **194**.
    **A KEV row and its CVE record are two clocks, and the catalog can be AHEAD** (added 2026-10-31
    20:41, from `CVE-2026-118527`: KEV'd 2026-10-30, `cveawg` 404 a day later, its own `notes`
    linking an NVD URL that resolves to nothing). Measured with the new
@@ -726,6 +758,9 @@ underlying pages — this produced a two-layer false signal in a single item.
    sentence says the slot is a slot** — "`Primary`/`Secondary` is a slot position, not a provenance" is the
    correction being quoted, not the mistake, and three such items fired on the 10-26 20:34 batch);
    **status** (a prose `vulnStatus` against the record — see the standing-watch paragraph below);
+   **date** (added 2026-11-02 04:31 — a publish cue's calendar day against the record's `published`
+   parsed as UTC, catching a UTC+8 host's local day: `date-local-shift` / `date-mismatch`, see the
+   `disclosure-lag` paragraph's "quoted as a calendar day");
    **cwe** (added 2026-10-30 20:30 from a published error of my own: item 36 said ClickHouse's
    `CVE-2026-116366` "CNA container states no CWE" while `cveawg` returned `CWE-190` — so **"states
    no CWE" is a claim about TWO fields**, and the check reads both, `weaknesses[]` from the same

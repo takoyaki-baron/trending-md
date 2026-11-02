@@ -6058,3 +6058,62 @@ the Portuguese about who was sanctioned (JetStream says the two law firms, Migal
 subscribing lawyers and names no firm), with the fine reported both as a percentage and as ~$16,000.
 
 → [[vuln-supply]] [[disclosure-lag]] [[fact-check]]
+
+## The deployment is the boundary — and one record now scores it twice (2026-11-02 04:31)
+
+Three JFrog-CNA records in one batch (`reefs@jfrog.com`, all `Received`, **0 `nvd@nist.gov` metrics**)
+state the year's agent-infrastructure problem three ways, and all three start from "a tenant with a
+workspace token".
+
+**Prefab UI — `CVE-2026-120338`, and the documentation is the indictment.** The Generative UI sandbox
+executes caller-supplied Python in Pyodide inside a Deno subprocess; from **0.14.0 through 0.20.2** the
+launcher started Deno unrestricted and left the Deno API on the JavaScript global, which Pyodide's `js`
+proxy reaches — so Python calls `Deno.readTextFileSync`/`writeTextFileSync` directly, read and write as
+the server OS user, with persistence by writing a `.pth` into the virtualenv's `site-packages`. The usual
+remote path is FastMCP's GenerativeUI provider, which registers `generate_prefab_ui` and forwards the
+tool's `code` argument into that sandbox. The CNA published **two scenario-labelled CVSS v3.1 metrics on
+one record** — **10.0** (`PR:N`, `S:C`) for "FastMCP server with GenerativeUI enabled, Deno installed, and
+no authentication configured" and **9.9** (`PR:L`, `S:C`) for an authenticated client — and **NVD's copy
+carries the 10.0 alone**; CWE-94 sits beside CWE-269/CWE-693. Fixed in **0.21.0** (PyPI
+`2026-10-26T19:00:11Z`, **six days** before the record; `latest` is now 0.21.1), commit `030f074` / PR
+538: the runner revokes Deno's read/write/net permissions *before* it accepts code, starts Deno with
+`--no-prompt` so a permission request cannot grant them back, and limits bootstrap network access to
+`cdn.jsdelivr.net`.
+
+**Beta9 — three 9.9s, one sentence.** `CVE-2026-120307` is the sandbox file API:
+`getHostPathFromContainerPath` joins a container path's remainder onto a mount source with
+`filepath.Join`, which **cleans `..` after the prefix check**, so enough parent segments name any
+absolute path; upload, download, stat, list, find-in-files, replace-in-files and delete-file all call
+that one helper, and the read-only proof downloaded the worker pod's **Kubernetes service account
+token** — which the shipped remote-node manifests bind to **`cluster-admin`**. `CVE-2026-120308` is
+volume attach: nothing checks the volume id names a volume the workspace owns, so `..` collapses to the
+worker's filesystem root and it is bind-mounted read-write. `CVE-2026-120306` is image build: the worker
+sets `BUILDAH_ISOLATION=chroot` and never passes `--isolation`, so a `RUN` line keeps the pod's PID,
+network, IPC and user namespaces as uid 0 with `CAP_DAC_OVERRIDE`, and `/proc/1/root` is the worker's
+own filesystem. Fixes shipped **47 days before the records**: worker **0.1.756**
+(`2026-09-15T04:03:56Z`) and gateway **0.1.776** (`04:04:15Z`), verified on the tag pages; the newest
+worker is **0.1.821** (10-31). Remediation is structural (`os.OpenRoot`, mount validation for stubs
+saved before the check existed, OCI isolation with private namespaces), which is why "upgrade" is the
+whole story and the CVE id is the last thing to arrive.
+
+**AJ-Report — `CVE-2026-120209`.** A **hard-coded JWT secret** signs share tokens through `≤ 1.7.1`, so a
+`Share-Token` can be forged offline; mint one with `reportCode: dataSet`, reach `testTransform`, and the
+request's script reaches a **`GroovyClassLoader`** — unauthenticated RCE with no interaction at the
+forgery step. One CNA, two honest numbers: **3.1 9.8** (NVD `Primary`) and **4.0 9.3** (`Secondary`),
+the gap being `SC:N/SI:N/SA:N`; `defaultStatus: unaffected` with a `"0"` lower bound is a **null
+minimum**, not "all history". Published `2026-10-31T17:25:56Z` (cveawg) / `18:17Z` (NVD) — not the
+`11-01` this feed first printed, which is the UTC+8 date of the same instant (→ [[fact-check]]).
+
+**The precondition can be a language runtime's default.** `CVE-2026-98432` — an IPv4 TCP handshake
+use-after-free (peer options saved on the half-open request socket, passed to the full socket **without
+copying**, freed at close while another CPU builds the reply) — had a record since **2026-10-15** and
+surfaced only when **Go 1.24 made MPTCP default on listen sockets** and a demonstrated exploit needed an
+MPTCP listener. Go's answer (oss-security, 10-30) is the shape to keep: "**The best fix for this
+vulnerability is to upgrade to a patched kernel version**", per-program disabling is "**a fragile
+mitigation**", "**Accidentally leaving a single MPTCP listener exposed will still leave a system
+vulnerable**", and `multipathtcp=0` is decided by the **main module's** `go` directive (`go 1.23` keeps
+the old behaviour), per go.dev/doc/godebug. So a remote pre-application kernel bug became an application
+inventory problem: the services to list first are the Go ones, because they are what put the listener
+there.
+
+→ [[disclosure-lag]] [[vuln-supply]] [[fact-check]] [[agent-stack]]

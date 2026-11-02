@@ -4279,24 +4279,24 @@
     },
     "https://news.ycombinator.com/item?id=50319143": {
       "verdict": "blocked",
-      "streak": 2,
+      "streak": 3,
       "first_seen": "2026-11-01T20:21:56.940Z",
-      "last_seen": "2026-11-01T20:24:58.606Z",
+      "last_seen": "2026-11-01T21:31:21.726Z",
       "feeds": [
         "2026-11-02.md"
       ]
     },
     "https://www.npmjs.com/package/t3": {
       "verdict": "blocked",
-      "streak": 2,
+      "streak": 3,
       "first_seen": "2026-11-01T20:21:56.940Z",
-      "last_seen": "2026-11-01T20:24:58.606Z",
+      "last_seen": "2026-11-01T21:31:21.726Z",
       "feeds": [
         "2026-11-02.md"
       ]
     }
   },
-  "runs": 134,
+  "runs": 135,
   "first_run": "2026-09-05T12:47:55.004Z",
-  "last_run": "2026-11-01T20:24:58.606Z"
+  "last_run": "2026-11-01T21:31:21.726Z"
 }

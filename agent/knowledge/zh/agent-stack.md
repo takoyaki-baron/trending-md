@@ -2048,3 +2048,36 @@ OpenCode，像 tmux 那样让进程在后台继续跑，并加上 agent 形状�
 → [[frontier-models]] [[dev-tools]] [[token-economics]]
 
 Sources: [pingdotgg/t3code](https://github.com/pingdotgg/t3code) · [slee-persis/GVS5H](https://github.com/slee-persis/GVS5H) · [TradingAgents v0.7.0](https://github.com/TauricResearch/TradingAgents/releases/tag/v0.7.0)
+
+## 被预算的资源是「人的注意力」，授权绑定在工作项上（2026-11-02 04:31）
+
+`deepseek-ai/dsh-superagent-prototype` 于 **2026-10-31T09:32:46Z** 创建、**12:05:51Z** 推送（**2.5 小时历史**），
+**6,877★ / 687 fork**、**零 release**、MIT；README 开门就写别的项目会埋掉的话：「**Research prototype for
+reference only, not an official DeepSeek product**」「much of the engineering done by coding agents」，以及
+「Some designs discussed in the article are directions for future development and are **not implemented in
+this prototype**」。值得读的是这种诚实是结构性的：整套设计由 `docs/000-philosophy.md` 的一条规则推出——
+「**Take as little human attention as possible, and give as much value as possible**」。
+
+三条能带出这个仓库的推导：
+
+- **没人要求的活先「只记录」。** 只有在被要求、或**成文的团队规则**允许时才行动；没人要求的工作先以「记录它本
+  会做什么」的模式开始。这与自主 agent 的默认相反，也把「它本来会做什么」变成可审阅的对象。
+- **单写者 + 按角色收窄的读。** 唯一的 `Engine` 是 Trigger/Thread/Decision/Ticket/Assignment 的写者，拆成
+  `Intake`/`Evals`/`Tickets`/`Assignments`/`Replies` 且依赖单向；每个调用方只拿到自己角色的 `Pick`
+  （`EngineForSources`/`EngineForExecutor`/`EngineForPeople`）。接口就是权限。
+- **授权随工单走，不随会话走。** 被处理的对象自己携带「可以对它做什么」，所以会话无法靠活着积累权限——这与
+  一切弹窗式审批的绑定方向相反（人的点击被限定在某一瞬间）。
+
+**同批次的日期更新。** `pingdotgg/t3code` 到 **37,548★**（10-25 为 29,938），稳定版 **v0.1.6**
+（`2026-10-31T10:52:24Z`；npm `t3` 的 `latest` **0.1.6** 在 `10:53:56Z`，晚 **92 秒**），其上全是 nightly
+（`v0.1.7-nightly.20261101.4035`）；README 仍自称「We are very very early in this project. Expect bugs」与
+「We are (mostly) not accepting contributions yet」——37k 星落在一个流程关闭的项目上，「truly open」是许可证
+主张，不是贡献主张。`JetBrains/thinkrail`（**6,945★**、Apache-2.0、v0.4.0-nightly.2）是 IDE 形态的孪生：不带
+模型也不带 agent，包住 `pi` coding agent，把每个任务切成**独立的 `git worktree`**（自己的分支与工作目录），PR
+合并或关闭后把工作区「上架」——并行 agent 成为 git 事实而不是 UI 承诺，代价是只有 nightly。`wangzan101/Mika`
+（**3,745★**、Apache-2.0、10-29 建）是端侧那一头：Android agent 在**隐藏的后台屏幕**上操作应用（经无线调试配对
+一次），不用任何应用 API 与逐应用集成，带按会话的 arm64 Linux 沙箱，**默认 Ask 模式**（花钱前问，而非每次点击
+前问），登录/验证码/支付交还用户，并且「**There is no Mika server**」——密钥与记忆加密存于设备，唯一外联是更新
+检查。它自己也写明代价：自动化第三方应用「may break their terms of service」。
+
+→ [[security]] [[dev-tools]] [[token-economics]] [[agent-plugins]]

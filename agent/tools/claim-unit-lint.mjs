@@ -13,7 +13,7 @@
  *     "9.1 (CVSS 3.1)" where 9.1 was the v4.0 score and 3.1 said 7.4.
  * Both were caught by hand, after publication. This tool is the hand.
  *
- * FOUR CHECKS, each one a unit that has produced a wrong sentence here:
+ * CHECKS, each one a unit that has produced a wrong sentence here:
  *   A. ISSUE COUNTER (`--check issues`) — a number followed by "issues" in an item that never
  *      splits issues from PRs. Also verifies the arithmetic when a total AND parts are quoted:
  *      the composite is a cached counter, and it lagged its own parts on free-my-tv (77 vs 21+58).
@@ -227,13 +227,13 @@ const CACHE_PATH = arg('cache') ?? 'agent/data/claim-unit-cache.json';
 // 5 MB of TEXT is ~7 MB on disk (JSON escapes newlines); 8 MB was an 11 MB file, bigger than the 9.9 MB
 // it was meant to bound.
 const CACHE_BYTES = Number(arg('cache-bytes') ?? 5_000_000);
-const CHECKS = new Set((arg('check') ?? 'issues,cvss,status,temporal,cwe,repo,count,ratio,bundle,quotation').split(',').map((s) => s.trim()));
+const CHECKS = new Set((arg('check') ?? 'issues,cvss,status,date,temporal,cwe,range,repo,count,ratio,bundle,quotation').split(',').map((s) => s.trim()));
 
 const SELFTEST = has('selftest');
 const STATUS_WATCH = has('status-watch');
 const EXTRA_IDS = (arg('ids') ?? '').split(',').map((s) => s.trim()).filter(Boolean);
 if (!FILE && !FILES && !SELFTEST && !has('ghsa-census') && !has('quotation-census') && !has('commit-quote-census') && !STATUS_WATCH) {
-  console.error('usage: claim-unit-lint.mjs --file <feed.md> [--no-net] [--check issues,cvss,status,repo,count,ratio] [--strict] [--json] [--census] [--selftest] [--status-watch [--ids CVE-…]] | --ghsa-census [--pages N]');
+  console.error('usage: claim-unit-lint.mjs --file <feed.md> [--no-net] [--check issues,cvss,status,date,temporal,cwe,range,repo,count,ratio,bundle,quotation] [--strict] [--json] [--census] [--selftest] [--status-watch [--ids CVE-…]] | --ghsa-census [--pages N]');
   process.exit(2);
 }
 
@@ -500,7 +500,28 @@ function nvdBatch(cves) {
        record's bytes, and no cited blog page need carry it. Note `Received` records usually have
        no description at all, which is "not yet", never "states nothing". */
     const desc = (c.descriptions ?? []).filter((d) => d.lang === 'en').map((d) => d.value).join(' ');
-    map.set(c.id, { status: c.vulnStatus, assigner: c.sourceIdentifier, modified: c.lastModified, published: c.published, metrics, cwe, desc });
+    /* `configurations` is NVD's ANALYSIS output, so its absence marks "not yet analysed" (measured
+       2026-10-25: present on 408/408 `Analyzed`+`Modified`, 0/4,097 of every other status) — never
+       "the record states nothing". It is the fallback range source, not the primary: the CNA's own
+       `affected[]` lives in cveawg and is what the CNA actually said. */
+    const cpeRanges = [];
+    for (const conf of c.configurations ?? []) {
+      for (const node of conf.nodes ?? []) {
+        for (const m of node.cpeMatch ?? []) {
+          if (m.vulnerable === false) continue;
+          const min = m.versionStartIncluding ?? m.versionStartExcluding ?? null;
+          const max = m.versionEndIncluding ?? m.versionEndExcluding ?? null;
+          if (!min && !max) continue;
+          cpeRanges.push({
+            min, minInc: Boolean(m.versionStartIncluding),
+            max, maxInc: Boolean(m.versionEndIncluding),
+            product: (m.criteria ?? '').split(':')[4] ?? null,
+            versionType: null, source: 'nvd-cpe',
+          });
+        }
+      }
+    }
+    map.set(c.id, { status: c.vulnStatus, assigner: c.sourceIdentifier, modified: c.lastModified, published: c.published, metrics, cwe, desc, cpe: cpeRanges });
   }
   return map;
 }
@@ -793,7 +814,30 @@ function cnaState(id) {
      NVD side. It is a verbatim source for the `quotation` check: an advisory sentence quoted in the
      feed has bytes in the record, and the record is not a page. */
   const desc = (j.containers?.cna?.descriptions ?? []).map((d) => d.value).join(' ');
-  cache[key] = { fetched_at: new Date().toISOString(), v: CNA_CACHE_V, state: j.cveMetadata.state, assigner: j.cveMetadata.assignerShortName, metrics, cwe, desc };
+  /* `affected[]` is the CNA's own statement of the range — a different field from NVD's
+     `configurations[]`, which is analysis output, and present on 97.4% of records where
+     `configurations` is present only on analysed ones (census 2026-10-25). Kept per `versions[]`
+     ENTRY, because one affected entry can carry several (one per release line), and `changes[]` is
+     carried beside it: a change entry ENDS a range at its `at` version, so a span with one is not
+     the shape a `≤ max` reader thinks it is. */
+  const ranges = [];
+  for (const a of j.containers?.cna?.affected ?? []) {
+    for (const v of a.versions ?? []) {
+      const status = v.status ?? a.defaultStatus ?? 'affected';
+      if (status !== 'affected') continue;
+      ranges.push({
+        product: a.product ?? null,
+        min: v.version ?? null,
+        minInc: true,
+        max: v.lessThanOrEqual ?? v.lessThan ?? null,
+        maxInc: Boolean(v.lessThanOrEqual),
+        versionType: v.versionType ?? a.versionType ?? null,
+        changes: (v.changes ?? []).map((c) => ({ at: c.at, status: c.status })),
+        source: 'cna-affected',
+      });
+    }
+  }
+  cache[key] = { fetched_at: new Date().toISOString(), v: CNA_CACHE_V, state: j.cveMetadata.state, assigner: j.cveMetadata.assignerShortName, metrics, cwe, desc, ranges, published: j.cveMetadata.datePublished };
   return cache[key];
 }
 
@@ -1111,6 +1155,125 @@ function checkStatus(it, subjects) {
   return out;
 }
 
+/* Check H — a publish date is a CALENDAR DAY in the record's own clock, and a host at UTC+8 reads
+ * the same instant as the NEXT day. Filed 2026-11-02 04:31 by my own error in that batch: item 18
+ * published `CVE-2026-120209` as "published 2026-11-01" while cveawg's `datePublished` is
+ * 2026-10-31T17:25:56Z (NVD: 2026-10-31) — the quoted day is the LOCAL date of that instant, which
+ * is the `updated:` trap one layer over (CLAUDE.md: a date without a zone is a claim, not a
+ * measurement). Three guards, each a way the check would otherwise be noise:
+ *   (a) only PUBLISH cues count — "fixed", "released" and "reserved" are different clocks, and NVD
+ *       carries no `dateReserved` at all, so a reservation date is unverifiable here rather than wrong;
+ *   (b) a claim binds only when its own sentence names the id, or the item names exactly one CVE, or
+ *       every record the item cites agrees on the day — otherwise a multi-CVE Source line's single
+ *       date would be scored against whichever id happened to be primary;
+ *   (c) an absent record is `skip`, never a finding — unreadable is not wrong. */
+/* `\\b` after the day FAILS on an ISO instant, because `1` and `T` are both word characters — so
+   `published 2026-10-31T09:29Z · reserved 2026-10-28` skipped the instant and scored the *reserved*
+   day against the record, and `CVE published 2026-10-30T14:36Z · advisory dated 2026-06-24` scored
+   the advisory's. Measured on the 33-feed census (11-02): 2 of the first 11 findings. The fix is a
+   digit lookahead, not a `\\b`. */
+const PUB_DATE = /\b(published|disclosed)\b[^.;|\n]{0,48}?(20\d\d-\d\d-\d\d)(?![\d])/g;
+/* The cue is about the ARTIFACT nearest it far more often than about the record — measured over 33
+   feeds (11-02): **10 of 11 findings were the checker's**, and every one of them was a cue about
+   something else. Five suppressors, each a live case from that census:
+     - "published **the** Sleep framework" / "published **by** Patchstack" → an author's output;
+     - a version token immediately before the cue ("v0.1.7, published 2026-05-06", "7.1.2-33 was
+       published on 2026-10-10") → a RELEASE date;
+     - an artifact noun in the 60 characters before it (release, tag, advisory, report, research,
+       article, blog, post, paper, commit, README, docs, bulletin) → that artifact's date;
+     - a `Source:` line whose text before the cue names no registry (cveawg, CVE Program, NVD, CNA
+       records) → the citing SITE's date, e.g. "Unit 42 · published 2026-10-14";
+     - and a Source line that DOES name the registry is kept, which is what let the census find a
+       real `date-local-shift` ("CVE Program (cveawg) · published 2026-10-24"). */
+const DATE_ARTIFACT = /\b(?:releases?|released|tags?|tagged|advisories|advisory|reports?|research|articles?|blog|posts?|posted|papers?|commits?|README|docs?|specs?|bulletins?)\b/i;
+const REGISTRY = /\b(?:cveawg|CVE Program|NVD|CNA|CVE)\b/i;
+function dateCueIsArtifact(text, idx, dateStart) {
+  const after = text.slice(idx, idx + 16);
+  if (/^(?:published|disclosed)\s+(?:the|a|an)\b/i.test(after)) return true;   // published the framework
+  if (/^(?:published|disclosed)\s+by\b/i.test(after)) return true;            // published by Patchstack
+  // markdown emphasis sits BETWEEN the version and the cue (`**v0.1.7**, published`, `` 7.1.2-33 ``
+  // was published) and a literal test reads that as no version at all — the 10-22 and 10-27 cases.
+  /* The Source line decides by its own rule and returns, because its source NAME is made of the very
+     words the artefact test looks for — `CVE Program (cveawg) / Postiz advisories · published …` was
+     suppressed for containing "advisories", which is the registry speaking, not a vendor posting. */
+  const lineStart0 = text.lastIndexOf('\n', idx) + 1;
+  const lineEnd0 = text.indexOf('\n', idx);
+  const line0 = text.slice(lineStart0, lineEnd0 < 0 ? text.length : lineEnd0);
+  const srcIdx0 = line0.search(/\*\*Source:\*\*/);
+  if (srcIdx0 >= 0) return !REGISTRY.test(text.slice(lineStart0 + srcIdx0, idx));
+  const before = text.slice(Math.max(0, idx - 60), idx).replace(/[*`]/g, '');
+  /* A version ATTACHED to the cue means a RELEASE: "v0.1.7, published…", "7.1.2-33 was published…",
+     "worker 0.1.756 and gateway 0.1.776 — both published 2026-09-15T04:03Z". Presence alone is not
+     enough — the item's sentence names the CVE and a version in every other case — so the test is
+     the short tail between the version and the cue: punctuation, a dash, `both`/`all`, `was`/`is`. */
+  if (/(?:^|[\s(])v?\d+(?:\.\d+)+(?:[-.][0-9A-Za-z][0-9A-Za-z.\-]*)?\s*[,;:]?\s*(?:[—–-]\s*)?(?:both\s+|all\s+)?(?:was\s+|is\s+)?$/.test(before)) return true;
+  if (DATE_ARTIFACT.test(before)) return true;                                // "release … published"
+  return false;
+}
+function checkDate(it, subjects, cna = new Map()) {
+  const out = [];
+  const text = it.text;
+  const ids = idMentions(text);
+  if (!ids.length) return out;
+  const distinct = [...new Set(ids.map((m) => m.id))];
+  const sents = sentences(text);
+  const ctx = { sents, primary: primarySubject(text, ids) };
+  const dayOfString = (p) => {
+    if (!p) return null;
+    const iso = /Z$|[+-]\d\d:?\d\d$/.test(p) ? p : `${p}Z`; // NVD omits the Z — parse it as UTC
+    const ms = Date.parse(iso);
+    if (!Number.isFinite(ms)) return null;
+    return { utc: iso.slice(0, 10), local: new Date(ms + 8 * 3600e3).toISOString().slice(0, 10) };
+  };
+  /* TWO CLOCKS. NVD's `published` is when NVD ingested the record; cveawg's `datePublished` is when
+     the CNA published it, and they are hours apart — enough to land on different calendar days, which
+     is how CVE-2026-117656 (cveawg 2026-10-30T23:55:23Z, NVD 2026-10-31T00:16:51Z) was reported as a
+     mismatch against a correct "published 2026-10-30" (census 2026-11-02). A claim is true if it
+     matches EITHER clock's day; when the two disagree the verdict says which one it matched. */
+  const clocksOf = (id) => {
+    const out = [];
+    const n = dayOfString(subjects.get(id)?.published);
+    if (n) out.push({ name: 'NVD published', raw: subjects.get(id).published, ...n });
+    const c = cna.get(id)?.published;
+    const cd = dayOfString(c);
+    if (cd) out.push({ name: 'cveawg datePublished', raw: c, ...cd });
+    return out;
+  };
+  // the item's records, for the "every cited record agrees on the day" arm of guard (b)
+  const recDays = distinct.map((id) => dayOfString(subjects.get(id)?.published)).filter(Boolean);
+  const unanimous = recDays.length > 0 && recDays.every((d) => d.utc === recDays[0].utc);
+  const done = new Set();
+  for (const m of text.matchAll(PUB_DATE)) {
+    const quoted = m[2];
+    const at = m.index + m[0].lastIndexOf(quoted);
+    if (dateCueIsArtifact(text, m.index, at)) continue;
+    const s = sents.find((x) => at >= x.start && at < x.end);
+    if (!s || done.has(s.start)) continue;
+    const inSent = ids.filter((x) => x.at >= s.start && x.at < s.end);
+    let id = null;
+    if (inSent.length) id = bindSubject(at, ids, ctx).id;
+    else if (distinct.length === 1 || unanimous) id = distinct[0];
+    if (!id) continue;
+    const clocks = clocksOf(id);
+    if (!clocks.length) continue; // no record / no published / unreadable — silence is not equality
+    done.add(s.start);
+    const utcHit = clocks.find((c) => c.utc === quoted) ?? null;
+    const localHit = clocks.find((c) => c.local === quoted) ?? null;
+    const all = clocks.map((c) => `${c.name} ${c.raw} (${c.utc} UTC)`).join(' · ');
+    if (utcHit) {
+      out.push({ check: 'date', item: it.n, verdict: 'ok', claim: `${id} published ${quoted}`,
+        detail: clocks.length > 1 ? `${all} — the two clocks differ; ${quoted} is the ${utcHit.name} day` : utcHit.raw });
+    } else if (localHit) {
+      out.push({ check: 'date', item: it.n, verdict: 'date-local-shift', claim: `${id} published ${quoted}`,
+        detail: `${all} — ${quoted} is that instant's UTC+8 date, so the quoted day is the host's local one; write the UTC date, or the instant with its Z` });
+    } else {
+      out.push({ check: 'date', item: it.n, verdict: 'date-mismatch', claim: `${id} published ${quoted}`,
+        detail: `${all} — neither clock's day is ${quoted}` });
+    }
+  }
+  return out;
+}
+
 /**
  * The `--status-watch` store. A single feed run can only see today, so the *movement* — which is
  * the event worth catching, and which the 04:27 pass had to reconstruct from four timestamps by
@@ -1286,6 +1449,177 @@ function checkCwe(it, subjects, cna) {
   return out;
 }
 
+// ── check H: the affected span's own arithmetic ─────────────────────────────────────────────
+/* Filed 2026-11-01 20:49 from the `--remedy-census` calibration: **87 of 3,461** records in one
+ * publication week state a span that contains nothing — 86 write a POINT as a range
+ * (`{version: X, lessThan: X}`, 73 of them Chrome's house style) and 1 inverts its bounds (Apache
+ * MINA's `3.0.0` … `3.0.0-M2`, where the milestone sorts BEFORE the release). The feed quotes
+ * affected spans constantly and nothing read the span: `count` greps numbers beside nouns, `cvss`
+ * recomputes a vector, `cwe` reads two fields — none asks whether `min <= max`.
+ *
+ * The trap this check is built around is that **the inverted span is usually quoted faithfully**.
+ * The 11-01 MINA item says "Affected is `3.0.0` through `3.0.0-M2`", which is exactly what the
+ * record states and is still a statement whose subject set is empty. So the finding is not "you
+ * misquoted the record"; it is "the span you quoted contains nothing, say so".
+ *
+ * Both directions of the same question are needed, because they fail differently:
+ *   (a) the RECORD's span is empty and the item quotes it → `span-empty` (sev 2, the item should
+ *       carry the arithmetic, since a scanner reading the range sees an empty set);
+ *   (b) the ITEM's own two endpoints invert → `span-inverted` (sev 3, the item wrote it wrong).
+ * Two verdicts rather than one, because the remedies differ: (a) is a sentence to add, (b) is a
+ * number to fix.
+ * Everything else is silence, never a pass: an item that quotes no span, or a record with no
+ * readable range, is unmeasured rather than verified.
+ *
+ * Guards, each one a false positive the design would otherwise produce:
+ *   - a `*` / `0` / missing bound is a NULL bound, never a version (CVE 5.x's null minimum), so the
+ *     span is unbounded and cannot be empty;
+ *   - a git range is not a version range — 211 of the first remedy-census pass's "empty spans" were
+ *     `<sha>`…`<sha>` ordered by a comparator with no meaning for a hash → `span-unverifiable`;
+ *   - "A through B" is INCLUSIVE on both ends, so A == B is one version and not an empty span; only
+ *     a record's `lessThan` (exclusive) makes an equal pair empty;
+ *   - the item's span must be ANCHORED to the record (an endpoint must equal one of its bounds), or
+ *     a measurement pair — "from 41.39% to 56.97", "0.96 to 0.86" — reads as a version range.
+ */
+function parseVer(v) {
+  const s = String(v).replace(/^\s*[vV]/, '').trim();
+  const m = s.match(/^(\d+(?:\.\d+)*)(.*)$/);
+  if (!m) return { nums: [], pre: s };
+  return { nums: m[1].split('.').map(Number), pre: (m[2] || '').replace(/^[-._]/, '') };
+}
+/** Semver-ish: numeric segments first, then a release sorts AFTER its prereleases, which is the
+    only ordering this check asks about (`3.0.0-M2` sorts before `3.0.0`). */
+function cmpVer(a, b) {
+  const A = parseVer(a), B = parseVer(b);
+  for (let i = 0; i < Math.max(A.nums.length, B.nums.length); i++) {
+    const x = A.nums[i] ?? 0, y = B.nums[i] ?? 0;
+    if (x !== y) return x < y ? -1 : 1;
+  }
+  if (A.pre === B.pre) return 0;
+  if (!A.pre) return 1;
+  if (!B.pre) return -1;
+  return A.pre < B.pre ? -1 : 1;
+}
+const NULL_BOUND = (v) => v == null || /^(?:\*|0|)$/.test(String(v).trim());
+/** `<sha>` is not a version: 7–40 hex chars WITH at least one letter (a bare `20260101` is a date). */
+const SHA_LIKE = (v) => /^[0-9a-f]{7,40}$/i.test(String(v ?? '').trim()) && /[a-f]/i.test(String(v ?? ''));
+const sameVer = (a, b) => a != null && b != null && !NULL_BOUND(a) && !NULL_BOUND(b) && cmpVer(a, b) === 0;
+/** `empty` | `ok` | `unbounded` | `unorderable` — the four states a stated span can be in. */
+function spanState(r) {
+  if (r.versionType === 'git' || SHA_LIKE(r.min) || SHA_LIKE(r.max)) return 'unorderable';
+  const min = NULL_BOUND(r.min) ? null : r.min;
+  const max = NULL_BOUND(r.max) ? null : r.max;
+  if (!min || !max) return 'unbounded';
+  const c = cmpVer(min, max);
+  if (c > 0) return 'empty';
+  if (c === 0 && r.maxInc === false) return 'empty';
+  return 'ok';
+}
+function describeRange(r) {
+  const lo = [r.min == null ? '·' : r.min, r.minInc === false ? '(exclusive)' : '(inclusive)'].join(' ');
+  const hi = [r.max == null ? '·' : r.max, r.maxInc ? '(inclusive)' : '(exclusive)'].join(' ');
+  return `${lo} … ${hi}${r.product ? ` · ${r.product}` : ''}${r.changes?.length ? ` · changes[] ${r.changes.map((c) => `${c.status}@${c.at}`).join(',')}` : ''}`;
+}
+/** Every range a record states, CNA `affected[]` first (what the CNA said) and NVD's analysis second. */
+function rangesOf(id, subjects, cna) {
+  const out = [];
+  for (const r of cna.get(id)?.ranges ?? []) out.push(r);
+  for (const r of subjects.get(id)?.cpe ?? []) out.push(r);
+  return out;
+}
+/** The two-endpoint version span as this corpus writes it. The joiner is the discriminator: `through`
+    is a range in this feed's own voice, while `to` and a spaced dash also carry measurements — so
+    those two need the record anchor before they are read as a span (see `checkRange`). */
+const VER_TOKEN = String.raw`[vV]?\d+(?:\.\d+)+(?:[-.][0-9A-Za-z][0-9A-Za-z.\-]*)?(?![%\d])`;
+const SPAN_RE = new RegExp(String.raw`(${VER_TOKEN})\s*(through|to|–|—|\s-\s)\s*(${VER_TOKEN})`, 'gi');
+/* The token's own char class includes `.` so that `1.2.3-build.4` survives, which means a
+   sentence-final period is captured with it (`3.0.0-M2.`). Comparing that against the record's
+   `3.0.0-M2` fails on the punctuation alone — a finding about the reader, not the span. */
+const cleanVer = (v) => String(v).replace(/[.,;:]+$/, '');
+
+function checkRange(it, subjects, cna = new Map()) {
+  const out = [];
+  const t = it.plain;
+  const ids = idMentions(t);
+  if (!ids.length) return out;
+  const sents = sentences(t);
+  const ctx = { sents, primary: primarySubject(t, ids) };
+  const done = new Set();
+  for (const m of t.matchAll(SPAN_RE)) {
+    const [, a0, joiner, b0] = m;
+    const a = cleanVer(a0), b = cleanVer(b0);
+    const at = m.index;
+    const s = sents.find((x) => at >= x.start && at < x.end);
+    if (!s || done.has(s.start)) continue;
+    const bound = bindSubject(at, ids, ctx);
+    if (!bound) continue;
+    const ranges = rangesOf(bound.id, subjects, cna);
+    if (!ranges.length) continue;
+    /* Is the item quoting a span the record states? Matched in EITHER order, because a writer can
+       read a record's bounds backwards — and the pair test is also the discriminator that keeps a
+       MEASUREMENT out: `41.39% → 56.97` and `0.96 → 0.86` are spans in the prose and ranges in
+       nothing, and one endpoint happening to equal a bound is a coincidence, not an anchor. */
+    const pairMatches = (r) => (sameVer(r.min, a) && sameVer(r.max, b)) || (sameVer(r.min, b) && sameVer(r.max, a));
+    const rec = ranges.find(pairMatches) ?? null;
+    const touches = (r) => [a, b].some((x) => sameVer(r.min, x) || sameVer(r.max, x));
+    // `through` / a dash is the feed's own range voice, so one matching bound anchors it; `to` is
+    // also how measurements are written, so it needs both endpoints to be the record's own bounds.
+    const strong = /through/i.test(joiner) || /[\u2013\u2014]/.test(joiner);
+    const anchored = strong ? ranges.some(touches) : rec != null;
+    const span = `${a} ${/through/i.test(joiner) ? 'through' : '–'} ${b}`;
+    const recState = rec ? spanState(rec) : null;
+    /* The RECORD's emptiness is judged first and separately from the item's own arithmetic. The
+       11-01 MINA item writes "3.0.0 through 3.0.0-M2" in the record's own order — a faithful
+       quotation of an empty span — and calling that "the item wrote it backwards" would be a
+       finding about the writer instead of about the range. A span the record states and the item
+       reverses is the other case, and only it gets the item-voice detail. */
+    if (rec && recState === 'empty') {
+      done.add(s.start);
+      out.push({
+        check: 'range', item: it.n, verdict: 'span-empty', claim: `${bound.id} ${span}`,
+        detail: `the record's own ${rec.source} span is ${describeRange(rec)} — ${rec.min} and ${rec.max} close a set with nothing in it under its own comparator, so the quoted range is vacuous; say so rather than restating it as a range`,
+      });
+      continue;
+    }
+    if (cmpVer(a, b) > 0) {
+      if (!anchored) continue;
+      done.add(s.start);
+      out.push({
+        check: 'range', item: it.n, verdict: 'span-inverted', claim: `${bound.id} ${span}`,
+        detail: `the item's own span runs from ${a} to ${b}, and ${b} sorts BEFORE ${a} — the record's bounds are ${ranges.map(describeRange).join('; ')}`,
+      });
+      continue;
+    }
+    /* No version span matches, but every range the record states is a GIT range: the item is
+       quoting a version span from somewhere else (a distro advisory, a fixed-in line) for a record
+       whose own bounds are revisions. That is the state 211 of the first remedy-census pass
+       mistook for an empty span, and the honest verdict is that nothing here is orderable —
+       sev 0, because the item's span may be perfectly true of the packaged artifact. */
+    if (!rec) {
+      const stated = ranges.filter((r) => r.min || r.max);
+      const inSent = ids.some((x) => x.at >= s.start && x.at < s.end);
+      if (inSent && strong && stated.length && stated.every((r) => spanState(r) === 'unorderable')) {
+        done.add(s.start);
+        out.push({
+          check: 'range', item: it.n, verdict: 'span-unverifiable', claim: `${bound.id} ${span}`,
+          detail: `the record states only a git range (${stated.map(describeRange).join('; ')}), so the version span in the item is not the record's own bounds and neither endpoint can be ordered against them`,
+        });
+      }
+      continue; // nothing else to compare: silence, never a pass
+    }
+    done.add(s.start);
+    if (recState === 'unorderable') {
+      out.push({
+        check: 'range', item: it.n, verdict: 'span-unverifiable', claim: `${bound.id} ${span}`,
+        detail: `the record's bound is a git revision, not a version (${describeRange(rec)}) — the comparator cannot order two hashes, so nothing is verified here`,
+      });
+    } else {
+      out.push({ check: 'range', item: it.n, verdict: 'ok-span', claim: `${bound.id} ${span}`, detail: `${describeRange(rec)} — non-empty` });
+    }
+  }
+  return out;
+}
+
 // ── check C: repo state ─────────────────────────────────────────────────────────────────────
 let cache = {};
 try { cache = JSON.parse(readFileSync(CACHE_PATH, 'utf8')); } catch { /* first run */ }
@@ -1297,11 +1631,14 @@ const CACHE_TTL_MS = 6 * 3600 * 1000;
 const ERROR_TTL_MS = 10 * 60 * 1000;
 // Bump when the stored shape grows: a cached entry missing a field the check reads would turn
 // "not fetched by this version" into "absent from the record".
-/* v: 2 added `problemTypes` (the cwe check). v: 3 adds `descriptions[]` (the quotation check) —
-   and the bump is the rule, not a tidiness choice: an entry written before a field was read would
-   turn "not fetched by this version" into "absent from the record", which is the exact defect the
-   schema version exists to prevent. A bump forces one refetch per CVE and is unmetered. */
-const CNA_CACHE_V = 3;
+/* v: 2 added `problemTypes` (the cwe check). v: 3 adds `descriptions[]` (the quotation check).
+   v: 4 adds `affected[]` as normalised `ranges` (the range check); v: 5 adds `datePublished`, because
+   the registry's clock and NVD's are hours apart and the `date` check was reading only one of them.
+   Each bump is the rule, not
+   a tidiness choice: an entry written before a field was read would turn "not fetched by this
+   version" into "absent from the record", which is the exact defect the schema version exists to
+   prevent. A bump forces one refetch per CVE and is unmetered. */
+const CNA_CACHE_V = 5;
 
 function repoState(slug) {
   const hit = cache[slug];
@@ -2927,6 +3264,86 @@ if (SELFTEST) {
   t('a bare issue count in a repo item still fires', checkIssues({ ...mk('t', 'it has 3,286 issues'), repos: ['a/b'] }).map((x) => x.verdict), ['unsplit-issue-count']);
   t('open issues fires even after a review verb', checkIssues(mk('t', 'found **3,286 open issues** on the board')).map((x) => x.verdict), ['unsplit-issue-count']);
 
+  /* 2026-11-02 04:31 — the publish-date check, filed by my own error in that batch's item 18: a
+     UTC+8 host read cveawg's 2026-10-31T17:25:56Z as "2026-11-01". */
+  const subj = (o) => new Map(Object.entries(o).map(([k, v]) => [k, { status: 'Received', published: v }]));
+  const dchk = (text, o) => checkDate(mk('t', text), subj(o)).map((x) => x.verdict);
+  t('date: the UTC day matches', dchk('CVE-2026-120209 published 2026-10-31.', { 'CVE-2026-120209': '2026-10-31T17:25:56.000' }), ['ok']);
+  t('date: the local day of the same instant is a shift', dchk('CVE-2026-120209 published 2026-11-01.', { 'CVE-2026-120209': '2026-10-31T17:25:56.000' }), ['date-local-shift']);
+  t('date: a day matching neither clock is a mismatch', dchk('CVE-2026-120209 published 2026-09-04.', { 'CVE-2026-120209': '2026-10-31T17:25:56.000' }), ['date-mismatch']);
+  t('date: no record is silence, not equality', dchk('CVE-2026-120209 published 2026-11-01.', {}), []);
+  t('date: a fix date is a different clock', dchk('CVE-2026-120209 fixed 2026-09-15 and reserved 2026-10-31.', { 'CVE-2026-120209': '2026-10-31T17:25:56.000' }), []);
+  t('date: a multi-CVE Source line binds only on unanimity',
+    dchk('Three records published 2026-11-01.', { 'CVE-2026-120307': '2026-11-01T09:00:00.000', 'CVE-2026-120308': '2026-10-20T09:00:00.000' }), []);
+  t('date: unanimously-same records make the line checkable',
+    dchk('CVE-2026-120307 and CVE-2026-120308 published 2026-11-01.', { 'CVE-2026-120307': '2026-11-01T09:00:00.000', 'CVE-2026-120308': '2026-11-01T10:00:00.000' }), ['ok']);
+  /* 2026-11-02 04:43 — the affected-span check, filed from the MINA calibration (11-01 feed):
+     "Affected is `3.0.0` through `3.0.0-M2`" is a faithful quotation of a record whose own bounds
+     contain nothing, which is exactly why a fact-check of the quotation passes and the span is
+     still vacuous. */
+  const rng = (text, ranges, id = 'CVE-2026-118636') =>
+    checkRange(mk('t', text), new Map(), new Map([[id, { ranges }]])).map((x) => x.verdict);
+  const R = (o) => ({ min: null, minInc: true, max: null, maxInc: true, versionType: null, source: 'cna-affected', ...o });
+  t('range: the prerelease sorts BEFORE its release, so the MINA span is empty',
+    cmpVer('3.0.0-M2', '3.0.0'), -1);
+  t('range: a faithful quotation of an empty span is a finding',
+    rng('`CVE-2026-118636`: Affected is `3.0.0` through **`3.0.0-M2`**.', [R({ min: '3.0.0', max: '3.0.0-M2' })]),
+    ['span-empty']);
+  t('range: a point written as an exclusive range is empty (Chrome house style)',
+    rng('CVE-2026-118636 is affected from 1.2.3 through 1.2.3.', [R({ min: '1.2.3', max: '1.2.3', maxInc: false })]),
+    ['span-empty']);
+  // …but the same pair through an INCLUSIVE bound is one version, not an empty set
+  t('range: equal bounds under an inclusive end are a point, not an empty span',
+    rng('CVE-2026-118636 covers 1.2.3 through 1.2.3 exactly.', [R({ min: '1.2.3', max: '1.2.3' })]), ['ok-span']);
+  t('range: a normal span verifies rather than passing silently',
+    rng('CVE-2026-118636 affects 0.14.0 through 0.20.2.', [R({ min: '0.14.0', max: '0.20.3', maxInc: false })]), []);
+  t('range: a span matching the record end to end is verified',
+    rng('CVE-2026-118636 affects 0.14.0 through 0.20.3.', [R({ min: '0.14.0', max: '0.20.3', maxInc: false })]), ['ok-span']);
+  // the item's OWN inversion still has to be anchored, or every measurement pair fires
+  t('range: an inverted span the item wrote is a finding',
+    rng('CVE-2026-118636 affects 2.0.0 through 1.0.0 here.', [R({ min: '1.0.0', max: '2.0.0' })]), ['span-inverted']);
+  t('range: a measurement pair is not a version span',
+    rng('CVE-2026-118636 detection went from 41.39% to 56.97.', [R({ min: '1.0.0', max: '2.0.0' })]), []);
+  t('range: a descending measurement against one anchored endpoint is still not a span',
+    rng('CVE-2026-118636 scored 0.96 to 0.86 on the same set.', [R({ min: '0.96', max: '1.4' })]), []);
+  t('range: a git range has no arithmetic — the version span is unverifiable against it',
+    rng('CVE-2026-118636 affects 1.0.0 through 2.0.0.', [R({ min: '1f4c0de9b2a7', max: '99aa11bb22cc', versionType: 'git' })]), ['span-unverifiable']);
+  t('range: a mixed record with a real CPE range is not called unverifiable',
+    rng('CVE-2026-118636 affects 1.0.0 through 2.0.0.', [R({ min: '1f4c0de9b2a7', max: '99aa11bb22cc', versionType: 'git' }), R({ min: '1.0.0', max: '3.0.0', source: 'nvd-cpe' })]), []);
+  t('range: a null minimum is unbounded, never empty',
+    spanState(R({ min: '0', max: '1.7.1' })), 'unbounded');
+  t('range: no record range is silence, not a pass',
+    rng('CVE-2026-118636 affects 1.0.0 through 2.0.0.', []), []);
+
+  /* 2026-11-02 04:43 — the 33-feed census found **10 of 11 `date` findings were the checker's**, and
+     all ten were a publish cue about an ARTIFACT. Each suppressor below is one of them. */
+  t('date: an ISO instant is a date — the `\\b` after the day made it invisible',
+    dchk('CVE-2026-118598 Source: cveawg · published 2026-10-31T09:29Z · reserved 2026-10-28.', { 'CVE-2026-118598': '2026-10-31T10:16:37.923' }), ['ok']);
+  t('date: a Source line naming the registry keeps its date',
+    dchk('CVE-2026-115931 - **Source:** CVE Program (cveawg) / Postiz advisories · published 2026-10-24.', { 'CVE-2026-115931': '2026-10-23T23:17:43.263' }), ['date-local-shift']);
+  t('date: a Source line naming a newsroom publishes the ARTICLE, not the record',
+    dchk('CVE-2025-61624 - **Source:** Unit 42 · published 2026-10-14.', { 'CVE-2025-61624': '2026-04-14T16:16:31.300' }), []);
+  t('date: a version before the cue is a RELEASE date',
+    dchk('CVE-2026-114106 was fixed in v0.1.7, published 2026-05-06.', { 'CVE-2026-114106': '2026-10-21T01:17:36.820' }), []);
+  t('date: "<version> was published on" is a release, not a record',
+    dchk('CVE-2026-116145 7.1.2-33 was published on 2026-10-10.', { 'CVE-2026-116145': '2026-10-25T14:16:52.543' }), []);
+  t('date: "published the <thing>" is an author'+"'"+'s output',
+    dchk('CVE-2026-98432 Behrouz published the Sleep framework on 2026-10-27.', { 'CVE-2026-98432': '2026-10-15T13:17:13.987' }), []);
+  t('date: "published by <party> on" is the party'+"'"+'s date',
+    dchk('CVE-2026-61991 it was reported in September, published by Patchstack on 2026-10-13.', { 'CVE-2026-61991': '2026-10-29T16:18:11.463' }), []);
+  /* Two clocks (11-02 census): cveawg's `datePublished` and NVD's `published` are hours apart, and
+     the gap crosses midnight on real records — the false positive this rule removes. */
+  const dchk2 = (text, sub, cn) => checkDate(mk('t', text), subj(sub), new Map(Object.entries(cn))).map((x) => x.verdict);
+  t('date: a claim matching the OTHER registry clock is verified, not a mismatch',
+    dchk2('CVE-2026-117656 published 2026-10-30.',
+      { 'CVE-2026-117656': '2026-10-31T00:16:51.340' }, { 'CVE-2026-117656': { published: '2026-10-30T23:55:23.426Z' } }), ['ok']);
+  t('date: a day matching neither clock is still a mismatch',
+    dchk2('CVE-2026-117656 published 2026-10-29.',
+      { 'CVE-2026-117656': '2026-10-31T00:16:51.340' }, { 'CVE-2026-117656': { published: '2026-10-30T23:55:23.426Z' } }), ['date-mismatch']);
+
+  t('date: a record cue right after the artefact noun still compares',
+    dchk('CVE-2026-61738 CVE published 2026-10-30T14:36Z on the advisory line.', { 'CVE-2026-61738': '2026-10-30T15:16:53.507' }), ['ok']);
+
   // star quotes — a delta and a total are different units (the item-12 false finding)
   t('star delta is not a count', starQuotesOf(strip('Source: GitHub Trending · +312 stars today · nightly-labs')), []);
   t('k-suffix is read as thousands', starQuotesOf(strip('**1.4k stars**, **174 forks**')), [1400]);
@@ -3386,7 +3803,7 @@ const parsed = paths.map((p) => ({ path: p, items: parseItems(readFileSync(p, 'u
 let nvd = new Map();
 let nvdCalls = 0;
 let ghsaCalls = 0;
-if (!NO_NET && (CHECKS.has('cvss') || CHECKS.has('status') || CHECKS.has('cwe') || STATUS_WATCH || CHECKS.has('quotation'))) {
+if (!NO_NET && (CHECKS.has('cvss') || CHECKS.has('status') || CHECKS.has('cwe') || CHECKS.has('range') || STATUS_WATCH || CHECKS.has('quotation'))) {
   const cves = [...new Set([...parsed.flatMap((f) => f.items.flatMap((it) => it.cves)), ...EXTRA_IDS])];
   const CHUNK = 25;
   for (let i = 0; i < cves.length; i += CHUNK) {
@@ -3404,7 +3821,7 @@ if (!NO_NET && (CHECKS.has('cvss') || CHECKS.has('status') || CHECKS.has('cwe') 
   }
 }
 const subjects = new Map();
-for (const [id, rec] of nvd) subjects.set(id, { kind: 'cve', status: rec.status, modified: rec.modified, metrics: rec.metrics, cwe: rec.cwe });
+for (const [id, rec] of nvd) subjects.set(id, { kind: 'cve', status: rec.status, modified: rec.modified, published: rec.published, metrics: rec.metrics, cwe: rec.cwe, cpe: rec.cpe });
 /* The watch is written before the checks run, so a regression found here shows up in the same
  * report that a stale claim about it would. It records the observation, not a verdict: a move
  * that no item mentions is still the thing worth catching. */
@@ -3425,7 +3842,7 @@ if (STATUS_WATCH && !NO_NET) {
 // unmetered, so the cap is about latency rather than budget — cached entries cost nothing.
 const cna = new Map();
 let cnaCalls = 0;
-if (!NO_NET && (CHECKS.has('cvss') || CHECKS.has('temporal') || CHECKS.has('cwe') || CHECKS.has('quotation'))) {
+if (!NO_NET && (CHECKS.has('cvss') || CHECKS.has('temporal') || CHECKS.has('cwe') || CHECKS.has('range') || CHECKS.has('quotation'))) {
   const ids = [...new Set(parsed.flatMap((f) => f.items.flatMap((it) => strip(it.text).match(/CVE-\d{4}-\d{3,7}/g) ?? [])))].slice(0, MAX_CNA);
   for (const id of ids) {
     // A schema bump forces a refetch, and a refetch is a call: counting only "no entry at all"
@@ -3451,8 +3868,10 @@ for (const { path: p, items } of parsed) {
     if (CHECKS.has('issues')) findings.push(...checkIssues(it));
     if (!NO_NET && CHECKS.has('cvss')) findings.push(...checkCvss(it, subjects, cna));
     if (!NO_NET && CHECKS.has('status')) findings.push(...checkStatus(it, subjects));
+    if (!NO_NET && CHECKS.has('date')) findings.push(...checkDate(it, subjects, cna));
     if (!NO_NET && CHECKS.has('temporal')) findings.push(...checkTemporal(it, cna, subjects));
     if (!NO_NET && CHECKS.has('cwe')) findings.push(...checkCwe(it, subjects, cna));
+    if (!NO_NET && CHECKS.has('range')) findings.push(...checkRange(it, subjects, cna));
   }
   if (!NO_NET && CHECKS.has('repo')) for (const it of items) findings.push(...checkRepo(it, budget, ageBudget));
   if (!NO_NET && CHECKS.has('count')) for (const it of items) findings.push(...await checkCount(it));
@@ -3471,6 +3890,16 @@ for (const { path: p, items } of parsed) {
  * (`page:`, `readme:`, `hfcard:`) are bounded to the most recently fetched N; the small structured
  * keys (repo state, `cna:`, `ghsa:`) are kept whole because they are the ones a re-run saves a call
  * on. Dropping a page is cheap — every one of them is refetched unmetered. */
+/* The CNA containers (351 for a month-wide census) are STRUCTURED and deliberately kept whole,
+ * because they are what makes a re-run cost nothing — but they are only useful for the 6 h TTL, and
+ * a census that walks a month leaves the whole corpus behind (6.2 MB, 11-02). Past a week an entry
+ * is dead weight: refetching it is unmetered. Same rule as the text budget, different axis. */
+const CNA_KEEP_MS = 7 * 86400 * 1000;
+for (const k of Object.keys(cache)) {
+  if (!k.startsWith('cna:')) continue;
+  const at = Date.parse(cache[k]?.fetched_at ?? 0);
+  if (Number.isFinite(at) && Date.now() - at > CNA_KEEP_MS) delete cache[k];
+}
 const cacheBytes = (e) => (e && typeof e.text === 'string' ? e.text.length : 0);
 const textish = Object.keys(cache).filter((k) => /^(page|readme|hfcard):/.test(k));
 textish.sort((a, b) => Date.parse(cache[b].fetched_at ?? 0) - Date.parse(cache[a].fetched_at ?? 0));
@@ -3484,7 +3913,7 @@ try {
   writeFileSync(CACHE_PATH, JSON.stringify(cache, null, 1));
 } catch { /* cache is best-effort */ }
 
-const SEVERITY = { ok: 0, 'ok-cited-page': 0, 'no-cve-named': 1, 'no-record': 1, 'slot-quoted': 1, 'counted-by-author': 0, 'number-other-noun': 1, 'temporal-stopping-point': 1, 'cna-only-score': 1, 'star-drift': 2, 'star-dated': 1, 'star-surge': 1, 'ok-history': 0, 'history-older-than-record': 2, 'history-unreadable': 1, stale: 2, archived: 2, differs: 2, absent: 2, 'unsplit-issue-count': 3, 'compound-lags-parts': 3, 'version-swapped': 3, 'version-absent': 3, 'score-not-reproducible': 2, 'score-mismatch': 3, 'wrong-subject': 3, 'absence-contradicted': 3, 'status-stale': 2, 'status-dated': 1, 'cwe-absent-but-recorded': 3, 'cwe-mismatch': 3, 'cwe-unreadable': 1, 'status-no-record': 1, 'status-no-cve': 1, 'advisory-unreadable': 1, 'advisory-repo-only': 0, unreadable: 1, 'artifact-unreadable': 1, 'nvd-unavailable': 1, 'ratio-row-count': 3, 'ok-ratio': 0, 'not-a-repo': 0, 'ok-table-rows': 0, 'table-columns-unresolved': 0, 'bundle-ok': 0, 'bundle-lines-named': 0, 'bundle-unavailable': 0, 'bundle-line-count': 3, 'bundle-total-mismatch': 2, 'quote-not-found': 3, 'quote-paraphrase': 2, 'quote-short': 1, 'quote-not-read': 0 };
+const SEVERITY = { ok: 0, 'ok-cited-page': 0, 'no-cve-named': 1, 'no-record': 1, 'slot-quoted': 1, 'counted-by-author': 0, 'number-other-noun': 1, 'temporal-stopping-point': 1, 'cna-only-score': 1, 'star-drift': 2, 'star-dated': 1, 'star-surge': 1, 'ok-history': 0, 'history-older-than-record': 2, 'history-unreadable': 1, stale: 2, archived: 2, differs: 2, absent: 2, 'unsplit-issue-count': 3, 'compound-lags-parts': 3, 'version-swapped': 3, 'version-absent': 3, 'score-not-reproducible': 2, 'score-mismatch': 3, 'wrong-subject': 3, 'absence-contradicted': 3, 'status-stale': 2, 'status-dated': 1, 'date-local-shift': 2, 'date-mismatch': 2, 'cwe-absent-but-recorded': 3, 'cwe-mismatch': 3, 'cwe-unreadable': 1, 'span-empty': 2, 'span-inverted': 3, 'span-unverifiable': 0, 'ok-span': 0, 'status-no-record': 1, 'status-no-cve': 1, 'advisory-unreadable': 1, 'advisory-repo-only': 0, unreadable: 1, 'artifact-unreadable': 1, 'nvd-unavailable': 1, 'ratio-row-count': 3, 'ok-ratio': 0, 'not-a-repo': 0, 'ok-table-rows': 0, 'table-columns-unresolved': 0, 'bundle-ok': 0, 'bundle-lines-named': 0, 'bundle-unavailable': 0, 'bundle-line-count': 3, 'bundle-total-mismatch': 2, 'quote-not-found': 3, 'quote-paraphrase': 2, 'quote-short': 1, 'quote-not-read': 0 };
 const REAL = (f) => (SEVERITY[f.verdict] ?? 1) >= 2;
 
 /* `status_watch` rides the findings file so the act pass sees a backwards move without re-reading
