@@ -1,6 +1,6 @@
 ---
 date: 2026-11-03
-updated: 2026-11-02T20:19:54Z
+updated: 2026-11-02T20:21:05Z
 schedule: 04:03, 12:03, 20:03 UTC+8
 sources: 22
 license: CC-BY-4.0
@@ -332,7 +332,7 @@ Worktrunk 是一个为某一种工作流而生的 git worktree 管理 CLI："Cla
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-11-02T20:19:54Z |
+| Generated | 2026-11-02T20:21:05Z |
 | Items | 20 |
 | Sources tracked | 22（Hacker News、GitHub Trending、arXiv、NVD、cveawg、厂商博客、安全公告） |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8（每日三次） |

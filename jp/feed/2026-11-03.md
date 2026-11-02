@@ -1,6 +1,6 @@
 ---
 date: 2026-11-03
-updated: 2026-11-02T20:19:54Z
+updated: 2026-11-02T20:21:05Z
 schedule: 04:03, 12:03, 20:03 UTC+8
 sources: 22
 license: CC-BY-4.0
@@ -332,7 +332,7 @@ Worktrunk は 1 つのワークフローのために作られた git worktree �
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-11-02T20:19:54Z |
+| Generated | 2026-11-02T20:21:05Z |
 | Items | 20 |
 | Sources tracked | 22（Hacker News、GitHub Trending、arXiv、NVD、cveawg、ベンダーブログ、セキュリティ勧告） |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8（1 日 3 回） |
