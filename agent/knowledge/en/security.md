@@ -6198,3 +6198,103 @@ two fields on one page. (Contrast the faster check that *passes*: fastify's `CVE
 from `C:H/I:H/A:N`, which matches its "injects upstream path segments and strips the mandatory suffix".)
 
 → [[disclosure-lag]] [[vuln-supply]] [[fact-check]]
+
+### The vendor's own table contradicts its own vector, and one batch ships the whole severity ladder (verified 2026-11-03 04:30)
+
+Barracuda's advisory for `CVE-2026-116606` — Email Security Gateway before **9.4.0.030**, where an
+attacker invokes a configuration-import function and restores a crafted compatible backup to rewrite the
+appliance's global config — prints a per-CVE row reading **"Severity: High / CVSS Score: 9.3 /
+Authentication Required: Yes, administrative access"**. Mandiant's vector is
+`AV:N/AC:L/AT:N/PR:N/UI:N/VC:H/VI:H/VA:H` at **9.3** with `baseSeverity: CRITICAL`: no privileges
+required, and 9.3 is inside CVSS 4.0's Critical band (9.0–10.0), so the row is wrong on both fields in
+the same direction. The prose resolves only half of it — "requires an attacker to have access to the
+administrative interface" is reachability, not credentials. NVD: `Awaiting Analysis`, **no
+`nvd@nist.gov` metric**, the CISA ADP's SSVC written the next afternoon (`Exploitation: none`,
+`Automatable: yes`, `Technical Impact: total`), and the remediation split across two firmware lines
+(**BNSF-40425** for 9.4.017+, **BNSF-40430** below), so a stale appliance needs two updates.
+
+The same batch carries the bottom of the ladder. Apache published **five** Syncope records on 2026-11-02
+between **13:04:15Z and 13:12:27Z**, and every one carries exactly one `metrics` entry whose type is
+**`"Textual description of severity"`** and whose content is a word — `moderate` on `CVE-2026-109083`,
+`important` on the other four. NVD publishes all five **`Deferred` with zero metrics** (read first-hand
+off the API), so there is no number anywhere in any container. The most serious by description is
+`CVE-2026-109083`: an administrator imports a BPMN definition over the REST API and a JUEL expression
+executes on the server "with no sandbox" — an authenticated RCE whose severity line is the word
+"moderate". All five fix at **4.0.9 / 4.1.4** across three lines (3.0.x, 4.0.x, 4.1.x), and
+`CVE-2026-114364` names itself "an incomplete fix for CVE-2026-77051". A pipeline gating on
+`CVSS >= 9.0` sees none of the five.
+
+Two more states from the batch, both about the range rather than the score:
+
+- **The range's ceiling is the current release, and there is nothing above it.** `CVE-2026-120459`
+  (python-jose "through 3.5.0", `CWE-347`, **CVSS 4.0 9.1** beside 3.1 **7.4**, both VulnCheck, NVD
+  `Awaiting Analysis`) is real at 3.5.0: `jose/backends/native.py` assigns `self.prepared_key = key`
+  after a type check only, and `_process_jwk` base64url-decodes `k` with no length test, so an empty
+  `oct` key becomes `b""` and reaches `hmac.new`. PyPI's newest is still **3.5.0, uploaded
+  2025-05-28T17:31:52Z** (verified), the repo last pushed **2026-04-14**, and the original report is
+  **issue #398, filed 2026-03-08** — no comments, no labels, no linked PR. VulnCheck reserved the ID at
+  **12:42:23Z** and published at **14:29:15Z**: **1h47m**. The Agno shape with the fix *absent* instead
+  of unstated; the remedy is application-side (reject an empty key at config time).
+- **The exploitable pattern, not the product, is the affected object.** `CVE-2026-120309` (Nuxt and
+  `@nuxt/nitro-server` 4.6.0 → <4.6.2, `CWE-436`, **6.3 on 4.0 / 3.7 on 3.1**, VulnCheck) misfires only
+  when "authorization checks use the Nuxt helper value while resource selection uses
+  `event.context.params`" and the path carries `%3F` — the framework helper invites exactly the mix it
+  then breaks on.
+
+**The rule:** before quoting a vendor's severity row, find the vector it summarises; before writing "no
+CVSS", check whether the record publishes a *word* instead (policy, not absence — case 3 in the
+CLAUDE.md ladder, the curl/Go shape); and when a record's `lessThanOrEqual` names the newest release,
+the range has no upgrade path and the remedy is a code change, not an update.
+
+→ [[disclosure-lag]] [[vuln-supply]] [[fact-check]]
+
+## The word is a signal to somebody else — a word-only severity acquires a CISA-ADP number within hours (2026-11-03 04:31)
+
+Apache's word-only severity metric (`"Textual description of severity"` — `low` / `moderate` /
+`important`) was filed on 11-03 as a *policy*: five Syncope records, no number anywhere, so "a pipeline
+that gates on CVSS ≥ 9.0 cannot see them." Measured over two NVD publication windows, the honest
+reading is stranger and more useful: **the word is not the end of the record — it is the signal
+another party acts on, and that party is CISA-ADP Vulnrichment, not the vendor and not NVD.**
+
+**What the word-only class actually is (NVD window 2026-10-27 → 11-02, 3,336 records).** 835 carry zero
+CVSS metrics (25%); 197 of those are `Rejected` → **638** published records with no score. Of those,
+**23 (3.6%)** carry a word-only metric, and **23 of 23 are `security@apache.org`** — Kafka 12, Qpid
+Proton C 4, the five Syncope records, Pinot 1, Arrow Rust 1. The other **615** carry **no metric in the
+CNA container at all**: Mozilla's 340 Firefox records have no `metrics` key, plus Android 128, the
+kernel CNA 104, Drupal 77, MITRE 38. So "no CVSS" is three different states and only one of them is a
+word.
+
+**Apache's own week is a coin-flip, not a doctrine.** 48 Apache records in that window: **23
+word-only**, **22** carrying Apache's own CVSS, 2 scored by NVD, 1 ADP-only. Half of one CNA's output
+gets a number from the CNA and half gets a word.
+
+**Where the number comes from (window 2026-09-21 → 27, 44 Apache records, read 11-03).** 42 carry a
+word (`moderate` 18, `low` 13, `important` 11); 41 of those are word-only, and `CVE-2026-31377` (Doris)
+ships **both** the word `important` and Apache's own 7.5. Today **41 of the 44** carry a **CISA-ADP**
+CVSS 3.1 metric in the record's **ADP container**, and they are exactly the word-only ones: the three
+the ADP left alone are the three that already carried Apache's own CVSS (MINA `CVE-2026-47321` 7.5 and
+`CVE-2026-94301` 9.8 — no word at all — and Doris, which had both).
+
+Lag from CVE publication to the ADP's own `providerMetadata.dateUpdated`: median **4.4 h**, min **0.9 h**,
+max **104 h**; **37 of 41 within 6 h**, **40 of 41 within 24 h**. Tomcat's `CVE-2026-77791`
+(`important` → **9.8**) got its number 1.5 h after publication; Qpid Broker-J's `CVE-2026-92564` took
+104 h.
+
+**Two guards, both measured.** (a) `dateUpdated` moves whenever the ADP container is rewritten, so every
+lag here is an **upper bound** on when the number first appeared, never an arrival time. (b) The
+distribution is over **survivors** — records that were enriched — so 4.4 h describes the class, not a
+deadline: the five Syncope records had no number at ~8 h either, and they are now pinned in the
+standing watch (`agent/tools/nvd-provenance.json`), which reports only movement.
+
+**And a number can be in the record before NVD's API returns it.** Of the 638, **32** have an ADP
+container and **11** carry a CISA-ADP CVSS that NVD's `metrics` does not serve — all eleven are
+`security@android.com` records still in `Received`. So "no CVSS on the NVD API" is not "no CVSS on the
+record", and the artifact you read decides the answer. (In the other direction the CNA container is
+faithful: **0 of 638** carry a CNA CVSS that NVD failed to ingest.)
+
+**The rule:** when a record shows a word instead of a number, name which of the three states it is
+(word-only from the CNA / no metric in the CNA container / number present in the container but not in
+the API), and never read the word as a standing absence — on the measured sample the number arrives
+from a third party within a day.
+
+→ [[disclosure-lag]] [[vuln-supply]] [[fact-check]]

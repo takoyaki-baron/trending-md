@@ -376,6 +376,13 @@ function checkIssues(it) {
   // arXiv's "57,240 issue and pull-request threads" as an unsplit count (measured 2026-10-26).
   const namesSplit = /\bissues?\b[^.\n]{0,40}\b(?:PRs?|pulls?[- ]requests?)\b|\b(?:PRs?|pulls?[- ]requests?)\b[^.\n]{0,40}\bissues?\b/i.test(t);
   const re = new RegExp(`${NUM}\\s+(?:open\\s+)?issues?\\b`, 'gi');
+  // The counter has a NAME too: `a **9** open-issue count`, `an open-issue counter of 9`. The
+  // number-before-noun pattern above cannot see it (the hyphen is not `\\s+`), and this is the exact
+  // sentence that shipped on 2026-11-03 — item 17's "9 open-issue count" is GitHub's
+  // `open_issues_count` = **4 issues + 4 PRs**, so the reader is told a 9 that no issue count holds.
+  // The noun itself is the tracker anchor, so the bare-count suppressors do not apply.
+  const counterRe = new RegExp(`${NUM}\\s+(?:open[- ])?issues?[- ](?:count|counter)\\b`, 'gi');
+  for (const m of t.matchAll(counterRe)) issueQuotes.push({ n: toNum(m[1]), at: m.index, ph: m[0] });
   for (const m of t.matchAll(re)) {
     const after = t.slice(m.index + m[0].length, m.index + m[0].length + 24).toLowerCase();
     if (/^ per /.test(after)) continue; // a ratio, not a count
@@ -3309,7 +3316,11 @@ if (SELFTEST) {
   // 2026-10-28 item 31: review findings are not tracker rows
   t('review defects are not an issue count', checkIssues(mk('t', 'Claude caught all **11 issues** that human reviewers had spotted')).map((x) => x.verdict), []);
   t('a bare issue count with no repo is not a finding', checkIssues(mk('t', 'the list carries 11 issues overall')).map((x) => x.verdict), []);
-  t('a bare issue count in a repo item still fires', checkIssues({ ...mk('t', 'it has 3,286 issues'), repos: ['a/b'] }).map((x) => x.verdict), ['unsplit-issue-count']);
+  t('bare issue count in a repo item still fires', checkIssues({ ...mk('t', 'it has 3,286 issues'), repos: ['a/b'] }).map((x) => x.verdict), ['unsplit-issue-count']);
+  // 2026-11-03 filing case: the counter's own noun, number-first, hyphenated — invisible to the
+  // pattern above, and it shipped as "**9** open-issue count" for a counter that was 4 issues + PRs.
+  t('counter noun fires', checkIssues(mk('t', 'The repo has a **9** open-issue count against 9,759 forks')).map((x) => x.verdict), ['unsplit-issue-count']);
+  t('counter noun with a split named is compliant', checkIssues(mk('t', 'an open-issue count of 8 that splits into 4 issues and 4 PRs')).map((x) => x.verdict), ['ok']);
   t('open issues fires even after a review verb', checkIssues(mk('t', 'found **3,286 open issues** on the board')).map((x) => x.verdict), ['unsplit-issue-count']);
 
   /* 2026-11-02 04:31 — the publish-date check, filed by my own error in that batch's item 18: a

@@ -3830,3 +3830,61 @@ fastify）与 `Deferred`（三条 Network-AI、两条 http4k），每个分数�
 算得 **9.1**，与它「注入上游路径段并剥掉强制后缀」的描述相符。）
 
 → [[disclosure-lag]] [[vuln-supply]] [[fact-check]]
+
+### 厂商自己的表格与自己的向量矛盾，而同一批次给出了整条严重性阶梯（2026-11-03 04:30 核实）
+
+Barracuda 为 `CVE-2026-116606`（Email Security Gateway **9.4.0.030** 之前：攻击者调用配置导入功能，恢复一个
+构造好的兼容备份，从而改写设备全局配置）发布的安全公告里，逐 CVE 表格写的是 **"Severity: High / CVSS Score:
+9.3 / Authentication Required: Yes, administrative access"**。而 Mandiant 的向量是
+`AV:N/AC:L/AT:N/PR:N/UI:N/VC:H/VI:H/VA:H`、**9.3**、`baseSeverity: CRITICAL`：不需要任何权限，且 9.3 落在
+CVSS 4.0 的 Critical 区间（9.0–10.0）——两个字段同向出错。正文只解释了一半："需要攻击者能访问受影响产品的
+管理界面"说的是可达性，不是凭据。NVD 状态 `Awaiting Analysis`、**没有 `nvd@nist.gov` 指标**；CISA ADP 在次日下午
+写入 SSVC（`Exploitation: none`、`Automatable: yes`、`Technical Impact: total`）。修复分两条固件线
+（9.4.017 及以上 **BNSF-40425**，以下 **BNSF-40430**），落后多个版本的设备要打两次。
+
+同一批次还有阶梯的底端：Apache 在 2026-11-02 的 **13:04:15Z 至 13:12:27Z** 之间发布了 **5** 条 Syncope 记录，
+每一条的 `metrics` 只有一个条目，类型是 **`"Textual description of severity"`**，内容是一个词——
+`CVE-2026-109083` 是 `moderate`，其余四条是 `important`。NVD 把这五条全部标为 **`Deferred` 且零指标**（已第一手
+读取 API），所以任何容器里都没有数字。按描述最严重的是 `CVE-2026-109083`：管理员通过 REST API 导入 BPMN 定义，
+JUEL 表达式"在没有沙箱的情况下"直接在服务器上执行——一个已认证 RCE，严重性写的是"moderate"。五条都在
+**4.0.9 / 4.1.4** 修复，覆盖三条线（3.0.x、4.0.x、4.1.x）；`CVE-2026-114364` 自称是"CVE-2026-77051 的不完整
+修复"。以 `CVSS >= 9.0` 为门限的流水线，这五条一条也看不见。
+
+另外两个状态，谈的是范围而不是分数：
+
+- **范围的上界就是当前最新版本，上面没有可升级的东西。** `CVE-2026-120459`（python-jose"through 3.5.0"，
+  `CWE-347`，**CVSS 4.0 9.1** 与 3.1 **7.4**，均为 VulnCheck，NVD `Awaiting Analysis`）在 3.5.0 上是真的：
+  `jose/backends/native.py` 只做类型检查就 `self.prepared_key = key`，`_process_jwk` 对 `k` 做 base64url 解码
+  而不检查长度，于是空的 `oct` 键变成 `b""` 并进入 `hmac.new`。PyPI 最新仍是 **3.5.0，上传于
+  2025-05-28T17:31:52Z**（已核实），仓库最后推送 **2026-04-14**，原始报告是**2026-03-08 提交的 issue #398**——
+  无评论、无标签、无关联 PR。VulnCheck 在 **12:42:23Z** 保留 ID、**14:29:15Z** 发布：**1 小时 47 分**。这是 Agno
+  形态，只是修复*不存在*而非未说明；补救在应用侧（配置时拒绝空键）。
+- **受影响的是可利用的写法，不是产品。** `CVE-2026-120309`（Nuxt 与 `@nuxt/nitro-server` 4.6.0 → <4.6.2，
+  `CWE-436`，**4.0 6.3 / 3.1 3.7**，VulnCheck）只在"鉴权用 Nuxt 辅助函数的值、而资源选择用
+  `event.context.params`"且路径含 `%3F` 时触发——框架辅助函数恰恰诱导了它随后会破坏的那种混用。
+
+**规则：**引用厂商的严重性行之前，先找到它所概括的向量；写"没有 CVSS"之前，先看记录是不是用**一个词**代替了
+分数（那是政策，不是缺失——CLAUDE.md 阶梯的第 3 种情形，curl/Go 的形态）；而当记录的 `lessThanOrEqual` 指的就是
+最新发布版本时，范围内没有升级路径，补救办法是改代码。
+
+→ [[disclosure-lag]] [[vuln-supply]] [[fact-check]]
+
+## 词是给别人的信号——纯文字严重度会在数小时内获得一个 CISA-ADP 数字（2026-11-03 04:31）
+
+Apache 的纯文字严重度指标（`"Textual description of severity"`——`low` / `moderate` / `important`）在 11-03 被当作一种*政策*归档：五条 Syncope 记录，任何地方都没有数字，于是"接 CVSS ≥ 9.0 的流水线看不到它们"。跨两个 NVD 发布窗口实测后，更诚实也更有用的读法是：**词不是记录的终点，而是另一方采取行动的信号，而那一方是 CISA-ADP Vulnrichment，不是厂商，也不是 NVD。**
+
+**这个"只有词"的类究竟是什么（NVD 窗口 2026-10-27 → 11-02，3,336 条记录）。** 835 条零 CVSS 指标（25%），其中 197 条是 `Rejected` → **638** 条已发布且无分数。这 638 条里 **23 条（3.6%）** 只有文字指标，而 **23/23 全部来自 `security@apache.org`**——Kafka 12、Qpid Proton C 4、五条 Syncope、Pinot 1、Arrow Rust 1。另外 **615** 条**在 CNA 容器里根本没有 `metrics` 字段**：Mozilla 的 340 条 Firefox 记录连 `metrics` 键都没有，另有 Android 128、内核 CNA 104、Drupal 77、MITRE 38。所以"没有 CVSS"是三种不同状态，其中只有一种是一个词。
+
+**Apache 自己的一周是抛硬币，不是教义。** 该窗口 48 条 Apache 记录：**23 条只有词**、**22 条带 Apache 自己的 CVSS**、2 条由 NVD 打分、1 条仅 ADP。同一个 CNA 的产出里，一半由 CNA 给出数字，一半只给一个词。
+
+**数字从哪里来（窗口 2026-09-21 → 27，44 条 Apache 记录，11-03 读取）。** 42 条带词（`moderate` 18、`low` 13、`important` 11）；其中 41 条只有词，`CVE-2026-31377`（Doris）同时带 `important` 和 Apache 自己的 7.5。今天 **44 条里有 41 条**在记录的 **ADP 容器**里带一个 **CISA-ADP** CVSS 3.1 指标——而且正好是那批只有词的：ADP 没碰的三条，正是本来就带 Apache 自己 CVSS 的三条（MINA `CVE-2026-47321` 7.5 与 `CVE-2026-94301` 9.8——完全没有词——以及本来就两者都有的 Doris）。
+
+从 CVE 发布到 ADP 自己的 `providerMetadata.dateUpdated` 的间隔：中位 **4.4 小时**，最短 **0.9 小时**，最长 **104 小时**；**41 条里 37 条在 6 小时内**、**40 条在 24 小时内**。Tomcat 的 `CVE-2026-77791`（`important` → **9.8**）在发布 1.5 小时后拿到数字；Qpid Broker-J 的 `CVE-2026-92564` 用了 104 小时。
+
+**两条守卫，都是实测出来的。**（a）`dateUpdated` 在 ADP 容器任何一次重写时都会变动，所以这里的每个间隔都是数字首次出现时间的**上界**，不是到达时刻。（b）分布只覆盖**幸存者**——被富集过的记录——所以 4.4 小时描述的是这一类，不是期限：五条 Syncope 记录到约 8 小时也还没有数字，它们现在被钉在常设监视里（`agent/tools/nvd-provenance.json`），只报告变动。
+
+**而且数字可以先出现在记录里，NVD 的 API 还没返回。** 638 条里有 **32** 条带 ADP 容器，其中 **11** 条带一个 NVD `metrics` 并未提供的 CISA-ADP CVSS——这 11 条全部是仍处于 `Received` 的 `security@android.com` 记录。所以"NVD API 上没有 CVSS"不等于"记录上没有 CVSS"，你读的文物决定了答案。（反方向倒是忠实的：**638 条里 0 条**带 NVD 未收录的 CNA CVSS。）
+
+**规则：** 当一条记录给出的是一个词而不是数字时，说明它属于三种状态中的哪一种（CNA 只给词 / CNA 容器里根本没有指标 / 数字已在容器里但 API 未反映），并且永远不要把那个词读成恒久的缺失——在实测样本里，数字会在一天内由第三方写入。
+
+→ [[disclosure-lag]] [[vuln-supply]] [[fact-check]]

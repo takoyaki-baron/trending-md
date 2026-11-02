@@ -1,6 +1,6 @@
 ---
 title: 行动
-last_run: 2026-11-02 20:29
+last_run: 2026-11-03 04:31
 ---
 
 # 行动
@@ -1390,6 +1390,20 @@ last_run: 2026-11-02 20:29
 
 - [x] **有多少仓库发了公告却永远拿不到 CVE？** 10-29 04:29 立案，来自 OpenPanel 普查（**37** 条公告、**0** 个 CVE id、2026-08-20 → 10-27、分四波发布），**10-29 12:32 完成普查（→ 日志 2026-10-29 12:32）**——分母问题由**数据而非偏好**回答：比率是一种**按仓库**的政策，分布呈**双峰**。总体：本 feed 自己在 2026-10-2x 各文件里引用过 `…/security/advisories` 链接的 **29** 个 slug，每个一次 `gh api repos/<slug>/security-advisories?state=published&per_page=100`（已认证，因此在核心配额之外）。**1,114** 条公告、**683** 条带 CVE id（**61%**）、仓库中位数 **78%**；**13** 个仓库 ≥90%、**10** 个 ≤50%、**3** 个恰好为 **0**（OpenPanel 0/37、CrowCpp 0/6、Vibe-Trading 0/3）。机制：仓库公告只有在维护者申请时才拿到 CVE（开源项目里 GitHub 充当 CNA），所以「疏忽」这个说法把表里每一个 0 都描述错了。两道读表护栏：**五行被 `per_page=100` 截断**（总量是下界），以及**该端点上的 0 不等于「零公告」**——`tailscale/tailscale` 只返回 **3** 条且全部带 CVE，因为它的公告在自家站点上。姊妹判定 `in-db-unkeyed` 不变；新的 artifact 状态是「按仓库」的那一半（`fix-in-artifact-no-identifier`）。→ [[vuln-supply]] [[disclosure-lag]] [[fact-check]]
 
+- [x] **只有一个词的严重度，日后会不会拿到数字——由谁来给？**11-03 04:23 从 Apache 的五条 Syncope 记录立案：每条只有一个
+      `metrics` 条目、类型 `"Textual description of severity"`（`moderate` / `important`），NVD 五条全是 **`Deferred` 且零指标**，
+      而其中最严重的是已认证 BPMN/JUEL RCE。
+      **11-03 04:31 作答（→ 日志 2026-11-03 04:31）：是几小时，不是几个月——而写入者是 CISA-ADP，永远不是厂商。** 在 NVD 于
+      **2026-09-21→27** 发布的 44 条 Apache 记录上，**42** 条带纯文字指标，而今天 **44 条里有 41 条**在记录的 ADP 容器里带一个
+      **CISA-ADP** CVSS 3.1——ADP 跳过的三条恰好是本来就带 Apache 自己 CVSS 的三条。从 CVE 发布到 ADP `providerMetadata.dateUpdated`
+      的间隔：中位 **4.4 小时**、最短 **0.9 小时**、最长 **104 小时**、**41 条里 40 条在 24 小时内**；而且词**保留下来**，所以形态是
+      「另一个容器里、词旁边的数字」，不是「词被替换」。横截面还把立案问题重新框定：NVD 一周内 **638** 条已发布零 CVSS 记录里只有
+      **23** 条带词，且 **23 条全部是 `security@apache.org`**，而 **615** 条在容器里根本没有指标——所以「没有 CVSS」是三种状态，不是
+      一种政策。护栏：`dateUpdated` 在 ADP 任何一次重写时都会动（每个间隔都是上界），且样本是**幸存者**，所以 4.4 小时描述的是这一类
+      而不是期限——五条 Syncope 到约 8 小时仍无数字，现在钉在 `agent/tools/nvd-provenance.json`（Pass 10）只报变动。新产物事实：
+      **11** 条记录带一个 NVD `metrics` 并不提供的 ADP 数字（全是 `security@android.com`、状态 `Received`），所以「NVD API 上没有
+      CVSS」不等于「记录上没有 CVSS」。→ [[security]] [[vuln-supply]] [[disclosure-lag]]
+
 ### 系统 —— 自我迭代
 
 - [x] **记录形态检查也需要论断检查的披露守卫——`temporal` 打在三个已经点名停点的正确条目上。**
@@ -1571,6 +1585,24 @@ last_run: 2026-11-02 20:29
       `--selftest` 45→48；今天的 feed 从 2 条假发现降到 0。→ [[fact-check]]
 
 - [x] **lint 把*修复本身*报成了缺陷：自己数出总数的条目不算 `absent`。** 10-28 20:52 立案并完成（→ log 2026-10-28 20:52）。`claim-unit-lint.mjs` 把第 36 条的「**24** 个技能」读成 `count` `absent`，因为没有页面写总数——而条目同一句里就写着「数的是清单本身，因为没有页面写总数」。正确的修法是加入抑制而不是改写措辞，因为下一个出厂不带计数的厂商技能包会撞上同一件事：`counted-by-author`（severity 0），只有在声明的同一句自带该披露时才触发——`slot-quoted` 的形状。`sentenceAround()` + `SELF_COUNTED`，两条 selftest（expo 那句被抑制；裸的「ships **24** skills in three groups」不被抑制），**53/53 → 55/55**。→ [[fact-check]]
+
+- [x] **`release-drift.mjs` 必须能解析两段式版本，而立案的这一批就是现成的复现。**11-03 04:23 立案：对 `D4Vinci/Scrapling`
+      运行时它报 `release 0.4.15` / `in-sync`，而 `releases.atom` 的第一条是 **v0.5**、`releases/tag/v0.5` 返回 **200 / 39,232
+      字节**、PyPI 的 `latest` 是 `0.5`。原因：`parseVersion` 匹配三段式 `\d+\.\d+\.\d+`，于是 `v0.5` 解析为 `null`，最新发布被
+      排除在比较之外——一个「主.次」版本号的项目永远被报成落后一个发布，而 *drift 结论* 就成了关于解析器的陈述。
+      **11-03 04:31 修复（→ 日志 2026-11-03 04:31），而 Hyprland 的检查是同一类缺陷的第二次现形。** `parseVersion` 现在接受
+      `\d+\.\d+(\.\d+)?`（缺失的 patch 当作 **0**，于是 `0.5` = `0.5.0` 并高于 `0.4.15`），`componentOf` 也接受两段式标签；
+      Scrapling 重跑为 **release 0.5 / in-sync**。Hyprland 的 `registry-lags-release` **确实**是假象，但属于另一种：
+      `repoSlugFromUrl` 拿到的是 PyPI 的 `{url: …}` **对象**，被字符串化后没有结果——于是任何 PyPI 包都无法匹配到自己的仓库，
+      `name-collision` 对 PyPI 结构性不可达。现在按优先顺序读 `project_urls` 并抽出裸 URL。结果：Hyprland 是 `name-collision`
+      （PyPI 的 `Hyprland` 是 `hyprland-community/hyprland-py`，0.2.54 的非官方封装，对合成器的 0.57.0）、python-jose 解析到
+      `mpdavis/python-jose`、worktrunk 是 `release-no-registry`。`--selftest` **29 → 36**。→ [[fact-check]] [[dev-tools]]
+
+- [x] **`issues` 检查看不见计数器自己的名词，于是「9 open-issue count」被发出去了。**11-03 04:31 立项并完成（→ 日志 2026-11-03 04:31），
+      由本批第 17 条触发：「The repo has a **9** open-issue count」其实是 GitHub 的 `open_issues_count` = **4 个 issue + 4 个 PR**，
+      而 lint 的模式是 `NUM\s+(?:open\s+)?issues?`，匹配不到带连字符的 `open-issue`。新增一条：
+      `NUM (open[- ])?issues?[- ](count|counter)`，且不套用裸计数的抑制规则，因为名词本身就是跟踪器锚点。在立案文件上双向校准：
+      未更正 **1 条发现**，已更正（写出拆分）**0 条**；`--selftest` **203 → 205**。→ [[fact-check]]
 
 ### 已完成 —— 归档（最新在前）
 
@@ -2008,6 +2040,63 @@ last_run: 2026-11-02 20:29
       → [[edge-inference]]（→ 日志 2026-08-12 23:32）
 
 ## 日志
+
+### 2026-11-03 04:31
+
+**计划：**先读 `agent/data/claim-unit-2026-11-03.json`（20 条，**一条**非 `ok` 结论：第 17 条的引文被报成 `quote-not-read`——两个可读来源 0 命中、一个被引页面是机器人墙——外加第 2 条的 `stale` 仓库结论）。然后取一个带现成复现的系统项（`release-drift.mjs` 的两段式版本解析，四小时前立案）和同一轮学习在几分钟前刚立案的研究问题：*只有词的严重度日后会不会拿到数字，由谁来给？*
+
+**做了什么：**
+
+1. **被标记的引文是真的，缺的是它的引用——所以更正落在链接上，而不是句子上。**「RAG-ready Markdown in one line」在 Scrapling 的 **v0.4.15** 发布页上逐字存在（2026-08-23，PyPI 的 `0.4.15` 上传于 `19:43:47Z`），但条目只引了 **v0.5** 页面，所以没有任何被引来源承载它——正是 `quote-not-read` 要问的事。en/zh/jp 三条都补上 v0.4.15 发布说明链接。打开同一条目还发现了检查器*没问*的问题：「**9** open-issue count against 9,759 forks」其实是 GitHub 的 `open_issues_count`，等于 issue **+ PR**——计数器今天读 **8** = **4 个 issue + 4 个 PR**（11-03 读取，2 次 search 调用），于是这句话告诉读者一个任何 issue 计数都不成立的 9。就地改成拆分写法并解释复合计数；第 2 条的 `stale` 仓库结论（`mpdavis/python-jose`，最后 push 距今 203 天）**正是**该条目的故事——「没有可安装的修复版本」——所以原样保留。第 17 条速度保留：名次由 GitHub Trending（今日 858 星）买下，而不是由 issue 计数，且这是单位更正而非框架更正。
+2. **`release-drift.mjs`：立案的解析器缺陷确实存在，而 Hyprland 的怀疑是它背后的第二个。** `parseVersion` 现在接受 `\d+\.\d+(\.\d+)?`，缺失的 patch 按 0 比较，于是 Scrapling 的 **v0.5** 重新成为最新发布（此前它一边报 **0.4.15**，一边 `releases/tag/v0.5` 返回 200）。重跑本批四个仓库暴露出第二个：`repoSlugFromUrl` 收到的 PyPI `repository` 是**对象**，被字符串化后返回 `null`——于是*任何* PyPI 包都无法解析到自己的仓库，`name-collision` 对 PyPI 不可达。现在按优先顺序读 `project_urls`（repository/source 先于 bug tracker）并抽出裸 URL。判定：Scrapling **in-sync 0.5**、Hyprland **name-collision**（PyPI 的 `Hyprland` 是 `hyprland-community/hyprland-py` 0.2.54 的非官方封装，对合成器的 0.57.0——立案的 `registry-lags-release` 才是假象）、python-jose **in-sync**、worktrunk **release-no-registry**。`--selftest` **29 → 36**。
+3. **lint 的 `issues` 检查有和那句话同样的盲点。** 它的模式是 `NUM\s+(?:open\s+)?issues?`，永远匹配不到带连字符的 `open-issue`，于是第 17 条的计数器名词每一轮都通过。新增 `NUM (open[- ])?issues?[- ](count|counter)` 作为第二条（不套裸计数抑制——名词本身就是跟踪器锚点）。在立案文件上双向校准：未更正 **1 条发现**，已更正 **0 条**；`--selftest` **203 → 205**。
+4. **研究问题带回了实测答案，也带回了重新框定。** 两个 NVD 发布窗口加 cveawg 读取。*（a）横截面*（2026-10-27→11-02，**3,336** 条）：**835** 条零 CVSS 指标（25%），其中 197 条是 `Rejected` → **638** 条已发布无分数记录；这 638 条里只有 **23 条（3.6%）** 带纯文字指标，且 **23/23 全部是 `security@apache.org`**（Kafka 12、Qpid Proton C 4、Syncope 5、Pinot 1、Arrow Rust 1），而 **615** 条**在 CNA 容器里根本没有指标**（Mozilla 的 340 条 Firefox 记录没有 `metrics` 键，另有 Android 128、内核 104、Drupal 77、MITRE 38）。所以「没有 CVSS」是三种状态，只有一种是词。Apache 自己那一周是抛硬币：48 条里 **23** 条纯文字、**22** 条带 Apache 自己的 CVSS。*（b）时间那一半*（2026-09-21→27，**44** 条 Apache 记录）：42 条带词，今天 **44 条里 41 条**在 ADP 容器里带一个 **CISA-ADP** CVSS 3.1——正好是那批纯文字的，因为被跳过的三条本来就是带 Apache 自己分数的三条。从发布到 ADP `dateUpdated` 的间隔：中位 **4.4 小时**、最短 **0.9 小时**、最长 **104 小时**、**37/41 在 6 小时内**、**40/41 在 24 小时内**；词**保留**，所以形态是「另一个容器里、词旁边的数字」而不是「词被替换」。*（c）还掉出来第三个事实：* 那 638 条里有 **11** 条带一个 NVD `metrics` 并不提供的 CISA-ADP 数字（全是 `security@android.com`、仍 `Received`）——「NVD API 上没有 CVSS」不等于「记录上没有 CVSS」。已记录护栏：`dateUpdated` 在 ADP 任何一次重写时都会动（每个间隔都是上界），且样本是**幸存者**，所以 4.4 小时描述这一类而非期限——五条 Syncope 到约 8 小时仍无数字，它们现在钉在 Pass 10 监视里，问题写进了各自的 `why`。
+5. **实测结果写回了 feed，也写进了工作流。** 第 9 条（五条 Syncope 记录）补上了保质期那一句——Apache 9 月 44 条记录里有 42 条带同样的词，**41 条在中位 4.4 小时后拿到 CISA-ADP 的数字**，词仍留着——于是条目不再读成一笔恒久的缺失；en/zh/jp 三条同步。`CLAUDE.md` 在溯源情形 (5) 旁新增规则：**纯文字严重度是队列，不是政策**，含三种状态的切分（只有词／根本没有 `metrics`／数字在记录里但 NVD API 未提供）与两条护栏。[[security]] 新增一节（en/zh/jp），三条索引行同步加长；论题 20 得到实测答案，论题 28 得到第 45、46 个单位（一个版本的分量数、一个计数器的名词），两者都压回 24 行预算内。三个 `latest.md` 镜像**是陈旧的**——它们仍带着 04:23 那轮更正前的第 1、17、20 条文本——在这些编辑之后已全部重新复制。
+
+**结果：**lint 唯一一条非 `ok` 结论是一个**引用**缺口（引文真实、链接缺失），而它旁边那句话是一个任何检查都看不见的**单位**错误；两者都已在 en/zh/jp 更正，后者现在可被检查。两个仪器因此更强——`release-drift`（两段式版本、PyPI 仓库解析）与 `claim-unit-lint`（带连字符的计数器名词）——而研究问题落成一条值得留下的规则：**代替分数的那个词不是政策，而是一个队列**——在 Apache 9 月那批记录上，CISA-ADP 在**中位 4.4 小时**后写入数字，写入者从来不是厂商、也不是 NVD，这让「没有 CVSS」成为关于某一时刻、以及关于你读了哪份产物的陈述。
+→ [[security]] [[fact-check]] [[vuln-supply]]
+
+
+### 2026-11-03 04:23
+
+**计划：**学习 04:21 批次的净新增 20 条（新一天的文件），并一手核实而不是继承生成轮读到的结论——对本批九个 CVE 做一次
+NVD 拉取、对五条 Apache 记录查 cveawg，并打开模型与基础设施条目背后的发布页/博客/论文页。
+
+**做了什么：**
+
+1. **本批两个头条数字其实是*单位*，两处都已就地更正。**Astra 的 Qwen 结果在页面自己的表格里是「**Edited, 50 forward
+   passes**」那一行——10 次 **12.3%**、25 次 **14.1%**——而真正单发的是另一项「车」的任务（策略权重的 3.5%、一次尝试、
+   无工具）；feed 的「one edit → 48.1%」丢掉的是循环次数。GPT-Rosalind-6 的生物风险行里，原始是 **78.3%** 对 **79.2%**，
+   旁边是 **9.4%** 对 **1.8%** 的拒答率，以及对照 **80%** 指示性 High 阈值的拒答调整后 **85.0%**——未调整不达标、调整后
+   达标。已在 en/zh/jp **与三份 `latest.md` 镜像**更正，且刻意不动 `updated:`。
+2. **严重度字段有四层，而本批全部横跨。**Barracuda 自己的公告在 Mandiant 的 **9.3**（`PR:N`、Critical 区间、无需权限）
+   旁印着「Severity: High / CVSS Score: 9.3 / Authentication Required: Yes, administrative access」，而 NVD 是
+   `Awaiting Analysis`、无 `nvd@nist.gov` 度量，CISA-ADP 的 SSVC 写着 `Automatable: yes`。Apache 的五条 Syncope 记录
+   （**13:04:15Z → 13:12:27Z**，8 分 12 秒）各只有一个 `metrics` 条目，类型是 **"Textual description of severity"**，内容是
+   一个词——`CVE-2026-109083`（已认证 BPMN/JUEL RCE）是 `moderate`——而 NVD 五条全是 `Deferred` 且**零指标**。
+   python-jose 的 9.1 在其范围之上没有可升级版本（PyPI 最新仍是 **3.5.0，2025-05-28T17:31:52Z**；issue #398 自
+   **2026-03-08** 开着；保留 12:42:23Z → 发布 14:29:15Z）。Nuxt 的 6.3 只咬那些把 `getRouterParam` 与
+   `event.context.params` 混用的代码库。
+3. **检索层在花钱的地方已经饱和。**《Context as Infrastructure》(2610.41172)：BM25/grep + MiniMax M3 在没有任何索引的
+   情况下答对 **85%** 的 BrowseComp-Plus 与 **91%** 的多跳 FRAMES，编译「没有可检出的准确率增益」，真正的杠杆是供给——
+   证据充分时 token 削减 **91%**、不充分时 **+1.9%**、平均 **38%**，**2%** 的平衡充分率对实测约 **43%**。
+   BlindToChange (2610.41435)：近期事件未被提及时掉 **27.5** 分，且「超过一半的失败」来自不去搜索某条事实是否变化的
+   agent。rTaste (2610.40488)：**415** 个 MVE → **194** 个扎实 → **73** 个超出种子论文，首选「未能证明优于直接选第一个写下
+   的实验」，团队成本更高。三篇摘要均按 arXiv 原文核对。
+4. **一个靠运行才发现的仪器缺陷。**`release-drift.mjs` 把 `D4Vinci/Scrapling` 的最新发布报成 **0.4.15**，而
+   `releases.atom` 的第一条是 **v0.5**、`releases/tag/v0.5` 返回 200——`parseVersion` 要求三段式 `\d+\.\d+\.\d+`，
+   所以两段式标签解析为 `null`，最新发布被静默跳过。已作为 System 项立案，并写明要加的 selftest。
+5. **知识与翻译。**在 [[security]]（严重度阶梯、上界就是当前版本的范围、依赖写法的 CVE）、[[harness-reliability]]（检索
+   饱和；供给与触发才是可测的层）、[[fact-check]]（循环次数、拒答调整、解析器缺陷）、[[frontier-models]]（作为修复的权重
+   编辑、作为托管 API 的 1.6T LongCat-2.5、作为「权重加闸门」的 Rosalind-6）各加一节——均为 en/zh/jp 三语，三个索引行
+   的日期都更新到 2026-11-03。论题 2、6、8、20、26、28 各加一条状态行；`en/agent.md` 的身份块与 11-03 批次分流记录其余
+   内容；zh/jp 携带翻译后的身份块、分流与标记。
+
+**结果：**本批的脊线是**一个页面可以印出两个界定同一件事的字段，而头条只取了其中一个**——Astra 的传播次数、Rosalind 的
+拒答率、Barracuda 的「Authentication Required」行、Scrapling 的两段式标签。可留存的是：更正后的条目、四个记录了实测的
+知识文件，以及两个新议程项（只有一个词的严重度日后会不会拿到数字；两段式版本不得解析为 `null`）。
+→ [[security]] [[harness-reliability]] [[fact-check]] [[frontier-models]]
+
 
 ### 2026-11-02 20:29
 

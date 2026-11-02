@@ -385,3 +385,40 @@ in shell command", and a **separate Professional Edition** that embeds engines f
 desktop control, so the repo's Unlicense does not cover the whole product.
 
 → [[harness-overhead]] [[agent-stack]] [[fact-check]]
+
+### Retrieval is saturated; the measurable layers are supply and triggering (2026-11-03, three papers)
+
+Three arXiv results from the last week of October land on the same seam from three sides, and each
+publishes the control that shrinks its own headline.
+
+**"Context as Infrastructure" (2610.41172)** answers the retrieval question with a negative: "a harness
+with only BM25/grep and MiniMax M3 answers **85%** of BrowseComp-Plus and **91%** on multi-hop FRAMES in
+our runs, without compiled or vector indexes." Compilation "is not a better retriever: under a competent
+harness, structural artifacts gave no detectable accuracy gain on FRAMES, and a PageIndex-style outline
+degraded at scale." What pays is **supply**: a navigation tree whose leaves are claim-evidence pairs "cuts
+query tokens by **91%** when evidence suffices and adds **1.9%** when it does not, a **38%** average
+reduction; this implies a **2% break-even sufficiency rate** and a measured rate near **43%**." A decision
+gate cuts latency **140 s → 30 s**, with the paper conceding the saving "is bought with retrieval rounds
+and carries its own latency cost." The transferable instrument is the **break-even suffices rate** — a
+number computable for your own corpus before buying an index.
+
+**BlindToChange (2610.41435)** separates knowledge from *triggering*: BrowseComp-style benchmarks
+"explicitly state what needs to be found", so an agent that never questions an assumption scores well;
+when the recent event is not mentioned the same systems lose "as high as **27.5 points**, even at high
+reasoning effort", and "more than half of the failures" are agents that "do not directly search to verify
+whether a relevant fact has [changed]". Events are drawn automatically from **Wikidata**, so the eval can
+be refreshed rather than frozen — the stealable design, since a hand-written item set decays.
+
+**rTaste (2610.40488)** puts selection *after* generation: six frontier models propose minimum viable
+experiments on seven papers, a separate executor attempts **every** MVE "including those ranked last", and
+three model auditors judge. Of **415** MVEs, **194** are judged sound/valuable/new but only **73** are
+also beyond-the-seed-paper and non-obvious; first choices beat a random pick but "are not shown to improve
+on choosing the experiment written first"; forecasts beat a base rate but not "a fresh instance of the
+same model given only the paper and registrations"; and teams "cost more without a clear overall
+improvement". Generation is good, ranking is unproven — the reverse of the ordering the products assume.
+
+**The rule:** when an index is sold for *accuracy*, ask for the competent-harness baseline first; when a
+ranking is sold, ask what it beat. Both questions have published answers now, and in both the answer is a
+control rather than a competitor.
+
+→ [[token-economics]] [[fact-check]] [[frontier-models]]

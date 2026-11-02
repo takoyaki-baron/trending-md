@@ -219,6 +219,23 @@ underlying pages — this produced a two-layer false signal in a single item.
    beside the ADP's v4.0 8.2) — so when both exist, quote both with their CVSS versions instead of
    replacing one with the other. Census cohorts are *publication-day* snapshots (analysis lands
    later), so read the `nvd` row as latency, not as NVD's steady-state coverage.
+   **A word-only severity is a QUEUE, not a policy — CISA-ADP writes the number within hours, and the
+   number can be in the record before NVD's API returns it** (added 2026-11-03, from the Syncope
+   item's own follow-up question). Measured over NVD's 2026-10-27→11-02 window (**3,336** records):
+   **835** carry zero CVSS metrics (25%), 197 of those `Rejected` → **638** published records with no
+   score. Of those only **23 (3.6%)** carry a `"Textual description of severity"` metric and **23 of 23
+   are `security@apache.org`**, while **615** carry **no `metrics` key in the CNA container at all**
+   (Mozilla's 340 Firefox records, Android 128, kernel 104, Drupal 77, MITRE 38) — so "no CVSS" is
+   **three states** and only one of them is a word. Over the 2026-09-21→27 window, **41 of Apache's 44
+   records** (all the word-only ones; the 3 skipped already carried Apache's own CVSS) now hold a
+   **CISA-ADP** CVSS 3.1 in the record's ADP container, a median **4.4 h** after publication (min 0.9 h,
+   max 104 h; **40 of 41 within 24 h**) — and the word **stays**, so the shape is "a number beside the
+   word in another container", never "the word was replaced". Two guards: the ADP's
+   `providerMetadata.dateUpdated` moves on any rewrite, so every lag is an **upper bound**, and the
+   population is **survivors** (records that got enriched), so 4.4 h describes the class, not a
+   deadline. And **11 of the 638** carry a CISA-ADP number NVD's `metrics` does not serve (all
+   `security@android.com`, still `Received`) — so "no CVSS on the NVD API" is not "no CVSS on the
+   record", and the artifact you read decides the sentence. Write the state, not the absence.
    A **standing** per-CVE watch (Pass 10 of `agent-run.sh`, `agent/tools/nvd-provenance.json`)
    reports only movement — status flips, an `nvd@nist.gov` metric appearing, a score revision, a
    KEV add — because keyword search cannot see a record that already exists changing state.

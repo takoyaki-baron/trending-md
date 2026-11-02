@@ -2878,3 +2878,34 @@ machinery is scored as a defect — and the fix a reader would apply is to bolt 
 prose that was already correct.
 
 → [[vuln-supply]] [[disclosure-lag]]
+
+### Two of this batch's numbers were an iteration count and an adjustment (2026-11-03 04:30)
+
+**A table row is a condition, and a headline can drop it.** Astra's Qwen result is quoted everywhere as
+"one edit → 7.9% to 48.1%"; the page's own table labels that row **"Edited, 50 forward passes"**, with
+**12.3%** at 10 passes and **14.1%** at 25, while the genuinely single-shot result is the separate car
+task (3.5% of a policy's weights, one attempt, no tools). The feed published the merged version and was
+corrected in place — title and body, all three locales, the three mirrored `latest.md`, and `updated:`
+deliberately left alone. This is the unit class with a new spelling: not a different noun but a **loop
+count**, which turns a repair *process* into an *edit*.
+
+**And a refusal rate is the column that moves the verdict across a threshold.** GPT-Rosalind-6's biorisk
+row reads 78.3% against its predecessor's 79.2% — quoted that way it is a regression — while the same
+table's refusal rates are **9.4%** and **1.8%** and the refusal-adjusted figures are **85.0%** versus n/a
+against an indicative High threshold of **80%**. The unadjusted number misses the bar and the adjusted one
+clears it, so a sentence quoting only the first reads as a quality finding when the difference is largely
+a refusal policy.
+
+**One instrument defect, found by running it.** `release-drift.mjs` reported `D4Vinci/Scrapling`'s newest
+release as **0.4.15** while `releases.atom` lists **v0.5** first and `releases/tag/v0.5` returns 200 —
+`parseVersion` requires a three-component `\d+\.\d+\.\d+`, so a two-component tag parses to `null` and the
+newest release is silently skipped. A project on major.minor versioning is therefore always reported one
+release behind, and the drift verdict becomes a statement about the parser. Filed to the agenda; the guard
+is the one this file keeps repeating: **a version-shaped string is not a semver triple.**
+
+**Two smaller reads, both "the field is not the artifact":** `max-sixty/worktrunk` carries `MIT OR
+Apache-2.0` in its manifest while `api.github.com` returns `license: NOASSERTION` (fourth instance of a
+licence being three artifacts), and its open count is **66** issues + PRs — the composite counter again,
+quoted here as a total rather than a split.
+
+→ [[security]] [[harness-reliability]] [[disclosure-lag]]

@@ -1618,6 +1618,56 @@
       "id": "CVE-2026-120213",
       "why": "@fastify/http-proxy rewritePrefix bypass via URL-decoded params, no dot-dot — CWE-22 + CWE-436, fixed 11.6.6",
       "seeded": "2026-11-02 [Received] 3.1 Secondary/openjs 9.1, published 11-02"
+    },
+    {
+      "id": "CVE-2026-109083",
+      "why": "Apache Syncope: text-only severity 'moderate' under an authenticated BPMN/JUEL RCE; NVD Deferred, 0 metrics — watch for the CISA-ADP number (Sept's word-only Apache records got one a median 4.4h later, 41/44)",
+      "seeded": "2026-11-03 [Deferred] no metric in any container; cna metrics[0].other.type='Textual description of severity' = moderate; CWE-653; fixed 4.0.9 / 4.1.4; published 11-02T14:17Z"
+    },
+    {
+      "id": "CVE-2026-114364",
+      "why": "Apache Syncope incomplete fix for CVE-2026-77051; text-only severity 'important'; NVD Deferred, 0 metrics — watch for the CISA-ADP number (Sept's word-only Apache records got one a median 4.4h later, 41/44)",
+      "seeded": "2026-11-03 [Deferred] no metric; text 'important'; CWE-89; cveawg pub 11-02T13:12:27Z"
+    },
+    {
+      "id": "CVE-2026-113687",
+      "why": "Apache Syncope Groovy sandbox escape on a separate Thread; text-only severity 'important' — watch for the CISA-ADP number (Sept's word-only Apache records got one a median 4.4h later, 41/44)",
+      "seeded": "2026-11-03 [Deferred] no metric; text 'important'; CWE-653"
+    },
+    {
+      "id": "CVE-2026-113511",
+      "why": "Apache Syncope cross-realm subtree relocation; text-only severity 'important' — watch for the CISA-ADP number (Sept's word-only Apache records got one a median 4.4h later, 41/44)",
+      "seeded": "2026-11-03 [Deferred] no metric; text 'important'; CWE-639"
+    },
+    {
+      "id": "CVE-2026-110535",
+      "why": "Apache Syncope AuthProfile self-update enables impersonation for WA surrogate auth; text-only 'important' — watch for the CISA-ADP number (Sept's word-only Apache records got one a median 4.4h later, 41/44)",
+      "seeded": "2026-11-03 [Deferred] no metric; text 'important'; CWE-269; range starts 3.0.12 on the 3.0 line"
+    },
+    {
+      "id": "CVE-2026-111560",
+      "why": "Barracuda ESG/ADC/BMA/WCC/WAF/WSG command injection 8.6, chains with CVE-2026-116606 to root",
+      "seeded": "2026-11-03 cited as the sibling; check whether NVD scores it independently of the Mandiant CNA entry"
+    },
+    {
+      "id": "CVE-2026-116606",
+      "why": "Barracuda ESG pre-auth authz bypass, Mandiant 9.3 v4.0 PR:N vs vendor row 'Authentication Required: Yes'",
+      "seeded": "2026-11-03 [Awaiting Analysis] 4.0 Secondary/mandiant-cve@google.com 9.3; CISA-ADP SSVC none/automatable/total; CWE-288; fixed 9.4.0.030"
+    },
+    {
+      "id": "CVE-2026-120309",
+      "why": "Nuxt getRouterParam vs h3 %3F parser confusion, 6.3 v4.0 / 3.7 v3.1 (VulnCheck)",
+      "seeded": "2026-11-03 [Awaiting Analysis] 4.0 Secondary 6.3 + 3.1 Secondary 3.7, both disclosure@vulncheck.com; CWE-436; fixed 4.6.2"
+    },
+    {
+      "id": "CVE-2026-120459",
+      "why": "python-jose empty HMAC key, 9.1 v4.0 / 7.4 v3.1 (VulnCheck); no release above the affected range",
+      "seeded": "2026-11-03 [Awaiting Analysis] 4.0 Secondary 9.1 + 3.1 Primary 7.4, same CNA (slot differs from CVE-2026-120309); CWE-347; PyPI newest 3.5.0 2025-05-28"
+    },
+    {
+      "id": "CVE-2026-77051",
+      "why": "Apache Syncope: the earlier fix that CVE-2026-114364 says is incomplete — does it get re-scored?",
+      "seeded": "2026-11-03 referenced by CVE-2026-114364's description; worth watching for a supersede/re-issue"
     }
   ]
 }

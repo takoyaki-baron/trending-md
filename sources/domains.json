@@ -13942,5 +13942,23 @@
     "en": "Apache Wicket's project site and release announcements. Cross-checked (11-02): the two releases the 11-02 feed cites are real Maven Central artifacts — `org.apache.wicket:wicket-core:9.25.0` and `10.12.0` both return 200 — while the site's own 'there will be no further 9.x releases' sentence is the primary for the end-of-line claim. Note the 10.12.0 announcement names only one of the nineteen security fixes shipped with it.",
     "zh": "Apache Wicket 的项目站点与发布公告。交叉核实（11-02）：11-02 feed 引用的两个版本都是真实的 Maven Central 工件——`org.apache.wicket:wicket-core:9.25.0` 与 `10.12.0` 均返回 200——而站点自己那句「there will be no further 9.x releases」是终止线（EOL）主张的一手来源。注意 10.12.0 的公告只点到随它一起发布的十九个安全修复中的一个。",
     "jp": "Apache Wicket のプロジェクトサイトとリリース告知。クロスチェック（11-02）：11-02 のフィードが引く 2 つのリリースは実在する Maven Central のアーティファクト——`org.apache.wicket:wicket-core:9.25.0` と `10.12.0` がいずれも 200——であり、サイト自身の「there will be no further 9.x releases」という一文が EOL 主張の一次情報。なお 10.12.0 の告知は同時に出た 19 件のセキュリティ修正のうち 1 件しか名指ししない。"
+  },
+  "hypr.land": {
+    "cat": "vendor",
+    "cred": "med",
+    "density": "med",
+    "cv": 1,
+    "en": "Hyprland's own project site — release posts written by the maintainer; the primary for feature lists and breaking changes, but the 0.57 post states the .conf removal without a migration procedure. Cross-checked 2026-11-03 against the GitHub release/tag (v0.57.0) and the repo's own counters.",
+    "zh": "Hyprland 自己的项目站点——由维护者撰写的发布帖；功能清单与不兼容变更的一手来源，但 0.57 的帖子只说明删除 .conf 而未给迁移步骤。2026-11-03 已对 GitHub 的 release/tag（v0.57.0）与仓库自身的计数做过交叉核验。",
+    "jp": "Hyprland 自身のプロジェクトサイト——メンテナが書くリリース投稿。機能一覧と破壊的変更の一次資料だが、0.57 の投稿は .conf 廃止を述べるのみで移行手順が無い。2026-11-03 に GitHub のリリース/タグ（v0.57.0）とリポジトリ自身の計数で照合した。"
+  },
+  "syncope.apache.org": {
+    "cat": "security",
+    "cred": "high",
+    "density": "med",
+    "cv": 1,
+    "en": "Apache Syncope's security page — the project's advisory list; terse, and its records carry a textual severity rather than a CVSS number. Cross-checked 2026-11-03 against the CVE Program registry (cveawg), which returned the same five records with assigner `apache`.",
+    "zh": "Apache Syncope 的安全页——项目自己的公告列表；文字简略，其记录只给文字级严重度而非 CVSS 数字。2026-11-03 已对 CVE Program 注册库（cveawg）做过交叉核验，后者返回同样五条记录且 assigner 为 `apache`。",
+    "jp": "Apache Syncope のセキュリティページ——プロジェクト自身の勧告一覧。簡潔で、記録は CVSS 数値ではなくテキストの重大度を持つ。2026-11-03 に CVE Program のレジストリ（cveawg）で照合し、同じ 5 件が assigner `apache` として返った。"
   }
 }

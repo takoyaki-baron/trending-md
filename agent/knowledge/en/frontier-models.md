@@ -5097,3 +5097,44 @@ rather than audited) and the 11-02 feed re-published it a day later, so the numb
 ones and the re-appearance is a duplication, not a development.
 
 → [[harness-reliability]] [[fact-check]] [[token-economics]] [[agent-stack]]
+
+### Three model events where the artifact and the claim are separable (2026-11-03)
+
+**A weight editor that is a repair channel, not a training substitute.** MIT CSAIL's "Weight-Space
+Programming" gives GPT-6 Astra a model's weights as text (or through a Python sandbox for larger nets)
+under one rule — "no training or gradient information is allowed." Verified first-hand: it named the game
+for all four 17,253-weight PPO policies without being given the options; on a car-on-ramp task it changed
+**3.5%** of the weights in **one attempt with no tools**, taking success from **0% to 100%** over **1,024**
+episodes; and on Qwen3.5-0.8B, over **50 forward passes**, it edited **0.016%** of the weights (**131,072**
+values) to move MATH-500 **7.9% → 48.1%**, GSM8K 13.8 → 67.1, IFEval 21.0 → 62.3, with answers hitting
+the 32,768-token limit falling **93% → 33.1%** (10 and 25 passes reach only **12.3%** and **14.1%**). The
+authors' ceiling is the finding: "Editing weights could remove an obstacle that hid an ability, but it
+could not add an ability the model lacked" — and on Gemma 3 270M, where the obstacle is not a loop, edits
+move MATH-500 by about a point. **The unit is the pass count**: 50-pass iterative repair, with the
+single-shot glory belonging to the toy policy.
+
+**A 1.6T model trained without NVIDIA, shipped as an API.** Meituan's LongCat-2.5 (2026-11-02) is a native
+multimodal model for long-horizon agentic tasks at **1.6 trillion** parameters with training "全程由国产算力完成"
+(domestic compute end to end), continuing LongCat-2.0 (June 2026), which its page calls the first
+full train-plus-inference run of a trillion-parameter model on domestic silicon. Reported additions:
+**~48B** parameters activated per token, multi-level discrete visual tokens so one backbone holds vision
+and text, W4A4 quantization for long-context training, and a loop that converts real agents' failed
+trajectories into verifiable tasks. Availability is the part to read carefully — live **via API and
+longcat.chat**, with GitHub and Hugging Face still **"即将上线"**. Verified: the `meituan-longcat` org
+carries **29** Hub repos and **no LongCat-2.5**, and a Hub search for "LongCat-2.5" returns **0**, so
+"native multimodal" and "open" are separate facts. Provenance note: the page usually quoted is a
+**经济观察报** article republished inside Meituan's news centre, so "the vendor's own page" is a wire story
+on the vendor's domain.
+
+**A version bump that adds no weights, only a gate.** GPT-Rosalind-6's addendum says it "uses the same
+weights as GPT-6 Astra" and "We did not add training data or perform additional post-training for this
+release" — what changed is access (approved customers, business verification, compliance screening,
+qualified human review before outputs inform experiments). Beneficial capability rises against
+Rosalind-5.5 (MedChemBench v7 **49.6 vs 28.9**, GeneBench Pro v13 **37.7 vs 16.7**, LifeSciBench Gold
+**61.3 vs 44.0**) while the posture is inherited: "High capability in the Biological and Chemical domain,
+below the threshold for Critical", **Critical in Cybersecurity**, and "None of the four Critical
+capability evaluations met its indicative threshold." The biorisk row has to be read as a table: cons@32
+**78.3%** (Rosalind-6) vs **79.2%** (Rosalind-5.5) vs 63.3% (Astra), refusal rates **9.4% / 1.8% /
+29.2%**, refusal-adjusted **85.0%** against an indicative High threshold of **80%**.
+
+→ [[fact-check]] [[edge-inference]] [[agent-stack]]

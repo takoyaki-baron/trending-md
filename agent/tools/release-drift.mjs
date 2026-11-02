@@ -84,21 +84,29 @@ const DAY = 24 * 3600 * 1000;
 let apiCalls = 0;
 
 // ── version parsing / comparison ────────────────────────────────────────────────────────────────
-/** Parse the first semver-ish triple in a tag or version string. `null` when there is none. */
+/**
+ * Parse the first semver-ish version in a tag or version string. `null` when there is none.
+ * The patch component is OPTIONAL (`v0.5` → `0.5`, patch `null`): a major.minor project parsed by a
+ * three-component regex yields `null`, and the newest release is then silently dropped from every
+ * comparison — `D4Vinci/Scrapling` reported its newest release as **0.4.15** while `v0.5` was live
+ * on the tag, the atom feed and PyPI (measured 2026-11-03).
+ */
 function parseVersion(s) {
   if (!s) return null;
-  const m = String(s).match(/v?(\d+)\.(\d+)\.(\d+)(?:[-+]([0-9A-Za-z.-]+))?/);
+  const m = String(s).match(/v?(\d+)\.(\d+)(?:\.(\d+))?(?:[-+]([0-9A-Za-z.-]+))?/);
   if (!m) return null;
-  // `raw` is the bare triple: `skill-v4.7.1` and `v4.7.1` must compare as the same version.
-  return { major: +m[1], minor: +m[2], patch: +m[3], pre: m[4] || null,
-    raw: `${m[1]}.${m[2]}.${m[3]}${m[4] ? `-${m[4]}` : ''}` };
+  // `raw` is the bare version: `skill-v4.7.1` and `v4.7.1` must compare as the same version, and a
+  // two-component tag keeps its own spelling so the report quotes what the project actually ships.
+  return { major: +m[1], minor: +m[2], patch: m[3] == null ? null : +m[3], pre: m[4] || null,
+    raw: `${m[1]}.${m[2]}${m[3] == null ? '' : `.${m[3]}`}${m[4] ? `-${m[4]}` : ''}` };
 }
-/** -1 / 0 / 1, prerelease sorts before its own release. */
+/** -1 / 0 / 1, prerelease sorts before its own release. A missing patch IS patch 0 (`0.5` = `0.5.0`). */
 function cmpVersion(a, b) {
   const pa = parseVersion(a), pb = parseVersion(b);
   if (!pa || !pb) return 0;
   for (const k of ['major', 'minor', 'patch']) {
-    if (pa[k] !== pb[k]) return pa[k] < pb[k] ? -1 : 1;
+    const x = pa[k] ?? 0, y = pb[k] ?? 0;
+    if (x !== y) return x < y ? -1 : 1;
   }
   if (pa.pre && !pb.pre) return -1;
   if (!pa.pre && pb.pre) return 1;
@@ -110,7 +118,7 @@ function cmpVersion(a, b) {
  * `engine-v0.1.17` → `engine`. The prefix is everything before the last `-v<digit>`.
  */
 function componentOf(tag) {
-  const m = String(tag).match(/^(.*?)[-_]?v?(\d+\.\d+\.\d+.*)$/);
+  const m = String(tag).match(/^(.*?)[-_]?v?(\d+\.\d+(?:\.\d+)?.*)$/);
   if (!m) return '(root)';
   const prefix = (m[1] || '').replace(/[-_]$/, '');
   return prefix || '(root)';
@@ -154,7 +162,10 @@ function escapeRe(s) { return s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); }
 /** `git+https://github.com/A/B.git` → `a/b`. `null` when there is no repo URL at all. */
 function repoSlugFromUrl(url) {
   if (!url) return null;
-  const s = String(url).replace(/^git\+/, '').replace(/^git:\/\//, 'https://');
+  // npm hands back a string, PyPI an `{url}` object — a caller that passes the object used to get
+  // `"[object Object]"` and therefore no slug, silently disabling the name-collision guard.
+  const s = String(typeof url === 'object' ? (url.url || '') : url)
+    .replace(/^git\+/, '').replace(/^git:\/\//, 'https://');
   const m = s.match(/github\.com[/:]([^/]+)\/([^/#?]+)/i);
   if (!m) return null;
   return `${m[1]}/${m[2].replace(/\.git$/, '')}`.toLowerCase();
@@ -281,11 +292,22 @@ async function findRegistry(repo, explicit) {
       const latest = body.info.version;
       const urls = body.urls && body.urls[0];
       // PyPI has no `repository` field; the provenance lives in `project_urls` (or `home_page`).
+      // Preference matters: `Bug Tracker` is often the first GitHub URL and it can point at a
+      // DIFFERENT repo than the one that publishes (a downstream tracker), so the source-ish keys
+      // win. The value is returned as a BARE URL — a labelled `"Homepage https://…"` string used to
+      // yield no slug at all, which made every PyPI package read `registry-unverified` (measured
+      // 2026-11-03 on PyPI's unofficial `Hyprland` wrapper, reported as `registry-lags-release`).
       const pu = body.info.project_urls || {};
-      const repoUrl = Object.entries(pu).map(([k, v]) => `${k} ${v}`)
-        .find((s) => /github\.com/i.test(s)) || body.info.home_page || null;
+      const pickUrl = (v) => (String(v).match(/https?:\/\/\S+/) || [String(v)])[0].replace(/[),.]+$/, '');
+      const PREF = ['repository', 'source', 'source code', 'homepage', 'code', 'github', 'bug tracker'];
+      const entries = Object.entries(pu);
+      const ordered = PREF.flatMap((k) => entries.filter(([kk]) => kk.toLowerCase() === k))
+        .concat(entries.filter(([kk]) => !PREF.includes(kk.toLowerCase())));
+      const repoUrl = (ordered.map(([, v]) => pickUrl(v)).find((s) => /github\.com/i.test(s)))
+        || (body.info.home_page ? pickUrl(body.info.home_page) : null);
       return { ecosystem: 'pypi', name, version: latest,
-        published: urls && urls.upload_time_iso_8601 || null, repository: repoUrl && { url: repoUrl } };
+        published: urls && urls.upload_time_iso_8601 || null,
+        repository: repoUrl ? { url: repoUrl } : null };
     }
   }
   return null;
@@ -446,6 +468,14 @@ function selftest() {
   ok('cmp 0.1.17 < 4.7.0', cmpVersion('0.1.17', '4.7.0') === -1);
   ok('prerelease < release', cmpVersion('3.0.0-rc1', '3.0.0') === -1);
   ok('no version → null', parseVersion('latest') === null);
+  // Two-component versions (filed 2026-11-03 on D4Vinci/Scrapling: v0.5 live while 0.4.15 was
+  // reported as newest). `v0.5` must parse, beat `v0.4.15`, and equal `v0.5.0`.
+  ok('parse two-component v0.5', parseVersion('v0.5')?.raw === '0.5');
+  ok('cmp 0.5 > 0.4.15', cmpVersion('v0.5', 'v0.4.15') === 1);
+  ok('0.5 equals 0.5.0', cmpVersion('0.5', '0.5.0') === 0);
+  ok('two-component tag → (root)', componentOf('v0.5') === '(root)');
+  ok('two-component component prefix', componentOf('skill-v4.7') === 'skill');
+  ok('two-component tags pick the newest', highestOverall(['v0.4.15', 'v0.5', 'v0.4.14']) === '0.5');
 
   // component grouping — trap 1
   const impTags = ['engine-v0.1.17', 'skill-v4.7.0', 'engine-v0.1.16', 'cli-v4.7.0', 'skill-v4.6.0'];
@@ -464,6 +494,7 @@ function selftest() {
   // repo identity — trap 2
   ok('git+https slug', repoSlugFromUrl('git+https://github.com/pbakaus/impeccable.git') === 'pbakaus/impeccable');
   ok('git:// slug', repoSlugFromUrl('git://github.com/A/B.git') === 'a/b');
+  ok('PyPI {url} object slug', repoSlugFromUrl({ url: 'https://github.com/A/B' }) === 'a/b');
   ok('no repo → null', repoSlugFromUrl(null) === null);
 
   // state machine
