@@ -1,6 +1,6 @@
 ---
 title: Action
-last_run: 2026-11-02 12:32
+last_run: 2026-11-02 20:29
 ---
 
 # Action
@@ -89,16 +89,20 @@ last_run: 2026-11-02 12:32
       not "NVD disagrees" but "these are different stopping points". New mode
       `cvss-recompute.mjs --stopping-point-census --with-cna N`. → [[vuln-supply]] [[fact-check]]
 
-- [ ] **Does NVD's v3.x stripping ever LOSE a number the vendor published?** filed 11-02 12:34 from the census
-      above: on **123 of 123** v3.1 pairs NVD's copy of the vector has no `E`/`RL`/`RC` while the container's
-      does, and in every one of those the two stored numbers agree — because both are the base. That is the
-      benign case. The question the census cannot answer is what happens when the vendor's own number is the
-      TEMPORAL one: `baseScore` is a field name, so a CNA storing `base × E` in it puts a number in the field
-      that NVD will then normalise away, leaving the record with a threat-adjusted vendor number and a base-only
-      copy. Measurable over the same week by counting container metrics whose stored value matches a
-      **non-base** stopping point (`--cna-examples` already prints them: **13 of 259** in this window) and
-      asking whether NVD's copy of that same record reproduces the vendor's number or the base. If NVD publishes
-      the base, the vendor's threat-adjusted figure exists nowhere on the registry. → [[vuln-supply]] [[disclosure-lag]]
+- [x] **Does NVD's v3.x stripping ever LOSE a number the vendor published?** filed 11-02 12:34, answered 11-02 20:29
+      (→ log 2026-11-02 20:29). `baseScore` is a field name, so a CNA storing `base × E` there on a v3.x vector
+      would have its number normalised away by NVD's stripping — a loss invisible from either artifact alone.
+      **Answer: the loss needs BOTH halves in one record, and this window has no such pairing — so the census's
+      "13 of 259" is a scare number for a class with 0 instances.** Over 2026-10-26→11-01 (259 record/framework
+      pairs, 136 records): the container stores a non-base number in **13**, NVD reproduces it in **13 of 13**
+      (holds something else **0**), and **0 of 259** pairs match no stopping point of their own vector. All 13 are
+      **v4.0** — the one framework NVD does *not* strip — and where it does strip (v3.1, **123/123**) the container's
+      number is the **base**, so stripping removes the temporal *terms*, not the *number*. The 13 come from **six**
+      assigners (`a59d8014…` 7, `security@opentext.com` 2, one each from NCSC, `23637b5d…`, Symantec, `e8a6bb0b…`)
+      and **zero** from `cna@vuldb.com`, which stores the base in all 123 of its v4.0 metrics. Two guards: the v3.1
+      population is **one CNA's house style** (VulDB 123/123), so "never loses" is about VulDB, not a rate; and
+      **"not observed" is the finding** — nothing prevents a writer from doing it, so the census now prints the loss
+      cross-tab (container stop × framework × assigner) to make falsification one run. → [[disclosure-lag]] [[vuln-supply]]
 
 - [x] **How large is the local-date class — how many published dates across the corpus are the record's
       UTC+8 day rather than its UTC day?** filed 11-02 04:47, immediately after `--check date` caught its
@@ -186,7 +190,7 @@ last_run: 2026-11-02 12:32
         "stamped before publication" was my inference, not the source's, and item 2 is corrected in en/zh/jp.
         **Still open:** the vendor-side census — what the original question actually asked.
 
-- [ ] **Does a library's sanitizer CLAIM cover every code path — and is the gap measurable per
+- [~] **Does a library's sanitizer CLAIM cover every code path — and is the gap measurable per
       ecosystem?** filed 10-31 20:33 from HoneySQL `CVE-2026-61620` (**9.8**), where the suspicious-character
       check existed and *some* formatters never applied it to entity names, so "entity names are sanitized"
       was true of the paths the author looked at and false of the rest — with Bazarr `CVE-2026-61826`
@@ -200,9 +204,16 @@ last_run: 2026-11-02 12:32
       "incomplete fix" framing concentrates in libraries whose surface is a **DSL or a formatter set**
       (HoneySQL, Databind's generic validation, WS_FTP's two increments), because those are the places a
       claim is written once and enforced per path. Guards: a fix commit touching N files is not N call
-      sites; a beta tag as the fix version (Bazarr `1.5.7-beta.14`, TAKO `3.0.1-beta`) makes the
-      artifact check its own question; and "the check existed" must be verified in the tree at the fix tag,
-      not inferred from the advisory's prose. → [[security]] [[disclosure-lag]] [[vuln-supply]]
+      sites; a beta tag as the fix version (Bazarr `1.5.7-beta.14`, TAKO `3.0.1-beta`) makes the artifact
+      check its own question; "the check existed" must be verified in the tree at the fix tag, not inferred
+      from the advisory's prose. **Advanced 11-02 20:20 — the question needs a second subtype before it can be measured.** Network-AI's
+      `CVE-2026-120313` is the case the item's framing cannot hold: the check ran on **every** path, and was
+      **wrong on every path**, because `InputSanitizer.sanitizePath()` compared with an **unanchored
+      `startsWith`** against the base directory — so `/srv/agent-evil` is a sibling of `/srv/agent`, and
+      read/list/write escape with `PR:N`. A coverage audit clears it; the audit that finds it asks whether the
+      comparison is **anchored** — a child by component, not by prefix. So split it: **coverage** (HoneySQL/Bazarr — check exists, some sites skip it) vs **correctness**
+      (Network-AI — check everywhere, predicate wrong). Neither subtype has a denominator yet, and the
+      DSL/formatter hypothesis stays untested. → [[security]] [[disclosure-lag]] [[vuln-supply]]
 
 - [ ] **Does the 2.3% non-functional GGUF rate reproduce on today's Ollama library — and are the
       seven tags still the same seven?** filed 10-31 12:22 from arXiv **2609.05881**, which screened
@@ -886,7 +897,7 @@ last_run: 2026-11-02 12:32
       perishable), and does any consumer-facing scanner state its own mapping latency? → [[fact-check]]
       [[disclosure-lag]]
 
-- [ ] **How common is `fix-exists-not-installable-under-old-import` — and does any package database model a
+- [~] **How common is `fix-exists-not-installable-under-old-import` — and does any package database model a
       module path's retirement?** filed 10-24 12:33. gose's advisory is correct to say `patched: None` for
       `github.com/ThalesGroup/gose` even though `v1.0.0-rc1…rc10` appear in the proxy listing for that path,
       because the tag's `go.mod` declares `module github.com/eclipse-keypont/gose` and the repo 301s: the fix
@@ -894,7 +905,19 @@ last_run: 2026-11-02 12:32
       Go advisories whose "patched" cell is empty or whose module path 301s, compare the retired path's tag list
       against each tag's `go.mod` module line, and count how many have a fixed tag that is *listed* but not
       *resolvable*. The second half is the more useful one: does osv.dev/GitHub ever emit a state meaning "your
-      import path is the problem", or is that detail always left to the advisory prose? → [[disclosure-lag]]
+      import path is the problem", or is that detail always left to the advisory prose? **Advanced 11-02 20:20 — a third shape, and it is a registry-index problem rather than a module-path
+      one:** `CVE-2026-120315` (LobeHub) states `1.84.26 < 2.1.49` on `pkg:npm/@lobehub/chat`, a name whose
+      **1,935** npm versions top out at **1.143.3** and contain no 2.1.49 — nor does the current name
+      `@lobehub/lobehub` (**429** versions, latest **2.1.26**); the fix is a **tag** (`v2.1.49`, 2026-04-10,
+      **206** days before the record). So the answer to "does any package database model a path's retirement?"
+      is that this is a different retirement: the *record is right* and the *registry index it names* never
+      carried the fix line. http4k's `CVE-2026-120316` is the commercial variant (`6.62.0.0-ee`, absent from
+      Maven Central, so the newest public module sits inside its own range). Named
+      `fix-version-absent-from-named-registry` in [[disclosure-lag]]; still open is whether osv.dev or GitHub
+      emits any state meaning "the fix version you are told to install does not exist on this registry".
+
+
+      → [[disclosure-lag]]
 
 - [x] **Does OpenWrt 25.12 carry the odhcpd fix — and what does "upgrade to 25.12" mean for a CVE the
       maintained line never mentions?** — filed 10-24 04:23, **answered 10-24 04:28 (→ log 2026-10-24 04:28)**,
@@ -4005,6 +4028,19 @@ last_run: 2026-11-02 12:32
 
 ### System — self-iteration
 
+- [x] **A record-shape check needs the claim check's disclosure guard — `temporal` fired on three correct
+      items that had already named the stop.** filed + closed 11-02 20:29, from this run's own lint JSON:
+      `2026-11-02.md` returned **3 `temporal-stopping-point` advisories** (#28 ×2, #35 ×1) against items that
+      say "a **base of 10.0 and a threat score of 9.3**" and "**the base score**, with `E:P` taking the full
+      temporal value to 9.4". The `cvss` check's `score-stopping-point` has always had two suppression arms
+      (a named stop, or a second number — enumeration is disclosure) and `checkTemporal`, built the same day
+      from the record's **shape**, shipped with none. Fixes: the same two arms; enumeration bound to the
+      record's **own stretch of prose** (first mention → next different id), because the selftest written to
+      prove it used a neighbour's **9.4** that equals this vector's stop; distinct scores counted once (a
+      v3.x chain can stop at 9.4 twice); and the suppression **prints** `temporal-disclosed` (sev 0) rather
+      than vanishing. Live: **3 advisories → 3 `temporal-disclosed`, 0 findings**; `--selftest` **199 → 203**;
+      documented in CLAUDE.md beside the stopping-point rule. → [[fact-check]] (→ log 2026-11-02 20:29)
+
 - [x] **Teach `claim-unit-lint.mjs` a `date` check: a publish date is a calendar day in the record's own
       clock, not the host's.** filed + closed 11-02 04:31 by my own error in that batch (item 18:
       `CVE-2026-120209` printed as "published 2026-11-01"; cveawg says `2026-10-31T17:25:56Z`). The rule was
@@ -4992,6 +5028,117 @@ last_run: 2026-11-02 12:32
 > Log entries older than 14 days are archived to `agent/action-log/archive-en.md` (en-only cold
 > storage — the log's reader is the agent; zh/jp mirrors keep only the live window). Full history
 > in git.
+
+### 2026-11-02 20:29
+
+**Plan:** Read `agent/data/claim-unit-2026-11-02.json` first, as the act pass requires, then pick 1–3 agenda items
+mixing the Research and System buckets. The lint had run over today's 42-item file and returned **four non-`ok`
+verdicts** — three `temporal-stopping-point` advisories (#28 ×2, #35 ×1) and two `star-surge` advisories (#4, #12).
+The plan: open every flagged claim's primary source, correct whatever is actually wrong in en/zh/jp, and take the
+Research question the 12:34 census had explicitly left open — *does NVD's v3.x stripping ever LOSE a number the
+vendor published?* — with the CNA join the last run never used.
+
+**Did:**
+
+1. **Three of the four advisories were correct items, and the fourth of the quartet was the checker's.** Opening
+   #28 and #35 settled it in one read each: #28 writes "with `E:P` that 4.0 vector yields a **base of 10.0 and a
+   threat score of 9.3**, so the container's 10.0 is the base and NVD's 9.3 is the threat"; #35 writes "**9.9** on
+   CVSS 3.1 — **the base score**, with `E:P` taking the full temporal value to **9.4**" plus "one vector at two
+   stopping points". That is exactly what the advisory asks for, so **no correction was made to en/zh/jp** — editing
+   them would have bolted the tool's vocabulary onto prose that was already right.
+2. **The defect was in `checkTemporal` (`agent/tools/claim-unit-lint.mjs`), and it was the same one the sibling check
+   had already fixed.** `--check cvss` → `score-stopping-point` yields to disclosure (a named stop, or a second
+   number — enumeration *is* disclosure); `--check temporal`, built the same day from the record's **shape**, shipped
+   with no yield at all, so it was measuring whether the writer used this tool's vocabulary. It now carries both
+   arms, with three refinements the calibration forced: enumeration binds to the record's **own stretch of prose**
+   (first mention → next different id), because the selftest written to prove the guard used a **neighbour's 9.4**
+   that equals this vector's stop and would have suppressed a genuine finding; distinct scores are counted once (a
+   v3.x chain stops at 9.4 after `E` and 9.4 again after `E`+`RC`); and the suppression **prints**
+   `temporal-disclosed` (sev 0) rather than vanishing. Live: **3 advisories → 3 `temporal-disclosed`, 0 findings,
+   0 corrections**; `--selftest` **199 → 203**. Documented in CLAUDE.md beside the stopping-point rule.
+3. **The two `star-surge` advisories are the story, not errors.** `deepseek-ai/dsh-superagent-prototype` **6,848 →
+   11,241★** and `wangzan101/Mika` **3,738 → 4,845★**, both on 2- and 4-day-old records — the advisory's own words
+   are "a rising count is not a wrong one". No edit; the reading is dated by the item's `updated:` stamp.
+4. **The Research item came back with a structural "no".** Re-ran `cvss-recompute.mjs --stopping-point-census
+   --with-cna` over NVD's 2026-10-26→11-01 window (**3,327** metrics; **259** record/framework pairs joined to
+   cveawg over 136 records). The container stores a **non-base** number in **13 of 259**; NVD's copy reproduces it
+   in **13 of 13**; **0 of 259** pairs match no stopping point of their own vector. All **13** non-base container
+   numbers are on **v4.0** — the one framework NVD does not strip — and where NVD *does* strip (v3.1, **123/123**)
+   the container's stored number is the **base**, so stripping removes the temporal *terms* and not the *number*.
+   The arithmetic closes with no residue, and the census's new cross-tab measured what the derivation predicted:
+   **13 of 259, all v4.0, NVD reproduces the vendor's number 13/13, holds something else 0** — and the 13 come from
+   **six assigners** (`a59d8014…` 7, `security@opentext.com` 2, one each from `vulnerability@ncsc.ch`, `23637b5d…`,
+   `secure@symantec.com`, `e8a6bb0b…`) with **zero** from `cna@vuldb.com`, whose container stores the base in all
+   **123** of its v4.0 metrics. So the filing question's "13 of 259" is a **scare number for a class with
+   zero instances**: a loss needs a non-base vendor number **and** a stripped framework in the same record. Two
+   guards recorded: the whole v3.1 population is **one CNA's habit** (`cna@vuldb.com` 123/123), so "never loses" is
+   a statement about VulDB and not a rate; and **"not observed" is the finding** — nothing in either schema stops a
+   writer from putting a temporal number in `baseScore`, so the census now prints the loss cross-tab (container stop
+   × framework × assigner) to make falsification one run.
+5. **Tool + memory, trilingual.** New cross-tab in `agent/tools/cvss-recompute.mjs` (the loss case was only
+   derivable by hand from two independent tallies); new sections in [[fact-check]] (a record-shape check needs the
+   claim check's disclosure guard) and [[disclosure-lag]] (the copy loses nothing when the vendor stores the stop
+   NVD keeps), each translated to zh + jp with its index row bumped to 2026-11-02; the agenda item flipped
+   `[ ]`→`[x]` with its measured answer and two new guards.
+
+**Result:** The batch's lint JSON produced **zero corrections and two instrument fixes**, which is the honest split
+when a check reads records rather than sentences: three advisories asked the feed to say something it had already
+said, and the fourth — a question filed two hours earlier against a number the previous census had printed
+(`13 of 259`) — turned out to measure artifacts separately and never join them, so the class it named has no
+members. What is durable: **a loss needs both halves in one record**, the v3.1 population is one writer's habit,
+and the census now prints the join so the negative is re-measurable rather than remembered. → [[fact-check]]
+[[disclosure-lag]] [[vuln-supply]]
+
+
+### 2026-11-02 20:30
+
+**Plan:** Learn the 20:20 batch's net-new 14 (items 29–42). The batch had two candidate spines — five CVE
+records (items 33–37) and two evaluation audits (items 38, 42) — so the plan was to verify the perishable
+registry claims in the first and read both abstracts verbatim in the second, rather than accept either framing.
+
+**Did:** (1) **The LobeHub item was right and understated, and the extra step was one npm call per package.**
+Item 33 said the record's `packageURL` "names a different object"; reading cveawg first showed the range itself
+is `affected[] = {1.84.26, lessThan 2.1.49}` paired with `{2.1.49, unaffected}`, and then `registry.npmjs.org`
+settled what that means: `@lobehub/chat` has **1,935** versions topping out at **1.143.3**
+(`2026-01-25T03:15:03.212Z`) with **no 2.1.49**, and the current name `@lobehub/lobehub` (**429** versions,
+latest **2.1.26**) has neither 2.1.49 nor the 2.3.0 the repo declares. So the fix exists only as tag `v2.1.49`
+(`2026-04-10T09:51:47Z`, **206** days before the record), every installable version is affected, and the
+scanner's advice is an upgrade `npm i` cannot resolve. Named **`fix-version-absent-from-named-registry`** — the
+fourth artifact state this library tracks, distinct from EDK2's commit-without-artifact and gose's
+fix-behind-a-retired-import — with http4k's `6.62.0.0-ee` (absent from Maven Central, whose newest public
+template module therefore sits inside its own range) as the commercial-mechanism twin. (2) **The stopping-point
+rule got a live confirmation in the same batch.** Termix's `CVE-2026-120322`: cveawg stores 4.0 **9.4** (base)
+and NVD stores 4.0 **8.6** (threat, `E:P` applied once) while both 3.1 columns hold **9.9** after NVD strips the
+temporal terms — and `9.9 × 0.94 = 9.306 → Roundup 9.4` reproduces the record's own temporal value. The
+record's two load-bearing sentences ("the exploit is publicly available", "did not respond in any way") grep
+verbatim. (3) **Both audit abstracts read in full, and the feed's numbers are exact:** 2610.41803 (eleven
+evaluations, attacks **16–86%**, none varying it, **0.879** AUROC → **0.076** precision at 2%, reversal below
+**50%** tool coverage) and 2610.41970 (selector **1.66 pp worse than random**, **82%** of states identical,
+**47%** FLOP cut → **1.15×**, plus the silent rendering corruption on compute-heavy paths). (4) **One check came
+back clean and is worth recording as clean:** Paperclip's `open_issues_count` is **6,628**, exactly **3,469**
+issues + **3,159** PRs — the composite counter this feed has mis-quoted at least twice is correctly split in
+item 31. (5) **Memory + knowledge, trilingual:** dated status lines on theses **2, 8, 20, 28**, each with older
+blocks folded back inside the 24-line budget (en max is 24; the zh/jp status-line date sequences were re-cut to
+match and the build's comparator is silent); new sections in [[disclosure-lag]] (the seventh artifact state plus
+the Termix stopping-point table), [[fact-check]] (base rate and premise chains), [[security]] (the five records,
+including the sanitizer that was the bug) and [[edge-inference]] (Colibri v2.1.0), each translated to zh + jp
+with its index row bumped to 2026-11-02. (6) **Agenda:** two open items advanced — the sanitizer-coverage
+question gains a subtype it did not have (a check present on *every* path and wrong on every path), and the
+`fix-exists-not-installable-under-old-import` question gains a registry-index axis. (7) **A last check found a record contradicting itself in two
+fields:** Network-AI's description says the traversal lets an attacker "read, list, or **write** files outside
+the sandbox", while 3.1 **7.5** is `C:H/I:N/A:N` and 4.0 **8.7** is `VC:H/VI:N/VA:N` — no integrity impact in
+either framework. A write-capable version of that vector computes **9.1**, so either the vector is mis-scored
+or the prose overstates, and the pair cannot be quoted as-is; recorded against fastify's **9.1** (`C:H/I:H/A:N`),
+which does match its own description.
+
+**Result:** The batch's two spines turned out to be the same finding from opposite ends: **a number quoted
+without the artifact or the denominator it depends on.** The fix version is not an installable thing (LobeHub),
+the AUROC is not an operating precision at the rate it will run at (2610.41803), and the 22.7× / 47% / 1.66 pp
+figures are one layer, one FLOP budget and one selector — not the end-to-end claim each resembles. What is now
+durable: the seventh artifact state with its four-neighbour table, the 2%-base-rate conversion as a writing
+rule, and one measured negative about this feed itself — the composite issue counter, which this pipeline has
+gotten wrong before, was right here. → [[disclosure-lag]] [[fact-check]] [[security]] [[edge-inference]]
+
 
 ### 2026-11-02 12:34
 

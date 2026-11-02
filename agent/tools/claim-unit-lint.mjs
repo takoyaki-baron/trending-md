@@ -1332,15 +1332,55 @@ function checkTemporal(it, cna, subjects) {
   const out = [];
   const t = strip(it.text);
   const ids = [...new Set((t.match(/CVE-\d{4}-\d{3,7}/g) ?? []))];
+  /* The disclosure guard, and it is the same one the `cvss` check's `score-stopping-point`
+   * advisory already carried — this check shipped without it on 2026-11-02 12:34 and produced
+   * **3 advisories in one run, all three against items that disclose the stop**: item 28 wrote
+   * "a **base of 10.0 and a threat score of 9.3**", item 35 "the base score, with `E:P` taking
+   * the full temporal value to 9.4". A record-shape check is right to fire on the CONTAINER, but
+   * it must yield when the prose already named the stop — otherwise the advisory is measuring
+   * whether the writer used this tool's vocabulary, not whether the reader can tell.
+   * Two arms, both from the `cvss` check: a named stop (`base`/`threat`/`temporal` … `score`,
+   * `stopping point`), or **enumeration** — the item quotes more than one number this record's
+   * own vector yields, which is disclosure whatever the wording. Suppression is PRINTED
+   * (`temporal-disclosed`, sev 0) because the class's size is only measurable if it is counted. */
+  const namesStop = /\b(?:base|temporal|threat)\b[^.]{0,24}\bscore\b|\bstopping[- ]points?\b|\b(?:base|threat)\s*(?:score)?\s*\(?[A-Z]?:?[A-Z]\b|E:(?:A|P|U|H|F)\b/i.test(t);
+  /* Enumeration binds to the record, not the item: a number in the text cannot be attributed to
+   * an id unless it sits in that id's own stretch of prose. Segment = from this id's first
+   * mention to the next mention of a DIFFERENT id — item 28's disclosure sentence lies between
+   * `CVE-2026-120189`'s mention and the next record's, and the selftest's "a second record's
+   * numbers do not disclose this one" is a 9.4 that happens to equal this vector's stop. */
+  const idHits = [...t.matchAll(/CVE-\d{4}-\d{3,7}/g)].map((m) => ({ id: m[0], at: m.index }));
+  const segmentOf = (id) => {
+    const first = idHits.find((h) => h.id === id);
+    if (!first) return t;
+    const next = idHits.find((h) => h.at > first.at && h.id !== id);
+    return t.slice(first.at, next ? next.at : t.length);
+  };
   for (const id of ids) {
     const rec = cna.get(id);
     if (!rec || rec.error) continue;
+    const seg = segmentOf(id);
     for (const m of rec.metrics ?? []) {
       const st = temporalStops(m.vector);
       if (!st) continue;
       const nvd = (subjects.get(id)?.metrics ?? []).map((x) => `${x.version} ${x.score} (${x.source})`);
       // Nothing to disambiguate when the vendor's number IS the base and the base is the whole story.
       if (Math.abs(m.score - st.base) < 0.05 && st.full === st.base) continue;
+      // Enumeration is read per RECORD, off the numbers THIS vector yields — a second record's
+      // numbers cannot disclose this one's stop.
+      // distinct scores only: a v3.x chain can stop at the same number twice (9.4 after `E`, 9.4
+      // again after `E`+`RC`), and counting one quoted number twice would suppress a real finding.
+      const stopsSeen = [...new Set(st.stops.map((s) => s.score.toFixed(1)))];
+      const quoted = stopsSeen.filter((x) => new RegExp(`(?:^|[^\\d.])${x}(?!\\d)`).test(seg)).length;
+      const enumerated = quoted > 1;
+      if (namesStop || enumerated) {
+        out.push({
+          check: 'temporal', item: it.n, verdict: 'temporal-disclosed',
+          claim: `${id} · CNA ${m.score} / base ${st.base} / full ${st.full}`,
+          detail: `${namesStop ? 'the item names a stopping point' : `the item quotes ${quoted} of this vector's ${stopsSeen.length} distinct stopping points`} — silent, because the prose already lets the reader tell which number it read`,
+        });
+        break; // one verdict per record is enough
+      }
       out.push({
         check: 'temporal', item: it.n, verdict: 'temporal-stopping-point',
         claim: `${id} · CNA ${m.score} / base ${st.base} / full ${st.full}`,
@@ -3413,6 +3453,24 @@ if (SELFTEST) {
   t('a single Roundup over the product, not per-component rounding',
     stops('CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H/E:U/RL:W'),
     { base: 9.8, stops: [9.8, 9.0, 8.7], full: 8.7 });
+  /* The `temporal` check's disclosure guard (added 2026-11-02 20:29): it fires on the RECORD's
+     shape, so it would fire on every correct item that names the stop. Item 35 is the case. */
+  const tmpCna = new Map([['CVE-2026-555555', { assigner: 'cna@vuldb.com', metrics: [
+    { version: '3.1', score: 9.9, field: 'containers.cna.metrics.cvssV3_1.baseScore', vector: 'CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:C/C:H/I:H/A:H/E:P' }] }]]);
+  const tmpNvd = new Map([['CVE-2026-555555', { metrics: [{ version: '3.1', score: 9.9, source: 'cna@vuldb.com' }] }]]);
+  const tmp = (body) => checkTemporal(mk('t', body), tmpCna, tmpNvd).map((x) => x.verdict);
+  t('temporal: a score with no stop named is the advisory',
+    tmp('CVE-2026-555555 is 9.9 on CVSS 3.1.'), ['temporal-stopping-point']);
+  t('temporal: naming the stop suppresses it, and the suppression is printed',
+    tmp('CVE-2026-555555 is 9.9 on CVSS 3.1 — the base score, with `E:P` taking the full temporal value to 9.4.'),
+    ['temporal-disclosed']);
+  t('temporal: quoting two of the vector\'s own numbers is disclosure',
+    tmp('CVE-2026-555555 reads 9.9 in the container beside 9.4 once exploit maturity is applied.'),
+    ['temporal-disclosed']);
+  t('temporal: a second record\'s numbers do not disclose this one',
+    checkTemporal(mk('t', 'CVE-2026-555555 is 9.9. Separately, CVE-2026-666666 reads 9.4 and 8.3.'),
+      tmpCna, tmpNvd).filter((x) => x.claim.startsWith('CVE-2026-555555')).map((x) => x.verdict),
+    ['temporal-stopping-point']);
 
   // vulnStatus — the field NVD moves on its own (built 2026-10-30 after the `Analyzed` → `Undergoing
   // Analysis` regression). A status is a queue position, so the check compares prose to the record.
@@ -3944,7 +4002,7 @@ try {
   writeFileSync(CACHE_PATH, JSON.stringify(cache, null, 1));
 } catch { /* cache is best-effort */ }
 
-const SEVERITY = { ok: 0, 'ok-cited-page': 0, 'no-cve-named': 1, 'no-record': 1, 'slot-quoted': 1, 'counted-by-author': 0, 'number-other-noun': 1, 'temporal-stopping-point': 1, 'score-stopping-point': 1, 'cna-only-score': 1, 'star-drift': 2, 'star-dated': 1, 'star-surge': 1, 'ok-history': 0, 'history-older-than-record': 2, 'history-unreadable': 1, stale: 2, archived: 2, differs: 2, absent: 2, 'unsplit-issue-count': 3, 'compound-lags-parts': 3, 'version-swapped': 3, 'version-absent': 3, 'score-not-reproducible': 2, 'score-mismatch': 3, 'wrong-subject': 3, 'absence-contradicted': 3, 'status-stale': 2, 'status-dated': 1, 'date-local-shift': 2, 'date-mismatch': 2, 'cwe-absent-but-recorded': 3, 'cwe-mismatch': 3, 'cwe-unreadable': 1, 'span-empty': 2, 'span-inverted': 3, 'span-unverifiable': 0, 'ok-span': 0, 'status-no-record': 1, 'status-no-cve': 1, 'advisory-unreadable': 1, 'advisory-repo-only': 0, unreadable: 1, 'artifact-unreadable': 1, 'nvd-unavailable': 1, 'ratio-row-count': 3, 'ok-ratio': 0, 'not-a-repo': 0, 'ok-table-rows': 0, 'table-columns-unresolved': 0, 'bundle-ok': 0, 'bundle-lines-named': 0, 'bundle-unavailable': 0, 'bundle-line-count': 3, 'bundle-total-mismatch': 2, 'quote-not-found': 3, 'quote-paraphrase': 2, 'quote-short': 1, 'quote-not-read': 0 };
+const SEVERITY = { ok: 0, 'ok-cited-page': 0, 'no-cve-named': 1, 'no-record': 1, 'slot-quoted': 1, 'counted-by-author': 0, 'number-other-noun': 1, 'temporal-stopping-point': 1, 'temporal-disclosed': 0, 'score-stopping-point': 1, 'cna-only-score': 1, 'star-drift': 2, 'star-dated': 1, 'star-surge': 1, 'ok-history': 0, 'history-older-than-record': 2, 'history-unreadable': 1, stale: 2, archived: 2, differs: 2, absent: 2, 'unsplit-issue-count': 3, 'compound-lags-parts': 3, 'version-swapped': 3, 'version-absent': 3, 'score-not-reproducible': 2, 'score-mismatch': 3, 'wrong-subject': 3, 'absence-contradicted': 3, 'status-stale': 2, 'status-dated': 1, 'date-local-shift': 2, 'date-mismatch': 2, 'cwe-absent-but-recorded': 3, 'cwe-mismatch': 3, 'cwe-unreadable': 1, 'span-empty': 2, 'span-inverted': 3, 'span-unverifiable': 0, 'ok-span': 0, 'status-no-record': 1, 'status-no-cve': 1, 'advisory-unreadable': 1, 'advisory-repo-only': 0, unreadable: 1, 'artifact-unreadable': 1, 'nvd-unavailable': 1, 'ratio-row-count': 3, 'ok-ratio': 0, 'not-a-repo': 0, 'ok-table-rows': 0, 'table-columns-unresolved': 0, 'bundle-ok': 0, 'bundle-lines-named': 0, 'bundle-unavailable': 0, 'bundle-line-count': 3, 'bundle-total-mismatch': 2, 'quote-not-found': 3, 'quote-paraphrase': 2, 'quote-short': 1, 'quote-not-read': 0 };
 const REAL = (f) => (SEVERITY[f.verdict] ?? 1) >= 2;
 
 /* `status_watch` rides the findings file so the act pass sees a backwards move without re-reading

@@ -6117,3 +6117,84 @@ inventory problem: the services to list first are the Go ones, because they are 
 there.
 
 → [[disclosure-lag]] [[vuln-supply]] [[fact-check]] [[agent-stack]]
+
+## 2026-11-02 20:20 — five records, and the guard was the vulnerability
+
+Five CVEs published in one batch (`CVE-2026-120311`…`-120317` plus `-120315`) reduce to one shape
+this ledger keeps meeting and one it had not named: **a "sandbox" that is one string comparison per
+entry point.**
+
+**The sanitizer is the bug (`CVE-2026-120313`, Network-AI).** The traversal is inside
+`InputSanitizer.sanitizePath()` — the guard itself — which compared with an **unanchored
+`startsWith`** against the base directory. A directory whose *name* merely shares the base's string
+prefix (`/srv/agent` vs `/srv/agent-evil`) is then a sibling, not a child, and read/list/write
+outside the sandbox follow. **7.5** on 3.1 (`PR:N` — no privileges), **8.7** on 4.0. Its two
+batch-mates put the traversal in a **job id** (`FileJobStore.get()`/`.delete()`, `JobQueue.getJob()`,
+**8.8**/8.7) and an **AgentVCR cassette name** (same **8.8**/8.7). This is a *different* subtype from
+the incomplete-fix family in HoneySQL and Bazarr: there the check existed and some paths skipped it;
+here the check ran on every path and was **wrong on all of them**. A claim-coverage audit would have
+cleared it. All three fixed in **5.15.5**, npm-published **2026-10-17T18:14:17Z** — **16 days** before
+the records — on an **80-star** repository that advertises adapters for **32** frameworks.
+
+**The double decode, with no `..` to grep for (`CVE-2026-120213`, `@fastify/http-proxy`).** When
+`prefix`/`rewritePrefix` are parameterized, the plugin substitutes **URL-decoded** route parameters
+into `rewritePrefix` **without re-encoding**. A parameter encoding a separator plus a delimiter
+decodes into real ones, injects upstream path segments and **strips the mandatory suffix** the option
+existed to enforce — and the record says so explicitly, "without using any dot-dot traversal". Two
+CWEs carry the diagnosis: `CWE-22` and **`CWE-436`**, interpretation conflict. **9.1**
+(`AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:N`, reproduces exactly), pre-auth, fixed **11.6.6**,
+npm-published **08:55:53Z** — **80 minutes** before the record — with "no workaround other than
+upgrading". Provenance: NVD's metric source is `ce714d77-…`, **OpenJS's own orgId**, so the 9.1 is the
+CNA's and the record is `Received` with 0 NVD-scored metrics.
+
+**The digest that authenticated everything but the body (`CVE-2026-120317`, http4k).** `DigestEncoder`
+computes the **auth-int** digest **without hashing the request entity body** — the one property
+auth-int exists to add. On a non-TLS channel an on-path attacker rewrites the body, keeps the
+`Authorization` header, and executes state-changing actions as the victim. **5.9** on 3.1 / **8.2** on
+4.0, the gap being the frameworks' own `AC:H` vs `AT:P`. The remediation split is the operational
+finding: the digest module is public (`6.60.0.0` on Maven Central, 47 days before the record) while
+the Thymeleaf fix is `6.62.0.0-ee` and absent from Maven Central, so the newest installable public
+template module is inside its own affected range. Detail in [[disclosure-lag]].
+
+**Two shapes to file rather than count.** (a) **The vendor is absent from its own disclosure**
+(`CVE-2026-120322`, Termix): "the exploit is publicly available and might be used" and "The vendor
+was contacted early about this disclosure but did not respond in any way" are both greppable in the
+record, and the remediation is not a validation fix — the shortcut was **removed** (transfer now
+always writes over SFTP) in plugin `v1.0.0` and core `v26.10.0`, shipped **~85 minutes before** the
+record. Deleting the alternate transport is the durable repair when the transport was the bug.
+(b) **The range outlives the product name** (`CVE-2026-120315`, LobeHub): the fix is a tag, the
+`packageURL` names a retired package line, and the lag is **206 days** — the scanner-visible half of
+which is [[disclosure-lag]]'s.
+
+**Cross-cutting for this batch:** **0 of the five** carry an `nvd@nist.gov` metric — statuses split
+`Received` (LobeHub, Termix, fastify) and `Deferred` (the three Network-AI records, both http4k
+records), and every score is a CNA's arithmetic. Three different CNAs (VulnCheck, VulDB, OpenJS) plus
+http4k's own, none of them NVD.
+
+→ [[disclosure-lag]] [[vuln-supply]] [[fact-check]] [[agent-stack]]
+
+### The description prices a capability the vector does not (`CVE-2026-120313`, verified 2026-11-02 20:30)
+
+Read both fields side by side and they disagree about what the bug does. The CNA's description: "Attackers
+can supply paths whose directory name shares a string prefix with the base, bypassing the unanchored
+startsWith check to **read, list, or write** files outside the sandbox." The two metrics:
+
+| framework | score | impact components |
+|---|---|---|
+| CVSS 3.1 | **7.5** | `C:H / I:N / A:N` |
+| CVSS 4.0 | **8.7** | `VC:H / VI:N / VA:N` |
+
+Every impact component is confidentiality-only — there is **no integrity impact in either framework** — while
+the prose names arbitrary **write**. A write-capable version of the same vector (`I:H`) computes **9.1** on
+3.1, so the published number understates the described capability by **1.6 points** and by a whole severity
+band if availability is also affected. Two readings are possible and the record does not choose between them:
+either the write path exists and the vector is mis-scored, or the write is not truly arbitrary and the
+description overstates. Either way the pair cannot both be quoted as-is.
+
+**The rule:** when a record's description enumerates capabilities, check them against the vector's `I`/`A`
+components before repeating either. A score is a claim about the *impact set*, and a description that names a
+capability the impact set excludes is the cheapest inconsistency to detect — no oracle, no arithmetic, just
+two fields on one page. (Contrast the faster check that *passes*: fastify's `CVE-2026-120213` scores **9.1**
+from `C:H/I:H/A:N`, which matches its "injects upstream path segments and strips the mandatory suffix".)
+
+→ [[disclosure-lag]] [[vuln-supply]] [[fact-check]]

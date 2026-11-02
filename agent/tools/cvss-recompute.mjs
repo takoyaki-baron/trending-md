@@ -506,6 +506,24 @@ async function stoppingCensus(rows, label, json = false) {
     }
     const unexplained = ok.filter((p) => !p.same && (p.cnaStop === 'neither' || p.nvdStop === 'neither'));
     say(`\n  pairs that differ where EITHER side matches no stopping point: ${unexplained.length}${unexplained.length ? ' ← the class that is actually wrong' : ' — every disagreement is one vector, two stopping points'}`);
+    /* THE LOSS CASE (added 2026-11-02 20:29, from the "does v3.x stripping LOSE a number the vendor
+       published" agenda item). The tallies above count artifacts; the question is a JOIN — when the
+       container stores a number that is NOT the base, does NVD's copy reproduce the vendor's number
+       or normalise it away? The arithmetic for one window: on v3.1 NVD strips the temporal metrics
+       and stores the base, so a CNA that had put `base × E` in `baseScore` would leave the registry
+       holding a number nobody published. It cannot be answered from the two independent tallies,
+       which is why it is printed as a cross-tab. */
+    const offBase = ok.filter((p) => p.cnaStop !== 'base' && p.cnaStop !== 'no score');
+    say('\n  the LOSS case — the container stores a number that is NOT the base:');
+    say(`    ${offBase.length} of ${ok.length} container metric(s)${offBase.length ? '' : ' ← none, so this window cannot exhibit a loss'}`);
+    for (const v of [...new Set(offBase.map((p) => p.version))].sort()) {
+      const s = offBase.filter((p) => p.version === v);
+      const kept = s.filter((p) => p.same).length;
+      const byCna = new Map();
+      for (const p of s) byCna.set(p.assigner, (byCna.get(p.assigner) ?? 0) + 1);
+      const names = [...byCna.entries()].map(([a, n]) => `${String(a).slice(0, 16)} ${n}`).join(' · ');
+      say(`    v${v.padEnd(5)} ${String(s.length).padStart(4)} · NVD reproduces the vendor's non-base number ${String(kept).padStart(3)} · NVD holds something else ${String(s.length - kept).padStart(3)}${names ? ` · ${names}` : ''}`);
+    }
     if (args.includes('--cna-examples')) for (const p of ok.slice(0, 12)) say(`    ${p.id} v${p.version} cna ${p.cnaScore} (${p.cnaStop}) · nvd ${p.nvdScore} (${p.nvdStop})${p.stripped ? ' · STRIPPED' : ''}`);
   }
   return classified;

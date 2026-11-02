@@ -2076,3 +2076,125 @@ record carries a *range* while these records carry a *product*. Still unmeasured
 advisory in `references[]` names the version the record omits.
 
 → [[vuln-supply]] [[fact-check]] [[security]]
+
+## The fix version that no registry carries (2026-11-02 20:20)
+
+The six artifact states this file tracks all assume the *fix* is the scarce object — merged in source
+and not released, released and not installable under the old import, patched in a cell whose product
+line is bundled. This batch produced the complementary case, twice, and it is the one a version
+scanner cannot express: **the record names a fixed version, the registry the record's own
+`packageURL` points at cannot contain it, and every version that registry does carry is affected.**
+
+Measured first-hand on `CVE-2026-120315` (LobeHub Chat, a path traversal in document parsing that
+ends in code execution):
+
+- cveawg's `affected[]` is `{version: "1.84.26", lessThan: "2.1.49"}` plus
+  `{version: "2.1.49", status: "unaffected"}`, on `packageURL: pkg:npm/%40lobehub/chat`.
+- npm `@lobehub/chat` has **1,935** published versions; `dist-tags.latest` is **1.143.3**
+  (`2026-01-25T03:15:03.212Z`); **`2.1.49` is not in the version list at all.**
+- The project's current name is `@lobehub/lobehub`: **429** versions, `latest` **2.1.26**
+  (`2026-02-10`), and it too has **no `2.1.49`** — and no `2.3.0`, which is what the repository
+  declares.
+- So the fix exists as a **GitHub tag** (`v2.1.49`, `2026-04-10T09:51:47Z`) and on neither npm name.
+  Record published `2026-11-02T02:01:13.641Z` → **206 days** after the fix; the GHSA went out
+  **2026-10-17** → **190 days**.
+
+The consequence is not "the range is wrong". The range is right, and a scanner that implements it
+exactly reports *every installable version affected* with an upgrade target (`2.1.49`) that
+`npm i` cannot resolve — a remediation that fails at the install step while reading as complete on
+the dashboard. Name the state **`fix-version-absent-from-named-registry`**, and keep it distinct
+from its three neighbours:
+
+| state | what is missing | who is wrong |
+|---|---|---|
+| `fix-in-source-no-artifact` (EDK2) | the built, signed artifact | nobody — the commit is the fix and firmware ships downstream |
+| `fix-exists-not-installable-under-old-import` (gose) | reachability at the importer's path | the module path / the consumer's imports |
+| `fix-in-artifact-no-identifier` (Openpanel) | the CVE id | the project's disclosure policy |
+| **`fix-version-absent-from-named-registry`** | **the registry entry the version implies** | **the record's `packageURL`, which names a package line that never carried the fix** |
+
+The same batch's second instance fails by a different mechanism and reaches the same place:
+`CVE-2026-120316` (http4k, a Thymeleaf template traversal) names **`6.62.0.0-ee`** as the fix, an
+enterprise-build coordinate; Maven Central's `http4k-template-thymeleaf` listing tops out at
+**`6.61.0.0` (`2026-09-29`)**, so the newest publicly installable module still sits inside its own
+`< 6.62.0.0-ee` range. There the fix is a *commercial* artifact, not a missing one — and the
+open-source consumer's remediation is a licence, which no advisory cell has a field for.
+
+**Guards, so this does not become "the fix does not exist":** the tag is real and the patch is
+verifiable at it (LobeHub's `writeTempFile` runs `basename()` through `resolve()` there, under a
+comment already citing the GHSA); a version absent from a registry is a claim about **that name on
+that registry on that day**, which is perishable in both directions (`registry.npmjs.org/<pkg>` →
+`versions` + `dist-tags.latest`, one call); and a renamed package means two names must both be
+checked before "absent" is written — `@lobehub/chat` is the retired one, `@lobehub/lobehub` the
+current one, and the fix is on neither.
+
+### A live confirmation of the stopping-point rule, from the same batch
+
+`CVE-2026-120322` (Termix, 9.9 path traversal) is the cleanest instance yet of the convention the
+2026-11-02 12:34 census described, because both artifacts are readable in one pass:
+
+| artifact | CVSS 4.0 | vector | CVSS 3.1 |
+|---|---|---|---|
+| cveawg (VulDB CNA) | **9.4** | `…SC:H/SI:H/SA:H/E:P` | **9.9** (base; temporal stripped) |
+| NVD (`Received`, `cna@vuldb.com` `Secondary`) | **8.6** | same prefix + `E:P/CR:X/…` | **9.9** (`Primary`, temporal stripped) |
+
+So the CNA stores the 4.0 **base** (9.4) and NVD stores the 4.0 **threat** score (8.6) — `E:P`
+applied once — while on 3.1 both sides hold the base, and the record's own temporal value is
+`9.9 × 0.94 = 9.306 → Roundup 9.4` (the feed's arithmetic, reproduced). "The vendor says 9.4 and
+NVD says 8.6" is therefore not a disagreement and not a copy error: it is one vector quoted at two
+stopping points, and the arithmetic says which.
+
+→ [[vuln-supply]] [[fact-check]] [[security]]
+
+## The copy loses nothing when the vendor stores the stop NVD keeps (2026-11-02 20:29)
+
+The stopping-point census established the direction of the normalisation: NVD **keeps** `E` on v4.0 and
+**strips** the temporal metrics on v3.x, so the same record yields a threat-adjusted 4.0 beside a base 3.1.
+The open question was the dark side of that asymmetry — *if a CNA puts `base × E` into a field called
+`baseScore` on a **v3.x** vector, NVD strips the terms and stores the base, and the vendor's number then
+exists nowhere on the registry.* That is a loss nobody can see from either artifact alone.
+
+Measured over NVD's **2026-10-26 → 11-01** publication window (one pull, **3,327** metrics; the CNA join
+over cveawg returns **259** record/framework pairs, 136 records):
+
+| artifact | where its number sits |
+|---|---|
+| container (CNA) | **base 246 · non-base (threat) 13** |
+| NVD's copy | **threat 136 · base with no Threat metric 123** |
+| pairs matching **no** stopping point of their own vector | **0 of 259** |
+
+and by framework: **v3.1 — 123 pairs, 0 differences, 123 stripped** · **v4.0 — 136 pairs, 123 differences,
+0 stripped, Δ(nvd−cna) −3.4…−0.4**.
+
+**The loss case does not occur in this window, and the reason is structural rather than lucky.** All **13**
+container metrics that store a non-base number are on **v4.0** — the one framework NVD does *not* strip — and
+NVD reproduces the vendor's number in **13 of 13**, holding something else in **0**. (Confirmed by the census's
+new loss cross-tab, and the count closes with no residue: a v3.1 pair whose container stored a threat score would
+differ from NVD's base, and v3.1 has `differ 0`; v4.0 has exactly 136 − 123 = 13 agreements, so those are the 13.)
+Where NVD *does* strip, the container's stored number is the **base**, so stripping removes the *temporal terms*
+and not the *number*.
+
+**And the 13 are not VulDB's.** The cross-tab names them by assigner: `a59d8014…` **7**, `security@opentext.com`
+**2**, and one each from `vulnerability@ncsc.ch`, `23637b5d…`, `secure@symantec.com` and `e8a6bb0b…` — **zero**
+from `cna@vuldb.com`, whose container stores the base in all **123** of its v4.0 metrics. So the two halves of the
+answer come from two disjoint populations, which is the cleanest possible statement of it: **the CNAs that publish
+a threat score as their stored number are exactly the CNAs whose framework NVD does not strip.**
+
+**Three rules for reading any future sighting of this class.**
+
+1. **A loss needs BOTH halves in the same record: a non-base vendor number AND a framework NVD strips.**
+   Either half alone is benign. A census that counts only "container stores a non-base stop" will report a
+   scare number (13 of 259) for a class that has no instances (0).
+2. **The v3.1 population is one writer's habit, not a rate.** All 123 v3.1 pairs come from `cna@vuldb.com`,
+   whose container publishes four frameworks per record. The v4.0 pairs split across **seven** assigners
+   (VulDB 123, `a59d8014…` 7, OpenText 2, and one each from NCSC, Symantec, `23637b5d…`, `e8a6bb0b…`). So
+   "v3.x stripping never loses a number" is a statement about VulDB's 123 records, and any CNA that writes
+   its temporal score into `baseScore` on a 3.1 vector would falsify it — quote the assigner.
+3. **"Not observed" is the finding, and it is perishable in the usual way.** The class is empty in one
+   published week; nothing in either schema prevents a writer from filling `baseScore` with a temporal
+   number, and the census prints the loss cross-tab now so a future window can falsify it in one run.
+
+One call, and the cross-tab prints whether the copy reproduced the vendor's non-base number or held
+something else:
+`node agent/tools/cvss-recompute.mjs --from … --to … --stopping-point-census --with-cna N --oracle <cvss4>`.
+
+→ [[vuln-supply]] [[fact-check]]

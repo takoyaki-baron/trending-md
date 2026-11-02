@@ -2788,3 +2788,93 @@ combination is a reader that does not know the unit — which is the failure thi
 it catches its own as readily as the feed's.
 
 → [[vuln-supply]] [[fact-check]]
+
+## A metric quoted without its base rate is a different number (2026-11-02 20:20)
+
+Two papers in one batch audit the **premise** a headline number rests on rather than reporting a
+lower number of their own, and between them they supply the two questions this file has been
+missing.
+
+**arXiv 2610.41803 — the base rate is the missing denominator.** Detectors for hijacked agents are
+scored by AUROC on test sets where attacks are **16% to 86%** of samples; across the **eleven**
+evaluations audited, **none varies that share**, and **six** never test on a second benchmark.
+
+- At a **2% attack rate**, a detector with **AUROC 0.879** reaches **precision 0.076** — one true
+  alert per thirteen. The composition of the *negatives alone* moves that precision between
+  **0.039 and 0.117**, so the headline number is stable while the operating precision it implies is
+  not.
+- **Tool coverage** (share of test calls whose tool was seen in training) is a second hidden axis:
+  detector rankings **cross near 50% coverage and reverse below it**, because unseen tools map to
+  inputs training never reached. Dropout on tool inputs largely removes the reversal.
+- **Transfer is absent:** no detector trained on AgentDrift ranks AgentDojo better than chance
+  (`AUROC 0.47–0.52`), including one that reaches **0.996 in-domain**. A released monitor trained on
+  neither reaches **0.930**, yet its own released decision rule yields **0.096** precision at 2%.
+
+**arXiv 2610.41970 — test-time scaling is a chain of three premises, and the first two were
+missing.** Pre-registered, on Cosmos Policy + RoboCasa:
+
+- **Decision signal:** a learned value selector is **1.66 pp worse than random** on clean data; a
+  hindsight oracle gains only **1.40 pp** with an episode-level interval **spanning zero**; and
+  **82% of states have identical candidate outcomes** — there is no headroom to select into.
+- **Realized efficiency:** token pruning cuts per-forward FLOPs by up to **47%** but buys at most
+  **1.15×** end-to-end (1.25× on a decode-excluded path) against its own **1.5×** target.
+- **Evaluation integrity:** the adaptive-allocation experiment is declared **inconclusive** under a
+  power gate — and the audit finds a **silent rendering corruption whose rate rises sharply along
+  compute-heavy planning paths**, i.e. the simulator degrades specifically on the trajectories being
+  tested, while the official direct-policy result stays unaffected.
+
+**The rule to carry:** when a detector, router or verifier quotes a discrimination metric, ask for
+the **prevalence it will run at** and convert — precision, not AUROC, is what an operator
+experiences, and at a 2% base rate a strong AUROC is a false-alarm generator. When a test-time
+method quotes a FLOP or candidate reduction, ask whether the reduction reached **wall clock** and
+whether the candidates were **distinguishable at all**. And when an audit finds the environment
+degrading on the tested path, the benchmark was measuring its own renderer — a failure mode no
+amount of seed averaging fixes.
+
+→ [[harness-reliability]] [[frontier-models]] [[vuln-supply]]
+
+## A record-shape check needs the claim check's disclosure guard (2026-11-02 20:29)
+
+The lint has two stopping-point instruments and they answer different questions, which is why one of them
+was right and the other was measuring the wrong thing.
+
+- **`--check cvss` → `score-stopping-point`** is a *claim* check. It binds a quoted number to a record,
+  and it has always been suppressed by disclosure: the item names the stop ("base"/"threat"/"temporal"),
+  or it prints two of the vector's numbers, because enumeration is disclosure.
+- **`--check temporal` → `temporal-stopping-point`** is a *record-shape* check, built because an item can
+  quote three numbers in one paragraph with no `CVSS 3.1` label anywhere, so every pair-based check is
+  blind to it. It reads the CNA container's metrics and fires per record — and it shipped with **no yield
+  at all**.
+
+On its first live run (`2026-11-02.md`, 42 items) it returned **three advisories against three correct
+items**, and the items had already done exactly what the advisory asked for:
+
+- item 28 — "with `E:P` that 4.0 vector yields a **base of 10.0 and a threat score of 9.3**, so the
+  container's 10.0 is the base and NVD's 9.3 is the threat";
+- item 35 — "**9.9** on CVSS 3.1 … — **the base score**, with `E:P` taking the full temporal value to
+  **9.4**", plus the sentence "one vector at two stopping points".
+
+So the finding was not about the feed. It was about whether the writer used this tool's vocabulary.
+
+**Three fixes, and the third is the transferable one.**
+
+1. **The same two arms, shared with the claim check.** A named stop (`base`/`threat`/`temporal` …
+   `score`, `stopping point`), or a second number from **this vector's own** stops.
+2. **Enumeration binds to the record, not the item.** A bare number cannot be attributed to an id unless
+   it sits in that id's own stretch of prose, so the segment is *first mention of this id → next mention
+   of a different id*. The selftest that forced this ("a second record's numbers do not disclose this
+   one") was written with a neighbour's **9.4**, which is this vector's stop exactly — an item-level
+   count would have suppressed a genuine finding with another record's number. Distinct scores are
+   counted once: a v3.x chain can stop at 9.4 after `E` and 9.4 again after `E`+`RC`, and counting one
+   quoted number twice is a suppression bug that reads as diligence.
+3. **The suppression prints a verdict** (`temporal-disclosed`, sev 0) instead of vanishing. A suppression
+   nobody can count is how a check's prevalence becomes folklore; this file already carries the rule
+   ("the suppressions are named, not silent") and the date check's census is the reason it does — before
+   the census, its false-positive rate looked like 18% and was invisible in any single-run calibration.
+
+**The general rule:** a check that reads the *record* rather than the *sentence* must still ask whether
+the sentence answered the question. Otherwise a writer who satisfies the intent without naming the
+machinery is scored as a defect — and the fix a reader would apply is to bolt the tool's vocabulary onto
+prose that was already correct.
+
+→ [[vuln-supply]] [[disclosure-lag]]

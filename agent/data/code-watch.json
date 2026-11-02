@@ -897,11 +897,59 @@
           "path": "docs/superpowers/plans/2026-10-18-settlement-store.md",
           "html_url": "https://github.com/hefenglim/invest-portfolio/blob/ce7267e273932f64605975d28571bd3bfbd151e5/docs/superpowers/plans/2026-10-18-settlement-store.md",
           "found": "2026-10-20T13:39:06.666Z"
+        },
+        "SeaXen/agentskills::library/juliusbrussee-caveman/docs/WRAP-BENCHMARK.md": {
+          "repo": "SeaXen/agentskills",
+          "path": "library/juliusbrussee-caveman/docs/WRAP-BENCHMARK.md",
+          "html_url": "https://github.com/SeaXen/agentskills/blob/9e00883470e91079cbf9b84486138201904dcae6/library/juliusbrussee-caveman/docs/WRAP-BENCHMARK.md",
+          "found": "2026-11-02T12:39:29.192Z"
+        },
+        "SeaXen/agentskills::library/juliusbrussee-caveman/docs/technical/product-model.md": {
+          "repo": "SeaXen/agentskills",
+          "path": "library/juliusbrussee-caveman/docs/technical/product-model.md",
+          "html_url": "https://github.com/SeaXen/agentskills/blob/9e00883470e91079cbf9b84486138201904dcae6/library/juliusbrussee-caveman/docs/technical/product-model.md",
+          "found": "2026-11-02T12:39:29.192Z"
+        },
+        "SohamTilekar/skills-catalog::sources/workflows/caveman/docs/WRAP-BENCHMARK.md": {
+          "repo": "SohamTilekar/skills-catalog",
+          "path": "sources/workflows/caveman/docs/WRAP-BENCHMARK.md",
+          "html_url": "https://github.com/SohamTilekar/skills-catalog/blob/695be2fc0018fe080544e76f06dbdb57dfcbf86c/sources/workflows/caveman/docs/WRAP-BENCHMARK.md",
+          "found": "2026-11-02T12:39:29.192Z"
+        },
+        "SeaXen/agentskills::library/juliusbrussee-caveman/docs/technical/accounting-and-evidence.md": {
+          "repo": "SeaXen/agentskills",
+          "path": "library/juliusbrussee-caveman/docs/technical/accounting-and-evidence.md",
+          "html_url": "https://github.com/SeaXen/agentskills/blob/9e00883470e91079cbf9b84486138201904dcae6/library/juliusbrussee-caveman/docs/technical/accounting-and-evidence.md",
+          "found": "2026-11-02T12:39:29.192Z"
+        },
+        "SohamTilekar/skills-catalog::sources/workflows/caveman/docs/technical/product-model.md": {
+          "repo": "SohamTilekar/skills-catalog",
+          "path": "sources/workflows/caveman/docs/technical/product-model.md",
+          "html_url": "https://github.com/SohamTilekar/skills-catalog/blob/695be2fc0018fe080544e76f06dbdb57dfcbf86c/sources/workflows/caveman/docs/technical/product-model.md",
+          "found": "2026-11-02T12:39:29.192Z"
+        },
+        "SohamTilekar/skills-catalog::sources/workflows/caveman/docs/technical/accounting-and-evidence.md": {
+          "repo": "SohamTilekar/skills-catalog",
+          "path": "sources/workflows/caveman/docs/technical/accounting-and-evidence.md",
+          "html_url": "https://github.com/SohamTilekar/skills-catalog/blob/695be2fc0018fe080544e76f06dbdb57dfcbf86c/sources/workflows/caveman/docs/technical/accounting-and-evidence.md",
+          "found": "2026-11-02T12:39:29.192Z"
+        },
+        "SeaXen/agentskills::library/juliusbrussee-caveman/benchmarks/render_charts.py": {
+          "repo": "SeaXen/agentskills",
+          "path": "library/juliusbrussee-caveman/benchmarks/render_charts.py",
+          "html_url": "https://github.com/SeaXen/agentskills/blob/9e00883470e91079cbf9b84486138201904dcae6/library/juliusbrussee-caveman/benchmarks/render_charts.py",
+          "found": "2026-11-02T12:39:29.192Z"
+        },
+        "SohamTilekar/skills-catalog::sources/workflows/caveman/benchmarks/render_charts.py": {
+          "repo": "SohamTilekar/skills-catalog",
+          "path": "sources/workflows/caveman/benchmarks/render_charts.py",
+          "html_url": "https://github.com/SohamTilekar/skills-catalog/blob/695be2fc0018fe080544e76f06dbdb57dfcbf86c/sources/workflows/caveman/benchmarks/render_charts.py",
+          "found": "2026-11-02T12:39:29.192Z"
         }
       },
-      "runs": 124,
+      "runs": 125,
       "first_run": "2026-09-01T04:34:31.653Z",
-      "last_run": "2026-11-02T04:57:47.218Z",
+      "last_run": "2026-11-02T12:39:29.192Z",
       "last_total": 100
     },
     "ra-paper-id": {
@@ -1711,25 +1759,25 @@
           "found": "2026-10-27T20:38:19.872Z"
         }
       },
-      "runs": 72,
+      "runs": 73,
       "first_run": "2026-09-05T21:03:03.908Z",
-      "last_run": "2026-11-02T04:57:47.218Z",
+      "last_run": "2026-11-02T12:39:29.192Z",
       "last_total": 100
     },
     "ra-vllm": {
       "seen": {},
-      "runs": 111,
+      "runs": 112,
       "first_run": "2026-09-05T21:03:03.908Z",
-      "last_run": "2026-11-02T04:57:47.218Z",
+      "last_run": "2026-11-02T12:39:29.192Z",
       "last_total": 0
     },
     "ra-sglang": {
       "seen": {},
-      "runs": 111,
+      "runs": 112,
       "first_run": "2026-09-05T21:03:03.908Z",
-      "last_run": "2026-11-02T04:57:47.218Z",
+      "last_run": "2026-11-02T12:39:29.192Z",
       "last_total": 0
     }
   },
-  "last_run": "2026-11-02T04:57:47.218Z"
+  "last_run": "2026-11-02T12:39:29.192Z"
 }

@@ -1578,6 +1578,46 @@
       "id": "CVE-2026-84170",
       "why": "Apache Wicket 8.3 CWE-770 upload resource ignoring configured limits — 4.0-only CNA score",
       "seeded": "2026-11-02 [Received] 4.0 Secondary/security@apache.org 8.3, published 11-01"
+    },
+    {
+      "id": "CVE-2026-120315",
+      "why": "LobeHub Chat path traversal to RCE via writeTempFile — fix tag 2.1.49 dated 2026-04-10, no 2.1.49 on npm under either package name",
+      "seeded": "2026-11-02 [Received] 3.1 Primary/disclosure@vulncheck.com 8.8, 4.0 Secondary 8.7, CWE-22, published 11-02"
+    },
+    {
+      "id": "CVE-2026-120313",
+      "why": "Network-AI InputSanitizer.sanitizePath unanchored startsWith escapes the base directory to a sibling (PR:N)",
+      "seeded": "2026-11-02 [Deferred] 3.1 Primary/disclosure@vulncheck.com 7.5, 4.0 Secondary 8.7, CWE-22, published 11-02"
+    },
+    {
+      "id": "CVE-2026-120311",
+      "why": "Network-AI FileJobStore job-id traversal reads/deletes arbitrary .json incl. AuthGuardian trust config",
+      "seeded": "2026-11-02 [Deferred] 3.1 Primary/disclosure@vulncheck.com 8.8, 4.0 Secondary 8.7, CWE-23, published 11-02"
+    },
+    {
+      "id": "CVE-2026-120312",
+      "why": "Network-AI AgentVCR cassette-name traversal reads/writes arbitrary .json",
+      "seeded": "2026-11-02 [Deferred] 3.1 Primary/disclosure@vulncheck.com 8.8, 4.0 Secondary 8.7, CWE-23, published 11-02"
+    },
+    {
+      "id": "CVE-2026-120322",
+      "why": "Termix transferToHost destPath traversal, public exploit, vendor did not respond — fixed in core v26.10.0",
+      "seeded": "2026-11-02 [Received] 3.1 Primary/cna@vuldb.com 9.9, 4.0 Secondary 8.6, CWE-22, published 11-02"
+    },
+    {
+      "id": "CVE-2026-120317",
+      "why": "http4k DigestEncoder computes auth-int without hashing the request body — fix 6.60.0.0 shipped 2026-09-16",
+      "seeded": "2026-11-02 [Deferred] 3.1 Primary/disclosure@vulncheck.com 5.9, 4.0 Secondary 8.2, CWE-345, published 11-02"
+    },
+    {
+      "id": "CVE-2026-120316",
+      "why": "http4k ThymeleafTemplates path traversal — fix is 6.62.0.0-ee, absent from Maven Central (newest public 6.61.0.0)",
+      "seeded": "2026-11-02 [Deferred] 3.1 Primary/disclosure@vulncheck.com 5.9, 4.0 Secondary 8.2, CWE-22, published 11-02"
+    },
+    {
+      "id": "CVE-2026-120213",
+      "why": "@fastify/http-proxy rewritePrefix bypass via URL-decoded params, no dot-dot — CWE-22 + CWE-436, fixed 11.6.6",
+      "seeded": "2026-11-02 [Received] 3.1 Secondary/openjs 9.1, published 11-02"
     }
   ]
 }

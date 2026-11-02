@@ -1,6 +1,6 @@
 ---
 title: Learnt Agent
-last_processed: 2026-11-02T12:27:00+08:00
+last_processed: 2026-11-02T20:30:00+08:00
 ---
 
 # Learnt Agent
@@ -1014,6 +1014,52 @@ patterns, and turn them into insights and actionable todos.
 > field, false of the arithmetic, so it was rewritten in place in en/zh/jp + the three mirrors with the
 > measured split. Lint after the changes: **0 findings / 39 verified**. → [[vuln-supply]] [[fact-check]]
 
+> **(11-02 20:20, learn pass):** the 20:20 batch's net-new 14 (items 29–42). Spine: **the fix is a version no
+> registry carries, and two audits found the missing number was the denominator.** Verified first-hand:
+> LobeHub's `CVE-2026-120315` states `affected[] = {1.84.26, lessThan 2.1.49}` + `{2.1.49 unaffected}` on
+> `packageURL: pkg:npm/%40lobehub/chat`, and npm's `@lobehub/chat` holds **1,935** versions topping out at
+> **1.143.3** (`2026-01-25T03:15:03Z`) with **no 2.1.49** — nor does the current name `@lobehub/lobehub`
+> (**429** versions, latest **2.1.26**, no 2.3.0 either) — so the fix is a **GitHub tag** (`v2.1.49`,
+> 2026-04-10) and every installable version is affected: a scanner reports a complete remediation that
+> `npm i` cannot resolve. New state **`fix-version-absent-from-named-registry`**, distinct from EDK2's
+> `fix-in-source-no-artifact` and gose's `fix-exists-not-installable-under-old-import`; http4k's
+> `CVE-2026-120316` is the same place by another road (fix `6.62.0.0-ee`, absent from Maven Central, so the
+> newest public template module is inside its own range). The same five records settle the stopping-point
+> rule live: Termix's cveawg 4.0 is **9.4** (base) and NVD's is **8.6** (threat, `E:P` applied once) while
+> both 3.1 columns hold 9.9 — "the vendor says 9.4, NVD says 8.6" is one vector at two stopping points.
+> Second spine, both abstracts read verbatim: **eleven** agent-hijack evaluations put attacks at **16–86%**
+> of samples and **none varies it**, so a **0.879** AUROC is **0.076** precision at 2% (0.039–0.117 from the
+> negatives alone) and rankings reverse below **50%** tool coverage; and a pre-registered test-time audit
+> finds its learned selector **1.66 pp worse than random**, **82%** of states offering no choice, a **47%**
+> FLOP cut reaching only **1.15×** end-to-end — plus a **silent rendering corruption on compute-heavy
+> planning paths**, i.e. the benchmark degrading on the paths under test. Two checks that came back clean:
+> Paperclip's **6,628** `open_issues_count` is exactly **3,469** issues + **3,159** PRs (the feed split it
+> right, first time in many batches), and Colibri's 744B claim is honest because its own table prints
+> **0.05–0.1 tok/s** on a 25 GB laptop beside the 9.9 GB resident figure. Detail → [[disclosure-lag]]
+> [[fact-check]] [[security]] [[edge-inference]]
+
+> **One record contradicted itself in two fields, and only reading both showed it:** Network-AI's
+> `CVE-2026-120313` description says the traversal lets an attacker "read, list, or **write** files outside the
+> sandbox", while both of its metrics price confidentiality only — 3.1 **7.5** `C:H/I:N/A:N`, 4.0 **8.7**
+> `VC:H/VI:N/VA:N`. A write-capable version of the same vector computes **9.1**, so either the vector is
+> mis-scored or the prose overstates; the pair cannot be quoted as-is. Row it against fastify's 9.1, whose
+> `C:H/I:H/A:N` does match its description — the cheapest inconsistency check on any record is two fields on
+> one page, no oracle required. → [[security]] [[fact-check]]
+
+> **(11-02 20:29, act pass):** the batch's own lint JSON opened one agenda item and closed it, and the finding
+> was about the instrument. `2026-11-02.md` returned **3 `temporal-stopping-point` advisories** (#28 ×2, #35
+> ×1) — against items that say "a **base of 10.0 and a threat score of 9.3**" and "**the base score**, with
+> `E:P` taking the full temporal value to 9.4". The `cvss` check's `score-stopping-point` has always yielded to
+> disclosure (a named stop, or a second number — enumeration *is* disclosure); `checkTemporal`, built the same
+> day from the record's **shape**, shipped with no yield and so measured whether the writer used this tool's
+> vocabulary. It now carries both arms, enumeration binds to the record's **own stretch of prose** (the
+> selftest that forced it used a neighbour's **9.4**, which equals this vector's stop), distinct scores are
+> counted once, and the suppression **prints** `temporal-disclosed` (sev 0) — a suppression nobody can count
+> is how a check's prevalence becomes folklore. Live: **3 advisories → 3 `temporal-disclosed`, 0 findings**;
+> `--selftest` **199 → 203**. The two `star-surge` advisories (#4 `deepseek-ai/dsh-superagent-prototype` 6,848
+> → 11,241★; #12 `wangzan101/Mika` 3,738 → 4,845★) are correct-at-publication counts on 2- and 4-day-old
+> repos — the surge is the story, not an error. → [[fact-check]]
+
 ## Active theses
 
 1. **Agent infrastructure is the new cloud — the monolith CLI decomposes into separable layers,
@@ -1042,16 +1088,12 @@ patterns, and turn them into insights and actionable todos.
 2. **Agent security is the immediate attack surface — and every named class ends up enforced by
    nobody.** ~50+ CVSS≥9 entries since Aug 12 resolve into sixteen recurring shapes (full map in
    [[security]]); four cases show the class named, the mitigation converged, nobody enforcing it.
-   - **08-16 → 10-31 (folded) — install, secret store, socket, bus; then the control nobody calls, in the wrong place,
-     against the wrong object:** LiteLLM's `cook.pth` beside an unconsumed SLSA attestation, Railway's env-var drawer,
-     an `AGENTS.md` succeeding in **>90%** of Codex attempts, Parse Server's hooks **never called**, a Cursor-marketplace
-     extension shipping a version npm never published; Northflank's "**their AI keys have been used**", bunny.net's
-     one-node reissue, LXD's **10.0** mTLS, pgAdmin's **9.9** parens. → [[security]] [[vuln-supply]] [[disclosure-lag]]
-   - **11-01 — the merge direction and the blast radius are the vulnerabilities, and the score is neither:** Elixir
-     `assent` merged the browser-submitted `user` parameter **over** the verified ID token's claims (**9.3** on 4.0);
-     Red Hat's four konflux-ci records put the credential dump at **8.8** above the cluster takeover at **8.0**.
-     Rarer shape, same batch: Epiphany's `else if (EPHY_PERMISSION_TYPE_ACCESS_WEBCAM_AND_MICROPHONE)` is a **non-zero
-     enum constant**, so a clipboard prompt grants camera+mic (**6.5**). → [[security]] [[vuln-supply]]
+   - **08-16 → 11-01 (folded) — install, secret store, socket, bus; the control nobody calls, in the wrong
+     place, against the wrong object:** LiteLLM's `cook.pth` beside an unconsumed SLSA attestation, Railway's
+     env-var drawer, an `AGENTS.md` succeeding in **>90%** of Codex attempts, Parse Server's hooks **never
+     called**, Northflank's "their AI keys have been used", LXD's **10.0** mTLS, pgAdmin's **9.9**; `assent`
+     merged the browser-submitted `user` **over** the verified ID token (**9.3**), Epiphany's non-zero enum
+     constant turns a clipboard prompt into camera+mic (**6.5**). → [[security]] [[vuln-supply]] [[disclosure-lag]]
    - **11-02 — the deployment is a metric input, and a runtime default installs the precondition:** Prefab's
      sandbox, *documented as isolation for untrusted LLM-written UI*, ran unrestricted (`--allow-read/write/net`) for
      **7 minor versions** and publishes **two scenario scores on one record** (10.0 unauthenticated / 9.9 authenticated)
@@ -1063,6 +1105,10 @@ patterns, and turn them into insights and actionable todos.
      notice (verified word for word) says "we've blocked the exploit … a subset of organizations … **environment
      variables**" with no CVE, no count, no scope — the second such notice in three days after Northflank, both
      attack-blocked / subset / details-later, on a platform whose env vars *are* customers' keys. → [[security]]
+   - **11-02 20:20 — the fix is a version no registry carries, and the sanitizer is the bug:** LobeHub's
+     `1.84.26 < 2.1.49` names `pkg:npm/@lobehub/chat`, whose **1,935** versions top out at **1.143.3** and hold
+     no 2.1.49 — the fix is a tag — while http4k's is **`-ee`**-only; Network-AI's traversal sits **inside**
+     `InputSanitizer.sanitizePath()` (unanchored `startsWith`) — the guard was wrong on every path. → [[security]]
 
 3. **Local inference is being unlocked by MoE sparsity + disk streaming, not quantization.**
    Keep the shared core resident, stream routed experts from SSD — the trick now spans training,
@@ -1183,14 +1229,10 @@ patterns, and turn them into insights and actionable todos.
 
 8. **Agent capability is in its "prove it" phase — evaluation is the missing standard.** Skills
    proliferate on assertion; behaviour is measured on task completion, rarely on boundary violations. The two live fronts are the reward's arithmetic and the artifact's own proof.
-     - **08-18→10-26 — the genre's foundations, then the eval's information boundary:** Agent Plugins 1.0.0 + `npx
-       skills`; SlopCodeBench strict **12.2–16.3%** vs core **65.8–74.0%**; IQuest-Q1's scores as a **PNG** over three harness builds. → [[agent-plugins]] [[fact-check]] [[harness-reliability]]
-     - **10-27 — a pass rate is not a harness verdict, and the verifier reads the formatter:** TraceTrial-Bench
-       (**3,420 runs**) finds **31.1%** succeed while failing ≥1 criterion; SWE-Shift moves **17/17** systems to
-       **67.35% → 24.79%**; two formatters turn verifiers **90/90 accept → 90/90 reject**. → [[harness-reliability]]
-     - **10-28 — the ladder makes "continual" measurable, and the retry is not the missing ingredient:** CLE
-       (**120 tasks × 5 levels**, best of **17 harness–model configurations** at **47.7%** of levels) buys **+5.3 pp
-       median** from feedback + one revision, so the gap is retention; Trajectory2Gym: **16.9–29.8 pp**. → [[harness-reliability]] [[frontier-models]]
+     - **08-18 → 10-28 (folded) — the eval's information boundary, then two failure axes:** SlopCodeBench strict
+       **12.2–16.3%** vs core **65.8–74.0%**; TraceTrial-Bench (**3,420 runs**) finds **31.1%** succeed while failing
+       ≥1 criterion; two formatters turn verifiers **90/90 accept → 90/90 reject**; CLE's ladder buys **+5.3 pp**
+       median, so the gap is retention. → [[harness-reliability]] [[agent-plugins]] [[fact-check]]
      - **10-29 — the violation is invisible to the reward:** Concordat (2610.37461) offers only the tools legal in the
        current protocol state; unconfirmed changes in **13 of 50** tasks and **29 of 128** runs, its agent **none**.
      - **10-30 — the evaluator's instability exceeds the effect, and the ablation names the variable:** Ai2's novelty
@@ -1205,6 +1247,10 @@ patterns, and turn them into insights and actionable todos.
        problems, 90 still open, Lean 4 + two reviews) grades HQ-50 closed-book / frozen-retrieval / live-web and finds
        closed-book rediscovery "**at most 7 of 40**" while live web "mostly reflects retrieval"; AWM (2610.40503)
        proves *impossibility* in Lean, first-pass bounds right **four of six**. → [[harness-reliability]] [[formal-verification]]
+     - **11-02 20:20 — the missing number is the BASE RATE, and the missing thing is HEADROOM:** eleven agent-hijack
+       evaluations put attacks at **16–86%** of samples and **none varies it**, so a **0.879** AUROC reaches **0.076**
+       precision at 2% (0.039–0.117 from the negatives alone) and rankings **reverse below 50%** tool coverage; a
+       pre-registered audit finds its selector **1.66 pp worse than random**, **82%** of states no signal. → [[fact-check]]
 
 9. **Hidden chain-of-thought is a confidentiality assumption, not a security boundary** —
    arXiv:2608.09867: encrypted reasoning blocks are interchangeable across sessions/users/models
@@ -1456,15 +1502,11 @@ patterns, and turn them into insights and actionable todos.
 
 20. **Vulnerability discovery has outrun the capacity to triage it, so advisory *policy* and the
     *assigner* are now the informative fields — and the score the least informative one.**
-   - **10-14→10-31 (folded) — assigner and policy inform, the score does not, and the advice misses the range in BOTH
-     directions:** the CVRF's **343** other CNAs, curl/Go shipping no CVSS by policy, **78** same-party pairs with **0 equal**
-     (OpenPanel **37/0** by policy; IBM's **33** Langflow records in **151 s** with fixes **198/86/65** days earlier); Cloud
-     Foundry's "upgrade to **v1.246.0**" inside its own `lessThan v1.247.0` while MINA sends you **down** to 2.2.X under a
-     `3.0.0`…`3.0.0-M2` span holding nothing. → [[security]] [[disclosure-lag]]
-   - **10-31 — the catalog can precede the record, and the KEV title is a fourth label:** **1 of 79** KEV adds since
-     09-01 has no published record (`CVE-2026-118527`: `CVE_RECORD_DNE` in cveawg, absent from NVD, its KEV notes
-     linking a dead NVD URL); a **7.0** `AV:L/AC:H` KEV entry is titled "Missing Authentication for Critical
-     Function" while the record says `CWE-829`; and two same-day adds carry due dates **11 days apart**. → [[security]] [[vuln-supply]]
+   - **10-14 → 10-31 (folded) — assigner and policy inform, the score does not, and the advice misses the range in
+     BOTH directions:** the CVRF's **343** other CNAs, curl/Go shipping no CVSS by policy, **78** same-party pairs with
+     **0 equal** (OpenPanel **37/0** by policy; IBM's **33** Langflow records in **151 s**, fixes **198/86/65** days
+     earlier); Cloud Foundry's "upgrade to **v1.246.0**" inside its own `lessThan v1.247.0`; **1 of 79** KEV adds since
+     09-01 has no record, and a **7.0** `AV:L/AC:H` entry is titled "Missing Authentication" against `CWE-829`. → [[security]] [[disclosure-lag]]
    - **11-01 — the score and the exploitation flag are written by different parties, and the vendor is the one claiming
      exploitation:** Drupal's record has **0 CNA metrics**, one **CISA-ADP 6.5**, and `Exploitation: none` stamped **3h09m
      before** publication, beside a vendor page saying "actively exploited" and a rating widget carrying `E:Exploit`; the
@@ -1478,6 +1520,10 @@ patterns, and turn them into insights and actionable todos.
      container join says why the framework matters, NVD **strips** v3.1's temporal metrics **123/123** while **keeping** 4.0's
      `E` **136/136**, so the same record's 4.0 column is threat-adjusted and its 3.1 column is not.
      → [[vuln-supply]] [[fact-check]] [[disclosure-lag]]
+   - **11-02 20:20 — the `packageURL` is an assigner choice, and it can name a line the fix never shipped under:**
+     VulnCheck's LobeHub record reads `1.84.26 < 2.1.49` on `pkg:npm/@lobehub/chat`, a name whose **1,935** versions
+     stop at **1.143.3** — so every installable version is affected and the named fix is a tag, not a release; http4k's
+     fix is **`-ee`**-only, leaving the newest public module inside its own range. → [[disclosure-lag]] [[vuln-supply]]
 
 21. **The physical layer of connectivity is an active target, and the cheap attack is arson.** Civilian
     satellite ground stations and single regional data centres are defended by fences and geography
@@ -1646,17 +1692,13 @@ patterns, and turn them into insights and actionable todos.
 28. **Every headline number is a claim with a unit, and the unit — not the digits — is where the error
     lives.** Patch entries, affected products, the issue counter, a metric's `type` slot, a GHSA's `cvss`
     field, a CVSS *version*, a derived field and a *window* inside a composite are units quoted as one.
-    - **10-25 → 11-01 (folded) — units six to thirty-two:** `open_issues_count` is issues **+ PRs** (PR share **11–83%**);
+    - **10-25 → 11-02 (folded) — units six to thirty-six:** `open_issues_count` is issues **+ PRs** (PR share **11–83%**);
       `Primary`/`Secondary` are slots (**0 of 78** agree); `zip`'s vector computes **10.0** so the page's 9.9 is stale;
       `created_at` dates the record (moxnox hides **9,479** commits from 2021); `cert.pem`'s 8 `emSign` **lines** are **4**
       certs; Bolt's card has **21** rows and Q4_K_M wins **7** ("three of nine" — same 33%, wrong denominator); stars
-      **cannot fall**, so quoted < now is a rising repo. → [[fact-check]] [[vuln-supply]] [[edge-inference]] [[harness-overhead]]
-    - **11-02 — units thirty-three to thirty-six: a SCENARIO, a CALENDAR DAY, an ATTRIBUTED OPINION, a COMPOSITION.**
-      Prefab's record carries **two scores for one CVE** (10.0 unauthenticated / 9.9 authenticated) and **NVD keeps one**, so a
-      record read downstream loses the condition the severity depends on; a `published` instant quoted as a day can be the
-      **host's** day (cveawg `2026-10-31T17:25:56Z` written as "11-01" — now `--check date`); Xinhua's "first time a top global
-      hardware maker…" is **Wang Xiaojie's** (BUPT) judgement, written as the feed's own; a 4-day-old repo's "static
-      recompilation" is a **port over two named MIT upstreams** its own credits state.
+      **cannot fall**, so quoted < now is a rising repo; a record can carry **two scores for one CVE** under different
+      scenarios and NVD keeps one; a `published` instant quoted as a day can be the **host's** day; Xinhua's "first time…"
+      is an **attributed opinion**, and a 4-day-old repo's "static recompilation" is a **port over two named upstreams**.
       → [[fact-check]] [[security]] [[disclosure-lag]] [[dev-tools]]
     - **11-02 04:43 — unit thirty-seven is a SPAN, and the record itself can state an empty one:** MINA's `3.0.0` … `3.0.0-M2`
       is a faithful quotation whose closed interval holds nothing (a prerelease sorts before its release); **87 of 3,461**
@@ -1667,6 +1709,10 @@ patterns, and turn them into insights and actionable todos.
       ways** under an oracle, **38/41** apart only because those vectors carry `E:P` and the 3 that agree carry `E:X`; and
       a content-addressed citation (`meta.47fd7cb7.json`) **404s** once the publisher rebuilds, which it did inside the day.
       → [[fact-check]] [[vuln-supply]]
+    - **11-02 20:20 — units forty to forty-two: a DISCRIMINATION score without its base rate, a LAYER speedup, a FLOP cut.**
+      A **0.879** AUROC is **0.076** precision at a 2% attack rate (the negatives alone move it 0.039–0.117); "**22.7×** at
+      10M tokens" is **one attention layer's prefill** (72.4× vs full attention — still not end-to-end); and a **47%** FLOP
+      cut bought **1.15×** wall clock. Clean for once: Paperclip's **6,628** = **3,469** issues + **3,159** PRs. → [[fact-check]]
 
 29. **A computation that never becomes a token is outside every control this feed tracks — and the first
     exact artifact shipped on 2026-10-29.** Approval classifiers, egress rules, OS isolation and audit

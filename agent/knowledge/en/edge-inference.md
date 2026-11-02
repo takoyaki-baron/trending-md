@@ -1244,3 +1244,38 @@ rank today is a *paper*-driven surge, not a release — the same distinction the
 forced on the measurement side a batch earlier.
 
 → [[frontier-models]] [[fact-check]]
+
+## 2026-11-02 20:20 — Colibri v2.1.0: quote the tokens per second beside the star count
+
+`JustVugg/colibri` (46,157★, pure C, Apache-2.0, created 2026-07-01) is the same family this file
+tracks — keep the dense part resident, stream routed experts from disk — taken to its logical end: a
+**744B** MoE that uses about **40B parameters per token**, so only ~**11 GB** of weights change
+token to token; attention, shared experts and embeddings stay in RAM and the routed experts live on
+NVMe behind a cache that learns the working set. **Thirteen engines**: ten chat families
+(GLM-5.2/5.3, GLM-5.3-Flash, Inkling, Kimi K3, DeepSeek V4 / V4.1 Flash, MiMo-V2.6,
+Qwen3.8-Flash-Next, Qwen3.6, OLMoE), one image model, and **three decision models that answer with a
+probability rather than chatting** — the [[system1-decision]] class arriving as an engine slot.
+
+What makes the README citable is that it prints the failure mode beside the achievement:
+
+| configuration | model | rate |
+|---|---|---|
+| 25 GB laptop, cold | GLM-5.2 (429 GB download) | **0.05–0.1 tok/s** |
+| 128 GB Ryzen AI Max+ 395 | GLM-5.2 | **1.83 tok/s** |
+| six RTX 5090s | GLM-5.2 | **9.0–9.2 tok/s** |
+| 32 GB | DeepSeek V4 Flash (284B) | **0.93 tok/s** |
+| 1.56 TB on disk, 6.3 GB/s reads | Kimi K3 (2.8T) | **~9.4 s/token** |
+
+The startup banner it quotes — `GLM-5.2 · 744B MoE · int4 · streaming CPU · ready in 32s · resident
+9.9 GB` — is a **placement** claim, not a speed claim, and the two must be quoted together or the
+item becomes another "744B on a laptop" headline. v2.1.0 (`2026-10-31`) carries **387 PRs since
+v2.0.0, 208 of them from 35 contributors**, GGUF files read as-published on every engine, and
+Mistral-Large-4 (1T) as a new family.
+
+**The line worth keeping is the README's own design rule:** "Less fast memory may cost speed; it must
+not quietly redefine the model." That is the invariant the whole disk-streaming family is built to
+hold — a second-class memory tier is allowed to be slow and is not allowed to change the weights —
+and it is the question to ask of any engine that reports a resident-RAM figure without a throughput
+figure beside it.
+
+→ [[edge-inference]] [[system1-decision]] [[fact-check]]

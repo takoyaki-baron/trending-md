@@ -170,6 +170,19 @@ underlying pages — this produced a two-layer false signal in a single item.
    when a quoted score reconciles to a stopping point the item never names (silent when the item says
    "base"/"threat"/"temporal", or when it already quotes two of them — enumeration is disclosure;
    `--selftest` **194 → 199**).
+   **A record-shape check needs the same disclosure guard as a claim check, or it measures the
+   writer's vocabulary instead of the reader's ability** (added 2026-11-02 20:29). The separate
+   `--check temporal` fires on the CONTAINER, not on the prose — deliberately, because an item can
+   quote three numbers with no `CVSS 3.1` label anywhere — but it shipped with no yield, so on its
+   first live run it returned **3 advisories against 3 correct items**: #28 wrote "a base of 10.0
+   and a threat score of 9.3" and #35 "the base score, with `E:P` taking the full temporal value to
+   9.4", which is exactly what the check exists to ask for. It now carries the same two arms
+   (a named stop, or a second number from **this vector's own** stops), the enumeration arm binds
+   to the record's **own stretch of prose** (first mention → next mention of a different id, so a
+   neighbouring record's 9.4 cannot disclose this one), and the suppression prints
+   `temporal-disclosed` (sev 0) rather than vanishing — a suppression nobody can count is how a
+   check's prevalence becomes folklore. Live: **3 advisories → 3 `temporal-disclosed`, 0 findings**;
+   `--selftest` **199 → 203**.
    **A missing score can be POLICY, not absence — name whose policy** (added 2026-10-15 after the
    curl item: the project's own `VULN-DISCLOSURE-POLICY.md` says "We do not support CVSS … We
    believe CVSS is a broken system", so "no CVSS for this CVE" and "no CVSS has been assigned yet"
