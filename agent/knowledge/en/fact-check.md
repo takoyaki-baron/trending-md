@@ -2676,3 +2676,115 @@ a single-run calibration of 1 finding / 24 verified, because that day's items ha
 release lines.
 
 → [[fact-check]] [[disclosure-lag]]
+
+## The second number on the page was a stopping point, not a disagreement (2026-11-02 12:27)
+
+Item 28 of the 11-02 batch said something that sounded like a scandal and was not: **41** records assigned by
+`cna@vuldb.com`, NVD's re-served **4.0** score **lower than the record's own in 38 of 41** (by 0.7–3.2, never
+higher), with "no field says which stopping point either number is." The *field* really doesn't say — but the
+**arithmetic does**, and one oracle call settles the whole class.
+
+Measured first-hand over NVD's publication window `2026-10-31T23:00Z → 2026-11-02T02:00Z` (one list call,
+**41** records, **41/41 `Received`**), joining each NVD record against its cveawg container:
+
+| fact | result |
+|---|---|
+| CNA containers carrying **CVSS 3.0** | **41 / 41** |
+| NVD copies carrying **CVSS 3.0** | **0 / 41** (the framework is dropped in the copy) |
+| **3.1** agreement | **41 / 41 identical** |
+| **4.0** agreement | **3 / 41 identical**, **38 / 41 differ, NVD always lower** |
+| `E` (Exploit Maturity) in the vector | **`P` × 38**, **`X` × 3** |
+
+Then `cvss4` as the oracle (`node cvss-recompute.mjs --oracle <path>`, the same route used on 10-27):
+
+- strip `E` from the vector → the CNA's stored `baseScore` reproduces **41/41**;
+- keep the vector's `E:P` → **NVD's** stored `baseScore` reproduces **41/41**;
+- the three that agree are exactly the three whose `E` is `X` (not defined), where both computations coincide.
+
+So both numbers are arithmetically exact for *their own* stopping point: **CVSS-B (base) vs CVSS-BT (threat)**.
+`CVE-2026-120189` is **10.0** in all four of the container's frameworks and **9.3** on NVD for 4.0 — with the
+identical base metrics and `E:P`, 9.3 is what the threat term yields and 10.0 is what it yields without it.
+
+**The rule that comes out of it:** when two copies of a v4.0 number disagree, **look at `E` before you write
+"they disagree."** The direction is fixed by the metric: `E:P`/`E:U` pull the score down (here −0.7 to −3.2),
+`E:A` and `E:X` leave it at base. This is the FortiSandbox shape (10-27: `baseScore: 9.6` beside a temporal
+vector, NVD re-serving 9.8 with the temporal stripped) one framework higher — **the field name `baseScore` is a
+label chosen by each publisher, not the definition of what was computed.** And the reusable version: a second
+number that reproduces from a *different* stopping point on the *same* vector is not evidence of an error in
+either copy, so the check is a recompute, never a comparison of two quoted scores.
+
+What survives of the item's sharper point is upstream and still true: the **container is richer than the copy**
+— four frameworks in, three out, and the v3.0 column has no home in NVD at all — so "the record's score" is a
+statement about which container you read, and a scanner reading NVD sees a strictly smaller set than a reviewer
+reading the CVE. That is [[disclosure-lag]]'s territory, not a scoring dispute.
+
+→ [[fact-check]] [[vuln-supply]] [[disclosure-lag]]
+
+## A content-addressed URL is a snapshot, and this one expired the same day (2026-11-02 12:27)
+
+Item 19 (`hackerbooks.org`) cited `https://hackerbooks.org/data/meta.47fd7cb7.json` for its corpus figures. By
+the time I checked it: **HTTP 404, 0 bytes**. The site **content-hashes its data files**, so the live name is
+now `data/meta.2e673908.json` — and the numbers had moved:
+
+| field | item | live file (same `generated: 2026-11-02`) |
+|---|---|---|
+| books | 15,362 | **15,767** |
+| mentions | 270,334 | **281,374** |
+| comments | 217,954 | **225,861** |
+| commenters | 56,456 | **57,773** |
+
+Two lessons, both cheap and both new to this library as a *class*:
+
+1. **A fingerprinted asset URL has the lifetime of one regeneration.** It is the strongest form of the
+   "perishable citation" problem in CLAUDE.md, because the page is not wrong — it is *gone*, and a checksum in
+   the path guarantees the link dies the moment the publisher rebuilds. Cite the artefact's **stable name**
+   (`/data/meta.json`) or the human page, and put the hash in the text if the snapshot matters.
+2. **A corpus count is a counter, not a measurement.** These fields grew inside a single day (books +2.6%,
+   mentions +4.1%) because the crawler keeps running. Any sentence of the form "N books / N mentions" needs its
+   read time attached: the durable content is the *shape* (15k books, ~270k mentions, 2007–2026) plus the
+   published check.
+
+**And the check is what to carry:** every mention was labelled *recommend / neutral / critical / not about the
+book*, and the labels were compared against a **second model** on 400 mentions, agreeing **85%**. That is
+**inter-model agreement, not accuracy** — there is no human gold set in the artifact — so 85% is a **ceiling**
+on every downstream claim, not a quality score. An item that says "recommended by N people" inherits it: the
+ranking weights distinct commenters above raw mentions, and the label under each of them is right four times
+in five *against another labeler of the same family*. Publishing agreement and calling it agreement is the
+honest version; that is rarer than it should be.
+
+→ [[fact-check]] [[ai-impact]]
+
+## A score check that compares one number has to know which number it is (2026-11-02 12:34)
+
+The `cvss` unit recomputes a quoted score from its own `vectorString`, and that is the right instrument for
+the question *"does the record's number survive its own vector?"* — 4,461 of 4,461 NVD metrics reproduce over
+a publication week. It is the wrong instrument for a vector that carries a Threat metric, because there the
+arithmetic has **several** right answers and `judge()` was comparing against the base alone. A record honestly
+storing the threat score read as `differs` — a finding about the checker, of the same species as the ten
+false `date` findings and `range` failing on its own filing case.
+
+Three changes, each a small unit:
+
+1. **`judge()` accepts ANY stopping point** and reports which one matched (`stopping: 'base' | 'threat (E)'`).
+   Only a number matching none is `differs`. The new selftests pin both directions, plus `RL:W = 0.97`.
+2. **`stoppingPoints()` moved into `cvss-recompute.mjs`**, which owns the arithmetic, because the census and
+   the lint need the same function and a second copy would drift. For v4.0 the oracle is asked **twice** —
+   with `E` and with `E` stripped — since v4.0 folds `E` into the lookup instead of scaling the base.
+3. **The advisory `score-stopping-point`** (sev 1) fires when a quoted score reconciles to a stopping point
+   the item never names. It is suppressed by disclosure, the way `slot-quoted` and `counted-by-author` are:
+   the item says "base"/"threat"/"temporal", or it already prints two of the vector's numbers — enumeration
+   is disclosure, and it does not have to be a second CVSS *pair* ("9.8, or 8.5 once E and RC are applied"
+   gives the second number a unit in prose and the pair extractor never sees it, so the check reads every
+   stopping point off the raw text instead).
+
+A defect found while calibrating, worth naming because it is this library's recurring one: running
+`--check temporal` alone reported "NVD re-serves no metric" for a record NVD re-serves four of, because the
+NVD pull was gated on `cvss`/`status`/`cwe`/`range` and not on `temporal`. The sentence was true of the
+*pull* and false of the *registry* — **unread is not absent**, in the checker's own plumbing.
+
+**The transferable rule:** a check that compares one number must state *which* number it expects, and when
+the arithmetic yields a set, the finding is only the residue that matches none of them. Every other
+combination is a reader that does not know the unit — which is the failure this file exists to catch, and
+it catches its own as readily as the feed's.
+
+→ [[vuln-supply]] [[fact-check]]

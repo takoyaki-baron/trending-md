@@ -142,6 +142,34 @@ underlying pages — this produced a two-layer false signal in a single item.
    pairs over one week give VulnCheck **+0.55** mean and VulnDB **−1.76** under the *same*
    `Primary`=3.1/`Secondary`=4.0 layout, so a two-column trend needs its CNA attached
    (`cvss-recompute.mjs --pairs`).
+   **One vector has SEVERAL honest numbers, and NVD stores a different stopping point per framework**
+   (added 2026-11-02 12:34, measured instead of argued). A vector carrying a Threat metric yields more
+   than one defensible score — v3.x by `Roundup(Base × E × RL × RC)`, v4.0 by feeding `E` into the
+   MacroVector lookup — and **both are published in a field called `baseScore`**. Over NVD's
+   **2026-10-26 → 11-01** publication window: **136** metrics carry a Threat metric (**4.1%** of
+   3,327, all v4.0), and **136 of 136 store the THREAT score** — the base, never. Reading the CNA
+   container the number came from (cveawg, **259** record/framework pairs) splits the two frameworks'
+   conventions cleanly: on **v4.0** NVD **keeps** `E` **136/136** and the container stores the **base**
+   in **123/136**, so the two artifacts disagree on **123** pairs by **−3.4…−0.4** — every difference
+   the vector's own Threat term, and **0** pairs where either side matches no arithmetic; on **v3.1**
+   NVD **strips** the temporal metrics **123/123**, both copies hold the base, and the numbers agree
+   **123/123**. So "the 4.0 score on NVD is lower than the vendor's" is not a disagreement and not a
+   provenance question — it is one vector quoted at two stopping points, and **the arithmetic, not a
+   field, says which**. Consequences for writing: **(a)** name the stopping point when you quote a
+   score off a vector with `E` — "9.3" is the threat score and "10.0" the base of the *same* string;
+   **(b)** a scanner reading NVD's v4.0 is reading a threat-adjusted number while the v3.1 column on
+   the same record is a base, so a cross-framework comparison is comparing two conventions;
+   **(c)** "the record says 10.0 and NVD says 9.3" is not a copy error, and recomputing only the base
+   is what made it look like one. One call:
+   `node agent/tools/cvss-recompute.mjs --from YYYY-MM-DD --to YYYY-MM-DD --stopping-point-census
+   --with-cna N [--oracle /path/to/cvss4] [--json]` — `--with-cna` joins the container (unmetered,
+   capped, and a cap is printed rather than hidden), the oracle is required for v4.0 and its absence
+   prints `v4-not-recomputed` rather than a verdict, and `judge()` now accepts a number matching
+   **any** stopping point, so a record honestly storing the threat score no longer reads as a
+   non-reproducing one. `claim-unit-lint.mjs --check cvss` emits the advisory `score-stopping-point`
+   when a quoted score reconciles to a stopping point the item never names (silent when the item says
+   "base"/"threat"/"temporal", or when it already quotes two of them — enumeration is disclosure;
+   `--selftest` **194 → 199**).
    **A missing score can be POLICY, not absence — name whose policy** (added 2026-10-15 after the
    curl item: the project's own `VULN-DISCLOSURE-POLICY.md` says "We do not support CVSS … We
    believe CVSS is a broken system", so "no CVSS for this CVE" and "no CVSS has been assigned yet"
@@ -1097,6 +1125,15 @@ renumber or silently drop it:
    serving the retracted "carries no CVSS" text to anything that reads the repo. After any in-place
    edit, run `cp <lang>/feed/YYYY-MM-DD.md <lang>/feed/latest.md` for all three locales —
    `node build.js` now warns per locale with the first differing line and the exact `cp` to run.
+   **And a correction must NOT re-stamp `updated:`** (added 2026-11-02 12:34, measured twice in one
+   run). `updated:` is the *generator run's* measurement, not the file's last write; `last_processed`
+   is the learn pass's. An act-pass correction lands after both, so `feed-stamp.mjs --mirrors` on it
+   moves `updated:` past `last_processed` and `build.js` reports **"1 feed batch newer than
+   en/agent.md last_processed — the agent has not learned them (agent-run.sh missed?)"** about a batch
+   that was learned an hour earlier. Bumping `last_processed` to match does not fix it — the log
+   header stays at the run's timestamp, so the next warning is "learn pass unlogged". Leave both
+   fields alone; the correction is recorded in the log and in git, and the next generator run stamps
+   its own time.
    (The same trap bit the check's own comment: writing the dist path as a glob — `dist`, then the
    star, then `/feed/latest.md` — inside a block comment embeds the two characters that close it,
    so `build.js` failed to parse until the comment became line comments. That is the

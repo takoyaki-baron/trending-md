@@ -1533,6 +1533,51 @@
       "id": "CVE-2026-120209",
       "why": "AJ-Report hard-coded JWT secret -> Groovy RCE; one CNA, two honest numbers (3.1 9.8 Primary / 4.0 9.3 Secondary)",
       "seeded": "2026-11-02 [Received] 3.1 Primary/disclosure@vulncheck.com 9.8, 4.0 Secondary 9.3, CWE-321, published 10-31"
+    },
+    {
+      "id": "CVE-2026-112887",
+      "why": "Gitea 20-record batch — no metric in ANY container (CNA + ADP empty), NVD Deferred; watch for a CISA-ADP score appearing",
+      "seeded": "2026-11-02 [Deferred] 0 metrics (CNA+ADP empty), published 11-01"
+    },
+    {
+      "id": "CVE-2026-117635",
+      "why": "Gitea public-only PAT not restricted on /api/v1/admin — admin token could list all emails, create admins",
+      "seeded": "2026-11-02 [Deferred] 0 metrics, published 11-01"
+    },
+    {
+      "id": "CVE-2026-118386",
+      "why": "Gitea PR-review commit_id runs pull_request_review workflows with repo secrets; credited to Anthropic",
+      "seeded": "2026-11-02 [Deferred] 0 metrics (CNA+ADP empty), published 11-01"
+    },
+    {
+      "id": "CVE-2026-119441",
+      "why": "Gitea DELETE /orgs/{org}/repos accepted a public-only token and deleted private repos",
+      "seeded": "2026-11-02 [Deferred] 0 metrics, published 11-01"
+    },
+    {
+      "id": "CVE-2026-120263",
+      "why": "Gitea ACCOUNT_LINKING=auto let OAuth2 sign-in claim an existing account by name/email",
+      "seeded": "2026-11-02 [Deferred] 0 metrics, published 11-01"
+    },
+    {
+      "id": "CVE-2026-120189",
+      "why": "VulDB 10.0 in all four frameworks (CNA) vs NVD 4.0 9.3 — the base-vs-threat stopping point",
+      "seeded": "2026-11-02 [Received] 4.0 Secondary/cna@vuldb.com 9.3 (threat term), 3.1 Primary 10.0, 2.0 Secondary 10.0, published 11-01"
+    },
+    {
+      "id": "CVE-2026-120276",
+      "why": "VulDB WAVLINK 10.0 template vector (AV:N/AC:L/PR:N/UI:N/S:C/C:H/I:H/A:H)",
+      "seeded": "2026-11-02 [Received] 4.0 Secondary/cna@vuldb.com 9.3, 3.1 Primary 10.0, published 11-01"
+    },
+    {
+      "id": "CVE-2026-83594",
+      "why": "Apache Wicket 8.3 CWE-789 FileUploadToResourceField allocation — 4.0-only CNA score, 0 NVD-scored",
+      "seeded": "2026-11-02 [Received] 4.0 Secondary/security@apache.org 8.3, published 11-01"
+    },
+    {
+      "id": "CVE-2026-84170",
+      "why": "Apache Wicket 8.3 CWE-770 upload resource ignoring configured limits — 4.0-only CNA score",
+      "seeded": "2026-11-02 [Received] 4.0 Secondary/security@apache.org 8.3, published 11-01"
     }
   ]
 }

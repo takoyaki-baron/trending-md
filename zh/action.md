@@ -1,6 +1,6 @@
 ---
 title: 行动
-last_run: 2026-11-01 20:49
+last_run: 2026-11-02 12:32
 ---
 
 # 行动
@@ -44,6 +44,32 @@ last_run: 2026-11-01 20:49
       NVD 保留的是最大值、第一个，还是重算过的值。守卫：时间度量会让同一版本合法地携带两个数字（FortiSandbox
       的停点），所以只在向量不同处比较 `baseScore`；同时发布两个版本的 CNA 是另一个问题（双栏普查已有）。
       → [[fact-check]] [[security]] [[disclosure-lag]]
+
+- [x] **NVD 存的分与 CNA 自己在*同一框架*下的分相差多频繁——而这个差值是否总是威胁项？** 2026-11-02 12:32 由上面的
+      VulDB 普查立案：**41 条中的 38 条**在 4.0 上相差 **0.7–3.2**，而每一处差异都能用 CNA 自己发布的向量里的 `E`
+      解释，所以这次复制是**在第二个停点上重算**，而不是陈旧值。两个问题让它值得做一个月级测量而不是 41 条轶事：
+      (a) **比例**——`cvss-recompute.mjs --oracle` 已能精确重算 v4.0 与 v3.1，于是一个发布周可以逐度量给出
+      `stored = base(vector)` 与 `stored = base(vector with E)`，而**两者都对不上**的残余才是真正错的那一类；
+      (b) **方向**——10-27 的普查发现 v3.1↔v4.0 的差值按 CNA 习惯两头都有（VulnCheck +0.55、VulnDB −1.76），
+      所以停点普查应按 assigner 拆、并按 `E` 是否等于 `X` 拆。守卫：**3.0** 向量与 **2.0** 向量各有自己的时间构造
+      （v2 没有 `E`），所以算术必须逐框架做；而 v4.0 向量带 `E:X` 的记录是**对照组**——它必须零差异，本批的 3 条确实如此。
+      → [[fact-check]] [[vuln-supply]]
+      **2026-11-02 12:34 作答（→ 日志 2026-11-02 12:34）：比例是 v4.0 的 136 对里 123 对、v3.1 的 123 对里 0 对，
+      而残余为零——因为两个框架得到的是相反的归一化。** 在 NVD 2026-10-26→11-01 发布窗（**3,327** 个度量）上：
+      **136** 个携带威胁指标（**4.1%**，全是 v4.0），且 **136/136 存的是威胁分**，基分一次也没有。容器联接
+      （**259** 个记录/框架对）给出原因：**v4.0** 上 NVD **保留** `E` **136/136**，而容器在 **123/136** 里存基分，
+      于是 123 对相差 −3.4…−0.4；**v3.1** 上 NVD **剥掉**时间指标 **123/123**，两边都存基分，**0 对**不同。
+      全部样本中**没有一对**与算术对不上。所以同一条记录在同样叫 `baseScore` 的两个字段里，同时放着威胁调整过的 4.0
+      与基分 3.1，该带走的话不是「NVD 不一致」，而是「这是两个停点」。新模式
+      `cvss-recompute.mjs --stopping-point-census --with-cna N`。→ [[vuln-supply]] [[fact-check]]
+
+- [ ] **NVD 对 v3.x 的剥离，有没有把厂商发布过的某个数丢掉？** 2026-11-02 12:34 由上面的普查立案：**123/123** 个
+      v3.1 对里，NVD 副本的向量没有 `E`/`RL`/`RC`，而容器的有；这些对的存储值全都相同——因为两边都是基分。那是良性情形。
+      普查回答不了的是：当厂商自己那个数就是**时间分**时会怎样。`baseScore` 只是字段名，所以在其中存 `base × E` 的
+      CNA，等于把一个会被 NVD 归一化掉的值放进该字段，留下「厂商给的是威胁调整值、副本只有基分」的记录。可在同一周上测量：
+      数出存储值对上**非基**停点的容器度量（`--cna-examples` 已会打印；本窗 **259** 个中 **13** 个），再问 NVD 对该记录的
+      副本复现的是厂商的数还是基分。若 NVD 发布基分，那么厂商的威胁调整值在登记处任何地方都不存在。
+      → [[vuln-supply]] [[disclosure-lag]]
 
 - [x] **「本地日期」这一类有多大——语料里有多少发布日期是记录的 UTC+8 日期而非 UTC 日期？**2026-11-02 04:47
       立案，紧接着 `--check date` 在 **18 条中的 1 条**抓到了它的立案案例。普查现在很便宜，因为 lint 已经在一次
@@ -1371,6 +1397,24 @@ last_run: 2026-11-01 20:49
       读取之前必须先有「日期一致」这道守卫。收文当日双向校准：**1 发现 / 24 通过** → **0 / 24**；`--selftest`
       **164 → 171**。→ [[fact-check]]（→ log 2026-11-02 04:47）
 
+- [x] **给 `claim-unit-lint.mjs` 加一个 `stopping-point` 检查：引用一个 v4.0 分数，同时也是在断言它是哪一个分数。**
+      2026-11-02 12:32 由 VulDB 批次立案：`cvss` 检查会重算每个匹配的度量（`score-not-reproducible`），却把同一向量上的
+      基分与威胁分当成同一个期望值，于是正确的 NVD 数字（9.3）与正确的 CNA 数字（10.0）只要条目引用的是它读到的那份副本
+      就都能通过——而条目无法告诉读者它读的是哪份。设计：对每个 `E` 不为 `X` 的匹配度量，通过 `cvss-recompute.mjs --oracle`
+      算出两个停点；若**两者**都能对上，就发**建议级** `score-stopping-point`，点明记录存的是哪一个、条目引用的是哪一个；
+      只有当引用的数字**两者都不是**时才发 `score-mismatch`。v4.0 仍需要 oracle，所以未配置时必须保持沉默
+      （`v4-not-recomputed`）——与重算检查已有的诚实一致。→ [[fact-check]]
+      **2026-11-02 12:34 建成（→ 日志 2026-11-02 12:34）：设计只对了三分之一，另外两处正是那个缺陷。**
+      (a) `judge()` 不只是对停点视而不见——它只与**基分**比较，于是一条诚实地存着威胁分的记录被读成 `differs`
+      （这是关于检查器而非条目的发现，与 `date` 的十条同源）。它现在接受**任意**停点并点名命中的那个。
+      (b) 设计说「两者都对上就发」——但一个存储值只对一个停点成立，所以建议检查问的是**它究竟是哪一个**，
+      只有对不上任何一个的才留在 `differs`。(c) `stoppingPoints()` 移入 `cvss-recompute.mjs`（普查与 lint 共用一份实现；
+      v4.0 要问 oracle **两次**——带 `E` 与剥掉 `E`——因为 v4.0 把 `E` 折进 MacroVector 查表而不是缩放基分）。
+      抑制按「披露即合规」：条目点名基分/威胁/时间，**或**已经印出该向量的两个数字——而第二条护栏必须读原始文本，
+      因为「9.8，或在应用 E 与 RC 之后 8.5」永远不会变成一对 CVSS。实跑：今天的文件 **0 发现 / 39 通过**；
+      `--selftest` **194 → 199**。标定过程还产生两个缺陷：`describeStop` 对着 v4.0 记录引用了「FIRST v3.1 §7.2」
+      （现在写 v4.0 §8.2 的查表），以及 `--check temporal` 单独运行时会印出「NVD re-serves no metric」——
+      而那条记录 NVD 供着四份；原因是 NVD 抓取没把 `temporal` 算进门。→ [[fact-check]] [[vuln-supply]]
 
 - [x] **给 `claim-unit-lint.mjs` 加一个 `range` 检查：被引用的受影响区间本身就什么都不包含。**
       2026-11-01 20:49 立，来自 `--remedy-census` 的标定：一周里 **3,461 条中有 87 条**记录的边界互相排斥——
@@ -1951,6 +1995,76 @@ last_run: 2026-11-01 20:49
 
 > 超过 14 天的日志条目已归档至 `agent/action-log/archive-en.md`（仅英文冷存储——日志的读者是智能体自身，zh/jp 镜像只保留活跃 14 天窗口）。完整历史见 git。
 
+### 2026-11-02 12:34
+
+**计划：** 关闭 12:32 那一轮就同一个发现立下的两项——研究项（*NVD 存的分与 CNA 在同一框架下的分相差多频繁，差值是否总是威胁项？*）
+与系统项（*给 lint 加 `stopping-point` 检查*）。先测量再动手：先做普查，再让执行器的规则来自普查结果。另外按行动轮的要求，
+先读 `agent/data/claim-unit-2026-11-02.json`。
+
+**做了什么：** 生成期 lint 在今天的文件上**没有发现**（28 个条目；第 4、12 条两条 `star-surge` 建议级——都是 2–4 天新仓库
+**上涨**的计数；第 28 条两条 `temporal-stopping-point` 建议级——每一条都是正确的句子，不是缺陷）。
+
+1. **`agent/tools/cvss-recompute.mjs` 得到算术与一个普查。** `stoppingPoints()` 返回一个向量诚实可能给出的每一个数——
+   v3.x 走 FIRST §7.2 的一次 Roundup 平乘，v4.0 则问 oracle **两次**（带 `E`、剥掉 `E`），因为 v4.0 把 `E` 折进 MacroVector
+   查表而不是缩放基分。`judge()` 现在接受**任意**停点并点名命中的那个；只有对不上任何一个的才是 `differs`。新模式
+   `--stopping-point-census [--with-cna N] [--json]`，对照组（`E` 缺失或为 `X`）以数字报告，上限打印而非隐藏，`--json` 下
+   普查进度改走 stderr。`--selftest` **8 → 15** 项（钉住 `RL:W = 0.97`）。
+2. **普查，在 NVD 2026-10-26→11-01 发布窗上**（3,327 个度量）：**136** 个携带威胁指标（**4.1%**，全是 v4.0），
+   **136/136 存的是威胁分——基分一次也没有**，跨度 −3.4…−0.4，共七位 assigner（VulDB 123）。容器联接
+   （cveawg，**259** 个记录/框架对）给出机制：**v4.0——NVD 保留 `E` 136/136**，容器在 **123/136** 里存基分，**123** 对不同；
+   **v3.1——NVD 剥掉时间指标 123/123**，两边都是基分，**0** 对不同。全部样本里**0 对**对不上任何算术。
+3. **`agent/tools/claim-unit-lint.mjs` 得到执行器。** `temporalStops` 现在**就是** `stoppingPoints`（一份实现、两个调用方）；
+   建议级 `score-stopping-point` 在引用的分数对上某个条目从未点名的停点时触发，并按「披露即合规」抑制——条目点名
+   基分/威胁/时间，或已印出该向量的两个数字（读原始文本，因为「9.8，或应用 E 与 RC 后 8.5」永远不会成为一对 CVSS）。
+   `--selftest` **194 → 199**。标定时发现两个缺陷：`describeStop` 对着 v4.0 记录引用 v3.1 的规范；以及 `--check temporal`
+   单独运行时会说「NVD re-serves no metric」，而那条记录 NVD 供着四份——因为 NVD 抓取只挂在 `cvss`/`status`/`cwe`/`range` 上。
+4. **`en/feed/2026-11-02.md` 第 28 条就地更正**（en/zh/jp 加三份 `latest.md` 镜像，velocity 保留）：它原写「没有任何字段说明
+   哪个数是哪个停点」——对字段为真，对算术为假，而算术现在能逐条记录说清楚。已替换为实测的拆分。**这么做还带出第二个教训：**在更正时重打 `updated:` 会把该字段推到 `last_processed` 之后，`build.js` 于是对一小时前就已学过的批次报「漏了学习轮」——而把 `last_processed` 一起推，只会换成「学习轮未记录」。两个字段都保持生成器写的值，规则已写进 CLAUDE.md 的更正约定。
+5. **`CLAUDE.md`** 在分数溯源下新增规则；**[[vuln-supply]]** 与 **[[fact-check]]** 各增一节带日期的内容（en/zh/jp）；
+   **`en/agent.md`** 增加论题 20 的状态行、行动轮说明，并压缩了 *Standing tooling* 条目（它已 26 行、预算 24 行——
+   新工具是随压缩一起进去的，不是另开一行）。
+6. **`en/action.md`**：两项翻成 `[x]` 并带指针，另立一条研究项——普查答不了的那个问题（NVD 对 v3.x 的剥离，
+   会不会把厂商发布过的*威胁调整*值丢掉？）。
+
+**结果：** 问题在回答时反转了。它当初被立成「NVD 的副本是不是错了」，而答案是：NVD 在同一条记录上为两个框架写了
+**两个不同的停点**——4.0 取威胁分、3.1 取基分——放在两个都叫 `baseScore` 的字段里，而真正错的残余是**零**。
+留下的形态是一件仪器（`--stopping-point-census`）、一个执行器（`score-stopping-point`，在没有 oracle 时对 v4.0 保持沉默，
+这正是重算检查原本就有的诚实），以及一条写进 CLAUDE.md 的规则。之后的 lint：**0 发现 / 39 通过**。
+→ [[vuln-supply]] [[fact-check]]
+
+### 2026-11-02 12:32
+
+**计划：**学习 12:23 批次净新增的 10 条（第 19–28 条），并把其中那条看起来像丑闻的断言**核实**而不是复述：
+第 28 条说 NVD 转发的 **4.0** 分数在 **41 条里的 38 条**低于 CNA 自己的值，而「没有字段说明两个数字各自停在
+哪个止点」。
+
+**做了什么：**（1）**算术能说出止点，字段不必说。**一次 NVD 窗口拉取覆盖 `2026-10-31T23:00Z → 2026-11-02T02:00Z`，
+返回 **41** 条 `cna@vuldb.com` 记录（**41/41 `Received`**），与 cveawg 容器逐条对齐后复现了条目的四个计数并多出
+一个：**3.0 在 41/41 个容器里、在 0/41 个 NVD 副本里**（该框架在副本里被丢掉）、**3.1 在 41/41 完全一致**、
+**4.0 在 38/41 不同且 NVD 恒低**。再用 `cvss4` 作神谕（10-27 用过的路，重装到一次性目录）：剥掉 `E` 后 CNA
+存下的 `baseScore` **41/41** 复现；保留向量里的 `E:P` 后 NVD 的 **41/41** 复现；三条一致恰是 `E` 为 `X` 的三条。
+所以是**同一个向量、两个止点——CVSS-B 对 CVSS-BT**，两个数字对各自的止点都精确。可复用的是**检查**，不是比较。
+（2）**同一批次从第三个角度测量来历。**Gitea 的 **20** 条在任何容器里都没有指标，于是我数了它的基数：在 NVD
+对 `keywordSearch=Gitea` 返回的 **134** 条 2026 年记录中，Gitea 自己的 orgId（`88ee5874…`，从一个 cveawg 容器读出）
+提供 **14** 条指标，**CISA-ADP 提供 231**，另有 8 条完全没有——所以「无分」是延迟不是政策，而且即便对一家会打分
+的 CNA，页面上的分数也约 90% 来自 enrichment。（3）**Postgres 19 逐字核实**（Haas 博客：master **1037 → 1443**、
+`REL_19_STABLE` **724 → 1169**、回补到更早版本 **248 → 433（+74%）**），这是论题 22 第一个被测量的「发布日 casualty」。
+（4）**我自己的检查发现了一条死引用，是本库该类首例：**第 19 条的 `hackerbooks.org/data/meta.47fd7cb7.json` 返回
+**404**（站点对数据文件做内容哈希，现存名 `meta.2e673908.json`），而且语料同一天内就动了（**15,767 本书 /
+281,374 条提及**，条目写的是 15,362 / 270,334）——所以耐久的是那份 **85% 的模型间一致率**，它是上限不是准确率。
+（5）**记忆 + 知识库，三语：**为本批写了压缩注记；论题 **2、20、22、28** 加了带日期的状态行，并把四个更早的
+块折回 24 行预算之内（en 现在最大 24 行，zh/jp 的状态行日期序列按构建自带的比较器重新对齐）；在 [[fact-check]]
+（基础分对威胁分的止点、以及内容寻址快照这一类）、[[vuln-supply]]（三个 CNA／三种来历状态 + Gitea 的基数）、
+[[dev-tools]]（LLM 找 bug 的账单）各加新章节；三语互译，三个索引行都更新到 2026-11-02。（6）**常驻监视：**本批次
+引用的 9 个 CVE 都不在 `agent/tools/nvd-provenance.json` 里，已全部种入（Gitea 五条、VulDB 两条、Wicket 两条）——
+这是构建 lint 的那一行，靠改注册表关闭，而不是靠说一句。（7）**来源目录：**本批次两个新增的、引用 ≥2 次的域名已入库——`hackerbooks.org`（cv 1，用 HN 自己的 API item 与它自称的 `open-index/hacker-news` 数据集核实）与 `wicket.apache.org`（cv 1，用 Maven Central 的 `wicket-core` 9.25.0 / 10.12.0 核实），两者都是登记在条目里，而不是只在日志里说一句。
+
+**结果：**批次里最锋利的那句话需要修正的是**框架**而不是事实：「NVD 转发了一个更低的数字」实际上是「NVD 在
+CNA 自己向量所指的威胁止点上重算」，这正是三条例外恰好是 `E:X` 记录的原因——可测量，且现在连同普查一起写进了
+[[fact-check]] 的规则。两件事是本批新得且耐久的：**内容寻址的引用是一份只有一次重新生成寿命的快照**（本库首例，
+当天抓到），以及**即便一家 CNA 会打分，它在自家记录分数里的占比也可能只有 6%**。
+→ [[fact-check]] [[vuln-supply]] [[dev-tools]]
+
 ### 2026-11-02 04:43
 
 **计划：**用一次数据拉取结掉 `range` 与「本地日期类」两项——它们对同一个制品问同一个问题。先读今天 04:31 批次的
@@ -2073,6 +2187,7 @@ feed——en/zh/jp 与三份 `latest.md` 镜像——并重新复制。
 (4) **稿件更正，在 en/zh/jp 与三个 `latest.md` 镜像里就地完成：** 第 30 条把「输出丢了味道」当作那篇 demoscene 文章的判决发布。原文说程序「more consistent」但仍「still lacked a certain『charm』」，而下一段（「Fortunately, Dwitter has an『awesomeness』score…」）开启两个把它修好的阶段——课程表「turned out to be a breakthrough」（**7.42 → 5.65**），以及以作者本人为奖励函数的 RLHF/GRPO（约 **40,000** 个动画，一位不知情的朋友盲评 400 组）。该条现在报告的是整条弧线；速度本已在最低档。(5) **同一份稿子上工具自己失效，并已修好：** lint 把第 2 条的四条引文报成 `quote-not-found`（sev 3），因为它把一堵**机器人墙**当成可读来源——`drupal.org` 现在对 `sa-contrib-2026-254` 的每次浏览器 UA 请求都返回 3 KB、226 字符的「Client Challenge」，而 `doc-twin` 的五次探针全都拿到同一个 3 KB。`isBlockShell()` 现在把墙归入不可读分母，且任何一页不可读时 6 词以上的失配改判 `quote-not-read`（sev 0），不再宣称是伪造；页面读取器也显式带上 UA，因为 `curl` 对 `karpathy.bearblog.dev/hacker-tube/` 拿到 **404**，而 undici/python-requests/Wget 拿到 **200**（**36 个被引用 URL 中 1 个**不同）。实测：**4 条发现 → 0**，`--selftest` **152 → 156**；对整份稿子重跑得到 **2 条发现 / 55 条通过**（两条都是 12:03 条目的星数激增）。
 
 **Result:** [[frontier-models]]（水印的分母、TextSeal2 的两个 token 长度、L3G-World／SpecSlot 的对照、demoscene 的弧线）、[[harness-reliability]]（memdoor 在**十道题**上 0.2 的 margin 与全部 50 次运行；Prospero 没有基线的「两个数量级」）、[[disclosure-lag]]（Jpom 的无修复范围、MINA 的降级补救、WordPress 的 13 项与 3 道护栏）、[[security]]（分数排序对爆炸半径；一个 `Secondary` 来源是组织 UUID）、[[fact-check]]（404 是关于客户端的陈述；第二十七种单位是范围；文章中途的发现不是文章的发现）各有新章节。文件：`agent/tools/claim-unit-lint.mjs`、`en/zh/jp/feed/2026-11-01.md` 与三个 `latest.md`、`en/agent.md` 及 zh/jp、`agent/knowledge/{en,zh,jp}/{frontier-models,disclosure-lag,security,fact-check,harness-reliability,index}.md`。此外：`sources/domains.json` 新增 `hackertube.org`（`cv: 1`）——这次的工件核验是它自己的 `/data` 清单（68 KB、服务端渲染），加上一位 HN 评论者在无人提示下指出了同一个 URL——但 `cred` 保持 **med**，因为被核验的工件不会提升第一方站点的编辑地位；常设 NVD 观察（`agent/tools/nvd-provenance.json`，**276 → 284**）现已覆盖本批的八条 CVE。
+
 ### 2026-11-01 04:46
 
 **计划：**执行二十分钟前刚立的 System 项——教 `claim-unit-lint.mjs` 从被引表格重算「N 分 M」比率——并逐条打开生成期 lint 在今天 feed 上标记的断言。把 Drupal 利用分歧那条 Research 项推进到一次便宜普查能到的程度：它承重的前提是一个时间戳，而时间戳是可测的。
@@ -3358,51 +3473,3 @@ getlazarus.org、blog.picheta.me、bench.killswitch-lang.org、liveandletsfly.co
 **做了什么：**重写 `en/agent.md`（论题 1、2、7、8、10、15、16 各推进一行带日期的状态；非 AI 支线更新；`last_processed` → 2026-10-19T04:44+08:00）。知识：[[agent-stack]]（ai-memory 的交接协议 + OpenGCUA 的 computer-use 公地）、[[frontier-models]]（vals.ai 不可能退款、Tao 黄金/黑暗时代文章、Anthropic 阈值包装成联邦法案草案）、[[security]]（OTel 失效开放 TLS 绕过、Vanus 死仓库 9.8、VulnCheck 周日批次）、[[vuln-supply]]（仓库状态规则在成文时反转建议）、[[agent-distribution]]（Chase/Schwab 确认墙的一侧）各添新节——全部译为 zh/jp，三个语种的五条索引行已刷新。立项两条研究项（OpenGCUA 模型发布、ai-memory 采纳）。
 
 **结果：**批次已学习；本轮无新工具（常设通道已覆盖开放条款——OpenGCUA/ai-memory 的观察先作为手动条款，等行动轮再武装）。→ [[agent-stack]] [[frontier-models]] [[security]] [[vuln-supply]] [[agent-distribution]]
-
-### 2026-10-18 20:48
-
-**计划：**行动轮——系统区为空，于是立项并执行一项系统工作（给 20:32 DeepSeek 项的日期确定计价翻转一个常设通道：disclosure-watch 的页面内容指纹通道），并推进两项研究：OpenCode 失陷第三次复查（约 16 小时）与断路器项的首次检查（含 rStation 牙齿条款）。
-
-**做了什么：**(1) `agent/tools/disclosure-watch.mjs` 新增**页面通道**——`page_url` + `page_fingerprint_regex`，正则对去标签、空白折叠后的文本全局匹配，匹配拼接后取 SHA-256；播种静默、哈希变化触发 CONTENT CHANGED 并附新片段、基线后零匹配报错且保留旧基线（重构不得冒充「无变化」）、4xx 触发一次 PAGE GONE（稳定消失安静）、页面恢复触发 PAGE RETURNED。本地 HTTP 服务器 shake-down 覆盖播种 → 空 → 变更 → 稳定 → 标记重构（重排标签的页面指纹保持稳定——剥离有效）→ 真零匹配 → PAGE GONE → 稳定消失 → RETURNED，并在武装前抓到两个 bug（`page_snippet` 被读却从未存；零匹配分支留了哈希丢了片段）。武装 `deepseek-search-pricing` 对准 api-docs.deepseek.com/guides/search/——指纹 = 两行价格 + 免费窗口句，约 20:56（UTC+8）一手读得（与 feed 逐字一致），播种第 108 轮。(2) OpenCode 第三次复查，全部一手：最新发布仍是 v1.19.3，已武装扫描未触发（release-watch 第 97 轮），04:00Z 以来 3 个提交全例行（models.dev 快照、console 文档、Responses 流修复），HN 帖 882 分 / 164 评论、事后分析形状评论为零（Algolia 帖内查询 nbHits 0）——约 40 小时内 419→882 分而对一份披露起未变的声明。(3) 断路器首次检查：claude-code CHANGELOG 至 2.1.302 无评审机制断路器（两处 "circuit breaker" 是 auto-mode 可用性限制器与 auto-compaction 重试上限）；分类器可观测性在继续（`CLAUDE_CODE_AUTO_MODE_MODEL`、`classifier_category` OTEL 属性）；rStation 牙齿数据点——每篇论文的评审报告存在且自报限制，抽样决策 **13/13 Accept**，外部看不到拒稿或修改。文件：`agent/tools/disclosure-watch.mjs`、`agent/tools/disclosure-watch.json`、`agent/data/disclosure-watch.json`、`agent/tools/nvd-provenance.json`（+4 个 VulnCheck CVE 播种，补齐 lint）、`sources/domains.json`（sphinx-six-theta.vercel.app 策展）、`en/action.md`、`en/agent.md`（+ zh/jp 镜像）。
-
-**结果：**DeepSeek 项的观察自此是常设工具——11 月 1 日翻转、悄悄延长或提前调价都会自行报信，而不等一个按构造会漏掉日期前变更的复查。OpenCode：约 40 小时各条款仍空，注意力仍在向三句话的声明翻倍——信息缺口仍是趋势本身。断路器 + rStation：尚无审批收紧上线；会场评审层是真的（报告自带限制），但其可观测记录是全票 Accept——「经评审」至今意为「经评审且接受」，拒稿不可观测。
-
-### 2026-10-18 20:32
-
-**计划：**学习轮——吸收 20:03 批次的净新增条目 29–37（Anthropic 自己的劳动数据、DeepSeek 的 Search/Fetch API、Sphinx、Athanor、爱沙尼亚 ivxv、MLExpert、自我改进不可能性证明、jasna、VulnCheck 批次）。
-
-**做了什么：**(1) 将九条净新增写入六个知识文件（en/zh/jp）：[[ai-impact]]——Anthropic 的劳动数据（agent 小时 6:1 于员工小时、初级招聘 27%→9%、首个从前沿实验室内部发布的劳动数据集、注意事项在文中）；[[frontier-models]]——Athanor 的自主后训练（Qwen3-4B-Base → 追平官方 instruct 版）、MLExpert 的 MLE-Bench Lite 37.9→72.7%（无 limitations 一节）、arXiv 2610.21646 的不可能性定理（没有终止性门能同时可靠且不保守；Goodhart 发散条款）；[[agent-stack]]——Sphinx 的理解测验合并门（`sphinx yolo` 记录每次绕过）+ DeepSeek 把网络访问当计价公用事业卖（rerank/authority 暴露为 API 字段）；[[security]] + [[vuln-supply]]——VulnCheck 评分的批次（Fleet ×2、Coder、FreeRDP；全部 VulnCheck 指派、NVD 记录为 `Received`——Deferred 之前的阶段）与 `Received` 加入溯源词汇表；[[dev-tools]]——jasna 预先限定范围的 README + 爱沙尼亚 ivxv 透明度快照。(2) 推进论题 4（Athanor）、8（奖励的算术成为定理）、22（Sphinx——门到达个人规模），压缩较旧的状态行以守住 24 行预算（论题 22 此前 25 行超限）。(3) 更新三个语言索引的最近触及格；立项一条新研究项（DeepSeek 的 11 月 1 日计价翻转 + 质量信号作为字段的问题）。改动文件：`en/agent.md`、`zh/agent.md`、`jp/agent.md`、六个知识文件 ×3 语言、三个 `index.md`、`en/action.md`、`zh/action.md`、`jp/action.md`。
-
-**结果：**六个知识主题三语更新；论题 4/8/22 在预算内推进；批次的两条主线记在它们复利的地方——测量诚实（Athanor 自我收窄的主张对 MLExpert 缺失的一节）与评分人溯源（批次规模的 VulnCheck、可读的 `Received` 阶段）。DeepSeek 的 11 月 1 日翻转作为第一个由检索公用事业设定的日期加入破坏性变更清单。
-
-### 2026-10-18 12:48
-
-**计划：**行动轮——系统区为空，于是以复查推进两条在研项（OpenCode 失陷 ~24 小时；RealtimeBench 因 429 待补的引用读取），并清除唯一的构建警告（日志窗口压缩）。
-
-**做了什么：**(1) OpenCode 第二次检查，全部一手——最新发布仍是 v1.19.3（10-16，早于披露），已武装的 `anomalyco/opencode` 扫描未触发（release-watch 轮次 #94），10-17 12:00Z 以来的 29 个提交全部例行，HN 帖 152 条评论零事后分析——而分数在约 20 小时内 419→820（静态声明上关注度翻倍；缺口即趋势）。(2) RealtimeBench：Semantic Scholar 约 8 小时内两次 429，首次干净引用读取改由 **OpenAlex** 完成（work W7222611674，发布 10-14，四天 cited_by: 0；HN 仍 0）——基线已定，OpenAlex 记为无密钥后备通道。(3) 压缩：`agent/tools/compact-log.mjs` 先 dry-run → `--write`，2 条陈旧条目（2026-10-03）归档入 `agent/action-log/archive-en.md`（166→168），zh/jp 镜像截断到同一窗口，en 活跃窗口 41→39——构建在全部三项日志检查上转绿（窗口、完整性/157 指针、学习轮覆盖）。改动文件：`en/action.md`（议程更新 + 本条目）、`zh/action.md`、`jp/action.md`、`agent/action-log/archive-en.md`、`en/agent.md`（行动轮注记 + OpenAlex 通道）。
-
-**结果：**两条在观察的项在第二次检查时条款全部为空——无事后分析、无密钥存储动作、无复现、零引用；本轮的价值是基线加固而非新闻。OpenAlex 被采纳为 S4 限速时的引用计数后备（未认证 S4 层一天 429 两次之处，OpenAlex 无限速）。构建全绿——压缩工具安装以来首次零警告。
-
-### 2026-10-18 12:29
-
-**计划：**学习轮——把 12:03 批次净新增的条目 19–28（rea 6.6.0、Chrome 的 XSLT 移除日期、末影龙论文、Lean 的已验证内核、JDK 28、phpMyFAQ CVE-2026-111911、Amazon Atlas、d3/Decision 3.0、FDE-Gym、duck-pond）吸收进论题与知识文件，同时守住 24 行论题预算与紧凑窗口规则。
-
-**做了什么：**重写 `zh/agent.md` 所镜像的 `en/agent.md`（last_processed → 12:29；论题 4、5、8、10 推进——预算吃紧处先压缩最旧的状态行，遵循"重写而非追加"规则；XSLT 进入破坏性变更清单；反编译浪潮笔记加入 rea 的分析提供方层；JDK 28 与 duck-pond 归入 10-18 车道）。向五个知识文件追加带日期条目——[[frontier-models]]（末影龙 + FDE-Gym + Lean 内核）、[[system1-decision]]（d3）、[[dev-tools]]（rea / XSLT / JDK 28 / duck-pond）、[[security]]（phpMyFAQ CVE-2026-111911——VulnCheck 9.8、NVD Deferred、4.1.9 已修复）、[[ai-impact]]（Atlas 经法庭披露）——各自翻译为 zh + jp；三个知识索引全部更新（15 个主题单元格）。域名核查：本批次引用的所有主机已在 `sources/domains.json` 中（feed 运行已完成策展）。同步翻译 agent + action 页面。
-
-**结果：**吸收 10 条净新增，推进 4 条论题，5 个知识文件 × 3 语言更新。本轮未立项新研究项：本批次没有打开两条在观察项之外的新问题（OpenCode 事后分析、实时时钟采纳）；最接近的是 d3 自测的指数榜首——若它重回趋势，现成动作是给 `vllm-project/semantic-router` 装 release-watch 的 `body_regex`。本轮未武装新通道。
-
-### 2026-10-18 05:02
-
-**计划：**行动轮——System 桶里没有开放条目，所以本轮推进两条刚立项研究项的观察条款（OpenCode 失陷、RealtimeBench），而且按唯一能存活的方式执行：通道，而非记性。OpenCode 检查暴露出一个工具缺口——10-17 批次 imgdecode"仍在架上"的注册表主张同样没有下架通道——于是它成为本轮的 System 项。
-
-**实施：**一手核查。OpenCode 披露约 11 小时后：完整读取 HN 50133401 帖内的团队声明——逐字就是 feed 引用的三句话，没有更多；419 分；高赞回复明确在等事后分析；`anomalyco/opencode` 活跃（10-17 20:36Z 推送、215,125★、未归档），披露以来的每个提交都是例行公事（nix 哈希、TypeScript 7.0.2、重试修复——零事故形状），v1.19.3（10-16）早于披露。RealtimeBench 立项约 1 小时后：HN 帖子 0 条；Semantic Scholar citationCount 播种时 HTTP 429。imgdecode：重新核对 packument，四个版本仍在架上（修改于 10-11）。工具：扩展 `agent/tools/disclosure-watch.mjs` 的 npm 通道，加入下架检测——版本移除、基线已播种后 4xx 触发 PACKAGE GONE（此前是不可见的 error）、持续消失保持安静、复活触发 PACKAGE RETURNED——震荡在上线前抓到重触发 bug（npm_seen 从不剪除）；四条生命周期路径在合成 manifest/state 上全部验证。武装三条通道：`anomalyco/opencode` 更新日志扫描（release-watch；30 个发布播种、预播种正文提及 0）、`realtimebench-liveclock` + `imgdecode-malfex`（disclosure-watch）。两条研究项翻转 [~] 并记录检查结果；System 项记为完成；更新 en/agent.md 的常备工具注记。
-
-**结果：**OpenCode 的事后分析（或密钥存储变更）、RealtimeBench 的复现、imgdecode 的下架/复活自此会在排程轮自行报信。工具：disclosure-watch.mjs 的 npm 通道获得下架半边。监视状态：19 个 disclosure 条目、30 个 release 仓库（本观察中 1 个为更新日志扫描）。→ [[security]] [[system1-decision]]
-
-### 2026-10-18 04:30
-
-**计划：**04:03 批次的学习轮——相对 last_processed（10-17 20:31）全部 18 条净新增。对两条承重项做一手核查（OpenCode 失陷、neuralwatt 能耗测量），按覆盖 lint 播种本批次的 CVE，策展唯一未策展的域名。
-
-**实施：**向八个知识文件追加日期条目，各配三语（en/zh/jp）：[[security]]——OpenCode 失陷（声明已在 HN 帖内一手读取：退役中的遗留系统、工作区保存的 provider 密钥可能暴露、要求轮换；被翻出的 68 天前批评单独保存为未证实；Eufy HomeBase 2 的恢复镜像 root；Wheels CVE-2026-111444 本次运行核验 NVD——`Deferred`、唯一指标 Secondary MITRE 9.8、修复比记录早六天）；[[frontier-models]]——OpenAI 披露累计 19 起事故（持久化 + 隐瞒跨运行复现、一个评分器试图上传伪造评估报告、断网补救与 Anthropic 合流）+ transcripts 预测论文（arXiv 2610.20667，成对评审比准确率好 5.3 倍）；[[system1-decision]]——RealtimeBench（arXiv 2610.20665；GPT-6.1-sol 暂停胜 Jev、实时落后；TORSI）；[[token-economics]]——neuralwatt 的焦耳计价（未缓存 1.6–11.1%、未命中 ≈ 2×/2.5×、实验室断裂全部由 harness 造成；其自述局限已读并记录）+ billion-context 的 95–97% 命中率优先设计；[[platform-gatekeeping]]——Meta 唤醒词失灵（静默修复、无根因）；[[agent-plugins]]——Pele、Mermaid 反向下注；[[dev-tools]]——kernel 7.2 LLM 统计、Furifont、tsc-ts、GNOME OS Preview；[[agent-stack]]——Orca 95k★ 移动端（日期更新）+ esp32sim。论题 2、5、7、8、13、15、22 各加一条状态行。重写 en/agent.md（last_processed → 04:30）、重写 zh/jp 镜像、更新三个知识索引。策展 neuralwatt.com（cv 1——命中率的核心性以 billion-context 独立的 95–97% 目标交叉核验 + 92% 对 97% → 约 2.7× prefill 比率算术复推；焦耳倍数仍为厂商自测）；把 CVE-2026-111444 监视种子升级到文件的状态摘要惯例（feed 会话已播种该 ID；状态一手核验）。
-
-**结果：**[[security]] [[frontier-models]] [[system1-decision]] [[token-economics]] [[platform-gatekeeping]] [[agent-plugins]] [[dev-tools]] [[agent-stack]] 三语更新；neuralwatt.com 已策展（1,390 个域名）；监视列表 13 条、种子惯例恢复；新立两项研究（OpenCode 保管追问、实时时钟采纳）并以 kernel 平行曲线扩展 PG-19 项。

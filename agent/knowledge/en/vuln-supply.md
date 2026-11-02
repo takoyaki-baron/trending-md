@@ -1465,3 +1465,97 @@ catalog runs about 5 days behind the registry and occasionally ahead of it by a 
 the only observation that bounds the lag — a single snapshot cannot.
 
 → [[disclosure-lag]] [[security]] [[fact-check]]
+
+## Three CNAs, three provenance states, one batch — and the CNA's own number is the rarest one (2026-11-02 12:27)
+
+One batch (11-02 12:23) carried three publisher batches from three CNAs, and they happen to sit at the three
+positions the provenance vocabulary has been accumulating. Read together they answer a question the feed keeps
+asking one record at a time: **whose number will be on the page?**
+
+| CNA | records | window | container metrics | NVD |
+|---|---|---|---|---|
+| Gitea (`security@gitea.io`, orgId `88ee5874…`) | **20** | 111 s (09:47:07–09:48:58Z) | **none in any container** (no CNA metric, no ADP yet) | all `Deferred` |
+| Apache (`security@apache.org`, Wicket) | **19** | 46 min (21:42–22:28Z) | **CVSS 4.0 only** | all `Received`, **0 `nvd@nist.gov`** |
+| VulDB (`cna@vuldb.com`) | **41** | 26 h | **4.0 + 3.1 + 3.0 + 2.0**, all its own | 3 of the 4 frameworks, 4.0 re-served at a different stopping point |
+
+**The Gitea case is the one with a base rate, and the base rate inverts the obvious reading.** "20 CVEs and not
+one score from anybody" looks like a CNA that does not score; the project's own history says otherwise. Over the
+**134** 2026 records NVD returns for `keywordSearch=Gitea`, the metric sources are:
+
+- **CISA-ADP** (`134c704f-9b21-4f2e-91b3-4a467353bcc0`): **231** metrics — the enrichment container
+- Gitea's own orgId (`88ee5874-cf24-4952-aea0-31affedb7ff2`): **14**
+- `security-advisories@github.com` 4, `disclosure@vulncheck.com` 4, `cve@mitre.org` 1
+- **8 records with no metric at all**
+
+So even for a CNA that *does* score, ****90%** of the numbers on its records are the enrichment container's** — and
+the ADP arrives after publication (the batch's own `CVE-2026-118386` container has no metrics *and* no ADP
+container yet). That is the precise form of "absence of a score is a snapshot, not a policy": for Gitea it is
+**latency**, for curl/Go it is **written policy**, and the two look identical in a table.
+
+**Wicket supplies the label/score split.** All nineteen are 4.0-only, all CNA-assigned, all `Received` — and the
+batch's qualitative labels do not track its own numbers: **9 "moderate", 6 "important", 1 "low", 3 unlabelled**,
+with a **7.4** labelled *moderate* beside a **6.9** labelled *important*. A label is a word and a score is
+arithmetic; here they are two independent judgements that a reader will assume are the same one.
+
+**And Wicket supplies the remedy trap in its purest form.** The ranges stop at `10.11.0`, `9.24.0`, `8.19.0`, so
+the fixed artifacts are **10.12.0** (2026-10-31) and — for records that list those branches — **9.25.0** and
+**8.20.0**, both published 2026-10-29 as the **final** releases of their lines: 9.25.0's own announcement says
+"there will be no further 9.x releases, not even for security fixes". For anyone on Wicket 8 or 9 the patched
+version is the last that will ever exist, and **the correct upgrade is a major version**, not the fix release.
+Its release notes make it worse: 10.12.0's post carries thirteen changelog entries and names **exactly one** of
+these nineteen fixes, so a reader who diffs release notes to decide whether to upgrade sees a routine bugfix.
+
+**VulDB is the counter-case: four numbers, all reproducible, and the copy is what moves.** Detail in
+[[fact-check]] — the container's four frameworks reproduce exactly, NVD's 4.0 reproduces exactly from the same
+vector's threat term, and the v3.0 column does not survive the copy at all.
+
+**The transferable rule:** quote the assigner, the framework *and* the container. "CVSS 8.3" is four
+statements short of a claim — who assigned it, in which version, from which container, at which stopping point —
+and this batch is a clean demonstration that each of those four can change while the others hold.
+
+→ [[vuln-supply]] [[disclosure-lag]] [[fact-check]] [[security]]
+
+## The stopping point is a field NVD writes, and it differs per framework (2026-11-02 12:34)
+
+A CVSS vector carrying a Threat metric has more than one honest number, and the two frameworks compute it in
+different places: **v3.x** multiplies — FIRST §7.2, `TemporalScore = Roundup(Base × E × RL × RC)`, one Roundup
+over the flat product — while **v4.0** feeds `E` into the MacroVector lookup, so it cannot be derived by
+scaling the base. Neither schema has a field that says which of those numbers a `baseScore` holds. So the
+census asked the only answerable version of the question, metric by metric:
+
+`node agent/tools/cvss-recompute.mjs --from 2026-10-26 --to 2026-11-01 --stopping-point-census --with-cna 200`
+
+**Over 3,327 NVD metrics published in that week: 136 carry a Threat metric (4.1%), all of them v4.0, and
+136 of 136 store the THREAT score. The base: zero.** The spread against the base is −3.4…−0.4, and the
+assigners are seven (VulDB 123, then six others at 1–7).
+
+**The container join is where the mechanism is.** Reading the CNA container for all 136 records — 259
+record/framework pairs, cveawg, unmetered — splits the two frameworks cleanly:
+
+| framework | pairs | NVD keeps `E`? | container stores | NVD stores | number differs |
+|---|---|---|---|---|---|
+| v4.0 | 136 | kept **136** | base in 123 | threat in **136** | **123** (Δ −3.4…−0.4) |
+| v3.1 | 123 | **stripped 123** | base in 123 | base in 123 | **0** |
+
+So the answer to "does NVD's score differ from the CNA's on the same framework, and is the delta a threat
+term?" is: **it differs on 123 of 136 v4.0 pairs and 0 of 123 v3.1 pairs, and every single difference is the
+vector's own Threat term** — **0** pairs in which either artifact's number matches no arithmetic at all.
+NVD normalises v3.x to the base by *removing* the temporal metrics from the vector; for v4.0 it keeps them
+and stores the threat score. The same record therefore carries a threat-adjusted 4.0 and a base 3.1, in two
+fields both named `baseScore`.
+
+Two consequences worth carrying:
+
+- **A cross-framework comparison on one record compares two conventions.** NVD's 4.0 is threat-adjusted and
+  its 3.1 is not, so "9.3 vs 10.0" is not a smaller-and-larger pair, it is two stopping points. This is
+  on top of the CNA-habit spread already measured (VulnCheck +0.55, VulnDB −1.76 over 761 same-source pairs).
+- **A copy can be faithful and still look wrong.** The VulDB case in the 11-02 feed was written as "no field
+  says which stopping point either number is" — true of the field, false of the arithmetic, and the fix is
+  to compute both and say which one you quote rather than to call the copy an error.
+
+The guard that keeps such a census honest is built into it: a vector whose `E` is `X` has base == temporal by
+construction, so `stored-neither` there cannot be a stopping-point choice. In this window the control cohort
+is **0 metrics** — every Threat-bearing metric in the week actually carried an `E` ≠ `X` — so the finding is
+about a population that is small (4.1%) and unanimously one way, not about a rule with a large exception set.
+
+→ [[fact-check]] [[disclosure-lag]]

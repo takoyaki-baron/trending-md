@@ -13924,5 +13924,23 @@
     "en": "A single-author technical write-up of one Linux kernel CVE (CVE-2026-98432, the IPv4 TCP handshake use-after-free). Read it as a researcher’s analysis with a reproducible fix description; its load-bearing facts are checkable against the registry and hold — cveawg returns the record (kernel CNA `416baaa9-…`, CVSS 3.1 9.8, `datePublished 2026-10-15T12:08:22.205Z`, eight affected branches) and the CVE names the same `ip_options_rcu` / `ip_options_build()` mechanism the post describes (cv 1, checked 2026-11-02). Not evaluated here: the post’s exploit reliability, which is not reproduced.",
     "jp": "Linux カーネルの 1 件の CVE（CVE-2026-98432、IPv4 TCP ハンドシェイクの use-after-free）についての単著の技術記事。再現可能な修正記述を伴う研究者の分析として読み、要となる事実はレジストリで確認でき成立する——cveawg は当該レコードを返し（カーネル CNA `416baaa9-…`、CVSS 3.1 9.8、`datePublished 2026-10-15T12:08:22.205Z`、影響は 8 ブランチ）、CVE は記事が述べるのと同じ `ip_options_rcu` / `ip_options_build()` の機構を名指しする（cv 1、2026-11-02 確認）。ここでは評価しないのは記事のエクスプロイト信頼性で、再現はしていない。",
     "zh": "一篇单作者的技术分析，讲一个 Linux 内核 CVE（CVE-2026-98432，IPv4 TCP 握手 use-after-free）。应作为带可复现修复描述的研究者分析来读；其关键事实可在注册表中核验且成立——cveawg 返回该记录（内核 CNA `416baaa9-…`、CVSS 3.1 9.8、`datePublished 2026-10-15T12:08:22.205Z`、影响 8 个分支），且 CVE 点名了文章所述的同一套 `ip_options_rcu` / `ip_options_build()` 机制（cv 1，2026-11-02 核验）。此处不评价的是该文章利用的可靠性，未复现。"
+  },
+  "hackerbooks.org": {
+    "cat": "community",
+    "cred": "med",
+    "cv": 1,
+    "density": "med",
+    "en": "Show-HN project by roansh (rohitshinde.in): a searchable index of books mentioned in 19 years of HN comments, with LLM-labelled mention sentiment. Cross-checked (11-02): the HN item 50326821 exists on HN's own API (196 comments), and the comment corpus it names as its source — the open-index/hacker-news dataset — resolves on Hugging Face. Two limits found first-hand: its corpus counters move within a day and its data files are content-hashed (a cited `meta.<hash>.json` 404s after the next rebuild), and its '85%' is agreement with a second model, not accuracy.",
+    "zh": "roansh（rohitshinde.in）的 Show HN 项目：可检索的 19 年 HN 评论里被提及的书，提及情感由 LLM 标注。交叉核实（11-02）：HN item 50326821 在 HN 自己的 API 上存在（196 条评论），它自称的语料来源 open-index/hacker-news 数据集在 Hugging Face 上可解析。一手发现两个限制：语料计数一天内就会变，且数据文件是内容寻址的（引用的 `meta.<hash>.json` 在下一次重建后 404），其「85%」是与第二个模型的一致率，不是准确率。",
+    "jp": "roansh（rohitshinde.in）による Show HN プロジェクト：19 年分の HN コメントで言及された書籍の検索可能な索引で、言及の感情は LLM がラベル付けする。クロスチェック（11-02）：HN item 50326821 は HN 自身の API に存在し（196 コメント）、語料の出典として挙げる open-index/hacker-news データセットは Hugging Face で解決できる。一手で見つけた限界は二つ：コーパスの計数は一日のうちに動き、データファイルは内容アドレス型（引用した `meta.<hash>.json` は次の再ビルドで 404）、そして「85%」は二つ目のモデルとの一致率であって精度ではない。"
+  },
+  "wicket.apache.org": {
+    "cat": "vendor",
+    "cred": "high",
+    "cv": 1,
+    "density": "med",
+    "en": "Apache Wicket's project site and release announcements. Cross-checked (11-02): the two releases the 11-02 feed cites are real Maven Central artifacts — `org.apache.wicket:wicket-core:9.25.0` and `10.12.0` both return 200 — while the site's own 'there will be no further 9.x releases' sentence is the primary for the end-of-line claim. Note the 10.12.0 announcement names only one of the nineteen security fixes shipped with it.",
+    "zh": "Apache Wicket 的项目站点与发布公告。交叉核实（11-02）：11-02 feed 引用的两个版本都是真实的 Maven Central 工件——`org.apache.wicket:wicket-core:9.25.0` 与 `10.12.0` 均返回 200——而站点自己那句「there will be no further 9.x releases」是终止线（EOL）主张的一手来源。注意 10.12.0 的公告只点到随它一起发布的十九个安全修复中的一个。",
+    "jp": "Apache Wicket のプロジェクトサイトとリリース告知。クロスチェック（11-02）：11-02 のフィードが引く 2 つのリリースは実在する Maven Central のアーティファクト——`org.apache.wicket:wicket-core:9.25.0` と `10.12.0` がいずれも 200——であり、サイト自身の「there will be no further 9.x releases」という一文が EOL 主張の一次情報。なお 10.12.0 の告知は同時に出た 19 件のセキュリティ修正のうち 1 件しか名指ししない。"
   }
 }

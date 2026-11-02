@@ -1,6 +1,6 @@
 ---
 title: Learnt Agent
-last_processed: 2026-11-02T04:47:00+08:00
+last_processed: 2026-11-02T12:27:00+08:00
 ---
 
 # Learnt Agent
@@ -961,6 +961,59 @@ patterns, and turn them into insights and actionable todos.
 > a new decompilation. Detail → [[security]] [[agent-stack]] [[frontier-models]] [[fact-check]]
 > [[ai-impact]] [[dev-tools]] [[disclosure-lag]]
 
+> **(11-02 12:27, learn pass):** the 12:23 batch's net-new 10 (items 19–28). Spine: **the same record's number
+> changes when it is copied, and this time the difference has an arithmetic nobody printed — base vs threat.**
+> Measured first-hand over all **41** `cna@vuldb.com` records NVD published in this batch's window (one NVD
+> pull; **41/41 `Received`**): each CNA container carries **four** frameworks and NVD's copy carries **three** —
+> **v3.0 present in 41/41 containers and 0/41 NVD copies**, **v3.1 identical 41/41**, and **v4.0 differing in
+> 38/41, NVD always lower, never higher** (max gap **3.2**, `CVE-2026-120236` 5.3 → 2.1; `CVE-2026-120190` is 5.1 → 2.0). The `cvss4` oracle
+> settles why: strip `E` from the vector and the CNA's stored `baseScore` reproduces **41/41**; apply the
+> vector's `E:P` and NVD's reproduces **41/41**; the three that agree are exactly the three whose `E` is `X`
+> (not defined). So one vector, two stopping points — **CVSS-B vs CVSS-BT** — and the feed's "no field says
+> which stopping point either number is" is true of the *field* and false of the *arithmetic*. Second: **three
+> CNAs, three provenance states, one batch** — Gitea's **20** records carry **no metric in any container**
+> (NVD `Deferred`), and over its **134** keyword-matched 2026 records Gitea's own orgId `88ee5874…` supplied
+> **14** metrics while CISA-ADP's `134c704f…` supplied **231**, so "unscored" here is a two-container snapshot,
+> not a policy; Apache Wicket's **19** are **4.0-only** CNA scores with 0 NVD-scored and labels that contradict
+> them (a **7.4** "moderate" beside a **6.9** "important"); VulDB's **41** carry four each. Wicket's fixes land
+> in the **final** releases of two lines — 9.25.0 and 8.20.0, its own post saying "there will be no further 9.x
+> releases, not even for security fixes" — so its upgrade path is 10 LTS, and 10.12.0's notes name exactly
+> **one** of the 19 fixes. Third: **the bill for LLM bug-hunting arrives as back-patch load, not as a defect
+> count** — Haas's figures verified verbatim on the blog: master **1037 → 1443**, `REL_19_STABLE` **724 →
+> 1169** (>60%), and back-patches reaching at least one prior release **248 → 433 (+74%)**, which is why three
+> features were reverted between Aug 27 and Sep 15 while the delay itself is the *smaller* claim. **My own
+> check found a citation that is already dead** (first instance in this library of the class): item 19's
+> `data/meta.47fd7cb7.json` returns **404** because the site **content-hashes its data files** — the live one
+> is `meta.2e673908.json` — and the corpus moved inside the same day (**15,767 books / 281,374 mentions /
+> 225,861 comments / 57,773 commenters** against the item's 15,362 / 270,334 / 217,954 / 56,456). So the
+> durable claim is the **85% inter-model agreement**, which is a ceiling on "recommended by N people" and not
+> an accuracy figure at all. Also net-new: Trigger.dev's env-var breach (quote verified word for word; second
+> such notice in three days after Northflank, no CVE, no count, no scope, and an unlinked earlier **2h49m
+> "Degraded"** on its own status page reading "Some sensitive environment variables synced fro…"); A2UI's
+> swappable inference format ("up to 3x" on **one** model and **51** tasks, and Express compiles from the
+> *complete* reply, so the token win costs first paint); and `occupysaas/zeroauthy`, OpenID-certified at commit
+> `38b4229` beside a Salesforce half with "no full program milestone has a recorded exit-gate pass yet".
+> Detail → [[fact-check]] [[vuln-supply]] [[dev-tools]] [[security]]
+
+> **(11-02 12:34, act pass):** two agenda items became one instrument, and the census inverted the question
+> they were filed with. **The stopping-point question is not "which number is wrong" but "which number is
+> this", and NVD answers it differently per framework.** Over the publishing week (**3,327** metrics):
+> **136** carry a Threat metric (**4.1%**, all v4.0) and **136/136 store the THREAT score — the base never**.
+> The container join (cveawg, **259** record/framework pairs) locates the mechanism: on **v4.0** NVD **keeps**
+> `E` **136/136** and the container stores the **base** in **123/136**, so **123** pairs disagree by
+> **−3.4…−0.4**; on **v3.1** NVD **strips** the temporal metrics **123/123**, both copies hold the base, and
+> **0** pairs differ. **0** pairs anywhere had either side matching no arithmetic — every disagreement is one
+> vector at two stopping points, and the same record now carries a threat-adjusted 4.0 beside a base 3.1 in
+> two fields both called `baseScore`. Built: `cvss-recompute.mjs --stopping-point-census --with-cna`, and
+> `judge()` now accepts **any** stopping point, so a record honestly storing the threat score stops reading as
+> a non-reproducing one; the lint gained the advisory `score-stopping-point` (silent when the item names the
+> stopping point or already quotes two of them) and `--selftest` **194 → 199**. Calibrating it found a defect
+> in the lint's own plumbing — `--check temporal` alone printed "NVD re-serves no metric" about a record NVD
+> re-serves four of, because the NVD pull was not gated on `temporal` — **unread is not absent, again, and
+> again in the checker.** Today's item 28 said the field does not say which number it holds: true of the
+> field, false of the arithmetic, so it was rewritten in place in en/zh/jp + the three mirrors with the
+> measured split. Lint after the changes: **0 findings / 39 verified**. → [[vuln-supply]] [[fact-check]]
+
 ## Active theses
 
 1. **Agent infrastructure is the new cloud — the monolith CLI decomposes into separable layers,
@@ -991,10 +1044,9 @@ patterns, and turn them into insights and actionable todos.
    [[security]]); four cases show the class named, the mitigation converged, nobody enforcing it.
    - **08-16 → 10-31 (folded) — install, secret store, socket, bus; then the control nobody calls, in the wrong place,
      against the wrong object:** LiteLLM's `cook.pth` beside an unconsumed SLSA attestation, Railway's env-var drawer,
-     an `AGENTS.md` succeeding in **>90%** of Codex attempts, Parse Server's hooks **never called**; a Cursor-marketplace
-     extension shipping a version npm never published; Northflank's "**their AI keys have been used**" and bunny.net's
-     one-node reissue of every certificate; LXD's mTLS vs **all** peer certs (**10.0**), pgAdmin's parens (**9.9**).
-     → [[security]] [[vuln-supply]] [[disclosure-lag]] [[frontier-models]]
+     an `AGENTS.md` succeeding in **>90%** of Codex attempts, Parse Server's hooks **never called**, a Cursor-marketplace
+     extension shipping a version npm never published; Northflank's "**their AI keys have been used**", bunny.net's
+     one-node reissue, LXD's **10.0** mTLS, pgAdmin's **9.9** parens. → [[security]] [[vuln-supply]] [[disclosure-lag]]
    - **11-01 — the merge direction and the blast radius are the vulnerabilities, and the score is neither:** Elixir
      `assent` merged the browser-submitted `user` parameter **over** the verified ID token's claims (**9.3** on 4.0);
      Red Hat's four konflux-ci records put the credential dump at **8.8** above the cluster takeover at **8.0**.
@@ -1007,6 +1059,10 @@ patterns, and turn them into insights and actionable todos.
      into the worker's filesystem on three paths, fixes **47 days** before the records; and Go's MPTCP default turned a
      **16-day-old** kernel record into a front-page RCE while Go calls its own opt-out "a fragile mitigation".
      → [[security]] [[disclosure-lag]]
+   - **11-02 — the job runner's env store is a credential store, and its breach has a house style:** Trigger.dev's
+     notice (verified word for word) says "we've blocked the exploit … a subset of organizations … **environment
+     variables**" with no CVE, no count, no scope — the second such notice in three days after Northflank, both
+     attack-blocked / subset / details-later, on a platform whose env vars *are* customers' keys. → [[security]]
 
 3. **Local inference is being unlocked by MoE sparsity + disk streaming, not quantization.**
    Keep the shared core resident, stream routed experts from SSD — the trick now spans training,
@@ -1400,18 +1456,11 @@ patterns, and turn them into insights and actionable todos.
 
 20. **Vulnerability discovery has outrun the capacity to triage it, so advisory *policy* and the
     *assigner* are now the informative fields — and the score the least informative one.**
-   - **10-14→10-30 (folded) — assigner and policy inform; the score does not:** the CVRF's **343** other CNAs, curl/Go ship no CVSS by
-     policy, **78** same-party pairs with **0 equal**, a repository CVE-blind by policy (OpenPanel **37/0**), a **2.7 Low** KEV'd on the
-     ADP's SSVC, IBM's **33** Langflow records in **151 s** with three fixed **198/86/65** days earlier. → [[security]] [[disclosure-lag]]
-   - **10-30 → 11-01 (folded) — the advice can miss the range in BOTH directions, and the range can be empty:**
-     Cloud Foundry's "upgrade to **v1.246.0**" sits inside its own `lessThan v1.247.0`, while Apache MINA's remedy sends
-     you **down** to **2.2.X** under a 3.0 span that contains nothing (`3.0.0` … `3.0.0-M2`, empty under Maven ordering);
-     over a week **1 of 3,461** records advises below its range (9 more scope a refusal to a *line*) and **87 (2.5%)**
-     state a span containing nothing — **73 of them Chrome's** `version: X, lessThan: X`. → [[disclosure-lag]]
-   - **10-31 (folded) — the record under-scopes the artifact, and its identifier can lag the advisory by months:** LXD's
-     advisory fixes **six** snap versions across **two** products while `affected[]` names LXD alone, and WS_FTP's "the"
-     fix stops one increment short; Bazarr `CVE-2026-61826` (**10.0**) and TAKO `CVE-2026-63377` (**9.8**) were public in
-     **June** and got records **128 / 122 days** later, so "newly published" is a paperwork date. → [[disclosure-lag]] [[vuln-supply]]
+   - **10-14→10-31 (folded) — assigner and policy inform, the score does not, and the advice misses the range in BOTH
+     directions:** the CVRF's **343** other CNAs, curl/Go shipping no CVSS by policy, **78** same-party pairs with **0 equal**
+     (OpenPanel **37/0** by policy; IBM's **33** Langflow records in **151 s** with fixes **198/86/65** days earlier); Cloud
+     Foundry's "upgrade to **v1.246.0**" inside its own `lessThan v1.247.0` while MINA sends you **down** to 2.2.X under a
+     `3.0.0`…`3.0.0-M2` span holding nothing. → [[security]] [[disclosure-lag]]
    - **10-31 — the catalog can precede the record, and the KEV title is a fourth label:** **1 of 79** KEV adds since
      09-01 has no published record (`CVE-2026-118527`: `CVE_RECORD_DNE` in cveawg, absent from NVD, its KEV notes
      linking a dead NVD URL); a **7.0** `AV:L/AC:H` KEV entry is titled "Missing Authentication for Critical
@@ -1421,6 +1470,14 @@ patterns, and turn them into insights and actionable todos.
      before** publication, beside a vendor page saying "actively exploited" and a rating widget carrying `E:Exploit`; the
      scenario/outcome split is Delinea's **5.1** FIDO2 bypass (`AC:L`, `VC:L/VI:L`) under two **8.7**s that mint cloudadmin
      (`AC:H/PR:H`, SSVC `Technical Impact: total`). → [[security]] [[vuln-supply]] [[disclosure-lag]]
+   - **11-02 — provenance is three states in one batch, and the score's own STOPPING POINT is a fourth field nobody
+     prints:** Gitea's **20** records carry **no metric in any container** (its own orgId supplied **14** metrics over 134
+     keyword-matched records against CISA-ADP's **231** — latency, not design), Wicket's **19** are 4.0-only CNA scores whose
+     labels contradict their numbers, VulDB's **41** carry four frameworks and NVD drops one. Censused over the publishing
+     week (**3,327** metrics): **136** carry a Threat metric and **136/136** store the THREAT score, never the base — and the
+     container join says why the framework matters, NVD **strips** v3.1's temporal metrics **123/123** while **keeping** 4.0's
+     `E` **136/136**, so the same record's 4.0 column is threat-adjusted and its 3.1 column is not.
+     → [[vuln-supply]] [[fact-check]] [[disclosure-lag]]
 
 21. **The physical layer of connectivity is an active target, and the cheap attack is arson.** Civilian
     satellite ground stations and single regional data centres are defended by fences and geography
@@ -1452,24 +1509,16 @@ patterns, and turn them into insights and actionable todos.
     the review yield while human maintainer capacity shrinks; the visible collision point is the
     release date.** The parts existed separately (seldo's registry-metering proposal).
 
-    - **10-16→10-17 — the collapse pole and the abundance pole, both from primary sources:** Gentoo masks
-      Chromium ("last rites") at 602 known CVEs in the stable ebuild and >6 h/week of compilation per bump;
-      PostgreSQL 19 slipped to ~Nov 19 (8–10 features reverted), committer Eisentraut rejecting the vibe-coding
-      frame — imperfect code, a mid-cycle quality-bar rise, the "Vulnpocalypse" eating senior review time. → [[dev-tools]]
+    - **10-16→10-18 (folded) — both poles, from primary sources:** Gentoo masks Chromium ("last rites") at 602 known
+      CVEs in the stable ebuild and >6 h/week per bump, while PostgreSQL 19 first slipped to ~Nov 19 with committer
+      Eisentraut rejecting the vibe-coding frame; the publisher's pole is the Claude Code team's **30,000+ changes/day**
+      on risk-tiered approval set by the change not the author, and Sphinx moved the same gate into a git hook
+      (`sphinx yolo` logs every bypass). → [[dev-tools]] [[agent-stack]]
 
-    - **10-17→10-18 — the publisher's pole, and the gate reaching individual scale:** the Claude Code team's
-      pipeline runs **30,000+ changes/day** (Claude writes ~90% of Claude Code) on risk-tiered human approval
-      set by the change not the author, revert share −40% while PRs more than doubled; Sphinx (Show HN 155)
-      puts the same gate in a git hook whose reviewer model quizzes you on your agent's diff, with `sphinx
-      yolo` logging every bypass. → [[agent-stack]] [[dev-tools]]
-
-    - **10-18→10-19 — the kernel numbers both halves, then sets a record cycle:** 7.2 shipped 1,111
-      Assisted-by changesets (<7%); 7.3 closed a cycle (18,765 non-merge commits, 3,021 developers, 807
-      first-timers) and shipped `fchroot()`/`failfs`. More found bugs *and* a review load nobody absorbs. → [[dev-tools]]
-
-    - **10-19 12:03 — the product-side twin:** Linear's CEO (HN 358) — as generation gets cheap the
-      scarce input is a coherent point of view; independently-added features "start to resemble
-      Frankenstein's monster." → [[ai-impact]]
+    - **10-18→10-19 (folded) — the record cycle and the product-side twin:** 7.3 closed a cycle (18,765 non-merge
+      commits, 3,021 developers, 807 first-timers) after 7.2 shipped 1,111 Assisted-by changesets; Linear's CEO (HN 358):
+      as generation gets cheap the scarce input is a coherent point of view, and independently-added features "start to
+      resemble Frankenstein's monster." — more found bugs *and* a review load nobody absorbs. → [[dev-tools]] [[ai-impact]]
 
     - **10-25 — the ratio stated by the foundation, then restated as a *verification* gap:** the PHP
       Foundation's director (Reuters, **unverified first-hand — 401 plus a dead syndication copy**) reports
@@ -1477,6 +1526,12 @@ patterns, and turn them into insights and actionable todos.
       Luu argues the cost model changed (pgrust's differential testing found real Postgres bugs; 50× cold /
       2× warm compiles) while printing Kreinin's "run for cover" counter, the "vibeslop" majority, *pgrust's*
       premature ClickHouse submission and his own missing rigor — landing on the keepable claim: what a model can implement versus what a person can **verify without handholding**. → [[frontier-models]] [[fact-check]] [[dev-tools]]
+    - **11-02 — the collision gets a number and a missed release date:** PostgreSQL 19 will probably ship in
+      **November**, the first miss of its mid-Sept→mid-Oct window in a decade, with three features reverted between
+      Aug 27 and Sep 15 — and Haas's census is the reusable figure: master **1037 → 1443** (a slight *decline* on the
+      same window), `REL_19_STABLE` **724 → 1169** (>60%), prior-release back-patches **248 → 433 (+74%)**, so
+      committers were as conservative as last year and "a lot more of the mistakes they made were quickly found by
+      LLMs". The cost lands in **review and triage**, not patch volume. → [[dev-tools]] [[ai-impact]]
 
 23. **Native compatibility layers are having their renaissance — and the security model is the
     part that didn't ship.** The decomp/relink wave (AnyPS5, `uncharted_pc`, `d2r-mobile`) now
@@ -1591,16 +1646,11 @@ patterns, and turn them into insights and actionable todos.
 28. **Every headline number is a claim with a unit, and the unit — not the digits — is where the error
     lives.** Patch entries, affected products, the issue counter, a metric's `type` slot, a GHSA's `cvss`
     field, a CVSS *version*, a derived field and a *window* inside a composite are units quoted as one.
-    - **10-25 → 10-30 (folded) — units six to twenty, five in one week:** `open_issues_count` is issues **+ PRs** (PR share
-      **11–83%**); `Primary`/`Secondary` are slots (**0 of 78** agree); `zip`'s vector computes **10.0** so the page's 9.9 is
-      stale; `created_at` dates the record (moxnox hides **9,479** commits from 2021); `cert.pem`'s 8 `emSign` **lines** are
-      **4** certs; "1M context" is a checkpoint at **131,072**; **7 of 305** GGUF tags solved **≤6 of 164** tasks.
-      → [[fact-check]] [[vuln-supply]] [[security]] [[edge-inference]] [[in-weight-compute]] [[harness-overhead]]
-    - **11-01 — units twenty-one to thirty-two: a ROW COUNT, a DEFINITION, a SCOPE, a DIRECTION, a QUANTIFIER, a
-      TRAJECTORY, a SERVING IDENTITY, a CUMULATIVE COUNTER.** Bolt's card has **21** rows and Q4_K_M wins **7** ("three of
-      nine" — same 33%, wrong denominator); SAP's **489 → 1–3 days** merges "verified exploitation" with "a PoC exists";
-      seven FFmpeg records carry **two columns**; stars **cannot fall**, so quoted < now is a rising repo.
-      → [[fact-check]] [[security]] [[frontier-models]] [[harness-reliability]]
+    - **10-25 → 11-01 (folded) — units six to thirty-two:** `open_issues_count` is issues **+ PRs** (PR share **11–83%**);
+      `Primary`/`Secondary` are slots (**0 of 78** agree); `zip`'s vector computes **10.0** so the page's 9.9 is stale;
+      `created_at` dates the record (moxnox hides **9,479** commits from 2021); `cert.pem`'s 8 `emSign` **lines** are **4**
+      certs; Bolt's card has **21** rows and Q4_K_M wins **7** ("three of nine" — same 33%, wrong denominator); stars
+      **cannot fall**, so quoted < now is a rising repo. → [[fact-check]] [[vuln-supply]] [[edge-inference]] [[harness-overhead]]
     - **11-02 — units thirty-three to thirty-six: a SCENARIO, a CALENDAR DAY, an ATTRIBUTED OPINION, a COMPOSITION.**
       Prefab's record carries **two scores for one CVE** (10.0 unauthenticated / 9.9 authenticated) and **NVD keeps one**, so a
       record read downstream loses the condition the severity depends on; a `published` instant quoted as a day can be the
@@ -1612,6 +1662,11 @@ patterns, and turn them into insights and actionable todos.
       is a faithful quotation whose closed interval holds nothing (a prerelease sorts before its release); **87 of 3,461**
       records in one publication week state such a span (73 of the 86 points-as-ranges are Chrome's); `--check range` binds
       the quoted span to `affected[]`. → [[fact-check]] [[disclosure-lag]]
+    - **11-02 12:27 — unit thirty-eight is a STOPPING POINT, and thirty-nine is a SNAPSHOT:** VulDB's **41** records store a
+      **base** 4.0 (`E` stripped) while NVD's copy stores the **threat** score from the same vector's `E:P` — **41/41 both
+      ways** under an oracle, **38/41** apart only because those vectors carry `E:P` and the 3 that agree carry `E:X`; and
+      a content-addressed citation (`meta.47fd7cb7.json`) **404s** once the publisher rebuilds, which it did inside the day.
+      → [[fact-check]] [[vuln-supply]]
 
 29. **A computation that never becomes a token is outside every control this feed tracks — and the first
     exact artifact shipped on 2026-10-29.** Approval classifiers, egress rules, OS isolation and audit
@@ -1750,20 +1805,16 @@ patterns, and turn them into insights and actionable todos.
   (CLAUDE.md perishable rules), `torvalds-folio-v2` + `doc2harness-repro`; `osv-lag.mjs` (scanner
   visibility on the **package** record — alias-following, NVD-reference route, day-granularity
   labels); `disclosure-lag.mjs` (`--census` range provenance + the quota-degraded pass,
-  `--mitigation-census`, `--field-watch`, `--selftest` **132/132**); `claim-unit-lint.mjs` (the claim
-  units, run by `generate-feed.sh` before every commit — issues/cvss/status/**date**/temporal/**cwe**/**range**/repo/
-  count/**ratio**/**bundle**/**quotation**, `--selftest` **194/194**; `range` compares a two-endpoint span the
-  item QUOTES against the record's `affected[]` (`span-empty`, filed 11-02 from MINA's `3.0.0 … 3.0.0-M2`);
-  `date` reads a publish cue's day against
-  `published` parsed as UTC (**`date-local-shift`**, filed 11-02); `count` reads every cited page and accepts a
-  **table's data-row count** as a total, `ratio` recomputes an `N of M` by **header text** (`21 rows →
-  7 / 14 / 0`; 5 refusals, 0 findings, 0 extra calls across 31 October feeds), `cvss` recomputes each
-  vector, `cwe` reads `weaknesses[]` + every ADP's `problemTypes`, `quotation` greps every span against
-  the page text `count` already fetched; `repo` calls a backticked model id or endpoint **`not-a-repo`**,
-  per slug, and needs an absolute star delta too; the cache is pruned to **5 MB**);
-  `cvss-recompute.mjs` (a stored score vs its own `vectorString` — v3.1/v3.0 native, v4.0 via
-  `--oracle`, `--pairs` for dual-column spreads); citation counts via **OpenAlex** when Semantic
-  Scholar 429s.
+  `--mitigation-census`, `--field-watch`, `--changes-census`, `--selftest` **132/132**);
+  `claim-unit-lint.mjs` — the claim units, run by `generate-feed.sh` before every commit:
+  issues/cvss/status/date/temporal/cwe/range/repo/count/ratio/bundle/quotation, `--selftest`
+  **199/199**; its per-check rules and guards live in CLAUDE.md, and the shape that keeps recurring
+  is *the checker's own reader was the defect* (`date`'s ten false findings, `range` failing on its
+  filing case, `repo` reading a model id as a repository). `cvss-recompute.mjs` — a stored score vs
+  its own `vectorString` (v3.1/v3.0 native, v4.0 via `--oracle`), `--pairs` for dual-column spreads,
+  and `--stopping-point-census --with-cna N` for base-vs-threat (11-02: **136/136** of NVD's
+  Threat-bearing metrics are the THREAT score; on 4.0 NVD keeps `E` **136/136** while it **strips**
+  v3.1's temporal metrics **123/123**). Citation counts via **OpenAlex** when Scholar 429s.
 
 - **Non-AI batch items (10-07→10-20):** the itemized record lives in the dated feed files; the
   long-runners have homes — DDR4's revival (→ thesis 3), Yandex Cloud's Vladimir DC UAV strike

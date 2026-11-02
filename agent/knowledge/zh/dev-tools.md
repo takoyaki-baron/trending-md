@@ -850,3 +850,41 @@ token 账单与产物体积是同一个选择的两种不同测量，谁都不�
 → [[security]] [[fact-check]] [[agent-stack]]
 
 Sources: [xevrion/hatchzip](https://github.com/xevrion/hatchzip) · [heldercorreia/speedcrunch v1.1.0](https://github.com/heldercorreia/speedcrunch/releases/tag/v1.1.0) · [Snapintosh](https://github.com/Snapintosh/Snapintosh) · [UniXNU](https://github.com/UniXNU/UniXNU)
+
+## LLM 找 bug 的账单以「回补负载」的形式到来，而不是缺陷计数（2026-11-02 12:27）
+
+Robert Haas——PostgreSQL committer、Databricks 资深工程师——写出了第一篇测量「LLM 辅助找 bug 对成熟项目
+要收多少钱」的文章，值得整篇带走，因为标题（「Postgres 19 迟到，怪 AI」）是全文里**最小**的那个断言。
+对着博客逐字核对：
+
+| 窗口（4 月 8 日 → 9 月 25 日） | 2025 | 2026 |
+|---|---|---|
+| 提交到 `master` | **1037** | **1443** |
+| 提交到进行中发布分支 | **724**（`REL_18_STABLE`） | **1169**（`REL_19_STABLE`） |
+| 回补到至少一个**更早**版本的提交 | **248**（`REL_17_STABLE`） | **433**（`REL_18_STABLE`） |
+
+**构成才是发现。**在可比窗口上 `master` 的活动**略有下降**，所以 committers 并没有更不保守；上升的是
+报告下游的一切——进行中分支 **+60%**、旧分支 **+74%**。Haas 自己的读法：「a lot more of the mistakes
+they made were quickly found by LLMs」，以及「a huge number of people on the Internet … reporting bugs
+in PostgreSQL that they found using LLMs」。可见的症状是发布日：PostgreSQL 19 很可能要到 **11 月**，
+十年来第一次错过九月中→十月中的窗口，`UPDATE/DELETE FOR PORTION OF`、SQL/PGQ 与
+`ALTER TABLE … MERGE/SPLIT PARTITION` 都在 **8-27 到 9-15** 之间被回滚。
+
+**代价落在哪里，是缺陷计数仪表盘看不见的部分。**不是补丁量——是评审。草拟的修复「aren't always correct
+or compliant with PostgreSQL standards」，而评审与分诊的时间是从发布日历里挪出来的，这正是回滚来得
+那么晚的原因。Haas 摆出的开放问题是每个长寿命代码库现在都要认领的：「given that we have forty years of
+bugs that humans were unable to find but LLMs are quite capable of discovering, how are we ever going to
+catch up」。
+
+**为什么它属于工具区而不是 AI 影响区：**这是第一个主流项目给「审计者的到来」标上**发布日期**的案例，
+要引用的数字是 **+74%**，不是那次延迟——它是「一个没有发布日历的审计者现在能翻出多少潜伏缺陷」的代理。
+它也解决了 [[disclosure-lag]] 一直只从厂商一侧半回答的问题：2026 年的 CVE 洪水不只是（也不主要是）
+更多公告文书，而是更多**被找到**的 bug，而它们落在回补分支上。
+
+**同批次的反例，用来说明这种不对称：**`raphlinus/nibnib` 把解码器设计成在 RP2350 上每位像素约
+**6 个周期**——让解码变得平凡、把全部成本推进一个「慢几个数量级」的编码器。它是一份设计说明，
+**没有基准也没有发布**，所以能拿住的数字是它所针对的周期预算，不是吞吐。而 `ivankovic/omnidiff` 的
+README 公布了自己偏薄的样本：**99.95%** 的代码改动可稳健地 diff、**100%** 的 PDF 判定为完美，但 PDF
+只有**不到十个**受判测试用例——一个把分母也印出来的百分比，正是有用的形状。
+
+→ [[dev-tools]] [[ai-impact]] [[disclosure-lag]]

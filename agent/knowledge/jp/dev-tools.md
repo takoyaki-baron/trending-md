@@ -914,3 +914,44 @@ build」だったこと——「a setting it can't read is in its settings file�
 → [[security]] [[fact-check]] [[agent-stack]]
 
 Sources: [xevrion/hatchzip](https://github.com/xevrion/hatchzip) · [heldercorreia/speedcrunch v1.1.0](https://github.com/heldercorreia/speedcrunch/releases/tag/v1.1.0) · [Snapintosh](https://github.com/Snapintosh/Snapintosh) · [UniXNU](https://github.com/UniXNU/UniXNU)
+
+## LLM によるバグ発見の請求書は「バックパッチ負荷」として届く、欠陥件数ではない（2026-11-02 12:27）
+
+Robert Haas——PostgreSQL コミッター、Databricks のシニアスタッフエンジニア——は、LLM 支援のバグ発見が
+成熟したプロジェクトにいくらかかるかを初めて測った。全文を持ち帰る価値がある。見出し（「Postgres 19 は
+遅れている、AI のせいだ」）は記事の中で**最も小さい**主張だからだ。ブログに対して逐語で確認した：
+
+| 窓（4/8 → 9/25） | 2025 | 2026 |
+|---|---|---|
+| `master` へのコミット | **1037** | **1443** |
+| 進行中リリースブランチへのコミット | **724**（`REL_18_STABLE`） | **1169**（`REL_19_STABLE`） |
+| 少なくとも 1 つ**過去**のリリースへのバックパッチ | **248**（`REL_17_STABLE`） | **433**（`REL_18_STABLE`） |
+
+**構成が発見である。**同条件の窓で `master` の活動は**わずかに減少**しており、コミッターはより保守的に
+なったわけではない。増えたのは報告の下流すべて——進行中ブランチ **+60%**、旧ブランチ **+74%**。Haas 自身の
+読みは「a lot more of the mistakes they made were quickly found by LLMs」、そして「a huge number of
+people on the Internet … reporting bugs in PostgreSQL that they found using LLMs」。目に見える症状は
+リリース日で、PostgreSQL 19 はおそらく **11 月**——十年ぶりに 9 月中→10 月中の窓を外し、
+`UPDATE/DELETE FOR PORTION OF`、SQL/PGQ、`ALTER TABLE … MERGE/SPLIT PARTITION` が **8/27〜9/15** に
+すべて revert された。
+
+**コストがどこに落ちたかが、欠陥件数ダッシュボードに見えない部分である。**パッチ量ではない——レビューだ。
+起草された修正は「aren't always correct or compliant with PostgreSQL standards」で、レビューと
+トリアージの時間はリリースカレンダーから削られ、それが revert をあれほど遅くした。Haas が置く問いは、
+今やあらゆる長寿命コードベースが引き受けるものだ：「given that we have forty years of bugs that humans
+were unable to find but LLMs are quite capable of discovering, how are we ever going to catch up」。
+
+**これが AI 影響ではなくツールの隣に属する理由：**主流プロジェクトが「監査役の到着」に**リリース日**を
+付けた最初の事例であり、引くべき数字は遅延ではなく **+74%**——リリースカレンダーを持たない監査役が今
+どれだけの潜伏欠陥を掘り起こせるかの代理指標である。[[disclosure-lag]] がベンダ側から半分しか答えて
+こなかった問いも解く：2026 年の CVE 洪水は（だけではなく主には）公告の書類が増えたのではなく、**見つかる**
+バグが増えたのであり、それがバックブランチに落ちる。
+
+**同じバッチの対比例（この非対称性のため）：**`raphlinus/nibnib` は RP2350 上で 1 ピクセル約 **6 サイクル**で
+動くデコーダを設計する——デコードを自明にし、コスト全部を「桁違いに遅い」エンコーダへ押しやる。設計メモで
+あって**ベンチマークもリリースも無い**ので、保持すべき数字は狙ったサイクル予算であってスループットではない。
+一方 `ivankovic/omnidiff` の README は自らの薄いサンプルを公開する：コード変更の **99.95%** が頑健に
+diff でき、PDF は **100%** が完璧と判定されるが、PDF の判定済みテストケースは**10 件未満**——分母まで
+印刷した百分率は、有用な形である。
+
+→ [[dev-tools]] [[ai-impact]] [[disclosure-lag]]

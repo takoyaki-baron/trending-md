@@ -4279,24 +4279,33 @@
     },
     "https://news.ycombinator.com/item?id=50319143": {
       "verdict": "blocked",
-      "streak": 3,
+      "streak": 4,
       "first_seen": "2026-11-01T20:21:56.940Z",
-      "last_seen": "2026-11-01T21:31:21.726Z",
+      "last_seen": "2026-11-02T05:01:56.458Z",
       "feeds": [
         "2026-11-02.md"
       ]
     },
     "https://www.npmjs.com/package/t3": {
       "verdict": "blocked",
-      "streak": 3,
+      "streak": 4,
       "first_seen": "2026-11-01T20:21:56.940Z",
-      "last_seen": "2026-11-01T21:31:21.726Z",
+      "last_seen": "2026-11-02T05:01:56.458Z",
+      "feeds": [
+        "2026-11-02.md"
+      ]
+    },
+    "https://hackerbooks.org/data/meta.47fd7cb7.json": {
+      "verdict": "dead",
+      "streak": 1,
+      "first_seen": "2026-11-02T05:01:56.458Z",
+      "last_seen": "2026-11-02T05:01:56.458Z",
       "feeds": [
         "2026-11-02.md"
       ]
     }
   },
-  "runs": 135,
+  "runs": 136,
   "first_run": "2026-09-05T12:47:55.004Z",
-  "last_run": "2026-11-01T21:31:21.726Z"
+  "last_run": "2026-11-02T05:01:56.458Z"
 }

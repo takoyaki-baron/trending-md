@@ -184,7 +184,7 @@ import { execFileSync } from 'node:child_process';
 import { dirname, basename } from 'node:path';
 // The score's arithmetic, not just the record's copy of it. `cvss-recompute.mjs` guards its CLI
 // behind an `import.meta.url` check, so importing it costs nothing but the v3.1 equations.
-import { judge, recompute, roundup31 } from './cvss-recompute.mjs';
+import { judge, recompute, roundup31, stoppingPoints } from './cvss-recompute.mjs';
 
 const arg = (name) => {
   const i = process.argv.indexOf(`--${name}`);
@@ -726,49 +726,28 @@ function parseRepoAdvisory(html) {
 }
 
 // ── check F helpers: the CNA container + the stopping points of one vector ──────────────────
-/* FIRST, CVSS v3.1 specification §7.2, read off the page on 2026-10-27:
- *   TemporalScore = Roundup (BaseScore × ExploitCodeMaturity × RemediationLevel × ReportConfidence)
- * ONE Roundup over the flat product — not the step-by-step form a v3.0 memory supplies (that
- * recomputes CVE-2026-107656 to 9.2 instead of the spec's 9.1). The weights are that page's own
- * table; the one worth pinning in a test is **RL:W = 0.97**, next to an Official Fix's 0.95. */
-const TEMPORAL_W = {
-  E: { X: 1, H: 1, F: 0.97, P: 0.94, U: 0.91 },
-  RL: { X: 1, U: 1, W: 0.97, T: 0.96, O: 0.95 },
-  RC: { X: 1, C: 1, R: 0.96, U: 0.92 },
-};
+/* The arithmetic lives in `cvss-recompute.mjs`, which owns the spec transcription (FIRST v3.1
+ * §7.2, one Roundup over the flat product; v4.0 folds `E` into the MacroVector lookup) and can
+ * express both frameworks. It moved there on 2026-11-02 when the stopping-point census needed the
+ * same function over a week of NVD records — one implementation, two callers, instead of a second
+ * copy that would drift. */
+const temporalStops = stoppingPoints;
 const TEMPORAL_NAME = { E: 'Exploit Code Maturity', RL: 'Remediation Level', RC: 'Report Confidence' };
-
-/**
- * Every number one v3.x vector can honestly yield, in increasing order of application:
- * base, then base × each temporal component applied so far (each with its own Roundup, which is
- * what "the score if only these were applied" means), and the full temporal score.
- * Returns null when the vector carries no temporal component — nothing to disambiguate.
- */
-function temporalStops(vector) {
-  const body = String(vector ?? '').replace(/^CVSS:[^/]+\//, '');
-  const m = {};
-  for (const part of body.split('/')) { const [k, v] = part.split(':'); if (k) m[k] = v; }
-  const applied = ['E', 'RL', 'RC'].filter((k) => m[k] && m[k] !== 'X');
-  if (!applied.length) return null;
-  const base = recompute(vector);
-  if (base.verdict !== 'computed') return null;
-  const stops = [{ label: 'base', score: base.score, applied: [] }];
-  let product = base.score;
-  for (const k of applied) {
-    const w = TEMPORAL_W[k]?.[m[k]];
-    if (w == null) return null; // an unknown metric value has no arithmetic — say nothing
-    product *= w;
-    stops.push({ label: `base×${applied.slice(0, applied.indexOf(k) + 1).join('×')}`, score: roundup31(product), applied: stops.at(-1).applied.concat(k) });
-  }
-  return { base: base.score, applied, stops, full: stops.at(-1).score, vector };
-}
 
 /** The sentence that names which stopping point a stored number sits at. */
 function describeStop(st, score) {
-  const hit = st.stops.filter((s) => Math.abs(s.score - score) < 0.05);
-  const all = st.stops.map((s) => (s.label === 'base' ? `base ${s.score}` : `${s.applied.join('+')} ${s.score}`)).join(', ');
-  const point = hit.length ? ` — that is ${hit.at(-1).label === 'base' ? 'the base score' : `${hit.at(-1).label} with only ${hit.at(-1).applied.join(', ')} applied`}` : ' — which is none of them';
-  return `${point} (${all}; full temporal ${st.full}, FIRST v3.1 §7.2)`;
+  const hit = st.stops.filter((s) => Math.abs(s.score - score) < 0.05).at(-1);
+  const all = st.stops.map((s) => (s.label === 'base' ? `base ${s.score}` : `${s.label} ${s.score}`)).join(', ');
+  const point = hit
+    ? ` — that is ${hit.label === 'base' ? 'the base score' : `the ${hit.label} score${hit.applied.length ? ` with only ${hit.applied.join(', ')} applied` : ''}`}`
+    : ' — which is none of them';
+  /* The two frameworks get their arithmetic from different places and it is worth saying which:
+     v3.x multiplies by the Threat weights (FIRST v3.1 §7.2, one Roundup over the flat product),
+     v4.0 feeds `E` into the MacroVector lookup, which is why v4.0 is the framework the oracle is
+     needed for. A citation that names the wrong spec is the kind of small lie this file exists to
+     stop, and the first version of this sentence said "FIRST v3.1 §7.2" over a v4.0 record. */
+  const spec = st.version === '4.0' ? 'v4.0 §8.2, E in the MacroVector lookup' : 'FIRST v3.1 §7.2';
+  return `${point} (${all}; full ${st.version === '4.0' ? 'threat' : 'temporal'} ${st.full}, ${spec})`;
 }
 
 /**
@@ -955,6 +934,35 @@ function checkCvss(it, subjects, cna = new Map()) {
           detail: `${hit.id} stores ${hit.score} for ${hit.vector}, which computes ${repro.computed} (Δ ${repro.delta > 0 ? '+' : ''}${repro.delta}) — the quoted number is the record's, and the record does not reproduce; say so rather than printing it bare`,
         });
         continue;
+      }
+      /* ── the stopping-point advisory (System item, filed 2026-11-02 12:32) ──────────────────
+       * A vector carrying a Threat metric has several honest numbers, and a quoted one names which
+       * only if the writer says so. Measured over NVD's 2026-10-26→11-01 window: **136 metrics
+       * carry one, and 136/136 store the THREAT score** — every one v4.0, because NVD strips the
+       * temporal metrics from v3.x and keeps v4.0's `E` (CNA join over 259 record/framework pairs:
+       * **123 v3.1 stripped / 136 v4.0 kept**, and the two artifacts disagree on **123 of 136**
+       * v4.0 pairs by −3.4…−0.4 — all of it the Threat term). So a quoted v4.0 score on NVD is
+       * usually a threat score and the reader cannot tell.
+       * Advisory, not a finding: the number is right, the sentence is under-specified. Suppressed
+       * the way `slot-quoted` and `counted-by-author` are — by the item saying it out loud, or by
+       * quoting more than one stopping point of the same vector (enumeration is disclosure). */
+      const stops = hit.vector ? stoppingPoints(hit.vector) : null;
+      if (stops && stops.stops.length > 1) {
+        const namesStop = /\b(?:base|temporal|threat)\b[^.]{0,24}\bscore\b|\bstopping[- ]point\b|\b(?:base|threat)\s*(?:score)?\s*\(?[A-Z]?:?[A-Z]\b|E:(?:A|P|U|H|F)\b/i.test(t);
+        /* Enumeration is disclosure, and it is not always a second CVSS PAIR: "9.8 … or 8.5 once
+           E and RC are applied" gives the second number a unit in prose rather than a version
+           label, so the score extractor never sees it. Read every stopping point off the item's
+           own text instead of off the extracted pairs. */
+        const enumerated = stops.stops.filter((s) => new RegExp(`(?:^|[^\\d.])${s.score.toFixed(1)}(?!\\d)`).test(t)).length > 1;
+        if (!namesStop && !enumerated) {
+          const here = stops.stops.map((s) => `${s.label} ${s.score}`).join(' · ');
+          out.push({
+            check: 'cvss', item: it.n, verdict: 'score-stopping-point',
+            claim: `${cl.version} ${cl.score}`,
+            detail: `${hit.id}'s vector carries a Threat metric, so one vector yields ${here}; the record stores ${hit.score}, which is the ${repro.stopping === 'base' ? 'BASE' : `${repro.stopping.toUpperCase()} score`} — say which one you quote, because the reader cannot see it in the record`,
+          });
+          continue;
+        }
       }
       out.push({
         check: 'cvss', item: it.n, verdict: 'ok',
@@ -3528,6 +3536,25 @@ if (SELFTEST) {
     checkCvss(mk('t', 'CVE-2026-222222 is 9.9 on CVSS 3.1.'), new Map([['CVE-2026-222222', { kind: 'cve', status: 'Analyzed', metrics: [
       { version: '3.1', type: 'Primary', source: 'nvd@nist.gov', score: 9.9 }] }]])).map((x) => x.verdict), ['ok']);
 
+  /* ── the stopping-point advisory (2026-11-02 12:34) ──────────────────────────────────────────
+   * One v3.1 vector `…/E:P/RL:O/RC:R` yields 9.8 / 9.3 / 8.8 / 8.5, and a record storing the base
+   * or the threat is honest either way. The three cases that must be told apart: quoting it bare
+   * (advisory), saying which one (silent), quoting two of them (silent — enumeration discloses). */
+  const stopSubj = (score) => new Map([['CVE-2026-333333', { kind: 'cve', status: 'Received', metrics: [
+    { version: '3.1', type: 'Primary', source: 'vulndb@example.com', score, vector: 'CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H/E:P/RL:O/RC:R' },
+  ] }]]);
+  const stopV = (s, score) => checkCvss(mk('t', s), stopSubj(score)).map((x) => x.verdict).filter((v) => v !== 'ok');
+  t('stopping: the threat score quoted bare is an advisory, not a mismatch',
+    stopV('CVE-2026-333333 is 8.5 on CVSS 3.1.', 8.5), ['score-stopping-point']);
+  t('stopping: the BASE quoted bare is the same advisory',
+    stopV('CVE-2026-333333 is 9.8 on CVSS 3.1.', 9.8), ['score-stopping-point']);
+  t('stopping: naming the base score is compliance',
+    stopV('CVE-2026-333333 reads 9.8 as its base score, against 8.5 with the threat metrics applied.', 9.8), []);
+  t('stopping: quoting two stopping points discloses by enum',
+    stopV('CVE-2026-333333 is 9.8 on CVSS 3.1, or 8.5 once E and RC are applied.', 9.8), []);
+  t('stopping: a base-only vector raises no question',
+    checkCvss(mk('t', 'CVE-2026-222222 is 10.0 on CVSS 3.1.'), reproSubj(10.0)).map((x) => x.verdict), ['ok']);
+
   // the count matcher — three spellings of one claim (measured 2026-10-26 on the 20:34 batch)
   t('count: "N skills" is read', countNumsIn('a dataset of 42,447 skills from major marketplaces', 'skills'), [42447]);
   t('count: "N-skill analyzed subset" is the same claim', countNumsIn('In the 31,132-skill analyzed subset, 26.1% carry one', 'skills'), [31132]);
@@ -3803,7 +3830,11 @@ const parsed = paths.map((p) => ({ path: p, items: parseItems(readFileSync(p, 'u
 let nvd = new Map();
 let nvdCalls = 0;
 let ghsaCalls = 0;
-if (!NO_NET && (CHECKS.has('cvss') || CHECKS.has('status') || CHECKS.has('cwe') || CHECKS.has('range') || STATUS_WATCH || CHECKS.has('quotation'))) {
+/* `temporal` is in this list because its message quotes NVD's copy beside the container's — run
+ * alone without it, the check said "NVD re-serves no metric" about a record NVD re-serves four of.
+ * The statement was about the pull, not the registry, which is the "unread is not absent" defect
+ * wearing a different hat (fixed 2026-11-02 12:34, while calibrating the stopping-point check). */
+if (!NO_NET && (CHECKS.has('cvss') || CHECKS.has('temporal') || CHECKS.has('status') || CHECKS.has('cwe') || CHECKS.has('range') || STATUS_WATCH || CHECKS.has('quotation'))) {
   const cves = [...new Set([...parsed.flatMap((f) => f.items.flatMap((it) => it.cves)), ...EXTRA_IDS])];
   const CHUNK = 25;
   for (let i = 0; i < cves.length; i += CHUNK) {
@@ -3913,7 +3944,7 @@ try {
   writeFileSync(CACHE_PATH, JSON.stringify(cache, null, 1));
 } catch { /* cache is best-effort */ }
 
-const SEVERITY = { ok: 0, 'ok-cited-page': 0, 'no-cve-named': 1, 'no-record': 1, 'slot-quoted': 1, 'counted-by-author': 0, 'number-other-noun': 1, 'temporal-stopping-point': 1, 'cna-only-score': 1, 'star-drift': 2, 'star-dated': 1, 'star-surge': 1, 'ok-history': 0, 'history-older-than-record': 2, 'history-unreadable': 1, stale: 2, archived: 2, differs: 2, absent: 2, 'unsplit-issue-count': 3, 'compound-lags-parts': 3, 'version-swapped': 3, 'version-absent': 3, 'score-not-reproducible': 2, 'score-mismatch': 3, 'wrong-subject': 3, 'absence-contradicted': 3, 'status-stale': 2, 'status-dated': 1, 'date-local-shift': 2, 'date-mismatch': 2, 'cwe-absent-but-recorded': 3, 'cwe-mismatch': 3, 'cwe-unreadable': 1, 'span-empty': 2, 'span-inverted': 3, 'span-unverifiable': 0, 'ok-span': 0, 'status-no-record': 1, 'status-no-cve': 1, 'advisory-unreadable': 1, 'advisory-repo-only': 0, unreadable: 1, 'artifact-unreadable': 1, 'nvd-unavailable': 1, 'ratio-row-count': 3, 'ok-ratio': 0, 'not-a-repo': 0, 'ok-table-rows': 0, 'table-columns-unresolved': 0, 'bundle-ok': 0, 'bundle-lines-named': 0, 'bundle-unavailable': 0, 'bundle-line-count': 3, 'bundle-total-mismatch': 2, 'quote-not-found': 3, 'quote-paraphrase': 2, 'quote-short': 1, 'quote-not-read': 0 };
+const SEVERITY = { ok: 0, 'ok-cited-page': 0, 'no-cve-named': 1, 'no-record': 1, 'slot-quoted': 1, 'counted-by-author': 0, 'number-other-noun': 1, 'temporal-stopping-point': 1, 'score-stopping-point': 1, 'cna-only-score': 1, 'star-drift': 2, 'star-dated': 1, 'star-surge': 1, 'ok-history': 0, 'history-older-than-record': 2, 'history-unreadable': 1, stale: 2, archived: 2, differs: 2, absent: 2, 'unsplit-issue-count': 3, 'compound-lags-parts': 3, 'version-swapped': 3, 'version-absent': 3, 'score-not-reproducible': 2, 'score-mismatch': 3, 'wrong-subject': 3, 'absence-contradicted': 3, 'status-stale': 2, 'status-dated': 1, 'date-local-shift': 2, 'date-mismatch': 2, 'cwe-absent-but-recorded': 3, 'cwe-mismatch': 3, 'cwe-unreadable': 1, 'span-empty': 2, 'span-inverted': 3, 'span-unverifiable': 0, 'ok-span': 0, 'status-no-record': 1, 'status-no-cve': 1, 'advisory-unreadable': 1, 'advisory-repo-only': 0, unreadable: 1, 'artifact-unreadable': 1, 'nvd-unavailable': 1, 'ratio-row-count': 3, 'ok-ratio': 0, 'not-a-repo': 0, 'ok-table-rows': 0, 'table-columns-unresolved': 0, 'bundle-ok': 0, 'bundle-lines-named': 0, 'bundle-unavailable': 0, 'bundle-line-count': 3, 'bundle-total-mismatch': 2, 'quote-not-found': 3, 'quote-paraphrase': 2, 'quote-short': 1, 'quote-not-read': 0 };
 const REAL = (f) => (SEVERITY[f.verdict] ?? 1) >= 2;
 
 /* `status_watch` rides the findings file so the act pass sees a backwards move without re-reading

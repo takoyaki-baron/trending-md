@@ -1284,3 +1284,44 @@ same choice, and neither implies the other.
 → [[security]] [[fact-check]] [[agent-stack]]
 
 Sources: [xevrion/hatchzip](https://github.com/xevrion/hatchzip) · [heldercorreia/speedcrunch v1.1.0](https://github.com/heldercorreia/speedcrunch/releases/tag/v1.1.0) · [Snapintosh](https://github.com/Snapintosh/Snapintosh) · [UniXNU](https://github.com/UniXNU/UniXNU)
+
+## The bill for LLM bug-hunting arrives as back-patch load, not as a defect count (2026-11-02 12:27)
+
+Robert Haas — PostgreSQL committer, Sr. Staff engineer at Databricks — wrote the first measurement of what
+LLM-assisted bug hunting costs a mature project, and it is worth carrying in full because the headline ("Postgres
+19 is late, and it's AI's fault") is the *smallest* claim in the post. Verified verbatim against the blog:
+
+| window (Apr 8 → Sep 25) | 2025 | 2026 |
+|---|---|---|
+| commits to `master` | **1037** | **1443** |
+| commits to the release-in-progress branch | **724** (`REL_18_STABLE`) | **1169** (`REL_19_STABLE`) |
+| commits back-patched to at least one *prior* release | **248** (`REL_17_STABLE`) | **433** (`REL_18_STABLE`) |
+
+**The composition is the finding.** `master` activity *declined slightly* on a like-for-like window, so the
+committers were no less conservative; what rose is everything downstream of a report — **+60%** on the branch in
+development and **+74%** on older branches. Haas's own reading: "a lot more of the mistakes they made were
+quickly found by LLMs," with "a huge number of people on the Internet … reporting bugs in PostgreSQL that they
+found using LLMs." The visible symptom is a release date: PostgreSQL 19 will most likely ship in **November**,
+the first miss of its mid-September→mid-October window in a decade, with `UPDATE/DELETE FOR PORTION OF`,
+SQL/PGQ and `ALTER TABLE … MERGE/SPLIT PARTITION` all reverted between **Aug 27 and Sep 15**.
+
+**Where the cost actually landed is the part a vuln-count dashboard cannot see.** Not patch volume — review.
+Drafted fixes "aren't always correct or compliant with PostgreSQL standards," and the review + triage time came
+out of the release calendar, which is what made the reverts so late. The open question Haas states is the one
+every long-lived codebase now owns: "given that we have forty years of bugs that humans were unable to find but
+LLMs are quite capable of discovering, how are we ever going to catch up".
+
+**Why this belongs beside the tools rather than in the AI-impact notes:** it is the first case where a
+mainstream project put a *release date* on the auditor's arrival, and the number to quote is the **+74%**, not
+the delay — a proxy for latent defect an auditor with no release calendar can now surface. It also resolves a
+question [[disclosure-lag]] keeps half-answering from the vendor side: the 2026 CVE flood is not (only) more
+disclosure paperwork, it is more *found* bugs, and the back-branches are where they land.
+
+**Contrast case in the same batch, for the asymmetry:** `raphlinus/nibnib` designs a decoder to run in **~6
+cycles per pixel** on an RP2350 by making decode trivial and pushing all the cost into an encoder "orders of
+magnitude slower" — a design note with **no benchmarks and no release**, so the number to hold is the cycle
+budget it was designed against, not a throughput. And `ivankovic/omnidiff`'s README publishes its own thin
+sample: **99.95%** of code changes diff robustly, **100%** of PDFs judged perfect, but PDFs have **fewer than
+ten judged test cases** — a percentage whose denominator the author printed, which is the useful shape.
+
+→ [[dev-tools]] [[ai-impact]] [[disclosure-lag]]
