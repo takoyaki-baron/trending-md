@@ -1,9 +1,9 @@
 {
- "generated": "2026-11-01T21:27:00.611Z",
+ "generated": "2026-11-02T04:23:24.085Z",
  "files": [
   {
    "file": "2026-11-02.md",
-   "items": 18,
+   "items": 28,
    "findings": [
     {
      "check": "status",
@@ -55,46 +55,109 @@
      "detail": "NVD published 2026-10-31T18:17:09.263 (2026-10-31 UTC) · cveawg datePublished 2026-10-31T17:25:56.161Z (2026-10-31 UTC) — the two clocks differ; 2026-10-31 is the NVD published day"
     },
     {
+     "check": "status",
+     "item": 22,
+     "verdict": "ok",
+     "claim": "CVE-2026-118386 `Deferred`",
+     "detail": "Deferred (lastModified 2026-11-01T10:18:36.187)"
+    },
+    {
+     "check": "status",
+     "item": 23,
+     "verdict": "ok",
+     "claim": "CVE-2026-83594 `Received`",
+     "detail": "Received (lastModified 2026-11-01T23:17:29.723)"
+    },
+    {
+     "check": "cwe",
+     "item": 23,
+     "verdict": "ok",
+     "claim": "CVE-2026-83594 CWE-789",
+     "detail": "stated in NVD weaknesses[] (security@apache.org)"
+    },
+    {
+     "check": "cwe",
+     "item": 23,
+     "verdict": "ok",
+     "claim": "CVE-2026-84170 CWE-770",
+     "detail": "stated in NVD weaknesses[] (security@apache.org)"
+    },
+    {
+     "check": "status",
+     "item": 28,
+     "verdict": "ok",
+     "claim": "CVE-2026-120189 `Received`",
+     "detail": "Received (lastModified 2026-11-01T01:17:16.877)"
+    },
+    {
+     "check": "temporal",
+     "item": 28,
+     "verdict": "temporal-stopping-point",
+     "claim": "CVE-2026-120189 · CNA 10 / base 10 / full 9.1",
+     "detail": "VulDB stores 3.1 10 in `containers.cna.metrics.cvssV3_1.baseScore` — that is the base score (base 10, E 9.4, E+RC 9.1; full temporal 9.1, FIRST v3.1 §7.2); NVD re-serves 4.0 9.3 (cna@vuldb.com), 3.1 10 (cna@vuldb.com), 2.0 10 (cna@vuldb.com) — one vector, so name the stopping point you quote (a field called `baseScore` does not have to hold the base)"
+    },
+    {
+     "check": "temporal",
+     "item": 28,
+     "verdict": "temporal-stopping-point",
+     "claim": "CVE-2026-120276 · CNA 10 / base 10 / full 9.1",
+     "detail": "VulDB stores 3.1 10 in `containers.cna.metrics.cvssV3_1.baseScore` — that is the base score (base 10, E 9.4, E+RC 9.1; full temporal 9.1, FIRST v3.1 §7.2); NVD re-serves 4.0 9.3 (cna@vuldb.com), 3.1 10 (cna@vuldb.com), 2.0 10 (cna@vuldb.com) — one vector, so name the stopping point you quote (a field called `baseScore` does not have to hold the base)"
+    },
+    {
+     "check": "repo",
+     "item": 4,
+     "verdict": "star-surge",
+     "claim": "6848 quoted vs 9023 now",
+     "detail": "deepseek-ai/dsh-superagent-prototype: 6848 → 9023 (+24%, 2175 stars) since the batch was written on a 2-day-old record (launch window) — a rising count is not a wrong one; date the reading if the number will be re-used"
+    },
+    {
      "check": "repo",
      "item": 4,
      "verdict": "ok-history",
      "claim": "deepseek-ai/dsh-superagent-prototype",
-     "detail": "record 1d, oldest commit 2026-10-31 (~1 commits)"
+     "detail": "record 2d, oldest commit 2026-10-31 (~1 commits)"
     },
     {
      "check": "repo",
      "item": 4,
      "verdict": "ok",
      "claim": "deepseek-ai/dsh-superagent-prototype",
-     "detail": "6857★, last push 2026-10-31"
+     "detail": "9023★, last push 2026-10-31"
     },
     {
      "check": "repo",
      "item": 5,
      "verdict": "ok",
      "claim": "pingdotgg/t3code",
-     "detail": "37522★, last push 2026-11-01"
+     "detail": "38472★, last push 2026-11-02"
     },
     {
      "check": "repo",
      "item": 11,
      "verdict": "ok",
      "claim": "JetBrains/thinkrail",
-     "detail": "6941★, last push 2026-11-01"
+     "detail": "7012★, last push 2026-11-01"
+    },
+    {
+     "check": "repo",
+     "item": 12,
+     "verdict": "star-surge",
+     "claim": "3738 quoted vs 4191 now",
+     "detail": "wangzan101/Mika: 3738 → 4191 (+11%, 453 stars) since the batch was written on a 4-day-old record (launch window) — a rising count is not a wrong one; date the reading if the number will be re-used"
     },
     {
      "check": "repo",
      "item": 12,
      "verdict": "ok-history",
      "claim": "wangzan101/Mika",
-     "detail": "record 3d, oldest commit 2026-10-29 (~351 commits)"
+     "detail": "record 4d, oldest commit 2026-10-29 (~351 commits)"
     },
     {
      "check": "repo",
      "item": 12,
      "verdict": "ok",
      "claim": "wangzan101/Mika",
-     "detail": "3741★, last push 2026-11-01"
+     "detail": "4191★, last push 2026-11-01"
     },
     {
      "check": "quotation",
@@ -193,6 +256,69 @@
      "verdict": "ok",
      "claim": "9 quotation(s)",
      "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 19,
+     "verdict": "ok",
+     "claim": "1 quotation(s)",
+     "detail": "verbatim in 3 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 20,
+     "verdict": "ok",
+     "claim": "3 quotation(s)",
+     "detail": "verbatim in 3 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 21,
+     "verdict": "ok",
+     "claim": "1 quotation(s)",
+     "detail": "verbatim in 3 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 22,
+     "verdict": "ok",
+     "claim": "1 quotation(s)",
+     "detail": "verbatim in 16 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 23,
+     "verdict": "ok",
+     "claim": "1 quotation(s)",
+     "detail": "verbatim in 7 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 24,
+     "verdict": "ok",
+     "claim": "4 quotation(s)",
+     "detail": "verbatim in 5 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 25,
+     "verdict": "ok",
+     "claim": "1 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 26,
+     "verdict": "ok",
+     "claim": "3 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 27,
+     "verdict": "ok",
+     "claim": "3 quotation(s)",
+     "detail": "verbatim in 3 readable source(s)"
     }
    ]
   }

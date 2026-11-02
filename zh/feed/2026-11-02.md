@@ -1,8 +1,8 @@
 ---
 date: 2026-11-02
-updated: 2026-11-01T20:31:08Z
+updated: 2026-11-02T04:23:19Z
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 18
+sources: 24
 license: CC-BY-4.0
 ---
 
@@ -296,13 +296,185 @@ On-policy 自蒸馏让教师模型以特权参考为条件；现有方法要么�
 
 ---
 
+---
+
+## 19. HackerBooks 用 Claude 给 270,334 条 HN 书籍提及打标 —— 并把自己 85% 的一致率印了出来
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Hacker News（Show HN）· 1,054 pts · 约 12 小时前（约 23:58 UTC+8）
+- **Tags:** `hacker-news` `dataset` `llm-labeling` `books` `affiliate`
+
+Hacker Books 是一个可搜索的索引，收录 Hacker News 评论区里被推荐的书；它自己的 `data/meta.json`（**2026-11-02** 生成）把语料说清楚了，而不是含糊带过：**15,362 本书、270,334 条提及、217,954 条评论、56,456 位评论者**，覆盖 **2007 到 2026**；书籍元数据与封面来自 Open Library，每个书籍页面都链回原帖。预生成的热门榜收录 **600** 本；整个书级数据集可以 CSV 下载。
+
+真正值得读的是它如何定义「被推荐」。只数提及次数，会让人人都在*警告*的书排得像心头好，所以**每一条提及都用 Claude Sonnet 5.5 打上了** *recommend*、*neutral*、*critical* 或 *not about the book* 的标签，同名电影、游戏之类的提及会被丢弃。About 页随后给出了检验：这些标签与 Claude Opus 5.5 在 400 条提及上比对，一致率 **85%**，页面自己也提醒「会有噪声」。关键词规则、情感打分和 TF-IDF 分类器都先试过，准确率更低。排名把**不同评论者**的权重放在原始提及数之上，所以单个狂热读者带不动一本书。
+
+它同时也是一门生意，而且代码里写着：联盟参数是 `{ bookshop: '130774', amazon: 'roansh-20' }`，About 文案说佣金用来「支付托管费用」。站点致谢 Andrej Karpathy 的 HackerTube 是灵感来源，并声明自己「与 Y Combinator 和 Hacker News 无关联」。
+
+**Why it matters:** 一个由 LLM 构建、还公布了自己跨模型一致率的语料，比多数「AI 搜索」产品更可靠 —— 而 **85%** 就是该带走的数字，因为它是「有 N 个人推荐」这类说法天花板。这也是两天内第二个把 HN 存档做成消费级产品的项目：十九年的评论区现在是原料，被索引的是第三方镜像，而不是 HN 的 API。
+
+[`🔗 hackerbooks.org`](https://hackerbooks.org) · [`🔗 hackerbooks data/meta.json`](https://hackerbooks.org/data/meta.47fd7cb7.json) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50326821)
+
+---
+
+## 20. Postgres 19 迟到，是因为 LLM 让它四十年的 bug 变得可寻 —— 回补提交涨了 74%
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Robert Haas 博客 · HN 154 pts · 约 27 小时前（约 09:38 UTC+8）· 原文发表于 neon.com
+- **Tags:** `postgresql` `maintenance` `llm-bug-hunting` `release-engineering`
+
+PostgreSQL 提交者、Databricks 高级工程师 Robert Haas 写道：**PostgreSQL 19 很可能要到 11 月才发布**，这是十年来第一次错过 9 月中到 10 月中这个窗口；而且有三个大特性在 beta 后期被撤回 —— `UPDATE/DELETE FOR PORTION OF`、SQL/PGQ、`ALTER TABLE … MERGE/SPLIT PARTITION`，撤回时间都在 **8 月 27 日到 9 月 15 日**之间。他对「发生了什么」的回答不是流程变化，而是一组测量。
+
+4 月 8 日到 9 月 25 日之间，2026 年进入 `master` 的提交是 **1,443** 个，2025 年是 **1,037** 个 —— Haas 特别指出，扣除窗口差异后这其实是*略微下降*。真正的跳升在下游：进入 `REL_19_STABLE` 的提交从 **724 涨到 1,169**（+60% 以上），而回补到至少上一个发布分支的提交从 **248 涨到 433**（+74%）。他的判断是：提交者的保守程度与去年差不多，但「他们犯的错里有更多被 LLM 迅速找了出来」。
+
+延迟来自 LLM 帮不上忙的两个环节：评审，因为模型起草的修复「并不总是正确、也不总符合 PostgreSQL 的规范」；以及从发布上被抽走去处理回补分支的时间 —— 这正是撤回拖到那么晚的原因。Haas 明确说延迟本身并不可怕，悬而未决的是：「我们有四十年人类没能发现、而 LLM 相当擅长发现的 bug，我们到底要怎么追上」。
+
+**Why it matters:** 这是主流数据库第一次给「LLM 找 bug 时代」标上发布日期，该带走的数字是回补分支的 **+74%**，不是标题里的延迟 —— 它衡量的是一个不看发布日历的审计者，如今能在成熟代码里翻出多少潜伏缺陷。每个长寿命代码库都该预期同一张账单，而它以评审负载而不是补丁数量的形式到来。
+
+[`🔗 Postgres 19 is late, and it's AI's fault`](https://rhaas.blogspot.com/2026/10/postgres-19-is-late-and-its-ais-fault.html) · [`🔗 neon.com 原文`](https://neon.com/blog/postgres-19-is-late-and-its-ais-fault) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50312408)
+
+---
+
+## 21. OmniDiff v0.3.0 会把 PDF、字体和图片当内容来 diff，而不是打印「Binary files differ」—— 还标出了自己测试集最薄的地方
+
+- **Velocity:** ▮▮ rising
+- **Source:** Show HN · 185 pts · v0.3.0 发布于 2026-11-01T10:58Z · 421★
+- **Tags:** `rust` `diff` `dev-tools` `tree-sitter` `terminal`
+
+`ivankovic/omnidiff` 是一个 AGPL-3.0 的 diff 工具，它先判断自己在看什么，再决定怎么比：代码走 tree-sitter 语法（构建时从 C 编译），而图片、光标主题、字体、压缩包、消息目录和 PDF 各自用内容相关的比较方式，而不是 `git diff` 那句「二进制文件有差异」。**v0.3.0** 发布于 **2026-11-01T10:58Z**，把这件事做到了字符串内部 —— JSON `"content"` 里旁边有 `"path"` 指向 `.tsx` 的 TSX、YAML `run:` 块里的 shell、模板字面量里的 CSS/HTML —— 于是被持有字符串里的改动会标在改动处，而不是从第一处到最后一处画一整段。图片按感知比较，重新编码不算改动；TUI 在支持 kitty/sixel/iTerm2 的终端里画真像素，其余用半块字符。
+
+README 里那张表才是重点，因为它把主张分开了：**99.95%** 的代码改动能被 diff、**98.8%** 会走到内容相关的算法；代码这一行是 98% 在 100 ms 内、**70%** 完全正确、92% 接近正确；PDF 是 100% 正确但只有 **57%** 在 100 ms 内 —— 而 README 自己说 PDF「判定用例不到十个」。速度在一台机器上测（i7-1370P、32 GB）。安装方式有 `cargo install`、Homebrew、签名的 apt 源和 Nix。
+
+**Why it matters:** 行 diff 是 1970 年代的模型，被套在了根本不是「行」的产物上；这里的工程价值在于*不对称* —— 一侧更重、懂类型的比较，同时还得作为 `git` 的外部 diff 跑起来。那些百分比要当成判定样本数来读，不是覆盖率：PDF 全对那一行，靠的是不到十个用例。
+
+[`🔗 ivankovic/omnidiff`](https://github.com/ivankovic/omnidiff) · [`🔗 v0.3.0 发布`](https://github.com/ivankovic/omnidiff/releases/tag/v0.3.0) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50325253)
+
+---
+
+## 22. Gitea 在 111 秒里发了 20 条 CVE 记录 —— 其中没有任何一条带着任何一方的评分
+
+- **Velocity:** ▮▮ rising
+- **Source:** Gitea CNA（cveawg）· 2026-11-01T09:47:07–09:48:58Z · 修复于 28.3.0
+- **Tags:** `cve` `gitea` `token-scope` `ci` `supply-chain`
+
+Gitea CNA 在 2026-11-01 的 **111 秒**内发布了 **20 条记录**，受影响范围全部写作 `{version: "0", lessThan: "28.3.0"}`（其中四条的下界是 1.19.0 / 1.23.0 / 1.27.0），而**这二十条在任何容器里都没有 CVSS 指标** —— 不是 Gitea 的，也不是 CISA-ADP 的。NVD 把二十条全部标为 `Deferred`，它自己的 `published` 时间戳是 **10:18:33–10:18:37Z**，比 CNA 的时钟晚三十分钟，正是本刊一再撞见的双时钟。
+
+内容并不单薄：这一批主要是**令牌作用域**没有生效。`CWE-863`（授权不当）出现 6 次，`CWE-200` 4 次，`CWE-862` 4 次。最值得看的三条：**`CVE-2026-118386`** —— 一个 PR 评审把 `commit_id` 指向评审者自己的提交，`pull_request_review` 工作流就以那个提交运行、无需批准，「带着仓库的 secret 和一个可写令牌」；Gitea 在公告里致谢 **Anthropic** 报告了它。**`CVE-2026-117635`** —— `public-only` 个人访问令牌在 `/api/v1/admin` 上没有受限，于是站点管理员一个「只读公开资源」的令牌可以列出所有用户邮箱、创建私有组织、创建新的管理员。**`CVE-2026-119441`** —— `DELETE /api/v1/orgs/{org}/repos` 接受了 public-only 令牌，删掉了私有仓库。**`CVE-2026-120263`** —— `ACCOUNT_LINKING = auto` 下，OAuth2 登录可用用户名或邮箱认领已有账号。发布说明列了 **21** 条 CVE、**60** 个已合并 PR；第 21 条 `CVE-2026-111943` 是 Go 1.27.3 重编译、不再信任一批中间证书，那条不是 Gitea 的。
+
+关于评分，这个项目自己的历史正好纠正最直观的读法：NVD 已收录的 **128** 条 Gitea 自派记录里，**120** 条带 CVSS 指标，但其中 **101** 条只有 **CISA-ADP** 的富化，只有 **15** 条带着 Gitea 自己写的分。所以这二十条上将出现的数字，最可能是 CISA 的、稍后到达 —— 这里的「没有分」是两个容器尚未填充的快照，不是政策。
+
+**Why it matters:** 代码托管平台是唯一一处「作用域不足的令牌」等于供应链原语的地方 —— 一个能枚举所有私有仓库的作业令牌，一个用仓库 secret 运行攻击者选定代码的评审工作流。而这里的溯源规则与平常相反：这个 CNA *是*打分的，所以缺席是延迟。要写成「尚未发布任何指标」，绝不能写成「按设计不打分」。
+
+[`🔗 CVE-2026-112887 (cveawg)`](https://cveawg.mitre.org/api/cve/CVE-2026-112887) · [`🔗 Gitea 28.3.0 发布说明`](https://blog.gitea.com/release-of-28.3.0/) · [`🔗 GHSA-8r36-6j2c-3gmv`](https://github.com/go-gitea/gitea/security/advisories/GHSA-8r36-6j2c-3gmv)
+
+---
+
+## 23. Apache Wicket 在 46 分钟里发了 19 条记录 —— 上限 8.3，而修复活在两个已终止的最终版本里
+
+- **Velocity:** ▮▮ rising
+- **Source:** Apache CNA（cveawg）· 2026-11-01T21:42–22:28Z · NVD 状态 `Received`
+- **Tags:** `cve` `java` `wicket` `xss` `missing-authorization`
+
+2026-11-01 的 **21:42:45Z 到 22:28:35Z** 之间落下 19 条 Apache Wicket 记录，每一条**只有 CVSS 4.0**，由 `security@apache.org` 指派，每一条在 NVD 里仍是 `Received`、**没有 `nvd@nist.gov` 指标** —— 也就是说页面上那个分数是 CNA 的，被原样再服务了一遍。上限是 **8.3**，出现两次：`CVE-2026-83594`（`CWE-789`）让 `FileUploadToResourceField` 按客户端在自己的 Ajax 回调里声称的大小去分配内存；`CVE-2026-84170`（`CWE-770`）是独立上传资源没有执行配置好的限额。接着 **7.6 三次**、**7.4 三次**是 XSS 与转义（`CWE-79` 全批出现 5 次，其中一个 7.4 是 `CWE-116`：`JavaScriptUtils#escapeQuotes` 转义了引号却没转义反斜杠），**6.9 两次**、**6.3 四次**是缺失授权与包资源泄露，尾部是 2.3 三次和 2.1。
+
+有两个细节比清单更有价值。第一，项目的定性标签和分数并不同步：这一批里有 **9 个 moderate、6 个 important、1 个 low**，另有 3 条无标签，而一个 **7.4** 标的是 *moderate*，一个 **6.9** 标的是 *important* —— 标签是词，分数是算术，两者不是同一份评估。第二，决定谁能打上补丁的是范围：它们止于 **10.11.0**、**9.24.0** 和 **8.19.0**，因此含修复的产物是 **10.12.0**（2026-10-31），以及对那些列了 9.x 或 8.x 分支的记录而言的 **9.25.0** 与 **8.20.0** —— 后两者发布于 2026-10-29，是各自分支的**最终**版本。Wicket 9 自己的公告写着「不会再有 9.x 版本，连安全修复也不会有」。
+
+**Why it matters:** 对还留在 Wicket 8 或 9 的人来说，已修复的版本就是永远存在的最后一个，所以升级路径是 10 LTS，而不是 9.25.0。这同时也是一个发布说明问题：10.12.0 的帖子有十三条变更记录，其中只点名了这些修复里的一条（`WICKET-7205`，CSP 那条）—— 靠读发布说明判断要不要升级的人，看到的是一次例行的 bug 修复发布。
+
+[`🔗 CVE-2026-83594 (cveawg)`](https://cveawg.mitre.org/api/cve/CVE-2026-83594) · [`🔗 Wicket 10.12.0 发布`](https://wicket.apache.org/news/2026/10/31/wicket-10.12.0-released.html) · [`🔗 Wicket 9.25.0 —— 终点`](https://wicket.apache.org/news/2026/10/29/wicket-9.25.0-released.html)
+
+---
+
+## 24. OccupySaaS 想在没有原厂商的情况下重建 SaaS —— 一个仓库通过了 OpenID 认证，另一个还没有任何里程碑过闸
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News · 124 pts · 约 4 小时前（约 08:17 UTC+8）
+- **Tags:** `open-source` `clean-room` `auth0` `salesforce` `licensing`
+
+「OccupySaaS」是一场带着仓库的抗议运动：被裁掉的工程师，Apache-2.0，「用洁净室方式、开源、可直接替换那些把我们的行业租回给我们的平台」。口号是一百万工程师。而今天的实物是**两个仓库**。
+
+`occupysaas/zeroauthy`（24★，创建于 2026-10-14）是真的那个：一个会说 **Auth0 的 Authentication API 与 Management API** 的身份服务器，现有 Auth0 SDK 指向 zeroauthy 租户即可不改代码运行 —— 多租户发现、JWKS、`client_credentials`、授权码 + PKCE、轮换刷新令牌、PAR、设备流、`/v2/logout`，以及覆盖应用、API、client grants 和数据库连接的 Management API。它在 **commit `38b4229`、2026 年 10 月 18 日**通过了 **OpenID 基金会** Basic OP、Config OP、Form Post OP 三个档位的 OpenID Connect Provider 认证 —— 而且这可查：openid.net 的认证提供方表里就写着「zeroauthy (commit 38b4229)」。
+
+`occupysaas/salescompel`（21★，最后推送 2026-10-21）是这份宣言的另一半，用 Go/PostgreSQL 做 Salesforce 替代，而它的 README 对自身进度异常诚实：M0 到 M10 共十一个里程碑；一个早期 Vue 原型「预览编辑只留在内存里，不调用后端」；还有那句「尚没有任何完整项目里程碑有记录的出口闸通过」。它给出的草稿预算是「到 M9 大约还需 185–350 个计划当量」，而生产认证（M9）写着「未达成」—— 这就是摆在 24 星仓库旁边的承诺规模。
+
+**Why it matters:** OpenID 认证是把它与宣言区分开的东西 —— 一个能通过一致性测试套件的身份服务器是可检验的主张，而可直接替换 Auth0 的产品，正是那种能熬过公司定价页变化的东西。Salesforce 那一半则展示了这场运动真实的单位：一次一个模块，并由一份洁净室文档约束什么可以从原版读取，而不是整体替换。
+
+[`🔗 occupysaas.com`](https://occupysaas.com/) · [`🔗 occupysaas/zeroauthy`](https://github.com/occupysaas/zeroauthy) · [`🔗 OpenID 认证提供方`](https://openid.net/certification/certified-openid-providers-profiles/) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50331402)
+
+---
+
+## 25. nibnib 是为「每像素六个周期解码」而生的图像格式 —— 编码器慢几个数量级，而且还没有任何基准
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News · 111 pts · 约 3 天前（约 12:17 UTC+8）· 79★
+- **Tags:** `image-codec` `rust` `embedded` `rp2350` `format-design`
+
+`raphlinus/nibnib` 源自一个关于 **RP2350** 微控制器上 DVI 输出的问题：那里的预算是大约**每像素六个周期** —— 够取一次、查一次调色板、存一次，仅此而已。由此产生的格式，调色板里存的不是颜色而是**增量**：上一个解码像素被翻倍（`(pix >> 16) * 0x10001`），一个字节去索引 32 位调色板项，再把它加上去 —— 每个输入字节产出**两个 RGB565 像素**，即 **4bpp**，低 16 位是左边那个像素。整个内循环是五行 Rust。
+
+基于增量正是它优于普通调色板图像的原因：平坦区域保持平滑，因为调色板存的是小变化而不是绝对颜色；编码器用 Floyd–Steinberg 权重、按*两个*像素的合并误差来选每一项。编码器比解码器「慢几个数量级」，README 把这当作非对称格式的正常形状。它同样列出了没做的事：调色板是一个固定的小增量立方加上高斯随机的项，**并不根据图像自适应选择**；贪心搜索会把伪影拖到锐利边缘右侧；往返扫描（boustrophedon）与更好的搜索被列为未来工作，且不会改变解码器；容器就是两字节宽、两字节高、256 个调色板项，然后逐行 —— 没有任何元数据。仓库创建于 **2026-10-30**，此后没有提交，MIT/Apache-2.0。
+
+**Why it matters:** 在每像素约 6 个周期的约束下，通用编解码器根本放不进去；唯一能打进这个预算的办法是把解码做得极简，把全部代价推到设备上永远不跑的搜索里去。请把这篇当设计笔记读，而不是产品 —— README 里没有任何编解码基准，也没有发布，所以该记住的数字是它设计时所对的周期预算。
+
+[`🔗 raphlinus/nibnib`](https://github.com/raphlinus/nibnib) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50299811)
+
+---
+
+## 26. A2UI 不再要求模型直接吐 JSON —— Express「最高 3 倍」，测的是一个模型、51 个任务
+
+- **Velocity:** ▮ steady
+- **Source:** Google Developers Blog · 2026-10-27 · a2ui-agent-sdk 0.9.0
+- **Tags:** `generative-ui` `agents` `a2ui` `sdk` `inference-format`
+
+A2UI 是 Google 的生成式 UI 协议：客户端把组件目录作为契约广播出去，智能体发来描述由这些组件拼成的界面的消息，客户端渲染。最初的绑定要求模型直接写那串 JSON，每一个大括号和嵌套元素都要写 —— 团队现在承认这把「A2UI 与 LLM 绑死了」。这次发布让**推理格式可以替换**，并把 **A2UI Express** 设为默认：每行一条语句、类 Python 语法、位置参数按目录 schema 顺序映射、`_` 跳过一个槽位、`$/title` 绑定数据模型、`Event("accept")` 声明服务端动作 —— 再由 SDK 里的确定性代码编译回校验过的 A2UI 消息。
+
+这些是上限，帖子也这么说：相对 Direct JSON **最高 3 倍**更低延迟、**最高 3 倍**更少 token，来自四种格式（Direct JSON、Express、Atom、Elemental）跑**同一套 51 任务评测、同一个 gemini-3.5-flash**，思考模式开与关各跑一遍。Express 已进入 Python（`a2ui-agent-sdk` 0.9.0）、TypeScript（`@a2ui/agent` 0.0.1）和 Dart（`a2ui_agent` 0.0.1-wip004）。第二条路径换上 **System One 决策模型**：TypeSafe 的 Jev 在约 100–300 ms 内用带校准的概率回答类型化问题，代码建树，小模型只写文字 —— 在 11 条提示的一次运行里，组件树 **92–298 ms** 上屏，整屏 0.8–1.7 s 完成，11 条全部产出合法 A2UI，而帖子把它标为「因为样本很小，只是初步结果」。
+
+有两条约束被写出来而不是藏起来：受控生成「只能产出其语法描述的布局」（Apparite 的语法覆盖九种界面原型和十二个块）；以及 Python/TypeScript SDK **对 Direct JSON 是逐块流式，而 Express 要等完整回复再编译** —— 也就是说 token 上的收益，代价是首屏。
+
+**Why it matters:** 模型与渲染器之间的那一层，才是生成式 UI 延迟真正所在；把它从「模型写出整棵树」改成「模型写一个小程序，由 SDK 代码编译成那棵树」，正是让工具调用变可靠的同一招。把「最高 3 倍」读成一个模型上的一次评测，并在采用前先看清流式上的这一处不对称。
+
+[`🔗 Fast, reliable A2UI, with swappable inference formats`](https://developers.googleblog.com/fast-reliable-a2ui/) · [`🔗 a2ui-agent-sdk（PyPI）`](https://pypi.org/project/a2ui-agent-sdk/)
+
+---
+
+## 27. Trigger.dev 告诉客户「环境变量被拿走了」—— 三句话，没有范围，没有 CVE
+
+- **Velocity:** ▮ steady
+- **Source:** Trigger.dev 博客 + 状态页 · HN 24 pts · 约 3 小时前（约 09:09 UTC+8）
+- **Tags:** `security-incident` `secrets` `background-jobs` `agent-infra`
+
+Trigger.dev 的 CTO 在 **2026-11-01** 发了事件通告：「Trigger.dev 发生了一起安全事件。我们已经封堵了此次攻击所用的漏洞，但调查发现一部分组织存在暴露。攻击者获取了这些组织的环境变量。」状态页当晚 **22:50 UTC** 标为已解决，并说团队「会跟进提供更多细节」。到本批为止，没有 CVE、没有受影响组织数量、没有漏洞描述，也没有第三方报告；缓解步骤以邮件发给账户所有者。
+
+公开记录里还能看到同一组件上的更早一次事件：状态页 Deployments 的历史里有一条 **2026-10-06**、持续 **2 小时 49 分**的「Degraded」，标题渲染为「Some sensitive environment variables synced fro…」—— 在组件视图里被截断，Trigger.dev 也没有把它与本次事件关联。对一个以「构建并部署 AI 智能体」为卖点的平台来说，环境变量就是每位客户智能体的模型 API 密钥和数据库地址。
+
+**Why it matters:** 这是三天内第二份「请假定你的环境变量被读取过」的披露，前一份是 2026-10-31 的 Northflank，两份通告的形状一样 —— 漏洞已封堵、部分客户、细节稍后。运营建议不依赖那些缺失的细节：轮换平台持有的密钥，并把任务运行器的环境变量存储当作凭据存储来对待，因为攻击者就是这么对待它的。
+
+[`🔗 Security Disclosure: Sunday November 1st`](https://trigger.dev/blog/security-incident-nov-2026) · [`🔗 Trigger.dev 状态页`](https://status.trigger.dev/) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50331784)
+
+---
+
+## 28. VulDB 给每条记录打四次分 —— 而 NVD 再服务的那个 4.0，在 41 条里有 38 条低于记录本身
+
+- **Velocity:** ▮ steady
+- **Source:** VulDB CNA（NVD，发布于 2026-10-31T23:17 → 2026-11-02T01:17）
+- **Tags:** `cve` `iot` `firmware` `scoring` `vuldb`
+
+在本批截止的 26 小时窗口里，NVD 收录了 **41** 条由 `cna@vuldb.com` 指派的记录，全部仍是 `Received`，而且每一条在**自己的容器里被打了四次分** —— CVSS 4.0、3.1、3.0 和 2.0，同一个 CNA。NVD 再服务的并不是这一套：**全部 41 条**容器里都有 3.0 指标，NVD 的副本里根本没有；而在 **41 条中的 38 条**里，NVD 上的 4.0 分数**低于**记录里的 4.0 —— 差 0.7 到 3.2 分，且从不更高（3 条相同）。3.1 则在 **41 条里 41 条**一致。具体案例：`CVE-2026-120189` 在 CNA 容器里四个框架全是 **10.0**，而它在 NVD 的页面是 4.0 的 **9.3**，旁边是 3.1 与 2.0 的 10.0。这些向量带着 `E:P`（3.1 下还有 `RC:R`），所以「按威胁修正」是小那个数最像的解释 —— 但没有任何字段说明哪个数是哪个停点，两者都叫 `baseScore`。
+
+对象是消费级与中小企业的固件 —— **WAVLINK WN536AX6-A** 占 7 条，**WN553X1-B** 6 条，**Oray 蒲公英 X5 Pro** 3 条，WAVLINK WN701AE 与 **Ruijie RG-ES205GC** 各 2 条，另有 **D-Link DIR-505**（固件 1.10B02）和一台 **Linksys E8450**。描述是固件 fuzz 输出的形状：`/bin/ioos`、`/protocol.csp` 或 `/cgi-bin/wapi.cgi` 里的一个 `strcpy` 或一个没名字的 `sub_416760`，除了网络可达之外没有写明任何前置条件。而评分是模板，不是二十份评估：**41 条里有 20 条**在 3.1 栏达到 9.9 或 10.0，它们是两个向量 —— **9 条**是 `AV:N/AC:L/PR:N/UI:N/S:C/C:H/I:H/A:H`（10.0），**11 条**是同一串把 `PR:N` 换成 `PR:L`（9.9，而 NVD 上的 4.0 是 8.6、容器里是 9.4）。
+
+**Why it matters:** 10.0 本应意味着最坏情况可达，而这里是同一模板套在整个产品族上 —— 如果每个处理函数真的都是未认证远程代码执行，这站得住；如果不是，就会误导，因为这些行正是仪表盘上「关键 CVE 数量」的来源。但更锋利的发现在向量上游：同一条记录在它的容器里是 10.0、在 NVD 上是 9.3，而没有任何字段说明这个差，于是读 NVD 的扫描器和读 CVE 的评审各自引用对方无法复现的数字。引用指派方，引用框架，并说明你读的是哪一份副本。
+
+[`🔗 CVE-2026-120189（D-Link DIR-505，10.0）`](https://cveawg.mitre.org/api/cve/CVE-2026-120189) · [`🔗 CVE-2026-120276（WAVLINK，10.0）`](https://cveawg.mitre.org/api/cve/CVE-2026-120276)
+
+---
+
 ## Metadata
 
 | 字段 | 值 |
 |-------|-------|
-| 生成时间 | 2026-11-01T20:22:00Z |
-| 条目数 | 18 |
-| 追踪来源 | 18（GitHub Trending、Hacker News、arXiv、NVD/CVE 记录、cveawg CNA、JFrog、VulnCheck、Go 安全团队、新华社、中国日报、陶哲轩博客、GitHub Releases、npm、PyPI、Hugging Face、JetBrains、DeepSeek Harness、handy.computer） |
+| 生成时间 | 2026-11-02T04:12:10Z |
+| 条目数 | 28 |
+| 追踪来源 | 24（GitHub Trending、Hacker News、arXiv、NVD/CVE 记录、cveawg CNA、JFrog、VulnCheck、Go 安全团队、新华社、中国日报、陶哲轩博客、GitHub Releases、npm、PyPI、Hugging Face、JetBrains、DeepSeek Harness、handy.computer） |
 | 更新排期 | 04:03、12:03、20:03 UTC+8（每日三次） |
 | 排名方式 | 速度加权（时效 × 互动加速度 × 来源权威度） |
 | 许可 | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |

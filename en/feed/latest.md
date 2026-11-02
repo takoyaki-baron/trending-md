@@ -1,8 +1,8 @@
 ---
 date: 2026-11-02
-updated: 2026-11-01T20:31:08Z
+updated: 2026-11-02T04:23:19Z
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 18
+sources: 24
 license: CC-BY-4.0
 ---
 
@@ -296,13 +296,185 @@ The scoring is a free illustration of the provenance rule in this feed: one reco
 
 ---
 
+---
+
+## 19. HackerBooks indexes 270,334 book mentions from 19 years of HN comments — and prints the 85% its own labels agree
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Hacker News (Show HN) · 1,054 pts · ~12h ago (~23:58 UTC+8)
+- **Tags:** `hacker-news` `dataset` `llm-labeling` `books` `affiliate`
+
+Hacker Books is a searchable index of books recommended in Hacker News comments, and its own `data/meta.json` — generated **2026-11-02** — states the corpus rather than gesturing at it: **15,362 books, 270,334 mentions, 217,954 comments, 56,456 commenters**, covering **2007 to 2026**, with book metadata and covers from Open Library and every book page linking back to the original thread. The pre-built top list carries **600** books; the whole book-level dataset is downloadable as CSV.
+
+The part worth reading is how it decided what "recommended" means. Counting mentions alone makes a book people *warn about* rank like a favourite, so **every mention was labelled by Claude Sonnet 5.5** as *recommend*, *neutral*, *critical* or *not about the book*, and mentions of a same-named film or game are dropped. The About page then states the check: the labels were compared against Claude Opus 5.5 on 400 mentions and agreed **85%** of the time, and the page's own note is that you should expect some noise. Keyword rules, sentiment scoring and a TF-IDF classifier were tried first and were less accurate. Ranking weights **distinct commenters** above raw mentions, so one enthusiast cannot carry a title.
+
+It is also a business, and the bundle says so in code: the affiliate map is `{ bookshop: '130774', amazon: 'roansh-20' }`, and the About text says a commission from those links "pays for hosting". The site credits Andrej Karpathy's HackerTube as the inspiration and states it is "not affiliated with Y Combinator or Hacker News."
+
+**Why it matters:** an LLM-built corpus that publishes its own inter-model agreement is a better artifact than most "AI search" products — and the 85% is the number to carry, because it is the ceiling on every claim of the form "recommended by N people". The second HN-archive consumer product in two days is also the trend: a 19-year comment corpus is now raw material, and the third-party mirror, not HN's API, is what gets indexed.
+
+[`🔗 hackerbooks.org`](https://hackerbooks.org) · [`🔗 hackerbooks data/meta.json`](https://hackerbooks.org/data/meta.47fd7cb7.json) · [`🔗 HN thread`](https://news.ycombinator.com/item?id=50326821)
+
+---
+
+## 20. Postgres 19 is late because LLMs made its 40 years of bugs findable — back-patches up 74%
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Robert Haas (blog) · 154 pts on HN · ~27h ago (~09:38 UTC+8) · originally at neon.com
+- **Tags:** `postgresql` `maintenance` `llm-bug-hunting` `release-engineering`
+
+Robert Haas — PostgreSQL committer, Sr. Staff engineer at Databricks — writes that **PostgreSQL 19 will most likely not ship until November**, the first time in a decade the project misses its mid-September-to-mid-October window, and that three large features were pulled late in the beta: `UPDATE/DELETE FOR PORTION OF`, SQL/PGQ, and `ALTER TABLE … MERGE/SPLIT PARTITION`, all reverted between **August 27 and September 15**. His answer to "what happened" is not a process change but a measurement.
+
+Between April 8 and September 25, commits to `master` in 2026 were **1,443** against **1,037** in 2025 — and Haas notes that is a *slight decline* once you account for the window. The jump is downstream: commits to `REL_19_STABLE` went **724 → 1,169** (more than +60%), and commits back-patched to at least one *prior* release went **248 → 433** (+74%). His reading is that committers were about as conservative as last year, but "a lot more of the mistakes they made were quickly found by LLMs."
+
+The delay comes from the two places an LLM cannot help with: review, because drafted fixes "aren't always correct or compliant with PostgreSQL standards", and triage time diverted from the release to the back-branches — which is what left the reverts so late. Haas is explicit that the delay itself is not the worrying part; the open question is "given that we have forty years of bugs that humans were unable to find but LLMs are quite capable of discovering, how are we ever going to catch up".
+
+**Why it matters:** this is the first mainstream database putting a release date on the LLM-bug-hunting era, and the number to carry is the **+74%** on back-branches, not the headline delay — it is a proxy for how much latent defect an auditor with no release calendar can now surface in mature code. Every long-lived codebase should expect the same bill, and it arrives as review load, not as patch volume.
+
+[`🔗 Postgres 19 is late, and it's AI's fault`](https://rhaas.blogspot.com/2026/10/postgres-19-is-late-and-its-ais-fault.html) · [`🔗 Original at neon.com`](https://neon.com/blog/postgres-19-is-late-and-its-ais-fault) · [`🔗 HN thread`](https://news.ycombinator.com/item?id=50312408)
+
+---
+
+## 21. OmniDiff v0.3.0 diffs PDFs, fonts and pictures instead of printing "Binary files differ" — and shows where its test set is thin
+
+- **Velocity:** ▮▮ rising
+- **Source:** Show HN · 185 pts · v0.3.0 released 2026-11-01T10:58Z · 421★
+- **Tags:** `rust` `diff` `dev-tools` `tree-sitter` `terminal`
+
+`ivankovic/omnidiff` is an AGPL-3.0 diff tool that decides what it is looking at before it diffs: code goes through tree-sitter grammars (compiled from C at build time), and pictures, cursors, fonts, archives, message catalogs and PDFs each get a content-specific comparison instead of the `git diff` line that says the bytes differ. **v0.3.0**, published **2026-11-01T10:58Z**, extends that inside strings — TSX in a JSON `"content"` beside a `"path"` naming a `.tsx`, shell in a YAML `run:` block, CSS/HTML in template literals — so an edit inside a held string is highlighted where it happened rather than as one span from first to last change. Pictures compare perceptually, so a re-encode is not a change, and the TUI draws real pixels over kitty/sixel/iTerm2 or half blocks otherwise.
+
+The README's own table is the interesting part, because it separates the claims: **99.95%** of code changes diffs robustly and **98.8%** gets a content-specific algorithm; on code, 98% of changes diff in under 100 ms, **70%** are *perfect* and 92% near-perfect; PDFs are 100% perfect but only **57%** under 100 ms — and the README says PDFs "have fewer than ten judged test cases". Speed is measured on one machine (i7-1370P, 32 GB). Install via `cargo install`, Homebrew, a signed apt repo, or Nix.
+
+**Why it matters:** line diff is a 1970s model applied to artifacts that are not lines, and the interesting engineering here is the *asymmetry* — a heavier, type-aware comparison on one side that still has to run as `git`'s external diff. Read the percentages as judged-sample numbers, not as coverage: the perfect-on-PDF row rests on fewer than ten cases.
+
+[`🔗 ivankovic/omnidiff`](https://github.com/ivankovic/omnidiff) · [`🔗 v0.3.0 release`](https://github.com/ivankovic/omnidiff/releases/tag/v0.3.0) · [`🔗 HN thread`](https://news.ycombinator.com/item?id=50325253)
+
+---
+
+## 22. Gitea published 20 CVE records in 111 seconds — and not one carries a score from anybody
+
+- **Velocity:** ▮▮ rising
+- **Source:** Gitea CNA (cveawg) · 2026-11-01T09:47:07–09:48:58Z · fixed in 28.3.0
+- **Tags:** `cve` `gitea` `token-scope` `ci` `supply-chain`
+
+The Gitea CNA published **20 records** in **111 seconds** on 2026-11-01, all with `affected: {version: "0", lessThan: "28.3.0"}` (four start at 1.19.0 / 1.23.0 / 1.27.0 instead of 0), and **none of the twenty carries a CVSS metric in any container** — not Gitea's, not CISA-ADP's. NVD lists all twenty as `Deferred` and its own `published` stamps run **10:18:33–10:18:37Z**, thirty minutes after the CNA's clock, which is the two-timestamp split this feed keeps running into.
+
+The content is not thin, though: the batch is mostly **token scope** failing to apply. `CWE-863` (incorrect authorization) appears 6 times, `CWE-200` 4, `CWE-862` 4. The standouts: **`CVE-2026-118386`** — a PR review whose `commit_id` named the reviewer's own commit made `pull_request_review` workflows run from that commit, unapproved, "with the repository's secrets and a token that can write to it"; Gitea credits **Anthropic** for the report. **`CVE-2026-117635`** — a `public-only` personal access token was not restricted on `/api/v1/admin`, so a site admin's restricted token could list every user's email, create private organizations and create new administrators. **`CVE-2026-119441`** — `DELETE /api/v1/orgs/{org}/repos` accepted a public-only token and deleted private repositories. **`CVE-2026-120263`** — `ACCOUNT_LINKING = auto` let an OAuth2 sign-in claim an existing account by name or email. The release notes list **21** CVEs across **60** merged PRs; the 21st, `CVE-2026-111943`, is the Go 1.27.3 rebuild that drops a set of intermediate certificates, and it is not Gitea's.
+
+On the score question, the project's own history is the correction to the obvious reading: of the **128** Gitea-assigned records NVD already holds, **120** carry a CVSS metric, but **101** carry only **CISA-ADP**'s enrichment and just **15** carry one Gitea wrote itself. So the number that will appear on these twenty is most likely CISA's, arriving later — "no score" here is a snapshot of two containers that have not been filled, not a policy.
+
+**Why it matters:** a forge is the one place where an under-scoped token is a supply-chain primitive — a job token that could enumerate every private repo, a review workflow that runs attacker-chosen code with repo secrets. And the provenance rule cuts the other way from usual: this CNA *does* score, so the absence is latency. Quote it as *no metric published yet*, never as unscored by design.
+
+[`🔗 CVE-2026-112887 (cveawg)`](https://cveawg.mitre.org/api/cve/CVE-2026-112887) · [`🔗 Gitea 28.3.0 release notes`](https://blog.gitea.com/release-of-28.3.0/) · [`🔗 GHSA-8r36-6j2c-3gmv`](https://github.com/go-gitea/gitea/security/advisories/GHSA-8r36-6j2c-3gmv)
+
+---
+
+## 23. Apache Wicket published 19 records in 46 minutes — max 8.3, and the fixes live in two final EOL releases
+
+- **Velocity:** ▮▮ rising
+- **Source:** Apache CNA (cveawg) · 2026-11-01T21:42–22:28Z · NVD status `Received`
+- **Tags:** `cve` `java` `wicket` `xss` `missing-authorization`
+
+Nineteen Apache Wicket records landed between **21:42:45Z and 22:28:35Z** on 2026-11-01, every one scored **CVSS 4.0 only**, assigned by `security@apache.org`, and every one still `Received` in NVD with **no `nvd@nist.gov` metric** — so the score on every page is the CNA's, re-served. The ceiling is **8.3**, twice: `CVE-2026-83594` (`CWE-789`) lets `FileUploadToResourceField` allocate the size the client asserts in its own Ajax callback, and `CVE-2026-84170` (`CWE-770`) is the standalone upload resource not enforcing the configured limits. Then **7.6 ×3** and **7.4 ×3** are XSS and escaping — `CWE-79` appears 5 times across the batch, and one of the 7.4s is `CWE-116`, `JavaScriptUtils#escapeQuotes` escaping the quote but not the backslash, **6.9 ×2** and **6.3 ×4** are missing-authorization and package-resource leaks, and the tail runs 2.3 ×3 and 2.1.
+
+Two details are worth more than the list. First, the project's qualitative labels and its scores do not track: the batch carries **9 "moderate", 6 "important", 1 "low"** and 3 with no label, and a **7.4** is labelled *moderate* while a **6.9** is labelled *important* — a label is a word, a score is arithmetic, and they are not the same assessment. Second, the ranges decide who can patch: they stop at **10.11.0**, **9.24.0** and **8.19.0**, so the fixed artifacts are **10.12.0** (2026-10-31) and — for the records that list a 9.x or 8.x branch — **9.25.0** and **8.20.0**, both published 2026-10-29 as the **final** releases of their lines. Wicket 9's own announcement says "there will be no further 9.x releases, not even for security fixes."
+
+**Why it matters:** for anyone on Wicket 8 or 9, the patched version is the last one that will ever exist, and the upgrade is therefore to 10 LTS rather than to 9.25.0. It is also a release-notes problem: 10.12.0's post carries thirteen changelog entries and names exactly one of these fixes (`WICKET-7205`, the CSP case) — a reader who diffs release notes to decide whether to upgrade sees a routine bugfix release.
+
+[`🔗 CVE-2026-83594 (cveawg)`](https://cveawg.mitre.org/api/cve/CVE-2026-83594) · [`🔗 Wicket 10.12.0 release`](https://wicket.apache.org/news/2026/10/31/wicket-10.12.0-released.html) · [`🔗 Wicket 9.25.0 — end of line`](https://wicket.apache.org/news/2026/10/29/wicket-9.25.0-released.html)
+
+---
+
+## 24. OccupySaaS wants to rebuild SaaS without its vendors — one repo is OpenID-certified, the other has passed no milestone
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News · 124 pts · ~4h ago (~08:17 UTC+8)
+- **Tags:** `open-source` `clean-room` `auth0` `salesforce` `licensing`
+
+"OccupySaaS" is a protest movement with a repository: laid-off engineers, Apache-2.0, "clean-room, open-source, drop-in replacements for the platforms that rent our own industry back to us." The slogan is a million engineers. The artifacts, today, are **two repos**.
+
+`occupysaas/zeroauthy` (24★, created 2026-10-14) is the real one: an identity server that speaks **Auth0's Authentication API and Management API**, so an existing Auth0 SDK points at a zeroauthy tenant and works unchanged — multi-tenant discovery, JWKS, `client_credentials`, authorization code + PKCE, rotating refresh tokens, PAR, device flow, `/v2/logout`, and a Management API for applications, APIs, client grants and database connections. It is **certified by the OpenID Foundation** as an OpenID Connect Provider for the Basic OP, Config OP and Form Post OP profiles at **commit `38b4229`, 18-Oct-2026** — and that is checkable: openid.net's certified-providers table lists "zeroauthy (commit 38b4229)".
+
+`occupysaas/salescompel` (21★, last push 2026-10-21) is the other half of the pitch, a Salesforce replacement in Go/PostgreSQL, and its README is unusually honest about where it is: eleven milestones from M0 to M10, an early Vue prototype that "preview edits stay in memory and do not call the backend", and the sentence "no full program milestone has a recorded exit-gate pass yet". Its draft budget — "roughly 185–350 additional plan equivalents through M9" — with production certification (M9) at "Not reached" is the scale of the promise set beside a 24-star repo.
+
+**Why it matters:** the OpenID certification is what separates this from a manifesto — an identity server that passes conformance suites is a testable claim, and a drop-in Auth0 replacement is the kind of thing that survives a company's pricing page. The Salesforce half shows the actual unit of this movement: one module at a time, with a clean-room document governing what may be read from the original, not a wholesale replacement.
+
+[`🔗 occupysaas.com`](https://occupysaas.com/) · [`🔗 occupysaas/zeroauthy`](https://github.com/occupysaas/zeroauthy) · [`🔗 OpenID certified providers`](https://openid.net/certification/certified-openid-providers-profiles/) · [`🔗 HN thread`](https://news.ycombinator.com/item?id=50331402)
+
+---
+
+## 25. nibnib is an image format built to decode in six cycles a pixel — the encoder is orders of magnitude slower, and nothing is benchmarked yet
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News · 111 pts · ~3d ago (~12:17 UTC+8) · 79★
+- **Tags:** `image-codec` `rust` `embedded` `rp2350` `format-design`
+
+`raphlinus/nibnib` came out of a question about DVI output on an **RP2350** microcontroller, where the budget is roughly **six cycles per pixel** — enough for a fetch, a palette lookup and a store, and nothing else. The format that came out is a palette of **deltas** rather than colours: the last decoded pixel is doubled (`(pix >> 16) * 0x10001`), a byte indexes a 32-bit palette entry, and that entry is added to it — producing **two RGB565 pixels per input byte**, i.e. **4bpp**, with the low 16 bits as the left pixel. The whole inner loop is five lines of Rust.
+
+Being delta-based is why it beats ordinary palette images: flat regions stay smooth because the palette stores small changes, not absolute colours, and the encoder chooses each entry to minimise error across *both* pixels using Floyd–Steinberg weights. The encoder is "orders of magnitude slower" than the decoder, which the README treats as the normal shape of an asymmetric format. It also lists what is not done: the palette is a fixed cube of small deltas plus random Gaussian entries and is **not chosen adaptively from the image**; the greedy search trails artifacts to the right of sharp edges; boustrophedon encoding and better searches are named as future work that would not change the decoder; and the container is two bytes of width, two of height, 256 palette entries, then rows — no metadata. Repo created **2026-10-30**, no commits since, MIT/Apache-2.0.
+
+**Why it matters:** at ~6 cycles/pixel a general-purpose codec does not fit, and the only way to hit that budget is to make decoding trivial and push all the cost into a search nobody runs on the device. Read this one as a design note, not a product — there are no encode/decode benchmarks in the README and no release, so the number to hold is the cycle budget it was designed against.
+
+[`🔗 raphlinus/nibnib`](https://github.com/raphlinus/nibnib) · [`🔗 HN thread`](https://news.ycombinator.com/item?id=50299811)
+
+---
+
+## 26. A2UI stops asking the model to emit JSON — Express is "up to 3x" faster, measured on one model and 51 tasks
+
+- **Velocity:** ▮ steady
+- **Source:** Google Developers Blog · 2026-10-27 · a2ui-agent-sdk 0.9.0
+- **Tags:** `generative-ui` `agents` `a2ui` `sdk` `inference-format`
+
+A2UI is Google's protocol for generative UI: a client advertises a component catalog as a contract, an agent sends messages describing a screen built from it, and the client renders. The original binding had models write that JSON directly, each brace and nested element — which the team now says "coupled A2UI to LLMs". The release makes the **inference format swappable** and ships **A2UI Express** as the new default: one statement per line in a Python-like syntax, positional arguments mapped by the catalog's schema order, `_` to skip a slot, `$/title` binding to the data model, `Event("accept")` for a server action — compiled back into validated A2UI messages by deterministic SDK code.
+
+The claims are ceilings and the post says so: **up to 3x** lower latency and **up to 3x fewer tokens** than Direct JSON, from four formats (Direct JSON, Express, Atom, Elemental) run through the **same 51-task eval on gemini-3.5-flash**, with thinking on and off. Express is available in Python (`a2ui-agent-sdk` 0.9.0), TypeScript (`@a2ui/agent` 0.0.1) and Dart (`a2ui_agent` 0.0.1-wip004). The second path swaps in a **System One decision model**: TypeSafe's Jev answers typed questions with calibrated probabilities in ~100–300 ms, code builds the tree, and a small model writes only text — in one run of 11 prompts the tree was on screen in **92–298 ms** with screens complete in 0.8–1.7 s, valid on 11 of 11, and the post labels it "a first look, since the sample is small".
+
+Two constraints are stated rather than hidden: controlled generation "can only produce the layouts its grammar describes" (Apparite's grammar covers nine archetypes and twelve blocks), and the Python/TypeScript SDKs **stream Direct JSON chunk by chunk but compile Express from the complete reply** — so the token win costs you first-paint.
+
+**Why it matters:** the layer between a model and a renderer is where generative UI latency actually lives, and moving it from having the model write a tree to having it write a small program that SDK code compiles into that tree is the same trick that made tool calls reliable. Read "up to 3x" as one eval on one model, and check the streaming asymmetry before adopting it.
+
+[`🔗 Fast, reliable A2UI, with swappable inference formats`](https://developers.googleblog.com/fast-reliable-a2ui/) · [`🔗 a2ui-agent-sdk on PyPI`](https://pypi.org/project/a2ui-agent-sdk/)
+
+---
+
+## 27. Trigger.dev tells customers their environment variables were taken — three sentences, no scope, no CVE
+
+- **Velocity:** ▮ steady
+- **Source:** Trigger.dev blog + status page · 24 pts on HN · ~3h ago (~09:09 UTC+8)
+- **Tags:** `security-incident` `secrets` `background-jobs` `agent-infra`
+
+Trigger.dev's CTO posted an incident notice on **2026-11-01**: "There has been a security incident at Trigger.dev. We've blocked the exploit used in this attack, but our investigation has identified exposure across a subset of organizations. The attacker gained unauthorized access to environment variables for these organizations." The status page entry was marked **Resolved at 22:50 UTC** the same evening, and says the team "will follow up with more details." As of this batch there is no CVE, no count of affected organizations, no description of the exploit, and no third-party report; mitigation steps went to account owners by email.
+
+What the public record does show is a second, earlier event on the same component: the status page's Deployments history carries a **2h49m "Degraded"** entry on **2026-10-06** whose title renders as "Some sensitive environment variables synced fro…" — truncated in the component view, and not linked to this incident by Trigger.dev. For a platform that sells itself as a place to build and deploy AI agents, environment variables are the model API keys and the database URLs of every customer's agent.
+
+**Why it matters:** this is the second disclosure in three days saying a platform's environment variables were read, after Northflank on 2026-10-31, and both notices are shaped the same way — exploit blocked, subset named, details later. The operational advice does not depend on the missing details: rotate the keys the platform held, and treat a job runner's env store as a credential store, because that is what an attacker treated it as.
+
+[`🔗 Security Disclosure: Sunday November 1st`](https://trigger.dev/blog/security-incident-nov-2026) · [`🔗 Trigger.dev status`](https://status.trigger.dev/) · [`🔗 HN thread`](https://news.ycombinator.com/item?id=50331784)
+
+---
+
+## 28. VulDB scores each record four times — and the 4.0 score NVD re-serves is lower than the record's own in 38 of 41
+
+- **Velocity:** ▮ steady
+- **Source:** VulDB CNA (NVD, published 2026-10-31T23:17 → 2026-11-02T01:17)
+- **Tags:** `cve` `iot` `firmware` `scoring` `vuldb`
+
+Over the 26-hour window ending at this batch, NVD carries **41** records assigned by `cna@vuldb.com`, every one of them still `Received`, and every one of them scored **four times in its own container** — CVSS 4.0, 3.1, 3.0 and 2.0, all from the same CNA. What NVD re-serves from those records is not the same set: **all 41** containers carry a 3.0 metric that NVD's copy does not carry at all, and in **38 of 41** the 4.0 score on NVD is **lower** than the 4.0 in the record — by 0.7 to 3.2 points, and never higher (3 are identical). The 3.1 score matches in **41 of 41**. The concrete case: `CVE-2026-120189` reads **10.0** in all four frameworks inside the CNA container, and NVD's page for it reads **9.3** for 4.0 beside 10.0 for 3.1 and 2.0. The vectors carry `E:P` (and `RC:R` under 3.1), so a threat-adjusted reading is the obvious candidate for the smaller number — but no field says which stopping point either number is, and both are labelled `baseScore`.
+
+The subjects are consumer and SMB firmware — **WAVLINK WN536AX6-A** takes 7 records, **WN553X1-B** 6, **Oray Pugongying X5 Pro** 3, WAVLINK WN701AE and **Ruijie RG-ES205GC** 2 each, plus **D-Link DIR-505** (firmware 1.10B02) and a **Linksys E8450**. The descriptions have the shape of firmware fuzzing output: a `strcpy` or an unnamed `sub_416760` in `/bin/ioos`, `/protocol.csp` or `/cgi-bin/wapi.cgi`, with no stated preconditions beyond network reachability. And the scores are a template rather than twenty assessments: **20 of the 41** reach 9.9 or 10.0 in the 3.1 column, and they are two vectors — **9** at `AV:N/AC:L/PR:N/UI:N/S:C/C:H/I:H/A:H` (10.0) and **11** at the same string with `PR:N` swapped for `PR:L` (9.9, and 8.6 for 4.0 on NVD, 9.4 in the container).
+
+**Why it matters:** a 10.0 is supposed to mean the worst case is reachable, and here it is one template applied across a product family — defensible if each handler really is unauthenticated remote code execution, misleading if it is not, because these are the rows that populate critical-CVE counts in dashboards. But the sharper finding is upstream of the vector: the same record is 10.0 in its container and 9.3 on NVD, with no field naming the difference, so a scanner reading NVD and a reviewer reading the CVE both quote a number the other cannot reproduce. Quote the assigner, quote the framework, and say which copy you read.
+
+[`🔗 CVE-2026-120189 (D-Link DIR-505, 10.0)`](https://cveawg.mitre.org/api/cve/CVE-2026-120189) · [`🔗 CVE-2026-120276 (WAVLINK, 10.0)`](https://cveawg.mitre.org/api/cve/CVE-2026-120276)
+
+---
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-11-01T20:31:08Z |
-| Items | 18 |
-| Sources tracked | 18 (GitHub Trending, Hacker News, arXiv, NVD/CVE records, cveawg CNAs, JFrog, VulnCheck, Go security team, Xinhua, China Daily, Terry Tao's blog, GitHub releases, npm, PyPI, Hugging Face, JetBrains, DeepSeek Harness, handy.computer) |
+| Generated | 2026-11-02T04:23:19Z |
+| Items | 28 |
+| Sources tracked | 24 (GitHub Trending, Hacker News, arXiv, NVD/CVE records, cveawg CNAs, JFrog, VulnCheck, Go security team, Apache/ASF, Gitea, Trigger.dev, Google Developers Blog, openid.net, Xinhua, China Daily, Terry Tao's blog, Robert Haas, neon.com, GitHub releases, npm, PyPI, Hugging Face, JetBrains, DeepSeek Harness, hackerbooks.org) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (3x daily) |
 | Ranking | Velocity-weighted (recency × engagement acceleration × source authority) |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |
