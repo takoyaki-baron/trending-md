@@ -1,0 +1,284 @@
+{
+ "generated": "2026-11-02T20:18:41.490Z",
+ "files": [
+  {
+   "file": "2026-11-03.md",
+   "items": 20,
+   "findings": [
+    {
+     "check": "cvss",
+     "item": 2,
+     "verdict": "ok",
+     "claim": "4.0 9.1",
+     "detail": "CVE-2026-120459 · Secondary/disclosure@vulncheck.com"
+    },
+    {
+     "check": "status",
+     "item": 2,
+     "verdict": "ok",
+     "claim": "CVE-2026-120459 `Awaiting Analysis`",
+     "detail": "Awaiting Analysis (lastModified 2026-11-02T19:14:53.030)"
+    },
+    {
+     "check": "date",
+     "item": 2,
+     "verdict": "ok",
+     "claim": "CVE-2026-120459 published 2026-11-02",
+     "detail": "NVD published 2026-11-02T15:17:29.867 (2026-11-02 UTC) · cveawg datePublished 2026-11-02T14:29:15.767Z (2026-11-02 UTC) — the two clocks differ; 2026-11-02 is the NVD published day"
+    },
+    {
+     "check": "cwe",
+     "item": 2,
+     "verdict": "ok",
+     "claim": "CVE-2026-120459 CWE-347",
+     "detail": "stated in NVD weaknesses[] (disclosure@vulncheck.com)"
+    },
+    {
+     "check": "cvss",
+     "item": 6,
+     "verdict": "ok",
+     "claim": "4.0 9.3",
+     "detail": "CVE-2026-116606 · Secondary/mandiant-cve@google.com"
+    },
+    {
+     "check": "status",
+     "item": 6,
+     "verdict": "ok",
+     "claim": "CVE-2026-116606 `Awaiting Analysis`",
+     "detail": "Awaiting Analysis (lastModified 2026-11-02T20:17:32.373)"
+    },
+    {
+     "check": "status",
+     "item": 6,
+     "verdict": "ok",
+     "claim": "CVE-2026-116606 `Awaiting Analysis`",
+     "detail": "Awaiting Analysis (lastModified 2026-11-02T20:17:32.373)"
+    },
+    {
+     "check": "date",
+     "item": 6,
+     "verdict": "ok",
+     "claim": "CVE-2026-116606 published 2026-11-02",
+     "detail": "NVD published 2026-11-02T13:17:37.017 (2026-11-02 UTC) · cveawg datePublished 2026-11-02T12:59:11.278Z (2026-11-02 UTC) — the two clocks differ; 2026-11-02 is the NVD published day"
+    },
+    {
+     "check": "status",
+     "item": 9,
+     "verdict": "ok",
+     "claim": "CVE-2026-109083 `Deferred`",
+     "detail": "Deferred (lastModified 2026-11-02T16:12:04.590)"
+    },
+    {
+     "check": "cvss",
+     "item": 11,
+     "verdict": "ok",
+     "claim": "4.0 6.3",
+     "detail": "CVE-2026-120309 · Secondary/disclosure@vulncheck.com"
+    },
+    {
+     "check": "cvss",
+     "item": 11,
+     "verdict": "ok",
+     "claim": "3.1 3.7",
+     "detail": "CVE-2026-120309 · Secondary/disclosure@vulncheck.com · vector reproduces 3.7"
+    },
+    {
+     "check": "status",
+     "item": 11,
+     "verdict": "ok",
+     "claim": "CVE-2026-120309 `Awaiting Analysis`",
+     "detail": "Awaiting Analysis (lastModified 2026-11-02T19:34:23.993)"
+    },
+    {
+     "check": "date",
+     "item": 11,
+     "verdict": "ok",
+     "claim": "CVE-2026-120309 published 2026-11-02",
+     "detail": "NVD published 2026-11-02T03:17:28.217 (2026-11-02 UTC) · cveawg datePublished 2026-11-02T02:01:09.557Z (2026-11-02 UTC) — the two clocks differ; 2026-11-02 is the NVD published day"
+    },
+    {
+     "check": "date",
+     "item": 20,
+     "verdict": "ok",
+     "claim": "CVE-2026-98432 published 2026-10-15",
+     "detail": "NVD published 2026-10-15T13:17:13.987 (2026-10-15 UTC) · cveawg datePublished 2026-10-15T12:08:22.205Z (2026-10-15 UTC) — the two clocks differ; 2026-10-15 is the NVD published day"
+    },
+    {
+     "check": "repo",
+     "item": 2,
+     "verdict": "stale",
+     "claim": "mpdavis/python-jose",
+     "detail": "last push 2026-04-14 (203d) with 1759 stars — is the item about the code or the name?"
+    },
+    {
+     "check": "repo",
+     "item": 3,
+     "verdict": "ok",
+     "claim": "hyprwm/Hyprland",
+     "detail": "39841★, last push 2026-11-02"
+    },
+    {
+     "check": "repo",
+     "item": 17,
+     "verdict": "ok",
+     "claim": "D4Vinci/Scrapling",
+     "detail": "92638★, last push 2026-11-02"
+    },
+    {
+     "check": "repo",
+     "item": 19,
+     "verdict": "ok",
+     "claim": "max-sixty/worktrunk",
+     "detail": "9961★, last push 2026-11-02"
+    },
+    {
+     "check": "quotation",
+     "item": 1,
+     "verdict": "ok",
+     "claim": "4 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 3,
+     "verdict": "ok",
+     "claim": "2 quotation(s)",
+     "detail": "verbatim in 3 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 4,
+     "verdict": "ok",
+     "claim": "1 quotation(s)",
+     "detail": "verbatim in 3 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 5,
+     "verdict": "ok",
+     "claim": "5 quotation(s)",
+     "detail": "verbatim in 3 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 6,
+     "verdict": "ok",
+     "claim": "3 quotation(s)",
+     "detail": "verbatim in 8 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 7,
+     "verdict": "ok",
+     "claim": "7 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 8,
+     "verdict": "ok",
+     "claim": "4 quotation(s)",
+     "detail": "verbatim in 3 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 9,
+     "verdict": "ok",
+     "claim": "3 quotation(s)",
+     "detail": "verbatim in 16 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 10,
+     "verdict": "ok",
+     "claim": "6 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 11,
+     "verdict": "ok",
+     "claim": "3 quotation(s)",
+     "detail": "verbatim in 5 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 12,
+     "verdict": "ok",
+     "claim": "6 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 13,
+     "verdict": "ok",
+     "claim": "9 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 14,
+     "verdict": "ok",
+     "claim": "4 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 15,
+     "verdict": "ok",
+     "claim": "7 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 16,
+     "verdict": "ok",
+     "claim": "6 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 17,
+     "verdict": "quote-not-read",
+     "claim": "“rag ready markdown in one line”",
+     "detail": "6 words, 0 hits in 2 readable source(s), but 1 cited page(s) went unread (pypi.org/project/scrapling/ served a bot wall) — unread is not absent, so this is not called a fabrication; open those page(s) before publishing"
+    },
+    {
+     "check": "quotation",
+     "item": 17,
+     "verdict": "ok",
+     "claim": "4 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 18,
+     "verdict": "ok",
+     "claim": "6 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 19,
+     "verdict": "ok",
+     "claim": "2 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 20,
+     "verdict": "ok",
+     "claim": "2 quotation(s)",
+     "detail": "verbatim in 5 readable source(s)"
+    }
+   ]
+  }
+ ],
+ "status_watch": [],
+ "api_calls": 0,
+ "readme_calls": 0,
+ "cited_page_calls": 0,
+ "repo_page_calls": 0,
+ "nvd_calls": 1,
+ "cna_calls": 0
+}
