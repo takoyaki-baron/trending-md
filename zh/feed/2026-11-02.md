@@ -1,6 +1,6 @@
 ---
 date: 2026-11-02
-updated: 2026-11-02T04:23:19Z
+updated: 2026-11-02T12:19:50Z
 schedule: 04:03, 12:03, 20:03 UTC+8
 sources: 24
 license: CC-BY-4.0
@@ -304,7 +304,7 @@ On-policy 自蒸馏让教师模型以特权参考为条件；现有方法要么�
 - **Source:** Hacker News（Show HN）· 1,054 pts · 约 12 小时前（约 23:58 UTC+8）
 - **Tags:** `hacker-news` `dataset` `llm-labeling` `books` `affiliate`
 
-Hacker Books 是一个可搜索的索引，收录 Hacker News 评论区里被推荐的书；它自己的 `data/meta.json`（**2026-11-02** 生成）把语料说清楚了，而不是含糊带过：**15,362 本书、270,334 条提及、217,954 条评论、56,456 位评论者**，覆盖 **2007 到 2026**；书籍元数据与封面来自 Open Library，每个书籍页面都链回原帖。预生成的热门榜收录 **600** 本；整个书级数据集可以 CSV 下载。
+Hacker Books 是一个可搜索的索引，收录 Hacker News 评论区里被推荐的书；它自己的 `data/meta.json`（**2026-11-02** 生成）把语料说清楚了，而不是含糊带过：本批次读取时为 **15,362 本书、270,334 条提及、217,954 条评论、56,456 位评论者**，覆盖 **2007 到 2026**；书籍元数据与封面来自 Open Library，每个书籍页面都链回原帖。该文件每次重建都会换一个新的内容哈希，当前构建读到 **15,766 本书与 281,363 条提及** —— 这些总数是快照，不是常量。预生成的热门榜收录 **600** 本；整个书级数据集可以 CSV 下载。
 
 真正值得读的是它如何定义「被推荐」。只数提及次数，会让人人都在*警告*的书排得像心头好，所以**每一条提及都用 Claude Sonnet 5.5 打上了** *recommend*、*neutral*、*critical* 或 *not about the book* 的标签，同名电影、游戏之类的提及会被丢弃。About 页随后给出了检验：这些标签与 Claude Opus 5.5 在 400 条提及上比对，一致率 **85%**，页面自己也提醒「会有噪声」。关键词规则、情感打分和 TF-IDF 分类器都先试过，准确率更低。排名把**不同评论者**的权重放在原始提及数之上，所以单个狂热读者带不动一本书。
 
@@ -312,7 +312,7 @@ Hacker Books 是一个可搜索的索引，收录 Hacker News 评论区里被推
 
 **Why it matters:** 一个由 LLM 构建、还公布了自己跨模型一致率的语料，比多数「AI 搜索」产品更可靠 —— 而 **85%** 就是该带走的数字，因为它是「有 N 个人推荐」这类说法天花板。这也是两天内第二个把 HN 存档做成消费级产品的项目：十九年的评论区现在是原料，被索引的是第三方镜像，而不是 HN 的 API。
 
-[`🔗 hackerbooks.org`](https://hackerbooks.org) · [`🔗 hackerbooks data/meta.json`](https://hackerbooks.org/data/meta.47fd7cb7.json) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50326821)
+[`🔗 hackerbooks.org`](https://hackerbooks.org) · [`🔗 hackerbooks data/meta.json`](https://hackerbooks.org/data/meta.99d6a8ef.json) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50326821)
 
 ---
 
@@ -468,13 +468,239 @@ Trigger.dev 的 CTO 在 **2026-11-01** 发了事件通告：「Trigger.dev 发�
 
 ---
 
+## 29. HyperFrames 把 HTML 渲染成确定性 MP4 —— 三个半小时内连发三个版本
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** GitHub Trending（周榜）· 77,426★ · 本周 +5,153 · v0.9.2 发布于 2026-11-02T09:10Z
+- **Tags:** `video` `agents` `renderer` `htmx` `open-source`
+
+`heygen-com/hyperframes`（77,426★，创建于 2026-03-10，Apache-2.0）是一个开源框架，把 HTML、CSS、媒体和可寻址动画渲染成**确定性的 MP4** —— 可以本地用 CLI 跑，可以由 agent 通过已发布的 skills 驱动，也可以作为托管创作工作流背后的渲染内核。agent 那条路才是卖点：跑一次 `npx hyperframes skills update`，然后让 Claude Code、Codex 或 Cursor 去做视频，skills 教会它整条循环 —— 规划、写出合法 HTML、接上可寻址动画、加素材、lint、预览、渲染。
+
+今天真正值得写的是它发了什么。**v0.9.0**（2026-11-02T05:41:28Z）是破坏性版本：**AWS Lambda 与 Google Cloud Run** 上的分布式渲染现在只走 **Plan v2**，Plan v1 传输层、`planProtocol` 选项以及 v1 的事件与结果类型全部移除 —— 旧 v1 载荷会在"做任何渲染工作之前"被回以 `PLAN_PROTOCOL_UNSUPPORTED`。**v0.9.1**（07:41:18Z）随即补上这次破坏性变更造出的边角：一个没有 `PlanProtocol` 的 Lambda 状态机现在默认 v2，而不是以 `States.Runtime` 失败。**v0.9.2**（09:10:24Z）让已结束的场景交还 WebGL context，下一个场景不再被拖慢。npm `hyperframes` 的 `latest` 是 **0.9.2**，发布于 09:16:42Z —— 比 tag 晚六分钟。
+
+**Why it matters:** 视频是 agent 至今唯一无法确定性产出的输出形态，而这里的设计答案是：把产物做成带可寻址时间轴的文档，让渲染成为文件的函数，而不是采样循环的函数。破坏性变更指向的是它不再只是玩具的地方 —— 分布式渲染农场 —— 而 SDK 和部署必须一起动：再传 `"v1"` 现在会抛错。
+
+[`🔗 heygen-com/hyperframes`](https://github.com/heygen-com/hyperframes) · [`🔗 v0.9.0（破坏性）`](https://github.com/heygen-com/hyperframes/releases/tag/v0.9.0) · [`🔗 npm hyperframes`](https://www.npmjs.com/package/hyperframes)
+
+---
+
+## 30. Colibri 把 744B MoE 从磁盘流进 9.9 GB 内存 —— 在笔记本上每秒 0.05 个 token
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** GitHub Trending · 今日 +655★ · 46,157★ · v2.1.0 发布于 2026-10-31T12:50Z
+- **Tags:** `moe` `local-inference` `c` `gguf` `quantization`
+
+`JustVugg/colibri`（46,157★，创建于 2026-07-01，Apache-2.0，纯 C）利用让 MoE 模型变大的那件事本身，把超大模型跑在人们已有的硬件上：一个 744B 模型每个 token 只用约 **40B 参数**，所以逐 token 变化的只有约 **11 GB**。稠密部分 —— attention、共享专家、embedding —— 常驻内存；路由专家留在磁盘上，路由器要哪个就读哪个，经由一个会学习"你的活儿用哪些专家"的缓存。它带**十三个引擎**：十个对话模型族（GLM-5.2/5.3、GLM-5.3-Flash、Inkling、Kimi K3、DeepSeek V4 与 V4.1 Flash、MiMo-V2.6、Qwen3.8-Flash-Next、Qwen3.6、OLMoE）、一个图像模型，以及三个"以概率作答"而非聊天的决策模型。
+
+README 自己那张表才是它区别于演示的地方。**GLM-5.2**（下载 429 GB）在**一台 25 GB 笔记本上冷启动只有 0.05–0.1 tok/s**，在 128 GB 的 Ryzen AI Max+ 395 上是 **1.83**，在六张 RTX 5090 上是 **9.0–9.2**。**Kimi K3**（2.8T，1.56 TB）大约**每个 token 9.4 秒**，专家读取速度 6.3 GB/s。**DeepSeek V4 Flash**（284B）在 32 GB 内存下是 **0.93 tok/s**。README 里的启动横幅写着 `GLM-5.2 · 744B MoE · int4 · streaming CPU · ready in 32s · resident 9.9 GB`。**v2.1.0**（2026-10-31）包含**自 v2.0.0 以来 387 个 pull request，其中 208 个来自 35 位贡献者**、每个引擎都能按原样读 GGUF，并新增 Mistral-Large-4（1T）。
+
+**Why it matters:** 把每秒 token 数写在星数旁边 —— 这里的主张是关于*摆放*，不是速度，代价是每个专家一次 NVMe 读取。README 写明的那条设计准则才值得照抄："Less fast memory may cost speed; it must not quietly redefine the model."
+
+[`🔗 JustVugg/colibri`](https://github.com/JustVugg/colibri) · [`🔗 v2.1.0 发布`](https://github.com/JustVugg/colibri/releases/tag/v2.1.0) · [`🔗 GGUF 支持说明`](https://github.com/JustVugg/colibri/blob/main/docs/gguf.md)
+
+---
+
+## 31. Paperclip 是给 agent 用的组织架构图，11 万星 —— 稳定版停在 10 月 23 日，之后只有 nightly
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** GitHub Trending · 今日 +507★ · 110,094★ · 稳定版 v2026.1023.0 打标于 2026-10-24
+- **Tags:** `agents` `orchestration` `governance` `budget` `typescript`
+
+`paperclipai/paperclip`（110,094★，18,243 fork，MIT，创建于 2026-03-02）是一个 Node.js 服务加 React UI，编排的是 agent 的**团队**而不是单个 agent：人与 agent 混排的组织架构、目标关联到任务、按公司/agent/项目分级的预算、受限的密钥、权限，以及按指派工作、追问消息或排期把 agent 叫醒的**心跳**。一句话定位是"If OpenClaw is an employee, Paperclip is the company."。花名册就是本 feed 一路追踪的那串 harness：OpenClaw、Claude Code、Codex、Cursor + Cloud、Gemini CLI、OpenCode、Pi、Hermes + Gateway、Grok Build 和 Kimi Code —— 其余东西的入口，README 自己给了："If it can receive a heartbeat, it's hired."
+
+产物状态才是重点，因为星数不等于发布。**稳定**线是 `v2026.1023.0`，打标 **2026-10-24T00:03:59Z**、标注"Released: 2026-10-23" —— 从 beta 提升上来的 200 个 commit，头牌是私密任务与项目：别人打不开、搜不到、读不到运行 transcript、也无法通过插件触达。此后的全部是 **canary** 与 **nightly**（最新：`nightly/v2026.1102.0-nightly.0`，2026-11-01T16:08:51Z）。仓库现有 **3,469 个未关 issue 与 3,159 个未关 pull request**。
+
+**Why it matters:** 竞争的计量单位已经从 agent 移到组织架构 —— 谁能花多少钱、谁能看哪份 transcript —— 而这是这个转向在大规模上最清楚的表述。把发布通道当作状态来读：距上一个稳定版十天，中间由每日打标的 nightly 列车顶上。
+
+[`🔗 paperclipai/paperclip`](https://github.com/paperclipai/paperclip) · [`🔗 v2026.1023.0`](https://github.com/paperclipai/paperclip/releases/tag/v2026.1023.0) · [`🔗 paperclip.ing`](https://paperclip.ing)
+
+---
+
+## 32. Heretic 2.0 打破自己的配置格式、上了插件系统，并把研究功能交给 Lophius
+
+- **Velocity:** ▮▮ rising
+- **Source:** GitHub · 今日 +404★ · 37,777★ · v2.0.0 打标于 2026-11-01T13:03Z
+- **Tags:** `abliteration` `model-modification` `plugins` `pypi` `agpl`
+
+`p-e-w/heretic`（37,777★，AGPL-3.0）做的正是名字说的那件事 —— "Training-free language model modification" —— 不去训练，而是针对成对的示例 prompt 与相应的 **scorer** 做优化。默认动作是抑制拒答；另有若干随包配置分别削减 slop、幽默、谄媚，或改变情绪倾向；README 说社区已在 Hugging Face 上发布了**数千个**经 Heretic 处理过的模型。在 RTX 3090 上，默认配置处理 `Qwen3-4B-Instruct-2507` 约需 **30–40 分钟**。
+
+**v2.0.0** 于 **2026-11-01T13:03:19Z** 打标，PyPI 上的 `heretic-llm` 2.0.0 于 **12:21:39Z** 上传 —— 距 1.4.0（2026-06-14）八个月。这是两个方向上都破坏兼容的版本。为 1.x 写的配置文件**不能用了**（有迁移指南），发布说明写得很直白："Research features have been removed. The intended replacement is Lophius."。补上的是基础设施：**通用插件系统**，含 scorer *与* modifier 插件（以及 ARA）、插件上的 `reproducible` 属性、**带端到端测试的无头运行**、benchmark scorer、数据集 config/subset 选择，以及一处修复让优化器能用 `0` 的 max-weight 下限关掉 MLP ablation。
+
+**Why it matters:** 当 scorer 变成可插拔，abliteration 就不再是一份配方 —— 这个工具现在能操纵*任何*可度量的行为，比许可证页面上写的范围更大。对手里有一份调好的 1.x 配置的人来说，风险在迁移：过期配置不会被拒绝，它只是错的。
+
+[`🔗 p-e-w/heretic`](https://github.com/p-e-w/heretic) · [`🔗 v2.0.0 发布`](https://github.com/p-e-w/heretic/releases/tag/v2.0.0) · [`🔗 PyPI heretic-llm`](https://pypi.org/project/heretic-llm/)
+
+---
+
+## 33. LobeHub 的路径穿越四月就修好了 —— CVE 十一月才来，而 npm 上没有 2.1.49 可装
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** VulnCheck CNA（cveawg）· 预留 2026-11-01T12:48Z · 发布 2026-11-02T02:01Z
+- **Tags:** `cve` `path-traversal` `rce` `npm` `ai-chat`
+
+`CVE-2026-120315` 是 LobeHub Chat 文档解析里的路径穿越，最终通向代码执行，机理只有四行。`TempFileManager.writeTempFile(data, name)` 用 `join(this.tempDir, name)` 拼路径；`name` 来自 `files.name` 列，而 `file.createFile` 直接把它写成用户输入。建一条名为 `../../../../../../app/startServer.js` 的文件记录，内容放 `child_process.execSync` 载荷，再触发文档解析，载荷就落到服务启动的位置。公告给出的前置条件是**服务端数据库部署**加一个已认证会话 —— 是 `PR:L`，不是预认证。
+
+日期才是发现。GHSA（`GHSA-2g9j-v25c-4j97`）把 **2.1.49** 列为已修复，而该 tag 自己的发布页日期是 **2026-04-10T09:51:47Z** —— 比公告发布的 10 月 17 日早 **190 天**，比 CVE 记录早 **206 天**。修复在那个 tag 上可验证：`writeTempFile` 现在把 `basename(name)` 交给 `resolve()`，注释里已经写着这个 GHSA 编号。
+
+然后是记录指向的产物。它的 `packageURL` 是 `pkg:npm/@lobehub/chat`，而该包最新发布版本是 **1.143.3（2026-01-25）**；项目当前的包是 `@lobehub/lobehub`，仓库里声明为 **2.3.0**，而该名在 npm 上的 `latest` 是 **2.1.26（2026-02-10）**。**2.1.49 只存在于 GitHub tag，两个 npm 包名下都没有。** 评分是 VulnCheck 自己的：CVSS 3.1 **8.8**、CVSS 4.0 **8.7**；NVD 的状态是 `Received`、**0 条 NVD 自评 metric**，而 3.1 的分数从其向量精确复现。项目自己的最新发布 v2.3.0 出在 2026-11-01。
+
+**Why it matters:** 从修复到 CVE 九个月，正是让自托管应用躺在未打补丁状态的那种披露滞后；但第二层对防御方更糟 —— 按那个 packageURL 查询的扫描器看到的每个 npm 版本都 `< 2.1.49`，而没有任何可升级到的修复版本。范围是对的，它命名的产物是另一个对象，所以补救办法要从 tag 读，不能从 registry 读。
+
+[`🔗 CVE-2026-120315（cveawg）`](https://cveawg.mitre.org/api/cve/CVE-2026-120315) · [`🔗 GHSA-2g9j-v25c-4j97`](https://github.com/lobehub/lobehub/security/advisories/GHSA-2g9j-v25c-4j97) · [`🔗 v2.1.49 tag（2026-04-10）`](https://github.com/lobehub/lobehub/releases/tag/v2.1.49)
+
+---
+
+## 34. Network-AI 自己的路径清洗器就是漏洞 —— 一个没锚定的 `startsWith` 放出了一整个同级目录
+
+- **Velocity:** ▮▮ rising
+- **Source:** VulnCheck CNA（cveawg）· 3 条记录 2026-11-02T02:01:10–12Z · 修复于 5.15.5
+- **Tags:** `cve` `path-traversal` `agent-framework` `npm` `sandbox`
+
+VulnCheck 对 **Network-AI** 发了三条路径穿越记录 —— 这是一个 npm 上的 TypeScript 多 agent 编排器（`pkg:npm/network-ai`），宣称有 32 个框架的适配器 —— 第三条最该读。`CVE-2026-120313` 出在 **`InputSanitizer.sanitizePath()`** 本身，也就是那个守卫：它拿路径和基础目录比较时用了**没锚定的 `startsWith`**，于是只要某个路径的目录名和基础目录**共享字符串前缀**，它就是基础目录的同级而非子级。沙箱外的读、列目录、写随之而来，而且这一条不需要任何权限：CVSS 3.1 **7.5**（`PR:N`）、4.0 **8.7**。`CVE-2026-120311` 把穿越序列塞进**任务 id**（`FileJobStore.get()`、`.delete()`、`JobQueue.getJob()`）以读或删任意 `.json` —— 包括 `AuthGuardian` 的信任等级配置和授权 token，也就是靠删文件拼出来的授权绕过 —— 它在 CVSS 3.1 上是 **8.8**、4.0 上是 **8.7**，`PR:L`。`CVE-2026-120312` 是同一招走 **AgentVCR 的 cassette 名**（`load()`/`save()`），同样是 **8.8** 与 **8.7**。
+
+三条都在 **5.15.5** 修复；该 npm 版本发布于 **2026-10-17T18:14:17Z**，**比记录早 16 天**，npm `latest` 现在是 5.17.1。NVD 把三条都列为 `Deferred`、**0 条 NVD 自评 metric**，所以这里的分数全是 CNA 的算术（3.1 的数值精确复现）。仓库是 **80 星**，MIT，最后推送 2026-10-27。
+
+**Why it matters:** 一个 agent 框架的三个"沙箱"各自只是一个字符串比较，而清洗器要第一个审计，因为其他一切都信任它。体量是另一半：一个 80 星的依赖在一个批次里带出四条 CVE，不代表风险面更小 —— 只代表评审面更小，而修复仍然比记录早两周。
+
+[`🔗 CVE-2026-120313（InputSanitizer）`](https://cveawg.mitre.org/api/cve/CVE-2026-120313) · [`🔗 CVE-2026-120311（FileJobStore）`](https://cveawg.mitre.org/api/cve/CVE-2026-120311) · [`🔗 CVE-2026-120312（AgentVCR）`](https://cveawg.mitre.org/api/cve/CVE-2026-120312)
+
+---
+
+## 35. Termix 的 9.9 只要一个 `destPath`，exploit 已公开，而记录说厂商从未回复
+
+- **Velocity:** ▮▮ rising
+- **Source:** VulDB CNA（cveawg）· 预留 2026-11-01T13:17Z · 发布 2026-11-02T01:45Z
+- **Tags:** `cve` `path-traversal` `self-hosted` `ssh` `vuldb`
+
+`CVE-2026-120322` 是 **Termix-SSH/Termix** —— 一个 15,780 星的自托管 Web SSH/文件管理器 —— 里的路径穿越，入口是 `/plugin-api/file-manager/transferToHost`，其中 `destPath` 参数没有被约束在传输根目录内。任意文件写，可远程发起，CVSS 3.1 给 **9.9**（`AV:N/AC:L/PR:L/UI:N/S:C/C:H/I:H/A:H`，精确复现）—— 那是基础分，带 `E:P` 的完整时序分是 9.4 —— 2.0 给 **9.0**。4.0 那一栏正是本 feed 反复记录的分叉：CNA 容器存 **9.4**，NVD 对同一串存 **8.6**，两边都带 `E:P` —— 一个向量停在两个点上，不是两份评估。
+
+记录里有两句话比分数更重要。"The exploit is publicly available and might be used." 以及："The vendor was contacted early about this disclosure but did not respond in any way."。公开 PoC 放在一个 GitHub 仓库（`0xGenesi/CVE`）里，而不是记录里。记录也写明了补救，而那不是一个校验修复：该捷径在独立的 File Manager 插件 **v1.0.0** 里被**移除** —— 传输引擎现在一律走 SFTP 写 —— 核心的 **v26.10.0** 同样。Termix 在 **2026-11-02T00:20:19Z 发布了 v26.11.0**，大约比记录发布早 **85 分钟**。
+
+**Why it matters:** 一个握着整片机器 SSH 凭据的 Web 终端，本质上是"有触达范围的"文件管理器，所以一个没校验的 `destPath` 就是对它能碰到的每台主机的写入。修复的形态才是要带走的 —— 厂商的答案是删掉另一条传输通路而不是清洗路径，当捷径本身就是 bug 时，这是更耐久的选项。
+
+[`🔗 CVE-2026-120322（cveawg）`](https://cveawg.mitre.org/api/cve/CVE-2026-120322) · [`🔗 公开 PoC 说明`](https://github.com/0xGenesi/CVE/blob/main/Termix_FileManager_transferToHost_Arbitrary_File_Write.md) · [`🔗 Termix v26.11.0`](https://github.com/Termix-SSH/Termix/releases/tag/v26.11.0)
+
+---
+
+## 36. http4k 的 auth-int 摘要从来没哈希过 body —— 而另一个修复只存在于 `-ee` 构建里
+
+- **Velocity:** ▮▮ rising
+- **Source:** VulnCheck CNA（cveawg）· 2 条记录 2026-11-02T02:01:14–15Z · NVD 状态 `Deferred`
+- **Tags:** `cve` `authentication` `http4k` `maven` `enterprise`
+
+两条 http4k 记录在同一秒落地，第一条是教科书式的。**`CVE-2026-120317`**（`CWE-345`）说 `DigestEncoder` 计算 **auth-int** 摘要时**没有对请求实体 body 做哈希** —— 而绑定 body 正是 auth-int 存在的唯一理由。非 TLS 通道上的在途攻击者改写 body、保留 `Authorization` 头，就以受害者身份执行了改变状态的操作。**`CVE-2026-120316`**（`CWE-22`）是 `ThymeleafTemplates` 的 Caching/HotReload 里的穿越：`ViewModel.template()` 值里的 `../` 被解析时没有做容器内检查，于是由请求驱动的模板选择就能泄露服务进程可读的任意文件 —— 且无需认证。
+
+两条都是 CVSS 3.1 **5.9**、CVSS 4.0 **8.2**，这个落差来自框架本身：4.0 一侧是 `AC:H` 与 `AT:P`。产物层面的分叉才是要动手的。`http4k-security-digest` 在 Maven Central 上有 **6.60.0.0**，日期 **2026-09-16** —— 比记录早 47 天。而 Thymeleaf 的修复是 **6.62.0.0-ee**，Maven Central 上 `http4k-template-thymeleaf` 的列表最高只到 **6.61.0.0（2026-09-29）**：那里没有 `6.62.0.0-ee` 这个产物，所以最新可公开安装的模板模块仍然落在它自己的受影响范围内（`< 6.62.0.0-ee`）。NVD 把两条都列为 `Deferred`、**0 条 NVD 自评 metric**。
+
+**Why it matters:** 当你没法在所有地方终止 TLS 时会选 digest auth，而 body 完整性恰恰是它被扩展出来提供的那条属性 —— 一个把 body 排除在外的摘要，认证了请求行，别的什么都没认证。另一半是运维层面：对其中一个 CVE 来说，升级指令是一句话，另一个不是。
+
+[`🔗 CVE-2026-120317（auth-int）`](https://cveawg.mitre.org/api/cve/CVE-2026-120317) · [`🔗 CVE-2026-120316（Thymeleaf）`](https://cveawg.mitre.org/api/cve/CVE-2026-120316) · [`🔗 Maven Central 上的 http4k-security-digest`](https://repo1.maven.org/maven2/org/http4k/http4k-security-digest/)
+
+---
+
+## 37. `@fastify/http-proxy` 没用一个 `..` 就绕过了自己的 rewrite 前缀 —— 靠解码两次
+
+- **Velocity:** ▮ steady
+- **Source:** OpenJS CNA（cveawg）· 预留 2026-10-31T13:33Z · 发布 2026-11-02T10:15Z
+- **Tags:** `cve` `encoding-confusion` `fastify` `proxy` `npm`
+
+`CVE-2026-120213` 影响 `@fastify/http-proxy` **9.0.0 到 11.6.5**，而缺陷是一次编码往返，不是穿越。当应用用参数化的 **`prefix`** 与 **`rewritePrefix`** 选项把客户端钉在一个固定的上游路径上时，插件把**已 URL 解码的路由参数**替换进 `rewritePrefix` 而**没有重新编码**。于是某个参数值只要编码了路径分隔符外加 fragment 或 query 分隔符，解码后就成了真的分隔符与分隔符号，从而注入额外的上游路径段并**剥掉 `rewritePrefix` 本要强制的必需后缀**。记录明确写了这发生在"without using any dot-dot traversal"的情况下 —— 所以查 `..` 的过滤器、或者按 `..` 写规则的 WAF，什么都看不见。它带的两条 CWE 就是诊断：`CWE-22` 与 `CWE-436`（解释冲突）。
+
+分数是 CVSS 3.1 **9.1**（`AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:N`，精确复现），预认证。修复在 **11.6.6**，npm 发布于 **2026-11-02T08:55:53Z** —— **比记录早 80 分钟** —— 公告把替代方案堵死了："There is no workaround other than upgrading."。有一条来源说明值得占位：NVD 表里这条 9.1 的来源是 `ce714d77-…`，那正是 **openjs 自己的 orgId**，所以这个数字是 CNA 的而非某方富化 —— 记录状态是 `Received`、0 条 NVD 自评 metric。
+
+**Why it matters:** "先解码再替换"是经典的双重解析缺陷，也是 `CWE-436` 存在的理由 —— 两个组件对"字符串何时不再是编码态"意见不一。如果你用 `rewritePrefix` 来强制一个后缀而不只是拼 URL，这就是对那个选项所配置之限制的免认证绕过。
+
+[`🔗 CVE-2026-120213（cveawg）`](https://cveawg.mitre.org/api/cve/CVE-2026-120213) · [`🔗 GHSA-h3vp-4jfr-v364`](https://github.com/fastify/fastify-http-proxy/security/advisories/GHSA-h3vp-4jfr-v364) · [`🔗 npm @fastify/http-proxy`](https://www.npmjs.com/package/@fastify/http-proxy)
+
+---
+
+## 38. 十一份 agent 劫持评测把攻击样本放在 16–86% —— 到了 2% 的真实比例，AUROC 0.879 只剩 7.6% 精确率
+
+- **Velocity:** ▮▮ rising
+- **Source:** arXiv 2610.41803 · 提交于 2026-10-30 · 审计 11 份评测
+- **Tags:** `research` `agents` `detection` `evaluation` `base-rate`
+
+检测**被劫持的 LLM agent** 的模型会读工具调用轨迹找异常，而这篇论文先用一次普查说明它们是怎么被评测的：在**审计的十一份评测**里，攻击或异常样本占测试样本的 **16% 到 86%**，**没有任何一份改变过这个比例**，**有六份完全没有在第二个 benchmark 或数据源上测试**。剩下的就是这掩盖了什么。在 **AgentDrift** 与 **AgentDojo** 上，**2% 的攻击率**下，一个 **AUROC 0.879** 的检测器只达到**精确率 0.076** —— 而光是负样本的构成就能把这个精确率在 **0.039 到 0.117** 之间推动。其次，随着**工具覆盖率**（测试时调用到的工具在训练中出现过的比例）下降，检测器排名在 **50% 附近交叉、在更低处反转**，因为没见过的工具映射到训练从未到达的输入；对工具输入做 dropout 基本能消除这个反转。第三，**没有任何在 AgentDrift 上训练的检测器能在 AgentDojo 上排得比随机好** —— AUROC 0.47 到 0.52 —— 包括一个在 AgentDrift 内部达到 **0.996** 的。一个两个都没训过的公开 LLM 动作监控器达到 **0.930**，但在 2% 攻击率下它公开的判定规则仍会以误报为主（精确率 **0.096**）。
+
+论文自己的局限部分写得异常坦白，值得一并带走：只有那个监控器的方案是完全前瞻性的，若干读法是在看到相关结果之后加上的，AgentDrift 是单一生成器造的合成集且各领域的工具集完全不重叠，而且**在 AgentDojo 上，反转的 leave-one-suite-out 类比没有稳定复现**。
+
+**Why it matters:** 基础比例就是全部论证 —— AUROC 看起来像一种能力，而 2% 的攻击占比把它变成每十三个告警里十二个是假。把攻击占比写进评测报告；至于那个反转，请把它读成作者自己在第二个 benchmark 上降级过的头条。
+
+[`🔗 arXiv 2610.41803`](https://arxiv.org/abs/2610.41803) · [`🔗 全文（HTML）`](https://arxiv.org/html/2610.41803v1)
+
+---
+
+## 39. MCP 工具调用轨迹不用对话就能认出用户 —— 26.25%，纯靠猜是 17.97%
+
+- **Velocity:** ▮▮ rising
+- **Source:** arXiv 2610.41885 · 提交于 2026-10-30 · 1,000 个画像、4,000 条轨迹
+- **Tags:** `research` `mcp` `privacy` `agents` `benchmark`
+
+agent 会留下**工具调用轨迹**，这篇论文问的是这些轨迹本身暴露了什么 —— 不要对话，只要协议合法的工具交互。**PrivacyTrace** 提供度量：**1,000 个合成用户画像**与 **4,000 条 agent 轨迹**，跨四个领域，用 **25 台服务器**上的真实 MCP 工具生成，由四个主流 LLM 充当攻击者。单领域轨迹访问把画像推断成功率从纯先验猜测的 **17.97%** 提到 **26.25%**。渠道分析是可动手的那半：**工具参数与返回结果**提供最大的轨迹内证据，**跨会话关联**进一步放大风险，而**精确标识符仍然很难还原**。两阶段攻击几乎追平一次性攻击，而以轨迹支持的**部分画像**为条件比匹配的先验猜测再高 **3.30 个百分点** —— 其中第二阶段仍然受益于模型的先验。
+
+局限决定了能把它带到多远：用户行为是**合成的**（人口学校准只对齐了边缘分布，不对齐行为），而它勾勒的候选防御 —— 查询混淆、减少暴露的工具调用内容、跨服务隔离会话 —— 都被标为**未测试**。
+
+**Why it matters:** 轨迹是比聊天日志活得更久的那份产物，也是最可能被送去第三方可观测性服务的一份。八个点的差距算不上灾难，但增量指向很具体：泄露在**参数与结果**里，所以抹掉工具名几乎不换来什么，而限定一个参数能包含什么换来的最多。
+
+[`🔗 arXiv 2610.41885 — PrivacyTrace`](https://arxiv.org/abs/2610.41885) · [`🔗 代码：AI45Lab/PrivacyTrace`](https://github.com/AI45Lab/PrivacyTrace)
+
+---
+
+## 40. Latent Sparse Attention 在 1000 万 token 上把*一层 attention* 提速 22.7 倍 —— 并且说明了是一层
+
+- **Velocity:** ▮▮ rising
+- **Source:** arXiv 2610.42147 · 提交于 2026-10-30 · GLM-5.3-FLASH（Qwen-3.8-27B）
+- **Tags:** `research` `attention` `long-context` `inference` `indexer`
+
+超过一百万 token 后，如果**选 key 的 indexer** 本身是二次的，稀疏 attention 就不再帮上忙 —— 而这条研究线大多卡在这里。**Latent Sparse Attention** 把打分搬进一个学出来的 **64 维隐空间**：key 在那里被层次化聚类，query 打的是簇的层级而不是每个 key。两个变体的训练方式不同 —— **D-LSA** 只训练小的逐层投影、把 LSA 蒸馏进预训练模型，**N-LSA** 仅靠 next-token loss 原生训练。也提供单层（flat）搜索；树结构让 prefill 变成次二次。
+
+数字要带着分母一起说：在 **GLM-5.3-FLASH（Qwen-3.8-27B）上、1000 万 token 处**，D-LSA 把**一层 attention** 的 prefill 相对其**原本的稀疏 attention** 提速 **22.7 倍**、decode 提速 **4.6 倍**，相对**全 attention** 则是 **72.4 倍**与 **42.5 倍**，"同时在多项任务上保持相近精度"。N-LSA 在全 attention 精度下，于 128k token 处取得**每层 1.6 倍**的训练加速。论文直说了两处限制：它**没有**在蒸馏之后接着做整套稀疏训练（D-LSA 支持这一步，但"due to its cost"省略了），以及按层或按请求调预算"left to future work"。
+
+**Why it matters:** 诚实的计量单位就是全部 —— 22.7 倍是一层的 prefill，不是端到端延迟，而在 1000 万 token 处，成本正是堆在这一层上。同日另一篇（**2610.42112**，Zyphra Hierarchical Attention）给出了更强的渐近主张 —— 含路由在内的总成本次线性增长 —— 也落在"压缩 key 摘要的树"上，这说明在两者交付之前，想法已经收敛。
+
+[`🔗 arXiv 2610.42147 — Latent Sparse Attention`](https://arxiv.org/abs/2610.42147) · [`🔗 全文（HTML）`](https://arxiv.org/html/2610.42147v1) · [`🔗 arXiv 2610.42112 — ZHA`](https://arxiv.org/abs/2610.42112)
+
+---
+
+## 41. prompt injection 防御：对抗训练加一个更好的损失，把 AgentDojo 从 78.8% 压到 8.8%
+
+- **Velocity:** ▮ steady
+- **Source:** arXiv 2610.41998 · 提交于 2026-10-30 · 代码、数据与模型均已发布
+- **Tags:** `research` `prompt-injection` `adversarial-training` `agents` `dpo`
+
+这项工作开始时最强的公开防御模型 **Meta-SecAlign** 用 DPO 损失训练，在自适应 prompt injection 下攻击成功率仍**逼近 100%**。论文给出两个原因，并都修了。第一个是锚点：DPO 把模型约束在一个**未防御的参考模型**附近，而不安全的参考就是错误的重力井。他们的观察是：一个理想化的**注入不变、效用保持的 oracle** 的输出分布，在训练中竟然是可得的，由此得到一个有原理的 **SecPO** 损失。第二个是攻击集：Meta-SecAlign 在弱模拟攻击上训练，于是他们搭了一条对抗训练流水线合成更强的注入输入（**best@240**）并在其上训练。
+
+结果以两个叠乘的倍数报告：相对 Meta-SecAlign，对抗训练单独在三种 SOTA 自适应攻击上把攻击成功率降低 **1.5–14.5 倍**，而 **SecPO 损失相对 DPO 损失再降 2.4–4.6 倍**。agent 工作流里的端到端数字最适合引用：在 Qwen3.6-27B 上、`AttackerMovesSecond` 攻击下，**AgentDojo ASR@800 为 8.8%，对照组 78.8%**。良性效用跨**九个 benchmark** 检查 —— agent 工具调用、指令遵循、科学与数学 —— 没有可见下降。代码、含优化注入的训练集以及模型都已发布。
+
+**Why it matters:** 可迁移的是诊断而不是分数 —— 在一个本身不安全的参考上训练出的防御，会继承那个锚点，这是对整整一类把模型对齐到安全回答的配方的批评。把结果读成一种攻击设定、一个模型尺寸；九个 benchmark 的效用检查才是让它可被采用、而不是又一次拒答率交易的原因。
+
+[`🔗 arXiv 2610.41998 — SecPO`](https://arxiv.org/abs/2610.41998) · [`🔗 代码：Sizhe-Chen/SecPO`](https://github.com/Sizhe-Chen/SecPO) · [`🔗 Hugging Face 上的模型`](https://huggingface.co/Sizhe-Chen/Qwen3.6-27B-Instruct-SecPO)
+
+---
+
+## 42. 一次预注册的 test-time search 审计：学出来的选择器比随机还差，82% 的状态根本没什么可选
+
+- **Velocity:** ▮ steady
+- **Source:** arXiv 2610.41970 · 提交于 2026-10-30 · Cosmos Policy + RoboCasa
+- **Tags:** `research` `world-models` `test-time-scaling` `evaluation` `robotics`
+
+**world-action 模型**的 test-time scaling —— 把更多推理花在候选选择与自适应分配上 —— 通常靠一个成功率增量来证明。这篇论文在 **Cosmos Policy** 与 **RoboCasa** 上审计那个增量需要的三个前提，分析计划事先注册。**决策信号：** 在干净数据上，一个学出来的**价值选择器比随机差 1.66 个百分点**，事后 oracle 也只换来 **1.40 个百分点**且其 episode 级区间跨过零，而**82% 的状态下候选结果完全相同** —— 根本没有多少可选的余量。**实际效率：** token 剪枝把每次前向的 FLOPs 最多砍掉 **47%**，但在已部署路径上至多带来实测 **1.15 倍**端到端加速（在排除 decode 的路径上是 1.25 倍），够不到它自己 **1.5 倍**的目标。**评测完整性：** 自适应分配实验在功效门槛下被判定为**无结论**。
+
+完整性那条发现才该让所有跑 world-model 评测的人紧张：审计发现并修掉了一处**静默的渲染损坏，其发生率沿计算量大的规划路径急剧上升**，同时官方的直接策略结果并不受影响 —— 一个恰好在你正在测试的轨迹上退化的仿真器。检测器、修复与脚本都已发布，结论也明确"scoped to the tested configuration"。
+
+**Why it matters:** 多采样候选再打分就能带来更好的控制，这个主张是一条三前提的链，而这次审计在一个具名模型上发现前两个不成立 —— 选择器没有可用信号，FLOPs 的削减没有变成墙上时钟。渲染那个 bug 才是可复用的教训：如果环境在你测试的路径上静默退化，那么 benchmark 测的是它自己的渲染器。
+
+[`🔗 arXiv 2610.41970`](https://arxiv.org/abs/2610.41970) · [`🔗 全文（HTML）`](https://arxiv.org/html/2610.41970v1)
+
+---
+
 ## Metadata
 
 | 字段 | 值 |
 |-------|-------|
-| 生成时间 | 2026-11-02T04:12:10Z |
-| 条目数 | 28 |
-| 追踪来源 | 24（GitHub Trending、Hacker News、arXiv、NVD/CVE 记录、cveawg CNA、JFrog、VulnCheck、Go 安全团队、新华社、中国日报、陶哲轩博客、GitHub Releases、npm、PyPI、Hugging Face、JetBrains、DeepSeek Harness、handy.computer） |
+| 生成时间 | 2026-11-02T12:10:51Z |
+| 条目数 | 42 |
+| 追踪来源 | 27（GitHub Trending、Hacker News、arXiv、NVD/CVE 记录、cveawg CNA、JFrog、VulnCheck、Go 安全团队、新华社、中国日报、陶哲轩博客、GitHub Releases、npm、PyPI、Hugging Face、JetBrains、DeepSeek Harness、handy.computer、Maven Central、OpenJS CNA、VulDB） |
 | 更新排期 | 04:03、12:03、20:03 UTC+8（每日三次） |
 | 排名方式 | 速度加权（时效 × 互动加速度 × 来源权威度） |
 | 许可 | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |

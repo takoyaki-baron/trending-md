@@ -1,6 +1,6 @@
 ---
 date: 2026-11-02
-updated: 2026-11-02T04:23:19Z
+updated: 2026-11-02T12:19:50Z
 schedule: 04:03, 12:03, 20:03 UTC+8
 sources: 24
 license: CC-BY-4.0
@@ -304,7 +304,7 @@ CNA はスコアを一つではなく**シナリオ付きで二つ**出した。
 - **Source:** Hacker News（Show HN）· 1,054 pts · 約 12 時間前（約 23:58 UTC+8）
 - **Tags:** `hacker-news` `dataset` `llm-labeling` `books` `affiliate`
 
-Hacker Books は Hacker News のコメントで推薦された書籍を検索できる索引で、自身の `data/meta.json`（**2026-11-02** 生成）がコーパスを曖昧にせず数字で示している。**書籍 15,362 冊、言及 270,334 件、コメント 217,954 件、コメント者 56,456 人**、期間は **2007 年から 2026 年**。書誌情報と表紙は Open Library から取得し、各書籍ページは元のスレッドへリンクを戻す。事前生成のトップリストは **600 冊**、書籍単位のデータセットは CSV で取得できる。
+Hacker Books は Hacker News のコメントで推薦された書籍を検索できる索引で、自身の `data/meta.json`（**2026-11-02** 生成）がコーパスを曖昧にせず数字で示している。本バッチで読んだ時点では**書籍 15,362 冊、言及 270,334 件、コメント 217,954 件、コメント者 56,456 人**、期間は **2007 年から 2026 年**。書誌情報と表紙は Open Library から取得し、各書籍ページは元のスレッドへリンクを戻す。このファイルは再ビルドのたびに新しい内容ハッシュで作り直されるため、現在のビルドは **15,766 冊・281,363 件** を返す —— 総数は定数ではなくスナップショットだ。事前生成のトップリストは **600 冊**、書籍単位のデータセットは CSV で取得できる。
 
 読む価値があるのは「推薦」の定義のほうだ。言及回数だけを数えると、みなが*警告している*本が好かれている本のように上位へ来る。そこで**すべての言及に Claude Sonnet 5.5 が** *recommend*、*neutral*、*critical*、*not about the book* のラベルを付けた。同名の映画やゲームへの言及は落としている。About ページはその検証も書いている。ラベルを Claude Opus 5.5 と 400 件の言及で突き合わせ、一致率は **85%**、ページ自身も「ノイズは覚悟してほしい」と添える。キーワード規則、感情スコア、TF-IDF 分類器も先に試したが精度は低かった。ランキングは生の言及数より**異なるコメント者の数**を重く見るので、一人の熱狂的な読者だけでは本を押し上げられない。
 
@@ -312,7 +312,7 @@ Hacker Books は Hacker News のコメントで推薦された書籍を検索で
 
 **Why it matters:** LLM で作ったコーパスがモデル間の一致率まで公表しているのは、ほとんどの「AI 検索」製品より良い成果物だ。そして持ち帰るべき数字は **85%** で、「N 人が推薦」という主張すべての天井になる。二日連続で HN アーカイブを消費する製品が出たことも傾向だ。19 年分のコメントは原材料になり、索引されるのは HN の API ではなく第三者のミラーである。
 
-[`🔗 hackerbooks.org`](https://hackerbooks.org) · [`🔗 hackerbooks data/meta.json`](https://hackerbooks.org/data/meta.47fd7cb7.json) · [`🔗 HN スレッド`](https://news.ycombinator.com/item?id=50326821)
+[`🔗 hackerbooks.org`](https://hackerbooks.org) · [`🔗 hackerbooks data/meta.json`](https://hackerbooks.org/data/meta.99d6a8ef.json) · [`🔗 HN スレッド`](https://news.ycombinator.com/item?id=50326821)
 
 ---
 
@@ -468,13 +468,239 @@ Trigger.dev の CTO は **2026-11-01** にインシデント告知を出した�
 
 ---
 
+## 29. HyperFrames は HTML を決定論的な MP4 に変える —— 3 時間半で 3 リリースを出した
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** GitHub Trending（週間）· 77,426★ · 今週 +5,153 · v0.9.2 公開 2026-11-02T09:10Z
+- **Tags:** `video` `agents` `renderer` `htmx` `open-source`
+
+`heygen-com/hyperframes`（77,426★、2026-03-10 作成、Apache-2.0）は、HTML・CSS・メディア・シーク可能なアニメーションを**決定論的な MP4** に変換するオープンソースのフレームワークだ。ローカルでは CLI、エージェントからは公開された skills 経由、あるいはホスト型のオーサリングワークフローの背後にあるレンダリングコアとして動く。売りはエージェント経由の道筋で、`npx hyperframes skills update` を一度実行したあと Claude Code、Codex、Cursor に動画を作らせればよい。skills がループ全体を教える —— 計画し、妥当な HTML を書き、シーク可能なアニメーションを繋ぎ、メディアを加え、lint し、プレビューし、レンダリングする。
+
+今日について書く価値があるのは、何を出したかだ。**v0.9.0**（2026-11-02T05:41:28Z）は破壊的で、**AWS Lambda と Google Cloud Run** 上の分散レンダリングは **Plan v2** のみになった。Plan v1 のトランスポート、`planProtocol` オプション、v1 のイベントと結果型は削除され、古い v1 ペイロードには「レンダリング作業を一切行う前に」`PLAN_PROTOCOL_UNSUPPORTED` が返る。**v0.9.1**（07:41:18Z）はその破壊的変更が生んだ端を直した。`PlanProtocol` のない Lambda ステートマシンが `States.Runtime` で失敗する代わりに v2 を既定とする。**v0.9.2**（09:10:24Z）は終了したシーンが WebGL コンテキストを手放し、次のシーンが遅くならないようにする。npm `hyperframes` の `latest` は **0.9.2**、公開は 09:16:42Z で、タグの 6 分後だ。
+
+**Why it matters:** 動画はエージェントが依然として決定論的に出力できない唯一の形式であり、ここでの設計上の答えは、成果物をシーク可能なタイムラインを持つ文書にして、レンダリングをサンプリングループの関数ではなくファイルの関数にすることだ。破壊的変更は、これが玩具でなくなる地点 —— 分散レンダーファーム —— を指している。SDK とデプロイは同時に動かす必要があり、`"v1"` を渡すと今は例外になる。
+
+[`🔗 heygen-com/hyperframes`](https://github.com/heygen-com/hyperframes) · [`🔗 v0.9.0（破壊的）`](https://github.com/heygen-com/hyperframes/releases/tag/v0.9.0) · [`🔗 npm hyperframes`](https://www.npmjs.com/package/hyperframes)
+
+---
+
+## 30. Colibri は 744B MoE をディスクから 9.9 GB の RAM に流し込む —— ノート PC で毎秒 0.05 トークン
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** GitHub Trending · 今日 +655★ · 46,157★ · v2.1.0 公開 2026-10-31T12:50Z
+- **Tags:** `moe` `local-inference` `c` `gguf` `quantization`
+
+`JustVugg/colibri`（46,157★、2026-07-01 作成、Apache-2.0、純粋な C）は、MoE モデルを巨大にしている当の性質を利用して、人が既に持っているハードで巨大モデルを動かす。744B のモデルは 1 トークンあたり約 **40B のパラメータ**しか使わず、トークンごとに変化するのは約 **11 GB** だけだ。密な部分 —— attention、共有エキスパート、embedding —— は RAM に常駐し、ルーティングされるエキスパートはディスクに置かれ、ルーターが要求したときに読まれる。そのキャッシュは「自分の作業がどのエキスパートを使うか」を学習する。**13 のエンジン**を抱える。チャット系 10 種（GLM-5.2/5.3、GLM-5.3-Flash、Inkling、Kimi K3、DeepSeek V4 と V4.1 Flash、MiMo-V2.6、Qwen3.8-Flash-Next、Qwen3.6、OLMoE）、画像 1 種、そしてチャットせず確率で答える意思決定モデル 3 種だ。
+
+デモと一線を画すのは README 自身の表である。**GLM-5.2**（ダウンロード 429 GB）は**25 GB のノート PC でコールド時に 0.05–0.1 tok/s**、128 GB の Ryzen AI Max+ 395 で **1.83**、RTX 5090 6 枚で **9.0–9.2**。**Kimi K3**（2.8T、1.56 TB）は**1 トークン約 9.4 秒**、エキスパートの読み出しは 6.3 GB/s。**DeepSeek V4 Flash**（284B）は 32 GB で **0.93 tok/s**。README の起動バナーは `GLM-5.2 · 744B MoE · int4 · streaming CPU · ready in 32s · resident 9.9 GB`。**v2.1.0**（2026-10-31）は **v2.0.0 以降の 387 の pull request、うち 208 が 35 名の貢献者から**、全エンジンでの GGUF 直接読み込み、Mistral-Large-4（1T）の追加を含む。
+
+**Why it matters:** 星の数と並べてトークン毎秒を引用すること。主張は速度ではなく*配置*であり、代償はエキスパート 1 つにつき NVMe 読み出し 1 回だ。README が明示する設計原則こそ持ち帰る価値がある —— "Less fast memory may cost speed; it must not quietly redefine the model."
+
+[`🔗 JustVugg/colibri`](https://github.com/JustVugg/colibri) · [`🔗 v2.1.0 リリース`](https://github.com/JustVugg/colibri/releases/tag/v2.1.0) · [`🔗 GGUF 対応の説明`](https://github.com/JustVugg/colibri/blob/main/docs/gguf.md)
+
+---
+
+## 31. Paperclip は 11 万星のエージェント用組織図 —— 安定版は 10 月 23 日で止まり、以後は nightly のみ
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** GitHub Trending · 今日 +507★ · 110,094★ · 安定版 v2026.1023.0 は 2026-10-24 タグ
+- **Tags:** `agents` `orchestration` `governance` `budget` `typescript`
+
+`paperclipai/paperclip`（110,094★、18,243 fork、MIT、2026-03-02 作成）は Node.js サーバーと React UI で、単体のエージェントではなくエージェントの**チーム**を編成する。人間とエージェントが混在する組織図、目標とタスクの紐付け、会社・エージェント・プロジェクト単位の予算、スコープ付きシークレット、権限、そして割り当てられた作業・フォローアップ・スケジュールでエージェントを起こす**ハートビート**。一行の位置づけは "If OpenClaw is an employee, Paperclip is the company."。名簿は本フィードが追ってきた harness の一覧そのものだ —— OpenClaw、Claude Code、Codex、Cursor + Cloud、Gemini CLI、OpenCode、Pi、Hermes + Gateway、Grok Build、Kimi Code。それ以外のための入口も README が書いている —— "If it can receive a heartbeat, it's hired."
+
+成果物の状態こそが要点で、星の数はリリースではない。**安定**ラインは `v2026.1023.0`、タグは **2026-10-24T00:03:59Z** で「Released: 2026-10-23」と記される。ベータから昇格した 200 コミットで、目玉は非公開のタスクとプロジェクト —— 他者は開けず、検索にも出ず、実行トランスクリプトも読めず、プラグインからも届かない。それ以降はすべて **canary** と **nightly** だ（最新 `nightly/v2026.1102.0-nightly.0`、2026-11-01T16:08:51Z）。トラッカーには**未クローズの issue 3,469 件と pull request 3,159 件**がある。
+
+**Why it matters:** 競争の単位はエージェントから組織図へ移った —— 誰がいくら使ってよく、誰がどのトランスクリプトを見てよいか —— そしてこれはその転換を大規模に最も明確に述べたものだ。リリースチャネルを状態として読むこと。最後の安定版から 10 日、その間は毎日タグ付けされる nightly 列車が代役を務めている。
+
+[`🔗 paperclipai/paperclip`](https://github.com/paperclipai/paperclip) · [`🔗 v2026.1023.0`](https://github.com/paperclipai/paperclip/releases/tag/v2026.1023.0) · [`🔗 paperclip.ing`](https://paperclip.ing)
+
+---
+
+## 32. Heretic 2.0 は自らの設定を壊し、プラグイン機構を入れ、研究機能を Lophius に譲った
+
+- **Velocity:** ▮▮ rising
+- **Source:** GitHub · 今日 +404★ · 37,777★ · v2.0.0 タグ 2026-11-01T13:03Z
+- **Tags:** `abliteration` `model-modification` `plugins` `pypi` `agpl`
+
+`p-e-w/heretic`（37,777★、AGPL-3.0）は名前の通りのことをする —— "Training-free language model modification" —— 訓練せず、対比的な例プロンプトと対応する **scorer** に対して最適化する。既定の動作は拒否の抑制で、slop・ユーモア・追従性を削る設定や情動の向きを変える設定も同梱されている。README によれば、コミュニティは Hugging Face に**数千**の Heretic 処理済みモデルを公開している。RTX 3090 では既定設定で `Qwen3-4B-Instruct-2507` を約 **30〜40 分**で処理する。
+
+**v2.0.0** は **2026-11-01T13:03:19Z** にタグ付けされ、PyPI の `heretic-llm` 2.0.0 は **12:21:39Z** にアップロードされた —— 1.4.0（2026-06-14）から 8 か月後だ。両方向に破壊的なリリースである。1.x 用の設定ファイルは**動かない**（移行ガイドがある）。リリースノートは率直にこう書く —— "Research features have been removed. The intended replacement is Lophius."。代わりに入ったのは基盤だ。**汎用プラグイン機構**（scorer *と* modifier プラグイン、加えて ARA）、プラグインの `reproducible` プロパティ、**エンドツーエンドテスト付きのヘッドレス実行**、benchmark scorer、データセットの config/subset 指定、そして最適化器が max-weight 下限 `0` で MLP ablation を無効化できる修正。
+
+**Why it matters:** scorer が差し替え可能になった時点で abliteration は一つのレシピではなくなった。このツールは今や*測定可能なあらゆる振る舞い*を操作できる —— ライセンスのページが示すより広い能力だ。1.x の調整済み設定を持つ人にとっては移行がリスクになる。古い設定は拒否されず、単に間違っているだけだからだ。
+
+[`🔗 p-e-w/heretic`](https://github.com/p-e-w/heretic) · [`🔗 v2.0.0 リリース`](https://github.com/p-e-w/heretic/releases/tag/v2.0.0) · [`🔗 PyPI heretic-llm`](https://pypi.org/project/heretic-llm/)
+
+---
+
+## 33. LobeHub のパストラバーサルは 4 月に直っていた —— CVE は 11 月、しかも npm に 2.1.49 は無い
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** VulnCheck CNA（cveawg）· 予約 2026-11-01T12:48Z · 公開 2026-11-02T02:01Z
+- **Tags:** `cve` `path-traversal` `rce` `npm` `ai-chat`
+
+`CVE-2026-120315` は LobeHub Chat の文書解析におけるパストラバーサルで、最終的にコード実行に至る。機構は 4 行だ。`TempFileManager.writeTempFile(data, name)` はパスを `join(this.tempDir, name)` で組み立てていた。`name` は `files.name` 列から来ており、`file.createFile` がユーザー入力をそのまま書き込む。内容が `child_process.execSync` のペイロードである `../../../../../../app/startServer.js` という名前のファイルレコードを作り、文書解析を叩けば、ペイロードはサーバーの起動元に落ちる。勧告が示す前提は**サーバー・データベース構成**と認証済みセッションで、`PR:L` であり事前認証ではない。
+
+発見は日付にある。GHSA（`GHSA-2g9j-v25c-4j97`）は **2.1.49** を修正済みとするが、そのタグ自身のリリースページは **2026-04-10T09:51:47Z** だ —— 勧告の公開（10 月 17 日）より **190 日**、CVE レコードより **206 日**早い。修正はそのタグで検証できる。`writeTempFile` は今 `basename(name)` を `resolve()` に通し、そのコメントには既にこの GHSA の ID が書かれている。
+
+さらにレコードが指す成果物がある。`packageURL` は `pkg:npm/@lobehub/chat` だが、このパッケージの最新公開版は **1.143.3（2026-01-25）**。プロジェクトの現在のパッケージは `@lobehub/lobehub` で、リポジトリの宣言は **2.3.0**、その名前の npm `latest` は **2.1.26（2026-02-10）**。**2.1.49 は GitHub のタグにだけ存在し、どちらの npm 名にも無い。** スコアは VulnCheck 自身のもので、CVSS 3.1 **8.8**、CVSS 4.0 **8.7**。NVD の状態は `Received` で **NVD 採点の metric は 0 件**、3.1 の値はベクトルから正確に再現する。プロジェクト自身の最新リリース v2.3.0 は 2026-11-01 に出た。
+
+**Why it matters:** 修正から CVE まで 9 か月は、セルフホストのアプリを未修正のまま放置させる開示ラグだ。しかし防御側にとって厳しいのは第二層である。その packageURL で引くスキャナはすべての npm バージョンを `< 2.1.49` と見なし、上げ先の修正版が存在しない。範囲は正しく、それが名指す成果物は別のオブジェクトなのだ。修復はレジストリではなくタグから読む必要がある。
+
+[`🔗 CVE-2026-120315（cveawg）`](https://cveawg.mitre.org/api/cve/CVE-2026-120315) · [`🔗 GHSA-2g9j-v25c-4j97`](https://github.com/lobehub/lobehub/security/advisories/GHSA-2g9j-v25c-4j97) · [`🔗 v2.1.49 タグ（2026-04-10）`](https://github.com/lobehub/lobehub/releases/tag/v2.1.49)
+
+---
+
+## 34. Network-AI 自身のパスサニタイザが脆弱性だった —— アンカー無しの `startsWith` が隣接ディレクトリを許した
+
+- **Velocity:** ▮▮ rising
+- **Source:** VulnCheck CNA（cveawg）· 3 件 2026-11-02T02:01:10–12Z · 修正 5.15.5
+- **Tags:** `cve` `path-traversal` `agent-framework` `npm` `sandbox`
+
+VulnCheck は npm の TypeScript 製マルチエージェント編成器 **Network-AI**（`pkg:npm/network-ai`、32 フレームワーク向けアダプタを謳う）にパストラバーサルを 3 件出した。読むべきは 3 件目だ。`CVE-2026-120313` は**`InputSanitizer.sanitizePath()` そのもの**、つまりガードの中にある。基底ディレクトリとの比較に**アンカー無しの `startsWith`** を使っていたため、ディレクトリ名が基底の文字列接頭辞を**共有するだけ**のパスは、その子ではなく兄弟になる。サンドボックス外の読み取り・一覧・書き込みが続き、これは権限を要さない —— CVSS 3.1 で **7.5**（`PR:N`）、4.0 で **8.7**。`CVE-2026-120311` は**ジョブ ID** にトラバーサル列を入れ（`FileJobStore.get()`、`.delete()`、`JobQueue.getJob()`）、任意の `.json` を読むか消す —— `AuthGuardian` の信頼レベル設定やグラントトークンを含み、ファイル削除から組み立てる認可バイパスになる —— スコアは CVSS 3.1 で **8.8**、4.0 で **8.7**、`PR:L`。`CVE-2026-120312` は同じ手を **AgentVCR のカセット名**（`load()`/`save()`）でやる、同じ **8.8** と **8.7** だ。
+
+3 件とも **5.15.5** で修正された。その npm リリースは **2026-10-17T18:14:17Z** に公開されており、**レコードより 16 日古い**。npm `latest` は現在 5.17.1。NVD は 3 件とも `Deferred`、**NVD 採点の metric は 0 件**なので、ここに並ぶ値はすべて CNA の算術だ（3.1 は正確に再現する）。リポジトリは **80 星**、MIT、最終 push は 2026-10-27。
+
+**Why it matters:** あるエージェントフレームワークの 3 つの「サンドボックス」はそれぞれ 1 回の文字列比較であり、最初に監査すべきはサニタイザだ。他のすべてがそれを信頼しているからだ。サイズも半分の話になる。1 バッチで 4 件の CVE を持つ 80 星の依存は、攻撃面が小さいのではなくレビュー面が小さい。そして修正はレコードより 2 週間早い。
+
+[`🔗 CVE-2026-120313（InputSanitizer）`](https://cveawg.mitre.org/api/cve/CVE-2026-120313) · [`🔗 CVE-2026-120311（FileJobStore）`](https://cveawg.mitre.org/api/cve/CVE-2026-120311) · [`🔗 CVE-2026-120312（AgentVCR）`](https://cveawg.mitre.org/api/cve/CVE-2026-120312)
+
+---
+
+## 35. Termix の 9.9 は `destPath` ひとつ、エクスプロイトは公開済み、記録はベンダーが応答しなかったと書く
+
+- **Velocity:** ▮▮ rising
+- **Source:** VulDB CNA（cveawg）· 予約 2026-11-01T13:17Z · 公開 2026-11-02T01:45Z
+- **Tags:** `cve` `path-traversal` `self-hosted` `ssh` `vuldb`
+
+`CVE-2026-120322` は **Termix-SSH/Termix**（15,780 星のセルフホスト型 Web SSH／ファイルマネージャ）のパストラバーサルで、入口は `/plugin-api/file-manager/transferToHost`。`destPath` 引数が転送ルートに閉じ込められていない。任意ファイル書き込みを遠隔から実行でき、CVSS 3.1 で **9.9**（`AV:N/AC:L/PR:L/UI:N/S:C/C:H/I:H/A:H`、正確に再現）—— これは基本値で、`E:P` を含む完全な時間値は 9.4 —— 2.0 で **9.0**。4.0 の列は本フィードが繰り返し記録してきた分岐そのものだ。CNA のコンテナは **9.4**、NVD の同じ文字列は **8.6** で、どちらも `E:P` を持つ —— 1 つのベクトルが 2 つの停止点に置かれているだけで、2 つの評価ではない。
+
+記録の中でスコアより重いのは 2 文だ。"The exploit is publicly available and might be used." そして "The vendor was contacted early about this disclosure but did not respond in any way."。公開 PoC は記録の中ではなく GitHub リポジトリ（`0xGenesi/CVE`）にある。記録は修復も明示しており、それは検証の修正ではない。ショートカットが独立した File Manager プラグイン **v1.0.0** で**削除**され（転送エンジンは常に SFTP 経由で書く）、コアの **v26.10.0** でも同様になった。Termix は **2026-11-02T00:20:19Z に v26.11.0** を出しており、レコードの公開のおよそ **85 分前**だ。
+
+**Why it matters:** 艦隊分の SSH 資格情報を握る Web ターミナルは、届く範囲を持つファイルマネージャであり、検証されない `destPath` は到達しうる全ホストへの書き込みになる。持ち帰るべきは修正の形だ。ベンダーの答えはパスを洗浄することではなく代替トランスポートを消すことで、ショートカット自体がバグだった場合はこちらが耐久性のある選択になる。
+
+[`🔗 CVE-2026-120322（cveawg）`](https://cveawg.mitre.org/api/cve/CVE-2026-120322) · [`🔗 公開 PoC の解説`](https://github.com/0xGenesi/CVE/blob/main/Termix_FileManager_transferToHost_Arbitrary_File_Write.md) · [`🔗 Termix v26.11.0`](https://github.com/Termix-SSH/Termix/releases/tag/v26.11.0)
+
+---
+
+## 36. http4k の auth-int ダイジェストは本文を一度もハッシュしていなかった —— もう一方の修正は `-ee` ビルドにしか無い
+
+- **Velocity:** ▮▮ rising
+- **Source:** VulnCheck CNA（cveawg）· 2 件 2026-11-02T02:01:14–15Z · NVD は `Deferred`
+- **Tags:** `cve` `authentication` `http4k` `maven` `enterprise`
+
+http4k のレコードが同じ秒に 2 件着地し、1 件目は教科書的だ。**`CVE-2026-120317`**（`CWE-345`）は、`DigestEncoder` が **auth-int** ダイジェストを計算する際に**リクエスト本文をハッシュしていない**という。本文を束縛することこそ auth-int の存在理由である。非 TLS 経路上の攻撃者は本文を書き換え、`Authorization` ヘッダはそのままに、被害者として状態を変える操作を実行する。**`CVE-2026-120316`**（`CWE-22`）は `ThymeleafTemplates` の Caching/HotReload におけるトラバーサルで、`ViewModel.template()` の値に含まれる `../` が封じ込め検査なしに解決される。リクエスト駆動のテンプレート選択により、サーバープロセスが読める任意のファイルが漏れる —— しかも未認証で。
+
+どちらも CVSS 3.1 で **5.9**、CVSS 4.0 で **8.2** で、その差はフレームワーク側のものだ（4.0 側は `AC:H` と `AT:P`）。判断すべきは成果物の分岐である。`http4k-security-digest` には Maven Central に **6.60.0.0** があり、日付は **2026-09-16** —— レコードの 47 日前。Thymeleaf 側の修正は **6.62.0.0-ee** で、Maven Central の `http4k-template-thymeleaf` の一覧は **6.61.0.0（2026-09-29）** で止まっている。`6.62.0.0-ee` という成果物はそこに存在せず、公開で導入できる最新のテンプレートモジュールは今も自身の影響範囲（`< 6.62.0.0-ee`）の内側にある。NVD は 2 件とも `Deferred`、**NVD 採点の metric は 0 件**。
+
+**Why it matters:** digest 認証は TLS 終端をどこにでも置けないときに選ばれ、本文の完全性はまさにそのために拡張された性質だ。本文を除いたダイジェストはリクエスト行だけを認証し、意味のあるものは何も認証しない。もう半分は運用で、アップグレードの指示が一方の CVE では一行で済み、もう一方では済まない。
+
+[`🔗 CVE-2026-120317（auth-int）`](https://cveawg.mitre.org/api/cve/CVE-2026-120317) · [`🔗 CVE-2026-120316（Thymeleaf）`](https://cveawg.mitre.org/api/cve/CVE-2026-120316) · [`🔗 Maven Central の http4k-security-digest`](https://repo1.maven.org/maven2/org/http4k/http4k-security-digest/)
+
+---
+
+## 37. `@fastify/http-proxy` は `..` を一度も使わず自身の rewrite プレフィックスを迂回した —— 二重デコードで
+
+- **Velocity:** ▮ steady
+- **Source:** OpenJS CNA（cveawg）· 予約 2026-10-31T13:33Z · 公開 2026-11-02T10:15Z
+- **Tags:** `cve` `encoding-confusion` `fastify` `proxy` `npm`
+
+`CVE-2026-120213` は `@fastify/http-proxy` の **9.0.0 から 11.6.5** に影響し、欠陥はトラバーサルではなくエンコードの往復だ。アプリケーションがパラメータ化された **`prefix`** と **`rewritePrefix`** でクライアントを固定の上流パスに縛ると、プラグインは **URL デコード済みのルートパラメータ**を**再エンコードせずに** `rewritePrefix` へ代入する。パス区切りと fragment または query の区切りをエンコードした値は、デコード後に本物の区切りとなるため、上流のパスセグメントを注入し、`rewritePrefix` が強制するはずだった**必須サフィックスを剥がす**。記録はこれが "without using any dot-dot traversal" で起きると明記している —— `..` を探すフィルタや、`..` を条件に書いた WAF には何も見えない。付された 2 つの CWE が診断そのものだ —— `CWE-22` と `CWE-436`（解釈の衝突）。
+
+スコアは CVSS 3.1 で **9.1**（`AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:N`、正確に再現）で事前認証。修正は **11.6.6**、npm 公開は **2026-11-02T08:55:53Z** —— **レコードの 80 分前** —— 勧告は代替手段を塞いでいる。"There is no workaround other than upgrading."。出所について一行だけ書く価値がある。NVD の表でこの 9.1 の source は `ce714d77-…` で、これは **openjs 自身の orgId** だ。つまり値は CNA のものでエンリッチではない。レコードの状態は `Received`、NVD 採点の metric は 0 件。
+
+**Why it matters:** デコードしてから代入するのは古典的な二重パースの欠陥であり、`CWE-436` が存在する理由でもある —— 文字列がいつエンコード済みでなくなるかについて、2 つのコンポーネントが食い違う。`rewritePrefix` を URL 組み立てではなくサフィックスの強制に使っているなら、これはそのオプションが設定された制限への未認証バイパスになる。
+
+[`🔗 CVE-2026-120213（cveawg）`](https://cveawg.mitre.org/api/cve/CVE-2026-120213) · [`🔗 GHSA-h3vp-4jfr-v364`](https://github.com/fastify/fastify-http-proxy/security/advisories/GHSA-h3vp-4jfr-v364) · [`🔗 npm @fastify/http-proxy`](https://www.npmjs.com/package/@fastify/http-proxy)
+
+---
+
+## 38. エージェント乗っ取り検出の評価 11 本は攻撃を 16〜86% の割合で入れていた —— 実運用の 2% では AUROC 0.879 が適合率 7.6% になる
+
+- **Velocity:** ▮▮ rising
+- **Source:** arXiv 2610.41803 · 投稿 2026-10-30 · 11 本の評価を監査
+- **Tags:** `research` `agents` `detection` `evaluation` `base-rate`
+
+**乗っ取られた LLM エージェント**の検出器はツール呼び出しの痕跡から異常を読むが、本論文はまずその評価のされ方を調査する。**監査した 11 本の評価**で、攻撃や異常がテストサンプルに占める割合は **16% から 86%** にわたり、**その割合を変えた評価は一つもなく**、**6 本は第 2 のベンチマークやデータ源でのテストを一切報告していない**。残りは、それが何を隠すかだ。**AgentDrift** と **AgentDojo** において、**攻撃率 2%** では **AUROC 0.879** の検出器の**適合率は 0.076** にとどまり、負例の構成だけでその適合率は **0.039 から 0.117** まで動く。次に、**ツール被覆率**（テスト時のツール呼び出しのうち訓練で見たツールの割合）が下がると、検出器の順位は **50% 付近で交差し、それを下回ると逆転する**。未知のツールが訓練で到達しなかった入力に写像されるからだ。ツール入力への dropout はこの逆転をほぼ消す。第三に、**AgentDrift で訓練した検出器はどれも AgentDojo で偶然より良く順位づけできない** —— AUROC 0.47〜0.52 —— 中には AgentDrift 内で **0.996** に達するものも含まれる。どちらでも訓練していない公開の LLM 行動モニタは **0.930** に達するが、攻撃率 2% では公開された判定規則がなお誤警報中心になる（適合率 **0.096**）。
+
+論文自身の限界の節は異例に率直で、併せて持ち帰る価値がある。完全に前向きだったのはモニタの計画だけであり、いくつかの読み方は関連結果を見た後に追加され、AgentDrift は単一生成器の合成データでツール集合が領域間で完全に素である。そして**AgentDojo では、逆転の leave-one-suite-out 類似が一貫して再現しなかった**。
+
+**Why it matters:** 基底率が議論のすべてだ。AUROC は能力に見えるが、攻撃が 2% の配備では 13 件の警報のうち 12 件が誤りになる。攻撃の割合を評価報告に書くこと。逆転については、著者自身が第 2 のベンチマークで格下げした見出しとして読むこと。
+
+[`🔗 arXiv 2610.41803`](https://arxiv.org/abs/2610.41803) · [`🔗 全文（HTML）`](https://arxiv.org/html/2610.41803v1)
+
+---
+
+## 39. MCP のツール呼び出し痕跡は会話なしで利用者を特定する —— 26.25%、当て推量は 17.97%
+
+- **Velocity:** ▮▮ rising
+- **Source:** arXiv 2610.41885 · 投稿 2026-10-30 · 1,000 プロファイル、4,000 軌跡
+- **Tags:** `research` `mcp` `privacy` `agents` `benchmark`
+
+エージェントは**ツール呼び出しの痕跡**を残す。本論文はその痕跡だけが何を明かすかを問う —— 会話は不要で、プロトコル上妥当なツール相互作用だけを見る。**PrivacyTrace** が測定を与える。**合成ユーザープロファイル 1,000 件**と **4,000 本のエージェント軌跡**を 4 領域にわたり、**25 サーバー**の実 MCP ツールで生成し、4 つの主要 LLM を攻撃者とする。単一領域の痕跡アクセスで、プロファイル推論の攻撃成功率は事前分布による推測の **17.97%** から **26.25%** へ上がる。実行可能なのは経路の分析だ。**ツール引数と返却結果**が痕跡に基づく最大の証拠を与え、**セッション間の連結**がリスクをさらに増幅し、**厳密な識別子の復元は依然として難しい**。2 段階攻撃は一発攻撃にほぼ匹敵し、痕跡に支持された**部分プロファイル**を条件にすると、対応する事前分布推測より **3.30 ポイント**上回る —— ただし第 2 段階もモデルの事前分布の恩恵を受ける。
+
+限界はどこまで持ち運ぶかを決める。ユーザー行動は**合成**であり（人口統計の周辺分布は合わせているが行動は合わせていない）、示される候補防御 —— クエリの難読化、露出するツール呼び出し内容の削減、サービス間でのセッション分離 —— はいずれも**未検証**と明記されている。
+
+**Why it matters:** 痕跡はチャットログより長く生き残る成果物であり、第三者の可観測性サービスに送られやすいものでもある。8 ポイントの差は破滅ではないが、増分は具体的な場所を指す。漏れは**引数と結果**にあり、ツール名を消してもほぼ何も得られず、引数に何を含められるかを絞るのが最も効く。
+
+[`🔗 arXiv 2610.41885 — PrivacyTrace`](https://arxiv.org/abs/2610.41885) · [`🔗 コード：AI45Lab/PrivacyTrace`](https://github.com/AI45Lab/PrivacyTrace)
+
+---
+
+## 40. Latent Sparse Attention は 1,000 万トークンで*attention 1 層*を 22.7 倍にする —— そして 1 層だと書いている
+
+- **Velocity:** ▮▮ rising
+- **Source:** arXiv 2610.42147 · 投稿 2026-10-30 · GLM-5.3-FLASH（Qwen-3.8-27B）
+- **Tags:** `research` `attention` `long-context` `inference` `indexer`
+
+100 万トークンを超えると、**キーを選ぶ indexer** 自体が二次であるならスパース attention は助けにならない —— この研究線の大半がそこで止まっている。**Latent Sparse Attention** はスコアリングを学習された **64 次元の潜在空間**に移す。キーはそこで階層的にクラスタ化され、クエリはすべてのキーではなくクラスタの階層を採点する。2 つの変種は訓練が異なる。**D-LSA** は小さな層ごとの射影だけを訓練して事前学習モデルに蒸留し、**N-LSA** は next-token loss だけで素から訓練する。単層（flat）探索も選べ、木構造にすると prefill が準二次になる。
+
+数値は分母を添えて。**GLM-5.3-FLASH（Qwen-3.8-27B）の 1,000 万トークン**で、D-LSA は**attention 1 層**の prefill を**元のスパース attention** に対し **22.7 倍**、decode を **4.6 倍**高速化し、**全 attention** に対しては **72.4 倍**と **42.5 倍**で、「多様なタスクで同程度の精度を保つ」。N-LSA は全 attention の精度に一致しつつ、128k トークンで**層あたり 1.6 倍**の訓練高速化を得る。論文は限界を 2 つ明記する。蒸留の後にスパース訓練の通しを行わない（D-LSA は対応するが "due to its cost" で省略）、層ごと・リクエストごとの予算調整は "left to future work"。
+
+**Why it matters:** 正直な単位がすべてだ。22.7 倍は 1 層の prefill でありエンドツーエンドの遅延ではなく、1,000 万トークンではコストはまさにその層に積み上がる。同日の別論文（**2610.42112**、Zyphra Hierarchical Attention）はより強い漸近的主張 —— ルーティングを含む総コストが準線形 —— を出し、こちらも圧縮キー要約の木に着地している。どちらも出荷する前に、アイデアが収束したことを示している。
+
+[`🔗 arXiv 2610.42147 — Latent Sparse Attention`](https://arxiv.org/abs/2610.42147) · [`🔗 全文（HTML）`](https://arxiv.org/html/2610.42147v1) · [`🔗 arXiv 2610.42112 — ZHA`](https://arxiv.org/abs/2610.42112)
+
+---
+
+## 41. プロンプトインジェクション防御：敵対訓練とより良い損失で AgentDojo が 78.8% から 8.8% へ
+
+- **Velocity:** ▮ steady
+- **Source:** arXiv 2610.41998 · 投稿 2026-10-30 · コード・データ・モデルを公開
+- **Tags:** `research` `prompt-injection` `adversarial-training` `agents` `dpo`
+
+この研究の出発点で最も防御された公開モデル **Meta-SecAlign** は DPO 損失で訓練されながら、適応的プロンプトインジェクション下で攻撃成功率が**ほぼ 100%** に達する。論文は理由を 2 つ挙げ、両方を直す。第一はアンカーで、DPO はモデルを**未防御の参照モデル**の近くに留めるが、安全でない参照は誤った重力井戸だ。彼らの観察は、理想化された**注入不変かつ有用性を保つ oracle** の出力分布が訓練中には入手可能だというもので、これが原理的な **SecPO** 損失を導く。第二は攻撃集合で、Meta-SecAlign は弱い模擬攻撃で訓練される。そこでより強い注入入力（**best@240**）を合成する敵対訓練パイプラインを作り、その上で訓練する。
+
+結果は 2 つの積で報告される。敵対訓練だけでも 3 種の SOTA 適応攻撃に対し Meta-SecAlign 比で攻撃成功率を **1.5〜14.5 倍**下げ、**SecPO 損失は DPO 損失比でさらに 2.4〜4.6 倍**下げる。エージェント作業での端から端までの値が引用に適する。Qwen3.6-27B において `AttackerMovesSecond` 攻撃下の **AgentDojo ASR@800 が 8.8%**、比較対象は **78.8%**。良性の有用性は **9 つのベンチマーク**（エージェントのツール呼び出し、指示追従、科学、数学）で測られ、目立った低下はない。コード、最適化された注入を含む訓練セット、モデルはいずれも公開されている。
+
+**Why it matters:** 持ち運べるのはスコアではなく診断だ。それ自体が安全でない参照に対して訓練された防御は、そのアンカーを継承する。これはモデルを安全な応答に寄せる一連のレシピ全体への批判になる。結果は 1 つの攻撃設定、1 つのモデル規模として読むこと。9 ベンチマークの有用性検査が、拒否率の取引ではなく採用可能にしている部分だ。
+
+[`🔗 arXiv 2610.41998 — SecPO`](https://arxiv.org/abs/2610.41998) · [`🔗 コード：Sizhe-Chen/SecPO`](https://github.com/Sizhe-Chen/SecPO) · [`🔗 Hugging Face のモデル`](https://huggingface.co/Sizhe-Chen/Qwen3.6-27B-Instruct-SecPO)
+
+---
+
+## 42. test-time search の事前登録された監査：学習した選択器はランダムより悪く、82% の状態には選ぶ余地が無かった
+
+- **Velocity:** ▮ steady
+- **Source:** arXiv 2610.41970 · 投稿 2026-10-30 · Cosmos Policy + RoboCasa
+- **Tags:** `research` `world-models` `test-time-scaling` `evaluation` `robotics`
+
+**world-action モデル**の test-time scaling —— 候補選択と適応配分に推論を上乗せする —— は通常、成功率の差分で正当化される。本論文はその差分が必要とする 3 つの前提を **Cosmos Policy** と **RoboCasa** で監査し、分析計画は事前登録されている。**決定信号：** クリーンなデータで、学習した**価値選択器はランダムより 1.66 ポイント悪く**、後知恵の oracle でも **1.40 ポイント**しか得られずエピソード単位の区間はゼロをまたぐ。さらに **82% の状態で候補の結果が同一**であり、選ぶ余地がほとんど無い。**実現効率：** トークン枝刈りは 1 回の forward の FLOPs を最大 **47%** 削るが、配備経路での実測エンドツーエンド高速化は最大 **1.15 倍**（decode を除いた経路で 1.25 倍）で、自身の **1.5 倍**目標に届かない。**評価の完全性：** 適応配分の実験は検出力のゲートの下で**結論不能**と判定される。
+
+完整性の所見こそ、world-model の評価を回す誰もが警戒すべきものだ。監査は**計算の重い計画経路に沿って発生率が急上昇する静かなレンダリング破損**を特定して修正しており、公式の直接方針の結果には影響しない —— テストしている軌跡の上でだけ劣化するシミュレータである。検出器、修正、スクリプトは公開され、結論は明示的に "scoped to the tested configuration" とされる。
+
+**Why it matters:** 候補を増やして採点すれば制御が良くなるという主張は 3 つの前提の連鎖であり、この監査は名指しのモデルで最初の 2 つが欠けていることを示す —— 選択器に使える信号が無く、FLOPs の削減は実時間にならなかった。レンダリングの不具合こそ再利用できる教訓だ。環境がテスト対象の経路で静かに劣化するなら、ベンチマークは自身のレンダラを測っている。
+
+[`🔗 arXiv 2610.41970`](https://arxiv.org/abs/2610.41970) · [`🔗 全文（HTML）`](https://arxiv.org/html/2610.41970v1)
+
+---
+
 ## Metadata
 
 | 項目 | 値 |
 |-------|-------|
-| 生成 | 2026-11-02T04:12:10Z |
-| 記事数 | 28 |
-| 追跡ソース | 24（GitHub Trending、Hacker News、arXiv、NVD/CVE レコード、cveawg CNA、JFrog、VulnCheck、Go セキュリティチーム、新華社、中国日報、Terence Tao のブログ、GitHub Releases、npm、PyPI、Hugging Face、JetBrains、DeepSeek Harness、handy.computer） |
+| 生成 | 2026-11-02T12:10:51Z |
+| 記事数 | 42 |
+| 追跡ソース | 27（GitHub Trending、Hacker News、arXiv、NVD/CVE レコード、cveawg CNA、JFrog、VulnCheck、Go セキュリティチーム、新華社、中国日報、Terence Tao のブログ、GitHub Releases、npm、PyPI、Hugging Face、JetBrains、DeepSeek Harness、handy.computer、Maven Central、OpenJS CNA、VulDB） |
 | 更新スケジュール | 04:03、12:03、20:03 UTC+8（1 日 3 回） |
 | ランキング | 速度加重（新しさ × エンゲージメント加速度 × ソースの権威） |
 | ライセンス | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |

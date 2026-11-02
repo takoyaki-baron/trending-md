@@ -1,9 +1,9 @@
 {
- "generated": "2026-11-02T04:23:24.085Z",
+ "generated": "2026-11-02T12:19:56.634Z",
  "files": [
   {
    "file": "2026-11-02.md",
-   "items": 28,
+   "items": 42,
    "findings": [
     {
      "check": "status",
@@ -94,21 +94,161 @@
      "item": 28,
      "verdict": "temporal-stopping-point",
      "claim": "CVE-2026-120189 · CNA 10 / base 10 / full 9.1",
-     "detail": "VulDB stores 3.1 10 in `containers.cna.metrics.cvssV3_1.baseScore` — that is the base score (base 10, E 9.4, E+RC 9.1; full temporal 9.1, FIRST v3.1 §7.2); NVD re-serves 4.0 9.3 (cna@vuldb.com), 3.1 10 (cna@vuldb.com), 2.0 10 (cna@vuldb.com) — one vector, so name the stopping point you quote (a field called `baseScore` does not have to hold the base)"
+     "detail": "VulDB stores 3.1 10 in `containers.cna.metrics.cvssV3_1.baseScore` — that is the base score (base 10, base×E 9.4, base×E×RC 9.1; full temporal 9.1, FIRST v3.1 §7.2); NVD re-serves 4.0 9.3 (cna@vuldb.com), 3.1 10 (cna@vuldb.com), 2.0 10 (cna@vuldb.com) — one vector, so name the stopping point you quote (a field called `baseScore` does not have to hold the base)"
     },
     {
      "check": "temporal",
      "item": 28,
      "verdict": "temporal-stopping-point",
      "claim": "CVE-2026-120276 · CNA 10 / base 10 / full 9.1",
-     "detail": "VulDB stores 3.1 10 in `containers.cna.metrics.cvssV3_1.baseScore` — that is the base score (base 10, E 9.4, E+RC 9.1; full temporal 9.1, FIRST v3.1 §7.2); NVD re-serves 4.0 9.3 (cna@vuldb.com), 3.1 10 (cna@vuldb.com), 2.0 10 (cna@vuldb.com) — one vector, so name the stopping point you quote (a field called `baseScore` does not have to hold the base)"
+     "detail": "VulDB stores 3.1 10 in `containers.cna.metrics.cvssV3_1.baseScore` — that is the base score (base 10, base×E 9.4, base×E×RC 9.1; full temporal 9.1, FIRST v3.1 §7.2); NVD re-serves 4.0 9.3 (cna@vuldb.com), 3.1 10 (cna@vuldb.com), 2.0 10 (cna@vuldb.com) — one vector, so name the stopping point you quote (a field called `baseScore` does not have to hold the base)"
+    },
+    {
+     "check": "issues",
+     "item": 31,
+     "verdict": "ok",
+     "claim": "3469 issues + 3159 PRs",
+     "detail": "split named (PR share 48%)"
+    },
+    {
+     "check": "status",
+     "item": 33,
+     "verdict": "ok",
+     "claim": "CVE-2026-120315 `Received`",
+     "detail": "Received (lastModified 2026-11-02T03:17:29.457)"
+    },
+    {
+     "check": "date",
+     "item": 33,
+     "verdict": "ok",
+     "claim": "CVE-2026-120315 published 2026-11-02",
+     "detail": "NVD published 2026-11-02T03:17:29.457 (2026-11-02 UTC) · cveawg datePublished 2026-11-02T02:01:13.641Z (2026-11-02 UTC) — the two clocks differ; 2026-11-02 is the NVD published day"
+    },
+    {
+     "check": "cvss",
+     "item": 34,
+     "verdict": "ok",
+     "claim": "3.1 7.5",
+     "detail": "CVE-2026-120313 · Primary/disclosure@vulncheck.com · vector reproduces 7.5"
+    },
+    {
+     "check": "cvss",
+     "item": 34,
+     "verdict": "ok",
+     "claim": "4.0 8.7",
+     "detail": "CVE-2026-120313 · Secondary/disclosure@vulncheck.com"
+    },
+    {
+     "check": "cvss",
+     "item": 34,
+     "verdict": "ok",
+     "claim": "3.1 8.8",
+     "detail": "CVE-2026-120311 · Primary/disclosure@vulncheck.com · vector reproduces 8.8"
+    },
+    {
+     "check": "status",
+     "item": 34,
+     "verdict": "ok",
+     "claim": "CVE-2026-120313 `Deferred`",
+     "detail": "Deferred (lastModified 2026-11-02T03:17:29.200)"
+    },
+    {
+     "check": "cvss",
+     "item": 35,
+     "verdict": "ok",
+     "claim": "3.1 9.9",
+     "detail": "CVE-2026-120322 · Primary/cna@vuldb.com · vector reproduces 9.9"
+    },
+    {
+     "check": "date",
+     "item": 35,
+     "verdict": "ok",
+     "claim": "CVE-2026-120322 published 2026-11-02",
+     "detail": "NVD published 2026-11-02T02:18:47.550 (2026-11-02 UTC) · cveawg datePublished 2026-11-02T01:45:41.924Z (2026-11-02 UTC) — the two clocks differ; 2026-11-02 is the NVD published day"
+    },
+    {
+     "check": "temporal",
+     "item": 35,
+     "verdict": "temporal-stopping-point",
+     "claim": "CVE-2026-120322 · CNA 9.9 / base 9.9 / full 9.4",
+     "detail": "VulDB stores 3.1 9.9 in `containers.cna.metrics.cvssV3_1.baseScore` — that is the base score (base 9.9, base×E 9.4, base×E×RC 9.4; full temporal 9.4, FIRST v3.1 §7.2); NVD re-serves 4.0 8.6 (cna@vuldb.com), 3.1 9.9 (cna@vuldb.com), 2.0 9 (cna@vuldb.com) — one vector, so name the stopping point you quote (a field called `baseScore` does not have to hold the base)"
+    },
+    {
+     "check": "cvss",
+     "item": 36,
+     "verdict": "ok",
+     "claim": "3.1 5.9",
+     "detail": "CVE-2026-120317 · Primary/disclosure@vulncheck.com · vector reproduces 5.9"
+    },
+    {
+     "check": "cvss",
+     "item": 36,
+     "verdict": "ok",
+     "claim": "4.0 8.2",
+     "detail": "CVE-2026-120317 · Secondary/disclosure@vulncheck.com"
+    },
+    {
+     "check": "status",
+     "item": 36,
+     "verdict": "ok",
+     "claim": "CVE-2026-120317 `Deferred`",
+     "detail": "Deferred (lastModified 2026-11-02T03:17:30.100)"
+    },
+    {
+     "check": "status",
+     "item": 36,
+     "verdict": "ok",
+     "claim": "CVE-2026-120317 `Deferred`",
+     "detail": "Deferred (lastModified 2026-11-02T03:17:30.100)"
+    },
+    {
+     "check": "cwe",
+     "item": 36,
+     "verdict": "ok",
+     "claim": "CVE-2026-120317 CWE-345",
+     "detail": "stated in NVD weaknesses[] (disclosure@vulncheck.com)"
+    },
+    {
+     "check": "cwe",
+     "item": 36,
+     "verdict": "ok",
+     "claim": "CVE-2026-120316 CWE-22",
+     "detail": "stated in NVD weaknesses[] (disclosure@vulncheck.com)"
+    },
+    {
+     "check": "cvss",
+     "item": 37,
+     "verdict": "ok",
+     "claim": "3.1 9.1",
+     "detail": "CVE-2026-120213 · Secondary/ce714d77-add3-4f53-aff5-83d477b104bb · vector reproduces 9.1"
+    },
+    {
+     "check": "status",
+     "item": 37,
+     "verdict": "ok",
+     "claim": "CVE-2026-120213 `Received`",
+     "detail": "Received (lastModified 2026-11-02T11:17:31.137)"
+    },
+    {
+     "check": "date",
+     "item": 37,
+     "verdict": "ok",
+     "claim": "CVE-2026-120213 published 2026-11-02",
+     "detail": "NVD published 2026-11-02T11:17:31.137 (2026-11-02 UTC) · cveawg datePublished 2026-11-02T10:15:08.777Z (2026-11-02 UTC) — the two clocks differ; 2026-11-02 is the NVD published day"
+    },
+    {
+     "check": "date",
+     "item": 37,
+     "verdict": "ok",
+     "claim": "CVE-2026-120213 published 2026-11-02",
+     "detail": "NVD published 2026-11-02T11:17:31.137 (2026-11-02 UTC) · cveawg datePublished 2026-11-02T10:15:08.777Z (2026-11-02 UTC) — the two clocks differ; 2026-11-02 is the NVD published day"
     },
     {
      "check": "repo",
      "item": 4,
      "verdict": "star-surge",
-     "claim": "6848 quoted vs 9023 now",
-     "detail": "deepseek-ai/dsh-superagent-prototype: 6848 → 9023 (+24%, 2175 stars) since the batch was written on a 2-day-old record (launch window) — a rising count is not a wrong one; date the reading if the number will be re-used"
+     "claim": "6848 quoted vs 11241 now",
+     "detail": "deepseek-ai/dsh-superagent-prototype: 6848 → 11241 (+39%, 4393 stars) since the batch was written on a 2-day-old record (launch window) — a rising count is not a wrong one; date the reading if the number will be re-used"
     },
     {
      "check": "repo",
@@ -122,28 +262,28 @@
      "item": 4,
      "verdict": "ok",
      "claim": "deepseek-ai/dsh-superagent-prototype",
-     "detail": "9023★, last push 2026-10-31"
+     "detail": "11241★, last push 2026-10-31"
     },
     {
      "check": "repo",
      "item": 5,
      "verdict": "ok",
      "claim": "pingdotgg/t3code",
-     "detail": "38472★, last push 2026-11-02"
+     "detail": "39830★, last push 2026-11-02"
     },
     {
      "check": "repo",
      "item": 11,
      "verdict": "ok",
      "claim": "JetBrains/thinkrail",
-     "detail": "7012★, last push 2026-11-01"
+     "detail": "7092★, last push 2026-11-02"
     },
     {
      "check": "repo",
      "item": 12,
      "verdict": "star-surge",
-     "claim": "3738 quoted vs 4191 now",
-     "detail": "wangzan101/Mika: 3738 → 4191 (+11%, 453 stars) since the batch was written on a 4-day-old record (launch window) — a rising count is not a wrong one; date the reading if the number will be re-used"
+     "claim": "3738 quoted vs 4845 now",
+     "detail": "wangzan101/Mika: 3738 → 4845 (+23%, 1107 stars) since the batch was written on a 4-day-old record (launch window) — a rising count is not a wrong one; date the reading if the number will be re-used"
     },
     {
      "check": "repo",
@@ -157,7 +297,14 @@
      "item": 12,
      "verdict": "ok",
      "claim": "wangzan101/Mika",
-     "detail": "4191★, last push 2026-11-01"
+     "detail": "4845★, last push 2026-11-01"
+    },
+    {
+     "check": "count",
+     "item": 39,
+     "verdict": "ok",
+     "claim": "4,000 agent",
+     "detail": "README states it"
     },
     {
      "check": "quotation",
@@ -319,6 +466,62 @@
      "verdict": "ok",
      "claim": "3 quotation(s)",
      "detail": "verbatim in 3 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 29,
+     "verdict": "ok",
+     "claim": "1 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 30,
+     "verdict": "ok",
+     "claim": "1 quotation(s)",
+     "detail": "verbatim in 3 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 31,
+     "verdict": "ok",
+     "claim": "2 quotation(s)",
+     "detail": "verbatim in 4 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 32,
+     "verdict": "ok",
+     "claim": "2 quotation(s)",
+     "detail": "verbatim in 3 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 35,
+     "verdict": "ok",
+     "claim": "2 quotation(s)",
+     "detail": "verbatim in 7 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 37,
+     "verdict": "ok",
+     "claim": "2 quotation(s)",
+     "detail": "verbatim in 5 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 40,
+     "verdict": "ok",
+     "claim": "3 quotation(s)",
+     "detail": "verbatim in 3 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 42,
+     "verdict": "ok",
+     "claim": "1 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
     }
    ]
   }

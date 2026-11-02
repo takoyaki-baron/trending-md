@@ -1,6 +1,6 @@
 ---
 date: 2026-11-02
-updated: 2026-11-02T04:23:19Z
+updated: 2026-11-02T12:19:50Z
 schedule: 04:03, 12:03, 20:03 UTC+8
 sources: 24
 license: CC-BY-4.0
@@ -304,7 +304,7 @@ The scoring is a free illustration of the provenance rule in this feed: one reco
 - **Source:** Hacker News (Show HN) · 1,054 pts · ~12h ago (~23:58 UTC+8)
 - **Tags:** `hacker-news` `dataset` `llm-labeling` `books` `affiliate`
 
-Hacker Books is a searchable index of books recommended in Hacker News comments, and its own `data/meta.json` — generated **2026-11-02** — states the corpus rather than gesturing at it: **15,362 books, 270,334 mentions, 217,954 comments, 56,456 commenters**, covering **2007 to 2026**, with book metadata and covers from Open Library and every book page linking back to the original thread. The pre-built top list carries **600** books; the whole book-level dataset is downloadable as CSV.
+Hacker Books is a searchable index of books recommended in Hacker News comments, and its own `data/meta.json` — generated **2026-11-02** — states the corpus rather than gesturing at it: at this batch's reading, **15,362 books, 270,334 mentions, 217,954 comments, 56,456 commenters**, covering **2007 to 2026**, with book metadata and covers from Open Library and every book page linking back to the original thread. The file is rebuilt under a new content hash, so the current build reads **15,766 books and 281,363 mentions** — the totals are a snapshot, not a constant. The pre-built top list carries **600** books; the whole book-level dataset is downloadable as CSV.
 
 The part worth reading is how it decided what "recommended" means. Counting mentions alone makes a book people *warn about* rank like a favourite, so **every mention was labelled by Claude Sonnet 5.5** as *recommend*, *neutral*, *critical* or *not about the book*, and mentions of a same-named film or game are dropped. The About page then states the check: the labels were compared against Claude Opus 5.5 on 400 mentions and agreed **85%** of the time, and the page's own note is that you should expect some noise. Keyword rules, sentiment scoring and a TF-IDF classifier were tried first and were less accurate. Ranking weights **distinct commenters** above raw mentions, so one enthusiast cannot carry a title.
 
@@ -312,7 +312,7 @@ It is also a business, and the bundle says so in code: the affiliate map is `{ b
 
 **Why it matters:** an LLM-built corpus that publishes its own inter-model agreement is a better artifact than most "AI search" products — and the 85% is the number to carry, because it is the ceiling on every claim of the form "recommended by N people". The second HN-archive consumer product in two days is also the trend: a 19-year comment corpus is now raw material, and the third-party mirror, not HN's API, is what gets indexed.
 
-[`🔗 hackerbooks.org`](https://hackerbooks.org) · [`🔗 hackerbooks data/meta.json`](https://hackerbooks.org/data/meta.47fd7cb7.json) · [`🔗 HN thread`](https://news.ycombinator.com/item?id=50326821)
+[`🔗 hackerbooks.org`](https://hackerbooks.org) · [`🔗 hackerbooks data/meta.json`](https://hackerbooks.org/data/meta.99d6a8ef.json) · [`🔗 HN thread`](https://news.ycombinator.com/item?id=50326821)
 
 ---
 
@@ -468,13 +468,239 @@ The subjects are consumer and SMB firmware — **WAVLINK WN536AX6-A** takes 7 re
 
 ---
 
+## 29. HyperFrames turns HTML into a deterministic MP4 — and shipped three releases in three and a half hours
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** GitHub Trending (weekly) · 77,426★ · +5,153 this week · v0.9.2 published 2026-11-02T09:10Z
+- **Tags:** `video` `agents` `renderer` `htmx` `open-source`
+
+`heygen-com/hyperframes` (77,426★, created 2026-03-10, Apache-2.0) is an open-source framework for turning HTML, CSS, media and seekable animations into **deterministic MP4** video — run locally through the CLI, driven by an agent through published skills, or used as the rendering core behind a hosted authoring workflow. The agent path is the pitch: `npx hyperframes skills update` once, then ask Claude Code, Codex or Cursor to make a video, and the skills teach the loop — plan, write valid HTML, wire seekable animations, add media, lint, preview, render.
+
+What it shipped today is the more useful story. **v0.9.0** (2026-11-02T05:41:28Z) is breaking: distributed rendering on **AWS Lambda and Google Cloud Run** now runs only on **Plan v2**, and the Plan v1 transport, the `planProtocol` option and the v1 event and result types are removed — an old v1 payload is answered with `PLAN_PROTOCOL_UNSUPPORTED` "before doing any render work". **v0.9.1** (07:41:18Z) then fixed the edge that breaking change created: a Lambda state machine with no `PlanProtocol` now defaults to v2 instead of failing with `States.Runtime`. **v0.9.2** (09:10:24Z) makes an ended scene give up its WebGL context so the next scene is not slowed. npm `hyperframes` `latest` is **0.9.2**, published 09:16:42Z — six minutes after the tag.
+
+**Why it matters:** video is the one output agents still cannot produce deterministically, and the design answer here is to make the artifact a document with a seekable timeline so a render is a function of the file rather than of a sampling loop. The breaking change points at where that stops being a toy — distributed render farms — and the SDK/deployment must move together: passing `"v1"` now throws.
+
+[`🔗 heygen-com/hyperframes`](https://github.com/heygen-com/hyperframes) · [`🔗 v0.9.0 (breaking)`](https://github.com/heygen-com/hyperframes/releases/tag/v0.9.0) · [`🔗 npm hyperframes`](https://www.npmjs.com/package/hyperframes)
+
+---
+
+## 30. Colibri streams a 744B MoE from disk into 9.9 GB of RAM — at 0.05 tok/s on a laptop
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** GitHub Trending · +655★ today · 46,157★ · v2.1.0 published 2026-10-31T12:50Z
+- **Tags:** `moe` `local-inference` `c` `gguf` `quantization`
+
+`JustVugg/colibri` (46,157★, created 2026-07-01, Apache-2.0, pure C) runs very large Mixture-of-Experts models on hardware people own by exploiting the one thing that makes them large: a 744B model uses about **40B parameters per token**, so only about **11 GB** of them change from token to token. The dense part — attention, shared experts, embeddings — stays in RAM; the routed experts live on disk and are read when the router asks for them, through a cache that learns which experts your work uses. There are **thirteen engines**: ten chat families (GLM-5.2/5.3, GLM-5.3-Flash, Inkling, Kimi K3, DeepSeek V4 and V4.1 Flash, MiMo-V2.6, Qwen3.8-Flash-Next, Qwen3.6, OLMoE), one image model, and three decision models that answer with a probability rather than chatting.
+
+The README's own table is what separates this from a demo. **GLM-5.2** (429 GB download) runs at **0.05–0.1 tok/s cold on a 25 GB laptop**, **1.83** on a 128 GB Ryzen AI Max+ 395, and **9.0–9.2** on six RTX 5090s. **Kimi K3** (2.8T, 1.56 TB) produces about **9.4 seconds per token** with experts read at 6.3 GB/s. **DeepSeek V4 Flash** (284B) does **0.93 tok/s** with 32 GB. The startup banner in the README reads `GLM-5.2 · 744B MoE · int4 · streaming CPU · ready in 32s · resident 9.9 GB`. **v2.1.0**, published 2026-10-31, carries **387 pull requests since v2.0.0, 208 of them from 35 contributors**, GGUF files read as published on every engine, and Mistral-Large-4 (1T) as a new family.
+
+**Why it matters:** quote the tokens per second beside the star count — the claim is about *placement*, not speed, and one NVMe read per expert is the bill. The design rule the README states is the part worth copying: "Less fast memory may cost speed; it must not quietly redefine the model."
+
+[`🔗 JustVugg/colibri`](https://github.com/JustVugg/colibri) · [`🔗 v2.1.0 release`](https://github.com/JustVugg/colibri/releases/tag/v2.1.0) · [`🔗 GGUF support notes`](https://github.com/JustVugg/colibri/blob/main/docs/gguf.md)
+
+---
+
+## 31. Paperclip is an org chart for agents at 110k stars — a stable release on October 23 and nightlies since
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** GitHub Trending · +507★ today · 110,094★ · stable v2026.1023.0 tagged 2026-10-24
+- **Tags:** `agents` `orchestration` `governance` `budget` `typescript`
+
+`paperclipai/paperclip` (110,094★, 18,243 forks, MIT, created 2026-03-02) is a Node.js server and React UI that orchestrates a **team** of agents rather than one: an org chart of humans and agents, goals linked to tasks, per-company/agent/project budgets, scoped secrets, permissions, and **heartbeats** that wake an agent for assigned work, a follow-up message or a schedule. Its one-line positioning is "If OpenClaw is an employee, Paperclip is the company." The roster is the list of harnesses this feed has been tracking: OpenClaw, Claude Code, Codex, Cursor + Cloud, Gemini CLI, OpenCode, Pi, Hermes + Gateway, Grok Build and Kimi Code — and the README's own escape hatch for anything else is "If it can receive a heartbeat, it's hired."
+
+The artifact state is the interesting part, because the star count is not the release. The **stable** line is `v2026.1023.0`, tagged **2026-10-24T00:03:59Z** and labelled "Released: 2026-10-23" — 200 commits promoted from a beta, headlined by private tasks and projects that others cannot open, find in search, read run transcripts for, or reach through a plugin. Everything since then is **canary** and **nightly** (latest: `nightly/v2026.1102.0-nightly.0`, 2026-11-01T16:08:51Z). The tracker carries **3,469 open issues and 3,159 open pull requests**.
+
+**Why it matters:** the unit of competition has moved from the agent to the org chart — who may spend what, who may see which transcript — and this is the clearest statement of that shift at scale. Read the release channel as the state: ten days since the last stable, with a daily-tagged nightly train standing in for one.
+
+[`🔗 paperclipai/paperclip`](https://github.com/paperclipai/paperclip) · [`🔗 v2026.1023.0`](https://github.com/paperclipai/paperclip/releases/tag/v2026.1023.0) · [`🔗 paperclip.ing`](https://paperclip.ing)
+
+---
+
+## 32. Heretic 2.0 breaks its own configs, ships a plugin system, and drops its research features to Lophius
+
+- **Velocity:** ▮▮ rising
+- **Source:** GitHub · +404★ today · 37,777★ · v2.0.0 tagged 2026-11-01T13:03Z
+- **Tags:** `abliteration` `model-modification` `plugins` `pypi` `agpl`
+
+`p-e-w/heretic` (37,777★, AGPL-3.0) does what it says on the tin — "Training-free language model modification" — by optimizing against contrasting example prompts and matching **scorers** instead of training. The default action is refusal suppression; other shipped configs reduce slop, humor and sycophancy or shift emotional alignment, and the README notes the community has published **thousands** of Heretic-processed models on Hugging Face. On an RTX 3090 the default configuration processes `Qwen3-4B-Instruct-2507` in about **30–40 minutes**.
+
+**v2.0.0** was tagged **2026-11-01T13:03:19Z** and uploaded to PyPI as `heretic-llm` 2.0.0 at **12:21:39Z** — eight months after 1.4.0 (2026-06-14). It is a breaking release in both directions. Configuration files written for 1.x **do not work** (there is a migration guide), and the release notes say plainly: "Research features have been removed. The intended replacement is Lophius." What arrives instead is infrastructure: a **generic plugin system** with scorer *and* modifier plugins (plus ARA), a `reproducible` property on plugins, **headless operation with end-to-end tests**, a benchmark scorer, dataset config/subset selection, and a fix so the optimizer can disable MLP ablation via a `0` max-weight floor.
+
+**Why it matters:** abliteration stopped being one recipe when the scorers became pluggable — the tool now steers *any* measurable behaviour, which is a broader capability than the licence page suggests. For anyone with a tuned 1.x config, the migration is the risk: a stale config is not rejected, it is wrong.
+
+[`🔗 p-e-w/heretic`](https://github.com/p-e-w/heretic) · [`🔗 v2.0.0 release`](https://github.com/p-e-w/heretic/releases/tag/v2.0.0) · [`🔗 PyPI heretic-llm`](https://pypi.org/project/heretic-llm/)
+
+---
+
+## 33. LobeHub's path traversal was fixed in April — the CVE arrived in November, and npm has no 2.1.49 to install
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** VulnCheck CNA (cveawg) · reserved 2026-11-01T12:48Z · published 2026-11-02T02:01Z
+- **Tags:** `cve` `path-traversal` `rce` `npm` `ai-chat`
+
+`CVE-2026-120315` is a path traversal in LobeHub Chat's document parsing that ends in code execution, and its mechanism is four lines. `TempFileManager.writeTempFile(data, name)` built its path as `join(this.tempDir, name)`; `name` comes from the `files.name` column, which `file.createFile` sets straight from user input. Create a file record named `../../../../../../app/startServer.js` with a `child_process.execSync` payload as its content, then trigger document parsing, and the payload lands where the server starts from. The advisory's precondition is a **server-database deployment** plus an authenticated session — `PR:L`, not pre-auth.
+
+The dates are the finding. The GHSA (`GHSA-2g9j-v25c-4j97`) names **2.1.49** as patched, and that tag's own release page is dated **2026-04-10T09:51:47Z** — **190 days before the advisory was published on October 17** and **206 days before the CVE record**. The fix is verifiable at that tag: `writeTempFile` now runs `basename(name)` through `resolve()` under a comment that already cites the GHSA id.
+
+Then there is the artifact the record points at. Its `packageURL` is `pkg:npm/@lobehub/chat`, whose newest published version is **1.143.3 (2026-01-25)**; the project's current package is `@lobehub/lobehub`, which the repository declares at **2.3.0** while npm's `latest` for that name is **2.1.26 (2026-02-10)**. **2.1.49 exists as a GitHub tag and on neither npm name.** Scores are VulnCheck's own: **8.8** CVSS 3.1 and **8.7** CVSS 4.0; NVD lists the record `Received` with **0 NVD-scored metrics**, and the 3.1 score reproduces exactly from its vector. The project's own latest release, v2.3.0, shipped 2026-11-01.
+
+**Why it matters:** nine months from fix to CVE is the disclosure lag that lets a self-hosted app sit unpatched, but the second layer is worse for defenders — a scanner keyed on that packageURL sees every npm version as `< 2.1.49` and no fixed version to upgrade to. The range is right and the artifact it names is a different object, so the remediation has to be read off the tag, not the registry.
+
+[`🔗 CVE-2026-120315 (cveawg)`](https://cveawg.mitre.org/api/cve/CVE-2026-120315) · [`🔗 GHSA-2g9j-v25c-4j97`](https://github.com/lobehub/lobehub/security/advisories/GHSA-2g9j-v25c-4j97) · [`🔗 v2.1.49 tag (2026-04-10)`](https://github.com/lobehub/lobehub/releases/tag/v2.1.49)
+
+---
+
+## 34. Network-AI's own path sanitizer was the bug — an unanchored `startsWith` let a sibling directory out
+
+- **Velocity:** ▮▮ rising
+- **Source:** VulnCheck CNA (cveawg) · 3 records 2026-11-02T02:01:10–12Z · fixed in 5.15.5
+- **Tags:** `cve` `path-traversal` `agent-framework` `npm` `sandbox`
+
+VulnCheck published three path-traversal records against **Network-AI**, a TypeScript multi-agent orchestrator on npm (`pkg:npm/network-ai`) that advertises adapters for 32 frameworks, and the third is the one to read. `CVE-2026-120313` is in **`InputSanitizer.sanitizePath()`** — the guard itself — which used an **unanchored `startsWith`** comparison against the base directory, so a path whose directory name merely *shares the base's string prefix* is a sibling of it, not a child. Read, list and write outside the sandbox follow, and this one needs no privileges: **7.5** on CVSS 3.1 (`PR:N`) and **8.7** on 4.0. `CVE-2026-120311` puts a traversal sequence in a **job id** (`FileJobStore.get()`, `.delete()`, `JobQueue.getJob()`) to read or delete arbitrary `.json` — including the `AuthGuardian` trust-level configuration and grant tokens, which is an authorization bypass assembled from file deletion — and scores **8.8** on CVSS 3.1 and **8.7** on 4.0 with `PR:L`. `CVE-2026-120312` is the same trick through an **AgentVCR cassette name** in `load()`/`save()`, at the same **8.8** and **8.7**.
+
+All three are fixed in **5.15.5**; the npm release published **2026-10-17T18:14:17Z** is **16 days older than the records**, and npm `latest` is now 5.17.1. NVD lists all three `Deferred` with **0 NVD-scored metrics**, so every score here is the CNA's arithmetic (the 3.1 values reproduce exactly). The repository is **80 stars**, MIT, last pushed 2026-10-27.
+
+**Why it matters:** an agent framework's three "sandboxes" were one string comparison each, and the sanitizer is the component to audit first because it is the thing everything else trusts. The size is the other half: an 80-star dependency with four CVEs in one batch is not a smaller risk surface — it is a smaller review surface, and the fix still predates the record by two weeks.
+
+[`🔗 CVE-2026-120313 (InputSanitizer)`](https://cveawg.mitre.org/api/cve/CVE-2026-120313) · [`🔗 CVE-2026-120311 (FileJobStore)`](https://cveawg.mitre.org/api/cve/CVE-2026-120311) · [`🔗 CVE-2026-120312 (AgentVCR)`](https://cveawg.mitre.org/api/cve/CVE-2026-120312)
+
+---
+
+## 35. Termix's 9.9 needs one `destPath`, the exploit is public, and the record says the vendor never replied
+
+- **Velocity:** ▮▮ rising
+- **Source:** VulDB CNA (cveawg) · reserved 2026-11-01T13:17Z · published 2026-11-02T01:45Z
+- **Tags:** `cve` `path-traversal` `self-hosted` `ssh` `vuldb`
+
+`CVE-2026-120322` is a path traversal in **Termix-SSH/Termix** — a self-hosted web SSH/file manager at 15,780 stars — through `/plugin-api/file-manager/transferToHost`, where the `destPath` argument is not confined to the transfer root. Arbitrary file write, remotely initiated, **9.9** on CVSS 3.1 (`AV:N/AC:L/PR:L/UI:N/S:C/C:H/I:H/A:H`, which reproduces exactly) — the base score, with `E:P` taking the full temporal value to 9.4 — and **9.0** on 2.0. The 4.0 column is the split this feed keeps documenting: the CNA's container stores **9.4** and NVD's copy of the same string stores **8.6**, with `E:P` present in both — one vector at two stopping points, not two assessments.
+
+Two sentences in the record carry more weight than the score. "The exploit is publicly available and might be used." And: "The vendor was contacted early about this disclosure but did not respond in any way." A public PoC lives in a GitHub repository (`0xGenesi/CVE`) rather than in the record. The remediation is stated in the record too, and it is not a validation fix: the shortcut was **removed** in the standalone File Manager plugin **v1.0.0** — the transfer engine now always writes over SFTP — and in core **v26.10.0**. Termix shipped **v26.11.0 at 2026-11-02T00:20:19Z**, roughly **85 minutes before** the record was published.
+
+**Why it matters:** a web terminal that holds SSH credentials for a fleet is a file manager with reach, so one unvalidated `destPath` is a write onto every host it can touch. The fix shape is the takeaway — the vendor's answer was to delete the alternate transport rather than sanitise a path, which is the durable option when the shortcut was the bug.
+
+[`🔗 CVE-2026-120322 (cveawg)`](https://cveawg.mitre.org/api/cve/CVE-2026-120322) · [`🔗 Public PoC write-up`](https://github.com/0xGenesi/CVE/blob/main/Termix_FileManager_transferToHost_Arbitrary_File_Write.md) · [`🔗 Termix v26.11.0`](https://github.com/Termix-SSH/Termix/releases/tag/v26.11.0)
+
+---
+
+## 36. http4k's auth-int digest never hashed the body — and the other fix exists only in an `-ee` build
+
+- **Velocity:** ▮▮ rising
+- **Source:** VulnCheck CNA (cveawg) · 2 records 2026-11-02T02:01:14–15Z · NVD `Deferred`
+- **Tags:** `cve` `authentication` `http4k` `maven` `enterprise`
+
+Two http4k records landed in the same second, and the first is a textbook one. **`CVE-2026-120317`** (`CWE-345`) says `DigestEncoder` computes the **auth-int** digest **without hashing the request entity body** — the one thing auth-int exists to bind. An on-path attacker on a non-TLS channel rewrites the body, keeps the `Authorization` header, and executes state-changing actions as the victim. **`CVE-2026-120316`** (`CWE-22`) is a traversal in `ThymeleafTemplates` Caching/HotReload: `../` segments in a `ViewModel.template()` value are resolved without a containment check, so request-driven template selection discloses any file the server process can read — unauthenticated.
+
+Both score **5.9 on CVSS 3.1 and 8.2 on CVSS 4.0**, and the gap is the frameworks' own: `AC:H` and `AT:P` on the 4.0 side. The artifact split is the part to act on. `http4k-security-digest` has **6.60.0.0** on Maven Central, dated **2026-09-16** — 47 days before the record. The Thymeleaf fix is **6.62.0.0-ee**, and Maven Central's `http4k-template-thymeleaf` listing tops out at **6.61.0.0 (2026-09-29)**: no `6.62.0.0-ee` artifact exists there, so the newest publicly installable template module still sits inside its own affected range (`< 6.62.0.0-ee`). NVD lists both records `Deferred` with **0 NVD-scored metrics**.
+
+**Why it matters:** digest auth is chosen when you cannot afford TLS termination everywhere, and body-integrity is precisely the property it was extended to provide — a digest computed over everything but the body authenticates the request line and nothing that matters. The other half is operational: the upgrade instruction is a one-line sentence for one of these CVEs and not for the other.
+
+[`🔗 CVE-2026-120317 (auth-int)`](https://cveawg.mitre.org/api/cve/CVE-2026-120317) · [`🔗 CVE-2026-120316 (Thymeleaf)`](https://cveawg.mitre.org/api/cve/CVE-2026-120316) · [`🔗 http4k-security-digest on Maven Central`](https://repo1.maven.org/maven2/org/http4k/http4k-security-digest/)
+
+---
+
+## 37. `@fastify/http-proxy` bypassed its own rewrite prefix without a single `..` — by decoding twice
+
+- **Velocity:** ▮ steady
+- **Source:** OpenJS CNA (cveawg) · reserved 2026-10-31T13:33Z · published 2026-11-02T10:15Z
+- **Tags:** `cve` `encoding-confusion` `fastify` `proxy` `npm`
+
+`CVE-2026-120213` affects `@fastify/http-proxy` **9.0.0 through 11.6.5**, and the bug is an encoding round-trip rather than a traversal. When an application uses parameterized **`prefix`** and **`rewritePrefix`** options to pin clients to a fixed upstream path, the plugin substitutes **URL-decoded route parameters** into `rewritePrefix` **without re-encoding them**. A parameter value that encodes a path separator together with a fragment or query delimiter therefore decodes into real separators and delimiters, which injects extra upstream path segments and **strips the mandatory suffix** the `rewritePrefix` was there to enforce. The record is explicit that this happens "without using any dot-dot traversal" — so a `..` filter, or a WAF rule looking for one, sees nothing. The two CWEs it carries are the diagnosis: `CWE-22` and `CWE-436`, interpretation conflict.
+
+The score is **9.1** on CVSS 3.1 (`AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:N`, which reproduces exactly), and pre-auth. Fixed in **11.6.6**, npm-published **2026-11-02T08:55:53Z** — **80 minutes before** the record — and the advisory closes the alternatives: "There is no workaround other than upgrading." One provenance note worth the space: NVD's table lists that 9.1 with source `ce714d77-…`, which is **openjs's own orgId**, so the number is the CNA's and not an enrichment — the record is `Received` with 0 NVD-scored metrics.
+
+**Why it matters:** decode-then-substitute is the canonical double-parse bug and the reason `CWE-436` exists — two components disagreeing about when a string stops being encoded. If you use `rewritePrefix` to enforce a suffix rather than merely to build a URL, this is an unauthenticated bypass of the restriction the option was configured for.
+
+[`🔗 CVE-2026-120213 (cveawg)`](https://cveawg.mitre.org/api/cve/CVE-2026-120213) · [`🔗 GHSA-h3vp-4jfr-v364`](https://github.com/fastify/fastify-http-proxy/security/advisories/GHSA-h3vp-4jfr-v364) · [`🔗 npm @fastify/http-proxy`](https://www.npmjs.com/package/@fastify/http-proxy)
+
+---
+
+## 38. Eleven agent-hijack evaluations put attacks at 16–86% of samples — at a 2% rate, AUROC 0.879 is 7.6% precision
+
+- **Velocity:** ▮▮ rising
+- **Source:** arXiv 2610.41803 · submitted 2026-10-30 · 11 evaluations audited
+- **Tags:** `research` `agents` `detection` `evaluation` `base-rate`
+
+Detectors for **hijacked LLM agents** read tool-call traces for anomalies, and this paper opens with a census of how they are evaluated: across the **eleven evaluations audited**, attacks or anomalies make up **16% to 86%** of test samples, **no evaluation varies that share**, and **six report no test on data from a second benchmark or source**. The rest is what that hides. On **AgentDrift** and **AgentDojo**, at a **2% attack rate**, a detector with **AUROC 0.879** reaches **precision 0.076** — and the composition of the negatives alone moves that precision between **0.039 and 0.117**. Second, as **tool coverage** (the share of test tool calls whose tool was seen in training) falls, detector rankings **cross near 50% coverage and reverse below it**; dropout on tool inputs largely removes the reversal. Third, **no detector trained on AgentDrift ranks AgentDojo better than chance** — AUROC 0.47 to 0.52 — including one that reaches **0.996 within AgentDrift**. A released LLM action monitor trained on neither reaches **0.930**, but at a 2% attack rate its released decision rule would still mostly raise false alerts (precision **0.096**).
+
+The paper's own limitations section is unusually candid and worth carrying: only the monitor's plan was fully prospective, several readings were added after related results were seen, AgentDrift is synthetic from one generator with disjoint tool sets, and **on AgentDojo a leave-one-suite-out analogue of the reversal did not reproduce consistently**.
+
+**Why it matters:** the base rate is the whole argument — an AUROC reads like a capability, and a 2% attack share turns it into one false alarm per thirteen. Put the attack share in the eval report, and read the reversal as a headline the authors themselves demoted on the second benchmark.
+
+[`🔗 arXiv 2610.41803`](https://arxiv.org/abs/2610.41803) · [`🔗 Full text (HTML)`](https://arxiv.org/html/2610.41803v1)
+
+---
+
+## 39. MCP tool-call traces identify the user without the conversation — 26.25% vs 17.97% for guessing
+
+- **Velocity:** ▮▮ rising
+- **Source:** arXiv 2610.41885 · submitted 2026-10-30 · 1,000 profiles, 4,000 trajectories
+- **Tags:** `research` `mcp` `privacy` `agents` `benchmark`
+
+Agents leave **tool-call traces**, and this paper asks what those traces alone reveal about the person driving them — no conversation, only protocol-valid interactions. **PrivacyTrace** supplies the measurement: **1,000 synthetic user profiles** and **4,000 agent trajectories** across four domains, generated with real MCP tools from **25 servers**, attacked by four mainstream LLMs. Single-domain trace access raises profile-inference attack success from **17.97%** under prior-based guessing to **26.25%**. The channel analysis is the actionable half: **tool arguments and returned results** provide the largest trace-grounded evidence, **cross-session linkage** amplifies the risk further, and **exact identifiers stay hard to recover**. A two-stage attack nearly matches one-shot accuracy, and conditioning on a trace-supported partial profile adds **3.30 points** over matched prior-based guessing — with Stage 2 still leaning on the model's priors.
+
+The limitations matter for how far to carry it: the user behaviour is **synthetic** (population calibration matches demographic margins, not behaviour), and the candidate defenses it sketches — query obfuscation, exposing less tool-call content, isolating sessions across services — are named as **untested**.
+
+**Why it matters:** the trace is the artifact that outlives your chat log, and it is the one most likely to be sent to a third-party observability service. The eight-point gap is not a catastrophe, but the deltas point somewhere specific: the leak is in the **arguments and results**, so stripping tool names buys almost nothing while scoping what an argument may contain buys the most.
+
+[`🔗 arXiv 2610.41885 — PrivacyTrace`](https://arxiv.org/abs/2610.41885) · [`🔗 Code: AI45Lab/PrivacyTrace`](https://github.com/AI45Lab/PrivacyTrace)
+
+---
+
+## 40. Latent Sparse Attention speeds *one attention layer* 22.7× at 10M tokens — and says which layer
+
+- **Velocity:** ▮▮ rising
+- **Source:** arXiv 2610.42147 · submitted 2026-10-30 · GLM-5.3-FLASH (Qwen-3.8-27B)
+- **Tags:** `research` `attention` `long-context` `inference` `indexer`
+
+Above a million tokens, sparse attention stops helping if the **indexer that chooses the keys** is itself quadratic — which is where most of this line of work has been stuck. **Latent Sparse Attention** moves the scoring into a learned **64-dimensional latent space**: keys are hierarchically clustered there, and a query scores the hierarchy of clusters instead of every key. Two variants are trained differently — **D-LSA**, distilled into a pretrained model by training only small per-layer projections, and **N-LSA**, trained natively on next-token loss alone. A single-level (flat) search is available; the tree makes prefill subquadratic.
+
+The numbers, with their denominator attached: on **GLM-5.3-FLASH (Qwen-3.8-27B) at 10M tokens**, D-LSA speeds **one attention layer** by **22.7×** in prefill and **4.6×** in decode over its **original sparse attention**, and by **72.4×** and **42.5×** over **full attention**, "while keeping similar accuracy across a variety of tasks". N-LSA matches full-attention accuracy with a **1.6×** per-layer training speedup at 128k tokens. The paper states two limits plainly: it does **not** follow distillation with a full sparse-training pass (which D-LSA supports but omits "due to its cost"), and per-layer or per-request budget tuning is "left to future work".
+
+**Why it matters:** the honest unit is the story — 22.7× is one layer's prefill, not end-to-end latency, and at 10M tokens the layer is where the cost actually accumulates. A same-day paper (**2610.42112**, Zyphra Hierarchical Attention) makes the stronger asymptotic claim — total cost including routing growing sublinearly — and also lands on a tree of compressed key summaries, which is a sign the idea has converged before either ships.
+
+[`🔗 arXiv 2610.42147 — Latent Sparse Attention`](https://arxiv.org/abs/2610.42147) · [`🔗 Full text (HTML)`](https://arxiv.org/html/2610.42147v1) · [`🔗 arXiv 2610.42112 — ZHA`](https://arxiv.org/abs/2610.42112)
+
+---
+
+## 41. Prompt-injection defense: adversarial training plus a better loss takes AgentDojo from 78.8% to 8.8%
+
+- **Velocity:** ▮ steady
+- **Source:** arXiv 2610.41998 · submitted 2026-10-30 · code, data and model released
+- **Tags:** `research` `prompt-injection` `adversarial-training` `agents` `dpo`
+
+The best-defended published model at the start of this work, **Meta-SecAlign**, is trained with a DPO loss and still reaches attack success rates **approaching 100%** under adaptive prompt injection. The paper gives two reasons and fixes both. The first is the anchor: DPO keeps the model near an **undefended reference model**, and an insecure reference is the wrong gravity well. Their observation is that the output distribution of an idealized **injection-invariant, utility-preserving oracle** is nonetheless accessible during training, which yields a principled **SecPO** loss. The second is the attack set: Meta-SecAlign trains on weak simulated attacks, so they build an adversarial-training pipeline that synthesizes stronger injected inputs (**best@240**) and train on those.
+
+Results are reported as two stacked multipliers: AT alone reduces attack success **1.5–14.5×** against three state-of-the-art adaptive attacks compared with Meta-SecAlign, and the **SecPO loss takes a further 2.4–4.6×** off compared with DPO. In agentic workflows the end-to-end number is the quotable one: **8.8% vs 78.8% AgentDojo ASR@800** under the `AttackerMovesSecond` attack, on a Qwen3.6-27B. Benign utility is checked across **nine benchmarks** — agentic tool calling, instruction following, science and math — with no noticeable reduction. Code, the training set with optimized injections, and the model are all released.
+
+**Why it matters:** the transferable part is the diagnosis, not the score — a defense trained against a reference that is itself insecure inherits that anchor, which is a critique of a whole family of recipes that align a model to safe responses. Read the result as one attack setting on one model size; the nine-benchmark utility check is what makes it adoptable rather than another refusal-rate trade.
+
+[`🔗 arXiv 2610.41998 — SecPO`](https://arxiv.org/abs/2610.41998) · [`🔗 Code: Sizhe-Chen/SecPO`](https://github.com/Sizhe-Chen/SecPO) · [`🔗 Model on Hugging Face`](https://huggingface.co/Sizhe-Chen/Qwen3.6-27B-Instruct-SecPO)
+
+---
+
+## 42. A pre-registered audit of test-time search: the learned selector was worse than random, and 82% of states had nothing to choose
+
+- **Velocity:** ▮ steady
+- **Source:** arXiv 2610.41970 · submitted 2026-10-30 · Cosmos Policy + RoboCasa
+- **Tags:** `research` `world-models` `test-time-scaling` `evaluation` `robotics`
+
+Test-time scaling for **world-action models** — spend more inference on candidate selection and adaptive allocation — is usually justified by a success-rate delta. This paper audits the three premises that delta needs, on **Cosmos Policy** and **RoboCasa**, with the analysis plan pre-registered. **Decision signal:** on clean data a learned **value selector is 1.66 percentage points worse than random**, a hindsight oracle gains only **1.40 pp** with an episode-level interval spanning zero, and **82% of states show identical candidate outcomes** — there is little selection headroom to find. **Realized efficiency:** token pruning cuts per-forward FLOPs by up to **47%** but yields at most a measured **1.15×** end-to-end speedup on the deployed path (1.25× on a decode-excluded path), short of its own **1.5×** target. **Evaluation integrity:** the adaptive-allocation experiment is declared **inconclusive** under a power gate.
+
+The integrity finding is the one that should worry anyone running world-model evals: the audit identifies and fixes a **silent rendering corruption whose rate rises sharply along compute-heavy planning paths** while leaving the official direct-policy result unaffected — a simulator that degrades specifically on the trajectories you are testing. A detector, the fix and the scripts are released, and the conclusions are explicitly "scoped to the tested configuration".
+
+**Why it matters:** the claim that sampling more candidates and scoring them higher improves control is a chain of three premises, and this audit finds the first two missing on a named model — the selector had no usable signal and the FLOP reduction did not become wall-clock. The rendering bug is the reusable lesson: if the environment silently degrades on the paths under test, the benchmark is measuring its own renderer.
+
+[`🔗 arXiv 2610.41970`](https://arxiv.org/abs/2610.41970) · [`🔗 Full text (HTML)`](https://arxiv.org/html/2610.41970v1)
+
+---
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-11-02T04:56:05Z |
-| Items | 28 |
-| Sources tracked | 24 (GitHub Trending, Hacker News, arXiv, NVD/CVE records, cveawg CNAs, JFrog, VulnCheck, Go security team, Apache/ASF, Gitea, Trigger.dev, Google Developers Blog, openid.net, Xinhua, China Daily, Terry Tao's blog, Robert Haas, neon.com, GitHub releases, npm, PyPI, Hugging Face, JetBrains, DeepSeek Harness, hackerbooks.org) |
+| Generated | 2026-11-02T12:19:50Z |
+| Items | 42 |
+| Sources tracked | 27 (GitHub Trending, Hacker News, arXiv, NVD/CVE records, cveawg CNAs, JFrog, VulnCheck, Go security team, Apache/ASF, Gitea, Trigger.dev, Google Developers Blog, openid.net, Xinhua, China Daily, Terry Tao's blog, Robert Haas, neon.com, GitHub releases, npm, PyPI, Hugging Face, JetBrains, DeepSeek Harness, hackerbooks.org, Maven Central, OpenJS CNA, VulDB) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (3x daily) |
 | Ranking | Velocity-weighted (recency × engagement acceleration × source authority) |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |
