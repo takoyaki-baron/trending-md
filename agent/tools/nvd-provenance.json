@@ -1683,6 +1683,51 @@
       "id": "CVE-2026-120431",
       "why": "Netpbm sgitopnm heap overflow, one of seven records published five weeks after the 10.86.51 fix — the slot-vs-provenance case",
       "seeded": "2026-11-03 [Awaiting Analysis] 3.1 Primary/disclosure@vulncheck.com 7.8, 4.0 Secondary 8.5, CWE-122, published 2026-11-02"
+    },
+    {
+      "id": "CVE-2026-120630",
+      "why": "CrewAI SSRF parser differential — CNA container carries NO metrics key at all; NVD Deferred, 0 metrics",
+      "seeded": "2026-11-03 [seeded by the 20:22 learn pass; first --watch run fills the baseline]"
+    },
+    {
+      "id": "CVE-2026-19304",
+      "why": "Langflow SSRF (same author) — NVD Analyzed with a single psirt@us.ibm.com 7.7, 0 NVD-scored (endorsement case)",
+      "seeded": "2026-11-03 [seeded by the 20:22 learn pass; first --watch run fills the baseline]"
+    },
+    {
+      "id": "CVE-2026-105769",
+      "why": "kaniko ACR regex — 9.3 chainguard, NVD Awaiting Analysis, fix tag 2026-10-27",
+      "seeded": "2026-11-03 [seeded by the 20:22 learn pass; first --watch run fills the baseline]"
+    },
+    {
+      "id": "CVE-2026-89292",
+      "why": "Eclipse Mnestix — 9.2 v4.0 emo@eclipse.org, NVD Received, fixed 54 days before the record",
+      "seeded": "2026-11-03 [seeded by the 20:22 learn pass; first --watch run fills the baseline]"
+    },
+    {
+      "id": "CVE-2026-94290",
+      "why": "SUSE Fleet — 9.1 meissner@suse.de, NVD Awaiting Analysis",
+      "seeded": "2026-11-03 [seeded by the 20:22 learn pass; first --watch run fills the baseline]"
+    },
+    {
+      "id": "CVE-2026-88811",
+      "why": "SUSE Rancher Manager meta proxy — 9.1 PR:N, NVD Awaiting Analysis",
+      "seeded": "2026-11-03 [seeded by the 20:22 learn pass; first --watch run fills the baseline]"
+    },
+    {
+      "id": "CVE-2026-120283",
+      "why": "VulDB Linksys E8450 — same shape as -120276, plus an SSVC ADP metric",
+      "seeded": "2026-11-03 [seeded by the 20:22 learn pass; first --watch run fills the baseline]"
+    },
+    {
+      "id": "CVE-2025-3248",
+      "why": "Langflow KEV entry (oldest of six) — cited as the KEV-context control in item 32",
+      "seeded": "2026-11-03 [seeded by the 20:22 learn pass; first --watch run fills the baseline]"
+    },
+    {
+      "id": "CVE-2026-9198",
+      "why": "Langflow KEV entry (2026-08-04) — second of the six that make the CVE-2026-19304 non-KEV point checkable",
+      "seeded": "2026-11-03 [seeded by the 20:22 learn pass]"
     }
   ]
 }

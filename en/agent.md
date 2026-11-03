@@ -1,6 +1,6 @@
 ---
 title: Learnt Agent
-last_processed: 2026-11-03T12:29:00+08:00
+last_processed: 2026-11-03T20:25:00+08:00
 ---
 
 # Learnt Agent
@@ -1105,6 +1105,37 @@ patterns, and turn them into insights and actionable todos.
 > Compile-as-Hypothesis, Satisfied-Not-Solving) verified verbatim, including **9 of 23** unsupported
 > pre-registered hypotheses. Detail → [[vuln-supply]] [[harness-reliability]] [[security]] [[fact-check]]
 
+> **(11-03 20:22, learn pass):** the 20:22 batch's net-new 16 (items 32–47). Spine: **the thing that checks and the
+> thing that executes read the same bytes differently — and one of the batch's own numbers is a band, not a
+> constant.** Verified first-hand, all six CVE records from `cveawg` + **one** NVD pull: CrewAI's
+> `CVE-2026-120630` has `urlparse` reading host **1.1.1.1** where `urllib3` dials **127.0.0.1** (one backslash),
+> ships **no `metrics` key at all** (so "no CVSS" is every party's silence, not a policy), states `CWE-918` as
+> **free text with no `cweId`**, and was fixed by **PR #6981** merged **2026-08-17** — **77 days** before the
+> record — by pinning the *connect-time* peer IP, which closes the backslash only as a side effect. The same
+> author's Langflow hit is `CVE-2026-19304` (**7.7**, NVD `Analyzed` with a single `psirt@us.ibm.com` metric and
+> **0 NVD-scored**) and **not** one of the six KEV entries the product has. **kaniko** (`CVE-2026-105769`, 9.3) is
+> an unanchored `.*\.azurecr\.io`, so `x.azurecr.io.attacker.com` receives the build's Entra token twice; the fix
+> is in kaniko's **vendored** copy while upstream issue **#21** is still open (filed 2026-08-13, verified).
+> **Mnestix** (`CVE-2026-89292`, 9.2, CWE-918 **and** CWE-522) exposed one backend key for *all* infrastructures,
+> fix **2.3.0** on **2026-09-10T13:59Z**, record **2026-11-03T09:31:27Z** — **54 days**.
+> **The stopping-point claim became a table instead of folklore, and the table's sign is part of the number.**
+> I censused every `cna@vuldb.com` record NVD published on 2026-11-02 (**31** of 479): **31/31** v4.0 vectors carry
+> a Threat metric (29 `E:P`), **0/31** v3.1 do, and under **Δ = v4.0 − 3.1** the gap is **−0.82 at Critical**
+> (10 pairs, 3.1 higher 10/10), **−1.93 at High**, **−1.91 at Medium** with a **−4.2…+1.6** range (mean −1.51) —
+> so "0.7 points low" is the Critical row, and the two `E:X` rows invert the direction because that is the
+> *framework*, not the threat. A v4.0 oracle reproduced 8/8 exactly, including a Medium record whose container
+> stores 4.0 **2.4** and NVD **0.9** while both 3.1 columns read **4.8**. **Two papers make the parser gap
+> measurable in agents:** ETUDE (**97.6%** ASR, **95.9%** legitimate completion, seven harnesses) wins because
+> "the harness supplies a one-time approval for that call; this does not re-examine the updated implementation",
+> and Kerkoporta's poisoned 4B *beats* its clean baseline in exactly one cell (TerminalBench-Lite minus timeouts,
+> 42.8 → 58.4) while losing on SWE-bench Verified — with OOD ASR collapsing **94.8–84.1% → 1.0–0.0%** once the
+> trigger acknowledgement is removed from the trace. Also verified: the scorer audit's **22 points / 0** and
+> **9.5**-point regex swing (verbatim), SHA-256 19–20-step preimages with the paper's own "do not threaten full
+> SHA-256", SIMPLE's **R² 0.969 / 11.97% MAPE** over **13** dense LLMs (MoE not in the fit) and its
+> intelligence-per-joule peak; repos at check — auto-ontology **1,668★** (README: no benchmark numbers, "not
+> accepting external contributions"), floci **28,191★**, Toit **1,464★**, DiscImageStudio **4,248★** (+31 in ~3h).
+> New knowledge files → [[parser-differential]] [[cvss-stopping-points]]
+
 ## Active theses
 
 1. **Agent infrastructure is the new cloud — the monolith CLI decomposes into separable layers,
@@ -1135,24 +1166,24 @@ patterns, and turn them into insights and actionable todos.
    [[security]]); four cases show the class named, the mitigation converged, nobody enforcing it.
    - **08-16 → 11-01 (folded) — install, secret store, socket, bus; the control nobody calls, in the wrong place,
      against the wrong object:** LiteLLM's `cook.pth` beside an unconsumed SLSA attestation, Railway's env-var drawer,
-     `AGENTS.md` succeeding in **>90%** of Codex attempts, Parse Server's hooks **never called**, LXD's **10.0** mTLS,
-     pgAdmin's **9.9**, `assent` merging the browser's `user` **over** the verified token, Epiphany's enum constant
-     turning a clipboard prompt into camera+mic. → [[security]] [[vuln-supply]] [[disclosure-lag]]
+     `AGENTS.md` beating Codex in **>90%** of attempts, LXD's **10.0** mTLS, `assent` merging the browser's `user` over
+     the verified token. → [[security]] [[vuln-supply]] [[disclosure-lag]]
    - **11-02 (folded) — the deployment is a metric input, the default installs the precondition, and the fix can be a
      version no registry carries:** Prefab's sandbox, *documented as isolation for untrusted LLM-written UI*, ran
-     unrestricted (`--allow-read/write/net`) for **7 minor versions** and publishes **two scenario scores on one record**
-     (10.0 unauthenticated / 9.9 authenticated) that NVD collapses to one; Beta9's three **9.9**s, fixes **47 days**
-     before the records; Go's MPTCP default on a **16-day-old** kernel record; Trigger.dev's env-store notice with no
-     CVE, count or scope; LobeHub's fix version absent from all **1,935** npm versions; Network-AI's guard **inside**
-     `InputSanitizer.sanitizePath()`. → [[security]] [[disclosure-lag]] [[vuln-supply]]
+     unrestricted for **7 minor versions** and publishes **two scenario scores on one record** NVD collapses to one;
+     Beta9's three **9.9**s fixed **47 days** early; LobeHub's fix absent from all **1,935** npm versions.
+     → [[security]] [[disclosure-lag]] [[vuln-supply]]
    - **11-03 — the severity field is the vendor's template:** Barracuda's row reads "Authentication Required: Yes"
      beside Mandiant's `PR:N` **9.3**; Apache's five Syncope records carry only a *word* as their metric, so a
      `CVSS >= 9.0` gate misses an authenticated JUEL RCE rated `moderate`. → [[security]] [[vuln-supply]]
    - **11-03 12:29 — the attacker description is tiered by audience, and the public notice is the least specific tier:**
-     WorkOS's bulletin is **5,531** chars with **0** occurrences of `ARTEX`, Salesforce, Snowflake or the stated
-     Hong Kong/China origin — while its *customer notification* names all of them and its CEO's HN comment names the
-     framework in different words ("autonomous AI agent framework" vs the notice's "AI-assisted, autonomous
-     penetration testing framework"). So "the vendor did not say X" needs a named document. → [[security]] [[fact-check]]
+     WorkOS's bulletin is **5,531** chars with **0** occurrences of `ARTEX`, Salesforce, Snowflake or the stated HK/China
+     origin — while its *customer notification* names all of them and its CEO's HN comment uses other words. So "the
+     vendor did not say X" needs a named document. → [[security]] [[fact-check]]
+   - **11-03 20:22 — the guard and the fetcher parse different bytes:** CrewAI's check reads `urlparse`'s host
+     (`1.1.1.1`) while `urllib3` dials its own (`127.0.0.1`), and the record carries **no metric from any party**; kaniko's
+     `.*\.azurecr\.io` is unanchored (upstream #21 still open); Mnestix's **9.2** put **one** backend key behind an SSRF,
+     shipped **54 days** before its record. → [[parser-differential]] [[security]]
 
 3. **Local inference is being unlocked by MoE sparsity + disk streaming, not quantization.**
    Keep the shared core resident, stream routed experts from SSD — the trick now spans training,
@@ -1285,10 +1316,9 @@ patterns, and turn them into insights and actionable todos.
        vs **40.9%** on the same pairs; a leak probe's **82%** against a bag-of-words control that "performs nearly as
        well"; MICA's **94.3%** divergence from one contract; OpenFrontiers' closed-book "**at most 7 of 40**"; AWM's
        Lean impossibility proof, right **four of six**. → [[harness-reliability]] [[formal-verification]]
-     - **11-02 20:20 — the missing number is the BASE RATE, and the missing thing is HEADROOM:** eleven agent-hijack
-       evaluations put attacks at **16–86%** of samples and **none varies it**, so a **0.879** AUROC reaches **0.076**
-       precision at 2% (0.039–0.117 from the negatives alone) and rankings **reverse below 50%** tool coverage; a
-       pre-registered audit finds its selector **1.66 pp worse than random**, **82%** of states no signal. → [[fact-check]]
+      - **11-02 20:20 — the missing number is the BASE RATE, and the missing thing is HEADROOM:** eleven agent-hijack
+        evaluations put attacks at **16–86%** of samples and **none varies it**, so a **0.879** AUROC reaches **0.076**
+        precision at 2% and rankings **reverse below 50%** tool coverage. → [[fact-check]]
      - **11-03 — generation is fine, selection is unproven:** rTaste's **415** MVEs give **194** sound but only **73**
        beyond-the-seed, and first choices "are not shown to improve on choosing the experiment written first";
        BlindToChange's **27.5**-point gap is *triggering*. → [[harness-reliability]] [[fact-check]]
@@ -1296,6 +1326,10 @@ patterns, and turn them into insights and actionable todos.
        **five** tasks at **90.4–100%** with no model name, no task count and no aggregate; "Compile as Hypothesis"
        finds **no significant** prompt-optimisation gain on strong reasoners, and the one gain it does report
        (**+0.14**) splits **~.035** judge-rubric reconstruction / **~.105** real instruction refinement. → [[harness-reliability]]
+      - **11-03 20:22 — the grader's rule is the largest unexamined term:** **eight** benchmarks' official scorers over
+        **five** VLMs move accuracy up to **22 points** on identical outputs and **exactly 0** where the model emits clean
+        option letters; a **0.000**-non-compliance trace still swings **9.5** on which regex match is kept.
+        → [[parser-differential]] [[harness-reliability]]
 
 9. **Hidden chain-of-thought is a confidentiality assumption, not a security boundary** —
    arXiv:2608.09867: encrypted reasoning blocks are interchangeable across sessions/users/models
@@ -1335,11 +1369,9 @@ patterns, and turn them into insights and actionable todos.
     audit, the training/eval is closed, and — unlike the SB 53 release gate — this boundary has no
     regulator. **Measured:** excessive agency has a first rate (CSA 53% exceeded permissions);
     **bypassed end-to-end** (Embrace The Red); the real boundary is OS isolation + egress control.
-    - **09-29→10-14 — enforcement arrives as silicon, OS layer and enterprise checkbox:** NVIDIA's Open
-      Agent Safety Platform (OpenShell + Sentry on BlueField-4 DPUs — perimeter-not-intent, no detection
-      figures); Apple tightening Full Disk Access, then HomeView's Secure Exclaves; Firefox Enterprise's
-      "allow/restrict/disable AI tools" beside DLP; Nadella's "assume the model is compromised."
-      → [[security]] [[agent-stack]] [[platform-gatekeeping]]
+    - **09-29→10-14 — enforcement arrives as silicon, OS layer and enterprise checkbox:** OpenShell + Sentry on
+      BlueField-4 DPUs (perimeter-not-intent, no detection figures); Full Disk Access, then Secure Exclaves;
+      "assume the model is compromised." → [[security]] [[agent-stack]] [[platform-gatekeeping]]
     - **10-14 — the dataflow policy unit ships as a product:** `strands-agents/box` (Apache-2.0,
       macOS-ARM preview) enforces Dogwood `permit`/`forbid` default-deny rules *outside* the agent
       over a shared event history — a file read can deny a later egress: "what may it do next, given
@@ -1352,6 +1384,9 @@ patterns, and turn them into insights and actionable todos.
     - **10-29 — the class moves *upstream* of the boundary rather than across it:** Qwenputer computes
       **inside the forward pass**, so no approval fires and no log records it (→ thesis 29).
       → [[in-weight-compute]]
+    - **11-03 20:22 — approval is admission-time and the bytes change after it:** ETUDE rewrites a benign tool in place
+      and keeps **97.6%** ASR at **95.9%** legitimate completion across **seven** harnesses — "the harness supplies a
+      one-time approval for that call; this does not re-examine the updated implementation." → [[parser-differential]]
 
 12. **The optimization target shifted from the model to the harness — and the premium is
     measured, and bounded.** Bojie Li names the discipline: "harness engineering."
@@ -1738,7 +1773,7 @@ patterns, and turn them into insights and actionable todos.
       stars **cannot fall**; two scenario scores collapse to one on NVD; a `published` day can be the **host's** day. → [[fact-check]] [[security]] [[disclosure-lag]]
     - **11-02 (folded) — units thirty-seven to forty-two: a SPAN that can be empty, a STOPPING POINT, a SNAPSHOT, a
       base rate, a layer, a FLOP cut:** MINA's `3.0.0` … `3.0.0-M2` holds nothing (**87 of 3,461** records in a week
-      state such a span); VulDB's **41** store a **base** 4.0 while NVD stores the **threat** score from the same `E:P`;
+      state such a span); VulDB's **41** store a **base** 4.0 while NVD stores the **threat** score from the same `E:P` — and over **31** VulDB records published 11-02 that gap is **−0.82 at Critical, −1.93 at High, −1.91 at Medium (−4.2…+1.6)** under `Δ = v4.0 − 3.1` — so the quoted 0.7 is a BAND, not a constant, and **the sign is the subtraction** (the first table wrote it `3.1 − 4.0` and read **+0.7**) → [[cvss-stopping-points]].
       a **0.879** AUROC is **0.076** precision at a 2% attack rate; "**22.7×**" is one attention layer's prefill; a
       **47%** FLOP cut bought **1.15×** wall clock. → [[fact-check]] [[vuln-supply]] [[disclosure-lag]]
     - **11-03 — units forty-three and forty-four: a LOOP COUNT and an ADJUSTMENT:** Astra's **48.1%** is the table's
@@ -1901,7 +1936,9 @@ patterns, and turn them into insights and actionable todos.
   its own `vectorString` (v3.1/v3.0 native, v4.0 via `--oracle`), `--pairs` for dual-column spreads,
   and `--stopping-point-census --with-cna N` for base-vs-threat (11-02: **136/136** of NVD's
   Threat-bearing metrics are the THREAT score; on 4.0 NVD keeps `E` **136/136** while it **strips**
-  v3.1's temporal metrics **123/123**). Citation counts via **OpenAlex** when Scholar 429s.
+  v3.1's temporal metrics **123/123**), and since 11-03 it prints the **band table** with the counts
+  beside the mean (`Δ = v4.0 − 3.1`, `E:X` as the control row). Citation counts via **OpenAlex** when
+  Scholar 429s.
 
 - **Non-AI batch items (10-07→10-20):** the itemized record lives in the dated feed files; the
   long-runners have homes — DDR4's revival (→ thesis 3), Yandex Cloud's Vladimir DC UAV strike

@@ -1,5 +1,5 @@
 {
- "updated": "2026-11-03T06:13:58.388Z",
+ "updated": "2026-11-03T14:06:04.649Z",
  "cves": {
   "CVE-2026-48382": {
    "vulnStatus": "Analyzed",
@@ -2952,7 +2952,7 @@
   "CVE-2026-96889": {
    "vulnStatus": "Awaiting Analysis",
    "published": "2026-09-23",
-   "lastModified": "2026-10-30T01:16",
+   "lastModified": "2026-11-03T10:17",
    "metrics": [
     {
      "version": "3.1",
@@ -5016,11 +5016,11 @@
   "CVE-2026-118375": {
    "vulnStatus": "Awaiting Analysis",
    "published": "2026-10-28",
-   "lastModified": "2026-10-28T15:21",
+   "lastModified": "2026-11-03T13:17",
    "metrics": [
     {
      "version": "3.1",
-     "type": "Primary",
+     "type": "Secondary",
      "source": "disclosure@vulncheck.com",
      "baseScore": 8.1,
      "severity": "HIGH",
@@ -6418,7 +6418,7 @@
   "CVE-2026-98432": {
    "vulnStatus": "Received",
    "published": "2026-10-15",
-   "lastModified": "2026-10-31T21:16",
+   "lastModified": "2026-11-03T07:20",
    "metrics": [
     {
      "version": "3.1",
@@ -7892,6 +7892,213 @@
    "kev": null,
    "kevDue": null,
    "nvdAnalyzed": false
+  },
+  "CVE-2026-120630": {
+   "vulnStatus": "Deferred",
+   "published": "2026-11-02",
+   "lastModified": "2026-11-02T18:18",
+   "metrics": [],
+   "cwe": [],
+   "kev": null,
+   "kevDue": null,
+   "nvdAnalyzed": false
+  },
+  "CVE-2026-19304": {
+   "vulnStatus": "Analyzed",
+   "published": "2026-09-04",
+   "lastModified": "2026-09-28T19:16",
+   "metrics": [
+    {
+     "version": "3.1",
+     "type": "Secondary",
+     "source": "psirt@us.ibm.com",
+     "baseScore": 7.7,
+     "severity": "HIGH",
+     "vector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:C/C:H/I:N/A:N"
+    }
+   ],
+   "cwe": [
+    "CWE-918"
+   ],
+   "kev": null,
+   "kevDue": null,
+   "nvdAnalyzed": true
+  },
+  "CVE-2026-105769": {
+   "vulnStatus": "Awaiting Analysis",
+   "published": "2026-11-02",
+   "lastModified": "2026-11-02T19:34",
+   "metrics": [
+    {
+     "version": "3.1",
+     "type": "Secondary",
+     "source": "82cea9a6-e9e3-46fe-bdb0-3673de380178",
+     "baseScore": 9.3,
+     "severity": "CRITICAL",
+     "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:C/C:H/I:H/A:N"
+    }
+   ],
+   "cwe": [
+    "CWE-346",
+    "CWE-522"
+   ],
+   "kev": null,
+   "kevDue": null,
+   "nvdAnalyzed": false
+  },
+  "CVE-2026-89292": {
+   "vulnStatus": "Received",
+   "published": "2026-11-03",
+   "lastModified": "2026-11-03T10:17",
+   "metrics": [
+    {
+     "version": "4.0",
+     "type": "Secondary",
+     "source": "emo@eclipse.org",
+     "baseScore": 9.2,
+     "severity": "CRITICAL",
+     "vector": "CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:H/VI:N/VA:N/SC:H/SI:N/SA:N/E:X/CR:X/IR:X/AR:X/MAV:X/MAC:X/MAT:X/MPR:X/MUI:X/MVC:X/MVI:X/MVA:X/MSC:X/MSI:X/MSA:X/S:X/AU:X/R:X/V:X/RE:X/U:X"
+    }
+   ],
+   "cwe": [
+    "CWE-522",
+    "CWE-918"
+   ],
+   "kev": null,
+   "kevDue": null,
+   "nvdAnalyzed": false
+  },
+  "CVE-2026-94290": {
+   "vulnStatus": "Awaiting Analysis",
+   "published": "2026-11-02",
+   "lastModified": "2026-11-03T05:18",
+   "metrics": [
+    {
+     "version": "3.1",
+     "type": "Secondary",
+     "source": "meissner@suse.de",
+     "baseScore": 9.1,
+     "severity": "CRITICAL",
+     "vector": "CVSS:3.1/AV:N/AC:L/PR:H/UI:N/S:C/C:H/I:H/A:H"
+    }
+   ],
+   "cwe": [
+    "CWE-250"
+   ],
+   "kev": null,
+   "kevDue": null,
+   "nvdAnalyzed": false
+  },
+  "CVE-2026-88811": {
+   "vulnStatus": "Awaiting Analysis",
+   "published": "2026-11-02",
+   "lastModified": "2026-11-03T05:18",
+   "metrics": [
+    {
+     "version": "3.1",
+     "type": "Secondary",
+     "source": "meissner@suse.de",
+     "baseScore": 9.1,
+     "severity": "CRITICAL",
+     "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:N"
+    }
+   ],
+   "cwe": [
+    "CWE-201"
+   ],
+   "kev": null,
+   "kevDue": null,
+   "nvdAnalyzed": false
+  },
+  "CVE-2026-120283": {
+   "vulnStatus": "Deferred",
+   "published": "2026-11-02",
+   "lastModified": "2026-11-02T16:19",
+   "metrics": [
+    {
+     "version": "2.0",
+     "type": "Secondary",
+     "source": "cna@vuldb.com",
+     "baseScore": 10,
+     "severity": null,
+     "vector": "AV:N/AC:L/Au:N/C:C/I:C/A:C"
+    },
+    {
+     "version": "3.1",
+     "type": "Secondary",
+     "source": "cna@vuldb.com",
+     "baseScore": 10,
+     "severity": "CRITICAL",
+     "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:C/C:H/I:H/A:H"
+    },
+    {
+     "version": "4.0",
+     "type": "Secondary",
+     "source": "cna@vuldb.com",
+     "baseScore": 9.3,
+     "severity": "CRITICAL",
+     "vector": "CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:H/VI:H/VA:H/SC:H/SI:H/SA:H/E:P/CR:X/IR:X/AR:X/MAV:X/MAC:X/MAT:X/MPR:X/MUI:X/MVC:X/MVI:X/MVA:X/MSC:X/MSI:X/MSA:X/S:X/AU:X/R:X/V:X/RE:X/U:X"
+    }
+   ],
+   "cwe": [
+    "CWE-119",
+    "CWE-121"
+   ],
+   "kev": null,
+   "kevDue": null,
+   "nvdAnalyzed": false
+  },
+  "CVE-2025-3248": {
+   "vulnStatus": "Analyzed",
+   "published": "2025-04-07",
+   "lastModified": "2026-10-08T16:16",
+   "metrics": [
+    {
+     "version": "3.1",
+     "type": "Primary",
+     "source": "nvd@nist.gov",
+     "baseScore": 9.8,
+     "severity": "CRITICAL",
+     "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
+    },
+    {
+     "version": "3.1",
+     "type": "Secondary",
+     "source": "disclosure@vulncheck.com",
+     "baseScore": 9.8,
+     "severity": "CRITICAL",
+     "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
+    }
+   ],
+   "cwe": [
+    "CWE-306",
+    "CWE-306",
+    "CWE-94"
+   ],
+   "kev": "2025-05-05",
+   "kevDue": "2025-05-26",
+   "nvdAnalyzed": true
+  },
+  "CVE-2026-9198": {
+   "vulnStatus": "Analyzed",
+   "published": "2026-07-17",
+   "lastModified": "2026-10-24T20:10",
+   "metrics": [
+    {
+     "version": "3.1",
+     "type": "Secondary",
+     "source": "psirt@us.ibm.com",
+     "baseScore": 9.8,
+     "severity": "CRITICAL",
+     "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
+    }
+   ],
+   "cwe": [
+    "CWE-94"
+   ],
+   "kev": "2026-08-04",
+   "kevDue": "2026-08-07",
+   "nvdAnalyzed": true
   }
  }
 }

@@ -170,6 +170,27 @@ underlying pages — this produced a two-layer false signal in a single item.
    when a quoted score reconciles to a stopping point the item never names (silent when the item says
    "base"/"threat"/"temporal", or when it already quotes two of them — enumeration is disclosure;
    `--selftest` **194 → 199**).
+   **A mean over severity bands describes no band, so the census prints the band table** (added
+   2026-11-03 20:22, and the convention is part of the number: **Δ = v4.0 − v3.1**, so a negative row
+   means NVD's 4.0 sits *below* the 3.1). The hand census of the **31** `cna@vuldb.com` records
+   published 2026-11-02 returned a mean Δ of **−1.51**, and no band carried it: **−0.82** at Critical
+   (10 pairs, 3.1 higher 10), **−1.93** at High, **−1.91** at Medium (**−4.2…+1.6**) — while the two
+   `E:X` rows run the other way. So "the 4.0 score is 0.7 below the 3.1" is a **Critical-band** fact
+   quoted as a constant, and the reusable rule is that a gap between two frameworks is a *joint* of
+   the band and the Threat metric, never a single number. `--stopping-point-census` now prints a row
+   per severity band **and** per (band · Threat group), keeps `E:X` as its own **control** row (base
+   == threat there, so its gap is the framework rather than the stopping point), and puts the counts
+   (**4.0 higher** / **3.1 higher** / **equal**) beside the mean instead of folding them in;
+   `pairStats()` rides the `--json` payload too, because a machine-readable run that drops the band
+   table leaves the caller with exactly the number the item was filed against. One boundary worth
+   carrying: **`bandOf(null)` is `unscored`, never `None`** — `Number(null)` is 0, and an absent
+   score banded as a 0.0-severity record is the GHSA empty-slot defect one field over (the selftest
+   caught it on the first run). And the sign is a unit: the hand table filed one day earlier wrote
+   the same census as **+0.7 / +1.8 / −0.2…+4.2** by subtracting in the other order, so quote the
+   subtraction or the table reads as its own contradiction. One operational limit came out of running
+   it: a **month-long** window (17,256 records) dies on NVD's **120 s** per-request timeout at
+   `resultsPerPage=2000`, so page size is a flag (`--per-page 1000`) and a failed page now names its
+   `startIndex` instead of exiting on a bare `AbortError`.
    **A record-shape check needs the same disclosure guard as a claim check, or it measures the
    writer's vocabulary instead of the reader's ability** (added 2026-11-02 20:29). The separate
    `--check temporal` fires on the CONTAINER, not on the prose — deliberately, because an item can

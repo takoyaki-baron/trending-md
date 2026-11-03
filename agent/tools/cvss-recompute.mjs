@@ -27,6 +27,7 @@
  * Usage:
  *   cvss-recompute.mjs --ids CVE-2026-115905,CVE-2026-102649      # one NVD call for the list
  *   cvss-recompute.mjs --from 2026-10-20 --to 2026-10-26          # census over a pub window
+ *   cvss-recompute.mjs --from … --to … --per-page 500             # smaller pages for a month+
  *   cvss-recompute.mjs --from … --to … --json                     # per-metric records
  *   cvss-recompute.mjs --oracle /tmp/cvsscheck/node_modules/cvss4  # exact v4.0 via third party
  *   cvss-recompute.mjs --from … --to … --stopping-point-census    # base vs threat, per assigner
@@ -46,6 +47,15 @@
  * `differs`. Both are now checked (`stoppingPoints()`), and only a number matching neither is a
  * finding. The census that sized the class:
  *   node agent/tools/cvss-recompute.mjs --from 2026-10-26 --to 2026-11-01 --stopping-point-census
+ *
+ * ── THE BAND TABLE (2026-11-03 20:34) ────────────────────────────────────────────────────────
+ * The census also prints every same-source 3.1/4.0 pair split by severity band, by band · Threat
+ * group, by assigner, and by assigner · band — with counts beside the mean. `Δ` is always
+ * **4.0 − 3.1**, so a negative row means NVD's 4.0 sits below the 3.1; the hand table this replaced
+ * subtracted the other way (`3.1 − 4.0`) and published `+0.7` for the same records that read
+ * `−0.82` here, which is why the convention is printed rather than remembered. `E:X` is the
+ * CONTROL row: with no Threat metric the two frameworks' bases are compared directly, so its gap is
+ * the framework's own. `--json` carries the same structure under `pairs`.
  *
  * Exit code is 0 unless `--strict` and a `differs` was found.
  */
@@ -526,6 +536,10 @@ async function stoppingCensus(rows, label, json = false) {
     }
     if (args.includes('--cna-examples')) for (const p of ok.slice(0, 12)) say(`    ${p.id} v${p.version} cna ${p.cnaScore} (${p.cnaStop}) · nvd ${p.nvdScore} (${p.nvdStop})${p.stripped ? ' · STRIPPED' : ''}`);
   }
+  /* The band table, printed by the census the System item names. It is a DIFFERENT population from
+     the tallies above — a pair needs one party to publish both frameworks, while the tallies count
+     NVD metrics carrying a Threat metric — so it is its own block rather than a fourth column. */
+  say(renderPairBlock(pairStats(pairRows(rows))));
   return classified;
 }
 
@@ -567,12 +581,49 @@ function summarise(rows) {
   return differing;
 }
 
+/* ── the BAND TABLE (System item filed 2026-11-03 20:22) ──────────────────────────────────────
+ * Why a table and not one mean: the 11-02 hand census of the 31 `cna@vuldb.com` records NVD
+ * published that day returned a mean of **+1.7**, and no band carried it — **+0.7** at Critical
+ * (8 of 10 up), **+1.8** at High, **−0.2…+4.2** at Medium — while the two `E:X` rows ran the other
+ * way. Those hand figures subtracted `3.1 − 4.0`; THIS TABLE subtracts `4.0 − 3.1`, the convention
+ * `--pairs` has always printed, so the same records read **−0.82 / −1.93 / −1.91**. The sign is part
+ * of the number, which is why the header names the subtraction rather than leaving it to the reader.
+ * An average across bands averages two different things (how each band's vectors happen to sit, and
+ * which Threat metric the CNA habitually appends), and it describes no record — the defect the feed
+ * has been corrected for repeatedly, a number true of the population and false of every member — so
+ * the census prints the counts it was folding away: a row per severity band, a row per (band ·
+ * Threat-metric group), and a per-assigner split, because every concentration this library has
+ * measured has turned out to be one writer's house style. `E:X` is the CONTROL: with no Threat
+ * metric the two frameworks' bases are compared directly, so a non-zero mean there is the
+ * frameworks' own difference rather than a stopping-point choice. */
+const SEV_BANDS = [
+  ['Critical', (s) => s >= 9],
+  ['High', (s) => s >= 7 && s < 9],
+  ['Medium', (s) => s >= 4 && s < 7],
+  ['Low', (s) => s > 0 && s < 4],
+  ['None', (s) => s <= 0],
+];
+export function bandOf(score) {
+  /* `null` is NOT 0.0 — `Number(null)` is 0, which would band an absent score as `None`, the same
+     "an empty slot reads as a zero" defect the GHSA census caught on `{score: 0.0}`. A genuine 0.0
+     severity is a real band; a missing one is silence. */
+  if (score === null || score === undefined || score === '') return 'unscored';
+  const s = Number(score);
+  if (!Number.isFinite(s)) return 'unscored';
+  return SEV_BANDS.find(([, f]) => f(s))?.[0] ?? 'unscored';
+}
+const bandOrder = (key) => {
+  const b = String(key).split(' · ')[0];
+  const i = SEV_BANDS.findIndex(([n]) => n === b);
+  return i === -1 ? SEV_BANDS.length : i;
+};
+
 /* The dual-column question ("is the v3.1-vs-v4.0 spread a CNA property or a universal one?") is
  * only answerable on records that carry *both* versions, and only if the pair belongs to one party.
  * A record can hold a CNA's 3.1 and the ADP's 4.0 — that is two assessments, not one scorer twice —
  * so pairs are accepted only when both metrics share a `source`, and the split is printed per source
  * so a single CNA cannot masquerade as the class. */
-function pairBlock(rows) {
+function pairRows(rows) {
   const byId = new Map();
   for (const r of rows) {
     if (!byId.has(r.id)) byId.set(r.id, []);
@@ -586,29 +637,66 @@ function pairBlock(rows) {
       for (const b of v40) {
         if (a.source !== b.source) continue;
         if (!Number.isFinite(Number(a.stored)) || !Number.isFinite(Number(b.stored))) continue;
-        pairs.push({ id, source: a.source, s31: Number(a.stored), s40: Number(b.stored) });
+        pairs.push({
+          id, source: a.source, assigner: a.cna ?? null,
+          s31: Number(a.stored), s40: Number(b.stored),
+          /* The 4.0 vector's `E` decides the group; the 3.1 vector's is recorded nowhere because
+             NVD strips it on every v3.1 copy measured so far (123/123 and 29/29 windows). */
+          e40: parseV4ish(b.vector)?.E ?? null,
+        });
       }
     }
   }
-  if (!pairs.length) return '\nsame-source 3.1/4.0 pairs: 0 — no scorer published both versions in this window';
-  const out = [`\nsame-source 3.1/4.0 pairs: ${pairs.length}`];
-  const per = new Map();
-  for (const p of pairs) {
-    const cur = per.get(p.source) ?? { n: 0, equal: 0, hi40: 0, hi31: 0, sum: 0, bands: 0 };
-    cur.n += 1;
-    const d = Math.round((p.s40 - p.s31) * 10) / 10;
-    if (d === 0) cur.equal += 1;
-    else if (d > 0) cur.hi40 += 1;
-    else cur.hi31 += 1;
-    cur.sum += d;
-    const band = (s) => (s >= 9 ? 'C' : s >= 7 ? 'H' : s >= 4 ? 'M' : s > 0 ? 'L' : 'N');
-    if (band(p.s31) !== band(p.s40)) cur.bands += 1;
-    per.set(p.source, cur);
-  }
-  for (const [src, c] of [...per.entries()].sort((a, b) => b[1].n - a[1].n)) {
-    out.push(`  ${src.padEnd(34)} ${String(c.n).padStart(4)} pairs · equal ${c.equal} · 4.0 higher ${c.hi40} · 3.1 higher ${c.hi31} · mean Δ ${(c.sum / c.n).toFixed(2)} · band crossing ${c.bands}`);
-  }
+  return pairs;
+}
+
+/* Counts, not only means — and the counts come out of the same pass so the mean can never disagree
+   with the row beside it. `hi40` is the "stored 4.0 is above the 3.1 base" count the item asks for. */
+function pairStats(pairs) {
+  const tally = (keyOf) => {
+    const m = new Map();
+    for (const p of pairs) {
+      const k = keyOf(p);
+      const c = m.get(k) ?? { n: 0, equal: 0, hi40: 0, hi31: 0, sum: 0, lo: Infinity, hi: -Infinity, cross: 0 };
+      const d = Math.round((p.s40 - p.s31) * 10) / 10;
+      c.n += 1;
+      c.sum += d;
+      if (d === 0) c.equal += 1; else if (d > 0) c.hi40 += 1; else c.hi31 += 1;
+      c.lo = Math.min(c.lo, d);
+      c.hi = Math.max(c.hi, d);
+      if (bandOf(p.s31) !== bandOf(p.s40)) c.cross += 1;
+      m.set(k, c);
+    }
+    return [...m.entries()].map(([key, c]) => ({ key, ...c, mean: Math.round((c.sum / c.n) * 100) / 100 }));
+  };
+  return {
+    total: pairs.length,
+    bands: tally((p) => bandOf(p.s31)).sort((a, b) => bandOrder(a.key) - bandOrder(b.key)),
+    byBandE: tally((p) => `${bandOf(p.s31)} · E:${p.e40 ?? 'absent'}`)
+      .sort((a, b) => bandOrder(a.key) - bandOrder(b.key) || a.key.localeCompare(b.key)),
+    bySource: tally((p) => p.source ?? '?').sort((a, b) => b.n - a.n),
+    bySourceBand: tally((p) => `${p.source ?? '?'} · ${bandOf(p.s31)}`)
+      .sort((a, b) => b.n - a.n || bandOrder(a.key) - bandOrder(b.key)),
+  };
+}
+
+function renderPairBlock(stats) {
+  if (!stats.total) return '\nsame-source 3.1/4.0 pairs: 0 — no scorer published both versions in this window';
+  const line = ({ key, n, hi40, hi31, equal, mean, lo, hi, cross }) =>
+    `  ${String(key).padEnd(30)} ${String(n).padStart(4)} pairs · 4.0 higher ${String(hi40).padStart(3)} · 3.1 higher ${String(hi31).padStart(3)} · equal ${String(equal).padStart(3)} · mean Δ ${String(mean).padStart(6)} · Δ ${(lo === hi ? `${lo}` : `${lo}…${hi}`).padEnd(11)} · band crossing ${cross}`;
+  const out = [`\nsame-source 3.1/4.0 pairs: ${stats.total}`, '', '  by band (banded on the 3.1 score):'];
+  for (const r of stats.bands) out.push(line(r));
+  out.push('', '  by band · Threat metric on the 4.0 vector (E:X is the control — base == threat there):');
+  for (const r of stats.byBandE) out.push(line(r));
+  out.push('', '  by assigner:');
+  for (const r of stats.bySource) out.push(line(r));
+  out.push('', '  by assigner · band (a mean per CNA is a house style; a mean per band is arithmetic):');
+  for (const r of stats.bySourceBand) out.push(line(r));
   return out.join('\n');
+}
+
+function pairBlock(rows) {
+  return renderPairBlock(pairStats(pairRows(rows)));
 }
 
 async function main() {
@@ -635,10 +723,19 @@ async function main() {
     const start = from.includes('T') ? from : `${from}T00:00:00.000`;
     let startIndex = 0;
     let pages = 0;
+    /* A 2000-record page can exceed the 120 s per-request timeout on a busy day, and the failure
+       arrives as a bare `AbortError` with no page number — which says nothing about which request
+       died or what to change (measured 2026-11-03: a month window crashed this way after 7 minutes).
+       So the page size is a parameter and a failure names the page and the fix. */
+    const PER_PAGE = String(argOf('--per-page', '2000'));
     for (;;) {
-      const j = await nvd({
-        pubStartDate: start, pubEndDate: end, resultsPerPage: '2000', startIndex: String(startIndex),
-      });
+      let j;
+      try {
+        j = await nvd({ pubStartDate: start, pubEndDate: end, resultsPerPage: PER_PAGE, startIndex: String(startIndex) });
+      } catch (e) {
+        throw new Error(`NVD page ${pages + 1} (startIndex ${startIndex}, ${PER_PAGE}/page) failed after 4 attempts: ${e.message}`
+          + ' — re-run with a smaller `--per-page` (e.g. 500–1000); a 2000-record page can exceed the 120 s timeout');
+      }
       pages += 1;
       for (const rec of j.vulnerabilities ?? []) rows.push(...rowsFor(rec));
       startIndex += (j.vulnerabilities ?? []).length;
@@ -655,7 +752,10 @@ async function main() {
        die. Nothing above writes to stdout except the window line, which is printed before this. */
     if (args.includes('--stopping-point-census')) {
       const rowsJson = await stoppingCensus(rows, `${argOf('--from', '')} → ${argOf('--to', '')}`.trim(), true);
-      console.log(JSON.stringify({ generated: new Date().toISOString(), oracle: oracleName, metrics: rowsJson }, null, 1));
+      /* `pairs` is in the JSON too: the band table is the census's answer to "does the mean describe
+         a band?", and a machine-readable run that drops it leaves the caller with the number the
+         item was filed against. */
+      console.log(JSON.stringify({ generated: new Date().toISOString(), oracle: oracleName, metrics: rowsJson, pairs: pairStats(pairRows(rows)) }, null, 1));
       return;
     }
     console.log(JSON.stringify({ generated: new Date().toISOString(), oracle: oracleName, rows }, null, 1));
@@ -718,10 +818,44 @@ function selftest() {
   } else {
     console.log('skip v4.0 stopping-point cases (no --oracle installed)');
   }
+
+  /* ── the band table (2026-11-03 20:22) ──────────────────────────────────────────────────────
+   * Pinned is the lesson rather than the layout: a band's row must carry the counts it was folded
+   * from, and the population mean must be distinguishable from every band's mean — otherwise the
+   * table would be the same average printed five times. */
+  T('severity bands are the CVSS label bands, edges inclusive',
+    bandOf(10) === 'Critical' && bandOf(9) === 'Critical' && bandOf(8.9) === 'High' &&
+    bandOf(7) === 'High' && bandOf(6.9) === 'Medium' && bandOf(4) === 'Medium' &&
+    bandOf(3.9) === 'Low' && bandOf(0) === 'None' && bandOf(null) === 'unscored',
+    `10→${bandOf(10)} · 8.9→${bandOf(8.9)} · 3.9→${bandOf(3.9)} · 0→${bandOf(0)}`);
+  const demoPairs = [
+    { s31: 9.5, s40: 10.0, e40: 'P' },
+    { s31: 9.4, s40: 9.9, e40: 'P' },
+    { s31: 9.2, s40: 8.4, e40: 'P' },
+    { s31: 7.5, s40: 8.7, e40: 'P' },
+    { s31: 7.2, s40: 7.9, e40: 'X' },
+  ].map((p, i) => ({ id: `T-${i}`, source: 'demo', assigner: 'demo', ...p }));
+  const demo = pairStats(demoPairs);
+  const crit = demo.bands.find((b) => b.key === 'Critical');
+  const high = demo.bands.find((b) => b.key === 'High');
+  T('a band row keeps its counts, not only its mean', crit && crit.n === 3 && crit.hi40 === 2 && crit.hi31 === 1, crit && `${crit.n} pairs · 4.0 higher ${crit.hi40} · 3.1 higher ${crit.hi31}`);
+  T('a band mean is not the population mean', crit && high && crit.mean === 0.07 && high.mean === 0.95 && crit.mean !== high.mean, `Critical ${crit?.mean} · High ${high?.mean}`);
+  T('E:X gets its own row (base == threat is the control)', demo.byBandE.some((r) => r.key === 'High · E:X') && demo.byBandE.some((r) => r.key === 'High · E:P'));
+  T('a pair crossing a band boundary is counted, not silently re-banded', crit?.cross === 1, `Critical crossings ${crit?.cross}`);
   console.log(bad ? `\n${bad} failure(s)` : '\nall selftests pass');
   if (bad) process.exit(1);
 }
 
 /* Only run as a program. `import` of this file must be side-effect free — the first version was
  * not, and importing `judge()` to sanity-check it ran a whole default census instead. */
-if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) await main();
+if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
+  /* A window census's failure mode is an NVD request that times out, and an unhandled `AbortError`
+     exits with a stack trace that names neither the page nor the parameter to change. One line of
+     context beats a trace here — the tool is run headless from a pipeline. */
+  try {
+    await main();
+  } catch (e) {
+    console.error(`cvss-recompute: ${e.message}`);
+    process.exit(1);
+  }
+}

@@ -13960,5 +13960,23 @@
     "en": "Apache Syncope's security page — the project's advisory list; terse, and its records carry a textual severity rather than a CVSS number. Cross-checked 2026-11-03 against the CVE Program registry (cveawg), which returned the same five records with assigner `apache`.",
     "zh": "Apache Syncope 的安全页——项目自己的公告列表；文字简略，其记录只给文字级严重度而非 CVSS 数字。2026-11-03 已对 CVE Program 注册库（cveawg）做过交叉核验，后者返回同样五条记录且 assigner 为 `apache`。",
     "jp": "Apache Syncope のセキュリティページ——プロジェクト自身の勧告一覧。簡潔で、記録は CVSS 数値ではなくテキストの重大度を持つ。2026-11-03 に CVE Program のレジストリ（cveawg）で照合し、同じ 5 件が assigner `apache` として返った。"
+  },
+  "syscall.sh": {
+    "cat": "code",
+    "cred": "med",
+    "density": "high",
+    "cv": 1,
+    "en": "A syscall reference (tables per architecture + a JSON endpoint) — machine-readable and mirroring the kernel's own numbering rather than a blog; low editorial content, so verify the kernel version a row was introduced in. Curation check 2026-11-03: `x64/syscalls.json` fetched first-hand — 371 rows, arch x64, 82 kernels.",
+    "zh": "系统调用参考（按架构分表 + 每架构一个 JSON 端点）——机器可读、直接对应内核自己的编号而不是博客；编辑含量低，所以要核实某一行是哪个内核版本引入的。",
+    "jp": "システムコールのリファレンス（アーキテクチャ別の表と JSON エンドポイント）——機械可読で、カーネル自身の番号に対応する。編集的な内容は薄いので、各行がどのカーネル版で入ったかは検証すること。"
+  },
+  "workos.com": {
+    "cat": "vendor",
+    "cred": "med",
+    "density": "med",
+    "cv": 1,
+    "en": "Identity/enterprise-SaaS vendor blog and security bulletins — the vendor's own statement of what happened, useful mainly for the gaps between its tiers (a public notice, a customer notification, and an executive comment can say three different things). Curation check 2026-11-03: its 9.4 for CVE-2025-11969 matches NVD’s vector `PR:N` on the record.",
+    "zh": "身份/企业 SaaS 厂商的博客与安全公告——厂商自己对事件的陈述，主要价值在于它各层级之间的落差（公开公告、客户通知与高管评论可能说的是三件事）。",
+    "jp": "アイデンティティ／エンタープライズ SaaS ベンダーのブログとセキュリティ公告——起きたことについてのベンダー自身の陈述で、主な価値は階層間のずれ（公開公告・顧客通知・経営者のコメントが別々のことを言いうる）にある。"
   }
 }
