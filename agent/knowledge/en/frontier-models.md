@@ -5138,3 +5138,107 @@ capability evaluations met its indicative threshold." The biorisk row has to be 
 29.2%**, refusal-adjusted **85.0%** against an indicative High threshold of **80%**.
 
 → [[fact-check]] [[edge-inference]] [[agent-stack]]
+
+## 11-04 — four papers that price the axis nobody optimized
+
+Every abstract below was read verbatim on 2026-11-04 04:19–04:21 (arXiv `abs/` pages). They arrive
+together and share one shape: **an ordering that holds on the metric the field optimizes, and
+inverts on the metric the deployment cares about.**
+
+### Muon wins the pretraining curve and loses the fine-tune (2611.03633)
+
+Muon's reputation is pretraining loss per FLOP. After fine-tuning: "**beyond a sufficiently large
+pretraining data budget, AdamW outperforms Muon after fine-tuning**", and as model size grows AdamW
+overtakes at **progressively smaller pretraining token-parameter ratios**. The proposed mechanism is
+the **margin-to-spread ratio** — how far the correct logit sits above the wrong ones relative to how
+widely the wrong logits are spread. Muon has the larger ratio at small data budgets, AdamW at large
+ones, and that ordering mirrors the fine-tuning result. The theory is deliberately modest and the
+paper says so: in a **linear associative memory** it proves the ratio of gradient descent gains on
+Muon's after **one** update as the data budget grows, with simulations extending the trend.
+
+Read it as: "faster" means **faster to a given pretraining loss**, and a lab that picks an optimizer
+on the pretraining curve may be trading a downstream gain for a pretraining number. The proof is a
+toy; the empirical trend is the claim to test against your own fine-tuning.
+
+### Multi-epoch pretraining prefers an ensemble to a wider model (2611.03590)
+
+When data is the binding constraint the question becomes how many passes over the same tokens.
+Studying epochs and ensemble size jointly at fixed data on FineWeb: **logit averaging** reduces
+late-training deterioration, **delays optimal stopping**, and can beat wider or deeper single models
+at matched parameter-token budgets over a common training horizon. The analysis is a dynamical
+mean-field theory for multi-epoch SGD in power-law random-feature ensembles tracking error
+correlations across epochs *and* across models; ensembling reduces the prediction variance
+responsible for the late-time growth in expected test error, which is what shifts the stopping time.
+From those stopping times it derives compute-allocation laws under which **ensemble size grows at
+least as fast as training time per member**. Regime is stated (fixed data, matched budgets) and
+outside it the law does not apply.
+
+### Sonar-MoE frees each expert's gradient in the backward pass (2611.03577)
+
+Most of an MoE's parameters are experts, and standard training holds every expert gradient in GPU
+memory until the optimizer step — memory that grows with expert count, which is the axis MoE models
+are being pushed along. Sonar-MoE applies the optimizer **during** the backward pass for **batched**
+expert tensors and frees each gradient immediately, so the GPU never holds more than one layer of
+expert gradients.
+
+Measured on **OLMoE-1B-7B** and **Granite-3.1-3B-A800M** in bf16, two expert-kernel backends:
+
+| claim | value |
+|---|---|
+| peak memory | **19% – 22%** lower |
+| update equivalence | **bitwise identical** to standard training *without* expert gradient clipping |
+| quality | held-out loss within **0.003** of all baselines |
+| step time | **17% – 23%** less than standard training *with* global-norm clipping |
+| design detail | updating whole batched tensors avoids the **20% – 72%** slowdown seen with per-expert updates at the same memory saving |
+
+"Bitwise identical" is the load-bearing word: it makes adoption cheap (no re-tuning to chase a moved
+loss curve), and it is the kind of claim a reader can test rather than trust. Dense parameters are
+still clipped, which is why it matches optimizer-in-backward over all parameters on memory and speed
+without giving up that control.
+
+### RLVR teaches a strategy that evaporates out of distribution (2611.03627)
+
+A controllable setting: find multiple inputs `x` for `f(x) = y` where `f` is a **non-bijective** string
+function, which makes the reasoning strategy observable and easy-to-hard OOD shifts definable (more
+solutions, longer `y`). Under RLVR the model solves in-distribution with structured step-by-step
+derivation; under the OOD shift it **abandons the derivation and collapses into brute-force
+enumeration**, with sharp accuracy drops.
+
+The authors rule out the two easy explanations first, and that is the paper's best feature: the base
+model is **not incapable**, and this is **not reward hacking** — in-distribution it succeeds with the
+right strategy. The repair is counter-intuitive: co-training on **bijective inversion** tasks, which
+are *not* uniformly harder and are *further* from the OOD evaluation, makes derivation more certain
+and substantially restores both strategy and accuracy. So the failure is "it stops bothering", not
+"it gets worse", and the second is trainable by a task that looks unrelated.
+
+→ [[harness-reliability]] [[fact-check]]
+
+## 11-04 — the weights are legible enough to argue about, and the replication moved the claim NARROWER
+
+Simon Willison ran the Weight-Space Programming paper's `exp1_which_game` prompts — name which of four
+10×10 grid games a policy network was trained on, with the instruction "You have no tools: no code
+execution, no calculator, nothing to run" — against **Qwen 3.8 27B running locally** in LM Studio
+(~17 GB) through his `llm` CLI. Results from his post (2026-11-03):
+
+| game | result | cost |
+|---|---|---|
+| Pac-Man | correct, **72%** confidence | 46m 12s, 43,506 reasoning tokens |
+| Pong | correct, **75%** | ~1 hour |
+| Breakout | correct, **88%** | ~52 minutes |
+| Freeway | **failed** — guessed a Pac-Man-like game | — |
+
+Kimi K3.1 Pro via OpenRouter got Breakout in ~9m 41s. **The caveats are the substance**, and Willison
+puts them in his own post rather than in a footnote: he separates the two claims commentary merged —
+models *interpreting* weights without tools versus models *modifying* them — links Matthew Honnibal's
+critique ("misleading") and Sean Goedecke's argument that the weight-editing example resembles
+ordinary human ML research, calls the reasoning traces "almost incomprehensible", and closes: "**I'm
+not ready to declare that the age of source code is over.**"
+
+**Why this is the right bar and not a debunk:** a 17 GB open-weights model on a laptop, prompts
+published with the paper, a **documented failure** (Freeway), and 45–65 minutes of reasoning per
+answer. That is simultaneously evidence that *some* structure is legible in weights and evidence
+against the reading that this replaces reading code. The follow-up to the original Astra claim has
+moved in exactly one direction — **narrower** — which is the direction a real result moves when it is
+replicated by someone with no stake in the headline.
+
+→ [[fact-check]] [[edge-inference]]

@@ -208,7 +208,7 @@ bf16・2 種類のエキスパートカーネルバックエンドで **OLMoE-1B
 
 `CVE-2026-28336` は SolarWinds Dameware のコマンドインジェクションで、**2026.3 およびそれ以前の全バージョン**に影響し、**2026.3.1** で修正される。ベンダー自身のベクトル `CVSS:3.0/AV:N/AC:L/PR:L/UI:N/S:C/C:H/I:H/A:H` で **9.9 Critical**。低権限のバグを 9.9 に押し上げるのは `S:C`（スコープ変更）と `PR:L` の組み合わせだ——注入されたコマンドは受け付けたコンポーネント内に留まらず、公告の一行要約は「could lead to the compromise of the remotely controlled host」と述べる。
 
-数字と一緒に書くべき来歴が 2 つある。NVD レコード上のメトリクスは `Secondary psirt@solarwinds.com`、ステータスは `Received`——つまり 9.9 は **CNA** のスコアであり、NVD の分析ではなく、おそらくそのまま再配信される。もう 1 つ、謝辞は **Greg Bernatowicz on the Boeing Enterprise Security Red Team** を挙げている。先週続いた、外部レッドチームの発見・修正・記録という開示の形と同じだ。
+数字と一緒に書くべき来歴が 2 つある。NVD レコード上のメトリクスは `Secondary psirt@solarwinds.com` で、レコードは `Awaiting Analysis` に留まり **NVD 採点の指標は 0 件**（本項目の執筆時は `Received` で、同日のうちに移動した）——つまり 9.9 は **CNA** のスコアであり、NVD の分析ではなく、おそらくそのまま再配信される。もう 1 つ、謝辞は **Greg Bernatowicz on the Boeing Enterprise Security Red Team** を挙げている。先週続いた、外部レッドチームの発見・修正・記録という開示の形と同じだ。
 
 **なぜ重要か：** Dameware はリモートサポート製品であり、影響を受けるホストは管理者が他のすべてに到達するために使うホストである。悪用には足場が要るが、ゼロではない。対応は 2026.3.1 への更新で、この公告で興味深いのはむしろ短さのほうだ——悪用状況の記載も、攻撃複雑度の議論もなく、「Authentication is required」以外に注入経路が認証前か後かの説明もない。
 

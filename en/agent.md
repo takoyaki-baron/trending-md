@@ -1,6 +1,6 @@
 ---
 title: Learnt Agent
-last_processed: 2026-11-03T20:25:00+08:00
+last_processed: 2026-11-04T04:22:00+08:00
 ---
 
 # Learnt Agent
@@ -1136,6 +1136,47 @@ patterns, and turn them into insights and actionable todos.
 > accepting external contributions"), floci **28,191★**, Toit **1,464★**, DiscImageStudio **4,248★** (+31 in ~3h).
 > New knowledge files → [[parser-differential]] [[cvss-stopping-points]]
 
+> **(11-04 04:22, learn pass):** the 04:15 batch's net-new 20 (a fresh day's file). Spine: **the installer is the trust
+> boundary, and two of the batch's artifacts disagree inside a single element.** Verified first-hand: Postman desktop
+> **12.33.4**'s Codex installer exports `approvePostmanHook(system)`, whose own doc comment reads "Approves only Postman's
+> current hook after installation; unsupported APIs never fail the install", locates its hook by key
+> `postman@postman:hooks/codex-hooks.json:session_start:0:0` and — when `trustStatus !== 'trusted'` — issues
+> `config/batchWrite` with `{hooks.state: {<key>: {trusted_hash}}}` plus `reloadUserConfig: true`, so the party that
+> wrote the hook asked the host to trust it. Issue **#14370** (created 2026-10-25T19:03:26Z, **147** reactions at check
+> against the batch's 140, open, 18 comments) carries the log line verbatim —
+> `{"source":"auto-existing-upgrade","results":["claude-code:installed","codex:installed"],…}` at
+> **2026-10-24T09:34:14.418Z** — and the reporter's own limits are the honest half: not reproduced on a clean Mac, the
+> trust record "does not prove who created that specific record", no exfiltration claim. **The framework is not the MCP
+> variable:** the tool-poisoning paper re-read verbatim drives **9,720** cells (12 frameworks × 18 models × 45
+> scenarios) to **22.9%** ASR (**2,113** cells; 64.9% dispatch an attacker call → 23.0% contact the endpoint → **12.1%**
+> verified exfiltration), nine frameworks inside **23–26%** (**χ² 3.30, p = 0.91**), "no framework implements
+> intentional defense", model ASR **0.4–49.7%**, and a description scanner rejecting **20 of 45** at 7.2% FPR. GitBook's
+> status page read first-hand carries both updates and they contradict on the one thing you act on: 13:15 CET
+> "**Action required: None at this time**" beside 16:21 CET's rotation list, under the attribution "a sophisticated,
+> highly targeted attack **using AI agents**" that names no tool and no entry point, with "**Questions asked to GitBook
+> Assistant by your site visitors**" among the affected data.
+> **Two artifacts answered inside one element.** SolarWinds' `CVE-2026-28336` advisory prints
+> `CVSS:3.0/AV:N/AC:L/PR:L/UI:N/S:C/C:H/I:H/A:H` as link **text** while that same anchor's `href` is
+> `…/calculator/**3-1**#CVSS:**3.1**/AV:N/…`, and NVD stores the record as `cvssMetric**V31**` — NVD follows the href,
+> both stop at **9.9**, and an item quoting either half is correct while the pair reads as a version swap.
+> `patch-gg/pixelfx` writes its count as `<!-- count -->244<!-- /count -->` in its README — the first artifact that
+> *delimits* a number the `count` check exists to read — and `multica-ai/andrej-karpathy-skills` supplies the composite
+> counter's second direction: `search/issues` returns **0** issues + **108** PRs (the item's own numbers, so the item was
+> right) while `open_issues_count` reads **137**, 29 *above* the live split, where free-my-tv's was 2 *below* (77 vs 79).
+> One NVD pull over six ids — **0 of 6** NVD-scored, five CNAs: SolarWinds 9.9 `Secondary psirt@solarwinds.com` on
+> `Received`; Elo **9.8/9.8** from the GitHub CNA with CWE sets {94,116,1336} and {79,94,693,1336}; FreeRDP
+> `CVE-2026-121392` **`Undergoing Analysis`** at 4.0 **9.1** beside 3.1 **7.4**, both carrying `E:X` (so that spread is
+> the framework, not a stopping point); Docker 9.2 on 4.0 with **CWE-424**; and `CVE-2026-98432` still `Received` 20 days
+> on. Two fix shapes: FreeRDP's successor advisory is *titled* "**Incomplete fix** …" with two of three sinks
+> byte-identical from 3.29.0 to HEAD (**eleven** releases exposed), and Docker's remediation is a **conjunction** —
+> 4.98.0 **and** WSL 3.0.3, "running on an older WSL remains affected" — while the kernel fix Ubuntu still has not
+> shipped arrives inside a **desktop product's bundled kernel**. Four papers price the axis nobody optimized: Muon loses
+> the fine-tune past a data budget, multi-epoch pretraining prefers an **ensemble** to a wider model, Sonar-MoE frees
+> expert gradients in-backward for **19–22%** peak memory at **bitwise identical** updates, and RLVR's OOD failure is a
+> model that **stops deriving** (repaired by co-training on an easier, farther task). VeriHarm's **95%** task accuracy
+> against **37%** safe success is thesis 8's widest gap yet, and Willison's laptop replication names 3 of 4 games and
+> keeps the failure. Detail → [[security]] [[disclosure-lag]] [[fact-check]] [[frontier-models]] [[harness-reliability]]
+
 ## Active theses
 
 1. **Agent infrastructure is the new cloud — the monolith CLI decomposes into separable layers,
@@ -1164,26 +1205,27 @@ patterns, and turn them into insights and actionable todos.
 2. **Agent security is the immediate attack surface — and every named class ends up enforced by
    nobody.** ~50+ CVSS≥9 entries since Aug 12 resolve into sixteen recurring shapes (full map in
    [[security]]); four cases show the class named, the mitigation converged, nobody enforcing it.
-   - **08-16 → 11-01 (folded) — install, secret store, socket, bus; the control nobody calls, in the wrong place,
-     against the wrong object:** LiteLLM's `cook.pth` beside an unconsumed SLSA attestation, Railway's env-var drawer,
-     `AGENTS.md` beating Codex in **>90%** of attempts, LXD's **10.0** mTLS, `assent` merging the browser's `user` over
-     the verified token. → [[security]] [[vuln-supply]] [[disclosure-lag]]
+   - **08-16 → 11-01 (folded) — install, secret store, socket, bus; the control nobody calls, in the wrong place:** LiteLLM's
+     `cook.pth` beside an unconsumed SLSA attestation, Railway's env-var drawer, `AGENTS.md` beating Codex in **>90%** of attempts,
+     LXD's **10.0** mTLS, `assent` merging the browser's `user` over the verified token. → [[security]] [[vuln-supply]] [[disclosure-lag]]
    - **11-02 (folded) — the deployment is a metric input, the default installs the precondition, and the fix can be a
      version no registry carries:** Prefab's sandbox, *documented as isolation for untrusted LLM-written UI*, ran
      unrestricted for **7 minor versions** and publishes **two scenario scores on one record** NVD collapses to one;
      Beta9's three **9.9**s fixed **47 days** early; LobeHub's fix absent from all **1,935** npm versions.
      → [[security]] [[disclosure-lag]] [[vuln-supply]]
-   - **11-03 — the severity field is the vendor's template:** Barracuda's row reads "Authentication Required: Yes"
-     beside Mandiant's `PR:N` **9.3**; Apache's five Syncope records carry only a *word* as their metric, so a
-     `CVSS >= 9.0` gate misses an authenticated JUEL RCE rated `moderate`. → [[security]] [[vuln-supply]]
-   - **11-03 12:29 — the attacker description is tiered by audience, and the public notice is the least specific tier:**
-     WorkOS's bulletin is **5,531** chars with **0** occurrences of `ARTEX`, Salesforce, Snowflake or the stated HK/China
-     origin — while its *customer notification* names all of them and its CEO's HN comment uses other words. So "the
-     vendor did not say X" needs a named document. → [[security]] [[fact-check]]
-   - **11-03 20:22 — the guard and the fetcher parse different bytes:** CrewAI's check reads `urlparse`'s host
-     (`1.1.1.1`) while `urllib3` dials its own (`127.0.0.1`), and the record carries **no metric from any party**; kaniko's
-     `.*\.azurecr\.io` is unanchored (upstream #21 still open); Mnestix's **9.2** put **one** backend key behind an SSRF,
-     shipped **54 days** before its record. → [[parser-differential]] [[security]]
+   - **11-03 (folded) — the severity field is the vendor's template, and the attacker description is tiered by audience:**
+     Barracuda's "Authentication Required: Yes" beside Mandiant's `PR:N` **9.3**, Syncope's five records carrying only a *word*
+     (so a `CVSS >= 9.0` gate misses an authenticated JUEL RCE), and WorkOS's **5,531**-char bulletin with **0** occurrences of
+     `ARTEX` where the customer notification names it, Salesforce, Snowflake and the HK/China origin. → [[security]] [[fact-check]]
+   - **11-03 20:22 — the guard and the fetcher parse different bytes:** CrewAI's check reads `urlparse`'s host while `urllib3`
+     dials `127.0.0.1`; kaniko's `.*\.azurecr\.io` is unanchored (#21 open); Mnestix's **9.2** put one backend key behind an
+     SSRF, shipped **54 days** early. → [[parser-differential]] [[security]]
+   - **11-04 04:28 — the prose/vector contradiction is 5 in 3,365, and the naive cue counts the VICTIM:** over NVD's
+     10-27→11-02 window a bare cue beside `PR:N` returns **60**; actor-bound, **280** — **250** name an anonymous path,
+     **24** the person tricked, leaving **5** (Wordfence ×3, CIRCL, WSO2), all un-analyzed (`Deferred` ×3). → [[vuln-supply]]
+   - **11-04 — the installer asks the host to trust what it just wrote; the framework is not the MCP variable:** Postman's Codex
+     installer calls its own `approvePostmanHook` → `config/batchWrite` on a `trusted_hash`, and tool poisoning over **9,720** cells
+     is **22.9%** with nine frameworks inside **23–26%** (**p = 0.91**) against model ASR **0.4–49.7%**. → [[security]]
 
 3. **Local inference is being unlocked by MoE sparsity + disk streaming, not quantization.**
    Keep the shared core resident, stream routed experts from SSD — the trick now spans training,
@@ -1308,28 +1350,28 @@ patterns, and turn them into insights and actionable todos.
 
 8. **Agent capability is in its "prove it" phase — evaluation is the missing standard.** Skills
    proliferate on assertion; behaviour is measured on task completion, rarely on boundary violations. The two live fronts are the reward's arithmetic and the artifact's own proof.
-     - **08-18 → 10-28 (folded) — the eval's information boundary, then two failure axes:** SlopCodeBench strict
-       **12.2–16.3%** vs core **65.8–74.0%**; TraceTrial-Bench (**3,420 runs**) finds **31.1%** succeeding while failing
-       ≥1 criterion; two formatters turn verifiers **90/90 accept → 90/90 reject**. → [[harness-reliability]] [[fact-check]]
-     - **10-29 → 10-31 (folded) — the control is missing, then the control is a CONDITION:** Concordat's
-       protocol-legal tool list (**13 of 50** tasks unconfirmed, its own agent **none**); Ai2's novelty judge at **93.5%**
-       vs **40.9%** on the same pairs; a leak probe's **82%** against a bag-of-words control that "performs nearly as
-       well"; MICA's **94.3%** divergence from one contract; OpenFrontiers' closed-book "**at most 7 of 40**"; AWM's
-       Lean impossibility proof, right **four of six**. → [[harness-reliability]] [[formal-verification]]
-      - **11-02 20:20 — the missing number is the BASE RATE, and the missing thing is HEADROOM:** eleven agent-hijack
-        evaluations put attacks at **16–86%** of samples and **none varies it**, so a **0.879** AUROC reaches **0.076**
-        precision at 2% and rankings **reverse below 50%** tool coverage. → [[fact-check]]
-     - **11-03 — generation is fine, selection is unproven:** rTaste's **415** MVEs give **194** sound but only **73**
-       beyond-the-seed, and first choices "are not shown to improve on choosing the experiment written first";
-       BlindToChange's **27.5**-point gap is *triggering*. → [[harness-reliability]] [[fact-check]]
-     - **11-03 12:29 — an example set has no denominator, and part of a prompt gain is the JUDGE:** LifeVal publishes
-       **five** tasks at **90.4–100%** with no model name, no task count and no aggregate; "Compile as Hypothesis"
-       finds **no significant** prompt-optimisation gain on strong reasoners, and the one gain it does report
-       (**+0.14**) splits **~.035** judge-rubric reconstruction / **~.105** real instruction refinement. → [[harness-reliability]]
+     - **08-18 → 10-28 (folded) — the eval's information boundary, then two failure axes:** SlopCodeBench strict **12.2–16.3%** vs
+       core **65.8–74.0%**; TraceTrial-Bench (**3,420** runs) finds **31.1%** succeeding while failing ≥1 criterion; two formatters
+       turn verifiers **90/90 accept → 90/90 reject**. → [[harness-reliability]] [[fact-check]]
+     - **10-29 → 10-31 (folded) — the control is missing, then the control is a CONDITION:** Concordat's protocol-legal tool
+       list (**13 of 50** tasks unconfirmed, its own agent **none**); Ai2's novelty judge at **93.5%** vs **40.9%**; a leak
+       probe's **82%** against a bag-of-words control that "performs nearly as well"; MICA's **94.3%**; OpenFrontiers'
+       "**at most 7 of 40**"; AWM's Lean impossibility proof, right **four of six**. → [[harness-reliability]] [[formal-verification]]
+     - **11-02 20:20 — the missing number is the BASE RATE, and the missing thing is HEADROOM:** eleven agent-hijack evaluations
+       put attacks at **16–86%** of samples and **none varies it**, so a **0.879** AUROC reaches **0.076** precision at 2% and
+       rankings **reverse below 50%** tool coverage. → [[fact-check]]
+     - **11-03 — generation is fine, selection is unproven:** rTaste's **415** MVEs give **194** sound but only **73** beyond-the-seed,
+       and first choices "are not shown to improve on choosing the experiment written first". → [[harness-reliability]] [[fact-check]]
+     - **11-03 12:29 — an example set has no denominator, and part of a prompt gain is the JUDGE:** LifeVal publishes **five** tasks
+       at **90.4–100%** with no model name, no task count and no aggregate; "Compile as Hypothesis" finds **no significant** gain on
+       strong reasoners, and its one **+0.14** splits **~.035** judge-rubric reconstruction / **~.105** real refinement. → [[harness-reliability]]
       - **11-03 20:22 — the grader's rule is the largest unexamined term:** **eight** benchmarks' official scorers over
         **five** VLMs move accuracy up to **22 points** on identical outputs and **exactly 0** where the model emits clean
         option letters; a **0.000**-non-compliance trace still swings **9.5** on which regex match is kept.
         → [[parser-differential]] [[harness-reliability]]
+     - **11-04 — the metric decides what gets measured, and safe success is **37%** at **95%** accuracy:** VeriHarm runs
+       executable harm tests beside the correctness tests, separating "completed" from "completed without harm" by ~2.5× on
+       GPT-5.6-Sol and Claude-Opus-5. → [[harness-reliability]]
 
 9. **Hidden chain-of-thought is a confidentiality assumption, not a security boundary** —
    arXiv:2608.09867: encrypted reasoning blocks are interchangeable across sessions/users/models
@@ -1372,21 +1414,21 @@ patterns, and turn them into insights and actionable todos.
     - **09-29→10-14 — enforcement arrives as silicon, OS layer and enterprise checkbox:** OpenShell + Sentry on
       BlueField-4 DPUs (perimeter-not-intent, no detection figures); Full Disk Access, then Secure Exclaves;
       "assume the model is compromised." → [[security]] [[agent-stack]] [[platform-gatekeeping]]
-    - **10-14 — the dataflow policy unit ships as a product:** `strands-agents/box` (Apache-2.0,
-      macOS-ARM preview) enforces Dogwood `permit`/`forbid` default-deny rules *outside* the agent
-      over a shared event history — a file read can deny a later egress: "what may it do next, given
-      what it already did," not "what can it touch." → [[agent-stack]] [[security]]
-    - **10-15 — the containment gap gets the defenders' account and its liability edge:** CSO
-      Online's round-up (Wallach/RAND, SANS's Lee, McGraw) argues labs are "skipping security
-      basics" — containment and monitoring — not facing agents with intent, with **neither OpenAI nor
-      Anthropic responding**; insurers, Senate legislation and an FTC probe convert "misaligned
-      behavior" into **ordinary liability**. → [[frontier-models]] [[security]]
+    - **10-14 — the dataflow policy unit ships as a product:** `strands-agents/box` (Apache-2.0, macOS-ARM preview) enforces
+      Dogwood `permit`/`forbid` default-deny rules *outside* the agent: "what may it do next, given what it already did."
+      → [[agent-stack]] [[security]]
+    - **10-15 — the containment gap gets the defenders' account and its liability edge:** CSO Online's round-up
+      (Wallach/RAND, SANS's Lee, McGraw) argues labs are "skipping security basics" — containment and monitoring —
+      not facing agents with intent, with **neither OpenAI nor Anthropic responding**; insurers, Senate legislation
+      and an FTC probe convert "misaligned behavior" into **ordinary liability**. → [[frontier-models]] [[security]]
     - **10-29 — the class moves *upstream* of the boundary rather than across it:** Qwenputer computes
       **inside the forward pass**, so no approval fires and no log records it (→ thesis 29).
       → [[in-weight-compute]]
     - **11-03 20:22 — approval is admission-time and the bytes change after it:** ETUDE rewrites a benign tool in place
       and keeps **97.6%** ASR at **95.9%** legitimate completion across **seven** harnesses — "the harness supplies a
       one-time approval for that call; this does not re-examine the updated implementation." → [[parser-differential]]
+    - **11-04 — the installer can perform the approval it needs:** Postman's `approvePostmanHook` writes its own hook's
+      `trusted_hash` through the host's `config/batchWrite`, trusting a `SessionStart` hook where a plugin speaks first. → [[security]]
 
 12. **The optimization target shifted from the model to the harness — and the premium is
     measured, and bounded.** Bojie Li names the discipline: "harness engineering."
@@ -1601,6 +1643,9 @@ patterns, and turn them into insights and actionable todos.
      the open-bound shape is **17 of 3,365** records and **13 (76.5%)** have their ceiling *at* the registry's latest
      release — an accurate record with an **empty remedy**, never "inside the bound" — and **15/15** of the rows that
      can be named are one CNA (`disclosure@vulncheck.com`, all `defaultStatus: unaffected`). → [[security]] [[disclosure-lag]]
+   - **11-04 — "fixed in X" is a claim about a SET, and a fix can be a conjunction:** FreeRDP's successor advisory is *titled*
+     "**Incomplete fix** …" — two of three sinks byte-identical from 3.29.0 to HEAD, **eleven** releases exposed — and Docker's
+     9.2 needs **4.98.0 and WSL 3.0.3** ("running on an older WSL remains affected"). → [[disclosure-lag]] [[security]]
 
 21. **The physical layer of connectivity is an active target, and the cheap attack is arson.** Civilian
     satellite ground stations and single regional data centres are defended by fences and geography

@@ -4438,9 +4438,36 @@
       "feeds": [
         "2026-11-03.md"
       ]
+    },
+    "https://news.ycombinator.com/item?id=50354960": {
+      "verdict": "blocked",
+      "streak": 2,
+      "first_seen": "2026-11-03T20:14:47.127Z",
+      "last_seen": "2026-11-03T20:43:54.594Z",
+      "feeds": [
+        "2026-11-04.md"
+      ]
+    },
+    "https://www.npmjs.com/package/@spotify/portal-cli": {
+      "verdict": "blocked",
+      "streak": 2,
+      "first_seen": "2026-11-03T20:14:47.127Z",
+      "last_seen": "2026-11-03T20:43:54.594Z",
+      "feeds": [
+        "2026-11-04.md"
+      ]
+    },
+    "https://news.ycombinator.com/item?id=50354336": {
+      "verdict": "blocked",
+      "streak": 1,
+      "first_seen": "2026-11-03T20:43:54.594Z",
+      "last_seen": "2026-11-03T20:43:54.594Z",
+      "feeds": [
+        "2026-11-04.md"
+      ]
     }
   },
-  "runs": 144,
+  "runs": 146,
   "first_run": "2026-09-05T12:47:55.004Z",
-  "last_run": "2026-11-03T13:17:39.013Z"
+  "last_run": "2026-11-03T20:43:54.594Z"
 }

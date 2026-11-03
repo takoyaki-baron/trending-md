@@ -1728,6 +1728,31 @@
       "id": "CVE-2026-9198",
       "why": "Langflow KEV entry (2026-08-04) — second of the six that make the CVE-2026-19304 non-KEV point checkable",
       "seeded": "2026-11-03 [seeded by the 20:22 learn pass]"
+    },
+    {
+      "id": "CVE-2026-28336",
+      "why": "SolarWinds Dameware 9.9 (CNA-assigned, Secondary psirt@solarwinds.com, Received) — item 13; watch for NVD analysis replacing or endorsing the number",
+      "seeded": "2026-11-04 [seeded by the 04:22 learn pass; first --watch run fills the baseline]"
+    },
+    {
+      "id": "CVE-2026-44266",
+      "why": "Elo Ruby-backend RCE 9.8 (GitHub CNA, Received) — item 14; paired with -44267 in one advisory, watch for a status flip to Analyzed",
+      "seeded": "2026-11-04 [seeded by the 04:22 learn pass; first --watch run fills the baseline]"
+    },
+    {
+      "id": "CVE-2026-44267",
+      "why": "Elo JS-constructor escape 9.8 (GitHub CNA, Received) — item 14, second of the pair",
+      "seeded": "2026-11-04 [seeded by the 04:22 learn pass; first --watch run fills the baseline]"
+    },
+    {
+      "id": "CVE-2026-121392",
+      "why": "FreeRDP incomplete-fix 9.1 v4.0 beside 7.4 v3.1, both VulnCheck and both E:X — item 15; Undergoing Analysis at seed, watch for the framework pair to be re-scored",
+      "seeded": "2026-11-04 [seeded by the 04:22 learn pass; first --watch run fills the baseline]"
+    },
+    {
+      "id": "CVE-2026-112917",
+      "why": "Docker Desktop WSL2 seccomp bypass 9.2 v4.0 (security@docker.com, Received, CWE-424) — item 16; the conjunction-of-two-artifacts case",
+      "seeded": "2026-11-04 [seeded by the 04:22 learn pass; first --watch run fills the baseline]"
     }
   ]
 }

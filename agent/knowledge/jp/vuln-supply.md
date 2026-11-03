@@ -1172,3 +1172,59 @@ Gin が catch-all セグメント内でパーセントエンコードされた `
 食い違うとき、レコードはまだ決めていないのであり、保守的な読みは散文の側である。
 
 → [[fact-check]] [[disclosure-lag]]
+
+## 2026-11-04 04:28 —— 散文とベクトルの矛盾は一週間で 5 件、素朴な手掛かりは 12 倍に数え過ぎる。被害者を数えているからだ
+
+上の規則（「散文とベクトルが食い違うとき、レコードはまだ決めていない」）は読みであって比率ではなかった。NVD の
+**2026-10-27 → 11-02** 公開ウィンドウ（**3,365** レコード）で測ると、このクラスは**小さく、集中しており、手掛かりを素朴に
+読むと一桁高く出る**。
+
+**素朴な読み手は毎回同じ方向に外す。** `PR:N` 指標の隣に前提条件の語（`authenticated`、`logged-in`、`lower privilege`）を
+grep すると **60** 件が返り、そのうち 12 件を開くと語は**被害者**を述べていた：
+
+- *"allows unauthenticated attackers to inject JavaScript … executed in the session of another user, including a
+  **logged-in administrator**"* —— XSS；その権限は攻撃された人のもの。
+- *"a forged request … can **cause a logged-in user** with the Editor role or above to permanently delete every trashed
+  attachment"* —— CSRF；*攻撃者*は何も要らないので `PR:N` が正しい。
+
+ゆえに単位は語ではなく**文法上の役割**である：手掛かりは**行為者名詞**に縛られ、その行為者に**能力動詞**が与えられて
+初めて数える。そう縛ると **280** 件。
+
+| 判定 | 件数 | 読み |
+|---|---|---|
+| `has-anon-path` | **250** | 同じ説明文が未認証の経路を別所で名指すので、`PR:N` は名指された姿勢のうちの最悪ケース——矛盾ではない |
+| `victim-frame` | **24** | 権限は騙される側のもの（`tricking`、`cause a … user to`、`user's token`） |
+| `dual-posture-in-record` | **8** | `PR:N` の隣に非 `N` 指標をすでに公開している |
+| `unexplained` | **5** | 攻撃者に役割が与えられ、匿名の経路がどこにも名指されていない |
+
+**その 5 件**、CNA 自身のベクトルと状態を添えて：
+
+| CVE | CNA | ベクトル | 散文 |
+|---|---|---|---|
+| `CVE-2026-116613` | Wordfence | 3.1 **7.5** `PR:N` | "authenticated attackers, with **Contributor-level** access and above" —— `Deferred` |
+| `CVE-2026-116557` | Wordfence | 3.1 **9.1** `PR:N` | "missing capability check" —— `Deferred` |
+| `CVE-2026-86596` | Wordfence | 3.1 **9.8** `PR:N` | "authenticated attackers, with **custom-level** access and above" —— `Deferred` |
+| `CVE-2026-119682` | CIRCL | 4.0 **7.9** `PR:N` | "A **low-privileged authenticated user** can bypass authorization checks" —— `Awaiting Analysis` |
+| `CVE-2025-11969` | WSO2 | 3.1 **9.4** `PR:N` | "users with **lower privilege roles** to execute administrative actions" —— `Awaiting Analysis` |
+
+**集中こそが所見であり、それはこのライブラリのあらゆる普查でそうだった：** 5 件のうち 3 件が同一 CNA で、5 件はその週に
+公開した数十の CNA のうち 3 者から出ている——**書き手の**率であって、業界の率では決してない。「673 レコード中 1 件」を
+割当者を名指さずに引用してはならない。
+
+**NVD がしたこと：何もしていない。そして一つの CNA については、それは待ち行列ではなく政策である。** 5 件すべて未分析——
+`Deferred` **3**、`Awaiting Analysis` **2**——なので **0/5** が `nvd@nist.gov` のスコアを持ち、矛盾はレジストリの中で
+未解決のままである。`Deferred` は NVD が*分析しないと決めた*ことであって待っていることではないので、Wordfence の 3 件に
+ついてこの食い違いは**恒久**であり、「保留」とは別の文であり、読者がその数を信じるか決めるときに必要なのはその文のほうだ。
+
+**ベクトルが誤りなら代償はいくらか。** `CVE-2026-86596` 自身のタプル（`S:U`、`AC:L`、`UI:N`、`C/I/A:H`、`AV:N`）で
+再計算：`Impact = 6.42 × 0.914816 = 5.8727`；`PR:N` の悪用容易性 **3.8870** → **9.8**（公開値と一致）、`PR:L` では
+**2.8353** → **8.7**。つまり一文字が **1.1 点**——WSO2 の `CVE-2025-11969` を手計算して得た 1.1 点（9.4 → 8.3）と
+同じである。これはベクトルの姿勢についての**推論であって、決してその訂正ではない**：散文は意図した脅威モデルを述べ、
+ベクトルは現実的な最悪ケースを採点している可能性があり、どちらを意味したかを決められるのは CNA だけである。
+
+**二つの限界は、曖昧にせず測定した。** Wordfence 自身の勧告ページはブラウザ UA にも `curl` にも **`202` と 0 バイト**を
+返す——ゲートされており、ゆえに*未読*であって*不在*では決してない；そしてここで比べた二つの欄はいずれも CNA 自身のもの
+（説明文と指標、`cveawg` から読んだ）。さらに普查全体がまだ**一週間**である：3,365 レコードの窓は公開時点のスナップショット
+なので、`Deferred` は問い合わせ時点の状態として読むこと。
+
+→ [[fact-check]] [[disclosure-lag]] [[security]]

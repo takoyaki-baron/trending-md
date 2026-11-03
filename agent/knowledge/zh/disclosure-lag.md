@@ -1394,3 +1394,36 @@ confusion, empty HMAC key, and timing side-channels"——即记录只覆盖了�
 **维护者**什么都没说。随之而来的建议在应用侧（在配置阶段拒绝空密钥）或分叉——绝不是「升级」。
 
 → [[vuln-supply]] [[fact-check]]
+
+## 11-04 — “已在 X 修复”是对**集合**的断言，而修复可以是两个产品的**合取**
+
+本文件的每个状态都假定修复是单一的东西、单一版本、单一产品。11-04 批次的两条记录在同一周里打破两个假定，而两者都能从公告自己的文字读出——不需要普查。
+
+### 状态：`fix-claimed-for-a-set-partially-applied`
+
+FreeRDP 的 `GHSA-jq25-3374-4262` **标题本身**就是发现：**“Incomplete fix for GHSA-43hh-p3vw-hfx3: CN-fallback and IP-literal cert identity checks were never patched.”** 早前那份公告（随 **3.29.0** 发布）声称关闭三个证书身份校验弱点，涉及 `tls_verify_certificate()` / `tls_match_hostname()` / `x509_utils_get_dns_names()`。但 3.29.0 的提交集（`af7f228`、`c5a7325`、`b7db8d2`）**只处理了内嵌 NUL 字节截断这一种情形**；其余两种——非匹配 SAN 下仍回退到 Common Name、以及 IP 字面量通过 DNS SAN 匹配——按公告措辞，在 `libfreerdp/crypto/tls.c` 中**从 3.29.0 标签到当前 HEAD 逐字节相同**。修复版本是 **3.32.2**。
+
+后果，按重要性排序：
+
+1. **“已在 3.29.0 修复”对其中的两种情形为假，且持续了十一个版本。** 升级一次就不再关注的人，全程处于暴露状态，而他们的扫描器显示已修补。
+2. **检查必须是对公告点名的每一处 sink 做 diff**，而不是“有没有提交提到这个 CVE”。三处 sink 中有两处完全没有任何 diff，一个文件的一次 `git diff` 就能看见。
+3. **威胁模型写得很精确，且不是“无认证”：** 能出示一张链到客户端本就信任的 CA 的证书（错误签发的公共 CA、失控的私有 CA）的攻击者即可通过身份校验并中间人劫持 RDP 会话——画面、键盘、剪贴板、输入注入。这是 [[security]] 的证书信任族，以客户端校验 bug 的形式出现，而非信任库问题。
+4. 公告还带着一句更多报告该有的话：**“This report was submitted with AI assistance.”**
+
+可复用的动作：**读后续公告的标题。** 发出不完整修复的厂商，几乎总在下一份公告里点名这份不完整——因为第二次提交必须解释第一次为何没能关闭它。
+
+### 状态：`fix-is-a-conjunction-of-two-artifacts`
+
+`CVE-2026-112917`（Docker Desktop for Windows、WSL2 后端，`security@docker.com` 的 CVSS 4.0 **9.2**，**CWE-424**，`Received`）的修复是两个厂商、两个产品里的两个版本边界，而 Docker 用一句话说了出来：
+
+> “Docker Desktop 4.98.0 or later **and** WSL 3.0.3 or later” … “Docker Desktop 4.98.0 or later running on an older WSL **remains affected**.”
+
+于是只知道应用版本的扫描器会把主机标为已修复，而内核侧仍是旧的，且记录里没有任何单一字段能表达这件事——范围是一个合取。机制是 seccomp 表的一个习惯，而非 Docker 的 bug：过滤器挡住了 64 位的 `socket` 调用及 `AF_VSOCK`，却没挡住 **32 位的 `socketcall` 复用入口**，即经典的 32 位系统调用缺口在 x86-64 上重现。这张表被复制进了其他容器运行时。
+
+### `CVE-2026-98432` 这条线收束：内核修复先进了桌面产品
+
+本文件 11-03 那条记录：发布三周后，Ubuntu 的追踪器仍列出 `CVE-2026-98432` 且 22.04/24.04/26.04 都没有已修补的内核。**Docker Desktop 4.98.0 的第二条安全条目就是这个修复**——“Fixed CVE-2026-98432, a use-after-free in the Linux kernel's IPv4 TCP handling”，引用指向 `linux-msft-wsl-6.18.54.1` 与 WSL `3.0.3`，即一个携带补丁的**内置内核**。
+
+亲自核实：NVD 记录仍是 **`Received`**（发布于 2026-10-15T13:17:13Z），只有一条指标——内核 CNA 的 `Secondary` **9.8**——且**无 CWE**。所以“这台主机是否已修复”现在取决于容器跑在哪个内核上：内置内核是一个有自己发布节奏的产物，它可以比发行版更早拿到修复。这与 OpenWrt/EDK2 的形状相反（源码已修、产物未构建）；这里产物跑在了发行版自己前面。
+
+→ [[security]] [[vuln-supply]] [[fact-check]]

@@ -3913,3 +3913,79 @@ evidence that WorkOS application data was accessed" 是关于调查第四天的�
 研究者的。
 
 → [[fact-check]] [[disclosure-lag]]
+
+## 11-04 — 安装器请求宿主信任它刚刚写入的东西（Postman，2026-10-24）
+
+插件市场让安装器获得对**其他厂商 agent 配置**的写入权限，而 hook 信任本应是唯一必须由人来做的那道边界。Postman 桌面版 **12.33.4** 在一个已登录的既有用户上越过了它，而且是静默的。
+
+**日志原文**，来自 `~/Library/Application Support/Postman/logs/main.log`，时间 **2026-10-24T09:34:14.418Z**（issue #14370，提交于 2026-10-25T19:03:26Z，我核查时 **147** 个 reaction，18 条评论，仍未关闭）：
+
+```text
+PostmanAgentPluginService~install: script completed
+{"source":"auto-existing-upgrade","results":["claude-code:installed","codex:installed"],"installer":"script"}
+Main: autoInstall.plugin.existing-user finished
+{"outcome":"installed","platform":"darwin","exposed":true,"signedIn":true,...}
+```
+
+**代码，按报告者点名的固定版本阅读**（`postmanlabs/postman-plugin@6c8e452e0f4237f4bcc0901cb1ac442dec707e49`）。`installer/src/hosts/codex-hooks.ts` 导出 `approvePostmanHook(system)`，它自己的文档注释就是发现本身：
+
+> `/** Approves only Postman's current hook after installation; unsupported APIs never fail the install. */`
+
+它通过 JSON-RPC 连到 `codex app-server`，调用 `hooks/list`，筛出唯一的键 `postman@postman:hooks/codex-hooks.json:session_start:0:0`，并在 `trustStatus !== 'trusted'` 时通过 `config/batchWrite` 写入 `{ hooks.state: { [KEY]: { trusted_hash: hash } } }` 与 `reloadUserConfig: true`；`installer/src/hosts/codex.ts` 在安装后调用它。于是**写入该 hook 的组件，正是请求宿主信任它的组件**，中间没有任何用户手势，而这是一个 `SessionStart` hook——插件最先说话的表面。它的上下文文件以 `<EXTREMELY_IMPORTANT>` 块开头，指示 agent 在"任何非平凡的 API 工程任务"前加载 `postman:api-engineer` 技能。
+
+**报告者自己写的限制才是诚实的一半，而 HN 标题比 issue 更强**：该序列"尚未在一台干净的 Mac 上复现"；仅有信任记录"不能证明是谁创建了那条特定记录"；报告"不主张已确立数据外泄"。HN 的"attempts to share all API data"并不在 issue 里。Postman 当时未在帖内回复。
+
+**可推广的部分：**hook 审批必须是**宿主拥有、且带外**的（宿主 UI 里的提示，而不是第三方进程可调用的 JSON-RPC 方法），因为任何能触达 `config/batchWrite` 的安装器都会继承这条提权路径。这是论题 11 的边界从没人布防的方向到来：问题不是"模型能否被信任去发起工具调用"，而是"安装器能否被信任去动信任库"。
+
+**同批还有反例。** `spotify/portal-ai-plugins`（已核 **3,003★**，Apache-2.0，无 description 字段，`pushed_at` 2026-10-23，13 条 issues+PRs）把企业连接器打包成市场（`claude plugin marketplace add spotify/portal-ai-plugins`，再 `claude plugin install portal@portal`），横跨 Claude Code、Codex、Cursor 与 pi——同一条安装路径、同一个信任面；它的第二个插件 **shunt** 把"I/O 密集的 agent 工作——批量文件读取与样板生成"通过 Portal CLI 的 action 注册表路由到更便宜的 worker 模型。厂商在市场里同时发布连接器与成本策略，正是多数 agent 团队私下形成的模式；市场真正新增的，是那个信任问题。
+
+→ [[agent-stack]] [[agent-plugins]] [[fact-check]]
+
+## 11-04 — MCP 工具投毒是模型属性，不是框架属性（9,720 个单元格）
+
+arXiv **2611.03555**，2026-11-04 04:20 逐字重读摘要。让这个数字有意义的，是设计选择：**真实工具执行**而非"合规打分"，并用双 oracle 以 **canary HTTP 回执**确认外泄。
+
+| 量 | 值 |
+|---|---|
+| 矩阵 | **9,720** 个单元格 = 12 框架 × 18 模型 × 45 攻击场景 |
+| 总体 ASR | **22.9%**（**2,113** 个易感单元格） |
+| 其中 | 64.9% 发起攻击者工具调用 · 23.0% 访问攻击者端点 · **12.1%** 可验证地窃取到秘密 |
+| 框架差异 | 九个核心框架落在 **23–26%**（**χ² = 3.30，p = 0.91**） |
+| 模型差异 | **0.4% – 49.7%** |
+| 正则描述扫描器 | 45 个场景中挡住 **20** 个，误报率 **7.2%** |
+| 披露 | 对四家厂商的五次协同披露，**全部被拒** |
+
+论文自己的那句就是采购结论："Resistance is model-level … and no framework implements intentional defense." 框架的偶然属性只在特定情形下缓解；十二个框架里没有一个是刻意防御。所以"我们用了框架 X，MCP 就安全了"得不到唯一带执行的跨框架测量的支持，而多数目录提供的那道控制——描述扫描器——在 45 个攻击中只挡住 20 个。
+
+随之而来的控制，正是本库反复抵达的那条：**边界是工具调用被允许做什么，而不是工具描述说了什么。**可对照 Concordat 的做法（未被提供的调用做不出来）与 `strands-agents/box` 的数据流策略（一次文件读取可以否决之后的出网）——两者都在模型之外，都对"哪个框架组装了提示"无感。
+
+→ [[agent-stack]] [[harness-reliability]] [[fact-check]]
+
+## 11-04 — GitBook："using AI agents" 是厂商表述，且两条更新对"该做什么"互相矛盾
+
+状态页 2026-11-04 04:19 亲自读取（HTTP 200，101 KB；`Action required` ×1、`AI agents` ×1、`Rotate` ×2、`re-authenticate` ×1、`Questions asked` ×1）。按页面自己的说法：**2026-11-02 19:00 CET**，攻击者"gained unauthorized access to some of our infrastructure credentials"；应用与需认证的文档站作为预防下线，公开内容尽量用缓存维持。
+
+**两条条目在读者唯一要照做的那一行上互相矛盾。** **13:15 CET** 那条写"**Action required: None at this time**"；**16:21 CET** 那条则要求轮换 GitBook API token、轮换已发布集成中使用的第三方 token 与密钥，并重新认证 GitBook MCP server。两条同时在线——状态页是只追加的散文，早先那条并没有被撤回。
+
+**受影响数据的清单很具体，而归因很不具体。** 点名的是：integration tokens、Git Sync secrets、API tokens，以及"**Questions asked to GitBook Assistant by your site visitors**"。归因——"a sophisticated, highly targeted attack **using AI agents**"——没有点名任何工具、任何入口或任何证据，所以它是厂商的表述而非发现；这与 WorkOS 的形状正好相反（数据清单精确、攻击者含糊）。操作上：Git Sync secret 通常是一个进仓库的 deploy key 或 bot token，只轮换平台 token 而留下游密钥，就是这次修复的不完整版本。
+
+→ [[fact-check]] [[agent-stack]]
+
+## 11-04 — 六条记录、一次 NVD 拉取：0/6 由 NVD 打分，五个 CNA
+
+于 2026-11-03T20:18Z 以逗号分隔的 `cveId` 列表一次请求拉取。
+
+| CVE | 状态 | 指标（全部 `Secondary`） | 分数 | CWE |
+|---|---|---|---|---|
+| `CVE-2026-28336` SolarWinds Dameware | `Received` | `psirt@solarwinds.com` 3.1 | **9.9** | CWE-20 |
+| `CVE-2026-44266` Elo（Ruby 后端） | `Received` | `security-advisories@github.com` 3.1 | **9.8** | 94, 116, 1336 |
+| `CVE-2026-44267` Elo（JS constructor） | `Received` | `security-advisories@github.com` 3.1 | **9.8** | 79, 94, 693, 1336 |
+| `CVE-2026-121392` FreeRDP | `Undergoing Analysis` | `disclosure@vulncheck.com` 4.0 **与** 3.1 | **9.1 / 7.4** | CWE-295 |
+| `CVE-2026-112917` Docker Desktop | `Received` | `security@docker.com` 4.0 | **9.2** | CWE-424 |
+| `CVE-2026-98432` Linux 内核（ipv4） | `Received` | `416baaa9…`（内核 CNA）3.1 | **9.8** | 无 |
+
+三条阅读要点。**(a) FreeRDP 的差距来自框架，而非截断点：**它的两个向量都带 `E:X`，所以 `9.1`（v4.0，`AC:H`→`AT:P`）与 `7.4`（v3.1）是同一个 base 被两个公式读出——这是 [[cvss-stopping-points]] 的对照行，不是复制错误。**(b) SolarWinds 的 9.9 是 CNA 的数字**，记录仍是 `Received`，而厂商页面并不能确定这是哪个*版本*——见 [[fact-check]] 里那个"文本写 3.0、链接指向 3.1 计算器"的单一锚点。**(c) `CVE-2026-98432` 二十天后仍是 `Received`**，唯一指标是内核 CNA 的 `Secondary` 9.8，且**无 CWE**——11-03 那条"Ubuntu 没有发布内核"现在旁边多了一个证据：Docker Desktop 发布了修复（见 [[disclosure-lag]]）。
+
+**Elo 这对是迄今最干净的"一个 bug、四个后端"记录：**`src/compilers/ruby.ts` 第 180–184 行转义了反斜杠、双引号与控制字符，却**没有转义 `#`**，而 `#{…}` 是 Ruby 插值，于是构造的 Elo 字符串会编译成攻击者选定的代码——而"the same Elo source compiled to JavaScript, Python, or SQL is benign"。第二处 sink 在 405–412 行，把子类型约束标签塞进 Ruby 双引号字符串，"with no escape pass at all"。公告精确到行号，这正是本库想要的产物类别：读者可以拿它与源码做 diff。
+
+→ [[vuln-supply]] [[disclosure-lag]] [[fact-check]]

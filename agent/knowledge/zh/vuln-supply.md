@@ -1078,3 +1078,55 @@ VulnCheck 的（4.0 **8.7** `PR:N/VC:H`，3.1 **7.5**），NVD 为 **`Deferred`*
 当第二个与第三个不一致，记录还没决定，而保守读法是散文那一边。
 
 → [[fact-check]] [[disclosure-lag]]
+
+## 2026-11-04 04:28 —— 散文与向量的矛盾一周只有 5 条，而朴素线索多算 12 倍，因为它数的是受害者
+
+上面那条规则（「当散文与向量不一致，记录还没决定」）是一个读法，不是一个比率。在 NVD 的 **2026-10-27 → 11-02** 发布窗口
+（**3,365** 条记录）上测量后，这一类结果是**小、集中，并且如果线索是朴素地读，就会高估一个数量级**。
+
+**朴素的读取器每一次都朝同一个方向错。** 在 `PR:N` 指标旁 grep 任意前置条件词（`authenticated`、`logged-in`、
+`lower privilege`）返回 **60** 条，而打开其中十二条显示这些词描述的是**受害者**：
+
+- *"allows unauthenticated attackers to inject JavaScript … executed in the session of another user, including a
+  **logged-in administrator**"* —— XSS；那个权限属于被攻击的人。
+- *"a forged request … can **cause a logged-in user** with the Editor role or above to permanently delete every trashed
+  attachment"* —— CSRF；`PR:N` 是对的，因为*攻击者*什么都不需要。
+
+所以单位不是一个词，而是一个**语法角色**：线索只在被绑到**行事者名词**、并且那个行事者被授予一个**能力动词**时才计数。
+这样绑定之后：**280** 条。
+
+| 判定 | 条数 | 读法 |
+|---|---|---|
+| `has-anon-path` | **250** | 同一描述另点名了一条未认证路径，所以 `PR:N` 是已点名姿态中的最坏情形——不是矛盾 |
+| `victim-frame` | **24** | 权限属于被诱骗的人（`tricking`、`cause a … user to`、`user's token`） |
+| `dual-posture-in-record` | **8** | 记录已在 `PR:N` 那条之外另发布了非 `N` 指标 |
+| `unexplained` | **5** | 攻击者被赋予一个角色，且没有点名任何匿名路径 |
+
+**那五条**，附 CNA 自己的向量与状态：
+
+| CVE | CNA | 向量 | 散文 |
+|---|---|---|---|
+| `CVE-2026-116613` | Wordfence | 3.1 **7.5** `PR:N` | "authenticated attackers, with **Contributor-level** access and above" —— `Deferred` |
+| `CVE-2026-116557` | Wordfence | 3.1 **9.1** `PR:N` | "missing capability check" —— `Deferred` |
+| `CVE-2026-86596` | Wordfence | 3.1 **9.8** `PR:N` | "authenticated attackers, with **custom-level** access and above" —— `Deferred` |
+| `CVE-2026-119682` | CIRCL | 4.0 **7.9** `PR:N` | "A **low-privileged authenticated user** can bypass authorization checks" —— `Awaiting Analysis` |
+| `CVE-2025-11969` | WSO2 | 3.1 **9.4** `PR:N` | "users with **lower privilege roles** to execute administrative actions" —— `Awaiting Analysis` |
+
+**集中本身就是结论，这在本库的每一次普查里都是如此：** 五条中三条来自同一家 CNA，而这五条来自当周发布的数十家 CNA 中的三家
+——那是**写作者的**比率，永远不是行业比率。不要在不点名通知方的情况下引用「673 条里 1 条」。
+
+**NVD 对它们做了什么：什么都没做；而对某一家 CNA 来说，那是政策而不是队列。** 五条全都未被分析——`Deferred` **3**、
+`Awaiting Analysis` **2**——所以 **0/5** 带有 `nvd@nist.gov` 的分数，矛盾在登记处里没有解决。`Deferred` 是 NVD
+*选择不分析*，不是等着分析，所以对 Wordfence 那三条而言这个分歧是**永久**的，这与「待办」是两句话，而它才是读者在决定
+是否相信这个数字时真正需要的那一句。
+
+**如果向量是错的，代价是多少。** 按 `CVE-2026-86596` 自己的元组（`S:U`、`AC:L`、`UI:N`、`C/I/A:H`、`AV:N`）重算：
+`Impact = 6.42 × 0.914816 = 5.8727`；`PR:N` 下可利用性 **3.8870** → **9.8**（与发布值一致），`PR:L` 下 **2.8353** →
+**8.7**。所以一个字符是 **1.1 分**——与手算 WSO2 `CVE-2025-11969` 得到的 1.1 分相同（9.4 → 8.3）。那是对向量姿态的
+**推断，永远不是对它的更正**：散文可能描述意图中的威胁模型，而向量给最坏现实情形打分，只有 CNA 能定夺它指的是哪一个。
+
+**两个限度，是测出来的而不是含糊带过的。** Wordfence 自己的公告页对浏览器 UA 与 `curl` 都返回 **`202` 与 0 字节**——被门禁
+拦住，所以是*读不到*，永远不是*不存在*；而这里对照的两个字段都来自 CNA 自己（描述与指标，读自 `cveawg`）。并且整次普查
+仍然只有**一周**：3,365 条的窗口是发布快照，所以把 `Deferred` 读成查询时刻的状态。
+
+→ [[fact-check]] [[disclosure-lag]] [[security]]

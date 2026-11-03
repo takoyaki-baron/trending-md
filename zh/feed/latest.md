@@ -208,7 +208,7 @@ MoE 模型的大部分参数在专家里，标准训练要把每个专家的梯�
 
 `CVE-2026-28336` 是 SolarWinds Dameware 中的命令注入，影响 **2026.3 及所有更早版本**，在 **2026.3.1** 修复，按厂商自己的向量 `CVSS:3.0/AV:N/AC:L/PR:L/UI:N/S:C/C:H/I:H/A:H` 评为 **9.9 Critical**。`S:C`（scope change）加上 `PR:L`，正是把一个低权限问题推到 9.9 的原因：被注入的命令并不会留在接受它的那个组件里，而公告的一句话总结说它「could lead to the compromise of the remotely controlled host」。
 
-有两个来源事实必须和这个数字一起写。NVD 记录上的度量是 `Secondary psirt@solarwinds.com`，记录状态是 `Received`——所以 9.9 是 **CNA** 的分数，不是 NVD 的分析结果，而且很可能被原样转发。另外，致谢写的是 **Greg Bernatowicz on the Boeing Enterprise Security Red Team**，这与上周那批由厂商致谢外部红队的披露形状一致：外部红队发现、打补丁、然后出记录。
+有两个来源事实必须和这个数字一起写。NVD 记录上的度量是 `Secondary psirt@solarwinds.com`，记录停在 `Awaiting Analysis`，**0 条 NVD 自评指标**（本条写成时是 `Received`，同日稍后移动了）——所以 9.9 是 **CNA** 的分数，不是 NVD 的分析结果，而且很可能被原样转发。另外，致谢写的是 **Greg Bernatowicz on the Boeing Enterprise Security Red Team**，这与上周那批由厂商致谢外部红队的披露形状一致：外部红队发现、打补丁、然后出记录。
 
 **为什么重要：** Dameware 是远程支持软件，意味着受影响的主机正是管理员用来触达其他所有机器的那批；利用需要一个立足点，但不是什么都不需要。修复是升到 2026.3.1，而这份公告最值得注意的反而是它有多短——没有利用状态、没有攻击复杂度讨论，除了「Authentication is required」之外，也没说明注入路径是认证前还是认证后。
 

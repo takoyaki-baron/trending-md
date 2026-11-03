@@ -2264,3 +2264,70 @@ nothing a consumer can install, and the **maintainer** has said nothing at all. 
 follows is application-side (reject an empty key at configuration time) or a fork — never "upgrade".
 
 → [[vuln-supply]] [[fact-check]]
+
+## 11-04 — "fixed in X" is a claim about a SET, and a fix can be a CONJUNCTION of two products
+
+Every state in this file assumes the fix is one thing, at one version, in one product. Two records
+from the 11-04 batch break both assumptions in the same week, and both are readable off the
+advisory's own words — no census needed.
+
+### State: `fix-claimed-for-a-set-partially-applied`
+
+FreeRDP's `GHSA-jq25-3374-4262` is *titled* the finding: **"Incomplete fix for GHSA-43hh-p3vw-hfx3:
+CN-fallback and IP-literal cert identity checks were never patched."** The earlier advisory, shipped
+in **3.29.0**, claims to close three certificate identity-validation weaknesses in
+`tls_verify_certificate()` / `tls_match_hostname()` / `x509_utils_get_dns_names()`. The 3.29.0 commit
+set (`af7f228`, `c5a7325`, `b7db8d2`) addresses **only the embedded-NUL-byte truncation case**; the
+Common-Name-fallback-despite-non-matching-SAN case and the IP-literal-matched-via-DNS-SAN case are,
+in the advisory's wording, **byte-identical in `libfreerdp/crypto/tls.c` from the 3.29.0 tag through
+current HEAD**. Fixed in **3.32.2**.
+
+Consequences, in the order they matter:
+
+1. **"Fixed in 3.29.0" was false for two of three cases for eleven releases.** Anyone who upgraded
+   once and stopped watching has been exposed the entire time, and their scanner says patched.
+2. **The check is a diff over every sink the advisory names** — not "does a commit mention the CVE".
+   Two of three sinks had no diff at all, which is visible in one `git diff` of one file.
+3. **The threat model is stated precisely and it is not "no authentication":** an attacker presenting
+   a certificate chaining to a CA the client already trusts (a misissuing public CA, a rogue private
+   CA) passes identity verification and MITMs the RDP session — screen, keystrokes, clipboard, input
+   injection. This is [[security]]'s certificate-trust family, arriving as a client-side validation
+   bug rather than a trust-store question.
+4. The advisory carries the line more reports should: **"This report was submitted with AI
+   assistance."**
+
+The reusable move: **read the successor advisory's title.** A vendor that ships an incomplete fix
+almost always names the incompleteness in the next advisory, because the second filing has to explain
+why the first one did not close it.
+
+### State: `fix-is-a-conjunction-of-two-artifacts`
+
+`CVE-2026-112917` (Docker Desktop for Windows, WSL2 backend, **9.2** on CVSS 4.0 from
+`security@docker.com`, **CWE-424**, `Received`) has a remediation that is two version bounds in two
+products shipped by two vendors, and Docker says so in one sentence:
+
+> "Docker Desktop 4.98.0 or later **and** WSL 3.0.3 or later" … "Docker Desktop 4.98.0 or later
+> running on an older WSL **remains affected**."
+
+So a scanner that knows only the application's version marks the host fixed while the kernel side is
+still the old one, and no single field in the record expresses this — the range is a conjunction. The
+mechanism is a seccomp-table habit rather than a Docker bug: the filter blocked the 64-bit `socket`
+syscall with `AF_VSOCK` and not the **32-bit `socketcall` multiplexer**, the classic 32-bit-syscall
+gap reappearing on x86-64. The table is copied into other container runtimes.
+
+### The `CVE-2026-98432` arc closes, and the kernel fix arrives in a desktop product
+
+The 11-03 lane in this file recorded that Ubuntu's tracker still listed `CVE-2026-98432` with no
+patched kernel for 22.04/24.04/26.04 three weeks after publication. **Docker Desktop 4.98.0's second
+security entry is that fix** — "Fixed CVE-2026-98432, a use-after-free in the Linux kernel's IPv4 TCP
+handling" — with references pointing at `linux-msft-wsl-6.18.54.1` and WSL `3.0.3`, i.e. a **bundled
+kernel** carrying the patch.
+
+Verified first-hand: the NVD record is still **`Received`** (published 2026-10-15T13:17:13Z), carries
+exactly one metric — the Linux kernel CNA's `Secondary` **9.8** — and **no CWE**. So the answer to
+"is this host patched" now depends on which kernel the container is running on: an embedded kernel is
+an artifact with its own release train, and it can reach a fix before the distribution does. That is
+the inverse of the OpenWrt/EDK2 shape (source fixed, artifact not built); here the artifact ships
+ahead of the distro's own.
+
+→ [[security]] [[vuln-supply]] [[fact-check]]

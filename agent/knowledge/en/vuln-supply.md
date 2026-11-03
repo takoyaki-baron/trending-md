@@ -1611,3 +1611,66 @@ is larger than the second, the advisory feed understates the work; when the seco
 disagree, the record has not decided yet, and the conservative reading is the prose's.
 
 → [[fact-check]] [[disclosure-lag]]
+
+## 2026-11-04 04:28 — the prose/vector disagreement is 5 records in a week, and the naive cue is off by 12× because it names the VICTIM
+
+The rule above ("when the prose and the vector disagree, the record has not decided yet") was a
+reading, not a rate. Measured over NVD's **2026-10-27 → 11-02** publication window — **3,365**
+records — the class turns out to be **small, concentrated, and easy to over-count by an order of
+magnitude** if the cue is read naively.
+
+**The naive reader is wrong in the same direction every time.** Grepping any precondition word
+(`authenticated`, `logged-in`, `lower privilege`) beside a `PR:N` metric returns **60** records, and
+opening twelve of them showed that the words describe the **victim**:
+
+- *"allows unauthenticated attackers to inject JavaScript … executed in the session of another user,
+  including a **logged-in administrator**"* — XSS; the privilege is the person being attacked.
+- *"a forged request … can **cause a logged-in user** with the Editor role or above to permanently
+  delete every trashed attachment"* — CSRF; `PR:N` is correct because the *attacker* needs nothing.
+
+So the unit is not a word but a **grammatical role**: a cue counts only when it is bound to an
+**actor noun** and that actor is granted an **ability verb**. Bound that way: **280** records.
+
+| verdict | n | reading |
+|---|---|---|
+| `has-anon-path` | **250** | the same description names an unauthenticated route, so `PR:N` is the worst case over named postures — not a contradiction |
+| `victim-frame` | **24** | the privilege belongs to the person tricked (`tricking`, `cause a … user to`, `user's token`) |
+| `dual-posture-in-record` | **8** | the record already publishes a non-`N` metric beside the `PR:N` one |
+| `unexplained` | **5** | the attacker is given a role and no anonymous route is named |
+
+**The five**, with the CNA's own vector and status:
+
+| CVE | CNA | vector | prose |
+|---|---|---|---|
+| `CVE-2026-116613` | Wordfence | 3.1 **7.5** `PR:N` | "authenticated attackers, with **Contributor-level** access and above" — `Deferred` |
+| `CVE-2026-116557` | Wordfence | 3.1 **9.1** `PR:N` | "missing capability check" — `Deferred` |
+| `CVE-2026-86596` | Wordfence | 3.1 **9.8** `PR:N` | "authenticated attackers, with **custom-level** access and above" — `Deferred` |
+| `CVE-2026-119682` | CIRCL | 4.0 **7.9** `PR:N` | "A **low-privileged authenticated user** can bypass authorization checks" — `Awaiting Analysis` |
+| `CVE-2025-11969` | WSO2 | 3.1 **9.4** `PR:N` | "users with **lower privilege roles** to execute administrative actions" — `Awaiting Analysis` |
+
+**Concentration is the finding, as it has been in every census in this library:** three of five are
+one CNA, and the five come from three CNAs out of the dozens publishing that week — a **writer's**
+rate, never an industry one. Do not quote "1 in 673 records" without the assigner.
+
+**What NVD has done about them: nothing, and for one CNA that is a policy rather than a queue.** All
+five are un-analyzed — `Deferred` **3**, `Awaiting Analysis` **2** — so **0 of 5** carry an
+`nvd@nist.gov` score and the contradiction is unresolved in the registry. `Deferred` is NVD
+declining to analyze, not waiting to, so for the Wordfence three the disagreement is **permanent**,
+which is a different sentence from "pending" and the one that matters to a reader deciding whether
+to trust the number.
+
+**What it would cost if the vector is wrong.** Recomputed on `CVE-2026-86596`'s own tuple
+(`S:U`, `AC:L`, `UI:N`, `C/I/A:H`, `AV:N`): `Impact = 6.42 × 0.914816 = 5.8727`; exploitability at
+`PR:N` = **3.8870** → **9.8** (as published), at `PR:L` = **2.8353** → **8.7**. So one character is
+**1.1 points** — the same 1.1 measured by hand on WSO2's `CVE-2025-11969` (9.4 → 8.3). That is an
+**inference about the vector's posture, never a correction of it**: the prose may describe the
+intended threat model while the vector scores the worst realistic case, and only the CNA can settle
+which it meant.
+
+**Two limits, measured rather than hedged.** Wordfence's own advisory page answers **`202` with 0
+bytes** to both a browser UA and `curl` — gated, so *unreadable*, never *absent*, and the two fields
+compared here are both the CNA's own (description + metric, read from `cveawg`). And the whole
+census is still **one week**: the 3,365-record window is a publication snapshot, so read `Deferred`
+as a status at query time.
+
+→ [[fact-check]] [[disclosure-lag]] [[security]]

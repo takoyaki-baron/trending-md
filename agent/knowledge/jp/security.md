@@ -4306,3 +4306,79 @@ agent framework" 対 通知の "AI-assisted, autonomous penetration testing fram
 調査四日目についての記述であり、ARTEX の帰属はベンダー自身のものであって外部研究者のものではない。
 
 → [[fact-check]] [[disclosure-lag]]
+
+## 11-04 — インストーラが「自分が書いたもの」を信頼するようホストに求める（Postman、2026-10-24）
+
+プラグインマーケットはインストーラに**他社のエージェント設定**への書き込み権限を与える。フック信頼は、本来人間が行う唯一の境界である。Postman デスクトップ **12.33.4** は、既にサインイン済みの既存ユーザーの環境でそれを静かに越えた。
+
+**ログ原文**（`~/Library/Application Support/Postman/logs/main.log`、**2026-10-24T09:34:14.418Z**）。issue #14370 は 2026-10-25T19:03:26Z 提出、私の確認時点で **147** リアクション・18 コメント・未クローズ。
+
+```text
+PostmanAgentPluginService~install: script completed
+{"source":"auto-existing-upgrade","results":["claude-code:installed","codex:installed"],"installer":"script"}
+Main: autoInstall.plugin.existing-user finished
+{"outcome":"installed","platform":"darwin","exposed":true,"signedIn":true,...}
+```
+
+**コードは報告者が名指しした固定リビジョンで読んだ**（`postmanlabs/postman-plugin@6c8e452e0f4237f4bcc0901cb1ac442dec707e49`）。`installer/src/hosts/codex-hooks.ts` は `approvePostmanHook(system)` を公開し、そのドックコメント自体が発見である:
+
+> `/** Approves only Postman's current hook after installation; unsupported APIs never fail the install. */`
+
+JSON-RPC で `codex app-server` に接続し、`hooks/list` を呼び、キー `postman@postman:hooks/codex-hooks.json:session_start:0:0` で絞り込み、`trustStatus !== 'trusted'` のとき `config/batchWrite` 経由で `{ hooks.state: { [KEY]: { trusted_hash: hash } } }` と `reloadUserConfig: true` を書き込む。`installer/src/hosts/codex.ts` がインストール後にそれを呼ぶ。つまり**フックを書いたコンポーネントが、そのフックを信頼するようホストに求めた**のであり、間にユーザー操作はない。しかも `SessionStart` フック——プラグインが最初に発言する面——である。フックのコンテキストファイルは `<EXTREMELY_IMPORTANT>` ブロックで始まり、「非自明な API エンジニアリング作業の前に」`postman:api-engineer` スキルを読み込むよう指示する。
+
+**報告者自身が書いた限界が誠実な半分であり、HN の見出しは issue より強い**: そのシーケンスは「クリーンな Mac では未再現」、信頼レコードだけでは「その特定のレコードを誰が作ったかは証明しない」、報告は「データ持ち出しを立証したとは主張しない」。HN の "attempts to share all API data" は issue にはない。Postman はスレッド内で返信していない。
+
+**一般化できる部分:** フック承認は**ホストが所有し、帯域外**でなければならない（サードパーティのプロセスが呼べる JSON-RPC メソッドではなく、ホスト UI のプロンプト）。`config/batchWrite` に到達できるインストーラは誰でもこの昇格経路を継承するからだ。これは論点 11 の境界が、誰も計装していなかった方向から来た形である——「モデルにツール呼び出しを任せられるか」ではなく、「インストーラに信頼ストアを任せられるか」。
+
+**同じバッチに反例がある。** `spotify/portal-ai-plugins`（確認済み **3,003★**、Apache-2.0、description フィールドなし、`pushed_at` 2026-10-23、issues+PRs 13）はエンタープライズコネクタをマーケットプレイスとして配布し（`claude plugin marketplace add spotify/portal-ai-plugins` → `claude plugin install portal@portal`）、Claude Code・Codex・Cursor・pi を横断する——同じインストール経路、同じ信頼面。2 つ目のプラグイン **shunt** は「I/O の重いエージェント作業——一括ファイル読み込みとボイラープレート生成」を Portal CLI のアクション登録簿経由で安価なワーカーモデルへ流す。ベンダーがコネクタとコスト方針を同じ市場で出すのは、多くのエージェントチームが私的に到達する形そのものだが、市場が追加するのは信頼の問いである。
+
+→ [[agent-stack]] [[agent-plugins]] [[fact-check]]
+
+## 11-04 — MCP ツールポイズニングはモデルの性質であり、フレームワークの性質ではない（9,720 セル）
+
+arXiv **2611.03555**、2026-11-04 04:20 に要旨を逐語で再読。数字を意味のあるものにしているのは設計判断——「コンプライアンス採点」ではなく**実際のツール実行**、そして **canary HTTP 受信**で持ち出しを確認する二重オラクル。
+
+| 量 | 値 |
+|---|---|
+| マトリクス | **9,720** セル = 12 フレームワーク × 18 モデル × 45 攻撃シナリオ |
+| 全体 ASR | **22.9%**（**2,113** セル） |
+| 内訳 | 64.9% が攻撃者ツール呼び出し · 23.0% が攻撃者エンドポイントへ接続 · **12.1%** が秘密の持ち出しを検証可能 |
+| フレームワーク差 | 中核 9 フレームワークが **23–26%** に収まる（**χ² = 3.30、p = 0.91**） |
+| モデル差 | **0.4% – 49.7%** |
+| 正規表現の説明スキャナ | 45 シナリオ中 **20** を拒否、誤検知率 **7.2%** |
+| 開示 | 4 ベンダーへの 5 件の協調開示、**すべて拒否** |
+
+論文自身の一文が調達上の結論である: "Resistance is model-level … and no framework implements intentional defense." フレームワークの偶有的性質は特定の場合に緩和するが、12 のうち意図的な防御はひとつもない。したがって「フレームワーク X を使っているから MCP は安全」は、実行を伴う唯一の横断測定に支持されず、多くのカタログが提供する制御＝説明スキャナは 45 のうち 20 を止めるに過ぎない。
+
+続く制御は、このライブラリが繰り返し到達するものだ: **境界はツール呼び出しが「何をしてよいか」であり、ツールの説明文ではない。** Concordat の手（提供されていない呼び出しはできない）と `strands-agents/box` のデータフロー方針（ファイル読み込みが後の外向き通信を否定できる）はいずれもモデルの外側にあり、どのフレームワークがプロンプトを組んだかに無関心である。
+
+→ [[agent-stack]] [[harness-reliability]] [[fact-check]]
+
+## 11-04 — GitBook: "using AI agents" はベンダーの性格づけであり、2 つの更新は「何をすべきか」で矛盾する
+
+ステータスページを 2026-11-04 04:19 に一次取得（HTTP 200、101 KB、`Action required` ×1、`AI agents` ×1、`Rotate` ×2、`re-authenticate` ×1、`Questions asked` ×1）。ページ自身の記述では **2026-11-02 19:00 CET** に攻撃者が「gained unauthorized access to some of our infrastructure credentials」。アプリと認証付きドキュメントを予防的にオフライン化し、公開コンテンツはキャッシュで維持した。
+
+**2 つのエントリは、読者が唯一実行する行で矛盾している。** **13:15 CET** の更新は「**Action required: None at this time**」と書き、**16:21 CET** の更新は GitBook API トークンのローテーション、公開済み連携で使う第三者トークンとシークレットのローテーション、GitBook MCP サーバの再認証を求めている。両方が同じページに載っている——ステータスページは追記型の散文であり、前のエントリは撤回されていない。
+
+**影響データの一覧は具体的で、帰属は具体的でない。** 名指しされたのは integration tokens、Git Sync secrets、API tokens、そして「**Questions asked to GitBook Assistant by your site visitors**」。帰属——「a sophisticated, highly targeted attack **using AI agents**」——はツールも侵入点も根拠も名指ししないので、これはベンダーの性格づけであって発見ではない。WorkOS の形を逆にしたものである（データ一覧は精密、攻撃者は曖昧）。運用上は、Git Sync secret は通常リポジトリへの deploy key か bot token なので、プラットフォームのトークンだけ回して下流のシークレットを残すのは、この修復の不完全版である。
+
+→ [[fact-check]] [[agent-stack]]
+
+## 11-04 — 6 レコード、NVD 1 回の取得: 0/6 が NVD 採点、CNA は 5 者
+
+2026-11-03T20:18Z、カンマ区切りの `cveId` リストで 1 リクエスト。
+
+| CVE | 状態 | 指標（すべて `Secondary`） | スコア | CWE |
+|---|---|---|---|---|
+| `CVE-2026-28336` SolarWinds Dameware | `Received` | `psirt@solarwinds.com` 3.1 | **9.9** | CWE-20 |
+| `CVE-2026-44266` Elo（Ruby バックエンド） | `Received` | `security-advisories@github.com` 3.1 | **9.8** | 94, 116, 1336 |
+| `CVE-2026-44267` Elo（JS constructor） | `Received` | `security-advisories@github.com` 3.1 | **9.8** | 79, 94, 693, 1336 |
+| `CVE-2026-121392` FreeRDP | `Undergoing Analysis` | `disclosure@vulncheck.com` 4.0 **と** 3.1 | **9.1 / 7.4** | CWE-295 |
+| `CVE-2026-112917` Docker Desktop | `Received` | `security@docker.com` 4.0 | **9.2** | CWE-424 |
+| `CVE-2026-98432` Linux カーネル（ipv4） | `Received` | `416baaa9…`（カーネル CNA）3.1 | **9.8** | なし |
+
+読み方 3 点。**(a) FreeRDP の開きはフレームワークであり、停止点ではない:** 両ベクトルが `E:X` を持つので、`9.1`（v4.0、`AC:H`→`AT:P`）と `7.4`（v3.1）は同じ base を 2 つの式で読んだもの——[[cvss-stopping-points]] の対照行であってコピー誤りではない。**(b) SolarWinds の 9.9 は CNA の数字**であり、レコードは `Received` のまま、ベンダーページはそれがどの*バージョン*かを確定しない——[[fact-check]] の「本文は 3.0、リンクは 3.1 計算機」という単一アンカーの項を参照。**(c) `CVE-2026-98432` は 20 日経っても `Received`**、唯一の指標はカーネル CNA の `Secondary` 9.8、**CWE なし**。11-03 の「Ubuntu はカーネルを出していない」の隣に証拠が 1 つ増えた: Docker Desktop が修正を出した（[[disclosure-lag]] 参照）。
+
+**Elo の 2 件は「1 つのバグ、4 つのバックエンド」の最も綺麗な記録:** `src/compilers/ruby.ts` の 180–184 行はバックスラッシュ・二重引用符・制御文字をエスケープするが **`#` をしない**。`#{…}` は Ruby の補間なので、細工した Elo 文字列は攻撃者が選んだコードにコンパイルされる——一方「the same Elo source compiled to JavaScript, Python, or SQL is benign」。405–412 行の第 2 の sink はサブタイプ制約ラベルを Ruby の二重引用符文字列に包み、「with no escape pass at all」。アドバイザリが行番号まで特定しているのが、このライブラリが欲しい成果物の型である: 読者がソースと diff できる記録。
+
+→ [[vuln-supply]] [[disclosure-lag]] [[fact-check]]

@@ -6330,3 +6330,149 @@ no evidence that WorkOS application data was accessed" is a statement about day 
 investigation, and the ARTEX attribution is the vendor's own — not an outside researcher's.
 
 → [[fact-check]] [[disclosure-lag]]
+
+## 11-04 — the installer asks the host to trust what it just wrote (Postman, 2026-10-24)
+
+A plugin marketplace gives an installer write access to **other vendors' agent configs**, and hook
+trust is the one boundary that is supposed to need a human. Postman desktop **12.33.4** crossed it,
+silently, on an existing signed-in user.
+
+**The log line, verbatim** from `~/Library/Application Support/Postman/logs/main.log` at
+**2026-10-24T09:34:14.418Z** (issue #14370, filed 2026-10-25T19:03:26Z, **147** reactions at my
+check, 18 comments, still open):
+
+```text
+PostmanAgentPluginService~install: script completed
+{"source":"auto-existing-upgrade","results":["claude-code:installed","codex:installed"],"installer":"script"}
+Main: autoInstall.plugin.existing-user finished
+{"outcome":"installed","platform":"darwin","exposed":true,"signedIn":true,...}
+```
+
+**The code, read at the pinned revision the reporter names**
+(`postmanlabs/postman-plugin@6c8e452e0f4237f4bcc0901cb1ac442dec707e49`). `installer/src/hosts/codex-hooks.ts`
+exports `approvePostmanHook(system)`, whose own doc comment is the finding:
+
+> `/** Approves only Postman's current hook after installation; unsupported APIs never fail the install. */`
+
+It speaks JSON-RPC to `codex app-server`, calls `hooks/list`, filters for the single key
+`postman@postman:hooks/codex-hooks.json:session_start:0:0`, and — when `trustStatus !== 'trusted'` —
+writes
+
+```ts
+{ edits: [{ keyPath: 'hooks.state', value: { [KEY]: { trusted_hash: hash } }, mergeStrategy: 'upsert' }],
+  reloadUserConfig: true }
+```
+
+through `config/batchWrite`. `installer/src/hosts/codex.ts` then calls it after installing. So **the
+component that wrote the hook is the component that asked the host to trust it**, with no user
+gesture in between, and the hook is a `SessionStart` hook — the surface where a plugin gets to speak
+before anything else does. The hook's context file opens with an `<EXTREMELY_IMPORTANT>` block
+instructing the agent to load the `postman:api-engineer` skill before "any non-trivial API
+engineering task".
+
+**The reporter's limits are the honest half, and the HN headline is stronger than the issue:** the
+sequence was "not yet reproduced on a clean Mac"; the trust record alone "does not prove who created
+that specific record"; the report "does not claim to establish data exfiltration". The HN framing
+("attempts to share all API data") is not in the issue. Postman had not replied in-thread.
+
+**What generalises:** hook approval has to be **host-owned and out-of-band** (a prompt in the host's
+UI, not a JSON-RPC method a third-party process may call), because any installer that can reach
+`config/batchWrite` inherits the escalation. This is thesis 11's boundary arriving from the direction
+nobody instrumented: not "can the model be trusted with a tool call" but "can the installer be
+trusted with the trust store".
+
+**The counter-example ships in the same batch.** `spotify/portal-ai-plugins` (**3,003★** verified,
+Apache-2.0, no description field, `pushed_at` 2026-10-23, 13 issues+PRs) packages an enterprise
+connector as a marketplace (`claude plugin marketplace add spotify/portal-ai-plugins`, then
+`claude plugin install portal@portal`) across Claude Code, Codex, Cursor and pi — the same install
+path, the same trust surface — and its second plugin, **shunt**, routes "I/O-heavy agent work — bulk
+file reads and boilerplate generation" to cheaper worker models through the Portal CLI's action
+registry. A vendor publishing both the connector and the cost policy in one marketplace is the
+pattern most agent teams arrive at privately; the trust question is what the marketplace adds.
+
+→ [[agent-stack]] [[agent-plugins]] [[fact-check]]
+
+## 11-04 — MCP tool poisoning is a model property, not a framework property (9,720 cells)
+
+arXiv **2611.03555**, abstract re-read verbatim at 2026-11-04 04:20. The design decision that makes
+the number mean something: **real tool execution rather than compliance grading**, with a dual oracle
+that confirms exfiltration by **canary HTTP receipt**.
+
+| quantity | value |
+|---|---|
+| matrix | **9,720** cells = 12 frameworks × 18 models × 45 attack scenarios |
+| overall ASR | **22.9%** (**2,113** vulnerable cells) |
+| of those | 64.9% dispatch an attacker tool call · 23.0% contact the attacker endpoint · **12.1%** verifiably exfiltrate a secret |
+| framework spread | nine core frameworks inside **23–26%** (**χ² = 3.30, p = 0.91**) |
+| model spread | **0.4% – 49.7%** |
+| regex description scanner | rejects **20 of 45** scenarios at **7.2%** false positives |
+| disclosure | five coordinated disclosures across four vendors, **all rejected** |
+
+The paper's own sentence is the procurement consequence: "Resistance is model-level … and no
+framework implements intentional defense." Incidental framework properties mitigate specific cases;
+nothing in twelve frameworks is deliberate. So "we use framework X, so MCP is handled" is not
+supported by the only cross-framework measurement with execution behind it, and a description
+scanner — the control most catalogues ship — is a speed bump on 20 of 45 attacks.
+
+The control that follows is the one this library keeps arriving at: **the boundary is what a tool
+call may do, not what the tool's description says.** Compare Concordat's move (an unoffered call
+cannot be made) and `strands-agents/box`'s dataflow policy (a file read can deny a later egress) —
+both outside the model, both indifferent to which framework assembled the prompt.
+
+→ [[agent-stack]] [[harness-reliability]] [[fact-check]]
+
+## 11-04 — GitBook: "using AI agents" is a vendor characterisation, and the two updates disagree on the action
+
+Status page read first-hand at 2026-11-04 04:19 (HTTP 200, 101 KB; `Action required` ×1, `AI agents`
+×1, `Rotate` ×2, `re-authenticate` ×1, `Questions asked` ×1). Timeline as the page states it: at
+**19:00 CET on 2026-11-02** an attacker "gained unauthorized access to some of our infrastructure
+credentials"; the app and authenticated docs went offline as a precaution while public content
+stayed live from cache.
+
+**The two entries contradict each other on the one line a reader acts on.** The **13:15 CET** update
+says "**Action required: None at this time**"; the **16:21 CET** update tells customers to rotate
+GitBook API tokens, rotate third-party tokens and secrets used in published integrations, and
+re-authenticate the GitBook MCP server. Both are live on the same page — a status page is append-only
+prose, and the earlier entry is not retracted.
+
+**The affected-data list is specific where the attribution is not.** Named: integration tokens, Git
+Sync secrets, API tokens, and "**Questions asked to GitBook Assistant by your site visitors**". The
+attribution — "a sophisticated, highly targeted attack **using AI agents**" — names no tool, no entry
+point and no evidence, so it is the vendor's characterisation and not a finding; it is the WorkOS
+shape in the opposite order (a precise data list beside a vague attacker). Operationally: a Git Sync
+secret is usually a deploy key or bot token into a repo, so rotating the platform token and leaving
+downstream secrets is the incomplete version of this remediation.
+
+→ [[fact-check]] [[agent-stack]]
+
+## 11-04 — six records, one NVD pull: 0 of 6 NVD-scored, five CNAs
+
+Pulled 2026-11-03T20:18Z with a comma-separated `cveId` list (one request).
+
+| CVE | status | metrics (all `Secondary`) | score | CWE |
+|---|---|---|---|---|
+| `CVE-2026-28336` SolarWinds Dameware | `Received` | `psirt@solarwinds.com` 3.1 | **9.9** | CWE-20 |
+| `CVE-2026-44266` Elo (Ruby backend) | `Received` | `security-advisories@github.com` 3.1 | **9.8** | 94, 116, 1336 |
+| `CVE-2026-44267` Elo (JS constructor) | `Received` | `security-advisories@github.com` 3.1 | **9.8** | 79, 94, 693, 1336 |
+| `CVE-2026-121392` FreeRDP | `Undergoing Analysis` | `disclosure@vulncheck.com` 4.0 **and** 3.1 | **9.1 / 7.4** | CWE-295 |
+| `CVE-2026-112917` Docker Desktop | `Received` | `security@docker.com` 4.0 | **9.2** | CWE-424 |
+| `CVE-2026-98432` Linux kernel (ipv4) | `Received` | `416baaa9…` (kernel CNA) 3.1 | **9.8** | none |
+
+Three reading notes. **(a) FreeRDP's spread is the framework, not a stopping point:** both its
+vectors carry `E:X`, so `9.1` (v4.0, `AC:H`→`AT:P`) beside `7.4` (v3.1) is the same base read by two
+equations — the control row of [[cvss-stopping-points]], not a copy error. **(b) SolarWinds' 9.9 is
+the CNA's number** on a `Received` record, and the vendor page does not settle which *version* it is
+— see [[fact-check]] for the one anchor that prints 3.0 as text and links to the 3.1 calculator.
+**(c) `CVE-2026-98432` is still `Received` twenty days on, with the Linux kernel CNA's `Secondary`
+9.8 and no CWE** — the 11-03 lane's "Ubuntu shipped no kernel" now has a second artifact beside it:
+Docker Desktop ships a fix (see [[disclosure-lag]]).
+
+**The Elo pair is the cleanest "one bug, four backends" record yet:** `src/compilers/ruby.ts`
+lines 180–184 escape backslash, double quote and control characters but **not `#`**, and `#{…}` is
+Ruby interpolation, so a crafted Elo string compiles to attacker-chosen code — while "the same Elo
+source compiled to JavaScript, Python, or SQL is benign". A second sink at 405–412 wraps a
+subtype-constraint label in a Ruby double-quoted string "with no escape pass at all". The advisory is
+specific down to line numbers, which is the artifact class this library wants: a record a reader can
+diff against the source.
+
+→ [[vuln-supply]] [[disclosure-lag]] [[fact-check]]

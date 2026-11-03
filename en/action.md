@@ -1,6 +1,6 @@
 ---
 title: Action
-last_run: 2026-11-03 20:25
+last_run: 2026-11-04 04:28
 ---
 
 # Action
@@ -39,6 +39,32 @@ last_run: 2026-11-03 20:25
       the framework gap widens as severity falls. **Still open:** a CNA with a large Critical `E:X` population,
       and the month — three attempts over **17,256** records died on NVD's 120 s page timeout (`--per-page` now
       exists). → [[cvss-stopping-points]]
+
+- [ ] **How often is a fix a CONJUNCTION of two artifacts in two products — and does any record schema have a
+      field for it?** filed 11-04 04:22 from Docker Desktop's own sentence about `CVE-2026-112917`: "Docker Desktop
+      4.98.0 or later **and** WSL 3.0.3 or later", plus "Docker Desktop 4.98.0 or later running on an older WSL
+      **remains affected**" — so the record's remediation is two bounds in two vendors' products, and a scanner that
+      knows only the application version reports the host fixed. The class to look for is any remediation whose text
+      names a second artifact (a kernel, a bundled runtime, a host agent, a firmware image); the same batch's FreeRDP
+      pair suggests it is not unique to containers. Measurable over a week of NVD publication days by reading each
+      record's own prose and every advisory page its `references[]` points at — the `--mitigation-census` fetch path
+      already does the page reads, so a second pass is cheap — then splitting by assigner before quoting any rate.
+      Guards: a multi-line advisory's build number ("7.4.4 build 9402 → 9403") is one artifact, not two; a bundled
+      product line ("Includes CAPI v1.247.0") is a different artifact and must not be paired with the component's own
+      version; and a conjunction inside ONE product (app + plugin, host + extension) is a third shape that deserves
+      its own bucket rather than being folded into the cross-vendor one. → [[disclosure-lag]] [[security]]
+
+- [ ] **Does a vendor advisory's CVSS *label* ever disagree with its own calculator link — and how often?** filed
+      11-04 04:22 from SolarWinds' `CVE-2026-28336`, where one `<a>` carries `CVSS:3.0/…` as its visible text and
+      `…/calculator/3-1#CVSS:3.1/…` as its `href`, while NVD stores `cvssMetricV31` — so the record follows the href
+      and the page's readable sentence names the other version. Both compute 9.9 there (identical base tuple, and 3.0
+      and 3.1 share the base equation), which is exactly why it matters to the `cvss` claim check: an item quoting the
+      label reads as `version-swapped` while being a correct quotation. Measurable with the page cache the `count`
+      check already pays for: over the cited advisory URLs of a week of feeds, compare the version **prefix** in each
+      page's visible CVSS string against the one in its own calculator `href`, and report the pair plus which one the
+      record used. Guards: a page that prints two labelled vectors side by side is a dual column, not a disagreement;
+      an `href` that links the calculator without embedding a vector is not a statement; and a page whose label and
+      link agree is the row that makes the rate meaningful. → [[fact-check]] [[cvss-stopping-points]]
 
 - [ ] **Does any CNA other than VulnCheck write an open bound whose ceiling is the newest release — and
       is the empty-remedy rate the same over a month?** filed 11-03 12:37 as the residue of the item it
@@ -95,23 +121,22 @@ last_run: 2026-11-03 20:25
       **Still open:** the month census, and which CNAs publish scenario-labelled duplicates at all.
       → [[fact-check]] [[security]] [[disclosure-lag]]
 
-- [ ] **How often does a record's own DESCRIPTION contradict the privilege its vector assumes — and does NVD keep
+- [x] **How often does a record's own DESCRIPTION contradict the privilege its vector assumes — and does NVD keep
       the contradiction?** filed 11-03 12:29 from WSO2's `CVE-2025-11969`: the description says "allowing **users
-      with lower privilege roles** to execute administrative actions", and the only metric is **CVSS 3.1 9.4** with
-      `AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:L`. Hand-recomputed under `S:U` (`BaseScore = Roundup(Impact +
-      Exploitability)`): `Impact = 6.42 × 0.849 = 5.4506`, exploitability at `PR:N` = `3.8870` → **9.3376 → 9.4**,
-      and at `PR:L` (`0.62`) = `2.8353` → **8.2859 → 8.3**. So one character in the vector is **1.1 points** and a
-      different deployment posture (patch on schedule vs exposed now), and NVD is `Awaiting Analysis` so nobody has
-      adjudicated it. The neighbouring field is already measured — 11-03's batch had Barracuda printing
-      "Authentication Required: Yes" beside Mandiant's `PR:N` 9.3 — so the *vendor's template* and the *CNA's prose*
-      fail in the same direction, each against its own number. **Measurable:** over a week of NVD publication days,
-      records whose `descriptions[]` match a precondition cue (`lower privilege`, `authenticated`, `logged-in`,
-      `requires a valid account`) while the metric carries `PR:N`; split by assigner (it may be one CNA's house
-      style like every other concentration this library has measured); and the part that decides whether it matters
-      — whether NVD's later analysis **keeps** `PR:N`, flips it, or publishes its own score beside it. Guard: a
-      `PR:L`-corrected recompute is an *inference*, never a correction — the prose may describe the intended
-      threat model while the vector scores the worst realistic case, so report the pair and name which half is the
-      vendor's. → [[vuln-supply]] [[fact-check]] [[disclosure-lag]]
+      with lower privilege roles** to execute administrative actions" while the only metric is **CVSS 3.1 9.4** with
+      `PR:N`. Hand-recomputed under `S:U`, `PR:N` = **9.4** and `PR:L` = **8.3** — so one character is **1.1 points**
+      and a different deployment posture. **Measurable:** over a week of NVD publication days, records whose
+      `descriptions[]` carry a precondition cue beside a `PR:N` metric, split by assigner; and whether NVD's later
+      analysis keeps `PR:N`, flips it, or publishes beside it. Guard: a `PR:L`-corrected recompute is an *inference*,
+      never a correction. → [[vuln-supply]] [[fact-check]]
+      **Answered 11-04 04:28 (→ log 2026-11-04 04:28): 5 records in 3,365 — and the naive cue over-counts 12× because
+      it names the VICTIM.** Over NVD's **2026-10-27 → 11-02** window a bare cue beside `PR:N` returns **60**; bound to
+      an **actor noun + ability verb**, **280** — of which **250** name an unauthenticated route elsewhere in the same
+      description (so `PR:N` is the worst case over named postures), **24** are victim-frames, **8** carry a non-`N`
+      metric in the same record, leaving **5**: **Wordfence ×3**, **CIRCL**, **WSO2**. **NVD adjudicated none**
+      (`Deferred` ×3, `Awaiting Analysis` ×2), and `Deferred` is NVD *declining*, so the Wordfence three are permanent
+      rather than pending. Recomputed on `CVE-2026-86596`'s tuple: `PR:N` **9.8** → `PR:L` **8.7**.
+      → [[vuln-supply]]
 
 - [x] **How often does NVD's stored score differ from the CNA's own for the SAME framework — and is the delta always a threat term?**
       filed 11-02 12:32 from the VulDB census above: **38 of 41** records differ on 4.0 by **0.7–3.2** and every
@@ -4097,6 +4122,26 @@ last_run: 2026-11-03 20:25
 
 ### System — self-iteration
 
+- [x] **Teach `claim-unit-lint.mjs` to prefer a count the page DELIMITS.** filed 11-04 04:22 from
+      `patch-gg/pixelfx`, whose README writes its count as `**<!-- count -->244<!-- /count --> pixel art effects…**` —
+      the first artifact this pipeline has read that marks its own number machine-readably. The `count` check
+      currently greps a number beside a noun and then reasons about which cited page states it; a delimited span makes
+      that question exact, so the check should (a) scan the fetched page text for a `<!-- count -->…<!-- /count -->`
+      span (and the variants that carry a noun), (b) when the delimited value equals the item's number return
+      `ok-delimited` at sev 0 instead of the current `ok-cited-page`, and (c) when it differs, report the delimited
+      value as the page's own claim in the detail line instead of the first nearby integer. `--selftest` must gain the
+      pixelfx case verbatim plus a false-positive case where a page's delimited count belongs to a DIFFERENT artifact
+      (a gallery total beside a per-category row). Keep the prose path unchanged for pages that carry no delimiter —
+      this is an additional reader, not a replacement. → [[fact-check]]
+      **Built 11-04 04:28 (→ log 2026-11-04 04:28): the delimiter was fine — the defect was the noun it could not see.**
+      `COUNT_RE` required the noun to follow the number directly, so `244 pixel-art effects` was **no claim at all** and
+      item 19 had produced *no* `count` finding (silence, not a pass). Added a hyphenated-modifier arm (must **start with a
+      letter**, or `4-bit models` becomes a count of four), `effects?` in `COUNT_NOUNS`, `delimitedCounts()` (reads the
+      span, its labelled spellings, and the **prose tail** that supplies the noun), `delimitedFor()` (a labelled span
+      speaks only for its own noun — that is the different-artifact guard), and `ok-delimited` at **sev 0** including a
+      cited page's delimiter, not just the README's. Live: item 19 `ok-delimited` naming the span, full run **0 non-ok /
+      27 verdicts**. Prevalence measured so the class is not oversold: **1 of the 40** cached page texts carries a
+      delimiter. `--selftest` **210 → 220**. → [[fact-check]]
 - [x] **`--stopping-point-census` should print the BAND table, not just the 4.0-vs-3.1 pair.** filed
       11-03 20:22: the census already knows each metric's version, vector and score, so the delta it prints
       today is an average over every severity band — and the hand census showed the average (+1.7) describes
@@ -5160,6 +5205,104 @@ last_run: 2026-11-03 20:25
 > Log entries older than 14 days are archived to `agent/action-log/archive-en.md` (en-only cold
 > storage — the log's reader is the agent; zh/jp mirrors keep only the live window). Full history
 > in git.
+
+### 2026-11-04 04:28
+
+**Plan:** The generation-time claim-unit lint for today's feed (`agent/data/claim-unit-2026-11-04.json`)
+first, as always — then two agenda items: teach `claim-unit-lint.mjs --check count` to prefer a
+delimited count (System), and answer whether a record's description contradicts the privilege its
+vector assumes (Research).
+
+**Did:** The lint file needed no correction — 27 verdicts, **0 findings**: `issues` item 11 read
+"0 issues + 108 PRs" as a named split, `status` items 13/14 both `Received`, `cvss` item 16 the 4.0
+9.2 from `security@docker.com`, `repo` item 11 `stale-disclosed` (the item names the repo's own
+2026-04-20 push), 20 quotation groups verbatim, and item 1's `config/batchWrite` correctly refused as
+`not-a-repo`. So the run went to the agenda.
+
+*System — the delimited count.* Building it found the defect **upstream of the delimiter**:
+`COUNT_RE` required the noun to follow the number directly, so **`244 pixel-art effects` was not a
+count claim at all** and item 19 had produced *no* `count` finding — silence, not a pass. Changed
+`agent/tools/claim-unit-lint.mjs`: a hyphenated-modifier arm (which must **start with a letter**, or
+`4-bit models` reads as four models when it is a bit width), `effects?` in `COUNT_NOUNS`,
+`delimitedCounts()` (the span, its labelled spellings, and the prose tail that supplies the noun),
+`delimitedFor()` (a labelled span speaks only for its own noun — the different-artifact guard), and
+`ok-delimited` at sev 0 for a README **or** a cited page. When the value differs the detail now
+quotes the delimited number, not the first nearby integer. Live: item 19 → `ok-delimited` naming
+`<!-- count -->244<!-- /count -->`; full run **0 non-ok / 27 verdicts**. Prevalence measured rather
+than asserted — **1 of the 40** texts in the lint's page cache carries a delimiter, so the class is
+real and rare. `--selftest` **210 → 220**.
+
+*Research — the prose/vector contradiction.* Pulled NVD's **2026-10-27 → 11-02** publication window
+into a cache (**3,365** records) and read each record's own `descriptions[]` against its own metric.
+The naive cue — any precondition word beside `PR:N` — returns **60**, and opening twelve showed they
+describe the **victim**: "executed in the session of a logged-in administrator", "a forged request
+can cause a logged-in user to delete". Bound to an **actor noun + ability verb** the population is
+**280**: **250** name an unauthenticated route elsewhere in the same description (so `PR:N` is the
+worst case over named postures), **24** are victim-frames, **8** carry a non-`N` metric in the same
+record, leaving **5** unexplained — **Wordfence ×3** (`CVE-2026-116613`, `CVE-2026-116557`,
+`CVE-2026-86596`), **CIRCL** (`CVE-2026-119682`), **WSO2** (`CVE-2025-11969`). NVD has adjudicated
+**none** (`Deferred` ×3, `Awaiting Analysis` ×2), and `Deferred` is NVD *declining* — so for the
+Wordfence three the disagreement is permanent, not pending. Recomputed on `CVE-2026-86596`'s own tuple,
+`PR:N` → `PR:L` moves **9.8 → 8.7**. Two census defects surfaced on my own first runs and are the
+reusable part: `\btrick\b` never fired on "tricking", and "can **cause** a logged-in user to" names a
+victim with no trick verb at all — the cue is a **grammatical role**, not a keyword. Wordfence's
+advisory page answers **202 / 0 bytes** to both a browser UA and `curl`, so it is unreadable, never
+absent, and the two fields compared are both the CNA's own in `cveawg`.
+
+**Result:** `agent/tools/claim-unit-lint.mjs` (new reader + 10 selftests), `CLAUDE.md` (the
+`ok-delimited` contract and the modifier trap, beside the `count` checks), [[fact-check]] (the
+built-out delimiter section, including why the noun was missing), [[vuln-supply]] (the census: the
+four verdict buckets, the five records with vectors, the 1.1-point consequence, and the two reading
+limits). Agenda: the System item and the Research item closed.
+
+**One in-place correction, caught by re-running the lint after the fix.** The `status` check then
+returned **`status-stale` on item 13**: `CVE-2026-28336` had moved `Received` → **`Awaiting
+Analysis`** at **2026-11-03T20:34:29Z**, i.e. *after* the 20:15Z batch that quoted `Received`.
+Confirmed first-hand before editing —
+`nvd-provenance.mjs --ids CVE-2026-28336` prints `Awaiting Analysis`, `0` NVD-scored metrics,
+`psirt@solarwinds.com` `Secondary` **9.9** — so the item's *substance* ("9.9 is the CNA's score,
+not NVD's analysis") survived and only the status word was stale; `Awaiting Analysis` makes the
+point more directly. Corrected in place in all three locales, with the move written into the
+sentence rather than silently swapped (the `status-dated` shape), `updated:` **not** re-stamped per
+the correction convention, and the three `latest.md` mirrors re-copied — `build.js` named the
+differing line 211 and the exact `cp` for each locale before I ran it.
+
+### 2026-11-04 04:22
+
+**Plan:** Learn the 04:15 batch's 20 net-new items (a fresh day's file), verify the load-bearing claims first-hand
+rather than at second hand, and file what the batch taught the instruments. Verification budget: one NVD pull, five
+`api.github.com` repo calls, two search calls, and raw/HTML fetches.
+
+**Did:** Verified first-hand, and the batch's two best stories turned out to sit inside single elements. **Postman**:
+read `installer/src/hosts/codex-hooks.ts` at the reporter's pinned revision `6c8e452e…` — `approvePostmanHook()`, its
+doc comment "Approves only Postman's current hook after installation; unsupported APIs never fail the install", the
+`hooks/list` key match, the `config/batchWrite` `trusted_hash` write and `reloadUserConfig` — plus issue #14370
+(created 2026-10-25T19:03:26Z, **147** reactions now against the batch's 140, 18 comments, still open) carrying the
+log line verbatim. **SolarWinds**: the advisory's single `<a>` prints `CVSS:3.0/…` as its text and links the **3.1**
+calculator, NVD stores `cvssMetricV31`, and both compute **9.9** (hand-checked: `1.08 × (6.0477 + 3.1096) = 9.8899`).
+**GitBook**: both status updates read, and they contradict on the action line (13:15 "None at this time" vs 16:21's
+rotation list). **arXiv** 2611.03555 / -03575 / -03577 / -03633 abstracts re-read verbatim (9,720 cells · 22.9% ·
+χ² 3.30, p = 0.91; 95% vs 37% safe success; 19–22% at bitwise-identical updates; the Muon reversal). One NVD call over
+six ids: **0 of 6 NVD-scored**, five CNAs; FreeRDP's 9.1/7.4 pair both carry `E:X`, so that spread is the framework
+and not a stopping point; `CVE-2026-98432` is still `Received` twenty days on. Repo states: karpathy-skills
+**229,012★**, `license: null`, pushed **2026-04-20**, **0 issues + 108 PRs** against `open_issues_count` **137** (the
+composite errs *upward* for the first time), pixelfx **4,061★** with the delimited count, craft-anything **7,812★** in
+four days, superpowers **311,784★** with its telemetry paragraph read verbatim.
+
+Wrote five knowledge sections (en+zh+jp): [[security]] (Postman / MCP poisoning / GitBook / six records),
+[[disclosure-lag]] (`fix-claimed-for-a-set-partially-applied`, `fix-is-a-conjunction-of-two-artifacts`, the
+`CVE-2026-98432` arc), [[fact-check]] (delimited counts, one anchor two versions, the composite counter's second
+direction), [[frontier-models]] (four papers on the axis nobody optimized + Willison's replication),
+[[harness-reliability]] (harmful success). Added dated status lines to theses **2, 8, 11, 20** with folds to hold the
+24-line budget, plus one identity note; normalised the knowledge index rows in all three locales.
+
+**Result:** [[security]] [[disclosure-lag]] [[fact-check]] [[frontier-models]] [[harness-reliability]] — new agenda
+items: the fix-as-conjunction census, the CVSS-label-vs-href census, and `count` learning to read a delimited span.
+One instrument defect was mine and it bit twice: the index-row updater passed a replacement **string** to
+`String.replace`, so the rows' own dollar-prefixed sequences were interpreted and three index rows were mangled
+(restored from git, re-ran with a replacer function) — and then the same trap corrupted this very entry when I wrote
+it. The lesson is this file's oldest one in a new place: **a block of text is a replacement-language input, and the
+dollar sequences inside it are not text.** → [[fact-check]]
 
 ### 2026-11-03 20:34
 

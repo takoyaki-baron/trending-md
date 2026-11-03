@@ -2032,8 +2032,16 @@ function checkRepo(it, budget, ageBudget) {
 const COUNT_NOUNS = [
   'harnesses?', 'install sections?', 'sub-skills?', 'skills?', 'rules?', 'plugins?', 'agents?',
   'commands?', 'formats?', 'tools?', 'apps?', 'workers?', 'benchmarks?', 'languages?', 'models?',
+  'effects?',
 ];
-const COUNT_RE = new RegExp(`${NUM}\\s+((?:${COUNT_NOUNS.join('|')}))\\b`, 'gi');
+/* A count's noun is often dressed by a hyphenated modifier, and the matcher used to require the
+ * noun to follow the number directly. Measured 2026-11-04 on item 19: `244 pixel-art effects` is a
+ * count claim the reader could not see at all, so the page's own machine-readable delimiter had
+ * nothing to be compared against. The modifier is ONE hyphenated word followed by a space (not a
+ * word ending in a hyphen — `pixel-art effects` has the separator between them), and it must START
+ * with a letter, or `4-bit models` reads as a count of four when it is a bit width. */
+const COUNT_MOD = '[A-Za-z][A-Za-z0-9]*(?:-[A-Za-z0-9]+)+\\s+';
+const COUNT_RE = new RegExp(`${NUM}\\s+(?:${COUNT_MOD})?((?:${COUNT_NOUNS.join('|')}))\\b`, 'gi');
 let readmeCalls = 0;
 
 /* A digit INSIDE an identifier is not a count, and the claim reader cannot tell them apart by
@@ -2073,6 +2081,43 @@ function frontmatterBlockCount(text, noun) {
     else if (/^\S/.test(lines[i])) break; // the next top-level key ends the block
   }
   return n;
+}
+
+/* A page can mark its own count MACHINE-READABLY, and then the "which page states it" question has
+ * an exact answer instead of a neighbour-grep. Measured 2026-11-04 on `patch-gg/pixelfx`, whose
+ * README opens `**<!-- count -->244<!-- /count --> pixel art effects and animations…**` — the
+ * first artifact this pipeline has read that delimits its own number.
+ *
+ * The delimiter marks the NUMBER; the NOUN is usually the prose it introduces, so the tail is read
+ * too. A delimiter that CARRIES a label (`<!-- count:effects -->`) is the stronger spelling and is
+ * compared label-to-noun — which is also what stops a gallery total sitting beside a per-category
+ * row from being read as this claim's count. That guard is the whole reason the label exists: a
+ * span about another noun is another artifact's count, and using it would make the check manufacture
+ * a disagreement it then reports as the author's. */
+function delimitedCounts(text) {
+  const out = [];
+  const re = /<!--\s*count(?:[:=\s]+([A-Za-z][\w -]*?))?\s*-->([\s\S]{0,40}?)<!--\s*\/\s*count\s*-->/gi;
+  for (const m of text.matchAll(re)) {
+    const raw = m[2].replace(/[*_`\s]/g, '');
+    if (!/^\d[\d,]*$/.test(raw)) continue; // a span holding prose is not a count
+    const tail = text.slice(m.index + m[0].length, m.index + m[0].length + 90)
+      .replace(/<!--[\s\S]*?-->/g, ' ').replace(/<[^>]*>/g, ' ');
+    out.push({ n: toNum(raw), label: m[1] ? m[1].trim().toLowerCase() : null, tail });
+  }
+  return out;
+}
+
+/* `[]` is "no delimiter speaks to this claim", which is why it never becomes a finding: a page
+ * that carries no delimiter is simply a page the prose reader handles as before. */
+function delimitedFor(spans, noun) {
+  const stem = noun.replace(/s$/, '').toLowerCase();
+  const sq = (s) => s.replace(/s$/, '');
+  return spans.filter((s) => {
+    if (s.label) return sq(s.label) === stem;
+    // Unlabelled: the noun has to be in the clause the span introduces, or the number is unattached.
+    const head = s.tail.replace(/^[\s*_`]+/, '').split(/[.;:!?]/)[0];
+    return new RegExp(`\\b${stem}(?:s|es)?\\b`, 'i').test(head);
+  });
 }
 
 async function readme(slug) {
@@ -2304,17 +2349,21 @@ async function checkCount(it) {
     return out;
   }
   const body = rd.text.replace(/[*_`]/g, '');
+  const spans = delimitedCounts(rd.text);
   const unresolved = [];
   for (const cl of claims) {
     const anyNum = countNumsIn(body, cl.noun);
     // A YAML block is a count written as structured data — read it before calling the claim absent
     const block = frontmatterBlockCount(rd.text, cl.noun);
-    if (anyNum.includes(cl.n)) {
+    const delim = delimitedFor(spans, cl.noun);
+    if (delim.some((s) => s.n === cl.n)) {
+      out.push({ check: 'count', item: it.n, verdict: 'ok-delimited', claim: cl.phrase, detail: `the README delimits this count itself (\`<!-- count -->${cl.n}<!-- /count -->\`) — the page answers the question exactly, with no neighbour-grep needed` });
+    } else if (anyNum.includes(cl.n)) {
       out.push({ check: 'count', item: it.n, verdict: 'ok', claim: cl.phrase, detail: `README states it` });
     } else if (block === cl.n) {
       out.push({ check: 'count', item: it.n, verdict: 'ok', claim: cl.phrase, detail: `the card's \`${cl.noun.replace(/s$/, '')}:\` block lists ${block} — a structured block is a count, not a sentence` });
     } else {
-      unresolved.push({ cl, anyNum, block });
+      unresolved.push({ cl, anyNum, block, delim });
     }
   }
   if (unresolved.length) {
@@ -2325,12 +2374,17 @@ async function checkCount(it) {
       const t = await citedPageText(p);
       if (t.text) fetched.push({ ...p, text: t.text });
     }
-    for (const { cl, anyNum } of unresolved) {
+    for (const { cl, anyNum, delim } of unresolved) {
       const hit = fetched.find((p) => countNumsIn(p.text.replace(/&nbsp;/g, ' '), cl.noun).includes(cl.n));
       // A model card is fetched RAW (frontmatter intact), so its `language:` block is checkable even
       // though no sentence states the total — the item's count is verified, not merely excused.
       const blockHit = fetched.find((p) => frontmatterBlockCount(p.text, cl.noun) === cl.n);
-      if (hit) {
+      /* A cited page's own delimiter is the same exact answer the README's is, and it is checked
+         here too because a vendor gallery marks its total on ITS page, not in the repo README. */
+      const delimHit = fetched.find((p) => delimitedFor(delimitedCounts(p.text), cl.noun).some((s) => s.n === cl.n));
+      if (delimHit) {
+        out.push({ check: 'count', item: it.n, verdict: 'ok-delimited', claim: cl.phrase, detail: `${delimHit.label} delimits this count itself (\`<!-- count -->${cl.n}<!-- /count -->\`) — a machine-readable count is the exact question answered` });
+      } else if (hit) {
         out.push({ check: 'count', item: it.n, verdict: 'ok-cited-page', claim: cl.phrase, detail: `${hit.label} states it (the repo README does not) — quote the page the number came from` });
       } else if (blockHit) {
         out.push({ check: 'count', item: it.n, verdict: 'ok-cited-page', claim: cl.phrase, detail: `${blockHit.label}'s \`${cl.noun.replace(/s$/, '')}:\` block lists ${cl.n} — the count is in the metadata, not a sentence` });
@@ -2343,7 +2397,11 @@ async function checkCount(it) {
            the header: the table must NAME the noun, or the row count is a coincidence. */
         out.push({ check: 'count', item: it.n, verdict: 'ok-table-rows', claim: cl.phrase, detail: `${tableRowHit(fetched, cl).label}: a table headed “${tableRowHit(fetched, cl).header}” has ${cl.n} data rows — a row count is a count` });
       } else if (anyNum.length) {
-        out.push({ check: 'count', item: it.n, verdict: 'differs', claim: cl.phrase, detail: `README says ${[...new Set(anyNum)].join(' / ')} ${cl.noun}${fetched.length ? `; also read ${fetched.map((p) => p.label).join(', ')}` : ''}` });
+        /* A page that delimits its own count has stated it exactly, so the detail line quotes the
+           DELIMITED value rather than the first nearby integer — that is the number the page is
+           making a claim about, and the one a reader can act on. */
+        const delimited = delim.length ? [...new Set(delim.map((s) => s.n))] : null;
+        out.push({ check: 'count', item: it.n, verdict: 'differs', claim: cl.phrase, detail: delimited ? `the README's own \`<!-- count -->\` delimiter states ${delimited.join(' / ')} ${cl.noun} — a machine-readable count outranks the first nearby integer` : `README says ${[...new Set(anyNum)].join(' / ')} ${cl.noun}${fetched.length ? `; also read ${fetched.map((p) => p.label).join(', ')}` : ''}` });
       } else if (selfCountedNear(it.plain, cl)) {
         /* The item already says it counted the number itself. `absent` means "the page states
            none and the prose does not admit it" — an item that admits it is the fix, not the defect
@@ -3723,9 +3781,27 @@ if (SELFTEST) {
     selfCountedNear('The title reads 36 language tags over one pair.\n\nThe card\'s `language:` block lists 36 codes, from `zh` to `kk`.', { n: 36, noun: 'language', phrase: '36 language' }), true);
   t('count: a disclosure about a DIFFERENT number does not suppress this one',
     selfCountedNear('The title reads 36 language tags over one pair.\n\nIts manifest groups 24 skills, a total counted from the manifest itself.', { n: 36, noun: 'language', phrase: '36 language' }), false);
+  // a hyphenated modifier no longer hides the noun (measured 2026-11-04 on item 19)
+  t('count: a hyphenated modifier does not hide the noun',
+    [...'244 pixel-art effects and animations'.matchAll(COUNT_RE)].map((m) => `${m[1]} ${m[2]}`), ['244 effects']);
+  t('count: a numeric unit is a width, not a count', [...'runs 4-bit models cheaply'.matchAll(COUNT_RE)].map((m) => m[1]), []);
+  t('count: a plain count still reads', [...'ships 12 tools'.matchAll(COUNT_RE)].map((m) => m[1]), ['12']);
+  /* 2026-11-04 — the delimited-count reader, filed from `patch-gg/pixelfx`'s own README. */
+  t('count: a delimited span is read as a number',
+    delimitedCounts('**<!-- count -->244<!-- /count --> pixel art effects and animations.**').map((s) => [s.n, s.label]),
+    [[244, null]]);
+  t('count: an unlabelled span takes its noun from the prose it introduces',
+    delimitedFor(delimitedCounts('<!-- count -->244<!-- /count --> pixel art effects and animations.'), 'effects').map((s) => s.n), [244]);
+  t('count: a labelled span matches its own noun', delimitedFor(delimitedCounts('<!-- count:effects -->244<!-- /count -->'), 'effects').map((s) => s.n), [244]);
+  // the guard: a gallery total beside a per-category row is another artifact's count
+  t('count: a span about another noun is not this claim\'s count',
+    delimitedFor(delimitedCounts('<!-- count -->120<!-- /count --> images in the full gallery'), 'effects'), []);
+  t('count: a span labelled with another noun is refused even beside the right prose',
+    delimitedFor(delimitedCounts('<!-- count:images -->120<!-- /count --> effects'), 'effects'), []);
+  t('count: a span holding prose is not a count', delimitedCounts('<!-- count -->lots<!-- /count --> effects'), []);
+  t('count: a page with no delimiter yields nothing, never a finding', delimitedCounts('ships 244 effects'), []);
   // the identifier guard: a digit inside a name is not a count
-  t('count: "FP8 model card" is a name, not eight models',
-    identifierNumber('tencent/Hy-SimulMT-30B-A3B-FP8 model card', 34, '8'), true);
+  t('count: "FP8 model card" is a name, not eight models', identifierNumber('tencent/Hy-SimulMT-30B-A3B-FP8 model card', 34, '8'), true);
   t('count: "36 language tags" is a real count',
     identifierNumber('and 36 language tags over one pair', 4, '36'), false);
   t('count: a dotted version is part of a name', identifierNumber('upgraded to 3.16.2 models here', 14, '16'), true);
@@ -4070,7 +4146,7 @@ try {
   writeFileSync(CACHE_PATH, JSON.stringify(cache, null, 1));
 } catch { /* cache is best-effort */ }
 
-const SEVERITY = { ok: 0, 'ok-cited-page': 0, 'no-cve-named': 1, 'no-record': 1, 'slot-quoted': 1, 'counted-by-author': 0, 'number-other-noun': 1, 'temporal-stopping-point': 1, 'temporal-disclosed': 0, 'score-stopping-point': 1, 'cna-only-score': 1, 'star-drift': 2, 'star-dated': 1, 'star-surge': 1, 'ok-history': 0, 'history-older-than-record': 2, 'history-unreadable': 1, stale: 2, archived: 2, 'stale-disclosed': 0, 'archived-disclosed': 0, differs: 2, absent: 2, 'unsplit-issue-count': 3, 'compound-lags-parts': 3, 'version-swapped': 3, 'version-absent': 3, 'score-not-reproducible': 2, 'score-mismatch': 3, 'wrong-subject': 3, 'absence-contradicted': 3, 'status-stale': 2, 'status-dated': 1, 'date-local-shift': 2, 'date-mismatch': 2, 'cwe-absent-but-recorded': 3, 'cwe-mismatch': 3, 'cwe-unreadable': 1, 'span-empty': 2, 'span-inverted': 3, 'span-unverifiable': 0, 'ok-span': 0, 'status-no-record': 1, 'status-no-cve': 1, 'advisory-unreadable': 1, 'advisory-repo-only': 0, unreadable: 1, 'artifact-unreadable': 1, 'nvd-unavailable': 1, 'ratio-row-count': 3, 'ok-ratio': 0, 'not-a-repo': 0, 'ok-table-rows': 0, 'table-columns-unresolved': 0, 'bundle-ok': 0, 'bundle-lines-named': 0, 'bundle-unavailable': 0, 'bundle-line-count': 3, 'bundle-total-mismatch': 2, 'quote-not-found': 3, 'quote-paraphrase': 2, 'quote-short': 1, 'quote-not-read': 0 };
+const SEVERITY = { ok: 0, 'ok-cited-page': 0, 'no-cve-named': 1, 'no-record': 1, 'slot-quoted': 1, 'counted-by-author': 0, 'number-other-noun': 1, 'temporal-stopping-point': 1, 'temporal-disclosed': 0, 'score-stopping-point': 1, 'cna-only-score': 1, 'star-drift': 2, 'star-dated': 1, 'star-surge': 1, 'ok-history': 0, 'history-older-than-record': 2, 'history-unreadable': 1, stale: 2, archived: 2, 'stale-disclosed': 0, 'archived-disclosed': 0, differs: 2, absent: 2, 'unsplit-issue-count': 3, 'compound-lags-parts': 3, 'version-swapped': 3, 'version-absent': 3, 'score-not-reproducible': 2, 'score-mismatch': 3, 'wrong-subject': 3, 'absence-contradicted': 3, 'status-stale': 2, 'status-dated': 1, 'date-local-shift': 2, 'date-mismatch': 2, 'cwe-absent-but-recorded': 3, 'cwe-mismatch': 3, 'cwe-unreadable': 1, 'span-empty': 2, 'span-inverted': 3, 'span-unverifiable': 0, 'ok-span': 0, 'status-no-record': 1, 'status-no-cve': 1, 'advisory-unreadable': 1, 'advisory-repo-only': 0, unreadable: 1, 'artifact-unreadable': 1, 'nvd-unavailable': 1, 'ratio-row-count': 3, 'ok-ratio': 0, 'ok-delimited': 0, 'not-a-repo': 0, 'ok-table-rows': 0, 'table-columns-unresolved': 0, 'bundle-ok': 0, 'bundle-lines-named': 0, 'bundle-unavailable': 0, 'bundle-line-count': 3, 'bundle-total-mismatch': 2, 'quote-not-found': 3, 'quote-paraphrase': 2, 'quote-short': 1, 'quote-not-read': 0 };
 const REAL = (f) => (SEVERITY[f.verdict] ?? 1) >= 2;
 
 /* `status_watch` rides the findings file so the act pass sees a backwards move without re-reading

@@ -2909,3 +2909,114 @@ licence being three artifacts), and its open count is **66** issues + PRs — th
 quoted here as a total rather than a split.
 
 → [[security]] [[harness-reliability]] [[disclosure-lag]]
+
+## 11-04 — a count can delimit itself, a version can live in a link's href, and the composite errs UPWARD too
+
+Three units from the 11-04 batch, each measured first-hand, each one a thing this file's checks could
+learn.
+
+### A repo that delimits its own count (`patch-gg/pixelfx`)
+
+Read verbatim from `raw.githubusercontent.com/patch-gg/pixelfx/main/README.md`, line 7:
+
+```
+**<!-- count -->244<!-- /count --> pixel art effects and animations, every one a small piece of code.**
+```
+
+This is the cheapest possible fix for the count-drift class that `claim-unit-lint --check count`
+exists to detect: two HTML comment markers around the number, so a machine reader takes an exact
+value instead of regex-guessing which "244" in the prose is the claim. Repo state at check:
+**4,061★**, MIT, created **2026-10-30**, **`pushed_at` 2026-10-31T08:44** — four days without a
+commit while the board keeps moving it, which is the dedup rule's "attention, not a release"
+case.
+
+**Agenda item:** teach `count` to prefer a delimited span (`<!-- count -->…<!-- /count -->`) when the
+cited page carries one, and to say so in the verdict. A page that marks its own claim should outrank
+a regex that happens to match.
+
+### Built the same day: the delimited reader, and the noun it could not see
+
+The agenda item above was closed by code, not by a note, and building it surfaced the real defect —
+which was **upstream of the delimiter**. `COUNT_RE` required the noun to follow the number
+directly, so `244 pixel-art effects` was not a count claim *at all*: the hyphenated modifier sat
+where the space was expected, and the reader returned nothing to check. Item 19 had produced **no
+`count` finding of any kind** in the generation-time lint JSON — silence, not a pass.
+
+Three changes in `agent/tools/claim-unit-lint.mjs`:
+
+1. **A hyphenated-modifier arm** (`COUNT_MOD`) between the number and the noun, plus `effects?` in
+   `COUNT_NOUNS`. The modifier must **start with a letter** — `4-bit models` is a bit width, and a
+   pattern that accepts it manufactures counts out of numbers that were never quantities.
+2. **`delimitedCounts()`** reads `<!-- count -->N<!-- /count -->`, its labelled spellings
+   (`<!-- count:effects -->`), and the **prose tail** the span introduces, because the delimiter
+   marks the number while the noun is usually the sentence that follows it.
+3. **`ok-delimited` (sev 0)** — a page that states its own count machine-readably outranks a
+   neighbour-grep, and the detail line names the delimiter so a reader can check the claim without
+   re-deriving it. When the value **differs**, the detail reports the **delimited** number rather
+   than the first nearby integer: that is the number the page is making a claim about.
+
+**The guard is the label, and it is why the label exists.** A span carrying a noun
+(`<!-- count:images -->120<!-- /count -->`) is refused for a claim about a different noun, and an
+**unlabelled** span only speaks for a noun in the clause it introduces. Without it a gallery total
+sitting beside a per-category row becomes a disagreement the checker then reports as the author's.
+
+**Prevalence, measured rather than assumed:** **1 of the 40** page/README texts the lint's cache
+holds (`agent/data/claim-unit-cache.json`) carries a count delimiter at all, and it is this one. So
+the class is real but rare — the working set, not a corpus rate, and worth saying because a reader
+should not expect a delimiter to rescue a claim in general. `--selftest` **210 → 220**, with the
+pixelfx case verbatim and the different-artifact case as its false positive.
+
+
+
+The advisory page's CVSS link is a single `<a>` whose two halves name different versions:
+
+```html
+<a href="https://www.first.org/cvss/calculator/3-1#CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:C/C:H/I:H/A:H"
+   data-linkdetail="CVSS:3.0/AV:N/AC:L/PR:L/UI:N/S:C/C:H/I:H/A:H">CVSS:3.0/AV:N/AC:L/PR:L/UI:N/S:C/C:H/I:H/A:H</a>
+```
+
+- the **visible text** says **3.0**;
+- the **`href`** points at the **3.1** calculator and embeds a **3.1** vector string;
+- NVD stores the record as `cvssMetric**V31**` with a 3.1 prefix — **NVD follows the href, not the label.**
+
+The base-metric tuple is identical and computes **9.9 under both** framework equations (`1.08 ×
+(6.0477 + 3.1096) = 9.8899` → Roundup 9.9), so no number is at stake — only the label. Three
+readings, all true: (a) "the vendor rates it CVSS 3.0" quotes the label; (b) "the record is CVSS 3.1"
+quotes the slot; (c) **an item that says one while the reader checks the other looks like the
+`version-swapped` defect while both halves are correct quotations.**
+
+**What this teaches the instrument:** a version label in prose can be *display text*. A text strip
+sees one string; the raw HTML shows the pair. The cheap check is to compare the quoted version against
+the **`vectorString` prefix in the record**, not against the page's prose — which is what the `cvss`
+check already does, and why this item survived review.
+
+### The composite counter errs in BOTH directions (`multica-ai/andrej-karpathy-skills`)
+
+Measured four hours after the batch, on a repo whose numbers the item quoted exactly:
+
+| field | value |
+|---|---|
+| `search/issues?is:issue&is:open` | **0** |
+| `search/issues?is:pr&is:open` | **108** |
+| repo `open_issues_count` | **137** |
+
+The item said "0 open issues and 108 open pull requests" — correct at read time, and *not* a sum to
+the composite. The earlier calibration (free-my-tv) had the composite **2 below** its parts (77 vs
+21+58 = 79); here it is **29 above**. So the composite is not "a sum with drift in one direction" but
+a cached counter whose error has no sign, and the only safe quotation is the **named query's** number
+plus the split. This is the third measurement of the same unit and the first in the upward direction.
+
+### The same repo is the Void pattern with the sign flipped
+
+State at check: **229,012★**, 22,828 forks, `license: null`, `archived: false`, **zero releases**,
+`created_at` **2026-01-27T03:53:13Z**, `pushed_at` **2026-04-20T10:05:04Z** (**198 days**), seven
+entries at the repo root with no `LICENSE` among them, and a README whose first line promotes the
+author's newer project. Void's failure was a dead project carrying live stars *behind a claim of
+momentum*; this one's artifact is tiny and static while the attention is real and historical — so
+"trending" is a fact about the board and nothing else. The operational line: **no licence means
+all-rights-reserved by default in most jurisdictions**, so copying the `CLAUDE.md` into your repo is a
+redistribution question the star count cannot answer, and the right reading is "a short prompt", not
+"a maintained dependency". Check the repo state before writing either word (CLAUDE.md's perishable
+rule), because this one will change.
+
+→ [[security]] [[agent-plugins]] [[disclosure-lag]]

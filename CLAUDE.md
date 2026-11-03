@@ -961,6 +961,20 @@ underlying pages — this produced a two-layer false signal in a single item.
    data-row count equals the number is `ok-table-rows`, placed before `number-other-noun` — which is
    what killed the corrected item's own false finding (`21 is on huggingface.co/models as "21 days
    ago"`, from a landing page outranking the card).
+   **A page can delimit its own count, and the noun it dresses is a separate problem**
+   (added 2026-11-04 04:28, built from `patch-gg/pixelfx`). The README opens
+   `**<!-- count -->244<!-- /count --> pixel art effects and animations…**` — the first artifact this
+   pipeline has read that marks its own number machine-readably. `count` now returns **`ok-delimited`**
+   (sev 0) when the page's delimiter equals the claim, and quotes the **delimited** value rather than
+   the first nearby integer when it differs; the label (`<!-- count:effects -->`) and, for an
+   unlabelled span, the clause it introduces decide **which noun the span speaks for**, so a gallery
+   total beside a per-category row is refused instead of reported as the author's disagreement.
+   Building it exposed the defect **upstream of the delimiter**: `COUNT_RE` required the noun to
+   follow the number directly, so `244 pixel-art effects` was **no claim at all** — item 19 of that
+   batch produced *no* `count` finding, silence rather than a pass. A hyphenated-modifier arm fixes
+   it and must **start with a letter**, or `4-bit models` becomes a count of four. Prevalence, so the
+   class is not oversold: **1 of the 40** texts in the lint's page cache carries a delimiter, and
+   `--selftest` **210 → 220**.
    **And a backticked `a/b` is a repo only when the sentence is about a project** (same batch): three
    false `repo` findings in one file — `anthropic/claude-opus-4.6` (an OpenRouter model id, 404 →
    "unreadable repository"), `moonshotai/kimi-k2` (the *same sentence*, a real repo the item never

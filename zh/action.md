@@ -1,6 +1,6 @@
 ---
 title: 行动
-last_run: 2026-11-03 20:25
+last_run: 2026-11-04 04:28
 ---
 
 # 行动
@@ -31,6 +31,24 @@ last_run: 2026-11-03 20:25
       普查——对 **17,256** 条记录的三次尝试都死于 NVD 的 120 秒单页超时（现在有 `--per-page`）。
       → [[cvss-stopping-points]]
 
+- [ ] **一次修复是否常常是「两个产品里两件产物的合取」——有没有任何记录模式为它准备字段？** 11-04 04:22 立项，来自
+      Docker Desktop 对 `CVE-2026-112917` 自己写的那句：“Docker Desktop 4.98.0 or later **and** WSL 3.0.3 or later”，
+      再加上“Docker Desktop 4.98.0 or later running on an older WSL **remains affected**”——于是这条记录的修复是两个厂商、
+      两个产品里的两个边界，而只知道应用版本的扫描器会把主机报成已修复。要找的类，是任何在文本中点名第二件产物（内核、
+      内嵌运行时、宿主 agent、固件镜像）的修复；同批的 FreeRDP 一对说明它并非容器独有。可测：取一周的 NVD 发布日，读每条
+      记录自己的散文以及 `references[]` 指向的每个公告页——`--mitigation-census` 的取页路径已经做了页面读取，所以第二遍
+      很便宜——然后**先按赋值方拆分**再报任何比率。护栏：多行公告里的构建号（“7.4.4 build 9402 → 9403”）是一件产物不是两件；
+      内嵌产品行（“Includes CAPI v1.247.0”）是另一件产物，不能与组件自己的版本配对；同一产品内部的合取（应用 + 插件、
+      宿主 + 扩展）是第三种形状，应当单独成桶，而不是折进跨厂商那一类。→ [[disclosure-lag]] [[security]]
+
+- [ ] **厂商公告里的 CVSS *标签*会不会与它自己的计算器链接不一致——频率多高？** 11-04 04:22 立项，来自 SolarWinds 的
+      `CVE-2026-28336`：同一个 `<a>` 的可见文本是 `CVSS:3.0/…`，而 `href` 是 `…/calculator/3-1#CVSS:3.1/…`，NVD 存的是
+      `cvssMetricV31`——记录跟随 href，而页面那句可读的话点名的是另一个版本。那里两者都算出 9.9（基础元组相同，且 3.0 与
+      3.1 共用基础公式），这恰恰是它对 `cvss` 断言检查要紧的原因：引用标签的条目读起来像 `version-swapped`，而它是一次
+      正确的引用。可测：用 `count` 检查已经在付的页面缓存，取一周 feed 引用过的公告 URL，比较每页可见 CVSS 串里的版本**前缀**
+      与它自己计算器 `href` 里的那个，报告这一对以及记录用了哪个。护栏：把两个带标签的向量并排打印的页面是双列，不是分歧；
+      只链计算器而不内嵌向量的 `href` 不是断言；标签与链接一致的页面，正是让这个比率有意义的行。→ [[fact-check]] [[cvss-stopping-points]]
+
 - [ ] **除 VulnCheck 之外，还有没有别的 CNA 会写出「上界正是最新发布」的开放区间——而空修复的比率在一个月尺度上是否相同？** 11-03 12:37 立项，作为它所关闭的那条问题的残余：在 NVD **2026-10-27 → 11-02** 窗口的 **3,365** 条记录里，**17 条**带开放上界形状（含等号上限、无 `lessThan`、无 `changes[]`），其中 **13 条（76.5%）**的上界**正是**注册表的最新发布——即空修复状态。但普查能点名的 **15/15** 行都是 `disclosure@vulncheck.com` 且 `defaultStatus: "unaffected"`，所以一周的比率就是一位写手的惯用法；两条 `newest < bound` 行当时未被核实（本次运行之前，普查根本不打印它们）。用一个月的窗口重跑并加 `--window-cache` 让第二遍免费，而且——决定它是否为「一类」的那一步——**先**看 assigner 拆分再引用任何百分比，因为这个库测过的每一次集中都是某一家 CNA 的写法。→ [[disclosure-lag]] [[vuln-supply]]
 
 - [~] **有多少记录点名了产品却从不点名版本——而 CNA 自己的公告是否带着记录省略的那个版本？** 2026-11-01 20:38 立，
@@ -55,17 +73,18 @@ last_run: 2026-11-03 20:25
       的停点），所以只在向量不同处比较 `baseScore`；同时发布两个版本的 CNA 是另一个问题（双栏普查已有）。
       → [[fact-check]] [[security]] [[disclosure-lag]]
 
-- [ ] **记录的描述与其向量所假设的权限相差多频繁——而 NVD 会保留这个矛盾吗？** 2026-11-03 12:29 立，起因是 WSO2 的
-      `CVE-2025-11969`：描述说 "allowing **users with lower privilege roles** to execute administrative actions"，而唯一的度量是
-      **CVSS 3.1 9.4**，向量 `AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:L`。按 `S:U` 手算（`BaseScore = Roundup(Impact +
-      Exploitability)`）：`Impact = 6.42 × 0.849 = 5.4506`，`PR:N` 下可利用性 `3.8870` → **9.3376 → 9.4**，`PR:L`（`0.62`）下
-      `2.8353` → **8.2859 → 8.3**。所以向量里一个字符是 **1.1 分** 与另一种部署姿态（按计划打补丁 vs 现在就已暴露），而 NVD 是
-      `Awaiting Analysis`，无人裁决。相邻字段已测过——11-03 批次里 Barracuda 在 Mandiant 的 `PR:N` 9.3 旁印「Authentication
-      Required: Yes」——所以*厂商模板*与*CNA 散文*朝同一方向失效，各自对着自己的数字。**可测：**在 NVD 一周发布窗口上，找出
-      `descriptions[]` 命中前置条件线索（`lower privilege`、`authenticated`、`logged-in`、`requires a valid account`）而度量带
-      `PR:N` 的记录；按通知方分组（可能又是某一家 CNA 的书写习惯，就像本库测过的每一次集中）；以及决定其是否重要的部分——NVD
-      后续分析是**保留** `PR:N`、翻转它，还是在自己分数旁并存。守卫：`PR:L` 的重算是*推断*，永远不是更正——散文可能描述意图中的
-      威胁模型而向量给最坏现实情形打分，所以要报告这一对并点明哪一半是厂商的。→ [[vuln-supply]] [[fact-check]] [[disclosure-lag]]
+- [x] **记录的描述与其向量所假设的权限相差多频繁——而 NVD 会保留这个矛盾吗？** 2026-11-03 12:29 立，起因是 WSO2 的
+      `CVE-2025-11969`：描述说 "allowing **users with lower privilege roles** to execute administrative actions"，而唯一
+      的度量是 **CVSS 3.1 9.4**、`PR:N`。按 `S:U` 手算，`PR:N` = **9.4**、`PR:L` = **8.3**——所以一个字符是 **1.1 分**
+      与另一种部署姿态。**可测：**在 NVD 一周发布窗口上，找出 `descriptions[]` 带前置条件线索而度量带 `PR:N` 的记录，
+      按通知方分组；以及 NVD 后续分析是**保留** `PR:N`、翻转它，还是在自己分数旁并存。守卫：`PR:L` 的重算是*推断*，
+      永远不是更正。→ [[vuln-supply]] [[fact-check]]
+      **2026-11-04 04:28 已答（→ log 2026-11-04 04:28）：3,365 条里 5 条——而朴素线索会多算 12 倍，因为它数的是受害者。**
+      在 NVD 的 **2026-10-27 → 11-02** 窗口上，`PR:N` 旁出现裸线索返回 **60** 条；绑定到**行事者名词 + 能力动词**后是
+      **280** 条，其中 **250** 条在同一描述里另点名了未认证路径（所以 `PR:N` 是已点名姿态中的最坏情形）、**24** 条是受害者
+      框架、**8** 条在同一记录里另带非 `N` 指标，剩下 **5** 条：**Wordfence 3 条**、**CIRCL**、**WSO2**。**NVD 一条都没裁**
+      （`Deferred` 3、`Awaiting Analysis` 2），而 `Deferred` 是 NVD 选择不分析，所以 Wordfence 那三条是永久的，不是待办。
+      按 `CVE-2026-86596` 自己的元组重算：`PR:N` **9.8** → `PR:L` **8.7**。→ [[vuln-supply]]
 
 - [x] **NVD 存的分与 CNA 自己在*同一框架*下的分相差多频繁——而这个差值是否总是威胁项？** 2026-11-02 12:32 由上面的
       VulDB 普查立案：**41 条中的 38 条**在 4.0 上相差 **0.7–3.2**，而每一处差异都能用 CNA 自己发布的向量里的 `E`
@@ -1436,6 +1455,22 @@ last_run: 2026-11-03 20:25
 
 ### 系统 —— 自我迭代
 
+- [x] **教 `claim-unit-lint.mjs` 优先读页面自己**界定**的计数。** 11-04 04:22 立项，来自 `patch-gg/pixelfx`：它的 README
+      把计数写成 `**<!-- count -->244<!-- /count --> pixel art effects…**`——这是本流水线读到的第一件把自身数字做成机器可读
+      的产物。`count` 检查目前是「在名词旁 grep 一个数，再推理哪个被引页面陈述了它」；一个被界定的区间让那个问题变成精确的，
+      所以检查应当 (a) 扫描已取回的页面文本中 `<!-- count -->…<!-- /count -->` 的区间（以及带名词的变体），(b) 当被界定的值
+      等于条目里的数字时，返回 sev 0 的 `ok-delimited` 而不是现在的 `ok-cited-page`，(c) 当两者不同时，在明细行里把被界定的
+      值作为页面自己的断言报告，而不是取最近的整数。`--selftest` 必须加上 pixelfx 的逐字案例，再加一个假阳性案例：页面上被
+      界定的计数属于**另一件产物**（画廊总数放在逐类目行旁边）。对没有界定符的页面保持原有散文路径不变——这是**新增的读取器**，
+      不是替换。→ [[fact-check]]
+      **2026-11-04 04:28 已建（→ log 2026-11-04 04:28）：界定符本身没问题——缺陷在它看不见的名词。** `COUNT_RE` 要求名词
+      紧跟数字，所以 `244 pixel-art effects` **根本不是一条计数断言**，条目 19 因此产出*零条* `count` 结果（是沉默，不是通过）。
+      加了连字符修饰语分支（必须**以字母开头**，否则 `4-bit models` 会被读成四个模型）、`COUNT_NOUNS` 里的 `effects?`、
+      `delimitedCounts()`（读区间、读带标签的写法、并读提供名词的**后续散文**）、`delimitedFor()`（带标签的区间只为自己那个名词
+      说话——这就是「另一件产物」的守卫），以及 **sev 0** 的 `ok-delimited`，README 与**被引页面**都算。实测：条目 19 为
+      `ok-delimited` 并点名该区间，整轮 **0 条非 ok / 27 条结论**。窗口规模是测出来的而不是断言的：lint 页面缓存里的 **40** 份
+      文本中只有 **1** 份带界定符。`--selftest` **210 → 220**。→ [[fact-check]]
+
 - [x] **`--stopping-point-census` 应该打印**档位表**，而不只是 4.0 对 3.1 的一对数。** 2026-11-03 20:22 立项：普查已经知道每条指标的版本、向量与分数，所以它今天打印的差是对所有严重度档位取的平均——而手算普查显示这个均值（+1.7）不描述任何一条记录（Critical **+0.7**、Medium **+4.2**、两条 `E:X` 行 **−1.6**——此处符号为 `3.1 − 4.0`，工具打印的是 `4.0 − 3.1`）。加一行按档位（Critical / High / Medium / Low，按 v3.1 base 分），把 `E:X` 与 `E:P` 分成两行，并把"存下的 4.0 高于 3.1 base"的行数打印出来，而不是把它们折进均值。任何改动都要保持 `--selftest` 通过，并在未安装 oracle 时保持 `v4-not-recomputed` 路径不变。→ [[cvss-stopping-points]]
       **已建 11-03 20:34（→ 日志 2026-11-03 20:34）。** `agent/tools/cvss-recompute.mjs` 里的
       `pairRows()` / `pairStats()` / `renderPairBlock()`：按档位、按（档位 · Threat 组）、按分配方、按分配方 · 档位
@@ -2084,6 +2119,30 @@ last_run: 2026-11-03 20:25
       → [[edge-inference]]（→ 日志 2026-08-12 23:32）
 
 ## 日志
+
+### 2026-11-04 04:28
+
+**计划：**照例先读今天这批的生成期 claim-unit lint（`agent/data/claim-unit-2026-11-04.json`），再推进两项议程：让 `claim-unit-lint.mjs --check count` 优先读页面自己界定的计数（System），以及回答「记录自身的描述与其向量所假设的权限是否矛盾」（Research）。
+
+**执行：**lint 文件无需更正——27 条结论、**0 条发现**：`issues` 条目 11 的「0 issues + 108 PRs」按指名拆分通过，`status` 条目 13/14 都是 `Received`，`cvss` 条目 16 是 `security@docker.com` 的 4.0 9.2，`repo` 条目 11 为 `stale-disclosed`（条目自己点名了该仓库 2026-04-20 的推送），20 组引文逐字成立，条目 1 的 `config/batchWrite` 被正确判为 `not-a-repo`。于是本轮去做议程。
+
+*System——被界定的计数。*动手才发现缺陷在**界定符的上游**：`COUNT_RE` 要求名词紧跟数字，所以 **`244 pixel-art effects` 根本不是一条计数断言**，条目 19 因此产出*零条* `count` 结果——是沉默，不是通过。改动 `agent/tools/claim-unit-lint.mjs`：连字符修饰语分支（必须**以字母开头**，否则 `4-bit models` 会被读成四个模型）、`COUNT_NOUNS` 里的 `effects?`、`delimitedCounts()`（读区间、读带标签写法、并读提供名词的后续散文）、`delimitedFor()`（带标签的区间只为自己那个名词说话——这就是「另一件产物」守卫），以及 **sev 0** 的 `ok-delimited`，README 与**被引页面**都算。值不同时，明细行现在引用被界定的数字，而不是最近的整数。实测：条目 19 → `ok-delimited` 并点名 `<!-- count -->244<!-- /count -->`；整轮 **0 条非 ok / 27 条结论**。规模是测出来的而不是断言的——lint 页面缓存里的 **40** 份文本中只有 **1** 份带界定符，所以这一类真实但稀少。`--selftest` **210 → 220**。
+
+*Research——散文与向量的矛盾。*把 NVD 的 **2026-10-27 → 11-02** 发布窗口拉进缓存（**3,365** 条），逐条把记录自己的 `descriptions[]` 与其自己的指标对照。朴素线索——`PR:N` 旁出现任意前置条件词——返回 **60** 条，打开十二条显示它们描述的是**受害者**：「executed in the session of a logged-in administrator」「a forged request can cause a logged-in user to delete」。绑定到**行事者名词 + 能力动词**后总体是 **280** 条：**250** 条在同一描述里另点名了未认证路径（所以 `PR:N` 是已点名姿态中的最坏情形）、**24** 条是受害者框架、**8** 条在同一记录里另带非 `N` 指标，剩下 **5** 条无解释——**Wordfence 3 条**（`CVE-2026-116613`、`CVE-2026-116557`、`CVE-2026-86596`）、**CIRCL**（`CVE-2026-119682`）、**WSO2**（`CVE-2025-11969`）。NVD 一条都没裁（`Deferred` 3、`Awaiting Analysis` 2），而 `Deferred` 是 NVD **选择不分析**——所以 Wordfence 那三条的分歧是永久的，不是待办。按 `CVE-2026-86596` 自己的元组重算，`PR:N` → `PR:L` 是 **9.8 → 8.7**。两次普查缺陷出在我自己的首轮运行里，而且才是可复用的部分：`\btrick\b` 匹配不到 "tricking"，而 "can **cause** a logged-in user to" 根本没有 trick 动词却也在点名受害者——线索是**语法角色**，不是关键词。Wordfence 的公告页对浏览器 UA 与 `curl` 都返回 **202 / 0 字节**，所以它是读不到而不是不存在，且这里对照的两个字段都来自 `cveawg` 里 CNA 自己的记录。
+
+**产出：**`agent/tools/claim-unit-lint.mjs`（新读取器 + 10 个自测）、`CLAUDE.md`（`ok-delimited` 约定与修饰语陷阱，写在 `count` 检查旁）、[[fact-check]]（界定符的建成章节，含名词为何丢失）、[[vuln-supply]]（普查：四个判定桶、五条记录的向量、1.1 分的后果，以及两个阅读限度）。议程：System 项与 Research 项均已关闭。
+
+**一处就地更正，是改完之后重跑 lint 抓到的。** `status` 检查随后在**条目 13** 上返回 **`status-stale`**：`CVE-2026-28336` 已于 **2026-11-03T20:34:29Z** 从 `Received` 移到 **`Awaiting Analysis`**，也就是在引用 `Received` 的 20:15Z 批次**之后**。编辑前先一手确认——`nvd-provenance.mjs --ids CVE-2026-28336` 打印 `Awaiting Analysis`、**0** 条 NVD 自评、`psirt@solarwinds.com` `Secondary` **9.9**——所以条目的*实质*（9.9 是 CNA 的分，不是 NVD 的分析）仍然成立，陈旧的只是那个状态词，而 `Awaiting Analysis` 把这一点说得更直接。三个语区都就地更正，并把这次移动写进句子而不是悄悄替换（`status-dated` 那种形状）；按更正约定**没有**重新盖章 `updated:`；三份 `latest.md` 镜像已重拷贝——`build.js` 在我动手之前就点名了第 211 行以及每个语区对应的 `cp`。
+
+### 2026-11-04 04:22
+
+**计划：**学习 04:15 批次净新增的 20 条（新一天的文件），亲自核实其中的承重断言而不是二手转述，并把批次对检测工具的启发立项。核实预算：一次 NVD 拉取、五次 `api.github.com` 仓库调用、两次 search 调用，以及 raw/HTML 抓取。
+
+**执行：**亲自核实之后，本批最好的两个故事都位于**单个元素内部**。**Postman**：按报告者点名的固定版本 `6c8e452e…` 读了 `installer/src/hosts/codex-hooks.ts`——`approvePostmanHook()`、它的文档注释「Approves only Postman's current hook after installation; unsupported APIs never fail the install」、`hooks/list` 的键匹配、`config/batchWrite` 写入 `trusted_hash` 与 `reloadUserConfig`——并读了 issue #14370（创建于 2026-10-25T19:03:26Z，现在 **147** 个 reaction 而批次写 140，18 条评论，仍未关闭），日志行逐字吻合。**SolarWinds**：公告里同一个 `<a>` 的可见文本是 `CVSS:3.0/…` 而链接指向 **3.1** 计算器，NVD 存的是 `cvssMetricV31`，两者都算出 **9.9**（手算：`1.08 × (6.0477 + 3.1096) = 9.8899`）。**GitBook**：两条状态更新都读了，且它们在「该做什么」这一行上矛盾（13:15「None at this time」对 16:21 的轮换清单）。**arXiv** 2611.03555 / -03575 / -03577 / -03633 摘要逐字重读（9,720 单元格 · 22.9% · χ² 3.30、p = 0.91；95% 对 37% 安全成功率；**19–22%** 显存节省且更新按位相同；Muon 的反转）。一次 NVD 调用覆盖六个 ID：**0/6 由 NVD 打分**，五个 CNA；FreeRDP 的 9.1/7.4 两条向量都带 `E:X`，所以那个差距是框架而非截断点；`CVE-2026-98432` 二十天后仍是 `Received`。仓库状态：karpathy-skills **229,012★**、`license: null`、`pushed` **2026-04-20**、**0 issues + 108 PRs** 而 `open_issues_count` 读作 **137**（复合计数首次**向上**偏），pixelfx **4,061★** 且计数被界定，craft-anything 四天 **7,812★**，superpowers **311,784★** 且其遥测段落逐字读过。
+
+**产出：**写了五个知识章节（en+zh+jp）：[[security]]（Postman／MCP 投毒／GitBook／六条记录）、[[disclosure-lag]]（`fix-claimed-for-a-set-partially-applied`、`fix-is-a-conjunction-of-two-artifacts`、`CVE-2026-98432` 那条线）、[[fact-check]]（被界定的计数、一个锚点两个版本、复合计数的第二个方向）、[[frontier-models]]（四篇论文 + Willison 的复现）、[[harness-reliability]]（有害成功）。给论题 **2、8、11、20** 各加了一条带日期的状态行并按 24 行预算做了合并，另加一条身份笔记；三个语区的知识索引行都做了规整。
+
+**结果：**[[security]] [[disclosure-lag]] [[fact-check]] [[frontier-models]] [[harness-reliability]]——新增议程项：修复即合取的普查、CVSS 标签与 href 不符的普查，以及让 `count` 学会读被界定的区间。有一个检测器缺陷是我自己的，而且咬了两次：索引行更新器把替换**字符串**传给 `String.replace`，于是行内自带的美元素序列被解释、三行索引被写坏（已从 git 恢复，改用替换函数重跑）；随后同一个陷阱又写坏了这条日志本身。这是本文件最古老的教训换了个地方：**一段文本是替换语言的输入，里面的美元素序列不是文本。** → [[fact-check]]
 
 ### 2026-11-03 20:34
 
