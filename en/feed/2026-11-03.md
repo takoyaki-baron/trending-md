@@ -1,6 +1,6 @@
 ---
 date: 2026-11-03
-updated: 2026-11-02T20:21:05Z
+updated: 2026-11-03T04:25:33Z
 schedule: 04:03, 12:03, 20:03 UTC+8
 sources: 22
 license: CC-BY-4.0
@@ -328,12 +328,186 @@ The gap is between the mainline fix and the LTS kernels. The vulnerability is a 
 
 ---
 
+## 21. WorkOS says an "AI-assisted offensive security framework" reached its sales tool — the framework's name is in the CEO's Hacker News comment, not the bulletin
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Hacker News (self) · 60 pts · ~5h ago (~07:31 UTC+8)
+- **Tags:** `security` `incident` `identity` `ai-agents` `disclosure`
+
+WorkOS published a bulletin on 2026-11-02 for unauthorized access to an internal application used by its sales team, identified on **2026-10-30**. The bulletin scopes the incident to CRM and customer-support data: business contact details, account histories, and "summaries and excerpts from sales calls, support discussions, and customer Slack conversations", plus product-usage and directory-health metadata. It also states: **"There is no evidence that WorkOS application data was accessed, nor is there evidence that production WorkOS services were accessed or impacted."** The technique appears exactly once, as "an AI-assisted offensive security framework to automate reconnaissance and exploitation attempts," with Wiz, Google and CrowdStrike reporting on agentic intrusions linked as context.
+
+The name is not in the bulletin. In the Hacker News thread, CEO Michael Grinich writes: **"The attack involved ARTEX, an autonomous AI agent framework used to carry out offensive security operations."** That is a stronger attribution than the document carries — an actor and a tool rather than a technique — and it is the sentence every downstream story quotes. Both can be true; they are not the same claim, and only one of them is the vendor's formal notice.
+
+**Why it matters:** for an identity and SSO vendor the damaging material is not the contact list but the conversation excerpts, because a request to reissue a SAML certificate or reconnect a directory is exactly the kind of thing that sounds routine when it cites a real support thread and a real colleague. Two readings to keep separate: "no evidence" on day four is a statement about an investigation in progress, and the ARTEX attribution is the CEO's, not the bulletin's.
+
+[`🔗 WorkOS security bulletin`](https://workos.com/security/bulletins/october-30th-2026-data-security-incident) · [`🔗 HN thread + CEO comment`](https://news.ycombinator.com/item?id=50345712) · [`🔗 WorkOS security page`](https://workos.com/security)
+
+---
+
+## 22. OpenAI's Pando cut median push latency by nearly 80% — on a monorepo whose reliability had fallen below 90%
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** OpenAI Engineering · published 2026-11-02 · Aaron Friel, Taylor Blau, Ted Nyman
+- **Tags:** `git` `infrastructure` `monorepo` `agents` `source-control`
+
+OpenAI built a new Git backend, **Pando**, and now serves its entire monorepo from it without changing the client or the protocol. The framing is explicitly agent-driven: Codex raised the number of branches, pushes, merges and fetches per engineer, "with reliability at times falling below 90%" before the rebuild. The production numbers are stated plainly: median push latency down **nearly 80%** (also written as "nearly 5x"), **nearly a petabyte of Git data per day**, more than **57 TB of Git packs in a single hour** with over 99% of those bytes from local disk cache, a median packfile under **20 KiB** and a 99th percentile under **3 MiB**, and a petabyte/day served "with just a handful of CPU cores".
+
+The design has two moving parts. Pando coordinates updates to each branch independently, so unrelated branch pushes proceed in parallel; and it reuses packfiles across fetches instead of generating one per client, so many readers get the same bytes. The cost is stated in the post rather than discovered by a reader: "a reader looking at several branches can see them at different points of time." Upstream contributions came out of the work — `packfile-uri` tracing and byte counts, validation when accepting an existing pack, and fixes around concurrent downloads and interrupted transfers.
+
+**Why it matters:** agent concurrency turned source control into a throughput problem, and the answer here is per-branch causal consistency rather than a global lock — a trade you should name before adopting it, because cross-branch atomic reads are the thing you give up. The performance claims are production self-reports with no stated baseline beyond "the previous backend", and "nearly 5x" and "nearly 80%" are the same measurement in two units, not two results.
+
+[`🔗 Scaling Git at OpenAI`](https://openai.com/index/scaling-git-at-openai/) · [`🔗 OpenAI news index`](https://openai.com/news/)
+
+---
+
+## 23. OpenAI's LifeVal shows five everyday tasks at 90.4%–100% — and no average, no model name, and no task count
+
+- **Velocity:** ▮▮ rising
+- **Source:** OpenAI Research · published 2026-11-02
+- **Tags:** `eval` `agents` `benchmark` `openai` `transparency`
+
+LifeVal is a new OpenAI evaluation of "tasks that matter in everyday life", built from the American Time Use Survey and the Multinational Time Use Study plus a new demographically representative survey of **3,995** respondents, covering caregiving, health, education, household administration, personal finance, shopping and government services. The published page is a set of worked examples, each with a score: **93.1%** for comparing kindergartens and shortlisting enrolment, **98.0%** for organising flood-prep volunteers, **100%** for finding a home in Luzerne County and adding the deed to a cart, **96.3%** for setting up a shared game stream with a grandparent, and **90.4%** for a meal plan after a diabetes diagnosis. Then one summary sentence: **"Our latest models score very highly on many LifeVal tasks."**
+
+What the page's text does not carry: which model or version, how many tasks the evaluation contains, an aggregate score, a failure example, or a methodology and limitations section. A "See more" control sits under the examples, so more rows plausibly exist behind it — but the five numbers above are the ones in the server-rendered page, and the only quantitative claim about the benchmark as a whole is the sentence above.
+
+**Why it matters:** an eval published as five passing examples is a capability claim, not a measurement anyone else can compare against — there is no denominator, no model version to pin, and no stated task distribution. Quote the examples as examples. The survey work underneath is the more reusable artifact: 3,995 respondents is a defensible way to choose what to measure, and the omission is what happens after that choice.
+
+[`🔗 LifeVal`](https://openai.com/index/lifeval/) · [`🔗 OpenAI Research index`](https://openai.com/research/)
+
+---
+
+## 24. Netpbm's September release fixed buffer overruns written in 1988 — the seven CVEs for them arrived five weeks later
+
+- **Velocity:** ▮▮ rising
+- **Source:** NVD (VulnCheck CNA) · records published 2026-11-02 · release 10.86.51 dated 2026-09-28
+- **Tags:** `cve` `netpbm` `memory-safety` `image-parsing` `disclosure`
+
+Seven VulnCheck records published 2026-11-02 describe memory-safety bugs in Netpbm's format converters: a heap overflow in **sgitopnm** (`readChannels()`, RLE-compressed SGI), an integer overflow in **winicontopam** on oversized ICO/CUR dimensions, stack overflows in **picttoppm**'s `paintPoly()` and `scanPoly()`, a heap overflow in **xpmtoppm** from an unvalidated characters-per-pixel value, an integer overflow in **jbigtopnm**, and an out-of-bounds read in **tgatoppm**'s `get_pixel()`. The fixed versions are given per branch: before **10.86.51**, 11.x before **11.02.30**, and 11.03 before **11.15.08** (the first record says 11.02.29 / 11.15.07). All seven are **`Awaiting Analysis`** at NVD, so every score is the CNA's: **CVSS 3.1 7.8** with `AV:L/AC:L/PR:N/UI:R`, and **CVSS 4.0 8.5** with `AV:L/UI:P` — the same bug in two frameworks with different interaction assumptions.
+
+The changelog is larger and older than the batch. Release **10.86.51 (2026-09-28)** lists fixes in seventeen programs plus a build fix, most annotated "Always broken" with the introduction date: `picttoppm` since 1988, `tgatoppm` since 1989, `pjtoppm` and `imgtoppm` since 1991, `xpmtoppm` and `sgitopnm` since 1994, `jbigtopnm` since 9.2 (2000). Several entries credit "Discovered and diagnosed by Tristan Madani", and one is unusually candid about provenance: **"picttoppm: fix buffer overrun with very large polygons in input. Always broken -- in fact done intentionally for coding convenience (picttoppm was in primordial Netpbm in 1988)."**
+
+**Why it matters:** the batch covers six converters; the release note covers seventeen converters, five weeks earlier. If your exposure list is the CVE feed, it is a subset of the patch you already needed — and "always broken" means these are not regressions from a refactor but properties the code has had since the 1980s. Patch to the branch level named in the record, not to "latest".
+
+[`🔗 CVE-2026-120431 (NVD)`](https://nvd.nist.gov/vuln/detail/CVE-2026-120431) · [`🔗 Netpbm 10.86.51 changelog (SVN)`](https://svn.code.sf.net/p/netpbm/code/!svn/bc/5371/super_stable/doc/HISTORY) · [`🔗 VulnCheck advisory`](https://www.vulncheck.com/advisories/netpbm-before-10.86.51-11.02.29-and-11.15.07-sgitopnm-heap-buffer-overflow)
+
+---
+
+## 25. CSGHub serves private model and code files to anonymous callers — the portal signs the request with its own admin key
+
+- **Velocity:** ▮▮ rising
+- **Source:** VulnCheck CVE-2026-120426 · published 2026-11-02 · issue #1586 opened 2026-10-31
+- **Tags:** `cve` `idor` `model-hub` `self-hosted` `unfixed`
+
+`CVE-2026-120426` describes an authorization bypass in **OpenCSG CSGHub** through `v2.6.0-ce`: an unauthenticated caller can read files in private model, code and space repositories by injecting a percent-encoded `current_user` parameter into the file path. The reporter's own write-up in issue #1586 traces it precisely. `GET /:repo_type/:namespace/:name/resolve/:branch/*path` is registered in a bare route group with no per-route guard, unlike the upload routes above it; with no `user_token` cookie the portal fetches through the backend using the **global server API key**; on that privileged call the acting identity is carried only as a `current_user` query parameter, and the attacker-controlled path is interpolated with `%s` ahead of `?current_user=%s` with no escaping. Because Gin decodes a percent-encoded query separator inside the catch-all segment, a path ending `README.md%3Fcurrent_user%3D<owner>%26` overrides the parameter. Datasets are unaffected — their routes use a login middleware the others lack.
+
+VulnCheck scored it **CVSS 4.0 8.7** (`PR:N/VC:H`) and **CVSS 3.1 7.5** — both from the same CNA, at different framework conventions — and NVD's status is **`Deferred`**. There is no fixed release to install: the issue was opened 2026-10-31 and is still open, the newest release is **v2.6.0-ce (2026-10-15)**, and `main`'s last commit is **2026-09-19**.
+
+**Why it matters:** a self-hosted model hub holds the weights, the dataset, and whatever tokens were committed beside them, so an unauthenticated GET is the whole exposure — no write and no RCE needed. The failure is architectural rather than a typo: a user-facing route falling back to the administrative service credential, with the user's identity then asserted by a query parameter. Until a release exists, the mitigation is at the proxy: deny anonymous access to `*/resolve/*` or require a session for private namespaces.
+
+[`🔗 CVE-2026-120426 (cveawg)`](https://cveawg.mitre.org/api/cve/CVE-2026-120426) · [`🔗 Issue #1586 (full trace)`](https://github.com/OpenCSGs/csghub/issues/1586) · [`🔗 VulnCheck advisory`](https://www.vulncheck.com/advisories/opencsg-csghub-through-2.6.0-ce-unauthenticated-private-repository-file-read-via-resolve-route)
+
+---
+
+## 26. WSO2's 9.4 says no privileges are required — its own description says the attacker needs a lower-privilege role
+
+- **Velocity:** ▮▮ rising
+- **Source:** CVE record (WSO2 CNA) · reserved 2025-10-20 · published 2026-11-02
+- **Tags:** `cve` `wso2` `access-control` `cvss` `api-gateway`
+
+`CVE-2025-11969` is a System REST API access-control failure in WSO2 API Manager. The record's description is about a logged-in user: **"The System REST APIs do not correctly enforce access control mechanisms, allowing users with lower privilege roles to execute administrative actions that should be restricted."** The metric attached to the same record is not: **CVSS 3.1 9.4** with `AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:L`, where `privilegesRequired: NONE` describes an unauthenticated attacker. Recomputing that vector with `PR:L` — the value the prose implies — gives **8.3**. Both numbers are WSO2's; NVD's status is `Awaiting Analysis`, so there is no second opinion on the record.
+
+The scope is broad and build-pinned. Nine API Manager branch lines from **3.1.0** to **4.5.0** each carry a build-number ceiling (for example `4.5.0` before `4.5.0.32`), alongside WSO2 Identity Server as Key Manager 5.10.0, Open Banking AM and IAM 2.0.0, API Control Plane, Universal Gateway and Traffic Manager. Two Maven artifacts (`org.wso2.carbon.apimgt.rest.api.util` and `.common`) list per-version fix builds, and the record states that APIs exposed through the API Gateway are not affected. The ID was reserved on **2025-10-20** and published on **2026-11-02**, 378 days later.
+
+**Why it matters:** `PR:N` versus `PR:L` is the difference between patching on your normal schedule and treating the deployment as exposed now, and it moves the score by more than a point. The record does not resolve it, and the vendor advisory it links did not render for me, so the honest reading is the conservative one: assume a low-privileged account is enough until someone publishes a request that works without a session. Either way the fixed builds are named per branch — "upgrade API Manager" is not the instruction.
+
+[`🔗 CVE-2025-11969 (cveawg)`](https://cveawg.mitre.org/api/cve/CVE-2025-11969) · [`🔗 NVD record`](https://nvd.nist.gov/vuln/detail/CVE-2025-11969)
+
+---
+
+## 27. Auriga closes 68.3% of RoboDojo's planning–execution gap — and the number that makes the case is the 22.5% it starts from
+
+- **Velocity:** ▮▮ rising
+- **Source:** arXiv 2611.01112 · submitted 2026-10-31 · 21 authors
+- **Tags:** `robotics` `agents` `harness` `embodied` `benchmark`
+
+The Auriga technical report starts with a measurement that is not about its own system: on RoboDojo, a benchmark that separates high-level task decisions from physical execution, **removing arm execution raises GPT-6 Astra's success rate from 22.5% to 76.2%**. The gap is the interface, not the model. Auriga is a task-agnostic harness that tries to close it — the model decides over an explicit task belief and acts through tool calls or synthesised multi-step Python; the harness supplies calibrated 3D measurements, finger-referenced dual-arm control, a single admission gateway to the robot, a paused visual trajectory preview before motion, and stage-tolerance checks during execution that stop the robot and return the measured discrepancy for in-place recovery. The authors report it closes **68.3%** of that gap zero-shot, ranks first on RoboDojo with **57.7%** success (**64.0** score), "more than doubling the reference harness on the same model", and stays first under scene randomisation while learned policies drop by up to **33.9%**. On RoboCasa365 the same frozen harness reaches **73.2%**, up to 23.1% ahead of VLA-assisted agents on composite tasks.
+
+The caveats are structural. The harness was developed across **13 cross-task capability iterations** and then frozen for evaluation — an honest description of how much iteration sits behind a "zero-shot" number, but iteration nonetheless. The leaderboard is the authors' own submission on a benchmark whose reference control interface is what the 22.5% was measured against. And the 68.3% is a fraction of a gap defined by one model on one benchmark.
+
+**Why it matters:** the transferable result is the 22.5 → 76.2 swing, because it says most of the embodied-agent deficit on this benchmark lives in the control interface rather than in perception or planning. That is a claim about where to spend engineering, and it is also why a harness paper can beat a model paper on the same leaderboard without either being wrong.
+
+[`🔗 Auriga (arXiv)`](https://arxiv.org/abs/2611.01112) · [`🔗 Auriga project page`](https://auriga.stelledge.com/) · [`🔗 Code`](https://github.com/lose4578/Auriga)
+
+---
+
+## 28. Four prompt optimizers, eight tasks, no significant gain on strong reasoners — and one arm collapsed to the judge floor in 3 of 5 runs
+
+- **Velocity:** ▮▮ rising
+- **Source:** arXiv 2611.01135 · submitted 2026-10-31 · Zhengshuai Yang, Changyun Li
+- **Tags:** `prompt-optimization` `evals` `reasoning` `negative-result` `research`
+
+"Compile as Hypothesis" tests the assumption underneath every prompt-optimisation tool: that searching over prompts reliably improves downstream accuracy. Across four optimizer families — genome search, profile-guided mutation, GEPA and ESPO — and eight tasks, measured in paired same-day runs, the authors find **"no statistically significant accuracy gains on strong reasoners."** One structural finding is not a null result: a discrete structural genome prevents a bimodal seed-collapse, where unconstrained search "collapses toward the judge floor in **3/5 runs**".
+
+The paper's useful contribution is a three-dimensional headroom typology over 190-problem knowledge-intensive evaluations: prompt optimisation cannot compensate for an intrinsic knowledge deficit or for physical token truncation, but it does resolve protocol and formatting errors. On `gpt-6`, free-text reflective search (GEPA) gains **+0.14** where structured search stays flat — and the ablation splits that gain into roughly **0.035 from judge-rubric reconstruction** and **0.105 from genuine instruction refinement**. The authors also report exposing "silent backend-mixing in commercial APIs during outage windows" and ship per-call audit verification for it.
+
+**Why it matters:** the split is the finding to carry. If a third of a measured prompt gain is the judge's rubric being reconstructed rather than the instruction being improved, then any optimisation loop scored by an LLM judge is measuring partly its own rubric — and the typology tells you which failures are addressable at all. If your task is knowledge-bound rather than format-bound, the honest expectation from this paper is zero.
+
+[`🔗 Compile as Hypothesis (arXiv)`](https://arxiv.org/abs/2611.01135) · [`🔗 cs.AI listing (2026-10-31)`](https://arxiv.org/list/cs.AI/2026-10-31)
+
+---
+
+## 29. Give PPO a button that resets its needs and it solves 2 of 80 seeds instead of 71
+
+- **Velocity:** ▮ steady
+- **Source:** arXiv 2611.01183 · submitted 2026-10-31 · Chase J. Metoyer
+- **Tags:** `rl` `reward-hacking` `wireheading` `pre-registration` `research`
+
+Bounded intrinsic rewards are usually treated as safe from gaming on the argument that a capped signal cannot pay to exploit. This paper tests it directly. A homeostatic satiation reward gives an agent needs that build up and pay out when relieved; add one cheap action that resets the needs, and in **MiniGrid DoorKey-8x8** PPO agents solve **2 of 80 seeds**, against **71 of 80** on the same seeds without the action. In **KeyCorridorS3R1** it is **0 of 20** against **20 of 20**. The policies stay near-uniform, which is the interesting part: this is not a policy that learned a clever exploit, it is one that found a button and stopped.
+
+The paper does the theory too. A telescoping argument caps any policy's satiation return at the needs' starting drive, and a post-hoc computation shows that at every growth rate trained, a solving trajectory beats that cap on all sampled layouts — so the reward does not ask for the behaviour that appeared. Two controls land it: with advantage normalisation on, a satisfaction signal the agent could fill itself was worse than none (**11 of 20** solved with task reward alone versus **1 of 20** with the tamperable signal), and a per-press cost of **0.1** restored the task in every seed. All predictions were pre-registered and hash-locked from round 3, and **9 of 23 hypotheses were not supported** — each is reported.
+
+**Why it matters:** "bounded" is a property of the range, not of the incentive; the exploit here needs no reward hacking in the usual sense, only an action that satisfies the signal without doing the task. The per-press cost restoring every seed is the practical lever — price the reset — and the pre-registration with nine published failures is the reason to trust the other fourteen.
+
+[`🔗 Satisfied, Not Solving (arXiv)`](https://arxiv.org/abs/2611.01183) · [`🔗 cs.LG listing (2026-10-31)`](https://arxiv.org/list/cs.LG/2026-10-31)
+
+---
+
+## 30. Polyend published the Tracker firmware source under PolyForm Noncommercial — the plugin SDK is MIT, the synth engine is still two `.a` files
+
+- **Velocity:** ▮▮ rising
+- **Source:** Polyend · announced 2026-11-02 · HN 100 pts
+- **Tags:** `open-source` `licensing` `embedded` `firmware` `hardware`
+
+Polyend published the firmware source for the original **Tracker**, **Tracker+** and **Tracker Mini** on 2026-11-02, alongside a **Tracker Community Edition 1.0** that installs on all three instruments. The announcement is explicit that you can "modify the firmware yourself and share your own version", and that a recovery path exists: "We've built in a recovery system to keep a faulty firmware build from bricking your Tracker." The repository (`polyend/tracker-ce`) documents the hardware split — an NXP Kinetis MK66FX1M0 Cortex-M4F at 180 MHz in the original, i.MX RT1051/RT1064 Cortex-M7 at 600 MHz in the Plus and Mini.
+
+The licence is the part worth reading. It is a three-part document: the firmware and most headers under **PolyForm Noncommercial 1.0.0**; the `.ptfx` Sample Editor plugin SDK (`editor-fx-sdk/`) under **MIT**, with the text saying developers are "expressly permitted to build, distribute, and sell" those plugins; and two precompiled static archives, `synth/lib/libPolySynth.a` and `synth/lib/libPolyDSP.a`, kept **proprietary**. Commercial music made with the firmware is explicitly permitted; selling the firmware or a derivative, or putting it in a commercial hardware product, is not. GitHub's licence detector reports the repository as **NOASSERTION**, which is what an unrecognised composite looks like.
+
+**Why it matters:** this is source-available with a deliberate commercial carve-out, not open source — the synthesis engine you would need to build a genuinely new instrument remains a binary. The split is also a template more hardware vendors will reach for: permissive where the community adds value (plugins), noncommercial where the product is, closed where the DSP is.
+
+[`🔗 Tracker firmware announcement`](https://polyend.com/whats-up/tracker-the-biggest-update-yet/) · [`🔗 polyend/tracker-ce`](https://github.com/polyend/tracker-ce) · [`🔗 LICENSE (PolyForm NC + MIT SDK)`](https://github.com/polyend/tracker-ce/blob/main/LICENSE)
+
+---
+
+## 31. syscall.sh relaunched with 27 architecture tables and a JSON endpoint per architecture
+
+- **Velocity:** ▮ steady
+- **Source:** Show HN · 215 pts · ~19h ago (~17:29 UTC+8)
+- **Tags:** `linux` `syscalls` `reference` `json` `devtools`
+
+syscall.sh is a browsable index of Linux system-call tables, rebuilt and relaunched — the about page says it began in 2020, went on hiatus, and is "being maintained again" as of 2026. It now covers **27 architectures**, each with per-call numbers, arguments and register conventions: **369** syscalls on x86_64 since 3.3, **441** on i386, **326** on AArch64 since 3.7, **327** on RISC-V 64 since 4.15, **439** on the ia32 compat layer, and so on down to Hexagon, MicroBlaze and Xtensa. Tables run from Linux **3.3 to 7.3**, and every architecture also ships as a plain JSON file — `/<arch>/syscalls.json` — alongside an API.
+
+**Why it matters:** syscall numbers are not portable across architectures and not stable across kernel versions, which is precisely the detail that breaks emulators, sandbox seccomp profiles, tracing tools and hand-written assembly. Having the tables as JSON per arch turns a lookup problem into a build input — and the per-call history of when something appeared or was dropped is the part that a header file cannot tell you.
+
+[`🔗 syscall.sh`](https://syscall.sh/) · [`🔗 x86_64 table as JSON`](https://syscall.sh/x64/syscalls.json) · [`🔗 About`](https://syscall.sh/about)
+
+---
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-11-02T20:21:05Z |
-| Items | 20 |
+| Generated | 2026-11-03T04:25:33Z |
+| Items | 31 |
 | Sources tracked | 22 (Hacker News, GitHub Trending, arXiv, NVD, cveawg, vendor blogs, security advisories) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (3x daily) |
 | Ranking | Velocity-weighted (recency × engagement acceleration × source authority) |

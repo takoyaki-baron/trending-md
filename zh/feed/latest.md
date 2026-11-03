@@ -1,6 +1,6 @@
 ---
 date: 2026-11-03
-updated: 2026-11-02T20:21:05Z
+updated: 2026-11-03T04:25:33Z
 schedule: 04:03, 12:03, 20:03 UTC+8
 sources: 22
 license: CC-BY-4.0
@@ -328,12 +328,186 @@ Worktrunk 是一个为某一种工作流而生的 git worktree 管理 CLI："Cla
 
 ---
 
+## 21. WorkOS 说一个"AI 辅助的进攻性安全框架"进了它的销售工具——而框架的名字在 CEO 的 Hacker News 评论里，不在公告里
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Hacker News（自发帖）· 60 pts · ~5 小时前（~07:31 UTC+8）
+- **Tags:** `security` `incident` `identity` `ai-agents` `disclosure`
+
+WorkOS 于 2026-11-02 发布安全公告，说明其销售团队使用的一个内部应用遭到未授权访问，发现时间为 **2026-10-30**。公告把事件范围限定在 CRM 与客户支持数据：商务联系人信息、客户账户历史，以及"销售通话、支持讨论和客户 Slack 对话的摘要与片段"，外加产品使用与目录健康度之类的运营元数据。公告同时写明：**"目前没有证据表明 WorkOS 的应用数据被访问，也没有证据表明生产环境的 WorkOS 服务被访问或受到影响。"** 攻击手法只出现了一次，被描述为"一个 AI 辅助的进攻性安全框架，用于自动化侦察与利用尝试"，并把 Wiz、Google、CrowdStrike 关于 Agent 入侵的报告作为背景引用，而非关于本案的证据。
+
+名字不在公告里。在 Hacker News 讨论串中，CEO Michael Grinich 写道：**"这次攻击涉及 ARTEX，一个用于执行进攻性安全操作的自主 AI Agent 框架。"** 这比公告承担的归因更重——给出了行为体与工具，而不只是手法——也正是此后所有报道引用的那一句。两者都可以为真；但它们不是同一个断言，且只有一个是厂商的正式通知。
+
+**为什么重要：** 对一家身份与 SSO 厂商来说，真正危险的不是联系人清单，而是对话片段：一封要求重签 SAML 证书或重新连接目录的邮件，在引用了真实的支持线程和真实的同事之后，看起来就像日常操作。两种读法要分开："没有证据"在第四天说的是调查仍在进行，而 ARTEX 这个归因是 CEO 说的，不是公告说的。
+
+[`🔗 WorkOS 安全公告`](https://workos.com/security/bulletins/october-30th-2026-data-security-incident) · [`🔗 HN 讨论串 + CEO 评论`](https://news.ycombinator.com/item?id=50345712) · [`🔗 WorkOS 安全页`](https://workos.com/security)
+
+---
+
+## 22. OpenAI 的 Pando 把推送延迟中位数砍掉近 80%——对象是一个可靠性一度跌破 90% 的 monorepo
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** OpenAI 工程博客 · 发布于 2026-11-02 · Aaron Friel、Taylor Blau、Ted Nyman
+- **Tags:** `git` `infrastructure` `monorepo` `agents` `source-control`
+
+OpenAI 造了一个新的 Git 后端 **Pando**，现在整个 monorepo 都由它服务，客户端和协议都没变。动机被明确写成 Agent 驱动：Codex 抬高了每位工程师的分支数、推送数、合并数和拉取数，重建之前"可靠性有时跌破 90%"。生产数字给得很直接：推送延迟中位数下降**近 80%**（文中也写作"近 5 倍"），每天送达**近 1 PB** 的 Git 数据，单小时送出超过 **57 TB** 的 Git pack，其中 99% 以上来自本地磁盘缓存，packfile 中位数小于 **20 KiB**、99 分位小于 **3 MiB**，而每天 1 PB 只用了"屈指可数的几个 CPU 核"。
+
+设计有两个要点。第一，Pando 对每个分支独立协调更新，互不相关的分支推送可以并行；第二，它在多次 fetch 之间复用 packfile，而不是为每个客户端单独生成，因此同一份字节可以服务很多读者。代价由文章自己说出，而不是留给读者发现："同时查看多个分支的读者，可能看到它们处于不同的时间点。"这项工作也回流到上游：`packfile-uri` 下载的追踪与字节统计、接受已有 pack 时的校验，以及并发下载与中断传输的边界修复。
+
+**为什么重要：** Agent 并发把源码管理变成了吞吐问题，而这里的答案是按分支的因果一致性，而不是全局锁——采用之前要先把这个取舍说出来，因为你放弃的正是跨分支的原子读。性能结论是生产环境的自述，除了"上一套后端"之外没有给出基线；"近 5 倍"和"近 80%"是同一个测量的两种单位，不是两个结果。
+
+[`🔗 Scaling Git at OpenAI`](https://openai.com/index/scaling-git-at-openai/) · [`🔗 OpenAI 新闻索引`](https://openai.com/news/)
+
+---
+
+## 23. OpenAI 的 LifeVal 给出五个日常任务、分数 90.4%–100%——没有平均值，没有模型名，也没有任务总数
+
+- **Velocity:** ▮▮ rising
+- **Source:** OpenAI Research · 发布于 2026-11-02
+- **Tags:** `eval` `agents` `benchmark` `openai` `transparency`
+
+LifeVal 是 OpenAI 新公布的"日常生活中真正重要的事"评测，取材于 American Time Use Survey 与 Multinational Time Use Study，并新增了一份覆盖 **3,995** 名受访者的、人口结构上有代表性的调查；覆盖育儿、健康、教育、家庭事务、个人理财、购物与政府服务。公开页面是一组带分数的范例：比较幼儿园并整理报名信息 **93.1%**，组织防洪志愿者 **98.0%**，在 Luzerne 县找房并把房契加入购物车 **100%**，为祖母搭好远程一起看球的方案 **96.3%**，为刚确诊糖尿病的父母做一周饮食计划 **90.4%**。随后是一句总结：**"我们最新的模型在许多 LifeVal 任务上得分非常高。"**
+
+页面正文没有给出的东西：模型名称或版本、评测包含多少任务、总分、失败案例，以及方法与局限性章节。范例下方有一个"See more"控件，后面很可能还有更多行——但上面五个数字就是服务端渲染文本里的全部数字，而关于这个基准整体的唯一量化断言，就是上面那句话。
+
+**为什么重要：** 以五个通过范例发布的评测是能力声明，不是别人可以对比的测量——没有分母，没有可钉住的模型版本，也没有说明任务分布。引用时请把这五个数字当作范例。底下真正可复用的人工产物是调查工作：3,995 名受访者是挑选"测什么"的一种站得住脚的方式，而缺失的是这个选择之后的部分。
+
+[`🔗 LifeVal`](https://openai.com/index/lifeval/) · [`🔗 OpenAI Research 索引`](https://openai.com/research/)
+
+---
+
+## 24. Netpbm 九月那次发布修的是 1988 年写下的缓冲区溢出——对应的七个 CVE 五周后才到
+
+- **Velocity:** ▮▮ rising
+- **Source:** NVD（VulnCheck CNA）· 记录发布于 2026-11-02 · 10.86.51 发布于 2026-09-28
+- **Tags:** `cve` `netpbm` `memory-safety` `image-parsing` `disclosure`
+
+2026-11-02 发布的七条 VulnCheck 记录描述了 Netpbm 各格式转换器里的内存安全问题：**sgitopnm** 的堆溢出（`readChannels()`，RLE 压缩的 SGI）、**winicontopam** 在超大 ICO/CUR 尺寸上的整数溢出、**picttoppm** 的 `paintPoly()` 与 `scanPoly()` 两处栈溢出、**xpmtoppm** 因未校验的 characters-per-pixel 值导致的堆溢出、**jbigtopnm** 的整数溢出，以及 **tgatoppm** `get_pixel()` 的越界读。修复版本按分支给出：**10.86.51** 之前、11.x 的 **11.02.30** 之前、11.03 的 **11.15.08** 之前（第一条记录写作 11.02.29 / 11.15.07）。七条在 NVD 全部是 **`Awaiting Analysis`**，所以每个分数都是 CNA 的：**CVSS 3.1 7.8**（`AV:L/AC:L/PR:N/UI:R`）与 **CVSS 4.0 8.5**（`AV:L/UI:P`）——同一个 bug 在两个框架下，用户交互的假设不同。
+
+变更日志比这批 CVE 更大、也更老。**10.86.51（2026-09-28）**列出了十七个程序里的修复外加一处构建修复，多半标注"Always broken"并给出引入时间：`picttoppm` 自 1988 年，`tgatoppm` 自 1989 年，`pjtoppm` 与 `imgtoppm` 自 1991 年，`xpmtoppm` 与 `sgitopnm` 自 1994 年，`jbigtopnm` 自 9.2（2000 年）。若干条目标注"由 Tristan Madani 发现并诊断"，还有一条对来源异常坦白：**"picttoppm：修复超大多边形输入导致的缓冲区溢出。一直就是坏的——事实上当年是为了编码方便故意这么写的（picttoppm 自 1988 年起就在原始 Netpbm 里）。"**
+
+**为什么重要：** 这批 CVE 覆盖六个转换器，而发布说明覆盖十七个，且早了五周。如果你的暴露清单就是 CVE feed，那它只是你本来就需要打的那个补丁的子集；而"一直就是坏的"意味着这些不是重构引入的回归，而是这份代码从 1980 年代起就有的属性。请按记录里点名的分支版本升级，不要只升到"最新"。
+
+[`🔗 CVE-2026-120431（NVD）`](https://nvd.nist.gov/vuln/detail/CVE-2026-120431) · [`🔗 Netpbm 10.86.51 变更日志（SVN）`](https://svn.code.sf.net/p/netpbm/code/!svn/bc/5371/super_stable/doc/HISTORY) · [`🔗 VulnCheck 公告`](https://www.vulncheck.com/advisories/netpbm-before-10.86.51-11.02.29-and-11.15.07-sgitopnm-heap-buffer-overflow)
+
+---
+
+## 25. CSGHub 把私有模型与代码文件交给匿名请求者——门户用自家管理员密钥签了这次请求
+
+- **Velocity:** ▮▮ rising
+- **Source:** VulnCheck CVE-2026-120426 · 发布于 2026-11-02 · issue #1586 于 2026-10-31 提交
+- **Tags:** `cve` `idor` `model-hub` `self-hosted` `unfixed`
+
+`CVE-2026-120426` 描述 **OpenCSG CSGHub** `v2.6.0-ce` 及之前的授权绕过：未认证的调用者可以在文件路径里注入百分号编码的 `current_user` 参数，从而读取私有 model、code、space 仓库中的文件。报告者在 issue #1586 里的追溯很精确。`GET /:repo_type/:namespace/:name/resolve/:branch/*path` 注册在一个没有逐路由守卫的裸路由组里，与它上方那些使用中间件的上传路由不同；当请求没有 `user_token` cookie 时，门户改用**全局服务端 API key** 去后端取文件；在这次特权调用里，行为主体的身份只由 `current_user` 查询参数承载，而攻击者控制的路径以 `%s` 拼在 `?current_user=%s` 前面、未做转义。由于 Gin 会把 catch-all 段里的百分号编码查询分隔符解码，一个以 `README.md%3Fcurrent_user%3D<owner>%26` 结尾的路径就能覆盖该参数。数据集不受影响——它们的路由带了其他路由缺少的登录中间件。
+
+VulnCheck 给了 **CVSS 4.0 8.7**（`PR:N/VC:H`）与 **CVSS 3.1 7.5**——同一个 CNA、不同框架的约定——NVD 状态为 **`Deferred`**。目前没有可安装的修复版本：issue 于 2026-10-31 提交且仍是 open，最新发布是 **v2.6.0-ce（2026-10-15）**，`main` 的最后一次提交是 **2026-09-19**。
+
+**为什么重要：** 自托管的模型中心里放着权重、数据集，以及被顺手提交进去的各种 token，所以一个未认证的 GET 就是全部暴露面——不需要写入，也不需要 RCE。这个缺陷是架构性的，不是笔误：面向用户的路由回退到了管理用服务凭据，随后用查询参数来断言用户身份。在版本发布之前，缓解只能放在代理层：拒绝匿名访问 `*/resolve/*`，或对私有命名空间强制要求会话。
+
+[`🔗 CVE-2026-120426（cveawg）`](https://cveawg.mitre.org/api/cve/CVE-2026-120426) · [`🔗 Issue #1586（完整链路）`](https://github.com/OpenCSGs/csghub/issues/1586) · [`🔗 VulnCheck 公告`](https://www.vulncheck.com/advisories/opencsg-csghub-through-2.6.0-ce-unauthenticated-private-repository-file-read-via-resolve-route)
+
+---
+
+## 26. WSO2 的 9.4 说不需要任何权限——它自己的描述说攻击者需要一个低权限角色
+
+- **Velocity:** ▮▮ rising
+- **Source:** CVE 记录（WSO2 CNA）· 预留 2025-10-20 · 发布 2026-11-02
+- **Tags:** `cve` `wso2` `access-control` `cvss` `api-gateway`
+
+`CVE-2025-11969` 是 WSO2 API Manager 的 System REST API 访问控制失效。记录描述讲的是已登录用户：**"System REST API 没有正确执行访问控制机制，使得拥有较低权限角色的用户能够执行本应受限的管理操作。"** 同一条记录上的度量却不是这么说的：**CVSS 3.1 9.4**，向量 `AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:L`，其中 `privilegesRequired: NONE` 描述的是未认证攻击者。把该向量按描述暗示的值改成 `PR:L` 重算，得 **8.3**。两个数字都出自 WSO2；NVD 状态为 `Awaiting Analysis`，所以记录上没有第二种意见。
+
+影响面很宽，且按构建号钉死。从 **3.1.0** 到 **4.5.0** 的九条 API Manager 分支各自带一个构建号上限（例如 `4.5.0` 需低于 `4.5.0.32`），另有 WSO2 Identity Server as Key Manager 5.10.0、Open Banking AM 与 IAM 2.0.0、API Control Plane、Universal Gateway 与 Traffic Manager。两个 Maven 构件（`org.wso2.carbon.apimgt.rest.api.util` 与 `.common`）列出了逐版本的修复构建，记录还说明经 API Gateway 暴露的 API 不受影响。这个 ID 于 **2025-10-20** 预留、**2026-11-02** 发布，相隔 378 天。
+
+**为什么重要：** `PR:N` 与 `PR:L` 的差别，是按正常节奏打补丁与把这次部署当成已暴露来对待的差别，而且它让分数差了一个多点。记录本身没有解决这个问题，它链接的厂商公告我这边打不开，所以诚实的读法是取保守的一侧：在有会话的请求被公开之前，假定一个低权限账号就够。无论哪种，修复构建都是按分支点名的——"升级 API Manager"不是可执行的指令。
+
+[`🔗 CVE-2025-11969（cveawg）`](https://cveawg.mitre.org/api/cve/CVE-2025-11969) · [`🔗 NVD 记录`](https://nvd.nist.gov/vuln/detail/CVE-2025-11969)
+
+---
+
+## 27. Auriga 补上 RoboDojo 规划—执行差距的 68.3%——而真正说明问题的是它起步的 22.5%
+
+- **Velocity:** ▮▮ rising
+- **Source:** arXiv 2611.01112 · 提交于 2026-10-31 · 21 位作者
+- **Tags:** `robotics` `agents` `harness` `embodied` `benchmark`
+
+Auriga 技术报告的起手是一个与自家系统无关的测量：在把高层任务决策与物理执行分开的 RoboDojo 上，**去掉机械臂执行这一步，GPT-6 Astra 的成功率从 22.5% 升到 76.2%**。差距在接口，不在模型。Auriga 是一个任务无关的 harness，试图补上这个差距——模型在显式的任务信念上做决策，通过工具调用或合成的多步 Python 行动；harness 提供标定过的 3D 测量、以指尖为参照的双臂控制、通往机器人的唯一准入网关、动作前在仿真暂停时查看的轨迹预览，以及执行中检查各阶段容差与抓取边界、一旦偏离就停机并回传实测偏差供原地恢复。作者报告它零样本补上了这个差距的 **68.3%**，在 RoboDojo 上以 **57.7%** 成功率（**64.0** 分）排名第一，"在同一个模型上比参考 harness 高出一倍以上"，并且在场景随机化下仍居第一，而学习型策略最多掉 **33.9%**。在 RoboCasa365 上，同一个冻结的 harness 达到 **73.2%**，在复合任务上领先 VLA 辅助的 Agent 最多 23.1%。
+
+保留意见是结构性的。这个 harness 是在 **13 轮跨任务能力迭代**中开发出来的，之后才冻结用于评测——这是对一个"零样本"数字背后究竟有多少迭代的诚实说明，但仍然是迭代。榜单是作者自己在某个基准上的提交，而 22.5% 正是以该基准的参考控制接口为基线测出来的。68.3% 也只是"一个模型在一个基准上"所定义的那个差距的比例。
+
+**为什么重要：** 可迁移的结论是 22.5 → 76.2 这个摆动，因为它说明在这个基准上，具身 Agent 的缺口大部分位于控制接口，而不在感知或规划。这是一条关于"工程力气该花在哪"的断言，也正是为什么一篇 harness 论文可以在同一个榜单上压过一篇模型论文，而两边都没错。
+
+[`🔗 Auriga（arXiv）`](https://arxiv.org/abs/2611.01112) · [`🔗 Auriga 项目页`](https://auriga.stelledge.com/) · [`🔗 代码`](https://github.com/lose4578/Auriga)
+
+---
+
+## 28. 四种提示优化器、八个任务，在强推理模型上没有显著收益——且有一臂在 5 次运行中 3 次塌到裁判下限
+
+- **Velocity:** ▮▮ rising
+- **Source:** arXiv 2611.01135 · 提交于 2026-10-31 · Zhengshuai Yang、Changyun Li
+- **Tags:** `prompt-optimization` `evals` `reasoning` `negative-result` `research`
+
+《Compile as Hypothesis》检验的是每个提示优化工具底下的假设：在提示上做搜索能可靠提升下游准确率。跨四个优化器家族——基因组搜索、profile 引导变异、GEPA 与 ESPO——和八个任务，在同日配对的测量下，作者发现**"在强推理模型上没有统计显著的准确率提升"**。其中一个结构性发现不是零结果：离散的结构基因组能阻止双峰的种子塌缩——无约束搜索会"在 **5 次运行中的 3 次**塌向裁判下限"。
+
+论文更有用的贡献是在 190 题的知识密集型评测上给出的三维 headroom 分类：提示优化无法弥补内在的知识缺口，也无法弥补物理上的 token 截断，但它确实能解决协议与格式错误。在 `gpt-6` 上，自由文本的反思式搜索（GEPA）拿到 **+0.14**，而结构化搜索持平——消融把这个增益拆成大约 **0.035 来自裁判评分标准的重建**、**0.105 来自真正的指令改进**。作者还报告"暴露了商业 API 在故障窗口内的静默后端混用"，并给出了逐调用审计验证工具。
+
+**为什么重要：** 要带走的是那个拆分。如果一次测得的提示增益里有三分之一来自裁判标准的重建、而不是指令被改进，那么任何用 LLM 裁判打分的优化循环，都在部分地测量它自己的评分标准；而这个分类告诉你哪些失败根本是可修的。如果你的任务是知识受限而非格式受限，这篇论文给出的诚实预期是零。
+
+[`🔗 Compile as Hypothesis（arXiv）`](https://arxiv.org/abs/2611.01135) · [`🔗 cs.AI 列表（2026-10-31）`](https://arxiv.org/list/cs.AI/2026-10-31)
+
+---
+
+## 29. 给 PPO 一个能重置自身需求的按钮，它只在 80 个种子里解出 2 个，而不是 71 个
+
+- **Velocity:** ▮ steady
+- **Source:** arXiv 2611.01183 · 提交于 2026-10-31 · Chase J. Metoyer
+- **Tags:** `rl` `reward-hacking` `wireheading` `pre-registration` `research`
+
+有界的内在奖励通常被认为不会被钻空子，理由是封顶的信号付不起利用它的代价。这篇论文直接测了这一点。一个稳态满足（homeostatic satiation）奖励给 Agent 会累积、在被满足时付钱的需求；再加一个重置需求的廉价动作，于是在 **MiniGrid DoorKey-8x8** 里，带这个动作的 PPO Agent 在 **80 个种子中解出 2 个**，而同样种子下不带它的是 **71 个**。在 **KeyCorridorS3R1** 里是 **20 个中 0 个**，对 **20 个中 20 个**。策略始终接近均匀——这才是关键：这不是一个学会了巧妙利用的策略，而是一个找到了按钮然后停下的策略。
+
+论文也做了理论。一个 telescoping 论证把任何策略的满足回报上限钉在需求初始驱动值上，而后验计算显示，在所有训练过的增长率下，一条解题轨迹在全部采样布局上都超过这个上限——所以奖励并没有要求出现的行为。两个对照把结论钉住：开启优势归一化时，一个 Agent 能自己填满的满足信号比没有还差（只有任务奖励时 **20 个解出 11 个**，用可篡改信号时 **20 个解出 1 个**），而每次按下成本 **0.1** 就在每个种子上恢复了任务。所有预测都预注册、并从第 3 轮起哈希锁定，**23 个假设中有 9 个未获支持**——每一个都如实报告。
+
+**为什么重要：** "有界"是取值范围的性质，不是激励的性质；这里利用它不需要通常意义上的 reward hacking，只需要一个满足信号却不做任务的动作用。每次按下成本能恢复全部种子，这是可操作的杠杆——给重置定价；而预注册加上九条公开的失败，是另外十四条值得相信的原因。
+
+[`🔗 Satisfied, Not Solving（arXiv）`](https://arxiv.org/abs/2611.01183) · [`🔗 cs.LG 列表（2026-10-31）`](https://arxiv.org/list/cs.LG/2026-10-31)
+
+---
+
+## 30. Polyend 以 PolyForm Noncommercial 公开了 Tracker 固件源码——插件 SDK 是 MIT，合成引擎仍是两个 `.a` 文件
+
+- **Velocity:** ▮▮ rising
+- **Source:** Polyend · 公布于 2026-11-02 · HN 100 pts
+- **Tags:** `open-source` `licensing` `embedded` `firmware` `hardware`
+
+Polyend 于 2026-11-02 公开了原版 **Tracker**、**Tracker+** 与 **Tracker Mini** 的固件源码，同时发布可在三台机器上安装的 **Tracker Community Edition 1.0**。公告把话说得很明白：你可以"自己修改固件并分享你自己的版本"，并给出恢复路径："我们内建了一套恢复系统，避免一个错误的固件构建把你的 Tracker 变砖。"仓库（`polyend/tracker-ce`）写清了硬件差异——原版是 180 MHz 的 NXP Kinetis MK66FX1M0 Cortex-M4F，Plus 与 Mini 是 600 MHz 的 i.MX RT1051/RT1064 Cortex-M7。
+
+值得读的是许可证。它分三部分：固件与大部分头文件采用 **PolyForm Noncommercial 1.0.0**；`.ptfx` 采样编辑器插件 SDK（`editor-fx-sdk/`）采用 **MIT**，许可文本明确写着开发者"被明示允许构建、分发并销售"这些插件；而 `synth/lib/libPolySynth.a` 与 `synth/lib/libPolyDSP.a` 两个预编译静态库保持**专有**。用固件做的商业音乐是被明示允许的；销售固件或其衍生版本、或把它放进商用硬件产品则不允许。GitHub 的许可证识别把该仓库标为 **NOASSERTION**——一个未被识别的复合许可看起来就是这样。
+
+**为什么重要：** 这是带刻意商业切分的 source-available，不是开源——你真正想用来做一台全新乐器的那套合成引擎仍是二进制。这个切分也是一种更多硬件厂商会采用的模板：社区能增值的地方给宽松许可（插件），产品所在的地方给非商业许可，DSP 所在的地方保持闭源。
+
+[`🔗 Tracker 固件公告`](https://polyend.com/whats-up/tracker-the-biggest-update-yet/) · [`🔗 polyend/tracker-ce`](https://github.com/polyend/tracker-ce) · [`🔗 LICENSE（PolyForm NC + MIT SDK）`](https://github.com/polyend/tracker-ce/blob/main/LICENSE)
+
+---
+
+## 31. syscall.sh 重新上线：27 张架构表，每个架构一个 JSON 端点
+
+- **Velocity:** ▮ steady
+- **Source:** Show HN · 215 pts · ~19 小时前（~17:29 UTC+8）
+- **Tags:** `linux` `syscalls` `reference` `json` `devtools`
+
+syscall.sh 是一个可浏览的 Linux 系统调用表索引，最近重建并重新上线——关于页说它始于 2020 年，中间停更数年，"自 2026 年起重新维护"。现在覆盖 **27 种架构**，每种都给出调用号、参数与寄存器约定：x86_64 上 **369** 个系统调用（自 3.3 起）、i386 **441** 个、AArch64 **326** 个（自 3.7）、RISC-V 64 **327** 个（自 4.15）、ia32 兼容层 **439** 个，一直列到 Hexagon、MicroBlaze 与 Xtensa。表覆盖 Linux **3.3 到 7.3**，每个架构还提供纯 JSON：`/<arch>/syscalls.json`，另有一个 API。
+
+**为什么重要：** 系统调用号既不能跨架构移植，也不跨内核版本稳定，而这恰恰是模拟器、seccomp 沙箱配置、追踪工具和手写汇编会坏掉的地方。把每个架构的表做成 JSON，就把"查表"变成了一个构建输入——而每个调用的出现/移除历史，是头文件告诉不了你的那部分。
+
+[`🔗 syscall.sh`](https://syscall.sh/) · [`🔗 x86_64 表（JSON）`](https://syscall.sh/x64/syscalls.json) · [`🔗 关于`](https://syscall.sh/about)
+
+---
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-11-02T20:21:05Z |
-| Items | 20 |
+| Generated | 2026-11-03T04:25:33Z |
+| Items | 31 |
 | Sources tracked | 22（Hacker News、GitHub Trending、arXiv、NVD、cveawg、厂商博客、安全公告） |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8（每日三次） |
 | Ranking | 速度加权（时效 × 互动加速度 × 来源权威度） |
