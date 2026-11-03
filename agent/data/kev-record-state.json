@@ -1,16 +1,21 @@
 {
- "updated": "2026-11-03T12:22:26.770Z",
+ "updated": "2026-11-03T20:15:57.320Z",
  "rows": {
   "CVE-2026-118527": {
    "added": "2026-10-30",
    "first_seen": "2026-10-31T12:51:06.659Z",
-   "state": "unpublished",
-   "published": null,
+   "state": "PUBLISHED",
+   "published": "2026-11-03T14:53:28.232Z",
    "history": [
     {
      "at": "2026-10-31T12:51:06.659Z",
      "state": "unpublished",
      "published": null
+    },
+    {
+     "at": "2026-11-03T20:15:57.320Z",
+     "state": "PUBLISHED",
+     "published": "2026-11-03T14:53:28.232Z"
     }
    ]
   },
@@ -1025,6 +1030,19 @@
      "at": "2026-10-31T12:51:06.659Z",
      "state": "PUBLISHED",
      "published": "2026-09-01T21:28:50.717Z"
+    }
+   ]
+  },
+  "CVE-2026-119977": {
+   "added": "2026-11-03",
+   "first_seen": "2026-11-03T20:15:57.320Z",
+   "state": "PUBLISHED",
+   "published": "2026-10-31T05:33:07.059Z",
+   "history": [
+    {
+     "at": "2026-11-03T20:15:57.320Z",
+     "state": "PUBLISHED",
+     "published": "2026-10-31T05:33:07.059Z"
     }
    ]
   }

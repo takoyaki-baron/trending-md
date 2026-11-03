@@ -1,6 +1,6 @@
 ---
 date: 2026-11-04
-updated: 2026-11-03T20:14:24Z
+updated: 2026-11-03T20:15:18Z
 schedule: 04:03, 12:03, 20:03 UTC+8
 sources: 18
 license: CC-BY-4.0
@@ -330,7 +330,7 @@ Elo は関数型の式言語を no-code ツール向けに Ruby、JavaScript、P
 
 | フィールド | 値 |
 |-------|-----|
-| Generated | 2026-11-03T20:14:24Z |
+| Generated | 2026-11-03T20:15:18Z |
 | Items | 20 |
 | Sources tracked | 18（Hacker News、GitHub Trending、arXiv、NVD、GitHub Advisory Database、ベンダー勧告、ステータスページ） |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8（1 日 3 回） |

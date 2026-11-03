@@ -1,6 +1,6 @@
 ---
 date: 2026-11-04
-updated: 2026-11-03T20:14:24Z
+updated: 2026-11-03T20:15:18Z
 schedule: 04:03, 12:03, 20:03 UTC+8
 sources: 18
 license: CC-BY-4.0
@@ -330,7 +330,7 @@ The setup is deliberately stripped: a model-based reinforcement-learning agent m
 
 | Field | Value |
 |-------|---------|
-| Generated | 2026-11-03T20:14:24Z |
+| Generated | 2026-11-03T20:15:18Z |
 | Items | 20 |
 | Sources tracked | 18 (Hacker News, GitHub Trending, arXiv, NVD, GitHub Advisory Database, vendor advisories, status pages) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (3x daily) |

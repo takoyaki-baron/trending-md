@@ -1,5 +1,5 @@
 {
- "generated": "2026-11-03T20:12:21.694Z",
+ "generated": "2026-11-03T20:15:51.421Z",
  "files": [
   {
    "file": "2026-11-04.md",
@@ -192,8 +192,8 @@
  ],
  "status_watch": [],
  "api_calls": 0,
- "readme_calls": 0,
- "cited_page_calls": 2,
+ "readme_calls": 5,
+ "cited_page_calls": 15,
  "repo_page_calls": 0,
  "nvd_calls": 1,
  "cna_calls": 0

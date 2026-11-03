@@ -1,6 +1,6 @@
 ---
 date: 2026-11-04
-updated: 2026-11-03T20:14:24Z
+updated: 2026-11-03T20:15:18Z
 schedule: 04:03, 12:03, 20:03 UTC+8
 sources: 18
 license: CC-BY-4.0
@@ -330,7 +330,7 @@ Elo 把一门函数式表达式语言编译到 Ruby、JavaScript、Python 与 SQ
 
 | 字段 | 值 |
 |-------|-----|
-| Generated | 2026-11-03T20:14:24Z |
+| Generated | 2026-11-03T20:15:18Z |
 | Items | 20 |
 | Sources tracked | 18（Hacker News、GitHub Trending、arXiv、NVD、GitHub Advisory Database、厂商公告、状态页） |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8（每日 3 次） |
