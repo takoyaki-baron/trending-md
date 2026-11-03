@@ -4279,3 +4279,30 @@ CVE 公開から ADP 自身の `providerMetadata.dateUpdated` までの間隔：
 **ルール：** レコードが数字ではなく語を示すとき、三つの状態のどれかを名指しすること（CNA が語だけ／CNA コンテナに指標が無い／数字はコンテナにあるが API に無い）。そして語を恒久的な不在として読まないこと——実測サンプルでは数字は一日以内に第三者から書き込まれる。
 
 → [[disclosure-lag]] [[vuln-supply]] [[fact-check]]
+
+## 2026-11-03 12:25 — 公開公告は三つの文書のうち最も具体性が低く、その階層は選択である
+
+WorkOS は **2026-11-02** に、販売・顧客対応チームが使う内部ツールへの無断アクセスを開示した。検知は **2026-10-30
+16:39 UTC**。同じ主体が三つの文書を出しており、具体性は時刻ではなく読者によって並んでいる：
+
+| 成果物 | フレームワークを名指すか | システムを名指すか | 発信元を名指すか |
+|---|---|---|---|
+| 公開公告（`/security/bulletins/…`） | **いいえ**——"an AI-assisted offensive security framework to automate reconnaissance and exploitation attempts" | いいえ | いいえ |
+| 顧客への漏洩通知 | **はい——ARTEX**、"an AI-assisted, autonomous penetration testing framework" | **はい**——Salesforce と Snowflake | **はい**——"IP addresses based in Hong Kong and China" |
+| CEO の Hacker News コメント | **はい——ARTEX**、"an autonomous AI agent framework" | いいえ | いいえ |
+
+2026-11-03 に自分で読んだ：公告ページは本文 **5,531** 文字で、`ARTEX`、`Hong Kong`、`Salesforce`、`Snowflake` は
+いずれも **0** 回。`AI-assisted` は **2** 回で、どちらも手法であり製品名ではない。通知の原文は HN スレッドに
+逐語で再現されており（`werrett`、2026-11-02T23:30:59Z、"we received the following breach notification from
+WorkOS"）、CEO の文（`grinich`、2026-11-03T00:26:29Z）は grep 可能で、通知とは言い回しが違う——"autonomous AI
+agent framework" 対 通知の "AI-assisted, autonomous penetration testing framework"。一つの道具、一つの会社、
+一日のうちに、三つの記述。
+
+**ルール:** *受領者側の写し* はそれ自体が独立した文書クラスであり、公開告知より体系的に具体的である——だから
+「ベンダーは X を言っていない」には文書名が必要であり、最強の入手可能版はしばしばセキュリティページにすら
+現れない。これは OpenWrt の四文書の教訓を一段外側へ延ばしたものだ：あちらでは公告が消費者の単位で唯一の文書
+だったが、こちらでは**通知**がそれであり、公開公告は全員に向けて書かれ、結果として誰にも書かれていない。
+二つの読みを分けること。本件では両方ある："there is no evidence that WorkOS application data was accessed" は
+調査四日目についての記述であり、ARTEX の帰属はベンダー自身のものであって外部研究者のものではない。
+
+→ [[fact-check]] [[disclosure-lag]]

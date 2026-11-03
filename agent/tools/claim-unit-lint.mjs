@@ -46,6 +46,14 @@
  *      with the number in the text by more than `--star-tolerance` (default 10%). This is the
  *      Void lesson's cheapest half; `api.github.com` is metered, so the budget is `--max-repos`
  *      (default 8) and results are cached for 6h in `agent/data/claim-unit-cache.json`.
+ *      Both verdicts carry a **disclosure guard** (added 2026-11-03 12:37, from a false finding on
+ *      item 2 of that batch): a repo the ITEM itself calls stale or archived — the pushed day in a
+ *      sentence that names a push, or a state word the author chose — reports `stale-disclosed` /
+ *      `archived-disclosed` at severity 0 instead of sev 2, because there the staleness is the
+ *      story and the item already carries the advice. The suppression prints, so the class stays
+ *      countable. Calibrated both ways: `stale-disclosed` on python-jose (item 2), `archived-
+ *      disclosed` on Pico CSS, and still `archived` (sev 2) on the same repo with the sentence that
+ *      does not say so.
  *   D. COUNT CLAIM (`--check count`) — "N harnesses", "N rules", "N install sections": a number
  *      about the ARTIFACT, read against the artifact. The repo README is fetched from
  *      `raw.githubusercontent.com` (unmetered) and searched for the same noun with ANY number;
@@ -1758,6 +1766,34 @@ const YOUNG_RECORD_DAYS = 120;
  * project"; flagging that would be a finding about the checker. */
 const SELF_DISCLOSED_HISTORY = /\b(?:history (?:begins|goes back|dates)|commits (?:deep|going back)|created_at dates|not the project'?s? (?:history|age)|re-?pushed)\b/i;
 
+/* A **disclosed** staleness is not a **drifted** one (added 2026-11-03 12:37). The repo check asks
+ * "is the item about the code or the name?", and that batch's item 2 had already answered: the lint
+ * returned `stale` (sev 2) for `mpdavis/python-jose` at 203 days, while the item says "its last push
+ * was 2026-04-14", "PyPI's newest release is still 3.5.0 from 2025-05-28" and tags itself
+ * `unmaintained`. There the staleness **is** the story — the record describes a vulnerability whose
+ * fixed version does not exist — so the finding was about the checker, the same species as
+ * `star-dated` and `temporal-disclosed`. Downgrade rather than suppress: the suppression prints.
+ * Two arms, and each must be about a *clock or a state*, never a lucky word:
+ *   (a) the API's own last-push day, inside a sentence that also names a push/commit/release (so a
+ *       coincidental CVE date elsewhere in the item cannot launder it);
+ *   (b) a state word the author chose — `unmaintained`, `dormant`, `no commits since`, …
+ * `archived` rides the same guard: an item that reports an archived repo (Flowise's "archived
+ * read-only Aug 13") is making the point the check exists to make, not missing it. */
+const STALE_STATE = /\b(?:unmaintained|dormant|abandoned|archived|stalled|gone quiet|dead project|no longer (?:maintained|updated|developed)|no (?:commits?|releases?|updates?|activity) since)\b/i;
+const STALE_CLOCK_NOUN = /\b(?:last (?:push|commit|release|update)|newest release|latest release|repository (?:was )?last)\b/i;
+function staleDisclosure(plain, pushedISO) {
+  const day = String(pushedISO || '').slice(0, 10);
+  if (/^\d{4}-\d\d-\d\d$/.test(day)) {
+    for (const s of sentences(plain)) {
+      const t = plain.slice(s.start, s.end);
+      if (t.includes(day) && STALE_CLOCK_NOUN.test(t)) return `the item names this repo's own last-push day (${day})`;
+    }
+  }
+  const m = STALE_STATE.exec(plain);
+  if (m) return `the item states the state itself (“${m[0]}”)`;
+  return null;
+}
+
 function oldestCommit(slug) {
   const key = `oldest:${slug}`;
   const hit = cache[key];
@@ -1932,9 +1968,19 @@ function checkRepo(it, budget, ageBudget) {
     const biggest = starQuotes.length ? Math.max(...starQuotes) : null;
     const recAgeDays = st.created_at ? Math.round((Date.now() - Date.parse(st.created_at)) / 86_400_000) : null;
     if (st.archived) {
-      out.push({ check: 'repo', item: it.n, verdict: 'archived', claim: slug, detail: `archived: true, last push ${st.pushed_at.slice(0, 10)} — an archived repo makes "unfixed" permanent, not pending` });
+      const disc = staleDisclosure(it.plain, st.pushed_at);
+      out.push({
+        check: 'repo', item: it.n, verdict: disc ? 'archived-disclosed' : 'archived', claim: slug,
+        detail: `archived: true, last push ${st.pushed_at.slice(0, 10)} — an archived repo makes "unfixed" permanent, not pending`
+          + (disc ? `; ${disc}, so the item already carries the advice` : ''),
+      });
     } else if (ageDays > STALE_DAYS) {
-      out.push({ check: 'repo', item: it.n, verdict: 'stale', claim: slug, detail: `last push ${st.pushed_at.slice(0, 10)} (${ageDays}d) with ${st.stars} stars — is the item about the code or the name?` });
+      const disc = staleDisclosure(it.plain, st.pushed_at);
+      out.push({
+        check: 'repo', item: it.n, verdict: disc ? 'stale-disclosed' : 'stale', claim: slug,
+        detail: `last push ${st.pushed_at.slice(0, 10)} (${ageDays}d) with ${st.stars} stars — `
+          + (disc ? `${disc}, so the staleness is the story rather than an unexamined number` : 'is the item about the code or the name?'),
+      });
     }
     /* A relative tolerance on a SMALL count is not a tolerance. Measured 2026-11-01 on item 17,
        a 7-hour-old Show HN repo quoted at "3 commits, 6 stars": two stars arrived while the batch
@@ -1975,7 +2021,7 @@ function checkRepo(it, budget, ageBudget) {
         }
       }
     }
-    if (!['archived', 'stale'].includes(out.at(-1)?.verdict) && biggest != null) {
+    if (!['archived', 'stale', 'archived-disclosed', 'stale-disclosed'].includes(out.at(-1)?.verdict) && biggest != null) {
       out.push({ check: 'repo', item: it.n, verdict: 'ok', claim: slug, detail: `${st.stars}★, last push ${st.pushed_at.slice(0, 10)}` });
     }
   }
@@ -3440,6 +3486,17 @@ if (SELFTEST) {
     /launch window/.test((starVerdict({ slug: 'a/b', quoted: 6, now: 25, recAgeDays: 1 }) ?? {}).detail ?? ''), true);
   t('age claim detected', AGE_CLAIM.test('a six-day-old project with 9,479 commits'), true);
   t('version number is not an age claim', AGE_CLAIM.test('released 1.4.0 with 12 days of work'), false);
+  /* 2026-11-03 12:37 — a repo the item itself calls stale is not an unchecked number. Item 2
+     (`mpdavis/python-jose`, 203d, 1,759★) returned sev-2 `stale` against a sentence that names
+     both clocks and a tag that names the state. */
+  const sd = (plain, day = '2026-04-14') => staleDisclosure(plain, `${day}T00:39:48Z`);
+  t('the item names the pushed day beside a push/release noun',
+    /last-push day \(2026-04-14\)/.test(sd('The repo sits at 1,759 stars, its last push was 2026-04-14, and PyPI is still 3.5.0.') ?? ''), true);
+  t('a state word the author chose is disclosure',
+    /unmaintained/.test(sd('A dependency nobody maintains any more; unmaintained since 2025.', '2099-01-01') ?? ''), true);
+  t('a bare date is not disclosure', sd('CVE-2026-120459 was published 2026-04-14 by another CNA.', '2026-04-14'), null);
+  t('an unrelated item saying nothing is not disclosure', sd('A fast JSON library with 1,759 stars.'), null);
+  t('the same date in another sentence does not reach the claim', sd('2026-04-14: a different repo shipped. This one has 1,759 stars.', '2026-04-14'), null);
   t('github url is still a repo', slugs('[advisory](https://github.com/padok-team/burrito/security/advisories/GHSA-x)'), ['padok-team/burrito']);
   t('file path is not a repo', slugs('`src/lib/json.js` and `docs/readme.md`'), []);
 
@@ -4013,7 +4070,7 @@ try {
   writeFileSync(CACHE_PATH, JSON.stringify(cache, null, 1));
 } catch { /* cache is best-effort */ }
 
-const SEVERITY = { ok: 0, 'ok-cited-page': 0, 'no-cve-named': 1, 'no-record': 1, 'slot-quoted': 1, 'counted-by-author': 0, 'number-other-noun': 1, 'temporal-stopping-point': 1, 'temporal-disclosed': 0, 'score-stopping-point': 1, 'cna-only-score': 1, 'star-drift': 2, 'star-dated': 1, 'star-surge': 1, 'ok-history': 0, 'history-older-than-record': 2, 'history-unreadable': 1, stale: 2, archived: 2, differs: 2, absent: 2, 'unsplit-issue-count': 3, 'compound-lags-parts': 3, 'version-swapped': 3, 'version-absent': 3, 'score-not-reproducible': 2, 'score-mismatch': 3, 'wrong-subject': 3, 'absence-contradicted': 3, 'status-stale': 2, 'status-dated': 1, 'date-local-shift': 2, 'date-mismatch': 2, 'cwe-absent-but-recorded': 3, 'cwe-mismatch': 3, 'cwe-unreadable': 1, 'span-empty': 2, 'span-inverted': 3, 'span-unverifiable': 0, 'ok-span': 0, 'status-no-record': 1, 'status-no-cve': 1, 'advisory-unreadable': 1, 'advisory-repo-only': 0, unreadable: 1, 'artifact-unreadable': 1, 'nvd-unavailable': 1, 'ratio-row-count': 3, 'ok-ratio': 0, 'not-a-repo': 0, 'ok-table-rows': 0, 'table-columns-unresolved': 0, 'bundle-ok': 0, 'bundle-lines-named': 0, 'bundle-unavailable': 0, 'bundle-line-count': 3, 'bundle-total-mismatch': 2, 'quote-not-found': 3, 'quote-paraphrase': 2, 'quote-short': 1, 'quote-not-read': 0 };
+const SEVERITY = { ok: 0, 'ok-cited-page': 0, 'no-cve-named': 1, 'no-record': 1, 'slot-quoted': 1, 'counted-by-author': 0, 'number-other-noun': 1, 'temporal-stopping-point': 1, 'temporal-disclosed': 0, 'score-stopping-point': 1, 'cna-only-score': 1, 'star-drift': 2, 'star-dated': 1, 'star-surge': 1, 'ok-history': 0, 'history-older-than-record': 2, 'history-unreadable': 1, stale: 2, archived: 2, 'stale-disclosed': 0, 'archived-disclosed': 0, differs: 2, absent: 2, 'unsplit-issue-count': 3, 'compound-lags-parts': 3, 'version-swapped': 3, 'version-absent': 3, 'score-not-reproducible': 2, 'score-mismatch': 3, 'wrong-subject': 3, 'absence-contradicted': 3, 'status-stale': 2, 'status-dated': 1, 'date-local-shift': 2, 'date-mismatch': 2, 'cwe-absent-but-recorded': 3, 'cwe-mismatch': 3, 'cwe-unreadable': 1, 'span-empty': 2, 'span-inverted': 3, 'span-unverifiable': 0, 'ok-span': 0, 'status-no-record': 1, 'status-no-cve': 1, 'advisory-unreadable': 1, 'advisory-repo-only': 0, unreadable: 1, 'artifact-unreadable': 1, 'nvd-unavailable': 1, 'ratio-row-count': 3, 'ok-ratio': 0, 'not-a-repo': 0, 'ok-table-rows': 0, 'table-columns-unresolved': 0, 'bundle-ok': 0, 'bundle-lines-named': 0, 'bundle-unavailable': 0, 'bundle-line-count': 3, 'bundle-total-mismatch': 2, 'quote-not-found': 3, 'quote-paraphrase': 2, 'quote-short': 1, 'quote-not-read': 0 };
 const REAL = (f) => (SEVERITY[f.verdict] ?? 1) >= 2;
 
 /* `status_watch` rides the findings file so the act pass sees a backwards move without re-reading

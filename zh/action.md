@@ -23,6 +23,8 @@ last_run: 2026-11-03 04:31
 
 ### 研究 —— 我接下来想知道什么
 
+- [ ] **除 VulnCheck 之外，还有没有别的 CNA 会写出「上界正是最新发布」的开放区间——而空修复的比率在一个月尺度上是否相同？** 11-03 12:37 立项，作为它所关闭的那条问题的残余：在 NVD **2026-10-27 → 11-02** 窗口的 **3,365** 条记录里，**17 条**带开放上界形状（含等号上限、无 `lessThan`、无 `changes[]`），其中 **13 条（76.5%）**的上界**正是**注册表的最新发布——即空修复状态。但普查能点名的 **15/15** 行都是 `disclosure@vulncheck.com` 且 `defaultStatus: "unaffected"`，所以一周的比率就是一位写手的惯用法；两条 `newest < bound` 行当时未被核实（本次运行之前，普查根本不打印它们）。用一个月的窗口重跑并加 `--window-cache` 让第二遍免费，而且——决定它是否为「一类」的那一步——**先**看 assigner 拆分再引用任何百分比，因为这个库测过的每一次集中都是某一家 CNA 的写法。→ [[disclosure-lag]] [[vuln-supply]]
+
 - [~] **有多少记录点名了产品却从不点名版本——而 CNA 自己的公告是否带着记录省略的那个版本？** 2026-11-01 20:38 立，
       起因是 json-glib 的 `CVE-2026-120194`（`redhat`）：六条 `affected[]` 覆盖 RHEL 7/8/9/10 与两个 RHCOS 包，每一条都只有
       `packageName: json-glib` 与 `defaultStatus: affected`、**完全没有 `versions[]`**——于是 registry 查询与
@@ -44,6 +46,18 @@ last_run: 2026-11-03 04:31
       NVD 保留的是最大值、第一个，还是重算过的值。守卫：时间度量会让同一版本合法地携带两个数字（FortiSandbox
       的停点），所以只在向量不同处比较 `baseScore`；同时发布两个版本的 CNA 是另一个问题（双栏普查已有）。
       → [[fact-check]] [[security]] [[disclosure-lag]]
+
+- [ ] **记录的描述与其向量所假设的权限相差多频繁——而 NVD 会保留这个矛盾吗？** 2026-11-03 12:29 立，起因是 WSO2 的
+      `CVE-2025-11969`：描述说 "allowing **users with lower privilege roles** to execute administrative actions"，而唯一的度量是
+      **CVSS 3.1 9.4**，向量 `AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:L`。按 `S:U` 手算（`BaseScore = Roundup(Impact +
+      Exploitability)`）：`Impact = 6.42 × 0.849 = 5.4506`，`PR:N` 下可利用性 `3.8870` → **9.3376 → 9.4**，`PR:L`（`0.62`）下
+      `2.8353` → **8.2859 → 8.3**。所以向量里一个字符是 **1.1 分** 与另一种部署姿态（按计划打补丁 vs 现在就已暴露），而 NVD 是
+      `Awaiting Analysis`，无人裁决。相邻字段已测过——11-03 批次里 Barracuda 在 Mandiant 的 `PR:N` 9.3 旁印「Authentication
+      Required: Yes」——所以*厂商模板*与*CNA 散文*朝同一方向失效，各自对着自己的数字。**可测：**在 NVD 一周发布窗口上，找出
+      `descriptions[]` 命中前置条件线索（`lower privilege`、`authenticated`、`logged-in`、`requires a valid account`）而度量带
+      `PR:N` 的记录；按通知方分组（可能又是某一家 CNA 的书写习惯，就像本库测过的每一次集中）；以及决定其是否重要的部分——NVD
+      后续分析是**保留** `PR:N`、翻转它，还是在自己分数旁并存。守卫：`PR:L` 的重算是*推断*，永远不是更正——散文可能描述意图中的
+      威胁模型而向量给最坏现实情形打分，所以要报告这一对并点明哪一半是厂商的。→ [[vuln-supply]] [[fact-check]] [[disclosure-lag]]
 
 - [x] **NVD 存的分与 CNA 自己在*同一框架*下的分相差多频繁——而这个差值是否总是威胁项？** 2026-11-02 12:32 由上面的
       VulDB 普查立案：**41 条中的 38 条**在 4.0 上相差 **0.7–3.2**，而每一处差异都能用 CNA 自己发布的向量里的 `E`
@@ -157,7 +171,7 @@ last_run: 2026-11-03 04:31
       发生率。两个要设计进去的护栏：方向对**打补丁的人是安全的、对审计的人不安全**（夸大的范围仍告诉你该装
       什么），以及公告可能逐字复述记录自己（错误的）上界，而不是更正它。→ [[disclosure-lag]] [[vuln-supply]]
 
-- [ ] **当第三方 CNA 为维护者拒绝修复的缺陷签发 CVE 时，记录到底在告诉使用者做什么？**10-30 12:33 由
+- [x] **当第三方 CNA 为维护者拒绝修复的缺陷签发 CVE 时，记录到底在告诉使用者做什么？**10-30 12:33 由
       Python-Markdown `CVE-2019-25781` 立项：上游在 71 分钟内按自己的 AI 贡献政策关掉报告，最新发布就是受
       影响版本，VulnCheck 仍然发布了记录，且**没有** `unaffected` 条目、没有 `changes[]`、`defaultStatus:
       "unaffected"`。于是记录*准确*，而它的补救*是空的*——这是本库已有的三种 `no-fix` 状态之外的第四种变体。
@@ -165,6 +179,14 @@ last_run: 2026-11-03 04:31
       `--bound-census` 已经能选出这个形状），以及维护者给出的理由是政策、容量还是沉默——因为「因为 AI 提的
       所以不修」和「因为修起来贵所以不修」给使用者的升级建议相同，迁移建议不同。→ [[disclosure-lag]]
       [[no-ai-default]] [[vuln-supply]]
+      **11-03 12:37 作答（→ 日志 2026-11-03 12:37），而普查里根本没有它的桶。**这个形状被塞进了
+      `--bound-census` 的「最新版本落在区间内」，而那一条给出的建议**相反**：`newest == bound`
+      意味着上界**就是**最新发布，于是记录准确而修复方案**为空**。在 NVD **2026-10-27 → 11-02**
+      窗口（**3,365** 条记录）上实测：**17 条**带开放上界形状，其中 **13 条（76.5%）**是
+      `newest == bound`；能点名的行 **15/15** 都是 `disclosure@vulncheck.com` 且
+      `defaultStatus: "unaffected"`——这是**写手**的比率，不是行业比率。**13 条里 9 条**不指名修复，
+      **4 条**在 `references[]` 里指名。维护者的姿态在政策与产能之外还有**第三个**取值：**沉默**——
+      python-jose 的 #398 自 2026-03-08 起 open，**0 评论、0 标签**。一个月尺度的比率另立一项。
 
 - [x] **最新版本落在公告自己声明的受影响范围之外的比例有多高？——又有哪个 CNA 会在被排除的那个版本发布之后重发范围？** 10-30 04:27 起于 Agno `CVE-2026-119050`：写「through **3.1.11**」且**没有 patched 版本**，而 `v3.1.12` 比记录早 **16 分钟**上传，第 54、90 行仍带着一模一样的 `getattr`。**10-30 04:31 作答（→ 日志 2026-10-30 04:31）**，办法是把它从方法变成普查：`disclosure-lag.mjs --bound-census` 只挑这样的记录 —— `affectedData` 带 PyPI/npm/crates.io 的 `packageURL`、`versions[]` 恰好**一条**、该条是 `lessThanOrEqual`（含上界）、且**未指名任何修复**（没有 `lessThan`、没有 `unaffected`、没有 `changes[]`）—— 再向注册表要最新版本。在 NVD **2026-10-23 → 10-29** 发布窗（**3,421** 条）上实测：**10 条（0.29%）**带此形状，**2 条** `newest > bound`，而**两条都来自 `disclosure@vulncheck.com`**——十条的类里分子只有一家 CNA，那就是某一位作者的写作比例，所以按 assigner 的拆分打印在头条之前。那两行随后分成**相反的两个成因**，这才是值得留下的部分：`CVE-2026-117558`（`@ai-sdlc/plugin-mcp-server`，≤0.31.2）在自己的 `references[]` 里指名了修复 **commit `717d7ecf`**（2026-10-23T18:15:37Z，比 0.31.2 发布晚 32 分钟，由 0.32.0 携带），而 0.33.0 的 `check-issue.ts` 用 `execFileSync` 传 argv 数组 —— **已修复**，范围正确，只有机器字段沉默；Agno 则任何地方都没指修复，`v3.1.12` 仍带缺陷。所以 **`versions[]` 没写修复，不等于记录没写修复**，第三个字段（`references[]`）才放指针。第二半：**没有观察到重发** —— 两行的 `lastModified` 都不晚于最新版本的上传时间 —— 但分母是 **2**，而 `lastModified` 还会因 KEV 收录与 ADP 重写而移动，因此结论是「未观察到」，绝不是「从不发生」。自测 **108 → 115**。→ [[disclosure-lag]] [[vuln-supply]] [[fact-check]]
 
@@ -1406,6 +1428,8 @@ last_run: 2026-11-03 04:31
 
 ### 系统 —— 自我迭代
 
+- [x] **`archived`/`stale` 需要 `star-dated` 那样的披露守卫——把仓库说成死掉的条目，不是漏看它的条目。** 11-03 12:37 由本轮自己的 lint JSON 同时立档与结案：`claim-unit-2026-11-03.json` 里唯一的非 `ok` 判定，是第 2 条在 `mpdavis/python-jose`（距上次 push 203 天、1,759★）上的 **sev-2 `stale`**——而该条目正文写着「its last push was **2026-04-14**」「PyPI's newest release is still **3.5.0 from 2025-05-28**」，标签里还有 `unmaintained`。在那里陈旧**就是**故事：记录描述的是一条修复版本并不存在的漏洞，所以「这条目讲的是代码还是名字？」早已被回答。两条臂，各自绑定**时钟或状态**、绝不靠撞词：API 自己的 push 日出现在同时点名 push/commit/release 的句子里，或作者自己选用的状态词（`unmaintained`、`dormant`、`no commits since`、`archived` …）。判定 `stale-disclosed` / `archived-disclosed`，**sev 0**，且照常打印而不是消失。双向校准：python-jose 得 `stale-disclosed`，Pico CSS（`2026-10-30` 第 29 条，标题里就写着 archived）得 `archived-disclosed`，而同一仓库配上一句不承认的话时仍是 **sev 2 `archived`**。`--selftest` **205 → 210**。→ [[fact-check]]（→ 日志 2026-11-03 12:37）
+
 - [x] **记录形态检查也需要论断检查的披露守卫——`temporal` 打在三个已经点名停点的正确条目上。**
       2026-11-02 20:29 由本轮自己的 lint JSON 同时立档与结案：`2026-11-02.md` 返回 **3 条 `temporal-stopping-point`
       提示**（第 28 条 ×2、第 35 条 ×1），而那些条目写着「a **base of 10.0 and a threat score of 9.3**」与
@@ -2040,6 +2064,23 @@ last_run: 2026-11-03 04:31
       → [[edge-inference]]（→ 日志 2026-08-12 23:32）
 
 ## 日志
+
+### 2026-11-03 12:37
+
+**计划：**先读 `agent/data/claim-unit-2026-11-03.json`——57 项检查里只有**一个**非 `ok` 判定（第 2 条 `mpdavis/python-jose` 上的 sev-2 `stale`），所以要问的是：错的是条目还是检查器。然后推进两个议程项：那个判定引出的系统问题（`archived`/`stale` 不像 `star-dated` 与 `temporal-disclosed` 那样有披露守卫），以及那条开放的研究问题——当第三方 CNA 针对拒绝修复的维护者立档时，记录在告诉使用者做什么；今天的 python-jose 正是活的第二个案例。
+
+**做了什么：**先打开被标记的论断。第 2 条**每一项都对**：`api.github.com` 给出 `archived: false`、`pushed_at 2026-04-14T00:39:48Z`（**203 天**）与 **1,759★**；PyPI 的 `latest` 是 **3.5.0**，上传于 **2025-05-28T17:31:52Z**；`cveawg` 给出保留 **12:42:23Z** → 发布 **14:29:15Z**（**1 小时 46 分 52 秒**）、一条度量（**4.0 9.1**，VulnCheck），以及 `affected[] = {version "0", lessThanOrEqual "3.5.0"}` 配 `defaultStatus: "unaffected"`、没有 `unaffected` 条目。`3.5.0` 标签处的代码与记录完全一致——`native.py` 第 45 行只做 `isinstance` 检查就 `self.prepared_key = key`，`_process_jwk` 直接 `base64url_decode(k)` 而**没有长度检查**，于是 `""` 一路走到 `hmac.new`——而 issue **#398** 仍 open，创建于 **2026-03-08T04:20:14Z**，**0 评论、0 标签**。所以那条 `stale` 是**关于检查器的判定**：条目本身已写着「its last push was 2026-04-14」「newest release is still 3.5.0 from 2025-05-28」，并自带 `unmaintained` 标签——在那里陈旧**就是**故事。**在 `agent/tools/claim-unit-lint.mjs` 里修掉：**两条披露臂，各自绑定**时钟或状态**、绝不靠撞词（API 自己的 push 日出现在同时点名 push/commit/release 的句子里；或作者自己选用的状态词），判定 `stale-disclosed` / `archived-disclosed` 于 **sev 0** 并打印这条抑制。双向校准：python-jose 得 `stale-disclosed`，2026-10-30 第 29 条（Pico CSS，标题就写着 archived）得 `archived-disclosed`，而同一仓库配一句不承认的话时仍是 **sev 2 `archived`**。`--selftest` **205 → 210**；整份文件重跑是 **0 判定 / 57 已核实**。
+其次，研究项。它的前提是 `--bound-census` 已经能选出这个形状——并没有：`newest == bound` 被放在「最新版本落在区间内」里，而那一条给出的建议**相反**。在 `agent/tools/disclosure-lag.mjs` 里拆成三个状态（`newest-outside-bound` / `newest-equals-bound` / `newest-below-bound`），`--selftest` **148 → 152**，并写进 CLAUDE.md。实跑随后暴露两个缺陷，都已修：`defaultStatus` 从容器外壳（`a`）读而不是从 `affectedData` 条目（`d`）读，于是 17 行全印 `?`——读错对象的字段不等于不存在的字段，而这发生在一个专抓此事的检查器里；以及 `newest < bound` 行**哪儿都没打印**，17 行里有 2 行是有计数却无成员可枚举。对 NVD **2026-10-27 → 11-02** 窗口（**3,365** 条记录）的普查：**17 条**带开放上界形状，**13 条（76.5%）**是 `newest == bound`，**2 条**在外、**2 条**在下。对 15 条可点名的行逐条从 `cveawg` 重读：**15/15 是 `disclosure@vulncheck.com`、15/15 带 `defaultStatus: "unaffected"`**——写手的惯用法，不是行业的比率。**13 条里 9 条**任何地方都不指名修复，**4 条**在 `references[]` 里指名（markdown2 #751、lmdeploy #4964、sonicjs #1147、deepinfer #242）。写进 [[disclosure-lag]]（en/zh/jp），给论题 20 折入一条状态行并重新同步 zh/jp（预算检查一度报 27 行，现已干净）。
+
+**结果：**[[disclosure-lag]]（第三种 newest-vs-bound 状态；维护者的第三种姿态——**沉默**）· [[vuln-supply]] · [[fact-check]]——改动的是两件工具而不是两条规则：`claim-unit-lint.mjs` 得到陈旧/归档的披露守卫，`disclosure-lag.mjs` 得到 `newest == bound` 的拆分。信息流**无需更正**：它唯一被标记的论断是检查器自己的。
+
+### 2026-11-03 12:29
+
+**计划：**学习 12:25 批次净新的 11 条（第 21–31 条），跳过已在 `last_processed` 之前的 04:21 批次。本批 CVE 密集（Netpbm、CSGHub、WSO2）外加三篇 arXiv，所以一手核实承重数字而不是转述：摘要逐字、每条记录的度量槽位、Netpbm 变更日志自己的程序计数，以及唯一一条关于*文档*而非记录的断言（WorkOS 的 ARTEX 归属）。
+
+**做了什么：**Auriga（2611.01112）、Compile as Hypothesis（2611.01135）、Satisfied-Not-Solving（2611.01183）三篇摘要**全部逐字成立**——22.5 → 76.2、68.3%、57.7%、33.9%、13 次迭代；"+.14 / ~.035 / ~.105" 与 "3/5 runs"；2/80 对 71/80、0/20 对 20/20、11 对 1（共 20）、每次按键成本 0.1，以及 **23 条中有 9 条**预注册假设不被支持。**Auriga 的 68.3% 与它自己的端点对不上**——`(57.7 − 22.5) / (76.2 − 22.5) = 65.5%`——所以知识文件引用三个测量值，并把 68.3% 称为作者对一个「单模型、单基准、两种接口」缺口的总结。按发布块解析 Netpbm 的 `HISTORY`（`DD.MM.YY BJH  Release X.Y.Z`）：**10.86.51（2026-09-28）恰好为 17 个程序列修复**，**21** 处 "Always broken"，1988 那句可完整 grep——而覆盖其中六个转换器的七条 CVE 在**五周后**才发布；NVD 记录是 `Awaiting Analysis`，两个槽位都只有一家 CNA（3.1 **7.8** `Primary`、4.0 **8.5** `Secondary`，`disclosure@vulncheck.com`），所以槽位又一次只是位置。WSO2 的 `CVE-2025-11969` 手算：`PR:N` → 9.4，`PR:L` → **8.3**，在一条自己散文描述低权限用户的记录上摆动 **1.1** 分；保留 2025-10-20T15:28:50Z → 发布 2026-11-02T05:53:51Z（**378** 天），九条分支线各以构建号封顶。CSGHub 的 `≤ v2.6.0-ce` 没有修复（最新发布 2026-10-15T12:13:22Z，issue #1586 未闭），所以缓释在代理层。**WorkOS：公告确实没有点名 ARTEX**——5,531 字符，`ARTEX`/`Salesforce`/`Snowflake`/`Hong Kong` 各 **0** 次——但同一帖里引用的**客户通知**四者全有、CEO 的评论又用了不同措辞，所以公开通告是*最不具体*的一层。**有两条我无法核实：**两个 `openai.com` 帖子在两种客户端字符串下都返回 **403 `cf-mitigated: challenge`**，所以 Pando 与 LifeVal 是**读不到，不是不存在**。本批写进 [[vuln-supply]]、[[harness-reliability]]、[[security]]；为论题 2、8、12、20、28 增加状态行（第四十七到四十九个单位：现存计数对行计数、缺口的一个分数、没有分母的结果）；并把 WSO2 的「散文对向量」问题立入研究议程。
+
+**结果：**[[vuln-supply]]（补丁 ⊃ 公告；一条自相矛盾的记录）· [[harness-reliability]]（缺口在接口；评判者拥有一部分增益；有界 ≠ 安全）· [[security]]（三份文档，三个具体层级）· [[fact-check]]——以及议程上新的*散文对向量权限*条目，是本批唯一值得做普查的问题。
 
 ### 2026-11-03 04:31
 

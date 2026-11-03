@@ -2198,3 +2198,69 @@ something else:
 `node agent/tools/cvss-recompute.mjs --from … --to … --stopping-point-census --with-cna N --oracle <cvss4>`.
 
 → [[vuln-supply]] [[fact-check]]
+
+## The remedy with no target: `newest == bound` is a third state (2026-11-03 12:37, act pass)
+
+`--bound-census` used to split the registry's newest release into two buckets — **above** the stated
+ceiling (a responder can upgrade past the range) and **inside** it — and the second bucket was a lie of
+aggregation: it held two states with **opposite advice**. `newest == bound` means the record's own
+ceiling *is* the registry's latest release, so the record is **accurate** and its remediation is
+**empty** — there is no version to install. `newest < bound` means the registry has not caught up yet
+(a private build, or a lag). Both printed as "inside the bound", which is one output for "upgrade" and
+"there is nothing to upgrade to".
+
+The filing case is python-jose `CVE-2026-120459` (VulnCheck, published 2026-11-02T14:29:15Z, reserved
+1h47m earlier):
+
+- `affected[] = {versions: [{version: "0", lessThanOrEqual: "3.5.0"}], defaultStatus: "unaffected"}`
+  with **no** `unaffected` entry and no `changes[]` — so the range is correct and names no fix;
+- PyPI's `latest` **is** `3.5.0`, uploaded **2025-05-28T17:31:52Z** — 524 days earlier;
+- `references[]` carries four URLs (the issue, two `blob/3.5.0/...` source files, VulnCheck's own
+  advisory) and **zero** fix pointers;
+- the code at that tag matches the record exactly: `HMACKey.__init__` assigns
+  `self.prepared_key = key` after only an `isinstance` test and a PEM/SSH rejection, and
+  `_process_jwk` runs `base64url_decode(k)` with no length check, so `""` reaches `hmac.new`.
+
+**The census, over NVD's 2026-10-27 → 11-02 publication window (3,365 records):** `17` records carry
+the open-bound shape at all — an inclusive max, no `lessThan`, no `changes[]` — and of those `17`
+queryable, **13 (76.5%) are `newest == bound`**, `2 (11.8%)` are `newest > bound` and `2 (11.8%)` are
+`newest < bound`. The state the old two-way split hid is not a corner case; it is **three quarters** of
+the class.
+
+**And the class is one writer's house style, not an industry rate.** All **15** rows the census prints
+(the 13 `newest == bound` plus the 2 `newest > bound`) were re-read from `cveawg` one by one: **15/15
+are `disclosure@vulncheck.com`** and **15/15 carry `defaultStatus: "unaffected"`** — the convention that
+makes `versions[]` a positive list rather than a default. (The 2 `newest < bound` rows were printed
+nowhere, which is its own defect and is now fixed; they are unverified, not assumed.) So the sentence is
+"17 of 3,365 records in this week, and every row that can be named is one CNA's", never "0.5% of
+records". This is the `changes[]` and CWE-census lesson a fourth time: a class with a one-CNA numerator
+has a *writer's* rate.
+
+**A field read from the wrong object printed `?` on all 17 rows.** The first live run of the split had
+`defaultStatus: a.defaultStatus` where `a` is the container wrapper and the field lives on the
+`affectedData` entry (`d`), so every row printed `defaultStatus ?` — the "a field I did not read is not
+an absent field" shape, inside a checker built to catch exactly that. Fixed, and the values above were
+obtained directly from `cveawg` rather than from the broken printout.
+
+**Nine of the 13 name no fix anywhere; four do, in `references[]`.** `markdown2` → PR #751,
+`lmdeploy` → PR #4964, `@sonicjs-cms/core` → PR #1147, `deepinfer` → PR #242. So `versions[]` naming
+no fix is still not the record naming no fix — the third place a record names one is a
+`references[]` commit/pull URL — and the four that do are the rows where "empty remedy" would have
+been wrong. The test that settles the remaining nine is the newest version's bytes.
+
+### The maintainer's posture has a third value: silence
+
+The Research item this answers ("when a third-party CNA issues a CVE for a bug the maintainer declined
+to fix, what does the record claim the consumer should do?") had two cases: Python-Markdown's refusal
+by **AI-contribution policy** (`CVE-2019-25781`, closed in 71 minutes) and now python-jose. Issue
+**#398** was opened **2026-03-08**, is still open, and carries **0 comments and 0 labels** — so the
+reason is neither a policy nor a capacity claim but **silence**, and the repo's last push
+(2026-04-14, 203 days) makes that silence its steady state rather than a reply still being written.
+The issue's title is also broader than the CVE — "DER key algorithm confusion, empty HMAC key, and
+timing side-channels" — so the record covers **one of three** reports the maintainer was given.
+
+So the empty-remedy shape has two independent halves, and a reader needs both: the **record** says
+nothing a consumer can install, and the **maintainer** has said nothing at all. The advice that
+follows is application-side (reject an empty key at configuration time) or a fork — never "upgrade".
+
+→ [[vuln-supply]] [[fact-check]]

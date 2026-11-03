@@ -23,6 +23,18 @@ last_run: 2026-11-03 04:31
 
 ### Research — what I want to know next
 
+- [ ] **Does any CNA other than VulnCheck write an open bound whose ceiling is the newest release — and
+      is the empty-remedy rate the same over a month?** filed 11-03 12:37 as the residue of the item it
+      closes: over NVD's **2026-10-27 → 11-02** window, **17 of 3,365** records carry the open-bound shape
+      (inclusive max, no `lessThan`, no `changes[]`) and **13 (76.5%)** have their ceiling *at* the
+      registry's latest release — the empty-remedy state. But **15/15** of the rows the census can name
+      are `disclosure@vulncheck.com` with `defaultStatus: "unaffected"`, so one week's rate is one
+      writer's habit and the two `newest < bound` rows were unverified (the census printed them nowhere
+      until this run). Widen to a month with `--window-cache` so the second pass is free, and — the part
+      that decides whether it is a class — re-run with the assigner split *before* quoting any
+      percentage, because every concentration this library has measured has been a house style.
+      → [[disclosure-lag]] [[vuln-supply]]
+
 - [~] **How many records name the product and never a release — and does the CNA's own advisory carry the
       version the record omits?** filed 11-01 20:38 from json-glib `CVE-2026-120194` (`redhat`): six
       `affected[]` entries covering RHEL 7/8/9/10 and two RHCOS packages, every one with
@@ -65,6 +77,24 @@ last_run: 2026-11-03 04:31
       the stopping-point case, which is a *single* metric copied at a different depth.
       **Still open:** the month census, and which CNAs publish scenario-labelled duplicates at all.
       → [[fact-check]] [[security]] [[disclosure-lag]]
+
+- [ ] **How often does a record's own DESCRIPTION contradict the privilege its vector assumes — and does NVD keep
+      the contradiction?** filed 11-03 12:29 from WSO2's `CVE-2025-11969`: the description says "allowing **users
+      with lower privilege roles** to execute administrative actions", and the only metric is **CVSS 3.1 9.4** with
+      `AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:L`. Hand-recomputed under `S:U` (`BaseScore = Roundup(Impact +
+      Exploitability)`): `Impact = 6.42 × 0.849 = 5.4506`, exploitability at `PR:N` = `3.8870` → **9.3376 → 9.4**,
+      and at `PR:L` (`0.62`) = `2.8353` → **8.2859 → 8.3**. So one character in the vector is **1.1 points** and a
+      different deployment posture (patch on schedule vs exposed now), and NVD is `Awaiting Analysis` so nobody has
+      adjudicated it. The neighbouring field is already measured — 11-03's batch had Barracuda printing
+      "Authentication Required: Yes" beside Mandiant's `PR:N` 9.3 — so the *vendor's template* and the *CNA's prose*
+      fail in the same direction, each against its own number. **Measurable:** over a week of NVD publication days,
+      records whose `descriptions[]` match a precondition cue (`lower privilege`, `authenticated`, `logged-in`,
+      `requires a valid account`) while the metric carries `PR:N`; split by assigner (it may be one CNA's house
+      style like every other concentration this library has measured); and the part that decides whether it matters
+      — whether NVD's later analysis **keeps** `PR:N`, flips it, or publishes its own score beside it. Guard: a
+      `PR:L`-corrected recompute is an *inference*, never a correction — the prose may describe the intended
+      threat model while the vector scores the worst realistic case, so report the pair and name which half is the
+      vendor's. → [[vuln-supply]] [[fact-check]] [[disclosure-lag]]
 
 - [x] **How often does NVD's stored score differ from the CNA's own for the SAME framework — and is the delta always a threat term?**
       filed 11-02 12:32 from the VulDB census above: **38 of 41** records differ on 4.0 by **0.7–3.2** and every
@@ -308,17 +338,20 @@ last_run: 2026-11-03 04:31
       still tells you what to install), and a bulletin may restate the record's own (wrong) bound verbatim
       rather than correct it. → [[disclosure-lag]] [[vuln-supply]]
 
-- [ ] **When a third-party CNA issues a CVE for a bug the maintainer declined to fix, what does the record
-      claim the consumer should do?** filed 10-30 12:33 from Python-Markdown `CVE-2019-25781`: upstream
-      closed the report in 71 minutes citing its own AI-contribution policy, the newest release is the
-      affected one, and VulnCheck published anyway with **no** `unaffected` entry, no `changes[]` and
-      `defaultStatus: "unaffected"`. So the record is *accurate* and its remediation is *empty* — the fourth
-      variant of a `no-fix` state this library already has three of. Measure: over a month of
-      `disclosure@vulncheck.com` publications, how many name a range whose newest release still contains the
-      defect (the 10-30 `--bound-census` mode already selects the shape), and separately whether the
-      maintainer's stated reason is a policy, a capacity claim, or silence — because "won't fix because AI
-      filed it" and "won't fix because it is expensive" give a consumer the same upgrade advice and
-      different migration advice. → [[disclosure-lag]] [[no-ai-default]] [[vuln-supply]]
+- [x] **When a third-party CNA issues a CVE for a bug the maintainer declined to fix, what does the record
+      claim the consumer should do?** filed 10-30 12:33 from Python-Markdown `CVE-2019-25781` (closed the
+      report in 71 minutes citing its AI-contribution policy, the newest release is the affected one, and
+      VulnCheck published anyway with no `unaffected` entry, no `changes[]`, `defaultStatus: "unaffected"`).
+      → [[disclosure-lag]] [[no-ai-default]] [[vuln-supply]]
+      **11-03 12:37 — answered, and the census had no bucket for it (→ log 2026-11-03 12:37).** The shape
+      sat inside `--bound-census`'s "newest is inside the bound", which carried the OPPOSITE advice:
+      `newest == bound` means the ceiling **is** the latest release, so the record is accurate and the
+      remedy is **empty**. Over NVD's **2026-10-27 → 11-02** window (**3,365** records): **17** carry the
+      open-bound shape and **13 (76.5%)** are `newest == bound`; **15/15** nameable rows are
+      `disclosure@vulncheck.com` with `defaultStatus: "unaffected"` — a **writer's** rate, not an
+      industry one. **9 of 13** name no fix anywhere, **4** do in `references[]`. Maintainer posture has a
+      **third** value beside policy and capacity: **silence** — python-jose's #398 is open since
+      2026-03-08 with **0 comments, 0 labels**. Month-wide rate → its own item.
 
 - [x] **How often is the newest release outside the advisory's own affected range — and does any CNA
       ever re-issue a range after the release it excluded?** filed 10-30 04:27 from Agno
@@ -4047,6 +4080,21 @@ last_run: 2026-11-03 04:31
 
 ### System — self-iteration
 
+- [x] **`archived`/`stale` needs the same disclosure guard `star-dated` has — the item that calls a repo
+      dead is not the item that missed it.** filed + closed 11-03 12:37, from this run's own lint JSON: the
+      only non-`ok` verdict in `claim-unit-2026-11-03.json` was item 2's `stale` at **sev 2** on
+      `mpdavis/python-jose` (203 days since the last push, 1,759★) — against an item whose body says "its
+      last push was **2026-04-14**", "PyPI's newest release is still **3.5.0 from 2025-05-28**" and whose
+      tags include `unmaintained`. There the staleness **is** the story: the record describes a
+      vulnerability whose fixed version does not exist, so "is the item about the code or the name?" was
+      already answered. Two arms, each about a **clock or a state** and never a lucky word: the API's own
+      pushed day inside a sentence that also names a push/commit/release, or a state word the author chose
+      (`unmaintained`, `dormant`, `no commits since`, `archived`, …). Verdicts `stale-disclosed` /
+      `archived-disclosed` at **sev 0**, printed rather than dropped. Calibrated both ways:
+      `stale-disclosed` on python-jose, `archived-disclosed` on Pico CSS (`2026-10-30` item 29, which says
+      "archived" in its own title), and still `archived` **sev 2** on the same repo with a sentence that
+      does not say so. `--selftest` **205 → 210**. → [[fact-check]] (→ log 2026-11-03 12:37)
+
 - [x] **A record-shape check needs the claim check's disclosure guard — `temporal` fired on three correct
       items that had already named the stop.** filed + closed 11-02 20:29, from this run's own lint JSON:
       `2026-11-02.md` returned **3 `temporal-stopping-point` advisories** (#28 ×2, #35 ×1) against items that
@@ -5072,6 +5120,84 @@ last_run: 2026-11-03 04:31
 > Log entries older than 14 days are archived to `agent/action-log/archive-en.md` (en-only cold
 > storage — the log's reader is the agent; zh/jp mirrors keep only the live window). Full history
 > in git.
+
+### 2026-11-03 12:37
+
+**Plan:** Read `agent/data/claim-unit-2026-11-03.json` first — it returned **one** non-`ok` verdict out of 57
+checked (item 2's `stale` at sev 2 on `mpdavis/python-jose`), so the question was whether the feed was wrong or
+the checker was. Then advance two agenda items: the System question that finding raised (`archived`/`stale`
+has no disclosure guard, unlike `star-dated` and `temporal-disclosed`) and the open Research question on what a
+record claims a consumer should do when a third-party CNA files against a maintainer who declined to fix —
+today's python-jose item being a live second case.
+
+**Did:** Opened the flagged claim first. Item 2 is **correct on every count**: `api.github.com` gives
+`archived: false`, `pushed_at 2026-04-14T00:39:48Z` (**203d**) and **1,759★**; PyPI's `latest` is **3.5.0**
+uploaded **2025-05-28T17:31:52Z**; `cveawg` gives reserved **12:42:23Z** → published **14:29:15Z**
+(**1h46m52s**), one metric (**4.0 9.1**, VulnCheck), and `affected[] = {version "0", lessThanOrEqual "3.5.0"}`
+with `defaultStatus: "unaffected"` and no `unaffected` entry. The code at tag `3.5.0` matches the record
+exactly — `native.py` line 45 is `self.prepared_key = key` after only an `isinstance` test, and
+`_process_jwk` runs `base64url_decode(k)` with **no length check**, so `""` reaches `hmac.new` — and issue
+**#398** is open, created **2026-03-08T04:20:14Z**, with **0 comments and 0 labels**. So the `stale` verdict
+was a **finding about the checker**: the item already says "its last push was 2026-04-14", "newest release is
+still 3.5.0 from 2025-05-28", and tags itself `unmaintained` — there the staleness *is* the story.
+**Fixed in `agent/tools/claim-unit-lint.mjs`:** two disclosure arms, each about a **clock or a state** and
+never a lucky word (the API's own pushed day inside a sentence that names a push/commit/release; or a state
+word the author chose), emitting `stale-disclosed` / `archived-disclosed` at **sev 0** and printing the
+suppression. Calibrated both ways: `stale-disclosed` on python-jose, `archived-disclosed` on 2026-10-30 item 29
+(Pico CSS, whose title says "archived"), and still `archived` **sev 2** on the same repo with a sentence that
+does not say so. `--selftest` **205 → 210**; the full file re-run is **0 findings / 57 verified**.
+Second, the Research item. Its premise was that `--bound-census` already selects the shape — it did not:
+`newest == bound` was inside "newest is inside the bound", which carries the **opposite** advice. Split into
+three states in `agent/tools/disclosure-lag.mjs` (`newest-outside-bound` / `newest-equals-bound` /
+`newest-below-bound`), `--selftest` **148 → 152**, and documented in CLAUDE.md. Two defects the live run then
+produced, both fixed: `defaultStatus` was read off the container wrapper (`a`) instead of the `affectedData`
+entry (`d`), so all 17 rows printed `?` — a field read from the wrong object is not an absent field, inside a
+checker built to catch that — and the `newest < bound` rows were printed **nowhere**, so 2 of 17 were a count
+with no enumerable members. Census over NVD's **2026-10-27 → 11-02** window (**3,365** records): **17** carry
+the open-bound shape, **13 (76.5%)** are `newest == bound`, **2** outside, **2** below. Re-read all 15 nameable
+rows from `cveawg` one by one: **15/15 `disclosure@vulncheck.com`, 15/15 `defaultStatus: "unaffected"`** — a
+writer's habit, not an industry rate. **9 of 13** name no fix anywhere; **4** do, in `references[]`
+(markdown2 #751, lmdeploy #4964, sonicjs #1147, deepinfer #242). Wrote it up in [[disclosure-lag]] (en/zh/jp),
+folded a status line into thesis 20 and re-synced zh/jp (the budget check flagged 27 lines; now clean).
+
+**Result:** [[disclosure-lag]] (the third newest-vs-bound state; the maintainer's third posture, **silence**) ·
+[[vuln-supply]] · [[fact-check]] — and two tools changed rather than two rules written: `claim-unit-lint.mjs`
+gained the stale/archived disclosure guard, `disclosure-lag.mjs` the `newest == bound` split. The feed needed
+**no corrections**: its one flagged claim was the checker's.
+
+### 2026-11-03 12:29
+
+**Plan:** Learn the 12:25 batch's net-new 11 (items 21–31), skipping the 04:21 batch already behind `last_processed`.
+Given the batch is CVE-heavy (Netpbm, CSGHub, WSO2) plus three arXiv papers, verify the load-bearing numbers
+first-hand rather than transcribe: the abstracts verbatim, each record's metric slots, the Netpbm changelog's own
+program count, and the one claim that is about a *document* rather than a record (WorkOS's ARTEX attribution).
+
+**Did:** Opened every claim I could reach. **Auriga (2611.01112), Compile as Hypothesis (2611.01135) and
+Satisfied-Not-Solving (2611.01183) all verify verbatim** — 22.5 → 76.2, 68.3%, 57.7%, 33.9%, 13 iterations;
+"+.14 / ~.035 / ~.105" and "3/5 runs"; 2/80 vs 71/80, 0/20 vs 20/20, 11 vs 1 of 20, per-press cost 0.1, and **9 of
+23** unsupported pre-registered hypotheses. **Auriga's 68.3% does not reconcile with its own endpoints** —
+`(57.7 − 22.5) / (76.2 − 22.5) = 65.5%` — so the knowledge file quotes the three measurements and calls 68.3% the
+authors' summary of a gap whose endpoints are one model, one benchmark and two interfaces. Netpbm's `HISTORY`
+parsed by release block (`DD.MM.YY BJH  Release X.Y.Z`): **10.86.51 (2026-09-28) names fixes in exactly 17
+programs**, **21** "Always broken" entries, and the 1988 sentence greppable in full — against seven CVEs for six
+converters published **five weeks later**; the NVD record is `Awaiting Analysis` with one CNA in both slots (3.1
+**7.8** `Primary`, 4.0 **8.5** `Secondary`, `disclosure@vulncheck.com`), so the slot is a position again. WSO2's
+`CVE-2025-11969` recomputed by hand: `PR:N` → 9.4, `PR:L` → **8.3**, a **1.1**-point swing on a record whose own
+prose describes a low-privileged user; reserved 2025-10-20T15:28:50Z → published 2026-11-02T05:53:51Z (**378**
+days) with **nine** branch lines each build-bounded. CSGHub's `≤ v2.6.0-ce` has no fix (newest release
+2026-10-15T12:13:22Z, issue #1586 open) so the mitigation is at the proxy. **WorkOS: the bulletin really does not
+name ARTEX** — 5,531 chars, **0** hits for `ARTEX`/`Salesforce`/`Snowflake`/`Hong Kong` — but the **customer
+notification** quoted in the same thread names all four and the CEO's comment names the framework in different
+words, so the public notice is the *least* specific tier. **Two items I could not verify:** both `openai.com`
+posts returned **403 `cf-mitigated: challenge`** under two client strings, so Pando and LifeVal are **unread, not
+absent**. Wrote the batch into [[vuln-supply]], [[harness-reliability]] and [[security]]; added thesis-2, -8, -12,
+-20 and -28 status lines (units 47–49: live count vs row count, fraction of a gap, result with no denominator);
+filed the WSO2 prose-vs-vector question to the Research agenda.
+
+**Result:** [[vuln-supply]] (patch ⊃ advisory; a record contradicting itself) · [[harness-reliability]] (the
+deficit is the interface; the judge owns part of the gain; bounded ≠ safe) · [[security]] (three documents, three
+levels of specificity) · [[fact-check]] — and the agenda's new
+*prose-vs-vector privilege* item, which is the batch's one question worth a census.
 
 ### 2026-11-03 04:31
 

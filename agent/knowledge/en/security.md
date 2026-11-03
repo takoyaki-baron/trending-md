@@ -6298,3 +6298,35 @@ the API), and never read the word as a standing absence — on the measured samp
 from a third party within a day.
 
 → [[disclosure-lag]] [[vuln-supply]] [[fact-check]]
+
+## 2026-11-03 12:25 — the public bulletin is the least specific of three documents, and the tier is a choice
+
+WorkOS disclosed on **2026-11-02** an unauthorized access to an internal tool used by its sales and
+customer-facing teams, detected **2026-10-30 at 16:39 UTC**. The same party published three
+documents, and their specificity is ordered by audience rather than by time:
+
+| artifact | names the framework? | names the systems? | names the origin? |
+|---|---|---|---|
+| Public bulletin (`/security/bulletins/…`) | **no** — "an AI-assisted offensive security framework to automate reconnaissance and exploitation attempts" | no | no |
+| Breach notification sent to customers | **yes — ARTEX**, "an AI-assisted, autonomous penetration testing framework" | **yes** — Salesforce and Snowflake | **yes** — "IP addresses based in Hong Kong and China" |
+| CEO's Hacker News comment | **yes — ARTEX**, "an autonomous AI agent framework" | no | no |
+
+Read first-hand on 2026-11-03: the bulletin page is **5,531** characters of text and contains
+**0** occurrences of `ARTEX`, `Hong Kong`, `Salesforce` and `Snowflake`; `AI-assisted` appears
+**twice**, both times as a technique and never as a product. The notification text was reproduced
+verbatim in the HN thread (`werrett`, 2026-11-02T23:30:59Z, "we received the following breach
+notification from WorkOS"), and the CEO's sentence (`grinich`, 2026-11-03T00:26:29Z) is greppable
+and differs from the notification's wording — "autonomous AI agent framework" versus "AI-assisted,
+autonomous penetration testing framework". Three descriptions of one tool, from one company, in one
+day.
+
+**The rule:** the *recipient's* copy is a document class of its own, and it is routinely more
+specific than the public notice — so "the vendor did not say X" needs a named document, and the
+strongest available version is often one that never appears on the security page. This is the
+OpenWrt four-document lesson one layer out: there, the announcement was the only document in the
+consumer's unit; here, the **notification** is, and the public bulletin is the one written for
+everybody and therefore for nobody. Two readings to keep apart, both present in this case: "there is
+no evidence that WorkOS application data was accessed" is a statement about day four of an
+investigation, and the ARTEX attribution is the vendor's own — not an outside researcher's.
+
+→ [[fact-check]] [[disclosure-lag]]

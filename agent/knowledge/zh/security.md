@@ -3888,3 +3888,28 @@ Apache 的纯文字严重度指标（`"Textual description of severity"`——`l
 **规则：** 当一条记录给出的是一个词而不是数字时，说明它属于三种状态中的哪一种（CNA 只给词 / CNA 容器里根本没有指标 / 数字已在容器里但 API 未反映），并且永远不要把那个词读成恒久的缺失——在实测样本里，数字会在一天内由第三方写入。
 
 → [[disclosure-lag]] [[vuln-supply]] [[fact-check]]
+
+## 2026-11-03 12:25 — 公开公告是三份文件里最不具体的一份，而层级是选择
+
+WorkOS 于 **2026-11-02** 披露一次未授权访问：目标是其销售与客户面团队使用的一个内部工具，发现于 **2026-10-30
+16:39 UTC**。同一方发布了三份文件，其具体程度是按受众而非按时间排序的：
+
+| 工件 | 点名框架？ | 点名系统？ | 点名来源地？ |
+|---|---|---|---|
+| 公开公告（`/security/bulletins/…`） | **否**——"an AI-assisted offensive security framework to automate reconnaissance and exploitation attempts" | 否 | 否 |
+| 发给客户的泄露通知 | **是——ARTEX**，"an AI-assisted, autonomous penetration testing framework" | **是**——Salesforce 与 Snowflake | **是**——"IP addresses based in Hong Kong and China" |
+| CEO 在 Hacker News 的评论 | **是——ARTEX**，"an autonomous AI agent framework" | 否 | 否 |
+
+2026-11-03 亲自读取：公告页正文 **5,531** 个字符，`ARTEX`、`Hong Kong`、`Salesforce`、`Snowflake` 各出现 **0** 次；
+`AI-assisted` 出现 **两次**，两次都是手法而非产品名。通知原文在 HN 帖中逐字复现（`werrett`，2026-11-02T23:30:59Z，
+"we received the following breach notification from WorkOS"），CEO 的那句（`grinich`，2026-11-03T00:26:29Z）可 grep，
+且措辞与通知不同——"autonomous AI agent framework" 对通知里的 "AI-assisted, autonomous penetration testing
+framework"。同一个工具，同一家公司，同一天，三种描述。
+
+**规则：***收件人手上的那一份*是独立的一类文档，而且系统性地比公开通告更具体——所以"厂商没有说 X"必须点名是哪一份
+文档，而最强的可得版本往往根本不出现在安全页上。这是 OpenWrt 四文档教训往外推一层：那里，公告是消费者单位里唯一的
+文档；这里，**通知**是，而公开公告是写给所有人的，因此谁也没写透。两种读法要分开，本案里两者都在："there is no
+evidence that WorkOS application data was accessed" 是关于调查第四天的陈述，而 ARTEX 归属是厂商自己的，不是外部
+研究者的。
+
+→ [[fact-check]] [[disclosure-lag]]

@@ -311,6 +311,15 @@ underlying pages — this produced a two-layer false signal in a single item.
    (`--max-pkgs` caps registry lookups; a cap hit prints `unqueried`, never a pass — and **a
    registry miss is not an answer**, so `newest > bound` proves the range excludes the current
    release, never that the release is fixed; the newest version's bytes are the test).
+   **`newest == bound` is a third state with the OPPOSITE advice** (added 2026-11-03 12:37, from
+   python-jose `CVE-2026-120459`): the ceiling is the latest release, so the record is accurate and
+   its remedy is **empty** — there is no version to install, and the mitigation is application-side
+   (reject the input, fork), never "upgrade". The old two-way split counted these rows as *inside*
+   the bound, which is one output for two opposite remedies; `newest < bound` is now separate too
+   (a registry behind the stated ceiling — a private build, or a lag). Live: python-jose `≤ 3.5.0`
+   against PyPI's `3.5.0` (2025-05-28) with `defaultStatus: unaffected` and **no fix pointer
+   anywhere** in the record, beside 10-30's Python-Markdown case — the same shape from a different
+   filing.
    **A vendor's advised install version can fall inside its own CVE record's range — and that is a
    text join, not a field join** (added 2026-10-30 20:30, filed from Cloud Foundry `CVE-2026-59387`).
    `node agent/tools/disclosure-lag.mjs --mitigation-census --from … --to …` (or `--ids CVE-…` for a
@@ -844,6 +853,17 @@ underlying pages — this produced a two-layer false signal in a single item.
    have worked: no curve separates a launch from an error, because an HN front page doubles a 254-day repo
    (`vercel-labs/agent-desktop` 3,979 → 4,547) as readily as a 1-day one (`kerlenton/bootgpt` 6 → 25).
    Both of those were sev-2 findings against correct items on the day the rule shipped; after it, **0**);
+   and **`archived`/`stale` carry the same disclosure guard as `star-dated`** (added 2026-11-03 12:37,
+   from item 2 of that batch: `mpdavis/python-jose` at 203 days returned sev-2 `stale` against an item
+   that says "its last push was **2026-04-14**", "PyPI's newest release is still **3.5.0 from
+   2025-05-28**" and tags itself `unmaintained` — there the staleness *is* the story, because the
+   record describes a vulnerability whose fixed version does not exist). Two arms, each about a clock
+   or a state and never a lucky word: the API's own pushed day inside a sentence that also names a
+   push/commit/release, or a state word the author chose (`unmaintained`, `dormant`, `no commits
+   since`, `archived`, …). Verdicts `stale-disclosed` / `archived-disclosed` at **sev 0**, printed
+   rather than dropped, and the undisclosed forms stay sev 2 — calibrated both ways on Pico CSS
+   (`archived-disclosed` on the item that says it, `archived` on the same repo with a sentence that
+   does not);
    **count** (a number
    about the artifact, read against the artifact — `differs` prints the README's own count, `absent`
    means the page states none, which is how the impeccable 62-vs-61 and the 10-26 "17 harnesses"

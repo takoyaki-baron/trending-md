@@ -1558,4 +1558,56 @@ construction, so `stored-neither` there cannot be a stopping-point choice. In th
 is **0 metrics** — every Threat-bearing metric in the week actually carried an `E` ≠ `X` — so the finding is
 about a population that is small (4.1%) and unanimously one way, not about a rule with a large exception set.
 
+## 2026-11-03 12:25 — the advisory batch is a subset of the patch, and one record contains its own contradiction
+
+Three records from one batch, each answering a different question about what a record bounds.
+
+**Netpbm: the patch is the superset, five weeks ahead.** Seven VulnCheck records published
+**2026-11-02** describe memory-safety bugs in one image-format converter family; the fix shipped in
+**10.86.51** on **2026-09-28**. Counted first-hand from the changelog block (`HISTORY`, where block
+boundaries are `DD.MM.YY BJH  Release X.Y.Z` lines), that release names fixes in **17 programs** —
+`pamtogif`, `pnmtojbig`, `jbigtopnm`, `pgmtexture`, `pnmtofiasco`, `winicontopam`, `pjtoppm`,
+`lispmtopgm`, `asciitopgm`, `pnmquantall`, `pnmpad`, `picttoppm`, `tgatoppm`, `xpmtoppm`,
+`sgitopnm`, `pbmtomda`, `mdatopbm`, `mrftopbm`, `pamtowinicon`, `thinkjettopbm`, `imgtoppm`,
+`pamcut`, `pbmtopgm`, `ppmtopict`, `pcxtoppm`, `pbmtext` — against a CVE batch covering six
+converters. So **CVE set ⊂ patch set**, and an exposure list built from the advisory feed is a
+subset of the patch the user needed five weeks earlier. `Always broken` appears **21** times; the
+introduction dates reach **1988** (`picttoppm`, "in primordial Netpbm"), then 1989 (`tgatoppm`),
+1991, 1994 and 2000. The changelog states its own origin verbatim: "Always broken -- in fact **done
+intentionally for coding convenience** (picttoppm was in primordial Netpbm in 1988)." NVD state:
+**`Awaiting Analysis`**, one CNA's pair — 3.1 **7.8** (`AV:L/AC:L/PR:N/UI:R`) sitting in the
+**`Primary`** slot and 4.0 **8.5** (`AV:L/UI:P`) in **`Secondary`**, both `disclosure@vulncheck.com`.
+The slot is a position, not a provenance: the same party wrote both, and the two frameworks differ on
+the *interaction* assumption (`UI:R` vs `UI:P`), not on the attacker's reach.
+
+**WSO2 `CVE-2025-11969`: the prose and the vector describe different attackers.** The description
+says "allowing **users with lower privilege roles** to execute administrative actions that should be
+restricted"; the only metric is **CVSS 3.1 9.4** with `AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:L`. Both
+numbers are the same party's, so this is not a provenance question — it is one record disagreeing
+with itself. Recomputed by hand under `S:U` (so `BaseScore = Roundup(Impact + Exploitability)`):
+`ISS = 0.849`, `Impact = 6.42 × 0.849 = 5.4506`; exploitability with `PR:N` is `8.22 × 0.85 × 0.77 ×
+0.85 × 0.85 = 3.8870` → **9.3376 → 9.4**; with `PR:L` (`0.62`) it is `2.8353` → **8.2859 → 8.3**.
+So a one-character change in the vector moves the score **1.1 points** and the deployment posture
+from "patch on schedule" to "exposed now". NVD is `Awaiting Analysis`, so there is no second opinion.
+Clock and scope: reserved **2025-10-20T15:28:50Z**, published **2026-11-02T05:53:51Z** (**378 days**),
+and the `affected[]` carries **nine API Manager branch lines** from `3.1.0` to `4.5.0`, each bounded
+by a build number (`4.5.0` < `4.5.0.32`) — "upgrade API Manager" is not an instruction.
+
+**CSGHub `CVE-2026-120426`: the route falls back to the administrative credential.** A read route
+(`/:repo_type/:namespace/:name/resolve/:branch/*path`) is registered without the per-route guard the
+upload routes carry; with no `user_token` cookie the portal fetches through the backend using the
+**global server API key**, and the acting identity is then asserted only by a `current_user` query
+parameter — which the attacker controls, because Gin decodes a percent-encoded `%3F` inside the
+catch-all segment. Datasets are unaffected (their routes have a login middleware). Both scores are
+VulnCheck's (4.0 **8.7** `PR:N/VC:H`, 3.1 **7.5**), NVD is **`Deferred`**, and there is **no fix**:
+`affected[]` is `≤ v2.6.0-ce`, the newest release is **v2.6.0-ce (2026-10-15T12:13:22Z)**, and issue
+#1586 was opened 2026-10-31 and is still open. The mitigation is at the proxy — deny anonymous
+`*/resolve/*` — because a self-hosted model hub's whole exposure is a GET.
+
+**The rule:** ask the three questions in order, because each is answered by a different document.
+*What did the patch fix?* is the changelog, and it is bounded by what shipped. *What does the record
+say the attacker needs?* is the prose. *What does the number assume?* is the vector. When the first
+is larger than the second, the advisory feed understates the work; when the second and third
+disagree, the record has not decided yet, and the conservative reading is the prose's.
+
 → [[fact-check]] [[disclosure-lag]]

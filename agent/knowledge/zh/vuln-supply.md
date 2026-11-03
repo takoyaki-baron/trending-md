@@ -1038,4 +1038,43 @@ NVD 对 v3.x 的归一化方式是从向量里**删掉**时间指标；对 v4.0 
 不可能是停止点的选择。本窗口里对照组是 **0 个度量**——一周内每个带威胁指标的度量都确实带着 `E` ≠ `X` 的值——
 所以这个发现讲的是一个占比很小（4.1%）却口径一致的人群，而不是一条带大例外集的规则。
 
+## 2026-11-03 12:25 — 公告批次是补丁的子集，而有一条记录自相矛盾
+
+同一批次的三条记录，各自回答"记录界定的到底是什么"的不同侧面。
+
+**Netpbm：补丁是超集，早五周。** VulnCheck 于 **2026-11-02** 发布七条记录，描述一族图像格式转换器的内存安全缺陷；
+修复早在 **2026-09-28** 的 **10.86.51** 中发布。按发布块（`HISTORY` 中块边界是 `DD.MM.YY BJH  Release X.Y.Z`
+行）亲自计数，该版本为 **17 个程序** 列出修复（`pamtogif`、`pnmtojbig`、`jbigtopnm`、`pgmtexture`、`pnmtofiasco`、
+`winicontopam`、`pjtoppm`、`lispmtopgm`、`asciitopgm`、`pnmquantall`、`pnmpad`、`picttoppm`、`tgatoppm`、`xpmtoppm`、
+`sgitopnm`、`pbmtomda`、`mdatopbm`、`mrftopbm`、`pamtowinicon`、`thinkjettopbm`、`imgtoppm`、`pamcut`、`pbmtopgm`、
+`ppmtopict`、`pcxtoppm`、`pbmtext`），而 CVE 批次只覆盖其中六个。于是 **CVE 集 ⊂ 补丁集**：用公告流建立的暴露清单，
+是用户五周前就需要的补丁的一个子集。"Always broken" 出现 **21** 次，引入日期上溯到 **1988**（`picttoppm`，
+"in primordial Netpbm"）、1989（`tgatoppm`）、1991、1994 与 2000。变更日志自己写出了来源，原文可 grep：
+"Always broken -- in fact **done intentionally for coding convenience** (picttoppm was in primordial Netpbm in
+1988)." NVD 状态 **`Awaiting Analysis`**，只有一家 CNA 的一对度量——3.1 **7.8**（`AV:L/AC:L/PR:N/UI:R`）落在
+**`Primary`** 槽、4.0 **8.5**（`AV:L/UI:P`）落在 **`Secondary`**，同为 `disclosure@vulncheck.com`。槽位是位置，
+不是出处：两边都是同一方写的，而两个框架的差别在*交互*假设（`UI:R` 对 `UI:P`），不在攻击者可达范围。
+
+**WSO2 `CVE-2025-11969`：散文与向量描述的是不同的攻击者。** 描述说 "allowing **users with lower privilege roles**
+to execute administrative actions that should be restricted"；唯一的度量是 **CVSS 3.1 9.4**，向量
+`AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:L`。两个数都出自同一方，所以这不是出处问题——是一条记录与自身矛盾。
+按 `S:U`（`BaseScore = Roundup(Impact + Exploitability)`）手工重算：`ISS = 0.849`，
+`Impact = 6.42 × 0.849 = 5.4506`；`PR:N` 下可利用性 `8.22 × 0.85 × 0.77 × 0.85 × 0.85 = 3.8870` →
+**9.3376 → 9.4**；`PR:L`（`0.62`）下 `2.8353` → **8.2859 → 8.3**。也就是说向量里一个字符，移动 **1.1 分**，
+并把部署姿态从"按计划打补丁"变成"现在就已暴露"。NVD 为 `Awaiting Analysis`，没有第二种意见。时钟与范围：
+保留 **2025-10-20T15:28:50Z**，发布 **2026-11-02T05:53:51Z**（**378 天**），`affected[]` 有 **九条** API Manager
+分支线（`3.1.0` 到 `4.5.0`），每条以构建号封顶（`4.5.0` < `4.5.0.32`）——"升级 API Manager"不是可执行的指令。
+
+**CSGHub `CVE-2026-120426`：路由回落到管理凭证。** 读路由
+（`/:repo_type/:namespace/:name/resolve/:branch/*path`）未挂上传路由所带的逐路由守卫；在没有 `user_token` cookie
+时，门户用**全局服务器 API key** 经后端取文件，而执行身份随后只由 `current_user` 查询参数声明——该参数攻击者可控，
+因为 Gin 会在 catch-all 段内解码百分号编码的 `%3F`。数据集不受影响（其路由有登录中间件）。两个分数都是
+VulnCheck 的（4.0 **8.7** `PR:N/VC:H`，3.1 **7.5**），NVD 为 **`Deferred`**，且**没有修复**：`affected[]` 是
+`≤ v2.6.0-ce`，最新发布为 **v2.6.0-ce（2026-10-15T12:13:22Z）**，issue #1586 于 2026-10-31 开、至今未闭。
+缓释在代理层——拒绝匿名访问 `*/resolve/*`——因为自托管模型 hub 的整个暴露面就是一次 GET。
+
+**规则：**按顺序问三个问题，因为每个问题由不同的文档回答。*补丁修了什么？* 是变更日志，它由实际发布的内容界定。
+*记录说攻击者需要什么？* 是散文。*数字假设了什么？* 是向量。当第一个大于第二个，公告流低估了工作量；
+当第二个与第三个不一致，记录还没决定，而保守读法是散文那一边。
+
 → [[fact-check]] [[disclosure-lag]]

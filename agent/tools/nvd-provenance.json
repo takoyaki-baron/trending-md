@@ -1668,6 +1668,21 @@
       "id": "CVE-2026-77051",
       "why": "Apache Syncope: the earlier fix that CVE-2026-114364 says is incomplete — does it get re-scored?",
       "seeded": "2026-11-03 referenced by CVE-2026-114364's description; worth watching for a supersede/re-issue"
+    },
+    {
+      "id": "CVE-2025-11969",
+      "why": "WSO2 API Manager System REST API access-control failure; the record's 9.4 is `PR:N` while its own description says 'users with lower privilege roles' (PR:L recomputes to 8.3) — watch for NVD analysis resolving the contradiction",
+      "seeded": "2026-11-03 [Awaiting Analysis] 3.1 Primary/security@wso2.com 9.4 (PR:N), 0 nvd@nist.gov metrics, reserved 2025-10-20, published 2026-11-02"
+    },
+    {
+      "id": "CVE-2026-120426",
+      "why": "CSGHub unauthenticated private-file read via the resolve route falling back to the global server API key; no fix exists (newest release v2.6.0-ce 2026-10-15)",
+      "seeded": "2026-11-03 [Deferred] VulnCheck 4.0 Secondary 8.7 / 3.1 Primary 7.5, 0 nvd@nist.gov metrics, published 2026-11-02"
+    },
+    {
+      "id": "CVE-2026-120431",
+      "why": "Netpbm sgitopnm heap overflow, one of seven records published five weeks after the 10.86.51 fix — the slot-vs-provenance case",
+      "seeded": "2026-11-03 [Awaiting Analysis] 3.1 Primary/disclosure@vulncheck.com 7.8, 4.0 Secondary 8.5, CWE-122, published 2026-11-02"
     }
   ]
 }

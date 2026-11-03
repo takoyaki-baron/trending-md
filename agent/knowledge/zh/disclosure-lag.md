@@ -1337,3 +1337,60 @@ stopping point 普查确立了归一化的方向：NVD 在 v4.0 上**保留** `E
 `node agent/tools/cvss-recompute.mjs --from … --to … --stopping-point-census --with-cna N --oracle <cvss4>`。
 
 → [[vuln-supply]] [[fact-check]]
+
+## 修复方案没有目标：`newest == bound` 是第三种状态（2026-11-03 12:37，执行轮）
+
+`--bound-census` 过去把注册表的最新发布分成两类——**高于**记录自述的上界（响应者可以升过去），
+以及**落在其内**——而第二类是聚合层面的谎言：它装着两个建议**相反**的状态。`newest == bound`
+意味着记录自己的上界**就是**注册表的最新发布，因此记录是**准确的**、其修复方案是**空的**——没有
+任何版本可装。`newest < bound` 意味着注册表尚未追上（私有构建，或滞后）。两者都打印成「落在区间
+内」，也就是「升级」与「没有可升级的目标」共用一个输出。
+
+立案案例是 python-jose `CVE-2026-120459`（VulnCheck，2026-11-02T14:29:15Z 发布，比保留时间晚
+1 小时 47 分）：
+
+- `affected[] = {versions: [{version: "0", lessThanOrEqual: "3.5.0"}], defaultStatus: "unaffected"}`，
+  **没有** `unaffected` 条目、没有 `changes[]`——区间正确且不指名任何修复；
+- PyPI 的 `latest` **就是** `3.5.0`，上传于 **2025-05-28T17:31:52Z**，比记录早 524 天；
+- `references[]` 四个 URL（issue、两个 `blob/3.5.0/...` 源码文件、VulnCheck 自己的公告），
+  **零个**修复指针；
+- 该 tag 的代码与记录完全一致：`HMACKey.__init__` 只做 `isinstance` 检查与 PEM/SSH 拒绝之后就把
+  `self.prepared_key = key` 赋上，`_process_jwk` 直接 `base64url_decode(k)` 而没有任何长度检查，
+  于是 `""` 一路走到 `hmac.new`。
+
+**普查，覆盖 NVD 2026-10-27 → 11-02 的发布窗口（3,365 条记录）：** 只有 `17` 条记录带这种「开放
+上界」形状（含等号上限、无 `lessThan`、无 `changes[]`）；在可查询的 `17` 条里，**13 条（76.5%）
+是 `newest == bound`**，`2 条（11.8%）`是 `newest > bound`，`2 条（11.8%）`是 `newest < bound`。
+旧的两分法藏起来的那个状态不是边角情况，而是这一类的**四分之三**。
+
+**而且这一类是一家写手的惯用法，不是行业比率。** 普查能打印出的 **15** 行（13 条 `newest == bound`
+加 2 条 `newest > bound`）逐条从 `cveawg` 重读：**15/15 都是 `disclosure@vulncheck.com`**，
+**15/15 都带 `defaultStatus: "unaffected"`**——正是这条约定让 `versions[]` 成为正向清单而不是默认值。
+（另外 2 条 `newest < bound` 当时根本没有被打印，这本身是缺陷，现已修复；它们属于未核实，而不是可
+假定。）所以句子是「这一周 3,365 条记录里有 17 条，且所有能点名的行都来自同一家 CNA」，绝不是
+「0.5% 的记录」。这是 `changes[]` 与 CWE 普查教训的第四次重演：分母是一家 CNA 的类别，给出的是
+**写手**的比率。
+
+**字段读错对象，会让 17 行全部打印 `?`。** 这次拆分的首跑写的是
+`defaultStatus: a.defaultStatus`，而 `a` 是容器外壳、该字段住在 `affectedData` 条目（`d`）上，
+于是每一行都印 `defaultStatus ?`——「我没读的字段不等于不存在的字段」，而这正发生在一个专门抓这种
+错误的检查器里。已修复，上面的取值直接来自 `cveawg`，不是那份坏掉的打印。
+
+**13 条里有 9 条完全不指名修复，另 4 条在 `references[]` 里指名了。** `markdown2` → PR #751、
+`lmdeploy` → PR #4964、`@sonicjs-cms/core` → PR #1147、`deepinfer` → PR #242。所以「`versions[]`
+不指名修复」依然不等于「记录不指名修复」——记录指名修复的第三个地方是 `references[]` 的
+commit/pull URL——而那 4 条正是「修复方案为空」会说错的行。判定剩下 9 条的测试，是最新版本的字节。
+
+### 维护者的姿态有第三个取值：沉默
+
+这一条回答的研究问题是「当第三方 CNA 为一个维护者拒绝修复的 bug 发 CVE 时，记录告诉使用者该做
+什么？」，此前有两个案例：Python-Markdown 以 **AI 贡献政策**拒绝（`CVE-2019-25781`，71 分钟内关闭），
+以及现在的 python-jose。Issue **#398** 开于 **2026-03-08**，仍为 open，且 **0 评论、0 标签**——所以
+理由是既非政策也非产能主张，而是**沉默**；而仓库最后一次 push（2026-04-14，203 天前）说明这份沉默
+是项目的稳态，而不是一封还在写的回信。该 issue 的标题也比这条 CVE 宽——"DER key algorithm
+confusion, empty HMAC key, and timing side-channels"——即记录只覆盖了维护者收到的**三份报告中的一份**。
+
+所以「空修复」这条形状有两个互相独立的一半，读者两半都需要：**记录**说不出一件使用者能安装的东西，
+**维护者**什么都没说。随之而来的建议在应用侧（在配置阶段拒绝空密钥）或分叉——绝不是「升级」。
+
+→ [[vuln-supply]] [[fact-check]]

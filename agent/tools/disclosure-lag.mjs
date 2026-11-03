@@ -282,7 +282,12 @@ const FIELD_CENSUS = argOf('--field-census', null);
 const CHANGES_CENSUS = args.includes('--changes-census');
 /* `--bound-census`: is the ecosystem's newest release outside the bound an open-ended record
    states? `--max-pkgs` caps registry lookups (they are unmetered but paced); a cap hit is
-   printed as `unqueried`, never as a pass. */
+   printed as `unqueried`, never as a pass.
+   THREE states, not two (split 2026-11-03 12:37): `newest > bound` is an upgrade path,
+   `newest == bound` is an accurate record with an EMPTY remedy (the ceiling is the latest release —
+   python-jose `≤ 3.5.0` against PyPI's 3.5.0), and `newest < bound` is a registry lag. The middle
+   one had no bucket and was counted as "inside the bound", which is the same output for opposite
+   advice. */
 const BOUND_CENSUS = args.includes('--bound-census');
 const MAX_PKGS = Number(argOf('--max-pkgs', 80));
 /* `--mitigation-census`: does the version a vendor advisory tells you to install fall inside that
@@ -2033,6 +2038,13 @@ if (SELFTEST) {
     advisoryUrlsOf({ references: [{ url: 'https://nvd.nist.gov/vuln/detail/CVE-1' }, { url: 'https://example.com/a' },
       { url: 'https://example.com/b', tags: ['vendor-advisory'] }] }).map(u => u.replace('https://example.com/', '')),
     ['b', 'a']);
+  /* 2026-11-03 12:37 — the three newest-vs-bound states, and the one that had no bucket.
+     `newest == bound` is an accurate record with an EMPTY remedy (python-jose's `≤ 3.5.0` against
+     PyPI's 3.5.0), which the old two-way split reported as "inside the bound". */
+  eq('bound: a fix above the ceiling is an upgrade path', boundVerdict(cmpVer('3.1.12', '3.1.11')), 'newest-outside-bound');
+  eq('bound: the ceiling IS the latest release — no upgrade target', boundVerdict(cmpVer('3.5.0', '3.5.0')), 'newest-equals-bound');
+  eq('bound: a registry behind the stated ceiling is a lag, not a remedy', boundVerdict(cmpVer('2.0.0', '2.1.0')), 'newest-below-bound');
+  eq('bound: a prerelease sorts below its own release', boundVerdict(cmpVer('3.0.0-M2', '3.0.0')), 'newest-below-bound');
 
   let pass = 0;
   for (const c of cases) {
@@ -2216,7 +2228,10 @@ function openBoundOf(cve) {
       if (v.lessThan) { skips.push('names-a-fix'); continue; }
       if (v.changes?.length) { skips.push('names-a-fix'); continue; }
       if (!v.lessThanOrEqual) { skips.push('unbounded'); continue; }
-      candidates.push({ ecosystem: REGISTRY_ECOSYSTEMS[eco], name, max: v.lessThanOrEqual, maxInc: true, source: a.source || null });
+      /* `defaultStatus` lives on the affectedData entry (`d`), not on the container wrapper (`a`)
+         — the first version of this line read `a.defaultStatus` and printed `?` on all 17 rows of
+         the live census, which is the "a field I did not read is not an absent field" shape. */
+      candidates.push({ ecosystem: REGISTRY_ECOSYSTEMS[eco], name, max: v.lessThanOrEqual, maxInc: true, source: a.source || null, defaultStatus: d.defaultStatus ?? null });
     }
   }
   if (!candidates.length) return { bound: null, skips };
@@ -2253,6 +2268,20 @@ async function newestRelease(ecosystem, name) {
   return out;
 }
 
+/* `newest == bound` is NOT "inside the bound" — it is the sharper state, and the two have OPPOSITE
+ * remedies. `newest > bound` means a responder can upgrade past the range. `newest == bound` means
+ * the registry's newest release IS the range's ceiling, so the record is accurate and its
+ * remediation is EMPTY: there is no version to install. Measured 2026-11-03 on `CVE-2026-120459`
+ * (python-jose, `≤ 3.5.0`, PyPI latest 3.5.0 from 2025-05-28, `defaultStatus: unaffected`, no fix
+ * anywhere) — the same shape as 10-30's Python-Markdown case (`CVE-2019-25781`). Collapsing both
+ * into `inside` reported an upgrade path for a package that has none, which is the advice direction
+ * the feed's `Why it matters` line then repeats. */
+function boundVerdict(cmp) {
+  if (cmp > 0) return 'newest-outside-bound';
+  if (cmp === 0) return 'newest-equals-bound';
+  return 'newest-below-bound';
+}
+
 async function boundCensus({ from, to }) {
   const { records, total } = await fetchWindow(from, to);
   const rows = [];
@@ -2280,13 +2309,13 @@ async function boundCensus({ from, to }) {
     if (!r.newest) { r.verdict = 'registry-unreadable'; continue; }
     const cmp = cmpVer(r.newest.version, r.max);
     if (cmp > 0) {
-      r.verdict = 'newest-outside-bound';
+      r.verdict = boundVerdict(cmp);
       /* The second half of the filed question: was the record TOUCHED after that release appeared?
          `lastModified` moves for KEV adds and ADP rewrites too, so a hit is "the record was reissued
          without widening the bound", not proof the CNA read the release. */
       r.afterNewest = !!(r.modified && r.newest.at && Date.parse(r.modified) > Date.parse(r.newest.at));
     } else {
-      r.verdict = 'newest-inside-bound';
+      r.verdict = boundVerdict(cmp);
     }
     await sleep(120);
   }
@@ -2298,20 +2327,22 @@ function printBoundCensus(c) {
   const pct = (n, d) => (d ? ((100 * n) / d).toFixed(1) : '0.0');
   const q = c.rows.filter(r => r.verdict !== 'unqueried');
   const out = q.filter(r => r.verdict === 'newest-outside-bound');
-  const inside = q.filter(r => r.verdict === 'newest-inside-bound');
+  const equal = q.filter(r => r.verdict === 'newest-equals-bound');
+  const below = q.filter(r => r.verdict === 'newest-below-bound');
   const unread = q.filter(r => r.verdict === 'registry-unreadable');
   console.log(`Open-bound census — publication window ${c.from} → ${c.to} (UTC)`);
   console.log(`  ${c.fetched} records · ${c.candidates} with an inclusive max and no named fix · ${c.queried} queryable (cap ${MAX_PKGS})`);
   console.log('');
-  console.log('  ecosystem     n   newest-outside   inside   unreadable');
+  console.log('  ecosystem     n   newest>bound   newest==bound   newest<bound   unreadable');
   for (const eco of ['pypi', 'npm', 'crates.io']) {
     const e = q.filter(r => r.ecosystem === eco);
     if (!e.length) continue;
-    console.log(`  ${eco.padEnd(12)} ${String(e.length).padStart(3)}   ${String(e.filter(r => r.verdict === 'newest-outside-bound').length).padStart(14)}   ${String(e.filter(r => r.verdict === 'newest-inside-bound').length).padStart(6)}   ${String(e.filter(r => r.verdict === 'registry-unreadable').length).padStart(10)}`);
+    console.log(`  ${eco.padEnd(12)} ${String(e.length).padStart(3)}   ${String(e.filter(r => r.verdict === 'newest-outside-bound').length).padStart(12)}   ${String(e.filter(r => r.verdict === 'newest-equals-bound').length).padStart(14)}   ${String(e.filter(r => r.verdict === 'newest-below-bound').length).padStart(13)}   ${String(e.filter(r => r.verdict === 'registry-unreadable').length).padStart(10)}`);
   }
   console.log('');
   console.log(`  newest > bound   ${out.length}/${q.length} (${pct(out.length, q.length)}%)  — the release a responder upgrades to is outside the stated range`);
-  console.log(`  newest <= bound  ${inside.length}/${q.length} (${pct(inside.length, q.length)}%)`);
+  console.log(`  newest == bound  ${equal.length}/${q.length} (${pct(equal.length, q.length)}%)  — the ceiling IS the latest release: accurate record, NO upgrade target`);
+  console.log(`  newest < bound   ${below.length}/${q.length} (${pct(below.length, q.length)}%)  — the registry has not reached the stated bound (private build, or a lag)`);
   if (unread.length) console.log(`  unreadable       ${unread.length} — a registry miss is not an answer`);
   const byAsn = {};
   for (const r of out) byAsn[r.assigner] = (byAsn[r.assigner] || 0) + 1;
@@ -2322,6 +2353,34 @@ function printBoundCensus(c) {
     console.log('');
     console.log('  by assigner (hit / candidates):');
     for (const [a, n] of ranked) console.log(`    ${a.padEnd(34)} ${String(n).padStart(3)} / ${String(totals[a]).padStart(3)}  (${pct(n, totals[a])}%)`);
+  }
+  /* An assigner with candidates and ZERO hits was invisible here — the table iterated the hit
+     map, so the first live run printed a single row (`disclosure@vulncheck.com 2/17`) and read as
+     "all 17 are VulnCheck's", which the row cannot establish. Name the candidate-only assigners. */
+  const silent = Object.entries(totals).filter(([a]) => !byAsn[a]).sort((x, y) => y[1] - x[1]);
+  if (silent.length) {
+    console.log(`  (no hit: ${silent.map(([a, n]) => `${a} ${n}`).join(' · ')})`);
+  }
+  /* The empty-remedy class gets its own listing, because its advice is the inverse of the row
+   * above: `newest == bound` means the record is right and there is nothing to install, so the
+   * remedy is application-side (reject the input, fork) and never "upgrade". */
+  /* The `newest < bound` rows were printed nowhere on the first live run — the listing covered
+     `outside` and `equals` only, so 2 of 17 rows were a count with no enumerable members. A census
+     whose rows cannot be listed cannot be re-checked. */
+  if (below.length) {
+    console.log('');
+    console.log(`  newest < bound — the registry is behind the stated ceiling (${below.length} row(s)):`);
+    for (const r of below.slice(0, 20)) {
+      console.log(`    ${r.id}  ${r.ecosystem}/${r.name}  ≤${r.max} but latest is ${r.newest.version} (${String(r.newest.at).slice(0, 10)})  defaultStatus ${r.defaultStatus ?? '?'}  [${r.assigner}]`);
+    }
+  }
+  const noTarget = equal.filter(r => !r.fixRefs?.length);
+  if (equal.length) {
+    console.log('');
+    console.log(`  newest == bound — the record is accurate and the remedy is EMPTY (${equal.length} row(s), ${noTarget.length} with no fix pointer):`);
+    for (const r of equal.slice(0, 20)) {
+      console.log(`    ${r.id}  ${r.ecosystem}/${r.name}  ≤${r.max} = latest (${String(r.newest.at).slice(0, 10)})  defaultStatus ${r.defaultStatus ?? '?'}  [${r.assigner}]${r.fixRefs?.length ? `  fix ref ${r.fixRefs[0]}` : ''}`);
+    }
   }
   if (out.length) {
     console.log('');

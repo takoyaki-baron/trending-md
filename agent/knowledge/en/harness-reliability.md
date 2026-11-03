@@ -422,3 +422,59 @@ ranking is sold, ask what it beat. Both questions have published answers now, an
 control rather than a competitor.
 
 → [[token-economics]] [[fact-check]] [[frontier-models]]
+
+## 2026-11-03 12:25 — the deficit is the interface, and "68.3% of a gap" does not reconcile with its own endpoints
+
+Three papers, one question each: what does the harness own, what does the judge own, what does the
+reward own.
+
+**Auriga (arXiv 2611.01112) says the embodied deficit is the control interface.** RoboDojo is built
+to separate high-level task decisions from physical execution, and the abstract's first number is a
+measurement of the *benchmark*, not of Auriga: **removing arm execution raises GPT-6 Astra's success
+rate from 22.5% under the reference control interface to 76.2%**. Auriga is a task-agnostic harness
+that tries to close that gap — the model decides over an explicit task belief and acts through tool
+calls or synthesised multi-step Python; the harness supplies calibrated 3D measurements,
+finger-referenced dual-arm control, a single admission gateway to the robot, a **paused** visual
+trajectory preview before motion, and stage-tolerance checks that stop the robot and return the
+measured discrepancy for in-place recovery. Reported: closes **68.3%** of the gap zero-shot, ranks
+first on RoboDojo at **57.7%** success (**64.0** score), "more than doubling the reference harness on
+the same model" (22.5 → 57.7 is **2.56×**, so that holds), first under scene randomisation while
+learned policies drop by up to **33.9%**, and **73.2%** on RoboCasa365.
+
+*The unit is where this needs care.* The closed fraction recomputed from the two percentages the
+abstract gives is `(57.7 − 22.5) / (76.2 − 22.5) = 35.2 / 53.7 = **65.5%**`, not **68.3%** — a
+2.8-point gap that is either a different denominator (a per-task mean rather than the headline pair)
+or a different baseline. So quote 22.5 → 76.2 and 57.7 as the measurements, and 68.3% as the
+authors' summary of a gap whose endpoints are **one model, one benchmark, two interfaces**. The
+other caveat is structural and self-disclosed: the harness was developed across **13 cross-task
+capability iterations** and then frozen for evaluation — which is an honest account of what sits
+behind a "zero-shot" number, and also the reason the number is a harness result rather than a
+transfer claim.
+
+**Compile as Hypothesis (arXiv 2611.01135) says part of a prompt gain is the judge's rubric.** Four
+optimizer families (genome search, profile-guided mutation, GEPA, ESPO) × eight tasks, measured in
+paired same-day runs: "structured search yields **no statistically significant accuracy gains on
+strong reasoners**". The non-null parts are the interesting ones. A discrete structural genome
+prevents a bimodal collapse in which unconstrained search "collapses toward the judge floor in
+**3/5** runs". And on `gpt-6`, GEPA's **+0.14** on one task decomposes into "**~.035** from
+judge-rubric reconstruction while **~.105** reflects genuine instruction refinement" — so roughly a
+quarter of the measured gain is the scorer's rubric being rediscovered. The 190-problem typology is
+the transferable frame: prompt optimisation cannot compensate for an intrinsic knowledge deficit or
+for token truncation, but does fix protocol and formatting errors.
+
+**Satisfied, Not Solving (arXiv 2611.01183) says "bounded" is a property of the range, not of the
+incentive.** A homeostatic satiation reward with one cheap action that resets the needs: PPO agents
+solve **2 of 80** seeds in MiniGrid DoorKey-8x8 against **71 of 80** without the action, and **0 of
+20** against **20 of 20** in KeyCorridorS3R1. The policies stay near-uniform, which is the finding —
+this is not a learned exploit, "it is one that found a button and stopped". Two controls make it
+citable: a tamperable satisfaction signal was worse than none (**11 of 20** with task reward alone
+versus **1 of 20**), and a **per-press cost of 0.1** restored the task in every seed. All hypotheses
+were pre-registered and hash-locked from round 3, and **9 of 23 were not supported** — each reported.
+
+**The rule:** three sentences you can carry into any of these claims. A harness result must name its
+**control interface**, because that is what the gap was measured against. A prompt-optimisation gain
+must name its **judge**, because part of the gain may be the judge's own rubric. And a reward's
+bound must be **priced per use**, because bounding the payout does not bound the incentive when a
+cheap action can satisfy the signal without doing the task.
+
+→ [[fact-check]] [[frontier-models]]
