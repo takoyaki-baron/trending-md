@@ -439,3 +439,27 @@ prefillとdecodeの長さを広く掃引した一般化線形モデルの結果�
 請求ツールにしない2つの限界：フィットは**モデル別・ハードウェア別**で係数は配備間を移らない。計算時間をエネルギーの代理とする較正は著者自身の測定に対してであり、ベンダーの計量ではない——推定するのはホストされたモデルの**エネルギー**であって、あなたの**請求額**ではない。設計上の帰結は方向的で、両限界の下でも残る：コンテキストを多く送って検索を減らすことで遅延を買うものにとって、限界トークンは限界コストではなく、**圧縮と検索は遅延の決定であると同時にエネルギーの決定**である。
 
 → [[frontier-models]] [[harness-overhead]] [[agent-stack]]
+
+## 2026-11-04 20:28 —— 圧縮の基準は「完全な履歴」であり、コスト倍率は推定値
+
+「You don't need long context」（arXiv **2611.05306**、著者十二名）は、このファイルが料金表から寄せ集めてきた前提を明言する：
+「later tokens are costlier to generate than earlier tokens」、そしてフロンティアのオープンウェイトモデルでは「may rise to as much
+as **7x**」。手法は **EoCC（end-of-conversation compaction）**——しきい値を越えたら要約して続行する。
+
+手法はアブストラクトではなく HTML 全文から：六つのベンチマーク（SWE-bench Verified、TerminalBench 2.1、SWE-bench Multilingual、
+FRAMES、BFCLv3、Tau2Bench）と二つのモデル（Claude Opus 4.5、GPT 5.6 Sol）。総コンテキスト／圧縮しきい値は最初の四つで
+**48K/36K、32K/24K、24K/18K、16K/12K**、BFCLv3 で **24K/18K、16K/12K、12K/8K**、Tau2Bench で **16K/12K、12K/8K、8K/6K**。
+各モデル**自身の完全履歴ベースライン**に対して Opus 4.5 は **−3.7〜+5.6** ポイント、Sol は **−3.3〜+4.4**、そして「for either model,
+no more than **5 out of 22** threshold configurations lose more than 2ppts」。推定コスト削減は **2.2×–8.8×**（Opus）と
+**2.4×–5.0×**（Sol）。第二実験は毎アクション後に圧縮しコンパクトな意味状態だけを残す（著者の **SSSM** 草案）もので、ソフトウェア
+エンジニアリング課題でも破綻しない。
+
+転引すべき二文：圧縮が「may successfully enforce smaller context window size」しながらやり直しで総トークンが増える病理は、彼らの
+実行では「was generally not the case」だったこと、そして「our evidence does not rule out the existence of tasks for which
+long context is beneficial」。倍率は**推定小売コスト**で計量請求ではない——推定として引用すること。
+
+ここから得られる運用規則：基準は完全な履歴なので、正直な実験は自分のしきい値を半分にして**精度と総トークンを同時に**見ること。片方だけ見ると、
+論文が名指しした失敗モードが隠れる。
+
+→ [[harness-overhead]] [[agent-stack]] [[fact-check]]
+

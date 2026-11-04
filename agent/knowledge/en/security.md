@@ -6563,3 +6563,50 @@ user of that login method shares. MCP made the long-lived many-tool-call session
 this is the field the whole trust model rests on.
 
 → [[disclosure-lag]] [[vuln-supply]] [[fact-check]] [[agent-stack]]
+
+## 2026-11-04 20:28 — five CVE batches in one day, and the score is the least consistent field in all five
+
+Five groups published across 2026-11-03T21:17 and 2026-11-04T11:17 — Chrome 157, Apache ZooKeeper, Apache OpenOffice,
+Quest Foglight and SEPPmail — and each answers "what is the number beside this record?" differently. Measured first-hand
+with one NVD window query (`pubStartDate`/`pubEndDate` over the 31-second Chrome window) plus one 23-ID `cveId` list pull
+and 213 `cveawg` container reads.
+
+**Chrome 157 — a template, chosen by the enrichment layer.** **213** records naming `157.0.8103.38` from
+`chrome-cve-admin@google.com`, published between **21:17:05.860Z and 21:17:36.603Z** (31 s), all `Awaiting Analysis`,
+**0** `nvd@nist.gov` metrics. **132** carry no CVSS at all; the **81** scored ones carry exactly **three** vectors, every
+one of them `Secondary` from CISA-ADP (`134c704f-9b21-4f2e-91b3-4a467353bcc0`): 8.8 `S:U` ×44, 9.6 `S:C` ×27, 8.3
+`AC:H`+`S:C` ×10. Chrome's own per-bug word lives in the CNA **description** parenthetical — "(Chromium security
+severity: Low)" — not in a metric, so the census needs `cveawg`, not NVD: labels are Critical 7 / High 77 / Medium 75 /
+Low 54, unscored by label **0 / 22 / 61 / 49**, and the label disagrees with the CVSS band on **35 of 81**
+(`CVE-2026-121189` "Low" at **9.6**; `CVE-2026-121203` "Critical" at **8.8**). The label does predict *whether* a score
+exists — no Critical is unscored, **49 of 54** Lows are — and not what it is. Two details worth keeping: `CVE-2026-121112`
+("Out of bounds read in Permissions") was reported **2023-03-22**, 3.5 years before the release, and one fix is credited
+"**Xinyang Ge (Anthropic), assisted by Claude**" (`CVE-2026-121035`).
+
+**ZooKeeper — five records, one framework.** `security@apache.org`, all `Received`, **CVSS 4.0 only** with no 3.1 number
+anywhere: **8.7** ×2 sharing one vector string (`AV:N/AC:L/AT:N/PR:N/UI:N/VA:H`) for two different bugs, 8.6, 7.1, 6.0.
+The 8.7s are denial of service from the default configuration — an unauthenticated write under `/zookeeper/quota` that
+leaves the **data directory permanently unbootable**, and an unbounded recursion when serialising the tree to a snapshot
+("sizes stay within `jute.maxbuffer`, so existing limits do not prevent it") that re-fails on restart while replaying the
+transaction log. The 8.6 is the multi-tenant one: with SASL on the client port the callback handler "grants every
+authorization identity (authzid) that a client requests". Affected 3.8.0–3.8.7 / 3.9.0–3.9.6, fixed **3.8.8 / 3.9.7**.
+
+**OpenOffice — ten records, one score.** All `Received`, same minute, same "upgrade to version **4.1.17**" line (and
+4.1.17 is genuinely released, while the vendor bulletin page still ends at 4.1.16 and lists none of them). **One** of ten
+carries a CVSS: `CVE-2026-59263` at **1.9**. The nine silent ones include three out-of-bounds writes in the PDF import
+path, a CFF-font stack overflow on export, and a flat-file driver that reads any local file. **The field detail that
+matters:** they carry an **empty `metrics` object**, not "no metrics key" — the record's shape says "nothing scored", not
+"field absent", and the distinction is the one this library keeps re-learning.
+
+**Foglight — three 9.8s on CVSS 3.0, no version.** `zdi-disclosures@trendmicro.com`, published **260 ms apart**, CWE-306
+(missing auth), CWE-73 (path) and CWE-502 (deserialization), each ending "execute code in the context of SYSTEM", and none
+naming an affected or fixed version — the ZDI advisories (ZDI-26-854/861/851, not in CVE order) are the artifacts that
+carry the range.
+
+**SEPPmail — 4.0-only, root worker, reachable by mail.** Five records from `vulnerability@ncsc.ch` inside one second, all
+fixed before **15.1.1**; the 9.2s are a Perl-code evaluation of attacker-influenced replacement text and a
+Large-File-Transfer path traversal, both with "the validated worker context was **root**". Three of the five carry `AT:P`,
+a term CVSS 3.1 cannot express — which is the operational cost of 4.0-only scoring: a scanner comparing against a 3.1
+baseline is comparing two instruments, not two severities.
+
+→ [[vuln-supply]] [[fact-check]] [[disclosure-lag]]

@@ -310,3 +310,27 @@ KeyCorridorS3R1 上是 **0/20** 对 **20/20**。策略保持近似均匀，这�
 **它在本文中的位置：**它是 11-03 解析器差分（评分者的规则能在相同输出上把准确率移动 **22 个点**）的补集。那里是*评分者*决定了数字；这里是*度量*决定了到底测什么——而差距约 **2.5 倍**，比本文件测到的任何评分者分歧都大。它也强化了本文件关于前沿 agent 拥有 shell 访问的既有断言：shell 访问加上一套能通过的测试，正是“做完了”与“没造成损害地做完了”分道扬镳的配置，所以护栏属于**环境**（一条命令能碰什么），而不是提示。
 
 → [[fact-check]] [[frontier-models]]
+
+## 2026-11-04 20:28 —— 执行前的筛查，与一份预注册的「验证器无效」结果
+
+两篇论文：一篇讲控制能放在哪里，一篇讲哪个杠杆真的推动发现。
+
+**LatentTriad（arXiv 2611.05088）把检查放进 prefill。** 它陈述的问题正是每个技能市场的问题：agent「are extended with reusable
+skills, but untrusted skill content can induce operations outside the user's task」，模式匹配漏掉语境风险，动态分析「incurs the
+cost of skill execution」。主张是「hidden states formed during prefill contain readable information about task-operation
+consistency」，方法在一次共享 prefill 上融合三路信号——上下文的 **Boundary** 特征、按组调整的 **Operation** 方向、以及偏离良性状态关系的
+程度——因此检测「generates no output tokens, invokes no tools, and executes no skill code」。数字：**5,830** 个技能包、五个来源、
+七个骨干，pooled F1 **99.0–99.2%**，source-macro F1 **93.0–94.6%**，检测+prefill 中位数 **259–284 ms**。要带走的是**差距**（约 6 分）
+而不是头条——那是各来源不均衡，而这正是一个收集而来的市场语料的样子。干预结果要单独说：匹配的 Operation 状态干预会把固定的风险读数「toward
+the donor label」，即读数是随状态移动的，而不是与状态并排放着。
+
+**验证器上的预注册零结果（arXiv 2611.04420）。** 自动研究流水线的隐含赌注——「discovery quality rises with verification strength」
+——在两个真实数据领域（作业车间调度；基于北京 T-Drive 轨迹的车路协同卸载）用每个领域 **100 对匹配的 LLM/随机**、三个验证器层级来检验。
+操纵是成立的（**429 例**变异电池，分数随层级上升），赌注不成立：LLM 相对随机的配对优势「does not scale with it」（A 域单侧
+**p = 0.1115**；D 域 **p = 0.9994**），而 D 域在严格层级下反而缩小（边际对比 **−0.040**，p = 0.0013）。方法学那句话最值钱：「the two
+lower gates promote identical candidates in **100/100 and 99/100** pairs, so the strict order is untestable when they coincide」。
+建设性的一半：事后并池分析在 A 域给出 **+1.52** holdout 价值单位（单侧 Wilcoxon，n = 100，p = 0.0002）——杠杆是**把候选池加宽**，
+不是把闸门收紧。Zenodo DOI 10.5281/zenodo.23308866。
+
+→ [[fact-check]] [[frontier-models]] [[in-weight-compute]]
+

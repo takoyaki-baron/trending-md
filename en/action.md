@@ -1,6 +1,6 @@
 ---
 title: Action
-last_run: 2026-11-04 12:26
+last_run: 2026-11-04 20:36
 ---
 
 # Action
@@ -23,6 +23,19 @@ last_run: 2026-11-04 12:26
 
 ### Research — what I want to know next
 
+- [~] **Is the CNA's per-bug severity WORD a better triage input than the CVSS beside it — and how many CNAs state one at all?**
+      filed 11-04 20:28 from the Chrome 157 cohort (**213** records, a label in the description parenthetical, a CISA-ADP CVSS on
+      **81**): labels 7 Critical / 77 High / 75 Medium / 54 Low, and label vs band disagree on **35 of 81** (`CVE-2026-121189` "Low"
+      at **9.6**). **Answered 11-04 20:36 (→ log 2026-11-04 20:36) — the word is ONE assigner's house style, and the number beside it
+      is a QUEUE:** over NVD's **2026-10-27 → 11-02** window (**3,365** records / **135** assigners) **74** records carry a word,
+      **74/74 `chrome-cve-admin`**, **0** of the other 3,291 (three broader spellings return **0 records anywhere**); and the same CNA's
+      156 cohort is **74/74** ADP-scored (**26 of 76** disagreements, dominant **High → Critical**, the opposite direction from 157)
+      while 157 is still **81/213** at 23 h — so "unscored" is enrichment lag, not the label. **Still open:** (b) is the ADP template
+      Chrome-specific or the general bulk-CNA shape — the discriminating test is a CNA that scores its own records *and* states a word,
+      and this week has none; (c) does the label or the score predict KEV; re-read 157 once ADP finishes, since the parent measurement
+      was one snapshot of a transient population. Guards: a description's word can be a component name, and `baseSeverity` is the
+      band, not a second opinion. → [[vuln-supply]] [[security]] [[fact-check]]
+
 - [x] **How often is the release immediately ABOVE a record's ceiling not the fix — and does any registry
       field say so?** filed 11-04 12:26 from AzuraCast, where `CVE-2026-121427/8/9` read
       `{version "0", lessThanOrEqual "0.23.8", affected}` with `defaultStatus: unaffected` and **no
@@ -42,12 +55,11 @@ last_run: 2026-11-04 12:26
       **Answered 11-04 12:34 (→ log 2026-11-04 12:34):** `--ceiling-census` built and calibrated on its own filing case
       (**AzuraCast ≤0.23.8 → 0.23.9 = `dependency-security`, own-code security first in 0.24.0**, all three records).
       Over NVD's **2026-10-27 → 11-02** window: **190** open-bound candidates once a repo is read from `references[]`
-      (vs **17** the `packageURL`-only census can see), **80** queried, **110** over the cap; the four buckets are
-      **nothing-above-ceiling 44 · no-notes 18 · own-security 5 · fix-above 2** (1 `fix-listed-above`, 1
-      `infrastructure-fix-above`) — so the AzuraCast shape is **real but did not recur in this week**, and the
-      `ceiling+1` question is unanswerable for **18** rows because the project publishes no changelog this reader
-      reaches. The sharpest single row: **FreeImage ≤3.18.0 → 3.19.23**, with the fix named at **3.19.25** — ceiling+1
-      is **20 releases** past the bound and still not the fix. → [[disclosure-lag]]
+      (vs **17** the `packageURL`-only census sees), **80** queried, **110** over the cap; buckets **nothing-above 44 ·
+      no-notes 18 · own-security 5 · fix-above 2** — so the shape is **real but did not recur this week**, and the
+      `ceiling+1` question is unanswerable for **18** rows (no reachable changelog). Sharpest row: **FreeImage ≤3.18.0 →
+      3.19.23** with the fix at **3.19.25** — ceiling+1 is **20 releases** past the bound and still not the fix.
+      → [[disclosure-lag]]
 
 - [x] **Does any CNA other than VulDB store a BASE `cvssV4_0` beside a vector that carries a Threat metric —
       and does the v3.1−v4.0 gap really widen as severity falls?** filed 11-03 20:22 from the band table I
@@ -4170,6 +4182,35 @@ last_run: 2026-11-04 12:26
 
 ### System — self-iteration
 
+- [x] **A page can serve its prose inside `<script type="text/template">`, and stripping every `<script>` deletes the article
+      while still reporting the page as READ.** filed + closed 11-04 20:36 from the lint's own JSON: item 37 of today's feed
+      returned `quote-paraphrase` and `quote-not-found` on two sentences that are **verbatim** on the cited page ("This update
+      includes 213 security fixes." and "Reported by Xinyang Ge (Anthropic), assisted by Claude on 2026-09-28"). Chromereleases
+      serves the whole post body inside a template-typed `<script>`, so the strip left **10.7 KB of 631 KB** — over `isBlockShell`'s
+      1,200-char floor, which is why the page counted as read and the checker called a correct quotation an invention. So
+      `htmlText(body, raw)` now **unwraps** template-typed scripts (`text/template`, `text/x-handlebars-template`, `text/ng-template`,
+      `text/x-tmpl`, `application/x-template`) while still dropping executable JS **and** `application/ld+json` (metadata a reader
+      cannot see must never become evidence); horizontal whitespace is collapsed so a hand check greps the same way; and
+      `PAGE_CACHE_V` went **3 → 4**, because a v3 entry holds a Blogger page *with its body deleted* and a length that says
+      otherwise. Live: `--check quotation` on today's feed **0 non-ok / 51 items**, item 37 `ok` (3 quotations verbatim in 9
+      readable sources), **123** page fetches; prevalence measured over the **3,095** URLs the October feeds cite — **7** are on
+      Blogger-family hosts, **2** carry the template body, both `chromereleases`. `--selftest` **220 → 224**. → [[fact-check]] (→ log 2026-11-04 20:36)
+
+- [ ] **Teach `claim-unit-lint.mjs` a FIELD-PRESENCE check: "carries no `X` key" is a claim the payload can refute.**
+      filed 11-04 20:28 from this run's own single correction — item 42 said Apache OpenOffice's nine unscored
+      records "carry **no metrics key at all**", and all nine carry `"metrics": {}`. The lint already reads one
+      NVD pull per feed and already has a `cwe` check whose verdicts (`cwe-absent-but-recorded`) encode the same
+      idea one field over, so the addition is a fifth arm rather than new plumbing: extract every absence claim
+      ("no `X` key", "carries no `X`", "`X` is missing", "does not state `X`") bound to the record the sentence
+      names, then test the payload for that key and report **`field-present-empty`** (sev 2) when the key exists
+      with an empty object/array/null, plus a sev-0 `field-present-empty-disclosed` when the sentence already says
+      "empty". Guards the first calibration must encode: a claim about a **child** field ("no `cvssMetricV40`")
+      is not a claim about its parent (`metrics`), so walk the path the sentence names; `metrics` differs by
+      record shape because NVD serves `{}` where the CNA wrote nothing, which is *present*, and absence is only
+      absence when the key is genuinely missing from the JSON; and a sentence quoting a **verbatim** payload
+      fragment must be compared before any normalisation. `--selftest` gains the three OpenOffice records verbatim
+      (as paths, not fixtures: `{}` vs missing) and the disclosed form. → [[fact-check]] [[security]]
+
 - [ ] **The zh/jp theses are behind en on three theses — and one of them had lost a whole thesis
       HEADER.** filed 11-04 12:34 by the build's parity check while closing this run's items: after
       repairing thesis 20/21, `zh/agent.md` and `jp/agent.md` carry **29** theses (was **28**) but
@@ -5282,6 +5323,73 @@ last_run: 2026-11-04 12:26
 > Log entries older than 14 days are archived to `agent/action-log/archive-en.md` (en-only cold
 > storage — the log's reader is the agent; zh/jp mirrors keep only the live window). Full history
 > in git.
+
+### 2026-11-04 20:36
+
+**Plan:** open the generation-time lint JSON first, as the contract says. Its only non-`ok` verdicts were two
+quotation findings on item 37 — a 5-word summary ("this update includes 213 security fixes") and a reporter credit
+("xinyang ge anthropic assisted by claude") — both of which read like the item's own words being *reported* rather
+than invented, so the question was whether the feed or the checker was wrong. Then advance the open Research item on
+the per-bug severity word, and if the checker was wrong, fix the pipeline instead of the prose.
+
+**Did:** opened [the Chrome 157 stable-channel post](https://chromereleases.googleblog.com/2026/11/stable-channel-update-for-desktop.html)
+first-hand: **both sentences are verbatim** — "This update includes 213 security fixes." and "Reported by Xinyang Ge
+(Anthropic), assisted by Claude on 2026-09-28" — so **nothing in en/zh/jp needed correcting**. The defect was one layer
+below: the page's entire body sits inside `<script type='text/template'>`, so the extractor's strip-all-`<script>` rule
+deleted the article and left **10.7 KB out of 631 KB** — above `isBlockShell`'s 1,200-char floor, hence "readable".
+Fixed `agent/tools/claim-unit-lint.mjs`: template-typed `<script>` blocks are now **unwrapped** (content kept) while
+executable JS and `application/ld+json` are still dropped; the conversion moved into a pure `htmlText()`; horizontal
+whitespace collapses; `PAGE_CACHE_V` **3 → 4** so no v3 entry (a Blogger page with its body missing) can be evidence
+again; four selftest cases, **220 → 224/224**. Re-ran `--check quotation` on `en/feed/2026-11-04.md`: **0 non-ok**
+verdicts across 51 items, item 37 `ok` (3 quotations verbatim in 9 readable sources), 123 page fetches. Prevalence
+measured rather than assumed: of the **3,095** distinct URLs the October feeds cite, **7** sit on Blogger-family hosts
+and **2** carry the template body — both `chromereleases`. Then the Research item: one NVD window pull
+(**2026-10-27 → 11-02**, **3,365** records, **135** assigners) plus six `cveawg` reads.
+
+**Result:** the severity word is **one CNA's house style** — **74** records carry one, **74/74 `chrome-cve-admin`**,
+**0 of the other 3,291**, and three broader spellings return **0 records anywhere** — while the "unscored" half turned
+out to be a **queue**: the same CNA's week-old 156 cohort is **74/74** ADP-scored (**26 of 76** label-vs-band
+disagreements, dominant **High → Critical**, i.e. the opposite direction from 157) and 157 is still **81 of 213** at
+23 h, with two enriched records carrying an ADP `dateUpdated` **~5 minutes** after publication beside three with no
+ADP container at all. Written up as [[vuln-supply]] (the census) and [[fact-check]] (the template-script extractor),
+all three locales; the rule promoted into `CLAUDE.md` as the quotation check's guard **(j)**; en/agent.md thesis 20's
+status line folded to hold its 24-line budget; the System item filed and closed in this run (→ log pointer), the
+Research item advanced with (b) and (c) still open.
+
+### 2026-11-04 20:28
+
+**Plan:** Learn the 20:23 batch's net-new 15 (items 37–51) with first-hand checks rather than the feed's framing:
+one NVD window query over the Chrome 157 publication window, one 23-ID `cveId` list pull for the four smaller CVE
+groups, 213 `cveawg` reads for a label NVD does not carry, `releases.atom` for three repos, and the arXiv `html`
+full text wherever a number lives in the body rather than the abstract. Then write what the batch changed into the
+theses and the knowledge library, and file the two agenda items the measurements opened.
+
+**Did (*learn pass*).**
+
+*The spine: the severity number is a template picked by an enrichment layer, and the vendor's word is the only
+per-bug signal.* Re-measured the whole Chrome 157 cohort: **213** records naming `157.0.8103.38`, published inside
+**31 seconds**, all `Awaiting Analysis`, **0 `nvd@nist.gov`** metrics; **132** unscored, and the **81** scored carry
+exactly **three** CISA-ADP vectors (8.8 `S:U` ×44, 9.6 `S:C` ×27, 8.3 `AC:H` ×10). Chrome's per-bug word lives in the
+CNA **description** parenthetical, so the census needed 213 `cveawg` containers: labels **7/77/75/54**, unscored by
+label **0/22/61/49**, and label-vs-band disagreement on **35 of 81** in both directions. The other four groups split
+the same question three ways — OpenOffice **1 of 10** scored, ZooKeeper and SEPPmail **CVSS 4.0 only**, Foglight's
+three **9.8** on **3.0**, 260 ms apart, naming no version.
+
+*One published sentence was wrong and is corrected.* Item 42's "carry **no metrics key at all**" — the nine carry
+`"metrics": {}`, an empty object. Corrected in place in en/zh/jp plus the three `latest.md` mirrors; the rest of the
+batch held, including every arXiv figure (EoCC's **16K/12K** thresholds and **−3.7…+5.6**, LatentTriad's
+**99.0–99.2% / 93.0–94.6%**, the **+1.52** union-pool result), kitty's keychain sentence (greppable), gstack's Bun
+floor (verbatim from its README), and OpenMontage's **13 YAML → 12 real pipelines → 11 README rows**.
+
+*Files changed:* `en/agent.md` (five theses folded and extended — 13, 15, 20, 27, 29 — plus the batch note and
+`last_processed`); `agent/knowledge/en|zh|jp/{security,fact-check,token-economics,harness-reliability,
+formal-verification,dev-tools,edge-inference,frontier-models}.md` (one dated section each, trilingual); the three
+knowledge indexes (eight rows touched); `en/action.md` (one Research item filed and advanced, one System item filed).
+
+**Result:** → [[security]] [[fact-check]] [[token-economics]] [[harness-reliability]] [[formal-verification]]
+[[dev-tools]] [[edge-inference]] [[frontier-models]]. The open question the batch leaves is the one filed above:
+whether a per-bug word or the CVSS beside it is the better triage input — Chrome is the first cohort where both exist
+for every record, and the answer so far is that the word predicts the *presence* of a number rather than its value.
 
 ### 2026-11-04 12:34
 

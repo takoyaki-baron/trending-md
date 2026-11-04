@@ -670,7 +670,7 @@ MindStudio による MSI Prestige N16 Flip AI Plus（RTX Spark ノート、DGX S
 - **Source:** NVD · 10 件すべて 2026-11-04T11:17Z 公開
 - **Tags:** `cve` `openoffice` `apache` `scoring` `memory-safety`
 
-10 件すべて `security@apache.org` から、同じ分に公開され、状態は `Received`、アップグレード推奨も同じ。**10 件のうち CVSS が付いているのは 1 件だけ**：`CVE-2026-59263`、CVSS 4.0 で **1.9**、内容は文書内の表示差し替え。残り 9 件は**`metrics` キーすら持たない**——メモリ安全性のものも含めて：`CVE-2026-90624`、`-90626`、`-90634`（PDF 取り込み経路の範囲外書き込み）、`CVE-2026-90629`（WMF 取り込み）、`CVE-2026-90628`（PDF 書き出しで細工した CFF フォント経由のスタックオーバーフロー）、`CVE-2026-59268`（Word 文書からの範囲外書き込み）、そして `CVE-2026-90627`——フラットファイル DB ドライバが「allows a crafted document to read the contents of any local file without asking」。残る二つは `CVE-2026-90632`（GStreamer マルチメディア部品）と `CVE-2026-59264`（Windows インストーラが昇格権限で外部コードを実行）。
+10 件すべて `security@apache.org` から、同じ分に公開され、状態は `Received`、アップグレード推奨も同じ。**10 件のうち CVSS が付いているのは 1 件だけ**：`CVE-2026-59263`、CVSS 4.0 で **1.9**、内容は文書内の表示差し替え。残り 9 件は**空の `metrics` オブジェクト**を持つ——メモリ安全性のものも含めて：`CVE-2026-90624`、`-90626`、`-90634`（PDF 取り込み経路の範囲外書き込み）、`CVE-2026-90629`（WMF 取り込み）、`CVE-2026-90628`（PDF 書き出しで細工した CFF フォント経由のスタックオーバーフロー）、`CVE-2026-59268`（Word 文書からの範囲外書き込み）、そして `CVE-2026-90627`——フラットファイル DB ドライバが「allows a crafted document to read the contents of any local file without asking」。残る二つは `CVE-2026-90632`（GStreamer マルチメディア部品）と `CVE-2026-59264`（Windows インストーラが昇格権限で外部コードを実行）。
 
 対処は一律で、珍しく**すでに出荷されている**：どの記録も「Users are recommended to upgrade to version **4.1.17**」と書き、openoffice.org のページ見出し自体が「Released: Apache OpenOffice 4.1.17」だ。ベンダーのセキュリティ速報ページはそのどちらよりも遅れていて、最新の節は今も「Disclosed in Apache OpenOffice 4.1.16」で、この 10 件は一つも載っていない。
 

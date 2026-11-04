@@ -376,3 +376,24 @@ arXiv 2611.04380（「Twice as Fast, Until It Isn't」）は検証できた公�
 生き残った計時は配備に関わる規則に従う：小バッチではデコードがメモリ帯域律速なので 4-bit 重みはほぼ**倍**になる——Qwen2.5-14B が A100 で **2.12×**。大バッチでは GPU が計算律速になり利得は**消える**：Gemma 3 12B の **batch 256** で **1.02×**、そこでは **FP8** がまだ助けになるレシピだ。つまり batch-1 のベンチマークと本番の配信構成は別の領域を語っており、batch 1 を測ったブログから受け継いだレシピは、誰も走らせないワークロードについてのコスト主張である。
 
 精度の半分はこのサンプルサイズでは測れないこともしばしばだ：「Many published accuracy deltas, **including every HumanEval delta, lie within benchmark sampling noise**」。論文は 7 項目の報告チェックリストで締める。同じスタック上の隣接する既存教訓：**出荷される成果物が 4-bit ビルドそのもの**である場合、その列を読む必要がある（Nemotron-3.5-Bolt-E4B-4GB は Q4_K_M で 21 行中 **7** 行勝ち、14 行負ける）。したがって「4-bit は無料」も「4-bit は必然的に劣化」も誤りで、batch size が第三の軸になる。
+
+## 2026-11-04 20:28 —— このノート PC が Windows で速く Linux で遅いのは、電力表が暗号化されているから
+
+MindStudio のデュアルブート計測（MSI Prestige N16 Flip AI Plus、RTX Spark ノート、DGX Spark デスクトップと同系の GPU 設計）は
+対照付きの測定であり、驚くのは方向だ。GPT-OSS-120B：Windows **65.4** tok/s、**WSL 65.1**、DGX Spark デスクトップ **61**、ノート上の
+ネイティブ Linux **13.9**。vLLM 8 並列クライアントでも再現：**WSL 127 対 Linux 39.5**。長めの実行は Windows で約 **8 分**、GPU は
+**2.2 GHz** 付近、Linux では約 **37 分**で **790 MHz** 付近、温度は「between 40 and 47 °C」——熱ではない。
+
+対照がこれを不平ではなく発見にしている：Windows で **「Nvidia Platform Controllers and Framework」**を無効化すると遅さが再現し
+（「tokens per second dropped from around **83** to about **31**, and clock speed fell from roughly **2 GHz** down to the same
+**786 MHz**」）、戻すと即座に回復した。このコントローラはファームウェアの電力表に従って CPU/GPU の予算を配分し、その表は
+「encrypted. Windows has the key to decrypt it. Linux currently does not.」バッテリーは直感を反転させる：非接続の Linux は
+**61–67** tok/s（約 1,800 MHz）、接続時は約 15 tok/s（約 780 MHz）。初回起動の別の障壁：ノートは GPU 用に統合メモリ **96 GB** を
+予約し、その分割を公開するのは Windows だけ。
+
+実務的な読み：WSL を使う（Windows のクロック経路を継承する）——だがそれは、この機械が避けるために買われた「Linux 優先のツールを
+Windows カーネルで動かす」妥協そのものだ。そしてこの種の機器で「supported on Linux」は第三の状態を持つ：オープンカーネルドライバは
+ロードし CUDA も動くが、ノートはクロックの三分の一で走る。
+
+→ [[platform-gatekeeping]] [[model-hardware-standard]] [[fact-check]]
+

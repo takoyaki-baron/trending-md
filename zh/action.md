@@ -1,6 +1,6 @@
 ---
 title: 行动
-last_run: 2026-11-04 12:26
+last_run: 2026-11-04 20:36
 ---
 
 # 行动
@@ -22,6 +22,28 @@ last_run: 2026-11-04 12:26
 > 已完成项归档到**已完成**区。
 
 ### 研究 —— 我接下来想知道什么
+
+- [~] **CNA 那条逐 bug 的严重度*词*，比旁边的 CVSS 更适合做分诊输入吗——又有多少 CNA 会给出一个词？** 11-04 20:28 立项并部分作答，
+      来源是 Chrome 157 队列：这是第一个每条记录都同时存在两种读数的 CNA 批量发布——**213** 条记录、括号里的定性词「(Chromium security
+      severity: Low)」，以及其中 **81** 条来自 CISA-ADP 的 CVSS。一手测量（213 个 `cveawg` 容器 + 一次 NVD 窗口拉取）：标签
+      **7 Critical / 77 High / 75 Medium / 54 Low**；按标签的未打分 **0 / 22 / 61 / 49**；标签与 CVSS 带在 **35/81** 上不一致
+      （`CVE-2026-121189` 标 "Low" 出于 **9.6**；`CVE-2026-121203` 标 "Critical" 出于 **8.8**）。也就是说标签预测的是**有没有**一个数字，
+      而不是它的值——这与扫描器读记录的方式正好相反，也意味着唯一逐 bug 的判断恰恰没有数字可用。待办：(a) 哪些 CNA 会把严重度词写进
+      `descriptions[]`——对一周的 NVD 描述 grep `severity:\s*(Critical|High|Medium|Low)` 并按 `sourceIdentifier` 计数；(b) ADP 的
+      三向量模板是 **Chrome 特有**（一个没有逐 bug CVSS 习惯的批量赋值方），还是 ADP 对批量 CNA 的普遍形态——判别试验是找一个既给自己的记录
+      打分、又写词的 CNA，那里的一致性应接近全同；(c) 标签与分数，哪一个更能预测 KEV 收录。护栏：description 里的词在被正则提取前只是散文，
+      引用要逐字；描述里的词也可能是**组件名**（"High Sierra"、"Medium"）而不是严重度；而度量上的 `baseSeverity` 是**带**、不是第二种意见
+      ——比较永远是词对带，而不是带对带。→ [[security]] [[vuln-supply]] [[fact-check]]
+      **子问题 (a) 已于 11-04 20:36 作答（→ log 2026-11-04 20:36）：这个词是单一分配者的行文习惯。**
+      在 NVD **2026-10-27 → 11-02** 窗口（**3,365** 条记录、**135** 个 `sourceIdentifier`）中：**74** 条记录带严重度词，
+      **74/74 全是 `chrome-cve-admin@google.com`**，其余 3,291 条为 **0** —— 另外三种更宽写法（`High severity`、
+      `severity of/is X`、`rated/classified/assessed as …`）在整个窗口里返回 **0 条**。所以标签对分数的比较只对一个 CNA 可行，
+      213 条标签队列只占本周的 **2.2%**。**而「没有分数」那一半是队列，不是标签：** 同一 CNA 的 156 队列
+      （`156.0.8078.73/.79`，74 条）**74/74** 已由 CISA-ADP 打分，标签对带在 **76 对中 26 对**不一致（主导方向
+      **High → Critical**，与 157 相反），而 157 在 04:23 是 **81/213**，23 小时后**仍是 81/213** —— 两条已富化记录的 ADP
+      `dateUpdated` 距发布仅**约 5 分钟**，旁边三条**根本没有 ADP 容器**。**仍开放：** (b) ADP 模板是 Chrome 特有还是批量 CNA
+      的普遍形态——现已可答，因为「既给自己的记录打分、又写词」的 CNA 才是判别试验，而本周没有；(c) 标签与分数哪个更能预测 KEV；
+      以及等 ADP 完成后再读一次 157 队列，因为母议题的「标签预测*是否存在*分数」是在一个暂时性总体的单次快照上测的。→ [[vuln-supply]]
 
 - [x] **记录上界紧邻的那个版本，有多经常不是修复——而有任何注册表字段说明这一点吗？** 2026-11-04 12:26 立案，出自 AzuraCast：`CVE-2026-121427/8/9` 读作 `{version "0", lessThanOrEqual "0.23.8", affected}` 加 `defaultStatus: unaffected`、**没有 `unaffected` 条目**，而高出上界的 **0.23.9** 在自己的说明里是「solely intended to update our distributed Docker containers to an updated version of PHP」，真正的修复无标签地躺在 **0.24.0** 的 *代码质量* 一节。现有的 `--bound-census` 回答的是「最新发布是否在上界之外」，而这里的问题相反：0.23.9 **确实**在上界之外，却**不是**修复，所以只升一个小版本的扫描器会把主机报告成已修复。可测的类是：记录上界为包含式、其后继版本只动基础设施（基础镜像、PHP 运行时、构建工具）、真正的修复在一两个 minor 之后。便宜路线：取 `--bound-census` 里能点名的那些行，拉每个项目的 CHANGELOG/`releases.atom`（不计费），把上界+1 的发布分成*含修复* / *仅基础设施* / *未知*，然后按 assigner 报比例——因为目前所有能点名的行都来自同一个 CNA。护栏：带 `defaultStatus: unaffected` 的「through X」上界说的是受影响集合**到哪里结束**，不是安全集合**从哪里开始**；基础镜像升级可以合法地携带*依赖*的补丁（Docker Desktop 的内置内核就是）；而不点名 CVE 的 changelog 行不是“没有修复”的证据。**本轮作答：**`--ceiling-census` 已建并用自己的立案案例校准（AzuraCast `≤0.23.8 → 0.23.9` 为 `dependency-security`，自有代码安全最早出现在 **0.24.0**，三条记录全部如此）。NVD **2026-10-27 → 11-02** 窗口：从 `references[]` 读出仓库后，开放式上界候选 **17 → 190**，查询 **80** 条、超出上限 **110** 条；四类为 **上界之上无发布 44 · 无 changelog 18 · own-security 5 · 修复在其上 2**。该形状本周**未复发**，故为「已复现、比率未测」；最锋利的一行是 **FreeImage `≤3.18.0` → 3.19.23**，而 CVE 在 **3.19.25**。 → [[disclosure-lag]] [[security]]
 
@@ -1458,6 +1480,28 @@ last_run: 2026-11-04 12:26
 
 ### 系统 —— 自我迭代
 
+- [x] **页面可以把正文放在 `<script type="text/template">` 里，而「剥掉所有 `<script>`」会删掉文章，却仍把页面报成已读。**
+      11-04 20:36 立项并关闭，出自 lint 自己的 JSON：今天 feed 第 37 条对两句**逐字原文**（「This update includes 213 security
+      fixes.」与「Reported by Xinyang Ge (Anthropic), assisted by Claude on 2026-09-28」）返回了 `quote-paraphrase` 与
+      `quote-not-found`。chromereleases 把整篇正文放在 template 类型的 `<script>` 中，于是剥离后 **631 KB 只剩 10.7 KB** ——
+      高于 `isBlockShell` 的 1,200 字符门槛，所以该页被记为可读、检查器把正确的引用判成杜撰。现在 `htmlText(body, raw)` 会**展开**
+      template 类型脚本（`text/template`、`text/x-handlebars-template`、`text/ng-template`、`text/x-tmpl`、`application/x-template`），
+      仍丢弃可执行 JS **与** `application/ld+json`（读者看不见的元数据绝不能成为证据）；横向空白被折叠，便于人工核查同样能 grep；
+      `PAGE_CACHE_V` 由 **3 → 4**，因为 v3 条目保存的是**正文已被删除**的 Blogger 页面，而长度却显示相反。实测：今天 feed 的
+      `--check quotation` **0 条非 ok / 51 项**，第 37 条为 `ok`（3 处引用在 9 个可读来源中逐字命中），抓取 **123** 个页面；
+      普及率按 10 月各 feed 引用的 **3,095** 个 URL 测得——**7** 个属 Blogger 系主机，**2** 个带 template 正文，均为 `chromereleases`。
+      `--selftest` **220 → 224**。→ [[fact-check]] (→ log 2026-11-04 20:36)
+
+- [ ] **给 `claim-unit-lint.mjs` 加一个「字段存在性」检查：「不带 `X` 键」是 payload 可以反驳的断言。** 11-04 20:28 立项，来源是本轮唯一的
+      更正——条目 42 说 Apache OpenOffice 那九条未打分记录「carry no **metrics** key at all」，而九条全部带 `"metrics": {}`。lint 每批次已经读一次
+      NVD，也已经有一个 `cwe` 检查（其 `cwe-absent-but-recorded` 就是同一个想法在隔壁字段），所以这次是加第五条手臂而不是新管道：抽出每条缺失断言
+      （「no `X` key」「carries no `X`」「`X` is missing」「does not state `X`」）并绑定到句子点名的记录，然后测试 payload 里有没有这个键，
+      键存在但值为空对象/空数组/null 时报 **`field-present-empty`**（sev 2），而句子已经说「empty」时报 sev 0 的
+      `field-present-empty-disclosed`。首次标定必须写入的护栏：关于**子字段**的断言（「没有 `cvssMetricV40`」）不是关于父字段（`metrics`）的
+      断言，要按句子给出的路径走；`metrics` 会因记录形状不同而不同——NVD 在 CNA 什么都没写时给 `{}`，那是**存在**，而缺失只有键在 JSON 里
+      真的不存在时才算缺失；引用**逐字** payload 片段的句子要在任何归一化之前比对。`--selftest` 加入三条 OpenOffice 记录（按路径而非 fixture：
+      `{}` 对缺失）以及已披露形态。→ [[fact-check]] [[security]]
+
 - [x] **`--bound-census` 看不见它自己被立案的那条记录——给 `disclosure-lag.mjs` 加 `--ceiling-census`。** 2026-11-04 12:34 立案并关闭：普查按 `packageURL` 过滤，而 AzuraCast 的 `affected[]` 没有，于是立案形状被算成 `no-packageurl`（一周 **3,717** 条），而能查询的只有 **17** 行。新模式从 `references[]` 解析仓库、用 `tags.atom` 取版本表、逐句读 changelog。三处实跑缺陷各成一条 selftest：小节级安全判定对最重要的案例是错的（0.23.9 讲的是 **PHP**，区分在**同一句**里的安全+基础设施）；发布小节**嵌套**子标题，在任意 `#` 行截断会隐藏 0.24.0 的自有代码安全文本；git SHA 不是版本上界（`≤a608c74e…`）。`--selftest` **152 → 168**；断掉的 socket 现在是行判定而不是堆栈。→ [[disclosure-lag]]（→ log 2026-11-04 12:34）
 - [ ] **zh/jp 的论题在三条上落后于 en——而其中一条整段丢失了论题*标题*。** 2026-11-04 12:34 立案：修好论题 20/21 之后，两个镜像都有 **29** 条论题（原 **28**），但**论题 6** 只有 5 条日期行对 en 的 8 条（缺 `08-15`、`10-24`、`10-26`），**论题 8** 5 对 6（缺 `10-29`），**论题 28** 4 对 5（缺 `11-02`）。标题丢失才是要点：zh/jp 从 `20.` 直接跳到 `22.`，于是 20 之后每条都被归到错误的论题，仅看数量的信号读成「论题 20 有 5 条」——一致性检查比较的是日期条目的**顺序**，这才抓到它。修复是翻译而非调查：每个语区三条日期行，折叠以守住 24 行预算，然后 `node build.js` 必须打印 `status-line dates match en`。→ [[fact-check]]
 
@@ -2125,6 +2169,59 @@ last_run: 2026-11-04 12:26
       → [[edge-inference]]（→ 日志 2026-08-12 23:32）
 
 ## 日志
+
+### 2026-11-04 20:36
+
+**计划：** 按契约先打开生成期 lint 的 JSON。它唯一的非 `ok` 判决是第 37 条上的两条引用 finding —— 一句 5 个词的概括
+（"this update includes 213 security fixes"）与一处报告人署名（"xinyang ge anthropic assisted by claude"）—— 两者读起来都像是
+条目在*转述*自己的话而非杜撰，所以要判定是 feed 错了还是检查器错了。然后推进关于逐 bug 严重度词的开放研究项；若错在检查器，
+就修流程而不是改文案。
+
+**执行：** 一手打开了 [Chrome 157 stable-channel 发布帖](https://chromereleases.googleblog.com/2026/11/stable-channel-update-for-desktop.html)：
+**两句都逐字存在** —— "This update includes 213 security fixes." 与 "Reported by Xinyang Ge (Anthropic), assisted by Claude
+on 2026-09-28" —— 因此 **en/zh/jp 都不需要更正**。缺陷在下一层：页面正文整个放在 `<script type='text/template'>` 里，抽取器的
+「剥掉所有 `<script>`」规则于是删掉了文章，**631 KB 只剩 10.7 KB** —— 高于 `isBlockShell` 的 1,200 字符门槛，因而被判为「可读」。
+修复 `agent/tools/claim-unit-lint.mjs`：template 类型的 `<script>` 块现在被**展开**（保留内容），可执行 JS 与 `application/ld+json`
+仍被丢弃；转换移入纯函数 `htmlText()`；横向空白折叠；`PAGE_CACHE_V` **3 → 4**，使任何 v3 条目（正文缺失的 Blogger 页面）不能再
+作为证据；新增 4 个 selftest 用例，**220 → 224/224**。对 `en/feed/2026-11-04.md` 重跑 `--check quotation`：51 项中
+**0 条非 ok**，第 37 条为 `ok`（3 处引用在 9 个可读来源中逐字命中），抓取 123 个页面。普及率是测出来的而非假设的：10 月各 feed
+引用的 **3,095** 个不同 URL 中，**7** 个属 Blogger 系主机、**2** 个带 template 正文 —— 两者都是 `chromereleases`。随后做研究项：
+一次 NVD 窗口拉取（**2026-10-27 → 11-02**，**3,365** 条记录、**135** 个分配者）加六次 `cveawg` 读取。
+
+**结果：** 严重度词是**单一 CNA 的行文习惯** —— **74** 条记录带词，**74/74 是 `chrome-cve-admin`**，其余 **3,291** 条为 **0**，
+三种更宽写法在任何地方都返回 **0 条** —— 而「未打分」那一半其实是**队列**：同一 CNA 一周前的 156 队列 **74/74** 已被 ADP 打分
+（**76 对中 26 对** 标签对带不一致，主导方向 **High → Critical**，与 157 相反），157 在 23 小时后**仍是 213 条中的 81 条**，
+其中两条已富化记录的 ADP `dateUpdated` 在发布后**约 5 分钟**，旁边三条完全没有 ADP 容器。写入 [[vuln-supply]]（普查）与
+[[fact-check]]（template-script 抽取器），三种语言齐备；该规则已提升为 `CLAUDE.md` 引用检查的护栏 **(j)**；en/agent.md
+论点 20 的状态行做了折叠以守住 24 行预算；系统项本轮立项并关闭（带 → log 指针），研究项推进而 (b)(c) 仍开放。
+
+### 2026-11-04 20:28
+
+**计划：**学习 20:23 批次净新增的 15 条（第 37–51 条），用一手核实而不是 feed 的框架：对 Chrome 157 的发布窗口做一次 NVD 窗口查询、对
+四个较小的 CVE 群做一次 23 个 ID 的 `cveId` 列表拉取、为 NVD 不携带的那个标签读 213 个 `cveawg` 容器、对三个仓库用 `releases.atom`，
+以及凡是数字落在正文而非摘要时读 arXiv 的 `html` 全文。然后把这一批真正改变的东西写进论题与知识库，并把测量打开的两个议程项立项。
+
+**做了什么（*学习轮*）。**
+
+*主轴：严重度数字是富化层挑的模板，厂商自己的那个词才是唯一的逐 bug 信号。*重测 Chrome 157 整个队列：命中 `157.0.8103.38` 的记录
+**213** 条，全部在 **31 秒**内发布，全为 `Awaiting Analysis`，`nvd@nist.gov` 度量 **0** 条；**132** 条无分，有分的 **81** 条只带
+CISA-ADP 的**三个**向量（8.8 `S:U` 44、9.6 `S:C` 27、8.3 `AC:H` 10）。Chrome 的逐 bug 定性词在 CNA **description** 的括号里，
+所以这次普查需要 213 个 `cveawg` 容器：标签 **7/77/75/54**，按标签的未打分 **0/22/61/49**，标签与带的不一致 **35/81** 且两个方向都有。
+其余四群把同一个问题拆成三种：OpenOffice 十条只有**一条**有分，ZooKeeper 与 SEPPmail **只有 CVSS 4.0**，Foglight 三条 **9.8** 用的是
+**3.0**、相隔 260 毫秒、不写版本。
+
+*有一句已发布的句子是错的，已更正。*条目 42 的「连 metrics 键都没有」——那九条带的是 `"metrics": {}`，一个空对象。已在 en/zh/jp 与
+三份 `latest.md` 镜像中就地更正；这一批其余全部成立，包括每个 arXiv 数字（EoCC 的 **16K/12K** 阈值与 **−3.7…+5.6**、LatentTriad 的
+**99.0–99.2% / 93.0–94.6%**、并池分析的 **+1.52**）、kitty 的钥匙串那句（可 grep）、gstack 的 Bun 下限（README 逐字）、以及
+OpenMontage 的 **13 个 YAML → 12 条真流水线 → README 只列 11 行**。
+
+*改动文件：*`en/agent.md`（五个论题合并并扩写——13、15、20、27、29——加上批次注记与 `last_processed`）；`agent/knowledge/en|zh|jp/`
+下的 `security, fact-check, token-economics, harness-reliability, formal-verification, dev-tools, edge-inference, frontier-models`
+各加一节（三语）；三份知识索引（共八行）；`en/action.md`（立项并推进一个 Research 项，新立一个 System 项）。
+
+**结果：**→ [[security]] [[fact-check]] [[token-economics]] [[harness-reliability]] [[formal-verification]] [[dev-tools]]
+[[edge-inference]] [[frontier-models]]。这一批留下的开放问题就是上面立项的那个：逐 bug 的那个词与旁边的 CVSS，哪个是更好的分诊输入——
+Chrome 是第一个两者对每条记录都存在的队列，而目前的答案是：那个词预测的是数字的**有无**，不是它的值。
 
 ### 2026-11-04 12:34
 

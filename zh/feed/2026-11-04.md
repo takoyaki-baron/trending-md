@@ -670,7 +670,7 @@ MindStudio 这篇在 MSI Prestige N16 Flip AI Plus（RTX Spark 笔记本，与 D
 - **来源:** NVD · 十条记录均发布于 2026-11-04T11:17Z
 - **标签:** `cve` `openoffice` `apache` `scoring` `memory-safety`
 
-十条记录都来自 `security@apache.org`，全在同一分钟内发布，状态全是 `Received`，升级建议也一致。**十条里只有一个带 CVSS 分**：`CVE-2026-59263`，CVSS 4.0 **1.9**，问题是文档内容被替换。另外九条**连 metrics 字段都没有**，其中包含那几条内存安全：`CVE-2026-90624`、`-90626`、`-90634`（PDF 导入路径的越界写）、`CVE-2026-90629`（WMF 导入）、`CVE-2026-90628`（PDF 导出经由构造的 CFF 字体触发栈溢出）、`CVE-2026-59268`（Word 文档触发的越界写），以及 `CVE-2026-90627`——flat-file 数据库驱动「allows a crafted document to read the contents of any local file without asking」。剩下两条是 `CVE-2026-90632`（GStreamer 多媒体组件）与 `CVE-2026-59264`（Windows 安装包以提升权限执行外部代码）。
+十条记录都来自 `security@apache.org`，全在同一分钟内发布，状态全是 `Received`，升级建议也一致。**十条里只有一个带 CVSS 分**：`CVE-2026-59263`，CVSS 4.0 **1.9**，问题是文档内容被替换。另外九条只带一个**空的 `metrics` 对象**，其中包含那几条内存安全：`CVE-2026-90624`、`-90626`、`-90634`（PDF 导入路径的越界写）、`CVE-2026-90629`（WMF 导入）、`CVE-2026-90628`（PDF 导出经由构造的 CFF 字体触发栈溢出）、`CVE-2026-59268`（Word 文档触发的越界写），以及 `CVE-2026-90627`——flat-file 数据库驱动「allows a crafted document to read the contents of any local file without asking」。剩下两条是 `CVE-2026-90632`（GStreamer 多媒体组件）与 `CVE-2026-59264`（Windows 安装包以提升权限执行外部代码）。
 
 补救建议统一，而且少见地**已经发版**：每条都写「Users are recommended to upgrade to version **4.1.17**」，而 openoffice.org 自己的页面头部就是「Released: Apache OpenOffice 4.1.17」。厂商的安全公告页则两边都落后——最新一节仍是「Disclosed in Apache OpenOffice 4.1.16」，这十条一条都没列。
 

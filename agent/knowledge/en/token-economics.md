@@ -584,3 +584,30 @@ directional and survives both limits: for anything that buys latency by sending 
 the marginal token is not the marginal cost, and **compaction/retrieval is an energy decision as well as a latency one**.
 
 → [[frontier-models]] [[harness-overhead]] [[agent-stack]]
+
+## 2026-11-04 20:28 — compaction is measured against FULL history, and the cost multiples are estimates
+
+"You don't need long context" (arXiv **2611.05306**, twelve authors) states the premise this file has been assembling from
+pricing tables: "later tokens are costlier to generate than earlier tokens," with the disparity "may rise to as much as
+**7x**" on frontier open-weight models. The method is **EoCC (end-of-conversation compaction)** — at a threshold, summarise
+and continue.
+
+Method, read from the HTML full text rather than the abstract: six benchmarks (SWE-bench Verified, TerminalBench 2.1,
+SWE-bench Multilingual, FRAMES, BFCLv3, Tau2Bench) and two models (Claude Opus 4.5, GPT 5.6 Sol), with total-context /
+compaction thresholds of **48K/36K, 32K/24K, 24K/18K, 16K/12K** on the first four, **24K/18K, 16K/12K, 12K/8K** on BFCLv3,
+and **16K/12K, 12K/8K, 8K/6K** on Tau2Bench. Against each model's **own full-history baseline**: Opus 4.5 **−3.7 to +5.6**
+points, Sol **−3.3 to +4.4**, and "for either model, no more than **5 out of 22** threshold configurations lose more than
+2ppts". Estimated cost savings **2.2×–8.8×** (Opus) and **2.4×–5.0×** (Sol). A second experiment compacts after every
+action and keeps only a compact semantic state (their **SSSM** sketch) and still does not collapse on software-engineering
+tasks.
+
+Two sentences from the paper are the ones to quote onward: the pathology where compaction "may successfully enforce smaller
+context window size" while total tokens rise from redoing work "was generally not the case" in their runs, and "our
+evidence does not rule out the existence of tasks for which long context is beneficial." The multiples are **estimated
+retail cost**, not metered bills — quote them as estimates.
+
+The operational rule this buys: the baseline is full history, so the honest experiment is to halve your own threshold and
+watch **accuracy and total tokens together**. Looking at either one alone hides the failure mode the paper names.
+
+→ [[harness-overhead]] [[agent-stack]] [[fact-check]]
+

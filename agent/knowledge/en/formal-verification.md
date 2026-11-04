@@ -260,3 +260,25 @@ verification claim is auditable when the artifact names its own unmeasured denom
 is not lying; it is withholding the number that would let you size the rest.
 
 → [[frontier-models]] [[fact-check]] [[dev-tools]]
+
+## 2026-11-04 20:28 — the proof moves to PTX, one layer below the compiler
+
+arXiv **2611.04447** formalises **PTX** — the assembly the driver consumes — rather than CUDA or a framework IR, "an
+approach that allows modeling and reasoning about patterns common in GPU kernels for Deep Learning, including
+acquire-release, tensor cores, proxies, async operations, multi-kernel pipelines and data-dependent control flow." That
+list is the honest scope statement: it names the features that make GPU kernels hard, each one a place where a naive model
+diverges from what the hardware does.
+
+The proofs are for "simple implementations of a WGMMA GEMM kernel, FlashAttention, and a 3-kernel MoE pipeline" — the
+authors' own word is "simple", and the third is the interesting one here because it spans a **pipeline** (memory handed
+between kernels) rather than a single launch.
+
+Why the layer matters: verification of ML infrastructure currently stops at the compiler or the framework and skips the
+layer where tensor-core scheduling, async copies and memory proxies get their semantics wrong, so a proof at PTX is the
+seam where a correctness argument can survive a compiler change. The limit belongs with the result: **PTX is not the ISA**,
+so the proof covers the program as written, not the machine that executes it. Same shape as Lasm (Lean→WASM with no
+checker at run time) and NESformer's stated PPU scope — the artifact states what it does not cover, which is what makes it
+reviewable.
+
+→ [[frontier-models]] [[in-weight-compute]]
+

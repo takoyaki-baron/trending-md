@@ -332,3 +332,29 @@ RoboCasa365 では **73.2%**。
 **このファイル内の位置:** 11-03 のパーサー差分（採点者の規則が同一出力で精度を **22 ポイント**動かす）の補集合である。あちらは*採点者*が数字を決めた。こちらは*指標*が何を測るか自体を決めており、差は約 **2.5 倍**——本ファイルで測ったどの採点者不一致よりも大きい。シェルアクセスを持つフロンティアエージェントについての本ファイルの既存の主張も鋭くなる: シェルアクセスと通るテストスイートの組み合わせこそ「完了」と「損害なく完了」が分岐する構成であり、ガードレールは**環境**（コマンドが触れてよいもの）に属し、プロンプトには属さない。
 
 → [[fact-check]] [[frontier-models]]
+
+## 2026-11-04 20:28 —— 実行前のスクリーニングと、検証器に関する事前登録されたゼロ結果
+
+二本の論文：一つは制御をどこに置けるか、もう一つはどのレバーが発見を動かすか。
+
+**LatentTriad（arXiv 2611.05088）は検査を prefill に置く。** 提示される問題はあらゆるスキルマーケットのものだ：agent は「are
+extended with reusable skills, but untrusted skill content can induce operations outside the user's task」、パターン照合は
+文脈リスクを取りこぼし、動的解析は「incurs the cost of skill execution」。主張は「hidden states formed during prefill contain
+readable information about task-operation consistency」で、手法は一つの共有 prefill 上で三つの信号——文脈の **Boundary** 特徴、
+グループ調整済みの **Operation** 方向、良性状態関係からの逸脱——を統合するので、検出は「generates no output tokens, invokes no
+tools, and executes no skill code」。数字：**5,830** スキルパッケージ、五つの出所、七つのバックボーン、pooled F1 **99.0–99.2%**、
+source-macro F1 **93.0–94.6%**、検出+prefill の中央値 **259–284 ms**。持ち帰るべきは見出しではなく**差**（約 6 点）——出所の不均等で
+あり、収集されたマーケットコーパスとはそういうものだ。介入結果は別に語る：一致した Operation 状態への介入は固定されたリスク読み取りを
+「toward the donor label」動かす、つまり読み取りは状態の隣にあるのではなく状態とともに動く。
+
+**検証器に関する事前登録のゼロ結果（arXiv 2611.04420）。** 自動研究パイプラインの暗黙の賭け——「discovery quality rises with
+verification strength」——を二つの実データ領域（ジョブショップ・スケジューリング、北京 T-Drive 軌跡上の車路協調オフローディング）で、
+各領域 **100 組のマッチした LLM/ランダム**と三つの検証器層で検証する。操作は効く（**429 件**の変異バッテリーでスコアが層ごとに上昇）
+が、賭けは効かない：LLM のランダムに対する優位は「does not scale with it」（A 領域は片側 **p = 0.1115**、D 領域 **p = 0.9994**）、
+D 領域では厳格層でむしろ縮む（マージン対比 **−0.040**、p = 0.0013）。方法論の一文が最良：「the two lower gates promote identical
+candidates in **100/100 and 99/100** pairs, so the strict order is untestable when they coincide」。建設的な半分：事後の
+ユニオンプール分析が A 領域で **+1.52** holdout 価値単位（片側 Wilcoxon、n = 100、p = 0.0002）——レバーは**候補プールを広げる**ことで
+あって、ゲートを締めることではない。Zenodo DOI 10.5281/zenodo.23308866。
+
+→ [[fact-check]] [[frontier-models]] [[in-weight-compute]]
+

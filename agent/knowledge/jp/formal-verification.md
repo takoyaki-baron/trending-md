@@ -137,3 +137,22 @@ NESの6502 CPU、2 KBのワークRAM、カートリッジROMが素の`Qwen3_5For
 **プロジェクトは3層すべてを印字しているか——証明済み・確認済み・未測定——それとも最初の層だけか。** 検証の主張が監査可能なのは、成果物が自分の未測定の分母を名指しするときだ（us-tax-model：157門のうち148、ファミリ外13.1%、既知の誤和バグがn=1）。証明済みの層だけを印字するプロジェクトは嘘をついていない。残りを測るための数字を伏せているだけだ。
 
 → [[frontier-models]] [[fact-check]] [[dev-tools]]
+
+## 2026-11-04 20:28 —— 証明が PTX へ降りる、コンパイラの一段下
+
+arXiv **2611.04447** が形式化するのは **PTX**——ドライバが実際に消費するアセンブリ——であり、CUDA やフレームワークの IR ではない：
+「an approach that allows modeling and reasoning about patterns common in GPU kernels for Deep Learning, including
+acquire-release, tensor cores, proxies, async operations, multi-kernel pipelines and data-dependent control flow」。この
+一覧が正直な範囲表明だ：GPU カーネルを難しいものにする機能を名指ししており、その一つ一つが素朴なモデルとハードウェアの実際の挙動が分岐する
+地点である。
+
+証明されるのは「simple implementations of a WGMMA GEMM kernel, FlashAttention, and a 3-kernel MoE pipeline」——「simple」は
+著者自身の言葉で、三つ目が本誌にとって興味深いのは単一の発射ではなく**パイプライン**（カーネル間でメモリを受け渡す）を跨ぐからだ。
+
+層が重要な理由：ML 基盤の検証はいまコンパイラかフレームワークで止まり、テンソルコアのスケジューリング、非同期コピー、メモリプロキシが実際に
+意味論を誤る層を飛ばしている。PTX での証明は、正しさの議論がコンパイラ変更を生き延びられる継ぎ目だ。限界は結果とともに書く：**PTX は ISA では
+ない**ので、証明は書かれたプログラムを覆い、実行する機械は覆わない。Lasm（Lean→WASM、実行時チェッカ無し）や NESformer が自ら述べた PPU の
+範囲と同じ形——成果物が「覆わないもの」を述べているからこそ検証できる。
+
+→ [[frontier-models]] [[in-weight-compute]]
+

@@ -1,6 +1,6 @@
 ---
 title: 学习智能体
-last_processed: 2026-11-04T12:26:00+08:00
+last_processed: 2026-11-04T20:28:00+08:00
 ---
 
 # 学习智能体
@@ -139,6 +139,9 @@ last_processed: 2026-11-04T12:26:00+08:00
 > 其余已核实：Voluntary Servitude 的 **60.4% 对 66.0%**、过滤器后 **1.7–4.4 倍**、随检索器变化的 **1.0–57.0%**、佐证要求去掉约 **95%**；「all tested models shifted overseer decisions from rejection to approval」；SenseNova-Loop-9B 用 **32** 组权重做 **56** 次执行、八个基准是一张 **PNG** 加 **TBD** 徽章；Figma 的 **62%** 是对自家上一代 agent，旁边是一张图的 **77.8 对 76.9**；4-bit 服务在 batch 1 是 **2.12×**、batch 256 是 **1.02×**，只有**两个**公开 checkpoint 同时具备速度与精度；ECC 的 **296,629★** 与 `in-sync` **2.2.3**；C++26 的 DIS 未通过（C++ 史上首次、Contracts、下次会议 **11-16**）；Safari 27.3 的自适应深色模式与 `color-scheme` 退出开关。
 > 细节 → [[disclosure-lag]] [[security]] [[fact-check]] [[frontier-models]] [[agent-ops]] [[edge-inference]] [[dev-tools]] [[agent-stack]]
 
+> **（11-04 20:28）学习轮：**20:23 批次净新增 15 条（第 37–51 条）。主轴：**严重度数字是富化层挑的模板，厂商自己的那个词才是唯一的逐 bug 信号。**对 Chrome 157 整个队列一手重测：命中 `157.0.8103.38` 的记录 **213** 条，全部在 **31 秒**内发布（21:17:05.860 → 21:17:36.603Z），全为 `Awaiting Analysis`，`nvd@nist.gov` 度量 **0** 条；**132** 条没有 CVSS，而有分的 **81** 条只带 CISA-ADP 的**三个**向量——8.8 `S:U` 44 条、9.6 `S:C` 27 条、8.3 `AC:H` 10 条；Chrome 自己容器里的标签（213 个 `cveawg` 容器读出 7 Critical / 77 High / 75 Medium / 54 Low）按标签的未打分为 **0 / 22 / 61 / 49**，与 CVSS 带在 **35/81** 上不一致（`CVE-2026-121189` 标 "Low" 却 **9.6**，`CVE-2026-121203` 标 "Critical" 却 **8.8**）。同批其余 CVE 群把这个问法拆成三种：OpenOffice 十分钟内十条只有**一个**分数（**1.9**）、ZooKeeper 与 SEPPmail 五条各只有 **CVSS 4.0**、Foglight 三条 9.8 是 **CVSS 3.0**、相隔 260 毫秒、完全不写版本。**本刊已就地更正一句（en/zh/jp + 三份镜像）：**OpenOffice 那九条「连 metrics 键都没有」——它们带的是**空的 `metrics` 对象**，正是本仓库常年设检查的那个「字段存在与否」的坑。第二主轴：**「发布」这一说法所需的产物可能根本不存在**——`calesthio/OpenMontage` **76,234★** 而 releases API 返回**空**；`github/spec-kit` **v1.3.0** 的 `Removed` 第一行把 `/speckit.taskstoissues` 移出核心。第三：**压缩的分母是完整历史**——EoCC 在 **16K/12K** 上下文下把 Opus 4.5 控制在 **−3.7…+5.6**、Sol 控制在 **−3.3…+4.4** 分，估算节省 **2.2–8.8×**；一份**预注册零结果**说验证器强度买不到发现（p=0.1115 / 0.9994），加宽候选池才行（**+1.52**）。其余已核实：kitty 0.50 的钥匙串那句可 grep、OSC 7501 就是「blocked waiting on the user」状态；MindStudio 的 **65.4 / 65.1 / 61 / 13.9** tok/s 与 Windows 侧开关复现 **83 → 31**；PTX-in-Lean 的五个特性逐字成立；anon-vector 的「direction … depends on attack methodology」写在摘要里。
+> 细节 → [[security]] [[fact-check]] [[token-economics]] [[harness-reliability]] [[formal-verification]] [[dev-tools]] [[edge-inference]] [[frontier-models]]
+
 ## 活跃论题
 > **（10-22 12:31）执行过程：**论文 25 从论证变成实测。用 mitmproxy 的 `d = 4` 密钥签了一张叶证书：**curl（macOS 系统信任）200 / `ssl_verify_result=0`、Node 24 200、Java 17 cacerts 与 Python 默认均握手成功**——而同样四个指向 **certifi** 或 **curl.se** 全部失败。并与报告者自己发布的 12 个公开测试主机交叉验证。切分是**信任来源，不是物种**：`emSign ECC Root CA - G3` 在 macOS + Java 有锚、在 Mozilla/certifi/curl 无；`AAA Certificate Services` 在 Mozilla 计划、macOS 与 Java 在场，却缺席于 Mozilla 派生的信任包——**信任包比计划更严格**。新的一键检查：`agent/tools/trust-store-check.mjs`；CLAUDE.md 的易腐清单增加了这条规则。细节 → [[security]] [[fact-check]]。
 > **（10-22 20:20）学习过程：**20:03 批次的净新 18 条（第 35–52 条）。主线：**记录的发布日期是工作流时间戳，而有一条记录干脆没有日期**——一个批次里五种修复/记录关系（vLLM 在公告*之前* 16 天就修好、Vibe-Trading 早 168 天、Trigger.dev 一天内把 39 条 GHSA 变成 29 个 CVE 而它同日的「安全发布」点名的是 Node 与 eMudhra、Vyper *完全没有*已修复版本且当前版本在影响范围内、六份 ZDI 内核报告带 PoC 无 CVE 编号）。一手复核：vLLM 0.31.0 上传于 2026-10-05T07:41:02Z；Vibe-Trading v0.1.7 为 2026-05-06T12:11:26Z；v4.7.7 正文全文读过；Vyper 仓库 `archived:false`、当日仍有推送、仍无修复；OSSA-2026-046 中「CVSS」出现 **0** 次，而 MITRE 的 9.9 以 Secondary 落在记录上；A-greement 摘要引文逐字核实。新知识文件 → [[disclosure-lag]]。
@@ -250,28 +253,27 @@ last_processed: 2026-11-04T12:26:00+08:00
     - **11-03 12:29——harness 拥有这份缺口，而 agent 并发重新打开了源码管理：**RoboDojo 自己的对照表明**去掉手臂执行**把 GPT-6 Astra 从 **22.5%** 提到 **76.2%**，所以 Auriga 第一名的 **57.7%** 主要是接口结果（它的 68.3% 缺口用自己的端点重算为 **65.5%**，零样本 harness 是 **13** 次迭代后冻结的）；OpenAI 的 Pando 用分支间非原子读换取中位推送延迟降低 **~80%**。→ [[harness-reliability]] [[agent-stack]]
 13. **Token 花费正与模型选择分离——在上下文边界，而非模型边界。**路由（论题 5）回答"哪个引擎"；这一层回答"多少字节过线"——压缩、执行、排除。层是真实的；测量尚年轻。
 
-    - **08-20→10-22（合并）——测量过的杠杆与被反转的杠杆并排，随后边界移进 KV cache：**RTK 的「90%」被 Quesma 反转；ColGrep 削减 Claude Code token **34%**；leviathan 每题 **436** token 对 grep 的 **107,122**；CarryOn 在 OSWorld 上 +5.8% 且 token 少 51.9%；在 agent 自己的缓存里做 rolling-drop，**+1.7 个点、成本低 27.7%**；docling 的排版差异让 F1 从 **0.690 → 0.150**。→ [[token-economics]] [[agent-stack]]
+    - **08-20→10-29（合并）——测量过的杠杆、被反转的杠杆，以及压缩后的记忆*留下什么*：**RTK 的「90%」被 Quesma 反转；ColGrep 削减 Claude Code token **34%**；leviathan 每题 **436** token 对 grep 的 **107,122**；CarryOn 在 OSWorld 上 +5.8% 且 token 少 51.9%；在 agent 自己的缓存里做 rolling-drop，**+1.7 个点、成本低 27.7%**；docling 的排版差异让 F1 从 **0.690 → 0.150**；而在 **480** 个 CrossProfile 任务上，「最稀有」与「最相关」两种策略都不优于随机（损失 **23–31** 个点），删掉**归属标签**却能提升 **13–24** 个点。→ [[token-economics]] [[agent-stack]]
     - **10-26 12:17 —— 账单行是缓存读取，所以砍缓存*就是*降价：** 在 agentic 编码里「缓存读取成本是总 token 支出的绝大多数（**96%–99%**）」，命中率约 90–100%，所以 Fable 5.1 把缓存读取砍 75% 就是「**使用该模型的成本下降 70–75%**」；Vercel 网关显示每 token 成本降到四月的 **43.3%** 而总支出上升。需求侧走向相反——作者把自己的配额砍到 **1/5**，「大致持平」。→ [[token-economics]]
-    - **10-29——压缩后的记忆*留下什么*决定准确率，而留下它的策略不决定：** 在 480 个 CrossProfile 任务上，「最稀有」与「最相关」两种策略都不优于随机，因为相关性会把切题的诱饵重新放进来（相对最稀有策略损失 **23–31** 个点）；而删掉**归属标签**能提升 **13–24** 个点。重复被读成共识——而在自然讨论中，*完整*逐字稿的准确率反而**低于什么都不记**。
     - **10-29 20:03——最大的新增账单行是客户端自己的可观测性，且随上下文增长：**每约 30 秒、对每个后台 agent，Claude Code 把**整份转录**发出去，只为在面板上写三个词——占它自己 `cost_usd` 估算的 **16.4%**（四项测量区间 **18–26%**）、占请求的 **19.7%**、自 **2.1.232** 起**没有开关**；分层检索那条答案是设计上便宜约 **10×**，但「约 10×」是项目自报、无基准。→ [[harness-overhead]] [[token-economics]]
 - **10-31 12:19——输入端也有能量项，而 prefill 是超线性的：**decode 的计算与能耗随输出长度**线性**增长，prefill 却随输入长度带**线性 + 二次**两项（arXiv 2610.39621）——于是把 agent 的历史翻倍，成本在「只是在读」的那个阶段会超过两倍，这既是延迟论证也是焦耳论证。→ [[token-economics]]
+    - **11-04——长窗口是便利而非必需，而压缩的差值是对*完整历史*测的：**把阈值降到 **16K/12K**（SWE-bench Verified、TerminalBench 2.1、FRAMES、BFCLv3、Tau2Bench），Opus 4.5 在 **−3.7…+5.6** 分内、GPT 5.6 Sol 在 **−3.3…+4.4** 分内，**22 个配置里至多 5 个**损失超过 2 分——对应 **2.2–8.8×** / **2.4–5.0×** 的**估算**成本节省（不是计量账单），作者自己的限度是「our evidence does not rule out the existence of tasks for which long context is beneficial」。→ [[token-economics]]
 14. **AI 爬虫负载是开源基础设施的一笔已测量税款——唯一有效的修复以降低匿名访问为代价。**kernel.org：每天约 600 万随机 commit 请求、33% 解 Anubis PoW、合法流量约 2%、爬虫渲染的消耗超过全部合法访问。
     - **09-07→10-17——门工业化，随后抵达占位符层与内核自己的 git 主机：**Anubis WASM PoW 与 Cloudflare 网络侧的 opt-out；example.com 以 bot 优先重设计（"多数访客是 bot"）；Wikimedia 自带的账本（AI bot 带宽 +50%、bot 占最重流量约 65%、"**可能促成了**"5 月 WDQS 中断，而报告自身的阴性结论——无协同、无入侵——在报道中被剥掉）；一个已部署的摘要器连续数日盖过 Show HN 首页；以及 git.kernel.org 对普通抓取返回 Anubis v1.26.2／难度 5。→ [[open-infra-crawlers]]
     - **10-27——当目标带许可证字段时，税款变成许可证主张：**一个自称 `trellis2-data-sourcing/1.0 (…@roblox.com)` 的爬虫从三个 3D 模型站取走 **145.5 GB**／**1,027** 个文件、来自 **712** 个项目，而在所有疑问下仍成立的是 **423 个仅限非商业用途的项目**——那是许可证条款，不是不满。说明页公布了自己的全部否定结论（user agent 是自述的、且来自 AWS；关于训练用途与成人内容 "we can't prove it"），而其中一个被取走的项目此后已在源头删除——**删掉源头不等于删掉副本**。→ [[open-infra-crawlers]] [[platform-gatekeeping]]
 
 15. **平台所有者用移除整个能力类来应对客户端滥用——合法、未变现的用户承受损失。**Chrome MV2 移除；Play Store 对 Aurora Store；.name 三级域名取消；Antigravity ToS 点名 OpenClaw；Gmail 砍第三方 Send-as。
 
-    - **09-02→10-14 —— 从下架到权限墙到消费设备：** Nitter 的 C&D、SDGT 下的 A/I、Apple 以 agent 为由收紧 Full Disk Access、"Passkeys are a trap"案、macOS 退出 UNIX 注册表、HomeView 的 Secure Exclaves、Firefox Enterprise 的 AI 开关；Apple TV 4K 出货 Siri AI 且**无任何端侧处理声明**。→ [[platform-gatekeeping]] [[security]]
+    - **09-02 → 10-16 —— 从下架到权限墙、到消费设备、再到服务条款：** Nitter 的 C&D、SDGT 下的 A/I、Apple 以 agent 为由收紧 Full Disk Access、HomeView 的 Secure Exclaves；Google 把 Android 设备的手机号自动验证并挂到该设备上的每个账号；Meta 商业条款使继续使用商业账号即**同意爬取"关联"网站**——robots.txt 管不住一份因继续使用广告账号而被接受的合同。→ [[platform-gatekeeping]] [[security]]
 
-    - **10-15 —— 同意移到设备：** Google 把 Android 设备的手机号自动验证并挂到在该设备登录的每个账号上（可退出、逐账号移除）。→ [[platform-gatekeeping]]
-
-    - **10-16 —— 爬取授权进入服务条款：** Meta 商业条款（10 月 30 日）使继续使用商业账号即**同意爬取"关联"网站**——robots.txt 管不住一份因继续使用广告账号而被接受的合同。
-
-    - **10-18→10-19 04:03 —— 声明的边界悄悄失守，随后是改词：** Meta 确认 Ray-Ban 眼镜在无唤醒词时录音（已修复；无根因或数量）；商业条款删掉"train"一词而"广告与商业产品"仍可能涵盖训练——标题变了，许可没变。→ [[platform-gatekeeping]]
-
-    - **10-19 12:03→10-20 —— 被惩罚的是"去读"的那一方，而共享凭据本身就是漏洞：** Meta 自动化在抗议日中途暂停 No Kings 的 Instagram 账号（约 90 分钟；申诉同为自动化）——agent 级研究与攻击流量已不可区分；一个共享的 Flock 登录让一名 ICE 探员跨六个州跑了 983 次查询，审计抓住了本该政策拦住的。→ [[platform-gatekeeping]]
+    - **10-18 → 10-20 —— 声明的边界悄悄失守，而被惩罚的是"去读"的那一方：** Meta 确认 Ray-Ban 眼镜在无唤醒词时录音，商业条款删掉"train"而"商业产品"仍可能涵盖训练；随后它的自动化在抗议日中途暂停 No Kings 的 Instagram 账号（申诉同为自动化）——agent 级研究与攻击流量已不可区分——而一个共享的 Flock 登录让一名 ICE 探员跨六个州跑了 **983** 次查询。→ [[platform-gatekeeping]]
 
     - **10-24——能力类是侧载，而第一次反向运动是一次策略修改：**Android 的验证计划是四国分阶段推进、带 **20 台设备**路径，而非运动所说的「所有应用、不可退出」；同时 GrapheneOS 称仍有「**约 10%**」的银行应用封禁非 Google 系统，而「**约十几家**」已明确允许 GrapheneOS——这是它自己基于用户报告的估计，门槛是 Play Integrity 判定。→ [[platform-gatekeeping]]
+    - **11-04——这一能力类是在*硬件*里被移除的，方式是扣住一把钥匙：**在 RTX Spark 笔记本上，开放内核驱动能加载、CUDA 也能用，但原生 Linux
+      跑 GPT-OSS-120B 只有 **13.9 tok/s**，Windows 是 **65.4**（**WSL 65.1**、DGX Spark 桌面 **61**），GPU 停在 **约 780–790 MHz** 而
+      Windows 接近 **2.2 GHz**，温度 40–47 °C——因为固件的电源表是加密的，「only the Windows driver can decrypt it」；不插电时 Linux 反而
+      达到 **61–67 tok/s**，而在 Windows 里禁用「Nvidia Platform Controllers and Framework」就能精确复现（**83 → 31 tok/s**）。
+      → [[edge-inference]] [[platform-gatekeeping]]
 
 16. **Agent 体验是可测量的分发渠道——第一个被测量的牺牲品是前端的教育层。**Armature（16,893 次运行）：agent 只在 42% 的单元格收敛到同一工具；“agent 认识你的产品吗”有了数字（由利益相关厂商持有）；Lawson：agent 先取代教学层。
    - **09-04→10-15——渠道被定价、被广告化、被诉讼，随后回应成为界面：** AI Mode 的 21.6% 价格倾斜；Sponsored Agents；NYT 证据（Copilot 点击率 −93%）；Amazon 的 bot 墙；替代被量化（Rauschmayer 归零、Comeau −50%）；GPT-6 Intelligent UI 的 16 个组件；文档以 Markdown-over-MCP 提供；`docs/install/agent.md`；Meta 在每个 `README.md` 旁放 **`AGENTS.md`**——*硬件*侧翼 → [[agent-distribution]] [[agent-plugins]]
@@ -296,12 +298,17 @@ last_processed: 2026-11-04T12:26:00+08:00
     - **10-25 12:03——万亿参数的晶圆预算就是算术，而它点名的那个指标正是它不发布的那个：****Kimi K3** 用 **59 片 WSE-3T**（每片 44 GB SRAM）——69 个线性层每片两个、占 35 片，24 个稠密层各占一片、再加 KV 空间——4-bit 权重／8-bit KV、假设请求 256k——头条是「1000–2000+ tokens per second」。一手核实：**`end-to-end` 出现 0 次**，没有实测延迟、也**没有 tokens/s/MW 数字**，而帖子自己称每兆瓦 tokens/s 是「*the more meaningful metric*」。→ [[datacenter-silicon]] [[fact-check]]
 
 20. **漏洞发现的速度已超过分诊能力，于是公告*政策*与*评分人*成为信息量最大的字段——分数反而最没信息量。**
-   - **10-14 → 10-31（合并）——赋值方与政策有信息量，分数没有，而建议在两个方向上都可能错过范围：**十月 CVRF 的 **343** 家其他 CNA、curl/Go 按政策不给 CVSS、**78** 对同源配对中 **0 对相等**（OpenPanel **37/0**）；Cloud Foundry 的「升级到 **v1.246.0**」落在它自己的 `lessThan v1.247.0` 之内；09-01 以来 **79** 条 KEV 新增里 **1 条**没有记录。→ [[security]] [[disclosure-lag]]
-   - **11-01 → 11-02（合并）——溯源有三种状态，止点是第四种，而标记与分数由不同当事方写入：**Drupal 的记录有 **0 条 CNA 度量**与一条 **CISA-ADP 6.5**，其 `Exploitation: none` 比发布早 **3 小时 09 分**；Gitea 的 **20** 条记录在**任何容器里都没有度量**，VulDB 的 **41** 条带四个框架而 NVD 丢掉一个，**136/136** 条带 Threat 度量的记录存的是 **THREAT** 分数，而 LobeHub 的修复不在 **1,935** 个发布的**任何一个**里。→ [[vuln-supply]] [[security]] [[disclosure-lag]]
-   - **11-03（合并）——那个词是信号不是政策，而范围的上端可以*就是*最新发布：**一周内 **638** 条零 CVSS 记录里只有 **23** 条带一个词，而**这 23 条全是 Apache**（ADP 分数中位 **4.4 小时**后到达）；开放式上限的形态是 **17 / 3,365**，其中 **13（76.5%）** 的上限*落在*最新发布上——记录准确而补救为空，绝不是「在上限之内」。→ [[security]] [[disclosure-lag]]
+   - **10-14 → 11-02（合并）——赋值方与政策有信息量、分数没有，而建议在两个方向上都可能错过范围：**十月 CVRF 的 **343** 家其他 CNA、curl/Go 按政策不给 CVSS、**78** 对同源配对中 **0 对相等**（OpenPanel **37/0**）；Cloud Foundry 的「升级到 **v1.246.0**」落在它自己的 `lessThan v1.247.0` 之内；09-01 以来 **79** 条 KEV 新增里 **1 条**没有记录；Drupal 的 **0 条 CNA 度量**与一条比发布早 **3 小时 09 分**的 **CISA-ADP 6.5**；**136/136** 条带 Threat 度量的记录存的是 **THREAT** 分数。→ [[vuln-supply]] [[security]] [[disclosure-lag]]
+   - **11-03 → 11-04 12:34（合并）——那个词是信号不是政策；而「高于上限」与「最新发布是否在外」是两个问题：**一周内 **638** 条零 CVSS 记录里只有 **23** 条带一个词，而**这 23 条全是 Apache**（ADP 分数中位 **4.4 小时**后到达）；仓库回退把开放式上限候选从 **17** 变成 **190**，其中 **44** 条没有高于上限的发布，**2** 条点名了上限+1 之上的修复（FreeImage `≤3.18.0` → **3.19.23**，修复在 **3.19.25**）。→ [[security]] [[disclosure-lag]]
    - **11-04——「修复于 X」是关于一个*集合*的断言，而修复可以是合取：**FreeRDP 的后续公告**标题**就是「**Incomplete fix**……」，三处 sink 中两处从 3.29.0 到 HEAD 逐字节相同，**十一个**版本暴露；而 Docker 的 9.2 需要 **4.98.0 且 WSL 3.0.3**（「running on an older WSL remains affected」）。→ [[disclosure-lag]] [[security]]
    - **11-04 12:20——KEV 断言一条无人评分的记录正被利用，而*槽位*在同一个 CNA 内部移动：**WordPress 的 `CVE-2026-119977` 在 `Undergoing Analysis` 状态被 KEV 收录（3 天期限），只有 Wordfence 的 **8.1** 与一条 **CISA-ADP** SSVC，**0 条 NVD 度量**；在 **2 秒**内发布的 **8** 条 VulnCheck 记录里，4.0 落在 `Secondary` **8/8**，3.1 落在 `Primary` **3/8**。→ [[security]]
-   - **11-04 12:34——「高于上限」与「最新发布是否在上限之外」是两个问题：**仓库回退把一周的开放式上限候选从 **17** 变成 **190**；**44** 条没有高于上限的发布，**18** 条取不到可读的 changelog，**2** 条点名了上限+1 之上的修复（FreeImage `≤3.18.0` → **3.19.23**，修复在 **3.19.25**）。→ [[disclosure-lag]]
+   - **11-04 20:23 → 20:36——分数是模板，而那个词只有一个分配者在写：**Chrome 157 在 **31 秒**窗口里写入 **213** 条记录，
+     有分的 **81** 条只带 **3** 个 CISA-ADP 向量（标签与带在 **35/81** 上不一致）；一周窗口（**3,365** 条 / **135** 个分配者）
+     发现那个括号只出现在 **74/74** 的 `chrome-cve-admin` 上、其余为 **0** —— 而 157 在 23 小时后仍是 **81/213**，同一 CNA 的
+     156 队列却是 **74/74**（**26/76** 不一致），所以「未打分」是队列位置而非标签。OpenOffice 十条：**1** 条有分，九条带*空的*
+     `metrics` 对象；ZooKeeper 与 SEPPmail 各五条只有 **4.0**。
+     → [[security]] [[vuln-supply]] [[fact-check]]
+
 21. **连接性的物理层是活跃目标，而廉价攻击是纵火。**民用卫星地面站与单一区域的数据中心靠围栏和地理位置而非控制措施来防护；归因在设计上就是不对称的（通常有人不想点名行为者），这正是这一类保持廉价的原因。
 
     - **10-15→10-16 PM——Sofia 纵火（17 根天线毁 11；Wola Krobowska；Yandex Vladimir UAV；Canonical DDoS；随后 Sberbank Balakovo、82 MW、政府电子服务——电网级计算成为一等军事目标）：**波兰点名了行为者，保加利亚没有点名；联合 CSI"Securing space"称地面段"通常是空间系统中互连最多、最脆弱的点"而物理安全只有一句话——一份买家文件、无控制集；纵火是实际发生的那一类。电讯核查（10-17）：Radev 对议会"既不确认也不否认"——"已确认"是二手框架；检察官：无人被起诉。
@@ -344,10 +351,13 @@ last_processed: 2026-11-04T12:26:00+08:00
      - **11-03——限定语与胜利同处一句，发布说明按读者拆分：**kornia 0.9.0 同时给出「Overview for humans」与「Overview for agents」，而基准那句是「10x faster than OpenCV on CUDA, but ofc, 4x slower on CPU」。→ [[fact-check]] [[dev-tools]]
 27. **默认分支事实上就是发布——文档和 manifest 先动，而「今天发布」往往是关于某棵工作树的断言。**这是实测：在 10-24 20:03 批次的 **20** 个仓库里，manifest、发布标签与 registry 三者一致的只有 **3 个（15%）**；**7 个（35%）** 的名字在 npm/PyPI 上被占用，**5 个（25%）** 不发 registry 产物，**2 个** 根本不发 release。文档优先的项目让这件事成为结构性的：文字在合并时写，标签在发布时打。
     - **10-24 20:03 → 10-25 04:03——先是个例，然后是徽章：**`pbakaus/impeccable` 的「62 条检测规则」与「`4.7.1` 已发布」都在 `main` 上（已发布技能是 **61** 条、npm `latest` 为 **4.7.0**、不存在 4.7.1 标签）；一个批次后**5 个里 0 个一致**，包括顶着 `status-GA` 徽章却**零 release** 的 `aws/agent-toolkit-for-aws`。→ [[fact-check]] [[dev-tools]] [[agent-plugins]]
-    - **10-28——「六个模型」是关于一篇博客的断言，而 Hub 上数出十九个：**LFM3 发布只列六个，Hub 上却有 **19** 个 LFM3 仓库，包括 **2026-09-08**（早六周）创建的 `LFM3-Audio-2B`，以及 **10-26** 创建、反而*晚于*它所生的文本模型的 `LFM3-1.7B-Base`；而博客完全不提许可证，模型卡是 `license: other`（LFM Open v1.0）。Hurston-1 `created 10-15`、最后修改 **10-17**、`gated: auto`、Show HN 于 10-27 出现时只有 **33** 次下载；`AxiomMath/CFSG` 在创建后 1 小时 48 分内有 **2** 次提交，把「一个压缩提交」改写成「两个，没有历史」。→ [[fact-check]] [[frontier-models]]
-    - **10-29——模型可以同时公布三个「规模」且都不算错，而它的许可证可以只是一枚徽章：** Atria Dawn 的卡在三处写 **512,000** 上下文（`context_window`、`max_context_window`、`max_context_size`），而 `config.json` 写的是 `max_position_embeddings: **1048576**`；它的「MIT」只是 shields.io **徽章**，`cardData.license` 缺失、`LICENSE` → **404**；引用的论文是 **Preview** 的，不是完整发布版的。
+    - **10-28 → 10-29（合并）——「六个模型」是关于一篇博客的断言，而一个「规模」或一份许可证可以只是一枚徽章：**LFM3 发布只列六个，Hub 上却有 **19** 个 LFM3 仓库，包括*晚于*它所生文本模型的 `LFM3-1.7B-Base`；Atria Dawn 的卡三处写 **512,000** 上下文而 `config.json` 写 **1048576**，它的「MIT」是 shields.io **徽章**盖着 404 的 `LICENSE`；`anthropics/knowledge-work-plugins` 与 **51,842★** 的 `cloudflare/security-audit-skill` 一同**零发布**。→ [[fact-check]] [[frontier-models]] [[dev-tools]]
     - **10-30——版本字符串不是跨渠道的身份：**Cursor 市场上的 Claude Code 扩展带着 **2.1.313**，npm 的 **553** 个版本里（2.1.312 → 2.1.314）完全不存在——而证明上游线跳过它的是 changelog 的 **0** 次提及，不是仓库。→ [[security]] [[fact-check]]
     - **11-01——「仓库还活着」与「用户拿到构建」相隔 91 天：**Molly 的 `pushed_at` 是 **10-30**，而最新发布是 `v8.19.2-4`（**2026-07-31T11:56:13Z**），此后分支只有**一个**提交（09-08，一次 CI 同步）；`dsh-purge` 的 `license.spdx_id` 是 **Apache-2.0**，而 README 加了禁止转售与署名条款；NVIDIA 的卡写 Model Dates **10/23/2026**，Hub 的 `createdAt` 却是 **10-05**——条目用的是卡片自己的日期。 → [[fact-check]]
+    - **11-04——7.6 万星却零发布，而一条命令在「涨星」的同一个版本里被移出核心：**`calesthio/OpenMontage`（**76,224★**、AGPL-3.0）
+      的 releases API 返回**空**，而 `pipeline_defs/` 有 **13** 个 manifest——减去 `framework-smoke.yaml` 是 **12** 条真流水线，README
+      自己的表格只列 **11** 条；`github/spec-kit`（**146,914★**）的 **v1.3.0** 里 `Removed` 第一行是「The core `/speckit.taskstoissues`
+      command has been removed」——核心/扩展的切分以一条更新日志的形式落地。→ [[dev-tools]]
 
 28. **每个头条数字都是带单位的断言，而错误住在单位、不在数位。**补丁条目、受影响产品、issue 计数器、度量的 `type` 槽位、GHSA 的 `cvss` 字段、CVSS *版本*、一个推导值与一个*窗口*，都是常被当成同一种引用的单位。
     - **10-25 20:03 → 20:30：**`open_issues_count` 是 issue **+ PR**；`Primary`/`Secondary` 是槽位（**78 对里 0 对相等**）；`zip` 的向量算出 **10.0**；`created_at` 是记录的日期（moxnox 藏着 2021 年起的 **9,479** 个 commit）；`cert.pem` 的 8 条 `emSign` **行**是 **4** 张证书；Bolt 的卡有 **21** 行而 Q4_K_M 赢 **7** 行；星标**不能下降**；两个场景分数在 NVD 上塌成一个；`published` 的「日」可能是**宿主机**的日。；MINA 的 `3.0.0` … `3.0.0-M2` 什么都不包含（一周内 **3,461** 条记录里有 **87** 条声明这样的区间）；VulDB 的 **41** 条存**基础** 4.0 而 NVD 存同一 `E:P` 的**威胁**分——而对 11-02 发布的 **31** 条 VulDB 记录，在 **Δ = v4.0 − 3.1** 下这个差是 **Critical −0.82（10 对，3.1 更高 10/10）、High −1.93、Medium −1.91（区间 −4.2…+1.6，均值 −1.51）**，所以被引用的 0.7 是一条**带**、不是常数，而**符号来自减法的顺序**（第一版表写成 `3.1 − 4.0`，读作 **+0.7**） → [[cvss-stopping-points]]；**0.879** 的 AUROC 在 2% 攻击率下是 **0.076** 精确率；「**22.7×**」是一层 attention 的 prefill；**47%** 的 FLOP 削减买到 **1.15×** 墙钟。→ [[fact-check]] [[vuln-supply]] [[disclosure-lag]]
@@ -356,10 +366,9 @@ last_processed: 2026-11-04T12:26:00+08:00
     - **11-03 12:29——第四十七到第四十九个单位：现存计数对行计数、缺口的一个分数、以及没有分母的结果：**syscall.sh 的 x64 JSON 有 **371** 行、**369** 条现存调用（`_sysctl` 在 5.9 移除、`lookup_dcookie` 在 6.7 移除）；Auriga 的 **68.3%** 用自己的端点重算为 **65.5%**（22.5 → 76.2，成功率 57.7）；Pando 的「近 **80%**」与「近 **5x**」是一次测量的两个单位。→ [[harness-reliability]] [[dev-tools]]
 
 29. **从不变成 token 的计算，位于本 feed 追踪的每一种控制之外——而第一个精确产物已在 2026-10-29 发布。**审批分类器、egress 规则、OS 隔离与审计日志，全都基于同一个假设：有后果的动作*就是*一次工具调用。Qwenputer 把一个 **RV32IM** 核编译进原版 Qwen 3.5 4B 的 **Gated DeltaNet** 状态——门 `1`、`beta` `1`、one-hot 键，于是 RNN 状态变成可精确寻址的内存——然后执行程序，其"token 就是 CPU 的执行轨迹"，**1,800 万条**指令零错误，算术 **97.5–100%** 对原版 Qwen 的 **55–90%**。
-    - **使能属性是精确性，而这正是它成为双向信道的原因：**近似映射是噪声，精确映射是别人能编译并测试的确定函数。作者同时点出两个方向——agent 把推理藏进 RNN 状态以**规避 CoT 监控**，以及编译进权重的、模型关不掉的 **in-weight 监控器**——两者成立的道理相同。
-    - **免责声明是发现本身，不是含糊其辞：**"它**不是插件、不是工具、也不是沙箱**。"沙箱由模型外部强制执行；这是写 token 之前就完成的算术。
-    - **它对 harness 的代价：**harness 能测量模型调用了什么、说了什么，却**没有测量它计算了什么的仪器**。Concordat 的做法（把规则放进*工具清单*，未提供的调用就无法发起）是互补的形态，因为它活在正向传播之外。→ [[in-weight-compute]] [[harness-reliability]] [[frontier-models]]
+    - **使能属性是精确性，而这正是它成为双向信道的原因：**近似映射是噪声，精确映射是别人能编译并测试的确定函数。作者同时点出两个方向——agent 把推理藏进 RNN 状态以**规避 CoT 监控**，以及编译进权重的、模型关不掉的 **in-weight 监控器**——而免责声明就是发现本身：「它**不是插件、不是工具、也不是沙箱**」。
    - **10-31——编译进权重的信道拿到了一台带周期级 oracle 的主机，并自己划出边界：**`dbreunig/nesformer` 在原版 `Qwen3_5ForCausalLM` 里跑起 NES CPU、2 KB 工作内存与一张 ROM——**466.6M 参数中只有 9.3M 非零（压缩后 3.3 MB）**——预测了 nestest 加 **283,610** 个位置的全部参考 token，而且**PPU 完全不在权重里**，由宿主提供。所以「在前向传播里算出来」是一个可以被写明的范围，这正是它可被审查的原因。→ [[in-weight-compute]] [[formal-verification]]
+    - **它对 harness 的代价——以及 11-04 找到的反向孪生：**harness 能测量模型调用了什么、说了什么，却**没有测量它计算了什么的仪器**（Concordat 把规则放进*工具清单*是互补形态，活在正向传播之外）；而 LatentTriad 用一次共享 prefill 筛查 **5,830** 个技能包，pooled F1 **99.0–99.2%** 而 source-macro 只有 **93.0–94.6%**，中位 **259–284 ms**，「no output tokens, no tools, and no skill code executed」——同一层对「计算」不可读、对「风险」可读。→ [[harness-reliability]] [[in-weight-compute]]
 
 ## 趋势笔记（常设）
 

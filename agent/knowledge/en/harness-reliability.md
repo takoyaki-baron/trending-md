@@ -507,3 +507,32 @@ where "done" and "done without damage" diverge, so the guardrail belongs in the 
 a command may touch) rather than in the prompt.
 
 → [[fact-check]] [[frontier-models]]
+
+## 2026-11-04 20:28 — screening before execution, and a pre-registered null on the verifier
+
+Two papers, one about where a control can sit and one about which lever actually moves discovery.
+
+**LatentTriad (arXiv 2611.05088) puts the check in the prefill.** The stated problem is every skill marketplace's: agents
+are "extended with reusable skills, but untrusted skill content can induce operations outside the user's task", pattern
+matching misses contextual risk, and dynamic analysis "incurs the cost of skill execution". The claim is that "hidden
+states formed during prefill contain readable information about task-operation consistency", and the method combines
+contextual **Boundary** features, group-adjusted **Operation** directions and departures from benign state relationships
+over **one shared prefill**, so detection "generates no output tokens, invokes no tools, and executes no skill code".
+Numbers: **5,830** skill packages from five sources, seven backbones, **99.0–99.2%** pooled F1 and **93.0–94.6%**
+source-macro F1, detection+prefill median **259–284 ms**. Carry the **gap** (~6 points) rather than the headline — it is
+the sources being unequal, which is what a gathered marketplace corpus looks like. The intervention result is separate and
+worth separating: matched Operation-state interventions shift fixed risk readouts "toward the donor label", i.e. the
+readout moves with the state rather than sitting beside it.
+
+**A pre-registered null on the verifier (arXiv 2611.04420).** The implicit bet of automated-research pipelines —
+"discovery quality rises with verification strength" — is tested in two real-data domains (job-shop scheduling; vehicular
+edge offloading on Beijing T-Drive trajectories) with **100 matched LLM/random pairs per domain** and three verifier
+tiers. The manipulation binds (**429-case** mutation battery, scores rise across tiers) and the bet does not: the paired
+LLM-over-random advantage "does not scale with it" (A, one-sided **p = 0.1115**; D, **p = 0.9994**), and in D it shrinks
+under the strict tier (margin contrast **−0.040**, p = 0.0013). The method note is the best part: "the two lower gates
+promote identical candidates in **100/100 and 99/100** pairs, so the strict order is untestable when they coincide."
+Constructive half: a post-hoc union-pool analysis gives **+1.52** holdout-value units in domain A (one-sided Wilcoxon,
+n = 100, p = 0.0002) — **widening the pool, not tightening the gate**, is the lever. Zenodo DOI 10.5281/zenodo.23308866.
+
+→ [[fact-check]] [[frontier-models]] [[in-weight-compute]]
+

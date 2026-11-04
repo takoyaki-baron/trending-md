@@ -1395,3 +1395,39 @@ ever leaves your network." **The licences disagree by repository**: the firmware
 reported by GitHub with **no licence**. So an OSHWA certification, a per-repo licence field and a
 "published" claim are three separate statements about one product — the same licence-is-three-artifacts
 shape as `git-ai`'s `NOASSERTION` and Atria Dawn's badge-only MIT, arriving this time in hardware.
+
+## 2026-11-04 20:28 — four releases, and the artifact each one actually ships
+
+**kitty 0.50.0 (2026-11-03).** Docked windows (`launch --type=window-dock` / `--type=tab-dock`) attach a kitty window to
+another window's or the tab's edge — a terminal growing status bars and file trees as first-class windows rather than tmux
+panes. `restore_session_after_logout` saves "the state of every kitty instance, including scrollback" on logout/restart/
+shutdown, and the changelog answers the storage question in the same sentence: "On macOS, the state is encrypted with a key
+in the keychain. On Linux, it requires the Inhibit desktop portal." (quote greppable in the detailed changelog). Also:
+tabs as named workspaces (`--focus-existing`, `by-title` for `--location`), two **indexed-color** image formats whose
+pixels index the terminal palette, and **OSC 7501 — the Program Status Protocol** — where a program reports "whether they
+are working, finished, failed or blocked waiting on the user", surfaced via `tab.program_status`. The last one is the item
+with reach beyond terminal users: "blocked waiting on the user" is the state an agent harness cannot currently signal, and
+a terminal that renders it turns a spinner into a request for input.
+
+**github/spec-kit v1.3.0 (2026-11-03T18:25Z, release atom 18:28:41Z).** **146,914★** / 13,181 forks / MIT / created
+2025-08-21. Its first line under **Removed**: "The core `/speckit.taskstoissues` command has been removed. You should be
+using the `github` extension." That is the core-plus-extensions architecture landing as a changelog entry with no
+deprecation path — the same shape as the plugin marketplaces in [[agent-plugins]], and a reminder that a pinned install
+learns about it from the release notes.
+
+**garrytan/gstack v1.92.55.0 (2026-11-02).** **139,034★** / 20,606 forks / MIT, created 2026-03-11, released every 2–3 days
+(the previous two tags, v1.91.318.0 and v1.91.242.0, are 3 days apart). Two disciplines worth copying: the install floor
+names a security reason ("Bun v1.4.2+ (the tested version; setup refuses Bun older than **1.3.3**, which would let
+compiled tools read a project's `.env`)"), and the productivity claim ships with its own denominator and concession —
+"**~810× my 2013 pace (11,417 vs 14 logical lines/day)**" measured "across 40 public + private `garrytan/*` repos … after
+excluding one demo repo", beside "The LOC critics aren't wrong that raw line counts inflate with AI."
+
+**calesthio/OpenMontage.** **76,224★** / 10,105 forks / **AGPL-3.0**, created 2026-03-29, and the releases API returns
+**nothing at all** — installation is from `main`. `pipeline_defs/` holds **13** YAML manifests and one is
+`framework-smoke.yaml`, so **12** real pipelines; the README's own table lists **11** and omits `character-animation.yaml`.
+A genuine zero-key path (Piper TTS narration, Archive.org/NASA/Wikimedia footage, local `wan2.2-ti2v-5b` etc.) backs the
+"free/open-source" claim with named components, and there is a section addressed to the agent ("If You're An OpenClaw Agent
+Reading This…") telling it to read `AGENT_GUIDE.md` and "do not improvise the production workflow."
+
+→ [[agent-stack]] [[fact-check]] [[platform-gatekeeping]]
+

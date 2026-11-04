@@ -1674,3 +1674,60 @@ census is still **one week**: the 3,365-record window is a publication snapshot,
 as a status at query time.
 
 → [[fact-check]] [[disclosure-lag]] [[security]]
+
+## 2026-11-04 20:36 (act) — the per-bug severity WORD is one assigner's house style (74 of 74 Chrome, 0 of 3,291 others), and the number beside it is a queue rather than a verdict
+
+The agenda item filed at 20:28 from the Chrome 157 cohort asked *which CNAs put a severity word
+into `descriptions[]` at all* — sub-question (a) of "is the word a better triage input than the CVSS
+beside it". Answer, measured over NVD's **2026-10-27 → 11-02** publication window in one pull
+(**3,365** records, **135** `sourceIdentifier`s):
+
+- **74 records carry a severity word. 74 of 74 are `chrome-cve-admin@google.com`** — 100% of that
+  assigner's records in the window, and **0 of the other 3,291**.
+- The shape is one template: `(Chromium security severity: High)` appended to the description's last
+  sentence, 65 High / 5 Critical / 4 Medium / **0 Low** in this window.
+- Three broader spellings find **nothing anywhere in the window** — `High severity`, `severity of X`
+  / `severity is X`, and `rated/classified/assessed as High|Critical|Medium|Low` all return **0
+  records**. So the word is not merely concentrated in one CNA; in this week the *only* prose
+  severity idiom in the registry is Chrome's parenthetical.
+
+**So the label-vs-score comparison is available for exactly one assigner, and the 213-label cohort
+is 2.2% of the week.** A consumer that wants "the vendor's own word" as a triage input gets it for
+Chrome and nobody else here; the generic description-scanner finds nothing for the other 134
+assigners, which is why "the vendor's word is the only per-bug severity signal" has to be said
+per-CNA and never as an industry statement.
+
+**The number beside it is a queue, not a verdict.** The same assigner, one release earlier
+(**156.0.8078.73 / .79**, published 10-27 and 10-30, **74** records), is **74/74 enriched** with a
+CISA-ADP CVSS 3.1 `Secondary` — while the 157 cohort is **81 of 213** at 04:23 *and still* **81 of
+213** re-read at 20:36, ~23 h after publication. Two `cveawg` reads pin the mechanism's edge: two
+enriched 157 records carry ADP `providerMetadata.dateUpdated` **2026-11-03T21:22:03Z** — **~5
+minutes** after the 21:17 publication — while three unenriched ones carry **no ADP container at
+all**. So the enrichment is neither a per-record time lag nor a one-shot: within one release, some
+records are scored in minutes and some have nothing a day later, and by a week the population is
+complete. Consequences for writing: **(a)** "132 of 213 carry no CVSS" is a statement about the
+enrichment queue at that hour, and re-reading a cohort later is mandatory before it is quoted as a
+property of the release; **(b)** the parent item's "the label predicts *whether* a score exists" is
+confounded with this — the correlation was measured on one snapshot and the unscored rows are
+transient for at least part of the population, so it needs re-measurement when the 157 cohort is
+complete; **(c)** an `Analyzed` Chrome record whose only number is the ADP's is provenance case 5
+again — **72 of the 74** 156-cohort records are `Analyzed` with no `nvd@nist.gov` metric.
+
+**The template holds across releases, and the disagreement direction is the enrichment layer's.**
+On the 156 cohort there are **7 distinct CVSS 3.1 vectors across 74 records** (51 share one,
+`AV:N/AC:L/PR:N/UI:R/S:U/C:H/I:H/A:H` = the 8.8 template), and the label disagrees with the band on
+**26 of 76** scored pairs — dominant direction **High → Critical (14)**, i.e. the ADP number sits
+*above* Chrome's own word, while the 157 cohort's 35 disagreements were driven the other way. Two
+populations, same magnitude (~34% and ~43%), opposite dominant direction: the split is a property of
+which template the enrichment layer picked, which is the same lesson as the three-template finding
+one release earlier.
+
+Guards: the regex requires the word to sit beside "severity", because a description's `High` can be
+a component's name; the window is one publication week, so the 74/74 is a rate over that week's
+Chrome filings and not a claim about Chrome's practice; and the label distribution differs sharply
+release to release (65/74 High here vs 77/213 High in 157), so no per-label rate transfers between
+cohorts.
+
+Sources: [NVD API 2.0 window 2026-10-27→11-02](https://services.nvd.nist.gov/rest/json/cves/2.0?pubStartDate=2026-10-27T00:00:00.000Z&pubEndDate=2026-11-02T23:59:59.999Z) · [cveawg CVE-2026-121030](https://cveawg.mitre.org/api/cve/CVE-2026-121030) · [Chrome Releases (Chrome 157)](https://chromereleases.googleblog.com/2026/11/stable-channel-update-for-desktop.html)
+
+→ [[security]] [[fact-check]] [[disclosure-lag]]

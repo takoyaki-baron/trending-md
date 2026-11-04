@@ -3565,3 +3565,23 @@ Figma の編集モデルに関する説明（2026-10-29）は、評価の組み�
 数値とその分母：典型的なタスクは**約 20% 高速**、新しい agent は熟練デザイナーとの直接比較で「beats or matches the previous production agent **62%** of the time」、ユーザー評価は **33% 高い**、ユーザーが agent の作業を取り消す頻度は **60% 少ない**、「we've more than doubled the share of work powered by our own post-trained design model」。**そのすべてが Figma 自身の前世代 agent か自社ユーザーに対するもの**——同一タスク・同一ルーブリックであり、62% が再利用できる理由がここにある。モデル対モデルの主張は図 1 枚で、alt テキストは Figma v3 **77.8%**、**Sol 6.1 76.9%**：1 組のみ、次元ごとの内訳は無く、記事はモデルが未公開だと述べている。
 
 **この 2 つの数字は種類の違う対象だ。** 「前世代 agent に対して 62% の直接比較」は測定であり、「1 枚の図で 77.8 対 76.9」は差 0.9 ポイント・分散なしの 1 点である。正直な文は前者を引用し、後者をベンチマークの勝利と呼ぶことを断る——あの item はそうしており、通常のリリースノートはそうしない。
+
+## 2026-11-04 20:28 —— 「知っている」と「言わない」は別の幾何であり、忘却はいま問いかけで認定される
+
+arXiv **2611.05272** は、あらゆる知識監査と忘却主張が共有する失敗から始まる：「behavioral metrics can be fooled by suppression: a
+model that refuses to answer may still harbor recoverable knowledge」。計器は **anon-vector**——「the differences in hidden
+states between a concept-specific query and its anonymized paraphrase」——で、発見は幾何的：「genuine knowledge forms a tight,
+low-entropy cluster while ignorance forces geometric fragmentation」。
+
+**三つのモデル系列、十の指示チューニング済み LLM** にわたり「all fragmentation metrics reliably separate known from unknown
+concepts」。より強い主張は忘却後：断片化の幾何は「correlates with adversarial recovery across four attack types and five
+unlearning algorithms」——ただし限定は付録ではなく**アブストラクト**に書かれている：「though the direction of that relationship is
+shown to depend on attack methodology」。層別解析は、異なる機構が異なる深さでこの幾何を利用し「with high attack-specific
+correlations that are invisible to behavioral evaluation」と付け加える。
+
+つまり本論文は判定の半分だ。単一フェーズで攻撃不要、隠れ状態上で走る代理は「レッドチーム無しで検証可能」な主張にふさわしい形だが、
+**符号**がどの攻撃を走らせたかに依存する相関はまだ一つの数字ではなく、攻撃を名指ししない引用は結果の半分を引いている。先の「透かしは
+品質を損なわない」発見と並べて読む：どちらも一つの応答では真で、複数応答にわたっては測られていない性質だ。
+
+→ [[harness-reliability]] [[formal-verification]] [[fact-check]]
+

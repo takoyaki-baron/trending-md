@@ -983,3 +983,37 @@ WebKit の **Adaptive Dark Mode**（Safari 27.3 beta）は、作者がスタイ�
 `Stringman`（Neufangled Robotics）は **795 ドル**の部屋規模ケーブルロボットだ——直列アームではなく、部屋の天井四隅から 4 本の線で吊るした **638 g** のグリッパで、「price is basically actuator count」という論法による。実測の主張：7×7×3 m の部屋、**28 N** の線張力上限で床近く **2.2 kg**、平均 **1.9 kg**、同じ DM-H6215 アクチュエータで組んだ 0.75 m 直列アームというサイト自身の脚注比較では **0.32 kg**。移動は約 **0.4 m/s**、対角 3–10 m・高さ 2.3–4 m の部屋に対応、PET-GF と PLA で 3D プリント、計算は意図的に外部——PC がコントローラ、グリッパに Pi Zero 2W、アンカーに Pi 3A+、5 GHz Wi-Fi を QR コードで設定する。
 
 **OSHWA 認証（US002788）** を持ち、CAD・PCB・制御ソフトを公開し、「can run air gapped on your local Wi-Fi network: the UI is served locally, AI models run on your own hardware, and no data ever leaves your network」。**ライセンスはリポジトリごとに食い違う**：ファームウェア（`nhnifong/cranebot3-firmware`）は **Apache-2.0**、PCB リポジトリ（`nhnifong/stringman-pcbs`）は GitHub 上で**ライセンス無し**と表示される。つまり OSHWA 認証、リポジトリ単位のライセンスフィールド、「公開済み」という主張は、1 つの製品についての 3 つの独立した文だ——`git-ai` の `NOASSERTION` や Atria Dawn のバッジだけの MIT と同じ「ライセンスは 3 つの成果物」の形が、今回はハードウェアで現れた。
+
+## 2026-11-04 20:28 —— 四つのリリースと、それぞれが実際に届ける成果物
+
+**kitty 0.50.0（2026-11-03）。** ドックウィンドウ（`launch --type=window-dock` / `--type=tab-dock`）は kitty の窓を別ウィンドウや
+タブの縁に貼る——端末がステータスバーやファイルツリーを tmux ペインではなく一級のウィンドウとして持つ。`restore_session_after_logout`
+はログアウト／再起動／シャットダウン時に「the state of every kitty instance, including scrollback」を保存し次回起動時に復元する。
+保存先の問いには同じ文で答える：「On macOS, the state is encrypted with a key in the keychain. On Linux, it requires the Inhibit
+desktop portal.」（引用は詳細変更履歴で grep 可能）。ほかにタブを名前付きワークスペースとして扱う機能（`--focus-existing`、
+`--location` の `by-title`）、端末パレットを索引する**インデックスカラー**画像形式二つ、そして **OSC 7501——Program Status
+Protocol**：プログラムが「whether they are working, finished, failed or blocked waiting on the user」を報告し
+`tab.program_status` でタブバーに出る。最後の一つが端末利用者以外に届く：「blocked waiting on the user」は agent ハーネスが今
+シグナルできない状態であり、それを描画する端末はスピナーを入力要求に変える。
+
+**github/spec-kit v1.3.0（2026-11-03T18:25Z、release atom 18:28:41Z）。** **146,914★** / 13,181 fork / MIT / 2025-08-21 作成。
+**Removed** の第一行：「The core `/speckit.taskstoissues` command has been removed. You should be using the `github`
+extension.」——コア＋拡張のアーキテクチャが非推奨パス無しで変更履歴として着地した。[[agent-plugins]] のプラグインマーケットと同形で、
+バージョンを固定した導入はリリースノートでこれを知る、という提醒でもある。
+
+**garrytan/gstack v1.92.55.0（2026-11-02）。** **139,034★** / 20,606 fork / MIT、2026-03-11 作成、2〜3 日ごとにリリース（直前の
+二つのタグ v1.91.318.0 と v1.91.242.0 は 3 日差）。真似する価値のある二つの規律：導入下限がセキュリティ理由を明記している
+（「Bun v1.4.2+ (the tested version; setup refuses Bun older than **1.3.3**, which would let compiled tools read a project's
+`.env`)」）、そして生産性の主張が分母と留保を伴う——「**~810× my 2013 pace (11,417 vs 14 logical lines/day)**」、測定範囲は
+「across 40 public + private `garrytan/*` repos … after excluding one demo repo」、隣に「The LOC critics aren't wrong that raw
+line counts inflate with AI」がある。
+
+**calesthio/OpenMontage。** **76,224★** / 10,105 fork / **AGPL-3.0**、2026-03-29 作成、そして releases API は**何も返さない**——
+導入は `main` から。`pipeline_defs/` には **13** 個の YAML があり一つは `framework-smoke.yaml` なので実パイプラインは **12**、
+README 自身の表は **11** しか挙げず `character-animation.yaml` を落としている。真のゼロキー経路（Piper TTS のナレーション、
+Archive.org/NASA/Wikimedia の素材、ローカルの `wan2.2-ti2v-5b` 等）が「無料／オープンソース」の主張を具体的な構成要素で支え、
+agent 宛ての節（「If You're An OpenClaw Agent Reading This…」）が `AGENT_GUIDE.md` を読み「do not improvise the production
+workflow」と指示している。
+
+→ [[agent-stack]] [[fact-check]] [[platform-gatekeeping]]
+

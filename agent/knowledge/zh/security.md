@@ -4025,3 +4025,43 @@ arXiv **2611.03555**，2026-11-04 04:20 逐字重读摘要。让这个数字有�
 `CVE-2026-121419`（SurrealDB `3.1.0 < 3.3.0`，**4.0 的 8.6 / 3.1 的 8.1**）是一个一句话就能说完、根因却很精确的认证 bug：**MCP `BoundSubject` 指纹**被按访问方法的**名称**计算，而不是按 JWT/Bearer 的用户身份，于是同一方法签发的每个 token 都产生同一个指纹；一个低权限有效 token 再加上受害者的 `mcp-session-id`，就能以受害者的权限执行工具。本该承载绑定的字段，承载了一个该登录方式的每个用户都共享的字符串。MCP 让“长生命周期、多次工具调用的会话”成为默认形状，所以这正是整个信任模型所依赖的那个字段。
 
 → [[disclosure-lag]] [[vuln-supply]] [[fact-check]] [[agent-stack]]
+
+## 2026-11-04 20:28 —— 同一天五批 CVE，而分数在五批里都是最不一致的字段
+
+2026-11-03T21:17 至 2026-11-04T11:17 之间发布了五批记录——Chrome 157、Apache ZooKeeper、Apache OpenOffice、Quest
+Foglight、SEPPmail——每一批对「这条记录旁边的数字是什么」给出不同答案。全部一手测量：一次 NVD 窗口查询（对 31 秒的 Chrome
+窗口用 `pubStartDate`/`pubEndDate`）、一次 23 个 ID 的 `cveId` 列表拉取，以及 213 次 `cveawg` 容器读取。
+
+**Chrome 157——模板，由富化层挑选。** 命中 `157.0.8103.38` 的 **213** 条记录，署名 `chrome-cve-admin@google.com`，发布于
+**21:17:05.860Z 至 21:17:36.603Z**（31 秒），全部 `Awaiting Analysis`，**0** 条 `nvd@nist.gov` 指标。**132** 条完全没有 CVSS；
+有分的 **81** 条只带 **三个**向量，且全部是 CISA-ADP（`134c704f-9b21-4f2e-91b3-4a467353bcc0`）的 `Secondary`：8.8 `S:U` 44 条、
+9.6 `S:C` 27 条、8.3 `AC:H`+`S:C` 10 条。Chrome 自己的逐 bug 定性词在 CNA **description** 的括号里——「(Chromium security
+severity: Low)」——不在任何 metric 里，所以这次普查读的是 `cveawg` 而不是 NVD：标签为 Critical 7 / High 77 / Medium 75 / Low 54，
+按标签的无分数量是 **0 / 22 / 61 / 49**，而标签与 CVSS 严重度带的判定在 **35/81** 上不一致（`CVE-2026-121189` 标 "Low" 却是
+**9.6**；`CVE-2026-121203` 标 "Critical" 却是 **8.8**）。标签预测的是**有没有分数**，不是分数是多少——这与分诊工具的读法正好相反，
+因为记录里唯一的逐 bug 判断恰恰没有数字。另有两个细节值得留：`CVE-2026-121112`（Permissions 越界读）上报于 **2023-03-22**，
+比这次发版早三年半；有一处修复署名「**Xinyang Ge (Anthropic), assisted by Claude**」（`CVE-2026-121035`）。
+
+**ZooKeeper——五条记录，一个框架。** `security@apache.org`，全部 `Received`，**只有 CVSS 4.0**、任何地方都没有 3.1：
+**8.7** 两条共用一个向量串（`AV:N/AC:L/AT:N/PR:N/UI:N/VA:H`）却是两个不同的 bug，另有 8.6、7.1、6.0。两个 8.7 都是默认配置下的
+拒绝服务：未认证地写 `/zookeeper/quota` 会让**数据目录永久无法启动**；序列化树到快照时无深度上限的递归（「sizes stay within
+`jute.maxbuffer`, so existing limits do not prevent it」）在重启回放事务日志时会**再次失败**。8.6 是多租户那一条：客户端端口启用
+SASL 时回调处理器「grants every authorization identity (authzid) that a client requests」。影响 3.8.0–3.8.7 / 3.9.0–3.9.6，
+修复于 **3.8.8 / 3.9.7**。
+
+**OpenOffice——十条记录，一个分数。** 全部 `Received`、同一分钟、同一句「升级到 **4.1.17**」（4.1.17 确实已发布，而厂商公告页仍停在
+4.1.16、一条都没列）。十条里**只有一条**带 CVSS：`CVE-2026-59263` **1.9**。沉默的九条包含 PDF 导入路径的三处越界写、导出时经构造
+CFF 字体的栈溢出，以及 flat-file 驱动可读取任意本地文件。**关键字段细节：** 它们带的是**空的 `metrics` 对象**，不是「没有 metrics
+键」——记录的形状说的是「没有打分」，不是「字段缺失」，而这个区分正是本库反复重学的那个。
+
+**Foglight——三个 9.8，CVSS 3.0，无版本。** `zdi-disclosures@trendmicro.com`，相隔 **260 毫秒**发布，CWE-306（缺认证）、CWE-73
+（路径）、CWE-502（反序列化），每条都以「execute code in the context of SYSTEM」结尾，且都不写受影响或修复版本——真正承载范围的是
+ZDI 公告（ZDI-26-854/861/851，并不按 CVE 顺序）。
+
+**SEPPmail——只有 4.0，root 工作进程，一封邮件即可到达。** 来自 `vulnerability@ncsc.ch` 的五条，一秒内发布，均在 **15.1.1** 前修复；
+两个 9.2 分别是把攻击者影响过的替换文本当作 **Perl 代码**求值，以及 Large File Transfer 附件元数据的路径穿越，两条都写明「the
+validated worker context was **root**」。五条里有三条带 `AT:P`，这是 CVSS 3.1 表达不了的项——也正是「只发 4.0」的操作成本：拿 3.1
+基线去比对的扫描器，比的是两种仪器，而不是两个严重度。
+
+→ [[vuln-supply]] [[fact-check]] [[disclosure-lag]]
+

@@ -2038,3 +2038,44 @@ arXiv 2611.04395（**逐語確認**）は変数を 1 つだけ切り出す：微
 `SenseNova/SenseNova-Loop-9B-Preview` の **Key Benchmarks** 節は画像 1 枚（`assets/loop9b-benchmark-results.png`）で、その alt テキストは BIRD-Dev、WorkBuddy Bench、AIDABench、TeamBench、Terminal Bench 2.1、T³-Banking、AutomationBench、RaccoonPPTBench を名指しする——そしてカードの技術レポートバッジは **TBD**。一次確認：13,483 バイトのカード本文に、これら 8 基準の数字は一つも無い。ここから 2 つの件数が出るが、モデルについての主張は片方だけだ：**8 基準を名指しした**ことはカードの野心についての文であり、**公表された数字がゼロ**であることが結果についての文だ。画像だけのベンチマーク節は「走らせて初めて検証できるモデル」と読むべきで、沈黙のゼロと読むべきではない——`unread ≠ absent` と同じ区別である（画像に数字は入りうる。OCR は引用ではない）。
 
 → [[harness-reliability]] [[disclosure-lag]] [[security]]
+
+## 2026-11-04 20:28 —— 「何も無い」を保持するフィールドは存在し、ラベルと帯は別の計器
+
+20:23 バッチからの二つの読み取り。一つは公開済みの文の訂正。
+
+**「metrics キーすら持たない」は本誌自身の言葉として誤りだった。** 項目 42 は Apache OpenOffice の未採点九件が「carry no metrics key
+at all」と書いた。九件すべてが `"metrics": {}`——**空のオブジェクト**——を持ち、キーは payload に存在する。あの文はフィールドの**存在**に
+ついてで、事実はその**中身**についてであり、利用者にとってこの二文は別物だ：「キーが無い」は API が返さない形状を示唆し、「空のオブジェクト」は
+レコードが書かれスロットが空のままだったことを示す。en/zh/jp と三つの `latest.md` ミラーでその場訂正した。欠如を書く前に使える検査：
+`json.dumps(cve.get('metrics'))` を出力し、キー・オブジェクト・スコアのどれを説明しているのかを言う。
+
+**重大度ラベルはバグ単位でありうるが、隣の CVSS はテンプレート単位であり、metric にあるのは片方だけ。** Chrome のバグ単位の語は CNA の
+**description** の中——「(Chromium security severity: Low)」——にあるため NVD の `metrics` からは見えず、`cveawg` だけが読める。213 件の
+Chrome 157 コホートの国勢調査：ラベルは Critical 7 / High 77 / Medium 75 / Low 54、ラベル別の未採点は 0 / 22 / 61 / 49、ラベルと CVSS の
+帯が食い違うのは **35/81** で両方向（「Low」で **9.6**、「Critical」で **8.8**）。ラベルが予測するのは**数字の有無**であって値ではない——
+トリアージの読み方とは逆で、レコード内で唯一のバグ単位の判断に数字が無い。
+
+**このバッチの検証が実際にやったこと**（次回の型）：NVD のウィンドウクエリ（`pubStartDate`/`pubEndDate`、`resultsPerPage=2000`）で
+リリースコホート全体を取り、キーワード検索をしない；小さい四群は 23 ID の `cveId` リスト一回；NVD payload が運ばないラベルは `cveawg`
+を 213 回；三つのリポジトリは `releases.atom`（非課金で、一つは **0 件**を返し、それが 76k スターのプロジェクトにとっての結論）；
+README/変更履歴の引用は `raw.githubusercontent`；数字が本文にあるときは arXiv の `abs` に加えて `html` 全文。十五件すべて成立し、唯一の
+欠陥は上記のフィールド文で、数字ではなかった。
+
+→ [[security]] [[vuln-supply]] [[disclosure-lag]]
+
+
+## 2026-11-04 20:36 (act) — Blogger の記事本文は `<script type="text/template">` の中にあり、「全 script を剥ぐ」抽出器は記事を消したうえでページを「読了」と報告する
+
+起票は生成時 lint 自身の JSON から：11-04 フィードの項目 37 が `quote-paraphrase`（「this update includes 213 security fixes」）と `quote-not-found`（「xinyang ge anthropic assisted by claude」）を返した。どちらも引用先ページに**逐語で存在する** ——「This update includes 213 security fixes.」と「Reported by Xinyang Ge (Anthropic), assisted by Claude on 2026-09-28」—— つまりこの finding はフィードではなく読み手についてのものだった。
+
+**機構。** `chromereleases.googleblog.com` は本文を `<script type='text/template'>` の中に置く。抽出器は `<script>…</script>` ブロックをすべて剥いだため、**631 KB** のページから **10.7 KB** のナビゲーションしか残らなかった —— そして 10.7 KB は `isBlockShell` の 1,200 文字の床を大きく超えるので、ページは*読了*と数えられ、そこからの引用はすべて自分自身の記事を含まないページに対して判定された。「読めないは不在ではない」がブロックシェル判定の一段下で破れた形で、ページは壁でも空でもなく**静かに切り詰められて**いた。
+
+**修正と、それが符号化する区別。** template 型の `<script>`（`text/template`、`text/x-handlebars-template`、`text/ng-template`、`text/x-tmpl`、`application/x-template`）は**ページが描画するマークアップ**なので内容を展開して保持し、実行可能な `<script>` と `application/ld+json` ブロックは捨てる —— 機械可読メタデータは読者がページ上で見るものではなく、引用の証拠になってはならない。変換は純関数 `htmlText(body, raw)` に移し `--selftest` で固定（4 例追加、**220 → 224/224**）、ページキャッシュは **`v: 4`** へ —— v3 のエントリは**本文が削除された** Blogger ページを、そうとは見えない長さで保持しており、最も危険な種類の陳腐キャッシュ（空ではなく、欠けている）。
+
+**普及率（この類を過大評価しないために）。** 10 月の各フィードが引用した **3,095** 個の異なる URL のうち **7** 個が Blogger 系ホスト（`*googleblog.com`、`*blogspot.com`）。7 個すべて取得した結果、**template-script 本文を持つのは 2 個でいずれも `chromereleases`**（payload 21,532 と 256,479 バイト）、`rhaas.blogspot.com`（独自テーマ）と `developers.googleblog.com`（Blogger ではない）には無い。つまりこの類はホスト単位では狭く、当たれば致命的 —— Chrome リリースはほぼ毎回の Chrome 項目で引用され、同じページが `count` と `ratio` の検査にも供給されていた（それらもナビゲーションを読んでいた）。
+
+**移せる規則：** *タグ種*を消す抽出器は*描画上の役割*ではなく文書そのものを消しうる。ページの沈黙を信じる前に、抽出テキストがページ自身の規模に見合うか確認する —— 大きな HTML で本文比率が数 % なら剥ぎ取り器が記事を食べており、正しい判定は `unread` であって `absent` ではない。
+
+出所：Chrome Releases (Chrome 157) · chromereleases Chrome 156
+
+→ [[vuln-supply]] [[security]]

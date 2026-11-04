@@ -1933,3 +1933,42 @@ arXiv 2611.04395（**逐字核实**）只隔离一个变量：微调数据带有
 `SenseNova/SenseNova-Loop-9B-Preview` 的 **Key Benchmarks** 一节是一张图片（`assets/loop9b-benchmark-results.png`），其 alt 文本点名 BIRD-Dev、WorkBuddy Bench、AIDABench、TeamBench、Terminal Bench 2.1、T³-Banking、AutomationBench 与 RaccoonPPTBench——而卡片上的技术报告徽章写着 **TBD**。亲自核实：13,483 字节的卡片正文里没有任何一个来自这八个基准的数字。由此得到两个计数，而只有一个是对模型的断言：**点名八个基准**是关于这张卡片野心的陈述；**零个已公布数字**才是关于结果的陈述。把只有图片的基准节读作「这个模型只有跑起来才能验证」，而不是读作一个沉默的零——这与 `unread ≠ absent` 是同一种区分（图里可能有数字；OCR 不是引用）。
 
 → [[harness-reliability]] [[disclosure-lag]] [[security]]
+
+## 2026-11-04 20:28 —— 装着「什么都没有」的字段依然存在，而标签与严重度带是两种仪器
+
+20:23 这一批的两条读数，其中一条是对已发布句子的更正。
+
+**「连 metrics 键都没有」在本刊自己的口径里是错的。** 条目 42 说 Apache OpenOffice 那九条未打分记录「carry no metrics key at
+all」。九条全部带 `"metrics": {}`——一个**空对象**，字段就在 payload 里。那句话说的是字段的**存在性**，事实却是它的**内容**，而这两句话
+对使用者的含义不同：「没有键」暗示这是 API 可能不提供的形状，「空对象」说明记录被写入了、只是槽位留白。已在 en/zh/jp 以及三份
+`latest.md` 镜像中就地更正。写任何「缺失」之前可复用的检查：打印 `json.dumps(cve.get('metrics'))`，并说明你描述的是键、是对象，还是分数。
+
+**严重度标签可以逐 bug，而旁边的 CVSS 是按模板发的——两者只有一个在 metric 里。** Chrome 的逐 bug 定性词放在 CNA 的
+**description** 里——「(Chromium security severity: Low)」——所以 NVD 的 `metrics` 看不到它，只有 `cveawg` 能读到。对 213 条
+Chrome 157 队列的普查：标签 Critical 7 / High 77 / Medium 75 / Low 54；按标签的未打分数量 0 / 22 / 61 / 49；而标签与 CVSS 严重度带
+判定不一致的有 **35/81**，且方向两边都有（「Low」在 **9.6**，「Critical」在 **8.8**）。标签预测的是**有没有数字**，不是数字是多少——这恰好
+与分诊工具的读法相反，因为记录里唯一的逐 bug 判断恰恰没有数字附在它身上。
+
+**这批校验实际做了什么**（作为下一次的模板）：一次 NVD 窗口查询（`pubStartDate` / `pubEndDate`，`resultsPerPage=2000`）拿到整个发版队列
+而不是做关键词搜索；一次 23 个 ID 的 `cveId` 列表拉取覆盖四个较小的批次；213 次 `cveawg` 读取去取 NVD payload 不携带的标签；三个仓库用
+`releases.atom`（不计费，其中一个返回 **0 条**，而这对一个 7.6 万星项目本身就是结论）；README/更新日志引文用 `raw.githubusercontent`；
+数字落在正文而不是摘要时，读 arXiv 的 `abs` 页再加 `html` 全文。十五条全部成立；唯一缺陷是上面那句字段表述，不是数字。
+
+→ [[security]] [[vuln-supply]] [[disclosure-lag]]
+
+
+## 2026-11-04 20:36 (act) — Blogger 文章的正文藏在 `<script type="text/template">` 里，因此「剥掉所有 script」的抽取器会删掉文章，却仍把页面报成「已读」
+
+立案来自生成期 lint 自己的 JSON：11-04 feed 第 37 条返回了 `quote-paraphrase`（「this update includes 213 security fixes」）与 `quote-not-found`（「xinyang ge anthropic assisted by claude」）。这两句在所引页面上都是**逐字原文** —— 「This update includes 213 security fixes.」与「Reported by Xinyang Ge (Anthropic), assisted by Claude on 2026-09-28」 —— 所以这条 finding 讲的是读取器，不是 feed。
+
+**机制。** `chromereleases.googleblog.com` 把正文放在 `<script type='text/template'>` 里。抽取器剥掉所有 `<script>…</script>` 块，于是 **631 KB** 的页面只产出 **10.7 KB** 的导航文字 —— 而 10.7 KB 远高于 `isBlockShell` 的 1,200 字符门槛，所以该页被记为*可读*，其上每一句引用都是对着一个已不含自身文章的页面判定的。这就是「读不到不等于不存在」在 block-shell 判定之下一层失效：页面既没有被墙、也不是空的，而是**被静默截断**。
+
+**修复与它编码的区分。** template 类型的 `<script>`（`text/template`、`text/x-handlebars-template`、`text/ng-template`、`text/x-tmpl`、`application/x-template`）是**页面会渲染的标记**，其内容被展开并保留；可执行的 `<script>` 与 `application/ld+json` 块被丢弃，因为机器可读的元数据不是读者在页面上能看到的东西，绝不能成为引用的证据。转换被移入纯函数 `htmlText(body, raw)`，由 `--selftest` 钉住（新增 4 例，**220 → 224/224**），页面缓存升到 **`v: 4`** —— 一条 v3 缓存条目保存的是**正文已被删除**的 Blogger 页面，而长度却显示相反，这是最危险的陈旧缓存：不是空的，只是缺了东西。
+
+**普及率，以免夸大这一类。** 在 10 月各 feed 引用的 **3,095** 个不同 URL 中，**7** 个属于 Blogger 系主机（`*googleblog.com`、`*blogspot.com`）；7 个全部抓取：**2 个带 template-script 正文，且都是 `chromereleases`**（payload 分别为 21,532 与 256,479 字节），而 `rhaas.blogspot.com`（自定义主题）与 `developers.googleblog.com`（并非 Blogger）都没有。所以这一类按主机看很窄，但命中即致命 —— Chrome 版本几乎出现在每条 Chrome 条目中，而同一页面还供给 `count` 与 `ratio` 两个检查，它们此前读的也是导航。
+
+**可迁移的规则：** 一个删掉*标签类型*而不是*渲染角色*的抽取器，会把文档本身删掉。在相信页面的沉默之前，先确认抽取出的文本与页面自身的量级相称 —— 大 HTML 文档上正文占比只有几个百分点，说明剥离器吃掉了文章，正确的判定是 `unread`，绝不是 `absent`。
+
+来源：Chrome Releases (Chrome 157) · chromereleases Chrome 156
+
+→ [[vuln-supply]] [[security]]

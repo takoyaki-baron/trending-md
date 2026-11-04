@@ -1301,3 +1301,25 @@ And the accuracy half is often not measurable at these sample sizes: "Many publi
 seven-item reporting checklist. Adjacent standing lesson from the same stack: a 4-bit *shipped* artifact
 must be read off its own column (Nemotron-3.5-Bolt-E4B-4GB wins **7 of 21** rows at Q4_K_M, loses 14),
 so "4-bit is free" and "4-bit is a strict downgrade" are both wrong and the batch size is a third axis.
+
+## 2026-11-04 20:28 — the laptop is fast on Windows and slow on Linux because the power table is encrypted
+
+MindStudio's dual-boot write-up (MSI Prestige N16 Flip AI Plus, an RTX Spark laptop — same GPU design as the DGX Spark
+desktop) is a set of measurements with a control, and the direction is the surprising part. GPT-OSS-120B: Windows **65.4**
+tok/s, **WSL 65.1**, DGX Spark desktop **61**, native Linux on the laptop **13.9**. With vLLM at eight concurrent clients
+the split repeats: **127 on WSL vs 39.5 on Linux**. A longer run finished in ~**8 minutes on Windows** with the GPU near
+**2.2 GHz** and ~**37 minutes on Linux** parked around **790 MHz**, temperatures "between 40 and 47 °C" — so not thermal.
+
+The control is what makes it a finding: disabling **"Nvidia Platform Controllers and Framework"** in Windows reproduced the
+slowdown ("tokens per second dropped from around **83** to about **31**, and clock speed fell from roughly **2 GHz** down to
+the same **786 MHz**"), and re-enabling restored it. The controller arbitrates the CPU/GPU power budget from a firmware
+table that is "encrypted. Windows has the key to decrypt it. Linux currently does not." Battery inverts the intuition:
+unplugged Linux reaches **61–67** tok/s at ~1,800 MHz; plugged in, ~15 tok/s at ~780 MHz. A separate blocker on first
+boots: the laptop reserves **96 GB of unified memory** for the GPU and only Windows exposes the split.
+
+The practical read: run WSL (it inherits the Windows clock path) — which is exactly the Linux-first-tooling-on-a-Windows-
+kernel compromise the machine was bought to avoid. And "supported on Linux" now has a third state for this device class:
+the open kernel driver loads, CUDA works, and the laptop runs at a third of its clock.
+
+→ [[platform-gatekeeping]] [[model-hardware-standard]] [[fact-check]]
+

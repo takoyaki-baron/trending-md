@@ -2258,6 +2258,42 @@ function isBlockShell(text) {
   return t.length < 1_200 && BLOCK_SHELL_RE.test(t.slice(0, 900).toLowerCase());
 }
 
+/* A `<script type="text/template">` is NOT code — it is markup the page renders, and stripping
+ * every `<script>` deletes the article. Measured 2026-11-04, the day it produced two findings
+ * against correct quotations (item 37 of the 11-04 feed): chromereleases.googleblog.com's Chrome
+ * 157 post carries its ENTIRE body — the "This update includes 213 security fixes." sentence and
+ * every "Reported by X (Anthropic), assisted by Claude" credit — inside
+ * `<script type='text/template'>`, so the strip left **10.7 KB of navigation out of a 631 KB
+ * page**. That residue is well over `isBlockShell`'s 1,200-char floor, so the page counted as
+ * READ, `quote-not-found` went out on two verbatim sentences, and the finding described the
+ * extractor rather than the feed. Blogger/Blogspot serves post bodies this way, which makes it a
+ * host class rather than one page (chromereleases is cited in nearly every Chrome item).
+ * So template-typed scripts are UNWRAPPED (their content kept) and everything else — executable
+ * JS, and `application/ld+json` metadata, which a reader never sees on the page — is dropped.
+ * The distinction is the one this whole check rests on: prose a reader can see is a source;
+ * machine-readable data the page merely carries is not. */
+const SCRIPT_TEMPLATE_RE = /<script\b[^>]*\btype\s*=\s*["']?(?:text\/template|text\/x-handlebars-template|text\/ng-template|text\/x-tmpl|application\/x-template)["']?[^>]*>([\s\S]*?)<\/script>/gi;
+const SCRIPT_DATA_RE = /<script\b[^>]*\btype\s*=\s*["']?application\/(?:ld\+json|json)["']?[^>]*>[\s\S]*?<\/script>/gi;
+
+/** HTML → readable text. Pure, so `--selftest` pins the template unwrap without a network call. */
+function htmlText(body, raw = false) {
+  if (raw) return body;
+  return body
+    .replace(SCRIPT_TEMPLATE_RE, ' $1 ')
+    .replace(SCRIPT_DATA_RE, ' ')
+    .replace(/<(script|style|noscript|svg)[\s\S]*?<\/\1>/gi, ' ')
+    .replace(/<[^>]+>/g, ' ')
+    .replace(/&nbsp;|&#160;/g, ' ')
+    .replace(/&#x([0-9a-f]+);/gi, (_, h) => { try { return String.fromCodePoint(parseInt(h, 16)); } catch { return ' '; } })
+    .replace(/&#(\d+);/g, (_, d) => { try { return String.fromCodePoint(Number(d)); } catch { return ' '; } })
+    .replace(/&amp;/g, '&').replace(/&#39;|&apos;/g, "'").replace(/&quot;/g, '"')
+    .replace(/&lt;/g, '<').replace(/&gt;/g, '>')
+    /* Tags become a space, so `the <a>213</a> fixes` arrives as three spaces in a row. A reader
+       checking "does the page carry this sentence" compares one space, so collapse horizontal runs
+       — newlines stay, because `mdTables` reads a page's table by LINE. */
+    .replace(/[ \t]{2,}/g, ' ');
+}
+
 async function citedPageText(page) {
   const key = `page:${page.url}`;
   const hit = cache[key];
@@ -2298,14 +2334,9 @@ async function citedPageText(page) {
       const body = (await r.text()).slice(0, 3_000_000);
       // An abs page is HTML: keep its text, drop the tags, so a `<blockquote>` abstract reads as prose.
       // `<style>`/`<noscript>` go too — a stylesheet's tokens can spell a noun next to a number.
-      const t = page.raw ? body : body
-        .replace(/<(script|style|noscript|svg)[\s\S]*?<\/\1>/gi, ' ')
-        .replace(/<[^>]+>/g, ' ')
-        .replace(/&nbsp;|&#160;/g, ' ')
-        .replace(/&#x([0-9a-f]+);/gi, (_, h) => { try { return String.fromCodePoint(parseInt(h, 16)); } catch { return ' '; } })
-        .replace(/&#(\d+);/g, (_, d) => { try { return String.fromCodePoint(Number(d)); } catch { return ' '; } })
-        .replace(/&amp;/g, '&').replace(/&#39;|&apos;/g, "'").replace(/&quot;/g, '"')
-        .replace(/&lt;/g, '<').replace(/&gt;/g, '>');
+      // `htmlText()` keeps a template-typed `<script>` — see its comment: stripping that is what
+      // deleted a Blogger post's whole body and reported two verbatim quotations as inventions.
+      const t = htmlText(body, page.raw);
       // keep the longest read: a wall is short by construction, but a truncated 200 also arrives
       if (t.length > text.length) text = t;
       if (!isBlockShell(t)) break;
@@ -2318,8 +2349,12 @@ async function citedPageText(page) {
 }
 /* v3 names its client (see `citedPageText`). A page's text now depends on who asked, and an entry
    fetched anonymously is not evidence about what a named client sees — the same rule the CNA
-   cache's schema version encodes. */
-const PAGE_CACHE_V = 3;
+   cache's schema version encodes.
+   v4 unwraps template-typed `<script>` blocks (`htmlText`). An entry written by the v3 extractor
+   holds a Blogger page with its body DELETED and still reads as a full-text page, so it is the
+   most dangerous kind of stale cache: not empty, but a page whose prose is missing while its
+   length says otherwise. Bumping costs one unmetered refetch per cited page. */
+const PAGE_CACHE_V = 4;
 let citedPages_requests = 0;
 
 async function checkCount(it) {
@@ -4015,6 +4050,25 @@ if (SELFTEST) {
   t('commit: a mixed item still judges its non-commit quotations',
     checkQuotes(mk('t', 'it says "the model was not trained at all here today" and "allocation-free listener callback for schedulable nodes (#148)"'), qsrc('Nothing about it here.')).map((x) => x.verdict),
     ['quote-not-found', 'quote-unreadable-source']);
+
+  /* THE TEMPLATE-SCRIPT BODY (filed 2026-11-04 20:36, item 37 of the 11-04 feed). Blogger serves
+     a post body inside `<script type='text/template'>`; a strip that removes every `<script>`
+     deletes the article and leaves enough navigation to pass `isBlockShell`, so the page reads as
+     full text and two verbatim quotations were reported as inventions. The fixture is the Chrome
+     157 post's own shape, trimmed. */
+  const BLOGGER = '<html><head><style>body{}</style><script>var nav = "not prose";</script></head>'
+    + '<body><div id="navbar">Home About</div>'
+    + '<script type="text/template">\n<p>This update includes <a href="#">213</a> security fixes.</p>'
+    + '<p>Reported by Xinyang Ge (Anthropic), assisted by Claude on 2026-09-28</p>\n</script>'
+    + '<script type="application/ld+json">{"headline":"json metadata is not a source"}</script>'
+    + '</body></html>';
+  const bt = htmlText(BLOGGER);
+  t('template: a Blogger post body survives the script strip',
+    [bt.includes('This update includes 213 security fixes.'), bt.includes('assisted by Claude')], [true, true]);
+  t('template: executable JS is still not prose', bt.includes('not prose'), false);
+  t('template: ld+json metadata is not a source a reader can see', bt.includes('json metadata'), false);
+  t('template: the unwrapped body answers the quotation check',
+    checkQuotes(mk('t', 'the post says "This update includes 213 security fixes."'), qsrc(bt)).map((x) => x.verdict), ['ok']);
 
   for (const c of cases) console.log(`  ${c.pass ? '✓' : '✗'} ${c.name}${c.pass ? '' : ` — got ${JSON.stringify(c.got)}, want ${JSON.stringify(c.want)}`}`);
   const ok = cases.filter((c) => c.pass).length;

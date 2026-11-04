@@ -402,3 +402,26 @@ Sources: [arXiv: Cache Engineering for Agents](https://arxiv.org/abs/2610.28577)
 两条限度让它不至于变成计费工具：拟合**按模型、按硬件**，系数不跨部署迁移；计算时间代能量的标定是对作者自己的测量，而不是厂商的计量——它估算的是托管模型的**能耗**，不是你的**账单**。设计结论是方向性的、且两条限度下都成立：凡是靠多送上下文而不是少检索来换延迟的，边际 token 不是边际成本，**压缩与检索既是延迟决策也是能量决策**。
 
 → [[frontier-models]] [[harness-overhead]] [[agent-stack]]
+
+## 2026-11-04 20:28 —— 压缩的基线是「完整历史」，而成本倍数是估算
+
+《You don't need long context》（arXiv **2611.05306**，十二位作者）把这个文件从定价表里一点点拼出来的前提明说了：「later tokens are
+costlier to generate than earlier tokens」，在前沿开源权重模型上该差距「may rise to as much as **7x**」。方法是 **EoCC**
+（end-of-conversation compaction）——越过阈值就摘要并继续。
+
+方法读自 HTML 全文而不是摘要：六个基准（SWE-bench Verified、TerminalBench 2.1、SWE-bench Multilingual、FRAMES、BFCLv3、Tau2Bench）
+与两个模型（Claude Opus 4.5、GPT 5.6 Sol）；前四个基准的总上下文/压缩阈值取 **48K/36K、32K/24K、24K/18K、16K/12K**，BFCLv3 取
+**24K/18K、16K/12K、12K/8K**，Tau2Bench 取 **16K/12K、12K/8K、8K/6K**。相对各模型**自己的完整历史基线**：Opus 4.5 **−3.7 至 +5.6**
+分，Sol **−3.3 至 +4.4**，且「for either model, no more than **5 out of 22** threshold configurations lose more than 2ppts」。
+估算成本节省 **2.2×–8.8×**（Opus）与 **2.4×–5.0×**（Sol）。第二个实验是每执行一步就压缩、只留紧凑语义状态（作者的 **SSSM** 草图），
+在软件工程任务上同样没有崩塌。
+
+论文里值得转引的两句：压缩「may successfully enforce smaller context window size」而重做工作让总 token 上升的这种病理，在他们
+的实验中「was generally not the case」；以及「our evidence does not rule out the existence of tasks for which long context is
+beneficial」。倍数是**估算零售成本**，不是计量账单——引用时要说明是估算。
+
+由此得到的操作规则：基线是完整历史，所以要做的诚实实验是把自己的阈值减半，并**同时**看准确率与总 token。只看其中一个，就会掩盖论文
+点名的那种失败模式。
+
+→ [[harness-overhead]] [[agent-stack]] [[fact-check]]
+

@@ -4418,3 +4418,45 @@ KEV の JSON（`known_exploited_vulnerabilities.json`、`catalogVersion 2026.11.
 `CVE-2026-121419`（SurrealDB `3.1.0 < 3.3.0`、**4.0 で 8.6 / 3.1 で 8.1**）は一文で言えるが根因は精密な認証バグだ：**MCP `BoundSubject` の指紋**が JWT/Bearer のユーザー単位の識別子ではなく**アクセスメソッドの名前**から計算されていたため、同じ方式で発行されたすべてのトークンが同じ指紋になった。低権限の有効トークンと被害者の `mcp-session-id` があれば、被害者の権限でツールを実行できる。束縛を運ぶはずのフィールドが、そのログイン方式の全ユーザーが共有する文字列を運んでいた。MCP は「長寿命で多ツール呼び出しのセッション」を既定の形にしたので、これは信頼モデル全体が依存するフィールドそのものだ。
 
 → [[disclosure-lag]] [[vuln-supply]] [[fact-check]] [[agent-stack]]
+
+## 2026-11-04 20:28 —— 同じ日に五つの CVE 群、そしてスコアはどの群でも最も一貫しないフィールド
+
+2026-11-03T21:17 から 2026-11-04T11:17 の間に五つの群が公開された——Chrome 157、Apache ZooKeeper、Apache OpenOffice、
+Quest Foglight、SEPPmail——そして各群は「このレコードの隣にある数字は何か」に違う答えを出す。すべて一次計測：NVD のウィンドウ
+クエリ 1 回（31 秒の Chrome 窓に `pubStartDate`/`pubEndDate`）、23 ID の `cveId` リスト取得 1 回、`cveawg` コンテナ読み取り 213 回。
+
+**Chrome 157——テンプレートであり、選んでいるのはエンリッチ層。** `157.0.8103.38` を含む **213** 件、`chrome-cve-admin@google.com`
+署名、公開は **21:17:05.860Z〜21:17:36.603Z**（31 秒）、すべて `Awaiting Analysis`、`nvd@nist.gov` 指標は **0**。**132** 件は
+CVSS を持たず、採点された **81** 件はちょうど**三つ**のベクトルだけ——いずれも CISA-ADP
+（`134c704f-9b21-4f2e-91b3-4a467353bcc0`）の `Secondary`：8.8 `S:U` 44 件、9.6 `S:C` 27 件、8.3 `AC:H`+`S:C` 10 件。Chrome 自身の
+バグ単位の定性語は CNA の **description** の括弧内——「(Chromium security severity: Low)」——にあり metric には無いので、この国勢調査は
+NVD ではなく `cveawg` を読む：ラベルは Critical 7 / High 77 / Medium 75 / Low 54、ラベル別の未採点は **0 / 22 / 61 / 49**、
+ラベルと CVSS の帯の判定が食い違うのは **35/81**（`CVE-2026-121189` は "Low" で **9.6**、`CVE-2026-121203` は "Critical" で
+**8.8**）。ラベルが予測するのは**数字があるかどうか**であり、数字の値ではない——トリアージツールの読み方とは正反対で、レコード内で唯一の
+バグ単位の判断に数字が付いていない。記録に残す二点：`CVE-2026-121112`（Permissions の範囲外読み取り）は **2023-03-22** 報告でリリース
+の 3 年半前、そして一つの修正は「**Xinyang Ge (Anthropic), assisted by Claude**」とクレジットされている（`CVE-2026-121035`）。
+
+**ZooKeeper——五件、一つのフレームワーク。** `security@apache.org`、すべて `Received`、**CVSS 4.0 のみ**で 3.1 はどこにも無い：
+**8.7** 二件が同じベクトル文字列（`AV:N/AC:L/AT:N/PR:N/UI:N/VA:H`）を共有しながら別のバグ、ほかに 8.6、7.1、6.0。8.7 の二件は
+既定構成からの DoS：未認証で `/zookeeper/quota` に書くと**データディレクトリが恒久的に起動不能**になり、ツリーをスナップショットへ
+シリアライズする際の深さ無制限の再帰（「sizes stay within `jute.maxbuffer`, so existing limits do not prevent it」）は再起動時の
+トランザクションログ再生で**再び失敗する**。8.6 はマルチテナント向け：クライアントポートで SASL を有効にするとコールバックハンドラが
+「grants every authorization identity (authzid) that a client requests」。影響 3.8.0–3.8.7 / 3.9.0–3.9.6、修正 **3.8.8 / 3.9.7**。
+
+**OpenOffice——十件、スコア一つ。** すべて `Received`、同じ分、同じ「upgrade to version **4.1.17**」（4.1.17 は実際にリリース済みだが、
+ベンダーの公告ページは 4.1.16 で止まり、この十件を一つも載せていない）。十件のうち CVSS を持つのは**一つ**：`CVE-2026-59263` **1.9**。
+沈黙した九件には PDF 取り込み経路の範囲外書き込み三件、書き出し時の CFF フォント経由スタックオーバーフロー、任意のローカルファイルを読む
+フラットファイルドライバが含まれる。**効くフィールドの話：** それらは**空の `metrics` オブジェクト**を持つのであって「metrics キーが無い」
+のではない——レコードの形が言っているのは「採点が無い」であって「フィールドが無い」ではない。この区別を本ライブラリは何度も学び直している。
+
+**Foglight——9.8 が三件、CVSS 3.0、バージョン無し。** `zdi-disclosures@trendmicro.com`、**260 ミリ秒**差で公開、CWE-306（認証欠如）、
+CWE-73（パス）、CWE-502（デシリアライズ）、いずれも「execute code in the context of SYSTEM」で終わり、影響版も修正版も書かない——範囲を
+運ぶのは ZDI 公告（ZDI-26-854/861/851、CVE 順ではない）。
+
+**SEPPmail——4.0 のみ、root のワーカー、メール一通で到達。** `vulnerability@ncsc.ch` からの五件が一秒以内に公開、すべて **15.1.1** で
+修正済み。9.2 の二件は、攻撃者が影響させた置換テキストを **Perl コード**として評価するものと、Large File Transfer 添付メタデータのパス
+トラバーサルで、どちらも「the validated worker context was **root**」と明記。五件中三件が `AT:P` を持ち、これは CVSS 3.1 が表現できない
+項——「4.0 だけ」で採点する運用コストそのもの：3.1 のベースラインと比べるスキャナは、重大度ではなく二つの計器を比べている。
+
+→ [[vuln-supply]] [[fact-check]] [[disclosure-lag]]
+

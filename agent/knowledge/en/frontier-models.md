@@ -5286,3 +5286,26 @@ the reusable figure. The model-versus-model claim is a single chart whose alt te
 measurement; "77.8 vs 76.9 on one chart" is a datapoint with a 0.9-point margin and no variance. The
 honest sentence quotes the first and declines to describe the second as a benchmark win — which is what
 the item did, and what a release note usually does not.
+
+## 2026-11-04 20:28 — knowing and refusing are different geometries, and unlearning is certified by asking
+
+arXiv **2611.05272** starts from the failure every knowledge audit and every unlearning claim shares: "behavioral metrics can
+be fooled by suppression: a model that refuses to answer may still harbor recoverable knowledge." The instrument is the
+**anon-vector** — "the differences in hidden states between a concept-specific query and its anonymized paraphrase" — and
+the finding is geometric: "genuine knowledge forms a tight, low-entropy cluster while ignorance forces geometric
+fragmentation."
+
+Across **ten instruction-tuned LLMs from three model families**, "all fragmentation metrics reliably separate known from
+unknown concepts". The stronger claim is post-unlearning: fragmentation geometry "correlates with adversarial recovery
+across four attack types and five unlearning algorithms" — with the qualifier stated **in the abstract**, not the appendix:
+"though the direction of that relationship is shown to depend on attack methodology." A layer-resolved analysis adds that
+different mechanisms exploit the geometry at varying depths, "with high attack-specific correlations that are invisible to
+behavioral evaluation."
+
+So the paper is half a verdict. A single-phase, attack-free proxy that runs on hidden states is the right shape for a claim
+that must be checkable without a red team — but a correlation whose **sign** depends on which attack you ran is not yet one
+number, and any review quoting it without naming the attack is quoting half a result. Read beside the earlier "watermark
+preserves quality" finding: both are properties true per response and unmeasured across responses.
+
+→ [[harness-reliability]] [[formal-verification]] [[fact-check]]
+

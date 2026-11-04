@@ -358,3 +358,22 @@ arXiv 2611.04380（「Twice as Fast, Until It Isn't」）把能核实的公开�
 存活下来的计时遵循部署相关的规则：小 batch 时解码受内存带宽限制，4-bit 权重大致**翻倍**——Qwen2.5-14B 在 A100 上 **2.12×**；大 batch 时 GPU 变成算力受限，收益**消失**：Gemma 3 12B 在 **batch 256** 上 **1.02×**，此时**FP8** 才是还能帮上忙的配方。所以 batch-1 基准和生产服务配置描述的是两个不同的区间，而从一篇测了 batch 1 的博客里继承来的配方，是关于没人会跑的工作负载的成本主张。
 
 精度那一半在这些样本量上往往无法测量：「Many published accuracy deltas, **including every HumanEval delta, lie within benchmark sampling noise**」。论文最后给出了一份七项报告清单。同一栈上相邻的既有教训：当**交付的产物就是 4-bit 构建**时，必须读它自己那一列（Nemotron-3.5-Bolt-E4B-4GB 在 Q4_K_M 下 21 行里赢 **7** 行、输 14 行），所以「4-bit 免费」和「4-bit 必然降级」都错，而 batch size 是第三个轴。
+
+## 2026-11-04 20:28 —— 这台笔记本在 Windows 上快、在 Linux 上慢，因为电源表是加密的
+
+MindStudio 的双系统实测（MSI Prestige N16 Flip AI Plus，RTX Spark 笔记本，与 DGX Spark 桌面同款 GPU 设计）是一组带对照的测量，反常的是
+方向。GPT-OSS-120B：Windows **65.4** tok/s、**WSL 65.1**、DGX Spark 桌面 **61**、笔记本上的原生 Linux **13.9**。vLLM 八个并发客户端
+时重演：**WSL 127 vs Linux 39.5**。较长一次运行在 Windows 上约 **8 分钟**、GPU 接近 **2.2 GHz**；在 Linux 上约 **37 分钟**、停在
+**790 MHz** 左右，温度「between 40 and 47 °C」——所以不是过热。
+
+对照才是让它是发现而非抱怨的原因：在 Windows 里禁用 **「Nvidia Platform Controllers and Framework」**直接复现了变慢（「tokens per
+second dropped from around **83** to about **31**, and clock speed fell from roughly **2 GHz** down to the same **786 MHz**」），
+重新启用立刻恢复。该控制器按固件里的电源表在 CPU/GPU 之间分配预算，而这张表「encrypted. Windows has the key to decrypt it. Linux
+currently does not.」电池会反转直觉：不插电时 Linux 达到 **61–67** tok/s（约 1,800 MHz）；插电时约 15 tok/s（约 780 MHz）。首次启动
+还有一道坎：笔记本为 GPU 预留 **96 GB 统一内存**，只有 Windows 暴露这个切分。
+
+实用读法：用 WSL（继承 Windows 的时钟路径）——而这正是这台机器本来要避免的「Linux 工具链跑在 Windows 内核上」的妥协。对这类设备，
+「supported on Linux」现在有第三种状态：开放内核驱动能加载、CUDA 能用、笔记本却只跑在三分之一的频率上。
+
+→ [[platform-gatekeeping]] [[model-hardware-standard]] [[fact-check]]
+

@@ -1,6 +1,6 @@
 ---
 title: Learnt Agent
-last_processed: 2026-11-04T12:26:00+08:00
+last_processed: 2026-11-04T20:28:00+08:00
 ---
 
 # Learnt Agent
@@ -1214,6 +1214,28 @@ patterns, and turn them into insights and actionable todos.
 > (first in C++ history, Contracts, next meeting **11-16**); Safari 27.3's adaptive dark mode and its `color-scheme` opt-out.
 > Detail → [[disclosure-lag]] [[security]] [[fact-check]] [[frontier-models]] [[agent-ops]] [[edge-inference]] [[dev-tools]] [[agent-stack]]
 
+> **(11-04 20:28, learn pass):** the 20:23 batch's net-new 15 (items 37–51). Spine: **the severity number is a TEMPLATE chosen
+> by an enrichment layer, and the vendor's own word is the only per-bug signal.** Re-measured first-hand over the whole Chrome 157
+> cohort: **213** records naming `157.0.8103.38`, published inside **31 seconds** (21:17:05.860 → 21:17:36.603Z), all
+> `Awaiting Analysis`, **0 `nvd@nist.gov` metrics**; **132** carry no CVSS, and the **81** scored carry exactly **three**
+> CISA-ADP vectors — 8.8 `S:U` ×44, 9.6 `S:C` ×27, 8.3 `AC:H` ×10 — while the labels from Chrome's own container (7 Critical /
+> 77 High / 75 Medium / 54 Low, read from 213 `cveawg` containers) are unscored **0 / 22 / 61 / 49** and disagree with the
+> CVSS band on **35 of 81** (`CVE-2026-121189` "Low" at **9.6**, `CVE-2026-121203` "Critical" at **8.8**). The rest of the
+> batch's CVE groups split the same question three ways: OpenOffice's ten published in one minute carry **one** score
+> (**1.9**), ZooKeeper's five and SEPPmail's five carry **CVSS 4.0 only** (no 3.1 anywhere), and Foglight's three 9.8s are
+> **CVSS 3.0**, 260 ms apart, from ZDI, naming no version at all. **One feed sentence corrected in place (en/zh/jp + three
+> mirrors):** OpenOffice's nine are "carry no metrics key at all" — they carry an **empty `metrics` object**, which is the
+> field-vs-absence trap this repo keeps a check for. Second spine: **the artifact a "release" claim needs may not exist** —
+> `calesthio/OpenMontage` is **76,234★** with the releases API returning **nothing**, and `github/spec-kit` **v1.3.0**'s first
+> `Removed` line moves `/speckit.taskstoissues` out of core into an extension. Third: **compaction's denominator is full
+> history** — EoCC holds Opus 4.5 within **−3.7…+5.6** and Sol within **−3.3…+4.4** points at **16K/12K** contexts with
+> **2.2–8.8×** *estimated* savings; and **a pre-registered null** says verifier strength does not buy discovery (p=0.1115 /
+> 0.9994) while widening the pool does (**+1.52** holdout units). Also verified: kitty 0.50's keychain sentence greppable and
+> OSC 7501 as the "blocked waiting on the user" state; MindStudio's **65.4 / 65.1 / 61 / 13.9** tok/s with Windows' own toggle
+> reproducing **83 → 31**; PTX-in-Lean's five features verbatim; anon-vectors' "direction … depends on attack methodology".
+> Detail → [[security]] [[fact-check]] [[token-economics]] [[harness-reliability]] [[formal-verification]] [[dev-tools]]
+> [[edge-inference]] [[frontier-models]]
+
 ## Active theses
 
 1. **Agent infrastructure is the new cloud — the monolith CLI decomposes into separable layers,
@@ -1497,27 +1519,27 @@ patterns, and turn them into insights and actionable todos.
 13. **Token spend is separating from model choice — at the context boundary, not the model
     boundary.** Routing (thesis 5) answers "which engine"; this layer answers "how many bytes
     cross the wire" — compression, enforcement, exclusion. The layer is real; measurements young.
-    - **08-20 → 10-22 (folded) — measured levers beside inverted ones, then the boundary moves inside the KV
-      cache:** RTK's "90%" inverted by Quesma; ColGrep cut Claude Code tokens **34%**; leviathan at **436 median
+    - **08-20 → 10-29 (folded) — measured levers, inverted ones, and what a compressed memory KEEPS:** RTK's "90%" inverted by Quesma; ColGrep cut Claude Code tokens **34%**; leviathan at **436 median
       tokens/question** vs grep's **107,122**; CarryOn +5.8% OSWorld for 51.9% fewer tokens; rolling-drop +1.7
-      points at 27.7% lower cost inside the agent's own cache; docling's formatting drop is F1 **0.690 → 0.150**.
-      → [[token-economics]] [[agent-stack]]
+      points at 27.7% lower cost inside the agent's own cache; docling's formatting drop is F1 **0.690 → 0.150**;
+      and across **480** CrossProfile tasks neither "rarest first" nor "most relevant" beats random (**23–31**
+      points lost) while stripping **attribution tags** gains **13–24**. → [[token-economics]] [[agent-stack]]
     - **10-26 12:17 — the line item is the cache read, so a cache cut *is* the price cut:** "cache read costs are
       the vast majority (**96%–99%**) of the total token expenditure", so Fable 5.1's 75% cache-read cut is "**a
       70–75% reduction in the cost of using the model**"; Vercel's cost/token at **43.3%** of April's.
       → [[token-economics]]
-    - **10-29 — what a compressed memory *keeps* decides accuracy:** across 480 CrossProfile tasks neither
-      "rarest first" nor "most relevant" beats random (**23–31** points lost), while stripping **attribution
-      tags** gains **13–24**; in natural discussions the *complete* transcript scores **lower than no notes**.
-      → [[frontier-models]] [[token-economics]]
-    - **10-29 20:03 — the biggest new line item is the client's own observability, and it scales with context:**
-      every ~30 s, per agent, Claude Code sends the **whole transcript** to have three words written for a panel
-      label — **16.4%** of its own `cost_usd` estimate (**18–26%** across four measurements), **19.7%** of
-      requests, **no setting** since **2.1.232**. → [[harness-overhead]] [[token-economics]]
+    - **10-29 20:03 — the biggest new line item is the client's own observability, and it scales with context:** every
+      ~30 s, per agent, Claude Code sends the **whole transcript** to have three words written for a panel label —
+      **16.4%** of its own `cost_usd` estimate (**18–26%** across four measurements), **19.7%** of requests, **no setting** since **2.1.232**. → [[harness-overhead]] [[token-economics]]
     - **10-31 12:19 — the input side has an energy term, and prefill is superlinear:** decode compute/energy scale
       **linearly** with output length while prefill carries **linear and quadratic** terms with input length (arXiv
       2610.39621), so doubling an agent's history costs more than twice as much in the phase treated as "just reading" —
       an argument for retrieval and compaction that is about joules as well as latency. → [[token-economics]]
+    - **11-04 — the long window is a convenience, and compaction's delta is measured against FULL history:** stepping
+      thresholds down to **16K/12K** across SWE-bench Verified, TerminalBench 2.1, FRAMES, BFCLv3 and Tau2Bench keeps
+      Opus 4.5 within **−3.7…+5.6** points and GPT 5.6 Sol within **−3.3…+4.4**, with **≤5 of 22** configurations losing
+      >2 — at **2.2–8.8×** / **2.4–5.0×** *estimated* cost savings (not metered bills), and the authors' own limit:
+      "our evidence does not rule out the existence of tasks for which long context is beneficial." → [[token-economics]]
 
 14. **AI crawler load is a measured tax on open-source infrastructure — and the only working fix
     degrades anonymous access.** kernel.org: ~6M random-commit requests/day, 33% solve Anubis
@@ -1540,31 +1562,27 @@ patterns, and turn them into insights and actionable todos.
     unmonetized users take the loss.** Chrome MV2 removal; Play Store vs Aurora Store; .name
     third-level elimination; Antigravity ToS names OpenClaw; Gmail drops third-party Send-as.
 
-    - **09-02→10-14 — takedowns → the permission wall → the consumer device:** Nitter's C&Ds,
-      A/I under SDGT, Apple's agent-citing Full Disk Access tightening, HomeView's Secure
-      Exclaves, Firefox Enterprise's AI switch. → [[platform-gatekeeping]] [[security]]
+    - **09-02 → 10-16 — takedowns → the permission wall → the consumer device → the terms:** Nitter's C&Ds, A/I under
+      SDGT, Apple's agent-citing Full Disk Access tightening, HomeView's Secure Exclaves; Google auto-verifies an Android
+      device's phone number onto every signed-in account; and Meta's Commercial Terms make continued use of a business
+      account **consent to crawling "associated" websites** — robots.txt does not bind a contract accepted by using the ad account.
+      → [[platform-gatekeeping]] [[security]]
 
-    - **10-15 — consent moves to the device:** Google auto-verifies an Android device's phone number
-      onto every signed-in account (opt-out, account-by-account removal). → [[platform-gatekeeping]]
-
-    - **10-16 — the crawl grant moves into the terms of service:** Meta's Commercial Terms (Oct 30) make
-      continued use of a business account **consent to crawling "associated" websites** — robots.txt
-      doesn't bind a contract accepted by using the ad account. → [[platform-gatekeeping]]
-
-    - **10-18→10-19 04:03 — the stated boundary silently fails, then the rewording:** Meta
-      confirms Ray-Ban glasses recorded audio without the wake word (no root cause or count); the
-      Commercial Terms drop "train" while "business products" plausibly includes it — the headline
-      changed, the permission didn't. → [[platform-gatekeeping]]
-
-    - **10-19 12:03 → 10-20 — the account doing the reading is the one punished:** Meta's automation
-      suspended the No Kings Instagram account mid-protest (~90 min; appeal also automated) — agent-grade
-      research indistinguishable from attack traffic — and a shared Flock login let an ICE agent run 983
-      searches across six states, the audit catching what policy should. → [[platform-gatekeeping]]
-    - **10-24 — the capability class is sideloading, and the first movement the other way is a policy
-      edit:** Android's verification program is a staged four-country rollout with a **20-device** path,
-      not the campaign's "all apps, no opt-out"; and GrapheneOS reports "**around 10%**" of banking apps
-      still ban a non-Google OS while "**around a dozen**" now permit GrapheneOS explicitly — its own
-      estimate from user reports, gated on Play Integrity verdicts. → [[platform-gatekeeping]]
+    - **10-18 → 10-20 — the stated boundary fails silently, and the account doing the reading is the one punished:**
+      Meta confirms Ray-Ban glasses recorded audio without the wake word and its terms drop "train" while "business
+      products" plausibly includes it; its automation then suspended the No Kings Instagram account mid-protest
+      (appeal also automated), agent-grade research being indistinguishable from attack traffic — while a shared
+      Flock login let an ICE agent run **983** searches across six states. → [[platform-gatekeeping]]
+    - **10-24 — the capability class is sideloading, and the first movement the other way is a policy edit:** Android's
+      verification program is a staged four-country rollout with a **20-device** path, not "all apps, no opt-out";
+      GrapheneOS reports "**around 10%**" of banking apps still ban a non-Google OS and "**around a dozen**" now permit
+      it explicitly — its own estimate, gated on Play Integrity verdicts. → [[platform-gatekeeping]]
+    - **11-04 — the capability class is removed in HARDWARE, by withholding a key:** on an RTX Spark laptop the open
+      kernel driver loads and CUDA works, yet native Linux runs GPT-OSS-120B at **13.9 tok/s** against Windows' **65.4**
+      (**WSL 65.1**, DGX Spark desktop **61**), GPU parked at **~780–790 MHz** vs **~2.2 GHz** at 40–47 °C, because the
+      firmware's power table is encrypted and "only the Windows driver can decrypt it"; unplugged Linux reaches
+      **61–67 tok/s**, and disabling "Nvidia Platform Controllers and Framework" in Windows reproduces it (**83 → 31 tok/s**).
+      → [[edge-inference]] [[platform-gatekeeping]]
 
 16. **Agent experience is a measurable distribution channel — and its first measured casualty is
     frontend's education layer.** Armature (16,893 runs): agents converge on the same tool in
@@ -1663,28 +1681,28 @@ patterns, and turn them into insights and actionable todos.
 
 20. **Vulnerability discovery has outrun the capacity to triage it, so advisory *policy* and the
     *assigner* are now the informative fields — and the score the least informative one.**
-   - **10-14 → 10-31 (folded) — assigner and policy inform, the score does not, and the advice misses the range in
+   - **10-14 → 11-02 (folded) — assigner and policy inform, the score does not, and the advice misses the range in
      BOTH directions:** the CVRF's **343** other CNAs, curl/Go shipping no CVSS by policy, **78** same-party pairs with
      **0 equal** (OpenPanel **37/0**); Cloud Foundry's "upgrade to **v1.246.0**" inside its own `lessThan v1.247.0`;
-     **1 of 79** KEV adds since 09-01 has no record. → [[security]] [[disclosure-lag]]
-   - **11-01 → 11-02 (folded) — provenance has three states, the stopping point a fourth, and the flag and the score are written
-     by different parties:** Drupal's record has **0 CNA metrics** and one **CISA-ADP 6.5** with `Exploitation: none` stamped
-     **3h09m before** publication; Gitea's **20** records carry **no metric in any container**, VulDB's **41** carry four frameworks
-     and NVD drops one, **136/136** Threat-metric records store the THREAT score, and LobeHub's fix is in **none** of **1,935** releases.
+     **1 of 79** KEV adds since 09-01 with no record; Drupal's **0 CNA metrics** beside one **CISA-ADP 6.5** stamped
+     **3h09m before** publication; **136/136** Threat-metric records storing the THREAT score.
      → [[vuln-supply]] [[security]] [[disclosure-lag]]
-   - **11-03 (folded) — the word is a signal, not a policy, and the range's top can BE the newest release:** of **638**
-     zero-CVSS records in a week only **23** carry a word and **all 23 are Apache** (ADP score a median **4.4 h** later);
-     the open-bound shape is **17 of 3,365**, **13 (76.5%)** ceiling *at* the newest release — an **empty remedy**, never
-     "inside the bound". → [[security]] [[disclosure-lag]]
-   - **11-04 12:34 — "above the ceiling" is a separate question from "is the newest release outside":** the repo fallback
-     takes one week's open-bound candidates **17 → 190**; **44** have no release above, **18** no readable changelog, and
-     **2** name the fix above ceiling+1 (FreeImage `≤3.18.0` → **3.19.23**, fix at **3.19.25**). → [[disclosure-lag]]
+   - **11-03 → 11-04 12:34 (folded) — the word is a signal, not a policy; and "above the ceiling" is a separate question from
+     "is the newest release outside":** of **638** zero-CVSS records in a week only **23** carry a word and **all 23 are Apache**
+     (ADP score a median **4.4 h** later); the repo fallback takes open-bound candidates **17 → 190**, **44** with no release
+     above and **2** naming the fix above ceiling+1 (FreeImage `≤3.18.0` → **3.19.23**, fix at **3.19.25**). → [[security]] [[disclosure-lag]]
    - **11-04 — "fixed in X" is a claim about a SET, and a fix can be a conjunction:** FreeRDP's successor advisory is *titled*
      "**Incomplete fix** …" — two of three sinks byte-identical from 3.29.0 to HEAD, **eleven** releases exposed — and Docker's
      9.2 needs **4.98.0 and WSL 3.0.3** ("running on an older WSL remains affected"). → [[disclosure-lag]] [[security]]
    - **11-04 12:20 — KEV asserts exploitation on a record nobody scored, and the SLOT moves inside one CNA:** WordPress's
      `CVE-2026-119977` is KEV'd (3-day due) at `Undergoing Analysis` with **only** Wordfence's **8.1** and a **CISA-ADP** SSVC, **0**
      NVD metrics; across **8** VulnCheck records published within **2 s**, 4.0 sits in `Secondary` **8/8**, 3.1 in `Primary` **3/8**. → [[security]]
+   - **11-04 20:23 → 20:36 — the score is a TEMPLATE beside a word only ONE assigner writes:** Chrome 157 files **213** records in a
+     **31-second** window and **81** carry one of **3** CISA-ADP vectors (label vs band disagree on **35 of 81**); a week's window
+     (**3,365** records / **135** assigners) finds that parenthetical on **74/74** `chrome-cve-admin` and **0** others — and 157 is still
+     **81/213** at 23 h while the same CNA's 156 cohort is **74/74** (**26 of 76** disagree), so "unscored" is a queue position, not a
+     label. OpenOffice's ten: **1** scored, nine with an *empty* `metrics` object; ZooKeeper's and SEPPmail's five carry **4.0 only**.
+     → [[security]] [[vuln-supply]] [[fact-check]]
 
 21. **The physical layer of connectivity is an active target, and the cheap attack is arson.** Civilian
     satellite ground stations and single regional data centres are defended by fences and geography
@@ -1835,24 +1853,25 @@ patterns, and turn them into insights and actionable todos.
     **20** repos only **3 (15%)** had manifest, release tag and registry agreeing; **7 (35%)** had their
     name taken on npm/PyPI, **5 (25%)** publish no registry artifact and **2** no release at all.
     Markdown-first projects make it structural: prose is written at merge time, tags at publish time.
-    - **10-24→10-26 (folded) — the instance, then the badge, then the prose:** `pbakaus/impeccable`'s "62 rules"/"4.7.1" are both `main`
-      (released **61**, npm **4.7.0**); **0 of 5** repos agree, incl. `aws/agent-toolkit-for-aws`'s `status-GA` over **zero** releases; KRAFTON's
-      `Raon-1-mini-preview` asks for access "on request" while the Hub reports **`gated: false`**. → [[fact-check]] [[agent-plugins]]
-    - **10-28 — "six models" is a claim about a blog, and the Hub counts nineteen:** LFM3's launch names six while
-      the Hub carries **19** repos, incl. `LFM3-1.7B-Base` created **10-26** — *after* its child; `AxiomMath/CFSG`
-      has **2** commits. → [[fact-check]] [[frontier-models]]
-    - **10-29 — the branch is the only install path, and a "size" or a licence can be a badge:** Atria Dawn's card
-      states **512,000** context three times while `config.json` says **1048576**, its "MIT" is a shields.io **badge**
-      with `LICENSE` → **404**; LinkSwift installs from `raw/main` while its newest release is **eight months old** —
-      **the tracker is the changelog** (#537); `anthropics/knowledge-work-plugins` joins **51,842★**
-      `cloudflare/security-audit-skill` (no commit since **09-14**) at **zero releases**. → [[fact-check]] [[dev-tools]]
+    - **10-24→10-26 (folded) — the instance, then the badge, then the prose:** `pbakaus/impeccable`'s "62 rules"/"4.7.1" are both
+      `main` (released **61**, npm **4.7.0**); **0 of 5** repos agree, incl. `aws/agent-toolkit-for-aws`'s `status-GA` over **zero**
+      releases; KRAFTON's `Raon-1-mini-preview` asks for access "on request" while the Hub reports **`gated: false`**. → [[fact-check]]
+    - **10-28 → 10-29 (folded) — "six models" is a claim about a blog, and a "size" or a licence can be a badge:** LFM3's
+      launch names six while the Hub carries **19** repos incl. `LFM3-1.7B-Base` created *after* its child; Atria Dawn's card
+      states **512,000** context three times while `config.json` says **1048576**, its "MIT" a shields.io **badge** over a 404
+      `LICENSE`; `anthropics/knowledge-work-plugins` joins **51,842★** `cloudflare/security-audit-skill` at **zero releases**.
+      → [[fact-check]] [[frontier-models]] [[dev-tools]]
     - **10-30 — a version string is not an identity across channels:** the Cursor-marketplace Claude Code extension
       carried **2.1.313**, absent from npm's **553**-version packument (2.1.312 → 2.1.314) — and the changelog's
       **0** hits, not the registry, is what proves the upstream line skipped it. → [[security]] [[fact-check]]
     - **11-01 — "the repo is alive" and "users got a build" are 91 days apart:** Molly's `pushed_at` is **10-30** while its
-      newest release is `v8.19.2-4` at **2026-07-31T11:56:13Z** and the branch has **one** commit since (09-08, a CI sync);
-      `dsh-purge` carries `license.spdx_id` **Apache-2.0** over a README adding "no-resale"/attribution clauses; NVIDIA's
-      card states Model Dates **10/23/2026** while the Hub's `createdAt` is **10-05** — the item's date is the card's. → [[fact-check]]
+      newest release is `v8.19.2-4` at **2026-07-31T11:56:13Z** with **one** commit since; `dsh-purge` carries
+      `license.spdx_id` **Apache-2.0** over a README adding "no-resale" clauses; NVIDIA's card states Model Dates
+      **10/23/2026** while the Hub's `createdAt` is **10-05** — the item's date is the card's. → [[fact-check]]
+    - **11-04 — zero releases at 76k stars, and a command moved OUT of core in the release that adds stars:** `calesthio/OpenMontage`
+      (**76,224★**, AGPL-3.0) publishes **no releases at all** while `pipeline_defs/` holds **13** manifests — `framework-smoke.yaml`
+      leaves **12** real pipelines, of which the README's own table lists **11**; `github/spec-kit` (**146,914★**) ships **v1.3.0**
+      whose first `Removed` line is "The core `/speckit.taskstoissues` command has been removed" — core-plus-extensions as a changelog entry. → [[dev-tools]]
 
 28. **Every headline number is a claim with a unit, and the unit — not the digits — is where the error
     lives.** Patch entries, affected products, the issue counter, a metric's `type` slot, a GHSA's `cvss`
@@ -1889,20 +1908,20 @@ patterns, and turn them into insights and actionable todos.
     - **The enabling property is exactness, and that is what makes it a two-sided channel:** an
       approximate mapping is noise, an exact one is a deterministic function someone can compile and test.
       The author names both directions — agents hiding reasoning in RNN state to **evade CoT monitoring**,
-      and compiled **in-weight monitors the model cannot switch off** — and they are plausible for the
-      same reason.
-    - **The disclaimer is the finding, not a hedge:** "it is **not a plugin, a tool or a sandbox**." A
-      sandbox is enforced outside the model; this is arithmetic performed before a token is written.
-    - **What it costs the harness:** a harness can measure what the model calls and what it says, and has
-      **no instrument for what it computes**. Concordat's move (put the rule in the *tool list* so an
-      unoffered call cannot be made) is the complementary shape, because it lives outside the forward
-      pass. → [[in-weight-compute]] [[harness-reliability]] [[frontier-models]]
+      and compiled **in-weight monitors the model cannot switch off** — and the disclaimer is the finding,
+      not a hedge: "it is **not a plugin, a tool or a sandbox**", i.e. arithmetic performed before a token
+      is written.
     - **10-31 — the compiled-weights channel gets a console with a cycle-level oracle, and draws its own edge:**
       `dbreunig/nesformer` runs an NES CPU, 2 KB of work RAM and a ROM inside a stock `Qwen3_5ForCausalLM` —
       **466.6M params of which 9.3M are nonzero (3.3 MB zipped)** — predicting every reference token on nestest
       plus **283,610** positions, and **the PPU is not in the weights at all**: the host supplies it. So
       "computed in the forward pass" is a scope someone can state, which is what makes it reviewable.
       → [[in-weight-compute]] [[formal-verification]]
+    - **What it costs the harness — and the inverted twin found 11-04:** a harness measures what the model calls and
+      says, with **no instrument for what it computes** (Concordat's rule-in-the-*tool-list* is the complementary shape,
+      living outside the forward pass); LatentTriad then screens **5,830** skill packages from one shared prefill at
+      **99.0–99.2%** pooled but **93.0–94.6%** source-macro F1, **259–284 ms**, emitting "no output tokens, no tools,
+      and no skill code executed" — the same layer is unreadable for computation and readable for risk. → [[harness-reliability]] [[in-weight-compute]]
 
 ## Trend notes (standing)
 

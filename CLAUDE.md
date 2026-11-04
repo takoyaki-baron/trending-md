@@ -1107,6 +1107,22 @@ underlying pages — this produced a two-layer false signal in a single item.
    **(i) Scare quotes are not quotations** — and the checker cannot tell: "good at repository
    edits, weaker at long-horizon shell work" was the *feed's own gloss* in quote marks, and the
    repair is to drop the marks, not to find a source.
+   **(j) A `<script type="text/template">` is markup the page RENDERS, not code** (added 2026-11-04
+   20:36, the Blogger lesson). `chromereleases.googleblog.com` serves the whole post body inside a
+   template-typed script, so the extractor's strip-every-`<script>` rule left **10.7 KB out of 631 KB**
+   — above `isBlockShell`'s 1,200-char floor, hence *readable* — and two verbatim quotations ("This
+   update includes 213 security fixes.", "Reported by Xinyang Ge (Anthropic), assisted by Claude on
+   2026-09-28") were published as invented. `htmlText()` now **unwraps** template-typed scripts
+   (`text/template`, `text/x-handlebars-template`, `text/ng-template`, `text/x-tmpl`,
+   `application/x-template`) while still dropping executable JS **and** `application/ld+json` (metadata
+   a reader cannot see must never become evidence for a quotation); `PAGE_CACHE_V` went **3 → 4**,
+   because a v3 entry holds a Blogger page **with its body deleted** and a length that says otherwise.
+   Prevalence measured, not assumed: of the **3,095** URLs the October feeds cite, **7** are on
+   Blogger-family hosts and **2** carry the template body, both `chromereleases`. The transferable rule:
+   **an extractor that deletes a tag TYPE rather than a rendering ROLE can delete the document** — so
+   before believing a page's silence, check the extracted text has the page's own scale; a body ratio
+   of a few percent on a large HTML document means the stripper ate the article, and the verdict is
+   `unread`, never `absent`. `--selftest` **220 → 224**.
    Calibrated **both ways on its own filing day**: the uncorrected 10-31 feed returned **13
    findings / 9 verified** → after four in-place corrections (items **8, 10, 14, 20**) and three
    scare-quote removals (**9, 12, 16**), **0 findings / 15 verified**. The one real fabrication it

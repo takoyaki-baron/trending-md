@@ -3262,3 +3262,22 @@ Figma 关于其编辑模型的叙述（2026-10-29）是少见地把评估构造�
 数字连同它们的分母：典型任务**约快 20%**；新 agent 在与资深设计师的头对头测试中「beats or matches the previous production agent **62%** of the time」；用户评分**高 33%**；用户撤销 agent 工作的频率**低 60%**；「we've more than doubled the share of work powered by our own post-trained design model」。**每一个都是对着 Figma 自己的上一代 agent 或自己的用户**——同任务、同评分标准，这就是 62% 可复用的原因。模型对模型的主张是一张图，其 alt 文本写着 Figma v3 **77.8%**、**Sol 6.1 76.9%**：一个点对，没有分维度拆解，且文章说模型未公开。
 
 **这两个数字是不同种类的对象。** 「对上一代 agent 62% 头对头」是一次测量；「一张图上 77.8 对 76.9」是一个边际 0.9 分、没有方差的单点。诚实的那句话引用前者，并拒绝把后者说成基准胜利——那条 item 做到了，而通常的发布说明做不到。
+
+## 2026-11-04 20:28 —— 「知道」与「不说」是两种几何，而遗忘目前靠提问来认证
+
+arXiv **2611.05272** 从每个知识审计与遗忘主张共享的失败出发：「behavioral metrics can be fooled by suppression: a model that refuses to
+answer may still harbor recoverable knowledge」。仪器是 **anon-vector**——「the differences in hidden states between a
+concept-specific query and its anonymized paraphrase」——发现是几何性的：「genuine knowledge forms a tight, low-entropy cluster
+while ignorance forces geometric fragmentation」。
+
+跨**三个模型家族、十个指令微调 LLM**，「all fragmentation metrics reliably separate known from unknown concepts」。更强的断言在遗忘之后：
+碎片化几何「correlates with adversarial recovery across four attack types and five unlearning algorithms」——限定语写在**摘要**而不是附录：
+「though the direction of that relationship is shown to depend on attack methodology」。逐层分析补充：不同机制在不同深度利用这套几何，
+「with high attack-specific correlations that are invisible to behavioral evaluation」。
+
+所以这篇只给出一半结论。单阶段、无需攻击、直接跑在隐藏状态上的代理，正是那种「不必红队即可复核」的主张应有的形状——但一个**符号**取决于你
+跑哪种攻击的相关性还不是一个数字，任何不说明攻击类型的引用都只引了一半。与先前「水印不损质量」的发现并读：两者都是「每条回复成立、跨多条回复
+未被测量」的性质。
+
+→ [[harness-reliability]] [[formal-verification]] [[fact-check]]
+

@@ -916,3 +916,34 @@ WebKit 的 **Adaptive Dark Mode**（Safari 27.3 beta）是第一个会改变“�
 `Stringman`（Neufangled Robotics）是一台 **795 美元**的房间级缆索机器人——一个 **638 g** 的夹爪由室内四角的四根线吊起，而不是串联机械臂，论据是「price is basically actuator count」。实测主张：7×7×3 m 房间、**28 N** 线张力上限下，靠近地面可举 **2.2 kg**、平均 **1.9 kg**，对照官网自己脚注的 **0.32 kg**（同样 DM-H6215 执行器的 0.75 m 串联臂）；移动约 **0.4 m/s**；适用对角线 3–10 m、高 2.3–4 m 的房间；PET-GF 与 PLA 3D 打印；计算刻意外置——你的 PC 当控制器，夹爪里一块 Pi Zero 2W、锚点处 Pi 3A+ 板，5 GHz Wi-Fi 用二维码配网。
 
 它通过了 **OSHWA 认证（US002788）**，公布 CAD、PCB 与控制软件，并且「can run air gapped on your local Wi-Fi network: the UI is served locally, AI models run on your own hardware, and no data ever leaves your network」。**许可证按仓库不一致**：固件（`nhnifong/cranebot3-firmware`）是 **Apache-2.0**；PCB 仓库（`nhnifong/stringman-pcbs`）在 GitHub 上显示**无许可证**。所以一项 OSHWA 认证、一个按仓库的许可证字段、一句“已公开”是关于同一个产品的三句独立陈述——与 `git-ai` 的 `NOASSERTION`、Atria Dawn 只在徽章里写 MIT 是同一种“许可证是三个产物”的形状，这次出现在硬件里。
+
+## 2026-11-04 20:28 —— 四个发布，以及它们各自真正交付的产物
+
+**kitty 0.50.0（2026-11-03）。** 停靠窗口（`launch --type=window-dock` / `--type=tab-dock`）把 kitty 窗口贴到另一个窗口或标签页
+边缘——终端长出状态栏与文件树，作为一等窗口而不是 tmux 分屏。`restore_session_after_logout` 在登出/重启/关机时保存「the state of
+every kitty instance, including scrollback」并在下次启动时恢复；同一句里就回答了存储问题：「On macOS, the state is encrypted with a
+key in the keychain. On Linux, it requires the Inhibit desktop portal.」（引文可在详细更新日志中 grep 到）。此外：标签页成为命名
+工作区（`--focus-existing`、`--location` 的 `by-title`）、两种**索引色**图像格式（像素索引终端调色板，于是图片随主题改色），以及
+**OSC 7501——Program Status Protocol**：程序上报「whether they are working, finished, failed or blocked waiting on the user」，
+通过 `tab.program_status` 显示在标签栏。最后这条超出终端用户群：「blocked waiting on the user」正是 agent harness 目前无法发出的
+状态，而把它渲染出来的终端，就把转圈变成了请求输入。
+
+**github/spec-kit v1.3.0（2026-11-03T18:25Z，release atom 18:28:41Z）。** **146,914★** / 13,181 fork / MIT / 创建于
+2025-08-21。**Removed** 下的第一行是：「The core `/speckit.taskstoissues` command has been removed. You should be using the
+`github` extension.」——核心+扩展的架构以更新日志的形式落地，没有弃用路径。与 [[agent-plugins]] 里的插件市场同形，也提醒：钉住版本
+的安装方式是从发布说明里才得知这件事。
+
+**garrytan/gstack v1.92.55.0（2026-11-02）。** **139,034★** / 20,606 fork / MIT，创建于 2026-03-11，每 2–3 天发一版（前两个 tag
+v1.91.318.0 与 v1.91.242.0 相隔 3 天）。两条值得抄的纪律：安装门槛写了安全理由（「Bun v1.4.2+ (the tested version; setup refuses
+Bun older than **1.3.3**, which would let compiled tools read a project's `.env`)」），生产力主张自带分母与让步——「**~810× my 2013
+pace (11,417 vs 14 logical lines/day)**」，测量范围「across 40 public + private `garrytan/*` repos … after excluding one demo
+repo」，旁边就是「The LOC critics aren't wrong that raw line counts inflate with AI.」
+
+**calesthio/OpenMontage。** **76,224★** / 10,105 fork / **AGPL-3.0**，创建于 2026-03-29，而 releases API 返回**空**——安装途径是
+`main`。`pipeline_defs/` 里有 **13** 个 YAML，其中一个是 `framework-smoke.yaml`，所以是 **12** 条真流水线；README 自己的表格只列了
+**11** 条，漏掉 `character-animation.yaml`。一条真实的零密钥路径（Piper TTS 旁白、Archive.org/NASA/Wikimedia 素材、本地
+`wan2.2-ti2v-5b` 等）用具体组件支撑了「免费/开源」的说法，还有一节是写给 agent 的（「If You're An OpenClaw Agent Reading This…」），
+让它先读 `AGENT_GUIDE.md` 并且「do not improvise the production workflow」。
+
+→ [[agent-stack]] [[fact-check]] [[platform-gatekeeping]]
+

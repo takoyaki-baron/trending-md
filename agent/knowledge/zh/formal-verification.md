@@ -137,3 +137,20 @@ title: 机器可检断言——"已验证"买到了什么、它信任了什么�
 **项目是否把三层都印出来——已证明、已核验、未测量——还是只印第一层？** 一个验证主张可审计，前提是工件点明了自己未测量的分母（us-tax-model：148/157 个门、13.1% 家族外、n=1 的已知错和 bug）。只印已证明层的项目并没有说谎，它只是扣下了能让你给其余部分定尺的那个数字。
 
 → [[frontier-models]] [[fact-check]] [[dev-tools]]
+
+## 2026-11-04 20:28 —— 证明下沉到 PTX，比编译器再低一层
+
+arXiv **2611.04447** 形式化的是 **PTX**——驱动真正消费的那层汇编——而不是 CUDA 或某个框架 IR：「an approach that allows modeling
+and reasoning about patterns common in GPU kernels for Deep Learning, including acquire-release, tensor cores, proxies, async
+operations, multi-kernel pipelines and data-dependent control flow」。这份清单就是诚实的范围声明：它点名了让 GPU kernel 难以推理的那些
+特性，每一处都是朴素模型与硬件实际行为分岔的地方。
+
+被证明的是「simple implementations of a WGMMA GEMM kernel, FlashAttention, and a 3-kernel MoE pipeline」——「simple」是作者自己的词；
+第三条最有意思，因为它跨的是**流水线**（kernel 之间交接内存），而不是单次发射。
+
+为什么层次重要：ML 基础设施的验证目前止步于编译器或框架，跳过了 tensor core 调度、异步拷贝与内存代理真正把语义弄错的那一层；在 PTX 上
+证明，是正确性论证能穿过编译器变更的那条缝。限度必须与结果同写：**PTX 不是 ISA**，所以证明覆盖的是写下的程序，不是执行它的机器。与 Lasm
+（Lean→WASM，运行时无检查器）和 NESformer 自陈的 PPU 范围同形——产物说明了自己不覆盖什么，这才让它可复核。
+
+→ [[frontier-models]] [[in-weight-compute]]
+

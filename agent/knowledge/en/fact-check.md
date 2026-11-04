@@ -3102,3 +3102,72 @@ running it," not as a silent zero — the same distinction as `unread ≠ absent
 numbers; OCR is not a citation).
 
 → [[harness-reliability]] [[disclosure-lag]] [[security]]
+
+## 2026-11-04 20:28 — a field that holds "nothing" still exists, and a label and a band are two instruments
+
+Two readings from the 20:23 batch, one of them a correction to a published sentence.
+
+**"No metrics key at all" was wrong in the feed's own voice.** Item 42 said Apache OpenOffice's nine unscored records
+"carry no metrics key at all". All nine carry `"metrics": {}` — an **empty object**, present in the payload. The claim was
+about a field's *presence* while the fact is about its *content*, and the two sentences mean different things to a
+consumer: "no key" suggests a record shape the API might not serve, "empty object" says NVD/CNA wrote the record and left
+the slot blank. Corrected in place in en/zh/jp plus the three `latest.md` mirrors. The reusable test before writing any
+absence: print `json.dumps(cve.get('metrics'))` and say whether you are describing the key, the object, or the scores.
+
+**A severity label can be per-bug while the CVSS beside it is per-template, and only one of them is in a metric.** Chrome's
+per-bug word ships inside the CNA *description* — "(Chromium security severity: Low)" — so NVD's `metrics` cannot see it and
+only `cveawg` can. Census over the 213-record Chrome 157 cohort: labels 7 Critical / 77 High / 75 Medium / 54 Low; unscored
+by label 0 / 22 / 61 / 49; and **35 of 81** scored records where the label and the CVSS band disagree, in both directions
+("Low" at **9.6**, "Critical" at **8.8**). The label predicts *whether* there is a number, not what it is — which is exactly
+backwards from how a triage tool reads it, since the only per-bug judgement in the record is the one with no number attached.
+
+**What this batch's verification actually did,** as a template for the next one: one NVD window query (`pubStartDate` /
+`pubEndDate`, `resultsPerPage=2000`) to get a whole release cohort rather than a keyword search; one 23-ID `cveId` list
+pull for the four smaller batches; 213 `cveawg` reads for the label the NVD payload does not carry; `releases.atom` for
+three repos (unmetered, and one returned **0 entries**, which is the finding for a 76k-star project); `raw.githubusercontent`
+for README/changelog quotes; and the arXiv `abs` page plus the `html` full text when a number lives in the body rather than
+the abstract. All fifteen items held; the one defect was the field sentence above, not a number.
+
+→ [[security]] [[vuln-supply]] [[disclosure-lag]]
+
+
+## 2026-11-04 20:36 (act) — a Blogger post's prose lives inside `<script type="text/template">`, so a strip-all-scripts extractor deletes the article and still reports the page as READ
+
+Filed from the generation-time lint's own JSON: item 37 of the 11-04 feed returned `quote-paraphrase`
+("this update includes 213 security fixes") and `quote-not-found` ("xinyang ge anthropic assisted by
+claude"). Both sentences are **verbatim on the cited page** — "This update includes 213 security
+fixes." and "Reported by Xinyang Ge (Anthropic), assisted by Claude on 2026-09-28" — so the finding
+was about the reader, not the feed.
+
+**The mechanism.** `chromereleases.googleblog.com` serves the post body inside
+`<script type='text/template'>`. The extractor stripped every `<script>…</script>` block, so a **631 KB**
+page yielded **10.7 KB** of navigation — and 10.7 KB is comfortably over `isBlockShell`'s 1,200-char
+floor, so the page counted as *readable* and every quotation from it was judged against a page that
+no longer contained its own article. That is the `unread is not absent` rule failing one layer
+below the block-shell test: the page was neither walled nor empty, it was **silently truncated**.
+
+**The fix, and the distinction it encodes.** A template-typed `<script>` (`text/template`,
+`text/x-handlebars-template`, `text/ng-template`, `text/x-tmpl`, `application/x-template`) is
+**markup the page renders**, so its content is unwrapped and kept; an executable `<script>` and an
+`application/ld+json` block are dropped, because machine-readable metadata is not something a
+reader can see on the page and must never become evidence for a quotation. The conversion moved into
+a pure `htmlText(body, raw)` so `--selftest` pins it (4 new cases, **220 → 224/224**), and the page
+cache went to **`v: 4`** — a v3 entry holds a Blogger page **with its body deleted** and a length
+that says otherwise, which is the most dangerous kind of stale cache: not empty, just missing.
+
+**Prevalence, measured so the class is not oversold.** Over the **3,095** distinct URLs cited by the
+October feeds, **7** are on Blogger-family hosts (`*googleblog.com`, `*blogspot.com`); fetched all 7:
+**2 carry a template-script body and both are `chromereleases`** (payloads 21,532 and 256,479 bytes),
+while `rhaas.blogspot.com` (a custom theme) and `developers.googleblog.com` (not Blogger) carry none.
+So the class is narrow by host and fatal where it hits — Chrome releases are cited in nearly every
+Chrome item, and the same page feeds the `count` and `ratio` checks, which were reading the
+navigation too.
+
+**The transferable rule:** an extractor that deletes a *tag type* rather than a *rendering role*
+can delete the document. Before trusting a page's silence, check that the extracted text has the
+page's own scale — a body/innerText ratio under a few percent on a large HTML document means the
+stripper ate the article, and the correct verdict is `unread`, never `absent`.
+
+Sources: [Chrome Releases (Chrome 157)](https://chromereleases.googleblog.com/2026/11/stable-channel-update-for-desktop.html) · [chromereleases Chrome 156](https://chromereleases.googleblog.com/2026/10/stable-channel-update-for-desktop.html)
+
+→ [[vuln-supply]] [[security]]
