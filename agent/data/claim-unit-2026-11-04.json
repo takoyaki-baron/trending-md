@@ -1,9 +1,9 @@
 {
- "generated": "2026-11-03T20:15:51.421Z",
+ "generated": "2026-11-04T04:20:00.405Z",
  "files": [
   {
    "file": "2026-11-04.md",
-   "items": 20,
+   "items": 36,
    "findings": [
     {
      "check": "issues",
@@ -14,17 +14,10 @@
     },
     {
      "check": "status",
-     "item": 13,
-     "verdict": "ok",
-     "claim": "CVE-2026-28336 `Received`",
-     "detail": "Received (lastModified 2026-11-03T18:18:01.140)"
-    },
-    {
-     "check": "status",
      "item": 14,
      "verdict": "ok",
      "claim": "CVE-2026-44266 `Received`",
-     "detail": "Received (lastModified 2026-11-03T18:18:02.957)"
+     "detail": "Received (lastModified 2026-11-03T20:18:13.823)"
     },
     {
      "check": "cvss",
@@ -32,6 +25,118 @@
      "verdict": "ok",
      "claim": "4.0 9.2",
      "detail": "CVE-2026-112917 · Secondary/security@docker.com"
+    },
+    {
+     "check": "status",
+     "item": 21,
+     "verdict": "ok",
+     "claim": "CVE-2026-119977 `Undergoing Analysis`",
+     "detail": "Undergoing Analysis (lastModified 2026-11-03T21:45:31.220)"
+    },
+    {
+     "check": "status",
+     "item": 21,
+     "verdict": "ok",
+     "claim": "CVE-2026-119977 `Undergoing Analysis`",
+     "detail": "Undergoing Analysis (lastModified 2026-11-03T21:45:31.220)"
+    },
+    {
+     "check": "cvss",
+     "item": 24,
+     "verdict": "ok",
+     "claim": "4.0 8.7",
+     "detail": "CVE-2026-121428 · Secondary/disclosure@vulncheck.com"
+    },
+    {
+     "check": "cvss",
+     "item": 24,
+     "verdict": "ok",
+     "claim": "3.1 8.8",
+     "detail": "CVE-2026-121428 · Secondary/disclosure@vulncheck.com · vector reproduces 8.8"
+    },
+    {
+     "check": "status",
+     "item": 24,
+     "verdict": "ok",
+     "claim": "CVE-2026-121428 `Deferred`",
+     "detail": "Deferred (lastModified 2026-11-03T19:18:02.950)"
+    },
+    {
+     "check": "date",
+     "item": 24,
+     "verdict": "ok",
+     "claim": "CVE-2026-121428 published 2026-11-03",
+     "detail": "NVD published 2026-11-03T15:17:33.570 (2026-11-03 UTC) · cveawg datePublished 2026-11-03T14:28:22.946Z (2026-11-03 UTC) — the two clocks differ; 2026-11-03 is the NVD published day"
+    },
+    {
+     "check": "cvss",
+     "item": 26,
+     "verdict": "ok",
+     "claim": "4.0 8.3",
+     "detail": "CVE-2026-121424 · Secondary/disclosure@vulncheck.com"
+    },
+    {
+     "check": "cvss",
+     "item": 26,
+     "verdict": "ok",
+     "claim": "3.1 6.5",
+     "detail": "CVE-2026-121424 · Secondary/disclosure@vulncheck.com · vector reproduces 6.5"
+    },
+    {
+     "check": "status",
+     "item": 26,
+     "verdict": "ok",
+     "claim": "CVE-2026-121424 `Awaiting Analysis`",
+     "detail": "Awaiting Analysis (lastModified 2026-11-03T19:18:02.800)"
+    },
+    {
+     "check": "date",
+     "item": 26,
+     "verdict": "ok",
+     "claim": "CVE-2026-121424 published 2026-11-03",
+     "detail": "NVD published 2026-11-03T15:17:32.883 (2026-11-03 UTC) · cveawg datePublished 2026-11-03T14:28:20.066Z (2026-11-03 UTC) — the two clocks differ; 2026-11-03 is the NVD published day"
+    },
+    {
+     "check": "cvss",
+     "item": 27,
+     "verdict": "ok",
+     "claim": "4.0 8.6",
+     "detail": "CVE-2026-121419 · Secondary/disclosure@vulncheck.com"
+    },
+    {
+     "check": "cvss",
+     "item": 27,
+     "verdict": "ok",
+     "claim": "3.1 8.1",
+     "detail": "CVE-2026-121419 · Primary/disclosure@vulncheck.com · vector reproduces 8.1"
+    },
+    {
+     "check": "cvss",
+     "item": 27,
+     "verdict": "ok",
+     "claim": "4.0 8.8",
+     "detail": "CVE-2026-121417 · Secondary/disclosure@vulncheck.com"
+    },
+    {
+     "check": "cvss",
+     "item": 27,
+     "verdict": "ok",
+     "claim": "3.1 7.8",
+     "detail": "CVE-2026-121417 · Secondary/disclosure@vulncheck.com · vector reproduces 7.8"
+    },
+    {
+     "check": "status",
+     "item": 27,
+     "verdict": "ok",
+     "claim": "CVE-2026-121419 `Deferred`",
+     "detail": "Deferred (lastModified 2026-11-03T15:17:32.103)"
+    },
+    {
+     "check": "date",
+     "item": 27,
+     "verdict": "ok",
+     "claim": "CVE-2026-121417 published 2026-11-03",
+     "detail": "NVD published 2026-11-03T15:17:31.553 (2026-11-03 UTC) · cveawg datePublished 2026-11-03T14:28:15.135Z (2026-11-03 UTC) — the two clocks differ; 2026-11-03 is the NVD published day"
     },
     {
      "check": "repo",
@@ -45,27 +150,55 @@
      "item": 10,
      "verdict": "ok",
      "claim": "obra/superpowers",
-     "detail": "311782★, last push 2026-11-03"
+     "detail": "311956★, last push 2026-11-03"
     },
     {
      "check": "repo",
      "item": 11,
      "verdict": "stale-disclosed",
      "claim": "multica-ai/andrej-karpathy-skills",
-     "detail": "last push 2026-04-20 (197d) with 229009 stars — the item names this repo's own last-push day (2026-04-20), so the staleness is the story rather than an unexamined number"
+     "detail": "last push 2026-04-20 (198d) with 229161 stars — the item names this repo's own last-push day (2026-04-20), so the staleness is the story rather than an unexamined number"
     },
     {
      "check": "repo",
      "item": 12,
      "verdict": "ok",
      "claim": "spotify/portal-ai-plugins",
-     "detail": "3003★, last push 2026-10-23"
+     "detail": "3080★, last push 2026-10-23"
     },
     {
      "check": "count",
      "item": 17,
      "verdict": "ok",
      "claim": "320 tools",
+     "detail": "README states it"
+    },
+    {
+     "check": "count",
+     "item": 19,
+     "verdict": "ok-delimited",
+     "claim": "244 pixel-art effects",
+     "detail": "the README delimits this count itself (`<!-- count -->244<!-- /count -->`) — the page answers the question exactly, with no neighbour-grep needed"
+    },
+    {
+     "check": "count",
+     "item": 33,
+     "verdict": "ok",
+     "claim": "71 agents",
+     "detail": "README states it"
+    },
+    {
+     "check": "count",
+     "item": 33,
+     "verdict": "ok",
+     "claim": "314 skills",
+     "detail": "README states it"
+    },
+    {
+     "check": "count",
+     "item": 33,
+     "verdict": "ok",
+     "claim": "80 tools",
      "detail": "README states it"
     },
     {
@@ -186,14 +319,148 @@
      "verdict": "ok",
      "claim": "1 quotation(s)",
      "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 21,
+     "verdict": "ok",
+     "claim": "1 quotation(s)",
+     "detail": "verbatim in 15 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 22,
+     "verdict": "ok",
+     "claim": "1 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 23,
+     "verdict": "ok",
+     "claim": "1 quotation(s)",
+     "detail": "verbatim in 3 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 24,
+     "verdict": "ok",
+     "claim": "5 quotation(s)",
+     "detail": "verbatim in 10 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 25,
+     "verdict": "ok",
+     "claim": "5 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 26,
+     "verdict": "ok",
+     "claim": "2 quotation(s)",
+     "detail": "verbatim in 10 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 27,
+     "verdict": "ok",
+     "claim": "3 quotation(s)",
+     "detail": "verbatim in 8 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 28,
+     "verdict": "ok",
+     "claim": "2 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 29,
+     "verdict": "ok",
+     "claim": "1 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 30,
+     "verdict": "ok",
+     "claim": "1 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 31,
+     "verdict": "ok",
+     "claim": "1 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 32,
+     "verdict": "ok",
+     "claim": "2 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 33,
+     "verdict": "ok",
+     "claim": "5 quotation(s)",
+     "detail": "verbatim in 1 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 34,
+     "verdict": "ok",
+     "claim": "1 quotation(s)",
+     "detail": "verbatim in 3 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 35,
+     "verdict": "ok",
+     "claim": "2 quotation(s)",
+     "detail": "verbatim in 5 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 36,
+     "verdict": "ok",
+     "claim": "1 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
     }
    ]
   }
  ],
- "status_watch": [],
+ "status_watch": [
+  {
+   "id": "CVE-2026-119977",
+   "from": "Received",
+   "to": "Undergoing Analysis",
+   "regressed": false,
+   "modified": "2026-11-03T21:45:31.220"
+  },
+  {
+   "id": "CVE-2026-121392",
+   "from": "Undergoing Analysis",
+   "to": "Analyzed",
+   "regressed": false,
+   "modified": "2026-11-03T21:12:38.530"
+  },
+  {
+   "id": "CVE-2026-28336",
+   "from": "Received",
+   "to": "Awaiting Analysis",
+   "regressed": false,
+   "modified": "2026-11-03T20:34:29.410"
+  }
+ ],
  "api_calls": 0,
- "readme_calls": 5,
- "cited_page_calls": 15,
+ "readme_calls": 11,
+ "cited_page_calls": 39,
  "repo_page_calls": 0,
  "nvd_calls": 1,
  "cna_calls": 0
