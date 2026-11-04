@@ -536,3 +536,38 @@ n = 100, p = 0.0002) — **widening the pool, not tightening the gate**, is the 
 
 → [[fact-check]] [[frontier-models]] [[in-weight-compute]]
 
+## 2026-11-05 04:43 — two benchmarks raise difficulty by controlling exactly one variable
+
+Both papers in this batch are **designs**, not scores, and the design is what makes the number attributable.
+
+**Switch-SWE** (arXiv **2611.02017**, figures verified verbatim): **200** focus tasks from **19** Python
+repositories, reconstructed from issue / pull-request / review history and rendered as **400 matched session
+specifications**. Each focus task is scored twice under identical requirements and executable verifiers — once in
+an uninterrupted session, once in a *switched* session that interleaves ordered stages from other unfinished tasks
+in the same repository, with only the final focus patch scored. Across **7** coding agents the average
+focus-task resolution gap is **11.5 percentage points** (range **6.0–15.0**). Trajectory analysis attributes it to
+"cross-task requirement confusion and loss of task state".
+
+The contribution is the **matched pair**: because the focus task, the verifier and the repository are held fixed
+and only the interleaving changes, 11.5 points is attributable to switching rather than to difficulty sampling.
+It also measures the actual working condition of an agent in a live repository, which single-issue
+repository-level benchmarks deliberately remove.
+
+**ToolSpace** (arXiv **2611.05036**): reverses MCP environment synthesis from data-centric to tool-centric.
+Existing methods "first synthesize a database and scenario, then derive tools and tasks from them", which yields
+interfaces that "may not match real ones", compositions "not grounded in execution", and tasks that "rarely span
+more than one environment". ToolSpace instead mines data, state and retry dependencies from **adjacent calls in
+execution traces of real MCP services**, "using deterministic rules rather than LLM judgment", clusters the
+weighted tool-composition graph into environments, synthesizes a database **only** where state is mutated and
+replays recorded returns otherwise, then keeps only chains that "replay successfully from the initial state".
+Applied to AutomationBench and τ³-Bank Banking it produces harder Pro versions on which **7 frontier models drop
+by up to 38.2 points**; as training data across seven long-horizon tool-use benchmarks it raises
+Qwen3.6-35B-A3B from **23.0 to 41.0** average score (**43.2** with RL).
+
+The shared lesson: **both make the environment the controlled variable** — same verifier for the treatment and
+the control, and a dependency graph that is *mined* rather than *judged*, so environment construction is not
+itself a model behaviour. A benchmark that gets 38 points harder when it is built from recorded execution was
+measuring interface familiarity, which is the same failure the grader-side work keeps finding one layer over.
+
+→ [[fact-check]] [[agent-stack]] [[in-weight-compute]]
+

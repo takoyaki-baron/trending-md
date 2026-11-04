@@ -171,6 +171,22 @@
  *      2026-10-30 on the `CVE-2026-97229` case: `Analyzed` → `Undergoing Analysis` 27 minutes after
  *      its KEV add, when CISA-ADP rewrote the container. Reading rules in the check's header.
  *
+ *   H. PAPER DATE (`--check paper`, in the default set since 2026-11-05) — an arXiv paper's
+ *      `published` instant against the date the item quotes for it. Built because the 11-05 batch
+ *      was a day early on **3 of 3** papers, in the same direction and by the same amount — a unit
+ *      defect in the generator, and one no existing arm could see (`date` binds publish cues to CVE
+ *      records; `count`/`ratio` read pages, not timestamps). ONE unmetered request per file:
+ *      `export.arxiv.org/api/query?id_list=<a,b,c>` returns `published` and `updated` for the whole
+ *      batch. Verdicts: `paper-date-mismatch` (sev 2 — the quoted day/instant is not the
+ *      submission instant), `paper-date-imprecise` (sev 1 — the day is right and the instant was
+ *      available), `paper-date-revision` (sev 1 — the quoted date is a v2+ paper's LATER instant,
+ *      so it names the wrong submission rather than the wrong day), `paper-date-unread` (sev 0).
+ *      Two guards: the cue must be **submission** (`submitted`/`posted`/`preprint`), never
+ *      `announced`/`published`, because arXiv's announcement is a second and later clock; and a
+ *      quoted instant is compared at the precision it states, since the feed writes `21:38Z` for
+ *      `21:38:49Z`. Calibrated both ways on its filing file: the pre-correction committed feed
+ *      returns **3 findings** (all three papers), the corrected one **0 findings / 3 verified**.
+ *
  * Usage:
  *   node agent/tools/claim-unit-lint.mjs --file en/feed/2026-10-26.md
  *   node agent/tools/claim-unit-lint.mjs --file … --no-net            # check A only (prose)
@@ -235,7 +251,7 @@ const CACHE_PATH = arg('cache') ?? 'agent/data/claim-unit-cache.json';
 // 5 MB of TEXT is ~7 MB on disk (JSON escapes newlines); 8 MB was an 11 MB file, bigger than the 9.9 MB
 // it was meant to bound.
 const CACHE_BYTES = Number(arg('cache-bytes') ?? 5_000_000);
-const CHECKS = new Set((arg('check') ?? 'issues,cvss,status,date,temporal,cwe,range,repo,count,ratio,bundle,quotation').split(',').map((s) => s.trim()));
+const CHECKS = new Set((arg('check') ?? 'issues,cvss,status,date,temporal,cwe,range,repo,count,ratio,bundle,quotation,paper').split(',').map((s) => s.trim()));
 
 const SELFTEST = has('selftest');
 const STATUS_WATCH = has('status-watch');
@@ -581,8 +597,39 @@ function sentenceAround(t, phrase) {
   return r ? t.slice(r.start, r.end) : t.slice(Math.max(0, i - 200), i + 200);
 }
 
+/* The sentence carrying a literal needle (a slug, a URL) — for reading what the item says ABOUT it.
+ * A SLUG IS A PREFIX OF ITS SIBLINGS, which the first version of this helper missed: item 5 of the
+ * 11-05 feed names `tencent/Hy4-preview` (a real model) four sentences before it says "There is no
+ * `tencent/Hy4`", so a plain `indexOf` bound the negation to the WRONG sentence and the guard could
+ * not fire. The occurrence counts only when the next character cannot continue the name. */
+function sentenceWith(t, needle) {
+  const s = String(t);
+  let i = -1;
+  for (let from = 0; (i = s.indexOf(needle, from)) >= 0; from = i + needle.length) {
+    if (!/[A-Za-z0-9_.\-/]/.test(s[i + needle.length] ?? ' ')) break;
+  }
+  if (i < 0) return '';
+  const r = sentences(s).find((x) => i >= x.start && i < x.end);
+  return r ? s.slice(r.start, r.end) : s.slice(Math.max(0, i - 200), i + 200);
+}
+
+/** A sentence that asserts a name does not exist — a 404 agrees with it rather than refuting it. */
+const ABSENT_ASSERTED = /\b(?:there (?:is|are|was|were) no|no such|(?:does|do|did) not exist|has no (?:github|repo|repository|release)|no (?:public |official )?(?:github |hf |hugging face )?(?:repo|repository|release|weights) (?:exists|yet))\b/i;
+
 /** An item that says it counted the number itself is not claiming a page says it. */
-const SELF_COUNTED = /\b(?:counted (?:from|it|them|myself|by hand)|no page states (?:a |the )?total|nothing states a total|count(?:ed)? (?:from|off) the (?:manifest|README|file|page)|a total counted|(?:block|field|key|frontmatter|metadata)\s+(?:lists|carries|has|holds|contains)\s+\d+)\b/i;
+/* Two arms added 2026-11-05, both from item 16 of that day's feed, whose sentence is "Neither the
+ * README nor the MCP docs states a total, so we counted the git tree ourselves: 174 `SKILL.md`
+ * files" — correct (the tree API returns 174: 167 under `skills/`, 7 under `.agents/`) and reported
+ * `absent` **twice** because neither spelling was in the vocabulary:
+ *   (a) **`we counted`** — the existing arm requires `counted from|it|them|myself|by hand`, so the
+ *       first-person plural, which is how an author writes it, was invisible. The object varies
+ *       ("the git tree", "the release list", "every skill directory"), so only the subject is pinned.
+ *   (b) **`neither … states a total`** — the existing arm is `no page states a total`; a negative
+ *       about TWO named pages says the same thing in a shape the alternation could not reach.
+ * Both keep the same denominator guard as every other arm: the sentence must also carry the NUMBER
+ * (`selfCountedNear`), so an item that says "we counted the tree" about 24 cannot suppress a
+ * different 174. */
+const SELF_COUNTED = /\b(?:counted (?:from|it|them|myself|by hand)|no page states (?:a |the )?total|nothing states a total|count(?:ed)? (?:from|off) the (?:manifest|README|file|page)|a total counted|\bwe counted\b|\b(?:no|neither)\b[^.]{0,80}?\b(?:states?|gives?|lists?|publishes?)\s+(?:a|the)\s+total|(?:block|field|key|frontmatter|metadata)\s+(?:lists|carries|has|holds|contains)\s+\d+)\b/i;
 
 /* The disclosure can live in the body while the NUMBER lives in the title — item 35's headline is
  * "36 language tags" and its justification is a body sentence, "the card's `language:` block lists
@@ -1297,6 +1344,98 @@ function checkDate(it, subjects, cna = new Map()) {
   return out;
 }
 
+/* ── paper dates: an arXiv `published` instant is one unmetered call, and the feed was a day early on
+ * 3 of 3 papers of the 11-05 batch (2611.03998 cited 2026-11-01, published 2026-11-02T21:38:49Z;
+ * 2611.02017 cited 2026-10-31, published 2026-11-01T16:04:16Z; 2611.05036 cited 2026-11-02,
+ * published 2026-11-03T15:09:01Z). Same direction and magnitude 3/3 — a unit defect in the
+ * generator, not three typos — and **no existing arm could see it**: `checkDate` binds publish cues
+ * to CVE records only, and `count`/`ratio` read pages rather than timestamps.
+ *
+ * Two rules the calibration put in, each a way this would otherwise produce a false finding:
+ *   (a) **the cue must be SUBMISSION** (`submitted`, `posted`, `preprint`), never
+ *       `announced`/`published`/`updated` — arXiv's announcement date is a second, later clock, and
+ *       "updated" belongs to a revision, which is the separate verdict below.
+ *   (b) **a revision has its own instant**, so a quoted date that matches `updated` on a v2+ paper
+ *       is `paper-date-revision` (it names the wrong submission, not the wrong day) rather than a
+ *       mismatch.
+ * A quoted instant is compared at the precision it states — the feed writes `21:38Z` for
+ * `21:38:49Z`, which is a truncation, not an error.
+ */
+const PAPER_CACHE_V = 1;
+const ARXIV_SUBMIT_CUE = /\b(submitted|posted|preprint\s+(?:dated|of))\b[^.\n]{0,40}?(\d{4}-\d{2}-\d{2}(?:T\d{2}:\d{2}(?::\d{2})?Z?)?)/i;
+
+async function arxivRecords(ids) {
+  const out = new Map();
+  const miss = [];
+  for (const id of ids) {
+    const hit = cache[`paper:${id}`];
+    if (hit && hit.v === PAPER_CACHE_V && Date.now() - Date.parse(hit.fetched_at) < CACHE_TTL_MS) { out.set(id, hit.rec); continue; }
+    miss.push(id);
+  }
+  if (!miss.length || NO_NET) return out;
+  try {
+    // ONE request for the batch — the API accepts a comma-separated id_list
+    const r = await fetch(`https://export.arxiv.org/api/query?id_list=${miss.join(',')}&max_results=${miss.length + 2}`, { signal: AbortSignal.timeout(30_000) });
+    const xml = await r.text();
+    for (const m of xml.matchAll(/<entry>([\s\S]*?)<\/entry>/g)) {
+      const e = m[1];
+      const full = (/<id>([^<]+)<\/id>/.exec(e) ?? [])[1];
+      if (!full) continue;
+      const withV = full.split('/abs/')[1] ?? '';
+      const base = withV.replace(/v\d+$/, '');
+      const rec = {
+        id: base,
+        version: Number((/v(\d+)$/.exec(withV) ?? [])[1] ?? 1),
+        published: (/<published>([^<]+)<\/published>/.exec(e) ?? [])[1] ?? null,
+        updated: (/<updated>([^<]+)<\/updated>/.exec(e) ?? [])[1] ?? null,
+      };
+      cache[`paper:${base}`] = { fetched_at: new Date().toISOString(), v: PAPER_CACHE_V, rec };
+      out.set(base, rec);
+    }
+  } catch { /* unread is a state, not an absence — the caller reports it as unread */ }
+  return out;
+}
+
+/** Pure: what the item's quoted date is, given the record. Split out so `--selftest` pins it. */
+function paperVerdict(rec, quoted) {
+  if (!rec?.published) return { verdict: 'paper-date-unread', detail: 'the arXiv API returned no record for this id — unread is not a wrong date' };
+  const pub = rec.published;
+  const pubDay = pub.slice(0, 10);
+  const upd = rec.updated ?? pub;
+  if (quoted.length <= 10) {
+    // a DAY, where the record carries an instant — the imprecision is the finding, not a mismatch
+    if (quoted === pubDay) return { verdict: 'paper-date-imprecise', day: pubDay,
+      detail: `the item quotes ${quoted}; arXiv's \`published\` is ${pub} — the day is right and the instant is available, so quote it` };
+    if (rec.version >= 2 && quoted === upd.slice(0, 10)) return { verdict: 'paper-date-revision', day: pubDay,
+      detail: `the item quotes ${quoted}, which is this paper's REVISION instant (${upd}); the first submission was ${pub} (v${rec.version}) — name which submission` };
+    return { verdict: 'paper-date-mismatch', day: pubDay,
+      detail: `the item quotes ${quoted}; arXiv's \`published\` is ${pub}${rec.version >= 2 ? ` (updated ${upd})` : ''}` };
+  }
+  const q = Date.parse(quoted);
+  if (!Number.isFinite(q)) return { verdict: 'paper-date-unread', detail: `“${quoted}” is not a parseable instant — silence, not a finding` };
+  const near = (iso) => Number.isFinite(Date.parse(iso)) && Math.abs(q - Date.parse(iso)) < 60_000;
+  if (near(pub)) return { verdict: 'ok', detail: `arXiv \`published\` ${pub} — the quoted instant is the submission's` };
+  if (rec.version >= 2 && near(upd)) return { verdict: 'paper-date-revision', day: pubDay,
+    detail: `the item quotes ${quoted}, which is this paper's REVISION instant (${upd}); the first submission was ${pub} (v${rec.version}) — name which submission` };
+  return { verdict: 'paper-date-mismatch', day: pubDay,
+    detail: `the item quotes ${quoted}; arXiv's \`published\` is ${pub}${rec.version >= 2 ? ` (updated ${upd})` : ''} — the difference is ${Math.round((q - Date.parse(pub)) / 60000)} minute(s)` };
+}
+
+function checkPaper(it, papers) {
+  const out = [];
+  const ids = [...new Set([...it.plain.matchAll(/arxiv\.org\/abs\/(\d{4}\.\d{4,5})/g)].map((m) => m[1]))];
+  for (const id of ids) {
+    const rec = papers.get(id);
+    // the cue must be in a sentence that names THIS id — a neighbouring paper's date is not this one's
+    const sents = sentences(it.plain).filter((s) => new RegExp(`\\b${id.replace('.', '\\.')}\\b`).test(it.plain.slice(s.start, s.end)));
+    const hit = sents.map((s) => ARXIV_SUBMIT_CUE.exec(it.plain.slice(s.start, s.end))).find(Boolean);
+    if (!hit) continue; // no submission cue — silence, never the announcement clock
+    const v = paperVerdict(rec, hit[2]);
+    out.push({ check: 'paper', item: it.n, verdict: v.verdict, claim: `arXiv ${id} ${hit[1]} ${hit[2]}`, detail: v.detail });
+  }
+  return out;
+}
+
 /**
  * The `--status-watch` store. A single feed run can only see today, so the *movement* — which is
  * the event worth catching, and which the 04:27 pass had to reconstruct from four timestamps by
@@ -1702,21 +1841,39 @@ const ERROR_TTL_MS = 10 * 60 * 1000;
    version" into "absent from the record", which is the exact defect the schema version exists to
    prevent. A bump forces one refetch per CVE and is unmetered. */
 const CNA_CACHE_V = 5;
+/* The repo cache had no version until 2026-11-05, and the day it needed one it produced exactly the
+ * defect the versions above exist to prevent: v-0 entries stored a failure as a bare `error` string,
+ * so `tencent/Hy4`'s 404 came back as "unreadable" from a six-hour-old entry even after `repoState`
+ * learned to keep the HTTP status. An entry of another shape is a MISS, not a state — the refetch is
+ * one metered call per slug and the answer is the record's own. */
+const REPO_CACHE_V = 2;
 
 function repoState(slug) {
   const hit = cache[slug];
-  if (hit && Date.now() - Date.parse(hit.fetched_at) < CACHE_TTL_MS) return hit;
+  /* A 404 is a stable answer and may sit for the full TTL; a transient failure may not — the page
+     cache's rule ("a wall is cached for 10 minutes, not 6 hours") one object over. */
+  if (hit && hit.v === REPO_CACHE_V) {
+    const ttl = hit.error && hit.status !== '404' ? ERROR_TTL_MS : CACHE_TTL_MS;
+    if (Date.now() - Date.parse(hit.fetched_at) < ttl) return hit;
+  }
   let j;
   try {
-    const raw = execFileSync('gh', ['api', `repos/${slug}`], { encoding: 'utf8', timeout: 30_000, stdio: ['ignore', 'pipe', 'ignore'] });
+    const raw = execFileSync('gh', ['api', `repos/${slug}`], { encoding: 'utf8', timeout: 30_000, stdio: ['ignore', 'pipe', 'pipe'] });
     j = JSON.parse(raw);
     apiCalls += 1;
   } catch (e) {
-    cache[slug] = { fetched_at: new Date().toISOString(), error: String(e.message ?? e).split('\n')[0] };
+    /* A 404 IS A STATE, NOT AN UNREADABLE REQUEST — and the two need different sentences. `gh`
+     * writes the status to stderr, which this call used to discard, so every failure arrived as
+     * "Command failed: gh api repos/<slug>" and item 5 of the 11-05 feed ("There is no `tencent/Hy4`")
+     * came back `unreadable` at sev 1 against a sentence the 404 CONFIRMS. The status is now kept,
+     * so a caller can tell "the registry says this name does not exist" from "I could not ask". */
+    const msg = `${e.stderr ?? ''}${e.message ?? ''}`;
+    const status = /HTTP (\d{3})/.exec(msg)?.[1] ?? (/Not Found|404/.test(msg) ? '404' : null);
+    cache[slug] = { fetched_at: new Date().toISOString(), v: REPO_CACHE_V, status, error: String(e.message ?? e).split('\n')[0] };
     return cache[slug];
   }
   cache[slug] = {
-    fetched_at: new Date().toISOString(),
+    fetched_at: new Date().toISOString(), v: REPO_CACHE_V,
     pushed_at: j.pushed_at, created_at: j.created_at, archived: j.archived,
     stars: j.stargazers_count, forks: j.forks_count, license: j.license?.spdx_id ?? null,
   };
@@ -1960,7 +2117,18 @@ function checkRepo(it, budget, ageBudget) {
         out.push({ check: 'repo', item: it.n, verdict: 'hf-model', claim: slug, detail: `${hf} — a Hugging Face model id, not a GitHub repository (read the card, not a README)` });
         continue;
       }
-      out.push({ check: 'repo', item: it.n, verdict: 'unreadable', claim: slug, detail: `api.github.com: ${st.error}` });
+      /* A 404 CONFIRMS an item that says the name does not exist. Item 5 of the 11-05 feed reads
+       * "There is no `tencent/Hy4` and no GA system card in the org's listing", and `gh api
+       * repos/tencent/Hy4` answers 404 — an agreement reported as a sev-1 `unreadable` finding
+       * because the status was thrown away and the sentence was never read. The guard is the usual
+       * one: the suppression fires only when THIS slug's own sentence carries the negation, so a
+       * live project whose repo 404s (deleted, renamed, private) still reports as unreadable. */
+      const said = sentenceWith(it.plain ?? it.text ?? '', slug);
+      if (st.status === '404' && ABSENT_ASSERTED.test(said)) {
+        out.push({ check: 'repo', item: it.n, verdict: 'repo-absent-asserted', claim: slug, detail: `repos/${slug} answers 404 and the item's own sentence asserts it does not exist (“${said.trim().slice(0, 140)}”) — the registry agrees, so this is a confirmation, not an unreadable repo` });
+        continue;
+      }
+      out.push({ check: 'repo', item: it.n, verdict: 'unreadable', claim: slug, detail: `api.github.com: ${st.error}${st.status ? ` (HTTP ${st.status})` : ''}` });
       continue;
     }
     const pushed = Date.parse(st.pushed_at);
@@ -2208,6 +2376,15 @@ function citedPages(plain, { hn = false, cap = 3 } = {}) {
     let raw = false;
     let rank = 1;
     const arxiv = /^https:\/\/arxiv\.org\/abs\/(\d{4}\.\d{4,5})(?:v\d+)?/.exec(url);
+    /* A FILE on the Hub is the file, not the card. `huggingface.co/<repo>/raw/<rev>/<path>`,
+     * `/resolve/` and `/blob/` all name one artifact, and until 2026-11-05 they were rewritten by the
+     * MODEL-CARD arm below to `<repo>/raw/main/README.md` and then dropped as a duplicate of the card
+     * — so a cited LICENSE was never fetched. Item 1 of the 11-05 feed quotes `"prominently displayed
+     * on the user interface"` verbatim out of `moonshotai/Kimi-K3.1-Pro`'s LICENSE §3, and the lint
+     * reported `quote-not-found` (sev 3) against a correct item having read three sources, none of
+     * them that file. Same species as the GitHub `blob/` arm one line down: a linked file IS the
+     * text, and a rendered page is a guess. Raw URLs keep the revision the item pinned. */
+    const hfFile = /^https:\/\/huggingface\.co\/(datasets\/)?([\w.-]+)\/([\w.-]+)\/(?:raw|resolve|blob)\/([^/]+)\/([^?#]+)$/.exec(url);
     const hf = /^https:\/\/huggingface\.co\/datasets\/([\w.-]+\/[\w.-]+)/.exec(url);
     // a plain `huggingface.co/<org>/<name>` is a MODEL CARD, and it is the page a count about a model
     // has to be read against — 2026-10-29 item 7's "40 languages" lives there, not in a GitHub README
@@ -2217,6 +2394,12 @@ function citedPages(plain, { hn = false, cap = 3 } = {}) {
     if (arxiv) {
       url = `https://arxiv.org/abs/${arxiv[1]}`;
       label = `arXiv ${arxiv[1]}`;
+      rank = 0;
+    } else if (hfFile) {
+      // `raw` and `resolve` already serve the bytes; `blob` is the rendered viewer, so ask its twin
+      url = `https://huggingface.co/${hfFile[1] ?? ''}${hfFile[2]}/${hfFile[3]}/raw/${hfFile[4]}/${hfFile[5]}`;
+      label = `${hfFile[2]}/${hfFile[3]} ${hfFile[5]}`;
+      raw = true;
       rank = 0;
     } else if (hf) {
       url = `https://huggingface.co/datasets/${hf[1]}/raw/main/README.md`;
@@ -3556,6 +3739,17 @@ if (SELFTEST) {
   t('hostname is not a repo', slugs('download from `pkgs.tailscale.com/stable` today'), []);
   t('github route is not a repo', slugs('see `advisories/GHSA-m8xf-2cr7-77ph` for the record'), []);
   t('blob path is not a repo', slugs('`blob/main/docs/x.md`'), []);
+  /* 2026-11-05 item 5: a sentence asserting a name does not exist is CONFIRMED by a 404 — the
+     finding said "unreadable" at sev 1 because the sentence was never read. Both sides pinned. */
+  t('a sentence asserting absence is recognised',
+    ABSENT_ASSERTED.test(sentenceWith('It ships computer use. There is no `tencent/Hy4` and no GA system card in the org listing.', 'tencent/Hy4')), true);
+  t('a sentence about a live repo is not an absence claim',
+    ABSENT_ASSERTED.test(sentenceWith('The release is `tencent/Hy4` and it is on the Hub.', 'tencent/Hy4')), false);
+  /* the sibling-prefix trap: "tencent/Hy4-preview" must not answer for "tencent/Hy4" */
+  t('a slug does not bind to its longer sibling sentence',
+    ABSENT_ASSERTED.test(sentenceWith('The preview is tencent/Hy4-preview and it is Apache-2.0. There is no tencent/Hy4 and no GA card.', 'tencent/Hy4')), true);
+  t('and the sibling sentence alone is still not an absence claim',
+    ABSENT_ASSERTED.test(sentenceWith('The preview is tencent/Hy4-preview and it is Apache-2.0.', 'tencent/Hy4')), false);
   t('real repo slug survives', slugs('`obra/superpowers` and `zip-rs/zip2`'), ['obra/superpowers', 'zip-rs/zip2']);
   // a dated star quote is a surge signal, not a stale number (2026-10-28 item 5: 56 → 114)
   t('dated quote detected', DATED_QUOTE.test('at the time of writing holds 56 stars and one commit'), true);
@@ -3793,6 +3987,18 @@ if (SELFTEST) {
   t('cited pages: a linked docs file is fetched raw, not rendered',
     citedPages('[`docs`](https://github.com/FrigadeHQ/hob/blob/main/docs/README.md)').map((p) => [p.url, p.raw]),
     [['https://raw.githubusercontent.com/FrigadeHQ/hob/main/docs/README.md', true]]);
+  /* measured 2026-11-05 on item 1 of that day's feed: the LICENSE beside the model card was rewritten
+     to the card's README and deduped away, so a verbatim §3 quotation came back `quote-not-found`.
+     The file and the card must be TWO candidates. */
+  t('cited pages: a HF file link is the file, not the card (raw twin kept)',
+    citedPages('https://huggingface.co/moonshotai/Kimi-K3.1-Pro/raw/main/LICENSE').map((p) => p.url),
+    ['https://huggingface.co/moonshotai/Kimi-K3.1-Pro/raw/main/LICENSE']);
+  t('cited pages: a HF `blob/` viewer is asked for its raw twin',
+    citedPages('https://huggingface.co/tencent/Hy4-preview/blob/main/README.md').map((p) => [p.url, p.raw]),
+    [['https://huggingface.co/tencent/Hy4-preview/raw/main/README.md', true]]);
+  t('cited pages: a HF file and its card are both sources under the cap',
+    citedPages('https://huggingface.co/moonshotai/Kimi-K3.1-Pro · https://huggingface.co/moonshotai/Kimi-K3.1-Pro/raw/main/LICENSE').map((p) => p.url).sort(),
+    ['https://huggingface.co/moonshotai/Kimi-K3.1-Pro/raw/main/LICENSE', 'https://huggingface.co/moonshotai/Kimi-K3.1-Pro/raw/main/README.md'].sort());
   t('cited pages: a repo root is skipped (its README is already read)',
     citedPages('https://github.com/FrigadeHQ/hob · https://github.com/FrigadeHQ/hob/releases/tag/v0.2.1').map((p) => p.url),
     ['https://github.com/FrigadeHQ/hob/releases/tag/v0.2.1']);
@@ -3809,6 +4015,17 @@ if (SELFTEST) {
   // measured 2026-10-28 on item 36 (expo/skills): the page states no total and the item says so
   t('count: an item that says it counted the number itself is not `absent`',
     SELF_COUNTED.test(sentenceAround('Its manifest groups **24** skills into three buckets — a total counted from the manifest itself, since no page states it. Installation is per-harness.', '24** skills')), true);
+  /* measured 2026-11-05 on item 16 of that day's feed: "Neither the README nor the MCP docs states a
+     total, so we counted the git tree ourselves: 174 `SKILL.md` files" — correct (tree API: 174) and
+     reported `absent` twice, because neither "we counted" nor "neither … states a total" was known. */
+  t('count: first-person "we counted" is a disclosure',
+    SELF_COUNTED.test('Neither the README nor the MCP docs states a total, so we counted the git tree ourselves: 174 `SKILL.md` files.'), true);
+  t('count: "neither A nor B states a total" is a disclosure',
+    SELF_COUNTED.test('Neither the README nor the docs states a total.'), true);
+  t('count: a page that DOES state a total is not a disclosure',
+    SELF_COUNTED.test('The README states a total of 174 skills.'), false);
+  t('count: "we counted" about another number does not suppress this one',
+    selfCountedNear('The feed ships 174 skills.\n\nWe counted 24 directories at the top level.', { n: 174, noun: 'skill', phrase: '174 skill' }), false);
   t('count: and a bare count with no such disclosure is not suppressed',
     SELF_COUNTED.test(sentenceAround('The repo ships **24** skills in three groups.', '24** skills')), false);
   // measured 2026-10-29 on item 35: the disclosure is in the body, the number is in the title
@@ -4070,6 +4287,24 @@ if (SELFTEST) {
   t('template: the unwrapped body answers the quotation check',
     checkQuotes(mk('t', 'the post says "This update includes 213 security fixes."'), qsrc(bt)).map((x) => x.verdict), ['ok']);
 
+  /* ── paper dates: the three filing cases of 2026-11-05, verbatim, both sides ────────────────── */
+  const P = (pub, version = 1, updated = pub) => ({ id: 'x', version, published: pub, updated });
+  t('paper: a truncated instant is the same instant (21:38Z vs 21:38:49Z)',
+    paperVerdict(P('2026-11-02T21:38:49Z'), '2026-11-02T21:38Z').verdict, 'ok');
+  t('paper: the right day with an instant available is imprecise, not a mismatch',
+    paperVerdict(P('2026-11-02T21:38:49Z'), '2026-11-02').verdict, 'paper-date-imprecise');
+  t('paper: a day one early is a mismatch (2611.02017 cited 2026-10-31)',
+    paperVerdict(P('2026-11-01T16:04:16Z'), '2026-10-31').verdict, 'paper-date-mismatch');
+  t('paper: an instant one day early is a mismatch too (2611.03998 cited 2026-11-01)',
+    paperVerdict(P('2026-11-02T21:38:49Z'), '2026-11-01T21:38Z').verdict, 'paper-date-mismatch');
+  t('paper: a revision date is its own verdict, not a wrong day',
+    paperVerdict(P('2026-10-20T09:00:00Z', 2, '2026-11-01T16:04:16Z'), '2026-11-01').verdict, 'paper-date-revision');
+  t('paper: no record is unread, never a finding',
+    paperVerdict(undefined, '2026-11-02').verdict, 'paper-date-unread');
+  t('paper: the cue must be submission — "announced" is the other clock',
+    ARXIV_SUBMIT_CUE.test('announced 2026-11-02 on the arXiv listing'), false);
+  t('paper: a submitted cue is read', ARXIV_SUBMIT_CUE.exec('arXiv 2611.03998 · submitted 2026-11-02T21:38Z')?.[2], '2026-11-02T21:38Z');
+
   for (const c of cases) console.log(`  ${c.pass ? '✓' : '✗'} ${c.name}${c.pass ? '' : ` — got ${JSON.stringify(c.got)}, want ${JSON.stringify(c.want)}`}`);
   const ok = cases.filter((c) => c.pass).length;
   console.log(`selftest ${ok}/${cases.length}`);
@@ -4167,6 +4402,15 @@ for (const { path: p, items } of parsed) {
   if (CHECKS.has('bundle')) for (const it of items) findings.push(...checkBundle(it));
   // a quotation is a claim about bytes — the page text is already cached by the count check
   if (!NO_NET && CHECKS.has('quotation')) for (const it of items) findings.push(...await checkQuote(it, nvd, cna));
+  /* A paper's submission instant is one unmetered call for the WHOLE batch (a comma-separated
+   * id_list), so the arm is per-file rather than per-item. */
+  if (!NO_NET && CHECKS.has('paper')) {
+    const ids = [...new Set(items.flatMap((it) => [...it.plain.matchAll(/arxiv\.org\/abs\/(\d{4}\.\d{4,5})/g)].map((m) => m[1])))];
+    if (ids.length) {
+      const papers = await arxivRecords(ids);
+      for (const it of items) findings.push(...checkPaper(it, papers));
+    }
+  }
 
   perFile.push({ file: basename(p), items: items.length, findings });
   allFindings.push(...findings.map((f) => ({ file: basename(p), ...f })));
@@ -4200,7 +4444,7 @@ try {
   writeFileSync(CACHE_PATH, JSON.stringify(cache, null, 1));
 } catch { /* cache is best-effort */ }
 
-const SEVERITY = { ok: 0, 'ok-cited-page': 0, 'no-cve-named': 1, 'no-record': 1, 'slot-quoted': 1, 'counted-by-author': 0, 'number-other-noun': 1, 'temporal-stopping-point': 1, 'temporal-disclosed': 0, 'score-stopping-point': 1, 'cna-only-score': 1, 'star-drift': 2, 'star-dated': 1, 'star-surge': 1, 'ok-history': 0, 'history-older-than-record': 2, 'history-unreadable': 1, stale: 2, archived: 2, 'stale-disclosed': 0, 'archived-disclosed': 0, differs: 2, absent: 2, 'unsplit-issue-count': 3, 'compound-lags-parts': 3, 'version-swapped': 3, 'version-absent': 3, 'score-not-reproducible': 2, 'score-mismatch': 3, 'wrong-subject': 3, 'absence-contradicted': 3, 'status-stale': 2, 'status-dated': 1, 'date-local-shift': 2, 'date-mismatch': 2, 'cwe-absent-but-recorded': 3, 'cwe-mismatch': 3, 'cwe-unreadable': 1, 'span-empty': 2, 'span-inverted': 3, 'span-unverifiable': 0, 'ok-span': 0, 'status-no-record': 1, 'status-no-cve': 1, 'advisory-unreadable': 1, 'advisory-repo-only': 0, unreadable: 1, 'artifact-unreadable': 1, 'nvd-unavailable': 1, 'ratio-row-count': 3, 'ok-ratio': 0, 'ok-delimited': 0, 'not-a-repo': 0, 'ok-table-rows': 0, 'table-columns-unresolved': 0, 'bundle-ok': 0, 'bundle-lines-named': 0, 'bundle-unavailable': 0, 'bundle-line-count': 3, 'bundle-total-mismatch': 2, 'quote-not-found': 3, 'quote-paraphrase': 2, 'quote-short': 1, 'quote-not-read': 0 };
+const SEVERITY = { ok: 0, 'ok-cited-page': 0, 'no-cve-named': 1, 'no-record': 1, 'slot-quoted': 1, 'counted-by-author': 0, 'number-other-noun': 1, 'temporal-stopping-point': 1, 'temporal-disclosed': 0, 'score-stopping-point': 1, 'cna-only-score': 1, 'star-drift': 2, 'star-dated': 1, 'star-surge': 1, 'ok-history': 0, 'history-older-than-record': 2, 'history-unreadable': 1, stale: 2, archived: 2, 'stale-disclosed': 0, 'archived-disclosed': 0, differs: 2, absent: 2, 'unsplit-issue-count': 3, 'compound-lags-parts': 3, 'version-swapped': 3, 'version-absent': 3, 'score-not-reproducible': 2, 'score-mismatch': 3, 'wrong-subject': 3, 'absence-contradicted': 3, 'status-stale': 2, 'status-dated': 1, 'date-local-shift': 2, 'date-mismatch': 2, 'cwe-absent-but-recorded': 3, 'cwe-mismatch': 3, 'cwe-unreadable': 1, 'span-empty': 2, 'span-inverted': 3, 'span-unverifiable': 0, 'ok-span': 0, 'status-no-record': 1, 'status-no-cve': 1, 'advisory-unreadable': 1, 'advisory-repo-only': 0, unreadable: 1, 'artifact-unreadable': 1, 'nvd-unavailable': 1, 'ratio-row-count': 3, 'ok-ratio': 0, 'ok-delimited': 0, 'not-a-repo': 0, 'repo-absent-asserted': 0, 'ok-table-rows': 0, 'table-columns-unresolved': 0, 'bundle-ok': 0, 'bundle-lines-named': 0, 'bundle-unavailable': 0, 'bundle-line-count': 3, 'bundle-total-mismatch': 2, 'quote-not-found': 3, 'quote-paraphrase': 2, 'quote-short': 1, 'quote-not-read': 0, 'paper-date-imprecise': 1, 'paper-date-mismatch': 2, 'paper-date-revision': 1, 'paper-date-unread': 0 };
 const REAL = (f) => (SEVERITY[f.verdict] ?? 1) >= 2;
 
 /* `status_watch` rides the findings file so the act pass sees a backwards move without re-reading

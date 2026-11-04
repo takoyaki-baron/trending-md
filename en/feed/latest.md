@@ -173,7 +173,7 @@ The affected population is narrower than "Rails": an app qualifies only if it us
 ## 10. Dory1.0-4B buys 11.5 points of SWE-bench by running the same 20 layers twice
 
 - **Velocity:** ▮▮ rising
-- **Source:** arXiv 2611.03998 · submitted 2026-11-01 · weights on Hugging Face
+- **Source:** arXiv 2611.03998 · submitted 2026-11-02T21:38Z · weights on Hugging Face
 - **Tags:** `ai-research` `looped-model` `nvidia` `efficiency` `benchmarks`
 
 NVIDIA's Nemotron Labs released **Dory1.0-4B**, a 4-billion-parameter "looped (latent-recurrent) language model with elastic depth: a single checkpoint serves different inference compute budgets." The architecture is a normalized Transformer (nGPT) backbone with interleaved sliding-window and full-attention layers, split into input block, a shared recurrent block and output block — "the Input and Output blocks have 8 layers each, while the Recurrent block has 20 layers" — and the recurrent block can be applied a variable number of times *without retraining or swapping the model*.
@@ -282,7 +282,7 @@ Scoring: **CVSS 4.0 9.3** from `security-advisories@github.com` (`AV:N/AC:L/AT:N
 - **Source:** GitHub Trending (daily) · 2,324 stars · MIT · pushed 2026-11-04T18:02Z
 - **Tags:** `agent-skills` `mcp` `media-generation` `open-source` `scenario`
 
-`scenario-labs/skills` is an MIT-licensed set of Agent Skills that "teach AI coding agents (Claude Code, Cursor, Codex, Copilot, and 70+ others) how to create production-ready content with Scenario through the Scenario MCP server": images, video, audio, textures, skyboxes, 3D assets and custom-trained models. Neither the README nor the MCP docs states a total, so we counted the git tree ourselves: **174 `SKILL.md` files** across **82 top-level directories** — **80** of the directories are `scenario-*` skills, and the rest of the files sit under `dcc/` (**35**) and `game-engines/` (**52**) in the "expert tools" families, which need ZBrush, Blender, Maya, Unreal, Unity, Godot or Roblox Studio installed rather than the MCP server.
+`scenario-labs/skills` is an MIT-licensed set of Agent Skills that "teach AI coding agents (Claude Code, Cursor, Codex, Copilot, and 70+ others) how to create production-ready content with Scenario through the Scenario MCP server": images, video, audio, textures, skyboxes, 3D assets and custom-trained models. Neither the README nor the MCP docs states a total, so we counted the git tree ourselves: **174 `SKILL.md` files** — **167** under `skills/` across **82** directories (**80** named `scenario*`, plus `dcc/` with **35** and `game-engines/` with **52**, the "expert tools" families that need ZBrush, Blender, Maya, Unreal, Unity, Godot or Roblox Studio installed rather than the MCP server) — and **7** more under `.agents/skills/` that maintain the repo's own PR workflow.
 
 The pitch in the repo's own description field is narrower than "generate media": skills that "pick the right model, price before spending, and keep characters and brands consistent". The skill list backs that up with a long tail of per-provider wrappers — `scenario-veo`, `scenario-seedance`, `scenario-kling`, `scenario-vidu`, `scenario-wan`, `scenario-runway`, `scenario-elevenlabs`, `scenario-meshy`, `scenario-rodin` — alongside workflow skills like `scenario-quality-gate`, `scenario-refine-loop` and `scenario-model-comparison`.
 
@@ -297,7 +297,7 @@ Two operational details are worth copying. Install can be pinned: `npx skills@1.
 ## 17. Coding agents lose 11.5 points when a session interleaves unfinished tasks
 
 - **Velocity:** ▮ steady
-- **Source:** arXiv 2611.02017 · submitted 2026-10-31
+- **Source:** arXiv 2611.02017 · submitted 2026-11-01T16:04Z
 - **Tags:** `ai-research` `agents` `benchmark` `coding` `evaluation`
 
 **Switch-SWE** measures something the standard repository-level benchmarks do not: whether an agent can come back to a half-finished task after working on another one in the same repo. The setup is **200 focus tasks from 19 Python repositories**, reconstructed from issue, pull-request and review history and "rendered as 400 matched session specifications" — each focus task is scored twice, once in an uninterrupted session and once in a "switched" session that "interleaves ordered stages from other unfinished tasks in the same repository, while only the final focus patch is scored."
@@ -331,7 +331,7 @@ The KEV entry itself documents a schema that has moved. It carries `forensicTria
 ## 19. ToolSpace builds harder MCP environments from real execution traces — and seven frontier models drop up to 38.2 points
 
 - **Velocity:** ▮ steady
-- **Source:** arXiv 2611.05036 · submitted 2026-11-02
+- **Source:** arXiv 2611.05036 · submitted 2026-11-03T15:09Z
 - **Tags:** `ai-research` `agents` `mcp` `benchmark` `tool-use`
 
 **ToolSpace** inverts how MCP environments are usually synthesized. Existing methods are data-centric — synthesize a database and scenario, then derive tools and tasks from it — which the paper says produces interfaces that "may not match real ones", compositions "not grounded in execution", and tasks that "rarely span more than one environment". ToolSpace instead "mines data, state, and retry dependencies from adjacent calls in execution traces of real MCP services and open agent corpora, using deterministic rules rather than LLM judgment", clusters the weighted tool-composition graph into environments, synthesizes databases only where state is mutated, replays recorded returns otherwise, and keeps only chains that "replay successfully from the initial state".

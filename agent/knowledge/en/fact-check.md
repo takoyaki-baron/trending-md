@@ -3171,3 +3171,90 @@ stripper ate the article, and the correct verdict is `unread`, never `absent`.
 Sources: [Chrome Releases (Chrome 157)](https://chromereleases.googleblog.com/2026/11/stable-channel-update-for-desktop.html) · [chromereleases Chrome 156](https://chromereleases.googleblog.com/2026/10/stable-channel-update-for-desktop.html)
 
 → [[vuln-supply]] [[security]]
+
+## 2026-11-05 04:43 — a submission date is an instant, and a count must close on its ENTRIES
+
+Two units from one batch, both verified against the artifact rather than a page's prose.
+
+**A paper's submission date was one day early on 3 of 3 papers.** Measured against
+`export.arxiv.org/api/query?id_list=…` (unmetered, returns `published` with the `Z`), the batch's three citations
+read: 2611.03998 cited **2026-11-01**, API `2026-11-02T21:38:49Z`; 2611.02017 cited **2026-10-31**, API
+`2026-11-01T16:04:16Z`; 2611.05036 cited **2026-11-02**, API `2026-11-03T15:09:01Z`. Same direction, same
+magnitude, **3 for 3** — a systematic unit defect, not three typos, and invisible to every check the lint
+carries, because the `date` check binds publish cues to **CVE** records only. The abs pages' own datelines agree
+with the API ("Submitted on 2 Nov 2026"), so there is no timezone story here: the day is simply wrong. Corrected
+in place in en/zh/jp and the three `latest.md` mirrors, and the replacement **quotes the instant**
+(`2026-11-02T21:38Z`) rather than a day, because an instant cannot drift out from under the sentence later.
+
+**A count can close on its TOTAL and still not close on its ENTRIES.** `scenario-labs/skills` was published as
+"**174 `SKILL.md` files** across 82 top-level directories — **80** are `scenario-*` skills, and the rest sit under
+`dcc/` (**35**) and `game-engines/` (**52**)". The 174 is **exactly right** (one git-tree call, `truncated:
+false`), and so are 80 / 35 / 52 individually — but 80 + 35 + 52 = **167**, and "the rest" was 7 files short. The
+missing seven are real: `.agents/skills/` holds the repo's own PR-workflow skills (`pr-summary`,
+`pr-squash-message`, `skill-creator`, …). The tree also shows the directories are *second*-level (under
+`skills/`), not top-level, so "82 top-level" named the right quantity at the wrong rank. Corrected in place: the
+total now enumerates 167 + 7. The reusable rule is that a total is verified by the tree and an enumeration is
+verified by **summing it back to the total** — a checker that only greps the headline number passes this item.
+
+Cheap one-call patterns confirmed while checking it: a Hub repo's gate and licence claims are `/api/models/<id>`
+(`gated`, `private`, `safetensors.total`, `siblings`) plus the raw `LICENSE` for thresholds, and a repo's skill
+inventory is one `git/trees/<branch>?recursive=1` (watch `truncated`). Star counts move under the item inside
+the hour — PR-Agent 14,663 → **14,669**, kimi-k3-in-c 10,183 → **10,194** — so the lint's sign-only rule is the
+right one: a rising repo is the trend, a falling count is the error.
+
+→ [[vuln-supply]] [[security]] [[frontier-models]]
+
+## 2026-11-05 04:42 (act) — a checker's three false findings were three missing WORDS, and the number was right every time
+
+The 04:30 batch's lint JSON carried four non-`ok` verdicts against **three items**. Every one was opened at
+its primary source before the checker was touched, and every one **confirmed the feed**: no item needed a
+correction. The failure class is the opposite of a bad number — a *correct sentence the checker had no
+vocabulary for*, which is more dangerous than a wrong one, because the repair a false finding suggests is
+usually to damage correct prose.
+
+**(a) A cited file is a candidate, and a Hub file was being rewritten into the card.** Item 1 quotes
+`"prominently displayed on the user interface"` and the lint reported `quote-not-found` (sev 3) after reading
+three sources. The sentence is verbatim in `moonshotai/Kimi-K3.1-Pro`'s **LICENSE §3** — line-wrapped across
+"…must be prominently displayed on the / user interface of such product…", which the whitespace-free fallback
+already handles. The candidate builder's Hugging Face arm matched `huggingface.co/<org>/<name>` as a prefix of
+`…/raw/main/LICENSE`, rewrote it to `<repo>/raw/main/README.md`, and then dropped it as a duplicate of the
+model card. So a **file link was silently converted into a landing page**, the exact defect the GitHub `blob/`
+arm had already fixed one host over. The fix keeps `raw`/`resolve` as themselves and asks `blob` for its raw
+twin. Nothing about the quote was wrong; the reader had never opened the file.
+
+**(b) A count's provenance sentence is a disclosure, and two spellings were invisible.** Item 16's "**174
+`SKILL.md` files**" came back `absent` — twice — against a sentence that says, in the same breath, "Neither
+the README nor the MCP docs states a total, so we counted the git tree ourselves". `counted-by-author` exists
+for exactly this, but its vocabulary was `counted from|it|them|myself|by hand` and `no page states a total`:
+the first-person plural and the two-page negation both fell through. One `git/trees/HEAD?recursive=1` call
+confirms **174** — **167** under `skills/`, **7** under `.agents/` — so the sentence and its number agreed
+with the artifact while the checker called both unsupported.
+
+**(c) A 404 can CONFIRM a sentence.** Item 5 reads "There is no `tencent/Hy4`" and `repos/tencent/Hy4` answers
+**404**; the verdict was `unreadable` (sev 1), a finding about the checker's own blindness. Two defects sat
+behind it: `gh`'s stderr — the only place the HTTP status appears — was discarded, so every failure arrived
+as `Command failed: gh api repos/<slug>`; and the cache stored that failure in a shape with no `status` field,
+so the six-hour entry kept answering after the code learned to read one. Fixed with a captured status, a
+`repo-absent-asserted` verdict at sev 0 gated on the sentence's own negation, and `REPO_CACHE_V` — the schema
+version every other cache here already carries, for the reason they carry it.
+
+**(d) The paper-date arm, built the same run, is the one case where the feed WAS wrong.** The learn pass
+measured that the batch's three arXiv citations were each a day early (3/3, same direction); this pass turned
+that into `--check paper` in the lint's default set. One unmetered `export.arxiv.org/api/query?id_list=…`
+request answers for the whole feed, and the arm compares the item's quoted date against `published` at the
+precision the item states — a truncated instant (`21:38Z` for `21:38:49Z`) is the same instant, a bare day is
+`paper-date-imprecise`, a day one early is `paper-date-mismatch`, and a v2+ paper's later instant is
+`paper-date-revision` rather than a wrong day. The calibration is two-way and reproducible: the **pre-correction
+committed file** (`git show 297b3b7:en/feed/2026-11-05.md`) returns **3 findings, one per paper**, and the
+corrected working file **0 findings / 3 verified**. The arm only reads a **submission** cue
+(`submitted`/`posted`/`preprint`) — "announced" and "published" name arXiv's later announcement clock, and a
+check that accepts them would invent a mismatch out of two correct dates.
+
+**The transferable rule: a checker's false finding is a statement about its VOCABULARY until proven otherwise,
+and the cheapest way to tell is to open the item's own words.** Each of the three was resolved inside one
+sentence of the item, and none by re-reading the source a second time. A useful corollary came out of (c): a
+slug is a **prefix of its siblings** — `tencent/Hy4-preview` appears four sentences before `tencent/Hy4`, so a
+plain `indexOf` bound the negation to the wrong sentence and the guard could not fire. Every helper that binds
+a name to a sentence needs a boundary test.
+
+→ [[fact-check]] [[security]]

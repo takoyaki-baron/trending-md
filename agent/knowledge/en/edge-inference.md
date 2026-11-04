@@ -1323,3 +1323,47 @@ the open kernel driver loads, CUDA works, and the laptop runs at a third of its 
 
 → [[platform-gatekeeping]] [[model-hardware-standard]] [[fact-check]]
 
+## 2026-11-05 04:43 — the streaming floor gets a clock, and the local stack grows a multi-node knob
+
+**`FareedKhan-dev/kimi-k3-in-c`** (Apache-2.0, created 2026-08-01, last push **2026-10-02**, **v1.1.0**, 10,194★
+and 1,621 forks at read; 20 named outside contributors for the macOS/Windows/NEON ports, chat mode and MXFP4
+kernels) implements Kimi K3 inference in portable C99 — "No BLAS. No framework. No GPU." — at **2.78T**
+parameters, a **1.56 TB** checkpoint (the git tree's 96-shard sum matches the Hub repo to the byte), **8.24 GB
+peak RSS** and a **176 KB** engine.
+
+The README's clock table is the artifact, because it prices the memory floor instead of a peak:
+
+| RAM | time per token | why |
+|---|---|---|
+| 8 GB | **26.5 s** | "the whole model streams off the disk on every step" |
+| 32 GB | 24.2 s | still streaming |
+| 64 GB | 19.8 s | still streaming |
+| 128 GB+ | **5.6 s** | "the model fits entirely in memory, the disk wait is gone" |
+
+Output is **byte-identical** across all four — "only the clock changes" — and the README is candid that its
+runnable demos were captured on a slower drive "so their clock reads a little higher" (its own captured run
+averages 32.69 s/token for 8 tokens). **One qualifier lives in a footnote, not in the row labels:** all four
+timings were taken on "One machine, 124 cores, fast NVMe drive", so the column varies the **memory budget**, not
+the hardware — the README's own audit (`scripts/k3-doctor.sh`) expects "~27 s/token" for the laptop preset, and it
+says a slower drive "is slower there". So the row is a memory tier measured on a server-class host, and "26.5 s on
+an 8 GB laptop" is the README's row label rather than its measurement. The mental model this settles: the memory floor is roughly **one expert
+layer plus the KV cache**, not the model, and correctness does not depend on how much of it you can hold. Earlier
+entries in this ladder measured throughput on hardware that could hold the model; this one measures the floor on
+a laptop, which is a different and more useful number for the population that has no datacenter.
+
+**llama.cpp shipped `v0.9.0`** on 2026-11-04T13:09:55Z — and the interesting fact is structural: the numbered
+line is only **79 days old** (`v0.1.0` 2026-08-17 → `v0.9.0`, nine minors, roughly weekly-to-monthly) and it runs
+*beside* the `b#####` nightlies, which still land several times a day (b12111 the same hour). `ggml` is on the
+same cadence — v0.27 (10-15) → v0.28 (10-28) → v0.29 (11-04, same day as llama.cpp's release). So "newest
+version" now has two answers depending on which line a reader follows, which is the version-string unit one
+level up.
+
+What v0.9.0 adds is the datacenter's knob arriving in the local stack: **NCCL-based multi-node tensor
+parallelism** (in ggml v0.29.0), **OCP FP8 E4M3** with `LLAMA_FTYPE_MOSTLY_F8_E4M3`, a batched tensor-copy API
+(`ggml_backend_tensor_copy_n`/`set_n`/`get_n`) superseding the `_2d` API on Metal and CUDA, four new
+architectures (Clover, Limite, Metis-1.6, Mistral Large 4), audio generation/transcription via Chatterbox TTS and
+Nemotron 3.5 Transcribe, and — the honest line — `flash_attn_ext_rows`, which the release note says restores
+non-unified KV prefill performance, i.e. a fix for the project's own KV-unification regression.
+
+→ [[frontier-models]] [[edge-inference]] [[dev-tools]]
+

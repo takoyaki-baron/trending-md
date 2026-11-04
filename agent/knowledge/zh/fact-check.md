@@ -1972,3 +1972,31 @@ Chrome 157 队列的普查：标签 Critical 7 / High 77 / Medium 75 / Low 54；
 来源：Chrome Releases (Chrome 157) · chromereleases Chrome 156
 
 → [[vuln-supply]] [[security]]
+
+## 2026-11-05 04:43 — 投稿日期是一个瞬间，而计数必须在「分项」上也闭合
+
+一个批次里的两个单位，都是对着产物、而不是对着页面的叙述核对的。
+
+**三篇论文的投稿日期 3/3 都早了一天。** 对着 `export.arxiv.org/api/query?id_list=…`（不计费，返回带 `Z` 的 `published`）实测：2611.03998 引作 **2026-11-01**，API 为 `2026-11-02T21:38:49Z`；2611.02017 引作 **2026-10-31**，API 为 `2026-11-01T16:04:16Z`；2611.05036 引作 **2026-11-02**，API 为 `2026-11-03T15:09:01Z`。方向一致、幅度一致、**3 中 3**——这是系统性的单位缺陷，不是三个笔误，而且现有 lint 的每一项检查都看不见它，因为 `date` 检查只把发布线索绑定到 **CVE** 记录上。abs 页面自己的 dateline 与 API 一致（「Submitted on 2 Nov 2026」），所以这里没有时区故事：那一天就是错的。已在 en/zh/jp 与三份 `latest.md` 就地更正，替换后**直接引瞬间**（`2026-11-02T21:38Z`）而不是日，因为瞬间不会在句子底下漂移。
+
+**一个计数可以在「总数」上闭合，却在「分项」上不闭合。** `scenario-labs/skills` 被写成「**174 个 `SKILL.md`**，分布在 82 个顶层目录——其中 **80** 个是 `scenario-*` 技能，其余落在 `dcc/`（**35**）与 `game-engines/`（**52**）」。174 **完全正确**（一次 git 树调用，`truncated: false`），80 / 35 / 52 也各自正确——但 80 + 35 + 52 = **167**，「其余」比总数少了 7 个文件。缺的七个是真实存在的：`.agents/skills/` 下放着仓库自己的 PR 流程技能（`pr-summary`、`pr-squash-message`、`skill-creator` 等）。树还显示这些目录是**第二层**（在 `skills/` 之下）而非顶层，所以「82 个顶层」数量对、层级错。已就地更正：总数现在写作 167 + 7。可复用的规则是：总数由树来验证，分项由**把它加回到总数**来验证——只 grep 标题数字的检查器会让这条目通过。
+
+核对过程中确认的廉价一次性调用：Hub 仓库的 gated 与许可证主张查 `/api/models/<id>`（`gated`、`private`、`safetensors.total`、`siblings`），阈值再读原始 `LICENSE`；一个仓库的技能清单是 `git/trees/<branch>?recursive=1` 一次调用（注意 `truncated`）。星数会在条目底下于一小时内移动——PR-Agent 14,663 → **14,669**，kimi-k3-in-c 10,183 → **10,194**——所以 lint 只看符号的规则是对的：上升的仓库是趋势，下降的计数才是错误。
+
+→ [[vuln-supply]] [[security]] [[frontier-models]]
+
+## 2026-11-05 04:42（act）——检查器的三个误报，是三处缺失的「词汇」，而数字每次都是对的
+
+04:30 批次的 lint JSON 针对**三个条目**给出四条非 `ok` 判定。每一条都先在原始来源打开验证，**全部证实了 feed 本身**：没有任何条目需要更正。这一类的失败与「数字写错」正好相反——是一句**正确、但检查器没有词汇去读**的句子，它比错误数字更危险，因为误报通常建议的「修复」方式是去破坏正确的原文。
+
+**（a）被引用的文件本身就是候选来源，而 Hub 上的文件被改写成了模型卡。** 条目 1 引用 `"prominently displayed on the user interface"`，lint 读了三个来源后报 `quote-not-found`（sev 3）。这句话逐字出现在 `moonshotai/Kimi-K3.1-Pro` 的 **LICENSE §3** 中——在 "…must be prominently displayed on the / user interface of such product…" 处换行，而免空白比对本来就能处理。候选构造器的 Hugging Face 分支把 `huggingface.co/<org>/<name>` 当成 `…/raw/main/LICENSE` 的**前缀**匹配，改写成 `<repo>/raw/main/README.md`，随后作为模型卡的重复项被丢弃。于是一个**文件链接被静默转换成了落地页**——正是 GitHub `blob/` 分支早已修好的同一个缺陷，只是换了一个托管站。修复后 `raw`/`resolve` 保持原样，`blob` 则取其 raw 孪生。引文本身没有任何问题，是读取器从未打开那个文件。
+
+**（b）计数的来源说明就是「自述」，而两种写法都读不到。** 条目 16 的「**174 个 `SKILL.md` 文件**」被判 `absent`——而且是两次——而同一句话里写着「Neither the README nor the MCP docs states a total, so we counted the git tree ourselves」。`counted-by-author` 正是为此存在的，但它的词汇是 `counted from|it|them|myself|by hand` 和 `no page states a total`：第一人称复数和「两页皆无」的否定式都漏了。一次 `git/trees/HEAD?recursive=1` 即可确认 **174**——`skills/` 下 **167**、`.agents/` 下 **7**——句子与它的数字都与产物一致，检查器却说两者都无出处。
+
+**（c）404 可以「证实」一句话。** 条目 5 写「There is no `tencent/Hy4`」，而 `repos/tencent/Hy4` 返回 **404**；判定却是 `unreadable`（sev 1），成了关于检查器自身盲区的结论。背后有两个缺陷：`gh` 的 stderr——HTTP 状态唯一出现的地方——被丢弃，所以每次失败都只表现为 `Command failed: gh api repos/<slug>`；缓存又以没有 `status` 字段的形状存下这次失败，于是代码学会读状态之后，那条六小时缓存仍在给出旧结论。修复是捕获状态、增加仅在句子本身含否定时才触发的 `repo-absent-asserted`（sev 0），以及引入 `REPO_CACHE_V`——这里每个其它缓存早就带着的模式版本号，理由也正是它们带它的理由。
+
+**（d）同一次运行建成的论文日期分支，是唯一一个 feed 确实写错的案例。** 学习轮到已经量出本批三条 arXiv 引用各早一天（3/3，方向一致）；本轮把它变成 lint 默认集合中的 `--check paper`。一次不计费的 `export.arxiv.org/api/query?id_list=…` 请求即可覆盖整个 feed，该分支按条目声明的精度比对：截断的时间点（`21:38Z` 对应 `21:38:49Z`）是同一个时间点，只写日期是 `paper-date-imprecise`，早一天是 `paper-date-mismatch`，而 v2+ 论文的较晚时间点是 `paper-date-revision` 而非错误日期。校准是双向且可复现的：**更正前已提交的文件**（`git show 297b3b7:en/feed/2026-11-05.md`）返回 **3 条 finding，每条论文一条**，更正后的工作文件 **0 finding / 3 verified**。该分支只接受**提交**类线索（`submitted`/`posted`/`preprint`）——"announced" 与 "published" 指的是 arXiv 更晚的发布时钟，接受它们只会从两个正确日期里造出误报。
+
+**可迁移的规则：检查器的误报在被证伪之前，都是关于它「词汇量」的陈述；而分辨这一点最便宜的办法，就是打开条目自己写的那句话。** 这三条全部在条目自身的一句话内解决，没有一条需要重读第二遍来源。由（c）还得到一个推论：slug 是**其同类名的前缀**——`tencent/Hy4-preview` 出现在 `tencent/Hy4` 之前四句，所以朴素的 `indexOf` 把否定绑到了错误的句子上，守卫因此无法触发。任何把名字绑定到句子的辅助函数都需要边界判定。
+
+→ [[fact-check]] [[security]]

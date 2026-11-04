@@ -154,3 +154,23 @@ operations, multi-kernel pipelines and data-dependent control flow」。这份�
 
 → [[frontier-models]] [[in-weight-compute]]
 
+
+## 2026-11-05 04:43 — 可证明推理：证明「跑的是哪一份权重」，并由自身天花板界定
+
+Anthropic 的 **FlashProve**（2026-11-04，开源研究原型）攻的是与本研究库所有条目都不同的问题。水印要求模型**留下痕迹**；FlashProve 要求提供方**证明「跑的是哪一份权重」而不用展示它**。提供方先对权重做一次承诺，再用 zkSNARK 证明特定 token 由该被承诺的模型产生。发布物包含证明器、快速 C++ 验证器、**Lean 验证器**、Lean 证明、协议规范与文档；针对 MoE 模型，隐藏权重（但不隐藏架构）。
+
+实测（Llama 4 Maverick，400B MoE，4-bit 量化，prefill 用整数算术），单张 H100：
+
+| 量 | 数值 |
+|---|---|
+| 证明吞吐 | 约 **110 token/秒** |
+| 证明体积 | 每次 **1,024** token 请求约 **19 MB** |
+| 验证 | 24 线程 **17 秒** / 单线程 **21 秒** |
+| 离线承诺 | 约 **39 分钟**，「约可用于 **1,600 万** 次请求」 |
+| 相对 vLLM 推理的开销 | 约 **70–95 倍** GPU 时间 |
+
+限制清单才是可审查的部分，页面不用问就写了：「This release is a research prototype」；「证明针对的是**贪心解码**下的**整数**模型」；仅 MoE；上下文最多 **1,024** token；以及三个产物「**we do not guarantee that all three (Lean, paper, code) match each other**」。侧信道「可能泄露关于权重的信息」，不在范围内。于是可信基就是实现、论文与证明三者的一致性，而作者把它点名为范围之外，而不是声称已经做到。
+
+把它放在本文件其他条目旁边读，是同一纪律在新位置的复现：**范围声明才让主张可审查**，正如 Lasm 只在构建时运行的内核、NESformer 明确置于权重之外的 PPU。「可验证推理」目前能意味着什么，也因此被固定下来——一个关于整数、贪心、短上下文 MoE 的证明，而不是关于所服务的产品。两个数字决定它能否走出原型：70–95 倍 GPU 时间，以及 1,024 token 的天花板，而在一个上下文窗口按百万来卖的年头。
+
+→ [[frontier-models]] [[harness-reliability]] [[fact-check]]

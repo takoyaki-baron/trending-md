@@ -1,6 +1,6 @@
 ---
 title: Learnt Agent
-last_processed: 2026-11-04T20:28:00+08:00
+last_processed: 2026-11-05T04:43:00+08:00
 ---
 
 # Learnt Agent
@@ -1236,6 +1236,49 @@ patterns, and turn them into insights and actionable todos.
 > Detail → [[security]] [[fact-check]] [[token-economics]] [[harness-reliability]] [[formal-verification]] [[dev-tools]]
 > [[edge-inference]] [[frontier-models]]
 
+> **(11-05 04:43, learn pass):** the 04:30 batch's net-new 20 (a fresh day's file). Spine: **a dated promise was kept two
+> days early, and the same batch's other lab shipped the opposite artifact class.** The 10-24 note said Kimi K3.1 Pro was
+> **Proprietary** with **0** artifacts "until weights arrive by Nov 4"; they landed **2026-11-02T04:13:51Z**. Measured
+> first-hand: `gated: false`, **96** safetensors shards summing to **1,563,293,160,568** bytes, `config.json` 93 layers /
+> **1,048,576** ctx / **163,840** vocab / **896** experts, and a licence whose only triggers are §2's **$20M** MaaS
+> separate-agreement and §3's **100M MAU / $20M monthly** naming clause (§4 exempts internal use and Moonshot's own
+> partners) — so "open weights" is literally true and "open source" is not, and the 1.56 TB cross-checks byte-for-byte
+> against an independent C reimplementation's stated checkpoint. Tencent's Hy4 is the mirror: the org carries only
+> `Hy4-preview` (Apache-2.0, 2026-08-27) and `Hy4-preview-FP8`, no GA card, the GA page a 6 KB shell with **10** chars of
+> visible text, the circulating 770B/49B figures the *preview's*. One NVD pull over six IDs: **5 of 6 carry no
+> `nvd@nist.gov` metric**, and the sixth is the **0.2%** case — `CVE-2024-27834` with NVD's own **5.5**, attributed
+> correctly in a live item for the first time — while its `CWE-287` is the ADP's and the KEV entry's (NVD's own field
+> reads `NVD-CWE-noinfo`); Traefik's **8.7 / 7.0** turns out to be one VulnCheck source in two version slots, disagreeing
+> about *where* the impact lands. KEV measured: **1,768** entries, **151** on BOD 26-04, **340** on BOD 22-01,
+> `forensicTriage: "Yes"` on **97**. Three of my own checks found feed errors, all corrected in place (en/zh/jp + the three
+> `latest.md`): **arXiv submission dates were one day early on 3/3 papers** — a systematic unit no lint check reaches —
+> and `scenario-labs/skills`' **174** count enumerated only **167**, with the **7** `.agents/skills/` PR-workflow skills
+> missing. Also first-hand: Switch-SWE's matched sessions (**11.5 pp**, 7 agents), ToolSpace's trace-mined environments
+> (**38.2** points, deterministic rules not LLM judgment), FlashProve (**70–95×**, **1,024**-token ceiling, "we do not
+> guarantee that all three (Lean, paper, code) match each other"), Dory1.0-4B's elastic depth, and llama.cpp's **v0.9.0**
+> from a semver line only **79 days** old. Detail → [[frontier-models]] [[security]] [[fact-check]] [[harness-reliability]]
+> [[edge-inference]] [[formal-verification]]
+
+> **(11-05 04:42, act pass):** the batch's lint JSON carried four non-`ok` verdicts against three items, and
+> **every one confirmed the feed** — the class was a correct sentence the checker had no vocabulary for, which
+> is the more dangerous direction because the repair a false finding suggests is usually to damage correct
+> prose. **(a)** item 1's `quote-not-found` on `"prominently displayed on the user interface"` is verbatim in
+> the Kimi licence §3; the candidate builder's Hub arm matched `huggingface.co/<org>/<name>` as a **prefix** of
+> `…/raw/main/LICENSE`, rewrote it to the card's README and deduped it away, so the cited file was never
+> fetched — fixed by giving `raw`/`resolve`/`blob` their own arm (the GitHub `blob/` rule, one host over).
+> **(b)** item 16's **174** `SKILL.md` files came back `absent` twice against a sentence that says "Neither the
+> README nor the MCP docs states a total, so we counted the git tree ourselves"; the tree API confirms **174**
+> (**167** under `skills/` + **7** under `.agents/`), and `we counted` / `neither … states a total` are now
+> `counted-by-author`. **(c)** item 5's `unreadable` on `tencent/Hy4` was a **404 agreeing** with "There is no
+> `tencent/Hy4`" — `gh`'s stderr (the only place the status lives) was discarded, so the verdict was about the
+> checker's blindness; `repo-absent-asserted` (sev 0) plus `REPO_CACHE_V`, because a v-0 cache entry kept
+> returning the old verdict after the code learned to read one. The one real defect was the class the learn
+> pass had already measured: **3 of 3 arXiv dates a day early**, now a check (`--check paper`, one unmetered
+> `export.arxiv.org/api/query?id_list=…` per feed) that returns **3 findings on the pre-correction file and 0
+> on the corrected one**. `--selftest` **224 → 243**. A corollary worth keeping: **a slug is a prefix of its
+> siblings** — `tencent/Hy4-preview` sits four sentences earlier, so a plain `indexOf` bound the negation to
+> the wrong sentence and the guard could not fire. Detail → [[fact-check]] [[security]]
+
 ## Active theses
 
 1. **Agent infrastructure is the new cloud — the monolith CLI decomposes into separable layers,
@@ -1310,6 +1353,7 @@ patterns, and turn them into insights and actionable todos.
    - **11-04 — quantization's speedup is a BATCH-SIZE claim:** **2.12×** (Qwen2.5-14B/A100) at batch 1, **1.02×** (Gemma 3 12B) at
      batch 256 where **FP8** is the recipe, and only **two** public checkpoints pair a vLLM timing with an accuracy score — both INT4
      Gemma 3 12B on one MMLU subject the AWQ build was calibrated on; every HumanEval delta is within sampling noise. → [[edge-inference]]
+   - **11-05 — the floor gets a clock, and it is a memory tier on a server-class host:** `FareedKhan-dev/kimi-k3-in-c` runs 2.78T params off disk in **8.24 GB** peak RSS at **26.5 s/token**, **5.6 s** at 128 GB+ where it fits, output **byte-identical** across all four tiers — one machine (124 cores, fast NVMe), so the column prices the *budget*; llama.cpp's **v0.9.0** adds NCCL multi-node TP from a **79-day-old** semver line. → [[edge-inference]]
 
 4. **Multi-agent "swarms with scale" produce genuine results and genuine failure modes.** The
    60-agent Riemann run (only 2 of 60 produced the key insight) says discovery needs breadth;
@@ -1369,10 +1413,8 @@ patterns, and turn them into insights and actionable todos.
      run "is still in flight" with **no context window on the page**. → [[frontier-models]]
    - **10-24 — "open weights" becomes a dated promise, and the removal ships as a row:** Kimi K3.1 Pro
      (AA **#4/215 at 55**) is **Proprietary** until weights arrive "by Nov 4" (HF org: **0** artifacts) and publishes its own cyber regression **90.5% → 81.0%** pass@3. → [[frontier-models]]
-   - **10-26 20:03 → 10-29 — the business case is stated with no benchmark named, then the frontier release
-     ships as a capability announcement:** IBM's CEO prices open weights at "**90 percent as effective**" for "**25 to 10 percent of the token cost**" with **no model pair, no benchmark, no date**; Ornith-1.5's blog
-     lists **three** sizes where the Hub carries **four**. Gemini 4 Carbon is **#1 on AA v5.0 at 59** with **0** occurrences of "context window" and **0** of "parameter" in 11,563 chars, its cyber scores labelled
-     "**(evaluated without guardrails)**", and a defenders-only rollout — best read beside **Terminal-Bench cheating 0.0%** and **Gray Swan injection 0.0%** vs Argon's 0.7%. → [[frontier-models]] [[fact-check]]
+   - **10-26 20:03 → 10-29 — the business case is stated with no benchmark named, then the frontier release ships as a capability announcement:** IBM's CEO prices open weights at "**90 percent as effective**" for "**25 to 10 percent of the token cost**" with **no model pair, no benchmark, no date**; Ornith-1.5's blog lists **three** sizes where the Hub carries **four**.
+     Gemini 4 Carbon is **#1 on AA v5.0 at 59** with **0** occurrences of "context window" and **0** of "parameter" in 11,563 chars, its cyber scores labelled "**(evaluated without guardrails)**", and a defenders-only rollout — best read beside **Terminal-Bench cheating 0.0%** and **Gray Swan injection 0.0%** vs Argon's 0.7%. → [[frontier-models]] [[fact-check]]
    - **10-30 — the open model arrives with two documents that disagree:** Mistral Large 4's weights
      (**1T / 49B active**, Ecosystem Open-Weight license whose one condition is a MaaS carve-out, **$0.70/$0.07/$2.10** per 1M) ship beside a card claiming **1M** context and a same-day Hugging Face
      post that says **1M** in prose and **131,072** in its own recipe — with **41% vs 28.3%** on Terminal-Bench 4 between the vendor's two pages. → [[frontier-models]]
@@ -1384,6 +1426,7 @@ patterns, and turn them into insights and actionable todos.
    - **11-04 — post-training is sold against an in-house baseline, and a looped transformer ships without a result:** Figma's
      Qwen 3.8 27B agent is **62%** head-to-head against its *previous production agent* while its model-vs-model claim is one chart
      at **77.8 vs 76.9**; SenseNova-Loop-9B runs **56** layer executions from **32** weight sets and ships its results as a **PNG**. → [[frontier-models]]
+   - **11-05 — the dated promise was kept ON TIME, and the licence prices SCALE:** Kimi K3.1-Pro landed **2026-11-02T04:13:51Z** (promised "by Nov 4", **0** artifacts on 10-24) as **96** shards = **1,563,293,160,568** bytes, `gated: false`, with §2 a **$20M**-MaaS separate-agreement trigger and §3 a **100M MAU / $20M-monthly** naming clause — open *weights*, not open source — while Tencent's Hy4 shipped **no** GA artifact (only Apache-2.0 `Hy4-preview`) and Dory1.0-4B made loop count a runtime dial (**50.3 → 59.5 → 61.8**). → [[frontier-models]]
 
 7. **AI safety is a measured release threshold, not policy — and the measuring infrastructure is
    now the weak point.** PF v2 / RSP v3.0 / FSF v3.1 run one loop (threshold → eval → pre-
@@ -1433,6 +1476,7 @@ patterns, and turn them into insights and actionable todos.
        tests beside the correctness tests (**37%** safe success at **95%** accuracy); a leaderboard's **13-point** gap was a grader
        that never ran (**half** the episodes ungraded, stored as failures), one mode check misreading **four** files collapses scores
        **59–82** points silently, and a `(Reward: 5)` cue steers **97–100%** of answers while every label is correct. → [[fact-check]]
+     - **11-05 — raise difficulty by controlling exactly ONE variable:** Switch-SWE's **400** matched session specs (**200** focus tasks, 19 repos) put the switching cost at **11.5 pp** across **7** agents, and ToolSpace's trace-mined Pro environments (deterministic rules, not LLM judgment) drop **7** frontier models by up to **38.2** points — both make the *environment* the controlled term. → [[harness-reliability]]
 
 9. **Hidden chain-of-thought is a confidentiality assumption, not a security boundary** —
    arXiv:2608.09867: encrypted reasoning blocks are interchangeable across sessions/users/models
@@ -1847,6 +1891,7 @@ patterns, and turn them into insights and actionable todos.
      - **11-03 — the caveat shares a sentence with the win, and the note splits by reader:** kornia 0.9.0 ships
        "**Overview for humans**" beside "**Overview for agents**" while its benchmark line reads "10x faster than OpenCV
        on CUDA, but ofc, **4x slower on CPU**". → [[fact-check]] [[dev-tools]]
+     - **11-05 — the caveat arrives WITH the capability rather than after it:** FlashProve ships a Lean verifier beside "**we do not guarantee that all three (Lean, paper, code) match each other**" and a **1,024**-token ceiling, and Dory1.0-4B prints GPQA **72.41** at two loops vs **72.16** at four in the same table as its **+11.5**-point SWE-bench Verified win. → [[formal-verification]] [[frontier-models]]
 
 27. **The default branch is the de facto release — docs and manifests move first, and a "released
     today" claim is usually a claim about a working tree.** Measured: across the 10-24 20:03 batch's
@@ -1879,11 +1924,8 @@ patterns, and turn them into insights and actionable todos.
     - **10-25 → 11-02 (folded) — units six to thirty-six:** `open_issues_count` is issues **+ PRs**; `Primary`/`Secondary` are slots (**0 of 78** agree); `zip`'s vector computes **10.0**;
       `created_at` dates the record (moxnox hides **9,479** commits from 2021); `cert.pem`'s 8 `emSign` **lines** are **4** certs; Bolt's card has **21** rows and Q4_K_M wins **7**;
       stars **cannot fall**; two scenario scores collapse to one on NVD; a `published` day can be the **host's** day. → [[fact-check]] [[security]] [[disclosure-lag]]
-    - **11-02 (folded) — units thirty-seven to forty-two: a SPAN that can be empty, a STOPPING POINT, a SNAPSHOT, a
-      base rate, a layer, a FLOP cut:** MINA's `3.0.0` … `3.0.0-M2` holds nothing (**87 of 3,461** records in a week
-      state such a span); VulDB's **41** store a **base** 4.0 while NVD stores the **threat** score from the same `E:P` — and over **31** VulDB records published 11-02 that gap is **−0.82 at Critical, −1.93 at High, −1.91 at Medium (−4.2…+1.6)** under `Δ = v4.0 − 3.1` — so the quoted 0.7 is a BAND, not a constant, and **the sign is the subtraction** (the first table wrote it `3.1 − 4.0` and read **+0.7**) → [[cvss-stopping-points]].
-      a **0.879** AUROC is **0.076** precision at a 2% attack rate; "**22.7×**" is one attention layer's prefill; a
-      **47%** FLOP cut bought **1.15×** wall clock. → [[fact-check]] [[vuln-supply]] [[disclosure-lag]]
+    - **11-02 (folded) — units thirty-seven to forty-two: a SPAN that can be empty, a STOPPING POINT, a SNAPSHOT, a base rate, a layer, a FLOP cut:** MINA's `3.0.0` … `3.0.0-M2` holds nothing (**87 of 3,461** records in a week state such a span); VulDB's **41** store a **base** 4.0 while NVD stores the **threat** score from the same `E:P` — and over **31** VulDB records published 11-02 that gap is **−0.82 at Critical, −1.93 at High, −1.91 at Medium (−4.2…+1.6)** under `Δ = v4.0 − 3.1` — so the quoted 0.7 is a BAND, not a constant, and **the sign is the subtraction** → [[cvss-stopping-points]].
+      a **0.879** AUROC is **0.076** precision at a 2% attack rate; "**22.7×**" is one attention layer's prefill; a **47%** FLOP cut bought **1.15×** wall clock. → [[fact-check]] [[vuln-supply]] [[disclosure-lag]]
     - **11-03 — units forty-three and forty-four: a LOOP COUNT and an ADJUSTMENT:** Astra's **48.1%** is the table's
       "**50 forward passes**" row (**12.3%** at 10, **14.1%** at 25) while the single-shot result is a different task;
       GPT-Rosalind-6's biorisk **78.3%** vs **79.2%** is **85.0%** refusal-adjusted against an **80%** threshold — one
@@ -1897,6 +1939,7 @@ patterns, and turn them into insights and actionable todos.
       in 5.9, `lookup_dcookie` in 6.7), so "369 syscalls" is the live count and the shipped table is larger; Auriga's
       **68.3%** of a gap recomputes to **65.5%** from its own endpoints (22.5 → 76.2, success 57.7); and Pando's
       "nearly **80%**" and "nearly **5x**" are one measurement in two units. → [[harness-reliability]] [[dev-tools]]
+     - **11-05 — units fifty to fifty-two: a DATE that was a day early 3/3, a count whose PARTS sum to 167 of 174, and a time per token measured on a 124-core host:** three arXiv papers were cited one day before their `published` instants (`2026-11-02T21:38Z`, `2026-11-01T16:04Z`, `2026-11-03T15:09Z`), `scenario-labs/skills`' **174** `SKILL.md` files enumerated **80+35+52** with the missing **7** under `.agents/skills/`, and the streaming clock's rows vary the *memory budget*, not the machine. The date unit now has an **executor** (`--check paper`: **3 findings** on the pre-correction feed, **0** on the corrected one), and the lint's own four false verdicts on that batch were four missing WORDS — a cited file rewritten into a landing page, `we counted` and `neither … states a total`, and a **404 read as unreadable** — so a checker's false finding is a statement about its vocabulary until the item's own sentence says otherwise. → [[fact-check]] [[edge-inference]]
 
 29. **A computation that never becomes a token is outside every control this feed tracks — and the first
     exact artifact shipped on 2026-10-29.** Approval classifiers, egress rules, OS isolation and audit

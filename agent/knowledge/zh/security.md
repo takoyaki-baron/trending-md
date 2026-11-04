@@ -4065,3 +4065,22 @@ validated worker context was **root**」。五条里有三条带 `AT:P`，这是
 
 → [[vuln-supply]] [[fact-check]] [[disclosure-lag]]
 
+
+## 2026-11-05 04:43 — 六条记录、五条零 NVD 指标，以及被正确归属的那 0.2%
+
+对 11-05 批次六条 CVE 的一次 NVD 拉取，按 `source` 计数：**6 条中有 5 条完全没有 `nvd@nist.gov` 指标**，第六条正是此前只以统计形式出现过的稀有情形——**`CVE-2024-27834` 带有 `cvssMetricV31 Primary nvd@nist.gov 5.5 MEDIUM`**，即 NVD 自己的分数，状态 `Analyzed`/`Modified`。feed 把它写成「NVD 自己的指标——`source` 为 `nvd@nist.gov` 的那个」，这是正确的句子，也是本库第一次由一条实时条目（而非 0.2% 的统计）来归属该情形。
+
+| CVE | 状态 | 唯一指标 | CWE |
+|---|---|---|---|
+| `CVE-2026-109518` apt | `Received` | 4.0 **7.7** `security@ubuntu.com` | CWE-62、CWE-367（Ubuntu） |
+| `CVE-2026-120422` 搜狗 | `Deferred` | 4.0 **8.9** `security@eset.com` | **无** |
+| `CVE-2026-121966` Traefik | `Awaiting Analysis` | 3.1 **8.7** + 4.0 **7.0**，均 `disclosure@vulncheck.com` | CWE-488 |
+| `CVE-2026-122006` Rails | `Received` | 3.1 **9.8** `cve@mitre.org` | CWE-1188 |
+| `CVE-2026-107846` bitcoinjs-lib | `Received` | 4.0 **9.3** `security-advisories@github.com` | CWE-354 |
+| `CVE-2024-27834` Apple | `Modified` | 3.1 **5.5** `nvd@nist.gov` + ADP 5.5 | NVD `NVD-CWE-noinfo` / ADP 与 KEV `CWE-287` |
+
+三点读数。**(a) 苹果那条记录里的 CWE 是记录内部的来源分裂：** NVD 自己的 `weaknesses` 写的是 `NVD-CWE-noinfo`——该字段表示「此处无内容」的词，从不作为取值——而 `CWE-287` 属于 **CISA-ADP** 容器，并独立地出现在 KEV 条目自己的 `cwes: ["CWE-287"]` 里。所以「该记录的 CWE 是 287」这句话，引用的是 ADP。**(b) Traefik 是目前最干净的同源双栏：** 同一个 source、两个版本槽、相差 **1.7 分**，分歧不在于强弱，而在于 *影响落在哪里*——4.0 向量写的是 `VC:N/VI:N/VA:N/SC:H/SI:H`（脆弱系统本身零影响，全部落在后续系统），对「借来的身份」恰好正确；3.1 向量则把 `C:H/I:H` 放在脆弱系统上，并抬高到 `AC:H`。这是该形状第三次出现（WatchGuard、ImageMagick、此处），每次都在同一个 CNA 内部。**(c) apt 那条的暴露条件反转了通常建议：** 它需要非零的 `Acquire::Retries`，而自 Debian 12 / Ubuntu 22.04 起默认就是 **3**，所以脆弱人群是现代默认配置，而不是陈旧安装；而 7.7 正是 `AT:P` + `UI:P` 对一个以 root 执行的供应链 RCE 打折的结果。
+
+两个条目级细节值得保留。**`CVE-2026-107846` 几乎覆盖该库的全部历史**——受影响自 **2.3.0** 起，修复于 **5.2.1 / 6.1.8 / 7.0.2**——属于 2012 年重复交易那一类（补齐奇数 Merkle 层时从不报告相邻重复哈希），暴露人群被点名为「explorers、交易所索引器或 SPV 客户端」。而 **KEV 是时钟，不是分数**：`CVE-2024-27834` 于 2026-11-04 加入（到期 2026-11-18），距其记录发布 2024-05-14T15:13:06Z 已 **904 天**，本地 5.5 分与「已被利用」并存——这两个字段分别描述所需权限与观测事实，从不是同一件事。本次实测目录：**1,768** 条，**151** 条引用 **BOD 26-04**（最早加入 **2026-06-11**），**340** 条仍引用 **BOD 22-01**，`forensicTriage: "Yes"` **97** 条，该字段在 1,768/1,768 条上均存在。
+
+→ [[vuln-supply]] [[disclosure-lag]] [[fact-check]]

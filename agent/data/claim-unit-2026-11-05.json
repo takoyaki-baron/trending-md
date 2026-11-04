@@ -1,5 +1,5 @@
 {
- "generated": "2026-11-04T20:30:29.564Z",
+ "generated": "2026-11-04T20:47:52.762Z",
  "files": [
   {
    "file": "2026-11-05.md",
@@ -85,9 +85,9 @@
     {
      "check": "repo",
      "item": 5,
-     "verdict": "unreadable",
+     "verdict": "repo-absent-asserted",
      "claim": "tencent/Hy4",
-     "detail": "api.github.com: Command failed: gh api repos/tencent/Hy4"
+     "detail": "repos/tencent/Hy4 answers 404 and the item's own sentence asserts it does not exist (“There is no tencent/Hy4 and no GA system card in the org's listing at the time of writing; Tencent says it \"intends to release the model wei”) — the registry agrees, so this is a confirmation, not an unreadable repo"
     },
     {
      "check": "repo",
@@ -101,35 +101,28 @@
      "item": 12,
      "verdict": "ok",
      "claim": "FareedKhan-dev/kimi-k3-in-c",
-     "detail": "10189★, last push 2026-10-02"
+     "detail": "10198★, last push 2026-10-02"
     },
     {
      "check": "count",
      "item": 16,
-     "verdict": "absent",
+     "verdict": "counted-by-author",
      "claim": "174 agent",
-     "detail": "no count of agent on README of scenario-labs/skills or mcp.scenario.com/docs — count it yourself, or say \"no page states a total\""
+     "detail": "no page states a agent total, and the item says so — the count is the author's own census"
     },
     {
      "check": "count",
      "item": 16,
-     "verdict": "absent",
+     "verdict": "counted-by-author",
      "claim": "174 SKILL",
-     "detail": "no count of skill on README of scenario-labs/skills or mcp.scenario.com/docs — count it yourself, or say \"no page states a total\""
-    },
-    {
-     "check": "quotation",
-     "item": 1,
-     "verdict": "quote-not-found",
-     "claim": "“prominently displayed on the user interface”",
-     "detail": "6 words, 0 hits in 3 readable source(s); no source carries it (read moonshotai/Kimi-K3.1-Pro README, HF model moonshotai/Kimi-K3.1-Pro, news.ycombinator.com/item?id=50366999) — if this came from somewhere this item does not cite, cite it; otherwise it is the feed's own words and must not wear quotation marks"
+     "detail": "no page states a skill total, and the item says so — the count is the author's own census"
     },
     {
      "check": "quotation",
      "item": 1,
      "verdict": "ok",
-     "claim": "3 quotation(s)",
-     "detail": "verbatim in 3 readable source(s)"
+     "claim": "4 quotation(s)",
+     "detail": "verbatim in 4 readable source(s)"
     },
     {
      "check": "quotation",
@@ -263,6 +256,27 @@
      "verdict": "ok",
      "claim": "4 quotation(s)",
      "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "paper",
+     "item": 10,
+     "verdict": "ok",
+     "claim": "arXiv 2611.03998 submitted 2026-11-02T21:38Z",
+     "detail": "arXiv `published` 2026-11-02T21:38:49Z — the quoted instant is the submission's"
+    },
+    {
+     "check": "paper",
+     "item": 17,
+     "verdict": "ok",
+     "claim": "arXiv 2611.02017 submitted 2026-11-01T16:04Z",
+     "detail": "arXiv `published` 2026-11-01T16:04:16Z — the quoted instant is the submission's"
+    },
+    {
+     "check": "paper",
+     "item": 19,
+     "verdict": "ok",
+     "claim": "arXiv 2611.05036 submitted 2026-11-03T15:09Z",
+     "detail": "arXiv `published` 2026-11-03T15:09:01Z — the quoted instant is the submission's"
     }
    ]
   }

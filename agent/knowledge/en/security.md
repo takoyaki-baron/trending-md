@@ -6610,3 +6610,44 @@ a term CVSS 3.1 cannot express — which is the operational cost of 4.0-only sco
 baseline is comparing two instruments, not two severities.
 
 → [[vuln-supply]] [[fact-check]] [[disclosure-lag]]
+
+## 2026-11-05 04:43 — six records, five with zero NVD metrics, and the 0.2% case attributed right
+
+One NVD pull over six IDs from the 11-05 batch. Counted by `source`: **5 of 6 carry no `nvd@nist.gov` metric at
+all**, and the sixth is the rare case the provenance censuses had only measured statistically — **`CVE-2024-27834`
+carries `cvssMetricV31 Primary nvd@nist.gov 5.5 MEDIUM`**, NVD's own number, on an `Analyzed`/`Modified` record.
+The feed wrote it as "NVD's own metric — the one whose `source` is `nvd@nist.gov`", which is the correct
+sentence and the first time this library has one attributed from a live item rather than a 0.2% statistic.
+
+| CVE | status | only metric | CWE |
+|---|---|---|---|
+| `CVE-2026-109518` apt | `Received` | 4.0 **7.7** `security@ubuntu.com` | CWE-62, CWE-367 (Ubuntu) |
+| `CVE-2026-120422` Sogou | `Deferred` | 4.0 **8.9** `security@eset.com` | **none** |
+| `CVE-2026-121966` Traefik | `Awaiting Analysis` | 3.1 **8.7** + 4.0 **7.0**, both `disclosure@vulncheck.com` | CWE-488 |
+| `CVE-2026-122006` Rails | `Received` | 3.1 **9.8** `cve@mitre.org` | CWE-1188 |
+| `CVE-2026-107846` bitcoinjs-lib | `Received` | 4.0 **9.3** `security-advisories@github.com` | CWE-354 |
+| `CVE-2024-27834` Apple | `Modified` | 3.1 **5.5** `nvd@nist.gov` + ADP 5.5 | NVD `NVD-CWE-noinfo` / ADP + KEV `CWE-287` |
+
+Three read-outs. **(a) The CWE on the Apple record is a provenance split inside one record:** NVD's own
+`weaknesses` entry is `NVD-CWE-noinfo` — the field's word for *nothing here*, never a value — while `CWE-287`
+belongs to the **CISA-ADP** container and, independently, to the KEV entry's own `cwes: ["CWE-287"]`. A sentence
+that says "the record's CWE is 287" is quoting the ADP. **(b) Traefik is the cleanest intra-CNA dual column yet:**
+one source, two version slots, **1.7 points apart**, and the disagreement is not about strength but about *where
+the impact lands* — the 4.0 vector reads `VC:N/VI:N/VA:N/SC:H/SI:H` (nothing on the vulnerable system, everything
+on the subsequent one), which is exactly right for a borrowed identity, while the 3.1 vector puts
+`C:H/I:H` on the vulnerable system and raises complexity to `AC:H`. Third sighting of the shape (WatchGuard,
+ImageMagick, here), always inside one CNA. **(c) The apt bug's exposure condition inverts the usual advice:** it
+needs a non-zero `Acquire::Retries`, which is **3 by default since Debian 12 / Ubuntu 22.04**, so the vulnerable
+population is the modern default rather than the stale install — and the 7.7 is what `AT:P` + `UI:P` do to a
+root-executing supply-chain RCE.
+
+Two item-level details worth keeping. **`CVE-2026-107846` spans nearly the library's whole history** — affected
+from **2.3.0**, fixed in **5.2.1 / 6.1.8 / 7.0.2** — and it is the 2012 duplicate-transaction class (a padded
+odd Merkle level that never reports adjacent duplicate hashes), with the exposed population named as "explorers,
+exchange indexers, or SPV clients". And **KEV is a clock, not a score**: `CVE-2024-27834` was added 2026-11-04
+(due 2026-11-18) **904 days** after its record published 2024-05-14T15:13:06Z, at a local-only 5.5 beside an
+active-exploitation flag — the two fields describe the privilege required and the observation, never the same
+thing. Catalog measured this run: **1,768** entries, **151** citing **BOD 26-04** (earliest add **2026-06-11**),
+**340** still citing **BOD 22-01**, `forensicTriage: "Yes"` on **97**, and the field present on 1,768/1,768.
+
+→ [[vuln-supply]] [[disclosure-lag]] [[fact-check]]

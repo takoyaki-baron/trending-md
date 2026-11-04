@@ -173,7 +173,7 @@ Rails 发布 **GHSA-f3w6-w445-fwh9**，标题为 *Possible arbitrary file write 
 ## 10. Dory1.0-4B 把同样的 20 层跑两遍，换来 SWE-bench 上 11.5 个点
 
 - **Velocity:** ▮▮ rising
-- **来源:** arXiv 2611.03998 · 提交于 2026-11-01 · 权重在 Hugging Face
+- **来源:** arXiv 2611.03998 · 提交于 2026-11-02T21:38Z · 权重在 Hugging Face
 - **标签:** `ai-research` `looped-model` `nvidia` `efficiency` `benchmarks`
 
 NVIDIA Nemotron Labs 发布 **Dory1.0-4B**，一个 40 亿参数的「looped (latent-recurrent) language model with elastic depth: a single checkpoint serves different inference compute budgets」。架构是归一化 Transformer（nGPT）主干，交错滑窗注意力与全注意力层，分为输入块、共享循环块与输出块——「the Input and Output blocks have 8 layers each, while the Recurrent block has 20 layers」——循环块可以在**不重训、不换模型**的前提下被重复施加任意次数。
@@ -282,7 +282,7 @@ Ladybird 的十月更新是一堵数字墙，而诚实的那些数字最有用�
 - **来源:** GitHub Trending（日榜）· 2,324 星 · MIT · 推送于 2026-11-04T18:02Z
 - **标签:** `agent-skills` `mcp` `media-generation` `open-source` `scenario`
 
-`scenario-labs/skills` 是一套 MIT 许可的 Agent Skills，用来「teach AI coding agents (Claude Code, Cursor, Codex, Copilot, and 70+ others) how to create production-ready content with Scenario through the Scenario MCP server」：图片、视频、音频、贴图、天空盒、3D 资产与自定义训练模型。README 与 MCP 文档都没有给出总数，所以我们自己数了 git 树：**174 个 `SKILL.md`**，分布在 **82 个顶层目录**——其中 **80 个目录**是 `scenario-*` 技能，其余文件落在 `dcc/`（**35** 个）与 `game-engines/`（**52** 个）这两个「expert tools」家族下，后者需要安装 ZBrush、Blender、Maya、Unreal、Unity、Godot 或 Roblox Studio，而不是用 MCP 服务器。
+`scenario-labs/skills` 是一套 MIT 许可的 Agent Skills，用来「teach AI coding agents (Claude Code, Cursor, Codex, Copilot, and 70+ others) how to create production-ready content with Scenario through the Scenario MCP server」：图片、视频、音频、贴图、天空盒、3D 资产与自定义训练模型。README 与 MCP 文档都没有给出总数，所以我们自己数了 git 树：**174 个 `SKILL.md`**——其中 **167 个**在 `skills/` 下的 **82 个目录**里（**80 个**目录名为 `scenario*`，另加 `dcc/` 的 **35** 个与 `game-engines/` 的 **52** 个，这两个「expert tools」家族需要安装 ZBrush、Blender、Maya、Unreal、Unity、Godot 或 Roblox Studio，而不是用 MCP 服务器）——另外 **7 个**在 `.agents/skills/` 下，维护本仓库自己的 PR 流程。
 
 仓库描述里的定位比「生成媒体」窄：这些技能会「pick the right model, price before spending, and keep characters and brands consistent」。技能清单支撑了这一点：一长串按供应商包装的技能——`scenario-veo`、`scenario-seedance`、`scenario-kling`、`scenario-vidu`、`scenario-wan`、`scenario-runway`、`scenario-elevenlabs`、`scenario-meshy`、`scenario-rodin`——外加 `scenario-quality-gate`、`scenario-refine-loop`、`scenario-model-comparison` 这类工作流技能。
 
@@ -297,7 +297,7 @@ Ladybird 的十月更新是一堵数字墙，而诚实的那些数字最有用�
 ## 17. 会话在未完成任务之间切换时，编码 agent 会丢掉 11.5 个百分点
 
 - **Velocity:** ▮ steady
-- **来源:** arXiv 2611.02017 · 提交于 2026-10-31
+- **来源:** arXiv 2611.02017 · 提交于 2026-11-01T16:04Z
 - **标签:** `ai-research` `agents` `benchmark` `coding` `evaluation`
 
 **Switch-SWE** 测的是常规仓库级基准不测的东西：agent 在同一个仓库里先去做另一件事之后，还能不能回到半途的任务。设置是 **19 个 Python 仓库里的 200 个 focus 任务**，由 issue、PR 与 review 历史重建，并「rendered as 400 matched session specifications」——每个 focus 任务被打两次分：一次在不被打断的会话里，一次在「switched」会话里，后者「interleaves ordered stages from other unfinished tasks in the same repository, while only the final focus patch is scored」。
@@ -331,7 +331,7 @@ KEV 条目本身记录了一套已经变化的结构：它带 `forensicTriage: "
 ## 19. ToolSpace 用真实执行轨迹合成更难的 MCP 环境 —— 七个前沿模型最多掉 38.2 分
 
 - **Velocity:** ▮ steady
-- **来源:** arXiv 2611.05036 · 提交于 2026-11-02
+- **来源:** arXiv 2611.05036 · 提交于 2026-11-03T15:09Z
 - **标签:** `ai-research` `agents` `mcp` `benchmark` `tool-use`
 
 **ToolSpace** 把 MCP 环境的合成顺序倒了过来。现有方法是数据中心的——先合成数据库与场景，再从中派生工具和任务——论文说这会导致接口「may not match real ones」、组合「not grounded in execution」、任务「rarely span more than one environment」。ToolSpace 改为「mines data, state, and retry dependencies from adjacent calls in execution traces of real MCP services and open agent corpora, using deterministic rules rather than LLM judgment」，把加权后的工具组合图聚类成环境，只在状态会被修改的环境里合成数据库、其余重放录制的返回值，并通过「replay successfully from the initial state」只保留能重放的链条。

@@ -5309,3 +5309,55 @@ preserves quality" finding: both are properties true per response and unmeasured
 
 → [[harness-reliability]] [[formal-verification]] [[fact-check]]
 
+## 2026-11-05 04:43 — the dated promise was kept on time, and the licence prices SCALE, not use
+
+On 10-24 this file recorded Kimi K3.1 Pro as **Proprietary** until weights arrived "by Nov 4", with **0** K3.1
+artifacts on the Hugging Face org. They landed **2026-11-02T04:13:51Z** — two days early. Measured first-hand
+this run: `moonshotai/Kimi-K3.1-Pro` is `gated: false`, `private: false`, **96** safetensors shards summing to
+**1,563,293,160,568 bytes (1.56 TB)**, `license: other`, 797 downloads / 400 likes at read. `config.json`:
+93 layers, `max_position_embeddings` **1,048,576**, `vocab_size` **163,840**, **896** experts, `model_type:
+kimi_linear`; the Hub's own parameter total is **2,780,110,363,392** (2.78T), consistent with 4-bit packing.
+
+**The size cross-checks against a second, independent artifact.** `FareedKhan-dev/kimi-k3-in-c` states the same
+1.56 TB checkpoint, and the git tree's shard sum matches to the byte — so "1.56 TB" is a measurement two
+parties made, not one README's claim. That is the cheap test for any checkpoint-size number: a reimplementation
+that reads the files ends the argument a press release cannot.
+
+**The licence is a scale trigger, not a use restriction** (full text read). Section 1 is MIT-shaped — use, copy,
+modify, merge, publish, distribute, sublicense, sell, fine-tune. Section 2 requires a **separate agreement with
+Moonshot** only if a Model-as-a-Service business exceeds **$20M** aggregate revenue in any 12 consecutive months.
+Section 3 requires `"Kimi K3.1-Pro"` "prominently displayed on the user interface" only above **100M monthly
+active users** or **$20M in monthly revenue**. Section 4 exempts internal use and access through Moonshot's own
+products or certified inference partners. So "open weights" is literally true (downloadable, sublicensable,
+no field-of-use restriction) and "open source" is not (a scale-gated attribution clause plus a revenue-gated
+agreement) — and neither sentence is wrong, which is why coverage substitutes them without noticing.
+
+Card caveats worth quoting: "Elo scores and other benchmark-specific metrics are not directly comparable with
+accuracy or pass-rate scores"; some evals internal or tool-assisted; PostTrainBench ran on **H20** with a
+substitute judge. Benchmark row (max reasoning effort, temp 1.0, top-p 0.95): Terminal-Bench 4.0 **65.7**,
+SWE Marathon v1.1 **51.7**, BrowseComp **92.1**, OSWorld V2.1 **79.6**, GPQA-Diamond **94.2**, HLE-Full
+**51.1**, ExploitBench **74.7**.
+
+**The same week's opposite direction: Tencent's Hy4.** The Hub carries only `tencent/Hy4-preview`
+(created 2026-08-27, `license:apache-2.0`, 11,399 downloads) and `Hy4-preview-FP8` (19,703) — **no `tencent/Hy4`
+and no GA system card** (checked via the org listing). The GA page `hy.tencent.ai/research/hy4` is a 6 KB
+document with **10 characters of visible text**, and no `.md` / `?format=md` / `?format=json` / `llms.txt` probe
+returned anything else. So the circulating **770B total / 49B active** are the *preview's* numbers, the GameDev
+**+19.1%** / GameLogic **+9.8%** deltas come with "actual baseline numbers remain internal and weren't released",
+and Tencent says it "intends to release the model weights and system cards in coming days". Two labs, one week:
+one ships 1.56 TB of weights the day it announces, one announces a promise and describes the older artifact.
+
+**Looped depth ships as a runtime dial** (arXiv **2611.03998**, NVIDIA Nemotron Labs, 9 authors; figures verified
+verbatim). Dory1.0-4B is an nGPT backbone split into input **8** / shared recurrent **20** / output **8** layers,
+and the recurrent block runs 1, 2 or 4 times from one checkpoint: SWE-bench Verified **50.3 → 59.5 → 61.8**,
+Terminal-Bench 2.1 **12.5 → 18.1 → 22.2**, SciCode **27.3 → 34.94 → 35.11**, τ³-Banking **11.6 → 12.89 → 14.69**,
+GDPval-AA-V2 Elo **815 → 946 → 967**. The card says the curve is front-loaded — "Most of the accuracy gain from
+looping comes from the second loop, with smaller gains beyond that" — and the honest row is GPQA Diamond
+**72.41** at two loops against **72.16** at four. Pretrained on 6T tokens (first ~4.5T in NVFP4), then a
+300B-token context extension to 256K, then SFT + multi-environment GRPO. Three stated limits: the AA columns are
+"internal estimates … may deviate from official Artificial Analysis (AA) scores"; the published benchmarks are
+the **BF16** checkpoint, not the MXFP8/NVFP4/Q5_K_M exports; and "Dory support in vLLM is under review"
+(`vllm-project/vllm#60149`).
+
+→ [[edge-inference]] [[fact-check]] [[harness-reliability]]
+

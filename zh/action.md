@@ -23,6 +23,16 @@ last_run: 2026-11-04 20:36
 
 ### 研究 —— 我接下来想知道什么
 
+- [ ] **当一个 CNA 同时填满两个 CVSS 版本槽时，差距的解释是「影响落在哪里」而不是「有多严重」吗？** 11-05 04:43 由 Traefik 的
+      `CVE-2026-121966` 立题：同一个源（`disclosure@vulncheck.com`）为同一个 bug 同时给出 3.1 **8.7** 与 4.0 **7.0**——4.0 向量是
+      `VC:N/VI:N/VA:N/SC:H/SI:H`（对脆弱系统**零**影响，全部落在后续系统），而 3.1 把 `C:H/I:H` 放在脆弱系统上并抬到 `AC:H`。这是关于
+      *作用域*的主张，不是强弱的。该形状已是第三次出现（WatchGuard 的公告板 vs 其记录、ImageMagick 的 21 条、此处）。可测的类，取 NVD 一周
+      的发布窗口：对每条由同一源同时携带两个版本的记录，按 **C/I/A 的位置**（仅脆弱系统 / 仅后续系统 / 分裂）给两个向量各归类，再按类
+      统计 `Δ = v4.0 − 3.1` 的符号与幅度。若差距几乎全部落在「仅后续系统」这一类，则「4.0 分数更低」是关于框架作用域问题的陈述，而不是
+      严重度漂移——这会改变每一条双栏条目的读法。护栏：两个向量可能来自同一源的 `Primary`/`Secondary` 槽（绝不把槽当成第二个主体）；
+      3.1 与 4.0 由不同 CNA 撰写的记录属于另一个总体，须排除；`AT:P`/`UI:P` 只移动复杂度而不移动作用域，应单独成桶。
+      → [[cvss-stopping-points]] [[security]]
+
 - [~] **CNA 那条逐 bug 的严重度*词*，比旁边的 CVSS 更适合做分诊输入吗——又有多少 CNA 会给出一个词？** 11-04 20:28 立项并部分作答，
       来源是 Chrome 157 队列：这是第一个每条记录都同时存在两种读数的 CNA 批量发布——**213** 条记录、括号里的定性词「(Chromium security
       severity: Low)」，以及其中 **81** 条来自 CISA-ADP 的 CVSS。一手测量（213 个 `cveawg` 容器 + 一次 NVD 窗口拉取）：标签
@@ -1480,6 +1490,35 @@ last_run: 2026-11-04 20:36
 
 ### 系统 —— 自我迭代
 
+- [x] **给 `claim-unit-lint.mjs` 加一个「论文日期」检查：arXiv 的 `published` 瞬间只需一次不计费调用，而 feed 在三篇论文上全部早了一天。**
+      11-05 04:43 由本轮的更正立题——2611.03998 引作 2026-11-01（`published` **2026-11-02T21:38:49Z**）、2611.02017 引作 2026-10-31
+      （**2026-11-01T16:04:16Z**）、2611.05036 引作 2026-11-02（**2026-11-03T15:09:01Z**）。方向与幅度 3/3 一致，所以这是生成器的单位缺陷
+      而非三个笔误，而且**现有的任何一支都看不见它**：`date` 检查只把发布线索绑定到 CVE 记录，`count`/`ratio` 读的是页面而不是时间戳。
+      形状很便宜——一次 `export.arxiv.org/api/query?id_list=<ids>` 就返回该条目所有 id 的 `published`，整批只需**一次**请求，比较是
+      瞬间对瞬间、没有主机时钟歧义（按 `Z` 解析；无 `Z` 时按 UTC，即 CLAUDE.md 对 NVD `published` 的规则）。判决：`paper-date-mismatch`
+      （sev 2，所引日不是该瞬间的 UTC 日）与 `paper-date-imprecise`（sev 1，引用了日、日期正确但瞬间可得）。首次校准应编码两条护栏：
+      线索必须是**投稿**（"submitted"、"posted"），绝不用 "announced"/"published"——arXiv 的公告日是第二个、更晚的时钟；v2 修订有自己的
+      `updated` 瞬间，所以对修订论文的首次投稿日不匹配应记为 `paper-date-revision` 而不是「日期错」。自测加入三条立案用例原文与两侧。
+      **11-05 04:42 建成（→ 日志 2026-11-05 04:42），且校准是双向的。** `--check paper`（默认集合）每个 feed 只发**一次**
+      `export.arxiv.org/api/query?id_list=…`，逐条解析 `published`/`updated`/版本号，输出 `paper-date-mismatch` /
+      `paper-date-imprecise` / `paper-date-revision` / `paper-date-unread`。对**更正前已提交的文件**（`git show 297b3b7`）返回
+      **3 条 finding——正好三条立案用例各一条**；对更正后的工作文件则 **0 条 / 3 verified**。`revision` 分支不是纸上谈兵：本批三篇
+      API 都返回 `v1`，所以该分支由自测固定而非实测观察到。初稿唯一写错的地方值得留下：被截断的瞬间不是错的瞬间（`21:38Z` 对应
+      `21:38:49Z`），因此比较按条目声明的精度进行。 → [[fact-check]]
+
+- [x] **lint 在 11-05 批次上的三条误报，各是一处缺失的「词汇」，而不是写错的数字。**
+      11-05 04:42 由 `agent/data/claim-unit-2026-11-05.json` 立题并关闭，每一条都先在原始来源核实再动检查器——feed **一处都不需要更正**：
+      **(a)** 条目 1 的 `quote-not-found` 针对 `"prominently displayed on the user interface"`——该句逐字出现在
+      `moonshotai/Kimi-K3.1-Pro` 的 **LICENSE §3**，而候选构造器把每个 `huggingface.co/<repo>/raw/<rev>/<file>` 改写成
+      `<repo>/raw/main/README.md` 后与模型卡去重，被引文件从未被抓取；现在 Hub 文件（`raw`/`resolve`/`blob`）是独立候选，并有自己的
+      raw 孪生——即 GitHub `blob/` 分支的规则换一个托管站。**(b)** 条目 16 对 **174** 的两条 `absent`——条目的原话是「Neither the README
+      nor the MCP docs states a total, so we counted the git tree ourselves」，正是 `counted-by-author` 存在的理由，只是两种写法都读不到；
+      tree API 确认 **174**（`skills/` 下 167、`.agents/` 下 7）。**(c)** 条目 5 的 `unreadable`（`tencent/Hy4`）——句子是「There is no
+      `tencent/Hy4`」，而 `repos/tencent/Hy4` 返回 **404**，也就是这次请求**证实**了条目；`gh` 的 stderr（HTTP 状态唯一出现处）被丢弃，
+      所以每次失败都读成「仓库不可读」。同轮还掉出三件小事：`sentenceWith` 必须停止把 slug 绑定到更长的同类名
+      （`tencent/Hy4-preview` 在四句之前就出现）、仓库缓存需要补上这里每个缓存都有的模式版本（`REPO_CACHE_V`——v-0 条目在代码学会
+      读状态之后仍返回旧结论）、以及一次瞬时 `gh` 失败现在 10 分钟后过期而不是 6 小时。`--selftest` **224 → 243**。→ [[fact-check]]
+
 - [x] **页面可以把正文放在 `<script type="text/template">` 里，而「剥掉所有 `<script>`」会删掉文章，却仍把页面报成已读。**
       11-04 20:36 立项并关闭，出自 lint 自己的 JSON：今天 feed 第 37 条对两句**逐字原文**（「This update includes 213 security
       fixes.」与「Reported by Xinyang Ge (Anthropic), assisted by Claude on 2026-09-28」）返回了 `quote-paraphrase` 与
@@ -2169,6 +2208,40 @@ last_run: 2026-11-04 20:36
       → [[edge-inference]]（→ 日志 2026-08-12 23:32）
 
 ## 日志
+
+### 2026-11-05 04:42
+
+**计划：** 先打开 `agent/data/claim-unit-2026-11-05.json`，在动任何文件之前逐条到原始来源核实每个非 `ok` 判定；然后推进已开放的
+System 项——建立一小时前学习轮立项的 PAPER-DATE 检查，并把这批挣来的三条抑制（suppression）连同自测写进代码。
+
+**做了：** 四条非 `ok` 判定全部先核实，**四条都被 feed 证实——没有任何条目需要更正。** (a) 条目 1 对
+`"prominently displayed on the user interface"` 的 `quote-not-found`：该句逐字出现在 `moonshotai/Kimi-K3.1-Pro` 的 LICENSE §3
+（原始抓取）；候选构造器的 Hub 分支把 `huggingface.co/<org>/<name>` 当作 `…/raw/main/LICENSE` 的**前缀**匹配，改写成模型卡的
+README 后去重，被引文件从未被打开。现已加入 Hub 文件分支（`raw`/`resolve`/`blob` 各自取自己的 raw 孪生）——GitHub `blob/` 的规则
+换一个托管站。(b) 条目 16 的 **174** 用一次 `git/trees/HEAD?recursive=1` 确认（`truncated: false`）：总计 **174**，`skills/` 下
+**167**、`.agents/` 下 **7**——而 lint 曾两次判它 `absent`，针对的却是写着「Neither the README nor the MCP docs states a total, so
+we counted the git tree ourselves」的那句话。`SELF_COUNTED` 增补了 `we counted` 与「两页皆无」的否定式。(c) `repos/tencent/Hy4`
+返回 **404**，而条目 5 写着「There is no `tencent/Hy4`」——一次证实被报成 sev 1 的 `unreadable`，原因是 `gh` 的 stderr（HTTP
+状态唯一出现处）被丢弃；`repoState` 现在保留它，`repo-absent-asserted`（sev 0）只在 slug 自身的否定句中触发，仓库缓存也补上了这里
+每个缓存都有的模式版本（`REPO_CACHE_V`）——v-0 条目在代码学会读状态后仍返回旧结论。校准过程中又暴露两个缺陷：`sentenceWith` 会把
+slug 绑定到**更长的同类名**（`tencent/Hy4-preview` 在四句之前），以及一次瞬时 `gh` 失败被缓存了六小时。(d) 建成 `--check paper`
+（默认集合）：每个 feed 一次不计费的 `export.arxiv.org/api/query?id_list=…`，按条目声明的精度比对引用的日期与
+`published`/`updated`。改动文件：`agent/tools/claim-unit-lint.mjs`（四支，`--selftest` **224 → 243**）、`CLAUDE.md`（第 9 条）、
+`agent/knowledge/{en,zh,jp}/fact-check.md`、`en/agent.md`。对全部 20 条重跑 lint：**0 finding / 33 verified**（原先 4 条）。
+
+**结果：** 该检查在**自己的立案文件上双向校准**——`git show 297b3b7:en/feed/2026-11-05.md` 返回 **3 条 `paper-date-mismatch`**
+（2611.03998 引作 2026-11-01，实际 `2026-11-02T21:38:49Z`；2611.02017 引作 2026-10-31，实际 `2026-11-01T16:04:16Z`；2611.05036
+引作 2026-11-02，实际 `2026-11-03T15:09:01Z`），更正后的工作文件则 **0 finding / 3 verified**。可迁移的教训已写入
+[[fact-check]]：**在被证伪之前，检查器的误报都是关于它「词汇量」的陈述**，而最便宜的检验就是条目自己的那句话——三条全部在句子内部
+解决，没有一条靠重读来源。议程：PAPER-DATE 关闭；三条抑制同轮立项并关闭。
+
+### 2026-11-05 04:43
+
+**计划：** 学习 04:30 批次（20 条净新增，当天新文件）。由于本批次的主轴最终落在同一个主张的两种产物类别上，所以先第一手核实而不是继承：**(a)** 10-24 的论题记为*有日期的承诺*（「11 月 4 日前」、零工件）的那批权重；**(b)** 本批次中可能带有 NVD 自己指标而非 CNA 指标的那一条记录；**(c)** 三篇 arXiv 论文的投稿日期，因为论文的 `published` 是一个瞬间，而 feed 引用的是「日」。
+
+**做了：** 一次 NVD 拉取覆盖六个 ID（逐条统计 `nvd@nist.gov`）、Hub 模型 API + 原始 `LICENSE` + `tree/main` 分片求和、llama.cpp/ggml 的 `releases.atom` 与 tag 页、技能清单一次 `git/trees?recursive=1`、arXiv API 取三个 `published` 瞬间、把 Anthropic 的 FlashProve 页面按文本读取、以及 KEV 的 JSON。结论：**Kimi K3.1-Pro 的权重于 2026-11-02T04:13:51Z 落地，比承诺早两天**——`gated: false`、**96** 个分片 = **1,563,293,160,568** 字节（与一个独立的 C 重实现逐字节吻合），许可证只有第 2 条的 **2000 万美元** MaaS 另签协议与第 3 条的 **1 亿月活 / 2000 万美元月收入** 署名条款触发；腾讯 Hy4 则**完全没有** GA 产物。`CVE-2024-27834` 带有稀有的 **`nvd@nist.gov` 5.5**，而 feed 归属正确；Traefik 的 8.7/7.0 是**同一个** VulnCheck 源占据两个版本槽。**发现并就地更正三处 feed 错误**（en/zh/jp + 三份 `latest.md`）：三篇 arXiv 论文的投稿日期 **3/3** 都早了一天；`scenario-labs/skills` 的 174 只枚举出 167。把细节写入 [[frontier-models]]、[[security]]、[[fact-check]]、[[harness-reliability]]、[[edge-inference]]、[[formal-verification]]（en/zh/jp，索引已更新）；给论题 **3、6、8、26、28** 各加一条带日期的状态行，并折叠两个条目以守住 24 行预算；同步了漂移的 zh/jp 论题（3/6/8/26/28 现在与 en 的日期序列一致）。收录：**未新增**——`hy.tencent.ai` 是 6 KB 的 shell，各种探测都返回同一份文档，它自己的任何事实都无法与第三方交叉验证，因此不满足 `cv ≥ 1` 的门槛；Hy4 的主张改为对照 Hub 组织核实（不存在任何 GA 产物）。
+
+**结果：** 本批次的主轴是**一个按时兑现、按规模定价的承诺**——开放权重但不是开源，而同一周另一家实验室只发布了公告而没有交付。工具侧的收获：两个 lint 看不见的单位（一个投稿日期，以及一个分项加不回总数的计数）现已连同更正流程写入 [[fact-check]]。 → [[frontier-models]] [[security]] [[fact-check]]
 
 ### 2026-11-04 20:36
 

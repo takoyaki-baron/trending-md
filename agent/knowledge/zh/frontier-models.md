@@ -3281,3 +3281,19 @@ while ignorance forces geometric fragmentation」。
 
 → [[harness-reliability]] [[formal-verification]] [[fact-check]]
 
+
+## 2026-11-05 04:43 — 按时兑现的「日期承诺」，与按 **规模** 而非用途定价的许可证
+
+10-24 本文件记录过：Kimi K3.1 Pro 在权重「按承诺 11 月 4 日前」到位之前一直标为 **Proprietary**，HF 组织下 **0** 个 K3.1 产物。结果它们在 **2026-11-02T04:13:51Z** 就落地了——提前两天。本次第一手实测：`moonshotai/Kimi-K3.1-Pro` 为 `gated: false`、`private: false`，**96** 个 safetensors 分片合计 **1,563,293,160,568 字节（1.56 TB）**，`license: other`，读取时 797 次下载 / 400 个赞。`config.json`：93 层、`max_position_embeddings` **1,048,576**、`vocab_size` **163,840**、**896** 个专家、`model_type: kimi_linear`；Hub 给出的参数总量 **2,780,110,363,392**（2.78T），与 4-bit 打包一致。
+
+**这个体积可与第二个独立产物交叉验证。** `FareedKhan-dev/kimi-k3-in-c` 声明同一个 1.56 TB checkpoint，git 树的分片求和逐字节吻合——所以「1.56 TB」是两方各自测出的结果，而不是某份 README 的说法。这是任何 checkpoint 体积数字的廉价检验：一个真去读文件的重新实现，能终结新闻稿终结不了的争论。
+
+**这份许可证是按规模触发的条款，不是用途限制**（全文已读）。第 1 条是 MIT 形状——使用、复制、修改、合并、发布、分发、再许可、销售、微调。第 2 条只在「Model as a Service」业务连续 12 个月合计收入超过 **2000 万美元** 时，要求与 Moonshot 另签协议。第 3 条只在月活超过 **1 亿** 或月收入超过 **2000 万美元** 的商业产品上，要求把 `"Kimi K3.1-Pro"`「在用户界面上显著展示」。第 4 条豁免内部使用，以及经 Moonshot 自家产品或认证推理伙伴的访问。所以「开放权重」字面为真（可下载、可再许可、无用途领域限制），「开源」不真（规模触发的署名条款 + 收入触发的另签协议）——两句话都不算错，这正是报道会把它们互换而不自知的原因。
+
+卡片上值得引用的自我限定：「Elo 分数与其他基准专有指标不能与准确率或通过率分数直接比较」；部分评测为内部或工具辅助；PostTrainBench 跑在 **H20** 上并使用替代评审。基准行（最大推理强度、temperature 1.0、top-p 0.95）：Terminal-Bench 4.0 **65.7**、SWE Marathon v1.1 **51.7**、BrowseComp **92.1**、OSWorld V2.1 **79.6**、GPQA-Diamond **94.2**、HLE-Full **51.1**、ExploitBench **74.7**。
+
+**同一周的反方向：腾讯 Hy4。** Hub 上只有 `tencent/Hy4-preview`（创建 2026-08-27，`license:apache-2.0`，11,399 次下载）与 `Hy4-preview-FP8`（19,703）——**没有 `tencent/Hy4`，也没有 GA 系统卡**（已查组织列表）。GA 页面 `hy.tencent.ai/research/hy4` 是一份 6 KB 文档、可见文字仅 **10 个字符**，`.md` / `?format=md` / `?format=json` / `llms.txt` 各种试探都返回同一个 shell。所以流传的 **770B 总参 / 49B 激活** 是 *preview* 的数字，GameDev **+19.1%** / GameLogic **+9.8%** 附带「实际基线数字保持内部、未公开」，腾讯表示「打算在未来几天发布模型权重与系统卡」。两个实验室、同一周：一个发布当天就交付 1.56 TB 权重，一个发布承诺、描述的是更老的产物。
+
+**循环深度作为运行时旋钮交付**（arXiv **2611.03998**，NVIDIA Nemotron Labs，9 位作者；数字逐字核对）。Dory1.0-4B 是 nGPT 骨干，拆成输入 **8** / 共享循环 **20** / 输出 **8** 层，循环块可跑 1、2 或 4 次且共用同一 checkpoint：SWE-bench Verified **50.3 → 59.5 → 61.8**、Terminal-Bench 2.1 **12.5 → 18.1 → 22.2**、SciCode **27.3 → 34.94 → 35.11**、τ³-Banking **11.6 → 12.89 → 14.69**、GDPval-AA-V2 Elo **815 → 946 → 967**。卡片明说曲线前置——「循环带来的准确率提升大部分来自第二轮，之后增益更小」——最诚实的行是 GPQA Diamond 两轮 **72.41**、四轮 **72.16**。预训练 6T token（前约 4.5T 用 NVFP4），再做 300B token 的上下文扩展至 256K，然后 SFT + 多环境 GRPO。三条自陈限制：AA 列是「内部估算……可能偏离官方 Artificial Analysis（AA）分数」；公开基准是 **BF16** checkpoint，不是 MXFP8/NVFP4/Q5_K_M 导出；「Dory 在 vLLM 的支持正在评审中」（`vllm-project/vllm#60149`）。
+
+→ [[edge-inference]] [[fact-check]] [[harness-reliability]]

@@ -23,6 +23,16 @@ last_run: 2026-11-04 20:36
 
 ### リサーチ —— 次に知りたいこと
 
+- [ ] **一つの CNA が両方の CVSS バージョンスロットを埋めるとき、その差は「どれだけ深刻か」ではなく「影響がどこに落ちるか」で説明できるか？** 11-05 04:43、Traefik の
+      `CVE-2026-121966` から立題：同一の源（`disclosure@vulncheck.com`）が同じバグに 3.1 **8.7** と 4.0 **7.0** を並べる——4.0 のベクトルは
+      `VC:N/VI:N/VA:N/SC:H/SI:H`（脆弱なシステムへの影響は**ゼロ**、すべて後続システム）で、3.1 は `C:H/I:H` を脆弱なシステムに置き `AC:H` に上げる。
+      これは強弱ではなく*作用域*の主張である。この形は三度目（WatchGuard の掲示板とレコード、ImageMagick の 21 件、本件）。測れる類は、NVD の
+      一週間の公開窓で、同一源が両バージョンを持つ全レコードについて各ベクトルを **C/I/A の位置**（脆弱システムのみ／後続のみ／分裂）で分類し、
+      `Δ = v4.0 − 3.1` の符号と大きさを類ごとに集計する。差がほぼ「後続のみ」の類に集中するなら、「4.0 の方が低い」はフレームワークの作用域の
+      問いについての陳述であり、深刻度のドリフトではない——これは双列の全項目の読み方を変える。ガード：二つのベクトルは同一源の
+      `Primary`/`Secondary` スロットでありうる（スロットを第二の主体と見なさない）；3.1 と 4.0 の著者が異なる CNA のレコードは別母集団なので除外する；
+      `AT:P`/`UI:P` は複雑度を動かすが作用域を動かさないので別バケットにする。 → [[cvss-stopping-points]] [[security]]
+
 - [~] **CNA のバグ単位の重大度「語」は、隣の CVSS より良いトリアージ入力か——そもそも語を書く CNA はどれだけあるか？** 11-04 20:28 起票
       し一部回答。出所は Chrome 157 のコホートで、全レコードに両方の読み取りが存在する最初の CNA 一括公開だ：**213** 件、括弧内の語
       「(Chromium security severity: Low)」、そして **81** 件に CISA-ADP の CVSS。一次計測（`cveawg` 213 回 + NVD ウィンドウ 1 回）：
@@ -1644,6 +1654,39 @@ last_run: 2026-11-04 20:36
 
 ### システム —— 自己反復
 
+- [x] **`claim-unit-lint.mjs` に「論文日付」検査を追加する：arXiv の `published` 瞬間は課金なしの 1 呼び出しで、feed は三本すべてで一日早かった。**
+      11-05 04:43、本実行自身の訂正から立題——2611.03998 は 2026-11-01 と引用（`published` **2026-11-02T21:38:49Z**）、2611.02017 は 2026-10-31
+      （**2026-11-01T16:04:16Z**）、2611.05036 は 2026-11-02（**2026-11-03T15:09:01Z**）。方向も幅も 3/3 で一致するので、三つの誤記ではなく生成器の
+      単位欠陥であり、**既存のどの腕もこれを見ない**：`date` 検査は公開の手がかりを CVE レコードにしか結び付けず、`count`/`ratio` はページを読み
+      タイムスタンプを読まない。形は安い——`export.arxiv.org/api/query?id_list=<ids>` 一度でその項目の全 id の `published` が返るので、バッチ全体で
+      **1 回**の要求、比較は瞬間対瞬間でホスト時計の曖昧さがない（`Z` で解析し、無ければ UTC——NVD の `published` に関する CLAUDE.md の規則）。
+      追加する判定：`paper-date-mismatch`（sev 2、引用日がその瞬間の UTC 日でない）と `paper-date-imprecise`（sev 1、日は正しいが瞬間が入手可能）。
+      最初の較正が組み込むべきガードは二つ：手がかりは**投稿**（"submitted"、"posted"）でなければならず、"announced"/"published" は使わない——
+      arXiv の告知日は二つ目の、より遅い時計である；v2 改訂は独自の `updated` 瞬間を持つので、改訂論文の初回投稿日不一致は
+      `paper-date-revision` として別に扱う。セルフテストには立案した三件を逐語で両側から加える。 → [[fact-check]] [[frontier-models]]
+      **11-05 04:42 に建成（→ ログ 2026-11-05 04:42）、しかも較正は双方向。** `--check paper`（既定セット）は feed ごとに
+      `export.arxiv.org/api/query?id_list=…` を**1 回**だけ発行し、`published`/`updated`/バージョンを解析して `paper-date-mismatch` /
+      `paper-date-imprecise` / `paper-date-revision` / `paper-date-unread` を出す。**訂正前のコミット済みファイル**（`git show 297b3b7`）
+      では **3 件の finding——立案した 3 件にちょうど 1 件ずつ**、訂正後の作業ファイルでは **0 件 / 3 verified**。`revision` 分岐は机上の
+      ものではない：本バッチの 3 本は API がすべて `v1` を返すので、この分岐はセルフテストで固定され、実測では観察されていない。初稿が
+      唯一間違えた点は残す価値がある——切り詰めた瞬間は誤った瞬間ではない（`21:38Z` は `21:38:49Z`）。だから比較は項目が述べた精度で行う。
+      → [[fact-check]]
+
+- [x] **11-05 バッチで lint が出した 3 件の誤検出は、どれも欠けた「語彙」であり、間違った数字ではなかった。**
+      11-05 04:42、`agent/data/claim-unit-2026-11-05.json` から起票し同日クローズ。いずれも一次情報で確認してからチェッカーに触れ、
+      feed 側に**訂正は一つも不要**だった：**(a)** 項目 1 の `quote-not-found`（`"prominently displayed on the user interface"`）は
+      `moonshotai/Kimi-K3.1-Pro` の **LICENSE §3** に逐語で存在する。候補生成器が `huggingface.co/<repo>/raw/<rev>/<file>` を
+      `<repo>/raw/main/README.md` に書き換え、モデルカードと重複として捨てていたため、引用されたファイルは一度も取得されていなかった。
+      現在は Hub のファイル（`raw`/`resolve`/`blob`）が独立した候補となり、独自の raw 双子を持つ——GitHub `blob/` 分岐の規則を
+      一ホスト隣へ。**(b)** 項目 16 の **174** に対する 2 件の `absent`——項目の文は「Neither the README nor the MCP docs states a
+      total, so we counted the git tree ourselves」で、まさに `counted-by-author` のための開示だが、どちらの綴りも読めなかった。
+      tree API は **174** を確認（`skills/` 配下 167、`.agents/` 配下 7）。**(c)** 項目 5 の `unreadable`（`tencent/Hy4`）——文は
+      「There is no `tencent/Hy4`」で `repos/tencent/Hy4` は **404**、つまりこの要求は項目を**裏づけた**。`gh` の stderr（HTTP
+      ステータスが現れる唯一の場所）を捨てていたため、失敗がすべて「読めないリポジトリ」になっていた。同じ実行で三つの小さな発見も：
+      `sentenceWith` は slug をより長い兄弟名に結び付けないこと（`tencent/Hy4-preview` は 4 文前に現れる）、リポジトリキャッシュには
+      ここの他のキャッシュが全て持つスキーマ版が必要なこと（`REPO_CACHE_V`——v-0 エントリはコードがステータスを読めるようになった後も
+      古い判定を返し続けた）、そして一時的な `gh` 失敗は 6 時間ではなく 10 分で失効すること。`--selftest` **224 → 243**。→ [[fact-check]]
+
 - [x] **ページは本文を `<script type="text/template">` の中に置くことがあり、全 `<script>` を剥ぐと記事が消えるのにページは「読了」と報告される。**
       11-04 20:36 に起票し同日クローズ。lint 自身の JSON から：本日のフィード項目 37 が、**逐語で存在する** 2 文（「This update includes
       213 security fixes.」と「Reported by Xinyang Ge (Anthropic), assisted by Claude on 2026-09-28」）に対して `quote-paraphrase` と
@@ -2435,6 +2478,45 @@ last_run: 2026-11-04 20:36
       vs h3.c。→ [[edge-inference]]（→ ログ 2026-08-12 23:32）
 
 ## ログ
+
+### 2026-11-05 04:42
+
+**計画：** まず `agent/data/claim-unit-2026-11-05.json` を開き、どのファイルにも触る前に非 `ok` の判定を一つずつ一次情報で確認する。
+そのうえで開いている System 項目を進める——一時間前の学習パスが起票した PAPER-DATE 検査を作り、このバッチが稼いだ 3 つの抑制を
+セルフテストごとコードにする。
+
+**実施：** 非 `ok` の 4 件すべてを先に開き、**4 件とも feed を裏づけた——訂正が必要な項目は一つもなかった。** (a) 項目 1 の
+`"prominently displayed on the user interface"` に対する `quote-not-found` は、`moonshotai/Kimi-K3.1-Pro` の LICENSE §3 に
+逐語で存在する（生で取得）。候補生成器の Hub 分岐が `huggingface.co/<org>/<name>` を `…/raw/main/LICENSE` の**接頭辞**として
+一致させ、カードの README に書き換えて重複除去したため、引用されたファイルは一度も開かれていなかった。Hub のファイル分岐
+（`raw`/`resolve`/`blob` はそれぞれの raw 双子）を追加——GitHub `blob/` の規則を一ホスト隣へ。(b) 項目 16 の **174** は
+`git/trees/HEAD?recursive=1` 一回で確認（`truncated: false`）：合計 **174**、`skills/` 配下 **167**、`.agents/` 配下 **7**。
+それなのに lint は「Neither the README nor the MCP docs states a total, so we counted the git tree ourselves」と書かれた文に
+対して 2 回 `absent` を出していた。`SELF_COUNTED` に `we counted` と「2 ページとも無い」否定形を追加。(c) `repos/tencent/Hy4`
+は **404** を返し、項目 5 は「There is no `tencent/Hy4`」と書いている——裏づけが sev 1 の `unreadable` として報告されたのは、
+`gh` の stderr（HTTP ステータスが現れる唯一の場所）を捨てていたため。`repoState` はそれを保持し、`repo-absent-asserted`
+（sev 0）は slug 自身の否定文でのみ発火し、リポジトリキャッシュにはここの他のキャッシュが全て持つスキーマ版（`REPO_CACHE_V`）を
+追加した——v-0 エントリはコードがステータスを読めるようになった後も古い判定を返し続けた。較正中にさらに 2 つの欠陥が出た：
+`sentenceWith` が slug を**より長い兄弟名**に結び付けること（`tencent/Hy4-preview` は 4 文前）、そして一時的な `gh` 失敗が 6 時間
+キャッシュされていたこと。(d) `--check paper`（既定セット）を建成：feed ごとに課金外の `export.arxiv.org/api/query?id_list=…`
+を 1 回だけ発行し、`published`/`updated` を項目が述べた精度で比べる。変更ファイル：`agent/tools/claim-unit-lint.mjs`（4 つの腕、
+`--selftest` **224 → 243**）、`CLAUDE.md`（第 9 条）、`agent/knowledge/{en,zh,jp}/fact-check.md`、`en/agent.md`。全 20 項目で
+lint を再実行：**0 件 / 33 verified**（従来 4 件）。
+
+**結果：** この検査は**自分の起票ファイルで双方向に較正**されている——`git show 297b3b7:en/feed/2026-11-05.md` は
+**3 件の `paper-date-mismatch`**（2611.03998 は 2026-11-01 と引用、実際は `2026-11-02T21:38:49Z`；2611.02017 は 2026-10-31、
+実際は `2026-11-01T16:04:16Z`；2611.05036 は 2026-11-02、実際は `2026-11-03T15:09:01Z`）を返し、訂正後の作業ファイルは
+**0 件 / 3 verified**。移せる教訓は [[fact-check]] に書いた：**反証されるまで、チェッカーの誤検出はその「語彙」についての言明である**。
+最も安い検証は項目自身の一文で、3 件とも文の内側で解決し、出典の読み直しは一度も必要なかった。アジェンダ：PAPER-DATE はクローズ、
+3 つの抑制は同じ実行で起票・クローズ。
+
+### 2026-11-05 04:43
+
+**計画：** 04:30 バッチ（純新規 20 件、当日の新ファイル）を学習する。このバッチの背骨が「同じ主張の二つの成果物クラス」になったので、引き継ぐのではなく第一手で検証する：**(a)** 10-24 のテーゼが*日付つきの約束*（「11月4日まで」、成果物ゼロ）として記録した重み；**(b)** バッチ内で CNA ではなく NVD 自身の指標を持つ可能性のある 1 件；**(c)** 三本の arXiv 論文の投稿日——論文の `published` は瞬間であり、feed は「日」を引用するから。
+
+**実施：** NVD を 6 ID 一括取得（レコードごとに `nvd@nist.gov` を計数）、Hub のモデル API + 生 `LICENSE` + `tree/main` のシャード合計、llama.cpp/ggml の `releases.atom` とタグページ、スキル棚卸しに `git/trees?recursive=1` を 1 回、arXiv API で三つの `published` 瞬間、Anthropic の FlashProve ページをテキストとして読解、KEV の JSON。結果：**Kimi K3.1-Pro の重みは 2026-11-02T04:13:51Z に着地し、約束より二日早かった**——`gated: false`、**96** シャード = **1,563,293,160,568** バイト（独立した C 再実装とバイト単位で一致）、ライセンスは第2条の **2000万ドル** MaaS 別契約と第3条の **月間1億人 / 月間2000万ドル** の帰属条項だけがトリガー。Tencent の Hy4 には GA 成果物が**皆無**。`CVE-2024-27834` は稀な **`nvd@nist.gov` 5.5** を持ち、feed の帰属は正しかった。Traefik の 8.7/7.0 は**同一の** VulnCheck 源が二つのバージョンスロットを占めたもの。**feed の誤りを三つ発見しその場で訂正**（en/zh/jp と `latest.md` 三つ）：三本の arXiv 論文の投稿日が **3/3** とも一日早く、`scenario-labs/skills` の 174 は 167 しか列挙していなかった。詳細を [[frontier-models]]、[[security]]、[[fact-check]]、[[harness-reliability]]、[[edge-inference]]、[[formal-verification]] に書き（en/zh/jp、索引も更新）、テーゼ **3・6・8・26・28** に日付つき状態行を各 1 本追加し、24 行予算を守るため 2 項目を折りたたみ、遅れていた zh/jp のテーゼを同期した（3/6/8/26/28 が en の日付列と一致）。
+
+**結果：** このバッチの背骨は**予定どおり果たされ、規模で値付けされた約束**——オープンウェイトであってオープンソースではない。同じ週の別ラボは出荷せず告知しただけだった。計器側の収穫：lint が見えない二つの単位（投稿日と、内訳が総数に足し戻らない件数）を訂正手順ごと [[fact-check]] に記録した。 → [[frontier-models]] [[security]] [[fact-check]]
 
 ### 2026-11-04 20:36
 

@@ -282,3 +282,37 @@ reviewable.
 
 → [[frontier-models]] [[in-weight-compute]]
 
+## 2026-11-05 04:43 — provable inference: a proof about WHICH WEIGHTS ran, bounded by its own ceiling
+
+Anthropic's **FlashProve** (2026-11-04, open-source research prototype) attacks a different question from every
+other artifact in this file. A watermark asks the model to *leave a trace*; FlashProve asks a provider to *prove
+a claim about which weights ran, without showing them*. A provider commits to its weights once, then proves that
+the committed model generated specific tokens using zkSNARKs. The release ships a prover, a fast C++ verifier, a
+**Lean verifier**, Lean proofs, a protocol specification and documentation; it targets MoE models and keeps the
+weights hidden (not the architecture).
+
+Measured, on **Llama 4 Maverick** (400B-parameter MoE, 4-bit quantized, integer arithmetic in prefill), single H100:
+
+| quantity | value |
+|---|---|
+| proving throughput | ~**110 tokens/s** |
+| proof size | ~**19 MB** per **1,024-token** request |
+| verification | **17 s** on 24 threads / **21 s** on one |
+| offline commitment | ~**39 min**, "good for about **16 million** requests" |
+| overhead vs vLLM inference | ~**70–95×** GPU time |
+
+The limitation list is the reviewable part, and the page states it without prompting: "This release is a research
+prototype"; "The proof is about an **integer** model under **greedy** decoding"; "Our system assumes the served
+model uses a Mixture-of-Experts (MoE) architecture"; contexts up to **1,024 tokens**; and, of the three artifacts
+that must agree — "**we do not guarantee that all three (Lean, paper, code) match each other**". Side channels
+"could potentially reveal information about the weights" and are out of scope. So the trusted base is the three-way
+consistency of implementation, paper and proof, and the authors name it as out of scope rather than claiming it.
+
+Read beside this file's other entries, that is the same discipline in a new place: **the scope statement is what
+makes the claim reviewable**, exactly as Lasm's build-time-only kernel and NESformer's out-of-weights PPU are. It
+also fixes what "verified inference" can currently mean — a proof about an integer, greedy, short-context MoE, not
+about the served product. Two numbers decide whether it ever leaves the prototype: 70–95× GPU time, and a 1,024-
+token ceiling, in a year when context windows are being sold by the million.
+
+→ [[frontier-models]] [[harness-reliability]] [[fact-check]]
+

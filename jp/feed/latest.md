@@ -173,7 +173,7 @@ Rails は **GHSA-f3w6-w445-fwh9**（*Possible arbitrary file write and read in A
 ## 10. Dory1.0-4B は同じ 20 層を二度走らせて SWE-bench で 11.5 ポイントを得る
 
 - **Velocity:** ▮▮ rising
-- **ソース:** arXiv 2611.03998 · 投稿 2026-11-01 · ウェイトは Hugging Face
+- **ソース:** arXiv 2611.03998 · 投稿 2026-11-02T21:38Z · ウェイトは Hugging Face
 - **タグ:** `ai-research` `looped-model` `nvidia` `efficiency` `benchmarks`
 
 NVIDIA Nemotron Labs の **Dory1.0-4B** は 40 億パラメータの「looped (latent-recurrent) language model with elastic depth: a single checkpoint serves different inference compute budgets」だ。アーキテクチャは正規化 Transformer（nGPT）を backbone とし、スライディングウィンドウ注意と全注意の層を交互に配置、入力ブロック・共有再帰ブロック・出力ブロックに分かれる——「the Input and Output blocks have 8 layers each, while the Recurrent block has 20 layers」——再帰ブロックは**再学習もモデル差し替えもなしに**任意回数適用できる。
@@ -282,7 +282,7 @@ Ladybird の 10 月アップデートは数字の壁だが、正直な数字が�
 - **ソース:** GitHub Trending（デイリー）· 2,324 スター · MIT · プッシュ 2026-11-04T18:02Z
 - **タグ:** `agent-skills` `mcp` `media-generation` `open-source` `scenario`
 
-`scenario-labs/skills` は MIT ライセンスの Agent Skills 群で、「teach AI coding agents (Claude Code, Cursor, Codex, Copilot, and 70+ others) how to create production-ready content with Scenario through the Scenario MCP server」——画像、動画、音声、テクスチャ、スカイボックス、3D アセット、カスタム学習モデル。README にも MCP ドキュメントにも総数はないので、git ツリーを自分で数えた：**`SKILL.md` は 174 個**、**82 個のトップレベルディレクトリ**にまたがる——うち **80 ディレクトリ**が `scenario-*` スキルで、残りのファイルは `dcc/`（**35**）と `game-engines/`（**52**）の「expert tools」ファミリに入る。後者は MCP サーバではなく、ZBrush、Blender、Maya、Unreal、Unity、Godot、Roblox Studio のインストールを必要とする。
+`scenario-labs/skills` は MIT ライセンスの Agent Skills 群で、「teach AI coding agents (Claude Code, Cursor, Codex, Copilot, and 70+ others) how to create production-ready content with Scenario through the Scenario MCP server」——画像、動画、音声、テクスチャ、スカイボックス、3D アセット、カスタム学習モデル。README にも MCP ドキュメントにも総数はないので、git ツリーを自分で数えた：**`SKILL.md` は 174 個**——うち **167 個**が `skills/` 下の **82 ディレクトリ**（**80** ディレクトリは `scenario*`、加えて `dcc/` が **35**、`game-engines/` が **52** で、後者は MCP サーバではなく ZBrush、Blender、Maya、Unreal、Unity、Godot、Roblox Studio のインストールを必要とする「expert tools」ファミリ）——残る **7 個**は `.agents/skills/` 下にあり、このリポジトリ自身の PR ワークフローを保守している。
 
 リポジトリの description にある売りは「メディア生成」より狭い：スキルは「pick the right model, price before spending, and keep characters and brands consistent」。スキル一覧がそれを裏づける——ベンダごとのラッパー（`scenario-veo`、`scenario-seedance`、`scenario-kling`、`scenario-vidu`、`scenario-wan`、`scenario-runway`、`scenario-elevenlabs`、`scenario-meshy`、`scenario-rodin`）と、`scenario-quality-gate`、`scenario-refine-loop`、`scenario-model-comparison` のようなワークフロー系が並ぶ。
 
@@ -297,7 +297,7 @@ Ladybird の 10 月アップデートは数字の壁だが、正直な数字が�
 ## 17. セッションが未完了タスクを挟むと、コーディングエージェントは 11.5 ポイント失う
 
 - **Velocity:** ▮ steady
-- **ソース:** arXiv 2611.02017 · 投稿 2026-10-31
+- **ソース:** arXiv 2611.02017 · 投稿 2026-11-01T16:04Z
 - **タグ:** `ai-research` `agents` `benchmark` `coding` `evaluation`
 
 **Switch-SWE** は通常のリポジトリレベル基準が測らないものを測る：同じリポジトリで別の作業をした後、エージェントは半端なタスクに戻れるのか。設定は **19 の Python リポジトリから 200 の focus タスク**で、issue・プルリクエスト・レビュー履歴から再構成され、「rendered as 400 matched session specifications」として提示される——各 focus タスクは二度採点される。一度は中断のないセッションで、もう一度は「switched」セッションで、後者は「interleaves ordered stages from other unfinished tasks in the same repository, while only the final focus patch is scored」。
@@ -331,7 +331,7 @@ KEV のエントリ自体が、変わったスキーマを記録している。`
 ## 19. ToolSpace は実実行トレースからより難しい MCP 環境を合成する —— フロンティア 7 モデルが最大 38.2 ポイント下落
 
 - **Velocity:** ▮ steady
-- **ソース:** arXiv 2611.05036 · 投稿 2026-11-02
+- **ソース:** arXiv 2611.05036 · 投稿 2026-11-03T15:09Z
 - **タグ:** `ai-research` `agents` `mcp` `benchmark` `tool-use`
 
 **ToolSpace** は MCP 環境の合成順序を逆にする。既存手法はデータ中心で、データベースとシナリオを先に合成し、そこからツールとタスクを導く——論文によればその結果、インターフェースは「may not match real ones」、構成は「not grounded in execution」、タスクは「rarely span more than one environment」になる。ToolSpace は代わりに「mines data, state, and retry dependencies from adjacent calls in execution traces of real MCP services and open agent corpora, using deterministic rules rather than LLM judgment」とし、重み付きツール構成グラフを環境へクラスタリングし、状態を書き換える環境にのみデータベースを合成、それ以外は記録済みの戻り値を再生し、「replay successfully from the initial state」で通る連鎖だけを残す。

@@ -1037,6 +1037,31 @@ underlying pages — this produced a two-layer false signal in a single item.
    one Roundup over the flat product** (per-step rounding gives 9.2: wrong for 3.1, and what a
    v3.0-shaped memory produces), with **RL:W = 0.97** pinned by a selftest next to Official Fix's
    0.95. `--selftest` 48→53.
+   **A paper's date is a fourth clock, and the generator was a day early on 3 of 3** (added
+   2026-11-05 04:42): the arXiv `published` instant against the date an item quotes for the paper.
+   `claim-unit-lint.mjs --check paper` (default set) costs **one unmetered request per feed** —
+   `export.arxiv.org/api/query?id_list=<a,b,c>` answers for the whole batch — and splits
+   `paper-date-mismatch` (sev 2) / `paper-date-imprecise` (sev 1, the day is right and the instant
+   was available) / `paper-date-revision` (sev 1, the quoted date is a v2+ paper's LATER instant, so
+   it names the wrong submission) / `paper-date-unread` (sev 0). Calibrated both ways on its filing
+   file: the **pre-correction committed** 11-05 feed returns **3 findings** (2611.03998 cited
+   2026-11-01 vs `published` 2026-11-02T21:38:49Z, 2611.02017 cited 2026-10-31 vs 2026-11-01T16:04:16Z,
+   2611.05036 cited 2026-11-02 vs 2026-11-03T15:09:01Z), the corrected one **0 findings / 3 verified**.
+   Two guards: the cue must be **submission** (`submitted`/`posted`/`preprint`) and never
+   `announced`/`published`, because arXiv's announcement is a second, later clock; and a quoted
+   instant is compared at the precision it states, since the feed writes `21:38Z` for `21:38:49Z`.
+   Nothing else in the lint could see this class: the `date` arm binds publish cues to CVE records,
+   and the page readers read text, not timestamps.
+   **Three suppressions the same batch bought, each against a correct item:** a **Hugging Face file
+   link** (`…/raw/<rev>/<file>`) is now its own candidate instead of being rewritten to the model
+   card and deduped away — item 1's verbatim `"prominently displayed on the user interface"` lives in
+   the LICENSE and had been reported `quote-not-found`; **`we counted` / `neither … states a total`**
+   are `counted-by-author` disclosures (item 16's 174 `SKILL.md` files, confirmed by the tree API:
+   167 under `skills/` + 7 under `.agents/`); and a **404 confirms a sentence that asserts the name
+   does not exist** (`repo-absent-asserted`, sev 0 — item 5's "There is no `tencent/Hy4`"). The repo
+   cache gained a schema version (`REPO_CACHE_V`) for the same reason every other cache has one: a
+   v-0 entry stored a failure as a bare `error` string, so the 404 kept arriving as `unreadable`
+   from a six-hour-old entry after the code learned to read the status.
    One NVD request per feed: `cveId` accepts a comma-separated list (measured
    10-26 — seven IDs, one call, six records back, the seventh genuinely absent). Two limits are
    stated rather than hidden: it reads the **default branch** only (`release-drift.mjs --claim`
