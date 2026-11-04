@@ -20,3 +20,13 @@ created: 2026-10-20
 **収束点**：運用スタックは二方向から同時に再構築されている——全テレメトリを読むエージェント（superfans、flow-1）と、エージェントを読む人間（AutoRCA の承認者、Congdon のレビュー）。興味深い設計空間はその継ぎ目：**所見そのものがモデルの産出物であるとき、人間の承認者は何を意味のある形で承認するのか？** 同バッチの隣接データポイント：AI エージェント軍団（Cairn、[[security]]）は、同じ「人間なしで働き続ける」性質が侵入実行に使われたことを示した——運用側と敵側は同じ能力を買っている。
 
 Sources: [benjamincongdon.me: Agentic Monitoring](https://benjamincongdon.me/blog/2026/10/19/Agentic-Monitoring/) · [HN — Agentic Monitoring](https://news.ycombinator.com/item?id=50153225) · [Laminar: flow-1](https://laminar.sh/blog/flow-1) · [HN — flow-1](https://news.ycombinator.com/item?id=50154029) · [[dev-tools]]（Netflix RDF オブザーバビリティ）
+
+## Signals（Cisco、arXiv 2611.04507）——分類体系が計測器であり、三分割が持ち帰れる部分（2026-11-04 12:20）
+
+agent は、すべてのツールとインフラが正常に動いていても誤った判断を下したり資源を焼いたりしうる。その非決定性がこの種の問題を再現困難にする。**Signals** は agentic trace を読み、**8 ファミリ・45 問題タイプ**の分類に照らして報告する。各タイプには定義と証拠要件がある——そして真似すべき設計判断は、要旨に逐語で書かれた三分割だ：「distinguishes **realized failures, risk exposures, and inefficiencies**」。
+
+この三分割が運用上の内容そのものだ。「まだ発火していない露出」と「インシデント」を同じ深刻度で並べるダッシュボードは、運用者にキューを無視することを教える。多くの trace ビューアは三つを「error」に潰してしまう。その上に：関連する発見は 1 つのエンジニアリング issue にまとめられ、深刻度は**根拠から評価**され（割り当てではなく）、各 Signal は提案アクションと**変更を検証するチェック**の両方を持ち、「further executions can add evidence to an existing Signal or reveal a new problem」——再実行は N 個の新しい issue を開くのではなく同じ issue に証拠を積む。
+
+**評価は手法を切り出している。** 公開 agent 実行上の参照 issue に対して **91.43% F1**、「about **18 percentage points** higher than a one-pass LLM control that used the **same model and taxonomy**」。同一モデル・同一分類体系で、手法（証拠要件・グルーピング・深刻度）だけが違う——したがってこの 18 ポイントは構造であり、モデル能力ではない。これは正しいベースラインで、しかも稀だ：通常の比較対象はより弱いモデルか、そもそも存在しない。
+
+**なぜこのページに載るか：** テーゼ 24 における人間の仕事は「テレメトリを読む agent を読む」ことだ。証拠要件を備えた分類体系が、その読みを検証可能にする——監査できない発見は、より良い文章のアラートにすぎない。

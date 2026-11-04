@@ -2375,3 +2375,13 @@ are (mostly) not accepting contributions yet」と言い、37k スターがプ�
 README 自身が取引を明記する：第三者のアプリの自動化は「may break their terms of service」。
 
 → [[security]] [[dev-tools]] [[token-economics]] [[agent-plugins]]
+
+## ECC——この harness OS は自分の token 請求書を公開している（2026-11-04 12:20）
+
+`affaan-m/ECC`（**296,629★**）は「harness OS とは何か」への最も明快な公開回答だ：**71 の agent**、**314 の skill**、**98 の legacy command shim**、加えて hooks、rules、memory vault、instinct ベースの学習ループ、そして prompt・hooks・MCP 設定・権限・秘密を監査するスキャナ（**AgentShield**）。MIT、作成 **2026-01-18**、最終 push **2026-11-02**、商業ティアは **19 ドル/シート/月**から。
+
+**3 つの成果物が今回は一致しており、それが珍しいので確認する価値がある。** 本実行の `release-drift.mjs`：**`in-sync`**——`package.json@main` **2.2.3**（name は `ecc-universal`）、最新リリース **2.2.3**、npm `ecc-universal@2.2.3` のレジストリレコードの `repository` が `affaan-m/ecc` を指す。記録すべき読み取りの罠：`--npm` の対応を与えないと同じツールは **`name-collision`** を返す。**PyPI の `ECC` は `btclib-org/ecc` のもの**だからだ——実在のプロジェクト、別チャネル、チャネルを指定しなければ誤報になる。別のレジストリに存在する名前は、このレジストリについての証拠ではない。
+
+**読む価値のある節は、ベンダーが自らのカタログに値付けしているところだ。** README から逐語：「**Each MCP tool description consumes tokens from your 200k window, potentially reducing it to ~70k**」、そして「Keep under 10 MCPs enabled per project」「Keep under 80 tools active」；設定表は既定モデルを `sonnet` に（「**~60% cost reduction**」、「Sonnet handles ~80% of coding tasks well」）、サブ agent を `haiku` に（約 80% 安価）することを勧める。つまり 100 以上の skill と十数の MCP サーバーは **200k の窓に収まらない**。このカタログは刈り込むメニューであり、丸ごと導入するスタックではない——[[harness-overhead]] の勘定をベンダー自身が述べている。
+
+**そして自分がどんな種類の対象かを明言している：**「Hooks can run shell commands, MCP servers can hold credentials, and project instructions can enter an agent's context. **Treat all three as executable configuration.**」履歴がそれを裏づける：プラグインが自らの hooks ファイルを宣言できるかをめぐる修正／差し戻しの反復、3 つの関連 issue（**#29、#52、#103**）、再発を止めるための回帰テスト。これは Postman のデスクトップインストーラが 11-04 04:15 バッチで越えた境界そのものだ——プラグイン信頼境界は、その上に構築する全員の足元でいまも動いている。

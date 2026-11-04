@@ -888,3 +888,31 @@ README 公布了自己偏薄的样本：**99.95%** 的代码改动可稳健地 d
 只有**不到十个**受判测试用例——一个把分母也印出来的百分比，正是有用的形状。
 
 → [[dev-tools]] [[ai-impact]] [[disclosure-lag]]
+
+## C++26 的 DIS 未通过，而一手来源是一位代表的博客（2026-11-04 12:20）
+
+**2026 年 10 月 23 日**，经过十二周投票，ISO 各国国家体对 C++26 国际标准草案的表决未获通过。在唯一可得的一手来源中逐字核实：「a two-thirds majority is required. **This majority was not achieved.**」各国意见指向 **Contracts**——2019 年在科隆被纳入 C++20，又在同一次会议被移出 C++20，研究四年后经 EWG 与 2026 年 3 月的 WG21 全会以多数票带进 C++26。
+
+关于**证据**的三件事，比结果本身更要紧：
+
+- **计数规则不公开。** ISO 规则使某些投票明细成为内部信息，所以这段叙述是一位代表的解读，而非已公布的计票——作者自己这么说，并说明他代表德国的票。
+- **检索是带保留的，而保留必须和数字一起走。** 「When I searched the ISO system, I could only find one other DIS that was not approved: ISO/IEC DIS 26926 C++/CLI Language Specification dated **August 11, 2006**」——外加「It's possible that my search privileges aren't sufficient to view everything」。所以「C++ 历史上首次被否决」是**就其检索所及**为真，不是一次审计。
+- **四条前路都需要同一个多数。** 修订草案再投一次 DIS、退回委员会草案阶段、作为技术规范（TS）发布、或取消——每一条都需要 WG21 的多数，而这个工作组已经两次把这个草案推向前。下次会议 **11 月 16 日**；它是否还叫 C++26 是小问题。
+
+**为什么它属于这里：** DIS 被否是 ISO 流程中唯一能拦下委员会已批准特性的杠杆，而爆炸半径是工具链——自三月以来所有针对 C++26 特性构建的编译器厂商、库与培训课程，现在都没有日期。它也是一次对标准底层信任模型的公开检视：作者的论点不是 Contracts 好，而是一个在国家体层面落败的少数派，拒绝接受一个它已在委员会内部输过两次的失败。
+
+## Safari 27.3 会改造作者从未设计过的页面——而退出开关是一个声明
+
+WebKit 的 **Adaptive Dark Mode**（Safari 27.3 beta）是第一个会改变“作者没有设计过”的网站渲染外观的浏览器转换。它要补的缺口，逐字为：「**Almost 40% of web page loads are from users in dark mode, and yet only 10% of page loads support it.**」
+
+其行为有一个重要的顺序：声明了 `color-scheme: light dark`（通过 `<meta name="color-scheme">` 或 CSS 属性）的页面「does not change a thing」；已经是深色的页面不动；其余页面被分析为主导明或暗，若是明则转换。所以**这个声明就是最便宜的退出开关**，而多数网站本来就有理由加上它。
+
+实现细节才是站点所有者的运营部分：用**颜色矩阵**在**保持色相**的前提下降亮度反转，目标是 **WCAG 4.5:1** 对比度；渐变会被转换；多数图片不动，但 **SVG** 图标与标志会被检查并在对比度不足时重新着色，简单的黑白位图标志则按像素直方图反相；`mask` 与 `mix-blend-mode` 在受影响元素上被关闭；而 **`<canvas>` 内容保持不变**，「since canvases contain a wide range of content that's hard to predict」。整件事跑在引擎内部，这正是它能做到的原因。
+
+**教训是：一个转换层会把潜在的邋遢变成可见的产物**——用 SVG 而不是位图标志、用 CSS 渐变而不是平铺背景图、用透明内容图。任何引擎层面无法推理的东西（canvas）只是保持原样，所以出问题的页面，是颜色和内容说着两种语言的那些。
+
+## 开源硬件，两个许可证：认证与代码仓库是两句不同的话
+
+`Stringman`（Neufangled Robotics）是一台 **795 美元**的房间级缆索机器人——一个 **638 g** 的夹爪由室内四角的四根线吊起，而不是串联机械臂，论据是「price is basically actuator count」。实测主张：7×7×3 m 房间、**28 N** 线张力上限下，靠近地面可举 **2.2 kg**、平均 **1.9 kg**，对照官网自己脚注的 **0.32 kg**（同样 DM-H6215 执行器的 0.75 m 串联臂）；移动约 **0.4 m/s**；适用对角线 3–10 m、高 2.3–4 m 的房间；PET-GF 与 PLA 3D 打印；计算刻意外置——你的 PC 当控制器，夹爪里一块 Pi Zero 2W、锚点处 Pi 3A+ 板，5 GHz Wi-Fi 用二维码配网。
+
+它通过了 **OSHWA 认证（US002788）**，公布 CAD、PCB 与控制软件，并且「can run air gapped on your local Wi-Fi network: the UI is served locally, AI models run on your own hardware, and no data ever leaves your network」。**许可证按仓库不一致**：固件（`nhnifong/cranebot3-firmware`）是 **Apache-2.0**；PCB 仓库（`nhnifong/stringman-pcbs`）在 GitHub 上显示**无许可证**。所以一项 OSHWA 认证、一个按仓库的许可证字段、一句“已公开”是关于同一个产品的三句独立陈述——与 `git-ai` 的 `NOASSERTION`、Atria Dawn 只在徽章里写 MIT 是同一种“许可证是三个产物”的形状，这次出现在硬件里。

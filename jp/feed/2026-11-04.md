@@ -364,7 +364,7 @@ Elo は関数型の式言語を no-code ツール向けに Ruby、JavaScript、P
 - **ソース:** andreasfertig.com · 2026-11-03 · HN 86 ポイント
 - **タグ:** `cpp` `iso` `standards` `contracts` `dev-tools`
 
-**2026 年 10 月 23 日**、12 週間の投票期間を経て、ISO 各国際団体による C++26 国際標準草案（DIS）の表决は承認されなかった。ドイツ代表団の一員として書く Andreas Fertig は算数を率直に示す。「a two-thirds majority is required. This majority was not achieved」——そして各国のコメントは **Contracts** を指す。この機能は 2019 年のケルンで C++20 に入り、同じ会合で C++20 から外れ、その後 4 年間の研究会を経て EWG と 2026 年 3 月の WG21 投票で C++26 に載ったものだ。彼は ISO システムを検索し、承認されなかった DIS がもう一つだけ——2006 年の C++/CLI 言語仕様 ISO/IEC DIS 26926——しか見つからず、そのプロジェクトは中止されたと記す。
+**2026 年 10 月 23 日**、12 週間の投票期間を経て、ISO 各国際団体による C++26 国際標準草案（DIS）の表决は承認されなかった。ドイツ代表団の一員として書く Andreas Fertig は算数を率直に示す。「a two-thirds majority is required. This majority was not achieved」——そして各国のコメントは **Contracts** を指す。この機能は 2019 年のケルンで C++20 に入り、同じ会合で C++20 から外れ、その後 4 年間の研究会を経て EWG と 2026 年 3 月の WG21 投票で C++26 に載ったものだ。彼は ISO システムを検索し、承認されなかった DIS がもう一つだけ——2006 年の C++/CLI 言語仕様 ISO/IEC DIS 26926——しか見つからず、そのプロジェクトは中止されたと記す。ただし自身の ISO 検索権限では全てを見られない可能性があるとも添えており、この数は彼の検索の結果であって監査ではない。
 
 面白いのは手続きであり、著者は何が分かるかの限界も明示する。ISO の規則により票の内訳は内部情報であるため、これは代表の読みであって公開された集計ではない。道は 4 つ——改訂稿で新たな DIS 投票を行う、委員会草案段階へ戻す、技術仕様（TS）として発行する、プロジェクトを中止する——であり、**いずれも WG21 内の多数を必要とする**。この作業部会はすでにこの草案を 2 度前に進めている。次の会合は **11 月 16 日**で、規格名が C++26 のままでいられるかは小さな問題だと彼は明言する。
 
@@ -382,7 +382,7 @@ Elo は関数型の式言語を no-code ツール向けに Ruby、JavaScript、P
 
 `disclosure@vulncheck.com` による 3 件のレコードは、同じ秒に公開され、いずれも `Deferred`、そして形が同じだ。**局レベルの権限**——管理者ではない——だけでホストの root に届く。`CVE-2026-121428` はリモートコード実行で、改行を含むタイムゾーンをプロフィール編集 API に送ると AzuraCast が再生成する **Supervisor** 設定に混入し、新しいプログラムを定義して「executes OS commands as root when configuration regenerates」（CVSS 4.0 **8.7**、3.1 **8.8**）。`CVE-2026-121429` は `stereo_tool_configuration_path` または `stereo_tool_license_key` にシェルのメタ文字を注入し、局の再起動時に `/bin/sh` 経由で実行される（**8.7** / **8.8**）。`CVE-2026-121427` は権限境界のバグの最も純粋な形だ。「Manage station broadcasting」権限を持たない利用者に対して `frontend_config.custom_config` が除去されず、保存された JSON がそのまま `key=value` 行として Shoutcast の `sc_serv.conf` に書かれるため、局管理者が `adminpassword`、`password`、`portbase` を上書きできる（**8.7** / **7.5**）。
 
-修正情報では、レコードは成果物より役に立たない。3 件とも影響範囲を「through 0.23.8」としており、これでは **0.23.9** が安全に見える——しかし 0.23.9（10 月 21 日）は自身のリリースノートに「solely intended to update our distributed Docker containers to an updated version of PHP」と書かれている。実際の修正は **0.24.0**（10 月 25 日）にあり、しかもラベル無しで changelog の「コード品質/技術的変更」節に並んでいる。「Improved the security around StereoTool invocation in Liquidsoap」「Improved the security of environment variables in Supervisor process configuration」、そして「Prevented station managers without the 'Manage Broadcasting' permission from setting custom Icecast, RSAS or Shoutcast configuration」。その changelog に CVE 番号は一つも無い。
+修正情報では、レコードは成果物より役に立たない。3 件とも影響範囲を「through 0.23.8」としており、これでは **0.23.9** が安全に見える——しかし 0.23.9（10 月 21 日）は自身のリリースノートに「solely intended to update our distributed Docker containers to an updated version of PHP」と書かれている。実際の修正は **0.24.0**（10 月 25 日）にあり、しかもラベル無しで changelog の「コード品質/技術的変更」節に並んでいる。「Improved the security around StereoTool invocation in Liquidsoap」「Improved the security of environment variables in Supervisor process configuration」、そして「Prevented station managers without the 'Manage Broadcasting' permission from setting custom Icecast, RSAS or Shoutcast configuration」。その節に CVE 番号は一つも無い——changelog 全体で唯一現れる `CVE-` 文字列は、数年前のリリースにある `CVE-2023-2191` だ。
 
 **なぜ重要か:** 3 件のうち 2 件は改行そのものが脆弱性だ——欄はテキストを受け取り、テンプレートはテキストを設定ファイルに書き、設定ファイルはプログラムである。もう一つの教訓はマルチテナントソフトのバージョン範囲についてだ。レコードの上限は**バージョン番号**であり、その一つ上の版はベースイメージの更新にすぎない。だから「0.23.x の最新に当てた」人は、修正も得ておらず、自分に何か足りないと疑う理由も持っていない。
 
@@ -414,7 +414,7 @@ Figma の説明は教師あり微調整から始まり、真剣に受け止め�
 
 3 件のレコード、1 つのパーサ、同じ影響文を 3 つの異なる機構で繰り返したもの。「that validate as an allowed domain but are delivered to an attacker-controlled domain, bypassing recipient allow lists and disclosing message content」ということになる。`CVE-2026-121424` はネストした RFC 5322 コメントを**最初の**閉じ括弧で終わらせるため、コメント末尾に隠したアドレスも配送される。`CVE-2026-121425` は RFC 5322 の**グループ**を、引用符付き表示名の内側にあるセミコロンで終わらせる。`CVE-2026-121426` は **angle-addr** を、引用符付きローカル部・コメント・ドメインリテラルの内側の `>` で終わらせる。3 件とも VulnCheck による採点で CVSS 4.0 **8.3**、3.1 **6.5**、NVD の状態はすべて `Awaiting Analysis`——つまりどちらの数値も CNA のものだ。
 
-影響範囲は運用担当が二度読むべき部分である。**3.0.0 から 10.1.4 の手前まで**。3.0.0 は **2017-01-31** に npm へ公開され、10.1.3 は **2026-10-18 10:40Z**、10.1.4 は **11:57Z**——77 分後だ。そのリリースノートには 4 件の addressparser 修正があり、その一つは最も外側の閉じ括弧でのみコメントを終えるもので、最初のレコードの機構に対応する。閉じ切れなかった注意点が一つある。さらに 56 分後の 10.1.6 が「addressparser: read groups in the same pass as the rest of the list」を出しており、これは `CVE-2026-121425` が述べるグループ経路そのものの書き直しだが、ノートは 10.1.4 がそのケースを既に閉じたかを述べていない。`npm latest` は現在 **10.3.1**（2026-10-29）なので、実務的な助言は明白だ。
+影響範囲は運用担当が二度読むべき部分である。**3.0.0 から 10.1.4 の手前まで**。3.0.0 は **2017-01-31** に npm へ公開され、10.1.3 は **2026-10-18T10:40:44Z** に npm へ、10.1.4 は **11:59:56Z**——**79 分**後だ。そのリリースノートには 4 件の addressparser 修正があり、その一つは最も外側の閉じ括弧でのみコメントを終えるもので、最初のレコードの機構に対応する。閉じ切れなかった注意点が一つある。さらに 56 分後の 10.1.6 が「addressparser: read groups in the same pass as the rest of the list」を出しており、これは `CVE-2026-121425` が述べるグループ経路そのものの書き直しだが、ノートは 10.1.4 がそのケースを既に閉じたかを述べていない。`npm latest` は現在 **10.3.1**（2026-10-29）なので、実務的な助言は明白だ。
 
 **なぜ重要か:** メールはパーサの不一致がそのままセキュリティ境界になる場所だ。上位層——許可リスト、別名の書き換え、テナントフィルタ——はパーサが出力した文字列を読み、ここでのどの機構も「アドレスがどこから始まりどこで終わるか」について両者を食い違わせる。9 年に及ぶ範囲は、「新しい 10.x を使っている」が 10.1.4 以降でない限り答えにならないことも意味する。
 

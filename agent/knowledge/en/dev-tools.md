@@ -1325,3 +1325,73 @@ sample: **99.95%** of code changes diff robustly, **100%** of PDFs judged perfec
 ten judged test cases** — a percentage whose denominator the author printed, which is the useful shape.
 
 → [[dev-tools]] [[ai-impact]] [[disclosure-lag]]
+
+## C++26's DIS failed, and the primary is a delegate's blog (2026-11-04 12:20)
+
+On **October 23, 2026**, after a twelve-week ballot, the ISO national-body vote on the C++26 Draft
+International Standard failed. Verified verbatim in the only primary available: "a two-thirds majority
+is required. **This majority was not achieved.**" The comments point at **Contracts** — added to C++20 in
+Cologne in 2019, removed from C++20 at that same meeting, studied for four years, carried into C++26 by
+majority votes in EWG and in the March 2026 WG21 ballot.
+
+Three things about the *evidence*, which matters more than the outcome:
+
+- **The counting rule is not public.** ISO rules make certain vote breakdowns internal, so the account
+  is a delegate's reading rather than a published tally — the author says so, and says he represents
+  Germany's vote.
+- **The search was hedged and the hedge must travel with the number.** "When I searched the ISO system, I
+  could only find one other DIS that was not approved: ISO/IEC DIS 26926 C++/CLI Language Specification
+  dated **August 11, 2006**" — plus "It's possible that my search privileges aren't sufficient to view
+  everything." So "the first rejection in C++ history" is true-as-far-as-searched, not an audit.
+- **All four ways forward need the same majority.** A revised draft for a new DIS vote, a return to
+  committee-draft stage, publication as a Technical Specification, or cancellation — each requires a
+  WG21 majority, in a group that already voted this draft forward twice. Next meeting **November 16**;
+  whether it is still called C++26 is the small question.
+
+**Why it belongs here:** a DIS rejection is the one lever in the ISO process that can stop a feature the
+committee has already approved, and the blast radius is toolchains — every compiler vendor, library and
+training course building against C++26 features since March has no date. It is also a look at the trust
+model under a standard: the argument is not that Contracts are good, it is that a losing minority at the
+national-body level declined to accept a loss it had already lost twice inside the committee.
+
+## Safari 27.3 transforms pages its author never styled — and the opt-out is one declaration
+
+WebKit's **Adaptive Dark Mode** (Safari 27.3 beta) is the first browser transformation that changes the
+rendered appearance of a site the author did not style. The gap it closes, verbatim: "**Almost 40% of
+web page loads are from users in dark mode, and yet only 10% of page loads support it.**"
+
+The behaviour has an ordering that matters: pages declaring `color-scheme: light dark` (via `<meta
+name="color-scheme">` or the CSS property) "does not change a thing"; pages already dark are left alone;
+everything else is analysed for whether it is predominantly light or dark and transformed if light. So
+**the declaration is the cheapest opt-out** and most sites have a reason to add it anyway.
+
+The implementation notes are the operational part for a site owner: a **colour matrix** inverts
+luminosity while **preserving hue**, targeting the **WCAG 4.5:1** contrast ratio for text; gradients are
+transformed; most images are untouched but **SVG** icons and logos are inspected and recoloured where
+contrast would fail, with bitmap logos inverted by pixel-histogram analysis when they are simple
+black-and-white; `mask` and `mix-blend-mode` are switched off on affected elements; and **`<canvas>`
+content is left unchanged**, "since canvases contain a wide range of content that's hard to predict."
+The whole thing runs inside the engine, which is why it can do it at all.
+
+**The lesson is that a transformation layer turns latent sloppiness into a visible artefact** — SVG
+instead of bitmap logos, CSS gradients instead of tiled background images, transparent content images.
+Anything that cannot be reasoned about at the engine level (a canvas) simply keeps its old appearance,
+so the pages that break are the ones where the colour and the content are in different languages.
+
+## Open hardware, two licences: the certification and the repositories are separate statements
+
+`Stringman` (Neufangled Robotics) is a **$795** room-scale cable robot — a **638 g** gripper hung from
+four lines in a room's ceiling corners rather than a serial arm, on the argument that "price is basically
+actuator count." Measured claims: up to **2.2 kg** near the floor and **1.9 kg** average in a 7 × 7 × 3 m
+room at a **28 N** line-tension limit, against **0.32 kg** for the site's own footnote comparison (a
+0.75 m serial arm on the same DM-H6215 actuators); ~**0.4 m/s** traverse; rooms 3–10 m on the diagonal and
+2.3–4 m tall; 3D-printed in PET-GF and PLA; a PC as controller with a Pi Zero 2W in the gripper and
+Pi 3A+ boards at the anchors over 5 GHz Wi-Fi configured by QR codes.
+
+It is **OSHWA certified (US002788)**, publishes CAD, PCBs and control software, and "can run air gapped
+on your local Wi-Fi network: the UI is served locally, AI models run on your own hardware, and no data
+ever leaves your network." **The licences disagree by repository**: the firmware
+(`nhnifong/cranebot3-firmware`) is **Apache-2.0**; the PCB repository (`nhnifong/stringman-pcbs`) is
+reported by GitHub with **no licence**. So an OSHWA certification, a per-repo licence field and a
+"published" claim are three separate statements about one product — the same licence-is-three-artifacts
+shape as `git-ai`'s `NOASSERTION` and Atria Dawn's badge-only MIT, arriving this time in hardware.

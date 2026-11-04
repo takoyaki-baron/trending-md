@@ -13978,5 +13978,32 @@
     "en": "Identity/enterprise-SaaS vendor blog and security bulletins — the vendor's own statement of what happened, useful mainly for the gaps between its tiers (a public notice, a customer notification, and an executive comment can say three different things). Curation check 2026-11-03: its 9.4 for CVE-2025-11969 matches NVD’s vector `PR:N` on the record.",
     "zh": "身份/企业 SaaS 厂商的博客与安全公告——厂商自己对事件的陈述，主要价值在于它各层级之间的落差（公开公告、客户通知与高管评论可能说的是三件事）。",
     "jp": "アイデンティティ／エンタープライズ SaaS ベンダーのブログとセキュリティ公告——起きたことについてのベンダー自身の陈述で、主な価値は階層間のずれ（公開公告・顧客通知・経営者のコメントが別々のことを言いうる）にある。"
+  },
+  "wordpress.org": {
+    "cat": "vendor",
+    "cred": "high",
+    "cv": 1,
+    "density": "high",
+    "en": "WordPress.org — the project's own release and security notes for core. First-party, so cred describes the project's editorial standing, not a verification: a release note names a fix without saying which CVE it closed, which is why every item here cross-reads it against the CNA record. Curation cross-check (2026-11-04): the 7.1.4 note's upgrade-process RCE claim was confirmed from outside the vendor by Wordfence's CNA record CVE-2026-119977, which names the same mechanism and the same fix version — separately authored, since the vendor credits reporter Umut Bayram.",
+    "zh": "WordPress.org——核心自身的发布与安全说明。属第一方来源，cred 描述的是项目的编辑公信力而非核验结论：发布说明会提到某处修复却不说是哪个 CVE，因此本 feed 每次都把它与 CNA 记录对照阅读。 策展交叉核验（2026-11-04）：7.1.4 说明中「升级流程可导致 RCE」的主张，由 Wordfence 的 CNA 记录 CVE-2026-119977 从厂商之外独立确认——同一机制、同一修复版本；厂商致谢的是报告者 Umut Bayram，两份文件由不同方撰写。",
+    "jp": "WordPress.org — コア自身のリリース／セキュリティノート。一次情報源であるため cred は編集上の信頼性を指し、検証結果ではない。リリースノートは修正に触れてもどの CVE を閉じたかは書かないため、本 feed は常に CNA レコードと突き合わせる。 キュレーション時のクロスチェック（2026-11-04）：7.1.4 のアップグレード過程 RCE という主張は、Wordfence の CNA レコード CVE-2026-119977 がベンダー外から同じ機構・同じ修正版として確認している。ベンダーは報告者 Umut Bayram に謝辞を記しており、両文書は別の主体が書いたものだ。"
+  },
+  "figma.com": {
+    "cat": "vendor",
+    "cred": "med",
+    "cv": 0,
+    "density": "med",
+    "en": "Figma's engineering blog. Post-training and agent posts carry real methodology (SFT on native file format, deterministic validators plus visual judges, expert calibration) but every product number — 20% faster, 62% head-to-head, 33% higher ratings, 60% fewer undos — is measured against Figma's own previous agent, and the single model-vs-model chart is one pair whose values live only in the image alt text. Not independently validated; do not quote as a benchmark win.",
+    "zh": "Figma 的工程博客。后训练与 agent 相关文章给出了真实的方法论（以原生文件格式做 SFT、确定性校验器加视觉评审、资深设计师校准），但所有产品数字——快 20%、正面 62%、评分高 33%、撤销少 60%——都是相对 Figma 自家上一代 agent 测得的，唯一的模型对比图只有一对数据，且数值只存在于图片 alt 文本里。未经独立核验，不要当作基准胜出来引用。",
+    "jp": "Figma のエンジニアリングブログ。後学習と agent の記事は実際の手法（ネイティブファイル形式での SFT、決定論的バリデータと視覚評価、熟練デザイナーによる校正）を示すが、製品の数字——20% 高速、62% で勝敗、評価 33% 高、取り消し 60% 減——はいずれも Figma 自身の前世代 agent に対する測定であり、モデル同士の比較図は 1 組だけで、値は画像の alt テキストにしか無い。独立検証は無く、ベンチマークの勝利として引用すべきでない。"
+  },
+  "neufangled.com": {
+    "cat": "vendor",
+    "cred": "med",
+    "cv": 1,
+    "density": "med",
+    "en": "Neufangled Robotics' product page for Stringman, a room-scale cable robot. Claims are arithmetic (4 actuators, 28 N tension limit, 1.9 kg average payload) rather than demo-only, and the design is published — but the site is the seller's own page, so prices and payload figures are first-party. The PCB repo it links carries no licence, which the page does not mention. Curation cross-check (2026-11-04): the load-bearing claim (open source, OSHWA certified) was checked against OSHWA's own certification record US002788 and the published firmware (Apache-2.0) and PCB repos. cred stays med — a first-party page's standing does not rise with a verified fact.",
+    "zh": "Neufangled Robotics 的 Stringman 产品页——一台房间级缆索机器人。其主张是可算的（4 个执行器、28 N 张力上限、平均 1.9 kg 载荷）而非只有演示，设计也确实公开——但页面由卖方自己维护，价格与载荷均为第一方数据。它链接的 PCB 仓库没有许可证，页面未提及这一点。 策展交叉核验（2026-11-04）：其关键主张（开源、OSHWA 认证）已对照 OSHWA 自身的认证记录 US002788，以及公开的固件（Apache-2.0）与 PCB 仓库核实。cred 仍为 med——第一方页面的公信力不会因为一个事实被核实而上升。",
+    "jp": "Neufangled Robotics の Stringman 製品ページ。部屋規模ケーブルロボットで、主張はデモだけでなく算数（アクチュエータ 4 個、張力上限 28 N、平均ペイロード 1.9 kg）であり設計も公開されている。ただし売り手自身のページであるため価格とペイロードは一次情報。リンク先の PCB リポジトリにライセンスが無い点はページに書かれていない。 キュレーション時のクロスチェック（2026-11-04）：中核の主張（オープンソース、OSHWA 認証）は OSHWA 自身の認証記録 US002788 と、公開されたファームウェア（Apache-2.0）・PCB リポジトリで確認した。cred は med のまま——一次情報ページの信頼性は事実の確認では上がらない。"
   }
 }

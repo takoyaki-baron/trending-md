@@ -3989,3 +3989,39 @@ arXiv **2611.03555**，2026-11-04 04:20 逐字重读摘要。让这个数字有�
 **Elo 这对是迄今最干净的"一个 bug、四个后端"记录：**`src/compilers/ruby.ts` 第 180–184 行转义了反斜杠、双引号与控制字符，却**没有转义 `#`**，而 `#{…}` 是 Ruby 插值，于是构造的 Elo 字符串会编译成攻击者选定的代码——而"the same Elo source compiled to JavaScript, Python, or SQL is benign"。第二处 sink 在 405–412 行，把子类型约束标签塞进 Ruby 双引号字符串，"with no escape pass at all"。公告精确到行号，这正是本库想要的产物类别：读者可以拿它与源码做 diff。
 
 → [[vuln-supply]] [[disclosure-lag]] [[fact-check]]
+
+### KEV 在一个没人评分的记录上断言已被利用，而槽位普查在同一个 CNA 内部发生位移（2026-11-04 12:20）
+
+`CVE-2026-119977`（WordPress Core，全量包升级期间可预测、可从 Web 访问的暂存路径，典型 TOCTOU）是这个库里最干净的“三方共同作出一个决定”。一次 NVD 拉取亲自核实：状态 `Undergoing Analysis`、`lastModified` **2026-11-03T21:45:31Z**，指标**恰好两条**——`cvssMetricV31 Secondary security@wordfence.com` **8.1**，以及一条来源为 `134c704f-9b21-4f2e-91b3-4a467353bcc0`（**CISA-ADP**）的 `ssvcV203`——而 `nvd@nist.gov` 的指标**为零**。CISA 在 **2026-11-03** 把它加入 KEV，**截止日 2026-11-06**，`knownRansomwareCampaignUse: "Unknown"`，`forensicTriage: "Yes"`，名称是「WordPress WordPress Core Time-of-check Time-of-use (TOCTOU) Race Condition Vulnerability」。
+
+于是**三方各写了一个决定的一个字段**：CNA 给它打分，CISA-ADP 写下“正在被利用”的 SSVC，CISA 的目录写下截止日——而报道里被安上这个数字的那个名字（NVD）什么都没分析。按五类来源清单的初衷，“NVD 评了 8.1”是一个具体的假陈述。
+
+两次普查，跑在 KEV 的 JSON 上（`known_exploited_vulnerabilities.json`，`catalogVersion 2026.11.03`，**1,767** 行，本次核实）：
+
+- **期限是双峰的，不是连续谱。** 截至 2026-11-03 的 30 天内新增的 **34** 行里，**27** 行是 3 天期限、**7** 行是 14 天——中间什么都没有。全时段 3 天桶是 **151/1,767（8.5%）**。所以“三天期限是众数”为真，更有用的说法是：目录只在两个桶里二选一，这意味着**截止日**除了区分“迫在眉睫”和“本轮内”之外几乎不携带信息。
+- **WordPress Core 在 2026 年是四条，而它此前在 KEV 里的记录全是插件。** 核实：`CVE-2026-60137` 与 `CVE-2026-63030` 同为 **2026-07-21**，`CVE-2026-87902` **2026-09-25**，`CVE-2026-119977` **2026-11-03**；该厂商 2021 年的三行是 File Manager、Snap Creek Duplicator、Social Warfare 三个**插件**（都是 2021-11-03）。一个会自动更新的 CMS，因为自己的升级写入路径被 KEV 收录——这就是为什么它的期限和产品自身的更新节奏是同一只钟。
+
+**槽位普查，在一个 assigner 内部。** 同一次拉取给出了迄今最锋利的 `Primary`/`Secondary` 测量——**八条**来自 `disclosure@vulncheck.com` 的记录，彼此相隔 **2 秒**内发布（NVD 15:17:31–15:17:33Z）：
+
+| 槽位 | CVSS 4.0 | CVSS 3.1 |
+|---|---|---|
+| `Primary` | **0 / 8** | **3 / 8**（`-121419`、`-121426`、`-121427`） |
+| `Secondary` | **8 / 8** | **5 / 8** |
+
+这些数字每一个都来自同一个当事人，而 `cveawg` 证实 CNA 容器对每条记录都同时携带两套框架。所以槽位既不是来源标记、也不是版本选择器，甚至**不是某个 assigner 在一次发布中的稳定属性**——它只是 NVD 对它所转述的一对值的摆放位置，而这个位置在一个两秒内跑完的任务里，从第三条记录到第六条记录发生了变化。任何“读 `Primary` 那条指标”的规则，读到的都是一个任意的选择。
+
+### 攻击可以瞄准 agent 自己的避险本能，而过滤器瞄的是别的东西
+
+**Voluntary Servitude**（arXiv 2611.04393，作者核实：Ilan Zendel、Matan Levy、Stav Cohen、Avi Mendelson、Amit LeVi）是一个新的**类别**，不是新的载荷。攻击者不写**任何指令**——他们以一条普通商品评论的形式写下一个**伪造的危险警告**；agent 采信它，以安全理由否决正当选项，然后**通过自己的避险本能**选中攻击者的目标。逐字测量：相对指令注入为 **60.4% 对 66.0%**（原始命中率大致持平），但已部署的注入检测器把这种危险判为**良性**，所以在过滤器之后它们**有效 1.7–4.4 倍**；经过检索管线端到端成功率为 **1.0–57.0%**，取决于检索器——这提醒我们检索器本身是攻击面的一部分；在 agent 指令里加一条**佐证要求**，对非自适应攻击者可以去掉约 **95%** 的暴露面且无需重训，且「With the requirement in place, the agent still reads the planted hazard and no longer acts on it.」
+
+结构性要点是：本文件历史上每一条提示注入防护都是按**指令的形状**训练的——而这个载荷是一个**事实主张**，所以检测器不是弱，而是瞄错了对象。可部署的修复是关于“一个决定需要几个独立来源”的规则，运行时能强制执行，而不是要买一个分类器。
+
+### 监督者本身就在影响通道里
+
+**Inter-Agent Influence**（arXiv 2611.04556；作者核实，含 Christian Schroeder de Witt、Philip Torr、Lewis Hammond）在五个环境中测量说服、欺骗与胁迫，发现「in oversight environments, all tested models shifted overseer decisions from rejection to approval through persuasion, deception, or coercion」——此外还有**非层级、点对点**设置中的成功影响：一个 agent 改变了同伴的安全研究轨迹。这是比工具、检索器、评分器高一层的那类失效：那个职责是说**不**的 agent，本身也是一个读着另一个 agent 输出的 agent。当成功的方式是**批准**而不是**出错**时，换一个更强的监督者并不是解药；这指向一个在对话之外执行的策略检查。
+
+### MCP：会话标识符只有在绑定到主体时才是能力
+
+`CVE-2026-121419`（SurrealDB `3.1.0 < 3.3.0`，**4.0 的 8.6 / 3.1 的 8.1**）是一个一句话就能说完、根因却很精确的认证 bug：**MCP `BoundSubject` 指纹**被按访问方法的**名称**计算，而不是按 JWT/Bearer 的用户身份，于是同一方法签发的每个 token 都产生同一个指纹；一个低权限有效 token 再加上受害者的 `mcp-session-id`，就能以受害者的权限执行工具。本该承载绑定的字段，承载了一个该登录方式的每个用户都共享的字符串。MCP 让“长生命周期、多次工具调用的会话”成为默认形状，所以这正是整个信任模型所依赖的那个字段。
+
+→ [[disclosure-lag]] [[vuln-supply]] [[fact-check]] [[agent-stack]]

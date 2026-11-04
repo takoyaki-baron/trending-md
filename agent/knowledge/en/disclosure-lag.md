@@ -2331,3 +2331,148 @@ the inverse of the OpenWrt/EDK2 shape (source fixed, artifact not built); here t
 ahead of the distro's own.
 
 → [[security]] [[vuln-supply]] [[fact-check]]
+
+### The bound is named and the fix is not: AzuraCast's ceiling-plus-one is an image bump (2026-11-04 12:20 batch)
+
+Three records from `disclosure@vulncheck.com`, published **2026-11-03T15:17:33Z** inside one second
+(`CVE-2026-121427`, `-121428`, `-121429`), all `Deferred`, all the same shape — and the shape is the
+one CLAUDE.md's `--bound-census` paragraph describes, met live:
+
+```
+"defaultStatus": "unaffected",
+"versions": [{ "version": "0", "status": "affected",
+               "versionType": "semver", "lessThanOrEqual": "0.23.8" }]
+```
+
+No `unaffected` entry, no `lessThan`, no `changes[]`, no `packageURL` — an **inclusive ceiling with no
+named fix**. What makes this one worth keeping is that the version immediately above the ceiling is a
+release whose own notes say it is not the fix:
+
+> 0.23.9 (Oct 21, 2026): "This release is solely intended to update our distributed Docker containers
+> to an updated version of PHP that patches recently released high-severity security vulnerabilities.
+> It does not introduce any new features nor require any additional steps to migrate."
+
+That is a **base-image bump running ahead of the records that were filed five days later**, so
+"0.23.x, patched" is a sentence with no fix behind it and 0.23.9 is the version that looks like the
+answer. The real fixes are in **0.24.0 (Oct 25, 2026)**, three lines in *Code Quality/Technical
+Changes* that name no CVE and no CVE-shaped word:
+
+> "Improved the security of environment variables in Supervisor process configuration."
+> "Improved the security around StereoTool invocation in Liquidsoap."
+> "Prevented station managers without the 'Manage Broadcasting' permission from setting custom
+> Icecast, RSAS or Shoutcast configuration."
+
+Verified first-hand in `AzuraCast/AzuraCast`'s `CHANGELOG.md` (187,974 bytes) — all three verbatim, and
+the **only** `CVE-` string anywhere in that file is `CVE-2023-2191` in a release-years-old entry, so
+"no CVE in the changelog" is true of the 0.24.0 section and false of the file. The third place a
+record can name a fix is its own `references[]`/advisory page; here the project's changelog is the
+only document that states it, and it states it in the vocabulary of a quality-of-life release.
+
+**The reuse:** a version ceiling plus `defaultStatus: unaffected` plus no `unaffected` entry means the
+record is telling you where the affected set **ends**, not where the safe set **begins**, and the
+registry/CHANGELOG pair is what supplies the second half. Ask whether the release one above the ceiling
+could plausibly carry the fix (same project, same subsystem) before treating it as the remedy.
+
+### Nodemailer names its fix, and the next release rewrites the same parser path
+
+`CVE-2026-121424`, `-121425`, `-121426` are the counter-shape: `{version "3.0.0", lessThan "10.1.4",
+affected}` plus an explicit `{version "10.1.4", status "unaffected"}`, all `Awaiting Analysis`, all
+**8.3 on CVSS 4.0 / 6.5 on 3.1** from VulnCheck. So the bound is named — and the residual question is
+the one the notes cannot answer: 10.1.6, **55 minutes after 10.1.5**, ships "addressparser: read groups
+in the same pass as the rest of the list", a rewrite of exactly the group path `CVE-2026-121425`
+describes, and nothing says whether 10.1.4 already closed that case.
+
+The clock, measured on one registry rather than two: npm `3.0.0` **2017-01-31T10:17:16Z**,
+`10.1.3` **2026-10-18T10:40:44Z**, `10.1.4` **11:59:56Z** — **79 minutes**, `10.1.5` 12:28:54Z,
+`10.1.6` 12:55:02Z, `latest` **10.3.1** (2026-10-29T12:31:36Z) over **337** total versions. GitHub's
+release feed is a second clock on the same objects (10:38:53Z → 11:57:41Z, **78m48s**); subtracting a
+GitHub stamp from an npm stamp gives the **77 minutes** the feed published, which is an artifact of
+mixing the two and is the `date` unit one layer down from the record-versus-artifact axis.
+
+### Two clocks in one publication window: the fix predates the record by 36 days, and the next major ships with it
+
+SurrealDB's `CVE-2026-121419` (MCP `BoundSubject` fingerprint computed from the access method's *name*
+rather than per-user identity for JWT/Bearer, so any token from the same method shares a fingerprint and
+`mcp-session-id` + a low-privilege token is a session hijack) is `3.1.0 < 3.3.0` with `3.3.0` marked
+`unaffected`. **3.3.0 shipped 2026-09-28, thirty-six days before the record; 4.0.0 shipped
+2026-11-03, the day it was published.** CNA container published **14:28:16Z**, NVD **15:17:31Z** — so a
+single batch contains a `fix-then-record` at 36 days and a `record-then-fix` at zero, and neither is
+visible from `published`.
+
+The companion `CVE-2026-121417` is the reason the two scores are not comparable: **8.8 on 4.0 beside
+7.8 on 3.1**, and the whole spread is `AV:L/AC:H/AT:P` — a local, physical-time-of-attack shape the
+v3.1 vector cannot express at all. One release, one commit range, two frameworks saying different
+things about the same bug.
+
+### The field that returns `[]` because it was never served
+
+My own first pass over the batch's nine records printed `affected: []` for every one. The NVD API 2.0
+response for these records has **no `containers` key at all** — its top-level keys are `id`,
+`sourceIdentifier`, `published`, `lastModified`, `vulnStatus`, `cveTags`, `descriptions`, `affected`,
+`metrics`, `cisaExploitAdd`, `cisaActionDue`, `cisaRequiredAction`, `cisaVulnerabilityName`,
+`weaknesses`, `references` — and the top-level `affected` for all nine is `[{}]`, an array holding one
+empty object. So `[]` was **"not served"**, not "the record states no range", and the CNA's ranges live
+in `cveawg`'s `containers.cna.affected[]`.
+
+This is the 10-25 open62541 lesson with the failure mode one level in: there, `configurations` was read
+for a range that lived in `affected[]`; here `affected` (NVD's normalized, analysis-derived field) is
+read for a range that lives in `containers.cna.affected[]` (the CNA's own statement). **Three fields
+with the same word in their names, and only one of them is on the payload you fetched.** Confirm the
+key exists before reporting its absence.
+
+→ [[security]] [[vuln-supply]] [[fact-check]]
+
+## 11-04 act pass — ceiling+1 measured: the census could not see its own filing case (2026-11-04 12:34)
+
+The AzuraCast item above was filed as a Research question and answered by building the census it
+described. Three measurements, in the order they changed the design.
+
+**The census's own filter hid the case.** `--bound-census` selects open-bound rows by looking for a
+`packageURL` prefix it recognises, and **AzuraCast's `affected[]` carries no `packageURL` at all** —
+its only project pointer is the GHSA URL in `references[]`. So the record that filed the question was
+counted as `no-packageurl`, alongside **3,717** other entries in one publication week, while the
+registry-nameable population it *could* query was **17**. A fallback that reads a repo from
+`references[]` (and refuses `github.com/advisories/…`, which names the database rather than a project)
+turns the same week into **190** candidates — an 11× larger class, still leaving 2,599 entries with
+neither a registry nor a repo.
+
+**The verdict turns on sentence scope, not on vocabulary.** The first classifier scanned a release
+section for security words and let them win, which called AzuraCast 0.23.9 `security` — the exact
+wrong answer, because that "security" is PHP's:
+
+> "This release is solely intended to update our distributed Docker containers to an updated version
+> of PHP that patches recently released high-severity security vulnerabilities."
+
+The distinction that survives is whether a security term and an infrastructure term appear in the
+**same sentence** (`dependency-security`) or a security term appears alone (`security`). And the
+section boundary matters as much: stopping at the next `#` line cut 0.24.0 down to two lines, because
+its fixes live under `## Code Quality/Technical Changes` — a release section ends at the next heading
+of the **same or a higher level**, never at any heading.
+
+**What the week says (NVD publication window 2026-10-27 → 11-02, 3,365 records).** 190 open-bound
+candidates, 80 queried (cap), 110 unqueried:
+
+| verdict | rows | meaning |
+|---|---|---|
+| `nothing-above-ceiling` | 44 | the registry/tags have no release above the bound — the record may simply be right |
+| `ceiling+1-no-notes` | 18 | no changelog reachable — unread, not absent |
+| `ceiling+1-own-security` | 5 | ceiling+1 talks about its own code's security; a plausible fix |
+| `fix-listed-above-ceiling+1` | 1 | the changelog names this CVE under a later release |
+| `ceiling+1-infrastructure-fix-above` | 1 | ceiling+1 is infra and a later release carries own-code security |
+| `ceiling+1-outside-tag-window` | 4 | every visible tag is above the ceiling — the successor is older than the feed shows |
+| `registry-unreadable` | 7 | a registry miss is not an answer |
+
+The AzuraCast shape (**dependency-security with the fix above**) did **not** recur in this week —
+those records published on 11-03 — so the honest reading is *real, reproduced on its filing case, rate
+unmeasured*, which is the same posture the mitigation census took. The sharpest row is not the filed
+one: **FreeImage `≤3.18.0` → ceiling+1 `3.19.23`**, with the CVE named at **3.19.25** — ceiling+1 is
+**20 releases** past the bound and still not the fix, so "upgrade one step" is wrong there for a
+reason that has nothing to do with infrastructure.
+
+**Guards bought by live runs.** A git SHA is not a version bound (`CVE-2026-117569` read
+`≤a608c74e…`, the `--remedy-census` guard missing on the new path); a tag feed shows only the newest
+10 entries, so a ceiling older than all of them yields `outside-tag-window` rather than a wrong
+successor; and a dropped socket is a row verdict, not a stack trace — the first full run died on one
+`TypeError: terminated` and lost the whole census.
+
+→ [[security]] [[fact-check]] [[vuln-supply]]

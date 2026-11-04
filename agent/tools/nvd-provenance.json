@@ -1753,6 +1753,66 @@
       "id": "CVE-2026-112917",
       "why": "Docker Desktop WSL2 seccomp bypass 9.2 v4.0 (security@docker.com, Received, CWE-424) — item 16; the conjunction-of-two-artifacts case",
       "seeded": "2026-11-04 [seeded by the 04:22 learn pass; first --watch run fills the baseline]"
+    },
+    {
+      "id": "CVE-2026-121417",
+      "why": "SurrealDB UAF in surrealdb-core KV backends, 8.8 v4.0 / 7.8 v3.1 with AV:L/AC:H/AT:P - item 27; the pair whose spread is the framework, not a stopping point",
+      "seeded": "2026-11-04 [seeded by the 12:26 learn pass; first --watch run fills the baseline]"
+    },
+    {
+      "id": "CVE-2026-121419",
+      "why": "SurrealDB MCP BoundSubject keyed on access-method name (3.1.0<3.3.0), 8.6 v4.0 / 8.1 v3.1 - item 27; Primary slot on 3.1 vs Secondary on 4.0 within one assigner",
+      "seeded": "2026-11-04 [seeded by the 12:26 learn pass; first --watch run fills the baseline]"
+    },
+    {
+      "id": "CVE-2026-121424",
+      "why": "Nodemailer addressparser nested-comment bypass, 3.0.0<10.1.4, 8.3 v4.0 / 6.5 v3.1 - item 26; watch whether NVD leaves Awaiting Analysis or re-scores",
+      "seeded": "2026-11-04 [seeded by the 12:26 learn pass; first --watch run fills the baseline]"
+    },
+    {
+      "id": "CVE-2026-121425",
+      "why": "Nodemailer addressparser group/semicolon bypass, 8.3/6.5 - item 26; the mechanism 10.1.6 rewrote, so watch for a widened range",
+      "seeded": "2026-11-04 [seeded by the 12:26 learn pass; first --watch run fills the baseline]"
+    },
+    {
+      "id": "CVE-2026-121426",
+      "why": "Nodemailer addressparser angle-addr bypass, 8.3/6.5, Primary slot on 3.1 - item 26",
+      "seeded": "2026-11-04 [seeded by the 12:26 learn pass; first --watch run fills the baseline]"
+    },
+    {
+      "id": "CVE-2026-121427",
+      "why": "AzuraCast Shoutcast sc_serv.conf injection, lessThanOrEqual 0.23.8 with no unaffected entry, 8.7/7.5 - item 24; the inclusive-ceiling/no-named-fix shape",
+      "seeded": "2026-11-04 [seeded by the 12:26 learn pass; first --watch run fills the baseline]"
+    },
+    {
+      "id": "CVE-2026-121428",
+      "why": "AzuraCast timezone-newline RCE into Supervisor, 8.7/8.8 - item 24; fixes are unlabelled 0.24.0 changelog lines",
+      "seeded": "2026-11-04 [seeded by the 12:26 learn pass; first --watch run fills the baseline]"
+    },
+    {
+      "id": "CVE-2026-121429",
+      "why": "AzuraCast StereoTool command injection, 8.7/8.8 - item 24",
+      "seeded": "2026-11-04 [seeded by the 12:26 learn pass; first --watch run fills the baseline]"
+    },
+    {
+      "id": "CVE-2026-60137",
+      "why": "WordPress Core SQL injection, KEV 2026-07-21 - item 21 history (WordPress Core's 2026 KEV run)",
+      "seeded": "2026-11-04 [seeded by the 12:26 learn pass; first --watch run fills the baseline]"
+    },
+    {
+      "id": "CVE-2026-63030",
+      "why": "WordPress Core interpretation conflict, KEV 2026-07-21 - item 21 history",
+      "seeded": "2026-11-04 [seeded by the 12:26 learn pass; first --watch run fills the baseline]"
+    },
+    {
+      "id": "CVE-2026-87902",
+      "why": "WordPress Core remote file inclusion, KEV 2026-09-25 - item 21 history",
+      "seeded": "2026-11-04 [seeded by the 12:26 learn pass; first --watch run fills the baseline]"
+    },
+    {
+      "id": "CVE-2023-2191",
+      "why": "NOT a subject of this batch: cited only as the single CVE- string elsewhere in AzuraCast's CHANGELOG, in the corrected sentence of item 24 (\"no CVE in that section\"). Seeded so the coverage check is honest, not to track movement",
+      "seeded": "2026-11-04 [seeded by the 12:26 learn pass; first --watch run fills the baseline]"
     }
   ]
 }

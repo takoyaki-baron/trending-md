@@ -5242,3 +5242,47 @@ moved in exactly one direction — **narrower** — which is the direction a rea
 replicated by someone with no stake in the headline.
 
 → [[fact-check]] [[edge-inference]]
+
+## The looped transformer ships as a production shape — and answers a paper with a PNG (2026-11-04 12:20)
+
+`SenseNova/SenseNova-Loop-9B-Preview` (Apache-2.0, 9B, HF + ModelScope, training context
+**262,144** tokens) is the first production-shaped answer to the 10-30 question of whether looping a
+transformer is uniformly better. The card states the architecture precisely and the precision is the
+point: **24 decoder layers applied twice in sequence**, giving "**56 decoder-layer computations per
+forward pass while storing only 32 sets of decoder-layer weights**" — layers 0–3, then the block 4–27
+run twice over shared weights, then 28–31 and the head, so the loop is **the middle** and the parameter
+duplication is zero. Inside the loop, mHC carries **two residual streams**, with the stream-mixing map
+constrained by **Sinkhorn normalization at 20 iterations**; attention is hybrid at **three linear to one
+full** per four-layer group, and the **loop boundaries are aligned to whole groups**. MTP ships for
+accelerated inference (Dspark and Dflash2 in progress).
+
+**What is not stated precisely is the result.** The **Key Benchmarks** section is a single PNG whose alt
+text names eight benchmarks, with no number in 13,483 bytes of text and a tech-report badge reading
+**TBD**. So the artefact is a base to evaluate, not a result to cite — and the architectural claim
+(56 executions, 32 weight sets, exact layer indices) is checkable in a way the benchmark claim is not.
+That asymmetry is the reusable reading: when the architecture is prose and the evaluation is an image,
+the card has published a design, not a finding.
+
+## Post-training against an in-house baseline is the honest comparison — and the frontier chart is one point
+
+Figma's account of its editing model (2026-10-29) is a rare case where the evaluation construction ships
+with the number. Designs are represented in **Figma's native file format**, paired with synthetic edit
+requests, candidates produced by larger teacher models and filtered by deterministic validators **plus
+visual judges**, with a generation pipeline that could revise its own output; the first serious model was
+a **Llama 3.3 70B** on "more than 250,000 examples," since displaced by newer bases, and the agent's
+current model is post-trained on **Qwen 3.8 27B**. The stated reason for adding RL is the standard
+critique of imitation learning — it "teaches the model to produce designs very similar to what it saw in
+training at the cost of loss of generalization."
+
+The numbers, with their denominators: typical tasks about **20% faster**; the new agent "beats or matches
+the previous production agent **62%** of the time" in head-to-head testing with expert designers; user
+ratings **33%** higher; users undo the agent's work **60%** less often; and "we've more than doubled the
+share of work powered by our own post-trained design model." **Every one is against Figma's own previous
+agent or its own users** — a like-for-like, same-task, same-rubric comparison, which is why the 62% is
+the reusable figure. The model-versus-model claim is a single chart whose alt text reads Figma v3
+**77.8%** beside **Sol 6.1 76.9%**: one pair, no per-dimension breakdown, and the model is unreleased.
+
+**The two numbers are different kinds of object.** "62% head-to-head against our previous agent" is a
+measurement; "77.8 vs 76.9 on one chart" is a datapoint with a 0.9-point margin and no variance. The
+honest sentence quotes the first and declines to describe the second as a benchmark win — which is what
+the item did, and what a release note usually does not.

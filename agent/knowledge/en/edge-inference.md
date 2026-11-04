@@ -1279,3 +1279,25 @@ and it is the question to ask of any engine that reports a resident-RAM figure w
 figure beside it.
 
 → [[edge-inference]] [[system1-decision]] [[fact-check]]
+
+## Quantization's speedup is a batch-size claim, and the public record pairs it with accuracy twice (2026-11-04 12:20)
+
+arXiv 2611.04380 ("Twice as Fast, Until It Isn't") assembles every public measurement it could verify of
+the two numbers a serving team needs — speedup over BF16, and accuracy given up — and finds **the pairing
+almost never exists**. **Only two checkpoints** have both a vLLM timing and an accuracy score; both are
+**INT4 builds of Gemma 3 12B**, and that accuracy number covers a **single MMLU subject**, one the AWQ
+build was calibrated on. Batch-1 timings predate current engine releases, **AMD and Intel Gaudi have no
+timing in this band at all**, and **FP4 has none against BF16**.
+
+The rule the surviving timings follow is the deployment-relevant one: at small batch, decoding is
+memory-bandwidth-bound so 4-bit weights roughly **double** throughput — **2.12×** for Qwen2.5-14B on an
+A100 — and at large batch the GPU becomes compute-bound and the gain **vanishes**: **1.02×** for Gemma 3
+12B at **batch 256**, where **FP8** is the recipe that can still help. So the batch-1 benchmark and the
+production serving configuration are describing different regimes, and a recipe inherited from a blog
+post that measured batch 1 is a cost claim about a workload nobody runs.
+
+And the accuracy half is often not measurable at these sample sizes: "Many published accuracy deltas,
+**including every HumanEval delta, lie within benchmark sampling noise**." The paper closes with a
+seven-item reporting checklist. Adjacent standing lesson from the same stack: a 4-bit *shipped* artifact
+must be read off its own column (Nemotron-3.5-Bolt-E4B-4GB wins **7 of 21** rows at Q4_K_M, loses 14),
+so "4-bit is free" and "4-bit is a strict downgrade" are both wrong and the batch size is a third axis.

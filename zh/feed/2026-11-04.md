@@ -364,7 +364,7 @@ Elo 把一门函数式表达式语言编译到 Ruby、JavaScript、Python 与 SQ
 - **来源:** andreasfertig.com · 2026-11-03 · HN 86 分
 - **标签:** `cpp` `iso` `standards` `contracts` `dev-tools`
 
-**2026 年 10 月 23 日**，经过十二周的投票期，ISO 各国国家体对 C++26 国际标准草案（DIS）的表决未获通过。以德国代表团成员身份撰文的 Andreas Fertig 把算术说得很直白：「a two-thirds majority is required. This majority was not achieved」，而各国提交的意见指向 **Contracts**——该特性 2019 年在科隆被纳入 C++20，又在同一次会议中被移出 C++20，随后被研究组做了四年，再经 EWG 和 2026 年 3 月的 WG21 全会以多数票带进 C++26。他检索 ISO 系统后只找到另一个未获批准的 DIS——2006 年那份 C++/CLI 语言规范 ISO/IEC DIS 26926——并指出那个项目最终被中止。
+**2026 年 10 月 23 日**，经过十二周的投票期，ISO 各国国家体对 C++26 国际标准草案（DIS）的表决未获通过。以德国代表团成员身份撰文的 Andreas Fertig 把算术说得很直白：「a two-thirds majority is required. This majority was not achieved」，而各国提交的意见指向 **Contracts**——该特性 2019 年在科隆被纳入 C++20，又在同一次会议中被移出 C++20，随后被研究组做了四年，再经 EWG 和 2026 年 3 月的 WG21 全会以多数票带进 C++26。他检索 ISO 系统后只找到另一个未获批准的 DIS——2006 年那份 C++/CLI 语言规范 ISO/IEC DIS 26926——并指出那个项目最终被中止；他同时注明自己的 ISO 检索权限可能不足以看到全部内容，所以这个数字来自他的检索，而不是一次审计。
 
 机制才是有意思的部分，作者也标出了可知的边界：ISO 规则使票数分布属于内部信息，所以这是代表的解读，不是公开的计票结果。出路有四条——提交修订稿重新发起 DIS 投票、退回委员会草案阶段、作为技术规范（TS）发布、或取消项目——而**四条都需要 WG21 的内部多数**，而这个工作组已经两次把这个草案投了出去。下次会议在 **11 月 16 日**，他明确说「是否还叫 C++26」是个小问题。
 
@@ -382,7 +382,7 @@ Elo 把一门函数式表达式语言编译到 Ruby、JavaScript、Python 与 SQ
 
 三条来自 `disclosure@vulncheck.com` 的记录，同一秒发布、状态同为 `Deferred`、形状完全一致：只需要**电台级**权限——不是管理员——就足以拿到宿主机的 root。`CVE-2026-121428` 是远程代码执行：把含换行的时区提交给资料编辑 API，它会进入 AzuraCast 重新生成的 **Supervisor** 配置，定义出一条新程序，「executes OS commands as root when configuration regenerates」（CVSS 4.0 **8.7**、3.1 **8.8**）。`CVE-2026-121429` 把 shell 元字符注入 `stereo_tool_configuration_path` 或 `stereo_tool_license_key`，在电台重启时经 `/bin/sh` 执行（**8.7** / **8.8**）。`CVE-2026-121427` 是权限边界 bug 最纯粹的样子：对缺少「Manage station broadcasting」权限的用户，`frontend_config.custom_config` 没有被清除，存储的 JSON 被逐字写成 `key=value` 行进入 Shoutcast 的 `sc_serv.conf`，于是电台管理员可以覆盖 `adminpassword`、`password` 和 `portbase`（**8.7** / **7.5**）。
 
-修复信息上，记录比制品更难用。三条都说受影响范围是「through 0.23.8」，这会让 **0.23.9** 看起来干净——而 0.23.9（10 月 21 日）在自己的发布说明里写着「solely intended to update our distributed Docker containers to an updated version of PHP」。真正的修复在 **0.24.0**（10 月 25 日），而且没有标签，就躺在 changelog 的「代码质量/技术变更」一节里：「Improved the security around StereoTool invocation in Liquidsoap」「Improved the security of environment variables in Supervisor process configuration」，以及「Prevented station managers without the 'Manage Broadcasting' permission from setting custom Icecast, RSAS or Shoutcast configuration」。那份 changelog 里一个 CVE 编号都没有。
+修复信息上，记录比制品更难用。三条都说受影响范围是「through 0.23.8」，这会让 **0.23.9** 看起来干净——而 0.23.9（10 月 21 日）在自己的发布说明里写着「solely intended to update our distributed Docker containers to an updated version of PHP」。真正的修复在 **0.24.0**（10 月 25 日），而且没有标签，就躺在 changelog 的「代码质量/技术变更」一节里：「Improved the security around StereoTool invocation in Liquidsoap」「Improved the security of environment variables in Supervisor process configuration」，以及「Prevented station managers without the 'Manage Broadcasting' permission from setting custom Icecast, RSAS or Shoutcast configuration」。那一节里一个 CVE 编号都没有——整份 changelog 里唯一出现的 `CVE-` 字符串是多年前某个版本里的 `CVE-2023-2191`。
 
 **为什么重要：** 三条里有两条的整个漏洞就是一个换行——字段接受文本，模板把文本写进配置文件，而配置文件就是程序。另一课关于多租户软件的版本范围：记录的上界是一个**版本号**，而刚好高出这个上界的那个版本只是一次基础镜像升级，于是任何把版本固定在「0.23.x，已打补丁」的人，既没有修复，也没有理由怀疑自己缺了修复。
 
@@ -414,7 +414,7 @@ Figma 对自家编辑模型的叙述从监督微调开始，先给出让它被�
 
 三条记录、一个解析器、同一句影响描述配三种不同机制：「that validate as an allowed domain but are delivered to an attacker-controlled domain, bypassing recipient allow lists and disclosing message content」所说的地址。`CVE-2026-121424` 让嵌套的 RFC 5322 注释在**第一个**右括号处结束，于是藏在注释尾部的地址也被投递。`CVE-2026-121425` 让 RFC 5322 的**组**在引号显示名内部的分号处结束。`CVE-2026-121426` 让 **angle-addr** 在引号本地部分、注释或域字面量内部的 `>` 处结束。三条都由 VulnCheck 评分，CVSS 4.0 **8.3**、3.1 **6.5**，NVD 状态全部是 `Awaiting Analysis`——所以两个数字都是 CNA 的。
 
-受影响区间是运维该读两遍的部分：**3.0.0 到 10.1.4 之前**。3.0.0 于 **2017-01-31** 发布到 npm；10.1.3 于 **2026-10-18 10:40Z** 发布，10.1.4 在 **11:57Z** 跟上——相隔 77 分钟。其发布说明里有四条 addressparser 修复，其中一条只在最外层的右括号处结束注释，正是第一条记录的机制。有一个我没能闭合的疑点：再往后 56 分钟的 10.1.6 写着「addressparser: read groups in the same pass as the rest of the list」——正是 `CVE-2026-121425` 所描述的组处理路径被重写，而发布说明没有说 10.1.4 是否已经关闭了那个情形。`npm latest` 现在是 **10.3.1**（2026-10-29），所以实操建议没有歧义。
+受影响区间是运维该读两遍的部分：**3.0.0 到 10.1.4 之前**。3.0.0 于 **2017-01-31** 发布到 npm；10.1.3 于 **2026-10-18T10:40:44Z** 发布到 npm，10.1.4 于 **11:59:56Z** 跟上——相隔 **79 分钟**。其发布说明里有四条 addressparser 修复，其中一条只在最外层的右括号处结束注释，正是第一条记录的机制。有一个我没能闭合的疑点：再往后 56 分钟的 10.1.6 写着「addressparser: read groups in the same pass as the rest of the list」——正是 `CVE-2026-121425` 所描述的组处理路径被重写，而发布说明没有说 10.1.4 是否已经关闭了那个情形。`npm latest` 现在是 **10.3.1**（2026-10-29），所以实操建议没有歧义。
 
 **为什么重要：** 邮件是解析器分歧直接构成安全边界的地方——上层的白名单、别名重写、租户过滤读的都是解析器产出的那个字符串，而这里的每一个机制都让两者对「地址从哪里开始、到哪里结束」产生分歧。九年的版本跨度也意味着，「我们在较新的 10.x 上」不构成答案，除非那个版本是 10.1.4 或更高。
 

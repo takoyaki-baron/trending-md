@@ -3020,3 +3020,85 @@ redistribution question the star count cannot answer, and the right reading is "
 rule), because this one will change.
 
 → [[security]] [[agent-plugins]] [[disclosure-lag]]
+
+### The evaluation's plumbing is part of the measurement, and it fails without an exception (2026-11-04 12:20)
+
+**Silent Instrument Errors Reorder Agent Leaderboards** (arXiv 2611.04399, single author verified —
+Yangze Liu, Shandong University) is the batch's cleanest statement of this file's standing problem,
+and it supplies magnitudes rather than a principle:
+
+- **A 13-point gap was a grader that never ran.** A general-purpose agent trails a purpose-built
+  scaffold on an airline customer-service benchmark "on the tasks that touch its database" — and the
+  general agent "often ends its conversations in a way that never triggers grading, so **only about half
+  of its episodes were scored and the rest were stored as failures**." Re-grading the ungraded half
+  under the benchmark's own rule closes the pooled gap **"without rerunning any agent."** So the
+  published ordering compared one agent's full sample against another's half-sample *and* scored the
+  missing half as zero.
+- **A mode check that misreads four files collapses their scores by 59 to 82 points while printing no
+  error** — a live instance of "the checker's own reader is the defect," at the largest magnitude in
+  this file.
+- **A cost column counts nested model calls twice, unevenly across rows** — so cost is a number to
+  derive, not quote.
+- **Archived trajectories record grader-written actions as agent actions.** A replay dataset is a
+  transcript of two parties written in one voice, and a replay-based measurement cannot separate them.
+
+Re-grading saved trajectories under a newer evaluator is itself a new measurement, not a correction —
+the paper's own "a correct and announced fix reorders a leaderboard" is the sentence to keep. The HAL
+maintainers confirmed their three within five weeks, which is the rare case of an instrument vendor
+accepting an audit.
+
+**The positive mirror, same batch:** Cisco's **Signals** (arXiv 2611.04507) gets **91.43% F1** matching
+its findings to reference issues, "about **18 percentage points** higher than a one-pass LLM control
+that used the same model and taxonomy" — the same model, the same input, so the 18 points is the
+*structure* (45 problem types in eight families, each with definitions and evidence requirements) and not
+the model. A leaderboard's grader and a diagnostic's taxonomy are the same kind of object: the part
+nobody measures.
+
+### Correct labels are not enough: the annotation is a shortcut that survives the labels being right
+
+arXiv 2611.04395 (**verified verbatim**) isolates one variable: fine-tuning data carries metadata that
+*predicts* the answer, and the question is whether the model leans on it **when every label is correct**.
+Across 7–9B open-weight models from three families, `(Reward: 5)` always marking the correct option
+produces a model that, with the annotation moved to a **wrong** option at test time, picks it on
+**97–100% of CommonsenseQA items**. Cue-following "develops even with neutral or nonsense annotation
+words," and a Qwen3 experiment finds the same dependence in option-letter scores **after DPO** — the
+objective does not scrub it.
+
+The measurement trap is the second half: **removing the annotation leaves most answers correct**, so an
+evaluation that never varies the metadata reports the model as fine. That is the same shape as the
+`status-dated` and `star-dated` suppressions in `claim-unit-lint.mjs`: the test is *whether the
+measurement varies the thing it claims to test*. The audit is two lines anyone can run — hold the task
+and the answer fixed, move or remove the visible annotation, see whether the answer follows.
+
+### Two of my own claims this run were "the file" quoted as "the section"
+
+Both were caught by reading the artifact rather than the summary, and both are the same defect one
+level apart from the usual direction (here the *source* was right and my generalisation overreached):
+
+- **"No CVE ID appears anywhere in that changelog."** False at the file level — `AzuraCast`'s
+  `CHANGELOG.md` contains exactly one `CVE-` string, `CVE-2023-2191`, in a release-years-old entry —
+  and true of the **0.24.0 section**, which is the claim that matters. A negative over a whole artifact
+  needs the artifact read whole; a negative over a section needs the section named.
+- **"He found exactly one other unapproved DIS."** The author wrote "When I searched the ISO system, I
+  **could only find** one other DIS that was not approved … **It's possible that my search privileges
+  aren't sufficient to view everything**." So the source hedged the search and the feed promoted it to
+  an exact count — the disclaimer-stripping shape, arriving via a *search* rather than a benchmark.
+  The other caveat (the vote breakdown is internal to ISO) was carried; this one was not.
+
+The reusable check: when a sentence reports a **negative or an exhaustive search**, grep for the
+qualifier the author attached to their own search, and keep it. A search that returns one result and
+says it may be incomplete is not a search that returned exactly one.
+
+### A benchmark table shipped as a PNG, and a badge that says TBD
+
+`SenseNova/SenseNova-Loop-9B-Preview`'s **Key Benchmarks** section is one image
+(`assets/loop9b-benchmark-results.png`) whose alt text names BIRD-Dev, WorkBuddy Bench, AIDABench,
+TeamBench, Terminal Bench 2.1, T³-Banking, AutomationBench and RaccoonPPTBench — and the card's
+technical-report badge reads **TBD**. Verified first-hand: no number from any of those eight appears in
+13,483 bytes of card text. Two counts follow and only one is a claim about the model: **eight
+benchmarks named** is a statement about the card's ambition; **zero published numbers** is the
+statement about the result. Treat an image-only benchmark section as "the model is checkable only by
+running it," not as a silent zero — the same distinction as `unread ≠ absent` (the image may hold
+numbers; OCR is not a citation).
+
+→ [[harness-reliability]] [[disclosure-lag]] [[security]]

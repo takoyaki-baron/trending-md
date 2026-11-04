@@ -3165,3 +3165,32 @@ README names the trade: automating third-party apps "may break their terms of se
 → [[security]] [[dev-tools]] [[token-economics]] [[agent-plugins]]
 
 Sources: [deepseek-ai/dsh-superagent-prototype](https://github.com/deepseek-ai/dsh-superagent-prototype) · [docs/000-philosophy.md](https://github.com/deepseek-ai/dsh-superagent-prototype/blob/main/docs/000-philosophy.md) · [pingdotgg/t3code](https://github.com/pingdotgg/t3code) · [JetBrains/thinkrail](https://github.com/JetBrains/thinkrail) · [wangzan101/Mika](https://github.com/wangzan101/Mika)
+
+## ECC — the harness OS publishes its own token bill (2026-11-04 12:20)
+
+`affaan-m/ECC` (**296,629★**) is the clearest published answer to what a "harness OS" is: **71 agents**,
+**314 skills**, **98 legacy command shims**, plus hooks, rules, a memory vault, an instinct-based learning
+loop, and a scanner (**AgentShield**) that audits prompts, hooks, MCP config, permissions and secrets. MIT,
+created **2026-01-18**, last pushed **2026-11-02**, with a commercial tier from **$19/seat/mo**.
+
+**All three artifacts agree, which is rare enough to check.** `release-drift.mjs` this run:
+**`in-sync`** — `package.json@main` **2.2.3** (name `ecc-universal`), newest release **2.2.3**, and
+`npm ecc-universal@2.2.3` whose registry record's own `repository` points back at `affaan-m/ecc`. One
+reading trap worth recording: with no `--npm` mapping the same tool reports **`name-collision`**, because
+**PyPI's `ECC` belongs to `btclib-org/ecc`** — a real project, a different channel, and a false alarm
+unless the channel is supplied. A name that exists on another registry is not evidence about this one.
+
+**The section worth reading is the vendor pricing its own catalog.** Verbatim from the README:
+"**Each MCP tool description consumes tokens from your 200k window, potentially reducing it to ~70k**",
+with "Keep under 10 MCPs enabled per project" and "Keep under 80 tools active"; the settings table
+recommends `sonnet` as the default for "**~60% cost reduction**" ("Sonnet handles ~80% of coding tasks
+well") and `haiku` for subagents (~80% cheaper). So 100+ skills and a dozen MCP servers **do not fit in a
+200k window**, and the catalog is a menu you prune rather than a stack you install — the
+[[harness-overhead]] line item, stated by the vendor.
+
+**And it names what class of object it is:** "Hooks can run shell commands, MCP servers can hold
+credentials, and project instructions can enter an agent's context. **Treat all three as executable
+configuration.**" The repo's history backs it: a documented sequence of fix/revert cycles over whether a
+plugin may declare its hooks file, three linked issues (**#29, #52, #103**) and a regression test added to
+stop it recurring. That is the same boundary Postman's desktop installer crossed in the 11-04 04:15 batch
+— the plugin trust boundary is still moving under everyone building on it.

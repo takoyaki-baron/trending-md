@@ -41,3 +41,13 @@ GPT-6-sol 的 23 倍）。发布自曝一个失败案例（合同审查中漏掉
 被用来跑入侵——运维端和攻击端买的是同一种能力。
 
 Sources: [benjamincongdon.me: Agentic Monitoring](https://benjamincongdon.me/blog/2026/10/19/Agentic-Monitoring/) · [HN — Agentic Monitoring](https://news.ycombinator.com/item?id=50153225) · [Laminar: flow-1](https://laminar.sh/blog/flow-1) · [HN — flow-1](https://news.ycombinator.com/item?id=50154029) · [[dev-tools]]（Netflix RDF 可观测性）
+
+## Signals（Cisco，arXiv 2611.04507）——分类法就是仪表，三分法是可迁移的部分（2026-11-04 12:20）
+
+agent 可以在每个工具和每一层基础设施都正常工作时做出错误决定或烧掉资源，而它的不确定性让这一类问题很难复现。**Signals** 读取 agentic trace，并对照**八个族、45 种问题类型**报告问题，每种类型都有自己的定义与证据要求——而值得照搬的设计决定，是摘要里逐字写出的三分法：它「distinguishes **realized failures, risk exposures, and inefficiencies**」。
+
+这个三分法就是运营内容本身。一块把“尚未触发的暴露”和“事故”标成同一严重度的看板，等于在教操作员忽略这个队列；多数 trace 查看器把三者都塌缩成“error”。在此之上：相关发现被归并成一个工程 issue；严重度由**支撑证据**评定而不是指定；每个 Signal 同时带一个建议动作和一条**验证改动的检查**；而且「further executions can add evidence to an existing Signal or reveal a new problem」——重复运行会在同一个 issue 上累积，而不是开 N 个新的。
+
+**评估把方法隔离了出来。** 在公开 agent 执行上对参考 issue 得到 **91.43% F1**，「about **18 percentage points** higher than a one-pass LLM control that used the **same model and taxonomy**」。同一模型、同一分类法，不同的**方法**——证据要求、归并、严重度——所以这 18 分是结构，不是模型能力。这是正确的基线，而且罕见：常见的比较对象要么是更弱的模型，要么根本没有基线。
+
+**为什么它落在这一页：** 论文 24 里人的工作是“读那些读遥测的 agent”。带证据要求的分类法，才让这种阅读可以被复核——一个你无法审计的发现，只是一条措辞更好的告警。

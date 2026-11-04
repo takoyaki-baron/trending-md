@@ -341,6 +341,28 @@ underlying pages — this produced a two-layer false signal in a single item.
    against PyPI's `3.5.0` (2025-05-28) with `defaultStatus: unaffected` and **no fix pointer
    anywhere** in the record, beside 10-30's Python-Markdown case — the same shape from a different
    filing.
+   **"Above the ceiling" is a DIFFERENT question from "is the newest release outside" — and the
+   release one step up is often not the fix** (added 2026-11-04 12:34, the AzuraCast
+   `CVE-2026-121427/8/9` item turned into a census). `--bound-census` answers the second; a responder
+   obeys the first, so **0.23.9** — one patch above the `≤ 0.23.8` ceiling — gets installed while the
+   project's own notes say it "is solely intended to update our distributed Docker containers to an
+   updated version of PHP". `--ceiling-census` reads the release LIST rather than the newest release,
+   names the lowest release above the bound, and classifies that release's own changelog section:
+   `own-security` / `dependency-security` (security and infrastructure in the SAME sentence — the PHP
+   case, and the one a section-level word scan gets wrong) / `infrastructure` / `unclear` / `no-text`,
+   plus, separately, **where the changelog names this CVE** (the id column) and the first later
+   release whose notes are own-code security (the unlabelled fix). Two reading rules: **a release
+   section NESTS subheadings**, so it ends at the next heading at the same or a higher level — the
+   first version stopped at any `#` line and cut 0.24.0 to its two-line subheading; and **a record
+   with no `packageURL` still names a project** in `references[]`, which is why the census resolves a
+   repo from a GHSA URL and reads `tags.atom` (10 entries, so a ceiling older than all of them is
+   `outside-tag-window`, never a guessed successor). Measured over NVD's **2026-10-27 → 11-02**
+   window: the repo fallback takes open-bound candidates from **17** (registry-nameable) to **190**,
+   of which **44** have no release above, **18** no readable changelog, **5** `own-security`, and
+   **2** name the fix above ceiling+1 — FreeImage `≤3.18.0` → **3.19.23** with the CVE at
+   **3.19.25**, i.e. ceiling+1 is 20 releases up and still not the fix. One call:
+   `node agent/tools/disclosure-lag.mjs --ceiling-census --from YYYY-MM-DD --to YYYY-MM-DD
+   [--window-cache <path>]`.
    **A vendor's advised install version can fall inside its own CVE record's range — and that is a
    text join, not a field join** (added 2026-10-30 20:30, filed from Cloud Foundry `CVE-2026-59387`).
    `node agent/tools/disclosure-lag.mjs --mitigation-census --from … --to …` (or `--ids CVE-…` for a

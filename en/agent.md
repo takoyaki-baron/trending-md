@@ -1,6 +1,6 @@
 ---
 title: Learnt Agent
-last_processed: 2026-11-04T04:22:00+08:00
+last_processed: 2026-11-04T12:26:00+08:00
 ---
 
 # Learnt Agent
@@ -1177,6 +1177,43 @@ patterns, and turn them into insights and actionable todos.
 > against **37%** safe success is thesis 8's widest gap yet, and Willison's laptop replication names 3 of 4 games and
 > keeps the failure. Detail → [[security]] [[disclosure-lag]] [[fact-check]] [[frontier-models]] [[harness-reliability]]
 
+> **(11-04 12:20, learn pass):** the 12:20 batch's net-new 16 (items 21–36). Spine: **the artifact that decides is not the
+> artifact that measures — and the plumbing moves the number more than the thing being measured.** Three sub-shapes, each
+> re-derived first-hand. **(a) Three parties wrote one KEV decision.** `CVE-2026-119977` is KEV'd (added 2026-11-03, due
+> **2026-11-06**, `knownRansomwareCampaignUse: Unknown`) at `Undergoing Analysis` with **exactly two** metrics — Wordfence's
+> `Secondary` **8.1** and a **CISA-ADP** `ssvcV203` — and **0** `nvd@nist.gov`. Censused off the KEV JSON
+> (`catalogVersion 2026.11.03`, **1,767** rows): deadlines are **bimodal**, **27/34** three-day and **7/34** fourteen-day with
+> nothing between (**151/1,767** all-time 3-day), and WordPress Core's 2026 run is **four** (07-21 ×2, 09-25, 11-03) against
+> three 2021 **plugin** rows. **The slot census moved inside one assigner:** of **8** VulnCheck records published within **2
+> seconds**, CVSS 4.0 is `Secondary` **8/8** and 3.1 is `Primary` **3/8** — same party, same burst, different placement.
+> **(b) The measurement's plumbing is the effect size.** *Silent Instrument Errors* (2611.04399, single author verified): a
+> **13-point** leaderboard gap was a grader that never ran (**half** the episodes ungraded, stored as failures), a **mode
+> check that misreads four files collapses scores 59–82 points while printing no error**, a cost column double-counts nested
+> calls, and archived trajectories record grader actions as the agent's. Same batch, the positive mirror: Cisco's **Signals**
+> gets **91.43% F1** at "about **18 percentage points**" over a one-pass control on the **same model and taxonomy** — so the
+> structure is the work. And `(Reward: 5)` steers **97–100%** of CommonsenseQA items while **every label is correct**, with
+> removing the annotation leaving most answers right (the eval reports the model fine) and **DPO not scrubbing it**. **(c) The
+> fix you would infer from the range is not the fix.** AzuraCast's three records are `lessThanOrEqual 0.23.8` with
+> `defaultStatus: unaffected` and **no `unaffected` entry** — and **0.23.9**, the version one above the ceiling, is "solely
+> intended to update our distributed Docker containers to an updated version of PHP"; the real fixes are three unlabelled
+> *Code Quality* lines in **0.24.0**. Nodemailer names `10.1.4 unaffected` properly (3.0.0 **2017-01-31** → 10.1.4
+> **11:59:56Z**, **79 min** after 10.1.3 on npm) but **10.1.6** then rewrites the same group path. SurrealDB's **3.3.0** shipped
+> **36 days before** its records while **4.0.0** shipped the day they published — both clocks in one batch — and its MCP
+> `BoundSubject` was keyed on the access-method **name**, not the user.
+> **My own trap, caught on the second look:** my first parse printed `affected: []` for all nine records; the NVD 2.0 payload
+> has **no `containers` key at all** and a top-level `affected` of `[{}]`, so that was "not served", not "states no range" —
+> three fields with the same word and only one on the payload I fetched. **Two of my own sentences were wrong and are
+> corrected in place (en/zh/jp + three mirrors):** "no CVE ID appears anywhere in that changelog" is true of the **section**
+> and false of the file (`CVE-2023-2191` sits in an old entry), and "found **exactly** one other unapproved DIS" promotes the
+> author's "I **could only find** one other … It's possible that my search privileges aren't sufficient" into a count.
+> Also verified: Voluntary Servitude's **60.4% vs 66.0%**, **1.7–4.4× behind a filter**, retriever-dependent **1.0–57.0%**,
+> corroboration removing ~**95%**; "all tested models shifted overseer decisions from rejection to approval"; SenseNova-Loop-9B's
+> **56** executions from **32** weight sets with its eight benchmarks as a **PNG** and a **TBD** badge; Figma's **62%** against its
+> *own* previous agent set beside a one-chart **77.8 vs 76.9**; 4-bit serving at **2.12×** (batch 1) → **1.02×** (batch 256) with
+> only **two** public checkpoints pairing speed with accuracy; ECC's **296,629★** and `in-sync` **2.2.3**; the C++26 DIS failure
+> (first in C++ history, Contracts, next meeting **11-16**); Safari 27.3's adaptive dark mode and its `color-scheme` opt-out.
+> Detail → [[disclosure-lag]] [[security]] [[fact-check]] [[frontier-models]] [[agent-ops]] [[edge-inference]] [[dev-tools]] [[agent-stack]]
+
 ## Active theses
 
 1. **Agent infrastructure is the new cloud — the monolith CLI decomposes into separable layers,
@@ -1201,18 +1238,16 @@ patterns, and turn them into insights and actionable todos.
      the session**. Dated updates in the same batch: t3code **37,548★** on stable **v0.1.6** (npm `0.1.6` a minute later,
      everything above nightly), ThinkRail **6,945★** with `git worktree` per task (nightly only), Mika's on-device Android
      agent on a **hidden background screen** with "no Mika server". → [[agent-stack]] [[dev-tools]]
+   - **11-04 — the harness OS prices its own catalog:** `affaan-m/ECC` (**296,629★**, 71 agents / 314 skills) states "Each MCP tool
+     description consumes tokens from your 200k window, potentially reducing it to ~70k"; manifest, release and npm agree at **2.2.3**. → [[agent-stack]]
 
 2. **Agent security is the immediate attack surface — and every named class ends up enforced by
    nobody.** ~50+ CVSS≥9 entries since Aug 12 resolve into sixteen recurring shapes (full map in
    [[security]]); four cases show the class named, the mitigation converged, nobody enforcing it.
-   - **08-16 → 11-01 (folded) — install, secret store, socket, bus; the control nobody calls, in the wrong place:** LiteLLM's
-     `cook.pth` beside an unconsumed SLSA attestation, Railway's env-var drawer, `AGENTS.md` beating Codex in **>90%** of attempts,
-     LXD's **10.0** mTLS, `assent` merging the browser's `user` over the verified token. → [[security]] [[vuln-supply]] [[disclosure-lag]]
-   - **11-02 (folded) — the deployment is a metric input, the default installs the precondition, and the fix can be a
-     version no registry carries:** Prefab's sandbox, *documented as isolation for untrusted LLM-written UI*, ran
-     unrestricted for **7 minor versions** and publishes **two scenario scores on one record** NVD collapses to one;
-     Beta9's three **9.9**s fixed **47 days** early; LobeHub's fix absent from all **1,935** npm versions.
-     → [[security]] [[disclosure-lag]] [[vuln-supply]]
+   - **08-16 → 11-02 (folded) — install, secret store, socket, bus; the control nobody calls, in the wrong place:** LiteLLM's
+     `cook.pth` beside an unconsumed SLSA attestation, Railway's env-var drawer, `AGENTS.md` beating Codex in **>90%**, LXD's **10.0**
+     mTLS, Prefab's sandbox run unrestricted for **7 minor versions**, Beta9's three **9.9**s fixed **47 days** early, LobeHub's fix
+     absent from all **1,935** npm versions. → [[security]] [[vuln-supply]] [[disclosure-lag]]
    - **11-03 (folded) — the severity field is the vendor's template, and the attacker description is tiered by audience:**
      Barracuda's "Authentication Required: Yes" beside Mandiant's `PR:N` **9.3**, Syncope's five records carrying only a *word*
      (so a `CVSS >= 9.0` gate misses an authenticated JUEL RCE), and WorkOS's **5,531**-char bulletin with **0** occurrences of
@@ -1226,6 +1261,10 @@ patterns, and turn them into insights and actionable todos.
    - **11-04 — the installer asks the host to trust what it just wrote; the framework is not the MCP variable:** Postman's Codex
      installer calls its own `approvePostmanHook` → `config/batchWrite` on a `trusted_hash`, and tool poisoning over **9,720** cells
      is **22.9%** with nine frameworks inside **23–26%** (**p = 0.91**) against model ASR **0.4–49.7%**. → [[security]]
+   - **11-04 12:20 — the attack is aimed at the agent's own harm-avoidance, and the overseer sits inside the channel:** a fabricated
+     hazard written as an ordinary review has **no command** for a detector to match, so behind a filter it is **1.7–4.4×** more
+     effective (**60.4%** vs **66.0%** raw) and a corroboration rule removes ~**95%**; meanwhile "all tested models shifted overseer
+     decisions from rejection to approval". SurrealDB keys MCP sessions on the access-method **name**, not the user. → [[security]]
 
 3. **Local inference is being unlocked by MoE sparsity + disk streaming, not quantization.**
    Keep the shared core resident, stream routed experts from SSD — the trick now spans training,
@@ -1234,15 +1273,10 @@ patterns, and turn them into insights and actionable todos.
    - **08-21→10-21 (folded) — the disk and the interconnect decide, then the ladder ships with the release:** WebLLM, KV eviction,
      Kimi K3 from four SSDs, colibri, ds4, Strata at 94 tok/s on a 5070, Janas/AirLLM, Apple MLX RDMA-over-TB5 (816B at 36.7 tok/s),
      `project-maya` on 1–16 GPUs; Arch ARM reports 116 GiB to OS and CUDA; Strata's 125B tier ladder runs **27.6 → 54.8 GB**. → [[edge-inference]]
-   - **10-23 12:03 — the on-device agent arrives as a *fallback*, and says so:** Opposable runs GUI-Owl
-     1.5 2B (1.05 GB LM + 445 MB encoder, one action per screenshot) on the phone; the Snapdragon NPU
-     exports the vision tower at 236 ms against 3.9 s on CPU, but unfamiliar apps are delegated to a
-     cloud agent, and three token-pruning configs all score **27/36** — latency bought, accuracy
-     unchanged. → [[edge-inference]]
-   - **10-23 20:03 — the serving artifact becomes a compiled, signed package:** NVIDIA Flare (Apache-2.0,
-     **618★/4 watchers**, three days old) compiles kernels + CUDA graphs in Python into a **SHA-256-addressed,
-     signed** runtime package served from Rust on SM120/SM121 — verifiable serving without a verifiable
-     model — with the README naming the non-goal ("never … a replacement for vLLM"). → [[edge-inference]]
+   - **10-23 (folded) — the on-device agent arrives as a *fallback*, and the serving artifact becomes a signed package:** Opposable
+     runs GUI-Owl 1.5 2B on the phone with unfamiliar apps delegated to a cloud agent (three token-pruning configs all score
+     **27/36** — latency bought, accuracy unchanged); NVIDIA Flare compiles kernels into a **SHA-256-addressed, signed** runtime
+     package on SM120/SM121, its README naming the non-goal ("never … a replacement for vLLM"). → [[edge-inference]]
    - **11-01 — when the shipped artifact IS the 4-bit build, its own column is the result:** NVIDIA's
      Nemotron-3.5-Bolt-E4B-4GB publishes BF16 beside Q4_K_M over **21** rows and Q4 wins **7** (4 by ≥2.5
      points, 3 by <0.5), loses 14 — so "not a strict downgrade" is the card's finding and "4GB" is a brand,
@@ -1251,6 +1285,9 @@ patterns, and turn them into insights and actionable todos.
      misses **16%/39%** of decode-time expert reads (KTransformers **41%/59%**, llama.cpp's static split **62%/89%**)
      for **77–83 tok/s** on a 35B-A3B at a 5090, and the number that decides usability is the **tail** — **44 s**
      worst turn against baselines crossing **150 s** (KTransformers **946 s**). → [[edge-inference]] [[fact-check]]
+   - **11-04 — quantization's speedup is a BATCH-SIZE claim:** **2.12×** (Qwen2.5-14B/A100) at batch 1, **1.02×** (Gemma 3 12B) at
+     batch 256 where **FP8** is the recipe, and only **two** public checkpoints pair a vLLM timing with an accuracy score — both INT4
+     Gemma 3 12B on one MMLU subject the AWQ build was calibrated on; every HumanEval delta is within sampling noise. → [[edge-inference]]
 
 4. **Multi-agent "swarms with scale" produce genuine results and genuine failure modes.** The
    60-agent Riemann run (only 2 of 60 produced the key insight) says discovery needs breadth;
@@ -1322,6 +1359,9 @@ patterns, and turn them into insights and actionable todos.
      end-to-end on domestic Chinese compute, live at longcat.chat with GitHub/HF still "即将上线" — the
      `meituan-longcat` org carries **29** Hub repos and **0** LongCat-2.5 (checked this run), and the page usually
      quoted is a wire story republished on the vendor's domain. → [[frontier-models]]
+   - **11-04 — post-training is sold against an in-house baseline, and a looped transformer ships without a result:** Figma's
+     Qwen 3.8 27B agent is **62%** head-to-head against its *previous production agent* while its model-vs-model claim is one chart
+     at **77.8 vs 76.9**; SenseNova-Loop-9B runs **56** layer executions from **32** weight sets and ships its results as a **PNG**. → [[frontier-models]]
 
 7. **AI safety is a measured release threshold, not policy — and the measuring infrastructure is
    now the weak point.** PF v2 / RSP v3.0 / FSF v3.1 run one loop (threshold → eval → pre-
@@ -1360,18 +1400,17 @@ patterns, and turn them into insights and actionable todos.
      - **11-02 20:20 — the missing number is the BASE RATE, and the missing thing is HEADROOM:** eleven agent-hijack evaluations
        put attacks at **16–86%** of samples and **none varies it**, so a **0.879** AUROC reaches **0.076** precision at 2% and
        rankings **reverse below 50%** tool coverage. → [[fact-check]]
-     - **11-03 — generation is fine, selection is unproven:** rTaste's **415** MVEs give **194** sound but only **73** beyond-the-seed,
-       and first choices "are not shown to improve on choosing the experiment written first". → [[harness-reliability]] [[fact-check]]
-     - **11-03 12:29 — an example set has no denominator, and part of a prompt gain is the JUDGE:** LifeVal publishes **five** tasks
-       at **90.4–100%** with no model name, no task count and no aggregate; "Compile as Hypothesis" finds **no significant** gain on
-       strong reasoners, and its one **+0.14** splits **~.035** judge-rubric reconstruction / **~.105** real refinement. → [[harness-reliability]]
+     - **11-03 (folded) — generation is fine but selection is unproven, and part of a prompt gain is the JUDGE:** rTaste's **415**
+       MVEs give **194** sound but only **73** beyond-the-seed; LifeVal's **five** tasks at **90.4–100%** carry no model name and no
+       aggregate, and "Compile as Hypothesis"'s **+0.14** splits **~.035** judge-rubric / **~.105** real refinement. → [[harness-reliability]]
       - **11-03 20:22 — the grader's rule is the largest unexamined term:** **eight** benchmarks' official scorers over
         **five** VLMs move accuracy up to **22 points** on identical outputs and **exactly 0** where the model emits clean
         option letters; a **0.000**-non-compliance trace still swings **9.5** on which regex match is kept.
         → [[parser-differential]] [[harness-reliability]]
-     - **11-04 — the metric decides what gets measured, and safe success is **37%** at **95%** accuracy:** VeriHarm runs
-       executable harm tests beside the correctness tests, separating "completed" from "completed without harm" by ~2.5× on
-       GPT-5.6-Sol and Claude-Opus-5. → [[harness-reliability]]
+     - **11-04 (folded) — the metric decides what is measured, and the instrument is the effect size:** VeriHarm runs executable harm
+       tests beside the correctness tests (**37%** safe success at **95%** accuracy); a leaderboard's **13-point** gap was a grader
+       that never ran (**half** the episodes ungraded, stored as failures), one mode check misreading **four** files collapses scores
+       **59–82** points silently, and a `(Reward: 5)` cue steers **97–100%** of answers while every label is correct. → [[fact-check]]
 
 9. **Hidden chain-of-thought is a confidentiality assumption, not a security boundary** —
    arXiv:2608.09867: encrypted reasoning blocks are interchangeable across sessions/users/models
@@ -1628,24 +1667,24 @@ patterns, and turn them into insights and actionable todos.
      BOTH directions:** the CVRF's **343** other CNAs, curl/Go shipping no CVSS by policy, **78** same-party pairs with
      **0 equal** (OpenPanel **37/0**); Cloud Foundry's "upgrade to **v1.246.0**" inside its own `lessThan v1.247.0`;
      **1 of 79** KEV adds since 09-01 has no record. → [[security]] [[disclosure-lag]]
-   - **11-01 — the score and the exploitation flag are written by different parties:** Drupal's record has **0 CNA metrics**,
-     one **CISA-ADP 6.5**, and `Exploitation: none` stamped **3h09m before** publication, beside a vendor page saying
-     "actively exploited"; Delinea's FIDO2 bypass is **5.1** under two **8.7**s that mint cloudadmin. → [[security]] [[vuln-supply]]
-   - **11-02 (folded) — provenance has three states, the stopping point is a fourth, and the `packageURL` is an
-     assigner choice:** Gitea's **20** records carry **no metric in any container**, Wicket's **19** are 4.0-only CNA
-     scores whose labels contradict their numbers, VulDB's **41** carry four frameworks and NVD drops one; **136/136**
-     Threat-metric records store the THREAT score (v3.1 stripped **123/123**, 4.0's `E` kept **136/136**); and
-     VulnCheck's LobeHub fix version exists in **none** of **1,935** releases. → [[vuln-supply]] [[fact-check]] [[disclosure-lag]]
+   - **11-01 → 11-02 (folded) — provenance has three states, the stopping point a fourth, and the flag and the score are written
+     by different parties:** Drupal's record has **0 CNA metrics** and one **CISA-ADP 6.5** with `Exploitation: none` stamped
+     **3h09m before** publication; Gitea's **20** records carry **no metric in any container**, VulDB's **41** carry four frameworks
+     and NVD drops one, **136/136** Threat-metric records store the THREAT score, and LobeHub's fix is in **none** of **1,935** releases.
+     → [[vuln-supply]] [[security]] [[disclosure-lag]]
    - **11-03 (folded) — the word is a signal, not a policy, and the range's top can BE the newest release:** of **638**
-     published zero-CVSS records in one week only **23** carry a word and **all 23 are Apache**, whose September
-     word-only records acquired a **CISA-ADP** score a median **4.4 h** later (41/44); Netpbm **10.86.51** lists fixes
-     in **17** programs while **seven** CVEs for six converters published **five weeks later**. **Measured 11-03 12:37:**
-     the open-bound shape is **17 of 3,365** records and **13 (76.5%)** have their ceiling *at* the registry's latest
-     release — an accurate record with an **empty remedy**, never "inside the bound" — and **15/15** of the rows that
-     can be named are one CNA (`disclosure@vulncheck.com`, all `defaultStatus: unaffected`). → [[security]] [[disclosure-lag]]
+     zero-CVSS records in a week only **23** carry a word and **all 23 are Apache** (ADP score a median **4.4 h** later);
+     the open-bound shape is **17 of 3,365**, **13 (76.5%)** ceiling *at* the newest release — an **empty remedy**, never
+     "inside the bound". → [[security]] [[disclosure-lag]]
+   - **11-04 12:34 — "above the ceiling" is a separate question from "is the newest release outside":** the repo fallback
+     takes one week's open-bound candidates **17 → 190**; **44** have no release above, **18** no readable changelog, and
+     **2** name the fix above ceiling+1 (FreeImage `≤3.18.0` → **3.19.23**, fix at **3.19.25**). → [[disclosure-lag]]
    - **11-04 — "fixed in X" is a claim about a SET, and a fix can be a conjunction:** FreeRDP's successor advisory is *titled*
      "**Incomplete fix** …" — two of three sinks byte-identical from 3.29.0 to HEAD, **eleven** releases exposed — and Docker's
      9.2 needs **4.98.0 and WSL 3.0.3** ("running on an older WSL remains affected"). → [[disclosure-lag]] [[security]]
+   - **11-04 12:20 — KEV asserts exploitation on a record nobody scored, and the SLOT moves inside one CNA:** WordPress's
+     `CVE-2026-119977` is KEV'd (3-day due) at `Undergoing Analysis` with **only** Wordfence's **8.1** and a **CISA-ADP** SSVC, **0**
+     NVD metrics; across **8** VulnCheck records published within **2 s**, 4.0 sits in `Secondary` **8/8**, 3.1 in `Primary` **3/8**. → [[security]]
 
 21. **The physical layer of connectivity is an active target, and the cheap attack is arson.** Civilian
     satellite ground stations and single regional data centres are defended by fences and geography
@@ -1738,6 +1777,11 @@ patterns, and turn them into insights and actionable todos.
       observability — AutoRCA keeps human approvers. Agents read all the telemetry, humans read the
       agents; the seam question: what does a human approver still meaningfully approve?
       → [[agent-ops]] [[dev-tools]]
+
+    - **11-04 — the taxonomy is the instrument:** Cisco's Signals reports against **45 problem types in eight families**, splits
+      **realized failures / risk exposures / inefficiencies**, and scores **91.43% F1** — "about **18 percentage points** higher
+      than a one-pass LLM control that used the same model and taxonomy", so the gain is evidence requirements and grouping, not
+      the model. An exposure that has not fired is not an incident. → [[agent-ops]]
 
 25. **Certificate trust follows a stack's trust *source*, not its species — "browser vs library" was
     the wrong cut.** A CA whose private key is a single byte passes every structural check (validity

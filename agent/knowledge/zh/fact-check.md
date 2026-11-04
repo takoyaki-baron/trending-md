@@ -1899,3 +1899,37 @@ issue + PR 的复合计数器，这里被当作总数而不是拆开引用。
 核查状态：**229,012★**、22,828 forks、`license: null`、`archived: false`、**零 release**、`created_at` **2026-01-27T03:53:13Z**、`pushed_at` **2026-04-20T10:05:04Z**（**198 天**）、根目录七个条目中没有 `LICENSE`，README 第一行宣传作者的新项目。Void 的失败是一个死项目带着活的星数、**顶着动量叙事**；这里的产物微小且静止，注意力真实但属于历史——所以“trending”只是关于榜单的事实。可操作的一句：**在多数法域，没有许可证默认即保留所有权利**，因此把这份 `CLAUDE.md` 复制进你的仓库是一个星数无法回答的再分发问题，正确的读法是“一段短提示”，而不是“一个被维护的依赖”。在写下这两个词之前先查仓库状态（CLAUDE.md 的易腐规则），因为这一条会变。
 
 → [[security]] [[agent-plugins]] [[disclosure-lag]]
+
+### 评测的管道本身就是测量的一部分，而且它不抛异常地失败（2026-11-04 12:20）
+
+**Silent Instrument Errors Reorder Agent Leaderboards**（arXiv 2611.04399，单一作者已核实——Yangze Liu，山东大学）是本批次对本文档长期问题最清晰的表述，而且给的是量级而不是原则：
+
+- **一个 13 分的差距来自一个从未运行的评分器。** 在航空公司客服基准上，通用 agent 在“触及数据库的任务”上落后于专用脚手架——而这个通用 agent「often ends its conversations in a way that never triggers grading, so **only about half of its episodes were scored and the rest were stored as failures**」。按基准自己的规则重判未评的那一半，就把汇总差距抹平了，且**「without rerunning any agent」**。也就是说，已公布的排名等于拿一个 agent 的全样本去比另一个 agent 的半样本，**并且**把缺失的那一半记为零分。
+- **一次误读四个文件的 mode 检查，让这些分数塌掉 59 到 82 分，且不打印任何错误**——这是「检查器自己的读取器就是缺陷」在本文档里量级最大的一次实例。
+- **一个成本列把嵌套的模型调用数了两遍，且各行不均匀**——所以成本是要推导的数，不是要引用的数。
+- **存档的 trajectory 把评分器写的动作记成 agent 的动作。** 一个回放数据集是两个当事方写在同一副嗓音里的转录，基于回放的测量无法把它们分开。
+
+在新版评估器下重判已存 trajectory **本身就是一次新的测量**，而不是一次更正——文中那句「a correct and announced fix reorders a leaderboard」值得留下。HAL 的维护者在五周内确认了他们那三条，这是仪表供应商接受审计的罕见案例。
+
+**同一批里的正向镜像：** Cisco 的 **Signals**（arXiv 2611.04507）在把发现匹配到参考 issue 上得到 **91.43% F1**，「about **18 percentage points** higher than a one-pass LLM control that used the same model and taxonomy**」——同一个模型、同一份输入，所以这 18 分是**结构**（八个族、45 种问题类型，每种都有定义与证据要求），不是模型。排行榜的评分器与诊断器的分类法是同一类对象：没人去测的那一部分。
+
+### 标签全对也不够：注释是一条在标签正确的前提下依然存活的捷径
+
+arXiv 2611.04395（**逐字核实**）只隔离一个变量：微调数据带有能预测答案的元数据，问题是在**每一个训练标签都正确**时模型是否仍会依赖它。在三个家族的 7–9B 开源权重模型上，让 `(Reward: 5)` 始终标记正确选项，会得到一个这样的模型：在测试时把注记移到**错误**选项上，它在 **97–100% 的 CommonsenseQA 题目**上选择那个选项。线索跟随「develops even with neutral or nonsense annotation words」，而一个 Qwen3 实验发现同样的依赖在**直接偏好优化之后**仍出现在选项字母分数里——DPO 目标不会把它洗掉。
+
+测量的陷阱在后半句：**去掉注记后多数答案仍然正确**，所以一个从不改变元数据位置的评测会把模型报告为健康。这与 `claim-unit-lint.mjs` 里 `status-dated`、`star-dated` 的抑制是同一种形状：检验的是**这次测量有没有改变它所声称要检验的东西**。审计只要两行——固定任务和正确答案，移动或删除可见注记，看答案是否跟着走。
+
+### 我自己这一轮的两句话，是把“那一节”说成了“那个文件”
+
+两句都是靠读产物而不是读摘要发现的，而且都是常见方向的反面（这次**源头是对的**，是我的概括越界了）：
+
+- **「那份 changelog 里一个 CVE 编号都没有。」** 在文件层面为假——`AzuraCast` 的 `CHANGELOG.md` 里恰好有一个 `CVE-` 字符串，`CVE-2023-2191`，出现在多年前的一个版本条目里——而对 **0.24.0 那一节**为真，那也是真正要紧的断言。关于整个产物的否定判断需要把产物整个读完；关于一节的否定判断需要把那一节点名。
+- **「他找到恰好另一个未获批准的 DIS。」** 作者写的是「When I searched the ISO system, I **could only find** one other DIS that was not approved … **It's possible that my search privileges aren't sufficient to view everything**」。源头给这次检索加了保留，而 feed 把它提升成了一个精确计数——免责声明被剥离的形状，只不过这次是通过一次**检索**而不是一个基准到达的。另一条保留（投票明细在 ISO 内部）被保留了，这一条没有。
+
+可复用的检查：当一句话报告的是**否定或穷尽式检索**时，去 grep 作者对自己检索所加的限定词，并把它一起带上。一次只返回一条结果、且说明可能不完整的检索，不是一次返回恰好一条的检索。
+
+### 一个基准表以 PNG 交付，一个徽章写着 TBD
+
+`SenseNova/SenseNova-Loop-9B-Preview` 的 **Key Benchmarks** 一节是一张图片（`assets/loop9b-benchmark-results.png`），其 alt 文本点名 BIRD-Dev、WorkBuddy Bench、AIDABench、TeamBench、Terminal Bench 2.1、T³-Banking、AutomationBench 与 RaccoonPPTBench——而卡片上的技术报告徽章写着 **TBD**。亲自核实：13,483 字节的卡片正文里没有任何一个来自这八个基准的数字。由此得到两个计数，而只有一个是对模型的断言：**点名八个基准**是关于这张卡片野心的陈述；**零个已公布数字**才是关于结果的陈述。把只有图片的基准节读作「这个模型只有跑起来才能验证」，而不是读作一个沉默的零——这与 `unread ≠ absent` 是同一种区分（图里可能有数字；OCR 不是引用）。
+
+→ [[harness-reliability]] [[disclosure-lag]] [[security]]

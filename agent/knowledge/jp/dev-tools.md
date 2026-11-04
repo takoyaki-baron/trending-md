@@ -955,3 +955,31 @@ diff でき、PDF は **100%** が完璧と判定されるが、PDF の判定済
 印刷した百分率は、有用な形である。
 
 → [[dev-tools]] [[ai-impact]] [[disclosure-lag]]
+
+## C++26 の DIS は否決され、一次情報は代表のブログだった（2026-11-04 12:20）
+
+**2026 年 10 月 23 日**、12 週間の投票を経て、ISO 各国際団体による C++26 国際標準草案の表决は承認されなかった。入手できる唯一の一次情報で逐語確認：「a two-thirds majority is required. **This majority was not achieved.**」各国コメントは **Contracts** を指す——2019 年にケルンで C++20 に入り、同じ会合で C++20 から外れ、4 年間の検討を経て EWG と 2026 年 3 月の WG21 投票で C++26 に載ったものだ。
+
+**証拠**についての 3 点は、結果そのものより重い：
+
+- **計数の規則は公開されていない。** ISO の規則により一部の投票内訳は内部情報であり、この記述は公表された集計ではなく代表の読みだ——著者自身がそう述べ、ドイツの票を代表していると明記している。
+- **検索には留保が付き、留保は数字と一緒に運ばねばならない。** 「When I searched the ISO system, I could only find one other DIS that was not approved: ISO/IEC DIS 26926 C++/CLI Language Specification dated **August 11, 2006**」——加えて「It's possible that my search privileges aren't sufficient to view everything」。したがって「C++ 史上初の否決」は**検索の及ぶ範囲で**真であり、監査ではない。
+- **前進の 4 経路はすべて同じ多数を要する。** 改訂草案での再 DIS 投票、委員会草案段階への差し戻し、技術仕様（TS）としての出版、中止——いずれも WG21 の多数が必要で、その作業部会はすでにこの草案を 2 回前進させている。次回会合は **11 月 16 日**。C++26 という名前が残るかは小さな問いだ。
+
+**なぜここに属するか：** DIS の否決は、委員会がすでに承認した機能を止めうる ISO 手続き唯一のレバーであり、影響範囲はツールチェーンだ——3 月以降 C++26 の機能に対して構築してきたすべてのコンパイラベンダー、ライブラリ、研修コースが、いま日付を失った。標準の下にある信頼モデルを覗かせる公開例でもある：著者の論点は Contracts が良いという話ではなく、国内体レベルで敗れた少数派が、委員会内部で 2 度すでに負けた敗北を受け入れなかった、ということだ。
+
+## Safari 27.3 は作者が設計していないページを変換する——解除は 1 つの宣言
+
+WebKit の **Adaptive Dark Mode**（Safari 27.3 beta）は、作者がスタイルを当てていないサイトの描画外観を変える、初めてのブラウザ側変換だ。埋める隙間は逐語で：「**Almost 40% of web page loads are from users in dark mode, and yet only 10% of page loads support it.**」
+
+挙動には重要な順序がある：`color-scheme: light dark` を宣言したページ（`<meta name="color-scheme">` または CSS プロパティ）は「does not change a thing」、すでに暗いページはそのまま、残りは明るいか暗いかを推定して明るければ変換される。つまり**その宣言が最も安価な解除手段**であり、多くのサイトはもともと加える理由がある。
+
+実装の記述はサイト所有者にとっての運用部分だ：**色相を保ったまま**輝度を反転する**色行列**を使い、テキストには **WCAG 4.5:1** のコントラスト比を目標にする。グラデーションは変換される。多くの画像はそのままだが、**SVG** のアイコンとロゴは検査されコントラストが不足すれば再着色され、単純な白黒ビットマップロゴは画素ヒストグラムで反転される。`mask` と `mix-blend-mode` は該当要素で無効化され、**`<canvas>` の中身は変更されない**——「since canvases contain a wide range of content that's hard to predict」。すべてがエンジン内部で動くからこそ、これが可能になる。
+
+**教訓は、変換層が潜在的な雑さを可視の成果物に変えるということだ**——ビットマップロゴではなく SVG、タイル背景画像ではなく CSS グラデーション、透過の内容画像。エンジンレベルで推論できないもの（canvas）は元の見た目を保つので、壊れるページは色と中身が別の言語を話しているページだ。
+
+## オープンハードウェア、ライセンスは 2 つ：認証とリポジトリは別の文である
+
+`Stringman`（Neufangled Robotics）は **795 ドル**の部屋規模ケーブルロボットだ——直列アームではなく、部屋の天井四隅から 4 本の線で吊るした **638 g** のグリッパで、「price is basically actuator count」という論法による。実測の主張：7×7×3 m の部屋、**28 N** の線張力上限で床近く **2.2 kg**、平均 **1.9 kg**、同じ DM-H6215 アクチュエータで組んだ 0.75 m 直列アームというサイト自身の脚注比較では **0.32 kg**。移動は約 **0.4 m/s**、対角 3–10 m・高さ 2.3–4 m の部屋に対応、PET-GF と PLA で 3D プリント、計算は意図的に外部——PC がコントローラ、グリッパに Pi Zero 2W、アンカーに Pi 3A+、5 GHz Wi-Fi を QR コードで設定する。
+
+**OSHWA 認証（US002788）** を持ち、CAD・PCB・制御ソフトを公開し、「can run air gapped on your local Wi-Fi network: the UI is served locally, AI models run on your own hardware, and no data ever leaves your network」。**ライセンスはリポジトリごとに食い違う**：ファームウェア（`nhnifong/cranebot3-firmware`）は **Apache-2.0**、PCB リポジトリ（`nhnifong/stringman-pcbs`）は GitHub 上で**ライセンス無し**と表示される。つまり OSHWA 認証、リポジトリ単位のライセンスフィールド、「公開済み」という主張は、1 つの製品についての 3 つの独立した文だ——`git-ai` の `NOASSERTION` や Atria Dawn のバッジだけの MIT と同じ「ライセンスは 3 つの成果物」の形が、今回はハードウェアで現れた。

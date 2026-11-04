@@ -213,6 +213,7 @@
  *   node disclosure-lag.mjs --field-watch weaknesses                    # re-read the SAME ids
  *   node disclosure-lag.mjs --changes-census --from 2026-10-21 --to 2026-10-27   # changes[] prevalence
  *   node disclosure-lag.mjs --bound-census --from 2026-10-23 --to 2026-10-29     # newest vs stated bound
+ *   node disclosure-lag.mjs --ceiling-census --from 2026-10-27 --to 2026-11-02  # is ceiling+1 the fix?
  *   node disclosure-lag.mjs --backlog-census --from 2026-10-21 --to 2026-10-27   # the Received residue
  *   node disclosure-lag.mjs --remedy-census --from 2026-10-25 --to 2026-10-31    # advice vs its own range
  *   node disclosure-lag.mjs --remedy-census --from … --to … --window-cache /tmp/w.json  # reuse the fetch
@@ -289,6 +290,7 @@ const CHANGES_CENSUS = args.includes('--changes-census');
    one had no bucket and was counted as "inside the bound", which is the same output for opposite
    advice. */
 const BOUND_CENSUS = args.includes('--bound-census');
+const CEILING_CENSUS = args.includes('--ceiling-census');
 const MAX_PKGS = Number(argOf('--max-pkgs', 80));
 /* `--mitigation-census`: does the version a vendor advisory tells you to install fall inside that
    advisory's own CVE record? Filed 2026-10-30 20:45 from Cloud Foundry `CVE-2026-59387`. One page
@@ -357,6 +359,11 @@ const RANGE_WORD = /\b(?:before|prior\s+to|earlier\s+than|through|up\s+to|and\s+
 const BUNDLE_WORD = /\b(?:includes?|bundles?|ships?|packages?)\b[^.]{0,40}$/i;
 const VERSION_TOKEN = /\bv?(\d{1,4}(?:\.\d{1,4}){1,3}(?:[-.][A-Za-z0-9]+)*)\b/g;
 const GHSA_RE = /GHSA(-[23456789cfghjmpqrvwx]{4}){3}/g;
+/* The ceiling+1 census's two word-lists, also up here so `--selftest` can reach `classifyRelease`
+   before the census section initialises. A security term outranks an infrastructure term: a release
+   that bumps PHP *and* fixes an XSS is a fix, so the order is the claim being tested. */
+const SECURITY_WORDS = /\b(?:CVE-\d{4}-\d+|[Ss]ecurity|[Vv]ulnerab|[Xx][Ss][Ss]|injection|[Rr]emote code|[Aa]uth(?:entication)? bypass|[Ss]SRF|[Rr]ace condition)/;
+const INFRA_WORDS = /\b(?:PHP|base image|docker|Docker|container image|build tool|build system|CI|dependenc(?:y|ies)|bump|toolchain|Node(?:\.js)?|runtime)\b/;
 
 /* ── the remedy census (added 2026-11-01 20:49) ──────────────────────────────────────────────
    Filed from Apache MINA `CVE-2026-118636`: the affected span is `3.0.0 <= 3.0.0-M2`, the record
@@ -2046,6 +2053,62 @@ if (SELFTEST) {
   eq('bound: a registry behind the stated ceiling is a lag, not a remedy', boundVerdict(cmpVer('2.0.0', '2.1.0')), 'newest-below-bound');
   eq('bound: a prerelease sorts below its own release', boundVerdict(cmpVer('3.0.0-M2', '3.0.0')), 'newest-below-bound');
 
+  /* 2026-11-04 12:34 — ceiling+1. The filing case is AzuraCast, where the release one patch above
+     the record's inclusive ceiling is a PHP base-image bump and the fix is unlabelled two minors
+     later. Each reader is pinned separately because each one can be right while the verdict is
+     wrong: the heading match, the bucket, and the "where does the CVE appear" walk. */
+  const CL = [
+    '## 0.24.0 — 2026-10-29',
+    '### Code Quality',
+    '- Fixed: administrator-role check on the media upload endpoint.',
+    '## 0.23.9 — 2026-10-20',
+    'This release is solely intended to update our distributed Docker containers to an updated version of PHP.',
+    '## 0.23.8 — 2026-10-12',
+    '- Dependency bump: guzzle 7.9.2.',
+  ].join('\n');
+  eq('ceiling+1: the section is heading-anchored to its own version',
+    /solely intended to update/.test(sectionForVersion(CL, '0.23.9') || ''), true);
+  eq('ceiling+1: and it stops before the next heading',
+    /0.23.8/.test(sectionForVersion(CL, '0.23.9') || ''), false);
+  /* A release section NESTS subheadings; the boundary is the next heading at the same or a higher
+     level, not the next `#` line. Measured: stopping at any heading cut 0.24.0 down to its first
+     two lines and hid the own-code security text the whole verdict turns on. */
+  eq('ceiling+1: subheadings belong to their release section',
+    /administrator-role check/.test(sectionForVersion(CL, '0.24.0') || ''), true);
+  eq('ceiling+1: an infrastructure-only note is not a fix',
+    classifyRelease(sectionForVersion(CL, '0.23.9')), 'infrastructure');
+  eq('ceiling+1: a security sentence with no infra term is the project talking about itself',
+    classifyRelease('PHP 8.3 bump\n- Fixed XSS in the login form'), 'security');
+  eq('ceiling+1: security scoped to a base image is the DEPENDENCY bucket, not the project\'s',
+    classifyRelease('This release is solely intended to update our distributed Docker containers to an updated version of PHP that patches recently released high-severity security vulnerabilities.'),
+    'dependency-security');
+  eq('ceiling+1: no changelog is no-text, never infrastructure',
+    classifyRelease(null), 'no-text');
+  eq('ceiling+1: a bare version in prose is not a section heading',
+    sectionForVersion('Requires 0.23.9 or later.\n## 1.0.0\n- initial', '0.23.9'), null);
+  eq('ceiling+1: the CVE-id walk reports the heading it sits under',
+    cveMentionVersions('## 0.24.1\n- fixes CVE-2026-121427\n## 0.24.0\n- nothing', 'CVE-2026-121427'), ['0.24.1']);
+  eq('ceiling+1: a fix named ABOVE ceiling+1 is its own verdict',
+    ceilingVerdict({ cp1Class: 'infrastructure', cveVersions: ['0.24.1'], cp1: '0.23.9' }), 'fix-listed-above-ceiling+1');
+  eq('ceiling+1: infrastructure with no later CVE mention is the dangerous default',
+    ceilingVerdict({ cp1Class: 'infrastructure', cveVersions: [], cp1: '0.23.9' }), 'ceiling+1-infrastructure-only');
+  eq('ceiling+1: a security note without the id is weaker but not the infra bucket',
+    ceilingVerdict({ cp1Class: 'security', cveVersions: [], cp1: '0.23.9' }), 'ceiling+1-own-security');
+  eq('ceiling+1: the AzuraCast shape — a dependency patch above the ceiling, the real fix above THAT',
+    ceilingVerdict({ cp1Class: 'dependency-security', cveVersions: [], cp1: '0.23.9', firstOwnSecurityAbove: '0.24.0' }),
+    'ceiling+1-dependency-security-fix-above');
+  eq('ceiling+1: a dependency patch with nothing above it is the dangerous default',
+    ceilingVerdict({ cp1Class: 'dependency-security', cveVersions: [], cp1: '0.23.9' }),
+    'ceiling+1-dependency-security');
+  /* The repo fallback: without it the census could not see the record it was filed from, because
+     AzuraCast's `affected[]` carries no `packageURL` and every row of that shape was counted as
+     `no-packageurl`. The GHSA reference names the project; a register path does not. */
+  eq('ceiling+1: a GHSA reference names the project the record omits',
+    repoFromRefs({ references: [{ url: 'https://github.com/AzuraCast/AzuraCast/security/advisories/GHSA-2wcv-vv3g-g86q' }] }),
+    'AzuraCast/AzuraCast');
+  eq('ceiling+1: the advisories database is not a project',
+    repoFromRefs({ references: [{ url: 'https://github.com/advisories/GHSA-xxxx-yyyy-zzzz' }] }), null);
+
   let pass = 0;
   for (const c of cases) {
     if (c.ok) pass++;
@@ -2212,15 +2275,53 @@ function printRangeCensus(c) {
    the exemption). Records with several spans are counted and excluded rather than merged, because
    a multi-branch range has one max per line and "the newest" is not one number. */
 
-function openBoundOf(cve) {
+/* A repository named by the record's own `references[]`. Added 2026-11-04 12:34 because the
+   ceiling+1 census could not see the record it was FILED from: AzuraCast's `affected[]` carries no
+   `packageURL` at all, so every row of that shape was counted as `no-packageurl` (3,717 entries
+   over one week — a class far larger than the 17 registry-nameable rows). The GHSA reference is
+   enough to name the project, and a project's tags are a version list. Register-style repos are
+   skipped: `github.com/advisories/GHSA-…` names the database, not a project. */
+function repoFromRefs(cve) {
+  for (const r of cve.references || []) {
+    const m = String(r.url || '').match(/github\.com\/([A-Za-z0-9_.-]+)\/([A-Za-z0-9_.-]+)/);
+    if (!m) continue;
+    if (/^(advisories|security|sponsors|features|marketplace|topics)$/i.test(m[1])) continue;
+    return `${m[1]}/${m[2].replace(/\.git$/, '')}`;
+  }
+  return null;
+}
+
+function openBoundOf(cve, { allowRepo = false } = {}) {
   const skips = [];
   const candidates = [];
   for (const a of cve.affected || []) {
     for (const d of a.affectedData || []) {
       const purl = d.packageURL || '';
       const eco = Object.keys(REGISTRY_ECOSYSTEMS).find(p => purl.startsWith(p));
-      if (!eco) { if (d.versions?.length) skips.push('no-packageurl'); continue; }
+      if (!eco && !(d.versions?.length)) { continue; }
       const vs = d.versions || [];
+      if (!eco) {
+        /* No registry name, but the record may still name a project. The bound shape is identical,
+           so the same four exclusions apply before the reference fallback is trusted — otherwise a
+           `lessThan` record would enter this census as an open bound just because its URL is a
+           GitHub repo. */
+        const repo = allowRepo ? repoFromRefs(cve) : null;
+        if (!repo) { skips.push('no-packageurl'); continue; }
+        if (vs.length !== 1) { skips.push('multi-span'); continue; }
+        const v0 = vs[0];
+        if (v0.status && v0.status !== 'affected') { skips.push('no-affected-span'); continue; }
+        if (v0.lessThan) { skips.push('names-a-fix'); continue; }
+        if (v0.changes?.length) { skips.push('names-a-fix'); continue; }
+        if (!v0.lessThanOrEqual) { skips.push('unbounded'); continue; }
+        /* A git RANGE IS NOT A VERSION RANGE — the same guard the remedy census had to add
+           (2026-11-01, 211 empty spans that were `<sha>…<sha>`). Measured on this census's first
+           week: `CVE-2026-117569` read `≤a608c74e99910232dd208fee99de860458672b82`, and a tag feed
+           ordered by `cmpVer` turns that into a bound no release can satisfy. */
+        if (!/^\s*v?\d+(?:\.\d+)*/.test(String(v0.lessThanOrEqual))) { skips.push('git-range'); continue; }
+        candidates.push({ ecosystem: 'github', name: repo, max: v0.lessThanOrEqual, maxInc: true,
+          source: a.source || null, defaultStatus: d.defaultStatus ?? null });
+        continue;
+      }
       const name = decodeURIComponent(purl.slice(eco.length)).replace(/^@/, '@');
       if (vs.length !== 1) { skips.push('multi-span'); continue; }
       const v = vs[0];
@@ -2280,6 +2381,125 @@ function boundVerdict(cmp) {
   if (cmp > 0) return 'newest-outside-bound';
   if (cmp === 0) return 'newest-equals-bound';
   return 'newest-below-bound';
+}
+
+/* ── ceiling+1: is the release immediately above the bound the FIX? ────────────────────────────
+   Filed 2026-11-04 12:26 from AzuraCast, where `CVE-2026-121427/8/9` read
+   `{version "0", lessThanOrEqual "0.23.8", affected}` with `defaultStatus: unaffected`, and
+   **0.23.9** — the release one patch above the ceiling — is, in its own notes, "solely intended to
+   update our distributed Docker containers to an updated version of PHP", while the real fixes sit
+   unlabelled in **0.24.0**'s *Code Quality* section.
+
+   `--bound-census` already answers "is the newest release outside the bound". That is a different
+   question: 0.23.9 IS outside the bound and is NOT the fix, so a responder who upgrades one patch
+   level reports the host patched. The discriminating measurement needs the release LIST, not the
+   newest release, and then a reading of the release's own notes.
+
+   The three readings, and why each is a separate bucket rather than a score:
+     · `security`      — the section for ceiling+1 names a CVE / a vulnerability class. The release
+                          above the ceiling is plausibly the fix.
+     · `infrastructure` — the section names a base image, a runtime bump, build tooling, or a
+                          dependency upgrade and NO security term. Upgrading to it is not a fix,
+                          which is the state the feed would otherwise publish as "upgrade past X".
+     · `no-text`       — the project publishes no changelog this reader can reach. Unread is not
+                          absent, so this never counts as either bucket.
+   A fourth column is orthogonal and is the sharpest signal available without git archaeology:
+   **does the CVE id appear ANYWHERE in the changelog, and under which version heading?** When it
+   appears under a release above ceiling+1, the project has named its own fix release and the
+   record's machine field did not.
+   Pure, so `--selftest` pins them without a network. */
+/** The changelog section belonging to one version, or null when the text has no such heading.
+ *  Heading-anchored on purpose: a bare version string also appears in "compatible with 1.2.3" and
+ *  in the body of a neighbouring note, which would make every release look documented. */
+function sectionForVersion(text, version) {
+  if (!text || !version) return null;
+  const esc = String(version).replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  const lines = text.split('\n');
+  /* The version is matched against the heading's TEXT, after its `#` marker is stripped — a
+     single regex that tried to jump from `^#{1,6}\s` to the version could never succeed, because
+     the one character it needed to anchor on was the whitespace the marker rule had consumed
+     (measured: 2 selftest cases failed with `false` / `no-text` on the first run). */
+  const anyHead = /^\s{0,3}(#{1,6})\s/;
+  const stripMark = /^\s{0,3}#{1,6}\s*/;
+  const vre = new RegExp(`(?:^|[^0-9A-Za-z.])v?${esc}(?![0-9A-Za-z.])`, 'i');
+  const start = lines.findIndex(l => anyHead.test(l) && vre.test(l.replace(stripMark, '')));
+  if (start < 0) return null;
+  /* Stop at the next heading of the SAME OR HIGHER level, not at any heading. AzuraCast's notes
+     nest `## New Features/Changes` and `## Code Quality` under `# AzuraCast 0.24.0`; a reader that
+     stops at any `#` line returns the two-line subheading and its section looks empty. That is how
+     the first live run classified 0.24.0 as carrying no own-code security text. */
+  const level = (lines[start].match(anyHead) || [, '#'])[1].length;
+  let end = lines.length;
+  for (let i = start + 1; i < lines.length; i++) {
+    const m = lines[i].match(anyHead);
+    if (m && m[1].length <= level) { end = i; break; }
+  }
+  return lines.slice(start, end).join('\n');
+}
+
+/** Which bucket a release's own notes fall in — decided SENTENCE by sentence, not over the section.
+ *
+ *  The first version of this read the whole section and let a security term win, which is right for
+ *  a release that bumps PHP and fixes an XSS and WRONG for the case this census was filed on:
+ *  AzuraCast 0.23.9 says "This release is solely intended to update our distributed Docker
+ *  containers to an updated version of PHP that patches recently released high-severity security
+ *  vulnerabilities." A section-level reader called that `security`; the sentence is about **PHP**,
+ *  and the project's own three CVEs are fixed unlabelled in 0.24.0's *Code Quality* section. That
+ *  is the whole failure mode — a release that says "security" and is not this record's fix — so
+ *  the distinction has to be dependency-scoped security, not security.
+ *
+ *  `security` means a security sentence with no infrastructure term in it: the project talking
+ *  about its own code. `dependency-security` is security and infrastructure in the SAME sentence:
+ *  the base image's patched CVEs, a runtime bump. A section can hold both, and `security` wins
+ *  there — a release that does both is still a candidate fix. */
+function classifyRelease(section) {
+  if (!section) return 'no-text';
+  let own = false, dep = false, infra = false;
+  for (const s of section.split(/(?<=[.!?])\s+|\n+/)) {
+    if (!s.trim()) continue;
+    const sec = SECURITY_WORDS.test(s), inf = INFRA_WORDS.test(s);
+    if (sec && inf) dep = true;
+    else if (sec) own = true;
+    else if (inf) infra = true;
+  }
+  if (own) return 'security';
+  if (dep) return 'dependency-security';
+  if (infra) return 'infrastructure';
+  return 'unclear';
+}
+
+/** Every version heading a CVE id is mentioned under, nearest heading above each occurrence.
+ *  Returns the list in document order (newest first in most changelogs). */
+function cveMentionVersions(text, cveId) {
+  if (!text || !cveId) return [];
+  const lines = text.split('\n');
+  const out = [];
+  let current = null;
+  const verRe = /\bv?(\d+\.\d+(?:\.\d+)?(?:[-.][0-9A-Za-z.]+)?)\b/;
+  for (const l of lines) {
+    if (/^\s{0,3}#{1,6}\s/.test(l)) { const m = l.match(verRe); if (m) current = m[1]; }
+    if (l.includes(cveId) && current && !out.includes(current)) out.push(current);
+  }
+  return out;
+}
+
+/** The verdict for one row. `cp1` is the lowest release strictly above the record's inclusive
+ *  ceiling; `cveVersions` is where the project's own changelog names this CVE;
+ *  `firstOwnSecurityAbove` is the first release above cp1 whose notes are security about THIS
+ *  project — the unlabelled fix the record's own range cannot point at. */
+function ceilingVerdict({ cp1Class, cveVersions, cp1, firstOwnSecurityAbove }) {
+  const later = (cveVersions || []).filter(v => cp1 && cmpVer(v, cp1) > 0);
+  if (later.length) return 'fix-listed-above-ceiling+1';
+  if ((cveVersions || []).includes(cp1)) return 'ceiling+1-names-the-cve';
+  if (cp1Class === 'security') return 'ceiling+1-own-security';
+  if (cp1Class === 'dependency-security') {
+    return firstOwnSecurityAbove ? 'ceiling+1-dependency-security-fix-above' : 'ceiling+1-dependency-security';
+  }
+  if (cp1Class === 'infrastructure') {
+    return firstOwnSecurityAbove ? 'ceiling+1-infrastructure-fix-above' : 'ceiling+1-infrastructure-only';
+  }
+  if (cp1Class === 'unclear') return 'ceiling+1-unclear';
+  return 'ceiling+1-no-notes';
 }
 
 async function boundCensus({ from, to }) {
@@ -2405,6 +2625,194 @@ function printBoundCensus(c) {
   console.log('  the range excludes the current release, never that the release is fixed. Read the row as a');
   console.log('  record to open (the newest version\'s bytes are the test), and read the per-assigner split');
   console.log('  before quoting a rate — this shape was one writer\'s habit for `changes[]`.');
+}
+
+/* ── `--ceiling-census`: the release one step above the bound, and its own notes ─────────────── */
+
+/** Every release a registry lists, plus the repo the project names — so the ceiling+1 is a real
+ *  release and not "the newest one", which is the state `--bound-census` already reports.
+ *  All three endpoints are unmetered (no `api.github.com` call). */
+async function releaseList(ecosystem, name) {
+  const key = `list:${ecosystem}:${name}`;
+  if (!globalThis.__relListCache) globalThis.__relListCache = new Map();
+  if (globalThis.__relListCache.has(key)) return globalThis.__relListCache.get(key);
+  let out = null;
+  try {
+    if (ecosystem === 'pypi') {
+      const j = await getJson(`https://pypi.org/pypi/${encodeURIComponent(name)}/json`);
+      const b = j?.body;
+      if (b?.releases) {
+        const versions = Object.entries(b.releases).map(([version, files]) =>
+          ({ version, at: files?.[0]?.upload_time_iso_8601 || null }));
+        const urls = b.info?.project_urls || {};
+        const repo = [urls.Source, urls.Repository, urls['Source Code'], urls.Code, urls.Homepage, b.info?.home_page]
+          .find(u => typeof u === 'string' && /github\.com\//.test(u)) || null;
+        out = { versions, repo };
+      }
+    } else if (ecosystem === 'npm') {
+      const j = await getJson(`https://registry.npmjs.org/${name.replace('/', '%2F')}`);
+      const b = j?.body;
+      if (b?.versions) {
+        const versions = Object.keys(b.versions).map(version => ({ version, at: b.time?.[version] || null }));
+        const r = b.repository;
+        const repo = (typeof r === 'string' ? r : r?.url) || b.homepage || null;
+        out = { versions, repo: repo && /github\.com\//.test(repo) ? repo : null };
+      }
+    } else if (ecosystem === 'github') {
+      /* A project with no registry entry still has TAGS, and `tags.atom` is unmetered. The feed is
+         capped at 10 entries, which is a coverage limit rather than an absence — the caller checks
+         whether the record's ceiling is INSIDE the visible window before naming a ceiling+1, since
+         a ceiling older than every visible tag cannot have its successor named from here. */
+      const r = await getText(`https://github.com/${name}/tags.atom`).catch(() => ({ status: 0, body: null }));
+      if (r.status === 200 && r.body) {
+        const versions = [];
+        for (const m of r.body.matchAll(/<entry>([\s\S]*?)<\/entry>/g)) {
+          const t = m[1].match(/<title>([^<]*)<\/title>/);
+          const u = m[1].match(/<updated>([^<]*)<\/updated>/);
+          if (t && /\d/.test(t[1])) versions.push({ version: t[1].trim(), at: u ? u[1] : null });
+        }
+        out = versions.length ? { versions, repo: `https://github.com/${name}`, visible: versions.length } : null;
+      }
+    } else {
+      const j = await getJson(`https://crates.io/api/v1/crates/${encodeURIComponent(name)}`);
+      if (j?.body?.versions) {
+        const versions = j.body.versions.map(v => ({ version: v.num, at: v.created_at || null }));
+        out = { versions, repo: j.body.crate?.repository || null };
+      }
+    }
+  } catch { out = null; }
+  globalThis.__relListCache.set(key, out);
+  return out;
+}
+
+/** A project's changelog text, tried at the paths projects actually use, on the default branch.
+ *  A 404 on every candidate is `null` — which the census prints as no-notes rather than as an
+ *  absence of fixes. `releases.atom` is the last resort because it renders release bodies, which
+ *  is where a project that keeps no changelog file puts its notes. */
+async function changelogFor(repo) {
+  if (!repo) return null;
+  const key = `cl:${repo}`;
+  if (!globalThis.__clCache) globalThis.__clCache = new Map();
+  if (globalThis.__clCache.has(key)) return globalThis.__clCache.get(key);
+  const m = String(repo).match(/github\.com[/:]([^/]+)\/([^/#?]+?)(?:\.git)?(?:[#?].*)?$/);
+  if (!m) { globalThis.__clCache.set(key, null); return null; }
+  const slug = `${m[1]}/${m[2]}`;
+  let text = null;
+  /* A dropped socket must become a row verdict, not a stack trace: the first live run died with
+     `TypeError: terminated` on one changelog fetch and lost the whole census, which is the same
+     "one failed page ends the run" defect the bound census fixed for `AbortError`. */
+  for (const path of ['CHANGELOG.md', 'CHANGELOG', 'CHANGES.md', 'CHANGELOG.rst', 'docs/CHANGELOG.md', 'RELEASE_NOTES.md']) {
+    const r = await getText(`https://raw.githubusercontent.com/${slug}/HEAD/${path}`).catch(() => ({ status: 0, body: null }));
+    if (r.status === 200 && r.body && r.body.length > 200) { text = r.body; break; }
+  }
+  if (!text) {
+    const r = await getText(`https://github.com/${slug}/releases.atom`).catch(() => ({ status: 0, body: null }));
+    if (r.status === 200 && r.body) text = r.body.replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&amp;/g, '&');
+  }
+  const out = text ? { slug, text } : { slug, text: null };
+  globalThis.__clCache.set(key, out);
+  return out;
+}
+
+async function ceilingCensus({ from, to }) {
+  const { records, total } = await fetchWindow(from, to);
+  const rows = [];
+  const skipTally = {};
+  for (const c of records) {
+    if (c.vulnStatus === 'Rejected') continue;
+    const { bound, skips } = openBoundOf(c, { allowRepo: true });
+    for (const s of skips) skipTally[s] = (skipTally[s] || 0) + 1;
+    if (!bound) continue;
+    rows.push({ id: c.id, assigner: c.sourceIdentifier || '?', published: c.published || null, ...bound, cp1: null, cp1At: null, cp1Class: null, cveVersions: [], verdict: 'unqueried' });
+  }
+  const cap = Math.min(rows.length, MAX_PKGS);
+  for (const r of rows.slice(0, cap)) {
+    const list = await releaseList(r.ecosystem, r.name);
+    if (!list || !list.versions.length) { r.verdict = 'registry-unreadable'; continue; }
+    const above = list.versions.filter(v => cmpVer(v.version, r.max) > 0)
+      .sort((a, b) => cmpVer(a.version, b.version));
+    if (!above.length) { r.verdict = 'nothing-above-ceiling'; continue; }
+    /* The tag feed shows the newest 10 only. When EVERY visible tag is above the ceiling, the true
+       ceiling+1 is older than anything this reader can see — so naming the lowest visible tag would
+       overstate the step a responder should take. Report the limit instead of a guess. */
+    if (r.ecosystem === 'github' && above.length === list.versions.length) {
+      r.verdict = 'ceiling+1-outside-tag-window';
+      r.visibleTags = list.versions.length;
+      continue;
+    }
+    r.cp1 = above[0].version; r.cp1At = above[0].at;
+    const cl = await changelogFor(list.repo);
+    r.changelogSlug = cl?.slug || null;
+    if (!cl?.text) { r.cp1Class = 'no-text'; r.verdict = ceilingVerdict({ cp1Class: r.cp1Class, cveVersions: [], cp1: r.cp1 }); continue; }
+    r.cp1Class = classifyRelease(sectionForVersion(cl.text, r.cp1));
+    r.cveVersions = cveMentionVersions(cl.text, r.id);
+    /* When ceiling+1 is a dependency's patch or mere infrastructure, look ABOVE it for the first
+       release whose notes are security about this project. That is the unlabelled fix AzuraCast
+       ships in 0.24.0 — no CVE id anywhere in a 188 KB changelog, so the id column cannot find it
+       and only the section's subject can. Bounded to the next 8 releases: past that, the release
+       is not "the one above" in any useful sense. */
+    if (['dependency-security', 'infrastructure', 'unclear'].includes(r.cp1Class)) {
+      for (const v of above.slice(1, 9)) {
+        if (classifyRelease(sectionForVersion(cl.text, v.version)) === 'security') { r.firstOwnSecurityAbove = v.version; break; }
+      }
+    }
+    r.verdict = ceilingVerdict({ cp1Class: r.cp1Class, cveVersions: r.cveVersions, cp1: r.cp1, firstOwnSecurityAbove: r.firstOwnSecurityAbove });
+    await sleep(120);
+  }
+  for (const r of rows.slice(cap)) r.verdict = 'unqueried';
+  return { from, to, totalResults: total, fetched: records.length, candidates: rows.length, queried: cap, skipTally, rows };
+}
+
+function printCeilingCensus(c) {
+  const pct = (n, d) => (d ? ((100 * n) / d).toFixed(1) : '0.0');
+  const q = c.rows.filter(r => r.verdict !== 'unqueried');
+  const named = q.filter(r => r.cp1);
+  const by = {};
+  for (const r of q) by[r.verdict] = (by[r.verdict] || 0) + 1;
+  console.log(`Ceiling+1 census — publication window ${c.from} → ${c.to} (UTC)`);
+  console.log(`  ${c.fetched} records · ${c.candidates} with an inclusive max and no named fix · ${c.queried} queryable (cap ${MAX_PKGS})`);
+  console.log('');
+  console.log(`  rows with a release above the ceiling: ${named.length}/${q.length} (${pct(named.length, q.length)}%) of the open-bound rows`);
+  const order = ['fix-listed-above-ceiling+1', 'ceiling+1-names-the-cve', 'ceiling+1-own-security',
+    'ceiling+1-dependency-security-fix-above', 'ceiling+1-dependency-security',
+    'ceiling+1-infrastructure-fix-above', 'ceiling+1-infrastructure-only', 'ceiling+1-unclear',
+    'ceiling+1-no-notes', 'ceiling+1-outside-tag-window', 'nothing-above-ceiling'];
+  for (const k of order) if (by[k]) console.log(`    ${k.padEnd(32)} ${String(by[k]).padStart(3)}`);
+  const other = Object.keys(by).filter(k => !order.includes(k));
+  for (const k of other) console.log(`    ${k.padEnd(32)} ${String(by[k]).padStart(3)}`);
+  console.log('');
+  console.log('  What each verdict means:');
+  console.log('    fix-listed-above-ceiling+1   the project\'s own changelog names this CVE under a release ABOVE ceiling+1');
+  console.log('    ceiling+1-names-the-cve      ceiling+1\'s notes name this CVE (the obvious fix)');
+  console.log('    ceiling+1-own-security       ceiling+1\'s notes carry security about THIS project but not this id');
+  console.log('    ceiling+1-dependency-security-fix-above  ceiling+1 patches a DEPENDENCY, and a later release carries own-code security');
+  console.log('    ceiling+1-dependency-security ceiling+1 says "security" about a base image / runtime — upgrade is NOT this fix');
+  console.log('    ceiling+1-infrastructure-only ceiling+1\'s notes are base image / runtime / build only — upgrade is NOT a fix');
+  console.log('    ceiling+1-unclear            notes exist; neither a security nor an infrastructure term matched');
+  console.log('    ceiling+1-no-notes           no changelog reachable — unread is not absent');
+  console.log('    ceiling+1-outside-tag-window every visible tag is above the ceiling — the successor is older than the feed shows');
+  console.log('');
+  if (named.length) {
+    console.log('  rows (id · package · ceiling → ceiling+1 · verdict · where the CVE is mentioned):');
+    for (const r of named.slice(0, 25)) {
+      console.log(`    ${r.id}  ${r.ecosystem}/${r.name}  ≤${r.max} → ${r.cp1}${r.cp1At ? ` (${String(r.cp1At).slice(0, 10)})` : ''}`);
+      console.log(`        ${r.verdict}${r.firstOwnSecurityAbove ? `  · own-code security first in ${r.firstOwnSecurityAbove}` : ''}${r.cveVersions?.length ? `  · CVE named under ${r.cveVersions.join(', ')}` : ''}  [${r.assigner}]`);
+    }
+    if (named.length > 25) console.log(`    …${named.length - 25} more`);
+    const byAsn = {};
+    for (const r of named) { const a = byAsn[r.assigner] = byAsn[r.assigner] || { n: 0, infra: 0, later: 0 }; a.n++; if (r.verdict === 'ceiling+1-infrastructure-only') a.infra++; if (r.verdict === 'fix-listed-above-ceiling+1') a.later++; }
+    console.log('');
+    console.log('  by assigner (rows · infra-only · fix listed above ceiling+1):');
+    for (const [a, v] of Object.entries(byAsn).sort((x, y) => y[1].n - x[1].n)) {
+      console.log(`    ${a.padEnd(34)} ${String(v.n).padStart(3)} · ${String(v.infra).padStart(3)} · ${String(v.later).padStart(3)}`);
+    }
+  }
+  const sk = Object.entries(c.skipTally).sort((a, b) => b[1] - a[1]);
+  if (sk.length) console.log(`\n  excluded shapes: ${sk.map(([k, v]) => `${k} ${v}`).join(' · ')}`);
+  console.log('\n  Two guards this census cannot lift: a changelog line that names NO CVE is not evidence of no');
+  console.log('  fix (the real fix can ship unlabelled under "Code Quality"), which is why the CVE-mention');
+  console.log('  column is listed separately from the bucket; and a base-image bump CAN carry a dependency\'s');
+  console.log('  patch, which is why ceiling+1-infrastructure-only is a prompt to open the diff, not a verdict.');
 }
 
 /* ── the mitigation census (filed 2026-10-30 20:45) ──
@@ -3387,6 +3795,15 @@ if (BOUND_CENSUS) {
   process.exit(0);
 }
 
+if (CEILING_CENSUS) {
+  const to = CENSUS_TO || new Date(Date.now() - 864e5).toISOString().slice(0, 10);
+  const from = CENSUS_FROM || new Date(Date.parse(`${to}T00:00:00Z`) - 6 * 864e5).toISOString().slice(0, 10);
+  const c = await ceilingCensus({ from, to });
+  if (JSON_OUT) console.log(JSON.stringify(c, null, 1));
+  else printCeilingCensus(c);
+  process.exit(0);
+}
+
 if (MITIGATION_CENSUS) {
   const to = CENSUS_TO || new Date(Date.now() - 864e5).toISOString().slice(0, 10);
   const from = CENSUS_FROM || new Date(Date.parse(`${to}T00:00:00Z`) - 6 * 864e5).toISOString().slice(0, 10);
@@ -3440,7 +3857,7 @@ if (!IDS.length && !TRACKERS.length && !(REPO && ARTIFACT)) {
     ' [--release-notes <url>[,<url>…]] [--census [--no-github]] [--range-census --from YYYY-MM-DD --to YYYY-MM-DD]' +
     ' [--field-census <field> --from YYYY-MM-DD --to YYYY-MM-DD]' +
     ' [--field-watch <field> [--from YYYY-MM-DD --to YYYY-MM-DD] [--store <path>]]' +
-    ' [--changes-census | --backlog-census | --bound-census | --mitigation-census | --remedy-census --from YYYY-MM-DD --to YYYY-MM-DD [--window-cache <path>]]');
+    ' [--changes-census | --backlog-census | --bound-census | --ceiling-census | --mitigation-census | --remedy-census --from YYYY-MM-DD --to YYYY-MM-DD [--window-cache <path>]]');
   process.exit(0);
 }
 

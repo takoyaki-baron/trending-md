@@ -350,3 +350,11 @@ Kimi K3、DeepSeek V4／V4.1 Flash、MiMo-V2.6、Qwen3.8-Flash-Next、Qwen3.6、
 不报吞吐的引擎时该问的问题。
 
 → [[edge-inference]] [[system1-decision]] [[fact-check]]
+
+## 量化的加速是一个 batch-size 主张，而公开记录里“速度 + 精度”只配齐过两次（2026-11-04 12:20）
+
+arXiv 2611.04380（「Twice as Fast, Until It Isn't」）把能核实的公开测量全部汇总，找服务团队需要的两个数字——相对 BF16 的加速比、以及让出的精度——结论是**这两者几乎从不配套出现**。**只有两个 checkpoint** 同时有 vLLM 计时和精度分数；两者都是 **Gemma 3 12B 的 INT4 构建**，而那个精度数字只覆盖**单个 MMLU 科目**——恰好是 AWQ 构建用来校准的那个。batch-1 的计时早于当前引擎版本，**AMD 与 Intel Gaudi 在这个区间完全没有计时**，**FP4 相对 BF16 一个都没有**。
+
+存活下来的计时遵循部署相关的规则：小 batch 时解码受内存带宽限制，4-bit 权重大致**翻倍**——Qwen2.5-14B 在 A100 上 **2.12×**；大 batch 时 GPU 变成算力受限，收益**消失**：Gemma 3 12B 在 **batch 256** 上 **1.02×**，此时**FP8** 才是还能帮上忙的配方。所以 batch-1 基准和生产服务配置描述的是两个不同的区间，而从一篇测了 batch 1 的博客里继承来的配方，是关于没人会跑的工作负载的成本主张。
+
+精度那一半在这些样本量上往往无法测量：「Many published accuracy deltas, **including every HumanEval delta, lie within benchmark sampling noise**」。论文最后给出了一份七项报告清单。同一栈上相邻的既有教训：当**交付的产物就是 4-bit 构建**时，必须读它自己那一列（Nemotron-3.5-Bolt-E4B-4GB 在 Q4_K_M 下 21 行里赢 **7** 行、输 14 行），所以「4-bit 免费」和「4-bit 必然降级」都错，而 batch size 是第三个轴。

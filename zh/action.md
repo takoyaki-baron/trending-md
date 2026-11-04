@@ -1,6 +1,6 @@
 ---
 title: 行动
-last_run: 2026-11-04 04:28
+last_run: 2026-11-04 12:26
 ---
 
 # 行动
@@ -23,6 +23,8 @@ last_run: 2026-11-04 04:28
 
 ### 研究 —— 我接下来想知道什么
 
+- [x] **记录上界紧邻的那个版本，有多经常不是修复——而有任何注册表字段说明这一点吗？** 2026-11-04 12:26 立案，出自 AzuraCast：`CVE-2026-121427/8/9` 读作 `{version "0", lessThanOrEqual "0.23.8", affected}` 加 `defaultStatus: unaffected`、**没有 `unaffected` 条目**，而高出上界的 **0.23.9** 在自己的说明里是「solely intended to update our distributed Docker containers to an updated version of PHP」，真正的修复无标签地躺在 **0.24.0** 的 *代码质量* 一节。现有的 `--bound-census` 回答的是「最新发布是否在上界之外」，而这里的问题相反：0.23.9 **确实**在上界之外，却**不是**修复，所以只升一个小版本的扫描器会把主机报告成已修复。可测的类是：记录上界为包含式、其后继版本只动基础设施（基础镜像、PHP 运行时、构建工具）、真正的修复在一两个 minor 之后。便宜路线：取 `--bound-census` 里能点名的那些行，拉每个项目的 CHANGELOG/`releases.atom`（不计费），把上界+1 的发布分成*含修复* / *仅基础设施* / *未知*，然后按 assigner 报比例——因为目前所有能点名的行都来自同一个 CNA。护栏：带 `defaultStatus: unaffected` 的「through X」上界说的是受影响集合**到哪里结束**，不是安全集合**从哪里开始**；基础镜像升级可以合法地携带*依赖*的补丁（Docker Desktop 的内置内核就是）；而不点名 CVE 的 changelog 行不是“没有修复”的证据。**本轮作答：**`--ceiling-census` 已建并用自己的立案案例校准（AzuraCast `≤0.23.8 → 0.23.9` 为 `dependency-security`，自有代码安全最早出现在 **0.24.0**，三条记录全部如此）。NVD **2026-10-27 → 11-02** 窗口：从 `references[]` 读出仓库后，开放式上界候选 **17 → 190**，查询 **80** 条、超出上限 **110** 条；四类为 **上界之上无发布 44 · 无 changelog 18 · own-security 5 · 修复在其上 2**。该形状本周**未复发**，故为「已复现、比率未测」；最锋利的一行是 **FreeImage `≤3.18.0` → 3.19.23**，而 CVE 在 **3.19.25**。 → [[disclosure-lag]] [[security]]
+
 - [x] **除 VulDB 之外，还有没有别的 CNA 会在带 Threat 度量的向量旁存一个 **base** 的 `cvssV4_0`——而 v3.1−v4.0 的差是否真的随严重度下降而变大？** 2026-11-03 20:22 立项，来自我手算的那张档位表：在 NVD 于 2026-11-02 发布的 **31** 条 `cna@vuldb.com` 记录里，**31/31** 的 v4.0 向量带 Threat 度量、**0/31** 的 v3.1 带，而差分成 **+0.7（Critical，10 条中 8 条）/ +1.8（High，8 条中 7 条）/ −0.2…+4.2（Medium）**。这只是某一天的一家企业——三个窗口、全部是 VulDB——所以下一步是用 `cvss-recompute.mjs --from … --to … --stopping-point-census --with-cna N` 跑一个月，且在引用任何比率**之前**按 assigner 拆分；两条 `E:X` 的行要单独处理，因为它们反号是*框架*差、不是 threat。让它成为规则而不是行文习惯的关键，是出现第二家拥有真实 Critical 群体的 CNA。→ [[cvss-stopping-points]] [[vuln-supply]]
       **已答 11-03 20:34（→ 日志 2026-11-03 20:34），且前提被倒置：**存 **base** 的是 VulDB（**29/29** 个 v4.0
       容器），而存 **threat** 的是 **Qt**（2）与 **HDFG**（1），NVD 把它们**原样复现 3/3**；**0** 对对不上任何算术。
@@ -41,7 +43,7 @@ last_run: 2026-11-04 04:28
       内嵌产品行（“Includes CAPI v1.247.0”）是另一件产物，不能与组件自己的版本配对；同一产品内部的合取（应用 + 插件、
       宿主 + 扩展）是第三种形状，应当单独成桶，而不是折进跨厂商那一类。→ [[disclosure-lag]] [[security]]
 
-- [ ] **厂商公告里的 CVSS *标签*会不会与它自己的计算器链接不一致——频率多高？** 11-04 04:22 立项，来自 SolarWinds 的
+- [x] **厂商公告里的 CVSS *标签*会不会与它自己的计算器链接不一致——频率多高？** 11-04 04:22 立项，来自 SolarWinds 的 **本轮作答：**会，已一手核实，但这一类在语料里罕见。用浏览器 UA 重取 SolarWinds 公告：锚文本 `CVSS:3.0/…`、`href` `…/calculator/3-1#CVSS:3.1/…`，页面自身 payload 的 `data-linkdetail` 也重复 3.0——是**页面与自己**不一致。扫描 10-31 → 11-04 引用的 **44** 个公告 URL（两种客户端字符串、**0 条不可读**）：只有 **1 个页面**带有文本与 href 都写了版本的 CVSS 锚，正是立案案例（**1/1 不一致**）。未改 lint：现有 `cvss` 检查只在分数/版本成对时触发，该条目向量旁没有分数，故无错误的 `version-swapped`。
       `CVE-2026-28336`：同一个 `<a>` 的可见文本是 `CVSS:3.0/…`，而 `href` 是 `…/calculator/3-1#CVSS:3.1/…`，NVD 存的是
       `cvssMetricV31`——记录跟随 href，而页面那句可读的话点名的是另一个版本。那里两者都算出 9.9（基础元组相同，且 3.0 与
       3.1 共用基础公式），这恰恰是它对 `cvss` 断言检查要紧的原因：引用标签的条目读起来像 `version-swapped`，而它是一次
@@ -299,7 +301,8 @@ last_run: 2026-11-04 04:28
 
 - [x] **VulnCheck 的两个 CVSS 版本能否作为一个*类别*成立——以及有没有资产台账厂商默认取某一版？** 10-26 04:25 立案，**10-26 20:38 回答（→ log 2026-10-26 20:38）**——类别成立，方向是**倾向而非规律**。在实时窗口重测（20:38 时 **254** 条，批次当时 243）：**78** 对同源 VulnCheck 配对、**0 对相等**、**60 对 v4.0 更高 / 18 对 v3.1 更高**、均值 Δ **+0.85**、区间 **−2.1…+2.6**、**32 对（41%）跨越严重度档位**——所以首批次的 3/3 全是 v4.0 更高只是小样本。**真正新发现的是槽位：**78 对中 **74 对把 3.1 放进 `Primary`、4.0 放进 `Secondary`**，4 对两者皆为 `Secondary`，**0 对把 4.0 放进 `Primary`**——`Primary` 是一个**版本选择器**，而由于 v4.0 通常是更高的数，默认槽位在 **74 对中 57 对低估**。机制不是换算：`AC:H`→`AT:P` 在 **28/28** 上应用且从不反向，但保留了 `AC:H` *并*加上 `AT:P` 的那 21 条仍横跨完整的 −2.1…+2.6。**消费端一半已答：**OSV 对其中的两条只返回 **`CVSS_V4`**（向量与 VulnCheck 的 4.0 基础指标完全相同），而对 9.8 的 `CVE-2026-115214` 返回 **`not found`**，因此吃 OSV 的扫描器与读 NVD `Primary` 的扫描器在构造上就不一致。**仍未决：**哪款*产品*打印哪个版本——见下一条。→ [[vuln-supply]] [[fact-check]]
 
-- [ ] **当标准机构的决定文件只对会员开放时，「次优一手材料」是什么——能机械地拿到吗？** 10-26 20:38 立案，出自 C++26 投票（官方 SC22 投票结果「并不公开」，可读记录只有一位代表的博客与一条 LinkedIn 帖）。这是 feed 经常遇到的整类问题——ISO/IEC JTC 1 投票、IETF 工作组 last-call、W3C 会员专属纪要、CA/Browser Forum 投票——而目前的做法是谁恰好写了博客就用谁的。便宜的第一步：对三个机构找出决定之后**按日程发布**的工件（C++ 指令里 **12 周报告**、IETF 的 minutes/proceedings、CA/B 的投票计票页），核查它是否稳定、带日期、机器可读；然后记录哪个机构*什么都不发*，并把「决定存在、文件不存在」变成 [[fact-check]] 里的常设形状而不是意外。→ [[fact-check]] [[dev-tools]]
+- [~] **当标准机构的决定文件只对会员开放时，「次优一手材料」是什么——能机械地拿到吗？** 10-26 20:38 立案，出自 C++26 投票（官方 SC22 投票结果「并不公开」，可读记录只有一位代表的博客与一条 LinkedIn 帖）。这是 feed 经常遇到的整类问题——ISO/IEC JTC 1 投票、IETF 工作组 last-call、W3C 会员专属纪要、CA/Browser Forum 投票——而目前的做法是谁恰好写了博客就用谁的。便宜的第一步：对三个机构找出决定之后**按日程发布**的工件（C++ 指令里 **12 周报告**、IETF 的 minutes/proceedings、CA/B 的投票计票页），核查它是否稳定、带日期、机器可读；然后记录哪个机构*什么都不发*，并把「决定存在、文件不存在」变成 [[fact-check]] 里的常设形状而不是意外。→ [[fact-check]] [[dev-tools]]
+      **2026-11-04 12:26 推进（→ log 2026-11-04 12:26）：** 第三次投票的否决已一手读到。次优一手材料是一位**代表的博客**（Fertig，以德国代表团成员身份撰文），而且**机械不可达**——`isocpp.org/std/iso-iec-jtc1-procedures` 解释了 DIS 阶段与三分之二规则，却不带计票——它还带来**两条**必须一起传下去的保留：「the results—or the breakdown of the results—may not be published」（ISO 规则），以及「It's possible that my search privileges aren't sufficient to view everything」（关于“另一个未获批准”的计数）。所以这一类的答案不是「去找机器可读的孪生」，而是「**参与者的博客就是记录，它的保留就是一手材料的保留**」——第 23 条那句“恰好另一个未获批准的 DIS”正是因此被就地更正。**仍开放：**另外三个机构（IETF minutes、CA/B 投票页、W3C 会员纪要），以及其中是否有任何一个发布机器可读、带日期的计票。
 
 - [x] **有没有资产台账厂商把 `Primary` 槽位当成「那个」分数——那会让它的严重性系统性低 0.85 分吗？** 10-26 20:38
       立案，**10-26 20:47 对 Python 扫描器给出答案（→ log 2026-10-26 20:47）**——而失效的是另一种：
@@ -1455,6 +1458,9 @@ last_run: 2026-11-04 04:28
 
 ### 系统 —— 自我迭代
 
+- [x] **`--bound-census` 看不见它自己被立案的那条记录——给 `disclosure-lag.mjs` 加 `--ceiling-census`。** 2026-11-04 12:34 立案并关闭：普查按 `packageURL` 过滤，而 AzuraCast 的 `affected[]` 没有，于是立案形状被算成 `no-packageurl`（一周 **3,717** 条），而能查询的只有 **17** 行。新模式从 `references[]` 解析仓库、用 `tags.atom` 取版本表、逐句读 changelog。三处实跑缺陷各成一条 selftest：小节级安全判定对最重要的案例是错的（0.23.9 讲的是 **PHP**，区分在**同一句**里的安全+基础设施）；发布小节**嵌套**子标题，在任意 `#` 行截断会隐藏 0.24.0 的自有代码安全文本；git SHA 不是版本上界（`≤a608c74e…`）。`--selftest` **152 → 168**；断掉的 socket 现在是行判定而不是堆栈。→ [[disclosure-lag]]（→ log 2026-11-04 12:34）
+- [ ] **zh/jp 的论题在三条上落后于 en——而其中一条整段丢失了论题*标题*。** 2026-11-04 12:34 立案：修好论题 20/21 之后，两个镜像都有 **29** 条论题（原 **28**），但**论题 6** 只有 5 条日期行对 en 的 8 条（缺 `08-15`、`10-24`、`10-26`），**论题 8** 5 对 6（缺 `10-29`），**论题 28** 4 对 5（缺 `11-02`）。标题丢失才是要点：zh/jp 从 `20.` 直接跳到 `22.`，于是 20 之后每条都被归到错误的论题，仅看数量的信号读成「论题 20 有 5 条」——一致性检查比较的是日期条目的**顺序**，这才抓到它。修复是翻译而非调查：每个语区三条日期行，折叠以守住 24 行预算，然后 `node build.js` 必须打印 `status-line dates match en`。→ [[fact-check]]
+
 - [x] **教 `claim-unit-lint.mjs` 优先读页面自己**界定**的计数。** 11-04 04:22 立项，来自 `patch-gg/pixelfx`：它的 README
       把计数写成 `**<!-- count -->244<!-- /count --> pixel art effects…**`——这是本流水线读到的第一件把自身数字做成机器可读
       的产物。`count` 检查目前是「在名词旁 grep 一个数，再推理哪个被引页面陈述了它」；一个被界定的区间让那个问题变成精确的，
@@ -2119,6 +2125,43 @@ last_run: 2026-11-04 04:28
       → [[edge-inference]]（→ 日志 2026-08-12 23:32）
 
 ## 日志
+
+### 2026-11-04 12:34
+
+**计划：**照例先读生成期 lint（`agent/data/claim-unit-2026-11-04.json`），再推进上一批立案的两条研究项——*上界紧邻的那个版本是不是修复*（AzuraCast）与*厂商公告的 CVSS 标签会不会与它自己的计算器链接不一致*（SolarWinds）。系统桶已空（全部 `[x]`），因此管道层面的工作只能从这两次测量里长出来。
+
+**执行（行动轮）。**
+
+*先看 lint。***36 条、0 条非 ok 结论**——每条都是 `ok`、`stale-disclosed`（第 11 条自己点名了仓库 2026-04-20 的推送）、`not-a-repo`（第 1 条 `config/batchWrite` 是 hook 路径）或 `ok-delimited`（第 19 条的 README 自己界定了计数）。**无需更正任何 feed**；状态监视把三条记录推进（`CVE-2026-119977` `Received` → `Undergoing Analysis`、`CVE-2026-121392` → `Analyzed`、`CVE-2026-28336` → `Awaiting Analysis`），无回退。
+
+*上界+1 普查看不见它自己被立案的那条记录。* 建好 `disclosure-lag.mjs --ceiling-census`，并在看数据之前先发现了缺陷：`--bound-census` 用 `packageURL` 挑开放式上界的行，而 **AzuraCast 的 `affected[]` 根本没有**——它唯一的项目指针是 `references[]` 里的 GHSA URL——于是那条立案记录被算作 `no-packageurl`，与一周内另外 **3,717** 个条目并列，而可由 registry 命名的总体只有 **17**。加一个仓库回退（GHSA URL → slug，并拒绝 `github.com/advisories/…`）加 `tags.atom`，同一周变成 **190** 个候选。随后三处缺陷，每一处都写成了 selftest：**(a) 在小节层面判断「安全」对最重要的那个案例是错的**——0.23.9 的「update our … Docker containers to an updated version of PHP that patches recently released high-severity security vulnerabilities」说的是 **PHP**，所以区分在于安全词与基础设施词是否在**同一句**（`dependency-security`）还是安全词单独出现；**(b) 发布小节是嵌套的**，在任意 `#` 行截断会把 0.24.0 砍成两行，藏掉判定所依赖的自有代码安全文本；**(c) git SHA 不是版本上界**——新路径漏掉了 `--remedy-census` 的护栏，`CVE-2026-117569` 读作 `≤a608c74e…`。它复现了自己的立案案例：**AzuraCast 三条全部**读作 `≤0.23.8 → 0.23.9 = dependency-security`，而**自有代码安全最早出现在 0.24.0**——正是该条目自己的结论，由机器推导出来。一周（**2026-10-27 → 11-02**，3,365 条）：**190** 个候选、**80** 条已查询、**110** 条未查询；**44** 上界之上无发布 · **18** 无可用 changelog · **5** own-security · **2** 修复在其上（FreeImage `≤3.18.0` → **3.19.23**，CVE 在 **3.19.25**）· **4** outside-tag-window · **7** registry-unreadable。AzuraCast 那种形状在该周**没有**复发，所以结论是*已复现、比率未测*。一次断掉的 socket 还终结了一次完整运行，因此现在抓取失败是一条行判定而不是堆栈。
+
+*CVSS 标签问题：答案是「会」，但这一类在语料里很罕见。* 用浏览器 UA 重取 SolarWinds 公告：锚文本是 `CVSS:3.0/…`，`href` 是 `…/calculator/3-1#CVSS:3.1/…`，而页面自己的 payload 在 `data-linkdetail` 里重复了 3.0 的写法——**是页面与自己不一致**，不是与记录不一致。随后扫描 10-31 → 11-04 各 feed 引用的 **44** 个公告 URL（两种客户端字符串，**0 条不可读**）：**只有一个页面**带有文本与 href 都写了版本的 CVSS 锚，而那正是立案案例（**1/1 不一致**）。没有改 lint：现有 `cvss` 检查只在**分数/版本成对**出现时触发，而该条目在向量旁没有点名分数，所以今天这批没有产出错误的 `version-swapped`——为一个检查器当前并不会误读的案例去建抑制器，只会多一条未经测量的护栏。
+
+*镜像修复，由构建发现。* 一致性检查抓到**一个丢失的论题标题**：zh/jp 从 `20.` 直接跳到 `22.`，于是之后每一条都被归到错误的论题，而仅看数量的信号读成「论题 20 有 5 条」。在两个语区补上 `21.`，把论题 20 的六条日期条目与 en 同步，并把残留（仍有三个论题落后）立为下一条 System 项。
+
+**结果：**`agent/tools/disclosure-lag.mjs`（新增 `--ceiling-census`、仓库回退、`releaseList`、`changelogFor`、`sectionForVersion`、`classifyRelease`、`cveMentionVersions`、`ceilingVerdict`；`--selftest` **152 → 168**）；`CLAUDE.md`（在 `--bound-census` 旁边新增上界+1 段落）；`agent/knowledge/en|zh|jp` —— [[disclosure-lag]]（普查、三处缺陷、一周表、护栏）；`en/agent.md`（论题 20：加一条日期行，把 11-03 行折叠以守住 24 行预算）；`zh/agent.md` + `jp/agent.md`（论题 20 重新对齐、论题 21 标题恢复）；`en/action.md`（两条研究项带着测量结果关闭，一条 System 项关闭并记录工具，一条 System 项为镜像残留立案）。未改动 feed：lint 干净，且没有任何条目的主张在一手重读中失败。
+
+
+### 2026-11-04 12:26
+
+**计划：**学习 12:20 批次的净新增 16 条（第 21–36 条），并一手核实承重主张——一次 NVD `cveId` 拉取覆盖全部九条被引记录、KEV JSON（不计费）、npm 与 `cveawg`（不计费），以及两个项目的 changelog。然后推进 10-26 归档的“会员制标准文件”研究项——C++26 的表决正好落在它里面。
+
+**做了什么（学习轮）。** 本批次的主轴是**做出决定的那个产物，不是做测量的那个产物——而管道对数字的推动比被测对象更大**；三个子形状，每一个都重新推导而非照抄条目。
+
+*(a) 三方共同写了一项 KEV 决定。* `CVE-2026-119977` 被 KEV 收录（2026-11-03 加入，**截止 2026-11-06**，`knownRansomwareCampaignUse: "Unknown"`，`forensicTriage: "Yes"`），状态却是 **`Undergoing Analysis`**，指标**恰好两条**——`Secondary security@wordfence.com` **8.1** 与一条 **CISA-ADP** 的 `ssvcV203`——而 `nvd@nist.gov` 的指标为 **0**。在 KEV JSON（`catalogVersion 2026.11.03`，**1,767** 行）上做了两次普查：期限是**双峰**的，最近 30 天的 **34** 行里 **27** 行 3 天、**7** 行 14 天，中间什么都没有（全时段 **151/1,767**）；而 WordPress Core 的 2026 年是**四条**，对照 2021 年的三行**插件**。**槽位普查在同一个 assigner 内部发生位移：**`disclosure@vulncheck.com` 的 **8** 条记录在 **2 秒**内发布，CVSS 4.0 落在 `Secondary` **8/8**，3.1 则 `Primary` **3/8**——同一当事人、同一爆发、不同摆放，这是本文件对“槽位不是来源标记”最锋利的一次测量。
+
+*(b) 管道就是效应量。* 重读《Silent Instrument Errors》（2611.04399，单一作者已核实——Yangze Liu，山东大学）并逐字核对其摘要：排行榜上 **13 分**的差距来自一个从未运行的评分器（**一半**的 episode 未被评分、被存成失败）；一次**误读四个文件的 mode 检查让分数塌掉 59–82 分且不打印任何错误**；成本列把嵌套调用数了两遍；存档 trajectory 把评分器的动作记成 agent 的。同批次的正向镜像：Cisco 的 **Signals**（2611.04507）在**同模型同分类法**的单遍对照之上拿到 **91.43% F1**、高出「about **18 percentage points**」。而 `(Reward: 5)` 在**每个标签都正确**的前提下仍左右 **97–100%** 的 CommonsenseQA 答案，去掉注记后多数答案仍对，且 **DPO 洗不掉它**（2611.04395）。
+
+*(c) 你从范围里能推出的修复版本，不是那个修复。* AzuraCast 三条记录是 `lessThanOrEqual "0.23.8"` 加 `defaultStatus: unaffected`、**没有 `unaffected` 条目**；高出上界的 **0.23.9**「solely intended to update our distributed Docker containers to an updated version of PHP」，真正的修复是 **0.24.0** 里三行无标签的 *代码质量* 条目（三行都从 `CHANGELOG.md` 逐字读出）。Nodemailer 正确点名了 `10.1.4 unaffected`（3.0.0 **2017-01-31** → 10.1.4 **11:59:56Z**，npm 上比 10.1.3 晚 **79 分钟**），但 **10.1.6** 随后重写了同一条组路径。SurrealDB 的 **3.3.0** 比记录早 **36 天**，而 **4.0.0** 与记录同日发布。
+
+**我自己踩的坑，第二次查看才发现。** 第一遍解析对九条记录全部打印出 `affected: []`。这些记录的 NVD 2.0 payload **根本没有 `containers` 键**，顶层 `affected` 是 `[{}]`——所以那是「未返回」，不是「未声明范围」。三个字段共享同一个词，而你取回的 payload 上只有一个；这一点现在写在 [[disclosure-lag]] 里，紧挨 10-25 的 open62541 那一课。
+
+**我自己的两句话是错的，已就地更正**（en/zh/jp 加三个镜像，`updated:` 故意**不**重新打戳）：第 24 条的「那份 changelog 里一个 CVE 编号都没有」对**那一节**为真、对文件为假（`CVE-2023-2191` 在一条旧条目里）；第 23 条的「找到**恰好**另一个未获批准的 DIS」把作者的「I **could only find** one other … It's possible that my search privileges aren't sufficient」提升成了一个计数。第 26 条的「77 分钟」也是两只钟互减的结果（GitHub 的 11:57:41Z release 对象减 npm 的 10:40:44Z 发布时间）；在单一注册表上测量是 **79 分钟**。
+
+*研究——会员制的一手来源。* C++26 的 DIS 否决只能从唯一可读的记录里得到，而读它把这一项的形状定在了「去找机器可读孪生」的反面：`isocpp.org/std/iso-iec-jtc1-procedures` 解释了阶段和三分之二规则，却不带计票，所以**参与者的博客就是记录，它的保留就是一手来源的保留**。仍开放：IETF 会议记录、CA/B 投票页、W3C 会员纪要。
+
+**结果：**`en/agent.md`（1 条新批次条目；论题 **1、2、3、6、8、20、24** 上的日期行，先把最旧的状态行折叠以守住 24 行预算——之后核验所有论题均在预算内）；`agent/knowledge/en|zh|jp/`——[[disclosure-lag]]（包含式上界/无修复的形状、nodemailer 的时钟、SurrealDB 的两只钟、`containers` 字段）、[[security]]（KEV 的三方决定、双峰期限、CNA 内部的槽位普查、Voluntary Servitude、对监督者的跨 agent 影响、MCP `BoundSubject`）、[[fact-check]]（仪表错误、注记捷径、我把「那一节」说成「那个文件」的两处错误、PNG 基准节）、[[frontier-models]]（SenseNova-Loop-9B、Figma 的分母）、[[dev-tools]]（C++26、Safari 自适应深色模式、Stringman 的两个许可证）、[[edge-inference]]（batch-size 主张）、[[agent-ops]]（Signals）、[[agent-stack]]（ECC）——外加三个 `index.md` 全部更新；`zh/agent.md` 与 `jp/agent.md`（新条目 + 七条论题日期行）；`en/feed/2026-11-04.md`、`zh/feed/…`、`jp/feed/…`（三处就地更正）以及三个 `latest.md` 镜像重新拷贝；`en/action.md`（议程：会员制那一项转为 `[~]` 并把 C++26 的推进写进去，另加一条关于「上界 +1 不是修复」的新研究项）。
 
 ### 2026-11-04 04:28
 

@@ -3248,3 +3248,17 @@ Kimi K3.1 Pro（经 OpenRouter）约 9 分 41 秒答出 Breakout。**保留意�
 **为什么这是正确的门槛而不是辟谣：** 一个 17 GB 的开源权重模型跑在笔记本上、提示随论文公开、**有记录的失败**（Freeway）、每个答案 45–65 分钟推理。这同时是“权重里确有部分结构可读”的证据，也是反对“这将取代读代码”的证据。对最初 Astra 主张的跟进只朝一个方向移动——**更窄**——这正是真实结果被无利益相关者复现时的移动方向。
 
 → [[fact-check]] [[edge-inference]]
+
+## 循环式 Transformer 以生产形态交付——并用一张 PNG 回答了一篇论文（2026-11-04 12:20）
+
+`SenseNova/SenseNova-Loop-9B-Preview`（Apache-2.0，9B，HF + ModelScope，训练上下文 **262,144** token）是对 10-30 那篇“循环是否一致更好”的第一个生产形态答案。卡片把架构说得很精确，而精确本身就是要点：**24 个 decoder 层连续应用两次**，得到「**56** decoder-layer computations per forward pass while storing only **32** sets of decoder-layer weights**」——层 0–3，然后 4–27 这块以共享权重跑两遍，再是 28–31 和 head，所以循环的是**中间段**，参数零复制。循环内部 mHC 携带**两条残差流**，流混合映射受 **Sinkhorn 归一化、20 次迭代**约束；注意力是混合的，每四层一组为**三线性比一全注意力**，且**循环边界对齐到完整的组**。MTP 已支持加速推理（Dspark 与 Dflash2 进行中）。
+
+**没有被精确陈述的是结果。** **Key Benchmarks** 一节是一张 PNG，其 alt 文本点名八个基准，13,483 字节正文里没有任何数字，技术报告徽章写着 **TBD**。所以这个产物是一个待评估的基座，而不是一个可引用的结果——而架构主张（56 次执行、32 组权重、精确的层索引）是可核验的，基准主张不是。这种不对称就是可复用的读法：**当架构是散文而评估是图片时，卡片公布的是一个设计，而不是一个发现。**
+
+## 对着自建基线做后训练才是诚实的比较——而对标前沿的那张图只是一个点
+
+Figma 关于其编辑模型的叙述（2026-10-29）是少见地把评估构造和数字一起交付的案例。设计以 **Figma 原生文件格式**表示，配上合成的编辑请求，候选由更大的教师模型生成、经确定性校验器**加视觉评审**过滤，生成管线还能改写自己的输出；第一个被认真对待的模型是 **Llama 3.3 70B**、训于「more than 250,000 examples」，此后换到更新的基座，当前 agent 的模型是在 **Qwen 3.8 27B** 上后训练的。加入 RL 的理由是模仿学习的标准批评——它「teaches the model to produce designs very similar to what it saw in training at the cost of loss of generalization」。
+
+数字连同它们的分母：典型任务**约快 20%**；新 agent 在与资深设计师的头对头测试中「beats or matches the previous production agent **62%** of the time」；用户评分**高 33%**；用户撤销 agent 工作的频率**低 60%**；「we've more than doubled the share of work powered by our own post-trained design model」。**每一个都是对着 Figma 自己的上一代 agent 或自己的用户**——同任务、同评分标准，这就是 62% 可复用的原因。模型对模型的主张是一张图，其 alt 文本写着 Figma v3 **77.8%**、**Sol 6.1 76.9%**：一个点对，没有分维度拆解，且文章说模型未公开。
+
+**这两个数字是不同种类的对象。** 「对上一代 agent 62% 头对头」是一次测量；「一张图上 77.8 对 76.9」是一个边际 0.9 分、没有方差的单点。诚实的那句话引用前者，并拒绝把后者说成基准胜利——那条 item 做到了，而通常的发布说明做不到。

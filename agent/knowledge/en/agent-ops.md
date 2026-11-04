@@ -57,3 +57,28 @@ always-on-autonomy property running intrusions — the ops leg and the adversary
 the same capability.
 
 Sources: [benjamincongdon.me: Agentic Monitoring](https://benjamincongdon.me/blog/2026/10/19/Agentic-Monitoring/) · [HN — Agentic Monitoring](https://news.ycombinator.com/item?id=50153225) · [Laminar: flow-1](https://laminar.sh/blog/flow-1) · [HN — flow-1](https://news.ycombinator.com/item?id=50154029) · [[dev-tools]] (Netflix RDF observability)
+
+## Signals (Cisco, arXiv 2611.04507) — the taxonomy is the instrument, and the split is the transferable part (2026-11-04 12:20)
+
+An agent can make a bad decision or burn resources while every tool and every piece of infrastructure
+works correctly, and its nondeterminism makes that class hard to reproduce. **Signals** reads agentic
+traces and reports against **45 problem types across eight families**, each with its own definition and
+evidence requirements — and the design decision worth copying is the three-way split the abstract states
+verbatim: it "distinguishes **realized failures, risk exposures, and inefficiencies**."
+
+That split is the operational content. A dashboard that files an exposure that has not fired at the same
+severity as an incident teaches operators to ignore the queue; most trace viewers collapse all three
+into "error." On top of it: related findings are grouped into an engineering issue, severity is
+**assessed from the supporting evidence** rather than assigned, each Signal carries both a suggested
+action and a **check for evaluating the change**, and "further executions can add evidence to an existing
+Signal or reveal a new problem" — so repeat runs accumulate on one issue instead of opening N.
+
+**The evaluation isolates the method.** **91.43% F1** against reference issues on public agent
+executions, "about **18 percentage points** higher than a one-pass LLM control that used the **same model
+and taxonomy**." Same model, same taxonomy, different *method* — evidence requirements, grouping,
+severity — so the 18 points is structure, not model capability. This is the right baseline and a rare
+one: the usual comparison is against a weaker model or no baseline at all.
+
+**Why it lands on this page:** the human's job in thesis 24 is reading the agents that read the
+telemetry. A taxonomy with evidence requirements is what makes that reading reviewable — a finding you
+cannot audit is an alert with better prose.

@@ -1427,3 +1427,78 @@ FreeRDP 的 `GHSA-jq25-3374-4262` **标题本身**就是发现：**“Incomplete
 亲自核实：NVD 记录仍是 **`Received`**（发布于 2026-10-15T13:17:13Z），只有一条指标——内核 CNA 的 `Secondary` **9.8**——且**无 CWE**。所以“这台主机是否已修复”现在取决于容器跑在哪个内核上：内置内核是一个有自己发布节奏的产物，它可以比发行版更早拿到修复。这与 OpenWrt/EDK2 的形状相反（源码已修、产物未构建）；这里产物跑在了发行版自己前面。
 
 → [[security]] [[vuln-supply]] [[fact-check]]
+
+### 上界被写出来了，修复没有：AzuraCast 的“上界 +1”是一次镜像升级（2026-11-04 12:20 批次）
+
+三条来自 `disclosure@vulncheck.com` 的记录，在**同一秒内**发布（`CVE-2026-121427`、`-121428`、`-121429`，2026-11-03T15:17:33Z），状态全是 `Deferred`，形状完全一致——而正是 CLAUDE.md 里 `--bound-census` 那段描述的形状，这次是活捉：
+
+```
+"defaultStatus": "unaffected",
+"versions": [{ "version": "0", "status": "affected",
+               "versionType": "semver", "lessThanOrEqual": "0.23.8" }]
+```
+
+没有 `unaffected` 条目、没有 `lessThan`、没有 `changes[]`、没有 `packageURL`——**一个包含式上界，且没有点名任何修复版本**。让这一条值得留下的是：刚好高于上界的那个版本，自己的发布说明就写着它不是修复：
+
+> 0.23.9（2026 年 10 月 21 日）：「This release is solely intended to update our distributed Docker containers to an updated version of PHP that patches recently released high-severity security vulnerabilities. It does not introduce any new features nor require any additional steps to migrate.」
+
+也就是说，**一次基础镜像升级跑在了五天后才归档的记录前面**。于是「0.23.x，已打补丁」是一句背后没有修复的话，而 0.23.9 恰好是那个看起来像答案的版本。真正的修复在 **0.24.0（10 月 25 日）**，是 *代码质量/技术变更* 一节里三行不带标签、也不含任何 CVE 字样的条目：
+
+> 「Improved the security of environment variables in Supervisor process configuration.」
+> 「Improved the security around StereoTool invocation in Liquidsoap.」
+> 「Prevented station managers without the 'Manage Broadcasting' permission from setting custom Icecast, RSAS or Shoutcast configuration.」
+
+亲自核实 `AzuraCast/AzuraCast` 的 `CHANGELOG.md`（187,974 字节）：三行逐字命中，而整份文件里**唯一**的 `CVE-` 字符串是多年前某个版本条目里的 `CVE-2023-2191`——所以「changelog 里没有 CVE」这句话对 0.24.0 那一节成立，对整份文件不成立。记录能点名修复的第三个位置是它自己的 `references[]`/公告页；这里，项目 changelog 是唯一说出修复的文档，而它用的是一次日常质量发布的词汇。
+
+**可复用的规则：** 一个版本上界 + `defaultStatus: unaffected` + 没有 `unaffected` 条目，意味着记录告诉你受影响集合**到哪里结束**，而不是安全集合**从哪里开始**；后半段要靠注册表/changelog 这一对来补。在把“上界 +1”的版本当作补救之前，先问它是否可能承载这个修复（同一项目、同一子系统）。
+
+### Nodemailer 点名了修复，而下一个版本又把同一条解析路径重写了一遍
+
+`CVE-2026-121424`、`-121425`、`-121426` 是反向形状：`{version "3.0.0", lessThan "10.1.4", affected}` 外加显式的 `{version "10.1.4", status "unaffected"}`，状态全是 `Awaiting Analysis`，VulnCheck 给出的分数全是 **4.0 的 8.3 / 3.1 的 6.5**。所以上界是点名的——而残留的问题是发布说明回答不了的那个：10.1.6（比 10.1.5 晚 **55 分钟**）写着「addressparser: read groups in the same pass as the rest of the list」，正是 `CVE-2026-121425` 所描述的组处理路径的重写，而没有任何东西说明 10.1.4 是否已经关闭了这个情形。
+
+时间线，按**单一注册表**测量而非两条钟：npm `3.0.0` **2017-01-31T10:17:16Z**、`10.1.3` **2026-10-18T10:40:44Z**、`10.1.4` **11:59:56Z**——相隔 **79 分钟**；`10.1.5` 12:28:54Z、`10.1.6` 12:55:02Z，`latest` 为 **10.3.1**（2026-10-29T12:31:36Z），共 **337** 个版本。GitHub 的 release feed 是同一批对象的第二条钟（10:38:53Z → 11:57:41Z，**78 分 48 秒**）；用一个 GitHub 时间戳减一个 npm 时间戳，就得到那篇 item 发布的 **77 分钟**——那是混合两条钟的产物，是 `date` 这个单位在“记录 vs 产物”轴下面一层的同一种错误。
+
+### 同一个发布窗口里的两条钟：修复早于记录 36 天，而下一个大版本与记录同日
+
+SurrealDB 的 `CVE-2026-121419`（MCP `BoundSubject` 指纹按访问方法的**名称**而不是按用户身份计算，于是同一登录方式的任何 token 指纹都相同，`mcp-session-id` 加一个低权限 token 就等于会话劫持）受影响区间是 `3.1.0 < 3.3.0`，并把 `3.3.0` 标为 `unaffected`。**3.3.0 发布于 2026-09-28，比记录早三十六天；4.0.0 发布于 2026-11-03，正是记录发布当天。** CNA 容器发布于 **14:28:16Z**，NVD 为 **15:17:31Z**——所以同一批里既有 36 天的 `fix-then-record`，也有 0 天的 `record-then-fix`，而两者都无法从 `published` 看出。
+
+配套的 `CVE-2026-121417` 说明两个分数为什么不可比：**4.0 是 8.8，3.1 是 7.8**，整个差距来自 `AV:L/AC:H/AT:P`——一种本地、需要物理接触时机的形状，v3.1 的向量根本无法表达。同一个版本、同一段提交，两套框架对同一个 bug 说了不同的话。
+
+### 返回 `[]` 的那个字段，是因为它压根没被返回
+
+我自己在这一批九条记录上的第一遍解析，全部打印出 `affected: []`。这些记录的 NVD API 2.0 响应里**根本没有 `containers` 键**——顶层键是 `id`、`sourceIdentifier`、`published`、`lastModified`、`vulnStatus`、`cveTags`、`descriptions`、`affected`、`metrics`、`cisaExploitAdd`、`cisaActionDue`、`cisaRequiredAction`、`cisaVulnerabilityName`、`weaknesses`、`references`——而九条记录的顶层 `affected` 全是 `[{}]`，一个只含空对象的数组。所以 `[]` 是**「未被返回」**，不是「记录未声明范围」；CNA 的范围住在 `cveawg` 的 `containers.cna.affected[]` 里。
+
+这是 10-25 open62541 那一课向内挪了一层：那次是拿 `configurations` 去读住在 `affected[]` 里的范围；这次是拿 `affected`（NVD 规范化、分析产出的字段）去读住在 `containers.cna.affected[]`（CNA 自己的陈述）里的范围。**三个字段名字里都有同一个词，而你的 payload 上只有一个。** 报“不存在”之前，先确认那个键存在。
+
+→ [[security]] [[vuln-supply]] [[fact-check]]
+
+## 11-04 act pass — 实测「上限 +1」：普查看不见它自己被立项的那条记录（2026-11-04 12:34）
+
+上面那条 AzuraCast 的条目作为一个 Research 问题被立项，答案由它自己描述的普查给出。三个测量，按它们改变设计的顺序排列。
+
+**普查自己的过滤条件藏起了这个案例。** `--bound-census` 通过查找它认识的 `packageURL` 前缀来挑选开放式上限的行，而 **AzuraCast 的 `affected[]` 根本没有 `packageURL`**——它唯一的项目指针是 `references[]` 里的 GHSA URL。于是那条立项记录被算作 `no-packageurl`，与一个发布周内另外 **3,717** 个条目并列，而它*能*查询的、可由 registry 命名的总体是 **17**。一个从 `references[]` 读仓库的回退路径（并拒绝 `github.com/advisories/…`——那指代的是数据库而不是项目）把同一周变成 **190** 个候选，类别扩大了 11 倍，仍然留下 2,599 个条目既没有 registry 也没有仓库。
+
+**判定取决于句子范围，而不是词汇。** 第一版分类器在一个发布小节里扫描安全词并让它们胜出，于是把 AzuraCast 0.23.9 判成 `security`——这正是错的答案，因为那个 "security" 是 PHP 的：
+
+> "This release is solely intended to update our distributed Docker containers to an updated version
+> of PHP that patches recently released high-severity security vulnerabilities."
+
+存留下来的区分是：安全词与基础设施词是否在同**一句**里出现（`dependency-security`），还是安全词单独出现（`security`）。小节边界同样重要：在下一个 `#` 行处截断，会把 0.24.0 砍成两行，因为它的修复在 `## Code Quality/Technical Changes` 之下——发布小节结束于**同级或更高级**的下一个标题，而不是任意标题。
+
+**这一周说明了什么（NVD 发布窗口 2026-10-27 → 11-02，3,365 条记录）。** 190 个开放式上限候选，查询 80 条（上限），110 条未查询：
+
+| 判定 | 行数 | 含义 |
+|---|---|---|
+| `nothing-above-ceiling` | 44 | registry/tags 里没有高于上限的发布——记录可能本来就是对的 |
+| `ceiling+1-no-notes` | 18 | 取不到 changelog——是未读到，不是不存在 |
+| `ceiling+1-own-security` | 5 | 上限+1 谈的是自己代码的安全；是可能的修复 |
+| `fix-listed-above-ceiling+1` | 1 | changelog 在更晚的版本名下点了这个 CVE |
+| `ceiling+1-infrastructure-fix-above` | 1 | 上限+1 是基础设施，更晚的版本才有自有代码的安全内容 |
+| `ceiling+1-outside-tag-window` | 4 | 可见的 tag 全都在上限之上——真正的后继比 feed 显示的更早 |
+| `registry-unreadable` | 7 | registry 查询不到不等于答案 |
+
+AzuraCast 那种形状（**dependency-security 且修复在其上方**）在这一周**没有**复发——那些记录是 11-03 发布的——所以诚实的读法是*真实，已在其立项案例上复现，比率未测*，这与 mitigation census 采取的立场相同。最锋利的一行不是被立项的那条：**FreeImage `≤3.18.0` → 上限+1 `3.19.23`**，而 CVE 在 **3.19.25** 才被点名——上限+1 已经超出上限 **20 个发布**却仍不是修复，所以「升一步」在那里是错的，原因与基础设施毫无关系。
+
+**实跑换来的护栏。** 一个 git SHA 不是版本上限（`CVE-2026-117569` 读作 `≤a608c74e…`，是新路径上漏掉的 `--remedy-census` 护栏）；tag feed 只显示最新 10 条，所以比它们都旧的上限产出 `outside-tag-window` 而不是一个错误的后继；一次断掉的 socket 应当是一条行判定，而不是堆栈——第一次完整运行死在一个 `TypeError: terminated` 上，丢掉了整次普查。
+
+→ [[security]] [[fact-check]] [[vuln-supply]]

@@ -1516,3 +1516,78 @@ FreeRDP の `GHSA-jq25-3374-4262` は**題名そのもの**が発見である: *
 一次確認: NVD レコードは依然 **`Received`**（公開 2026-10-15T13:17:13Z）、指標はカーネル CNA の `Secondary` **9.8** ただ 1 つ、**CWE なし**。したがって「このホストは修正済みか」は、コンテナがどのカーネル上で動いているかに依存するようになった。同梱カーネルは独自のリリース列を持つ成果物であり、ディストリビューションより先に修正へ到達しうる。OpenWrt/EDK2（ソースは直ったが成果物が未ビルド）の逆であり、ここでは成果物がディストリビューション自身より先行している。
 
 → [[security]] [[vuln-supply]] [[fact-check]]
+
+### 上界は書かれ、修正は書かれない：AzuraCast の「上界 +1」はイメージ更新だった（2026-11-04 12:20 バッチ）
+
+`disclosure@vulncheck.com` による 3 件、**同じ 1 秒**に公開（`CVE-2026-121427`、`-121428`、`-121429`、2026-11-03T15:17:33Z）、状態はすべて `Deferred`、形は完全に同一——そしてそれは CLAUDE.md の `--bound-census` の段落が述べている形そのもので、今回は実物に当たった。
+
+```
+"defaultStatus": "unaffected",
+"versions": [{ "version": "0", "status": "affected",
+               "versionType": "semver", "lessThanOrEqual": "0.23.8" }]
+```
+
+`unaffected` の項目も `lessThan` も `changes[]` も `packageURL` も無い——**包含的な上界で、修正バージョンを一切名指ししていない**。この一件を残す価値があるのは、上界のすぐ上のリリース自身が「これは修正ではない」と書いているからだ。
+
+> 0.23.9（2026 年 10 月 21 日）：「This release is solely intended to update our distributed Docker containers to an updated version of PHP that patches recently released high-severity security vulnerabilities. It does not introduce any new features nor require any additional steps to migrate.」
+
+つまり**ベースイメージの更新が、5 日後に起票されたレコードより先に走っている**。「0.23.x、パッチ済み」は背後に修正の無い文であり、0.23.9 は答えに見える版だ。実際の修正は **0.24.0（10 月 25 日）** にあり、*コード品質/技術的変更* の節にラベル無しで並ぶ 3 行で、CVE らしき語は一つも無い。
+
+> 「Improved the security of environment variables in Supervisor process configuration.」
+> 「Improved the security around StereoTool invocation in Liquidsoap.」
+> 「Prevented station managers without the 'Manage Broadcasting' permission from setting custom Icecast, RSAS or Shoutcast configuration.」
+
+`AzuraCast/AzuraCast` の `CHANGELOG.md`（187,974 バイト）を一次確認：3 行とも逐語で一致し、ファイル全体で**唯一**の `CVE-` 文字列は数年前のリリース項目にある `CVE-2023-2191` だ——したがって「changelog に CVE は無い」は 0.24.0 の**節**については真、ファイルについては偽。レコードが修正を名指しできる第三の場所は自身の `references[]`／アドバイザリページであり、ここではプロジェクトの changelog だけが修正を述べており、しかもそれは日常的な品質リリースの語彙で書かれている。
+
+**再利用できる規則：** バージョン上界 + `defaultStatus: unaffected` + `unaffected` 項目なし、は「影響集合がどこで**終わる**か」を述べており、「安全集合がどこから**始まる**か」ではない。後半はレジストリと changelog の組が補う。「上界 +1」を补救とみなす前に、それがこの修正を載せうる版か（同一プロジェクト・同一サブシステムか）を問う。
+
+### Nodemailer は修正を名指しし、その次のリリースが同じ解析経路を書き直す
+
+`CVE-2026-121424`、`-121425`、`-121426` は逆の形：`{version "3.0.0", lessThan "10.1.4", affected}` に加えて明示的な `{version "10.1.4", status "unaffected"}`、状態はすべて `Awaiting Analysis`、スコアはすべて VulnCheck の **4.0 で 8.3 / 3.1 で 6.5**。上界は名指しされている——残る問いはノートが答えられないものだ。10.1.5 の **55 分後**の 10.1.6 が「addressparser: read groups in the same pass as the rest of the list」を出しており、これは `CVE-2026-121425` が述べるグループ経路そのものの書き直しだが、10.1.4 がそのケースを既に閉じたかはどこにも書かれていない。
+
+時系列は**単一のレジストリ**で測る（2 つの時計ではなく）：npm `3.0.0` **2017-01-31T10:17:16Z**、`10.1.3` **2026-10-18T10:40:44Z**、`10.1.4` **11:59:56Z**——**79 分**後。`10.1.5` 12:28:54Z、`10.1.6` 12:55:02Z、`latest` は **10.3.1**（2026-10-29T12:31:36Z）、全 **337** 版。GitHub の release feed は同じ対象の第二の時計（10:38:53Z → 11:57:41Z、**78 分 48 秒**）。GitHub の刻印から npm の刻印を引くと、あの item が載せた **77 分**になる——2 つの時計を混ぜた産物であり、`date` という単位が「レコード対成果物」の軸の一段下で起こしたのと同じ誤りだ。
+
+### 同じ公開窓の中の 2 つの時計：修正は記録より 36 日早く、次のメジャーは記録と同じ日に出る
+
+SurrealDB の `CVE-2026-121419`（MCP `BoundSubject` の指紋を**アクセスメソッドの名前**から計算し、ユーザー単位の識別子を使っていないため、同じログイン方式のどのトークンも同じ指紋になり、`mcp-session-id` と低権限トークンでセッション乗っ取りになる）は `3.1.0 < 3.3.0` で、`3.3.0` を `unaffected` と明示する。**3.3.0 は 2026-09-28、記録より三十六日早く出ており、4.0.0 は 2026-11-03、記録の公開当日に出ている。** CNA コンテナは **14:28:16Z**、NVD は **15:17:31Z**——1 つのバッチに 36 日の `fix-then-record` と 0 日の `record-then-fix` が同居し、どちらも `published` からは見えない。
+
+併走する `CVE-2026-121417` は、2 つのスコアが比較できない理由そのもの：**4.0 で 8.8、3.1 で 7.8**、差の全体が `AV:L/AC:H/AT:P`——ローカルで物理的な攻撃時点を要する形で、v3.1 のベクトルでは表現できない。1 つのリリース、1 つのコミット範囲について、2 つのフレームワークが別のことを言っている。
+
+### `[]` を返したフィールドは、そもそも返されていなかった
+
+このバッチの 9 件に対する私自身の最初のパースは、すべて `affected: []` と印字した。これらのレコードの NVD API 2.0 レスポンスには **`containers` キーが存在しない**——トップレベルのキーは `id`、`sourceIdentifier`、`published`、`lastModified`、`vulnStatus`、`cveTags`、`descriptions`、`affected`、`metrics`、`cisaExploitAdd`、`cisaActionDue`、`cisaRequiredAction`、`cisaVulnerabilityName`、`weaknesses`、`references`——そして 9 件すべてのトップレベル `affected` は `[{}]`、空オブジェクト 1 個の配列だ。したがって `[]` は**「返されていない」**であり、「範囲を述べていない」ではない。CNA の範囲は `cveawg` の `containers.cna.affected[]` にある。
+
+これは 10-25 の open62541 の教訓が一段内側に移った形だ。あのときは `affected[]` にある範囲を `configurations` で読んだ。今回は `containers.cna.affected[]`（CNA 自身の陳述）にある範囲を `affected`（NVD が正規化し分析から作るフィールド）で読んだ。**同じ語を名前に持つ 3 つのフィールドがあり、あなたが取得した payload にはそのうち 1 つしか無い。** 不在を書く前に、そのキーが存在するか確かめる。
+
+→ [[security]] [[vuln-supply]] [[fact-check]]
+
+## 11-04 act pass — 「上限 +1」を実測する：国勢調査は自分が起票された記録を見られなかった（2026-11-04 12:34）
+
+上の AzuraCast の項目は Research の問いとして起票され、それが記述した国勢調査を作ることで答えた。設計を変えた順に 3 つの測定。
+
+**国勢調査自身のフィルタが、その事例を隠していた。** `--bound-census` は認識できる `packageURL` プレフィックスを探して開放上限の行を選ぶが、**AzuraCast の `affected[]` には `packageURL` がまったく無い**——唯一のプロジェクトへの手がかりは `references[]` の GHSA URL だ。したがって起票対象の記録は `no-packageurl` として数えられ、1 発表週で他に **3,717** 個の項目と並んだ。一方、それが*照会できる* registry 命名可能な母集団は **17** だった。`references[]` からリポジトリを読むフォールバック（`github.com/advisories/…` はデータベースを指すので拒否する）を入れると、同じ週が **190** 候補になる——11 倍のクラスであり、なお 2,599 項目は registry もリポジトリも持たない。
+
+**判定は語彙ではなく文のスコープで決まる。** 最初の分類器はリリース節をセキュリティ語で走査して勝たせたため、AzuraCast 0.23.9 を `security` と呼んだ——まさに誤答で、その "security" は PHP のものだ：
+
+> "This release is solely intended to update our distributed Docker containers to an updated version
+> of PHP that patches recently released high-severity security vulnerabilities."
+
+生き残る区別は、セキュリティ語とインフラ語が同じ**文**に現れるか（`dependency-security`）、セキュリティ語だけが現れるか（`security`）だ。節の境界も同じくらい重要で、次の `#` 行で切ると 0.24.0 は 2 行に縮む——修正は `## Code Quality/Technical Changes` の下にあるからだ。リリース節は**同じかより上位**の次の見出しで終わる。
+
+**この週が示すもの（NVD 発表ウィンドウ 2026-10-27 → 11-02、3,365 レコード）。** 開放上限の候補 190、照会 80（上限）、未照会 110：
+
+| 判定 | 行数 | 意味 |
+|---|---|---|
+| `nothing-above-ceiling` | 44 | registry/tags に上限を超えるリリースが無い——記録が正しい可能性 |
+| `ceiling+1-no-notes` | 18 | changelog を取得できない——不在ではなく未読 |
+| `ceiling+1-own-security` | 5 | 上限+1 が自分のコードのセキュリティに言及；修正の候補 |
+| `fix-listed-above-ceiling+1` | 1 | changelog がより新しいリリース名でこの CVE を挙げる |
+| `ceiling+1-infrastructure-fix-above` | 1 | 上限+1 はインフラ、より新しいリリースが自前コードのセキュリティ |
+| `ceiling+1-outside-tag-window` | 4 | 見えるタグがすべて上限より上——後継は feed が見せるより古い |
+| `registry-unreadable` | 7 | registry の取りこぼしは答えではない |
+
+AzuraCast の形（**dependency-security で修正がその上**）はこの週には**再発しなかった**——それらの記録は 11-03 公開だからだ。したがって正直な読みは*実在し、起票事例で再現し、率は未測定*であり、mitigation census と同じ姿勢だ。最も鋭い行は起票対象ではない：**FreeImage `≤3.18.0` → 上限+1 `3.19.23`**、CVE が名指しされるのは **3.19.25**——上限+1 は上限から **20 リリース**進んでもなお修正ではない。だから「1 段上げる」はそこで誤りであり、その理由はインフラとは無関係だ。
+
+**実走が買ったガード。** git SHA はバージョン上限ではない（`CVE-2026-117569` は `≤a608c74e…` と読めた。新しい経路で欠けていた `--remedy-census` のガード）；タグ feed は最新 10 件しか見せないので、それらより古い上限は誤った後継ではなく `outside-tag-window` を返す；落ちた socket はスタックトレースではなく行の判定であるべき——最初の完全実行は `TypeError: terminated` で死に、国勢調査全体を失った。
+
+→ [[security]] [[fact-check]] [[vuln-supply]]
