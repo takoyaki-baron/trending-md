@@ -1,0 +1,277 @@
+{
+ "generated": "2026-11-04T20:30:29.564Z",
+ "files": [
+  {
+   "file": "2026-11-05.md",
+   "items": 20,
+   "findings": [
+    {
+     "check": "cvss",
+     "item": 2,
+     "verdict": "ok",
+     "claim": "4.0 7.7",
+     "detail": "CVE-2026-109518 · Secondary/security@ubuntu.com"
+    },
+    {
+     "check": "status",
+     "item": 2,
+     "verdict": "ok",
+     "claim": "CVE-2026-109518 `Received`",
+     "detail": "Received (lastModified 2026-11-04T19:17:18.327)"
+    },
+    {
+     "check": "cvss",
+     "item": 7,
+     "verdict": "ok",
+     "claim": "4.0 8.9",
+     "detail": "CVE-2026-120422 · Secondary/security@eset.com"
+    },
+    {
+     "check": "status",
+     "item": 7,
+     "verdict": "ok",
+     "claim": "CVE-2026-120422 `Deferred`",
+     "detail": "Deferred (lastModified 2026-11-04T10:17:26.260)"
+    },
+    {
+     "check": "status",
+     "item": 7,
+     "verdict": "ok",
+     "claim": "CVE-2026-120422 `Deferred`",
+     "detail": "Deferred (lastModified 2026-11-04T10:17:26.260)"
+    },
+    {
+     "check": "date",
+     "item": 7,
+     "verdict": "ok",
+     "claim": "CVE-2026-120422 published 2026-11-04",
+     "detail": "NVD published 2026-11-04T10:17:26.120 (2026-11-04 UTC) · cveawg datePublished 2026-11-04T10:06:13.119Z (2026-11-04 UTC) — the two clocks differ; 2026-11-04 is the NVD published day"
+    },
+    {
+     "check": "cvss",
+     "item": 15,
+     "verdict": "ok",
+     "claim": "4.0 9.3",
+     "detail": "CVE-2026-107846 · Secondary/security-advisories@github.com (bound subject GHSA-8vv3-6qpc-gpw6 is not in the global Advisory Database)"
+    },
+    {
+     "check": "cvss",
+     "item": 18,
+     "verdict": "ok",
+     "claim": "3.1 5.5",
+     "detail": "CVE-2024-27834 · Primary/nvd@nist.gov · vector reproduces 5.5"
+    },
+    {
+     "check": "date",
+     "item": 18,
+     "verdict": "ok",
+     "claim": "CVE-2024-27834 published 2024-05-14",
+     "detail": "NVD published 2024-05-14T15:13:06.953 (2024-05-14 UTC) · cveawg datePublished 2024-05-13T23:00:50.836Z (2024-05-13 UTC) — the two clocks differ; 2024-05-14 is the NVD published day"
+    },
+    {
+     "check": "repo",
+     "item": 1,
+     "verdict": "hf-model",
+     "claim": "moonshotai/Kimi-K3.1-Pro",
+     "detail": "huggingface.co/moonshotai/Kimi-K3.1-Pro (gated: false, 112 files, created 2026-11-02) — a Hugging Face model id, not a GitHub repository (read the card, not a README)"
+    },
+    {
+     "check": "repo",
+     "item": 5,
+     "verdict": "hf-model",
+     "claim": "tencent/Hy4-preview",
+     "detail": "huggingface.co/tencent/Hy4-preview (gated: false, 170 files, created 2026-08-27) — a Hugging Face model id, not a GitHub repository (read the card, not a README)"
+    },
+    {
+     "check": "repo",
+     "item": 5,
+     "verdict": "unreadable",
+     "claim": "tencent/Hy4",
+     "detail": "api.github.com: Command failed: gh api repos/tencent/Hy4"
+    },
+    {
+     "check": "repo",
+     "item": 12,
+     "verdict": "ok-history",
+     "claim": "FareedKhan-dev/kimi-k3-in-c",
+     "detail": "record 95d, oldest commit 2026-08-01 (~98 commits)"
+    },
+    {
+     "check": "repo",
+     "item": 12,
+     "verdict": "ok",
+     "claim": "FareedKhan-dev/kimi-k3-in-c",
+     "detail": "10189★, last push 2026-10-02"
+    },
+    {
+     "check": "count",
+     "item": 16,
+     "verdict": "absent",
+     "claim": "174 agent",
+     "detail": "no count of agent on README of scenario-labs/skills or mcp.scenario.com/docs — count it yourself, or say \"no page states a total\""
+    },
+    {
+     "check": "count",
+     "item": 16,
+     "verdict": "absent",
+     "claim": "174 SKILL",
+     "detail": "no count of skill on README of scenario-labs/skills or mcp.scenario.com/docs — count it yourself, or say \"no page states a total\""
+    },
+    {
+     "check": "quotation",
+     "item": 1,
+     "verdict": "quote-not-found",
+     "claim": "“prominently displayed on the user interface”",
+     "detail": "6 words, 0 hits in 3 readable source(s); no source carries it (read moonshotai/Kimi-K3.1-Pro README, HF model moonshotai/Kimi-K3.1-Pro, news.ycombinator.com/item?id=50366999) — if this came from somewhere this item does not cite, cite it; otherwise it is the feed's own words and must not wear quotation marks"
+    },
+    {
+     "check": "quotation",
+     "item": 1,
+     "verdict": "ok",
+     "claim": "3 quotation(s)",
+     "detail": "verbatim in 3 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 2,
+     "verdict": "ok",
+     "claim": "3 quotation(s)",
+     "detail": "verbatim in 5 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 3,
+     "verdict": "ok",
+     "claim": "6 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 4,
+     "verdict": "ok",
+     "claim": "2 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 5,
+     "verdict": "ok",
+     "claim": "4 quotation(s)",
+     "detail": "verbatim in 5 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 6,
+     "verdict": "ok",
+     "claim": "7 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 7,
+     "verdict": "ok",
+     "claim": "6 quotation(s)",
+     "detail": "verbatim in 4 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 8,
+     "verdict": "ok",
+     "claim": "2 quotation(s)",
+     "detail": "verbatim in 4 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 9,
+     "verdict": "ok",
+     "claim": "1 quotation(s)",
+     "detail": "verbatim in 5 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 10,
+     "verdict": "ok",
+     "claim": "6 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 11,
+     "verdict": "ok",
+     "claim": "1 quotation(s)",
+     "detail": "verbatim in 4 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 12,
+     "verdict": "ok",
+     "claim": "5 quotation(s)",
+     "detail": "verbatim in 1 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 13,
+     "verdict": "ok",
+     "claim": "5 quotation(s)",
+     "detail": "verbatim in 3 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 14,
+     "verdict": "ok",
+     "claim": "9 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 15,
+     "verdict": "ok",
+     "claim": "5 quotation(s)",
+     "detail": "verbatim in 5 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 16,
+     "verdict": "ok",
+     "claim": "5 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 17,
+     "verdict": "ok",
+     "claim": "4 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 18,
+     "verdict": "ok",
+     "claim": "2 quotation(s)",
+     "detail": "verbatim in 5 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 19,
+     "verdict": "ok",
+     "claim": "7 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 20,
+     "verdict": "ok",
+     "claim": "4 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    }
+   ]
+  }
+ ],
+ "status_watch": [],
+ "api_calls": 0,
+ "readme_calls": 0,
+ "cited_page_calls": 0,
+ "repo_page_calls": 0,
+ "nvd_calls": 1,
+ "cna_calls": 0
+}
