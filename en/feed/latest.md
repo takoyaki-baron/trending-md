@@ -1,8 +1,8 @@
 ---
 date: 2026-11-04
-updated: 2026-11-04T04:18:54Z
+updated: 2026-11-04T12:21:49Z
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 22
+sources: 24
 license: CC-BY-4.0
 ---
 
@@ -584,13 +584,255 @@ The evaluation is against reference issues on public agent executions: **91.43% 
 
 ---
 
+## 37. Chrome 157 shipped 213 security fixes — and CISA's enrichment scored a "Low" at 9.6 and a "Critical" at 8.8
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Chrome Releases · stable 2026-11-03 · NVD census of 213 records
+- **Tags:** `cve` `chrome` `cisa-adp` `cvss` `scoring`
+
+The stable-channel post is one sentence plus a list: "This update includes 213 security fixes." NVD holds **213 records** naming `157.0.8103.38` from `chrome-cve-admin@google.com`, and all of them were published on **2026-11-03 between 21:17:05.860Z and 21:17:36.603Z** — a 31-second window. **132 of the 213 carry no CVSS metric at all.** The 81 that do carry one carry exactly **three distinct vectors**, every one of them `Secondary` from `134c704f-9b21-4f2e-91b3-4a467353bcc0` (CISA-ADP): **8.8** with `S:U` (44 records), **9.6** with `S:C` (27), and **8.3** with `AC:H` plus `S:C` (10). All 213 sit at `Awaiting Analysis` with **no `nvd@nist.gov` metric on any of them**. Chrome's own container supplies the CWE and a qualitative word — Critical 7, High 77, Medium 75, Low 54 — and no number.
+
+The two scales do not agree, in both directions. `CVE-2026-121189` is labelled **Low** by Chrome and carries **9.6**; `CVE-2026-121203` is labelled **Critical** and carries **8.8**. The label does predict *whether* there is a score — no Critical record is unscored, while 61 of 75 Medium and 49 of 54 Low are — but not what it is. Two other details are worth keeping: `CVE-2026-121112` ("Out of bounds read in Permissions") was reported **2023-03-22**, three and a half years before this release, and one fix is credited "**Xinyang Ge (Anthropic), assisted by Claude**".
+
+**Why it matters:** a Chrome CVE number is a landing slot, not a severity — 213 records arrived in half a minute because the Chrome CNA files them in bulk, and the number beside 81 of them is one of three boilerplate templates chosen by the enrichment layer, not an assessment of the bug. When you triage this release, the vendor's own Critical/High/Medium/Low word is the only severity signal that was applied per-bug, and on **35 of the 81** scored records the CVSS band and that word disagree — which is why quoting the 9.6 as "how bad" is quoting a template rather than an assessment.
+
+[`🔗 Stable Channel Update for Desktop (Chrome 157)`](https://chromereleases.googleblog.com/2026/11/stable-channel-update-for-desktop.html) · [`🔗 CVE-2026-121189 (NVD — Low, 9.6)`](https://nvd.nist.gov/vuln/detail/CVE-2026-121189) · [`🔗 CVE-2026-121203 (NVD — Critical, 8.8)`](https://nvd.nist.gov/vuln/detail/CVE-2026-121203)
+
+---
+
+## 38. Later tokens cost up to 7× more than earlier ones — and compacting the context to 16K kept accuracy within 3.7 points
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** arXiv 2611.05306 · submitted 2026-11-03 · twelve authors
+- **Tags:** `long-context` `agents` `compaction` `inference` `cost`
+
+The premise is a cost asymmetry most serving stacks already price in but few papers measure: "later tokens are costlier to generate than earlier tokens," and on frontier open-weight models the disparity "may rise to as much as **7x**." The method is **EoCC, end-of-conversation compaction** — when the conversation crosses a threshold, summarise and continue — evaluated on six benchmarks (SWE-bench Verified, TerminalBench 2.1, SWE-bench Multilingual, FRAMES, BFCLv3, Tau2Bench) with **Claude Opus 4.5** and **GPT 5.6 Sol**, stepping the total context limit down to as low as **16K / 12K** (and **8K / 6K** on Tau2Bench).
+
+The numbers are per-model deltas against that model's own full-history baseline: Opus 4.5 spans **−3.7 to +5.6 points**, GPT 5.6 Sol **−3.3 to +4.4**, and "for either model, no more than **5 out of 22** threshold configurations lose more than 2ppts." Estimated cost savings run **2.2× to 8.8×** for Opus 4.5 and **2.4× to 5.0×** for Sol. A second experiment compacts "after every action" and keeps only a compact semantic state — the authors' **SSSM** sketch — and still does not collapse on software-engineering tasks. The paper states both the caveat and the limit itself: the pathology where compaction "may successfully enforce smaller context window size" while total token spend rises from redoing work "was generally not the case" in their runs, and "our evidence does not rule out the existence of tasks for which long context is beneficial."
+
+**Why it matters:** the delta is measured against full history, which is the right baseline, and the cost multiples are **estimated retail cost**, not metered bills — quote them as estimates. The transferable finding is that the 1M-token window is a convenience rather than a requirement for the workloads people actually cite it for, and the discipline that replaces it is a compaction policy with a stated threshold. If you run an agent loop, the cheap experiment is theirs: halve the threshold and watch accuracy and total tokens together, because the failure mode is invisible if you only look at one.
+
+[`🔗 You don't need long context (arXiv)`](https://arxiv.org/abs/2611.05306) · [`🔗 Full text`](https://arxiv.org/html/2611.05306v1)
+
+---
+
+## 39. Apache ZooKeeper shipped five CVEs in one batch — and the 8.7 that needs no login also makes the data directory permanently unbootable
+
+- **Velocity:** ▮▮ rising
+- **Source:** NVD · five records published 2026-11-04T11:17Z
+- **Tags:** `cve` `zookeeper` `apache` `dos` `cvss4`
+
+Five records from `security@apache.org`, published in the same minute, all `Received`, and all scored on **CVSS 4.0 only** — there is no 3.1 number anywhere on any of them. The two 8.7s share one vector string (`AV:N/AC:L/AT:N/PR:N/UI:N/VA:H`) despite being different bugs. **`CVE-2026-100300`** is in the quota subsystem and is unauthenticated "on default deployments, where that subtree is world-writable": a write under `/zookeeper/quota` crashes the critical request-processing thread *and* renders the on-disk data directory permanently unbootable — non-persistence is not a backstop here. **`CVE-2026-115448`** is the harder one to recover from: the server serialises its tree to a snapshot by recursing one stack frame per znode level with no depth bound, so a client allowed to create znodes (the default root ACL is open) builds a chain deep enough to exhaust the JVM stack — "sizes stay within `jute.maxbuffer`, so existing limits do not prevent it" — and on restart the server rebuilds the deep tree from its transaction log and **fails again**. It spreads to followers, and recovery "can entail data loss."
+
+The other three are quieter and more architectural. **`CVE-2026-100252`** (8.6): with SASL on the client port, the callback handler "grants every authorization identity (authzid) that a client requests, without checking it against the principal the client authenticated as." **`CVE-2026-100302`** (7.1): the multiRead handler puts no limit on bundled operations or response size — one small request. **`CVE-2026-100235`** (6.0): a TOCTOU in `setACL` where "the pending change is not published to the server's outstanding change record," so requests prepared mid-change are authorised against the old ACL. Affected is **3.8.0–3.8.7 and 3.9.0–3.9.6**, fixed in **3.8.8 / 3.9.7**, and Apache's own workaround for the recursion bug is to stop relying on the default open root ACL.
+
+**Why it matters:** ZooKeeper is the layer everything else uses to agree on who is leader, and two of these five are denial of service from a default configuration. The distinction that matters operationally is permanence: a crash you restart is an incident, a crash that recurs during startup snapshot is a rebuild-from-backup, and this batch contains one of each. The SASL record is the security-relevant one for multi-tenant clusters — an authzid you can name is an authzid you can be.
+
+[`🔗 CVE-2026-100300 (NVD)`](https://nvd.nist.gov/vuln/detail/CVE-2026-100300) · [`🔗 CVE-2026-115448 (NVD)`](https://nvd.nist.gov/vuln/detail/CVE-2026-115448) · [`🔗 CVE-2026-100252 (NVD)`](https://nvd.nist.gov/vuln/detail/CVE-2026-100252)
+
+---
+
+## 40. LatentTriad scores a skill package from its prefill state — 99.0% pooled F1 with no token generated and no skill executed
+
+- **Velocity:** ▮▮ rising
+- **Source:** arXiv 2611.05088 · submitted 2026-11-03
+- **Tags:** `agents` `skills` `security` `detection` `interpretability`
+
+The problem the paper states is the one every skill marketplace now has: agents are "extended with reusable skills, but untrusted skill content can induce operations outside the user's task," and the two existing answers are both bad — pattern matching misses contextual risk, and dynamic analysis "incurs the cost of skill execution," which is the exact thing you were trying to avoid. The finding is that "hidden states formed during prefill contain readable information about task-operation consistency," including across held-out expression forms.
+
+**LatentTriad** combines three signals — contextual Boundary features, group-adjusted Operation directions, and departures from benign state relationships — over a single shared prefill, so "detection generates no output tokens, invokes no tools, and executes no skill code." Evaluated on **5,830 skill packages from five sources** and **seven backbones**, it reports **99.0–99.2% pooled F1** and **93.0–94.6% source-macro F1**, with detection plus prefill at a **259–284 ms** median. There is also an intervention result worth separating from the accuracy claim: matched Operation-state interventions "affect later Boundary states and shift fixed risk readouts toward the donor label" — the readout moves with the state rather than sitting beside it.
+
+**Why it matters:** the gap between pooled F1 (99.0) and source-macro F1 (93.0) is the number to carry — roughly six points of the headline is the sources being unequal, which is what a per-source corpus of gathered packages will look like. The structural contribution is cost: screening a skill before it runs, with no sandbox and no tokens, changes the economics of scanning a marketplace from executing everything to reading the first hidden state. That is the only shape of control that can sit in front of an install button.
+
+[`🔗 LatentTriad (arXiv)`](https://arxiv.org/abs/2611.05088) · [`🔗 Paper PDF`](https://arxiv.org/pdf/2611.05088)
+
+---
+
+## 41. Plugged in, native Linux on an RTX Spark laptop runs 13.9 tok/s where Windows runs 65.4 — and unplugging it makes Linux fast again
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** MindStudio blog · 2026-11-01 · 143 pts on HN
+- **Tags:** `nvidia` `linux` `cuda` `inference` `hardware`
+
+MindStudio's write-up of dual-booting an MSI Prestige N16 Flip AI Plus (an RTX Spark laptop, the same GPU design as the DGX Spark desktop) is a set of measurements rather than a benchmark table, and the direction is the surprising part. On **GPT-OSS-120B**: Windows **65.4 tok/s**, WSL **65.1**, the DGX Spark desktop **61**, and native Linux on the laptop **13.9** — about five times slower than Windows on the same silicon. With vLLM at eight concurrent clients the split repeats, **127 tok/s on WSL against 39.5 on Linux**. A longer run finished in about **8 minutes on Windows with the GPU near 2.2 GHz** and **37 minutes on Linux parked around 790 MHz**, with temperatures "between 40 and 47 °C," which rules out thermal throttling.
+
+The control is the part that makes it a finding rather than a complaint: disabling a component called **"Nvidia Platform Controllers and Framework"** in Windows reproduced the slowdown directly — "tokens per second dropped from around 83 to about 31, and clock speed fell from roughly 2 GHz down to the same 786 MHz seen on Linux when plugged in" — and re-enabling it restored normal speed immediately. The controller arbitrates the power budget between CPU and GPU, and "the firmware hands this controller a table of power settings that is encrypted. Windows has the key to decrypt it. Linux currently does not." Battery versus wall power inverts the usual intuition: unplugged, Linux reached **61–67 tok/s** at ~1,800 MHz; plugged in, ~15 tok/s at ~780 MHz. A separate allocation detail blocks first boots — the laptop reserves **96 GB of 128 GB** unified memory for the GPU and only Windows exposes the split.
+
+**Why it matters:** this is a vendor gate rather than a kernel or driver bug, and the Windows-side experiment is what proves it — no amount of distribution or driver tuning changes it, because the missing piece is a decryption key. The practical advice in the post is to run WSL, which inherits the Windows clock path and hits 65.1 tok/s, but that advice is exactly the Linux-first-tooling-on-a-Windows-kernel compromise the hardware was bought to avoid. It also re-frames "supported on Linux" for this class of machine: the open kernel driver loads, CUDA works, and the laptop still runs at a third of its clock.
+
+[`🔗 Linux on the Nvidia RTX Spark Laptop: What Actually Works`](https://www.mindstudio.ai/blog/linux-nvidia-rtx-spark-laptop) · [`🔗 HN thread`](https://news.ycombinator.com/item?id=50362905)
+
+---
+
+## 42. Apache OpenOffice published ten CVEs in one minute — and scored one of them
+
+- **Velocity:** ▮▮ rising
+- **Source:** NVD · ten records published 2026-11-04T11:17Z
+- **Tags:** `cve` `openoffice` `apache` `scoring` `memory-safety`
+
+Ten records from `security@apache.org`, all published inside the same minute, all `Received`, all recommending the same upgrade. **One of the ten carries a CVSS score**: `CVE-2026-59263` at **1.9** on CVSS 4.0, for substituted content in a manipulated document. The other nine carry **no metrics key at all**, including the memory-safety ones — `CVE-2026-90624`, `-90626` and `-90634` (uncontrolled memory access in the PDF import path causing out-of-bounds writes), `CVE-2026-90629` (WMF import), `CVE-2026-90628` (a stack overflow in PDF export reached through a crafted CFF font), `CVE-2026-59268` (out-of-bounds write from a Word document), and `CVE-2026-90627`, where the flat-file database driver "allows a crafted document to read the contents of any local file without asking." The remaining two are `CVE-2026-90632` (the GStreamer multimedia component) and `CVE-2026-59264` (Windows installers running external code with elevated access).
+
+The remediation is uniform and, unusually, already shipped: every record says "Users are recommended to upgrade to version **4.1.17**," and openoffice.org's own header reads "Released: Apache OpenOffice 4.1.17." The vendor's security bulletin page is behind both — its newest section is still "Disclosed in Apache OpenOffice 4.1.16" and it lists none of these ten.
+
+**Why it matters:** a local-file-read and three out-of-bounds writes in a document importer are the exact class where the CVSS number is the only triage input most scanners read, and here there is nothing to read for nine of ten. The honest sentence is that these records are unscored, not that their severity is unknown, and the difference matters because a scanner that drops unscored packages silently drops all nine. It is also a rare case where the fix is a real release rather than a promise: 4.1.17 exists, so the action is a download, not a wait.
+
+[`🔗 CVE-2026-90627 (NVD)`](https://nvd.nist.gov/vuln/detail/CVE-2026-90627) · [`🔗 CVE-2026-90628 (NVD)`](https://nvd.nist.gov/vuln/detail/CVE-2026-90628) · [`🔗 Apache OpenOffice security bulletins`](https://www.openoffice.org/security/bulletin.html)
+
+---
+
+## 43. Quest Foglight's three 9.8s all say "authentication is not required," all end in SYSTEM, and none names a version
+
+- **Velocity:** ▮▮ rising
+- **Source:** NVD · three records published 2026-11-04T00:17:29Z
+- **Tags:** `cve` `rce` `zdi` `java` `monitoring`
+
+Three records from `zdi-disclosures@trendmicro.com`, published **260 milliseconds apart** (`.130`, `.260`, `.390`) and all scored **9.8** on **CVSS 3.0** — not 3.1, not 4.0. Each is a different way into the same product, and each description ends the same way: "An attacker can leverage this vulnerability to execute code in the context of SYSTEM." **`CVE-2026-92188`** (ZDI-26-854, CWE-306) is a missing authentication check in `ForgeMBeanServerSupport` — authentication is not required at all. **`CVE-2026-92189`** (ZDI-26-861, CWE-73) is `writeTopologySectionToFile`, which validates no user-supplied path before using it in file operations. **`CVE-2026-92190`** (ZDI-26-851, CWE-502) is the `baseRmiServiceExporter` bean deserializing untrusted data.
+
+The ZDI advisory numbers are not in CVE order — 854, 861, 851 — which is what a single research campaign looks like after the reports are split across advisories. And none of the three descriptions names an affected or a fixed version; the affected product is stated as "Quest Foglight for Databases," full stop.
+
+**Why it matters:** three independent unauthenticated RCEs in one monitoring product is a pattern, not three coincidences — a Java management surface that exposes an MBean server, a file-writing method and a deserialization endpoint to the network has no authentication boundary drawn across any of them. For operators the record gives no version to compare against, so the ZDI advisories are the artifacts that must be read; for everyone else the lesson is that a 9.8 here means "reachable and unauthenticated," and the CWE tells you which of the three shapes your scanner will actually recognise.
+
+[`🔗 ZDI-26-854 (ForgeMBeanServerSupport)`](https://www.zerodayinitiative.com/advisories/ZDI-26-854/) · [`🔗 CVE-2026-92190 (NVD — deserialization)`](https://nvd.nist.gov/vuln/detail/CVE-2026-92190) · [`🔗 CVE-2026-92189 (NVD — file path)`](https://nvd.nist.gov/vuln/detail/CVE-2026-92189)
+
+---
+
+## 44. Kitty 0.50 docks a window to another window and restores your scrollback after logout — encrypted with a keychain key on macOS
+
+- **Velocity:** ▮▮ rising
+- **Source:** kitty changelog · 0.50.0 released 2026-11-03 · 182 pts on HN
+- **Tags:** `terminal` `kitty` `wayland` `dev-tools` `release`
+
+The headline feature is **docked windows**: `launch --type=window-dock` and `--type=tab-dock` attach a kitty window to the edge of another window or of the tab, which is the terminal growing status bars and file trees as first-class windows instead of tmux panes. The second is **`restore_session_after_logout`**, which will "save the state of every kitty instance, including scrollback, when logging out, restarting or shutting down and restore it the next time kitty starts" — and the storage decision is stated: "On macOS, the state is encrypted with a key in the keychain. On Linux, it requires the Inhibit desktop portal." Scrollback contains whatever was on screen, so where it lands is a security question and the changelog answers it in the same sentence that announces the feature.
+
+Three more are worth flagging. Tabs become **named workspaces** — `launch --focus-existing` to jump to an existing window rather than spawn, a `by-title` value for `launch --location` that keeps tabs alphabetical, and detach-window able to send a window to a named tab that it creates if missing. The graphics protocol gains two **indexed-color image formats** whose pixels index the terminal palette, so images recolour with the theme, plus a per-feature capability query. And kitty now speaks **OSC 7501, the Program Status Protocol**, where a program reports "whether they are working, finished, failed or blocked waiting on the user," surfaced in the tab bar through `tab.program_status`.
+
+**Why it matters:** OSC 7501 is the one with reach beyond terminal users — "blocked waiting on the user" is precisely the state an agent harness cannot currently signal, and a terminal that renders it turns a spinner into a request for input. The restore-after-logout feature is the more immediately useful and the more dangerous: scrollback surviving a reboot means it survives into a file, and the macOS-only encryption is the kind of platform asymmetry that produces a security difference between two users of the same app.
+
+[`🔗 kitty changelog (0.50.0)`](https://sw.kovidgoyal.net/kitty/changelog/#detailed-list-of-changes) · [`🔗 HN thread`](https://news.ycombinator.com/item?id=50362980)
+
+---
+
+## 45. GitHub's spec-kit is at 146,914 stars — and 1.3.0 removed a command from its own core
+
+- **Velocity:** ▮▮ rising
+- **Source:** GitHub Trending (daily) · v1.3.0 released 2026-11-03
+- **Tags:** `agent-infra` `spec-driven` `github` `dev-tools` `open-source`
+
+`github/spec-kit` is GitHub's own **Spec-Driven Development** toolkit — 146,914 stars, 13,181 forks, MIT, created 2025-08-21 and pushed 2026-11-03. Its README has moved from a single SDD workflow to a table of **independent entry points**: build a feature (SDD, in core), diagnose and repair broken behaviour, decide whether an idea deserves investment, or bring your own process assembled from the same primitives. Integration with a coding agent, quality gates and external tools are all listed as **extensions**, with lifecycle hooks and runtime events.
+
+The release that put it on today's trending list is **v1.3.0** (2026-11-03T18:25:42Z), and its first line under **Removed** is the architectural statement: "The core `/speckit.taskstoissues` command has been removed. You should be using the `github` extension." The changelog beside it is the ordinary maintenance of a large project — a bug fix bounding Python `--number` parsing against oversized inputs, a fix so the git extension's fetch stops "waiting on a credential prompt," workflow expressions parsed with a Lark LALR grammar, and a `preflight_setup()` hook that runs before shared writes.
+
+**Why it matters:** moving a command *out* of core and into an extension in the same release that adds 20k stars is the clearest signal yet about where agent tooling is settling — a small core of process primitives plus installable extensions, which is the same shape as the plugin marketplaces in items 10 and 12. Practically, anyone who pinned an install to `@v1.3.0` and used `taskstoissues` finds out from the changelog, not from a deprecation warning, so read the Removed section before bumping.
+
+[`🔗 github/spec-kit`](https://github.com/github/spec-kit) · [`🔗 v1.3.0 release notes`](https://github.com/github/spec-kit/releases/tag/v1.3.0) · [`🔗 Spec Kit docs`](https://github.github.io/spec-kit/)
+
+---
+
+## 46. Garry Tan's gstack is at 139,034 stars — and its installer refuses a Bun old enough to let compiled tools read your `.env`
+
+- **Velocity:** ▮▮ rising
+- **Source:** GitHub Trending (daily) · v1.92.55.0 released 2026-11-02
+- **Tags:** `agent-infra` `skills` `claude-code` `yc` `tooling`
+
+`garrytan/gstack` packages a virtual engineering team as slash commands: "a CEO who rethinks the product, an eng manager who locks architecture, a designer who catches AI slop, a reviewer who finds production bugs, a QA lead who opens a real browser, a security officer who runs OWASP + STRIDE audits, and a release engineer who ships the PR. All slash commands, all Markdown, all free, MIT license." It has **139,034 stars** and **20,606 forks**, was created 2026-03-11, and ships on an unusual clock — **v1.92.55.0** on 2026-11-02, with releases roughly every two to three days.
+
+Two details separate it from the other six-figure skill repos in this feed. The install prerequisites name a specific floor and say why: Bun **v1.4.2+** ("the tested version; setup refuses Bun older than **1.3.3**, which would let compiled tools read a project's `.env`") — a security gate on the version of the runtime the tooling compiles against, written into the setup script. And the productivity claims come with a methodology page rather than a number in the README: "~**810×** my 2013 pace (11,417 vs 14 logical lines/day)" and "2026 has already produced **240× the entire 2013 year**," measured "across 40 public + private `garrytan/*` repos including Bookface, after excluding one demo repo." The same page states the caveat: "The LOC critics aren't wrong that raw line counts inflate with AI."
+
+**Why it matters:** the pattern here — one prompt file per org role, wired together by slash commands — is the same org-chart-for-agents shape that paperclip and ECC already occupy, and a YC president publishing it is the highest-profile endorsement the category has. The reusable piece is not the skills; it is the two disciplines: a minimum runtime version chosen for a stated security reason, and a productivity number that ships with its own denominator and its own concession.
+
+[`🔗 garrytan/gstack`](https://github.com/garrytan/gstack) · [`🔗 Why gstack, and how I use it`](https://github.com/garrytan/gstack/blob/main/docs/why-gstack.md) · [`🔗 v1.92.55.0 release`](https://github.com/garrytan/gstack/releases/tag/v1.92.55.0)
+
+---
+
+## 47. OpenMontage ships twelve video pipelines, 76,224 stars and not one release
+
+- **Velocity:** ▮▮ rising
+- **Source:** GitHub Trending (daily) · pushed 2026-11-03 · no releases
+- **Tags:** `agent-infra` `video` `agpl` `skills` `open-source`
+
+`calesthio/OpenMontage` calls itself "the first open-source, agentic video production system," and the architecture is a pipeline rather than a prompt: every workflow runs `research → proposal → script → scene_plan → assets → edit → compose`, with "a dedicated **director skill** — a markdown instruction file" per stage, and a human approval checkpoint at creative decisions. The repo's `pipeline_defs/` directory holds **thirteen YAML files**, one of which is `framework-smoke.yaml` — so twelve real pipelines, matching the description's "12 production pipelines," while the README's own table lists eleven and omits `character-animation.yaml`.
+
+Two things in the README are unusually concrete. There is a genuine zero-key path — narration from **Piper TTS**, footage from **Archive.org, NASA and Wikimedia Commons**, and local video generation through `wan2.2-ti2v-5b`, `wan2.1-1.3b`, `hunyuan-1.5`, `ltx2-local` or `cogvideo-5b` — so the "free/open-source workflow" claim is backed by named components. And there is a section addressed to the agent rather than the human: "If you're An OpenClaw Agent Reading This, Congratulations: You Probably Passed The Turing Test," followed by instructions to read `AGENT_GUIDE.md` and "do not improvise the production workflow."
+
+The repo state is the other half: **76,224 stars**, 10,105 forks, AGPL-3.0, created 2026-03-29, pushed 2026-11-03 — and the releases API returns **nothing at all**. Installation is from `main`.
+
+**Why it matters:** a 76k-star agent system with zero releases means every user is tracking a moving default branch, which is a different risk profile from the skill repos that at least tag a version. The AGPL choice is the substantive one for anyone who wants to monetise output: it is the licence most likely to reach a service that runs this on a server, and it is the opposite of the MIT norm in this category. Judge the pipelines on the artifact you clone, because there is no release to pin.
+
+[`🔗 calesthio/OpenMontage`](https://github.com/calesthio/OpenMontage) · [`🔗 pipeline_defs/`](https://github.com/calesthio/OpenMontage/tree/main/pipeline_defs) · [`🔗 Agent guide`](https://github.com/calesthio/OpenMontage/blob/main/AGENT_GUIDE.md)
+
+---
+
+## 48. A pre-registered test found a stronger verifier does not buy better discoveries — widening the proposal pool does
+
+- **Velocity:** ▮ steady
+- **Source:** arXiv 2611.04420 · submitted 2026-11-03 · pre-registered
+- **Tags:** `automated-research` `evaluation` `preregistration` `llm-agents` `research`
+
+Automated-research pipelines rest on "an implicit bet: discovery quality rises with verification strength." This paper tests the bet under a **pre-registered protocol** in two real-data domains — job-shop scheduling and vehicular edge offloading on Beijing T-Drive trajectories — with **100 matched LLM/random pairs per domain** and three verifier tiers. The manipulation works: a **429-case mutation battery** shows verifier scores rising across tiers, so the tiers are genuinely different.
+
+The bet does not survive it. The paired LLM-over-random advantage "does not scale with it" — one-sided **p = 0.1115** in domain A and **p = 0.9994** in domain D — and in D it *shrinks* under the strict tier (margin contrast **−0.040**, p = 0.0013). One methodological honesty is worth more than the negative result: "the two lower gates promote identical candidates in 100/100 and 99/100 pairs, so the strict order is untestable when they coincide," which is the authors telling you where their own instrument cannot see. The constructive half is the replacement: a post-hoc union-pool analysis finds "the fastest path to better discovery is widening the pool, not tightening the gate," worth **+1.52 holdout-value units** in domain A (one-sided Wilcoxon, n = 100, p = 0.0002). Criteria, ledgers and scripts are archived on Zenodo.
+
+**Why it matters:** every agentic-research demo in this feed claims a better verifier or a better judge, and this is a pre-registered measurement saying that at these tiers the gate is not the lever — the proposer pool is. The union-pool finding is also actionable in a way the negative one is not: if you already have two proposers, combining them beats buying a stricter checker, and it beats it by an amount this paper puts a number on.
+
+[`🔗 Verifier strength does not buy discovery quality (arXiv)`](https://arxiv.org/abs/2611.04420) · [`🔗 Paper PDF`](https://arxiv.org/pdf/2611.04420) · [`🔗 Pre-registration and artifacts (Zenodo)`](https://doi.org/10.5281/zenodo.23308866)
+
+---
+
+## 49. SEPPmail evaluates your email address as Perl — as root, before you authenticate
+
+- **Velocity:** ▮ steady
+- **Source:** NVD · five records published 2026-11-04T09:17:41Z
+- **Tags:** `cve` `seppmail` `rce` `perl` `unauthenticated`
+
+Five records from `vulnerability@ncsc.ch`, published inside one second, all `Received`, all **CVSS 4.0 only**, all fixed before **15.1.1**. The 9.2s are the ones to read. **`CVE-2026-114424`** (CWE-95): the gateway "can evaluate attacker-influenced replacement text as **Perl code** in sender or recipient replacement rules. An unauthenticated remote sender can execute operating-system commands in the mail-processing worker context when an active rule uses message-derived replacement data and its search condition matches. The validated worker context was **root**." **`CVE-2026-114425`** (CWE-73): the gateway trusts a file path supplied in **Large File Transfer attachment metadata**, so an unauthenticated sender can "disclose, move, or delete an accessible regular file" — and again, "the validated workers ran as root."
+
+The other three are the same boundary drawn less sharply. **`CVE-2026-114426`** (8.7, CWE-400) processes and writes v1 file-interface upload data "before authenticating the caller and without an absolute request-size limit," so concurrent or slow requests occupy workers and fill temporary storage. **`CVE-2026-114421`** (8.3, CWE-640) permits password recovery for "a created but unregistered GINA account whose initial password is empty," letting an attacker "set a new password, authenticate as that account, and prevent the intended recipient from using it." **`CVE-2026-114420`** (6.9) fails to neutralise LDAP metacharacters in an unauthenticated account-selection input, allowing address enumeration. Three of the five carry `AT:P` in their 4.0 vectors — an attack-requirements term CVSS 3.1 cannot express.
+
+**Why it matters:** the attack unit here is **an email**, and the precondition on the 9.2 — "when an active rule uses message-derived replacement data and its search condition matches" — is a configuration most mail gateways with rewrite rules have. A templating language that evaluates its input as code, running as root, reachable by anyone who can send a message, is a design that turns every delivery into an execution request; the fix is the upgrade, and the 4.0-only scoring means a scanner comparing against a 3.1 baseline is comparing two different instruments.
+
+[`🔗 CVE-2026-114424 (NVD — Perl evaluation)`](https://nvd.nist.gov/vuln/detail/CVE-2026-114424) · [`🔗 CVE-2026-114425 (NVD — file path)`](https://nvd.nist.gov/vuln/detail/CVE-2026-114425) · [`🔗 SEPPmail revision history`](https://docs.seppmail.com/en/20_revision-history.html)
+
+---
+
+## 50. PTX is now formalised in Lean, with proofs for a WGMMA GEMM, FlashAttention and a three-kernel MoE
+
+- **Velocity:** ▮ steady
+- **Source:** arXiv 2611.04447 · submitted 2026-11-03
+- **Tags:** `formal-verification` `lean` `gpu` `kernels` `research`
+
+The abstraction level is the contribution. Instead of verifying CUDA or a framework's IR, the authors formalise **PTX** — the assembly the driver actually consumes — and build enough of a model to reason about "patterns common in GPU kernels for Deep Learning, including **acquire-release, tensor cores, proxies, async operations, multi-kernel pipelines and data-dependent control flow**." That list is the set of features that makes GPU kernels hard to reason about formally, and each one is a place where a naive model diverges from what the hardware does.
+
+They then use it to prove correctness of three kernels: "simple implementations of a **WGMMA GEMM kernel, FlashAttention, and a 3-kernel MoE pipeline**." A three-kernel MoE is the interesting one for this feed's readers because it is the first proof here that spans a *pipeline* — memory handed between kernels — rather than a single launch.
+
+**Why it matters:** verification of ML infrastructure currently stops at the compiler or the framework and skips the layer where tensor-core scheduling, async copies and memory proxies actually get their semantics wrong. Proving properties at PTX is the seam where a correctness argument can survive a compiler change. The limit is structural and should be stated with the result: PTX is not the ISA, so a proof covers the program as written, not the machine that executes it — and these are, by the authors' own words, "simple implementations."
+
+[`🔗 Formalizing PTX in Lean to Prove GPU Kernel Correctness (arXiv)`](https://arxiv.org/abs/2611.04447) · [`🔗 Paper PDF`](https://arxiv.org/pdf/2611.04447)
+
+---
+
+## 51. Anon-vectors separate "knows" from "won't say" — and after unlearning, the geometry predicts what an attack recovers
+
+- **Velocity:** ▮ steady
+- **Source:** arXiv 2611.05272 · submitted 2026-11-03
+- **Tags:** `interpretability` `unlearning` `safety` `hidden-states` `research`
+
+Behavioural evaluation cannot tell a model that does not know a concept from one that refuses to say it, which makes both knowledge audits and machine-unlearning claims fragile in the same direction. The paper's measurement is a difference vector: **anon-vectors** are "the differences in hidden states between a concept-specific query and its anonymized paraphrase," and the finding is geometric — "genuine knowledge forms a tight, low-entropy cluster while ignorance forces geometric fragmentation."
+
+Across **ten instruction-tuned LLMs from three model families**, "all fragmentation metrics reliably separate known from unknown concepts." The stronger claim is about unlearning: after removal, fragmentation geometry "correlates with adversarial recovery across four attack types and five unlearning algorithms" — and the authors state the qualifier in the abstract rather than the appendix, "though the direction of that relationship is shown to depend on attack methodology." A layer-resolved analysis adds that "different adversarial mechanisms exploit this geometry at varying depths, with high attack-specific correlations that are invisible to behavioral evaluation."
+
+**Why it matters:** unlearning is currently certified by asking the model, and a refusal is exactly the signal this paper says is uninformative. A single-phase, attack-free proxy that runs on hidden states is the right shape for a claim that has to be checkable without a red team — but the caveat that the direction depends on attack methodology means it is not yet one verdict, and a review that quotes a correlation without saying which attack produced it is quoting half a result.
+
+[`🔗 The Geometry of Ignorance (arXiv)`](https://arxiv.org/abs/2611.05272) · [`🔗 Paper PDF`](https://arxiv.org/pdf/2611.05272)
+
+---
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-11-04T04:18:54Z |
-| Items | 36 |
-| Sources tracked | 22 (Hacker News, GitHub Trending, arXiv, NVD, CISA KEV, GitHub Advisory Database, vendor advisories, release notes, status pages) |
+| Generated | 2026-11-04T12:21:49Z |
+| Items | 51 |
+| Sources tracked | 24 (Hacker News, GitHub Trending, arXiv, NVD, CISA KEV, GitHub Advisory Database, vendor advisories, release notes, vendor security bulletins, status pages) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (3x daily) |
 | Ranking | Velocity-weighted (recency × engagement acceleration × source authority) |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |

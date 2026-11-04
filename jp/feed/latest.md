@@ -1,8 +1,8 @@
 ---
 date: 2026-11-04
-updated: 2026-11-04T04:18:54Z
+updated: 2026-11-04T12:21:49Z
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 22
+sources: 24
 license: CC-BY-4.0
 ---
 
@@ -584,13 +584,255 @@ agent はツールも基盤も正常に動いているのに誤った判断を�
 
 ---
 
+## 37. Chrome 157 は 213 件のセキュリティ修正を一気に出した —— そして CISA の補完は「Low」を 9.6、「Critical」を 8.8 と採点した
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Chrome Releases · 安定版 2026-11-03 · NVD 213 件の全数調査
+- **Tags:** `cve` `chrome` `cisa-adp` `cvss` `scoring`
+
+安定版チャネルの告知は一文とリストだけだ。「This update includes 213 security fixes.」NVD には `chrome-cve-admin@google.com` が起票し `157.0.8103.38` を名指す記録が **213 件**あり、そのすべてが **2026-11-03 の 21:17:05.860Z から 21:17:36.603Z** の間に公開されている——わずか **31 秒**。**213 件のうち 132 件には CVSS 指標がまったく付いていない。** 付いている 81 件が使っているのは**わずか 3 種類のベクトル**で、しかもすべて `134c704f-9b21-4f2e-91b3-4a467353bcc0`（CISA-ADP）が出した `Secondary` だ：**8.8**（`S:U`、44 件）、**9.6**（`S:C`、27 件）、**8.3**（`AC:H` かつ `S:C`、10 件）。213 件すべてが `Awaiting Analysis` で、**`nvd@nist.gov` の指標は 1 件もない**。Chrome 自身のコンテナが渡しているのは CWE と定性語——Critical 7 件、High 77 件、Medium 75 件、Low 54 件——であって、数字ではない。
+
+二つの尺度は両方向にずれる。`CVE-2026-121189` は Chrome が **Low** と呼びながら **9.6** を持ち、`CVE-2026-121203` は **Critical** と呼びながら **8.8** を持つ。ラベルが予測できるのは**点が付くかどうか**だけで——Critical 7 件は 1 件も無採点でなく、Medium 75 件のうち 61 件、Low 54 件のうち 49 件が無採点——いくつになるかは予測できない。もう二つ、覚えておく価値のある細部がある。`CVE-2026-121112`（「Out of bounds read in Permissions」）の報告日は **2023-03-22** で、このリリースより三年半前。そして修正のひとつには「**Xinyang Ge (Anthropic), assisted by Claude**」とクレジットされている。
+
+**なぜ重要か:** Chrome の CVE 番号は採番の枠であって重大度ではない——213 件が 30 秒あまりで並ぶのは Chrome の CNA が一括起票しているからで、そのうち 81 件の隣にある数字は補完レイヤーが三つの雛形から選んだもので、バグの評価ではない。この リリースを切り分けるとき、ベンダー自身の Critical/High/Medium/Low という語だけがバグ単位で付けられた唯一の重大度信号であり、**採点済み 81 件のうち 35 件**で CVSS の帯とその語は一致しない——だからあの 9.6 を「どれくらい悪いか」として引くのは、評価ではなく雛形を引いていることになる。
+
+[`🔗 Stable Channel Update for Desktop（Chrome 157）`](https://chromereleases.googleblog.com/2026/11/stable-channel-update-for-desktop.html) · [`🔗 CVE-2026-121189（NVD — Low、9.6）`](https://nvd.nist.gov/vuln/detail/CVE-2026-121189) · [`🔗 CVE-2026-121203（NVD — Critical、8.8）`](https://nvd.nist.gov/vuln/detail/CVE-2026-121203)
+
+---
+
+## 38. 後ろのトークンは最大 7 倍高くつく —— それでも文脈を 16K に圧縮して、精度の低下は 3.7 ポイント以内だった
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** arXiv 2611.05306 · 2026-11-03 投稿 · 著者 12 名
+- **Tags:** `long-context` `agents` `compaction` `inference` `cost`
+
+前提は、ほとんどの配信スタックが価格に織り込みながら実測してこなかった非対称だ。「later tokens are costlier to generate than earlier tokens」であり、フロンティアのオープンウェイトモデルではその差は「may rise to as much as **7x**」に達する。手法は **EoCC（会話末の圧縮）**——会話が閾値を越えたら要約して続行する——で、6 つのベンチマーク（SWE-bench Verified、TerminalBench 2.1、SWE-bench Multilingual、FRAMES、BFCLv3、Tau2Bench）を **Claude Opus 4.5** と **GPT 5.6 Sol** で評価し、総文脈上限を **16K / 12K**（Tau2Bench では **8K / 6K**）まで下げていく。
+
+数字はすべて**各モデル自身の全履歴ベースライン**に対する差分である：Opus 4.5 は **−3.7〜+5.6 ポイント**、GPT 5.6 Sol は **−3.3〜+4.4**、そして「for either model, no more than **5 out of 22** threshold configurations lose more than 2ppts」。推定コスト削減は Opus 4.5 で **2.2×〜8.8×**、Sol で **2.4×〜5.0×**。第二の実験は「アクションごとに圧縮」し、コンパクトな意味状態だけを持ち回る——著者の言う **SSSM** の素描——もので、ソフトウェアエンジニアリングのタスクでも破綻しない。論文は欠陥と限界も自分で書いている：圧縮が「may successfully enforce smaller context window size」しつつ、やり直しによって総トークン消費が増える病理は「was generally not the case」であり、「our evidence does not rule out the existence of tasks for which long context is beneficial」。
+
+**なぜ重要か:** 差分は全履歴ベースラインに対して測られており、これは正しい基準だ。一方コスト倍率は**推定小売価格**であって実請求額ではない——引くときは推定として扱うこと。持ち帰れるのは、人々が長文脈を挙げるときの作業量にとって 100 万トークンの窓は利便性であって要件ではなく、代わりに要になるのは閾値を明示した圧縮方針だという点だ。agent ループを回しているなら、彼らの実験は最も安い：閾値を半分にして、精度と総トークンを同時に見る。片方だけ見ていると、この失敗モードは見えない。
+
+[`🔗 You don't need long context（arXiv）`](https://arxiv.org/abs/2611.05306) · [`🔗 全文`](https://arxiv.org/html/2611.05306v1)
+
+---
+
+## 39. Apache ZooKeeper が一度に 5 件の CVE を出した —— ログイン不要の 8.7 は、データディレクトリを永久に起動不能にする
+
+- **Velocity:** ▮▮ rising
+- **Source:** NVD · 5 件すべて 2026-11-04T11:17Z 公開
+- **Tags:** `cve` `zookeeper` `apache` `dos` `cvss4`
+
+5 件すべて `security@apache.org` から、同じ分に公開され、状態は `Received`、採点は**すべて CVSS 4.0 のみ**——3.1 の数字はどこにもない。二つの 8.7 は別々のバグでありながら同じベクトル文字列（`AV:N/AC:L/AT:N/PR:N/UI:N/VA:H`）を共有している。**`CVE-2026-100300`** はクォータサブシステムにあり、「unauthenticated on default deployments, where that subtree is world-writable」——`/zookeeper/quota` への書き込み一発で、重要なリクエスト処理スレッドを落とし、**かつ**ディスク上のデータディレクトリを永久に起動不能にする。ここでは「再起動すれば戻る」は保険にならない。**`CVE-2026-115448`** の方が復旧は難しい：サーバはデータツリーをスナップショットに直列化する際、znode の階層ごとに 1 フレーム再帰し、深さの上限がない。znode を作れるクライアント（既定のルート ACL は開放）が十分深い連鎖を作れば JVM スタックを使い果たす——「sizes stay within `jute.maxbuffer`, so existing limits do not prevent it」——そして再起動時、サーバはトランザクションログからこの深いツリーを再構築し、**起動スナップショットの取得で再び失敗する**。ログは follower にも及び、復旧は「can entail data loss」。
+
+残る三つは静かで、より構造的だ。**`CVE-2026-100252`**（8.6）：SASL を有効にしたクライアントポートで、コールバックハンドラは「grants every authorization identity (authzid) that a client requests, without checking it against the principal the client authenticated as」。**`CVE-2026-100302`**（7.1）：multiRead ハンドラは束ねる操作数にも応答サイズにも上限を置かない——小さなリクエスト一つで済む。**`CVE-2026-100235`**（6.0）：`setACL` の TOCTOU で、「the pending change is not published to the server's outstanding change record」——変更の途中で準備（および認可）されたリクエストは古い ACL で通る。影響範囲は **3.8.0–3.8.7 と 3.9.0–3.9.6**、修正は **3.8.8 / 3.9.7**。再帰バグについて Apache 自身が示す回避策は、既定で開いたルート ACL に頼るのをやめることだ。
+
+**なぜ重要か:** ZooKeeper は他のすべてが「誰がリーダーか」に合意するために使う層であり、この 5 件のうち 2 件は既定設定でのサービス拒否だ。運用判斷を分けるのは**永続性**：再起動で戻るクラッシュはインシデント、起動時のスナップショットで繰り返し失敗するのはバックアップからの再構築であり、このバッチには両方ある。マルチテナントのクラスタで効くのは SASL の件だ——自分で名乗れる authzid は、自分になれる身元である。
+
+[`🔗 CVE-2026-100300（NVD）`](https://nvd.nist.gov/vuln/detail/CVE-2026-100300) · [`🔗 CVE-2026-115448（NVD）`](https://nvd.nist.gov/vuln/detail/CVE-2026-115448) · [`🔗 CVE-2026-100252（NVD）`](https://nvd.nist.gov/vuln/detail/CVE-2026-100252)
+
+---
+
+## 40. LatentTriad はスキルパッケージの prefill 隠れ状態だけで危険度を読む —— トークン生成なし、実行なしで pooled F1 99.0%
+
+- **Velocity:** ▮▮ rising
+- **Source:** arXiv 2611.05088 · 2026-11-03 投稿
+- **Tags:** `agents` `skills` `security` `detection` `interpretability`
+
+論文が立てる問題は、いまのスキルマーケットプレイスが共通に抱える問題だ：agent は「extended with reusable skills, but untrusted skill content can induce operations outside the user's task」であり、既存の二つの答えはどちらも良くない——パターン照合は文脈的なリスクを取りこぼし、動的解析は「incurs the cost of skill execution」、つまり避けたかったそのものを払う。発見は「hidden states formed during prefill contain readable information about task-operation consistency」であり、統制された評価では未知の表現形式にも及ぶ。
+
+**LatentTriad** は三つの信号——文脈化された Boundary 特徴、グループ補正した Operation 方向、良性状態関係からの逸脱——を一度の prefill の上で合成するので、「detection generates no output tokens, invokes no tools, and executes no skill code」となる。**5 つの情報源からの 5,830 個のスキルパッケージ**と**7 つのバックボーン**で、**99.0–99.2% の pooled F1** と **93.0–94.6% の source-macro F1**、prefill と検出を合わせた中央値 **259–284 ms** を報告する。精度の主張とは分けて読むべき介入結果もある：一致させた Operation 状態の介入は「affect later Boundary states and shift fixed risk readouts toward the donor label」——読み取り値は状態の隣にあるのではなく、状態とともに動く。
+
+**なぜ重要か:** 持ち帰るべきは pooled F1（99.0）と source-macro F1（93.0）の差だ——見出しの数字のおよそ 6 ポイントは情報源ごとのばらつきであり、寄せ集めたスキルパッケージのコーパスはまさにそう見える。構造的な貢献はコストにある：スキルが走る**前に**、サンドボックスもトークンも使わずに篩うことで、マーケットプレイスの走査は「全部実行する」から「最初の隠れ状態を読む」に変わる。取り付けボタンの手前に置ける制御は、この形しかない。
+
+[`🔗 LatentTriad（arXiv）`](https://arxiv.org/abs/2611.05088) · [`🔗 論文 PDF`](https://arxiv.org/pdf/2611.05088)
+
+---
+
+## 41. 電源に繋ぐと、RTX Spark ノートの原生 Linux は 13.9 tok/s、Windows は 65.4 —— 抜くと Linux の方が速くなる
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** MindStudio ブログ · 2026-11-01 · HN 143 ポイント
+- **Tags:** `nvidia` `linux` `cuda` `inference` `hardware`
+
+MindStudio による MSI Prestige N16 Flip AI Plus（RTX Spark ノート、DGX Spark デスクトップと同じ GPU 設計）のデュアルブート記録は、ベンチマーク表ではなく実測の集まりで、意外なのは方向の方だ。**GPT-OSS-120B** で：Windows **65.4 tok/s**、WSL **65.1**、DGX Spark デスクトップ **61**、ノート上の原生 Linux **13.9**——同じシリコンで約 5 倍遅い。vLLM を 8 クライアント同時で回すと差は再現し、**WSL 127 tok/s に対し Linux 39.5**。長めの実行は Windows が約 **8 分**で GPU は 2.2 GHz 付近を維持、Linux は **37 分**で約 790 MHz に張り付いていた。温度は「between 40 and 47 °C」なので、熱によるスロットリングは排除される。
+
+これを愚痴ではなく発見にしているのは対照実験だ。Windows で **「Nvidia Platform Controllers and Framework」** というコンポーネントを無効化すると、低下がそのまま再現された——「tokens per second dropped from around 83 to about 31, and clock speed fell from roughly 2 GHz down to the same 786 MHz seen on Linux when plugged in」——有効に戻すと即座に回復する。このコントローラは CPU と GPU の電力予算を配分しており、「the firmware hands this controller a table of power settings that is encrypted. Windows has the key to decrypt it. Linux currently does not」。バッテリーと電源で常識が反転する：抜くと Linux は LM Studio で **61〜67 tok/s**、約 1,800 MHz。繋ぐと同じテストが約 **15 tok/s**、約 780 MHz になる。初回起動を阻む別の配分もある——この機体は 128 GB の統合メモリのうち **96 GB** を GPU 用に予約し、その分割を公開しているのは Windows だけだ。
+
+**なぜ重要か:** これはベンダーが設けたゲートであり、カーネルやドライバのバグではない。Windows 側の実験がその証明で、ディストリビューションを変えてもドライバを詰めても変わらない——欠けているのは復号鍵だからだ。記事の実用的な助言は WSL を使うこと：Windows のクロック経路を引き継ぎ 65.1 tok/s 出る。しかしその助言は、この機体が避けるために買われた「Linux 前提のツール群を Windows カーネルで動かす」妥協そのものだ。この種の機械にとっての「Linux 対応」も定義し直される：オープンカーネルドライバは読み込まれ、CUDA も動き、それでもノートは 3 分の 1 のクロックで走る。
+
+[`🔗 Linux on the Nvidia RTX Spark Laptop: What Actually Works`](https://www.mindstudio.ai/blog/linux-nvidia-rtx-spark-laptop) · [`🔗 HN スレッド`](https://news.ycombinator.com/item?id=50362905)
+
+---
+
+## 42. Apache OpenOffice は 1 分間に 10 件の CVE を出し、そのうち 1 件にだけ点を付けた
+
+- **Velocity:** ▮▮ rising
+- **Source:** NVD · 10 件すべて 2026-11-04T11:17Z 公開
+- **Tags:** `cve` `openoffice` `apache` `scoring` `memory-safety`
+
+10 件すべて `security@apache.org` から、同じ分に公開され、状態は `Received`、アップグレード推奨も同じ。**10 件のうち CVSS が付いているのは 1 件だけ**：`CVE-2026-59263`、CVSS 4.0 で **1.9**、内容は文書内の表示差し替え。残り 9 件は**`metrics` キーすら持たない**——メモリ安全性のものも含めて：`CVE-2026-90624`、`-90626`、`-90634`（PDF 取り込み経路の範囲外書き込み）、`CVE-2026-90629`（WMF 取り込み）、`CVE-2026-90628`（PDF 書き出しで細工した CFF フォント経由のスタックオーバーフロー）、`CVE-2026-59268`（Word 文書からの範囲外書き込み）、そして `CVE-2026-90627`——フラットファイル DB ドライバが「allows a crafted document to read the contents of any local file without asking」。残る二つは `CVE-2026-90632`（GStreamer マルチメディア部品）と `CVE-2026-59264`（Windows インストーラが昇格権限で外部コードを実行）。
+
+対処は一律で、珍しく**すでに出荷されている**：どの記録も「Users are recommended to upgrade to version **4.1.17**」と書き、openoffice.org のページ見出し自体が「Released: Apache OpenOffice 4.1.17」だ。ベンダーのセキュリティ速報ページはそのどちらよりも遅れていて、最新の節は今も「Disclosed in Apache OpenOffice 4.1.16」で、この 10 件は一つも載っていない。
+
+**なぜ重要か:** ローカルファイル読み取り 1 件と範囲外書き込み 3 件が文書取り込み部に揃っており、これは CVSS の数字が多くのスキャナにとって唯一の切り分け入力になる類だが、ここでは 10 件中 9 件に読むべき点がない。正直な文は「点が付いていない」であって「重大度不明」ではなく、この差は実務的だ——採点なしのパッケージを捨てるスキャナは 9 件すべてを黙って捨てる。同時に、修正が約束ではなく**実在のリリース**である稀な例でもある：4.1.17 はすでにあるので、行動はダウンロードであって待機ではない。
+
+[`🔗 CVE-2026-90627（NVD）`](https://nvd.nist.gov/vuln/detail/CVE-2026-90627) · [`🔗 CVE-2026-90628（NVD）`](https://nvd.nist.gov/vuln/detail/CVE-2026-90628) · [`🔗 Apache OpenOffice セキュリティ速報`](https://www.openoffice.org/security/bulletin.html)
+
+---
+
+## 43. Quest Foglight の 3 つの 9.8 はどれも「認証不要」と書き、どれも SYSTEM で終わり、どれも版を書かない
+
+- **Velocity:** ▮▮ rising
+- **Source:** NVD · 3 件すべて 2026-11-04T00:17:29Z 公開
+- **Tags:** `cve` `rce` `zdi` `java` `monitoring`
+
+3 件は `zdi-disclosures@trendmicro.com` から、公開間隔は **260 ミリ秒**（`.130`、`.260`、`.390`）、採点はすべて **CVSS 3.0** で **9.8**——3.1 でも 4.0 でもない。それぞれ同じ製品への別の入口で、どの説明も同じ一文で終わる：「An attacker can leverage this vulnerability to execute code in the context of SYSTEM.」**`CVE-2026-92188`**（ZDI-26-854、CWE-306）は `ForgeMBeanServerSupport` の認証チェック欠落——認証はまったく不要。**`CVE-2026-92189`**（ZDI-26-861、CWE-73）は `writeTopologySectionToFile` で、利用者指定のパスをファイル操作に使う前に検証しない。**`CVE-2026-92190`**（ZDI-26-851、CWE-502）は `baseRmiServiceExporter` bean が信頼できないデータをデシリアライズする。
+
+ZDI の公告番号は CVE の順と一致しない——854、861、851——これは一つの研究キャンペーンが複数の公告に分かれた後の姿だ。加えて、3 件の説明はいずれも影響版も修正版も書いていない。影響製品は「Quest Foglight for Databases」で終わっている。
+
+**なぜ重要か:** 同じ監視製品に独立した未認証 RCE が 3 つあるのは偶然ではなくパターンだ——MBean サーバ、ファイル書き込みメソッド、デシリアライズ端点をネットワークに晒し、そのどれにも認証の境界を引いていない。運用者にとって比較できる版が記録にないので、実際に読むべき成果物は ZDI の公告になる。それ以外にとっては、ここでの 9.8 は「到達可能かつ未認証」を意味し、CWE がそのスキャナの認識する 3 つの形のどれかを教えてくれる。
+
+[`🔗 ZDI-26-854（ForgeMBeanServerSupport）`](https://www.zerodayinitiative.com/advisories/ZDI-26-854/) · [`🔗 CVE-2026-92190（NVD — デシリアライズ）`](https://nvd.nist.gov/vuln/detail/CVE-2026-92190) · [`🔗 CVE-2026-92189（NVD — ファイルパス）`](https://nvd.nist.gov/vuln/detail/CVE-2026-92189)
+
+---
+
+## 44. Kitty 0.50 はウィンドウを別ウィンドウにドッキングし、ログアウト後もスクロールバックを復元する —— macOS ではキーチェーンの鍵で暗号化
+
+- **Velocity:** ▮▮ rising
+- **Source:** kitty changelog · 0.50.0 は 2026-11-03 公開 · HN 182 ポイント
+- **Tags:** `terminal` `kitty` `wayland` `dev-tools` `release`
+
+目玉は**ドッキングウィンドウ**：`launch --type=window-dock` と `--type=tab-dock` で、kitty のウィンドウを別のウィンドウやタブの端に貼り付ける——tmux のペインではなく、ステータスバーやファイルツリーを一級のウィンドウとして端末が持つ形だ。二つ目は **`restore_session_after_logout`** で、「save the state of every kitty instance, including scrollback, when logging out, restarting or shutting down and restore it the next time kitty starts」——保存先の判断は同じ段落に書かれている：「On macOS, the state is encrypted with a key in the keychain. On Linux, it requires the Inhibit desktop portal.」スクロールバックには画面に出たものが全部入るので、それがどこに落ちるかはセキュリティの問いであり、変更履歴は機能を告知するのと同じ文でそれに答えている。
+
+さらに三つ。タブは**名前付きワークスペース**になる——`launch --focus-existing` で新規作成ではなく既存に飛び、`launch --location` に `by-title` が加わってタブをアルファベット順に保ち、detach-window はウィンドウを名前付きタブへ送れる（無ければ作る）。グラフィックスプロトコルには**インデックスカラー画像形式**が二つ加わり、画素が端末パレットの添字なので画像が配色に追従して色を変える。個別機能の対応を問い合わせる `q` キーも入った。そして kitty は **OSC 7501 プログラム状態プロトコル**を話す：プログラムが「whether they are working, finished, failed or blocked waiting on the user」を報告でき、`tab.program_status` を介してタブバーに表示される。
+
+**なぜ重要か:** 端末利用者の外側に届くのは OSC 7501 だ——「blocked waiting on the user」はまさに agent harness が今出せない信号であり、それを描画できる端末はスピナーを入力要求に変える。ログアウト後の復元はより即効性があり、より危険でもある：スクロールバックが再起動を生き延びるということはファイルとして生き延びるということで、macOS だけ暗号化というのは、同じアプリの二人の利用者の間に安全の差を作る類のプラットフォーム非対称だ。
+
+[`🔗 kitty changelog（0.50.0）`](https://sw.kovidgoyal.net/kitty/changelog/#detailed-list-of-changes) · [`🔗 HN スレッド`](https://news.ycombinator.com/item?id=50362980)
+
+---
+
+## 45. GitHub の spec-kit が 146,914 スターに達し —— そして 1.3.0 は自分のコマンドを一つコアから外した
+
+- **Velocity:** ▮▮ rising
+- **Source:** GitHub Trending（日次）· v1.3.0 は 2026-11-03 公開
+- **Tags:** `agent-infra` `spec-driven` `github` `dev-tools` `open-source`
+
+`github/spec-kit` は GitHub 自身の**仕様駆動開発（SDD）**ツールキットで、146,914 スター、13,181 フォーク、MIT、2025-08-21 作成、最終プッシュ 2026-11-03。README は単一の SDD 手順から、**互いに独立した入口**の表に変わった：機能を作る（SDD、コア内）、壊れた挙動を診断して直す、アイデアが投資に値するか判断する、あるいは同じ原語から自分の手順を組む。コーディング agent との連携、品質ゲート、外部ツール接続はいずれも**拡張**として並び、ライフサイクルフックとランタイムイベントを伴う。
+
+今日のトレンドに押し上げたのは **v1.3.0**（2026-11-03T18:25:42Z）で、**Removed** の最初の行がそのまま設計声明になっている：「The core `/speckit.taskstoissues` command has been removed. You should be using the `github` extension.」隣の変更履歴は大規模プロジェクトの日常保守だ——Python の `--number` 解析が巨大数で落ちるのを境界付きにし、git 拡張の fetch が「waiting on a credential prompt」で止まるのを直し、ワークフロー式を Lark LALR 文法で解析し、共有書き込みの前に走る `preflight_setup()` フックを足した。
+
+**なぜ重要か:** 同じリリースでコマンドを**コアから外へ**出し、同時に 2 万スター増やすのは、agent ツールの形がどこに落ち着いたかを示す最も明快な信号だ——小さな手順原語の核と、インストール可能な拡張。第 10・12 項目のプラグインマーケットプレイスと同じ形である。実務的には、`@v1.3.0` に固定して `taskstoissues` を使っていた人は非推奨警告ではなく変更履歴で知ることになるので、上げる前に Removed の節を読むこと。
+
+[`🔗 github/spec-kit`](https://github.com/github/spec-kit) · [`🔗 v1.3.0 リリースノート`](https://github.com/github/spec-kit/releases/tag/v1.3.0) · [`🔗 Spec Kit ドキュメント`](https://github.github.io/spec-kit/)
+
+---
+
+## 46. Garry Tan の gstack は 139,034 スター —— そのインストーラは、コンパイル済みツールに `.env` を読ませる古さの Bun を拒む
+
+- **Velocity:** ▮▮ rising
+- **Source:** GitHub Trending（日次）· v1.92.55.0 は 2026-11-02 公開
+- **Tags:** `agent-infra` `skills` `claude-code` `yc` `tooling`
+
+`garrytan/gstack` は仮想のエンジニアリングチームをスラッシュコマンドの束として配る：「a CEO who rethinks the product, an eng manager who locks architecture, a designer who catches AI slop, a reviewer who finds production bugs, a QA lead who opens a real browser, a security officer who runs OWASP + STRIDE audits, and a release engineer who ships the PR. All slash commands, all Markdown, all free, MIT license.」**139,034 スター**、**20,606 フォーク**、2026-03-11 作成、リリースは特異な刻みで、**v1.92.55.0** が 2026-11-02、おおよそ 2〜3 日ごと。
+
+この情報源にある他の六桁スターのスキルリポジトリと分ける細部が二つある。インストール前提が下限と理由を明記している：Bun **v1.4.2+**（「the tested version; setup refuses Bun older than **1.3.3**, which would let compiled tools read a project's `.env`」）——ツール群がコンパイルして動くランタイムの版に対する安全ゲートを、setup スクリプトに書き込んでいる。そして生産性の主張には方法論ページが付き、README の数字だけでは終わらない：「~**810×** my 2013 pace (11,417 vs 14 logical lines/day)」と「2026 has already produced **240× the entire 2013 year**」、計測範囲は「across 40 public + private `garrytan/*` repos including Bookface, after excluding one demo repo」。同じページに譲歩も書かれている：「The LOC critics aren't wrong that raw line counts inflate with AI.」
+
+**なぜ重要か:** ここでの形——組織の役割ごとに一つのプロンプトファイルを置き、スラッシュコマンドで繋ぐ——は paperclip や ECC がすでに占めている「組織図を agent に渡す」形と同じで、YC 会長がそれを公開したことはこのカテゴリで最も注目度の高い裏書きだ。持ち帰るべきはスキル群ではなく二つの規律：明示した安全上の理由で選んだランタイムの最低版と、自分の分母と自分の譲歩を伴って出てくる生産性の数字だ。
+
+[`🔗 garrytan/gstack`](https://github.com/garrytan/gstack) · [`🔗 Why gstack, and how I use it`](https://github.com/garrytan/gstack/blob/main/docs/why-gstack.md) · [`🔗 v1.92.55.0 リリース`](https://github.com/garrytan/gstack/releases/tag/v1.92.55.0)
+
+---
+
+## 47. OpenMontage には 12 本の動画パイプラインと 76,224 スターがあり、リリースは一つもない
+
+- **Velocity:** ▮▮ rising
+- **Source:** GitHub Trending（日次）· 最終プッシュ 2026-11-03 · リリースなし
+- **Tags:** `agent-infra` `video` `agpl` `skills` `open-source`
+
+`calesthio/OpenMontage` は「the first open-source, agentic video production system」を名乗り、そのアーキテクチャはプロンプトではなくパイプラインだ：どのワークフローも `research → proposal → script → scene_plan → assets → edit → compose` を回し、各段に「a dedicated **director skill** — a markdown instruction file」があり、創造的な判断点に人間の承認が入る。リポジトリの `pipeline_defs/` には **13 個の YAML** があり、一つは `framework-smoke.yaml`——つまり実質 12 本で、説明の「12 production pipelines」と合う。一方 README の表は 11 本しか載せておらず、`character-animation.yaml` が抜けている。
+
+README には珍しく具体的な記述が二つある。本当に鍵なしで動く経路——ナレーションは **Piper TTS**、素材は **Archive.org、NASA、Wikimedia Commons**、ローカル動画生成は `wan2.2-ti2v-5b`、`wan2.1-1.3b`、`hunyuan-1.5`、`ltx2-local`、`cogvideo-5b`——なので「無料・オープンソースのワークフロー」という主張には名前のある部品が伴う。そして人間ではなく agent に向けた節がある：「If you're An OpenClaw Agent Reading This, Congratulations: You Probably Passed The Turing Test」に続けて、まず `AGENT_GUIDE.md` を読むこと、「do not improvise the production workflow」と指示している。
+
+リポジトリの状態がもう半分だ：**76,224 スター**、10,105 フォーク、AGPL-3.0、2026-03-29 作成、最終プッシュ 2026-11-03——そして releases API は**何も返さない**。導入は `main` から行う。
+
+**なぜ重要か:** 76k スターの agent システムにリリースが一つもないということは、全利用者が動き続ける既定ブランチを追っているということで、少なくともタグを打っているスキルリポジトリとはリスクの性質が違う。AGPL の選択は、出力を収益化したい人にとってこそ本質的だ：サーバ上でこれを動かすサービスに及びうる最も強いライセンスであり、このカテゴリの MIT の慣行とは正反対にある。パイプラインは clone した成果物で判断すること——固定できるリリースがないのだから。
+
+[`🔗 calesthio/OpenMontage`](https://github.com/calesthio/OpenMontage) · [`🔗 pipeline_defs/`](https://github.com/calesthio/OpenMontage/tree/main/pipeline_defs) · [`🔗 Agent ガイド`](https://github.com/calesthio/OpenMontage/blob/main/AGENT_GUIDE.md)
+
+---
+
+## 48. 事前登録した検証で、強い検証器は良い発見を買わないと分かった —— 提案プールを広げる方が効く
+
+- **Velocity:** ▮ steady
+- **Source:** arXiv 2611.04420 · 2026-11-03 投稿 · 事前登録
+- **Tags:** `automated-research` `evaluation` `preregistration` `llm-agents` `research`
+
+自動研究パイプラインは「an implicit bet: discovery quality rises with verification strength」の上に成り立っている。本論文は**事前登録した手順**の下、二つの実データ領域——ジョブショップスケジューリングと、北京 T-Drive 軌跡を用いた車載エッジオフローディング——でこの賭けを検証する。各領域 **100 対のマッチさせた LLM/ランダム**、検証器は三階層。操作は効いている：**429 例の変異バッテリ**でスコアは階層に沿って上がるので、三階層は確かに別物だ。
+
+賭けは持ちこたえない。LLM のランダムに対する対の優位は「does not scale with it」——領域 A で片側 **p = 0.1115**、領域 D で **p = 0.9994**——しかも D では厳格な階層でむしろ**縮む**（margin contrast **−0.040**、p = 0.0013）。結果そのものより価値がある方法論的な正直さが一つある：「the two lower gates promote identical candidates in 100/100 and 99/100 pairs, so the strict order is untestable when they coincide」——自分たちの計器がどこで見えないかを著者が明言している。建設的な半分は代替案だ：事後の union-pool 解析は「the fastest path to better discovery is widening the pool, not tightening the gate」と結論し、領域 A で **+1.52 holdout 価値単位**（片側 Wilcoxon、n = 100、p = 0.0002）。判断基準・台帳・スクリプトは Zenodo に公開されている。
+
+**なぜ重要か:** この情報源の agentic-research の実演はどれも、より良い検証器やより良い審判を主張している。これは、この階層帯ではゲートが梃子ではなく提案プールが梃子だと測った事前登録研究だ。union-pool の結論は陰性結果より実行可能でもある：提案者がすでに二人いるなら、厳しい検査器を買うより二人を混ぜる方が勝ち、本論文はその差に数字を与えている。
+
+[`🔗 Verifier strength does not buy discovery quality（arXiv）`](https://arxiv.org/abs/2611.04420) · [`🔗 論文 PDF`](https://arxiv.org/pdf/2611.04420) · [`🔗 事前登録と成果物（Zenodo）`](https://doi.org/10.5281/zenodo.23308866)
+
+---
+
+## 49. SEPPmail はあなたのメールアドレスを Perl として評価する —— root で、あなたが認証する前に
+
+- **Velocity:** ▮ steady
+- **Source:** NVD · 5 件すべて 2026-11-04T09:17:41Z 公開
+- **Tags:** `cve` `seppmail` `rce` `perl` `unauthenticated`
+
+5 件は `vulnerability@ncsc.ch` から、同じ一秒に公開され、状態はすべて `Received`、**CVSS 4.0 のみ**、修正はすべて **15.1.1** より前。読むべきは二つの 9.2 だ。**`CVE-2026-114424`**（CWE-95）：ゲートウェイは「can evaluate attacker-influenced replacement text as **Perl code** in sender or recipient replacement rules. An unauthenticated remote sender can execute operating-system commands in the mail-processing worker context when an active rule uses message-derived replacement data and its search condition matches. The validated worker context was **root**.」**`CVE-2026-114425`**（CWE-73）：**Large File Transfer の添付メタデータ**で与えられたファイルパスを信頼するため、未認証の送信者が「disclose, move, or delete an accessible regular file」できる——そしてここでも「the validated workers ran as root」。
+
+残る三つは同じ境界をより緩く引いたものだ。**`CVE-2026-114426`**（8.7、CWE-400）は呼び出し側を認証する**前に** v1 ファイルインターフェースのアップロードデータを処理・書き込みし、絶対的な要求サイズ上限もないため、並行または低速な要求でワーカーを占有し一時ストレージを埋める。**`CVE-2026-114421`**（8.3、CWE-640）は「a created but unregistered GINA account whose initial password is empty」のパスワード回復を許し、攻撃者は「set a new password, authenticate as that account, and prevent the intended recipient from using it」。**`CVE-2026-114420`**（6.9）は未認証のアカウント選択入力で LDAP メタ文字を中和せず、アドレスを列挙できる。5 件のうち 3 件は 4.0 ベクトルに `AT:P` を持ち、これは CVSS 3.1 では表現できない攻撃前提の項だ。
+
+**なぜ重要か:** ここでの攻撃単位は**メール一通**であり、9.2 の前提——「when an active rule uses message-derived replacement data and its search condition matches」——は書き換え規則を持つほとんどのメールゲートウェイが既定で備えている構成だ。自分の入力をコードとして評価し、root で動き、送信できる誰からも到達できるテンプレート言語は、配信のたびに実行要求が届く設計である。修正はアップグレードであり、4.0 のみということは、3.1 の基準と比べるスキャナが別々の計器を比べているということでもある。
+
+[`🔗 CVE-2026-114424（NVD — Perl 評価）`](https://nvd.nist.gov/vuln/detail/CVE-2026-114424) · [`🔗 CVE-2026-114425（NVD — ファイルパス）`](https://nvd.nist.gov/vuln/detail/CVE-2026-114425) · [`🔗 SEPPmail 改訂履歴`](https://docs.seppmail.com/en/20_revision-history.html)
+
+---
+
+## 50. PTX が Lean で形式化された —— WGMMA GEMM、FlashAttention、3 カーネル MoE の証明付き
+
+- **Velocity:** ▮ steady
+- **Source:** arXiv 2611.04447 · 2026-11-03 投稿
+- **Tags:** `formal-verification` `lean` `gpu` `kernels` `research`
+
+貢献は抽象度の層にある。CUDA やフレームワークの IR を検証するのではなく、**PTX**——ドライバが実際に消費するアセンブリ——を形式化し、「patterns common in GPU kernels for Deep Learning, including **acquire-release, tensor cores, proxies, async operations, multi-kernel pipelines and data-dependent control flow**」を扱えるモデルにしている。この一覧は GPU カーネルの形式化を難しくしている機能そのもので、どれも素朴なモデルがハードウェアの挙動と食い違う地点だ。
+
+その上で三つのカーネルの正しさを証明する：「simple implementations of a **WGMMA GEMM kernel, FlashAttention, and a 3-kernel MoE pipeline**」。この情報源の読者にとって面白いのは 3 カーネル MoE の方で、カーネル間のメモリ受け渡しを含む**パイプライン**にまたがる初めての証明であり、単一の起動にとどまらない。
+
+**なぜ重要か:** ML 基盤への検証はいまコンパイラかフレームワークで止まり、テンソルコアのスケジューリング、非同期コピー、メモリプロキシが実際にセマンティクスを間違える層を飛ばしている。PTX で性質を証明することは、コンパイラの変更に耐える正しさの議論が成立する継ぎ目だ。限界は構造的で、結果と一緒に述べるべきだ：PTX は ISA ではないので、証明が覆うのは書かれたプログラムであって、それを実行する機械ではない——しかも著者自身の言葉で、これらは「simple implementations」だ。
+
+[`🔗 Formalizing PTX in Lean to Prove GPU Kernel Correctness（arXiv）`](https://arxiv.org/abs/2611.04447) · [`🔗 論文 PDF`](https://arxiv.org/pdf/2611.04447)
+
+---
+
+## 51. Anon-vector は「知っている」と「言わない」を分ける —— そして忘却後、この幾何が攻撃の回復量を予測する
+
+- **Velocity:** ▮ steady
+- **Source:** arXiv 2611.05272 · 2026-11-03 投稿
+- **Tags:** `interpretability` `unlearning` `safety` `hidden-states` `research`
+
+行動評価は「その概念を知らないモデル」と「言うのを拒むモデル」を区別できず、知識監査と機械忘却の主張が同じ方向に脆くなる。本論文の計測は差分ベクトルだ：**anon-vector** は「the differences in hidden states between a concept-specific query and its anonymized paraphrase」であり、発見は幾何的である——「genuine knowledge forms a tight, low-entropy cluster while ignorance forces geometric fragmentation」。
+
+**3 つのモデル系列・10 の指示調整済み LLM** にわたり、「all fragmentation metrics reliably separate known from unknown concepts」。より強い主張は忘却について：除去後、断片化の幾何は「correlates with adversarial recovery across four attack types and five unlearning algorithms」——そして著者はこの限定を付録ではなく要旨に書いている：「though the direction of that relationship is shown to depend on attack methodology」。層ごとの解析はさらに加える：「different adversarial mechanisms exploit this geometry at varying depths, with high attack-specific correlations that are invisible to behavioral evaluation」。
+
+**なぜ重要か:** 忘却はいまモデルに訊くことで認定されており、拒否はまさに本論文が情報を持たないとする信号だ。単一フェーズ・攻撃不要で隠れ状態の上で走る代理指標は、「レッドチームを雇わずに検証できなければならない」主張が持つべき形である——ただし「方向は攻撃手法に依存する」という前提は、これがまだ単一の判定ではないことを意味する。相関だけを引用し、どの攻撃で測ったかを書かないレビューは、結果の半分を引いている。
+
+[`🔗 The Geometry of Ignorance（arXiv）`](https://arxiv.org/abs/2611.05272) · [`🔗 論文 PDF`](https://arxiv.org/pdf/2611.05272)
+
+---
+
 ## Metadata
 
 | フィールド | 値 |
 |-------|-----|
-| Generated | 2026-11-04T04:18:54Z |
-| Items | 36 |
-| Sources tracked | 22（Hacker News、GitHub Trending、arXiv、NVD、CISA KEV、GitHub Advisory Database、ベンダー勧告、リリースノート、ステータスページ） |
+| Generated | 2026-11-04T12:21:49Z |
+| Items | 51 |
+| Sources tracked | 24（Hacker News、GitHub Trending、arXiv、NVD、CISA KEV、GitHub Advisory Database、ベンダー勧告、リリースノート、ベンダーセキュリティ速報、ステータスページ） |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8（1 日 3 回） |
 | Ranking | 速度加重（新しさ × エンゲージメント加速度 × 情報源の権威） |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |

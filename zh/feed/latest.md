@@ -1,8 +1,8 @@
 ---
 date: 2026-11-04
-updated: 2026-11-04T04:18:54Z
+updated: 2026-11-04T12:21:49Z
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 22
+sources: 24
 license: CC-BY-4.0
 ---
 
@@ -584,13 +584,255 @@ agent 可以在所有工具与所有基础设施都正常工作时做出错误�
 
 ---
 
+## 37. Chrome 157 一口气修了 213 个安全问题 —— 而 CISA 的补全把一个「Low」打成 9.6、把一个「Critical」打成 8.8
+
+- **Velocity:** ▮▮▮ trending
+- **来源:** Chrome Releases · 稳定版 2026-11-03 · NVD 213 条记录的全量统计
+- **标签:** `cve` `chrome` `cisa-adp` `cvss` `scoring`
+
+稳定版公告就是一句话加一个列表：「This update includes 213 security fixes.」NVD 中署名 `chrome-cve-admin@google.com`、命中 `157.0.8103.38` 的记录有 **213 条**，且全部发布于 **2026-11-03 的 21:17:05.860Z 至 21:17:36.603Z** 之间——整整 **31 秒**。**213 条中有 132 条根本没有任何 CVSS 指标。** 有分的 81 条只用了 **3 个不同的向量**，且全部是 `134c704f-9b21-4f2e-91b3-4a467353bcc0`（CISA-ADP）给出的 `Secondary`：**8.8**（`S:U`，44 条）、**9.6**（`S:C`，27 条）、**8.3**（`AC:H` 加 `S:C`，10 条）。213 条的 `vulnStatus` 全是 `Awaiting Analysis`，**没有一条带 `nvd@nist.gov` 指标**。Chrome 自己的容器给的是 CWE 和一个定性词——Critical 7 条、High 77 条、Medium 75 条、Low 54 条——以及没有数字。
+
+两套刻度在两个方向上都不一致。`CVE-2026-121189` 被 Chrome 标为 **Low**，却拿着 **9.6**；`CVE-2026-121203` 被标为 **Critical**，却拿着 **8.8**。这个标签能预测的是**有没有**分——7 条 Critical 无一无分，而 75 条 Medium 里 61 条无分、54 条 Low 里 49 条无分——但预测不了分数是多少。另有两处细节值得记住：`CVE-2026-121112`（「Out of bounds read in Permissions」）的上报日期是 **2023-03-22**，比这次发版早了三年半；而其中一处修复的致谢写着「**Xinyang Ge (Anthropic), assisted by Claude**」。
+
+**为什么重要：** 一个 Chrome 的 CVE 编号是一个登记位，不是严重度——213 条记录在半分多钟里涌出来，是因为 Chrome 的 CNA 在批量登记；而其中 81 条旁边的那个数字，是补全层从三个模板里挑出来的，不是对漏洞本身的评估。做这次发版的优先级排序时，厂商自己那个 Critical/High/Medium/Low 的词，是唯一逐条给出的严重度信号；而在 **81 条有分记录里有 35 条**，CVSS 的档位和这个词并不一致——这就是为什么引用那个 9.6 当「有多严重」，引用的是模板而非判断。
+
+[`🔗 Stable Channel Update for Desktop（Chrome 157）`](https://chromereleases.googleblog.com/2026/11/stable-channel-update-for-desktop.html) · [`🔗 CVE-2026-121189（NVD — Low，9.6）`](https://nvd.nist.gov/vuln/detail/CVE-2026-121189) · [`🔗 CVE-2026-121203（NVD — Critical，8.8）`](https://nvd.nist.gov/vuln/detail/CVE-2026-121203)
+
+---
+
+## 38. 越靠后的 token 最高要贵 7 倍 —— 而把上下文压到 16K，准确率只掉了 3.7 分以内
+
+- **Velocity:** ▮▮▮ trending
+- **来源:** arXiv 2611.05306 · 提交于 2026-11-03 · 十二位作者
+- **标签:** `long-context` `agents` `compaction` `inference` `cost`
+
+前提是大多数推理栈早就在计价里体现、却少有人测量的成本不对称：「later tokens are costlier to generate than earlier tokens」，而在前沿开源权重模型上这个差距「may rise to as much as **7x**」。方法是 **EoCC（端对话压缩）**——对话越过阈值就摘要后继续——在六个基准上评估（SWE-bench Verified、TerminalBench 2.1、SWE-bench Multilingual、FRAMES、BFCLv3、Tau2Bench），模型是 **Claude Opus 4.5** 与 **GPT 5.6 Sol**，总上下文上限一路压到 **16K / 12K**（Tau2Bench 上到 **8K / 6K**）。
+
+这些数字都是相对**各自模型自己的全历史基线**的差值：Opus 4.5 落在 **−3.7 到 +5.6 个点**，GPT 5.6 Sol 落在 **−3.3 到 +4.4**，并且「for either model, no more than **5 out of 22** threshold configurations lose more than 2ppts」。估算的成本节省是 Opus 4.5 **2.2× 到 8.8×**、Sol **2.4× 到 5.0×**。第二个实验是「每做完一个动作就压缩」、只保留一份紧凑语义状态——作者的 **SSSM** 草图——在软件工程任务上同样没有崩。论文自己也写清了缺陷与边界：压缩「may successfully enforce smaller context window size」的同时，可能因重做工作而让总 token 消耗上升，这种情形在他们的实验里「was generally not the case」；而「our evidence does not rule out the existence of tasks for which long context is beneficial」。
+
+**为什么重要：** 差值是对全历史基线测的，这是对的基线；而成本倍数是**估算的零售价**，不是真实账单——引用时要按估算说。可迁移的结论是：人们举的那些长上下文用例，100 万 token 窗口是便利而非必需，替代它是「有明确阈值的压缩策略」。如果你在跑 agent 循环，最便宜的实验就是他们的：把阈值砍半，同时看准确率和总 token——因为只看一个，这个失败模式是不可见的。
+
+[`🔗 You don't need long context（arXiv）`](https://arxiv.org/abs/2611.05306) · [`🔗 全文`](https://arxiv.org/html/2611.05306v1)
+
+---
+
+## 39. Apache ZooKeeper 一个批次出了五个 CVE —— 那个不需要登录的 8.7，还会让数据目录永久起不来
+
+- **Velocity:** ▮▮ rising
+- **来源:** NVD · 五条记录均发布于 2026-11-04T11:17Z
+- **标签:** `cve` `zookeeper` `apache` `dos` `cvss4`
+
+五条记录都来自 `security@apache.org`，同一分钟发布，状态全是 `Received`，且**只按 CVSS 4.0 打分**——里面没有任何一个 3.1 的数字。两个 8.7 共用同一个向量串（`AV:N/AC:L/AT:N/PR:N/UI:N/VA:H`），尽管是两个不同的 bug。**`CVE-2026-100300`** 在配额子系统，且「unauthenticated on default deployments, where that subtree is world-writable」：向 `/zookeeper/quota` 写一次，就能打掉关键的请求处理线程，**并且**让磁盘上的数据目录永久无法启动——这里「重启就好」不是兜底。**`CVE-2026-115448`** 更难恢复：服务端把数据树序列化成快照时，每深一层 znode 递归一帧且无深度上限，所以一个被允许创建 znode 的客户端（默认根 ACL 是开放的）可以造出足够深的链把 JVM 栈耗尽——「sizes stay within `jute.maxbuffer`, so existing limits do not prevent it」——而重启时服务端要从事务日志重建这棵深树，**在做启动快照时再次失败**。它会随日志传到 follower，恢复过程「can entail data loss」。
+
+另外三条更安静，也更偏架构。**`CVE-2026-100252`**（8.6）：开启 SASL 的客户端端口上，回调处理器「grants every authorization identity (authzid) that a client requests, without checking it against the principal the client authenticated as」。**`CVE-2026-100302`**（7.1）：multiRead 处理器对批量操作数和响应体大小都不设上限——一个小请求即可。**`CVE-2026-100235`**（6.0）：`setACL` 的 TOCTOU——「the pending change is not published to the server's outstanding change record」，于是在变更中途被准备（并授权）的请求，是按旧 ACL 放行的。影响范围是 **3.8.0–3.8.7 与 3.9.0–3.9.6**，修复版本 **3.8.8 / 3.9.7**；而 Apache 给递归漏洞的缓解办法，是别再依赖默认开放的根 ACL。
+
+**为什么重要：** ZooKeeper 是其它一切用来就「谁是 leader」达成一致的层，而这五个里有两个是默认配置下的拒绝服务。真正决定运维动作的区别是**永久性**：崩溃后能重启是事故，重启时快照反复失败是从备份重建，而这一批里两种都有。对多租户集群而言最关键的是 SASL 那条——一个你能自己命名的 authzid，就是一个你能变成的身份。
+
+[`🔗 CVE-2026-100300（NVD）`](https://nvd.nist.gov/vuln/detail/CVE-2026-100300) · [`🔗 CVE-2026-115448（NVD）`](https://nvd.nist.gov/vuln/detail/CVE-2026-115448) · [`🔗 CVE-2026-100252（NVD）`](https://nvd.nist.gov/vuln/detail/CVE-2026-100252)
+
+---
+
+## 40. LatentTriad 只读一个技能包的 prefill 隐状态就能判风险 —— 不生成 token、不执行代码，pooled F1 99.0%
+
+- **Velocity:** ▮▮ rising
+- **来源:** arXiv 2611.05088 · 提交于 2026-11-03
+- **标签:** `agents` `skills` `security` `detection` `interpretability`
+
+论文点出的问题，是现在每个技能市场都有的问题：agent 会被「extended with reusable skills, but untrusted skill content can induce operations outside the user's task」，而现有两种答案都不好——模式匹配抓不到上下文风险，动态分析「incurs the cost of skill execution」，而这恰恰是你想避免的那件事。它的发现是「hidden states formed during prefill contain readable information about task-operation consistency」，并且在受控评估中对没见过的表达形式同样成立。
+
+**LatentTriad** 把三个信号合成起来——上下文化的 Boundary 特征、按组校正的 Operation 方向、以及偏离良性状态关系的程度——共用一次 prefill，于是「detection generates no output tokens, invokes no tools, and executes no skill code」。在 **5,830 个来自五个来源的技能包**与**七个 backbone**上，报告 **99.0–99.2% pooled F1** 与 **93.0–94.6% source-macro F1**，prefill 加检测的中位耗时 **259–284 ms**。还有一个应当与准确率分开看的干预结果：匹配的 Operation 状态干预「affect later Boundary states and shift fixed risk readouts toward the donor label」——读数跟着状态走，而不是待在状态旁边。
+
+**为什么重要：** 要把 pooled F1（99.0）与 source-macro F1（93.0）之间的差距带上——大约六个点的标题数字，来自各来源表现不均，而一个从各处收罗来的技能包语料本来就长这样。结构性的贡献在成本：在技能运行**之前**、不动沙箱、不生成 token 地筛一遍，把「扫一个市场」从「全都执行」变成「读第一个隐状态」。这也是唯一能放在安装按钮前面的控制形态。
+
+[`🔗 LatentTriad（arXiv）`](https://arxiv.org/abs/2611.05088) · [`🔗 论文 PDF`](https://arxiv.org/pdf/2611.05088)
+
+---
+
+## 41. 插上电源，RTX Spark 笔记本上原生 Linux 跑 13.9 tok/s，Windows 跑 65.4 —— 而拔掉电源 Linux 反而变快
+
+- **Velocity:** ▮▮▮ trending
+- **来源:** MindStudio 博客 · 2026-11-01 · HN 143 分
+- **标签:** `nvidia` `linux` `cuda` `inference` `hardware`
+
+MindStudio 这篇在 MSI Prestige N16 Flip AI Plus（RTX Spark 笔记本，与 DGX Spark 桌面机同一 GPU 设计）上双系统的记录，是一组实测而不是一张跑分表，而反直觉的正是方向。跑 **GPT-OSS-120B**：Windows **65.4 tok/s**、WSL **65.1**、DGX Spark 桌面机 **61**、笔记本上的原生 Linux **13.9**——同样一块硅，慢了约五倍。vLLM 开八个并发客户端时差距复现：**WSL 127 tok/s，Linux 39.5**。一次更长的测试在 Windows 上约 **8 分钟**、GPU 稳在 2.2 GHz 附近，Linux 上 **37 分钟**、GPU 停在约 790 MHz；温度「between 40 and 47 °C」，这就排除了过热降频。
+
+让这件事成为结论而非抱怨的，是对照实验：在 Windows 里禁用名为 **「Nvidia Platform Controllers and Framework」** 的组件，直接复现了降速——「tokens per second dropped from around 83 to about 31, and clock speed fell from roughly 2 GHz down to the same 786 MHz seen on Linux when plugged in」——重新启用后立刻恢复。这个控制器负责在 CPU 与 GPU 之间分配功耗预算，而「the firmware hands this controller a table of power settings that is encrypted. Windows has the key to decrypt it. Linux currently does not」。电池与市电的表现把常识翻了过来：拔掉电源，Linux 在 LM Studio 上跑到 **61–67 tok/s**、约 1,800 MHz；插上电源，同一次测试掉到约 **15 tok/s**、约 780 MHz。另有一个分配细节挡住第一次启动——这台机器把 128 GB 统一内存里的 **96 GB** 预留给 GPU，而只有 Windows 暴露这个切分开关。
+
+**为什么重要：** 这是厂商设的闸门，不是内核或驱动 bug，而 Windows 侧的对照实验正是证据——换发行版、调驱动都不会改变它，因为缺的是一把解密密钥。文章的实用建议是走 WSL：它继承 Windows 的时钟路径，能到 65.1 tok/s；但那条建议恰恰就是这台机器被买来时要避开的「Linux 优先工具链跑在 Windows 内核上」的妥协。它也重新定义了这类机器的「支持 Linux」：开源内核驱动能加载、CUDA 能用，而笔记本仍然在三分之一的频率上跑。
+
+[`🔗 Linux on the Nvidia RTX Spark Laptop: What Actually Works`](https://www.mindstudio.ai/blog/linux-nvidia-rtx-spark-laptop) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50362905)
+
+---
+
+## 42. Apache OpenOffice 一分钟内发了十个 CVE —— 只给其中一个打了分
+
+- **Velocity:** ▮▮ rising
+- **来源:** NVD · 十条记录均发布于 2026-11-04T11:17Z
+- **标签:** `cve` `openoffice` `apache` `scoring` `memory-safety`
+
+十条记录都来自 `security@apache.org`，全在同一分钟内发布，状态全是 `Received`，升级建议也一致。**十条里只有一个带 CVSS 分**：`CVE-2026-59263`，CVSS 4.0 **1.9**，问题是文档内容被替换。另外九条**连 metrics 字段都没有**，其中包含那几条内存安全：`CVE-2026-90624`、`-90626`、`-90634`（PDF 导入路径的越界写）、`CVE-2026-90629`（WMF 导入）、`CVE-2026-90628`（PDF 导出经由构造的 CFF 字体触发栈溢出）、`CVE-2026-59268`（Word 文档触发的越界写），以及 `CVE-2026-90627`——flat-file 数据库驱动「allows a crafted document to read the contents of any local file without asking」。剩下两条是 `CVE-2026-90632`（GStreamer 多媒体组件）与 `CVE-2026-59264`（Windows 安装包以提升权限执行外部代码）。
+
+补救建议统一，而且少见地**已经发版**：每条都写「Users are recommended to upgrade to version **4.1.17**」，而 openoffice.org 自己的页面头部就是「Released: Apache OpenOffice 4.1.17」。厂商的安全公告页则两边都落后——最新一节仍是「Disclosed in Apache OpenOffice 4.1.16」，这十条一条都没列。
+
+**为什么重要：** 一个本地文件读取加三个越界写入，全在文档导入器里——这正是 CVSS 分数是大多数扫描器唯一拿来排序的输入的那一类，而这里十条里有九条无分可读。诚实的那句话是「这些记录没有打分」，而不是「严重度未知」，这个区别很实际：一个丢弃无分包的扫描器会把九条全部静默丢掉。这也是一处少见的、修复是**真实发行版**而非承诺的地方：4.1.17 已经存在，所以动作是下载，不是等待。
+
+[`🔗 CVE-2026-90627（NVD）`](https://nvd.nist.gov/vuln/detail/CVE-2026-90627) · [`🔗 CVE-2026-90628（NVD）`](https://nvd.nist.gov/vuln/detail/CVE-2026-90628) · [`🔗 Apache OpenOffice 安全公告`](https://www.openoffice.org/security/bulletin.html)
+
+---
+
+## 43. Quest Foglight 的三个 9.8 都说「不需要认证」、都以 SYSTEM 结束，且都不写明版本
+
+- **Velocity:** ▮▮ rising
+- **来源:** NVD · 三条记录均发布于 2026-11-04T00:17:29Z
+- **标签:** `cve` `rce` `zdi` `java` `monitoring`
+
+三条记录来自 `zdi-disclosures@trendmicro.com`，发布间隔 **260 毫秒**（`.130`、`.260`、`.390`），全部按 **CVSS 3.0** 打 **9.8**——不是 3.1，也不是 4.0。每一条都是进同一款产品的不同路径，而每条描述的结尾都一样：「An attacker can leverage this vulnerability to execute code in the context of SYSTEM.」**`CVE-2026-92188`**（ZDI-26-854，CWE-306）是 `ForgeMBeanServerSupport` 缺少认证检查——完全不需要认证。**`CVE-2026-92189`**（ZDI-26-861，CWE-73）是 `writeTopologySectionToFile`，在使用用户提供的路径前不做任何校验。**`CVE-2026-92190`**（ZDI-26-851，CWE-502）是 `baseRmiServiceExporter` bean 反序列化不可信数据。
+
+ZDI 公告号并不按 CVE 顺序——854、861、851——而那正是一次研究行动在被拆成多份公告之后的样子。另外这三条描述都没有给出受影响或修复版本；受影响产品就写到「Quest Foglight for Databases」为止。
+
+**为什么重要：** 同一款监控产品里三个互相独立的未认证 RCE 是一种模式，不是三次巧合——把一个 MBean server、一个写文件方法和一个反序列化端点暴露到网络上，而三者之上没有画出任何认证边界。对运维来说记录里没有版本可比，所以真正要读的物料是 ZDI 的公告；对其他人来说，这里的 9.8 含义是「可达且未认证」，而 CWE 告诉你三条里哪一条是你的扫描器真正认得的形状。
+
+[`🔗 ZDI-26-854（ForgeMBeanServerSupport）`](https://www.zerodayinitiative.com/advisories/ZDI-26-854/) · [`🔗 CVE-2026-92190（NVD — 反序列化）`](https://nvd.nist.gov/vuln/detail/CVE-2026-92190) · [`🔗 CVE-2026-92189（NVD — 文件路径）`](https://nvd.nist.gov/vuln/detail/CVE-2026-92189)
+
+---
+
+## 44. Kitty 0.50 可以把窗口停靠到另一个窗口上，还能在注销后恢复回滚缓冲 —— macOS 上用钥匙串里的密钥加密
+
+- **Velocity:** ▮▮ rising
+- **来源:** kitty changelog · 0.50.0 发布于 2026-11-03 · HN 182 分
+- **标签:** `terminal` `kitty` `wayland` `dev-tools` `release`
+
+头号特性是**停靠窗口**：`launch --type=window-dock` 与 `--type=tab-dock` 把 kitty 窗口贴到另一个窗口或整个标签页的边缘——也就是终端把状态栏和文件树变成一等窗口，而不是 tmux 里的 pane。第二个是 **`restore_session_after_logout`**，它「save the state of every kitty instance, including scrollback, when logging out, restarting or shutting down and restore it the next time kitty starts」——而存储决策跟特性写在同一段里：「On macOS, the state is encrypted with a key in the keychain. On Linux, it requires the Inhibit desktop portal.」回滚缓冲里是屏幕上出现过的一切，所以它落到哪里是个安全问题，变更日志在宣布这个特性的同一句话里回答了它。
+
+另外三条值得一提。标签页变成**命名工作区**——`launch --focus-existing` 跳到已有窗口而不是新开，`launch --location` 新增 `by-title` 以保持标签页按字母排序，detach-window 可以把窗口送进一个命名标签页（不存在就创建）。图形协议新增两种**索引色图像格式**，像素是终端调色板的下标，于是图片跟着配色方案变色，并新增逐特性的能力查询。还有 kitty 现在支持 **OSC 7501 程序状态协议**：程序可以上报「whether they are working, finished, failed or blocked waiting on the user」，最终通过 `tab.program_status` 显示在标签栏上。
+
+**为什么重要：** OSC 7501 是超出终端用户之外的那一条——「blocked waiting on the user」恰恰是 agent harness 现在无法发出的信号，而一个能把它渲染出来的终端，会让转圈变成一次请求输入。注销后恢复则是更即时有用、也更危险的那个：回滚缓冲熬过一次重启，就意味着它熬成了一个文件，而只有 macOS 加密这一点，正是那种会在同一款应用的两个用户之间造成安全差异的平台不对称。
+
+[`🔗 kitty changelog（0.50.0）`](https://sw.kovidgoyal.net/kitty/changelog/#detailed-list-of-changes) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50362980)
+
+---
+
+## 45. GitHub 的 spec-kit 到了 146,914 星 —— 而 1.3.0 把自己的一个命令从核心里删掉了
+
+- **Velocity:** ▮▮ rising
+- **来源:** GitHub Trending（日榜）· v1.3.0 发布于 2026-11-03
+- **标签:** `agent-infra` `spec-driven` `github` `dev-tools` `open-source`
+
+`github/spec-kit` 是 GitHub 自己的**规格驱动开发（SDD）**工具包——146,914 星、13,181 fork、MIT、创建于 2025-08-21、最后推送 2026-11-03。它的 README 已经从单一 SDD 流程，改成一张**互相独立的入口**表：做功能（SDD，在核心里）、诊断并修复坏掉的行为、判断一个想法值不值得投入，或用同样的原语拼一套自己的流程。与编码 agent 的集成、质量门禁、外部工具连接，全都列在**扩展**里，还带生命周期钩子和运行时事件。
+
+把它顶上今天热榜的是 **v1.3.0**（2026-11-03T18:25:42Z），而它 **Removed** 下面的第一行就是架构声明：「The core `/speckit.taskstoissues` command has been removed. You should be using the `github` extension.」旁边的变更日志是一个大项目日常的维护——修掉 Python `--number` 解析在超大数字上的崩溃、修掉 git 扩展的 fetch「waiting on a credential prompt」、用 Lark LALR 文法解析 workflow 表达式，以及一个在共享写入之前运行的 `preflight_setup()` 钩子。
+
+**为什么重要：** 在同一个版本里把一个命令**从核心移出**、变成扩展，同时还涨了两万星，是 agent 工具形态落定得最清楚的信号——一个很小的流程原语内核，加上可安装的扩展，这和第 10、12 条里的插件市场是同一个形状。实际操作上，任何把安装钉在 `@v1.3.0` 又用了 `taskstoissues` 的人，是从变更日志得知的，而不是从弃用警告——升级前先读 Removed 那一节。
+
+[`🔗 github/spec-kit`](https://github.com/github/spec-kit) · [`🔗 v1.3.0 发布说明`](https://github.com/github/spec-kit/releases/tag/v1.3.0) · [`🔗 Spec Kit 文档`](https://github.github.io/spec-kit/)
+
+---
+
+## 46. Garry Tan 的 gstack 到了 139,034 星 —— 而它的安装脚本会拒绝一个老到能让编译产物读到 `.env` 的 Bun
+
+- **Velocity:** ▮▮ rising
+- **来源:** GitHub Trending（日榜）· v1.92.55.0 发布于 2026-11-02
+- **标签:** `agent-infra` `skills` `claude-code` `yc` `tooling`
+
+`garrytan/gstack` 把一支虚拟工程团队打包成斜杠命令：「a CEO who rethinks the product, an eng manager who locks architecture, a designer who catches AI slop, a reviewer who finds production bugs, a QA lead who opens a real browser, a security officer who runs OWASP + STRIDE audits, and a release engineer who ships the PR. All slash commands, all Markdown, all free, MIT license.」它有 **139,034 星**、**20,606 fork**，创建于 2026-03-11，发版节奏很不寻常——**v1.92.55.0** 在 2026-11-02，大致每两三天一个版本。
+
+两处细节把它和本信息流里其它六位数星的技能仓库区分开。安装前置条件写明了具体的版本下限和理由：Bun **v1.4.2+**（「the tested version; setup refuses Bun older than **1.3.3**, which would let compiled tools read a project's `.env`」）——这是把一道安全闸门写进 setup 脚本，针对的是工具链编译所依赖的那个运行时版本。而生产力声明配的是一个方法论页面，而不是 README 里的一个数字：「~**810×** my 2013 pace (11,417 vs 14 logical lines/day)」和「2026 has already produced **240× the entire 2013 year**」，测算范围是「across 40 public + private `garrytan/*` repos including Bookface, after excluding one demo repo」。同一页也写了让步：「The LOC critics aren't wrong that raw line counts inflate with AI.」
+
+**为什么重要：** 这里的形状——每个组织角色一个提示文件、用斜杠命令串起来——和 paperclip、ECC 已经占据的位置是同一个「把组织架构图交给 agent」，而一位 YC 总裁把它发出来，是这个品类迄今最高调的一次背书。可复用的不是那些技能，而是两条纪律：一个出于明确安全理由选定的运行时最低版本，和一个自带分母、也自带让步的生产力数字。
+
+[`🔗 garrytan/gstack`](https://github.com/garrytan/gstack) · [`🔗 Why gstack, and how I use it`](https://github.com/garrytan/gstack/blob/main/docs/why-gstack.md) · [`🔗 v1.92.55.0 发布`](https://github.com/garrytan/gstack/releases/tag/v1.92.55.0)
+
+---
+
+## 47. OpenMontage 有十二条视频流水线、76,224 星，和一个发行版都没有
+
+- **Velocity:** ▮▮ rising
+- **来源:** GitHub Trending（日榜）· 最后推送 2026-11-03 · 无任何 release
+- **标签:** `agent-infra` `video` `agpl` `skills` `open-source`
+
+`calesthio/OpenMontage` 自称「the first open-source, agentic video production system」，而它的架构是一条流水线而不是一个提示词：每个工作流都跑 `research → proposal → script → scene_plan → assets → edit → compose`，每一阶段都有一个「dedicated **director skill** — a markdown instruction file」，并在创意决策点设人工确认。仓库的 `pipeline_defs/` 目录里有 **13 个 YAML**，其中之一是 `framework-smoke.yaml`——所以是十二条真流水线，与描述里的「12 production pipelines」对得上；而 README 自己的表格只列了十一条，漏掉 `character-animation.yaml`。
+
+README 里有两处少见的实在。一条真正零密钥的路径——旁白用 **Piper TTS**，素材来自 **Archive.org、NASA、Wikimedia Commons**，本地生视频可选 `wan2.2-ti2v-5b`、`wan2.1-1.3b`、`hunyuan-1.5`、`ltx2-local`、`cogvideo-5b`——所以「免费/开源工作流」这句话是有具名组件撑着的。还有一节是写给 agent 而不是人看的：「If you're An OpenClaw Agent Reading This, Congratulations: You Probably Passed The Turing Test」，随后要求先读 `AGENT_GUIDE.md`，并且「do not improvise the production workflow」。
+
+仓库状态是另一半：**76,224 星**、10,105 fork、AGPL-3.0、创建于 2026-03-29、最后推送 2026-11-03——而 releases API **什么都返回不了**，安装走 `main`。
+
+**为什么重要：** 一个 76k 星的 agent 系统零发行版，意味着每个用户都在跟一条会动的默认分支，这与那些至少打了 tag 的技能仓库是不同的风险画像。AGPL 这个选择对任何想把产出变现的人来说才是实质性的：它是最可能覆盖到在服务器上跑它的服务的许可证，也正好与这个品类里的 MIT 惯例相反。请按你 clone 下来的物料评判这些流水线，因为没有 release 可以钉。
+
+[`🔗 calesthio/OpenMontage`](https://github.com/calesthio/OpenMontage) · [`🔗 pipeline_defs/`](https://github.com/calesthio/OpenMontage/tree/main/pipeline_defs) · [`🔗 Agent 指南`](https://github.com/calesthio/OpenMontage/blob/main/AGENT_GUIDE.md)
+
+---
+
+## 48. 一个预注册实验发现：更强的验证器买不到更好的发现 —— 把提案池做大才行
+
+- **Velocity:** ▮ steady
+- **来源:** arXiv 2611.04420 · 提交于 2026-11-03 · 预注册
+- **标签:** `automated-research` `evaluation` `preregistration` `llm-agents` `research`
+
+自动化科研流水线建立在一个「implicit bet: discovery quality rises with verification strength」之上。本文在一个**预注册方案**下、两个真实数据领域里检验这个赌注——job-shop 排程，以及基于北京 T-Drive 轨迹的车联网边缘卸载——每个领域 **100 对匹配的 LLM/随机**，三档验证器。操纵是有效的：**429 例变异电池**显示分数随档位上升，所以三档确实不同。
+
+赌注没扛住。LLM 相对随机的配对优势「does not scale with it」——领域 A 单侧 **p = 0.1115**，领域 D **p = 0.9994**——而且在 D 里，严格档位下它反而**缩小**（margin contrast **−0.040**，p = 0.0013）。有一处方法论的诚实比阴性结果本身更值钱：「the two lower gates promote identical candidates in 100/100 and 99/100 pairs, so the strict order is untestable when they coincide」——作者在告诉你，他们的仪器在哪里看不见。建设性的那一半是替代方案：事后 union-pool 分析发现「the fastest path to better discovery is widening the pool, not tightening the gate」，在领域 A 值 **+1.52 个 holdout 价值单位**（单侧 Wilcoxon，n = 100，p = 0.0002）。判据、账本与脚本已归档到 Zenodo。
+
+**为什么重要：** 本信息流里每一个 agentic-research 演示都在宣称有更好的验证器或更好的裁判，而这是一次预注册测量，说在这个档位区间里闸门不是杠杆、提案池才是。union-pool 的结论也比阴性结论更可操作：如果你已经有两个提案者，把它们合起来胜过买一个更严的检查器，而且这篇论文给它标了数。
+
+[`🔗 Verifier strength does not buy discovery quality（arXiv）`](https://arxiv.org/abs/2611.04420) · [`🔗 论文 PDF`](https://arxiv.org/pdf/2611.04420) · [`🔗 预注册与物料（Zenodo）`](https://doi.org/10.5281/zenodo.23308866)
+
+---
+
+## 49. SEPPmail 把你的邮件地址当 Perl 求值 —— 以 root 身份，在你认证之前
+
+- **Velocity:** ▮ steady
+- **来源:** NVD · 五条记录均发布于 2026-11-04T09:17:41Z
+- **标签:** `cve` `seppmail` `rce` `perl` `unauthenticated`
+
+五条记录来自 `vulnerability@ncsc.ch`，同一秒内发布，状态全为 `Received`，**只有 CVSS 4.0**，修复版本都在 **15.1.1** 之前。要读的是那两个 9.2。**`CVE-2026-114424`**（CWE-95）：网关「can evaluate attacker-influenced replacement text as **Perl code** in sender or recipient replacement rules. An unauthenticated remote sender can execute operating-system commands in the mail-processing worker context when an active rule uses message-derived replacement data and its search condition matches. The validated worker context was **root**.」**`CVE-2026-114425`**（CWE-73）：网关信任 **Large File Transfer 附件元数据**里提供的文件路径，于是未认证的发送者可以「disclose, move, or delete an accessible regular file」——而同样是「the validated workers ran as root」。
+
+另外三条是同一条边界画得没那么利落。**`CVE-2026-114426`**（8.7，CWE-400）在认证调用方**之前**就处理并写入 v1 文件接口上传数据，且没有绝对请求大小上限，于是并发或慢速请求可以占满 worker、塞满临时存储。**`CVE-2026-114421`**（8.3，CWE-640）允许对「a created but unregistered GINA account whose initial password is empty」做密码找回，攻击者可以「set a new password, authenticate as that account, and prevent the intended recipient from using it」。**`CVE-2026-114420`**（6.9）未在未认证的账户选择输入里中和 LDAP 元字符，可枚举地址。五条里有三条的 4.0 向量带 `AT:P`——这是 CVSS 3.1 表达不出的攻击前提项。
+
+**为什么重要：** 这里的攻击单位是**一封邮件**；而那个 9.2 的前提——「when an active rule uses message-derived replacement data and its search condition matches」——恰恰是大多数配置了改写规则的邮件网关默认就有的。一个把自己的输入当代码求值、以 root 运行、且任何能发信的人都可达的模板引擎，是一种把每次投递都变成执行请求的设计；修复就是升级，而只有 4.0 分数这件事意味着，拿 3.1 基线去比的扫描器是在比较两种不同的仪器。
+
+[`🔗 CVE-2026-114424（NVD — Perl 求值）`](https://nvd.nist.gov/vuln/detail/CVE-2026-114424) · [`🔗 CVE-2026-114425（NVD — 文件路径）`](https://nvd.nist.gov/vuln/detail/CVE-2026-114425) · [`🔗 SEPPmail 版本历史`](https://docs.seppmail.com/en/20_revision-history.html)
+
+---
+
+## 50. PTX 现在有了 Lean 形式化，并给出了 WGMMA GEMM、FlashAttention 和三层 MoE 的证明
+
+- **Velocity:** ▮ steady
+- **来源:** arXiv 2611.04447 · 提交于 2026-11-03
+- **标签:** `formal-verification` `lean` `gpu` `kernels` `research`
+
+贡献在于抽象的层次。作者没有去验证 CUDA 或某个框架的 IR，而是形式化了 **PTX**——驱动真正消费的那层汇编——并把模型做到足以推理「patterns common in GPU kernels for Deep Learning, including **acquire-release, tensor cores, proxies, async operations, multi-kernel pipelines and data-dependent control flow**」。这份清单正好就是让 GPU 内核难以形式化的那组特性，而每一项都是朴素模型会与硬件实际行为分歧的地方。
+
+然后他们用它证明了三个内核的正确性：「simple implementations of a **WGMMA GEMM kernel, FlashAttention, and a 3-kernel MoE pipeline**」。对本信息流的读者来说三层 MoE 才是最有趣的那个，因为它是这里第一个跨越**流水线**——内核之间的内存交接——而不只是单次 launch 的证明。
+
+**为什么重要：** 目前对 ML 基础设施的验证止步于编译器或框架，恰好跳过了张量核调度、异步拷贝和内存代理真正把语义写错的那一层。在 PTX 上证明性质，是让正确性论证能扛住一次编译器变更的那个接缝。局限是结构性的，应与结论一起说：PTX 不是 ISA，所以证明覆盖的是写出来的程序，不是执行它的机器——而且按作者自己的说法，这些是「simple implementations」。
+
+[`🔗 Formalizing PTX in Lean to Prove GPU Kernel Correctness（arXiv）`](https://arxiv.org/abs/2611.04447) · [`🔗 论文 PDF`](https://arxiv.org/pdf/2611.04447)
+
+---
+
+## 51. Anon-vector 分得开「知道」和「不说」—— 而在遗忘之后，这个几何能预测攻击能恢复什么
+
+- **Velocity:** ▮ steady
+- **来源:** arXiv 2611.05272 · 提交于 2026-11-03
+- **标签:** `interpretability` `unlearning` `safety` `hidden-states` `research`
+
+行为评估分不清「模型不知道某个概念」和「模型拒绝说出它」，这使得知识审计与机器遗忘声明在同一个方向上同样脆弱。论文的测量是一个差值向量：**anon-vector** 是「the differences in hidden states between a concept-specific query and its anonymized paraphrase」，而发现是几何性的——「genuine knowledge forms a tight, low-entropy cluster while ignorance forces geometric fragmentation」。
+
+跨 **三个模型家族、十个指令微调 LLM**，「all fragmentation metrics reliably separate known from unknown concepts」。更强的断言关于遗忘：移除之后，碎片化几何「correlates with adversarial recovery across four attack types and five unlearning algorithms」——而且作者把这个限定写进了摘要而不是附录：「though the direction of that relationship is shown to depend on attack methodology」。逐层分析还补充：「different adversarial mechanisms exploit this geometry at varying depths, with high attack-specific correlations that are invisible to behavioral evaluation」。
+
+**为什么重要：** 遗忘现在是通过问模型来认证的，而一次拒绝恰恰是本文认定不携带信息的那个信号。一个单阶段、不需要攻击、跑在隐状态上的代理指标，正是那种「必须能在不请红队的情况下被检验」的断言该有的形状——但「方向取决于攻击方法」这个前提意味着它还不是单一结论，而一篇只引用相关系数、不说清是哪种攻击的综述，引用的是半个结果。
+
+[`🔗 The Geometry of Ignorance（arXiv）`](https://arxiv.org/abs/2611.05272) · [`🔗 论文 PDF`](https://arxiv.org/pdf/2611.05272)
+
+---
+
 ## Metadata
 
 | 字段 | 值 |
 |-------|-----|
-| Generated | 2026-11-04T04:18:54Z |
-| Items | 36 |
-| Sources tracked | 22（Hacker News、GitHub Trending、arXiv、NVD、CISA KEV、GitHub Advisory Database、厂商公告、发布说明、状态页） |
+| Generated | 2026-11-04T12:21:49Z |
+| Items | 51 |
+| Sources tracked | 24（Hacker News、GitHub Trending、arXiv、NVD、CISA KEV、GitHub Advisory Database、厂商公告、发布说明、厂商安全公告、状态页） |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8（每日 3 次） |
 | Ranking | 速度加权（新鲜度 × 互动加速度 × 来源权威） |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |
