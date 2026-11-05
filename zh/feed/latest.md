@@ -403,14 +403,14 @@ Ricursive Intelligence 发布 **Ripple-65B Preview**：一个 **65B 稠密**（�
 ## 23. Kyverno 在 3.3 秒内发布了 21 条 CVE 记录 —— 七条 9.0 以上，而修复比文书早 15 天
 
 - **Velocity:** ▮▮▮ trending
-- **来源:** NVD · CVE-2026-122302 – CVE-2026-122323 发布窗口 2026-11-05T03:17:22–03:17:25Z
+- **来源:** NVD · 21 条记录 `CVE-2026-122302`–`CVE-2026-122323`，发布窗口 2026-11-05T03:17:22–03:17:25Z
 - **标签:** `cve` `kubernetes` `kyverno` `privilege-escalation` `policy-engine`
 
-二十一条 Kyverno 记录在 **2026-11-05T03:17:22.030Z** 到 **03:17:25.343Z** 之间落到 NVD——发布窗口 **3.313 秒**——全部由 `disclosure@vulncheck.com` 打分，全部仍处于 `Received`。其中七条在 9.0 及以上：**五条 9.9**、一条 **9.8**、一条 **9.1**。五个 9.9 共用 `CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:C/C:H/I:H/A:H`（重算结果确为 9.9：把它推进 Critical 区间的正是 `S:C` 的 scope 变更），同一批记录的 VulnCheck 4.0 度量给 **9.4**。
+二十一条 Kyverno 记录在 **2026-11-05T03:17:22.030Z** 到 **03:17:25.343Z** 之间落到 NVD——发布窗口 **3.313 秒**——全部由 `disclosure@vulncheck.com` 打分，全部仍处于 `Received`。这些 ID 是一个**集合**而不是一个区间：`CVE-2026-122302`–`CVE-2026-122323` 这段跨度里有 **22** 个编号，而 **`CVE-2026-122317` 在 NVD 上根本没有记录**（单独查询，`totalResults` 为 **0**），所以是 21 条记录落在一个 22 个编号、带一个空洞的跨度里。其中七条在 9.0 及以上：**五条 9.9**、一条 **9.8**、一条 **9.1**。五个 9.9 共用 `CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:C/C:H/I:H/A:H`（重算结果确为 9.9：把它推进 Critical 区间的正是 `S:C` 的 scope 变更），同一批记录的 VulnCheck 4.0 度量给 **9.4**。
 
 漏洞机制是同一个形状——命名空间内的策略作者够到了控制器的 ServiceAccount——但各个变体值得逐个看。`CVE-2026-122311` 是 `resource.get()` / `resource.post()` 的路径穿越：resource 参数按 `/` 切分，第一段之后的一切都被交给 client-go 当作「subresource」，而 `rest.IsValidPathSegmentName` 不校验 subresource，`path.Join` 再把 `..` 解析掉。通告自己的摘要对后果写得很直接：一个能在自己命名空间里创建 `NamespacedValidatingPolicy` 的租户，可以用 Kyverno admission controller 的 ServiceAccount 读写集群里任意位置的任意对象。`CVE-2026-122310` 是同一思路向上一层：`context.apiCall` 的 `urlPath` 是清洗之后才校验、执行的却是原始路径，于是 `#` 或 `?` 就能把穿越藏过检查。`CVE-2026-122303` 与 `-122313` 借 `targetMatchConstraints.expression` 返回一个字面量 CEL map，指到别人的命名空间；`CVE-2026-122304` 利用 cleanup controller「builds its context loader with a nil policy」；`CVE-2026-122302` 校验的是**控制器**的权限，而不是作者的。
 
-日期比数量更重要。修复版本是 **1.19.2**，发布于 **2026-10-20T23:50:19Z**；`GHSA-4pqm-wqq6-h9q2` 于 **2026 年 10 月 21 日**发布，`datePublic` 也是 **2026-10-21**；CVE 记录直到 **2026-11-05** 才到——比修复发布晚十六天。而且通告明说这是复发而非新类：机制不同，且先前那两处修复都拦不住它——指的是 `GHSA-79gf-7frw-68m9`（CVE-2026-54523）与 `GHSA-cvq5-hhx3-f99p`（CVE-2026-41068）。
+日期比数量更重要。修复版本是 **1.19.2**，发布于 **2026-10-20T23:50:19Z**；`GHSA-4pqm-wqq6-h9q2` 于 **2026 年 10 月 21 日**发布，`datePublic` 也是 **2026-10-21**；CVE 记录直到 **2026-11-05** 才到——距修复发布 **15.15 天**，按日历日期相减（`2026-10-20` → `2026-11-05`）则是 16 天。而且通告明说这是复发而非新类：机制不同，且先前那两处修复都拦不住它——指的是 `GHSA-79gf-7frw-68m9`（CVE-2026-54523）与 `GHSA-cvq5-hhx3-f99p`（CVE-2026-41068）。
 
 **为什么重要：** 已公布的复现环境是一个跑 Kubernetes v1.32.2 的 kind 集群，用发布版 manifest 安装，没有改任何配置，也没有给 Kyverno 追加任何 RBAC——就是默认安装。所以前置条件只是「某个租户能创建命名空间级策略」，而结果是集群管理员。3.3 秒的批量发布同时提醒：NVD 的发布时间是工作流产物，这些 bug 没有一条是在 03:17Z 变真的，而它们全部在 10 月 21 日就已经公开。
 

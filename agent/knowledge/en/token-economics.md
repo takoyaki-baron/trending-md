@@ -611,3 +611,43 @@ watch **accuracy and total tokens together**. Looking at either one alone hides 
 
 → [[harness-overhead]] [[agent-stack]] [[fact-check]]
 
+
+## 2026-11-05 12:34 — compression's acceptance test is the metric that misses the regression, and the batch ships both the proof and a reward built on it
+
+Two papers in one batch answer different halves of one question, and read together they are the most useful thing
+in the batch for anyone shipping a compaction layer.
+
+**The proof that the standard test is wrong.** arXiv **2611.06380**, *Does Context Compression Preserve Refusal
+Alignment?*, finds that "encoder-based compression systematically weakens refusal behaviour in instruction-tuned
+language models, despite high reconstruction fidelity", and that the effect "persists across model families and
+compression architectures." The mechanism is stated, not inferred: "compression attenuates activation along the
+decoder's learned refusal direction" — refusal has a direction in activation space, compression shrinks the
+component along it, and the semantic content survives because it lives somewhere else. The proposed repair,
+**Memory Steering**, is "a lightweight inference-time intervention that restores refusal rates to near-baseline
+levels without retraining", operating entirely in compressed representation space. The sentence to carry into
+systems design is the conclusion: "semantic preservation does not guarantee behavioural preservation under
+compression." Limits, which matter as much as the claim: the abstract reports **no figures** — no refusal-rate
+deltas, no fidelity values, no named model list — so this is a directional claim with a mechanism, and the
+magnitudes are in the body. Two authors.
+
+**The reward that cannot see it.** arXiv **2611.06445**, **SumOne**, replaces the usual compaction training signal
+(the downstream task score, or the solver's behaviour, both of which couple a summarizer to one task and one
+harness) with reconstruction: "Given a summary of the expired history, a frozen reconstructor recovers randomly
+masked portions of the original trajectory; reconstruction quality, combined with a length penalty, provides a
+task-agnostic reward for optimizing the summarizer with GRPO." No reference summaries and no task execution are
+needed. At inference "only the lightweight summarizer is retained, enabling plug-and-play context compression for
+otherwise unchanged agents", and the checkpoint "transfers across downstream models and agent harnesses without
+additional fine-tuning". Measured savings: "approximately **78%** on DeepSearchQA and **75%** on SWE-bench
+Verified relative to operating with full context", with the accuracy side stated as "absolute decreases of
+**0.04**" — a number the abstract never scales, which is four points on a 0–1 pass rate and nothing on a 0–100
+score.
+
+**The read-out.** A reconstruction reward is exactly the fidelity signal 2611.06380 shows is insufficient for a
+*behavioural* property: a summarizer optimized to let a frozen model recover the details it dropped is, by
+construction, blind to whether the compressed representation preserved the model's refusals. Its independence
+from the task is the design goal and the blind spot in the same property. So the batch contains the failure mode
+and the training objective that cannot detect it, published days apart — and the practical rule is that a
+compaction stack needs **two** acceptance tests, one for what survives and one for what the model still refuses,
+because a safety property that degrades while quality metrics hold is the worst shape a regression can take.
+
+→ [[harness-overhead]] [[fact-check]] [[frontier-models]]

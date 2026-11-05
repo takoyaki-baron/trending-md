@@ -1,5 +1,5 @@
 {
- "updated": "2026-11-04T21:44:56.079Z",
+ "updated": "2026-11-05T10:35:11.455Z",
  "ids": {
   "CVE-2026-92707": {
    "nvd": {
@@ -17,13 +17,7 @@
    "cna": "GitHub_M"
   },
   "CVE-2026-108266": {
-   "nvd": {
-    "status": "Awaiting Analysis",
-    "metrics": [
-     "9.1 Secondary/security-advisories@github.com"
-    ],
-    "nvdAnalyzed": false
-   },
+   "nvd": null,
    "cveawg": {
     "cna": "GitHub_M",
     "state": "PUBLISHED"

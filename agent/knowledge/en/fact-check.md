@@ -3258,3 +3258,66 @@ plain `indexOf` bound the negation to the wrong sentence and the guard could not
 a name to a sentence needs a boundary test.
 
 → [[fact-check]] [[security]]
+
+## 2026-11-05 12:34 — four units this batch put a number on, and a failed prototype whose negative result was never retested
+
+**(a) A dashed CVE range is a claim about a SET, and this is the second time the feed has written one the registry
+does not support.** The Kyverno item said "21 records `CVE-2026-122302`–`CVE-2026-122323`"; the span holds **22**
+identifiers and **`CVE-2026-122317` has no record at all** (`cveId` queried alone, `totalResults` **0**). The rule
+has been in CLAUDE.md since the HPE ArubaOS item (10-25) and had **no executor**, so it is now a check rather than
+a paragraph: `claim-unit-lint.mjs --check idrange` (default set, **zero network calls**) extracts every dashed
+range, computes the implied span for same-year endpoints, binds it to a stated count of *records* (never of
+scores), and emits `cve-range-span-mismatch` at severity 2. Four guards, each bought by a wrong answer while
+calibrating it on the filing case's own corrected sentence: a count must carry a record-ish noun and may take at
+most **one capitalised** intervening word (`22 values and CVE` counted two and fired on a correct item); a number
+immediately after a hyphen is an **identifier, not a count** (`CVE-2026-122317 carries no record` was read as
+"122317 records"); two stated counts for one range is `range-ambiguous` at sev 0 rather than a coin flip; and a
+disclosed gap is the **correction**, printed as `cve-range-disclosed` (sev 0) rather than dropped. Calibrated both
+ways on the filing file: the pre-correction commit returns **1 finding**, the corrected working file **0 findings
+/ 2 disclosed**. Census over **36** October–November feeds / **1,484** items: **5** dashed ranges, **1 finding**
+(the filing case), **3** `ok-range`, **1** cross-year silence — so the class is 0.34% of items and the check has no
+false positive on the corpus.
+
+**(b) A benchmark table can have two columns for the same benchmark, and the competitor's loss is the harness.**
+Ripple-65B Preview is a **65B dense** model (12T tokens, `d_model` 5120, 80 layers, MFU 40%, no custom kernels, no
+quantization) scoring **80.52** on Terminal-Bench 2.1 — above Reflection Beam 501B (**80.1** self-reported), Muse
+Spark Open 816B (76.4), Thinking Machines Inkling 975B (63.8) and Nemotron 3 Ultra 550B (56.4). Under the
+**official Terminus 2 harness** Beam falls to **70.8**, Inkling to **56.2**, Muse to **78.7**, while Ripple stays
+at **80.5**. The card states why it prints both and admits the general problem: Terminal-Bench 2.1 scores "were
+universally lower (with the exception of Muse Spark Open) when using the official Terminus 2 harness at 128K
+sequence length with summarization", and "Replicating benchmark scores has been challenging, particularly for
+modern agentic evals". Outside Terminal-Bench the advantage narrows or inverts — SWE-bench Verified **76.5** vs
+Beam's **81.6**; SWE-bench Pro v1.0 **61.42** vs **66.1**; DeepSWE 1.1 **44.3** vs Muse's **60.0** — and the
+"SWE-bench Pro v2.0 Hard 79.1 vs Inkling 2.0" row is a harness difference the card does not call out, since the
+same table puts Inkling at 54.3 on v1.0. Cost claim: **$32M** "full R&D cost", "one-tenth the cost of the previous
+open-weight SOTA on agentic coding", **"as estimated to the best of our knowledge"**. First-hand at 11-05 12:34:
+`gated: false`, 31 files, `safetensors` total **64,782,689,360** (BF16) = the card's 129.6 GB, `apache-2.0`,
+created 2026-11-04T02:41:21Z, **133 likes / 0 downloads**. The unit to attach to "beats 501B" is the column.
+
+**(c) A spec table's constant RATIO can be the design, and the spec it omits is the one that decides the use.**
+Qualcomm's Cloud AI 100 Ultra is a 150 W PCIe card at up to 870 TOPS INT8, 288 TFLOPS FP16, 576 MB on-die SRAM,
+64 AI cores, **128 GB** DRAM and **548 GB/s** over PCIe Gen4 ×16 — no NVLink, no host-memory coherence. Across
+four SKUs the ratio is constant: 548/128 and 137/32 are both **4.3 GB/s of bandwidth per GB of capacity**, which
+is the signature of an LPDDR-based design rather than HBM and means the card is sized for many concurrent small
+models rather than one large decode. The AI 80 Ultra has the *same* 150 W, 128 GB and 548 GB/s and differs only
+in compute (618 TOPS / 222 TFLOPS), which is what the "Ultra" suffix buys; the AI 100 Pro drops to 75 W / 32 GB /
+137 GB/s. The vendor page's DRAM column reads "128 GB **LPR4x**" on both Ultra SKUs — a typo for LPDDR4x. Unit
+rule: TOPS across vendors is close to meaningless without the bandwidth figure, and "128 GB" here describes
+capacity per watt and per slot.
+
+**(d) A negative result from a broken prototype is not evidence about the premise — and it can cost weeks.** Ryan
+Miceli's third Xbox 360 hypervisor post reports the exploit going from "~20 minutes with a ~30% success rate" to
+"near instantaneous with a near 100% success rate", and the interesting half is why it took so long. The
+memory-encryption scheme's whitening value is **12 bits**, giving **1024** unique ciphertexts for any plaintext;
+the original PoC generated only the one it needed and treated the full lookup table as a dead end, because an
+older hypervisor flushed the TLB for the encrypted range and later builds did not, so the table "was causing
+issues". The author's own account is the transferable sentence: "by the time I got to the end of the exploit I had
+become so blinded by tunnel vision chasing CPU cache issues that I had convinced myself the lookup table just
+wasn't going to work." The rebuilt table indexes on **20 bits** of the expected ciphertext and stores both the
+oracle value and the malicious replacement, and deliberately ignores collisions — a few collisions mean skipping
+iterations of a race loop, cheaper than bucket support. **The failure was a wrong model of a primitive, retained
+because the experiment that refuted it had been run against a broken prototype and never retested.** For this
+agent the operational form is: when a check reports "absent", re-run it after the reader changes — the same rule
+that made three of the lint's own verdicts into vocabulary bugs.
+
+→ [[security]] [[vuln-supply]] [[frontier-models]] [[datacenter-silicon]]

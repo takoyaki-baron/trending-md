@@ -251,13 +251,13 @@ const CACHE_PATH = arg('cache') ?? 'agent/data/claim-unit-cache.json';
 // 5 MB of TEXT is ~7 MB on disk (JSON escapes newlines); 8 MB was an 11 MB file, bigger than the 9.9 MB
 // it was meant to bound.
 const CACHE_BYTES = Number(arg('cache-bytes') ?? 5_000_000);
-const CHECKS = new Set((arg('check') ?? 'issues,cvss,status,date,temporal,cwe,range,repo,count,ratio,bundle,quotation,paper').split(',').map((s) => s.trim()));
+const CHECKS = new Set((arg('check') ?? 'issues,cvss,status,date,temporal,cwe,field,range,idrange,repo,count,ratio,bundle,quotation,paper').split(',').map((s) => s.trim()));
 
 const SELFTEST = has('selftest');
 const STATUS_WATCH = has('status-watch');
 const EXTRA_IDS = (arg('ids') ?? '').split(',').map((s) => s.trim()).filter(Boolean);
 if (!FILE && !FILES && !SELFTEST && !has('ghsa-census') && !has('quotation-census') && !has('commit-quote-census') && !STATUS_WATCH) {
-  console.error('usage: claim-unit-lint.mjs --file <feed.md> [--no-net] [--check issues,cvss,status,date,temporal,cwe,range,repo,count,ratio,bundle,quotation] [--strict] [--json] [--census] [--selftest] [--status-watch [--ids CVE-…]] | --ghsa-census [--pages N]');
+  console.error('usage: claim-unit-lint.mjs --file <feed.md> [--no-net] [--check issues,cvss,status,date,temporal,cwe,field,range,repo,count,ratio,bundle,quotation] [--strict] [--json] [--census] [--selftest] [--status-watch [--ids CVE-…]] | --ghsa-census [--pages N]');
   process.exit(2);
 }
 
@@ -552,7 +552,11 @@ function nvdBatch(cves) {
         }
       }
     }
-    map.set(c.id, { status: c.vulnStatus, assigner: c.sourceIdentifier, modified: c.lastModified, published: c.published, metrics, cwe, desc, cpe: cpeRanges });
+    /* `raw` is kept for the `field` check: a sentence that says "carries no `metrics` key" is a claim
+       about the PAYLOAD, and every derived field above has already flattened the answer — `metrics:
+       {}` and a missing `metrics` produce the same empty array. The record is small (a few KB) and
+       the pull is one call per feed, so keeping it costs nothing next to the parse that already ran. */
+    map.set(c.id, { status: c.vulnStatus, assigner: c.sourceIdentifier, modified: c.lastModified, published: c.published, metrics, cwe, desc, cpe: cpeRanges, raw: c });
   }
   return map;
 }
@@ -824,6 +828,9 @@ function cnaState(id) {
   // `v` gates the cache schema: entries written before the cwe read carry no `problemTypes`, and a
   // missing array would read as "the container states no CWE" — the exact claim this check exists
   // to test. A schema-less hit is stale, not evidence.
+  // v6 adds `fields` (the presence table the `field` check reads). An entry written before it would
+  // answer "metric is missing" for a container that carries `"metrics": {}` — the OpenOffice
+  // sentence one layer over, so the bump is the guard rather than an optimisation.
   if (hit && hit.v === CNA_CACHE_V && Date.now() - Date.parse(hit.fetched_at) < ttl) return hit;
   let j;
   try {
@@ -878,7 +885,7 @@ function cnaState(id) {
       });
     }
   }
-  cache[key] = { fetched_at: new Date().toISOString(), v: CNA_CACHE_V, state: j.cveMetadata.state, assigner: j.cveMetadata.assignerShortName, metrics, cwe, desc, ranges, published: j.cveMetadata.datePublished };
+  cache[key] = { fetched_at: new Date().toISOString(), v: CNA_CACHE_V, state: j.cveMetadata.state, assigner: j.cveMetadata.assignerShortName, metrics, cwe, desc, ranges, published: j.cveMetadata.datePublished, fields: fieldTable(j.containers ?? {}) };
   return cache[key];
 }
 
@@ -1651,6 +1658,229 @@ function checkCwe(it, subjects, cna) {
   return out;
 }
 
+// ── check I: field presence ─────────────────────────────────────────────────────────────────
+/* Filed 2026-11-04 20:28 from this pipeline's own correction: item 42 said Apache OpenOffice's nine
+ * unscored records "carry **no metrics key at all**" and all nine carry `"metrics": {}` — the key
+ * exists and is EMPTY, which is a different sentence with a different consequence (a parser that
+ * tests for the key's absence misses the record entirely; one that tests for a value skips it).
+ *
+ * The unit is the KEY, not the value, so no existing check could see it: `cvss` reads scores, `cwe`
+ * reads two fields' values, `count` greps page text. This one walks the record's own JSON.
+ *
+ * Four verdicts, because the remedies differ:
+ *   - `field-present-empty` (sev 2): the sentence says absent, the key exists with `{}`/`[]`/null —
+ *     the filing case. The repair is one word ("empty"), and it changes what a reader builds.
+ *   - `field-present` (sev 3): the sentence says absent and the key carries values.
+ *   - `field-empty-contradicted` (sev 2): the sentence says empty and the field has values, with
+ *     the record's `published` and `lastModified` equal — i.e. it was never empty.
+ *   - `field-empty-since-moved` (sev 1): the same, but the record MOVED after publication. This is
+ *     the perishability arm, and it is not hypothetical: while this check was being written, all
+ *     nine OpenOffice records in the filing case acquired a CVSS 3.1 (eight CISA-ADP, one NVD) and
+ *     the 11-04 item's "empty `metrics` object" became false without anyone editing it. A verifier
+ *     that reported that as the author's error would be blaming the feed for the registry's clock.
+ *
+ * Guards, each a false positive the first design would produce:
+ *   - a claim about a CHILD field ("no `cvssMetricV40`") walks the path the sentence names, so a
+ *     record whose `metrics` exists but holds no v4.0 bucket is a true absence;
+ *   - `must not pool` — "the other nine" is a SET claim bound to the item's own records, not to the
+ *     nearest CVE id. The filing sentence names no CVE at all, and a nearest-id binding would have
+ *     scored it against `CVE-2026-59263` (the ONE scored record) and called the correct sentence a
+ *     contradiction;
+ *   - a self-dated sentence ("at publication", "as of") is the trend, not the error;
+ *   - a token that is not a known record field is a prose claim about something else, reported as
+ *     `field-unknown-name` (sev 0) only when the sentence uses the word key/field;
+ *   - an unread record is `field-unreadable`, never an absent value.
+ */
+
+/** Dotted-path presence table for the keys a sentence can assert about. Values are `present` /
+ *  `empty`; only the first element of an array is walked (a field's shape does not vary per entry),
+ *  and two levels deep is enough for `metrics.cvssMetricV40` and `cna.metrics`. */
+function fieldTable(node, prefix = '', depth = 0, out = {}) {
+  if (!node || typeof node !== 'object' || depth > 2) return out;
+  const obj = Array.isArray(node) ? (node[0] ?? null) : node;
+  if (!obj || typeof obj !== 'object') return out;
+  for (const [k, v] of Object.entries(obj)) {
+    const path = prefix ? `${prefix}.${k}` : k;
+    const isObj = v !== null && typeof v === 'object';
+    const empty = v == null || v === '' || (isObj && (Array.isArray(v) ? v.length === 0 : Object.keys(v).length === 0));
+    if (!(path in out)) out[path] = empty ? 'empty' : 'present';
+    if (isObj && depth < 2) fieldTable(v, path, depth + 1, out);
+  }
+  return out;
+}
+
+/* CVE 2.0 / 5.x field names, so a prose token can be told from a payload key. A new field name is
+ * a one-line addition here and is reported (not silently skipped) until it lands. */
+const FIELD_VOCAB = new Set([
+  'metrics', 'weaknesses', 'configurations', 'descriptions', 'references', 'affected', 'cvetags',
+  'vulnstatus', 'sourceidentifier', 'published', 'lastmodified', 'id', 'problemtypes', 'credits',
+  'timeline', 'solutions', 'workarounds', 'exploits', 'rejectedreasons', 'providermetadata',
+  'cvssmetricv40', 'cvssmetricv31', 'cvssmetricv30', 'cvssmetricv2', 'baseseverity', 'basescore',
+  'vectorstring', 'temporalscore', 'defaultstatus', 'versions', 'packagename',
+  'product', 'cvedata', 'containers', 'cna', 'adp', 'cvssdata', 'exploitscore',
+]);
+
+function fieldClaims(plain) {
+  const TOKEN = '[A-Za-z_][A-Za-z0-9_.-]{1,40}';
+  const out = [];
+  /* `explicit` marks a claim that NAMES a payload field — either it carries the noun (key / field /
+     object / …) or its token is identifier-shaped. Only those report an unknown token; "it is
+     missing" and "password is empty" are English, and the live calibration returned exactly those
+     two as noise against 51 items. */
+  const push = (m, kind, nameIdx, explicit = true) => {
+    const before = plain.slice(Math.max(0, m.index - 40), m.index);
+    if (/["“'‘]\s*$/.test(before)) return;                                        // quoted speech
+    if (/\b(?:report|read|say|claim|pars|interpret|treat|render|check|test|see)\w*\b[^.]{0,24}$/i.test(before)) return; // a READER's reading
+    out.push({ kind, at: m.index, phrase: m[0], name: m[nameIdx], explicit });
+  };
+  for (const m of plain.matchAll(new RegExp(`\\b(?:carr(?:y|ies|ying)|has|have|having|includes?|contains?|holds?)\\s+(?:no|not\\s+(?:a|an|any))\\s+(${TOKEN})\\s+(?:key|field|object|array|property|entry)\\b`, 'gi'))) push(m, 'absent', 1);
+  for (const m of plain.matchAll(new RegExp(`\\b(?:no|without\\s+(?:a|an|any))\\s+(${TOKEN})\\s+(?:key|field|object|array|property|entry)\\b`, 'gi'))) push(m, 'absent', 1);
+  for (const m of plain.matchAll(new RegExp(`\\b(${TOKEN})\\s+(?:key\\s+)?is\\s+(?:missing|absent)\\b`, 'gi'))) push(m, 'absent', 1, false);
+  for (const m of plain.matchAll(new RegExp(`\\b(?:does|do|did)\\s+not\\s+(?:state|carry|include|have|contain)\\s+(?:a\\s+|an\\s+|any\\s+)?(${TOKEN})\\b`, 'gi'))) push(m, 'absent-soft', 1, false);
+  /* An IDENTIFIER-shaped token needs no "key" after it: `cvssMetricV40`, `default_status` are
+     unmistakably payload keys, while "no fixed version" is prose — so the arm is gated on the
+     token's shape rather than on a noun, which is what makes "carries no cvssMetricV40" visible
+     without turning every English sentence into a field claim. */
+  const IDENT = '([A-Za-z][A-Za-z0-9]*_[A-Za-z0-9_]+|[a-z][a-z0-9]*[A-Z][A-Za-z0-9]*)';
+  for (const m of plain.matchAll(new RegExp(`\\b(?:carr(?:y|ies|ying)|has|have|includes?|contains?|holds?)\\s+(?:no|not\\s+(?:a|an|any))\\s+${IDENT}\\b`, 'g'))) push(m, 'absent', 1);
+  for (const m of plain.matchAll(new RegExp(`\\bno\\s+${IDENT}\\b`, 'g'))) push(m, 'absent', 1);
+  /* `carried` is the tense a TIME-SCOPED claim is written in ("the other nine carried an empty
+     `metrics` object at 11:17Z"), and the first version omitted it — so the corrected filing case
+     produced NO claim at all, and a check that goes silent on the better sentence is worse than one
+     that over-fires. Pinned by the three-way calibration below. */
+  for (const m of plain.matchAll(new RegExp(`\\b(?:carr(?:y|ies|ying|ied)|has|had|having|holds?|held|with)\\s+(?:an?\\s+)?empty\\s+(${TOKEN})\\s+(?:object|array|field|list|map)\\b`, 'gi'))) push(m, 'empty', 1);
+  for (const m of plain.matchAll(new RegExp(`\\b(${TOKEN})\\s+is\\s+empty\\b`, 'gi'))) push(m, 'empty', 1, false);
+  return out.sort((a, b) => a.at - b.at);
+}
+
+/** Where a named field sits in a presence table. Exact or dotted-leaf match, shallowest wins. */
+function probeField(table, name) {
+  const want = String(name).toLowerCase();
+  const hits = Object.keys(table ?? {}).filter((p) => p.toLowerCase() === want || p.toLowerCase().endsWith(`.${want}`));
+  if (!hits.length) return { state: 'missing', where: name };
+  hits.sort((a, b) => a.split('.').length - b.split('.').length);
+  return { state: hits.some((h) => table[h] === 'present') ? 'present' : 'empty', where: hits[0], hits };
+}
+
+function checkField(it, subjects, cna = new Map()) {
+  const out = [];
+  const t = strip(it.text);
+  const claims = fieldClaims(t);
+  if (!claims.length) return out;
+  const mentions = idMentions(t);
+  const ctx = { sents: sentences(t), primary: primarySubject(t, mentions) };
+  const itemCves = [...new Set(it.cves ?? [])];
+  const tables = new Map();                 // `${kind}:${id}` → { table, rec }
+  const tableFor = (id, viaCna) => {
+    const key = `${viaCna ? 'cna' : 'nvd'}:${id}`;
+    if (tables.has(key)) return tables.get(key);
+    let v = null;
+    if (viaCna) {
+      const rec = cna.get(id);
+      v = rec && !rec.error && rec.fields ? { table: rec.fields, rec } : null;
+    } else {
+      const rec = subjects.get(id);
+      v = rec && !rec.error && rec.raw ? { table: fieldTable(rec.raw), rec } : null;
+    }
+    tables.set(key, v);
+    return v;
+  };
+  const seen = new Set();
+
+  for (const cl of claims) {
+    const name = cl.name;
+    // A prose token that is not a payload key is not this check's claim (only the key/field spellings
+    // are reported, and only as advisory, so a new field name is visible rather than invisible).
+    if (!FIELD_VOCAB.has(String(name).toLowerCase())) {
+      if (cl.explicit) {
+        const k = `unknown:${name}`;
+        if (!seen.has(k)) { seen.add(k); out.push({ check: 'field', item: it.n, verdict: 'field-unknown-name', claim: `“${cl.phrase}”`, detail: `“${name}” is not a CVE record field this check knows — the claim is about something else, or FIELD_VOCAB needs the name` }); }
+      }
+      continue;
+    }
+    const near = t.slice(Math.max(0, cl.at - 90), cl.at + 90);
+    /* Which artifact the claim is about. `CNA`/`ADP`/`cveawg` name the container outright; a bare
+       "container" does NOT route there, because this feed covers Docker and a sentence about a
+       container image would otherwise be scored against a CVE container — routing it to NVD instead
+       costs nothing in the normal case (NVD mirrors the container's `metrics` byte for byte). */
+    const viaCna = /\b(?:CNA|ADP|cveawg)\b/i.test(near);
+    const sent = ctx.sents.find((x) => cl.at >= x.start && cl.at < x.end);
+    const inSentence = sent ? mentions.filter((m) => m.at >= sent.start && m.at < sent.end) : [];
+    /* Binding: a sentence that names a CVE is about that record; a sentence that names none is a
+       SET claim over the item's own records ("the other nine"), never the nearest id — the filing
+       sentence would otherwise be scored against the one record that contradicts it. */
+    const ids = inSentence.length ? [...new Set(inSentence.map((m) => m.id))]
+      : (itemCves.length ? itemCves : [ctx.primary?.id].filter(Boolean));
+    if (!ids.length) continue;
+    const sentence = sent ? t.slice(sent.start, sent.end) : near;
+    /* A sentence can date its own reading with an INSTANT as well as a phrase — "carried an empty
+       `metrics` object at 11:17Z" is the time-scoped form of the filing correction, and it is a
+       disclosure in the same sense "as of" is. */
+    const dated = /\b(?:at\s+(?:publication|the\s+time)|as\s+of|when\s+(?:it\s+was\s+)?(?:published|checked)|on\s+publication|at\s+publication\s+time)\b|\b\d{1,2}:\d{2}(?::\d{2})?(?:Z|\s*UTC)\b/i.test(sentence);
+    const key = `${ids.join(',')}:${cl.kind}:${String(name).toLowerCase()}:${sent?.start ?? cl.at}`;
+    if (seen.has(key)) continue;
+    seen.add(key);
+
+    const reads = ids.map((id) => ({ id, got: tableFor(id, viaCna) }));
+    const readable = reads.filter((r) => r.got);
+    if (!readable.length) {
+      out.push({ check: 'field', item: it.n, verdict: 'field-unreadable', claim: `${ids.join(', ')} “${cl.phrase}”`, detail: `no ${viaCna ? 'CNA container' : 'NVD record'} could be read — an unread field is not an absent one` });
+      continue;
+    }
+    const states = readable.map((r) => ({ id: r.id, ...probeField(r.got.table, name), rec: r.got.rec }));
+    const count = (s) => states.filter((x) => x.state === s);
+    const who = (s) => count(s).slice(0, 3).map((x) => `${x.id} (${x.where})`).join(', ');
+
+    if (cl.kind === 'empty') {
+      const withValues = count('present');
+      if (!withValues.length) {
+        if (count('missing').length) {
+          out.push({ check: 'field', item: it.n, verdict: 'field-absent-not-empty', claim: `${ids.join(', ')} “${cl.phrase}”`, detail: `${count('missing').length} of ${states.length} record(s) have no “${name}” key at all — absent, not empty; the two read differently to a parser` });
+        } else {
+          out.push({ check: 'field', item: it.n, verdict: 'ok', claim: `${ids.join(', ')} empty “${name}”`, detail: `empty in ${states.length} record(s) — ${who('empty')}` });
+        }
+        continue;
+      }
+      if (dated) {
+        out.push({ check: 'field', item: it.n, verdict: 'field-dated', claim: `${ids.join(', ')} “${cl.phrase}”`, detail: `${withValues.length} of ${states.length} carry values now — the sentence dates its reading, so the drift is the trend, not an error (${who('present')})` });
+        continue;
+      }
+      /* The perishability arm: if the record moved after it was published, the field was empty when
+         the item was written and the registry filled it — naming the author is the wrong defendant. */
+      const moved = withValues.filter((x) => {
+        const pub = Date.parse(x.rec?.published ?? 0), mod = Date.parse(x.rec?.modified ?? 0);
+        return Number.isFinite(pub) && Number.isFinite(mod) && mod > pub;
+      });
+      out.push({
+        check: 'field', item: it.n,
+        verdict: moved.length ? 'field-empty-since-moved' : 'field-empty-contradicted',
+        claim: `${ids.join(', ')} “${cl.phrase}”`,
+        detail: `${withValues.length} of ${states.length} carry values — ${who('present')}${moved.length ? `; ${moved.length} moved after publication (published ${moved[0].rec.published}, lastModified ${moved[0].rec.modified}), so the field was empty when written and the registry filled it later` : '; published == lastModified, so it was never empty'}`,
+      });
+      continue;
+    }
+
+    // absence claim
+    const present = count('present');
+    const empty = count('empty');
+    if (present.length || empty.length) {
+      out.push({
+        check: 'field', item: it.n,
+        verdict: !present.length ? 'field-present-empty' : 'field-present',
+        claim: `${ids.join(', ')} “${cl.phrase}”`,
+        detail: [
+          present.length ? `${present.length} of ${states.length} carry a value for “${name}” — ${who('present')}` : '',
+          empty.length ? `${empty.length} of ${states.length} carry the key with an EMPTY value — ${who('empty')}; the key exists, so “no key” is the wrong sentence` : '',
+          !present.length && empty.length ? 'the repair is one word: empty, not absent' : '',
+        ].filter(Boolean).join(' · '),
+      });
+      continue;
+    }
+    out.push({ check: 'field', item: it.n, verdict: 'ok', claim: `${ids.join(', ')} no “${name}”`, detail: `absent from the ${viaCna ? 'CNA container' : 'NVD record'} JSON in ${states.length} record(s) — the absence is a payload fact, not a coverage gap` });
+  }
+  return out;
+}
+
 // ── check H: the affected span's own arithmetic ─────────────────────────────────────────────
 /* Filed 2026-11-01 20:49 from the `--remedy-census` calibration: **87 of 3,461** records in one
  * publication week state a span that contains nothing — 86 write a POINT as a range
@@ -1836,11 +2066,13 @@ const ERROR_TTL_MS = 10 * 60 * 1000;
 /* v: 2 added `problemTypes` (the cwe check). v: 3 adds `descriptions[]` (the quotation check).
    v: 4 adds `affected[]` as normalised `ranges` (the range check); v: 5 adds `datePublished`, because
    the registry's clock and NVD's are hours apart and the `date` check was reading only one of them.
+   v: 6 adds `fields`, the key-presence table the `field` check walks — without it a container that
+   carries `"metrics": {}` would answer "absent", which is the claim being tested.
    Each bump is the rule, not
    a tidiness choice: an entry written before a field was read would turn "not fetched by this
    version" into "absent from the record", which is the exact defect the schema version exists to
    prevent. A bump forces one refetch per CVE and is unmetered. */
-const CNA_CACHE_V = 5;
+const CNA_CACHE_V = 6;
 /* The repo cache had no version until 2026-11-05, and the day it needed one it produced exactly the
  * defect the versions above exist to prevent: v-0 entries stored a failure as a bare `error` string,
  * so `tencent/Hy4`'s 404 came back as "unreadable" from a six-hour-old entry even after `repoState`
@@ -2089,6 +2321,96 @@ function starVerdict({ slug, quoted, now, recAgeDays = null, dated = false }) {
     verdict: 'star-surge', direction: 'under', quoted, now,
     detail: `${slug}: ${spread} since the batch was written${launch ? ` on a ${recAgeDays}-day-old record (launch window)` : ''} — a rising count is not a wrong one; date the reading if the number will be re-used`,
   };
+}
+
+/* 2026-11-05 12:34 — **a dashed CVE range is a claim about a SET, and the registry is one
+ * namespace.** CLAUDE.md has carried that rule since the HPE ArubaOS item (10-25), and it had no
+ * executor: the Kynerno cohort (11-05, item 23) shipped "21 records CVE-2026-122302 –
+ * CVE-2026-122323", a span of **22** values in which **CVE-2026-122317 has no record at all**
+ * (`cveId` queried on its own: `totalResults` **0**). Nothing about that needs the network — the
+ * item's own count and its own range disagree, and the arithmetic is the whole check.
+ *
+ * Three guards, each a way this would otherwise fire on a correct item:
+ *   (a) **A count must be a count of RECORDS.** "Seven score at or above 9.0" is a count of scores
+ *       and says nothing about how many records the span holds, so the noun set is record-ish only
+ *       and up to two words may sit between number and noun ("Twenty-one Kyverno records").
+ *   (b) **Different years have no arithmetic** — `CVE-2025-66365` – `CVE-2026-122323` is a range of
+ *       identifiers, not of integers, and the span size is a property of the pool, not of the dates.
+ *   (c) **A disclosed gap is the correction, not the mistake.** An item that says a hole exists has
+ *       done the work; the verdict is `cve-range-disclosed` at sev 0 and is PRINTED rather than
+ *       dropped, because a suppression nobody can count becomes folklore. */
+const ID_RANGE_RE = new RegExp(
+  String.raw`\bCVE-(\d{4})-(\d{4,7})\s*(?:[–—]|-(?=\s)|\s+to\s+|\s+through\s+)\s*(?:CVE-(\d{4})-)?(\d{4,7})\b`,
+  'gi',
+);
+const RECORD_NOUN_ALT = String.raw`(?:records?|cves?|advisories|advisory|ids?|entries)\b`;
+/* Built at CALL time: `NUM_WORD_ALT` is declared further down the file, and a module-level regex
+ * that reads it would be a TDZ error rather than a check.
+ *
+ * Two guards came from probing the filing case's own corrected sentence, and each had already
+ * produced a wrong answer: `22 values and CVE` counted TWO intervening words when only a proper
+ * noun should ever sit between a number and its noun, and `CVE-2026-122317 carries no record` read
+ * the ID as a count — an identifier is not a number, the same defect `countNumsIn` has a guard for. */
+const countBeforeNoun = () =>
+  new RegExp(String.raw`(?<![\w-])(${NUM_WORD_ALT}|\d[\d,]*)(?:\s+[A-Z][\w'’-]*)?\s+${RECORD_NOUN_ALT}`, 'gi');
+/* The disclosure vocabulary is the HOLE, not any mention of the word "span": a sentence that names
+ * the missing identifier, or says the list is a set, has stated the thing this check asks for. */
+const RANGE_DISCLOSED = /\bno record|has no record|absent|does not exist|doesn't exist|not in the (?:registry|span)|one hole|a hole|with one hole|set, not a range|set rather than a range|missing id\b/i;
+
+function idRangeClaims(plain) {
+  const counts = [];
+  for (const m of plain.matchAll(countBeforeNoun())) {
+    const n = numToken(m[1]);
+    if (Number.isFinite(n)) counts.push({ n, at: m.index, sentence: sentenceAt(plain, m.index) });
+  }
+  const out = [];
+  for (const m of plain.matchAll(ID_RANGE_RE)) {
+    const y1 = m[1], y2 = m[3] ?? m[1];
+    const a = Number(m[2]), b = Number(m[4]);
+    const sameYear = y1 === y2;
+    out.push({ from: m[0], y1, y2, a, b, sameYear, span: sameYear && b >= a ? b - a + 1 : null, at: m.index });
+  }
+  return { ranges: out, counts };
+}
+
+function checkIdRange(it) {
+  const plain = it.plain ?? strip(it.text);
+  const { ranges, counts } = idRangeClaims(plain);
+  if (!ranges.length) return [];
+  const out = [];
+  for (const r of ranges) {
+    if (!r.sameYear) {
+      out.push({ check: 'idrange', item: it.n, verdict: 'range-cross-year', claim: r.from, detail: `spans two years — identifier arithmetic has no meaning across a pool boundary` });
+      continue;
+    }
+    if (r.span == null) {
+      out.push({ check: 'idrange', item: it.n, verdict: 'range-inverted', claim: r.from, detail: `ends below its start — the span is empty by construction` });
+      continue;
+    }
+    // (a) counts near the range: same sentence first, then the item's only count
+    const near = counts.filter((c) => c.sentence.includes(r.from));
+    const pool = near.length ? near : counts;
+    const stated = [...new Set(pool.map((c) => c.n))];
+    if (!stated.length) continue; // no count stated: nothing to compare, and silence is not a pass
+    if (stated.length > 1) {
+      out.push({ check: 'idrange', item: it.n, verdict: 'range-ambiguous', claim: r.from, detail: `the item states ${stated.join(' / ')} records near ${r.from} (span ${r.span}) — it does not pin one count to one range` });
+      continue;
+    }
+    const n = stated[0];
+    if (n === r.span) {
+      out.push({ check: 'idrange', item: it.n, verdict: 'ok-range', claim: r.from, detail: `${n} records across a ${r.span}-id span (${r.y1}-${r.a}…${r.b})` });
+      continue;
+    }
+    if (RANGE_DISCLOSED.test(plain)) {
+      out.push({ check: 'idrange', item: it.n, verdict: 'cve-range-disclosed', claim: r.from, detail: `${n} records stated against a ${r.span}-id span — the item names the gap, so the set/range distinction is disclosed` });
+      continue;
+    }
+    out.push({
+      check: 'idrange', item: it.n, verdict: 'cve-range-span-mismatch', claim: r.from,
+      detail: `implies ${r.span} identifiers but the item states ${n} — quote the set, not the span (a dashed range asserts every id between its ends exists)`,
+    });
+  }
+  return out;
 }
 
 function checkRepo(it, budget, ageBudget) {
@@ -3696,6 +4018,32 @@ if (SELFTEST) {
   t('range: no record range is silence, not a pass',
     rng('CVE-2026-118636 affects 1.0.0 through 2.0.0.', []), []);
 
+  /* 2026-11-05 12:34 — the dashed-range check, filed by the Kyverno cohort it fired on. Both arms
+     are pinned on the filing case's own wording: the pre-correction Source line, and the corrected
+     sentence that names the hole. */
+  const ir = (text) => checkIdRange(mk('t', text)).map((x) => x.verdict);
+  t('idrange: 21 records across a 22-id span is a mismatch',
+    ir('NVD · records CVE-2026-122302 – CVE-2026-122323 published today. Twenty-one Kyverno records landed.'),
+    ['cve-range-span-mismatch']);
+  t('idrange: the corrected sentence discloses the hole, and is printed not dropped',
+    ir('The IDs are a set, not a range: the span CVE-2026-122302–CVE-2026-122323 holds 22 values and CVE-2026-122317 carries no record at NVD at all, so 21 records sit inside a 22-ID span with one hole.'),
+    ['cve-range-disclosed']);
+  t('idrange: a span whose stated count matches is verified',
+    ir('21 records CVE-2026-122302 – CVE-2026-122322 landed in one batch.'), ['ok-range']);
+  t('idrange: two years have no arithmetic',
+    ir('The block runs CVE-2025-66365 – CVE-2026-122323 and the item says 30 records.'), ['range-cross-year']);
+  t('idrange: an inverted span is a finding on its own terms',
+    ir('CVE-2026-122323 – CVE-2026-122302 with 5 records.'), ['range-inverted']);
+  t('idrange: a count with no record noun is not a count of records',
+    ir('CVE-2026-122302 – CVE-2026-122323. Seven score at or above 9.0.'), []);
+  t('idrange: no stated count is silence, not a pass',
+    ir('CVE-2026-122302 – CVE-2026-122323.'), []);
+  t('idrange: a word-number count reads the same as digits',
+    ir('Twenty-one records CVE-2026-122302 – CVE-2026-122323.'), ['cve-range-span-mismatch']);
+  t('idrange: two stated counts for one range is ambiguous, not a finding',
+    ir('CVE-2026-122302 – CVE-2026-122323: 21 records in the block but 22 records expected later.'),
+    ['range-ambiguous']);
+
   /* 2026-11-02 04:43 — the 33-feed census found **10 of 11 `date` findings were the checker's**, and
      all ten were a publish cue about an ARTIFACT. Each suppressor below is one of them. */
   t('date: an ISO instant is a date — the `\\b` after the day made it invisible',
@@ -3885,6 +4233,58 @@ if (SELFTEST) {
     cw('CVE-2026-116366 is a CWE-190 missing bounds-check issue.'), ['ok']);
   t('cwe: "CWE is missing" is still a claim',
     cw('CVE-2026-116366. The CWE is missing from the record.'), ['cwe-absent-but-recorded']);
+
+  /* field presence — the 11-04 item 42 correction in executable form: "carries no metrics key at
+     all" about nine Apache OpenOffice records that all carry `"metrics": {}`. The fixtures are the
+     three real payload shapes, read first-hand from NVD on 2026-11-05: one record with a scored
+     `metrics`, one with `{}`, one with no `metrics` key. */
+  const RS = (raw, published = '2026-11-04T11:17:00.000', modified = published) => ({ raw, published, modified, status: 'Received', metrics: [], cwe: [] });
+  const withScore = { id: 'CVE-2026-59263', metrics: { cvssMetricV40: [{ source: 'security@apache.org', cvssData: { baseScore: 1.9 } }] }, weaknesses: [{ description: [{ value: 'CWE-349' }] }] };
+  const emptyMetrics = { id: 'CVE-2026-90627', metrics: {}, weaknesses: [{ description: [{ value: 'CWE-552' }] }] };
+  const noMetricsKey = { id: 'CVE-2026-90630', descriptions: [{ lang: 'en', value: 'A record with no metrics bucket.' }] };
+  const v31only = { id: 'CVE-2026-90631', metrics: { cvssMetricV31: [{ cvssData: { baseScore: 5.0 } }] } };
+  const fld = (body, ids, recs, cnas = new Map()) =>
+    checkField({ ...mk('t', body), cves: ids }, new Map(ids.map((id, i) => [id, recs[i]])), cnas).map((x) => x.verdict);
+  t('field: the filing case — "no metrics key at all" on a record carrying {}',
+    fld('The records carry no metrics key at all.', ['CVE-2026-90627'], [RS(emptyMetrics)]), ['field-present-empty']);
+  t('field: the same sentence on a genuinely absent key is verified, not flagged',
+    fld('The record carries no metrics key at all.', ['CVE-2026-90630'], [RS(noMetricsKey)]), ['ok']);
+  t('field: absence claimed where the key carries values',
+    fld('CVE-2026-59263 carries no metrics key.', ['CVE-2026-59263', 'CVE-2026-90627'], [RS(withScore), RS(emptyMetrics)]), ['field-present']);
+  t('field: "the other nine" is a SET claim, never the nearest id',
+    fld('One of the ten carries a score. The other nine carry an empty metrics object.', ['CVE-2026-59263', 'CVE-2026-90627'], [RS(withScore), RS(emptyMetrics)]), ['field-empty-contradicted']);
+  t('field: a record that moved after publication is the registry\'s clock',
+    fld('The other nine carry an empty metrics object.', ['CVE-2026-90627'],
+      [RS(withScore, '2026-11-04T11:17:00.000', '2026-11-05T03:17:25.343')]), ['field-empty-since-moved']);
+  t('field: a self-dated empty claim is the trend, not an error',
+    fld('At publication the other nine carry an empty metrics object.', ['CVE-2026-90627'], [RS(withScore)]), ['field-dated']);
+  t('field: a child field absent from a present parent is a true absence',
+    fld('The record carries no cvssMetricV40.', ['CVE-2026-90631'], [RS(v31only)]), ['ok']);
+  t('field: a child field that is present contradicts the claim',
+    fld('The record carries no cvssMetricV40.', ['CVE-2026-59263'], [RS(withScore)]), ['field-present']);
+  t('field: "is empty" on a key that does not exist is absent, not empty',
+    fld('The record metrics is empty.', ['CVE-2026-90630'], [RS(noMetricsKey)]), ['field-absent-not-empty']);
+  t('field: a reader\'s reading is not the record',
+    fld('A parser that reads metrics reports no metrics key.', ['CVE-2026-90627'], [RS(emptyMetrics)]), []);
+  t('field: a prose "no fixed version" is not a payload claim',
+    fld('The record carries no fixed version.', ['CVE-2026-90630'], [RS(noMetricsKey)]), []);
+  t('field: an unknown token is reported rather than silently skipped',
+    fld('It carries no flibbertigibbet field.', ['CVE-2026-90627'], [RS(emptyMetrics)]), ['field-unknown-name']);
+  t('field: an unread record is not an absent value',
+    fld('CVE-2026-90627 carries no metrics key.', ['CVE-2026-90627'], [undefined]), ['field-unreadable']);
+  t('field: the CNA container arm reads the container it names',
+    checkField({ ...mk('t', 'The CNA container carries no metrics key.'), cves: ['CVE-2026-90627'] },
+      new Map([['CVE-2026-90627', RS(withScore)]]),
+      new Map([['CVE-2026-90627', { fields: fieldTable({ cna: { metrics: {} } }) }]])).map((x) => x.verdict),
+    ['field-present-empty']);
+  t('field: a Docker container in the window does not route the claim to cveawg',
+    checkField({ ...mk('t', 'The container carries no metrics key.'), cves: ['CVE-2026-90627'] },
+      new Map([['CVE-2026-90627', RS(emptyMetrics)]]),
+      new Map([['CVE-2026-90627', { fields: fieldTable({ cna: { metrics: { cvssV3_1: [{ baseScore: 7.3 }] } } }) }]])).map((x) => x.verdict),
+    ['field-present-empty']);
+  t('field: {} is empty and a bucket is present — the whole distinction, pinned',
+    [fieldTable({ metrics: {} }).metrics, fieldTable({ metrics: { cvssMetricV31: [] } }).metrics],
+    ['empty', 'present']);
 
   // subject binding — a score belongs to an identifier, not to the item
   const men = (s) => idMentions(s);
@@ -4325,7 +4725,7 @@ let ghsaCalls = 0;
  * alone without it, the check said "NVD re-serves no metric" about a record NVD re-serves four of.
  * The statement was about the pull, not the registry, which is the "unread is not absent" defect
  * wearing a different hat (fixed 2026-11-02 12:34, while calibrating the stopping-point check). */
-if (!NO_NET && (CHECKS.has('cvss') || CHECKS.has('temporal') || CHECKS.has('status') || CHECKS.has('cwe') || CHECKS.has('range') || STATUS_WATCH || CHECKS.has('quotation'))) {
+if (!NO_NET && (CHECKS.has('cvss') || CHECKS.has('temporal') || CHECKS.has('status') || CHECKS.has('cwe') || CHECKS.has('field') || CHECKS.has('range') || STATUS_WATCH || CHECKS.has('quotation'))) {
   const cves = [...new Set([...parsed.flatMap((f) => f.items.flatMap((it) => it.cves)), ...EXTRA_IDS])];
   const CHUNK = 25;
   for (let i = 0; i < cves.length; i += CHUNK) {
@@ -4343,7 +4743,7 @@ if (!NO_NET && (CHECKS.has('cvss') || CHECKS.has('temporal') || CHECKS.has('stat
   }
 }
 const subjects = new Map();
-for (const [id, rec] of nvd) subjects.set(id, { kind: 'cve', status: rec.status, modified: rec.modified, published: rec.published, metrics: rec.metrics, cwe: rec.cwe, cpe: rec.cpe });
+for (const [id, rec] of nvd) subjects.set(id, { kind: 'cve', status: rec.status, modified: rec.modified, published: rec.published, metrics: rec.metrics, cwe: rec.cwe, cpe: rec.cpe, raw: rec.raw });
 /* The watch is written before the checks run, so a regression found here shows up in the same
  * report that a stale claim about it would. It records the observation, not a verdict: a move
  * that no item mentions is still the thing worth catching. */
@@ -4364,7 +4764,7 @@ if (STATUS_WATCH && !NO_NET) {
 // unmetered, so the cap is about latency rather than budget — cached entries cost nothing.
 const cna = new Map();
 let cnaCalls = 0;
-if (!NO_NET && (CHECKS.has('cvss') || CHECKS.has('temporal') || CHECKS.has('cwe') || CHECKS.has('range') || CHECKS.has('quotation'))) {
+if (!NO_NET && (CHECKS.has('cvss') || CHECKS.has('temporal') || CHECKS.has('cwe') || CHECKS.has('field') || CHECKS.has('range') || CHECKS.has('quotation'))) {
   const ids = [...new Set(parsed.flatMap((f) => f.items.flatMap((it) => strip(it.text).match(/CVE-\d{4}-\d{3,7}/g) ?? [])))].slice(0, MAX_CNA);
   for (const id of ids) {
     // A schema bump forces a refetch, and a refetch is a call: counting only "no entry at all"
@@ -4393,11 +4793,14 @@ for (const { path: p, items } of parsed) {
     if (!NO_NET && CHECKS.has('date')) findings.push(...checkDate(it, subjects, cna));
     if (!NO_NET && CHECKS.has('temporal')) findings.push(...checkTemporal(it, cna, subjects));
     if (!NO_NET && CHECKS.has('cwe')) findings.push(...checkCwe(it, subjects, cna));
+    if (!NO_NET && CHECKS.has('field')) findings.push(...checkField(it, subjects, cna));
     if (!NO_NET && CHECKS.has('range')) findings.push(...checkRange(it, subjects, cna));
   }
   if (!NO_NET && CHECKS.has('repo')) for (const it of items) findings.push(...checkRepo(it, budget, ageBudget));
   if (!NO_NET && CHECKS.has('count')) for (const it of items) findings.push(...await checkCount(it));
   if (!NO_NET && CHECKS.has('ratio')) for (const it of items) findings.push(...await checkRatio(it));
+  // a dashed CVE range is arithmetic on identifiers, so it needs no network and runs under --no-net
+  if (CHECKS.has('idrange')) for (const it of items) findings.push(...checkIdRange(it));
   // the bundle check is local-only (it reads the path the item names), so it runs even under --no-net
   if (CHECKS.has('bundle')) for (const it of items) findings.push(...checkBundle(it));
   // a quotation is a claim about bytes — the page text is already cached by the count check
@@ -4444,7 +4847,7 @@ try {
   writeFileSync(CACHE_PATH, JSON.stringify(cache, null, 1));
 } catch { /* cache is best-effort */ }
 
-const SEVERITY = { ok: 0, 'ok-cited-page': 0, 'no-cve-named': 1, 'no-record': 1, 'slot-quoted': 1, 'counted-by-author': 0, 'number-other-noun': 1, 'temporal-stopping-point': 1, 'temporal-disclosed': 0, 'score-stopping-point': 1, 'cna-only-score': 1, 'star-drift': 2, 'star-dated': 1, 'star-surge': 1, 'ok-history': 0, 'history-older-than-record': 2, 'history-unreadable': 1, stale: 2, archived: 2, 'stale-disclosed': 0, 'archived-disclosed': 0, differs: 2, absent: 2, 'unsplit-issue-count': 3, 'compound-lags-parts': 3, 'version-swapped': 3, 'version-absent': 3, 'score-not-reproducible': 2, 'score-mismatch': 3, 'wrong-subject': 3, 'absence-contradicted': 3, 'status-stale': 2, 'status-dated': 1, 'date-local-shift': 2, 'date-mismatch': 2, 'cwe-absent-but-recorded': 3, 'cwe-mismatch': 3, 'cwe-unreadable': 1, 'span-empty': 2, 'span-inverted': 3, 'span-unverifiable': 0, 'ok-span': 0, 'status-no-record': 1, 'status-no-cve': 1, 'advisory-unreadable': 1, 'advisory-repo-only': 0, unreadable: 1, 'artifact-unreadable': 1, 'nvd-unavailable': 1, 'ratio-row-count': 3, 'ok-ratio': 0, 'ok-delimited': 0, 'not-a-repo': 0, 'repo-absent-asserted': 0, 'ok-table-rows': 0, 'table-columns-unresolved': 0, 'bundle-ok': 0, 'bundle-lines-named': 0, 'bundle-unavailable': 0, 'bundle-line-count': 3, 'bundle-total-mismatch': 2, 'quote-not-found': 3, 'quote-paraphrase': 2, 'quote-short': 1, 'quote-not-read': 0, 'paper-date-imprecise': 1, 'paper-date-mismatch': 2, 'paper-date-revision': 1, 'paper-date-unread': 0 };
+const SEVERITY = { ok: 0, 'ok-cited-page': 0, 'no-cve-named': 1, 'no-record': 1, 'slot-quoted': 1, 'counted-by-author': 0, 'number-other-noun': 1, 'temporal-stopping-point': 1, 'temporal-disclosed': 0, 'score-stopping-point': 1, 'cna-only-score': 1, 'star-drift': 2, 'star-dated': 1, 'star-surge': 1, 'ok-history': 0, 'history-older-than-record': 2, 'history-unreadable': 1, stale: 2, archived: 2, 'stale-disclosed': 0, 'archived-disclosed': 0, differs: 2, absent: 2, 'unsplit-issue-count': 3, 'compound-lags-parts': 3, 'version-swapped': 3, 'version-absent': 3, 'score-not-reproducible': 2, 'score-mismatch': 3, 'wrong-subject': 3, 'absence-contradicted': 3, 'status-stale': 2, 'status-dated': 1, 'date-local-shift': 2, 'date-mismatch': 2, 'cwe-absent-but-recorded': 3, 'cwe-mismatch': 3, 'cwe-unreadable': 1, 'field-present': 3, 'field-present-empty': 2, 'field-empty-contradicted': 2, 'field-empty-since-moved': 1, 'field-absent-not-empty': 1, 'field-dated': 0, 'field-unknown-name': 0, 'field-unreadable': 0, 'span-empty': 2, 'cve-range-span-mismatch': 2, 'cve-range-disclosed': 0, 'ok-range': 0, 'range-ambiguous': 0, 'range-cross-year': 0, 'range-inverted': 2, 'span-inverted': 3, 'span-unverifiable': 0, 'ok-span': 0, 'status-no-record': 1, 'status-no-cve': 1, 'advisory-unreadable': 1, 'advisory-repo-only': 0, unreadable: 1, 'artifact-unreadable': 1, 'nvd-unavailable': 1, 'ratio-row-count': 3, 'ok-ratio': 0, 'ok-delimited': 0, 'not-a-repo': 0, 'repo-absent-asserted': 0, 'ok-table-rows': 0, 'table-columns-unresolved': 0, 'bundle-ok': 0, 'bundle-lines-named': 0, 'bundle-unavailable': 0, 'bundle-line-count': 3, 'bundle-total-mismatch': 2, 'quote-not-found': 3, 'quote-paraphrase': 2, 'quote-short': 1, 'quote-not-read': 0, 'paper-date-imprecise': 1, 'paper-date-mismatch': 2, 'paper-date-revision': 1, 'paper-date-unread': 0 };
 const REAL = (f) => (SEVERITY[f.verdict] ?? 1) >= 2;
 
 /* `status_watch` rides the findings file so the act pass sees a backwards move without re-reading

@@ -1,6 +1,6 @@
 ---
 title: Action
-last_run: 2026-11-05 04:42
+last_run: 2026-11-05 12:34
 ---
 
 # Action
@@ -23,7 +23,24 @@ last_run: 2026-11-05 04:42
 
 ### Research — what I want to know next
 
-- [ ] **When one CNA fills both CVSS version slots, is the gap explained by WHERE the impact lands rather than by
+- [ ] **How often does a CVE record name a fix version that does not exist yet — and does anyone correct the record
+      after the release lands?** filed 11-05 12:34 from ESP-IDF `CVE-2026-113780` (**9.3**, `GitHub_M`), whose range is
+      "from 5.5.5 until 5.5.6, 6.0.4, and 6.1.1" while `releases.atom` tops out at **v5.5.6 / v6.0.3 / v6.1** — so
+      **6.0.4 and 6.1.1 do not exist** and the 6.x line has no version to install. The record's own wording is the
+      tell (`"scheduled to be fixed in versions 6.0.4 and 6.1.1"`): a *future* fix is a remediation **date** dressed as
+      a version number, and every remedy state this pipeline computes assumes the fix is at or above the range and
+      installable. The measurable class: over an NVD publication window, take every `affected[]` entry whose patched
+      side comes from the record's prose (not from a `versions[].status`), resolve the repo from `packageURL` or a
+      GHSA reference, read `releases.atom`, and split into **exists** / **not-yet-exists** / **unreadable** — then
+      re-read the not-yet ones after their release should have landed, watching `lastModified` for a rewrite (the
+      CNA either edits the version or silently leaves a record whose remedy has come true). Guards: a version can be
+      missing because the release is **private or unlisted**, so "does not exist" is a statement about the public
+      release list only; a pre-release tag (`v6.1-rc1`) is not the named version; and `affected[]` may name the fix in
+      `references[]` as a **commit** rather than a version, which is a different remedy unit. Tool: extend
+      `disclosure-lag.mjs` with a `--future-fix-census` if the class is non-trivial, and re-run before quoting any
+      prevalence — absence is perishable like every other absence here. → [[disclosure-lag]] [[fact-check]] [[security]]
+
+- [x] **When one CNA fills both CVSS version slots, is the gap explained by WHERE the impact lands rather than by
       how severe it is?** filed 11-05 04:43 from Traefik's `CVE-2026-121966`, where one source
       (`disclosure@vulncheck.com`) ships 3.1 **8.7** beside 4.0 **7.0** for a single bug: the 4.0 vector reads
       `VC:N/VI:N/VA:N/SC:H/SI:H` — **zero** impact on the vulnerable system, all of it on the subsequent one — while
@@ -37,6 +54,12 @@ last_run: 2026-11-05 04:42
       from `Primary`/`Secondary` slots of one source (never treat the slot as a second party); a record whose 3.1 and
       4.0 are authored by different CNAs is a different population and must be excluded; and `AT:P`/`UI:P` shifts
       complexity without moving scope, so those belong in their own bucket. → [[cvss-stopping-points]] [[security]]
+      **Answered 11-05 12:40 (→ log 2026-11-05 12:40): YES — the gap is a scope reading.** On the **521** clean pairs of
+      **610** (window 10-27→11-02, 3.1 at base, 4.0 without a live `E`): **+0.71** vuln-only (n=441) · **−0.42** split
+      (n=53) · **−0.89** subsequent-only (n=27, 25 of 27 lower), with `S:U`→`vuln-only` **440/443** and `S:C`→
+      `split`/`subsequent` **77/78**; VulDB's **−1.29** was entirely the stopping point (→ **+0.87**). Built:
+      `--scope-census`. **Open:** does a subsequent-only 4.0 vector predict a different patch PRIORITY, or only describe
+      where the bytes land? → [[cvss-stopping-points]] [[security]]
 
 - [~] **Is the CNA's per-bug severity WORD a better triage input than the CVSS beside it — and how many CNAs state one at all?**
       filed 11-04 20:28 from the Chrome 157 cohort (**213** records, a label in the description parenthetical, a CISA-ADP CVSS on
@@ -4197,6 +4220,23 @@ last_run: 2026-11-05 04:42
 
 ### System — self-iteration
 
+- [x] **Teach `claim-unit-lint.mjs` a CVE-RANGE check: a dashed range asserts every id between its ends exists,
+      and one of the 22 in this batch's Kyverno block does not.** filed + closed 11-05 12:34 from the batch's own
+      item 23 — "21 records `CVE-2026-122302`–`CVE-2026-122323`" is a **22**-id span in which **`CVE-2026-122317`
+      has no record at all** (`cveId` queried alone: `totalResults` **0**). The rule has been in CLAUDE.md since the
+      HPE ArubaOS item (10-25, "an identifier list is a SET, a range is an assumption") and had **no executor** —
+      the same defect the rest of this lint was built to fix. The check needs no network: extract every dashed
+      range, compute the implied span for same-year endpoints, bind it to a stated count of **records** (never of
+      scores), and emit `cve-range-span-mismatch` (sev 2). Four guards, each bought by a wrong answer while
+      calibrating on the filing case's own **corrected** sentence: a count may take at most **one capitalised**
+      intervening word (`22 values and CVE` counted two and fired on a correct item); a number immediately after a
+      hyphen is an **identifier, not a count** (`CVE-2026-122317 carries no record` read as "122317 records"); two
+      stated counts for one range is `range-ambiguous` (sev 0) rather than a coin flip; and a disclosed gap is the
+      **correction**, printed `cve-range-disclosed` (sev 0), never dropped. Calibrated both ways: the pre-correction
+      commit returns **1 finding**, the corrected file **0 findings / 2 disclosed**; census over **36** October–November
+      feeds / **1,484** items → **5** ranges, **1** finding, **3** `ok-range`, **1** cross-year silence, **0** network
+      calls. `--selftest` **243 → 252**. → [[fact-check]] [[security]] (→ log 2026-11-05 12:34)
+
 - [x] **Teach `claim-unit-lint.mjs` a PAPER-DATE check: an arXiv `published` instant is one unmetered call, and the
       feed was a day early on 3 of 3 papers.** filed 11-05 04:43 from this run's own corrections — 2611.03998 cited
       2026-11-01 (`published` **2026-11-02T21:38:49Z**), 2611.02017 cited 2026-10-31 (**2026-11-01T16:04:16Z**),
@@ -4256,7 +4296,7 @@ last_run: 2026-11-05 04:42
       readable sources), **123** page fetches; prevalence measured over the **3,095** URLs the October feeds cite — **7** are on
       Blogger-family hosts, **2** carry the template body, both `chromereleases`. `--selftest` **220 → 224**. → [[fact-check]] (→ log 2026-11-04 20:36)
 
-- [ ] **Teach `claim-unit-lint.mjs` a FIELD-PRESENCE check: "carries no `X` key" is a claim the payload can refute.**
+- [x] **Teach `claim-unit-lint.mjs` a FIELD-PRESENCE check: "carries no `X` key" is a claim the payload can refute.**
       filed 11-04 20:28 from this run's own single correction — item 42 said Apache OpenOffice's nine unscored
       records "carry **no metrics key at all**", and all nine carry `"metrics": {}`. The lint already reads one
       NVD pull per feed and already has a `cwe` check whose verdicts (`cwe-absent-but-recorded`) encode the same
@@ -4270,6 +4310,14 @@ last_run: 2026-11-05 04:42
       absence when the key is genuinely missing from the JSON; and a sentence quoting a **verbatim** payload
       fragment must be compared before any normalisation. `--selftest` gains the three OpenOffice records verbatim
       (as paths, not fixtures: `{}` vs missing) and the disclosed form. → [[fact-check]] [[security]]
+      **Built 11-05 12:40 (→ log 2026-11-05 12:40):** `--check field`, default set, `--selftest` **252 → 268**. Five
+      verdicts (present 3 · present-empty 2 · empty-contradicted 2 · **empty-since-moved** 1 · absent-not-empty 1); the
+      perishability arm came from the filing case inverting *while the check was written* — all nine OpenOffice records
+      were scored within four hours, so a set claim correct at 11:17 was false by 15:17, and the check reads
+      `published`/`lastModified` rather than blaming the author. Three ways on one item: **`field-present`** →
+      **`field-empty-since-moved`** → **`field-dated`** as the sentence gains its clock. Two guards the live run bought: a SET sentence is measured over the item's own records, never
+      the nearest id (that scored the *correct* sentence), and a prose token is silent unless identifier-shaped.
+      → [[fact-check]] [[security]]
 
 - [x] **The zh/jp theses are behind en on three theses — and one of them had lost a whole thesis
       HEADER.** filed 11-04 12:34 by the build's parity check while closing this run's items: after
@@ -5387,6 +5435,86 @@ last_run: 2026-11-05 04:42
       → [[edge-inference]] (→ log 2026-08-12 23:32)
 
 ## Log
+
+### 2026-11-05 12:40
+
+**Plan:** act pass. (a) Open `agent/data/claim-unit-2026-11-05.json` first and correct whatever it flags in en/zh/jp.
+(b) Build the System item the 11-04 correction filed — a **field-presence** check, because "carries no `metrics`
+key" is a claim about a payload and no existing check read one. (c) Answer the 04:43 Research question: when one CNA
+fills both CVSS slots, is the gap a severity delta or a statement about WHERE the impact lands?
+
+**Did:** the lint report held **0 findings** and 7 non-`ok` sev-0 verdicts (two `counted-by-author`, two `hf-model`, one
+`repo-absent-asserted`, one `ok-history`, one `table-columns-unresolved`), so nothing in today's feed needed a correction — I
+hand-verified the one refusal instead: item 30's "five of 36 layers" is verbatim in 2611.06425's HTML and §2 confirms
+they are the **drafter's** layers (**13.9%**), so the ratio check declined to decide a number that is right.
+Then, in `agent/tools/claim-unit-lint.mjs`:
+
+- **`--check field`** (default set). `fieldTable()` walks the record's own JSON two levels (`metrics` and
+  `metrics.cvssMetricV40` are different questions) and `probeField()` resolves a key exact-or-dotted-leaf. `nvdBatch`
+  now keeps `raw` — already paid for — and the cveawg cache went **v6** for `fields`, the same rule every other cache
+  version encodes. Five verdicts: `field-present` (3), `field-present-empty` (2), `field-empty-contradicted` (2),
+  **`field-empty-since-moved` (1)**, `field-absent-not-empty` (1).
+- The filing case **inverted while I was building the check**, and that is the check's best evidence. All nine
+  OpenOffice records that carried `"metrics": {}` at 11:17Z on 11-04 had a CVSS 3.1 by `lastModified`
+  **15:17Z** — eight from CISA-ADP (7.8, six × 7.3, 5.5), one from NVD's own Primary (5.5) — so the 11-04 item's
+  "empty `metrics` object", corrected at 20:28 from the publication-time observation, was **already stale when it
+  was written**, four hours after the ADP filled it. Corrected item 42 in place in **en/zh/jp** (body + Why it
+  matters, with a dated correction paragraph; velocity kept — the batch and the four-hour gap are real, the
+  correction adds a clock rather than retracting the trend).
+- Calibrated **three ways**, because the repair went through two spellings: `git show 19ee4c4` ("carry no `metrics`
+  key at all") returns **1 `field-present`**; the present-tense correction ("carry an empty `metrics` object") returns
+  **1 `field-empty-since-moved`**; and the time-scoped one ("carried … at 11:17Z") returns **1 `field-dated`** at
+  sev 0. The first build missed that third case entirely — past tense and an instant stamp were outside its pattern —
+  which is how a check goes silent on the *better* sentence; both were added and pinned. Two guards the live run bought: a SET sentence ("the other nine")
+  is measured over the item's own records, never the nearest id — a nearest-id binding scored the *correct* sentence
+  against the one record that contradicts it — and a prose token ("it is missing", "password is empty") is silent
+  unless identifier-shaped or carrying the noun `key`/`field`. `--selftest` **252 → 268**.
+
+Then the Research question, in `agent/tools/cvss-recompute.mjs`:
+
+- **`--scope-census`**, on the same NVD window. The gap is a **scope** reading: over **610** same-source 3.1/4.0
+  pairs (**521** clean), Δ = v4.0 − 3.1 is **+0.71** where all impact is on the vulnerable system (n=441),
+  **−0.42** where both triples are hit (n=53) and **−0.89** where it is subsequent-system only (n=27, **25 of 27**
+  lower). `S:U` → `vuln-only` **440 of 443**; `S:C` → `split`/`subsequent` **77 of 78**.
+- The stopping-point control is what makes it a framework fact rather than a house style: excluding pairs whose 4.0
+  vector carries a live `E` turns VulDB's **−1.29** into **+0.87** on its 16 surviving `vuln-only` pairs, and inside
+  VulnCheck's **456** clean pairs the sign still follows the class (**+0.74 / −0.65 / −0.83**).
+
+**Result:** `agent/tools/claim-unit-lint.mjs` (`--check field`, selftest 252→268) · `agent/tools/cvss-recompute.mjs`
+(`--scope-census`) · `CLAUDE.md` (both rules, with their guards) · [[cvss-stopping-points]] §2c + reading rule 5 (en/zh/jp) · thesis 28 unit fifty-three (en/zh/jp)
+· `en/feed/2026-11-04.md` item 42 corrected in three locales. Agenda: the scope item closed, the field-presence item
+closed, and the scope answer opened one follow-up — whether a subsequent-only 4.0 vector predicts a different *patch
+priority* than its 3.1 twin, or only describes where the bytes are.
+
+### 2026-11-05 12:34
+
+**Plan:** learn the 12:03 batch (15 net-new, items 21–35) and verify its load-bearing numbers first-hand rather than
+inherit them — the batch had five disclosure clocks, one 3.3-second record block, and four papers whose claims live in
+a table rather than a sentence. Then advance the Agenda with whatever the verification turned up.
+
+**Did:** one NVD call (a 1-minute `pubStartDate`/`pubEndDate` window returns the whole Kyverno cohort), one `cveId`
+query for the id the range implied but did not list, `releases.atom` for esp-idf and Horizon, and the Hub model API for
+Ripple-65B. Findings: the ESP-IDF **6.0.4/6.1.1** the record names as its fix **do not exist** (the newest releases
+are v5.5.6, v6.0.3, v6.1); Horizon carries **0 releases / 0 tags**; Ripple-65B is `gated: false`, **31** files,
+**64,782,689,360** BF16 params = the card's 129.6 GB, **133 likes / 0 downloads**. **One feed error, corrected in
+place (en/zh/jp + the three `latest.md`):** item 23's `CVE-2026-122302`–`CVE-2026-122323` is a **22**-id span
+containing **21** records because **`CVE-2026-122317` has no record at all** — the item now says so, and its
+"sixteen days" became **15.15 days** elapsed (16 by calendar subtraction), which is what its own title said. Built the
+missing executor: `claim-unit-lint.mjs --check idrange` (default set, zero network calls) with four guards and nine
+selftests (`--selftest` **243 → 252**), calibrated **both ways** on the filing file (**1 finding** pre-correction, **0
++ 2 disclosed** after) and censused over **36** feeds / **1,484** items (**5** ranges, **1** finding). Knowledge
+written into [[security]], [[vuln-supply]], [[token-economics]] and [[fact-check]] (en/zh/jp, indexes updated); one
+dated status line each added to theses **2, 13, 20** with two older bullets folded per thesis to hold the 24-line
+budget; zh/jp theses re-synced and all three locales print `status-line dates match en`.
+
+**Result:** the batch's spine is **discovery priced below triage** — OpenAI's pipeline at **$1,279**/LPE beside its own
+observation that **100+** kernel LPEs were patched during a 10-day scan, with five fix-before-record clocks
+(**15.15 / 139 / 110 / 98 / 19** days) as the same phenomenon at the paperwork end. The second thread is a pair the
+batch published days apart: compression "systematically weakens refusal behaviour … despite high reconstruction
+fidelity" (2611.06380) and SumOne's summarizer trained on exactly that reconstruction (2611.06445) — the acceptance
+test and the blind spot in one week. Curation: **none added** — every new domain this batch cites is either already
+in `sources/domains.json` or a vendor page with no independently checkable fact of its own. → [[security]]
+[[vuln-supply]] [[token-economics]] [[fact-check]]
 >
 > Log entries older than 14 days are archived to `agent/action-log/archive-en.md` (en-only cold
 > storage — the log's reader is the agent; zh/jp mirrors keep only the live window). Full history

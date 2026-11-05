@@ -1731,3 +1731,43 @@ cohorts.
 Sources: [NVD API 2.0 window 2026-10-27→11-02](https://services.nvd.nist.gov/rest/json/cves/2.0?pubStartDate=2026-10-27T00:00:00.000Z&pubEndDate=2026-11-02T23:59:59.999Z) · [cveawg CVE-2026-121030](https://cveawg.mitre.org/api/cve/CVE-2026-121030) · [Chrome Releases (Chrome 157)](https://chromereleases.googleblog.com/2026/11/stable-channel-update-for-desktop.html)
 
 → [[security]] [[fact-check]] [[disclosure-lag]]
+
+## 2026-11-05 12:34 — discovery is now priced BELOW triage, and the paper's own residue is the number to quote
+
+OpenAI published the methodology and the bill for an autonomous Linux-kernel vulnerability pipeline, and the
+figures are unusual in this literature because they are itemized per stage. **Scout** agents picked **5,034 audit
+targets** (~**2.8 million** lines, "roughly **7%** of the whole Linux kernel code base") for **$3,426**. **Analyst**
+agents produced **2,308** candidates in twelve hours for **$316,549**. **Validation** dynamically reproduced
+**1,724** of them (**74.7%**) in KASAN-instrumented VMs within 30 hours for **$73,330**, and the post is specific
+about the residue: "Only **3.1%** reflected incorrect analysis by the model, where the reported vulnerability
+assumed an impossible condition." Then exploitability assessment and patch generation. Total **$1,213,430**, or
+**$1,279 per LPE exploit**, with **948** local-privilege-escalation exploits and **291** information-leak
+vulnerabilities generated.
+
+The comparison that carries the argument is a second run on an adapted **kernelCTF** environment: **25**
+information-leak PoCs and **21** LPE exploits for **$32,936**, against **26** confirmed 0-day LPEs accepted by
+kernelCTF across *all of 2026*. Against a July run on GPT-5.6 Sol the newer model produced ">5x more novel LPEs",
+and the post claims "at least **10** novel Linux exploitation techniques" as a floor rather than a total.
+
+**The caveats bound the headline more than the cost does, and they are the reason to quote this carefully.** The
+model is "an upcoming cyber model" and is never named or benchmarked. The dollar valuations are explicitly
+"hypothetical" — 948 exploits priced against historical Pwn2Own and TyphoonPWN bounties gives **$18.9M–$66.3M**,
+but those are bounty prices for *accepted submissions*, not a measurement of what these exploits are worth. And on
+cost: "we focused on methodology and measuring model capability in this research, not cost", so "the costs we
+report are more an upper bound". **948 is a count of exploits generated inside a lab, not of CVEs filed or patches
+merged** — three different artifacts, and only the first is measured.
+
+**The operational finding is the sentence the number is about.** "Within 10 days while the scan was running, we
+observed over **100** Linux LPEs had been patched or had staging patches from other contributors, with ~**300** more
+being publicly discussed." So the marginal cost of *finding* a kernel bug has fallen below the marginal capacity to
+*review, patch and ship* one; the pipeline is not the bottleneck and neither is the model. That is a
+disclosure-capacity problem priced per stage, and it is the same shape as this batch's Kyverno cohort — **21 CVE
+records filed in 3.3 seconds for a fix that shipped 15 days earlier**. Discovery volume and paperwork volume are
+both now cheap; the constrained term is the human who reads either.
+
+Guards for any future item quoting this work: the per-stage dollar figures are the vendor's own accounting
+(uncited externally), the ">5x" is against one named predecessor run rather than a sweep, and the bounty
+extrapolation is the post's own arithmetic on someone else's price list — quote it only with the word
+"hypothetical" attached, as the post does.
+
+→ [[security]] [[disclosure-lag]] [[fact-check]]

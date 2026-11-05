@@ -1,5 +1,5 @@
 {
- "updated": "2026-11-04T21:44:40.654Z",
+ "updated": "2026-11-05T10:34:49.350Z",
  "cves": {
   "CVE-2026-48382": {
    "vulnStatus": "Analyzed",
@@ -420,7 +420,7 @@
   "CVE-2026-111927": {
    "vulnStatus": "Awaiting Analysis",
    "published": "2026-10-17",
-   "lastModified": "2026-10-21T22:16",
+   "lastModified": "2026-11-04T23:10",
    "metrics": [
     {
      "version": "3.1",
@@ -2173,7 +2173,7 @@
   "CVE-2026-110264": {
    "vulnStatus": "Modified",
    "published": "2026-10-22",
-   "lastModified": "2026-10-31T00:16",
+   "lastModified": "2026-11-04T23:10",
    "metrics": [
     {
      "version": "3.1",
@@ -2952,7 +2952,7 @@
   "CVE-2026-96889": {
    "vulnStatus": "Awaiting Analysis",
    "published": "2026-09-23",
-   "lastModified": "2026-11-04T15:17",
+   "lastModified": "2026-11-05T01:17",
    "metrics": [
     {
      "version": "3.1",
@@ -6035,7 +6035,7 @@
   "CVE-2026-59179": {
    "vulnStatus": "Deferred",
    "published": "2026-10-28",
-   "lastModified": "2026-10-29T19:17",
+   "lastModified": "2026-11-04T23:10",
    "metrics": [
     {
      "version": "3.1",
@@ -6611,7 +6611,7 @@
   "CVE-2026-61826": {
    "vulnStatus": "Deferred",
    "published": "2026-10-30",
-   "lastModified": "2026-10-30T19:39",
+   "lastModified": "2026-11-05T03:17",
    "metrics": [
     {
      "version": "3.1",
@@ -6633,7 +6633,7 @@
   "CVE-2026-63377": {
    "vulnStatus": "Deferred",
    "published": "2026-10-30",
-   "lastModified": "2026-11-02T19:35",
+   "lastModified": "2026-11-05T03:17",
    "metrics": [
     {
      "version": "3.1",
@@ -7051,7 +7051,7 @@
   "CVE-2026-120194": {
    "vulnStatus": "Awaiting Analysis",
    "published": "2026-10-31",
-   "lastModified": "2026-11-02T18:18",
+   "lastModified": "2026-11-04T22:17",
    "metrics": [
     {
      "version": "3.1",
@@ -7845,7 +7845,7 @@
   "CVE-2025-11969": {
    "vulnStatus": "Awaiting Analysis",
    "published": "2026-11-02",
-   "lastModified": "2026-11-02T20:17",
+   "lastModified": "2026-11-04T22:10",
    "metrics": [
     {
      "version": "3.1",

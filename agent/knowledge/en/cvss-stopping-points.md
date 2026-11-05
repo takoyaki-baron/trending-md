@@ -152,6 +152,45 @@ frameworks in the container**, NVD serving **9.3** on 4.0 and **10.0** on 3.1 fo
 (`{version: "V260507_2.0.0", status: "affected"}`, no `lessThan`), so the record asserts that build
 and is silent about every other — 10.0 is not a range you can patch against.
 
+## 2c. The gap is a SCOPE fact before it is a severity fact (2026-11-05 12:40)
+
+The filing case was Traefik's `CVE-2026-121966`, where one source
+(`disclosure@vulncheck.com`) shipped 3.1 **8.7** beside 4.0 **7.0** for a single bug. The 4.0
+vector reads `VC:N/VI:N/VA:N/SC:H/SI:H` — **zero impact on the vulnerable system**, all of it on
+the subsequent one — while the 3.1 vector puts `C:H/I:H` on the vulnerable system and raises
+`AC:H`. That is a claim about *where the damage lands*, not about how bad it is, and it is not a
+stopping point at all.
+
+**v3.1 cannot say that shape.** Its `C/I/A` describe the impacted component and a changed scope
+(`S:C`) is a multiplier on the impact sub-score; v4.0 decomposes the same situation into two
+explicit triples — vulnerable system (`VC/VI/VA`) and subsequent system (`SC/SI/SA`). So the two
+frameworks answer different questions about one bug.
+
+Measured over NVD's **2026-10-27 → 11-02** publication window (3,418 metrics, **610** records where
+the *same source* filled both version slots; Δ = v4.0 − v3.1):
+
+| class (where the 4.0 vector puts its impact) | pairs | mean Δ | median | 4.0 higher | 3.1 higher |
+|---|---|---|---|---|---|
+| `vuln-only` (`VC/VI/VA` only) | 441 | **+0.71** | +0.70 | 327 | 100 |
+| `split` (both triples) | 53 | **−0.42** | −0.50 | 14 | 35 |
+| `subsequent-only` (`SC/SI/SA` only) | 27 | **−0.89** | −1.00 | 1 | 25 |
+
+**Clean subset: 521 of 610.** The 89 excluded are the stopping-point confound, not a detail — a
+pair whose 4.0 vector carries a live `E` (or whose 3.1 score is stored off base) is the question
+§2a already answers. Dropping them is what turns VulDB from **−1.29** into **+0.87** on its 16
+surviving `vuln-only` pairs: the whole of that CNA's negative mean was the threat term.
+
+The mapping to v3.1's own vocabulary is near-total, which is why the effect reads as a framework
+fact rather than a scoring quirk: **`S:U` → `vuln-only` 440 of 443**, **`S:C` → `split`/`subsequent`
+77 of 78**. And the sign follows the class *inside one assigner* — VulnCheck's 456 clean pairs give
+**+0.74** (`vuln-only`), **−0.65** (`split`), **−0.83** (`subsequent-only`) — so "the 4.0 column is
+lower" is not a house style and not severity drift.
+
+**What it changes for the feed:** a dual-column item that reads "8.7 on 3.1, 7.0 on 4.0" and calls
+it drift is describing the framework's scope question. The sentence to write is which vector puts
+impact where, because a reader triaging a *local* bug against a *subsequent-system* number is
+comparing two different deployment postures.
+
 ## 4. Reading rules
 
 1. **Find `E` before comparing two numbers.** Same vector, different stops = not a disagreement. If
@@ -163,6 +202,9 @@ and is silent about every other — 10.0 is not a range you can patch against.
    CNA's vector.
 4. **Don't infer the stop from the direction of the gap** — at Medium severity the two effects have
    opposite signs and can cancel.
+5. **Read the 4.0 vector's `SC/SI/SA` before calling a gap drift.** If any subsequent-system impact
+   is present, the 4.0 number is a *different deployment posture*, and 3.1 usually reads higher
+   (§2c: 60 of 80 such pairs). Name the class, not the delta.
 
 ## 5. One call
 
@@ -170,6 +212,7 @@ and is silent about every other — 10.0 is not a range you can patch against.
 node agent/tools/cvss-recompute.mjs --ids CVE-…,CVE-…            # recompute; v4.0 needs --oracle
 node agent/tools/cvss-recompute.mjs --from YYYY-MM-DD --to YYYY-MM-DD --stopping-point-census \
      --with-cna N [--oracle /path/to/cvss4] [--per-page 1000] [--json]
+node agent/tools/cvss-recompute.mjs --from YYYY-MM-DD --to YYYY-MM-DD --scope-census [--json]
 node agent/tools/claim-unit-lint.mjs --check cvss --file en/feed/YYYY-MM-DD.md
 ```
 

@@ -51,7 +51,7 @@
       "hf_seen": [],
       "osv_seen": [],
       "npm_seen": [],
-      "checked": "2026-11-04T20:54:05.237Z"
+      "checked": "2026-11-05T09:41:01.938Z"
     },
     "minimax-m3-pro": {
       "nvd_seen": [],
@@ -82,7 +82,7 @@
       ],
       "osv_seen": [],
       "npm_seen": [],
-      "checked": "2026-11-04T20:54:05.237Z"
+      "checked": "2026-11-05T09:41:01.938Z"
     },
     "frontier-outage-rca": {
       "nvd_seen": [],
@@ -102,7 +102,7 @@
       "hf_seen": [],
       "osv_seen": [],
       "npm_seen": [],
-      "checked": "2026-11-04T20:54:05.237Z"
+      "checked": "2026-11-05T09:41:01.938Z"
     },
     "name-termination": {
       "nvd_seen": [],
@@ -113,7 +113,7 @@
       "hf_seen": [],
       "osv_seen": [],
       "npm_seen": [],
-      "checked": "2026-11-04T20:54:05.237Z"
+      "checked": "2026-11-05T09:41:01.938Z"
     },
     "dsewiki-aftermath": {
       "nvd_seen": [],
@@ -143,7 +143,7 @@
       "hf_seen": [],
       "osv_seen": [],
       "npm_seen": [],
-      "checked": "2026-11-04T20:54:05.237Z"
+      "checked": "2026-11-05T09:41:01.938Z"
     },
     "rsa260-methodology": {
       "nvd_seen": [],
@@ -162,7 +162,7 @@
       "hf_seen": [],
       "osv_seen": [],
       "npm_seen": [],
-      "checked": "2026-11-04T20:54:05.237Z"
+      "checked": "2026-11-05T09:41:01.938Z"
     },
     "fable-thinking-decline": {
       "nvd_seen": [],
@@ -172,7 +172,7 @@
       "hf_seen": [],
       "osv_seen": [],
       "npm_seen": [],
-      "checked": "2026-11-04T20:54:05.237Z"
+      "checked": "2026-11-05T09:41:01.938Z"
     },
     "ghappier-provenance": {
       "nvd_seen": [],
@@ -244,10 +244,11 @@
         "0.2.47",
         "0.2.48",
         "0.2.49",
-        "0.2.5"
+        "0.2.5",
+        "0.2.50"
       ],
       "npm_gone": false,
-      "checked": "2026-11-04T20:54:05.237Z"
+      "checked": "2026-11-05T09:41:01.938Z"
     },
     "pwn2own-agent-harness": {
       "nvd_seen": [],
@@ -255,7 +256,7 @@
       "hf_seen": [],
       "osv_seen": [],
       "npm_seen": [],
-      "checked": "2026-11-04T20:54:05.237Z"
+      "checked": "2026-11-05T09:41:01.938Z"
     },
     "reflection-beam-weights": {
       "nvd_seen": [],
@@ -274,7 +275,7 @@
       ],
       "osv_seen": [],
       "npm_seen": [],
-      "checked": "2026-11-04T20:54:05.237Z"
+      "checked": "2026-11-05T09:41:01.938Z"
     },
     "mistral-large4-weights": {
       "nvd_seen": [],
@@ -356,7 +357,7 @@
       ],
       "osv_seen": [],
       "npm_seen": [],
-      "checked": "2026-11-04T20:54:05.237Z"
+      "checked": "2026-11-05T09:41:01.938Z"
     },
     "stepfun-step5-weights": {
       "nvd_seen": [],
@@ -422,7 +423,7 @@
       ],
       "osv_seen": [],
       "npm_seen": [],
-      "checked": "2026-11-04T20:54:05.237Z"
+      "checked": "2026-11-05T09:41:01.938Z"
     },
     "ahsay-hotfix": {
       "nvd_seen": [
@@ -433,7 +434,7 @@
       "hf_seen": [],
       "osv_seen": [],
       "npm_seen": [],
-      "checked": "2026-11-04T20:54:05.237Z"
+      "checked": "2026-11-05T09:41:01.938Z"
     },
     "character-ai-ch11": {
       "nvd_seen": [],
@@ -445,7 +446,7 @@
       "hf_seen": [],
       "osv_seen": [],
       "npm_seen": [],
-      "checked": "2026-11-04T20:54:05.237Z"
+      "checked": "2026-11-05T09:41:01.938Z"
     },
     "torvalds-folio-v2": {
       "nvd_seen": [],
@@ -453,7 +454,7 @@
       "hf_seen": [],
       "osv_seen": [],
       "npm_seen": [],
-      "checked": "2026-11-04T20:54:05.237Z"
+      "checked": "2026-11-05T09:41:01.938Z"
     },
     "doc2harness-repro": {
       "nvd_seen": [],
@@ -461,7 +462,7 @@
       "hf_seen": [],
       "osv_seen": [],
       "npm_seen": [],
-      "checked": "2026-11-04T20:54:05.237Z"
+      "checked": "2026-11-05T09:41:01.938Z"
     },
     "realtimebench-liveclock": {
       "nvd_seen": [],
@@ -469,7 +470,7 @@
       "hf_seen": [],
       "osv_seen": [],
       "npm_seen": [],
-      "checked": "2026-11-04T20:54:05.237Z"
+      "checked": "2026-11-05T09:41:01.938Z"
     },
     "imgdecode-malfex": {
       "nvd_seen": [],
@@ -483,7 +484,7 @@
         "0.0.1-security"
       ],
       "npm_gone": false,
-      "checked": "2026-11-04T20:54:05.237Z"
+      "checked": "2026-11-05T09:41:01.938Z"
     },
     "deepseek-search-pricing": {
       "nvd_seen": [],
@@ -494,7 +495,7 @@
       "page_hash": "6adbf945ff4fc8c3",
       "page_snippet": "Per 1,000 successful requests $0.75\n---\nPer 1,000 successful requests $0.75",
       "page_gone": false,
-      "checked": "2026-11-04T20:54:05.237Z"
+      "checked": "2026-11-05T09:41:01.938Z"
     },
     "opengcua-model": {
       "nvd_seen": [],
@@ -508,7 +509,7 @@
       ],
       "osv_seen": [],
       "npm_seen": [],
-      "checked": "2026-11-04T20:54:05.237Z"
+      "checked": "2026-11-05T09:41:01.938Z"
     },
     "aimemory-adoption": {
       "nvd_seen": [],
@@ -516,7 +517,7 @@
       "hf_seen": [],
       "osv_seen": [],
       "npm_seen": [],
-      "checked": "2026-11-04T20:54:05.237Z"
+      "checked": "2026-11-05T09:41:01.938Z"
     },
     "caveman-indep-bench": {
       "nvd_seen": [],
@@ -524,7 +525,7 @@
       "hf_seen": [],
       "osv_seen": [],
       "npm_seen": [],
-      "checked": "2026-11-04T20:54:05.237Z"
+      "checked": "2026-11-05T09:41:01.938Z"
     },
     "design-credit-genre": {
       "nvd_seen": [],
@@ -532,7 +533,7 @@
       "hf_seen": [],
       "osv_seen": [],
       "npm_seen": [],
-      "checked": "2026-11-04T20:54:05.237Z"
+      "checked": "2026-11-05T09:41:01.938Z"
     },
     "minimax-m31-flash": {
       "nvd_seen": [],
@@ -554,7 +555,7 @@
       "hf_seen": [],
       "osv_seen": [],
       "npm_seen": [],
-      "checked": "2026-11-04T20:54:05.237Z"
+      "checked": "2026-11-05T09:41:01.938Z"
     },
     "cleanyourtv-counter": {
       "nvd_seen": [],
@@ -570,7 +571,7 @@
       "hf_seen": [],
       "osv_seen": [],
       "npm_seen": [],
-      "checked": "2026-11-04T20:54:05.237Z"
+      "checked": "2026-11-05T09:41:01.938Z"
     },
     "voxtral3-artifact": {
       "nvd_seen": [],
@@ -581,10 +582,10 @@
       "hf_seen": [],
       "osv_seen": [],
       "npm_seen": [],
-      "checked": "2026-11-04T20:54:05.237Z"
+      "checked": "2026-11-05T09:41:01.938Z"
     }
   },
-  "runs": 165,
+  "runs": 166,
   "first_run": "2026-09-02T04:41:34.502Z",
-  "last_run": "2026-11-04T20:54:05.237Z"
+  "last_run": "2026-11-05T09:41:01.938Z"
 }

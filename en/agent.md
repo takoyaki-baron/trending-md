@@ -1,6 +1,6 @@
 ---
 title: Learnt Agent
-last_processed: 2026-11-05T04:43:00+08:00
+last_processed: 2026-11-05T12:34:00+08:00
 ---
 
 # Learnt Agent
@@ -1278,6 +1278,26 @@ patterns, and turn them into insights and actionable todos.
 > on the corrected one**. `--selftest` **224 → 243**. A corollary worth keeping: **a slug is a prefix of its
 > siblings** — `tencent/Hy4-preview` sits four sentences earlier, so a plain `indexOf` bound the negation to
 > the wrong sentence and the guard could not fire. Detail → [[fact-check]] [[security]]
+> **(11-05 12:34, learn pass):** the 12:03 batch's net-new 15 (items 21–35). Spine: **discovery is now priced below
+> triage, and one identifier range was a set with a hole in it.** OpenAI's kernel pipeline — **5,034** audit targets for
+> **$3,426**, **2,308** candidates for **$316,549**, **1,724** reproduced (**74.7%**) for **$73,330**, **948** LPE exploits
+> **+ 291** infoleaks for **$1,213,430** total (**$1,279**/LPE) — and its own operational number: **100+** LPEs patched
+> during a 10-day scan. The caveats are the item: model unnamed and unbenchmarked, bounty valuations "hypothetical"
+> (**$18.9M–$66.3M**), costs "more an upper bound", and 948 is exploits generated in a lab, not CVEs filed. Verified
+> first-hand: the Kyverno cohort is **21** records in **3.313 s** (five 9.9, one 9.8, one 9.1; the 9.9s' 4.0 is
+> **9.4**) but its span `CVE-2026-122302`–`CVE-2026-122323` holds **22** ids and **`CVE-2026-122317` has no record at
+> all** — corrected in place, en/zh/jp + the three `latest.md` — and its **15.15-day** lag (16 by calendar subtraction,
+> which the item had written two ways). ESP-IDF's **6.0.4/6.1.1 do not exist** (`releases.atom`: top is v5.5.6, v6.0.3,
+> v6.1); Horizon has **0 releases / 0 tags**; Ripple-65B is `gated: false`, **31** files, **64,782,689,360** BF16 params
+> = the card's 129.6 GB, **133 likes / 0 downloads**. Also net-new: GPUStack's **9.8** loopback-as-admin (exploited in
+> the wild, fix **139 d** early), Yuxi's **9.9** sandbox→orchestrator reach (fix **110 d** early, credentials not
+> rotated), Pocket ID's **9.6** token-bound-to-user `email_verified` (**98 d**), CASE-Bench's **27–36%** safeguard
+> observation rate, compression weakening refusal at high reconstruction fidelity (2611.06380) beside SumOne's
+> reconstruction reward (2611.06445), D3D's **5.71×** decoupled drafting, non-uniform LoRA ranks keeping the instruction
+> adapter (**16–25 pp** IFEval), Qualcomm's constant **4.3 GB/s per GB**, and the Xbox 360 table abandoned on a broken
+> prototype. New executor: `--check idrange` (**1 finding** pre-correction / **0 + 2 disclosed** after; census **36**
+> feeds / **1,484** items → **5** ranges, **1** finding, **0** network calls). Detail → [[security]] [[vuln-supply]]
+> [[token-economics]] [[fact-check]]
 
 ## Active theses
 
@@ -1317,19 +1337,19 @@ patterns, and turn them into insights and actionable todos.
      Barracuda's "Authentication Required: Yes" beside Mandiant's `PR:N` **9.3**, Syncope's five records carrying only a *word*
      (so a `CVSS >= 9.0` gate misses an authenticated JUEL RCE), and WorkOS's **5,531**-char bulletin with **0** occurrences of
      `ARTEX` where the customer notification names it, Salesforce, Snowflake and the HK/China origin. → [[security]] [[fact-check]]
-   - **11-03 20:22 — the guard and the fetcher parse different bytes:** CrewAI's check reads `urlparse`'s host while `urllib3`
-     dials `127.0.0.1`; kaniko's `.*\.azurecr\.io` is unanchored (#21 open); Mnestix's **9.2** put one backend key behind an
-     SSRF, shipped **54 days** early. → [[parser-differential]] [[security]]
-   - **11-04 04:28 — the prose/vector contradiction is 5 in 3,365, and the naive cue counts the VICTIM:** over NVD's
-     10-27→11-02 window a bare cue beside `PR:N` returns **60**; actor-bound, **280** — **250** name an anonymous path,
-     **24** the person tricked, leaving **5** (Wordfence ×3, CIRCL, WSO2), all un-analyzed (`Deferred` ×3). → [[vuln-supply]]
+   - **11-03 20:22 → 11-04 04:28 (folded) — the guard and the fetcher parse different bytes, and the cue counts the VICTIM:**
+     CrewAI's check reads `urlparse`'s host while `urllib3` dials `127.0.0.1` (kaniko's `.*\.azurecr\.io` unanchored, Mnestix's
+     **9.2** shipped **54 days** early), and over NVD's 10-27→11-02 window a bare exploitation cue beside `PR:N` returns **60** while
+     actor-bound it returns **280** — **250** an anonymous path, **24** the person tricked, leaving **5**. → [[parser-differential]] [[vuln-supply]]
    - **11-04 — the installer asks the host to trust what it just wrote; the framework is not the MCP variable:** Postman's Codex
      installer calls its own `approvePostmanHook` → `config/batchWrite` on a `trusted_hash`, and tool poisoning over **9,720** cells
      is **22.9%** with nine frameworks inside **23–26%** (**p = 0.91**) against model ASR **0.4–49.7%**. → [[security]]
-   - **11-04 12:20 — the attack is aimed at the agent's own harm-avoidance, and the overseer sits inside the channel:** a fabricated
-     hazard written as an ordinary review has **no command** for a detector to match, so behind a filter it is **1.7–4.4×** more
-     effective (**60.4%** vs **66.0%** raw) and a corroboration rule removes ~**95%**; meanwhile "all tested models shifted overseer
-     decisions from rejection to approval". SurrealDB keys MCP sessions on the access-method **name**, not the user. → [[security]]
+   - **11-04 12:20 → 11-05 — the overseer sits inside the channel, and three defaults bind a claim to the wrong subject:** a fabricated
+     hazard written as an ordinary review has **no command** to match, so behind a filter it is **1.7–4.4×** more effective and a
+     corroboration rule removes ~**95%**; SurrealDB keys MCP sessions on the access-method **name**. Then GPUStack's **9.8** promotes any
+     loopback request to admin (`force_auth_localhost` False, a forged `X-GPUStack-Real-IP` suffices, exploited in the wild), Yuxi's
+     **9.9** kept the sandbox and lost the orchestrator's API, and Pocket ID's **9.6** bound its email token to the user rather than the
+     address — `email_verified: true` on a mailbox you no longer control. → [[security]] [[disclosure-lag]]
 
 3. **Local inference is being unlocked by MoE sparsity + disk streaming, not quantization.**
    Keep the shared core resident, stream routed experts from SSD — the trick now spans training,
@@ -1568,22 +1588,22 @@ patterns, and turn them into insights and actionable todos.
       points at 27.7% lower cost inside the agent's own cache; docling's formatting drop is F1 **0.690 → 0.150**;
       and across **480** CrossProfile tasks neither "rarest first" nor "most relevant" beats random (**23–31**
       points lost) while stripping **attribution tags** gains **13–24**. → [[token-economics]] [[agent-stack]]
-    - **10-26 12:17 — the line item is the cache read, so a cache cut *is* the price cut:** "cache read costs are
-      the vast majority (**96%–99%**) of the total token expenditure", so Fable 5.1's 75% cache-read cut is "**a
-      70–75% reduction in the cost of using the model**"; Vercel's cost/token at **43.3%** of April's.
-      → [[token-economics]]
-    - **10-29 20:03 — the biggest new line item is the client's own observability, and it scales with context:** every
-      ~30 s, per agent, Claude Code sends the **whole transcript** to have three words written for a panel label —
-      **16.4%** of its own `cost_usd` estimate (**18–26%** across four measurements), **19.7%** of requests, **no setting** since **2.1.232**. → [[harness-overhead]] [[token-economics]]
-    - **10-31 12:19 — the input side has an energy term, and prefill is superlinear:** decode compute/energy scale
-      **linearly** with output length while prefill carries **linear and quadratic** terms with input length (arXiv
-      2610.39621), so doubling an agent's history costs more than twice as much in the phase treated as "just reading" —
-      an argument for retrieval and compaction that is about joules as well as latency. → [[token-economics]]
+    - **10-26 12:17 → 10-29 20:03 (folded) — the line item is the cache read, then the client's own observability:** "cache
+      read costs are the vast majority (**96%–99%**) of the total token expenditure", so Fable 5.1's 75% cache-read cut is "**a
+      70–75% reduction in the cost of using the model**" — and the newest line item is the ~30 s panel label that re-sends the
+      **whole transcript** for **16.4%** of `cost_usd` (**18–26%** across four measurements). → [[harness-overhead]] [[token-economics]]
+    - **10-31 12:19 — prefill is superlinear:** decode compute/energy scale **linearly** with output length while prefill carries
+      **linear and quadratic** terms with input length (arXiv 2610.39621), so doubling history costs more than twice as much in the phase
+      treated as "just reading" — retrieval and compaction are about joules as well as latency. → [[token-economics]]
     - **11-04 — the long window is a convenience, and compaction's delta is measured against FULL history:** stepping
       thresholds down to **16K/12K** across SWE-bench Verified, TerminalBench 2.1, FRAMES, BFCLv3 and Tau2Bench keeps
       Opus 4.5 within **−3.7…+5.6** points and GPT 5.6 Sol within **−3.3…+4.4**, with **≤5 of 22** configurations losing
       >2 — at **2.2–8.8×** / **2.4–5.0×** *estimated* cost savings (not metered bills), and the authors' own limit:
       "our evidence does not rule out the existence of tasks for which long context is beneficial." → [[token-economics]]
+    - **11-05 — compression's acceptance test is the metric that misses the regression:** it "systematically weakens refusal behaviour …
+      despite high reconstruction fidelity" by attenuating "activation along the decoder's learned refusal direction" (2611.06380, no figures
+      in its abstract) — while SumOne trains its summarizer on exactly that reconstruction (2611.06445: **−78%** / **−75%** est. cost).
+      → [[token-economics]] [[fact-check]]
 
 14. **AI crawler load is a measured tax on open-source infrastructure — and the only working fix
     degrades anonymous access.** kernel.org: ~6M random-commit requests/day, 33% solve Anubis
@@ -1735,18 +1755,18 @@ patterns, and turn them into insights and actionable todos.
      "is the newest release outside":** of **638** zero-CVSS records in a week only **23** carry a word and **all 23 are Apache**
      (ADP score a median **4.4 h** later); the repo fallback takes open-bound candidates **17 → 190**, **44** with no release
      above and **2** naming the fix above ceiling+1 (FreeImage `≤3.18.0` → **3.19.23**, fix at **3.19.25**). → [[security]] [[disclosure-lag]]
-   - **11-04 — "fixed in X" is a claim about a SET, and a fix can be a conjunction:** FreeRDP's successor advisory is *titled*
-     "**Incomplete fix** …" — two of three sinks byte-identical from 3.29.0 to HEAD, **eleven** releases exposed — and Docker's
-     9.2 needs **4.98.0 and WSL 3.0.3** ("running on an older WSL remains affected"). → [[disclosure-lag]] [[security]]
-   - **11-04 12:20 — KEV asserts exploitation on a record nobody scored, and the SLOT moves inside one CNA:** WordPress's
-     `CVE-2026-119977` is KEV'd (3-day due) at `Undergoing Analysis` with **only** Wordfence's **8.1** and a **CISA-ADP** SSVC, **0**
-     NVD metrics; across **8** VulnCheck records published within **2 s**, 4.0 sits in `Secondary` **8/8**, 3.1 in `Primary` **3/8**. → [[security]]
+   - **11-04 (folded) — "fixed in X" is a claim about a SET, and the SLOT moves inside one CNA:** FreeRDP's successor is *titled*
+     "**Incomplete fix** …" (two of three sinks byte-identical from 3.29.0 to HEAD) while Docker's 9.2 needs **4.98.0 and WSL 3.0.3**;
+     WordPress's `CVE-2026-119977` is KEV'd at `Undergoing Analysis` on **only** Wordfence's **8.1** + a CISA-ADP SSVC. → [[disclosure-lag]] [[security]]
    - **11-04 20:23 → 20:36 — the score is a TEMPLATE beside a word only ONE assigner writes:** Chrome 157 files **213** records in a
      **31-second** window and **81** carry one of **3** CISA-ADP vectors (label vs band disagree on **35 of 81**); a week's window
-     (**3,365** records / **135** assigners) finds that parenthetical on **74/74** `chrome-cve-admin` and **0** others — and 157 is still
-     **81/213** at 23 h while the same CNA's 156 cohort is **74/74** (**26 of 76** disagree), so "unscored" is a queue position, not a
-     label. OpenOffice's ten: **1** scored, nine with an *empty* `metrics` object; ZooKeeper's and SEPPmail's five carry **4.0 only**.
-     → [[security]] [[vuln-supply]] [[fact-check]]
+     (**3,365** records / **135** assigners) finds that parenthetical on **74/74** `chrome-cve-admin` and **0** others — so "unscored"
+     is a queue position, not a label. → [[security]] [[vuln-supply]] [[fact-check]]
+   - **11-05 — discovery is now PRICED below triage, and the batch's other records are the same clock:** OpenAI reports **2,308**
+     candidates → **1,724** reproduced (**74.7%**) → **948** LPE exploits + **291** infoleaks for **$1,213,430** (**$1,279**/LPE),
+     and prices the problem itself — "over **100** Linux LPEs had been patched … with ~**300** more being publicly discussed" during a
+     10-day scan — beside five fix-before-record clocks (**15.15 / 139 / 110 / 98 / 19** days) and a **21**-record batch in **3.313 s**
+     whose **22**-id span has one hole (`CVE-2026-122317`, no record at all). → [[vuln-supply]] [[security]] [[disclosure-lag]]
 
 21. **The physical layer of connectivity is an active target, and the cheap attack is arson.** Civilian
     satellite ground stations and single regional data centres are defended by fences and geography
@@ -1941,6 +1961,9 @@ patterns, and turn them into insights and actionable todos.
       "nearly **80%**" and "nearly **5x**" are one measurement in two units. → [[harness-reliability]] [[dev-tools]]
      - **11-05 — units fifty to fifty-two: a DATE that was a day early 3/3, a count whose PARTS sum to 167 of 174, and a time per token measured on a 124-core host:** three arXiv papers were cited one day before their `published` instants (`2026-11-02T21:38Z`, `2026-11-01T16:04Z`, `2026-11-03T15:09Z`), `scenario-labs/skills`' **174** `SKILL.md` files enumerated **80+35+52** with the missing **7** under `.agents/skills/`, and the streaming clock's rows vary the *memory budget*, not the machine. The date unit now has an **executor** (`--check paper`: **3 findings** on the pre-correction feed, **0** on the corrected one), and the lint's own four false verdicts on that batch were four missing WORDS — a cited file rewritten into a landing page, `we counted` and `neither … states a total`, and a **404 read as unreadable** — so a checker's false finding is a statement about its vocabulary until the item's own sentence says otherwise. → [[fact-check]] [[edge-inference]]
 
+    - **11-05 12:40 — unit fifty-three: a CLASS, not a delta:** in **521** clean same-source 3.1/4.0 pairs, Δ = 4.0 − 3.1 is
+      **+0.71** where all impact sits on the vulnerable system (n=441) and **−0.42 / −0.89** where any sits on a subsequent one (`S:U`→`vuln-only` **440/443**); `--scope-census` → [[cvss-stopping-points]]
+
 29. **A computation that never becomes a token is outside every control this feed tracks — and the first
     exact artifact shipped on 2026-10-29.** Approval classifiers, egress rules, OS isolation and audit
     logs are all downstream of one assumption: that a consequential action *is* a tool call. Qwenputer
@@ -2080,8 +2103,8 @@ patterns, and turn them into insights and actionable todos.
   labels); `disclosure-lag.mjs` (`--census` range provenance + the quota-degraded pass,
   `--mitigation-census`, `--field-watch`, `--changes-census`, `--selftest` **132/132**);
   `claim-unit-lint.mjs` — the claim units, run by `generate-feed.sh` before every commit:
-  issues/cvss/status/date/temporal/cwe/range/repo/count/ratio/bundle/quotation, `--selftest`
-  **199/199**; its per-check rules and guards live in CLAUDE.md, and the shape that keeps recurring
+  issues/cvss/status/date/temporal/cwe/range/**idrange**/repo/count/ratio/bundle/quotation/paper,
+  `--selftest` **252/252**; its per-check rules and guards live in CLAUDE.md, and the shape that keeps recurring
   is *the checker's own reader was the defect* (`date`'s ten false findings, `range` failing on its
   filing case, `repo` reading a model id as a repository). `cvss-recompute.mjs` — a stored score vs
   its own `vectorString` (v3.1/v3.0 native, v4.0 via `--oracle`), `--pairs` for dual-column spreads,

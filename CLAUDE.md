@@ -170,6 +170,19 @@ underlying pages — this produced a two-layer false signal in a single item.
    when a quoted score reconciles to a stopping point the item never names (silent when the item says
    "base"/"threat"/"temporal", or when it already quotes two of them — enumeration is disclosure;
    `--selftest` **194 → 199**).
+   **A two-framework gap is a SCOPE reading before it is a severity reading** (added 2026-11-05 12:40,
+   measured over NVD's 2026-10-27→11-02 window — **610** same-source 3.1/4.0 pairs, **521** clean). On the
+   4.0 vector, classify where the impact lands: `vuln-only` (`VC/VI/VA` only), `split`, `subsequent-only`
+   (`SC/SI/SA` only). Then Δ = v4.0 − v3.1 is **+0.71 vuln-only** (n=441, 327 higher), **−0.42 split**
+   (n=53) and **−0.89 subsequent-only** (n=27, **25 of 27** lower) — so "the 4.0 column is lower" is a
+   statement that impact left the vulnerable system, not that the bug got less severe. The mapping to
+   v3.1's own vocabulary is near-total (**`S:U` → `vuln-only` 440 of 443**, **`S:C` →
+   `split`/`subsequent` 77 of 78**), and it holds **inside one CNA** (VulnCheck's 456 clean pairs:
+   **+0.74 / −0.65 / −0.83**), which is what makes it the framework rather than a house style. The
+   control that must be applied or the number is worthless: **a 4.0 vector carrying a live `E` is a
+   stopping-point pair, not a scope pair** — excluding them turns VulDB's headline **−1.29** into
+   **+0.87** on its 16 surviving `vuln-only` pairs. One call:
+   `node agent/tools/cvss-recompute.mjs --from YYYY-MM-DD --to YYYY-MM-DD --scope-census [--json]`.
    **A mean over severity bands describes no band, so the census prints the band table** (added
    2026-11-03 20:22, and the convention is part of the number: **Δ = v4.0 − v3.1**, so a negative row
    means NVD's 4.0 sits *below* the 3.1). The hand census of the **31** `cna@vuldb.com` records
@@ -456,6 +469,22 @@ underlying pages — this produced a two-layer false signal in a single item.
    `--if-due 20` keeps it a watch in a 3x-daily pipeline. The distinction it encodes is
    **value-sets alone cannot tell "NVD added beside" from "NVD overwrote"** — same values plus an
    `nvd` source is the first, different values with only `nvd` left is the second.
+   **And since 2026-11-05 it has an EXECUTOR, because a rule in prose did not survive one recurrence**
+   (added 2026-11-05 12:34, the Kyverno cohort): item 23 shipped "21 records `CVE-2026-122302`–`CVE-2026-122323`",
+   a **22**-id span in which **`CVE-2026-122317` has no record at all** (`cveId` queried alone: `totalResults` **0**)
+   — the HPE shape again, one namespace over, ten days after the rule was written. `claim-unit-lint.mjs --check
+   idrange` (default set, **zero network calls**) extracts every dashed range, computes the implied span for
+   same-year endpoints, binds it to a stated count of **records** (never of scores), and emits
+   `cve-range-span-mismatch` (sev 2). Four guards, each bought by a wrong answer while calibrating it on the filing
+   case's own **corrected** sentence: a count may take at most **one capitalised** intervening word (`22 values and
+   CVE` counted two and fired on a correct item, so the fix is a `[A-Z]`-only single slot); a number immediately
+   after a hyphen is an **identifier, not a count** (`CVE-2026-122317 carries no record` read as "122317 records" —
+   the `countNumsIn` guard, one regex over); **two** stated counts for one range is `range-ambiguous` (sev 0) rather
+   than a coin flip; and a disclosed gap is the **correction**, printed `cve-range-disclosed` (sev 0) and never
+   dropped. Calibrated both ways on the filing file: the pre-correction commit returns **1 finding**, the corrected
+   working file **0 findings / 2 disclosed**; census over **36** October–November feeds / **1,484** items → **5**
+   dashed ranges, **1** finding, **3** `ok-range`, **1** cross-year silence — so the class is 0.34% of items and the
+   check has no false positive on the corpus. `--selftest` **243 → 252**.
    **An identifier list is a SET, a range is an assumption, and "CVE-X to CVE-Y" is not a citation**
    (added 2026-10-25 20:30, the HPE ArubaOS eighth row). Coverage printed a "maximum severity" table of
    eight consecutive IDs, `CVE-2026-79844`…`-79851`; one of them, `-79845`, is `VulDB`'s SQL injection in
@@ -887,6 +916,24 @@ underlying pages — this produced a two-layer false signal in a single item.
    **`CWE-306 missing authentication`** — a weakness's own NAME — as an absence claim, so only
    "CWE is/was missing" and "CWE … not stated/recorded/assigned" count (10-28/10-29 feeds: 1 finding
    before the fix, 0 after, 9 verified);
+   **field** (added 2026-11-05 12:50 — "carries no `X` key" is a claim about the PAYLOAD, and every derived
+   field flattens it: NVD serves `"metrics": {}` where the CNA wrote nothing, so an empty bucket and a missing
+   key are the same empty array to every other check). `--check field` walks the record's own JSON two levels
+   (`metrics` and `metrics.cvssMetricV40` are different questions), resolves a key exact-or-dotted-leaf, and
+   reports `field-present` (3) / `field-present-empty` (2) / `field-empty-contradicted` (2) /
+   **`field-empty-since-moved` (1)** / `field-absent-not-empty` (1), plus three sev-0 suppressions
+   (`field-dated`, `field-unreadable`, `field-unknown-name`). The same item calibrated it **three ways** as its
+   sentence improved — `field-present` on the published "carry no `metrics` key at all", `field-empty-since-moved`
+   on the present-tense repair, `field-dated` once the sentence gained its instant — and that third run is why the
+   patterns take **past tense** (`carried`) and an **instant stamp** (`11:17Z`): the first build was silent on the
+   best sentence, which is the failure mode a checker must never have. Three rules it bought: **a SET sentence
+   ("the other nine") is measured over the item's own records, never the nearest id** — a nearest-id binding
+   scored the corrected OpenOffice sentence against the one record that contradicts it; **a perishable FIELD
+   verdict is the registry's clock, not the author's** (the nine OpenOffice records all acquired a CVSS 3.1
+   within four hours, so a claim correct at 11:17Z was false by 15:17Z — the check reads `published` vs
+   `lastModified` and says which); and **a prose token is not a payload key** unless it is identifier-shaped or
+   carries the noun `key`/`field` ("it is missing", "password is empty" were the live run's only noise).
+   `--selftest` **252 → 268**;
    **repo** (`archived`, `stale` past
    `--stale-days`, and a star count that moved — **by SIGN, not by percentage** (added 2026-11-01 12:39):
    the lint runs minutes after the batch, so the only thing it can watch is the repo moving *under* the

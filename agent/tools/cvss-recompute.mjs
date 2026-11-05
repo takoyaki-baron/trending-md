@@ -643,6 +643,12 @@ function pairRows(rows) {
           /* The 4.0 vector's `E` decides the group; the 3.1 vector's is recorded nowhere because
              NVD strips it on every v3.1 copy measured so far (123/123 and 29/29 windows). */
           e40: parseV4ish(b.vector)?.E ?? null,
+          /* The `scope` census reads the vectors themselves, so both travel on the pair. `stop31`
+             is the stopping point the 3.1 score was stored at (the judge already decided it), which
+             is the control that keeps a stopping-point gap out of a scope table. */
+          v31: a.vector ?? null,
+          v40: b.vector ?? null,
+          stop31: a.stopping ?? null,
         });
       }
     }
@@ -699,6 +705,97 @@ function pairBlock(rows) {
   return renderPairBlock(pairStats(pairRows(rows)));
 }
 
+/* ── the scope census (Research item filed 2026-11-05 04:43) ────────────────────────────────
+ * "When one CNA fills both CVSS version slots, is the gap explained by WHERE the impact lands
+ * rather than by how severe it is?" The filing case was Traefik's `CVE-2026-121966`, where one
+ * source shipped 3.1 **8.7** beside 4.0 **7.0** for a single bug: the 4.0 vector reads
+ * `VC:N/VI:N/VA:N/SC:H/SI:H` — zero impact on the vulnerable system — while 3.1 put `C:H/I:H` on
+ * the vulnerable system and raised to `AC:H`.
+ *
+ * v3.1 cannot express that shape. Its `C/I/A` describe the impacted component, and a changed scope
+ * (`S:C`) is a multiplier on the impact sub-score; v4.0 decomposes the same situation into two
+ * explicit triples (vulnerable system `VC/VI/VA`, subsequent system `SC/SI/SA`). So the two
+ * frameworks answer different questions about one bug, and a Δ between them is not severity drift.
+ *
+ * Measured over NVD's 2026-10-27 → 11-02 publication window: **610** same-source pairs, of which
+ * **521** are clean (the 3.1 score stored at base and the 4.0 vector carrying no live Threat
+ * metric — see the guard below). Classes, on the 4.0 vector:
+ *   vuln-only  n=441  mean Δ **+0.71**  (4.0 higher 327, 3.1 higher 100)
+ *   split      n= 53  mean Δ **−0.42**  (3.1 higher 35)
+ *   subsequent n= 27  mean Δ **−0.89**  (3.1 higher 25 of 27)
+ * and the mapping is near-total: `S:U` → vuln-only **440 of 443**, `S:C` → split/subsequent **77
+ * of 78**. Within the dominant assigner alone (VulnCheck, 456 pairs) the sign follows the class
+ * (+0.74 vuln-only, −0.83 subsequent-only, −0.65 split), so the split is not a house style.
+ *
+ * The guard that changes the answer if dropped: a pair whose 4.0 vector carries a live `E` is a
+ * **stopping-point** difference, not a scope one (VulDB's 105 pairs are −1.29 before the filter and
+ * its 16 surviving vuln-only pairs are **+0.87** — the whole of its negative mean was the threat
+ * term the 11-02 census already measured). A 3.1 score stored away from base is excluded for the
+ * same reason. `E:X` is the accepted control: base == threat there.
+ */
+function scopeClass(v4) {
+  const d = parseV4ish(v4) ?? {};
+  const vuln = ['VC', 'VI', 'VA'].some((k) => d[k] === 'L' || d[k] === 'H');
+  const subs = ['SC', 'SI', 'SA'].some((k) => d[k] === 'L' || d[k] === 'H');
+  if (vuln && subs) return 'split';
+  if (vuln) return 'vuln-only';
+  if (subs) return 'subsequent-only';
+  return 'none';
+}
+
+function scopeCensus(pairs) {
+  const scopeOf = (v) => (!v ? 'n/a' : scopeClass(v));
+  const clean = pairs.filter((p) => p.stop31 === 'base' && (p.e40 == null || p.e40 === 'X'));
+  const tally = (list, keyOf) => {
+    const m = new Map();
+    for (const p of list) {
+      const k = keyOf(p);
+      const c = m.get(k) ?? { n: 0, equal: 0, hi40: 0, hi31: 0, sum: 0, lo: Infinity, hi: -Infinity };
+      const d = Math.round((p.s40 - p.s31) * 10) / 10;
+      c.n += 1; c.sum += d;
+      if (d === 0) c.equal += 1; else if (d > 0) c.hi40 += 1; else c.hi31 += 1;
+      c.lo = Math.min(c.lo, d); c.hi = Math.max(c.hi, d);
+      m.set(k, c);
+    }
+    return [...m.entries()].map(([key, c]) => ({ key, ...c, mean: Math.round((c.sum / c.n) * 100) / 100 }))
+      .sort((a, b) => SCOPE_ORDER.indexOf(a.key) - SCOPE_ORDER.indexOf(b.key) || b.n - a.n);
+  };
+  return {
+    total: pairs.length,
+    clean: clean.length,
+    classes: tally(clean, (p) => scopeOf(p.v40)),
+    byAssigner: tally(clean, (p) => `${p.source ?? '?'} · ${scopeOf(p.v40)}`),
+    mapping: tally(clean, (p) => `${(parseV4ish(p.v31) ?? {}).S ?? '?'} · ${scopeOf(p.v40)}`),
+    /* The excluded rows are printed, never dropped: a census that silently filters its population
+       leaves the reader unable to ask what the filter did. */
+    dirty: { e40: pairs.filter((p) => p.e40 && p.e40 !== 'X').length, stop31: pairs.filter((p) => p.stop31 !== 'base').length },
+  };
+}
+
+const SCOPE_ORDER = ['vuln-only', 'split', 'subsequent-only', 'none', 'n/a'];
+
+function renderScopeCensus(st, label) {
+  /* The sign is a unit — the whole finding is that the direction follows the class, so a positive
+     mean prints with its `+` rather than relying on the reader noticing the missing minus. */
+  const sg = (x) => `${x > 0 ? '+' : ''}${x}`;
+  const line = ({ key, n, hi40, hi31, equal, mean, lo, hi }) =>
+    `  ${String(key).padEnd(28)} ${String(n).padStart(4)} pairs · 4.0 higher ${String(hi40).padStart(3)} · 3.1 higher ${String(hi31).padStart(3)} · equal ${String(equal).padStart(3)} · mean Δ ${sg(mean).padStart(6)} · Δ ${(lo === hi ? sg(lo) : `${sg(lo)}…${sg(hi)}`)}`;
+  const out = [
+    `\n── scope census ${label ? `— ${label}` : ''}`,
+    `Δ = v4.0 − v3.1. Class is where the 4.0 vector puts its impact (vulnerable system VC/VI/VA vs subsequent SC/SI/SA).`,
+    `clean subset: ${st.clean} of ${st.total} same-source pairs (3.1 stored at base · 4.0 carries no live Threat metric)`,
+    `excluded: ${st.dirty.e40} pair(s) with a live \`E\` on the 4.0 vector · ${st.dirty.stop31} with a 3.1 score off base`,
+    '',
+    '  by class:',
+  ];
+  for (const r of st.classes) out.push(line(r));
+  out.push('', '  by assigner · class (a mean per CNA is a house style; a mean per class is the framework):');
+  for (const r of st.byAssigner) if (r.n >= 4) out.push(line(r));
+  out.push('', '  the mapping — 3.1 Scope flag · 4.0 class (S:C is v3.1\'s only way to say "beyond the vulnerable system"):');
+  for (const r of st.mapping) out.push(line(r));
+  return out.join('\n');
+}
+
 async function main() {
   if (args.includes('--selftest')) return selftest();
   const rows = [];
@@ -750,6 +847,11 @@ async function main() {
     /* `--json` is an output CONTRACT, so a census mode must answer in JSON here rather than print
        a progress line first — the 2026-11-01 lesson where a note on stdout made `--json | JSON.parse`
        die. Nothing above writes to stdout except the window line, which is printed before this. */
+    if (args.includes('--scope-census')) {
+      const st = scopeCensus(pairRows(rows));
+      console.log(JSON.stringify({ generated: new Date().toISOString(), oracle: oracleName, scope: st }, null, 1));
+      return;
+    }
     if (args.includes('--stopping-point-census')) {
       const rowsJson = await stoppingCensus(rows, `${argOf('--from', '')} → ${argOf('--to', '')}`.trim(), true);
       /* `pairs` is in the JSON too: the band table is the census's answer to "does the mean describe
@@ -759,6 +861,10 @@ async function main() {
       return;
     }
     console.log(JSON.stringify({ generated: new Date().toISOString(), oracle: oracleName, rows }, null, 1));
+    return;
+  }
+  if (args.includes('--scope-census')) {
+    console.log(renderScopeCensus(scopeCensus(pairRows(rows)), `${argOf('--from', '?')} → ${argOf('--to', '?')}`));
     return;
   }
   if (args.includes('--stopping-point-census')) {

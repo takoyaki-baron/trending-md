@@ -6651,3 +6651,83 @@ thing. Catalog measured this run: **1,768** entries, **151** citing **BOD 26-04*
 **340** still citing **BOD 22-01**, `forensicTriage: "Yes"` on **97**, and the field present on 1,768/1,768.
 
 → [[vuln-supply]] [[disclosure-lag]] [[fact-check]]
+
+## 2026-11-05 12:34 — five fix-then-record clocks in one batch, and a trusted-source-IP default that was exploited in the wild
+
+**The Kyverno cohort (`CVE-2026-122302`…`-122323`), 21 records in a 3.313-second window
+(2026-11-05T03:17:22.030Z → 03:17:25.343Z), every one scored by `disclosure@vulncheck.com` and every one still
+`Received`.** Seven at ≥ 9.0: **five 9.9**, one **9.8**, one **9.1**. The 9.9s share
+`CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:C/C:H/I:H/A:H` — the `S:C` scope change is what lifts a `PR:L` bug into the
+Critical band — and VulnCheck's own 4.0 metric scores those same records **9.4**. **The IDs are a set, not a
+range:** the span holds **22** values and **`CVE-2026-122317` has no record at NVD at all** (`cveId` queried
+alone, `totalResults` **0**, verified first-hand 11-05 12:34). Mechanism is one shape — a namespaced policy
+author reaching the controller's ServiceAccount — with variants worth naming: `resource.get()`/`resource.post()`
+splits its argument on `/` and hands everything after the first segment to client-go as a "subresource" that
+`rest.IsValidPathSegmentName` does not validate, so `path.Join` resolves `..` (`-122311`); `context.apiCall`'s
+`urlPath` is validated after cleaning while the raw path executes, so `#` or `?` hides the traversal (`-122310`);
+CEL map literals from `targetMatchConstraints.expression` name another namespace (`-122303`, `-122313`); a nil
+policy in the cleanup controller's context loader (`-122304`); and `-122302` checks the *controller's* permissions
+rather than the author's. The published reproduction is a `kind` cluster on Kubernetes v1.32.2 installed from the
+release manifest with no configuration changes and no extra RBAC — so the precondition is only that some tenant
+can create a namespaced policy, and the outcome is cluster admin. Fix **1.19.2** shipped **2026-10-20T23:50:19Z**;
+`GHSA-4pqm-wqq6-h9q2` published **Oct 21**; the records arrived **11-05** — **15.15 days** elapsed, or 16 by
+calendar-date subtraction. The advisory says the class is a *recurrence*: neither `GHSA-79gf-7frw-68m9`
+(`CVE-2026-54523`) nor `GHSA-cvq5-hhx3-f99p` (`CVE-2026-41068`) stops this mechanism.
+
+**GPUStack `CVE-2026-102895`, 9.8 — and the advisory states in-the-wild exploitation.** `get_current_user`
+promotes any request it considers loopback to the built-in administrator when `force_auth_localhost` is False,
+which is the default. Two unauthenticated ways to look local: put GPUStack behind a same-host reverse proxy (the
+canonical self-hosted shape, where "every remote request arrives at GPUStack with TCP peer `127.0.0.1`"), or send
+a forged `X-GPUStack-Real-IP: 127.0.0.1`. The advisory's root-cause line is the lesson: "Trusting the network
+source of a request (socket peer, or a client-controllable header) as an authentication signal." Blast radius is
+administrative — enumerate/modify users, models, workers and config; mint `["*"]` admin keys "valid from any
+source IP thereafter"; read worker credentials and cloud-provider secrets; reach code execution on workers via
+`POST /v2/inference-backends/from-yaml`. Observed exploited "against a v2.1.1 deployment (attacker-created custom
+backends running reverse shells)". Fix **v2.2.0** shipped **2026-06-18T15:54:18Z**, **139 days** before the NVD
+record (2026-11-04T22:17:44Z); newest release v2.3.0 (10-21), so the exposed population is anyone still on 2.1.x.
+Mitigations that are also a checklist: `force_auth_localhost=true`, strip client `X-GPUStack-Real-IP` at the
+edge, never let a gateway make external traffic look local.
+
+**Yuxi `CVE-2026-97693`, 9.9 — the sandbox held and the orchestrator's API did not.** A low-privileged
+authenticated user who can run commands in their own sandbox "can reach other tenants' sandbox APIs, access their
+files and secrets, execute commands in active sandboxes, and enumerate, create, or delete sandboxes through the
+unauthenticated provisioner without knowing administrator, database, or MinIO credentials" — "without a container
+escape or kernel vulnerability", which is the phrase that keeps the severity honest. Fix **0.7.1** shipped
+**2026-07-17T15:50:37Z** (**110 days** early); the line is at v0.8.0.beta7. **The remediation note is the part
+operators miss:** "upgrading the Compose files does not automatically rotate them", so any deployment that ever ran
+the documented defaults must separately rotate the persisted **PostgreSQL**, **Neo4j** and **MinIO** credentials —
+and an exposed PostgreSQL superuser alone yields command execution inside its container.
+
+**Pocket ID `CVE-2026-115770`, 9.6, `CWE-345` — an identity claim bound to the user instead of the address.**
+`SendEmailVerification` binds the token "only to the user's identifier", `UpdateUser` changes the account email
+"without invalidating the outstanding token", and `VerifyEmail` marks "the current address as verified" — so a user
+requests a token for an address they control, switches the account to an arbitrary unused address, redeems the
+stale token, and Pocket ID publishes that new address with `email_verified: true`. Defaults are what make it
+reachable (`emailsVerified=false`, `allowOwnAccountEdit=true`), and the one precondition — the target address must
+not already belong to another user — is what a new hire's mailbox satisfies. The downstream sentence is worth
+quoting rather than paraphrasing: an app trusting a verified email for automatic account matching or provisioning
+"can link the attacker's identity to another user's account, while applications that rely exclusively on the stable
+OIDC `sub` claim are not affected by that downstream consequence." Fix **2.12.0** (**2026-07-29T23:05:53Z**, **98
+days** early); current v2.19.2. The design rule outlives the patch: if an identity claim can be invalidated by a
+later edit, the edit must invalidate the claim — and JIT provisioning off `email` rather than `sub` is the half no
+upgrade fixes.
+
+**ESP-IDF `CVE-2026-113780`, 9.3, and a fix version that does not exist.** "The `esp_tee` trap entry in
+`esp_tee_vectors_plic.S` and `esp_tee_vectors_clic.S` saves a caller-controlled register frame through the
+REE-supplied stack pointer before switching to the trusted TEE stack or validating the pointer" — so a local
+unprivileged REE application can direct a machine-mode write into TEE-exclusive memory on **ESP32-C5, C6, C61 and
+H2**, and both the secure-service `ecall` and the interrupt entry path carry the same ordering. Affected from
+**5.5.5** until **5.5.6, 6.0.4 and 6.1.1**; the record says 5.5.6 is fixed and 6.0.4/6.1.1 are "scheduled".
+**v5.5.6 shipped 2026-10-16T14:32:14Z**, but `releases.atom` read on 11-05 tops out at **v6.0.3** (09-02) and
+**v6.1** (08-27) — **neither 6.0.4 nor 6.1.1 exists**, so the 6.x line has no version to install. CNA is
+`GitHub_M`, not Espressif's own numbering, and the bug class is the one embedded teams discount: the TEE boundary
+fails on the instruction *before* the switch.
+
+**The read-out, and it is one sentence: five records, five fix-before-record clocks, one of them not yet
+runnable.** 15.15 / 139 / 110 / 98 / 19 days between ship and paperwork, so the NVD `published` field dates a
+workflow, never an event — and the ESP-IDF case is the fifth disclosure state's mirror image: a version number
+used as a remediation *date*. The credential-level lesson generalizes past this batch: **updating a Compose file
+rotates code, never secrets**, and every fix that shipped before its record shipped to a population that had
+already stopped watching.
+
+→ [[vuln-supply]] [[disclosure-lag]] [[fact-check]] [[agent-stack]]
