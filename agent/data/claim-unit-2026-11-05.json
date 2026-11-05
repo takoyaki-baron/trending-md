@@ -1,9 +1,9 @@
 {
- "generated": "2026-11-04T20:47:52.762Z",
+ "generated": "2026-11-05T04:27:41.726Z",
  "files": [
   {
    "file": "2026-11-05.md",
-   "items": 20,
+   "items": 35,
    "findings": [
     {
      "check": "cvss",
@@ -17,7 +17,7 @@
      "item": 2,
      "verdict": "ok",
      "claim": "CVE-2026-109518 `Received`",
-     "detail": "Received (lastModified 2026-11-04T19:17:18.327)"
+     "detail": "Received (lastModified 2026-11-05T01:17:21.307)"
     },
     {
      "check": "cvss",
@@ -69,6 +69,48 @@
      "detail": "NVD published 2024-05-14T15:13:06.953 (2024-05-14 UTC) · cveawg datePublished 2024-05-13T23:00:50.836Z (2024-05-13 UTC) — the two clocks differ; 2024-05-14 is the NVD published day"
     },
     {
+     "check": "status",
+     "item": 23,
+     "verdict": "ok",
+     "claim": "CVE-2026-122323 `Received`",
+     "detail": "Received (lastModified 2026-11-05T03:17:25.343)"
+    },
+    {
+     "check": "date",
+     "item": 23,
+     "verdict": "ok",
+     "claim": "CVE-2026-122323 published 2026-11-05",
+     "detail": "NVD published 2026-11-05T03:17:25.343 (2026-11-05 UTC) · cveawg datePublished 2026-11-05T02:25:21.376Z (2026-11-05 UTC) — the two clocks differ; 2026-11-05 is the NVD published day"
+    },
+    {
+     "check": "date",
+     "item": 25,
+     "verdict": "ok",
+     "claim": "CVE-2026-97693 published 2026-11-04",
+     "detail": "NVD published 2026-11-04T22:18:07.687 (2026-11-04 UTC) · cveawg datePublished 2026-11-04T21:14:50.408Z (2026-11-04 UTC) — the two clocks differ; 2026-11-04 is the NVD published day"
+    },
+    {
+     "check": "date",
+     "item": 26,
+     "verdict": "ok",
+     "claim": "CVE-2026-115770 published 2026-11-04",
+     "detail": "NVD published 2026-11-04T23:17:18.767 (2026-11-04 UTC) · cveawg datePublished 2026-11-04T22:32:18.097Z (2026-11-04 UTC) — the two clocks differ; 2026-11-04 is the NVD published day"
+    },
+    {
+     "check": "date",
+     "item": 27,
+     "verdict": "ok",
+     "claim": "CVE-2026-113780 published 2026-11-04",
+     "detail": "NVD published 2026-11-04T19:17:18.493 (2026-11-04 UTC) · cveawg datePublished 2026-11-04T19:04:21.450Z (2026-11-04 UTC) — the two clocks differ; 2026-11-04 is the NVD published day"
+    },
+    {
+     "check": "date",
+     "item": 27,
+     "verdict": "ok",
+     "claim": "CVE-2026-113780 published 2026-11-04",
+     "detail": "NVD published 2026-11-04T19:17:18.493 (2026-11-04 UTC) · cveawg datePublished 2026-11-04T19:04:21.450Z (2026-11-04 UTC) — the two clocks differ; 2026-11-04 is the NVD published day"
+    },
+    {
      "check": "repo",
      "item": 1,
      "verdict": "hf-model",
@@ -94,14 +136,14 @@
      "item": 12,
      "verdict": "ok-history",
      "claim": "FareedKhan-dev/kimi-k3-in-c",
-     "detail": "record 95d, oldest commit 2026-08-01 (~98 commits)"
+     "detail": "record 96d, oldest commit 2026-08-01 (~98 commits)"
     },
     {
      "check": "repo",
      "item": 12,
      "verdict": "ok",
      "claim": "FareedKhan-dev/kimi-k3-in-c",
-     "detail": "10198★, last push 2026-10-02"
+     "detail": "10418★, last push 2026-10-02"
     },
     {
      "check": "count",
@@ -116,6 +158,13 @@
      "verdict": "counted-by-author",
      "claim": "174 SKILL",
      "detail": "no page states a skill total, and the item says so — the count is the author's own census"
+    },
+    {
+     "check": "ratio",
+     "item": 30,
+     "verdict": "table-columns-unresolved",
+     "claim": "five of 36",
+     "detail": "a cited page carries a table, but no column pair is named by the item strongly enough to pin — count the rows by hand rather than let a positional match decide"
     },
     {
      "check": "quotation",
@@ -258,6 +307,104 @@
      "detail": "verbatim in 2 readable source(s)"
     },
     {
+     "check": "quotation",
+     "item": 21,
+     "verdict": "ok",
+     "claim": "8 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 22,
+     "verdict": "ok",
+     "claim": "7 quotation(s)",
+     "detail": "verbatim in 3 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 23,
+     "verdict": "ok",
+     "claim": "1 quotation(s)",
+     "detail": "verbatim in 20 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 24,
+     "verdict": "ok",
+     "claim": "4 quotation(s)",
+     "detail": "verbatim in 6 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 25,
+     "verdict": "ok",
+     "claim": "5 quotation(s)",
+     "detail": "verbatim in 6 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 26,
+     "verdict": "ok",
+     "claim": "6 quotation(s)",
+     "detail": "verbatim in 6 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 27,
+     "verdict": "ok",
+     "claim": "3 quotation(s)",
+     "detail": "verbatim in 6 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 28,
+     "verdict": "ok",
+     "claim": "5 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 29,
+     "verdict": "ok",
+     "claim": "7 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 30,
+     "verdict": "ok",
+     "claim": "4 quotation(s)",
+     "detail": "verbatim in 3 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 31,
+     "verdict": "ok",
+     "claim": "6 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 32,
+     "verdict": "ok",
+     "claim": "4 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 33,
+     "verdict": "ok",
+     "claim": "3 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 35,
+     "verdict": "ok",
+     "claim": "2 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
      "check": "paper",
      "item": 10,
      "verdict": "ok",
@@ -277,14 +424,49 @@
      "verdict": "ok",
      "claim": "arXiv 2611.05036 submitted 2026-11-03T15:09Z",
      "detail": "arXiv `published` 2026-11-03T15:09:01Z — the quoted instant is the submission's"
+    },
+    {
+     "check": "paper",
+     "item": 28,
+     "verdict": "ok",
+     "claim": "arXiv 2611.06380 submitted 2026-11-04T11:42Z",
+     "detail": "arXiv `published` 2026-11-04T11:42:42Z — the quoted instant is the submission's"
+    },
+    {
+     "check": "paper",
+     "item": 29,
+     "verdict": "ok",
+     "claim": "arXiv 2611.06294 submitted 2026-11-04T10:29Z",
+     "detail": "arXiv `published` 2026-11-04T10:29:52Z — the quoted instant is the submission's"
+    },
+    {
+     "check": "paper",
+     "item": 30,
+     "verdict": "ok",
+     "claim": "arXiv 2611.06425 submitted 2026-11-04T12:27Z",
+     "detail": "arXiv `published` 2026-11-04T12:27:58Z — the quoted instant is the submission's"
+    },
+    {
+     "check": "paper",
+     "item": 31,
+     "verdict": "ok",
+     "claim": "arXiv 2611.06486 submitted 2026-11-04T13:26Z",
+     "detail": "arXiv `published` 2026-11-04T13:26:44Z — the quoted instant is the submission's"
+    },
+    {
+     "check": "paper",
+     "item": 32,
+     "verdict": "ok",
+     "claim": "arXiv 2611.06445 submitted 2026-11-04T12:49Z",
+     "detail": "arXiv `published` 2026-11-04T12:49:07Z — the quoted instant is the submission's"
     }
    ]
   }
  ],
  "status_watch": [],
  "api_calls": 0,
- "readme_calls": 0,
- "cited_page_calls": 0,
+ "readme_calls": 10,
+ "cited_page_calls": 11,
  "repo_page_calls": 0,
  "nvd_calls": 1,
  "cna_calls": 0

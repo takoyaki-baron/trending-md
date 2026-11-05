@@ -1,8 +1,8 @@
 ---
 date: 2026-11-05
-updated: 2026-11-04T20:30:18Z
+updated: 2026-11-05T04:27:03Z
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 26
+sources: 24
 license: CC-BY-4.0
 ---
 
@@ -360,13 +360,297 @@ AutomationBench と τ³-Bench Banking に適用すると、「the pipeline prod
 
 ---
 
+## 21. OpenAI の自動パイプラインは 120 万ドルの API クレジットで Linux の root 奪取エクスプロイトを 948 本作った
+
+- **Velocity:** ▮▮▮ trending
+- **ソース:** openai.com/index · 2026-11-04 公開 · HN 197 ポイント
+- **タグ:** `security` `ai-research` `linux` `kernel` `vulnerability-research`
+
+OpenAI がカーネル脆弱性探索パイプラインの方法論と請求額を公開した。「Our prototype identified and analyzed 2,308 candidate Linux kernel findings, dynamically reproduced 1,724 vulnerabilities, and produced 948 local privilege escalation (LPE) exploits that could allow an unprivileged local user to gain root access.」実行全体の API 費用は **1,213,430 ドル、LPE エクスプロイト 1 本あたり 1,279 ドル**。情報漏えい系は **291 件**と別に報告されている。
+
+パイプラインは 5 段階で、最後に人間が入る。**Scout** エージェントが **5,034 の監査対象**——約 **280 万行**、「roughly 7% of the whole Linux kernel code base」——を選び、費用は 3,426 ドル。**Analyst** エージェントが 12 時間で 2,308 件の候補を出し、316,549 ドル。**Validation** が KASAN 入りの VM で 30 時間かけて 1,724 件（**74.7%**）を再現し、73,330 ドル。残差についての記述が具体的だ：「Only 3.1% reflected incorrect analysis by the model, where the reported vulnerability assumed an impossible condition.」続いて悪用可能性評価とパッチ生成が来る。
+
+論旨を支えるのは、改変版 **kernelCTF** 環境での 2 回目の実行だ。情報漏えい PoC 25 件、LPE エクスプロイト 21 件で **32,936 ドル**。一方 kernelCTF が 2026 年に受理した 0-day LPE は通年で **26 件**。7 月の GPT-5.6 Sol による実行と比べ、新しいモデルは「>5x」多く新規 LPE を見つけたとされ、「at least 10 novel Linux exploitation techniques」を下限として挙げている。
+
+見出しを縛るのはコストより注記のほうだ。モデルは「an upcoming cyber model」と呼ばれるだけで、名前もベンチマークも出てこない。評価額の 1,890 万〜6,630 万ドルは明示的に「hypothetical」——948 本を Pwn2Own と TyphoonPWN の過去の賞金に当てはめた数字で、その賞金は「受理された提出物」の値段であって、これらのエクスプロイトの価値の測定ではない。コストについても著者自身が締めている：「we focused on methodology and measuring model capability in this research, not cost」、ゆえに「the costs we report are more an upper bound」。**948** は実験室内で生成されたエクスプロイトの数であり、提出された CVE の数でもマージされたパッチの数でもない。
+
+**なぜ重要か：** 誰もが引用する 2 つの数字——948 本、1 本 1,279 ドル——は、記事自身がボトルネックではないと述べた問いに答える数字だ。本当の運用上の発見はこちら：「within 10 days while the scan was running, we observed over 100 Linux LPEs had been patched or had staging patches from other contributors, with ~300 more being publicly discussed」。カーネルのバグを 1 つ見つける限界費用は、それをレビューし、直し、出荷する限界キャパシティを下回った。これは開示パイプラインの問題であり、この記事の正直な貢献はそれに値段を付けたことだ。
+
+[`🔗 OpenAI: A thousand fewer paths to root`](https://openai.com/index/a-thousand-fewer-paths-to-root/) · [`🔗 HN ディスカッション`](https://news.ycombinator.com/item?id=50372929)
+
+---
+
+## 22. Ripple-65B は 65B の dense で 500B〜975B の米国オープンウェイト模型を Terminal-Bench で上回る —— ただし 2 列のうち 1 列でだけ
+
+- **Velocity:** ▮▮▮ trending
+- **ソース:** ricursive.com/ripple · 2026-11-04 · HN 248 ポイント
+- **タグ:** `ai-models` `open-weights` `dense` `benchmarks` `agentic-coding`
+
+Ricursive Intelligence が **Ripple-65B Preview** を公開した。**65B の dense**（MoE ではない）Transformer で、**12T トークン**で事前学習、最大 1M コンテキスト。**Terminal-Bench 2.1 で 80.52** を記録し、Reflection Beam 501B（80.1）、Meta Muse Spark Open 816B（76.4）、Thinking Machines Inkling 975B（63.8）、NVIDIA Nemotron 3 Ultra 550B（56.4）を上回る。アーキテクチャは意図的に地味だ：`d_model` **5120**、**80 層**、MFU **40%**、「simple sharding, no custom kernels, and no quantization (BF16)」。チームは開発中に「scaled from 1 to 5 people during development」。重みは Apache-2.0 で **16 個の safetensors シャード、合計 129,565,519,472 バイト（129.6 GB）**、ほかに NVFP4、DFlash2、事前学習のみの base チェックポイント。閲覧時点で **129 いいね、ダウンロード 0**。
+
+ベンチマーク表には Terminal-Bench の列が 2 つあり、挙動が大きく違う。`(self-reported)` 列では Ripple 80.5 が Beam の 80.1 を 0.4 上回る。ところが**公式 Terminus 2 harness** では Beam が **70.8**、Inkling が 56.2、Muse Spark が 78.7 まで落ち、Ripple は **80.5** のまま。カードは両列を載せた理由も書いている：「we found that Terminal-Bench 2.1 scores were universally lower (with the exception of Muse Spark Open) when using the official Terminus 2 harness at 128K sequence length with summarization」。競合の再実行セルはイタリックで示し、「Replicating benchmark scores has been challenging, particularly for modern agentic evals, due to the number of factors which can cause eval scores to shift.」と明言する。
+
+Terminal-Bench を離れると「SOTA」はずっと狭くなる。**SWE-bench Verified 76.5**（Beam 81.6、Muse 78.7）、**SWE-bench Pro v1.0 61.42**（Beam 66.1）、**DeepSWE 1.1 44.3**（Muse 60.0）。唯一の外れ値が **SWE-bench Pro v2.0 Hard** で、Ripple が 79.1 と主張する一方 Inkling は **2.0**——同じ表で Inkling は Pro v1.0 では 54.3 なので、これは能力差ではなく harness 差であり、記事はそれを指摘していない。
+
+コスト主張は脚注ごと引用する必要がある。**3,200 万ドル**は「our full R&D cost」であり、「one-tenth the cost of the previous open-weight SOTA on agentic coding」、「as estimated to the best of our knowledge」と書かれる。効率の主張は別物で、より明確：「improves Compute Efficiency (CE) on code by 16x relative to the Olmo 3 ladder, with the advantage further increasing with scale up to 55x for the full hero run」。
+
+**なぜ重要か：** DGX Spark に載り、500B 超の MoE と数ポイント差に収まる 65B dense は、順位そのものより面白い。MoE の容量と dense の計算効率の差は、パラメータ数の見た目より狭いということだからだ。一緒に持ち帰るべきは列の分割のほうで、同じ競合が harness を変えると 9.3 ポイント落ちる。つまり「501B を上回る」は、どの列を読んだかという話である。（Ricursive は 2026-10-31 に扱った Flint の RecursiveSI とは別の会社だ。）
+
+[`🔗 ricursive.com/ripple`](https://www.ricursive.com/ripple) · [`🔗 ricursiveAI/Ripple-65B-Preview`](https://huggingface.co/ricursiveAI/Ripple-65B-Preview) · [`🔗 HN ディスカッション`](https://news.ycombinator.com/item?id=50369925)
+
+---
+
+## 23. Kyverno は 3.3 秒で 21 件の CVE レコードを公開した —— 9.0 以上が 7 件、そして修正は書類より 15 日早い
+
+- **Velocity:** ▮▮▮ trending
+- **ソース:** NVD · CVE-2026-122302 – CVE-2026-122323 公開 2026-11-05T03:17:22–03:17:25Z
+- **タグ:** `cve` `kubernetes` `kyverno` `privilege-escalation` `policy-engine`
+
+Kyverno のレコード 21 件が **2026-11-05T03:17:22.030Z** から **03:17:25.343Z** の間に NVD に着地した——公開ウィンドウは **3.313 秒**。すべて `disclosure@vulncheck.com` が採点し、すべて `Received` のまま。9.0 以上が 7 件で、**9.9 が 5 件**、**9.8 が 1 件**、**9.1 が 1 件**。9.9 の 5 件は `CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:C/C:H/I:H/A:H` を共有する（再計算しても 9.9：`PR:L` のバグを Critical 帯へ押し上げているのは `S:C` のスコープ変更だ）。同じレコードに対する VulnCheck の 4.0 指標は **9.4**。
+
+機構はどれも同じ形——名前空間内のポリシー作成者がコントローラの ServiceAccount に届く——だが、個々の変種は読む価値がある。`CVE-2026-122311` は `resource.get()` / `resource.post()` のパストラバーサル：resource 引数は `/` で分割され、最初のセグメント以降がすべて client-go の「subresource」として渡される。`rest.IsValidPathSegmentName` は subresource を検証せず、`path.Join` が `..` を解決してしまう。アドバイザリ自身の要約は結果について率直だ。自分の名前空間で `NamespacedValidatingPolicy` を作れるテナントは、Kyverno admission controller の ServiceAccount を使ってクラスタ内の任意の場所の任意のオブジェクトを読み書きできる。`CVE-2026-122310` は同じ発想を 1 層上で行う：`context.apiCall` の `urlPath` はクリーニング後に検証されるが実行されるのは生のパスなので、`#` や `?` でトラバーサルを検査から隠せる。`CVE-2026-122303` と `-122313` は `targetMatchConstraints.expression` で他者の名前空間を指すリテラル CEL map を返す。`CVE-2026-122304` は cleanup controller が「builds its context loader with a nil policy」であることを突く。`CVE-2026-122302` は作成者ではなく**コントローラ**の権限を検査してしまう。
+
+数より日付のほうが重要だ。修正版は **1.19.2**、公開は **2026-10-20T23:50:19Z**。`GHSA-4pqm-wqq6-h9q2` は **2026 年 10 月 21 日**に公開され、`datePublic` も **2026-10-21**。CVE レコードが来たのは **2026-11-05**——修正の出荷から 16 日後である。しかもアドバイザリはこれが新種ではなく再発だと明言している。機構は異なり、先行する 2 つの修正はいずれもこれを止めない、と——`GHSA-79gf-7frw-68m9`（CVE-2026-54523）と `GHSA-cvq5-hhx3-f99p`（CVE-2026-41068）を指す。
+
+**なぜ重要か：** 公開された再現環境は Kubernetes v1.32.2 の kind クラスタにリリース版マニフェストを入れ、RBAC も設定も追加せず——つまり既定のインストールだ。前提条件は「いずれかのテナントが名前空間スコープのポリシーを作れる」ことだけで、結果はクラスタ管理者権限。3.3 秒のバッチは、NVD の公開時刻がワークフローの産物であることも思い出させる。これらのバグが 03:17Z に真になったわけではなく、すべて 10 月 21 日には公開済みだった。
+
+[`🔗 GHSA-4pqm-wqq6-h9q2（パストラバーサル）`](https://github.com/kyverno/kyverno/security/advisories/GHSA-4pqm-wqq6-h9q2) · [`🔗 Kyverno v1.19.2`](https://github.com/kyverno/kyverno/releases/tag/v1.19.2) · [`🔗 NVD CVE-2026-122311`](https://nvd.nist.gov/vuln/detail/CVE-2026-122311)
+
+---
+
+## 24. GPUStack は loopback からのリクエストを管理者とみなしていた —— アドバイザリは実環境での悪用を報告している
+
+- **Velocity:** ▮▮ rising
+- **ソース:** GitHub Advisory Database · GHSA-gj9m-f8ph-pmhr · CVE-2026-102895 · 9.8
+- **タグ:** `cve` `ai-infra` `authentication` `gpustack` `exploited`
+
+`CVE-2026-102895` はモデルサービング向けのオープンソース GPU クラスタマネージャ GPUStack に対する **9.8**。**5,972 スター**、2026-11-05 にも push がある生きたリポジトリだ。バグはポリシー 1 行にある。`force_auth_localhost` が False（既定値）のとき、`get_current_user` は、送信元が loopback と判定されたリクエストを組み込みの管理者アカウントへ昇格させる。認証情報なしで loopback に見せかける方法は 2 つ。GPUStack を同一ホストのリバースプロキシの背後に置く（最も典型的なセルフホスト形態で、「every remote request arrives at GPUStack with TCP peer `127.0.0.1`」）、あるいは `X-GPUStack-Real-IP: 127.0.0.1` を偽造する。アドバイザリの根本原因の一行がすべての教訓だ：「Trusting the network source of a request (socket peer, or a client-controllable header) as an authentication signal.」
+
+影響範囲は管理者級：ユーザー・モデル・ワーカー・設定の列挙と変更、スコープ `["*"]` の永続管理者 API キーの鋳造（以後「valid from any source IP thereafter」）、ワーカーの認証情報とクラウドプロバイダの secret の読み出し、そして `POST /v2/inference-backends/from-yaml` のような管理者専用エンドポイント経由でワーカーホスト上のコード実行まで。
+
+よくある 9.x の認証バイパスと一線を画す一文が同じアドバイザリにある：「This vulnerability has been observed exploited in the wild against a v2.1.1 deployment (attacker-created custom backends running reverse shells).」実環境での悪用は Javier Sixto（ulex.fr）が報告。脆弱性自体は Nikko Enggaliano、Wei Yunzhou、Rui Yang と Haoyu Wang（ジョンズ・ホプキンス大学）が独立に報告した。
+
+時計はいつもどおり食い違う。アドバイザリの公開は **2026 年 7 月 31 日**。修正版 **v2.2.0** の出荷は **2026-06-18T15:54:18Z** で、**2026-11-04T22:17:44Z** の NVD レコードより **139 日**早い。最新リリースは **v2.3.0**（2026-10-21）なので、現行ラインにいる人はすでに修正済み。アドバイザリが描写しているのは 2.1.x に残っている母集団だ。
+
+**なぜ重要か：** 「localhost は信頼する」という既定値は、セキュリティ上の決定に見えるがゆえにどのコードレビューも生き延びる。そしてリバースプロキシがそれを静かに「インターネット全体が満たす規則」に変えてしまう。回避策の一覧はそのままチェックリストになる：`force_auth_localhost=true` を設定し、エッジでクライアント由来の `X-GPUStack-Real-IP` を剥がし、ゲートウェイに外部トラフィックをローカルに見せかけさせない。
+
+[`🔗 GHSA-gj9m-f8ph-pmhr`](https://github.com/gpustack/gpustack/security/advisories/GHSA-gj9m-f8ph-pmhr) · [`🔗 NVD CVE-2026-102895`](https://nvd.nist.gov/vuln/detail/CVE-2026-102895) · [`🔗 GPUStack v2.2.0`](https://github.com/gpustack/gpustack/releases/tag/v2.2.0)
+
+---
+
+## 25. Yuxi のサンドボックスはコンテナエスケープなしで互いの API に届いた —— 9.9、修正はレコードの 110 日前
+
+- **Velocity:** ▮▮ rising
+- **ソース:** GitHub Advisory Database · CVE-2026-97693 · 公開 2026-11-04T22:18Z
+- **タグ:** `cve` `ai-infra` `multi-tenant` `sandbox` `yuxi`
+
+Yuxi は「a large-model-based intelligent knowledge base and knowledge graph agent development platform」で、7,602 スター、リリースラインはまだ beta。「execution-capable Docker sandboxes と信頼されたアプリケーションサービス間の隔離が不十分」に対して **9.9**（`CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:C/C:H/I:H/A:H`）が付く。自分のサンドボックスでコマンドを実行できる低権限の認証済みユーザーは、「can reach other tenants' sandbox APIs, access their files and secrets, execute commands in active sandboxes, and enumerate, create, or delete sandboxes through the unauthenticated provisioner without knowing administrator, database, or MinIO credentials.」
+
+この項目を誠実に保つのは「何が起きなかったか」を述べた一文だ。これらの経路はクロステナントのデータを漏えい・改変し、サービス拒否を起こせるが、「without a container escape or kernel vulnerability」。サンドボックスの境界はすべて保たれた。破れたのはサンドボックスとコントロールプレーンの間のネットワーク境界である。
+
+運用担当者が見落とすのは修正の注記だ。修正版は **0.7.1**、公開は **2026-07-17T15:50:37Z** で、レコードの **110 日**前。現行ラインは **v0.8.0.beta7** に進んでいる。しかし「upgrading the Compose files does not automatically rotate them」——文書化された既定値を一度でも動かしたデプロイは、永続化された **PostgreSQL**、**Neo4j**、**MinIO** の認証情報を別途ローテートする必要がある。公開された PostgreSQL アカウントがスーパーユーザーなら、それだけで PostgreSQL コンテナ内のコマンド実行に至るとアドバイザリは記す。
+
+**なぜ重要か：** サンドボックスはどのエージェント基盤も掲げる安全の約束であり、ここではサンドボックス自体は無事だった——テナント境界はオーケストレータ自身の API 面だった。Compose ファイルの更新が入れ替えるのはコードであって secret ではない。アドバイザリはそれを読者に委ねず明記している。
+
+[`🔗 CVE-2026-97693 レコード`](https://www.cve.org/CVERecord?id=CVE-2026-97693) · [`🔗 GHSA-qpm5-6332-9445`](https://github.com/xerrors/Yuxi/security/advisories/GHSA-qpm5-6332-9445) · [`🔗 NVD CVE-2026-97693`](https://nvd.nist.gov/vuln/detail/CVE-2026-97693)
+
+---
+
+## 26. Pocket ID はメールトークンをアドレスではなくユーザーに紐づけていた —— だから手放したアドレスを「検証済み」にできた
+
+- **Velocity:** ▮▮ rising
+- **ソース:** GitHub Advisory Database · CVE-2026-115770 · 公開 2026-11-04T23:17Z
+- **タグ:** `cve` `identity` `oidc` `pocket-id` `account-linking`
+
+`CVE-2026-115770` は passkey ベースの OIDC プロバイダ Pocket ID の **9.6**（`AV:N/AC:L/PR:L/UI:N/S:C/C:H/I:H/A:N`）。スター数は **10,005**。バグは 3 つの正常な機能の相互作用だ。`SendEmailVerification` はトークンを「only to the user's identifier」で束ね、`UpdateUser` はアカウントのメールを「without invalidating the outstanding token」変更し、`VerifyEmail` は「the current address as verified」とする。したがって一般ユーザーは、自分が制御するアドレスでトークンを要求し、アカウントを任意の未使用アドレスに変更し、古いトークンを引き換えられる——Pocket ID は新しいアドレスを `email_verified` が true の状態で公開してしまう。
+
+到達可能性は既定値にある：「The default affected configuration uses `emailsVerified=false` and `allowOwnAccountEdit=true`」。レコードには前提が 1 つ明記されている——「the target address must not already belong to another Pocket ID user」——そしてこれは新入社員のメールボックスがまさに満たす条件だ。
+
+下流の影響は言い換えずに引用したほうが正確だ。検証済みメールを自動アカウント照合やプロビジョニングに使うアプリケーションは「can link the attacker's identity to another user's account, while applications that rely exclusively on the stable OIDC `sub` claim are not affected by that downstream consequence.」
+
+時系列：修正版 **2.12.0** の公開は **2026-07-29T23:05:53Z** で、**2026-11-04** のレコードより **98 日**前。プロジェクトは現在 **v2.19.2**（2026-10-22）。CWE-345。
+
+**なぜ重要か：** `email_verified` は依存する側が「事実についての表明」として扱う唯一の claim だが、ここでそれが表明していたのはトークンの内容ではなく主体だった。緩和はパッチノートではなく設計原則になる。ある identity の表明が後続の編集で無効化されうるなら、その編集は表明も無効化しなければならない——そして `sub` ではなく `email` で即時プロビジョニングするアプリは、アップグレードしても残るバグの半分だ。
+
+[`🔗 CVE-2026-115770 レコード`](https://www.cve.org/CVERecord?id=CVE-2026-115770) · [`🔗 GHSA-rm8c-2cv8-jwf6`](https://github.com/pocket-id/pocket-id/security/advisories/GHSA-rm8c-2cv8-jwf6) · [`🔗 Pocket ID v2.12.0`](https://github.com/pocket-id/pocket-id/releases/tag/v2.12.0)
+
+---
+
+## 27. ESP-IDF の TEE トラップ入口は呼び出し側のスタックポインタ経由で書き込む —— そして 6.x の修正版はまだ存在しない
+
+- **Velocity:** ▮▮ rising
+- **ソース:** GitHub Advisory Database · CVE-2026-113780 · 9.3 · 公開 2026-11-04T19:17Z
+- **タグ:** `cve` `esp32` `tee` `firmware` `espressif`
+
+`CVE-2026-113780` は ESP-IDF に対する **9.3**（`AV:L/AC:L/PR:N/UI:N/S:C/C:H/I:H/A:H`）で、機構はアセンブリの入口における順序の誤り：「the `esp_tee` trap entry in `esp_tee_vectors_plic.S` and `esp_tee_vectors_clic.S` saves a caller-controlled register frame through the REE-supplied stack pointer before switching to the trusted TEE stack or validating the pointer.」つまり REE 側のローカルな非特権アプリが「direct this machine-mode write into TEE-exclusive memory」でき、**ESP32-C5、C6、C61、H2** で REE/TEE の隔離境界を破り、TEE の制御フローデータを汚染しうる。セキュアサービスの `ecall` 経路と割り込み入口経路の両方に同じ順序の問題がある。
+
+これを学術から運用の話に変えるのがバージョン情報だ。影響範囲は **from 5.5.5 until 5.5.6, 6.0.4, and 6.1.1** で、レコードは「is fixed in version 5.5.6 and is scheduled to be fixed in versions 6.0.4 and 6.1.1」と述べる。**v5.5.6** は **2026-10-16T14:32:14Z** に公開。しかし今日 ESP-IDF のリリース一覧を読むと最新は **v6.0.3**（2026-09-02）と **v6.1**（2026-08-27）で、**6.0.4 と 6.1.1 は存在しない**。6.x ラインにいる人にはインストールできるバージョンがない。レコード自体の公開は **2026-11-04T19:17:18Z**、5.5.x の修正から 19 日後である。
+
+修正コミットは 4 本引用され、CNA は `GitHub_M`——Espressif 自身の採番ではなく GitHub 割当の CVE だ。
+
+**なぜ重要か：** 「将来の修正バージョン」を名指しするアドバイザリは、修正日をバージョン番号の衣装で着せたものだ。ここでの正直な読みは、5.5.x は修正済みで 6.x はまだ、になる。このバグ種別は組み込みチームが軽視しがちなものでもある。TEE 境界が破れるのは切り替えの**直前の命令**であって、信頼されたコードの内側ではない。だから「ポインタを検証している」と「使う前に検証している」は同じことにならない。
+
+[`🔗 GHSA-49x8-xqjg-2pjg`](https://github.com/espressif/esp-idf/security/advisories/GHSA-49x8-xqjg-2pjg) · [`🔗 NVD CVE-2026-113780`](https://nvd.nist.gov/vuln/detail/CVE-2026-113780) · [`🔗 ESP-IDF v5.5.6`](https://github.com/espressif/esp-idf/releases/tag/v5.5.6)
+
+---
+
+## 28. トークンを節約するプロンプト圧縮は、高い再建忠実度のままモデルの拒否を静かに弱める
+
+- **Velocity:** ▮▮ rising
+- **ソース:** arXiv 2611.06380 · 投稿 2026-11-04T11:42Z
+- **タグ:** `ai-research` `safety` `compression` `alignment` `interpretability`
+
+**Does Context Compression Preserve Refusal Alignment?** が問うのは、入力を忠実に再建できる圧縮エンコーダが、モデルの振る舞いも保つのかどうか。答えは否：「encoder-based compression systematically weakens refusal behaviour in instruction-tuned language models, despite high reconstruction fidelity」、しかもこの効果は「persists across model families and compression architectures」。
+
+単なるリーダーボード観察を超えさせるのが機構の主張だ：「compression attenuates activation along the decoder's learned refusal direction.」拒否行動は活性化空間にある方向を持ち、圧縮はその方向の成分を縮める。意味内容は別の場所にあるので生き残る。論文は **Memory Steering** を提案する——「a lightweight inference-time intervention that restores refusal rates to near-baseline levels without retraining」で、圧縮表現空間の内部だけで動く。
+
+システム設計に持ち込むべき結論は一文：「semantic preservation does not guarantee behavioural preservation under compression.」
+
+数字を引く前に当てるべき限界はこれだ。抄録には具体値が一切ない——拒否率の差も、再建忠実度も、モデル名もない。したがってこれは機構を伴う方向性の主張で、大きさは本文にある。著者は Anthony Nguyen と Wenjun Lin の 2 名。
+
+**なぜ重要か：** 長コンテキストのエージェントスタックは今やどれも予算に収めるために圧縮し、その受け入れ基準は「人間がまだ要約を読めるか」——まさに本論文が不十分だと示した指標だ。品質指標が保たれたまま安全特性だけが静かに劣化するのは、回帰として最悪の形であり、再建が忠実かどうかを確認することこそ、それを見逃す確認だ。
+
+[`🔗 arXiv 2611.06380`](https://arxiv.org/abs/2611.06380) · [`🔗 全文（PDF）`](https://arxiv.org/pdf/2611.06380)
+
+---
+
+## 29. CASE-Bench：コーディングエージェントに良いリポジトリ文脈を与えると機能で 8.2 点、安全で 3.7 点
+
+- **Velocity:** ▮▮ rising
+- **ソース:** arXiv 2611.06294 · 投稿 2026-11-04T10:29Z
+- **タグ:** `ai-research` `security` `benchmark` `coding-agents` `context`
+
+**A.S.E 2.0** は **CASE-Bench** を構築した——「a benchmark of 145 repository-level tasks from real CVEs in 51 projects」。各タスクは Docker で走り、「has functional tests and a proof-of-concept exploit validated in both directions」、そして「the repository code that enforces or undermines its security」が注記される。問いは、セキュアコーディングのベンチマークが普通は固定してしまう変数だ。文脈構築は「designed almost exclusively for functional correctness」なので、モデルがプロジェクトの認可チェックを見たのか、真似すべき不安全なコードを隣に見たのかは、これまで変えられてこなかった。
+
+**13 種の文脈構築手法**、6 つの対照、6 つの LLM での結果は 3 つ：
+
+- 「(1) functionality-oriented context raises the functional pass rate by up to 8.2 percentage points (pp) but the secure pass rate by at most 3.7 pp」——誰もが出荷している最適化は、それが調整された軸でおよそ 2 倍の価値しかない。
+- 「(2) withholding a safeguard lowers the secure pass rate by up to 8.1 pp, while one inserted insecure exemplar raises correct-but-exploitable code by 6.3 pp」——悪い例を 1 つ入れるのはガードを外すのとほぼ同じくらい害で、しかも機能的テストは通るコードを生む。
+- 「(3) coding agents observe the relevant safeguard in only 27-36% of trajectories」——大半の場合、エージェントはそれを制約するファイルをそもそも読んでいない。
+
+**なぜ重要か：** プロンプトでは直せないのは 2 番目だ。「correct-but-exploitable」は機能テストとほとんどのセキュリティレビューの両方をすり抜ける分類で、テストスイートは不安全な例も満たす同じ仕様に対して書かれているからだ。27〜36% という数字は問題の位置づけも変える。まずこれは推論の問題ではなく検索の問題であり、3 分の 2 の軌跡は関連するガードレールにそもそも辿り着いていない。
+
+[`🔗 arXiv 2611.06294`](https://arxiv.org/abs/2611.06294) · [`🔗 全文（PDF）`](https://arxiv.org/pdf/2611.06294)
+
+---
+
+## 30. D3D は現在のブロックが検証されている間に次のブロックを起草する —— 32B ターゲットで 5.71 倍
+
+- **Velocity:** ▮▮ rising
+- **ソース:** arXiv 2611.06425 · 投稿 2026-11-04T12:27Z · GitHub にコード公開
+- **タグ:** `ai-research` `inference` `speculative-decoding` `diffusion` `throughput`
+
+投機的デコーディングには空転の窓がある。拡散ドラフタは 1 パスでブロックを出せるが、「each new block must wait for updated target-model hidden states」なので、起草と検証が直列化する。**D3D**（Decoupled Diffusion Drafting）はこの依存を外す——「blockwise denoising with auxiliary autoregressive supervision」を組み合わせた単独の拡散ドラフタで、ターゲットの隠れ状態なしに長い受理プレフィックスを得る。これにより「draft successor blocks during verification in one packed pass」が可能になる。
+
+実務側の半分は圧縮だ。層は受理長への影響で剪定され、「Removing five of 36 layers retains over 99% of mean acceptance length across three benchmarks with Qwen3-8B as the target.」
+
+7 ベンチマークの平均高速化は、ターゲット Qwen3-8B で **5.00×**、Qwen3-32B で **5.71×**。DFlash は同じ条件で **4.03×** と **3.67×**。Qwen3-32B の GSM8K では **7.48×** に達する。比較対象の選び方は妥当——同系統のドラフタ、同じベンチマーク——そしてコードは `fudan-generative-vision/D3D` で公開されている（9 スター、最終 push 2026-11-01。出たばかりの成果物であり、保守されているプロジェクトではない）。
+
+**なぜ重要か：** 数字の非対称こそが発見だ。ターゲットが大きくなると DFlash は相対的に遅くなり（4.03× → 3.67×）、D3D は速くなる（5.00× → 5.71×）。これは「利得がドラフト品質ではなく検証窓の充填から来る」なら当然の形で、大きなターゲットほど窓が長いからだ。投機的デコーディングは 2 年間ドラフタを中心に最適化されてきた。この論文が扱うのはスケジュールである。
+
+[`🔗 arXiv 2611.06425`](https://arxiv.org/abs/2611.06425) · [`🔗 fudan-generative-vision/D3D`](https://github.com/fudan-generative-vision/D3D) · [`🔗 全文（PDF）`](https://arxiv.org/pdf/2611.06425)
+
+---
+
+## 31. モデルマージに LoRA rank の統一は要らない —— 統一を前提とする手法は instruction adapter を丸ごと捨てている
+
+- **Velocity:** ▮ steady
+- **ソース:** arXiv 2611.06486 · 投稿 2026-11-04T13:26Z
+- **タグ:** `ai-research` `lora` `model-merging` `fine-tuning` `evaluation`
+
+モデルマージは別々に微調整した専門家を再学習なしで 1 つにまとめる。通例は全専門家を同じ LoRA rank で訓練するが、これは「even though each domain has its own best rank」——領域をまたいで rank の選択を結合してしまう。論文の主張は、この結合が「is a property of the merge method, not of merging」だという点。実験は 3 領域（数学・指示追従・多言語）、4 つの rank、3 つのモデル規模で **36 の専門家**を訓練し、6 つの手法でマージする。
+
+結果は手法の系列できれいに分かれる。「Giving experts different ranks costs averaging and utility-based selection nothing, and gains them up to 1.8 pp of multi-domain accuracy, while the conflict-resolution methods are inconsistent and can lose up to 4 pp.」機構は選択規則にある。マージは「keeps only a fixed share of the pooled spectral components, and methods that choose them by size discard many that would have reduced loss」——しかも捨てるのは**同じ**専門家だ。「The instruction adapter has the smallest singular values, so it is dropped almost entirely and IFEval falls by 16 to 25 pp.」
+
+loss への効果で選ぶと 3 専門家すべてが残り、8 倍の rank 範囲で精度はほぼ平坦になる——0.7 pp、TIES は 4B 規模で 6.7 pp。
+
+**なぜ重要か：** IFEval の 16〜25 ポイント低下は調整の揺れではない。マージ手法が、マージした 3 専門家のうち 1 つを静かに削除しているのであり、症状はマージしたら指示追従が悪くなった、に見えてバグには見えない。運用上の規則は一文：マージ演算子が大きさで選ばない限り rank は専門家ごとに選べる。大きさで選ぶなら、ノルム最小のアダプタは最も重要でないアダプタではない。
+
+[`🔗 arXiv 2611.06486`](https://arxiv.org/abs/2611.06486) · [`🔗 全文（PDF）`](https://arxiv.org/pdf/2611.06486)
+
+---
+
+## 32. SumOne は捨てたものを凍結モデルに再建させることで、エージェントの要約器を訓練する
+
+- **Velocity:** ▮ steady
+- **ソース:** arXiv 2611.06445 · 投稿 2026-11-04T12:49Z
+- **タグ:** `agent-infra` `memory` `context-compaction` `grpo` `open-source`
+
+長距離エージェントのコンテキスト圧縮は、たいてい本当に重要なもの——下流タスクのスコアやソルバの挙動——に対して訓練される。これは要約器を特定のタスクと特定のエージェントに縛りつける。**SumOne** はそこを再建報酬に置き換える：「Given a summary of the expired history, a frozen reconstructor recovers randomly masked portions of the original trajectory; reconstruction quality, combined with a length penalty, provides a task-agnostic reward for optimizing the summarizer with GRPO.」参照要約もタスク実行も要らない。
+
+推論時は「only the lightweight summarizer is retained, enabling plug-and-play context compression for otherwise unchanged agents」、そしてこのチェックポイントは「transfers across downstream models and agent harnesses without additional fine-tuning」。長距離検索とソフトウェアエンジニアリングのタスクで、「reduces estimated inference cost by approximately 78% on DeepSearchQA and 75% on SWE-bench Verified relative to operating with full context」。
+
+精度側は「absolute decreases of 0.04」と書かれるが、指標のスケールが示されていない。抄録で読者が大きさを測れない唯一の数字だ——0〜1 の通過率なら 4 ポイント、0〜100 のスコアなら無に等しい。
+
+**なぜ重要か：** 興味深い設計判断は訓練信号そのものだ。凍結モデルが捨てた情報をまだ復元できるか、と問うのは安価で、タスクを必要とせず、あるベンチマークの形を覚えた要約器には騙せない情報保持の代理指標であり、それこそ論文が避けようとしている失敗だ。未解決なのは、再建忠実度と下流の有用性が別の設定ではすでに分岐することが知られている点で（第 28 項）、この報酬の独立性はそのまま盲点でもある。
+
+[`🔗 arXiv 2611.06445`](https://arxiv.org/abs/2611.06445) · [`🔗 全文（PDF）`](https://arxiv.org/pdf/2611.06445)
+
+---
+
+## 33. Horizon は 12,624 スターのニュースレーダーで、profile 体系も MCP サーバも skill もある —— ただし release も tag も 1 つも無い
+
+- **Velocity:** ▮ steady
+- **ソース:** GitHub Trending（デイリー）· 本日 121 スター · MIT · 最終 push 2026-11-03T17:20Z
+- **タグ:** `agent-infra` `mcp` `skills` `rss` `open-source`
+
+`Thysrael/Horizon` は MIT の Python プロジェクトで、自称「your own AI-powered news radar」。RSS、Hacker News、Reddit、Telegram、X、GitHub、金融系フィードから取り込み、「collects, filters, and deduplicates them, then brings the worthwhile ones to you with context and community discussion」。**2026-02-20** 作成、**12,624 スター**、2026-11-03 にも push があり、英中 2 言語の日次ブリーフィングを Markdown、GitHub Pages、メール、WeChat、webhook で配信する。
+
+盗む価値のある設計判断は **profile** だ。「A profile is a reusable set of editorial rules: what belongs, what's worth keeping, and what to write.」各ソースは profile（組み込みは `tech-news`、`tech-blog`、`ai-creator`）にルーティングされ、profile ごとに採点 rubric、しきい値、重複排除規則、出力形式を持つ。分析・フィルタ・重複排除は**エンリッチの前**に行われる。`src/mcp/` に MCP サーバもあり、アシスタントがパイプラインの各段階を呼べる。skill での導入も用意されている——`npx skills add Thysrael/Horizon --skill horizon -g`。
+
+勧める前に確認すべき成果物の状態がこれだ。このリポジトリの releases と tags のフィードを直接読んだ：**release 0 件、tag 0 件**。このプロジェクトから導入できるものはすべて 2026-11-03 時点の既定ブランチそのままで、skill も含め、固定できるバージョン付き tag が存在しない。
+
+**なぜ重要か：** ソースごとの編集 rubric はフィードにとって正しい抽象化だ。何を読むかとどう書くかを分離しており、ほとんどのアグリゲータはそれを 1 つのプロンプトに押し込んでいる。tag の不在は、このフィードが繰り返し見つけてきたサプライチェーンの形でもある。1.26 万スターと文書化された導入手順がありながら、レビュー済みの状態が存在せず、「commit を固定せよ」はプロジェクト自身がまだ出せない助言になっている。
+
+[`🔗 Thysrael/Horizon`](https://github.com/Thysrael/Horizon) · [`🔗 ライブデモ`](https://thysrael.github.io/Horizon/) · [`🔗 GitHub Trending`](https://github.com/trending)
+
+---
+
+## 34. Qualcomm の Cloud AI 100 Ultra は 128 GB を 548 GB/s・150 W で動かす —— そして自社の仕様表に誤記がある
+
+- **Velocity:** ▮ steady
+- **ソース:** qualcomm.com 製品ページ · HN 116 ポイント · 約 20 時間前（約 00:00 UTC+8）
+- **タグ:** `hardware` `inference` `qualcomm` `datacenter` `specs`
+
+Qualcomm の **Cloud AI 100 Ultra** は PCIe FH3/4L の推論カードで、**TDP 150 W**、**最大 870 TOPS INT8**、**最大 288 TFLOPS FP16**、オンダイ SRAM **576 MB**、**AI コア 64 基**、**128 GB** DRAM、**PCIe Gen4 ×16** で **548 GB/s**。NVLink もホストメモリのコヒーレンスもなく、スロット以外の相互接続はない。**AI Inference Suite** が付属し、チャット・画像生成・マルチモーダル・RAG 向けの OpenAI 互換 API を Kubernetes かベアメタルコンテナで提供する。
+
+面白い成果物はファミリ表で、「Ultra」という接尾辞が何を買うのかが見える。**AI 80 Ultra** は**同じ** 150 W、**同じ** 128 GB、**同じ** 548 GB/s で、違うのは計算能力だけ——618 TOPS INT8、222 TFLOPS FP16 対 870 と 288。**AI 100 Pro** は 75 W、32 GB、137 GB/s のハーフハイトカード、8 レーンに下がる。
+
+4 つの SKU を横に読むと比は一定だ。548 GB/s 対 128 GB、137 GB/s 対 32 GB はどちらも**容量 1 GB あたり 4.3 GB/s**。容量と帯域が一緒にスケールするのは HBM ではなく LPDDR 系の指紋であり、1 枚のメモリが「多数の並行した小モデル」向けに設計されていて「大きなモデル 1 つを高速にデコードする」向けではないことを意味する。
+
+ベンダ自身のページの細部を 1 つ。両 Ultra SKU の DRAM 欄は「128 GB **LPR4x**」と書かれているが、これは LPDDR4x の誤記であって型番ではない。
+
+**なぜ重要か：** このカードの用途を決める仕様は、見出しに無いほうだ——548 GB/s が制約であり、だから売り文句が「単一モデルの高速デコード」ではなく「低電力で数百の並行推論ストリーム」になる。ベンダ間で TOPS を比べるのは、この数字を伴わないとほぼ無意味であり、「128 GB」も同じだ。ここでのそれは帯域あたりではなく、ワットあたり・スロットあたりの容量を指している。
+
+[`🔗 Cloud AI 100 Ultra`](https://www.qualcomm.com/data-center/products/cloud-ai-100-ultra) · [`🔗 製品ブリーフ（PDF）`](https://www.qualcomm.com/content/dam/qcomm-martech/dm-assets/documents/Prod-Brief-QCOM-Cloud-AI-100-Ultra.pdf) · [`🔗 HN ディスカッション`](https://news.ycombinator.com/item?id=50370654)
+
+---
+
+## 35. Xbox 360 hypervisor エクスプロイトは「20 分・成功率 30%」から「ほぼ瞬時・ほぼ 100%」になった —— 20 ビットの参照表のおかげで
+
+- **Velocity:** ▮ steady
+- **ソース:** icode4.coffee · 2026-11-04 · HN 78 ポイント
+- **タグ:** `reverse-engineering` `xbox360` `exploit` `hardware` `writeup`
+
+Ryan Miceli による Xbox 360 hypervisor の第 3 回は短く、PoC 公開後に何が変わったかが主だ。見出しになる変化はこれ：「how it went from taking ~20 minutes with a ~30% success rate to being near instantaneous with a near 100% success rate.」
+
+それを成し遂げた変更は 2 つ。1 つ目はゲームディスクという入口を外したこと。**Rock Band Blitz** の体験版にあったセーブファイルのエクスプロイト（「DaTArrest」、`ihatecompvir` と `InvoxiPlayGames` による）が stage 2 の ROP チェーンへ繋がる。さらに本体が USB ストレージに対応した際、HDD やメモリユニットからの起動を許されたパッケージが**USB ストレージ**にも拡張されたため、この体験版パッケージは普通のファイルとして USB メモリにコピーし、対応バージョンの任意の本体で起動できる。
+
+2 つ目は著者自身の盲点の修正だ。メモリ暗号化の whitening 値は **12 ビット**で、任意の平文に対して **1024 通り**の暗号文がある。最初の PoC は必要な 1 通りしか生成していなかった——その参照表は試して諦めていたものだ。理由も率直に書かれている。古い hypervisor は暗号化範囲の TLB をフラッシュしていたが後のビルドでは行われず、システムコールを直接呼ぶと whitening ビットが古いままになり、表は「was causing issues」を起こした。「by the time I got to the end of the exploit I had become so blinded by tunnel vision chasing CPU cache issues that I had convinced myself the lookup table just wasn't going to work.」作り直した表は期待される暗号文の **20 ビット**で索引し、oracle 値（衝突検証用）と悪意ある置換値の両方を格納し、衝突は意図的に無視する。わずかな衝突は競合ループの反復を数回飛ばすだけで済み、ハッシュテーブルにバケット対応を実装するより安い、と記事は述べる。
+
+**なぜ重要か：** これはエクスプロイト開発で最もよくある失敗の見本だ。欠けていたのはプリミティブではなく、プリミティブについてのモデルのほうで、壊れた試作が出した否定的な結果を新しい前提で再検証しないまま数週間抱えていた。修正は 1024 倍の事前計算と、以前の実験が無効だったと認めたことだった。第 4 回は peer pressure エクスプロイトを扱う。
+
+[`🔗 Hacking the Xbox 360 Hypervisor Part 3`](https://icode4.coffee/?p=1746) · [`🔗 HN ディスカッション`](https://news.ycombinator.com/item?id=50372164)
+
+---
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-11-04T20:30:18Z |
-| Items | 20 |
-| Sources tracked | 26（Hacker News、GitHub Trending、NVD、CISA KEV、GitHub Advisory Database、ベンダ PSIRT、arXiv、Hugging Face、ベンダ工学ブログ） |
+| Generated | 2026-11-05T04:27:03Z |
+| Items | 35 |
+| Sources tracked | 24（Hacker News、GitHub Trending、NVD、CVE.org、CISA KEV、GitHub Advisory Database、ベンダ PSIRT、arXiv、Hugging Face、ベンダ工学ブログ） |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8（1 日 3 回） |
 | Ranking | 速度加重（新しさ × エンゲージメント加速度 × 情報源の権威） |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |

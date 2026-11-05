@@ -1,8 +1,8 @@
 ---
 date: 2026-11-05
-updated: 2026-11-04T20:30:18Z
+updated: 2026-11-05T04:27:03Z
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 26
+sources: 24
 license: CC-BY-4.0
 ---
 
@@ -360,13 +360,297 @@ KEV 条目本身记录了一套已经变化的结构：它带 `forensicTriage: "
 
 ---
 
+## 21. OpenAI 的自动化流水线用 120 万美元 API 额度换来了 948 个 Linux 提权 exploit
+
+- **Velocity:** ▮▮▮ trending
+- **来源:** openai.com/index · 2026-11-04 发布 · HN 197 分
+- **标签:** `security` `ai-research` `linux` `kernel` `vulnerability-research`
+
+OpenAI 公开了一条自主挖内核漏洞流水线的方法论和账单：「Our prototype identified and analyzed 2,308 candidate Linux kernel findings, dynamically reproduced 1,724 vulnerabilities, and produced 948 local privilege escalation (LPE) exploits that could allow an unprivileged local user to gain root access.」整轮运行的 API 成本是 **1,213,430 美元，折合每个 LPE exploit 1,279 美元**；文中另报 **291** 个信息泄露类漏洞。
+
+流水线分五段，最后一段是人。**Scout** agent 选出 **5,034 个审计目标**——约 **280 万行**，「roughly 7% of the whole Linux kernel code base」——花费 3,426 美元。**Analyst** agent 在 12 小时内产出 2,308 条候选，花费 316,549 美元。**Validation** 阶段在带 KASAN 的虚拟机里 30 小时内复现了其中 1,724 条（**74.7%**），花费 73,330 美元；文中对残差给得很具体：「Only 3.1% reflected incorrect analysis by the model, where the reported vulnerability assumed an impossible condition.」之后是可用性评估与补丁生成。
+
+真正承载论点的是一次改编版 **kernelCTF** 环境上的对照：25 个信息泄露 PoC、21 个 LPE exploit，成本 **32,936 美元**；而 kernelCTF 在整个 2026 年确认接收的 0-day LPE 是 **26** 个。相对 7 月那次 GPT-5.6 Sol 的运行，新模型的「新发现」LPE 数量是「>5x」，并且文中说「at least 10 novel Linux exploitation techniques」是下限。
+
+限制比成本更能界定这条标题。模型被称作「an upcoming cyber model」，从头到尾没有命名也没有跑基准。估值那一段的 1,890 万–6,630 万美元被明确标注为「hypothetical」——那是 948 个 exploit 按 Pwn2Own 与 TyphoonPWN 历史赏金折算出来的金额，而那些赏金是给「被接收的提交」的价，不是对这些 exploit 价值的测量。成本上作者也自己收口：「we focused on methodology and measuring model capability in this research, not cost」，因此「the costs we report are more an upper bound」。**948** 是实验室内部生成 exploit 的数量，不是提交的 CVE 数，也不是合入的补丁数。
+
+**为什么重要：** 大家会引用的两个数——948 个 exploit、每个 1,279 美元——恰好回答了文章自己认为不是瓶颈的那个问题。它真正的运营发现是：「within 10 days while the scan was running, we observed over 100 Linux LPEs had been patched or had staging patches from other contributors, with ~300 more being publicly discussed」——也就是说，发现一个内核 bug 的边际成本，已经低于审阅、修好并把补丁发出去的边际产能。这是披露管道的问题，这篇文章最诚实的贡献是给它定了价。
+
+[`🔗 OpenAI：A thousand fewer paths to root`](https://openai.com/index/a-thousand-fewer-paths-to-root/) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50372929)
+
+---
+
+## 22. Ripple-65B 用 65B 稠密模型在 Terminal-Bench 上压过 500B–975B 的美国开源模型 —— 但只在两列中的一列上
+
+- **Velocity:** ▮▮▮ trending
+- **来源:** ricursive.com/ripple · 2026-11-04 · HN 248 分
+- **标签:** `ai-models` `open-weights` `dense` `benchmarks` `agentic-coding`
+
+Ricursive Intelligence 发布 **Ripple-65B Preview**：一个 **65B 稠密**（非 MoE）Transformer，**12T token** 预训练、支持最长 1M 上下文，在 **Terminal-Bench 2.1 上得 80.52**，高于 Reflection Beam 501B（80.1）、Meta Muse Spark Open 816B（76.4）、Thinking Machines Inkling 975B（63.8）与 NVIDIA Nemotron 3 Ultra 550B（56.4）。模型卡的架构刻意朴素：`d_model` **5120**、**80 层**、MFU **40%**，「simple sharding, no custom kernels, and no quantization (BF16)」，团队在开发过程中「scaled from 1 to 5 people during development」。权重以 Apache-2.0 发布，**16 个 safetensors 分片合计 129,565,519,472 字节（129.6 GB）**，另有 NVFP4、DFlash2 与一个仅预训练的 base checkpoint。我们读取时：**129 个赞、0 次下载**。
+
+基准表有两列 Terminal-Bench，行为差异很大。`(self-reported)` 列里 Ripple 80.5 比 Beam 的 80.1 高 0.4；而在**官方 Terminus 2 harness** 下，Beam 掉到 **70.8**、Inkling 掉到 56.2、Muse Spark 掉到 78.7，Ripple 仍然是 **80.5**。模型卡解释了为什么两列都印：「we found that Terminal-Bench 2.1 scores were universally lower (with the exception of Muse Spark Open) when using the official Terminus 2 harness at 128K sequence length with summarization」，并且把自家重跑的竞品格子用斜体标出，同时直言「Replicating benchmark scores has been challenging, particularly for modern agentic evals, due to the number of factors which can cause eval scores to shift.」
+
+离开 Terminal-Bench 之后，「SOTA」这个说法就窄了很多：**SWE-bench Verified 76.5**（Beam 81.6、Muse 78.7）、**SWE-bench Pro v1.0 61.42**（Beam 66.1）、**DeepSWE 1.1 44.3**（Muse 60.0）。唯一的离群点是 **SWE-bench Pro v2.0 Hard**：Ripple 自称 79.1，而 Inkling 只有 **2.0**——同一张表里 Inkling 在 Pro v1.0 上是 54.3，这更像 harness 差异而不是能力差异，文中没有点明。
+
+成本主张必须连脚注一起引用：**3,200 万美元**是「our full R&D cost」，被描述为「one-tenth the cost of the previous open-weight SOTA on agentic coding」，并且「as estimated to the best of our knowledge」。效率主张是另一件事，而且写得更好：「improves Compute Efficiency (CE) on code by 16x relative to the Olmo 3 ladder, with the advantage further increasing with scale up to 55x for the full hero run」。
+
+**为什么重要：** 一个能塞进 DGX Spark、又和 500B+ MoE 只差几个点的 65B 稠密模型，比名次本身更有意思——它说明 MoE 的容量优势与稠密的算力效率之间的差距，比参数量暗示的要窄。该一起带走的还有那个列分裂：同一个竞品在换 harness 后掉了 9.3 分，所以「压过 501B」是关于你读哪一列的陈述。（Ricursive 不是 2026-10-31 我们报道过的 Flint 那家 RecursiveSI。）
+
+[`🔗 ricursive.com/ripple`](https://www.ricursive.com/ripple) · [`🔗 ricursiveAI/Ripple-65B-Preview`](https://huggingface.co/ricursiveAI/Ripple-65B-Preview) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50369925)
+
+---
+
+## 23. Kyverno 在 3.3 秒内发布了 21 条 CVE 记录 —— 七条 9.0 以上，而修复比文书早 15 天
+
+- **Velocity:** ▮▮▮ trending
+- **来源:** NVD · CVE-2026-122302 – CVE-2026-122323 发布窗口 2026-11-05T03:17:22–03:17:25Z
+- **标签:** `cve` `kubernetes` `kyverno` `privilege-escalation` `policy-engine`
+
+二十一条 Kyverno 记录在 **2026-11-05T03:17:22.030Z** 到 **03:17:25.343Z** 之间落到 NVD——发布窗口 **3.313 秒**——全部由 `disclosure@vulncheck.com` 打分，全部仍处于 `Received`。其中七条在 9.0 及以上：**五条 9.9**、一条 **9.8**、一条 **9.1**。五个 9.9 共用 `CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:C/C:H/I:H/A:H`（重算结果确为 9.9：把它推进 Critical 区间的正是 `S:C` 的 scope 变更），同一批记录的 VulnCheck 4.0 度量给 **9.4**。
+
+漏洞机制是同一个形状——命名空间内的策略作者够到了控制器的 ServiceAccount——但各个变体值得逐个看。`CVE-2026-122311` 是 `resource.get()` / `resource.post()` 的路径穿越：resource 参数按 `/` 切分，第一段之后的一切都被交给 client-go 当作「subresource」，而 `rest.IsValidPathSegmentName` 不校验 subresource，`path.Join` 再把 `..` 解析掉。通告自己的摘要对后果写得很直接：一个能在自己命名空间里创建 `NamespacedValidatingPolicy` 的租户，可以用 Kyverno admission controller 的 ServiceAccount 读写集群里任意位置的任意对象。`CVE-2026-122310` 是同一思路向上一层：`context.apiCall` 的 `urlPath` 是清洗之后才校验、执行的却是原始路径，于是 `#` 或 `?` 就能把穿越藏过检查。`CVE-2026-122303` 与 `-122313` 借 `targetMatchConstraints.expression` 返回一个字面量 CEL map，指到别人的命名空间；`CVE-2026-122304` 利用 cleanup controller「builds its context loader with a nil policy」；`CVE-2026-122302` 校验的是**控制器**的权限，而不是作者的。
+
+日期比数量更重要。修复版本是 **1.19.2**，发布于 **2026-10-20T23:50:19Z**；`GHSA-4pqm-wqq6-h9q2` 于 **2026 年 10 月 21 日**发布，`datePublic` 也是 **2026-10-21**；CVE 记录直到 **2026-11-05** 才到——比修复发布晚十六天。而且通告明说这是复发而非新类：机制不同，且先前那两处修复都拦不住它——指的是 `GHSA-79gf-7frw-68m9`（CVE-2026-54523）与 `GHSA-cvq5-hhx3-f99p`（CVE-2026-41068）。
+
+**为什么重要：** 已公布的复现环境是一个跑 Kubernetes v1.32.2 的 kind 集群，用发布版 manifest 安装，没有改任何配置，也没有给 Kyverno 追加任何 RBAC——就是默认安装。所以前置条件只是「某个租户能创建命名空间级策略」，而结果是集群管理员。3.3 秒的批量发布同时提醒：NVD 的发布时间是工作流产物，这些 bug 没有一条是在 03:17Z 变真的，而它们全部在 10 月 21 日就已经公开。
+
+[`🔗 GHSA-4pqm-wqq6-h9q2（路径穿越）`](https://github.com/kyverno/kyverno/security/advisories/GHSA-4pqm-wqq6-h9q2) · [`🔗 Kyverno v1.19.2`](https://github.com/kyverno/kyverno/releases/tag/v1.19.2) · [`🔗 NVD CVE-2026-122311`](https://nvd.nist.gov/vuln/detail/CVE-2026-122311)
+
+---
+
+## 24. GPUStack 把任何来自 loopback 的请求当成管理员 —— 通告说它已在野被利用
+
+- **Velocity:** ▮▮ rising
+- **来源:** GitHub Advisory Database · GHSA-gj9m-f8ph-pmhr · CVE-2026-102895 · 9.8
+- **标签:** `cve` `ai-infra` `authentication` `gpustack` `exploited`
+
+`CVE-2026-102895` 是打在 GPUStack 上的 **9.8**——一个面向模型服务的开源 GPU 集群管理器，**5,972 星**，仓库在 2026-11-05 还有推送。漏洞只有一行策略：当 `force_auth_localhost` 为 False（默认值）时，`get_current_user` 会把任何来源被判为 loopback 的请求提升为内置管理员账号。有两种不需要任何凭据就能「看起来像 loopback」的办法：把 GPUStack 放在同机反向代理后面（最典型的自托管形态，此时「every remote request arrives at GPUStack with TCP peer `127.0.0.1`」），或者伪造 `X-GPUStack-Real-IP: 127.0.0.1`。通告里的根因行就是整条教训：「Trusting the network source of a request (socket peer, or a client-controllable header) as an authentication signal.」
+
+影响面是管理级的：枚举并修改用户、模型、worker 与配置；铸造 scope 为 `["*"]` 的持久管理员 API key（此后「valid from any source IP thereafter」）；读取 worker 凭据与云厂商 secret；并借助 `POST /v2/inference-backends/from-yaml` 一类仅管理员可用的接口在 worker 主机上执行代码。
+
+让这条区别于那几十个 9.x 认证绕过的是同一份通告里的一句：「This vulnerability has been observed exploited in the wild against a v2.1.1 deployment (attacker-created custom backends running reverse shells).」在野利用由 Javier Sixto（ulex.fr）报告；漏洞本身由 Nikko Enggaliano、Wei Yunzhou，以及 Rui Yang 与 Haoyu Wang（约翰霍普金斯大学）独立报告。
+
+几个时钟照样对不上。通告发布于 **2026 年 7 月 31 日**；修复版本 **v2.2.0** 发布于 **2026-06-18T15:54:18Z**——比 **2026-11-04T22:17:44Z** 的 NVD 记录早 **139 天**。最新版本是 **v2.3.0**（2026-10-21），所以停留在当前版本线上的人已经修好，通告描述的是仍留在 2.1.x 的那批部署。
+
+**为什么重要：** 「localhost 可信」这个默认值能活过每一次代码评审，因为它读起来像一个安全决定而不是一个 bug，而一个反向代理会悄悄把它变成一条「整个互联网都满足」的规则。缓解清单本身也值得留着：设 `force_auth_localhost=true`、在边缘剥掉客户端自带的 `X-GPUStack-Real-IP`、绝不让网关把外部流量伪装成本地。
+
+[`🔗 GHSA-gj9m-f8ph-pmhr`](https://github.com/gpustack/gpustack/security/advisories/GHSA-gj9m-f8ph-pmhr) · [`🔗 NVD CVE-2026-102895`](https://nvd.nist.gov/vuln/detail/CVE-2026-102895) · [`🔗 GPUStack v2.2.0`](https://github.com/gpustack/gpustack/releases/tag/v2.2.0)
+
+---
+
+## 25. Yuxi 的沙箱之间可以互访对方的 API，并不需要容器逃逸 —— 9.9，修复比记录早 110 天
+
+- **Velocity:** ▮▮ rising
+- **来源:** GitHub Advisory Database · CVE-2026-97693 · 发布于 2026-11-04T22:18Z
+- **标签:** `cve` `ai-infra` `multi-tenant` `sandbox` `yuxi`
+
+Yuxi 是「a large-model-based intelligent knowledge base and knowledge graph agent development platform」，7,602 星，版本线还在 beta。`CVE-2026-97693` 为「execution-capable Docker sandboxes 与受信应用服务之间隔离不足」给出 **9.9**（`CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:C/C:H/I:H/A:H`）。一个能在自己沙箱里执行命令的低权限已认证用户，「can reach other tenants' sandbox APIs, access their files and secrets, execute commands in active sandboxes, and enumerate, create, or delete sandboxes through the unauthenticated provisioner without knowing administrator, database, or MinIO credentials.」
+
+让这条保持诚实的是那句说明「什么没有发生」的话：这些路径能泄露和篡改跨租户数据并造成拒绝服务，「without a container escape or kernel vulnerability」。沙箱边界一个都没破；破的是沙箱与控制面之间的网络边界。
+
+运维最容易漏掉的是修复说明。修复版本是 **0.7.1**，发布于 **2026-07-17T15:50:37Z**——比记录早 **110 天**——当前线已经走到 **v0.8.0.beta7**。但是：「upgrading the Compose files does not automatically rotate them」，所以任何曾经跑过文档默认值的部署，都必须单独轮换持久化的 **PostgreSQL**、**Neo4j** 与 **MinIO** 凭据；通告还指出，如果暴露的 PostgreSQL 账号是超级用户，仅此一项就能在 PostgreSQL 容器内执行命令。
+
+**为什么重要：** 沙箱是每个 agent 平台都会做的安全承诺，而这里沙箱本身没事——租户边界是编排层自己的 API 面。升级一个 Compose 文件换掉的是代码，从来不换 secret，通告把这句明写了出来，而不是留给读者自己想。
+
+[`🔗 CVE-2026-97693 记录`](https://www.cve.org/CVERecord?id=CVE-2026-97693) · [`🔗 GHSA-qpm5-6332-9445`](https://github.com/xerrors/Yuxi/security/advisories/GHSA-qpm5-6332-9445) · [`🔗 NVD CVE-2026-97693`](https://nvd.nist.gov/vuln/detail/CVE-2026-97693)
+
+---
+
+## 26. Pocket ID 把邮件令牌绑在用户上而不是地址上 —— 于是你可以「验证」一个已不属于你的邮箱
+
+- **Velocity:** ▮▮ rising
+- **来源:** GitHub Advisory Database · CVE-2026-115770 · 发布于 2026-11-04T23:17Z
+- **标签:** `cve` `identity` `oidc` `pocket-id` `account-linking`
+
+`CVE-2026-115770` 是 Pocket ID 上的 **9.6**（`AV:N/AC:L/PR:L/UI:N/S:C/C:H/I:H/A:N`）。Pocket ID 是一个基于 passkey 的 OIDC 提供方，**10,005 星**。这个 bug 是三个正常特性之间的三方互动：`SendEmailVerification` 把令牌「only to the user's identifier」绑定，`UpdateUser` 修改账号邮箱时「without invalidating the outstanding token」，而 `VerifyEmail` 会把「the current address as verified」。于是普通用户可以为自己控制的地址申请一个令牌，把账号改成任意一个未被占用的地址，再兑现那个旧令牌——Pocket ID 就会以一个 `email_verified` 为 true 的状态发布这个新地址。
+
+可达性来自默认值：「The default affected configuration uses `emailsVerified=false` and `allowOwnAccountEdit=true`」。记录里写了一个前置条件——「the target address must not already belong to another Pocket ID user」——而这恰好是新员工邮箱满足的情形。
+
+下游后果写得比转述更准确：一个信任「已验证邮箱」来做自动账号匹配或开户的应用，「can link the attacker's identity to another user's account, while applications that rely exclusively on the stable OIDC `sub` claim are not affected by that downstream consequence.」
+
+时间线：修复版本 **2.12.0** 发布于 **2026-07-29T23:05:53Z**——比 **2026-11-04** 的记录早 **98 天**——项目现在已到 **v2.19.2**（2026-10-22）。CWE-345。
+
+**为什么重要：** `email_verified` 是依赖方唯一当成「关于事实的断言」的 claim，而这里它断言的其实是令牌的主体，不是令牌的内容。缓解办法是一条设计规则而不是补丁说明：如果一个身份断言能被后续编辑作废，那么那次编辑就必须作废这个断言——而任何拿 `email` 而不是 `sub` 做即时开户的应用，是升级之后仍然留着的那半个 bug。
+
+[`🔗 CVE-2026-115770 记录`](https://www.cve.org/CVERecord?id=CVE-2026-115770) · [`🔗 GHSA-rm8c-2cv8-jwf6`](https://github.com/pocket-id/pocket-id/security/advisories/GHSA-rm8c-2cv8-jwf6) · [`🔗 Pocket ID v2.12.0`](https://github.com/pocket-id/pocket-id/releases/tag/v2.12.0)
+
+---
+
+## 27. ESP-IDF 的 TEE 陷入入口经由调用方的栈指针写入 —— 而 6.x 的修复版本还根本不存在
+
+- **Velocity:** ▮▮ rising
+- **来源:** GitHub Advisory Database · CVE-2026-113780 · 9.3 · 发布于 2026-11-04T19:17Z
+- **标签:** `cve` `esp32` `tee` `firmware` `espressif`
+
+`CVE-2026-113780` 在 ESP-IDF 上是 **9.3**（`AV:L/AC:L/PR:N/UI:N/S:C/C:H/I:H/A:H`），机制是一段汇编入口里的顺序错误：「the `esp_tee` trap entry in `esp_tee_vectors_plic.S` and `esp_tee_vectors_clic.S` saves a caller-controlled register frame through the REE-supplied stack pointer before switching to the trusted TEE stack or validating the pointer.」也就是说，REE 侧一个本地无特权应用可以「direct this machine-mode write into TEE-exclusive memory」，在 **ESP32-C5、C6、C61 与 H2** 上打破 REE/TEE 隔离边界，并可能污染 TEE 的控制流数据。安全服务 `ecall` 与中断入口两条路径都有同样的顺序问题。
+
+版本信息是让这条从学术变成运营的地方。受影响区间是 **from 5.5.5 until 5.5.6, 6.0.4, and 6.1.1**，记录说该问题「is fixed in version 5.5.6 and is scheduled to be fixed in versions 6.0.4 and 6.1.1」。**v5.5.6** 发布于 **2026-10-16T14:32:14Z**。但今天读 ESP-IDF 的发布列表，最新的是 **v6.0.3**（2026-09-02）与 **v6.1**（2026-08-27）——**6.0.4 与 6.1.1 并不存在**，也就是说停在 6.x 线上的人没有可安装的版本。记录本身的发布时间是 **2026-11-04T19:17:18Z**，距 5.5.x 的修复十九天。
+
+通告引用了四个修复提交，CNA 是 `GitHub_M`——GitHub 分配的 CVE 号，不是 Espressif 自己的编号体系。
+
+**为什么重要：** 一份点名「未来修复版本」的通告，是把修复日期包装成了版本号；这里诚实的读法是 5.5.x 已修、6.x 还没有。这类 bug 也正好是嵌入式团队容易低估的：TEE 边界是在切换的**上一条指令**上失守的，不在受信代码里面——所以「校验了指针」和「在使用之前校验指针」不是同一句话。
+
+[`🔗 GHSA-49x8-xqjg-2pjg`](https://github.com/espressif/esp-idf/security/advisories/GHSA-49x8-xqjg-2pjg) · [`🔗 NVD CVE-2026-113780`](https://nvd.nist.gov/vuln/detail/CVE-2026-113780) · [`🔗 ESP-IDF v5.5.6`](https://github.com/espressif/esp-idf/releases/tag/v5.5.6)
+
+---
+
+## 28. 为了省 token 压缩提示词，会悄悄削弱模型的拒答 —— 而重建保真度依然很高
+
+- **Velocity:** ▮▮ rising
+- **来源:** arXiv 2611.06380 · 提交于 2026-11-04T11:42Z
+- **标签:** `ai-research` `safety` `compression` `alignment` `interpretability`
+
+**Does Context Compression Preserve Refusal Alignment?** 问的是：一个能忠实重建输入的压缩编码器，是否也保住了模型对它的行为。答案是没有：「encoder-based compression systematically weakens refusal behaviour in instruction-tuned language models, despite high reconstruction fidelity」，而且这一效应「persists across model families and compression architectures」。
+
+机制层面的主张，才是让它超越「又一个榜单观察」的部分：「compression attenuates activation along the decoder's learned refusal direction.」也就是说，拒答行为在激活空间里有一个方向，压缩把沿该方向的分量缩小，而语义内容因为存放在别处得以幸存。论文提出 **Memory Steering**——「a lightweight inference-time intervention that restores refusal rates to near-baseline levels without retraining」，完全在压缩表示空间内操作。
+
+它要带进系统设计的结论就一句：「semantic preservation does not guarantee behavioural preservation under compression.」
+
+引数字之前该先套上的限制是：摘要里没有任何具体数值——没有拒答率差值、没有重建保真度、没有点名模型清单——所以这是一个带机制的方向性结论，量级在正文里。作者两人：Anthony Nguyen 与 Wenjun Lin。
+
+**为什么重要：** 现在每一套长上下文 agent 栈都在为了塞进预算而压缩，而通行的验收标准是「人还能不能读懂这段摘要」——恰恰是这篇论文证明不够用的那个指标。一种在质量指标全都保持的同时静默退化的安全属性，是回归里最糟的形态，而「重建结果保真」恰恰是那次会漏掉它的检查。
+
+[`🔗 arXiv 2611.06380`](https://arxiv.org/abs/2611.06380) · [`🔗 全文（PDF）`](https://arxiv.org/pdf/2611.06380)
+
+---
+
+## 29. CASE-Bench：给编码 agent 好的仓库上下文，换来 8.2 点功能分和 3.7 点安全分
+
+- **Velocity:** ▮▮ rising
+- **来源:** arXiv 2611.06294 · 提交于 2026-11-04T10:29Z
+- **标签:** `ai-research` `security` `benchmark` `coding-agents` `context`
+
+**A.S.E 2.0** 构建了 **CASE-Bench**——「a benchmark of 145 repository-level tasks from real CVEs in 51 projects」，每个任务跑在 Docker 里，「has functional tests and a proof-of-concept exploit validated in both directions」，并标注了「the repository code that enforces or undermines its security」。它要问的正是安全代码基准通常固定住的那个变量：上下文构造「designed almost exclusively for functional correctness」，所以模型到底是看到了项目的授权检查、还是看到旁边一段可模仿的不安全代码，从来没有人去变过。
+
+在 **13 种上下文构造方法**、六个对照与六个 LLM 上，三个结果：
+
+- 「(1) functionality-oriented context raises the functional pass rate by up to 8.2 percentage points (pp) but the secure pass rate by at most 3.7 pp」——大家天天在发的那些优化，在被调优的那条轴上值大约两倍。
+- 「(2) withholding a safeguard lowers the secure pass rate by up to 8.1 pp, while one inserted insecure exemplar raises correct-but-exploitable code by 6.3 pp」——一个坏例子几乎和抽掉护栏一样有害，而且它产出的代码能通过功能测试。
+- 「(3) coding agents observe the relevant safeguard in only 27-36% of trajectories」——大多数时候，agent 根本没读到那个会约束它的文件。
+
+**为什么重要：** 第二条是提示词里修不掉的那个。「correct-but-exploitable」是一类同时躲过功能测试和多数安全评审的代码，因为测试集是照着不安全范例也满足的同一份规格写的。27–36% 这个数字则把问题重新归了位：与其说是推理问题，不如先说是检索问题——三分之二的轨迹压根没把相关护栏翻出来。
+
+[`🔗 arXiv 2611.06294`](https://arxiv.org/abs/2611.06294) · [`🔗 全文（PDF）`](https://arxiv.org/pdf/2611.06294)
+
+---
+
+## 30. D3D 在当前块还在被验证时就去草拟下一个块 —— 32B 目标上 5.71 倍
+
+- **Velocity:** ▮▮ rising
+- **来源:** arXiv 2611.06425 · 提交于 2026-11-04T12:27Z · GitHub 上有代码
+- **标签:** `ai-research` `inference` `speculative-decoding` `diffusion` `throughput`
+
+投机解码有一段空转窗口：扩散草拟器一次就能出一整块，但「each new block must wait for updated target-model hidden states」，于是草拟与验证被迫串行。**D3D**（Decoupled Diffusion Drafting）把这个依赖去掉了——一个独立扩散草拟器，把「blockwise denoising with auxiliary autoregressive supervision」结合起来，在不需要目标模型隐状态的情况下获得较长的被接受前缀，从而可以「draft successor blocks during verification in one packed pass」。
+
+工程上的一半是压缩：按层对接受长度的影响剪枝，而「Removing five of 36 layers retains over 99% of mean acceptance length across three benchmarks with Qwen3-8B as the target.」
+
+七个基准的平均加速：目标 Qwen3-8B 时 **5.00×**，目标 Qwen3-32B 时 **5.71×**；DFlash 同条件是 **4.03×** 与 **3.67×**。在 Qwen3-32B 上跑 GSM8K 达到 **7.48×**。对照选得合适——同族草拟器、同基准——代码在 `fudan-generative-vision/D3D` 公开（9 星，最后推送 2026-11-01，所以这是刚出炉的产物，而不是维护中的项目）。
+
+**为什么重要：** 数字之间的不对称才是发现本身。目标变大时 DFlash 相对变慢（4.03× → 3.67×），D3D 反而变快（5.00× → 5.71×）——这正是「收益来自填满验证窗口而不是草拟质量」会呈现的样子，因为更大的目标意味着更长的窗口可填。投机解码被围绕草拟器优化了两年，这篇讲的是调度。
+
+[`🔗 arXiv 2611.06425`](https://arxiv.org/abs/2611.06425) · [`🔗 fudan-generative-vision/D3D`](https://github.com/fudan-generative-vision/D3D) · [`🔗 全文（PDF）`](https://arxiv.org/pdf/2611.06425)
+
+---
+
+## 31. 模型合并不需要统一 LoRA rank —— 而那些坚称需要的合并法会把指令适配器整个丢掉
+
+- **Velocity:** ▮ steady
+- **来源:** arXiv 2611.06486 · 提交于 2026-11-04T13:26Z
+- **标签:** `ai-research` `lora` `model-merging` `fine-tuning` `evaluation`
+
+模型合并把分别微调出来的专家合成一个模型、无需重训，而通行做法是让每个专家都用同一个 LoRA rank——这就在各领域之间把 rank 选择绑死了，「even though each domain has its own best rank」。论文的主张是这种耦合「is a property of the merge method, not of merging」。实验规模：三个领域（数学、指令遵循、多语）、四个 rank、三个模型尺度，共 **36 个专家**，用六种合并方法。
+
+结果按方法族干净地分开：「Giving experts different ranks costs averaging and utility-based selection nothing, and gains them up to 1.8 pp of multi-domain accuracy, while the conflict-resolution methods are inconsistent and can lose up to 4 pp.」机制在挑选规则上：合并「keeps only a fixed share of the pooled spectral components, and methods that choose them by size discard many that would have reduced loss」——而且丢弃的是**同一个**专家。「The instruction adapter has the smallest singular values, so it is dropped almost entirely and IFEval falls by 16 to 25 pp.」
+
+改成按对 loss 的影响去挑，三个专家都能留下，准确率在 8 倍 rank 区间上几乎持平——0.7 pp，对比 TIES 在 4B 尺度上的 6.7 pp。
+
+**为什么重要：** 16–25 个点的 IFEval 掉分不是调参噪声——它是一种合并方法悄悄删掉了你合并进去的三个专家之一，而现象会表现为合并之后指令遵循就是变差了，不像一个 bug。可操作的规则只有一句：只要合并算子不按幅值挑选，rank 就可以逐专家选；而如果它按幅值挑，范数最小的适配器并不是最不重要的那个。
+
+[`🔗 arXiv 2611.06486`](https://arxiv.org/abs/2611.06486) · [`🔗 全文（PDF）`](https://arxiv.org/pdf/2611.06486)
+
+---
+
+## 32. SumOne 训练 agent 的摘要器的方式：让一个冻结模型去重建被丢掉的部分
+
+- **Velocity:** ▮ steady
+- **来源:** arXiv 2611.06445 · 提交于 2026-11-04T12:49Z
+- **标签:** `agent-infra` `memory` `context-compaction` `grpo` `open-source`
+
+长程 agent 的上下文压缩，通常是拿你真正在乎的东西去训练——下游任务分数或求解器行为——这会把摘要器绑死在某个任务、某个 agent 上。**SumOne** 换成了重建奖励：「Given a summary of the expired history, a frozen reconstructor recovers randomly masked portions of the original trajectory; reconstruction quality, combined with a length penalty, provides a task-agnostic reward for optimizing the summarizer with GRPO.」不需要参考摘要，也不需要跑任务。
+
+推理时「only the lightweight summarizer is retained, enabling plug-and-play context compression for otherwise unchanged agents」，而且这个 checkpoint「transfers across downstream models and agent harnesses without additional fine-tuning」。在长程检索与软件工程任务上，它「reduces estimated inference cost by approximately 78% on DeepSearchQA and 75% on SWE-bench Verified relative to operating with full context」。
+
+准确率那一侧写的是「absolute decreases of 0.04」，但没说明这个度量的量纲——这是摘要里读者唯一无法估量的数字：在 0–1 的通过率上那是四个点，在 0–100 的分数上那什么都不是。
+
+**为什么重要：** 有意思的设计决定是训练信号本身。让一个冻结模型去重建被丢掉的信息，是一个便宜、不需要任务、也无法被「学会了某个基准形状」的摘要器钻空子的信息保留代理——而后者正是这篇论文要绕开的失败。没解决的部分是：重建保真度与下游有用性在别的场景里已经被证明会分叉（见第 28 条），所以这份奖励的独立性同时也是它的盲点。
+
+[`🔗 arXiv 2611.06445`](https://arxiv.org/abs/2611.06445) · [`🔗 全文（PDF）`](https://arxiv.org/pdf/2611.06445)
+
+---
+
+## 33. Horizon 是一个 12,624 星的新闻雷达，有 profile 系统、MCP server、skill —— 却一个 release、一个 tag 都没有
+
+- **Velocity:** ▮ steady
+- **来源:** GitHub Trending（日榜）· 今日 121 星 · MIT · 最后推送 2026-11-03T17:20Z
+- **标签:** `agent-infra` `mcp` `skills` `rss` `open-source`
+
+`Thysrael/Horizon` 是一个 MIT 的 Python 项目，自称「your own AI-powered news radar」：从 RSS、Hacker News、Reddit、Telegram、X、GitHub 与财经源抓取，然后「collects, filters, and deduplicates them, then brings the worthwhile ones to you with context and community discussion」。它创建于 **2026-02-20**，**12,624 星**，2026-11-03 仍有推送，产出中英双语的每日简报，可交付为 Markdown、GitHub Pages、邮件、微信或 webhook。
+
+值得抄的设计决定是 **profile**：「A profile is a reusable set of editorial rules: what belongs, what's worth keeping, and what to write.」每个源路由到一个 profile（内置 `tech-news`、`tech-blog`、`ai-creator`），每个 profile 自带打分 rubric、阈值、去重规则与输出形态，而分析、过滤与去重都在富化**之前**完成。此外 `src/mcp/` 下有一个 MCP server 供助手调用流水线各阶段，还有一个 skill 安装方式——`npx skills add Thysrael/Horizon --skill horizon -g`。
+
+推荐之前该注意的产物状态是这一条。我们直接查了这个仓库的 releases 与 tags 两个 feed：**0 个 release、0 个 tag**。这个项目能装的一切都是 2026-11-03 的默认分支快照——包括那个 skill，它没有可钉住的版本化 tag。
+
+**为什么重要：** 「按源配置的编辑 rubric」对信息流是正确的抽象——它把读什么和怎么写拆开，而多数聚合器把它们塞进一个 prompt 里。缺失的 tag 则是这个 feed 反复遇到的同一种供应链形态：1.26 万星、有文档化的安装路径，却没有任何可供审计的状态，「钉住一个 commit」成了一句项目自己还给不出的建议。
+
+[`🔗 Thysrael/Horizon`](https://github.com/Thysrael/Horizon) · [`🔗 在线演示`](https://thysrael.github.io/Horizon/) · [`🔗 GitHub Trending`](https://github.com/trending)
+
+---
+
+## 34. 高通 Cloud AI 100 Ultra 让 128 GB 显存跑在 548 GB/s 上，功耗 150 W —— 而且自家规格表里有个拼写错误
+
+- **Velocity:** ▮ steady
+- **来源:** qualcomm.com 产品页 · HN 116 分 · 约 20 小时前（约 00:00 UTC+8）
+- **标签:** `hardware` `inference` `qualcomm` `datacenter` `specs`
+
+高通的 **Cloud AI 100 Ultra** 是一张 PCIe FH3/4L 推理卡，**150 W TDP**，**最高 870 TOPS INT8**、**最高 288 TFLOPS FP16**、**576 MB** 片上 SRAM、**64 个 AI core**、**128 GB** DRAM，**PCIe Gen4 ×16** 提供 **548 GB/s** 带宽——没有 NVLink，没有 host 内存一致性，除了插槽之外没有互联。它搭配一套 **AI Inference Suite**，提供兼容 OpenAI 的 API（对话、图像生成、多模态、RAG），以 Kubernetes 或裸金属容器部署。
+
+有意思的产物是那张家族表，因为它显示了「Ultra」这个后缀到底买到了什么。**AI 80 Ultra** 是**同样的** 150 W、**同样的** 128 GB、**同样的** 548 GB/s，差别只在算力——618 TOPS INT8、222 TFLOPS FP16，对 870 与 288。**AI 100 Pro** 则降到 75 W、32 GB、137 GB/s，半高卡、八条 lane。
+
+把四个 SKU 横着读，比值是常数：548 GB/s 对 128 GB、137 GB/s 对 32 GB，都是**每 GB 容量 4.3 GB/s 带宽**。容量与带宽同步缩放，这正是 LPDDR 方案而非 HBM 的指纹——也意味着单卡的显存是为「很多个并发小模型」准备的，不是为「一个高速解码的大模型」准备的。
+
+厂商自己页面上的一处细节：两个 Ultra SKU 的 DRAM 一列都写作「128 GB **LPR4x**」，这是 LPDDR4x 的拼写错误，而不是某个料号。
+
+**为什么重要：** 决定这张卡用途的规格，恰好是标题里没有的那个——548 GB/s 才是约束，也正是它决定了卖点是「低功耗下的数百路并发推理流」而不是「单模型快速解码」。跨厂商比 TOPS 在不带这个数字时几乎无意义，「128 GB」同理：这里它描述的是每瓦、每槽的容量，不是每带宽。
+
+[`🔗 Cloud AI 100 Ultra`](https://www.qualcomm.com/data-center/products/cloud-ai-100-ultra) · [`🔗 产品简介（PDF）`](https://www.qualcomm.com/content/dam/qcomm-martech/dm-assets/documents/Prod-Brief-QCOM-Cloud-AI-100-Ultra.pdf) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50370654)
+
+---
+
+## 35. Xbox 360 hypervisor 利用从「20 分钟、30% 成功率」变成「近乎瞬间、接近 100%」—— 靠的是一张 20 位查找表
+
+- **Velocity:** ▮ steady
+- **来源:** icode4.coffee · 2026-11-04 · HN 78 分
+- **标签:** `reverse-engineering` `xbox360` `exploit` `hardware` `writeup`
+
+Ryan Miceli 关于 Xbox 360 hypervisor 的第三篇很短，主要在讲 PoC 放出之后改了什么。标题级的变化是：「how it went from taking ~20 minutes with a ~30% success rate to being near instantaneous with a near 100% success rate.」
+
+两处改动做到的。第一是去掉了游戏光盘这个入口：**Rock Band Blitz** 试玩版里的一个存档漏洞（「DaTArrest」，由 `ihatecompvir` 与 `InvoxiPlayGames` 发现）能引导到 stage-2 ROP 链；而当主机开始支持 USB 存储时，原本签名允许从 HDD 或存储单元启动的包被「祖父条款」扩展到 **USB 存储**，于是这个试玩包可以当普通文件拷到 U 盘上，在任何支持该版本的主机上启动。
+
+第二是修掉作者自己的盲点。内存加密的 whitening 值是 **12 位**，对任意明文给出 **1024 个**不同密文，而最初的 PoC 只生成了它需要的那一个——那张查找表他试过、并且放弃了。文章很坦白地讲了为什么：较早的 hypervisor 会为加密区间刷 TLB，后来的构建不再刷，于是直接调用系统调用会留下过期的 whitening 位，表「was causing issues」；「by the time I got to the end of the exploit I had become so blinded by tunnel vision chasing CPU cache issues that I had convinced myself the lookup table just wasn't going to work.」重建后的表用预期密文的 **20 位**做索引，同时存 oracle 值（用于碰撞校验）与恶意替换值，并且刻意忽略碰撞——用文章的话说，少量碰撞意味着在竞态循环里跳过若干次迭代，这比在哈希表里实现桶支持更便宜。
+
+**为什么重要：** 这是一个漏洞工程中最常见失败的标本——不是缺原语，而是对原语的模型错了，并且因为一次坏掉的原型给出的负面结果从未在新前提下重测，就这么抱了几周。修法是多 1024 倍的预计算，加上承认早先那次实验无效；第四篇讲的是 peer pressure exploit。
+
+[`🔗 Hacking the Xbox 360 Hypervisor Part 3`](https://icode4.coffee/?p=1746) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50372164)
+
+---
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-11-04T20:30:18Z |
-| Items | 20 |
-| Sources tracked | 26（Hacker News、GitHub Trending、NVD、CISA KEV、GitHub Advisory Database、厂商 PSIRT、arXiv、Hugging Face、厂商工程博客） |
+| Generated | 2026-11-05T04:27:03Z |
+| Items | 35 |
+| Sources tracked | 24（Hacker News、GitHub Trending、NVD、CVE.org、CISA KEV、GitHub Advisory Database、厂商 PSIRT、arXiv、Hugging Face、厂商工程博客） |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8（每日 3 次） |
 | Ranking | 速度加权（新鲜度 × 互动加速度 × 来源权威度） |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |

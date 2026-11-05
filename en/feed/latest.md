@@ -1,8 +1,8 @@
 ---
 date: 2026-11-05
-updated: 2026-11-04T20:30:18Z
+updated: 2026-11-05T04:27:03Z
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 26
+sources: 24
 license: CC-BY-4.0
 ---
 
@@ -360,13 +360,297 @@ The agent-first claim is concrete rather than decorative: an **MCP server** lets
 
 ---
 
+## 21. OpenAI's cyber pipeline turned $1.2M of API credits into 948 Linux root exploits
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** openai.com/index · published 2026-11-04 · 197 pts on HN
+- **Tags:** `security` `ai-research` `linux` `kernel` `vulnerability-research`
+
+OpenAI published the methodology and the bill for an autonomous kernel-hunting pipeline: "Our prototype identified and analyzed 2,308 candidate Linux kernel findings, dynamically reproduced 1,724 vulnerabilities, and produced 948 local privilege escalation (LPE) exploits that could allow an unprivileged local user to gain root access." The run cost **$1,213,430 in API credits, or $1,279 per LPE exploit**, and the post also reports **291** information-leak vulnerabilities.
+
+The pipeline is five stages with a human at the end. **Scout** agents picked **5,034 audit targets** — about **2.8 million lines**, "roughly 7% of the whole Linux kernel code base" — for $3,426. **Analyst** agents produced the 2,308 candidates in twelve hours for $316,549. **Validation** reproduced 1,724 of them (**74.7%**) in KASAN-instrumented VMs within 30 hours for $73,330, and the post is unusually specific about the residue: "Only 3.1% reflected incorrect analysis by the model, where the reported vulnerability assumed an impossible condition." Then exploitability assessment and patch generation.
+
+The comparison that carries the thesis is a second run on an adapted **kernelCTF** environment: 25 information-leak PoCs and 21 LPE exploits for **$32,936**, against **26** confirmed 0-day LPEs accepted by kernelCTF across all of 2026. Against a July run on GPT-5.6 Sol, the newer model found ">5x more novel LPEs" — and the post claims "at least 10 novel Linux exploitation techniques" as a floor.
+
+The caveats bound the headline more than the cost does. The model is "an upcoming cyber model" and is never named or benchmarked. The dollar ranges in the valuation paragraph are explicitly "hypothetical" — 948 exploits priced against historical Pwn2Own and TyphoonPWN bounties gives $18.9M–$66.3M, but those are bounty prices for accepted submissions, not a measurement of what these exploits are worth. And on cost: "we focused on methodology and measuring model capability in this research, not cost", so "the costs we report are more an upper bound". **948** is the count of exploits generated inside a lab, not of CVEs filed or patches merged.
+
+**Why it matters:** the numbers everyone will quote — 948 exploits, $1,279 each — are the ones that answer a question nobody asked, because discovery was never the bottleneck the post identifies. Its own operational finding is that "within 10 days while the scan was running, we observed over 100 Linux LPEs had been patched or had staging patches from other contributors, with ~300 more being publicly discussed" — so the marginal cost of finding a kernel bug has fallen below the marginal capacity to review, patch and ship one. That is a disclosure-pipeline problem, and the paper's honest contribution is pricing it.
+
+[`🔗 OpenAI: A thousand fewer paths to root`](https://openai.com/index/a-thousand-fewer-paths-to-root/) · [`🔗 Hacker News discussion`](https://news.ycombinator.com/item?id=50372929)
+
+---
+
+## 22. Ripple-65B is a dense 65B that beats 500B–975B US open-weight models on Terminal-Bench — on one of two columns
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** ricursive.com/ripple · 2026-11-04 · 248 pts on HN
+- **Tags:** `ai-models` `open-weights` `dense` `benchmarks` `agentic-coding`
+
+Ricursive Intelligence released **Ripple-65B Preview**, a **65B dense** Transformer (not MoE) pretrained on **12T tokens** with up to 1M context, scoring **80.52 on Terminal-Bench 2.1** — above Reflection Beam 501B (80.1), Meta Muse Spark Open 816B (76.4), Thinking Machines Inkling 975B (63.8) and NVIDIA Nemotron 3 Ultra 550B (56.4). The card's architecture is deliberately plain: `d_model` **5120**, **80 layers**, MFU **40%**, "simple sharding, no custom kernels, and no quantization (BF16)", built by a team that "scaled from 1 to 5 people during development". It ships **16 safetensors shards totalling 129,565,519,472 bytes (129.6 GB)** under Apache-2.0, plus NVFP4, DFlash2 and a pretrain-only base checkpoint. At the time we read it: **129 likes, 0 downloads**.
+
+The benchmark table has two Terminal-Bench columns and they behave very differently. Under `(self-reported)`, Ripple 80.5 sits 0.4 above Beam's 80.1. Under the **official Terminus 2 harness**, Beam drops to **70.8**, Inkling to 56.2, Muse Spark to 78.7 — and Ripple stays at **80.5**. The card says why it published both: "we found that Terminal-Bench 2.1 scores were universally lower (with the exception of Muse Spark Open) when using the official Terminus 2 harness at 128K sequence length with summarization", and it marks re-run competitor cells in italics while stating plainly that "Replicating benchmark scores has been challenging, particularly for modern agentic evals, due to the number of factors which can cause eval scores to shift."
+
+The advantage is narrower than "SOTA" once you leave Terminal-Bench. **SWE-bench Verified 76.5** against Beam's 81.6 and Muse's 78.7; **SWE-bench Pro v1.0 61.42** against Beam's 66.1; **DeepSWE 1.1 44.3** against Muse's 60.0. The one outlier is **SWE-bench Pro v2.0 Hard**, where Ripple claims 79.1 against Inkling's **2.0** — a number the same table puts at 54.3 on Pro v1.0, which is a harness difference rather than a capability difference and is not called out.
+
+The cost claim needs its footnote attached: **$32M** for "our full R&D cost", described as "one-tenth the cost of the previous open-weight SOTA on agentic coding", "as estimated to the best of our knowledge". The efficiency claim is separate and better specified: the ladder "improves Compute Efficiency (CE) on code by 16x relative to the Olmo 3 ladder, with the advantage further increasing with scale up to 55x for the full hero run."
+
+**Why it matters:** a dense 65B that fits on a DGX Spark and lands within a few points of 500B-plus MoEs is the more interesting result than the rank, because it says the gap between MoE capacity and dense compute efficiency is narrower than the parameter counts suggest. What should travel with it is the column split — the same competitor loses 9.3 points when the harness changes, so "beats 501B" is a statement about which column you read. (Ricursive is not RecursiveSI, the lab behind Flint, which we covered on 2026-10-31.)
+
+[`🔗 ricursive.com/ripple`](https://www.ricursive.com/ripple) · [`🔗 ricursiveAI/Ripple-65B-Preview`](https://huggingface.co/ricursiveAI/Ripple-65B-Preview) · [`🔗 Hacker News discussion`](https://news.ycombinator.com/item?id=50369925)
+
+---
+
+## 23. Kyverno published 21 CVE records in 3.3 seconds — seven at 9.0 or above, and the fix is 15 days older than the paperwork
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** NVD · records CVE-2026-122302 – CVE-2026-122323 published 2026-11-05T03:17:22–03:17:25Z
+- **Tags:** `cve` `kubernetes` `kyverno` `privilege-escalation` `policy-engine`
+
+Twenty-one Kyverno records landed at NVD between **2026-11-05T03:17:22.030Z** and **03:17:25.343Z** — a **3.313-second** publication window — every one of them scored by `disclosure@vulncheck.com` and every one still at `Received`. Seven score at or above 9.0: **five at 9.9**, one at **9.8** and one at **9.1**. The 9.9s share `CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:C/C:H/I:H/A:H` (which recomputes to 9.9: the `S:C` scope change is what lifts a `PR:L` bug into the Critical band), with VulnCheck's 4.0 metric scoring the same records **9.4**.
+
+The mechanisms are all the same shape — a namespaced policy author reaching the controller's ServiceAccount — and the individual variants are worth reading. `CVE-2026-122311` is a path traversal in `resource.get()` / `resource.post()`: the resource argument is split on `/` and everything after the first segment is handed to client-go as a "subresource", which `rest.IsValidPathSegmentName` does not validate, and `path.Join` resolves the `..`. The advisory's own summary is direct about the consequence: a tenant who can create a `NamespacedValidatingPolicy` in its own namespace can read and write arbitrary objects anywhere in the cluster, using the Kyverno admission controller's ServiceAccount. `CVE-2026-122310` is the same idea one layer up — the `context.apiCall` `urlPath` is validated after cleaning but the raw path is executed, so a `#` or `?` hides the traversal from the check. `CVE-2026-122303` and `-122313` use `targetMatchConstraints.expression` to return a CEL map literal naming someone else's namespace; `CVE-2026-122304` exploits the cleanup controller building "its context loader with a nil policy"; `CVE-2026-122302` checks the *controller's* permissions rather than the author's.
+
+The dates matter more than the count. The patched version is **1.19.2**, released **2026-10-20T23:50:19Z**; `GHSA-4pqm-wqq6-h9q2` was published **Oct 21**, 2026 with `datePublic` **2026-10-21**; the CVE records arrived **2026-11-05** — sixteen days after the fix shipped. And the advisory is explicit that this is a recurrence rather than a new class — the mechanism here is different, it says, and neither of the two earlier fixes stops it — referring to `GHSA-79gf-7frw-68m9` (CVE-2026-54523) and `GHSA-cvq5-hhx3-f99p` (CVE-2026-41068).
+
+**Why it matters:** the published reproduction is a kind cluster running Kubernetes v1.32.2, installed from the release manifest, with no configuration changes and no extra RBAC granted to Kyverno — the default install — so the precondition is only that some tenant can create a namespaced policy, and the outcome is cluster admin. The 3.3-second batch is also a reminder that publication timing at NVD is a workflow artifact: nothing about these bugs became true at 03:17Z, and everything about them was already public on October 21.
+
+[`🔗 GHSA-4pqm-wqq6-h9q2 (path traversal)`](https://github.com/kyverno/kyverno/security/advisories/GHSA-4pqm-wqq6-h9q2) · [`🔗 Kyverno v1.19.2`](https://github.com/kyverno/kyverno/releases/tag/v1.19.2) · [`🔗 NVD CVE-2026-122311`](https://nvd.nist.gov/vuln/detail/CVE-2026-122311)
+
+---
+
+## 24. GPUStack treated any loopback request as the administrator — and the advisory says it was exploited in the wild
+
+- **Velocity:** ▮▮ rising
+- **Source:** GitHub Advisory Database · GHSA-gj9m-f8ph-pmhr · CVE-2026-102895 · 9.8
+- **Tags:** `cve` `ai-infra` `authentication` `gpustack` `exploited`
+
+`CVE-2026-102895` is a **9.8** against GPUStack, an open-source GPU cluster manager for model serving — **5,972 stars**, and a repo that pushed again on 2026-11-05. The bug is one line of policy: `get_current_user` promotes any request whose source is considered loopback to the built-in administrator account when `force_auth_localhost` is False, which is the default. There are two unauthenticated ways to look like loopback: put GPUStack behind a same-host reverse proxy (the canonical self-hosted shape, where "every remote request arrives at GPUStack with TCP peer `127.0.0.1`"), or send a forged `X-GPUStack-Real-IP: 127.0.0.1`. The advisory's root-cause line is the whole lesson: "Trusting the network source of a request (socket peer, or a client-controllable header) as an authentication signal."
+
+The blast radius is administrative: enumerate and modify users, models, workers and configuration; mint persistent admin API keys with scope `["*"]` "valid from any source IP thereafter"; read worker credentials and cloud-provider secrets; and reach code execution on worker hosts through admin-only endpoints such as `POST /v2/inference-backends/from-yaml`.
+
+The sentence that makes this a different item from the dozens of 9.x auth bypasses is in the same advisory: "This vulnerability has been observed exploited in the wild against a v2.1.1 deployment (attacker-created custom backends running reverse shells)." In-the-wild reporting is credited to Javier Sixto (ulex.fr); the bug was independently reported by Nikko Enggaliano, Wei Yunzhou, and Rui Yang & Haoyu Wang (Johns Hopkins).
+
+The clocks disagree more than usual. The advisory was published **Jul 31, 2026**; **v2.2.0**, the fix, shipped **2026-06-18T15:54:18Z** — **139 days** before the NVD record on **2026-11-04T22:17:44Z**. The newest release is **v2.3.0** (2026-10-21), so anyone on the current line is already patched; anyone still on 2.1.x is the population the advisory describes.
+
+**Why it matters:** "localhost is trusted" is a default that survives every code review because it reads as a security decision rather than a bug, and a reverse proxy silently converts it into a rule that the whole internet satisfies. The workaround list is also a checklist worth keeping: set `force_auth_localhost=true`, strip client-supplied `X-GPUStack-Real-IP` at the edge, and never let a gateway make external traffic look local.
+
+[`🔗 GHSA-gj9m-f8ph-pmhr`](https://github.com/gpustack/gpustack/security/advisories/GHSA-gj9m-f8ph-pmhr) · [`🔗 NVD CVE-2026-102895`](https://nvd.nist.gov/vuln/detail/CVE-2026-102895) · [`🔗 GPUStack v2.2.0`](https://github.com/gpustack/gpustack/releases/tag/v2.2.0)
+
+---
+
+## 25. Yuxi's sandboxes could reach each other's APIs without a container escape — 9.9, fixed 110 days before the record
+
+- **Velocity:** ▮▮ rising
+- **Source:** GitHub Advisory Database · CVE-2026-97693 · published 2026-11-04T22:18Z
+- **Tags:** `cve` `ai-infra` `multi-tenant` `sandbox` `yuxi`
+
+Yuxi is "a large-model-based intelligent knowledge base and knowledge graph agent development platform" — 7,602 stars, a release line still in beta. `CVE-2026-97693` scores **9.9** (`CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:C/C:H/I:H/A:H`) for "insufficient isolation between execution-capable Docker sandboxes and trusted application services". A low-privileged authenticated user who can run commands in their own sandbox "can reach other tenants' sandbox APIs, access their files and secrets, execute commands in active sandboxes, and enumerate, create, or delete sandboxes through the unauthenticated provisioner without knowing administrator, database, or MinIO credentials."
+
+The phrase that keeps this honest is the one that says what did *not* happen: these paths disclose and modify cross-tenant data and can cause denial of service "without a container escape or kernel vulnerability". Every sandbox boundary held; the network boundary between the sandbox and the control plane did not.
+
+The remediation note is the part operators will miss. The fix is **0.7.1**, released **2026-07-17T15:50:37Z** — **110 days** before the record — and the current line has moved on to **v0.8.0.beta7**. But: "upgrading the Compose files does not automatically rotate them", so any deployment that ever ran the documented defaults must separately rotate persisted **PostgreSQL**, **Neo4j** and **MinIO** credentials; if the exposed PostgreSQL account is a superuser, the advisory notes that alone yields command execution in the PostgreSQL container.
+
+**Why it matters:** the sandbox is the security claim every agent platform makes, and here the sandbox was fine — the orchestrator's own API surface was the tenant boundary. Upgrading a Compose file rotates code, never secrets, and the advisory says so explicitly rather than leaving it to the reader.
+
+[`🔗 CVE-2026-97693 record`](https://www.cve.org/CVERecord?id=CVE-2026-97693) · [`🔗 GHSA-qpm5-6332-9445`](https://github.com/xerrors/Yuxi/security/advisories/GHSA-qpm5-6332-9445) · [`🔗 NVD CVE-2026-97693`](https://nvd.nist.gov/vuln/detail/CVE-2026-97693)
+
+---
+
+## 26. Pocket ID bound its email token to the user, not the address — so you could verify an address you no longer controlled
+
+- **Velocity:** ▮▮ rising
+- **Source:** GitHub Advisory Database · CVE-2026-115770 · published 2026-11-04T23:17Z
+- **Tags:** `cve` `identity` `oidc` `pocket-id` `account-linking`
+
+`CVE-2026-115770` is a **9.6** (`AV:N/AC:L/PR:L/UI:N/S:C/C:H/I:H/A:N`) in Pocket ID, a passkey-based OIDC provider with **10,005 stars**. The bug is a three-way interaction between three normal features: `SendEmailVerification` binds the token "only to the user's identifier", `UpdateUser` changes the account email "without invalidating the outstanding token", and `VerifyEmail` marks "the current address as verified". So an ordinary user requests a token for an address they control, switches the account to an arbitrary unused address, and redeems the stale token — and Pocket ID publishes the new address with `email_verified` set to true.
+
+The defaults are what make it reachable: "The default affected configuration uses `emailsVerified=false` and `allowOwnAccountEdit=true`". There is one precondition, stated in the record — "the target address must not already belong to another Pocket ID user" — which is exactly the case a new hire's mailbox satisfies.
+
+The downstream consequence is precise and worth quoting rather than paraphrasing: an application that trusts a verified email for automatic account matching or provisioning "can link the attacker's identity to another user's account, while applications that rely exclusively on the stable OIDC `sub` claim are not affected by that downstream consequence."
+
+The clocks: the fix is **2.12.0**, released **2026-07-29T23:05:53Z** — **98 days** before the record on **2026-11-04** — and the project is now at **v2.19.2** (2026-10-22). CWE-345.
+
+**Why it matters:** `email_verified` is the one claim relying parties treat as an assertion about a fact, and here it was a claim about a token's subject instead of its contents. The mitigation is a design rule, not a patch note: if an identity claim can be invalidated by a later edit, the edit has to invalidate the claim — and any app doing JIT provisioning off `email` rather than `sub` is the half of this bug that no upgrade fixes.
+
+[`🔗 CVE-2026-115770 record`](https://www.cve.org/CVERecord?id=CVE-2026-115770) · [`🔗 GHSA-rm8c-2cv8-jwf6`](https://github.com/pocket-id/pocket-id/security/advisories/GHSA-rm8c-2cv8-jwf6) · [`🔗 Pocket ID v2.12.0`](https://github.com/pocket-id/pocket-id/releases/tag/v2.12.0)
+
+---
+
+## 27. ESP-IDF's TEE trap entry wrote through the caller's stack pointer — and the 6.x fix does not exist yet
+
+- **Velocity:** ▮▮ rising
+- **Source:** GitHub Advisory Database · CVE-2026-113780 · 9.3 · published 2026-11-04T19:17Z
+- **Tags:** `cve` `esp32` `tee` `firmware` `espressif`
+
+`CVE-2026-113780` scores **9.3** (`AV:L/AC:L/PR:N/UI:N/S:C/C:H/I:H/A:H`) on ESP-IDF, and the mechanism is an ordering bug in an assembly entry path: "the `esp_tee` trap entry in `esp_tee_vectors_plic.S` and `esp_tee_vectors_clic.S` saves a caller-controlled register frame through the REE-supplied stack pointer before switching to the trusted TEE stack or validating the pointer." A local unprivileged application in the Rich Execution Environment can therefore "direct this machine-mode write into TEE-exclusive memory" on **ESP32-C5, C6, C61 and H2**, breaking the REE/TEE isolation boundary and potentially corrupting TEE control-flow data. Both the secure-service `ecall` and interrupt entry paths carry the same ordering.
+
+The versions are where this becomes operational rather than academic. The affected range is **from 5.5.5 until 5.5.6, 6.0.4, and 6.1.1**, and the record says the issue "is fixed in version 5.5.6 and is scheduled to be fixed in versions 6.0.4 and 6.1.1." **v5.5.6** shipped **2026-10-16T14:32:14Z**. But ESP-IDF's release list, read today, tops out at **v6.0.3** (2026-09-02) and **v6.1** (2026-08-27) — so **6.0.4 and 6.1.1 do not exist**, and anyone on the 6.x line has no version to install. The record itself was published **2026-11-04T19:17:18Z**, nineteen days after the 5.5.x fix.
+
+Four fix commits are cited, and the CNA is `GitHub_M` — the GitHub-assigned CVE, not Espressif's own numbering.
+
+**Why it matters:** an advisory that names a future fixed version is a remediation date dressed as a version number, and the honest reading here is that 5.5.x is patched while 6.x is not yet. The bug class is also the one embedded teams discount: the TEE boundary fails on the instruction *before* the switch, not inside the trusted code, which is why validating the pointer is not the same as validating it before using it.
+
+[`🔗 GHSA-49x8-xqjg-2pjg`](https://github.com/espressif/esp-idf/security/advisories/GHSA-49x8-xqjg-2pjg) · [`🔗 NVD CVE-2026-113780`](https://nvd.nist.gov/vuln/detail/CVE-2026-113780) · [`🔗 ESP-IDF v5.5.6`](https://github.com/espressif/esp-idf/releases/tag/v5.5.6)
+
+---
+
+## 28. Compressing a prompt to save tokens quietly weakens the model's refusals — at high reconstruction fidelity
+
+- **Velocity:** ▮▮ rising
+- **Source:** arXiv 2611.06380 · submitted 2026-11-04T11:42Z
+- **Tags:** `ai-research` `safety` `compression` `alignment` `interpretability`
+
+**Does Context Compression Preserve Refusal Alignment?** asks whether a compression encoder that reconstructs its input faithfully also preserves what the model does with it. The answer is no: "encoder-based compression systematically weakens refusal behaviour in instruction-tuned language models, despite high reconstruction fidelity", and the effect "persists across model families and compression architectures."
+
+The mechanistic claim is the part that makes it more than a leaderboard observation: "compression attenuates activation along the decoder's learned refusal direction." That is, the refusal behaviour has a direction in activation space, compression shrinks the component along it, and semantic content survives because it lives somewhere else. The paper proposes **Memory Steering**, "a lightweight inference-time intervention that restores refusal rates to near-baseline levels without retraining", operating entirely in compressed representation space.
+
+Its conclusion is the sentence to carry into systems design: "semantic preservation does not guarantee behavioural preservation under compression."
+
+The limits are the ones a reader should apply before quoting a number: the abstract reports no figures — no refusal-rate deltas, no reconstruction-fidelity values, no named model list — so this is a directional claim with a mechanism, and the magnitude is in the body. Two authors, Anthony Nguyen and Wenjun Lin.
+
+**Why it matters:** every long-context agent stack now compresses to fit a budget, and the standard acceptance test is whether a human can still read the summary — which is precisely the metric this paper shows is insufficient. A safety property that degrades silently while quality metrics hold is the worst shape a regression can take, and checking that the reconstruction is faithful is the check that misses it.
+
+[`🔗 arXiv 2611.06380`](https://arxiv.org/abs/2611.06380) · [`🔗 Full text (PDF)`](https://arxiv.org/pdf/2611.06380)
+
+---
+
+## 29. CASE-Bench: giving a coding agent good repository context buys 8.2 points of function and 3.7 of security
+
+- **Velocity:** ▮▮ rising
+- **Source:** arXiv 2611.06294 · submitted 2026-11-04T10:29Z
+- **Tags:** `ai-research` `security` `benchmark` `coding-agents` `context`
+
+**A.S.E 2.0** builds **CASE-Bench**, "a benchmark of 145 repository-level tasks from real CVEs in 51 projects", where each task runs in Docker, "has functional tests and a proof-of-concept exploit validated in both directions", and is annotated with "the repository code that enforces or undermines its security." The design question is the one secure-code benchmarks usually hold fixed: context construction is "designed almost exclusively for functional correctness", so whether the model sees the project's authorization check — or a nearby piece of insecure code to imitate — was never varied.
+
+Across **13 context construction methods**, six controls and six LLMs, three results:
+
+- "(1) functionality-oriented context raises the functional pass rate by up to 8.2 percentage points (pp) but the secure pass rate by at most 3.7 pp" — the optimizations everyone ships are worth roughly twice as much on the axis they were tuned for.
+- "(2) withholding a safeguard lowers the secure pass rate by up to 8.1 pp, while one inserted insecure exemplar raises correct-but-exploitable code by 6.3 pp" — a single bad example is nearly as harmful as removing the guard, and it produces code that passes the functional tests.
+- "(3) coding agents observe the relevant safeguard in only 27-36% of trajectories" — the majority of the time the agent never read the file that would have constrained it.
+
+**Why it matters:** the second result is the one with no fix in the prompt. "Correct-but-exploitable" is a category that both functional tests and most security review miss, because the test suite was written against the same spec the insecure exemplar satisfies. The 27–36% figure also reframes the problem: this is a retrieval question before it is a reasoning question, since two-thirds of trajectories never surfaced the relevant guardrail at all.
+
+[`🔗 arXiv 2611.06294`](https://arxiv.org/abs/2611.06294) · [`🔗 Full text (PDF)`](https://arxiv.org/pdf/2611.06294)
+
+---
+
+## 30. D3D drafts the *next* block while the current one is still being verified — 5.71× on a 32B target
+
+- **Velocity:** ▮▮ rising
+- **Source:** arXiv 2611.06425 · submitted 2026-11-04T12:27Z · code on GitHub
+- **Tags:** `ai-research` `inference` `speculative-decoding` `diffusion` `throughput`
+
+Speculative decoding has an idle window: a diffusion drafter predicts a block in one pass, but "each new block must wait for updated target-model hidden states", so drafting and verification serialize. **D3D** ("Decoupled Diffusion Drafting") removes the dependency — a standalone diffusion drafter combining "blockwise denoising with auxiliary autoregressive supervision" that achieves long accepted prefixes without the target's hidden states, which lets it "draft successor blocks during verification in one packed pass."
+
+The compression is the practical half: layers are pruned by their effect on acceptance length, and "Removing five of 36 layers retains over 99% of mean acceptance length across three benchmarks with Qwen3-8B as the target."
+
+Measured average speedup across seven benchmarks: **5.00×** with a Qwen3-8B target and **5.71×** with Qwen3-32B, against **4.03×** and **3.67×** for DFlash. On GSM8K with Qwen3-32B it reaches **7.48×**. The baseline is the relevant kind — same-family drafter, same benchmarks — and the code is public at `fudan-generative-vision/D3D` (9 stars, last push 2026-11-01, so this is a fresh artifact rather than a maintained one).
+
+**Why it matters:** the asymmetry in the numbers is the finding. DFlash gets *slower in relative terms* as the target grows (4.03× → 3.67×) while D3D gets *faster* (5.00× → 5.71×), which is what you would expect if the win comes from filling the verification window rather than from drafting quality — a bigger target means a longer window to fill. Speculative decoding has been optimised for the drafter for two years; this is a paper about the schedule.
+
+[`🔗 arXiv 2611.06425`](https://arxiv.org/abs/2611.06425) · [`🔗 fudan-generative-vision/D3D`](https://github.com/fudan-generative-vision/D3D) · [`🔗 Full text (PDF)`](https://arxiv.org/pdf/2611.06425)
+
+---
+
+## 31. Model merging does not require uniform LoRA ranks — and the methods that say it does drop the instruction adapter
+
+- **Velocity:** ▮ steady
+- **Source:** arXiv 2611.06486 · submitted 2026-11-04T13:26Z
+- **Tags:** `ai-research` `lora` `model-merging` `fine-tuning` `evaluation`
+
+Model merging combines separately fine-tuned experts without retraining, and the standard practice trains every expert at the same LoRA rank — coupling the rank choice across domains "even though each domain has its own best rank". The paper's claim is that the coupling "is a property of the merge method, not of merging". The experiment: **36 experts** on three domains (mathematics, instruction following, multilingual), at four ranks and three model scales, merged with six methods.
+
+The result splits cleanly by family. "Giving experts different ranks costs averaging and utility-based selection nothing, and gains them up to 1.8 pp of multi-domain accuracy, while the conflict-resolution methods are inconsistent and can lose up to 4 pp." The mechanism is a selection rule: merging "keeps only a fixed share of the pooled spectral components, and methods that choose them by size discard many that would have reduced loss" — and they discard the *same* expert. "The instruction adapter has the smallest singular values, so it is dropped almost entirely and IFEval falls by 16 to 25 pp."
+
+Choosing components "by their effect on loss instead keeps all three experts, and leaves accuracy nearly flat" across an 8× rank range — 0.7 pp, against 6.7 pp for TIES at 4B scale.
+
+**Why it matters:** the 16–25-point IFEval loss is not a tuning artifact — it is a merge method silently deleting one of the three experts you merged, and it would look like instruction following simply got worse after merging rather than like a bug. The operational rule is one sentence: rank can be chosen per expert whenever the merge operator does not select by magnitude, and if it does, the smallest-norm adapter is not the least important one.
+
+[`🔗 arXiv 2611.06486`](https://arxiv.org/abs/2611.06486) · [`🔗 Full text (PDF)`](https://arxiv.org/pdf/2611.06486)
+
+---
+
+## 32. SumOne trains an agent's summarizer by asking a frozen model to reconstruct what it dropped
+
+- **Velocity:** ▮ steady
+- **Source:** arXiv 2611.06445 · submitted 2026-11-04T12:49Z
+- **Tags:** `agent-infra` `memory` `context-compaction` `grpo` `open-source`
+
+Context compaction for long-horizon agents is usually trained against the thing you actually care about — the downstream task score or the solver's behaviour — which couples the summarizer to a specific task and a specific agent. **SumOne** replaces that with a reconstruction reward: "Given a summary of the expired history, a frozen reconstructor recovers randomly masked portions of the original trajectory; reconstruction quality, combined with a length penalty, provides a task-agnostic reward for optimizing the summarizer with GRPO." No reference summaries, no task execution.
+
+At inference "only the lightweight summarizer is retained, enabling plug-and-play context compression for otherwise unchanged agents" — and the checkpoint "transfers across downstream models and agent harnesses without additional fine-tuning." Measured on long-horizon search and software-engineering tasks, it "reduces estimated inference cost by approximately 78% on DeepSearchQA and 75% on SWE-bench Verified relative to operating with full context".
+
+The accuracy side is stated as "absolute decreases of 0.04" without naming the metric's scale, which is the one number in the abstract a reader cannot size — on a 0–1 pass rate that is four points, on a 0–100 score it is nothing.
+
+**Why it matters:** the training signal is the interesting design decision. Asking whether a frozen model can still recover the details that were thrown away is a proxy for information retention that is cheap, needs no task, and cannot be gamed by a summarizer that has learned one benchmark's shape — which is exactly the failure the paper is built to avoid. The unresolved part is that reconstruction fidelity and downstream usefulness were already known to diverge in other settings (item 28), so the reward's independence is also its blind spot.
+
+[`🔗 arXiv 2611.06445`](https://arxiv.org/abs/2611.06445) · [`🔗 Full text (PDF)`](https://arxiv.org/pdf/2611.06445)
+
+---
+
+## 33. Horizon is a 12,624-star news radar with a profile system, an MCP server, a skill — and no releases or tags at all
+
+- **Velocity:** ▮ steady
+- **Source:** GitHub Trending (daily) · 121 stars today · MIT · last push 2026-11-03T17:20Z
+- **Tags:** `agent-infra` `mcp` `skills` `rss` `open-source`
+
+`Thysrael/Horizon` is an MIT Python project that calls itself "your own AI-powered news radar": it pulls from RSS, Hacker News, Reddit, Telegram, X, GitHub and financial feeds, then "collects, filters, and deduplicates them, then brings the worthwhile ones to you with context and community discussion." Created **2026-02-20**, it has **12,624 stars**, pushes on 2026-11-03, and generates bilingual (English/Chinese) briefings delivered as Markdown, GitHub Pages, email, WeChat or a webhook.
+
+The design decision worth copying is **profiles**: "A profile is a reusable set of editorial rules: what belongs, what's worth keeping, and what to write." Each source routes to a profile (`tech-news`, `tech-blog`, `ai-creator` are the built-ins), each profile carries its own scoring rubric, threshold, dedup rule and output shape, and items are analysed and deduplicated *before* enrichment. There is also an MCP server under `src/mcp/` so an assistant can call the pipeline stages, and a skill install — `npx skills add Thysrael/Horizon --skill horizon -g`.
+
+The artifact state is the part to note before recommending it. We checked the repo's releases and tags feeds directly: **0 releases, 0 tags**. Everything installable from this project is the default branch as of 2026-11-03 — including the skill, which has no tagged version to pin to.
+
+**Why it matters:** a per-source editorial rubric is the right abstraction for a feed — it separates what to read from how to write about it, which most aggregators collapse into one prompt. The missing tags are the same supply-chain shape the feed keeps finding: 12.6k stars and a documented install path with no reviewed state available, so "pin a commit" is advice the project cannot yet give you.
+
+[`🔗 Thysrael/Horizon`](https://github.com/Thysrael/Horizon) · [`🔗 Live demo`](https://thysrael.github.io/Horizon/) · [`🔗 GitHub Trending`](https://github.com/trending)
+
+---
+
+## 34. Qualcomm's Cloud AI 100 Ultra puts 128 GB behind 548 GB/s at 150 W — and its own spec table has a typo
+
+- **Velocity:** ▮ steady
+- **Source:** qualcomm.com product page · 116 pts on HN · ~20h ago (~00:00 UTC+8)
+- **Tags:** `hardware` `inference` `qualcomm` `datacenter` `specs`
+
+Qualcomm's **Cloud AI 100 Ultra** is a PCIe FH3/4L inference card at **150 W TDP** with **up to 870 TOPS INT8**, **up to 288 TFLOPS FP16**, **576 MB** of on-die SRAM, **64 AI cores**, **128 GB** of DRAM and **548 GB/s** of bandwidth over **PCIe Gen4 ×16** — no NVLink, no host-memory coherence, no interconnect beyond the slot. It is sold alongside an **AI Inference Suite** that exposes OpenAI-compatible APIs for chat, image generation, multimodal and RAG, deployed on Kubernetes or bare-metal containers.
+
+The family table is the interesting artifact, because it shows what the "Ultra" suffix actually buys. The **AI 80 Ultra** has the *same* 150 W, the *same* 128 GB and the *same* 548 GB/s, and differs only in compute — 618 TOPS INT8 and 222 TFLOPS FP16 against 870 and 288. The **AI 100 Pro** drops to 75 W, 32 GB and 137 GB/s in a half-height card on eight lanes.
+
+Read across the four SKUs and the ratio is constant: 548 GB/s per 128 GB and 137 GB/s per 32 GB are both **4.3 GB/s of bandwidth per GB of capacity**. Capacity and bandwidth scale together, which is the signature of an LPDDR-based design rather than HBM — and it means a single card's memory is sized for many concurrent small models, not for decoding one large one at speed.
+
+One detail from the vendor's own page: the DRAM column reads "128 GB **LPR4x**" on both Ultra SKUs, which is a typo for LPDDR4x rather than a part number.
+
+**Why it matters:** the spec that decides what this card is good for is the one absent from the headline — 548 GB/s is the constraint, and it is why the pitch is hundreds of concurrent inference streams at low power rather than fast single-model decode. Comparing TOPS across vendors is close to meaningless without that number, and the same is true of "128 GB", which here describes capacity per watt and per slot rather than per bandwidth.
+
+[`🔗 Cloud AI 100 Ultra`](https://www.qualcomm.com/data-center/products/cloud-ai-100-ultra) · [`🔗 Product brief (PDF)`](https://www.qualcomm.com/content/dam/qcomm-martech/dm-assets/documents/Prod-Brief-QCOM-Cloud-AI-100-Ultra.pdf) · [`🔗 Hacker News discussion`](https://news.ycombinator.com/item?id=50370654)
+
+---
+
+## 35. The Xbox 360 hypervisor exploit went from 20 minutes at 30% to near-instant at near-100% — because of a 20-bit lookup table
+
+- **Velocity:** ▮ steady
+- **Source:** icode4.coffee · 2026-11-04 · 78 pts on HN
+- **Tags:** `reverse-engineering` `xbox360` `exploit` `hardware` `writeup`
+
+Ryan Miceli's third post on the Xbox 360 hypervisor is short and mostly about what changed after the PoC. The headline: "how it went from taking ~20 minutes with a ~30% success rate to being near instantaneous with a near 100% success rate."
+
+Two changes did it. First, an entry point that removes the game disc: a save-file exploit in the **Rock Band Blitz** demo ("DaTArrest", by `ihatecompvir` and `InvoxiPlayGames`) reached the stage-2 ROP chain, and because packages signed to boot from the HDD or memory unit were grandfathered onto **USB storage** when the console gained USB support, the demo package can be copied to a stick and launched on any console at a supported version.
+
+Second, a fix for the author's own blind spot. The memory-encryption scheme's whitening value is **12 bits**, giving **1024 unique ciphertexts** for any plaintext, and the original PoC only generated the one it needed — a lookup table it had tried and abandoned. The post is candid about why: an older hypervisor flushed the TLB for the encrypted range and later builds did not, so calling the syscall directly left stale whitening bits and the table "was causing issues"; "by the time I got to the end of the exploit I had become so blinded by tunnel vision chasing CPU cache issues that I had convinced myself the lookup table just wasn't going to work." The rebuilt table indexes on **20 bits** of the expected ciphertext and stores both the oracle value (for collision validation) and the malicious replacement, and deliberately ignores collisions — a few collisions, the post argues, mean skipping some iterations of the race loop, which is cheaper than implementing bucket support in the hash table.
+
+**Why it matters:** this is a worked example of the most common exploit-engineering failure — not a missing primitive but a wrong model of one, held for weeks because a negative result from a broken prototype was never retested against a fixed premise. The fix was 1024× more precomputation and an admission that the earlier experiment had been invalid; part 4 covers the peer-pressure exploit.
+
+[`🔗 Hacking the Xbox 360 Hypervisor Part 3`](https://icode4.coffee/?p=1746) · [`🔗 Hacker News discussion`](https://news.ycombinator.com/item?id=50372164)
+
+---
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-11-04T20:30:18Z |
-| Items | 20 |
-| Sources tracked | 26 (Hacker News, GitHub Trending, NVD, CISA KEV, GitHub Advisory Database, vendor PSIRTs, arXiv, Hugging Face, vendor engineering blogs) |
+| Generated | 2026-11-05T04:27:03Z |
+| Items | 35 |
+| Sources tracked | 24 (Hacker News, GitHub Trending, NVD, CVE.org, CISA KEV, GitHub Advisory Database, vendor PSIRTs, arXiv, Hugging Face, vendor engineering blogs) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (3x daily) |
 | Ranking | Velocity-weighted (recency × engagement acceleration × source authority) |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |
