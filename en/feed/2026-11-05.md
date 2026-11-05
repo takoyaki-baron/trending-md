@@ -1,8 +1,8 @@
 ---
 date: 2026-11-05
-updated: 2026-11-05T04:27:03Z
+updated: 2026-11-05T12:26:44Z
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 24
+sources: 31
 license: CC-BY-4.0
 ---
 
@@ -644,13 +644,281 @@ Second, a fix for the author's own blind spot. The memory-encryption scheme's wh
 
 ---
 
+## 36. OpenSSH shipped 10.6p2 in a day for a password-auth bypass on musl — and says long embargoes now mainly help attackers
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** OpenSSH release notes · 10.6p2 released 2026-11-05 · maintainer post 2026-11-05T09:03Z
+- **Tags:** `security` `openssh` `musl` `alpine` `coordinated-disclosure`
+
+Portable **OpenSSH 10.6p2** was released on **2026-11-05**. The release notes' entire security section is one entry: `sshd(8)` should "avoid password authentication bypass that is exploitable through sshd(8) that affects some Linux systems when built and run with PAM support disabled." The notes then place the fault outside the daemon — "We consider the root cause of this bug to be outside sshd, but it is exploitable via sshd and can be avoided there" — and credit **Özgün Kültekin of Wakefield** (wakefield.co).
+
+Maintainer Damien Miller's post the same morning is more specific about the population and the urgency. The bug affects a Linux system that uses musl libc without PAM — Alpine Linux is the example given — and for those his advice is to stop reading and set `PasswordAuthentication=no`, or disable SSH, immediately. He then rules out three neighbouring configurations explicitly: it does not exist on non-Linux systems, on glibc Linux systems, or on Linux systems that use PAM for password authentication. That is what makes the affected set small and, at the same time, exactly the container base image a large share of the internet builds on. (The post's text is served by the instance's status API; its web page renders as a JavaScript shell.)
+
+The timeline is the part that changes practice. Miller says the project learned of the problem the day before and released the next morning, because it has recently seen multiple cases of rapid bug rediscovery by AI agents, sometimes within hours — which it now treats as making long embargo periods a dangerous practice that primarily benefits attackers. The 10.6 release notes carry the same reasoning at length, including the observation that "We have seen a number of cases where a security bug identified by AI tools is subsequently independently discovered by a different researcher", and commit the project to "making more frequent releases to get bugfixes into users' hands more quickly rather than batching them until the next planned release."
+
+The artifact trail is short and worth reading in order: Alpine's `edge` build of `openssh` is **10.6_p2-r0**, with a package build time of **2026-11-05 09:05:19** — the same morning, which is what Miller's thanks to Alpine's maintainers for an updated release at very short notice refers to. There is no CVE identifier anywhere in the release notes, and none of the notes' bugfix entries names the mechanism. The upstream library side shows no matching change either: `musl`'s master log's most recent commit is dated **2026-10-14**.
+
+**Why it matters:** a password-authentication bypass in sshd is the highest-leverage bug shape in the protocol — it needs no exploit chain, only a login attempt — and the affected set is defined by a libc build flag rather than by a version, so "are you patched" is not answerable from `ssh -V` alone. The disclosure-policy change is the durable part: when rediscovery takes hours rather than months, an embargo's only remaining function is to keep defenders ignorant for the same window it keeps attackers ignorant, and OpenSSH has now written that down as policy rather than saying it off the record.
+
+> "We have seen a number of cases where a security bug identified by AI tools is subsequently independently discovered by a different researcher." — OpenSSH 10.6 release notes
+
+[`🔗 OpenSSH 10.6p2 release notes`](https://www.openssh.com/releasenotes.html) · [`🔗 Damien Miller's announcement`](https://hachyderm.io/@damienmiller/117563026759098135) · [`🔗 Alpine edge openssh 10.6_p2-r0`](https://pkgs.alpinelinux.org/package/edge/main/x86_64/openssh)
+
+---
+
+## 37. Baidu's ERNIE 5.5 Flash Base is a 280B-A14B pre-training checkpoint — and its table wins 24 of 30 rows against three open base models
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** ERNIE Blog · 2026-11-05 · Hugging Face repo created 2026-10-21
+- **Tags:** `ai-models` `open-weights` `moe` `baidu` `pretraining`
+
+Baidu released **ERNIE-5.5-Flash-Base**, a sparse MoE language model with **280B total parameters and 14B activated per token**, pre-trained from scratch on **33.5T tokens** at a **128K** training context and supporting **1M tokens** for fine-tuning and inference. It is a base checkpoint in the strict sense — "the checkpoint at the end of pre-training, before any mid- or post-training" — and the blog is explicit that this is the product: a starting point for "domain adaptation, instruction tuning and reinforcement-learning research." The post-trained ERNIE 5.5 Flash is announced as a later release, not this one.
+
+The architecture is the interesting part for anyone paying for long context. The model has **43 Transformer layers**, hidden size **4096** and **64 heads**, and only **one layer in seven** keeps token-level access to the full context (via MLA with DeepSeek-style sparse attention). The other **37 layers** use **Heavily Compressed Attention**: every 128 tokens collapse into a single cached entry, and the layer attends over those entries plus a short window of recent uncompressed tokens. Head dimensions are set per layer rather than globally — **512** for the cheap HCA layers, **256** for the expensive MLA ones — and Baidu says it tested the obvious alternative, few CSA layers instead of few MLA layers, and that at a similar KV-cache budget "HCA combined with MLA outperforms HCA combined with CSA."
+
+The evaluation is unusually comparable, which is why the numbers are worth quoting: "All four models are evaluated from their publicly released checkpoints with the same evaluation harness, prompts and few-shot examples, and with the same LLM judge for free-form QA." The four are ERNIE 5.5 Flash Base (**280B-A14B**), DeepSeek V4 Flash Base (**284B-A13B**), Hy3-preview-Base (**295B-A21B**) and MiMo V2.5 Base (**310B-A15B**). ERNIE is best in **24 of the table's 30 rows**, including MMLU **93.3** (5-shot), MMLU-Pro **78.4**, GPQA **60.2**, HumanEval+ **82.3**, LiveCodeBench **40.1** and LongBench-v2 **48.7**. It loses six, and three of those losses are on long context: **HELMET-Rerank 56.2** against DeepSeek's 60.0, **InfiniteBench 46.5** against 48.0, and **ChineseSimpleQA 73.0** against 75.3; the other three are BBH-CoT, INCLUDE-lite and FullStackBench. That is a table where the compression shows.
+
+Weights ship on Hugging Face in FP8 and BF16, under the **ERNIE 5.5 Flash Base Model License Agreement v1.0**. The repo `baidu/ERNIE-5.5-Flash-Base` was created **2026-10-21T08:40:58Z** — fifteen days before the blog post — and read **150 likes, 13 downloads** when we opened it.
+
+**Why it matters:** releasing an un-post-trained base checkpoint with a four-model, one-harness comparison is the rarer and more useful artifact — most "open" releases are post-trained and therefore opaque about what pre-training contributed. The 24-of-30 result also comes with its own control: the six rows ERNIE loses are concentrated in long-context rank-following and Chinese-simple-QA, which is what you would predict if 37 of 43 layers see the past 128× compressed.
+
+[`🔗 ERNIE 5.5 Flash Base`](https://ernie.baidu.com/release/ernie-5-5-flash-base/) · [`🔗 baidu/ERNIE-5.5-Flash-Base`](https://huggingface.co/baidu/ERNIE-5.5-Flash-Base) · [`🔗 BF16 weights`](https://huggingface.co/baidu/ERNIE-5.5-Flash-Base-BF16)
+
+---
+
+## 38. OpenAI's Images 2.6 is 50% faster and animates GIFs — and the announcement carries no evaluation at all
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** OpenAI · published 2026-11-04 · 322 pts on HN
+- **Tags:** `ai-models` `image-generation` `openai` `api` `product-release`
+
+**Images 2.6** shipped on **2026-11-04** across ChatGPT, Codex and the API. Two model names are in the API — **`GPT-Image-2.6 Flare`** and **`GPT-Image-2.6 Sunburst`** — split by quality setting: Flare is the fast/low path and the post says that at low quality it "can generate images in as little as six seconds", while Sunburst is the medium/high path and is positioned on "even greater image consistency across edits."
+
+Four capabilities are new. **GIF output**: the model can produce animated loops and sprite sheets, and the post leads with it ("GIFs are the native language of social media"). **Image markup in the API** — the point-and-edit interface that already existed in ChatGPT — so a caller can specify where a change goes rather than describing it. **SVG export**, for designs headed to a web page or print. And a **complexity parameter** that "lets developers adjust how much planning the model does to meet a request", orthogonal to the quality setting: quality controls "visual detail and fidelity", complexity controls "how much goes into the scene." The guidance is low complexity for edits, medium or high for "scenes with many elements or constraints."
+
+The scale claim is the one number in the post: "People around the world now create 4 billion images per week across ChatGPT, Codex, and the API." The speed claim is "**50% faster** than before" — with no baseline named, no resolution stated and no measurement shown.
+
+**Why it matters:** this is a model release with no benchmark table, no side-by-side against 2.5, and no quality metric whatsoever — the only comparative number is a speed delta whose reference point is a pronoun ("than before"). That is not unusual for image models, where evals are contested, but it is worth naming, because the GIF and SVG capabilities are the kind of thing that gets adopted on the strength of a demo and then evaluated by nobody. The safety evaluations are pointed at a separate system card, which is the artifact to read before the model is, and the pricing page is where the six-second figure becomes a bill.
+
+[`🔗 Introducing Images 2.6`](https://openai.com/index/introducing-images-2-6/) · [`🔗 Hacker News discussion`](https://news.ycombinator.com/item?id=50372945)
+
+---
+
+## 39. Uncle Bob's `ub-mode` is an agent skill whose rules are enforced by four separate programs — 7,054 stars, no releases, no description
+
+- **Velocity:** ▮▮ rising
+- **Source:** github.com/unclebob/ub-mode · created 2026-10-25 · 7,054★
+- **Tags:** `agent-skills` `software-engineering` `tdd` `code-quality` `claude-code`
+
+Robert C. Martin's **`ub-mode`** is 152 lines of `SKILL.md` (3,958 bytes) that tell a coding agent to work in three phases: **First Make it Work**, **Then Make it Right**, **Follow Practice**. It reached **7,054 stars** in eleven days on a repository with **no description**, **no releases**, **no tags**, MIT licence and **10 open issues and pull requests**; it forked **394** times. The README credits `@poteto`'s rules (`poteto-mode` / `pstack`) as the source and describes itself as "reduced and paired with deterministic quality-gate tools."
+
+That pairing is the actual argument. Prose rules in a skill file are suggestions to a model; the repo routes three of its gates through companion programs that return numbers — [`crapper`](https://github.com/unclebob/crapper) (cyclomatic complexity, test coverage and CRAP score per function, with a hard threshold of CRAP `< 10`), [`dryer`](https://github.com/unclebob/dryer) (structural duplication, flags blocks at `>= 0.8` similarity) and [`mutator`](https://github.com/unclebob/mutator) (mutation testing, to expose surviving mutants rather than coverage theatre), plus `uml-viewer` to draw components, coverage, CRAP and dependency directions. The instruction "keep functions under CRAP 10" is checkable by a compiler-like tool; "write clean code" is not.
+
+The rule set itself is a compressed version of the discipline Martin has been publishing for two decades: a Laziness Protocol ("One decision lives in one place", "Ship the smallest edit that solves the problem"), Foundational Thinking ("Get the data shape right before you write the logic", "Do first whatever helps every later phase"), TDD, Redesign From First Principles, Attack the Premise, Subtract Before You Add, plus the later phases' Fix Root Causes, Sequence Work into Verifiable Units, Test Behaviour (Not Implementation), and Guard the Context Window. Installation is a copy: `SKILL.md` into `~/.claude/skills/ub-mode/SKILL.md` (or the equivalent directory for Grok or Cursor), invoked as `/ub-mode`.
+
+**Why it matters:** the agent-skills genre has converged on prose personality prompts, and this is the first widely-starred one whose author's answer to how you know it worked is a second repository with an exit code. Whether the thresholds are the right ones is arguable — CRAP 10 and 0.8 similarity are decade-old heuristics — but the design choice, a skill that dispatches to measurable gates instead of asking the model to grade itself, is the transferable one.
+
+[`🔗 unclebob/ub-mode`](https://github.com/unclebob/ub-mode) · [`🔗 SKILL.md`](https://raw.githubusercontent.com/unclebob/ub-mode/HEAD/SKILL.md) · [`🔗 unclebob/crapper`](https://github.com/unclebob/crapper)
+
+---
+
+## 40. iTerm2's `x-man-page:` handler turned a percent-encoded NUL into whitespace — the third fix for the same URL scheme
+
+- **Velocity:** ▮▮ rising
+- **Source:** NVD `CVE-2026-123014` · published 2026-11-05T06:17Z · 8.7
+- **Tags:** `cve` `iterm2` `macos` `argument-injection` `nul-byte`
+
+`CVE-2026-123014` is an **argument injection** in iTerm2's `x-man-page:` URL handler, scored **8.7** under CVSS 4.0 (`AV:N/AC:L/AT:N/PR:N/UI:P/VC:H/VI:H/VA:H`), CWE-88, assigned by `cve@mitre.org` and still `Received` at NVD. The mechanism is two layers of normalisation disagreeing: "**Percent-encoded NUL characters survive input sanitization and are subsequently converted to whitespace during command-line parsing, allowing injection of additional arguments to `/usr/bin/man`**." One of those arguments is decisive — "An attacker can inject the `-P` option to select an attacker-controlled pager command" — so opening a crafted `x-man-page:` URL runs the attacker's program with the privileges of the logged-in user. The record's own `NOTE` field is the history: "this issue exists because of an incomplete fix for CVE-2023-46321."
+
+The vendor side is where the item gets useful, because the fix shipped before the record and the changelog says so in plain English. iTerm2's downloads page lists **3.7.7** (stable, built **2026-11-03**) and **3.7.7beta2** (built **2026-10-27**); the CVE's stated boundary is `3.7.7beta2`, but 3.7.7's own changelog carries the same entry: "Hardened the handler for `x-man-page:` URLs so a malicious URL can no longer be crafted to run an unexpected command or make man render an arbitrary local file. Man section and page names are now checked against an allowlist of characters." Two commits are cited in the record — `314ba43` and `f29420a` in the GitLab repository.
+
+**Why it matters:** `x-man-page:` is the URL scheme macOS and other terminals use to open a man page from a link, which means the attack surface is a click in a terminal emulator that never prompts — `UI:P` in the vector is the whole social engineering budget. The more transferable lesson is the sanitizer boundary: the check that let this through was applied to the decoded string while the consumer parsed the encoded one, and a NUL that becomes a space between those two steps is indistinguishable from an argument separator. The 2023 CVE fixed the same handler once already, and the record says so rather than leaving it to be discovered.
+
+[`🔗 NVD CVE-2026-123014`](https://nvd.nist.gov/vuln/detail/CVE-2026-123014) · [`🔗 iTerm2 downloads and changelog`](https://iterm2.com/downloads.html) · [`🔗 fix commit 314ba43`](https://gitlab.com/gnachman/iterm2/-/commit/314ba43920dbce08808c032e89966918090bdf8e)
+
+---
+
+## 41. TrueNAS granted admin to any socket whose peer address was a hardcoded heartbeat IP — on single-node installs with no HA at all
+
+- **Velocity:** ▮▮ rising
+- **Source:** TrueNAS advisory · NVD `CVE-2026-123033` · 8.3 · fixed in 25.10.8 (forthcoming)
+- **Tags:** `cve` `truenas` `authentication-bypass` `storage` `middlewared`
+
+`middlewared` — TrueNAS's middleware — registered its HA peer-authentication hook **unconditionally**, with "no failover-licence or heartbeat-interface check." The hook made its trust decision from two properties of the attacker's own socket: the TCP peer address had to be one of the hardcoded HA heartbeat addresses (**169.254.10.1** or **169.254.10.2**) and the source port had to be **≤ 1024**. Nothing was forged, nothing was signed, and the connection was granted "an internal node credential that is treated as a full administrator for every API method." Admin API access then means command execution as root.
+
+The applicability clause is the reason this is not merely an HA-pair bug: because the hook was present regardless of licensing, hardware or configuration, "an attacker able to meet those conditions could obtain unauthenticated administrative API access" on "non-HA, single-node Community Edition systems with no HA configuration." The vendor lists CWE-290 (authentication bypass by spoofing) and CWE-306 (missing authentication for a critical function), and notes what the credential bypasses on the way in: the management-interface IP allowlist, API rate limiting, and the audit log.
+
+TrueNAS's own threat model narrows the exploitability in a way the NVD description does not, and both belong in the same sentence. The advisory says "Exploitation is not possible from an arbitrary Internet location" — the trust check keys on a link-local source address, and a stock system "disables IPv4 link-local autoconfiguration and holds no route to the 169.254.0.0/16 range" — and then adds that "adjacency by itself is not sufficient," because with no return route "the attacker must additionally alter the return path — either by modifying routing on the TrueNAS system or by controlling the gateway/path." Where those hold, the impact is unauthenticated admin.
+
+The clocks and the state of the fix are worth separating. The advisory's title still reads "**CVE Pending**" and its "Fixed in" line reads "**TrueNAS SCALE 25.10.8 (forthcoming)**" — so there is nothing to install yet, and the primary mitigation is network isolation: keep the management interface on a trusted segment with no untrusted host on its layer-2. The NVD record exists anyway (`CVE-2026-123033`, published **2026-11-05T07:17Z**, `Received`, 8.3 under `CVSS:3.1/AV:A/AC:H/PR:N/UI:N/S:C/C:H/I:H/A:H`), assigned by `cve@mitre.org` — which published it in the same second as the unrelated OPNsense record in item 46, and a Wowza Streaming Engine XXE beside them. The correction itself is a one-line idea: trust requires "that the connection also terminate on the HA heartbeat listener, a local address and port the attacker cannot control."
+
+**Why it matters:** the bug is a textbook confused-deputy, but the interesting half is that the vendor published the return-path analysis that makes the CVSS `AC:H` defensible while the CVE description compresses it to "an attacker on the same network segment." A storage appliance's management API is the highest-value credential in the rack, and the hook being registered everywhere is the failure mode that turns a two-controller feature into a single-node vulnerability.
+
+[`🔗 TrueNAS security advisory`](https://security.truenas.com/scale/impact-statements/ha-node-auth-bypass/) · [`🔗 NVD CVE-2026-123033`](https://nvd.nist.gov/vuln/detail/CVE-2026-123033)
+
+---
+
+## 42. Ansible's `no_log: true` keeps the `exception` field — so a failed task prints the secret it was hiding
+
+- **Velocity:** ▮▮ rising
+- **Source:** NVD `CVE-2026-123036` · published 2026-11-05T10:16Z · Red Hat CNA · 5.5
+- **Tags:** `cve` `ansible` `secrets` `logging` `regression`
+
+`CVE-2026-123036` is a **5.5** (`CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:H/I:N/A:N`) filed by Red Hat against `ansible-core`, and it describes a mechanism that will be familiar to anyone who has read a censored task result. When a task marked `no_log: true` fails, the result is censored before emission — "but the `exception` field is retained because it is present in the PRESERVE allow-list in `lib/ansible/_internal/_task.py`." The default stdout callback then prints it.
+
+The code confirms the description. In the current `devel` tree the allow-list is a `frozenset` named `PRESERVE` containing `_ansible_no_log`, `attempts`, `changed`, `deprecations`, **`exception`**, `retries` and `warnings`, and the censor path rebuilds the result with exactly those keys before attaching the "output has been hidden" note. Everything else is dropped; the exception string is not.
+
+Three leak paths are named, and each is a different amount of secret: "module argument-validation errors echo the argument value", "templating errors print an Origin source snippet (the failing line plus the two preceding lines of the variables file, exposing neighbouring secrets from an `-e @secrets.yml` file)", and "`fail`/`assert` messages are printed in full." The consequence is the one operators will recognise — secrets supplied as extra variables or variable files "can therefore leak to terminal output, CI logs, and the stdout logs of any automation wrapping `ansible-playbook`, even though every task touching the secrets is marked `no_log: true`."
+
+The regression boundary is stated: "This is a regression introduced with the `ansible-core` 2.19 data-tagging/templating rework; the behaviour does not occur on 2.16, where the error text is correctly censored." NVD has not analyzed the record — `vulnStatus` is `Awaiting Analysis`, and the single metric is `Primary` from `secalert@redhat.com`. No fixed version appears in the record at the time of writing.
+
+**Why it matters:** `no_log` is the one security control Ansible users are told to trust, and it was defeated not by a parsing bug but by a allow-list that predates the field it preserves — the censor was written when `exception` held a Python class name, and the 2.19 rework made it hold a rendered error. The templating path is the worst of the three, because "the failing line plus the two preceding lines" is a citation to secrets the operator never asked to be evaluated, and CI runners keep stdout for a long time.
+
+[`🔗 NVD CVE-2026-123036`](https://nvd.nist.gov/vuln/detail/CVE-2026-123036) · [`🔗 lib/ansible/_internal/_task.py`](https://github.com/ansible/ansible/blob/devel/lib/ansible/_internal/_task.py) · [`🔗 Red Hat CVE page`](https://access.redhat.com/security/cve/CVE-2026-123036)
+
+---
+
+## 43. HakiOS runs Apple's XNU kernel on a POCO phone, draws through Metal on the Adreno — and reports the frame rate it did not reach
+
+- **Velocity:** ▮▮ rising
+- **Source:** github.com/oosexgang/hakios-xnu-kernel · created 2026-10-22 · 2,495★
+- **Tags:** `osdev` `xnu` `android` `metal` `reverse-engineering`
+
+**HakiOS** is Apple's open-source Darwin kernel — **XNU `xnu-8796.121.2`** — running on Android phones "the way Android is Linux on phones: a boot loader of its own, drivers of its own, a configuration system and a version of its own." It is a research bench, not a ROM: it runs from RAM by default and "a reboot gives the phone back to Android", and the same kernel boots in QEMU with `make qemu-open` "with nothing of Apple's and nothing of any phone's."
+
+The 4 November update is a graphics result. On a **POCO X5 Pro 5G**, the project's window server draws through **Metal on the Adreno 642L** two ways. `hakios-metal` measures page swipes at **110–115 fps**, Settings' scroll at **118** and the home button at **106** when rendering at 828×1792 and stretching to the panel; at the panel's native 1125×2436 the same three read **101, about 90 and about 90**. UniXNU's Metal-on-Vulkan path, for comparison, gives swipes at **50–57** and scroll at **41**.
+
+The sentence that follows the table is the reason to trust it: "The panel is **120 Hz**, and **120 frames a second has not been reached**." A bring-up project that publishes the number it missed, next to the number it hit, is doing the thing most such READMEs do not.
+
+Licensing is split by directory and worth reading before reuse: the kernel — `xnu/hakios.patch`, `xnu/files/`, `drivers/` — is a derivative of Apple's XNU and stays under the **Apple Public Source License 2.0**, and "everything else that is ours" (the boot loader in `xnuloader/`, `userland/src/`, tools, docs, `devices/`) is **MIT**. Apple's OS, its IPSW firmware and the phone's own firmware are not in the repository at all — "every user obtains them from their own device and their own copy of the firmware." That split is also why GitHub's licence detector reports `NOASSERTION` on the repo rather than a single identifier.
+
+**Why it matters:** getting a non-Linux kernel to boot on a phone is a crowded hobby, but getting a window server to composite at 90-plus frames through the vendor GPU driver of a *different* operating system is a much narrower achievement, and the honest 120 Hz line tells you where the remaining 5–25% is: not in the compositor but in a path that has not been finished. The APSL split is also a useful precedent — an Apple-licensed derivative can be published openly, and the licence obligations are per-file rather than per-repository.
+
+[`🔗 oosexgang/hakios-xnu-kernel`](https://github.com/oosexgang/hakios-xnu-kernel) · [`🔗 Metal on the Adreno`](https://github.com/oosexgang/hakios-xnu-kernel/blob/main/docs/reference/metal.md) · [`🔗 the measurements`](https://github.com/oosexgang/hakios-xnu-kernel/blob/main/docs/reference/metal-measurements.md) · [`🔗 LICENSE`](https://github.com/oosexgang/hakios-xnu-kernel/blob/main/LICENSE)
+
+---
+
+## 44. Mbed TLS will stop shipping security fixes in April 2027 unless new maintainers appear
+
+- **Velocity:** ▮▮ rising
+- **Source:** Mbed TLS announce list · 2026-10-08 · 55 pts on HN 2026-11-03
+- **Tags:** `security` `mbedtls` `open-source` `maintenance` `tls`
+
+The Mbed TLS team announced on **2026-10-08** that it is "preparing for a transition in the maintenance of TLS and X.509 libraries (both contained in the Mbed TLS project)." The existing maintainers "will continue to develop and maintain TF-PSA-Crypto, which remains an actively maintained part of the project", and "will cease their involvement in their development and maintenance of Mbed TLS **from April 2027**."
+
+The consequence is stated without hedging: "Unless new maintainers have joined the project and ramped up by that time, **security incident response, security fixes, and releases will cease from April 2027**." The future arrangement "have not yet been determined," and the team is asking for "engineering resources, funding, or other forms of support," with an email address for anyone willing to take it on.
+
+**Why it matters:** Mbed TLS is not a niche library — it is the TLS stack in a large share of embedded and IoT firmware, in RTOS SDKs, and in products whose update story is a firmware image shipped once. A library that stops issuing security fixes does not stop being depended on; it becomes a permanently vulnerable dependency whose consumers mostly cannot audit it, and the April 2027 date gives those consumers one procurement cycle to find a replacement that fits in their flash budget. The pattern is also the one the ecosystem keeps relearning: a component maintained by a foundation's core team is only as durable as the team's roadmap, and TF-PSA-Crypto is where that team is going.
+
+[`🔗 Announcement thread`](https://lists.trustedfirmware.org/archives/list/mbed-tls@lists.trustedfirmware.org/thread/YPIGCB7WN6GCHOGEGKOJXUYAP7OK527W/) · [`🔗 Hacker News discussion`](https://news.ycombinator.com/item?id=50349165)
+
+---
+
+## 45. vault-java-driver built a trust-all TLS context in three states where the caller asked for verification
+
+- **Velocity:** ▮ steady
+- **Source:** NVD `CVE-2026-109408` · 7.4 · published 2026-11-05T08:17Z · fixed in 7.0.0
+- **Tags:** `cve` `java` `vault` `tls` `secrets`
+
+`CVE-2026-109408` affects `io.github.jopenlibs:vault-java-driver` **5.2.0 through 6.2.3** and is fixed in **7.0.0**. The description is unusually precise about the trigger, because there are three of them, and all three are states in which the caller believes verification is on while `SslConfig.isVerify()` returns false and "the driver installs a trust-all SSLContext":
+
+1. an `SslConfig` passed to `VaultConfig` **without calling `build()`**;
+2. an `SslConfig` **restored by Java deserialization**;
+3. **`VAULT_SSL_VERIFY` set to a truthy value other than `"true"`** — such as `1`, `yes` or `on`.
+
+The third is the one that will be found in production configs, because `1`/`yes`/`on` are the conventional spellings for a boolean environment variable and every other tool in the stack accepts them. The impact follows from what the client carries: "An attacker on the network path to the Vault server can then read the Vault token and secrets in transit and forge responses." CWE-295 (improper certificate validation), **7.4** (`CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:H/I:H/A:N`).
+
+A second record from the same filing covers the same version range and is fixed in the same release: `CVE-2026-112072` (**6.5**, CWE-674) — the driver "parses Vault's JSON responses with a vendored minimal-json parser that has no nesting depth limit", so a deeply nested value raises a `StackOverflowError` "which escapes `catch (Exception)` handlers and kills the reading thread." The write-side precondition is neat: "A Vault token that can write but not read a KV v2 path can store such a value there, so every later read of that path through the driver fails" — a write-only credential turned into a persistent denial of read. It also requires **Vault 1.19.x or earlier**, because "1.20 and later reject values nested deeper than 298 levels."
+
+Provenance and clocks: both records were published **2026-11-05T08:17:03Z** by the same assigning CNA (source `abd028dc-c042-4c4d-9749-38d0f850af89`), both are `Received`, and both carry exactly one metric — the CNA's own v3.1 score, typed `Secondary` — with no `nvd@nist.gov` metric yet. The fix predates the paperwork: `vault-java-driver-7.0.0.jar` on Maven Central is timestamped **2026-11-04 23:15** UTC, about **nine hours** before the records.
+
+**Why it matters:** TLS verification being enabled is a claim about a boolean that four different code paths can set to the wrong value, and this client got all three of the easy ones wrong at once — the builder that must be called, the deserializer that skips it, and the string parser that accepts `yes`. The second CVE is the quieter lesson: `catch (Exception)` does not catch an `Error`, so a parser without a depth limit is a thread-killer, and a write-only token is enough to plant one.
+
+[`🔗 NVD CVE-2026-109408`](https://nvd.nist.gov/vuln/detail/CVE-2026-109408) · [`🔗 NVD CVE-2026-112072`](https://nvd.nist.gov/vuln/detail/CVE-2026-112072) · [`🔗 PR #78`](https://github.com/jopenlibs/vault-java-driver/pull/78)
+
+---
+
+## 46. OPNsense's ACME plugin interpolated two WebGUI fields into a root shell command — 9.4, fixed 33 hours before the record
+
+- **Velocity:** ▮ steady
+- **Source:** NVD `CVE-2026-123025` · published 2026-11-05T07:17Z · 9.4
+- **Tags:** `cve` `opnsense` `command-injection` `acme` `firewall`
+
+`CVE-2026-123025` is a **9.4** (`CVSS:4.0/AV:N/AC:L/AT:N/PR:L/UI:N/VC:H/VI:H/VA:H/SC:H/SI:H/SA:H`) in the **Google Cloud DNS validation module** of OPNsense's `os-acme-client` plugin, **through 4.17**, CWE-78. The mechanism is one missing escape in a method named for preparation: `DnsGcloud::prepare()` "decodes the `dns_gcloud_key` model field and directly interpolates the string fields `gcloud_account` and `gcloud_project` into a shell command passed to `proc_open()` via `LeUtils::run_shell_command()` without any validation or escaping." The privilege required is "a remote authenticated user with privileges to issue or renew certificates through the WebGUI/API", and the result is "arbitrary code execution **as root**."
+
+The privilege boundary is what to read carefully. A certificate-renewal permission sounds like a narrow, delegated capability — the kind a firewall admin hands to whoever manages TLS — and here it is equivalent to a root shell on the perimeter device, which is the box that terminates every VPN and every inter-VLAN rule.
+
+The fix landed first. `opnsense/plugins` **PR #5873**, "security/acme-client: release **4.18**", was merged **2026-11-03T22:21:57Z** and its body credits the reporter — "Gcloud vulnerability reported by: @cppghoul". The NVD record was published **2026-11-05T07:17:25Z**, roughly **33 hours** later, with `vulnStatus` `Received` and a single metric from `cve@mitre.org` typed `Secondary`. So the population at risk is anyone still on 4.17 or earlier, and the upgrade is a plugin release rather than a firmware image.
+
+**Why it matters:** the three-field shape — a key that is decoded, then two adjacent string fields interpolated into a shell — is the same bug as the ones this feed has logged against routers, NAS boxes and backup appliances all year, and it survives because the plugin's job is genuinely to shell out to `gcloud`. What makes it worth a slot is the authentication story: on a firewall, an authenticated user with certificate privileges is a role people hand out liberally, and the record's own `PR:L` is doing a lot of work for a bug that ends in root.
+
+> "A remote authenticated user with privileges to issue or renew certificates through the WebGUI/API can achieve arbitrary code execution as root." — the CVE record's own description
+
+[`🔗 NVD CVE-2026-123025`](https://nvd.nist.gov/vuln/detail/CVE-2026-123025) · [`🔗 opnsense/plugins PR #5873`](https://github.com/opnsense/plugins/pull/5873)
+
+---
+
+## 47. On-policy distillation reaches 96–103% of its teachers in-distribution and lands 2.45–16.25% *below the base model* out of it
+
+- **Velocity:** ▮ steady
+- **Source:** arXiv 2611.05609 · submitted 2026-11-03T20:53Z
+- **Tags:** `ai-research` `distillation` `rl` `generalization` `post-training`
+
+Multi-teacher on-policy distillation is the standard way to fold several specialised teachers back into one student after RL. The paper's finding is that the way it is usually measured cannot see what it loses. Prior work reports "near-perfect in-distribution (IND) distillation performance", which "can mask incomplete capability consolidation beyond the supervised distribution."
+
+The numbers are the argument. Across extrapolative settings on Qwen3 models spanning mathematical reasoning, coding, agent and long-context capabilities, "OPD and MOPD reach **96.04–102.73%** of their teachers' IND scores. Yet their out-of-distribution (OOD) scores remain **2.45–16.25% below the base model's**." Read that twice: the distilled student is not merely worse than its teachers out of distribution, it is worse than the *un-distilled base model* it started from. In three compositional settings, MOPD "improves IND performance over the base model, but its performance on composed tasks as OOD remains **18.19–24.34% below that of the best teachers**."
+
+The diagnosis is two bottlenecks — teacher capability and data coverage — and the paper reports that "jointly alleviating these bottlenecks eliminates OOD forgetting in our experiments and suggests the potential for generalization beyond the teacher." The mechanism section is the reusable part: analysing update geometry, (M)OPD makes "smaller and more spectrally concentrated updates on average than those of the RL baselines, along with greater shared update structure under MOPD" — a student that fits the teacher smoothly is one that has learned a narrower function, and the narrowness is invisible on the in-distribution eval. Their two remedies are geometry-based patching and base-preserving replay, both aimed at keeping the base model's behaviour reachable while matching IND performance.
+
+**Why it matters:** distillation is sold as consolidation with no downside, and this says the downside is a regression on exactly the capabilities that were not in the distillation set — the failure mode that matters when the student is deployed on inputs the teachers never saw. The measurement lesson generalises past distillation: an IND-only table is a table that cannot distinguish "learned the teacher" from "forgot everything else", and 2.45% is a large floor for a number that most reports never print.
+
+[`🔗 arXiv 2611.05609`](https://arxiv.org/abs/2611.05609) · [`🔗 Hugging Face daily papers`](https://huggingface.co/papers/2611.05609)
+
+---
+
+## 48. FrontierPhysics gave 42 physicists' own research to 22 models — no configuration passed more than 46 of 168 rollouts
+
+- **Velocity:** ▮ steady
+- **Source:** arXiv 2611.06910 · submitted 2026-11-04T18:56Z
+- **Tags:** `ai-research` `agents` `benchmark` `physics` `evaluation`
+
+**FrontierPhysics** is an end-to-end physics benchmark with **56 tasks**, each written by one of **42 physicists** from their own research, across **nine domains** spanning theoretical, computational and experimental physics. Existing physics benchmarks, the paper argues, "only evaluate fixed questions, isolated sub-tasks, or paper reproduction with given solutions, and rarely check research quality alongside correctness." A task here requires an agent to "review the literature, develop a research plan, conduct research and experiments, and produce structured outputs and scientific manuscripts" — and is graded by "deterministic verifiers with expert-authored rubrics" that ask whether the research is "correct and publishable."
+
+The result: "Across **22 models in 26 configurations**, no configuration passes more than **46 of its 168 rollouts**." That is 27.4% at the ceiling, across three rollouts per task (56 × 3 = 168), and it is the kind of number that only appears when the tasks are somebody's actual problem rather than a distilled question.
+
+The failure analysis is the part worth carrying: "Manual review of agent trajectories shows that frontier agents' main weaknesses are **insufficiently rigorous reasoning and limited expert intuition**, rather than gaps in physics knowledge or execution errors." That is a different diagnosis from the usual one, which is that the agent could not run the code — the models can execute, and they know the physics, and they do not know when they are wrong.
+
+**Why it matters:** the benchmark replaces a saturated multiple-choice surface with a rubric a physicist wrote about their own work, and the ceiling of 27.4% is the honest description of where end-to-end research automation stands — not whether it can do physics, but whether it can tell a publishable result from an unremarkable one. The weakness it names, expert intuition, is also the one that no additional tooling fixes, which makes the benchmark a better guide to what to build than another SWE-style score.
+
+[`🔗 arXiv 2611.06910`](https://arxiv.org/abs/2611.06910) · [`🔗 Hugging Face daily papers`](https://huggingface.co/papers/2611.06910)
+
+---
+
+## 49. neuron-explorer pushes every MLP neuron in a layer, keeps every rollout, and ranks the results against 256 random controls
+
+- **Velocity:** ▮ steady
+- **Source:** github.com/lyramakesmusic/neuron-explorer · created 2026-10-21 · 1,925★
+- **Tags:** `interpretability` `steering` `qwen` `mcp` `open-source`
+
+**neuron-explorer** is a steering-first workbench for **Qwen3.5-4B**: "Every MLP neuron in a layer is pushed up and down on a few prompts, every rollout is kept, and the explorer lays the results out over a 3D view of the model." The repository is MIT, **1,925 stars** since **2026-10-21**, and it ships the artifacts rather than only the tool — `explorer/cache/` carries precomputed layouts, connections and lens indices, and the server loads Qwen3.5-4B locally on MPS, CUDA or CPU for live steered chat.
+
+The design decisions that make it more than a visualiser are in the sweep scripts. Doses are "fractions of the median residual norm leaving the layer" — `{who, snake, orange} × {−0.7, +0.5, +0.8}` plus `{free} × {+3}`, one unsteered baseline per prompt — so a "push" is measured against the model's own scale rather than an arbitrary constant. Units are ranked "by word-cluster mass against random-direction controls" (the sweep runs with `--random-controls 256`) and reported with percentiles; `sweep/steer_lens.py` computes next-token **Δlogprob and KL** for ±0.8 pushes on *every* neuron; `sweep/check_equivalence.py` checks that the HF and vLLM steering paths and activation captures agree; and `sweep/finefineweb.py` builds "a domain-balanced FineFineWeb sample (about 20M tokens over 66 domains)" so a neuron's firing can be characterised on text the sweep never touched. Layer 22 is swept over **2,000,000 tokens**; `sweep/run_depth.sh "4 9 13 17" 384 64` does a random-subset pass across four layers.
+
+The fourth panel is an agent. A **Claude** tab runs the `claude` CLI with the explorer exposed as an **MCP server** (`explorer/agent_mcp.py`), and it "reads neurons, cones and lenses, runs the live model (steering, activations, next-token logprobs, ablations), moves the map, list and highlights, and **has file tools and a shell in your home folder**." The README adds the containment line: "The server answers only pages and tools on this machine" — a statement about binding, not about sandboxing, which is worth reading as the former.
+
+**Why it matters:** mechanistic interpretability tooling usually reports a finding; this one reports a control — every claim about a neuron comes with its percentile against 256 random directions, and every dose is a fraction of the layer's own residual norm, which is what lets a reader compare across layers without a units argument. The MCP-plus-shell panel is also the honest version of where this genre is heading: the agent that reads your interpretability results is running on the same machine as the model you are dissecting, with the same filesystem.
+
+[`🔗 lyramakesmusic/neuron-explorer`](https://github.com/lyramakesmusic/neuron-explorer) · [`🔗 README`](https://github.com/lyramakesmusic/neuron-explorer/blob/main/README.md) · [`🔗 Qwen3.5-4B R/J++ lenses`](https://huggingface.co/bubskee/qwen3.5-4b-r-jpp-lenses)
+
+---
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-11-05T04:27:03Z |
-| Items | 35 |
-| Sources tracked | 24 (Hacker News, GitHub Trending, NVD, CVE.org, CISA KEV, GitHub Advisory Database, vendor PSIRTs, arXiv, Hugging Face, vendor engineering blogs) |
+| Generated | 2026-11-05T12:26:44Z |
+| Items | 49 |
+| Sources tracked | 31 (Hacker News, GitHub Trending, NVD, CVE.org, CISA KEV, GitHub Advisory Database, vendor PSIRTs and security advisories, project release notes, package registries, mailing lists, arXiv, Hugging Face, vendor engineering blogs) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (3x daily) |
 | Ranking | Velocity-weighted (recency × engagement acceleration × source authority) |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |

@@ -1,9 +1,9 @@
 {
- "generated": "2026-11-05T04:27:41.726Z",
+ "generated": "2026-11-05T12:29:31.053Z",
  "files": [
   {
    "file": "2026-11-05.md",
-   "items": 35,
+   "items": 49,
    "findings": [
     {
      "check": "cvss",
@@ -17,7 +17,7 @@
      "item": 2,
      "verdict": "ok",
      "claim": "CVE-2026-109518 `Received`",
-     "detail": "Received (lastModified 2026-11-05T01:17:21.307)"
+     "detail": "Received (lastModified 2026-11-05T05:18:19.033)"
     },
     {
      "check": "cvss",
@@ -111,6 +111,125 @@
      "detail": "NVD published 2026-11-04T19:17:18.493 (2026-11-04 UTC) · cveawg datePublished 2026-11-04T19:04:21.450Z (2026-11-04 UTC) — the two clocks differ; 2026-11-04 is the NVD published day"
     },
     {
+     "check": "issues",
+     "item": 39,
+     "verdict": "ok",
+     "claim": "10 issues+PRs combined",
+     "detail": "one number for both nouns — that is the composite the counter reports, so nothing is being presented as an issue-only count"
+    },
+    {
+     "check": "status",
+     "item": 40,
+     "verdict": "ok",
+     "claim": "CVE-2026-123014 `Received`",
+     "detail": "Received (lastModified 2026-11-05T06:17:07.707)"
+    },
+    {
+     "check": "date",
+     "item": 40,
+     "verdict": "ok",
+     "claim": "CVE-2026-123014 published 2026-11-05",
+     "detail": "NVD published 2026-11-05T06:17:07.707 (2026-11-05 UTC) · cveawg datePublished 2026-11-05T05:25:55.141Z (2026-11-05 UTC) — the two clocks differ; 2026-11-05 is the NVD published day"
+    },
+    {
+     "check": "cwe",
+     "item": 40,
+     "verdict": "ok",
+     "claim": "CVE-2026-123014 CWE-88",
+     "detail": "stated in NVD weaknesses[] (cve@mitre.org)"
+    },
+    {
+     "check": "status",
+     "item": 41,
+     "verdict": "ok",
+     "claim": "CVE-2026-123033 `Received`",
+     "detail": "Received (lastModified 2026-11-05T07:17:26.207)"
+    },
+    {
+     "check": "date",
+     "item": 41,
+     "verdict": "ok",
+     "claim": "CVE-2026-123033 published 2026-11-05",
+     "detail": "NVD published 2026-11-05T07:17:26.207 (2026-11-05 UTC) · cveawg datePublished 2026-11-05T06:58:31.785Z (2026-11-05 UTC) — the two clocks differ; 2026-11-05 is the NVD published day"
+    },
+    {
+     "check": "cwe",
+     "item": 41,
+     "verdict": "ok",
+     "claim": "CVE-2026-123033 CWE-290",
+     "detail": "stated in NVD weaknesses[] (cve@mitre.org)"
+    },
+    {
+     "check": "status",
+     "item": 42,
+     "verdict": "ok",
+     "claim": "CVE-2026-123036 `Awaiting Analysis`",
+     "detail": "Awaiting Analysis (lastModified 2026-11-05T10:16:38.370)"
+    },
+    {
+     "check": "date",
+     "item": 42,
+     "verdict": "ok",
+     "claim": "CVE-2026-123036 published 2026-11-05",
+     "detail": "NVD published 2026-11-05T10:16:38.220 (2026-11-05 UTC) · cveawg datePublished 2026-11-05T09:38:31.304Z (2026-11-05 UTC) — the two clocks differ; 2026-11-05 is the NVD published day"
+    },
+    {
+     "check": "status",
+     "item": 45,
+     "verdict": "ok",
+     "claim": "CVE-2026-109408 `Received`",
+     "detail": "Received (lastModified 2026-11-05T08:17:03.463)"
+    },
+    {
+     "check": "date",
+     "item": 45,
+     "verdict": "ok",
+     "claim": "CVE-2026-109408 published 2026-11-05",
+     "detail": "NVD published 2026-11-05T08:17:03.463 (2026-11-05 UTC) · cveawg datePublished 2026-11-05T07:36:07.410Z (2026-11-05 UTC) — the two clocks differ; 2026-11-05 is the NVD published day"
+    },
+    {
+     "check": "date",
+     "item": 45,
+     "verdict": "ok",
+     "claim": "CVE-2026-109408 published 2026-11-05",
+     "detail": "NVD published 2026-11-05T08:17:03.463 (2026-11-05 UTC) · cveawg datePublished 2026-11-05T07:36:07.410Z (2026-11-05 UTC) — the two clocks differ; 2026-11-05 is the NVD published day"
+    },
+    {
+     "check": "cwe",
+     "item": 45,
+     "verdict": "ok",
+     "claim": "CVE-2026-112072 CWE-674",
+     "detail": "stated in NVD weaknesses[] (abd028dc-c042-4c4d-9749-38d0f850af89)"
+    },
+    {
+     "check": "status",
+     "item": 46,
+     "verdict": "ok",
+     "claim": "CVE-2026-123025 `Received`",
+     "detail": "Received (lastModified 2026-11-05T07:17:25.897)"
+    },
+    {
+     "check": "date",
+     "item": 46,
+     "verdict": "ok",
+     "claim": "CVE-2026-123025 published 2026-11-05",
+     "detail": "NVD published 2026-11-05T07:17:25.897 (2026-11-05 UTC) · cveawg datePublished 2026-11-05T06:29:05.916Z (2026-11-05 UTC) — the two clocks differ; 2026-11-05 is the NVD published day"
+    },
+    {
+     "check": "date",
+     "item": 46,
+     "verdict": "ok",
+     "claim": "CVE-2026-123025 published 2026-11-05",
+     "detail": "NVD published 2026-11-05T07:17:25.897 (2026-11-05 UTC) · cveawg datePublished 2026-11-05T06:29:05.916Z (2026-11-05 UTC) — the two clocks differ; 2026-11-05 is the NVD published day"
+    },
+    {
+     "check": "cwe",
+     "item": 46,
+     "verdict": "ok",
+     "claim": "CVE-2026-123025 CWE-78",
+     "detail": "stated in NVD weaknesses[] (cve@mitre.org)"
+    },
+    {
      "check": "repo",
      "item": 1,
      "verdict": "hf-model",
@@ -143,7 +262,7 @@
      "item": 12,
      "verdict": "ok",
      "claim": "FareedKhan-dev/kimi-k3-in-c",
-     "detail": "10418★, last push 2026-10-02"
+     "detail": "10650★, last push 2026-10-02"
     },
     {
      "check": "count",
@@ -165,6 +284,27 @@
      "verdict": "table-columns-unresolved",
      "claim": "five of 36",
      "detail": "a cited page carries a table, but no column pair is named by the item strongly enough to pin — count the rows by hand rather than let a positional match decide"
+    },
+    {
+     "check": "ratio",
+     "item": 37,
+     "verdict": "table-columns-unresolved",
+     "claim": "24 of 30 | 37 of 43",
+     "detail": "a cited page carries a table, but no column pair is named by the item strongly enough to pin — count the rows by hand rather than let a positional match decide"
+    },
+    {
+     "check": "idrange",
+     "item": 23,
+     "verdict": "cve-range-disclosed",
+     "claim": "CVE-2026-122302–CVE-2026-122323",
+     "detail": "21 records stated against a 22-id span — the item names the gap, so the set/range distinction is disclosed"
+    },
+    {
+     "check": "idrange",
+     "item": 23,
+     "verdict": "cve-range-disclosed",
+     "claim": "CVE-2026-122302–CVE-2026-122323",
+     "detail": "21 records stated against a 22-id span — the item names the gap, so the set/range distinction is disclosed"
     },
     {
      "check": "quotation",
@@ -405,6 +545,104 @@
      "detail": "verbatim in 2 readable source(s)"
     },
     {
+     "check": "quotation",
+     "item": 36,
+     "verdict": "ok",
+     "claim": "5 quotation(s)",
+     "detail": "verbatim in 3 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 37,
+     "verdict": "ok",
+     "claim": "4 quotation(s)",
+     "detail": "verbatim in 4 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 38,
+     "verdict": "ok",
+     "claim": "8 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 39,
+     "verdict": "ok",
+     "claim": "5 quotation(s)",
+     "detail": "verbatim in 3 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 40,
+     "verdict": "ok",
+     "claim": "4 quotation(s)",
+     "detail": "verbatim in 7 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 41,
+     "verdict": "ok",
+     "claim": "10 quotation(s)",
+     "detail": "verbatim in 4 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 42,
+     "verdict": "ok",
+     "claim": "8 quotation(s)",
+     "detail": "verbatim in 5 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 43,
+     "verdict": "ok",
+     "claim": "6 quotation(s)",
+     "detail": "verbatim in 5 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 44,
+     "verdict": "ok",
+     "claim": "6 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 45,
+     "verdict": "ok",
+     "claim": "6 quotation(s)",
+     "detail": "verbatim in 8 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 46,
+     "verdict": "ok",
+     "claim": "6 quotation(s)",
+     "detail": "verbatim in 5 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 47,
+     "verdict": "ok",
+     "claim": "6 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 48,
+     "verdict": "ok",
+     "claim": "5 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 49,
+     "verdict": "ok",
+     "claim": "6 quotation(s)",
+     "detail": "verbatim in 3 readable source(s)"
+    },
+    {
      "check": "paper",
      "item": 10,
      "verdict": "ok",
@@ -459,15 +697,29 @@
      "verdict": "ok",
      "claim": "arXiv 2611.06445 submitted 2026-11-04T12:49Z",
      "detail": "arXiv `published` 2026-11-04T12:49:07Z — the quoted instant is the submission's"
+    },
+    {
+     "check": "paper",
+     "item": 47,
+     "verdict": "ok",
+     "claim": "arXiv 2611.05609 submitted 2026-11-03T20:53Z",
+     "detail": "arXiv `published` 2026-11-03T20:53:26Z — the quoted instant is the submission's"
+    },
+    {
+     "check": "paper",
+     "item": 48,
+     "verdict": "ok",
+     "claim": "arXiv 2611.06910 submitted 2026-11-04T18:56Z",
+     "detail": "arXiv `published` 2026-11-04T18:56:22Z — the quoted instant is the submission's"
     }
    ]
   }
  ],
  "status_watch": [],
  "api_calls": 0,
- "readme_calls": 10,
- "cited_page_calls": 11,
+ "readme_calls": 33,
+ "cited_page_calls": 77,
  "repo_page_calls": 0,
- "nvd_calls": 1,
+ "nvd_calls": 2,
  "cna_calls": 0
 }

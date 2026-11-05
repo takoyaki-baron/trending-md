@@ -1,8 +1,8 @@
 ---
 date: 2026-11-05
-updated: 2026-11-05T04:27:03Z
+updated: 2026-11-05T12:26:44Z
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 24
+sources: 31
 license: CC-BY-4.0
 ---
 
@@ -644,13 +644,281 @@ Ryan Miceli 关于 Xbox 360 hypervisor 的第三篇很短，主要在讲 PoC 放
 
 ---
 
+## 36. OpenSSH 一天之内发布 10.6p2，修 musl 上的密码认证绕过 —— 并称长期禁运期如今主要帮的是攻击者
+
+- **Velocity:** ▮▮▮ trending
+- **来源:** OpenSSH 发布说明 · 10.6p2 于 2026-11-05 发布 · 维护者贴文 2026-11-05T09:03Z
+- **标签:** `security` `openssh` `musl` `alpine` `coordinated-disclosure`
+
+Portable **OpenSSH 10.6p2** 于 **2026-11-05** 发布。发布说明的安全章节只有一条：`sshd(8)` 应当「avoid password authentication bypass that is exploitable through sshd(8) that affects some Linux systems when built and run with PAM support disabled」。说明随后把责任放到守护进程之外——「We consider the root cause of this bug to be outside sshd, but it is exploitable via sshd and can be avoided there」——并致谢 **Wakefield 的 Özgün Kültekin**（wakefield.co）。
+
+维护者 Damien Miller 当日上午的贴文更具体地界定了受影响人群与紧迫性。该 bug 影响使用 musl libc 且未启用 PAM 的 Linux 系统（举的例子是 Alpine Linux），对这些系统他的建议是立刻停止阅读并设置 `PasswordAuthentication=no`，或直接关闭 SSH。随后他明确排除三种相邻配置：非 Linux 系统不受影响，glibc 的 Linux 系统不受影响，使用 PAM 做密码认证的 Linux 系统也不受影响。这正是受影响集合既小、又恰好等于互联网大量容器基础镜像的原因。（该贴文正文由实例的 status API 提供；网页本身是一个 JavaScript 空壳。）
+
+时间线才是改变实践的部分。Miller 说项目在前一天才得知问题，次日上午就发布，因为近来已多次见到 AI agent 快速重新发现同一 bug、有时只需数小时，因此现在认为长期禁运期是一种危险做法，主要受益的是攻击者。10.6 的发布说明把同样的推理写得更长，包括这一观察：「We have seen a number of cases where a security bug identified by AI tools is subsequently independently discovered by a different researcher」，并承诺「making more frequent releases to get bugfixes into users' hands more quickly rather than batching them until the next planned release」。
+
+构建产物的踪迹很短，值得按顺序读：Alpine `edge` 的 `openssh` 包已是 **10.6_p2-r0**，构建时间 **2026-11-05 09:05:19**——同一个上午，这正是 Miller 感谢 Alpine 维护者在极短时间内提供更新版本所指的事。发布说明里没有任何 CVE 编号，也没有任何一条 bugfix 说明机制。上游库一侧同样看不到对应改动：`musl` master 日志中最新一次提交的日期是 **2026-10-14**。
+
+**为什么重要：** sshd 的密码认证绕过是协议里杠杆最高的 bug 形态——不需要利用链，只需要一次登录尝试——而受影响集合由 libc 的构建开关而非版本号定义，所以「你有没有打补丁」无法从 `ssh -V` 得知。真正持久的是披露政策的变化：当重新发现以小时而非月计，禁运期唯一剩下的功能，就是在同样长的时间里同时让防御方无知，而 OpenSSH 现在把这一点写成了政策，而不是只在私下说。
+
+> 「We have seen a number of cases where a security bug identified by AI tools is subsequently independently discovered by a different researcher.」—— OpenSSH 10.6 发布说明
+
+[`🔗 OpenSSH 10.6p2 发布说明`](https://www.openssh.com/releasenotes.html) · [`🔗 Damien Miller 的公告`](https://hachyderm.io/@damienmiller/117563026759098135) · [`🔗 Alpine edge 的 openssh 10.6_p2-r0`](https://pkgs.alpinelinux.org/package/edge/main/x86_64/openssh)
+
+---
+
+## 37. 百度的 ERNIE 5.5 Flash Base 是 280B-A14B 的预训练检查点 —— 表格在与三个开源 base 模型的 30 行里赢了 24 行
+
+- **Velocity:** ▮▮▮ trending
+- **来源:** ERNIE Blog · 2026-11-05 · Hugging Face 仓库创建于 2026-10-21
+- **标签:** `ai-models` `open-weights` `moe` `baidu` `pretraining`
+
+百度发布 **ERNIE-5.5-Flash-Base**，一个稀疏 MoE 语言模型，**总参数 280B，每 token 激活 14B**，从零预训练于 **33.5T token**，训练上下文 **128K**，支持 **100 万 token** 的微调与推理。它是严格意义上的 base 检查点——「the checkpoint at the end of pre-training, before any mid- or post-training」——而博客明确说这正是产品本身：一个用于「domain adaptation, instruction tuning and reinforcement-learning research」的起点。后训练版 ERNIE 5.5 Flash 被宣布为后续发布，不是这一次。
+
+对任何为长上下文付费的人来说，架构才是重点。模型有 **43 层 Transformer**、隐藏维度 **4096**、**64 个注意力头**，只有 **七分之一的层**保留对完整上下文的 token 级访问（用 MLA 加 DeepSeek 式稀疏注意力）。其余 **37 层**使用 **Heavily Compressed Attention**：每 128 个 token 压成一个缓存条目，该层再对这些条目加一小段最近未压缩 token 做注意力。头维度按层设定而非全局统一——廉价的 HCA 层用 **512**，昂贵的 MLA 层用 **256**——百度还说测试了显而易见的替代方案（用少量 CSA 层代替少量 MLA 层），结论是在相近 KV cache 预算下「HCA combined with MLA outperforms HCA combined with CSA」。
+
+评测的可比性异常地好，这也是这些数字值得引用的原因：「All four models are evaluated from their publicly released checkpoints with the same evaluation harness, prompts and few-shot examples, and with the same LLM judge for free-form QA.」四个模型是 ERNIE 5.5 Flash Base（**280B-A14B**）、DeepSeek V4 Flash Base（**284B-A13B**）、Hy3-preview-Base（**295B-A21B**）和 MiMo V2.5 Base（**310B-A15B**）。ERNIE 在表格 **30 行中的 24 行**最优，包括 MMLU **93.3**（5-shot）、MMLU-Pro **78.4**、GPQA **60.2**、HumanEval+ **82.3**、LiveCodeBench **40.1**、LongBench-v2 **48.7**。它输了六行，其中三行在长上下文：**HELMET-Rerank 56.2** 对 DeepSeek 的 60.0、**InfiniteBench 46.5** 对 48.0、**ChineseSimpleQA 73.0** 对 75.3；另外三行是 BBH-CoT、INCLUDE-lite 和 FullStackBench。这是一张能看出压缩代价的表格。
+
+权重以 FP8 与 BF16 形式在 Hugging Face 发布，许可证为 **ERNIE 5.5 Flash Base Model License Agreement v1.0**。仓库 `baidu/ERNIE-5.5-Flash-Base` 创建于 **2026-10-21T08:40:58Z**——比博客早十五天——我们打开时读到 **150 个赞、13 次下载**。
+
+**为什么重要：** 发布一个未做后训练的 base 检查点、并附上四模型同一 harness 的对比，是更稀有也更有用的产物——多数「开放」发布都是后训练模型，因此对预训练贡献了什么并不透明。24/30 的结果还自带对照：ERNIE 输掉的六行集中在长上下文检索排序与中文简单问答，这恰好是「43 层里有 37 层只看 128 倍压缩后的过去」所预测的方向。
+
+[`🔗 ERNIE 5.5 Flash Base`](https://ernie.baidu.com/release/ernie-5-5-flash-base/) · [`🔗 baidu/ERNIE-5.5-Flash-Base`](https://huggingface.co/baidu/ERNIE-5.5-Flash-Base) · [`🔗 BF16 权重`](https://huggingface.co/baidu/ERNIE-5.5-Flash-Base-BF16)
+
+---
+
+## 38. OpenAI 的 Images 2.6 快了 50%、能生成 GIF —— 而公告里一个评测数字都没有
+
+- **Velocity:** ▮▮▮ trending
+- **来源:** OpenAI · 发布于 2026-11-04 · HN 322 分
+- **标签:** `ai-models` `image-generation` `openai` `api` `product-release`
+
+**Images 2.6** 于 **2026-11-04** 在 ChatGPT、Codex 与 API 上线。API 里有两个模型名——**`GPT-Image-2.6 Flare`** 与 **`GPT-Image-2.6 Sunburst`**——按质量档位分工：Flare 是快速/低档路径，博客说在低质量下它「can generate images in as little as six seconds」；Sunburst 是中/高质量路径，卖点是「even greater image consistency across edits」。
+
+四项能力是新的。**GIF 输出**：模型可产出循环动画与 sprite sheet，博客把它放在最前面（「GIFs are the native language of social media」）。**API 中的 image markup**——ChatGPT 里已有的点选编辑接口——调用方可以指定改哪里，而不必用文字描述。**SVG 导出**，面向网页与印刷。以及 **complexity 参数**，让开发者「adjust how much planning the model does to meet a request」，与质量档位正交：质量控「visual detail and fidelity」，复杂度控「how much goes into the scene」。官方建议编辑用低复杂度，元素多或约束多的场景用中或高。
+
+规模数字是全文唯一的一个：「People around the world now create 4 billion images per week across ChatGPT, Codex, and the API.」速度声明是「**50% faster** than before」——没有说明基线、没有分辨率、没有测量方法。
+
+**为什么重要：** 这是一次没有基准表、没有与 2.5 的并排对比、也没有任何质量指标的模型发布——唯一的比较数字是一个速度增量，而它的参照点是一个代词（「than before」）。对图像模型来说这并不罕见，因为评测本身有争议，但值得点名，因为 GIF 与 SVG 这类能力往往靠一段 demo 就被采纳，之后再无人评测。安全评估指向单独的系统卡，那才是用模型前该读的产物；而定价页才是「六秒」变成账单的地方。
+
+[`🔗 Introducing Images 2.6`](https://openai.com/index/introducing-images-2-6/) · [`🔗 Hacker News 讨论`](https://news.ycombinator.com/item?id=50372945)
+
+---
+
+## 39. Uncle Bob 的 `ub-mode` 是一个 agent skill，规则由四个独立程序执行 —— 7,054 星、无 release、无仓库描述
+
+- **Velocity:** ▮▮ rising
+- **来源:** github.com/unclebob/ub-mode · 创建于 2026-10-25 · 7,054★
+- **标签:** `agent-skills` `software-engineering` `tdd` `code-quality` `claude-code`
+
+Robert C. Martin 的 **`ub-mode`** 是 152 行 `SKILL.md`（3,958 字节），让编码 agent 分三阶段工作：**First Make it Work**、**Then Make it Right**、**Follow Practice**。它在十一天里达到 **7,054 星**，而仓库**没有描述**、**没有 release**、**没有 tag**，MIT 许可证，**10 个 open issue 与 PR**，被 fork **394** 次。README 注明规则源自 `@poteto`（`poteto-mode` / `pstack`），并自称是「reduced and paired with deterministic quality-gate tools」。
+
+这个「配对」才是真正的论点。skill 文件里的散文规则对模型只是建议；仓库把其中三道关卡接到会返回数字的独立程序上——[`crapper`](https://github.com/unclebob/crapper)（逐函数计算圈复杂度、测试覆盖率与 CRAP 分数，硬阈值 CRAP `< 10`）、[`dryer`](https://github.com/unclebob/dryer)（结构性重复，标记 `>= 0.8` 相似度的块）、[`mutator`](https://github.com/unclebob/mutator)（变异测试，暴露存活变异体而非覆盖率表演），外加 `uml-viewer` 画组件、覆盖率、CRAP 与依赖方向。「把函数控制在 CRAP 10 以下」可以由类编译器工具检查；「写干净的代码」不行。
+
+规则集本身是 Martin 二十年来发表的纪律的压缩版：Laziness Protocol（「One decision lives in one place」「Ship the smallest edit that solves the problem」）、Foundational Thinking（「Get the data shape right before you write the logic」「Do first whatever helps every later phase」）、TDD、Redesign From First Principles、Attack the Premise、Subtract Before You Add，以及后阶段的 Fix Root Causes、Sequence Work into Verifiable Units、Test Behaviour (Not Implementation) 与 Guard the Context Window。安装是一次复制：把 `SKILL.md` 放到 `~/.claude/skills/ub-mode/SKILL.md`（或 Grok、Cursor 的对应目录），用 `/ub-mode` 调用。
+
+**为什么重要：** agent-skill 这一品类已经收敛成散文式人格提示词，而这是第一个广受 star 的作品，其作者对你怎么知道它起作用了的回答，是另一个带退出码的仓库。阈值本身可以争论——CRAP 10 与 0.8 相似度都是十年前的经验法则——但设计选择是可迁移的：一个把检查派给可测量关卡、而不是让模型给自己打分的 skill。
+
+[`🔗 unclebob/ub-mode`](https://github.com/unclebob/ub-mode) · [`🔗 SKILL.md`](https://raw.githubusercontent.com/unclebob/ub-mode/HEAD/SKILL.md) · [`🔗 unclebob/crapper`](https://github.com/unclebob/crapper)
+
+---
+
+## 40. iTerm2 的 `x-man-page:` 处理器把百分号编码的 NUL 变成了空格 —— 同一 URL scheme 的第三次修补
+
+- **Velocity:** ▮▮ rising
+- **来源:** NVD `CVE-2026-123014` · 发布于 2026-11-05T06:17Z · 8.7
+- **标签:** `cve` `iterm2` `macos` `argument-injection` `nul-byte`
+
+`CVE-2026-123014` 是 iTerm2 `x-man-page:` URL 处理器中的**参数注入**，CVSS 4.0 评分 **8.7**（`AV:N/AC:L/AT:N/PR:N/UI:P/VC:H/VI:H/VA:H`），CWE-88，由 `cve@mitre.org` 分配，NVD 状态仍为 `Received`。机制是两层规范化不一致：「**Percent-encoded NUL characters survive input sanitization and are subsequently converted to whitespace during command-line parsing, allowing injection of additional arguments to `/usr/bin/man`**」。其中一个参数是决定性的——「An attacker can inject the `-P` option to select an attacker-controlled pager command」——于是打开一个构造好的 `x-man-page:` URL，就会以登录用户的权限运行攻击者的程序。记录自己的 `NOTE` 字段就是这段历史：「this issue exists because of an incomplete fix for CVE-2023-46321」。
+
+厂商一侧才是这个条目的价值所在，因为修复早于记录发布，而更新日志用大白话写了。iTerm2 下载页列出 **3.7.7**（稳定版，构建于 **2026-11-03**）与 **3.7.7beta2**（构建于 **2026-10-27**）；CVE 声明的边界是 `3.7.7beta2`，但 3.7.7 自己的更新日志带着同一条：「Hardened the handler for `x-man-page:` URLs so a malicious URL can no longer be crafted to run an unexpected command or make man render an arbitrary local file. Man section and page names are now checked against an allowlist of characters」。记录引用了两个提交——GitLab 仓库中的 `314ba43` 与 `f29420a`。
+
+**为什么重要：** `x-man-page:` 是 macOS 与其他终端用来从链接打开 man page 的 scheme，这意味着攻击面是终端模拟器里一次从不弹窗的点击——向量里的 `UI:P` 就是全部社工预算。更可迁移的教训是消毒边界：放过这个 bug 的检查作用在解码后的字符串上，而消费者解析的是编码后的字符串，而在两步之间从 NUL 变成空格的东西，与参数分隔符无法区分。2023 年的 CVE 已经修过同一个处理器一次，记录把这件事写了出来，而不是留给读者去发现。
+
+[`🔗 NVD CVE-2026-123014`](https://nvd.nist.gov/vuln/detail/CVE-2026-123014) · [`🔗 iTerm2 下载页与更新日志`](https://iterm2.com/downloads.html) · [`🔗 修复提交 314ba43`](https://gitlab.com/gnachman/iterm2/-/commit/314ba43920dbce08808c032e89966918090bdf8e)
+
+---
+
+## 41. TrueNAS 只要 socket 的对端地址是写死的心跳 IP 就授予管理员 —— 包括完全没配 HA 的单机安装
+
+- **Velocity:** ▮▮ rising
+- **来源:** TrueNAS 安全公告 · NVD `CVE-2026-123033` · 8.3 · 修复于 25.10.8（尚未发布）
+- **标签:** `cve` `truenas` `authentication-bypass` `storage` `middlewared`
+
+`middlewared`——TrueNAS 的中间件——**无条件**注册了 HA 对端认证钩子，「with no failover-licence or heartbeat-interface check」。该钩子仅凭攻击者自己 socket 的两个属性做信任判断：TCP 对端地址必须是写死的 HA 心跳地址之一（**169.254.10.1** 或 **169.254.10.2**），源端口必须 **≤ 1024**。没有伪造、没有签名，连接就被授予「an internal node credential that is treated as a full administrator for every API method」。拿到管理员 API 即等于以 root 执行命令。
+
+适用范围条款正是它不只是「HA 对」bug 的原因：由于钩子与许可证、硬件、配置无关地存在，攻击者「an attacker able to meet those conditions could obtain unauthenticated administrative API access」，适用范围包括「non-HA, single-node Community Edition systems with no HA configuration」。厂商列出 CWE-290（认证绕过/欺骗）与 CWE-306（关键功能缺少认证），并说明该凭据顺带绕过了什么：管理接口的 IP 白名单、API 速率限制，以及审计日志。
+
+TrueNAS 自己的威胁模型把可利用性收窄了一层，而 NVD 的描述没有，两者应当写在同一句里。公告说「Exploitation is not possible from an arbitrary Internet location」——信任判断基于链路本地源地址，而出厂系统「disables IPv4 link-local autoconfiguration and holds no route to the 169.254.0.0/16 range」——并补充「adjacency by itself is not sufficient」，因为系统没有返回路由，「the attacker must additionally alter the return path — either by modifying routing on the TrueNAS system or by controlling the gateway/path」。在这些条件满足处，影响就是未认证管理员。
+
+时钟与修复状态要分开说。公告标题仍写着「**CVE Pending**」，「Fixed in」一栏写的是「**TrueNAS SCALE 25.10.8 (forthcoming)**」——所以目前没有可安装的东西，主要缓解是网络隔离：把管理接口放在可信网段，且该二层网段上没有任何不可信主机。NVD 记录仍然存在（`CVE-2026-123033`，发布于 **2026-11-05T07:17Z**，`Received`，8.3，向量 `CVSS:3.1/AV:A/AC:H/PR:N/UI:N/S:C/C:H/I:H/A:H`），由 `cve@mitre.org` 分配——它与第 46 条里那个不相干的 OPNsense 记录、以及一个 Wowza Streaming Engine XXE 在同一秒发布。修复本身是一个想法：信任必须额外要求「that the connection also terminate on the HA heartbeat listener, a local address and port the attacker cannot control」。
+
+**为什么重要：** 这是教科书式的混淆代理，但有意思的另一半是：厂商公布了让 CVSS 的 `AC:H` 站得住脚的返回路径分析，而 CVE 描述把它压缩成了「an attacker on the same network segment」。存储设备的管理 API 是机架里价值最高的凭据，而钩子在所有安装上都注册着，正是把一个双控制器特性变成单机漏洞的那种失败模式。
+
+[`🔗 TrueNAS 安全公告`](https://security.truenas.com/scale/impact-statements/ha-node-auth-bypass/) · [`🔗 NVD CVE-2026-123033`](https://nvd.nist.gov/vuln/detail/CVE-2026-123033)
+
+---
+
+## 42. Ansible 的 `no_log: true` 保留 `exception` 字段 —— 于是失败的任务把本要隐藏的秘密打印了出来
+
+- **Velocity:** ▮▮ rising
+- **来源:** NVD `CVE-2026-123036` · 发布于 2026-11-05T10:16Z · Red Hat CNA · 5.5
+- **标签:** `cve` `ansible` `secrets` `logging` `regression`
+
+`CVE-2026-123036` 是 Red Hat 针对 `ansible-core` 提交的 **5.5**（`CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:H/I:N/A:N`），描述的机制任何读过被审查任务结果的人都熟悉。当一个标记 `no_log: true` 的任务失败时，结果在发出前被审查——「but the `exception` field is retained because it is present in the PRESERVE allow-list in `lib/ansible/_internal/_task.py`」。随后默认 stdout 回调把它打印出来。
+
+代码印证了这个描述。当前 `devel` 树里的白名单是一个名为 `PRESERVE` 的 `frozenset`，包含 `_ansible_no_log`、`attempts`、`changed`、`deprecations`、**`exception`**、`retries` 与 `warnings`，而审查路径在附上「output has been hidden」提示前，恰好用这些键重建结果。其余全部被丢弃，异常字符串没有。
+
+记录点名三条泄漏路径，每条漏出的秘密量不同：「module argument-validation errors echo the argument value」「templating errors print an Origin source snippet (the failing line plus the two preceding lines of the variables file, exposing neighbouring secrets from an `-e @secrets.yml` file)」「`fail`/`assert` messages are printed in full」。后果是运维者会认出的那种——以 extra vars 或变量文件提供的机密「can therefore leak to terminal output, CI logs, and the stdout logs of any automation wrapping `ansible-playbook`, even though every task touching the secrets is marked `no_log: true`」。
+
+回归边界被写明：「This is a regression introduced with the `ansible-core` 2.19 data-tagging/templating rework; the behaviour does not occur on 2.16, where the error text is correctly censored.」NVD 尚未分析该记录——`vulnStatus` 为 `Awaiting Analysis`，唯一指标来自 `secalert@redhat.com` 且类型为 `Primary`。记录里此刻没有修复版本。
+
+**为什么重要：** `no_log` 是 Ansible 用户被告知要信任的唯一安全控制，而击败它的不是一个解析 bug，而是一份早于该字段语义的白名单——审查逻辑写成时 `exception` 装的是 Python 类名，2.19 的重写让它装下了渲染后的错误文本。三条路径中模板那条最糟，因为「失败行加前两行」是对运维者从未要求求值的机密的引用，而 CI runner 会长期保留 stdout。
+
+[`🔗 NVD CVE-2026-123036`](https://nvd.nist.gov/vuln/detail/CVE-2026-123036) · [`🔗 lib/ansible/_internal/_task.py`](https://github.com/ansible/ansible/blob/devel/lib/ansible/_internal/_task.py) · [`🔗 Red Hat CVE 页面`](https://access.redhat.com/security/cve/CVE-2026-123036)
+
+---
+
+## 43. HakiOS 把苹果的 XNU 内核跑在 POCO 手机上，通过 Adreno 上的 Metal 绘制 —— 并报告了它没达到的帧率
+
+- **Velocity:** ▮▮ rising
+- **来源:** github.com/oosexgang/hakios-xnu-kernel · 创建于 2026-10-22 · 2,495★
+- **标签:** `osdev` `xnu` `android` `metal` `reverse-engineering`
+
+**HakiOS** 让苹果开源的 Darwin 内核——**XNU `xnu-8796.121.2`**——跑在 Android 手机上，「the way Android is Linux on phones: a boot loader of its own, drivers of its own, a configuration system and a version of its own」。它是研究台而非 ROM：默认从内存运行，「a reboot gives the phone back to Android」，同一个内核也能在 QEMU 中启动（`make qemu-open`），「with nothing of Apple's and nothing of any phone's」。
+
+11 月 4 日的更新是一项图形结果。在 **POCO X5 Pro 5G** 上，项目的窗口服务器通过 **Adreno 642L 上的 Metal** 绘制，且有两种路径。`hakios-metal` 在渲染 828×1792 再拉伸到屏幕时，测得翻页 **110–115 fps**、设置页滚动 **118**、home 键 **106**；在原生 1125×2436 下，同样三项是 **101、约 90、约 90**。作为对照，UniXNU 的 Metal-on-Vulkan 路径翻页 **50–57**、滚动 **41**。
+
+表格后面那句话才是可信度的来源：「The panel is **120 Hz**, and **120 frames a second has not been reached**.」一个 bring-up 项目把没达到的数字写在达到的数字旁边，正是多数同类 README 不做的事。
+
+许可证按目录拆分，复用前值得读：内核部分——`xnu/hakios.patch`、`xnu/files/`、`drivers/`——是苹果 XNU 的衍生作品，仍属 **Apple Public Source License 2.0**；而「everything else that is ours」（`xnuloader/` 里的引导器、`userland/src/`、工具、脚本、文档、`devices/`）是 **MIT**。苹果的操作系统、其 IPSW 固件与手机自身固件都不在仓库里——「every user obtains them from their own device and their own copy of the firmware」。这种拆分也解释了为什么 GitHub 的许可证检测把该仓库标为 `NOASSERTION`，而不是单一标识符。
+
+**为什么重要：** 让非 Linux 内核在手机上启动是个拥挤的爱好，但让窗口服务器通过**另一个操作系统**的厂商 GPU 驱动以 90 帧以上合成，是窄得多的成就，而那句诚实的 120 Hz 告诉你剩下的 5–25% 在哪：不在合成器，而在一条尚未完成的路径上。APSL 的拆分也是个有用的先例——苹果许可下的衍生作品可以公开发布，义务是按文件而非按仓库计的。
+
+[`🔗 oosexgang/hakios-xnu-kernel`](https://github.com/oosexgang/hakios-xnu-kernel) · [`🔗 Adreno 上的 Metal`](https://github.com/oosexgang/hakios-xnu-kernel/blob/main/docs/reference/metal.md) · [`🔗 测量记录`](https://github.com/oosexgang/hakios-xnu-kernel/blob/main/docs/reference/metal-measurements.md) · [`🔗 LICENSE`](https://github.com/oosexgang/hakios-xnu-kernel/blob/main/LICENSE)
+
+---
+
+## 44. 若没有新维护者接手，Mbed TLS 将在 2027 年 4 月停止发布安全修复
+
+- **Velocity:** ▮▮ rising
+- **来源:** Mbed TLS announce 邮件列表 · 2026-10-08 · HN 55 分 2026-11-03
+- **标签:** `security` `mbedtls` `open-source` `maintenance` `tls`
+
+Mbed TLS 团队在 **2026-10-08** 宣布正在「preparing for a transition in the maintenance of TLS and X.509 libraries (both contained in the Mbed TLS project)」。现有维护者「will continue to develop and maintain TF-PSA-Crypto, which remains an actively maintained part of the project」，并将「cease their involvement in their development and maintenance of Mbed TLS **from April 2027**」。
+
+后果没有任何修饰：「Unless new maintainers have joined the project and ramped up by that time, **security incident response, security fixes, and releases will cease from April 2027**」。未来的维护安排「have not yet been determined」，团队正在寻求「engineering resources, funding, or other forms of support」，并给出了愿意接手者的邮箱。
+
+**为什么重要：** Mbed TLS 不是小众库——它是大量嵌入式与 IoT 固件、RTOS SDK，以及那些「更新方式就是出厂烧一次固件」的产品里的 TLS 栈。一个停止发布安全修复的库并不会停止被依赖；它变成一个永久脆弱的依赖，而其消费者大多无法审计它，2027 年 4 月给了这些消费者一个采购周期去找能在 flash 预算里装下的替代品。这个模式也是生态反复重学的：由基金会核心团队维护的组件，其耐久性只等于该团队的路线图，而 TF-PSA-Crypto 才是这个团队要去的地方。
+
+[`🔗 公告串`](https://lists.trustedfirmware.org/archives/list/mbed-tls@lists.trustedfirmware.org/thread/YPIGCB7WN6GCHOGEGKOJXUYAP7OK527W/) · [`🔗 Hacker News 讨论`](https://news.ycombinator.com/item?id=50349165)
+
+---
+
+## 45. vault-java-driver 在三种「调用方要求校验」的状态下构造了信任一切的 TLS 上下文
+
+- **Velocity:** ▮ steady
+- **来源:** NVD `CVE-2026-109408` · 7.4 · 发布于 2026-11-05T08:17Z · 修复于 7.0.0
+- **标签:** `cve` `java` `vault` `tls` `secrets`
+
+`CVE-2026-109408` 影响 `io.github.jopenlibs:vault-java-driver` **5.2.0 到 6.2.3**，修复于 **7.0.0**。描述对触发条件异常精确，因为共有三种，而三种都是调用方以为校验开着、实际 `SslConfig.isVerify()` 返回 false 并「the driver installs a trust-all SSLContext」的状态：
+
+1. 传给 `VaultConfig` 的 `SslConfig` **没有调用 `build()`**；
+2. 由 **Java 反序列化**恢复的 `SslConfig`；
+3. **`VAULT_SSL_VERIFY` 设成 `"true"` 之外的「真值」**——例如 `1`、`yes` 或 `on`。
+
+第三条是最会在生产配置里被找到的，因为 `1`/`yes`/`on` 是布尔环境变量的常规写法，栈里其他工具都接受。影响来自客户端携带的东西：「An attacker on the network path to the Vault server can then read the Vault token and secrets in transit and forge responses」。CWE-295（证书校验不当），**7.4**（`CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:H/I:H/A:N`）。
+
+同一批归档里还有一条记录覆盖相同版本区间、同一个修复版本释放：`CVE-2026-112072`（**6.5**，CWE-674）——该驱动「parses Vault's JSON responses with a vendored minimal-json parser that has no nesting depth limit」，于是深层嵌套值抛出的 `StackOverflowError`「escapes `catch (Exception)` handlers and kills the reading thread」。写入侧的前提很精巧：「A Vault token that can write but not read a KV v2 path can store such a value there, so every later read of that path through the driver fails」——一个只写凭据被变成持久的读取拒绝服务。它还要求 **Vault 1.19.x 或更早**，因为「1.20 and later reject values nested deeper than 298 levels」。
+
+溯源与时钟：两条记录都发布于 **2026-11-05T08:17:03Z**，来自同一个分配 CNA（source 为 `abd028dc-c042-4c4d-9749-38d0f850af89`），状态均为 `Received`，且各自只带一个指标——CNA 自己的 v3.1 分数，类型为 `Secondary`——还没有 `nvd@nist.gov` 指标。修复早于文书：Maven Central 上 `vault-java-driver-7.0.0.jar` 的时间戳是 **2026-11-04 23:15** UTC，比记录早约 **九小时**。
+
+**为什么重要：** TLS 校验已启用，是对一个可能被四条代码路径设错的布尔值的断言，而这个客户端同时错在三条最容易的地方——必须调用的 builder、跳过它的反序列化器、接受 `yes` 的字符串解析器。第二条 CVE 是更安静的教训：`catch (Exception)` 抓不住 `Error`，所以没有深度限制的解析器是线程杀手，而一个只写 token 就足以把它种下去。
+
+[`🔗 NVD CVE-2026-109408`](https://nvd.nist.gov/vuln/detail/CVE-2026-109408) · [`🔗 NVD CVE-2026-112072`](https://nvd.nist.gov/vuln/detail/CVE-2026-112072) · [`🔗 PR #78`](https://github.com/jopenlibs/vault-java-driver/pull/78)
+
+---
+
+## 46. OPNsense 的 ACME 插件把两个 WebGUI 字段拼进 root shell 命令 —— 9.4，修复早于记录 33 小时
+
+- **Velocity:** ▮ steady
+- **来源:** NVD `CVE-2026-123025` · 发布于 2026-11-05T07:17Z · 9.4
+- **标签:** `cve` `opnsense` `command-injection` `acme` `firewall`
+
+`CVE-2026-123025` 是 OPNsense `os-acme-client` 插件 **Google Cloud DNS 验证模块**中的 **9.4**（`CVSS:4.0/AV:N/AC:L/AT:N/PR:L/UI:N/VC:H/VI:H/VA:H/SC:H/SI:H/SA:H`），**影响 4.17 及更早**，CWE-78。机制是一个名为 prepare 的方法里少了一次转义：`DnsGcloud::prepare()`「decodes the `dns_gcloud_key` model field and directly interpolates the string fields `gcloud_account` and `gcloud_project` into a shell command passed to `proc_open()` via `LeUtils::run_shell_command()` without any validation or escaping」。所需权限是「a remote authenticated user with privileges to issue or renew certificates through the WebGUI/API」，结果是「arbitrary code execution **as root**」。
+
+权限边界才是要仔细读的。证书续期权限听起来像一项狭窄的委派能力——正是防火墙管理员会交给管 TLS 的人的那种——而在这里它等价于边界设备上的 root shell，而边界设备是终结每条 VPN 与每条跨 VLAN 规则的那台机器。
+
+修复先落地。`opnsense/plugins` **PR #5873**「security/acme-client: release **4.18**」于 **2026-11-03T22:21:57Z** 合并，正文致谢报告者——「Gcloud vulnerability reported by: @cppghoul」。NVD 记录发布于 **2026-11-05T07:17:25Z**，约 **33 小时**之后，`vulnStatus` 为 `Received`，唯一指标来自 `cve@mitre.org` 且类型为 `Secondary`。因此风险人群是仍停留在 4.17 及更早的人，而升级是一次插件发布，不是固件镜像。
+
+**为什么重要：** 「一个被解码的 key、两个相邻字符串字段被拼进 shell」这个三段式形状，和今年这个 feed 在路由器、NAS、备份设备上记录过的是同一个 bug，它能存活是因为这个插件的工作本来就是 shell 出去调 `gcloud`。让它占一格的真正原因是认证故事：在防火墙上，有证书权限的已认证用户是人们很随意就会授予的角色，而记录自己的 `PR:L` 对一个最终导致 root 的 bug 来说，承担了太多分量。
+
+> 「A remote authenticated user with privileges to issue or renew certificates through the WebGUI/API can achieve arbitrary code execution as root.」—— CVE 记录自己的描述
+
+[`🔗 NVD CVE-2026-123025`](https://nvd.nist.gov/vuln/detail/CVE-2026-123025) · [`🔗 opnsense/plugins PR #5873`](https://github.com/opnsense/plugins/pull/5873)
+
+---
+
+## 47. 同策略蒸馏在分布内达到教师的 96–103%，在分布外却比 base 模型还低 2.45–16.25%
+
+- **Velocity:** ▮ steady
+- **来源:** arXiv 2611.05609 · 提交于 2026-11-03T20:53Z
+- **标签:** `ai-research` `distillation` `rl` `generalization` `post-training`
+
+多教师同策略蒸馏是 RL 之后把多个专精教师折回一个学生的标准做法。这篇论文的发现是：通常的测量方式看不到它丢掉了什么。既有工作报告「near-perfect in-distribution (IND) distillation performance」，而这「can mask incomplete capability consolidation beyond the supervised distribution」。
+
+数字本身就是论证。在 Qwen3 模型上、覆盖数学推理、代码、agent 与长上下文能力的外推设置中，「OPD and MOPD reach **96.04–102.73%** of their teachers' IND scores. Yet their out-of-distribution (OOD) scores remain **2.45–16.25% below the base model's**」。要读两遍：蒸馏出的学生不只是分布外不如教师，而是不如它出发时的**未蒸馏 base 模型**。在三个组合式设置里，MOPD「improves IND performance over the base model, but its performance on composed tasks as OOD remains **18.19–24.34% below that of the best teachers**」。
+
+诊断是两个瓶颈——教师能力与数据覆盖——论文报告「jointly alleviating these bottlenecks eliminates OOD forgetting in our experiments and suggests the potential for generalization beyond the teacher」。机制部分是更可复用的：分析更新几何后发现，(M)OPD 的更新「smaller and more spectrally concentrated updates on average than those of the RL baselines, along with greater shared update structure under MOPD」——一个平滑拟合教师的学生，学到的是更窄的函数，而窄度在分布内评测上不可见。两条补救是 geometry-based patching 与 base-preserving replay，目标都是在匹配 IND 表现的同时保留 base 模型行为的可达性。
+
+**为什么重要：** 蒸馏被当作无损的能力合并来卖，而这篇说代价恰好落在未进入蒸馏集的能力上——也就是学生被部署到教师从未见过的输入时的失败模式。测量教训也超出蒸馏：只有 IND 的表格，无法区分「学会了教师」与「忘掉了其他一切」，而 2.45% 是多数报告从不打印的一个很大的下限。
+
+[`🔗 arXiv 2611.05609`](https://arxiv.org/abs/2611.05609) · [`🔗 Hugging Face daily papers`](https://huggingface.co/papers/2611.05609)
+
+---
+
+## 48. FrontierPhysics 把 42 位物理学家自己的研究交给 22 个模型 —— 没有任何配置通过 168 次 rollout 中的 46 次以上
+
+- **Velocity:** ▮ steady
+- **来源:** arXiv 2611.06910 · 提交于 2026-11-04T18:56Z
+- **标签:** `ai-research` `agents` `benchmark` `physics` `evaluation`
+
+**FrontierPhysics** 是一个端到端物理基准，共 **56 个任务**，每个由 **42 位物理学家**之一基于自己的研究设计，覆盖理论、计算与实验物理的**九个领域**。论文认为现有物理基准「only evaluate fixed questions, isolated sub-tasks, or paper reproduction with given solutions, and rarely check research quality alongside correctness」。这里的任务要求 agent「review the literature, develop a research plan, conduct research and experiments, and produce structured outputs and scientific manuscripts」，并由「deterministic verifiers with expert-authored rubrics」判定研究是否「correct and publishable」。
+
+结果：「Across **22 models in 26 configurations**, no configuration passes more than **46 of its 168 rollouts**。」即上限 27.4%，每个任务三次 rollout（56 × 3 = 168），而这类数字只有在任务是某人真实问题时才会出现，而不是在蒸馏过的题目上。
+
+值得带走的是失败分析：「Manual review of agent trajectories shows that frontier agents' main weaknesses are **insufficiently rigorous reasoning and limited expert intuition**, rather than gaps in physics knowledge or execution errors」。这不同于常见的那句「agent 跑不了代码」——模型能执行，也懂物理，只是不知道自己什么时候错了。
+
+**为什么重要：** 这个基准用物理学家为自己工作撰写的评分规则，替代了已经饱和的选择题表面，而 27.4% 的上限诚实地描述了端到端研究自动化的现状——不是它会不会做物理，而是它能不能分辨可发表的结果与平庸的结果。它指出的弱点是专家直觉，而这是任何额外工具都修不了的那一个，因此这个基准比又一个 SWE 式分数更能指导该造什么。
+
+[`🔗 arXiv 2611.06910`](https://arxiv.org/abs/2611.06910) · [`🔗 Hugging Face daily papers`](https://huggingface.co/papers/2611.06910)
+
+---
+
+## 49. neuron-explorer 推动一层里每个 MLP 神经元、保留每次 rollout，并用 256 个随机对照给结果排序
+
+- **Velocity:** ▮ steady
+- **来源:** github.com/lyramakesmusic/neuron-explorer · 创建于 2026-10-21 · 1,925★
+- **标签:** `interpretability` `steering` `qwen` `mcp` `open-source`
+
+**neuron-explorer** 是 **Qwen3.5-4B** 的 steering 优先工作台：「Every MLP neuron in a layer is pushed up and down on a few prompts, every rollout is kept, and the explorer lays the results out over a 3D view of the model」。仓库是 MIT，自 **2026-10-21** 起 **1,925 星**，并且交付的是产物而不只是工具——`explorer/cache/` 带着预计算的布局、连接与 lens 索引，服务器在 MPS、CUDA 或 CPU 上本地加载 Qwen3.5-4B 做实时受控对话。
+
+让它不只是可视化的设计决定在 sweep 脚本里。剂量是「fractions of the median residual norm leaving the layer」——`{who, snake, orange} × {−0.7, +0.5, +0.8}` 加上 `{free} × {+3}`，每个 prompt 一条未 steering 基线——所以一次「推动」是相对模型自身尺度而非任意常数。单元按「by word-cluster mass against random-direction controls」排序（sweep 用 `--random-controls 256`）并给出百分位；`sweep/steer_lens.py` 对**每一个**神经元计算 ±0.8 推动下的下一 token **Δlogprob 与 KL**；`sweep/check_equivalence.py` 检查 HF 与 vLLM 两条 steering 路径与激活捕获是否一致；`sweep/finefineweb.py` 构造「a domain-balanced FineFineWeb sample (about 20M tokens over 66 domains)」，让神经元的触发可以在 sweep 从未碰过的文本上刻画。第 22 层在 **200 万 token** 上扫描；`sweep/run_depth.sh "4 9 13 17" 384 64` 对四层做随机子集扫描。
+
+第四个面板是一个 agent。**Claude** 标签页运行 `claude` CLI，把 explorer 作为 **MCP server**（`explorer/agent_mcp.py`）暴露出来，它可以「reads neurons, cones and lenses, runs the live model (steering, activations, next-token logprobs, ablations), moves the map, list and highlights, and **has file tools and a shell in your home folder**」。README 补了一句边界：「The server answers only pages and tools on this machine」——这是关于监听地址的陈述，不是关于沙箱的，按前者理解才对。
+
+**为什么重要：** 机制可解释性工具通常报告一个发现；这个工具报告的是一个对照——每条关于神经元的断言都带着它相对 256 个随机方向的百分位，而每个剂量都是该层自身残差范数的比例，这才让读者能在没有单位争论的情况下跨层比较。那个 MCP 加 shell 的面板也是这个品类走向的诚实版本：读你可解释性结果的 agent，和你正在解剖的模型跑在同一台机器上，共用同一个文件系统。
+
+[`🔗 lyramakesmusic/neuron-explorer`](https://github.com/lyramakesmusic/neuron-explorer) · [`🔗 README`](https://github.com/lyramakesmusic/neuron-explorer/blob/main/README.md) · [`🔗 Qwen3.5-4B R/J++ lenses`](https://huggingface.co/bubskee/qwen3.5-4b-r-jpp-lenses)
+
+---
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-11-05T04:27:03Z |
-| Items | 35 |
-| Sources tracked | 24（Hacker News、GitHub Trending、NVD、CVE.org、CISA KEV、GitHub Advisory Database、厂商 PSIRT、arXiv、Hugging Face、厂商工程博客） |
+| Generated | 2026-11-05T12:26:44Z |
+| Items | 49 |
+| Sources tracked | 31（Hacker News、GitHub Trending、NVD、CVE.org、CISA KEV、GitHub Advisory Database、厂商 PSIRT、arXiv、Hugging Face、厂商工程博客） |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8（每日 3 次） |
 | Ranking | 速度加权（新鲜度 × 互动加速度 × 来源权威度） |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |
