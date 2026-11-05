@@ -300,6 +300,29 @@ underlying pages — this produced a two-layer false signal in a single item.
    One call:
    `node agent/tools/disclosure-lag.mjs --range-census --from YYYY-MM-DD --to YYYY-MM-DD` prints the
    table above for any window (re-run it — analysis lands later and the top row moves).
+   **Read the range VALUE, not the range FIELD — a bound has three spellings and the selectors knew
+   two** (added 2026-11-06 04:47). `affectedRanges` learned the operator-inside-`version` form on
+   2026-10-26 (GitHub CNA's `{version: "< 13.0.0"}`), but every **population filter** kept testing
+   `v.lessThan || v.lessThanOrEqual`, so the reader knew and the census did not: `GitHub_M`'s
+   openhuman block `{version: "< 0.57.13", status: "affected"}` was counted unbounded by
+   `--range-census`, invisible to `--bound-census`'s `openBoundOf` (it needs an inclusive max), and
+   not a *named fix* to `--future-fix-census`'s `namedFixesOf` — a record that names its fix, filed
+   as one that names none. All three now call one function, `versionBounds()`, which returns the
+   bound **and its spelling** (`structured` · `operator-in-version` · `point` · `null-min` ·
+   `unread`), because a fix that silently reclassifies records is indistinguishable from one that
+   did nothing. Measured on NVD's **2026-10-29 → 11-04** window (**3,069** records): **303 (9.9%)**
+   state their bound ONLY as a comparator inside `versions[].version`, and `--range-census`'s
+   `bounded` column moves **2,118 → 2,421** by exactly those 303 — the decomposable change is the
+   point, so the print names `structured · operator-in-version · both · point-only` and keeps
+   `bounded`'s old meaning (an explicit range bound; a **point** is a single affected version, not a
+   range). Two guards the live data bought: **`MT6993` is not prose and `n/a` is not a version** —
+   a "starts with a digit" test threw away **159 distinct MediaTek chip IDs** that are the affected
+   set, so the test is *no digit anywhere, or whitespace with a non-digit-led first token*, which
+   keeps `1.18 RTM2` and `25.3.01 hotfix 10`; and **a residual bucket is a label nobody measured** —
+   the `--range-census` line that called everything unexplained "only UNAFFECTED versions" was
+   computed by subtraction, and the same change moved **120** records into it whose value is prose
+   (`n/a`, `Android kernel`, `Radeon Software for Linux 26.13`), so each term is now counted from
+   the record. `--selftest` **178 → 188**.
    **`changes[]` has a majority spelling that confirms the bound from the FAR SIDE, and the rule that
    reads it right can still be right for the wrong reason** (added 2026-10-28, censused over 3,070
    records). Of **139** records carrying a non-empty `changes[]` in NVD's 2026-10-21→27 window, only
@@ -948,6 +971,25 @@ underlying pages — this produced a two-layer false signal in a single item.
    phrase); a record cue needs a record-ish noun in its **own sentence** (`affected` excluded — "the affected …
    CELLS" is an advisory's table, the 10-31 false positive); and MISSING vs `affected: []` vs a versionless
    entry are three states, not one. `--selftest` **268 → 285**;
+   **…and a versionless entry is a PRODUCT, so the check must count `versioned`, not `entries`**
+   (added 2026-11-06 04:47, one day after it shipped). Feed item 6 of 11-06 was a Red Hat record
+   with **11 `affected[]` entries and 0 `versions[]`** — every one a product (`gdb` on six platform
+   lines, `crash` on three, two `gcc-toolset-*`) whose only stated version is the platform line
+   inside the CPE — and the item's sentence ("no `versions[]` key on any of them, so the record
+   states no version boundary") was **exactly right**. The check called it `range-only-in-cna`, whose
+   detail says "the CNA's own `affected[]` is where the range lives", because it tested
+   `aff.entries > 0`. So: **an entry count is not a range count**; the arm now requires
+   `aff.versioned > 0`, and the product-only shape gets its own sev-0 verdict
+   **`range-absent-products-only`** — the absence HOLDS, and what distinguishes the row is that the
+   patch level lives in the vendor's errata, a page the record does not link. The class is the
+   `secalert@redhat.com` shape measured on 2026-10-25→31 (**44 records / 374 entries, 44/44 Red
+   Hat**), so it recurs. Two lessons that outrank the fix: **the selftest had pinned the defect**
+   (`{entries: 6, versioned: 0}` → `range-absent-but-served`, under a test NAME that says a product
+   is not a range), and **the same run's item had two real errors this check could not see** —
+   `defaultStatus: affected` was claimed for *every* entry when **3 of the 11 are `unaffected` (all
+   `crash`)**, and two package names (`gdb-headless`, `gdb-gdbserver`) appear **nowhere** in any of
+   the four records. A false advisory on a correct sentence, beside two unnoticed errors in the same
+   sentence's paragraph, is what a single-arm checker looks like. `--selftest` **285 → 288**;
    **repo** (`archived`, `stale` past
    `--stale-days`, and a star count that moved — **by SIGN, not by percentage** (added 2026-11-01 12:39):
    the lint runs minutes after the batch, so the only thing it can watch is the repo moving *under* the

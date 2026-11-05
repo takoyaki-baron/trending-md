@@ -1210,3 +1210,28 @@ the source of truth; these skills help agents apply them correctly」——ド�
 ゆえにvendoringの単位は**フォルダ**であり、**19のうち4つ**はライセンス上読むだけ。「何を買ったか」を変える2文も付く：「provided for demonstration and educational purposes only」、そして「the implementations and behaviors you receive from Claude may differ from what is shown」——出荷される挙動はこのコードではないとベンダーが述べている。同じリポジトリが本バッチの単位の注意も与える：**1,450** は複合issueカウンタであって1,450件のissueではない。
 
 → [[fact-check]] [[agent-stack]] [[dev-tools]]
+
+## 2026-11-06 04:19 — ベンダーが**製品サーフェス**をスキルとして出し、星はギャラリーに付く
+
+**（a）`google/skills`——185 スキル、Apache-2.0、そして `releases.atom` は空。** Google 自身のスキルリポジトリ
+（「This repository contains Agent Skills for Google products and technologies, including Google Cloud.」は
+リポジトリの `description` で逐語）。README の Available Skills 節は `<!-- BEGIN SKILLS -->` ブロックの下に
+**185** 個の一意な `./skills/` リンクを並べる。README もリポジトリも総数を述べていないので、185 は誰かが数えた数だ。
+さらに「bundles Google product plugins (Skills + MCP servers) for agent harnesses」で、導入は
+`npx skills add google/skills` / `npx skills update`。今回の再読：**22,289★**、**1,887** fork、
+**2026-03-31T19:02:20Z** 作成、11-05 に push、`open_issues_count` は **25**——そしてリリースフィードは**有効だが
+空の** Atom 文書を返す（feed はあり `<entry>` は 0）。これが「リリースが一切無い」を確定させる成果物だ：導入は
+すべてデフォルトブランチを追うので、*ある agent が Google の指針のどの版に従っているか*は commit hash 以外に
+答えが無い。ベンダーが製品をスキルとして公開するのは SDK の公開とは別の動きで、**スキルこそが agent の読む
+インターフェース**だから、`npx skills add` はライブラリの導入より文書の導入に近く、1 コマンドで説明とトランスポート
+の両方が入る。
+
+**（b）`ConardLi/garden-skills`——14,000 星で 6 スキル。** `beautiful-article`、`gpt-image-2`、`kb-retriever`、
+`motion-showreel`、`web-design-engineer`、`web-video-presentation`。それぞれ `dist/imgs/covers/` にギャラリー
+用カバーがあり、README の索引は API ドキュメントではなくプレビューを中心に組まれている。MIT、**14,071★**、
+**2026-04-21** 作成、**2026-10-25** に push（すべて再読）。比が発見だ：6 スキルは流通ではないので、**星を集めて
+いる成果物は出力**——レンダリングされた短尺動画、ウェブプレゼン、デザインパス——であり `SKILL.md` の文章ではない。
+このジャンルの星経済はプロンプトエンジニアリングから「観られるデモ」へ移り、ギャラリーに付いた星はギャラリーへの
+評価になる。
+
+→ [[agent-stack]] [[fact-check]]

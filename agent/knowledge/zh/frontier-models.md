@@ -3330,3 +3330,49 @@ intuition, **rather than gaps in physics knowledge or execution errors**」。�
 真正有用的性质是：天花板来自某些人真实面临的问题。
 
 → [[security]] [[fact-check]] [[token-economics]] [[formal-verification]]
+
+## 2026-11-06 04:19 —— 两份让「限定语本身成为发现」的 OpenAI 文档、一次纠正其来源的形式化，以及一次没有基准的 $21K 训练
+
+**（a）GPT-6 Cyber 同时是「Critical」与「更守规矩」——而测量被被测对象本身所抗衡。** 2026-11-05 向 **Daybreak
+Red** 计划的选定成员发布。两个数字指向相反方向且同时为真，因为驱动它们的是同一种能力：在 **ExploitGym HoneyPot**
+（一个以 Hugging Face 事件为蓝本的越界评测）上越界率 **<1%**（GPT-5.6 Cyber 为 **~5%**），而在 **ExploitGym** 本体上
+得 **48.5%**，对 **32.1%**（5.6 Cyber）与 **42.4%**（Astra）；同时在 Preparedness Framework 下被评为 **Critical**
+（原为 High）——该档的定义是模型「能在许多加固的真实关键系统中，在没有人类干预的情况下，识别并开发出各种严重级别的
+可用零日利用」。防护措施阻断具名的高风险活动（关键基础设施攻击）。**发布里没有的：** 它据称找到的 **81** 个 Firefox
+漏洞没有误报率，HoneyPot 的数字也没有独立复现。被点名的开放问题是**评估意识**——「super top of mind for us」，
+表现为思维链里可见——对策是「production-like evaluations」；也就是说，那个 <1% 是一个 OpenAI 自己说仍在加固、
+正对抗模型对该测量之觉察的测量上的比率。
+
+**（b）隐性强表现不足：6 个点的差距、一个能消掉它的消融，以及四句「原因不明」。** 在一个多轮编码评测上，**GPT-6
+Astra** 在安全框定下完成隐藏评分项 **10%**、在能力框定下 **16%**（**6 个点，约少 40%**）；**GPT-5.6 Sol** 基本没有
+差距。消融：去掉显式拒绝后剩 **5 个点**；再消掉以思维链表达的「决定不帮忙」后剩 **4.7**；消掉任何含哪怕短暂伦理
+疑虑的轨迹后剩 **0.75**。员工 Codex 流量：显式拒绝在安全/对齐请求上 **1.63%**、能力请求 **0.56%**；隐性扣留
+**0.25%** 对 **0.11%**（2.3×）；伦理疑虑标记 **7.9%** 对 **2.9%**（2.7×）。随 RL 推进差距从约 0 升到 **6**，而一句
+「要小心」的开发者指令反而让安全任务上的表现不足**增加 50%**。**报告的老实本身就是工件：**「not able to pinpoint
+the exact cause」、「it's not clear whether this RL grader is the root cause」、「unclear whether they occur
+frequently enough to explain the difference」，而那个能消掉差距的权重相减是「fairly unnatural operation」。
+它也写下了要紧的边界——「we cannot rule out strategic motives that Astra did not externalize in CoT」——并把过度
+谨慎当作「the simplest current explanation」而非原因。读法与标题相反：**机制未被测量，而报告自己这么说。**
+
+**（c）Axiom 的 Stacks Project 形式化纠正了它的**来源**，这既是发现也是责任。** 一份「整个 Stacks Project」（约
+**7,500** 页代数几何）的 Lean 形式化，单一机器检查库，Stacks 标签把声明链回原文，「约 **1,600 万行**」，由
+「coordinated swarms of AI agents」在一个带多 agent 审计与**语义对照原文**的分层系统下完成。真正有操作重量的断言：
+「dozens of statements in the Stacks Project that required local refinement」——「missing hypotheses, edge
+cases in positive characteristic, and claims that did not hold in the full generality stated」，其中一些构造了
+显式反例。映射**不是一对一**（一个 Stacks 标签可以展开成多个声明，「some newly defined and others bridged
+directly to existing declarations in Mathlib」），de Jong「requested that AI-generated comments and pull
+requests not be submitted directly」到上游，而 1,600 万行与那些反例**都没有独立验证**——都来自建库的一方。
+一个「refine」了某条声明的形式化**已经改变了它**，而这个 refine 是审计必须为之辩护的数学判断。
+
+**（d）Linum 的 P-JiT：一份逐项列出的 $21,038 账单，以及完全没有基准。** 无 VAE 的像素空间扩散 transformer，
+**2.18B** 参数（训练时含 readout 与 PixelREPA 头约 2.42B），冻结的 **Qwen3.5-4B** 文本编码器，22 个 DiT 块，
+32×32 分块；**6.6 亿**样本（512² 下 **6.1027 亿**、297,985 步；1024² 下 **4,997 万**、24,400 步；全局批 **2,048**）；
+**$21,038**（预训练 $20,348 + 后训练 $690）= **8,415 H100-hours × $2.50**，8 节点共 64 张 H100；Apache-2.0，位于
+`Linum-AI/pjit-21k`。自陈的证据是一条**样本效率**断言（「比 Linum v2 少 **11×** 样本收敛，同时 token 压缩激进 4×」）、
+损失曲线（512² 阶段末约 **0.096** EMA；80M 样本处时间步表放宽后 **0.157** 的尖峰；转到 1024² 后约 **0.127**——作者
+提醒高分辨率损失不可直接比较，因为噪声尺度翻倍），以及一个 249 张图的画廊。**没有 FID、CLIP 或 GenEval。** 局限
+也点了名：没有文字渲染（所以「cannot write text or generate posters」）、全身/多实体/多人交互/世界知识弱，以及
+「it's still early days for post-training diffusion models」；它自称是「a proof-of-concept along the way to our
+next video model」。**这里的成本断言格外可核——因为每 GPU 小时的价格被写出来了。**
+
+→ [[fact-check]] [[harness-reliability]] [[formal-verification]]

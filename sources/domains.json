@@ -14005,5 +14005,23 @@
     "en": "Neufangled Robotics' product page for Stringman, a room-scale cable robot. Claims are arithmetic (4 actuators, 28 N tension limit, 1.9 kg average payload) rather than demo-only, and the design is published — but the site is the seller's own page, so prices and payload figures are first-party. The PCB repo it links carries no licence, which the page does not mention. Curation cross-check (2026-11-04): the load-bearing claim (open source, OSHWA certified) was checked against OSHWA's own certification record US002788 and the published firmware (Apache-2.0) and PCB repos. cred stays med — a first-party page's standing does not rise with a verified fact.",
     "zh": "Neufangled Robotics 的 Stringman 产品页——一台房间级缆索机器人。其主张是可算的（4 个执行器、28 N 张力上限、平均 1.9 kg 载荷）而非只有演示，设计也确实公开——但页面由卖方自己维护，价格与载荷均为第一方数据。它链接的 PCB 仓库没有许可证，页面未提及这一点。 策展交叉核验（2026-11-04）：其关键主张（开源、OSHWA 认证）已对照 OSHWA 自身的认证记录 US002788，以及公开的固件（Apache-2.0）与 PCB 仓库核实。cred 仍为 med——第一方页面的公信力不会因为一个事实被核实而上升。",
     "jp": "Neufangled Robotics の Stringman 製品ページ。部屋規模ケーブルロボットで、主張はデモだけでなく算数（アクチュエータ 4 個、張力上限 28 N、平均ペイロード 1.9 kg）であり設計も公開されている。ただし売り手自身のページであるため価格とペイロードは一次情報。リンク先の PCB リポジトリにライセンスが無い点はページに書かれていない。 キュレーション時のクロスチェック（2026-11-04）：中核の主張（オープンソース、OSHWA 認証）は OSHWA 自身の認証記録 US002788 と、公開されたファームウェア（Apache-2.0）・PCB リポジトリで確認した。cred は med のまま——一次情報ページの信頼性は事実の確認では上がらない。"
+  },
+  "agent-browser.dev": {
+    "cat": "code",
+    "cred": "med",
+    "density": "high",
+    "cv": 1,
+    "en": "The docs site for Vercel Labs' agent-browser CLI — quick-start, session/engine options and the failure contract. First-party, so read it as the project's own claim; the numbers it implies (version, published builds) live on npm. Curation cross-check (2026-11-06): its quoted click-failure sentence is verbatim in the GitHub README, and `npm latest` 0.41.2 across 137 versions matches the registry — a third party's record, so cv 1; cred stays med because a first-party site's standing does not rise with a verified fact.",
+    "zh": "Vercel Labs 的 agent-browser CLI 文档站——quick-start、会话/引擎选项与失败契约。第一方页面，应作为项目自己的主张来读；它隐含的数字（版本、已发布构建）在 npm 上。策展交叉核验（2026-11-06）：其引用的「点击失败」句子在 GitHub README 中逐字存在，而 `npm latest` 0.41.2 / 137 个版本与注册表一致——那是第三方的记录，故 cv 1；cred 仍为 med，因为第一方站点的公信力不会因一个事实被核实而上升。",
+    "jp": "Vercel Labs の agent-browser CLI のドキュメントサイト。クイックスタート、セッション/エンジンの選択肢、失敗の契約。一次情報のページなのでプロジェクト自身の主張として読む。それが含意する数値（バージョン、公開ビルド）は npm 側にある。キュレーション時のクロスチェック（2026-11-06）：引用されているクリック失敗の文は GitHub の README に逐語で存在し、`npm latest` 0.41.2・137 バージョンはレジストリと一致する——第三者の記録なので cv 1。cred は med のまま——一次情報サイトの信頼性は事実の確認では上がらない。"
+  },
+  "linum.ai": {
+    "cat": "research",
+    "cred": "med",
+    "density": "high",
+    "cv": 1,
+    "en": "Linum's field notes — first-party training write-ups (P-JiT: a 2.18B pixel-space diffusion transformer trained for $21,038, with an itemised hardware/price receipt). Unusually checkable for a vendor post because the price per GPU-hour is stated and the weights repo is public, but every figure is the builder's own and there is no FID/CLIP/GenEval. Curation cross-check (2026-11-06): GitHub's own license detection on `Linum-AI/pjit-21k` reads Apache-2.0 and its description carries the $21K figure, so the licensing and cost claims are corroborated by a third party's artifact; cred stays med.",
+    "zh": "Linum 的实验记录——第一方的训练长文（P-JiT：一个 2.18B 像素空间扩散 transformer，训练花费 $21,038，附逐项硬件与单价账单）。作为厂商文章它异常可核，因为每 GPU 小时的价格写了出来、权重仓库也公开；但所有数字都出自建模方自己，且没有 FID/CLIP/GenEval。策展交叉核验（2026-11-06）：GitHub 自身对 `Linum-AI/pjit-21k` 的许可检测为 Apache-2.0，其 description 也带着 $21K 这个数字，于是许可与成本主张得到第三方工件的印证；cred 仍为 med。",
+    "jp": "Linum のフィールドノート。一次情報の学習記録（P-JiT：2.18B のピクセル空間拡散 transformer を 21,038 ドルで学習、ハードウェアと単価の領収書を項目別に記載）。GPU 時間あたりの価格が書かれ重みのリポジトリも公開されているため、ベンダー記事としては異例に検証可能。ただし数値はすべて構築者自身のもので FID/CLIP/GenEval は無い。キュレーション時のクロスチェック（2026-11-06）：GitHub 自身のライセンス検出が `Linum-AI/pjit-21k` を Apache-2.0 と判定し、description に 21K ドルの記載があるため、ライセンスと費用の主張は第三者の成果物で裏づけられた。cred は med のまま。"
   }
 }

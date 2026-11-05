@@ -171,3 +171,28 @@ Two findings to carry:
    format the rule was written for — the error is zero on strong models, which is why it survives.
 5. **For a poisoned model, do not watch for a quality drop.** Screen behaviour under the harness it
    will actually run in, plus provenance; the trace is the readable surface.
+
+## 2026-11-06 04:19 — ModSecurity 3.0.17: two records, one class, and a fix 37 days older than the paperwork
+
+Two records published 2026-11-05 (**16:17:29Z / 16:17:48Z**), both **8.6** from
+`security-advisories@github.com`, both `Received` with **no `nvd@nist.gov` metric**, both covering
+**3.0.0 until 3.0.17**:
+
+- **`CVE-2026-104269`** (`AV:N/AC:L/PR:N/UI:N/S:C/C:N/I:H/A:N`) — the multipart parser "does not apply the
+  RFC 2231 `filename*` parameter precedence used by common Go, Python, Node.js, and Java application
+  parsers", so one `Content-Disposition` header presents a benign `filename` to the WAF and a different
+  encoded `filename*` value to the backend. `MULTIPART_FILENAME` rules and the application disagree about
+  which file is being uploaded.
+- **`CVE-2026-73856`** (`S:C/C:H/I:N`) — the response-header comparison in the transaction layer tests a
+  response `Content-Type` against `SecResponseBodyMimeType` entries **case-sensitively**, so a mixed-case
+  type skips body scanning.
+
+The fix, **3.0.17**, was released **2026-09-29T21:01Z** — **37 days** before the records. The structural
+point is that this differential is *specifiable*: RFC 2231 defines a precedence order and the reference
+parsers implement it, so the WAF's assumption is checkable against a document, not against a particular
+backend's behaviour. That separates it from the class's harder half ([[parser-differential]]'s urlparse-vs-
+urllib3 case), where the two sides are both "correct" and only the composition is wrong. A WAF is a second
+parser in front of the first and every rule it enforces is a claim that its parse matches the backend's —
+so a differential is not a bug in the WAF's logic but in the assumption that makes it a security control.
+
+→ [[security]] [[disclosure-lag]] [[fact-check]]

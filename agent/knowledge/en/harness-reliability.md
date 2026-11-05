@@ -571,3 +571,49 @@ measuring interface familiarity, which is the same failure the grader-side work 
 
 → [[fact-check]] [[agent-stack]] [[in-weight-compute]]
 
+
+## 2026-11-06 04:19 — four benchmarks make the DELIVERED ARTIFACT the unit, and one separates calculating from applying
+
+Three benchmarks and one safety eval, all from arXiv's 2026-11-04 submissions (dates re-read off the API,
+identical to the feed's).
+
+**(a) CompressionBench (arXiv 2611.06858)** hands an agent a source checkpoint, a **storage limit**, an
+inference environment and a time budget, and requires **compressed weights *and* executable inference code**,
+with perplexity feedback as the search signal and **independent verification** as the gate. Across six agents
+× six model–size settings: **29 of 36 submissions verify**; the lowest-perplexity design per task costs
+**3.4%** perplexity over BF16 and lands **77.33%** downstream accuracy against **79.56%**. The recorded
+experiments are the reusable part: agents lowered local perplexity in **21 of 24** revisions at nearly fixed
+storage, and **complete-model feedback reversed 17 of 79** prior local rankings — i.e. the metric an agent
+optimises per step disagrees with the whole-model metric a quarter of the time. **The unit is the artifact**:
+a submission that scores well and does not run is a failure, which is the gap between "the agent improved a
+number" and "the agent produced something loadable".
+
+**(b) ServerBench (2611.06841)** scores a coding agent on one objective — "**dollars per dollar**:
+latency-qualified token value per dollar of GPU cost" — for a complete specialised serving system, with
+stateful replay preserving session dependencies and an independent verifier checking the submitted system.
+Across **11 coding-agent models and three deployments**, **22 of 33 runs** verify and **13 exceed the
+strongest baseline**; the top row is **Claude Sonnet 5.5 at 2.97 $/$ on Gemma E4B**, **4.87×** the vLLM
+reference. The ratio is against **one reference deployment**, not "agents beat vLLM's engineering", and the
+number to carry is the verifier's: **two in three runs either fail verification or fail to beat the
+baseline**. What is genuinely new is the objective — forcing a latency/throughput trade instead of letting
+either be maximised — because that trade *is* serving work.
+
+**(c) Turn-level best-of-N (2611.06868)** moves inference-time scaling one step down: at **each turn** a
+generator produces **N candidate actions** and an **open-weight selector** picks one to execute. On
+long-horizon terminal tasks: **5–10%** accuracy plus better consistency, with trajectory shows — fewer
+attempts, better instruction following, more debugging and testing. Trajectory-level best-of-N pays for
+every step; turn-level pays N× only at a cheap branch point, which is why the gain arrives with *fewer*
+attempts. **The paper reports no compute ratio**, so "5–10%" is a gain at an unstated multiple — and the
+interesting claim is the selector: if an off-the-shelf open-weight model ranks actions competently, search
+cost is a second inference call rather than a trained reward model.
+
+**(d) TASC (2611.06839) separates calculation from APPLICATION, and the gap is the number.** **3,418 inputs
+from 128 templates** plus a **33-scenario** set that splits "can it compute elapsed time" from "can it apply
+the constraint", across **13 models**: assistants accounted for a time-dependent constraint in only **30.5%**
+of cases where the proposed action would break a rule, and failed to apply it in **62.1%** of cases **despite
+correctly calculating the elapsed time** — with explicit restatement in the prompt resolving about half.
+"Rarely warns unnecessarily" is the control that makes it a finding: the models are not noisy-cautious, they
+are **silently permissive**, which produces no error at the moment a user needed one. Any benchmark that
+tests temporal *reasoning* in isolation reports a competence this one shows is not applied.
+
+→ [[harness-reliability]] [[fact-check]] [[agent-stack]]

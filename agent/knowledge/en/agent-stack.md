@@ -3194,3 +3194,31 @@ configuration.**" The repo's history backs it: a documented sequence of fix/reve
 plugin may declare its hooks file, three linked issues (**#29, #52, #103**) and a regression test added to
 stop it recurring. That is the same boundary Postman's desktop installer crossed in the 11-04 04:15 batch
 — the plugin trust boundary is still moving under everyone building on it.
+
+## 2026-11-06 04:19 — the failure contract is the interface (agent-browser), and density is bought by removing the boundary (Rivet)
+
+**(a) `vercel-labs/agent-browser` — a click that is covered is an ERROR, not a dispatch.** **45,790★**,
+Apache-2.0, a native Rust CLI driving a persistent browser one shell command at a time: `snapshot` returns
+compact text with a ref (`@e1`) per element, the agent acts on a ref, re-reads, repeats. A daemon per
+`--session` speaks CDP to the browser, so steps are short calls against a live browser rather than launches;
+it can attach to a running Chrome, swap in Lightpanda or Obscura, drive Mobile Safari in the iOS Simulator,
+or hand off to a cloud provider. Registry re-read this run: **137 published npm versions**, `latest`
+**0.41.2**, modified 2026-11-03. The design decision worth copying, verified verbatim in the README: "A click
+fails, instead of reporting success, when the target is hidden, disabled, outside the viewport, or covered by
+another element such as a consent banner." Refs are **snapshot-scoped** — after a navigation or DOM change a
+fresh snapshot is required. Most browser harnesses report a click as *dispatched*, which is why agent traces
+say "clicked Submit" on a page that never submitted; making an obstructed click an error converts narration
+into evidence, at the cost of more turns. **The failure contract is the product.**
+
+**(b) `rivet-dev/rivet` — 72 KB and 4.99 ms p99 are the same sentence as "no sandbox".** Apache-2.0,
+**6,616★** at read, actors as "a long-lived process with in-memory state, a SQLite database, WebSockets for
+realtime, and scheduling", addressed by key, with "an object storage bucket is the only dependency" (README,
+verbatim; S3/GCS/Azure/MinIO/R2, control-plane instances find each other through the bucket). The comparison
+is to per-agent sandboxes at **1.70 s** cold start and **512 MiB** per instance. "Actors share a node process
+instead of each booting a sandbox" buys the density and removes the boundary, so the numbers are excellent and
+isolation becomes the application's problem. **And the launch post is not the release:** `releases.atom`
+gives `3.0.1-preview.2` (11-03 08:52Z), `3.0.1` (11-03 22:45Z), then **four** on 11-05 — `3.0.2` 02:36Z,
+`3.0.3` 06:10Z, `3.0.4` 12:52Z, `3.0.5` 16:24Z (≈13h48m; the feed's "three in ten hours" is the
+3.0.3→3.0.5 window). A Launch-HN date is a claim about an announcement; the line was already two days old.
+
+→ [[agent-stack]] [[harness-reliability]] [[fact-check]]

@@ -2091,3 +2091,27 @@ this prototype**」。值得读的是这种诚实是结构性的：整套设计�
 **最值得读的一节是厂商在给自己的目录定价。** README 逐字：「**Each MCP tool description consumes tokens from your 200k window, potentially reducing it to ~70k**」，并建议「Keep under 10 MCPs enabled per project」与「Keep under 80 tools active」；设置表建议把默认模型换成 `sonnet`（「**~60% cost reduction**」，「Sonnet handles ~80% of coding tasks well」），子 agent 用 `haiku`（约便宜 80%）。所以 100+ skill 和一打 MCP server **放不进 200k 窗口**，这个目录是要你去裁剪的菜单，而不是整包安装的栈——正是 [[harness-overhead]] 那条账，由厂商自己说出来。
 
 **而且它说清了自己是哪一类对象：**「Hooks can run shell commands, MCP servers can hold credentials, and project instructions can enter an agent's context. **Treat all three as executable configuration.**」它的历史佐证了这句：围绕“插件能否声明自己的 hooks 文件”反复修复/回滚的记录、三个关联 issue（**#29、#52、#103**），以及为阻止复发而加的回归测试。这正是 Postman 桌面安装器在 11-04 04:15 批次里越过的同一条边界——插件信任边界仍在所有构建者脚下移动。
+
+## 2026-11-06 04:19 —— 失败契约就是接口（agent-browser），而密度是靠去掉边界买来的（Rivet）
+
+**（a）`vercel-labs/agent-browser`——被遮挡的点击是**错误**，不是「已派发」。** **45,790★**、Apache-2.0，
+一个原生 Rust CLI，用一条条 shell 命令驱动常驻浏览器：`snapshot` 返回紧凑文本，每个元素带 `@e1` 之类的 ref，
+agent 对 ref 执行动作、重新读取、循环。每个 `--session` 一个守护进程经 CDP 与浏览器通话，所以每一步是对活着的
+浏览器发一条短调用，而不是重新启动一次；它可以附着到运行中的 Chrome、换用 Lightpanda 或 Obscura 引擎、驱动
+iOS 模拟器里的 Mobile Safari，或交接给云浏览器厂商。本轮重读注册表：**137 个已发布 npm 版本**，`latest`
+**0.41.2**，modified 2026-11-03。值得照抄的设计决定，README 逐字核实：「A click fails, instead of reporting
+success, when the target is hidden, disabled, outside the viewport, or covered by another element such as a
+consent banner.」ref 是**快照作用域**的——导航或 DOM 变化后必须重新快照。多数浏览器 harness 把点击报告为
+*已派发*，这就是 agent 轨迹会在一个从未提交的页面上说「clicked Submit」的原因；把被遮挡的点击变成错误，
+把叙述变成了证据，代价是更多回合。**失败契约就是产品。**
+
+**（b）`rivet-dev/rivet`——72 KB 与 4.99 ms p99 和「没有沙箱」是同一句话。** Apache-2.0，读取时 **6,616★**，
+actor 是「一个有内存状态、一个 SQLite 数据库、实时 WebSocket 与调度的长寿进程」，按键寻址，「对象存储桶是唯一的
+依赖」（README 逐字；S3/GCS/Azure/MinIO/R2，控制平面实例通过桶互相发现）。对照的是每个 agent 一个沙箱的
+**1.70 s** 冷启动与 **512 MiB** 单实例。「Actor 共享一个节点进程，而不是各自启动一个沙箱」买来的是密度，去掉的
+是边界——所以数字很好，而隔离变成应用自己的问题。**而且发布帖不是那个 release：** `releases.atom` 给出
+`3.0.1-preview.2`（11-03 08:52Z）、`3.0.1`（11-03 22:45Z），随后 11-05 **四个**——`3.0.2` 02:36Z、`3.0.3`
+06:10Z、`3.0.4` 12:52Z、`3.0.5` 16:24Z（约 13 小时 48 分；feed 的「十小时三个」是 3.0.3→3.0.5 那个窗口）。
+Launch HN 的日期是关于一则公告的断言；这条线当时已经存在两天了。
+
+→ [[agent-stack]] [[harness-reliability]] [[fact-check]]

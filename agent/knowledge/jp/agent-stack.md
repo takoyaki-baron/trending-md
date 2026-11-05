@@ -2385,3 +2385,30 @@ README 自身が取引を明記する：第三者のアプリの自動化は「m
 **読む価値のある節は、ベンダーが自らのカタログに値付けしているところだ。** README から逐語：「**Each MCP tool description consumes tokens from your 200k window, potentially reducing it to ~70k**」、そして「Keep under 10 MCPs enabled per project」「Keep under 80 tools active」；設定表は既定モデルを `sonnet` に（「**~60% cost reduction**」、「Sonnet handles ~80% of coding tasks well」）、サブ agent を `haiku` に（約 80% 安価）することを勧める。つまり 100 以上の skill と十数の MCP サーバーは **200k の窓に収まらない**。このカタログは刈り込むメニューであり、丸ごと導入するスタックではない——[[harness-overhead]] の勘定をベンダー自身が述べている。
 
 **そして自分がどんな種類の対象かを明言している：**「Hooks can run shell commands, MCP servers can hold credentials, and project instructions can enter an agent's context. **Treat all three as executable configuration.**」履歴がそれを裏づける：プラグインが自らの hooks ファイルを宣言できるかをめぐる修正／差し戻しの反復、3 つの関連 issue（**#29、#52、#103**）、再発を止めるための回帰テスト。これは Postman のデスクトップインストーラが 11-04 04:15 バッチで越えた境界そのものだ——プラグイン信頼境界は、その上に構築する全員の足元でいまも動いている。
+
+## 2026-11-06 04:19 — 失敗の契約がインターフェースであり（agent-browser）、密度は境界を外して買われる（Rivet）
+
+**（a）`vercel-labs/agent-browser`——覆われたクリックは「送出済み」ではなく**エラー**。** **45,790★**、
+Apache-2.0。ネイティブ Rust の CLI が常駐ブラウザを 1 コマンドずつ操作する：`snapshot` は要素ごとに `@e1` のような
+ref を持つ簡潔なテキストを返し、agent は ref に対して行動し、読み直し、繰り返す。`--session` ごとに 1 つのデーモンが
+CDP でブラウザと話すので、各ステップは起動ではなく生きたブラウザへの短い呼び出しになる。稼働中の Chrome に
+アタッチし、Lightpanda や Obscura に差し替え、iOS シミュレータの Mobile Safari を動かし、クラウドのブラウザ提供者に
+引き渡せる。今回レジストリを読み直し：**公開 npm バージョン 137 件**、`latest` は **0.41.2**、modified 2026-11-03。
+真似する価値のある設計判断は README で逐語確認：「A click fails, instead of reporting success, when the target is
+hidden, disabled, outside the viewport, or covered by another element such as a consent banner.」ref は
+**スナップショット作用域**で、ナビゲーションや DOM 変更の後は新しいスナップショットが要る。多くのブラウザ harness
+はクリックを*送出済み*と報告する——だから agent の軌跡は決して送信されなかったページで「clicked Submit」と言う。
+遮られたクリックをエラーにすると、語りが証拠になる。代価はターン数の増加だ。**失敗の契約が製品である。**
+
+**（b）`rivet-dev/rivet`——72 KB と p99 4.99 ms は「サンドボックスが無い」と同じ文。** Apache-2.0、読取時
+**6,616★**。actor は「メモリ状態、SQLite データベース、リアルタイム用 WebSocket、スケジューリングを持つ長命
+プロセス」でキーでアドレスされ、「オブジェクトストレージのバケットが唯一の依存」（README 逐語。S3/GCS/Azure/MinIO/
+R2、コントロールプレーンの各インスタンスはバケット経由で互いを見つける）。比較対象は agent ごとのサンドボックスの
+**1.70 s** コールドスタートと **512 MiB**/instance。「actor はそれぞれサンドボックスを起動する代わりにノード
+プロセスを共有する」——これが密度を買い、境界を外す。数字は優秀で、隔離はアプリケーションの問題になる。
+**そしてローンチ投稿はリリースではない：** `releases.atom` は `3.0.1-preview.2`（11-03 08:52Z）、`3.0.1`
+（11-03 22:45Z）、続いて 11-05 に**4 件**——`3.0.2` 02:36Z、`3.0.3` 06:10Z、`3.0.4` 12:52Z、`3.0.5` 16:24Z
+（約 13 時間 48 分。feed の「10 時間で 3 件」は 3.0.3→3.0.5 の窓）。Launch HN の日付は告知についての主張で、
+この系統はその時点で既に 2 日前から存在していた。
+
+→ [[agent-stack]] [[harness-reliability]] [[fact-check]]

@@ -106,7 +106,7 @@ Red Hat 在 2026-11-05 公布了 **四条 GDB 记录**，前一天下午预留�
 
 另外三条方向相反。**CVE-2026-121997** 是 `gdbserver` 在 `QTDPsrc` 包处理中的堆溢出：包声明的源长度与实际数据长度不一致，`hex2bin` 写出分配边界——**`PR:N/UI:N`**，完全不需要客户端交互。**CVE-2026-121996** 从 `gdbserver` 的 agent 表达式解析器泄露未初始化堆内存，记录称泄露内容「includes addresses suitable for defeating ASLR in further exploitation」；**CVE-2026-121995** 是客户端 tracepoint 上传处理中的栈溢出，会在「automatically during connection setup」时破坏内存。
 
-**为什么重要：** 每一条受影响条目都是**只有产品、没有版本**——`gdb`、`gdb-headless`、`gdb-gdbserver`、`gcc-toolset-14-gdb`、`gcc-toolset-15-gdb`，覆盖 RHEL 6、7、8、9、10 和 Red Hat Hardened Images；CNA 的 `affected[]` 十一个条目全部带 `defaultStatus: affected`，且没有任何一个带 `versions[]` 键，所以记录本身不给出任何版本边界，补丁级别只能去 Red Hat 的 errata 里找，而记录并没有链接它。这正是本刊此前标记过的 Red Hat 形态。可迁移的结论在威胁模型上：调试器本身就是一个交互式工具，按设计要解析攻击者提供的协议；而 `gdbserver`——人们为了让远程目标可调试而暴露在网络上的那一半——连社会工程都不需要。NVD 对这四条都还没有分析。
+**为什么重要：** `affected[]` 的十一个条目都是**只有产品、没有版本**，而且并不都是同一个产品：`gdb` 覆盖 RHEL 6、7、8、9、10 和 Red Hat Hardened Images，`gcc-toolset-14-gdb` 与 `gcc-toolset-15-gdb` 在 RHEL 8，`crash` 在 RHEL 8、9、10 上——最后三条带的是 `defaultStatus: unaffected`，所以**八条**受影响、**三条**不受影响。没有任何一条带 `versions[]` 键，因此记录本身不给出任何软件包版本边界；它唯一给出的版本，是每个 CPE 里的平台版本行（`cpe:/a:redhat:enterprise_linux:10`）。补丁级别只能去 Red Hat 的 errata 里找，而记录并没有链接它。这正是本刊此前标记过的 Red Hat 形态——NVD 一周的发布窗口里有 44 条记录、374 条 `affected[]` 条目，全部来自 Red Hat 的 CNA。可迁移的结论在威胁模型上：调试器本身就是一个交互式工具，按设计要解析攻击者提供的协议；而 `gdbserver`——人们为了让远程目标可调试而暴露在网络上的那一半——连社会工程都不需要。NVD 对这四条都还没有分析。
 
 [`🔗 CVE-2026-121994`](https://nvd.nist.gov/vuln/detail/CVE-2026-121994) · [`🔗 CVE-2026-121997`](https://nvd.nist.gov/vuln/detail/CVE-2026-121997) · [`🔗 Red Hat CVE 页面`](https://access.redhat.com/security/cve/cve-2026-121994)
 

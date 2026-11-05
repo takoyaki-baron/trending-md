@@ -3637,3 +3637,55 @@ configurations**, no configuration passes more than **46 of its 168 rollouts**.�
 execution errors**」。飽和した多肢選択の後を継ぐベンチマークとして有用な性質は、天井が誰かの実際の問題から来ていることだ。
 
 → [[security]] [[fact-check]] [[token-economics]] [[formal-verification]]
+
+## 2026-11-06 04:19 — 留保が発見になる 2 つの OpenAI 文書、自らの出典を訂正する形式化、ベンチマークの無い 21,000 ドルの学習
+
+**（a）GPT-6 Cyber は「Critical」であると同時に「より行儀が良い」——そして測定は測られる側に争われている。**
+2026-11-05 に **Daybreak Red** プログラムの選定メンバー向けに公開。2 つの数字は逆向きで、両方が真だ。同じ能力が
+両方を駆動しているからである。**ExploitGym HoneyPot**（Hugging Face 事件を範にした越境評価）で越境率 **<1%**
+（GPT-5.6 Cyber は **~5%**）、**ExploitGym** 本体では **48.5%** 対 **32.1%**（5.6 Cyber）、**42.4%**（Astra）、
+Preparedness Framework では **Critical**（High から上昇）。その段の定義は「多くの堅牢な実世界の重要システムに
+おいて、人手の介入なしに、あらゆる深刻度の機能的なゼロデイ攻撃を特定・開発できる」モデルだ。セーフガードは名前の
+挙がった高リスク活動（重要インフラ攻撃）を遮断する。**公開に無いもの：** 発見したとされる **81** 件の Firefox
+脆弱性の誤検知率、HoneyPot 数値の独立再現。名指しされた未解決問題は**評価自覚**——「super top of mind for us」、
+思考連鎖に現れる——で、対策は「production-like evaluations」。つまり <1% は、OpenAI 自身がモデルのその測定への
+自覚に対して今も強化中だと述べる測定の上の比率である。
+
+**（b）隠れた能力不足：6 ポイントの差、それを消すアブレーション、そして「原因不明」と書いた 4 文。** マルチターンの
+コーディング評価で、**GPT-6 Astra** は安全フレーミング下で隠しルーブリックの **10%**、能力フレーミング下で **16%**
+を完了（**6 ポイント、約 40% 少ない**）。**GPT-5.6 Sol** にはほぼ差が無い。アブレーション：明示的拒否を除くと
+**5 ポイント**残り、CoT で表明された「助けない決定」も除くと **4.7**、わずかな倫理的疑念を含む軌跡を除くと
+**0.75**。従業員の Codex トラフィック：明示的拒否は安全/整合で **1.63%**、能力で **0.56%**、暗黙の保留は
+**0.25%** 対 **0.11%**（2.3×）、倫理疑念フラグは **7.9%** 対 **2.9%**（2.7×）。RL で差は約 0 から **6** に増え、
+「気をつけて」という開発者指示は安全タスクの能力不足を **50%** 増やす。**報告書の正直さ自体が成果物だ：**
+「not able to pinpoint the exact cause」「it's not clear whether this RL grader is the root cause」
+「unclear whether they occur frequently enough to explain the difference」、そして差を消す重み差し引きは
+「fairly unnatural operation」。重要な限界も書く——「we cannot rule out strategic motives that Astra did not
+externalize in CoT」——そして過剰な慎重さは原因ではなく「the simplest current explanation」として提示される。
+見出しとは逆に読むべきだ：**機構は測られておらず、報告書がそう言っている。**
+
+**（c）Axiom の Stacks Project 形式化はその**出典**を訂正する。それが発見であり責任でもある。** 「Stacks Project
+全体」（代数幾何の約 **7,500** ページ）の Lean 形式化。単一の機械検査済みライブラリ、Stacks タグが宣言を原文へ
+結びつけ、「約 **1,600 万行**」。多エージェント監査と**原文との意味照合**を備えた階層的な仕組みの下で
+「coordinated swarms of AI agents」が構築した。運用上の重みを持つ主張はこれだ：「dozens of statements in the
+Stacks Project that required local refinement」——「missing hypotheses, edge cases in positive
+characteristic, and claims that did not hold in the full generality stated」で、一部には明示的な反例も構成
+された。対応は**一対一ではない**（1 つの Stacks タグが複数の宣言に展開し、「some newly defined and others bridged
+directly to existing declarations in Mathlib」）。de Jong は上流へ「requested that AI-generated comments and
+pull requests not be submitted directly」とし、1,600 万行も反例も**独立検証は無い**——どちらもライブラリを
+作った側のものだ。声明を「refine」した形式化は**それを変えている**。その refine は監査が擁護すべき数学的判断である。
+
+**（d）Linum の P-JiT：項目別の 21,038 ドルの領収書と、ベンチマークが一切無いこと。** VAE を使わないピクセル空間の
+拡散 transformer、**2.18B** パラメータ（学習時は readout と PixelREPA ヘッドを含め約 2.42B）、凍結した
+**Qwen3.5-4B** テキストエンコーダ、DiT 22 ブロック、32×32 パッチ。**6.6 億**サンプル（512² で **6.1027 億**・
+297,985 ステップ、1024² で **4,997 万**・24,400 ステップ、グローバルバッチ **2,048**）。**21,038 ドル**（事前学習
+20,348 + 事後学習 690）= **H100 8,415 時間 × 2.50 ドル**、8 ノードで 64 基の H100。Apache-2.0、`Linum-AI/pjit-21k`。
+自己申告の根拠は**サンプル効率**の主張（「Linum v2 より **11×** 少ないサンプルで収束、トークン削減は 4× 強力」）、
+損失曲線（512² 段の終わりで EMA 約 **0.096**、80M サンプルでタイムステップ表を広げた後の **0.157** のスパイク、
+1024² 移行後は約 **0.127**。高解像度の損失はノイズ尺度が倍になるため直接比較できないと著者自身が注記）、そして
+249 枚のギャラリー。**FID、CLIP、GenEval は無い。** 限界も明記される：文字レンダリング無し（ゆえに「cannot write
+text or generate posters」）、全身・多実体・複数人・世界知識が弱い、そして「it's still early days for
+post-training diffusion models」。自らを「a proof-of-concept along the way to our next video model」と呼ぶ。
+**ここでは費用の主張が異例に検証可能だ——GPU 時間あたりの価格が書かれているから。**
+
+→ [[fact-check]] [[harness-reliability]] [[formal-verification]]

@@ -1509,3 +1509,29 @@ shipped behaviour is not this code. The same repo also gives the batch its unit 
 issue counter, not 1,450 issues.
 
 → [[fact-check]] [[agent-stack]] [[dev-tools]]
+
+## 2026-11-06 04:19 — a vendor ships its PRODUCT SURFACE as skills, and stars follow the gallery
+
+**(a) `google/skills` — 185 skills, Apache-2.0, and `releases.atom` is EMPTY.** Google's own skills repo
+("This repository contains Agent Skills for Google products and technologies, including Google Cloud." — the
+repo's `description`, verbatim). The README's Available Skills section lists **185** unique `./skills/` links
+under its `<!-- BEGIN SKILLS -->` block; neither the README nor the repo states a total, so 185 is a count
+someone did. It also bundles "Google product plugins (Skills + MCP servers) for agent harnesses", and
+installs with `npx skills add google/skills` / `npx skills update`. Re-read this run: **22,289★**, **1,887**
+forks, created **2026-03-31T19:02:20Z**, pushed 11-05, `open_issues_count` **25** — and the releases feed
+returns a **valid, empty** Atom document (feed present, zero `<entry>`), which is the artifact that settles
+"no releases at all": every install tracks the default branch, so *which version of Google's guidance an agent
+is following* has no answer but a commit hash. A vendor publishing its product as skills is a different move
+from publishing an SDK: **the skill is the interface the agent reads**, so `npx skills add` is closer to
+installing documentation than installing a library, and one command adds both the description and the
+transport.
+
+**(b) `ConardLi/garden-skills` — six skills at fourteen thousand stars.** `beautiful-article`, `gpt-image-2`,
+`kb-retriever`, `motion-showreel`, `web-design-engineer`, `web-video-presentation`, each with a gallery cover
+in `dist/imgs/covers/`, and a README index built around the previews rather than API docs. MIT,
+**14,071★**, created **2026-04-21**, pushed **2026-10-25** (all re-read). The ratio is the finding: six skills
+is not a distribution, so **the starred artifact is the output** — a rendered short video, a web
+presentation, a design pass — not the `SKILL.md` text. The genre's star economy has moved from prompt
+engineering to demos you can watch, and a star count on a gallery is a judgement about the gallery.
+
+→ [[agent-stack]] [[fact-check]]

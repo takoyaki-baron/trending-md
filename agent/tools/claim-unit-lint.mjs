@@ -2107,7 +2107,16 @@ function rangeAbsentVerdict({ cue, namesNvd, nvd, cna }) {
   const aff = cnaRead ? (cna.affected ?? { key: 'absent', entries: 0, versioned: 0, products: [] }) : null;
   const refs = [...(nvdRead ? (nvd.refs ?? []) : []), ...(cnaRead ? (cna.refs ?? []) : [])];
   const fixRef = refs.find((u) => FIX_REF_RE.test(u));
-  const cnaServed = aff && aff.entries > 0;
+  /* A CNA `affected[]` entry WITHOUT a `versions[]` is a PRODUCT, not a range. Until 2026-11-06 this
+     tested `aff.entries > 0`, so a product-only container scored as "the range lives in the CNA" —
+     and it fired `range-only-in-cna` on feed item 6 of that day, whose sentence ("no `versions[]`
+     key on any of them, so the record states no version boundary") was **exactly right** against a
+     Red Hat record carrying 11 entries and 0 `versions[]`. The class is not hypothetical: the
+     2026-10-25→31 census found **44 records / 374 entries, 44/44 `secalert@redhat.com`**, every one
+     a product with no version. So the test is `versioned`, and the product-only shape gets its own
+     sev-0 verdict rather than being called served or silently confirmed. */
+  const cnaServed = aff && aff.versioned > 0;
+  const productOnly = !!(aff && aff.key === 'populated' && aff.entries > 0 && aff.versioned === 0);
   const nvdServed = cfg != null && cfg > 0;
   const shape = aff == null ? 'the CNA container is unreadable'
     : aff.key === 'absent' ? 'the container has no `affected` key'
@@ -2134,6 +2143,13 @@ function rangeAbsentVerdict({ cue, namesNvd, nvd, cna }) {
     /* The third place a record names a fix is `references[]`, and a commit is a fix pointer with no
        version in it — so the sentence can be right about the range field and wrong about "no fix". */
     return { verdict: 'range-in-references', detail: `${nvdState}; ${shape} — but \`references[]\` points at a fix: ${fixRef}` };
+  }
+  if (productOnly) {
+    /* The absence HOLDS. What distinguishes the row is where the remedy lives: the record names the
+       products and their platform releases (in `cpes`), never a package version, so the patch level
+       is in the vendor's errata — a page this record does not link. That is a sentence worth
+       writing, and it is not a finding. */
+    return { verdict: 'range-absent-products-only', detail: `${nvdState}; ${shape}${aff?.products?.length ? ` (${aff.products.slice(0, 3).join(', ')})` : ''} — a product WITHOUT a version is not a range, so the absence holds; the patch level lives in the vendor's errata, which the record does not name` };
   }
   return { verdict: 'range-absent-confirmed', detail: `${nvdState}; ${shape} — the absence holds in both fields` };
 }
@@ -4872,8 +4888,18 @@ if (SELFTEST) {
     ra('record', false, nvdAwaiting, { affected: { key: 'absent', entries: 0, versioned: 0, products: [] }, refs: [] }), 'range-absent-confirmed');
   t('rangeabsent: an empty affected[] is present-and-empty, and still confirms',
     ra('record', false, nvdAwaiting, { affected: { key: 'empty', entries: 0, versioned: 0, products: [] }, refs: [] }), 'range-absent-confirmed');
+  /* 2026-11-06 — the product-only shape. This case used to be pinned at `range-absent-but-served`,
+     which said the record states a range while the sentence beside it said a product is not one:
+     the selftest encoded the defect. Feed item 6 of 11-06 (Red Hat's four GDB records, 11 entries /
+     0 `versions[]`) is the live instance, and its sentence was correct. */
   t('rangeabsent: a versionless affected[] entry is a PRODUCT, which is not a range',
-    ra('record', false, nvdAwaiting, { affected: { key: 'populated', entries: 6, versioned: 0, products: ['json-glib'] }, refs: [] }), 'range-absent-but-served');
+    ra('record', false, nvdAwaiting, { affected: { key: 'populated', entries: 6, versioned: 0, products: ['json-glib'] }, refs: [] }), 'range-absent-products-only');
+  t('rangeabsent: naming NVD does not make a product-only record "served" either',
+    ra('record', true, nvdAwaiting, { affected: { key: 'populated', entries: 11, versioned: 0, products: ['Red Hat Enterprise Linux 10'] }, refs: [] }), 'range-absent-products-only');
+  t('rangeabsent: one versioned entry among products is enough to refute the claim',
+    ra('record', false, nvdAwaiting, { affected: { key: 'populated', entries: 11, versioned: 1, products: ['x'] }, refs: [] }), 'range-absent-but-served');
+  t('rangeabsent: a product-only record with a fix commit in references[] is the commit claim',
+    ra('record', false, { status: 'Analyzed', configs: 0, refs: ['https://github.com/o/r/commit/abc1234'] }, { affected: { key: 'populated', entries: 3, versioned: 0, products: ['x'] }, refs: [] }), 'range-in-references');
   t('rangeabsent: a fix commit in references[] is the third place a remedy lives',
     ra('record', false, { status: 'Analyzed', configs: 0, refs: ['https://github.com/o/r/commit/717d7ecf'] }, { affected: { key: 'absent', entries: 0, versioned: 0, products: [] }, refs: [] }), 'range-in-references');
   t('rangeabsent: unread is never absent',
@@ -5044,7 +5070,7 @@ try {
   writeFileSync(CACHE_PATH, JSON.stringify(cache, null, 1));
 } catch { /* cache is best-effort */ }
 
-const SEVERITY = { ok: 0, 'ok-cited-page': 0, 'no-cve-named': 1, 'no-record': 1, 'slot-quoted': 1, 'counted-by-author': 0, 'number-other-noun': 1, 'temporal-stopping-point': 1, 'temporal-disclosed': 0, 'score-stopping-point': 1, 'cna-only-score': 1, 'star-drift': 2, 'star-dated': 1, 'star-surge': 1, 'ok-history': 0, 'history-older-than-record': 2, 'history-unreadable': 1, stale: 2, archived: 2, 'stale-disclosed': 0, 'archived-disclosed': 0, differs: 2, absent: 2, 'unsplit-issue-count': 3, 'compound-lags-parts': 3, 'version-swapped': 3, 'version-absent': 3, 'score-not-reproducible': 2, 'score-mismatch': 3, 'wrong-subject': 3, 'absence-contradicted': 3, 'status-stale': 2, 'status-dated': 1, 'date-local-shift': 2, 'date-mismatch': 2, 'cwe-absent-but-recorded': 3, 'cwe-mismatch': 3, 'cwe-unreadable': 1, 'field-present': 3, 'field-present-empty': 2, 'field-empty-contradicted': 2, 'field-empty-since-moved': 1, 'field-absent-not-empty': 1, 'field-dated': 0, 'field-unknown-name': 0, 'field-unreadable': 0, 'span-empty': 2, 'cve-range-span-mismatch': 2, 'cve-range-disclosed': 0, 'ok-range': 0, 'range-ambiguous': 0, 'range-cross-year': 0, 'range-inverted': 2, 'span-inverted': 3, 'span-unverifiable': 0, 'ok-span': 0, 'range-absent-but-served': 3, 'range-only-in-cna': 1, 'range-absent-confirmed': 0, 'range-unread': 0, 'range-in-references': 1, 'boundary-named-no-artifact': 0, 'status-no-record': 1, 'status-no-cve': 1, 'advisory-unreadable': 1, 'advisory-repo-only': 0, unreadable: 1, 'artifact-unreadable': 1, 'nvd-unavailable': 1, 'ratio-row-count': 3, 'ok-ratio': 0, 'ok-delimited': 0, 'not-a-repo': 0, 'repo-absent-asserted': 0, 'ok-table-rows': 0, 'table-columns-unresolved': 0, 'bundle-ok': 0, 'bundle-lines-named': 0, 'bundle-unavailable': 0, 'bundle-line-count': 3, 'bundle-total-mismatch': 2, 'quote-not-found': 3, 'quote-paraphrase': 2, 'quote-short': 1, 'quote-not-read': 0, 'paper-date-imprecise': 1, 'paper-date-mismatch': 2, 'paper-date-revision': 1, 'paper-date-unread': 0 };
+const SEVERITY = { ok: 0, 'ok-cited-page': 0, 'no-cve-named': 1, 'no-record': 1, 'slot-quoted': 1, 'counted-by-author': 0, 'number-other-noun': 1, 'temporal-stopping-point': 1, 'temporal-disclosed': 0, 'score-stopping-point': 1, 'cna-only-score': 1, 'star-drift': 2, 'star-dated': 1, 'star-surge': 1, 'ok-history': 0, 'history-older-than-record': 2, 'history-unreadable': 1, stale: 2, archived: 2, 'stale-disclosed': 0, 'archived-disclosed': 0, differs: 2, absent: 2, 'unsplit-issue-count': 3, 'compound-lags-parts': 3, 'version-swapped': 3, 'version-absent': 3, 'score-not-reproducible': 2, 'score-mismatch': 3, 'wrong-subject': 3, 'absence-contradicted': 3, 'status-stale': 2, 'status-dated': 1, 'date-local-shift': 2, 'date-mismatch': 2, 'cwe-absent-but-recorded': 3, 'cwe-mismatch': 3, 'cwe-unreadable': 1, 'field-present': 3, 'field-present-empty': 2, 'field-empty-contradicted': 2, 'field-empty-since-moved': 1, 'field-absent-not-empty': 1, 'field-dated': 0, 'field-unknown-name': 0, 'field-unreadable': 0, 'span-empty': 2, 'cve-range-span-mismatch': 2, 'cve-range-disclosed': 0, 'ok-range': 0, 'range-ambiguous': 0, 'range-cross-year': 0, 'range-inverted': 2, 'span-inverted': 3, 'span-unverifiable': 0, 'ok-span': 0, 'range-absent-but-served': 3, 'range-only-in-cna': 1, 'range-absent-confirmed': 0, 'range-absent-products-only': 0, 'range-unread': 0, 'range-in-references': 1, 'boundary-named-no-artifact': 0, 'status-no-record': 1, 'status-no-cve': 1, 'advisory-unreadable': 1, 'advisory-repo-only': 0, unreadable: 1, 'artifact-unreadable': 1, 'nvd-unavailable': 1, 'ratio-row-count': 3, 'ok-ratio': 0, 'ok-delimited': 0, 'not-a-repo': 0, 'repo-absent-asserted': 0, 'ok-table-rows': 0, 'table-columns-unresolved': 0, 'bundle-ok': 0, 'bundle-lines-named': 0, 'bundle-unavailable': 0, 'bundle-line-count': 3, 'bundle-total-mismatch': 2, 'quote-not-found': 3, 'quote-paraphrase': 2, 'quote-short': 1, 'quote-not-read': 0, 'paper-date-imprecise': 1, 'paper-date-mismatch': 2, 'paper-date-revision': 1, 'paper-date-unread': 0 };
 const REAL = (f) => (SEVERITY[f.verdict] ?? 1) >= 2;
 
 /* `status_watch` rides the findings file so the act pass sees a backwards move without re-reading

@@ -1078,3 +1078,25 @@ CLI remain the source of truth; these skills help agents apply them correctly"�
 所以 vendoring 的单位是**文件夹**而不是仓库，**19 个里 4 个**按许可证只可读。另有两条改变「买到了什么」：「provided for demonstration and educational purposes only」，以及「the implementations and behaviors you receive from Claude may differ from what is shown」——厂商明说实际发货的行为不是这份代码。同一个仓库还给了本批的单位提醒：**1,450** 是复合 issue 计数器，不是 1,450 个 issue。
 
 → [[fact-check]] [[agent-stack]] [[dev-tools]]
+
+## 2026-11-06 04:19 —— 厂商把**产品表面**作为技能发布，而星标跟着画廊走
+
+**（a）`google/skills`——185 个技能、Apache-2.0，而 `releases.atom` 是空的。** Google 自己的技能仓库
+（「This repository contains Agent Skills for Google products and technologies, including Google Cloud.」
+是仓库的 `description`，逐字）。README 的 Available Skills 小节在其 `<!-- BEGIN SKILLS -->` 块下列出 **185**
+个唯一 `./skills/` 链接；README 与仓库都没有陈述总数，所以 185 是有人数出来的。它还「bundles Google product
+plugins (Skills + MCP servers) for agent harnesses」，安装是 `npx skills add google/skills` /
+`npx skills update`。本轮重读：**22,289★**、**1,887** fork、创建于 **2026-03-31T19:02:20Z**、11-05 推送、
+`open_issues_count` 为 **25**——而 release feed 返回的是一份**有效但为空**的 Atom 文档（feed 在、`<entry>` 为 0），
+这正是坐实「完全没有 release」的工件：每一次安装都跟着默认分支走，于是*某个 agent 到底在用 Google 指引的哪个版本*
+除了 commit hash 无从回答。厂商把产品作为技能发布，与发布 SDK 是不同的动作：**技能就是 agent 阅读的界面**，
+所以 `npx skills add` 更接近安装文档而非安装库，而一条命令同时加入描述与传输。
+
+**（b）`ConardLi/garden-skills`——六个技能、一万四千星。** `beautiful-article`、`gpt-image-2`、`kb-retriever`、
+`motion-showreel`、`web-design-engineer`、`web-video-presentation`，每个在 `dist/imgs/covers/` 有画廊封面，
+README 索引围绕这些预览而不是 API 文档来组织。MIT、**14,071★**、创建 **2026-04-21**、推送 **2026-10-25**
+（全部重读）。比例才是发现：六个技能不构成分发，所以**被星标的工件是产出**——渲染出来的短视频、网页演示、一次
+设计——而不是 `SKILL.md` 文本。这个门类的星标经济已经从提示工程转向「你能看得到的 demo」，而画廊上的星数，
+是对画廊的判断。
+
+→ [[agent-stack]] [[fact-check]]

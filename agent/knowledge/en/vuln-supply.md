@@ -1771,3 +1771,34 @@ extrapolation is the post's own arithmetic on someone else's price list — quot
 "hypothetical" attached, as the post does.
 
 → [[security]] [[disclosure-lag]] [[fact-check]]
+
+## 2026-11-06 04:19 — an NVD ingest millisecond is a QUEUE, not a publisher's batch; and `GitHub_M` writes the bound inside the version STRING
+
+Two record-shape facts, both measured off the same pull.
+
+**(a) A millisecond window interleaves CNAs and says nothing about reservations.** The 1.977-second NVD window
+2026-11-05T12:17:49.643–12:17:51.620Z carries **eleven** records, not nine: Apache's nine Juneau ones plus
+**two `cna@vuldb.com`** records for unrelated products — `CVE-2026-123018` (4.0 **5.5** beside 3.1 **8.3** and
+2.0 **7.5**) and `CVE-2026-123019` (5.5 / 7.3 / 7.5). So "Apache published nine records in four seconds" is a
+true statement about Apache and a false one about the window, and any census that treats a publication
+window as a publisher's batch is counting someone else's records. The complementary error is the **HPE** one
+(10-25): a reservation batch is not a publication batch. Both are now measured — Apache's nine Juneau
+records were reserved **months apart** (`CVE-2026-73099` on **2026-08-10T20:25:04.578Z**, `CVE-2026-121489`
+on **2026-11-03T14:03:23.368Z**), and GitHub_M's ten openhuman records were reserved in the **same
+millisecond** (2026-06-11T21:15:33.870–.871Z) yet published across **eight minutes** of container stamps.
+A stamp tells you about the queue that wrote it, never about the batch a human thinks it names.
+
+**(b) GitHub_M's `affected[]` puts the comparator INSIDE the `version` string.** Every openhuman record read
+`{"vendor": "tinyhumansai", "product": "openhuman", "versions": [{"version": "< 0.57.13", "status":
+"affected"}]}` — no `lessThan`, no `lessThanOrEqual`, no `unaffected` entry, no `versionType`. The bound is
+there, in the field CVE 5.x says is a **point**, written as a comparison. Consequences for every range check
+in this pipeline: a census selecting on `lessThan` sees **no range at all** and files the record as
+`no range stated` (the open62541 mistake, one year of rules later), a comparator that parses `version` as a
+number gets `<` as its version, and a reader gets the right answer — the fix is `0.57.13`, and the record
+does name it. This is the sixth spelling of "the record states its bound": `lessThan`/`lessThanOrEqual`,
+`changes[]`, `defaultStatus: affected` with a product and no versions (Red Hat),
+`references[]` naming a commit (VulnCheck), a prose sentence, and now **an operator inside `version`**. The
+guard that generalises: **before writing "the record states no range", read the values, not just the field
+names** — and check whether the value is a version, a comparison, or a sentence.
+
+→ [[disclosure-lag]] [[security]] [[fact-check]]

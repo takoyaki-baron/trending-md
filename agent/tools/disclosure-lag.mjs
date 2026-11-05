@@ -670,6 +670,67 @@ function opBounds(s) {
   return out.sawOp && (out.min || out.max) ? out : null;
 }
 
+/** ONE version entry's bound, read from whichever of the THREE spellings carries it.
+ *
+ *  Added 2026-11-06 04:47 because `affectedRanges` had learned the operator-in-`version` spelling on
+ *  2026-10-26 (the Pillow FlashPix record) while **every selector that decides whether a record
+ *  enters a census kept testing `v.lessThan || v.lessThanOrEqual`** — so the reader knew and the
+ *  population filter did not. The filing case is `GitHub_M`'s openhuman block, whose `affected[]`
+ *  entry is `{version: "< 0.57.13", status: "affected"}`: no `lessThan`, no `lessThanOrEqual`, so
+ *  `--range-census` counted it as unbounded and `namedFixesOf` never saw a fix at all — a record
+ *  that names its fix was filed as a record that names none. Same defect twice over (the
+ *  "read the FIELD, not the VALUE" shape this library keeps re-learning), and the fix is to make
+ *  the three selectors call this one function instead of spelling the test themselves.
+ *
+ *  Spellings, and the reason `spelling` is returned rather than just the numbers — the class has to
+ *  stay countable, or a fix that silently reclassifies records is indistinguishable from a fix that
+ *  did nothing:
+ *    · `structured`            — `{version, lessThan|lessThanOrEqual}` (the common CVE 5.x shape)
+ *    · `operator-in-version`   — `{version: "< 1.2.3"}` (GitHub's CNA; 190/3,013 records in one
+ *                                 publication week, 2026-10-26 measurement)
+ *    · `point`                 — a bare version: ONE affected version, not `[v, ∞)`
+ *      and `null-min` when the bare token is `"0"`/`"*"`/empty beside a structured bound.
+ *  A value that is not an operator and not a version — "older versions", "unaffected branches" —
+ *  keeps its `point`/unread treatment rather than becoming a bound: `opBounds` returns null for it,
+ *  and turning prose into a comparator is the error class this guard exists to prevent. */
+function versionBounds(v) {
+  const rawVer = v?.version != null ? String(v.version) : null;
+  const op = rawVer ? opBounds(rawVer) : null;
+  const less = v?.lessThan != null ? String(v.lessThan) : null;
+  const lessEq = v?.lessThanOrEqual != null ? String(v.lessThanOrEqual) : null;
+  const structured = !!(less || lessEq);
+  const nullMin = rawVer != null && ['0', '*', ''].includes(rawVer.trim());
+  let min = !op && rawVer && !nullMin ? rawVer : (op ? op.min : null);
+  let minInc = op ? op.minInc : true;
+  // The structured bounds win when both spellings are present; the operator form is the fallback.
+  let max = less || lessEq || (op ? op.max : null);
+  let maxInc = (less || lessEq) ? !!lessEq : (op ? op.maxInc : false);
+  /* A BARE `version` IS A PROSE FIELD AS OFTEN AS A VERSION ONE, and the test has to separate the
+     two without eating real identifiers. Measured on the 2026-10-29→11-04 window (3,069 records),
+     three shapes share this field and no single rule reads all three:
+       · `n/a` (80 entries), `Android kernel` (17), `Radeon Software for Linux 26.13` (30),
+         `versions prior to 7.96.0.1 y 7.96.0.2` — prose, and a point range built from one is a
+         boundary the record never stated.
+       · `MT6993`, `MT6897`, … (159 distinct MediaTek chip IDs) — NOT digit-led, and a plain
+         "starts with a digit" rule threw all of them away; they are the affected set.
+       · `1.18 RTM2`, `25.3.01 hotfix 10` — real version labels, digit-led with a suffix.
+     So: no digit anywhere ⇒ prose. A digit-led first token ⇒ a version. Anything else with
+     whitespace ⇒ prose. `MT6993` has no whitespace and has digits, so it survives. */
+  const unreadVal = rawVer != null && (/\d/.test(rawVer) === false
+    || (/\s/.test(rawVer.trim()) && !/^\s*v?\d/.test(rawVer)));
+  const prose = !op && !structured && unreadVal;
+  if (prose) return { rawVer, op, less, lessEq, min: null, minInc: true, max: null, maxInc: false,
+    bounded: false, spelling: 'unread', namesFix: false };
+  const spelling = op ? 'operator-in-version'
+    : structured ? 'structured'
+    : nullMin ? 'null-min'
+    : min ? 'point' : 'unread';
+  return { rawVer, op, less, lessEq, min, minInc, max, maxInc,
+    bounded: !!(min || max), spelling,
+    /* A bound that EXCLUDES an upper end names the fix release; an inclusive one does not. */
+    namesFix: !!(max && !maxInc) };
+}
+
 function affectedRanges(cve) {
   const ranges = [];
   const inverted = [];
@@ -685,15 +746,12 @@ function affectedRanges(cve) {
         continue;                       // do not invert a complement into a range
       }
       for (const v of affectedOnly) {
-        const rawVer = v.version != null ? String(v.version) : null;
-        const op = rawVer ? opBounds(rawVer) : null;
-        let min = rawVer && !op && !['0', '*', ''].includes(rawVer) ? rawVer : (op ? op.min : null);
-        let minInc = op ? op.minInc : true;
-        const less = v.lessThan != null ? String(v.lessThan) : null;
-        const lessEq = v.lessThanOrEqual != null ? String(v.lessThanOrEqual) : null;
-        // The structured bounds win when both spellings are present; the operator form is the fallback.
-        let max = less || lessEq || (op ? op.max : null);
-        let maxInc = (less || lessEq) ? !!lessEq : (op ? op.maxInc : false);
+        /* One reader for all three spellings — see `versionBounds`. Keeping this inline was how the
+           censuses and the range reader drifted apart on 2026-11-06. */
+        const vb = versionBounds(v);
+        const { rawVer, op, less, lessEq, spelling } = vb;
+        let min = vb.min, minInc = vb.minInc;
+        let max = vb.max, maxInc = vb.maxInc;
         /* `changes[]` toggles status INSIDE the range. Two shapes occur in the wild, and they are
            NOT the same function (2026-10-27, measured on both the same day):
              · ONE `unaffected` entry — it ends the affected span (CVE-2026-110720 consul-k8s:
@@ -728,11 +786,12 @@ function affectedRanges(cve) {
           aboveMax: (res.aboveMax || []).length,
           boundConfirms: !!(res.naive && res.bound && res.naive.first === res.bound) });        if (!min && !max) continue;
         if (min && !max) {              // single affected version — a POINT, not an open range
-          ranges.push({ raw: min, min, minInc, max: min, maxInc: true, from: 'cna-affected' });
+          ranges.push({ raw: min, min, minInc, max: min, maxInc: true, from: 'cna-affected', spelling });
           continue;
         }
         ranges.push({
           raw: op ? rawVer.trim() : (min ? `${min} ${less ? '<' : '<='} ${max}` : `${less ? '<' : '<='} ${max}`),
+          spelling,
           min, minInc, max, maxInc, from: 'cna-affected',
         });
       }
@@ -1778,6 +1837,42 @@ if (SELFTEST) {
   eq('cna: a two-sided operator string is one range, not one point',
     [affG2.ranges[0].min, affG2.ranges[0].max, affG2.ranges[0].maxInc], ['0.8.4', '0.8.6', false]);
   eq('opBounds: `= v` is a point', [opBounds('= 1.2.3').min, opBounds('= 1.2.3').max], ['1.2.3', '1.2.3']);
+  /* ── `versionBounds`: ONE reader for the three spellings, and the spelling is part of the answer
+     (added 2026-11-06, from `GitHub_M`'s openhuman block `{version: "< 0.57.13"}` — which every
+     census selector read as no bound at all while `affectedRanges` read it fine). ── */
+  const vbOp = versionBounds({ version: '< 0.57.13', status: 'affected' });
+  eq('versionBounds: operator-in-version is classified and bounds excluded',
+    [vbOp.spelling, vbOp.min, vbOp.max, vbOp.maxInc, vbOp.namesFix], ['operator-in-version', null, '0.57.13', false, true]);
+  const vbOpInc = versionBounds({ version: '<= 3.1.11' });
+  eq('versionBounds: an inclusive operator bound is the OPEN-BOUND shape, not a named fix',
+    [vbOpInc.spelling, vbOpInc.max, vbOpInc.maxInc, vbOpInc.namesFix], ['operator-in-version', '3.1.11', true, false]);
+  const vbSt = versionBounds({ version: '0', lessThan: '4.33.0' });
+  eq('versionBounds: a structured bound is labelled `structured`, "0" stays a null minimum',
+    [vbSt.spelling, vbSt.min, vbSt.max, vbSt.maxInc], ['structured', null, '4.33.0', false]);
+  const vbPt = versionBounds({ version: '5.2.0' });
+  /* A point reports min only — `affectedRanges` is what collapses it to `min === max`, and the
+     entry-level reader must not claim an upper bound the record never stated. */
+  eq('versionBounds: a bare version is a POINT and names no fix', [vbPt.spelling, vbPt.min, vbPt.max, vbPt.namesFix], ['point', '5.2.0', null, false]);
+  eq('versionBounds: prose is not a version token — it stays unread, never a point',
+    [versionBounds({ version: 'older versions' }).spelling, versionBounds({ version: 'older versions' }).bounded], ['unread', false]);
+  /* An open bound written with an operator is still the open-bound shape (it was `unbounded`). */
+  eq('openBoundOf: `{version: "<= 3.1.11"}` is the Agno shape in the other spelling',
+    openBoundOf({ affected: [{ affectedData: [{ packageURL: 'pkg:pypi/agno', versions: [{ version: '<= 3.1.11' }] }] }] }).bound?.max,
+    '3.1.11');
+  eq('openBoundOf: `{version: "< 13.0.0"}` names a fix, so it is not an open bound',
+    openBoundOf({ affected: [{ affectedData: [{ packageURL: 'pkg:pypi/x', versions: [{ version: '< 13.0.0' }] }] }] }).skips.includes('names-a-fix'),
+    true);
+  /* And the census that asks "does the named fix exist yet?" must see it — the openhuman row. */
+  const nfOp = namedFixesOf({ affected: [{ affectedData: [{ packageURL: 'pkg:cargo/openhuman',
+    versions: [{ version: '< 0.57.13', status: 'affected' }] }] }] });
+  eq('namedFixesOf: a fix spelled inside `version` is a named fix', [nfOp.fixes.length, nfOp.fixes[0]?.fix, nfOp.fixes[0]?.spelling],
+    [1, '0.57.13', 'operator-in-version']);
+  const nfSt = namedFixesOf({ affected: [{ affectedData: [{ packageURL: 'pkg:pypi/ansible-core',
+    versions: [{ version: '2.19.0', lessThan: '2.23.0', status: 'affected' }] }] }] });
+  eq('namedFixesOf: the structured spelling still reads, with its own label',
+    [nfSt.fixes[0]?.fix, nfSt.fixes[0]?.from, nfSt.fixes[0]?.spelling], ['2.23.0', '2.19.0', 'structured']);
+  eq('namedFixesOf: an inclusive bound names no fix and is not selected',
+    namedFixesOf({ affected: [{ affectedData: [{ packageURL: 'pkg:pypi/x', versions: [{ version: '<= 1.0' }] }] }] }).fixes.length, 0);
   /* ── `changes[]`: the exemption that ends a range (CVE-2026-110720, first-hand 2026-10-27) ── */
   const affK = affectedRanges({ affected: [{ source: 'security@hashicorp.com', affectedData: [{ vendor: 'HashiCorp',
     product: 'Tooling', defaultStatus: 'unaffected', versions: [{ version: '0.42.0', lessThan: '2.0.4',
@@ -2228,23 +2323,41 @@ async function rangeCensus({ from, to }) {
       || cfgs(c).length > 0;
     const vs = verEntries(c);
     const aff = vs.length > 0;
-    const bounded = vs.some(v => v.lessThan || v.lessThanOrEqual);
+    /* Read the VALUE, not the field (2026-11-06): `lessThan`/`lessThanOrEqual` are two of the three
+       spellings a bound has, and the third — a comparator inside `versions[].version` — was invisible
+       to this line while `affectedRanges` had been reading it since 10-26. */
+    const allBounds = vs.map(versionBounds);
+    const unreadEntries = allBounds.filter(b => b.spelling === 'unread').length;
+    const bounds = allBounds.filter(b => b.bounded);
+    const spelled = new Set(bounds.map(b => b.spelling));
+    const opBound = spelled.has('operator-in-version');
+    const structured = spelled.has('structured');
+    /* `bounded` keeps its pre-11-06 MEANING — the record states an explicit range bound — so the
+       column stays comparable across weeks and the operator spelling is the only thing that moved
+       it (+303 on the week it was fixed). A POINT (`{version: "5.2.0"}`) states a single affected
+       version, not a range, and is printed as its own row instead of being folded in. */
+    const bounded = opBound || structured;
+    const pointOnly = !bounded && bounds.length > 0;
     const desc = (c.descriptions || []).find(d => d.lang === 'en')?.value || null;
     const prose = proseRange(desc);
     const ar = affectedRanges(c);
     return { id: c.id, status, configurations: (c.configurations || []).length > 0, cpe, affected: (c.affected || []).length > 0,
-      affectedVersions: vs.length, bounded, prose: !!prose, cnaRanges: ar.ranges.length, id_ok: true };
+      affectedVersions: vs.length, bounded, opBound, structuredBound: structured, pointOnly, unreadEntries,
+      boundSpelling: opBound ? (structured ? 'both' : 'operator-in-version')
+        : pointOnly ? 'point-only' : structured ? 'structured' : 'none',
+      prose: !!prose, cnaRanges: ar.ranges.length, id_ok: true };
   });
 
   const byStatus = {};
   for (const r of rows) {
     const s = (byStatus[r.status] = byStatus[r.status] || { n: 0, configurations: 0, affected: 0, afVersions: 0,
-      bounded: 0, neither: 0, proseOnly: 0, cnaOnly: 0, both: 0 });
+      bounded: 0, opBounded: 0, neither: 0, proseOnly: 0, cnaOnly: 0, both: 0 });
     s.n++;
     if (r.configurations) s.configurations++;
     if (r.affected) s.affected++;
     if (r.affectedVersions) s.afVersions++;
     if (r.bounded) s.bounded++;
+    if (r.opBound) s.opBounded++;
     if (!r.configurations && !r.affected) { s.neither++; if (r.prose) s.proseOnly++; }
     if (!r.configurations && r.cnaRanges) s.cnaOnly++;
     if (r.configurations && r.cnaRanges) s.both++;
@@ -2284,12 +2397,29 @@ function printRangeCensus(c) {
   console.log(`  affected but no versions[]  ${neitherNoVer.length}` +
     (neitherNoVer.length ? `  e.g. ${neitherNoVer.slice(0, 4).map(r => r.id).join(', ')} — the range is not in the record at all` : ''));
   console.log(`  range readable WITHOUT analysis (configurations absent, affected[] present with versions): ${cnaOnly}`);
+  /* WHICH SPELLING the bound came in. Printed because a selector that reads one spelling of a value
+     reclassifies records silently, and "we fixed it" has to be measurable rather than felt: the
+     operator-in-version row is the population `--range-census` could not see before 2026-11-06. */
+  const spellRows = ['structured', 'operator-in-version', 'both', 'point-only']
+    .map(k => [k, c.rows.filter(r => r.boundSpelling === k).length]);
+  console.log(`  bound spelling      ${spellRows.map(([k, n]) => `${k} ${n}`).join(' · ')}` +
+    (spellRows[1][1] ? `  e.g. ${c.rows.filter(r => r.boundSpelling === 'operator-in-version').slice(0, 4).map(r => r.id).join(', ')}` : ''));
+  console.log('    "operator-in-version" is `{version: "< 1.2.3"}` — a bound with no `lessThan` field.');
+  console.log('    It was counted as UNBOUNDED before 2026-11-06, and `point-only` (`{version: "5.2.0"}`)');
+  console.log('    as unbounded too; the two rows are what moved the `bounded` column, not a change in the data.');
   const noRangeAnywhere = c.rows.filter(r => !r.configurations && r.cnaRanges === 0 && !r.prose);
   const rejected = noRangeAnywhere.filter(r => r.status === 'Rejected').length;
   const noVersions = noRangeAnywhere.filter(r => r.status !== 'Rejected' && r.affected && !r.affectedVersions).length;
-  const complement = noRangeAnywhere.length - rejected - noVersions;
+  /* The third term used to be a residual computed by subtraction and LABELLED "a complement" — and
+     the 11-06 change moved 163 records into it whose `versions[]` values are prose (`n/a`, `Android
+     kernel`), not `unaffected` statuses. A residual bucket is a label nobody measured, so each term
+     is now counted from the record. */
+  const unreadOnly = noRangeAnywhere.filter(r => r.status !== 'Rejected' && r.affectedVersions > 0 &&
+    r.unreadEntries === r.affectedVersions).length;
+  const complement = noRangeAnywhere.length - rejected - noVersions - unreadOnly;
   console.log(`  no range from any field AND no prose match: ${noRangeAnywhere.length}` +
     `  = ${rejected} Rejected (no product by definition) + ${noVersions} listed a product but no versions` +
+    (unreadOnly ? ` + ${unreadOnly} listed a version FIELD holding prose (\`n/a\`, a product name) rather than a version` : '') +
     (complement ? ` + ${complement} listed only UNAFFECTED versions (a complement, not a range)` : '') +
     (noRangeAnywhere.length ? `\n    e.g. ${noRangeAnywhere.slice(0, 4).map(r => `${r.id} [${r.status}]`).join(', ')}` : ''));
   const proseRescued = c.rows.filter(r => !r.configurations && r.cnaRanges === 0 && r.prose);
@@ -2353,15 +2483,18 @@ function openBoundOf(cve, { allowRepo = false } = {}) {
         if (vs.length !== 1) { skips.push('multi-span'); continue; }
         const v0 = vs[0];
         if (v0.status && v0.status !== 'affected') { skips.push('no-affected-span'); continue; }
-        if (v0.lessThan) { skips.push('names-a-fix'); continue; }
-        if (v0.changes?.length) { skips.push('names-a-fix'); continue; }
-        if (!v0.lessThanOrEqual) { skips.push('unbounded'); continue; }
+        /* The bound is read through `versionBounds`, so `{version: "<= 3.1.11"}` is the same
+           open-bound shape as `{version: "0", lessThanOrEqual: "3.1.11"}` — and `{version:
+           "< 13.0.0"}` is the same NAMED-FIX shape `lessThan` is (11-06). */
+        const b0 = versionBounds(v0);
+        if (b0.namesFix || v0.changes?.length) { skips.push('names-a-fix'); continue; }
+        if (!b0.max || !b0.maxInc) { skips.push('unbounded'); continue; }
         /* A git RANGE IS NOT A VERSION RANGE — the same guard the remedy census had to add
            (2026-11-01, 211 empty spans that were `<sha>…<sha>`). Measured on this census's first
            week: `CVE-2026-117569` read `≤a608c74e99910232dd208fee99de860458672b82`, and a tag feed
            ordered by `cmpVer` turns that into a bound no release can satisfy. */
-        if (!/^\s*v?\d+(?:\.\d+)*/.test(String(v0.lessThanOrEqual))) { skips.push('git-range'); continue; }
-        candidates.push({ ecosystem: 'github', name: repo, max: v0.lessThanOrEqual, maxInc: true,
+        if (!/^\s*v?\d+(?:\.\d+)*/.test(String(b0.max))) { skips.push('git-range'); continue; }
+        candidates.push({ ecosystem: 'github', name: repo, max: b0.max, maxInc: true, spelling: b0.spelling,
           source: a.source || null, defaultStatus: d.defaultStatus ?? null });
         continue;
       }
@@ -2369,13 +2502,14 @@ function openBoundOf(cve, { allowRepo = false } = {}) {
       if (vs.length !== 1) { skips.push('multi-span'); continue; }
       const v = vs[0];
       if (v.status && v.status !== 'affected') { skips.push('no-affected-span'); continue; }
-      if (v.lessThan) { skips.push('names-a-fix'); continue; }
-      if (v.changes?.length) { skips.push('names-a-fix'); continue; }
-      if (!v.lessThanOrEqual) { skips.push('unbounded'); continue; }
+      const bv = versionBounds(v);
+      if (bv.namesFix || v.changes?.length) { skips.push('names-a-fix'); continue; }
+      if (!bv.max || !bv.maxInc) { skips.push('unbounded'); continue; }
       /* `defaultStatus` lives on the affectedData entry (`d`), not on the container wrapper (`a`)
          — the first version of this line read `a.defaultStatus` and printed `?` on all 17 rows of
          the live census, which is the "a field I did not read is not an absent field" shape. */
-      candidates.push({ ecosystem: REGISTRY_ECOSYSTEMS[eco], name, max: v.lessThanOrEqual, maxInc: true, source: a.source || null, defaultStatus: d.defaultStatus ?? null });
+      candidates.push({ ecosystem: REGISTRY_ECOSYSTEMS[eco], name, max: bv.max, maxInc: true, spelling: bv.spelling,
+        source: a.source || null, defaultStatus: d.defaultStatus ?? null });
     }
   }
   if (!candidates.length) return { bound: null, skips };
@@ -2701,13 +2835,20 @@ function namedFixesOf(cve, { allowRepo = false } = {}) {
     for (const d of a.affectedData || []) {
       const purl = d.packageURL || '';
       const eco = Object.keys(REGISTRY_ECOSYSTEMS).find(p => purl.startsWith(p));
-      if (!eco) { if ((d.versions || []).some(v => v.lessThan)) skip('no-packageurl'); continue; }
+      if (!eco) {
+        /* The skip must be measured with the same reader the selection uses, or a record whose fix
+           lives in the operator spelling is neither selected nor counted as skipped (11-06). */
+        if ((d.versions || []).some(v => versionBounds(v).namesFix)) skip('no-packageurl');
+        continue;
+      }
       const name = decodeURIComponent(purl.slice(eco.length)).replace(/^@/, '@');
       for (const v of d.versions || []) {
-        if (!v.lessThan) continue;
+        const b = versionBounds(v);
+        if (!b.namesFix) continue;              // a bound that names no fix is not this census's shape
         if (v.status && v.status !== 'affected') { skip('no-affected-span'); continue; }
-        if (!/^\s*v?\d+(?:\.\d+)*/.test(String(v.lessThan))) { skip('git-range'); continue; }
-        out.push({ ecosystem: REGISTRY_ECOSYSTEMS[eco], name, fix: v.lessThan, from: v.version ?? null, defaultStatus: d.defaultStatus ?? null });
+        if (!/^\s*v?\d+(?:\.\d+)*/.test(String(b.max))) { skip('git-range'); continue; }
+        out.push({ ecosystem: REGISTRY_ECOSYSTEMS[eco], name, fix: b.max, from: b.min ?? null,
+          spelling: b.spelling, defaultStatus: d.defaultStatus ?? null });
       }
     }
   }

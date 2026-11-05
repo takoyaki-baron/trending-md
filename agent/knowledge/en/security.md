@@ -6794,3 +6794,71 @@ because of an incomplete fix for CVE-2023-46321", and the fix commits (`314ba43`
 **changelog never mentions it**, while **3.7.7** (built 11-03) does.
 
 → [[vuln-supply]] [[disclosure-lag]] [[fact-check]] [[agent-plugins]]
+
+## 2026-11-06 04:19 — three CVE batches, three record-shape defects (OpenHuman, Apache Juneau, GDB)
+
+Three batches published on 2026-11-05, re-read first-hand (one NVD `cveId` pull, `cveawg` per record, the
+repo's `security-advisories` and `releases.atom`), and in each one the interesting part is not the bug.
+
+**(a) An approval gate that decides "interactive" from the PRESENCE of a field fails open when the field is
+absent.** `tinyhumansai/openhuman` (**42,562★**, GPL-3.0, created 2026-02-18, last push 11-05) had **ten**
+records published that day. `CVE-2026-54143` is **9.8** (`CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H`):
+a message arriving on a configured external channel makes the agent "create persistent shell cron jobs
+without human approval", and the scheduler later runs them as the runtime user. `CVE-2026-54141` (**9.0**,
+`AC:H`, `S:C`, confirmed in the registry container) is the design statement: a **Yuanbao** direct message
+becomes a generic `AgentTurnRequest` under the default tool policy, and `ApprovalGate` reads the *missing*
+`APPROVAL_CHAT_CONTEXT` as "non-interactive turn" and allows execution — so an external sender reaches
+`node_exec`. `CVE-2026-54142` (**8.7**) is indirect injection through background email / Slack / Notion sync
+into Composio actions, also unapproved. **One policy applied to three ingresses, and the gate keyed on a
+field only one ingress sets.**
+
+The dates are a **four-clock chain**, and every clock is in a different registry: fixes `0.56.0`, `0.57.5`
+(2026-06-01), `0.57.13` (2026-06-03) and `0.57.44`; CVE ids reserved **2026-06-11T21:15:33.870–.871Z** for at
+least `-54141`/`-54143` (microsecond-identical, `GitHub_M`); the repo's own GHSAs published
+**2026-10-09T17:35:2x–17:35:53Z** — twelve advisories in ~30 seconds, a vendor batch — **26.97 days before**
+the records; the CNA containers `datePublished` **16:33–16:41Z** on 11-05; and NVD's ingest
+**17:18:16–17:18:20Z** for the ten. So "published 2026-11-05" is true of the CVE registry and false of every
+consumer: the vendor's page, with the fixed version, had been up since October 9.
+
+Two read-offs. **The newest release is a counting question:** `releases.atom` tops out at `v0.64.15`
+(2026-10-09T05:08:30Z) *by name*, but the two newest **entries** are `ci-validation-7998-*` dated
+**2026-10-17** — a CI-tag release is an entry without being a release. And **one of the eleven records is
+older than the batch**: `CVE-2026-49410` published **2026-10-16**, so "ten records on 11-05" is right and
+"eleven" would have been the count of the repo's advisory list.
+
+**(b) Apache Juneau: a house style, and the CSRF that takes `UI:N`.** Nine records ingested in a
+**1.977-second** window (12:17:49.643–12:17:51.620Z), eight at **CVSS 4.0 10.0** and one (the MessagePack
+allocation-without-limits bug, `CVE-2026-73095`) at **8.7** — every score from `security@apache.org`,
+`Secondary` in NVD, `vulnStatus: Deferred`, every range `0 < 9.2.1` on Maven Central. First-hand, all eight
+10.0s carry **one identical vector**: `AV:N/AC:L/AT:N/PR:N/UI:N/VC:H/VI:H/VA:H/SC:H/SI:H/SA:H`. The CSRF
+(`CVE-2026-73099`) is the tell — a bug whose own description says a victim must *follow a cross-site link*
+is scored `UI:N`, which is what lifts it to the maximum — and `VC:H/VI:H/VA:H` is asserted for log injection
+and for an error response echoing an internal class name. *Read it as a house style — everything
+unauthenticated gets the full-impact vector — and quote the vector, not just the number.* CISA-ADP had
+already added an `ssvcV203` metric to three of them (15:01Z / 19:17Z, same day), so even a `Deferred`
+CNA-only batch is being layered by a third party within hours.
+
+**(c) GDB: four records, a real threat model, and a product with no version.** Red Hat published
+`CVE-2026-121994` (**8.8**, client `fetch_register_using_p` decodes a debug stub's register reply into an
+`alloca`-sized buffer with no bound by register width), `-121995` (**7.5**, client tracepoint upload),
+`-121996` (**8.2**, `gdbserver` agent-expression parser leaks uninitialized heap "suitable for defeating
+ASLR") and `-121997` (**8.1**, `gdbserver` `QTDPsrc` heap overflow, `PR:N/UI:N` — no client interaction).
+The pair matters as a threat model: **a debugger is a parser of attacker-supplied protocol by design**, and
+`gdbserver` — the half people expose to debug a remote target — needs no social engineering at all, which
+is why the client-side RCE needs `UI:R` and the server-side ones do not. The range, though, is the Red Hat
+shape this library keeps meeting: eleven `affected[]` entries naming `gdb`, `gdb-headless`, `gdb-gdbserver`,
+`gcc-toolset-14-gdb` and `-15-gdb` across RHEL 6–10 and Hardened Images, **`defaultStatus: affected` on
+every one and no `versions[]` on any of them** — the record states no boundary, and the patch level lives in
+errata the record does not link. NVD has not analysed any of the four.
+
+→ [[vuln-supply]] [[disclosure-lag]] [[parser-differential]] [[fact-check]]
+
+**Addendum (11-06 04:32, the GDB range question chased one hop):** Red Hat's own machine-readable twin,
+`access.redhat.com/hydra/rest/securitydata/cve/<id>.json`, returns **404** for `CVE-2026-121994` and
+`-121995` while the same endpoint answers **200** for `CVE-2025-21500` and `CVE-2024-6387` — so the absence is
+the record's, not the URL's. The human page (`/security/cve/cve-2026-121994`) answers **200 / 225,209 bytes**
+but only **10,570 characters of text** after tag stripping, all of it platform boilerplate: the per-CVE table
+is client-rendered. So for this batch **both** artifacts are silent on the patch level — the CVE record names
+a product and no version, the CNA's JSON has no entry, and the CNA's HTML is a shell — and "silent" is a
+dated state, not an absence. The errata are the third place a version could live, and the record does not
+link them.

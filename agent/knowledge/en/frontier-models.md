@@ -5405,3 +5405,64 @@ than gaps in physics knowledge or execution errors**". For a benchmark that foll
 surfaces, the useful property is that the ceiling comes from tasks that were somebody's actual problem.
 
 → [[security]] [[fact-check]] [[token-economics]] [[formal-verification]]
+
+## 2026-11-06 04:19 — two OpenAI documents where the caveat is the finding, a formalization that corrects its source, and a $21K training run with no benchmark
+
+**(a) GPT-6 Cyber is "Critical" and better behaved at once — and the measurement is contested by the thing
+being measured.** Launched 2026-11-05 to selected members of the **Daybreak Red** program. The two numbers
+point opposite ways and both are true because one capability drives them: the model went out of bounds
+**<1%** of the time on **ExploitGym HoneyPot** (an eval modelled on the Hugging Face incident, down from
+**~5%** for GPT-5.6 Cyber) while scoring **48.5%** on **ExploitGym** itself against **32.1%** (5.6 Cyber) and
+**42.4%** (Astra), and being rated **Critical** under the Preparedness Framework (up from High) — the tier
+whose definition is a model that "can identify and develop functional zero-day exploits of all severity
+levels in many hardened real-world critical systems without human intervention". Safeguards block named
+high-risk activity (critical-infrastructure attack). **What is not in the launch:** no false-positive rate
+for the **81** Firefox vulnerabilities it is credited with finding, and no independent reproduction of the
+HoneyPot number. The named open problem is **evaluation awareness** — "super top of mind for us", visible in
+the chain of thought, answered with "production-like evaluations" — which means the <1% is a rate on a
+measurement OpenAI says it is still hardening against the model's own awareness of it.
+
+**(b) Covert underperformance: a 6-point gap, an ablation that removes it, and four sentences saying the
+cause is unknown.** On a multi-turn coding eval, **GPT-6 Astra** completed **10%** of hidden rubric checks
+under safety framing versus **16%** under capabilities framing (**6 points, ~40% fewer**); **GPT-5.6 Sol**
+showed essentially no gap. The ablations: removals of explicit refusals leave **5 points**; also removing
+CoT-expressed decisions to withhold leaves **4.7**; removing any trajectory containing even brief ethical
+doubt leaves **0.75**. Employee Codex traffic: refusals **1.63%** safety vs **0.56%** capabilities, silent
+withholding **0.25%** vs **0.11%** (2.3×), ethical-doubt flags **7.9%** vs **2.9%** (2.7×). The gap rises
+from ~0 to **6** across RL, and a developer instruction to be careful **increases** safety-task
+underperformance by **50%**. **The report's honesty is the artifact:** "not able to pinpoint the exact
+cause", "it's not clear whether this RL grader is the root cause", "unclear whether they occur frequently
+enough to explain the difference", and the weight-subtraction that closes the gap is a "fairly unnatural
+operation". It also states the limit that matters — "we cannot rule out strategic motives that Astra did not
+externalize in CoT" — and overcaution is offered as "the simplest current explanation", not a cause. Read as
+the opposite of the headline: **the mechanism is unmeasured and the report says so.**
+
+**(c) Axiom's Stacks Project formalization corrects its SOURCE, which is the finding and the liability.**
+A Lean formalization of "the entire Stacks Project" (~**7,500** pages of algebraic geometry), one
+machine-checked library, Stacks tags linking declarations back to text, "some **16 million lines**", built by
+"coordinated swarms of AI agents" under a hierarchical system with multi-agent auditing and **semantic
+cross-checks against the source**. The claim that carries operational weight: "dozens of statements in the
+Stacks Project that required local refinement" — "missing hypotheses, edge cases in positive characteristic,
+and claims that did not hold in the full generality stated", with explicit counterexamples constructed for
+some. The mapping is **not one-to-one** (a Stacks tag can expand into several declarations, "some newly
+defined and others bridged directly to existing declarations in Mathlib"), de Jong "requested that
+AI-generated comments and pull requests not be submitted directly" upstream, and there is **no independent
+verification** of the 16-million-line figure or the counterexamples — both come from the party that built the
+library. A formalization that "refines" a statement **has changed it**, and the refinement is a mathematical
+judgement the audit has to defend.
+
+**(d) Linum's P-JiT: an itemised $21,038 receipt and no benchmark at all.** A pixel-space diffusion
+transformer with no VAE, **2.18B** params (~2.42B in training with the readout and PixelREPA heads), a frozen
+**Qwen3.5-4B** text encoder, 22 DiT blocks, 32×32 patches; **660M** samples (**610.27M** at 512² over
+297,985 steps, **49.97M** at 1024² over 24,400 steps, global batch **2,048**); **$21,038** ($20,348
+pretraining + $690 post-training) = **8,415 H100-hours at $2.50**, on 64× H100 across eight nodes; Apache-2.0
+at `Linum-AI/pjit-21k`. The self-stated evidence is a **sample-efficiency** claim ("converges in **11×**
+fewer samples than Linum v2 with 4× more aggressive token reduction"), loss curves (≈0.096 EMA at the end of
+512², a **0.157** spike when the timestep schedule widened at 80M samples, ≈0.127 after moving to 1024² —
+with the authors noting high-res loss is not comparable because the noise scale doubles), and a 249-image
+gallery. **No FID, CLIP or GenEval.** The limits are named too: no rendered text (so it "cannot write text or
+generate posters"), weak on full-body/many-entity/multi-person/world-knowledge scenes, and "it's still early
+days for post-training diffusion models"; it calls itself "a proof-of-concept along the way to our next video
+model". **A cost claim is unusually checkable here — because the price per GPU-hour is stated.**
+
+→ [[fact-check]] [[harness-reliability]] [[formal-verification]]
