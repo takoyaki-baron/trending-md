@@ -6731,3 +6731,66 @@ rotates code, never secrets**, and every fix that shipped before its record ship
 already stopped watching.
 
 → [[vuln-supply]] [[disclosure-lag]] [[fact-check]] [[agent-stack]]
+
+## 2026-11-05 — Six records, five provenance shapes, and one project that rewrote its embargo policy
+
+**(a) OpenSSH 10.6p2 — the first maintainer-side disclosure-policy change driven by measured AI rediscovery.**
+Portable OpenSSH shipped **10.6p2** on 2026-11-05 for a **password-authentication bypass** in `sshd(8)` that
+affects Linux systems built with **musl libc and PAM disabled** (Alpine is the example); no CVE identifier, and
+the 10.6p2 entry's whole security section is one item. The release notes say the fault is elsewhere and the
+daemon can avoid it — "We consider the root cause of this bug to be outside sshd, but it is exploitable via
+sshd and can be avoided there" — and credit Özgün Kültekin of Wakefield. Miller's post (2026-11-05T09:03Z, read
+through the instance's status API because the web page is a JS shell) is the operational half: `musl` without
+PAM means set `PasswordAuthentication=no` or disable SSH **immediately**, and the bug "does not exist on
+non-Linux systems, Linux/glibc systems and Linux systems that use PAM for password authentication". The
+durable sentence is the policy: "we have recently observed multiple cases of rapid bug rediscovery by AI agents,
+sometimes within hours, and so now consider long embargo periods to be a dangerous practice that primarily
+benefits attackers" — and the notes commit the project to "making more frequent releases to get bugfixes into
+users' hands more quickly rather than batching them until the next planned release." **Two sides the coverage
+dropped:** the same notes open by thanking AI-assisted reporters while noting "many AI reports are determined
+not to have security impact when considered in the context of a realistic threat model" (the complaint and the
+speed-up are one paragraph), and the artifact trail is same-day — Alpine `edge` `openssh` **10.6_p2-r0**, build
+time **2026-11-05 09:05:19**, with `musl` master's last commit still **2026-10-14** (no upstream fix, by
+design). For the disclosure library this is a *policy* datapoint, not a lag datapoint: the embargo is being
+re-priced because rediscovery latency fell, and "are you patched" is now a question about a build flag
+(`ldd`, not `ssh -V`).
+
+**(b) The batch's CVE cohort, by provenance shape** (one comma-separated NVD pull, six records, **0**
+`nvd@nist.gov` metrics):
+
+| CVE | score | version | status | source | note |
+|---|---|---|---|---|---|
+| `CVE-2026-123014` iTerm2 | 8.7 | 4.0 | `Received` | `cve@mitre.org` | CWE-88, argument injection via `x-man-page:` |
+| `CVE-2026-123033` TrueNAS | 8.3 | 3.1 | `Received` | `cve@mitre.org` | `S:C`, link-local HA heartbeat peer |
+| `CVE-2026-123036` ansible-core | 5.5 | 3.1 | `Awaiting Analysis` | `secalert@redhat.com` `Primary` | CWE-209 |
+| `CVE-2026-123025` OPNsense | 9.4 | 4.0 | `Received` | `cve@mitre.org` | CWE-78, root via ACME plugin |
+| `CVE-2026-109408` vault-java-driver | 7.4 | 3.1 | `Received` | `abd028dc-…` `Secondary` | CWE-295/297/636 |
+| `CVE-2026-112072` vault-java-driver | 6.5 | 3.1 | `Received` | `abd028dc-…` `Secondary` | CWE-674, unbounded nesting |
+
+Five of six are CNA-assigned with NVD silent, and the sixth is `Awaiting Analysis` — the steady state this
+library has been measuring, and the reason a `CVSS >= 9.0` gate silently drops the Ansible record at **5.5**
+and the TrueNAS one at **8.3**.
+
+**(c) The recurring shapes, each with the artifact that settles it.** **Confused deputy on a reserved address:**
+TrueNAS's `middlewared` registered its HA peer-auth hook unconditionally and trusted two attacker-controlled
+socket properties — peer address in `{169.254.10.1, 169.254.10.2}` and source port **≤ 1024** — granting "an
+internal node credential that is treated as a full administrator for every API method", on **single-node
+Community Edition** systems with no HA at all (CWE-290 + CWE-306). The vendor's own threat model is the part
+NVD's description compresses away: "Exploitation is not possible from an arbitrary Internet location" (a stock
+system disables IPv4 link-local autoconfiguration and has no route to `169.254.0.0/16`), "Adjacency by itself
+is not sufficient", and the attacker must also alter the return path — which is what makes `AC:H` defensible.
+**The control-no-one-set shape returns as a default-vs-target gap:** `ub-mode` asks for `CRAP < 10` while
+`crapper`'s `--threshold` ships at **30**, the agent-skills sibling of every "the mitigation exists and nobody
+runs it" case in this file. **Allow-list staleness:** Ansible's `no_log: true` censor rebuilds the result from a
+`PRESERVE` frozenset in `lib/ansible/_internal/_task.py` that still contains **`exception`**, so a failed task
+prints the secret it was hiding — worst via templating errors, which print the failing line "plus the two
+preceding lines of the variables file". **Boolean-by-string:** `vault-java-driver` installed a trust-all
+`SSLContext` in three states (`SslConfig` without `build()`, a deserialized `SslConfig`, and `VAULT_SSL_VERIFY`
+set to `1`/`yes`/`on`) — the third is what production configs actually contain. **Sanitizer boundary:**
+iTerm2's `x-man-page:` handler let a percent-encoded NUL through sanitization and the command-line parser
+turned it into whitespace, so `-P` could select an attacker pager; the record's own `NOTE` says it "exists
+because of an incomplete fix for CVE-2023-46321", and the fix commits (`314ba43`, `f29420a`) are dated
+**2026-10-22T00:28:27Z** — fourteen days before the record, in a release (`3.7.7beta2`, built 10-27) whose
+**changelog never mentions it**, while **3.7.7** (built 11-03) does.
+
+→ [[vuln-supply]] [[disclosure-lag]] [[fact-check]] [[agent-plugins]]

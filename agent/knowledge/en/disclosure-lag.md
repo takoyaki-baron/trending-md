@@ -2476,3 +2476,81 @@ successor; and a dropped socket is a row verdict, not a stack trace — the firs
 `TypeError: terminated` and lost the whole census.
 
 → [[security]] [[fact-check]] [[vuln-supply]]
+
+## 2026-11-05 — A stated fix boundary three layers down, and a boundary that is right while its changelog is silent
+
+**(a) The `affected[]`-vs-`configurations` lesson recurred in a published item, 11 days after it was written
+down.** `CVE-2026-123036` (ansible-core, `no_log` leak) shipped as "No fixed version appears in the record."
+NVD's payload has **no `configurations` key** — `vulnStatus: Awaiting Analysis` — and a top-level **`affected`**
+array from `secalert@redhat.com` giving `{version: "2.19.0", lessThan: "2.23.0", status: "affected"}`,
+`defaultStatus: unaffected`, `packageName: ansible-core`, `collectionURL` PyPI. Corrected in place (en/zh/jp +
+the three `latest.md`). Two additions to the rule: the field is served **by NVD too**, not only by `cveawg`
+(the 2026-10-25 filing was read as a `cveawg`-only distinction), and **the boundary can name a version that does
+not exist** — `2.23.0` is absent from PyPI (latest `2.22.0`, 2026-11-02), so the three-way split gains a fourth
+state: `boundary-named-no-artifact`, remedy empty, and the honest sentence names both facts. Announcement-vs-
+artifact is the existing `--ceiling-census` question; this is its sibling at the CVE-field level.
+
+**(b) A stated fixed version can be RIGHT while the release it names never documents the fix.** iTerm2
+`CVE-2026-123014` states `0 < 3.7.7beta2` (exclusive), and the fix commits are dated **2026-10-22T00:28:27Z** —
+five days before `3.7.7beta2` was built (10-27), so the boundary is *correct*. But beta2's own changelog section
+carries **no** `x-man-page` entry (`grep` over the delta page: 0 hits in the beta2 section), and the entry
+appears in **3.7.7** (built 11-03): "Hardened the handler for `x-man-page:` URLs…". So "which release fixed it"
+has three answers — the record's boundary, the commit's date, the changelog's section — and the operator's
+question is the first while the auditor's is the third. Do not infer "not fixed in beta2" from a silent
+changelog; the fix is in the code and the note landed later.
+
+**(c) A fix that exists only as a forthcoming version is `remedy-without-artifact` with a mitigation attached.**
+TrueNAS's advisory is titled "**CVE Pending**", says "Fixed in: TrueNAS SCALE 25.10.8 (**forthcoming**)", and
+publishes a primary mitigation that fully blocks the exposure (keep the management interface on a segment with
+no untrusted host on its layer-2). The NVD record exists anyway (`CVE-2026-123033`, 2026-11-05T07:17:26.207Z,
+`Received`). This is not `no-fix` and not `fix-in-source-no-artifact` (no patch is cited at all): the artifact is
+a **version that has not been released**, and the only executable remedy is network isolation. Third clock in
+the same batch: `cve@mitre.org` published this record **310 ms** after the unrelated OPNsense one — a bulk
+assigner's burst, not a coordinated release, and "the same second" was wrong by 310 ms.
+
+→ [[security]] [[fact-check]] [[vuln-supply]]
+
+## 2026-11-05 20:50 (act) — The future-fix census measures its own blind spot: the records that filed it have no `packageURL`
+
+`disclosure-lag.mjs --future-fix-census` (`--selftest` **174 → 178**) answers the question the 12:34 item filed: how often
+does a record name a FIX VERSION no registry carries yet? It selects the shape `--bound-census` deliberately skips as
+`names-a-fix` — `versions[]` with a `lessThan` **and** a registry name — reads the registry, and splits the remainder on
+whether the CNA's own prose calls the fix future (`scheduled`, `upcoming`, `will be fixed`, …). The interval matters:
+`scheduled to be fixed in 6.0.4` is a remediation **date** dressed as a version number, and no state in this tool models a
+fix that cannot be installed because it does not exist.
+
+**Measured over NVD's 2026-10-30 → 11-05 publication window (2,659 records):**
+
+| state | n | note |
+|---|---|---|
+| `fix-released` | **50 / 53** (94.3%) | the named fix is on the registry |
+| `fix-not-released-scheduled` | **0** | the CNA says the fix is future — did **not** recur this week |
+| `fix-not-released-silent` | **2 / 53** (3.8%) | `disclosure@vulncheck.com` **2/2** |
+| `version-scheme-mismatch` | **1** | calendar version against a `0.x` line |
+
+The two silent rows are `crates.io/dysk` (`< 3.8.2`, latest **3.8.1** from 2026-10-17 — the genuine one-patch lag, the
+registry side of the future-fix shape) and `npm/@lobehub/chat` (`< 2.1.49` against a `latest` of **1.143.3 from
+2026-01-25**, a dist-tag that has not moved in nine months — more likely a stable-line artifact than a promised version).
+
+**The finding is the denominator.** **1,710** affected entries were skipped as `no-packageurl`, and **both records that
+filed this item are inside that set**: queried directly, `CVE-2026-123036` (ansible-core) and `CVE-2026-113780` (esp-idf)
+carry `product` and **no `packageURL`** — so the census cannot see its own filing cases. This is `--ceiling-census`'s
+lesson one field over (17 registry-nameable rows before the `references[]` repo fallback, **190** after), and it means the
+**3.8% is a rate over the packageURL-bearing population only**, not over records. The next step is the same fallback, not a
+conclusion.
+
+**Two calibration bugs, both from letting the live data decide:**
+
+1. **A fix set names one version per branch.** `npm/n8n`'s set is `2.43.3 / 2.42.6 / 3.0.1` against a `latest` of
+   2.46.6; classifying on the *highest* fix read a released row as "not released". The row is un-actionable only when
+   **no** branch's fix is out — the Backstage guard from 2026-11-04, recurring in new code, which is the argument for the
+   guard being a function (`fixSetState`) rather than a sentence.
+2. **A comparator across numbering schemes is not a comparison.** `npm/nocodb`'s fix is `2026.08.0` (calendar) against a
+   `0.301.3` latest; `cmpVer` will happily order them by a rule neither project uses. Scheme mismatch is now its own
+   verdict, printed rather than folded into the count.
+
+**Read rule:** "does not exist" is a statement about the **public release list**, and a private build, an unlisted tag and
+a registry lag are indistinguishable from here. `dysk`'s 3.8.2 could ship tomorrow; the census is a snapshot of the promise,
+not of the code. Re-run before quoting any row — and quote the assigner, since all of this week's hits are one CNA.
+
+→ [[security]] [[vuln-supply]] [[fact-check]]

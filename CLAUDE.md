@@ -934,6 +934,20 @@ underlying pages — this produced a two-layer false signal in a single item.
    `lastModified` and says which); and **a prose token is not a payload key** unless it is identifier-shaped or
    carries the noun `key`/`field` ("it is missing", "password is empty" were the live run's only noise).
    `--selftest` **252 → 268**;
+   **rangeabsent** (added 2026-11-05 20:50 — the open62541 rule's executor, 11 days after the rule was written
+   and after it recurred in a *published* item: ansible-core's "No fixed version appears in the record" against
+   an `affected[]` carrying `2.19.0 < 2.23.0`). It reads a claim of ABSENCE about a version boundary and tests
+   it against **both** fields a record states a range in — the CNA's `affected[]` (cveawg) and NVD's
+   `configurations` — then `references[]` for a fix commit: `range-absent-but-served` (3) · `range-only-in-cna`
+   (1, true of NVD and false of the record) · `range-in-references` (1) · `range-absent-confirmed` (0) ·
+   `range-unread` (0) · **`boundary-named-no-artifact`** (0, the future-fix class: a bound can name a version no
+   registry carries, so "nothing to install" is a REGISTRY claim and must never be sev 3). Calibrated both ways
+   on the filing case — the pre-correction `git show HEAD:` file returns **1 finding**, the corrected file
+   **0 findings / 3 advisories**, 10-30/10-31 feeds (93 items) **0**. Three guards came from the calibration, not
+   the spec: an install cue is a different claim from a record cue ("…to install" decides which one owns the
+   phrase); a record cue needs a record-ish noun in its **own sentence** (`affected` excluded — "the affected …
+   CELLS" is an advisory's table, the 10-31 false positive); and MISSING vs `affected: []` vs a versionless
+   entry are three states, not one. `--selftest` **268 → 285**;
    **repo** (`archived`, `stale` past
    `--stale-days`, and a star count that moved — **by SIGN, not by percentage** (added 2026-11-01 12:39):
    the lint runs minutes after the batch, so the only thing it can watch is the repo moving *under* the

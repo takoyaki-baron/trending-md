@@ -2053,3 +2053,67 @@ PCIe Gen4 ×16 上 **548 GB/s**——没有 NVLink、没有主机内存一致性
 重跑它——同一条规则让 lint 自己的三条裁决变成了词表 bug。
 
 → [[security]] [[vuln-supply]] [[frontier-models]] [[datacenter-silicon]]
+
+## 2026-11-05 —— 每个检查只读一个产物，错误都发生在「连接处」
+
+20:29 这批用 `claim-unit-lint.mjs` 跑出 **0 findings / 101 条判定**，而人工复核对同一份文件找出了 **五处缺陷**。
+它们不是随机的：每一处都是关于*两个产物之间关系*的断言，而库里每个检查只读一个。这个分类法是可复用的部分——
+检查器只能证伪它为它而建的那个单位，所以在每个连接点获得执行器之前，人工复核就是它们唯一的家。
+
+**(a) 字段 ↔ 记录。** 第 42 条结句是「记录里此刻没有修复版本」。`CVE-2026-123036` 的 NVD 载荷**没有 `configurations` 键**
+（`vulnStatus: Awaiting Analysis`）——却带一个来自 `secalert@redhat.com` 的顶层 **`affected`** 数组，写明
+`{version: "2.19.0", lessThan: "2.23.0", status: "affected"}`、`defaultStatus: unaffected`。记录*确实*写了修复边界，
+而那句话只读了一个字段就对整条记录下结论。这正是 **2026-10-25 open62541 规则在 11 天后复发**：规则写在 CLAUDE.md 的散文里，
+而散文规则不会在生成时触发（这正是 lint 存在的原因）。修正后的句子比原文更有用的另一半是：`2.23.0` **在 PyPI 上还不存在**
+（最新 `2.22.0`，2026-11-02 上传），所以诚实的写法是两个事实——边界有名字，但仍然没有可安装的东西。
+
+**(b) 行 ↔ 分节。** 第 37 条说「其中三行在长上下文」，点名 HELMET-Rerank 56.2 对 60.0、InfiniteBench 46.5 对 48.0、
+ChineseSimpleQA 73.0 对 75.3。手工重算 ERNIE 的表格（30 个基准行，**24 胜 / 6 负**——这批的比值完全正确，这是课的另一半）
+后，前两行在表格自己的 **Long Context** 分节里，ChineseSimpleQA 在 **Knowledge** 分节。`ratio` 检查返回
+`table-columns-unresolved` 并建议人工数行——它不读分节标题，所以一行的*分组*对它是不可见的。**表格的分节标题是表格对自己的断言**，
+而按基准*名字*而不是按页面自己的标题分组，就是「长上下文」吞下一个中文问答基准的方式。
+
+**(c) 依赖方 ↔ 被依赖方。** 第 39 条把「硬阈值 CRAP `< 10`」记在 `crapper` 名下、`>= 0.8` 记在 `dryer` 名下。两个数字都真实存在——
+但存在于 `ub-mode` 的 `SKILL.md`（「Reduce each function under CRAP 10」）和它的 README 里。工具自己的默认值是
+**30**（`crapper --threshold`）与 **0.82**（`dryer --threshold`），所以这两道关卡是 ub-mode 的*目标值*而非工具行为，
+调用者不传数字就什么都没被强制。读者是在用技能自证技能——那是唯一不可能反驳的来源。**当某个产物的论点是「工具 X 强制执行规则 Y」，
+这条断言需要 X 的页面，而不是依赖方的页面。**
+
+**(d) 句子 ↔ 句子。** 第 43 条把 `"The panel is 120 Hz, and 120 frames a second has not been reached."` 作为一句引文发布。
+两半都存在于那份测量文档里，但在不同位置、不同语法形态（setup 表格单元格 `1080 x 2400 at 120 Hz`，以及文档开头
+`**120 frames a second has not been reached**: not on hakios-metal, not on metal2vulkan, and not on OpenGL ES.`）。
+`quotation` 检查放过了它，因为它 grep 的是**片段**，而两个片段都在；把两个真实片段融合成一句是没有任何页面支持的断言，
+而这恰恰是去空白与省略号规则让它*更容易*通过的那种形状。引文要么按来源位置拆开，要么这个引用就是从事实拼装出来的虚构。
+
+**(e) 记录 ↔ 记录。** 第 41 条说 `cve@mitre.org`「与第 46 条里那个不相干的 OPNsense 记录在同一秒发布」。实测：
+`CVE-2026-123033` 在 `07:17:26.207Z`，`CVE-2026-123025` 在 `07:17:25.897Z`——相差 **310 毫秒**，跨过了秒边界，
+所以「同一秒」在让批量 CNA 的故事显得比分秒更紧凑的方向上是错的。两条记录之间的时长是两个亚秒时间戳的连接，
+按天粒度读的读取器看不见；请引用那两个瞬时。
+
+**而且墙是一个 (URL, TLS 客户端, 请求) 三元组——user-agent 字符串不是客户端。** `openai.com` 的 Images 2.6 文章对 `curl`
+四次尝试都回 **403 加一个「Enable JavaScript and cookies to continue」页面**——其中包括使用 `doc-twin.mjs` 所用的同一个
+Chrome 141 UA 字符串——而**用同一字符串的 Node `fetch` 返回 200 / 428,571 字节 / 8,662 字符正文**，两个方向各复现 2/2。
+所以 2026-11-01 的 `--ua-census` 教训还需要多一个轴：两个发送**完全相同头**的客户端会不一致，因为它们的 TLS 指纹不同，
+这意味着「我用浏览器 UA 重新探测了」仍可能是在描述探测器本身。实用形式：当某页面被引用来支撑引文而第一个客户端撞墙时，
+换一个*运行时*（`node -e "fetch(...)"`），而不是换一个字符串；并且永远不要让单客户端的 403 变成「页面没这么说」。
+
+→ [[security]] [[disclosure-lag]] [[frontier-models]] [[agent-plugins]]
+
+## 2026-11-05 20:50（执行）—— 字段↔记录的连接有了执行器，而校准在日志之前先发现了护栏
+
+20:29 批次里的缺陷 (a) 现在成了一条命令：`claim-unit-lint.mjs --check rangeabsent`（进入默认集，`--selftest` **268 → 285**）。它读取关于版本边界的**缺失**断言——「no fixed version」「states no affected range」「names no version」——绑定到它自己句子里的 CVE，然后对照记录可以声明范围的**两个**字段：CNA 容器的 `affected[]`（cveawg，不计费）与 NVD 的 `configurations`，再加 `references[]` 里的修复提交。不额外增加调用：NVD 那一次拉取和 `cnaState` 条目都是 `cvss`/`cwe` 已经付过的。
+
+判定：`range-absent-but-served`（sev 3）· `range-only-in-cna`（sev 1，对 NVD 为真、对记录为假）· `range-in-references`（sev 1，无范围但有修复提交）· `range-absent-confirmed`（sev 0）· `range-unread`（sev 0——读不到永远不等于缺失）· `boundary-named-no-artifact`（sev 0）。
+
+**双向校准才是可信的理由。** 对修正前的 `11-05` 文件（`git show HEAD:`）它恰好返回 **1 个 finding**——第 42 条的「No fixed version appears in the record」，而对上的 `affected[]` 里写着 `2.19.0 < 2.23.0`。对修正后的工作文件：**0 findings / 3 条提示**。这个检查是在**订正之后**才写的，所以唯一能证明它有效的方式，就是拿写错的那份文件去跑——只在修好的文本上校准过的检查，什么都没测到。
+
+**四条护栏，其中三条是这次校准买来的：**
+
+1. **关于注册表的断言不是关于记录的断言。** 修正后的句子以「there is still nothing to install」结尾，而这之所以为真，恰恰因为 `2.23.0` 不在 PyPI 上。把两套 cue 合在一起，会把修复本身变成 finding——那是检查器绝不能有的失效模式。所以 `INSTALL_ABSENT` 有独立判定，永不 sev 3。
+2. **缺失断言是关于某个产物的。** 在 10-30/10-31 两天（93 条）上校准，第一版返回一条命中——10-31 第 38 条：「the affected and patched cells both read `latest`, so the advisory names no version boundary at all」，它对 GHSA 的单元格为真、对任何记录都不为假，而同一条目两句之前就写着「Fixed in 0.1.77」。记录类 cue 现在需要它自己句子里有记录类名词，而 `affected` 被**故意**排除（「the affected … CELLS」是公告的表格）。
+3. **「…to install」决定这句话归哪个 cue。** ESP-IDF 的「anyone on the 6.x line has no version to install」经由 `has no version` 命中记录模式，对一条正确条目报了 sev 3；现在由匹配之后的尾巴决定。
+4. **缺失与 `[]` 是两种状态**（`affected.key: absent|empty|populated`），即 `metrics: {}` 那一课挪一个字段——而一条没有 `versions[]` 的条目是一个**产品**、不是范围（Red Hat 的形态），这一点写在 detail 行里，而不是悄悄放过。
+
+可迁移的规则：**当一条写下来的规则仍在复发，下一步不是把规则喊得更响，而是把它收得更窄。** 这个检查的好坏完全取决于它的 cue 词表，而上面每一条护栏，都是散文规则本会误报的句子。
+
+→ [[disclosure-lag]] [[security]]

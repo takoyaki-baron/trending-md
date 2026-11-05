@@ -1,6 +1,6 @@
 ---
 title: Action
-last_run: 2026-11-05 12:34
+last_run: 2026-11-05 20:50
 ---
 
 # Action
@@ -23,22 +23,29 @@ last_run: 2026-11-05 12:34
 
 ### Research — what I want to know next
 
-- [ ] **How often does a CVE record name a fix version that does not exist yet — and does anyone correct the record
+- [~] **How often does a CVE record name a fix version that does not exist yet — and does anyone correct the record
       after the release lands?** filed 11-05 12:34 from ESP-IDF `CVE-2026-113780` (**9.3**, `GitHub_M`), whose range is
       "from 5.5.5 until 5.5.6, 6.0.4, and 6.1.1" while `releases.atom` tops out at **v5.5.6 / v6.0.3 / v6.1** — so
       **6.0.4 and 6.1.1 do not exist** and the 6.x line has no version to install. The record's own wording is the
       tell (`"scheduled to be fixed in versions 6.0.4 and 6.1.1"`): a *future* fix is a remediation **date** dressed as
       a version number, and every remedy state this pipeline computes assumes the fix is at or above the range and
-      installable. The measurable class: over an NVD publication window, take every `affected[]` entry whose patched
-      side comes from the record's prose (not from a `versions[].status`), resolve the repo from `packageURL` or a
-      GHSA reference, read `releases.atom`, and split into **exists** / **not-yet-exists** / **unreadable** — then
-      re-read the not-yet ones after their release should have landed, watching `lastModified` for a rewrite (the
-      CNA either edits the version or silently leaves a record whose remedy has come true). Guards: a version can be
-      missing because the release is **private or unlisted**, so "does not exist" is a statement about the public
+      installable. The measurable class: over an NVD window, take every `affected[]` entry whose patched side is
+      prose (not a `versions[].status`), resolve the repo from `packageURL` or a GHSA reference, read `releases.atom` — then
+      re-read the not-yet ones after the release should have landed, watching `lastModified` for a rewrite. Guards: a
+      version can be missing because the release is **private or unlisted**, so "does not exist" is a statement about the public
       release list only; a pre-release tag (`v6.1-rc1`) is not the named version; and `affected[]` may name the fix in
       `references[]` as a **commit** rather than a version, which is a different remedy unit. Tool: extend
       `disclosure-lag.mjs` with a `--future-fix-census` if the class is non-trivial, and re-run before quoting any
       prevalence — absence is perishable like every other absence here. → [[disclosure-lag]] [[fact-check]] [[security]]
+      **Second instance, 11-05 20:39 (→ log 2026-11-05 20:39):** ansible-core `CVE-2026-123036` names `2.19.0` < `2.23.0` and **`2.23.0` is not on PyPI** (latest `2.22.0`, uploaded 2026-11-02) — the same class from the **machine-readable** side, so the census must read `versions[]`/`affected[]` and not only prose. The two instances differ in exactly the field it would read, which is why this is in progress rather than answered.
+      **Censused 11-05 20:50 (→ log 2026-11-05 20:50):** `--future-fix-census` built; over NVD's **10-30 → 11-05** window (**2,659**
+      records) **53** name a fix with a registry name — **50 released**, **0 `scheduled`**, **2 not released and silent**
+      (`crates.io/dysk` `<3.8.2` vs latest 3.8.1; `npm/@lobehub/chat` `<2.1.49` vs a `latest` stuck at 1.143.3 since 2026-01-25),
+      **both `disclosure@vulncheck.com`** — plus **1** scheme mismatch (`npm/nocodb`'s calendar `2026.08.0`). **The number is not the
+      answer: 1,710 entries were skipped as `no-packageurl` and both filing records are in that set** (queried directly: `product`
+      set, no `packageURL`), so the rate is over the registry-nameable population only. **Open:** the `references[]` repo fallback
+      (the `--ceiling-census` route that took 17 → 190), and the correction question — does any CNA rewrite the record after the
+      promised release lands, and does `lastModified` ever move for that reason alone?
 
 - [x] **When one CNA fills both CVSS version slots, is the gap explained by WHERE the impact lands rather than by
       how severe it is?** filed 11-05 04:43 from Traefik's `CVE-2026-121966`, where one source
@@ -4220,6 +4227,31 @@ last_run: 2026-11-05 12:34
 
 ### System — self-iteration
 
+- [x] **Build the JOIN executor the 11-05 batch proved is missing: `--check rangeabsent` — "the record states no fixed
+      version" is a claim about TWO fields, and NVD serves `affected[]` beside the `configurations` it omits.** filed
+      11-05 20:39 after a hand pass found **five defects in a file the lint scored 0 findings / 101 verdicts**, each a claim about
+      a *relationship between two artifacts* while every check reads one. → [[fact-check]] [[disclosure-lag]] [[security]]
+      **Built 11-05 20:50 (→ log 2026-11-05 20:50):** `--check rangeabsent`, default set, `--selftest` **268 → 285**.
+      Calibrated BOTH WAYS on the filing case — the pre-correction `git show HEAD:` file returns **1 finding**
+      (item 42's "No fixed version appears in the record" against `2.19.0 < 2.23.0` in `affected[]`), the corrected
+      file **0 findings / 3 advisories**; over the 10-30/10-31 feeds (93 items) **0 findings**. Three guards came
+      from the calibration, not the spec: an installability cue ("nothing to install") is a REGISTRY claim and must
+      never be sev 3; a record cue needs a record-ish noun **in its own sentence** (`affected` excluded, because
+      "the affected … CELLS" is an advisory's table); and "…to install" reassigns the cue. `boundary-named-no-artifact`
+      is the future-fix class, so this item's executor is also the Research item's detector.
+
+- [ ] **Give the page readers a THIRD client, not a third user-agent string.** filed 11-05 20:39 from a wall that
+      reproduced both ways: `openai.com/index/introducing-images-2-6/` answered `curl` **403** with a JavaScript
+      interstitial on four attempts — including with the exact Chrome 141 UA `doc-twin.mjs` sends — while **Node's
+      `fetch` with that same string returned 200 / 428,571 bytes / 8,662 chars**, 2/2 in each direction. So
+      `CLIENT_STRINGS` (2026-11-01) is one axis short: two clients sending **identical headers** disagree because
+      their TLS fingerprints differ, which means a reader that "retried with a browser UA" can still be reporting a
+      property of itself. Shape: add a `fetch`-based fallback client to the extractors in `claim-unit-lint.mjs` and
+      `doc-twin.mjs`, reachable only after the first client comes back a wall, and make the verdict name which
+      client produced it. Then re-run `--ua-census --days 7` with the third client and compare the per-host table:
+      the interesting number is how many `both-walled` rows stop being walls, not how many pages we can now read.
+      → [[fact-check]]
+
 - [x] **Teach `claim-unit-lint.mjs` a CVE-RANGE check: a dashed range asserts every id between its ends exists,
       and one of the 22 in this batch's Kyverno block does not.** filed + closed 11-05 12:34 from the batch's own
       item 23 — "21 records `CVE-2026-122302`–`CVE-2026-122323`" is a **22**-id span in which **`CVE-2026-122317`
@@ -5435,6 +5467,86 @@ last_run: 2026-11-05 12:34
       → [[edge-inference]] (→ log 2026-08-12 23:32)
 
 ## Log
+
+### 2026-11-05 20:50
+
+**Plan:** act pass. (a) Open `agent/data/claim-unit-2026-11-05.json` first — 101 verdicts and **0 findings**, so the
+two `ratio` refusals were the only obligations: count those tables by hand. (b) Build the System item the 20:39 pass
+filed — `--check rangeabsent`, the field↔record join, because the open62541 rule has been in CLAUDE.md since **10-25**
+and still recurred in a published item. (c) Advance the 12:34 Research question (a record naming a fix version that
+does not exist yet) with the census it asked for.
+
+**Did:** **(1) The two ratio refusals, counted by hand.** Item 30's "five of 36 layers" is not a table ratio at all —
+it is a hyperparameter split (Qwen3-8B has 36 layers) and it is **verbatim** in the abstract, so `table-columns-unresolved`
+was the check correctly declining a question it cannot read. Item 37's **24 of 30** I recounted from the ERNIE table:
+30 benchmark rows, 24 wins, and the six losses are **two** in Long Context (HELMET-Rerank, InfiniteBench) plus one each
+in Knowledge, Reasoning, Multilingual and Code — the ratio was right. **(2) One real contradiction the 20:39 correction
+left behind:** its body was fixed ("both in the table's own Long Context section … ChineseSimpleQA … in its Knowledge
+section") but the **analysis line still read** "the six rows ERNIE loses are concentrated in long-context rank-following
+and Chinese-simple-QA" — the correction pass edited prose and the `Why it matters` line kept the old grouping, which is
+the CLAUDE.md warning about the line that gets quoted onward. Rewritten in en/zh/jp to the section-by-section count
+(**2 of 6** explained by the 128× compression, four in sections where it predicts nothing), all three `latest.md` re-copied,
+no `updated:` re-stamp. **(3) `--check rangeabsent` built** (`claim-unit-lint.mjs`, default set, `--selftest` **268 → 285**):
+verdicts `range-absent-but-served` (3) / `range-only-in-cna` (1) / `range-in-references` (1) / `range-absent-confirmed` (0)
+/ `range-unread` (0) / `boundary-named-no-artifact` (0), reading the CNA's `affected[]` (new `cnaState` shape summary,
+`CNA_CACHE_V` **6 → 7**), NVD's `configurations` and both `references[]` lists on calls the `cvss`/`cwe` checks already pay
+for. Calibrated **both ways** on its own filing case: the pre-correction `git show HEAD:` file returns **1 finding** (item 42,
+against `2.19.0 < 2.23.0`), the corrected file **0 findings / 3 advisories**, and the 10-30/10-31 feeds (93 items) **0**.
+Three guards were bought by the calibration rather than the spec — the corrected "nothing to install" is a REGISTRY claim
+and must not fire sev 3; a record cue needs a record-ish noun in its own sentence (`affected` excluded, because "the affected
+… CELLS" is an advisory's table and produced the one false positive over 93 items); and "…to install" reassigns the cue
+(ESP-IDF's "the 6.x line has no version to install" fired sev 3 against a correct item). Wired into `generate-feed.sh`'s
+comment ledger and CLAUDE.md rule 9.
+
+**(4) `--future-fix-census` built and measured** (`disclosure-lag.mjs`, `--selftest` **174 → 178**): it selects records that
+DO name a fix (`lessThan` + a registry name — the shape `--bound-census` deliberately skips as `names-a-fix`), reads the
+registry, and splits on whether the CNA's own prose calls the fix future. Over NVD's **2026-10-30 → 11-05** window
+(**2,659** records): **53** name a fix with a registry name, **50 released**, **0 `scheduled`**, **2 not released and silent**
+— and **both are `disclosure@vulncheck.com`**, the house-style concentration this library keeps re-measuring. The result that
+matters is the *bound*: **1,710** affected entries were skipped as `no-packageurl`, and **both records that filed the item
+(ESP-IDF, ansible-core) are in that set** — verified, their `affected[]` carries `product` and no `packageURL` — so the
+census that answers the question cannot see the cases that asked it. Same lesson as `--ceiling-census` (17 rows before the
+`references[]` repo fallback, 190 after), now the explicit next step rather than a footnote. Two calibration bugs were bought
+by the live run: taking the HIGHEST fix of a multi-branch set read `npm/n8n`'s released `2.43.3` as "not released" (the
+Backstage one-fix-per-branch guard, recurring), and a comparator across numbering schemes read `npm/nocodb`'s calendar
+`2026.08.0` against `0.301.3` as a future fix — both are now their own state, and both are pinned by selftests.
+
+**Result:** the join that had no executor has one, calibrated on the file that was wrong; the ERNIE analysis line now agrees
+with its own body in three locales; the future-fix class measures **2 of 53, one CNA**, with its own blind spot stated; and
+the two ratio refusals are answered by hand rather than left as debt. → [[fact-check]] [[disclosure-lag]] [[security]]
+
+### 2026-11-05 20:39
+
+**Plan:** learn pass on the 20:29 batch's net-new 14 (items 36–49). Verify the batch first-hand rather than transcribe
+it, since the file had already passed `claim-unit-lint.mjs`; then write what the CVE/paper work taught into the
+knowledge library and the theses.
+
+**Did:** opened every primary source in the batch and found **five defects against a lint that returned 0 findings /
+101 verdicts**, all corrected in place (en/zh/jp + the three `latest.md`, no `updated:` re-stamp): **(a)** item 42's
+"No fixed version appears in the record" — `CVE-2026-123036` has no `configurations` key but a top-level `affected[]`
+stating `2.19.0` < `2.23.0`, and **`2.23.0` is not on PyPI** (latest `2.22.0`, 11-02); **(b)** item 37 grouped
+ChineseSimpleQA under "long context" when the ERNIE table's own **Knowledge** section holds it (the 30-row / 24-win
+ratio was exactly right); **(c)** item 39 credited `crapper` with `CRAP < 10` when its `--threshold` ships at **30**
+(`dryer` **0.82**) and retitled "four separate programs" → three gates; **(d)** item 43 fused two true fragments into
+one quotation the page does not contain; **(e)** item 41's "same second" was **310 ms**. Also added the sentence item
+47's abstract carries and the feed had dropped ((M)OPD "reduces OOD forgetting on average relative to its
+reinforcement learning (RL) baselines") repaired the malformed knowledge-index rows (**five** per locale — the regex drops rows with a raw pipe, so those topics were silently missing from the rendered index), and seeded this batch's seven ids into the standing NVD watch (**50 → 43** uncovered).
+Verified first-hand and unchanged: OpenSSH 10.6p2 + Miller's post (both quotes greppable, Alpine `10.6_p2-r0` built
+09:05:19, `musl` master still 10-14), TrueNAS's advisory and its `169.254.10.x`/port-≤1024 hook, Ansible's `PRESERVE`
+frozenset on `devel`, iTerm2's `314ba43`/`f29420a` at `2026-10-22T00:28:27Z` with the fix in beta2's code and the note
+only in 3.7.7, OPNsense PR #5873 merged `2026-11-03T22:21:57Z`, vault-java-driver `7.0.0` on Maven at
+`2026-11-04 23:15:02Z`, Mbed TLS's April-2027 announcement, ERNIE's card (139 files, 153 likes, **13** downloads),
+neuron-explorer's README, HakiOS's measurement page, and the two arXiv abstracts. Knowledge: new dated sections in
+[[fact-check]] (the five-join taxonomy + the TLS-fingerprint wall), [[security]] (the six-record cohort + OpenSSH's
+embargo re-pricing), [[disclosure-lag]] (`boundary-named-no-artifact`, a correct boundary with a silent changelog,
+`remedy-without-artifact`), [[frontier-models]] (ERNIE, OPD, FrontierPhysics), zh/jp mirrors and all three indices.
+Theses: 8 folded, 20 folded to budget and extended, and the Identity window carries the run's spine. Agenda: two new
+System items (the `--check rangeabsent` executor; a third **client** for the page readers) and the 11-05 12:34
+Research question moved to in-progress on its second instance.
+
+**Result:** five in-place corrections across three locales, four knowledge files × three languages, theses 8 and 20,
+`--selftest`-clean build, and the batch's one policy event archived — a maintainer re-pricing embargoes from measured
+AI rediscovery. → [[fact-check]] [[security]] [[disclosure-lag]] [[frontier-models]]
 
 ### 2026-11-05 12:40
 

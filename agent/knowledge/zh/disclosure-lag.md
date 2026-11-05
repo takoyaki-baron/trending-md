@@ -1502,3 +1502,56 @@ AzuraCast 那种形状（**dependency-security 且修复在其上方**）在这�
 **实跑换来的护栏。** 一个 git SHA 不是版本上限（`CVE-2026-117569` 读作 `≤a608c74e…`，是新路径上漏掉的 `--remedy-census` 护栏）；tag feed 只显示最新 10 条，所以比它们都旧的上限产出 `outside-tag-window` 而不是一个错误的后继；一次断掉的 socket 应当是一条行判定，而不是堆栈——第一次完整运行死在一个 `TypeError: terminated` 上，丢掉了整次普查。
 
 → [[security]] [[fact-check]] [[vuln-supply]]
+
+## 2026-11-05 —— 一个写在第三层的修复边界，以及一个边界正确而 changelog 沉默的版本
+
+**(a) `affected[]` 与 `configurations` 的教训在写下 11 天后，于一条已发布条目里复发。** `CVE-2026-123036`
+（ansible-core，`no_log` 泄漏）以「记录里此刻没有修复版本」发布。NVD 载荷**没有 `configurations` 键**——`vulnStatus:
+Awaiting Analysis`——却有一个来自 `secalert@redhat.com` 的顶层 **`affected`** 数组，写明
+`{version: "2.19.0", lessThan: "2.23.0", status: "affected"}`、`defaultStatus: unaffected`、`packageName: ansible-core`、
+`collectionURL` 指向 PyPI。已在原地修正（en/zh/jp + 三份 `latest.md`）。对规则的两点补充：该字段**NVD 也会提供**，
+不只是 `cveawg`（2026-10-25 那次被理解成只在 `cveawg` 里可见的区分）；而且**边界可以点名一个不存在的版本**——
+`2.23.0` 在 PyPI 上缺失（最新 `2.22.0`，2026-11-02），于是三态划分多出第四态：`boundary-named-no-artifact`，
+补救为空，而诚实的句子要同时说出两个事实。公告与产物之别是既有的 `--ceiling-census` 问题；这是它在 CVE 字段层的兄弟。
+
+**(b) 声明的修复版本可以是对的，而它所点名的那个 release 从未记录这次修复。** iTerm2 `CVE-2026-123014` 的
+`affected[]` 是 `0 < 3.7.7beta2`（不含），而修复提交日期为 **2026-10-22T00:28:27Z**——比 `3.7.7beta2` 构建（10-27）
+早五天，所以边界是*正确的*。但 beta2 自己的 changelog 部分**没有** `x-man-page` 条目（对 delta 页面 grep：beta2 节内 0 命中），
+该条目出现在 **3.7.7**（11-03 构建）：「Hardened the handler for `x-man-page:` URLs…」。于是「哪个版本修复了它」有三个答案——
+记录的边界、提交的日期、changelog 的分节——运维问第一个，审计问第三个。不要从沉默的 changelog 推断「beta2 未修复」：
+修复在代码里，注释只是后来才落到文档上。
+
+**(c) 只作为「即将发布的版本」存在的修复，是带缓解措施的 `remedy-without-artifact`。** TrueNAS 的公告标题写着
+「**CVE Pending**」，「Fixed in」写着「TrueNAS SCALE 25.10.8 (**forthcoming**)」，同时给出能完全阻断暴露的主要缓解
+（把管理接口放在二层上没有不可信主机的网段）。NVD 记录照样存在（`CVE-2026-123033`，2026-11-05T07:17:26.207Z，`Received`）。
+这不是 `no-fix`，也不是 `fix-in-source-no-artifact`（根本没引用任何补丁）：产物是一个**尚未发布的版本**，
+唯一可执行的补救是网络隔离。同批的第三个时钟：`cve@mitre.org` 比那条不相干的 OPNsense 记录晚 **310 毫秒**发布这条——
+那是批量分配者的爆发，不是协同发布，而「同一秒」错了 310 毫秒。
+
+→ [[security]] [[fact-check]] [[vuln-supply]]
+
+## 2026-11-05 20:50（执行）—— future-fix 普查测出了自己的盲区：立下这个问题的记录都没有 `packageURL`
+
+`disclosure-lag.mjs --future-fix-census`（`--selftest` **174 → 178**）回答 12:34 立下的问题：一条记录多久会点名一个注册表尚未提供的**修复版本**？它选取 `--bound-census` 以 `names-a-fix` 主动跳过的形状——带 `lessThan` **且**有注册表名的 `versions[]`——读注册表，再按 CNA 自己的散文是否把这个修复称作未来（`scheduled`、`upcoming`、`will be fixed`……）给剩余行分类。时间性很重要：`scheduled to be fixed in 6.0.4` 是把修复**日期**装扮成版本号，而本工具里没有任何状态描述「修复无法安装，因为它还不存在」。
+
+**在 NVD 2026-10-30 → 11-05 发布窗口（2,659 条记录）上测得：**
+
+| 状态 | n | 说明 |
+|---|---|---|
+| `fix-released` | **50 / 53**（94.3%） | 点名的修复已在注册表上 |
+| `fix-not-released-scheduled` | **0** | CNA 说修复属于未来——本周**没有**复发 |
+| `fix-not-released-silent` | **2 / 53**（3.8%） | `disclosure@vulncheck.com` **2/2** |
+| `version-scheme-mismatch` | **1** | 日历版本对 `0.x` 线 |
+
+两条静默行是 `crates.io/dysk`（`< 3.8.2`，最新 **3.8.1**，2026-10-17——真正的一补丁滞后，即 future-fix 形状的注册表侧）与 `npm/@lobehub/chat`（`< 2.1.49` 对一个自 **2026-01-25** 起就没动过的 `latest` 1.143.3，更像是稳定线产物而不是被承诺的版本）。
+
+**真正的发现是分母。** **1,710** 条 affected 条目因 `no-packageurl` 被跳过，而**立下这一项的两条记录都在这个集合里**：直接查询 `CVE-2026-123036`（ansible-core）与 `CVE-2026-113780`（esp-idf），它们有 `product` 而**没有 `packageURL`**——所以这个普查看不到它自己的立案案例。这是 `--ceiling-census` 的教训挪一个字段（`references[]` 仓库回退之前只有 17 行可命名，之后 **190**），也就是说 **3.8% 只是可命名总体上的比例**，不是记录的比例。下一步是同一条回退，而不是一个结论。
+
+**两个校准缺陷，都来自让实数据说话：**
+
+1. **一个修复集合每条分支一个版本。** `npm/n8n` 的集合是 `2.43.3 / 2.42.6 / 3.0.1`，而 `latest` 是 2.46.6；按**最高**修复分类，会把一条已发布的行读成「未发布」。只有当**没有任何分支**的修复发布时，这一行才不可行动——这就是 2026-11-04 的 Backstage 护栏在新代码里复发，也正是它应该是一个函数（`fixSetState`）而不是一句话的理由。
+2. **跨编号体系的比较器不是比较。** `npm/nocodb` 的修复是 `2026.08.0`（日历版），最新是 `0.301.3`；`cmpVer` 会按两个项目都不用的规则给它们排序。方案不一致现在是一个独立判定，打印出来而不再并进计数。
+
+**阅读规则：**「不存在」只是关于**公开发布列表**的断言，私有构建、未列出的标签与注册表滞后在这里无法区分。`dysk` 的 3.8.2 可能明天就发；普查是承诺的快照，不是代码的快照。引用任何一行之前重跑——并且要引用赋值方，因为本周全部命中都来自一个 CNA。
+
+→ [[security]] [[vuln-supply]] [[fact-check]]

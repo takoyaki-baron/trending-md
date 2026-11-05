@@ -291,6 +291,16 @@ const CHANGES_CENSUS = args.includes('--changes-census');
    advice. */
 const BOUND_CENSUS = args.includes('--bound-census');
 const CEILING_CENSUS = args.includes('--ceiling-census');
+/* `--future-fix-census`: how often does a record name a FIX VERSION that no registry carries yet?
+   Filed 2026-11-05 12:34 from ESP-IDF `CVE-2026-113780` (range "until 5.5.6, 6.0.4, and 6.1.1"
+   while the release list tops out at v6.0.3 / v6.1), and confirmed the same evening from the
+   machine-readable side by ansible-core `CVE-2026-123036` (`2.19.0 < 2.23.0`, PyPI latest 2.22.0).
+   `--bound-census` cannot see either: it selects records with an INCLUSIVE max and NO named fix,
+   which is the opposite shape. This one selects records that DO name a fix (`lessThan`), reads the
+   registry, and splits on whether the CNA's own prose says the fix is still future — because
+   "scheduled to be fixed in 6.0.4" is a remediation DATE dressed as a version number, and no
+   remedy state in this tool models a fix that cannot be installed because it does not exist. */
+const FUTURE_FIX_CENSUS = args.includes('--future-fix-census');
 const MAX_PKGS = Number(argOf('--max-pkgs', 80));
 /* `--mitigation-census`: does the version a vendor advisory tells you to install fall inside that
    advisory's own CVE record? Filed 2026-10-30 20:45 from Cloud Foundry `CVE-2026-59387`. One page
@@ -344,6 +354,16 @@ function mitigationVerdict(groups, fixes) {
 /* Package-URL prefixes the open-bound census can ask a registry about. Declared up here rather than
    beside the census because `--selftest` runs before that section is initialised. */
 const REGISTRY_ECOSYSTEMS = { 'pkg:pypi/': 'pypi', 'pkg:npm/': 'npm', 'pkg:cargo/': 'crates.io' };
+/* The prose cue, and the reason the census needs one: the same machine state (`lessThan` above the
+   newest release) covers two different causes — a private or unlisted build the registry cannot
+   see, and a fix the CNA has already promised is FUTURE. Only the second is a remedy that cannot
+   be followed. ESP-IDF's own wording is the shape: "is fixed in version 5.5.6 and is *scheduled to
+   be fixed* in versions 6.0.4 and 6.1.1". */
+const FUTURE_FIX_CUE = /\b(?:scheduled|expected|planned|intends?|upcoming|forthcoming)\b[^.]{0,80}?\b(?:fix|fixed|release|patch|patched|address)\w*\b|\bwill\s+be\s+(?:fixed|patched|addressed|released)\b|\bto\s+be\s+(?:fixed|patched|released)\b|\bin\s+a\s+future\s+release\b/i;
+/* `is fixed in` is the present tense and it is the control: a record whose named fix is missing
+   from the registry while its prose says the fix IS OUT is a different finding (`fix-released` is
+   the other side) — it means the artifact and the record disagree about the world. */
+
 /* The mitigation census's text rules live here for the same reason REGISTRY_ECOSYSTEMS does:
    `--selftest` runs before the census section of the file is initialised. */
 /* `upgrade CAPI to v1.246.0` is the real spelling, so the verb and its preposition are separated
@@ -2052,6 +2072,29 @@ if (SELFTEST) {
   eq('bound: the ceiling IS the latest release — no upgrade target', boundVerdict(cmpVer('3.5.0', '3.5.0')), 'newest-equals-bound');
   eq('bound: a registry behind the stated ceiling is a lag, not a remedy', boundVerdict(cmpVer('2.0.0', '2.1.0')), 'newest-below-bound');
   eq('bound: a prerelease sorts below its own release', boundVerdict(cmpVer('3.0.0-M2', '3.0.0')), 'newest-below-bound');
+  /* 2026-11-05 — a NAMED fix the registry does not carry yet, pinned on both filing cases. The
+     prose cue is what separates "the CNA promised a version" from "the registry cannot see a
+     private build", and only the first is a remedy nobody can follow. */
+  eq('future fix: ESP-IDF 6.1.1 against a release list topping out at 6.1, and the prose says "scheduled"',
+    futureFixVerdict({ cmp: cmpVer('6.1', '6.1.1'), cue: true }), 'fix-not-released-scheduled');
+  eq('future fix: ansible-core 2.23.0 against PyPI 2.22.0, prose silent',
+    futureFixVerdict({ cmp: cmpVer('2.22.0', '2.23.0'), cue: false }), 'fix-not-released-silent');
+  eq('future fix: once the named version ships the same row flips, with no rewrite',
+    futureFixVerdict({ cmp: cmpVer('6.1.1', '6.1.1'), cue: true }), 'fix-released');
+  eq('future fix: a registry miss is not a verdict',
+    futureFixVerdict({ cmp: null, cue: true }), 'registry-unreadable');
+  eq('future fix: the cue needs a future word AND a fix word, not "will" alone',
+    [FUTURE_FIX_CUE.test('is fixed in version 5.5.6'), FUTURE_FIX_CUE.test('is scheduled to be fixed in versions 6.0.4 and 6.1.1')], [false, true]);
+  eq('future fix: a multi-branch set is installable when ANY branch is released — the n8n row',
+    fixSetState('2.46.6', ['2.43.3', '2.42.6', '3.0.1']).releasedFix, '2.43.3');
+  eq('future fix: a branch fix above the newest, with no branch below it, is not installable',
+    fixSetState('2.46.6', ['3.0.1']).releasedFix, null);
+  eq('future fix: a calendar version against a 0.x line is a SCHEME mismatch, not a future fix',
+    fixSetState('0.301.3', ['2026.08.0']).schemeMismatch, true);
+  eq('future fix: an ordinary semver pair is not a scheme mismatch',
+    fixSetState('3.8.1', ['3.8.2']).schemeMismatch, false);
+  eq('future fix: a git commit is not a version bound',
+    namedFixesOf({ affected: [{ affectedData: [{ packageURL: 'pkg:npm/x', versions: [{ version: '0', lessThan: 'a608c74e99910232dd208fee99de860458672b82' }] }] }] }).fixes.length, 0);
 
   /* 2026-11-04 12:34 — ceiling+1. The filing case is AzuraCast, where the release one patch above
      the record's inclusive ceiling is a PHP base-image bump and the fix is unlabelled two minors
@@ -2625,6 +2668,143 @@ function printBoundCensus(c) {
   console.log('  the range excludes the current release, never that the release is fixed. Read the row as a');
   console.log('  record to open (the newest version\'s bytes are the test), and read the per-assigner split');
   console.log('  before quoting a rate — this shape was one writer\'s habit for `changes[]`.');
+}
+
+/* ── `--future-fix-census`: a named fix whose version does not exist yet ─────────────────────── */
+
+/** Pure: is a named-fix SET installable, given every branch's fix version? A set names one fix
+ *  per release line, so the row is un-actionable only when NO branch's fix is out — the Backstage
+ *  guard (2026-11-04) that this census broke on its first live run by taking the highest fix. */
+function fixSetState(newestVersion, fixes) {
+  const sorted = [...fixes].sort(cmpVer);
+  /* the HIGHEST branch fix already out, which is the version to install */
+  const releasedFix = sorted.filter(f => cmpVer(newestVersion, f) >= 0).at(-1) ?? null;
+  const cal = v => /^\s*v?(?:19|20)\d{2}\./.test(String(v));
+  const schemeMismatch = sorted.some(f => cal(f) !== cal(newestVersion));
+  return { releasedFix, schemeMismatch, top: sorted.at(-1) };
+}
+
+/** Pure: one row's verdict. Split out so `--selftest` pins every arm without a network call. */
+function futureFixVerdict({ cmp, cue }) {
+  if (cmp == null) return 'registry-unreadable';
+  if (cmp >= 0) return 'fix-released';
+  return cue ? 'fix-not-released-scheduled' : 'fix-not-released-silent';
+}
+
+/** Every `lessThan` bound the record states with a registry name — the NAMED-FIX shape, which
+ *  `openBoundOf` deliberately skips (`names-a-fix`). A git hash is not a version here either. */
+function namedFixesOf(cve, { allowRepo = false } = {}) {
+  const out = [];
+  const skips = {};
+  const skip = (k) => { skips[k] = (skips[k] || 0) + 1; };
+  for (const a of cve.affected || []) {
+    for (const d of a.affectedData || []) {
+      const purl = d.packageURL || '';
+      const eco = Object.keys(REGISTRY_ECOSYSTEMS).find(p => purl.startsWith(p));
+      if (!eco) { if ((d.versions || []).some(v => v.lessThan)) skip('no-packageurl'); continue; }
+      const name = decodeURIComponent(purl.slice(eco.length)).replace(/^@/, '@');
+      for (const v of d.versions || []) {
+        if (!v.lessThan) continue;
+        if (v.status && v.status !== 'affected') { skip('no-affected-span'); continue; }
+        if (!/^\s*v?\d+(?:\.\d+)*/.test(String(v.lessThan))) { skip('git-range'); continue; }
+        out.push({ ecosystem: REGISTRY_ECOSYSTEMS[eco], name, fix: v.lessThan, from: v.version ?? null, defaultStatus: d.defaultStatus ?? null });
+      }
+    }
+  }
+  /* Two branches of one product legitimately name two fixes; two DIFFERENT packages mean the
+     record is about a bundle, and one registry lookup cannot answer it. */
+  const names = [...new Set(out.map(f => `${f.ecosystem}/${f.name}`))];
+  if (names.length > 1) return { fixes: [], skips: { ...skips, 'multi-product': 1 } };
+  return { fixes: out, skips };
+}
+
+async function futureFixCensus({ from, to }) {
+  const { records, total } = await fetchWindow(from, to);
+  const rows = [];
+  const skipTally = {};
+  for (const c of records) {
+    if (c.vulnStatus === 'Rejected') continue;
+    const { fixes, skips } = namedFixesOf(c);
+    for (const [k, n] of Object.entries(skips)) skipTally[k] = (skipTally[k] || 0) + n;
+    if (!fixes.length) continue;
+    const desc = (c.descriptions || []).filter(d => d.lang === 'en' || d.lang?.startsWith('en')).map(d => d.value).join(' ');
+    rows.push({
+      id: c.id, assigner: c.sourceIdentifier || '?', modified: c.lastModified || null, published: c.published || null,
+      ecosystem: fixes[0].ecosystem, name: fixes[0].name, from: fixes[0].from, fixes: [...new Set(fixes.map(f => f.fix))],
+      cue: FUTURE_FIX_CUE.test(desc), newest: null, verdict: 'unqueried',
+      /* The sentence the cue fired in, so a reader can check the classification without refetching
+         the record — and a row whose cue sentence names a DIFFERENT version is visible as such. */
+      cueSentence: (desc.match(new RegExp(`[^.]*${(FUTURE_FIX_CUE.source)}[^.]*\\.`, 'i')) || [''])[0].trim().slice(0, 220) || null,
+    });
+  }
+  const cap = Math.min(rows.length, MAX_PKGS);
+  for (const r of rows.slice(0, cap)) {
+    r.newest = await newestRelease(r.ecosystem, r.name);
+    if (!r.newest) { r.verdict = 'registry-unreadable'; continue; }
+    /* A fix SET NAMES ONE VERSION PER BRANCH, so the row is un-actionable only when NO named fix
+       is released — the Backstage guard from 2026-11-04, which this census broke on its first live
+       run: taking the highest of `2.43.3 / 2.42.6 / 3.0.1` against `npm/n8n`'s 2.46.6 read the row
+       as "not released" while 2.43.3 had been installed for a week. `released` is therefore an
+       OR over the branches, and `checkFix` keeps the lowest fix still above the newest release for
+       the detail line. */
+    const { releasedFix, schemeMismatch, top } = fixSetState(r.newest.version, r.fixes);
+    r.checkFix = releasedFix ?? top;
+    r.schemeMismatch = schemeMismatch;
+    /* A comparator across two numbering SCHEMES is not a comparison: `npm/nocodb`'s fix is
+       `2026.08.0` (calendar) against a `0.301.3` latest, and `cmpVer` orders those by a rule
+       neither project uses. Report it as its own state rather than as a future fix. */
+    const cmp = releasedFix ? 0 : cmpVer(r.newest.version, top);
+    r.verdict = schemeMismatch ? 'version-scheme-mismatch' : futureFixVerdict({ cmp, cue: r.cue });
+    r.afterNewest = !!(r.modified && r.newest.at && Date.parse(r.modified) > Date.parse(r.newest.at));
+    await sleep(120);
+  }
+  for (const r of rows.slice(cap)) r.verdict = 'unqueried';
+  return { from, to, totalResults: total, fetched: records.length, candidates: rows.length, queried: cap, skipTally, rows };
+}
+
+function printFutureFixCensus(c) {
+  const pct = (n, d) => (d ? ((100 * n) / d).toFixed(1) : '0.0');
+  const q = c.rows.filter(r => r.verdict !== 'unqueried');
+  const sched = q.filter(r => r.verdict === 'fix-not-released-scheduled');
+  const silent = q.filter(r => r.verdict === 'fix-not-released-silent');
+  const released = q.filter(r => r.verdict === 'fix-released');
+  const unread = q.filter(r => r.verdict === 'registry-unreadable');
+  console.log(`Future-fix census — publication window ${c.from} → ${c.to} (UTC)`);
+  console.log(`  ${c.fetched} records · ${c.candidates} naming a fix with a registry name · ${c.queried} queried (cap ${MAX_PKGS})`);
+  console.log('');
+  console.log(`  fix released        ${released.length}/${q.length} (${pct(released.length, q.length)}%)  — the named fix is on the registry, so the remedy is installable`);
+  console.log(`  not released, SAID SO ${sched.length}/${q.length} (${pct(sched.length, q.length)}%)  — the record's own prose calls the fix future ("scheduled", "upcoming")`);
+  console.log(`  not released, silent  ${silent.length}/${q.length} (${pct(silent.length, q.length)}%)  — no future cue: a private build, an unlisted tag, or a lag`);
+  const scheme = q.filter(r => r.verdict === 'version-scheme-mismatch');
+  if (scheme.length) console.log(`  version scheme differs ${scheme.length} — a calendar version against a 0.x line; the comparator means nothing here`);
+  if (unread.length) console.log(`  registry unreadable   ${unread.length} — not an answer`);
+  const byAsn = {};
+  for (const r of [...sched, ...silent]) byAsn[r.assigner] = (byAsn[r.assigner] || 0) + 1;
+  const totals = {};
+  for (const r of q) totals[r.assigner] = (totals[r.assigner] || 0) + 1;
+  const ranked = Object.entries(byAsn).sort((a, b) => b[1] - a[1]);
+  if (ranked.length) {
+    console.log('\n  by assigner (not-released / queried):');
+    for (const [a, n] of ranked) console.log(`    ${a.padEnd(34)} ${String(n).padStart(3)} / ${String(totals[a]).padStart(3)}  (${pct(n, totals[a])}%)`);
+    const silentAssigners = Object.keys(totals).filter(a => !byAsn[a]).sort((x, y) => totals[y] - totals[x]);
+    if (silentAssigners.length) console.log(`  (no hit: ${silentAssigners.map(a => `${a} ${totals[a]}`).join(' · ')})`);
+  }
+  const list = (label, arr) => {
+    if (!arr.length) return;
+    console.log('');
+    console.log(`  ${label} (${arr.length} row(s)):`);
+    for (const r of arr.slice(0, 25)) {
+      console.log(`    ${r.id}  ${r.ecosystem}/${r.name}  ${r.from ? `${r.from} < ` : ''}${r.fixes.join(' / ')} but latest is ${r.newest.version} (${String(r.newest.at).slice(0, 10)})  [${r.assigner}]`);
+      if (r.cueSentence) console.log(`      cue: "${r.cueSentence}"`);
+    }
+  };
+  list('not released and SAID SO — a remediation DATE dressed as a version', sched);
+  list('not released and silent — open the tag list before writing "unpatched"', silent);
+  const sk = Object.entries(c.skipTally).sort((a, b) => b[1] - a[1]);
+  if (sk.length) console.log(`\n  excluded shapes: ${sk.map(([k, v]) => `${k} ${v}`).join(' · ')}`);
+  console.log('\n  "Does not exist" is a statement about the PUBLIC release list only: a private build, an');
+  console.log('  unlisted tag and a registry lag are indistinguishable from here. Re-run before quoting a');
+  console.log('  row — a promised fix ships, and this census is a snapshot of the promise, not of the code.');
 }
 
 /* ── `--ceiling-census`: the release one step above the bound, and its own notes ─────────────── */
@@ -3795,6 +3975,15 @@ if (BOUND_CENSUS) {
   process.exit(0);
 }
 
+if (FUTURE_FIX_CENSUS) {
+  const to = CENSUS_TO || new Date(Date.now() - 864e5).toISOString().slice(0, 10);
+  const from = CENSUS_FROM || new Date(Date.parse(`${to}T00:00:00Z`) - 6 * 864e5).toISOString().slice(0, 10);
+  const c = await futureFixCensus({ from, to });
+  if (JSON_OUT) console.log(JSON.stringify(c, null, 1));
+  else printFutureFixCensus(c);
+  process.exit(0);
+}
+
 if (CEILING_CENSUS) {
   const to = CENSUS_TO || new Date(Date.now() - 864e5).toISOString().slice(0, 10);
   const from = CENSUS_FROM || new Date(Date.parse(`${to}T00:00:00Z`) - 6 * 864e5).toISOString().slice(0, 10);
@@ -3857,7 +4046,7 @@ if (!IDS.length && !TRACKERS.length && !(REPO && ARTIFACT)) {
     ' [--release-notes <url>[,<url>…]] [--census [--no-github]] [--range-census --from YYYY-MM-DD --to YYYY-MM-DD]' +
     ' [--field-census <field> --from YYYY-MM-DD --to YYYY-MM-DD]' +
     ' [--field-watch <field> [--from YYYY-MM-DD --to YYYY-MM-DD] [--store <path>]]' +
-    ' [--changes-census | --backlog-census | --bound-census | --ceiling-census | --mitigation-census | --remedy-census --from YYYY-MM-DD --to YYYY-MM-DD [--window-cache <path>]]');
+    ' [--changes-census | --backlog-census | --bound-census | --future-fix-census | --ceiling-census | --mitigation-census | --remedy-census --from YYYY-MM-DD --to YYYY-MM-DD [--window-cache <path>]]');
   process.exit(0);
 }
 

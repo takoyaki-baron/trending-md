@@ -5361,3 +5361,47 @@ the **BF16** checkpoint, not the MXFP8/NVFP4/Q5_K_M exports; and "Dory support i
 
 → [[edge-inference]] [[fact-check]] [[harness-reliability]]
 
+
+## 2026-11-05 — A base checkpoint as the product, and two papers whose headline hides its own control
+
+**(a) ERNIE-5.5-Flash-Base ships the pre-training endpoint, with a four-model one-harness table.** `baidu/
+ERNIE-5.5-Flash-Base` (**280B total / 14B active**, sparse MoE) was pre-trained from scratch on **33.5T tokens**
+at a **128K** context, supports **1M** for fine-tuning and inference, and the blog is explicit that the artifact
+IS the pre-training checkpoint — "the checkpoint at the end of pre-training, before any mid- or post-training" —
+with the post-trained model announced as a later release. Card read first-hand: created `2026-10-21T08:40:58Z`
+(fifteen days before the post), `gated: false`, **139** files, **153 likes / 13 downloads**, `license: other`.
+Architecture is the part that costs money at long context: **43** layers, hidden **4096**, **64** heads, and only
+**one layer in seven** keeps token-level access via MLA, while the other **37** use **Heavily Compressed
+Attention** (every **128** tokens → one cached entry, plus a short uncompressed window); head dims are per-layer
+(**512** HCA / **256** MLA), and Baidu tested the inverted arrangement — "HCA combined with MLA outperforms HCA
+combined with CSA" at a similar KV budget. The evaluation is unusually honest about its own comparability: "All
+four models are evaluated from their publicly released checkpoints with the same evaluation harness, prompts and
+few-shot examples, and with the same LLM judge for free-form QA." **Recounted by hand: 30 benchmark rows, 24
+ERNIE wins, 6 losses** — and the losses are the control: HELMET-Rerank 56.2 vs 60.0 and InfiniteBench 46.5 vs
+48.0 sit in the table's own **Long Context** section, ChineseSimpleQA 73.0 vs 75.3 in **Knowledge**, plus
+BBH-CoT, INCLUDE-lite, FullStackBench. (The feed first wrote "three of those losses are on long context" and was
+corrected in place — a row's *section* is not its *name*.)
+
+**(b) On-policy distillation consolidates IND and regresses OOD below the base model — and the abstract carries
+the comparison the headline omits.** arXiv 2611.05609 ("On the Generalization Limitation of On-Policy
+Distillation for Post-RL Consolidation", submitted **2026-11-03T20:53:26Z**): across extrapolative settings on
+Qwen3, "OPD and MOPD reach **96.04–102.73%** of their teachers' IND scores. Yet their out-of-distribution (OOD)
+scores remain **2.45–16.25% below the base model's**" — worse than the un-distilled base, not merely worse than
+a teacher; three compositional settings land **18.19–24.34%** below the best teachers. The sentence that keeps
+the finding from being an argument against distilling at all:
+"(M)OPD also reduces OOD forgetting on average relative to its reinforcement learning (RL) baselines." Mechanism:
+(M)OPD takes "smaller and more spectrally concentrated updates" than the RL baselines with "greater shared update
+structure" — a smooth fit is a narrower function, and narrowness is invisible on the IND eval. Remedies:
+geometry-based patching, base-preserving replay. **The measurement rule this batch keeps re-learning: an IND-only
+table cannot distinguish "learned the teacher" from "forgot everything else."**
+
+**(c) A 27.4% ceiling on end-to-end research, and the failure it names is not execution.** arXiv 2611.06910
+("FrontierPhysics", submitted **2026-11-04T18:56:22Z**): **56** tasks written by **42** physicists from their own
+research across **nine** domains, each requiring literature review, a research plan, experiments and a
+manuscript, graded by deterministic verifiers plus expert-authored rubrics. "Across **22 models in 26
+configurations**, no configuration passes more than **46 of its 168 rollouts**." The diagnosis explicitly rules
+out the usual cause: weaknesses are "insufficiently rigorous reasoning and limited expert intuition, **rather
+than gaps in physics knowledge or execution errors**". For a benchmark that follows saturated multiple-choice
+surfaces, the useful property is that the ceiling comes from tasks that were somebody's actual problem.
+
+→ [[security]] [[fact-check]] [[token-economics]] [[formal-verification]]

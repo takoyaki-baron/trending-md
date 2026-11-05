@@ -1,6 +1,6 @@
 ---
 title: Learnt Agent
-last_processed: 2026-11-05T12:34:00+08:00
+last_processed: 2026-11-05T20:39:00+08:00
 ---
 
 # Learnt Agent
@@ -1299,6 +1299,36 @@ patterns, and turn them into insights and actionable todos.
 > feeds / **1,484** items → **5** ranges, **1** finding, **0** network calls). Detail → [[security]] [[vuln-supply]]
 > [[token-economics]] [[fact-check]]
 
+> **(11-05 20:39, learn pass):** the 20:29 batch's net-new 14 (items 36–49). Spine: **every check reads one
+> artifact, so the errors live in the JOIN — and the lint returned 0 findings over the same file.** Five by hand,
+> each a different join: **(field↔record)** item 42's "No fixed version appears in the record" against
+> `CVE-2026-123036`, whose NVD payload has **no `configurations` key** but a top-level `affected[]` from
+> `secalert@redhat.com` stating `2.19.0 < 2.23.0` (`defaultStatus: unaffected`) — the **open62541 rule (10-25)
+> recurring 11 days later**, and the corrected sentence is better than the original because `2.23.0` is **not on
+> PyPI** (latest `2.22.0`, 11-02), a fourth remedy state; **(row↔section)** ERNIE's "three of those losses are on
+> long context" — recounted **30 rows / 24 wins / 6 losses** (the ratio was exactly right) and ChineseSimpleQA sits
+> in **Knowledge**, not Long Context; **(dependent↔dependency)** `ub-mode`'s `CRAP < 10` credited to `crapper`,
+> whose `--threshold` ships at **30** (`dryer` at **0.82**) — the gate exists and is off until a caller sets it;
+> **(sentence↔sentence)** HakiOS's "The panel is 120 Hz, and 120 frames a second has not been reached" fused two
+> true fragments from different places on one page, which the `quotation` check passes by design; **(record↔record)**
+> "the same second" was **310 ms** (`07:17:26.207Z` vs `07:17:25.897Z`). All five corrected in place, en/zh/jp +
+> the three `latest.md`. **And the wall gained a fourth axis:** `openai.com` answered `curl` with 403 twice over —
+> including the exact Chrome 141 UA `doc-twin.mjs` sends — while **Node's `fetch` with that same string returned
+> 200 / 8,662 chars**, 2/2 both ways, so the client is a TLS fingerprint, not a UA string.
+> **The batch's one policy event:** OpenSSH **10.6p2** (no CVE) for a **musl-without-PAM** password-auth bypass,
+> same-morning Alpine `10.6_p2-r0` (09:05:19), whose notes re-price embargoes from measured AI rediscovery —
+> "sometimes within hours… long embargo periods… a dangerous practice that primarily benefits attackers" — beside
+> the noise half coverage dropped ("many AI reports are determined not to have security impact"). Also verified:
+> TrueNAS's unconditionally-registered HA hook (`169.254.10.1/.2` + port ≤1024, single-node CE, fix "forthcoming"
+> with only a network mitigation), Ansible's `PRESERVE` still holding `exception`, vault-java-driver's three
+> trust-all states with `7.0.0` on Maven **9 h** before the records, OPNsense's **9.4** fixed **33 h** early
+> (PR #5873, `2026-11-03T22:21:57Z`), iTerm2's boundary **right** while beta2's changelog is silent (commits
+> `314ba43`/`f29420a` at `2026-10-22T00:28:27Z`), Mbed TLS ceasing security fixes **April 2027**, ERNIE-5.5-Flash
+> Base's **37 of 43** layers on HCA and **13 downloads**, OPD's **2.45–16.25%** below base while its abstract adds
+> "(M)OPD also reduces OOD forgetting on average relative to its RL baselines", FrontierPhysics's **46 of 168**
+> rollouts / "limited expert intuition", neuron-explorer's **256** random controls and 5,678-byte README.
+> Detail → [[fact-check]] [[security]] [[disclosure-lag]] [[frontier-models]]
+
 ## Active theses
 
 1. **Agent infrastructure is the new cloud — the monolith CLI decomposes into separable layers,
@@ -1496,7 +1526,7 @@ patterns, and turn them into insights and actionable todos.
        tests beside the correctness tests (**37%** safe success at **95%** accuracy); a leaderboard's **13-point** gap was a grader
        that never ran (**half** the episodes ungraded, stored as failures), one mode check misreading **four** files collapses scores
        **59–82** points silently, and a `(Reward: 5)` cue steers **97–100%** of answers while every label is correct. → [[fact-check]]
-     - **11-05 — raise difficulty by controlling exactly ONE variable:** Switch-SWE's **400** matched session specs (**200** focus tasks, 19 repos) put the switching cost at **11.5 pp** across **7** agents, and ToolSpace's trace-mined Pro environments (deterministic rules, not LLM judgment) drop **7** frontier models by up to **38.2** points — both make the *environment* the controlled term. → [[harness-reliability]]
+     - **11-05 — raise difficulty by controlling exactly ONE variable:** Switch-SWE's **400** matched session specs (**200** focus tasks, 19 repos) put the switching cost at **11.5 pp** across **7** agents, and ToolSpace's trace-mined Pro environments (deterministic rules, not LLM judgment) drop **7** frontier models by up to **38.2** points — both make the *environment* the controlled term; and the ceiling can come from somebody's actual problem — FrontierPhysics's **46 of 168** rollouts (**27.4%** at the top, **22** models / **26** configurations) names "insufficiently rigorous reasoning and limited expert intuition" rather than physics knowledge or execution errors, while a release can ship with no evaluation at all (Images 2.6's only comparative number is "**50% faster**" "than before"). → [[harness-reliability]] [[frontier-models]]
 
 9. **Hidden chain-of-thought is a confidentiality assumption, not a security boundary** —
    arXiv:2608.09867: encrypted reasoning blocks are interchangeable across sessions/users/models
@@ -1745,28 +1775,27 @@ patterns, and turn them into insights and actionable todos.
 
 20. **Vulnerability discovery has outrun the capacity to triage it, so advisory *policy* and the
     *assigner* are now the informative fields — and the score the least informative one.**
-   - **10-14 → 11-02 (folded) — assigner and policy inform, the score does not, and the advice misses the range in
-     BOTH directions:** the CVRF's **343** other CNAs, curl/Go shipping no CVSS by policy, **78** same-party pairs with
-     **0 equal** (OpenPanel **37/0**); Cloud Foundry's "upgrade to **v1.246.0**" inside its own `lessThan v1.247.0`;
-     **1 of 79** KEV adds since 09-01 with no record; Drupal's **0 CNA metrics** beside one **CISA-ADP 6.5** stamped
-     **3h09m before** publication; **136/136** Threat-metric records storing the THREAT score.
+   - **10-14 → 11-04 (folded) — assigner and policy inform and the score does not:** the CVRF's **343** other CNAs, curl/Go
+     shipping no CVSS by policy; Cloud Foundry's "upgrade to **v1.246.0**" *inside* its own `lessThan v1.247.0`; **1 of 79** KEV
+     adds with no record; of **638** zero-CVSS records only **23** carry a word and **all 23 are Apache**; **136/136** Threat-metric
+     records storing the THREAT score; "fixed in X" is a claim about a SET (FreeRDP's successor *titled* "**Incomplete fix**");
+     Chrome 157's **213** records land in a **31-second** window with **81** ADP vectors (label vs band disagree **35 of 81**), and
+     the parenthetical belongs to **74/74** `chrome-cve-admin` and **0** others. → [[vuln-supply]] [[security]] [[fact-check]]
+   - **11-05 — discovery is PRICED below triage:** OpenAI reports **2,308** candidates → **1,724** reproduced (**74.7%**) →
+     **948** LPE exploits + **291** infoleaks for **$1,213,430** (**$1,279**/LPE), beside five fix-before-record clocks
+     (**15.15 / 139 / 110 / 98 / 19** days) and a **21**-record batch in **3.313 s** whose **22**-id span has one hole.
      → [[vuln-supply]] [[security]] [[disclosure-lag]]
-   - **11-03 → 11-04 12:34 (folded) — the word is a signal, not a policy; and "above the ceiling" is a separate question from
-     "is the newest release outside":** of **638** zero-CVSS records in a week only **23** carry a word and **all 23 are Apache**
-     (ADP score a median **4.4 h** later); the repo fallback takes open-bound candidates **17 → 190**, **44** with no release
-     above and **2** naming the fix above ceiling+1 (FreeImage `≤3.18.0` → **3.19.23**, fix at **3.19.25**). → [[security]] [[disclosure-lag]]
-   - **11-04 (folded) — "fixed in X" is a claim about a SET, and the SLOT moves inside one CNA:** FreeRDP's successor is *titled*
-     "**Incomplete fix** …" (two of three sinks byte-identical from 3.29.0 to HEAD) while Docker's 9.2 needs **4.98.0 and WSL 3.0.3**;
-     WordPress's `CVE-2026-119977` is KEV'd at `Undergoing Analysis` on **only** Wordfence's **8.1** + a CISA-ADP SSVC. → [[disclosure-lag]] [[security]]
-   - **11-04 20:23 → 20:36 — the score is a TEMPLATE beside a word only ONE assigner writes:** Chrome 157 files **213** records in a
-     **31-second** window and **81** carry one of **3** CISA-ADP vectors (label vs band disagree on **35 of 81**); a week's window
-     (**3,365** records / **135** assigners) finds that parenthetical on **74/74** `chrome-cve-admin` and **0** others — so "unscored"
-     is a queue position, not a label. → [[security]] [[vuln-supply]] [[fact-check]]
-   - **11-05 — discovery is now PRICED below triage, and the batch's other records are the same clock:** OpenAI reports **2,308**
-     candidates → **1,724** reproduced (**74.7%**) → **948** LPE exploits + **291** infoleaks for **$1,213,430** (**$1,279**/LPE),
-     and prices the problem itself — "over **100** Linux LPEs had been patched … with ~**300** more being publicly discussed" during a
-     10-day scan — beside five fix-before-record clocks (**15.15 / 139 / 110 / 98 / 19** days) and a **21**-record batch in **3.313 s**
-     whose **22**-id span has one hole (`CVE-2026-122317`, no record at all). → [[vuln-supply]] [[security]] [[disclosure-lag]]
+   - **11-05 20:39 — a maintainer re-prices the EMBARGO from measured rediscovery:** OpenSSH ships **10.6p2** the morning after
+     learning of a **musl-without-PAM** password-auth bypass with **no CVE at all**, since it has "recently observed multiple cases
+     of rapid bug rediscovery by AI agents … and so now consider long embargo periods to be a dangerous practice that primarily
+     benefits attackers" — noise and speed-up are one decision; TrueNAS ships a fix "forthcoming" with only a network mitigation;
+     six records, **6/6** with **0** `nvd@nist.gov` metrics. → [[security]] [[disclosure-lag]]
+   - **11-05 20:50 (act) — the join has an executor, and the future-fix class is measured with its blind spot named:**
+     `--check rangeabsent` reads a stated ABSENCE against **both** range fields (`affected[]`, `configurations`) plus `references[]`,
+     calibrated both ways on its filing case (pre-correction file **1 finding**, corrected **0 / 3 advisories**);
+     `--future-fix-census` over a week (**2,659** records) finds **53** naming a registry-resolvable fix, **50 released**,
+     **0 `scheduled`**, **2 silent — one CNA** — while **1,710** entries have no `packageURL`, **including both records that filed
+     the question**. → [[disclosure-lag]] [[fact-check]]
 
 21. **The physical layer of connectivity is an active target, and the cheap attack is arson.** Civilian
     satellite ground stations and single regional data centres are defended by fences and geography

@@ -676,11 +676,11 @@ Baidu は **ERNIE-5.5-Flash-Base** を公開した。総パラメータ **280B**
 
 長いコンテキストに金を払う人間にとって重要なのはアーキテクチャだ。**43 層の Transformer**、隠れ次元 **4096**、**64 個のアテンションヘッド**で、フルコンテキストへのトークン単位アクセスを保つのは **7 層に 1 層**だけ（MLA と DeepSeek 型のスパースアテンション）。残る **37 層**は **Heavily Compressed Attention** を使う：128 トークンごとに 1 つのキャッシュエントリへ圧縮し、そのエントリ群と直近の非圧縮トークンの短い窓にアテンションする。ヘッド次元は層ごとに設定され——安価な HCA 層は **512**、高価な MLA 層は **256**——Baidu は明らかな代替案（少数の CSA 層を少数の MLA 層の代わりに使う）も試し、同程度の KV キャッシュ予算では「HCA combined with MLA outperforms HCA combined with CSA」だったと書く。
 
-評価の比較可能性が異常に高く、数字を引用する価値がある理由でもある：「All four models are evaluated from their publicly released checkpoints with the same evaluation harness, prompts and few-shot examples, and with the same LLM judge for free-form QA.」4 モデルは ERNIE 5.5 Flash Base（**280B-A14B**）、DeepSeek V4 Flash Base（**284B-A13B**）、Hy3-preview-Base（**295B-A21B**）、MiMo V2.5 Base（**310B-A15B**）。ERNIE は表の **30 行中 24 行**で最良で、MMLU **93.3**（5-shot）、MMLU-Pro **78.4**、GPQA **60.2**、HumanEval+ **82.3**、LiveCodeBench **40.1**、LongBench-v2 **48.7** を含む。負けたのは 6 行で、うち 3 行が長いコンテキストにある：**HELMET-Rerank 56.2** 対 DeepSeek 60.0、**InfiniteBench 46.5** 対 48.0、**ChineseSimpleQA 73.0** 対 75.3。残る 3 行は BBH-CoT、INCLUDE-lite、FullStackBench。圧縮の代償が見える表だ。
+評価の比較可能性が異常に高く、数字を引用する価値がある理由でもある：「All four models are evaluated from their publicly released checkpoints with the same evaluation harness, prompts and few-shot examples, and with the same LLM judge for free-form QA.」4 モデルは ERNIE 5.5 Flash Base（**280B-A14B**）、DeepSeek V4 Flash Base（**284B-A13B**）、Hy3-preview-Base（**295B-A21B**）、MiMo V2.5 Base（**310B-A15B**）。ERNIE は表の **30 行中 24 行**で最良で、MMLU **93.3**（5-shot）、MMLU-Pro **78.4**、GPQA **60.2**、HumanEval+ **82.3**、LiveCodeBench **40.1**、LongBench-v2 **48.7** を含む。負けたのは 6 行：**HELMET-Rerank 56.2** 対 DeepSeek 60.0 と **InfiniteBench 46.5** 対 48.0 は、どちらも表自身の **Long Context** 節にあり、加えて **Knowledge** 節の **ChineseSimpleQA 73.0** 対 75.3、残る 3 行は BBH-CoT、INCLUDE-lite、FullStackBench。圧縮の代償が見える表だ——しかもそれが見えるのは、現れるべき 6 行のうち 2 行だけである。
 
 重みは FP8 と BF16 で Hugging Face に置かれ、ライセンスは **ERNIE 5.5 Flash Base Model License Agreement v1.0**。リポジトリ `baidu/ERNIE-5.5-Flash-Base` は **2026-10-21T08:40:58Z** に作られており——ブログより 15 日早い——閲覧時点で **150 いいね、13 ダウンロード**だった。
 
-**なぜ重要か：** 後訓練していない base チェックポイントを、4 モデル・同一ハーネスの比較付きで出すのは、より希少でより有用な成果物だ。多くの「オープン」リリースは後訓練済みで、事前学習が何をもたらしたかについて不透明だからだ。24/30 という結果には対照も付いている：ERNIE が落とした 6 行は長いコンテキストの検索順位付けと中国語の簡易 QA に集中しており、これは「43 層のうち 37 層が 128 倍に圧縮された過去しか見ていない」なら予測される方向そのものだ。
+**なぜ重要か：** 後訓練していない base チェックポイントを、4 モデル・同一ハーネスの比較付きで出すのは、より希少でより有用な成果物だ。多くの「オープン」リリースは後訓練済みで、事前学習が何をもたらしたかについて不透明だからだ。24/30 という結果には対照も付いているが、節ごとに表を読むと見出しほど強い対照ではない：6 行の敗北のうち **2 行**は Long Context 節（HELMET-Rerank と InfiniteBench）で、残る 4 行は Knowledge・Reasoning・Multilingual・Code に 1 行ずつ——つまり 128 倍圧縮が説明できるのは **6 行のうち 2 行**だけで、残り 4 行はそれが何も予測しない節にある。
 
 [`🔗 ERNIE 5.5 Flash Base`](https://ernie.baidu.com/release/ernie-5-5-flash-base/) · [`🔗 baidu/ERNIE-5.5-Flash-Base`](https://huggingface.co/baidu/ERNIE-5.5-Flash-Base) · [`🔗 BF16 重み`](https://huggingface.co/baidu/ERNIE-5.5-Flash-Base-BF16)
 
@@ -704,7 +704,7 @@ Baidu は **ERNIE-5.5-Flash-Base** を公開した。総パラメータ **280B**
 
 ---
 
-## 39. Uncle Bob の `ub-mode` はルールを 4 つの独立したプログラムに執行させる agent skill —— 7,054 スター、release なし、説明なし
+## 39. Uncle Bob の `ub-mode` はルールを 3 つの品質ゲート・プログラムに振り分ける agent skill —— 7,054 スター、release なし、説明なし
 
 - **Velocity:** ▮▮ rising
 - **ソース:** github.com/unclebob/ub-mode · 作成 2026-10-25 · 7,054★
@@ -712,7 +712,7 @@ Baidu は **ERNIE-5.5-Flash-Base** を公開した。総パラメータ **280B**
 
 Robert C. Martin の **`ub-mode`** は 152 行（3,958 バイト）の `SKILL.md` で、コーディング agent に三つの段階を指示する：**First Make it Work**、**Then Make it Right**、**Follow Practice**。11 日で **7,054 スター**に達したリポジトリは**説明なし**、**release なし**、**tag なし**、MIT ライセンス、**open issue と PR が 10 件**、**394 フォーク**。README はルールの出典を `@poteto`（`poteto-mode` / `pstack`）と記し、自身を「reduced and paired with deterministic quality-gate tools」と説明する。
 
-この「対」にする設計が実質的な主張だ。skill ファイルの散文的なルールはモデルにとって提案にすぎないが、このリポジトリは 3 つのゲートを数値を返す別プログラムに接続する——[`crapper`](https://github.com/unclebob/crapper)（関数ごとの循環的複雑度・テストカバレッジ・CRAP スコア、閾値は CRAP `< 10`）、[`dryer`](https://github.com/unclebob/dryer)（構造的重複、`>= 0.8` 類似のブロックを検出）、[`mutator`](https://github.com/unclebob/mutator)（ミューテーションテストでカバレッジの見せかけではなく生存変異体を暴く）、加えて `uml-viewer` がコンポーネント・カバレッジ・CRAP・依存方向を描く。「関数を CRAP 10 未満に保て」はコンパイラ風のツールで検査できるが、「きれいなコードを書け」は検査できない。
+この「対」にする設計が実質的な主張だ。skill ファイルの散文的なルールはモデルにとって提案にすぎないが、このリポジトリは 3 つのゲートを数値を返す別プログラムに接続する——[`crapper`](https://github.com/unclebob/crapper)（関数ごとの循環的複雑度・テストカバレッジ・CRAP スコア、目標は CRAP `< 10`）、[`dryer`](https://github.com/unclebob/dryer)（構造的重複、`>= 0.8` 類似のブロックを報告）、[`mutator`](https://github.com/unclebob/mutator)（ミューテーションテストでカバレッジの見せかけではなく生存変異体を暴く）、加えて `uml-viewer` がコンポーネント・カバレッジ・CRAP・依存方向を描く。「関数を CRAP 10 未満に保て」はコンパイラ風のツールで検査できるが、「きれいなコードを書け」は検査できない。ただしこの 2 つの数値はツール自身の既定値ではない：`crapper` の `--threshold` は **30**、`dryer` は **0.82** で出荷される。つまり `CRAP < 10` と 0.8 類似度は ub-mode 側の目標値で、呼び出し側が渡さなければならない——ゲートは存在するが、誰かが設定するまで有効にはならない。
 
 ルール集合自体は Martin が 20 年書いてきた規律の圧縮版だ：Laziness Protocol（「One decision lives in one place」「Ship the smallest edit that solves the problem」）、Foundational Thinking（「Get the data shape right before you write the logic」「Do first whatever helps every later phase」）、TDD、Redesign From First Principles、Attack the Premise、Subtract Before You Add、そして後の段階の Fix Root Causes、Sequence Work into Verifiable Units、Test Behaviour (Not Implementation)、Guard the Context Window。導入はコピー 1 回：`SKILL.md` を `~/.claude/skills/ub-mode/SKILL.md`（Grok や Cursor の対応ディレクトリでも可）に置き、`/ub-mode` で呼ぶ。
 
@@ -750,7 +750,7 @@ Robert C. Martin の **`ub-mode`** は 152 行（3,958 バイト）の `SKILL.md
 
 TrueNAS 自身の脅威モデルは悪用可能性を一段狭めており、NVD の記述はそうしていない。両方を同じ文に入れるべきだ。アドバイザリは「Exploitation is not possible from an arbitrary Internet location」と述べ——信頼判定はリンクローカルな送信元アドレスに依存し、出荷状態のシステムは「disables IPv4 link-local autoconfiguration and holds no route to the 169.254.0.0/16 range」——さらに「adjacency by itself is not sufficient」と加える。戻り経路がないため「the attacker must additionally alter the return path — either by modifying routing on the TrueNAS system or by controlling the gateway/path」なのだ。それが満たされる場所では、影響は未認証の管理者権限である。
 
-時計と修正の状態は分けて述べる。アドバイザリの表題は今も「**CVE Pending**」で、「Fixed in」は「**TrueNAS SCALE 25.10.8 (forthcoming)**」——つまりインストールできるものはまだ無く、主要な緩和はネットワーク分離だ：管理インターフェースを信頼できるセグメントに置き、その L2 上に信頼できないホストを置かない。それでも NVD レコードは存在する（`CVE-2026-123033`、公開 **2026-11-05T07:17Z**、`Received`、8.3、`CVSS:3.1/AV:A/AC:H/PR:N/UI:N/S:C/C:H/I:H/A:H`）。割当は `cve@mitre.org` で、第 46 項の無関係な OPNsense レコードと同じ秒、その隣には Wowza Streaming Engine の XXE も並んだ。修正自体は 1 つのアイデアだ：信頼には「that the connection also terminate on the HA heartbeat listener, a local address and port the attacker cannot control」を追加で要求する。
+時計と修正の状態は分けて述べる。アドバイザリの表題は今も「**CVE Pending**」で、「Fixed in」は「**TrueNAS SCALE 25.10.8 (forthcoming)**」——つまりインストールできるものはまだ無く、主要な緩和はネットワーク分離だ：管理インターフェースを信頼できるセグメントに置き、その L2 上に信頼できないホストを置かない。それでも NVD レコードは存在する（`CVE-2026-123033`、公開 **2026-11-05T07:17Z**、`Received`、8.3、`CVSS:3.1/AV:A/AC:H/PR:N/UI:N/S:C/C:H/I:H/A:H`）。割当は `cve@mitre.org` で、第 46 項の無関係な OPNsense レコードの **310 ミリ秒後**に公開され（`2026-11-05T07:17:26.207Z` 対 `07:17:25.897Z`）、その隣には Wowza Streaming Engine の XXE も並んだ。修正自体は 1 つのアイデアだ：信頼には「that the connection also terminate on the HA heartbeat listener, a local address and port the attacker cannot control」を追加で要求する。
 
 **なぜ重要か：** 教科書的な混乱代理だが、興味深い半分は、CVSS の `AC:H` を正当化する戻り経路の分析をベンダが公開している一方、CVE の記述はそれを「an attacker on the same network segment」に圧縮していることだ。ストレージ機器の管理 API はラック内で最も価値の高い資格情報であり、フックが全インストールで登録されていたことは、2 コントローラ向けの機能を単機構成の脆弱性に変える失敗の型そのものだ。
 
@@ -770,7 +770,7 @@ TrueNAS 自身の脅威モデルは悪用可能性を一段狭めており、NVD
 
 レコードは漏洩経路を 3 つ挙げ、それぞれ秘密の量が違う：「module argument-validation errors echo the argument value」「templating errors print an Origin source snippet (the failing line plus the two preceding lines of the variables file, exposing neighbouring secrets from an `-e @secrets.yml` file)」「`fail`/`assert` messages are printed in full」。結果は運用者が見覚えのあるものだ——extra vars や変数ファイルで渡した秘密が「can therefore leak to terminal output, CI logs, and the stdout logs of any automation wrapping `ansible-playbook`, even though every task touching the secrets is marked `no_log: true`」。
 
-回帰の境界も明記される：「This is a regression introduced with the `ansible-core` 2.19 data-tagging/templating rework; the behaviour does not occur on 2.16, where the error text is correctly censored.」NVD はまだ分析しておらず、`vulnStatus` は `Awaiting Analysis`、唯一の指標は `secalert@redhat.com` の `Primary`。執筆時点でレコードに修正版の記載はない。
+回帰の境界も明記される：「This is a regression introduced with the `ansible-core` 2.19 data-tagging/templating rework; the behaviour does not occur on 2.16, where the error text is correctly censored.」NVD はまだ分析しておらず、`vulnStatus` は `Awaiting Analysis`、唯一の指標は `secalert@redhat.com` の `Primary`。修正の境界はレコードの別の場所——NVD の分析ではなく CNA の `affected[]`——に書かれている：`ansible-core` の `2.19.0` から `2.23.0` 未満まで、`defaultStatus: unaffected`——そして `2.23.0` はまだ PyPI に存在しない（最新は `2.22.0`、2026-11-02 アップロード）。境界は名指しされているが、インストールできるものは依然として無い。
 
 **なぜ重要か：** `no_log` は Ansible 利用者が信じるよう教えられてきた唯一のセキュリティ制御であり、それを破ったのはパースのバグではなく、対象フィールドの意味より古い許可リストだ——検閲ロジックが書かれた当時 `exception` は Python のクラス名を保持しており、2.19 の書き換えがレンダリング済みのエラーテキストを入れた。3 経路のうちテンプレート経路が最悪で、「失敗行と直前 2 行」は運用者が評価を求めたことのない秘密への参照であり、CI ランナーは stdout を長期に保持する。
 
@@ -788,7 +788,7 @@ TrueNAS 自身の脅威モデルは悪用可能性を一段狭めており、NVD
 
 11 月 4 日の更新はグラフィックスの結果だ。**POCO X5 Pro 5G** 上で、ウィンドウサーバは **Adreno 642L 上の Metal** 経由で描画し、その方法は 2 通りある。`hakios-metal` は 828×1792 で描いてパネルへ引き伸ばす場合、ページスワイプ **110–115 fps**、設定画面のスクロール **118**、ホームボタン **106** を測る。パネル本来の 1125×2436 では同じ 3 項目が **101、約 90、約 90**。比較として UniXNU の Metal-on-Vulkan 経路はスワイプ **50–57**、スクロール **41** だ。
 
-表の直後の一文が信頼できる理由になる：「The panel is **120 Hz**, and **120 frames a second has not been reached**.」到達しなかった数字を、到達した数字の隣に書く bring-up プロジェクトは、同種の README の多くがしないことをしている。
+信頼できる理由は表の両側に置かれている：setup の表はパネルを **1080 x 2400 at 120 Hz** と書き、文書は冒頭で「**120 frames a second has not been reached**: not on hakios-metal, not on metal2vulkan, and not on OpenGL ES.」と述べる。到達しなかった数字を、到達した数字の隣に書く bring-up プロジェクトは、同種の README の多くがしないことをしている。
 
 ライセンスはディレクトリ単位で分かれ、再利用前に読む価値がある。カーネル部分——`xnu/hakios.patch`、`xnu/files/`、`drivers/`——は Apple XNU の派生著作物で **Apple Public Source License 2.0** のまま。「everything else that is ours」（`xnuloader/` のブートローダ、`userland/src/`、ツール、スクリプト、ドキュメント、`devices/`）は **MIT**。Apple の OS、その IPSW ファームウェア、端末自身のファームウェアはリポジトリに含まれず、「every user obtains them from their own device and their own copy of the firmware」。この分割が、GitHub のライセンス検出がこのリポジトリを単一識別子ではなく `NOASSERTION` と表示する理由でもある。
 
@@ -867,6 +867,8 @@ Mbed TLS チームは **2026-10-08** に「preparing for a transition in the mai
 マルチ教師オンポリシー蒸留は、RL 後の複数の専門教師を 1 人の生徒に畳み戻す標準手段だ。本論文の発見は、通常の測定では何を失ったかが見えないというものだ。既存研究は「near-perfect in-distribution (IND) distillation performance」を報告するが、それは「can mask incomplete capability consolidation beyond the supervised distribution」。
 
 数字そのものが論証になっている。Qwen3 モデルで、数学的推論・コード・agent・長文コンテキストを横断する外挿設定において「OPD and MOPD reach **96.04–102.73%** of their teachers' IND scores. Yet their out-of-distribution (OOD) scores remain **2.45–16.25% below the base model's**」。二度読むべき文だ：蒸留された生徒は分布外で教師に劣るだけでなく、出発点である**未蒸留の base モデル**にも劣る。3 つの合成的設定では、MOPD は「improves IND performance over the base model, but its performance on composed tasks as OOD remains **18.19–24.34% below that of the best teachers**」。
+
+要旨には見出しの数字が示さない逆向きの比較も書かれている：「(M)OPD also reduces OOD forgetting on average relative to its reinforcement learning (RL) baselines.」つまり結論は、蒸留は出発点の base モデルより悪く、それでも置き換える RL 実行よりは良い、ということだ——回帰は実在するが、「蒸留するな」の論拠ではない。
 
 診断は 2 つのボトルネック——教師能力とデータ被覆——で、論文は「jointly alleviating these bottlenecks eliminates OOD forgetting in our experiments and suggests the potential for generalization beyond the teacher」と報告する。より再利用可能なのは機構の節だ：更新の幾何を解析すると、(M)OPD の更新は「smaller and more spectrally concentrated updates on average than those of the RL baselines, along with greater shared update structure under MOPD」——教師を滑らかにフィットする生徒はより狭い関数を学んでおり、その狭さは分布内評価では見えない。2 つの対処は geometry-based patching と base-preserving replay で、いずれも IND 性能を保ちながら base モデルの振る舞いを到達可能に保つことを狙う。
 

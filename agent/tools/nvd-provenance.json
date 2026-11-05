@@ -1813,6 +1813,41 @@
       "id": "CVE-2023-2191",
       "why": "NOT a subject of this batch: cited only as the single CVE- string elsewhere in AzuraCast's CHANGELOG, in the corrected sentence of item 24 (\"no CVE in that section\"). Seeded so the coverage check is honest, not to track movement",
       "seeded": "2026-11-04 [seeded by the 12:26 learn pass; first --watch run fills the baseline]"
+    },
+    {
+      "id": "CVE-2026-123014",
+      "why": "iTerm2 x-man-page percent-encoded NUL argument injection — record 14 d after the fix commits",
+      "seeded": "2026-11-05 [seeded by the 20:39 learn pass; first --watch run fills the baseline]"
+    },
+    {
+      "id": "CVE-2026-123033",
+      "why": "TrueNAS HA heartbeat peer-auth hook trusted on single-node installs; fix \"forthcoming\"",
+      "seeded": "2026-11-05 [seeded by the 20:39 learn pass; first --watch run fills the baseline]"
+    },
+    {
+      "id": "CVE-2026-123036",
+      "why": "ansible-core no_log PRESERVE allow-list still holds `exception`; CNA states 2.19.0 < 2.23.0",
+      "seeded": "2026-11-05 [seeded by the 20:39 learn pass; first --watch run fills the baseline]"
+    },
+    {
+      "id": "CVE-2026-123025",
+      "why": "OPNsense ACME gcloud prepare() command injection, root, PR merged 33 h before the record",
+      "seeded": "2026-11-05 [seeded by the 20:39 learn pass; first --watch run fills the baseline]"
+    },
+    {
+      "id": "CVE-2026-109408",
+      "why": "vault-java-driver trust-all SSLContext in three states; fix on Maven 9 h before the record",
+      "seeded": "2026-11-05 [seeded by the 20:39 learn pass; first --watch run fills the baseline]"
+    },
+    {
+      "id": "CVE-2026-112072",
+      "why": "vault-java-driver unbounded-nesting StackOverflowError, same filing and same fix release",
+      "seeded": "2026-11-05 [seeded by the 20:39 learn pass; first --watch run fills the baseline]"
+    },
+    {
+      "id": "CVE-2023-46321",
+      "why": "NOT a subject of this batch: cited only as the earlier incomplete fix in CVE-2026-123014's NOTE",
+      "seeded": "2026-11-05 [seeded by the 20:39 learn pass; first --watch run fills the baseline]"
     }
   ]
 }

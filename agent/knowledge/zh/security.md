@@ -4151,3 +4151,49 @@ MinIO 凭据的情况下，通过未认证的 provisioner 枚举、创建或删�
 文件轮换的是代码，从来不是密钥**；而每一个早于记录的修复，都发给了已经停止关注的那批用户。
 
 → [[vuln-supply]] [[disclosure-lag]] [[fact-check]] [[agent-stack]]
+
+## 2026-11-05 —— 六条记录、五种出处形态，以及一个重写了自己禁运政策的项目
+
+**(a) OpenSSH 10.6p2——第一个由实测的 AI 再发现驱动的维护方披露政策变更。** Portable OpenSSH 于 2026-11-05 发布 **10.6p2**，
+修复 `sshd(8)` 的**口令认证绕过**，影响用 **musl libc 且禁用 PAM** 构建的 Linux 系统（Alpine 是例子）；没有 CVE 编号，
+10.6p2 那一节的整个 security 部分只有这一条。发布说明把根因放在别处、而守护进程能规避——「We consider the root cause of
+this bug to be outside sshd, but it is exploitable via sshd and can be avoided there」——并致谢 Özgün Kültekin of Wakefield。
+Miller 的帖子（2026-11-05T09:03Z，通过实例的 status API 读取，因为网页是 JS 外壳）是可操作的那一半：`musl` 无 PAM 意味着
+**立刻**设 `PasswordAuthentication=no` 或关闭 SSH，而该 bug「does not exist on non-Linux systems, Linux/glibc systems and
+Linux systems that use PAM for password authentication」。可长期保留的句子是政策：「we have recently observed multiple cases
+of rapid bug rediscovery by AI agents, sometimes within hours, and so now consider long embargo periods to be a dangerous
+practice that primarily benefits attackers」——发布说明同时承诺「making more frequent releases to get bugfixes into users'
+hands more quickly rather than batching them until the next planned release」。**报道丢掉的另一半是：** 同一份说明开篇感谢
+AI 辅助的报告者，同时指出「many AI reports are determined not to have security impact when considered in the context of a
+realistic threat model」（抱怨与提速是同一段），而产物链是同日的——Alpine `edge` 的 `openssh` **10.6_p2-r0**，构建时间
+**2026-11-05 09:05:19**，而 `musl` master 最后一次提交仍是 **2026-10-14**（按设计，上游没有修复）。对披露库而言这是一个
+*政策*数据点而非时滞数据点：禁运被重新定价，因为再发现延迟下降了，「是否已修补」变成了关于构建标志的问题
+（看 `ldd`，不是 `ssh -V`）。
+
+**(b) 这批的 CVE 队列，按出处形态**（一次逗号分隔的 NVD 拉取、六条记录、**0** 个 `nvd@nist.gov` 指标）：
+iTerm2 `CVE-2026-123014` 8.7/4.0/`Received`/`cve@mitre.org`（CWE-88，经 `x-man-page:` 的参数注入）；
+TrueNAS `CVE-2026-123033` 8.3/3.1/`Received`/`cve@mitre.org`（`S:C`，链路本地 HA 心跳对端）；
+ansible-core `CVE-2026-123036` 5.5/3.1/`Awaiting Analysis`/`secalert@redhat.com` `Primary`（CWE-209）；
+OPNsense `CVE-2026-123025` 9.4/4.0/`Received`/`cve@mitre.org`（CWE-78，ACME 插件经 root）；
+vault-java-driver `CVE-2026-109408` 7.4/3.1/`Received`/`abd028dc-…` `Secondary`（CWE-295/297/636）与
+`CVE-2026-112072` 6.5/3.1/`Received`/同源 `Secondary`（CWE-674，无嵌套深度上限）。
+六条中五条为 CNA 赋值且 NVD 沉默，第六条是 `Awaiting Analysis`——本库一直在测的稳态，也是 `CVSS >= 9.0` 门槛会静默丢掉
+5.5 分的 Ansible 与 8.3 分的 TrueNAS 的原因。
+
+**(c) 复发的形态，各配一个能定论的产物。** **保留地址上的混淆代理：** TrueNAS 的 `middlewared` 无条件注册 HA 对端认证钩子，
+并用攻击者可控的两个 socket 属性做信任判定——对端地址属于 `{169.254.10.1, 169.254.10.2}`、源端口 **≤ 1024**——授予
+「an internal node credential that is treated as a full administrator for every API method」，而且在**完全没配 HA 的单机
+Community Edition** 上生效（CWE-290 + CWE-306）。厂商自己的威胁模型正是 NVD 描述压缩掉的部分：「Exploitation is not
+possible from an arbitrary Internet location」（出厂系统禁用 IPv4 链路本地自动配置、没有到 `169.254.0.0/16` 的路由）、
+「Adjacency by itself is not sufficient」，攻击者还必须改变返回路径——这才是 `AC:H` 站得住脚的原因。
+**「没人设置的控件」以默认值与目标值之差的形式回归：** `ub-mode` 要求 `CRAP < 10`，而 `crapper` 的 `--threshold` 出厂是 **30**，
+是 agent-skill 版的「缓解存在但没人跑」。**白名单过期：** Ansible 的 `no_log: true` 审查器按 `PRESERVE` frozenset
+重建结果，而该集合仍包含 **`exception`**，于是失败任务打印出它本该隐藏的秘密——最糟的是模板错误路径，会打印失败行
+「plus the two preceding lines of the variables file」。**字符串当布尔：** `vault-java-driver` 在三种状态下安装 trust-all
+`SSLContext`（`SslConfig` 未调用 `build()`、被反序列化的 `SslConfig`、以及 `VAULT_SSL_VERIFY` 设为 `1`/`yes`/`on`）——
+第三种才是生产配置里真会出现的。**消毒器边界：** iTerm2 的 `x-man-page:` 处理器让百分号编码的 NUL 通过消毒，
+命令行解析又把它变成空白，于是 `-P` 可以指定攻击者的分页器；记录自己的 `NOTE` 说该问题「exists because of an incomplete fix
+for CVE-2023-46321」，而修复提交（`314ba43`、`f29420a`）日期为 **2026-10-22T00:28:27Z**——比记录早十四天，落在
+**changelog 从未提到它**的版本（`3.7.7beta2`，10-27 构建）里，而 **3.7.7**（11-03 构建）提了。
+
+→ [[vuln-supply]] [[disclosure-lag]] [[fact-check]] [[agent-plugins]]

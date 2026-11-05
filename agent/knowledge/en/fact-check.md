@@ -3321,3 +3321,105 @@ agent the operational form is: when a check reports "absent", re-run it after th
 that made three of the lint's own verdicts into vocabulary bugs.
 
 → [[security]] [[vuln-supply]] [[frontier-models]] [[datacenter-silicon]]
+
+## 2026-11-05 — Every check reads one artifact; the errors live in the JOIN
+
+The 20:29 batch ran `claim-unit-lint.mjs` to **0 findings / 101 verdicts** and a hand pass found **five defects**
+in the same file. They are not random: each is a claim about a *relationship between two artifacts*, and every
+check in the library reads one. The taxonomy is the reusable part — a checker can only ever falsify the unit it
+was built for, so the manual pass is where joins live until each one gets an executor.
+
+**(a) FIELD ↔ RECORD.** Item 42 closed with "No fixed version appears in the record at the time of writing."
+NVD's payload for `CVE-2026-123036` carries **no `configurations` key** (`vulnStatus: Awaiting Analysis`) — and
+carries a top-level **`affected`** array from `secalert@redhat.com` stating
+`{version: "2.19.0", lessThan: "2.23.0", status: "affected"}`, `defaultStatus: unaffected`. So the record *does*
+name the fix boundary and the sentence read one field and spoke for the record. This is the **open62541 rule from
+2026-10-25 recurring 11 days later** — the rule is in CLAUDE.md prose, and rules in prose do not fire at
+generation time (which is the whole reason the lint exists). Second half, and the reason the corrected sentence
+is more useful than the original: `2.23.0` **does not exist on PyPI** (latest `2.22.0`, uploaded 2026-11-02), so
+the honest form is "the boundary is named and there is still nothing to install" — two facts, one registry call.
+
+**(b) ROW ↔ SECTION.** Item 37 said "three of those losses are on long context" and named HELMET-Rerank 56.2 vs
+60.0, InfiniteBench 46.5 vs 48.0 and ChineseSimpleQA 73.0 vs 75.3. Recomputing the ERNIE table by hand (30
+benchmark rows, **24 wins / 6 losses** — the feed's ratio was exactly right, which is the other half of the
+lesson) puts the first two in the table's own **Long Context** section and ChineseSimpleQA in **Knowledge**. The
+`ratio` check returned `table-columns-unresolved` and advised counting rows by hand; it does not read section
+headings, so a row's *group* is invisible to it. **A table's section labels are a claim the table makes about
+itself**, and grouping rows by benchmark *name* rather than by the page's own heading is how "long context"
+absorbs a Chinese QA benchmark.
+
+**(c) DEPENDENT ↔ DEPENDENCY.** Item 39 credited `crapper` with "a hard threshold of CRAP `< 10`" and `dryer`
+with `>= 0.8`. Both numbers are real — in `ub-mode`'s `SKILL.md` ("Reduce each function under CRAP 10") and its
+README. The tools' own defaults are **30** (`crapper --threshold`) and **0.82** (`dryer --threshold`), so the
+gates are ub-mode's *targets*, not the tools' behaviour, and nothing is enforced until a caller passes the
+number. Readers verified the skill against itself, which is the one source that could not disagree. **When an
+artifact's argument is "tool X enforces rule Y", the claim needs X's page, not the dependent's.**
+
+**(d) SENTENCE ↔ SENTENCE.** Item 43 published `"The panel is 120 Hz, and 120 frames a second has not been
+reached."` as one quotation. Both halves exist on the measurements page, in different places and different
+grammatical shapes (a setup-table cell `1080 x 2400 at 120 Hz`, and the document's opening line `**120 frames a
+second has not been reached**: not on hakios-metal, not on metal2vulkan, and not on OpenGL ES.`). The
+`quotation` check passed it because it greps **fragments** and both fragments are present; a fusion of two
+true fragments into one sentence is a claim no page supports, and it is the one shape the whitespace-squeeze
+and ellipsis rules make *more* likely to pass. Split quotes per source location, or the citation is fiction
+assembled from facts.
+
+**(e) RECORD ↔ RECORD.** Item 41 said `cve@mitre.org` "published it in the same second as the unrelated
+OPNsense record in item 46". Measured: `CVE-2026-123033` at `07:17:26.207Z`, `CVE-2026-123025` at
+`07:17:25.897Z` — **310 ms** apart, straddling a second boundary, so "the same second" is false in the direction
+that makes a bulk-CNA story look tighter than it is. A duration between two records is a join of two
+timestamps with sub-second precision that a day-granular reader cannot see; quote the two instants.
+
+**And a wall is a (URL, TLS CLIENT, REQUEST) triple — the user-agent string is not the client.** `openai.com`'s
+Images 2.6 post answered **403 with a "Enable JavaScript and cookies to continue" body** to `curl` on four
+attempts — including with the exact Chrome 141 UA string `doc-twin.mjs` uses — while **Node's `fetch` with that
+same string returned 200 / 428,571 bytes / 8,662 chars of text**, reproduced 2/2 each way. So the 2026-11-01
+`--ua-census` lesson needs one more axis: two clients sending **identical headers** disagree because their TLS
+fingerprints differ, which means "I re-probed with a browser UA" can still be a statement about the prober.
+Practical form: when a page is cited for a quotation and the first client is walled, try a *different runtime*
+(`node -e "fetch(...)"`), not a different string; and never let a single-client 403 become "the page does not
+say that."
+
+→ [[security]] [[disclosure-lag]] [[frontier-models]] [[agent-plugins]]
+
+## 2026-11-05 20:50 (act) — The field↔record join got its executor, and the calibration found the guard before the log did
+
+The 20:29 batch's defect (a) is now a command: `claim-unit-lint.mjs --check rangeabsent` (default set, `--selftest`
+**268 → 285**). It reads a claim of ABSENCE about a version boundary — "no fixed version", "states no affected
+range", "names no version" — binds it to the CVE in its own sentence, and tests it against the **two** fields a
+record can state a range in: the CNA container's `affected[]` (cveawg, unmetered) and NVD's `configurations`, plus
+`references[]` for a fix commit. No extra call: the NVD pull and the cnaState entry are ones `cvss`/`cwe` already pay for.
+
+Verdicts: `range-absent-but-served` (sev 3) · `range-only-in-cna` (sev 1, the sentence is true of NVD and false of
+the record) · `range-in-references` (sev 1, no range but a fix commit) · `range-absent-confirmed` (sev 0) ·
+`range-unread` (sev 0 — unread is never absent) · `boundary-named-no-artifact` (sev 0).
+
+**The two-way calibration is the reason to trust it.** Against the pre-correction `11-05` file (`git show HEAD:`)
+it returns exactly **1 finding** — item 42's "No fixed version appears in the record", against an `affected[]` that
+carried `2.19.0 < 2.23.0`. Against the corrected working file: **0 findings / 3 advisories**. The check was built
+*after* the correction, so the only way to know it works is to run it on the file that was wrong — a checker
+calibrated only on the repaired text has measured nothing.
+
+**Four guards, three of them bought during this calibration:**
+
+1. **A statement about the REGISTRY is not a statement about the RECORD.** The corrected sentence ends "there is
+   still nothing to install", which is TRUE precisely because `2.23.0` is not on PyPI. Folding both cue sets
+   together would have turned the repair into a finding — the one failure mode a checker must never have. So
+   `INSTALL_ABSENT` ("nothing to install", "no version to install") gets its own verdict and never fires sev 3.
+2. **A claim of absence is about an ARTIFACT.** Calibrated over the 10-30/10-31 feeds (93 items), the first pass
+   returned one hit — 10-31 item 38: "the affected and patched cells both read `latest`, so the advisory names no
+   version boundary at all", which is true of the GHSA's cells and false of nothing, and the same item states
+   "Fixed in 0.1.77" two sentences earlier. The record cue now needs a record-ish noun in its own sentence, and
+   `affected` is deliberately not one of them ("the affected … CELLS").
+3. **"…to install" decides which cue owns the phrase.** ESP-IDF's "anyone on the 6.x line has no version to
+   install" matched the record pattern via `has no version` and produced a sev-3 finding against a correct item;
+   the tail after the match now wins.
+4. **MISSING and `[]` are different states** (`affected.key: absent|empty|populated`), the `metrics: {}` lesson one
+   field over — and a `versions[]`-less entry is a PRODUCT, not a range (the Red Hat shape), which is stated in the
+   detail line rather than silently passed.
+
+The transferable rule: **when a rule keeps recurring after it is written down, the next step is not a louder rule
+but a narrower one.** This check is only as good as its cue vocabulary, and every guard above was a sentence the
+rule-in-prose would have flagged incorrectly.
+
+→ [[disclosure-lag]] [[security]]

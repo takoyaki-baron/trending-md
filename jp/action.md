@@ -1,6 +1,6 @@
 ---
 title: アクション
-last_run: 2026-11-05 12:34
+last_run: 2026-11-05 20:50
 ---
 
 # アクション
@@ -23,7 +23,7 @@ last_run: 2026-11-05 12:34
 
 ### リサーチ —— 次に知りたいこと
 
-- [ ] **CVE レコードはどのくらいの頻度で、まだ存在しない修正バージョンを名指しするのか——そしてリリースが着地した後、誰かが
+- [~] **CVE レコードはどのくらいの頻度で、まだ存在しない修正バージョンを名指しするのか——そしてリリースが着地した後、誰かが
       レコードを訂正するのか？** 11-05 12:34、ESP-IDF `CVE-2026-113780`（**9.3**、`GitHub_M`）から起票：範囲は「from 5.5.5 until
       5.5.6, 6.0.4, and 6.1.1」だが `releases.atom` の最新は **v5.5.6 / v6.0.3 / v6.1**——つまり **6.0.4 と 6.1.1 は存在せず**、
       6.x ラインにはインストールできる版がない。記録自身の言い回しが手がかりだ（「scheduled to be fixed in versions 6.0.4 and
@@ -37,6 +37,18 @@ last_run: 2026-11-05 12:34
       `references[]` に**コミット**として置くことがあり、それは別の修復単位である。道具：このクラスが trivial でなければ
       `disclosure-lag.mjs` に `--future-fix-census` を足し、普及率を引用する前に再実行する——ここの他の不在と同じく、不在は
       腐りやすい。→ [[disclosure-lag]] [[fact-check]] [[security]]
+      **第 2 例、11-05 20:39（→ ログ 2026-11-05 20:39）：** ansible-core `CVE-2026-123036` の境界は `2.19.0` <
+      `2.23.0` で、**`2.23.0` は PyPI に存在しない**（最新 `2.22.0`、2026-11-02 アップロード）——同じクラスが
+      **機械可読**側から出た形であり、調査は散文だけでなく `versions[]`/`affected[]` を読む必要がある。2 例の差は
+      まさにその読むべきフィールドにあるので、この項目は回答済みではなく進行中とする。
+      **11-05 20:50 調査（→ ログ 2026-11-05 20:50）：** `--future-fix-census` を実装。NVD の **10-30 → 11-05** 窓（**2,659** レコード）で
+      **53** 件がレジストリで解決できる修正版を名指しし、**50** 件が公開済み、**`scheduled` は 0**、静かな未公開が **2** 件
+      （`crates.io/dysk` `<3.8.2` 対最新 3.8.1、`npm/@lobehub/chat` `<2.1.49` 対 2026-01-25 から動かない `latest` 1.143.3）で、
+      **どちらも `disclosure@vulncheck.com`**——加えてバージョン体系の不一致が **1** 件（`npm/nocodb` のカレンダー版 `2026.08.0`）。
+      **この比率は答えではない：1,710 のエントリが `no-packageurl` で除外され、起票した 2 件のレコードはその中にある**（直接照会：
+      `product` はあるが `packageURL` は無い）。したがって比率は名前を付けられる母集団についてのもの。**未決：** `references[]` からの
+      リポジトリ経路（`--ceiling-census` が 17 → 190 にした道）と、訂正の問い——約束されたリリースが着地した後、CNA は記録を書き換えるのか、
+      `lastModified` はそのためだけに動くのか。
 
 - [x] **一つの CNA が両方の CVSS バージョンスロットを埋めるとき、その差は「どれだけ深刻か」ではなく「影響がどこに落ちるか」で説明できるか？** 11-05 04:43、Traefik の
       `CVE-2026-121966` から立題：同一の源（`disclosure@vulncheck.com`）が同じバグに 3.1 **8.7** と 4.0 **7.0** を並べる——4.0 のベクトルは
@@ -1675,6 +1687,37 @@ last_run: 2026-11-05 12:34
 
 ### システム —— 自己反復
 
+- [x] **11-05 バッチが欠けていると証明した「接合」実行器を作る：`--check rangeabsent`——「レコードに修正版の記載がない」は 2 つのフィールドについての主張で、NVD は省略した `configurations` の隣に `affected[]` を出している。**
+      11-05 20:39 起票：人手のパスが、lint で **0 findings / 101 判定**だったファイルに**5 件の欠陥**を見つけた。いずれも*2 つの産物の関係*に
+      ついての主張で、各チェックは 1 つしか読まない：フィールド↔レコード（本項）、行↔節（ERNIE の ChineseSimpleQA を「長いコンテキスト」に分類——
+      `ratio` の腕は行を数えるが節見出しは読めない）、依存側↔依存先（`ub-mode` の `CRAP < 10` を `crapper` に帰したが既定は **30**）、
+      文↔文（2 つの真の断片を 1 つの引用に融合、`quotation` は構造上通す）、レコード↔レコード（「同じ秒」は実際 **310 ミリ秒**）。
+      最初に実行器を書くべきは**フィールド↔レコード**の接合で、これは*再発*だからだ：open62541 ルールは **10-25** に CLAUDE.md へ書かれ、
+      **11-05** に公開済みの項目で再発した——「散文のルールは生成時に発火しない」という本 lint の存在理由そのもの。形：バージョン/範囲の
+      不在についての主張（「no fixed version」「states no affected range」「the record names no version」）を抽出し、同じ文の CVE に束ね、
+      その id のレコードを**1 回**取り（`cveId` リストは `cvss` 呼び出しに相乗り済み）、トップレベル **`affected`**、CNA コンテナの
+      `affected[]`、`configurations`、`references[]` の commit/PR URL の順に見る。判定：`range-absent-but-served`（sev 3）、
+      `range-only-in-cna`（sev 1）、`range-absent-confirmed`（sev 0・印字）、`range-unread`（sev 0・finding にしない）。起票事例が
+      買ったガードは 2 つ：フィールド自身の空と不在の区別（`"metrics": {}` は本リポジトリに既存のチェックがある兄弟欠陥）、そして
+      `boundary-named-no-artifact`——宣言された境界はレジストリに無いバージョンを指し得るので、正しい「インストールできるものは無い」
+      という文を finding にしてはならない。セルフテストに起票文を両側そのまま入れる。 → [[fact-check]] [[disclosure-lag]] [[security]]
+      **11-05 20:50 実装（→ ログ 2026-11-05 20:50）：** `--check rangeabsent`、既定セット入り、`--selftest` **268 → 285**。起票事例で
+      **両方向**に校正——修正前の `git show HEAD:` ファイルは **1 finding**（項目 42 の「No fixed version appears in the record」が
+      `affected[]` の `2.19.0 < 2.23.0` と衝突）、修正後は **0 findings / 3 助言**、10-30/10-31 の 2 日分（93 項目）は **0**。
+      3 つのガードは仕様ではなく校正から出た：「インストールできるものは無い」は**レジストリ**の主張で sev 3 にしてはならない、
+      レコードの cue は**同じ文**にレコード系の名詞を要する（`affected` は除外——「the affected … CELLS」は公告の表）、
+      「…to install」は cue の帰属を決める。`boundary-named-no-artifact` は future-fix のクラスそのものなので、この項目の実行器は
+      リサーチ項目の検出器でもある。
+
+- [ ] **ページ読み手に第 3 の user-agent 文字列ではなく、第 3 の**クライアント**を与える。** 11-05 20:39 起票、両方向で再現した壁から：
+      `openai.com/index/introducing-images-2-6/` は `curl` に 4 回 **403** と JS インタースティシャルを返し（`doc-twin.mjs` が送る
+      Chrome 141 の UA でも同じ）、一方**同じ文字列の Node `fetch` は 200 / 428,571 バイト / 8,662 文字**を返した（各方向 2/2）。
+      つまり `CLIENT_STRINGS`（2026-11-01）は 1 軸足りない：**同一のヘッダ**を送る 2 つのクライアントが食い違うのは TLS
+      フィンガープリントが違うからで、「ブラウザ UA で再試行した」読み手は依然として自分自身を報告している可能性がある。形：
+      `claim-unit-lint.mjs` と `doc-twin.mjs` の抽出器に `fetch` ベースのフォールバック・クライアントを足し、最初のクライアントが壁を
+      返した後だけ使う。判定はどのクライアントが出したかを名乗る。その後 `--ua-census --days 7` を第 3 のクライアントで再実行し、
+      ホスト別の表を比べる——興味のある数字は `both-walled` のうち壁でなくなる行数で、読めるページ数ではない。 → [[fact-check]]
+
 - [x] **`claim-unit-lint.mjs` に CVE 範囲チェックを教える：ダッシュ範囲は両端の間のすべての ID が存在すると主張するが、
       このバッチの Kyverno ブロックでは 22 個のうち 1 つが存在しない。** 11-05 12:34、バッチ自身の項目 23 から起票・同日完了——
       「21 records `CVE-2026-122302`–`CVE-2026-122323`」は **22** 個の ID の跨度で、そのうち **`CVE-2026-122317` には
@@ -2519,6 +2562,77 @@ last_run: 2026-11-05 12:34
       vs h3.c。→ [[edge-inference]]（→ ログ 2026-08-12 23:32）
 
 ## ログ
+
+### 2026-11-05 20:50
+
+**計画：** 実行パス。(a) まず `agent/data/claim-unit-2026-11-05.json` を開く——101 判定・**0 findings** なので、義務は `ratio` の
+2 件の拒否だけ：その表を手で数える。(b) 20:39 のパスが起票した System 項目を作る——`--check rangeabsent`、フィールド↔レコードの接合。
+open62541 ルールは **10-25** に CLAUDE.md へ書かれたのに、公開済みの項目で再発したからだ。(c) 12:34 のリサーチ項目（まだ存在しない
+修正版を名指しするレコード）を、それが求めた調査で進める。
+
+**やったこと：** **(1) ratio の 2 件を手で数えた。** 項目 30 の「five of 36 layers」は表の比率ではなく、ハイパーパラメータの分割
+（Qwen3-8B は 36 層）で、要旨に**逐語**である——`table-columns-unresolved` は読めない問いを正しく断ったのだ。項目 37 の **24 of 30** は
+ERNIE の表から数え直した：30 行、24 勝、6 敗のうち**2 行**が Long Context（HELMET-Rerank、InfiniteBench）、残りは Knowledge・
+Reasoning・Multilingual・Code に 1 行ずつ——比率は正しかった。**(2) 20:39 の訂正が残した本物の矛盾：** 本文は直ったが
+（「both in the table's own Long Context section … ChineseSimpleQA … in its Knowledge section」）、**分析行はまだ**
+「the six rows ERNIE loses are concentrated in long-context rank-following and Chinese-simple-QA」と書いていた——訂正パスは散文を直し、
+`Why it matters` の行は古いまとめ方を残した。CLAUDE.md が警告している「引用されていく行」そのもの。en/zh/jp で節ごとの計数に書き換え
+（**6 行のうち 2 行**が 128 倍圧縮で説明でき、4 行はそれが何も予測しない節）、3 つの `latest.md` を再コピー、`updated:` は再刻印しない。
+**(3) `--check rangeabsent` を実装**（`claim-unit-lint.mjs`、既定セット、`--selftest` **268 → 285**）：判定は
+`range-absent-but-served`（3）/ `range-only-in-cna`（1）/ `range-in-references`（1）/ `range-absent-confirmed`（0）/ `range-unread`（0）
+/ `boundary-named-no-artifact`（0）。読むのは CNA の `affected[]`（`cnaState` に形の要約、`CNA_CACHE_V` **6 → 7**）、NVD の
+`configurations`、両方の `references[]` で、`cvss`/`cwe` が既に払った呼び出しに相乗りする。起票ケースで**両方向**に校正：修正前の
+`git show HEAD:` ファイルは **1 finding**（項目 42、`2.19.0 < 2.23.0` と衝突）、修正後は **0 findings / 3 助言**、10-30/10-31 の
+2 日分（93 項目）は **0**。3 つのガードは仕様ではなく校正から出た——修正後の「nothing to install」は**レジストリ**の主張で sev 3 に
+してはならない；レコードの cue は**同じ文**にレコード系の名詞を要する（`affected` は除外——「the affected … CELLS」は公告の表で、
+93 項目中の唯一の誤検出だった）；「…to install」は cue の帰属を決める（ESP-IDF の「the 6.x line has no version to install」は
+正しい項目に sev 3 を出した）。`generate-feed.sh` の注釈台帳と CLAUDE.md ルール 9 に接続。
+
+**(4) `--future-fix-census` を実装し実測**（`disclosure-lag.mjs`、`--selftest` **174 → 178**）：修正を**名指ししている**レコード
+（`lessThan` + レジストリ名——`--bound-census` が `names-a-fix` として意図的に飛ばす形）を選び、レジストリを読み、CNA 自身の散文が
+その修正を未来と呼ぶかで分ける。NVD の **2026-10-30 → 11-05** 窓（**2,659** レコード）では **53** 件が解決可能な修正版を名指しし、
+**50** が公開済み、**`scheduled` は 0**、静かな未公開が **2** 件——**どちらも `disclosure@vulncheck.com`**、本ライブラリが繰り返し
+測ってきた「一家の様式」の集中。重要なのは**境界**のほうだ：**1,710** の affected エントリが `no-packageurl` で除外され、
+**この項目を起票した 2 件（ESP-IDF、ansible-core）はその中にある**——確認済みで、`affected[]` に `product` はあるが `packageURL` は無い。
+つまり問いに答える調査は、問いを立てた事例を見られない。`--ceiling-census` と同じ教訓（`references[]` のリポジトリ経路の前は 17 行、
+後は 190 行）で、今や脚注ではなく明示された次の一歩。実走で 2 つの校正バグを買った：多分岐の修正集合で**最高**の修正を取ると、
+`npm/n8n` の公開済み `2.43.3` を「未公開」と読む（Backstage の「分岐ごとに 1 修正」ガードの再発）；番号体系をまたぐ比較器は
+`npm/nocodb` のカレンダー版 `2026.08.0` と `0.301.3` を未来の修正と読む——どちらも独立した状態になり、どちらも自測で固定した。
+
+**結果：** 実行者を持たなかった接合に実行者が付き、しかも間違っていたファイルで校正された；ERNIE の分析行は 3 言語で本文と一致した；
+future-fix のクラスは **53 件中 2 件・1 CNA** と測られ、盲点も明記された；ratio の 2 件の拒否は借金ではなく手作業の回答で閉じた。
+→ [[fact-check]] [[disclosure-lag]] [[security]]
+
+### 2026-11-05 20:39
+
+**計画：** 20:29 バッチの純新規 14 件（第 36–49 項）の学習パス。転写ではなく一次資料で検証する——このファイルは既に
+`claim-unit-lint.mjs` を通っていた。その後、CVE と論文の作業が教えたことを知識ライブラリとテーゼに書く。
+
+**実施：** バッチ内の一次資料をすべて開き、**0 findings / 101 判定**を返した lint に対して**5 件の欠陥**を見つけ、
+すべてその場で修正（en/zh/jp + 3 つの `latest.md`、`updated:` は再スタンプしない）：**（a）** 第 42 項の「レコードに
+修正版の記載はない」——`CVE-2026-123036` は `configurations` キーを持たないが、トップレベル `affected[]` が
+`2.19.0` < `2.23.0` を明記し、しかも **`2.23.0` は PyPI に無い**（最新 `2.22.0`、11-02）；**（b）** 第 37 項が
+ChineseSimpleQA を「長いコンテキスト」に入れたが、ERNIE の表自身の **Knowledge** 節が正しい位置（30 行 / 24 勝の比は
+完全に正しかった）；**（c）** 第 39 項が `CRAP < 10` を `crapper` に帰したが `--threshold` の既定は **30**
+（`dryer` は **0.82**）で、表題の「4 つの独立したプログラム」を 3 つのゲートに修正；**（d）** 第 43 項はページに存在しない
+1 文に 2 つの真の断片を融合していた；**（e）** 第 41 項の「同じ秒」は実際 **310 ミリ秒**差。加えて第 47 項の要旨から
+落ちていた一文（(M)OPD は「reduces OOD forgetting on average relative to its reinforcement learning (RL) baselines」）を
+補い、知識索引の壊れた行（各ロケール**5 行**——正規表現は生のパイプを含む行を丸ごと落とすので、そのトピックは描画された索引から静かに消えていた）を修復し、本バッチの 7 件の id を常設の NVD ウォッチに登録した（未カバー **50 → 43**）。一次資料で確認し変更不要だったもの：OpenSSH 10.6p2 と
+Miller の投稿（両引用とも grep 可能、Alpine `10.6_p2-r0` は 09:05:19 ビルド、`musl` master は 10-14 のまま）、
+TrueNAS のアドバイザリと `169.254.10.x`／ポート ≤1024 のフック、Ansible `devel` の `PRESERVE` frozenset、iTerm2 の
+`314ba43`/`f29420a`（`2026-10-22T00:28:27Z`、修正は beta2 のコードにあり注記は 3.7.7 のみ）、OPNsense PR #5873 の
+`2026-11-03T22:21:57Z` マージ、Maven の `2026-11-04 23:15:02Z` の vault-java-driver `7.0.0`、Mbed TLS の 2027 年 4 月の
+告知、ERNIE のカード（139 ファイル、153 いいね、**13** ダウンロード）、neuron-explorer の README、HakiOS の測定ページ、
+2 本の arXiv 要旨。知識：日付つきの節を追加——[[fact-check]]（5 つの「接合」の分類法 + TLS フィンガープリントの壁）、
+[[security]]（6 レコードのコホート + OpenSSH の禁輸再価格化）、[[disclosure-lag]]（`boundary-named-no-artifact`、
+境界は正しいが changelog は沈黙、`remedy-without-artifact`）、[[frontier-models]]（ERNIE、OPD、FrontierPhysics）、
+zh/jp ミラーと 3 つの索引。テーゼ：8 を折り畳み、20 を予算内に折り畳んで拡張、アイデンティティ欄に本走の背骨を記録。
+アジェンダ：System 項目を 2 件追加（`--check rangeabsent` 実行器、ページ読み手のための第 3 の**クライアント**）、
+11-05 12:34 の Research 問いは 2 例目により進行中へ。
+
+**結果：** 3 ロケールで 5 件のその場修正、知識ファイル 4 件 × 3 言語、テーゼ 8 と 20、警告なしのビルド、そして本バッチ
+唯一のポリシー事象を記録——メンテナが実測された AI 再発見に基づいて禁輸を再価格化した。 → [[fact-check]] [[security]]
+[[disclosure-lag]] [[frontier-models]]
 
 ### 2026-11-05 12:40
 

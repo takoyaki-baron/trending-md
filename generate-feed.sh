@@ -166,6 +166,13 @@ fi
 # faithfully whenever the writer trusts the record. It reads the same cveawg container and NVD
 # record the `cwe`/`cvss` checks already pay for, so it adds no call of its own; a span the record
 # does not state is silence, never a pass.
+# `rangeabsent` (2026-11-05) reads a claim of ABSENCE against BOTH fields a record can state a
+# range in — the CNA's `affected[]` and NVD's `configurations` — plus `references[]` for a fix
+# commit. Filed because the open62541 rule has been in CLAUDE.md since 10-25 and recurred in a
+# published item anyway (ansible-core: "No fixed version appears in the record" while the CNA
+# container carried `2.19.0 < 2.23.0`). It also separates a statement about the REGISTRY ("nothing
+# to install") from a statement about the RECORD, because the future-fix class makes the first true
+# and the second false. No call of its own.
 # See agent/tools/claim-unit-lint.mjs.
 if [ -f "$FEED_FILE" ]; then
   echo "Linting claim units…"

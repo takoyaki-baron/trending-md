@@ -3297,3 +3297,36 @@ while ignorance forces geometric fragmentation」。
 **循环深度作为运行时旋钮交付**（arXiv **2611.03998**，NVIDIA Nemotron Labs，9 位作者；数字逐字核对）。Dory1.0-4B 是 nGPT 骨干，拆成输入 **8** / 共享循环 **20** / 输出 **8** 层，循环块可跑 1、2 或 4 次且共用同一 checkpoint：SWE-bench Verified **50.3 → 59.5 → 61.8**、Terminal-Bench 2.1 **12.5 → 18.1 → 22.2**、SciCode **27.3 → 34.94 → 35.11**、τ³-Banking **11.6 → 12.89 → 14.69**、GDPval-AA-V2 Elo **815 → 946 → 967**。卡片明说曲线前置——「循环带来的准确率提升大部分来自第二轮，之后增益更小」——最诚实的行是 GPQA Diamond 两轮 **72.41**、四轮 **72.16**。预训练 6T token（前约 4.5T 用 NVFP4），再做 300B token 的上下文扩展至 256K，然后 SFT + 多环境 GRPO。三条自陈限制：AA 列是「内部估算……可能偏离官方 Artificial Analysis（AA）分数」；公开基准是 **BF16** checkpoint，不是 MXFP8/NVFP4/Q5_K_M 导出；「Dory 在 vLLM 的支持正在评审中」（`vllm-project/vllm#60149`）。
 
 → [[edge-inference]] [[fact-check]] [[harness-reliability]]
+
+## 2026-11-05 —— 把 base 检查点当产品发布，以及两篇「标题遮住了自身对照」的论文
+
+**(a) ERNIE-5.5-Flash-Base 直接把预训练终点当产物，附一张四模型同一 harness 的表。** `baidu/ERNIE-5.5-Flash-Base`
+（**280B 总参 / 14B 激活**，稀疏 MoE）在 **33.5T token**、**128K** 上下文上从零预训练，微调与推理支持 **1M**；博客明确指出产物*就是*
+预训练检查点——「the checkpoint at the end of pre-training, before any mid- or post-training」——后训练版作为后续发布另行预告。
+卡片实测：创建 `2026-10-21T08:40:58Z`（比博客早十五天）、`gated: false`、**139** 个文件、**153 赞 / 13 下载**、`license: other`。
+架构才是长上下文账单的部分：**43** 层、隐层 **4096**、**64** 头，只有**七层之一**通过 MLA 保留 token 级访问，其余 **37 层**
+用 **Heavily Compressed Attention**（每 **128** token 压成一个缓存条目，再接一小段未压缩窗口）；头维度按层设定
+（HCA **512** / MLA **256**），百度的对照实验给出反向排列不行——「HCA combined with MLA outperforms HCA combined with CSA」。
+评测难得地诚实：「All four models are evaluated from their publicly released checkpoints with the same evaluation harness,
+prompts and few-shot examples, and with the same LLM judge for free-form QA.」**手工重数：30 个基准行、ERNIE 24 胜、6 负**——
+而这 6 负正是对照：HELMET-Rerank 56.2 对 60.0 与 InfiniteBench 46.5 对 48.0 在表格自己的 **Long Context** 分节，
+ChineseSimpleQA 73.0 对 75.3 在 **Knowledge** 分节，另加 BBH-CoT、INCLUDE-lite、FullStackBench。
+（feed 起初写「其中三行在长上下文」，已在原地修正——行的*分节*不是它的*名字*。）
+
+**(b) 同策略蒸馏在分布内完成合并，却在分布外退化到 base 模型以下——而摘要里带着标题省略的那个对照。**
+arXiv 2611.05609（提交于 **2026-11-03T20:53:26Z**）：在 Qwen3 的外推设置中，「OPD and MOPD reach **96.04–102.73%** of
+their teachers' IND scores. Yet their out-of-distribution (OOD) scores remain **2.45–16.25% below the base model's**」——
+比它出发的未蒸馏 base 还差，不只是不如教师；三个组合式设置比最佳教师低 **18.19–24.34%**。让这个发现不至于变成
+「干脆别蒸馏」的那句：「(M)OPD also reduces OOD forgetting on average relative to its reinforcement learning (RL) baselines.」
+机制：(M)OPD 的更新「smaller and more spectrally concentrated… along with greater shared update structure」——
+平滑拟合就是更窄的函数，而窄度在 IND 评测上不可见。补救：geometry-based patching、base-preserving replay。
+**这批反复学到的测量规则：只有 IND 的表无法区分「学会了教师」与「忘掉了其他一切」。**
+
+**(c) 端到端研究的 27.4% 天花板，而它点名的失败不是执行问题。** arXiv 2611.06910（提交于 **2026-11-04T18:56:22Z**）：
+**56** 个任务由 **42** 位物理学家基于自己的研究写成，跨 **九个** 领域，每个都要求文献综述、研究计划、实验与论文，
+由确定性验证器加专家评分标准判分。「Across **22 models in 26 configurations**, no configuration passes more than
+**46 of its 168 rollouts**.」诊断明确排除了常见原因：弱点是「insufficiently rigorous reasoning and limited expert
+intuition, **rather than gaps in physics knowledge or execution errors**」。对一个接在饱和多选题之后的基准来说，
+真正有用的性质是：天花板来自某些人真实面临的问题。
+
+→ [[security]] [[fact-check]] [[token-economics]] [[formal-verification]]

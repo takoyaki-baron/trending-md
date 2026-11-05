@@ -3601,3 +3601,39 @@ correlations that are invisible to behavioral evaluation」と付け加える。
 **ループ深度が実行時ダイヤルとして出荷される**（arXiv **2611.03998**、NVIDIA Nemotron Labs、著者 9 名、数値は逐語で確認）。Dory1.0-4B は nGPT バックボーンを入力 **8** / 共有リカレント **20** / 出力 **8** 層に分け、リカレントブロックを 1・2・4 回まわす同一チェックポイントで提供する：SWE-bench Verified **50.3 → 59.5 → 61.8**、Terminal-Bench 2.1 **12.5 → 18.1 → 22.2**、SciCode **27.3 → 34.94 → 35.11**、τ³-Banking **11.6 → 12.89 → 14.69**、GDPval-AA-V2 Elo **815 → 946 → 967**。カードは曲線が前方荷重だと明言し（「ループによる精度向上の大半は二周目から得られ、それ以降の伸びは小さい」）、最も正直な行は GPQA Diamond の二周 **72.41** 対 四周 **72.16**。6T トークンで事前学習（最初の約 4.5T は NVFP4）、続いて 300B トークンの文脈拡張で 256K、その後 SFT とマルチ環境 GRPO。自己申告の限界は三つ：AA 列は「一貫した評価ハーネス下の内部推定であり、公式の Artificial Analysis（AA）スコアから乖離しうる」、公開ベンチマークは **BF16** チェックポイントのもので MXFP8/NVFP4/Q5_K_M の各エクスポートではない、そして「vLLM での Dory サポートはレビュー中」（`vllm-project/vllm#60149`）。
 
 → [[edge-inference]] [[fact-check]] [[harness-reliability]]
+
+## 2026-11-05 —— base チェックポイントを製品として出すこと、そして見出しが自らの対照を隠す 2 本の論文
+
+**(a) ERNIE-5.5-Flash-Base は事前学習の終点をそのまま製品として出し、4 モデル同一 harness の表を添える。**
+`baidu/ERNIE-5.5-Flash-Base`（**総 280B / 活性 14B**、スパース MoE）は **33.5T トークン**、**128K** コンテキストで
+ゼロから事前学習され、ファインチューニングと推論では **100 万**トークンを扱う。ブログは成果物が*まさに*事前学習
+チェックポイントだと明言する——「the checkpoint at the end of pre-training, before any mid- or post-training」——
+後訓練版は後日のリリースとして別に予告される。カードは実測：作成 `2026-10-21T08:40:58Z`（ブログの 15 日前）、
+`gated: false`、**139** ファイル、**153 いいね / 13 ダウンロード**、`license: other`。
+長いコンテキストの請求額を決めるのはアーキテクチャだ：**43** 層、隠れ次元 **4096**、**64** ヘッド、トークン単位のアクセスを
+保つのは **7 層に 1 層**（MLA）だけで、残る **37 層**が **Heavily Compressed Attention**（128 トークンごとに 1 エントリへ圧縮し、
+直近の非圧縮窓を足す）。ヘッド次元は層ごと（HCA **512** / MLA **256**）で、逆配置も試した上で「HCA combined with MLA
+outperforms HCA combined with CSA」と書く。評価は珍しく比較可能性に正直だ：「All four models are evaluated from their
+publicly released checkpoints with the same evaluation harness, prompts and few-shot examples, and with the same LLM judge
+for free-form QA.」**手で数え直すと 30 のベンチマーク行、ERNIE 24 勝 6 敗**——そしてその 6 敗が対照になる：
+HELMET-Rerank 56.2 対 60.0 と InfiniteBench 46.5 対 48.0 は表自身の **Long Context** 節、ChineseSimpleQA 73.0 対 75.3 は
+**Knowledge** 節、残りは BBH-CoT、INCLUDE-lite、FullStackBench。（feed は当初「うち 3 行が長いコンテキスト」と書き、
+その場で修正された——行の*節*は行の*名前*ではない。）
+
+**(b) オンポリシー蒸留は分布内を統合し、分布外では base モデルを下回る——要旨には見出しが省いた比較が書かれている。**
+arXiv 2611.05609（**2026-11-03T20:53:26Z** 投稿）：Qwen3 の外挿設定で「OPD and MOPD reach **96.04–102.73%** of their
+teachers' IND scores. Yet their out-of-distribution (OOD) scores remain **2.45–16.25% below the base model's**」——
+教師に劣るだけでなく、出発点の未蒸留 base より悪い。3 つの合成的設定は最良教師より **18.19–24.34%** 低い。
+この発見を「蒸留するな」にしない一文：「(M)OPD also reduces OOD forgetting on average relative to its reinforcement
+learning (RL) baselines.」機構は (M)OPD の更新が「smaller and more spectrally concentrated… along with greater shared
+update structure」——滑らかなフィットは狭い関数で、狭さは IND 評価では見えない。対処は geometry-based patching と
+base-preserving replay。**このバッチが繰り返し学ぶ測定規則：IND だけの表は「教師を学んだ」と「他を忘れた」を区別できない。**
+
+**(c) エンドツーエンド研究の 27.4% の天井、そして名指しされた失敗は実行ではない。** arXiv 2611.06910
+（**2026-11-04T18:56:22Z** 投稿）：**42** 人の物理学者が自身の研究から書いた **56** タスク、**9** 領域、いずれも文献レビュー・
+研究計画・実験・論文を要求し、決定論的検証器と専門家作成ルーブリックで採点される。「Across **22 models in 26
+configurations**, no configuration passes more than **46 of its 168 rollouts**.」診断は通常の原因を明示的に退ける：
+弱点は「insufficiently rigorous reasoning and limited expert intuition, **rather than gaps in physics knowledge or
+execution errors**」。飽和した多肢選択の後を継ぐベンチマークとして有用な性質は、天井が誰かの実際の問題から来ていることだ。
+
+→ [[security]] [[fact-check]] [[token-economics]] [[formal-verification]]

@@ -251,13 +251,13 @@ const CACHE_PATH = arg('cache') ?? 'agent/data/claim-unit-cache.json';
 // 5 MB of TEXT is ~7 MB on disk (JSON escapes newlines); 8 MB was an 11 MB file, bigger than the 9.9 MB
 // it was meant to bound.
 const CACHE_BYTES = Number(arg('cache-bytes') ?? 5_000_000);
-const CHECKS = new Set((arg('check') ?? 'issues,cvss,status,date,temporal,cwe,field,range,idrange,repo,count,ratio,bundle,quotation,paper').split(',').map((s) => s.trim()));
+const CHECKS = new Set((arg('check') ?? 'issues,cvss,status,date,temporal,cwe,field,range,rangeabsent,idrange,repo,count,ratio,bundle,quotation,paper').split(',').map((s) => s.trim()));
 
 const SELFTEST = has('selftest');
 const STATUS_WATCH = has('status-watch');
 const EXTRA_IDS = (arg('ids') ?? '').split(',').map((s) => s.trim()).filter(Boolean);
 if (!FILE && !FILES && !SELFTEST && !has('ghsa-census') && !has('quotation-census') && !has('commit-quote-census') && !STATUS_WATCH) {
-  console.error('usage: claim-unit-lint.mjs --file <feed.md> [--no-net] [--check issues,cvss,status,date,temporal,cwe,field,range,repo,count,ratio,bundle,quotation] [--strict] [--json] [--census] [--selftest] [--status-watch [--ids CVE-…]] | --ghsa-census [--pages N]');
+  console.error('usage: claim-unit-lint.mjs --file <feed.md> [--no-net] [--check issues,cvss,status,date,temporal,cwe,field,range,rangeabsent,repo,count,ratio,bundle,quotation] [--strict] [--json] [--census] [--selftest] [--status-watch [--ids CVE-…]] | --ghsa-census [--pages N]');
   process.exit(2);
 }
 
@@ -885,7 +885,24 @@ function cnaState(id) {
       });
     }
   }
-  cache[key] = { fetched_at: new Date().toISOString(), v: CNA_CACHE_V, state: j.cveMetadata.state, assigner: j.cveMetadata.assignerShortName, metrics, cwe, desc, ranges, published: j.cveMetadata.datePublished, fields: fieldTable(j.containers ?? {}) };
+  /* The SHAPE of `affected[]` — not its ranges — is what the `rangeabsent` check reads, and it is a
+     different question from the one `ranges` answers. Measured on the 11-05 filing case: NVD's
+     `configurations` is empty because the record is `Awaiting Analysis`, the CNA's `affected[]`
+     carries `2.19.0 < 2.23.0`, and the two facts together are exactly what a "the record names no
+     fixed version" sentence gets wrong. `entries` counts the array, `versioned` counts entries that
+     state a `versions[]` at all (the Red Hat shape has products and no versions), and `key` keeps
+     MISSING apart from `[]` — the `metrics: {}` distinction one field over. */
+  const affRaw = j.containers?.cna?.affected;
+  const affected = {
+    key: affRaw === undefined ? 'absent' : Array.isArray(affRaw) ? (affRaw.length ? 'populated' : 'empty') : 'other',
+    entries: Array.isArray(affRaw) ? affRaw.length : 0,
+    versioned: Array.isArray(affRaw) ? affRaw.filter((a) => (a.versions ?? []).length).length : 0,
+    products: Array.isArray(affRaw) ? [...new Set(affRaw.map((a) => a.product).filter(Boolean))] : [],
+  };
+  /* `references[]` is the THIRD place a record names a fix (`versions[]` is the second, prose the
+     first), and here it is the only one a commit-shaped remedy can reach. */
+  const refs = (j.containers?.cna?.references ?? []).map((r) => r.url).filter(Boolean);
+  cache[key] = { fetched_at: new Date().toISOString(), v: CNA_CACHE_V, state: j.cveMetadata.state, assigner: j.cveMetadata.assignerShortName, metrics, cwe, desc, ranges, affected, refs, published: j.cveMetadata.datePublished, fields: fieldTable(j.containers ?? {}) };
   return cache[key];
 }
 
@@ -2052,6 +2069,135 @@ function checkRange(it, subjects, cna = new Map()) {
   return out;
 }
 
+// ── check: a stated ABSENCE of a version range ────────────────────────────────────────────────
+/* "The record names no fixed version" is a claim about a relationship between two artifacts, and
+   every check above reads one. The rule has been in CLAUDE.md since **2026-10-25** (open62541: a
+   "structurally range-less `Received` record" whose range had been in the CNA's `affected[]` from
+   publication day), and it recurred on **2026-11-05** in a published item — ansible-core's record
+   said "No fixed version appears in the record" while its CNA container carried
+   `2.19.0 < 2.23.0`. A rule in prose did not fire at generation time, so it becomes a command. */
+const AFFECTED_ABSENT = [
+  /\bno\s+(?:fixed|patched|affected|vulnerable|repaired)\s+(?:version|release)s?\b/i,
+  /\bno\s+(?:affected|version)\s+(?:range|bound|boundary)\b/i,
+  /\b(?:states?|names?|carries?|lists?)\s+no\s+(?:affected|version|release|range|bound)\b/i,
+  /\bcarries?\s+no\s+`?affected`?/i,
+  /\bno\s+`?affected`?\s*(?:\[\])?\s+(?:entry|entries|field|array)\b/i,
+  /\b(?:the\s+)?record\s+(?:states?|names?|carries?|gives?)\s+no\s+(?:version|range|bound|affected)\b/i,
+];
+/* A sentence about INSTALLABILITY is a different claim from a sentence about the record. The
+   calibration sentence is the corrected one — "the boundary is named and there is still nothing to
+   install" — which is TRUE when the record's own bound names a release that does not exist yet
+   (`boundary-named-no-artifact` is the whole future-fix class, not a defect). Folding the two cue
+   sets together would have turned the correction into a finding, which is the failure mode a
+   checker must never have. */
+const INSTALL_ABSENT = [
+  /\bnothing\s+to\s+install\b/i,
+  /\bno\s+(?:fixed\s+)?version\s+to\s+install\b/i,
+  /\bnothing\s+to\s+upgrade\s+to\b/i,
+];
+const FIX_REF_RE = /\/(?:commit|pull|pull-request)\/|\/-\/commit\/|\b[0-9a-f]{7,40}\b.*\bfix/i;
+
+/** Pure: what a stated absence means, given the two artifacts. Split out so `--selftest` pins
+ *  every arm — including the corrected sentence — without a network call. */
+function rangeAbsentVerdict({ cue, namesNvd, nvd, cna }) {
+  const nvdRead = !!nvd && !nvd.error;
+  const cnaRead = !!cna && !cna.error;
+  if (!nvdRead && !cnaRead) return { verdict: 'range-unread', detail: 'neither the NVD record nor the CNA container could be read, so the absence is untested — unread is not absent' };
+  const cfg = nvdRead ? (nvd.configs ?? 0) : null;
+  const aff = cnaRead ? (cna.affected ?? { key: 'absent', entries: 0, versioned: 0, products: [] }) : null;
+  const refs = [...(nvdRead ? (nvd.refs ?? []) : []), ...(cnaRead ? (cna.refs ?? []) : [])];
+  const fixRef = refs.find((u) => FIX_REF_RE.test(u));
+  const cnaServed = aff && aff.entries > 0;
+  const nvdServed = cfg != null && cfg > 0;
+  const shape = aff == null ? 'the CNA container is unreadable'
+    : aff.key === 'absent' ? 'the container has no `affected` key'
+    : aff.key === 'empty' ? '`affected: []` — present and empty, which is not the same as missing'
+    : aff.versioned < aff.entries ? `${aff.entries} \`affected[]\` entr${aff.entries === 1 ? 'y' : 'ies'} of which ${aff.versioned} state a \`versions[]\``
+    : `${aff.entries} \`affected[]\` entr${aff.entries === 1 ? 'y' : 'ies'} with a \`versions[]\``;
+  const nvdState = nvdRead ? `NVD \`configurations\` ${cfg > 0 ? `carries ${cfg} CPE range(s)` : `is absent (record is \`${nvd.status ?? 'unknown'}\`, and absent \`configurations\` means "not yet analysed", never "states nothing")`}` : 'the NVD record is unreadable';
+
+  if (cue === 'install') {
+    if (cnaServed || nvdServed) {
+      return { verdict: 'boundary-named-no-artifact', detail: `${nvdState}; ${shape} — so the record DOES name a bound, and "nothing to install" is a statement about the registry, not the record${fixRef ? `; a fix pointer is also present: ${fixRef}` : ''}` };
+    }
+    return { verdict: 'range-absent-confirmed', detail: `${nvdState}; ${shape} — nothing to install and nothing named, which agree` };
+  }
+  if (nvdServed || cnaServed) {
+    /* "NVD states no affected range" can be TRUE of NVD and false of the record, and the two are
+       different sentences. Only a claim that names the container gets the soft verdict. */
+    if (namesNvd && !nvdServed && cnaServed) {
+      return { verdict: 'range-only-in-cna', detail: `${nvdState}; ${shape} — the sentence is true of NVD and false of the record, because the CNA's own \`affected[]\` is where the range lives (this is the open62541 shape, 2026-10-25)` };
+    }
+    return { verdict: 'range-absent-but-served', detail: `${nvdState}; ${shape}${aff?.products?.length ? ` (${aff.products.slice(0, 3).join(', ')})` : ''} — the record states a range, so the absence is about the field the sentence read, not about the record` };
+  }
+  if (fixRef) {
+    /* The third place a record names a fix is `references[]`, and a commit is a fix pointer with no
+       version in it — so the sentence can be right about the range field and wrong about "no fix". */
+    return { verdict: 'range-in-references', detail: `${nvdState}; ${shape} — but \`references[]\` points at a fix: ${fixRef}` };
+  }
+  return { verdict: 'range-absent-confirmed', detail: `${nvdState}; ${shape} — the absence holds in both fields` };
+}
+
+function affectedAbsentSpans(plain) {
+  const out = [];
+  for (const [cue, list] of [['record', AFFECTED_ABSENT], ['install', INSTALL_ABSENT]]) {
+    for (const re of list) {
+      for (const m of plain.matchAll(new RegExp(re.source, 'gi'))) {
+        const before = plain.slice(Math.max(0, m.index - 40), m.index);
+        /* "the 6.x line has no version **to install**" is the install claim wearing a record
+           verb's clothes — the ESP-IDF calibration (11-05) read it as a claim about the record and
+           produced a sev-3 finding against a correct item. The tail decides which cue owns it. */
+        if (cue === 'record' && /^\s+to\s+(?:install|upgrade)/i.test(plain.slice(m.index + m[0].length, m.index + m[0].length + 24))) continue;
+        if (/["“'‘]\s*$/.test(before)) continue;                                  // quoted speech
+        if (/\b(?:report|read|say|see|claim|describ|interpret|parse|treat|render|calls?|writes?)\w*\b[^.]{0,24}$/i.test(before)) continue; // attributed
+        out.push({ cue, at: m.index, phrase: m[0] });
+      }
+    }
+  }
+  return out.sort((a, b) => a.at - b.at);
+}
+
+function checkRangeAbsent(it, subjects, cna = new Map()) {
+  const out = [];
+  const t = strip(it.text);
+  const claims = affectedAbsentSpans(t);
+  if (!claims.length) return out;
+  const ids = idMentions(t);
+  if (!ids.length) return out;             // no subject → nothing to open (a general statement)
+  const ctx = { sents: sentences(t), primary: primarySubject(t, ids) };
+  const seen = new Set();
+  for (const cl of claims) {
+    const bound = bindSubject(cl.at, ids, ctx);
+    if (!bound || bound.kind !== 'cve') continue; // a GHSA has its own advisory fields, not these two
+    const key = `${bound.id}:${cl.cue}`;
+    if (seen.has(key)) continue;
+    seen.add(key);
+    const rec = subjects.get(bound.id) ?? null;
+    const raw = rec?.raw;
+    const nvd = !rec || rec.error ? { error: true }
+      : { configs: (raw?.configurations ?? []).reduce((n, c) => n + (c.nodes ?? []).reduce((k, nd) => k + (nd.cpeMatch ?? []).filter((m) => m.vulnerable !== false).length, 0), 0), refs: (raw?.references ?? []).map((r) => r.url).filter(Boolean), status: rec.status };
+    const cn = cna?.get(bound.id) ?? null;
+    const s = ctx.sents.find((x) => cl.at >= x.start && cl.at < x.end);
+    const sentText = s ? t.slice(s.start, s.end) : '';
+    const namesNvd = /\bNVD\b/.test(sentText);
+    /* A claim of absence is about an ARTIFACT, and an item can be talking about the ADVISORY while
+       the CVE record it bound to says otherwise — measured on the 10-31 feed's item 38: "the
+       advisory names no version boundary at all" is true of `GHSA-q3g8-3cf7-744f`'s `affected` /
+       `patched` cells (both read `latest`), false of nothing, and the same item states "Fixed in
+       0.1.77" two sentences earlier. So the RECORD cue needs a record-ish subject in its own
+       sentence; a sentence about a GHSA, a cell or a bulletin is a different artifact's claim. */
+    /* `affected` is deliberately NOT in this list: "the affected and patched CELLS both read
+       `latest`" is an advisory's table, and the first build read the word as the record's field. */
+    if (cl.cue === 'record' && /\b(?:advisory|GHSA|bulletin|cell)\b/i.test(sentText) && !/\b(?:record|container|NVD|field|array|entr(?:y|ies))\b/i.test(sentText)) continue;
+    /* the identifier itself is not a record noun — "…at all for CVE-2026-123036" is still a
+       sentence about the advisory's cells, and the first build let the id through as the subject. */
+    if (cl.cue === 'record' && !/\b(?:record|container|affected|NVD|field|array|entr(?:y|ies)|CVE-\d{4})\b/i.test(sentText)) continue;
+    const v = rangeAbsentVerdict({ cue: cl.cue, namesNvd, nvd, cna: cn ?? { error: true } });
+    out.push({ check: 'rangeabsent', item: it.n, verdict: v.verdict, claim: `${bound.id} — "${cl.phrase}"`, detail: v.detail });
+  }
+  return out;
+}
+
 // ── check C: repo state ─────────────────────────────────────────────────────────────────────
 let cache = {};
 try { cache = JSON.parse(readFileSync(CACHE_PATH, 'utf8')); } catch { /* first run */ }
@@ -2068,11 +2214,13 @@ const ERROR_TTL_MS = 10 * 60 * 1000;
    the registry's clock and NVD's are hours apart and the `date` check was reading only one of them.
    v: 6 adds `fields`, the key-presence table the `field` check walks — without it a container that
    carries `"metrics": {}` would answer "absent", which is the claim being tested.
+   v: 7 adds `affected` (the SHAPE summary) and `refs` — without them a v-6 entry answers "the CNA
+   states no affected[]" for every record, which is the whole claim the `rangeabsent` check tests.
    Each bump is the rule, not
    a tidiness choice: an entry written before a field was read would turn "not fetched by this
    version" into "absent from the record", which is the exact defect the schema version exists to
    prevent. A bump forces one refetch per CVE and is unmetered. */
-const CNA_CACHE_V = 6;
+const CNA_CACHE_V = 7;
 /* The repo cache had no version until 2026-11-05, and the day it needed one it produced exactly the
  * defect the versions above exist to prevent: v-0 entries stored a failure as a bare `error` string,
  * so `tencent/Hy4`'s 404 came back as "unreadable" from a six-hour-old entry even after `repoState`
@@ -4705,6 +4853,54 @@ if (SELFTEST) {
     ARXIV_SUBMIT_CUE.test('announced 2026-11-02 on the arXiv listing'), false);
   t('paper: a submitted cue is read', ARXIV_SUBMIT_CUE.exec('arXiv 2611.03998 · submitted 2026-11-02T21:38Z')?.[2], '2026-11-02T21:38Z');
 
+  /* 2026-11-05 — the range-absence check, pinned on the filing case BOTH WAYS: the published
+     sentence (which denied a range the CNA container carried) and the corrected one (which names
+     the field and then says "nothing to install" about the registry). The second must NOT be a
+     finding, or the check would punish the repair. */
+  const nvdAwaiting = { status: 'Awaiting Analysis', configs: 0, refs: [] };          // NVD unanalysed
+  const cnaAns = { affected: { key: 'populated', entries: 1, versioned: 1, products: ['ansible-core'] }, refs: [] };
+  const ra = (cue, namesNvd, nvd, cna) => rangeAbsentVerdict({ cue, namesNvd, nvd, cna }).verdict;
+  t('rangeabsent: the published sentence denied a range the CNA carried',
+    ra('record', false, nvdAwaiting, cnaAns), 'range-absent-but-served');
+  t('rangeabsent: the corrected "nothing to install" is about the REGISTRY, not the record',
+    ra('install', false, nvdAwaiting, cnaAns), 'boundary-named-no-artifact');
+  t('rangeabsent: naming NVD makes the same words true of NVD',
+    ra('record', true, nvdAwaiting, cnaAns), 'range-only-in-cna');
+  t('rangeabsent: an analysed record with NVD ranges refutes it in the stronger field too',
+    ra('record', true, { status: 'Analyzed', configs: 3, refs: [] }, cnaAns), 'range-absent-but-served');
+  t('rangeabsent: confirmed when neither field states one',
+    ra('record', false, nvdAwaiting, { affected: { key: 'absent', entries: 0, versioned: 0, products: [] }, refs: [] }), 'range-absent-confirmed');
+  t('rangeabsent: an empty affected[] is present-and-empty, and still confirms',
+    ra('record', false, nvdAwaiting, { affected: { key: 'empty', entries: 0, versioned: 0, products: [] }, refs: [] }), 'range-absent-confirmed');
+  t('rangeabsent: a versionless affected[] entry is a PRODUCT, which is not a range',
+    ra('record', false, nvdAwaiting, { affected: { key: 'populated', entries: 6, versioned: 0, products: ['json-glib'] }, refs: [] }), 'range-absent-but-served');
+  t('rangeabsent: a fix commit in references[] is the third place a remedy lives',
+    ra('record', false, { status: 'Analyzed', configs: 0, refs: ['https://github.com/o/r/commit/717d7ecf'] }, { affected: { key: 'absent', entries: 0, versioned: 0, products: [] }, refs: [] }), 'range-in-references');
+  t('rangeabsent: unread is never absent',
+    ra('record', false, { error: true }, { error: true }), 'range-unread');
+  t('rangeabsent: the filing sentence is a cue', affectedAbsentSpans(mk('t', 'No fixed version appears in the record at the time of writing.').plain).map((c) => c.cue), ['record']);
+  t('rangeabsent: the corrected sentence is an INSTALL cue, not a record one',
+    affectedAbsentSpans(mk('t', 'the boundary is named and there is still nothing to install.').plain).map((c) => c.cue), ['install']);
+  t('rangeabsent: a quotation of the record is not the author asserting it',
+    affectedAbsentSpans(mk('t', 'the advisory says "no fixed version is available".').plain).map((c) => c.cue), []);
+  /* End-to-end on the two filing sentences plus the one false positive the 10-31 calibration
+     produced: a claim about the ADVISORY's cells, bound to a CVE whose record it is not about. */
+  const raIt = (text) => checkRangeAbsent(
+    mk('t', text),
+    new Map([['CVE-2026-123036', { status: 'Awaiting Analysis', raw: { configurations: [], references: [] } }]]),
+    new Map([['CVE-2026-123036', { affected: { key: 'populated', entries: 1, versioned: 1, products: ['ansible-core'] }, refs: [] }]]),
+  ).map((x) => x.verdict);
+  t('rangeabsent: end-to-end, the published sentence fires on CVE-2026-123036',
+    raIt('NVD has not analyzed CVE-2026-123036. No fixed version appears in the record at the time of writing.'), ['range-absent-but-served']);
+  t('rangeabsent: end-to-end, the corrected sentence is information, not a finding',
+    raIt('The fix boundary for CVE-2026-123036 is named in the CNA affected[] field, and there is still nothing to install.'), ['boundary-named-no-artifact']);
+  t('rangeabsent: a claim about the ADVISORY is not a claim about the record',
+    raIt('The affected and patched cells both read latest, so the advisory names no version boundary at all for CVE-2026-123036.'), []);
+  t('rangeabsent: no CVE in the sentence is silence, not a general check',
+    raIt('Some projects name no fixed version at all.'), []);
+  t('rangeabsent: "the 6.x line has no version TO INSTALL" is the install cue, not a record one',
+    affectedAbsentSpans(mk('t', 'anyone on the 6.x line has no version to install.').plain).map((c) => c.cue), ['install']);
+
   for (const c of cases) console.log(`  ${c.pass ? '✓' : '✗'} ${c.name}${c.pass ? '' : ` — got ${JSON.stringify(c.got)}, want ${JSON.stringify(c.want)}`}`);
   const ok = cases.filter((c) => c.pass).length;
   console.log(`selftest ${ok}/${cases.length}`);
@@ -4725,7 +4921,7 @@ let ghsaCalls = 0;
  * alone without it, the check said "NVD re-serves no metric" about a record NVD re-serves four of.
  * The statement was about the pull, not the registry, which is the "unread is not absent" defect
  * wearing a different hat (fixed 2026-11-02 12:34, while calibrating the stopping-point check). */
-if (!NO_NET && (CHECKS.has('cvss') || CHECKS.has('temporal') || CHECKS.has('status') || CHECKS.has('cwe') || CHECKS.has('field') || CHECKS.has('range') || STATUS_WATCH || CHECKS.has('quotation'))) {
+if (!NO_NET && (CHECKS.has('cvss') || CHECKS.has('temporal') || CHECKS.has('status') || CHECKS.has('cwe') || CHECKS.has('field') || CHECKS.has('range') || CHECKS.has('rangeabsent') || STATUS_WATCH || CHECKS.has('quotation'))) {
   const cves = [...new Set([...parsed.flatMap((f) => f.items.flatMap((it) => it.cves)), ...EXTRA_IDS])];
   const CHUNK = 25;
   for (let i = 0; i < cves.length; i += CHUNK) {
@@ -4764,7 +4960,7 @@ if (STATUS_WATCH && !NO_NET) {
 // unmetered, so the cap is about latency rather than budget — cached entries cost nothing.
 const cna = new Map();
 let cnaCalls = 0;
-if (!NO_NET && (CHECKS.has('cvss') || CHECKS.has('temporal') || CHECKS.has('cwe') || CHECKS.has('field') || CHECKS.has('range') || CHECKS.has('quotation'))) {
+if (!NO_NET && (CHECKS.has('cvss') || CHECKS.has('temporal') || CHECKS.has('cwe') || CHECKS.has('field') || CHECKS.has('range') || CHECKS.has('rangeabsent') || CHECKS.has('quotation'))) {
   const ids = [...new Set(parsed.flatMap((f) => f.items.flatMap((it) => strip(it.text).match(/CVE-\d{4}-\d{3,7}/g) ?? [])))].slice(0, MAX_CNA);
   for (const id of ids) {
     // A schema bump forces a refetch, and a refetch is a call: counting only "no entry at all"
@@ -4795,6 +4991,7 @@ for (const { path: p, items } of parsed) {
     if (!NO_NET && CHECKS.has('cwe')) findings.push(...checkCwe(it, subjects, cna));
     if (!NO_NET && CHECKS.has('field')) findings.push(...checkField(it, subjects, cna));
     if (!NO_NET && CHECKS.has('range')) findings.push(...checkRange(it, subjects, cna));
+    if (!NO_NET && CHECKS.has('rangeabsent')) findings.push(...checkRangeAbsent(it, subjects, cna));
   }
   if (!NO_NET && CHECKS.has('repo')) for (const it of items) findings.push(...checkRepo(it, budget, ageBudget));
   if (!NO_NET && CHECKS.has('count')) for (const it of items) findings.push(...await checkCount(it));
@@ -4847,7 +5044,7 @@ try {
   writeFileSync(CACHE_PATH, JSON.stringify(cache, null, 1));
 } catch { /* cache is best-effort */ }
 
-const SEVERITY = { ok: 0, 'ok-cited-page': 0, 'no-cve-named': 1, 'no-record': 1, 'slot-quoted': 1, 'counted-by-author': 0, 'number-other-noun': 1, 'temporal-stopping-point': 1, 'temporal-disclosed': 0, 'score-stopping-point': 1, 'cna-only-score': 1, 'star-drift': 2, 'star-dated': 1, 'star-surge': 1, 'ok-history': 0, 'history-older-than-record': 2, 'history-unreadable': 1, stale: 2, archived: 2, 'stale-disclosed': 0, 'archived-disclosed': 0, differs: 2, absent: 2, 'unsplit-issue-count': 3, 'compound-lags-parts': 3, 'version-swapped': 3, 'version-absent': 3, 'score-not-reproducible': 2, 'score-mismatch': 3, 'wrong-subject': 3, 'absence-contradicted': 3, 'status-stale': 2, 'status-dated': 1, 'date-local-shift': 2, 'date-mismatch': 2, 'cwe-absent-but-recorded': 3, 'cwe-mismatch': 3, 'cwe-unreadable': 1, 'field-present': 3, 'field-present-empty': 2, 'field-empty-contradicted': 2, 'field-empty-since-moved': 1, 'field-absent-not-empty': 1, 'field-dated': 0, 'field-unknown-name': 0, 'field-unreadable': 0, 'span-empty': 2, 'cve-range-span-mismatch': 2, 'cve-range-disclosed': 0, 'ok-range': 0, 'range-ambiguous': 0, 'range-cross-year': 0, 'range-inverted': 2, 'span-inverted': 3, 'span-unverifiable': 0, 'ok-span': 0, 'status-no-record': 1, 'status-no-cve': 1, 'advisory-unreadable': 1, 'advisory-repo-only': 0, unreadable: 1, 'artifact-unreadable': 1, 'nvd-unavailable': 1, 'ratio-row-count': 3, 'ok-ratio': 0, 'ok-delimited': 0, 'not-a-repo': 0, 'repo-absent-asserted': 0, 'ok-table-rows': 0, 'table-columns-unresolved': 0, 'bundle-ok': 0, 'bundle-lines-named': 0, 'bundle-unavailable': 0, 'bundle-line-count': 3, 'bundle-total-mismatch': 2, 'quote-not-found': 3, 'quote-paraphrase': 2, 'quote-short': 1, 'quote-not-read': 0, 'paper-date-imprecise': 1, 'paper-date-mismatch': 2, 'paper-date-revision': 1, 'paper-date-unread': 0 };
+const SEVERITY = { ok: 0, 'ok-cited-page': 0, 'no-cve-named': 1, 'no-record': 1, 'slot-quoted': 1, 'counted-by-author': 0, 'number-other-noun': 1, 'temporal-stopping-point': 1, 'temporal-disclosed': 0, 'score-stopping-point': 1, 'cna-only-score': 1, 'star-drift': 2, 'star-dated': 1, 'star-surge': 1, 'ok-history': 0, 'history-older-than-record': 2, 'history-unreadable': 1, stale: 2, archived: 2, 'stale-disclosed': 0, 'archived-disclosed': 0, differs: 2, absent: 2, 'unsplit-issue-count': 3, 'compound-lags-parts': 3, 'version-swapped': 3, 'version-absent': 3, 'score-not-reproducible': 2, 'score-mismatch': 3, 'wrong-subject': 3, 'absence-contradicted': 3, 'status-stale': 2, 'status-dated': 1, 'date-local-shift': 2, 'date-mismatch': 2, 'cwe-absent-but-recorded': 3, 'cwe-mismatch': 3, 'cwe-unreadable': 1, 'field-present': 3, 'field-present-empty': 2, 'field-empty-contradicted': 2, 'field-empty-since-moved': 1, 'field-absent-not-empty': 1, 'field-dated': 0, 'field-unknown-name': 0, 'field-unreadable': 0, 'span-empty': 2, 'cve-range-span-mismatch': 2, 'cve-range-disclosed': 0, 'ok-range': 0, 'range-ambiguous': 0, 'range-cross-year': 0, 'range-inverted': 2, 'span-inverted': 3, 'span-unverifiable': 0, 'ok-span': 0, 'range-absent-but-served': 3, 'range-only-in-cna': 1, 'range-absent-confirmed': 0, 'range-unread': 0, 'range-in-references': 1, 'boundary-named-no-artifact': 0, 'status-no-record': 1, 'status-no-cve': 1, 'advisory-unreadable': 1, 'advisory-repo-only': 0, unreadable: 1, 'artifact-unreadable': 1, 'nvd-unavailable': 1, 'ratio-row-count': 3, 'ok-ratio': 0, 'ok-delimited': 0, 'not-a-repo': 0, 'repo-absent-asserted': 0, 'ok-table-rows': 0, 'table-columns-unresolved': 0, 'bundle-ok': 0, 'bundle-lines-named': 0, 'bundle-unavailable': 0, 'bundle-line-count': 3, 'bundle-total-mismatch': 2, 'quote-not-found': 3, 'quote-paraphrase': 2, 'quote-short': 1, 'quote-not-read': 0, 'paper-date-imprecise': 1, 'paper-date-mismatch': 2, 'paper-date-revision': 1, 'paper-date-unread': 0 };
 const REAL = (f) => (SEVERITY[f.verdict] ?? 1) >= 2;
 
 /* `status_watch` rides the findings file so the act pass sees a backwards move without re-reading

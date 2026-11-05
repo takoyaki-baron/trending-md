@@ -4559,3 +4559,53 @@ TEE の境界は切り替えの**前**の命令で壊れる。
 やめた母集団へ届いていた。
 
 → [[vuln-supply]] [[disclosure-lag]] [[fact-check]] [[agent-stack]]
+
+## 2026-11-05 —— 6 レコード、5 つの来歴形状、そして禁輸ポリシーを書き換えたプロジェクト
+
+**(a) OpenSSH 10.6p2 —— 実測された AI 再発見に駆動された、初のメンテナ側の開示ポリシー変更。**
+Portable OpenSSH は 2026-11-05 に **10.6p2** を公開した。`sshd(8)` の**パスワード認証バイパス**で、**musl libc かつ PAM 無効**で
+ビルドされた Linux システム（例：Alpine）に影響する。CVE 番号は無く、10.6p2 節の security セクションはこの 1 項目だけ。
+リリースノートは根因を sshd の外に置きつつデーモン側で回避可能とする——「We consider the root cause of this bug to be outside
+sshd, but it is exploitable via sshd and can be avoided there」——そして Özgün Kültekin of Wakefield に謝辞を記す。
+Miller の投稿（2026-11-05T09:03Z、Web ページが JS シェルなのでインスタンスの status API で読む）が運用側の半分だ：
+`musl` で PAM 無しなら `PasswordAuthentication=no` を設定するか SSH を**直ちに**無効化せよ、そしてこのバグは
+「does not exist on non-Linux systems, Linux/glibc systems and Linux systems that use PAM for password authentication」。
+長く残る一文はポリシーだ：「we have recently observed multiple cases of rapid bug rediscovery by AI agents, sometimes
+within hours, and so now consider long embargo periods to be a dangerous practice that primarily benefits attackers」——
+同時にノートは「making more frequent releases to get bugfixes into users' hands more quickly rather than batching them
+until the next planned release」を約束する。**報道が落とした残り半分：** 同じノートは AI 支援の報告者に感謝しつつ
+「many AI reports are determined not to have security impact when considered in the context of a realistic threat model」
+と述べる（不満と高速化は同じ段落）、そして成果物の連鎖は当日中だ——Alpine `edge` の `openssh` **10.6_p2-r0**、ビルド時刻
+**2026-11-05 09:05:19**、一方 `musl` master の最終コミットは **2026-10-14** のまま（設計上、上流に修正は無い）。
+開示ライブラリにとってこれは*ポリシー*のデータ点であり時差のデータ点ではない。禁輸が再価格化されたのは再発見の遅延が
+縮んだからで、「 patched か」はビルドフラグの問いになった（`ssh -V` ではなく `ldd`）。
+
+**(b) このバッチの CVE コホート、来歴形状別**（カンマ区切りの NVD 1 回、6 レコード、`nvd@nist.gov` 指標は **0**）：
+iTerm2 `CVE-2026-123014` 8.7/4.0/`Received`/`cve@mitre.org`（CWE-88、`x-man-page:` 経由の引数注入）、
+TrueNAS `CVE-2026-123033` 8.3/3.1/`Received`/`cve@mitre.org`（`S:C`、リンクローカル HA ハートビート）、
+ansible-core `CVE-2026-123036` 5.5/3.1/`Awaiting Analysis`/`secalert@redhat.com` `Primary`（CWE-209）、
+OPNsense `CVE-2026-123025` 9.4/4.0/`Received`/`cve@mitre.org`（CWE-78、ACME プラグイン経由で root）、
+vault-java-driver の `CVE-2026-109408` 7.4/3.1/`Received`/`abd028dc-…` `Secondary`（CWE-295/297/636）と
+`CVE-2026-112072` 6.5/3.1/`Received`/同源 `Secondary`（CWE-674、ネスト深さ無制限）。
+6 件中 5 件は CNA 割当で NVD は沈黙、6 件目は `Awaiting Analysis`——本ライブラリが測り続けてきた定常状態であり、
+`CVSS >= 9.0` のゲートが 5.5 の Ansible と 8.3 の TrueNAS を静かに落とす理由でもある。
+
+**(c) 再発する形状と、それを決着させる成果物。** **予約アドレス上の混同代理：** TrueNAS の `middlewared` は HA ピア認証
+フックを無条件に登録し、攻撃者制御下の 2 つの socket 属性——ピアアドレスが `{169.254.10.1, 169.254.10.2}`、送信元ポートが
+**1024 以下**——で信頼を決め、「an internal node credential that is treated as a full administrator for every API method」を
+与えた。しかも**HA を一切構成していない単一ノードの Community Edition** でも成立する（CWE-290 + CWE-306）。
+ベンダ自身の脅威モデルこそ NVD の記述が圧縮した部分だ：「Exploitation is not possible from an arbitrary Internet location」
+（出荷状態は IPv4 リンクローカル自動設定を無効化し `169.254.0.0/16` への経路を持たない）、「Adjacency by itself is not
+sufficient」、さらに戻り経路の改変が必要——これが `AC:H` を正当化する。**「誰も設定しない制御」は既定値と目標値の差として
+回帰する：** `ub-mode` は `CRAP < 10` を求めるが `crapper` の `--threshold` は **30** で出荷される。agent skill 版の
+「緩和は存在するが誰も実行しない」。**許可リストの陳腐化：** Ansible の `no_log: true` 検閲器は `PRESERVE` frozenset から
+結果を再構築し、その集合には今も **`exception`** が入っている。だから失敗タスクは隠すはずの秘密を印字する——最悪は
+テンプレート誤り経路で、失敗行「plus the two preceding lines of the variables file」を出す。**文字列を真偽値として扱う：**
+`vault-java-driver` は 3 つの状態で trust-all な `SSLContext` を導入した（`build()` 未呼び出しの `SslConfig`、
+デシリアライズされた `SslConfig`、`VAULT_SSL_VERIFY` が `1`/`yes`/`on`）——3 番目が本番設定に実際にある形だ。
+**サニタイザ境界：** iTerm2 の `x-man-page:` ハンドラはパーセントエンコードされた NUL をサニタイズ通過させ、コマンドライン
+解析がそれを空白に変えたため `-P` で攻撃者のページャを選べた。レコード自身の `NOTE` は「exists because of an incomplete fix
+for CVE-2023-46321」と述べ、修正コミット（`314ba43`、`f29420a`）は **2026-10-22T00:28:27Z**——レコードの 14 日前で、
+**changelog が一切触れていない**リリース（`3.7.7beta2`、10-27 ビルド）に入り、**3.7.7**（11-03 ビルド）で言及される。
+
+→ [[vuln-supply]] [[disclosure-lag]] [[fact-check]] [[agent-plugins]]

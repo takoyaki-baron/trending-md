@@ -4531,78 +4531,114 @@
     },
     "https://news.ycombinator.com/item?id=50366999": {
       "verdict": "blocked",
-      "streak": 3,
+      "streak": 4,
       "first_seen": "2026-11-04T20:22:21.417Z",
-      "last_seen": "2026-11-05T09:42:02.867Z",
+      "last_seen": "2026-11-05T13:10:13.849Z",
       "feeds": [
         "2026-11-05.md"
       ]
     },
     "https://news.ycombinator.com/item?id=50368626": {
       "verdict": "blocked",
-      "streak": 3,
+      "streak": 4,
       "first_seen": "2026-11-04T20:22:21.417Z",
-      "last_seen": "2026-11-05T09:42:02.867Z",
+      "last_seen": "2026-11-05T13:10:13.849Z",
       "feeds": [
         "2026-11-05.md"
       ]
     },
     "https://news.ycombinator.com/item?id=50369106": {
       "verdict": "blocked",
-      "streak": 3,
+      "streak": 4,
       "first_seen": "2026-11-04T20:22:21.417Z",
-      "last_seen": "2026-11-05T09:42:02.867Z",
+      "last_seen": "2026-11-05T13:10:13.849Z",
       "feeds": [
         "2026-11-05.md"
       ]
     },
     "https://news.ycombinator.com/item?id=50369194": {
       "verdict": "blocked",
-      "streak": 3,
+      "streak": 4,
       "first_seen": "2026-11-04T20:22:21.417Z",
-      "last_seen": "2026-11-05T09:42:02.867Z",
+      "last_seen": "2026-11-05T13:10:13.849Z",
       "feeds": [
         "2026-11-05.md"
       ]
     },
     "https://news.ycombinator.com/item?id=50358314": {
       "verdict": "blocked",
-      "streak": 3,
+      "streak": 4,
       "first_seen": "2026-11-04T20:22:21.417Z",
-      "last_seen": "2026-11-05T09:42:02.867Z",
+      "last_seen": "2026-11-05T13:10:13.849Z",
       "feeds": [
         "2026-11-05.md"
       ]
     },
     "https://news.ycombinator.com/item?id=50372929": {
       "verdict": "blocked",
-      "streak": 1,
+      "streak": 2,
       "first_seen": "2026-11-05T09:42:02.867Z",
-      "last_seen": "2026-11-05T09:42:02.867Z",
+      "last_seen": "2026-11-05T13:10:13.849Z",
       "feeds": [
         "2026-11-05.md"
       ]
     },
     "https://news.ycombinator.com/item?id=50370654": {
       "verdict": "blocked",
-      "streak": 1,
+      "streak": 2,
       "first_seen": "2026-11-05T09:42:02.867Z",
-      "last_seen": "2026-11-05T09:42:02.867Z",
+      "last_seen": "2026-11-05T13:10:13.849Z",
       "feeds": [
         "2026-11-05.md"
       ]
     },
     "https://news.ycombinator.com/item?id=50372164": {
       "verdict": "blocked",
-      "streak": 1,
+      "streak": 2,
       "first_seen": "2026-11-05T09:42:02.867Z",
-      "last_seen": "2026-11-05T09:42:02.867Z",
+      "last_seen": "2026-11-05T13:10:13.849Z",
+      "feeds": [
+        "2026-11-05.md"
+      ]
+    },
+    "https://news.ycombinator.com/item?id=50372945": {
+      "verdict": "blocked",
+      "streak": 1,
+      "first_seen": "2026-11-05T13:10:13.849Z",
+      "last_seen": "2026-11-05T13:10:13.849Z",
+      "feeds": [
+        "2026-11-05.md"
+      ]
+    },
+    "https://news.ycombinator.com/item?id=50349165": {
+      "verdict": "blocked",
+      "streak": 1,
+      "first_seen": "2026-11-05T13:10:13.849Z",
+      "last_seen": "2026-11-05T13:10:13.849Z",
+      "feeds": [
+        "2026-11-05.md"
+      ]
+    },
+    "https://access.redhat.com/security/cve/CVE-2026-123036": {
+      "verdict": "dead",
+      "streak": 1,
+      "first_seen": "2026-11-05T13:10:13.849Z",
+      "last_seen": "2026-11-05T13:10:13.849Z",
+      "feeds": [
+        "2026-11-05.md"
+      ]
+    },
+    "https://gitlab.com/gnachman/iterm2/-/commit/314ba43920dbce08808c032e89966918090bdf8e": {
+      "verdict": "blocked",
+      "streak": 1,
+      "first_seen": "2026-11-05T13:10:13.849Z",
+      "last_seen": "2026-11-05T13:10:13.849Z",
       "feeds": [
         "2026-11-05.md"
       ]
     }
   },
-  "runs": 153,
+  "runs": 154,
   "first_run": "2026-09-05T12:47:55.004Z",
-  "last_run": "2026-11-05T09:42:02.867Z"
+  "last_run": "2026-11-05T13:10:13.849Z"
 }

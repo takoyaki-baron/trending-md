@@ -676,11 +676,11 @@ Portable **OpenSSH 10.6p2** 于 **2026-11-05** 发布。发布说明的安全章
 
 对任何为长上下文付费的人来说，架构才是重点。模型有 **43 层 Transformer**、隐藏维度 **4096**、**64 个注意力头**，只有 **七分之一的层**保留对完整上下文的 token 级访问（用 MLA 加 DeepSeek 式稀疏注意力）。其余 **37 层**使用 **Heavily Compressed Attention**：每 128 个 token 压成一个缓存条目，该层再对这些条目加一小段最近未压缩 token 做注意力。头维度按层设定而非全局统一——廉价的 HCA 层用 **512**，昂贵的 MLA 层用 **256**——百度还说测试了显而易见的替代方案（用少量 CSA 层代替少量 MLA 层），结论是在相近 KV cache 预算下「HCA combined with MLA outperforms HCA combined with CSA」。
 
-评测的可比性异常地好，这也是这些数字值得引用的原因：「All four models are evaluated from their publicly released checkpoints with the same evaluation harness, prompts and few-shot examples, and with the same LLM judge for free-form QA.」四个模型是 ERNIE 5.5 Flash Base（**280B-A14B**）、DeepSeek V4 Flash Base（**284B-A13B**）、Hy3-preview-Base（**295B-A21B**）和 MiMo V2.5 Base（**310B-A15B**）。ERNIE 在表格 **30 行中的 24 行**最优，包括 MMLU **93.3**（5-shot）、MMLU-Pro **78.4**、GPQA **60.2**、HumanEval+ **82.3**、LiveCodeBench **40.1**、LongBench-v2 **48.7**。它输了六行，其中三行在长上下文：**HELMET-Rerank 56.2** 对 DeepSeek 的 60.0、**InfiniteBench 46.5** 对 48.0、**ChineseSimpleQA 73.0** 对 75.3；另外三行是 BBH-CoT、INCLUDE-lite 和 FullStackBench。这是一张能看出压缩代价的表格。
+评测的可比性异常地好，这也是这些数字值得引用的原因：「All four models are evaluated from their publicly released checkpoints with the same evaluation harness, prompts and few-shot examples, and with the same LLM judge for free-form QA.」四个模型是 ERNIE 5.5 Flash Base（**280B-A14B**）、DeepSeek V4 Flash Base（**284B-A13B**）、Hy3-preview-Base（**295B-A21B**）和 MiMo V2.5 Base（**310B-A15B**）。ERNIE 在表格 **30 行中的 24 行**最优，包括 MMLU **93.3**（5-shot）、MMLU-Pro **78.4**、GPQA **60.2**、HumanEval+ **82.3**、LiveCodeBench **40.1**、LongBench-v2 **48.7**。它输了六行：**HELMET-Rerank 56.2** 对 DeepSeek 的 60.0、**InfiniteBench 46.5** 对 48.0，这两行都在表格自己的 **Long Context** 分节里；再加上 **Knowledge** 分节里的 **ChineseSimpleQA 73.0** 对 75.3；剩下三行是 BBH-CoT、INCLUDE-lite 和 FullStackBench。这是一张能看出压缩代价的表格——而且恰好只在该出现的那六行里的两行出现。
 
 权重以 FP8 与 BF16 形式在 Hugging Face 发布，许可证为 **ERNIE 5.5 Flash Base Model License Agreement v1.0**。仓库 `baidu/ERNIE-5.5-Flash-Base` 创建于 **2026-10-21T08:40:58Z**——比博客早十五天——我们打开时读到 **150 个赞、13 次下载**。
 
-**为什么重要：** 发布一个未做后训练的 base 检查点、并附上四模型同一 harness 的对比，是更稀有也更有用的产物——多数「开放」发布都是后训练模型，因此对预训练贡献了什么并不透明。24/30 的结果还自带对照：ERNIE 输掉的六行集中在长上下文检索排序与中文简单问答，这恰好是「43 层里有 37 层只看 128 倍压缩后的过去」所预测的方向。
+**为什么重要：** 发布一个未做后训练的 base 检查点、并附上四模型同一 harness 的对比，是更稀有也更有用的产物——多数「开放」发布都是后训练模型，因此对预训练贡献了什么并不透明。24/30 的结果确实自带对照，但按分节读表，这个对照比标题所示的要弱：六行失利里**两行**在 Long Context 分节（HELMET-Rerank 与 InfiniteBench），其余四行分别是 Knowledge、Reasoning、Multilingual、Code 各一行——也就是说 128 倍压缩只解释得了 **6 行中的 2 行**，剩下四行落在它并不预测的分节里。
 
 [`🔗 ERNIE 5.5 Flash Base`](https://ernie.baidu.com/release/ernie-5-5-flash-base/) · [`🔗 baidu/ERNIE-5.5-Flash-Base`](https://huggingface.co/baidu/ERNIE-5.5-Flash-Base) · [`🔗 BF16 权重`](https://huggingface.co/baidu/ERNIE-5.5-Flash-Base-BF16)
 
@@ -704,7 +704,7 @@ Portable **OpenSSH 10.6p2** 于 **2026-11-05** 发布。发布说明的安全章
 
 ---
 
-## 39. Uncle Bob 的 `ub-mode` 是一个 agent skill，规则由四个独立程序执行 —— 7,054 星、无 release、无仓库描述
+## 39. Uncle Bob 的 `ub-mode` 是一个 agent skill，规则派给三个质量关卡程序执行 —— 7,054 星、无 release、无仓库描述
 
 - **Velocity:** ▮▮ rising
 - **来源:** github.com/unclebob/ub-mode · 创建于 2026-10-25 · 7,054★
@@ -712,7 +712,7 @@ Portable **OpenSSH 10.6p2** 于 **2026-11-05** 发布。发布说明的安全章
 
 Robert C. Martin 的 **`ub-mode`** 是 152 行 `SKILL.md`（3,958 字节），让编码 agent 分三阶段工作：**First Make it Work**、**Then Make it Right**、**Follow Practice**。它在十一天里达到 **7,054 星**，而仓库**没有描述**、**没有 release**、**没有 tag**，MIT 许可证，**10 个 open issue 与 PR**，被 fork **394** 次。README 注明规则源自 `@poteto`（`poteto-mode` / `pstack`），并自称是「reduced and paired with deterministic quality-gate tools」。
 
-这个「配对」才是真正的论点。skill 文件里的散文规则对模型只是建议；仓库把其中三道关卡接到会返回数字的独立程序上——[`crapper`](https://github.com/unclebob/crapper)（逐函数计算圈复杂度、测试覆盖率与 CRAP 分数，硬阈值 CRAP `< 10`）、[`dryer`](https://github.com/unclebob/dryer)（结构性重复，标记 `>= 0.8` 相似度的块）、[`mutator`](https://github.com/unclebob/mutator)（变异测试，暴露存活变异体而非覆盖率表演），外加 `uml-viewer` 画组件、覆盖率、CRAP 与依赖方向。「把函数控制在 CRAP 10 以下」可以由类编译器工具检查；「写干净的代码」不行。
+这个「配对」才是真正的论点。skill 文件里的散文规则对模型只是建议；仓库把其中三道关卡接到会返回数字的独立程序上——[`crapper`](https://github.com/unclebob/crapper)（逐函数计算圈复杂度、测试覆盖率与 CRAP 分数，目标 CRAP `< 10`）、[`dryer`](https://github.com/unclebob/dryer)（结构性重复，报告 `>= 0.8` 相似度的块）、[`mutator`](https://github.com/unclebob/mutator)（变异测试，暴露存活变异体而非覆盖率表演），外加 `uml-viewer` 画组件、覆盖率、CRAP 与依赖方向。「把函数控制在 CRAP 10 以下」可以由类编译器工具检查；「写干净的代码」不行。但这两个数字并不是工具自己的默认值：`crapper` 的 `--threshold` 出厂是 **30**，`dryer` 的是 **0.82**，所以 `CRAP < 10` 与 0.8 相似度是 ub-mode 的目标值，调用者必须自己传进去——关卡是存在的，但在有人设上之前它并不生效。
 
 规则集本身是 Martin 二十年来发表的纪律的压缩版：Laziness Protocol（「One decision lives in one place」「Ship the smallest edit that solves the problem」）、Foundational Thinking（「Get the data shape right before you write the logic」「Do first whatever helps every later phase」）、TDD、Redesign From First Principles、Attack the Premise、Subtract Before You Add，以及后阶段的 Fix Root Causes、Sequence Work into Verifiable Units、Test Behaviour (Not Implementation) 与 Guard the Context Window。安装是一次复制：把 `SKILL.md` 放到 `~/.claude/skills/ub-mode/SKILL.md`（或 Grok、Cursor 的对应目录），用 `/ub-mode` 调用。
 
@@ -750,7 +750,7 @@ Robert C. Martin 的 **`ub-mode`** 是 152 行 `SKILL.md`（3,958 字节），�
 
 TrueNAS 自己的威胁模型把可利用性收窄了一层，而 NVD 的描述没有，两者应当写在同一句里。公告说「Exploitation is not possible from an arbitrary Internet location」——信任判断基于链路本地源地址，而出厂系统「disables IPv4 link-local autoconfiguration and holds no route to the 169.254.0.0/16 range」——并补充「adjacency by itself is not sufficient」，因为系统没有返回路由，「the attacker must additionally alter the return path — either by modifying routing on the TrueNAS system or by controlling the gateway/path」。在这些条件满足处，影响就是未认证管理员。
 
-时钟与修复状态要分开说。公告标题仍写着「**CVE Pending**」，「Fixed in」一栏写的是「**TrueNAS SCALE 25.10.8 (forthcoming)**」——所以目前没有可安装的东西，主要缓解是网络隔离：把管理接口放在可信网段，且该二层网段上没有任何不可信主机。NVD 记录仍然存在（`CVE-2026-123033`，发布于 **2026-11-05T07:17Z**，`Received`，8.3，向量 `CVSS:3.1/AV:A/AC:H/PR:N/UI:N/S:C/C:H/I:H/A:H`），由 `cve@mitre.org` 分配——它与第 46 条里那个不相干的 OPNsense 记录、以及一个 Wowza Streaming Engine XXE 在同一秒发布。修复本身是一个想法：信任必须额外要求「that the connection also terminate on the HA heartbeat listener, a local address and port the attacker cannot control」。
+时钟与修复状态要分开说。公告标题仍写着「**CVE Pending**」，「Fixed in」一栏写的是「**TrueNAS SCALE 25.10.8 (forthcoming)**」——所以目前没有可安装的东西，主要缓解是网络隔离：把管理接口放在可信网段，且该二层网段上没有任何不可信主机。NVD 记录仍然存在（`CVE-2026-123033`，发布于 **2026-11-05T07:17Z**，`Received`，8.3，向量 `CVSS:3.1/AV:A/AC:H/PR:N/UI:N/S:C/C:H/I:H/A:H`），由 `cve@mitre.org` 分配——它比第 46 条里那个不相干的 OPNsense 记录晚 **310 毫秒**发布（`2026-11-05T07:17:26.207Z` 对 `07:17:25.897Z`），旁边还有一个 Wowza Streaming Engine XXE。修复本身是一个想法：信任必须额外要求「that the connection also terminate on the HA heartbeat listener, a local address and port the attacker cannot control」。
 
 **为什么重要：** 这是教科书式的混淆代理，但有意思的另一半是：厂商公布了让 CVSS 的 `AC:H` 站得住脚的返回路径分析，而 CVE 描述把它压缩成了「an attacker on the same network segment」。存储设备的管理 API 是机架里价值最高的凭据，而钩子在所有安装上都注册着，正是把一个双控制器特性变成单机漏洞的那种失败模式。
 
@@ -770,7 +770,7 @@ TrueNAS 自己的威胁模型把可利用性收窄了一层，而 NVD 的描述�
 
 记录点名三条泄漏路径，每条漏出的秘密量不同：「module argument-validation errors echo the argument value」「templating errors print an Origin source snippet (the failing line plus the two preceding lines of the variables file, exposing neighbouring secrets from an `-e @secrets.yml` file)」「`fail`/`assert` messages are printed in full」。后果是运维者会认出的那种——以 extra vars 或变量文件提供的机密「can therefore leak to terminal output, CI logs, and the stdout logs of any automation wrapping `ansible-playbook`, even though every task touching the secrets is marked `no_log: true`」。
 
-回归边界被写明：「This is a regression introduced with the `ansible-core` 2.19 data-tagging/templating rework; the behaviour does not occur on 2.16, where the error text is correctly censored.」NVD 尚未分析该记录——`vulnStatus` 为 `Awaiting Analysis`，唯一指标来自 `secalert@redhat.com` 且类型为 `Primary`。记录里此刻没有修复版本。
+回归边界被写明：「This is a regression introduced with the `ansible-core` 2.19 data-tagging/templating rework; the behaviour does not occur on 2.16, where the error text is correctly censored.」NVD 尚未分析该记录——`vulnStatus` 为 `Awaiting Analysis`，唯一指标来自 `secalert@redhat.com` 且类型为 `Primary`。修复边界写在记录的另一处——CNA 的 `affected[]`，而不是 NVD 的分析：`ansible-core` `2.19.0` 起、不含 `2.23.0`，`defaultStatus: unaffected`——而 `2.23.0` 目前在 PyPI 上还不存在（最新是 `2.22.0`，上传于 2026-11-02），所以边界有名字，但仍然没有可安装的东西。
 
 **为什么重要：** `no_log` 是 Ansible 用户被告知要信任的唯一安全控制，而击败它的不是一个解析 bug，而是一份早于该字段语义的白名单——审查逻辑写成时 `exception` 装的是 Python 类名，2.19 的重写让它装下了渲染后的错误文本。三条路径中模板那条最糟，因为「失败行加前两行」是对运维者从未要求求值的机密的引用，而 CI runner 会长期保留 stdout。
 
@@ -788,7 +788,7 @@ TrueNAS 自己的威胁模型把可利用性收窄了一层，而 NVD 的描述�
 
 11 月 4 日的更新是一项图形结果。在 **POCO X5 Pro 5G** 上，项目的窗口服务器通过 **Adreno 642L 上的 Metal** 绘制，且有两种路径。`hakios-metal` 在渲染 828×1792 再拉伸到屏幕时，测得翻页 **110–115 fps**、设置页滚动 **118**、home 键 **106**；在原生 1125×2436 下，同样三项是 **101、约 90、约 90**。作为对照，UniXNU 的 Metal-on-Vulkan 路径翻页 **50–57**、滚动 **41**。
 
-表格后面那句话才是可信度的来源：「The panel is **120 Hz**, and **120 frames a second has not been reached**.」一个 bring-up 项目把没达到的数字写在达到的数字旁边，正是多数同类 README 不做的事。
+可信度的来源分布在表格两侧：setup 表把面板写成 **1080 x 2400 at 120 Hz**，而文档开头就是「**120 frames a second has not been reached**: not on hakios-metal, not on metal2vulkan, and not on OpenGL ES.」一个 bring-up 项目把没达到的数字写在达到的数字旁边，正是多数同类 README 不做的事。
 
 许可证按目录拆分，复用前值得读：内核部分——`xnu/hakios.patch`、`xnu/files/`、`drivers/`——是苹果 XNU 的衍生作品，仍属 **Apple Public Source License 2.0**；而「everything else that is ours」（`xnuloader/` 里的引导器、`userland/src/`、工具、脚本、文档、`devices/`）是 **MIT**。苹果的操作系统、其 IPSW 固件与手机自身固件都不在仓库里——「every user obtains them from their own device and their own copy of the firmware」。这种拆分也解释了为什么 GitHub 的许可证检测把该仓库标为 `NOASSERTION`，而不是单一标识符。
 
@@ -867,6 +867,8 @@ Mbed TLS 团队在 **2026-10-08** 宣布正在「preparing for a transition in t
 多教师同策略蒸馏是 RL 之后把多个专精教师折回一个学生的标准做法。这篇论文的发现是：通常的测量方式看不到它丢掉了什么。既有工作报告「near-perfect in-distribution (IND) distillation performance」，而这「can mask incomplete capability consolidation beyond the supervised distribution」。
 
 数字本身就是论证。在 Qwen3 模型上、覆盖数学推理、代码、agent 与长上下文能力的外推设置中，「OPD and MOPD reach **96.04–102.73%** of their teachers' IND scores. Yet their out-of-distribution (OOD) scores remain **2.45–16.25% below the base model's**」。要读两遍：蒸馏出的学生不只是分布外不如教师，而是不如它出发时的**未蒸馏 base 模型**。在三个组合式设置里，MOPD「improves IND performance over the base model, but its performance on composed tasks as OOD remains **18.19–24.34% below that of the best teachers**」。
+
+摘要里还带着一句标题数字不会显示、方向却相反的比较：「(M)OPD also reduces OOD forgetting on average relative to its reinforcement learning (RL) baselines.」所以结论是：蒸馏比它出发时的 base 模型更差，但仍比它所取代的 RL 运行更好——回归是真的，却不是「干脆别蒸馏」的论据。
 
 诊断是两个瓶颈——教师能力与数据覆盖——论文报告「jointly alleviating these bottlenecks eliminates OOD forgetting in our experiments and suggests the potential for generalization beyond the teacher」。机制部分是更可复用的：分析更新几何后发现，(M)OPD 的更新「smaller and more spectrally concentrated updates on average than those of the RL baselines, along with greater shared update structure under MOPD」——一个平滑拟合教师的学生，学到的是更窄的函数，而窄度在分布内评测上不可见。两条补救是 geometry-based patching 与 base-preserving replay，目标都是在匹配 IND 表现的同时保留 base 模型行为的可达性。
 
