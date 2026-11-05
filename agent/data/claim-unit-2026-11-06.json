@@ -1,0 +1,256 @@
+{
+ "generated": "2026-11-05T20:18:56.161Z",
+ "files": [
+  {
+   "file": "2026-11-06.md",
+   "items": 19,
+   "findings": [
+    {
+     "check": "date",
+     "item": 4,
+     "verdict": "ok",
+     "claim": "CVE-2026-54143 published 2026-11-05",
+     "detail": "NVD published 2026-11-05T17:18:19.487 (2026-11-05 UTC) · cveawg datePublished 2026-11-05T16:40:23.589Z (2026-11-05 UTC) — the two clocks differ; 2026-11-05 is the NVD published day"
+    },
+    {
+     "check": "status",
+     "item": 5,
+     "verdict": "ok",
+     "claim": "CVE-2026-73099 `Deferred`",
+     "detail": "Deferred (lastModified 2026-11-05T19:17:26.810)"
+    },
+    {
+     "check": "date",
+     "item": 5,
+     "verdict": "ok",
+     "claim": "CVE-2026-73099 published 2026-11-05",
+     "detail": "NVD published 2026-11-05T12:17:50.917 (2026-11-05 UTC) · cveawg datePublished 2026-11-05T11:50:02.043Z (2026-11-05 UTC) — the two clocks differ; 2026-11-05 is the NVD published day"
+    },
+    {
+     "check": "date",
+     "item": 6,
+     "verdict": "ok",
+     "claim": "CVE-2026-121994 published 2026-11-05",
+     "detail": "NVD published 2026-11-05T17:18:00.503 (2026-11-05 UTC) · cveawg datePublished 2026-11-05T16:08:46.589Z (2026-11-05 UTC) — the two clocks differ; 2026-11-05 is the NVD published day"
+    },
+    {
+     "check": "rangeabsent",
+     "item": 6,
+     "verdict": "range-only-in-cna",
+     "claim": "CVE-2026-121994 — \"no fixed version\"",
+     "detail": "NVD `configurations` is absent (record is `Awaiting Analysis`, and absent `configurations` means \"not yet analysed\", never \"states nothing\"); 11 `affected[]` entries of which 0 state a `versions[]` — the sentence is true of NVD and false of the record, because the CNA's own `affected[]` is where the range lives (this is the open62541 shape, 2026-10-25)"
+    },
+    {
+     "check": "status",
+     "item": 15,
+     "verdict": "ok",
+     "claim": "CVE-2026-104269 `Received`",
+     "detail": "Received (lastModified 2026-11-05T16:17:29.377)"
+    },
+    {
+     "check": "date",
+     "item": 15,
+     "verdict": "ok",
+     "claim": "CVE-2026-104269 published 2026-11-05",
+     "detail": "NVD published 2026-11-05T16:17:29.377 (2026-11-05 UTC) · cveawg datePublished 2026-11-05T15:51:18.332Z (2026-11-05 UTC) — the two clocks differ; 2026-11-05 is the NVD published day"
+    },
+    {
+     "check": "repo",
+     "item": 4,
+     "verdict": "ok",
+     "claim": "tinyhumansai/openhuman",
+     "detail": "42562★, last push 2026-11-05"
+    },
+    {
+     "check": "repo",
+     "item": 7,
+     "verdict": "ok",
+     "claim": "google/skills",
+     "detail": "22287★, last push 2026-11-05"
+    },
+    {
+     "check": "repo",
+     "item": 11,
+     "verdict": "ok",
+     "claim": "vercel-labs/agent-browser",
+     "detail": "45791★, last push 2026-11-05"
+    },
+    {
+     "check": "repo",
+     "item": 12,
+     "verdict": "ok",
+     "claim": "rivet-dev/rivet",
+     "detail": "6615★, last push 2026-11-05"
+    },
+    {
+     "check": "repo",
+     "item": 14,
+     "verdict": "ok",
+     "claim": "HKUDS/DeepTutor",
+     "detail": "55398★, last push 2026-11-05"
+    },
+    {
+     "check": "repo",
+     "item": 16,
+     "verdict": "ok",
+     "claim": "Usagi-org/ai-goofish-monitor",
+     "detail": "17474★, last push 2026-10-10"
+    },
+    {
+     "check": "count",
+     "item": 7,
+     "verdict": "counted-by-author",
+     "claim": "185 agent",
+     "detail": "no page states a agent total, and the item says so — the count is the author's own census"
+    },
+    {
+     "check": "count",
+     "item": 7,
+     "verdict": "counted-by-author",
+     "claim": "185 skills",
+     "detail": "no page states a skills total, and the item says so — the count is the author's own census"
+    },
+    {
+     "check": "quotation",
+     "item": 1,
+     "verdict": "ok",
+     "claim": "4 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 2,
+     "verdict": "ok",
+     "claim": "4 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 3,
+     "verdict": "ok",
+     "claim": "7 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 4,
+     "verdict": "ok",
+     "claim": "1 quotation(s)",
+     "detail": "verbatim in 10 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 5,
+     "verdict": "ok",
+     "claim": "2 quotation(s)",
+     "detail": "verbatim in 7 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 6,
+     "verdict": "ok",
+     "claim": "3 quotation(s)",
+     "detail": "verbatim in 11 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 7,
+     "verdict": "ok",
+     "claim": "4 quotation(s)",
+     "detail": "verbatim in 1 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 8,
+     "verdict": "ok",
+     "claim": "10 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 10,
+     "verdict": "ok",
+     "claim": "2 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 11,
+     "verdict": "ok",
+     "claim": "2 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 12,
+     "verdict": "ok",
+     "claim": "8 quotation(s)",
+     "detail": "verbatim in 3 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 13,
+     "verdict": "ok",
+     "claim": "7 quotation(s)",
+     "detail": "verbatim in 3 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 14,
+     "verdict": "ok",
+     "claim": "6 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 15,
+     "verdict": "ok",
+     "claim": "1 quotation(s)",
+     "detail": "verbatim in 8 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 17,
+     "verdict": "ok",
+     "claim": "1 quotation(s)",
+     "detail": "verbatim in 1 readable source(s)"
+    },
+    {
+     "check": "paper",
+     "item": 9,
+     "verdict": "ok",
+     "claim": "arXiv 2611.06858 submitted 2026-11-04T18:14:50Z",
+     "detail": "arXiv `published` 2026-11-04T18:14:50Z — the quoted instant is the submission's"
+    },
+    {
+     "check": "paper",
+     "item": 10,
+     "verdict": "ok",
+     "claim": "arXiv 2611.06841 submitted 2026-11-04T17:59:07Z",
+     "detail": "arXiv `published` 2026-11-04T17:59:07Z — the quoted instant is the submission's"
+    },
+    {
+     "check": "paper",
+     "item": 18,
+     "verdict": "ok",
+     "claim": "arXiv 2611.06839 submitted 2026-11-04T17:54:49Z",
+     "detail": "arXiv `published` 2026-11-04T17:54:49Z — the quoted instant is the submission's"
+    },
+    {
+     "check": "paper",
+     "item": 19,
+     "verdict": "ok",
+     "claim": "arXiv 2611.06868 submitted 2026-11-04T18:23:14Z",
+     "detail": "arXiv `published` 2026-11-04T18:23:14Z — the quoted instant is the submission's"
+    }
+   ]
+  }
+ ],
+ "status_watch": [],
+ "api_calls": 0,
+ "readme_calls": 0,
+ "cited_page_calls": 0,
+ "repo_page_calls": 0,
+ "nvd_calls": 1,
+ "cna_calls": 0
+}

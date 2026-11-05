@@ -2045,6 +2045,138 @@
      "modified": "2026-11-05T07:17:25.897"
     }
    ]
+  },
+  "CVE-2026-121489": {
+   "status": "Deferred",
+   "modified": "2026-11-05T15:01:29.553",
+   "seen": "2026-11-05T20:18:53.375Z",
+   "history": [
+    {
+     "at": "2026-11-05T20:18:53.375Z",
+     "status": "Deferred",
+     "modified": "2026-11-05T15:01:29.553"
+    }
+   ]
+  },
+  "CVE-2026-73099": {
+   "status": "Deferred",
+   "modified": "2026-11-05T19:17:26.810",
+   "seen": "2026-11-05T20:18:53.375Z",
+   "history": [
+    {
+     "at": "2026-11-05T20:18:53.375Z",
+     "status": "Deferred",
+     "modified": "2026-11-05T19:17:26.810"
+    }
+   ]
+  },
+  "CVE-2026-104269": {
+   "status": "Received",
+   "modified": "2026-11-05T16:17:29.377",
+   "seen": "2026-11-05T20:18:53.375Z",
+   "history": [
+    {
+     "at": "2026-11-05T20:18:53.375Z",
+     "status": "Received",
+     "modified": "2026-11-05T16:17:29.377"
+    }
+   ]
+  },
+  "CVE-2026-73856": {
+   "status": "Received",
+   "modified": "2026-11-05T16:17:48.443",
+   "seen": "2026-11-05T20:18:53.375Z",
+   "history": [
+    {
+     "at": "2026-11-05T20:18:53.375Z",
+     "status": "Received",
+     "modified": "2026-11-05T16:17:48.443"
+    }
+   ]
+  },
+  "CVE-2026-121994": {
+   "status": "Awaiting Analysis",
+   "modified": "2026-11-05T19:17:16.247",
+   "seen": "2026-11-05T20:18:53.375Z",
+   "history": [
+    {
+     "at": "2026-11-05T20:18:53.375Z",
+     "status": "Awaiting Analysis",
+     "modified": "2026-11-05T19:17:16.247"
+    }
+   ]
+  },
+  "CVE-2026-121995": {
+   "status": "Awaiting Analysis",
+   "modified": "2026-11-05T17:18:00.820",
+   "seen": "2026-11-05T20:18:53.375Z",
+   "history": [
+    {
+     "at": "2026-11-05T20:18:53.375Z",
+     "status": "Awaiting Analysis",
+     "modified": "2026-11-05T17:18:00.820"
+    }
+   ]
+  },
+  "CVE-2026-121996": {
+   "status": "Awaiting Analysis",
+   "modified": "2026-11-05T19:17:16.407",
+   "seen": "2026-11-05T20:18:53.375Z",
+   "history": [
+    {
+     "at": "2026-11-05T20:18:53.375Z",
+     "status": "Awaiting Analysis",
+     "modified": "2026-11-05T19:17:16.407"
+    }
+   ]
+  },
+  "CVE-2026-121997": {
+   "status": "Awaiting Analysis",
+   "modified": "2026-11-05T19:17:16.560",
+   "seen": "2026-11-05T20:18:53.375Z",
+   "history": [
+    {
+     "at": "2026-11-05T20:18:53.375Z",
+     "status": "Awaiting Analysis",
+     "modified": "2026-11-05T19:17:16.560"
+    }
+   ]
+  },
+  "CVE-2026-54141": {
+   "status": "Received",
+   "modified": "2026-11-05T17:18:19.103",
+   "seen": "2026-11-05T20:18:53.375Z",
+   "history": [
+    {
+     "at": "2026-11-05T20:18:53.375Z",
+     "status": "Received",
+     "modified": "2026-11-05T17:18:19.103"
+    }
+   ]
+  },
+  "CVE-2026-54142": {
+   "status": "Received",
+   "modified": "2026-11-05T19:17:21.320",
+   "seen": "2026-11-05T20:18:53.375Z",
+   "history": [
+    {
+     "at": "2026-11-05T20:18:53.375Z",
+     "status": "Received",
+     "modified": "2026-11-05T19:17:21.320"
+    }
+   ]
+  },
+  "CVE-2026-54143": {
+   "status": "Received",
+   "modified": "2026-11-05T17:18:19.487",
+   "seen": "2026-11-05T20:18:53.375Z",
+   "history": [
+    {
+     "at": "2026-11-05T20:18:53.375Z",
+     "status": "Received",
+     "modified": "2026-11-05T17:18:19.487"
+    }
+   ]
   }
  },
  "_note": "vulnStatus watch (agent/tools/claim-unit-lint.mjs --status-watch). Records the one field NVD moves on its own, so a BACKWARDS move is visible rather than inferred from four timestamps by hand. Filed 2026-10-30 after CVE-2026-97229 went Analyzed → Undergoing Analysis when CISA-ADP rewrote its container 27 minutes after a KEV add. `at` is when this tool observed it; `modified` is the record's own lastModified."
