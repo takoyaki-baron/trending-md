@@ -1,8 +1,8 @@
 ---
 date: 2026-11-06
-updated: 2026-11-05T20:18:48Z
+updated: 2026-11-06T04:22:20Z
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 29
+sources: 37
 license: CC-BY-4.0
 ---
 
@@ -204,7 +204,7 @@ ServerBench はコーディングエージェントを単一の目的で採点�
 - **ソース:** Launch HN · 38 ポイント · 約 3 時間前（約 01:00 UTC+8）
 - **タグ:** `agents` `orchestration` `actor-model` `sqlite` `s3`
 
-Rivet は「the orchestrator for agentic workloads」として Hacker News に登場した。アクターモデルに基づき、各 actor は「a long-lived process with in-memory state, a SQLite database, WebSockets for realtime, and scheduling」で、キーでアドレス指定され、「an object storage bucket is the only dependency」。性能の主張は具体的だ——「**4.99 ms p99 cold starts, 72 KB RAM per Actor**, scales to billions」、p99 で「1.07 ms durable writes and 1.36 ms reads」、アイドル時は休止し、SQLite は「backed by S3, at SSD speeds」。比較対象はエージェントごとにサンドボックスを立てる方式で、コールドスタート **1.70 秒**、インスタンスあたり **512 MiB**。
+Rivet は「the orchestrator for agentic workloads」として Hacker News に登場した。アクターモデルに基づき、各 actor は「long-lived processes with in-memory state, a SQLite database, WebSockets, and scheduling」のひとつで、キーでアドレス指定され、「an object storage bucket is the only dependency」。性能の主張は具体的だ——「**4.99 ms p99 cold starts, 72 KB RAM per Actor**, scales to billions」、p99 で「1.07 ms durable writes and 1.36 ms reads」、アイドル時は休止し、SQLite は「backed by S3, at SSD speeds」。比較対象はエージェントごとにサンドボックスを立てる方式で、コールドスタート **1.70 秒**、インスタンスあたり **512 MiB**。
 
 リポジトリは **6,614 スター**、**Apache-2.0**、2023-06-16 作成、2026-11-05 にプッシュ。同じ日に **v3.0.3（06:10Z）、v3.0.4（12:52Z）、v3.0.5（16:24Z）** の 3 つを出している。
 
@@ -328,13 +328,267 @@ Linum は **Pyramid-JiT（P-JiT）** を公開した。VAE を持たないピク
 
 ---
 
+## 20. Thinking Machines が Inkling 2 Small を投入 —— 総パラメータ 594B・アクティブ 17B、重みは「来週」公開予定
+
+- **Velocity:** ▮▮▮ trending
+- **ソース:** Thinking Machines Lab · 110 ポイント · 約 4 時間前（約 00:00 UTC+8）
+- **タグ:** `ai-models` `mixture-of-experts` `thinking-machines` `open-weights` `benchmarks`
+
+Thinking Machines が第 2 世代モデル **Inkling 2 Small** を発表した。MoE で**総パラメータ 594B、アクティブ 17B**、画像入力と可変エフォートに対応し、Artificial Analysis Intelligence Index は **31**。現時点では **Tinker** 経由・クローズドウェイトで提供され、「We intend to make the full weights available under an Apache 2.0 license next week after the completion of external safety testing and red-teaming」としている。チェックポイントは重みの公開に合わせてダウンロード可能になる。学習には「hundreds of thousands of long-horizon coding tasks across multiple agent harnesses and context-compaction strategies」での RL が含まれ、agentic な RL グレーダーが「evaluated how the model approached the problem, not just whether its code passed」という。初期チェックポイントは **Fledge-Alpha** の名で OpenCode 上で公開テストされた。
+
+スコア表はほとんどが 2 位で、ベンダー自身がそう明記している。**SWE-bench Pro v2 (Hard) 86.3%**（Kimi K3 は 88.2%）、**DeepSWE v1.1 72.1%**（DeepSeek-V4.1-Flash-1017 は 77.0%）、**FrontierCode v2.0 25.4%**（同 28.5%）、**Vibe Code Bench v1.1 81.6%**（同 87.7%）、**PostTrainBench v1.2 31.9%**（GLM-5.3-Flash は 36.8%）。外部 GPU カーネルベンチマーク **PMPP-Hard** では平均解決タスク数で **9 モデル中 6 位**（**54.25**/69、AUC 494.27）だが、**Pass@4 は 64 で Claude Opus 5.5 と並び 2 位タイ**（Kimi K3 の 66 に次ぐ）。DeepSeek-V3.2 のスパースアテンション・カーネルタスク（暫定）では **6.02×** で 3 位、Claude Opus 5.5 は 18.80×、GPT-6 Astra は 10.26×。
+
+**なぜ重要か：** スコアが第三者評価なのが珍しい点だ。Thinking Machines は「externally reported evaluations for both internal and external models when applicable」と明言し、Arena、Artificial Analysis、Scale AI、Surge、Mercor、Thoughtful、Vals、Datacurve、DesignArena の数値を用いている。つまり自前ハーネスでの自己採点ではない。切り分けるべきは「リリース」のほうで、モデルカードと推論エンドポイントは出たが重みは出ていない。しかも告知しているのは日付ではなくゲート（外部安全テスト）だ。自己申告の限界も具体的で、音声非対応、「not the most succinct communicator」、「doesn't always choose the best tools for the job—especially in codebases with a large number of skills」、チャット体験は弱く「overuses of slashes, and overreaction to mental health and other safety related queries」を挙げている。
+
+> 「We intend to make the full weights available under an Apache 2.0 license next week after the completion of external safety testing and red-teaming.」
+
+[`🔗 Thinking Machines の発表`](https://thinkingmachines.ai/news/inkling-2-small/) · [`🔗 Hacker News スレッド`](https://news.ycombinator.com/item?id=50386338)
+
+---
+
+## 21. Claude Code がアカウントのメールアドレスを User-Agent に載せていた —— Anthropic の修正は自らを「a courtesy, not a boundary」と称する
+
+- **Velocity:** ▮▮▮ trending
+- **ソース:** Hacker News / GitHub · 681 ポイント · 約 6 時間前（約 22:17 UTC）
+- **タグ:** `claude-code` `privacy` `agent-harness` `pii` `hooks`
+
+2026-11-05 **22:13:15Z** に立てられた issue **#107757** は、Claude Code が「divulged my email to arbitrary 3rd parties in the `User-Agent` request header while conducting web searches」と訴える。バージョンは **2.1.318**。Anthropic の **poteat** は同日深夜に返信し、組み込み mod **`cc-plugin-privacy`** が **v2.1.317 以降**に同梱され「enabled by default」であること、`mods/privacy` としてソース公開されたことを示した。同時に「nobody implemented this 'share email addresses to websites' as a feature」とも述べている。仕組みはモデル側で、アカウントのメールアドレスがコンテキストに入っており、サイト自身の要求にモデルが従ってしまう、というもの。例として挙げられたのはウィキペディアで、スクリプトクライアントに User-Agent へ連絡先メールを書くよう求める方針があり、モデルがそれに従ってヘッダへ載せた。
+
+読むべきはその mod の README だ。登録するフックは `tool.check` ひとつで、「入力に当該アドレスが含まれ、かつ User-Agent を名指ししている」Bash／PowerShell／Monitor 呼び出しを拒否する。マッチングは「two word matches over the whole input. There is no parser, on purpose.」だと明記されている。そして自分の守備範囲をこう書く——「This is a courtesy, not a boundary, and it covers one shape.」通ってしまうものの一覧には「アドレスはあるが User-Agent を名指ししていない場合」（URL、リクエストボディ、`curl -u`、`From:` ヘッダ）と、明示的に「A web tool call. WebFetch and WebSearch are not checked, and neither are MCP tools.」が並ぶ。無効化の手段まで列挙されている——`/plugin disable`、`"cc-plugin-privacy@builtin": false`、サーバー側スイッチ、上位に座る installed plugin のフック、hooks モジュールが読み込まれないセッション。2.1.318 の利用者 2 人が、プラグインは `system/init` に載っているのに README が明記するテストケースはそのまま実行されたと報告している。
+
+**なぜ重要か：** アドレスがコンテキストに入ったのは、もっと前の設計判断だ。issue **#81138**（2026-07-25 起票）がシステムプロンプト中の `# userEmail / The user's email address is <account email>.` を記録しており、値は `~/.claude.json` の `oauthAccount.emailAddress` から来る。5 か月後の修正は、そのフィールドを外すのではなくシェル呼び出しへの文字列マッチ・フックだった。mod の守備範囲と実際に漏れた経路のずれがこの話の全部で、フックが見るのは `curl -A` 型の呼び出し、報告が指すのはウェブ検索、そして README もそれを認めている。ひとつの形にだけ効き「他の形は通る」と明言するフックは誠実であり、だからこそ制御点はフックではなく設定のほうになる。
+
+> 「This is a courtesy, not a boundary, and it covers one shape.」
+
+[`🔗 Issue #107757`](https://github.com/anthropics/claude-code/issues/107757) · [`🔗 mods/privacy のソース`](https://github.com/anthropics/claude-code/tree/main/mods/privacy) · [`🔗 Hacker News スレッド`](https://news.ycombinator.com/item?id=50385272)
+
+---
+
+## 22. Windows ペイントにリモートコード実行の CVE —— 記録自身の FAQ が、ペイントには無いネットワークサービスを説明している
+
+- **Velocity:** ▮▮▮ trending
+- **ソース:** CVE.org / MSRC · 375 ポイント · 約 7 時間前（約 20:43 UTC）
+- **タグ:** `cve` `microsoft` `cvss` `out-of-bounds-read` `windows`
+
+**CVE-2026-83844**（Windows ペイントのリモートコード実行）が 2026-11-05 に Hacker News のフロントページへ上がった。マイクロソフトが公開したのは 3 週間前の **2026-10-13T18:59:53Z**（予約は **2026-08-31T23:09:05Z**）である。説明は一文だけ——「Out-of-bounds read in Windows Paint allows an unauthorized attacker to execute code over a network」、CWE-125。ベクタは `CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:H/I:H/A:H/E:U/RL:O/RC:C` で、**基本 8.1、時間 7.1**。どちらもマイクロソフトが公表しており、記録の `baseScore` フィールドには 8.1 が入っている。同社の重要度は **Important** で Critical ではなく、MSRC ページは公開済み「No」、悪用「No」、「Exploitation Less Likely」としている。影響範囲はペイント **11.0.0.0 以上 11.2605.91.0 未満**。同じ記録内の CISA ADP による拡充は SSVC を `Exploitation: none`、`Automatable: no`、`Technical Impact: total` と記す。
+
+破綻するのは FAQ のほうだ。悪用方法を問われ、マイクロソフトはこう答える——「An unauthenticated attacker could exploit this vulnerability by sending a specially crafted packet to an affected service over the network. Successful exploitation could allow the attacker to execute code on the target system. No authentication or user interaction is required.」ペイントはデスクトップのビットマップエディタである。ポートを待ち受けず、記録はサービスもプロトコルも KB も名指ししていない。参照は MSRC の更新ガイド 1 件のみで、CVE 記録には remediation の項目自体が無い。
+
+**なぜ重要か：** `AV:N`/`UI:N` はテンプレートであり、この記録はそれを、唯一のネットワーク機能が Copilot 連携である製品に当てはめている。その連携をマイクロソフトは名指ししておらず、その日のスレッドは一日中それを推測していた。採点は内部的に整合している（8.1 はこのベクタが実際に算出する値、7.1 は `Roundup(8.1 × 0.91 × 0.95)`）。それが罠で、算術が正しいことはモデルが当てはまることを何も保証しない。検討に耐える緩和は 2 つだけで、`AC:H`——マイクロソフト自身の FAQ は悪用にシステムへの深い理解が必要で成功は保証されないと書く——と「Exploitation Less Likely」。どちらも「sending a specially crafted packet」で始まる文とは噛み合わない。
+
+> 「An unauthenticated attacker could exploit this vulnerability by sending a specially crafted packet to an affected service over the network.」
+
+[`🔗 CVE-2026-83844`](https://www.cve.org/CVERecord?id=CVE-2026-83844) · [`🔗 MSRC 更新ガイド`](https://msrc.microsoft.com/update-guide/vulnerability/CVE-2026-83844) · [`🔗 Hacker News スレッド`](https://news.ycombinator.com/item?id=50384233)
+
+---
+
+## 23. lz4 v1.11.0 がマルチスレッドをライブラリ内部へ —— 850 コミット、そして負の行を含むブロックサイズ表
+
+- **Velocity:** ▮▮ rising
+- **ソース:** lz4/lz4 リリース · 公開 2026-11-04T15:55:56Z
+- **タグ:** `compression` `lz4` `multithreading` `c` `release`
+
+**lz4 v1.11.0** が 2026-11-04 に公開された。**v1.10.0（2024-07-22）**以来のリリースで、**850 以上のコミット**を含む。目玉は、v1.10.0 ではコマンドラインだけだったマルチスレッド圧縮が **`liblz4`** の frame API に入ったことだ。`LZ4F_preferences_t.nbWorkers` という 1 フィールドを設定するだけで済む。`silesia.tar`（202 MB、AMD EPYC Genoa、gcc 11）で `LZ4F_compressFrame()` は、level 1 が 1/4/16 ワーカーで **522 → 1,921 → 7,550 MB/s**、level 9 が **28.5 → 113 → 436 MB/s**、level 12 が **10.6 → 42.5 → 154 MB/s**。出力はワーカー数に依存しない——「The compressed output only depends on the data and on compression parameters: it doesn't change with the number of workers, nor with the scheduling of threads, so results are reproducible from one system to another.」
+
+多くのアプリが実際に使う小データ側では、このリリースは効果が止まる場所を珍しく明示している。4 KB ブロック + 64 KB 辞書・level 1 で、state 再利用の圧縮は **388 → 566 MB/s**（gcc 11 で +46%、clang 22 で +62%）、辞書ありが **297 → 387**、辞書あり level 12 が **10.4 → 18.1 MB/s**、`lz4frame` の辞書つき伸長が **1,251 → 2,352 MB/s**。しかしブロックサイズ別の表には負の値がある。辞書ありの **1 KB** は gcc/clang で **−4% / −6%**、16 KB が **+26% / +0%**、64 KB が **+6% / −1%**。辞書つき伸長は 4 KB で 1.9×だが、64 KB では **+7% / −1%** に落ちる。
+
+**なぜ重要か：** ベンチマークより大事なものが 2 つある。**`nbWorkers` は「experimental」と明記**されており、安定した約束ではない。そして**静的ライブラリは既定で単一スレッドのまま**で、`nbWorkers` を受け取りつつ同一の出力を 1 スレッドで返す。リンク行に `-pthread` を強制しないための意図的な設計だ。つまりマルチスレッドの主張は動的ライブラリと CLI については真で、静的リンクのビルドについては訊くまで真ではない。28 か月ぶりのリリースが買った残り半分は信頼性で、契約ごとの単体テスト、カバレッジの穴を探すミューテーションテスト、ストリーミング frame 圧縮とマルチスレッド経路への fuzzing 拡張、そして新しいエラーコード——`LZ4_decompress_safe()` は `-1` 不正入力、`-2` 出力先不足、`-3` 辞書欠落を返す。
+
+> 「The compressed output only depends on the data and on compression parameters: it doesn't change with the number of workers, nor with the scheduling of threads, so results are reproducible from one system to another.」
+
+[`🔗 lz4 v1.11.0 リリース`](https://github.com/lz4/lz4/releases/tag/v1.11.0) · [`🔗 lz4/lz4`](https://github.com/lz4/lz4) · [`🔗 GitHub Trending`](https://github.com/trending?since=daily)
+
+---
+
+## 24. `banks` は prompt 本文からツールの `import_path` を解決していた —— 前回 CVE のサンドボックスは無関係だった
+
+- **Velocity:** ▮▮ rising
+- **ソース:** GitHub アドバイザリ GHSA-64vx-6h2c-rjh7 · 公開 2026-11-05T17:51Z
+- **タグ:** `cve` `python` `prompt-templates` `incomplete-fix` `rce`
+
+**CVE-2026-61536**（GHSA-64vx-6h2c-rjh7、**7.5**、`CVSS:3.1/AV:N/AC:H/PR:L/UI:N/S:U/C:H/I:H/A:H`）は、`{% completion %}` ブロックを LLM に送る Python ライブラリ **`banks`** のリモートコード実行だ。仕組みは二度読みたくなる。`_body_to_messages` が**レンダリング後のテンプレート本文**から `Tool` JSON を解析し、`_get_tool_callable` がその `import_path` を `importlib.import_module(...)` と `getattr(...)` で解決する。許可リストも検証も無い。モデルが一致する `function.name` の `tool_calls` を出すと、解決された callable が `json.loads(tool_call.function.arguments)` をキーワード引数として呼ばれる。`"import_path":"os.system"` と `{"command":"id"}` で、agent サーバのプロセス上で任意のコードが走る。アドバイザリには 6 行の PoC が付いている。
+
+これは「不完全な修正」で、原因は精密だ。以前の **CVE-2026-44209** は **2.4.2** で `src/banks/env.py` を `Environment` から `SandboxedEnvironment` に替えて修正された。だがそのパッチは「does not touch `src/banks/extensions/completion.py`, and the unsafe import + getattr chain still executes on 2.4.2」。サニタイザが最初から効きようがなかった理由も書かれている。悪意ある `Tool` JSON は「is plain text in the rendered template body — it requires no Jinja attribute access, so the sandbox is irrelevant」。修正版は **2.4.3** で、**2026-06-18T14:41:34Z** に PyPI へ上がっている。アドバイザリの公開より **140 日**前だ。PyPI の最新は **2.5.1**。
+
+**なぜ重要か：** 根因は引かれていなかった信頼境界にある。`Tool.import_path` は `Tool.from_callable` では開発者の `func.__module__` から組み立てられ、`_body_to_messages` では任意の JSON から解析される。両方が同じ信頼レベルを持つ。テンプレート駆動の agent すべてで探すべき形だ——開発者向けインターフェースとコンテンツ経路を兼ねるシリアライズ形式。アドバイザリ自身の推奨（「Treat Tool.import_path as untrusted by default」、起動時に登録した許可リストにだけ解決する）が修正であり、前の CVE が買った修正とは別物である。
+
+> 「The CVE-2026-44209 patch hardened Jinja attribute access but not this Python-level resolution.」
+
+[`🔗 GHSA-64vx-6h2c-rjh7`](https://github.com/masci/banks/security/advisories/GHSA-64vx-6h2c-rjh7) · [`🔗 v2.4.3 リリース`](https://github.com/masci/banks/releases/tag/v2.4.3) · [`🔗 修正コミット e443f11`](https://github.com/masci/banks/commit/e443f112b80a20ac24438afe4eb8f8a746a8396d)
+
+---
+
+## 25. Firenook は Firebase エミュレータを Rust で書き直した —— 書き込み 40 倍、負けた行も公開し、未実装サービスの一覧も出す
+
+- **Velocity:** ▮▮ rising
+- **ソース:** Show HN · 61 ポイント · 約 15 時間前（約 21:07 UTC+8）
+- **タグ:** `firebase` `emulators` `rust` `benchmarks` `developer-tools`
+
+**Firenook** は Firebase Local Emulator Suite のドロップイン代替だ。`firebase.json`、SDK、ポートをそのまま使い、スクリプトの 1 語を変えるだけでよく、JVM も要らない。**0.2.1** は **2026-11-04T21:35Z** に npm へ公開された（11 バージョン、Apache-2.0、リポジトリ作成 2026-09-09）。比較対象は **firebase-tools 15.22.0 on Java 26** で、2026 年 10 月 21〜22 日に AMD Ryzen 5 3600 / 64 GiB の 1 台で計測。本番 Web アプリの 2 時間分のトラフィック——Firestore 211,205 ドキュメント、Storage 33,352 オブジェクト（6.7 GB）、書き込み 5,280 回、listener 更新 60,000 回——を再生し、両スタックの最終データが完全一致することを条件にしている。中央値は**書き込み 208.2 → 5.1 ms（40 倍）**、listener 更新 **209 → 11 ms（19 倍）**、負荷時のフィルタ付きクエリ **33.1 → 6.6 ms**、Firestore トリガー関数 3.80 → 3.11 ms、ピークメモリ **22.57 → 2.11 GiB**、2 時間の CPU **1,586 → 616 s**、データ保持の再起動 **30.8 s → 0.59 s**。
+
+読む価値があるのは 3 点だ。すべての行に **99 パーセンタイル**が併記され、そこは見栄えが良くない——書き込みの p99 は **50.6 ms** で、40 倍は中央値の事実である。負けた行を自分で名指ししている——「Within the Storage cycle, downloads were the one step where Firenook was not faster: 2.30 / 5.01 ms against 2.12 / 4.31 ms.」そして「Every multiple is rounded down.」もう半分は互換性ページにある。**エミュレートしない**のは「Realtime Database, Hosting, App Hosting, Data Connect and universal extensions」で、これらを設定した `firebase.json` でも起動はするが、当該エミュレータは警告付きでスキップされる。musl（Alpine）、2.28 未満の glibc、Windows on Arm、Windows での停電復旧は未対応・未検証と明記。0.2.1 の既知の問題 6 件も回避策つきで列挙され、Auth や Storage の無いプロジェクトで `init` が書く `--keep-data` が起動を壊す件、Functions の保存失敗がターミナル画面にしか出ない件などが含まれる。
+
+**なぜ重要か：** 40 倍は本物で条件も書かれている。これはエミュレータのベンチマークでは珍しい——同一ワークロード、同一データ、95 個の証拠ファイルの独立監査、36/36 のブラウザ動線。注意すべきは「ドロップイン」という語で、4 つの Firebase サービスが未実装なので、Realtime Database を使うプロジェクトは書き込み中央値がどれだけ良くても候補にならない。加えて**54 個の MCP ツール**を稼働中のエミュレータ上に提供しており、ローカル開発ツールがこの 1 年進んできた方向そのものだ。
+
+> 「Every multiple is rounded down.」
+
+[`🔗 firenook.dev`](https://firenook.dev/) · [`🔗 ベンチマーク`](https://firenook.dev/benchmarks) · [`🔗 互換性`](https://firenook.dev/compatibility)
+
+---
+
+## 26. Kagi が登録の壁を外した —— アカウント無しで 50 回検索できる
+
+- **Velocity:** ▮▮ rising
+- **ソース:** Hacker News / Kagi changelog · 592 ポイント · 約 8 時間前（約 20:03 UTC）
+- **タグ:** `search` `kagi` `product-launch` `privacy`
+
+Kagi の 2026-11-05 のチェンジログ「Your friends and family can finally try Kagi」は、同社の最も大きな構造的制約を変える。「anyone, anywhere, can now visit kagi.com and search the web. No account required for the first 50 searches (100 more upon registration).」理由として挙げられているのは成長そのものではなく紹介の循環だ——「We've heard that it can be hard to recommend a search engine when your friends can't try it without creating an account」。「we don't run ads anywhere」を掲げるサブスクリプション企業の言葉である。
+
+**なぜ重要か：** 有料・広告なしのインデックスは、これまで支払わずに評価できなかった。つまり Google や Bing との比較はすべて又聞きの説明の上に成り立っていた。ログイン不要の 50 クエリは、自分のクエリで第一印象を作るには十分で、まさに本フィードの取材ルールが繰り返し求めてきた種類の確認だ。しかも制限は**検索回数**であって機能ではないので、試用はデモモードではなく製品本体を覆う。チェンジログが語らないのは、この経路が人間だけを想定しているかどうかだ。プログラムからのアクセス、レート制限、規約変更については何も述べておらず、Kagi が別段の表明をするまでは「アカウント不要」はブラウザセッションの話として読むべきである。
+
+[`🔗 Kagi チェンジログ`](https://kagi.com/changelog#11820) · [`🔗 Hacker News スレッド`](https://news.ycombinator.com/item?id=50383740)
+
+---
+
+## 27. QRAE はクエリが実際に見た検索チャンクだけを残す —— 成功率 +2.35 ポイント、トークン 45% 減
+
+- **Velocity:** ▮▮ rising
+- **ソース:** arXiv 2611.07976 · 投稿 2026-11-05T13:08:43Z
+- **タグ:** `arxiv` `agents` `context-compression` `deepsearch` `retrieval`
+
+DeepSearch の agent は検索を繰り返し、取得したソースを以降の推論へ持ち越す。その多くは後の推論に寄与しない。**QRAE**（Query-Relevant Attention Entropy）は、どの**無傷のチャンク**を残すかを決める。疎な evidence-assessment ヘッドを使い、有界の候補バッチを対の prefill で採点する。クエリ無しの対照が全チャンク共通の注意応答を抑え、**正規化エントロピー**が各チャンク内の*正の*応答の広がりを測る。高得点のチャンクは常設の **evidence whitelist** に入り、不確かなチャンクは推論コンテキストから外れるが **candidate cache** に残り、後のステップで再評価できる。追加の生成圧縮も、注意演算子の変更も要らない。複数の DeepSearch ベンチマークと推論モデルで、タスク成功率が平均 **+2.35 ポイント**、エンドツーエンド遅延が **30%** 減、報告トークン使用量が **45%** 減。ほぼ 100B パラメータのモデルにも一般化するとしている。
+
+**なぜ重要か：** whitelist と cache の分割が、要約型圧縮との分かれ目になる設計判断だ。チャンクを推論コンテキストから外すことと捨てることは別の操作で、cache がその「外す」を可逆にする。譲歩すべき点は、スコアが注意統計量である以上、注意ヘッドが反応するものを引き継ぐことだ。対照 prefill がそのための保護であり、主張の中で実質的な仕事をしている。
+
+[`🔗 arXiv 2611.07976`](https://arxiv.org/abs/2611.07976) · [`🔗 全文（PDF）`](https://arxiv.org/pdf/2611.07976)
+
+---
+
+## 28. Stroq は自分の agent のセッションを読み、どのコマンドが「読んだテキスト」由来かを問う
+
+- **Velocity:** ▮▮ rising
+- **ソース:** Show HN · 75 ポイント · 約 12 時間前（約 23:54 UTC+8）
+- **タグ:** `agent-security` `prompt-injection` `hooks` `claude-code` `codex`
+
+**Stroq** は、多くの agent ガードが飛ばしている問いから始める——「Every guard in this field answers the same question: is the command in front of me dangerous? That question cannot be answered from the command alone. An `npx` that installs an attacker's package looks exactly like an `npx` that installs a dependency; what separates them is that one of them was dictated by something the agent had just read.」そこでセッションが何を取り込んだかを記録し、アクションをその由来に名前で突き合わせる。`npx @stroq/cli` は直近 30 日の Claude Code と Codex のセッションを読み、鍵は**名前だけ**を表示して値は出さず、`~/.stroq` 以外に書かず、外部送信もしない。`stroq replay --all` はフックを入れずに過去のセッションをポリシーで再実行する。`stroq init` はフックを設置し、`curl | sh` と既知のローカル秘密を載せた外向き通信を拒否し、コマンドが agent の読んだテキストを復唱したときは**先に尋ね**、そのテキストを名指しする。リポジトリは **Apache-2.0、110 スター**、作成 2026-09-04。`@stroq/cli` **0.30.0** は 2026-11-05T15:31Z 公開、38 バージョン。
+
+収録に値するのはドキュメントのほうだ。fail-closed の論拠は主張ではなく計測されている——「Every agent that times a hook out treats its own timeout as an allow: Claude Code cancels the hook and lets the call continue through the normal permission flow, Codex reports a hook failure and proceeds, Copilot discards the late deny」。だから各呼び出しの中で watchdog を走らせ、インストーラが書いたタイムアウトの 60% で同じ拒否を返す。限界も同じ口調で書かれる。`stroq doctor` は「detects a modification rather than preventing one — an attacker who can rewrite the agent's config can rewrite the record too」。ある実行はフックを通らない stdio MCP サーバーを列挙し、その「results reach the agent unchecked」と述べる。そして「Tool-description poisoning is NOT covered by this run — add `--probe` to check it.」と明言する。
+
+**なぜ重要か：** アクションを、それを命じた信頼できないテキストまで遡る検出は他に無い。そして適用可能にしているのは守備範囲の正直さだ——110 スターとバージョン番号の伸びが API の流動性を示している。自分で名指しした穴は実務で最も効く。MCP サーバーは第二の入口であり、シェル呼び出しだけを見るフックは、モデルに渡るツール結果を境界の外に置いたままにする。
+
+> 「This detects a modification rather than preventing one — an attacker who can rewrite the agent's config can rewrite the record too.」
+
+[`🔗 AGGIB/Stroq`](https://github.com/AGGIB/Stroq) · [`🔗 Stroq ガイド`](https://github.com/AGGIB/Stroq/blob/main/docs/GUIDE.md) · [`🔗 Hacker News スレッド`](https://news.ycombinator.com/item?id=50380704)
+
+---
+
+## 29. Gauge は実在の agent に自分の CLI とドキュメントを走らせ、詰まる場所を探す —— 「Agent Experience」を測定対象にする
+
+- **Velocity:** ▮▮ rising
+- **ソース:** Show HN · 40 ポイント · 約 16 時間前（約 20:31 UTC）
+- **タグ:** `agents` `developer-experience` `skills` `mcp` `cli`
+
+**Gauge** は「An open-source CLI for hillclimbing Agent Experience」を名乗る。Skills、CLI、SDK、MCP サーバー、API、ドキュメントを対象に据えると、「runs real agents against your product, captures where they get stuck, and lets your own coding agent test fixes before you publish them」。面白いのは検出項目の分類で、どれもメンテナが動ける形をしている。対話的コマンドが coding agent を止める。agent が非推奨コマンドや古い API の書き方に手を伸ばす。「A Skill goes unused even when it should help with the task」。agent が「confidently claims a limitation that does not exist」。複数のコマンドにまたがる意図した操作手順を agent が推測できない。修正はエラーメッセージ、Skill の内容、ヘルプ文、コード、ドキュメントのどこに落ちてもよく、ツールは場所を指定しない。リポジトリは **MIT、103 スター**、作成 **2026-10-20**。`@withgauge/cli` は **0.28.0**（36 バージョン、2026-11-04T17:10Z 公開）。Docker と既存の Claude Code、Codex、Pi、OpenCode のサブスクリプションまたは API キーでローカルに動き、「No Gauge account required.」
+
+**なぜ重要か：** この種のソフトが試す対象は、人間が man ページを読む前提で書かれている。そして失敗の一覧は、人間の読み手が無意識に補ってしまう部分そのものだ——ページャ付きコマンド、古い例、存在しない制限を示唆するヘルプ文。そこにスコア付きのループを付けることが、「agent 向けにドキュメントを書く」を助言からチェンジログの 1 行に変える。ただし agent を評価器にする場合の前提は残る。所見はどの agent とどのモデルを向けたかに依存するので、オールグリーンは「そのモデルに対してオールグリーン」にすぎない。3 週間で 36 バージョンという数字が、定義自体がまだ動いていることを示している。
+
+[`🔗 gauge-sh/gauge-cli`](https://github.com/gauge-sh/gauge-cli) · [`🔗 Hacker News スレッド`](https://news.ycombinator.com/item?id=50371090)
+
+---
+
+## 30. ホワイトハウスのネットワークから、30 日間に 236 回のレジデンシャルプロキシ出口が観測された
+
+- **Velocity:** ▮▮ rising
+- **ソース:** Layer3 Intel · 1,247 ポイント · 約 15 時間前（約 04:45 UTC+8）
+- **タグ:** `security` `residential-proxies` `botnets` `infrastructure` `osint`
+
+今週はじめに「Residential Proxy Observatory」を公開した Layer3 Intel は、その列挙パイプラインが **2026 年 10 月 5 日から 11 月 3 日**の間に **AS2650** 経由で **236 回**出口したと報告した。AS2650 は**大統領行政府**に登録された AS だ。**6 個のアドレス**から、**30 日中 26 日**、**28 の異なるレジデンシャルプロキシサービス**を経由している。チームは対象を狙っていないと述べる——「We did not selectively target this network or try to make our probes exit from it. We caught this by chance, simply by requesting global rotating access through these services.」アドレスは **Spur** と **Synthient** と突き合わせられ、両者が独立にレジデンシャルプロキシ出口と判定したとしている。時刻は約半分が東部時間 17 時から深夜に集中し、早朝はほぼゼロ。著者はこれを「a person rather than a public guest Wi-Fi network: someone regularly on the White House network late into the evening, whose device is infected with a proxy SDK」と読む。
+
+観測所の他の行が被覆範囲を示す。セントヘレナ・アセンション・トリスタン・ダ・クーニャで **413 アドレス、32,000 以上の観測**（Starlink と地元事業者 Sure Saint Helena に分散）、南極は **3 件**ですべてマクマード基地を指す Cloudflare WARP アドレス、ピトケアン・ノーフォーク島・スヴァールバルは各 1 件。フォークランド 388、チャゴス 43、トケラウ 21、サウスジョージア 7。
+
+**なぜ重要か：** この発見は、堅牢化された境界を持つネットワークにも**エンドポイント**経由で到達できるということで、プロキシ SDK が繰り返し突きつけてきたサプライチェーンの主張そのものだ。ただし範囲の限定を読む必要がある——「Our data shows the exits, not the device or the person behind them」。観測所が見ているのは出口であり、感染端末という読みは時刻分布からの推論だ。開発者に関係する先例は記事が引く Synthient の *A Broken System Fueling Botnets* で、Kimwolf ボットネットがこれらのネットワーク経由で「at least 2 million devices, mostly Android devices with an exposed ADB service」に達した。このネットワーク上の SDK に同種の欠陥があれば、プロキシのアクセス権を買うことが内側への経路になる。6 アドレスは回転プールの下限であって人数ではない。
+
+> 「Our data shows the exits, not the device or the person behind them.」
+
+[`🔗 Layer3 Intel`](https://layer3intel.com/blog/residential-proxies-white-house-network) · [`🔗 Hacker News スレッド`](https://news.ycombinator.com/item?id=50371246)
+
+---
+
+## 31. スパースオートエンコーダの学習に必要な活性バッファは 8〜64 分の 1 —— リプレイが効かなくなる高原があるから
+
+- **Velocity:** ▮ steady
+- **ソース:** arXiv 2611.07756 · 投稿 2026-11-05T10:00:55Z
+- **タグ:** `arxiv` `interpretability` `sparse-autoencoders` `training` `scaling-laws`
+
+活性の保存はスパースオートエンコーダ（SAE）学習の典型的なボトルネックで、既定ではバッファをトークン予算と一緒に増やす。本論文は逆を問う。**総学習予算を固定**したとき、SAE は*一意な*活性をどれだけ必要とするのか。答えは膝のある曲線だ。品質は「improves rapidly as the buffer grows, then reaches a plateau where replaying the buffer is nearly as effective as using fresh activations throughout training」。その先では追加の一意な活性は「bring little benefit to reconstruction or interpretability, so the buffer need not grow with the training budget」。
+
+検証の広さが主張を支える。辞書サイズ、トークン予算、**Llama-3.1** の早・中・後層といくつかの **Qwen3** 規模、さらに 3 種の SAE 変種——**BatchTopK、TopK、JumpReLU**——で確認し、数学テキストと Python コードで活性の*供給元*を変える掃引も行う。評価は explained variance、再構成 MSE、feature absorption、自動解釈、スパースプロービングを覆う。これは重要で、解釈性こそ「小さいバッファが最初に壊れる」場所だからだ。著者の実用ルールは「choose the smallest buffer that reaches the quality plateau and replay it for the remaining budget」で、実測の節約は**活性ストレージ 8〜64 分の 1、品質劣化はほぼ無視できる**。
+
+**なぜ重要か：** 活性バッファはこの手法を大規模モデルで高価にしている当のもので、固定計算量で 8〜64 倍の節約は、解釈性パイプラインが 1 ノードに収まるかどうかの分かれ目になる。持ち運べるのは曲線の形——多様性はある点まで効き、その後は反復が代わりになる——で、これはストレージではなく辞書が何を学んでいるかについての言明だ。
+
+[`🔗 arXiv 2611.07756`](https://arxiv.org/abs/2611.07756) · [`🔗 全文（PDF）`](https://arxiv.org/pdf/2611.07756)
+
+---
+
+## 32. 13 のフロンティアモデルにまたがる制御喪失スコアは、封じ込めた長期間タスクの失敗率と 0.84 の相関を持つ
+
+- **Velocity:** ▮ steady
+- **ソース:** arXiv 2611.07953 · 投稿 2026-11-05T12:49:20Z
+- **タグ:** `arxiv` `ai-safety` `evaluation` `loss-of-control` `frontier-models`
+
+論文は**制御喪失**——「systems acting beyond effective human control with potentially irreversible consequences」——を、事前に測れると主張する 3 因子に分解する。**動機の不整合**、**害を可能にする能力**、**監視の回避**。これを **13 の測定可能な側面**と **29 の評価タスク**で操作化し、単一の LoC スコアにまとめる。**13 のフロンティアモデル**で、このスコアは封じ込めた長期間リスクシナリオの失敗率と **Pearson r = 0.84** で相関した。
+
+さらに 2 つの知見が論証を担う。リスクは「varies systematically across models and cannot be explained by capability alone」——静的な能力ランキングでは代替できない。そしてスコアは記述的であるだけでなく行動可能で、診断された弱点に的を絞ったファインチューニングと監視は「reduce failure rates while largely preserving general performance」。
+
+**なぜ重要か：** 事前スコアの価値は、予測対象より安いことにある。保持されたシナリオに対して r = 0.84 は、その主張としては強い数字だ。確立していないのは一般性で、この指標は著者が選んだ 29 タスクへの固定重み付けを 13 モデルで評価し、検証相手のシナリオもまた封じ込められた人工のもの——正直に読めば「構成された指標が構成されたハーネスを追う」であり、利用可能な最良の代理ではあるが実運用の予測とは別物だ。この上に何かを建てる人に有用なのは診断的な分解で、制御喪失リスクの主因が監視回避であるモデルと動機の不整合であるモデルは、指示する緩和策が違う。単一のスカラーにはできないことだ。
+
+[`🔗 arXiv 2611.07953`](https://arxiv.org/abs/2611.07953) · [`🔗 全文（PDF）`](https://arxiv.org/pdf/2611.07953)
+
+---
+
+## 33. 17 スターの「awesome」リポジトリに 95 件のオープン PR —— しかも中身は AI 生成のツール宣伝
+
+- **Velocity:** ▮ steady
+- **ソース:** Erik Gahner Larsen · 282 ポイント · 約 17 時間前（約 11:16 UTC）
+- **タグ:** `open-source` `awesome-lists` `ai-slop` `maintainers` `github`
+
+Erik Gahner Larsen の「Awesome repositories are no longer awesome」（2026-11-05）は AI に関わる 2 つの論点を出し、どちらにも実物を添える。1 つ目は陳腐化で、`awesome-R` を開くと「last updated more than a year ago」であり、「One of the first links in the repository is an overview of the top 50 downloaded packages - as of 2016!」と指摘する。2 つ目はスパムで、こちらには数字がある——「It is a small, unknown repository with 13 stars but 91 open pull requests at the time of writing.」私が 2026-11-06 に `abdessamadbettal/awesome-free-online-tools` を確認したところ **17 スター、95 件のオープン PR** だった。1 日で比率は改善どころか悪化している。
+
+著者は投稿者 1 人を追跡している。あるユーザーが「has created at least six vibe-coded websites (StatOrigin, ScanChess, Sticker Printer Hub, QuizQuip, LiquidityPools, DefiLPKit) and submitted more than 100 pull requests to various awesome lists to add these websites」。マージされた例も却下された例も見つかっている。対比例は残す価値がある。あるメンテナは PR を閉じる際にこう書いた——「There is not yet sufficient evidence of qualified educator review, independent validation of the educational content, or demonstrated learning outcomes.」
+
+**なぜ重要か：** awesome リストはエコシステムが持っていた最も安価なキュレーション機構だった。それが流通チャネルになった。もっともらしい項目を作るコストはほぼゼロになり、1 件を査読するコストは変わっていない。本フィードの主題にとって具体的な帰結はこうだ。これらのリストは学習と検索の基盤でもあり、agent が適切なライブラリを探すときに読むのはそれらである。だから 85% が未査読の投稿でできたリストは、単に古い名簿なのではなく、汚染された推薦元なのだ。著者の引いた線は正しい。すべてのリストが壊れたのではなく、リストで良い資源を探すという**方法**が信頼できなくなった。
+
+> 「There is not yet sufficient evidence of qualified educator review, independent validation of the educational content, or demonstrated learning outcomes.」
+
+[`🔗 Erik Gahner Larsen`](https://erikgahner.github.io/posts/2026/awesome-repositories-are-no-longer-awesome/) · [`🔗 Hacker News スレッド`](https://news.ycombinator.com/item?id=50377821)
+
+---
+
+## 34. Game Boy Advance の音声コーデックが N64 に収まった —— 44.1 kHz ステレオが CPU 4% で
+
+- **Velocity:** ▮ steady
+- **ソース:** PhobosLab · 207 ポイント · 約 15 時間前（約 12:51 UTC）
+- **タグ:** `n64` `audio-codec` `homebrew` `rsp` `libdragon`
+
+Dominic Szablewski の記事（日付は 2026-11-03）は制約の階段で、終点は動くコーデックだ。N64 には 93 MHz、カートリッジ容量は貴重、RSP ベクタコプロセッサは任天堂が長く閉ざしていた。Libultra の ADPCM は 4 倍圧縮だが、5 分の 44.1 kHz ステレオは約 **12 MB** になる——「The whole Mario 64 ROM is just 8MB in total.」Libdragon には動く RSP 加速 **Opus** デコーダがあるが、ゲーム中には遅すぎる。**QOA** も不適で、「each sample relies on the previous decoded sample」だからだ。
+
+答えは GBA のデモから来た。**Aikku93** の **ULC**（Ultra Low Complexity Codec）で、全帯域 MDCT 変換符号化、係数はニブル構文で詰める。各係数 4 ビット、予約値がゼロ連続、量子化器の変更、**ノイズフィル**を表す。著者は MP3 にこの機能が無く「needs to encode quasi-random coefficients as is」と書く。エントロピー復号は不要で、展開は「just ~150 lines of C」。移植は IMDCT を RSP の **DMEM 4,096 バイトと IMEM 4,096 バイト**に、浮動小数点なしで収める作業になる。そこで 16 ビット固定小数点（Q1.14）と 1,024 サンプルブロック + 512 サンプルのラップバッファ、きっかり 3,072 バイトを選ぶ。アセンブリは C を **RSPL**（Max Bebök による RSP 向けの C 風言語）へ Codex で部分ごとに訳し、その都度検証してからパイプラインストールを最適化して作られた。結果は約 **1,400 行の MIPS** で、「barely fits into the 4096 byte IMEM」。
+
+**なぜ重要か：** 持ち帰るべきはこの一文だ——「Quality and bitrate are close to those of Opus, but complexity is only 4x that of ADPCM」。44.1 kHz ステレオ 1 本が**CPU 時間の約 4%、RSP 時間の約 5%**で済む。これは「ゲーム中に音楽が流せる」と「カットシーンでしか流せない」の差である。Libdragon の preview ブランチにマージ済みで、Half-Life の N64 移植版 README も名指ししている。このコーデックが「for the 2,500 sounds and 27 music tracks, is what makes everything fit in one 64 MB cartridge image」だという。線形なサウンドトラック以外にも使えるようにしているのは、**毎秒約 20 バイト**のシークテーブルという地味な半分である。
+
+> 「Quality and bitrate are close to those of Opus, but complexity is only 4x that of ADPCM.」
+
+[`🔗 PhobosLab`](https://phoboslab.org/log/2026/11/n64-ulc-codec) · [`🔗 ulcplayer-gba（Aikku93）`](https://github.com/Aikku93/ulcplayer-gba) · [`🔗 Hacker News スレッド`](https://news.ycombinator.com/item?id=50378508)
+
+---
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-11-05T20:18:48Z |
-| Items | 19 |
-| Sources tracked | 29（Hacker News、GitHub Trending、NVD、CVE.org、CISA KEV、GitHub Advisory Database、Red Hat・Apache PSIRT、ベンダー勧告ページ、プロジェクトのリリースノート、npm・PyPI、Maven Central、arXiv、Hugging Face、ベンダー工学ブログ、The Verge） |
+| Generated | 2026-11-06T04:22:20Z |
+| Items | 34 |
+| Sources tracked | 37（Hacker News、GitHub Trending、NVD、CVE.org、CISA KEV、GitHub Advisory Database、MSRC、Red Hat・Apache PSIRT、ベンダー勧告ページ、プロジェクトのリリースノート、npm・PyPI、Maven Central、arXiv、Hugging Face、Thinking Machines、Kagi、Layer3 Intel、PhobosLab、開発者ブログ、The Verge） |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8（1 日 3 回） |
 | Ranking | 速度加重（新しさ × 反応の加速度 × 情報源の権威） |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |

@@ -1,8 +1,8 @@
 ---
 date: 2026-11-06
-updated: 2026-11-05T20:18:48Z
+updated: 2026-11-06T04:22:20Z
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 29
+sources: 37
 license: CC-BY-4.0
 ---
 
@@ -204,7 +204,7 @@ The design decision worth reading is the failure contract: "A click fails, inste
 - **Source:** Launch HN · 38 pts · ~3h ago (~01:00 UTC+8)
 - **Tags:** `agents` `orchestration` `actor-model` `sqlite` `s3`
 
-Rivet launched on Hacker News as "the orchestrator for agentic workloads," built on the actor model: each actor is "a long-lived process with in-memory state, a SQLite database, WebSockets for realtime, and scheduling," addressed by key, and "an object storage bucket is the only dependency." The performance claims are specific — "**4.99 ms p99 cold starts, 72 KB RAM per Actor**, scales to billions," with "1.07 ms durable writes and 1.36 ms reads at p99," hibernation when idle, and SQLite "backed by S3, at SSD speeds." The comparison it draws is against per-agent sandboxes at **1.70 s** cold start and **512 MiB** per instance.
+Rivet launched on Hacker News as "the orchestrator for agentic workloads," built on the actor model: each actor is one of the "long-lived processes with in-memory state, a SQLite database, WebSockets, and scheduling," addressed by key, and "an object storage bucket is the only dependency." The performance claims are specific — "**4.99 ms p99 cold starts, 72 KB RAM per Actor**, scales to billions," with "1.07 ms durable writes and 1.36 ms reads at p99," hibernation when idle, and SQLite "backed by S3, at SSD speeds." The comparison it draws is against per-agent sandboxes at **1.70 s** cold start and **512 MiB** per instance.
 
 The repository is **6,614 stars**, **Apache-2.0**, created 2023-06-16 and pushed on 2026-11-05 — the same day it published **v3.0.3 (06:10Z), v3.0.4 (12:52Z) and v3.0.5 (16:24Z)**.
 
@@ -328,13 +328,267 @@ The method is inference-time scaling applied one step down from where it usually
 
 ---
 
+## 20. Thinking Machines ships Inkling 2 Small — 594B total, 17B active, and the weights are promised for next week
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Thinking Machines Lab · 110 pts · ~4h ago (~00:00 UTC+8)
+- **Tags:** `ai-models` `mixture-of-experts` `thinking-machines` `open-weights` `benchmarks`
+
+Thinking Machines released **Inkling 2 Small**, its second model generation: a Mixture-of-Experts with **594B total parameters, 17B active**, image input and variable effort, scoring **31** on the Artificial Analysis Intelligence Index. It is available now through **Tinker** with closed weights — "We intend to make the full weights available under an Apache 2.0 license next week after the completion of external safety testing and red-teaming" — and checkpoints become downloadable when the weights ship. Training included RL on "hundreds of thousands of long-horizon coding tasks across multiple agent harnesses and context-compaction strategies," with an agentic RL grader that "evaluated how the model approached the problem, not just whether its code passed," and early checkpoints were tested publicly on OpenCode under the name **Fledge-Alpha**.
+
+The table is mostly second place, and the vendor labels it that way: **SWE-bench Pro v2 (Hard) 86.3%** against Kimi K3's 88.2%, **DeepSWE v1.1 72.1%** against DeepSeek-V4.1-Flash-1017's 77.0%, **FrontierCode v2.0 25.4%** against 28.5%, **Vibe Code Bench v1.1 81.6%** against 87.7%, **PostTrainBench v1.2 31.9%** against GLM-5.3-Flash's 36.8%. On the external **PMPP-Hard** GPU-kernel benchmark it finishes **6th of 9** on mean tasks solved (**54.25** of 69, AUC 494.27) but **joint 2nd on Pass@4 (64)**, tied with Claude Opus 5.5 and behind Kimi K3's 66 — and 3rd on the preliminary DeepSeek-V3.2 sparse-attention kernel task at **6.02×**, against Claude Opus 5.5's 18.80× and GPT-6 Astra's 10.26×.
+
+**Why it matters:** the scores are third-party, which is the unusual part — Thinking Machines states it uses "externally reported evaluations for both internal and external models when applicable," sourced from Arena, Artificial Analysis, Scale AI, Surge, Mercor, Thoughtful, Vals, Datacurve and DesignArena, so the comparison is not a self-run harness. The claim to hold separately is the release: a model card and an inference endpoint shipped, the weights did not, and the announcement names the gate (external safety testing) rather than a date. The stated limitations are specific and self-reported: no audio, "not the most succinct communicator," it "doesn't always choose the best tools for the job—especially in codebases with a large number of skills," and the chat experience is weaker, with "overuses of slashes, and overreaction to mental health and other safety related queries."
+
+> "We intend to make the full weights available under an Apache 2.0 license next week after the completion of external safety testing and red-teaming."
+
+[`🔗 Thinking Machines announcement`](https://thinkingmachines.ai/news/inkling-2-small/) · [`🔗 Hacker News submission`](https://news.ycombinator.com/item?id=50386338)
+
+---
+
+## 21. Claude Code put the account's email in the User-Agent — and the fix Anthropic shipped calls itself "a courtesy, not a boundary"
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Hacker News / GitHub · 681 pts · ~6h ago (~22:17 UTC)
+- **Tags:** `claude-code` `privacy` `agent-harness` `pii` `hooks`
+
+Issue **#107757** opened on 2026-11-05 at **22:13:15Z** reports that Claude Code "divulged my email to arbitrary 3rd parties in the `User-Agent` request header while conducting web searches," on version **2.1.318**. Anthropic's **poteat** replied the same night that a built-in mod **`cc-plugin-privacy`** ships in **v2.1.317 and later**, is "enabled by default," and is now source-available under `mods/privacy`; and that "nobody implemented this 'share email addresses to websites' as a feature" — the mechanism is the model, which has the account address in context, following a site's own request. His worked example is Wikipedia, whose policy requires scripted clients to identify themselves with a User-Agent contact email; the model complies, carrying the account's address into the header.
+
+The mod's README is the document to read. It registers one `tool.check` hook that refuses a Bash, PowerShell or Monitor call whose input holds the address **and** names a User-Agent, matched as "two word matches over the whole input. There is no parser, on purpose." It then says what it does not do: "This is a courtesy, not a boundary, and it covers one shape." The list of things that pass includes the address with no User-Agent named (a URL, a request body, `curl -u`, a `From:` header) and, explicitly, "A web tool call. WebFetch and WebSearch are not checked, and neither are MCP tools." It also documents its own off-switches — `/plugin disable`, `"cc-plugin-privacy@builtin": false`, a server-side switch, an installed plugin's hook sitting above it, or a session where no hooks module loads. Two commenters on 2.1.318 report the plugin is loaded (`system/init` lists it) but the documented test case still runs.
+
+**Why it matters:** the address got there by a design decision made months earlier — issue **#81138**, opened **2026-07-25**, documents the system-prompt block `# userEmail / The user's email address is <account email>.` read from `~/.claude.json` → `oauthAccount.emailAddress`, and the fix five months later is a string-match hook on shell calls rather than removing the field. The gap between the mod's reach and the reported leak is the whole story: the check covers `curl -A`-shaped calls, the report names web searches, and the README agrees. A hook that fires on one shape and reports "another shape passes" is honest — and it means the setting, not the hook, is the control.
+
+> "This is a courtesy, not a boundary, and it covers one shape."
+
+[`🔗 Issue #107757`](https://github.com/anthropics/claude-code/issues/107757) · [`🔗 mods/privacy source`](https://github.com/anthropics/claude-code/tree/main/mods/privacy) · [`🔗 Hacker News submission`](https://news.ycombinator.com/item?id=50385272)
+
+---
+
+## 22. Windows Paint has a remote-code-execution CVE — and the record's own FAQ describes a network service Paint does not run
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** CVE.org / MSRC · 375 pts · ~7h ago (~20:43 UTC)
+- **Tags:** `cve` `microsoft` `cvss` `out-of-bounds-read` `windows`
+
+**CVE-2026-83844**, the Windows Paint remote code execution vulnerability, reached the Hacker News front page on 2026-11-05 — three weeks after Microsoft published it on **2026-10-13T18:59:53Z** (reserved **2026-08-31T23:09:05Z**). The description is one sentence: "Out-of-bounds read in Windows Paint allows an unauthorized attacker to execute code over a network," CWE-125. The vector is `CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:H/I:H/A:H/E:U/RL:O/RC:C` — **base 8.1, temporal 7.1**, both published by Microsoft, with the record's `baseScore` field carrying the 8.1. Microsoft's own label is **Important**, not Critical, and the MSRC page says publicly disclosed "No", exploited "No", "Exploitation Less Likely". The affected range is Microsoft Paint **11.0.0.0 to less than 11.2605.91.0**. CISA's ADP enrichment in the same record files SSVC as `Exploitation: none`, `Automatable: no`, `Technical Impact: total`.
+
+The FAQ is where it comes apart. Asked how an attacker exploits it, Microsoft answers: "An unauthenticated attacker could exploit this vulnerability by sending a specially crafted packet to an affected service over the network. Successful exploitation could allow the attacker to execute code on the target system. No authentication or user interaction is required." Paint is a desktop bitmap editor. It does not listen on a port, and the record names no service, no protocol and no KB — its only reference is the MSRC update guide, and the CVE record carries no remediation entry.
+
+**Why it matters:** `AV:N`/`UI:N` is a template, and this record applies it to a product whose only network feature is its Copilot integration — which Microsoft does not name, and which the thread spent the day guessing at. The scoring is internally consistent (8.1 is exactly what that vector computes, and 7.1 is `Roundup(8.1 × 0.91 × 0.95)`), which is the trap: the arithmetic being right says nothing about whether the model fits. The two hedges that survive scrutiny are `AC:H` — Microsoft's own FAQ says exploitation needs deep understanding of the system and is not guaranteed — and "Exploitation Less Likely", and neither reconciles with a sentence that begins "sending a specially crafted packet."
+
+> "An unauthenticated attacker could exploit this vulnerability by sending a specially crafted packet to an affected service over the network."
+
+[`🔗 CVE-2026-83844`](https://www.cve.org/CVERecord?id=CVE-2026-83844) · [`🔗 MSRC update guide`](https://msrc.microsoft.com/update-guide/vulnerability/CVE-2026-83844) · [`🔗 Hacker News submission`](https://news.ycombinator.com/item?id=50384233)
+
+---
+
+## 23. lz4 v1.11.0 moves multithreading inside the library — 850 commits, and a block-size table where some rows are negative
+
+- **Velocity:** ▮▮ rising
+- **Source:** lz4/lz4 release · published 2026-11-04T15:55:56Z
+- **Tags:** `compression` `lz4` `multithreading` `c` `release`
+
+**lz4 v1.11.0** landed on 2026-11-04, the first release since **v1.10.0 (2024-07-22)** and **850+ commits** later. The headline is that multithreaded compression, which v1.10.0 added only to the command line, is now part of **`liblz4`**'s frame API: setting one field, `LZ4F_preferences_t.nbWorkers`, is enough. On `silesia.tar` (202 MB, AMD EPYC Genoa, gcc 11), `LZ4F_compressFrame()` goes **522 → 1,921 → 7,550 MB/s** at level 1 with 1/4/16 workers, **28.5 → 113 → 436 MB/s** at level 9, and **10.6 → 42.5 → 154 MB/s** at level 12. Output is worker-count independent: "The compressed output only depends on the data and on compression parameters: it doesn't change with the number of workers, nor with the scheduling of threads, so results are reproducible from one system to another."
+
+The small-data half is where most applications live, and the release is unusually candid about where it stops paying. On 4 KB blocks with a 64 KB dictionary at level 1, compression with a reused state goes **388 → 566 MB/s** (+46% gcc 11, +62% clang 22), with a dictionary **297 → 387**, dictionary at level 12 **10.4 → 18.1 MB/s**, and dictionary decompression through `lz4frame` **1,251 → 2,352 MB/s**. But the by-block-size table has negatives: with a dictionary at **1 KB** the gcc/clang rows are **−4% / −6%**, at 16 KB **+26% / +0%**, and at 64 KB **+6% / −1%**. Decompression with a dictionary is a 1.9× at 4 KB and only **+7% / −1%** at 64 KB.
+
+**Why it matters:** two artifacts matter more than the benchmark. **`nbWorkers` is labelled "experimental"**, so the field is not a stable promise; and the **static library stays single-threaded by default** — it accepts `nbWorkers` and produces identical output on one thread, deliberately keeping `-pthread` out of your link line. So the multithreading claim is true of the dynamic library and of the CLI, and false of a statically linked build until you ask. The rest of the release is the reliability half that a 28-month gap buys: a new contract-by-contract unit suite, mutation testing to find coverage gaps, fuzzing extended to streaming frame compression and the multithreaded path, and error codes — `LZ4_decompress_safe()` now returns `-1` malformed input, `-2` destination too small, `-3` missing dictionary.
+
+> "The compressed output only depends on the data and on compression parameters: it doesn't change with the number of workers, nor with the scheduling of threads, so results are reproducible from one system to another."
+
+[`🔗 lz4 v1.11.0 release`](https://github.com/lz4/lz4/releases/tag/v1.11.0) · [`🔗 lz4/lz4`](https://github.com/lz4/lz4) · [`🔗 GitHub Trending`](https://github.com/trending?since=daily)
+
+---
+
+## 24. `banks` resolved a tool's `import_path` out of the prompt body — and the sandbox from the previous CVE was irrelevant
+
+- **Velocity:** ▮▮ rising
+- **Source:** GitHub Advisory GHSA-64vx-6h2c-rjh7 · published 2026-11-05T17:51Z
+- **Tags:** `cve` `python` `prompt-templates` `incomplete-fix` `rce`
+
+**CVE-2026-61536** (GHSA-64vx-6h2c-rjh7, **7.5**, `CVSS:3.1/AV:N/AC:H/PR:L/UI:N/S:U/C:H/I:H/A:H`) is a remote code execution in **`banks`**, a Python library that runs `{% completion %}` blocks against an LLM. The mechanism is worth reading twice: `_body_to_messages` parses `Tool` JSON objects from the **rendered template body**, and `_get_tool_callable` resolves each one's `import_path` with `importlib.import_module(...)` followed by `getattr(...)` — no allowlist, no validation. When the model then emits a `tool_calls` entry whose `function.name` matches, the resolved callable is invoked with `json.loads(tool_call.function.arguments)` as kwargs. `"import_path":"os.system"` plus `{"command":"id"}` is arbitrary execution in the agent server, and the advisory ships the six-line PoC.
+
+The finding is an incomplete fix with a precise cause. **CVE-2026-44209** had been fixed in **2.4.2** by switching `src/banks/env.py` from `Environment` to `SandboxedEnvironment` — and the patch "does not touch `src/banks/extensions/completion.py`, and the unsafe import + getattr chain still executes on 2.4.2." The advisory states why the sanitiser could never have helped: the malicious `Tool` JSON "is plain text in the rendered template body — it requires no Jinja attribute access, so the sandbox is irrelevant." The remedy is **2.4.3**, uploaded to PyPI on **2026-06-18T14:41:34Z** — **140 days** before the advisory published. PyPI's newest release is **2.5.1**.
+
+**Why it matters:** the root cause is a trust boundary that was never drawn — `Tool.import_path` is built from a developer's `func.__module__` in `Tool.from_callable` and parsed from arbitrary JSON in `_body_to_messages`, and both paths carry the same trust level. That is the shape to look for in every template-driven agent: a serialisation format that is both a developer interface and a content channel. The advisory's own recommendation — "Treat Tool.import_path as untrusted by default" and resolve only against an allowlist registered at startup — is the fix, and it is a different fix from the one the previous CVE bought.
+
+> "The CVE-2026-44209 patch hardened Jinja attribute access but not this Python-level resolution."
+
+[`🔗 GHSA-64vx-6h2c-rjh7`](https://github.com/masci/banks/security/advisories/GHSA-64vx-6h2c-rjh7) · [`🔗 v2.4.3 release`](https://github.com/masci/banks/releases/tag/v2.4.3) · [`🔗 Fix commit e443f11`](https://github.com/masci/banks/commit/e443f112b80a20ac24438afe4eb8f8a746a8396d)
+
+---
+
+## 25. Firenook reimplements the Firebase emulators in Rust — 40× faster writes, a published negative row, and a list of services it skips
+
+- **Velocity:** ▮▮ rising
+- **Source:** Show HN · 61 pts · ~15h ago (~21:07 UTC+8)
+- **Tags:** `firebase` `emulators` `rust` `benchmarks` `developer-tools`
+
+**Firenook** is a drop-in replacement for the Firebase Local Emulator Suite: keep your `firebase.json`, SDKs and ports, change one word in your script, and stop needing a JVM. Its **0.2.1** shipped to npm on **2026-11-04T21:35Z** (11 versions, Apache-2.0, repo created 2026-09-09). The benchmark is against **firebase-tools 15.22.0 on Java 26**, measured 21–22 October on one AMD Ryzen 5 3600 with 64 GiB, replaying two hours of a production web application — 211,205 Firestore documents, 33,352 Storage objects (6.7 GB), 5,280 writes and 60,000 listener updates per emulator — with both stacks required to end on identical data. Medians: **write 208.2 → 5.1 ms (40×)**, listener update **209 → 11 ms (19×)**, filtered query under load **33.1 → 6.6 ms**, Firestore-triggered function 3.80 → 3.11 ms, peak memory **22.57 → 2.11 GiB**, CPU over the two hours **1,586 → 616 s**, restart with data kept **30.8 s → 0.59 s**.
+
+Three things make the page worth reading rather than quoting. Every row carries a **99th percentile** beside the median, and one of them is less flattering than the headline — the write p99 is **50.6 ms**, so the 40× is a median fact. The page names the row it loses: "Within the Storage cycle, downloads were the one step where Firenook was not faster: 2.30 / 5.01 ms against 2.12 / 4.31 ms." And "Every multiple is rounded down." The compatibility page is the other half: **not emulated** are "Realtime Database, Hosting, App Hosting, Data Connect and universal extensions" — a `firebase.json` that configures them still starts, with those emulators skipped and a warning — while Linux with musl (Alpine), a glibc older than 2.28, Windows on Arm, and power-loss recovery on Windows are listed as unsupported or unqualified. Six known issues in 0.2.1 are documented with workarounds, including an `init` script that writes `--keep-data` for projects without Auth or Storage, and a Functions save that fails silently on the terminal only.
+
+**Why it matters:** the 40× is real and the conditions are stated, which is rare in emulator benchmarks — same workload, same data, an independent audit over 95 evidence files, 36 of 36 browser journeys. The caution is the word "drop-in": four Firebase services are not implemented, so a project using Realtime Database is not a candidate no matter what the write median says. It also ships **54 MCP tools** over the running emulators, which is the direction local dev tooling has been moving all year.
+
+> "Every multiple is rounded down."
+
+[`🔗 firenook.dev`](https://firenook.dev/) · [`🔗 Benchmarks`](https://firenook.dev/benchmarks) · [`🔗 Compatibility`](https://firenook.dev/compatibility)
+
+---
+
+## 26. Kagi removes its signup wall — 50 searches before an account
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News / Kagi changelog · 592 pts · ~8h ago (~20:03 UTC)
+- **Tags:** `search` `kagi` `product-launch` `privacy`
+
+Kagi's 2026-11-05 changelog entry, "Your friends and family can finally try Kagi," changes the company's biggest structural constraint: "anyone, anywhere, can now visit kagi.com and search the web. No account required for the first 50 searches (100 more upon registration)." The stated reason is the referral loop, not growth for its own sake — "We've heard that it can be hard to recommend a search engine when your friends can't try it without creating an account" — from a company whose model is subscriptions with "we don't run ads anywhere."
+
+**Why it matters:** a paid, ad-free index was previously impossible to evaluate without paying, which meant every comparison against Google or Bing ran on second-hand descriptions. Fifty unauthenticated queries is enough to form a first-hand impression of result quality on your own queries — the kind of check this feed's own sourcing rules keep demanding — and the limit is on **searches**, not on features, so the trial covers the product rather than a demo mode. What the changelog does not say is whether the unauthenticated path is meant for people only: there is no statement about programmatic access, rate limits, or a terms change, so "no account required" should be read as a browser session until Kagi says otherwise.
+
+[`🔗 Kagi changelog`](https://kagi.com/changelog#11820) · [`🔗 Hacker News submission`](https://news.ycombinator.com/item?id=50383740)
+
+---
+
+## 27. QRAE keeps only the retrieved chunks the query actually attended to — 2.35 points and 45% fewer tokens
+
+- **Velocity:** ▮▮ rising
+- **Source:** arXiv 2611.07976 · submitted 2026-11-05T13:08:43Z
+- **Tags:** `arxiv` `agents` `context-compression` `deepsearch` `retrieval`
+
+DeepSearch agents re-search and carry retrieved sources into every later reasoning step, and much of what they carry never contributes. **QRAE** (Query-Relevant Attention Entropy) decides which **intact** chunks persist, using sparse evidence-assessment heads: each bounded candidate batch is scored through paired prefills, where a query-free control suppresses the attention response that every chunk shares, and **normalised entropy** measures the breadth of the *positive* response inside each chunk. High-scoring chunks enter a persistent **evidence whitelist**; uncertain ones leave the reasoning context but stay in a **candidate cache** where a later step can re-evaluate them. There is no extra generative compression pass and no change to the attention operator. Across multiple DeepSearch benchmarks and reasoning models the paper reports **+2.35 percentage points** task success, with end-to-end latency down **30%** and reported token usage down **45%**, and says the benefit generalises to a model with nearly 100B parameters.
+
+**Why it matters:** the whitelist/cache split is the design decision that separates this from summarisation-based compression — dropping a chunk from the reasoning context and discarding it are different operations, and the cache is what makes the drop reversible. The concession is that the score is an attention statistic, so it inherits whatever the attention heads respond to; the control prefill is the guard, and it is doing real work in the claim.
+
+[`🔗 arXiv 2611.07976`](https://arxiv.org/abs/2611.07976) · [`🔗 Full text (PDF)`](https://arxiv.org/pdf/2611.07976)
+
+---
+
+## 28. Stroq reads your agent's own sessions and asks which commands came from text it read
+
+- **Velocity:** ▮▮ rising
+- **Source:** Show HN · 75 pts · ~12h ago (~23:54 UTC+8)
+- **Tags:** `agent-security` `prompt-injection` `hooks` `claude-code` `codex`
+
+**Stroq** starts from a premise most agent guards skip: "Every guard in this field answers the same question: is the command in front of me dangerous? That question cannot be answered from the command alone. An `npx` that installs an attacker's package looks exactly like an `npx` that installs a dependency; what separates them is that one of them was dictated by something the agent had just read." So it records what a session took in and matches actions against that provenance by name. `npx @stroq/cli` reads your last 30 days of Claude Code and Codex sessions, prints key **names** and never values, writes only `~/.stroq`, and sends nothing; `stroq replay --all` re-runs past sessions against the policy without installing hooks; `stroq init` installs hooks that deny `curl | sh` and outbound requests carrying a known local secret, and **ask** when a command repeats text the agent read — naming the text. The repo is **Apache-2.0, 110 stars**, created 2026-09-04; `@stroq/cli` **0.30.0** was published 2026-11-05T15:31Z across 38 versions.
+
+The guides are the reason to file it. The fail-closed argument is measured, not asserted: "Every agent that times a hook out treats its own timeout as an allow: Claude Code cancels the hook and lets the call continue through the normal permission flow, Codex reports a hook failure and proceeds, Copilot discards the late deny" — so each invocation runs a watchdog returning the same deny at 60% of the timeout the installer wrote. And the limits are stated in the same voice: `stroq doctor` "detects a modification rather than preventing one — an attacker who can rewrite the agent's config can rewrite the record too"; a run lists the stdio MCP servers in an agent's config that bypass the hooks, whose "results reach the agent unchecked"; and it states plainly that "Tool-description poisoning is NOT covered by this run — add `--probe` to check it."
+
+**Why it matters:** tracing an action back to the untrusted text that dictated it is the detection nobody else ships, and the honesty about scope is what makes it usable — 110 stars and a version bump to prove the API is still moving. The gap it names is the one that matters in practice: MCP servers are a second ingress, and a hook-based guard that covers shell calls leaves the tool results feeding the model outside the boundary.
+
+> "This detects a modification rather than preventing one — an attacker who can rewrite the agent's config can rewrite the record too."
+
+[`🔗 AGGIB/Stroq`](https://github.com/AGGIB/Stroq) · [`🔗 Stroq guide`](https://github.com/AGGIB/Stroq/blob/main/docs/GUIDE.md) · [`🔗 Hacker News submission`](https://news.ycombinator.com/item?id=50380704)
+
+---
+
+## 29. Gauge runs real agents against your CLI and docs to find where they get stuck — "Agent Experience" as a testable target
+
+- **Velocity:** ▮▮ rising
+- **Source:** Show HN · 40 pts · ~16h ago (~20:31 UTC)
+- **Tags:** `agents` `developer-experience` `skills` `mcp` `cli`
+
+**Gauge** is "An open-source CLI for hillclimbing Agent Experience": point it at your Skills, CLI, SDK, MCP server, API or docs and it "runs real agents against your product, captures where they get stuck, and lets your own coding agent test fixes before you publish them." The finding taxonomy is the interesting artifact, because each entry is a failure a maintainer can act on: an interactive command blocks a coding agent; an agent reaches for deprecated commands or outdated API patterns; "A Skill goes unused even when it should help with the task"; an agent "confidently claims a limitation that does not exist"; an agent cannot infer the intended workflow across multiple commands. The repair might land in error messages, Skill content, help text, code or documentation — the tool does not prescribe which. The repo is **MIT, 103 stars**, created **2026-10-20**; `@withgauge/cli` is **0.28.0** (36 versions, published 2026-11-04T17:10Z). It runs locally on Docker with your existing Claude Code, Codex, Pi or OpenCode subscription or API key, and needs "No Gauge account required."
+
+**Why it matters:** the software this genre tests was written for a human reading a man page, and the failure list is specifically about the parts a human reader silently repairs — a paginated command, a stale example, a help string that implies a limitation. Making that a loop with a score is what turns writing docs for agents from advice into a changelog entry. The caveat is the one that comes with every agent-as-evaluator: the finding depends on the agent and the model you point it at, so a green run is a run against those, and the version count on a three-week-old package says the definition is still moving.
+
+[`🔗 gauge-sh/gauge-cli`](https://github.com/gauge-sh/gauge-cli) · [`🔗 Hacker News submission`](https://news.ycombinator.com/item?id=50371090)
+
+---
+
+## 30. Residential proxy exits were observed on the White House's network 236 times in 30 days
+
+- **Velocity:** ▮▮ rising
+- **Source:** Layer3 Intel · 1,247 pts · ~15h ago (~04:45 UTC+8)
+- **Tags:** `security` `residential-proxies` `botnets` `infrastructure` `osint`
+
+Layer3 Intel, which launched a "Residential Proxy Observatory" earlier this week, reports that its enumeration pipeline exited through **AS2650** — the autonomous system registered to the **Executive Office of the President** — **236 separate times** between **October 5 and November 3, 2026**, from **6 addresses**, on **26 of the 30 days**, via **28 separate residential proxy services**. The team says it did not target the network: "We did not selectively target this network or try to make our probes exit from it. We caught this by chance, simply by requesting global rotating access through these services." The addresses were cross-checked against **Spur** and **Synthient**, which the post says independently identify them as residential proxy exits. The timing is about half between 5 p.m. and midnight Eastern with "almost none" in the early morning, which the authors read as "a person rather than a public guest Wi-Fi network: someone regularly on the White House network late into the evening, whose device is infected with a proxy SDK."
+
+The observatory's other rows are the point about coverage: **413 addresses and 32,000+ observations** in Saint Helena, Ascension and Tristan da Cunha, split between Starlink and Sure Saint Helena; **three observations** from Antarctica, all from a Cloudflare WARP address pointing at McMurdo Station; and single observations on Pitcairn, Norfolk Island and Svalbard, with 388 addresses in the Falklands, 43 in the Chagos Islands, 21 in Tokelau and 7 in South Georgia.
+
+**Why it matters:** the finding is that a network with a hardened perimeter is reachable through a compromised *endpoint*, which is the supply-chain claim proxy SDKs keep making. But read the scope: "Our data shows the exits, not the device or the person behind them" — the observatory observes egress, and the infected-device reading is an inference from the hour-of-day histogram. The dev-relevant prior is the one the post cites, Synthient's *A Broken System Fueling Botnets*, where the Kimwolf botnet reached "at least 2 million devices, mostly Android devices with an exposed ADB service" through these networks; if an SDK on this network has a comparable flaw, buying proxy access becomes a route inward. Six addresses is a lower bound on a rotating pool, not a headcount.
+
+> "Our data shows the exits, not the device or the person behind them."
+
+[`🔗 Layer3 Intel`](https://layer3intel.com/blog/residential-proxies-white-house-network) · [`🔗 Hacker News submission`](https://news.ycombinator.com/item?id=50371246)
+
+---
+
+## 31. Sparse-autoencoder training needs an 8–64× smaller activation buffer than pipelines use — because replay stops paying at a plateau
+
+- **Velocity:** ▮ steady
+- **Source:** arXiv 2611.07756 · submitted 2026-11-05T10:00:55Z
+- **Tags:** `arxiv` `interpretability` `sparse-autoencoders` `training` `scaling-laws`
+
+Activation storage is the usual bottleneck in sparse-autoencoder training, and the default is to let the buffer grow with the token budget. This paper asks the inverse question — with a **fixed total training budget**, how many *unique* activations does an SAE actually need? The answer is a curve with a knee: quality "improves rapidly as the buffer grows, then reaches a plateau where replaying the buffer is nearly as effective as using fresh activations throughout training," and beyond that point additional unique activations "bring little benefit to reconstruction or interpretability, so the buffer need not grow with the training budget."
+
+The validation is broad enough to carry the claim: dictionary sizes, token budgets, early/middle/late layers of **Llama-3.1** and several **Qwen3** sizes, and three SAE variants — **BatchTopK, TopK and JumpReLU** — with sweeps over mathematical text and Python code to test whether changing the activation *source* moves the plateau. Evaluation covers explained variance, reconstruction MSE, feature absorption, automated interpretability and sparse probing, which matters because interpretability is exactly where a smaller buffer could plausibly hurt first. The practical rule the authors draw is to "choose the smallest buffer that reaches the quality plateau and replay it for the remaining budget," and the measured saving is **8–64× less activation storage with negligible quality loss**.
+
+**Why it matters:** an SAE's activation buffer is what makes the technique expensive to run on a large model, so a factor of 8–64 at fixed compute is the difference between an interpretability pipeline that fits on a node and one that does not. The transferable part is the shape — diversity helps until it stops, and repetition then substitutes for it — because that is a statement about what the dictionary is learning, not about storage.
+
+[`🔗 arXiv 2611.07756`](https://arxiv.org/abs/2611.07756) · [`🔗 Full text (PDF)`](https://arxiv.org/pdf/2611.07756)
+
+---
+
+## 32. A loss-of-control score across 13 frontier models correlates 0.84 with failures in contained long-horizon scenarios
+
+- **Velocity:** ▮ steady
+- **Source:** arXiv 2611.07953 · submitted 2026-11-05T12:49:20Z
+- **Tags:** `arxiv` `ai-safety` `evaluation` `loss-of-control` `frontier-models`
+
+The paper decomposes **loss of control** — "systems acting beyond effective human control with potentially irreversible consequences" — into three factors it says can be measured prospectively: **misaligned motive**, **harm-enabling capability** and **monitoring evasion**, operationalised through **13 measurable aspects** and **29 evaluation tasks** that combine into a single LoC score. Across **13 frontier models**, that score correlates with failure rates in contained long-horizon risk scenarios at **Pearson r = 0.84**.
+
+Two further findings do the argumentative work. Risk "varies systematically across models and cannot be explained by capability alone" — so a static capability ranking is not a substitute. And the score is actionable rather than only descriptive: fine-tuning and monitoring "directed at diagnosed vulnerabilities reduce failure rates while largely preserving general performance."
+
+**Why it matters:** the value of a prospective score is that it is cheap relative to the thing it predicts, and r = 0.84 against held-out scenarios is a strong number for that claim. What it does not establish is generality: the index is a fixed weighting over 29 tasks the authors chose, across 13 models, validated against scenarios that are themselves contained and authored — so the honest reading is that a constructed index tracks a constructed harness, which is the best available proxy and not the same as predicting a deployment. The useful line for anyone building on it is the diagnostic decomposition, because a model whose LoC risk is mostly monitoring evasion names a different mitigation than one whose risk is mostly misaligned motive — which a single scalar cannot do.
+
+[`🔗 arXiv 2611.07953`](https://arxiv.org/abs/2611.07953) · [`🔗 Full text (PDF)`](https://arxiv.org/pdf/2611.07953)
+
+---
+
+## 33. An "awesome" list with 17 stars now carries 95 open pull requests — and the PRs are AI-generated tool spam
+
+- **Velocity:** ▮ steady
+- **Source:** Erik Gahner Larsen · 282 pts · ~17h ago (~11:16 UTC)
+- **Tags:** `open-source` `awesome-lists` `ai-slop` `maintainers` `github`
+
+Erik Gahner Larsen's post, "Awesome repositories are no longer awesome" (2026-11-05), makes two AI-shaped arguments and backs both with artifacts. The first is staleness: he opens `awesome-R`, finds it "last updated more than a year ago," and notes "One of the first links in the repository is an overview of the top 50 downloaded packages - as of 2016!" The second is spam, and this is the one with a number: "It is a small, unknown repository with 13 stars but 91 open pull requests at the time of writing." I checked `abdessamadbettal/awesome-free-online-tools` on 2026-11-06 and it carried **17 stars and 95 open pull requests** — the ratio got worse, not better, inside a day.
+
+The author traces one submitter: a single user "has created at least six vibe-coded websites (StatOrigin, ScanChess, Sticker Printer Hub, QuizQuip, LiquidityPools, DefiLPKit) and submitted more than 100 pull requests to various awesome lists to add these websites," and he found merges as well as rejections. The counter-example is worth keeping: one maintainer closed a PR with "There is not yet sufficient evidence of qualified educator review, independent validation of the educational content, or demonstrated learning outcomes."
+
+**Why it matters:** awesome lists were the cheapest curation mechanism the ecosystem had, and they have become a distribution channel where the cost of producing a plausible entry went to near zero while the cost of reviewing one did not. The consequence is specific to this feed's subject: these lists are also training and retrieval substrate — what an agent reads when it goes looking for the right library — so a list that is 85% unreviewed submissions is a poisoned recommendation source, not just a stale one. The distinction the author draws is the right one: the lists are not all bad, the *approach* stopped being a reliable filter.
+
+> "There is not yet sufficient evidence of qualified educator review, independent validation of the educational content, or demonstrated learning outcomes."
+
+[`🔗 Erik Gahner Larsen`](https://erikgahner.github.io/posts/2026/awesome-repositories-are-no-longer-awesome/) · [`🔗 Hacker News submission`](https://news.ycombinator.com/item?id=50377821)
+
+---
+
+## 34. A Game Boy Advance audio codec turns out to fit the N64 — 44.1 kHz stereo for 4% of the CPU
+
+- **Velocity:** ▮ steady
+- **Source:** PhobosLab · 207 pts · ~15h ago (~12:51 UTC)
+- **Tags:** `n64` `audio-codec` `homebrew` `rsp` `libdragon`
+
+Dominic Szablewski's post (dated 2026-11-03) is a constraint ladder that ends in a working codec. The N64 had 93 MHz, cartridge space at a premium, and an RSP vector co-processor Nintendo guarded; Libultra's ADPCM gave 4× compression, which still puts a 5-minute 44.1 kHz stereo track at about **12 MB** — "The whole Mario 64 ROM is just 8MB in total." Libdragon has a working RSP-accelerated **Opus** decoder, but it is too slow for gameplay, and **QOA** is a poor fit because "each sample relies on the previous decoded sample."
+
+The answer came from a Game Boy Advance demo: **ULC** (Ultra Low Complexity Codec), by **Aikku93**, a full-band MDCT transform codec with a nibble-based coefficient syntax — each coefficient in 4 bits, with reserved values for zero runs, quantizer changes and **noise fill** — a feature the author notes MP3 lacks, so MP3 "needs to encode quasi-random coefficients as is." It needs no entropy decoding and unpacks in "just ~150 lines of C." Porting it meant fitting an IMDCT into the RSP's **4,096 bytes of DMEM and 4,096 bytes of IMEM** with no floats, which forced 16-bit fixed point (Q1.14) and a 1,024-sample block with a 512-sample lap buffer — exactly 3,072 bytes. The assembly was written by translating C to **RSPL**, Max Bebök's C-like language for the RSP, with Codex piece by piece and verification at each step, then optimising pipeline stalls; the result is about **1,400 lines of MIPS** that "barely fits into the 4096 byte IMEM."
+
+**Why it matters:** the measured result is the sentence to carry — "Quality and bitrate are close to those of Opus, but complexity is only 4x that of ADPCM," with a single 44.1 kHz stereo track costing **about 4% of CPU time and 5% of RSP time**, which is the difference between music that plays during gameplay and music that only plays in cutscenes. It has been merged into Libdragon's preview branch, and the Half-Life N64 port's own README credits it: the codec "for the 2,500 sounds and 27 music tracks, is what makes everything fit in one 64 MB cartridge image." A seek table costing about **20 bytes per second** is the unglamorous half that makes it usable for anything but a linear soundtrack.
+
+> "Quality and bitrate are close to those of Opus, but complexity is only 4x that of ADPCM."
+
+[`🔗 PhobosLab`](https://phoboslab.org/log/2026/11/n64-ulc-codec) · [`🔗 ulcplayer-gba (Aikku93)`](https://github.com/Aikku93/ulcplayer-gba) · [`🔗 Hacker News submission`](https://news.ycombinator.com/item?id=50378508)
+
+---
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-11-05T20:18:48Z |
-| Items | 19 |
-| Sources tracked | 29 (Hacker News, GitHub Trending, NVD, CVE.org, CISA KEV, GitHub Advisory Database, Red Hat and Apache PSIRTs, vendor advisory pages, project release notes, npm and PyPI registries, Maven Central, arXiv, Hugging Face, vendor engineering blogs, The Verge) |
+| Generated | 2026-11-06T04:22:20Z |
+| Items | 34 |
+| Sources tracked | 37 (Hacker News, GitHub Trending, NVD, CVE.org, CISA KEV, GitHub Advisory Database, MSRC, Red Hat and Apache PSIRTs, vendor advisory pages, project release notes, npm and PyPI registries, Maven Central, arXiv, Hugging Face, Thinking Machines, Kagi, Layer3 Intel, PhobosLab, developer blogs, The Verge) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (3x daily) |
 | Ranking | Velocity-weighted (recency × engagement acceleration × source authority) |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |

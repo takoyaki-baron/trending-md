@@ -1,100 +1,121 @@
 {
- "generated": "2026-11-05T20:18:56.161Z",
+ "generated": "2026-11-06T04:22:40.832Z",
  "files": [
   {
    "file": "2026-11-06.md",
-   "items": 19,
+   "items": 34,
    "findings": [
     {
      "check": "date",
      "item": 4,
      "verdict": "ok",
      "claim": "CVE-2026-54143 published 2026-11-05",
-     "detail": "NVD published 2026-11-05T17:18:19.487 (2026-11-05 UTC) · cveawg datePublished 2026-11-05T16:40:23.589Z (2026-11-05 UTC) — the two clocks differ; 2026-11-05 is the NVD published day"
+     "detail": "2026-11-05T16:40:23.589Z"
     },
     {
      "check": "status",
      "item": 5,
-     "verdict": "ok",
+     "verdict": "status-no-record",
      "claim": "CVE-2026-73099 `Deferred`",
-     "detail": "Deferred (lastModified 2026-11-05T19:17:26.810)"
-    },
-    {
-     "check": "date",
-     "item": 5,
-     "verdict": "ok",
-     "claim": "CVE-2026-73099 published 2026-11-05",
-     "detail": "NVD published 2026-11-05T12:17:50.917 (2026-11-05 UTC) · cveawg datePublished 2026-11-05T11:50:02.043Z (2026-11-05 UTC) — the two clocks differ; 2026-11-05 is the NVD published day"
+     "detail": "NVD carries no record for CVE-2026-73099, so the status claim cannot be checked — that is \"not in this registry\", not \"wrong\""
     },
     {
      "check": "date",
      "item": 6,
      "verdict": "ok",
      "claim": "CVE-2026-121994 published 2026-11-05",
-     "detail": "NVD published 2026-11-05T17:18:00.503 (2026-11-05 UTC) · cveawg datePublished 2026-11-05T16:08:46.589Z (2026-11-05 UTC) — the two clocks differ; 2026-11-05 is the NVD published day"
+     "detail": "2026-11-05T16:08:46.589Z"
     },
     {
      "check": "rangeabsent",
      "item": 6,
-     "verdict": "range-only-in-cna",
+     "verdict": "range-absent-products-only",
      "claim": "CVE-2026-121994 — \"no fixed version\"",
-     "detail": "NVD `configurations` is absent (record is `Awaiting Analysis`, and absent `configurations` means \"not yet analysed\", never \"states nothing\"); 11 `affected[]` entries of which 0 state a `versions[]` — the sentence is true of NVD and false of the record, because the CNA's own `affected[]` is where the range lives (this is the open62541 shape, 2026-10-25)"
+     "detail": "the NVD record is unreadable; 11 `affected[]` entries of which 0 state a `versions[]` (Red Hat Enterprise Linux 10, Red Hat Enterprise Linux 6, Red Hat Enterprise Linux 7) — a product WITHOUT a version is not a range, so the absence holds; the patch level lives in the vendor's errata, which the record does not name"
     },
     {
      "check": "status",
      "item": 15,
-     "verdict": "ok",
+     "verdict": "status-no-record",
      "claim": "CVE-2026-104269 `Received`",
-     "detail": "Received (lastModified 2026-11-05T16:17:29.377)"
+     "detail": "NVD carries no record for CVE-2026-104269, so the status claim cannot be checked — that is \"not in this registry\", not \"wrong\""
     },
     {
      "check": "date",
      "item": 15,
      "verdict": "ok",
      "claim": "CVE-2026-104269 published 2026-11-05",
-     "detail": "NVD published 2026-11-05T16:17:29.377 (2026-11-05 UTC) · cveawg datePublished 2026-11-05T15:51:18.332Z (2026-11-05 UTC) — the two clocks differ; 2026-11-05 is the NVD published day"
+     "detail": "2026-11-05T15:51:18.332Z"
+    },
+    {
+     "check": "date",
+     "item": 22,
+     "verdict": "ok",
+     "claim": "CVE-2026-83844 published 2026-10-13",
+     "detail": "2026-10-13T18:59:53.598Z"
+    },
+    {
+     "check": "temporal",
+     "item": 22,
+     "verdict": "temporal-disclosed",
+     "claim": "CVE-2026-83844 · CNA 8.1 / base 8.1 / full 7.1",
+     "detail": "the item names a stopping point — silent, because the prose already lets the reader tell which number it read"
+    },
+    {
+     "check": "field",
+     "item": 22,
+     "verdict": "field-unknown-name",
+     "claim": "“carries no remediation entry”",
+     "detail": "“remediation” is not a CVE record field this check knows — the claim is about something else, or FIELD_VOCAB needs the name"
     },
     {
      "check": "repo",
      "item": 4,
      "verdict": "ok",
      "claim": "tinyhumansai/openhuman",
-     "detail": "42562★, last push 2026-11-05"
+     "detail": "42561★, last push 2026-11-05"
     },
     {
      "check": "repo",
      "item": 7,
      "verdict": "ok",
      "claim": "google/skills",
-     "detail": "22287★, last push 2026-11-05"
+     "detail": "22448★, last push 2026-11-05"
     },
     {
      "check": "repo",
      "item": 11,
      "verdict": "ok",
      "claim": "vercel-labs/agent-browser",
-     "detail": "45791★, last push 2026-11-05"
+     "detail": "46010★, last push 2026-11-06"
     },
     {
      "check": "repo",
      "item": 12,
      "verdict": "ok",
      "claim": "rivet-dev/rivet",
-     "detail": "6615★, last push 2026-11-05"
+     "detail": "6673★, last push 2026-11-05"
     },
     {
      "check": "repo",
      "item": 14,
      "verdict": "ok",
      "claim": "HKUDS/DeepTutor",
-     "detail": "55398★, last push 2026-11-05"
+     "detail": "55545★, last push 2026-11-05"
     },
     {
      "check": "repo",
      "item": 16,
      "verdict": "ok",
      "claim": "Usagi-org/ai-goofish-monitor",
-     "detail": "17474★, last push 2026-10-10"
+     "detail": "17776★, last push 2026-10-10"
+    },
+    {
+     "check": "repo",
+     "item": 21,
+     "verdict": "not-a-repo",
+     "claim": "mods/privacy",
+     "detail": "named in backticks but the sentence is about a “model”, not a project — a model id or an endpoint path is not a repository claim, so archived/stale cannot answer here"
     },
     {
      "check": "count",
@@ -109,6 +130,13 @@
      "verdict": "counted-by-author",
      "claim": "185 skills",
      "detail": "no page states a skills total, and the item says so — the count is the author's own census"
+    },
+    {
+     "check": "count",
+     "item": 23,
+     "verdict": "ok-cited-page",
+     "claim": "16 workers",
+     "detail": "github.com/lz4/lz4/releases/tag/v1.11.0 states it (the repo README does not) — quote the page the number came from"
     },
     {
      "check": "quotation",
@@ -136,21 +164,21 @@
      "item": 4,
      "verdict": "ok",
      "claim": "1 quotation(s)",
-     "detail": "verbatim in 10 readable source(s)"
+     "detail": "verbatim in 7 readable source(s)"
     },
     {
      "check": "quotation",
      "item": 5,
      "verdict": "ok",
      "claim": "2 quotation(s)",
-     "detail": "verbatim in 7 readable source(s)"
+     "detail": "verbatim in 5 readable source(s)"
     },
     {
      "check": "quotation",
      "item": 6,
      "verdict": "ok",
      "claim": "3 quotation(s)",
-     "detail": "verbatim in 11 readable source(s)"
+     "detail": "verbatim in 7 readable source(s)"
     },
     {
      "check": "quotation",
@@ -206,7 +234,7 @@
      "item": 15,
      "verdict": "ok",
      "claim": "1 quotation(s)",
-     "detail": "verbatim in 8 readable source(s)"
+     "detail": "verbatim in 6 readable source(s)"
     },
     {
      "check": "quotation",
@@ -214,6 +242,104 @@
      "verdict": "ok",
      "claim": "1 quotation(s)",
      "detail": "verbatim in 1 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 20,
+     "verdict": "ok",
+     "claim": "8 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 21,
+     "verdict": "ok",
+     "claim": "7 quotation(s)",
+     "detail": "verbatim in 5 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 22,
+     "verdict": "ok",
+     "claim": "4 quotation(s)",
+     "detail": "verbatim in 4 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 23,
+     "verdict": "ok",
+     "claim": "2 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 24,
+     "verdict": "ok",
+     "claim": "4 quotation(s)",
+     "detail": "verbatim in 6 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 25,
+     "verdict": "ok",
+     "claim": "4 quotation(s)",
+     "detail": "verbatim in 3 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 26,
+     "verdict": "ok",
+     "claim": "4 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 28,
+     "verdict": "ok",
+     "claim": "6 quotation(s)",
+     "detail": "verbatim in 3 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 29,
+     "verdict": "ok",
+     "claim": "5 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 30,
+     "verdict": "ok",
+     "claim": "5 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 31,
+     "verdict": "ok",
+     "claim": "3 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 32,
+     "verdict": "ok",
+     "claim": "3 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 33,
+     "verdict": "ok",
+     "claim": "7 quotation(s)",
+     "detail": "verbatim in 3 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 34,
+     "verdict": "ok",
+     "claim": "7 quotation(s)",
+     "detail": "verbatim in 3 readable source(s)"
     },
     {
      "check": "paper",
@@ -242,15 +368,36 @@
      "verdict": "ok",
      "claim": "arXiv 2611.06868 submitted 2026-11-04T18:23:14Z",
      "detail": "arXiv `published` 2026-11-04T18:23:14Z — the quoted instant is the submission's"
+    },
+    {
+     "check": "paper",
+     "item": 27,
+     "verdict": "ok",
+     "claim": "arXiv 2611.07976 submitted 2026-11-05T13:08:43Z",
+     "detail": "arXiv `published` 2026-11-05T13:08:43Z — the quoted instant is the submission's"
+    },
+    {
+     "check": "paper",
+     "item": 31,
+     "verdict": "ok",
+     "claim": "arXiv 2611.07756 submitted 2026-11-05T10:00:55Z",
+     "detail": "arXiv `published` 2026-11-05T10:00:55Z — the quoted instant is the submission's"
+    },
+    {
+     "check": "paper",
+     "item": 32,
+     "verdict": "ok",
+     "claim": "arXiv 2611.07953 submitted 2026-11-05T12:49:20Z",
+     "detail": "arXiv `published` 2026-11-05T12:49:20Z — the quoted instant is the submission's"
     }
    ]
   }
  ],
  "status_watch": [],
  "api_calls": 0,
- "readme_calls": 0,
- "cited_page_calls": 0,
+ "readme_calls": 2,
+ "cited_page_calls": 12,
  "repo_page_calls": 0,
- "nvd_calls": 1,
+ "nvd_calls": 0,
  "cna_calls": 0
 }
