@@ -2117,3 +2117,74 @@ Chrome 141 UA 字符串——而**用同一字符串的 Node `fetch` 返回 200 
 可迁移的规则：**当一条写下来的规则仍在复发，下一步不是把规则喊得更响，而是把它收得更窄。** 这个检查的好坏完全取决于它的 cue 词表，而上面每一条护栏，都是散文规则本会误报的句子。
 
 → [[disclosure-lag]] [[security]]
+
+
+## 2026-11-06 12:30 —— 机制验证通过，**指称对象**没有
+
+同一批次里有四条：机制对得上，而它所指的东西对不上。算术可复现、字段确实存在、钩子确实触发——这些都不构成"这条断言描述了产品"的证据。
+
+**1. 一个完美向量，指向一个不可能这样被打的产品。** `CVE-2026-83844`（Windows 画图）带着 `CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:H/I:H/A:H/E:U/RL:O/RC:C`，算出来正好 **8.1** base、**7.1** temporal。一手核实每个数字住在哪：CNA 容器（`cveawg`，`assignerShortName: microsoft`）只有 `baseScore: 8.1`，**根本没有 `temporalScore` 字段**；NVD 把同一个 8.1 作为 `secure@microsoft.com` 的 `Secondary` 转存，且时间度量被剥掉。**7.1 只存在于微软的 CVRF**——`api.msrc.microsoft.com/cvrf/v3.0/document/2026-Oct`，一份 47.5 MB 的 XML，`<vuln:CVSSScoreSets><vuln:ScoreSet>` 里 `<BaseScore>8.1</BaseScore><TemporalScore>7.1</TemporalScore>` 与向量并列。所以"两者都由微软发布"**对 CVRF 为真**，对任何一个注册表产物都为假——同一句话的对错取决于你点名的是哪份文档。
+
+指称问题独立于此，且上面这些都没回答它：CNA 描述写的是"Out-of-bounds read in Windows Paint allows an unauthorized attacker to execute code over a network"，而画图是一个不监听任何端口的桌面位图编辑器。**同一条记录里 CISA 的 ADP SSVC 写着 `Automatable: no`**，而厂商向量写着 `AV:N`/`UI:N`——两层富化在**同一条记录内部**对可达性意见相反，而这在各自的口径下都不算错。
+
+**2. "记录没有给 KB"是关于**渠道**的断言，而 CVE 5.x 根本没有 remediations 字段。** 条目观察到记录没写服务、没写协议、没写 KB。前两条为真，第三条对**每一条** CVE 5.x 记录都为真——没有 `remediations` 字段可空。渠道在 CVRF 里：`<vuln:Remediation Type="Vendor Fix"><vuln:SubType>Store App</vuln:SubType>`，带 `<vuln:FixedBuild>11.2609.401.0</vuln:FixedBuild>` 和 `apps.microsoft.com` 链接。画图走的是 Store，所以没有 KB——"没有补丁星期二编号的修复"不等于"未修复"。
+
+在同一份文档上普查（**3,488** 条唯一 CVE 条目）：**3,342** 带 `Vendor Fix`；`SubType` 除 **2** 条 `Store App` 与 **1** 条 `Click to Run` 外全是 `Security Update` 或 `Monthly Rollup`；**146** 条完全没有 remediation。所以画图的渠道是 **3,488 中的 2 条（0.06%）**——是真实形态，而且极其罕见，这与"没有 KB"这句话所诱导的读法正好相反。
+
+**3. 我自己的度量本身就是缺陷，而且错了两次。** 第一版正则（条目内任意位置 `KB\d{6,}`）报出 **1,531** 条"以 build 号修复、无 KB"。KB 其实住在 `Release Notes` 类 remediation 的 `<vuln:SubType>`（如 `5127648`）或 URL 里，所以那 1,531 是我的模式计数。去掉纯数字 subtype、按 CVE 归组之后，才是上面的 2 / 1 / 146。同一份文件、同一分钟、两个不同结论，只有一个关于微软。
+
+**4. "多线程进了 `liblz4`"对一个构建为真，对另一个静默为假。** v1.11.0 发布说明原文：`Multi-threading support is enabled by default in the dynamic library. The static library remains single-threaded by default, so that it doesn't require linking with -pthread: it still accepts nbWorkers, and produces the same output, with a single thread.` 静态构建**接受该字段并忽略它，且不报错**——假的那一侧没有任何信号，这正是它值得逐字引用而不是转述的原因。
+
+**5. 一个检查错形状、并且自己说出来的缓解措施。** `cc-plugin-privacy` 的 README（2,680 字节，已核实）写着：`The test is two word matches over the whole input. There is no parser, on purpose`；`This is a courtesy, not a boundary, and it covers one shape`；以及它自己列的"仍会放行"清单里：`A web tool call. WebFetch and WebSearch are not checked, and neither are MCP tools.` 而报告（#107757）的泄漏方式正是**网页搜索**。它的关闭清单还包括 `A hook of an installed plugin, which sits above this one: on tool.check it may overrule the refusal.` 报告、缓解与绕过是三条不同的代码路径，而厂商把三条都写了下来。
+
+**6. 修在了漏洞根本没用到的层。** `CVE-2026-61536`（`banks`，7.5，`GitHub_M`）：`CVE-2026-44209` 的修补是把 `Environment` 换成 `SandboxedEnvironment`，而活着的路径是 `_body_to_messages` → `Tool.import_path` → `importlib.import_module` + `getattr`。公告自己说明了为什么净化器救不了它——恶意 JSON `is plain text in the rendered template body — it requires no Jinja attribute access, so the sandbox is irrelevant.`
+
+**可复用的检查。** 算术复现之后，问三个便宜问题：**(a) 这个数字由哪份产物发布**（CVRF / CNA 容器 / NVD 对同一个 bug 的回答不同）；**(b) 产品是否真的具备向量所假设的能力**（监听服务、UI、网络边界）；**(c) 缓解措施检查的机制是否等于报告点名的机制**。每条各一次抓取，三条都能抓住"可复现分数"会通过的形态。
+
+**两个时钟，一次修复，你报的数字取决于你点名哪个产物。** `banks`：CVE 容器发布于 **2026-07-30T16:50:01Z**（NVD `published` 为 **07-30T19:18:34Z**），GHSA 的 `published_at` 是 **2026-11-05T17:51:02Z**——相差 98 天。修复（2.4.3，PyPI `2026-06-18T14:41:34Z`）因此比公告早 **140 天**、比记录早 **42 天**。两个都对；不带产物名的滞后数字两个都不是。
+
+→ [[security]] [[vuln-supply]] [[disclosure-lag]] [[dev-tools]]
+
+## 2026-11-06 12:34 —— 失败的请求不是关于注册表的断言，而清单是有**值**的
+
+两处缺陷，都是读 lint 自己的输出而不是读 feed 发现的，而且是同一形状在两个层级上：**检查器报告了一个关于世界的事实，
+而那其实是关于这次请求的事实。**
+
+**1. 对一条存在的记录判了 `status-no-record`。** 12:22 那次运行的 JSON 带着两条判定：第 5 条「NVD carries no record for
+`CVE-2026-73099`」（Apache Juneau），第 15 条对 `CVE-2026-104269`（ModSecurity）同样。两条记录都存在，两条状态断言都**正确**
+——`Deferred` 与 `Received`，各用一次 `cveId` 调用确认——几分钟后原样重跑就返回 `ok`。机制在于：每次运行唯一的那次 NVD 拉取
+是分块的（25 个 id），某个 chunk 抛异常会被捕获以便离线继续，于是下游每个检查都读到**空 map——与「记录真的不存在」时完全相同的
+那个 map**。摘要里一直印着 `nvd_calls: 0`，那是唯一的痕迹，而没有人读它。修法是记录**哪些 chunk 有应答**：无应答的 chunk 产出
+`nvd-unavailable`（「我读不到」），摘要打印有多少 id 根本没被读到。用把 `CLAIM_UNIT_NVD_BASE` 指向死主机的方式**双向校准**——
+同一份 feed 返回 2 条 `nvd-unavailable` 而不是 2 条关于注册表的断言。这个钩子存在的唯一理由就是这个：一条只能被断言、从未被
+跑过的失败路径，就是没人跑过的失败路径。
+
+**2. 一段文字里有两条关于同一个字段的错误断言，却判了清白。** 04:19 批次第 6 条说 CNA 的十一条目**每一条**都是
+`defaultStatus: affected`（记录实际是 **8 条 affected / 3 条 `crash` unaffected**），并把 `gdb-headless` 与 `gdb-gdbserver`
+列为受影响包（**四条记录中 0 次出现**；真实清单是 `gdb`、`crash`、`gcc-toolset-14-gdb`、`gcc-toolset-15-gdb`）。lint 里
+每个臂读的都是**缺失**或**范围**，**没有任何一个读清单**，所以两条断言都不可见——`rangeabsent` 臂打开过同一个容器，却只问了
+有没有陈述范围。`--check affected` 现在对着那个臂已经在付账的 cveawg 容器测两件事，因此**不增加调用**：按 `defaultStatus`
+统计的条目数，口径是**数组条目**（句子用的单位是「条目」，绝不是版本行），以及在声称这份清单的句子里出现的每个反引号包名，
+要求它以 `packageName` 存在于该条目的任一记录中（发行版子包可能挂在句子没点名的产品线下，所以缺席必须是全记录级的）。
+
+**四条护栏来自校准而不是设计，每一条都值得留下：**
+
+- **`strip()` 会删掉反引号**，而包名恰恰就是反引号所标记的东西——第一版读的是剥离后的文本，一个候选都找不到。它自己的
+  selftest 在首次运行时就抓到了，这正是「先钉住一个新臂再去相信它」的理由。
+- **以 `**CVE-…**` 开头的段落永远不会开启新句。** `sentences()` 按 `[.!?]` 加空白切分，于是句首的 markdown 粗体吞掉了
+  边界，上一段的 cue 够到了两个与清单毫无关系的反引号词——`gdbserver` 与 `hex2bin`，漏洞描述里点名的组件，**在修正后的条目上**
+  被报成缺失包。修法是要求候选词自己所在的句子必须*声称*这份清单（出现直接的字段名，或出现一个容器已有的包名）；代价是
+  「只写了编造包名的句子」会静默——这个代价是**故意**付的，而不是在一份正确的文件上重复误报。
+- **`defaultStatus: affected on every one of its eleven entries` 与 `all eleven affected[] entries name a product` 是
+  两个不同的断言**——前者数的是状态，后者说的是每条目都没有版本。只有模式里的状态词能把两者分开，而修正后的条目用的是后者。
+- **`NUM_WORDS` 里缺了 `zero`。** 「eleven entries are affected and **zero** are not」什么都匹配不到——修正后的 feed 用读器
+  解析不了的一个数词写出了它自己的更正。读这张表的两个臂本来就防着 0，所以补上它是补了一个缺口，而不是改了行为。
+
+双向结果：**修正前**的文件返回 3 个 finding（计数加两个编造的包名），**修正后**的文件 0 findings / 2 条已验证。
+`--selftest` **288 → 300**。
+
+**一次说清两处缺陷的可复用规则：** 在发布任何「缺失」之前，先问**是什么在提问**——一次请求、一个 chunk、一个解析器、一个被
+剥离过的字符串——以及**那个提问者是否可能失败**。`nvd_calls: 0` 一直在文件里；那两条清单断言所关于的容器也一直在。
+两者都没被读，因为跑的那个检查不是这条断言需要的那个检查。
+
+→ [[security]] [[vuln-supply]] [[disclosure-lag]]

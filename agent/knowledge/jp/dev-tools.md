@@ -1017,3 +1017,22 @@ workflow」と指示している。
 
 → [[agent-stack]] [[fact-check]] [[platform-gatekeeping]]
 
+
+
+## 2026-11-06 12:30 —— 自らの負の行を刷るリリースと、drop-in ではない「drop-in」
+
+**lz4 v1.11.0**（2026-11-04T15:55:56Z、v1.10.0（2024-07-22）以来のリリース、850+ コミット）。マルチスレッドが CLI から `lz4frame` API へ移る：フィールドひとつ、`LZ4F_preferences_t.nbWorkers`。リリース本文からの逐語：**「Multi-threading support is enabled by default in the dynamic library. The static library remains single-threaded by default, so that it doesn't require linking with `-pthread`: it still accepts `nbWorkers`, and produces the same output, with a single thread.」** この一文が最も有用だ：静的ビルドではフィールドが**受け取られ、無視され、エラーも出ず**、出力は同一。そして `nbWorkers` は「experimental」と明記される。規模：`silesia.tar`（202 MB）level 1 → 1/4/16 スレッドで **522 / 1,921 / 7,550 MB/s**、level 12 → **10.6 / 42.5 / 154**。出力はスレッド数に依存せず再現可能（「results are reproducible from one system to another」）。
+
+小データの表こそ、リリースが自らに反論する場所だ：4 KB ブロック + 64 KB 辞書・level 1 で **388 → 566 MB/s** だが、ブロックサイズ別の表には負の行がある——**1 KB 辞書あり：−4%（gcc）/ −6%（clang）**、16 KB **+26% / +0%**、64 KB **+6% / −1%**、辞書あり展開は 64 KB で **+7% / −1%**。残りは 28 か月の空白が買った信頼性の半分：契約単位のユニットスイート、ミューテーションテスト、ストリーミングフレームとマルチスレッド経路へのファジング拡張、そして `LZ4_decompress_safe()` が **−1** 不正入力 / **−2** 出力先不足 / **−3** 辞書欠如を返すエラーコード。
+
+**Firenook**（Show HN、61 pts、npm **0.2.1** 2026-11-04T21:35Z、11 バージョン、Apache-2.0、リポジトリ作成 2026-09-09）は Firebase Local Emulator Suite を Rust で実装し直し、ベンチマークページがほぼ決してやらない二つをやる：**すべての中央値の隣に p99 を刷る**（書き込み p99 は **50.6 ms**、つまり 40× は*中央値*の事実）、そして**負けた行を名指す**——`firenook.dev/compatibility` と benchmarks ページで確認：「Within the Storage cycle, downloads were the one step where Firenook was not faster: 2.30 / 5.01 ms against 2.12 / 4.31 ms」、および「Every multiple is rounded down.」 firebase-tools 15.22.0 / Java 26 との中央値：書き込み **208.2 → 5.1 ms**、リスナー更新 **209 → 11 ms**、ピークメモリ **22.57 → 2.11 GiB**、データ保持再起動 **30.8 → 0.59 s**、両スタックが同一の終状態データ（211,205 ドキュメント、33,352 オブジェクト、6.7 GB）に到達することを条件に。
+
+採用を決めるのは互換ページの方で、明快に書かれている：**「Not emulated: Realtime Database, Hosting, App Hosting, Data Connect and universal extensions. A `firebase.json` that configures them still starts: those emulators are skipped, with a warning.」** つまり「drop-in」はポートと起動方法については真、五つのサービスについては偽——Realtime Database を使うプロジェクトは書き込み中央値がどれほど良くても候補にならない。非対応・未認定：musl（Alpine）、glibc < 2.28、Windows on Arm、32 ビット Windows、Windows での停電復旧。さらに**稼働中のエミュレータに対する 54 個の MCP ツール**を同梱する（サイトのナビで確認）——ローカル開発ツールが agent インターフェースを一等機能として迎えた形だ。
+
+**「Awesome repositories are no longer awesome」**（Erik Gahner Larsen、2026-11-05）。二つの物証、うち一つは一日で悪い方向に動いた数字：記事は `abdessamadbettal/awesome-free-online-tools` を「13 stars but 91 open pull requests at the time of writing」と記録し、同じリポジトリは 2026-11-06 に **17 stars / 95 open PR** だった。供給側は追跡可能——ある投稿者が「at least six vibe-coded websites」を作り「more than 100 pull requests to various awesome lists」を送っている。反例は、書かれた基準で拒否した maintainer の一文だ：「There is not yet sufficient evidence of qualified educator review, independent validation … or demonstrated learning outcomes」。この feed にとっての要点は「古い」ではなく**基盤**である：これらのリストは agent が適切なライブラリを探すときに読むものなので、85% が未レビューのリストは*推薦*の汚染源であって、単に古いわけではない。
+
+**N64 上の ULC**（PhobosLab、2026-11-03、Libdragon の preview ブランチにマージ済み）。移植ではなく制約の階段：Libultra の ADPCM では 5 分の 44.1 kHz ステレオが約 **12 MB**、Mario 64 の ROM 全体が 8 MB。Libdragon の RSP Opus デコーダはゲームプレイには遅すぎ、QOA は「each sample relies on the previous decoded sample」で不適。答えは Aikku93 の **ULC**——ニブル係数で、予約値がゼロ連続・量子化器切替・**ノイズフィル**を表す（MP3 に無い機能）——展開は「just ~150 lines of C」、エントロピー復号不要。作業は移植側にある：IMDCT を RSP の **4,096 B DMEM / 4,096 B IMEM** に収めるため浮動小数点を捨て、Q1.14 固定小数点、1,024 サンプルブロック + 512 サンプルのラップバッファ（ちょうど **3,072 B**）。C を **RSPL** へ Codex で部分的に翻訳し、各段で検証してからパイプラインストールを手で詰め、**約 1,400 行の MIPS** が「barely fits into the 4096 byte IMEM」。結果、44.1 kHz ステレオが **CPU 約 4% / RSP 約 5%**、シークテーブルは **約 20 bytes/秒**、Half-Life N64 移植の README が 2,500 の効果音と 27 曲を 64 MB カートリッジに収めた功績として挙げている。**残すべきパターン：モデルが転写し、人間が各段で検証し、制約（4 KB の IMEM）が検証を安くした。**
+
+**Kagi がサインアップの壁を外す**（changelog 2026-11-05）：「anyone, anywhere, can now visit kagi.com and search the web. No account required for the first 50 searches (100 more upon registration)」——制限は**検索回数**であって機能ではなく、プログラム的アクセスやレート制限については何も書いていない。したがって「no account required」は、規約が別を言うまではブラウザセッションと読むべきだ。このパイプラインにとっての価値は直接ある：有料でしか評価できなかった唯一の索引が、50 クエリで一次確認できるようになった。
+
+→ [[fact-check]] [[agent-stack]] [[no-ai-default]]

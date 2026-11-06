@@ -990,6 +990,45 @@ underlying pages — this produced a two-layer false signal in a single item.
    `crash`)**, and two package names (`gdb-headless`, `gdb-gdbserver`) appear **nowhere** in any of
    the four records. A false advisory on a correct sentence, beside two unnoticed errors in the same
    sentence's paragraph, is what a single-arm checker looks like. `--selftest` **285 → 288**;
+   **…and the two errors it could not see are now an arm of their own: `--check affected` reads the
+   array's VALUES** (added 2026-11-06 12:34). Every other arm reads an ABSENCE or a RANGE; not one
+   read a LIST, so a paragraph carrying two wrong claims about the same field scored clean. The arm
+   tests two things against the cveawg container the `rangeabsent` check already pays for, so it adds
+   no call: **(a) a stated count of entries by `defaultStatus`** — measured against ARRAY ENTRIES,
+   which is the unit the sentence uses and not version rows — and **(b) every backticked package name
+   in a sentence that claims the list**, required to exist as a `packageName` somewhere in the item's
+   records, because a distro subpackage can be listed under a product line the sentence did not name.
+   Two-way calibration on the filing case: the pre-correction file returns **3 findings** (the count
+   plus both invented packages), the corrected file **0 findings / 2 verified**. Censused over the six
+   November feeds (**271** items, **106** cveawg containers read): **0 findings / 3 verified** — so the
+   arm is narrow by design (it needs an explicit count phrase or a package list in a sentence that claims
+   the field) and the class did not recur after the 11-06 04:19 correction. Four guards came from
+   the calibration, not the spec: **`strip()` deletes backticks**, so package names must be read from
+   the RAW text (the selftest caught this on its first run); **a paragraph beginning with `**CVE-…**`
+   never starts a new sentence**, so a cue leaked two paragraphs' worth of context and `gdbserver` /
+   `hex2bin` — components named in the vulnerability's own description — fired as absent packages;
+   the fix is to require the candidate's own sentence to **claim the list** (a direct field name, or a
+   package the container already carries), at the cost of silence on a sentence that names only
+   invented packages; and **`defaultStatus: affected on every one of its eleven entries` is a
+   different spelling from `all eleven affected[] entries name a product`** — the first is a status
+   count, the second is not, and only the status word in the pattern keeps them apart. The same run
+   exposed a gap one level down: **`zero` was missing from `NUM_WORDS`**, so "eleven entries are
+   affected and **zero** are not" matched nothing at all — the corrected feed spelled its own
+   correction in a way the reader could not parse. `--selftest` **288 → 300**;
+   **and a failed request is not an absent record** (added 2026-11-06 12:34, filed by the 12:22
+   lint's own output). The one NVD pull a run makes is chunked, and a chunk that throws is caught so
+   the run can continue; downstream checks then read an empty map — **the same map a genuinely absent
+   record produces**. On that batch the pull failed and the JSON published **"NVD carries no record
+   for `CVE-2026-73099`"** and the same for `CVE-2026-104269`; both records exist (Apache's 10.0
+   `Deferred`, GitHub's 8.6 `Received`) and a plain re-run said `ok`. The pull now records **which
+   chunks answered**, retries each once, and an unanswered chunk yields **`nvd-unavailable`** ("I
+   could not read it") instead of `no-record` / `status-no-record`; `nvd_failed_chunks` rides the
+   JSON and the summary prints how many ids were never read, because `nvd_calls: 0` had been sitting
+   in that file as the only trace and was read by nobody. Calibrated both ways by pointing
+   `CLAIM_UNIT_NVD_BASE` at a dead host — a hook that exists **only** so the failure path is
+   reproducible rather than asserted: the same feed returns **2 `nvd-unavailable`** instead of 2
+   registry statements. The transferable rule is the file's oldest one, one layer out: **unread is
+   never absent, and a status code is not a record**;
    **repo** (`archived`, `stale` past
    `--stale-days`, and a star count that moved — **by SIGN, not by percentage** (added 2026-11-01 12:39):
    the lint runs minutes after the batch, so the only thing it can watch is the repo moving *under* the

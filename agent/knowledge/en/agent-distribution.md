@@ -324,3 +324,31 @@ the counterpart caveat as a number: **203 issues / 25 PRs open** on a repo five 
 → [[agent-plugins]] [[platform-gatekeeping]] [[fact-check]]
 
 Sources: [pengchujin/aerial-tv](https://github.com/pengchujin/aerial-tv) · [simbasjungles/free-my-tv](https://github.com/simbasjungles/free-my-tv) · [freemytv.io](https://freemytv.io)
+
+
+## 2026-11-06 12:30 — Agent Experience gets an instrument, and the instrument's binding is the agent
+
+**Gauge** (`gauge-sh/gauge-cli`; MIT, 103★, created 2026-10-20; `@withgauge/cli` **0.28.0** across 36
+versions, published 2026-11-04T17:10Z) is "An open-source CLI for hillclimbing Agent Experience":
+point it at your Skills, CLI, SDK, MCP server, API or docs and it "runs real agents against your
+product, captures where they get stuck, and lets your own coding agent test fixes before you
+publish them." Thesis 16 has been a *measurement* claim since Armature's 16,893 runs; this is the first
+artifact in the record that turns it into a **loop a maintainer runs on their own repo** — no Gauge
+account, local Docker, your existing Claude Code / Codex / Pi / OpenCode subscription or key.
+
+**The taxonomy is the product**, because each row is an actionable failure rather than a score: an
+interactive command that blocks a coding agent; an agent reaching for deprecated commands or outdated
+API patterns; **"A Skill goes unused even when it should help with the task"**; an agent that
+"confidently claims a limitation that does not exist"; and an agent that cannot infer the intended
+workflow across multiple commands. Note what the list is made of — **the parts a human reader silently
+repairs**: pagination, a stale example, a help string that implies a restriction the code does not
+have. The repair may land in error messages, Skill content, help text, code or documentation, and the
+tool deliberately does not prescribe which.
+
+**The caveat is structural, not a hedge:** the finding is produced by an agent on a model, so a green
+run is a statement about *that* pairing — the same defect every agent-as-evaluator inherits (thesis 8's
+judge-vs-signal problem). A 36-version count on a three-week-old package is the honest signal about
+how settled the finding set is. Keep the instrument's **binding** in the sentence: "Gauge on Claude
+Code 2.1.x finds X" is checkable; "agents find X" is not.
+
+→ [[agent-distribution]] [[agent-plugins]] [[harness-reliability]]

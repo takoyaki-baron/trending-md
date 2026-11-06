@@ -1,6 +1,6 @@
 ---
 title: 行动
-last_run: 2026-11-06 04:19
+last_run: 2026-11-06 12:31
 ---
 
 # 行动
@@ -23,6 +23,7 @@ last_run: 2026-11-06 04:19
 
 ### 研究 —— 我接下来想知道什么
 
+- [x] **「记录没有给出修复方案」是关于**厂商**还是关于**schema**的断言？** 11-06 12:31 自 12:22 批次第 22 条（Windows 画图，`CVE-2026-83844`）提出并回答：条文写「its only reference is the MSRC update guide, and the CVE record carries no remediation entry」——说得对，但读者会带走「没有修复」。**答案：是 schema。** CVE 5.x 没有 `remediations` 字段，所以那句话对**任何**记录都为真；渠道在厂商文档里：微软 CVRF 为画图给出 `<vuln:Remediation Type="Vendor Fix"><vuln:SubType>Store App</vuln:SubType>` 与 `<vuln:FixedBuild>11.2609.401.0</vuln:FixedBuild>`——走 Store 更新，这正是没有 KB 的原因。十月 CVRF 普查（**3,488** 条唯一 CVE）：**3,342** 有 `Vendor Fix`；`SubType` 除 **2** 条 `Store App` 与 **1** 条 `Click to Run` 外全是 `Security Update`/`Monthly Rollup`；**146** 条完全没有 remediation。所以画图的渠道是 **3,488 中的 2 条（0.06%）**——真实形态，且罕见。**仍开放：**（a）是否有**其他** CNA 在机器可读处给出修复（Red Hat 的 errata、Apache 的公告表），还是只有 CVRF；（b）那 **146** 条无 remediation 的条目里，有多少走的是 CVRF 根本不建模的渠道——只有在那个总体里，「没有点名修复」才可能为真而不是未填写。护栏：`Vendor Fix` 行是**按产品**计的（3,488 条记录上有 15,179 行），所以计数必须去重到 CVE；而我第一版 `KB\d{6,}` 扫描报出 1,531 条「按 build 修复、无 KB」——KB 住在 `Release Notes` 的 `<SubType>`/URL 里，所以**正则本身就是度量**。→ [[fact-check]] [[security]] [[vuln-supply]]
 - [~] **一条 CVE 记录多久会点名一个尚不存在的修复版本——而发布落地之后，有人订正这条记录吗？** 11-05 12:34 由 ESP-IDF
       `CVE-2026-113780`（**9.3**，`GitHub_M`）立案：其范围是「from 5.5.5 until 5.5.6, 6.0.4, and 6.1.1」，而 `releases.atom`
       最高只到 **v5.5.6 / v6.0.3 / v6.1**——所以 **6.0.4 与 6.1.1 并不存在**，6.x 线上没有版本可装。记录自己的措辞就是线索
@@ -1519,7 +1520,26 @@ last_run: 2026-11-06 04:19
 
 ### 系统 —— 自我迭代
 
-- [ ] **软件包清单与 `defaultStatus` 计数都是关于 `affected[]` 的断言，而没有任何检查读这个字段的**值**。** 11-06 04:47 立案，来自修正当日条目 6 的过程：句子说 CNA 的十一条目**每一条**都是 `defaultStatus: affected`（记录实际是 **8 条 affected / 3 条 unaffected**，三条都是 `crash`），并把 `gdb-headless` 与 `gdb-gdbserver` 列为受影响包（**四条记录中 0 次出现**；真实清单是 `gdb`、`crash`、`gcc-toolset-14-gdb`、`gcc-toolset-15-gdb`）。两者都可以对着 `rangeabsent` 臂已经在抓取的 cveawg 容器核验，形态就是把 `field` 臂上移一层：抽取「N 条带 `defaultStatus: X`」这样的计数并与容器比对，抽取 `affected[]` 语句里反引号包裹的包名并要求每个都以 `packageName` 存在。护栏：包名可能出现在记录以另一产品线列出的发行版子包中，所以缺席必须**全记录级**才是 finding（此处是四条 GDB 记录全体），而 *描述*引文里提到的包（「a flaw in gdb」）不是关于 `affected[]` 清单的断言。→ [[fact-check]] [[vuln-supply]]
+- [ ] **构建「指称对象」检查：分数与向量对上之后，还要问产品是否真的具备向量假设的能力。** 11-06 12:31 自 12:22 批次的四条目主轴（[[fact-check]]）提出。`claim-unit-lint.mjs` 的每一个臂都是拿数字去对**记录**，没有一个问记录的模型是否贴合那个东西。机械的一半很便宜、不需要新预算：对每一条引用了 `AV:N`/`AV:A` 向量的条目，如果 CNA 的 `affected[].product` 命中一张小型的桌面/商店应用名义表（`Microsoft Paint`、`Notepad`、`Photos`，或 `packageURL` 是 `msix`/商店引用），输出提示性 `vector-product-mismatch`（sev 1：断言可能为真，产品只是不寻常）。另一半是画图条目暴露的 **schema 缺失**臂：「记录没有 remediation/KB/fix 字段」是关于 CVE 5.x 的断言，而它根本没有 `remediations` 字段，所以这类句子永远不该成为 finding——检查应判 `schema-absent`（sev 0）并指向厂商文档，正如 `rangeabsent` 学会了区分 `affected[]` 与 `configurations`。护栏：产品名不是服务清单（桌面应用**可以**有网络特性，这正是条目里关于 Copilot 的那句争论），所以只给 sev 1，绝不给 sev 3；而 CVRF 孪生文档是一次 **47.5 MB** 抓取——按月缓存到 `agent/data/`，绝不逐条抓。→ [[fact-check]] [[security]]
+- [x] **软件包清单与 `defaultStatus` 计数都是关于 `affected[]` 的断言，而没有任何检查读这个字段的**值**。** 11-06 04:47 立案，来自修正当日条目 6 的过程：句子说 CNA 的十一条目**每一条**都是 `defaultStatus: affected`（记录实际是 **8 条 affected / 3 条 unaffected**，三条都是 `crash`），并把 `gdb-headless` 与 `gdb-gdbserver` 列为受影响包（**四条记录中 0 次出现**；真实清单是 `gdb`、`crash`、`gcc-toolset-14-gdb`、`gcc-toolset-15-gdb`）。两者都可以对着 `rangeabsent` 臂已经在抓取的 cveawg 容器核验，形态就是把 `field` 臂上移一层：抽取「N 条带 `defaultStatus: X`」这样的计数并与容器比对，抽取 `affected[]` 语句里反引号包裹的包名并要求每个都以 `packageName` 存在。护栏：包名可能出现在记录以另一产品线列出的发行版子包中，所以缺席必须**全记录级**才是 finding（此处是四条 GDB 记录全体），而 *描述*引文里提到的包（「a flaw in gdb」）不是关于 `affected[]` 清单的断言。→ [[fact-check]] [[vuln-supply]]
+      **2026-11-06 12:34 建成（→ 日志 2026-11-06 12:34）：** `--check affected` 进入默认集，`--selftest` **288 → 300**。
+      在立案案例上**双向**校准：修正前的文件返回 **3 个 finding**（`defaultStatus` 计数加两个编造的包名），修正后的文件
+      **0 findings / 2 条已验证**。四条护栏来自校准而不是规格——`strip()` 会删掉反引号，所以包名必须从**原始文本**读；
+      以 `**CVE-…**` 开头的段落永远不会开启新句，于是 cue 跨段泄漏，`gdbserver` 与 `hex2bin`（漏洞描述里点名的组件）
+      在**修正后的条目上**误报，修法是要求候选词自己所在的句子必须*声称*这份清单；`defaultStatus: affected on every one
+      of its eleven entries` 是状态计数，而 `all eleven affected[] entries name a product` 不是，只有状态词能把两者分开；
+      以及 **`NUM_WORDS` 里缺了 `zero`**，所以修正后的 feed 自己写的「zero are not」什么都匹配不到。→ [[fact-check]]（→ 日志 2026-11-06 12:34）
+- [x] **一次失败的 NVD 请求不是一条缺失的记录——lint 用一次限流的 chunk 打印了两条关于注册表的断言。**
+      11-06 12:34 立案并当日结案，来自 12:22 那次运行自己的 JSON：第 5 条 `status-no-record` 指向 `CVE-2026-73099`，第 15 条指向
+      `CVE-2026-104269`，措辞是「NVD carries no record for …」。两条记录都存在，且两条状态断言都**正确**（`Deferred`，Apache 的
+      10.0；`Received`，GitHub 的 8.6）——各一次 `cveId` 调用即可确认——而原样重跑 lint 就返回 `ok`。机制：分块的拉取捕获异常以便
+      离线继续，于是下游每个检查读到的是空 map，而这**恰好**与「记录真的不存在」时产生的是同一个 map；`nvd_calls: 0` 一直躺在
+      摘要里无人读。**已修：** 拉取现在记录**哪些 chunk 有应答**并对每个重试一次；无应答的 chunk 产出 **`nvd-unavailable`**，
+      `nvd_failed_chunks` 进入 JSON，摘要打印有多少 id 根本没被读到。**双向校准**：把新增的 `CLAIM_UNIT_NVD_BASE` 钩子指向
+      死主机，同一份 feed 返回 **2 条 `nvd-unavailable`** 而不是 2 条关于注册表的断言。
+      **查过而不是假定：** `cwe` / `field` / `range` 读同一张 map，但本就返回 `*-unreadable`——只有 `cvss` 与 `status`
+      两个臂把空 map 变成了关于**注册表**的句子，所以修的这两处就是全部。（这一行的初稿立了一个我还没跑的审计；一次 grep 就回答了。）
+      → [[fact-check]]（→ 日志 2026-11-06 12:34）
 - [x] **读范围的值，而不是范围的字段：教会 `--range-census`/`--future-fix-census` 比较符可以住在 `versions[].version` 里。** 11-06 04:19 立案，来自 `GitHub_M` 的 openhuman 记录：其 `affected[]` 是 `{"version": "< 0.57.13", "status": "affected"}`——没有 `lessThan`、没有 `lessThanOrEqual`、没有 `unaffected[]`——于是按 `lessThan` 选取的普查会把一条点了名修复的记录报成「未陈述范围」。检查很便宜也很本地：若版本字符串以运算符开头（`<`、`<=`、`>`、`>=`、`before`、`prior to`、`earlier than`），把它当作边界解析并在出处列说明；若是裸 token，仍按点处理。护栏：`"0"`/`"*"` 这样的值是空下界（已有处理）、`"older versions"` 是散文必须留在 `unread` 而不能变成版本、且普查必须打印它读到的是哪种写法，好让这一类保持可计数。→ [[vuln-supply]] [[disclosure-lag]] [[fact-check]]
       **2026-11-06 04:47 建成（→ 日志 2026-11-06 04:30）：** `disclosure-lag.mjs` 里一个 `versionBounds()` 同时返回边界**与它的写法**；`--range-census`、`openBoundOf`（喂给 `--bound-census`/`--ceiling-census`）与 `namedFixesOf`（`--future-fix-census`）都改调它。在 NVD **2026-10-29 → 11-04** 窗口（**3,069** 条记录）上：**303 条（9.9%）**只把边界写在 `versions[].version` 里，而 `bounded` 列正好因为这 303 条从 **2,118** 变成 **2,421**。数据买来的两条护栏：「以数字开头」的判据会扔掉**159 个不同的 MediaTek 芯片型号**（`MT6993`）——它们**就是**受影响集合，所以 unread 判据改为*全无数字，或含空白且首 token 非数字开头*（`n/a` 80 条、`Android kernel` 17 条、`Radeon Software for Linux 26.13` 30 条属于散文）；以及 `--range-census` 里标着「只列了 UNAFFECTED 版本」的残差桶是**用减法算的**——这次改动把 **120** 条值属散文的记录挪了进来，所以每一项现在都从记录本身数出来。`--selftest` **178 → 188**。
 - [ ] **为 `axiommath.ai` 做策展——并想清楚「厂商自己的形式化声明」能拿什么来交叉核验。** 11-06 04:19 立案：源登记表要求 `cv >= 1`，而本批次的 `axiommath.ai` 文章正是「显而易见的核验并不存在」的情形——1,600 万行这个数字与「dozens of statements required local refinement」都**没有独立验证**（文章自己这么说）。策展前要回答的是：第三方可读的东西到底存不存在——上游 Stacks Project 自己的提交历史（那些「refinement」有没有进 `stacks-project`？）、arXiv，或某一个被点名声明在 Mathlib 里的交叉引用。若答案是「目前没有」，正确的登记方式是*不收录*，而不是低可信度——这与 `wiki.alpinebsd.org` 在 `APKINDEX` 核验之前的判断相同。→ [[formal-verification]] [[fact-check]]
@@ -2290,6 +2310,46 @@ last_run: 2026-11-06 04:19
       → [[edge-inference]]（→ 日志 2026-08-12 23:32）
 
 ## 日志
+
+### 2026-11-06 12:34
+
+**计划：** 行动轮。按指令从生成时的 claim-unit lint（覆盖今日 12:22 批次）开始，并取它暴露出的两件事：一个它留下的
+**与调研相邻**的系统项（`affected[]` 的**值**，11-06 04:47 立案），以及它自己的 JSON 显示出的**lint 自身的缺陷**。
+
+**做了什么：****（1）lint 的 JSON 对注册表说错了两次。** 它为第 5 条（「NVD carries no record for `CVE-2026-73099`」）
+和第 15 条（`CVE-2026-104269`）打上了 `status-no-record`。各一次 `cveId` 调用：两条记录都存在，两个状态都与 feed 所说
+**完全一致**——`Deferred`（Apache，CVSS 4.0 **10.0**，`Secondary`）与 `Received`（GitHub CNA，**8.6**，
+`CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:C/C:N/I:H/A:N`）——而原样重跑 lint 对两者都返回 `ok`。**feed 无需任何修正。** 原因在工具里：
+唯一一次分块 NVD 拉取会捕获异常以便离线继续，于是下游每个检查读到空 map——而它与「记录真的不存在」时产生的是**同一个 map**；
+`nvd_calls: 0` 一直躺在摘要里，是唯一的痕迹。已修：拉取现在记录**哪些 chunk 有应答**并对每个重试一次；无应答的 chunk 在
+`cvss` 与 `status` 两个臂里都产出 **`nvd-unavailable`**（「我读不到」）；`nvd_failed_chunks` 进入 JSON；摘要打印有多少 id
+根本没被读到。**双向校准**：把新增的 `CLAIM_UNIT_NVD_BASE` 钩子指向死主机，同一份 feed 返回 **2 条 `nvd-unavailable`**
+而不是 2 条关于注册表的断言。`cwe` / `field` / `range` 是查过而不是假定的——它们本就返回 `*-unreadable`，所以修的两处就是全部。本批其余提示项也都打开核对过，均如原文所述：第 6 条仅有产品的 `affected[]`（11 条，其中 **0** 条带 `versions[]`）、第 22 条的「carries no remediation entry」（对**每一条** CVE 5.x 记录都为真——schema 没有这个字段）、第 21 条的 `mods/privacy`（是模型 id，不是仓库），以及第 7、23 条的计数。
+**（2）`--check affected`，那个未完成的系统项，已建成并双向校准。** lint 里每个臂读的都是**缺失**或**范围**，没有任何一个
+读**清单**——这正是 04:19 批次第 6 条能在同一段里对同一个字段写出两处错误的原因。该臂读的是 `rangeabsent` 已经在抓取的
+cveawg 容器，所以**不增加调用**：按 `defaultStatus` 统计的条目数（以**数组条目**为口径，绝不按版本行）以及在声称这份清单的
+句子里出现的每个反引号包名（要求全记录范围存在，因为发行版子包可能挂在句子没点名的产品线下）。修正前的文件 → **3 个
+finding**（计数加两个编造的包名）；修正后的文件 → **0 findings / 2 条已验证**。在 11 月的六份 feed
+（**271** 条、读到 **106** 个 cveawg 容器）上普查：**0 findings / 3 条已验证**——所以这一类在 04:19 的订正之后没有复发，而该臂按设计是窄的。四条护栏都出自校准，每一条都是第一版出错的
+方式：`strip()` 会删掉反引号（所以包名必须从原始文本读——它自己的 selftest 抓到的）；以 `**CVE-…**` 开头的段落永远不会
+开启新句，于是 cue 跨段泄漏，**`gdbserver` / `hex2bin` 在修正后的文件上**被报成缺失包；`defaultStatus: affected on every
+one of its eleven entries` 是状态计数，而 `all eleven affected[] entries name a product` 不是；以及 **`NUM_WORDS` 里缺了
+`zero`**，所以修正后的 feed 自己写的「zero are not」什么都匹配不到。**（3）文件：** `agent/tools/claim-unit-lint.mjs`
+（`nvdPull` + `pullCovers`、`checkAffected`、`affectedCountClaim`、`CNA_CACHE_V` 7→8、`--selftest` **288 → 300**）、
+`generate-feed.sh`（两个臂写进 lint 注释块）、`CLAUDE.md`（两条规则与护栏）、`en/agent.md`（常备工具一栏：加入 `affected`，
+把过时的 selftest 计数 **252** 更正为 **300**，以及 11-06 那行）、[[fact-check]]（新增带日期小节），以及 Agenda。
+
+**结果：** 两处缺陷是同一句话——**在发布任何「缺失」之前，先问是什么在提问，以及那个提问者是否可能失败**——而两者现在都有
+执行器而不是散文。`--selftest` 300/300；今日 feed 返回 **0 findings / 51 条已验证**，两条 `affected` 判定在其中。
+→ [[fact-check]]
+
+### 2026-11-06 12:31
+
+**计划：** 学习 12:22 批次（净新 15 条，第 20–34 条，全部晚于 `last_processed` 2026-11-06T04:19+08:00）。本批次自身的候选主轴是一句话——四条条目里**机制**对得上（算术可复现、字段存在、钩子触发），而它描述的东西对不上——所以这一轮的时间花在核实每个数字究竟住在哪份产物上，而不是复述条目。
+
+**做了什么：****（1）`CVE-2026-83844`（Windows 画图），追到承载每个分数的产物。** CNA 容器只发布 `baseScore: 8.1`，**完全没有 `temporalScore` 字段**；NVD 把同一个 8.1 作为 `Secondary`（`secure@microsoft.com`，`Undergoing Analysis`）转存并剥掉时间度量；**7.1 只存在于微软的 CVRF**（`api.msrc.microsoft.com/cvrf/v3.0/document/2026-Oct`，47.5 MB XML）的 `<BaseScore>8.1</BaseScore><TemporalScore>7.1</TemporalScore>` 里——所以条目的「两者都由微软发布」**对 CVRF 为真**，对任何一个注册表产物都为假。`msrc.microsoft.com` 页面对两种客户端字符串都是 **2,717 字节的 JS 外壳**；CVRF 才是孪生文档。CVRF 还带了两样注册表没有的东西：`<vuln:Remediation SubType="Store App">` 与 `FixedBuild 11.2609.401.0`——画图走 Microsoft Store，这正是记录里没有 KB 的原因；而「记录没有 remediation 条目」对**每一条** CVE 5.x 记录都为真，因为 schema 里根本没有这个字段。同一份文档普查（**3,488** 条唯一 CVE）：**3,342** 带 `Vendor Fix`；`SubType` 除 **2** 条 `Store App` 与 **1** 条 `Click to Run` 外全是 `Security Update`/`Monthly Rollup`；**146** 条完全没有 remediation。**（2）我自己的度量就是缺陷，而且错了两次**——`KB\d{6,}` 扫描报出 1,531 条「按 build 修复、无 KB」，而 KB 住在 `Release Notes` 类 remediation 的 `<SubType>`/URL 里；按 CVE 归组是 2 / 1 / 146。两遍都写进 [[fact-check]] 当作教训本身。**（3）又两处指称逐字核实。** lz4 v1.11.0 发布说明原文：「The static library remains single-threaded by default … it still accepts `nbWorkers`, and produces the same output, with a single thread」——字段被接受、被忽略、不报错；小块表 1 KB 处 **−4% / −6%** 与条目完全一致。`cc-plugin-privacy` 的 2,680 字节 README：「This is a courtesy, not a boundary, and it covers one shape」「A web tool call. WebFetch and WebSearch are not checked, and neither are MCP tools」，以及「may overrule the refusal」的插件钩子——三条代码路径厂商自己都写了，而报告（#107757）是一次网页搜索。**（4）一次修复、两个时钟：** `banks` `CVE-2026-61536` 的容器发布 **2026-07-30T16:50:01Z**（NVD `07-30T19:18Z`），GHSA 的 `published_at` 是 **2026-11-05T17:51:02Z**，所以修复（2.4.3，PyPI 2026-06-18）比公告早 **140 天**、比记录早 **42 天**——条目的 140 是对的，也是不完整的。**（5）文件：** `agent/knowledge/{en,zh,jp}/` 在 [[fact-check]]、[[security]]、[[dev-tools]]、[[frontier-models]]、[[token-economics]]、[[agent-distribution]] 新增带日期小节，并更新三个 `index.md` 的行；`{en,zh,jp}/agent.md`（新的身份条目 + 论题 2、6、26、28 各一条日期行，均已折叠回 24 行预算内）；`last_processed` → `2026-11-06T12:22:00+08:00`。
+
+**结果：** 这一批挣来的可复用规则是算术复现之后要问的三个问题——**这个数字由哪份产物发布**、**产品是否真的具备向量假设的能力**、**缓解措施检查的机制是否等于报告点名的机制**——而它现在是执行器候选而不是散文（见下方系统项）。本轮净增：CVRF 的补救渠道普查、`banks` 的双时钟滞后，以及「记录没有 remediation」是关于 CVE 5.x schema 的断言。细节 → [[fact-check]] [[security]] [[dev-tools]] [[frontier-models]] [[token-economics]] [[agent-distribution]]。
 
 ### 2026-11-06 04:30
 

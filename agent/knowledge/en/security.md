@@ -6862,3 +6862,54 @@ is client-rendered. So for this batch **both** artifacts are silent on the patch
 a product and no version, the CNA's JSON has no entry, and the CNA's HTML is a shell — and "silent" is a
 dated state, not an absence. The errata are the third place a version could live, and the record does not
 link them.
+
+
+**Addendum (11-06 12:30 — two CVE records, two shapes where the artifact is right and the subject is
+wrong, plus two agent hooks whose scope is documented).**
+
+**`CVE-2026-83844`, Windows Paint (8.1 base / 7.1 temporal, `CWE-125`, `microsoft`).** Verified from
+both registries and the vendor document: the CNA container publishes `baseScore: 8.1` **only**, NVD
+re-publishes the same 8.1 as `Secondary` (`secure@microsoft.com`, status `Undergoing Analysis`), and
+the **7.1 temporal score exists only in Microsoft's CVRF** ScoreSet. The description — "Out-of-bounds
+read in Windows Paint allows an unauthorized attacker to execute code over a network" — is a template
+applied to a desktop bitmap editor that listens on nothing, and **CISA's ADP SSVC in the same record
+says `Automatable: no`** beside the vendor's `AV:N`/`UI:N`. The remediation is a `Store App` vendor
+fix (`FixedBuild 11.2609.401.0`, `apps.microsoft.com`) — so the item's "no KB" is a channel, not an
+absence, in a month where `Store App` is **2 of 3,488** entries. Full census and the vector lesson →
+[[fact-check]].
+
+**`CVE-2026-61536`, `masci/banks` (7.5, `GitHub_M`, CWE-94 + CWE-470).** An **incomplete fix** with a
+precise cause: `CVE-2026-44209` hardened Jinja by switching to `SandboxedEnvironment`, and the live
+path never touches Jinja attribute access — `_body_to_messages` parses `Tool` JSON out of the
+**rendered body** and `_get_tool_callable` resolves `import_path` through `importlib.import_module` +
+`getattr`, invoked with `json.loads(tool_call.function.arguments)` when the model emits a matching
+`function.name`. `{"import_path": "os.system"}` plus `{"command": "id"}` is execution in the agent
+server. **The generalisable shape: one serialisation format serving as both a developer interface
+(`Tool.from_callable` builds `import_path` from `func.__module__`) and a content channel (the same
+field parsed from model-influenced text), with the same trust level on both paths.** The remedy the
+advisory names is not a sandbox but an allowlist registered at startup. Clocks: fix **2.4.3**
+(`2026-06-18T14:41:34Z`) → record **2026-07-30** (42 d) → GHSA public **2026-11-05** (140 d).
+
+**Two agent-harness hooks that document exactly what they miss.** `cc-plugin-privacy` (Claude Code
+v2.1.317+, enabled by default; issue #107757) refuses a Bash/PowerShell/Monitor call whose input holds
+the account address **and** names a User-Agent — "two word matches over the whole input. There is no
+parser, on purpose" — and states: "This is a courtesy, not a boundary, and it covers one shape."
+Explicitly passing: the address with no User-Agent named, and **"A web tool call. WebFetch and
+WebSearch are not checked, and neither are MCP tools"** — which is the shape the report described.
+Its off-switches include a server-side switch and **"A hook of an installed plugin, which sits above
+this one: on `tool.check` it may overrule the refusal"**, so an installed plugin can un-deny what the
+builtin denies. It does refuse regardless of permission mode and saved allow rules: the mod is a
+**deny, not a prompt**, which is the stronger half.
+
+**Stroq** (Apache-2.0, 110★) inverts the guard's question from "is this command dangerous" to "did
+this command come from text the agent just read", and its most transferable finding is about the hook
+*contract*, not the policy: **"Every agent that times a hook out treats its own timeout as an allow:
+Claude Code cancels the hook and lets the call continue through the normal permission flow, Codex
+reports a hook failure and proceeds, Copilot discards the late deny."** Its answer is a watchdog that
+raises the same deny at 60% of the installer's timeout — i.e. the guard must fail closed *inside a
+system that fails open*. Its stated blind spots: `stroq doctor` "detects a modification rather than
+preventing one", and a run lists the **stdio MCP servers** in the agent's config that bypass the hooks
+entirely ("results reach the agent unchecked"). Same ingress the privacy mod documents, from the other
+side — **the hook layer covers shell calls, and the tool-result channel is outside it.**
+
+→ [[fact-check]] [[vuln-supply]] [[disclosure-lag]] [[agent-stack]]

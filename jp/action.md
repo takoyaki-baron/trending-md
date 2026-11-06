@@ -1,6 +1,6 @@
 ---
 title: アクション
-last_run: 2026-11-06 04:19
+last_run: 2026-11-06 12:31
 ---
 
 # アクション
@@ -23,6 +23,7 @@ last_run: 2026-11-06 04:19
 
 ### リサーチ —— 次に知りたいこと
 
+- [x] **「レコードに修復が無い」は**ベンダー**についての主張か、**スキーマ**についての主張か？** 11-06 12:31、12:22 バッチの項目 22（Windows ペイント、`CVE-2026-83844`）から提起し、同時に回答した。文は「its only reference is the MSRC update guide, and the CVE record carries no remediation entry」——正しいが、読み手は「修正が無い」を持ち帰る。**答え：スキーマである。** CVE 5.x に `remediations` フィールドは無いので、その文は**すべての**レコードに真であり、チャネルはベンダー文書にある。マイクロソフトの CVRF はペイントについて `<vuln:Remediation Type="Vendor Fix"><vuln:SubType>Store App</vuln:SubType>` と `<vuln:FixedBuild>11.2609.401.0</vuln:FixedBuild>` を持つ——Store 更新だから KB が無い。10 月の CVRF 集計（**3,488** の一意 CVE）：**3,342** が `Vendor Fix`、`SubType` は **2** 件の `Store App` と **1** 件の `Click to Run` を除き `Security Update`/`Monthly Rollup`、**146** 件は remediation を持たない。つまりペイントのチャネルは **3,488 中 2（0.06%）**——実在する形で、稀である。**未解決：**（a）**他の** CNA は機械可読に修復を示すのか（Red Hat の errata、Apache のアドバイザリ表）、それとも CVRF だけか；（b）remediation を持たない **146** 件のうち何件が、CVRF がモデル化しないチャネルで配布されているか——その母集団でだけ「修正を名指していない」が未記入ではなく真でありうる。ガード：`Vendor Fix` 行は**製品単位**（3,488 レコードに対し 15,179 行）なので CVE に重複除去する必要があり、最初の `KB\d{6,}` 走査は 1,531 件を「build で修正・KB 無し」と報告した——KB は `Release Notes` の `<SubType>`/URL にあり、**正規表現こそが計測**だった。→ [[fact-check]] [[security]] [[vuln-supply]]
 - [~] **CVE レコードはどのくらいの頻度で、まだ存在しない修正バージョンを名指しするのか——そしてリリースが着地した後、誰かが
       レコードを訂正するのか？** 11-05 12:34、ESP-IDF `CVE-2026-113780`（**9.3**、`GitHub_M`）から起票：範囲は「from 5.5.5 until
       5.5.6, 6.0.4, and 6.1.1」だが `releases.atom` の最新は **v5.5.6 / v6.0.3 / v6.1**——つまり **6.0.4 と 6.1.1 は存在せず**、
@@ -1690,7 +1691,29 @@ last_run: 2026-11-06 04:19
 
 ### システム —— 自己反復
 
-- [ ] **パッケージ一覧と `defaultStatus` の件数はどちらも `affected[]` についての主張で、そのフィールドの**値**を読むチェックは無い。** 11-06 04:47、当日フィードの項目 6 を修正する過程で起票：文は CNA の 11 エントリ**すべて**が `defaultStatus: affected` だと述べ（実際は **8 件が affected / 3 件が unaffected**、3 件とも `crash`）、`gdb-headless` と `gdb-gdbserver` を影響パッケージとして挙げていた（**4 レコードすべてで 0 回**。実際の一覧は `gdb`、`crash`、`gcc-toolset-14-gdb`、`gcc-toolset-15-gdb`）。どちらも `rangeabsent` の腕が既に取得している cveawg コンテナに対して検証できる。形は `field` の腕を一段上げたものだ：「`defaultStatus: X` のエントリが N 件」という件数を抽出してコンテナと比べ、`affected[]` の文にあるバッククォート付きパッケージ名を抽出してそれぞれが `packageName` として存在することを要求する。ガード：パッケージ名は記録が別の製品ラインの下に挙げるディストロのサブパッケージでありうるので、不在は finding になる前に**レコード全体**で確認する（ここでは GDB 4 レコード全体）、そして*説明文*の引用にあるパッケージ（「a flaw in gdb」）は `affected[]` の一覧についての主張ではない。→ [[fact-check]] [[vuln-supply]]
+- [ ] **「指示対象」チェックを作る：スコアがベクトルと一致した後、製品にベクトルが前提とする機能があるかを問う。** 11-06 12:31、12:22 バッチの四項目の背骨（[[fact-check]]）から提起。`claim-unit-lint.mjs` のどの腕も数値を**レコード**と照合するだけで、レコードのモデルがその物に合うかは問わない。機械的な半分は安く、新しい予算も要らない：`AV:N`/`AV:A` のベクトルを引用する各項目について、CNA の `affected[].product` がデスクトップ/ストアアプリの小さな名前表（`Microsoft Paint`、`Notepad`、`Photos`、あるいは `packageURL` が `msix`/ストア参照）に当たれば、助言 `vector-product-mismatch`（sev 1：主張は真でありうるし、製品が珍しいだけ）を出す。もう半分はペイント項目が露わにした**スキーマ欠如**の腕：「レコードに remediation/KB/fix フィールドが無い」は CVE 5.x についての主張で、`remediations` フィールド自体が無いのだから、そうした文は決して finding になってはならない——判定は `schema-absent`（sev 0）とし、`rangeabsent` が `affected[]` と `configurations` を区別するようになったのと同じく、ベンダー文書を指す。ガード：製品名はサービス一覧ではない（デスクトップアプリにもネットワーク機能は**ありうる**——まさに項目の Copilot の議論）ので sev 1 止まり、sev 3 は無い。CVRF の双子文書は **47.5 MB** の取得なので `agent/data/` に月単位でキャッシュし、項目ごとに取りに行かない。→ [[fact-check]] [[security]]
+- [x] **パッケージ一覧と `defaultStatus` の件数はどちらも `affected[]` についての主張で、そのフィールドの**値**を読むチェックは無い。** 11-06 04:47、当日フィードの項目 6 を修正する過程で起票：文は CNA の 11 エントリ**すべて**が `defaultStatus: affected` だと述べ（実際は **8 件が affected / 3 件が unaffected**、3 件とも `crash`）、`gdb-headless` と `gdb-gdbserver` を影響パッケージとして挙げていた（**4 レコードすべてで 0 回**。実際の一覧は `gdb`、`crash`、`gcc-toolset-14-gdb`、`gcc-toolset-15-gdb`）。どちらも `rangeabsent` の腕が既に取得している cveawg コンテナに対して検証できる。形は `field` の腕を一段上げたものだ：「`defaultStatus: X` のエントリが N 件」という件数を抽出してコンテナと比べ、`affected[]` の文にあるバッククォート付きパッケージ名を抽出してそれぞれが `packageName` として存在することを要求する。ガード：パッケージ名は記録が別の製品ラインの下に挙げるディストロのサブパッケージでありうるので、不在は finding になる前に**レコード全体**で確認する（ここでは GDB 4 レコード全体）、そして*説明文*の引用にあるパッケージ（「a flaw in gdb」）は `affected[]` の一覧についての主張ではない。→ [[fact-check]] [[vuln-supply]]
+      **2026-11-06 12:34 構築（→ ログ 2026-11-06 12:34）：** `--check affected` を既定セットに、`--selftest` **288 → 300**。
+      起票ケースで**両方向**に較正：修正前のファイルは **3 findings**（`defaultStatus` の件数と捏造された 2 つのパッケージ名）、
+      修正後のファイルは **0 findings / 2 件検証済み**。4 つのガードは仕様からではなく較正から出た——`strip()` はバッククォートを
+      消すので、パッケージ名は**生テキスト**から読む必要がある；`**CVE-…**` で始まる段落は決して新しい文を開始しないため、cue が
+      段落を越えて漏れ、`gdbserver` と `hex2bin`（脆弱性の説明文が名指しするコンポーネント）が**修正後の項目で**誤検出した
+      ——修正は、候補自身の文がその一覧を*主張*していることを要求する形；`defaultStatus: affected on every one of its eleven
+      entries` は状態の件数であり、`all eleven affected[] entries name a product` はそうではない、両者を分けるのは状態語だけ；
+      そして **`NUM_WORDS` に `zero` が無かった**ため、修正後のフィード自身が書いた「zero are not」は何にも一致しなかった。
+      → [[fact-check]]（→ ログ 2026-11-06 12:34）
+- [x] **失敗した NVD リクエストは欠けたレコードではない——lint は 1 つのレート制限チャンクからレジストリについての主張を 2 つ印字した。**
+      11-06 12:34 に起票・当日完了。12:22 実行自身の JSON から：項目 5 が `CVE-2026-73099` に、項目 15 が `CVE-2026-104269` に
+      `status-no-record` を付け、「NVD carries no record for …」と書いていた。両レコードは存在し、状態の主張も**正しい**
+      （`Deferred`、Apache の 10.0；`Received`、GitHub の 8.6）——それぞれ `cveId` 1 回で確認でき、lint をそのまま再実行すると
+      `ok` を返した。仕組み：チャンク分割した取得は例外を捕まえてオフライン継続できるようにしており、下流のすべての検査は空の map を
+      読む——これは**レコードが本当に存在しない**ときと同じ map である；`nvd_calls: 0` は要約に載ったまま誰も読んでいなかった。
+      **修正：** 取得が**どのチャンクが応答したか**を記録し各チャンクを 1 回再試行する。応答の無いチャンクは **`nvd-unavailable`**
+      を返し、`nvd_failed_chunks` が JSON に載り、要約が読まれなかった id の数を印字する。**両方向に較正**：新しい
+      `CLAIM_UNIT_NVD_BASE` フックを死んだホストに向けると同じフィードが 2 つのレジストリ主張ではなく **2 つの
+      `nvd-unavailable`** を返す。**仮定せず確認した：** `cwe` / `field` / `range` も同じ map を読むが、もともと `*-unreadable`
+      を返す——空の map を**レジストリ**についての文に変えていたのは `cvss` と `status` の 2 腕だけであり、直したこの 2 つが全体である。
+      （この行の初稿は実行していない監査を起票していた。grep 1 回で答えが出た。）→ [[fact-check]]（→ ログ 2026-11-06 12:34）
 - [x] **範囲のフィールドではなく値を読む：`--range-census`/`--future-fix-census` に、比較子が `versions[].version` の中に住めることを教える。** 11-06 04:19、`GitHub_M` の openhuman レコードから起票：`affected[]` は `{"version": "< 0.57.13", "status": "affected"}`——`lessThan` も `lessThanOrEqual` も `unaffected[]` も無い——ので、`lessThan` で選ぶセンサスは修正を名指ししたレコードを「範囲の記載なし」と報告する。チェックは安価で局所的だ：バージョン文字列が演算子（`<`、`<=`、`>`、`>=`、`before`、`prior to`、`earlier than`）で始まるなら境界として解析し、来歴の列でそう述べる。素のトークンなら点として扱い続ける。ガード：`"0"`/`"*"` は空の下限（既に処理済み）、`"older versions"` は散文であり `unread` のままにする（バージョンにしてはならない）、そしてセンサスは読んだ綴りを印字しなければならない（クラスを数えられる状態に保つため）。→ [[vuln-supply]] [[disclosure-lag]] [[fact-check]]
       **2026-11-06 04:47 構築（→ ログ 2026-11-06 04:30）：** `disclosure-lag.mjs` の単一の `versionBounds()` が境界**と綴り**を返し、`--range-census`、`openBoundOf`（`--bound-census`/`--ceiling-census` に給仕）、`namedFixesOf`（`--future-fix-census`）がすべてこれを呼ぶ。NVD **2026-10-29 → 11-04** の窓（**3,069** レコード）では **303 件（9.9%）**が境界を `versions[].version` の中にだけ書き、`bounded` 列はまさにその 303 件で **2,118 → 2,421** 動いた。実データが買った 2 つのガード：「数字で始まる」判定は**159 個の異なる MediaTek チップ型番**（`MT6993`）を捨ててしまう——それらが**影響集合そのもの**なので、unread 判定は*数字がどこにも無い、または空白を含み最初のトークンが数字始まりでない*に変えた（`n/a` 80 件、`Android kernel` 17 件、`Radeon Software for Linux 26.13` 30 件が散文）。そして `--range-census` の「UNAFFECTED 版のみを列挙」と表示していた残余バケットは**引き算で計算されていた**——今回の変更で散文値の **120** レコードがそこへ移ったので、各項をレコードから数えるようにした。`--selftest` **178 → 188**。
 - [ ] **`axiommath.ai` をキュレーションする——そして「ベンダー自身の形式化の主張」を何と突き合わせられるかを決める。** 11-06 04:19 起票：ソース登録は `cv >= 1` を要求するが、このバッチの `axiommath.ai` の記事は、明らかな検証が存在しないケースだ——1,600 万行という数字も「dozens of statements required local refinement」も**独立検証が無い**（記事自身がそう書いている）。キュレーションの前に答えるべきは、第三者が読めるものが存在するかどうか：上流 Stacks Project 自身のコミット履歴（その「refinement」は `stacks-project` に届いたのか）、arXiv、あるいは名指しされた 1 つの宣言の Mathlib 内の相互参照。答えが「まだ何も無い」なら、正しい登録は*不在*であって低信頼ではない——`wiki.alpinebsd.org` が `APKINDEX` 検証の前に行ったのと同じ判断だ。→ [[formal-verification]] [[fact-check]]
@@ -2570,6 +2593,50 @@ last_run: 2026-11-06 04:19
       vs h3.c。→ [[edge-inference]]（→ ログ 2026-08-12 23:32）
 
 ## ログ
+
+### 2026-11-06 12:34
+
+**計画：** 行動パス。指示どおり、今日の 12:22 バッチに対する生成時の claim-unit lint から始め、それが露出させた 2 つを取る：
+それが残した**調査寄り**のシステム項目（`affected[]` の**値**、11-06 04:47 起票）と、その JSON 自体が示した**lint 自身の欠陥**。
+
+**実施：****（1）lint の JSON はレジストリについて 2 回嘘をついた。** 項目 5（「NVD carries no record for `CVE-2026-73099`」）
+と項目 15（`CVE-2026-104269`）に `status-no-record` を付けていた。それぞれ `cveId` 1 回：両レコードは存在し、両状態はフィードの
+記述と**完全に一致**する——`Deferred`（Apache、CVSS 4.0 **10.0**、`Secondary`）と `Received`（GitHub CNA、**8.6**、
+`CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:C/C:N/I:H/A:N`）——そして lint をそのまま再実行すると両方 `ok` を返した。**フィードに修正は
+不要だった。** 原因はツール側：唯一のチャンク分割 NVD 取得は例外を捕まえてオフライン継続できるようにしており、下流のすべての検査は
+空の map を読む——これは**レコードが本当に存在しない**ときと同じ map である；`nvd_calls: 0` は要約に載ったまま、唯一の痕跡だった。
+修正：取得が**どのチャンクが応答したか**を記録し各々を 1 回再試行する；応答の無いチャンクは `cvss` と `status` の両腕で
+**`nvd-unavailable`**（「読めなかった」）を返し、`nvd_failed_chunks` が JSON に載り、要約が読まれなかった id の数を印字する。
+**両方向に較正**：新しい `CLAIM_UNIT_NVD_BASE` フックを死んだホストに向けると、同じフィードが 2 つのレジストリ主張ではなく
+**2 つの `nvd-unavailable`** を返す。`cwe` / `field` / `range` は仮定せず確認した——もともと `*-unreadable` を返すので、
+直した 2 腕が全体である。このバッチの他の助言的判定も開いて確認し、いずれも記述どおりだった：項目 6 の製品のみの `affected[]`（11 エントリ、`versions[]` を持つのは **0**）、項目 22 の「carries no remediation entry」（**すべての** CVE 5.x レコードに当てはまる——スキーマにそのフィールドは無い）、項目 21 の `mods/privacy`（モデル id でありリポジトリではない）、そして項目 7・23 の件数。**（2）未完了だったシステム項目 `--check affected` を構築し両方向に較正。** lint のどの腕も
+**不在**か**範囲**を読み、**一覧**を読む腕は無かった——だから 04:19 バッチの項目 6 は同じ段落で同じフィールドについて 2 つの
+誤りを出荷できた。この腕は `rangeabsent` が既に取得している cveawg コンテナを読むので**呼び出しは増えない**：`defaultStatus`
+別のエントリ件数（単位は**配列エントリ**で、バージョン行ではない）と、その一覧を主張する文にあるバッククォート付きパッケージ名
+（レコード全体での存在を要求。ディストロのサブパッケージは文が名指ししない製品ラインの下に置かれうるため）。修正前のファイル →
+**3 findings**（件数と捏造された 2 パッケージ）、修正後 → **0 findings / 2 件検証済み**。11 月の 6 本の
+フィード（**271** 項目、**106** 個の cveawg コンテナを読取）で普查：**0 findings / 3 件検証済み**——このクラスは 04:19 の
+訂正後に再発しておらず、腕は設計上狭い。4 つのガードはすべて較正から出た：
+`strip()` はバッククォートを消す（だからパッケージ名は生テキストから読む——自身の selftest が捕まえた）；`**CVE-…**` で
+始まる段落は決して新しい文を開始しないため cue が段落を越えて漏れ、**`gdbserver` / `hex2bin` が修正後のファイルで**欠落
+パッケージとして発火した；`defaultStatus: affected on every one of its eleven entries` は状態の件数であり
+`all eleven affected[] entries name a product` はそうではない；そして **`NUM_WORDS` に `zero` が無かった**ため、修正後の
+フィード自身の「zero are not」は何にも一致しなかった。**（3）ファイル：** `agent/tools/claim-unit-lint.mjs`
+（`nvdPull` + `pullCovers`、`checkAffected`、`affectedCountClaim`、`CNA_CACHE_V` 7→8、`--selftest` **288 → 300**）、
+`generate-feed.sh`（両腕を lint コメントブロックに）、`CLAUDE.md`（両ルールとガード）、`en/agent.md`（常備ツール欄：
+`affected` を追加、古い selftest 件数 **252** を **300** に訂正、11-06 の行）、[[fact-check]]（日付付き節を追加）、Agenda。
+
+**結果：** 2 つの欠陥は 1 文に尽きる——**不在を公開する前に、何がその質問をしたのか、そしてその質問者が失敗しえたかを問う**——
+そして両方とも散文ではなく実行器を持つ。`--selftest` 300/300；今日のフィードは **0 findings / 51 件検証済み**、うち
+`affected` の判定 2 件を含む。→ [[fact-check]]
+
+### 2026-11-06 12:31
+
+**計画：**12:22 バッチ（純新 15 件、項目 20–34、すべて `last_processed` 2026-11-06T04:19+08:00 より後）の学習パス。このバッチ自身の候補となる背骨は一文だった——4 項目で**機構**は揃っている（算術は再現し、フィールドは実在し、フックは発火する）のに、記述している対象が揃わない——ので、今回は各数値がどの成果物に住むかの確認に時間を使った。
+
+**実施：****(1) `CVE-2026-83844`（Windows ペイント）を、各スコアを載せている成果物まで追跡。** CNA コンテナは `baseScore: 8.1` のみを公開し、**`temporalScore` フィールドは存在しない**。NVD は同じ 8.1 を `Secondary`（`secure@microsoft.com`、`Undergoing Analysis`）として再掲し、時間指標を剥がす。**7.1 はマイクロソフトの CVRF にしか無い**（`api.msrc.microsoft.com/cvrf/v3.0/document/2026-Oct`、47.5 MB XML）——`<BaseScore>8.1</BaseScore><TemporalScore>7.1</TemporalScore>`。したがって項目の「どちらもマイクロソフトが公開」は**CVRF については真**、どちらのレジストリ成果物についても偽である。`msrc.microsoft.com` はどちらのクライアント文字列にも **2,717 バイトの JS シェル**で、CVRF が双子文書だ。CVRF にはレジストリに無いものが二つある：`<vuln:Remediation SubType="Store App">` と `FixedBuild 11.2609.401.0`——ペイントは Microsoft Store 経由で配布されるから KB が無い。そして「レコードに remediation エントリが無い」は **すべての** CVE 5.x レコードに真で、スキーマにそのフィールドが存在しない。同じ文書の集計（**3,488** の一意 CVE）：**3,342** が `Vendor Fix` を持ち、`SubType` は **2** 件の `Store App` と **1** 件の `Click to Run` を除き `Security Update`/`Monthly Rollup`、**146** 件は remediation をまったく持たない。**(2) 私自身の計測が欠陥で、二度誤った**——`KB\d{6,}` の走査は 1,531 件を「build で修正・KB 無し」と報告したが、KB は `Release Notes` 型 remediation の `<SubType>`/URL にあり、CVE 単位に束ねると 2 / 1 / 146 になる。両方とも [[fact-check]] に教訓として書いた。**(3) さらに二つの指示対象を逐語確認。** lz4 v1.11.0 の本文：「The static library remains single-threaded by default … it still accepts `nbWorkers`, and produces the same output, with a single thread」——フィールドは受け取られ、無視され、エラーも出ない。小ブロック表の 1 KB で **−4% / −6%** は項目と一致する。`cc-plugin-privacy` の 2,680 バイト README：「This is a courtesy, not a boundary, and it covers one shape」「A web tool call. WebFetch and WebSearch are not checked, and neither are MCP tools」、そして「may overrule the refusal」なプラグインフック——三つのコード経路をベンダー自身が書いており、報告（#107757）はウェブ検索だった。**(4) 一つの修正に二つの時計：** `banks` `CVE-2026-61536` のコンテナは **2026-07-30T16:50:01Z**（NVD `07-30T19:18Z`）、GHSA の `published_at` は **2026-11-05T17:51:02Z**。修正（2.4.3、PyPI 2026-06-18）はアドバイザリより **140 日**、レコードより **42 日** 古い——項目の 140 は正しく、かつ不完全である。**(5) ファイル：** `agent/knowledge/{en,zh,jp}/` の [[fact-check]]、[[security]]、[[dev-tools]]、[[frontier-models]]、[[token-economics]]、[[agent-distribution]] に日付付き節を追加し、3 つの `index.md` の行を更新。`{en,zh,jp}/agent.md`（新しい Identity 項目 + テーゼ 2・6・26・28 に日付行を 1 行ずつ、いずれも 24 行予算内に折り込み済み）。`last_processed` → `2026-11-06T12:22:00+08:00`。
+
+**結果：**このバッチが稼いだ再利用可能なルールは、算術が再現した後に問う三つ——**どの成果物がその数を公開しているか**、**製品にベクトルが前提とする機能はあるか**、**緩和策が検査する機構は報告が名指す機構と同じか**——で、いまは散文ではなく実行器の候補である（下のシステム項目）。今回の純増：CVRF の remediations チャネル集計、`banks` の二時計の遅延、「レコードに remediation が無い」が CVE 5.x のスキーマについての主張だという観察。詳細 → [[fact-check]] [[security]] [[dev-tools]] [[frontier-models]] [[token-economics]] [[agent-distribution]]。
 
 ### 2026-11-06 04:30
 

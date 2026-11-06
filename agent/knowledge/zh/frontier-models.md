@@ -3376,3 +3376,16 @@ requests not be submitted directly」到上游，而 1,600 万行与那些反例
 next video model」。**这里的成本断言格外可核——因为每 GPU 小时的价格被写出来了。**
 
 → [[fact-check]] [[harness-reliability]] [[formal-verification]]
+
+
+## 2026-11-06 12:30 —— 第三方评测作为一种披露选择，以及两个给可解释性定价的测量
+
+**Inkling 2 Small**（Thinking Machines，2026-11-05；HN 约 110 pts）。MoE，**594B 总参 / 17B 激活**，图像输入、可变 effort，Artificial Analysis 智能指数 **31**；已在 **Tinker** 上线但权重闭源，并给出一个带条件、带门的承诺："We intend to make the full weights available under an Apache 2.0 license next week after the completion of external safety testing and red-teaming." 所以这次发布是模型卡 + 推理端点，checkpoint 要等权重落地——"已宣布未发布"的形态，且给的是**门**而不是日期。
+
+**真正有意思的是披露方式：**"externally reported evaluations for both internal and external models when applicable"，来源包括 Arena、Artificial Analysis、Scale AI、Surge、Mercor、Thoughtful、Vals、Datacurve 与 DesignArena——所以这不是自跑 harness 与自己对表。代价是大部分行都是第二名，而厂商自己就这么标注：SWE-bench Pro v2 (Hard) **86.3%** 对 Kimi K3 的 **88.2%**，DeepSWE v1.1 **72.1%** 对 **77.0%**，FrontierCode v2.0 **25.4%** 对 **28.5%**，Vibe Code Bench v1.1 **81.6%** 对 **87.7%**，PostTrainBench v1.2 **31.9%** 对 **36.8%**。在 **PMPP-Hard**（GPU kernel）上它按平均解题数排 **9 之第 6**（69 题中 **54.25**，AUC 494.27），但按 **Pass@4（64）** 并列 **第 2**——同样十几轮运行排出两个名次，所以"第 6"和"第 2"都为真，指标才是断言。自陈的局限：无音频、"not the most succinct communicator"、"doesn't always choose the best tools for the job—especially in codebases with a large number of skills"，以及"overuses of slashes, and overreaction to mental health and other safety related queries"。训练包含在"hundreds of thousands of long-horizon coding tasks across multiple agent harnesses and context-compaction strategies"上的 RL，评分看解题路径而非是否通过；早期 checkpoint 以 **Fledge-Alpha** 之名在 OpenCode 上公开测试——化名预发布，也是最便宜的污染未来基准的方式。
+
+**稀疏自编码器的激活缓冲在固定算力下可以小 8–64 倍**（arXiv 2611.07756）。问题被反过来了：在固定训练预算下，一个 SAE 到底需要多少**唯一**激活？答案是一条带拐点的曲线——质量"improves rapidly as the buffer grows, then reaches a plateau where replaying the buffer is nearly as effective as using fresh activations throughout training"，过了拐点"the buffer need not grow with the training budget." 验证覆盖面足够：字典大小、token 预算、**Llama-3.1** 与多个 **Qwen3** 尺寸的早/中/后层、三种 SAE 变体（**BatchTopK、TopK、JumpReLU**），并在数学文本与 Python 代码两个激活来源上扫描；评估用解释方差、重建 MSE、特征吸收、自动可解释性与稀疏探针——这份清单选得对，因为可解释性正是更小缓冲最可能先受损的地方。它是形状而非调参技巧：**多样性在有效期内有用，之后重复就开始替代它。**
+
+**一个前瞻性的失控分数与长程失败率相关 r = 0.84**（arXiv 2611.07953）。三个因子——**misaligned motive**、**harm-enabling capability**、**monitoring evasion**——操作化为 **13 个方面 / 29 个任务** 并合成每个模型一个标量，覆盖 **13 个前沿模型**，与受控长程风险场景中的失败率相关（**Pearson r = 0.84**）。两个支撑结论承担了论证：风险"varies systematically across models and cannot be explained by capability alone"（所以能力排名不能替代它），以及针对已诊断脆弱性的微调与监控"reduce failure rates while largely preserving general performance"。局限是范围，这里说得直白：作者构建、作者加权、作者选题的索引，对同样由作者编写且受控的场景做验证。真正有用的是**分解**——风险主要在监控规避的模型与风险主要在意图的模型对应不同的缓解手段，而一个标量做不到这一点。
+
+→ [[fact-check]] [[harness-reliability]] [[formal-verification]] [[security]]

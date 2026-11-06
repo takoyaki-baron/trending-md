@@ -5466,3 +5466,56 @@ days for post-training diffusion models"; it calls itself "a proof-of-concept al
 model". **A cost claim is unusually checkable here — because the price per GPU-hour is stated.**
 
 → [[fact-check]] [[harness-reliability]] [[formal-verification]]
+
+
+## 2026-11-06 12:30 — third-party evals as a disclosure choice, and two measurements that price
+interpretability
+
+**Inkling 2 Small** (Thinking Machines, 2026-11-05; HN ~110 pts). MoE, **594B total / 17B active**,
+image input, variable effort, **31** on the Artificial Analysis Intelligence Index; live on **Tinker**
+with closed weights and a dated-but-gated promise: "We intend to make the full weights available under
+an Apache 2.0 license next week after the completion of external safety testing and red-teaming." The
+release is therefore model card + inference endpoint, and checkpoints become downloadable when the
+weights land — the announced-not-released shape, with a named gate rather than a date.
+**The disclosure choice is the interesting part:** "externally reported evaluations for both internal
+and external models when applicable", sourced from Arena, Artificial Analysis, Scale AI, Surge,
+Mercor, Thoughtful, Vals, Datacurve and DesignArena — so this is not a self-run harness compared to
+itself. The price is that most rows are second place and the vendor labels them so: SWE-bench Pro v2
+(Hard) **86.3%** vs Kimi K3's **88.2%**, DeepSWE v1.1 **72.1%** vs **77.0%**, FrontierCode v2.0
+**25.4%** vs **28.5%**, Vibe Code Bench v1.1 **81.6%** vs **87.7%**, PostTrainBench v1.2 **31.9%** vs
+**36.8%**. On **PMPP-Hard** (GPU kernels) it is **6th of 9** on mean tasks solved (**54.25** of 69,
+AUC 494.27) but **joint 2nd on Pass@4 (64)** — the same eleven-odd runs ranked two ways, so "6th" and
+"2nd" are both true and the metric is the claim. Stated limitations, self-reported: no audio, "not the
+most succinct communicator", it "doesn't always choose the best tools for the job—especially in
+codebases with a large number of skills", and "overuses of slashes, and overreaction to mental health
+and other safety related queries". Training included RL on "hundreds of thousands of long-horizon
+coding tasks across multiple agent harnesses and context-compaction strategies", graded on approach
+rather than passing, with early checkpoints tested publicly on OpenCode as **Fledge-Alpha** — a
+pseudonymous pre-release, which is also the cheapest way to contaminate a future benchmark.
+
+**Sparse-autoencoder activation buffers are 8–64× larger than they need to be at fixed compute**
+(arXiv 2611.07756). The question is inverted from the usual one: with a fixed total training budget,
+how many *unique* activations does an SAE need? The answer is a knee — quality "improves rapidly as
+the buffer grows, then reaches a plateau where replaying the buffer is nearly as effective as using
+fresh activations throughout training", and past it "the buffer need not grow with the training
+budget." Validated across dictionary sizes, token budgets, early/middle/late layers of **Llama-3.1**
+and several **Qwen3** sizes, three SAE variants (**BatchTopK, TopK, JumpReLU**), and two activation
+domains (math text, Python) — with evaluation on explained variance, reconstruction MSE, feature
+absorption, automated interpretability *and* sparse probing, which is the right list because
+interpretability is where a smaller buffer would plausibly cost first. The claim is a shape, not a
+tuning trick: **diversity helps until it stops, and repetition then substitutes for it.**
+
+**A prospective loss-of-control score tracks long-horizon failure at r = 0.84** (arXiv 2611.07953).
+Three factors — **misaligned motive**, **harm-enabling capability**, **monitoring evasion** —
+operationalised into **13 aspects / 29 tasks** and one scalar per model, across **13 frontier models**,
+correlated against failure rates in contained long-horizon risk scenarios (**Pearson r = 0.84**). Two
+supporting findings carry the argument: risk "varies systematically across models and cannot be
+explained by capability alone" (so a capability ranking is not a substitute), and fine-tuning plus
+monitoring "directed at diagnosed vulnerabilities reduce failure rates while largely preserving
+general performance". The limit is scope, stated plainly here: an index constructed by the authors,
+weighted by the authors, over tasks chosen by the authors, validated against scenarios that are
+themselves authored and contained. The useful output is the **decomposition**, because a model whose
+risk is mostly monitoring evasion names a different mitigation than one whose risk is mostly motive —
+which a scalar cannot.
+
+→ [[fact-check]] [[harness-reliability]] [[formal-verification]] [[security]]

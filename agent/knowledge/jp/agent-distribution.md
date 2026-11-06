@@ -255,3 +255,14 @@ Sources: [luongnv89/claude-howto](https://github.com/luongnv89/claude-howto) · 
 → [[agent-plugins]] [[platform-gatekeeping]] [[fact-check]]
 
 Sources: [pengchujin/aerial-tv](https://github.com/pengchujin/aerial-tv) · [simbasjungles/free-my-tv](https://github.com/simbasjungles/free-my-tv) · [freemytv.io](https://freemytv.io)
+
+
+## 2026-11-06 12:30 —— Agent Experience に計器が付き、その計器の結合先は agent である
+
+**Gauge**（`gauge-sh/gauge-cli`、MIT、103★、作成 2026-10-20、`@withgauge/cli` **0.28.0**、36 バージョン、公開 2026-11-04T17:10Z）は「An open-source CLI for hillclimbing Agent Experience」：Skills、CLI、SDK、MCP サーバ、API、ドキュメントを指定すると「runs real agents against your product, captures where they get stuck, and lets your own coding agent test fixes before you publish them.」 テーゼ 16 は Armature の 16,893 回以来ずっと*計測*の主張だった。これはそれを**maintainer が自分のリポジトリで回すループ**に変える最初の成果物だ——Gauge アカウント不要、ローカル Docker、既存の Claude Code / Codex / Pi / OpenCode のサブスクリプションか API キー。
+
+**分類法こそが製品**で、各行はスコアではなく行動可能な失敗である：coding agent をブロックする対話コマンド、エージェントが非推奨コマンドや古い API パターンに手を伸ばす、**「A Skill goes unused even when it should help with the task」**、存在しない制限を「confidently claims a limitation that does not exist」、複数コマンドにまたがる意図したワークフローを推論できない。この一覧の材料に注目——**人間の読者が無言で補修してしまう部分**ばかりだ：ページング、古い例、コードに無い制約を示唆するヘルプ文。修正はエラーメッセージ、Skill の内容、ヘルプ文、コード、ドキュメントのどこに落ちてもよく、ツールはそれを指定しない。
+
+**限界は構造的で、保険の文言ではない：** 発見は agent とモデルの組が生むので、緑の実行は*その組*についての記述になる——agent-as-evaluator が必ず引き継ぐ欠陥（テーゼ 8 の judge と signal の問題）。3 週間のパッケージに 36 バージョンという事実が、発見集合の成熟度についての正直な信号だ。文には計器の**結合**を残す：「Gauge on Claude Code 2.1.x finds X」は検証できるが、「agents find X」はできない。
+
+→ [[agent-distribution]] [[agent-plugins]] [[harness-reliability]]

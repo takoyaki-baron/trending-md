@@ -2236,3 +2236,82 @@ status: "affected"}`、`defaultStatus: unaffected` を明記している。レ�
 持ち運べるルール：**書き留めた規則が再発し続けるとき、次の一手は規則を大きくすることではなく、狭くすることだ。** このチェックの良し悪しは cue の語彙で決まり、上のガードはどれも散文の規則が誤って旗を立てた文である。
 
 → [[disclosure-lag]] [[security]]
+
+
+## 2026-11-06 12:30 —— 機構は検証済み、**指示対象**は未検証
+
+同じバッチの 4 項目で、機構は通ったが、それが語っている対象は通らなかった。算術は再現でき、フィールドは実在し、フックは発火した——どれも「その主張が製品を記述している」証拠にはならない。
+
+**1. 完璧なベクトルが、そう攻撃できない製品を指している。** `CVE-2026-83844`（Windows ペイント）は `CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:H/I:H/A:H/E:U/RL:O/RC:C` を持ち、**8.1** base・**7.1** temporal が正確に出る。どの数字がどこに住むかを一次確認した：CNA コンテナ（`cveawg`、`assignerShortName: microsoft`）は `baseScore: 8.1` のみで、**`temporalScore` フィールドは存在しない**。NVD は同じ 8.1 を `secure@microsoft.com` の `Secondary` として再掲し、時間指標は剥がされている。**7.1 はマイクロソフトの CVRF にしか無い**——`api.msrc.microsoft.com/cvrf/v3.0/document/2026-Oct`（47.5 MB の XML）の `<vuln:CVSSScoreSets><vuln:ScoreSet>` に `<BaseScore>8.1</BaseScore><TemporalScore>7.1</TemporalScore>` がベクトルと並ぶ。つまり「どちらもマイクロソフトが公開」は**CVRF については真**で、どちらのレジストリ成果物についても偽である——同じ文の正誤が、名指す文書で決まる。
+
+指示対象の問いはこれとは別で、どれも答えていない：CNA の説明は「Out-of-bounds read in Windows Paint allows an unauthorized attacker to execute code over a network」だが、ペイントはポートを開かないデスクトップのビットマップエディタだ。**同じレコード内で CISA の ADP SSVC は `Automatable: no`** と書き、ベンダーのベクトルは `AV:N`/`UI:N` と言う——二人の enrichment が**一つのレコードの内部**で到達性について食い違っており、どちらも自分の口径では誤りではない。
+
+**2.「レコードに KB が無い」は**チャネル**の話で、CVE 5.x に remediations フィールドは無い。** 項目はサービスもプロトコルも KB も書かれていないと指摘した。前半は真、後半は**すべての** CVE 5.x レコードについて真——空になりうる `remediations` フィールドが存在しない。チャネルは CVRF にある：`<vuln:Remediation Type="Vendor Fix"><vuln:SubType>Store App</vuln:SubType>`、`<vuln:FixedBuild>11.2609.401.0</vuln:FixedBuild>`、`apps.microsoft.com` の URL。ペイントは Store 経由で配布されるから KB が無い——パッチチューズデイ番号の無い修正は、未修正ではない。
+
+同じ文書での集計（**3,488** の一意 CVE エントリ）：**3,342** が `Vendor Fix` を持つ。`SubType` は **2** 件の `Store App` と **1** 件の `Click to Run` を除き、すべて `Security Update` か `Monthly Rollup`。**146** 件は remediation をまったく持たない。ペイントのチャネルは **3,488 中 2（0.06%）**——実在する形だが極めて稀で、「KB が無い」という文が誘う読みとは正反対である。
+
+**3. 私の計測自体が欠陥で、しかも二度。** 最初の正規表現（エントリ内のどこかの `KB\d{6,}`）は **1,531** 件を「build 番号で修正・KB 無し」と報告した。KB は `Release Notes` 型 remediation の `<vuln:SubType>`（例 `5127648`）や URL に住んでいるので、その 1,531 は私のパターンの件数だ。数字のみの subtype を除き CVE 単位で束ね直して、上の 2 / 1 / 146 になる。同じファイル、同じ分、二つの結論、マイクロソフトについてのものは一つだけ。
+
+**4.「マルチスレッドが `liblz4` に入った」は一方のビルドで真、他方で無言の偽。** v1.11.0 のリリース本文：`Multi-threading support is enabled by default in the dynamic library. The static library remains single-threaded by default, so that it doesn't require linking with -pthread: it still accepts nbWorkers, and produces the same output, with a single thread.` 静的ビルドは**フィールドを受け取り、無視し、エラーも出さない**——偽の側に信号が無いことが、言い換えではなく逐語で引く理由である。
+
+**5. 見当違いの形を検査し、それを自分で書いている緩和策。** `cc-plugin-privacy` の README（2,680 バイト、確認済み）：`The test is two word matches over the whole input. There is no parser, on purpose`、`This is a courtesy, not a boundary, and it covers one shape`、そして自ら挙げる「通ってしまうもの」の一覧に `A web tool call. WebFetch and WebSearch are not checked, and neither are MCP tools.` 報告（#107757）の漏洩経路は**ウェブ検索**だった。停止手段の一覧には `A hook of an installed plugin, which sits above this one: on tool.check it may overrule the refusal.` も含まれる。報告・緩和・迂回は三つの別経路で、ベンダーは三つとも書いている。
+
+**6. 脆弱性が使っていない層を直した修正。** `CVE-2026-61536`（`banks`、7.5、`GitHub_M`）：`CVE-2026-44209` の修復は `Environment` を `SandboxedEnvironment` に替えるものだったが、生きている経路は `_body_to_messages` → `Tool.import_path` → `importlib.import_module` + `getattr`。アドバイザリ自身がなぜ無意味かを書いている——悪意ある JSON は `is plain text in the rendered template body — it requires no Jinja attribute access, so the sandbox is irrelevant.`
+
+**持ち運べる検査。** 算術が再現したあとに、安い問いを三つ：**(a) その数字を公開しているのはどの成果物か**（CVRF / CNA コンテナ / NVD は同じバグで違う答えを返す）；**(b) 製品にベクトルが前提とする機能はあるか**（待ち受けサービス、UI、ネットワーク境界）；**(c) 緩和策が検査する機構は、報告が名指す機構と同じか**。どれも 1 回の取得で、三つとも「再現するスコア」が通してしまう形を捕まえる。
+
+**二つの時計、一つの修正、数字は名指す成果物で決まる。** `banks`：CVE コンテナは **2026-07-30T16:50:01Z** 公開（NVD `published` は **07-30T19:18:34Z**）、GHSA の `published_at` は **2026-11-05T17:51:02Z**——98 日差。修正（2.4.3、PyPI `2026-06-18T14:41:34Z`）はアドバイザリより **140 日**、レコードより **42 日** 古い。どちらも真で、成果物を言わない遅延はどちらでもない。
+
+→ [[security]] [[vuln-supply]] [[disclosure-lag]] [[dev-tools]]
+
+## 2026-11-06 12:34 —— 失敗したリクエストはレジストリについての主張ではなく、一覧には**値**がある
+
+2 つの欠陥は、フィードではなく lint 自身の出力を読むことで見つかった。そして同じ形が 2 つの層で起きている：
+**チェッカーが世界についての事実を報告したが、それはリクエストについての事実だった。**
+
+**1. 存在するレコードに `status-no-record` を付けた。** 12:22 の実行の JSON は 2 つの判定を抱えていた：項目 5
+「NVD carries no record for `CVE-2026-73099`」（Apache Juneau）と、項目 15 の `CVE-2026-104269`（ModSecurity）に対して同じもの。
+両レコードは存在し、両方の状態主張は**正しい**——`Deferred` と `Received`、それぞれ `cveId` 1 回で確認——そして数分後に
+そのまま再実行すると両方 `ok` を返した。仕組み：実行ごとに 1 回の NVD 取得は 25 id のチャンクに分かれ、例外を投げたチャンクは
+オフライン継続のために捕まえられ、下流のすべての検査が**空の map——レコードが本当に存在しないときと同一の map**——を読む。
+要約は `nvd_calls: 0` を印字し続けており、それが唯一の痕跡だったが、誰も読まなかった。修正は**どのチャンクが応答したか**を
+記録すること：応答の無いチャンクは `nvd-unavailable`（「読めなかった」）を返し、要約は読まれなかった id の数を印字する。
+`CLAIM_UNIT_NVD_BASE` を死んだホストに向けて**両方向に較正**——同じフィードが、2 つのレジストリ主張ではなく 2 つの
+`nvd-unavailable` を返す。このフックが存在する唯一の理由はこれである：主張されるだけで一度も走らされていない失敗経路は、
+誰も走らせていない失敗経路である。
+
+**2. 1 つのフィールドについて 2 つの誤った主張を含む段落が、潔白と判定された。** 04:19 バッチの項目 6 は、CNA の 11 エントリ
+**すべて**が `defaultStatus: affected` だと述べ（実際は **8 affected / 3 `crash` unaffected**）、`gdb-headless` と
+`gdb-gdbserver` を影響パッケージとして挙げていた（**4 レコードすべてで 0 回**。実際の一覧は `gdb`、`crash`、
+`gcc-toolset-14-gdb`、`gcc-toolset-15-gdb`）。lint のどの腕も**不在**か**範囲**を読み、**一覧を読む腕は 1 つも無かった**ため、
+両方とも不可視だった——`rangeabsent` の腕は同じコンテナを開きながら、範囲が述べられているかしか問うていなかった。
+`--check affected` はいま、その腕が既に支払っている cveawg コンテナに対して 2 つを検査するので**呼び出しは増えない**：
+`defaultStatus` 別のエントリ件数（単位は**配列エントリ**——文が使う単位は「エントリ」であり、バージョン行ではない）と、
+その一覧を主張する文にあるバッククォート付きパッケージ名（アイテムのいずれかのレコードに `packageName` として存在することを
+要求。ディストロのサブパッケージは文が名指ししない製品ラインの下に置かれうるので、不在はレコード全体で確認する）。
+
+**4 つのガードは設計ではなく較正から出ており、どれも残す価値がある：**
+
+- **`strip()` はバッククォートを消す**。そしてパッケージ名こそバッククォートが印を付けるもの——初版は剥がした後のテキストを
+  読み、候補を 1 つも見つけられなかった。自身の selftest が最初の実行で捕まえた。新しい腕は、信じる前に固定する。
+- **`**CVE-…**` で始まる段落は決して新しい文を開始しない。** `sentences()` は `[.!?]` と空白で切るので、文頭の markdown
+  太字が境界を飲み込み、前段落の cue が一覧と無関係な 2 つのバッククォート語に届いた——`gdbserver` と `hex2bin`、
+  脆弱性の説明文が名指しするコンポーネントが、**修正後のアイテムで**欠落パッケージとして発火した。修正は、候補自身の文が
+  その一覧を*主張*していることを要求する形（直接のフィールド名、またはコンテナが既に持つパッケージ名）。代償は
+  「捏造されたパッケージ名だけを書いた文」が沈黙することであり、この代償は**意図して**払う——正しいファイルで誤検出を
+  繰り返すよりましだから。
+- **`defaultStatus: affected on every one of its eleven entries` と `all eleven affected[] entries name a product` は
+  別の主張である**——前者は状態を数え、後者は全エントリがバージョンを持たないと言う。両者を分けるのはパターン内の状態語だけで
+  あり、修正後のアイテムは後者を使っている。
+- **`NUM_WORDS` に `zero` が無かった。** 「eleven entries are affected and **zero** are not」は何にも一致しなかった——
+  修正後のフィードは、読み手が解析できない数詞で自分の訂正を書いていた。この表を読む両腕はもともと 0 を防いでいるので、
+  追加は挙動の変更ではなくギャップの補填である。
+
+双方向の結果：**修正前**のファイルは 3 findings（件数と 2 つの捏造パッケージ）、**修正後**は 0 findings / 2 件検証済み。
+`--selftest` **288 → 300**。
+
+**両方の欠陥に対する 1 つのルール：** 不在を公開する前に、**何がその質問をしたのか**——リクエスト、チャンク、パーサ、
+剥がされた文字列——と、**その質問者が失敗しえたか**を問う。`nvd_calls: 0` は最初からファイルにあり、その一覧主張が
+関わるコンテナもそこにあった。どちらも読まれなかったのは、走った検査が必要とされた検査ではなかったからである。
+
+→ [[security]] [[vuln-supply]] [[disclosure-lag]]

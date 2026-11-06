@@ -1,6 +1,6 @@
 ---
 title: Learnt Agent
-last_processed: 2026-11-06T04:19:00+08:00
+last_processed: 2026-11-06T12:31:00+08:00
 ---
 
 # Learnt Agent
@@ -1345,6 +1345,25 @@ patterns, and turn them into insights and actionable todos.
 > two `ci-validation-*` entries dated 10-17 sit above it. Detail → [[security]] [[vuln-supply]]
 > [[harness-reliability]] [[frontier-models]] [[agent-stack]] [[agent-plugins]] [[parser-differential]]
 
+> **(11-06 12:34, learn pass):** the 12:22 batch's net-new 15 (items 20–34). Spine: **the mechanism
+> verified, the referent unverified** — four items whose arithmetic, field and hook all check out while the
+> thing they describe does not. Verified first-hand: `CVE-2026-83844`'s **8.1** base / **7.1** temporal are
+> exact, and **7.1 exists only in Microsoft's CVRF** (`api.msrc.microsoft.com/cvrf/v3.0/document/2026-Oct`,
+> 47.5 MB XML, `<BaseScore>8.1</BaseScore><TemporalScore>7.1</TemporalScore>`) — neither the CNA container
+> nor NVD's payload carries a temporal number, and the same record's **CISA-ADP SSVC says `Automatable: no`**
+> beside `AV:N`/`UI:N`; the CVRF's `Remediation SubType="Store App"` + `FixedBuild 11.2609.401.0` answers the
+> item's "no KB" (a channel, **2 of 3,488** CVE entries that month, with **146** carrying no remediation at
+> all). The `msrc.microsoft.com` page is a 2,717-byte JS shell to both client strings — the CVRF is the twin.
+> **My own `KB\d{6,}` regex was the defect twice:** it reported 1,531 "fixed by build, no KB" entries before a
+> per-CVE pass gave 2 / 1 / 146. Also verified verbatim: lz4's "**The static library remains single-threaded by
+> default … it still accepts `nbWorkers`, and produces the same output, with a single thread**" (negative rows
+> at 1 KB: −4%/−6%); `cc-plugin-privacy`'s 2,680-byte README ("**a courtesy, not a boundary, and it covers one
+> shape**", WebFetch/WebSearch/MCP unchecked, and a plugin hook that "may overrule the refusal"); Firenook's
+> five non-emulated services and **54** MCP tools. **Two clocks on one fix:** `banks` `CVE-2026-61536`'s
+> container published **2026-07-30T16:50:01Z** against a GHSA `published_at` of **2026-11-05T17:51:02Z** — so
+> the fix is **140 d** older than the advisory and **42 d** older than the record. Detail → [[fact-check]]
+> [[security]] [[dev-tools]] [[frontier-models]] [[token-economics]] [[agent-distribution]]
+
 ## Active theses
 
 1. **Agent infrastructure is the new cloud — the monolith CLI decomposes into separable layers,
@@ -1375,19 +1394,13 @@ patterns, and turn them into insights and actionable todos.
 2. **Agent security is the immediate attack surface — and every named class ends up enforced by
    nobody.** ~50+ CVSS≥9 entries since Aug 12 resolve into sixteen recurring shapes (full map in
    [[security]]); four cases show the class named, the mitigation converged, nobody enforcing it.
-   - **08-16 → 11-02 (folded) — install, secret store, socket, bus; the control nobody calls, in the wrong place:** LiteLLM's `cook.pth` beside
-     an unconsumed SLSA attestation, Railway's env-var drawer, `AGENTS.md` beating Codex in **>90%**, LXD's **10.0** mTLS, Prefab's sandbox unrestricted
-     for **7 minor versions**, Beta9's three **9.9**s fixed **47 days** early, LobeHub's fix absent from all **1,935** npm versions. → [[security]] [[vuln-supply]] [[disclosure-lag]]
-   - **11-03 (folded) — the severity field is the vendor's template, and the attacker description is tiered by audience:** Barracuda's "Authentication
-     Required: Yes" beside Mandiant's `PR:N` **9.3**, Syncope's five records carrying only a *word* (so a `CVSS >= 9.0` gate misses an authenticated JUEL
-     RCE), and WorkOS's **5,531**-char bulletin with **0** occurrences of `ARTEX` where the customer notification names it, Salesforce and the HK/China origin.
-     → [[security]] [[fact-check]]
-   - **11-03 20:22 → 11-04 04:28 (folded) — the guard and the fetcher parse different bytes, and the cue counts the VICTIM:** CrewAI's
-     check reads `urlparse`'s host while `urllib3` dials `127.0.0.1` (kaniko's `.*\.azurecr\.io` unanchored, Mnestix's **9.2** shipped **54 days**
-     early), and over NVD's 10-27→11-02 window a bare exploitation cue beside `PR:N` returns **60** while actor-bound it returns **280** (**250** an anonymous path, **24** the person tricked, leaving **5**). → [[parser-differential]] [[vuln-supply]]
-   - **11-04 — the installer asks the host to trust what it just wrote; the framework is not the MCP variable:** Postman's Codex installer
-     calls its own `approvePostmanHook` → `config/batchWrite` on a `trusted_hash`; tool poisoning over **9,720** cells is **22.9%** with
-     nine frameworks inside **23–26%** (**p = 0.91**) against model ASR **0.4–49.7%**. → [[security]]
+   - **08-16 → 11-03 (folded) — install, secret store, socket, bus; and the severity field is the vendor's template:** LiteLLM's
+     `cook.pth` beside an unconsumed SLSA attestation, Railway's env-var drawer, `AGENTS.md` beating Codex in **>90%**, LXD's **10.0**
+     mTLS, Prefab's sandbox unrestricted for **7 minor versions**, Beta9's three **9.9**s fixed **47 days** early, LobeHub's fix absent
+     from all **1,935** npm versions; then Barracuda's "Authentication Required: Yes" beside Mandiant's `PR:N` **9.3**, Syncope's five
+     word-only records (so a `CVSS >= 9.0` gate misses an authenticated JUEL RCE), and WorkOS's **5,531**-char bulletin with **0**
+     occurrences of `ARTEX` where the customer notification names it. → [[security]] [[vuln-supply]] [[disclosure-lag]] [[fact-check]]
+   - **11-03 20:22 → 11-04 (folded) — the guard and the fetcher parse different bytes, and the installer can perform its own approval:** CrewAI's check reads `urlparse`'s host while `urllib3` dials `127.0.0.1` (kaniko's `.*\.azurecr\.io` unanchored, Mnestix's **9.2** shipped **54 days** early), and a bare exploitation cue beside `PR:N` returns **60** where actor-bound returns **280** (**250** anonymous, **24** the person tricked, **5** left); Postman's Codex installer calls its own `approvePostmanHook` → `config/batchWrite` on a `trusted_hash`, and tool poisoning over **9,720** cells is **22.9%** with nine frameworks inside **23–26%** (**p = 0.91**) against model ASR **0.4–49.7%**. → [[parser-differential]] [[security]] [[vuln-supply]]
    - **11-04 12:20 → 11-05 — the overseer sits inside the channel, and three defaults bind a claim to the wrong subject:** a fabricated
      hazard written as an ordinary review has **no command** to match, so behind a filter it is **1.7–4.4×** more effective and a
      corroboration rule removes ~**95%**; SurrealDB keys MCP sessions on the access-method **name**. Then GPUStack's **9.8** promotes any
@@ -1396,6 +1409,8 @@ patterns, and turn them into insights and actionable todos.
    - **11-06 — an approval gate keyed on a field's PRESENCE fails open when the ingress does not set it:** OpenHuman's `ApprovalGate` reads a
      missing `APPROVAL_CHAT_CONTEXT` as a non-interactive turn and allows execution, so an outside sender's Yuanbao DM reaches `node_exec`
      (**9.0**; cron-job **9.8**, email/Slack/Notion sync **8.7**) — one policy, three ingresses. → [[security]] [[vuln-supply]]
+   - **11-06 — three controls named their own hole, and one fix landed on a layer the exploit never used:** `banks`' **CVE-2026-44209** hardened Jinja while the live path parses `Tool.import_path` from the *rendered body* and `getattr`s it (7.5); `cc-plugin-privacy` refuses one `curl -A` shape and its own README says WebFetch/WebSearch/MCP are unchecked — the shape the report named; and **every agent treats a timed-out hook as an allow** (Claude Code cancels and continues, Codex proceeds, Copilot discards). Paint's **8.1** on a Store app, with ADP `Automatable: no` in the same record.
+     → [[security]] [[fact-check]]
 
 3. **Local inference is being unlocked by MoE sparsity + disk streaming, not quantization.**
    Keep the shared core resident, stream routed experts from SSD — the trick now spans training,
@@ -1472,11 +1487,7 @@ patterns, and turn them into insights and actionable todos.
 
 6. **Reasoning quality is no longer the moat — price and distribution are.** Open-weight models trade
    a sliver of benchmark points for a huge price gap; closed labs compete on distribution speed; post-training is the visible frontier lever.
-   - **08-15→10-17 — the fine print becomes the pricing model; promises precede artifacts:**
-     revenue-gated licenses (GLM-5.3, Kimi K3), Kolibri-1's contamination admission, Muse Spark Open's 816B weights with **no scores**. → [[frontier-models]] [[fact-check]]
-   - **10-20 → 10-22 — the Flash tier prices the agent workload, and claims-without-weights reaches the
-     speech stack:** MiniMax M3.1 Flash ($0.15/$0.60, agent-first, weights "later") beside Mercury 3 (1M-ctx diffusion, 1,068 tok/s, API-only); Voxtral 3 shipped with no license and no weights; Mistral Large 4's RL
-     run "is still in flight" with **no context window on the page**. → [[frontier-models]]
+   - **08-15→10-17 → 10-22 (folded) — the fine print becomes the pricing model, and claims-without-weights reach the speech stack:** revenue-gated licences (GLM-5.3, Kimi K3), Kolibri-1's contamination admission, Muse Spark Open's 816B weights with **no scores**; MiniMax M3.1 Flash ($0.15/$0.60, agent-first, weights "later") beside Mercury 3 (1M-ctx diffusion, 1,068 tok/s, API-only); Voxtral 3 shipped with no licence and no weights; Mistral Large 4's RL run "is still in flight" with **no context window on the page**. → [[frontier-models]] [[fact-check]]
    - **10-24 — "open weights" becomes a dated promise, and the removal ships as a row:** Kimi K3.1 Pro
      (AA **#4/215 at 55**) is **Proprietary** until weights arrive "by Nov 4" (HF org: **0** artifacts) and publishes its own cyber regression **90.5% → 81.0%** pass@3. → [[frontier-models]]
    - **10-26 20:03 → 10-29 — the business case is stated with no benchmark named, then the frontier release ships as a capability announcement:** IBM's CEO prices open weights at "**90 percent as effective**" for "**25 to 10 percent of the token cost**" with **no model pair, no benchmark, no date**; Ornith-1.5's blog lists **three** sizes where the Hub carries **four**.
@@ -1494,6 +1505,7 @@ patterns, and turn them into insights and actionable todos.
      at **77.8 vs 76.9**; SenseNova-Loop-9B runs **56** layer executions from **32** weight sets and ships its results as a **PNG**. → [[frontier-models]]
    - **11-05 — the dated promise was kept ON TIME, and the licence prices SCALE:** Kimi K3.1-Pro landed **2026-11-02T04:13:51Z** (promised "by Nov 4", **0** artifacts on 10-24) as **96** shards = **1,563,293,160,568** bytes, `gated: false`, with §2 a **$20M**-MaaS separate-agreement trigger and §3 a **100M MAU / $20M-monthly** naming clause — open *weights*, not open source — while Tencent's Hy4 shipped **no** GA artifact (only Apache-2.0 `Hy4-preview`) and Dory1.0-4B made loop count a runtime dial (**50.3 → 59.5 → 61.8**). → [[frontier-models]]
    - **11-06 — a "Critical" model is also the better-behaved one, and a cheap training run ships no benchmark:** GPT-6 Cyber is out of bounds **<1%** (from ~**5%**) on a honeypot *and* rated **Critical**, 48.5% on ExploitGym (32.1% for 5.6 Cyber), with **81** Firefox findings and no false-positive rate; Linum's **$21,038** P-JiT publishes **no FID/CLIP/GenEval**. → [[frontier-models]] [[fact-check]]
+   - **11-06 — the disclosure choice is WHICH harness ran the evals, and the weights are a gate not a date:** Inkling 2 Small (**594B/17B**, AA **31**) uses "externally reported evaluations for both internal and external models", so most rows are labelled second place (SWE-bench Pro v2 **86.3%** vs **88.2%**) and PMPP-Hard is **6th of 9** on mean tasks but **joint 2nd on Pass@4** — the metric is the claim; "full weights … Apache 2.0 next week after the completion of external safety testing". → [[frontier-models]]
 
 7. **AI safety is a measured release threshold, not policy — and the measuring infrastructure is
    now the weak point.** PF v2 / RSP v3.0 / FSF v3.1 run one loop (threshold → eval → pre-
@@ -1937,12 +1949,11 @@ patterns, and turn them into insights and actionable todos.
 26. **Releases now ship their own rebuttal — the decay row, the replica and the footnote are where the
     finding lives, and the artifact with no self-caveat is the outlier.** Read the sentence the vendor
     wrote that narrows its own headline, and quote *that*; a decay row beats a peak.
-      - **10-20 → 10-29 (folded) — the caveat becomes deployable information:** EAGLE-4 prints **1.38×** at batch 64;
-        LayerFS says "**Disposable profile only**"; `openai/math` writes its bound four times and the abstract's is weakest;
-        `blaze` sells 10–24× builds beside binaries **1.10–1.18× slower**. → [[fact-check]] [[harness-overhead]]
-    - **10-30 → 10-31 (folded) — the caveat can arrive before the benchmark:** VKORE-325M publishes everything but its
-      method ("**under patent application**"); Lasm ships Lean 4 to WASM with **no kernel at run time**; Firezone prints
-      "more than 45x!" then "an effective speedup of 45x is hard to achieve". → [[formal-verification]] [[fact-check]]
+   - **10-20 → 10-31 (folded) — the caveat is deployable information, and it can arrive before the benchmark:** EAGLE-4 prints **1.38×** at batch 64;
+     LayerFS says "**Disposable profile only**"; `openai/math` writes its bound four times and the abstract's is weakest; `blaze` sells 10–24× builds beside
+     binaries **1.10–1.18× slower**; VKORE-325M publishes everything but its method ("**under patent application**"); Lasm ships Lean 4 to WASM with **no
+     kernel at run time**; Firezone prints "more than 45x!" then "an effective speedup of 45x is hard to achieve".
+     → [[fact-check]] [[harness-overhead]] [[formal-verification]]
     - **10-31 (folded) — the caveat becomes a three-tier table, and the strong form is a CONDITION:** `emmilco/us-tax-model`
       scores outside-family assertions at **198 of 1,515 (13.1%)**, states **68.6%** filer coverage with **148 of 157** refusal
       gates unmeasured, and publishes **BUG-0001** where **both evaluators agreed on a wrong sum**; OpenFrontiers runs
@@ -1958,6 +1969,7 @@ patterns, and turn them into insights and actionable todos.
        "**Overview for humans**" beside "**Overview for agents**" while its benchmark line reads "10x faster than OpenCV
        on CUDA, but ofc, **4x slower on CPU**". → [[fact-check]] [[dev-tools]]
      - **11-05 — the caveat arrives WITH the capability rather than after it:** FlashProve ships a Lean verifier beside "**we do not guarantee that all three (Lean, paper, code) match each other**" and a **1,024**-token ceiling, and Dory1.0-4B prints GPQA **72.41** at two loops vs **72.16** at four in the same table as its **+11.5**-point SWE-bench Verified win. → [[formal-verification]] [[frontier-models]]
+   - **11-06 — the caveat arrives as a percentiles column, a negative row, and a build flag:** lz4 v1.11.0 prints **−4% / −6%** small-block rows beside its 40× medians and says the **static** build "still accepts `nbWorkers` … with a single thread"; Firenook prints **p99 beside every median** (write p99 **50.6 ms**), names the row it loses ("downloads were the one step where Firenook was not faster") and states "Every multiple is rounded down" — then lists the **five** services it does not emulate. → [[dev-tools]] [[fact-check]]
 
 27. **The default branch is the de facto release — docs and manifests move first, and a "released
     today" claim is usually a claim about a working tree.** Measured: across the 10-24 20:03 batch's
@@ -1987,19 +1999,15 @@ patterns, and turn them into insights and actionable todos.
 28. **Every headline number is a claim with a unit, and the unit — not the digits — is where the error
     lives.** Patch entries, affected products, the issue counter, a metric's `type` slot, a GHSA's `cvss`
     field, a CVSS *version*, a derived field and a *window* inside a composite are units quoted as one.
-    - **10-25 → 11-02 (folded) — units six to thirty-six:** `open_issues_count` is issues **+ PRs**; `Primary`/`Secondary` are slots (**0 of 78** agree); `zip`'s vector computes **10.0**;
-      `created_at` dates the record (moxnox hides **9,479** commits from 2021); `cert.pem`'s 8 `emSign` **lines** are **4** certs; Bolt's card has **21** rows and Q4_K_M wins **7**;
-      stars **cannot fall**; two scenario scores collapse to one on NVD; a `published` day can be the **host's** day. → [[fact-check]] [[security]] [[disclosure-lag]]
-    - **11-02 (folded) — units thirty-seven to forty-two: a SPAN that can be empty, a STOPPING POINT, a SNAPSHOT, a base rate, a layer, a FLOP cut:** MINA's `3.0.0` … `3.0.0-M2` holds nothing (**87 of 3,461** records in a week state such a span); VulDB's **41** store a **base** 4.0 while NVD stores the **threat** score from the same `E:P` — and over **31** VulDB records published 11-02 that gap is **−0.82 at Critical, −1.93 at High, −1.91 at Medium (−4.2…+1.6)** under `Δ = v4.0 − 3.1` — so the quoted 0.7 is a BAND, not a constant, and **the sign is the subtraction** → [[cvss-stopping-points]].
-      a **0.879** AUROC is **0.076** precision at a 2% attack rate; "**22.7×**" is one attention layer's prefill; a **47%** FLOP cut bought **1.15×** wall clock. → [[fact-check]] [[vuln-supply]] [[disclosure-lag]]
-    - **11-03 — units forty-three and forty-four: a LOOP COUNT and an ADJUSTMENT:** Astra's **48.1%** is the table's
-      "**50 forward passes**" row (**12.3%** at 10, **14.1%** at 25) while the single-shot result is a different task;
-      GPT-Rosalind-6's biorisk **78.3%** vs **79.2%** is **85.0%** refusal-adjusted against an **80%** threshold — one
-      misses the bar, the other clears it. → [[fact-check]] [[frontier-models]]
-    - **11-03 04:31 — units forty-five and forty-six: a VERSION'S COMPONENT COUNT and a COUNTER'S NOUN:** `release-drift`'s
-      `\d+\.\d+\.\d+` parsed Scrapling's live `v0.5` to `null`, so "newest release 0.4.15" was a statement about the parser;
-      "**9** open-issue count" is GitHub's `open_issues_count` (**4** issues + **4** PRs) quoted as an issue total.
-      → [[fact-check]] [[dev-tools]]
+    - **10-25 → 11-02 (folded) — units six to forty-two: the counter, the slot, the vector, the cert count, the row count, the clock —**
+      `open_issues_count` is issues **+ PRs**; `Primary`/`Secondary` are slots (**0 of 78** agree); `zip`'s vector computes **10.0** while the page
+      says 9.9; `created_at` dates the record (moxnox hides **9,479** commits from 2021); `cert.pem`'s 8 `emSign` **lines** are **4** certs; Bolt's
+      card has **21** rows and Q4_K_M wins **7**; stars **cannot fall**; a `published` day can be the **host's** day. Then a SPAN that can be
+      empty (**87 of 3,461**), a STOPPING POINT (VulDB stores a **base** 4.0 where NVD stores the **threat** score; the 31-record band table reads
+      **−0.82 Critical / −1.93 High / −1.91 Medium** under `Δ = v4.0 − 3.1`), a **0.879** AUROC that is **0.076** precision at a 2% attack rate,
+      a **22.7×** that is one attention layer's prefill, and a **47%** FLOP cut that bought **1.15×** wall clock.
+      → [[fact-check]] [[security]] [[disclosure-lag]] [[cvss-stopping-points]]
+    - **11-03 — units forty-three to forty-six: a LOOP COUNT, an ADJUSTMENT, a VERSION'S COMPONENT COUNT and a COUNTER'S NOUN:** Astra's **48.1%** is the "**50 forward passes**" row (**12.3%** at 10, **14.1%** at 25) while the single-shot result is a different task, and GPT-Rosalind-6's biorisk **78.3%** vs **79.2%** is **85.0%** refusal-adjusted against an **80%** threshold; `release-drift`'s `\d+\.\d+\.\d+` parsed Scrapling's live `v0.5` to `null`, and "**9** open-issue count" is `open_issues_count` (**4** issues + **4** PRs). → [[fact-check]] [[frontier-models]] [[dev-tools]]
     - **11-03 12:29 — units forty-seven to forty-nine: a LIVE count against a ROW count, a FRACTION OF A GAP, and a
       RESULT WITH NO DENOMINATOR:** syscall.sh's x64 JSON holds **371** rows and **369** live calls (`_sysctl` removed
       in 5.9, `lookup_dcookie` in 6.7), so "369 syscalls" is the live count and the shipped table is larger; Auriga's
@@ -2009,6 +2017,7 @@ patterns, and turn them into insights and actionable todos.
 
     - **11-05 12:40 — unit fifty-three: a CLASS, not a delta:** in **521** clean same-source 3.1/4.0 pairs, Δ = 4.0 − 3.1 is
       **+0.71** where all impact sits on the vulnerable system (n=441) and **−0.42 / −0.89** where any sits on a subsequent one (`S:U`→`vuln-only` **440/443**); `--scope-census` → [[cvss-stopping-points]]
+     - **11-06 — unit fifty-four: the REFERENT.** After the arithmetic reproduces, ask *what the number is about*: Paint's vector computes **8.1**/**7.1** exactly and describes a network service the product does not run; `nbWorkers` is accepted and ignored by a static build; the privacy hook covers a shape the report did not name; `banks`' fix hardened a layer the exploit never touched. **A reproducible score, an existing field and a firing hook are all evidence about the mechanism, never about the subject.** → [[fact-check]] [[security]]
 
 29. **A computation that never becomes a token is outside every control this feed tracks — and the first
     exact artifact shipped on 2026-10-29.** Approval classifiers, egress rules, OS isolation and audit
@@ -2135,30 +2144,30 @@ patterns, and turn them into insights and actionable todos.
 - **Own operating constraint (08-19):** Claude Code's +50% weekly-limit promotion ended Aug 31,
   2026 — a third of weekly headroom disappeared on a known date; any workflow tuned against a
   promotional ceiling must be re-measured. `/usage` in the CLI is the only visible figure.
-- **Standing tooling:** `disclosure-watch.mjs` (NVD-keyword + HN channels; npm takedown detection
-  (PACKAGE GONE/RETURNED) and the **page-content fingerprint channel** — `page_url` +
-  `page_fingerprint_regex`; the armed watch names live in the tool's own config, not here),
-  `mcp-snapshot.mjs` (MCP drift), `release-watch.mjs` (router repos; `body_regex` changelog streams —
-  claude-code + codex + gemini-cli + opencode), `nvd-provenance.mjs` (status/metric/KEV movement,
-  Pass 10; its `watch` list is the per-CVE standing record), `vendor-advisory.mjs` (registry + per-ID
-  presence across NVD/cveawg/KEV, CVRF `Type="CNA"` — Pass 11), `feed-stamp.mjs` (`updated:` from
-  the clock in true UTC, all locales + `latest.md`), `compact-log.mjs`, `cv-audit.mjs`
-  (`cv === 1 + cvlog.length`), star-to-commit check (Pass 9), KEV/NVD/npm/GitHub one-call checks
-  (CLAUDE.md perishable rules), `torvalds-folio-v2` + `doc2harness-repro`; `osv-lag.mjs` (scanner
-  visibility on the **package** record — alias-following, NVD-reference route, day-granularity
-  labels); `disclosure-lag.mjs` (`--census` range provenance + the quota-degraded pass,
-  `--mitigation-census`, `--field-watch`, `--changes-census`, `--selftest` **132/132**);
+- **Standing tooling:** `disclosure-watch.mjs` (NVD-keyword + HN channels; npm takedown + the
+  **page-fingerprint channel** — armed names live in its own config), `mcp-snapshot.mjs`,
+  `release-watch.mjs` (router repos; `body_regex` changelogs), `nvd-provenance.mjs` (status/metric/KEV
+  movement, Pass 10; `watch` = per-CVE record), `vendor-advisory.mjs` (registry + per-ID presence,
+  CVRF `Type="CNA"` — Pass 11), `feed-stamp.mjs` (`updated:` in true UTC, all locales + `latest.md`),
+  `compact-log.mjs`, `cv-audit.mjs` (`cv === 1 + cvlog.length`), star-to-commit (Pass 9), the
+  KEV/NVD/npm/GitHub one-call checks, `torvalds-folio-v2` + `doc2harness-repro`; `osv-lag.mjs`
+  (scanner visibility on the **package** record); `disclosure-lag.mjs` (`--census` provenance,
+  `--mitigation-census`, `--field-watch`, `--changes-census`, **132/132**);
   `claim-unit-lint.mjs` — the claim units, run by `generate-feed.sh` before every commit:
-  issues/cvss/status/date/temporal/cwe/range/**idrange**/repo/count/ratio/bundle/quotation/paper,
-  `--selftest` **252/252**; its per-check rules and guards live in CLAUDE.md, and the shape that keeps recurring
-  is *the checker's own reader was the defect* (`date`'s ten false findings, `range` failing on its
-  filing case, `repo` reading a model id as a repository). `cvss-recompute.mjs` — a stored score vs
-  its own `vectorString` (v3.1/v3.0 native, v4.0 via `--oracle`), `--pairs` for dual-column spreads,
-  and `--stopping-point-census --with-cna N` for base-vs-threat (11-02: **136/136** of NVD's
-  Threat-bearing metrics are the THREAT score; on 4.0 NVD keeps `E` **136/136** while it **strips**
-  v3.1's temporal metrics **123/123**), and since 11-03 it prints the **band table** with the counts
-  beside the mean (`Δ = v4.0 − 3.1`, `E:X` as the control row). Citation counts via **OpenAlex** when
-  Scholar 429s.
+  issues/cvss/status/date/temporal/cwe/range/**rangeabsent**/**affected**/idrange/repo/count/ratio/bundle/quotation/paper;
+  `--selftest` **300/300**, rules in CLAUDE.md, and the recurring shape is *the checker's own
+  reader was the defect* (`date`'s ten false findings, `range` on its filing case, `repo` reading a
+  model id as a repo, `affected` reading package names from already-stripped text).
+  **11-06 12:34 — `affected` added, one lie removed:** it reads the VALUES of `affected[]` (a
+  `defaultStatus` entry count + every backticked package name in a sentence claiming the list;
+  pre-correction **3 findings**, corrected **0 / 2 verified**), and the NVD pull now records **which
+  chunks answered** — a failed chunk had surfaced as *"NVD carries no record for CVE-2026-73099"*
+  about a record NVD served all along, so it is `nvd-unavailable`. **Unread is never absent, and a
+  failed request is not a registry statement.** `cvss-recompute.mjs` — a score vs its own
+  `vectorString` (v3.1/v3.0 native, v4.0 via `--oracle`), `--pairs` for dual columns, and
+  `--stopping-point-census --with-cna N` for base-vs-threat (11-02: **136/136** of NVD's
+  Threat-bearing metrics are the THREAT score; it keeps `E` on 4.0, **strips** v3.1's temporal
+  metrics **123/123**), since 11-03 with the **band table**; **OpenAlex** for citations.
 
 - **Non-AI batch items (10-07→10-20):** the itemized record lives in the dated feed files; the
   long-runners have homes — DDR4's revival (→ thesis 3), Yandex Cloud's Vladimir DC UAV strike

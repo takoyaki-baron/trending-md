@@ -1,6 +1,6 @@
 ---
 title: Action
-last_run: 2026-11-05 20:50
+last_run: 2026-11-06 12:31
 ---
 
 # Action
@@ -23,6 +23,20 @@ last_run: 2026-11-05 20:50
 
 ### Research — what I want to know next
 
+- [x] **Is "the record names no remediation" a claim about the VENDOR or about the SCHEMA?** filed and answered 11-06 12:31
+      from item 22 of the 12:22 batch (Windows Paint, `CVE-2026-83844`), which read "its only reference is the MSRC update guide, and the
+      CVE record carries no remediation entry" — a true sentence whose reader takes away "no fix". **Answered:** it is the schema.
+      CVE 5.x has no `remediations` field, so that sentence is true of **every** record ever published; the channel lives in the vendor
+      document, where Microsoft's CVRF carries `<vuln:Remediation Type="Vendor Fix"><vuln:SubType>Store App</vuln:SubType>` +
+      `<vuln:FixedBuild>11.2609.401.0</vuln:FixedBuild>` for Paint — a Store update, which is *why* there is no KB. Censused the October
+      CVRF (**3,488** unique-CVE entries): **3,342** have a `Vendor Fix`; `SubType` is `Security Update`/`Monthly Rollup` on all but **2**
+      (`Store App`) and **1** (`Click to Run`); **146** entries carry no remediation at all. So Paint's channel is **2 of 3,488 (0.06%)**
+      — a real shape and a rare one. **Still open:** (a) do any **other** CNA's records state a remedy anywhere machine-readable (Red Hat's
+      errata, Apache's advisory tables) or is the CVRF the only one; (b) how many of the **146** remediation-less entries ship through a
+      channel the CVRF does not model at all — that is the population where "no fix named" may be true rather than unfiled. Guards: a
+      `Vendor Fix` row is per PRODUCT (15,179 rows over 3,488 records), so counts must dedupe to the CVE; and my first `KB\d{6,}` scan
+      reported 1,531 "fixed by build, no KB" — the KB lives in a `Release Notes` remediation's `<SubType>`/URL, so **the regex was the
+      measurement**. → [[fact-check]] [[security]] [[vuln-supply]]
 - [~] **How often does a CVE record name a fix version that does not exist yet — and does anyone correct the record
       after the release lands?** filed 11-05 12:34 from ESP-IDF `CVE-2026-113780` (**9.3**, `GitHub_M`), whose record says
       "scheduled to be fixed in versions 6.0.4 and 6.1.1" while `releases.atom` tops out at **v5.5.6 / v6.0.3 / v6.1** — a
@@ -4216,7 +4230,19 @@ last_run: 2026-11-05 20:50
 
 ### System — self-iteration
 
-- [ ] **A package list and a `defaultStatus` count are claims about `affected[]`, and no check reads that field's VALUES.**
+- [ ] **Build the REFERENT check: after a score matches its vector, ask whether the product has the feature the vector assumes.**
+      filed 11-06 12:31 from the 12:22 batch's four-item spine ([[fact-check]]). Every arm in `claim-unit-lint.mjs` verifies a number
+      against a RECORD; none asks whether the record's model fits the thing. The cheapest half is mechanical and needs no new budget:
+      for every item quoting a CVSS vector with `AV:N`/`AV:A` on a product that is not a network service — detectable from the CNA
+      `affected[].product` against a small deny-list of desktop/store app shapes (`Microsoft Paint`, `Notepad`, `Photos`, anything whose
+      `packageURL` is a `msix`/store reference) — emit an advisory `vector-product-mismatch` (sev 1: the claim can be right and the
+      product unusual). The second half is the **schema-absence** arm the Paint item needed: "the record states no remediation/KB/fix
+      FIELD" is a claim about CVE 5.x, which has no `remediations` field, so those sentences can never be findings — the check should
+      say `schema-absent` (sev 0) and point at the vendor document, exactly as `rangeabsent` learned to name `affected[]` vs
+      `configurations`. Guards: a product name is not a service inventory (a desktop app CAN have a network feature, which is what the
+      item's own Copilot sentence debates), so sev 1 and never sev 3; and the CVRF twin is a **47.5 MB** fetch — cache it per month
+      under `agent/data/`, never per item. → [[fact-check]] [[security]]
+- [x] **A package list and a `defaultStatus` count are claims about `affected[]`, and no check reads that field's VALUES.**
       filed 11-06 04:47 while correcting item 6 of that day's feed: the sentence said the CNA carried
       `defaultStatus: affected` on **every one** of its eleven entries (the record has **8 affected / 3 unaffected**, all
       three `crash`) and named `gdb-headless` and `gdb-gdbserver` as affected packages (**0 occurrences in all four
@@ -4227,6 +4253,28 @@ last_run: 2026-11-05 20:50
       the record lists under another product line, so absence must be **record-wide** before it is a finding (all four GDB
       records here), and a sentence naming a package in a *description* quotation ("a flaw in gdb") is not a claim about the
       `affected[]` list. → [[fact-check]] [[vuln-supply]]
+      **Built 11-06 12:34 (→ log 2026-11-06 12:34):** `--check affected`, default set, `--selftest` **288 → 300**.
+      Calibrated both ways on the filing case: the pre-correction file returns **3 findings** (the `defaultStatus`
+      count plus both invented packages), the corrected file **0 findings / 2 verified**. Four guards came from the
+      calibration rather than the spec — `strip()` deletes backticks, so package names are read from the RAW text;
+      a paragraph beginning with `**CVE-…**` never starts a new sentence, so the cue leaked across paragraphs and
+      `gdbserver` / `hex2bin` (components named in the vulnerability's own description) fired **on the corrected
+      item**, fixed by requiring the candidate's own sentence to claim the list; `defaultStatus: affected on every one
+      of its eleven entries` is a status count while `all eleven affected[] entries name a product` is not, and only
+      the status word keeps them apart; and **`zero` was missing from `NUM_WORDS`**, so the corrected feed's own
+      "zero are not" matched nothing. → [[fact-check]] (→ log 2026-11-06 12:34)
+- [x] **A failed NVD request is not an absent record — the lint printed two registry statements from one rate-limited chunk.**
+      filed + closed 11-06 12:34 from the 12:22 run's own JSON: item 5 `status-no-record` for `CVE-2026-73099` and item 15 for
+      `CVE-2026-104269`, worded "NVD carries no record for …". Both records exist and both status claims were **correct**
+      (`Deferred`, Apache's 10.0; `Received`, GitHub's 8.6) — one `cveId` call each, and a plain re-run said `ok`. Mechanism:
+      the chunked pull catches a throw so the run can continue offline, and every downstream check then reads an empty map,
+      which is the same map a genuinely absent record produces; `nvd_calls: 0` sat in the summary unread. **Fixed:** the pull
+      records which chunks answered and retries each once; an unanswered chunk yields **`nvd-unavailable`**, `nvd_failed_chunks`
+      rides the JSON, and the summary prints how many ids were never read. Calibrated both ways by pointing
+      `CLAIM_UNIT_NVD_BASE` at a dead host — the same feed returns **2 `nvd-unavailable`** instead of 2 registry statements.
+      **Checked, not assumed:** `cwe` / `field` / `range` read the same map but already say `*-unreadable` — only the `cvss`
+      and `status` arms turned an empty map into a sentence about the REGISTRY, so those two were the whole class. (The
+      first draft of this line filed an audit I had not run; one grep answered it.) → [[fact-check]] (→ log 2026-11-06 12:34)
 - [x] **Read the range VALUE, not the range FIELD: teach `--range-census`/`--future-fix-census` that a comparator can live
       inside `versions[].version`.** filed 11-06 04:19 from `GitHub_M`'s openhuman records, whose `affected[]` is
       `{"version": "< 0.57.13", "status": "affected"}` — no `lessThan`, no `lessThanOrEqual`, no `unaffected[]` — so a census
@@ -5492,6 +5540,90 @@ last_run: 2026-11-05 20:50
       → [[edge-inference]] (→ log 2026-08-12 23:32)
 
 ## Log
+
+### 2026-11-06 12:34
+
+**Plan:** act pass. Start where the instructions say to — the generation-time claim-unit lint for today's 12:22
+batch — and take the two things it exposed: one **research-adjacent** System item it left open (`affected[]`'s
+VALUES, filed 11-06 04:47), and one **defect in the lint itself** that its own JSON showed.
+
+**Did:** **(1) The lint's JSON was wrong about the registry, twice.** It carried `status-no-record` for item 5
+("NVD carries no record for `CVE-2026-73099`") and item 15 (`CVE-2026-104269`). One `cveId` call each: both records
+exist, both statuses are **exactly** what the feed said — `Deferred` (Apache, CVSS 4.0 **10.0**, `Secondary`) and
+`Received` (GitHub CNA, **8.6**, `CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:C/C:N/I:H/A:N`) — and a plain re-run of the lint said
+`ok` for both. **The feed needed no correction.** The cause was in the tool: the one chunked NVD pull catches a throw so
+the run can continue offline, and every downstream check then reads an empty map — *the same map a genuinely absent
+record produces*; `nvd_calls: 0` had been sitting in the summary as the only trace. Fixed: the pull records **which
+chunks answered** and retries each once, an unanswered chunk yields **`nvd-unavailable`** ("I could not read it") in
+both the `cvss` and `status` arms, `nvd_failed_chunks` rides the JSON, and the summary prints how many ids were never
+read. **Calibrated both ways** by pointing the new `CLAIM_UNIT_NVD_BASE` hook at a dead host: the same feed returns
+**2 `nvd-unavailable`** instead of 2 registry statements. `cwe` / `field` / `range` were checked rather than assumed —
+they already return `*-unreadable`, so the two arms fixed were the whole class. The batch's other advisories were opened
+and are correct as written: item 6's product-only `affected[]` (11 entries, **0** with a `versions[]`), item 22's
+"carries no remediation entry" (true of **every** CVE 5.x record — the schema has no such field), item 21's
+`mods/privacy` (a model id, not a repo), and items 7 and 23's counts. **(2) `--check affected`, the open
+System item, built and calibrated both ways.** Every arm in the lint read an ABSENCE or a RANGE; **none read a LIST**,
+which is how the 04:19 batch's item 6 shipped two wrong claims about one field in one paragraph. The arm reads the
+cveawg container the `rangeabsent` check already pays for, so it adds **no call**: a stated count of entries by
+`defaultStatus` (measured against ARRAY ENTRIES, never version rows) and every backticked package name in a sentence
+that claims the list (record-wide existence, because a distro subpackage can sit under a product line the sentence
+did not name). Pre-correction file → **3 findings** (the count plus both invented packages); corrected file → **0
+findings / 2 verified**. Censused over the six November feeds (**271** items, **106** cveawg containers read): **0
+findings / 3 verified**, so the class did not recur after the 04:19 correction and the arm is narrow by design. Four guards came out of the calibration, each a way the first version was wrong: `strip()`
+deletes backticks (so package names must be read raw — its own selftest caught this); a paragraph beginning with
+`**CVE-…**` never starts a sentence, so the cue leaked across paragraphs and **`gdbserver` / `hex2bin` fired as absent
+packages on the corrected file**; `defaultStatus: affected on every one of its eleven entries` is a status count while
+`all eleven affected[] entries name a product` is not; and **`zero` was missing from `NUM_WORDS`**, so the corrected
+feed's own "zero are not" matched nothing. **(3) Files:** `agent/tools/claim-unit-lint.mjs` (`nvdPull` + `pullCovers`,
+`checkAffected`, `affectedCountClaim`, `CNA_CACHE_V` 7→8, `--selftest` **288 → 300**), `generate-feed.sh` (both arms
+documented in the lint comment block), `CLAUDE.md` (both rules, with the guards), `en/agent.md` (Standing tooling:
+`affected` added, selftest count corrected from a stale **252** to **300**, the 11-06 line), [[fact-check]] (new dated
+section), and the Agenda.
+
+**Result:** the two defects are one sentence — **before publishing an absence, ask what asked the question, and
+whether that could have failed** — and both now have executors instead of prose. `--selftest` 300/300; today's feed
+returns **0 findings / 51 verified** with the two `affected` verdicts among them. → [[fact-check]]
+
+### 2026-11-06 12:31
+
+**Plan:** learn pass on the 12:22 batch (15 net-new items, 20–34, all after `last_processed` 2026-11-06T04:19+08:00).
+The batch's own candidate spine was a single sentence — four items where the *mechanism* checks out (arithmetic
+reproduces, the field exists, the hook fires) while the thing it describes does not — so the pass was spent verifying
+where each number actually lives rather than restating the items.
+
+**Did:** **(1) `CVE-2026-83844` (Windows Paint), verified down to the artifact that carries each score.** The CNA
+container publishes `baseScore: 8.1` and **no `temporalScore` field at all**; NVD re-serves the same 8.1 as
+`Secondary` (`secure@microsoft.com`, `Undergoing Analysis`) with temporal components stripped; **7.1 exists only in
+Microsoft's CVRF** (`api.msrc.microsoft.com/cvrf/v3.0/document/2026-Oct`, 47.5 MB XML) as
+`<BaseScore>8.1</BaseScore><TemporalScore>7.1</TemporalScore>` beside the vector — so the item's "both published by
+Microsoft" is true *of the CVRF*, and would have been false of either registry artifact. The `msrc.microsoft.com` page
+is a **2,717-byte JS shell to both client strings**; the CVRF is the twin. Two things the CVRF added that no registry
+artifact carries: `<vuln:Remediation SubType="Store App">` with `FixedBuild 11.2609.401.0` — Paint ships through the
+Microsoft Store, which is *why* the record has no KB, and "no remediation entry" is true of **every** CVE 5.x record
+because the schema has no such field. Censused the same document (**3,488** unique-CVE entries): **3,342** carry a
+`Vendor Fix`, `SubType` is `Security Update`/`Monthly Rollup` on all but **2** (`Store App`) and **1** (`Click to Run`),
+and **146** carry no remediation at all. **(2) My own measurement was the defect twice** — a `KB\d{6,}` scan reported
+1,531 "fixed by build, no KB" entries; the KB lives in a `Release Notes` remediation's `<SubType>`/URL, and a per-CVE
+pass gave 2 / 1 / 146. Both passes are now written into [[fact-check]] as the lesson they are. **(3) Two more
+referents checked verbatim.** lz4 v1.11.0's release body: "The static library remains single-threaded by default … it
+still accepts `nbWorkers`, and produces the same output, with a single thread" — a field accepted and ignored with no
+error; and the small-block table's **−4% / −6%** rows at 1 KB match the item exactly. `cc-plugin-privacy`'s
+2,680-byte README: "This is a courtesy, not a boundary, and it covers one shape", "A web tool call. WebFetch and
+WebSearch are not checked, and neither are MCP tools", and a plugin hook that "may overrule the refusal" — three code
+paths the vendor named, while the report (#107757) was a web search. **(4) One fix, two clocks:** `banks`
+`CVE-2026-61536`'s container published **2026-07-30T16:50:01Z** (NVD `07-30T19:18Z`) against a GHSA `published_at` of
+**2026-11-05T17:51:02Z**, so the fix (2.4.3, PyPI 2026-06-18) is **140 d** older than the advisory and **42 d** older
+than the record — the item's 140 is right *and* incomplete. **(5) Files:** `agent/knowledge/{en,zh,jp}/` — new dated
+sections in [[fact-check]], [[security]], [[dev-tools]], [[frontier-models]], [[token-economics]],
+[[agent-distribution]], with all three `index.md` rows updated; `{en,zh,jp}/agent.md` (new Identity entry + one dated
+line each in theses 2, 6, 26, 28, each folded back inside the 24-line budget); `last_processed` → `2026-11-06T12:22:00+08:00`.
+
+**Result:** the reusable rule the batch earned is three questions asked after the arithmetic reproduces — **which
+artifact publishes the number**, **does the product have the feature the vector assumes**, **does the mitigation check
+the mechanism the report names** — and it is now an executor candidate rather than prose (System item below).
+Net-new this run: the CVRF remediation-channel census, the two-clock lag on `banks`, and the observation that
+"the record carries no remediation" is a statement about CVE 5.x's schema. Detail → [[fact-check]] [[security]]
+[[dev-tools]] [[frontier-models]] [[token-economics]] [[agent-distribution]].
 
 ### 2026-11-06 04:30
 

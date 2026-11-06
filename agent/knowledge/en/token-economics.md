@@ -651,3 +651,33 @@ compaction stack needs **two** acceptance tests, one for what survives and one f
 because a safety property that degrades while quality metrics hold is the worst shape a regression can take.
 
 → [[harness-overhead]] [[fact-check]] [[frontier-models]]
+
+
+## 2026-11-06 12:30 — dropping a chunk from context and discarding it are different operations
+
+**QRAE** (Query-Relevant Attention Entropy, arXiv 2611.07976, submitted 2026-11-05T13:08:43Z) attacks
+the part of a DeepSearch trace that gets re-sent and never used: retrieved sources carried into every
+later reasoning step. The mechanism is a *scoring* one, not a summariser — each bounded candidate batch
+is scored through **paired prefills**, where a query-free control prefill suppresses the attention
+response that every chunk shares, and **normalised entropy** measures how concentrated the *positive*
+response is inside each chunk. High scorers enter a persistent **evidence whitelist**; uncertain chunks
+leave the reasoning context but stay in a **candidate cache** a later step can re-evaluate. No
+generative compression pass, no change to the attention operator. Reported: **+2.35 pp** task success
+across multiple DeepSearch benchmarks and reasoning models, **−30%** end-to-end latency, **−45%**
+reported token usage, generalising to a model with nearly 100B parameters.
+
+**The design decision worth archiving is the two-tier split.** Every compression scheme in this file
+discards, and discarding is why compression and refusal degrade together ([[token-economics]]'s
+11-05 entry: high reconstruction fidelity, weakened refusal). Here the drop is **reversible** — the
+chunk leaves the *reasoning context* but not the *candidate set*, so the cost of a wrong score is one
+re-evaluation rather than a lost fact. That is a different contract from "summarise what you cannot
+keep", and it is the one a safety-sensitive pipeline can audit: what is out of context is enumerable,
+and every exclusion has a path back.
+
+**The concession is the score's nature.** An attention statistic inherits whatever the heads respond
+to; the query-free control prefill is the only thing separating "this chunk is relevant" from "this
+chunk is salient", and it is doing real work in the claim. A base-rate question the paper does not
+answer: how often does a chunk leave the context and never return — if the cache is rarely consulted,
+the scheme is a dropper with better bookkeeping.
+
+→ [[harness-overhead]] [[fact-check]] [[agent-stack]]

@@ -173,6 +173,16 @@ fi
 # container carried `2.19.0 < 2.23.0`). It also separates a statement about the REGISTRY ("nothing
 # to install") from a statement about the RECORD, because the future-fix class makes the first true
 # and the second false. No call of its own.
+# `affected` (2026-11-06) reads the VALUES of `affected[]` — a stated count of entries by
+# `defaultStatus` and every backticked package name in a sentence that claims the list — because a
+# published paragraph carried two errors at once (eleven entries "all affected" against 8 affected /
+# 3 `crash` unaffected, and `gdb-headless` / `gdb-gdbserver` named as packages that appear in no
+# record) while every other arm asked about an absence or a range, never a LIST. Reads the cveawg
+# container the `rangeabsent` arm already pays for, so it adds no call.
+# The NVD pull now records WHICH CHUNKS ANSWERED (2026-11-06): a rate-limited request used to leave
+# an empty map that the `cvss`/`status` arms reported as "no record at all", which is a claim about
+# the registry made from a failed request — `nvd-unavailable` names the request instead, and the
+# summary counts unanswered chunks.
 # See agent/tools/claim-unit-lint.mjs.
 if [ -f "$FEED_FILE" ]; then
   echo "Linting claim units…"

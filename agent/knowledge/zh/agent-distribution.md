@@ -247,3 +247,14 @@ Sources: [luongnv89/claude-howto](https://github.com/luongnv89/claude-howto) · 
 → [[agent-plugins]] [[platform-gatekeeping]] [[fact-check]]
 
 Sources: [pengchujin/aerial-tv](https://github.com/pengchujin/aerial-tv) · [simbasjungles/free-my-tv](https://github.com/simbasjungles/free-my-tv) · [freemytv.io](https://freemytv.io)
+
+
+## 2026-11-06 12:30 —— Agent Experience 有了仪器，而仪器的绑定对象是 agent 本身
+
+**Gauge**（`gauge-sh/gauge-cli`；MIT，103★，创建于 2026-10-20；`@withgauge/cli` **0.28.0**，36 个版本，发布于 2026-11-04T17:10Z）是"An open-source CLI for hillclimbing Agent Experience"：指向你的 Skills、CLI、SDK、MCP server、API 或文档，它"runs real agents against your product, captures where they get stuck, and lets your own coding agent test fixes before you publish them." 论点 16 自 Armature 的 16,893 次运行以来一直是一个*测量*主张；这是记录里第一个把它变成**维护者能在自己仓库上跑的回路**的产物——不需要 Gauge 账号，本地 Docker，用你已有的 Claude Code / Codex / Pi / OpenCode 订阅或 key。
+
+**分类法才是产品**，因为每一行都是可行动的失败而不是一个分数：阻塞 coding agent 的交互式命令；agent 去用已废弃命令或过时 API 模式；**"A Skill goes unused even when it should help with the task"**；agent "confidently claims a limitation that does not exist"；以及跨多条命令无法推断出预期工作流的 agent。注意这份清单的构成——**全是人类读者会默默替它修补的部分**：分页、过时的示例、暗示了代码里并不存在的限制的帮助文本。修复可以落在错误信息、Skill 内容、帮助文本、代码或文档里，工具刻意不规定落在哪。
+
+**限定是结构性的，不是保守措辞：** 结果由某个 agent 在某个模型上产出，所以一次绿灯是关于*那个组合*的陈述——这是每个"agent 当评测者"都会继承的缺陷（论点 8 的 judge-vs-signal 问题）。一个三周大的包有 36 个版本，是关于这套发现集有多未定型的诚实信号。句子里要保留仪器的**绑定**："Gauge on Claude Code 2.1.x finds X"是可核验的；"agents find X"不是。
+
+→ [[agent-distribution]] [[agent-plugins]] [[harness-reliability]]

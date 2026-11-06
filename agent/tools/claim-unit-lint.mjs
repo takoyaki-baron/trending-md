@@ -251,7 +251,7 @@ const CACHE_PATH = arg('cache') ?? 'agent/data/claim-unit-cache.json';
 // 5 MB of TEXT is ~7 MB on disk (JSON escapes newlines); 8 MB was an 11 MB file, bigger than the 9.9 MB
 // it was meant to bound.
 const CACHE_BYTES = Number(arg('cache-bytes') ?? 5_000_000);
-const CHECKS = new Set((arg('check') ?? 'issues,cvss,status,date,temporal,cwe,field,range,rangeabsent,idrange,repo,count,ratio,bundle,quotation,paper').split(',').map((s) => s.trim()));
+const CHECKS = new Set((arg('check') ?? 'issues,cvss,status,date,temporal,cwe,field,range,rangeabsent,affected,idrange,repo,count,ratio,bundle,quotation,paper').split(',').map((s) => s.trim()));
 
 const SELFTEST = has('selftest');
 const STATUS_WATCH = has('status-watch');
@@ -503,7 +503,11 @@ async function getJson(url, opts = {}) {
 
 function nvdBatch(cves) {
   // One request: NVD accepts a comma-separated cveId list (measured 2026-10-26).
-  const url = `https://services.nvd.nist.gov/rest/json/cves/2.0?cveId=${cves.join(',')}`;
+  // The base is overridable ONLY so the failure path can be calibrated both ways (2026-11-06):
+  // pointing it at a dead host reproduces a rate-limited run without waiting for one, which is
+  // how `nvd-unavailable` is demonstrated rather than asserted.
+  const base = process.env.CLAIM_UNIT_NVD_BASE || 'https://services.nvd.nist.gov/rest/json/cves/2.0';
+  const url = `${base}?cveId=${cves.join(',')}`;
   const raw = execFileSync('curl', ['-s', '--max-time', '45', url], { encoding: 'utf8', maxBuffer: 32 * 1024 * 1024 });
   const j = JSON.parse(raw);
   const map = new Map();
@@ -893,11 +897,27 @@ function cnaState(id) {
      state a `versions[]` at all (the Red Hat shape has products and no versions), and `key` keeps
      MISSING apart from `[]` — the `metrics: {}` distinction one field over. */
   const affRaw = j.containers?.cna?.affected;
+  const affArr = Array.isArray(affRaw) ? affRaw : [];
+  /* The VALUES of the array, not its shape (added 2026-11-06 12:34). Two claims about the same
+     field were published unchecked on the 11-06 04:19 batch — "`defaultStatus: affected` on every
+     one of its eleven entries" (8 affected / 3 `crash` unaffected) and `gdb-headless` /
+     `gdb-gdbserver` as affected packages (0 occurrences in all four records). `entries` counts the
+     array; `entryStatus` counts those entries BY `defaultStatus`, which is the unit a sentence
+     saying "eight entries are affected and three are not" is actually about. An entry carrying its
+     own `versions[]` counts here by its `defaultStatus` — that is the entry's own statement; a
+     per-version status is a different unit and is not folded in. */
+  const entryStatus = { affected: 0, unaffected: 0, other: 0 };
+  for (const a of affArr) {
+    const s = a.defaultStatus ?? 'affected';
+    if (s === 'affected' || s === 'unaffected') entryStatus[s] += 1; else entryStatus.other += 1;
+  }
   const affected = {
     key: affRaw === undefined ? 'absent' : Array.isArray(affRaw) ? (affRaw.length ? 'populated' : 'empty') : 'other',
-    entries: Array.isArray(affRaw) ? affRaw.length : 0,
-    versioned: Array.isArray(affRaw) ? affRaw.filter((a) => (a.versions ?? []).length).length : 0,
-    products: Array.isArray(affRaw) ? [...new Set(affRaw.map((a) => a.product).filter(Boolean))] : [],
+    entries: affArr.length,
+    versioned: affArr.filter((a) => (a.versions ?? []).length).length,
+    products: [...new Set(affArr.map((a) => a.product).filter(Boolean))],
+    entryStatus,
+    packages: [...new Set(affArr.map((a) => a.packageName).filter(Boolean))],
   };
   /* `references[]` is the THIRD place a record names a fix (`versions[]` is the second, prose the
      first), and here it is the only one a commit-shaped remedy can reach. */
@@ -948,7 +968,14 @@ function checkCvss(it, subjects, cna = new Map()) {
     const bound = bindSubject(cl.at, mentions, ctx);
     const rec = subjects.get(bound.id);
     if (!rec) {
-      out.push({ check: 'cvss', item: it.n, verdict: 'no-record', claim: `${cl.version} ${cl.score}`, detail: `no record read for ${bound.id} — absence is a registry statement, not a verdict on the score` });
+      const covered = pullCovers(nvdPull, bound.id);
+      out.push({
+        check: 'cvss', item: it.n, verdict: covered ? 'no-record' : 'nvd-unavailable',
+        claim: `${cl.version} ${cl.score}`,
+        detail: covered
+          ? `no record read for ${bound.id} — absence is a registry statement, not a verdict on the score`
+          : `the NVD request that would have carried ${bound.id} failed, so nothing is known about the record — a failed request is not a registry statement (${nvdPull.failed.length} chunk(s) unanswered)`,
+      });
       continue;
     }
     if (rec.error) {
@@ -1219,9 +1246,15 @@ function checkStatus(it, subjects) {
     const bound = bindSubject(claim.at, ids, ctx);
     const rec = subjects.get(bound.id);
     if (!rec) {
-      // Absence is a registry statement: the item may be describing a record NVD genuinely lacks.
-      out.push({ check: 'status', item: it.n, verdict: 'status-no-record', claim: `${bound.id} \`${claim.status}\``,
-        detail: `NVD carries no record for ${bound.id}, so the status claim cannot be checked — that is "not in this registry", not "wrong"` });
+      // Absence is a registry statement — but only if the request that would have carried this id
+      // came back. On the 12:22 batch it had not, and this branch published "NVD carries no record
+      // for CVE-2026-73099" about a record that was `Deferred` on NVD the whole time.
+      const covered = pullCovers(nvdPull, bound.id);
+      out.push({ check: 'status', item: it.n, verdict: covered ? 'status-no-record' : 'nvd-unavailable',
+        claim: `${bound.id} \`${claim.status}\``,
+        detail: covered
+          ? `NVD carries no record for ${bound.id}, so the status claim cannot be checked — that is "not in this registry", not "wrong"`
+          : `the NVD request that would have carried ${bound.id} failed, so its \`vulnStatus\` was never read — "I could not read it" is not "it says something else"` });
       done.add(s.start);
       continue;
     }
@@ -2214,6 +2247,148 @@ function checkRangeAbsent(it, subjects, cna = new Map()) {
   return out;
 }
 
+/* ── check: the VALUES of `affected[]` (2026-11-06 12:34) ─────────────────────────────────────
+ * Filed 11-06 04:47 from a published sentence with two errors in one paragraph: the CNA was said
+ * to carry `defaultStatus: affected` on **every one** of eleven entries (8 affected / 3 `crash`
+ * unaffected) and `gdb-headless` / `gdb-gdbserver` were named as affected packages (**0**
+ * occurrences in any of the four records; the real list is `gdb`, `crash`, `gcc-toolset-14-gdb`,
+ * `gcc-toolset-15-gdb`). Every other arm reads an absence or a range; none read a LIST, so both
+ * were invisible — the `rangeabsent` arm saw the same container and asked only whether a range
+ * was stated.
+ *
+ * Two claims, and they need opposite guards:
+ *   (a) a COUNT of entries by status is checked against ARRAY ENTRIES (`entryStatus`), never
+ *       against version rows — the unit the sentence uses is "entries".
+ *   (b) a backticked PACKAGE NAME must exist as a `packageName` somewhere in the item's records.
+ *       Absence has to be RECORD-WIDE before it is a finding, because a distro subpackage can be
+ *       listed under a product line the sentence did not name; and the sentence must be about the
+ *       list, so `"a flaw in gdb"` quoted from a description is not a claim about `affected[]`.
+ */
+const AFF_CLAIM_CUE = /\baffected\[\]|\baffected\s+(?:list|entries|field|array|products?)\b|\bdefaultStatus\b|\bpackageName\b/i;
+/* A backticked lowercase token in an `affected[]` sentence is a package candidate; the record's own
+ * FIELD NAMES are not, and they are the ones that recur (`defaultStatus: unaffected` never matches,
+ * because of the colon, but a bare `versions` would). */
+const AFF_FIELD_WORDS = new Set(['defaultstatus', 'packagename', 'versions', 'version', 'affected',
+  'unaffected', 'product', 'vendor', 'cpes', 'cpe', 'collectionurl', 'status', 'affected[]', 'versions[]']);
+const AFF_PKG = /^[a-z][a-z0-9][a-z0-9._+-]*$/;
+
+/** Pure: what a stated `affected[]` count means, given the container's own entry counts. */
+function affectedCountVerdict(claim, ledgers) {
+  const ok = ledgers.filter((l) => l.affected === claim.affected && l.unaffected === claim.unaffected);
+  if (!ok.length) return { verdict: 'affected-count-mismatch', detail: '' };
+  return { verdict: 'affected-count-ok', detail: '' };
+}
+
+/** Pure: the count phrase of an `affected[]` claim, or null. Both spellings are read because the
+ *  filing sentence shipped with WORD numbers — the `ratio` check's lesson one arm over. */
+function affectedCountClaim(plain) {
+  const N = String.raw`(\d[\d,]*|${NUM_WORD_ALT})`;
+  /* "carries `defaultStatus: affected` on every one of its eleven entries" — the spelling that
+     actually shipped wrong, and deliberately NOT "all eleven `affected[]` entries", which the
+     corrected item uses to mean "every entry names a product" and says nothing about status. The
+     status word in the pattern is what keeps those two apart. */
+  const all = plain.match(new RegExp(String.raw`defaultStatus:?\s*\`?(affected|unaffected)\`?\s+on\s+(?:every|all)\s+(?:one\s+)?of\s+(?:its|the)\s+${N}\s+entries`, 'i'));
+  if (all) {
+    const st = all[1].toLowerCase();
+    const n = numToken(all[2]);
+    if (Number.isFinite(n) && n > 0) {
+      return st === 'affected'
+        ? { affected: n, unaffected: 0, phrase: all[0].slice(0, 80) }
+        : { affected: 0, unaffected: n, phrase: all[0].slice(0, 80) };
+    }
+  }
+  const m = plain.match(new RegExp(String.raw`(?<![\w-])${N}\s+entries?\s+(?:are|is)\s+affected\s+and\s+${N}\s+(?:are|is)?\s*not\b`, 'i'))
+    ?? plain.match(new RegExp(String.raw`(?<![\w-])${N}\s+entries?\s+(?:are|is)\s+unaffected\s+and\s+${N}\s+(?:are|is)?\s*(?:affected|not)\b`, 'i'));
+  if (!m) return null;
+  const a = numToken(m[1]);
+  const u = numToken(m[2]);
+  if (!Number.isFinite(a) || !Number.isFinite(u)) return null;
+  // the second clause may be the affected half in the reversed spelling
+  const reversed = /unaffected\s+and/i.test(m[0]);
+  return { affected: reversed ? u : a, unaffected: reversed ? a : u, phrase: m[0].slice(0, 80) };
+}
+
+function checkAffected(it, cna = new Map()) {
+  const out = [];
+  const t = strip(it.text);
+  const ids = [...new Set(idMentions(t).map((m) => m.id))].filter((id) => id.startsWith('CVE-'));
+  if (!ids.length) return out;
+  const ledgers = [];
+  let read = 0;
+  for (const id of ids) {
+    const cn = cna.get(id);
+    if (!cn || cn.error || !cn.affected || cn.affected.key !== 'populated') continue;
+    read += 1;
+    ledgers.push({ id, ...cn.affected.entryStatus, packages: cn.affected.packages, name: id });
+  }
+  if (!read) return out; // unread is not absent, and no ledger means no claim can be tested
+
+  // (a) the count
+  const claim = affectedCountClaim(t);
+  if (claim) {
+    const v = affectedCountVerdict(claim, ledgers);
+    if (v.verdict === 'affected-count-ok') {
+      out.push({ check: 'affected', item: it.n, verdict: 'affected-count-ok', claim: claim.phrase,
+        detail: `the CNA's array carries ${ledgers[0].affected} affected / ${ledgers[0].unaffected} unaffected entries` });
+    } else if (new Set(ledgers.map((l) => `${l.affected}/${l.unaffected}`)).size > 1) {
+      // the item's own records disagree with each other: a count cannot be checked against a set
+      out.push({ check: 'affected', item: it.n, verdict: 'affected-ambiguous', claim: claim.phrase,
+        detail: `the item's ${ledgers.length} records carry different entry counts (${ledgers.map((l) => `${l.id} ${l.affected}/${l.unaffected}`).join(' · ')}), so one stated count has no single referent` });
+    } else {
+      const l = ledgers[0];
+      out.push({ check: 'affected', item: it.n, verdict: 'affected-count-mismatch', claim: claim.phrase,
+        detail: `${l.id} carries ${l.affected} affected and ${l.unaffected} unaffected \`affected[]\` ENTRIES, not ${claim.affected} and ${claim.unaffected} — an entry count is not a version count` });
+    }
+  }
+
+  /* (b) the package names — read from the RAW text, because a package name is exactly what
+     backticks mark and `strip()` deletes them (the selftest caught this on the first run), and
+     bound to the PARAGRAPH rather than the sentence. `sentences()` splits on `[.!?]` + whitespace,
+     so a paragraph beginning with `**CVE-…**` never starts a new sentence and a cue from the NEXT
+     paragraph reached two backticked words that have nothing to do with the list — `gdbserver` and
+     `hex2bin`, both components named in the vulnerability's own description, fired as
+     `affected-package-absent` on the corrected item. A claim about `affected[]` is a claim within
+     one paragraph; a paragraph is where the writer made it. */
+  const allPkgs = new Set(ledgers.flatMap((l) => l.packages));
+  /* A candidate is tested only in a sentence that CLAIMS the list — one carrying the field name
+     itself (`affected[]`, `defaultStatus`, `packageName`), or one that already names a package the
+     container carries. Without the second arm the corrected item's own component mentions leaked in:
+     "`gdbserver` — the half people expose on a network" sits two sentences after a real package
+     list, in the same paragraph, and fired `affected-package-absent` twice on correct text. A
+     sentence that names only invented packages is therefore silent — the cost of not repeating a
+     false finding on the file that is right. */
+  if (allPkgs.size) {
+    for (const para of it.text.split(/\n\s*\n/)) {
+      if (!AFF_CLAIM_CUE.test(strip(para))) continue;
+      /* One verdict per PARAGRAPH, not per sentence: a list can run across two sentences and a
+         name can repeat, so the first build reported the same `affected-package-ok` twice for
+         ansible-core. Deduping at the verdict is the wrong end — the unit is the claim, and the
+         writer made one. */
+      const absent = new Set();
+      const present = new Set();
+      for (const s of sentences(para)) {
+        const sent = para.slice(s.start, s.end);
+        const ticks = [...sent.matchAll(/`([^`\n]{1,60})`/g)].map((m) => m[1].trim());
+        const cands = [...new Set(ticks.filter((x) => AFF_PKG.test(x) && !AFF_FIELD_WORDS.has(x.toLowerCase())))];
+        if (!cands.length) continue;
+        const direct = /\baffected\[\]|\bdefaultStatus\b|\bpackageName\b/i.test(sent);
+        const here = cands.filter((p) => allPkgs.has(p));
+        if (!direct && !here.length) continue;
+        for (const p of cands) (allPkgs.has(p) ? present : absent).add(p);
+      }
+      for (const p of absent) {
+        out.push({ check: 'affected', item: it.n, verdict: 'affected-package-absent', claim: p,
+          detail: `\`${p}\` appears as no \`packageName\` in any of the item's ${ledgers.length} record(s) — the list is ${[...allPkgs].join(', ')}` });
+      }
+      if (present.size && !absent.size) {
+        out.push({ check: 'affected', item: it.n, verdict: 'affected-package-ok', claim: [...present].join(', '),
+          detail: `${present.size} package name(s) present in the CNA's \`affected[].packageName\`` });
+      }
+    }
+  }
+  return out;
+}
+
 // ── check C: repo state ─────────────────────────────────────────────────────────────────────
 let cache = {};
 try { cache = JSON.parse(readFileSync(CACHE_PATH, 'utf8')); } catch { /* first run */ }
@@ -2232,11 +2407,14 @@ const ERROR_TTL_MS = 10 * 60 * 1000;
    carries `"metrics": {}` would answer "absent", which is the claim being tested.
    v: 7 adds `affected` (the SHAPE summary) and `refs` — without them a v-6 entry answers "the CNA
    states no affected[]" for every record, which is the whole claim the `rangeabsent` check tests.
+   v: 8 adds `affected.entryStatus` and `affected.packages` (the array's VALUES) — a v-7 entry has
+   the shape only, so it would answer "no `packageName` in any record", which is exactly the claim
+   the `affected` check is testing.
    Each bump is the rule, not
    a tidiness choice: an entry written before a field was read would turn "not fetched by this
    version" into "absent from the record", which is the exact defect the schema version exists to
    prevent. A bump forces one refetch per CVE and is unmetered. */
-const CNA_CACHE_V = 7;
+const CNA_CACHE_V = 8;
 /* The repo cache had no version until 2026-11-05, and the day it needed one it produced exactly the
  * defect the versions above exist to prevent: v-0 entries stored a failure as a bare `error` string,
  * so `tencent/Hy4`'s 404 came back as "unreadable" from a six-hour-old entry even after `repoState`
@@ -3157,7 +3335,11 @@ const ROW_VOCAB = /\b(?:rows?|benchmarks?|columns?|tasks?|tests?|comparisons?|en
  * digits-only reader would have missed the filing case entirely. Bounded on purpose: the compound
  * form (`twenty-one`) is the only many-word spelling English uses for small numbers. */
 const NUM_WORDS = {
-  one: 1, two: 2, three: 3, four: 4, five: 5, six: 6, seven: 7, eight: 8, nine: 9, ten: 10,
+  /* `zero` added 2026-11-06 12:34, found by the `affected` arm's own selftest: "eleven entries are
+     affected and zero are not" matched NOTHING, because the map started at one. Both arms that read
+     it already guard (`ratio` needs >= 2, `count` needs a page stating the number), so the addition
+     is a gap closed rather than a behaviour change. */
+  zero: 0, one: 1, two: 2, three: 3, four: 4, five: 5, six: 6, seven: 7, eight: 8, nine: 9, ten: 10,
   eleven: 11, twelve: 12, thirteen: 13, fourteen: 14, fifteen: 15, sixteen: 16, seventeen: 17,
   eighteen: 18, nineteen: 19, twenty: 20, thirty: 30, forty: 40, fifty: 50, sixty: 60,
   seventy: 70, eighty: 80, ninety: 90,
@@ -4361,6 +4543,16 @@ if (SELFTEST) {
     statusMentions('Analyzed results are in the appendix.').length, 0);
   t('status: a claim with no CVE cannot be checked',
     checkStatus(mk('t', 'NVD marked the record `Analyzed`.'), new Map()).map((x) => x.verdict), ['status-no-cve']);
+  /* 2026-11-06 12:34 — a FAILED REQUEST is not an absent record. The 12:22 lint turned a
+     rate-limited NVD chunk into "NVD carries no record for CVE-2026-73099" twice; both records
+     existed (`Deferred` 10.0 and `Received` 8.6) and a plain re-run said `ok`. */
+  const pull = (chunkOf, okChunks) => ({ chunkOf: new Map(Object.entries(chunkOf)), okChunks: new Set(okChunks), failed: [] });
+  t('nvd pull: an answered chunk stands behind an absence',
+    pull({ 'CVE-1': 0, 'CVE-2': 0 }, [0]) && pullCovers(pull({ 'CVE-1': 0 }, [0]), 'CVE-1'), true);
+  t('nvd pull: an unanswered chunk does NOT',
+    pullCovers(pull({ 'CVE-1': 0, 'CVE-2': 1 }, [0]), 'CVE-2'), false);
+  t('nvd pull: an id never requested keeps the caller\'s own path',
+    pullCovers(pull({ 'CVE-1': 0 }, [0]), 'GHSA-x'), true);
 
   // weakness field — "states no CWE" is a claim about TWO fields (built 2026-10-30 from item 36,
   // where I published that sentence about a record whose CNA container said CWE-190)
@@ -4927,6 +5119,35 @@ if (SELFTEST) {
   t('rangeabsent: "the 6.x line has no version TO INSTALL" is the install cue, not a record one',
     affectedAbsentSpans(mk('t', 'anyone on the 6.x line has no version to install.').plain).map((c) => c.cue), ['install']);
 
+  /* 2026-11-06 12:34 — the VALUES of `affected[]`. Filed from a published paragraph carrying two
+     errors at once (a `defaultStatus` count and two package names that appear in no record), each
+     invisible to every arm above because those ask about an absence or a range, never a LIST.
+     Calibrated on the filing case's own CORRECTED sentence, which states 8/3 and names four real
+     packages across four records. */
+  const af = (body, entryStatus = { affected: 8, unaffected: 3, other: 0 }, packages = ['gdb', 'crash', 'gcc-toolset-14-gdb', 'gcc-toolset-15-gdb']) =>
+    checkAffected(mk('t', body), new Map([['CVE-2026-121994', { affected: { key: 'populated', entries: 11, versioned: 0, products: ['x'], entryStatus, packages } }]])).map((x) => x.verdict);
+  t('affected: the corrected count is verified (word numbers read)',
+    af('CVE-2026-121994: eight entries are affected and three are not.'), ['affected-count-ok']);
+  t('affected: "every one of eleven entries is affected" is the count that shipped wrong',
+    af('CVE-2026-121994: eleven entries are affected and zero are not.'), ['affected-count-mismatch']);
+  t('affected: digits and words are one unit',
+    af('CVE-2026-121994: 8 entries are affected and 3 are not.'), ['affected-count-ok']);
+  t('affected: a real package name is verified',
+    af('CVE-2026-121994: `gdb` and `crash` are the affected[] products on every line.'),
+    ['affected-package-ok']);
+  t('affected: a package name in no record is a finding',
+    af('CVE-2026-121994: the affected[] products include `gdb-headless` and `gdb-gdbserver`.'),
+    ['affected-package-absent', 'affected-package-absent']);
+  t('affected: the defaultStatus-on-every-entry spelling is the one that shipped wrong',
+    af('CVE-2026-121994: the CNA carries `defaultStatus: affected` on every one of its eleven entries.'),
+    ['affected-count-mismatch']);
+  t('affected: "all eleven affected[] entries name a product" is not a status claim',
+    af('CVE-2026-121994: all eleven affected[] entries name a product and no version.'), []);
+  t('affected: a sentence that is not about the list is silence',
+    af('CVE-2026-121994 bundles `gdb-headless` with the compiler.'), []);
+  t('affected: an unread container is silence, not absence',
+    checkAffected(mk('t', 'CVE-2026-121995: eleven entries are affected and zero are not.'), new Map([['CVE-2026-121995', { error: 'unreadable' }]])).map((x) => x.verdict), []);
+
   for (const c of cases) console.log(`  ${c.pass ? '✓' : '✗'} ${c.name}${c.pass ? '' : ` — got ${JSON.stringify(c.got)}, want ${JSON.stringify(c.want)}`}`);
   const ok = cases.filter((c) => c.pass).length;
   console.log(`selftest ${ok}/${cases.length}`);
@@ -4943,6 +5164,21 @@ const parsed = paths.map((p) => ({ path: p, items: parseItems(readFileSync(p, 'u
 let nvd = new Map();
 let nvdCalls = 0;
 let ghsaCalls = 0;
+/* WHICH IDS THE PULL ACTUALLY ANSWERED FOR (added 2026-11-06 12:34). A chunk that throws is
+ * caught two lines down so the run can continue offline, and every downstream check then reads an
+ * empty map — which is the same map a genuinely absent record produces. On the 12:22 batch that
+ * turned a rate-limited request into **`status-no-record`: "NVD carries no record for
+ * CVE-2026-73099"** (the record exists, is `Deferred`, and carries Apache's 10.0) and the same
+ * claim for `CVE-2026-104269` (exists, `Received`, 8.6). CLAUDE.md's rule is that unread is never
+ * absent; this is that rule with a network in front of it. The summary printed `nvd_calls: 0` and
+ * nobody read it — so the failure is carried here and named by the checks, not swallowed. */
+const nvdPull = { chunkOf: new Map(), okChunks: new Set(), failed: [] };
+/** Pure: does this pull stand behind an absence for `id`? False means a missing record is a fact
+ *  about the REQUEST, never about the registry. Pinned by `--selftest`. */
+function pullCovers(pull, id) {
+  const c = pull.chunkOf.get(id);
+  return c === undefined ? true : pull.okChunks.has(c); // never requested → the caller's own path
+}
 /* `temporal` is in this list because its message quotes NVD's copy beside the container's — run
  * alone without it, the check said "NVD re-serves no metric" about a record NVD re-serves four of.
  * The statement was about the pull, not the registry, which is the "unread is not absent" defect
@@ -4952,7 +5188,23 @@ if (!NO_NET && (CHECKS.has('cvss') || CHECKS.has('temporal') || CHECKS.has('stat
   const CHUNK = 25;
   for (let i = 0; i < cves.length; i += CHUNK) {
     if (i) await new Promise((r) => setTimeout(r, 6_500));
-    try { for (const [k, v] of nvdBatch(cves.slice(i, i + CHUNK))) nvd.set(k, v); nvdCalls += 1; } catch { /* offline or rate-limited; the cvss check reports no-record rather than a wrong verdict */ }
+    const chunk = cves.slice(i, i + CHUNK);
+    const cid = i / CHUNK;
+    for (const id of chunk) nvdPull.chunkOf.set(id, cid);
+    // offline or rate-limited: the chunk is RETRIED once, and a second failure is recorded so the
+    // checks say "the request failed" instead of "the registry has no record". One retry, not a
+    // loop — NVD's keyless ceiling is 5 per 30 s and a stubborn 403 needs minutes, not a backoff.
+    for (let attempt = 0; attempt < 2; attempt += 1) {
+      try {
+        for (const [k, v] of nvdBatch(chunk)) nvd.set(k, v);
+        nvdCalls += 1;
+        nvdPull.okChunks.add(cid);
+        break;
+      } catch (e) {
+        if (attempt === 1) nvdPull.failed.push({ chunk: cid, ids: chunk, error: String(e?.message ?? e).slice(0, 80) });
+        else await new Promise((r) => setTimeout(r, 6_500));
+      }
+    }
   }
   // GHSA subjects: one call per id an item actually names (a CVE-less GHSA is a subject with no
   // other way in), capped and cached — so a re-run inside the TTL costs nothing.
@@ -4986,7 +5238,7 @@ if (STATUS_WATCH && !NO_NET) {
 // unmetered, so the cap is about latency rather than budget — cached entries cost nothing.
 const cna = new Map();
 let cnaCalls = 0;
-if (!NO_NET && (CHECKS.has('cvss') || CHECKS.has('temporal') || CHECKS.has('cwe') || CHECKS.has('field') || CHECKS.has('range') || CHECKS.has('rangeabsent') || CHECKS.has('quotation'))) {
+if (!NO_NET && (CHECKS.has('cvss') || CHECKS.has('temporal') || CHECKS.has('cwe') || CHECKS.has('field') || CHECKS.has('range') || CHECKS.has('rangeabsent') || CHECKS.has('affected') || CHECKS.has('quotation'))) {
   const ids = [...new Set(parsed.flatMap((f) => f.items.flatMap((it) => strip(it.text).match(/CVE-\d{4}-\d{3,7}/g) ?? [])))].slice(0, MAX_CNA);
   for (const id of ids) {
     // A schema bump forces a refetch, and a refetch is a call: counting only "no entry at all"
@@ -5018,6 +5270,7 @@ for (const { path: p, items } of parsed) {
     if (!NO_NET && CHECKS.has('field')) findings.push(...checkField(it, subjects, cna));
     if (!NO_NET && CHECKS.has('range')) findings.push(...checkRange(it, subjects, cna));
     if (!NO_NET && CHECKS.has('rangeabsent')) findings.push(...checkRangeAbsent(it, subjects, cna));
+    if (!NO_NET && CHECKS.has('affected')) findings.push(...checkAffected(it, cna));
   }
   if (!NO_NET && CHECKS.has('repo')) for (const it of items) findings.push(...checkRepo(it, budget, ageBudget));
   if (!NO_NET && CHECKS.has('count')) for (const it of items) findings.push(...await checkCount(it));
@@ -5070,12 +5323,12 @@ try {
   writeFileSync(CACHE_PATH, JSON.stringify(cache, null, 1));
 } catch { /* cache is best-effort */ }
 
-const SEVERITY = { ok: 0, 'ok-cited-page': 0, 'no-cve-named': 1, 'no-record': 1, 'slot-quoted': 1, 'counted-by-author': 0, 'number-other-noun': 1, 'temporal-stopping-point': 1, 'temporal-disclosed': 0, 'score-stopping-point': 1, 'cna-only-score': 1, 'star-drift': 2, 'star-dated': 1, 'star-surge': 1, 'ok-history': 0, 'history-older-than-record': 2, 'history-unreadable': 1, stale: 2, archived: 2, 'stale-disclosed': 0, 'archived-disclosed': 0, differs: 2, absent: 2, 'unsplit-issue-count': 3, 'compound-lags-parts': 3, 'version-swapped': 3, 'version-absent': 3, 'score-not-reproducible': 2, 'score-mismatch': 3, 'wrong-subject': 3, 'absence-contradicted': 3, 'status-stale': 2, 'status-dated': 1, 'date-local-shift': 2, 'date-mismatch': 2, 'cwe-absent-but-recorded': 3, 'cwe-mismatch': 3, 'cwe-unreadable': 1, 'field-present': 3, 'field-present-empty': 2, 'field-empty-contradicted': 2, 'field-empty-since-moved': 1, 'field-absent-not-empty': 1, 'field-dated': 0, 'field-unknown-name': 0, 'field-unreadable': 0, 'span-empty': 2, 'cve-range-span-mismatch': 2, 'cve-range-disclosed': 0, 'ok-range': 0, 'range-ambiguous': 0, 'range-cross-year': 0, 'range-inverted': 2, 'span-inverted': 3, 'span-unverifiable': 0, 'ok-span': 0, 'range-absent-but-served': 3, 'range-only-in-cna': 1, 'range-absent-confirmed': 0, 'range-absent-products-only': 0, 'range-unread': 0, 'range-in-references': 1, 'boundary-named-no-artifact': 0, 'status-no-record': 1, 'status-no-cve': 1, 'advisory-unreadable': 1, 'advisory-repo-only': 0, unreadable: 1, 'artifact-unreadable': 1, 'nvd-unavailable': 1, 'ratio-row-count': 3, 'ok-ratio': 0, 'ok-delimited': 0, 'not-a-repo': 0, 'repo-absent-asserted': 0, 'ok-table-rows': 0, 'table-columns-unresolved': 0, 'bundle-ok': 0, 'bundle-lines-named': 0, 'bundle-unavailable': 0, 'bundle-line-count': 3, 'bundle-total-mismatch': 2, 'quote-not-found': 3, 'quote-paraphrase': 2, 'quote-short': 1, 'quote-not-read': 0, 'paper-date-imprecise': 1, 'paper-date-mismatch': 2, 'paper-date-revision': 1, 'paper-date-unread': 0 };
+const SEVERITY = { ok: 0, 'ok-cited-page': 0, 'no-cve-named': 1, 'no-record': 1, 'slot-quoted': 1, 'counted-by-author': 0, 'number-other-noun': 1, 'temporal-stopping-point': 1, 'temporal-disclosed': 0, 'score-stopping-point': 1, 'cna-only-score': 1, 'star-drift': 2, 'star-dated': 1, 'star-surge': 1, 'ok-history': 0, 'history-older-than-record': 2, 'history-unreadable': 1, stale: 2, archived: 2, 'stale-disclosed': 0, 'archived-disclosed': 0, differs: 2, absent: 2, 'unsplit-issue-count': 3, 'compound-lags-parts': 3, 'version-swapped': 3, 'version-absent': 3, 'score-not-reproducible': 2, 'score-mismatch': 3, 'wrong-subject': 3, 'absence-contradicted': 3, 'status-stale': 2, 'status-dated': 1, 'date-local-shift': 2, 'date-mismatch': 2, 'cwe-absent-but-recorded': 3, 'cwe-mismatch': 3, 'cwe-unreadable': 1, 'field-present': 3, 'field-present-empty': 2, 'field-empty-contradicted': 2, 'field-empty-since-moved': 1, 'field-absent-not-empty': 1, 'field-dated': 0, 'field-unknown-name': 0, 'field-unreadable': 0, 'span-empty': 2, 'cve-range-span-mismatch': 2, 'cve-range-disclosed': 0, 'ok-range': 0, 'range-ambiguous': 0, 'range-cross-year': 0, 'range-inverted': 2, 'span-inverted': 3, 'span-unverifiable': 0, 'ok-span': 0, 'range-absent-but-served': 3, 'range-only-in-cna': 1, 'range-absent-confirmed': 0, 'range-absent-products-only': 0, 'affected-count-ok': 0, 'affected-count-mismatch': 3, 'affected-package-ok': 0, 'affected-package-absent': 3, 'affected-ambiguous': 0, 'range-unread': 0, 'range-in-references': 1, 'boundary-named-no-artifact': 0, 'status-no-record': 1, 'status-no-cve': 1, 'advisory-unreadable': 1, 'advisory-repo-only': 0, unreadable: 1, 'artifact-unreadable': 1, 'nvd-unavailable': 1, 'ratio-row-count': 3, 'ok-ratio': 0, 'ok-delimited': 0, 'not-a-repo': 0, 'repo-absent-asserted': 0, 'ok-table-rows': 0, 'table-columns-unresolved': 0, 'bundle-ok': 0, 'bundle-lines-named': 0, 'bundle-unavailable': 0, 'bundle-line-count': 3, 'bundle-total-mismatch': 2, 'quote-not-found': 3, 'quote-paraphrase': 2, 'quote-short': 1, 'quote-not-read': 0, 'paper-date-imprecise': 1, 'paper-date-mismatch': 2, 'paper-date-revision': 1, 'paper-date-unread': 0 };
 const REAL = (f) => (SEVERITY[f.verdict] ?? 1) >= 2;
 
 /* `status_watch` rides the findings file so the act pass sees a backwards move without re-reading
    the store: the batch's own JSON is the thing it is told to open first. */
-const summary = { generated: new Date().toISOString(), files: perFile, status_watch: statusMoved, api_calls: apiCalls, readme_calls: readmeCalls, cited_page_calls: citedPages_requests, repo_page_calls: repoCalls, nvd_calls: nvdCalls, cna_calls: cnaCalls };
+const summary = { generated: new Date().toISOString(), files: perFile, status_watch: statusMoved, api_calls: apiCalls, readme_calls: readmeCalls, cited_page_calls: citedPages_requests, repo_page_calls: repoCalls, nvd_calls: nvdCalls, nvd_failed_chunks: nvdPull.failed.length, cna_calls: cnaCalls };
 if (OUT) {
   try { mkdirSync(dirname(OUT), { recursive: true }); writeFileSync(OUT, JSON.stringify(summary, null, 1)); } catch { /* a missing findings file is not a failed lint */ }
 }
@@ -5106,6 +5359,11 @@ if (JSON_OUT) {
     console.log('  verdicts: ' + Object.entries(byVerdict).map(([k, v]) => `${k}=${v}`).join(' '));
   }
   console.log(`\napi.github.com calls: ${apiCalls} (cached ${Object.keys(cache).filter((k) => !k.startsWith('readme:')).length} repos) · raw.githubusercontent fetches: ${readmeCalls} (unmetered) · github.com advisory-page fetches: ${repoCalls} (unmetered) · NVD calls: ${nvdCalls} · cveawg calls: ${cnaCalls}`);
+  /* A run whose NVD pull failed is a run whose record checks are blind, and the count used to be
+     the only trace of it — printed after 40 lines of verdicts and read by nobody. */
+  if (nvdPull.failed.length) {
+    console.log(`\n⚠ NVD: ${nvdPull.failed.length} chunk(s) unanswered — ${nvdPull.failed.reduce((n, f) => n + f.ids.length, 0)} id(s) never read (${nvdPull.failed[0].error}). Absence claims about them are UNKNOWN, not absent; re-run before acting.`);
+  }
 }
 
 const realCount = allFindings.filter(REAL).length;

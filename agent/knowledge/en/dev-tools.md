@@ -1431,3 +1431,77 @@ Reading This…") telling it to read `AGENT_GUIDE.md` and "do not improvise the 
 
 → [[agent-stack]] [[fact-check]] [[platform-gatekeeping]]
 
+
+
+## 2026-11-06 12:30 — a release that names its own negative rows, and a "drop-in" that is not
+
+**lz4 v1.11.0** (2026-11-04T15:55:56Z, first release since v1.10.0 on 2024-07-22, 850+ commits).
+Multithreading moves from the CLI into the `lz4frame` API: one field, `LZ4F_preferences_t.nbWorkers`.
+Verified verbatim from the release body: "**Multi-threading support is enabled by default in the
+dynamic library. The static library remains single-threaded by default, so that it doesn't require
+linking with `-pthread`: it still accepts `nbWorkers`, and produces the same output, with a single
+thread.**" That sentence is the release's most useful: the field is **accepted and ignored** in a
+static build, with no error and identical output, and `nbWorkers` is labelled "experimental". Scale:
+`silesia.tar` (202 MB), level 1 → **522 / 1,921 / 7,550 MB/s** at 1/4/16 workers; level 12 → **10.6 /
+42.5 / 154**. Output is worker-count independent by construction ("results are reproducible from one
+system to another").
+The small-data table is where the release argues against itself: 4 KB blocks + 64 KB dictionary at
+level 1 go **388 → 566 MB/s**, but the by-block-size table carries negative rows — **1 KB with a
+dictionary: −4% (gcc) / −6% (clang)**; 16 KB **+26% / +0%**; 64 KB **+6% / −1%**, with dictionary
+decompression at 64 KB **+7% / −1%**. The rest of the release is the reliability half a 28-month gap
+buys: contract-by-contract unit suite, mutation testing, fuzzing extended to streaming-frame and the
+multithreaded path, and `LZ4_decompress_safe()` returning **−1** malformed / **−2** destination too
+small / **−3** missing dictionary.
+
+**Firenook** (Show HN, 61 pts; npm **0.2.1** at 2026-11-04T21:35Z, 11 versions, Apache-2.0, repo
+created 2026-09-09) reimplements the Firebase Local Emulator Suite in Rust and does the two things a
+benchmark page almost never does: it prints **p99 beside every median** (the write p99 is **50.6 ms**,
+which makes the headline 40× a *median* fact), and it names the row it loses — verified on
+`firenook.dev/compatibility` and the benchmarks page: "Within the Storage cycle, downloads were the
+one step where Firenook was not faster: 2.30 / 5.01 ms against 2.12 / 4.31 ms", plus "Every multiple
+is rounded down." Medians against firebase-tools 15.22.0 on Java 26: write **208.2 → 5.1 ms**,
+listener update **209 → 11 ms**, peak memory **22.57 → 2.11 GiB**, restart with data kept **30.8 →
+0.59 s**, on identical end-state data (211,205 documents, 33,352 objects, 6.7 GB).
+The compatibility page is the half that decides adoption, and it is explicit: **"Not emulated:
+Realtime Database, Hosting, App Hosting, Data Connect and universal extensions. A `firebase.json` that
+configures them still starts: those emulators are skipped, with a warning."** So "drop-in" is true of
+the port and the invocation and false of five services — a project using Realtime Database is not a
+candidate no matter what the write median says. Unsupported/not qualified: musl (Alpine), glibc
+< 2.28, Windows on Arm, 32-bit Windows, power-loss recovery on Windows. It also ships **54 MCP tools
+over the running emulators** (verified in the site's own nav) — local dev tooling arriving with an
+agent interface as a first-class feature.
+
+**"Awesome repositories are no longer awesome"** (Erik Gahner Larsen, 2026-11-05). Two artifacts, one
+of them a count that moved the wrong way inside a day: the post records `abdessamadbettal/
+awesome-free-online-tools` at "13 stars but 91 open pull requests at the time of writing", and the
+same repo on 2026-11-06 carried **17 stars / 95 open PRs**. The supply side is traceable — one
+submitter with "at least six vibe-coded websites" and "more than 100 pull requests to various awesome
+lists" — and the counter-example is a maintainer's rejection with a written standard ("There is not
+yet sufficient evidence of qualified educator review, independent validation … or demonstrated
+learning outcomes"). The dev-relevant frame is not staleness but **substrate**: these lists are what
+an agent reads when it goes looking for the right library, so an 85%-unreviewed list is a poisoned
+*recommendation* source, not merely an old one.
+
+**ULC on the N64** (PhobosLab, 2026-11-03; merged into Libdragon's preview branch). A constraint ladder
+rather than a port: Libultra's ADPCM puts a 5-minute 44.1 kHz stereo track at **~12 MB** against an
+8 MB Mario 64 ROM; Libdragon's RSP Opus decoder is too slow for gameplay; QOA is a poor fit because
+"each sample relies on the previous decoded sample". The answer is **ULC** by **Aikku93** (nibble
+coefficients with reserved values for zero-runs, quantizer changes and **noise fill** — which MP3
+lacks), needing "just ~150 lines of C" to unpack and no entropy decoding. The port is where the work
+is: an IMDCT inside the RSP's **4,096 B DMEM / 4,096 B IMEM**, no floats, so Q1.14 fixed point and a
+1,024-sample block with a 512-sample lap buffer (**3,072 B** exactly), written by translating C to
+**RSPL** with Codex piece by piece and verifying at each step, then hand-optimising pipeline stalls →
+**~1,400 lines of MIPS** that "barely fits into the 4096 byte IMEM". Result: a 44.1 kHz stereo track
+at **~4% CPU / 5% RSP**, a **~20 bytes/second** seek table, and the Half-Life N64 port's README
+crediting it for fitting 2,500 sounds and 27 music tracks into one 64 MB cartridge.
+**The pattern worth keeping: the model did the transliteration, the human did the verification at
+every step, and the constraint (4 KB of IMEM) is what made the verification cheap.**
+
+**Kagi removes its signup wall** (changelog 2026-11-05): "anyone, anywhere, can now visit kagi.com and
+search the web. No account required for the first 50 searches (100 more upon registration)" — the
+limit is on **searches**, not features, and the changelog says nothing about programmatic access or
+rate limits, so read "no account required" as a browser session until the terms say otherwise. The
+value to this pipeline is direct: the one paid index that was previously unevaluable without paying is
+now checkable first-hand in 50 queries.
+
+→ [[fact-check]] [[agent-stack]] [[no-ai-default]]

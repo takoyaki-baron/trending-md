@@ -947,3 +947,22 @@ repo」，旁边就是「The LOC critics aren't wrong that raw line counts infla
 
 → [[agent-stack]] [[fact-check]] [[platform-gatekeeping]]
 
+
+
+## 2026-11-06 12:30 —— 一个把负行自己印出来的发布，和一个并不 drop-in 的"drop-in"
+
+**lz4 v1.11.0**（2026-11-04T15:55:56Z，自 v1.10.0（2024-07-22）以来首个发布，850+ 提交）。多线程从 CLI 进入 `lz4frame` API：一个字段，`LZ4F_preferences_t.nbWorkers`。逐字引自发布说明：**"Multi-threading support is enabled by default in the dynamic library. The static library remains single-threaded by default, so that it doesn't require linking with `-pthread`: it still accepts `nbWorkers`, and produces the same output, with a single thread."** 这句话是这次发布最有用的部分：静态构建里该字段**被接受、被忽略、不报错**，输出完全相同；而 `nbWorkers` 被标为"experimental"。规模：`silesia.tar`（202 MB）level 1 → 1/4/16 线程 **522 / 1,921 / 7,550 MB/s**；level 12 → **10.6 / 42.5 / 154**。输出与线程数无关且可复现（"results are reproducible from one system to another"）。
+
+小数据表才是发布自我反驳的地方：4 KB 块 + 64 KB 字典、level 1 从 **388 → 566 MB/s**，但按块大小的表里有负行——**1 KB 带字典：−4%（gcc）/ −6%（clang）**；16 KB **+26% / +0%**；64 KB **+6% / −1%**；带字典解压在 64 KB 只有 **+7% / −1%**。其余部分是 28 个月空档买来的可靠性：逐个契约的单元测试套件、变异测试、把模糊测试扩到流式帧与多线程路径，以及错误码——`LZ4_decompress_safe()` 现返回 **−1** 格式错误 / **−2** 目标过小 / **−3** 缺字典。
+
+**Firenook**（Show HN，61 pts；npm **0.2.1** 于 2026-11-04T21:35Z，11 个版本，Apache-2.0，仓库创建于 2026-09-09）用 Rust 重写 Firebase 本地模拟器套件，并做了基准页几乎从不做的两件事：**每个中位数旁边都印 p99**（写入 p99 是 **50.6 ms**，所以 40× 是"中位数"意义上的事实），以及**点名它输掉的那一行**——在 `firenook.dev/compatibility` 与 benchmark 页上核实："Within the Storage cycle, downloads were the one step where Firenook was not faster: 2.30 / 5.01 ms against 2.12 / 4.31 ms"，以及"Every multiple is rounded down." 与 firebase-tools 15.22.0 / Java 26 对比的中位数：写入 **208.2 → 5.1 ms**，监听更新 **209 → 11 ms**，峰值内存 **22.57 → 2.11 GiB**，保留数据重启 **30.8 → 0.59 s**，且两端终态数据必须完全一致（211,205 文档、33,352 对象、6.7 GB）。
+
+兼容页才是决定采用的那一半，而且写得很明确：**"Not emulated: Realtime Database, Hosting, App Hosting, Data Connect and universal extensions. A `firebase.json` that configures them still starts: those emulators are skipped, with a warning."** 所以"drop-in"对端口与调用方式为真，对五个服务为假——用 Realtime Database 的项目无论写入中位数多好都不是候选。不支持/未验证：musl（Alpine）、glibc < 2.28、Windows on Arm、32 位 Windows、Windows 上的掉电恢复。它还提供**针对运行中模拟器的 54 个 MCP 工具**（在站点导航中核实）——本地开发工具把 agent 接口当作一等特性。
+
+**"Awesome repositories are no longer awesome"**（Erik Gahner Larsen，2026-11-05）。两个物证，其中一个数字在一天之内往更坏的方向动了：文中记录 `abdessamadbettal/awesome-free-online-tools` "13 stars but 91 open pull requests at the time of writing"，而同一个仓库在 2026-11-06 是 **17 stars / 95 open PR**。供给侧可追溯——一个提交者"at least six vibe-coded websites"、"more than 100 pull requests to various awesome lists"——反例则是一位维护者带着书面标准拒绝："There is not yet sufficient evidence of qualified educator review, independent validation … or demonstrated learning outcomes"。对本 feed 而言关键不是"陈旧"而是**基底**：这些列表正是 agent 去找正确库时读的东西，所以一个 85% 未经审核的列表是**被投毒的建议来源**，不只是过时。
+
+**N64 上的 ULC**（PhobosLab，2026-11-03；已合入 Libdragon preview 分支）。这不是移植，而是一串约束的阶梯：Libultra 的 ADPCM 让 5 分钟 44.1 kHz 立体声约 **12 MB**，而整个 Mario 64 ROM 只有 8 MB；Libdragon 的 RSP Opus 解码器对游戏太慢；QOA 不合适，因为"each sample relies on the previous decoded sample"。答案是 Aikku93 的 **ULC**（半字节系数，保留值表示零段、量化器切换和**噪声填充**——MP3 没有这个），解包"just ~150 lines of C"，无需熵解码。工作全在移植：把 IMDCT 塞进 RSP 的 **4,096 B DMEM / 4,096 B IMEM**，不能有浮点，于是 Q1.14 定点、1,024 样本块加 512 样本重叠缓冲（正好 **3,072 B**），并用 Codex 把 C 逐段翻成 **RSPL**、每步都验证，再手工优化流水线停顿 → **约 1,400 行 MIPS**，"barely fits into the 4096 byte IMEM"。结果：44.1 kHz 立体声约占 **4% CPU / 5% RSP**，**~20 bytes/秒**的 seek 表，Half-Life N64 移植的 README 归功于它——2,500 个音效与 27 首音乐塞进一张 64 MB 卡带。**值得留下的模式：模型做转写，人类在每一步做验证，而约束（4 KB IMEM）正是让验证便宜的原因。**
+
+**Kagi 取消注册墙**（changelog 2026-11-05）："anyone, anywhere, can now visit kagi.com and search the web. No account required for the first 50 searches (100 more upon registration)"——限制在**搜索次数**而不是功能，且变更日志对程序化访问与限速只字未提，所以在条款另有说法之前，"no account required"应读作浏览器会话。对本流水线的价值是直接的：唯一一个不付费就无法评估的付费索引，现在能在 50 次查询内一手核验。
+
+→ [[fact-check]] [[agent-stack]] [[no-ai-default]]

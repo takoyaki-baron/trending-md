@@ -1,5 +1,5 @@
 {
- "generated": "2026-11-06T04:22:40.832Z",
+ "generated": "2026-11-06T04:49:31.073Z",
  "files": [
   {
    "file": "2026-11-06.md",
@@ -10,49 +10,70 @@
      "item": 4,
      "verdict": "ok",
      "claim": "CVE-2026-54143 published 2026-11-05",
-     "detail": "2026-11-05T16:40:23.589Z"
+     "detail": "NVD published 2026-11-05T17:18:19.487 (2026-11-05 UTC) · cveawg datePublished 2026-11-05T16:40:23.589Z (2026-11-05 UTC) — the two clocks differ; 2026-11-05 is the NVD published day"
     },
     {
      "check": "status",
      "item": 5,
-     "verdict": "status-no-record",
+     "verdict": "ok",
      "claim": "CVE-2026-73099 `Deferred`",
-     "detail": "NVD carries no record for CVE-2026-73099, so the status claim cannot be checked — that is \"not in this registry\", not \"wrong\""
+     "detail": "Deferred (lastModified 2026-11-05T19:17:26.810)"
+    },
+    {
+     "check": "date",
+     "item": 5,
+     "verdict": "ok",
+     "claim": "CVE-2026-73099 published 2026-11-05",
+     "detail": "NVD published 2026-11-05T12:17:50.917 (2026-11-05 UTC) · cveawg datePublished 2026-11-05T11:50:02.043Z (2026-11-05 UTC) — the two clocks differ; 2026-11-05 is the NVD published day"
     },
     {
      "check": "date",
      "item": 6,
      "verdict": "ok",
      "claim": "CVE-2026-121994 published 2026-11-05",
-     "detail": "2026-11-05T16:08:46.589Z"
+     "detail": "NVD published 2026-11-05T17:18:00.503 (2026-11-05 UTC) · cveawg datePublished 2026-11-05T16:08:46.589Z (2026-11-05 UTC) — the two clocks differ; 2026-11-05 is the NVD published day"
     },
     {
      "check": "rangeabsent",
      "item": 6,
      "verdict": "range-absent-products-only",
      "claim": "CVE-2026-121994 — \"no fixed version\"",
-     "detail": "the NVD record is unreadable; 11 `affected[]` entries of which 0 state a `versions[]` (Red Hat Enterprise Linux 10, Red Hat Enterprise Linux 6, Red Hat Enterprise Linux 7) — a product WITHOUT a version is not a range, so the absence holds; the patch level lives in the vendor's errata, which the record does not name"
+     "detail": "NVD `configurations` is absent (record is `Awaiting Analysis`, and absent `configurations` means \"not yet analysed\", never \"states nothing\"); 11 `affected[]` entries of which 0 state a `versions[]` (Red Hat Enterprise Linux 10, Red Hat Enterprise Linux 6, Red Hat Enterprise Linux 7) — a product WITHOUT a version is not a range, so the absence holds; the patch level lives in the vendor's errata, which the record does not name"
+    },
+    {
+     "check": "affected",
+     "item": 6,
+     "verdict": "affected-count-ok",
+     "claim": "eight entries are affected and three are not",
+     "detail": "the CNA's array carries 8 affected / 3 unaffected entries"
+    },
+    {
+     "check": "affected",
+     "item": 6,
+     "verdict": "affected-package-ok",
+     "claim": "gdb, gcc-toolset-14-gdb, gcc-toolset-15-gdb, crash",
+     "detail": "4 package name(s) present in the CNA's `affected[].packageName`"
     },
     {
      "check": "status",
      "item": 15,
-     "verdict": "status-no-record",
+     "verdict": "ok",
      "claim": "CVE-2026-104269 `Received`",
-     "detail": "NVD carries no record for CVE-2026-104269, so the status claim cannot be checked — that is \"not in this registry\", not \"wrong\""
+     "detail": "Received (lastModified 2026-11-05T16:17:29.377)"
     },
     {
      "check": "date",
      "item": 15,
      "verdict": "ok",
      "claim": "CVE-2026-104269 published 2026-11-05",
-     "detail": "2026-11-05T15:51:18.332Z"
+     "detail": "NVD published 2026-11-05T16:17:29.377 (2026-11-05 UTC) · cveawg datePublished 2026-11-05T15:51:18.332Z (2026-11-05 UTC) — the two clocks differ; 2026-11-05 is the NVD published day"
     },
     {
      "check": "date",
      "item": 22,
      "verdict": "ok",
      "claim": "CVE-2026-83844 published 2026-10-13",
-     "detail": "2026-10-13T18:59:53.598Z"
+     "detail": "NVD published 2026-10-13T19:20:32.890 (2026-10-13 UTC) · cveawg datePublished 2026-10-13T18:59:53.598Z (2026-10-13 UTC) — the two clocks differ; 2026-10-13 is the NVD published day"
     },
     {
      "check": "temporal",
@@ -164,21 +185,21 @@
      "item": 4,
      "verdict": "ok",
      "claim": "1 quotation(s)",
-     "detail": "verbatim in 7 readable source(s)"
+     "detail": "verbatim in 10 readable source(s)"
     },
     {
      "check": "quotation",
      "item": 5,
      "verdict": "ok",
      "claim": "2 quotation(s)",
-     "detail": "verbatim in 5 readable source(s)"
+     "detail": "verbatim in 7 readable source(s)"
     },
     {
      "check": "quotation",
      "item": 6,
      "verdict": "ok",
      "claim": "3 quotation(s)",
-     "detail": "verbatim in 7 readable source(s)"
+     "detail": "verbatim in 11 readable source(s)"
     },
     {
      "check": "quotation",
@@ -234,7 +255,7 @@
      "item": 15,
      "verdict": "ok",
      "claim": "1 quotation(s)",
-     "detail": "verbatim in 6 readable source(s)"
+     "detail": "verbatim in 8 readable source(s)"
     },
     {
      "check": "quotation",
@@ -262,7 +283,7 @@
      "item": 22,
      "verdict": "ok",
      "claim": "4 quotation(s)",
-     "detail": "verbatim in 4 readable source(s)"
+     "detail": "verbatim in 5 readable source(s)"
     },
     {
      "check": "quotation",
@@ -276,7 +297,7 @@
      "item": 24,
      "verdict": "ok",
      "claim": "4 quotation(s)",
-     "detail": "verbatim in 6 readable source(s)"
+     "detail": "verbatim in 8 readable source(s)"
     },
     {
      "check": "quotation",
@@ -395,9 +416,10 @@
  ],
  "status_watch": [],
  "api_calls": 0,
- "readme_calls": 2,
- "cited_page_calls": 12,
+ "readme_calls": 6,
+ "cited_page_calls": 18,
  "repo_page_calls": 0,
- "nvd_calls": 0,
+ "nvd_calls": 1,
+ "nvd_failed_chunks": 0,
  "cna_calls": 0
 }

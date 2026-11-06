@@ -3689,3 +3689,16 @@ post-training diffusion models」。自らを「a proof-of-concept along the way
 **ここでは費用の主張が異例に検証可能だ——GPU 時間あたりの価格が書かれているから。**
 
 → [[fact-check]] [[harness-reliability]] [[formal-verification]]
+
+
+## 2026-11-06 12:30 —— 第三者評価を開示方針として選ぶこと、および解釈可能性に値段を付ける二つの測定
+
+**Inkling 2 Small**（Thinking Machines、2026-11-05、HN 約 110 pts）。MoE、**594B 総パラメータ / 17B アクティブ**、画像入力、可変 effort、Artificial Analysis 知能指数 **31**。**Tinker** で提供中だが重みは非公開で、条件付きの約束がある：「We intend to make the full weights available under an Apache 2.0 license next week after the completion of external safety testing and red-teaming.」 つまりリリースはモデルカード + 推論エンドポイントで、チェックポイントは重みの公開後に降りてくる——「発表済み・未リリース」の形で、日付ではなく**ゲート**を名指している。
+
+**興味深いのは開示の選択だ：**「externally reported evaluations for both internal and external models when applicable」で、出所は Arena、Artificial Analysis、Scale AI、Surge、Mercor、Thoughtful、Vals、Datacurve、DesignArena——自前 harness を自分と比べた表ではない。代価はほとんどの行が 2 位で、ベンダー自身がそう記す：SWE-bench Pro v2 (Hard) **86.3%** 対 Kimi K3 **88.2%**、DeepSWE v1.1 **72.1%** 対 **77.0%**、FrontierCode v2.0 **25.4%** 対 **28.5%**、Vibe Code Bench v1.1 **81.6%** 対 **87.7%**、PostTrainBench v1.2 **31.9%** 対 **36.8%**。**PMPP-Hard**（GPU カーネル）では平均解決タスクで **9 中 6 位**（69 中 **54.25**、AUC 494.27）だが **Pass@4（64）で同率 2 位**——同じ十数回の実行が二つの順位を持つ。「6 位」も「2 位」も真で、指標が主張である。自己申告の限界：音声なし、「not the most succinct communicator」、「doesn't always choose the best tools for the job—especially in codebases with a large number of skills」、そして「overuses of slashes, and overreaction to mental health and other safety related queries」。学習には「hundreds of thousands of long-horizon coding tasks across multiple agent harnesses and context-compaction strategies」の RL が含まれ、採点は通過ではなく取り組み方を見る。初期チェックポイントは **Fledge-Alpha** の名で OpenCode 上で公開テストされた——匿名のプレリリースで、将来のベンチマークを汚染する最も安い方法でもある。
+
+**スパースオートエンコーダの活性バッファは固定計算量なら 8〜64 倍小さくできる**（arXiv 2611.07756）。問いは逆転されている：固定の学習予算で、SAE は**一意な**活性をどれだけ必要とするか。答えは膝のある曲線——品質は「improves rapidly as the buffer grows, then reaches a plateau where replaying the buffer is nearly as effective as using fresh activations throughout training」、その先では「the buffer need not grow with the training budget.」 検証は十分に広い：辞書サイズ、トークン予算、**Llama-3.1** と複数の **Qwen3** サイズの早/中/後層、三つの SAE 変種（**BatchTopK、TopK、JumpReLU**）、数学テキストと Python コードという二つの活性源。評価は説明分散、再構成 MSE、特徴吸収、自動解釈可能性、スパースプロービング——この一覧は正しい。解釈可能性こそ小さいバッファが最初に損なう場所だからだ。チューニング技ではなく**形**である：**多様性は効くが、効かなくなった後は反復がそれを代替する。**
+
+**前向きな制御喪失スコアは長期的失敗率と r = 0.84 で相関する**（arXiv 2611.07953）。三因子——**misaligned motive**、**harm-enabling capability**、**monitoring evasion**——を **13 側面 / 29 タスク**に操作化しモデルごとに 1 つのスカラーにまとめ、**13 のフロンティアモデル**について、封じ込められた長期的リスクシナリオの失敗率と相関させた（**Pearson r = 0.84**）。二つの補助知見が議論を支える：リスクは「varies systematically across models and cannot be explained by capability alone」（能力ランキングは代替にならない）、そして診断された脆弱性に向けた微調整と監視は「reduce failure rates while largely preserving general performance」。限界は範囲で、ここでは明快に書かれている：著者が構築し、著者が重み付けし、著者が選んだ課題による索引を、同じく著者が書いた封じ込めシナリオで検証している。有用な出力は**分解**だ——リスクの大半が監視回避であるモデルと、意図であるモデルでは緩和策が異なる。スカラーにはそれができない。
+
+→ [[fact-check]] [[harness-reliability]] [[formal-verification]] [[security]]

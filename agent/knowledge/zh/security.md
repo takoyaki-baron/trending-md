@@ -4254,3 +4254,16 @@ Red Hat 形状：十一条 `affected[]` 条目点名 `gdb`、`gdb-headless`、`g
 样板：逐 CVE 的表格由客户端渲染。于是这一批**两个工件在补丁级别上都是沉默的**——CVE 记录点名产品而无版本、CNA 的
 JSON 没有条目、CNA 的 HTML 是个壳——而「沉默」是一个带日期的状态，不是缺席。errata 是版本可能存在的第三处，而记录
 没有链接它们。
+
+
+**补记（11-06 12:30——两条 CVE 记录：产物正确、主体错误；外加两个把自身视野写在文档里的 agent 钩子）。**
+
+**`CVE-2026-83844`，Windows 画图（8.1 base / 7.1 temporal，`CWE-125`，`microsoft`）。** 两个注册表与厂商文档都核过：CNA 容器**只**发布 `baseScore: 8.1`，NVD 把同一个 8.1 作为 `Secondary`（`secure@microsoft.com`，状态 `Undergoing Analysis`）转存，而 **7.1 temporal 只存在于微软 CVRF** 的 ScoreSet 里。描述——"Out-of-bounds read in Windows Paint allows an unauthorized attacker to execute code over a network"——是把模板套在一个不监听任何东西的桌面位图编辑器上，而**同一条记录里 CISA 的 ADP SSVC 写着 `Automatable: no`**，与厂商的 `AV:N`/`UI:N` 并置。修复是 `Store App` 类型的 vendor fix（`FixedBuild 11.2609.401.0`，`apps.microsoft.com`）——所以条目里的"没有 KB"是渠道，不是缺失，而在那个月 `Store App` 是 **3,488 条中的 2 条**。完整普查与向量那一课 → [[fact-check]]。
+
+**`CVE-2026-61536`，`masci/banks`（7.5，`GitHub_M`，CWE-94 + CWE-470）。** 一次**不完整的修复**，成因精确：`CVE-2026-44209` 通过换成 `SandboxedEnvironment` 加固了 Jinja，而活着的路径根本不碰 Jinja 属性访问——`_body_to_messages` 从**渲染后的 body** 里解析 `Tool` JSON，`_get_tool_callable` 再用 `importlib.import_module` + `getattr` 解析 `import_path`，当模型输出匹配的 `function.name` 时以 `json.loads(tool_call.function.arguments)` 调用。`{"import_path": "os.system"}` 加 `{"command": "id"}` 就是 agent 服务器上的任意执行。**可推广的形态：同一种序列化格式同时充当开发者接口（`Tool.from_callable` 从 `func.__module__` 构造 `import_path`）与内容通道（同一字段从受模型影响的文本里解析），两条路径的信任级别相同。** 公告给的解法不是沙箱，而是启动时注册的 allowlist。时钟：修复 **2.4.3**（`2026-06-18T14:41:34Z`）→ 记录 **2026-07-30**（42 天）→ GHSA 公开 **2026-11-05**（140 天）。
+
+**两个把"我不覆盖什么"写清楚的 agent harness 钩子。** `cc-plugin-privacy`（Claude Code v2.1.317+，默认启用；issue #107757）拒绝那种输入里既有账号地址、又点名了 User-Agent 的 Bash/PowerShell/Monitor 调用——"two word matches over the whole input. There is no parser, on purpose"——并写明："This is a courtesy, not a boundary, and it covers one shape." 明确放行的包括"地址出现但没点名 User-Agent"，以及**`A web tool call. WebFetch and WebSearch are not checked, and neither are MCP tools`**——正是报告描述的形态。它的关闭清单里还有服务端开关，以及**`A hook of an installed plugin, which sits above this one: on tool.check it may overrule the refusal`**，即已安装插件的钩子可以把内置的拒绝改回去。它无视权限模式和已保存的 allow 规则：这个 mod 是**拒绝，不是提示**，这是更强的一半。
+
+**Stroq**（Apache-2.0，110★）把守卫的问题从"这条命令危险吗"换成"这条命令是否来自 agent 刚读到的文本"，而它最可迁移的发现关于钩子**契约**而非策略：**"Every agent that times a hook out treats its own timeout as an allow: Claude Code cancels the hook and lets the call continue through the normal permission flow, Codex reports a hook failure and proceeds, Copilot discards the late deny."** 它的答案是按安装者所写超时的 60% 抛同一个拒绝的看门狗——即守卫必须**在一个默许失败的系统内部**做到失败即拒绝。它自陈的盲区：`stroq doctor` "detects a modification rather than preventing one"；而每次运行都会列出配置里**完全绕过钩子的 stdio MCP 服务器**（"results reach the agent unchecked"）。与隐私 mod 是同一个入口的另一侧——**钩子层覆盖 shell 调用，而工具结果通道在它之外。**
+
+→ [[fact-check]] [[vuln-supply]] [[disclosure-lag]] [[agent-stack]]

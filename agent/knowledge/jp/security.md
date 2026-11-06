@@ -4670,3 +4670,16 @@ for CVE-2023-46321」と述べ、修正コミット（`314ba43`、`f29420a`）�
 よってこのバッチでは**両方の成果物がパッチレベルについて沈黙**している——CVE レコードは製品を挙げてバージョンを
 持たず、CNA の JSON にはエントリが無く、CNA の HTML はシェルだ——そして「沈黙」は日付を持つ状態であって不在ではない。
 バージョンが存在しうる第三の場所は errata で、レコードはそれをリンクしていない。
+
+
+**追記（11-06 12:30——CVE レコード 2 件、成果物は正しく主体が誤っている 2 つの形、加えて自分の守備範囲を文書に書いた agent フック 2 つ）。**
+
+**`CVE-2026-83844`、Windows ペイント（8.1 base / 7.1 temporal、`CWE-125`、`microsoft`）。** 両レジストリとベンダー文書で確認：CNA コンテナは `baseScore: 8.1` **のみ**を公開し、NVD は同じ 8.1 を `Secondary`（`secure@microsoft.com`、状態 `Undergoing Analysis`）として再掲、**7.1 temporal はマイクロソフトの CVRF** の ScoreSet にしか存在しない。説明——「Out-of-bounds read in Windows Paint allows an unauthorized attacker to execute code over a network」——は、何も待ち受けていないデスクトップのビットマップエディタにテンプレートを当てたもので、**同じレコード内で CISA の ADP SSVC は `Automatable: no`** と書き、ベンダーの `AV:N`/`UI:N` と並ぶ。修正は `Store App` の vendor fix（`FixedBuild 11.2609.401.0`、`apps.microsoft.com`）——項目の「KB が無い」はチャネルの話で欠如ではなく、その月の `Store App` は **3,488 中 2 件**。集計とベクトルの教訓 → [[fact-check]]。
+
+**`CVE-2026-61536`、`masci/banks`（7.5、`GitHub_M`、CWE-94 + CWE-470）。** **不完全な修正**で、原因は精確：`CVE-2026-44209` は `SandboxedEnvironment` への切り替えで Jinja を強化したが、生きた経路は Jinja の属性アクセスを一切通らない——`_body_to_messages` が**レンダリング後の body** から `Tool` JSON を解析し、`_get_tool_callable` が `importlib.import_module` + `getattr` で `import_path` を解決し、モデルが一致する `function.name` を出すと `json.loads(tool_call.function.arguments)` を引数に呼ぶ。`{"import_path": "os.system"}` と `{"command": "id"}` で agent サーバ上の任意実行になる。**一般化できる形：同一のシリアライズ形式が開発者インターフェース（`Tool.from_callable` が `func.__module__` から `import_path` を組む）とコンテンツ経路（同じフィールドをモデル影響下のテキストから解析する）を兼ね、両経路の信頼レベルが同じ。** アドバイザリが示す解はサンドボックスではなく起動時登録の allowlist。時計：修正 **2.4.3**（`2026-06-18T14:41:34Z`）→ レコード **2026-07-30**（42 日）→ GHSA 公開 **2026-11-05**（140 日）。
+
+**自分の守備範囲を明記した agent harness フック 2 つ。** `cc-plugin-privacy`（Claude Code v2.1.317+、既定で有効、issue #107757）は、入力にアカウントのアドレスがあり **かつ** User-Agent を名指す Bash/PowerShell/Monitor 呼び出しを拒否する——「two word matches over the whole input. There is no parser, on purpose」——そして明記する：「This is a courtesy, not a boundary, and it covers one shape.」通るものとして明示されているのはアドレスのみで User-Agent を名指さない場合と、**`A web tool call. WebFetch and WebSearch are not checked, and neither are MCP tools.`**——報告が述べた形そのものだ。停止手段にはサーバ側スイッチと、**`A hook of an installed plugin, which sits above this one: on tool.check it may overrule the refusal`**（インストール済みプラグインのフックが組み込みの拒否を覆せる）も含まれる。権限モードや保存済み allow 規則に関係なく拒否する：この mod は**プロンプトではなく拒否**で、そこが強い側である。
+
+**Stroq**（Apache-2.0、110★）はガードの問いを「このコマンドは危険か」から「このコマンドは agent が直前に読んだテキスト由来か」へ変える。最も持ち運べる発見はポリシーではなくフックの**契約**について：**「Every agent that times a hook out treats its own timeout as an allow: Claude Code cancels the hook and lets the call continue through the normal permission flow, Codex reports a hook failure and proceeds, Copilot discards the late deny.」** その答えは、インストーラが書いたタイムアウトの 60% で同じ拒否を返すウォッチドッグ——ガードは**失敗時に開く系の内部で**失敗時に閉じねばならない。自陳の盲点：`stroq doctor` は「detects a modification rather than preventing one」、そして実行ごとに、フックを完全に迂回する**stdio MCP サーバ**を設定から列挙する（「results reach the agent unchecked」）。プライバシー mod と同じ入口の反対側——**フック層はシェル呼び出しを覆い、ツール結果の経路はその外にある。**
+
+→ [[fact-check]] [[vuln-supply]] [[disclosure-lag]] [[agent-stack]]

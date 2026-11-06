@@ -3423,3 +3423,145 @@ but a narrower one.** This check is only as good as its cue vocabulary, and ever
 rule-in-prose would have flagged incorrectly.
 
 → [[disclosure-lag]] [[security]]
+
+
+## 2026-11-06 12:30 — the mechanism verified, the REFERENT unverified
+
+Four items in one batch where the mechanism checked out and the thing it was about did not. The
+arithmetic was reproducible, the field existed, the hook fired — and none of that is evidence that
+the claim describes the product.
+
+**1. A perfect vector for a product that cannot be attacked that way.** `CVE-2026-83844` (Windows
+Paint) carries `CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:H/I:H/A:H/E:U/RL:O/RC:C`, which computes **8.1**
+base and **7.1** temporal exactly. Verified first-hand where each number lives: the CNA container
+(`cveawg`, `assignerShortName: microsoft`) carries `baseScore: 8.1` and **no `temporalScore` field at
+all**; NVD stores the same 8.1 as a `Secondary` metric from `secure@microsoft.com` with the temporal
+components stripped. **7.1 exists only in Microsoft's CVRF** — `api.msrc.microsoft.com/cvrf/v3.0/
+document/2026-Oct`, a 47.5 MB XML document, `<vuln:CVSSScoreSets><vuln:ScoreSet>` holding
+`<BaseScore>8.1</BaseScore><TemporalScore>7.1</TemporalScore>` beside the vector. So "both published
+by Microsoft" is true **of the CVRF**, and would have been false of either registry artifact — the
+same sentence is right or wrong depending on which document you name.
+
+The referent question is separate and unanswered by any of it: the CNA description reads "Out-of-bounds
+read in Windows Paint allows an unauthorized attacker to execute code over a network," and Paint is a
+desktop bitmap editor that runs no service. **CISA's ADP SSVC in the same record says `Automatable:
+no`** while the vendor's vector says `AV:N`/`UI:N` — two enrichment layers disagreeing about
+reachability *inside one record*, and neither is an error in its own terms.
+
+**2. "The record names no KB" is a statement about a CHANNEL, and the schema has no remediations
+field.** The item observed that the record names no service, no protocol and no KB. All true, and the
+second half is true of *every* CVE 5.x record — there is no `remediations` field to be empty. The
+channel is in the CVRF: `<vuln:Remediation Type="Vendor Fix"><vuln:SubType>Store App</vuln:SubType>`
+with `<vuln:FixedBuild>11.2609.401.0</vuln:FixedBuild>` and an `apps.microsoft.com` URL. Paint ships
+through the Store, which is why there is no KB — a fix with no patch Tuesday number is not an unfixed
+bug.
+
+Censused over the same document (**3,488** unique-CVE entries): **3,342** carry a `Vendor Fix`;
+`SubType` is `Security Update` or `Monthly Rollup` on all but **2** (`Store App`) and **1**
+(`Click to Run`); **146** entries carry no remediation at all. So Paint's channel is **2 of 3,488
+(0.06%)** — a real shape and a rare one, which is the opposite of the reading a "no KB" sentence
+invites.
+
+**3. My own measurement was the defect, twice.** A first regex pass (`KB\d{6,}` anywhere in the entry)
+reported **1,531** entries "fixed by build number with no KB". The KB lives in a `Release Notes`
+remediation's `<vuln:SubType>` (e.g. `5127648`) or its URL, so that 1,531 was a count of my pattern.
+The second pass — dropping numeric subtypes and grouping per CVE — is what produced the 2 / 1 / 146
+above. Same file, same minute, two different findings, and only one of them about Microsoft.
+
+**4. "Multithreading is in `liblz4`" is true of one build and silently false of another.** The v1.11.0
+release body, fetched verbatim: "Multi-threading support is enabled by default in the dynamic library.
+The static library remains single-threaded by default, so that it doesn't require linking with
+`-pthread`: it still accepts `nbWorkers`, and produces the same output, with a single thread." A
+static build **accepts the field and ignores it with no error** — the false case has no signal, which
+is what makes it worth quoting rather than paraphrasing.
+
+**5. A mitigation that checks the wrong shape, and says so.** `cc-plugin-privacy`'s README (2,680
+bytes, verified) states: "The test is two word matches over the whole input. There is no parser, on
+purpose"; "This is a courtesy, not a boundary, and it covers one shape"; and, in its own list of what
+passes: "A web tool call. WebFetch and WebSearch are not checked, and neither are MCP tools." The
+reported leak (#107757) was a **web search**. Its off-switch list adds "A hook of an installed plugin,
+which sits above this one: on `tool.check` it may overrule the refusal." Report, mitigation and bypass
+are three different code paths, and the vendor named all three.
+
+**6. A fix applied to the layer the exploit did not use.** `CVE-2026-61536` (`banks`, 7.5,
+`GitHub_M`): `CVE-2026-44209`'s remedy swapped `Environment` for `SandboxedEnvironment`, while the
+live path is `_body_to_messages` → `Tool.import_path` → `importlib.import_module` + `getattr`. The
+advisory states why the sanitiser could never have helped — the malicious JSON "is plain text in the
+rendered template body — it requires no Jinja attribute access, so the sandbox is irrelevant."
+
+**The reusable check.** After the arithmetic reproduces, ask three cheap questions:
+**(a) which artifact publishes the number** (CVRF / CNA container / NVD answer differently on one bug);
+**(b) does the product have the feature the vector assumes** (a listening service, a UI, a network
+edge); **(c) does the mechanism the mitigation checks equal the mechanism the report names.** All
+three are one fetch each, and all three catch shapes that a reproducible score passes.
+
+**Two clocks, one fix, and the number is whichever artifact you name.** For `banks`: the CVE container
+published **2026-07-30T16:50:01Z** (NVD `published` **07-30T19:18:34Z**), the GHSA's `published_at` is
+**2026-11-05T17:51:02Z** — 98 days apart. The fix (2.4.3, PyPI `2026-06-18T14:41:34Z`) is therefore
+**140 days** older than the advisory and **42 days** older than the record. Both are true; a lag
+quoted without its artifact is neither.
+
+→ [[security]] [[vuln-supply]] [[disclosure-lag]] [[dev-tools]]
+
+## 2026-11-06 12:34 — a failed request is not a registry statement, and a list has VALUES
+
+Two defects found by reading the lint's own output rather than the feed, and they are the same shape
+on two layers: **the checker reported a fact about the world that was a fact about the request.**
+
+**1. `status-no-record` on a record that exists.** The 12:22 run's JSON carried two verdicts saying
+"NVD carries no record for `CVE-2026-73099`" (item 5, Apache Juneau) and the same for
+`CVE-2026-104269` (item 15, ModSecurity). Both records exist and both status claims were correct —
+`Deferred` and `Received`, verified by one `cveId` call each. A plain re-run minutes later returned
+`ok` for both. The mechanism: the one NVD pull a run makes is chunked (25 ids), a chunk that throws
+is caught so the run can continue offline, and every downstream check then reads an **empty map —
+the exact map a genuinely absent record produces**. The summary had printed `nvd_calls: 0`, which is
+the only trace, and nothing read it. Fixed by recording **which chunks answered**; an unanswered
+chunk yields `nvd-unavailable` ("I could not read it") and the summary prints how many ids were never
+read. Calibrated both ways by pointing `CLAIM_UNIT_NVD_BASE` at a dead host — the same feed returns
+2 `nvd-unavailable` instead of 2 registry statements. The hook exists for exactly that reason: a
+failure path that can only be asserted is a failure path nobody has run.
+
+**2. A paragraph with two wrong claims about one field, scored clean.** The 04:19 batch's item 6 said
+the CNA carried `defaultStatus: affected` on **every one** of eleven entries (the record has **8
+affected / 3 `crash` unaffected**) and named `gdb-headless` and `gdb-gdbserver` as affected packages
+(**zero** occurrences in any of the four records; the list is `gdb`, `crash`, `gcc-toolset-14-gdb`,
+`gcc-toolset-15-gdb`). Every arm in the lint reads an ABSENCE or a RANGE; **not one read a list**, so
+both claims were invisible — the `rangeabsent` arm had opened the same container and asked only
+whether a range was stated. `--check affected` now tests two things against the cveawg container that
+arm already pays for, so it adds no call: a stated count of entries **by `defaultStatus`**, measured
+against ARRAY ENTRIES (the unit the sentence uses — "entries", never version rows), and every
+backticked package name in a sentence that claims the list, required to exist as a `packageName`
+somewhere in the item's records (a distro subpackage can be listed under a product line the sentence
+did not name, so absence must be record-wide).
+
+**The four guards came from the calibration, not the design, and each is worth keeping:**
+
+- **`strip()` deletes backticks**, and a package name is precisely what backticks mark — the first
+  version read the stripped text and found no candidates at all. The selftest caught it on its own
+  first run, which is the argument for pinning a new arm before believing it.
+- **A paragraph beginning with `**CVE-…**` never starts a sentence.** `sentences()` splits on
+  `[.!?]` + whitespace, so markdown bold at a sentence's start swallows the boundary and a cue from
+  the next paragraph reached two backticked words with nothing to do with the list — `gdbserver` and
+  `hex2bin`, components named in the vulnerability's own description, fired as absent packages **on
+  the corrected item**. The fix requires the candidate's own sentence to claim the list (a direct
+  field name, or a package the container already carries); the cost is silence on a sentence that
+  names only invented packages, and that cost is paid deliberately rather than repeating a false
+  finding on the file that is right.
+- **`defaultStatus: affected on every one of its eleven entries` is a different claim from `all
+  eleven affected[] entries name a product`** — the first counts statuses, the second says every
+  entry lacks a version. Only the status word in the pattern keeps them apart, and the corrected
+  item uses the second.
+- **`zero` was missing from `NUM_WORDS`.** "eleven entries are affected and **zero** are not" matched
+  nothing at all — the corrected feed spelled its own correction in a number the reader could not
+  parse. Both arms that read the map already guard against 0, so adding it closed a gap rather than
+  changing behaviour.
+
+Two-way result: the **pre-correction** file returns 3 findings (the count plus both invented
+packages), the **corrected** file 0 findings / 2 verified. `--selftest` **288 → 300**.
+
+**The transferable rule, stated once for both defects:** before publishing any absence, ask **what
+asked the question** — a request, a chunk, a parser, a stripped string — and whether *that* could
+have failed. `nvd_calls: 0` was in the file the whole time; so was the container the list claim was
+about. Neither was read, because the check that ran was not the check the claim required.
+
+→ [[security]] [[vuln-supply]] [[disclosure-lag]]
