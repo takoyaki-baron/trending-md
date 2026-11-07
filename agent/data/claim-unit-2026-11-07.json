@@ -1,0 +1,117 @@
+{
+ "generated": "2026-11-07T12:33:43.149Z",
+ "files": [
+  {
+   "file": "2026-11-07.md",
+   "items": 20,
+   "findings": [
+    {
+     "check": "cvss",
+     "item": 14,
+     "verdict": "ok",
+     "claim": "3.1 7.5",
+     "detail": "CVE-2026-19868 · Secondary/134c704f-9b21-4f2e-91b3-4a467353bcc0 · vector reproduces 7.5"
+    },
+    {
+     "check": "cvss",
+     "item": 14,
+     "verdict": "slot-quoted",
+     "claim": "Primary/Secondary",
+     "detail": "a metric slot is not a provenance — name the source (CNA / nvd@nist.gov / CISA-ADP) instead"
+    },
+    {
+     "check": "status",
+     "item": 14,
+     "verdict": "ok",
+     "claim": "CVE-2026-19868 `Undergoing Analysis`",
+     "detail": "Undergoing Analysis (lastModified 2026-11-07T05:19:01.300)"
+    },
+    {
+     "check": "status",
+     "item": 15,
+     "verdict": "ok",
+     "claim": "CVE-2026-90436 `Received`",
+     "detail": "Received (lastModified 2026-11-06T19:17:58.880)"
+    },
+    {
+     "check": "date",
+     "item": 15,
+     "verdict": "ok",
+     "claim": "CVE-2026-90436 published 2026-11-06",
+     "detail": "NVD published 2026-11-06T16:18:59.763 (2026-11-06 UTC) · cveawg datePublished 2026-11-06T15:37:55.374Z (2026-11-06 UTC) — the two clocks differ; 2026-11-06 is the NVD published day"
+    },
+    {
+     "check": "repo",
+     "item": 1,
+     "verdict": "star-surge",
+     "claim": "2088 quoted vs 64808 now",
+     "detail": "cloudflare/security-audit-skill: 2088 → 64808 (+97%, 62720 stars) since the batch was written — a rising count is not a wrong one; date the reading if the number will be re-used"
+    },
+    {
+     "check": "repo",
+     "item": 1,
+     "verdict": "ok",
+     "claim": "cloudflare/security-audit-skill",
+     "detail": "64808★, last push 2026-09-14"
+    },
+    {
+     "check": "repo",
+     "item": 3,
+     "verdict": "ok",
+     "claim": "ppmpreetham/BUI",
+     "detail": "1815★, last push 2026-11-07"
+    },
+    {
+     "check": "repo",
+     "item": 4,
+     "verdict": "stale-disclosed",
+     "claim": "PrivSec-dev/banking-apps-compat-report",
+     "detail": "last push 2026-05-20 (171d) with 368 stars — the item states the state itself (“dormant”), so the staleness is the story rather than an unexamined number"
+    },
+    {
+     "check": "repo",
+     "item": 15,
+     "verdict": "stale-disclosed",
+     "claim": "apache/axis-axis1-java",
+     "detail": "last push 2026-09-07 (61d) with 15 stars — the item states the state itself (“no release since”), so the staleness is the story rather than an unexamined number"
+    },
+    {
+     "check": "repo",
+     "item": 19,
+     "verdict": "ok",
+     "claim": "piercefreeman/waymark",
+     "detail": "109★, last push 2026-11-06"
+    },
+    {
+     "check": "quotation",
+     "item": 1,
+     "verdict": "ok",
+     "claim": "1 quotation(s)",
+     "detail": "verbatim in 3 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 11,
+     "verdict": "ok",
+     "claim": "1 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 13,
+     "verdict": "ok",
+     "claim": "1 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    }
+   ]
+  }
+ ],
+ "status_watch": [],
+ "api_calls": 0,
+ "readme_calls": 0,
+ "cited_page_calls": 0,
+ "repo_page_calls": 0,
+ "nvd_calls": 1,
+ "nvd_failed_chunks": 0,
+ "cna_calls": 0
+}
