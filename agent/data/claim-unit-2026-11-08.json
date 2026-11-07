@@ -1,0 +1,222 @@
+{
+ "generated": "2026-11-07T20:31:15.138Z",
+ "files": [
+  {
+   "file": "2026-11-08.md",
+   "items": 17,
+   "findings": [
+    {
+     "check": "status",
+     "item": 2,
+     "verdict": "ok",
+     "claim": "CVE-2026-123294 `Awaiting Analysis`",
+     "detail": "Awaiting Analysis (lastModified 2026-11-07T05:18:12.623)"
+    },
+    {
+     "check": "cvss",
+     "item": 11,
+     "verdict": "ok",
+     "claim": "4.0 8.7",
+     "detail": "CVE-2026-123783 · Secondary/disclosure@vulncheck.com"
+    },
+    {
+     "check": "cvss",
+     "item": 11,
+     "verdict": "ok",
+     "claim": "3.1 8.8",
+     "detail": "CVE-2026-123783 · Secondary/disclosure@vulncheck.com · vector reproduces 8.8"
+    },
+    {
+     "check": "status",
+     "item": 11,
+     "verdict": "ok",
+     "claim": "CVE-2026-123783 `Deferred`",
+     "detail": "Deferred (lastModified 2026-11-06T18:18:04.953)"
+    },
+    {
+     "check": "status",
+     "item": 11,
+     "verdict": "ok",
+     "claim": "CVE-2026-123783 `Deferred`",
+     "detail": "Deferred (lastModified 2026-11-06T18:18:04.953)"
+    },
+    {
+     "check": "rangeabsent",
+     "item": 11,
+     "verdict": "range-only-in-cna",
+     "claim": "CVE-2026-123783 — \"no fixed version\"",
+     "detail": "NVD `configurations` is absent (record is `Deferred`, and absent `configurations` means \"not yet analysed\", never \"states nothing\"); 1 `affected[]` entry with a `versions[]` — the sentence is true of NVD and false of the record, because the CNA's own `affected[]` is where the range lives (this is the open62541 shape, 2026-10-25)"
+    },
+    {
+     "check": "cvss",
+     "item": 12,
+     "verdict": "ok",
+     "claim": "3.1 9.8",
+     "detail": "CVE-2026-123488 · Primary/disclosure@vulncheck.com · vector reproduces 9.8"
+    },
+    {
+     "check": "cvss",
+     "item": 12,
+     "verdict": "ok",
+     "claim": "4.0 9.3",
+     "detail": "CVE-2026-123488 · Secondary/disclosure@vulncheck.com"
+    },
+    {
+     "check": "status",
+     "item": 12,
+     "verdict": "ok",
+     "claim": "CVE-2026-123488 `Awaiting Analysis`",
+     "detail": "Awaiting Analysis (lastModified 2026-11-06T20:15:23.650)"
+    },
+    {
+     "check": "repo",
+     "item": 3,
+     "verdict": "ok",
+     "claim": "milind-soni/OpenMausBot",
+     "detail": "16823★, last push 2026-11-07"
+    },
+    {
+     "check": "repo",
+     "item": 7,
+     "verdict": "ok",
+     "claim": "dsx-ai-factory/nvke",
+     "detail": "507★, last push 2026-11-07"
+    },
+    {
+     "check": "repo",
+     "item": 17,
+     "verdict": "ok",
+     "claim": "mbillow/localthings",
+     "detail": "1019★, last push 2026-11-07"
+    },
+    {
+     "check": "quotation",
+     "item": 1,
+     "verdict": "ok",
+     "claim": "8 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 2,
+     "verdict": "ok",
+     "claim": "1 quotation(s)",
+     "detail": "verbatim in 10 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 3,
+     "verdict": "ok",
+     "claim": "1 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 4,
+     "verdict": "ok",
+     "claim": "4 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 5,
+     "verdict": "ok",
+     "claim": "1 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 6,
+     "verdict": "ok",
+     "claim": "2 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 7,
+     "verdict": "ok",
+     "claim": "1 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 8,
+     "verdict": "ok",
+     "claim": "2 quotation(s)",
+     "detail": "verbatim in 11 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 9,
+     "verdict": "ok",
+     "claim": "2 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 10,
+     "verdict": "ok",
+     "claim": "1 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 11,
+     "verdict": "ok",
+     "claim": "2 quotation(s)",
+     "detail": "verbatim in 3 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 12,
+     "verdict": "ok",
+     "claim": "1 quotation(s)",
+     "detail": "verbatim in 9 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 13,
+     "verdict": "ok",
+     "claim": "2 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 14,
+     "verdict": "ok",
+     "claim": "1 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 15,
+     "verdict": "ok",
+     "claim": "2 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 16,
+     "verdict": "ok",
+     "claim": "1 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 17,
+     "verdict": "ok",
+     "claim": "1 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    }
+   ]
+  }
+ ],
+ "status_watch": [],
+ "api_calls": 0,
+ "readme_calls": 0,
+ "cited_page_calls": 0,
+ "repo_page_calls": 0,
+ "nvd_calls": 1,
+ "nvd_failed_chunks": 0,
+ "cna_calls": 0
+}
