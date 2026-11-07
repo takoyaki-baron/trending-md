@@ -251,13 +251,13 @@ const CACHE_PATH = arg('cache') ?? 'agent/data/claim-unit-cache.json';
 // 5 MB of TEXT is ~7 MB on disk (JSON escapes newlines); 8 MB was an 11 MB file, bigger than the 9.9 MB
 // it was meant to bound.
 const CACHE_BYTES = Number(arg('cache-bytes') ?? 5_000_000);
-const CHECKS = new Set((arg('check') ?? 'issues,cvss,status,date,temporal,cwe,field,range,rangeabsent,affected,idrange,repo,count,ratio,bundle,quotation,paper').split(',').map((s) => s.trim()));
+const CHECKS = new Set((arg('check') ?? 'issues,cvss,status,date,temporal,cwe,field,range,rangeabsent,affected,referent,idrange,repo,count,ratio,bundle,quotation,paper').split(',').map((s) => s.trim()));
 
 const SELFTEST = has('selftest');
 const STATUS_WATCH = has('status-watch');
 const EXTRA_IDS = (arg('ids') ?? '').split(',').map((s) => s.trim()).filter(Boolean);
 if (!FILE && !FILES && !SELFTEST && !has('ghsa-census') && !has('quotation-census') && !has('commit-quote-census') && !STATUS_WATCH) {
-  console.error('usage: claim-unit-lint.mjs --file <feed.md> [--no-net] [--check issues,cvss,status,date,temporal,cwe,field,range,rangeabsent,repo,count,ratio,bundle,quotation] [--strict] [--json] [--census] [--selftest] [--status-watch [--ids CVE-…]] | --ghsa-census [--pages N]');
+  console.error('usage: claim-unit-lint.mjs --file <feed.md> [--no-net] [--check issues,cvss,status,date,temporal,cwe,field,range,rangeabsent,referent,repo,count,ratio,bundle,quotation] [--strict] [--json] [--census] [--selftest] [--status-watch [--ids CVE-…]] | --ghsa-census [--pages N]');
   process.exit(2);
 }
 
@@ -918,6 +918,11 @@ function cnaState(id) {
     products: [...new Set(affArr.map((a) => a.product).filter(Boolean))],
     entryStatus,
     packages: [...new Set(affArr.map((a) => a.packageName).filter(Boolean))],
+    /* `packageURL` is the referent check's second deny-list arm: a `pkg:msix/…`/msstore PURL says
+       "distributed through an app store", which is a statement about the artifact's surface no
+       product NAME can make. v: 9 exists so a v-8 entry cannot answer "no store reference" for a
+       container it was never read for. */
+    packageURLs: [...new Set(affArr.map((a) => a.packageURL).filter(Boolean))],
   };
   /* `references[]` is the THIRD place a record names a fix (`versions[]` is the second, prose the
      first), and here it is the only one a commit-shaped remedy can reach. */
@@ -2389,6 +2394,128 @@ function checkAffected(it, cna = new Map()) {
   return out;
 }
 
+// ── check: the REFERENT (built 2026-11-07 21:09, the System item filed 11-06 12:31) ─────────
+/* Every arm above verifies a NUMBER against a RECORD; none asks whether the record's model fits
+ * the thing. Two arms, both pure:
+ *
+ * (a) `vector-product-mismatch` (sev 1, advisory). An item can quote a correct vector and still
+ *     assert a model the product does not have: `AV:N`/`AV:A` assumes something remotely
+ *     reachable on a product the CNA's own `affected[].product` names as a desktop/store app —
+ *     the 2026-11-06 Paint item's own debate, where the record scored a Store app with a network
+ *     vector. A product name is not a service inventory — a desktop app CAN
+ *     carry a network feature — so this is NEVER a finding: sev 1 advisory when the sentence is
+ *     bare, sev 0 `product-mismatch-disclosed` when the item already draws the distinction (the
+ *     same disclose-not-suppress shape as `temporal-disclosed` and `stale-disclosed`). The second
+ *     deny-list arm reads `packageURL`: a `pkg:msix/…`/msstore PURL states store distribution,
+ *     which no product NAME can.
+ *
+ * (b) `schema-absent` (sev 0). "The CVE record carries no remediation entry" is a claim about the
+ *     SCHEMA: CVE 5.x has no `remediations` field, so the sentence is true of every record ever
+ *     published and carries no information about fixes. The remedy lives in the vendor document —
+ *     Microsoft's CVRF carries `<vuln:Remediation Type="Vendor Fix">` (censused 2026-11-06:
+ *     3,342 of 3,488 entries have one; Paint's Store App channel is 2 of 3,488) — which is what
+ *     `agent/tools/vendor-advisory.mjs` reads. Never a finding; a pointer for the reader who
+ *     would otherwise take the sentence as "no fix".
+ *
+ * Guards, each a way this fires on a correct item: the remediation cue must be record-bound (the
+ * sentence names the record/registry — the guard `rangeabsent` bought on 10-31 after "the advisory
+ * names no boundary" bound to the CVE); a claim about fix EXISTENCE ("no patch is available") is
+ * prose the record CAN state and is not a schema claim; quoted and attributed speech is skipped;
+ * a service-shaped product in the list defeats the deny-list for the whole record (a mixed
+ * `affected[]` is a record about several surfaces); and an unread container is silence. */
+
+/* Desktop/store app shapes — deliberately small, because membership is the whole signal: a product
+ * whose name is one of these is app-store-distributed and has no server class. Network app names
+ * (Outlook, Teams, mail, phone link) are deliberately absent — those products DO carry network
+ * surfaces, and `AV:N` on them is unremarkable. */
+const DESKTOP_PRODUCT_RE = /\b(?:paint|notepad|photos|calculator|snipping\s+tool|wordpad|camera|clock|weather|media\s+player|solitaire|clipchamp|game\s+bar)\b/i;
+const SERVICE_PRODUCT_RE = /\b(?:server|service|gateway|proxy|vpn|edge|web|api|daemon|agent|runtime|cluster|host)\b/i;
+const MSIX_PURL_RE = /pkg:(?:[^/]+\/)*(?:msix|msstore)/i;
+/* The debate spelled out — the Paint item's own body discusses whether a store-distributed app can
+ * carry a network surface, which is exactly the disclosure the disclosed verdict asks for. Two
+ * scopes on purpose: the claim's own sentence may use the broad vocabulary (`desktop`), but the
+ * whole-item test is deliberately NARROWER — "desktop" appears in roundups that never debate the
+ * vector, and one stray word must not downgrade an advisory into a disclosure. */
+const MISMATCH_DISCLOSED = /\b(?:desktop|store[- ](?:app|distributed)|app[- ]store|msix|msstore|local(?:ly)?\s+(?:attack|reachable|vector)|no\s+network|network(?:ed)?\s+(?:feature|surface|capability|path)|attack\s+surface)\b/i;
+const MISMATCH_DISCLOSED_ITEM = /\b(?:store[- ](?:app|distributed)|app[- ]store|msix|msstore|local(?:ly)?\s+(?:attack|reachable|vector)|no\s+network|network(?:ed)?\s+(?:feature|surface|capability|path))\b/i;
+/* The remediation-FIELD cue: nouns a record cannot carry in CVE 5.x. "No patch is available" is
+ * deliberately NOT here — that is a statement about fix existence, which prose can state. */
+const REMEDIATION_FIELD_ABSENT = /\b(?:carries|states?|has|contains?|lists?|names?|includes?|offers?)\s+no\s+(?:remediations?(?:\s+entr(?:y|ies)|\s+field|\s+information)?|KB\s*\d{5,}|knowledge[-\s]?base\s+(?:article|entr(?:y|ies))|patch(?:ed)?\s+(?:field|entry|section)|fix(?:ed)?\s+(?:field|entry|section)|update\s+(?:field|entry|section))\b/gi;
+/* The record-noun guard for arm (b), one regex: the absence sentence must name the artifact whose
+ * schema it is describing. */
+const REFERENT_RECORD_NOUN = /\b(?:record|container|NVD|registry|CVE\s+record|CVE\s+5)\b/i;
+/* A QUOTED vector, not a matched score: the referent question rides the vector the item itself
+ * asserts (`CVSS:3.1/AV:N/…`), because that is the sentence claiming the model. The Paint item
+ * quotes the vector and never states a bare "3.1 8.1" score pair, so a claim-shape trigger would
+ * be silent on its own filing case. Pairs are `[A-Z]{2}:` + value, so the match stops at the
+ * prose that follows the closing delimiter ("RC:C — **base 8.1**" ends at C, not at "base"). */
+const QUOTED_VECTOR_RE = /CVSS:([34]\.[01])\/((?:[A-Z]{1,2}:[A-Za-z0-9._-]+\/?)+)/g;
+
+/** Pure: the referent verdict for one quoted vector, given the CNA's own product list. Split out
+ *  so `--selftest` pins every arm without a network call. */
+function referentMismatch({ vector, products = [], packageURLs = [], sentence = '', itemDisclosed = false }) {
+  if (!vector || !/AV:[NA]\b/.test(vector)) return null;
+  if (MISMATCH_DISCLOSED.test(sentence) || itemDisclosed) {
+    return { verdict: 'product-mismatch-disclosed', disclosed: true, detail: 'the item already draws the desktop/store distinction, so the advisory is a disclosure rather than a gap' };
+  }
+  const purls = packageURLs.filter((u) => MSIX_PURL_RE.test(u));
+  const named = products.filter((p) => DESKTOP_PRODUCT_RE.test(p));
+  const storeShape = purls.length > 0 || (products.length > 0 && named.length === products.length);
+  if (!storeShape) return null;
+  if (products.some((p) => SERVICE_PRODUCT_RE.test(p))) return null;
+  return {
+    verdict: 'vector-product-mismatch',
+    detail: `the vector assumes a remote vector (AV:${vector.match(/AV:([NA])\b/)[1]}) while ${named.length ? `the CNA names only desktop/store product(s): ${named.join(', ')}` : `the record's packageURL is a store reference: ${purls[0]}`}`,
+  };
+}
+
+function checkReferent(it, subjects, cna = new Map()) {
+  const out = [];
+  const t = strip(it.text);
+  const mentions = idMentions(t);
+  const ctx = { sents: sentences(t), primary: primarySubject(t, mentions) };
+  const itemDisclosed = MISMATCH_DISCLOSED_ITEM.test(t);
+  /* ── arm (a): does the product have what the vector assumes? ── */
+  const seenVec = new Set();
+  for (const m of t.matchAll(QUOTED_VECTOR_RE)) {
+    if (!/\/AV:[NA]\b/.test(`/${m[2]}`)) continue;
+    const bound = bindSubject(m.index, mentions, ctx);
+    if (!bound || bound.kind !== 'cve') continue;
+    if (seenVec.has(bound.id)) continue;
+    seenVec.add(bound.id);
+    const cn = cna.get(bound.id);
+    if (!cn || cn.error) continue;               // no container → no product list, no verdict
+    const aff = cn.affected ?? {};
+    const s = ctx.sents.find((x) => m.index >= x.start && m.index < x.end);
+    const sentText = s ? t.slice(s.start, s.end) : '';
+    const v = referentMismatch({ vector: `CVSS:${m[1]}/${m[2]}`, products: aff.products ?? [], packageURLs: aff.packageURLs ?? [], sentence: sentText, itemDisclosed });
+    if (!v) continue;
+    out.push({
+      check: 'referent', item: it.n, verdict: v.verdict, claim: `${bound.id} quotes ${m[0].slice(0, 48)}`,
+      detail: `${v.detail} — a product name is not a service inventory, so this is advisory: the claim can be right and the product unusual`,
+    });
+  }
+  /* ── arm (b): a remediation-FIELD absence is the schema's, not the vendor's ── */
+  const seen = new Set();
+  for (const m of t.matchAll(REMEDIATION_FIELD_ABSENT)) {
+    const before = t.slice(Math.max(0, m.index - 40), m.index);
+    if (/["“'‘]\s*$/.test(before)) continue;                                  // quoted speech
+    if (/\b(?:report|read|say|see|claim|describ|interpret|parse|treat|render|calls?)\w*\b[^.]{0,24}$/i.test(before)) continue; // attributed
+    const bound = bindSubject(m.index, mentions, ctx);
+    if (!bound || bound.kind !== 'cve') continue;
+    const s = ctx.sents.find((x) => m.index >= x.start && m.index < x.end);
+    const sentText = s ? t.slice(s.start, s.end) : '';
+    if (!REFERENT_RECORD_NOUN.test(sentText)) continue; // the claim is about another artifact
+    if (seen.has(bound.id)) continue;
+    seen.add(bound.id);
+    out.push({
+      check: 'referent', item: it.n, verdict: 'schema-absent', claim: `“${m[0]}”`,
+      detail: `CVE 5.x has no \`remediations\` field, so this sentence is true of every record ever published and carries no information about fixes — ${bound.id}'s remedy lives in the vendor document (CVRF/CSAF), which \`agent/tools/vendor-advisory.mjs\` reads`,
+    });
+  }
+  return out;
+}
+
 // ── check C: repo state ─────────────────────────────────────────────────────────────────────
 let cache = {};
 try { cache = JSON.parse(readFileSync(CACHE_PATH, 'utf8')); } catch { /* first run */ }
@@ -2410,11 +2537,14 @@ const ERROR_TTL_MS = 10 * 60 * 1000;
    v: 8 adds `affected.entryStatus` and `affected.packages` (the array's VALUES) — a v-7 entry has
    the shape only, so it would answer "no `packageName` in any record", which is exactly the claim
    the `affected` check is testing.
+   v: 9 adds `affected.packageURLs` (the referent check's store-distribution arm) — a v-8 entry
+   carries no PURL list, so it would answer "no store reference" for a container it was never read
+   for.
    Each bump is the rule, not
    a tidiness choice: an entry written before a field was read would turn "not fetched by this
    version" into "absent from the record", which is the exact defect the schema version exists to
    prevent. A bump forces one refetch per CVE and is unmetered. */
-const CNA_CACHE_V = 8;
+const CNA_CACHE_V = 9;
 /* The repo cache had no version until 2026-11-05, and the day it needed one it produced exactly the
  * defect the versions above exist to prevent: v-0 entries stored a failure as a bare `error` string,
  * so `tencent/Hy4`'s 404 came back as "unreadable" from a six-hour-old entry even after `repoState`
@@ -2467,7 +2597,12 @@ function starQuotesOf(plain) {
   for (const m of plain.matchAll(re)) {
     if (m[1]) continue;                                   // signed → a delta, not a count
     const after = plain.slice(m.index + m[0].length, m.index + m[0].length + 24).toLowerCase();
-    if (/^\s*(?:today|yesterday|this\s+(?:day|week|month)|in\s+the\s+(?:last|past)|\/\s*day|per\s+day|so\s+far|overnight|a\s+day)/.test(after)) continue;
+    /* `in a day` added 2026-11-07 21:09 after today's own JSON: item 1's TITLE is
+     * "security-audit-skill spikes again — 2,088 stars in a day", its Source line carries
+     * "+2,088★ today · 64,781 total", and the check reported star-surge for "2088 quoted vs
+     * 64808 now" — a DELTA compared against the total, the 2026-10-27 `+312` defect wearing
+     * an unsigned tail. The number was true and dated; the reading was the checker's. */
+    if (/^\s*(?:today|yesterday|this\s+(?:day|week|month)|in\s+the\s+(?:last|past)|\/\s*day|per\s+day|in\s+(?:a|one)\s+day|so\s+far|overnight|a\s+day)/.test(after)) continue;
     const n = toNum(m[2]) * (m[3] ? 1000 : 1);
     if (Number.isFinite(n)) out.push(n);
   }
@@ -5148,6 +5283,52 @@ if (SELFTEST) {
   t('affected: an unread container is silence, not absence',
     checkAffected(mk('t', 'CVE-2026-121995: eleven entries are affected and zero are not.'), new Map([['CVE-2026-121995', { error: 'unreadable' }]])).map((x) => x.verdict), []);
 
+  /* 2026-11-07 21:09 — the REFERENT check (System item filed 11-06 12:31), calibrated on the
+     2026-11-06 Paint item, whose own "Why it matters" line — "the arithmetic being right says
+     nothing about whether the model fits" — is the question these arms mechanize. Every case is
+     the filing shape or one of its guards. */
+  const paintCna = () => new Map([['CVE-2026-83844', { affected: { key: 'populated', entries: 1, versioned: 1, products: ['Microsoft Paint'], entryStatus: { affected: 1, unaffected: 0, other: 0 }, packages: [], packageURLs: [] } }]]);
+  const cnaOf = (products, packageURLs = []) => new Map([['CVE-2026-83844', { affected: { key: 'populated', entries: products.length, versioned: products.length, products, entryStatus: { affected: products.length, unaffected: 0, other: 0 }, packages: [], packageURLs } }]]);
+  const ref = (body, cnaMap = paintCna()) => checkReferent(mk('t', body), new Map(), cnaMap).map((x) => x.verdict);
+  t('referent: AV:N quoted on a store-distributed product is the advisory',
+    ref('CVE-2026-83844 quotes `CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:H/I:H/A:H` for an over-the-network read.'), ['vector-product-mismatch']);
+  t('referent: the filing item debates the model, so it is disclosed, not flagged',
+    ref('CVE-2026-83844 quotes `CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:H/I:H/A:H`. Its only network feature is a Copilot integration.'), ['product-mismatch-disclosed']);
+  t('referent: AV:L on the same product assumes nothing remote',
+    ref('CVE-2026-83844 quotes `CVSS:3.1/AV:L/AC:H/PR:N/UI:N/S:U/C:H/I:H/A:H`.'), []);
+  t('referent: a service-shaped product list defeats the deny-list',
+    ref('CVE-2026-83844 quotes `CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:H/I:H/A:H`.', cnaOf(['Windows Server 2025', 'Windows 11'])), []);
+  t('referent: a mixed list (Paint beside anything) is silence',
+    ref('CVE-2026-83844 quotes `CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:H/I:H/A:H`.', cnaOf(['Microsoft Paint', 'Windows 11'])), []);
+  t('referent: a store packageURL alone carries the arm',
+    ref('CVE-2026-83844 quotes `CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:H/I:H/A:H`.', cnaOf(['Contoso Sketch'], ['pkg:msix/contoso.sketch'])), ['vector-product-mismatch']);
+  t('referent: an unread container is silence',
+    ref('CVE-2026-83844 quotes `CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:H/I:H/A:H`.', new Map([['CVE-2026-83844', { error: 'unreadable' }]])), []);
+  t('referent: the quoted vector survives strip() with its pairs intact',
+    (() => { const m = [...strip('The vector is `CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:H/I:H/A:H/E:U/RL:O/RC:C` — **base 8.1**, both published.').matchAll(QUOTED_VECTOR_RE)][0]; return [m[2].endsWith('RC:C'), m[2].includes('base')]; })(), [true, false]);
+  t('schema-absent: the filing sentence is a schema statement, not a fix statement',
+    ref('Its only reference is the MSRC update guide, and the CVE record for CVE-2026-83844 carries no remediation entry.'), ['schema-absent']);
+  t('schema-absent: an attributed absence is not the item claim',
+    ref('The post says the record carries no remediation entry for CVE-2026-83844.'), []);
+  t('schema-absent: fix existence is prose the record CAN state',
+    ref('No patch is available yet for CVE-2026-83844.'), []);
+  t('schema-absent: a sentence about an advisory is another artifact claim',
+    ref("CVE-2026-83844's advisory carries no remediation entry."), []);
+
+  /* 2026-11-07 21:09 — the star arm read a DELTA as a total on today's own JSON: item 1's TITLE is
+     "2,088 stars in a day", its Source line carries "+2,088★ today · 64,781 total", and the check
+     compared 2,088 against 64,874 and reported star-surge. The number was true and dated; the
+     reading was the checker's — the same unit defect as the 2026-10-27 `+312` case, wearing an
+     unsigned tail the period-word test did not reach. */
+  t('star delta: "N stars in a day" is a delta, not a total',
+    starQuotesOf('security-audit-skill spikes again — 2,088 stars in a day for a folder'), []);
+  t('star delta: "in one day" reads the same',
+    starQuotesOf('1,000 stars in one day'), []);
+  t('star delta: "a day" after the number stays a delta',
+    starQuotesOf('1,000 stars a day'), []);
+  t('star quotes: a bare total still reads',
+    starQuotesOf('the repo holds 64,781 stars'), [64781]);
+
   for (const c of cases) console.log(`  ${c.pass ? '✓' : '✗'} ${c.name}${c.pass ? '' : ` — got ${JSON.stringify(c.got)}, want ${JSON.stringify(c.want)}`}`);
   const ok = cases.filter((c) => c.pass).length;
   console.log(`selftest ${ok}/${cases.length}`);
@@ -5183,7 +5364,7 @@ function pullCovers(pull, id) {
  * alone without it, the check said "NVD re-serves no metric" about a record NVD re-serves four of.
  * The statement was about the pull, not the registry, which is the "unread is not absent" defect
  * wearing a different hat (fixed 2026-11-02 12:34, while calibrating the stopping-point check). */
-if (!NO_NET && (CHECKS.has('cvss') || CHECKS.has('temporal') || CHECKS.has('status') || CHECKS.has('cwe') || CHECKS.has('field') || CHECKS.has('range') || CHECKS.has('rangeabsent') || STATUS_WATCH || CHECKS.has('quotation'))) {
+if (!NO_NET && (CHECKS.has('cvss') || CHECKS.has('temporal') || CHECKS.has('status') || CHECKS.has('cwe') || CHECKS.has('field') || CHECKS.has('range') || CHECKS.has('rangeabsent') || CHECKS.has('referent') || STATUS_WATCH || CHECKS.has('quotation'))) {
   const cves = [...new Set([...parsed.flatMap((f) => f.items.flatMap((it) => it.cves)), ...EXTRA_IDS])];
   const CHUNK = 25;
   for (let i = 0; i < cves.length; i += CHUNK) {
@@ -5238,7 +5419,7 @@ if (STATUS_WATCH && !NO_NET) {
 // unmetered, so the cap is about latency rather than budget — cached entries cost nothing.
 const cna = new Map();
 let cnaCalls = 0;
-if (!NO_NET && (CHECKS.has('cvss') || CHECKS.has('temporal') || CHECKS.has('cwe') || CHECKS.has('field') || CHECKS.has('range') || CHECKS.has('rangeabsent') || CHECKS.has('affected') || CHECKS.has('quotation'))) {
+if (!NO_NET && (CHECKS.has('cvss') || CHECKS.has('temporal') || CHECKS.has('cwe') || CHECKS.has('field') || CHECKS.has('range') || CHECKS.has('rangeabsent') || CHECKS.has('affected') || CHECKS.has('referent') || CHECKS.has('quotation'))) {
   const ids = [...new Set(parsed.flatMap((f) => f.items.flatMap((it) => strip(it.text).match(/CVE-\d{4}-\d{3,7}/g) ?? [])))].slice(0, MAX_CNA);
   for (const id of ids) {
     // A schema bump forces a refetch, and a refetch is a call: counting only "no entry at all"
@@ -5271,6 +5452,7 @@ for (const { path: p, items } of parsed) {
     if (!NO_NET && CHECKS.has('range')) findings.push(...checkRange(it, subjects, cna));
     if (!NO_NET && CHECKS.has('rangeabsent')) findings.push(...checkRangeAbsent(it, subjects, cna));
     if (!NO_NET && CHECKS.has('affected')) findings.push(...checkAffected(it, cna));
+    if (!NO_NET && CHECKS.has('referent')) findings.push(...checkReferent(it, subjects, cna));
   }
   if (!NO_NET && CHECKS.has('repo')) for (const it of items) findings.push(...checkRepo(it, budget, ageBudget));
   if (!NO_NET && CHECKS.has('count')) for (const it of items) findings.push(...await checkCount(it));
@@ -5323,7 +5505,7 @@ try {
   writeFileSync(CACHE_PATH, JSON.stringify(cache, null, 1));
 } catch { /* cache is best-effort */ }
 
-const SEVERITY = { ok: 0, 'ok-cited-page': 0, 'no-cve-named': 1, 'no-record': 1, 'slot-quoted': 1, 'counted-by-author': 0, 'number-other-noun': 1, 'temporal-stopping-point': 1, 'temporal-disclosed': 0, 'score-stopping-point': 1, 'cna-only-score': 1, 'star-drift': 2, 'star-dated': 1, 'star-surge': 1, 'ok-history': 0, 'history-older-than-record': 2, 'history-unreadable': 1, stale: 2, archived: 2, 'stale-disclosed': 0, 'archived-disclosed': 0, differs: 2, absent: 2, 'unsplit-issue-count': 3, 'compound-lags-parts': 3, 'version-swapped': 3, 'version-absent': 3, 'score-not-reproducible': 2, 'score-mismatch': 3, 'wrong-subject': 3, 'absence-contradicted': 3, 'status-stale': 2, 'status-dated': 1, 'date-local-shift': 2, 'date-mismatch': 2, 'cwe-absent-but-recorded': 3, 'cwe-mismatch': 3, 'cwe-unreadable': 1, 'field-present': 3, 'field-present-empty': 2, 'field-empty-contradicted': 2, 'field-empty-since-moved': 1, 'field-absent-not-empty': 1, 'field-dated': 0, 'field-unknown-name': 0, 'field-unreadable': 0, 'span-empty': 2, 'cve-range-span-mismatch': 2, 'cve-range-disclosed': 0, 'ok-range': 0, 'range-ambiguous': 0, 'range-cross-year': 0, 'range-inverted': 2, 'span-inverted': 3, 'span-unverifiable': 0, 'ok-span': 0, 'range-absent-but-served': 3, 'range-only-in-cna': 1, 'range-absent-confirmed': 0, 'range-absent-products-only': 0, 'affected-count-ok': 0, 'affected-count-mismatch': 3, 'affected-package-ok': 0, 'affected-package-absent': 3, 'affected-ambiguous': 0, 'range-unread': 0, 'range-in-references': 1, 'boundary-named-no-artifact': 0, 'status-no-record': 1, 'status-no-cve': 1, 'advisory-unreadable': 1, 'advisory-repo-only': 0, unreadable: 1, 'artifact-unreadable': 1, 'nvd-unavailable': 1, 'ratio-row-count': 3, 'ok-ratio': 0, 'ok-delimited': 0, 'not-a-repo': 0, 'repo-absent-asserted': 0, 'ok-table-rows': 0, 'table-columns-unresolved': 0, 'bundle-ok': 0, 'bundle-lines-named': 0, 'bundle-unavailable': 0, 'bundle-line-count': 3, 'bundle-total-mismatch': 2, 'quote-not-found': 3, 'quote-paraphrase': 2, 'quote-short': 1, 'quote-not-read': 0, 'paper-date-imprecise': 1, 'paper-date-mismatch': 2, 'paper-date-revision': 1, 'paper-date-unread': 0 };
+const SEVERITY = { ok: 0, 'ok-cited-page': 0, 'no-cve-named': 1, 'no-record': 1, 'slot-quoted': 1, 'counted-by-author': 0, 'number-other-noun': 1, 'temporal-stopping-point': 1, 'temporal-disclosed': 0, 'score-stopping-point': 1, 'cna-only-score': 1, 'star-drift': 2, 'star-dated': 1, 'star-surge': 1, 'ok-history': 0, 'history-older-than-record': 2, 'history-unreadable': 1, stale: 2, archived: 2, 'stale-disclosed': 0, 'archived-disclosed': 0, differs: 2, absent: 2, 'unsplit-issue-count': 3, 'compound-lags-parts': 3, 'version-swapped': 3, 'version-absent': 3, 'score-not-reproducible': 2, 'score-mismatch': 3, 'wrong-subject': 3, 'absence-contradicted': 3, 'status-stale': 2, 'status-dated': 1, 'date-local-shift': 2, 'date-mismatch': 2, 'cwe-absent-but-recorded': 3, 'cwe-mismatch': 3, 'cwe-unreadable': 1, 'field-present': 3, 'field-present-empty': 2, 'field-empty-contradicted': 2, 'field-empty-since-moved': 1, 'field-absent-not-empty': 1, 'field-dated': 0, 'field-unknown-name': 0, 'field-unreadable': 0, 'span-empty': 2, 'cve-range-span-mismatch': 2, 'cve-range-disclosed': 0, 'ok-range': 0, 'range-ambiguous': 0, 'range-cross-year': 0, 'range-inverted': 2, 'span-inverted': 3, 'span-unverifiable': 0, 'ok-span': 0, 'range-absent-but-served': 3, 'range-only-in-cna': 1, 'range-absent-confirmed': 0, 'range-absent-products-only': 0, 'affected-count-ok': 0, 'affected-count-mismatch': 3, 'affected-package-ok': 0, 'affected-package-absent': 3, 'affected-ambiguous': 0, 'range-unread': 0, 'range-in-references': 1, 'boundary-named-no-artifact': 0, 'vector-product-mismatch': 1, 'product-mismatch-disclosed': 0, 'schema-absent': 0, 'status-no-record': 1, 'status-no-cve': 1, 'advisory-unreadable': 1, 'advisory-repo-only': 0, unreadable: 1, 'artifact-unreadable': 1, 'nvd-unavailable': 1, 'ratio-row-count': 3, 'ok-ratio': 0, 'ok-delimited': 0, 'not-a-repo': 0, 'repo-absent-asserted': 0, 'ok-table-rows': 0, 'table-columns-unresolved': 0, 'bundle-ok': 0, 'bundle-lines-named': 0, 'bundle-unavailable': 0, 'bundle-line-count': 3, 'bundle-total-mismatch': 2, 'quote-not-found': 3, 'quote-paraphrase': 2, 'quote-short': 1, 'quote-not-read': 0, 'paper-date-imprecise': 1, 'paper-date-mismatch': 2, 'paper-date-revision': 1, 'paper-date-unread': 0 };
 const REAL = (f) => (SEVERITY[f.verdict] ?? 1) >= 2;
 
 /* `status_watch` rides the findings file so the act pass sees a backwards move without re-reading

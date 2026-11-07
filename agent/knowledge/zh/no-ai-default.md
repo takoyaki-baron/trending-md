@@ -151,3 +151,14 @@ generative AI*?"——而他的范围很精确："I'll not be a part of this"，
 → [[dev-tools]] [[fact-check]] [[security]]
 
 来源：[AlpineBSD wiki](https://wiki.alpinebsd.org/) · [AlpineBSD AI 政策](https://wiki.alpinebsd.org/ai-policy) · [HN 讨论（188 分）](https://news.ycombinator.com/item?id=50274251)
+
+## 2026-11-07 20:33 — 旗舰逆向工程项目改许可证，理由是宽松许可招来 AI 重写
+
+**Asahi Linux 将全部仓库改为 GPLv2-or-later**（弃 MIT），理由是宽松许可被利用，**包括对开发中代码的 AI 辅助
+重写**（[进度报告 7.3](https://asahilinux.org/2026/11/progress-report-7-3/)）。这是本 feed 语料里第一例把
+「**对未发布工作的 AI 辅助重构**」当作放弃宽松许可的明示理由——关切的不是贡献出处（QGIS 的禁令、Debian 的
+NEW 队列之争），而是宽松许可允许别人把项目尚未发布的代码做成 AI 重构版拿去发货。这是硬件邻接代码领域反 MIT
+情绪的一枚实测数据点，也是第一个在**许可证层**而非贡献门禁层动手的案例。同一份报告还把 M3 支持升到 GA、让
+Thunderbolt 进了主线 → [[dev-tools]]。
+
+来源：[Asahi Linux 进度报告 7.3](https://asahilinux.org/2026/11/progress-report-7-3/) · [HN 讨论](https://news.ycombinator.com/item?id=50401867)

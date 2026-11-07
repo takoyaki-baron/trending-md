@@ -1036,3 +1036,43 @@ workflow」と指示している。
 **Kagi がサインアップの壁を外す**（changelog 2026-11-05）：「anyone, anywhere, can now visit kagi.com and search the web. No account required for the first 50 searches (100 more upon registration)」——制限は**検索回数**であって機能ではなく、プログラム的アクセスやレート制限については何も書いていない。したがって「no account required」は、規約が別を言うまではブラウザセッションと読むべきだ。このパイプラインにとっての価値は直接ある：有料でしか評価できなかった唯一の索引が、50 クエリで一次確認できるようになった。
 
 → [[fact-check]] [[agent-stack]] [[no-ai-default]]
+
+## 2026-11-07 20:33 — ターミナルコアが ABI を獲得、Blender のウィジェットが第二の命を得る、M3 が GA へ、ストレージはエージェント書き込みのために再構築
+
+- **libghostty 1.0**（`libghostty-vt`、[mitchellh.com](https://mitchellh.com/writing/libghostty-1-0)）：Ghostty から
+  抽出されたターミナルエミュレーションコアが、ライブラリと **C ABI の双方の安定**を宣言——semver と強制互換
+  （Linux は libabigail、macOS/WASM はゴールデン型マニフェスト）、バージョン付き ELF シンボル、署名付きソース
+  tarball、pkg-config と CMake 設定。MIT、ツリー内に copyleft なし、ランタイムは libc のみ；機能フラグでサブシステムを
+  コンパイル時に外せ（検索・選択・Kitty グラフィックス）、除外された呼び出しは壊れず `GHOSTTY_UNSUPPORTED` を返す。
+  CI は Linux（glibc/musl）、macOS 13+、iOS 13+、FreeBSD、Windows、Android、freestanding wasm32（サイズ最適化版
+  <1 MB）をビルド。4 コア 8 GB サーバで 1 万のアクティブターミナル；「libghostty 搭載ターミナルの利用者は Ghostty
+  アプリ本体より多い」——JetBrains IDE、libvterm を置き換える承認済み Neovim PR、KDE の実験。範囲の正直さ：VT コアのみ
+  （描画と UI は埋め込み側の担当地域）；一部プラットフォームはビルドされるが未テスト。
+- **BUI**（`ppmpreetham/BUI`、GPL-3.0+、約 1.8k★、11/6 に 0.4.1）：Blender のウィジェット層（`interface_widgets.cc`
+  の C 移植）をスタンドアローン toolkit に——ブラウザエンジンなし、Blender インストール不要——で **tkinter を完全**
+  （公開 tkinter/ttk 名 7,846 すべて）、部分 Qt、Rust（`rs!`/HTML/CSS + Tailwind v4）、JavaScript（React 19.3、Svelte 5 を
+  napi 経由）、C から本物の Dear ImGui 1.93 を喋る。Ryzen 7 5800U 一台での Zed gpui 比較：初回フレーム約 40 ms 対
+  231 ms；3,000 アニメーションセルで 59.9 対 19.9 FPS；フレームあたり CPU 11.6 対 50.5 ms；メモリ 30–40 対 65–77 MB。
+  作者自身の注意書き：1 台のマシン、最近の機能以前の測定、再実行ハーネスを提供。本当の主張は、1 つの C コアが言語
+  コミュニティごとの再発明されたウィジェット層をまとめて攻撃すること；代償はどこでも Blender 見た目、アクセシビリティ
+  未対応、macOS は実験的。
+- **Asahi Linux 7.3**：M3 が EXPERT から GA へ（DCP 有効：スリープ、性能、ノッチ周辺）；macaudio（約 3,100 行）と AVD
+  ディスプレイドライバ（約 13,000 行——主要コンポーネントとして最速の 3 か月）をアップストリームへ提出；Thunderbolt
+  は Apple の独制コントローラで約 5 年かけて上流に到達（USB3、XDomain、Thunderbolt Networking——**PCIe と
+  DisplayPort トンネリングは未実装**なので大半のドックはまだ動かない）。ほかに：m1n1 が M5 上で EL1 の VM を **3 つ**
+  実行（Secure Kernel と Exclaves を含む macOS を仮想化しリバースエンジニアリングへ）；Google P3S パッチセットの
+  リベースで 4K ページの x86 ゲームが muvm VM の外で動作（M2 Max Mac Studio で Wolfenstein: TNO **144+ FPS**、muvm は
+  約 20% のペナルティ）；Rust 音声ビームフォーマは手書き SIMD で約 2 倍。**リリースより長く残る見出し：全リポジトリを
+  GPLv2-or-later へ移行**、その理由は寛容ライセンスの悪用、開発中コードの AI 支援リライトを含む → [[no-ai-default]]。
+- **Meta の Astryx**（`meta/astryx`、MIT ベータ、1 日 +198★、計 14,123★）：**8 年間・13,000 以上のアプリ**で使われた社内
+  デザインシステム——150 以上のアクセシブルなコンポーネント、React 19+/StyleX、CSS カスタムプロパティによるテーマ、
+  Tailwind/CSS モジュール/素の CSS での上書き可、コンポーネントソースを eject する `swizzle` コマンド、CLI。
+  「エージェント対応」は具体的：API・ドキュメント・CLI を **1 つのリファレンス**として設計し、人間とエージェントが同じ
+  ページから同じものを作れるようにする；README は全コーディングエージェントが見つけられるようグローバル CLI インストール
+  を推奨し、エージェントが CLI を直接叩くことから `package.json` エイリアスを提案。11/6 に v0.7.10——2 日で 3 個目の
+  リリース。
+- **Waymark**（`piercefreeman/waymark`、MIT、約 109★、リリースなし）：Postgres のみに載る durable execution。差別化は
+  **リプレイではなくコンパイル**——`run()` の AST を IR に構文解析し、Rust 製の永続 VM 用バイトコードへ低減し、VM 状態を
+  Postgres にスナップショット、復旧は実行途中から再開；非決定的パターンはコンパイル時に捕捉（Temporal の
+  「SDK 規律で決定性を保つ」と対になる失敗面）。README は率直：pre-1.0、仕様は急速に変わり、本番・レイテンシ敏感・
+  約 1 万超の並行協調アクションには非推奨。

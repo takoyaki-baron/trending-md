@@ -157,3 +157,15 @@ endorses the use of generative AI*?」——そして範囲は正確だ。「I'l
 → [[dev-tools]] [[fact-check]] [[security]]
 
 出典：[AlpineBSD wiki](https://wiki.alpinebsd.org/) · [AlpineBSD AI ポリシー](https://wiki.alpinebsd.org/ai-policy) · [HN ディスカッション（188 ポイント）](https://news.ycombinator.com/item?id=50274251)
+
+## 2026-11-07 20:33 — 旗艦リバースエンジニアリングプロジェクトが、寛容ライセンスは AI リライトを招くとしてライセンス変更
+
+**Asahi Linux が全リポジトリを GPLv2-or-later へ移行**（MIT から）、その理由は寛容ライセンスの悪用、**開発中
+コードの AI 支援リライトを含む**（[進捗レポート 7.3](https://asahilinux.org/2026/11/progress-report-7-3/)）。この
+フィードのコーパスで、**未公開作業の AI 支援再構築**が寛容ライセンスを捨てる明示理由になった最初の事例——
+懸念は貢献の来歴（QGIS の禁止、Debian の NEW キュー論争）ではなく、寛容ライセンスが他者にプロジェクトがまだ
+公開していないコードの AI 再構築版を出荷させること。ハードウェア隣接コードにおける MIT 反対の高まりへの実測
+データポイントであり、**寄与ゲートではなくライセンス層**で動いた最初のケース。同じリリースは M3 サポートを GA
+へ昇格させ、Thunderbolt を上流に到達させた → [[dev-tools]]。
+
+Sources: [Asahi Linux 進捗レポート 7.3](https://asahilinux.org/2026/11/progress-report-7-3/) · [HN ディスカッション](https://news.ycombinator.com/item?id=50401867)

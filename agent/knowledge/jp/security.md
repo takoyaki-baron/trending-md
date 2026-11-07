@@ -4683,3 +4683,49 @@ for CVE-2023-46321」と述べ、修正コミット（`314ba43`、`f29420a`）�
 **Stroq**（Apache-2.0、110★）はガードの問いを「このコマンドは危険か」から「このコマンドは agent が直前に読んだテキスト由来か」へ変える。最も持ち運べる発見はポリシーではなくフックの**契約**について：**「Every agent that times a hook out treats its own timeout as an allow: Claude Code cancels the hook and lets the call continue through the normal permission flow, Codex reports a hook failure and proceeds, Copilot discards the late deny.」** その答えは、インストーラが書いたタイムアウトの 60% で同じ拒否を返すウォッチドッグ——ガードは**失敗時に開く系の内部で**失敗時に閉じねばならない。自陳の盲点：`stroq doctor` は「detects a modification rather than preventing one」、そして実行ごとに、フックを完全に迂回する**stdio MCP サーバ**を設定から列挙する（「results reach the agent unchecked」）。プライバシー mod と同じ入口の反対側——**フック層はシェル呼び出しを覆い、ツール結果の経路はその外にある。**
 
 → [[fact-check]] [[vuln-supply]] [[disclosure-lag]] [[agent-stack]]
+
+## 2026-11-07 20:33 — microVM エスケープが VMM コンテキストに到達、KEV 行きの VPN バイパス、未サポートだが修正済みの RCE、15,579 の感染サイト、そしてあなたの Mac の人間関係グラフ
+
+- **PwnEscape 第 2 部**（PWN Research、[pwn.ai](https://pwn.ai/blog/firecracker-escape)）：**Firecracker v1.16.1** で
+  第 1 部の guest→host メモリ読み書きプリミティブを得たあとの道順——guest ページに nonce を置き → 候補 EPT ルートを
+  探ってホスト物理アドレスを特定 → ホストページテーブルを逆検索して VMM の PGD を回復（Firecracker 自身の ELF への
+  バイト署名照合で ASLR を打破）→ ブロックされた `ioctl(KVM_RUN)` の生きた `pt_regs` フレームを見つけ保存レジスタを
+  上書き → 仕込んだガジェットで戻り値をゼロにし ioctl が「成功した」ように見せかけ → guest からの 1 バイトのシリアル
+  書き込みが Firecracker のコンテキストで実行される `write(2, ...)` を引き起こす。**注意書きこそが本文**：実証は
+  **jailer なし**（Firecracker を root で `systemd-run` から直接起動）、guest 側ヘルパーは root と `/dev/mem` が必要；
+  jailer は破られておらず、現実のホスト制御には第二の強力な LPE が要る。HN コメンタは帰属で割れた（ある者は
+  カーネルネットワーキングスタックのバグと呼ぶ）。**記事は `CVE-2026-99999` を引用しているが、cveawg ではこの ID は
+  Linux カーネルの ipv4 チェックサムバグ**（Linux CNA、2026-10-15 公開、今回確認）——つまりこのエスケープには
+  **検証された CVE もパッチ記述も存在しない**。
+- **SonicWall SSLVPN SAML バイパス `CVE-2026-19868`——レコードの翌日に KEV 掲載**（2026-11-06 追加；レコードは同日
+  19:17 UTC 公開、`Undergoing Analysis`）：別の認証方式の有効な資格情報を持つユーザーが SAML 認証制御を回避できる
+  認証強制の欠陥。**レコード上の唯一のスコアは CISA-ADP のエンリッチメント**——CVSS 3.1 **7.5**
+  （`AV:N/AC:H/PR:N/UI:N/S:C/C:H/I:L/A:N`、Secondary）——ベンダー側コンテナは空で、SonicWall のアドバイザリ
+  （SNWLID-2026-0014）は素の取得には JS シェルとして応答するため、対象・修正バージョンは実ブラウザが必要。
+  トリアージのための出所明記：7.5 はコーディネーターの数であってベンダーの数ではない。
+- **Apache Axis 1.x 未認証 RCE `CVE-2026-90436`**（oss-security、2026-11-06；レコードは `Received`、CVSS はどこも未公開）：
+  `<detail>` に `<exceptionName>` を運ぶ inbound SOAP fault のデシリアライゼーションで、Axis が攻撃者の指定したクラスを
+  インスタンス化する。`UNSUPPORTED WHEN ASSIGNED` のバナー付きで、三つの時計が物語を語る：**修正コミットは 2026-07-12
+  マージ（レコードより 117 日前）**；リポジトリの最終 push は 2026-09-07；**最後のリリースは 2011 年**（Axis 1.4）——
+  アップグレード先の成果物は存在せず、あらゆるデプロイの答えは移行。1 つのレコードに二つの「未サポート」：コードは
+  7 月に修正され、レコードは 11 月までかかり、成果物の層は 15 年凍結したまま。
+- **Scott Helme の常設カウント：15,579 の感染確認サイト**（[scotthelme.co.uk](https://scotthelme.co.uk/we-know-15-579-websites-are-infected-how-do-we-tell-them/)）、
+  合計約 1.35 億月間アクセス、グローバル上位より**国別 TLD の地域リーダー**（.fr/.es/.de）に集中——彼のチームが
+  「100% の確信」で悪意ある JavaScript を実行中と確認した存命サイト。感染：Magecart 型スキマー、ClickFix の偽認証
+  ドロップ、iOS スパイウェア（DarkSword、Coruna）、悪性リダイレクト；侵入経路：WordPress 脆弱性、感染したサード
+  パーティサプライチェーンスクリプト、XSS、そしてサイトのスクリプトにまだ参照されている**期限切れドメインを再登録する
+  「DeadTag」**。サイトは清掃されて初めてリストを外れる。発見は通知のギャップ：手動の連絡はほぼ無回答、GDPR で WHOIS
+  連絡先は無用、CDN が実際のホスティングを隠す；リストは非公開（名指し羞恥の害 + 攻撃者への標的プレゼント）、
+  地域別リストを NCSC/CERT に提供。
+- **Mac の IntelligencePlatform 監査**（[8rank.ai](https://8rank.ai/game/apple-intelligence-personal-knowledge-graph)）：
+  二つのデーモン（`knowledgeconstructiond`、`intelligenceplatformd`）が連絡先・カレンダー・写真・メッセージ・メール・
+  位置情報・ファミリー共有・スクリーンタイムからオンデバイスの個人ナレッジグラフを構築し、
+  `~/Library/IntelligencePlatform` 以下に**平文の SQLite データベース 51 個**として保存、フルディスクアクセスだけが門；
+  中心の `graph.db` は **181 エンティティクラス / 278 述語**のトリプルストア。同梱の 2 つの CoreML モデル
+  （`EntityTagging_Family`、`EntityTagging_FamilyAndFriends`）は **144 特徴の XGBoost 分類器**で、`metadata.json` が全特徴を
+  平文で列挙（例 `photosPersonPosteriorProbabilityGivenSaturdayNight`）、1 人あたり **17 列の関係性を毎日再計算**——
+  そして著者らは出荷済みモデルを 17 列のうち **2 列**までしか追跡できず（残りは「追跡できなかった」）。オープンソースの
+  検査ダッシュボード **iKnow** を公開。懸念は具体的：グラフ内の第三者は同意しておらず、ユーザーには「文書化がなく、
+  ストアを検査する方法がなく、誤った推論を訂正する一般的な方法もない」——プライバシーマーケティングの約束をすべて
+  果たしながら、誰も表面化させ否定させもしない関係性の推論を生み出すオンデバイス ML。監査の道筋が修正の実演：
+  監査に必要だったデータは特徴ファイルの中にあった。

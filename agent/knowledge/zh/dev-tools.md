@@ -966,3 +966,37 @@ repo」，旁边就是「The LOC critics aren't wrong that raw line counts infla
 **Kagi 取消注册墙**（changelog 2026-11-05）："anyone, anywhere, can now visit kagi.com and search the web. No account required for the first 50 searches (100 more upon registration)"——限制在**搜索次数**而不是功能，且变更日志对程序化访问与限速只字未提，所以在条款另有说法之前，"no account required"应读作浏览器会话。对本流水线的价值是直接的：唯一一个不付费就无法评估的付费索引，现在能在 50 次查询内一手核验。
 
 → [[fact-check]] [[agent-stack]] [[no-ai-default]]
+
+## 2026-11-07 20:33 — 终端核心拿到 ABI，Blender 控件获得第二生命，M3 转 GA，存储为 agent 写入重建
+
+- **libghostty 1.0**（`libghostty-vt`，[mitchellh.com](https://mitchellh.com/writing/libghostty-1-0)）：从 Ghostty
+  抽出的终端仿真核心宣布库与 **C ABI 双双稳定**——semver 加强制兼容（Linux 用 libabigail、macOS/WASM 用 golden
+  type manifest）、带版本的 ELF 符号、签名源码包、pkg-config 与 CMake 配置。MIT、树内无 copyleft、运行时只需 libc；
+  feature flag 可把子系统编译掉（搜索、选区、Kitty 图形），被裁剪的调用返回 `GHOSTTY_UNSUPPORTED` 而不是崩溃。CI
+  覆盖 Linux（glibc/musl）、macOS 13+、iOS 13+、FreeBSD、Windows、Android、freestanding wasm32（体积优化版 <1 MB）。
+  4 核 8 GB 服务器上跑 1 万个活跃终端；「用 libghostty 内核终端的人已经比用 Ghostty 应用本身的还多」——JetBrains
+  IDE、一个获准的替换 libvterm 的 Neovim PR、KDE 实验。范围诚实：只有 VT 核心（渲染/UI 留给嵌入方）；部分平台只
+  构建未测试。
+- **BUI**（`ppmpreetham/BUI`，GPL-3.0+，约 1.8k★，11-06 发 0.4.1）：把 Blender 的控件层（`interface_widgets.cc`
+  的 C 移植）抽成独立工具包——无浏览器引擎、不需装 Blender——同时说 **完整 tkinter**（全部 7,846 个公开
+  tkinter/ttk 名字）、部分 Qt、Rust（`rs!`/HTML/CSS + Tailwind v4）、JavaScript（React 19.3、Svelte 5 走 napi）、
+  C 侧真 Dear ImGui 1.93。单台 Ryzen 7 5800U 上对 Zed 的 gpui：首帧约 40 ms 对 231 ms；3,000 个动画单元 59.9 对
+  19.9 FPS；每帧 CPU 11.6 对 50.5 ms；内存 30–40 对 65–77 MB。作者自己的告诫：一台机器、测量于近期特性之前、提供
+  复跑 harness。真正的卖点是一个 C 核心同时服务每个语言社区自建的控件层；代价是处处长得像 Blender、暂无无障碍
+  支持、macOS 实验性。
+- **Asahi Linux 7.3**：M3 从 EXPERT 升到 GA（启用 DCP：睡眠、性能、刘海周边）；macaudio（约 3,100 行）与 AVD 显示
+  驱动（约 13,000 行——最快的大件上游化，3 个月）提交上游；Thunderbolt 补丁在 Apple 私有控制器上磨了约 5 年后进
+  主线（USB3、XDomain、Thunderbolt Networking——**尚无 PCIe 或 DisplayPort 隧道**，多数扩展坞仍不可用）。另外：
+  m1n1 可在 M5 上以 EL1 跑 **三个虚拟机**（虚拟化 macOS 含 Secure Kernel 与 Exclaves，用于逆向）；Google P3S 补丁
+  集让 4K 页的 x86 游戏在 muvm VM 外运行（《Wolfenstein: TNO》在 M2 Max Mac Studio 上 **144+ FPS**，muvm 有约 20%
+  惩罚）；Rust 音频波束成形器手写 SIMD 后约 2×。**比发布本身更长寿的头条：全部仓库改用 GPLv2-or-later**，理由是
+  宽松许可被利用、包括对开发中代码的 AI 辅助重写 → [[no-ai-default]]。
+- **Meta 的 Astryx**（`meta/astryx`，MIT beta，单日 +198★，共 14,123★）：内部用了 **8 年、13,000+ 应用**的设计系统
+  ——150+ 个无障碍组件，React 19+/StyleX，CSS 自定义属性主题化，可用 Tailwind/CSS modules/普通 CSS 覆写，`swizzle`
+  命令把组件源码弹射进你的项目，附 CLI。「agent ready」是具体的：API、文档、CLI 按**同一份参考**设计，让人和 agent
+  从同一页做出同样的东西；README 建议全局安装 CLI 让每个编码 agent 都能找到，并给出 `package.json` 别名——因为
+  agent 是直接调 CLI 的。11-06 发 v0.7.10——两天内第三个 release。
+- **Waymark**（`piercefreeman/waymark`，MIT，约 109★，无 release）：只依赖 Postgres 的 durable execution，差异点
+  是**编译一次而非重放一次**——把 `run()` 的 AST 解析成 IR，编译为 Rust 实现的持久虚拟机字节码，VM 状态快照进
+  Postgres，恢复时从中途续跑；非确定性模式在编译期被抓（对照 Temporal 的「靠 SDK 纪律保确定性」）。README 诚实
+  到 blunt：pre-1.0、spec 快速变化、不建议用于生产、延迟敏感任务或 >~1 万并发协调动作。

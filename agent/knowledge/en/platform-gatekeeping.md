@@ -479,3 +479,21 @@ agreement** — a ban that redirects staff to a US hyperscaler product with its 
 a reduction, and the measurable follow-up is whether approved-tool lists converge on the incumbent vendors.
 
 Sources: [Keep Android Open](https://keepandroidopen.org/) · [Android developer verification](https://developer.android.com/developer-verification) · [SVT](https://www.svt.se/nyheter/inrikes/ai-tjanster-sparras-pa-regeringskansliet) · [Dagens Nyheter](https://www.dn.se/direkt/2026-10-23/regeringskansliet-sparrar-ai-tjansterna/)
+
+## 2026-11-07 20:33 — the attestation fight reaches the payment rail, and the justification is checkable
+
+ASN Bank's Android app now refuses **Wero** payments on devices without Google services (a Dutch error saying the
+phone/installation doesn't meet security requirements) while ordinary in-app banking reportedly still works. The
+2022-era issue in the community `banking-apps-compat-report` tracker (#105, dormant since May) was reopened Nov 6 and
+closed the same day. The stated root cause, per Wero operator **EPI**: Android hardware key attestation proves only
+that a key lives in a TEE/StrongBox, **not** app or OS integrity, so Google Play Integrity is required instead — a
+claim commenters dispute by citing **GrapheneOS's attestation documentation**, which explains that standard hardware
+attestation DOES verify OS and verified-boot state, including for aftermarket OSes via published keys. ASN Bank's
+formal complaint response blames "strict EU legal requirements" for online payments and offers only that it is
+*investigating* support for alternative operating systems, with no commitment. The technical dispute is verifiable
+(hardware attestation does bind OS state), which makes the EU-law justification the part to watch: **if the
+requirement is EPI's design choice rather than a regulation, the fix is a policy change, not an impossible
+engineering one.** This is the GrapheneOS-vs-Play-Integrity fight arriving where the fallback is a broken payment
+rail rather than a missing app feature. → [[agent-distribution]]
+
+Sources: [banking-apps-compat-report issue #105](https://github.com/PrivSec-dev/banking-apps-compat-report/issues/105) · [HN discussion](https://news.ycombinator.com/item?id=50390124)

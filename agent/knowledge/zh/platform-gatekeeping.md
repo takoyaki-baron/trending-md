@@ -360,3 +360,17 @@ Kronofogden 正在考虑。欧洲公共部门里值得观察的模式不是模�
 是否向在位厂商收敛。
 
 来源：[Keep Android Open](https://keepandroidopen.org/) · [Android 开发者验证](https://developer.android.com/developer-verification) · [SVT](https://www.svt.se/nyheter/inrikes/ai-tjanster-sparras-pa-regeringskansliet) · [Dagens Nyheter](https://www.dn.se/direkt/2026-10-23/regeringskansliet-sparrar-ai-tjansterna/)
+
+## 2026-11-07 20:33 — 证明之争打进支付通道，而辩护理由是可以核验的
+
+ASN Bank 的 Android 应用现在在无 Google 服务的设备上拒绝 **Wero** 支付（荷兰语报错说手机或应用安装不符合其
+安全要求），而普通的应用内银行业务据报照常可用。社区 `banking-apps-compat-report` 追踪表里的 2022 年老 issue
+（#105，5 月起沉睡）于 11-06 被重新打开、同日再关闭。Wero 运营方 **EPI** 给出的根因：Android 硬件密钥证明只
+能证明密钥在 TEE/StrongBox 里，**不能**证明应用或 OS 完整性，所以必须改用 Google Play Integrity——评论区引
+**GrapheneOS 的证明文档**反驳：标准硬件证明确实校验 OS 与 verified-boot 状态， aftermarket OS 亦可通过公开密钥
+覆盖。ASN Bank 对正式投诉的回复把责任推给「欧盟对在线支付的严格要求」，只承诺*调研*对替代操作系统的支持，
+没有任何承诺。技术分歧是可验证的（硬件证明确实绑定 OS 状态），所以值得盯的是那条欧盟法律说辞：**如果要求
+出自 EPI 的设计选择而非法规，修复就是改政策，而不是一项做不到的工程。**这是 GrapheneOS 对 Play Integrity 之战
+打到一个退路是断掉的支付轨道、而非缺失的应用功能的地方。→ [[agent-distribution]]
+
+来源：[banking-apps-compat-report issue #105](https://github.com/PrivSec-dev/banking-apps-compat-report/issues/105) · [HN 讨论](https://news.ycombinator.com/item?id=50390124)

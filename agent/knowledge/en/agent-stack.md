@@ -3222,3 +3222,45 @@ gives `3.0.1-preview.2` (11-03 08:52Z), `3.0.1` (11-03 22:45Z), then **four** on
 3.0.3→3.0.5 window). A Launch-HN date is a claim about an announcement; the line was already two days old.
 
 → [[agent-stack]] [[harness-reliability]] [[fact-check]]
+
+## 2026-11-07 20:33 — the audit fleet, the write path, the memory map, and the identity broker
+
+- **`cloudflare/security-audit-skill` re-spikes (+2,088★/day, 64,781 total, #2 trending).** Six-phase workflow:
+  reconnaissance (writes `architecture.md` + a `coverage-ledger.json` of input surfaces) → coverage-led hunting by
+  isolated hunter agents → adversarial validation → schema-checked `findings.json` (`confirmed`/`needs_validation`/
+  `rejected`) → independent re-verification → reporting. Runs are additive (later runs read the prior ledger to target
+  gaps). **No releases, 14 commits** — the trigger is context, not code: Cloudflare launched **Zero Wire** on Radar
+  (Nov 3) and the skill calls itself the seed of the fleet-wide harness behind it. The only quantitative claim is
+  deliberately unimpressive (one run finds ~half of what repeated runs find); it is explicitly not a scanner and demands
+  an OS sandbox with no network. "The agent that checks a finding is never the agent that found it."
+- **GitHub's Rubicon — consensus only on refs** ([github.blog](https://github.blog/engineering/architecture-optimization/inside-githubs-new-git-storage-architecture/)):
+  disposable virtual replicas serve reads/writes with local disks as rebuildable caches; **Ref-CAS** quorum-commits
+  compare-and-swap transactions for ref updates + the pack manifest, locking only touched refs; durable objects in Azure
+  Blob; a separate compaction fleet GCs away from serving. **5,000 concurrent agents → 7,200 pushes/s to ONE repo** in
+  internal testing; one repo went 44M → 181M requests/day (Mar→May 2026); targets "two orders of magnitude more scale"
+  per repo; limited private preview. Named for what GitHub calls the industry's point of no return with agentic
+  development — many-agent writes to one repo are a capacity-planning assumption now.
+- **Anthropic decomposes agent memory into four components + "dreaming"** ([research post](https://www.anthropic.com/research/components-of-agent-memory),
+  11-06, verified this run). Layers: raw transcripts → salient memory notes → linked representations (wikis) → small
+  injected context; dreaming = idle compute between sessions that replays transcripts, corrects notes, promotes content.
+  Pokémon Red salience test: Sonnet 3.7 wrote **413 files / 225 folders, 1 badge**; Fable 5 wrote **9 files + `global.md`,
+  4 badges**; Opus 5.5 beat the game on a compact folder. Wiki build on Stainless's corpus (**350K files, ~420M tokens**,
+  acquired May; 25 questions): wiki-only **13% → 48%** as dreaming scaled 2 → 128 sessions; wiki+search **54% → 61%**
+  vs **53%** search-only, saving ~20,000 tokens/question. **Guidance beats rules**: "record only failures" cost Opus 5
+  *and* Opus 4.7 their memory gain; steering helped older models most (Sonnet 4.6 nearly doubled when told to read
+  memory-then-test theories; Sonnet 5 does it unprompted 9/10). Instruction rewrite closed the contract-terms wiki from
+  **41/57 → 57/57** (one page per contract, verbatim quotes, single writer — agents had overwritten a shared table).
+  Own failure modes: a wiki that grew larger than the corpus it summarized (Borges's map), injected errors propagating to
+  every session, in-session note-taking distracting from the task. Claude Code auto memory loads only the first
+  **200 lines / 25 KB** of `MEMORY.md` as an index.
+- **Zalando's `agentic-identity-broker`** (MIT, ~59★, OpenSSF badges, runs in production internally): scoped, revocable
+  OAuth2 on-behalf-of delegation with a token vault + consent UI across Google/GitHub/Databricks/Linear; deploys in the
+  call path via gateways (Agentgateway) so MCP server developers expose tools while auth/consent centralize — central
+  tool-approval prompts, audit trails, value redaction, fail-closed. The plumbing position: agents end up holding user
+  credentials because nothing else exists between "no access" and "the user's token".
+
+- **Fold-backfill (thesis 1) — three details that lived only in the memory window:** DeepSeek's `dsh-superagent-prototype`
+  derives "take as little human attention as possible" into **authorization traveling with the ticket, not the session**
+  (one `Engine` is the sole writer; callers get only their role's `Pick`); Mika's on-device Android agent runs on a
+  **hidden background screen**; and "MCP is an AAIF project" appears **0×** in MCP's own documentation while the Agentic
+  AI Foundation carries **10 hosted projects** (up from 3).

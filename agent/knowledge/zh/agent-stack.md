@@ -2115,3 +2115,34 @@ actor 是「一个有内存状态、一个 SQLite 数据库、实时 WebSocket �
 Launch HN 的日期是关于一则公告的断言；这条线当时已经存在两天了。
 
 → [[agent-stack]] [[harness-reliability]] [[fact-check]]
+
+## 2026-11-07 20:33 — 审计舰队、写入路径、记忆地图与身份代理
+
+- **`cloudflare/security-audit-skill` 再次冲榜（单日 +2,088★，共 64,781★，趋势第 2）。** 六阶段工作流：侦察（写出
+  `architecture.md` 与输入面的 `coverage-ledger.json`）→ 由相互隔离的 hunter agent 按覆盖账本狩猎 → 对抗性验证 →
+  带校验的 `findings.json`（`confirmed`/`needs_validation`/`rejected`）→ 对最终记录独立复核 → 报告。运行是增量的
+  （后续运行读前一版账本来补缺口）。**无 release、14 个 commit**——本周的新东西是背景而非代码：Cloudflare 于 11 月 3
+  日在 Radar 上线 **Zero Wire** 公开漏洞情报枢纽，该技能自称其背后舰队级 harness 的种子。README 唯一的量化声明刻意
+  不起眼（单次运行约找到多次运行的一半）；它明确不是扫描器，要求无网络的 OS 沙箱。「检查发现的 agent 永远不是发现
+  发现的那个 agent。」
+- **GitHub 的 Rubicon——只有 refs 上有共识**（[github.blog](https://github.blog/engineering/architecture-optimization/inside-githubs-new-git-storage-architecture/)）：
+  可抛弃的虚拟副本用本地磁盘当可重建缓存来服务读写；**Ref-CAS** 以仲裁提交 compare-and-swap 事务处理 ref 更新与包
+  清单，只锁定事务触及的 ref；持久对象进 Azure Blob；独立压缩编队脱离服务路径做合并与 GC。内部测试中 **5,000 个并发
+  agent 向同一个仓库推送 7,200 次/秒**；一个仓库的流量从 44M 涨到 181M 请求/天（2026 年 3→5 月）；目标是单仓库再高
+  「两个数量级」；限量私测。代号取自 GitHub 所称的行业在 agentic 开发上的「卢比孔河」——多 agent 写同一仓库已是容量
+  规划假设。
+- **Anthropic 把 agent 记忆分解为四个组件 + 「做梦」**（[研究博文](https://www.anthropic.com/research/components-of-agent-memory)，
+  11-06，本轮一手核对）。分层：原始 transcript → 显著记忆笔记 → 链接式表示（wiki）→ 小份注入上下文；做梦 = 会话间
+  的空闲算力，回放 transcript、订正笔记、向上晋升内容。宝可梦红显著性测试：Sonnet 3.7 写了 **413 个文件 / 225 个
+  文件夹，1 枚徽章**；Fable 5 写了 **9 个文件 + `global.md`，4 枚徽章**；Opus 5.5 用紧凑记忆文件夹通关。在 Stainless
+  语料（**35 万文件、约 4.2 亿 token**，5 月收购；25 个问题）上建 wiki：做梦从 2 会话扩到 128，wiki-only 得分
+  **13% → 48%**；wiki+搜索 **54% → 61%**，对照纯搜索 **53%**，每问省约 2 万 token。**引导胜过规则**：「只记录失败」
+  让 Opus 5 和 Opus 4.7 都丢掉记忆带来的增益；引导对旧模型帮助最大（Sonnet 4.6 被要求「先读记忆再验证猜想」后近乎翻
+  倍；Sonnet 5 无提示时 9/10 自发去读）。改写一条建库指令把合同条款 wiki 从 **41/57 修到 57/57**（每份合同一页、逐字
+  引用、单人独写——此前多个 agent 相互覆写共享表格）。自带失败模式：wiki 长得比它概括的语料还大（博尔赫斯的地图）、
+  注入的错误传播进每个会话、会话内记笔记分散任务注意力。Claude Code 的自动记忆只加载 `MEMORY.md` 前 **200 行 / 25 KB**
+  作索引。
+- **Zalando 的 `agentic-identity-broker`**（MIT，约 59★，OpenSSF 徽章，内部生产运行）：作用域化、可撤销的 OAuth2
+  on-behalf-of 委托，带 token 保险库 + 同意 UI，覆盖 Google/GitHub/Databricks/Linear；经网关（Agentgateway）部署在
+  调用路径中，MCP server 开发者只暴露工具而认证/同意集中化——集中工具审批提示、审计轨迹、值脱敏、fail-closed。管的
+  正是那段空档：在「无权限」与「用户的 token」之间本来什么都没有。

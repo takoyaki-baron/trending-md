@@ -1505,3 +1505,43 @@ value to this pipeline is direct: the one paid index that was previously unevalu
 now checkable first-hand in 50 queries.
 
 → [[fact-check]] [[agent-stack]] [[no-ai-default]]
+
+## 2026-11-07 20:33 — the terminal core gets an ABI, Blender's widgets get a second life, M3 ships GA, and storage is rebuilt for agent writes
+
+- **libghostty 1.0** (`libghostty-vt`, [mitchellh.com](https://mitchellh.com/writing/libghostty-1-0)): the
+  terminal-emulation core extracted from Ghostty announces stable library **and C ABI** — semver with enforced
+  compatibility (libabigail on Linux, golden type manifests on macOS/WASM), versioned ELF symbols, signed source
+  tarballs, pkg-config + CMake. MIT, no copyleft in the tree, runtime needs only libc; feature flags compile out
+  subsystems (search, selection, Kitty graphics) with flagged-out calls returning `GHOSTTY_UNSUPPORTED`. CI-built for
+  Linux (glibc/musl), macOS 13+, iOS 13+, FreeBSD, Windows, Android, freestanding wasm32 (<1 MB size-optimized).
+  10,000 active terminals on a 4-core/8 GB server; "more people now use libghostty-powered terminals than the Ghostty
+  app itself" — JetBrains IDEs, an approved Neovim PR replacing libvterm, KDE experiments. Scope honesty: VT core only
+  (rendering/UI stay with the embedder); some platforms built but untested.
+- **BUI** (`ppmpreetham/BUI`, GPL-3.0+, ~1.8k★, 0.4.1 Nov 6): Blender's widget layer (a C port of
+  `interface_widgets.cc`) as a standalone toolkit — no browser engine, no Blender install — speaking **tkinter
+  completely** (all 7,846 public tkinter/ttk names), partial Qt, Rust (`rs!`/HTML/CSS + Tailwind v4), JavaScript
+  (React 19.3, Svelte 5 via napi), and Dear ImGui 1.93 from C. Benchmarks on one Ryzen 7 5800U vs Zed's gpui: first
+  frame ~40 ms vs ~231 ms; 59.9 vs 19.9 FPS on 3,000 animated cells; 11.6 vs 50.5 ms CPU/frame; 30–40 vs 65–77 MB.
+  The author's own caveats: one machine, measured before recent features, rerun harness provided. The real claim is
+  one C core addressing every language community's rebuilt widget layer; the trade is that it looks like Blender
+  everywhere, has no accessibility support yet, and macOS is experimental.
+- **Asahi Linux 7.3**: M3 graduates EXPERT → GA (DCP enabled: sleep, performance, the notch area); macaudio
+  (~3,100 lines) and the AVD display driver (~13,000 lines — fastest major-component turnaround at 3 months)
+  submitted upstream; Thunderbolt lands upstream after ~5 years on Apple's bespoke controller (USB3, XDomain,
+  Thunderbolt Networking — **no PCIe or DisplayPort tunneling**, so most docks still don't work). Elsewhere: m1n1
+  runs **three VMs in EL1 on M5** (virtualizing macOS with Secure Kernel + Exclaves for reverse engineering); a
+  rebased Google P3S patchset runs 4K-page x86 games outside the muvm VM (Wolfenstein: TNO **144+ FPS** on an M2 Max
+  Studio vs muvm's ~20% penalty); the Rust audio beamformer ~2× with hand-written SIMD. **The headline that outlasts
+  the release: all repositories move to GPLv2-or-later**, citing exploitation of the permissive MIT licence,
+  including AI-assisted rewrites of in-development code → [[no-ai-default]].
+- **Meta's Astryx** (`meta/astryx`, MIT beta, +198★/day, 14,123 total): the internal design system used by
+  **13,000+ apps over eight years** — 150+ accessible components on React 19+/StyleX, theming via CSS custom
+  properties, overridable with Tailwind/CSS modules/plain CSS, a `swizzle` command that ejects component source, and
+  a CLI. The "agent ready" framing is concrete: API, docs and CLI designed as ONE reference so human and agent build
+  the same thing from the same page; README recommends global CLI install so every coding agent finds it, with a
+  `package.json` alias because agents invoke CLIs directly. v0.7.10 shipped Nov 6 — the third release in two days.
+- **Waymark** (`piercefreeman/waymark`, MIT, ~109★, no releases): durable execution entirely on Postgres whose
+  differentiator is **compile-once instead of replay-once** — parses `run()`'s AST to an IR, lowers to bytecode for a
+  durable Rust VM, snapshots VM state to Postgres, resumes mid-execution; nondeterministic patterns caught at compile
+  time (vs Temporal's determinism-by-SDK-discipline). Honest pre-1.0 README: spec changing quickly, not recommended
+  for production, latency-sensitive jobs, or >~10k concurrent coordinated actions.

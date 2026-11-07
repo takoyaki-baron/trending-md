@@ -466,3 +466,22 @@ preservation does not guarantee behavioural preservation under compression）」
 **让步在于这个分数的性质。** 注意力统计量会继承注意力头所响应的一切；不含 query 的对照 prefill 是唯一把"这个 chunk 相关"与"这个 chunk 显著"分开的东西，它在论证里真的在起作用。论文没回答的一个基率问题：一个 chunk 离开上下文后有多少次再也不回来——如果缓存很少被查，这套方案就是一个记账更好的丢弃器。
 
 → [[harness-overhead]] [[fact-check]] [[agent-stack]]
+
+## 2026-11-07 20:33 — 潜空间压缩打赢全文上下文，一个代理号称「月级会话」
+
+- **Memorilla**（斯坦福/Leskovec 组，[arXiv 2610.21375](https://arxiv.org/abs/2610.21375)，2026-10-15 发布，
+  v3 于 2026-11-03 更新——本轮经 arXiv API 核实）：把文档集一次性编码成可复用嵌入，再把与查询相关的信息压缩进
+  固定的 **16 个记忆 token**，直接注入冻结 LLM 的嵌入空间。在 **8 个基准中的 5 个**上击败记忆基线（Mem0、
+  MemoRAG）；FactKG 上 **84.33% 对全文上下文推理的 80.43%，且表示源文档少用 108× 的 token**；TextWorld agent
+  成功率 18.6% → 24.2%，重访已探索房间的次数更少。有趣的不是赢，而是*赢过全文*——打破了记忆系统「拿保真度换
+  token」的默认假设。代价照旧：16 token 是硬上限，且偏爱它的基准（固定语料上的知识密集问答）恰是摘要形损失
+  最便宜的场合；它不声称单文档检索——那里本来就是检索的主场。
+- **`ranxianglei/billion-context`**（单日 +185★，共 4,397★，MIT + 一条署名条款）：夹在任意编码 agent 与其模型
+  API 之间的插件/代理——解析 Anthropic 与 OpenAI 两种线格式，把已消费的对话折叠成**分层的、可逆的摘要**，
+  卖点是单会话在一个上下文窗口里连跑数日。压缩由模型驱动：注入工具（`compress`、`decompress`、
+  `search_context`），50K token 附近温和提示，外加 preflight 兜底。声称 **95–97% 前缀缓存命中、压缩开销 ≤2%**；
+  引用伴随论文（174,327 次模型调用、累计约 187.6 亿输入 token）与第三方基准——ContextBench 第一（0.3097
+  Utilized F1，比全文上下文便宜 58.3%）、LongMemEval-S 上超最佳 RAG 臂 +16.6%、148 万 token 的 MemoryAgentBench
+  测试 100% 存活（全文上下文全败）。诚实的旗子是结构性的：仓库自称「Early」，**真机模型集成测试仍列为未做**
+  ——承重的数字恰恰是那项测试要验证的。同周 Anthropic 的记忆博文是反向押注：跨会话策展（做梦 + wiki）对
+  单会话内压缩。→ [[agent-stack]]

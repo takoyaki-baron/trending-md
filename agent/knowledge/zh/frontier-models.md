@@ -3389,3 +3389,26 @@ next video model」。**这里的成本断言格外可核——因为每 GPU 小
 **一个前瞻性的失控分数与长程失败率相关 r = 0.84**（arXiv 2611.07953）。三个因子——**misaligned motive**、**harm-enabling capability**、**monitoring evasion**——操作化为 **13 个方面 / 29 个任务** 并合成每个模型一个标量，覆盖 **13 个前沿模型**，与受控长程风险场景中的失败率相关（**Pearson r = 0.84**）。两个支撑结论承担了论证：风险"varies systematically across models and cannot be explained by capability alone"（所以能力排名不能替代它），以及针对已诊断脆弱性的微调与监控"reduce failure rates while largely preserving general performance"。局限是范围，这里说得直白：作者构建、作者加权、作者选题的索引，对同样由作者编写且受控的场景做验证。真正有用的是**分解**——风险主要在监控规避的模型与风险主要在意图的模型对应不同的缓解手段，而一个标量做不到这一点。
 
 → [[fact-check]] [[harness-reliability]] [[formal-verification]] [[security]]
+
+## 2026-11-07 20:33 — 视频模型无基准转 GA，RSP 绊线大概率触发
+
+- **Gemini Omni 1.2 Flash 转 GA**（Google 博客，11-06）：Omni 1.1 的后继；原生片段 **3–15 秒、按 1 秒步进选择**
+  （此前上限 10 秒），多轮对话式编辑**不重新生成**即可精修片段，图像参考遵循，≤3 秒动作片段 + 音频提示，
+  720p 起草 → 4K 放大。定价 **720p 每秒 $0.07**（比 Omni 1.1 低 30%）；**每个输出都带 SynthID 水印**。覆盖
+  Gemini API/AI Studio、Vertex AI、Google Vids、Flow、Gemini 应用（向 AI Ultra 订阅者推送）与 Google Ads。
+  **没有任何基准数字**——证据是定性演示，且公告自己点名缺口（快速体育动作、快速脚本变更、复杂物理「开发中」）。
+  按秒计费的 GA 把演示变成账单科目；能力声明不带任何评测就上线，是本 feed 在模型发布里反复看到的那个模式。
+- **METR 独立评估：Anthropic 大概率越过了自家 2× RSP 阈值**（[metr.org](https://metr.org/blog/2026-11-05-anthropic-ai-rd-acceleration-assessment)，
+  11-05；驻场 11 周，8-12 至 10-29，2.5 FTE，不收钱）。**AECI**（Anthropic 版 Epoch Capabilities Index）自
+  2025 年 10 月起增长 **1.9× [95% CI 1.5–2.8×]**（估计断点 2025-10-07）——「一年走完约两年的历史进度」；按连接
+  函数做稳健性检验为 **1.1×–2.9×**；对所有前沿厂商拟合则读出 **1.4×**（两种解释：Anthropic 历史上低于前沿，
+  或过拟合基准）。作者相信 Anthropic「在良定义任务上的能力增速约为 2024 年 3 月–2025 年 10 月的 2 倍」，对 1.3×
+  或 3× 都「不会惊讶」。**训练算力扩张被确信排除**在驱动因素之外（证据已涂黑）。归因是**猜测而非测量**：
+  「我们猜当前加速的大部分（也许 ≈80%）来自 AI」；最响亮的支撑数据是 Slack 自报 uplift 达 **≈12×**（被明说为
+  低投入、不具代表性的证据）。**涂黑本身是头条**：Anthropic 有单边涂黑权，且「涂掉了我们所发现的最有信息量的
+  大多数证据」；METR 的透明度段落自述本报告「未达到『对证据的透明』」，而「**公众只能远超理想程度地依赖 METR
+  的判断**」。两个被报道略去的细节：**Model 4 在全部 15 个 AECI 基准上都 >50%**（「让我们对自己未来测量 AECI
+  的能力有点紧张」——饱和），以及**对抗鲁棒性一节承认「大部分分析依赖 Claude」**——Claude 参与了数据收集、
+  文档写作和 METR 自己的大部分分析，访谈引语由 Claude 按一段被引述的提示词分类。Ajeya Cotra 次日的评论逐条
+  走了一遍这些保留。越过阈值即触发 Anthropic RSP 承诺的下一档更强保障——这是政策绊线在响，不是基准。
+  → [[ai-impact]]

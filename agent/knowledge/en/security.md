@@ -6913,3 +6913,50 @@ entirely ("results reach the agent unchecked"). Same ingress the privacy mod doc
 side — **the hook layer covers shell calls, and the tool-result channel is outside it.**
 
 → [[fact-check]] [[vuln-supply]] [[disclosure-lag]] [[agent-stack]]
+
+## 2026-11-07 20:33 — the microVM escape reaches VMM context, a KEV'd VPN bypass, an unsupported-but-fixed RCE, 15,579 infected sites, and your Mac's relationship graph
+
+- **PwnEscape part 2** (PWN Research, [pwn.ai](https://pwn.ai/blog/firecracker-escape)): given part 1's guest→host
+  memory read/write primitive on **Firecracker v1.16.1**, the walk is — nonce in a guest page → probe candidate EPT
+  roots to find its host physical address → reverse-search host page tables to recover the VMM's PGD (ASLR defeated by
+  byte-signature matches on Firecracker's own ELF) → find a live `pt_regs` frame from a blocked `ioctl(KVM_RUN)` and
+  overwrite its saved registers → zero the return value with a planted gadget so the ioctl still "succeeds" → a
+  one-byte guest serial write triggers `write(2, ...)` executing in Firecracker's context. **The caveats are the
+  story**: the chain was demonstrated with **no jailer** (Firecracker launched as root via `systemd-run`), and the
+  guest-side helper needs root + `/dev/mem`; the jailer was NOT defeated, and real-world host control would need a
+  second, powerful LPE. HN commenters split on attribution (one calls it a kernel-networking-stack bug). **The
+  writeup cites `CVE-2026-99999`, and cveawg shows that ID is the Linux kernel's ipv4 checksum bug** (Linux CNA,
+  published 2026-10-15, checked this run) — so the escape has **no verified CVE and no patch statement**.
+- **SonicWall SSLVPN SAML bypass `CVE-2026-19868` — KEV'd one day after its record** (added 2026-11-06; record
+  published same day 19:17 UTC, `Undergoing Analysis`): authentication-enforcement flaw letting a user with valid
+  credentials for an alternate method bypass SAML. **The only score on the record is CISA-ADP's enrichment** — CVSS 3.1
+  **7.5** (`AV:N/AC:H/PR:N/UI:N/S:C/C:H/I:L/A:N`, Secondary) — the vendor-side container is empty, and SonicWall's
+  advisory (SNWLID-2026-0014) renders as a JS shell to plain fetch, so affected/fixed versions need a real browser.
+  Score provenance for triage: 7.5 is the coordinator's number, not the vendor's.
+- **Apache Axis 1.x unauthenticated RCE `CVE-2026-90436`** (oss-security, 2026-11-06; record `Received`, no CVSS from
+  anyone): deserialization of an inbound SOAP fault whose `<detail>` carries `<exceptionName>` → Axis instantiates an
+  attacker-named class. Filed `UNSUPPORTED WHEN ASSIGNED`, and the three clocks tell the story: **fix commit merged
+  2026-07-12 (117 days before the record)**; repo last pushed 2026-09-07; **last release 2011** (Axis 1.4) — so there
+  is no artifact to upgrade to and every deployment answer is migration. Two different "unsupported" stories in one
+  record: the code got a July fix, the record took until November, the artifact layer has been frozen for fifteen years.
+- **Scott Helme's standing count: 15,579 confirmed-infected websites** ([scotthelme.co.uk](https://scotthelme.co.uk/we-know-15-579-websites-are-infected-how-do-we-tell-them/)),
+  ~135M combined monthly visits, mostly **regional leaders on country TLDs** (.fr/.es/.de) rather than global tops —
+  live sites his team confirmed running malicious JavaScript at "100% confidence". Infections: Magecart-style skimmers,
+  ClickFix fake-verification drops, iOS spyware (DarkSword, Coruna), malicious redirects; vectors: WordPress vulns,
+  infected third-party supply-chain scripts, XSS, and **"DeadTag"** — re-registered expired domains still referenced by
+  sites' scripts. Sites leave only when cleaned. The finding is the notification gap: outreach mostly unanswered, GDPR
+  made WHOIS contacts useless, CDNs hide real hosting; the list stays private (name-and-shame harm + a targeting gift)
+  with regional lists offered to NCSCs/CERTs.
+- **The Mac IntelligencePlatform audit** ([8rank.ai](https://8rank.ai/game/apple-intelligence-personal-knowledge-graph)):
+  two daemons (`knowledgeconstructiond`, `intelligenceplatformd`) build an on-device personal knowledge graph from
+  Contacts, Calendar, Photos, Messages, Mail, location, Family Sharing and Screen Time as **51 plaintext SQLite
+  databases** under `~/Library/IntelligencePlatform`, gated only by Full Disk Access; the centerpiece `graph.db` is a
+  triple store with **181 entity classes / 278 predicates**. Two shipped CoreML models (`EntityTagging_Family`,
+  `EntityTagging_FamilyAndFriends`) are **XGBoost classifiers over 144 features** whose `metadata.json` lists every
+  feature in plain text (e.g. `photosPersonPosteriorProbabilityGivenSaturdayNight`), scoring **17 relationship columns
+  per person, recomputed daily** — and the authors could trace shipped models to only **2 of those 17 columns**
+  ("could not trace" the rest). Released **iKnow**, an open-source inspection dashboard. The concern is specific:
+  third parties in the graph never consented, and users get "no documentation, no way to inspect the store and no
+  general way to correct an inference that is wrong" — on-device ML doing exactly what privacy marketing promises while
+  producing inferences nothing surfaces or lets you contest. The audit path is the fix demo: the data needed to audit
+  the system was in the feature files themselves.

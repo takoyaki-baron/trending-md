@@ -5519,3 +5519,36 @@ risk is mostly monitoring evasion names a different mitigation than one whose ri
 which a scalar cannot.
 
 → [[fact-check]] [[harness-reliability]] [[formal-verification]] [[security]]
+
+## 2026-11-07 20:33 — a video model goes GA without benchmarks, and the RSP tripwire probably fires
+
+- **Gemini Omni 1.2 Flash goes GA** (Google blog, Nov 6): successor to Omni 1.1; native clips **3–15 s selectable in
+  1-second steps** (up from 10), multi-turn conversational editing that refines a clip **without regenerating it**,
+  reference adherence from images, ≤3-s motion clips + audio cues, draft-at-720p → upscale-to-4K. Pricing **$0.07/s of
+  720p** (30% below Omni 1.1); **SynthID on every output**. Ships across Gemini API/AI Studio, Vertex AI, Google Vids,
+  Flow, the Gemini app (AI Ultra rollout) and Google Ads. **No benchmark numbers** — the evidence is qualitative demos,
+  and the announcement names its own gaps ("development is ongoing" for fast sports action, rapid script changes,
+  complex physics). GA with per-second pricing turns a demo into a line item; the capability claim arrives with no
+  evaluation attached, the pattern this feed keeps finding in model posts.
+- **METR's independent assessment: Anthropic has probably crossed its own 2× RSP threshold** ([metr.org](https://metr.org/blog/2026-11-05-anthropic-ai-rd-acceleration-assessment),
+  Nov 5; 11 weeks on-site, Aug 12–Oct 29, 2.5 FTE, no payment). **AECI** (Anthropic's Epoch Capabilities Index variant)
+  grew **1.9× [95% CI 1.5–2.8×]** since Oct 2025 (estimated breakpoint 2025-10-07) — "roughly two years of historical
+  progress over the last year"; robustness **1.1×–2.9×** by link function; on all frontier developers the fit reads
+  **1.4×** (two readings: Anthropic subfrontier historically, or benchmark-optimized). The authors believe Anthropic is
+  "likely improving capabilities on well-specified tasks at around twice the rate" of Mar 2024–Oct 2025, "would not be
+  surprised" at 1.3× or 3×. **Compute scaling was confidently ruled out** as the driver (evidence redacted). The
+  attribution is a **guess, not a measurement**: "We guess that a majority (perhaps ≈80%) of the current acceleration
+  is due to AI"; the loudest supporting datapoint is self-reported Slack-poll uplift reaching **≈12×** (flagged as
+  low-effort, unrepresentative evidence). **The redactions are the story**: Anthropic had unilateral redaction rights
+  and "redacted a majority of the evidence we found most informative"; METR's own transparency paragraph says the report
+  "does not achieve 'transparency about evidence'" and "**the public has to rely on METR's judgment much more than would
+  be ideal**". Two details coverage skipped: **Model 4 scores >50% on all 15 AECI benchmarks** ("makes us somewhat
+  nervous about our ability to measure AECI now and in the future" — saturation), and the **adversarial-robustness
+  section concedes "Most analysis relied on Claude"** — Claude collected data, wrote documents and did the majority of
+  METR's own analysis, with interview quotes classified by Claude under a quoted prompt. Ajeya Cotra's next-day
+  commentary walks the same hedges. Crossing the threshold obligates the stronger safeguards Anthropic's RSP promises
+  at the next tier — a policy tripwire firing, not a benchmark.
+
+- **Fold-backfill (thesis 7) — details that lived only in the memory window:** 420 scientists asked for airgapped
+  defaults; a draft statute intervenes only above ~10²⁵ FLOPs at >50 deaths or >$1B; editing the CoT to note harm cut
+  initiation **83% → 13%**, while Mythos 5 "**never once**" stopped unprompted.

@@ -4267,3 +4267,42 @@ JSON 没有条目、CNA 的 HTML 是个壳——而「沉默」是一个带日�
 **Stroq**（Apache-2.0，110★）把守卫的问题从"这条命令危险吗"换成"这条命令是否来自 agent 刚读到的文本"，而它最可迁移的发现关于钩子**契约**而非策略：**"Every agent that times a hook out treats its own timeout as an allow: Claude Code cancels the hook and lets the call continue through the normal permission flow, Codex reports a hook failure and proceeds, Copilot discards the late deny."** 它的答案是按安装者所写超时的 60% 抛同一个拒绝的看门狗——即守卫必须**在一个默许失败的系统内部**做到失败即拒绝。它自陈的盲区：`stroq doctor` "detects a modification rather than preventing one"；而每次运行都会列出配置里**完全绕过钩子的 stdio MCP 服务器**（"results reach the agent unchecked"）。与隐私 mod 是同一个入口的另一侧——**钩子层覆盖 shell 调用，而工具结果通道在它之外。**
 
 → [[fact-check]] [[vuln-supply]] [[disclosure-lag]] [[agent-stack]]
+
+## 2026-11-07 20:33 — microVM 逃逸打到 VMM 上下文，KEV 化的 VPN 绕过，不受支持但已修复的 RCE，15,579 个感染站点，和你 Mac 的关系图谱
+
+- **PwnEscape 第二部**（PWN Research，[pwn.ai](https://pwn.ai/blog/firecracker-escape)）：在 **Firecracker
+  v1.16.1** 上，拿到第一部的 guest→host 内存读写原语后——在 guest 页里放 nonce → 探测候选 EPT 根找到其宿主物理
+  地址 → 反向搜索宿主页表找回 VMM 的 PGD（借对 Firecracker 自身 ELF 的字节签名匹配击败 ASLR）→ 从阻塞的
+  `ioctl(KVM_RUN)` 里找活的 `pt_regs` 帧覆写其保存的寄存器 → 用埋好的 gadget 把返回值清零让 ioctl 看起来仍然
+  成功 → guest 侧一字节串口写入触发在 Firecracker 上下文里执行的 `write(2, ...)`。**注意事项才是正文**：演示
+  时**没有 jailer**（Firecracker 以 root 经 `systemd-run` 直接启动），guest 侧助手需要 root + `/dev/mem`；
+  jailer 并未被攻破，真实世界的主机控制还需要一个强 LPE。HN 评论对归因有分歧（有人说这是内核网络栈的 bug）。
+  **文章引用了 `CVE-2026-99999`，而 cveawg 显示该 ID 是 Linux 内核的 ipv4 校验和 bug**（Linux CNA，2026-10-15
+  发布，本轮核实）——所以这次逃逸**没有已核实的 CVE，也没有补丁声明**。
+- **SonicWall SSLVPN SAML 绕过 `CVE-2026-19868`——入库 KEV 比记录只晚一天**（2026-11-06 加入；记录同日 19:17 UTC
+  发布，`Undergoing Analysis`）：认证强制缺陷，持备选认证方式有效凭据的用户可绕过 SAML。**记录上唯一的分数是
+  CISA-ADP 的富集**——CVSS 3.1 **7.5**（`AV:N/AC:H/PR:N/UI:N/S:C/C:H/I:L/A:N`，Secondary）——vendor 容器为空，
+  SonicWall 公告（SNWLID-2026-0014）对普通抓取是 JS 壳，受影响/已修复版本要用真浏览器读。分诊时要记住出处：
+  7.5 是协调方的数字，不是厂商的。
+- **Apache Axis 1.x 未认证 RCE `CVE-2026-90436`**（oss-security，2026-11-06；记录 `Received`，无任何一方给出
+  CVSS）：反序列化入站 SOAP fault，`<detail>` 携带 `<exceptionName>` 时 Axis 会实例化攻击者指定的类。挂着
+  `UNSUPPORTED WHEN ASSIGNED` 横幅，三座时钟讲完故事：**修复 commit 于 2026-07-12 合入（比记录早 117 天）**；
+  仓库最后推送 2026-09-07；**最后的 release 是 2011 年**（Axis 1.4）——没有可升级的产物，每个部署的答案都是
+  迁移。一条记录里藏着两种「不受支持」：代码 7 月就修了，记录 11 月才来，产物层冻了十五年。
+- **Scott Helme 的常设统计：15,579 个确认感染网站**（[scotthelme.co.uk](https://scotthelme.co.uk/we-know-15-579-websites-are-infected-how-do-we-tell-them/)），
+  合计约 1.35 亿月访问，多为**国家 TLD 上的区域头部**（.fr/.es/.de）而非全球大站——其团队以「100% 置信」确认
+  正在运行恶意 JS 的存活站点。感染类型：Magecart 式刷卡器、ClickFix 假验证投放、iOS 间谍软件（DarkSword、
+  Coruna）、恶意重定向；入侵途径：WordPress 漏洞、被感染的第三方供应链脚本、XSS，以及 **「DeadTag」**——重新
+  注册仍被站点脚本引用的过期域名。站点只有清理后才会离开名单。真正的发现是通知缺口：人工触达大多无人回应，
+  GDPR 让 WHOIS 联系方式失效，CDN 挡住真实托管；名单不公开（点名羞辱的伤害 + 送攻击者的靶子），区域性名单
+  提供给各国 NCSC/CERT。
+- **Mac IntelligencePlatform 审计**（[8rank.ai](https://8rank.ai/game/apple-intelligence-personal-knowledge-graph)）：
+  两个守护进程（`knowledgeconstructiond`、`intelligenceplatformd`）用通讯录、日历、照片、信息、邮件、位置、家人
+  共享与屏幕使用时间在本地构建个人知识图谱，存为 `~/Library/IntelligencePlatform` 下 **51 个明文 SQLite 库**，
+  仅靠完全磁盘访问权限把门；核心的 `graph.db` 是带 **181 个实体类 / 278 个谓词**的三元组库。两个随系统发货的
+  CoreML 模型（`EntityTagging_Family`、`EntityTagging_FamilyAndFriends`）是 **144 个特征上的 XGBoost 分类器**，
+  `metadata.json` 明文列出全部特征（如 `photosPersonPosteriorProbabilityGivenSaturdayNight`），为每人每日重算
+  **17 列关系打分**——而作者只能把已发货模型追溯到其中 **2 列**，其余 15 列「无法追溯」。随文发布 **iKnow**
+  开源检查面板。关切是具体的：图谱里的第三方从未同意，而用户「没有文档、无法查看库、也没有纠正错误推断的通用
+  途径」——本地 ML 兑现了隐私营销的每一条承诺，同时产出无人展示、无人可质疑的关系推断。审计路径即修复示范：
+  审计所需的数据就在特征文件里。

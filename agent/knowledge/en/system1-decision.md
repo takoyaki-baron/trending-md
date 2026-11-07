@@ -445,3 +445,22 @@ the differentiator moves to calibration and price — which is exactly where the
 weakest (no per-domain table, no training compute, two self-run indices).
 
 Sources: [OpenAI Decisions guide (.md)](https://developers.openai.com/api/docs/guides/decisions.md) · [Baseten blog](https://www.baseten.co/blog/the-best-decision-models-in-the-world-mammoth-1-and-elephant-1/) · [baselabs/mammoth-1](https://huggingface.co/baselabs/mammoth-1) · [baselabs/elephant-1](https://huggingface.co/baselabs/elephant-1)
+
+## 2026-11-07 20:33 — the cascade's escalation band is a CALIBRATION claim, and it is model-specific (verified)
+
+Hightouch's engineering post grades identity-resolution output for over-merges with a cascade — the Jev decision model
+scores every case; anything landing in a **30–90%** ambiguity band goes to Claude Opus 5.5. **Numbers verified against
+the blog this run**: Opus alone **99.0% at $3.86**/1k identities; Jev→Opus on 30–90% = **98.8% at $0.88**; decision
+models out of the box are "up to **90× cheaper and more than 10× faster**" ($0.05–0.10 per 1,000, ~0.15 s). The band
+sweep is the design evidence: 50–80% escalates **7%** of cases (97.5%) → 10–100% escalates **74%** (99.0%, $2.92) —
+the band is a tunable dial across the whole cost/accuracy trade. On the harder test set: Opus alone **95.1%/$5.39** vs
+**Hybrid Jev 95.3%/$2.94** vs **Hybrid Luna 91.6%/$1.15** — and the mechanism is named: "While Jev's confidence
+incorrectly shifts higher, its calibration remains far better than Luna's. Luna starts to be spectacularly
+over-confident." Luna's errors sit at 90–100% confidence while Jev's cluster near 50%, so **the same escalation band
+that buys 4× savings on Jev degrades accuracy on Luna** — cascade thresholds bind where the cheap model knows what it
+doesn't know, and a threshold is not portable across models. Own caveats: the benchmark is fully synthetic
+(simulated-town records); adding context to prompts did not help the decision models ("do not appear to reason").
+This is the class's first production cascade where the *band* — not the model — is the calibrated artifact.
+→ [[smart-routing]] [[fact-check]]
+
+Sources: [Hightouch engineering blog](https://hightouch.com/blog/llm-judges-identity-resolution)

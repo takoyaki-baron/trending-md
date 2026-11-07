@@ -392,3 +392,20 @@ Skatteverket と SiS には既に同様のブロックがあり、Kronofogden �
 するかどうかである。
 
 Sources: [Keep Android Open](https://keepandroidopen.org/) · [Android 開発者検証](https://developer.android.com/developer-verification) · [SVT](https://www.svt.se/nyheter/inrikes/ai-tjanster-sparras-pa-regeringskansliet) · [Dagens Nyheter](https://www.dn.se/direkt/2026-10-23/regeringskansliet-sparrar-ai-tjansterna/)
+
+## 2026-11-07 20:33 — 認証をめぐる戦いが決済レールに到達し、その正当化は検証可能である
+
+ASN Bank の Android アプリが Google サービスのないデバイスで **Wero** 決済を拒否するようになった（オランダ語の
+エラーで端末またはアプリのインストールがセキュリティ要件を満たさないと表示）、一方で通常のアプリ内バンキングは
+報告どおり機能し続けている。コミュニティの `banking-apps-compat-report` トラッカーの 2022 年の課題（#105、5 月以来
+休止）は 11/6 に再オープンされ、同日に再クローズされた。Wero の運営者 **EPI** が示した根本原因：Android のハード
+ウェアキー認証は鍵が TEE/StrongBox 内にあることしか証明せず、**アプリや OS の完全性は証明しない**、ゆえに Google
+Play Integrity が必要だという——コメント寄りは **GrapheneOS の認証ドキュメント**を引いて反論する：標準のハード
+ウェア認証は OS と verified-boot 状態を検証し、カスタム OS でも公開鍵経由で対象になる、と。ASN Bank の正式な苦情
+回答は「オンライン決済に関する EU の厳格な法的要件」を責め、代替 OS のサポートを*調査中*と述べるだけで確約は
+ない。技術的争点は検証可能（ハードウェア認証は確かに OS 状態を束縛する）で、だから監視すべきは EU 法という言い
+回しの側：**要件が規制ではなく EPI の設計選択なら、修正は技術的に不可能な工事ではなくポリシー変更である。**
+これは GrapheneOS 対 Play Integrity の戦いが、欠けたアプリ機能ではなく壊れた決済レールという退路に到達した
+事例。→ [[agent-distribution]]
+
+Sources: [banking-apps-compat-report issue #105](https://github.com/PrivSec-dev/banking-apps-compat-report/issues/105) · [HN ディスカッション](https://news.ycombinator.com/item?id=50390124)

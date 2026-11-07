@@ -1029,6 +1029,33 @@ underlying pages — this produced a two-layer false signal in a single item.
    reproducible rather than asserted: the same feed returns **2 `nvd-unavailable`** instead of 2
    registry statements. The transferable rule is the file's oldest one, one layer out: **unread is
    never absent, and a status code is not a record**;
+   **referent** (added 2026-11-07 21:09 — the System item filed 11-06, the "mechanism verified,
+   referent unverified" spine: every arm above verifies a number against a record, none asked
+   whether the record's model fits the thing). Two arms, both pure, never a finding: **(a)
+   `vector-product-mismatch`** (sev 1, advisory) fires when an item QUOTES a vector carrying
+   `AV:N`/`AV:A` while the CNA's own `affected[].product` list is entirely desktop/store-shaped
+   (`Microsoft Paint`, `Notepad`, `Photos`, …; a mixed list or any service-shaped product defeats
+   it; a `pkg:msix`/msstore `packageURL` carries the arm alone — `CNA_CACHE_V` went 8 → 9 to
+   carry `packageURLs`). The Paint item's own body already debated the network feature, so the
+   filing case lands in **`product-mismatch-disclosed`** (sev 0) — the disclose-not-suppress
+   shape, with the whole-item vocabulary deliberately narrower than the sentence-level one
+   ("desktop" appears in roundups that never debate a vector). **(b) `schema-absent`** (sev 0):
+   "the CVE record carries no remediation entry" is a claim about CVE 5.x, which has NO
+   `remediations` field — true of every record ever published, so the verdict points at the
+   vendor document instead of confirming an absence; "no patch is available" is deliberately NOT
+   a cue (fix existence is prose the record can state), and the record-noun guard is
+   `rangeabsent`'s. Calibrated both ways: the 11-06 filing feed returns disclosed + schema-absent
+   on the Paint item, **0 findings** across the seven November feeds (~245 items); `--selftest`
+   **300 → 316**. Read the check alone over multi-feed runs knowing `MAX_CNA` (30) caps the
+   containers the pull joins — a silent referent verdict in a census can be the cap, not the
+   check;
+   **and a star DELTA is not a star count — the third tail the `starQuotesOf` period-word test
+   missed** (added 2026-11-07 21:09, from the day's own JSON): item 1's title is
+   "security-audit-skill spikes again — **2,088 stars in a day**" beside a Source line reading
+   "+2,088★ today · 64,781 total", and the `repo` check reported star-surge for "2088 quoted vs
+   64808 now" — a delta compared against the total, the 2026-10-27 `+312` defect wearing an
+   unsigned tail. `in (a|one) day` joined the period-word alternation; four selftests pin the
+   title shape, and the live re-run drops the finding;
    **repo** (`archived`, `stale` past
    `--stale-days`, and a star count that moved — **by SIGN, not by percentage** (added 2026-11-01 12:39):
    the lint runs minutes after the batch, so the only thing it can watch is the repo moving *under* the

@@ -270,3 +270,16 @@ Sources: [picocss/pico discussion #754](https://github.com/picocss/pico/discussi
 [Python-Markdown contributing guide](https://raw.githubusercontent.com/Python-Markdown/markdown/master/docs/contributing.md) ·
 [issue #1654](https://github.com/Python-Markdown/markdown/issues/1654) ·
 [astropy AI policy](https://github.com/astropy/astropy-project/blob/b842b9bef3c8d69da73d639ea0254ae17fbc1fd1/policies/ai-policy.md)
+
+## 2026-11-07 20:33 — a flagship reverse-engineering project re-licenses because permissive code invites AI rewrites
+
+**Asahi Linux moves all repositories to GPLv2-or-later** (from MIT), citing exploitation of the permissive licence,
+**including AI-assisted rewrites of in-development code** ([progress report 7.3](https://asahilinux.org/2026/11/progress-report-7-3/)).
+This is the first instance in this feed's corpus where **AI-assisted reconstruction of unreleased work** is the stated
+reason a project abandons permissive licensing — the concern is not contribution provenance (QGIS's ban, Debian's
+NEW-queue dispute) but that a permissive license lets others ship AI-reconstructed versions of code the project has
+not released yet. A data point in the growing backlash against MIT for hardware-adjacent code, and the first to act
+at the **licence layer** rather than the contribution gate. The same release graduates M3 support to GA and lands
+Thunderbolt upstream → [[dev-tools]].
+
+Sources: [Asahi Linux progress report 7.3](https://asahilinux.org/2026/11/progress-report-7-3/) · [HN discussion](https://news.ycombinator.com/item?id=50401867)

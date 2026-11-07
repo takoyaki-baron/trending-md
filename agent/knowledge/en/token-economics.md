@@ -681,3 +681,26 @@ answer: how often does a chunk leave the context and never return — if the cac
 the scheme is a dropper with better bookkeeping.
 
 → [[harness-overhead]] [[fact-check]] [[agent-stack]]
+
+## 2026-11-07 20:33 — latent compression beats FULL CONTEXT, and a proxy claims the month-long session
+
+- **Memorilla** (Stanford/Leskovec group, [arXiv 2610.21375](https://arxiv.org/abs/2610.21375), published 2026-10-15,
+  v3 updated 2026-11-03 — verified via the arXiv API this run): encodes a document collection once into reusable
+  embeddings, then compresses query-relevant information into a fixed set of **16 memory tokens** injected directly
+  into a frozen LLM's embedding space. Beats memory baselines (Mem0, MemoRAG) on **5 of 8** benchmarks; on FactKG
+  **84.33% vs 80.43% for full-context inference at 108× fewer tokens** representing the sources; TextWorld agent
+  success 18.6% → 24.2% with fewer revisits. The interesting number is winning *against full context* — it breaks the
+  usual fidelity-for-tokens assumption. The catch: 16 tokens is a hard ceiling, and the benchmarks that favor it
+  (knowledge-intensive QA over a fixed corpus) are where summary-shaped loss is cheapest; it does not claim
+  single-document lookup, where retrieval already wins.
+- **`ranxianglei/billion-context`** (+185★/day, 4,397 total, MIT + one attribution term): a plugin/proxy between any
+  coding agent and its model API — parses Anthropic and OpenAI wire formats and folds consumed conversation into
+  **layered, reversible summaries**, pitching one session running for days through a single context window.
+  Compression is model-driven: injected tools (`compress`, `decompress`, `search_context`) plus gentle nudges around
+  50K tokens and a preflight backstop. Claims **95–97% prefix-cache hit rates, ≤2% compression cost**; cites a
+  companion paper (174,327 model calls, ~18.76B cumulative input tokens) and third-party benchmarks — #1 ContextBench
+  (0.3097 Utilized F1, −58.3% cost vs full context), +16.6% over the best RAG arm on LongMemEval-S, 100% survival on a
+  1.48M-token MemoryAgentBench test where full context failed all trials. The honest flag is structural: the repo
+  self-describes as "Early" with **real-model integration testing still listed as upcoming** — the load-bearing numbers
+  are exactly the ones that testing would validate. Same week, Anthropic's memory post is the opposite bet: curate
+  across sessions (dreaming + wikis) vs compress within one. → [[agent-stack]]
