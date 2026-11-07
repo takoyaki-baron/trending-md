@@ -150,17 +150,17 @@ Show HN のハニーポット、ただし標的が具体的だ：スーパーマ
 
 ---
 
-## 11. Skyvern のエージェントサンドボックス、バイトコードで突破される — アドバイザリは修正版を示さない
+## 11. Skyvern のエージェントサンドボックス、バイトコードで突破される — 当日中に 1.0.57 で修正、ただしアドバイザリは Unknown のまま
 
-- **Velocity:** ▮▮ rising
+- **Velocity:** ▮ steady
 - **Source:** NVD · レコード 11月6日 · `Deferred`
 - **Tags:** `agents` `security` `browser-automation`
 
-CVE-2026-123783（GHSA-2555-vffj-g73c、11月6日公開）：オープンソースのブラウザ自動化エージェント Skyvern の 1.0.56 までが "contains a sandbox bypass vulnerability that allows authenticated users to execute code by reconstructing functions from raw bytecode with types.CodeType"。脱出が迂回するのは作者らが選んだ防御そのものだ：デプロイされたスクリプトは "evade the is_safe_script_code AST denylist and import blocked modules such as subprocess or socket to run code in the Skyvern server process." GitHub アドバイザリは High 8.7 と評価し —— その Patched versions セルは Unknown と書かれたまま。NVD レコードは `Deferred` で、CVSS 4.0 8.7 と CVSS 3.1 8.8 をともに Secondary スロットで持つ。
+CVE-2026-123783（GHSA-2555-vffj-g73c、11月6日公開）：オープンソースのブラウザ自動化エージェント Skyvern の 1.0.56 までが "contains a sandbox bypass vulnerability that allows authenticated users to execute code by reconstructing functions from raw bytecode with types.CodeType"。脱出が迂回するのは作者らが選んだ防御そのものだ：デプロイされたスクリプトは "evade the is_safe_script_code AST denylist and import blocked modules such as subprocess or socket to run code in the Skyvern server process." アドバイザリは High 8.7 と評価し、その Patched versions セルは Unknown と書かれたまま —— このセルは公開時（11月6日 15:31Z）に書かれ、その後更新されていない。修正はその6時間後に ship した：v1.0.57（21:29Z リリース、同日に PyPI へ）が "Harden script sandbox validation (SKY-18441) (#8937)" を含む —— CVE レコードが引用する commit そのものだ。NVD レコードは `Deferred` で、CVSS 4.0 8.7 と CVSS 3.1 8.8 をともに Secondary スロットで持ち、GitHub Advisory DB のレコードにはパッケージもバージョン範囲もまったく載っていない。
 
-**なぜ重要か:** 「AST 否認リスト」流派のエージェントサンドボックスは、パーサの下の層で壊れ続けている：信頼できないコードが `types.CodeType` に触れられるなら、ソースレベルのレビューは飾りだ。ユーザー提供スクリプトを走らせるエージェントプラットフォームにとって、修正版が名指しされていないことが運用上の見出し —— バージョンピンを待つのではなく、実行記録を監査せよ。
+**なぜ重要か:** 「AST 否認リスト」流派のエージェントサンドボックスは、パーサの下の層で壊れ続けている：信頼できないコードが `types.CodeType` に触れられるなら、ソースレベルのレビューは飾りだ。運用上の見出しは 1.0.57 への一段アップグレードであり、この事例は同時に measurement でもある：patched-versions セルは公開時点のスナップショットで、これは6時間で腐った。当日修正が出た状況で Unknown のセルは、アドバイザリ DB を消費するすべてのスキャナに未修正と読まれる。修正を発見できる唯一の道は、レコードの `references[]` の commit から、それに名前を付けているリリースノートへ辿ることだ。
 
-[`🔗 GHSA-2555-vffj-g73c`](https://github.com/advisories/GHSA-2555-vffj-g73c) · [`🔗 NVD の CVE-2026-123783`](https://nvd.nist.gov/vuln/detail/CVE-2026-123783)
+[`🔗 GHSA-2555-vffj-g73c`](https://github.com/advisories/GHSA-2555-vffj-g73c) · [`🔗 NVD の CVE-2026-123783`](https://nvd.nist.gov/vuln/detail/CVE-2026-123783) · [`🔗 v1.0.57 リリースノート`](https://github.com/Skyvern-AI/skyvern/releases/tag/v1.0.57)
 
 ---
 

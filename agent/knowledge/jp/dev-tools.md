@@ -1076,3 +1076,17 @@ workflow」と指示している。
   Postgres にスナップショット、復旧は実行途中から再開；非決定的パターンはコンパイル時に捕捉（Temporal の
   「SDK 規律で決定性を保つ」と対になる失敗面）。README は率直：pre-1.0、仕様は急速に変わり、本番・レイテンシ敏感・
   約 1 万超の並行協調アクションには非推奨。
+
+## 2026-11-08 04:52 —— NVIDIA が AI ファクトリの制御面をオープンソース化し、Prometheus はクエリの値段を学び、OCF 規格が静かにクラウド API に勝つ
+
+### NVKE——自分の GPU ベアメタル向けマネージド Kubernetes（Apache-2.0 プレビュー、`dsx-ai-factory/nvke`）
+
+NVIDIA は NVKE を公開した（**509★** 確認済み、11-07 push、heise がプレビューを報道）：プラットフォームチームが自分の NVIDIA GPU ハードウェア上にテナント隔離された Kubernetes クラスタを開設・ライフサイクル管理するための管理面——各クラスタは自分の制御面と etcd を持つ；捨て用シードクラスタが管理クラスタをブートし、管理クラスタがオンデマンドでワークロードクラスタを生む。README は未熟さについて率直：API 認証は**デフォルトで無効**、アップグレードやバックアップ/復元の手順は**存在しない**、そして「NVKE is not a Kubernetes distribution and not a Cluster API flavour.」。プレビュー級のソフトウェア、本番級の踏み銃；戦略的な事実は、クラウドベンダーの製品だったマネージド Kubernetes の形が、NVIDIA の org 上のオープンソースソフトウェアになったことだ。
+
+### Prometheus 3.16.0——実験的なクエリコスト推定と `integral()`
+
+flag の後ろにある二つの実験機能（11-04 リリース）：PromQL の `integral()` 関数（「range ベクトルの時間積分」）と、実コスト報告と設定可能な実行制限つきのクエリコスト推定（`--enable-feature=query-cost`）。Smoothed と anchored vector selector は安定・常時有効になり、TSDB は XOR2 圧縮とチェックポイントメモリを改良し、Agent モードは metadata-wal-records サポートを得る。姿勢の変化：事後にメルトダウンを説明するから、走らせる前にクエリが使える金額を境界づけるへ。
+
+### LocalThings——Samsung 家電をクラウドアカウントなしで Home Assistant へ
+
+`mbillow/localthings`（**1,020★** 確認済み、MIT、HACS の既定リポジトリ一覧入り）：カスタム統合が DTLS 上の CoAP で Samsung SmartThings 互換家電——洗濯機、乾燥機、冷蔵庫、エアコン、オーブン、掃除機——と話し、経路は **OCF 規格**（`smartthings-local` ライブラリ）、RFC 7641 プッシュ更新 + 30 秒ポーリングのフォールバック、一回の識別子取得の後は Samsung クラウドアカウント不要、そして **90+ の実機捕捉テスト**。ローカル経路が存在するのは、Samsung がすべての家電に OCF 規格を積んでいるから——規格への適合が静かにクラウド専用 API に勝った——そして捕捉テスト一式が正直な部分だ：リバースエンジニアリングされた機器プロトコルは、実機に対する回帰テストを続けないと動き続けられない。

@@ -233,6 +233,38 @@ const UA = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (
  * is tried only when the first came back a wall. The named one is not `Mozilla`-shaped — that is
  * the point of it. */
 const CLIENT_STRINGS = [UA, 'curl/8.7.1 trending-md-claim-unit-lint/1.0'];
+/* The THIRD client is a transport, not a string (filed 2026-11-05 20:39): openai.com answered the
+ * real `curl` binary 403 — INCLUDING with this exact Chrome UA — while Node's `fetch` with the
+ * same string returned 200 / 428,571 bytes, 2/2 in each direction. Both CLIENT_STRINGS above ride
+ * Node's undici stack, so they share one TLS fingerprint; a gate keyed on the fingerprint walls
+ * both no matter what either sends. `fetchViaCurlBin` spawns the actual binary, which changes the
+ * fingerprint — the axis a UA retry can never reach. Reached only when both undici attempts came
+ * back walls or shells (`needsThirdClient`), and the cache entry records WHICH client produced the
+ * text, because a verdict that names a page should be able to name the client that read it.
+ * execFile (not exec): the URL is one argv element, never a shell string; the status code rides a
+ * `-w` sentinel line that is stripped before any text test runs. */
+import { execFile } from 'node:child_process';
+function fetchViaCurlBin(url, ua, timeoutMs = 20_000) {
+  return new Promise((resolve) => {
+    execFile('curl',
+      ['-sS', '-L', '--compressed', '--max-time', String(Math.ceil(timeoutMs / 1000)),
+       '-A', ua, '-H', 'Accept: text/html,application/xhtml+xml,*/*',
+       '-o', '-', '-w', '\n@@CURL_STATUS:%{http_code}@@', url],
+      { maxBuffer: 64 * 1024 * 1024, timeout: timeoutMs + 5_000 },
+      (err, stdout) => {
+        const s = String(stdout || '');
+        const m = s.match(/@@CURL_STATUS:(\d+)@@\s*$/);
+        if (!m) return resolve(null);   // spawn failure / timeout / no status line: unread this run
+        resolve({ status: Number(m[1]), body: s.slice(0, m.index) });
+      });
+  });
+}
+/* Pure decision: the binary fetch is paid only after BOTH undici clients failed to yield prose.
+ * An empty text is a failed run of the loop; a block shell is a page that answered but said
+ * nothing — the same two-test rule `isBlockShell` applies. */
+function needsThirdClient(text) {
+  return !text || isBlockShell(text);
+}
 const STAR_TOLERANCE = Number(arg('star-tolerance') ?? 0.10);
 // a relative drift on a tiny count is not a wrong claim (2026-11-01: 6★ → 8★ in one batch)
 const STAR_MIN_DELTA = Number(arg('star-min-delta') ?? 5);
@@ -3308,6 +3340,7 @@ async function citedPageText(page) {
    * wall on the other. Retry with the second before recording unread: this is the difference
    * between "the page does not say that" and "I could not read it", which is the rule the whole
    * check rests on. Only paid when the first attempt came back a wall, and both are unmetered. */
+  let client = CLIENT_STRINGS.length ? 'undici' : 'none';
   for (const ua of CLIENT_STRINGS) {
     try {
       const r = await fetch(page.url, { signal: AbortSignal.timeout(20_000), headers: { 'user-agent': ua, accept: 'text/html,application/xhtml+xml,*/*' } });
@@ -3324,7 +3357,22 @@ async function citedPageText(page) {
       if (!isBlockShell(t)) break;
     } catch { /* unreadable is a state, not an absence — it is reported as unread this run */ }
   }
-  cache[key] = { v: PAGE_CACHE_V, fetched_at: new Date().toISOString(), bytes: text.length, text };
+  /* The third client (2026-11-08, the openai.com shape): both attempts above share undici's TLS
+   * fingerprint, so a fingerprint gate walls both under any UA. Spawn the real `curl` binary —
+   * reached ONLY when the loop yielded no prose (`needsThirdClient`), so a normal run pays zero
+   * extra requests. The entry records which client produced the text: "the page does not say
+   * that" is a claim about bytes, and the bytes depend on who asked. */
+  if (needsThirdClient(text)) {
+    try {
+      const r = await fetchViaCurlBin(page.url, UA);
+      if (r && r.status < 400) {
+        citedPages_requests += 1;
+        const t = htmlText(r.body.slice(0, 3_000_000), page.raw);
+        if (t.length > text.length) { text = t; client = 'curl-bin'; }
+      }
+    } catch { /* unread this run — the short TTL re-fetches */ }
+  }
+  cache[key] = { v: PAGE_CACHE_V, fetched_at: new Date().toISOString(), bytes: text.length, text, client: needsThirdClient(text) ? 'none-read' : client };
   /* the short TTL above reads this entry's own contents, so a wall re-fetches after 10 minutes
      rather than being stored as fact for six hours */
   return cache[key];
@@ -4432,6 +4480,15 @@ if (SELFTEST) {
   const mk = (title, body = '') => ({ n: 1, title, body, text: `${title}\n${body}`, plain: strip(`${title}\n${body}`), cves: [], repos: [] });
   const cases = [];
   const t = (name, got, want) => cases.push({ name, pass: JSON.stringify(got) === JSON.stringify(want), got, want });
+
+  /* 2026-11-08 — the third client. Both CLIENT_STRINGS ride undici, so a TLS-fingerprint gate
+     walls both under any UA (openai.com: real curl 403 ×4 including this exact Chrome UA, Node
+     fetch 200 ×2 with the same string). The binary fetch is paid only when BOTH attempts yielded
+     no prose — a pure decision, so it is pinned offline. */
+  t('third client: empty text asks for it', needsThirdClient(''), true);
+  t('third client: a challenge shell asks for it', needsThirdClient('Just a moment... enable javascript'), true);
+  t('third client: real prose does not', needsThirdClient('The advisory lists the affected versions and the fix release.'), false);
+  t('third client: a short page WITHOUT a wall marker does not', needsThirdClient('ok'), false);
 
   t('unsplit: 3,286 open issues', checkIssues(mk('t', 'with **3,286 open issues** on the board')).map((x) => x.verdict), ['unsplit-issue-count']);
   t('split named: compliant', checkIssues(mk('t', '4,379 issues and 4,159 PRs')).map((x) => x.verdict), ['ok']);

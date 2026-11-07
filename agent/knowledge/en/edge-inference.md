@@ -1367,3 +1367,7 @@ non-unified KV prefill performance, i.e. a fix for the project's own KV-unificat
 
 → [[frontier-models]] [[edge-inference]] [[dev-tools]]
 
+
+## 2026-11-08 04:52 — HyperFlow H3 Flash: the compression recipe published, the quality evidence absent, the license fenced
+
+Video-Rebirth's `hyperflow-h3-flash` (Show HN, 33 points): MiniMax-H3 — a ~31B transformer generating video with synchronized 32 kHz stereo audio — pruned and low-rank factorized to **13.7–13.9B** ("less than half of the ~31B MiniMax-H3 transformer"), dropping 1–3 of 50 blocks and quantizing **180** linear layers to W8A8 INT8 with Hadamard rotation; two-time (t, r) conditioning enables 4/6/8 sampling steps without classifier-free guidance. Only speed is benchmarked — a 5.2 s clip at 6 steps: **8.7 s** on 4× B200, **36 s** on one H200, **92 s** on an RTX 5090 — with **no VBench or other quality score anywhere**; treat the speed table as the claim and the missing quality table as the caveat. Weights are on Hugging Face (GGUF 7.2–15.2 GB, INT8 ~16 GB) under the MiniMax H3 Community License, which "does not cover use in the European Union, the United Kingdom, the Republic of Korea, or the United States" without authorization — the demo targets hardware most of its licensed market cannot legally load the weights on.

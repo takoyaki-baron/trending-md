@@ -418,3 +418,7 @@ README の時計表こそが成果物だ。ピークではなく「メモリの�
 v0.9.0 が持ち込むのはデータセンターのノブのローカルスタックへの降下である：**NCCL によるマルチノードテンソル並列**（ggml v0.29.0）、**OCP FP8 E4M3** と `LLAMA_FTYPE_MOSTLY_F8_E4M3`、`_2d` API を置き換えるバッチテンソルコピー API（`ggml_backend_tensor_copy_n`/`set_n`/`get_n`、Metal と CUDA に実装）、4 つの新アーキテクチャ（Clover、Limite、Metis-1.6、Mistral Large 4）、Chatterbox TTS と Nemotron 3.5 Transcribe による音声生成・文字起こし、そして最も正直な一行——`flash_attn_ext_rows`。リリースノートはこれが非統合 KV の prefill 性能を回復すると述べており、つまりプロジェクト自身が入れた KV 統合の回帰を直したものだ。
 
 → [[frontier-models]] [[edge-inference]] [[dev-tools]]
+
+## 2026-11-08 04:52 —— HyperFlow H3 Flash：圧縮レシピは公開され、品質の証拠は不在、ライセンスはデモ機材に柵を置く
+
+Video-Rebirth の `hyperflow-h3-flash`（Show HN、33 ポイント）：MiniMax-H3——同期 32 kHz ステレオ音声つき動画を生成する ~31B transformer——を剪枝と低ランク分解で **13.7–13.9B** へ（「~31B の MiniMax-H3 transformer の半分以下」）、50 ブロックのうち 1–3 を落とし、**180** 個の線形層を Hadamard 回転つき W8A8 INT8 へ；二時刻 (t, r) 条件付けが classifier-free guidance なしの 4/6/8 サンプリングステップを可能にする。測られたのは速度だけ——5.2 秒クリップを 6 ステップで：4× B200 で **8.7 秒**、H200 一枚で **36 秒**、RTX 5090 で **92 秒**——そして **VBench その他の品質スコアはどこにもない**；速度表を主張とし、欠けた品質表を注意書きとせよ。重みは Hugging Face（GGUF 7.2–15.2 GB、INT8 ~16 GB）にあり、ライセンスは MiniMax H3 Community License——「許諾なくしては欧州連合、英国、大韓民国、米国での使用を.coverしない」——デモが狙う機材は、その許諾市場のほとんどの人が合法的に重みをロードできない機材だ。

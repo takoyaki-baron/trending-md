@@ -323,12 +323,66 @@ const AUTH_UNITS = [
  *                                   [--concurrency 6] [--json]
  *
  * Verdicts: `same` (both read, similar size) · `browser-walled` (only the named client reads) ·
- * `named-walled` (only the browser reads) · `both-walled` · `differs` (both read, sizes far apart)
- * · `unreadable` (neither). A host with any gated row is the host to name in the write-up; the
- * report is per-host because the rule is per-host.
+ * `named-walled` (only the browser reads) · `both-walled` · `curl-bin-served` (both undici clients
+ * walled, the real `curl` binary read it — a FINGERPRINT gate, the openai.com shape) ·
+ * `differs` (both read, sizes far apart) · `unreadable` (neither). A host with any gated row is
+ * the host to name in the write-up; the report is per-host because the rule is per-host. Since
+ * 2026-11-08 the census carries the third client on `both-walled` rows only, and every row keeps
+ * its A/B `pairVerdict` beside the final one — the tally shows both, so the rescue rate is a
+ * count, not a memory.
  */
 const CLIENT_A = { label: 'browser', ua: UA };
 const CLIENT_B = { label: 'named', ua: 'curl/8.7.1 trending-md-doc-twin/1.0' };
+/* The THIRD client is a transport, not a string (filed 2026-11-05 20:39, the openai.com filing
+ * case): `curl` the BINARY answered 403 with a JS interstitial on four attempts — including with
+ * the exact Chrome UA this tool sends — while Node's `fetch` with that same string returned
+ * 200 / 428,571 bytes, 2/2 in each direction. CLIENT_A and CLIENT_B above both ride Node's
+ * undici stack, so they share one TLS fingerprint and one header shape; a gate keyed on the
+ * FINGERPRINT treats them as the same client no matter what UA either sends. Spawning the real
+ * `curl` binary changes the fingerprint, which is the axis a UA retry can never reach. The UA
+ * held constant at CLIENT_A's.
+ * First live run's correction (2026-11-08, the census's own rescue row): the one `both-walled`
+ * URL the third client cleared — `pypi.org/project/heretic-llm/` — flipped back on re-test, for
+ * EVERY client: undici try 1 served the ~3 KB stub, undici try 2 the full 97 KB page, and
+ * curl-with-curl-UA the stub — so that row was a per-request INSTABILITY (PyPI intermittently
+ * serves a short JS-notice stub whose visible text matches the wall regex), not a fingerprint
+ * gate, and `curl-bin-served` must be read as "the third ROLL read it", never as "curl reads
+ * this host". The transport axis still earns its cost: the 6 rows that stayed walled across all
+ * three clients (npmjs.com ×4, theblock.co, arxiv.org) are measured gates, and a host that
+ * stubs undici but serves curl STABLY remains exactly the shape this client exists to catch.
+ * Only paid on rows already `both-walled` — the class the first two clients cannot rescue. */
+const CLIENT_C = { label: 'curl-bin', ua: UA };
+/* execFile (not exec): the URL is one argv element, never a shell string, and a page body stays
+ * in memory — nothing is written to a temp path an interpolated filename could hijack. The status
+ * code rides a sentinel line appended by `-w`; it is stripped before any text test runs. */
+import { execFile } from 'node:child_process';
+function fetchViaCurlBin(url, ua, timeoutMs = TIMEOUT_MS) {
+  return new Promise((resolve) => {
+    execFile('curl',
+      ['-sS', '-L', '--compressed', '--max-time', String(Math.ceil(timeoutMs / 1000)),
+       '-A', ua, '-H', 'Accept: text/html,application/xhtml+xml,*/*',
+       '-o', '-', '-w', '\n@@CURL_STATUS:%{http_code}@@', url],
+      { maxBuffer: 64 * 1024 * 1024, timeout: timeoutMs + 5_000 },
+      (err, stdout) => {
+        const s = String(stdout || '');
+        const m = s.match(/@@CURL_STATUS:(\d+)@@\s*$/);
+        if (!m) return resolve({ status: 0, bytes: 0, text: '', wall: true, error: err ? err.message : 'no status line' });
+        const body = s.slice(0, m.index);
+        const status = Number(m[1]);
+        const text = visibleText(body);
+        resolve({ status, bytes: Buffer.byteLength(body), text, wall: isWall(status, text) });
+      });
+  });
+}
+/* The three-client classifier: A/B decide the pair verdict as before; C is consulted only on
+ * `both-walled` and can upgrade it to `curl-bin-served`. Pure so the selftest can pin it. */
+function classifyUaPair3(a, b, c) {
+  const pair = classifyUaPair(a, b);
+  if (pair !== 'both-walled') return { pair, final: pair };
+  const kc = kindOf(c);
+  const final = kc === 'ok' ? 'curl-bin-served' : pair;
+  return { pair, final, curlbin: `${c.status}/${c.text.length}` };
+}
 const WALL_RE = /client challenge|enable javascript|javascript is disabled|just a moment|checking your browser|attention required|access denied|verify you are human|cf-chl|ddos protection by|请启用 ?javascript|请稍候/i;
 /* short AND says what it is — length alone would refuse a genuinely short page (the same two-test
  * rule claim-unit-lint's `isBlockShell` uses, deliberately kept in step with it) */
@@ -415,7 +469,19 @@ async function uaCensus() {
       lastReq[host] = Date.now();
       const a = await fetchAs(url, CLIENT_A.ua);
       const b = await fetchAs(url, CLIENT_B.ua);
-      rows.push({ url, host, verdict: classifyUaPair(a, b), browser: `${a.status}/${a.text.length}`, named: `${b.status}/${b.text.length}` });
+      /* The third client is consulted ONLY on `both-walled` — the class the two UA strings cannot
+       * rescue — so a normal run pays zero extra requests (measured: 63 of 1,299 rows were
+       * both-walled over a month). The row keeps the A/B pair verdict beside the final one, so the
+       * interesting number — how many both-walled rows stop being walls — is readable from the
+       * tally itself instead of being reconstructed. (First run of this edit hit a TDZ error —
+       * `pair` referenced inside its own destructuring initializer — which is why the census
+       * checks its own stdout: an empty JSON file is a failed run, not an empty class.) */
+      const pair = classifyUaPair(a, b);
+      let final = pair, curlbin;
+      if (pair === 'both-walled') {
+        ({ final, curlbin } = classifyUaPair3(a, b, await fetchViaCurlBin(url, CLIENT_C.ua)));
+      }
+      rows.push({ url, host, verdict: final, pairVerdict: pair, browser: `${a.status}/${a.text.length}`, named: `${b.status}/${b.text.length}`, ...(curlbin ? { curlbin } : {}) });
     }
   }));
   const tally = {};
@@ -463,6 +529,25 @@ async function main() {
       /* the HPE row may match any of three markers — assert the CLASS, not a spelling */
       const ok = expect === null ? got === null : expect.split('|').includes(got);
       console.log(`${ok ? 'ok  ' : 'FAIL'} ${name} → ${got ?? 'not gated'}`);
+      if (ok) pass++;
+    }
+    console.log('');
+    /* the third client is a classifier change, so its decision table is pinnable offline —
+     * no network needed (the rows are the shapes the census can meet) */
+    const ok3 = { status: 200, bytes: 30000, text: 'x'.repeat(4000), wall: false };
+    const wall3 = { status: 403, bytes: 3000, text: 'Just a moment...', wall: true };
+    const err3 = { status: 500, bytes: 0, text: '', wall: false };
+    const UA3_UNITS = [
+      ['both-walled + curl-bin reads → curl-bin-served', classifyUaPair3(wall3, wall3, ok3), 'both-walled', 'curl-bin-served'],
+      ['both-walled + curl-bin walled → both-walled (kept)', classifyUaPair3(wall3, wall3, wall3), 'both-walled', 'both-walled'],
+      ['both-walled + curl-bin 5xx → both-walled (a 500 is not a wall)', classifyUaPair3(wall3, wall3, err3), 'both-walled', 'both-walled'],
+      ['same + curl-bin never consulted → final stays same', classifyUaPair3(ok3, ok3, ok3), 'same', 'same'],
+      ['browser-walled pair → C not consulted, pair kept', classifyUaPair3(wall3, ok3, ok3), 'browser-walled', 'browser-walled'],
+    ];
+    for (const [name, got, pair, final] of UA3_UNITS) {
+      total++;
+      const ok = got.pair === pair && got.final === final;
+      console.log(`${ok ? 'ok  ' : 'FAIL'} ${name} → pair ${got.pair} final ${got.final}`);
       if (ok) pass++;
     }
     console.log(`\nselftest: ${pass}/${total} matched`);

@@ -497,3 +497,7 @@ engineering one.** This is the GrapheneOS-vs-Play-Integrity fight arriving where
 rail rather than a missing app feature. → [[agent-distribution]]
 
 Sources: [banking-apps-compat-report issue #105](https://github.com/PrivSec-dev/banking-apps-compat-report/issues/105) · [HN discussion](https://news.ycombinator.com/item?id=50390124)
+
+## 2026-11-08 04:52 — Apple's keyboard "grey list": the capability class is words, and the failure is user-blamed
+
+The Guardian reports research by independent researcher Derik Kauffman: **100,000+** words and phrases Apple has restricted from predictive-text completion — an undocumented "grey list". Autocomplete and swipe-typing silently refuse entries like "Dictator Trump", "NSA spies", "question your sexuality", "on MDMA"; and because swipe-typing **mangles adjacent words** ("United Ireland" bending to "United Iceland"), the policy surfaces as typos users blame on themselves. A values-laden list ships to a billion phones where the constraint is discoverable only by probing the keyboard — and it is the second undocumented behavioral layer found on Apple hardware in one week (an unrelated team separately mapped the on-device personal-knowledge graph). Same genre as this thesis's capability-class removals, one level quieter: not a capability removed, a vocabulary gated, with the denial rendered as user error.

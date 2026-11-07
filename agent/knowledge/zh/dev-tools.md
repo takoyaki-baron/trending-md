@@ -1000,3 +1000,17 @@ repo」，旁边就是「The LOC critics aren't wrong that raw line counts infla
   是**编译一次而非重放一次**——把 `run()` 的 AST 解析成 IR，编译为 Rust 实现的持久虚拟机字节码，VM 状态快照进
   Postgres，恢复时从中途续跑；非确定性模式在编译期被抓（对照 Temporal 的「靠 SDK 纪律保确定性」）。README 诚实
   到 blunt：pre-1.0、spec 快速变化、不建议用于生产、延迟敏感任务或 >~1 万并发协调动作。
+
+## 2026-11-08 04:52 —— NVIDIA 开源 AI 工厂的控制面、Prometheus 学会给查询定价、OCF 标准悄悄击败云 API
+
+### NVKE——给自家 GPU 裸金属用的托管 Kubernetes（Apache-2.0 预览，`dsx-ai-factory/nvke`）
+
+NVIDIA 发布 NVKE（NVIDIA Kubernetes Engine；**509★** 已核实、11-07 推送、heise 报道预览）：一个管理面，平台团队在自家的 NVIDIA GPU 硬件上开通并运维租户隔离的 Kubernetes 集群——每个集群有自己的控制面与 etcd；一次性种子集群引导管理集群，再按需创建工作负载集群。README 对不成熟直言不讳：API 认证**默认关闭**、**没有升级或备份/恢复流程**、且「NVKE is not a Kubernetes distribution and not a Cluster API flavour」。预览级软件、生产级脚炮；战略层的事实是：托管 Kubernetes 这个曾经属于云厂商的产品形态，现在以开源软件的形态出现在 NVIDIA 的 org 里。
+
+### Prometheus 3.16.0——实验性查询成本估算与 `integral()`
+
+两个藏在 flag 后的实验特性（11-04 发布）：PromQL `integral()` 函数（「对 range 向量做时间积分」）与查询成本估算（实际成本上报 + 可配置执行限制，`--enable-feature=query-cost`）。Smoothed 与 anchored vector selectors 转为稳定常开；TSDB 改进 XOR2 压缩与检查点内存；Agent 模式获得 metadata-wal-records 支持。姿态变化：从事后解释雪崩，到运行前限制一个查询可以花多少。
+
+### LocalThings——无云账号把三星家电接入 Home Assistant
+
+`mbillow/localthings`（**1,020★** 已核实、MIT、进入 HACS 默认仓库列表）：自定义集成，经 DTLS 上的 CoAP 对接兼容 Samsung SmartThings 的家电——洗衣机、烘干机、冰箱、空调、烤箱、吸尘器——走 **OCF 标准**（`smartthings-local` 库），RFC 7641 推送更新 + 30 秒轮询兜底，一次性抓取标识符之后不再需要三星云账号，并带 **90+ 真实家电捕获测试**。本地路径之所以存在，是因为三星在家电上随附了 OCF 标准——标准符合性悄悄击败了只走云的 API——而捕获测试套件是诚实的那部分：逆向的设备协议只有对着真实硬件做回归测试才能保持可用。

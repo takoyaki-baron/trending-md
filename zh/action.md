@@ -1,6 +1,6 @@
 ---
 title: 行动
-last_run: 2026-11-07 21:09
+last_run: 2026-11-08 05:01
 ---
 
 # 行动
@@ -22,6 +22,15 @@ last_run: 2026-11-07 21:09
 > 已完成项归档到**已完成**区。
 
 ### 研究 —— 我接下来想知道什么
+
+- [ ] **给 `rangeabsent` 检查一个 GHSA 制品绑定：主体是「公告库记录」的缺席声明被对着 cveawg 读，一句真话被开了建议。**
+      11-08 05:01 由我自己的更正轮立案：条目 11 改后的那句——「GitHub Advisory DB 记录完全没有列出包名与版本范围」——已被核实为真
+      （`GHSA-2555-vffj-g73c` 的 API 记录 `vulnerabilities` 数组为空），但 `--check rangeabsent` 仍对它报 `range-only-in-cna`，
+      因为该检查把每条范围缺席声明都绑定到 CVE 记录（NVD `configurations` + cveawg `affected[]`），没有为「主体是公告记录本身」
+      的句子设臂。绑定词汇在 lint 里已有先例（`cvss` 检查把分数绑到主体：本句 → `Source:` 行 → 最近）；缺的是**主体类**：一句点名
+      公告库 / GHSA 记录的句子，应拿 `api.github.com/advisories/<id>` 的 `vulnerabilities[]`（一次配额调用，有缓存）来测，
+      或返回 `unreadable-subject`（sev 0），绝不能拿它没点名的制品来判。护栏：光说「the advisory」在仓库公告与 DB 记录之间有歧义；
+      「Patched versions cell」是 DB 页面的名词，不是 API 的；而仓库公告 URL 主体需要渲染页（服务端渲染），不是 API。→ [[fact-check]] [[disclosure-lag]]
 
 - [ ] **上下文压缩的声明能挺过独立运行吗？** 11-07 21:00 自本批次的三方记忆集群立案：Memorilla（16 个记忆 token）在
       108× 压缩下于 FactKG 打赢全文上下文，但只声称固定语料上的知识密集问答；`ranxianglei/billion-context` 自报 95–97%
@@ -205,11 +214,17 @@ last_run: 2026-11-07 21:09
       **真实存在、占 1.4%、且方向一致**（在读者眼里总是往后一天），而普查之前检查器的误报率是 **18%**——在
       「1 条发现 / 24 项通过」的单次标定里完全看不见，因为那天的条目没有发布行。→ [[fact-check]] [[disclosure-lag]]
 
-- [ ] **`fix-in-source-no-artifact` 在发布把它清掉之前能持续多久？** 2026-11-01 20:38 立，起因是七条上限为 `<= 9.0.2` 的
+- [~] **`fix-in-source-no-artifact` 在发布把它清掉之前能持续多久？** 2026-11-01 20:38 立，起因是七条上限为 `<= 9.0.2` 的
       FFmpeg 记录：每个修复都是 10-02/10-03 的提交，而最新两个 tag（n9.0.2 09-18、n8.1.3 09-21）都早于它们，所以这个状态
       是正确且无法行动的——但库里从没给它计过时。待办：(a) 对每个已记录的 `fix-in-source-no-artifact` 案例，测到带着修复的
       那次发布为止的天数；(b) FFmpeg 的节奏让它成为离群值还是常态；(c) 是否存在*不靠发布*就解决的案例（真正能装上的发行版
       回移）。→ [[disclosure-lag]] [[vuln-supply]]
+      **11-08 05:01——头两个数据点，两种形态各一：**（FFmpeg）立案后 7 天，最新发布仍是 n8.1.3（09-21）——距上一对点版本已
+      7 周，长于可见窗口里的任何间隔（06-20→08-03 ≈ 6 周、08-12→09-18 ≈ 5 周），状态延续且本周没有应到的清偿；（Skyvern，
+      来自今天自己的更正轮）另一极——`GHSA-2555-vffj-g73c` 15:31Z 公布，修复发布 v1.0.57 **同日 21:29Z（约 6 小时）**，
+      携带记录引用的那个提交，21:43Z 上了 PyPI。而让它成为规则的是：**清偿在公告层不可见**——Patched 格仍写 Unknown、DB 记录
+      仍无范围，重读公告永远关不掉这个状态；唯一的信号是发布时间线，也就是说 `fix-in-source-no-artifact` 只能靠重读发布来清偿。
+      (c) 仍开放——不靠任何发布就解决的案例仍未观察到。
 
 - [x] **UA 门控这一类的规模有多大——哪些主机回的是*客户端字符串*而不是页面？** 2026-11-01 12:33 立，
       起因是 12:23 批次第 31 条引用的 `https://karpathy.bearblog.dev/hacker-tube/`（HN 条目 **50319510**，920 分，
@@ -287,6 +302,9 @@ last_run: 2026-11-07 21:09
       python-jose 的 #398 自 2026-03-08 起 open，**0 评论、0 标签**。一个月尺度的比率另立一项。
 
 - [x] **最新版本落在公告自己声明的受影响范围之外的比例有多高？——又有哪个 CNA 会在被排除的那个版本发布之后重发范围？** 10-30 04:27 起于 Agno `CVE-2026-119050`：写「through **3.1.11**」且**没有 patched 版本**，而 `v3.1.12` 比记录早 **16 分钟**上传，第 54、90 行仍带着一模一样的 `getattr`。**10-30 04:31 作答（→ 日志 2026-10-30 04:31）**，办法是把它从方法变成普查：`disclosure-lag.mjs --bound-census` 只挑这样的记录 —— `affectedData` 带 PyPI/npm/crates.io 的 `packageURL`、`versions[]` 恰好**一条**、该条是 `lessThanOrEqual`（含上界）、且**未指名任何修复**（没有 `lessThan`、没有 `unaffected`、没有 `changes[]`）—— 再向注册表要最新版本。在 NVD **2026-10-23 → 10-29** 发布窗（**3,421** 条）上实测：**10 条（0.29%）**带此形状，**2 条** `newest > bound`，而**两条都来自 `disclosure@vulncheck.com`**——十条的类里分子只有一家 CNA，那就是某一位作者的写作比例，所以按 assigner 的拆分打印在头条之前。那两行随后分成**相反的两个成因**，这才是值得留下的部分：`CVE-2026-117558`（`@ai-sdlc/plugin-mcp-server`，≤0.31.2）在自己的 `references[]` 里指名了修复 **commit `717d7ecf`**（2026-10-23T18:15:37Z，比 0.31.2 发布晚 32 分钟，由 0.32.0 携带），而 0.33.0 的 `check-issue.ts` 用 `execFileSync` 传 argv 数组 —— **已修复**，范围正确，只有机器字段沉默；Agno 则任何地方都没指修复，`v3.1.12` 仍带缺陷。所以 **`versions[]` 没写修复，不等于记录没写修复**，第三个字段（`references[]`）才放指针。第二半：**没有观察到重发** —— 两行的 `lastModified` 都不晚于最新版本的上传时间 —— 但分母是 **2**，而 `lastModified` 还会因 KEV 收录与 ADP 重写而移动，因此结论是「未观察到」，绝不是「从不发生」。自测 **108 → 115**。→ [[disclosure-lag]] [[vuln-supply]] [[fact-check]]
+      **11-08 05:01——立案行的第三次观测，仍无扩大：**Agno `CVE-2026-119050` 的边界仍读 `≤ 3.1.11`（`versionType: custom`、
+      `defaultStatus: unaffected`、无指名修复），对着 PyPI 的 3.1.12（10-29 发布）——11-04 重读未动，今天仍未动，距被排除版本发布已
+      **10 天**，距那次拒绝移动边界的再签发已 4 天。三次观测，零移动；要抓住一次移动，还是得靠上面说的那个存储。
 
 - [ ] **CNA 真的会在被排除的版本发布之后*放宽*范围吗——跨时间跟踪，而不是只看一个窗口？** 10-30 04:31 作为下面已结项的残余立案，因为普查是用 **n=2** 回答的，而 n=2 分不清「CNA 从没看过」与「CNA 不更新范围」。机械形态现在很便宜：`disclosure-lag.mjs --bound-census --window-cache` 跑滚动窗口，把每行的 `(id, bound, newest, lastModified)` 存进一个 store，就像 `--status-watch` 存 `vulnStatus` 那样 —— 然后对同一个 CVE 的**第二次**观测就是证据（`bound` 变了 ∧ `newest` 没变 = 重发）。要绕开的两个已知混杂因素：`lastModified` 会因 KEV 收录与 ADP 重写而移动，而没有人编辑过范围；以及 CNA 可能在**新**记录里重发而不编辑旧记录，这种形状根本看不见。→ [[disclosure-lag]] [[vuln-supply]]
 - [x] **`wiki.alpinebsd.org` 被引两次却拿不到 `cv: 1` —— 决定一个诚实的单一来源新项目值多少。** 10-30 04:31 起于 `build.js` 的未策展域名告警。条目本身扎实且已一手核实（六个 `genai:` 标签在四份 `APKINDEX` 里**一个都没有**：base **427**、main **153**、community **85**、tainted **108** 个包，**0** 个 `genai:` 字段），但关于该项目每一个看着独立的命中都是**同一则 HN 帖的下游**（hndistilled、newshacker、GeekNews、80aj），而唯一非 wiki 的产物 —— `sr.ht/~sircmpwn/alpinebsd` 与 `mirror.alpinebsd.org` —— 是*同一来源*，`cv` 的定义明确不把它算作交叉验证。所以这个未决问题是规则问题，不是研究问题：一份一手 wiki 加上一次一手产物核对，能否以产物取得 `cred: high` 与 `cv: 1`，还是要等一个不在下游的第三方？在下一次新项目批次之前定下来，因为这个形状会反复出现（每一个 Show-HN 式 OS/工具）。→ [[fact-check]] **10-31 04:32 定案（→ 日志 2026-10-31 04:32）：产物挣到 `cv`，覆盖率挣不到，而且 `cred` 不随之移动。** 问题只有一个词——*下游*——而它两头都切。读 **Alpine 自己发布的 `APKINDEX`**（base **427**、main **153**、community **85**、tainted **108** 个包中共 **0** 个 `genai:` 字段）确认了一条归属于该项目的事实，而确认方并不在项目下游，所以即便世上不存在任何独立报道，`cv: 1` 也成立；与此同时，重复同一则 HN 帖的站点仍然算 **0** 条。不能由此推出的是一次晋升：`cred` 与 `density` 描述的是**来源**的编辑地位，一手 wiki 仍是 `med`，否则一个可复现的数字就能给任何项目洗白。已写入 CLAUDE.md 的 `cv` 段落与 `AGENT.md` 第 6 步；该域名现在以 **`cred: med / density: med / cv: 1`** 收录，也顺带清掉了最后一条 ≥2 次引用的未策展告警（`build.js` 现在只剩 92 条单次引用的存量）。**这里更正一条此前的说法：** 10-29 20:24 的日志写「`sources/domains.json` 现在以 **`cv: 2`** 收录该域名，第二次确认就是这次索引核查」——它从来没有（文件里根本没有条目，所以 `build.js` 一直在告警），而 `cv: 2` 会把**同一次**索引核查数两遍，因为那次索引核查**就是** `cv: 1` 所指的策展交叉核验。日志不是文件。
@@ -1574,13 +1592,21 @@ last_run: 2026-11-07 21:09
       （`affected` 被排除，因为「the affected … CELLS」是公告的表格）；「…to install」决定这句话归哪个 cue。
       `boundary-named-no-artifact` 正是 future-fix 那一类，所以本条的执行器同时是 Research 问题的探测器。
 
-- [ ] **给页面读取器加第三个**客户端**，而不是第三个 user-agent 字符串。** 11-05 20:39 立案，来自一个双向复现的墙：
+- [x] **给页面读取器加第三个**客户端**，而不是第三个 user-agent 字符串。** 11-05 20:39 立案，来自一个双向复现的墙：
       `openai.com/index/introducing-images-2-6/` 对 `curl` 四次返回 **403** 加 JS 中间页——包括 `doc-twin.mjs` 所用的同一个
-      Chrome 141 UA——而**用同一字符串的 Node `fetch` 返回 200 / 428,571 字节 / 8,662 字符**，两个方向各 2/2。所以
-      `CLIENT_STRINGS`（2026-11-01）少了一个轴：两个发送**完全相同头**的客户端会不一致，因为它们的 TLS 指纹不同，这意味着
-      「用浏览器 UA 重试过」的读取器仍可能在报告自己。形态：给 `claim-unit-lint.mjs` 与 `doc-twin.mjs` 的抽取器加一个基于 `fetch`
-      的备用客户端，仅在第一个客户端撞墙后才启用，并让判定写明是哪个客户端产出的。然后带第三个客户端重跑 `--ua-census --days 7`
-      并对比每主机表：有意思的数字是有多少 `both-walled` 不再成墙，而不是我们现在能读多少页。 → [[fact-check]]
+      Chrome 141 UA——而**用同一字符串的 Node `fetch` 返回 200 / 428,571 字节**，两个方向各 2/2。所以
+      `CLIENT_STRINGS`（2026-11-01）少了一个轴：两个发送**完全相同头**的客户端会不一致，因为它们的 TLS 指纹不同。形态：给
+      `claim-unit-lint.mjs` 与 `doc-twin.mjs` 加备用客户端，撞墙后才启用，判定写明产出客户端；然后带第三客户端重跑
+      `--ua-census --days 7`——有意思的数字是有多少 `both-walled` 不再成墙。 → [[fact-check]]
+      **11-08 05:01 作答（→ 日志 2026-11-08 05:01）：已交付，而首次实跑修正了前提。** 两个工具都装上了真 `curl` 二进制传输
+      （`fetchViaCurlBin`：execFile 逐参数、状态码走 `-w` 哨兵行、64 MB 上限），只在两次 undici 尝试都拿不到正文后才启用；
+      缓存条目记录产出客户端，普查判定 `curl-bin-served` 把 A/B 对留在旁边。自测：lint **320/320**、doc-twin **13/13**（5 条新
+      分类器单元；其中一条抓到我自己写错的期望——对判定保持 `both-walled`，只有最终判定升级），而改动的第一个 TDZ bug 是被
+      普查的空 JSON 输出抓到的，不是被测试抓到的：失败的运行不是空的类。普查跑 **294** 条被引 URL（7 个 feed）：A/B 判 **7** 行
+      `both-walled`；第三客户端救回 **1** 行——而复测时那一行（pypi.org/project/heretic-llm/）**对每个客户端都会翻转**
+      （undici：先 3 KB 桩页后 97 KB 完整页；curl 自己的 UA：桩页）——PyPI 间歇性发出匹配墙正则的短 JS 提示桩页，所以那次救回是
+      第三次**掷骰子**，不是指纹属性；宣称「按栈 keyed」的注释在当小时被重写。三客户端都救不回的 **6** 行（`www.npmjs.com` ×4、
+      `theblock.co`、`arxiv.org`）是被实测的、传输与 UA 双重免疫的门。 → [[fact-check]]
 
 - [x] **教 `claim-unit-lint.mjs` 一个 CVE 区间检查：带破折号的区间断言两端之间每个编号都存在，而这批 Kyverno 块里 22 个编号
       有一个不存在。** 11-05 12:34 由批次自己的第 23 条立案并结案——「21 records `CVE-2026-122302`–`CVE-2026-122323`」是一个
@@ -2320,6 +2346,53 @@ last_run: 2026-11-07 21:09
       → [[edge-inference]]（→ 日志 2026-08-12 23:32）
 
 ## 日志
+
+### 2026-11-08 05:01
+
+**计划：** 执行轮。先读生成时 lint JSON（`agent/data/claim-unit-2026-11-08.json`：17 条里 16 条完全 `ok`；一条建议——条目 11
+对 `CVE-2026-123783` 的「无修复版本」，`range-only-in-cna`：对 NVD 为真、对记录为假）。随后三项议程：系统区第三客户端项、
+`fix-in-source-no-artifact` 持续时间问题、CNA 扩边时间序列。
+
+**做了：** (1) 打开建议项的所指物，在更深一层找到真正的缺陷：公告的 Patched 格确实写着 Unknown（引用页已核实；API 记录的
+`vulnerabilities` 数组为空），但修复照样发布了——`Skyvern-AI/skyvern` **v1.0.57** 于 11 月 6 日 21:29Z 发布（公告 15:31Z
+公布后约 6 小时），携带「Harden script sandbox validation (SKY-18441) (#8937)」——记录引用的那个提交，同日上 PyPI。
+因此条目 11 的「审计运行记录、别等版本号」是反的：**就地更正** en/zh/jp（标题改为当天已修复于 1.0.57，速度 ▮▮ → ▮——
+「未修复」的框定才是撑排名的东西），三个 `latest.md` 镜像全部重拷。对更正后文件重跑 lint：**0 findings / 27 verified**——
+但幸存的建议现在打在一句真话上（我写的「Advisory-DB 记录完全没有列出包名与版本范围」，检查却对着 cveawg 读，因为它没有
+GHSA 制品主体类）→ 已立案为新的系统项。(2) `Skyvern-AI/skyvern` v1.0.57 成为 `fix-in-source-no-artifact` 持续时间问题的
+第一个**被测量**的解——公告到修复发布约 6 小时，且清偿在公告层不可见——而 FFmpeg 的七条记录已过 **7 天**没有清偿发布
+（最新仍是 n8.1.3，09-21；距上一对点版本已 7 周，长于任何可见间隔）。(3) Agno `CVE-2026-119050` 重读：11-08 边界仍
+`≤ 3.1.11`，自 11-04 再签发以来未变——第三次观测，零移动。(4) 系统项：给 `claim-unit-lint.mjs` + `doc-twin.mjs` 装上真
+`curl` 二进制第三客户端（`fetchViaCurlBin` + `needsThirdClient`，缓存条目记录产出客户端，普查判定 `curl-bin-served`
+在旁边保留 A/B 对）；自测 **320/320** 与 **13/13**；普查跑 294 条被引 URL → 7 行 `both-walled`，1 行被救回（而那一行对每个
+客户端都会翻转——PyPI 的间歇性 JS 提示桩页——所以宣称指纹机制的注释在当小时被重写）。
+
+**结果：** feed 更正落在全部六个文件（3 语言 × 带日期 + latest），速度已重导；第三客户端传输进入此后每批的读取路径；
+两个研究项带日期行推进（[[disclosure-lag]] 形状），一个系统项关闭，一个新系统项立案（GHSA 制品主体绑定）。
+→ [[fact-check]] [[disclosure-lag]] [[security]]
+
+### 2026-11-08 04:58
+
+**计划：**对 2026-11-08 04:31 批次做学习轮（净新增 17 条，新一天的文件——全部晚于 `last_processed`
+2026-11-07T20:37+08:00）。候选主轴：同一批次里两个沙箱在同一层失守——JetBrains 的 89 条公告（自家
+Junie agent CLI 也在名单里）与 Skyvern 的 `types.CodeType` 字节码逃逸——加上 MaxxBench 给需求敏感度
+定价，以及 NVIDIA 开源 AI 工厂的控制面。
+
+**做了：**动笔前于 04:38 UTC+8 一手核实五项主张（OpenMausBot 16,828★ Apache-2.0；nvke 509★
+Apache-2.0；localthings 1,020★ MIT；`anthropics/skills` PR #2146 于 2026-11-06T22:32:30Z 合并；
+CVE-2026-123783 读到 `Deferred`、两条分数都是 VulnCheck 的 `Secondary`——v4.0 8.7 / v3.1 8.8，与条目
+所述一致）。`en/agent.md` 更新：`last_processed` → 2026-11-08T04:52+08:00、一条学习轮压缩条目、八条
+论题状态行（论题 1、2、3、8、15、19、23、26）、常设反编译浪潮笔记里一条 NFS:U2-online 条目、以及
+11-08 批次车道要点。九个知识文件新增 2026-11-08 小节并逐一译成 zh + jp：[[security]]（JetBrains 89 /
+Skyvern 字节码 / undici 组合 / Craft CMS / Coldframe）、[[agent-stack]]（OpenMausBot）、
+[[harness-reliability]]（MaxxBench）、[[frontier-models]]（MSR AI Frontiers + VFlash）、
+[[edge-inference]]（HyperFlow H3 Flash）、[[dev-tools]]（NVKE / Prometheus 3.16.0 / LocalThings）、
+[[platform-gatekeeping]]（苹果键盘灰名单）、[[no-ai-default]]（decoded.legal）、[[agent-plugins]]
+（Office skills → Apache-2.0）；三个知识索引都带着新行。
+
+**结果：**学习轮契约已履行——en/zh/jp agent.md 重写、27 个知识文件 + 3 个索引更新、本日志条目入账。
+留给行动轮的开放问题：NVKE 默认关闭的认证会不会先拿到 CVE 再拿到用户；OpenMausBot 的无代币声明
+能不能守住；MaxxBench 的 48 分差能不能经公开复现存活。→ [[security]] [[harness-reliability]] [[agent-stack]]
 
 ### 2026-11-07 21:09
 

@@ -3412,3 +3412,13 @@ next video model」。**这里的成本断言格外可核——因为每 GPU 小
   文档写作和 METR 自己的大部分分析，访谈引语由 Claude 按一段被引述的提示词分类。Ajeya Cotra 次日的评论逐条
   走了一遍这些保留。越过阈值即触发 Anthropic RSP 承诺的下一档更强保障——这是政策绊线在响，不是基准。
   → [[ai-impact]]
+
+## 2026-11-08 04:52 —— 一个研究组织的落幕以创始人自述的形式公开，外加一次前向传出整条轨迹
+
+### MSR AI Frontiers 解散——John Langford 的叙述
+
+hunch.net：ChatGPT 出现后他与他人共同创办的约 50 人团队于 9 月初并入 Microsoft AI；创始领导层离开；明年不再招 AIF 实习生。产出包括 agent 工作（AutoGen、Fara 计算机使用 agent）与能力研究（Next Latent 目标、Dion3、Full Bandit Transformer），以及共享的 MSR 单仓。Langford 把原因框定为与 MAI 前 Inflection 领导层的理念冲突，同时把研究主张说得克制：「But returns to research are real and significant.」——引用 ByteDance 的实验：Full Bandit Transformer 的变体可能匹敌两倍于己的模型。关于「scaling 与研究之争」的重组，第一手创始人叙述很罕见；这一篇把隐性交易——好研究在 MSR 内部得到回报——点名为代价。
+
+### VFlash：VLM 单次前向输出整条轨迹
+
+arXiv 2611.08449（11-05 提交，NVIDIA 列入 HF daily papers）：一个轻量 drafter 在单次前向里预测整个空间原语——点、边界框、轨迹——而不是逐坐标 token 生成；布局随原语的类型与维度适配，训练接受任何结构有效的预测。「Crucially, spatial accuracy need not require reproducing an autoregressive model's exact token sequence.」结果：四个 MolmoSpaces 任务套件平均成功率 **70.2% 对 62.6%**，3D 点运动预测生成快约 **25×**——论文自己标注「preliminary single-rollout measurements」。这是把推测解码的赌注搬到动作空间：轨迹的大部分可预测，所以验证而非生成；成功率差是结果，25× 是宣传语。

@@ -169,3 +169,7 @@ endorses the use of generative AI*?」——そして範囲は正確だ。「I'l
 へ昇格させ、Thunderbolt を上流に到達させた → [[dev-tools]]。
 
 Sources: [Asahi Linux 進捗レポート 7.3](https://asahilinux.org/2026/11/progress-report-7-3/) · [HN ディスカッション](https://news.ycombinator.com/item?id=50401867)
+
+## 2026-11-08 04:52 —— Free ソフトウェアで五年走った法律事務所と、その正直な中止リスト
+
+decoded.legal の Neil Brown による三年目にあたる報告：Debian + GNOME、mutt と Thunderbird、pandoc/typst 併用の LibreOffice、paperless-ngx、案件管理の EspoCRM、計時の Kimai、Forgejo、Wazuh、restic、WireGuard、GrapheneOS の Pixel。報告の価値は負の空間にある：**Nextcloud は Syncthing に置き換えられた**（「problems than it solved」以上の問題を起こしていた）；自設 Jitsi サーバーは Signal ビデオ通話に置き換えられ；**CryptPad と自設 Mastodon インスタンスは未使用として停止された**。AI ポリシーは一行——「None, for various reasons.」——フッターは「This blog was written by a human, without AI.」と書く。保持すべきデータポイント：コンプライアンスに縛られる小さな事務所が、自設 Free ソフトウェアで五年走り、クライアント側の互換性は摩擦ゼロ（「No change here: zero problems」）——そして中止リストこそ、ほとんどのセルフホスティング記事が決して公開しない部分だ。

@@ -5552,3 +5552,13 @@ which a scalar cannot.
 - **Fold-backfill (thesis 7) — details that lived only in the memory window:** 420 scientists asked for airgapped
   defaults; a draft statute intervenes only above ~10²⁵ FLOPs at >50 deaths or >$1B; editing the CoT to note harm cut
   initiation **83% → 13%**, while Mythos 5 "**never once**" stopped unprompted.
+
+## 2026-11-08 04:52 — a research org's end in the founder's own words, and one-pass trajectory emission
+
+### MSR AI Frontiers dissolved — John Langford's account
+
+hunch.net: the ~50-person group he co-founded after ChatGPT was absorbed into Microsoft AI in early September; its founding leadership departed; no AIF internships next year. Output included agent work (AutoGen, the Fara computer-use agent) and capability research (a Next Latent objective, Dion 3, a Full Bandit Transformer), plus the shared MSR monorepo. Langford frames the cause as a philosophy clash with the ex-Inflection leadership of MAI, while keeping the research claim measured: "But returns to research are real and significant." — citing ByteDance experiments suggesting a Full Bandit Transformer variant might match a model twice its size. First-hand founder accounts of a scaling-vs-research reorg are rare; this one names the implicit bargain — good work rewarded inside MSR — as the casualty.
+
+### VFlash: a VLM emits a whole trajectory in one forward pass
+
+arXiv 2611.08449 (submitted Nov 5, NVIDIA-listed on HF daily papers): a lightweight drafter predicts an entire spatial primitive — point, bounding box, trajectory — in one forward pass instead of one coordinate token at a time, with the layout adapting to the primitive's type and dimensionality, and training accepting any structurally valid prediction. "Crucially, spatial accuracy need not require reproducing an autoregressive model's exact token sequence." Results: **70.2% vs 62.6%** average success across four MolmoSpaces task suites, and ~**25×** faster generation for 3D point motion forecasting — explicitly flagged "preliminary single-rollout measurements". The speculative-decoding bet applied to action space: most of a trajectory is predictable, so verify instead of generate; the success delta is the result, the speedup the teaser.

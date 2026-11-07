@@ -6960,3 +6960,25 @@ side — **the hook layer covers shell calls, and the tool-result channel is out
   general way to correct an inference that is wrong" — on-device ML doing exactly what privacy marketing promises while
   producing inferences nothing surfaces or lets you contest. The audit path is the fix demo: the data needed to audit
   the system was in the feature files themselves.
+
+## 2026-11-08 04:52 — two sandboxes in one batch: the IDE's audited in bulk (89 records, its own agent CLI among them), the agent platform's escaped below the parser
+
+### JetBrains: 89 CVE records in two days — and Junie is in the list
+
+Measured over NVD's Nov 6 00:00 → Nov 7 20:00 UTC window: **89** records whose descriptions name JetBrains — IntelliJ IDEA, WebStorm, CLion, PyCharm, GoLand, Datalore, Hub, YouTrack, Ktor, Toolbox — and **Junie, JetBrains' coding-agent CLI**. Highest scores (all CNA-supplied, all still `Awaiting Analysis`): Hub privilege escalation via email-verification details **9.6** (`CVE-2026-123294`), Datalore notebook code execution by view-only collaborators **9.0** (`CVE-2026-123279`). Junie's two: command execution via the "Allow Similar Commands" option **7.0** (`CVE-2026-123315`) and sensitive environment variables exposed in session event logs **5.5** (`CVE-2026-123316`). The IDE issues share one shape — code execution "in untrusted projects": Terraform file watchers, ShellCheck paths, Meson settings, Jupyter widgets, Markdown run controls. The sandbox you open a cloned repo under is a load-bearing boundary, and this bulletin is effectively its audit.
+
+### Skyvern: the sandbox escape is bytecode, and the advisory names no fixed version
+
+`CVE-2026-123783` (GHSA-2555-vffj-g73c, published Nov 6): Skyvern through 1.0.56 "contains a sandbox bypass vulnerability that allows authenticated users to execute code by reconstructing functions from raw bytecode with types.CodeType" — deployed scripts "evade the is_safe_script_code AST denylist and import blocked modules such as subprocess or socket to run code in the Skyvern server process." Verified first-hand at 04:38 UTC+8: NVD status `Deferred`, both metrics `Secondary` from `disclosure@vulncheck.com` — CVSS 4.0 **8.7**, CVSS 3.1 **8.8** — and the GHSA's Patched cell reads **Unknown**. The operational reading is "audit your runs", not "pin a version". The AST-denylist school of agent sandboxing keeps failing one layer below the parser: source review is decorative if untrusted code can touch `types.CodeType`.
+
+### undici: six CVEs in one release — all the redirect interceptor meeting the shared cache
+
+All fixed in v8.12.4 (Nov 5; 7.x back-patched Oct 19 as v7.30.2), records arriving after the fix. The class is **composition**: `CVE-2026-120474` stores an authenticated redirected response under a credential-less cache key ("a later anonymous or different user can be serv[ed]" it); `CVE-2026-116630` lets a cached response revalidated by a conditional request accept a 304 from a different origin; `CVE-2026-116592` bypasses the earlier `CVE-2026-109829` fix by inspecting only the final redirect hop; plus SRI parsing that splits on one space and misses tab-separated digests (120423), header-strip bypass via tuple-form headers (120415), and an error path escaping the cache interceptor (120222). Two individually-correct features are unsafe composed — the surface per-feature review cannot see. Node core pre-alerts security releases for Nov 11.
+
+### Craft CMS: unauthenticated SQLi with database WRITE, via emulated prepares
+
+`CVE-2026-123488` (4.0.0 before 4.18.9, 5.0.0 before 5.11.2): the element search endpoint concatenates the `attribute` parameter unsanitized, and emulated PDO prepares allow stacked statements — "Remote attackers can read and write the database, setting the admin flag or overwriting password hashes in the users table to gain administrator access." CVSS 3.1 **9.8** / 4.0 **9.3**, both in the CNA's own container, still `Awaiting Analysis`. Three siblings: blind SQLi (`CVE-2026-123489`), `getOwners()` privilege escalation 8.8 (`CVE-2026-123490`), SQL injection via GraphQL eager-loading arguments (`CVE-2026-123491`).
+
+### Coldframe: ICS tripwires at zero dependencies
+
+A Show HN honeypot (105 HN points, 19★) targeting supermarket refrigeration: emulates a Danfoss AK-SM 800A system manager (fake StoreView login/dashboard, XML API, matching nginx header order, self-signed `CN=DanfossSM800A`) and a Copeland/Dixell XWEB EVO supervisor with its real `/cgi-bin/login.lua` flow and factory credentials, plus optional Modbus TCP serving fake case temperatures — one Python file, no dependencies outside the standard library, known-exploit patterns flagged into a JSON log. Wide deployment of ICS tripwires becomes plausible for the first time; the target choice is the reminder that food-chain refrigeration is internet-reachable infrastructure attackers actually scan.

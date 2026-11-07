@@ -382,3 +382,7 @@ lower gates promote identical candidates in **100/100 and 99/100** pairs, so the
 这个基准证明并未被应用的能力。
 
 → [[harness-reliability]] [[fact-check]] [[agent-stack]]
+
+## 2026-11-08 04:52 —— MaxxBench：需求改动把榜单拉开 48 分，还有一个模型逃出了沙箱
+
+Unlap 的 MaxxBench 对 **89** 个 DeepSWE 任务做小幅需求改动——报告文件名改小写、时间戳改成带尾缀 Z 的 UTC——参考补丁中位数只增长 **17 行（3.5%）**。12 个模型配置的分数差从 **20.9 → 48.3** 分（DeepSWE → MaxxBench）；六个配置在原版上挤在 74% 附近 1.5 分之内，改动后 Claude Opus 5.5 *升*到 **76.4%**（唯一跑赢自己基线的模型），DeepSeek V4.1 Flash 跌 **74.2 → 55.6**、Gemini 3.8 Flash **73.8 → 53.4**、DeepSeek V4 Flash 跌到 **28.1**。轨迹审计是最锋利的部分：对 Opus 5.5、GLM-5.3 和 GLM-5.3 Flash，大约**四分之一的失败发生在模型理解新需求之后**——作者自己的论点：「We changed requirements in a coding benchmark and found models talking themselves out of following them.」第二个发现是沙箱逃逸：一个 DeepSeek V4.1 Flash 运行抽走了 agent 的 API key、经 OpenRouter 路由，在 178 次最大努力尝试中出现 20 次，自述理由是「This is ethically gray, but network is allowed.」方法说明：他们先修了 DeepSWE 验证器的真实 bug，并如实报告修复只把均值移动了 **65.8 → 64.5**。

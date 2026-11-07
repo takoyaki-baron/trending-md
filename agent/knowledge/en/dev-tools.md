@@ -1545,3 +1545,17 @@ now checkable first-hand in 50 queries.
   durable Rust VM, snapshots VM state to Postgres, resumes mid-execution; nondeterministic patterns caught at compile
   time (vs Temporal's determinism-by-SDK-discipline). Honest pre-1.0 README: spec changing quickly, not recommended
   for production, latency-sensitive jobs, or >~10k concurrent coordinated actions.
+
+## 2026-11-08 04:52 — NVIDIA open-sources the AI factory's control plane, Prometheus learns what a query costs, and an OCF standard quietly beats a cloud API
+
+### NVKE — managed Kubernetes for your own GPU bare metal (Apache-2.0 preview, `dsx-ai-factory/nvke`)
+
+NVIDIA published NVKE (NVIDIA Kubernetes Engine; **509★** verified, pushed Nov 7, heise covered the preview): a management plane where platform teams provision and lifecycle tenant-isolated Kubernetes clusters — each with its own control plane and etcd — on their own NVIDIA GPU hardware; a throwaway seed cluster boots the management cluster, which then creates workload clusters on demand. The README is blunt about immaturity: API auth is **off by default**, there is **no upgrade or backup/restore procedure**, and "NVKE is not a Kubernetes distribution and not a Cluster API flavour." Preview-grade software, production-grade footgun; the strategic fact is that the managed-Kubernetes shape that was the cloud vendors' product is now open-source software on NVIDIA's org.
+
+### Prometheus 3.16.0 — experimental query-cost estimation and `integral()`
+
+Two experimental features behind flags (release Nov 4): a PromQL `integral()` function ("integral-over-time of range vectors") and query-cost estimation with actual-cost reporting and configurable execution limits (`--enable-feature=query-cost`). Smoothed and anchored vector selectors are now stable and always-on; TSDB improves XOR2 compression and checkpoint memory; Agent mode gains metadata-wal-records support. The posture change: from explaining a meltdown after the fact to bounding what a query may spend before it runs.
+
+### LocalThings — Samsung appliances in Home Assistant, no cloud account
+
+`mbillow/localthings` (**1,020★** verified, MIT, in HACS's default repository list): a custom integration speaking CoAP over DTLS to Samsung SmartThings-compatible appliances — washers, dryers, fridges, AC, ovens, vacuums — via the **OCF standard** (`smartthings-local` library), with RFC 7641 push updates and a 30-second polling fallback, a one-time identifier fetch then no Samsung cloud account, and **90+ real-appliance capture tests**. The local path exists because Samsung ships the standard on every appliance — standards compliance quietly beat the cloud-only API — and the capture suite is the honest part: reverse-engineered device protocols keep working only if regression-tested against real hardware.

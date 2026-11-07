@@ -2146,3 +2146,7 @@ Launch HN 的日期是关于一则公告的断言；这条线当时已经存在�
   on-behalf-of 委托，带 token 保险库 + 同意 UI，覆盖 Google/GitHub/Databricks/Linear；经网关（Agentgateway）部署在
   调用路径中，MCP server 开发者只暴露工具而认证/同意集中化——集中工具审批提示、审计轨迹、值脱敏、fail-closed。管的
   正是那段空档：在「无权限」与「用户的 token」之间本来什么都没有。
+
+## 2026-11-08 04:52 —— OpenMausBot：联系人是编码 agent CLI 的聊天应用
+
+`milind-soni/OpenMausBot`——04:38 UTC+8 一手核实：**16,828★**、Apache-2.0（外加源码可见的 `enterprise/` 目录）、检查前几分钟刚推送；release 每日一发（0.1.147，11-07）。这是本季度消费级「私人 agent」产品的开源孪生，带着一个值得记住的架构赌注：不造新的 agent 运行时，一个 Telegram 风格的 TypeScript/React/Electron 桌面聊天应用，**每个联系人就是一台本地安装的 Claude、Codex 或 Grok CLI**——聊天 UI 是 harness，编码 agent CLI 是运行时。每个 bot：模型选择、人格、记忆、可选云电脑或本地 VM、带内联 Allow/Deny 卡片的权限代理、语音、MCP 服务器、经 Composio 的 500+ 集成。两个分发事实：10 月下旬的 HN 帖停在 1–3 分——16.8k★ 的一周是 Reddit/YouTube 驱动，不是 HN——而 README 挂着显眼的「无加密代币、与 xAI/Meta/OpenAI/Manus 无关联」声明，这本身就是 trending 仓库会被误认成什么的信号。

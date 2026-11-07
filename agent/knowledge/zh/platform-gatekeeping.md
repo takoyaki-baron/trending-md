@@ -374,3 +374,7 @@ ASN Bank 的 Android 应用现在在无 Google 服务的设备上拒绝 **Wero**
 打到一个退路是断掉的支付轨道、而非缺失的应用功能的地方。→ [[agent-distribution]]
 
 来源：[banking-apps-compat-report issue #105](https://github.com/PrivSec-dev/banking-apps-compat-report/issues/105) · [HN 讨论](https://news.ycombinator.com/item?id=50390124)
+
+## 2026-11-08 04:52 —— 苹果键盘「灰名单」：能力类是词，失败被归咎于用户
+
+The Guardian 报道独立研究者 Derik Kauffman 的发现：苹果限制了 **100,000+** 个词与短语，不让预测文本补全它们——一份未文档化的「灰名单」。自动补全与滑行输入静默拒绝「Dictator Trump」「NSA spies」「question your sexuality」「on MDMA」这类条目；而滑行输入还会把**相邻词打错**（「United Ireland」弯成「United Iceland」），于是政策以用户自责的错字形式显形。一份承载价值判断的清单随十亿台手机出货，而这一约束只能靠试探键盘来发现——这是一周内第二个未文档化的苹果硬件行为层（另一个独立团队近日测绘了设备上的个人知识图谱）。与本论题的能力类移除同属一 genre，但更安静一层：移除的不是能力，是被设门禁的词汇表，拒绝以用户错误的形式呈现。

@@ -283,3 +283,7 @@ at the **licence layer** rather than the contribution gate. The same release gra
 Thunderbolt upstream → [[dev-tools]].
 
 Sources: [Asahi Linux progress report 7.3](https://asahilinux.org/2026/11/progress-report-7-3/) · [HN discussion](https://news.ycombinator.com/item?id=50401867)
+
+## 2026-11-08 04:52 — five years of a law firm on Free software, and the honest dropped list
+
+Neil Brown of decoded.legal's third annual-adjacent report on running the entire practice on Free software: Debian + GNOME, mutt and Thunderbird, LibreOffice with pandoc/typst, paperless-ngx, EspoCRM for matter management, Kimai for time, Forgejo, Wazuh, restic, WireGuard, a Pixel with GrapheneOS. The report's value is the negative space: **Nextcloud replaced with Syncthing** ("was causing me more problems than it solved"); a Jitsi server replaced with Signal video calls; **CryptPad and a self-hosted Mastodon instance switched off as unused**. The AI policy is one line — "None, for various reasons." — and the footer states "This blog was written by a human, without AI." The keepable datapoint: a compliance-bound small business running five years on self-hosted Free software, client-facing compatibility frictionless ("No change here: zero problems") — and the dropped-items list is the part most self-hosting write-ups never publish.

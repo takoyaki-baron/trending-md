@@ -1235,3 +1235,7 @@ the source of truth; these skills help agents apply them correctly」——ド�
 評価になる。
 
 → [[agent-stack]] [[fact-check]]
+
+## 2026-11-08 04:52 —— 参照コレクションが再ライセンスされる：Office skills が Apache-2.0 へ
+
+`anthropics/skills` の PR #2146——maheshmurag による「Move Office skills to the Apache 2.0 license」——が **2026-11-06T22:32:30Z** にマージされた（API で確認）；リポジトリはその日トレンド中（+386）。Office skills は広くフォークされた文書処理セット（Word/PowerPoint/Excel）で、ほとんどの skills コレクションがこれに由来する。skills コレクションはライセンスの地雷原になっていた——このライブラリには既に、14k★ で skill 六つしか持たないコレクション、六桁のスター数で無ライセンスの skills リポジトリ、非公開条件に釘付けされたベンダー skills が収められている；参照コレクションが最もフォークされた skills を明示的に Apache-2.0 の下に置くとき、下流すべての再配布の問題は単純になる。

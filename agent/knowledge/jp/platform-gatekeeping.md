@@ -409,3 +409,7 @@ Play Integrity が必要だという——コメント寄りは **GrapheneOS の
 事例。→ [[agent-distribution]]
 
 Sources: [banking-apps-compat-report issue #105](https://github.com/PrivSec-dev/banking-apps-compat-report/issues/105) · [HN ディスカッション](https://news.ycombinator.com/item?id=50390124)
+
+## 2026-11-08 04:52 —— Apple のキーボード「グレーリスト」：能力クラスは単語で、失敗はユーザーに帰される
+
+The Guardian が独立研究者 Derik Kauffman の研究を報じる：Apple は予測変換の補完から **100,000+** の語と句を制限している——文書化されていない「グレーリスト」。自動補完とスワイプ入力は「Dictator Trump」「NSA spies」「question your sexuality」「on MDMA」のような項目を静かに拒み、しかもスワイプ入力は**隣接する語まで壊す**（「United Ireland」が「United Iceland」に曲がる）ので、ポリシーはユーザーが自分を責めるタイプミスとして現れる。価値を担うリストが十億台の電話に搭載され、その制約はキーボードを突くことでしか発見できない——今週二つ目の未文書化 Apple ハードウェア振る舞い層（別の独立チームはここ一週間で端末上の個人知識グラフを別個に地図化した）。このテーゼの能力クラス削除と同じジャンルで、一段静か：取り除かれたのは能力ではなく、語彙に置かれた門であり、拒絶はユーザー error として描画される。

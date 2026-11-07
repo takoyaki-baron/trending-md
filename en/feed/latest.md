@@ -150,17 +150,17 @@ A Show HN honeypot with a specific target: the refrigeration systems of supermar
 
 ---
 
-## 11. Skyvern's agent sandbox escapes through bytecode — and the advisory names no fixed version
+## 11. Skyvern's agent sandbox escapes through bytecode — fixed in 1.0.57 the same day, but the advisory still reads Unknown
 
-- **Velocity:** ▮▮ rising
+- **Velocity:** ▮ steady
 - **Source:** NVD · record Nov 6 · `Deferred`
 - **Tags:** `agents` `security` `browser-automation`
 
-CVE-2026-123783 (GHSA-2555-vffj-g73c, published Nov 6): Skyvern — the open-source browser-automation agent — through 1.0.56 "contains a sandbox bypass vulnerability that allows authenticated users to execute code by reconstructing functions from raw bytecode with types.CodeType". The escape walks around the mitigation the authors chose: deployed scripts "evade the is_safe_script_code AST denylist and import blocked modules such as subprocess or socket to run code in the Skyvern server process." The GitHub advisory rates it High 8.7 — and its Patched versions cell reads Unknown. The NVD record is `Deferred`, carrying a CVSS 4.0 8.7 and CVSS 3.1 8.8, both in the Secondary slot.
+CVE-2026-123783 (GHSA-2555-vffj-g73c, published Nov 6): Skyvern — the open-source browser-automation agent — through 1.0.56 "contains a sandbox bypass vulnerability that allows authenticated users to execute code by reconstructing functions from raw bytecode with types.CodeType". The escape walks around the mitigation the authors chose: deployed scripts "evade the is_safe_script_code AST denylist and import blocked modules such as subprocess or socket to run code in the Skyvern server process." The advisory rates it High 8.7, and its Patched versions cell reads Unknown — a cell written at publication (Nov 6 15:31Z) and never updated. The fix shipped six hours later: v1.0.57 (released 21:29Z, on PyPI the same day) carries "Harden script sandbox validation (SKY-18441) (#8937)" — the exact commit the CVE record cites. The NVD record is `Deferred`, carrying a CVSS 4.0 8.7 and CVSS 3.1 8.8, both in the Secondary slot; the GitHub Advisory DB record lists no package and no version range at all.
 
-**Why it matters:** The AST-denylist school of agent sandboxing keeps failing at the layer below the parser: if untrusted code can touch `types.CodeType`, source-level review is decorative. For anyone running agent platforms with user-supplied scripts, the absence of a named fixed version is the operational headline — audit runs rather than waiting for a version pin.
+**Why it matters:** The AST-denylist school of agent sandboxing keeps failing at the layer below the parser: if untrusted code can touch `types.CodeType`, source-level review is decorative. The operational headline is the one-step upgrade to 1.0.57 — and the case doubles as a measurement: a patched-versions cell is a snapshot of publication time, and this one went stale within six hours. An Unknown cell beside a same-day fix release reads as unpatched to every scanner consuming the advisory DB, and the fix is discoverable only by walking the record's `references[]` commit to the release notes that name it.
 
-[`🔗 GHSA-2555-vffj-g73c`](https://github.com/advisories/GHSA-2555-vffj-g73c) · [`🔗 CVE-2026-123783 on NVD`](https://nvd.nist.gov/vuln/detail/CVE-2026-123783)
+[`🔗 GHSA-2555-vffj-g73c`](https://github.com/advisories/GHSA-2555-vffj-g73c) · [`🔗 CVE-2026-123783 on NVD`](https://nvd.nist.gov/vuln/detail/CVE-2026-123783) · [`🔗 v1.0.57 release notes`](https://github.com/Skyvern-AI/skyvern/releases/tag/v1.0.57)
 
 ---
 

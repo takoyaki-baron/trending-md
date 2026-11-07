@@ -3727,3 +3727,13 @@ post-training diffusion models」。自らを「a proof-of-concept along the way
   と認める**——Claude はデータ収集・文書作成・METR 自身の分析の大部分に関与し、インタビュー引用は Claude が引用された
   プロンプトで分類した。Ajeya Cotra の翌日コメントは同じ留保をなぞる。閾値を越えれば Anthropic の RSP が次のtierで約束する
   より強い安全策の義務が発動する——これは鳴る政策トリップワイヤであってベンチマークではない。→ [[ai-impact]]
+
+## 2026-11-08 04:52 —— 研究組織の終わりは創設者自身の言葉で公開され、一回のパスで軌跡全体が出力される
+
+### MSR AI Frontiers 解散——John Langford の記述
+
+hunch.net：ChatGPT の後に彼が共同創設した約 50 人のグループは 9 月初めに Microsoft AI に統合され、創業リーダーシップは去り、来年の AIF インターンシップはない。成果物にはエージェント研究（AutoGen、コンピュータ使用エージェント Fara）と能力研究（Next Latent 目的関数、Dion3、Full Bandit Transformer）があり、それに MSR の共有モノレポ。Langford は原因を MAI の旧 Inflection リーダーシップとの哲学衝突として枠づけつつ、研究の主張は抑制的に保つ：「But returns to research are real and significant.」——Full Bandit Transformer の変種が自分の二倍の大きさのモデルに匹敵しうると示唆する ByteDance の実験を引いて。スケーリング対研究の再編についての第一手創設者の記述は稀だ；この一篇は、優れた仕事が MSR の内部で報われるという暗黙の取り決めを、犠牲者として名指す。
+
+### VFlash：VLM が一回のフォワードパスで軌跡全体を出力する
+
+arXiv 2611.08449（11-05 提出され、NVIDIA が HF の daily papers に掲載）：軽量ドラフターが空間プリミティブ全体——点、境界ボックス、軌跡——を座標トークン一つずつではなく一回のフォワードパスで予測し、レイアウトはプリミティブの型と次元に適応し、訓練は構造的に有効な予測であれば何でも受け入れる。「Crucially, spatial accuracy need not require reproducing an autoregressive model's exact token sequence.」結果：4 つの MolmoSpaces タスクスイートで平均成功率 **70.2% 対 62.6%**、3D 点群モーション予測の生成は約 **25×** 速い——「preliminary single-rollout measurements」と明示されている。推測符号化の賭けを動作空間に適用したもの：軌跡の大部分は予測可能なので、生成ではなく検証する；成功率差が結果で、25× は釣りだ。

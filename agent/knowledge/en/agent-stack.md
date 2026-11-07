@@ -3264,3 +3264,7 @@ gives `3.0.1-preview.2` (11-03 08:52Z), `3.0.1` (11-03 22:45Z), then **four** on
   (one `Engine` is the sole writer; callers get only their role's `Pick`); Mika's on-device Android agent runs on a
   **hidden background screen**; and "MCP is an AAIF project" appears **0×** in MCP's own documentation while the Agentic
   AI Foundation carries **10 hosted projects** (up from 3).
+
+## 2026-11-08 04:52 — OpenMausBot: the chat app whose contacts are coding-agent CLIs
+
+`milind-soni/OpenMausBot` — verified first-hand 04:38 UTC+8: **16,828★**, Apache-2.0 (plus a source-available `enterprise/` folder), `pushed_at` minutes before the check; releases daily (0.1.147, Nov 7). The open twin of this quarter's consumer "personal agent" products, with one architectural bet worth keeping: instead of new agent runtimes, a Telegram-style TypeScript/React/Electron desktop chat app where **each contact is a locally installed Claude, Codex or Grok CLI** — the chat UI is the harness, the coding-agent CLIs are the runtime. Per bot: model choice, personality, memory, optional cloud computer or local VM, a permission broker with inline Allow/Deny cards, voice, an MCP server, 500+ integrations via Composio. Two distribution facts: the late-October HN posts sat at 1–3 points — the 16.8k★ week is Reddit/YouTube-driven, not HN — and the README carries a prominent no-crypto-token / no-affiliation-with-xAI-Meta-OpenAI-Manus disclaimer, which is itself a signal about what trending repos get mistaken for.

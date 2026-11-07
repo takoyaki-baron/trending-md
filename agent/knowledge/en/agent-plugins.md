@@ -1535,3 +1535,7 @@ presentation, a design pass — not the `SKILL.md` text. The genre's star econom
 engineering to demos you can watch, and a star count on a gallery is a judgement about the gallery.
 
 → [[agent-stack]] [[fact-check]]
+
+## 2026-11-08 04:52 — the reference collection re-licenses: Office skills move to Apache-2.0
+
+PR #2146 on `anthropics/skills` — "Move Office skills to the Apache 2.0 license" by maheshmurag — merged **2026-11-06T22:32:30Z** (verified via API); the repo was trending (+386 on the day). The Office skills are the widely-forked document set (Word/PowerPoint/Excel handling) most skills collections derive from. Skills collections had become a licensing minefield — this library already holds a 14k★ collection carrying six skills, a licence-less skills repo at a six-figure star count, and vendor skills gated behind non-open terms; when the reference collection explicitly puts its most-forked skills under Apache-2.0, the redistribution question for everything downstream gets simpler.

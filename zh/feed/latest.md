@@ -150,17 +150,17 @@ Unlap 的 MaxxBench 对 89 道 DeepSWE 任务做了小幅要求改动 —— 报
 
 ---
 
-## 11. Skyvern 的智能体沙箱被字节码穿透 — 公告未给出修复版本
+## 11. Skyvern 的智能体沙箱被字节码穿透 — 当天即修复于 1.0.57，但公告仍写着 Unknown
 
-- **Velocity:** ▮▮ rising
+- **Velocity:** ▮ steady
 - **Source:** NVD · 记录 11月6日 · `Deferred`
 - **Tags:** `agents` `security` `browser-automation`
 
-CVE-2026-123783（GHSA-2555-vffj-g73c，11月6日发布）：开源浏览器自动化智能体 Skyvern 在 1.0.56 及之前版本 "contains a sandbox bypass vulnerability that allows authenticated users to execute code by reconstructing functions from raw bytecode with types.CodeType"。逃逸绕开的正是作者选择的防线：部署的脚本 "evade the is_safe_script_code AST denylist and import blocked modules such as subprocess or socket to run code in the Skyvern server process." GitHub 公告评为 High 8.7 —— 而 Patched versions 一栏写的是 Unknown。NVD 记录为 `Deferred`，带 CVSS 4.0 8.7 与 CVSS 3.1 8.8，均位于 Secondary 槽位。
+CVE-2026-123783（GHSA-2555-vffj-g73c，11月6日发布）：开源浏览器自动化智能体 Skyvern 在 1.0.56 及之前版本 "contains a sandbox bypass vulnerability that allows authenticated users to execute code by reconstructing functions from raw bytecode with types.CodeType"。逃逸绕开的正是作者选择的防线：部署的脚本 "evade the is_safe_script_code AST denylist and import blocked modules such as subprocess or socket to run code in the Skyvern server process." 公告评为 High 8.7，而 Patched versions 一栏写的是 Unknown —— 这一格是发布时（11月6日 15:31Z）写下的，此后从未更新。修复在六小时后发布：v1.0.57（21:29Z 发布，同日上 PyPI）携带 "Harden script sandbox validation (SKY-18441) (#8937)" —— 正是 CVE 记录所引用的那个提交。NVD 记录为 `Deferred`，带 CVSS 4.0 8.7 与 CVSS 3.1 8.8，均位于 Secondary 槽位；GitHub Advisory DB 记录则完全未列出包名与版本范围。
 
-**为什么重要：** "AST 黑名单"流派的智能体沙箱不断在解析器之下的那一层失守：只要不可信代码能碰到 `types.CodeType`，源码级审查就是装饰。对任何运行"用户提供脚本"的智能体平台，公告未给出修复版本才是操作层面的头条 —— 审计运行记录，别等版本号。
+**为什么重要：** "AST 黑名单"流派的智能体沙箱不断在解析器之下的那一层失守：只要不可信代码能碰到 `types.CodeType`，源码级审查就是装饰。操作层面的头条是升级到 1.0.57 这一步 —— 而本例同时是一次测量：patched-versions 一格是发布时刻的快照，这一格在六小时内就过期了。在当日修复已发布的情形下，一格 Unknown 会让每个消费公告库的扫描器读成未修复；想找到修复，唯一的路径是顺着记录 `references[]` 里的提交走到提到它的发行说明。
 
-[`🔗 GHSA-2555-vffj-g73c`](https://github.com/advisories/GHSA-2555-vffj-g73c) · [`🔗 NVD 上的 CVE-2026-123783`](https://nvd.nist.gov/vuln/detail/CVE-2026-123783)
+[`🔗 GHSA-2555-vffj-g73c`](https://github.com/advisories/GHSA-2555-vffj-g73c) · [`🔗 NVD 上的 CVE-2026-123783`](https://nvd.nist.gov/vuln/detail/CVE-2026-123783) · [`🔗 v1.0.57 发行说明`](https://github.com/Skyvern-AI/skyvern/releases/tag/v1.0.57)
 
 ---
 

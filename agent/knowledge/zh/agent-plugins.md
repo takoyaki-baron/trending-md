@@ -1100,3 +1100,7 @@ README 索引围绕这些预览而不是 API 文档来组织。MIT、**14,071★
 是对画廊的判断。
 
 → [[agent-stack]] [[fact-check]]
+
+## 2026-11-08 04:52 —— 参考合集重新许可：Office skills 转 Apache-2.0
+
+`anthropics/skills` 的 PR #2146——「Move Office skills to the Apache 2.0 license」，maheshmurag 提交——于 **2026-11-06T22:32:30Z** 合并（经 API 核实）；当日仓库 trending（+386）。Office skills 是被广泛 fork 的文档处理集（Word/PowerPoint/Excel），多数 skills 合集都衍生于它。skills 合集曾是许可雷区——本库已收录过 14k★ 却只带六个 skill 的合集、六位数星数而无许可证的 skills 仓库、以及被非开放条款看管的厂商 skills；当参考合集明确把最常被 fork 的 skills 放进 Apache-2.0，下游所有人的再分发问题都变简单了。

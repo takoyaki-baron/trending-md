@@ -398,3 +398,7 @@ README 的时钟表才是产物，因为它给「内存地板」定价，而不�
 v0.9.0 带来的是数据中心的旋钮下沉到本地栈：**NCCL 多节点张量并行**（在 ggml v0.29.0 中）、**OCP FP8 E4M3** 与 `LLAMA_FTYPE_MOSTLY_F8_E4M3`、取代 `_2d` 的批量张量拷贝 API（`ggml_backend_tensor_copy_n`/`set_n`/`get_n`，Metal 与 CUDA 已实现）、四个新架构（Clover、Limite、Metis-1.6、Mistral Large 4）、Chatterbox TTS 与 Nemotron 3.5 Transcribe 的音频生成/转写，以及最诚实的一行——`flash_attn_ext_rows`，发布说明称它恢复了非统一 KV 的 prefill 性能，也就是修掉了项目自己引入的 KV 统一化回归。
 
 → [[frontier-models]] [[edge-inference]] [[dev-tools]]
+
+## 2026-11-08 04:52 —— HyperFlow H3 Flash：压缩配方公开、质量证据缺席、许可证给演示硬件设栅栏
+
+Video-Rebirth 的 `hyperflow-h3-flash`（Show HN，33 分）：MiniMax-H3——一个带同步 32 kHz 立体声、生成视频的 ~31B transformer——被剪枝 + 低秩分解到 **13.7–13.9B**（「少于 ~31B 的 MiniMax-H3 transformer 的一半」），丢掉 50 块中的 1–3 块、**180** 个线性层量化到 W8A8 INT8 并做 Hadamard 旋转；双时间 (t, r) 条件化支持 4/6/8 步采样、无需 classifier-free guidance。只测了速度——5.2 秒片段 @6 步：4× B200 上 **8.7 秒**、单张 H200 **36 秒**、RTX 5090 **92 秒**——而**任何 VBench 或质量分数都不存在**；把速度表当作主张、缺失的质量表当作告诫。权重在 Hugging Face（GGUF 7.2–15.2 GB、INT8 ~16 GB），许可证是 MiniMax H3 Community License——「未获授权不覆盖欧盟、英国、韩国或美国的使用」——演示瞄准的硬件，恰是它授权市场里多数人不能合法加载权重的。
