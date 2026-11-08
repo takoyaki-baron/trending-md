@@ -1,6 +1,6 @@
 ---
 date: 2026-11-08
-updated: 2026-11-07T20:31:09Z
+updated: 2026-11-08T04:30:04Z
 schedule: 04:03, 12:03, 20:03 UTC+8
 sources: 15
 license: CC-BY-4.0
@@ -250,13 +250,127 @@ A Home Assistant custom integration that controls Samsung SmartThings-compatible
 
 ---
 
+## 18. What runs on a $10 OpenStick homelab: ten services in 512 MB — including an AI agent harness
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Hacker News · 429+ pts · 10.3h ago (~02:12 UTC+8)
+- **Tags:** `self-hosting` `homelab` `agents` `hardware`
+
+For $10 including shipping, an OpenStick gives you 512 MB of RAM (~450 usable), 4× Cortex-A53 at 1 GHz, 4 GB eMMC, 150 Mbit/s Wi-Fi, a 4G modem and GPS — "Passively cooled, so 100% silent!" Laurens Bosscher documents what actually runs on his: CastSponsorSkip (5–10 MB), a forked AdGuard Home (40 MB — "60% of my queries are now blocked"), Cloudflare Tunnel, Beszel, Dozzle, Gatus, Fusion RSS, Shiori, Diun — and **Zeroclaw**, an AI agent harness: "It uses ~3 MB RSS when idle, covers all the functionality that I need, and the security defaults are sensible and easy enough to disable." He moved off OpenClaw because "it worked, but it used 1 GB+ of memory, broke with every update." The security model is stated plainly: "I've given Zeroclaw access to the OpenStick (but nothing beyond that). Effectively it's a root shell, but given that the blast radius is limited, I figured it would be acceptable."
+
+**Why it matters:** the floor for "a personal server" is now ten dollars, and the always-on personal agent fits on it — the same homelab post is also the first place many HN readers met ZeroClaw (item 22). The post's honesty is the useful part: he discloses that he runs his own AdGuard fork and links the official one ("you probably shouldn't run binaries provided by random strangers"), and names exactly what the agent can reach.
+
+> "Now, you might look at this hardware and think 'my watch is more powerful than that', and you wouldn't necessarily be wrong, but there's still a lot of fun to be had with a device this size."
+
+[`🔗 blog.bosscher.ch`](https://blog.bosscher.ch/posts/openstick/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50406670)
+
+---
+
+## 19. Claude Code's "Don't Ask Again" writes secrets into a git-committable file — apiiro counted 1,122 in public repos
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Hacker News · 243+ pts · 7.8h ago (~04:45 UTC+8)
+- **Tags:** `ai-tools` `security` `secrets` `claude-code`
+
+Apiiro's scan: approve a command containing a credential with "Don't Ask Again", and Claude Code stores the full command text — secret included — as an allowlist entry in `.claude/settings.local.json` inside the project. Their count: **1,122 such files in public GitHub repos carrying allowed commands with keys or passwords**. The article's own first instruction: "Search your GitHub organization for .claude/settings.local.json and .claude/settings.json. Each hit is a file anyone can read right now." The researcher confirmed in the HN thread that all 1,122 are public, and that "In 539 of the 1,105 repos we traced, a commit co-authored by Claude itself changed the file." Two honest caveats from the thread: pressing the button doesn't leak anything by itself — committing the file does; and the author's mechanism claim (the file is only added to the *global* gitignore, not the repo's) was disputed by commenters.
+
+**Why it matters:** the allowlist is a credentials-at-rest surface that reads like config, not like a secret store — and per the author it "spreads with every clone and fork, and goes public if the repo does." The audit is one grep away for any org that adopted Claude Code this year.
+
+[`🔗 apiiro research`](https://apiiro.com/blog/coding-agents-leaking-secrets-github-dont-ask-again) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50407882)
+
+---
+
+## 20. Hickory DNS, the Rust DNS stack, published 39 CVE records overnight — the fixes shipped in May and September
+
+- **Velocity:** ▮▮ rising
+- **Source:** NVD · 39 records · Nov 7–8 (~01:38Z)
+- **Tags:** `security` `dns` `rust` `dnssec`
+
+Hickory DNS (formerly trust-dns) — the Rust ecosystem's resolver/recursor — received **39 CVE records** in one overnight batch (Nov 7–8), all VulnCheck-assigned, all still `Received`, scores 3.7–8.8 on CVSS 3.1 (the same vectors carry v4.0 numbers up to 8.9). The serious ones are DNSSEC validation flaws: CVE-2026-123595/123596 (8.8) — the validating recursor's NSEC3 handler "matches the closest encloser by hash alone without checking the type bitmap and so accepts parent-side ancestor-delegation NSEC3 records as proof of nonexistence", so "an attacker who delivers one response built from genuinely signed parent NSEC3 records can cause NXDOMAIN or NODATA to be cached with AD=1, denying resolution of existing names at and below the zone cut." Around them sit roughly fifteen denial-of-service and resource-exhaustion records (the 7.5 band: wire-format preallocation, TSIG underflow, DoH/DoQ loops, zone-file panics). Every record's fix predates the paperwork: **0.26.2 shipped 2026-09-03, 0.26.1 on 2026-05-01** — 65 to 190 days earlier.
+
+**Why it matters:** a negative-answer poisoning flaw that lands in the cache with AD=1 defeats the whole point of validation — downstream consumers treat that bit as authenticated. And the batch is another measured instance of this feed's recurring shape: a bulk fix-then-record filing where "still unpatched" would have been exactly backwards.
+
+[`🔗 CVE-2026-123595 on NVD`](https://nvd.nist.gov/vuln/detail/CVE-2026-123595) · [`🔗 hickory-dns v0.26.2`](https://github.com/hickory-dns/hickory-dns/releases/tag/v0.26.2)
+
+---
+
+## 21. OpenAM ships a 10.0: unauthenticated session-token theft over its own notification WebSocket
+
+- **Velocity:** ▮▮ rising
+- **Source:** NVD · 3 records · Nov 8 ~01:37Z
+- **Tags:** `security` `cve` `saml` `access-management`
+
+Three VulnCheck-assigned records for OpenAM (the open-source access manager) landed overnight, all fixed in **16.1.4 (released 2026-10-22 — seventeen days before the records)**. CVE-2026-123551 is **10.0** (`AV:N/AC:L/PR:N/UI:N/S:C`): "unauthenticated attackers to read live session tokens from the notification WebSocket. Attackers can bypass the agent-only check through an unvalidated internal forward on legacy Liberty ID-FF endpoints, collecting iPlanetDirectoryPro tokens to hijack user and administrator sessions." CVE-2026-123550 (9.8): the SAML v2 service provider "accepts unsigned assertions on the ECP (PAOS) and HTTP-Artifact bindings when WantAssertionsSigned is false". CVE-2026-123549 (9.8): self-registration ignores the Valid Creation Attributes list, letting anonymous attackers set restricted attributes "including group membership".
+
+**Why it matters:** `iPlanetDirectoryPro` is OpenAM's master session cookie name — this is unauthenticated full-session hijack across user and admin accounts, chained through a legacy-protocol forward. OpenAM still runs federated SSO in a long tail of enterprise deployments, and anyone on ≤ 16.1.3 has a fix waiting since October 22.
+
+[`🔗 CVE-2026-123551 (cveawg)`](https://cveawg.mitre.org/api/cve/CVE-2026-123551) · [`🔗 OpenAM 16.1.4`](https://github.com/OpenIdentityPlatform/OpenAM/releases/tag/16.1.4)
+
+---
+
+## 22. Zeroclaw: a 33k-star Rust agent runtime whose pitch is one small binary — measured at ~3 MB idle on a $10 server
+
+- **Velocity:** ▮▮ rising
+- **Source:** GitHub · 33,225★ · pushed Nov 7 · trigger: item 18's post
+- **Tags:** `agents` `rust` `self-hosted` `ai-infrastructure`
+
+ZeroClaw (`zeroclaw-labs/zeroclaw`, Apache-2.0 OR MIT, created Feb 2026, v0.8.7 on Oct 27, commits last night) is "a single Rust binary you configure and run. It talks to LLM providers (Anthropic, OpenAI, Ollama, and ~20 others), reaches the world through 30+ channels (Discord, Telegram, Matrix, email, voice, webhooks, your own CLI), and acts through tools (shell, browser, HTTP, hardware, custom MCP servers). Everything runs on your machine, with your keys, in your workspace." The trigger for today's attention is the OpenStick post (429 pts): its author runs ZeroClaw on the $10 stick and measures "It uses ~3 MB RSS when idle" — against OpenClaw's "1 GB+ of memory, broke with every update". The README publishes no memory benchmark of its own; the RSS figure is one user's measurement on 450 MB of usable RAM.
+
+**Why it matters:** the agent-runtime conversation is dominated by platforms that assume a datacenter; ZeroClaw's bet is the opposite axis — a native runtime small enough that the deployment question becomes which of my devices, not which cloud. The honest caveat travels with the number: 3 MB is a blog post's measurement, not the project's benchmark.
+
+[`🔗 zeroclaw-labs/zeroclaw`](https://github.com/zeroclaw-labs/zeroclaw) · [`🔗 the OpenStick post that triggered it`](https://blog.bosscher.ch/posts/openstick/)
+
+---
+
+## 23. Text.js renders full-stack React apps inside the browser console — the DevTools dock as an app platform
+
+- **Velocity:** ▮ steady
+- **Source:** Hacker News · 87+ pts · first posted Nov 4, on the front page today
+- **Tags:** `react` `devtools` `frontend` `framework`
+
+Text.js — "Build full-stack React apps that render inside console.log" — treats the DevTools dock as a render target: React 19 with concurrent rendering, Suspense and error boundaries; folders in `app/` become routes with working Back/Forward and deep links; a responsive grid that "fits the docked DevTools panel at any page zoom"; and keyboard input because "Keys, paste and IME composition reach the app through one hidden `<textarea>`." It ships Table, LineChart, Markdown, Diff, Input, Select, Slider components and a `useKeymap` — and the landing page itself runs live in the console it describes. The repo (`anomalyco/textjs`) is MIT, created Nov 2, and has **150 stars and no releases** — the artifact getting the attention is the playground, not a package.
+
+**Why it matters:** every browser ships a fixed, zoom-aware, keyboard-rich viewport that nobody renders apps into. The constraint set (no pointer, grid-only layout, console scroll semantics) doubles as the design discipline — and the star/attention gap is a reminder that a front-page demo and a usable dependency are different claims.
+
+[`🔗 textjs.org`](https://textjs.org/) · [`🔗 anomalyco/textjs`](https://github.com/anomalyco/textjs)
+
+---
+
+## 24. Harness-S: rescue an agent's failures with sibling harnesses — then transfer the skill back into one policy
+
+- **Velocity:** ▮ steady
+- **Source:** arXiv · 2611.04277 · Nov 3 · 63 pts on HF
+- **Tags:** `agents` `reinforcement-learning` `papers` `harnesses`
+
+Harness-S starts from three observations about harness evolution from a common base — Locality, Complementarity, Nonstationarity: "variants repair different failures, and their utility changes as the policy learns." Instead of seeking a universally superior harness, it trains one: Directional Harness Evolution builds a fixed Sibling Harness Pool along distinct repair directions, and Complementary Harness Rescue Training invokes it **only when all initial attempts under the base harness fail** — the same policy generates fresh rollouts under a selected auxiliary harness, and "these trajectories replace the failed group for reinforcement learning." An Adaptive Harness Router picks the Top-k variants from Harness Behavior Profiles using "voting across multiple LLMs", re-anchored as the policy learns. Across AppWorld, SWE-Gym and DBBench, the trained policy "substantially outperforms policy-only training when returned to the original base harness", and reusing the router for Rank-1 inference "provides additional gains at the same executor rollout count."
+
+**Why it matters:** this feed keeps covering results that show agents are brittle to the harness they run under — this paper treats harness diversity as a *training resource* and tests the claim most of those results quietly avoid: that what a friendlier harness teaches survives the return to the strict one.
+
+[`🔗 arXiv:2611.04277`](https://arxiv.org/abs/2611.04277) · [`🔗 HF paper page`](https://huggingface.co/papers/2611.04277)
+
+---
+
+## 25. Since we covered imgproxy on 2026-11-01: the unnamed 9.8 has a CVE id now — and the GHSA still carries none
+
+- **Velocity:** ▮ steady
+- **Source:** NVD · 3 records · Nov 8 ~01:38Z (update to item 7 of 11-01)
+- **Tags:** `security` `cve` `go` `image-processing`
+
+On 11-01 this feed wrote up `GHSA-hff9-5pqw-6w9f` — a 9.8 heap overflow in imgproxy's ICO loader whose advisory carried **no CVE id**. The identifiers have now arrived, and they came from VulnCheck, not from the GHSA: three records published Nov 8 01:38Z. **CVE-2026-123614** (9.8 v3.1 / 9.3 v4.0) is the same bug the GHSA describes — "an integer overflow in the ICO loader that allows remote attackers to trigger a heap buffer overflow via a crafted data_size value". The other two extend the loader's audit: CVE-2026-123615 (7.5) is "an out-of-bounds heap read and write in the ICO loader's BMP header reconstruction (`vips_foreign_load_ico_header` in `vips/icoload.c`)", and CVE-2026-123616 (7.5) is unbounded allocation — "Attackers can supply a crafted 23-byte ICO file declaring a ~4GB data_size to trigger memory exhaustion and worker crashes without authentication." OSV's mirror of the GHSA (modified Nov 5) still lists no CVE alias — only `GO-2026-6897`. Fixes are unchanged: 4.0.16/4.0.17 (Sept 28/30); the current release is 4.0.22 (Nov 5).
+
+**Why it matters:** scanners key on identifiers, and this loader is now described twice by two databases that don't link — a GHSA with no CVE, and three CVEs with no GHSA. The prediction in the 11-01 item ("no CVE id" as a queue statement, not an absence) resolved inside a week.
+
+[`🔗 CVE-2026-123614 (cveawg)`](https://cveawg.mitre.org/api/cve/CVE-2026-123614) · [`🔗 GHSA-hff9-5pqw-6w9f`](https://github.com/advisories/GHSA-hff9-5pqw-6w9f)
+
+---
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-11-07T20:31:09Z |
-| Items | 17 |
-| Sources tracked | 15 (Hacker News, GitHub Trending, NVD, CISA KEV, arXiv, Hugging Face, vendor bulletins, JetBrains, The Guardian, hunch.net, decoded.legal, MaxxBench, heise) |
+| Generated | 2026-11-08T04:30:04Z |
+| Items | 25 |
+| Sources tracked | 20 (Hacker News, GitHub Trending, NVD, CISA KEV, arXiv, Hugging Face, vendor bulletins, cveawg, OSV, JetBrains, The Guardian, hunch.net, decoded.legal, MaxxBench, heise, blog.bosscher.ch, apiiro, textjs.org) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (3x daily) |
 | Ranking | Velocity-weighted (recency × engagement acceleration × source authority) |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |

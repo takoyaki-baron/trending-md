@@ -1,9 +1,9 @@
 {
- "generated": "2026-11-07T20:31:15.138Z",
+ "generated": "2026-11-08T04:34:25.634Z",
  "files": [
   {
    "file": "2026-11-08.md",
-   "items": 17,
+   "items": 25,
    "findings": [
     {
      "check": "status",
@@ -44,7 +44,7 @@
      "check": "rangeabsent",
      "item": 11,
      "verdict": "range-only-in-cna",
-     "claim": "CVE-2026-123783 — \"no fixed version\"",
+     "claim": "CVE-2026-123783 — \"no version range\"",
      "detail": "NVD `configurations` is absent (record is `Deferred`, and absent `configurations` means \"not yet analysed\", never \"states nothing\"); 1 `affected[]` entry with a `versions[]` — the sentence is true of NVD and false of the record, because the CNA's own `affected[]` is where the range lives (this is the open62541 shape, 2026-10-25)"
     },
     {
@@ -69,25 +69,39 @@
      "detail": "Awaiting Analysis (lastModified 2026-11-06T20:15:23.650)"
     },
     {
+     "check": "cvss",
+     "item": 20,
+     "verdict": "ok",
+     "claim": "3.1 8.8",
+     "detail": "CVE-2026-123595 · Primary/disclosure@vulncheck.com · vector reproduces 8.8"
+    },
+    {
+     "check": "status",
+     "item": 20,
+     "verdict": "ok",
+     "claim": "CVE-2026-123595 `Received`",
+     "detail": "Received (lastModified 2026-11-08T02:16:53.863)"
+    },
+    {
      "check": "repo",
      "item": 3,
      "verdict": "ok",
      "claim": "milind-soni/OpenMausBot",
-     "detail": "16823★, last push 2026-11-07"
+     "detail": "17187★, last push 2026-11-08"
+    },
+    {
+     "check": "repo",
+     "item": 7,
+     "verdict": "star-surge",
+     "claim": "502 quoted vs 595 now",
+     "detail": "dsx-ai-factory/nvke: 502 → 595 (+16%, 93 stars) since the batch was written — a rising count is not a wrong one; date the reading if the number will be re-used"
     },
     {
      "check": "repo",
      "item": 7,
      "verdict": "ok",
      "claim": "dsx-ai-factory/nvke",
-     "detail": "507★, last push 2026-11-07"
-    },
-    {
-     "check": "repo",
-     "item": 17,
-     "verdict": "ok",
-     "claim": "mbillow/localthings",
-     "detail": "1019★, last push 2026-11-07"
+     "detail": "595★, last push 2026-11-07"
     },
     {
      "check": "quotation",
@@ -163,8 +177,8 @@
      "check": "quotation",
      "item": 11,
      "verdict": "ok",
-     "claim": "2 quotation(s)",
-     "detail": "verbatim in 3 readable source(s)"
+     "claim": "3 quotation(s)",
+     "detail": "verbatim in 5 readable source(s)"
     },
     {
      "check": "quotation",
@@ -207,6 +221,62 @@
      "verdict": "ok",
      "claim": "1 quotation(s)",
      "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 18,
+     "verdict": "ok",
+     "claim": "7 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 19,
+     "verdict": "ok",
+     "claim": "3 quotation(s)",
+     "detail": "verbatim in 1 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 20,
+     "verdict": "ok",
+     "claim": "2 quotation(s)",
+     "detail": "verbatim in 5 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 21,
+     "verdict": "ok",
+     "claim": "2 quotation(s)",
+     "detail": "verbatim in 9 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 22,
+     "verdict": "ok",
+     "claim": "3 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 23,
+     "verdict": "ok",
+     "claim": "3 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 24,
+     "verdict": "ok",
+     "claim": "5 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 25,
+     "verdict": "ok",
+     "claim": "3 quotation(s)",
+     "detail": "verbatim in 7 readable source(s)"
     }
    ]
   }
