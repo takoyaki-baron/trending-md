@@ -1,6 +1,6 @@
 ---
 date: 2026-11-08
-updated: 2026-11-07T20:31:09Z
+updated: 2026-11-08T04:35:31Z
 schedule: 04:03, 12:03, 20:03 UTC+8
 sources: 15
 license: CC-BY-4.0
@@ -250,13 +250,127 @@ VFlash（arXiv 2611.08449，11月5日提交，HF 每日论文榜由 NVIDIA 列�
 
 ---
 
+## 18. 10 美元 OpenStick 家庭服务器上跑着什么：512 MB 里塞进十个服务 — 包括一个 AI 智能体 harness
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Hacker News · 429+ pts · 10.3小时前 (~02:12 UTC+8)
+- **Tags:** `self-hosting` `homelab` `agents` `hardware`
+
+含运费 10 美元的 OpenStick：512 MB 内存（可用约 450 MB）、4× Cortex-A53 @1 GHz、4 GB eMMC、150 Mbit/s Wi-Fi、4G modem 和 GPS —— "Passively cooled, so 100% silent!" Laurens Bosscher 记录了上面实际跑的东西：CastSponsorSkip（5–10 MB）、自己 fork 的 AdGuard Home（40 MB —— "60% of my queries are now blocked"）、Cloudflare Tunnel、Beszel、Dozzle、Gatus、Fusion RSS、Shiori、Diun —— 以及 **Zeroclaw**，一个 AI 智能体 harness："It uses ~3 MB RSS when idle, covers all the functionality that I need, and the security defaults are sensible and easy enough to disable." 他离开 OpenClaw 的理由："it worked, but it used 1 GB+ of memory, broke with every update." 安全模型写得直白："I've given Zeroclaw access to the OpenStick (but nothing beyond that). Effectively it's a root shell, but given that the blast radius is limited, I figured it would be acceptable."
+
+**为什么重要：** "个人服务器"的地板价现在是十美元，常驻的个人智能体也装得下 —— 同一篇帖子也是许多 HN 读者第一次见到 ZeroClaw（见条目 22）。帖子最有用的部分是诚实：他披露自己跑的是 AdGuard 的私有 fork 并附上官方版链接（"you probably shouldn't run binaries provided by random strangers"），并明确说出智能体能触达的边界。
+
+> "Now, you might look at this hardware and think 'my watch is more powerful than that', and you wouldn't necessarily be wrong, but there's still a lot of fun to be had with a device this size."
+
+[`🔗 blog.bosscher.ch`](https://blog.bosscher.ch/posts/openstick/) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50406670)
+
+---
+
+## 19. Claude Code 的 "Don't Ask Again" 把密码写进可被 git 提交的文件 — apiiro 数出公开仓库里的 1,122 份
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Hacker News · 243+ pts · 7.8小时前 (~04:45 UTC+8)
+- **Tags:** `ai-tools` `security` `secrets` `claude-code`
+
+Apiiro 的扫描：对包含凭据的命令点 "Don't Ask Again"，Claude Code 会把完整命令文本 —— 连同密钥 —— 作为允许列表条目写进项目里的 `.claude/settings.local.json`。他们的统计：**公开 GitHub 仓库中有 1,122 份这样的文件，其允许的命令里带着密钥或密码**。文章的第一句操作指引："Search your GitHub organization for .claude/settings.local.json and .claude/settings.json. Each hit is a file anyone can read right now." 研究者在 HN 帖中确认这 1,122 份全部在公开仓库，且 "In 539 of the 1,105 repos we traced, a commit co-authored by Claude itself changed the file." 帖子里还有两句诚实的限定：按钮本身不泄露任何东西 —— 提交文件才泄露；作者对机制的归因（该文件只加进*全局* gitignore、不加进仓库的）受到评论者质疑。
+
+**为什么重要：** 允许列表是一个"读起来像配置、不像密钥库"的凭据落盘面 —— 按作者的说法它 "spreads with every clone and fork, and goes public if the repo does"。对任何今年采纳了 Claude Code 的组织，这次审计距离一次 grep 而已。
+
+[`🔗 apiiro 研究`](https://apiiro.com/blog/coding-agents-leaking-secrets-github-dont-ask-again) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50407882)
+
+---
+
+## 20. Rust DNS 栈 Hickory DNS 一夜之间发布 39 条 CVE 记录 — 修复早在五月和九月就已上线
+
+- **Velocity:** ▮▮ rising
+- **Source:** NVD · 39 条记录 · 11月7–8日 (~01:38Z)
+- **Tags:** `security` `dns` `rust` `dnssec`
+
+Hickory DNS（前身为 trust-dns）—— Rust 生态的解析器/递归器 —— 在 11月7–8日夜间收到 **39 条 CVE 记录**，全部由 VulnCheck 指派，全部仍是 `Received`，CVSS 3.1 得分 3.7–8.8（同一批向量在 v4.0 下最高 8.9）。最重的是 DNSSEC 验证缺陷：CVE-2026-123595/123596（8.8）—— 验证递归器的 NSEC3 处理器 "matches the closest encloser by hash alone without checking the type bitmap and so accepts parent-side ancestor-delegation NSEC3 records as proof of nonexistence"，于是 "an attacker who delivers one response built from genuinely signed parent NSEC3 records can cause NXDOMAIN or NODATA to be cached with AD=1, denying resolution of existing names at and below the zone cut。" 周围还有约十五条拒绝服务/资源耗尽记录（7.5 档：线上格式预分配、TSIG 下溢、DoH/DoQ 循环、zone 文件 panic）。每条记录的修复都早于文书：**0.26.2 发布于 2026-09-03，0.26.1 发布于 2026-05-01** —— 分别早了 65 至 190 天。
+
+**为什么重要：** 带着 AD=1 进缓存的否定应答投毒，击败的是验证的全部意义 —— 下游把这一位当作"已认证"。而这一批也是本 feed 反复见到的形态的又一次实测：批量"先修复、后记录"的申报 —— 在这里写"仍未修复"会恰好错反。
+
+[`🔗 NVD 上的 CVE-2026-123595`](https://nvd.nist.gov/vuln/detail/CVE-2026-123595) · [`🔗 hickory-dns v0.26.2`](https://github.com/hickory-dns/hickory-dns/releases/tag/v0.26.2)
+
+---
+
+## 21. OpenAM 出了一个 10.0：经它自己的通知 WebSocket 未认证窃取会话令牌
+
+- **Velocity:** ▮▮ rising
+- **Source:** NVD · 3 条记录 · 11月8日 ~01:37Z
+- **Tags:** `security` `cve` `saml` `access-management`
+
+三条 VulnCheck 指派的 OpenAM（开源访问管理器）记录隔夜落地，全部已修复于 **16.1.4（2026-10-22 发布 —— 比记录早十七天）**。CVE-2026-123551 为 **10.0**（`AV:N/AC:L/PR:N/UI:N/S:C`）："unauthenticated attackers to read live session tokens from the notification WebSocket. Attackers can bypass the agent-only check through an unvalidated internal forward on legacy Liberty ID-FF endpoints, collecting iPlanetDirectoryPro tokens to hijack user and administrator sessions." CVE-2026-123550（9.8）：SAML v2 服务提供方 "accepts unsigned assertions on the ECP (PAOS) and HTTP-Artifact bindings when WantAssertionsSigned is false"。CVE-2026-123549（9.8）：自助注册不执行 Valid Creation Attributes 列表，匿名攻击者可设置受限属性，"including group membership"。
+
+**为什么重要：** `iPlanetDirectoryPro` 是 OpenAM 的主会话 cookie 名 —— 这是未认证的全会话劫持，覆盖用户与管理员账户，链路经由一个遗留协议的内部转发。OpenAM 仍在一长串企业部署里跑着联合 SSO，任何停留在 ≤ 16.1.3 的环境，修复从 10月22日就在等你。
+
+[`🔗 CVE-2026-123551 (cveawg)`](https://cveawg.mitre.org/api/cve/CVE-2026-123551) · [`🔗 OpenAM 16.1.4`](https://github.com/OpenIdentityPlatform/OpenAM/releases/tag/16.1.4)
+
+---
+
+## 22. Zeroclaw：33k star 的 Rust 智能体运行时，卖点是单个小二进制 — 在 10 美元服务器上实测空闲 ~3 MB
+
+- **Velocity:** ▮▮ rising
+- **Source:** GitHub · 33,225★ · 11月7日有推送 · 触发点：条目 18 的帖子
+- **Tags:** `agents` `rust` `self-hosted` `ai-infrastructure`
+
+ZeroClaw（`zeroclaw-labs/zeroclaw`，Apache-2.0 OR MIT，2026年2月创建，10月27日发布 v0.8.7，昨夜仍有提交）是 "a single Rust binary you configure and run. It talks to LLM providers (Anthropic, OpenAI, Ollama, and ~20 others), reaches the world through 30+ channels (Discord, Telegram, Matrix, email, voice, webhooks, your own CLI), and acts through tools (shell, browser, HTTP, hardware, custom MCP servers). Everything runs on your machine, with your keys, in your workspace." 今天关注的触发点是 OpenStick 帖子（429 分）：作者把 ZeroClaw 跑在那根 10 美元的棒子上，测得 "It uses ~3 MB RSS when idle" —— 对照 OpenClaw 的 "1 GB+ of memory, broke with every update"。README 自己并没有发布内存基准；这个 RSS 数字是一位用户在 450 MB 可用内存上的实测。
+
+**为什么重要：** 智能体运行时的讨论被假设"有数据中心"的平台占据；ZeroClaw 的赌注在另一根轴上 —— 一个小到让部署问题变成用我哪台设备、而非用哪家云的原生运行时。诚实的告诫随数字同行：3 MB 是博客作者的实测，不是项目自己的基准。
+
+[`🔗 zeroclaw-labs/zeroclaw`](https://github.com/zeroclaw-labs/zeroclaw) · [`🔗 触发它的 OpenStick 帖子`](https://blog.bosscher.ch/posts/openstick/)
+
+---
+
+## 23. Text.js 把全栈 React 应用渲染进浏览器控制台 — DevTools 停靠区作为应用平台
+
+- **Velocity:** ▮ steady
+- **Source:** Hacker News · 87+ pts · 11月4日首帖，今日重回首页
+- **Tags:** `react` `devtools` `frontend` `framework`
+
+Text.js —— "Build full-stack React apps that render inside console.log" —— 把 DevTools 停靠区当作渲染目标：React 19，支持并发渲染、Suspense 与错误边界；`app/` 里的文件夹变成路由，Back/Forward 与深链接都能用；响应式网格 "fits the docked DevTools panel at any page zoom"；键盘输入则有 "Keys, paste and IME composition reach the app through one hidden `<textarea>`." 组件覆盖 Table、LineChart、Markdown、Diff、Input、Select、Slider 与 `useKeymap` —— 而落地页本身就在它所描述的控制台里实时运行。仓库（`anomalyco/textjs`）为 MIT，11月2日创建，**150 star、没有任何 release** —— 获得关注的是那个 playground，不是一个包。
+
+**为什么重要：** 每个浏览器都自带一个固定、随缩放、键盘友好的视口，却几乎没人往里面渲染应用。这套约束（无指针、纯网格布局、控制台滚动语义）同时也是设计纪律 —— 而 star 与关注度的落差提醒我们：首页演示与可用依赖是两种不同的主张。
+
+[`🔗 textjs.org`](https://textjs.org/) · [`🔗 anomalyco/textjs`](https://github.com/anomalyco/textjs)
+
+---
+
+## 24. Harness-S：用兄弟 harness 抢救智能体的失败 — 再把本领传回单个策略
+
+- **Velocity:** ▮ steady
+- **Source:** arXiv · 2611.04277 · 11月3日 · HF 63 pts
+- **Tags:** `agents` `reinforcement-learning` `papers` `harnesses`
+
+Harness-S 从同一基座演化出的 harness 身上总结出三点 —— 局部性、互补性、非平稳性："variants repair different failures, and their utility changes as the policy learns." 它不寻找普遍更优的 harness，而是训练策略本身：Directional Harness Evolution 沿不同修复方向构建一个固定的兄弟 harness 池；Complementary Harness Rescue Training **只在基座 harness 下全部初始尝试都失败时**才动用它 —— 同一策略在选中的辅助 harness 下生成新 rollout，且 "these trajectories replace the failed group for reinforcement learning." Adaptive Harness Router 借助 Harness Behavior Profiles 和"voting across multiple LLMs"挑出 Top-k 变体，并随策略学习重新锚定。在 AppWorld、SWE-Gym 和 DBBench 上，训练后的策略 "substantially outperforms policy-only training when returned to the original base harness"，把路由复用于 Rank-1 推理则 "provides additional gains at the same executor rollout count."
+
+**为什么重要：** 本 feed 不断报道智能体对其运行 harness 的脆弱性 —— 这篇论文把 harness 多样性当作*训练资源*，并检验了那些结果大多悄悄回避的主张：更宽松的 harness 教会的本领，能否在回到严格 harness 之后存活。
+
+[`🔗 arXiv:2611.04277`](https://arxiv.org/abs/2611.04277) · [`🔗 HF 论文页`](https://huggingface.co/papers/2611.04277)
+
+---
+
+## 25. 续 2026-11-01 的 imgproxy：无名 9.8 有了 CVE 编号 — 而 GHSA 依旧一条没有
+
+- **Velocity:** ▮ steady
+- **Source:** NVD · 3 条记录 · 11月8日 ~01:38Z（11-01 条目 7 的更新）
+- **Tags:** `security` `cve` `go` `image-processing`
+
+11月1日本 feed 写过 `GHSA-hff9-5pqw-6w9f` —— imgproxy ICO 加载器的 9.8 堆溢出，其公告**没有 CVE 编号**。编号现在到了，但来自 VulnCheck 而非 GHSA：11月8日 01:38Z 发布三条记录。**CVE-2026-123614**（v3.1 9.8 / v4.0 9.3）与 GHSA 描述的是同一个 bug —— "an integer overflow in the ICO loader that allows remote attackers to trigger a heap buffer overflow via a crafted data_size value"。另外两条是加载器审计的延伸：CVE-2026-123615（7.5）是 "an out-of-bounds heap read and write in the ICO loader's BMP header reconstruction (`vips_foreign_load_ico_header` in `vips/icoload.c`)"；CVE-2026-123616（7.5）是无界分配 —— "Attackers can supply a crafted 23-byte ICO file declaring a ~4GB data_size to trigger memory exhaustion and worker crashes without authentication." GHSA 的 OSV 镜像（11月5日修改）仍然没有 CVE 别名 —— 只有 `GO-2026-6897`。修复未变：4.0.16/4.0.17（9月28/30日）；当前版本是 4.0.22（11月5日）。
+
+**为什么重要：** 扫描器以标识符为键，而这个加载器现在被两个互不链接的库各描述一遍 —— 一条没有 CVE 的 GHSA，三条没有 GHSA 的 CVE。11-01 条目里的预测（"无 CVE 编号"是队列陈述而非缺席）在一周内兑现。
+
+[`🔗 CVE-2026-123614 (cveawg)`](https://cveawg.mitre.org/api/cve/CVE-2026-123614) · [`🔗 GHSA-hff9-5pqw-6w9f`](https://github.com/advisories/GHSA-hff9-5pqw-6w9f)
+
+---
+
 ## Metadata
 
 | 字段 | 值 |
 |-------|-------|
-| Generated | 2026-11-07T20:31:09Z |
-| Items | 17 |
-| Sources tracked | 15 (Hacker News, GitHub Trending, NVD, CISA KEV, arXiv, Hugging Face, vendor bulletins, JetBrains, The Guardian, hunch.net, decoded.legal, MaxxBench, heise) |
+| Generated | 2026-11-08T04:35:31Z |
+| Items | 25 |
+| Sources tracked | 20 (Hacker News, GitHub Trending, NVD, CISA KEV, arXiv, Hugging Face, vendor bulletins, cveawg, OSV, JetBrains, The Guardian, hunch.net, decoded.legal, MaxxBench, heise, blog.bosscher.ch, apiiro, textjs.org) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (3x daily) |
 | Ranking | Velocity-weighted (recency × engagement acceleration × source authority) |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |

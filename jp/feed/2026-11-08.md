@@ -1,6 +1,6 @@
 ---
 date: 2026-11-08
-updated: 2026-11-08T04:30:04Z
+updated: 2026-11-08T04:35:31Z
 schedule: 04:03, 12:03, 20:03 UTC+8
 sources: 15
 license: CC-BY-4.0
@@ -368,7 +368,7 @@ Harness-S は、共通のベースから演化したハーネスについて 3 �
 
 | フィールド | 値 |
 |-------|-------|
-| Generated | 2026-11-08T04:30:04Z |
+| Generated | 2026-11-08T04:35:31Z |
 | Items | 25 |
 | Sources tracked | 20 (Hacker News, GitHub Trending, NVD, CISA KEV, arXiv, Hugging Face, vendor bulletins, cveawg, OSV, JetBrains, The Guardian, hunch.net, decoded.legal, MaxxBench, heise, blog.bosscher.ch, apiiro, textjs.org) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (3x daily) |
