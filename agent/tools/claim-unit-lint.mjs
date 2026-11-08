@@ -744,6 +744,10 @@ function advisoryMetrics(j) {
 }
 
 function advisoryState(id) {
+  /* `v` gates the schema: v2 (2026-11-08) adds `vulns` — the DB record's own `vulnerabilities[]`
+     shape, which the `rangeabsent` subject-class arm reads. An entry written before the field was
+     read would turn "not fetched by this version" into "absent", so v1 entries are re-fetched. */
+  const ADVISORY_STATE_V = 2;
   const key = `ghsa:${id}`;
   const hit = cache[key];
   // An error is not a six-hour fact: a rate-limit or a network blip must be re-probed, or the
@@ -751,7 +755,7 @@ function advisoryState(id) {
   // so it keeps the full TTL — but re-classify entries written before `notInDb` existed.
   if (hit?.error && !hit.notInDb && /\b404\b|Not Found/i.test(hit.error)) hit.notInDb = true;
   const ttl = hit?.error && !hit.notInDb ? ERROR_TTL_MS : CACHE_TTL_MS;
-  if (hit && Date.now() - Date.parse(hit.fetched_at) < ttl) return hit;
+  if (hit && hit.v === ADVISORY_STATE_V && Date.now() - Date.parse(hit.fetched_at) < ttl) return hit;
   let j;
   try {
     const raw = execFileSync('gh', ['api', `advisories/${id}`], { encoding: 'utf8', timeout: 30_000, stdio: ['ignore', 'pipe', 'pipe'] });
@@ -765,15 +769,20 @@ function advisoryState(id) {
     // Advisory Database carries no record under that id (measured 2026-10-26 on Snipe-IT's
     // GHSA-xf36-wx48-5rqp and Parse Server's GHSA-rq3w-5c6f-p7wr — both pages 200, both ids 404
     // here AND absent from OSV under the GHSA id, which indexes them only by their CVE alias).
-    cache[key] = { fetched_at: new Date().toISOString(), error: /\b404\b|Not Found/i.test(msg) ? 'not-in-advisory-db' : msg, notInDb: /\b404\b|Not Found/i.test(msg) };
+    cache[key] = { fetched_at: new Date().toISOString(), v: ADVISORY_STATE_V, error: /\b404\b|Not Found/i.test(msg) ? 'not-in-advisory-db' : msg, notInDb: /\b404\b|Not Found/i.test(msg) };
     return cache[key];
   }
   cache[key] = {
     fetched_at: new Date().toISOString(),
+    v: ADVISORY_STATE_V,
     cve_id: j.cve_id ?? null,
     severity: j.severity ?? null,
     published_at: j.published_at ?? null,
     metrics: advisoryMetrics(j),
+    vulns: {
+      entries: (j.vulnerabilities ?? []).length,
+      packages: [...new Set((j.vulnerabilities ?? []).map((x) => x.package?.name).filter(Boolean))],
+    },
   };
   return cache[key];
 }
@@ -2145,7 +2154,14 @@ function checkRange(it, subjects, cna = new Map()) {
    "structurally range-less `Received` record" whose range had been in the CNA's `affected[]` from
    publication day), and it recurred on **2026-11-05** in a published item — ansible-core's record
    said "No fixed version appears in the record" while its CNA container carried
-   `2.19.0 < 2.23.0`. A rule in prose did not fire at generation time, so it becomes a command. */
+   `2.19.0 < 2.23.0`. A rule in prose did not fire at generation time, so it becomes a command.
+   **2026-11-08 — the subject class grew a third artifact** (item 11 of that day's feed): the
+   sentence "the GitHub Advisory DB record lists no package and no version range at all" is TRUE
+   (`GHSA-2555-vffj-g73c`'s `vulnerabilities[]` is empty) and the check still fired
+   `range-only-in-cna`, because every claim was bound to the CVE record. A claim's own CLAUSE now
+   routes it: DB-marker text or a bare GHSA id → `advisoryState()`'s `vulnerabilities[]`; a
+   repo-advisory URL or "repo advisory" → the rendered page's cells; bare "the advisory" past the
+   guards → `advisory-subject-ambiguous`, never scored. See the block above `checkRangeAbsent`. */
 const AFFECTED_ABSENT = [
   /\bno\s+(?:fixed|patched|affected|vulnerable|repaired)\s+(?:version|release)s?\b/i,
   /\bno\s+(?:affected|version)\s+(?:range|bound|boundary)\b/i,
@@ -2243,7 +2259,64 @@ function affectedAbsentSpans(plain) {
   return out.sort((a, b) => a.at - b.at);
 }
 
-function checkRangeAbsent(it, subjects, cna = new Map()) {
+/* 2026-11-08 — the SUBJECT CLASS of a range-absence claim. A record-cue absence can be about a
+ * THIRD artifact: the Advisory-DB record (`api.github.com/advisories/<id>`'s own
+ * `vulnerabilities[]`) or the rendered repo-advisory page. Filed on item 11 of this day's feed:
+ * "The NVD record is `Deferred` …; the GitHub Advisory DB record lists no package and no version
+ * range at all" — TRUE (the API record's `vulnerabilities` array is empty, verified first-hand at
+ * 12:55) — yet the check returned `range-only-in-cna`, because it bound every claim to the CVE
+ * record and had no arm for a subject that is the advisory record itself. One sentence can carry
+ * TWO artifact claims ("the NVD record is `Deferred`" / "the DB record lists no package"), so the
+ * claim's own CLAUSE — from the last `;`/`: ` before it inside its sentence — decides the
+ * artifact: "GitHub Advisory DB/Database", "Advisory DB" or a GHSA id → the DB record; a
+ * repo-advisory URL, "repo advisory" or the page's cell nouns → the rendered page; bare "the
+ * advisory" is ambiguous between the two and is never scored against either. Guards bought by
+ * the filing case: "Patched versions cell" is the PAGE's noun, not the API's; a repo-advisory
+ * URL subject needs the rendered page (server-side), not the API record; and "nothing to
+ * install" stays a registry claim whatever the clause names, so install cues never route. */
+const ADVISORY_DB_SUBJECT = /\bGitHub\s+Advisory\s+(?:DB|Database)\b|\bAdvisory\s+Database\b|\bAdvisory\s+DB\b|\bGHSA(-[0-9a-zA-Z]{4}){3}\b/i;
+const REPO_ADVISORY_SUBJECT = /github\.com\/[\w.-]+\/[\w.-]+\/security\/advisories\//i;
+
+/** The clause an absence claim lives in — from the last `;` or `: ` before it (inside its own
+ *  sentence) to just past the claim, so a mixed sentence routes each claim to its own artifact. */
+function clauseAround(t, cl, sents) {
+  const s = sents.find((x) => cl.at >= x.start && cl.at < x.end);
+  let start = s ? s.start : 0;
+  const re = /[;:]\s/g;
+  re.lastIndex = start;
+  for (let m; (m = re.exec(t)) && m.index < cl.at;) start = m.index + m[0].length;
+  const end = Math.min(t.length, cl.at + (cl.phrase?.length ?? 0) + 80);
+  return { start, end, text: t.slice(start, end) };
+}
+
+/** Pure: an absence claim whose subject IS the Advisory-DB record, tested against THAT record.
+ *  `ghsa` is the cached `advisoryState()` result (injectable so `--selftest` stays offline). */
+function ghsaDbAbsentVerdict({ id, ghsa }) {
+  if (!id) return { verdict: 'unreadable-subject', detail: 'the clause names the Advisory-DB record but no GHSA id in the item resolves to it — not scored against an artifact it does not name' };
+  if (!ghsa || ghsa.error) {
+    if (ghsa?.notInDb || ghsa?.error === 'not-in-advisory-db')
+      return { verdict: 'ghsa-not-in-db', detail: `the Advisory Database carries no record under ${id} (404) — "lists no package" is vacuously true of an absent record; the repo-advisory page is the readable artifact` };
+    return { verdict: 'unreadable-subject', detail: `the Advisory-DB record ${id} could not be read (${ghsa?.error ?? 'not fetched'}) — unread is not absent` };
+  }
+  const v = ghsa.vulns ?? { entries: 0, packages: [] };
+  if (!v.entries)
+    return { verdict: 'ghsa-absent-confirmed', detail: `the Advisory-DB record ${id} carries an empty \`vulnerabilities[]\` — no package and no version range, exactly what the sentence says` };
+  return { verdict: 'ghsa-range-served', detail: `the Advisory-DB record ${id} states ${v.entries} affected package entr${v.entries === 1 ? 'y' : 'ies'}${v.packages?.length ? ` (${v.packages.slice(0, 3).join(', ')})` : ''} — the absence is false of the artifact the sentence names` };
+}
+
+/** Pure: the same claim whose subject is the RENDERED repo-advisory page. The cells are prose
+ *  ("Unknown", "latest", a range), so v1 quotes them verbatim at sev 0 and lets their own words
+ *  decide — routing to the right artifact is the fix; interpreting cells is the page's job. */
+function repoAdvisoryAbsentVerdict({ id, repo }) {
+  if (!id) return { verdict: 'unreadable-subject', detail: 'the clause names the advisory page but no GHSA id resolves to it — not scored against an artifact it does not name' };
+  if (!repo || repo.error) {
+    const why = repo?.error === 'no-page-in-item' ? ' — the item cites no repo-advisory URL, and the rendered page is this claim’s artifact' : '';
+    return { verdict: 'unreadable-subject', detail: `the advisory page for ${id} could not be read (${repo?.error ?? 'not fetched'}${why}) — unread is not absent` };
+  }
+  return { verdict: 'repo-advisory-cells', detail: `the repo-advisory page for ${id} renders server-side with cells: Affected versions: ${repo.affected ?? '—'} · Patched versions: ${repo.patched ?? '—'} — the page, not the API record, is this claim's artifact, and the cells' own words decide` };
+}
+
+function checkRangeAbsent(it, subjects, cna = new Map(), ghsa = null, repoPage = null) {
   const out = [];
   const t = strip(it.text);
   const claims = affectedAbsentSpans(t);
@@ -2251,9 +2324,40 @@ function checkRangeAbsent(it, subjects, cna = new Map()) {
   const ids = idMentions(t);
   if (!ids.length) return out;             // no subject → nothing to open (a general statement)
   const ctx = { sents: sentences(t), primary: primarySubject(t, ids) };
+  const ghs = ids.filter((m) => m.kind === 'ghsa');
   const seen = new Set();
   for (const cl of claims) {
     const bound = bindSubject(cl.at, ids, ctx);
+    /* Subject-class routing (2026-11-08) for UNAMBIGUOUS subjects, and BEFORE the two guards
+       below: a repo-advisory-URL sentence ("The repo advisory at github.com/… states no fixed
+       version") carries no record noun and the 10-31 guard would skip it, yet the URL resolves
+       the subject completely. Bare "the advisory" stays with the guards — sentences it skips
+       keep being skipped (the 10-31 calibration), and only ones WITH a record noun reach the
+       ambiguity disclosure after them. Install cues never route — "nothing to install" is a
+       registry claim, whatever the clause names. */
+    if (cl.cue === 'record') {
+      const clause = clauseAround(t, cl, ctx.sents);
+      const inSpan = (m) => m.at >= clause.start && m.at < clause.end;
+      const sent = ctx.sents.find((x) => cl.at >= x.start && cl.at < x.end);
+      const inSent = (m) => sent && m.at >= sent.start && m.at < sent.end;
+      const repoSubject = REPO_ADVISORY_SUBJECT.test(clause.text) || /\brepo advisory\b/i.test(clause.text);
+      /* A repo-advisory URL contains its own GHSA id, so id-in-clause alone must not claim the DB
+         record — the URL is the more specific subject and routes to the rendered page. */
+      const dbSubject = !repoSubject && (ADVISORY_DB_SUBJECT.test(clause.text) || ghs.some(inSpan));
+      if (dbSubject || repoSubject) {
+        const pick = ghs.find(inSpan) ?? ghs.find(inSent) ?? ghs[0] ?? null;
+        if (repoSubject) {
+          const rec = repoPage === null ? (pick ? repoAdvisory(it, pick.id) : null) : (pick && repoPage.get(pick.id));
+          const v = repoAdvisoryAbsentVerdict({ id: pick?.id ?? null, repo: rec ?? null });
+          out.push({ check: 'rangeabsent', item: it.n, verdict: v.verdict, claim: `${pick?.id ?? 'GHSA ?'} — "${cl.phrase}"`, detail: v.detail });
+          continue;
+        }
+        const rec = ghsa === null ? (pick ? advisoryState(pick.id) : null) : (pick && ghsa.get(pick.id));
+        const v = ghsaDbAbsentVerdict({ id: pick?.id ?? null, ghsa: rec ?? null });
+        out.push({ check: 'rangeabsent', item: it.n, verdict: v.verdict, claim: `${pick?.id ?? 'GHSA ?'} — "${cl.phrase}"`, detail: v.detail });
+        continue;
+      }
+    }
     if (!bound || bound.kind !== 'cve') continue; // a GHSA has its own advisory fields, not these two
     const key = `${bound.id}:${cl.cue}`;
     if (seen.has(key)) continue;
@@ -2278,6 +2382,17 @@ function checkRangeAbsent(it, subjects, cna = new Map()) {
     /* the identifier itself is not a record noun — "…at all for CVE-2026-123036" is still a
        sentence about the advisory's cells, and the first build let the id through as the subject. */
     if (cl.cue === 'record' && !/\b(?:record|container|affected|NVD|field|array|entr(?:y|ies)|CVE-\d{4})\b/i.test(sentText)) continue;
+    /* 2026-11-08 — bare "the advisory" past the guards: the sentence names an advisory AND a
+       record, but neither the clause nor the item resolves WHICH artifact — the repo page or the
+       DB record. Scoring it against the CVE record is the exact mistake the subject-class routing
+       exists to stop, so it is disclosed instead (sev 0), never scored. */
+    {
+      const clause = clauseAround(t, cl, ctx.sents);
+      if (!ADVISORY_DB_SUBJECT.test(clause.text) && !REPO_ADVISORY_SUBJECT.test(clause.text) && /\badvisory\b/i.test(clause.text)) {
+        out.push({ check: 'rangeabsent', item: it.n, verdict: 'advisory-subject-ambiguous', claim: `${bound.id} — "${cl.phrase}"`, detail: '"the advisory" alone is ambiguous between the repo advisory and the Advisory-DB record — not scored against an artifact it does not name' });
+        continue;
+      }
+    }
     const v = rangeAbsentVerdict({ cue: cl.cue, namesNvd, nvd, cna: cn ?? { error: true } });
     out.push({ check: 'rangeabsent', item: it.n, verdict: v.verdict, claim: `${bound.id} — "${cl.phrase}"`, detail: v.detail });
   }
@@ -5311,6 +5426,56 @@ if (SELFTEST) {
   t('rangeabsent: "the 6.x line has no version TO INSTALL" is the install cue, not a record one',
     affectedAbsentSpans(mk('t', 'anyone on the 6.x line has no version to install.').plain).map((c) => c.cue), ['install']);
 
+  /* 2026-11-08 — the subject class. Filed on item 11 of this day's feed: "the GitHub Advisory DB
+     record lists no package and no version range at all" is TRUE (GHSA-2555-vffj-g73c's
+     `vulnerabilities` array is empty — verified first-hand), and the check had returned
+     `range-only-in-cna` against it because every claim was bound to the CVE record. The fix
+     routes by the claim's own clause; these pins cover the arms and the two false-positive
+     shapes (the ambiguous bare "advisory", and the mixed sentence that must NOT reach the CVE
+     record anymore). */
+  const ghsaEmpty = { cve_id: 'CVE-2026-123783', severity: 'high', vulns: { entries: 0, packages: [] } };
+  const ghsaFull = { cve_id: 'CVE-2026-123783', severity: 'high', vulns: { entries: 2, packages: ['skyvern', 'skyvern-sdk'] } };
+  const gv = (ghsa, id = 'GHSA-2555-vffj-g73c') => ghsaDbAbsentVerdict({ id, ghsa }).verdict;
+  t('rangeabsent/ghsa: an empty vulnerabilities[] CONFIRMS the sentence',
+    gv(ghsaEmpty), 'ghsa-absent-confirmed');
+  t('rangeabsent/ghsa: a populated record REFUTES it, at the same severity as the CVE arm',
+    gv(ghsaFull), 'ghsa-range-served');
+  t('rangeabsent/ghsa: 404 is a STATE — "lists no package" is vacuous of an absent record',
+    gv({ error: 'not-in-advisory-db', notInDb: true }), 'ghsa-not-in-db');
+  t('rangeabsent/ghsa: a fetch blip is unread, never absent',
+    gv({ error: 'rate limited' }), 'unreadable-subject');
+  t('rangeabsent/ghsa: no resolvable id is unreadable-subject, not a CVE-record score',
+    ghsaDbAbsentVerdict({ id: null, ghsa: null }).verdict, 'unreadable-subject');
+  const raIt2 = (text, ghsaMap = new Map(), repoMap = new Map()) => checkRangeAbsent(
+    mk('t', text),
+    new Map([['CVE-2026-123783', { status: 'Deferred', raw: { configurations: [], references: [] } }]]),
+    new Map([['CVE-2026-123783', { affected: { key: 'populated', entries: 1, versioned: 1, products: ['skyvern'] }, refs: [] }]]),
+    ghsaMap, repoMap,
+  ).map((x) => x.verdict);
+  t('rangeabsent/ghsa: END-TO-END on the filing sentence — the advisory-db clause routes to the DB record, not cveawg',
+    raIt2('CVE-2026-123783 (GHSA-2555-vffj-g73c, published Nov 6): Skyvern through 1.0.56 contains a sandbox bypass vulnerability. The NVD record is `Deferred`, carrying a CVSS 4.0 8.7 and CVSS 3.1 8.8; the GitHub Advisory DB record lists no package and no version range at all.',
+      new Map([['GHSA-2555-vffj-g73c', ghsaEmpty]])),
+    ['ghsa-absent-confirmed']);
+  t('rangeabsent/ghsa: end-to-end, a populated DB record is a FINDING on the artifact the sentence named',
+    raIt2('The GitHub Advisory DB record for GHSA-2555-vffj-g73c lists no package and no version range at all.',
+      new Map([['GHSA-2555-vffj-g73c', ghsaFull]])),
+    ['ghsa-range-served']);
+  t('rangeabsent/ghsa: a GHSA-bound subject reaches its own fields instead of being skipped',
+    raIt2('GHSA-2555-vffj-g73c lists no package and no version range in the Advisory Database.',
+      new Map([['GHSA-2555-vffj-g73c', ghsaEmpty]])),
+    ['ghsa-absent-confirmed']);
+  t('rangeabsent/repo: a repo-advisory URL subject reads the rendered page and quotes its cells',
+    raIt2('The repo advisory at https://github.com/Skyvern-AI/skyvern/security/advisories/GHSA-3333-vffj-g73c states no fixed version anywhere.',
+      new Map(), new Map([['GHSA-3333-vffj-g73c', { severity: 'high', affected: '<= 1.0.56', patched: '1.0.57' }]])),
+    ['repo-advisory-cells']);
+  t('rangeabsent: bare "the advisory" with a record noun is ambiguous between two artifacts, never scored',
+    raIt2('NVD has not analyzed CVE-2026-123783. The advisory record shows no affected range at all, and the fix landed the same day.'),
+    ['advisory-subject-ambiguous']);
+  t('rangeabsent: an install cue never routes to the advisory record — "nothing to install" is the registry',
+    raIt2("CVE-2026-123783's CNA container names a fixed version, and there is still nothing to install. The GitHub Advisory DB record for GHSA-2555-vffj-g73c shows no fixed version either.",
+      new Map([['GHSA-2555-vffj-g73c', ghsaFull]])),
+    ['boundary-named-no-artifact', 'ghsa-range-served']);
+
   /* 2026-11-06 12:34 — the VALUES of `affected[]`. Filed from a published paragraph carrying two
      errors at once (a `defaultStatus` count and two package names that appear in no record), each
      invisible to every arm above because those ask about an absence or a range, never a LIST.
@@ -5562,7 +5727,7 @@ try {
   writeFileSync(CACHE_PATH, JSON.stringify(cache, null, 1));
 } catch { /* cache is best-effort */ }
 
-const SEVERITY = { ok: 0, 'ok-cited-page': 0, 'no-cve-named': 1, 'no-record': 1, 'slot-quoted': 1, 'counted-by-author': 0, 'number-other-noun': 1, 'temporal-stopping-point': 1, 'temporal-disclosed': 0, 'score-stopping-point': 1, 'cna-only-score': 1, 'star-drift': 2, 'star-dated': 1, 'star-surge': 1, 'ok-history': 0, 'history-older-than-record': 2, 'history-unreadable': 1, stale: 2, archived: 2, 'stale-disclosed': 0, 'archived-disclosed': 0, differs: 2, absent: 2, 'unsplit-issue-count': 3, 'compound-lags-parts': 3, 'version-swapped': 3, 'version-absent': 3, 'score-not-reproducible': 2, 'score-mismatch': 3, 'wrong-subject': 3, 'absence-contradicted': 3, 'status-stale': 2, 'status-dated': 1, 'date-local-shift': 2, 'date-mismatch': 2, 'cwe-absent-but-recorded': 3, 'cwe-mismatch': 3, 'cwe-unreadable': 1, 'field-present': 3, 'field-present-empty': 2, 'field-empty-contradicted': 2, 'field-empty-since-moved': 1, 'field-absent-not-empty': 1, 'field-dated': 0, 'field-unknown-name': 0, 'field-unreadable': 0, 'span-empty': 2, 'cve-range-span-mismatch': 2, 'cve-range-disclosed': 0, 'ok-range': 0, 'range-ambiguous': 0, 'range-cross-year': 0, 'range-inverted': 2, 'span-inverted': 3, 'span-unverifiable': 0, 'ok-span': 0, 'range-absent-but-served': 3, 'range-only-in-cna': 1, 'range-absent-confirmed': 0, 'range-absent-products-only': 0, 'affected-count-ok': 0, 'affected-count-mismatch': 3, 'affected-package-ok': 0, 'affected-package-absent': 3, 'affected-ambiguous': 0, 'range-unread': 0, 'range-in-references': 1, 'boundary-named-no-artifact': 0, 'vector-product-mismatch': 1, 'product-mismatch-disclosed': 0, 'schema-absent': 0, 'status-no-record': 1, 'status-no-cve': 1, 'advisory-unreadable': 1, 'advisory-repo-only': 0, unreadable: 1, 'artifact-unreadable': 1, 'nvd-unavailable': 1, 'ratio-row-count': 3, 'ok-ratio': 0, 'ok-delimited': 0, 'not-a-repo': 0, 'repo-absent-asserted': 0, 'ok-table-rows': 0, 'table-columns-unresolved': 0, 'bundle-ok': 0, 'bundle-lines-named': 0, 'bundle-unavailable': 0, 'bundle-line-count': 3, 'bundle-total-mismatch': 2, 'quote-not-found': 3, 'quote-paraphrase': 2, 'quote-short': 1, 'quote-not-read': 0, 'paper-date-imprecise': 1, 'paper-date-mismatch': 2, 'paper-date-revision': 1, 'paper-date-unread': 0 };
+const SEVERITY = { ok: 0, 'ok-cited-page': 0, 'no-cve-named': 1, 'no-record': 1, 'slot-quoted': 1, 'counted-by-author': 0, 'number-other-noun': 1, 'temporal-stopping-point': 1, 'temporal-disclosed': 0, 'score-stopping-point': 1, 'cna-only-score': 1, 'star-drift': 2, 'star-dated': 1, 'star-surge': 1, 'ok-history': 0, 'history-older-than-record': 2, 'history-unreadable': 1, stale: 2, archived: 2, 'stale-disclosed': 0, 'archived-disclosed': 0, differs: 2, absent: 2, 'unsplit-issue-count': 3, 'compound-lags-parts': 3, 'version-swapped': 3, 'version-absent': 3, 'score-not-reproducible': 2, 'score-mismatch': 3, 'wrong-subject': 3, 'absence-contradicted': 3, 'status-stale': 2, 'status-dated': 1, 'date-local-shift': 2, 'date-mismatch': 2, 'cwe-absent-but-recorded': 3, 'cwe-mismatch': 3, 'cwe-unreadable': 1, 'field-present': 3, 'field-present-empty': 2, 'field-empty-contradicted': 2, 'field-empty-since-moved': 1, 'field-absent-not-empty': 1, 'field-dated': 0, 'field-unknown-name': 0, 'field-unreadable': 0, 'span-empty': 2, 'cve-range-span-mismatch': 2, 'cve-range-disclosed': 0, 'ok-range': 0, 'range-ambiguous': 0, 'range-cross-year': 0, 'range-inverted': 2, 'span-inverted': 3, 'span-unverifiable': 0, 'ok-span': 0, 'range-absent-but-served': 3, 'range-only-in-cna': 1, 'range-absent-confirmed': 0, 'range-absent-products-only': 0, 'ghsa-absent-confirmed': 0, 'ghsa-range-served': 3, 'ghsa-not-in-db': 0, 'unreadable-subject': 0, 'advisory-subject-ambiguous': 0, 'repo-advisory-cells': 0, 'affected-count-ok': 0, 'affected-count-mismatch': 3, 'affected-package-ok': 0, 'affected-package-absent': 3, 'affected-ambiguous': 0, 'range-unread': 0, 'range-in-references': 1, 'boundary-named-no-artifact': 0, 'vector-product-mismatch': 1, 'product-mismatch-disclosed': 0, 'schema-absent': 0, 'status-no-record': 1, 'status-no-cve': 1, 'advisory-unreadable': 1, 'advisory-repo-only': 0, unreadable: 1, 'artifact-unreadable': 1, 'nvd-unavailable': 1, 'ratio-row-count': 3, 'ok-ratio': 0, 'ok-delimited': 0, 'not-a-repo': 0, 'repo-absent-asserted': 0, 'ok-table-rows': 0, 'table-columns-unresolved': 0, 'bundle-ok': 0, 'bundle-lines-named': 0, 'bundle-unavailable': 0, 'bundle-line-count': 3, 'bundle-total-mismatch': 2, 'quote-not-found': 3, 'quote-paraphrase': 2, 'quote-short': 1, 'quote-not-read': 0, 'paper-date-imprecise': 1, 'paper-date-mismatch': 2, 'paper-date-revision': 1, 'paper-date-unread': 0 };
 const REAL = (f) => (SEVERITY[f.verdict] ?? 1) >= 2;
 
 /* `status_watch` rides the findings file so the act pass sees a backwards move without re-reading

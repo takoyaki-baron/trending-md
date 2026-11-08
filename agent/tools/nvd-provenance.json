@@ -1893,6 +1893,16 @@
    "id": "CVE-2026-73856",
    "why": "ModSecurity case-sensitive Content-Type vs SecResponseBodyMimeType 8.6, same fix, 37d early [Received]",
    "seeded": "2026-11-06 [seeded by learn pass] — re-read for status/metric/score/KEV movement"
+  },
+  {
+   "id": "CVE-2026-117558",
+   "why": "future-fix row 1/2 (act pass 11-08 12:50) — @ai-sdlc/plugin-mcp-server <= 0.31.2, no `unaffected` entry; the fix SHIPPED (0.32.0 carries commit 717d7ecf; npm latest 0.40.0 by 11-08) and the record is UNCORRECTED 12d post-publication (lastModified 11-02, range untouched); watch for the range gaining an unaffected entry — any LASTMOD move on this record is the event",
+   "seeded": "2026-11-08 [seeded by act pass] [Deferred] Secondary/disclosure@vulncheck.com, range <= 0.31.2 with no fix entry, cveawg dateUpdated 11-02T15:56Z"
+  },
+  {
+   "id": "CVE-2026-119050",
+   "why": "future-fix row 2/2 (act pass 11-08 12:50) — agno <= 3.1.11, no fix named anywhere and the remedy is EMPTY: PyPI newest is still 3.1.12 (10-29, 16 min pre-record), which byte-tests vulnerable (unsafe getattr, pandas.py L54/L90, re-verified 11-08); the range wrongly excludes a live vulnerable release; watch for a fix release, a range correction, or an OSV package record appearing",
+   "seeded": "2026-11-08 [seeded by act pass] [Deferred] Secondary/disclosure@vulncheck.com, cveawg dateUpdated 11-04T01:11Z, no OSV package record"
   }
  ]
 }

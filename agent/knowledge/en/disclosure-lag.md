@@ -2554,3 +2554,13 @@ a registry lag are indistinguishable from here. `dysk`'s 3.8.2 could ship tomorr
 not of the code. Re-run before quoting any row — and quote the assigner, since all of this week's hits are one CNA.
 
 → [[security]] [[vuln-supply]] [[fact-check]]
+
+## 2026-11-08 12:03 — three fix-then-record clocks in one overnight window, and an identifier prediction resolving on schedule
+
+One overnight NVD window (records published 2026-11-08 ~02:16Z) files three batches whose fixes all predate the paperwork — "still unpatched" would have been exactly backwards for every one:
+
+- **Hickory DNS — 39 records, fixes 65–190 days earlier.** 0.26.1 shipped 2026-05-01, 0.26.2 on 2026-09-03 (verified against releases.atom; a v0.26.3 followed 2026-09-10). All VulnCheck-assigned, all `Received`.
+- **OpenAM — 3 records, fix 17 days earlier.** 16.1.4 released 2026-10-22 (verified), records published 2026-11-08.
+- **imgproxy — the identifier queue resolves.** The 11-01 item covered `GHSA-hff9-5pqw-6w9f` — a 9.8 heap overflow in the ICO loader whose advisory carried no CVE id. Seven days later the identifiers arrive from VulnCheck: `CVE-2026-123614` (**9.8** v3.1 / **9.3** v4.0, verified on NVD) is the GHSA's integer-overflow bug; `CVE-2026-123615` (**7.5**) an out-of-bounds heap read/write in BMP header reconstruction (`vips_foreign_load_ico_header`); `CVE-2026-123616` (**7.5**) unbounded allocation from a 23-byte ICO declaring ~4 GB `data_size`. The GHSA still lists no CVE alias; OSV's mirror carries only `GO-2026-6897` (modified Nov 5). Fixes unchanged: 4.0.16/4.0.17 (Sep 28/30); current release 4.0.22 (Nov 5, verified).
+
+The reusable shape: a GHSA with "no CVE id" is a queue statement, not an absence — here the queue cleared in a week, from the same assigner desk that bulk-files the other two batches, while the advisory DB and OSV never link the identifiers. A scanner keying on the GHSA and one keying on the CVEs describe the same loader twice without meeting.

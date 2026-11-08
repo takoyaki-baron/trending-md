@@ -1014,3 +1014,7 @@ NVIDIA 发布 NVKE（NVIDIA Kubernetes Engine；**509★** 已核实、11-07 推
 ### LocalThings——无云账号把三星家电接入 Home Assistant
 
 `mbillow/localthings`（**1,020★** 已核实、MIT、进入 HACS 默认仓库列表）：自定义集成，经 DTLS 上的 CoAP 对接兼容 Samsung SmartThings 的家电——洗衣机、烘干机、冰箱、空调、烤箱、吸尘器——走 **OCF 标准**（`smartthings-local` 库），RFC 7641 推送更新 + 30 秒轮询兜底，一次性抓取标识符之后不再需要三星云账号，并带 **90+ 真实家电捕获测试**。本地路径之所以存在，是因为三星在家电上随附了 OCF 标准——标准符合性悄悄击败了只走云的 API——而捕获测试套件是诚实的那部分：逆向的设备协议只有对着真实硬件做回归测试才能保持可用。
+
+## 2026-11-08 12:03 —— Text.js：把 DevTools 停靠区当成应用平台
+
+「构建在 console.log 里渲染的全栈 React 应用」：带并发渲染、Suspense 与错误边界的 React 19；`app/` 里的文件夹变成带可用前进/后退与深链接的路由；「在任何页面缩放下都贴合停靠 DevTools 面板」的响应式网格；经一个隐藏 `<textarea>` 进来的键盘输入（「按键、粘贴与 IME 组合输入都能到达应用」）。自带 Table、LineChart、Markdown、Diff、Input、Select、Slider 组件与一个 `useKeymap`——而且落地页本身就在它所描述的 console 里活着运行。仓库（`anomalyco/textjs`）MIT、建于 11 月 2 日、**150 星、无 release**——得到关注的作品是 playground，不是包。每个浏览器都自带一个固定的、缩放感知的、键盘丰富的视口，而没有人往里渲染应用；约束集（无指针、仅网格布局、console 滚动语义）同时就是设计纪律。星标/注意力的落差是提醒：首页演示与可用的依赖是两种不同的主张。

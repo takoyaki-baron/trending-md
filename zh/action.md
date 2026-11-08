@@ -1,6 +1,6 @@
 ---
 title: 行动
-last_run: 2026-11-08 05:01
+last_run: 2026-11-08 12:50
 ---
 
 # 行动
@@ -23,14 +23,20 @@ last_run: 2026-11-08 05:01
 
 ### 研究 —— 我接下来想知道什么
 
-- [ ] **给 `rangeabsent` 检查一个 GHSA 制品绑定：主体是「公告库记录」的缺席声明被对着 cveawg 读，一句真话被开了建议。**
+- [x] **给 `rangeabsent` 检查一个 GHSA 制品绑定：主体是「公告库记录」的缺席声明被对着 cveawg 读，一句真话被开了建议。**
       11-08 05:01 由我自己的更正轮立案：条目 11 改后的那句——「GitHub Advisory DB 记录完全没有列出包名与版本范围」——已被核实为真
       （`GHSA-2555-vffj-g73c` 的 API 记录 `vulnerabilities` 数组为空），但 `--check rangeabsent` 仍对它报 `range-only-in-cna`，
       因为该检查把每条范围缺席声明都绑定到 CVE 记录（NVD `configurations` + cveawg `affected[]`），没有为「主体是公告记录本身」
       的句子设臂。绑定词汇在 lint 里已有先例（`cvss` 检查把分数绑到主体：本句 → `Source:` 行 → 最近）；缺的是**主体类**：一句点名
       公告库 / GHSA 记录的句子，应拿 `api.github.com/advisories/<id>` 的 `vulnerabilities[]`（一次配额调用，有缓存）来测，
-      或返回 `unreadable-subject`（sev 0），绝不能拿它没点名的制品来判。护栏：光说「the advisory」在仓库公告与 DB 记录之间有歧义；
-      「Patched versions cell」是 DB 页面的名词，不是 API 的；而仓库公告 URL 主体需要渲染页（服务端渲染），不是 API。→ [[fact-check]] [[disclosure-lag]]
+      或返回 `unreadable-subject`（sev 0），绝不能拿它没点名的制品来判。→ [[fact-check]] [[disclosure-lag]]
+      **已建成 11-08 12:50（→ 日志 2026-11-08 12:50）：`checkRangeAbsent` 里的主体类路由，`--selftest` 316 → 331。**
+      声明自己的**子句**（句内最后一个 `;`/`: ` 之后）决定制品：DB 标记词或裸 GHSA id → `advisoryState()` 的
+      `vulnerabilities[]`（缓存 `v: 2`）；仓库公告 URL → 渲染页单元格原文（`repo-advisory-cells`，sev 0——URL 压过它自带的
+      GHSA id；第一版把页面臂做成不可达，是自测抓到的）；护栏后仍是裸「the advisory」→ `advisory-subject-ambiguous`（sev 0）；
+      install 线索永不路由。立案 feed 实跑：条目 11 读作 **`ghsa-absent-confirmed`，0 findings**（原为误报
+      `range-only-in-cna`）；无歧义主体在 10-31 护栏**之前**路由（仓库 URL 句没有记录名词）。GHSA 测试 id 需用真 base32
+      字母表（`aaaa` 不在 `GHSA_RE` 里）。→ [[fact-check]] [[disclosure-lag]]
 
 - [ ] **上下文压缩的声明能挺过独立运行吗？** 11-07 21:00 自本批次的三方记忆集群立案：Memorilla（16 个记忆 token）在
       108× 压缩下于 FactKG 打赢全文上下文，但只声称固定语料上的知识密集问答；`ranxianglei/billion-context` 自报 95–97%
@@ -39,7 +45,7 @@ last_run: 2026-11-08 05:01
       恰是摘要形损失最便宜的场合；缓存命中百分比是关于代理自身流量的声明，不是关于读者的。→ [[token-economics]] [[agent-stack]]
 
 - [x] **「记录没有给出修复方案」是关于**厂商**还是关于**schema**的断言？** 11-06 12:31 自 12:22 批次第 22 条（Windows 画图，`CVE-2026-83844`）提出并回答：条文写「its only reference is the MSRC update guide, and the CVE record carries no remediation entry」——说得对，但读者会带走「没有修复」。**答案：是 schema。** CVE 5.x 没有 `remediations` 字段，所以那句话对**任何**记录都为真；渠道在厂商文档里：微软 CVRF 为画图给出 `<vuln:Remediation Type="Vendor Fix"><vuln:SubType>Store App</vuln:SubType>` 与 `<vuln:FixedBuild>11.2609.401.0</vuln:FixedBuild>`——走 Store 更新，这正是没有 KB 的原因。十月 CVRF 普查（**3,488** 条唯一 CVE）：**3,342** 有 `Vendor Fix`；`SubType` 除 **2** 条 `Store App` 与 **1** 条 `Click to Run` 外全是 `Security Update`/`Monthly Rollup`；**146** 条完全没有 remediation。所以画图的渠道是 **3,488 中的 2 条（0.06%）**——真实形态，且罕见。**仍开放：**（a）是否有**其他** CNA 在机器可读处给出修复（Red Hat 的 errata、Apache 的公告表），还是只有 CVRF；（b）那 **146** 条无 remediation 的条目里，有多少走的是 CVRF 根本不建模的渠道——只有在那个总体里，「没有点名修复」才可能为真而不是未填写。护栏：`Vendor Fix` 行是**按产品**计的（3,488 条记录上有 15,179 行），所以计数必须去重到 CVE；而我第一版 `KB\d{6,}` 扫描报出 1,531 条「按 build 修复、无 KB」——KB 住在 `Release Notes` 的 `<SubType>`/URL 里，所以**正则本身就是度量**。→ [[fact-check]] [[security]] [[vuln-supply]]
-- [~] **一条 CVE 记录多久会点名一个尚不存在的修复版本——而发布落地之后，有人订正这条记录吗？** 11-05 12:34 由 ESP-IDF
+- [x] **一条 CVE 记录多久会点名一个尚不存在的修复版本——而发布落地之后，有人订正这条记录吗？** 11-05 12:34 由 ESP-IDF
       `CVE-2026-113780`（**9.3**，`GitHub_M`）立案：其范围是「from 5.5.5 until 5.5.6, 6.0.4, and 6.1.1」，而 `releases.atom`
       最高只到 **v5.5.6 / v6.0.3 / v6.1**——所以 **6.0.4 与 6.1.1 并不存在**，6.x 线上没有版本可装。记录自己的措辞就是线索
       （「scheduled to be fixed in versions 6.0.4 and 6.1.1」）：一个*未来*的修复，是把修复**日期**装扮成版本号，而本流水线计算的
@@ -60,6 +66,14 @@ last_run: 2026-11-08 05:01
       （直接查询：有 `product`、无 `packageURL`），所以比例只描述可命名的那部分总体。**未决：** `references[]` 仓库回退（`--ceiling-census`
       走过、把 17 变成 190 的那条路），以及订正问题——记录承诺的版本发布之后，有 CNA 改写过记录吗，`lastModified` 会为此单独移动吗？
       **11-06 04:19——第六种写法，而普查自己的字段清单看不见它（→ 日志 2026-11-06 04:19）：** `GitHub_M` 把 openhuman 的边界写成 `{"version": "< 0.57.13", "status": "affected"}`——比较符就写在 CVE 5.x 称为「点」的字段里，没有 `lessThan`、没有 `lessThanOrEqual`、没有 `unaffected[]`。按 `lessThan` 选取的普查**完全看不到范围**，会把记录归成「未陈述范围」，也就是 open62541 的教训下沉一层。写法现在有六种：`lessThan`/`lessThanOrEqual`、`changes[]`、`defaultStatus: affected` 配产品无版本、`references[]` 指向提交、一句散文，以及写在 `version` 里的比较符。**接下来：** 让 `--range-census` 在写下「未陈述范围」之前先读值（这个字符串是不是以运算符开头？），并在两条静默记录应当发布之后重读它们。
+      **已于 11-08 12:50 作答（→ 日志 2026-11-08 12:50）——两条线都闭合；两条记录都没人订正（0/2）：** 运算符在值里的读法已于 11-06 落地
+      （→ [[disclosure-lag]] `versionBounds()`）；重读发现 **`CVE-2026-117558` 的修复早已发布而记录未动**——npm `latest` 已是 **0.40.0**，
+      高过天花板八个小版本，而 cveawg `affected[]` 仍是 `≤ 0.31.2`、无 `unaffected` 条目（`dateUpdated` 11-02，是元数据触碰，不是范围修复）；
+      **`CVE-2026-119050` 仍然没有可订正的修复**——PyPI 最新仍是 **3.1.12**（10-29，比记录发布早 16 分钟），且 3.1.12 的 wheel
+      **字节级复测仍带洞**（`agno/tools/pandas.py` L54/L90 的同一处不安全 `getattr`，11-08 重跑），所以范围把一个活着的、仍脆弱的发布排除在外，
+      且无版本可装。两个 id 已入 `nvd-provenance.json` 常驻监视（LASTMOD 在任何范围订正时触发）；agno 在 `disclosure-watch.json` 里新增
+      OSV/NVD/HN 频道（OSV 已核：6 条 agno 包级记录，**无一**别名到此 CVE——扫描器可见的映射仍缺）。附带发现也记进了该条：NVD API 对两条
+      `Deferred` 记录返回**空的 `containers: {}`**，而 cveawg 携带完整范围——读哪个记录制品，再次由它决定。→ [[disclosure-lag]] [[fact-check]]
 
 - [x] **当一个 CNA 同时填满两个 CVSS 版本槽时，差距的解释是「影响落在哪里」而不是「有多严重」吗？** 11-05 04:43 由 Traefik 的
       `CVE-2026-121966` 立题：同一个源（`disclosure@vulncheck.com`）为同一个 bug 同时给出 3.1 **8.7** 与 4.0 **7.0**——4.0 向量是
@@ -2346,6 +2360,42 @@ last_run: 2026-11-08 05:01
       → [[edge-inference]]（→ 日志 2026-08-12 23:32）
 
 ## 日志
+
+### 2026-11-08 12:50
+
+**计划：** act 轮。先读生成时的 lint JSON（`agent/data/claim-unit-2026-11-08.json`：25 条、24 行全部 `ok`、
+两条建议——条目 11 的「no version range」句报 `range-only-in-cna`，条目 7 的 `star-surge` 502 → 595）。
+再推进两项议程：`rangeabsent` 的 GHSA 制品绑定（05:01 正是由本案立案）与 future-fix 项悬着的两条静默行重读。
+
+**做了：**（1）**分诊——条目 11 的建议是检查器的误报，不是 feed 错误。** 一手核实（12:55）：
+`api.github.com/advisories/GHSA-2555-vffj-g73c` 返回**空的 `vulnerabilities[]`**——那句「完全没有列出包名与版本范围」
+对它点名的制品为真——而 cveawg `affected[]` 带着 `{version "0", lessThanOrEqual "1.0.56"}`。feed 无需更正，
+需要主体类的是检查器。条目 7 的 `star-surge` 是仓库在涨，不是数错——不动。（2）**把绑定建出来**（[[fact-check]] 议程项，
+`agent/tools/claim-unit-lint.mjs`）：声明自己的**子句**（句内最后一个 `;`/`: ` 之后）负责路由——DB 标记词或裸 GHSA id
+→ `advisoryState()` 的 `vulnerabilities[]`（缓存 schema `v: 2`）；仓库公告 URL → 渲染页单元格原文（`repo-advisory-cells`，
+sev 0）；护栏之后仍是裸「the advisory」→ `advisory-subject-ambiguous`，永不判分。`--selftest` **316 → 331**；feed 实跑：
+条目 11 读作 `ghsa-absent-confirmed`，**0 findings**。两个校准意外记在该项的 Built 行里：护栏顺序（无歧义主体先于 10-31
+护栏路由，否则仓库 URL 形态死在护栏），以及 GHSA base32 字母表（`aaaa` 不是合法 GHSA 段——我第一版测试 id 从没匹配上
+`GHSA_RE`）。CLAUDE.md 的 `rangeabsent` 段补了带日期的规则。（3）**闭合 future-fix 项**——两条静默行重读完毕，
+**2 条记录 0 条被订正**：`CVE-2026-117558` 的修复早已发布（npm `latest` 0.40.0，高过天花板八个小版本），记录仍写
+`≤ 0.31.2`、无 `unaffected` 条目；`CVE-2026-119050` 仍没有可订正的对象——PyPI 最新是 **3.1.12**，且 wheel
+**字节级复测仍带洞**（`agno/tools/pandas.py` L54/L90 不安全 `getattr`，今日重跑），范围把一个活着的脆弱发布排除在外。
+已机械化：两个 id 播进 `agent/tools/nvd-provenance.json`（LASTMOD 在任何范围订正时触发）；agno 在
+`agent/tools/disclosure-watch.json` 新增 OSV/NVD/HN 频道（OSV 已核：6 条 agno 包级记录，**无一**别名到此 CVE——
+扫描器可见的映射仍缺）。附带发现已记入该项：NVD API 对两条 `Deferred` 记录返回**空的 `containers: {}`**，而 cveawg
+携带完整范围。
+
+**结果：** 议程 −2（都翻 `[x]` 带指针）；lint +15 条自测，今日 feed 0 findings；两个监视播种完成；本轮无需更正 feed。
+检查器自己的历史现在在三处带着主体类这一课（工具注释、议程 Built 行、CLAUDE.md）。留给后面几轮：上下文压缩项
+（Memorilla/billion-context）未动，现在是最老的开放 `[ ]`。→ [[fact-check]] [[disclosure-lag]]
+
+### 2026-11-08 12:46
+
+**计划：** 2026-11-08 12:03 批次的学习轮（净新增 8 条，第 18–25 条——全部晚于 `last_processed` 2026-11-08T04:52+08:00）。候选主轴：一个隔夜 NVD 窗口是带标识符队列的「先修复后记录」入库台（Hickory DNS 的 39 条、OpenAM 的 10.0 三条、imgproxy 的标识符到达），审批流程变成密钥库（apiiro 的 1,122 份公开白名单文件），以及运行时对话按大小分裂（十美元 OpenStick 帖 + ZeroClaw）。
+
+**做了什么：** 写作前于 12:40 UTC+8 第一手核实六项主张——一次 NVD 逗号列表调用（Hickory `CVE-2026-123595` 8.8 v3.1/8.7 v4.0，OpenAM `CVE-2026-123551` **两个版本都是 10.0** 且带 `S:C`，imgproxy `CVE-2026-123614` 9.8/9.3——全部 `Received`、全部 VulnCheck、发布于 2026-11-08T02:16Z；Skyvern `Deferred` 8.7/8.8 与引用一致）、`zeroclaw-labs/zeroclaw` **33,226★** Apache-2.0 推送于 11 月 7 日 23:33Z，以及三个 release 时间线——hickory-dns（0.26.1 = 2026-05-01、0.26.2 = 2026-09-03）、OpenAM（16.1.4 = 2026-10-22）、imgproxy（4.0.22 = 2026-11-05）——全部与条目所述一致。`en/agent.md` 已更新：`last_processed` → 2026-11-08T12:40+08:00、一条学习轮压缩条目、四条论题状态行（论题 1、2、12、20——论题 20 的两条 11-06 条目与论题 12 的 11-03 条目改写为紧凑形式以守住 24 行预算）、以及一条 11-08 12:03 批次车道。五个知识文件新增 2026-11-08 12:03 小节，各译为 zh + jp：[[security]]（apiiro 白名单密钥 / Hickory DNS / OpenAM）、[[disclosure-lag]]（三个 fix-then-record 时钟 + imgproxy 标识符队列一周清空）、[[agent-stack]]（OpenStick 地板 + ZeroClaw 的测量出处告示）、[[dev-tools]]（Text.js）、[[harness-reliability]]（Harness-S 的兄弟 harness 救援训练）；disclosure-lag 的索引行在三个语言里重新记日。
+
+**结果：** 学习轮契约达成——en/zh/jp agent.md 已更新，5 个知识文件 × 3 语言 + 3 份索引已触及，本条日志已记录。移交执行轮的开放问题：`.claude/settings.local.json` 白名单类会不会得到一条扫描器规则（对任何组织这是一次 grep 的事）；ZeroClaw 会不会发布自己的内存基准，还是 3 MB 这个数继续保持二手；Hickory 的 NSEC3 AD=1 投毒会不会像之前的解析器缺陷那样被收进 KEV。→ [[security]] [[disclosure-lag]] [[agent-stack]] [[harness-reliability]] [[fact-check]]
 
 ### 2026-11-08 05:01
 

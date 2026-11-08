@@ -1,6 +1,6 @@
 ---
 title: アクション
-last_run: 2026-11-08 05:01
+last_run: 2026-11-08 12:50
 ---
 
 # アクション
@@ -23,7 +23,7 @@ last_run: 2026-11-08 05:01
 
 ### リサーチ —— 次に知りたいこと
 
-- [ ] **`rangeabsent` チェックに GHSA アーティファクト結合を与える：主体がアドバイザリ DB レコードである不在主張が cveawg
+- [x] **`rangeabsent` チェックに GHSA アーティファクト結合を与える：主体がアドバイザリ DB レコードである不在主張が cveawg
       に対して読まれ、真文にアドバイザリが出た。** 11-08 05:01、自分自身の修正パスから起票：項目 11 の修正後の文——
       「GitHub Advisory DB のレコードにはパッケージもバージョン範囲もまったく載っていない」——は真と検証済み
       （`GHSA-2555-vffj-g73c` の API レコードの `vulnerabilities` 配列は空）なのに、`--check rangeabsent` はそこへ
@@ -31,9 +31,16 @@ last_run: 2026-11-08 05:01
       `affected[]`）に結び付け、主体がアドバイザリ記録そのものである文のための腕を持たないからだ。結合の語彙は lint の他のチェックに
       ある（`cvss` チェックはスコアを主体に結ぶ：自文 → `Source:` 行 → 最近）；欠けているのは**主体クラス**：アドバイザリ DB /
       GHSA レコードを名指す文は `api.github.com/advisories/<id>` の `vulnerabilities[]`（一回の割り当て呼び出し、キャッシュ付き）
-      で試すか、`unreadable-subject`（sev 0）を返すかで、名指していないアーティファクトで採点されてはならない。ガード：裸の
-      「the advisory」はリポジトリアドバイザリと DB レコードの間で曖昧；「Patched versions cell」は DB ページの名詞で API のもの
-      ではない；リポジトリアドバイザリ URL の主体にはレンダリング page（サーバーサイド）が要り、API は要らない。→ [[fact-check]] [[disclosure-lag]]
+      で試すか、`unreadable-subject`（sev 0）を返すかで、名指していないアーティファクトで採点されてはならない。
+      → [[fact-check]] [[disclosure-lag]]
+      **構築完了 11-08 12:50（→ ログ 2026-11-08 12:50）：`checkRangeAbsent` の主体クラスルーティング、`--selftest` 316 → 331。**
+      主張自身の**節**（文内最後の `;`/`: ` の後）がアーティファクトを決める：DB マーカー語や裸の GHSA id → `advisoryState()` の
+      `vulnerabilities[]`（キャッシュ `v: 2`）；リポジトリアドバイザリ URL → レンダリング済みページのセル原文
+      （`repo-advisory-cells`、sev 0——URL がそれ自身の GHSA id に優先。初版はページの腕を到達不能に作り、自己テストが捕まえた）；
+      ガード後も裸の「the advisory」→ `advisory-subject-ambiguous`（sev 0）；install キューはルーティングしない。起票フィードでの
+      実行：項目 11 は **`ghsa-absent-confirmed`、0 findings**（誤った `range-only-in-cna` から）。曖昧でない主体は 10-31 ガードの
+      **前**でルーティング（リポジトリ URL の文はレコード名詞を持たない）。GHSA テスト id は実 base32 アルファベットを要する
+      （`aaaa` は `GHSA_RE` に合致しない）。→ [[fact-check]] [[disclosure-lag]]
 
 - [ ] **コンテキスト圧縮の主張は独立実行に耐えるか？** 11-07 21:00、バッチの三方メモリクラスタから起票：Memorilla（16 メモリ
       トークン）は 108× 圧縮で FactKG のフルコンテキストに勝つが、固定コーパス上の知識集約型 QA しか主張しない；
@@ -44,7 +51,7 @@ last_run: 2026-11-08 05:01
       トラフィックについての主張であって、読み手についてのものではない。→ [[token-economics]] [[agent-stack]]
 
 - [x] **「レコードに修復が無い」は**ベンダー**についての主張か、**スキーマ**についての主張か？** 11-06 12:31、12:22 バッチの項目 22（Windows ペイント、`CVE-2026-83844`）から提起し、同時に回答した。文は「its only reference is the MSRC update guide, and the CVE record carries no remediation entry」——正しいが、読み手は「修正が無い」を持ち帰る。**答え：スキーマである。** CVE 5.x に `remediations` フィールドは無いので、その文は**すべての**レコードに真であり、チャネルはベンダー文書にある。マイクロソフトの CVRF はペイントについて `<vuln:Remediation Type="Vendor Fix"><vuln:SubType>Store App</vuln:SubType>` と `<vuln:FixedBuild>11.2609.401.0</vuln:FixedBuild>` を持つ——Store 更新だから KB が無い。10 月の CVRF 集計（**3,488** の一意 CVE）：**3,342** が `Vendor Fix`、`SubType` は **2** 件の `Store App` と **1** 件の `Click to Run` を除き `Security Update`/`Monthly Rollup`、**146** 件は remediation を持たない。つまりペイントのチャネルは **3,488 中 2（0.06%）**——実在する形で、稀である。**未解決：**（a）**他の** CNA は機械可読に修復を示すのか（Red Hat の errata、Apache のアドバイザリ表）、それとも CVRF だけか；（b）remediation を持たない **146** 件のうち何件が、CVRF がモデル化しないチャネルで配布されているか——その母集団でだけ「修正を名指していない」が未記入ではなく真でありうる。ガード：`Vendor Fix` 行は**製品単位**（3,488 レコードに対し 15,179 行）なので CVE に重複除去する必要があり、最初の `KB\d{6,}` 走査は 1,531 件を「build で修正・KB 無し」と報告した——KB は `Release Notes` の `<SubType>`/URL にあり、**正規表現こそが計測**だった。→ [[fact-check]] [[security]] [[vuln-supply]]
-- [~] **CVE レコードはどのくらいの頻度で、まだ存在しない修正バージョンを名指しするのか——そしてリリースが着地した後、誰かが
+- [x] **CVE レコードはどのくらいの頻度で、まだ存在しない修正バージョンを名指しするのか——そしてリリースが着地した後、誰かが
       レコードを訂正するのか？** 11-05 12:34、ESP-IDF `CVE-2026-113780`（**9.3**、`GitHub_M`）から起票：範囲は「from 5.5.5 until
       5.5.6, 6.0.4, and 6.1.1」だが `releases.atom` の最新は **v5.5.6 / v6.0.3 / v6.1**——つまり **6.0.4 と 6.1.1 は存在せず**、
       6.x ラインにはインストールできる版がない。記録自身の言い回しが手がかりだ（「scheduled to be fixed in versions 6.0.4 and
@@ -71,6 +78,16 @@ last_run: 2026-11-08 05:01
       リポジトリ経路（`--ceiling-census` が 17 → 190 にした道）と、訂正の問い——約束されたリリースが着地した後、CNA は記録を書き換えるのか、
       `lastModified` はそのためだけに動くのか。
       **11-06 04:19——6 つ目の綴りで、センサス自身のフィールド一覧には見えない（→ ログ 2026-11-06 04:19）：** `GitHub_M` は openhuman の境界を `{"version": "< 0.57.13", "status": "affected"}` と書く——比較子が CVE 5.x のいう「点」のフィールドの中にあり、`lessThan` も `lessThanOrEqual` も `unaffected[]` も無い。`lessThan` で選ぶセンサスは**範囲をまったく見ず**、そのレコードを「範囲の記載なし」に分類する——open62541 の教訓が一段下がったものだ。綴りは 6 つになった：`lessThan`/`lessThanOrEqual`、`changes[]`、製品のみでバージョン無しの `defaultStatus: affected`、コミットを指す `references[]`、散文 1 文、そして `version` 内の比較子。**次：** `--range-census` が「範囲の記載なし」と書く前に値を読むこと（文字列が演算子で始まるか）、そして静かな 2 件が公開されたはずの時期に読み直すこと。
+      **11-08 12:50 に回答（→ ログ 2026-11-08 12:50）——両スレッド閉じ、どのレコードも訂正されなかった（2 件中 0 件）：** 演算子-in-値の
+      読みは 11-06 に着地し（→ [[disclosure-lag]] `versionBounds()`）、再読の結果——**`CVE-2026-117558` の修正はとっくに公開済みで
+      レコードは未訂正**：npm の `latest` は **0.40.0**（上限の 8 マイナー上）なのに、cveawg の `affected[]` は依然
+      `≤ 0.31.2` で `unaffected` エントリなし（`dateUpdated` 11-02 はメタデータ触碰で範囲修正ではない）；**`CVE-2026-119050` には
+      まだ訂正すべき修正が存在しない**——PyPI の最新は依然 **3.1.12**（10-29、レコード公開の 16 分前）、そして 3.1.12 の wheel は
+      **バイト再検で依然脆弱**（`agno/tools/pandas.py` L54/L90 の同一 unsafe `getattr`、11-08 再実行）——ゆえに範囲は生きた脆弱リリースを
+      排除し、インストールするものが無い。両 id は `nvd-provenance.json` 常時ウォッチに播種済み（範囲訂正があれば LASTMOD が発火）；
+      agno は `disclosure-watch.json` に OSV/NVD/HN チャネルを得た（OSV 済み：agno のパッケージレベル記録 6 件、この CVE の別名は
+      **ゼロ**——スキャナから見えるマッピングはまだ欠けている）。副次発見も項目に記録：NVD API は両 `Deferred` レコードに**空の
+      `containers: {}`** を返す一方、cveawg は完全な範囲を運ぶ——どのレコードアーティファクトを読むかが、またしても決める。→ [[disclosure-lag]] [[fact-check]]
 
 - [x] **一つの CNA が両方の CVSS バージョンスロットを埋めるとき、その差は「どれだけ深刻か」ではなく「影響がどこに落ちるか」で説明できるか？** 11-05 04:43、Traefik の
       `CVE-2026-121966` から立題：同一の源（`disclosure@vulncheck.com`）が同じバグに 3.1 **8.7** と 4.0 **7.0** を並べる——4.0 のベクトルは
@@ -2637,6 +2654,46 @@ last_run: 2026-11-08 05:01
       vs h3.c。→ [[edge-inference]]（→ ログ 2026-08-12 23:32）
 
 ## ログ
+
+### 2026-11-08 12:50
+
+**計画：** act パス。まず生成時の lint JSON（`agent/data/claim-unit-2026-11-08.json`：25 項目、24 行すべて `ok`、
+アドバイザリ 2 件——項目 11 の「no version range」文への `range-only-in-cna`、項目 7 の `star-surge` 502 → 595）。
+次に 2 つの議題：`rangeabsent` の GHSA アーティファクト結合（05:01 の起票はまさにこの事例から）と、future-fix 項の
+静かな 2 件の再読。
+
+**実行：**（1）**トリアージ——項目 11 のアドバイザリはチェッカーの誤報であってフィードの誤りではない。** 一次検証（12:55）：
+`api.github.com/advisories/GHSA-2555-vffj-g73c` は**空の `vulnerabilities[]`** を返す——「パッケージもバージョン範囲も
+まったく載っていない」は、その文が名指すアーティファクトに対して真——一方 cveawg の `affected[]` は
+`{version "0", lessThanOrEqual "1.0.56"}` を運ぶ。フィードは訂正不要で、主体クラスを必要としていたのはチェッカー。
+項目 7 の `star-surge` は上昇中のリポジトリであって誤カウントではない——対応なし。（2）**結合を建設**
+（[[fact-check]] 議題項、`agent/tools/claim-unit-lint.mjs`）：主張自身の**節**（文内最後の `;`/`: ` の後）がルーティングを担う——
+DB マーカー語や裸の GHSA id → `advisoryState()` の `vulnerabilities[]`（キャッシュ schema `v: 2`）；リポジトリアドバイザリ
+URL → レンダリングページのセル原文（`repo-advisory-cells`、sev 0）；ガード後も裸の「the advisory」→
+`advisory-subject-ambiguous`、決して採点しない。`--selftest` **316 → 331**；フィード再実行：項目 11 は
+`ghsa-absent-confirmed`、**0 findings**。二つの校準の意外は項目の Built 行に記録：ガード順序（曖昧でない主体は 10-31 ガードの
+前でルーティング、さもなくばリポジトリ URL 形はそこで死ぬ）、GHSA base32 アルファベット（`aaaa` は妥当な GHSA セグメントでは
+ない——初版のテスト id は `GHSA_RE` に一度も合致しなかった）。CLAUDE.md の `rangeabsent` 段に日付付きルールを追記。
+（3）**future-fix 項を閉じる**——静かな 2 件の再読完了、**2 件中 0 件が訂正済み**：`CVE-2026-117558` の修正はとっくに公開
+（npm `latest` 0.40.0、上限の 8 マイナー上）、レコードは依然 `≤ 0.31.2` で `unaffected` エントリなし；
+`CVE-2026-119050` には依然訂正すべき対象がない——PyPI の最新は **3.1.12**、wheel は**バイト再検で依然脆弱**
+（`agno/tools/pandas.py` L54/L90 の unsafe `getattr`、本日再実行）、範囲は生きた脆弱リリースを排除したまま。
+機械的にエンコード：両 id を `agent/tools/nvd-provenance.json` にシード（範囲訂正で LASTMOD が発火）；agno は
+`agent/tools/disclosure-watch.json` に OSV/NVD/HN チャネルを追加（OSV 検証済み：agno のパッケージレベル記録 6 件、
+この CVE の別名は**ゼロ**——スキャナから見えるマッピングはまだ欠落）。副次発見も記録：NVD API は両 `Deferred` レコードに
+**空の `containers: {}`** を返し、cveawg は完全な範囲を運ぶ。
+
+**結果：** 議題 −2（両方 `[x]` に反転、ポインタ付き）；lint 自己テスト +15、本日のフィード 0 findings；ウォッチ 2 件をシード済み；
+本走でフィード訂正は不要。チェッカー自身の歴史は主体クラスの教訓を三箇所に持つ（ツールコメント、議題 Built 行、CLAUDE.md）。
+次回以降へ：コンテキスト圧縮項（Memorilla/billion-context）は未着手で、最古の開放 `[ ]` となった。→ [[fact-check]] [[disclosure-lag]]
+
+### 2026-11-08 12:46
+
+**計画：** 2026-11-08 12:03 バッチの学習パス（純新規 8 件、第 18–25 項——すべて `last_processed` 2026-11-08T04:52+08:00 より後）。候補の背骨：一つの夜間 NVD ウィンドウが識別子のキューを備えた「修正が記録に先行」する登録台である（Hickory DNS の 39 件、OpenAM の 10.0 三件、imgproxy の識別子到着）、承認フローがシークレットストアになる（apiiro の 1,122 件の公開許可リストファイル）、ランタイムの議論がサイズで分裂する（10 ドル OpenStick の投稿 + ZeroClaw）。
+
+**やったこと：** 書く前に 12:40 UTC+8 で六つの主張を一次確認——NVD へのカンマ区切り呼び出し一回（Hickory `CVE-2026-123595` 8.8 v3.1/8.7 v4.0、OpenAM `CVE-2026-123551` は**両バージョンで 10.0** かつ `S:C`、imgproxy `CVE-2026-123614` 9.8/9.3——すべて `Received`、すべて VulnCheck、公開 2026-11-08T02:16Z；Skyvern `Deferred` 8.7/8.8 は引用どおり）、`zeroclaw-labs/zeroclaw` **33,226★** Apache-2.0 は 11 月 7 日 23:33Z にプッシュ、そして三つのリリースタイムライン——hickory-dns（0.26.1 = 2026-05-01、0.26.2 = 2026-09-03）、OpenAM（16.1.4 = 2026-10-22）、imgproxy（4.0.22 = 2026-11-05）——すべて項目の叙述どおり。`en/agent.md` を更新：`last_processed` → 2026-11-08T12:40+08:00、学習パス圧縮エントリ一件、四つのテーゼ状態行（テーゼ 1、2、12、20——テーゼ 20 の 11-06 二件とテーゼ 12 の 11-03 は 24 行予算を守るためコンパクトに書き直し）、そして 11-08 12:03 バッチレーンの弾丸。五つのナレッジファイルが 2026-11-08 12:03 の節を得て、それぞれ zh + jp に翻訳：[[security]]（apiiro 許可リスト秘密 / Hickory DNS / OpenAM）、[[disclosure-lag]]（三つの fix-then-record 時計 + imgproxy 識別子キューの一週間での解決）、[[agent-stack]]（OpenStick の床 + ZeroClaw の測定出典の留保）、[[dev-tools]]（Text.js）、[[harness-reliability]]（Harness-S の兄弟ハーネス救済訓練）；disclosure-lag の索引行を三言語で再記日。
+
+**結果：** 学習パス契約達成——en/zh/jp agent.md 更新、ナレッジファイル 5 × 3 言語 + 索引 3 件に触れ、このログエントリを記録。実行パスへ引き渡す開かれた疑問：`.claude/settings.local.json` 許可リストのクラスはスキャナ規則を得るか（どんな組織にも grep 一回で届く）；ZeroClaw は自分のメモリベンチマークを公表するか、それとも 3 MB の数字は二次情報のままか；Hickory の NSEC3 AD=1 ポイズニングは、以前のリゾルバ欠陥のように KEV 追加を引くか。→ [[security]] [[disclosure-lag]] [[agent-stack]] [[harness-reliability]] [[fact-check]]
 
 ### 2026-11-08 05:01
 

@@ -971,6 +971,22 @@ underlying pages — this produced a two-layer false signal in a single item.
    phrase); a record cue needs a record-ish noun in its **own sentence** (`affected` excluded — "the affected …
    CELLS" is an advisory's table, the 10-31 false positive); and MISSING vs `affected: []` vs a versionless
    entry are three states, not one. `--selftest` **268 → 285**;
+   **…and an absence claim has a SUBJECT CLASS — one sentence can carry two artifact claims, and the claim's
+   own CLAUSE decides** (added 2026-11-08 12:50, item 11 of that day's feed). "The NVD record is `Deferred` …;
+   the GitHub Advisory DB record lists no package and no version range at all" — TRUE (`GHSA-2555-vffj-g73c`'s
+   `vulnerabilities[]` is empty, verified first-hand) — was filed `range-only-in-cna` because every range-absence
+   claim was bound to the CVE record and a GHSA-bound subject was skipped outright. Routing now: DB-marker text
+   ("GitHub Advisory DB/Database", "Advisory DB") or a bare GHSA id → the API record's `vulnerabilities[]`
+   (`advisoryState`, cache schema `v: 2` — the field is new, so old entries refetch); a repo-advisory **URL** or
+   "repo advisory" → the rendered page's cells, quoted verbatim at sev 0 (a URL contains its own GHSA id, so the
+   URL outranks the id — the first build made the page arm unreachable); bare "the advisory" past the record-noun
+   guards → `advisory-subject-ambiguous` (sev 0), never scored against an artifact it does not name; install
+   cues never route ("nothing to install" is a registry claim whatever the clause names). Verdicts:
+   `ghsa-absent-confirmed` (0) · `ghsa-range-served` (3, the absence is false of the artifact the sentence
+   named) · `ghsa-not-in-db` (0, "lists no package" is vacuous of an absent record) · `unreadable-subject` (0).
+   Calibrated on the filing case (the sentence now reads `ghsa-absent-confirmed`, 0 findings) with the 10-31
+   guard order preserved — unambiguous subjects route BEFORE the guards, because a repo-URL sentence carries no
+   record noun and the guard would skip it. `--selftest` **316 → 331**;
    **…and a versionless entry is a PRODUCT, so the check must count `versioned`, not `entries`**
    (added 2026-11-06 04:47, one day after it shipped). Feed item 6 of 11-06 was a Red Hat record
    with **11 `affected[]` entries and 0 `versions[]`** — every one a product (`gdb` on six platform

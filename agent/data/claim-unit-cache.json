@@ -13380,7 +13380,8 @@
   }
  },
  "ghsa:GHSA-hff9-5pqw-6w9f": {
-  "fetched_at": "2026-11-08T04:30:25.755Z",
+  "fetched_at": "2026-11-08T05:04:40.198Z",
+  "v": 2,
   "cve_id": null,
   "severity": "critical",
   "published_at": "2026-10-30T22:57:00Z",
@@ -13401,7 +13402,15 @@
     "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
     "field": "cvss_severities.cvss_v3"
    }
-  ]
+  ],
+  "vulns": {
+   "entries": 3,
+   "packages": [
+    "github.com/imgproxy/imgproxy/v3",
+    "github.com/imgproxy/imgproxy/v2",
+    "github.com/imgproxy/imgproxy"
+   ]
+  }
  },
  "cna:CVE-2026-115829": {
   "fetched_at": "2026-11-07T13:28:09.241Z",
@@ -57858,7 +57867,8 @@
   }
  },
  "ghsa:GHSA-2555-vffj-g73c": {
-  "fetched_at": "2026-11-08T04:30:21.733Z",
+  "fetched_at": "2026-11-08T05:04:36.126Z",
+  "v": 2,
   "cve_id": "CVE-2026-123783",
   "severity": "high",
   "published_at": "2026-11-06T15:31:28Z",
@@ -57887,10 +57897,15 @@
     "vector": "CVSS:4.0/AV:N/AC:L/AT:N/PR:L/UI:N/VC:H/VI:H/VA:H/SC:N/SI:N/SA:N/E:X/CR:X/IR:X/AR:X/MAV:X/MAC:X/MAT:X/MPR:X/MUI:X/MVC:X/MVI:X/MVA:X/MSC:X/MSI:X/MSA:X/S:X/AU:X/R:X/V:X/RE:X/U:X",
     "field": "cvss_severities.cvss_v4"
    }
-  ]
+  ],
+  "vulns": {
+   "entries": 0,
+   "packages": []
+  }
  },
  "ghsa:GHSA-qvg8-69ff-cf67": {
-  "fetched_at": "2026-11-08T04:30:23.713Z",
+  "fetched_at": "2026-11-08T05:04:38.082Z",
+  "v": 2,
   "cve_id": "CVE-2026-123488",
   "severity": "critical",
   "published_at": "2026-11-06T15:31:27Z",
@@ -57919,7 +57934,11 @@
     "vector": "CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:H/VI:H/VA:H/SC:N/SI:N/SA:N/E:X/CR:X/IR:X/AR:X/MAV:X/MAC:X/MAT:X/MPR:X/MUI:X/MVC:X/MVI:X/MVA:X/MSC:X/MSI:X/MSA:X/S:X/AU:X/R:X/V:X/RE:X/U:X",
     "field": "cvss_severities.cvss_v4"
    }
-  ]
+  ],
+  "vulns": {
+   "entries": 0,
+   "packages": []
+  }
  },
  "cna:CVE-2026-123294": {
   "fetched_at": "2026-11-08T04:30:27.943Z",
@@ -60241,7 +60260,7 @@
  },
  "page:https://apiiro.com/blog/coding-agents-leaking-secrets-github-dont-ask-again": {
   "v": 4,
-  "fetched_at": "2026-11-08T04:32:19.698Z",
+  "fetched_at": "2026-11-08T05:05:47.698Z",
   "bytes": 0,
   "text": "",
   "client": "none-read"

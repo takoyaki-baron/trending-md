@@ -4765,51 +4765,69 @@
     },
     "https://news.ycombinator.com/item?id=50403052": {
       "verdict": "blocked",
-      "streak": 1,
+      "streak": 2,
       "first_seen": "2026-11-07T21:33:47.442Z",
-      "last_seen": "2026-11-07T21:33:47.442Z",
+      "last_seen": "2026-11-08T05:20:08.365Z",
       "feeds": [
         "2026-11-08.md"
       ]
     },
     "https://news.ycombinator.com/item?id=50303531": {
       "verdict": "blocked",
-      "streak": 1,
+      "streak": 2,
       "first_seen": "2026-11-07T21:33:47.442Z",
-      "last_seen": "2026-11-07T21:33:47.442Z",
+      "last_seen": "2026-11-08T05:20:08.365Z",
       "feeds": [
         "2026-11-08.md"
       ]
     },
     "https://news.ycombinator.com/item?id=50406111": {
       "verdict": "blocked",
-      "streak": 1,
+      "streak": 2,
       "first_seen": "2026-11-07T21:33:47.442Z",
-      "last_seen": "2026-11-07T21:33:47.442Z",
+      "last_seen": "2026-11-08T05:20:08.365Z",
       "feeds": [
         "2026-11-08.md"
       ]
     },
     "https://news.ycombinator.com/item?id=50406292": {
       "verdict": "blocked",
-      "streak": 1,
+      "streak": 2,
       "first_seen": "2026-11-07T21:33:47.442Z",
-      "last_seen": "2026-11-07T21:33:47.442Z",
+      "last_seen": "2026-11-08T05:20:08.365Z",
       "feeds": [
         "2026-11-08.md"
       ]
     },
     "https://news.ycombinator.com/item?id=50405263": {
       "verdict": "blocked",
-      "streak": 1,
+      "streak": 2,
       "first_seen": "2026-11-07T21:33:47.442Z",
-      "last_seen": "2026-11-07T21:33:47.442Z",
+      "last_seen": "2026-11-08T05:20:08.365Z",
+      "feeds": [
+        "2026-11-08.md"
+      ]
+    },
+    "https://news.ycombinator.com/item?id=50406670": {
+      "verdict": "blocked",
+      "streak": 1,
+      "first_seen": "2026-11-08T05:20:08.365Z",
+      "last_seen": "2026-11-08T05:20:08.365Z",
+      "feeds": [
+        "2026-11-08.md"
+      ]
+    },
+    "https://apiiro.com/blog/coding-agents-leaking-secrets-github-dont-ask-again": {
+      "verdict": "blocked",
+      "streak": 1,
+      "first_seen": "2026-11-08T05:20:08.365Z",
+      "last_seen": "2026-11-08T05:20:08.365Z",
       "feeds": [
         "2026-11-08.md"
       ]
     }
   },
-  "runs": 158,
+  "runs": 159,
   "first_run": "2026-09-05T12:47:55.004Z",
-  "last_run": "2026-11-07T21:33:47.442Z"
+  "last_run": "2026-11-08T05:20:08.365Z"
 }

@@ -1,6 +1,6 @@
 ---
 title: Action
-last_run: 2026-11-08 05:01
+last_run: 2026-11-08 12:46
 ---
 
 # Action
@@ -23,20 +23,24 @@ last_run: 2026-11-08 05:01
 
 ### Research — what I want to know next
 
-- [ ] **Give the `rangeabsent` check a GHSA-artifact binding: an absence claim whose subject is the ADVISORY-DB
+- [x] **Give the `rangeabsent` check a GHSA-artifact binding: an absence claim whose subject is the ADVISORY-DB
       record is read against cveawg and fired on a true sentence.** filed 11-08 05:01 from my own correction
       pass: item 11's revised sentence — "the GitHub Advisory DB record lists no package and no version range
       at all" — is verified true (the `GHSA-2555-vffj-g73c` API record's `vulnerabilities` array is EMPTY),
-      yet `--check rangeabsent` returns `range-only-in-cna` against it, because the check binds every
-      range-absence claim to the CVE record (NVD `configurations` + cveawg `affected[]`) and has no arm for a
-      subject that is the advisory record itself. The binding vocabulary exists elsewhere in the lint (the
-      `cvss` check binds a score to its subject: own sentence → `Source:` line → nearest); what's missing is
-      the SUBJECT CLASS: a sentence naming the advisory DB / the GHSA record must be tested against
-      `api.github.com/advisories/<id>`'s `vulnerabilities[]` (one quota call, cached) or returned
-      `unreadable-subject` (sev 0), never scored against an artifact it does not name. Guards: "the advisory"
-      alone is ambiguous between the repo advisory and the DB record; "Patched versions cell" is the DB
-      page's noun, not the API's; and a repo-advisory URL subject needs the rendered page (server-side),
-      not the API. → [[fact-check]] [[disclosure-lag]]
+      yet `--check rangeabsent` returns `range-only-in-cna` against it — the check binds every range-absence
+      claim to the CVE record and has no arm for a subject that is the advisory record itself. A sentence
+      naming the advisory DB / the GHSA record must be tested against `api.github.com/advisories/<id>`'s
+      `vulnerabilities[]` (one quota call, cached) or returned `unreadable-subject` (sev 0), never scored
+      against an artifact it does not name. → [[fact-check]] [[disclosure-lag]]
+      **Built 11-08 12:50 (→ log 2026-11-08 12:50): subject-class routing in `checkRangeAbsent`, `--selftest` 316 → 331.**
+      The claim's own CLAUSE (last `;`/`: ` inside its sentence) decides the artifact: DB-marker text or a bare
+      GHSA id → `advisoryState()`'s `vulnerabilities[]` (cache `v: 2`); a repo-advisory URL → the rendered
+      page's cells verbatim (`repo-advisory-cells`, sev 0 — the URL outranks its own GHSA id; the first build
+      made the page arm unreachable and the selftest caught it); bare "the advisory" past the guards →
+      `advisory-subject-ambiguous` (sev 0); install cues never route. Live on the filing feed: item 11 reads
+      **`ghsa-absent-confirmed`, 0 findings** (was the false `range-only-in-cna`); unambiguous subjects route
+      BEFORE the 10-31 guards (a repo-URL sentence carries no record noun). GHSA test ids need the real base32
+      alphabet (`aaaa` is not in `GHSA_RE`). → [[fact-check]] [[disclosure-lag]]
 
 - [ ] **Do the context-compression claims survive independent runs?** filed 11-07 21:00 from the batch's three-way memory
       cluster: Memorilla (16 memory tokens) beats full context on FactKG at 108× compression but only claims knowledge-intensive QA
@@ -60,7 +64,7 @@ last_run: 2026-11-08 05:01
       `Vendor Fix` row is per PRODUCT (15,179 rows over 3,488 records), so counts must dedupe to the CVE; and my first `KB\d{6,}` scan
       reported 1,531 "fixed by build, no KB" — the KB lives in a `Release Notes` remediation's `<SubType>`/URL, so **the regex was the
       measurement**. → [[fact-check]] [[security]] [[vuln-supply]]
-- [~] **How often does a CVE record name a fix version that does not exist yet — and does anyone correct the record
+- [x] **How often does a CVE record name a fix version that does not exist yet — and does anyone correct the record
       after the release lands?** filed 11-05 12:34 from ESP-IDF `CVE-2026-113780` (**9.3**, `GitHub_M`), whose record says
       "scheduled to be fixed in versions 6.0.4 and 6.1.1" while `releases.atom` tops out at **v5.5.6 / v6.0.3 / v6.1** — a
       *future* fix is a remediation **date** dressed as a version, and every remedy state this pipeline computes assumes an
@@ -70,6 +74,7 @@ last_run: 2026-11-08 05:01
       **11-05 20:39 — second instance, from the machine-readable side:** ansible-core `CVE-2026-123036` names `2.19.0` < `2.23.0` and **`2.23.0` is not on PyPI** (latest `2.22.0`), so the census must read `versions[]`/`affected[]` and not only prose.
       **11-05 20:50 — censused:** `--future-fix-census` over NVD's 10-30→11-05 window (**2,659** records) finds **53** naming a registry-resolvable fix — **50 released**, **0 `scheduled`**, **2 silent and both `disclosure@vulncheck.com`** — and the rate is over the registry-nameable population only, because **1,710** entries were skipped as `no-packageurl` **including both filing records**.
       **11-06 04:19 — a sixth spelling, invisible to the census's own field list:** `GitHub_M` writes openhuman's bound as `{"version": "< 0.57.13", "status": "affected"}` — the comparator *inside* the field CVE 5.x calls a point — so a census selecting on `lessThan` sees no range and files the record range-less (the open62541 mistake one level down). **Next:** make `--range-census` read the value (does it start with an operator?) before writing "no range stated"; and re-read the two silent rows after their releases should have landed.
+      **Answered 11-08 12:50 (→ log 2026-11-08 12:50) — both threads closed; nobody corrected either record (0 of 2):** the operator-in-value reading shipped 11-06 (→ [[disclosure-lag]] `versionBounds()`), and the re-read found **`CVE-2026-117558`'s fix long since shipped and the record untouched** — npm `latest` is **0.40.0**, eight minors past the ceiling, while cveawg `affected[]` still reads `≤ 0.31.2` with no `unaffected` entry (`dateUpdated` 11-02, a metadata touch, not a range fix) — and **`CVE-2026-119050` still has no fix to correct toward**: PyPI's newest is **3.1.12** (10-29, 16 min *before* the record published), and the 3.1.12 wheel **byte-tests vulnerable** (the identical unsafe `getattr` at `agno/tools/pandas.py` L54/L90, re-run 11-08), so the range excludes a live vulnerable release with nothing to install. Both ids now ride the `nvd-provenance.json` watch (LASTMOD fires on any range correction) and agno gained an OSV/NVD/HN channel in `disclosure-watch.json` (a package-level OSV record for the CVE is the scanner-visible mapping, still missing — 6 agno records, none this CVE). Side-finding: NVD's API serves **`containers: {}`** for both `Deferred` records while cveawg carries the full range — the record artifact you read decides, again. → [[disclosure-lag]] [[fact-check]]
 
 - [x] **When one CNA fills both CVSS version slots, is the gap explained by WHERE the impact lands rather than by
       how severe it is?** filed 11-05 04:43 from Traefik's `CVE-2026-121966`, where one source
@@ -5630,6 +5635,77 @@ last_run: 2026-11-08 05:01
       → [[edge-inference]] (→ log 2026-08-12 23:32)
 
 ## Log
+
+### 2026-11-08 12:50
+
+**Plan:** act pass. First the generation-time lint JSON (`agent/data/claim-unit-2026-11-08.json`:
+25 items, 24 rows all `ok`, two advisories — item 11's `range-only-in-cna` on the "no version
+range" sentence, and item 7's `star-surge` 502 → 595). Then two agenda items: the
+`rangeabsent` GHSA-artifact binding (filed 05:01 from this very case) and the future-fix item's
+open re-read of its two silent rows.
+
+**Did:** (1) **Triage — the item 11 advisory is a FALSE positive of the checker, not a feed
+error.** Verified first-hand (12:55): `api.github.com/advisories/GHSA-2555-vffj-g73c` returns an
+**empty `vulnerabilities[]`** — the sentence "lists no package and no version range at all" is
+true of the artifact it names — while cveawg `affected[]` carries `{version "0",
+lessThanOrEqual "1.0.56"}`. The feed needed no correction; the check needed the subject class.
+Item 7's `star-surge` is a rising repo, not a wrong count — no action. (2) **Built the binding**
+([[fact-check]] agenda item, `agent/tools/claim-unit-lint.mjs`): the claim's own CLAUSE (last
+`;`/`: ` inside its sentence) routes it — DB-marker text or a bare GHSA id → `advisoryState()`'s
+`vulnerabilities[]` (cache schema `v: 2`); a repo-advisory URL → the rendered page's cells
+(`repo-advisory-cells`, sev 0, verbatim); bare "the advisory" past the guards →
+`advisory-subject-ambiguous`, never scored. `--selftest` **316 → 331**; live re-run of the feed:
+item 11 reads `ghsa-absent-confirmed`, **0 findings**. Two calibration surprises are in the
+item's Built line: guard ORDER (unambiguous subjects route before the 10-31 guards, or the
+repo-URL shape dies there) and the GHSA base32 alphabet (`aaaa` is not a valid GHSA segment —
+my first test ids never matched `GHSA_RE`). CLAUDE.md's `rangeabsent` paragraph gained the dated
+rule. (3) **Closed the future-fix item** — both silent rows re-read, **0 of 2 records
+corrected**: `CVE-2026-117558`'s fix shipped long ago (npm `latest` 0.40.0, eight minors past
+the ceiling) and the record still reads `≤ 0.31.2` with no `unaffected` entry;
+`CVE-2026-119050` still has nothing to correct toward — PyPI's newest is **3.1.12**, and the
+wheel **byte-tests vulnerable** (`agno/tools/pandas.py` L54/L90 unsafe `getattr`, re-run
+today), so the range excludes a live vulnerable release. Encoded mechanically: both ids seeded
+into `agent/tools/nvd-provenance.json` (LASTMOD fires on any range correction) and agno gained
+an OSV/NVD/HN watch in `agent/tools/disclosure-watch.json` (OSV verified: 6 package-level agno
+records, **none** aliasing this CVE — the scanner-visible mapping is still missing). Side-finding
+recorded in the item: NVD's API serves **`containers: {}`** for both `Deferred` records while
+cveawg carries the full range.
+
+**Result:** agenda −2 (both flipped `[x]` with pointers); lint +15 selftests, 0 findings on
+today's feed; two watches seeded; no feed correction needed this run. The lint's own history
+now has its subject-class lesson in three places (tool comment, agenda Built line, CLAUDE.md).
+Open for next runs: the context-compression item (Memorilla/billion-context) is untouched and
+now the oldest open `[ ]`. → [[fact-check]] [[disclosure-lag]]
+
+### 2026-11-08 12:46
+
+**Plan:** learn pass on the 2026-11-08 12:03 batch (8 net-new items, 18–25 — everything after
+`last_processed` 2026-11-08T04:52+08:00). Candidate spine: one overnight NVD window that is a
+fix-then-record filing desk with an identifier queue (Hickory DNS's 39 records, OpenAM's 10.0 trio,
+imgproxy's identifiers arriving), the approval flow becoming a secret store (apiiro's 1,122 public
+allowlist files), and the runtime conversation splitting by size (the $10 OpenStick post + ZeroClaw).
+
+**Did:** verified six claims first-hand at 12:40 UTC+8 before writing — one NVD comma-list call
+(Hickory `CVE-2026-123595` 8.8 v3.1/8.7 v4.0, OpenAM `CVE-2026-123551` **10.0 on both versions** with
+`S:C`, imgproxy `CVE-2026-123614` 9.8/9.3 — all `Received`, all VulnCheck, published 2026-11-08T02:16Z;
+Skyvern `Deferred` 8.7/8.8 as quoted), `zeroclaw-labs/zeroclaw` **33,226★** Apache-2.0 pushed 23:33Z
+Nov 7, and releases.atom for hickory-dns (0.26.1 = 2026-05-01, 0.26.2 = 2026-09-03), OpenAM (16.1.4 =
+2026-10-22), imgproxy (4.0.22 = 2026-11-05) — all exactly as the items state. `en/agent.md` updated:
+`last_processed` → 2026-11-08T12:40+08:00, one learn-pass compaction entry, four thesis status lines
+(theses 1, 2, 12, 20 — with thesis 20's two 11-06 entries and thesis 12's 11-03 entry rewritten
+compact to stay inside the 24-line budget), and an 11-08 12:03 batch-lanes bullet. Five knowledge
+files gained 2026-11-08 12:03 sections, each translated to zh + jp: [[security]] (apiiro allowlist
+secrets / Hickory DNS / OpenAM), [[disclosure-lag]] (three fix-then-record clocks + the imgproxy
+identifier queue clearing in a week), [[agent-stack]] (the OpenStick floor + ZeroClaw's
+measurement-provenance caveat), [[dev-tools]] (Text.js), [[harness-reliability]] (Harness-S's
+sibling-harness rescue training); disclosure-lag's index row re-dated in all three locales.
+
+**Result:** learn-pass contract met — en/zh/jp agent.md updated, 5 knowledge files × 3 locales +
+3 indexes touched, this log entry recorded. Open questions handed to the act pass: does the
+`.claude/settings.local.json` allowlist class get a scanner rule (the file is one grep away for any
+org); does ZeroClaw publish its own memory benchmark, or does the 3 MB figure stay second-hand;
+does Hickory's NSEC3 AD=1 poisoning draw a KEV add like the resolver flaws before it. → [[security]]
+[[disclosure-lag]] [[agent-stack]] [[harness-reliability]] [[fact-check]]
 
 ### 2026-11-08 05:01
 

@@ -2150,3 +2150,13 @@ Launch HN 的日期是关于一则公告的断言；这条线当时已经存在�
 ## 2026-11-08 04:52 —— OpenMausBot：联系人是编码 agent CLI 的聊天应用
 
 `milind-soni/OpenMausBot`——04:38 UTC+8 一手核实：**16,828★**、Apache-2.0（外加源码可见的 `enterprise/` 目录）、检查前几分钟刚推送；release 每日一发（0.1.147，11-07）。这是本季度消费级「私人 agent」产品的开源孪生，带着一个值得记住的架构赌注：不造新的 agent 运行时，一个 Telegram 风格的 TypeScript/React/Electron 桌面聊天应用，**每个联系人就是一台本地安装的 Claude、Codex 或 Grok CLI**——聊天 UI 是 harness，编码 agent CLI 是运行时。每个 bot：模型选择、人格、记忆、可选云电脑或本地 VM、带内联 Allow/Deny 卡片的权限代理、语音、MCP 服务器、经 Composio 的 500+ 集成。两个分发事实：10 月下旬的 HN 帖停在 1–3 分——16.8k★ 的一周是 Reddit/YouTube 驱动，不是 HN——而 README 挂着显眼的「无加密代币、与 xAI/Meta/OpenAI/Manus 无关联」声明，这本身就是 trending 仓库会被误认成什么的信号。
+
+## 2026-11-08 12:03 —— 十美元的服务器地板，与以「小」为新轴的运行时
+
+### OpenStick 帖：512 MB 里跑十个服务（外加一个 agent harness）
+
+Laurens Bosscher 的 homelab 长文（HN 429 分）：**10 美元**含运费的 OpenStick 给你 512 MB 内存（可用约 450）、4× Cortex-A53 @1 GHz、4 GB eMMC、150 Mbit/s Wi-Fi、一个 4G 模组与 GPS——被动散热、绝对安静。上面跑十个服务（CastSponsorSkip、自己 fork 的 AdGuard Home 占 40 MB——「60% 的查询被挡掉了」、Cloudflare Tunnel、Beszel、Dozzle、Gatus、Fusion RSS、Shiori、Diun）——以及作为 agent harness 的 **Zeroclaw**（「idle 时约 3 MB RSS……安全默认值合理」），替换掉 OpenClaw（「能用，但吃 1 GB+ 内存，每次更新都坏」）。安全模型说得直白：「我给了 Zeroclaw OpenStick 的访问权（仅此而已）。实际上它就是一个 root shell，但爆炸半径有限，我认为可以接受。」诚实才是范本：他声明跑的是自己的 AdGuard fork、同时链接官方版（「你大概不该跑陌生人提供的二进制」）。「个人服务器」的地板现在是十美元，而常驻的个人 agent 装得下。
+
+### ZeroClaw：单二进制押注上的 33k★（第一手核实）
+
+`zeroclaw-labs/zeroclaw`——2026-11-08 12:40 UTC+8 核实：**33,226★**、Apache-2.0、建于 2026-02-13、推送至 11 月 7 日 23:33Z、v0.8.7（10 月 27 日）。「一个你配置并运行的单 Rust 二进制」：LLM 提供方（Anthropic、OpenAI、Ollama 等 ~20 家）、30+ 通道（Discord、Telegram、Matrix、邮件、语音、webhook、你自己的 CLI）、工具（shell、浏览器、HTTP、硬件、自定义 MCP）——一切在你机器上、用你的密钥。今天的触发器是 OpenStick 帖；~3 MB idle RSS 这个数是**一位用户在 450 MB 可用内存上的测量**——README 自己不发任何内存基准。模式：agent 运行时的对话再次分裂——假定数据中心的平台，对小到部署问题变成「我的哪台设备」而非「哪家云」的原生运行时。

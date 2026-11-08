@@ -4328,3 +4328,17 @@ JSON 没有条目、CNA 的 HTML 是个壳——而「沉默」是一个带日�
 ### Coldframe：零依赖的 ICS 绊线
 
 Show HN 蜜罐（105 HN 分，仓库 19★）目标明确：超市的制冷系统。模拟 Danfoss AK-SM 800A 系统管理器（假 StoreView 登录/仪表盘、XML API、对齐 nginx 头顺序、自签 `CN=DanfossSM800A`）和 Copeland/Dixell XWEB EVO 监控器（带真实的 `/cgi-bin/login.lua` 流程与出厂凭据），外加可选的 Modbus TCP 服务假冷柜温度——一个 Python 文件、标准库之外零依赖、把命中已知漏洞模式的请求记进 JSON 日志。ICS 绊线的大规模部署第一次变得可行；而目标选择本身就是提醒：食品链制冷是攻击者真的在扫描的互联网可达基础设施。
+
+## 2026-11-08 12:03 —— 审批流程变成密钥库，隔夜窗口里两批批量入库
+
+### apiiro："Don't Ask Again" 把密钥写进可被 git 提交的文件
+
+用 "Don't Ask Again" 批准一条含凭据的命令，Claude Code 就会把完整命令文本——连同密钥——作为白名单条目存进项目里的 `.claude/settings.local.json`。Apiiro 的扫描：公开 GitHub 仓库里有 **1,122** 份这样的文件、其允许的命令带着 key 或密码；研究者在 HN 帖里确认这些全部公开，且「在我们追踪的 1,105 个仓库里，**539** 个有过 Claude 自己共同署名的 commit 修改过这个文件」。帖子自己给出的两个告解：按按钮本身不泄露任何东西——提交文件才泄露；作者关于机制的主张（该文件只被加进*全局* gitignore、不进仓库的）也被评论者质疑。这一类是：白名单是一个读起来像配置、随每次 clone 和 fork 传播、对今年采用了 Claude Code 的组织一次 grep 就能清点的静态凭据面。
+
+### Hickory DNS：一夜 39 条记录，每一条的修复都早于文书
+
+Hickory DNS（原 trust-dns，Rust 生态的解析器/递归器）在一夜之间（11 月 7–8 日）收到 **39** 条 CVE 记录，全部 VulnCheck 代理、全部仍是 `Received`，CVSS 3.1 为 3.7–8.8（v4.0 最高 8.9）。严重的类是 DNSSEC 否定应答投毒：`CVE-2026-123595/123596`（**8.8**，经一次 NVD 逗号列表调用第一手核实——`Received`、VulnCheck、发布于 2026-11-08T02:16Z）——验证递归器的 NSEC3 处理器「只按哈希匹配最近封闭者而不查类型位图」，于是由真实签名的父侧祖先委托记录能让 NXDOMAIN/NODATA **带着 AD=1 进缓存**，否认区切点以下的全部解析；下游消费者把那一位当作已认证。围绕它们的是约十五条 DoS/资源耗尽记录（线上格式预分配、TSIG 下溢、DoH/DoQ 循环、区域文件 panic）。每一条的修复都早于记录：0.26.2 于 2026-09-03 发布、0.26.1 在 2026-05-01（对照 releases.atom 核实）——早 **65 到 190 天**。
+
+### OpenAM：经由它自己的通知 WebSocket 的 10.0 会话令牌窃取
+
+`CVE-2026-123551` 是 **10.0**（`AV:N/AC:L/PR:N/UI:N/S:C`——核实：v3.1 `Primary` 与 v4.0 `Secondary` 上都是 10.0，VulnCheck）：未认证攻击者从通知 WebSocket 读取活体会话令牌，经旧 Liberty ID-FF 端点上的未验证内部转发绕过仅 agent 检查，收集 `iPlanetDirectoryPro` 令牌——OpenAM 的主会话 cookie——以劫持用户与管理员会话。同批两条：`CVE-2026-123550`（**9.8**）——当 `WantAssertionsSigned` 为 false 时，SAML v2 服务提供者在 ECP (PAOS) 与 HTTP-Artifact 绑定上接受未签名断言；`CVE-2026-123549`（**9.8**）——自注册无视 Valid Creation Attributes 列表，让匿名攻击者设置含组成员资格在内的受限属性。全部修复于 **16.1.4，2026-10-22 发布**（已核实）——比记录早十七天。
