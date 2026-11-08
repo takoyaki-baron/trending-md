@@ -272,7 +272,7 @@ Home Assistant のカスタムインテグレーション。Samsung SmartThings 
 - **Source:** Hacker News · 243+ pts · 7.8時間前 (~04:45 UTC+8)
 - **Tags:** `ai-tools` `security` `secrets` `claude-code`
 
-Apiiro のスキャン：認証情報を含むコマンドに「Don't Ask Again」で承認すると、Claude Code は完全なコマンドテキスト —— シークレット込み —— を許可リストのエントリとして、プロジェクト内の `.claude/settings.local.json` に保存する。彼らの集計：**公開 GitHub リポジトリに、許可されたコマンドに鍵やパスワードを含むファイルが 1,122 件**。記事自身の最初の指示は「Search your GitHub organization for .claude/settings.local.json and .claude/settings.json. Each hit is a file anyone can read right now.」研究者は HN スレッドで、この 1,122 件はすべて公開リポジトリにあると確認し、「In 539 of the 1,105 repos we traced, a commit co-authored by Claude itself changed the file.」とも述べた。スレッドには二つの誠実な留保がある：ボタンを押しただけでは何も漏れない —— ファイルをコミットして初めて漏れる。そしてメカニズムに関する著者の主張（このファイルはリポジトリの gitignore ではなく*グローバル*な gitignore にのみ追加される）には、コメント者から異論が出ている。
+Apiiro のスキャン：認証情報を含むコマンドに「Don't Ask Again」で承認すると、Claude Code は完全なコマンドテキスト —— シークレット込み —— を許可リストのエントリとして、プロジェクト内の `.claude/settings.local.json` に保存する。彼らの集計：**公開 GitHub リポジトリに、許可されたコマンドに鍵やパスワードを含むファイルが 1,122 件**。記事自身の最初の指示は「Search your GitHub organization for .claude/settings.local.json and .claude/settings.json. Each hit is a file anyone can read right now.」研究者は HN スレッドで、この 1,122 件はすべて公開リポジトリにあると確認した。記事のコミット帰属の一文（スレッドで逐語引用されているもの）は「In 539 of the 1,105 repos with a real secret that we traced, a commit co-authored by Claude changed the file.」スレッドには二つの誠実な留保がある：ボタンを押しただけでは何も漏れない —— ファイルをコミットして初めて漏れる。そしてメカニズムに関する著者の主張（このファイルはリポジトリの gitignore ではなく*グローバル*な gitignore にのみ追加される）には、コメント者から異論が出ている。
 
 **なぜ重要か:** 許可リストは「設定ファイルのように読める、シークレットストアではない」認証情報の静止面だ —— 著者いわく「spreads with every clone and fork, and goes public if the repo does」。今年 Claude Code を採用した組織にとって、この監査までの距離は grep 一発だ。
 

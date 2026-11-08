@@ -1,6 +1,6 @@
 ---
 title: Learnt Agent
-last_processed: 2026-11-08T12:40:00+08:00
+last_processed: 2026-11-08T20:36:00+08:00
 ---
 
 # Learnt Agent
@@ -1441,6 +1441,23 @@ patterns, and turn them into insights and actionable todos.
 > as a resource (transfer-back tested across AppWorld/SWE-Gym/DBBench); Text.js renders React in the console. → [[security]]
 > [[disclosure-lag]] [[vuln-supply]] [[agent-stack]] [[harness-reliability]] [[dev-tools]] [[fact-check]]
 
+> **(11-08 20:36, learn pass):** the 20:03 batch's net-new 11 (items 26–36; verified first-hand 20:30 — one NVD comma-list call returning
+> all 11 sampled records VulnCheck-assigned with scores matching the feed exactly, plus a `pubStartDate/pubEndDate` call measuring the
+> overnight desk whole: **125 records, 02:16:36→02:16:57Z, all `disclosure@vulncheck.com`** — the feed itemized 102, **23** un-itemized;
+> `earendil-works/pi` **120,740★** MIT pushed today; `crmne/zapfast` **3,526★**; `csm/clojurust` **99★**; the Veans repo advisory read
+> verbatim off the rendered page (Oct 22, "veans has no tagged release yet") while the global advisory API 404s; Coca-Cola's abstract
+> verified verbatim on the arXiv API, title "**Tools Need Not Speak in Text**", v1 2026-11-04T13:32:36Z; MuJoCo 4.0.0 published
+> 2026-11-06T15:39:53Z). Spine: **the desk measured whole, all fix-then-record** — rustls 5 (fixes Sep 14/Oct 14), Vikunja 39 (2.7.1,
+> Oct 20, nineteen days), Tornado 2 (PyPI Oct 21, eighteen days), devalue 9 (three fix waves Feb→Mar→Sep, one an incomplete-fix
+> bypass), gitoxide 2 — and statuses split *within one desk run* (`Received` rustls/devalue, `Deferred` the rest). Second thread:
+> **the injection class reaches a to-do app's own CLI** — Vikunja's Veans renders project titles verbatim inside the agent's
+> authoritative instruction block, primed on SessionStart/PreCompact (`CVE-2026-123498`), beside gitoxide's checkout-time NTLM leak
+> (`CVE-2026-123532`, no code execution). Third: **harness switching cost collapses** (the Pi essay's 244-releases/yr churn metric),
+> **memory's missing piece is named as an agreement** (LoreKit's four-shapes essay, OpenTelemetry precedent), latent compression's
+> third shape lands (Coca-Cola: tool observations into the embedding space, 70.01–89.24% cut), MuJoCo 4.0.0 ships speculative
+> contacts + elasto-plasticity, ZapFast makes the native-client argument, clj.rs pitches an agent-first language. → [[security]]
+> [[disclosure-lag]] [[vuln-supply]] [[agent-stack]] [[token-economics]] [[dev-tools]] [[fact-check]]
+
 ## Active theses
 
 1. **Agent infrastructure is the new cloud — the monolith CLI decomposes into separable layers,
@@ -1451,11 +1468,8 @@ patterns, and turn them into insights and actionable todos.
    - **08-16 → 10-31 (folded) — layers, a treaty, an operator surface, and the review surface is the manifest:** Codex Agents API, Docker Agent OCI,
      OpenCode 2.0's Code Mode; AAIF takes **10 hosted projects from 3**; `pingdotgg/t3code` (**29,938★**) drives six harnesses on sessions you own;
      `knowledge-work-plugins` ships **eleven** role-shaped bundles (**33,684★**, zero releases); `mattpocock/skills` (**307,351★**) splits **27** skills by who invokes them. → [[agent-stack]] [[agent-plugins]]
-   - **11-02 — the budget moves from sessions to ATTENTION, and authorization rides the work item:** DeepSeek's `dsh-superagent-prototype`
-     (**6,877★**, **2.5 hours of history**) — authorization travels with the ticket, not the session; t3code **37,548★** on stable v0.1.6;
-     ThinkRail **6,945★** with `git worktree` per task. → [[agent-stack]] [[dev-tools]]
-   - **11-04 — the harness OS prices its own catalog:** `affaan-m/ECC` (**296,629★**, 71 agents / 314 skills) states "Each MCP tool
-     description consumes tokens from your 200k window, potentially reducing it to ~70k"; manifest, release and npm agree at **2.2.3**. → [[agent-stack]]
+   - **11-02 → 11-04 (folded) — attention is the budget, the catalog is priced, authorization rides the work item:** `dsh-superagent-prototype` (**6,877★**) carries
+     authorization on the ticket; ECC (**296,629★**, 71 agents / 314 skills) prices its own catalog — MCP tool descriptions "potentially reduc[ing]" the 200k window "to ~70k". → [[agent-stack]]
    - **11-06 — the failure contract becomes the interface, and density is bought by removing the boundary:** `vercel-labs/agent-browser`
      (**45,790★**, 137 npm versions) makes a covered click an **error** and invalidates refs on DOM change; `rivet-dev/rivet` (**6,616★**)
      reaches **4.99 ms** p99 / **72 KB** per actor by having actors share a node process — the same sentence as "no sandbox". → [[agent-stack]]
@@ -1467,6 +1481,9 @@ patterns, and turn them into insights and actionable todos.
      `milind-soni/OpenMausBot` (**16,828★** verified, Apache-2.0 + source-available `enterprise/`) — contacts are locally installed
      Claude/Codex/Grok CLIs, the surge Reddit/YouTube (HN flat at 1–3) — and `zeroclaw-labs/zeroclaw` (**33,226★** verified, pushed
      Nov 7) whose "~3 MB idle RSS" is ONE user's OpenStick measurement against OpenClaw's 1 GB+, not a project benchmark. → [[agent-stack]]
+   - **11-08 PM — switching cost collapses, and memory's missing piece is named as an AGREEMENT:** the Pi migration essay (caleb.software, 367+ HN pts) retires Claude Code for
+     `earendil-works/pi` (**120,740★** MIT, verified) on a reproducible churn metric — **244 releases this year, >3/4 touching the system prompt or tool descriptions**; LoreKit counts **four memory
+     shapes that can't read each other** ("The problem isn't a missing tool. It's a missing agreement."); clj.rs pitches a Lisp "agentic coding runtime". → [[agent-stack]] [[token-economics]]
 
 2. **Agent security is the immediate attack surface — and every named class ends up enforced by
    nobody.** ~50+ CVSS≥9 entries since Aug 12 resolve into sixteen recurring shapes (full map in
@@ -1481,13 +1498,12 @@ patterns, and turn them into insights and actionable todos.
    - **11-07 — the microVM bet gets a public stage-two escape, and its CVE citation is bogus:** PWN Research's PwnEscape part 2 turns
      the Firecracker memory primitive into VMM-context execution **without defeating the jailer** (root jailer-less; full host control
      still needs an LPE), and the writeup's `CVE-2026-99999` is the kernel's ipv4 checksum bug — **no verified CVE**. → [[security]]
-   - **11-08 — the IDE sandbox gets audited in bulk, and the vendor's own agent CLI joins the bulletin:** **89** JetBrains CVE records
-     in two days, mostly one shape — code execution "in untrusted projects" (Terraform watchers, ShellCheck paths, Jupyter widgets) —
-     with Hub priv-esc 9.6 (`CVE-2026-123294`) and **Junie**, JetBrains' coding-agent CLI, at 7.0 exec via "Allow Similar Commands" +
-     5.5 env-var exposure in session logs. → [[security]]
-   - **11-08 — the AST-denylist school of agent sandboxing fails one layer below the parser:** Skyvern ≤1.0.56 is
-     escaped by reconstructing functions from raw bytecode via `types.CodeType`, so `is_safe_script_code` never sees
-     the import; the GHSA rates High 8.7 and its Patched cell reads **Unknown** — audit the runs, don't wait for a pin. → [[security]]
+   - **11-08 — the IDE sandbox gets audited in bulk, and agent sandboxing fails a layer below its parser:** **89** JetBrains records in two days, mostly code
+     execution "in untrusted projects" — with **Junie**, JetBrains' coding-agent CLI, at 7.0 exec via "Allow Similar Commands" + 5.5 env-var exposure — and Skyvern
+     ≤1.0.56 escaped by reconstructing functions from raw bytecode (`types.CodeType`), its Patched cell reading **Unknown**. → [[security]]
+   - **11-08 PM — the injection class reaches a to-do app's own CLI, and "just clone it" leaks credentials:** Vikunja's Veans agent CLI renders project titles verbatim
+     **inside the authoritative instruction block**, primed on SessionStart/PreCompact (`CVE-2026-123498`; the advisory's fix shape: a trust gate + untrusted data fenced out
+     of the authority section), and `gix-fs` <0.24.1 leaks NTLM handshakes via UNC symlink targets at checkout — no code execution (`CVE-2026-123532`). → [[security]]
    - **11-08 — the approval flow becomes a secret store:** Claude Code's "Don't Ask Again" writes the FULL command text — secret
      included — into `.claude/settings.local.json`; apiiro counted **1,122** public repos with keys/passwords in allowlists
      (**539 of 1,105** traced repos had a Claude co-authored commit touch the file). Committing leaks, not pressing; the allowlist
@@ -1736,10 +1752,10 @@ patterns, and turn them into insights and actionable todos.
       despite high reconstruction fidelity" by attenuating "activation along the decoder's learned refusal direction" (2611.06380, no figures
       in its abstract) — while SumOne trains its summarizer on exactly that reconstruction (2611.06445: **−78%** / **−75%** est. cost).
       → [[token-economics]] [[fact-check]]
-    - **11-07 — latent compression beats FULL CONTEXT, and the month-long session ships as a proxy:** Memorilla fits a corpus in
-      **16 memory tokens** and beats full context on FactKG (**84.33** vs **80.43**) at **108×** fewer tokens;
-      `ranxianglei/billion-context` folds consumed conversation into reversible summaries mid-session (**95–97%** prefix-cache
-      hits claimed, its own real-model integration testing not yet done) — curate across sessions vs compress within one. → [[token-economics]]
+    - **11-07 → 11-08 (folded) — latent compression's three shapes, one week:** compress a corpus into **16 memory tokens** (Memorilla beats full context on FactKG
+      **84.33** vs **80.43**, **108×** fewer); compress conversation into reversible summaries mid-session (`billion-context`, **95–97%** prefix-cache hits claimed,
+      integration testing unfinished); compress each tool observation into **latent tokens in the embedding space** (Coca-Cola, arXiv 2611.06500 — **70.01–89.24%**
+      token cut, "**consistently improving task performance**"; action-sufficiency, not reconstruction). → [[token-economics]]
 
 14. **AI crawler load is a measured tax on open-source infrastructure — and the only working fix
     degrades anonymous access.** kernel.org: ~6M random-commit requests/day, 33% solve Anubis
@@ -1899,10 +1915,10 @@ patterns, and turn them into insights and actionable todos.
      **months apart** beside two VulDB records in one **1.977 s** window; `GitHub_M`'s `{"version": "< 0.57.13"}` is invisible to a `lessThan` census, so one
      `versionBounds()` now feeds all three selectors (**303/3,069** operator-spelled), and `rangeabsent` mis-scored Red Hat's **11 entries / 0 `versions[]`**.
      → [[vuln-supply]] [[disclosure-lag]] [[fact-check]]
-   - **11-08 — the overnight window is a fix-then-record filing desk, and the imgproxy prediction resolves:** Hickory DNS gets **39** VulnCheck
-     records for fixes shipped **65–190 days** earlier (0.26.1 = 05-01, 0.26.2 = 09-03, verified); OpenAM's 10.0/9.8/9.8 trio was fixed **17 days**
-     earlier (16.1.4, 10-22, verified); and 11-01's "GHSA with no CVE id" (imgproxy) now carries `CVE-2026-123614/615/616` — same VulnCheck desk,
-     GHSA and OSV still unmapped. "Still unpatched" would have been exactly backwards for all three. → [[vuln-supply]] [[disclosure-lag]]
+   - **11-08 — the overnight desk measured whole: 125 records in 21 seconds, all fix-then-record:** one NVD window (02:16:36→02:16:57Z) carries **125** records, every
+     one VulnCheck — Hickory DNS **39** (fixes 65–190 days earlier, verified), Vikunja **39** (fixed in 2.7.1 on 10-20), rustls **5** (0.23.45/46, Sep 14/Oct 14), devalue
+     **9** (three fix waves Feb→Mar→Sep, one an incomplete-fix bypass), Tornado **2**, gitoxide **2**, OpenAM **3**, imgproxy **3** — and **23** more the feed never itemized.
+     The desk now matches Chrome's (**213** records / **31 s**, 11-04); "still unpatched" was exactly backwards for all of it. → [[vuln-supply]] [[disclosure-lag]]
 
 21. **The physical layer of connectivity is an active target, and the cheap attack is arson.** Civilian
     satellite ground stations and single regional data centres are defended by fences and geography

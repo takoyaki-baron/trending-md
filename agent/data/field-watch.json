@@ -2,7 +2,7 @@
  "fields": {
   "weaknesses": {
    "field": "weaknesses",
-   "updated": "2026-11-07T14:41:12.624Z",
+   "updated": "2026-11-08T14:43:55.291Z",
    "rows": {
     "CVE-2026-118585": {
      "first": "2026-10-30T04:28:29.604Z",
@@ -14192,7 +14192,8 @@
      "present": false,
      "values": null,
      "kinds": null,
-     "lastModified": "2026-10-29T18:17:33.777"
+     "lastModified": "2026-11-07T19:10:00.137",
+     "version": "2026-11-08T14:43:55.291Z"
     },
     "CVE-2026-103093": {
      "first": "2026-10-30T04:28:29.606Z",
@@ -15021,7 +15022,8 @@
      "present": false,
      "values": null,
      "kinds": null,
-     "lastModified": "2026-10-29T19:17:23.787"
+     "lastModified": "2026-11-07T19:10:00.137",
+     "version": "2026-11-08T14:43:55.291Z"
     },
     "CVE-2026-58119": {
      "first": "2026-10-30T04:28:29.606Z",
@@ -15040,7 +15042,8 @@
      "present": false,
      "values": null,
      "kinds": null,
-     "lastModified": "2026-10-29T19:17:23.863"
+     "lastModified": "2026-11-07T19:10:00.137",
+     "version": "2026-11-08T14:43:55.291Z"
     },
     "CVE-2026-58120": {
      "first": "2026-10-30T04:28:29.606Z",
@@ -15059,7 +15062,8 @@
      "present": false,
      "values": null,
      "kinds": null,
-     "lastModified": "2026-10-29T19:17:23.920"
+     "lastModified": "2026-11-07T19:10:00.137",
+     "version": "2026-11-08T14:43:55.291Z"
     },
     "CVE-2026-6877": {
      "first": "2026-10-30T04:28:29.606Z",
@@ -15828,7 +15832,8 @@
      "present": false,
      "values": null,
      "kinds": null,
-     "lastModified": "2026-10-29T20:17:33.380"
+     "lastModified": "2026-11-07T18:10:00.200",
+     "version": "2026-11-08T14:43:55.291Z"
     },
     "CVE-2026-67205": {
      "first": "2026-10-30T04:28:29.606Z",
@@ -15847,7 +15852,8 @@
      "present": false,
      "values": null,
      "kinds": null,
-     "lastModified": "2026-10-29T20:17:33.453"
+     "lastModified": "2026-11-07T18:10:00.200",
+     "version": "2026-11-08T14:43:55.291Z"
     },
     "CVE-2026-92092": {
      "first": "2026-10-30T04:28:29.606Z",
@@ -17472,7 +17478,8 @@
      "present": false,
      "values": null,
      "kinds": null,
-     "lastModified": "2026-10-29T23:16:55.143"
+     "lastModified": "2026-11-07T18:10:00.200",
+     "version": "2026-11-08T14:43:55.291Z"
     },
     "CVE-2026-92744": {
      "first": "2026-10-30T04:28:29.606Z",
@@ -17521,7 +17528,7 @@
     "from": "2026-10-29",
     "to": "2026-10-29"
    },
-   "observers": 9
+   "observers": 10
   }
  }
 }

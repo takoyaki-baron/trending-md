@@ -2160,3 +2160,19 @@ Laurens Bosscher 的 homelab 长文（HN 429 分）：**10 美元**含运费的 
 ### ZeroClaw：单二进制押注上的 33k★（第一手核实）
 
 `zeroclaw-labs/zeroclaw`——2026-11-08 12:40 UTC+8 核实：**33,226★**、Apache-2.0、建于 2026-02-13、推送至 11 月 7 日 23:33Z、v0.8.7（10 月 27 日）。「一个你配置并运行的单 Rust 二进制」：LLM 提供方（Anthropic、OpenAI、Ollama 等 ~20 家）、30+ 通道（Discord、Telegram、Matrix、邮件、语音、webhook、你自己的 CLI）、工具（shell、浏览器、HTTP、硬件、自定义 MCP）——一切在你机器上、用你的密钥。今天的触发器是 OpenStick 帖；~3 MB idle RSS 这个数是**一位用户在 450 MB 可用内存上的测量**——README 自己不发任何内存基准。模式：agent 运行时的对话再次分裂——假定数据中心的平台，对小到部署问题变成「我的哪台设备」而非「哪家云」的原生运行时。
+
+## 2026-11-08 20:03 —— harness 变更率度量、记忆格式协定，与 agent-first 语言
+
+### Pi 迁移：harness 切换成本坍塌，且变更率数字可复现
+
+一篇 9 月的随笔（caleb.software，11 月 8 日登 HN 首页，367+ 分）弃用 Claude Code 转向 **Pi**——`earendil-works/pi`，2026-11-08 20:30 UTC+8 验证：**120,740★**，MIT，v1.5.0 于 11 月 2 日，当天仍有提交。抱怨是具体的而非氛围：AGENTS.md/CLAUDE.md 双份维护；IDE 只能挂一个会话的 bug「被作为完全无关 bug 的重复关闭」；以及可度量的那条——**「Claude Code 今年 244 个 release，超过 3/4 改动了 system prompt 或工具描述」**。这是任何人都能测的 harness 稳定性度量，而这篇随笔的结构性发现是编码 harness 之间的切换成本已经坍塌：配置是 markdown，约定向 AGENTS.md 收敛，企业化路线图的受益者可以是开源工具包。同一篇里还有一句：「我确信几年后回望，它的发布是新纪元的主要推力之一」——说的是 Claude Code，出现在弃用它的文章里。
+
+### 记忆格式协定：四种互相读不懂的形状
+
+LoreKit 的 Mads Thines（11 月 7 日）清点一个典型 agent 设置把「记忆」放在哪：每仓库的 `AGENTS.md`/`CLAUDE.md` 加 `.cursor/rules/*.mdc`；Anthropic 的 memory tool 写 `/memories` 目录；Copilot 把仓库事实存 GitHub 服务端；memory MCP server 持有 JSONL 知识图谱——「四种形状，谁也读不了谁」。CI agent 学到的教训留在了写下它的工具里。论证引用 OpenTelemetry 先例（OpenTracing 与 OpenCensus 合并为共享数据模型与语义约定）：「问题不是缺工具，是缺协定。」作者披露利益相关（他做 LoreKit，开源）——对「市场自会收敛」的诚实反例。落在 Anthropic 给记忆四组件命名后一天：组件有地图，互通没有。
+
+### clj.rs：一种语言以「agentic coding runtime」为卖点
+
+`csm/clojurust`（alpha；crates.io 名 `cljrs`；验证 **99★**，license NOASSERTION）——「面向 Rust 生态的实验性 Clojure 方言……适合用作 agentic coding runtime」，带持久数据结构、托管宏系统、原生互操作，以及 clj.rs/repl 的浏览器 REPL。同像性 Lisp 加宏系统加 REPL 循环，结构上就是一个把代码当作 agent 可检视、可改写数据的 harness；这个 alpha 是否配得上该主张是开放的。数据点在于卖点本身：为 agent 驱动者设计、人类是第二受众的语言。
+
+→ [[token-economics]] [[dev-tools]]

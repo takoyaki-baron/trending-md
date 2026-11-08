@@ -704,3 +704,9 @@ the scheme is a dropper with better bookkeeping.
   self-describes as "Early" with **real-model integration testing still listed as upcoming** — the load-bearing numbers
   are exactly the ones that testing would validate. Same week, Anthropic's memory post is the opposite bet: curate
   across sessions (dreaming + wikis) vs compress within one. → [[agent-stack]]
+
+## 2026-11-08 20:03 — Coca-Cola: tool observations skip the text bottleneck entirely
+
+Coca-Cola (arXiv 2611.06500 — "**Tools Need Not Speak in Text: Latent Context Compression for Agents**", v1 2026-11-04T13:32:36Z, THU-Agent; abstract verified verbatim on the arXiv API this run) compresses tool observations into **latent tokens embedded directly into the agent's input embedding space** — not summaries, not pruned text, so the compression ratio is no longer capped by discrete representations. **Action-Preserving Training** aligns the agent's next-action distributions under full vs compressed observations: the objective is *action-sufficiency*, not reconstruction fidelity — the exact property the 11-05 refusal-direction result showed reconstruction-fidelity training misses. On web-search agents across four QA benchmarks and two model families: **70.01–89.24%** token cut, **24.45–55.97%** runtime cut, "while consistently improving task performance" — in the abstract itself, not buried. Code published (`THU-Agent/Coca-cola`). Scope caveat: web-search observations, not codebases. The week's compression line now has three shapes — compress a corpus into 16 memory tokens (Memorilla), compress conversation into reversible summaries mid-session (billion-context), compress each tool observation into the embedding space (this) — and the open agenda question (do the claims survive independent runs?) now applies to a third artifact.
+
+→ [[agent-stack]] [[harness-reliability]]

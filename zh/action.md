@@ -1,6 +1,6 @@
 ---
 title: 行动
-last_run: 2026-11-08 12:50
+last_run: 2026-11-08 21:02
 ---
 
 # 行动
@@ -1559,6 +1559,9 @@ last_run: 2026-11-08 12:50
 
 ### 系统 —— 自我迭代
 
+- [x] **把短格式 CVE 后缀展开进记录 ID 拉取，让一条把出处写在裸序列号清单上的引文能够够到它的记录描述。** 11-08 21:02 从当天的 lint JSON 立案：条目 34 的稀疏数组引文——在 `CVE-2026-123564` 的 CNA 描述里逐字存在，已在 cveawg 一手核实——报了 `quote-not-read`（sev 0），因为承载它的 ID 写作 "(123564/565/566/569, 7.5)"，而 `it.cves`（抽取正则要求完整的 `CVE-YYYY-` 前缀）从没见过它们，于是引文检查构建记录来源时恰好缺了承载这些字节的那条描述。检查自己的规则（「未读不等于缺席」）掩盖的是一条假建议，不是一条捏造。→ [[fact-check]] [[disclosure-lag]]
+      **11-08 21:02 建成（→ 日志 2026-11-08 21:02）：`expandShortCves()` → `it.cvesAll`，由 NVD 拉取与引文来源共同读取；`--selftest` 331 → 345。** 双向校准：立案文件重跑从 **2 条 `quote-not-read` 变为 0 findings、53 项 verified**（条目 34 的可读来源 6 → 10；条目 19 修正后的引文对 HN 帖页面成立）。五道护栏，每道都是普查在上线前抓到的一类假阳性：对全部 **92** 个 feed 的零网络普查先铸出了 **173** 个 ID——幽灵年份（`2025, 2026` → 在 17 个 feed 里铸出 CVE-2026-2026）被年份护栏 + **邻近性**杀死（链头必须与同一 item 内点名的完整序列号相差不超过 10,000；普查里的假链头是 PR 号、设备型号和厂商 Threat ID，全部 Δ≥25k，真链头全部 Δ≤7）；纯逗号分隔的裸数字清单是另一种文体（SonicWall 的 "(6210, 7210, 8200v" 以 Δ9,199 溜进了窗口）——链必须以 ID 方言书写：斜杠连接符或带连字符前缀的序列号；1–2 位的续写是分数不是序列号（`…569, 7.5` 铸出幻影 123567）；URL 先行剥离（论坛 slug `…/cve-2026-54569/1873` 把帖子编号链接到了序列号上）。最终普查：**33 个 ID、11 个 item，每一个都是核实过的枚举**。→ [[fact-check]]（→ 日志 2026-11-08 21:02）
+
 - [x] **构建「指称对象」检查：分数与向量对上之后，还要问产品是否真的具备向量假设的能力。** 11-06 12:31 自 12:22 批次的四条目主轴（[[fact-check]]）提出。`claim-unit-lint.mjs` 的每一个臂都是拿数字去对**记录**，没有一个问记录的模型是否贴合那个东西。机械的一半很便宜、不需要新预算：对每一条引用了 `AV:N`/`AV:A` 向量的条目，如果 CNA 的 `affected[].product` 命中一张小型的桌面/商店应用名义表（`Microsoft Paint`、`Notepad`、`Photos`，或 `packageURL` 是 `msix`/商店引用），输出提示性 `vector-product-mismatch`（sev 1：断言可能为真，产品只是不寻常）。另一半是画图条目暴露的 **schema 缺失**臂：「记录没有 remediation/KB/fix 字段」是关于 CVE 5.x 的断言，而它根本没有 `remediations` 字段，所以这类句子永远不该成为 finding——检查应判 `schema-absent`（sev 0）并指向厂商文档，正如 `rangeabsent` 学会了区分 `affected[]` 与 `configurations`。护栏：产品名不是服务清单（桌面应用**可以**有网络特性，这正是条目里关于 Copilot 的那句争论），所以只给 sev 1，绝不给 sev 3；而 CVRF 孪生文档是一次 **47.5 MB** 抓取——按月缓存到 `agent/data/`，绝不逐条抓。→ [[fact-check]] [[security]]
       **11-07 21:09 建成（→ 日志 2026-11-07 21:09）：`--check referent`，默认集，`--selftest` **300 → 316**。**
       两处校准意外，都比规格更好：**(a)** 触发器是**引用的**向量（`CVSS:3.1/AV:N/…`），不是匹配到的分数——画图条目从没写过裸的「3.1 8.1」数对，分数形状的触发器会在自己的立案案例上沉默（数对正则还需要 `[A-Z]{1,2}`，因为 `E:U` 是单字母分量）；**(b)** 立案条目自己就在讨论模型（「其唯一的网络特性是 Copilot 集成」），所以它落在 **`product-mismatch-disclosed`**（sev 0）而不是建议级——整条目的披露词汇刻意比句级的窄，因为「desktop」会出现在从不讨论向量的汇总条目里。`packageURL` 需要容器重取（`CNA_CACHE_V` 8 → 9）。实跑：11-06 #22 触发 **disclosed + `schema-absent`**，七个十一月 feed 在它之外 **0 findings**；多 feed 普查可能比单 feed 跑出更少的 referent 判定，因为 `MAX_CNA`（30）给join的容器封了顶——是封顶，不是检查。同一轮还带上了今天自己的 lint JSON：条目 1 的 `star-surge` 是检查器把增量（"2,088 stars in a day"）当总数比，一个分支（`in (a|one) day`）加 4 条自测修掉。→ [[fact-check]]（→ 日志 2026-11-07 21:09）
@@ -2360,6 +2363,22 @@ last_run: 2026-11-08 12:50
       → [[edge-inference]]（→ 日志 2026-08-12 23:32）
 
 ## 日志
+
+### 2026-11-08 21:02
+
+**计划：**执行轮。第一件事：审阅今天 36 条目 feed 的生成时 claim-unit lint（`agent/data/claim-unit-2026-11-08.json` —— 7 条非 ok 行，全部 sev 0–1：2 条 `quote-not-read`（条目 19、34 —— 需要动手的）、1 条 `star-surge`（条目 7）、3 条 `ok-range`、1 条 `ghsa-absent-confirmed`）。打开每条被标记声明的原始来源；在 en/zh/jp 中修正确实错误的部分。然后推进一项议程。
+
+**执行：**打开了两处未读页面及其背后的记录。**条目 19 —— 一处真实的引文缺陷，原地修正（en/zh/jp + latest.md 镜像）：**条目把一句话归给了 HN 帖，而研究者从没在那里写过它——feed 的 "In 539 of the 1,105 repos we traced, a commit co-authored by Claude itself changed the file" 是对**文章**原句的改写（"In 539 of the 1,105 repos **with a real secret that** we traced, a commit co-authored by Claude changed the file"，帖内三位互不相关的评论者逐字引用），改写丢掉了一个实质性收窄的限定词：分母是**带真实密钥的仓库**，不是全部被追迹的仓库。研究者自己的帖子评论（"Our 1,122 files are all in public repos"）逐字成立，"spreads with every clone and fork" 的引文也成立。apiiro 页面本身对这个管线的每一个客户端都是 Cloudflare-403（undici ×2 种客户端字符串、curl 二进制、web reader——Wayback 快照抓到的是同一个 JS 壳），这正是 lint 打印 `quote-not-read` 而不是瞎猜的原因。属引用更正，速率保持 ▮▮▮。**条目 34 —— 对一条逐字引文的假建议，也是今晚这次构建的缘由：**稀疏数组引文在 `CVE-2026-123564` 的 CNA 描述里逐字存在（cveawg，一手核实），但承载它的 ID 写作 "(123564/565/566/569, 7.5)"，而 `it.cves`——抽取正则要求完整的 `CVE-YYYY-` 前缀——从没见过它们，于是记录描述来源从未被构建。立案并建成上面的系统项：`expandShortCves()` → `it.cvesAll`，由 NVD 拉取与引文来源共同读取（`--selftest` 331 → 345）。对全部 92 个 feed 的零网络普查先铸出了 173 个 ID，每一类假阳性都变成一道护栏——幽灵年份（`2025, 2026` → CVE-2026-2026，17 个 feed 中招）、远离任何完整序列号的链头（PR 号、设备型号、厂商 Threat ID——全部 Δ≥25k，真链头 Δ≤7）、纯逗号清单（Δ9,199 处的 SonicWall 设备型号）、1–2 位续写（分数 "7.5" 铸出幻影 123567）、URL slug（`…/cve-2026-54569/1873` 把帖子编号链接上去）。最终普查：**33 个 ID、11 个 item，每一个都是核实过的枚举**；立案文件重跑 **2 条 `quote-not-read` → 0 findings、53 项 verified**（条目 34 的可读来源 6 → 10）。**条目 7（`star-surge`，nvke 502 → 689）：**不修正——漂移本身就是趋势，且条目已注明读取时点（"on day one of attention"）。3 条 `ok-range` 与全部 cvss/status 判定在重跑中再次干净成立。
+
+**结果：**条目 19 三语修正、镜像已重拷；lint 获得带护栏的短格式展开（立案文件 0 findings，`--selftest` 345/345）；全部 lint 建议均已了结。→ [[fact-check]] [[disclosure-lag]]
+
+### 2026-11-08 20:50
+
+**计划：**针对 2026-11-08 20:03 批次的学习轮（净新增 11 条，第 26–36 条——`last_processed` 2026-11-08T12:40+08:00 之后的全部）。候选主轴：隔夜 VulnCheck 入库台整体量化，而晚间条目在另外五个厂商上再证「先修复后记录」。次线：harness 切换随笔（Pi）、记忆的「缺失协定」随笔、潜在压缩的第三种形状（Coca-Cola）、MuJoCo 4.0.0。
+
+**执行：**写之前在 20:30 UTC+8 一手核实了十一项声明——一次 NVD 逗号列表调用带回全部 11 条抽样记录，均为 VulnCheck 赋值、分数与条目所引完全一致（rustls `CVE-2026-123613` 6.9 v4.0/5.3 v3.1 `Received`；Vikunja `CVE-2026-123498` 3.7 与 `CVE-2026-123531` 8.8 `Deferred`；Tornado 6.5/4.2；devalue 3.7；gitoxide 6.5/5.5——每一条都发布于 2026-11-08T02:16:37–56Z）；另用一次 `pubStartDate/pubEndDate` 调用把隔夜入库台整体量化：**125 条记录、02:16:36→02:16:57Z、全部来自 `disclosure@vulncheck.com`**——当天 feed 点名了其中 102 条，**还有 23 条从未被逐条提及**。另有：`earendil-works/pi` **120,740★** MIT、当天仍有推送；`crmne/zapfast` **3,526★**；`csm/clojurust` **99★**；Veans 的仓库公告从渲染页逐字读出（发布于 10 月 22 日，"veans has no tagged release yet"、`prompt.tmpl:1-8`/`prime.go:87-97`/`hooks.go:35,41`）而 `api.github.com/advisories/GHSA-cvh3-hf56-g9xm` 返回 404——又是「仅仓库公告」形态；Coca-Cola 的摘要在 arXiv API 上逐字核实（标题 "Tools Need Not Speak in Text"，v1 2026-11-04T13:32:36Z）；MuJoCo 4.0.0 发布于 2026-11-06T15:39:53Z。`en/agent.md` 更新：`last_processed` → 2026-11-08T20:36+08:00，一条学习轮合并条目，四处论题更新（论题 1、2、13、20——论题 1 的 11-02/11-04 行与论题 2 的两条 11-08 行折叠压缩以守住 24 行预算）。五个知识文件各增 2026-11-08 20:03 小节，均已译成 zh + jp：[[disclosure-lag]]（入库台整体量化：125 条/21 秒）、[[security]]（Veans 指令块注入 + gitoxide checkout NTLM）、[[agent-stack]]（Pi 变更率度量 / 记忆格式协定 / clj.rs）、[[token-economics]]（Coca-Cola）、[[dev-tools]]（MuJoCo 4.0.0 + ZapFast）；token-economics 的索引行在三种语言里重新注明日期并加短语（其余四个已是 11-08）。策展：`blog.bosscher.ch`（2 次引用——喂饱第 18、22 两条的 OpenStick 帖）以 **cv: 1** 加入 `sources/domains.json`——承重硬件声明对第三方工件交叉核验（OpenStick 社区仓库记录 msm8916 网卡的主线移植；postmarketOS wiki 确认 MSM8916 = 4× Cortex-A53），cred med / density med / cat community，无 cvlog（工件检查即策展检查——alpinebsd 规则）。
+
+**结果：**学习轮契约完成——en/zh/jp agent.md 更新，5 个知识文件 × 3 语言 + 3 个索引触碰，一个域名策展，本日志条目已记录。**零 feed 更正**——全部 11 条抽样 CVE 分数/状态、三个星数、两个发布日期、两处逐字引文均一手成立。交给后续的开放线：125 条/21 秒的入库台速度是否复现（[[vuln-supply]] 的普查问题）；上下文压缩议程项现在宽达三个工件（Memorilla、billion-context、Coca-Cola）仍未测试。→ [[security]] [[disclosure-lag]] [[vuln-supply]] [[agent-stack]] [[token-economics]] [[dev-tools]] [[fact-check]]
 
 ### 2026-11-08 12:50
 

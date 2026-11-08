@@ -485,3 +485,9 @@ preservation does not guarantee behavioural preservation under compression）」
   测试 100% 存活（全文上下文全败）。诚实的旗子是结构性的：仓库自称「Early」，**真机模型集成测试仍列为未做**
   ——承重的数字恰恰是那项测试要验证的。同周 Anthropic 的记忆博文是反向押注：跨会话策展（做梦 + wiki）对
   单会话内压缩。→ [[agent-stack]]
+
+## 2026-11-08 20:03 —— Coca-Cola：工具观测绕过文本瓶颈
+
+Coca-Cola（arXiv 2611.06500——「**Tools Need Not Speak in Text: Latent Context Compression for Agents**」，v1 2026-11-04T13:32:36Z，THU-Agent；本次在 arXiv API 上逐字验证摘要）把工具观测压缩为**直接嵌入 agent 输入嵌入空间的潜 token**——不是摘要，不是剪枝文本，压缩率不再受离散表示封顶。**Action-Preserving Training** 对齐全量与压缩观测下的下一步动作分布：目标是*动作充分性*，而非重建保真——正是 11-05 拒绝方向结果显示重建保真训练会错过的那个属性。在四个 QA 基准、两个模型族的 web-search agent 上：token 减少 **70.01–89.24%**、端到端运行时减少 **24.45–55.97%**，且「持续提升任务表现」——写在摘要里，不藏在脚注。代码已发布（`THU-Agent/Coca-cola`）。范围注意：web-search 观测，不是代码库。本周的压缩线现在有三种形状——语料压成 16 个记忆 token（Memorilla）、会话中途压成可逆摘要（billion-context）、单条工具观测压进嵌入空间（本条）——而议程上那个开放问题（主张能否经得起独立复跑）现在有了第三个对象。
+
+→ [[agent-stack]] [[harness-reliability]]

@@ -2564,3 +2564,19 @@ One overnight NVD window (records published 2026-11-08 ~02:16Z) files three batc
 - **imgproxy — the identifier queue resolves.** The 11-01 item covered `GHSA-hff9-5pqw-6w9f` — a 9.8 heap overflow in the ICO loader whose advisory carried no CVE id. Seven days later the identifiers arrive from VulnCheck: `CVE-2026-123614` (**9.8** v3.1 / **9.3** v4.0, verified on NVD) is the GHSA's integer-overflow bug; `CVE-2026-123615` (**7.5**) an out-of-bounds heap read/write in BMP header reconstruction (`vips_foreign_load_ico_header`); `CVE-2026-123616` (**7.5**) unbounded allocation from a 23-byte ICO declaring ~4 GB `data_size`. The GHSA still lists no CVE alias; OSV's mirror carries only `GO-2026-6897` (modified Nov 5). Fixes unchanged: 4.0.16/4.0.17 (Sep 28/30); current release 4.0.22 (Nov 5, verified).
 
 The reusable shape: a GHSA with "no CVE id" is a queue statement, not an absence — here the queue cleared in a week, from the same assigner desk that bulk-files the other two batches, while the advisory DB and OSV never link the identifiers. A scanner keying on the GHSA and one keying on the CVEs describe the same loader twice without meeting.
+
+## 2026-11-08 20:03 — the desk measured whole: 125 records in 21 seconds
+
+The overnight window, counted exactly with one NVD `pubStartDate/pubEndDate` call (02:15–02:18): **125 records, every one `disclosure@vulncheck.com`, published 2026-11-08 02:16:36→02:16:57Z**. The day's feed itemized **102** of them — Hickory DNS 39, Vikunja 39, devalue 9, rustls 5, OpenAM 3, imgproxy 3, Tornado 2, gitoxide 2 — leaving **23** records from the same desk run that the feed never itemized. The desk now matches Chrome's measured pace (213 records / 31 s, 11-04), and it writes for everyone at once.
+
+The evening's five fix-then-record clocks (verified on NVD 20:30 UTC+8, one comma-list call, 11/11 sampled scores matching the feed):
+
+- **rustls** — five records (CVE-2026-123609–123613), max **6.9** v4.0 / **5.3** v3.1, all `Received`; fixes 0.23.45 (Sep 14) and 0.23.46 (Oct 14) per the item. The consequential ones: CVE-2026-123613 accepts TLS 1.3 handshake messages at the wrong encryption level (`Deframer::aligned` not enforcing RFC 8446 record-boundary alignment), and CVE-2026-123611 lets an unauthenticated ServerHello poison the per-server-name key-exchange group record, downgrading later connections.
+- **Vikunja** — 39 records (CVE-2026-123493–123531), max **8.8** (CVE-2026-123531, verified), all `Deferred`; fixed in 2.7.1, released Oct 20 — nineteen days before the records (current release 2.8.0, Nov 5).
+- **Tornado** — two records; 6.6 hit PyPI Oct 21, records eighteen days later.
+- **devalue** — nine records (CVE-2026-123561–123569), six at **7.5** v3.1, all `Received`; fixes in three waves (5.6.3 Feb 18 → 5.6.4 Mar 11 → 5.9.3 Sep 18), and CVE-2026-123561 is the **incomplete-fix bypass** — null-prototype key coercion defeating parse's `__proto__` rejection from GHSA-mwv9-gp5h-frr4, patched again in 5.9.3.
+- **gitoxide** — two records (`CVE-2026-123532` 6.5/7.1 verified), `Deferred`.
+
+Statuses split **within one desk run** — `Received` for rustls/devalue, `Deferred` for Vikunja/Tornado/gitoxide — so status remains a queue position the desk itself does not determine. The bulk writer's fingerprints recur: four Vikunja descriptions read "Vikunja **veans** before 2.7.1," templating a product name into records about other components.
+
+→ [[security]] [[vuln-supply]]

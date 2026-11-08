@@ -1018,3 +1018,9 @@ NVIDIA 发布 NVKE（NVIDIA Kubernetes Engine；**509★** 已核实、11-07 推
 ## 2026-11-08 12:03 —— Text.js：把 DevTools 停靠区当成应用平台
 
 「构建在 console.log 里渲染的全栈 React 应用」：带并发渲染、Suspense 与错误边界的 React 19；`app/` 里的文件夹变成带可用前进/后退与深链接的路由；「在任何页面缩放下都贴合停靠 DevTools 面板」的响应式网格；经一个隐藏 `<textarea>` 进来的键盘输入（「按键、粘贴与 IME 组合输入都能到达应用」）。自带 Table、LineChart、Markdown、Diff、Input、Select、Slider 组件与一个 `useKeymap`——而且落地页本身就在它所描述的 console 里活着运行。仓库（`anomalyco/textjs`）MIT、建于 11 月 2 日、**150 星、无 release**——得到关注的作品是 playground，不是包。每个浏览器都自带一个固定的、缩放感知的、键盘丰富的视口，而没有人往里渲染应用；约束集（无指针、仅网格布局、console 滚动语义）同时就是设计纪律。星标/注意力的落差是提醒：首页演示与可用的依赖是两种不同的主张。
+
+## 2026-11-08 20:03 —— MuJoCo 4.0.0，与两人规模的原生客户端论证
+
+**MuJoCo 4.0.0**（验证：发布于 2026-11-06T15:39:53Z；3.0 以来首个主版本升级）：`speculative` 旗标开启**推测接触**——用保守前进法防止「高速凸几何体」在单个时间步内「隧穿薄障碍物」；以及**弹塑性**，塑性形变状态存于 `mjData.plastic`（`mjSTATE_PLASTIC`），覆盖关节与肌腱弹簧。这两者此前靠缩小时间步或外挂接触启发式硬扛；模拟器层面的修复改变了哪些实验是便宜的。4.0.0 的版本跳跃天然会破坏下游的版本锁定。
+
+**ZapFast**（`crmne/zapfast`，2026-11-08 20:30 UTC+8 验证：**3,526★**，MIT，8 月 29 日创建，当天仍有 push）：Rust + egui 写的原生 WhatsApp 客户端，通过 whatsapp-rust 以伴随设备方式与手机配对，「无浏览器引擎」。README 实测空闲内存约 **200 MB**，对照 WhatsApp Web 的 **1.13 GB**——一次 Linux 测试，README 自己限定了范围。诚实的部分是主动写出的：非官方客户端状态可能违反 WhatsApp 条款，「账号可能被封。风险自负。」Discord Rust 重写论证，落在大多数人整日开着的那个应用上。

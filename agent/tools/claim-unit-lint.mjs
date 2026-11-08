@@ -353,6 +353,71 @@ function sentenceInText(text, index) {
   return text.slice(start, e ? index + e.index + 1 : Math.min(text.length, index + 240));
 }
 
+/* SHORT-FORM CVE SUFFIXES (added 2026-11-08 21:02, from item 34 of the same day's feed — the
+ * filing case is a FALSE `quote-not-read` on a sentence that is verbatim in the CNA container).
+ * An item can attribute a quotation to a record it names ONLY as a bare or dash-prefixed serial —
+ * "`uneval` (123564/565/566/569, 7.5)", "and -123569" — and `it.cves` (the regex above needs the
+ * full `CVE-YYYY-` prefix) never sees those ids, so the quotation check built its record sources
+ * without the one description that carries the quoted bytes, and the check's own rule ("unread is
+ * not absent") downgraded a verifiable quote to an advisory. `it.cvesAll` = cves + the expanded
+ * ids; the NVD pull and the quotation sources both read it.
+ * Guards, each from a live shape in the same batch:
+ *   (a) a RANGE is not a list — `123561–123569` and `to`/`through` forms are the idrange check's
+ *       domain, and expanding a bulk CNA's block would grow the 25-id pull chunks for nothing, so
+ *       only list separators (`/`, `,`, `;`, `、`, `and`) join a chain, and a lone serial with no
+ *       continuation is never expanded;
+ *   (b) the year comes from the item's full ids, and only when they agree — a multi-year item
+ *       keeps its ambiguity rather than guess;
+ *   (c) a CONTINUATION serial shorter than its chain head borrows the head's leading digits
+ *       (`123564/565` → 123565), every expanded serial must be ≥4 digits, and a run of 1–2 digits
+ *       is a score or a counter (`…569, 7.5` borrowed five digits and minted a phantom `123567`),
+ *       so comma-formatted counters (`1,122`, `64,781`, `12,345,678`) never form a chain;
+ *   (d) PROXIMITY decides (added in the same hour, from a zero-network sweep over all 92 feeds):
+ *       the head must sit within 10,000 of a full serial named in the same item, because a
+ *       short-form list borrows the digits of a full id the writer just wrote, and one CNA's
+ *       records are contiguous. The sweep's false heads were all FAR — pull-request numbers
+ *       (24858/24868 vs serials 120210+), appliance models (6210, 7210), vendor Threat IDs
+ *       (510046/510047) — and its true heads were all NEAR (Δ≤7: the filing list, `123595/123596`,
+ *       a 96652-family). A 4-digit serial that parses as a year (`2025, 2026` → phantom
+ *       CVE-2026-2026 in 17 feeds) is skipped outright;
+ *   (e) JOINERY — the chain must be written in the id-enumeration dialect: a slash joiner
+ *       (`123564/565`, `80229/-80230`, `96754/96755/96759`) or a dash-prefixed serial
+ *       (`-80442, -81657, …`, `and -123569`). A pure comma list of bare numbers is a different
+ *       genre — the sweep's survivor was SonicWall's "SMA 1000 appliances (6210, 7210, 8200v)",
+ *       hardware models that slipped inside the proximity window on an unrelated serial (Δ9,199);
+ *   (f) a cap of 12 per item, because the cost of an id is an NVD record fetch, not a regex step. */
+function expandShortCves(text) {
+  const full = [...text.matchAll(/CVE-(\d{4})-(\d{3,7})/g)].map((m) => ({ year: m[1], serial: Number(m[2]) }));
+  if (!full.length) return [];
+  const years = [...new Set(full.map((f) => f.year))];
+  if (years.length !== 1) return [];
+  const year = years[0];
+  const serials = full.map((f) => f.serial);
+  const near = (serial) => serials.some((s) => Math.abs(s - serial) <= 10_000);
+  const CHAIN = /\b(\d{4,7})(?:(?:\s*[,/;、]\s*(?:and\s+)?|\s+and\s+)-?(\d{1,7}))+/gi;
+  const out = new Set();
+  /* (g) URLs are stripped before the scan: a forum slug `…/cve-2026-54569/1873` chained the full
+   * serial with the POST NUMBER and minted a phantom `51873` (2026-08-27 #8, the sweep's last
+   * false positive). Full ids still come from the raw text — a URL that names one is real. */
+  const bare = text.replace(/https?:\/\/\S+/g, ' ');
+  for (const m of bare.matchAll(CHAIN)) {
+    const head = m[1];
+    if (!near(Number(head)) || (head.length === 4 && Number(head) >= 1900 && Number(head) <= 2100)) continue;
+    if (!/\//.test(m[0]) && !/-\d/.test(m[0].slice(head.length))) continue; // (e) joinery
+    out.add(`CVE-${year}-${head}`);
+    for (const raw of m[0].slice(head.length).matchAll(/\d{1,7}/g)) {
+      if (raw[0].length < 3) continue;
+      let serial;
+      if (raw[0].length >= head.length) serial = raw[0];
+      else serial = head.slice(0, head.length - raw[0].length) + raw[0];
+      if (serial.length < 4) continue;
+      if (serial.length === 4 && Number(serial) >= 1900 && Number(serial) <= 2100) continue;
+      out.add(`CVE-${year}-${serial}`);
+    }
+  }
+  return [...out].slice(0, 12);
+}
+
 function parseItems(text) {
   const lines = text.split('\n');
   const items = [];
@@ -373,6 +438,7 @@ function parseItems(text) {
     it.text = `${it.title}\n${it.body}`;
     it.plain = strip(it.text);
     it.cves = [...new Set(it.text.match(/CVE-\d{4}-\d{3,7}/g) ?? [])].sort();
+    it.cvesAll = [...new Set([...it.cves, ...expandShortCves(it.text)])].sort();
     const repos = new Set();
     for (const m of it.text.matchAll(/github\.com\/([\w.-]+)\/([\w.-]+)/g)) {
       const slug = `${m[1]}/${m[2]}`.replace(/\.git$/, '');
@@ -4351,7 +4417,7 @@ async function checkQuote(it, nvd, cna) {
     else { unread += 1; if (t.text) shells.push(p.label); }
   }
   // (3) the records — a field quotation is a claim about a field, not about a page
-  const cves = it.cves ?? [];
+  const cves = it.cvesAll ?? it.cves ?? [];
   const kev = cves.length ? kevFeed() : new Map();
   for (const id of cves) {
     const rec = nvd.get(id);
@@ -5268,6 +5334,52 @@ if (SELFTEST) {
   t('quote: no readable source is unread, not absent',
     checkQuotes(mk('t', 'it says "The model was not trained. A compiler computed its weights."'), []).map((x) => x.verdict),
     ['quote-not-read']);
+  /* Short-form CVE suffixes (added 2026-11-08 21:02, from the same day's item 34): a quote
+   * attributed to a record named only as a serial list never reached the record-description
+   * sources, and a verbatim quote read as `quote-not-read`. The expansion is conservative —
+   * each guard below is a live shape from the filing batch. */
+  t('expand: the filing shape — a slash list of serials with continuations',
+    expandShortCves('CVE-2026-123561 is one. Around them, a sparse-array family in `uneval` (123564/565/566/569, 7.5): "quote"'),
+    ['CVE-2026-123564', 'CVE-2026-123565', 'CVE-2026-123566', 'CVE-2026-123569']);
+  t('expand: a comma-and list with dash-prefixed serials after a range',
+    expandShortCves('six of them 7.5 on CVSS 3.1 (CVE-2026-123562 through -123566, and -123569). The fixes arrived'),
+    ['CVE-2026-123566', 'CVE-2026-123569']);
+  t('expand: a dashed RANGE is not a list and expands to nothing',
+    expandShortCves('Nine CVE records (CVE-2026-123609–123613) for a library'),
+    []);
+  t('expand: a `to`/`through` range is the idrange check\'s domain, not a list',
+    expandShortCves('CVE-2026-123493 to CVE-2026-123531 shipped together'),
+    []);
+  t('expand: comma-formatted counters never form a chain (runs too short)',
+    expandShortCves('CVE-2026-123493 drew 1,122 stars and 64,781 commits'),
+    []);
+  t('expand: a multi-year item keeps its ambiguity rather than guess',
+    expandShortCves('CVE-2026-123561 and CVE-2025-99999 shipped; the family (123564/565) followed'),
+    []);
+  t('expand: a lone serial is not a list',
+    expandShortCves('the family (123564) sits around CVE-2026-123561'),
+    []);
+  t('expand: the cap holds at 12 ids',
+    expandShortCves('CVE-2026-123101 family: 123102/103/104/105/106/107/108/109/110/111/112/113/114/115'),
+    ['CVE-2026-123102', 'CVE-2026-123103', 'CVE-2026-123104', 'CVE-2026-123105', 'CVE-2026-123106', 'CVE-2026-123107', 'CVE-2026-123108', 'CVE-2026-123109', 'CVE-2026-123110', 'CVE-2026-123111', 'CVE-2026-123112', 'CVE-2026-123113']);
+  t('expand: PR/model lists FAR from any full serial expand to nothing (the 92-feed sweep\'s false class)',
+    expandShortCves('CVE-2026-120210 shipped late; plus upstream pull requests 24858, 24868 and 25341. Affected models 6210, 7210.'),
+    []);
+  t('expand: a year pair is never a serial list (17 feeds minted a phantom CVE-2026-2026)',
+    expandShortCves('CVE-2026-120210 was filed across 2025, 2026 and 2027'),
+    []);
+  t('expand: a slash list adjacent to a full id expands (the 123595/123596 shape)',
+    expandShortCves('the serious ones are DNSSEC validation flaws: CVE-2026-123595/123596 (8.8)'),
+    ['CVE-2026-123595', 'CVE-2026-123596']);
+  t('expand: a dash-prefixed enumeration expands (the 80441, -80442 shape)',
+    expandShortCves('fixes published to NVD on Sep 18 — CVE-2026-80441, -80442, -81657 — plus CVE-2026-75878'),
+    ['CVE-2026-80441', 'CVE-2026-80442', 'CVE-2026-81657']);
+  t('expand: a pure comma list of bare numbers is a different genre (SonicWall appliance models)',
+    expandShortCves('CVE-2026-15409 disclosed two flaws in SMA 1000 appliances (6210, 7210, 8200v on 12.4.3)'),
+    []);
+  t('expand: a URL slug cannot chain its post number onto a full serial',
+    expandShortCves('[`advisory`](https://senaite.org/t/senaite-security-fixes-june-2026-cve-2026-54569/1873) for CVE-2026-54569'),
+    []);
   /* A page that answers 200 with a bot wall is unfetched text, and a fabrication claim needs every
    * cited page read. Both halves added 2026-11-01 after one unread Drupal advisory produced four
    * sev-3 findings about the feed. */
@@ -5587,7 +5699,7 @@ function pullCovers(pull, id) {
  * The statement was about the pull, not the registry, which is the "unread is not absent" defect
  * wearing a different hat (fixed 2026-11-02 12:34, while calibrating the stopping-point check). */
 if (!NO_NET && (CHECKS.has('cvss') || CHECKS.has('temporal') || CHECKS.has('status') || CHECKS.has('cwe') || CHECKS.has('field') || CHECKS.has('range') || CHECKS.has('rangeabsent') || CHECKS.has('referent') || STATUS_WATCH || CHECKS.has('quotation'))) {
-  const cves = [...new Set([...parsed.flatMap((f) => f.items.flatMap((it) => it.cves)), ...EXTRA_IDS])];
+  const cves = [...new Set([...parsed.flatMap((f) => f.items.flatMap((it) => it.cvesAll ?? it.cves)), ...EXTRA_IDS])];
   const CHUNK = 25;
   for (let i = 0; i < cves.length; i += CHUNK) {
     if (i) await new Promise((r) => setTimeout(r, 6_500));

@@ -4342,3 +4342,15 @@ Hickory DNS（原 trust-dns，Rust 生态的解析器/递归器）在一夜之�
 ### OpenAM：经由它自己的通知 WebSocket 的 10.0 会话令牌窃取
 
 `CVE-2026-123551` 是 **10.0**（`AV:N/AC:L/PR:N/UI:N/S:C`——核实：v3.1 `Primary` 与 v4.0 `Secondary` 上都是 10.0，VulnCheck）：未认证攻击者从通知 WebSocket 读取活体会话令牌，经旧 Liberty ID-FF 端点上的未验证内部转发绕过仅 agent 检查，收集 `iPlanetDirectoryPro` 令牌——OpenAM 的主会话 cookie——以劫持用户与管理员会话。同批两条：`CVE-2026-123550`（**9.8**）——当 `WantAssertionsSigned` 为 false 时，SAML v2 服务提供者在 ECP (PAOS) 与 HTTP-Artifact 绑定上接受未签名断言；`CVE-2026-123549`（**9.8**）——自注册无视 Valid Creation Attributes 列表，让匿名攻击者设置含组成员资格在内的受限属性。全部修复于 **16.1.4，2026-10-22 发布**（已核实）——比记录早十七天。
+
+## 2026-11-08 20:03 —— 待办应用的公告里出现自家编码代理 CLI，以及一次不需要执行代码的 checkout 凭据泄露
+
+### Veans：项目标题被渲染进代理的权威指令块（一手验证）
+
+Vikunja 隔夜 39 条记录中有三条指向 **Veans**（`code.vikunja.io/veans`）——Vikunja 自己的编码代理 CLI。`CVE-2026-123498`（**3.7** v3.1 / 2.1 v4.0，已验证；公告严重级 **Low**）：拥有写权限的项目成员设置项目标题或任务内容，veans 将其逐字送进编码代理的指令。仓库公告（GHSA-cvh3-hf56-g9xm，发布于 **10 月 22 日**——从渲染的仓库页面验证；全局公告 API 返回 404，又是「仅仓库公告」形态）把机制点名到行：`prompt.tmpl:1-8` 与 `prime.go:87-97` 把字段渲染进权威块，在 **SessionStart 与 PreCompact** 上预先执行（`hooks.go:35,41`）。它的边界分析是该类的范本：四个渲染字段里三个来自 `.veans.yml`，「这不算数，因为仓库本来就控制 CLAUDE.md」——真正的边界是**服务器提供**的标题与任务文本。伴生 `CVE-2026-123499`（5.9）：不受信任 checkout 里的 `.veans.yml` 把 `VEANS_TOKEN` 的 Bearer 认证指向攻击者控制的服务器。「Veans 尚无 tagged release」；处方的修复形状是信任门加把远端元数据隔离在权威节之外。本周的规律：JetBrains 的 89 条公告带上了自家 Junie CLI，如今待办应用的公告也带上了自家 CLI。
+
+### gitoxide：checkout 时捕获 NTLM，代码尚未运行
+
+`CVE-2026-123532`（6.5 v3.1 / 7.1 v4.0，已验证）：`gix-fs` 0.24.1 之前——在 Windows 上启用 symlink 时，精心构造仓库中的 UNC symlink 目标让 checkout 自身的文件系统探测向外伸手，泄露本机 NTLM 握手。无需 install hook、无需编辑器任务、无需代码执行：外泄通道就是「just clone it」本身。伴生 `CVE-2026-123533`：`gix-commitgraph` 0.42.0 之前的 DoS（gitoxide 0.61.0 之前）。gitoxide 日益作为库嵌入其他工具的 git 路径，受影响集合大于其 CLI 用户群。
+
+→ [[disclosure-lag]] [[vuln-supply]]

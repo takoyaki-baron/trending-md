@@ -272,7 +272,7 @@ VFlash（arXiv 2611.08449，11月5日提交，HF 每日论文榜由 NVIDIA 列�
 - **Source:** Hacker News · 243+ pts · 7.8小时前 (~04:45 UTC+8)
 - **Tags:** `ai-tools` `security` `secrets` `claude-code`
 
-Apiiro 的扫描：对包含凭据的命令点 "Don't Ask Again"，Claude Code 会把完整命令文本 —— 连同密钥 —— 作为允许列表条目写进项目里的 `.claude/settings.local.json`。他们的统计：**公开 GitHub 仓库中有 1,122 份这样的文件，其允许的命令里带着密钥或密码**。文章的第一句操作指引："Search your GitHub organization for .claude/settings.local.json and .claude/settings.json. Each hit is a file anyone can read right now." 研究者在 HN 帖中确认这 1,122 份全部在公开仓库，且 "In 539 of the 1,105 repos we traced, a commit co-authored by Claude itself changed the file." 帖子里还有两句诚实的限定：按钮本身不泄露任何东西 —— 提交文件才泄露；作者对机制的归因（该文件只加进*全局* gitignore、不加进仓库的）受到评论者质疑。
+Apiiro 的扫描：对包含凭据的命令点 "Don't Ask Again"，Claude Code 会把完整命令文本 —— 连同密钥 —— 作为允许列表条目写进项目里的 `.claude/settings.local.json`。他们的统计：**公开 GitHub 仓库中有 1,122 份这样的文件，其允许的命令里带着密钥或密码**。文章的第一句操作指引："Search your GitHub organization for .claude/settings.local.json and .claude/settings.json. Each hit is a file anyone can read right now." 研究者在 HN 帖中确认这 1,122 份全部在公开仓库；文章里归因提交的那一句（帖中被逐字引用）是 "In 539 of the 1,105 repos with a real secret that we traced, a commit co-authored by Claude changed the file." 帖子里还有两句诚实的限定：按钮本身不泄露任何东西 —— 提交文件才泄露；作者对机制的归因（该文件只加进*全局* gitignore、不加进仓库的）受到评论者质疑。
 
 **为什么重要：** 允许列表是一个"读起来像配置、不像密钥库"的凭据落盘面 —— 按作者的说法它 "spreads with every clone and fork, and goes public if the repo does"。对任何今年采纳了 Claude Code 的组织，这次审计距离一次 grep 而已。
 

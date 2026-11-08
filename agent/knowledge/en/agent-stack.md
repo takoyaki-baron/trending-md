@@ -3278,3 +3278,19 @@ Laurens Bosscher's homelab write-up (429 HN points): for **$10** including shipp
 ### ZeroClaw: 33k★ on a single-binary bet (verified first-hand)
 
 `zeroclaw-labs/zeroclaw` — verified 2026-11-08 12:40 UTC+8: **33,226★**, Apache-2.0, created 2026-02-13, pushed 23:33Z Nov 7, v0.8.7 (Oct 27). "A single Rust binary you configure and run": LLM providers (Anthropic, OpenAI, Ollama, ~20 others), 30+ channels (Discord, Telegram, Matrix, email, voice, webhooks, your own CLI), tools (shell, browser, HTTP, hardware, custom MCP) — everything on your machine, with your keys. Today's trigger is the OpenStick post; the ~3 MB idle RSS figure is **one user's measurement on 450 MB of usable RAM** — the README publishes no memory benchmark of its own. The pattern: the agent-runtime conversation splits again — platforms that assume a datacenter vs a native runtime small enough that the deployment question becomes *which of my devices*, not *which cloud*.
+
+## 2026-11-08 20:03 — the harness churn metric, the memory-format agreement, and the agent-first language
+
+### Pi migration: harness switching cost collapses, and the churn number is reproducible
+
+A September essay (caleb.software, HN front page Nov 8, 367+ points) retires Claude Code for **Pi** — `earendil-works/pi`, verified 2026-11-08 20:30 UTC+8: **120,740★**, MIT, v1.5.0 Nov 2, pushed today. The complaints are specific rather than vibes: AGENTS.md/CLAUDE.md duplication; an only-one-session-per-IDE bug "closed as a duplicate of a totally unrelated bug"; and the measurable one — **"244 releases to Claude Code this year; over 3/4 of these changed the system prompt or tool descriptions."** That is a harness-stability metric anyone can measure, and the essay's structural finding is that switching cost between coding harnesses has collapsed: configs are markdown, conventions converge on AGENTS.md, and the beneficiary of an enterprise-tilted roadmap can be an open-source toolkit. The same essay: "I'm certain that in a few years we'll all look back at its release as one of the major drivers of this new era" — about Claude Code, in the piece that retires it.
+
+### The memory-format agreement: four shapes that can't read each other
+
+LoreKit's Mads Thines (Nov 7) inventories what a typical agent setup remembers and where: `AGENTS.md`/`CLAUDE.md` per repo plus `.cursor/rules/*.mdc`; Anthropic's memory tool writing to a `/memories` directory; Copilot keeping repo facts server-side on GitHub; a memory MCP server holding a JSONL knowledge graph — "four different shapes, and none of them can read the others." A lesson your CI agent learns stays in the tool that wrote it. The argument is the OpenTelemetry precedent (OpenTracing + OpenCensus merging into a shared data model and semantic conventions): "The problem isn't a missing tool. It's a missing agreement." The author discloses the stake (he builds LoreKit, open source) — the honest counterexample to "the market will converge on its own." Lands one day after Anthropic named memory's four components: the components have a map, the interchange does not.
+
+### clj.rs: a language pitched as "agentic coding runtime"
+
+`csm/clojurust` (alpha; crates.io as `cljrs`; verified **99★**, license NOASSERTION) — "an experimental Clojure dialect targeting the Rust ecosystem… suitable for use as an agentic coding runtime," with persistent data structures, a hosted macro system, native interop, and a browser REPL at clj.rs/repl. A homoiconic Lisp with a macro system and a REPL loop is structurally a harness that treats code as data the agent can inspect and rewrite; whether this alpha earns the claim is open. The datapoint is the pitch itself: languages designed for agent drivers with humans as the second audience.
+
+→ [[token-economics]] [[dev-tools]]

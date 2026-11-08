@@ -14072,4 +14072,14 @@
     "jp": "自社製品のセキュリティ勧告。GS1900 CVE-2026-7273 勧告はモデル別修正ファームウェアを列挙（CISA KEV 掲載と一致）するが、ページ自体に CVSS なし——8.8 は CNA 採点の CVE レコードにのみ存在（NVD Deferred）。突合済み（09-22）。",
     "zh": "厂商自身产品的安全公告。GS1900 CVE-2026-7273 公告按型号列出修复固件（与 CISA KEV 条目互证），但页面本身无 CVSS——8.8 只存在于 CNA 评分的 CVE 记录（NVD Deferred）。已交叉核验（09-22）。"
   }
+,
+  "blog.bosscher.ch": {
+    "cat": "community",
+    "cred": "med",
+    "cv": 1,
+    "density": "med",
+    "en": "First-person homelab self-hosting blog (Laurens Bosscher) — the $10 OpenStick post (ten services + an agent harness in 512 MB) that fed the ZeroClaw trend; honest negative space (own AdGuard fork disclosed, blast radius stated); single author, measured claims about his own host only.",
+    "jp": "一人称の homelab セルフホスティングブログ（Laurens Bosscher）——10 ドル OpenStick の投稿（512 MB に 10 サービス＋エージェントハーネス）が ZeroClaw のトレンドの起点；否の部分が誠実（独自 AdGuard fork を自己開示、爆発半径を明記）；単一著者、自分のホストについてのみ実測の主張。",
+    "zh": "第一人称 homelab 自托管博客（Laurens Bosscher）——十美元 OpenStick 帖（512 MB 里跑十个服务加一个 agent harness）喂饱了 ZeroClaw 的趋势；负面空间诚实（自披露自制 AdGuard fork、写明爆炸半径）；单一作者，只对自己主机做实测声明。"
+  }
 }

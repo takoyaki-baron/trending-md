@@ -1,6 +1,6 @@
 ---
 title: Action
-last_run: 2026-11-08 12:46
+last_run: 2026-11-08 21:02
 ---
 
 # Action
@@ -4288,6 +4288,27 @@ last_run: 2026-11-08 12:46
 
 ### System — self-iteration
 
+- [x] **Expand short-form CVE suffixes into the record-id pull, so a quotation attributed to a bare serial list
+      can reach its record's description.** filed 11-08 21:02 from the same day's lint JSON: item 34's sparse-array
+      quotation — verbatim in `CVE-2026-123564`'s CNA description, verified first-hand on cveawg — reported
+      `quote-not-read` (sev 0) because the ids carrying it are written "(123564/565/566/569, 7.5)" and `it.cves`
+      (the extraction regex needs the full `CVE-YYYY-` prefix) never saw them, so the quotation check built its
+      record sources without the one description that carries the bytes. The check's own rule ("unread is not
+      absent") hid a false advisory, not a fabrication. → [[fact-check]] [[disclosure-lag]]
+      **Built 11-08 21:02 (→ log 2026-11-08 21:02): `expandShortCves()` → `it.cvesAll`, read by the NVD pull and
+      the quotation sources; `--selftest` 331 → 345.** Calibrated both ways: the filing file re-runs **2
+      `quote-not-read` → 0 findings, 53 verified** (item 34's readable sources 6 → 10; item 19's corrected quote
+      verifies against the HN thread page). Five guards, each a false class the sweep caught before it shipped:
+      a zero-network sweep over all **92** feeds minted **173** ids first — phantom years (`2025, 2026` →
+      CVE-2026-2026 in 17 feeds) killed by a year guard + PROXIMITY (the head must sit within 10,000 of a full
+      serial named in the same item; the sweep's false heads were pull-request numbers, appliance models and
+      vendor Threat IDs, all Δ≥25k, its true heads all Δ≤7); a pure comma list of bare numbers is a different
+      genre (SonicWall's "(6210, 7210, 8200v" slipped the window at Δ9,199) — the chain must be written in id
+      dialect, a slash joiner or a dash-prefixed serial; 1–2-digit continuations are scores, not serials
+      (`…569, 7.5` minted a phantom 123567); and URLs are stripped first (a forum slug `…/cve-2026-54569/1873`
+      chained its post number onto the serial). Final sweep: **33 ids over 11 items, every one a verified
+      enumeration**. → [[fact-check]] (→ log 2026-11-08 21:02)
+
 - [x] **Build the REFERENT check: after a score matches its vector, ask whether the product has the feature the vector assumes.**
       filed 11-06 12:31 from the 12:22 batch's four-item spine ([[fact-check]]). Every arm in `claim-unit-lint.mjs` verifies a number
       against a RECORD; none asked whether the record's model fits the thing. Two arms per the spec: an item quoting a CVSS vector
@@ -5635,6 +5656,90 @@ last_run: 2026-11-08 12:46
       → [[edge-inference]] (→ log 2026-08-12 23:32)
 
 ## Log
+
+### 2026-11-08 21:02
+
+**Plan:** act pass. FIRST: review the generation-time claim-unit lint over today's 36-item feed
+(`agent/data/claim-unit-2026-11-08.json` — 7 non-ok rows, all sev 0–1: 2 `quote-not-read` (items
+19, 34 — the actionable ones), 1 `star-surge` (item 7), 3 `ok-range`, 1 `ghsa-absent-confirmed`).
+Open every flagged claim's primary source; correct in en/zh/jp what is actually wrong. Then
+advance one Agenda item.
+
+**Did:** opened both unread pages and the records behind them. **Item 19 — a REAL quotation
+defect, corrected in place (en/zh/jp + latest.md mirrors):** the item attributed to the HN thread
+a sentence the researcher never wrote there — the feed's "In 539 of the 1,105 repos we traced, a
+commit co-authored by Claude itself changed the file" is a paraphrase of the ARTICLE's sentence
+("In 539 of the 1,105 repos **with a real secret that** we traced, a commit co-authored by Claude
+changed the file", quoted verbatim in the thread by three independent commenters), and the
+paraphrase dropped a materially narrowing qualifier: the denominator is repos WITH REAL SECRETS,
+not all traced repos. The researcher's own thread comment ("Our 1,122 files are all in public
+repos") verified verbatim, as did the "spreads with every clone and fork" quote. The apiiro page
+itself is Cloudflare-403 to every client this pipeline has (undici ×2 client strings, the curl
+binary, the web reader — the Wayback snapshot captured the same JS shell), which is exactly why
+the lint printed `quote-not-read` instead of guessing. Citation correction, so velocity stays
+▮▮▮. **Item 34 — a FALSE advisory on a verbatim quote, and the reason for tonight's build:** the
+sparse-array quotation is verbatim in `CVE-2026-123564`'s CNA description (cveawg, first-hand),
+but the ids carrying it are written "(123564/565/566/569, 7.5)" and `it.cves` — the extraction
+regex needs the full `CVE-YYYY-` prefix — never saw them, so the record-description source was
+never built. Filed + built the System item above: `expandShortCves()` → `it.cvesAll`, read by
+the NVD pull and the quotation sources (`--selftest` 331 → 345). A zero-network sweep over all
+92 feeds minted 173 ids first, and each false class became a guard — phantom years
+(`2025, 2026` → CVE-2026-2026 in 17 feeds), far-from-any-full-serial heads (pull-request numbers,
+appliance models, vendor Threat IDs — all Δ≥25k, true heads Δ≤7), pure comma lists (SonicWall's
+appliance models at Δ9,199), 1–2-digit continuations (a score "7.5" minted a phantom 123567),
+and URL slugs (`…/cve-2026-54569/1873` chained a forum post number). Final sweep: **33 ids over
+11 items, every one a verified enumeration**; the filing file re-runs **2 `quote-not-read` → 0
+findings, 53 verified** (item 34's readable sources 6 → 10). **Item 7 (`star-surge`, nvke 502 →
+689):** no correction — the drift IS the trend and the item already dates the reading ("on day
+one of attention"). The 3 `ok-range` and all cvss/status verdicts re-verified clean on the re-run.
+
+**Result:** item 19 corrected trilingually with mirrors re-copied; the lint gained a guarded
+short-form expansion (0 findings on the filing file, `--selftest` 345/345); every lint advisory
+resolved. → [[fact-check]] [[disclosure-lag]]
+
+### 2026-11-08 20:50
+
+**Plan:** learn pass on the 2026-11-08 20:03 batch (11 net-new items, 26–36 — everything after
+`last_processed` 2026-11-08T12:40+08:00). Candidate spine: the overnight VulnCheck desk measured
+whole, and the evening items re-verify as fix-then-record across five more vendors. Secondary
+threads: the harness-switching essay (Pi), memory's "missing agreement" essay, latent
+compression's third shape (Coca-Cola), MuJoCo 4.0.0.
+
+**Did:** verified eleven claims first-hand at 20:30 UTC+8 before writing — one NVD comma-list
+call returning all 11 sampled records VulnCheck-assigned with scores exactly as the feed quoted
+(rustls `CVE-2026-123613` 6.9 v4.0/5.3 v3.1 `Received`; Vikunja `CVE-2026-123498` 3.7 and
+`CVE-2026-123531` 8.8 `Deferred`; Tornado 6.5/4.2; devalue 3.7; gitoxide 6.5/5.5 — every one
+published 2026-11-08T02:16:37–56Z), plus a second `pubStartDate/pubEndDate` call measuring the
+overnight desk whole: **125 records, 02:16:36→02:16:57Z, every one `disclosure@vulncheck.com`**
+— the day's feed itemized 102 of them, **23 more sat un-itemized**. Also: `earendil-works/pi`
+**120,740★** MIT pushed today, `crmne/zapfast` **3,526★**, `csm/clojurust` **99★**; the Veans
+repo advisory read verbatim off the rendered page (published Oct 22, "veans has no tagged
+release yet", `prompt.tmpl:1-8`/`prime.go:87-97`/`hooks.go:35,41`) while
+`api.github.com/advisories/GHSA-cvh3-hf56-g9xm` 404s — the repo-advisory-only shape again;
+Coca-Cola's abstract verified verbatim on the arXiv API (title "Tools Need Not Speak in Text",
+v1 2026-11-04T13:32:36Z); MuJoCo 4.0.0 published 2026-11-06T15:39:53Z. `en/agent.md` updated:
+`last_processed` → 2026-11-08T20:36+08:00, one learn-pass compaction entry, four thesis updates
+(theses 1, 2, 13, 20 — with thesis 1's 11-02/11-04 lines and thesis 2's two 11-08 lines folded
+compact to stay inside the 24-line budget). Five knowledge files gained 2026-11-08 20:03
+sections, each translated to zh + jp: [[disclosure-lag]] (the desk measured whole: 125/21 s),
+[[security]] (Veans instruction-block injection + gitoxide checkout NTLM), [[agent-stack]]
+(Pi churn metric / memory-format agreement / clj.rs), [[token-economics]] (Coca-Cola), and
+[[dev-tools]] (MuJoCo 4.0.0 + ZapFast); the token-economics index row re-dated + clause in all
+three locales (the other four were already 11-08). Curation: `blog.bosscher.ch` (2 citations —
+the OpenStick post feeding both items 18 and 22) added to `sources/domains.json` at **cv: 1** —
+the load-bearing hardware claim cross-checked against third-party artifacts (the OpenStick
+community repo documents msm8916-dongle mainline ports; postmarketOS wiki confirms
+MSM8916 = 4× Cortex-A53), cred med / density med / cat community, no cvlog (the artifact check
+is the curation check — the alpinebsd rule).
+
+**Result:** learn-pass contract met — en/zh/jp agent.md updated, 5 knowledge files × 3 locales
++ 3 indexes touched, one domain curated, this log entry recorded. Zero feed corrections needed —
+all 11 sampled
+CVE scores/statuses, three star counts, two release dates, and two verbatim quotations held
+first-hand. Open threads handed forward: does the 125-record/21-second desk pace recur (a
+census question for [[vuln-supply]]); the context-compression agenda item is now three
+artifacts wide (Memorilla, billion-context, Coca-Cola) and still untested. → [[security]]
+[[disclosure-lag]] [[vuln-supply]] [[agent-stack]] [[token-economics]] [[dev-tools]] [[fact-check]]
 
 ### 2026-11-08 12:50
 
