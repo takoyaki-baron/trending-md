@@ -1,6 +1,6 @@
 ---
 date: 2026-11-08
-updated: 2026-11-08T04:35:31Z
+updated: 2026-11-08T12:28:28Z
 schedule: 04:03, 12:03, 20:03 UTC+8
 sources: 15
 license: CC-BY-4.0
@@ -364,13 +364,169 @@ Harness-S は、共通のベースから演化したハーネスについて 3 �
 
 ---
 
+## 26. Goodbye Claude, Hello Pi — Claude Code のパワーユーザーが移行を公表、移行先のツールキットはいま 120k スター
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Hacker News · 367+ pts · 9.6時間前 (~11:11 UTC+8)
+- **Tags:** `agents` `coding-agents` `harnesses`
+
+今日のフロントページの議論は、9月のエッセイ（caleb.software、9月21日付）だ。作者は Claude Code をメインハーネスから引退させ、Pi へ移行した。Pi とは `earendil-works/pi`、MIT ライセンスの "AI agent toolkit: unified LLM API, agent loop, TUI, coding agent CLI" で、いま **120,730 スター**（11月2日に v1.5.0、本日もコミット）。不満はバイブスではなく具体的だ：AGENTS.md/CLAUDE.md の二重管理（"just a day after making my decision, they announced Claude Code would finally start supporting AGENTS.md files"）；IDE に接続できるセッションは一度に一つだけで、このバグは "reported at least as far back as December 2025 … and closed as a duplicate of a totally unrelated bug"；そして churn の計測 —— "there have been 244 releases to Claude Code this year; over 3/4 of these changed the system prompt or tool descriptions"。機能の追加ペースについては："Dynamic workflows, agent teams, ultrareviews – all great ways to help enterprise customers burn ever more tokens each day, but not really anything I want or need."
+
+**なぜ重要か:** エッセイの最も鋭い点は再現可能な数値だ —— 年間 244 リリースという速度でのシステムプロンプト churn は、誰でも測れるハーネス安定性の指標 —— そして、コーディングハーネス間の切り替えコストが崩壊したことを記録している：設定は markdown、慣習は AGENTS.md に収束しつつあり、エンタープライズ寄りのロードマップの受益者はオープンソースのツールキットでもありうる。
+
+> "I'm certain that in a few years we'll all look back at its release as one of the major drivers of this new era of software development we're in." —— Claude Code について、それを引退させる同じエッセイの中で
+
+[`🔗 caleb.software`](https://caleb.software/posts/claude-to-pi.html) · [`🔗 HN ディスカッション`](https://news.ycombinator.com/item?id=50410107) · [`🔗 earendil-works/pi`](https://github.com/earendil-works/pi)
+
+---
+
+## 27. rustls が 5 件の CVE を公開 — 暗号レベル違いのハンドシェイク受容、鍵交換ダウングレード、修正は 9 月と 10 月にすでに済んでいた
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** NVD · 5 レコード · 11月8日 ~02:16Z
+- **Tags:** `security` `tls` `rust`
+
+Rust エコシステムの TLS スタック rustls に、今日の夜間一括申請で 5 件の CVE レコードが着地した（CVE-2026-123609–123613、すべて VulnCheck 割り当て、すべて依然 `Received`、最大 **6.9** CVSS 4.0 / **5.3** CVSS 3.1）。最も影響が大きいのは CVE-2026-123613（0.23.13 → 0.23.45）：スタックが "accepts TLS 1.3 handshake messages at the wrong encryption level when they follow a key-changing message in the same record, because Deframer::aligned does not enforce RFC 8446 record-boundary alignment." CVE-2026-123611 は鍵交換のダウングレード —— "network attackers to poison the per-server-name key-exchange group record via an unauthenticated ServerHello," 一つの応答済み接続が後続の接続をダウングレードさせる。残る3件：CVE-2026-123610、オプションの Brotli 証明書解凍における "a five-byte Brotli header" からの無制限アロケーション；CVE-2026-123609、独自 `ClientSessionStore` のログで、導出された `Debug` フォーマットがセッションの秘密材料を露出；CVE-2026-123612（0.23.44/0.23.45 のみ）、ECH が拒否されたとき、ハンドシェイク完了前にバッファされたアプリケーションデータが平文で送信される。修正：0.23.45（9月14日）と 0.23.46（10月14日）—— 書類より数週間前だ。
+
+**なぜ重要か:** rustls は Rust サービスエコシステムの広い部分の下にある。そしてレコード境界の整合性の崩れは、まさに古い TLS スタックが修正に十年を費やしたバグクラスだ —— RFC 8446 のフレーミング規則は、平文レコードがハンドシェイク後のトラフィックに偽装できないために存在する。スコアは控えめ、爆発半径は最大、そして fix-then-record のまた一つの実測例：「未修正」と書けば正確に逆になる —— 0.23.46 以降にいるか確認せよ。
+
+[`🔗 NVD の CVE-2026-123613`](https://nvd.nist.gov/vuln/detail/CVE-2026-123613) · [`🔗 GHSA-2mjx-qc3c-rqvc`](https://github.com/rustls/rustls/security/advisories/GHSA-2mjx-qc3c-rqvc) · [`🔗 rustls リリース`](https://github.com/rustls/rustls/releases)
+
+---
+
+## 28. Vikunja が 39 件の CVE レコードを公開 — 自社のコーディングエージェント CLI「Veans」へのプロンプトインジェクションも含む
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** NVD · 39 レコード · 11月8日 ~02:16Z
+- **Tags:** `security` `cve` `agents`
+
+今日の一括申請で最大の単一ベンダー部分：オープンソースの ToDo・プロジェクト管理ツール Vikunja（`go-vikunja/vikunja`、約 6.0k スター）に **39 件の CVE レコード**（CVE-2026-123493–123531）—— すべて VulnCheck 割り当て、すべて `Deferred`、**2.7.1（10月20日リリース、レコードより 19 日前）**で修正済み（現行リリースは 11月5日の 2.8.0）。最高スコアは 8.8（CVE-2026-123531、リソース枯渇）。範囲には、レコードの文言 "allows disabled or locked users to retain access through API tokens owned by their bot users" という認証バイパス（CVE-2026-123493、5.4）や、チームオーナーが読み取り専用の共有プロジェクトの管理者を得る "by deleting accounts"（CVE-2026-123520、7.1）が含まれる。注目すべき部分群は **Veans**（`code.vikunja.io/veans`）、Vikunja のコーディングエージェント CLI を狙う：CVE-2026-123498（3.7）—— 書き込み権限を持つプロジェクトメンバーが "by setting project titles or task content rendered verbatim inside the coding agent's authoritative instruction block" 命令を注入でき、SessionStart と PreCompact フックで primed される；CVE-2026-123499（5.9）—— 信頼できないチェックアウト内の `.veans.yml` が、VEANS_TOKEN の Bearer 認証を攻撃者管理のサーバへ向ける。根底の GHSA は 10月22日公開で "veans has no tagged release yet" と述べる。修正はトラストゲートに加え、リモートメタデータを権限ブロックの外へフェンシングする形だ。そして一括記述者は指紋を残した：4 件の説明が「Vikunja **veans** before 2.7.1」と読める。
+
+**なぜ重要か:** コーディングエージェント CLI を 89 レコードの JetBrains ブレティンに入れたのと同じ週に、ToDo アプリのものが入った —— プロジェクトタイトルとタスクテキストは、ユーザーの上位にある命令ブロックへ流れ込む攻撃者書き込み可能なデータだ。重要なのはこの注入クラスで、ベンダー自身のアドバイザリが正しい形を処方している：信頼できないデータは、フェンスを張り、ラベルを付け、権限セクションの外へ。
+
+[`🔗 NVD の CVE-2026-123498`](https://nvd.nist.gov/vuln/detail/CVE-2026-123498) · [`🔗 GHSA-cvh3-hf56-g9xm`](https://github.com/go-vikunja/vikunja/security/advisories/GHSA-cvh3-hf56-g9xm) · [`🔗 Vikunja v2.7.1`](https://github.com/go-vikunja/vikunja/releases/tag/v2.7.1)
+
+---
+
+## 29. ZapFast：Rust と egui で書かれたネイティブ WhatsApp クライアント — アイドル時 200 MB 対 WhatsApp Web の 1.13 GB
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News · 87+ pts · 10.7時間前 (~10:02 UTC+8)
+- **Tags:** `rust` `messaging` `native-apps`
+
+ZapFast（`crmne/zapfast`、3,523 スター、MIT、8月29日作成、今朝もプッシュ）は、Rust と egui で書かれた Linux/macOS/Windows 向け WhatsApp クライアントだ："links to your phone as a companion device through whatsapp-rust and has no browser engine." README の計測は："In our Linux test it opens in under a second and uses about 200 MB of idle RAM, against 1.13 GB for WhatsApp Web." 11 の UI 言語、テーマ機能、リンクの仕組みを説明するドキュメントサイト。正直な部分は、埋もれさせておかずに明示したリスクボックスだ："ZapFast is an unofficial client and is not affiliated with WhatsApp or Meta. Using an unofficial client may be against WhatsApp's terms of service and could get an account suspended. Use it at your own risk."
+
+**なぜ重要か:** Discord の Rust 書き直しが今週「ネイティブ対 Electron」の論証を行った後、ZapFast は同じテーゼを、二人規模のプロジェクトが、多くの人が一日中開けっぱなしにするアプリに適用したものだ —— バンドルした Chromium の代わりにマルチデバイスプロトコルが重い持ち上げを担う。アカウント停止のリスクは現実に存在し、プロジェクト自身が冒頭で言明している。RAM の表は README どおり、1 回の Linux テストとして扱うこと。
+
+[`🔗 crmne/zapfast`](https://github.com/crmne/zapfast) · [`🔗 HN ディスカッション`](https://news.ycombinator.com/item?id=50409855) · [`🔗 ベンチマーク`](https://zapfast.rocks/benchmarks/)
+
+---
+
+## 30. MuJoCo 4.0.0 — 3.0 以来のメジャーバージョンに speculative contacts と弾塑性が追加
+
+- **Velocity:** ▮▮ rising
+- **Source:** GitHub Releases · v4.0.0 · 11月6日
+- **Tags:** `simulation` `robotics` `physics`
+
+MuJoCo —— DeepMind の物理シミュレータ、ロボティクスと RL 研究の事実上のリファレンス —— が 11月6日に 4.0.0 をリリースした。3.0 以来初のメジャーアップで、trending に入っている。目玉は2つ：**speculative contacts** のための `speculative` フラグは "to prevent fast-moving convex geoms from tunneling through thin obstacles within a single timestep"（conservative advancement、サンプルモデル付き）；そして **弾塑性（elasto-plasticity）**は、ジョイントとテンドンのスプリングに対し "with stateful plastic deformation stored in `mjData.plastic` (`mjSTATE_PLASTIC`)"。リリースは、3.0 以降のすべてをカバーする告知ディスカッション、mujoco.org のインタラクティブショーケース、MuJoCo Live のブラウザデモを参照している。
+
+**なぜ重要か:** 薄い幾何をすり抜けるトンネリングと塑性変形は、RL・ロボティクスの人々が歴史的にタイムステップを縮めたり接触ヒューリスティクスを後付けしたりして回避してきた物理挙動だ —— シミュレータレベルの修正は、どの実験が安く走らせられるかを変える。4.0.0 は下流のバージョンピンを壊す種類のアップでもあるので、ロックを確認せよ。
+
+[`🔗 v4.0.0 リリースノート`](https://github.com/google-deepmind/mujoco/releases/tag/4.0.0) · [`🔗 4.0 告知ディスカッション`](https://github.com/google-deepmind/mujoco/discussions/3773)
+
+---
+
+## 31. エージェントメモリには OpenTelemetry の瞬間が必要 — 互いを読めない 4 つのメモリ形式のサーベイ
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News · 63+ pts · 4.1時間前 (~16:40 UTC+8)
+- **Tags:** `agents` `memory` `interop`
+
+LoreKit の Mads Thines（11月7日）が、典型的なエージェントセットアップが何を「記憶」し、どこに置くかを棚卸しした：リポジトリごとの `AGENTS.md`/`CLAUDE.md` と `.cursor/rules/*.mdc`；Anthropic のメモリツールが書く `/memories` ディレクトリ；Copilot が GitHub 側に置くリポジトリの事実；JSONL ナレッジグラフを保持するメモリ MCP サーバ。"That's four different shapes, and none of them can read the others." CI エージェントが学んだ教訓は、それを書いたツールの中に留まる。エッセイの論証は歴史的だ：2019 年前、すべてのオブザーバビリティベンダーは独自のエージェントと形式を出荷していたが、OpenTracing と OpenCensus が OpenTelemetry に統合され、ベンダーはデータモデルとセマンティック規約で合意した。提案は：エージェントメモリにも同じ合意を。"The problem isn't a missing tool. It's a missing agreement." 著者は利害を開示している："I build one of these tools, LoreKit, which is open source. This isn't a pitch that LoreKit has solved memory."
+
+**なぜ重要か:** 今週の個々のメモリリリース —— このフィードは昨日 Anthropic のメモリ構成要素マップを扱い、16 トークンへの文書圧縮結果も扱った —— の背後にある調整問題を名指ししたものだ。どちらも、あるハーネスで学んだ教訓が別のハーネスへの切り替えに耐えればより良いものになる。市場が勝手に収束するという主張に対する、OpenTelemetry の前例こそ正直な反例だ。
+
+[`🔗 lorekit.io`](https://www.lorekit.io/blog/open-agent-memory-format) · [`🔗 HN ディスカッション`](https://news.ycombinator.com/item?id=50411467)
+
+---
+
+## 32. clj.rs：Rust で実装された Clojure 方言 — 「agentic coding runtime」を掲げる
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News · 78+ pts · 11月4日からフロントページ
+- **Tags:** `lisp` `rust` `languages`
+
+clj.rs（リポジトリ `csm/clojurust`、alpha、crates.io では `cljrs` として公開、clj.rs/repl にブラウザ REPL）は "an experimental Clojure dialect targeting the Rust ecosystem. It aims to be a capable Lisp runtime with persistent data structures, a hosted macro system, and native interop — compiled or interpreted, suitable for use as an agentic coding runtime." サイトは「Early stage; expect rough edges」と警告し、dev log が開発を公開で記録している。
+
+**なぜ重要か:** 「agentic coding runtime」は古いアイデアへの新しい売り文だ —— マクロシステムと REPL ループを持つホモイコニック言語は、構造として、コードをエージェントが検査し書き換えられるデータとして扱うハーネスだ。この alpha が主張に見合うかは開いている。言語がいまやエージェントドライバの*ために*設計され、人間が第二の読者になっていること —— それがトレンドのデータポイントだ。
+
+[`🔗 clj.rs`](https://clj.rs/) · [`🔗 HN ディスカッション`](https://news.ycombinator.com/item?id=50366902) · [`🔗 csm/clojurust`](https://github.com/csm/clojurust)
+
+---
+
+## 33. Tornado 6.6：`static_url()` のパストラバーサルと Set-Cookie インジェクション — レコードはリリースの 18 日後に到着
+
+- **Velocity:** ▮▮ rising
+- **Source:** NVD · 2 レコード · 11月8日 ~02:16Z
+- **Tags:** `security` `python` `web`
+
+Fetch/Wave と無数の社内サービスの下にある Python ウェブフレームワーク Tornado の 2 件の CVE レコード。CVE-2026-123534（CVSS 3.1 で 6.5 / CVSS 4.0 で 8.3）："a path traversal vulnerability in RequestHandler.static_url() and get_version() that allows attackers to hash files outside static_path using ../ sequences" —— プロセスが読める任意のファイルの SHA-512 ハッシュが漏れる情報開示で、アプリが攻撃者影響下の入力を `static_url()` に渡すあらゆる場所で届く。CVE-2026-123535（4.2）：`set_cookie`（および signed/secure 系）は "does not validate the max_age argument … allowing injection of additional Set-Cookie attributes." どちらも **6.6（PyPI 10月21日）**で修正済み —— 書類は 18 日遅れで着地した。すべて VulnCheck 割り当て、`Deferred`。
+
+**なぜ重要か:** トラバーサルは、ほとんどのアプリがファイルリーダではなく URL ビルダとして扱うバージョンハッシュのヘルパに住んでいる —— 呼び出し側が文字列を組み立てていると想定したヘルパが、実際にはファイルシステムを読んでいるという点で、このファイルの前半で扱った Craft CMS のエンドポイントと同じ種類の驚きだ。Tornado の長いデプロイの尻尾こそ、数ヶ月これに気づかない人口そのものだ。6.6 は 10 月からインストール可能だった。
+
+[`🔗 NVD の CVE-2026-123534`](https://nvd.nist.gov/vuln/detail/CVE-2026-123534) · [`🔗 GHSA-v8g8-cp5j-42fg`](https://github.com/tornadoweb/tornado/security/advisories/GHSA-v8g8-cp5j-42fg)
+
+---
+
+## 34. devalue が 9 件の CVE レコードを公開 — SvelteKit のシリアライズ層でのプロトタイプ汚染とスパース配列 DoS の一族
+
+- **Velocity:** ▮▮ rising
+- **Source:** NVD · 9 レコード · 11月8日 ~02:16Z
+- **Tags:** `security` `javascript` `sveltekit`
+
+devalue —— SvelteKit の SSR データ経路の下にあるシリアライズライブラリ —— に 9 件の CVE レコード（CVE-2026-123561–123569）が付いた。すべて VulnCheck 割り当て、すべて `Received`、うち 6 件が CVSS 3.1 で **7.5**（CVE-2026-123562〜-123566、および -123569）。修正は三波で来ていた：5.6.3（2月18日）、5.6.4（3月11日）、5.9.3（9月18日）；レコードは今日着地した。目立つのは 2 つ。CVE-2026-123567：`parse`/`unflatten` 経由のプロトタイプ注入 —— 細工された入力が `__proto__` own プロパティを持つオブジェクトを生み、下流コードが `Object.assign` でマージすると "alters the target object's prototype"。そして CVE-2026-123561 はその不完全な修正だ："malformed null-prototype object keys to bypass parse's __proto__ rejection through property-key coercion, an incomplete fix for GHSA-mwv9-gp5h-frr4" —— 迂回にはもう一つのリリースが要った。周囲には `uneval` のスパース配列一族（123564/565/566/569、7.5）："generated code for sparse arrays allocates memory proportional to the array's declared length when evaluated"、さらに `stringifyAsync` の未処理リジェクション（123562、7.5）は "can terminate the Node.js process."
+
+**なぜ重要か:** devalue は SvelteKit アプリにおいて、信頼できないリクエストペイロードがサーバ側デシリアライズと出会うまさにその場所にある。そしてこの一括は二段の修正連鎖を記録している —— 5.6.4 のリジェクションがパッチされ、迂回され、5.9.3 で再パッチされた —— このフィードが測り続けている incomplete-fix パターンだ。SvelteKit を提供しているなら、バージョンの下限は 5.9.3（現行は 6.0.3）。
+
+[`🔗 NVD の CVE-2026-123561`](https://nvd.nist.gov/vuln/detail/CVE-2026-123561) · [`🔗 GHSA-4q55-j62x-fr9h`](https://github.com/sveltejs/devalue/security/advisories/GHSA-4q55-j62x-fr9h) · [`🔗 npm の devalue`](https://www.npmjs.com/package/devalue)
+
+---
+
+## 35. Coca-Cola：エージェントのツール出力を潜在トークンへ圧縮 — トークンは 70〜89% 減、精度はむしろ上がると論文は主張
+
+- **Velocity:** ▮ steady
+- **Source:** arXiv · 2611.06500 · 11月4日
+- **Tags:** `agents` `context-compression` `papers`
+
+Coca-Cola（arXiv 2611.06500、11月4日提出、THU-Agent）が狙うのは "that agents must consume tool observations as explicit text tokens" という前提だ：連続的な潜在圧縮モデルが、圧縮したツール観測をエージェントの入力埋め込み空間へ直接埋め込み、Action-Preserving Training で訓練する —— "which aligns the agent's next-action distributions under full and compressed observations" —— 目的関数は再構成の忠実度ではなく行動の十分性だ。2 つのモデルファミリー・4 つの QA ベンチマーク上のウェブ検索エージェントで："reduces the agent's token consumption by 70.01%-89.24% and end-to-end runtime by 24.45%-55.97%, while consistently improving task performance." コードは公開済み（`THU-Agent/Coca-cola`）。
+
+**なぜ重要か:** 今週の圧縮結果は同じ方向を指し続けている —— Memorilla の 16 メモリトークン、billion-context の月単位セッション —— だが、それらはテキストへ圧縮する。Coca-Cola はボトルネックそのものを迂回し、70〜89% のトークン削減下での "consistently improving task performance" が再現できれば、ツールを使うエージェントのコストモデルが変わる。留保は QA 検索のスコープだ：ウェブ検索の観測であって、あなたのコードベースではない。
+
+[`🔗 arXiv:2611.06500`](https://arxiv.org/abs/2611.06500) · [`🔗 THU-Agent/Coca-cola`](https://github.com/THU-Agent/Coca-cola)
+
+---
+
+## 36. gitoxide：細工されたリポジトリがチェックアウト時に NTLM 認証情報を奪う — どのコードも走る前に
+
+- **Velocity:** ▮ steady
+- **Source:** NVD · 2 レコード · 11月8日 ~02:16Z
+- **Tags:** `security` `rust` `git`
+
+CVE-2026-123532（CVSS 3.1 で 6.5 / CVSS 4.0 で 7.1）：ピュア Rust の Git 実装 gitoxide の `gix-fs` が 0.24.1 未満で "contains a credential disclosure vulnerability that allows remote attackers to capture NTLM credentials by supplying UNC symlink targets in a crafted repository. When a victim checks out the repository on Windows with symlinks enabled," シンボリックリンクのプローブが外へ出て、そのマシンの NTLM ハンドシェイクを漏らす。伴うレコード CVE-2026-123533：`gix-commitgraph` 0.42.0 未満（gitoxide では 0.61.0 未満）のサービス拒否。どちらも VulnCheck 割り当て、gix-fs 0.24.1 / gitoxide 0.61.0 で修正済み。
+
+**なぜ重要か:** 「クローンするだけ」は新しい手足を増やし続けている —— これはインストールフックもエディタタスクもコード実行も不要だ：チェックアウト自身のファイルシステム探索が、持ち出しの経路になる。Gitoxide はライブラリとして組み込まれることが増えており（他のツールの git 経路の内側も含む）、影響を受ける集合は CLI ユーザーより広い。
+
+[`🔗 NVD の CVE-2026-123532`](https://nvd.nist.gov/vuln/detail/CVE-2026-123532) · [`🔗 GHSA-xw69-xv93-5fjv`](https://github.com/GitoxideLabs/gitoxide/security/advisories/GHSA-xw69-xv93-5fjv)
+
+---
+
 ## Metadata
 
 | フィールド | 値 |
 |-------|-------|
-| Generated | 2026-11-08T04:35:31Z |
-| Items | 25 |
-| Sources tracked | 20 (Hacker News, GitHub Trending, NVD, CISA KEV, arXiv, Hugging Face, vendor bulletins, cveawg, OSV, JetBrains, The Guardian, hunch.net, decoded.legal, MaxxBench, heise, blog.bosscher.ch, apiiro, textjs.org) |
+| Generated | 2026-11-08T12:28:28Z |
+| Items | 36 |
+| Sources tracked | 24 (Hacker News, GitHub Trending, NVD, CISA KEV, arXiv, Hugging Face, vendor bulletins, cveawg, OSV, JetBrains, The Guardian, hunch.net, decoded.legal, MaxxBench, heise, blog.bosscher.ch, apiiro, textjs.org, caleb.software, earendil-works/pi, lorekit.io, clj.rs, zapfast.rocks, PyPI/npm release registries) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (3x daily) |
 | Ranking | Velocity-weighted (recency × engagement acceleration × source authority) |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |

@@ -1,6 +1,6 @@
 ---
 date: 2026-11-08
-updated: 2026-11-08T04:35:31Z
+updated: 2026-11-08T12:28:28Z
 schedule: 04:03, 12:03, 20:03 UTC+8
 sources: 15
 license: CC-BY-4.0
@@ -364,13 +364,169 @@ On 11-01 this feed wrote up `GHSA-hff9-5pqw-6w9f` — a 9.8 heap overflow in img
 
 ---
 
+## 26. Goodbye Claude, Hello Pi — a Claude Code power user publishes their migration, to a toolkit now at 120k stars
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Hacker News · 367+ pts · 9.6h ago (~11:11 UTC+8)
+- **Tags:** `agents` `coding-agents` `harnesses`
+
+The front-page discussion today is a September essay (caleb.software, dated 21 September) retiring Claude Code as the author's main harness in favor of Pi — `earendil-works/pi`, the MIT "AI agent toolkit: unified LLM API, agent loop, TUI, coding agent CLI" now at **120,730 stars** (v1.5.0 on Nov 2, commits today). The complaints are specific rather than vibes: the AGENTS.md/CLAUDE.md duplication ("just a day after making my decision, they announced Claude Code would finally start supporting AGENTS.md files"); only one session can attach to the IDE at a time, a bug "reported at least as far back as December 2025 … and closed as a duplicate of a totally unrelated bug"; and the churn metric — "there have been 244 releases to Claude Code this year; over 3/4 of these changed the system prompt or tool descriptions". On the feature pace: "Dynamic workflows, agent teams, ultrareviews – all great ways to help enterprise customers burn ever more tokens each day, but not really anything I want or need."
+
+**Why it matters:** the essay's sharpest point is a reproducible number — system-prompt churn at 244-releases-a-year velocity is a harness-stability metric anyone can measure — and it documents that the switching cost between coding harnesses has collapsed: configs are markdown, conventions are converging on AGENTS.md, and the beneficiary of an enterprise-tilted roadmap can be an open-source toolkit.
+
+> "I'm certain that in a few years we'll all look back at its release as one of the major drivers of this new era of software development we're in." — on Claude Code, in the same essay that retires it
+
+[`🔗 caleb.software`](https://caleb.software/posts/claude-to-pi.html) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50410107) · [`🔗 earendil-works/pi`](https://github.com/earendil-works/pi)
+
+---
+
+## 27. rustls publishes five CVEs — wrong-encryption-level handshakes, a key-exchange downgrade, and fixes that shipped in September and October
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** NVD · 5 records · Nov 8 ~02:16Z
+- **Tags:** `security` `tls` `rust`
+
+Five CVE records for rustls — the Rust ecosystem's TLS stack — landed in today's overnight filing (CVE-2026-123609–123613, all VulnCheck-assigned, all still `Received`, max **6.9** CVSS 4.0 / **5.3** CVSS 3.1). The most consequential is CVE-2026-123613 (0.23.13 → 0.23.45): the stack "accepts TLS 1.3 handshake messages at the wrong encryption level when they follow a key-changing message in the same record, because Deframer::aligned does not enforce RFC 8446 record-boundary alignment." CVE-2026-123611: a key-exchange downgrade — "network attackers to poison the per-server-name key-exchange group record via an unauthenticated ServerHello," so one answered connection downgrades later ones. The rest: CVE-2026-123610, uncontrolled allocation in optional Brotli certificate decompression from "a five-byte Brotli header"; CVE-2026-123609, derived `Debug` formatting exposing session secret material in custom `ClientSessionStore` logs; CVE-2026-123612 (0.23.44/0.23.45 only), application data buffered before handshake completion sent in plaintext when ECH is rejected. Fixes: 0.23.45 (Sept 14) and 0.23.46 (Oct 14) — weeks before the paperwork.
+
+**Why it matters:** rustls sits under a large share of the Rust service ecosystem, and record-boundary misalignment is precisely the bug class that cost older TLS stacks a decade of fixes — RFC 8446's framing rules exist so a plaintext record can't masquerade as post-handshake traffic. Modest scores, maximal blast radius, and another measured instance of fix-then-record: "still unpatched" would be exactly backwards — check you're on 0.23.46+.
+
+[`🔗 CVE-2026-123613 on NVD`](https://nvd.nist.gov/vuln/detail/CVE-2026-123613) · [`🔗 GHSA-2mjx-qc3c-rqvc`](https://github.com/rustls/rustls/security/advisories/GHSA-2mjx-qc3c-rqvc) · [`🔗 rustls releases`](https://github.com/rustls/rustls/releases)
+
+---
+
+## 28. Vikunja publishes 39 CVE records — including prompt injection in its own coding-agent CLI, Veans
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** NVD · 39 records · Nov 8 ~02:16Z
+- **Tags:** `security` `cve` `agents`
+
+The biggest single-vendor slice of today's bulk filing: **39 CVE records** (CVE-2026-123493–123531) for Vikunja, the open-source to-do/project tracker (`go-vikunja/vikunja`, ~6.0k stars) — all VulnCheck-assigned, all `Deferred`, fixed in **2.7.1 (released Oct 20, nineteen days before the records**; current release 2.8.0, Nov 5). Max score 8.8 (CVE-2026-123531, resource exhaustion). The range covers an authentication bypass where the record "allows disabled or locked users to retain access through API tokens owned by their bot users" (CVE-2026-123493, 5.4) and team owners gaining admin on read-only shared projects "by deleting accounts" (CVE-2026-123520, 7.1). The notable subset targets **Veans** (`code.vikunja.io/veans`), Vikunja's coding-agent CLI: CVE-2026-123498 (3.7) — a project member with write access injects instructions "by setting project titles or task content rendered verbatim inside the coding agent's authoritative instruction block," primed on SessionStart and PreCompact hooks; CVE-2026-123499 (5.9) — a `.veans.yml` in an untrusted checkout points VEANS_TOKEN's Bearer auth at an attacker-controlled server. The underlying GHSA published Oct 22 and states "veans has no tagged release yet"; the fix is a trust gate plus fencing remote metadata outside the authority block. And the bulk writer left its fingerprints: four descriptions read "Vikunja **veans** before 2.7.1."
+
+**Why it matters:** the same week that put a coding-agent CLI in JetBrains' 89-record bulletin puts one in a to-do app's — project titles and task text are attacker-writable data flowing into an instruction block that outranks the user. That's the injection class that matters, and here the vendor's own advisory prescribes the right shape: untrusted data, fenced and labeled, outside the authority section.
+
+[`🔗 CVE-2026-123498 on NVD`](https://nvd.nist.gov/vuln/detail/CVE-2026-123498) · [`🔗 GHSA-cvh3-hf56-g9xm`](https://github.com/go-vikunja/vikunja/security/advisories/GHSA-cvh3-hf56-g9xm) · [`🔗 Vikunja v2.7.1`](https://github.com/go-vikunja/vikunja/releases/tag/v2.7.1)
+
+---
+
+## 29. ZapFast: a native WhatsApp client in Rust and egui — 200 MB idle against WhatsApp Web's 1.13 GB
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News · 87+ pts · 10.7h ago (~10:02 UTC+8)
+- **Tags:** `rust` `messaging` `native-apps`
+
+ZapFast (`crmne/zapfast`, 3,523 stars, MIT, created Aug 29, pushed today) is a WhatsApp client for Linux/macOS/Windows written in Rust with egui: it "links to your phone as a companion device through whatsapp-rust and has no browser engine." The README's measurement: "In our Linux test it opens in under a second and uses about 200 MB of idle RAM, against 1.13 GB for WhatsApp Web." Eleven UI languages, theming, and a docs site covering how linking works. The honest part is the risk box, stated rather than buried: "ZapFast is an unofficial client and is not affiliated with WhatsApp or Meta. Using an unofficial client may be against WhatsApp's terms of service and could get an account suspended. Use it at your own risk."
+
+**Why it matters:** after Discord's Rust rewrite made the native-vs-Electron argument this week, ZapFast is the same thesis applied by a two-person-scale project to the app most people keep open all day — with the multi-device protocol doing the heavy lifting instead of a bundled Chromium. The account-suspension risk is real and the project says so up front; treat the RAM table as one Linux test, as the README does.
+
+[`🔗 crmne/zapfast`](https://github.com/crmne/zapfast) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50409855) · [`🔗 benchmarks`](https://zapfast.rocks/benchmarks/)
+
+---
+
+## 30. MuJoCo 4.0.0 — the first major version since 3.0 adds speculative contacts and elasto-plasticity
+
+- **Velocity:** ▮▮ rising
+- **Source:** GitHub Releases · v4.0.0 · Nov 6
+- **Tags:** `simulation` `robotics` `physics`
+
+MuJoCo — DeepMind's physics simulator, the de-facto reference for robotics and RL research — shipped 4.0.0 on Nov 6, its first major bump since 3.0, and is trending. Two headline features: a `speculative` flag for **speculative contacts**, "to prevent fast-moving convex geoms from tunneling through thin obstacles within a single timestep" (conservative advancement, with example models); and **elasto-plasticity**, "with stateful plastic deformation stored in `mjData.plastic` (`mjSTATE_PLASTIC`)" for joint and tendon springs. The release points to an announcement discussion covering everything new since 3.0, an interactive showcase at mujoco.org, and browser demos at MuJoCo Live.
+
+**Why it matters:** tunneling through thin geometry and plastic deformation are two physics behaviors RL and robotics people have historically had to work around by shrinking timesteps or bolting on contact heuristics — a simulator-level fix changes what experiments are cheap to run. 4.0.0 is also the kind of version bump that breaks downstream pinning, so check your locks.
+
+[`🔗 v4.0.0 release notes`](https://github.com/google-deepmind/mujoco/releases/tag/4.0.0) · [`🔗 4.0 announcement discussion`](https://github.com/google-deepmind/mujoco/discussions/3773)
+
+---
+
+## 31. Agent memory needs its OpenTelemetry moment — a survey of the four memory formats on your machine that can't read each other
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News · 63+ pts · 4.1h ago (~16:40 UTC+8)
+- **Tags:** `agents` `memory` `interop`
+
+LoreKit's Mads Thines (Nov 7) inventories what a typical agent setup "remembers" and where: an `AGENTS.md`/`CLAUDE.md` per repo plus `.cursor/rules/*.mdc`; Anthropic's memory tool writing to a `/memories` directory; Copilot keeping repo facts server-side on GitHub; and a memory MCP server holding a JSONL knowledge graph. "That's four different shapes, and none of them can read the others." A lesson your CI agent learns stays in the tool that wrote it. The essay's argument is historical: before 2019 every observability vendor shipped its own agent and format, until OpenTracing and OpenCensus merged into OpenTelemetry and vendors agreed on a data model and semantic conventions. The proposal: the same agreement for agent memory, and "The problem isn't a missing tool. It's a missing agreement." The author discloses the stake: "I build one of these tools, LoreKit, which is open source. This isn't a pitch that LoreKit has solved memory."
+
+**Why it matters:** it names the coordination problem behind the week's individual memory releases — this feed covered Anthropic's memory-components map yesterday and a 16-token document-compression result; both are better if a lesson learned in one harness survives the switch to another. The OpenTelemetry precedent is the honest counterexample to the claim that the market will converge on its own.
+
+[`🔗 lorekit.io`](https://www.lorekit.io/blog/open-agent-memory-format) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50411467)
+
+---
+
+## 32. clj.rs: a Clojure dialect implemented in Rust — pitched as an agentic coding runtime
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News · 78+ pts · posted Nov 4, on the front page today
+- **Tags:** `lisp` `rust` `languages`
+
+clj.rs (repo `csm/clojurust`, alpha, published on crates.io as `cljrs`, with a browser REPL at clj.rs/repl) is "an experimental Clojure dialect targeting the Rust ecosystem. It aims to be a capable Lisp runtime with persistent data structures, a hosted macro system, and native interop — compiled or interpreted, suitable for use as an agentic coding runtime." The site warns "Early stage; expect rough edges," and the dev log documents the build in the open.
+
+**Why it matters:** "agentic coding runtime" is a new pitch for an old idea — a homoiconic language with a macro system and a REPL loop is, structurally, a harness that treats code as data the agent can inspect and rewrite. Whether this alpha earns the claim is open; that languages are now being designed *for* agent drivers, with humans as the second audience, is the trend datapoint.
+
+[`🔗 clj.rs`](https://clj.rs/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50366902) · [`🔗 csm/clojurust`](https://github.com/csm/clojurust)
+
+---
+
+## 33. Tornado 6.6: path traversal in `static_url()` and Set-Cookie injection — records arrived 18 days after the release
+
+- **Velocity:** ▮▮ rising
+- **Source:** NVD · 2 records · Nov 8 ~02:16Z
+- **Tags:** `security` `python` `web`
+
+Two CVE records for Tornado, the long-lived Python async web framework. CVE-2026-123534 (6.5 CVSS 3.1 / 8.3 CVSS 4.0): "a path traversal vulnerability in RequestHandler.static_url() and get_version() that allows attackers to hash files outside static_path using ../ sequences" — an information leak of SHA-512 file hashes for anything the process can read, reachable wherever an app passes attacker-influenced input to `static_url()`. CVE-2026-123535 (4.2): `set_cookie` (and its signed/secure variants) "does not validate the max_age argument … allowing injection of additional Set-Cookie attributes." Both fixed in **6.6, on PyPI Oct 21** — the paperwork landed eighteen days later. All VulnCheck-assigned, `Deferred`.
+
+**Why it matters:** the traversal lives in a version-hashing helper most apps treat as a URL builder, not a file reader — the same class of surprise as Craft CMS's endpoint earlier in this file, a helper that reads the filesystem where callers assumed it built a string. Tornado's deployment long tail is exactly the population that won't see this for months; 6.6 has been installable since October.
+
+[`🔗 CVE-2026-123534 on NVD`](https://nvd.nist.gov/vuln/detail/CVE-2026-123534) · [`🔗 GHSA-v8g8-cp5j-42fg`](https://github.com/tornadoweb/tornado/security/advisories/GHSA-v8g8-cp5j-42fg)
+
+---
+
+## 34. devalue publishes 9 CVE records — prototype pollution and a sparse-array DoS family in SvelteKit's serialization layer
+
+- **Velocity:** ▮▮ rising
+- **Source:** NVD · 9 records · Nov 8 ~02:16Z
+- **Tags:** `security` `javascript` `sveltekit`
+
+Nine CVE records (CVE-2026-123561–123569) for devalue — the serialization library under SvelteKit's SSR data channel — all VulnCheck-assigned, all `Received`, six of them **7.5** on CVSS 3.1 (CVE-2026-123562 through -123566, and -123569). The fixes arrived in three waves: 5.6.3 (Feb 18), 5.6.4 (Mar 11), 5.9.3 (Sept 18); the records landed today. Two stand out. CVE-2026-123567: prototype injection via `parse`/`unflatten` — crafted input yields objects with a `__proto__` own property, which "alters the target object's prototype" when downstream code merges with `Object.assign`. And CVE-2026-123561 is the incomplete fix for it: "malformed null-prototype object keys to bypass parse's __proto__ rejection through property-key coercion, an incomplete fix for GHSA-mwv9-gp5h-frr4" — the bypass took another release. Around them, a sparse-array family in `uneval` (123564/565/566/569, 7.5): "generated code for sparse arrays allocates memory proportional to the array's declared length when evaluated," plus a `stringifyAsync` unhandled rejection (123562, 7.5) that "can terminate the Node.js process."
+
+**Why it matters:** devalue sits exactly where untrusted request payloads meet server-side deserialization in SvelteKit apps, and the batch documents a two-step fix chain — 5.6.4's rejection patched, then bypassed, then patched again in 5.9.3 — the incomplete-fix pattern this feed keeps measuring. If you serve SvelteKit, the version floor is 5.9.3 (current: 6.0.3).
+
+[`🔗 CVE-2026-123561 on NVD`](https://nvd.nist.gov/vuln/detail/CVE-2026-123561) · [`🔗 GHSA-4q55-j62x-fr9h`](https://github.com/sveltejs/devalue/security/advisories/GHSA-4q55-j62x-fr9h) · [`🔗 devalue on npm`](https://www.npmjs.com/package/devalue)
+
+---
+
+## 35. Coca-Cola: an agent's tool output compressed into latent tokens — 70–89% fewer tokens, and the paper claims accuracy goes up
+
+- **Velocity:** ▮ steady
+- **Source:** arXiv · 2611.06500 · Nov 4
+- **Tags:** `agents` `context-compression` `papers`
+
+Coca-Cola (arXiv 2611.06500, submitted Nov 4, THU-Agent) attacks the assumption "that agents must consume tool observations as explicit text tokens": a continuous latent compression model embeds compressed tool observations directly into the agent's input embedding space, trained with Action-Preserving Training, "which aligns the agent's next-action distributions under full and compressed observations" — the objective is action-sufficiency, not reconstruction fidelity. On web-search agents across four QA benchmarks and two model families: "reduces the agent's token consumption by 70.01%-89.24% and end-to-end runtime by 24.45%-55.97%, while consistently improving task performance." Code is published (`THU-Agent/Coca-cola`).
+
+**Why it matters:** this week's compression results keep pointing the same direction — Memorilla's 16 memory tokens, billion-context's month-long sessions — but they compress into text. Coca-Cola skips the bottleneck entirely, and "consistently improving task performance" under 70–89% token cuts, if it replicates, changes the cost model of tool-using agents. Treat the QA-search scope as the caveat: web-search observations, not your codebase.
+
+[`🔗 arXiv:2611.06500`](https://arxiv.org/abs/2611.06500) · [`🔗 THU-Agent/Coca-cola`](https://github.com/THU-Agent/Coca-cola)
+
+---
+
+## 36. gitoxide: a crafted repository captures NTLM credentials at checkout — before any code runs
+
+- **Velocity:** ▮ steady
+- **Source:** NVD · 2 records · Nov 8 ~02:16Z
+- **Tags:** `security` `rust` `git`
+
+CVE-2026-123532 (6.5 CVSS 3.1 / 7.1 CVSS 4.0): `gix-fs` in gitoxide — the pure-Rust Git implementation — before 0.24.1 "contains a credential disclosure vulnerability that allows remote attackers to capture NTLM credentials by supplying UNC symlink targets in a crafted repository. When a victim checks out the repository on Windows with symlinks enabled," the symlink probe reaches out and leaks the machine's NTLM handshake. Companion record CVE-2026-123533: a denial of service in `gix-commitgraph` before 0.42.0 (gitoxide before 0.61.0). Both VulnCheck-assigned, fixed in gix-fs 0.24.1 / gitoxide 0.61.0.
+
+**Why it matters:** "just clone it" keeps growing new limbs — this one needs no install hook, no editor task, and no code execution: the checkout's own filesystem probing is the exfiltration channel. Gitoxide is increasingly embedded as a library (including inside other tools' git paths), so the affected set is larger than its CLI user base.
+
+[`🔗 CVE-2026-123532 on NVD`](https://nvd.nist.gov/vuln/detail/CVE-2026-123532) · [`🔗 GHSA-xw69-xv93-5fjv`](https://github.com/GitoxideLabs/gitoxide/security/advisories/GHSA-xw69-xv93-5fjv)
+
+---
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-11-08T04:35:31Z |
-| Items | 25 |
-| Sources tracked | 20 (Hacker News, GitHub Trending, NVD, CISA KEV, arXiv, Hugging Face, vendor bulletins, cveawg, OSV, JetBrains, The Guardian, hunch.net, decoded.legal, MaxxBench, heise, blog.bosscher.ch, apiiro, textjs.org) |
+| Generated | 2026-11-08T12:28:28Z |
+| Items | 36 |
+| Sources tracked | 24 (Hacker News, GitHub Trending, NVD, CISA KEV, arXiv, Hugging Face, vendor bulletins, cveawg, OSV, JetBrains, The Guardian, hunch.net, decoded.legal, MaxxBench, heise, blog.bosscher.ch, apiiro, textjs.org, caleb.software, earendil-works/pi, lorekit.io, clj.rs, zapfast.rocks, PyPI/npm release registries) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (3x daily) |
 | Ranking | Velocity-weighted (recency × engagement acceleration × source authority) |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |

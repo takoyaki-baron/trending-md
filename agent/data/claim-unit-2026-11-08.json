@@ -1,9 +1,9 @@
 {
- "generated": "2026-11-08T04:35:37.846Z",
+ "generated": "2026-11-08T12:28:44.154Z",
  "files": [
   {
    "file": "2026-11-08.md",
-   "items": 25,
+   "items": 36,
    "findings": [
     {
      "check": "status",
@@ -43,9 +43,9 @@
     {
      "check": "rangeabsent",
      "item": 11,
-     "verdict": "range-only-in-cna",
-     "claim": "CVE-2026-123783 — \"no version range\"",
-     "detail": "NVD `configurations` is absent (record is `Deferred`, and absent `configurations` means \"not yet analysed\", never \"states nothing\"); 1 `affected[]` entry with a `versions[]` — the sentence is true of NVD and false of the record, because the CNA's own `affected[]` is where the range lives (this is the open62541 shape, 2026-10-25)"
+     "verdict": "ghsa-absent-confirmed",
+     "claim": "GHSA-2555-vffj-g73c — \"no version range\"",
+     "detail": "the Advisory-DB record GHSA-2555-vffj-g73c carries an empty `vulnerabilities[]` — no package and no version range, exactly what the sentence says"
     },
     {
      "check": "cvss",
@@ -83,25 +83,81 @@
      "detail": "Received (lastModified 2026-11-08T02:16:53.863)"
     },
     {
+     "check": "status",
+     "item": 27,
+     "verdict": "ok",
+     "claim": "CVE-2026-123609 `Received`",
+     "detail": "Received (lastModified 2026-11-08T02:16:56.083)"
+    },
+    {
+     "check": "status",
+     "item": 28,
+     "verdict": "ok",
+     "claim": "CVE-2026-123493 `Deferred`",
+     "detail": "Deferred (lastModified 2026-11-08T02:16:36.350)"
+    },
+    {
+     "check": "status",
+     "item": 33,
+     "verdict": "ok",
+     "claim": "CVE-2026-123534 `Deferred`",
+     "detail": "Deferred (lastModified 2026-11-08T02:16:43.863)"
+    },
+    {
+     "check": "cvss",
+     "item": 34,
+     "verdict": "ok",
+     "claim": "3.1 7.5",
+     "detail": "CVE-2026-123562 · Primary/disclosure@vulncheck.com · vector reproduces 7.5"
+    },
+    {
+     "check": "status",
+     "item": 34,
+     "verdict": "ok",
+     "claim": "CVE-2026-123562 `Received`",
+     "detail": "Received (lastModified 2026-11-08T02:16:48.567)"
+    },
+    {
      "check": "repo",
      "item": 3,
      "verdict": "ok",
      "claim": "milind-soni/OpenMausBot",
-     "detail": "17187★, last push 2026-11-08"
+     "detail": "17647★, last push 2026-11-08"
     },
     {
      "check": "repo",
      "item": 7,
      "verdict": "star-surge",
-     "claim": "502 quoted vs 595 now",
-     "detail": "dsx-ai-factory/nvke: 502 → 595 (+16%, 93 stars) since the batch was written — a rising count is not a wrong one; date the reading if the number will be re-used"
+     "claim": "502 quoted vs 689 now",
+     "detail": "dsx-ai-factory/nvke: 502 → 689 (+27%, 187 stars) since the batch was written — a rising count is not a wrong one; date the reading if the number will be re-used"
     },
     {
      "check": "repo",
      "item": 7,
      "verdict": "ok",
      "claim": "dsx-ai-factory/nvke",
-     "detail": "595★, last push 2026-11-07"
+     "detail": "689★, last push 2026-11-07"
+    },
+    {
+     "check": "idrange",
+     "item": 27,
+     "verdict": "ok-range",
+     "claim": "CVE-2026-123609–123613",
+     "detail": "5 records across a 5-id span (2026-123609…123613)"
+    },
+    {
+     "check": "idrange",
+     "item": 28,
+     "verdict": "ok-range",
+     "claim": "CVE-2026-123493–123531",
+     "detail": "39 records across a 39-id span (2026-123493…123531)"
+    },
+    {
+     "check": "idrange",
+     "item": 34,
+     "verdict": "ok-range",
+     "claim": "CVE-2026-123561–123569",
+     "detail": "9 records across a 9-id span (2026-123561…123569)"
     },
     {
      "check": "quotation",
@@ -115,7 +171,7 @@
      "item": 2,
      "verdict": "ok",
      "claim": "1 quotation(s)",
-     "detail": "verbatim in 10 readable source(s)"
+     "detail": "verbatim in 6 readable source(s)"
     },
     {
      "check": "quotation",
@@ -157,7 +213,7 @@
      "item": 8,
      "verdict": "ok",
      "claim": "2 quotation(s)",
-     "detail": "verbatim in 11 readable source(s)"
+     "detail": "verbatim in 8 readable source(s)"
     },
     {
      "check": "quotation",
@@ -232,8 +288,15 @@
     {
      "check": "quotation",
      "item": 19,
+     "verdict": "quote-not-read",
+     "claim": "“in 539 of the 1 105 repos we traced a commit co authored by claude itself changed the file”",
+     "detail": "15 words, 0 hits in 1 readable source(s), but 1 cited page(s) went unread — unread is not absent, so this is not called a fabrication; open those page(s) before publishing"
+    },
+    {
+     "check": "quotation",
+     "item": 19,
      "verdict": "ok",
-     "claim": "3 quotation(s)",
+     "claim": "2 quotation(s)",
      "detail": "verbatim in 1 readable source(s)"
     },
     {
@@ -277,6 +340,90 @@
      "verdict": "ok",
      "claim": "3 quotation(s)",
      "detail": "verbatim in 7 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 26,
+     "verdict": "ok",
+     "claim": "6 quotation(s)",
+     "detail": "verbatim in 3 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 27,
+     "verdict": "ok",
+     "claim": "3 quotation(s)",
+     "detail": "verbatim in 14 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 28,
+     "verdict": "ok",
+     "claim": "3 quotation(s)",
+     "detail": "verbatim in 14 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 29,
+     "verdict": "ok",
+     "claim": "3 quotation(s)",
+     "detail": "verbatim in 3 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 30,
+     "verdict": "ok",
+     "claim": "2 quotation(s)",
+     "detail": "verbatim in 3 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 31,
+     "verdict": "ok",
+     "claim": "3 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 32,
+     "verdict": "ok",
+     "claim": "2 quotation(s)",
+     "detail": "verbatim in 3 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 33,
+     "verdict": "ok",
+     "claim": "2 quotation(s)",
+     "detail": "verbatim in 5 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 34,
+     "verdict": "quote-not-read",
+     "claim": "“generated code for sparse arrays allocates memory proportional to the arrays declared length whe…”",
+     "detail": "15 words, 0 hits in 6 readable source(s), but 1 cited page(s) went unread — unread is not absent, so this is not called a fabrication; open those page(s) before publishing"
+    },
+    {
+     "check": "quotation",
+     "item": 34,
+     "verdict": "ok",
+     "claim": "3 quotation(s)",
+     "detail": "verbatim in 6 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 35,
+     "verdict": "ok",
+     "claim": "4 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 36,
+     "verdict": "ok",
+     "claim": "1 quotation(s)",
+     "detail": "verbatim in 5 readable source(s)"
     }
    ]
   }
@@ -286,7 +433,7 @@
  "readme_calls": 0,
  "cited_page_calls": 0,
  "repo_page_calls": 0,
- "nvd_calls": 1,
+ "nvd_calls": 2,
  "nvd_failed_chunks": 0,
  "cna_calls": 0
 }

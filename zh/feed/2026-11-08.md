@@ -1,6 +1,6 @@
 ---
 date: 2026-11-08
-updated: 2026-11-08T04:35:31Z
+updated: 2026-11-08T12:28:28Z
 schedule: 04:03, 12:03, 20:03 UTC+8
 sources: 15
 license: CC-BY-4.0
@@ -364,13 +364,169 @@ Harness-S 从同一基座演化出的 harness 身上总结出三点 —— 局�
 
 ---
 
+## 26. Goodbye Claude, Hello Pi — 一位 Claude Code 重度用户公开其迁移，迁往的工具箱已有 12 万 star
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Hacker News · 367+ pts · 9.6小时前 (~11:11 UTC+8)
+- **Tags:** `agents` `coding-agents` `harnesses`
+
+今天登上首页的讨论是一篇九月的文章（caleb.software，日期 9 月 21 日），作者宣布退役 Claude Code、改用 Pi 作为主力 harness —— Pi 即 `earendil-works/pi`，MIT 协议的 "AI agent toolkit: unified LLM API, agent loop, TUI, coding agent CLI"，目前 **120,730 stars**（11月2日发布 v1.5.0，今天仍有提交）。抱怨点具体而非情绪化：AGENTS.md/CLAUDE.md 双格式负担（"just a day after making my decision, they announced Claude Code would finally start supporting AGENTS.md files"）；同一时间只能有一个会话连接 IDE，这个 bug "reported at least as far back as December 2025 … and closed as a duplicate of a totally unrelated bug"；以及变更频率这一硬指标 —— "there have been 244 releases to Claude Code this year; over 3/4 of these changed the system prompt or tool descriptions"。对功能节奏的批评："Dynamic workflows, agent teams, ultrareviews – all great ways to help enterprise customers burn ever more tokens each day, but not really anything I want or need."
+
+**为什么重要：** 这篇文章最锋利的地方是一个可复现的数字 —— 以每年 244 个 release 的速度改写 system prompt，是任何人都可测量的 harness 稳定性指标 —— 它同时记录了一个事实：编程 harness 之间的切换成本已经坍塌：配置是 markdown，惯例正在向 AGENTS.md 收敛，而一条偏企业路线图的最大受益者可以是一个开源工具箱。
+
+> "I'm certain that in a few years we'll all look back at its release as one of the major drivers of this new era of software development we're in." —— 评 Claude Code，出自这篇宣布退役它的同一篇文章
+
+[`🔗 caleb.software`](https://caleb.software/posts/claude-to-pi.html) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50410107) · [`🔗 earendil-works/pi`](https://github.com/earendil-works/pi)
+
+---
+
+## 27. rustls 一口气发布五条 CVE — 错误加密层级的握手、密钥交换降级，修复早已在九月和十月发布
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** NVD · 5 条记录 · 11月8日 ~02:16Z
+- **Tags:** `security` `tls` `rust`
+
+Rust 生态的 TLS 基础库 rustls 在今天凌晨的批量申报中收到五条 CVE 记录（CVE-2026-123609–123613，全部由 VulnCheck 申报，全部仍是 `Received`，最高 **6.9** CVSS 4.0 / **5.3** CVSS 3.1）。最关键的是 CVE-2026-123613（0.23.13 → 0.23.45）：实现会 "accepts TLS 1.3 handshake messages at the wrong encryption level when they follow a key-changing message in the same record, because Deframer::aligned does not enforce RFC 8446 record-boundary alignment"。CVE-2026-123611：密钥交换降级 —— "network attackers to poison the per-server-name key-exchange group record via an unauthenticated ServerHello"，一条被应答的连接即可让后续连接降级。其余：CVE-2026-123610，可选的 Brotli 证书解压存在不受控分配，起于 "a five-byte Brotli header"；CVE-2026-123609，派生 `Debug` 格式化会把会话密钥材料暴露进自定义 `ClientSessionStore` 的日志；CVE-2026-123612（仅 0.23.44/0.23.45），ECH 被拒绝时握手完成前缓冲的应用数据以明文发出。修复：0.23.45（9月14日）与 0.23.46（10月14日）—— 比文书早了数周。
+
+**为什么重要：** rustls 位于 Rust 服务生态的很大一部分之下，而记录边界错位正是当年让老一代 TLS 实现花了十年才补完的 bug 类别 —— RFC 8446 的成帧规则存在的意义，就是让明文记录无法冒充握手后的流量。分数不高，影响半径最大，且是又一次实测的 fix-then-record："仍然未修复"会恰好说反 —— 确认你在 0.23.46+。
+
+[`🔗 NVD 上的 CVE-2026-123613`](https://nvd.nist.gov/vuln/detail/CVE-2026-123613) · [`🔗 GHSA-2mjx-qc3c-rqvc`](https://github.com/rustls/rustls/security/advisories/GHSA-2mjx-qc3c-rqvc) · [`🔗 rustls releases`](https://github.com/rustls/rustls/releases)
+
+---
+
+## 28. Vikunja 发布 39 条 CVE 记录 — 其中包括自家编程智能体 CLI Veans 的提示注入
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** NVD · 39 条记录 · 11月8日 ~02:16Z
+- **Tags:** `security` `cve` `agents`
+
+今天批量申报中单一体量最大的一块：开源待办/项目追踪器 Vikunja（`go-vikunja/vikunja`，约 6.0k stars）收到 **39 条 CVE 记录**（CVE-2026-123493–123531）—— 全部由 VulnCheck 申报，全部 `Deferred`，修复于 **2.7.1（10月20日发布，比记录早十九天**；当前版本 2.8.0，11月5日）。最高分 8.8（CVE-2026-123531，资源消耗）。范围内包括：认证绕过 —— 记录原文 "allows disabled or locked users to retain access through API tokens owned by their bot users"（CVE-2026-123493，5.4）；团队 owner 通过 "by deleting accounts" 在只读共享项目上获得 admin（CVE-2026-123520，7.1）。最值得注意的子集瞄准 **Veans**（`code.vikunja.io/veans`），Vikunja 的编程智能体 CLI：CVE-2026-123498（3.7）—— 有写权限的项目成员 "by setting project titles or task content rendered verbatim inside the coding agent's authoritative instruction block" 注入指令，且在 SessionStart 和 PreCompact 钩子上 prime；CVE-2026-123499（5.9）—— 不受信任 checkout 中的 `.veans.yml` 可把 VEANS_TOKEN 的 Bearer 认证指向攻击者控制的服务器。底层 GHSA 于 10月22日发布，并写明 "veans has no tagged release yet"；修复是一个信任门，外加把远程元数据围栏在权威块之外。批量书写者还留下了指纹：四条描述写成 "Vikunja **veans** before 2.7.1"。
+
+**为什么重要：** 同一周里，JetBrains 的 89 条记录公告里有一条编程智能体 CLI，待办应用的公告里也有一条 —— 项目标题和任务文本是攻击者可写的数据，直接流进一个地位高于用户的指令块。这才是要紧的注入类别，而厂商自己的公告给出了正确形态：不可信数据，加围栏、加标签、放在权威区之外。
+
+[`🔗 NVD 上的 CVE-2026-123498`](https://nvd.nist.gov/vuln/detail/CVE-2026-123498) · [`🔗 GHSA-cvh3-hf56-g9xm`](https://github.com/go-vikunja/vikunja/security/advisories/GHSA-cvh3-hf56-g9xm) · [`🔗 Vikunja v2.7.1`](https://github.com/go-vikunja/vikunja/releases/tag/v2.7.1)
+
+---
+
+## 29. ZapFast：Rust + egui 的原生 WhatsApp 客户端 — 空闲 200 MB，对面是 WhatsApp Web 的 1.13 GB
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News · 87+ pts · 10.7小时前 (~10:02 UTC+8)
+- **Tags:** `rust` `messaging` `native-apps`
+
+ZapFast（`crmne/zapfast`，3,523 stars，MIT，8月29日创建，今天早上仍有推送）是 Linux/macOS/Windows 的 WhatsApp 客户端，用 Rust 与 egui 编写：它 "links to your phone as a companion device through whatsapp-rust and has no browser engine"。README 的实测："In our Linux test it opens in under a second and uses about 200 MB of idle RAM, against 1.13 GB for WhatsApp Web." 支持 11 种界面语言、主题，以及一个说明链接机制的文档站。最诚实的部分是风险框，明说而非藏在角落："ZapFast is an unofficial client and is not affiliated with WhatsApp or Meta. Using an unofficial client may be against WhatsApp's terms of service and could get an account suspended. Use it at your own risk."
+
+**为什么重要：** 本周 Discord 的 Rust 重写刚做完 native 对 Electron 的论证，ZapFast 是同一个命题被一个两人规模的项目应用到那个大多数人整天开着的应用上 —— 由多设备协议承担重活，而不是捆绑一个 Chromium。账号封禁风险是真实的，项目自己也先说了；RAM 表按 README 的定位处理 —— 那是一次 Linux 测试。
+
+[`🔗 crmne/zapfast`](https://github.com/crmne/zapfast) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50409855) · [`🔗 基准测试`](https://zapfast.rocks/benchmarks/)
+
+---
+
+## 30. MuJoCo 4.0.0 — 3.0 以来首个大版本，加入投机接触与弹塑性
+
+- **Velocity:** ▮▮ rising
+- **Source:** GitHub Releases · v4.0.0 · 11月6日
+- **Tags:** `simulation` `robotics` `physics`
+
+MuJoCo —— DeepMind 的物理仿真器、机器人学与 RL 研究事实上的参照实现 —— 于 11月6日发布 4.0.0，是 3.0 以来的第一个大版本，目前正在趋势榜上。两个头条特性：**投机接触（speculative contacts）** 的 `speculative` 开关，"to prevent fast-moving convex geoms from tunneling through thin obstacles within a single timestep"（保守推进，附示例模型）；以及**弹塑性（elasto-plasticity）**，"with stateful plastic deformation stored in `mjData.plastic` (`mjSTATE_PLASTIC`)"，覆盖关节与肌腱弹簧。发布说明指向一条汇总 3.0 以来全部新增的公告讨论、mujoco.org 的交互展示，以及 MuJoCo Live 的浏览器 demo。
+
+**为什么重要：** 穿透薄几何与塑性形变是 RL 与机器人研究者历来要用缩小步长或外挂接触启发式来绕过的两类物理行为 —— 仿真器层面的修复会改变哪些实验变得便宜。4.0.0 也是那种会弄断下游版本锁定的版本号，检查你的锁定。
+
+[`🔗 v4.0.0 发布说明`](https://github.com/google-deepmind/mujoco/releases/tag/4.0.0) · [`🔗 4.0 公告讨论`](https://github.com/google-deepmind/mujoco/discussions/3773)
+
+---
+
+## 31. 智能体记忆需要它的 OpenTelemetry 时刻 — 盘点你机器上四种互不相读的记忆格式
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News · 63+ pts · 4.1小时前 (~16:40 UTC+8)
+- **Tags:** `agents` `memory` `interop`
+
+LoreKit 的 Mads Thines（11月7日）盘点了一套典型智能体配置"记住"东西的位置：每个仓库一份 `AGENTS.md`/`CLAUDE.md` 外加 `.cursor/rules/*.mdc`；Anthropic 的 memory tool 写进 `/memories` 目录；Copilot 把仓库事实存在 GitHub 服务端；还有一个 memory MCP 服务器持有 JSONL 知识图谱。"That's four different shapes, and none of them can read the others." 你的 CI 智能体学到的教训只留在写下它的那个工具里。文章的论证是历史性的：2019 年之前每家可观测性厂商都自带 agent 和格式，直到 OpenTracing 与 OpenCensus 合并成 OpenTelemetry，厂商才就数据模型与语义约定达成一致。提议：给智能体记忆同样的协议，而 "The problem isn't a missing tool. It's a missing agreement." 作者披露了利益相关："I build one of these tools, LoreKit, which is open source. This isn't a pitch that LoreKit has solved memory."
+
+**为什么重要：** 它点出了本周各条记忆发布背后那个协调问题 —— 本 feed 昨天覆盖了 Anthropic 的记忆组件地图和 16 token 的文档压缩结果；如果一条教训在切换 harness 后仍然存活，两者都会更好。OpenTelemetry 先例是对市场自己会收敛这一主张最诚实的反例。
+
+[`🔗 lorekit.io`](https://www.lorekit.io/blog/open-agent-memory-format) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50411467)
+
+---
+
+## 32. clj.rs：用 Rust 实现的 Clojure 方言 — 定位是智能体编程运行时
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News · 78+ pts · 自11月4日起在首页
+- **Tags:** `lisp` `rust` `languages`
+
+clj.rs（仓库 `csm/clojurust`，alpha，已发布到 crates.io 名为 `cljrs`，clj.rs/repl 提供浏览器 REPL）是 "an experimental Clojure dialect targeting the Rust ecosystem. It aims to be a capable Lisp runtime with persistent data structures, a hosted macro system, and native interop — compiled or interpreted, suitable for use as an agentic coding runtime." 站点警告 "Early stage; expect rough edges"，开发日志公开记录了构建过程。
+
+**为什么重要：** "agentic coding runtime" 是一个新卖点套着旧想法 —— 带宏系统与 REPL 循环的同像性语言，在结构上就是一个把代码当作数据、供智能体检视与改写的 harness。这个 alpha 是否配得上宣言尚未可知；语言开始为智能体驱动者而设计、人类退居第二受众，这才是趋势数据点。
+
+[`🔗 clj.rs`](https://clj.rs/) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50366902) · [`🔗 csm/clojurust`](https://github.com/csm/clojurust)
+
+---
+
+## 33. Tornado 6.6：`static_url()` 路径穿越与 Set-Cookie 注入 — 记录比发布晚了 18 天
+
+- **Velocity:** ▮▮ rising
+- **Source:** NVD · 2 条记录 · 11月8日 ~02:16Z
+- **Tags:** `security` `python` `web`
+
+Tornado（Fetch/Wave 以及无数内部服务背后的 Python web 框架）收到两条 CVE 记录。CVE-2026-123534（CVSS 3.1 6.5 / CVSS 4.0 8.3）："a path traversal vulnerability in RequestHandler.static_url() and get_version() that allows attackers to hash files outside static_path using ../ sequences" —— 进程可读的任意文件，其 SHA-512 哈希都可能泄露，凡是把攻击者可控输入传给 `static_url()` 的应用皆可触达。CVE-2026-123535（4.2）：`set_cookie`（及其 signed/secure 变体）"does not validate the max_age argument … allowing injection of additional Set-Cookie attributes"。两者皆修复于 **6.6，10月21日已上 PyPI** —— 文书晚了十八天。全部由 VulnCheck 申报，状态 `Deferred`。
+
+**为什么重要：** 这个穿越藏在一个被大多数应用当作 URL 构造器而非文件读取器的版本哈希助手里 —— 与本文件前文 Craft CMS 的端点是同一类意外：一个被调用方当作字符串构造器的辅助函数，实际在读取文件系统。Tornado 的部署长尾正是那种几个月内都看不到公告的人群；而 6.6 从十月起就可安装。
+
+[`🔗 NVD 上的 CVE-2026-123534`](https://nvd.nist.gov/vuln/detail/CVE-2026-123534) · [`🔗 GHSA-v8g8-cp5j-42fg`](https://github.com/tornadoweb/tornado/security/advisories/GHSA-v8g8-cp5j-42fg)
+
+---
+
+## 34. devalue 发布 9 条 CVE 记录 — SvelteKit 序列化层的原型污染与稀疏数组 DoS 家族
+
+- **Velocity:** ▮▮ rising
+- **Source:** NVD · 9 条记录 · 11月8日 ~02:16Z
+- **Tags:** `security` `javascript` `sveltekit`
+
+SvelteKit SSR 数据通道底下的序列化库 devalue 收到九条 CVE 记录（CVE-2026-123561–123569）—— 全部由 VulnCheck 申报，全部 `Received`，其中六条 **CVSS 3.1 7.5**（CVE-2026-123562 至 -123566，以及 -123569）。修复分三波到达：5.6.3（2月18日）、5.6.4（3月11日）、5.9.3（9月18日）；记录今天才落地。两条最突出。CVE-2026-123567：经 `parse`/`unflatten` 的原型注入 —— 精造输入产生带 `__proto__` 自有属性的对象，下游代码用 `Object.assign` 合并时 "alters the target object's prototype"。而 CVE-2026-123561 是它的不完整修复："malformed null-prototype object keys to bypass parse's __proto__ rejection through property-key coercion, an incomplete fix for GHSA-mwv9-gp5h-frr4" —— 绕过又花了一个版本。围绕它们的是 `uneval` 的稀疏数组家族（123564/565/566/569，7.5）："generated code for sparse arrays allocates memory proportional to the array's declared length when evaluated"，外加一个 `stringifyAsync` 未处理拒绝（123562，7.5），"can terminate the Node.js process"。
+
+**为什么重要：** devalue 恰好位于 SvelteKit 应用中不可信请求载荷与服务端反序列化相遇的位置，而这批记录记录了一条两步修复链 —— 5.6.4 的拒绝先被打上，再被绕过，再在 5.9.3 打上 —— 正是本 feed 反复测量的不完整修复模式。如果你在服务 SvelteKit，版本下限是 5.9.3（当前：6.0.3）。
+
+[`🔗 NVD 上的 CVE-2026-123561`](https://nvd.nist.gov/vuln/detail/CVE-2026-123561) · [`🔗 GHSA-4q55-j62x-fr9h`](https://github.com/sveltejs/devalue/security/advisories/GHSA-4q55-j62x-fr9h) · [`🔗 npm 上的 devalue`](https://www.npmjs.com/package/devalue)
+
+---
+
+## 35. Coca-Cola：智能体的工具输出压缩成潜在 token — 少 70–89%，论文还称准确率上升
+
+- **Velocity:** ▮ steady
+- **Source:** arXiv · 2611.06500 · 11月4日
+- **Tags:** `agents` `context-compression` `papers`
+
+Coca-Cola（arXiv 2611.06500，11月4日提交，THU-Agent）攻击的是 "that agents must consume tool observations as explicit text tokens" 这一假设：一个连续潜在压缩模型把压缩后的工具观测直接嵌入智能体的输入嵌入空间，用 Action-Preserving Training 训练，"which aligns the agent's next-action distributions under full and compressed observations" —— 目标是动作充分性，而非重建保真度。在两个模型家族、四个 QA 基准的 web 搜索智能体上："reduces the agent's token consumption by 70.01%-89.24% and end-to-end runtime by 24.45%-55.97%, while consistently improving task performance." 代码已发布（`THU-Agent/Coca-cola`）。
+
+**为什么重要：** 本周的压缩结果不断指向同一方向 —— Memorilla 的 16 个记忆 token、billion-context 的整月会话 —— 但它们都压缩成文本。Coca-Cola 完全跳过了这个瓶颈，而在砍掉 70–89% token 的同时 "consistently improving task performance"，若能复现，将改写工具型智能体的成本模型。把 QA 搜索的范围当作限制条件：是 web 搜索观测，不是你的代码库。
+
+[`🔗 arXiv:2611.06500`](https://arxiv.org/abs/2611.06500) · [`🔗 THU-Agent/Coca-cola`](https://github.com/THU-Agent/Coca-cola)
+
+---
+
+## 36. gitoxide：精造仓库在 checkout 时捕获 NTLM 凭据 — 任何代码都还没运行
+
+- **Velocity:** ▮ steady
+- **Source:** NVD · 2 条记录 · 11月8日 ~02:16Z
+- **Tags:** `security` `rust` `git`
+
+CVE-2026-123532（CVSS 3.1 6.5 / CVSS 4.0 7.1）：纯 Rust 的 Git 实现 gitoxide 中的 `gix-fs`，0.24.1 之前 "contains a credential disclosure vulnerability that allows remote attackers to capture NTLM credentials by supplying UNC symlink targets in a crafted repository. When a victim checks out the repository on Windows with symlinks enabled"，符号链接探测向外发起连接并泄露本机的 NTLM 握手。伴随记录 CVE-2026-123533：`gix-commitgraph` 0.42.0 之前的拒绝服务（gitoxide 0.61.0 之前）。均由 VulnCheck 申报，修复于 gix-fs 0.24.1 / gitoxide 0.61.0。
+
+**为什么重要：** "克隆下来就行"不断长出新肢体 —— 这一条不需要安装钩子、不需要编辑器任务、也不需要代码执行：checkout 自身的文件系统探测就是外传通道。Gitoxide 正越来越多地以库的形式被嵌入（包括其他工具的 git 路径），受影响面大于它的 CLI 用户群。
+
+[`🔗 NVD 上的 CVE-2026-123532`](https://nvd.nist.gov/vuln/detail/CVE-2026-123532) · [`🔗 GHSA-xw69-xv93-5fjv`](https://github.com/GitoxideLabs/gitoxide/security/advisories/GHSA-xw69-xv93-5fjv)
+
+---
+
 ## Metadata
 
 | 字段 | 值 |
 |-------|-------|
-| Generated | 2026-11-08T04:35:31Z |
-| Items | 25 |
-| Sources tracked | 20 (Hacker News, GitHub Trending, NVD, CISA KEV, arXiv, Hugging Face, vendor bulletins, cveawg, OSV, JetBrains, The Guardian, hunch.net, decoded.legal, MaxxBench, heise, blog.bosscher.ch, apiiro, textjs.org) |
+| Generated | 2026-11-08T12:28:28Z |
+| Items | 36 |
+| Sources tracked | 24 (Hacker News, GitHub Trending, NVD, CISA KEV, arXiv, Hugging Face, 厂商公告, cveawg, OSV, JetBrains, The Guardian, hunch.net, decoded.legal, MaxxBench, heise, blog.bosscher.ch, apiiro, textjs.org, caleb.software, earendil-works/pi, lorekit.io, clj.rs, zapfast.rocks, PyPI/npm 发布注册表) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (3x daily) |
 | Ranking | Velocity-weighted (recency × engagement acceleration × source authority) |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |
