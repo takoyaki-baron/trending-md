@@ -1,0 +1,152 @@
+{
+ "generated": "2026-11-08T20:31:20.764Z",
+ "files": [
+  {
+   "file": "2026-11-09.md",
+   "items": 15,
+   "findings": [
+    {
+     "check": "status",
+     "item": 5,
+     "verdict": "ok",
+     "claim": "CVE-2026-9764 `Awaiting Analysis`",
+     "detail": "Awaiting Analysis (lastModified 2026-11-08T19:17:54.363)"
+    },
+    {
+     "check": "range",
+     "item": 5,
+     "verdict": "ok-span",
+     "claim": "CVE-2026-9764 1.0.4 through 2.0.1",
+     "detail": "1.0.4 (inclusive) … 2.0.1 (inclusive) · Bob Shell — non-empty"
+    },
+    {
+     "check": "range",
+     "item": 5,
+     "verdict": "ok-span",
+     "claim": "CVE-2026-6715 1.0 – 3.0.1.1",
+     "detail": "1.0 (inclusive) … 3.0.1.1 (inclusive) · Concert — non-empty"
+    },
+    {
+     "check": "field",
+     "item": 6,
+     "verdict": "field-unknown-name",
+     "claim": "“no service-health entry”",
+     "detail": "“service-health” is not a CVE record field this check knows — the claim is about something else, or FIELD_VOCAB needs the name"
+    },
+    {
+     "check": "field",
+     "item": 14,
+     "verdict": "field-unknown-name",
+     "claim": "“no contentEditable”",
+     "detail": "“contentEditable” is not a CVE record field this check knows — the claim is about something else, or FIELD_VOCAB needs the name"
+    },
+    {
+     "check": "repo",
+     "item": 3,
+     "verdict": "ok",
+     "claim": "thedotmack/claude-mem",
+     "detail": "114832★, last push 2026-11-08"
+    },
+    {
+     "check": "repo",
+     "item": 15,
+     "verdict": "ok",
+     "claim": "Renhuai123/ziwei-doushu",
+     "detail": "16935★, last push 2026-11-08"
+    },
+    {
+     "check": "repo",
+     "item": 15,
+     "verdict": "ok",
+     "claim": "Renhuai123/nishi-ziwei-video-reading",
+     "detail": "0★, last push 2026-11-08"
+    },
+    {
+     "check": "quotation",
+     "item": 1,
+     "verdict": "ok",
+     "claim": "1 quotation(s)",
+     "detail": "verbatim in 9 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 3,
+     "verdict": "ok",
+     "claim": "3 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 4,
+     "verdict": "ok",
+     "claim": "3 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 5,
+     "verdict": "ok",
+     "claim": "1 quotation(s)",
+     "detail": "verbatim in 8 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 6,
+     "verdict": "ok",
+     "claim": "1 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 7,
+     "verdict": "ok",
+     "claim": "2 quotation(s)",
+     "detail": "verbatim in 4 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 8,
+     "verdict": "ok",
+     "claim": "2 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 10,
+     "verdict": "ok",
+     "claim": "1 quotation(s)",
+     "detail": "verbatim in 3 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 11,
+     "verdict": "ok",
+     "claim": "1 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 12,
+     "verdict": "ok",
+     "claim": "1 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 13,
+     "verdict": "ok",
+     "claim": "1 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    }
+   ]
+  }
+ ],
+ "status_watch": [],
+ "api_calls": 0,
+ "readme_calls": 0,
+ "cited_page_calls": 0,
+ "repo_page_calls": 0,
+ "nvd_calls": 1,
+ "nvd_failed_chunks": 0,
+ "cna_calls": 0
+}
