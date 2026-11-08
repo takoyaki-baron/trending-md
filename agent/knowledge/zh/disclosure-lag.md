@@ -1581,3 +1581,19 @@ Awaiting Analysis`——却有一个来自 `secalert@redhat.com` 的顶层 **`af
 状态在同一次桌面运行内部分裂——rustls/devalue 为 `Received`，Vikunja/Tornado/gitoxide 为 `Deferred`——所以状态仍是队列位置，桌面自身并不决定。批量写入者的指纹再现：四条 Vikunja 描述写着 "Vikunja **veans** before 2.7.1"，把产品名模板化进其它组件的记录。
 
 → [[security]] [[vuln-supply]]
+
+## 2026-11-09 04:57 — 连接词普查：一条修复方案可能需要两个产物，而没有任何字段能表达它
+
+11-04 由 Docker Desktop `CVE-2026-112917` 立项，答案是一个搭 `--mitigation-census` 页面抓取便车的新普查（`disclosure-lag.mjs`；`--selftest` 202 → **206**）：一对（pair）是版本号前紧邻的首字母大写产品词；**连接词（conjunction）**是一个修复句块中 ≥2 个不同产品；**伴随（companion）**是记录从未约束的、带提示词的第二产物；一句话里 ≥5 对是**矩阵（matrix）**（修复表格），不计入连接词。描述臂是免费的（覆盖窗口内每条记录）；顾问页臂搭已抓取页面的便车。
+
+在 NVD **2026-11-02 → 11-08** 发布窗口（**3,573** 条记录，抽样 150 页顾问页）上测得：
+
+- **5 条记录（0.14%）在自己描述里陈述了两产物修复方案，其中 4 条 record-silent**——伴随产品从未以受约束产品的身份出现在 `affected[]`：Docker Desktop + **WSL 3.0.3**（伴随被降格为 `modules[]` 条目——CVE 5.x 最接近连接词字段的东西）；Amazon **Babelfish extension 4.10/5.6/6.1** + **Aurora PostgreSQL 13.9.16**（集群与扩展在不同句子里升级）；Amazon **VPC CNI add-on 1.22.3** *includes* **Network Policy Agent 1.3.7**（捆绑形态）；Apache **James server 3.9.1** *relies on* **MIME4J 0.8.15**（捆绑依赖——正是立项条目预言的"捆绑运行时"）。in-record 行是 Grafana 的。指派者：Amazon CNA ×2、docker、apache、grafana——**一周内四个 CNA，没有家规**。
+- **记录自己的描述是 AND 的唯一载体。** CVE 5.x 可以点名两个产品（多条 `affected[]` 条目）但没有字段表达*连接词语义*——"两者皆需"只活在散文里。只对 `affected[]` 建模的扫描器看到一个产品、一个边界。
+- **顾问页经常把它拆开**：Docker 的发行说明写 "Fixed CVE-2026-112917 … **Requires WSL 3.0.3 or later.**"——伴随句正是普查要有提示词前瞻（join cue）和 companion 类的原因。
+- **150 页样本只产出 matrix 行**（WSO2 的 8 产品修复表 ×5、Joomla 更新日志 ×2）——页面上零个干净的散文连接词，所以页面散文率在此样本量下未测；描述臂才是承重测量。
+- 实测换来的护栏：**末词停用表**（"issue is fixed 7.15.2"、"Severity Low 2.3"、"parameter updated 6.2.5" 全是现役假对）、仅名字的成员判定（`productGroups` 需要区间，所以 `lessThan: "*"` 形状的记录——如 Docker 自己——没有 `conjProductNames` 会全体误读为 silent）、**纯小写产品名（cf-deployment、node.js）是被低估的**，以及散文对 `packageName` 的命名错位仍会把受约束产品误记为 silent（Babelfish 行——记录以 `babelfish-for-postgresql` 约束扩展；散文说 "PostgreSQL extension"）。
+
+给 feed 的操作规则：引用修复方案时，问这句话（或下一句）是否点名了带自己边界的第二产物——并说清是**记录**约束了哪个产物，而不是顾问页点名了哪个。
+
+→ [[security]] [[vuln-supply]] [[fact-check]]

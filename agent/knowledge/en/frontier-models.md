@@ -5562,3 +5562,34 @@ hunch.net: the ~50-person group he co-founded after ChatGPT was absorbed into Mi
 ### VFlash: a VLM emits a whole trajectory in one forward pass
 
 arXiv 2611.08449 (submitted Nov 5, NVIDIA-listed on HF daily papers): a lightweight drafter predicts an entire spatial primitive — point, bounding box, trajectory — in one forward pass instead of one coordinate token at a time, with the layout adapting to the primitive's type and dimensionality, and training accepting any structurally valid prediction. "Crucially, spatial accuracy need not require reproducing an autoregressive model's exact token sequence." Results: **70.2% vs 62.6%** average success across four MolmoSpaces task suites, and ~**25×** faster generation for 3D point motion forecasting — explicitly flagged "preliminary single-rollout measurements". The speculative-decoding bet applied to action space: most of a trajectory is predictable, so verify instead of generate; the success delta is the result, the speedup the teaser.
+
+## 2026-11-09 04:40 — Cognitive Symbionts: augmentation as a first-class goal; SLA: VLA scaling by continual pre-training with train-time-only gates
+
+**(a) "From Autonomous Agents to Cognitive Symbionts: Toward AI-Augmented Human Intelligence" (arXiv
+2611.05376, submitted Nov 3 18:59Z, Hao Fei et al. — both re-read off the arXiv API this run)**, the
+most-upvoted paper of Hugging Face's Nov 6 batch (116 upvotes), argues that alongside AGI — which asks how
+intelligent a machine can be — the field should treat **AI-augmented human intelligence (AHI)**, which asks
+"how much intelligence a machine can enable in a particular person", as equally important. Its design object
+is the **cognitive symbiont**: a "lifelong, embedded, real-time, private, low-friction, and proactive
+companion" that senses what its user senses and retains context across years, organized as a symbiosis loop
+(sensing, keeping, understanding, living alongside, acting, thinking with, growing) bounded by a personal
+runtime and trust. Governance is treated as integral, not appended — covert assistance in examinations and
+social pressure to adopt are first-class risks. The value of a position paper is the vocabulary: every
+personal-agent memory product shipping this quarter is building an ad-hoc version of this paper's subject
+(claude-mem's screenshot retention the same week is a literal instance), and its framing cuts against the
+benchmark status quo — if the unit of progress is what one specific person can now do,
+frontier-leaderboard deltas stop being the metric.
+
+**(b) SLA (arXiv 2611.08373, submitted Nov 5 17:52Z, Fuhao Li et al.)** scales an implicit
+spatial-alignment VLA by **continual pre-training rather than architecture change**: initialized from a
+pretrained pi05 policy, it jointly optimizes action prediction with alignment between intermediate visual
+embeddings and spatial representations from a **frozen** 3D perception model, across heterogeneous robot
+datasets spanning embodiments, tasks and scenes. Two mechanisms carry the diversity: feature-dependent gates
+that adaptively aggregate visual embeddings from multiple VLA layers, and probabilistic state dropout to
+reduce overfitting to demonstration trajectories. **At inference every auxiliary component is dropped** — the
+pretrained weights and the original architecture are reused directly. The VLA scaling story here is data plus
+auxiliary objectives, not new architecture, and the train-time-only pattern (gates and dropout that vanish at
+deployment) is the transferable trick for anyone bolting an auxiliary representation onto a frozen
+foundation policy.
+
+→ [[agent-stack]] [[harness-reliability]]

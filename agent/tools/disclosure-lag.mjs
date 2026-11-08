@@ -325,7 +325,7 @@ function productGroups(cve) {
       if (!product || !ranges.length) continue;
       const paren = (product.match(/\(([^)]+)\)/) || [])[1] || null;
       const first = product.split(/[\s(]/)[0];
-      out.push({ product, aliases: [...new Set([product, first, paren].filter(Boolean))], ranges });
+      out.push({ product, aliases: [...new Set([product, first, paren].filter(Boolean))], ranges, modules: d.modules || [] });
     }
   }
   return out;
@@ -384,6 +384,47 @@ const GHSA_RE = /GHSA(-[23456789cfghjmpqrvwx]{4}){3}/g;
    that bumps PHP *and* fixes an XSS is a fix, so the order is the claim being tested. */
 const SECURITY_WORDS = /\b(?:CVE-\d{4}-\d+|[Ss]ecurity|[Vv]ulnerab|[Xx][Ss][Ss]|injection|[Rr]emote code|[Aa]uth(?:entication)? bypass|[Ss]SRF|[Rr]ace condition)/;
 const INFRA_WORDS = /\b(?:PHP|base image|docker|Docker|container image|build tool|build system|CI|dependenc(?:y|ies)|bump|toolchain|Node(?:\.js)?|runtime)\b/;
+
+/* ── the conjunction census's word-lists (added 2026-11-09 04:57, filed 2026-11-04 04:22) ──
+   Docker Desktop `CVE-2026-112917`'s remedy is a CONJUNCTION of artifacts in two products —
+   "fully fixed only with Docker Desktop 4.98.0 or later and WSL 3.0.3 or later", with the warning
+   sentence that makes the conjunction load-bearing ("4.98.0 or later running on an older WSL
+   remains affected"). A scanner that models only the record's `affected[]` product reports the
+   host patched. The detector rides text this tool already reads: the record's own description
+   (free — the window is already fetched) and the advisory page the `--mitigation-census` fetch
+   (zero extra fetches). Word-lists live up here because `--selftest` runs before the census
+   section initialises. */
+const CONJ_CENSUS_NOTE = 'a pair is a letter-led product token directly before a version; conjunction = >=2 DISTINCT products over one fix block; companion = a cued second artifact the record never bounds';
+/* A versioned-product pair: "Docker Desktop 4.98.0", "WSL 3.0.3". The token must be letter-led
+   and uppercase-initial — the noise floor. Lowercase products ("node.js 18") are invisible to it;
+   a version list of one product ("2.18.8, 2.21.4 and 3.1.4") produces no pairs at all, which is
+   the guard that matters most. */
+const CONJ_PRODUCT_VERSION = /\b([A-Z][A-Za-z0-9][A-Za-z0-9 ._+#/-]{0,38}?)\s+v?(\d{1,4}(?:\.\d{1,4}){1,3}(?:[-._][A-Za-z0-9]+)*)\b/g;
+/* Version-adjacent scaffolding words the lazy token swallows ("Docker Desktop to version 4.98.0"),
+   stripped from the token's tail until stable. */
+const CONJ_TOKEN_TAIL = /\s+(?:to|for|and|or|the|a|an|in|on|of|with|from|at|is|are|was|were|be|been|by|as|that|this|than|then|before|after|prior|earlier|later|up|also|plus|when|while|using|via|per|both|each|version|versions|release|build)\s*$/i;
+/* Leading scaffolding the token swallows from the sentence head ("Upgrade Docker Desktop",
+   "The issue is …"): stripped before the last-3-words trim, then again after it. */
+const CONJ_TOKEN_HEAD = /^(?:the|a|an|upgrade|upgrading|updating|update|updated|fixed|patched|see|refer|new|then|first|also|plus|and|or|install|installing|installed|run|running|use|using|used|for|in|on|with|from|by|to|when|while|after|before|this|that|these|those|its|their|your|our|please|simply|now|only|fully|version|versions|release|build|requires?|needed?|must|licensed)\s+/i;
+/* The token's LAST word decides whether it is a product or a phrase the sentence dropped on the
+   way to its version ("issue is fixed 7.15.2", "Severity Low 2.3", "parameter updated 6.2.5" —
+   every one a live false pair before this guard). A real product ends in a noun; these end in
+   scaffolding. */
+const CONJ_LAST_STOP = /^(?:fixed|patched|updated|update|issue|severity|low|medium|high|critical|minimum|maximum|requirement|requirements|parameter|manifests?|deprecated|obsolete|added|removed|enforces|relies|supports?|each|all)\b/i;
+/* A token that is itself scaffolding is not a product ("version 1.2.3 and 2.0.0" is one product's
+   versions; "build 9402" is not a version at all, so it never forms a pair). */
+const CONJ_STOP_TOKEN = /^(?:build|ver|version|versions|release|update|patch|hotfix|level|series|branch|service|pack|rollup|kb|notes|changelog)\b.*$/i;
+/* The loose fix cue for the description arm — prose says "fully fixed only with", which
+   FIX_STATEMENT's strict `\s+(?:in|as of|with|by)` misses on the adverb "only". */
+const CONJ_FIX_CUE = /\b(?:fixed|patched|remediated|addressed|resolved|mitigated|upgrade|upgrading|update|updating)\b/i;
+/* One continuation sentence may carry the second bound ("WSL 3.0.3 or later is also required",
+   "4.98.0 or later running on an older WSL remains affected"). Without a cue every stray
+   "Firefox 130.0 is unaffected." after a fix sentence would forge a conjunction; the cue is what
+   keeps the lookahead honest. */
+const CONJ_JOIN_CUE = /\b(?:also|required|requires|must|and|plus|together|along|remains?|still|older|additionally)\b/i;
+/* Non-global copy of FIX_STATEMENT: `.test()` on the shared /g regex would advance its lastIndex
+   and corrupt every later `matchAll` — the one thing a shared mutable regex must never do. */
+const FIX_STATEMENT_ANCHOR = new RegExp(FIX_STATEMENT.source, 'i');
 
 /* ── the remedy census (added 2026-11-01 20:49) ──────────────────────────────────────────────
    Filed from Apache MINA `CVE-2026-118636`: the affected span is `3.0.0 <= 3.0.0-M2`, the record
@@ -2105,6 +2146,55 @@ if (SELFTEST) {
   eq('mitigation: only tested-through rows cannot produce the finding',
     mitigationVerdict(cfGroups, fixStatementsFrom('The issue is fixed in v1.245.0, confirmed in CAPI up to v1.245.0 (inclusive).')).verdict,
     'only-tested-or-bundled');
+  /* ── the conjunction census (2026-11-09 04:57): two artifacts in two products is the shape;
+     a version list, one product twice, a build number and an affected-sentence are not.
+     The filing text is Docker Desktop CVE-2026-112917's own description, verbatim. ── */
+  const conjGroups = productGroups({ affected: [{ affectedData: [
+    { vendor: 'Docker', product: 'Docker Desktop', modules: ['WSL2 backend'],
+      versions: [{ version: '4.1.0', lessThan: '4.98.0', status: 'affected' }] }] }] });
+  const conjDocker = conjunctionsFrom('The issue is fully fixed only with Docker Desktop 4.98.0 or later and WSL 3.0.3 or later. Docker Desktop 4.98.0 or later running on an older WSL remains affected.',
+    conjGroups, 'record-description');
+  eq('conjunction: the filing description yields exactly one conjunction', conjDocker.length, 1);
+  eq('conjunction: the filing shape is record-silent', conjDocker[0].kind, 'record-silent');
+  eq('conjunction: the bounded product is named', conjDocker[0].named.map(p => p.product), ['Docker Desktop']);
+  eq('conjunction: the companion is silent and tagged as a module', [conjDocker[0].silent[0].product, conjDocker[0].silent[0].module], ['WSL', true]);
+  eq('conjunction: "fixed only with" anchors the description arm',
+    conjunctionsFrom('Fixed only with Acme App 2.0 and Helper 3.1.', [], 'record-description').length, 1);
+  eq('conjunction: a version list of ONE product is not a conjunction',
+    conjunctionsFrom('Fixed in 2.18.8, 2.21.4 and 3.1.4.', [], 'record-description').length, 0);
+  eq('conjunction: one product named twice is not two products',
+    conjunctionsFrom('Upgrade Linux 6.12.3 or Linux 6.13.1 to receive the fix.', [], 'record-description').length, 0);
+  eq('conjunction: an affected sentence with no fix verb is not a remedy',
+    conjunctionsFrom('This affects Apache HTTP Server 2.4.49 and mod_jk 1.2.8.', [], 'record-description').length, 0);
+  eq('conjunction: scaffolding tokens do not become products',
+    conjunctionsFrom('This is fixed in version 1.2.3 and version 2.0.0.', [], 'record-description').length, 0);
+  eq('conjunction: a modeled conjunction is in-record',
+    conjunctionsFrom('Upgrade CAPI to v1.247.0 and Cloud Foundry Deployment 60.7.0.',
+      productGroups({ affected: [{ affectedData: [{ product: 'CAPI', versions: [{ version: '1.0.0', lessThan: '1.247.0', status: 'affected' }] }] },
+        { affectedData: [{ product: 'Cloud Foundry Deployment', versions: [{ version: '60.0.0', lessThan: '60.7.0', status: 'affected' }] }] }] }),
+      'advisory')[0].kind, 'in-record');
+  eq('conjunction: the cue-bearing continuation carries the second bound',
+    conjunctionsFrom('Upgrade Docker Desktop to 4.98.0 or later. WSL 3.0.3 or later is also required.', [], 'advisory').length, 1);
+  eq('conjunction: an uncued stray sentence does not forge a conjunction',
+    conjunctionsFrom('Fixed in example-app 1.2.3. Firefox 130.0 is unaffected.', [], 'advisory').length, 0);
+  eq('conjunction: a bundled companion is tagged, not dropped',
+    conjunctionsFrom('Upgrade Cloud Deployment to 60.7.0, which includes CAPI v1.247.0.', [], 'advisory')[0].silent.some(p => p.bundled), true);
+  eq('conjunction: sentence-prefix prose does not become the product token',
+    conjunctionsFrom('The issue is fully fixed only with Docker Desktop 4.98.0 and Helper Tool 3.1.',
+      productGroups({ affected: [{ affectedData: [{ product: 'Docker Desktop', versions: [{ version: '4.1.0', lessThan: '4.98.0', status: 'affected' }] }] }] }),
+      'record-description')[0].named.map(p => p.product), ['Docker Desktop']);
+  const conjAdvisory = conjunctionsFrom('Fixed CVE-2026-112917 where a container on the WSL 2 backend could bypass the AF_VSOCK restriction. Requires WSL 3.0.3 or later.',
+    [], 'advisory');
+  eq('conjunction: the advisory page companion shape is a companion row', conjAdvisory[0].kind, 'companion');
+  eq('conjunction: the companion product is the record-absent second artifact',
+    conjAdvisory[0].silent.map(p => p.product), ['WSL']);
+  eq('conjunction: an uncued afterthought is not a companion',
+    conjunctionsFrom('Fixed in acme-cli 1.2.3. Python 3.9 support added.', [], 'advisory').length, 0);
+  eq('conjunction: a companion the record bounds itself is not a companion row',
+    conjunctionsFrom('Fixed in Acme App 1.2.3. Requires Helper 3.1 or later.',
+      productGroups({ affected: [{ affectedData: [{ product: 'Acme App', versions: [{ version: '1.0.0', lessThan: '1.2.3', status: 'affected' }] }] },
+        { affectedData: [{ product: 'Helper', versions: [{ version: '3.0.0', lessThan: '3.1', status: 'affected' }] }] }] }),
+      'advisory')[0].kind, 'in-record');
   /* ── the remedy census (2026-11-01 20:49): what the record advises, against its own range ──
      The filing record verbatim (`CVE-2026-118636`), whose remedy points BELOW its span, plus the
      four neighbours that must not be read as the same shape. */
@@ -3188,6 +3278,121 @@ function fixStatementsFrom(text) {
   return out.filter(f => (seen.has(f.version) ? false : (seen.add(f.version), true)));
 }
 
+/* ── the conjunction census's pure half (2026-11-09 04:57) ──
+   `conjPairsOf` reads versioned-product pairs out of one sentence; `conjunctionsFrom` assembles
+   them into conjunction rows over a fix sentence plus at most ONE cue-bearing continuation, then
+   classifies each pair against the record's own `affected[]` — `named` (a product the record
+   bounds), `silent` (a product the record never names — the scanner-dangerous shape), with a
+   `module` tag when the record demotes the companion to a `modules[]` entry, which is the closest
+   CVE 5.x comes to a conjunction field. `via` says which text the row came from. */
+
+/* Name-only product list for the conjunction arms: `productGroups` requires a derivable RANGE, so
+   a record whose only bound is `{version: X, lessThan: "*", status: "unaffected"}` (Docker
+   Desktop's own spelling) yields NO groups and every pair would read record-silent. Membership
+   here needs only the NAME — `modules[]` is the tag, not a bound. */
+function conjProductNames(cve) {
+  const out = [];
+  for (const a of cve.affected || []) {
+    for (const d of a.affectedData || []) {
+      if (d.product) out.push({ product: d.product, modules: d.modules || [] });
+    }
+  }
+  return out;
+}
+
+function conjMatchesRecord(token, groups) {
+  const t = String(token).toLowerCase();
+  for (const g of groups || []) {
+    const p = String(g.product || '').toLowerCase();
+    if (p && (p.includes(t) || t.includes(p))) return true;
+  }
+  return false;
+}
+
+function conjModuleTag(token, groups) {
+  const t = String(token).toLowerCase();
+  for (const g of groups || []) {
+    for (const m of g.modules || []) if (String(m).toLowerCase().includes(t)) return true;
+  }
+  return false;
+}
+
+function conjPairsOf(sentence) {
+  const pairs = [];
+  for (const m of String(sentence).matchAll(CONJ_PRODUCT_VERSION)) {
+    let token = m[1].replace(/\s+/g, ' ').trim();
+    /* Sentence prose leaks into the lazy token ("The issue is fully fixed only with Docker
+       Desktop"): strip scaffolding off both ends, then keep the last three words — the product
+       is what sits directly before the version — and strip again. Lowercase-only product names
+       (cf-deployment, node.js) are invisible to the uppercase-initial floor; that is a measured
+       undercount, stated rather than papered over. */
+    while (CONJ_TOKEN_TAIL.test(token)) token = token.replace(CONJ_TOKEN_TAIL, '').trim();
+    while (CONJ_TOKEN_HEAD.test(token)) token = token.replace(CONJ_TOKEN_HEAD, '').trim();
+    const last3 = token.split(' ').slice(-3).join(' ');
+    if (last3 && last3 !== token) { token = last3; while (CONJ_TOKEN_HEAD.test(token)) token = token.replace(CONJ_TOKEN_HEAD, '').trim(); }
+    const lastWord = (token.split(' ').pop() || '').replace(/[^A-Za-z0-9-]/g, '');
+    if (token.length < 2 || CONJ_STOP_TOKEN.test(token) || CONJ_LAST_STOP.test(lastWord)) continue;
+    const before = sentence.slice(Math.max(0, m.index - 60), m.index);
+    pairs.push({ product: token, version: m[2], bundled: BUNDLE_WORD.test(before) });
+  }
+  /* One product written twice is not two products — dedupe by lowercase token, first wins. */
+  const seen = new Set();
+  return pairs.filter(p => (seen.has(p.product.toLowerCase()) ? false : (seen.add(p.product.toLowerCase()), true)));
+}
+
+function conjunctionsFrom(text, groups, via) {
+  if (!text) return [];
+  text = String(text).replace(/https?:\/\/\S+/g, ' '); // a URL path's version-looking segment must not become a pair
+  const sentences = String(text).split(/(?<=[.!?])\s+(?=[A-Z(“"])/);
+  const out = [];
+  for (let i = 0; i < sentences.length; i++) {
+    const s = sentences[i];
+    const anchored = FIX_STATEMENT_ANCHOR.test(s) || CONJ_FIX_CUE.test(s);
+    if (!anchored) continue;
+    let block = conjPairsOf(s);
+    let sentence = s;
+    let lookahead = false;
+    /* One lookahead: the second bound often lands in its own sentence ("…is also required",
+       "Requires WSL 3.0.3 or later", "…remains affected"). The join cue is the guard against a
+       stray unrelated sentence. */
+    if (i + 1 < sentences.length && CONJ_JOIN_CUE.test(sentences[i + 1])) {
+      const more = conjPairsOf(sentences[i + 1]);
+      if (more.length) {
+        const have = new Set(block.map(p => p.product.toLowerCase()));
+        block = block.concat(more.filter(p => !have.has(p.product.toLowerCase())));
+        sentence = `${s} ${sentences[i + 1]}`;
+        lookahead = true;
+      }
+    }
+    const named = [], silent = [];
+    for (const p of block) {
+      if (conjMatchesRecord(p.product, groups)) named.push(p);
+      else silent.push({ ...p, module: conjModuleTag(p.product, groups) || undefined,
+        cued: (lookahead || /\b(?:requires?|must|needs?)\b/i.test(s)) || undefined });
+    }
+    if (block.length >= 2) {
+      out.push({
+        via,
+        /* ≥5 pairs in one sentence is a fix TABLE, not a conjunction — WSO2's advisory lists eight
+           products' rows in one paragraph, and counting it as "Docker Desktop and WSL" would fold
+           a matrix into the shape the question asks about. */
+        kind: block.length >= 5 ? 'matrix' : silent.length ? 'record-silent' : 'in-record',
+        sentence: sentence.replace(/\s+/g, ' ').trim().slice(0, 240),
+        named, silent,
+      });
+    } else if (silent.length && silent[0].cued) {
+      /* The companion shape — the Docker advisory page's own spelling: "Fixed CVE-2026-112917 …
+         Requires WSL 3.0.3 or later." One versioned second artifact in a cue-bearing sentence
+         beside a fix statement, which the strict two-pair rule cannot see. Record-absent only:
+         a companion the record bounds is just the record's remedy. */
+      out.push({ via, kind: 'companion',
+        sentence: sentence.replace(/\s+/g, ' ').trim().slice(0, 240),
+        named: [], silent });
+    }
+  }
+  return out;
+}
+
 function advisoryUrlsOf(cve) {
   const refs = (cve.references || []).filter(r => /^https?:\/\//.test(r.url || ''))
     .filter(r => !/^https?:\/\/(?:nvd\.nist\.gov|cve\.org|www\.cve\.org|services\.nvd\.nist\.gov)/.test(r.url))
@@ -3220,17 +3425,28 @@ async function mitigationCensus({ from, to, records: given = null }) {
      record?" The window form answers the prevalence question a single record cannot. */
   const { records, total } = given ? { records: given, total: given.length } : await fetchWindow(from, to);
   const rows = [];
+  const proseRows = [];
   let fetched = 0;
   const skip = {};
   for (const c of records) {
     if (c.vulnStatus === 'Rejected') continue;
     const { ranges } = affectedRanges(c);
     const groups = productGroups(c);
+    /* The conjunction census's description arm — free, so it covers EVERY record in the window,
+       not just the page-fetch sample. The filing record's own description states the conjunction
+       verbatim, which is why the arm exists at all. Membership uses the NAME list, not
+       `productGroups`' ranges. */
+    const conjNames = conjProductNames(c);
+    const proseConj = conjunctionsFrom(
+      (c.descriptions || []).find(d => d.lang === 'en')?.value || null, conjNames, 'record-description');
+    if (proseConj.length) proseRows.push({ id: c.id, assigner: c.sourceIdentifier || '?',
+      published: c.published || null, products: (conjNames || []).map(g => g.product), conjunctions: proseConj });
     const urls = advisoryUrlsOf(c);
     if (!ranges.length) { skip['no-affected-range'] = (skip['no-affected-range'] || 0) + 1; continue; }
     if (!urls.length) { skip['no-advisory-url'] = (skip['no-advisory-url'] || 0) + 1; continue; }
     rows.push({ id: c.id, assigner: c.sourceIdentifier || '?', modified: c.lastModified || null,
-      published: c.published || null, ranges, rangeRaws: ranges.map(r => r.raw), groups, url: urls[0], urls,
+      published: c.published || null, ranges, rangeRaws: ranges.map(r => r.raw), groups,
+      conjNames, url: urls[0], urls,
       pageStatus: 'unqueried', fixes: [], verdict: 'unqueried' });
   }
   const cap = Math.min(rows.length, MAX_PAGES);
@@ -3263,6 +3479,9 @@ async function mitigationCensus({ from, to, records: given = null }) {
       r.url = url;
       const all = fixStatementsFrom(text);
       r.fixes = all;
+      /* The conjunction census's advisory arm rides this fetch — zero extra requests. */
+      const conj = conjunctionsFrom(text, r.conjNames, 'advisory');
+      if (conj.length) r.conjunctions = conj;
       /* A version the advisory tells you to install that its own record calls affected is the
          finding. Tested-through and bundled rows are kept in the output but never produce it. */
       const v = mitigationVerdict(r.groups, all);
@@ -3272,7 +3491,7 @@ async function mitigationCensus({ from, to, records: given = null }) {
     }
   }
   for (const r of rows.slice(cap)) r.verdict = 'unqueried';
-  return { from, to, totalResults: total, fetched: records.length, candidates: rows.length, queried: cap, skip, rows };
+  return { from, to, totalResults: total, fetched: records.length, candidates: rows.length, queried: cap, skip, rows, proseRows };
 }
 
 function printMitigationCensus(c) {
@@ -3303,6 +3522,48 @@ function printMitigationCensus(c) {
   console.log('  read the verb before the version. The question the census cannot answer from one page is whether');
   console.log('  the advisory or the record is the stale document — compare `lastModified` with the advisory date,');
   console.log('  and remember the same party writes both.');
+
+  /* ── conjunction section (2026-11-09): remedies naming ≥2 distinct products ── */
+  const adv = [];
+  for (const r of q) for (const k of r.conjunctions || []) adv.push({ id: r.id, assigner: r.assigner, ...k });
+  const prose = c.proseRows || [];
+  console.log(`\n  CONJUNCTION census — ${CONJ_CENSUS_NOTE}`);
+  console.log(`  filed on Docker Desktop CVE-2026-112917 ("fully fixed only with Docker Desktop 4.98.0 … and WSL 3.0.3 …")`);
+  console.log(`  advisory pages: ${adv.length} conjunction sentence(s) over ${q.length} fetched (cap ${MAX_PAGES})`);
+  console.log(`  record descriptions: ${prose.length} record(s) of ${c.fetched} in the window — free, no extra fetch`);
+  const byKind = {};
+  for (const r of prose) for (const k of r.conjunctions) byKind[k.kind] = (byKind[k.kind] || 0) + 1;
+  console.log('  description kinds: ' + (Object.entries(byKind).map(([k, v]) => `${k} ${v}`).join(' · ') || 'none'));
+  const proseByAsn = {};
+  for (const r of prose) proseByAsn[r.assigner] = (proseByAsn[r.assigner] || 0) + 1;
+  for (const [a, n] of Object.entries(proseByAsn).sort((x, y) => y[1] - x[1]).slice(0, 8)) console.log(`    ${a.padEnd(42)} ${n}`);
+  const show = prose.filter(r => r.conjunctions.some(k => k.kind !== 'in-record'));
+  const printRow = (r) => {
+    console.log('');
+    console.log(`  ${r.id}  [${r.assigner}]  record products: ${r.products.join(' · ') || '(none)'}`);
+    for (const k of r.conjunctions) {
+      console.log(`    ${k.kind} — "${k.sentence}"`);
+      for (const p of k.named) console.log(`      named:   ${p.product} ${p.version}${p.bundled ? ' (bundled)' : ''}`);
+      for (const p of k.silent) console.log(`      silent:  ${p.product} ${p.version}${p.module ? ' (a modules[] entry, not a bounded product)' : ''}${p.bundled ? ' (bundled)' : ''}${p.cued ? ' (cued)' : ''}`);
+    }
+  };
+  for (const r of show.filter(r => r.conjunctions.some(k => k.kind === 'record-silent')).slice(0, 12)) printRow(r);
+  const companions = prose.filter(r => r.conjunctions.some(k => k.kind === 'companion') && !r.conjunctions.some(k => k.kind === 'record-silent'));
+  if (companions.length) {
+    console.log(`\n  companion rows (a cued second artifact the record never bounds): ${companions.length}`);
+    for (const r of companions.slice(0, 10)) printRow(r);
+  }
+  if (adv.length) {
+    console.log('\n  advisory-page rows:');
+    for (const r of adv.slice(0, 10)) {
+      console.log(`  ${r.id}  [${r.assigner}]  ${r.kind}`);
+      console.log(`    "${r.sentence}"`);
+      for (const p of [...r.named, ...r.silent]) console.log(`      ${r.named.includes(p) ? 'named:  ' : 'silent: '} ${p.product} ${p.version}${p.bundled ? ' (bundled)' : ''}`);
+    }
+  }
+  console.log('\n  A conjunction row is a FIND, not a verdict: the detector sees letter-led tokens only (lowercase');
+  console.log('  products are invisible), and record-silent means "not a bounded product in affected[]" — the');
+  console.log('  description may still name it, as Docker\'s own does. Read the sentence before quoting the row.');
 }
 
 /* ── the field census (added 2026-10-25 12:33) ──

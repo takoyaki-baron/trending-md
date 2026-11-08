@@ -4354,3 +4354,31 @@ Vikunja 隔夜 39 条记录中有三条指向 **Veans**（`code.vikunja.io/veans
 `CVE-2026-123532`（6.5 v3.1 / 7.1 v4.0，已验证）：`gix-fs` 0.24.1 之前——在 Windows 上启用 symlink 时，精心构造仓库中的 UNC symlink 目标让 checkout 自身的文件系统探测向外伸手，泄露本机 NTLM 握手。无需 install hook、无需编辑器任务、无需代码执行：外泄通道就是「just clone it」本身。伴生 `CVE-2026-123533`：`gix-commitgraph` 0.42.0 之前的 DoS（gitoxide 0.61.0 之前）。gitoxide 日益作为库嵌入其他工具的 git 路径，受影响集合大于其 CLI 用户群。
 
 → [[disclosure-lag]] [[vuln-supply]]
+
+## 2026-11-09 04:40 —— MCP 威胁模型拿到厂商产品的 CVE：IBM Bob 经工作区定义 MCP 服务器的 RCE
+
+`CVE-2026-9764`（**8.8** CVSS 3.1 `Primary`，`psirt@us.ibm.com`，NVD `Awaiting Analysis`，发布于
+2026-11-08T19:17Z——一手核实）覆盖 **IBM Bob 1.0.4 至 2.0.1**——IBM 的编码助手——而机制写在 **IBM 自己的
+公告标题**里：「IBM Bob is vulnerable to Remote Code Execution due to improper control of workspace-defined
+MCP server execution」（本轮逐字读自 ibm.com/support/pages/node/7291535；公告正文给出缓解形状——工作区定义
+的 MCP 服务器与其他工作区配置「除非仓库被用户明确信任」才会运行）。**CVE 记录自己的描述更含糊**——「improper
+control of user input code」——所以点名这个类的句子在厂商文档里、不在登记处；只引记录的聚合器会整个丢掉
+MCP 机制。这是人人演示过的那道题（克隆来的仓库自带的配置就是执行向量）以带版本的厂商记录形式落地：加固
+建议变成补丁管理，而信任门在仓库级、不在服务器级。它落在 **约 34 小时窗口内的 79 条 IBM PSIRT 记录**里，
+其中包括 IBM Concert 1.0–3.0.1.1 的两条 9.8（`CVE-2026-6715`、`CVE-2026-15266`，均为 OS 命令执行；Concert
+的区间在同一次拉取里核实非空）。与本周另一条 agent 平台记录对读——Vikunja 的 Veans CLI（11-08，注入穿过
+harness 自己的权威指令块）：工作区如今同时是提示侧与执行侧的投递通道。
+
+→ [[agent-stack]] [[vuln-supply]] [[disclosure-lag]]
+
+## 2026-11-09 04:57 — 两起无 CVE 披露 18 天后：标识符缺口依旧，预算原语却已经发货
+
+10 月下旬的两个立项案例在一次 act pass 里复查。
+
+**六份 ZDI 内核报告（10-22 立项）——pre-record 状态持续。** 六份 `ZDI-CAN` 报告登上公开 LKML（两个 ksmbd 前认证 RCE：`ZDI-CAN-33549` SMB Direct 整数下溢 CVSS 9.0、`ZDI-CAN-33774` 协议分发竞态，外加 `skb_zerocopy` LPE、vmwgfx 越界写、NVMe-T 未初始化资源、搜索域栈溢出）18 天后：(1) **没有任何已发布 CVE 记录提到这六个 CAN id**（NVD `keywordSearch` ×6，全部 `totalResults: 0`——预留对公共注册表不可见，所以"无公开 CVE"≠"无 CVE 存在"）；(2) **ZDI 没有发布任何顾问页**——每个 `zerodayinitiative.com/advisories/ZDI-CAN-<id>/` 都 302 到已发布索引；(3) **主线无修复**——torvalds 的 `fs/smb/server` 日志在 10-22 → 11-09 之间只有披露前的 08-17 RDMA *加密功能*系列；`smbdirect_connection_rdma_xmit` 的修复仍在指向 Linux 7.5 的分支上，未发布。面向 CVE 的扫描器在三周后仍然对六个公开 RCE/LPE 级内核漏洞返回干净。(lore.kernel.org 本身对两种 client 字符串都是验证码墙——改用 git.kernel.org 日志查的。)
+
+**x402（10-23 立项）——25 个缺陷没有标记，但花费上限问题的答案是肯定的。** 仓库（`x402-foundation/x402`，已从 Coinbase 迁出）恰好只有**两个仓库级 GHSA，都是 `cve_id: null`，都不是 2026 年 8 月的**（GHSA-3j63-5h8p-gf7c，2025-08-20，high；GHSA-qr2g-p6q7-w82m，2026-03-06，high）——8 月的 25 缺陷披露（按立项所说 criticals 已于 2026-08-20 修复）仍无机器可读标记，而且非 scoped 的 npm `x402` 包停在 1.2.0（2026-04-16，*披露之前*），SDK 们住在 scoped `@x402/*`（2.30.0，11 月 4 日）。但三个可查项都有答案：**(a) spend controls 于 2026-08-18 发货**（`#3154` py / `#3156` go，窗口内），`maxAmountPerPayment` **在全部三个 SDK 默认 `"$1"`**（ts/go/py——买家快速入门自己的表格），只能显式移除（`spendControls: false`）；**(b) Solana facilitator 的指令类型检查有测试钉住**——`svm/test/unit/instructionLayout.test.ts` 测 `resolveProtocolLayout`（v1 transfer/memo 顺序、preflight/postflight 允许列表、非法 Lighthouse 数据拒绝）；**(c) 标识符缺口有了另一种修复**：NVD 现在有一条 x402 CVE——`CVE-2026-113603`（VulnCheck CNA，2026-10-20，6.5 `Secondary` v3.1，`Awaiting Analysis`）——SIWX 授权绕过（`@x402/extensions` ≤2.28.0 等），是与 8 月那 25 个*不同*的 bug，`<=` 天花板低于现役 2.30.0，存在可安装修复。协议确实像立项条目假设的那样收敛到了预算原语——只是以*功能提交*（带文档和默认值）的形式，而不是安全顾问。
+
+两案共用的形状：没有标识符的披露会一直没有标识符，直到另一个 bug 逼出一条——修复通道（git 历史、文档、测试）承载着顾问通道永远不会承载的补救。
+
+→ [[disclosure-lag]] [[vuln-supply]] [[agent-stack]]

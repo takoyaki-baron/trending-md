@@ -1802,3 +1802,27 @@ guard that generalises: **before writing "the record states no range", read the 
 names** — and check whether the value is a version, a comparison, or a sentence.
 
 → [[disclosure-lag]] [[security]] [[fact-check]]
+
+## 2026-11-09 04:40 — the identifier gap has a healthcare tail: 92 of OpenEMR's 100 advisories never announced themselves as CVEs
+
+The 11-08 VulnCheck desk's largest single chunk is **OpenEMR**, the most widely deployed open-source EHR:
+**44 records in one Nov 8 publication run** (14:18Z), 4 at 9.0+ CVSS 3.1 — `CVE-2026-124469` (**9.9**, Fee Sheet
+drug-inventory SQLi interpolating `prod[N][warehouse]` into ORDER BY), `CVE-2026-124450` (**9.9**, fax/sms
+`disposeDocument` path traversal reaching `sqlconf.php` — the database-credentials file — for low-privileged
+users), `CVE-2026-124445` (**9.8**, one-time-auth bypass ignoring `enforce_onetime_use`). VulnCheck is the CNA
+and publishes each record twice (`Primary` v3.1 / `Secondary` v4.0 — the v4.0 columns read lower, 9.3–9.4, the
+scope convention again; all four `Received`). **The repo-level fact the CVE-keyed view hides, measured whole:**
+the repo advisory API returns **100 published GHSAs (2026-08-18T08:36Z → 10-28T02:18Z), 8 with a CVE id in the
+GHSA object, 92 without** — the extreme tail of the bimodal identifier distribution measured 10-29 (1,114
+advisories across 29 repos, 61% with ids, median 78%, bimodal 13 repos ≥90% / 10 ≤50%): OpenEMR sits at
+**8%**, and its affected ranges top out at "before 8.3.0/8.4.0" — anyone auto-updating was fixed months ago,
+while anyone triaging by CVE id just learned that 92 of the repo's advisories never self-announced in the
+namespace scanners watch. **Same window, the ADP column again:** `CVE-2026-114432` (Contact Form 7 before
+6.2.4, unauthenticated arbitrary file upload via invalid UTF-8 filename, ~10M active installs) carries **no
+CVSS from its CNA** (WPScan); the **9.8** everyone will quote is **CISA-ADP** (`Secondary`, org `134c704f-…`,
+published the day the record went up, with its SSVC alongside) — provenance case (5) recurring — and the fix
+shipped **Oct 29** (WordPress.org serves 6.2.4.1), ten days before the paperwork. Verified first-hand 11-09
+04:32: all five scores/statuses re-read off one NVD comma-list call, the 100/8/92 split re-counted whole off
+`gh api repos/openemr/openemr/security-advisories`.
+
+→ [[security]] [[disclosure-lag]] [[fact-check]]

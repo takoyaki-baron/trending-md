@@ -3294,3 +3294,21 @@ LoreKit's Mads Thines (Nov 7) inventories what a typical agent setup remembers a
 `csm/clojurust` (alpha; crates.io as `cljrs`; verified **99★**, license NOASSERTION) — "an experimental Clojure dialect targeting the Rust ecosystem… suitable for use as an agentic coding runtime," with persistent data structures, a hosted macro system, native interop, and a browser REPL at clj.rs/repl. A homoiconic Lisp with a macro system and a REPL loop is structurally a harness that treats code as data the agent can inspect and rewrite; whether this alpha earns the claim is open. The datapoint is the pitch itself: languages designed for agent drivers with humans as the second audience.
 
 → [[token-economics]] [[dev-tools]]
+
+## 2026-11-09 04:40 — claude-mem at 114.8k★ keeps your agent's screenshots by default, and grows a cloud quota
+
+claude-mem — the agent-memory layer (capture → compress → reinject) working across Claude Code, OpenClaw,
+Codex, Gemini, Hermes, Copilot and OpenCode — is the week's second-fastest riser at **114,830★** (+7,482 this
+week) and shipped **three releases in 21 hours** (v15.11.0 → v15.12.0, Nov 6 22:17Z → Nov 7 19:51Z).
+v15.12.0's headline, verbatim in the release notes: "screenshots and images your agent reads or makes are now
+kept and linked to the observations from that turn, **without sending them to an AI model**" — **on by
+default**, with a `Keep images` switch to stop it; conversion moves on-device (lossy WebP, 20 s each). The
+same release adds the cloud line item: "each owner can store up to **25 GiB** of images on cmem.ai, **the
+same limit Pro enforces**." Two things at once: visual observations are otherwise lost, so default-on
+retention is a real capability — and this is the moment a 114k-star local-first memory tool starts pricing a
+cloud tier, with the release notes stating the quiet part. Memory as the coding-agent stack's retention
+surface now includes raw screenshots of your terminal and editor; the privacy-relevant default flipped in a
+patch release, not a major. All quotations lint-verified verbatim at generation time; star count re-checked
+at 114,832★ forty minutes later (the drift is the trend).
+
+→ [[token-economics]] [[fact-check]]

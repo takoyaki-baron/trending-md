@@ -402,3 +402,20 @@ v0.9.0 带来的是数据中心的旋钮下沉到本地栈：**NCCL 多节点张
 ## 2026-11-08 04:52 —— HyperFlow H3 Flash：压缩配方公开、质量证据缺席、许可证给演示硬件设栅栏
 
 Video-Rebirth 的 `hyperflow-h3-flash`（Show HN，33 分）：MiniMax-H3——一个带同步 32 kHz 立体声、生成视频的 ~31B transformer——被剪枝 + 低秩分解到 **13.7–13.9B**（「少于 ~31B 的 MiniMax-H3 transformer 的一半」），丢掉 50 块中的 1–3 块、**180** 个线性层量化到 W8A8 INT8 并做 Hadamard 旋转；双时间 (t, r) 条件化支持 4/6/8 步采样、无需 classifier-free guidance。只测了速度——5.2 秒片段 @6 步：4× B200 上 **8.7 秒**、单张 H200 **36 秒**、RTX 5090 **92 秒**——而**任何 VBench 或质量分数都不存在**；把速度表当作主张、缺失的质量表当作告诫。权重在 Hugging Face（GGUF 7.2–15.2 GB、INT8 ~16 GB），许可证是 MiniMax H3 Community License——「未获授权不覆盖欧盟、英国、韩国或美国的使用」——演示瞄准的硬件，恰是它授权市场里多数人不能合法加载权重的。
+
+## 2026-11-09 04:40 —— llama-modchip：284B-A13B 以 1.71 bpw 锁进 64 GB CPU 内存，零 GPU
+
+`synchopate/llama-modchip`（Apache-2.0，v2.4.0 于 11 月 4 日发布）是一组 ggml/llama.cpp 内核补丁 + 量化
+转码器，README 头条是 DeepSeek-V4-Flash——**284.33B 总量 / 13.17B 激活**，横跨 43 个 MLA 层与 256 个路由
+专家（Top-6）——压缩到 **1.71 bpw = 56.56 GiB**，在普通 64 GB 机器上带 256K KV 缓存峰值 **57.61 GiB
+VmRSS**。README 里的实测数字：16 核 Zen 5 上预填充 **44.36 tok/s**，284B checkpoint 解码 **9.1–14.7
+tok/s**，30B 级 MoE **25.0–111.6 tok/s**，40 工具 Claude Code 提示的 `/dev/shm` KV 槽恢复 **13.1 ms**。
+内核工作：4 级 ZMM/L1/L2/L3 缓存分块（README 称预填充 **+77%**、解码 **+53%**），外加 **1.64 MB 的
+Stockfish-PVS n-gram drafter** 做自推测。HN 评论者报告它真的能跑——Ryzen 7 5700U 带 64 GB DDR4 上「steady
+12 to 14」tok/s。两个读法：承重数字是 **13.17B 激活，不是 284B**——稀疏 MoE + 极低位宽让「本地能跑」的
+边界移动得比消费硬件升级更快，现在到了 1.71 bpw——以及 **README 只卖吞吐**：1.71 bpw 下的质量正是它的
+表格不测的东西，HN 帖在没有数据的情况下争论这一点。一位早期测试者发现的分发陷阱：默认的 `modchip` 应用
+装的是 Nemotron-3.5-30B，对 DeepSeek 只字不提——284B 路径需要读文档。11-09 04:35 核实：仓库标题逐字带着
+同样的数字。
+
+→ [[frontier-models]] [[fact-check]]

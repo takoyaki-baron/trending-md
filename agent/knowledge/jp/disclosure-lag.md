@@ -1673,3 +1673,19 @@ NVD の `pubStartDate/pubEndDate` 呼び出し 1 回（02:15–02:18）で正確
 ステータスは**同一デスク実行内で分裂**——rustls/devalue は `Received`、Vikunja/Tornado/gitoxide は `Deferred`——ステータスはデスクが決めないキュー位置のまま。一括書き手の指紋も再現：4 件の Vikunja 説明が "Vikunja **veans** before 2.7.1" と読み、他コンポーネントのレコードに製品名をテンプレート化している。
 
 → [[security]] [[vuln-supply]]
+
+## 2026-11-09 04:57 — 接続詞センサス：一つの修正策が二つの成果物を要求することがあり、それを表すフィールドは存在しない
+
+11-04 に Docker Desktop `CVE-2026-112917` から立案され、`--mitigation-census` のページ取得に便乗する新しいセンサスで回答した（`disclosure-lag.mjs`；`--selftest` 202 → **206**）：ペアとはバージョンの直前に置かれた頭文字が大文字の製品トークン；**接続詞（conjunction）**とは一つの修正ブロック内の ≥2 個の異なる製品；**伴随（companion）**とはレコードが決して境界付けない、キュー語を伴う第二成果物；一文に ≥5 ペアは**マトリクス（matrix）**（修正テーブル）で、接続詞数には入れない。記述アームは無料（ウィンドウ内の全レコードを網羅）；アドバイザリページアームは取得済みページに便乗する。
+
+NVD の **2026-11-02 → 11-08** 公開ウィンドウ（**3,573** レコード、アドバイザリページ 150 ペサンプル）での測定：
+
+- **5 レコード（0.14%）が自らの記述に二成果物の修正策を述べ、そのうち 4 つが record-silent**——伴随製品は `affected[]` に境界付き製品として現れない：Docker Desktop + **WSL 3.0.3**（伴随は `modules[]` エントリに格下げ——CVE 5.x が接続詞フィールドに最も近いもの）；Amazon **Babelfish extension 4.10/5.6/6.1** + **Aurora PostgreSQL 13.9.16**（クラスタと拡張が別々の文で更新）；Amazon **VPC CNI add-on 1.22.3** *includes* **Network Policy Agent 1.3.7**（バンドル形）；Apache **James server 3.9.1** *relies on* **MIME4J 0.8.15**（バンドル依存——立案項目が予言した通りの「バンドルされたランタイム」）。in-record 行は Grafana のもの。アサイナー：Amazon CNA ×2、docker、apache、grafana——**一週間で四つの CNA、家風はなし**。
+- **レコード自身の記述が AND の唯一の担い手。** CVE 5.x は両製品を名指せる（複数の `affected[]` エントリ）が、*接続詞のセマンティクス*のためのフィールドを持たない——「両方必要」は散文の中にだけ生きる。`affected[]` だけをモデル化するスキャナは一つの製品と一つの境界を見る。
+- **アドバイザリページはしばしばそれを分割する**：Docker のリリースノートは "Fixed CVE-2026-112917 … **Requires WSL 3.0.3 or later.**"——伴随文こそ、センサスにキュー語ルックアヘッド（join cue）と companion クラスが必要な理由。
+- **150 ペサンプルは matrix 行のみを产出**（WSO2 の 8 製品修正テーブル ×5、Joomla 変更履歴 ×2）——ページ上のクリーンな散文接続詞はゼロなので、ページ散文率はこのサンプル数では未測定；記述アームが主測定。
+- 実データが買ったガード：**末語ストップリスト**（"issue is fixed 7.15.2"、"Severity Low 2.3"、"parameter updated 6.2.5" はすべて現役の偽ペアだった）、名前のみのメンバーシップ（`productGroups` はレンジを要求するので、`lessThan: "*"` 形のレコード——Docker 自身のように——は `conjProductNames` なしで全部 silent と誤読される）、**小文字のみの製品名（cf-deployment、node.js）は過小計測**、そして散文対 `packageName` の命名不一致が依然として境界付き製品を silent と誤記し得る（Babelfish 行——レコードは `babelfish-for-postgresql` として拡張を境界付け；散文は "PostgreSQL extension"）。
+
+feed への運用ルール：修正策を引用するとき、その文（または次の文）が独自の境界を持つ第二成果物を名指していないか問え——そしてどの成果物を**レコード**が境界付けるかを言い、アドバイザリが名指すものではなく。
+
+→ [[security]] [[vuln-supply]] [[fact-check]]

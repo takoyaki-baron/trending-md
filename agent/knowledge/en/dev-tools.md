@@ -1569,3 +1569,45 @@ Two experimental features behind flags (release Nov 4): a PromQL `integral()` fu
 **MuJoCo 4.0.0** (verified: published 2026-11-06T15:39:53Z; the first major bump since 3.0): a `speculative` flag for **speculative contacts** — conservative advancement preventing "fast-moving convex geoms" from tunneling "through thin obstacles within a single timestep" — and **elasto-plasticity**, with stateful plastic deformation stored in `mjData.plastic` (`mjSTATE_PLASTIC`) for joint and tendon springs. Both are behaviors RL and robotics work previously bought by shrinking timesteps or bolting on contact heuristics; simulator-level fixes change which experiments are cheap to run. A 4.0.0 bump also breaks downstream version pins by construction.
 
 **ZapFast** (`crmne/zapfast`, verified 2026-11-08 20:30 UTC+8: **3,526★**, MIT, created Aug 29, pushed today): a native WhatsApp client in Rust + egui, linking to the phone as a companion device through whatsapp-rust with "no browser engine". The README measures ~**200 MB** idle RAM against WhatsApp Web's **1.13 GB** — on one Linux test, as the README itself scopes it. The honest part is stated rather than buried: unofficial-client status may violate WhatsApp's ToS and "could get an account suspended. Use it at your own risk." The Discord-Rust-rewrite argument, applied to the app most people keep open all day.
+
+## 2026-11-09 04:40 — Levien's JIT-per-string bitmap text; PacketHound; Tasfer's canvas editor; ziwei-doushu's video-reading companion
+
+**(a) JIT bitmap text (Raph Levien, linebender.org; `raphlinus/vic-2350` pushed Nov 7).** An "alternate
+universe 80s home computer, realized on RP2350 hardware" races the beam — **520 kB SRAM, no framebuffer,
+~6 cycles/pixel**, which Rust can't meet — so a **JIT compiles a specialized ARM machine-code loop per string
+at display time**, in **symbolasm**, a language he built for the Cortex-M33. Numbers from the post: **23
+cycles per glyph** to compile, the demo spends **~21k cycles compiling / ~42k executing (≈2.6% of one core's
+throughput)**, compilation finishes **under 100 µs** before scanout, kerning reduces to an
+**AND-plus-popcount** over 2-byte-per-glyph bitvectors, and a second pass expands the 1bpp scanline to RGB565
+at **1.75 cycles/pixel**. The 1982 Blit's trick — generating display code for what you're about to draw —
+three orders of magnitude faster, applied to text, on a $5 microcontroller; compiling per-frame instead of
+caching is a genuinely new point in the embedded-text design space. He notes **Claude translated and
+optimized the JIT compiler from his hand-written Rust draft** — the disclosure is there if you look.
+
+**(b) PacketHound (v1.2.0, GPL-3.0, repo created Nov 5, pushed Nov 8)** — an ask-first **outbound** firewall
+for Windows 10/11: Allow/Block the first time an app tries to connect, remembered after, while staying quiet
+about Windows' own system chatter. The Little Snitch workflow has been the Mac's quiet privacy advantage for
+two decades, and outbound visibility is where modern exfiltration lives — including agent-era exfiltration
+(credentials a coding agent reads ending up somewhere unexpected). Open question worth watching: what its
+allow-rules UI does when one app spawns a dozen helper processes.
+
+**(c) Tasfer (hamza.se, Nov 3; `tasferlabs/tasfer` pushed Nov 8)** renders an entire rich-text editor on a
+2D canvas — text, cursors, selections, line breaking, RTL/Arabic shaping — with a hidden input preserving
+IME and autocorrect; local-first, no accounts, syncing via a **CRDT the author implemented himself over
+WebRTC**, where the minimal server only helps peers find each other and stores nothing (encrypted relay as
+fallback). **AGPL app / MIT engine**, separately licensable. The author credits LLM assistance — after
+discovering in December 2025 how useful Claude had become at this project size — for the acceleration that
+made it shippable. `contentEditable` is one of the web's oldest swamps, and every hand-rolled editor story
+ends up rebuilding line breaking and IME by hand; a working canvas editor with the hard parts already
+handled, MIT-licensed, is a real embedding option — the HN thread was still poking at it five days later.
+
+**(d) ziwei-doushu re-trends (16,935★, +4,906 this week; first covered 10-24) with new substance:** on Nov 8
+the README added a companion repo, `nishi-ziwei-video-reading` (created Nov 8) — multiple LLMs reading the
+17-episode source lecture series **frame by frame, 1.6 million frames**, publishing the methods, scripts,
+exam questions, results and pitfalls as the project runs: a working log of LLM-scale video ingestion applied
+to a domain corpus, which is its own methodology artifact. The project's boundary statement stands
+(algorithms are public traditional wisdom; the value lives in interpretation depth, UX and operations), and
+the README publishes its own limits — family-relation readings are its weakest dimension, quoting the source
+lectures to say so. Both repos verified 11-09 04:35.
+
+→ [[frontier-models]] [[ai-impact]]

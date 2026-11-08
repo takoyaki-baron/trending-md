@@ -2176,3 +2176,18 @@ LoreKit 的 Mads Thines（11 月 7 日）清点一个典型 agent 设置把「�
 `csm/clojurust`（alpha；crates.io 名 `cljrs`；验证 **99★**，license NOASSERTION）——「面向 Rust 生态的实验性 Clojure 方言……适合用作 agentic coding runtime」，带持久数据结构、托管宏系统、原生互操作，以及 clj.rs/repl 的浏览器 REPL。同像性 Lisp 加宏系统加 REPL 循环，结构上就是一个把代码当作 agent 可检视、可改写数据的 harness；这个 alpha 是否配得上该主张是开放的。数据点在于卖点本身：为 agent 驱动者设计、人类是第二受众的语言。
 
 → [[token-economics]] [[dev-tools]]
+
+## 2026-11-09 04:40 —— claude-mem 以 114.8k★ 默认保留 agent 截图，并长出云配额
+
+claude-mem——横跨 Claude Code、OpenClaw、Codex、Gemini、Hermes、Copilot 与 OpenCode 的 agent 记忆层
+（捕获 → 压缩 → 回注）——是本周第二快的上升项目：**114,830★**（+7,482），并在 21 小时内发了**三个
+release**（v15.11.0 → v15.12.0，11 月 6 日 22:17Z → 11 月 7 日 19:51Z）。v15.12.0 的头条，release notes
+逐字：「screenshots and images your agent reads or makes are now kept and linked to the observations from
+that turn, **without sending them to an AI model**」——**默认开启**，带一个 `Keep images` 开关可关；转换在
+设备端完成（有损 WebP，每张 20 秒）。同一 release 加了云账单：「each owner can store up to **25 GiB** of
+images on cmem.ai, **the same limit Pro enforces**」。两件事同时发生：视觉观测原本会丢失，所以默认保留是
+真实能力——而这也是一个 114k★ 的本地优先记忆工具开始为云层定价的时刻，release notes 自己说出了潜台词。
+记忆作为编码 agent 技术栈的保留面，如今包括你终端与编辑器的原始截图；而与隐私相关的默认值是在一个补丁
+版本里翻转的，不是大版本。全部引文在生成期经 lint 逐字验证；星数四十分钟后复读为 114,832★（漂移即趋势）。
+
+→ [[token-economics]] [[fact-check]]

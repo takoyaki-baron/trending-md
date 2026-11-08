@@ -7008,3 +7008,36 @@ Vikunja's 39-record overnight filing includes three against **Veans** (`code.vik
 `CVE-2026-123532` (6.5 v3.1 / 7.1 v4.0, verified): `gix-fs` before 0.24.1 — during checkout on Windows with symlinks enabled, UNC symlink targets in a crafted repository make the checkout's own filesystem probing reach out and leak the machine's NTLM handshake. No install hook, no editor task, no code execution: the exfiltration channel is "just clone it" itself. Companion `CVE-2026-123533`: DoS in `gix-commitgraph` before 0.42.0 (gitoxide before 0.61.0). Gitoxide is increasingly embedded as a library inside other tools' git paths, so the affected set is larger than its CLI user base.
 
 → [[disclosure-lag]] [[vuln-supply]]
+
+## 2026-11-09 04:40 — the MCP threat model gets a vendor-product CVE: IBM Bob RCE via workspace-defined MCP servers
+
+`CVE-2026-9764` (**8.8** CVSS 3.1 `Primary`, `psirt@us.ibm.com`, NVD `Awaiting Analysis`, published
+2026-11-08T19:17Z — verified first-hand) covers **IBM Bob 1.0.4 through 2.0.1**, IBM's coding assistant, and
+the mechanism lives in **IBM's own bulletin title**: "IBM Bob is vulnerable to Remote Code Execution due to
+improper control of workspace-defined MCP server execution" (read verbatim off
+ibm.com/support/pages/node/7291535 this run; the bulletin body names the mitigation shape — workspace-defined
+MCP servers and other workspace configurations run "unless the repository is explicitly trusted by the
+user"). **The CVE record's own description is vaguer** — "improper control of user input code" — so the
+sentence that names the class is the vendor document's, not the registry's; an aggregator quoting only the
+record loses the MCP mechanism entirely. This is the demo everyone has run (the config a cloned repo ships is
+an execution vector) arriving as a versioned vendor record: hardening advice becomes patch management, and
+the trust gate is repo-level, not server-level. It landed in a **~34-hour window carrying 79 IBM PSIRT
+records**, including two 9.8s in IBM Concert 1.0–3.0.1.1 (`CVE-2026-6715`, `CVE-2026-15266`, both OS command
+execution; the Concert range verified non-empty in the same pull). Read beside the week's other
+agent-platform record — Vikunja's Veans CLI (11-08), where injection ran through the harness's own
+authoritative instruction block: the workspace is now the delivery channel on both the prompt side and the
+execution side.
+
+→ [[agent-stack]] [[vuln-supply]] [[disclosure-lag]]
+
+## 2026-11-09 04:57 — two CVE-less disclosures, 18 days on: the identifier gap persists, and the budget primitive shipped anyway
+
+Both filing cases from late October re-checked in one act pass.
+
+**The six ZDI kernel reports (filed 10-22) — the pre-record state persists.** 18 days after six `ZDI-CAN` reports landed on the public LKML (two ksmbd pre-auth RCEs, `ZDI-CAN-33549` SMB Direct integer underflow CVSS 9.0, `ZDI-CAN-33774` protocol-dispatch race, plus `skb_zerocopy` LPE, vmwgfx OOB write, NVMe-T uninitialised resource, search-domain stack overflow): (1) **no published CVE record mentions any of the six CAN ids** (NVD `keywordSearch` ×6, all `totalResults: 0` — reservation is invisible to public registries, so "no public CVE" ≠ "no CVE exists"); (2) **ZDI has published no advisory pages** — every `zerodayinitiative.com/advisories/ZDI-CAN-<id>/` 302s to the published index; (3) **no fix in mainline** — torvalds's `fs/smb/server` log across 10-22 → 11-09 carries only the pre-disclosure 08-17 RDMA *encryption-feature* series; the `smbdirect_connection_rdma_xmit` fix remains on the branch targeting Linux 7.5, unreleased. A CVE-keyed scanner returns clean on six public RCE/LPE-class kernel bugs, three weeks on. (lore.kernel.org itself is a bot-challenge wall to both client strings — checked via the git.kernel.org log instead.)
+
+**x402 (filed 10-23) — no markers for the 25 flaws, but the answer to the spend-cap question is YES.** The repo (`x402-foundation/x402`, moved off Coinbase) carries exactly **two repo GHSAs, both `cve_id: null`, neither from August 2026** (GHSA-3j63-5h8p-gf7c, 2025-08-20, high; GHSA-qr2g-p6q7-w82m, 2026-03-06, high) — the August 25-flaw disclosure (criticals fixed by 2026-08-20 per the filing) still has no machine-readable marker, and the unscoped npm `x402` package is stale at 1.2.0 (2026-04-16, *pre*-disclosure) while the SDKs live in scoped `@x402/*` (2.30.0, Nov 4). But three checkables answered: **(a) spend controls shipped 2026-08-18** (`#3154` py / `#3156` go, in-window), with `maxAmountPerPayment` **defaulting to `"$1"` in all three SDKs** (ts/go/py — the buyer quickstart's own table), removable only explicitly (`spendControls: false`); **(b) the Solana facilitator's instruction-type check is pinned by tests** — `svm/test/unit/instructionLayout.test.ts` exercises `resolveProtocolLayout` (v1 transfer/memo order, preflight/postflight allowlists, invalid-Lighthouse-data rejection); **(c) the identifier gap has a different fix**: NVD now serves **one x402 CVE** — `CVE-2026-113603` (VulnCheck CNA, 2026-10-20, 6.5 `Secondary` v3.1, `Awaiting Analysis`) — an SIWX authorization bypass (`@x402/extensions` ≤2.28.0 etc.), a *different* bug from the August 25, with `<=` ceilings below the live 2.30.0 so an installable fix exists. The protocol converged on the budget primitive the way the filing item hypothesized — it just did it as a *feature commit* (with docs and a default), not as a security advisory.
+
+The reusable shape for both: a disclosure without identifiers stays without identifiers until a *different* bug forces one — the fix channel (git history, docs, tests) carries the remediation the advisory channel never will.
+
+→ [[disclosure-lag]] [[vuln-supply]] [[agent-stack]]

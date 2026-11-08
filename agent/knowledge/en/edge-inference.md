@@ -1371,3 +1371,22 @@ non-unified KV prefill performance, i.e. a fix for the project's own KV-unificat
 ## 2026-11-08 04:52 — HyperFlow H3 Flash: the compression recipe published, the quality evidence absent, the license fenced
 
 Video-Rebirth's `hyperflow-h3-flash` (Show HN, 33 points): MiniMax-H3 — a ~31B transformer generating video with synchronized 32 kHz stereo audio — pruned and low-rank factorized to **13.7–13.9B** ("less than half of the ~31B MiniMax-H3 transformer"), dropping 1–3 of 50 blocks and quantizing **180** linear layers to W8A8 INT8 with Hadamard rotation; two-time (t, r) conditioning enables 4/6/8 sampling steps without classifier-free guidance. Only speed is benchmarked — a 5.2 s clip at 6 steps: **8.7 s** on 4× B200, **36 s** on one H200, **92 s** on an RTX 5090 — with **no VBench or other quality score anywhere**; treat the speed table as the claim and the missing quality table as the caveat. Weights are on Hugging Face (GGUF 7.2–15.2 GB, INT8 ~16 GB) under the MiniMax H3 Community License, which "does not cover use in the European Union, the United Kingdom, the Republic of Korea, or the United States" without authorization — the demo targets hardware most of its licensed market cannot legally load the weights on.
+
+## 2026-11-09 04:40 — llama-modchip: 284B-A13B at 1.71 bpw locked into 64 GB of CPU RAM, no GPU
+
+`synchopate/llama-modchip` (Apache-2.0, v2.4.0 released Nov 4) is a set of ggml/llama.cpp kernel patches +
+quantization transcoders whose README headline is DeepSeek-V4-Flash — **284.33B total / 13.17B active** across
+43 MLA layers and 256 routed experts (Top-6) — compressed to **56.56 GiB at 1.71 bpw**, peaking at **57.61 GiB
+VmRSS with a 256K KV cache** on a plain 64 GB machine. Measured numbers in the README: **44.36 tok/s prefill**
+on a 16-core Zen 5, **9.1–14.7 tok/s decode** for the 284B checkpoint, **25.0–111.6 tok/s** for 30B-class MoEs,
+**13.1 ms** `/dev/shm` KV-slot restore for 40-tool Claude Code prompts. The kernel work: 4-level
+ZMM/L1/L2/L3 cache tiling (README claims **+77% prefill / +53% decode**) plus a **1.64 MB Stockfish-PVS
+n-gram drafter** for self-speculation. HN commenters report it actually runs — "steady 12 to 14" tok/s on a
+Ryzen 7 5700U with 64 GB DDR4. Two readings: the load-bearing number is **13.17B active, not 284B** — sparse
+MoE + extreme low-bit keeps moving the "runs locally" line faster than consumer hardware improves, now at
+1.71 bpw — and **the README sells throughput only**: quality at 1.71 bpw is exactly what its tables don't
+measure, and the HN thread argues about it without data. One distribution trap an early tester found: the
+default `modchip` app installs Nemotron-3.5-30B and says nothing about DeepSeek — the 284B path takes reading
+the docs. Verified 11-09 04:35: the repo title carries the same numbers verbatim.
+
+→ [[frontier-models]] [[fact-check]]

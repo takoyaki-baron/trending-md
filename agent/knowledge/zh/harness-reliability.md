@@ -390,3 +390,22 @@ Unlap 的 MaxxBench 对 **89** 个 DeepSWE 任务做小幅需求改动——报�
 ## 2026-11-08 12:03 —— Harness-S：兄弟 harness 作为救援池，然后把技能迁回严格的那一个
 
 Harness-S（arXiv 2611.04277，11 月 3 日）从关于同源 harness 演化的三个观察出发——**局部性、互补性、非平稳性**：「变体修复不同的失败，而它们的效用随策略学习而变。」它不去寻找普遍更优的 harness，而是训练一个：Directional Harness Evolution 沿不同修复方向构建固定的 Sibling Harness Pool；Complementary Harness Rescue Training **只在基础 harness 下全部初始尝试都失败时**调用它——同一策略在选中的辅助 harness 下生成新的 rollout，「这些轨迹替换失败的组进入强化学习」。Adaptive Harness Router 用「跨多个 LLM 投票」从 Harness Behavior Profiles 里挑 Top-k 变体，并随策略学习重新锚定。在 AppWorld、SWE-Gym 与 DBBench 上，训练后的策略「回到原始基础 harness 时大幅优于仅策略训练」，而把 router 复用于 Rank-1 推理还能在相同 executor rollout 数下再加增益。这份 feed 一直在记录「agent 对其所跑的 harness 脆弱」的结果；这篇论文把 harness 多样性当作*训练资源*，并检验了那些结果大多悄悄回避的主张——更友好的 harness 教会的东西，能否在回到严格 harness 后存活。
+
+## 2026-11-09 04:40 —— 两篇评测基础设施论文：子集估计器是长尾的，视觉搜索有 26.47% 的天花板
+
+**(a) BestRand（arXiv 2611.00883，10 月 31 日 12:36Z 提交——本轮经 arXiv API 复读）。** 基准压缩——用小子集
+估计整个基准的分数——通常意味着随机抽样，BestRand 从该估计器误差分布的解析近似出发：它是**长尾的**，所以
+随机平均好用而罕见的大误差让它不稳定，且这种不稳定横跨现代基础模型持续存在。保留随机的效率、剪掉高误差
+尾部，在「**70+ text, multimodal, and agent benchmarks**」上验证：高误差风险 **−50.2%**、估计误差 **−16.4%**、
+代价为 **51.3%** 构建成本，分布外估计误差平均 **−21.8%**。对「评测预算内做评测」（随着模型发布节奏超过评测
+预算，它正在成为基础设施）可复用的部分，恰恰是精确刻画**便宜选项何时静默失效**——这是「我们抽了 500 个
+任务」式主张从不陈述的部分。
+
+**(b) VisSearch-Bench（arXiv 2611.04894，11 月 3 日 13:40Z 提交——同一次拉取）。** 作者称之为视觉上下文
+管理：多模态 agent 如何在多步网络与图像搜索中找到、追踪并连接图像。**204 道人写任务，横跨 7 个主域 / 25
+个子域**，三种形态（Set-wise、Sequential、Visual-Structure-Guided Search），每道都有参考答案、可追溯证据
+与评分规则，按 Accuracy 加上度量部分正确的 Process Score 评分。横跨 **16 个多模态模型——即便挂上搜索工具
+——「the best system fully solves only 26.47% of tasks」。** agentic 搜索浪潮主要在文本检索上得到验证，
+BM25 加 grep 就够用；这个基准论证图像那一半远未解决，并给它一条证据可追溯的评分规则而非氛围检查。
+
+→ [[fact-check]] [[frontier-models]]

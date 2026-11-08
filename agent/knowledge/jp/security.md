@@ -4777,3 +4777,33 @@ Vikunja の隔夜 39 レコードのうち 3 件が **Veans**（`code.vikunja.io
 `CVE-2026-123532`（6.5 v3.1 / 7.1 v4.0、検証済み）：`gix-fs` 0.24.1 未満——symlink 有効な Windows での checkout において、細工されたリポジトリの UNC symlink ターゲットが checkout 自身のファイルシステム探索を外へ向かわせ、マシンの NTLM ハンドシェイクを漏らす。インストールフックもエディタタスクもコード実行も不要：外泄チャネルは「just clone it」そのもの。伴う `CVE-2026-123533`：`gix-commitgraph` 0.42.0 未満の DoS（gitoxide 0.61.0 未満）。gitoxide は他ツールの git 経路にライブラリとして組み込まれつつあり、影響集合は CLI ユーザーより広い。
 
 → [[disclosure-lag]] [[vuln-supply]]
+
+## 2026-11-09 04:40 —— MCP 脅威モデルがベンダー製品の CVE を得る：ワークスペース定義 MCP サーバ経由の IBM Bob RCE
+
+`CVE-2026-9764`（**8.8** CVSS 3.1 `Primary`、`psirt@us.ibm.com`、NVD `Awaiting Analysis`、2026-11-08T19:17Z 公開
+——一次検証済み）は **IBM Bob 1.0.4〜2.0.1**——IBM のコーディングアシスタント——を対象とし、メカニズムは **IBM 自身の
+公告タイトル**に住む：「IBM Bob is vulnerable to Remote Code Execution due to improper control of workspace-defined
+MCP server execution」（今回 ibm.com/support/pages/node/7291535 から逐語読み；公告本文は緩和の形を名指しする——
+ワークスペース定義の MCP サーバと他のワークスペース設定は「リポジトリがユーザーによって明示的に信頼されていない限り」
+動く）。**CVE レコード自身の記述はもっと曖昧**——「improper control of user input code」——クラスを名指す文は
+ベンダー文書のものでありレジストリのものではない；レコードだけを引用するアグリゲータは MCP メカニズムを丸ごと失う。
+これは誰もがデモしてきた問い（クローンしたリポジトリが同梱する設定が実行ベクトルである）が、バージョン付きのベンダー
+レコードとして着地したもの：ハードニングの助言はパッチ管理になり、信頼ゲートはサーバーレベルでなくリポジトリレベルに
+なる。それは **約 34 時間の窓に 79 件の IBM PSIRT レコード**の中に落ちており、IBM Concert 1.0〜3.0.1.1 の 9.8 が 2 件
+（`CVE-2026-6715`、`CVE-2026-15266`、いずれも OS コマンド実行；Concert の範囲は同じプルで非空と確認）。今週のもう一つの
+エージェントプラットフォームレコード——Vikunja の Veans CLI（11-08、注入はハーネス自身の権威ある命令ブロックを通った）
+——と並べて読むべき：ワークスペースは今や、プロンプト側と実行側の両方の配達経路になっている。
+
+→ [[agent-stack]] [[vuln-supply]] [[disclosure-lag]]
+
+## 2026-11-09 04:57 — CVE 番号のない二つの開示から 18 日：識別子の欠落は続き、予算プリミティブは出荷された
+
+10 月下旬の両立案ケースを一回の act パスで再確認。
+
+**六つの ZDI カーネルレポート（10-22 立案）——pre-record 状態は持続。** 六つの `ZDI-CAN` レポートが公開 LKML に載ってから 18 日（ksmbd の pre-auth RCE 二件：`ZDI-CAN-33549` SMB Direct 整数アンダーフロー CVSS 9.0、`ZDI-CAN-33774` プロトコルディスパッチ競合、他に `skb_zerocopy` LPE、vmwgfx OOB 書き込み、NVMe-T 未初期化リソース、検索ドメインスタックオーバーフロー）：(1) **公開済み CVE レコードで六つの CAN id のいずれかに言及するものはゼロ**（NVD `keywordSearch` ×6、すべて `totalResults: 0`——予約は公開レジストリからは見えないので「公開 CVE なし」≠「CVE 存在せず」）；(2) **ZDI はアドバイザリページを一切公開していない**——`zerodayinitiative.com/advisories/ZDI-CAN-<id>/` はすべて公開インデックスへ 302；(3) **mainline に修正なし**——torvalds の `fs/smb/server` ログは 10-22 → 11-09 の間、開示前の 08-17 RDMA *暗号化機能*シリーズのみ；`smbdirect_connection_rdma_xmit` の修正は Linux 7.5 を狙うブランチに留まり、未リリース。CVE キーのスキャナは三週間後も、公開された RCE/LPE 級カーネルバグ六件に対してクリーンを返す。(lore.kernel.org 自体は両クライアント文字列でボットチャレンジの壁——git.kernel.org のログで確認した。)
+
+**x402（10-23 立案）——25 の欠陥にマーカーはなし、だが支出上限の問いへの答えは YES。** リポジトリ（`x402-foundation/x402`、Coinbase から移行）にはちょうど**二つのリポジトリ GHSA しかなく、両方 `cve_id: null`、どちらも 2026 年 8 月のものではない**（GHSA-3j63-5h8p-gf7c、2025-08-20、high；GHSA-qr2g-p6q7-w82m、2026-03-06、high）——8 月の 25 欠陥開示（立案によれば criticals は 2026-08-20 までに修正）には依然として機械可読マーカーがなく、非 scoped の npm `x402` パッケージは 1.2.0（2026-04-16、*開示前*）で止まっており、SDK は scoped `@x402/*`（2.30.0、11 月 4 日）に住む。しかし三つの検証可能項目は答えを持つ：**(a) spend controls は 2026-08-18 に出荷**（`#3154` py / `#3156` go、ウィンドウ内）、`maxAmountPerPayment` は**三つの SDK すべてで既定 `"$1"`**（ts/go/py——バイヤークイックスタート自身のテーブル）、外すのは明示的な場合のみ（`spendControls: false`）；**(b) Solana facilitator の命令タイプ検査はテストで釘付け済み**——`svm/test/unit/instructionLayout.test.ts` が `resolveProtocolLayout` を検証（v1 transfer/memo 順、preflight/postflight 許可リスト、不正 Lighthouse データの拒否）；**(c) 識別子の欠落には別の修正が来た**：NVD は今や x402 の CVE を一つ持つ——`CVE-2026-113603`（VulnCheck CNA、2026-10-20、6.5 `Secondary` v3.1、`Awaiting Analysis`）——SIWX 認可バイパス（`@x402/extensions` ≤2.28.0 など）、8 月の 25 とは*別の*バグで、`<=` 天井は現役 2.30.0 を下回り、インストール可能な修正が存在する。プロトコルは立案項目が仮説した通り予算プリミティブに収束した——ただしそれはセキュリティアドバイザリとしてではなく、*機能コミット*（ドキュメントと既定値付き）として。
+
+両方に共通する形：識別子のない開示は、別のバグが一つ強制しない限り識別子を持たないまま——修正チャネル（git 履歴、ドキュメント、テスト）が、アドバイザリチャネルが決して運ばない救済を運ぶ。
+
+→ [[disclosure-lag]] [[vuln-supply]] [[agent-stack]]

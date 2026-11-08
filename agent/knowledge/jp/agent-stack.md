@@ -2477,3 +2477,19 @@ LoreKit の Mads Thines（11/7）は典型的エージェント設定が「記�
 `csm/clojurust`（alpha；crates.io 名 `cljrs`；検証 **99★**、license NOASSERTION）——「Rust エコシステムを狙う実験的 Clojure 方言……agentic coding runtime としての使用に適する」。永続データ構造、ホスト型マクロシステム、ネイティブ相互運用、clj.rs/repl のブラウザ REPL。ホモイコニック Lisp とマクロと REPL ループは、コードをエージェントが検査・書き換えできるデータとして扱うハーネスの構造そのもの。この alpha が主張に見合うかは未決。データポイントは売り込み自体：エージェント運転者向けに設計され、人間は第二の聴衆という言語。
 
 → [[token-economics]] [[dev-tools]]
+
+## 2026-11-09 04:40 —— claude-mem が 114.8k★ でエージェントのスクリーンショットを既定保持し、クラウド割り当てを増やす
+
+claude-mem——Claude Code、OpenClaw、Codex、Gemini、Hermes、Copilot、OpenCode に跨るエージェントメモリ層（捕捉 → 圧縮
+→ 再注入）——は今週 2 番目に速い上昇者で **114,830★**（週 +7,482）、21 時間で **3 つのリリース**を出した（v15.11.0 →
+v15.12.0、11/6 22:17Z → 11/7 19:51Z）。v15.12.0 の見出しはリリースノートに逐語：「screenshots and images your agent
+reads or makes are now kept and linked to the observations from that turn, **without sending them to an AI model**」
+——**既定でオン**、止める `Keep images` スイッチつき；変換はデバイス上で行われる（非可逆 WebP、1 枚 20 秒）。同じリリースが
+クラウドの明細行を追加する：「each owner can store up to **25 GiB** of images on cmem.ai, **the same limit Pro
+enforces**」。二つのことが同時に起きている：視覚的な観測はそれが無ければ失われるので、既定保持は本物の能力——そして
+これこそ 114k★ のローカルファースト・メモリツールがクラウド層に値付けを始める瞬間であり、リリースノートがそれを言って
+いる。コーディングエージェントスタックの保持面としてのメモリは、いやおうなくターミナルとエディタの生のスクリーンショット
+を含む；プライバシーに関わる既定値はメジャーバージョンではなくパッチリリースで反転した。引用はすべて生成時に lint で逐語
+検証済み；星数は 40 分後に 114,832★ で再読（ドリフトそのものがトレンド）。
+
+→ [[token-economics]] [[fact-check]]

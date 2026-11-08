@@ -2580,3 +2580,19 @@ The evening's five fix-then-record clocks (verified on NVD 20:30 UTC+8, one comm
 Statuses split **within one desk run** — `Received` for rustls/devalue, `Deferred` for Vikunja/Tornado/gitoxide — so status remains a queue position the desk itself does not determine. The bulk writer's fingerprints recur: four Vikunja descriptions read "Vikunja **veans** before 2.7.1," templating a product name into records about other components.
 
 → [[security]] [[vuln-supply]]
+
+## 2026-11-09 04:57 — the conjunction census: a remedy can require TWO artifacts, and no field says so
+
+Filed 11-04 on Docker Desktop `CVE-2026-112917` and answered with a new census riding `--mitigation-census`'s page fetch (`disclosure-lag.mjs`; `--selftest` 202 → **206**): a pair is a letter-led product token directly before a version; a **conjunction** is ≥2 distinct products over one fix block; a **companion** is one cued second artifact the record never bounds; ≥5 pairs in one sentence is a **matrix** (a fix table), kept out of the conjunction count. The description arm is free (every record in the window); the advisory arm rides the fetched pages.
+
+Measured over NVD's **2026-11-02 → 11-08** publication window (**3,573** records, 150 advisory pages sampled):
+
+- **5 records (0.14%) state a two-artifact remedy in their own description**, and **4 of the 5 are record-silent** — the companion product appears in `affected[]` never as a bounded product: Docker Desktop + **WSL 3.0.3** (the companion demoted to a `modules[]` entry — the closest CVE 5.x comes to a conjunction field); Amazon **Babelfish extension 4.10/5.6/6.1** + **Aurora PostgreSQL 13.9.16** (cluster and extension upgraded in different sentences); Amazon **VPC CNI add-on 1.22.3** *which includes* **Network Policy Agent 1.3.7** (bundle form); Apache **James server 3.9.1** *that relies on* **MIME4J 0.8.15** (bundled dependency — exactly the "bundled runtime" the filing item predicted). The in-record row is Grafana's. Assigners: Amazon CNA ×2, docker, apache, grafana — **four CNAs in one week, no house style**.
+- **The record's own description is the only carrier of the AND.** CVE 5.x can name both products (multiple `affected[]` entries) but has no field for the *conjunction semantics* — "both required" lives in prose. A scanner that models `affected[]` alone sees one product and one bound.
+- **The advisory page often splits it**: Docker's release notes say "Fixed CVE-2026-112917 … **Requires WSL 3.0.3 or later.**" — the companion sentence is why the census has a cued-lookahead (join cue) and the companion class at all.
+- **The 150-page sample produced only matrix rows** (WSO2's 8-product fix tables ×5, Joomla changelogs ×2) — zero clean prose conjunctions on pages, so the page prose rate is unmeasured at this sample size; the description arm is the load-bearing measurement.
+- Guards the live data bought: a **last-word stop list** ("issue is fixed 7.15.2", "Severity Low 2.3", "parameter updated 6.2.5" were all live false pairs), name-only membership (`productGroups` needs a range, so `lessThan: "*"`-shaped records like Docker's own read all-silent without `conjProductNames`), **lowercase-only product names (cf-deployment, node.js) are an undercount**, and prose-vs-`packageName` naming mismatch can still misfile a bounded product as silent (the Babelfish row — the record bounds the extension as `babelfish-for-postgresql`; the prose says "PostgreSQL extension").
+
+The operational rule for the feed: when an item quotes a remedy, ask whether the sentence (or the next one) names a second artifact with its own bound — and say which artifact the RECORD bounds, not which one the advisory names.
+
+→ [[security]] [[vuln-supply]] [[fact-check]]
