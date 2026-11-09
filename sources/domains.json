@@ -14170,5 +14170,68 @@
   "en": "Project site of BenchUp (formerly KetchUp), the open-source Rust/WebGPU SketchUp-style modeler. Used 11-09 for the launch (309 HN points). cv 0: first-party site; the mid-launch rename is evidenced by two author-originated artifacts (HN's launch title still says KetchUp; site title says BenchUp) — no third party involved yet.",
   "zh": "BenchUp（前名 KetchUp）项目站点——开源 Rust/WebGPU 的 SketchUp 风格建模器。11-09 用于其发布（HN 309 分）。cv 0：第一方站点；发布中途改名由两个作者侧产物佐证（HN 标题仍是 KetchUp，站点标题已是 BenchUp）——尚无第三方参与。",
   "jp": "BenchUp（旧名 KetchUp）のプロジェクトサイト。オープンソースの Rust/WebGPU 製 SketchUp 風モデラー。11-09 にローンチ（HN 309 pts）で使用。cv 0：一次サイトで、ローンチ途中の改名は二つの作者側アーティファクト（HN のタイトルは依然 KetchUp、サイトのタイトルは BenchUp）が示すのみ—第三者はまだ関与していない。"
+ },
+ "declarative-dragging.github.io": {
+  "cat": "research",
+  "cred": "med",
+  "density": "high",
+  "cv": 0,
+  "en": "Project site for Declarative Dragging (Horowitz, Blinn & Heer, UIST 2026) and the Dragology library — first-party for the mechanism, demos and the Best Paper badge; fetched 11-09 and read first-hand. cv 0: award and results are self-reported; the UIST 2026 program pages render no greppable program text to check against, and the HN engagement is downstream of the site.",
+  "zh": "Declarative Dragging（Horowitz、Blinn & Heer，UIST 2026）与 Dragology 库的项目站——机制、演示与最佳论文徽章的一手来源；11-09 抓取并一手阅读。cv 0：奖项与结果为自我报告；UIST 2026 议程页无可检索的程序文本可资核对，HN 讨论属于站点下游。",
+  "jp": "Declarative Dragging（Horowitz、Blinn & Heer、UIST 2026）と Dragology ライブラリのプロジェクトサイト。仕組み・デモ・最優秀論文賞バッジの一次情報。11-09 に取得し一次読解。cv 0：賞と結果は自己申告。UIST 2026 のプログラム頁は突合できるテキストをレンダリングせず、HN の議論はサイトの下流。"
+ },
+ "blog.nathanlangley.dev": {
+  "cat": "research",
+  "cred": "med",
+  "density": "high",
+  "cv": 0,
+  "en": "Nathan Langley's blog; host of the LiveNerf 30-day results post (11-09 batch). Its window scores (+0.7±1.8 / −1.5±1.8 pp) and validation numbers match ninjahawk/livenerf's own README docs, but blog and repo are the same origin, so that is not counted. cv 0: first-party measurement results with no independent confirmation yet — the pre-registered design (frozen panel, pinned CLI, committed decision rule) is what makes the numbers worth tracking.",
+  "zh": "Nathan Langley 的博客；LiveNerf 30 天结果帖（11-09 批次）的托管处。其窗口分数（+0.7±1.8 / −1.5±1.8 pp）与验证数字与 ninjahawk/livenerf README 的文档一致，但博客与仓库同源，不计入。cv 0：第一方测量结果，尚无独立确认——预注册的设计（冻结面板、钉死 CLI、预先提交的判定规则）是这些数字值得追踪的原因。",
+  "jp": "Nathan Langley のブログ。LiveNerf 30日間の結果ポスト（11-09 バッチ）の公開先。ウィンドウ・スコア（+0.7±1.8 / −1.5±1.8 pp）と検証数値は ninjahawk/livenerf の README ドキュメントと一致しますが、ブログとリポジトリは同源なので算入しません。cv 0：一次の測定結果で独立した確認はまだ — 事前登録された設計（凍結パネル、ピン留め CLI、事前コミットされた判定ルール）がこの数字を追う価値のある理由。"
+ },
+ "muratbuffalo.blogspot.com": {
+  "cat": "community",
+  "cred": "med",
+  "density": "high",
+  "cv": 1,
+  "en": "Murat's long-running distributed-systems blog (writing there since 2011). Used 11-09 for the writing-as-a-thinking-tool essay. Cross-validated 11-09: the Manuel Blum passage it quotes — \"Without writing, you are reduced to a finite automaton…\" — is carried verbatim by Wikiquote's Manuel Blum page, an artifact not downstream of the blog.",
+  "zh": "Murat 的长青分布式系统博客（自 2011 年写作至今）。11-09 用于“写作作为思考工具”一文。已交叉核验（11-09）：文中引用的 Manuel Blum 段落——“没有写作，你就退化成一台有限自动机……”——逐字收录于 Wikiquote 的 Manuel Blum 页面，一个不依赖该博客的工件。",
+  "jp": "Murat の長寿な分散システム・ブログ（2011年から執筆）。11-09 に「思考の道具としての執筆」のエッセイで使用。11-09 にクロス検証：引用されている Manuel Blum の一節 —「書かなければ、あなたは有限オートマトンに格下げされる……」— は Wikiquote の Manuel Blum ページが逐語で載めており、ブログの下流ではない成果物。"
+ },
+ "blog.zortax.de": {
+  "cat": "community",
+  "cred": "med",
+  "density": "high",
+  "cv": 1,
+  "en": "Dev blog carrying measured GUI-framework critiques; used 11-09 for A Critique of GPUI. Cross-validated 11-09: its Discord-GPUI-rewrite premise matches the Discord announcement this feed verified 2026-11-06 from its own sources — an independent confirmation of a fact the post attributes to Discord. The benchmark numbers are the author's own harness and the post discloses a COI (he works on the rival signal framework zgui), so cred stays med.",
+  "zh": "承载带实测的 GUI 框架批评的开发博客；11-09 用于《GPUI 批判》。已交叉核验（11-09）：其“Discord 用 GPUI 重写”的前提与本 feed 于 2026-11-06 从其自身来源核实过的 Discord 公告一致——对该文归于 Discord 的事实的独立确认。基准数字来自作者自己的 harness，且文中披露了利益相关（作者开发竞品 signal 框架 zgui），故 cred 保持 med。",
+  "jp": "実測を伴う GUI フレームワーク批判を載せる開発ブログ。11-09 に「GPUI 批判」で使用。11-09 にクロス検証：「Discord が GPUI でリライト」という前提は、このフィードが 2026-11-06 に独自ソースから検証した Discord の発表と一致 — ポストが Discord に帰属させる事実の独立した確認。ベンチマーク数値は著者自身のハーネスであり、COI（競合 signal フレームワーク zgui の開発者）を自己開示しているため、cred は med のまま。"
+ },
+ "chimera-vocal-synth.vercel.app": {
+  "cat": "community",
+  "cred": "low",
+  "density": "med",
+  "cv": 0,
+  "en": "First-party demo app: a physically-modelled voice synthesizer in the browser (simulated airway, vocal-fold view slowed 100×, F1/F2 vowel chart). Fetched 11-09; the described controls are in the page's own text. cv 0: no repo or second artifact exists, and HN engagement is downstream of the app itself.",
+  "zh": "第一方演示应用：浏览器中的物理建模语音合成器（模拟气道、放慢 100 倍的声带视图、F1/F2 元音图）。11-09 抓取；所描述的控件就在页面自身文本中。cv 0：没有仓库或第二工件存在，HN 讨论是应用本身的下游。",
+  "jp": "ファーストパーティのデモアプリ：ブラウザで動く物理モデリングの音声シンセサイザー（模擬気道、100倍スローの声帯ビュー、F1/F2 母音チャート）。11-09 に取得。記載の操作子はページ自身のテキストに含まれます。cv 0：リポジトリも第二の成果物も存在せず、HN の関心はアプリ自体の下流。"
+ },
+ "packagist.org": {
+  "cat": "data",
+  "cred": "high",
+  "density": "high",
+  "cv": 1,
+  "en": "The Composer package registry — canonical publish timestamps for PHP packages. Cross-validated 11-09: its craftcms/cms 5.11.2 publish time (2026-09-17T18:44Z) is consistent with the affected ranges (\"before 5.11.2\") in the six Craft CMS CVE records NVD published Nov 8 — a cross-registry artifact check; it is the primary source for fix dates.",
+  "zh": "Composer 包注册表——PHP 包发布时间戳的权威来源。已交叉核验（11-09）：其 craftcms/cms 5.11.2 的发布时间（2026-09-17T18:44Z）与 NVD 于 11 月 8 日发布的六条 Craft CMS CVE 记录中的受影响范围（\"before 5.11.2\"）一致——跨注册表的工件核验；它是修复日期的一手来源。",
+  "jp": "Composer パッケージレジストリ — PHP パッケージの公開タイムスタンプの権威ある情報源。11-09 にクロス検証：craftcms/cms 5.11.2 の公開時刻（2026-09-17T18:44Z）は、NVD が11月8日に公開した6件の Craft CMS CVE レコードの影響範囲（\"before 5.11.2\"）と整合 — レジストリ間の成果物検証。修正日時の一次情報源。"
+ },
+ "gbrain.io": {
+  "cat": "vendor",
+  "cred": "med",
+  "density": "med",
+  "cv": 0,
+  "en": "GBrain's hosted-service landing page (team memory across AI tools), linked as the paid-hosting option from garrytan/gbrain. Fetched 11-09; the positioning matches the repo README's own description, but both are the same origin, so that is not counted. cv 0: vendor self-description only.",
+  "zh": "GBrain 托管服务的落地页（跨 AI 工具的团队记忆），作为付费托管选项链接自 garrytan/gbrain。11-09 抓取；其定位与仓库 README 自身的描述一致，但两者同源，不计入。cv 0：仅厂商自我描述。",
+  "jp": "GBrain のホストサービスのランディングページ（AI ツール横断のチーム記憶）。garrytan/gbrain から有料ホスティングの選択肢としてリンク。11-09 に取得。位置づけはリポジトリ README の自己記述と一致しますが、両者は同源なので算入しません。cv 0：ベンダーの自己記述のみ。"
  }
 }

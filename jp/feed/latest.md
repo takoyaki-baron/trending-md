@@ -1,8 +1,8 @@
 ---
 date: 2026-11-09
-updated: 2026-11-09T05:12:07Z
+updated: 2026-11-09T12:27:48Z
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 24
+sources: 30
 license: CC-BY-4.0
 ---
 
@@ -486,13 +486,167 @@ Kyle Kingsbury — Jepsen の作者 — による Harvest、つまりタイム�
 
 ---
 
+## 35. Declarative Dragging：ドラッグが到達すべきモデル状態を宣言する — エンジンが取りうる世界を自前でレンダリングする（UIST 2026 最優秀論文賞）
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Hacker News · 586+ pts · 11月4日（いまだフロントページ）
+- **Tags:** `ui` `research` `interaction-design`
+
+Declarative Dragging（Horowitz、Blinn & Heer。UIST 2026 最優秀論文賞）は、ドラッグ&ドロップの作り方を逆転させます。「視覚的な振る舞いをすべて直接プログラムするのではなく、ドラッグ可能にしたい要素ごとに、そのドラッグが到達すべきアプリケーションの未来状態を宣言すればよい」のです。エンジンはそれらの状態を投機的にビューツリーへレンダリングし、各レンダリングでの被ドラッグ要素の着地位置を抽出し、それらの可能な世界からインタラクション全体を合成します — ドロップゾーンのジオメトリを手書きする必要はありません。実装は **Dragology** という、Web 上の SVG インターフェース向けライブラリで、合成可能な modifier でフロート、スナップ、トランジションを重ねられます。デモには代数書き換えパズル、木の間の順序保存写像、同じシステムの複数の並列表現がドラッグの最中にリアルタイムで連動する順列ラボがあります。論文後の仕事では、Hazel のリファクタリングをドラッグで触れる形にする試みや、著者らの数学ゲームのゲームパッド対応 3D 化も進んでいます。
+
+**Why it matters:** 「ドラッグ&ドロップなど簡単だ」は定番の HN ジョークです。手で作ると一週間かかるからです。ここでは最難関の部分を、細かいジオメトリではなくモデル意味論へのクエリに変えています。取りうる状態を投機的にレンダリングする手法は、エージェントがアクション計画に使うのと同じ技です — 今回、研究側から UI コードにやって来ました。
+
+[`🔗 declarative-dragging.github.io`](https://declarative-dragging.github.io/) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=50368481)
+
+---
+
+## 36. 思考の道具としての執筆：6ページ・メモの論拠は死んだ — 「今やまったく考えずに6ページを生産できる」
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Hacker News · 383+ pts · 26h前（昨日 ~18:41 UTC+8）
+- **Tags:** `writing` `llm` `essay`
+
+muratbuffalo ブログ（2011年から書き続けています）は、執筆＝認知という鮮やかに技術的な論証を展開します。大学院生に向けての Manuel Blum の一節 — チューリング機械と有限オートマトンの唯一の違いは「紙と鉛筆」を持つこと — は「書かなければ、あなたは有限オートマトンに格下げされる」と着地します。執筆はアウト・オブ・コア実行です。論文レビューを書いてみて初めて、書く前には「おそらく60%」しか理解していなかったと気づき、2018年の Paxos と Nakamoto コンセンサスの解剖学的類似性に関するブログ記事は、のちに研究論文の種になりました。LLM の節がより切れ味があります。「モデルはあなたの脳内にあるもの以外をすべて読んでいる」 — 標準的なフレーミングは知っていても、それへのあなたの未成熟な直観は知らない。そして Bezos が6ページ・メモを担保した言葉 — 「6ページの物語構造を持つメモを、明確な思考なしに書き上げることはできない」 — は死んだと宣言されます。LLM があれば「まったく考えずに6ページを生産でき、その6ページはなお思考が起きた証拠に見える」。続いて五つのルール（まず散らかる、整える、平易に保つ、読者のために書かない、スケジュールに載せる）。
+
+**Why it matters:** このフィードの多くの話題の下にある評価問題を言語化した一篇です。生成されたテキストはもはや思考が起きたことの証明にならない — だからすべての成果物（6ページ・メモ、ベンチマーク報告、CVE 分析）には出所の物語が必要です。「比較優位」の枠組みは、本日の Goldman Sachs の項への具体的な答えにもなっています。同社が制限したのは、このエッセイが外部化するなと言うものそのものです。
+
+[`🔗 muratbuffalo.blogspot.com`](http://muratbuffalo.blogspot.com/2026/11/writing-as-thinking-tool.html) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=50412067)
+
+---
+
+## 37. Opus 5.5 は弱体化したのか？ 238ポイントの大論争 vs そのために作られた唯一の測定装置 — すでに陰性結果を公表済み
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Hacker News · 238+ pts · 5h前（~15:04 UTC+8）
+- **Tags:** `evaluation` `llm` `benchmarks`
+
+Opus 5.5 の思考パターンが11月3日に変わったという拡散ツイートが HN のフロントページに乗り、例年の戦争が始まりました。品質崩壊の逸話（あるコメント者は自分のワークフローの成功率が ~85% から ~10% に落ちたと述べる）対、何も感じない人々。理論は静かな量子化から IPO シーズンの格下げまで並びます。読むべきは測定装置の側です。**ninjahawk/livenerf** — 事前登録済みの30日間（現在は45日に延長）のドリフト・ベンチマークで、2,336問の GPQA/MMLU-Pro/競争数学/AIME から「時々正解する」78問の凍結パネルをロックし、CLI をピン留めし、純関数で採点し、データ収集前に判定ルールをコミットしています。結果の投稿（10月27日）によれば、11–20日目は 59.2%（+0.7 ± 1.8 pp）、21–30日目は 57.1%（−1.5 ± 1.8 pp）で、58.4% のローンチ時ベースラインに対し持続的な退行はありません。重量を支えるのは誠実な限界の声明です。実測最小検出可能効果は10日ウィンドウあたり約 6.6 pp。意図的な **Opus 5 → Opus 5.5 の置換は区別できませんでした**（−3.8 ± 6.3 pp、トークン −23%）。推論 effort の低下はまずトークンに現れます（medium −26%、low −62% の出力トークン）。パネル監査では誤った解答キー8件と曖昧な問題約30件も見つかっています。
+
+**Why it matters:** モデル品質言説で最も繰り返される主張クラスが、その測定のために作られた最良の公共装置に現状測れない — しかも著者自身が率直に言っています。「ある装置が特定の同ファミリー置換を確実に検出できないなら、その置換が起きていないと主張するために使うべきではない」。静かな effort 引き下げはまずトークン・チャネルに現れます。見るべきは感想ではなくこの数字です。
+
+[`🔗 LiveNerf 30日間の結果ポスト`](https://blog.nathanlangley.dev/posts/livenerf-30-days.html) · [`🔗 ninjahawk/livenerf`](https://github.com/ninjahawk/livenerf) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=50422069)
+
+---
+
+## 38. Chimera：すべての音が模擬された気道から生まれる声のシンセサイザー — Pink Trombone の血統、ブラウザのタブの中で
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News · 246+ pts · 13h前（~06:36 UTC+8）
+- **Tags:** `audio` `web` `synthesis`
+
+Chimera Vocal Synth は物理モデリングの声のシンセサイザーです。「ここでのすべての音は、喉・口・鼻腔を空気が流れる様子のシミュレーションから生み出されています。」インターフェースは楽器そのものを露出します — 声門から唇までのチューブ表示、100倍スローにした声帯、ライブのフォルマント・スペクトル、F1/F2 の母音チャート — 舌・唇・顎をドラッグするか、110 Hz 基本周波数のキーボードを弾き、呼気圧（8.0 cmH₂O）、pressed 発声、ビブラートを調節します。ML モデルもサンプルもなし。HN のスレッドはこれを Pink Trombone（2018）の現代の子孫に位置づけ — さらに遡れば古い調音合成の仕事に系譜がつながります — 演奏クリップが X や Bluesky で拡散しています。
+
+**Why it matters:** 調音合成 — 声道を物理楽器として扱う — はニューラル TTS への長年の対抗軸です。完全に解釈可能（すべての母音は声道の形）で、拡散オーディオモデルにはできない制御ができ、タブに収まる音声学の教室です。ブラウザでインタラクション・レートで走ることが、 Engineering としての見せ場です。
+
+[`🔗 chimera-vocal-synth.vercel.app`](https://chimera-vocal-synth.vercel.app/) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=50418182)
+
+---
+
+## 39. GPUI 批判：`notify` は zone.js — Discord が同フレームワークにデスクトップを賭けた数日後の実測による反論
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News · 117+ pts · 8h前（~11:51 UTC+8）
+- **Tags:** `rust` `gui` `performance`
+
+Discord が GPUI によるリライトを発表した（11月6日報道）数日後、実測による対抗文書が来ました。著者の論点は、GPUI の状態モデルは「ある値が変わったとき、何が走るのか？」に答えられないというものです。`cx.notify()` はエンティティを一つ命名するだけで、その下は何も知りません。「ゾーンより正確です。エンティティを名指しするから。しかし結局は Angular の zone.js と同じ種類の発言をしています」。ベンチマーク（i9-13900K、Vulkan、3回の中央値）：3,000行・行ごとにキャッシュ済みビューのある状態で、ラベル1つの変更に 8.4 ms かかり、1,000行につき約 3 ms ずつ増えます。素の要素では 92 ms。手書きの等価ガードがあれば等しい値の書き込みは 7.9 ms から 0.9 µs に下がります。gpui-fast フォークは 8.4 → 3.4 ms — それでも木全体の走査です — そして Zed 自身の保持実験は「通常の作業ではオフより1〜3%遅い」と測定しています。Elm/Iced はラベル1つの変更で 39,023 個の widget を再構築し（7.3 ms）、egui は3,000行で1編集あたり約 32 ms です。このポストの開示声明はベンチマーク記事の模範です。著者は GPUI の Linux レンダラーを wgpu に移植し、このハーネスを作り、競合する signal フレームワーク（zgui、0.69 ms）に関わっています — 「これは私のフレームワークで、このハーネス上でチューニングされています。数字は割り引いて読んでください。」
+
+**Why it matters:** Discord のリライトが GPUI をネイティブ Rust UI の基準選択にした今、これが反対側の証言文書です。しかも中心のトレードオフは現実です。素朴な `render` API を保ってビュー単位で払うか、エンティティの signal グラフを手で組み、フレームワークを選んだ理由である簡潔さを失うか。開示声明の節は、ハーネス対ハーネスのベンチマーク記事がすべて写す価値のあるものです。
+
+[`🔗 A Critique of GPUI（zortax.de）`](https://blog.zortax.de/posts/a-critique-of-gpui) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=50420857)
+
+---
+
+## 40. 2026-11-08 の Craft CMS SQL インジェクション報道の続報：同じ波でさらに6件 — 9.8 の GraphQL 越権と 8.8 の署名付きテンプレート RCE
+
+- **Velocity:** ▮▮ rising
+- **Source:** NVD · 6件のレコード · 11月8日 14:18Z
+- **Tags:** `security` `cve` `craftcms`
+
+11月8日の VulnCheck 披露波（第1項の OpenEMR 44件と同じ ~14:18Z のラン）は、Craft CMS について昨日の未認証 SQL インジェクションを除くさらに6件のレコードを発表していました。CVE-2026-124426〜-124431 です。主役は **CVE-2026-124427（CVSS 3.1 で 9.8）**。「匿名の GraphQL クライアントが prev/next フィールド経由でスコープ外のセクション・エントリを読めるようにする」認可バイパス。可視エントリから schema が決して公開していないセクションへ連鎖できます。**CVE-2026-124430（8.8）**は、非管理者のコントロールパネルユーザーが「app/render-elements エンドポイント経由で HMAC 署名付き Twig テンプレートを取得する」RCE。そして CVE-2026-124429（7.5）は、公開登録者が無効化された非管理者アカウントを直接権限を保持したまま回収できるというもの。このほか、app/icon-svg エンドポイントでの SVG パスによる任意ファイル読み取り（6.5）と、アセットボリューム閲覧バイパス（4.3）。VulnCheck が CNA で、各レコードを2回発行します — `Primary` CVSS 3.1 と `Secondary` CVSS 4.0 を並べて — しかも組の方向はレコードごとに食い違います（9.8→9.3、6.5→7.1、7.5→8.7、8.8→8.7）。すべて **5.11.2 で修正済み — Packagist の表示では 2026-09-17 にリリース**で、書類より52日早い。現行は 5.11.5.1（10月8日）です。
+
+**Why it matters:** この第二弾の合計深刻度は昨日の1件を上回り、52日間の修正→レコードlagは、CVE の発表を待ってパッチを当てる人は2か月近く GraphQL スコープバイパスと署名付きテンプレート RCE を走らせていたことを意味します。そして同一 CNA の記録同士で 3.1 と 4.0 が双方向に食い違うとき、引用するスコアには必ずバージョンを添えるべきです。
+
+[`🔗 CVE-2026-124427（NVD）`](https://nvd.nist.gov/vuln/detail/CVE-2026-124427) · [`🔗 CVE-2026-124430（NVD）`](https://nvd.nist.gov/vuln/detail/CVE-2026-124430) · [`🔗 craftcms/cms（Packagist）`](https://packagist.org/packages/craftcms/cms)
+
+---
+
+## 41. ChatGPT Desktop があなたの SSH エージェントを転送する — 仕組みは OpenAI 自身の PR コメントに書かれていた：`forwarded-ssh-agent.sock`
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News · 53+ pts · 7.5h前（~12:43 UTC+8）
+- **Tags:** `security` `agents` `ssh`
+
+HN の投稿は、ChatGPT Desktop のエージェント構成では「リモートマシンで走るエージェントが……あなたのローカル SSH 認証情報で認証できる。つまり非公開の GitHub リポジトリにプッシュできる」と論じます。仕組みは OpenAI 自身のコードに文書化されています。codex PR #28131 における OpenAI エンジニアの6月14日のコメントは、アプリがサーバーを `SSH_AUTH_SOCK=~/.codex/app-server-control/forwarded-ssh-agent.sock` を指して起動し、`codex app-server --listen unix://` を実行することを示しています。SSH エージェントソケットが転送するのは鍵ではなく*署名リクエスト*です — つまりそのソケットに届くものはすべて、署名を受け入れる任意のホストに対してあなたの鍵を行使できます。スレッドの緩和策：Secretive 経由で macOS Secure Enclave に鍵を置く（セッションごとにタッチ gates）、またはタッチ必須の YubiKey — 新しい SSH 接続には常に人間のジェスチャーが要るようにする。
+
+**Why it matters:** エージェントの利便性は、バグではなく設計上の決定によって認証情報の爆発半径を広げ続けています — これは Claude Code の User-Agent 埋め込みメールや「Don't Ask Again」の秘密ファイルと同じ分類に座ります。デスクトップエージェントがどこかにエージェントソケットをマウントしているなら、「誰が私としてプッシュできるか」の答えには、そのソケットに届くものすべてが含まれます — 次の `git push` が驚きになる前に確認する価値があります。
+
+[`🔗 HN 議論`](https://news.ycombinator.com/item?id=50422628) · [`🔗 codex PR #28131 のコメント`](https://github.com/openai/codex/pull/28131#discussion_r3410013180)
+
+---
+
+## 42. Next-Concept Modeling：概念のレイヤー丸ごとを並列生成 — 同等品質で拡散言語モデルの10〜31倍速い
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News · 110+ pts · 4.7h前（~15:20 UTC+8）
+- **Tags:** `research` `architecture` `generation`
+
+Next-Concept Modeling（arXiv 2610.14162、10月9日提出。Hermann Kumbong ら — Azalia Mirhoseini と Christopher Ré を含むスタンフォード Hazy 系）は、自己回帰型と拡散型言語モデルの間に立ちます。まずマルチスケール残差 VQ-VAE がテキストを離散コードの*階層*にエンコードし、次に transformer が一度に1レベルを生成し、**レベル内の全コードを並列に予測**します — 粗い構造が先、細部が後。パラメータ規模を揃えた上で、NCM は LM1B で最強の拡散ベースラインの生成パープレキシティを **21倍速** で上回り、OpenWebText では10倍で互角、XSum では **31倍速** で ROUGE-L を合わせ、Sudoku の全難易度でより少ない関数評価で自己回帰・拡散の両ベースラインを上回ります。編集上の瑕疵も一つ：要旨の Sudoku の文が、背中合わせに2回現れます。
+
+**Why it matters:** next-token → 並列のスペクトラムには既知の二極（AR の品質、拡散のステップごと全シーケンス・コスト）があり、これは第三の粒度 — 「概念」 — を並列予測の単位として提案します。規模はまだ小さく（LM1B、OWT、XSum、Sudoku）、開いた問いは VQ 階層が指示チューニングと長いコンテキストに耐えるかです。しかし速度の主張は、推論予算が気にする種類のものです。
+
+[`🔗 arXiv:2610.14162`](https://arxiv.org/abs/2610.14162) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=50422168)
+
+---
+
+## 43. gbrain：Garry Tan のエージェント記憶レイヤーが拡大 — 31.9k スター、MCP で5つのハーネスに接続、npm の `gbrain` は別物だと警告
+
+- **Velocity:** ▮▮ rising
+- **Source:** GitHub Trending · +215 today · 31.9k stars
+- **Tags:** `agents` `memory` `open-source`
+
+GBrain（「Garry's Opinionated OpenClaw/Hermes Agent Brain」）は、YC の CEO Garry Tan 自身のエージェント運用の背後にある記憶レイヤーです。本人の挙げる数字：155,795 ページ、24,589 人、5,340 社、自律的に走る 66 の cron ジョブ。MIT、セルフホスト可能、gbrain.io がオプションの有料ホスティング。出典*付き*の明示的な事実を格納し、訂正と撤回を支援し、MCP で同じ脳を Claude Code、Codex、ChatGPT、Cursor、Grok Bot、Muse に提供します。合成レイヤーは引用付きの答えとギャップ分析（「脳がまだ知らないこと」 — 「4月22日以降、脳には Alice や Acme について何も追加されていない」という古さの警告を含む）を返します。型付きグラフは BrainBench の関係質問で本番 R@5 を 0.6626 から 0.7241 に引き上げ、「0.9791 は graph-oracle-parse の上限であり製品スコアではない」と正直に注記します。README にはサプライチェーンの警告もあります。「GBrain は npm で配布されていません。npm の `gbrain` パッケージは無関係で、実バイナリを shadow する可能性があります。」
+
+**Why it matters:** 記憶は本日のテーマです（上の claude-mem、先週の Anthropic の記憶マップ）。この参入者の差別化は、出典・撤回・ギャップ分析 — エージェントの記憶をただ大きいだけでなく監査可能にする部分です。npm shadow の警告は、release-drift の教訓が他人の README に現れた形であり、写す価値があります。
+
+[`🔗 garrytan/gbrain`](https://github.com/garrytan/gbrain) · [`🔗 gbrain.io（ホスト版）`](https://gbrain.io)
+
+---
+
+## 44. 埋め込み型 .NET テンプレートエンジン Scriban にサンドボックス脱出と DoS のペア — すべて10月24日に修正済み、レコードは11月8日に公開
+
+- **Velocity:** ▮ steady
+- **Source:** NVD · 3件のレコード · 11月8日 14:18Z
+- **Tags:** `security` `dotnet` `templating`
+
+同じ11月8日の VulnCheck 披露波は、Scriban（3,990★。.NET がユーザー執筆テンプレートをレンダリングする場所ならどこでも埋め込まれています）について3件のレコードをもたらしました。**CVE-2026-124438 がサンドボックス脱出です**（CVSS 3.1 で 7.4 / CVSS 4.0 で 9.1）：`array.map` のメンバーアクセスが「リフレクション・メンバーアクセッサ経由で関数値の .NET 内部に到達」します — インポートされたデリゲートの `Target`、`Method`、`ReturnType` を読むことで「サービスプロパティ、クロージャに捕獲された秘密、アセンブリパス」を露出し、上書きします。GHSA（7.5.2 で修正）は範囲を正確に示します。高影響の変種は、ホストが `ScriptObject.Import(name, Delegate)` でインスタンス・メソッドのデリゲートをインポートしていることを必要とする — 「関数を公開する文書化された方法」です。DoS のペア（CVE-2026-124437、-124439、7.5.3 で修正）：`math.format`、`regex.replace`、`string.escape` などのビルトインが `LimitToString` の割り当てガードをスキップし、後置のメンバー/インデクサー/呼び出しチェーンが `ExpressionDepthLimit` をバイパスし、`object.eval` が `RecursiveLimit` をバイパス — **ホストプロセスを終了させる捕獲不可能な `StackOverflowException`** に着地します。修正は10月24日にリリース。現行の 7.6.1 は11月8日 — レコードが公開された同じ日の約7時間前です。
+
+**Why it matters:** Scriban のサンドボックスは、テンプレートが信頼できない入力であることに正確に由来して存在します。そして今回の脱出は*文書化された*デリゲート・インポート API を通ります — つまり、普通の方法でサービスメソッドを公開していたすべてのホストが範囲内であり、設定ミスのホストだけではありません。さらにこの CNA の 4.0 スコアは自社の 3.1 より 1.2〜1.7 ポイント上回っています。スコアにはバージョンを添えてください。
+
+[`🔗 GHSA-hvr4-4p37-494f`](https://github.com/scriban/scriban/security/advisories/GHSA-hvr4-4p37-494f) · [`🔗 CVE-2026-124438（NVD）`](https://nvd.nist.gov/vuln/detail/CVE-2026-124438)
+
+---
+
+## 45. RuView の10.3万スター「WiFi で壁越しに見る」は正直さの表を同梱している — 自ら撤回した100%の数字、自らの 3.0% スタブ、そして本当に測られたもの
+
+- **Velocity:** ▮ steady
+- **Source:** GitHub Trending · +203 today · 103k stars
+- **Tags:** `wifi-sensing` `hardware` `open-source`
+
+RuView（103,148 スター）は、コンモディティ WiFi による空間センシングを謳います。9ドルの ESP32 CSI ノードで、存在検出、17キーポイントの姿勢、呼吸と心拍を「壁越しに、暗闇で、カメラもウェアラブルもなしで」。読む価値があるのは、その一枚のラベリング表（ADR-187、「見出しではなくラベルを読め」）です。**測定済み：** CSI エンコーダ＋存在検出ヘッドは 82.3% のホールドアウト temporal-triplet 精度 — より古い「100% presence」の数字は「単一クラスの録音で測定した」と明示的に*撤回*済み — そして MM-Fi 姿勢モデルは **82.69% torso-PCK@20**（アンサンブル 83.59%）。MultiFormer の 72.25%、CSI2Pose の 68.41% に対し、一致したプロトコル上、公開リーダーボードで自己訂正可能です。**正直に弱いとラベル付け：** コミット済みのオンデバイス姿勢モデルは目標 ≥35% に対し実測 **PCK@20 = 3.0%**、その実行パスは「いまだ `confidence=0` を返す中心骨格のスタブ」 — 「重みはまだ接続されていない」。**アーキテクチャのみ：** archive/v1 には「いかなるチェックポイントもない」。全研究の数字：ゼロショット cross-subject 約64%、室内較準 72.2%。4-bit エンコーダは 8 KB に収まり、HF の重みは公開済み。本日の +203 について公開のトリガーは見つかりませんでした — HN 投稿も報道もなし。
+
+**Why it matters:** 壁越し DensePose を謳うリポジトリが、自分の主張について real/stub/architecture の三層表を公開し、自分の最良のマーケティング数字を自ら撤回する — これは Void の対極です。誠実さそのものが成果物です。引用するのは 82.69%（ベンチマーク済み、公開プロトコル）であって、ヒーロー画像ではありません。
+
+[`🔗 ruvnet/RuView`](https://github.com/ruvnet/RuView) · [`🔗 ruvnet/wifi-densepose-pretrained（モデル）`](https://huggingface.co/ruvnet/wifi-densepose-pretrained)
+
+---
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-11-09T05:12:07Z |
-| Items | 34 |
-| Sources tracked | 24 (Hacker News, GitHub Trending, NVD, CISA-ADP enrichment, VulnCheck advisories, IBM security bulletins, WPScan, GitHub Advisory DB, OSV Advisory DB, arXiv, Hugging Face Papers, NVIDIA Newsroom, isocpp.org, shubs.io, duxlabs.dev, vercel.com changelog, aphyr.com, ram-altman.lol, ketchup3d.github.io, The Decoder, MailRoute, linebender.org, packethound.app, hamza.se) |
+| Generated | 2026-11-09T12:27:48Z |
+| Items | 45 |
+| Sources tracked | 30 (Hacker News, GitHub Trending, NVD, CISA-ADP enrichment, VulnCheck advisories, IBM security bulletins, WPScan, GitHub Advisory DB, OSV Advisory DB, arXiv, Hugging Face Papers, NVIDIA Newsroom, isocpp.org, shubs.io, duxlabs.dev, vercel.com changelog, aphyr.com, ram-altman.lol, ketchup3d.github.io, The Decoder, MailRoute, linebender.org, packethound.app, hamza.se, declarative-dragging.github.io, blog.nathanlangley.dev, muratbuffalo.blogspot.com, blog.zortax.de, chimera-vocal-synth.vercel.app, Packagist) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (3x daily) |
 | Ranking | Velocity-weighted (recency × engagement acceleration × source authority) |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |

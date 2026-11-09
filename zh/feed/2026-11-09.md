@@ -1,8 +1,8 @@
 ---
 date: 2026-11-09
-updated: 2026-11-09T05:12:07Z
+updated: 2026-11-09T12:27:48Z
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 24
+sources: 30
 license: CC-BY-4.0
 ---
 
@@ -486,13 +486,167 @@ Kyle Kingsbury — Jepsen 的作者 — 写 Harvest：这款时间追踪/开票 
 
 ---
 
+## 35. Declarative Dragging：声明一个拖拽应该到达哪些模型状态 — 引擎自己渲染出所有可能世界（UIST 2026 最佳论文）
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Hacker News · 586+ pts · 11月4日（仍在首页）
+- **Tags:** `ui` `research` `interaction-design`
+
+Declarative Dragging（Horowitz、Blinn & Heer；UIST 2026 最佳论文奖）反转了拖拽的构建方式："与其直接编写那些视觉行为，你只需对每个想让它可拖拽的元素声明：拖动它应该通向应用的哪些未来状态。" 引擎将这些状态推测性地渲染成视图树，提取被拖元素在每种渲染中的落点，再从这些可能世界合成出整个拖拽交互 — 无需手写任何 drop-zone 几何。实现是 **Dragology**，一个面向 Web SVG 界面的库，可通过可组合的 modifier 叠加浮动、吸附与过渡。演示包括代数重写谜题、树之间的保序映射、以及一个置换实验室 — 同一系统的多个并行表示在拖拽中途实时联动；论文之后的工作还包括让 Hazel 的重构操作变得可拖拽，以及作者们的数学游戏转向手柄上的 3D。
+
+**Why it matters:** "不就是拖个拽吗" 是 HN 的经典笑话，因为手写它至少要一周；这里把最难的部分变成了对模型语义的查询，而不是琐碎的几何。用推测性渲染枚举可能状态，和 agent 做动作规划用的是同一个技巧 — 这次它从研究侧进入了 UI 代码。
+
+[`🔗 declarative-dragging.github.io`](https://declarative-dragging.github.io/) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50368481)
+
+---
+
+## 36. 写作作为思考工具：六页备忘录的论证死了 — "现在你可以在毫无思考的情况下产出六页"
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Hacker News · 383+ pts · 26h ago（昨天 ~18:41 UTC+8）
+- **Tags:** `writing` `llm` `essay`
+
+muratbuffalo 博客（自 2011 年写作至今）为"写作即认知"给出了一个干净的技术论证：Manuel Blum 对研究生的名言 — 图灵机与有限自动机的唯一区别是"有纸和笔" — 落点是 "没有写作，你就退化成一台有限自动机"。写作是核外执行（out-of-core execution）：写论文评审时他才发现自己只读懂了 "大概 60%"；2018 年那篇 Paxos 与 Nakamoto 共识解剖学相似的博文，后来成了一篇研究论文的种子。LLM 那一节更锋利："模型读尽了所有东西，唯独没有读你脑子里的" — 它知道共识性的框架，不知道你对其半成品的怀疑。而贝佐斯为六页备忘录背书的理由 — "没人能写完一份六页、叙事结构的备忘录而思绪不清晰" — 被宣告失效：有了 LLM，"你现在可以在毫无思考的情况下产出六页，而这六页看起来仍然是思考发生过的证据"。随后是五条写作规则（先写烂、再修整、保持平实、不为读者写、把它排进日程）。
+
+**Why it matters:** 它点破了许多本 feed 内容底下的评估难题 — 产出的文本不再能证明思考发生过，于是每份产物（六页备忘录、基准报告、CVE 分析）都需要一个来源故事。"比较优势"的框架也是对今天 Goldman Sachs 条目的具体回应：那家公司限制掉的，恰恰是本文说最不该外包的东西。
+
+[`🔗 muratbuffalo.blogspot.com`](http://muratbuffalo.blogspot.com/2026/11/writing-as-thinking-tool.html) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50412067)
+
+---
+
+## 37. Opus 5.5 被削了吗？238 分的大辩论 vs 唯一一台为此而造的测量仪器 — 而它已经发表了阴性结果
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Hacker News · 238+ pts · 5h ago（~15:04 UTC+8）
+- **Tags:** `evaluation` `llm` `benchmarks`
+
+一条声称 Opus 5.5 思维模式在 11 月 3 日发生变化的疯传推文冲上 HN 首页，引来惯常的战争：质量崩塌的轶事（一位评论者：自己工作流的成功率从 ~85% 跌到 ~10%）对阵毫无察觉的人，理论从静默量化一路排到上市季降级。值得读的是那台仪器：**ninjahawk/livenerf** — 一个预注册的 30 天（现已延至 45 天）漂移基准，锁死一个 78 题的冻结面板（从 2,336 道 GPQA/MMLU-Pro/竞赛数学/AIME 题中筛出模型"时对时错"的题），钉死 CLI 版本，用纯函数评分，并在收集数据之前就提交了判定规则。其结果帖（10 月 27 日）：第 11–20 天得分 59.2%（+0.7 ± 1.8 pp）、第 21–30 天得分 57.1%（−1.5 ± 1.8 pp），对比 58.4% 的发布基线 — 没有持续回退。真正承重的是它诚实的极限：实测最小可检测效应 ≈ 每 10 天窗口 6.6 pp；一次刻意的 **Opus 5 → Opus 5.5 替换无法被区分**（−3.8 ± 6.3 pp，−23% tokens）；推理力度的削减首先体现在 token 上（medium −26%，low −62% 输出 token）；面板审计还发现了 8 个错误答案键和约 30 道歧义题。
+
+**Why it matters:** 模型质量话语里被重复最多的那类主张，目前连为此而造的最好的公共仪器都测不出来 — 作者自己说得直白："如果一台仪器连某种同家族模型替换都检测不到，那它就不该被用来声称替换没有发生。" 静默降力最先出现在 token 通道 — 该盯的是这个数字，不是感觉。
+
+[`🔗 LiveNerf 30 天结果帖`](https://blog.nathanlangley.dev/posts/livenerf-30-days.html) · [`🔗 ninjahawk/livenerf`](https://github.com/ninjahawk/livenerf) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50422069)
+
+---
+
+## 38. Chimera：一个所有声音都来自模拟气道的合成器 — Pink Trombone 的血脉，跑在浏览器标签页里
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News · 246+ pts · 13h ago（~06:36 UTC+8）
+- **Tags:** `audio` `web` `synthesis`
+
+Chimera Vocal Synth 是一台物理建模的语音合成器："这里的每个声音，都来自对空气流过喉咙、口腔和鼻腔的模拟。" 界面把乐器本身暴露出来 — 从声门到嘴唇的管道视图、放慢 100 倍的声带、实时共振峰频谱、F1/F2 元音图 — 你可以拖动舌头、嘴唇或下颌，或在 110 Hz 基频的键盘上弹奏，并调节气压（8.0 cmH₂O）、紧嗓与颤音。没有 ML 模型、没有采样；HN 评论区把它定位为 Pink Trombone（2018）的现代后裔 — 而后者又源自更早的发音合成工作 — 相关演示视频正在 X 和 Bluesky 上流传。
+
+**Why it matters:** 发音合成 — 把声道当作物理乐器 — 是神经 TTS 的长期对照面：完全可解释（每个元音就是一个声道形状）、以扩散音频模型做不到的方式可控，并且是一间装进标签页的语音学教室。能在浏览器里以交互帧率跑起来，才是工程上的本事。
+
+[`🔗 chimera-vocal-synth.vercel.app`](https://chimera-vocal-synth.vercel.app/) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50418182)
+
+---
+
+## 39. GPUI 批判：`notify` 就是 zone.js — 在 Discord 押注该框架几天后的一份实测反驳
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News · 117+ pts · 8h ago（~11:51 UTC+8）
+- **Tags:** `rust` `gui` `performance`
+
+在 Discord 宣布用 GPUI 重写桌面端（11 月 6 日已报道）几天后，一份实测的反驳来了：作者的论点是 GPUI 的状态模型回答不了"一个值变化时，哪些代码会执行？" — `cx.notify()` 只命名一个实体、实体以下一无所知，"比 zone 更精确，因为它命名了实体，但归根结底在说同一类话"，正如 Angular 的 zone.js。基准（i9-13900K、Vulkan、三次取中位数）：3,000 行、每行带缓存视图时，改一个 label 花 8.4 ms 且每 1,000 行约增 3 ms；普通元素要 92 ms；一个手写的相等性守卫能把等值写入从 7.9 ms 降到 0.9 µs。gpui-fast 分支把 8.4 降到 3.4 ms — 但仍是整棵树的遍历 — 而 Zed 自己的保留实验测得 "在日常负载下比不开启慢 1–3%"。Elm/Iced 一次 label 修改要重建 39,023 个 widget（7.3 ms）；egui 在 3,000 行下每次编辑约 32 ms。这篇帖子的披露声明是基准类文章的范本：作者把 GPUI 的 Linux 渲染器移植到了 wgpu、写下了这套测试、并且在一个竞争性的 signal 框架（zgui，0.69 ms）上工作 — "这是我的框架，而且是在这套测试上调优的，所以这些数字请打折扣来看。"
+
+**Why it matters:** 随着 Discord 的重写让 GPUI 成为原生 Rust UI 的默认选项，这份文档就是那句反方证词 — 而且它指出的取舍是真实的：要么保住朴素的 `render` API、按视图付费，要么手工搭一棵实体 signal 图、丢掉你当初选它的理由。披露声明一节也值得所有 harness 对 harness 的基准文章照抄。
+
+[`🔗 A Critique of GPUI（zortax.de）`](https://blog.zortax.de/posts/a-critique-of-gpui) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50420857)
+
+---
+
+## 40. 继 2026-11-08 报道 Craft CMS 的 SQL 注入之后：同一波里又来了六条记录 — 一个 9.8 的 GraphQL 越权和一个 8.8 的签名模板 RCE
+
+- **Velocity:** ▮▮ rising
+- **Source:** NVD · 6 条记录 · 11月8日 14:18Z
+- **Tags:** `security` `cve` `craftcms`
+
+11 月 8 日的 VulnCheck 披露波（与第 1 条 OpenEMR 的 44 条记录同一批 ~14:18Z）还为 Craft CMS 发出了另外六条记录，CVE-2026-124426 至 -124431 — 这还在昨天那条未认证 SQL 注入之外。主角：**CVE-2026-124427（CVSS 3.1 评 9.8）**，一个授权绕过 — "允许匿名 GraphQL 客户端经由 prev/next 字段读取作用域之外的 section 条目"，从一条可见条目链进 schema 从未暴露的 section；**CVE-2026-124430（评 8.8）**，非管理员控制面板用户"经由 app/render-elements 端点取得经 HMAC 签名的 Twig 模板"造成 RCE；以及 CVE-2026-124429（评 7.5），公开注册者可以认领已停用的非管理员账号并保留其直接权限。另有经由 app/icon-svg 端点的 SVG 路径任意文件读取（评 6.5）和一个资产卷浏览绕过（评 4.3）。VulnCheck 是 CNA，每条记录发布两次 — `Primary` CVSS 3.1 与 `Secondary` CVSS 4.0 并列 — 且两个分数的方向逐条不一致（9.8→9.3、6.5→7.1、7.5→8.7、8.8→8.7）。全部修复于 **5.11.2 — Packagist 显示其发布于 2026-09-17**，比文书早 52 天；当前版本为 5.11.5.1（10 月 8 日）。
+
+**Why it matters:** 这第二批的合计严重度超过昨天那条单条记录，而 52 天的修复-到-记录时差意味着：按 CVE 发布时间打补丁的人，带着 GraphQL 越权和签名模板 RCE 跑了将近两个月。而当同一个 CNA 自己的记录之间 3.1 与 4.0 都能双向不一致时，每个分数旁边都该带上版本号。
+
+[`🔗 CVE-2026-124427（NVD）`](https://nvd.nist.gov/vuln/detail/CVE-2026-124427) · [`🔗 CVE-2026-124430（NVD）`](https://nvd.nist.gov/vuln/detail/CVE-2026-124430) · [`🔗 craftcms/cms（Packagist）`](https://packagist.org/packages/craftcms/cms)
+
+---
+
+## 41. ChatGPT Desktop 会转发你的 SSH agent — 机制写在 OpenAI 自己的 PR 评论里：一个 `forwarded-ssh-agent.sock`
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News · 53+ pts · 7.5h ago（~12:43 UTC+8）
+- **Tags:** `security` `agents` `ssh`
+
+一条 HN 帖子论证：ChatGPT Desktop 的 agent 设置会让"运行在远程机器上的 agent……用你本地的 SSH 凭据完成认证。也就是说它可以推送你的私有 GitHub 仓库。" 机制写在 OpenAI 自己的代码里：OpenAI 工程师 6 月 14 日在 codex PR #28131 里的评论显示，应用以 `SSH_AUTH_SOCK=~/.codex/app-server-control/forwarded-ssh-agent.sock` 启动其服务器，指向 `codex app-server --listen unix://`。SSH-agent 套接字转发的是*签名请求*而不是密钥 — 所以任何能碰到这个套接字的东西，都能拿你的密钥去对任何愿意接受该签名的主机完成认证。帖子里的缓解方案：经 Secretive 把密钥放进 macOS Secure Enclave（每次会话触控确认），或用要求触摸的 YubiKey — 让每一个新 SSH 连接都必须有人类手势。
+
+**Why it matters:** agent 的便利性正通过设计决定、而非 bug，持续扩大凭据的爆炸半径 — 这件事与 Claude Code 的 User-Agent 带邮箱、"Don't Ask Again" 密钥文件属于同一类。如果你的桌面 agent 在任何地方挂了一个 agent 套接字，"谁能以我的身份推送"的答案，现在包括了所有能碰到该套接字的东西 — 在下一次 `git push` 给你惊喜之前值得查一查。
+
+[`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50422628) · [`🔗 codex PR #28131 评论`](https://github.com/openai/codex/pull/28131#discussion_r3410013180)
+
+---
+
+## 42. Next-Concept Modeling：一整层概念并行生成 — 同等质量下比扩散语言模型快 10–31 倍
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News · 110+ pts · 4.7h ago（~15:20 UTC+8）
+- **Tags:** `research` `architecture` `generation`
+
+Next-Concept Modeling（arXiv 2610.14162，10 月 9 日提交；Hermann Kumbong 等 — 斯坦福 Hazy 一脉，含 Azalia Mirhoseini 与 Christopher Ré）站在自回归与扩散语言模型之间：先由一个多尺度残差 VQ-VAE 把文本编码成离散码的*层级*，再由一个 transformer 一次生成一层，**层内所有码并行预测** — 先粗结构，后细纹理。在参数规模对齐的前提下，NCM 在 LM1B 上以 **21 倍速** 超过最强扩散基线的生成困惑度；在 OpenWebText 上 10 倍速持平；在 XSum 上以 **31 倍速** 打平 ROUGE-L；在 Sudoku 全部难度上以更少的前向次数同时超过自回归与扩散基线。一个编辑瑕疵值得记下：摘要里 Sudoku 那句话背靠背出现了两次。
+
+**Why it matters:** next-token → 并行谱系已有两个已知极点（AR 的质量、扩散的每步全序列开销），这篇提出第三种粒度 — "概念" — 作为并行预测的单位。规模还小（LM1B、OWT、XSum、Sudoku），悬而未决的问题是 VQ 层级能否挺过指令微调与长上下文；但那组速度数字正是推理预算所在意的类型。
+
+[`🔗 arXiv:2610.14162`](https://arxiv.org/abs/2610.14162) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50422168)
+
+---
+
+## 43. gbrain：Garry Tan 的 agent 记忆层全面铺开 — 31.9k stars，经 MCP 接入五类 harness，并警告 npm 上的 `gbrain` 不是它
+
+- **Velocity:** ▮▮ rising
+- **Source:** GitHub Trending · +215 today · 31.9k stars
+- **Tags:** `agents` `memory` `open-source`
+
+GBrain（"Garry's Opinionated OpenClaw/Hermes Agent Brain"）是 YC CEO Garry Tan 自己 agent 部署背后的记忆层 — 他给出的数字：155,795 页、24,589 个人、5,340 家公司、66 个自主运行的 cron 任务。MIT 许可、可自托管，gbrain.io 为可选付费托管；它存储带*来源*的显式事实、支持更正与撤回，并经 MCP 把同一颗大脑接给 Claude Code、Codex、ChatGPT、Cursor、Grok Bot 和 Muse。综合层返回带引用的答案外加缺口分析（"大脑还不知道什么" — 包括"4 月 22 日之后大脑就没有收到关于 Alice 或 Acme 的任何新内容"这类陈旧警告）；类型化图在 BrainBench 关系问题上把生产 R@5 从 0.6626 提到 0.7241，并诚实标注 "0.9791 是 graph-oracle-parse 的上限，不是产品分数"。README 还带着一条供应链警告："GBrain 不通过 npm 分发。npm 上的 `gbrain` 包与本项目无关，且可能遮蔽真正的二进制。"
+
+**Why it matters:** 记忆是今天的主题（上文 claude-mem，上周 Anthropic 的记忆地图），而这个新入局者的差异点是来源、撤回与缺口分析 — 让 agent 的记忆可审计而不仅是大。npm 遮蔽警告是 release-drift 教训出现在别人 README 里的样子，值得抄走。
+
+[`🔗 garrytan/gbrain`](https://github.com/garrytan/gbrain) · [`🔗 gbrain.io（托管版）`](https://gbrain.io)
+
+---
+
+## 44. 内嵌式 .NET 模板引擎 Scriban 收到一个沙箱逃逸和一对 DoS — 全部 10 月 24 日已修，记录 11 月 8 日才发布
+
+- **Velocity:** ▮ steady
+- **Source:** NVD · 3 条记录 · 11月8日 14:18Z
+- **Tags:** `security` `dotnet` `templating`
+
+同一波 11 月 8 日的 VulnCheck 披露还为 Scriban（3,990★；凡是 .NET 渲染用户模板的地方都在内嵌它）发出了三条记录。**CVE-2026-124438 是沙箱逃逸**（CVSS 3.1 评 7.4 / CVSS 4.0 评 9.1）：`array.map` 的成员访问"经反射成员访问器触达函数值的 .NET 内部" — 读导入委托上的 `Target`、`Method` 或 `ReturnType`，就能暴露"并覆写服务属性、被闭包捕获的密钥、程序集路径"。GHSA（7.5.2 修复）把范围圈得很准：高影响变体需要宿主以 `ScriptObject.Import(name, Delegate)` 导入过一个实例方法委托 — 而"这是暴露函数的文档推荐方式"。DoS 一对（CVE-2026-124437、-124439，7.5.3 修复）：`math.format`、`regex.replace`、`string.escape` 等内建函数绕过 `LimitToString` 分配守卫，后缀成员/索引/调用链绕过 `ExpressionDepthLimit`，`object.eval` 绕过 `RecursiveLimit` — 最终落下一个**无法捕获的 `StackOverflowException`，直接终止宿主进程**。修复于 10 月 24 日发布；当前版 7.6.1 于 11 月 8 日发布 — 与记录公开同日，早约 7 小时。
+
+**Why it matters:** Scriban 的沙箱之所以存在，恰恰因为模板是不可信输入；而这次逃逸走的是*文档推荐*的委托导入 API — 所以每个按正常方式暴露服务方法的宿主都在范围内，不只是配置错误的那些。这家 CNA 的 4.0 分数比它自己的 3.1 高出 1.2–1.7 分：引用分数时请带上版本。
+
+[`🔗 GHSA-hvr4-4p37-494f`](https://github.com/scriban/scriban/security/advisories/GHSA-hvr4-4p37-494f) · [`🔗 CVE-2026-124438（NVD）`](https://nvd.nist.gov/vuln/detail/CVE-2026-124438)
+
+---
+
+## 45. RuView 的 10.3 万星"用 WiFi 穿墙看见一切"带了一张诚实表 — 自己撤回的 100% 数字、自己的 3.0% 空壳，以及真正测出来的部分
+
+- **Velocity:** ▮ steady
+- **Source:** GitHub Trending · +203 today · 103k stars
+- **Tags:** `wifi-sensing` `hardware` `open-source`
+
+RuView（103,148 stars）宣称用商品 WiFi 做空间感知：9 美元的 ESP32 CSI 节点，实现存在检测、17 关键点姿态、呼吸与心率 —"穿墙、无光、无摄像头、无穿戴设备"。值得读的是它自己那张标注表（ADR-187，"读标签，别读标题"）。**已测：** CSI 编码器 + 存在检测头，82.3% 留出 temporal-triplet 准确率 — 而更早的 "100% presence" 数字被明确*撤回*，因为"是在单一类别的录音上测的" — 以及一个 MM-Fi 姿态模型 **82.69% torso-PCK@20**（ensemble 83.59%），对 MultiFormer 的 72.25% 与 CSI2Pose 的 68.41%，在匹配协议上、于公开排行榜上可自查自纠。**诚实标注为弱：** 仓库里提交的端侧姿态模型实测 **PCK@20 = 3.0%**（目标 ≥35%），且其运行时路径"仍是一个返回 `confidence=0` 的居中骨架空壳" — "权重尚未接上"。**仅有架构：** archive/v1 "没有任何 checkpoint"。全研究数字：零样本跨主体 ~64%，房间内校准 72.2%。4-bit 编码器塞进 8 KB；HF 权重已发布。今天的 +203 没有找到公开触发点 — 没有HN帖、没有报道。
+
+**Why it matters:** 一个宣称穿墙 DensePose 的仓库，为自己的主张发布"已测/空壳/仅架构"三层表、并亲手撤回自己最好的营销数字 — 这是 Void 的反面：诚实本身就是产物。引用那个 82.69%（有基准、有公开协议），别引用头图。
+
+[`🔗 ruvnet/RuView`](https://github.com/ruvnet/RuView) · [`🔗 ruvnet/wifi-densepose-pretrained（模型）`](https://huggingface.co/ruvnet/wifi-densepose-pretrained)
+
+---
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-11-09T05:12:07Z |
-| Items | 34 |
-| Sources tracked | 24 (Hacker News, GitHub Trending, NVD, CISA-ADP enrichment, VulnCheck advisories, IBM security bulletins, WPScan, GitHub Advisory DB, OSV Advisory DB, arXiv, Hugging Face Papers, NVIDIA Newsroom, isocpp.org, shubs.io, duxlabs.dev, vercel.com changelog, aphyr.com, ram-altman.lol, ketchup3d.github.io, The Decoder, MailRoute, linebender.org, packethound.app, hamza.se) |
+| Generated | 2026-11-09T12:27:48Z |
+| Items | 45 |
+| Sources tracked | 30 (Hacker News, GitHub Trending, NVD, CISA-ADP enrichment, VulnCheck advisories, IBM security bulletins, WPScan, GitHub Advisory DB, OSV Advisory DB, arXiv, Hugging Face Papers, NVIDIA Newsroom, isocpp.org, shubs.io, duxlabs.dev, vercel.com changelog, aphyr.com, ram-altman.lol, ketchup3d.github.io, The Decoder, MailRoute, linebender.org, packethound.app, hamza.se, declarative-dragging.github.io, blog.nathanlangley.dev, muratbuffalo.blogspot.com, blog.zortax.de, chimera-vocal-synth.vercel.app, Packagist) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (3x daily) |
 | Ranking | Velocity-weighted (recency × engagement acceleration × source authority) |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |
