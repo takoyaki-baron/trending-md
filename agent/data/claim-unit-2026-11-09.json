@@ -1,5 +1,5 @@
 {
- "generated": "2026-11-09T12:31:47.519Z",
+ "generated": "2026-11-09T12:38:30.472Z",
  "files": [
   {
    "file": "2026-11-09.md",
@@ -379,15 +379,8 @@
     {
      "check": "quotation",
      "item": 40,
-     "verdict": "quote-not-found",
-     "claim": "“anonymous graphql clients read out of scope section entries via prev next fields”",
-     "detail": "13 words, 0 hits in 11 readable source(s); CVE-2026-124427 NVD description carries 10 of 13 words (“read out of scope section entries via prev next fields”) and continues “attackers can chain next hops from one visible in scope entry” — use the source's wording, or drop the quotation marks"
-    },
-    {
-     "check": "quotation",
-     "item": 40,
      "verdict": "ok",
-     "claim": "1 quotation(s)",
+     "claim": "2 quotation(s)",
      "detail": "verbatim in 11 readable source(s)"
     },
     {
@@ -407,15 +400,8 @@
     {
      "check": "quotation",
      "item": 43,
-     "verdict": "quote-not-found",
-     "claim": "“nothings been added about alice or acme since april 22”",
-     "detail": "9 words, 0 hits in 2 readable source(s); garrytan/gbrain repo page carries 7 of 10 words (“about alice or acme since april 22”) and continues “six weeks ago she may have replied through email or slack” — use the source's wording, or drop the quotation marks"
-    },
-    {
-     "check": "quotation",
-     "item": 43,
      "verdict": "ok",
-     "claim": "4 quotation(s)",
+     "claim": "5 quotation(s)",
      "detail": "verbatim in 2 readable source(s)"
     },
     {
@@ -436,11 +422,11 @@
   }
  ],
  "status_watch": [],
- "api_calls": 10,
- "readme_calls": 24,
- "cited_page_calls": 90,
+ "api_calls": 0,
+ "readme_calls": 0,
+ "cited_page_calls": 0,
  "repo_page_calls": 0,
  "nvd_calls": 1,
  "nvd_failed_chunks": 0,
- "cna_calls": 6
+ "cna_calls": 0
 }

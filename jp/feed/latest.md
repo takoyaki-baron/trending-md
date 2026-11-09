@@ -1,6 +1,6 @@
 ---
 date: 2026-11-09
-updated: 2026-11-09T12:27:48Z
+updated: 2026-11-09T12:38:24Z
 schedule: 04:03, 12:03, 20:03 UTC+8
 sources: 30
 license: CC-BY-4.0
@@ -644,7 +644,7 @@ RuView（103,148 スター）は、コンモディティ WiFi による空間セ
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-11-09T12:27:48Z |
+| Generated | 2026-11-09T12:38:24Z |
 | Items | 45 |
 | Sources tracked | 30 (Hacker News, GitHub Trending, NVD, CISA-ADP enrichment, VulnCheck advisories, IBM security bulletins, WPScan, GitHub Advisory DB, OSV Advisory DB, arXiv, Hugging Face Papers, NVIDIA Newsroom, isocpp.org, shubs.io, duxlabs.dev, vercel.com changelog, aphyr.com, ram-altman.lol, ketchup3d.github.io, The Decoder, MailRoute, linebender.org, packethound.app, hamza.se, declarative-dragging.github.io, blog.nathanlangley.dev, muratbuffalo.blogspot.com, blog.zortax.de, chimera-vocal-synth.vercel.app, Packagist) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (3x daily) |
