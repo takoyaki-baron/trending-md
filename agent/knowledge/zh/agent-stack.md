@@ -2223,3 +2223,26 @@ API，服务端状态下「**only a verifier session can mark a goal done**」�
 **`garrytan/gbrain`（本轮核实 31,870★，MIT，建于 04-05；11-09 +215/天）：**YC CEO Garry Tan 自己的 agent 记忆层，经 MCP 服务六个表面（Claude Code、Codex、ChatGPT、Cursor、Grok Bot、Muse），可自托管，gbrain.io 为可选付费托管。自报规模：155,795 页、24,589 人、5,340 家公司、66 个 cron 任务。差异点正是其他记忆工具跳过的可审计记忆部件：显式事实**连同来源**存储、支持更正与**撤回**、综合层在引用式答案之外**附带缺口分析**（「关于 Alice 或 Acme，大脑自 4 月 22 日起六周没有新增」）。类型化图把生产 R@5 从 **0.6626 提到 0.7241**（BrainBench 关系问题），且天花板印在纸面上：「0.9791 是 graph-oracle-parse 上界，不是产品分数」。README 带着一条值得抄的供应链警告：「GBrain is NOT distributed on npm. The npm `gbrain` package is unrelated and can shadow the real binary」——已核实：npm `gbrain@1.3.1` 是「GPU Javascript Library for Machine Learning」。接在 claude-mem 的保留+云定价之后，记忆的新轴是**可审计性**：谁说的、何时说的、大脑还不知道什么。
 
 → [[agent-distribution]] [[fact-check]]
+
+## 2026-11-10 04:45 — harness 控制面登上周榜第一；内存投毒拿到按架构区分的基准
+
+**T3 Code（`pingdotgg/t3code`）以本周 **+15,379★**（累计 **53,850★**）登上周榜第一**——仓库创建于 **2026-02-08**。它自称
+「agent harness 控制面」：安装并登录你已经在付费的 CLI（**Codex、Claude Code、Cursor、Grok Build、OpenCode、Google
+Antigravity、fx**），T3 Code 从 iOS、Android、Web 或 Electron 外壳驱动它们。MIT；README 明说商业模式（「Nothing. We built
+T3 Code because we wanted the best possible development experience with agents」）。夜间发版，11 月 9 日一天三次
+（`v0.1.8-nightly.20261109.4429`，18:58 UTC）。给仓库定年的数字：九个月大的项目挂着 **5,976** 个未关闭 issue 与 PR。
+架构读法：harness 层正在与模型厂商分离，于是「选哪个订阅」取代「选哪个 harness」——而 README 那份七次登录的安装矩阵，
+就是这种可移植性的真实成本。（该仓库早前以「六 harness 控制面」出现过，即 10-25 条目。）
+
+**MemoryDojo（arXiv 2611.09721）** —— 一个针对「被投毒的记忆的生命周期」的基准：「某一会话中遇到的恶意指令可能被
+存储，并在之后的会话中被取出、被执行之前先在记忆中传播」，且「内存系统在处理与检索信息的方式上不同，因此投毒的
+下游影响在不同系统之间可能差异显著」。**155** 条跨会话长程轨迹 × 四个领域 × **五种**内存系统，追踪毒在何处写入、
+何时被取出、agent 随后做了什么。头条结果：「**所有内存系统都可被内存投毒**，且下游影响差异可观。」它还附带一种攻击：
+「一个内存感知的投毒优化过程，可提升投毒效力，并揭示内存架构之间的差异」——把「差异」从趣闻变成目标筛选标准。
+对任何在交付内存层的人（本文件一周内已覆盖四种互相竞争的内存格式），「我的存储和你的形状不同」现在有了可测的成本，
+而架构*就是*攻击面。防线侧读法见 [[security]]。
+
+→ [[agent-stack]] [[security]] [[harness-reliability]]
+
+来源：[pingdotgg/t3code](https://github.com/pingdotgg/t3code) · [t3.codes](https://t3.codes) ·
+[arXiv 2611.09721](https://arxiv.org/abs/2611.09721)

@@ -3361,3 +3361,32 @@ Machine Learning". Following claude-mem's retention-plus-cloud-pricing move, mem
 **auditability**: who said it, when, and what the brain doesn't know yet.
 
 → [[agent-distribution]] [[fact-check]]
+
+## 2026-11-10 04:45 — the harness control surface tops the weekly board, and memory poisoning gets an architecture-by-architecture benchmark
+
+**T3 Code (`pingdotgg/t3code`) is #1 on the weekly trending board at +15,379 stars (53,850 total)** — for a repo
+created **2026-02-08**. It calls itself an "agent harness control surface": you install and authenticate the CLIs you
+already pay for (**Codex, Claude Code, Cursor, Grok Build, OpenCode, Google Antigravity, fx**) and T3 Code drives them
+from iOS, Android, web or an Electron shell. MIT; the README states the business model explicitly ("Nothing. We built
+T3 Code because we wanted the best possible development experience with agents"). Nightly releases, three in one day
+on Nov 9 (`v0.1.8-nightly.20261109.4429` at 18:58 UTC). The number that dates the repo: **5,976 open issues and pull
+requests** on a nine-month-old project. Architectural reading: the harness layer is separating from the model vendor,
+so the *subscription* becomes the thing you choose — and the README's seven-login install matrix is the real cost of
+that portability. (The same repo's earlier appearance as a six-harness control surface is the 10-25 entry.)
+
+**MemoryDojo (arXiv 2611.09721)** — a benchmark for the lifecycle of a poisoned memory: "malicious instructions
+encountered in one session may be stored and propagated through memory before being retrieved and acted upon in
+later sessions", and "because memory systems differ in how they process and retrieve information, the downstream
+effects of poisoning can vary significantly across systems". **155** multi-session long-horizon trajectories across
+four domains × **five** memory systems, tracing where the poison is written, when it is retrieved, and what the agent
+then does. Headline result: "**all memory systems are susceptible** to memory poisoning, with substantial variation in
+downstream effects." It also ships an attack: "a memory-aware poison optimization process that increases the poisoning
+efficacy, highlighting differences between memory architectures" — which converts the variation from a curiosity into
+a target-selection criterion. For anyone shipping a memory layer (this file has covered four competing memory formats
+in a week), "my store is not the same shape as yours" now has a measured cost, and the architecture *is* the attack
+surface. → [[security]] for the guard-side reading.
+
+→ [[agent-stack]] [[security]] [[harness-reliability]]
+
+Sources: [pingdotgg/t3code](https://github.com/pingdotgg/t3code) · [t3.codes](https://t3.codes) ·
+[arXiv 2611.09721](https://arxiv.org/abs/2611.09721)

@@ -2349,3 +2349,37 @@ reader の取得であり、lint の判定は誠実なまま。第三の経路�
 （https リンク）、item 38（意訳 → リポジトリ README の逐語文 "Every sound comes from a simulated
 airway (lungs, vocal folds or syrinx, a branched vocal tract, lips, nose), not from samples."）、
 item 41（scare quotes を削除——feed 自身の修辞疑問であってソースの言葉ではない）。
+
+## 2026-11-10 04:45 — リポジトリの出来事が無いトレンド首位と、ベンチマーク行を別モデルに帰属し直す脚注
+
+**Sherlock は GitHub 日間ボード首位、**+4,294★**（106,745★、12,366 フォーク）で、背後にリポジトリの出来事が無い。**
+最終コミットは **11 月 1 日**（「update banner layout」）、最終リリースは **v0.16.2（9 月 8 日）**、アーカイブ印も新規勧告も
+無い。星はこの一週間で毎日数千増えているが、CLI は「一年間ほとんど動いていない」。これは Void の教訓の**良性**版であり、
+microduck の反対側でもある：速度は本物、引き金はリリースではない、だから正直にそう書く——関心は*問題*（自分のユーザ名で
+何が露出しているか）にあり、ツールへの信頼ではない。**400** の未クローズ issue と PR（issue **+** PR）が誤検知報告の
+置き場である。再確認される規則：**トレンドを書く前にリポジトリを開く**。唯一の成果物がバナーならバナーを書く。
+
+**Fable 5.2 の表には別モデルに属する行がある。**脚注 3 はサイバーと生物学の結果を **Mythos 5.2** で実行したと述べ
+（「セーフガードを弱めたモデルを試験することが、モデル行動を最も包括的に見る方法」）、したがって
+**CyScenarioBench 76.3** と **CVE-rediscovery 89.6** は Fable の数字ではない。脚注 4 は外部機関が本記事も System Card も
+レビューしていないと述べる。本フィードの語彙への二つの帰結：ベンチマーク行は**（モデル, セーフガード構成）**についての
+主張でありリリースについてのものではない。ベンダーが顧客（Vercel、Shopify、Uber、Oracle）を引用するのは熱意の引用である。
+これは Paint のベクトル不整合以来の「参照対象」の最新形——数字はページに対して検証でき、ページ自身の脚注が「別のものを
+測った」と言う。散文で `--check referent` 型の問いを立てよ：*この行はどの構成が生んだのか？*
+
+**両方向に較正できた二つの計数検査：** FFmpeg の **102 → 96 件の「through 9.0.2」** は説明文に対する計数
+（[[vuln-supply]]）、KEV の三件は `nvd-provenance.mjs` で読み直すと項目が主張した指標表そのもの（`Analyzed`、
+**0** 件の NVD 独自スコア、CNA のスコア 3 件）を返した（[[security]]）。その行の出所を*実際に*運ぶページは脚注ごと引用する
+価値がある。本ファイルが繰り返し記録してきた失敗様式は、外側の数字が内側の注意書きを生き延びることである。
+
+**そして論文自身のクラスは、指示ファイルではなく「出所の中のパス」で再現した。**このバッチの e-means の項目は
+コードが **`faiss/contrib/e_means`** にあると書いたが、FAISS リポジトリの contents API では `faiss/contrib` は
+**404** で、ディレクトリはリポジトリ直下の **`contrib/e_means`**。主張の中のパスもまた主張であり、最も安い検査は
+`contents` の 1 回呼び出し——論文の「テストフォルダが移った」型を散文ではなくコードに向けていれば、同じ 1 回で
+捕まえられたはずである。
+
+→ [[fact-check]] [[frontier-models]] [[vuln-supply]] [[security]]
+
+Sources: [sherlock-project/sherlock](https://github.com/sherlock-project/sherlock) ·
+[GitHub Trending (daily)](https://github.com/trending?since=daily) ·
+[Claude Fable 5.2 and Mythos 5.2](https://www.anthropic.com/claude-fable-and-mythos-5-2)

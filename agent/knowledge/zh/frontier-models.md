@@ -3479,3 +3479,39 @@ key 能量集中到稀疏通道子集——所以擦除门可以**低秩**。把
 **Next-Concept Modeling（arXiv 2610.14162，`published` 2026-10-09T17:49:45Z；Stanford Hazy 系——Hermann Kumbong、Azalia Mirhoseini、Christopher Ré）：**自回归与扩散语言模型之间的第三种粒度。多尺度残差 VQ-VAE 先把文本编码成离散码的*层级*，transformer 再逐层生成——**一层内的所有码并行预测**：粗结构在前、细节在后。参数规模匹配时，NCM 在 LM1B 上以 **21× 速度**击败最强扩散基线的生成困惑度，OpenWebText 上 10× 持平，XSum 上 **31×** 持平 ROUGE-L，Sudoku 各难度以更少的函数求值击败 AR 与扩散基线。两处工件值得记录：摘要里的 Sudoku 那句话**背靠背出现两次**（本轮经导出 API 核实），而且全部是小规模结果（LM1B、OWT、XSum、Sudoku）——开放问题是 VQ 层级能否熬过指令微调与长上下文。速度主张是推理预算在乎的那类；「概念」作为并行预测的单元是架构赌注。
 
 → [[harness-reliability]]
+
+## 2026-11-10 04:45 — 一个模型、两个保障等级的 SKU；以及一个把「拒绝回答」当作产品功能的便宜模型
+
+**Claude Fable 5.2 / Claude Mythos 5.2（Anthropic，11 月 9 日）。**两者被描述为「同一个底层模型」，按保障措施拆分：
+Fable 带网络安全与生物学过滤、面向所有人；Mythos 走 Cyber 与 Life Sciences 验证计划。价格 **$8 / $40 每 1M**
+输入/输出，「比 5.1 快最多 30%」，可选 fast mode「最多 2.5 倍」、价格 **$16 / $80**。值得留下的基准行：
+
+- **FrontierCode 2.0 Xhigh 49.1%**（「我们所测过的已发布模型中的最高分」）；**High 档 45.3%**，对 **Opus 5.5 的 45.5%**
+  「每任务成本约为一半」。
+- 反向的行：**AutomationBench 51.4** 对 **Gemini 4 Carbon 53.9**；**AA-Briefcase 1785 Elo** 对 **Opus 5.5 1800**——
+  而后者正是 Anthropic 仍建议作为起点的模型。
+
+**改变表格含义的两条脚注。**脚注 3：网络安全与生物学结果是在 **Mythos 5.2** 上跑的，因为「在降低保障的情况下测试模型，
+能最全面地观察模型行为」——所以 **CyScenarioBench 76.3**、**CVE-rediscovery 89.6** *不是* Fable 的数字，拿它去对比
+竞品「带保障」的数字是在比两种配置。脚注 4：「没有任何外部机构审阅了本文或 System Card 的内容。」页面上 Vercel、
+Shopify、Uber、Oracle 的引语是热情，不是背书；Computer-use 行标注为「OSWorld 2.1（离线集，部分）」。与 10-31 的
+「把规格写成目标」、11-06 的「披露跑分用的是哪个 harness」同形：**脚注就是发现**，「发布说明不是安全论证」是那句
+该被带走的话。
+
+**Meta Muse Ember（Meta Superintelligence Labs）。** **$0.10 / 缓存 $0.004 / $0.50 每 1M**；Artificial Analysis 测到
+**Intelligence Index 36，每任务 $0.14**——与 **Claude Haiku 5.5（max）的 $0.41** 同分——比 Meta 自家 **Muse Wonder
+（44，每任务 $6.95）** 低八分。赢的行：**AutomationBench-AA 68.1%**（与 Wonder 持平）、**Terminal-Bench 4.0 40.9%**
+对 Haiku 32.8%、Meta 自家 Muse Code 内 **Coding Agent Index 46** 对 Claude Code 中 Haiku 的 37。输的行：
+**FrontierCode 2.0 27.2% 对 34.9%**、**AA-Briefcase 1521 对 1574 Elo**。
+
+**解释这个价格的数字不是分数：** **AA-Omniscience 准确率 21.1%**，是其对比集中最低的，因为 Ember「对 **64%** 的问题
+拒绝作答」——正是这种弃答把幻觉率压在 **17.4%**，为 Haiku 5.5 的一半。会弃答的便宜路由与会瞎猜的便宜模型是两种产品；
+Meta 自己的路由叙事（「Muse Wonder 规划、Muse Ember 承担流量」）之所以成立，只因为弃答率被测量并公布。同一层的服务端
+一半——`OmniJev/Flide`——见 [[system1-decision]]。
+
+→ [[frontier-models]] [[fact-check]] [[token-economics]] [[system1-decision]]
+
+来源：[Claude Fable 5.2 and Mythos 5.2](https://www.anthropic.com/claude-fable-and-mythos-5-2) ·
+[HN 讨论](https://news.ycombinator.com/item?id=50429906) ·
+[Artificial Analysis: Muse Ember](https://artificialanalysis.ai/articles/meta-s-muse-ember-is-the-cheapest-model-scoring-36-on-the-intelligence-index) ·
+[TechCrunch: Meta releases Muse Ember](https://techcrunch.com/2026/11/09/meta-releases-muse-ember-a-new-lightweight-model-for-agent-execution/)

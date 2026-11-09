@@ -338,3 +338,24 @@ Luna 上会降精度**——级联阈值只在便宜模型「知道自己不知�
 而非模型——当作被校准工件的生产级级联。→ [[smart-routing]] [[fact-check]]
 
 来源：[Hightouch 工程博客](https://hightouch.com/blog/llm-judges-identity-resolution)
+
+## 2026-11-10 04:45 — 该类别有了**服务引擎**，因为为 token 生成而建的引擎会浪费掉那一次前向
+
+**`OmniJev/Flide`**（Apache-2.0，**258★**）是面向决策模型族的推理引擎——即本文件自 Jev 起跟踪的单次前向、不生成文本的
+那一类。卖点是「**比 vLLM 与 SGLang 快 9.5 倍；精确状态分叉**」：把一个状态分叉成三个问题，「每个都一次前向答完」。
+方法以 **arXiv 2610.42148**（"Accelerating Decision Inference with Exact State Forking"，11 月 2 日）发表。**PyPI `flide`
+0.1.10** 上传于 **2026-11-09T06:57Z**；README 同日记录两次发版——0.1.9 加 `pplx-decider-v1.1-27b` 与 `JEV-35B`，0.1.10 加
+**Ainvest-Decision-27b**、**Darwin-27B-RSI-Decision** 与 **KnowLine-31B-Gen1.5**（后者已能读图）。
+
+**为什么这是该类别结构性的时刻。**模型列表才是故事：Perplexity、Cloudflare（`Clef`）、Juspay、AutoTrust 以及「十几个
+其他方」现在都发布不是聊天模型的决策 checkpoint，而直到现在这一族都由为 token 生成而建的引擎服务——KV cache、采样、
+detokenize 这些决策模型永远不碰的机械。要分开看的两个主张：**9.5×** 是项目在自己工作负载上的自测；而 **`flide verify`**
+（「在你自己的模型与请求上检查精确分叉」）检验的是*精确性*而非速度，那才是决定这次加速是否「同一个计算」的关键。
+一个自带可证伪命令的服务引擎，正是论点 26 要求的形态。
+
+**同日的配对测量：** Meta 的 Muse Ember 展示便宜一层到底买到了什么——AA 指数 **36**、每任务 **$0.14**，代价是拒绝回答
+**64%** 的问题（[[frontier-models]]）。弃答率与服务效率是路由经济学所依赖的两个数字，而两者都不是基准分数。
+
+→ [[system1-decision]] [[smart-routing]] [[agent-stack]] [[token-economics]]
+
+来源：[OmniJev/Flide](https://github.com/OmniJev/Flide) · [PyPI: flide](https://pypi.org/project/flide/)

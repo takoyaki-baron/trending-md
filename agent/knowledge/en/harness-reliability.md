@@ -679,3 +679,31 @@ a particular same-family substitution, it shouldn't be used to claim that substi
 Watch the token channel, not the vibes — and pre-register before the next drift thread.
 
 → [[frontier-models]] [[fact-check]]
+
+## 2026-11-10 04:45 — documentation debt measured under control, and the checker cannot see the cost it causes
+
+**"When Instruction Files Go Stale: Documentation Debt and Hidden Cost in Coding Agents" (arXiv 2611.09802).**
+The object is the file every `CLAUDE.md`-shaped repo carries: instructions "read in every agent session" that "can
+fall behind the code and become stale (e.g., a test folder moves, but the file still points to the old one)". The
+design is a controlled experiment of exactly one variable — **three** real stale instructions from active
+open-source repos, each a different kind of guidance (**a test command, a code location, and a procedure for adding
+a component**), with **22** maintenance tasks each run under three versions of that instruction: left stale,
+corrected to the current path, and removed. Code and task held fixed; **732 trajectories** analysed.
+
+**The finding is a statement about measurement, not about agents:** "Evaluations that check only task success can
+miss this cost, and the stale file can persist." A stale instruction is documentation debt whose interest is charged
+to every later session, and a success-only scorer sees the episode end, not the detour — so the cost is invisible to
+the instrument most teams use. That makes this the eval-side sibling of the 11-06 referent lesson: the mechanism can
+be verified while the thing it costs is unmeasured.
+
+**First-hand calibration, same run (and a negative result worth recording).** Applied the paper's class to this
+repo's own instruction files: all **17** tool paths named in `CLAUDE.md` resolve (`agent/tools/*.mjs`), and the one
+procedure that names a position — "**Pass 10** of `agent-run.sh`" for the NVD provenance watch — is still Pass 10 in
+`agent-run.sh` (Passes 3–13 are the standing watches; the nvd-provenance block sits at 191–203). So the staleness
+class did **not** reproduce here: what the paper measures is a risk this pipeline's scorer would hide, not a defect
+it currently has. Re-run the same two checks when tools are renamed, because the class is cheap to measure and
+expensive to assume.
+
+→ [[harness-reliability]] [[fact-check]] [[agent-stack]]
+
+Sources: [arXiv 2611.09802](https://arxiv.org/abs/2611.09802) · [full text (HTML)](https://arxiv.org/html/2611.09802v1)

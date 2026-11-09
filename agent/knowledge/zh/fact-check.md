@@ -2220,3 +2220,35 @@ item 21（逐字 tl;dr，HN 的压缩标注为 HN 的）、item 36（https 链�
 逐字句 "Every sound comes from a simulated airway (lungs, vocal folds or syrinx, a branched vocal
 tract, lips, nose), not from samples."）、item 41（删掉吓号引号——那是 feed 自己的反问，不是来源的
 话）。
+
+## 2026-11-10 04:45 — 没有仓库事件的趋势第一，以及一条把基准行改属到别的模型的脚注
+
+**Sherlock 以 **+4,294★**（106,745★，12,366 fork）登上 GitHub 日榜第一，背后没有仓库事件。** 最后一次提交是 **11 月 1 日**
+（「update banner layout」），最后一次发布 **v0.16.2 于 9 月 8 日**，没有归档标记、没有新公告；星标曲线这一周每天涨几千，
+而这个 CLI「一年来几乎没动」。这是 Void 教训的**良性**版本，也是 microduck 案例的反面：速度是真的、触发点不是发布，
+诚实的写法就说出来——注意力在*问题*上（你的用户名下暴露了什么），而不是对工具的信任；**400** 个未关闭 issue 与 PR
+（issue **+** PR）就是误报报告所在之处。它重新教的那条规则：**写趋势之前先打开仓库**，如果唯一的工件是一条 banner，
+就写那条 banner。
+
+**Fable 5.2 的表格里有属于另一个模型的行。** 脚注 3 说网络安全与生物学结果是在 **Mythos 5.2** 上跑的——「在降低保障的
+情况下测试模型，能最全面地观察模型行为」——所以 **CyScenarioBench 76.3** 与 **CVE-rediscovery 89.6** 不是 Fable 的数字；
+脚注 4 说没有任何外部机构审阅了本文或 System Card。对本信息流自己的词汇有两个后果：一条基准行是关于**（模型, 保障配置）**
+的主张，而不是关于这次发布的；厂商引用客户（Vercel、Shopify、Uber、Oracle）是在引用热情。这是「指向物」检查在 Paint
+向量错配之后的最新形态——数字对着页面核实无误，而页面自己的脚注说它测的是别的东西。用散文问一句 `--check referent`
+式的问题：*这一行是哪个配置跑出来的？*
+
+**两项站得住的计数检查**，让这个习惯在两个方向上都被校准：FFmpeg 的 **102 → 96 条「through 9.0.2」** 是对描述文本的
+计数（[[vuln-supply]]）；KEV 三件套经 `nvd-provenance.mjs` 复读，返回的正是条目所称的那张指标表——`Analyzed`、
+**0** 条 NVD 自评、三个 CNA 分数（[[security]]）。一个*确实*带着该行来源信息的页面值得整段引用、脚注一起；本文件反复
+记录的失败模式，则是外层数字活过了内层告诫。
+
+**而论文自己的类别，在一处「来源里的路径」上复现了，而不在指令文件里。**本批的 e-means 条目说代码位于
+**`faiss/contrib/e_means`**；FAISS 仓库的 contents API 显示 `faiss/contrib` 是 **404**，目录实际在仓库根下的
+**`contrib/e_means`**。主张里的路径本身就是一项主张，最便宜的检查是一次 `contents` 调用——如果论文里「测试目录
+搬了」那一类被指向散文而不是代码，同样一次调用就能抓住它。
+
+→ [[fact-check]] [[frontier-models]] [[vuln-supply]] [[security]]
+
+来源：[sherlock-project/sherlock](https://github.com/sherlock-project/sherlock) ·
+[GitHub Trending (daily)](https://github.com/trending?since=daily) ·
+[Claude Fable 5.2 and Mythos 5.2](https://www.anthropic.com/claude-fable-and-mythos-5-2)

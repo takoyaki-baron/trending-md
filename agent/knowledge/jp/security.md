@@ -4849,3 +4849,70 @@ checkpoint サプライチェーンの話は、ガードより常に一段深い
 **Scriban（`CVE-2026-124438` 7.4 v3.1 / 9.1 v4.0；DoS の組 `CVE-2026-124437`/`-124439`）：**.NET テンプレート エンジンのサンドボックス脱出は**ドキュメント化された**デリゲート インポート API を通る——`array.map` のメンバーアクセスが「反射メンバーアクセサ経由で関数値の .NET 内部へ届く」（インポートされたデリゲートの `Target`/`Method`/`ReturnType` が「捕獲されたクロージャの秘密、サービス プロパティ、アセンブリ パス」を晒す）；GHSA（修正 7.5.2）によれば高影響の変種には `ScriptObject.Import(name, Delegate)`——「関数を公開するドキュメント上の方法」——が必要で、つまり普通のやり方でサービス メソッドを公開したホスト全てが範囲内、設定ミスのホストだけではない。DoS の組（修正 7.5.3）：`math.format`/`regex.replace`/`string.escape` が `LimitToString` 割り当てガードを飛ばし、後置メンバー/インデクサ/呼び出しチェーンが `ExpressionDepthLimit` を、`object.eval` が `RecursiveLimit` をバイパス——**ホスト プロセスを終了させる捕獲不能な `StackOverflowException`** に着地。修正は **10-24** に出荷（NuGet の梯子を確認：7.5.2、7.5.3、7.6.0、7.6.1）、レコードは **11-08** 公表——15 日；この CNA の 4.0 は自社の 3.1 より **1.2–1.7 ポイント上**。
 
 **ChatGPT Desktop があなたの SSH エージェントを転送する——バグではなく設計：**アプリは `SSH_AUTH_SOCK=~/.codex/app-server-control/forwarded-ssh-agent.sock` でサーバーを起動する（OpenAI エンジニアの 6 月 14 日 codex PR #28131 コメント；文字列は今回 PR ページ内で 7 件確認）。エージェント ソケットが転送するのは**鍵ではなく署名リクエスト**——そのソケットに届けることのできる何ものも、署名を受け入れるホストに対してあなたの鍵を振るえる。「誰が私として push できるか」の答えに、そこへ届くすべてが入る。爆発半径は設計判断で広がる——Claude Code の User-Agent メールアドレスや「Don't Ask Again」秘密ファイルと同じ類。緩和はジェスチャー ゲートの鍵：Secretive（macOS Secure Enclave、セッションごとのタッチ ゲート）かタッチ必須の YubiKey——新しい SSH 接続は常に人間のジェスチャーを要する。→ [[vuln-supply]]
+
+## 2026-11-10 04:45 — KEV 火曜の三件は「推薦ケース」の三連、そして二つの既定値が合成されて RCE に
+
+**KEV 2026.11.09（1,772 件）が同日に三件追加**——FreeSWITCH `CVE-2026-116779`（**9.8**）、OpenSSH `CVE-2026-123158`
+（**8.1**）、GPUStack `CVE-2026-102895`（**9.8**）。本実行で `agent/tools/nvd-provenance.mjs --ids` により一次確認：
+
+| CVE | vulnStatus | 指標 | NVD 独自 | KEV |
+|-----|-----------|------|---------|-----|
+| `CVE-2026-116779` | `Analyzed` | 1 件 — 3.1 `Secondary` `security-advisories@github.com` 9.8 | **0** | 2026-11-09 |
+| `CVE-2026-123158` | `Analyzed` | 1 件 — 3.1 `Secondary` `cve@mitre.org` 8.1 | **0** | 2026-11-09 |
+| `CVE-2026-102895` | `Analyzed` | 1 件 — 3.1 `Secondary` `security-advisories@github.com` 9.8 | **0** | 2026-11-09 |
+
+三件とも**推薦（endorsement）ケース**：状態は `Analyzed` だが唯一の指標は CNA のもので、NVD はレコードを分析しつつ
+割当者の数値を再供給し、自前のスコアを公表していない。したがって「NVD が 9.8 と言う」は GitHub の数値についての文に
+なる。`lastModified`（11-09 の 19:42–19:48Z）が KEV 追加の窓の内側にあるのは、分析が独立再計算ではなく KEV 昇格に
+促された兆候。
+
+**FreeSWITCH の機構は丸ごと残す価値がある：** `sofia_presence_handle_sip_i_message()` は「受信 SIP MESSAGE の To ユーザを
+プラス記号で分割し、左側をチャットプロトコルセレクタとして扱った」——`api` を選ぶと `switch_api_execute()` に到達し、
+MESSAGE を受け付けたピアが「OS コマンドシンクを含む」FreeSWITCH API コマンドを「デーモンの権限で」実行できた。受信
+チャットは標準の internal / external プロファイルで既定で有効、「野生での悪用が観測されている」、**1.11.3** で修正。
+OpenSSH の件は **2026-11-05** に扱った musl + PAM 無しのパスワードバイパス（256–1024 文字の任意パスワードが成功、
+**10.6p2** で修正）で、修正は既に出ており KEV が悪用の最初の確認。GPUStack の勧告は 2026-11-05 に既に野生悪用を
+主張しており、KEV は裏づけであって反転ではない。
+
+**既定値が二つ合成されて RCE。** **otterdog**（`CVE-2026-123870`、**CVSS 4.0 の 9.5**、Eclipse の CNA）：「otterdog の
+webapp は、受信 GitHub webhook の JSON 本文から組み立てた書式文字列を Python の `eval()` で評価する。
+`GITHUB_WEBHOOK_SECRET` が未設定または空（**コードの既定は `None`**）のとき、HMAC 署名検証は完全に省略され」——修正は
+`bbc9e3ce`。未設定で**開いて失敗する**認証制御が、リクエストデータへの `eval()` の前に立つ：どちらか一方でも欠陥、
+合成すれば環境変数を設定したことのない全デプロイが RCE。**Redpanda Connect**（`CVE-2026-123270`、**9.8**）は streams
+モードで「管理 HTTP API が `0.0.0.0:4195` に露出するが、認証は既定で無効」——未認証の `POST /streams/{id}` に
+`command`/`subprocess`/`ffi`/安全でない `sql_raw` を載せればホスト掌握。**v4.111** は API を明示有効化に変えるだけで
+（「手動で有効化すれば RCE は依然可能」）。このレコードは現時点で最も純粋な**出所ケース (5)**：`Received`、指標は
+`134c704f…`（CISA-ADP）の 9.8 と `CWE-306` のみ、参照は研究者自身の再現リポジトリ
+（`pagvac/redpanda-connect-unauth-rce`）一件で、ベンダー勧告もコミットもレコード内に無い。
+
+**パッチを当てた集団が露出集団。** Airflow `CVE-2026-111421`（**8.8**、CISA-ADP）は `CVE-2026-59242` の**不完全な修正**：
+Task Execution API が XCom 値を「他所で適用されている予約キー検査なしで」保存し、Dag 作者が書いた XCom を「ユーザが
+後で逆シリアライズ有効の API 経由で閲覧したとき、API サーバに `airflow.*` 名前空間のクラスを Dag 作者が選んだ引数で
+インスタンス化させた」。レコードは該当集団を明示する——「**apache-airflow 3.3.1** でその修正を適用したユーザは本経路で
+依然影響を受け、**3.4.0** 以降に上げるべき」——そして逆シリアライズは最初の勧告を真剣に扱ったデプロイでこそ有効だった。
+`CWE-502`、緩和は API サーバでの逆シリアライズ無効化。
+
+**SuperTokens `CVE-2026-123800`（9.9、CVSS 3.1、GitHub CNA、`Received`）**：`checkPermissionsForCreateOrUpdate` が
+「親 connection URI ドメインや base tenant への更新を十分に認可しない」ため、あるアプリの有効な API キーが親を書き換え、
+続いて兄弟も書き換える——キー差し替え、セッション鋳造、兄弟ダッシュボードユーザ経由の永続化。**18 のパッチ版**が七つの
+系列にまたがる（6.0.24 … 12.3.1）。前提は*ライセンス版*のマルチテナント配備で、複数アプリが同一の非既定 connection URI
+ドメインを共有する場合であり、単一テナントのセルフホストは対象外。
+
+**PackageKit `CVE-2026-104620`（CVSS 4.0 の 8.5、SUSE）**：「PackageKit の **Zypp バックエンド**で **1.4.1** より前、動作
+シミュレーションにおけるパストラバーサルによりローカル攻撃者が root 権限を得られた」。参照は SUSE Bugzilla 1284954 の
+一件のみ、上流コミットも修正版リンクも無く `Received`——本ファイルが繰り返し記録する「ディストロ起票の形」：広く配備
+されたデスクトップスタックのローカル root 脆弱性で、完全な開示はレジストリの外にある。
+
+**同じ日のメモリ側の兄弟：** MemoryDojo は五つのメモリシステムすべてが毒入れ可能で、影響はアーキテクチャで変わると
+示す（[[agent-stack]]）——本ファイルの「既定値が脆弱性」のエージェント版。
+
+→ [[security]] [[vuln-supply]] [[disclosure-lag]] [[agent-stack]] [[cvss-stopping-points]]
+
+Sources: [CISA KEV カタログ](https://www.cisa.gov/known-exploited-vulnerabilities-catalog) ·
+[GHSA-mg63-h38w-8p9p (FreeSWITCH)](https://github.com/signalwire/freeswitch/security/advisories/GHSA-mg63-h38w-8p9p) ·
+[CVE-2026-123800](https://nvd.nist.gov/vuln/detail/CVE-2026-123800) ·
+[CVE-2026-123270](https://nvd.nist.gov/vuln/detail/CVE-2026-123270) ·
+[CVE-2026-111421](https://nvd.nist.gov/vuln/detail/CVE-2026-111421) ·
+[CVE-2026-123870](https://nvd.nist.gov/vuln/detail/CVE-2026-123870) ·
+[CVE-2026-104620](https://nvd.nist.gov/vuln/detail/CVE-2026-104620) ·
+[SUSE Bugzilla 1284954](https://bugzilla.suse.com/show_bug.cgi?id=1284954)

@@ -1177,3 +1177,35 @@ MangoWC / Scroll / Miracle WM に対応。2.1 では密度プリセット（Spac
 **Declarative Dragging（UIST 2026 最優秀論文；Horowitz、Blinn & Heer）：**ドラッグ&ドロップをモデル セマンティクスへのクエリにする——「すべての視覚的振る舞いを直接プログラムするのではなく、ドラッグ可能にしたい各要素について、ドラッグが導くべきアプリケーションの未来状態を宣言するだけ」。エンジン（**Dragology**、SVG/web）はそれらの状態を投機的にビュー ツリーへ描画し、各描画でドラッグされた要素がどこに着地するかを抽出し、その可能世界からインタラクションを合成——手書きのドロップ ゾーン ジオメトリは不要；合成可能なモディファイアがフロート/スナップ/遷移を重ねる。可能状態の投機的描画はエージェントがアクション プランニングで使うのと同じ技で、研究側から UI コードへ到着した。論文後：Hazel のリファクタリングがドラッグで触れるものに；著者の数学ゲームはゲームパッドで 3D へ。
 
 → [[no-ai-default]] [[frontier-models]]
+
+## 2026-11-10 04:45 — k-means は FAISS 内部で速い兄弟を得て、malloc 解説は記憶ではなく測定で書き、ブラウザライブラリは負ける箇所を明記する
+
+**e-means が FAISS 内で Lloyd を置き換える**（`contrib/e_means`、Meta FAIR——11-10 に contents API で確認：ディレクトリはリポジトリ直下の `contrib/e_means` で、`faiss/contrib/e_means` は 404。フィードが印字したのは後者で、この読解で訂正した）。珍しいのは何も差し出さない点：
+「広いスケールとデータセットで、e-means は Lloyd の 25 エポックでのテスト損失を **1.2〜3 エポック**で下回る」。GPU では
+Flash-KMeans に対し **10–45×**、CPU では FAISS に対し **8–15×** の実時間。著者は Bessa、Mazaré、Szilvasy、Touvron、
+Picard、Douze、Jégou——後三者は打ち負かした FAISS ベースラインの多くを書いた人たちである。数字以上の意味：k-means は
+ベクトル索引・量子化コードブック・クラスタリング型検索フィルタの下にある基幹プリミティブで、エポック削減は新しいデータ
+構造なしにそのすべてに触れる。持つべき注意：比較は著者自身のハーネス対、同じグループによる prior SOTA の実装——
+対抗条件はコードが FAISS 本体に入ったことで、ベースラインが主張ではなく再現可能になった点。
+
+**「What is malloc doing, anyway?」（benmandrew.com）** ——インターフェースとカーネルの隙間を測って歩く記事：
+**1,000 回の `malloc(16)`** を `strace` で追うと `brk` システムコールは**合計 2 回**（program break を知るため 1 回、
+ヒープを **132 KiB** 伸ばすため 1 回）、「残り 999 回はその既に確保されたメモリから取る」。空のシステムコールは測定値で
+「**575 ns**」、後の出力では break と `printf` が **23.4 TiB** 離れている——「機械の 15.6 GiB RAM の約 1,530 倍。この範囲の
+ほとんどは未マップで、物理メモリを消費しない」。記事の方法が教訓：各数値は読者が再実行できるコードの出力である。
+
+**Zebkit（`ikey4u/zebkit`、LGPL-2.1、v0.2.0、135★）** は Blink + 全 JIT 段の V8 + PDFium + FFmpeg を一つのライブラリとして
+自分のアプリにリンクする——Chrome UI も Node も Electron パッケージングも無し——ホストのイベントループ
+（`zebkit_init()`、`zebkit_pump()`）で動き、渡したウィンドウ（X11 ウィンドウ、`NSView`、`HWND`）に描画、C/Rust/Python/
+Go/JS バインディング付き。**Electron 45.2.1** との比較（同一ハーネス、同一ページ、5–11 回の中央値、Linux x86-64、
+2026-11-06/07）は **171.2 / 59.4 MiB の配布サイズ** 対 260.5 / 87.1、コールドスタート **2.3 s 対 6.6 s**、空白ページ
+**179 MB 対 250 MB**、DOM と JS は同等。読む価値があるのはこのジャンルが省略する README 節：「**Where Electron is
+ahead**：1 ページあたりプロセスが一つ少ない。そして広告と動画が決める YouTube と The Verge の 2 サイトのメモリ」——
+zebkit は「Chrome のように」ストレージを別プロセスに砂箱化するため 1 ページ **7** プロセス、Electron は **6**。135★ の
+自己ベンチは著者のワークロードについての主張であり、負ける箇所を書いた主張こそ再実行する価値がある。
+
+→ [[dev-tools]] [[fact-check]] [[edge-inference]] [[agent-stack]]
+
+Sources: [e-means プロジェクトページ](https://e-means.github.io/) · [arXiv 2611.09501](https://arxiv.org/abs/2611.09501) ·
+[What is malloc doing, anyway?](https://benmandrew.com/articles/what-is-malloc-doing-anyway) ·
+[ikey4u/zebkit](https://github.com/ikey4u/zebkit)

@@ -464,3 +464,29 @@ This is the class's first production cascade where the *band* — not the model 
 → [[smart-routing]] [[fact-check]]
 
 Sources: [Hightouch engineering blog](https://hightouch.com/blog/llm-judges-identity-resolution)
+
+## 2026-11-10 04:45 — the class gets a SERVING ENGINE, because engines built for token generation waste the pass
+
+**`OmniJev/Flide`** (Apache-2.0, **258★**) is an inference engine for the decision-model family — the single-pass,
+no-generation models this file has tracked since Jev. Pitch: "**9.5 times faster than vLLM and SGLang; exact state
+forking**", where one state is forked into three questions and "each answered in one forward pass". Method published
+as **arXiv 2610.42148** ("Accelerating Decision Inference with Exact State Forking", Nov 2). **PyPI `flide` 0.1.10**
+uploaded **2026-11-09T06:57Z**; the README logged two releases the same day — 0.1.9 adding `pplx-decider-v1.1-27b`
+and `JEV-35B`, 0.1.10 adding **Ainvest-Decision-27b**, **Darwin-27B-RSI-Decision** and **KnowLine-31B-Gen1.5** (now
+reading images).
+
+**Why it is the class's structural moment.** The model list is the story: Perplexity, Cloudflare (`Clef`), Juspay,
+AutoTrust and "a dozen others" now publish decision checkpoints that are not chat models, and until now the whole
+family was served by engines built for token generation — KV cache, sampling, detokenisation machinery a decision
+model never touches. Two claims to keep separate: the **9.5×** is the project's own benchmark on its own workload;
+the **`flide verify`** command ("checks exact forking on your own model and requests") tests *exactness*, not speed,
+and that is the one that decides whether the speedup is the same computation. A serving engine that ships its own
+falsifier is the shape thesis 26 asks for.
+
+**Paired measurement from the same day:** Meta's Muse Ember shows what the cheap tier actually buys — **36** on the
+AA index at **$0.14**/task while declining **64%** of questions ([[frontier-models]]). Abstention and serving
+efficiency are the two numbers a router's economics rest on, and neither is a benchmark score.
+
+→ [[system1-decision]] [[smart-routing]] [[agent-stack]] [[token-economics]]
+
+Sources: [OmniJev/Flide](https://github.com/OmniJev/Flide) · [PyPI: flide](https://pypi.org/project/flide/)

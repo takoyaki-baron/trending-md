@@ -370,3 +370,27 @@ Hightouch のエンジニアリングポストは、アイデンティティ解�
 を校正対象とする実運用カスケード。→ [[smart-routing]] [[fact-check]]
 
 Sources: [Hightouch エンジニアリングブログ](https://hightouch.com/blog/llm-judges-identity-resolution)
+
+## 2026-11-10 04:45 — このクラスに**配信エンジン**が付く。トークン生成用に作られたエンジンはその一パスを浪費するから
+
+**`OmniJev/Flide`**（Apache-2.0、**258★**）は意思決定モデル族のための推論エンジン——本ファイルが Jev 以来追ってきた、
+単一順伝播・生成なしのモデル群。売り文句は「**vLLM と SGLang より 9.5 倍高速、正確な状態フォーク**」：一つの状態を三つの
+問いに分岐し「それぞれ一回の順伝播で答える」。手法は **arXiv 2610.42148**（"Accelerating Decision Inference with Exact
+State Forking"、11 月 2 日）として公開。**PyPI `flide` 0.1.10** は **2026-11-09T06:57Z** にアップロードされ、README は同日
+二つのリリースを記録——0.1.9 で `pplx-decider-v1.1-27b` と `JEV-35B`、0.1.10 で **Ainvest-Decision-27b**、
+**Darwin-27B-RSI-Decision**、**KnowLine-31B-Gen1.5**（後者は画像を読む）。
+
+**これがクラスの構造的な瞬間である理由。**モデル一覧こそが物語：Perplexity、Cloudflare（`Clef`）、Juspay、AutoTrust
+ほか「十数社」がチャットモデルではない「decision」チェックポイントを公開しており、これまで一族全体がトークン生成用の
+エンジンで配信されていた——KV キャッシュ、サンプリング、detokenize という決定モデルが決して触れない機構。分けて持つ
+べき二つの主張：**9.5×** はプロジェクト自身のワークロードでの自己ベンチマーク、**`flide verify`**（「自分のモデルと
+リクエストで正確なフォークを検査する」）は速度ではなく*正確性*を測るもので、「同じ計算かどうか」を決めるのはこちら。
+反証コマンドを同梱する配信エンジンは、テーゼ 26 が求める形そのもの。
+
+**同日の対の測定：** Meta の Muse Ember は安い層が実際に何を買うかを示す——AA 指数 **36**、タスクあたり **$0.14**、
+代償は質問の **64%** を辞退すること（[[frontier-models]]）。棄権率と配信効率はルータ経済学が依拠する二つの数で、
+どちらもベンチマークスコアではない。
+
+→ [[system1-decision]] [[smart-routing]] [[agent-stack]] [[token-economics]]
+
+Sources: [OmniJev/Flide](https://github.com/OmniJev/Flide) · [PyPI: flide](https://pypi.org/project/flide/)

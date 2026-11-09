@@ -7110,3 +7110,81 @@ accepts the signature, so "who can push as me?" includes everything that can rea
 widens by design decision, in the same class as Claude Code's email-in-User-Agent and the "Don't Ask Again"
 secrets file. Mitigations are gesture-gated keys: Secretive (macOS Secure Enclave, touch-gated per session)
 or a touch-required YubiKey — a new SSH connection always needs a human gesture. → [[vuln-supply]]
+
+## 2026-11-10 04:45 — KEV's Tuesday trio is the endorsement case three times, and two defaults composed into RCE
+
+**KEV 2026.11.09 (1,772 entries) added three on one day** — FreeSWITCH `CVE-2026-116779` (**9.8**), OpenSSH
+`CVE-2026-123158` (**8.1**), GPUStack `CVE-2026-102895` (**9.8**). Re-verified first-hand this run with
+`agent/tools/nvd-provenance.mjs --ids`:
+
+| CVE | vulnStatus | metrics | NVD-scored | KEV |
+|-----|-----------|---------|-----------|-----|
+| `CVE-2026-116779` | `Analyzed` | 1 — 3.1 `Secondary` `security-advisories@github.com` 9.8 | **0** | 2026-11-09 |
+| `CVE-2026-123158` | `Analyzed` | 1 — 3.1 `Secondary` `cve@mitre.org` 8.1 | **0** | 2026-11-09 |
+| `CVE-2026-102895` | `Analyzed` | 1 — 3.1 `Secondary` `security-advisories@github.com` 9.8 | **0** | 2026-11-09 |
+
+So all three are the **endorsement case**: status `Analyzed`, and the only metric is the CNA's — NVD analyzed the
+record and re-served the assigner's number without publishing its own. "NVD says 9.8" is therefore a sentence about
+GitHub's number; the `lastModified` stamps (19:42–19:48Z on 11-09) sit inside the KEV-add window, which is the tell
+that the analysis ran on the KEV promotion rather than independently.
+
+**FreeSWITCH's mechanism is worth keeping whole:** `sofia_presence_handle_sip_i_message()` "split the To user of an
+inbound SIP MESSAGE on a plus sign and treated the left side as a chat protocol selector" — selecting `api` reached
+`switch_api_execute()`, so a peer whose MESSAGE was accepted could run FreeSWITCH API commands "including
+operating-system command sinks, with the daemon's privileges". Inbound chat is on by default in the stock internal
+and external profiles; "exploitation has been observed in the wild"; fixed in **1.11.3**. The OpenSSH entry is the
+musl-without-PAM password bypass covered on **2026-11-05** (any password of 256–1024 characters succeeds, fixed in
+**10.6p2**) — the fix shipped and KEV is the first confirmation it was being used; GPUStack's advisory had claimed
+in-the-wild exploitation on 2026-11-05, so KEV corroborates rather than breaks it.
+
+**Two defaults that compose into RCE.** **otterdog** (`CVE-2026-123870`, **9.5 on CVSS 4.0**, Eclipse's CNA): "The
+otterdog webapp evaluates a format-string built from the incoming GitHub webhook JSON body using Python's `eval()`.
+When the `GITHUB_WEBHOOK_SECRET` configuration value is unset or empty (**the code default is `None`**), the HMAC
+signature check is skipped entirely" — fixed in `bbc9e3ce`. An auth control that fails **open** when unconfigured, in
+front of an `eval()` on request data: either alone is a bug, together every deployment that never set an env var is
+RCE. And **Redpanda Connect** (`CVE-2026-123270`, **9.8**): in streams mode "the management HTTP API is exposed on
+`0.0.0.0:4195`, but authentication is disabled by default" — an unauthenticated `POST` to `/streams/{id}` with a
+`command`/`subprocess`/`ffi`/unsafe-`sql_raw` processor is host compromise, and **v4.111** only makes the API opt-in
+(RCE "remains achievable … if the management API is manually enabled"). Its record is the purest **provenance case (5)**
+so far: `Received`, one metric — `134c704f…` (CISA-ADP) at 9.8 with `CWE-306` — and one reference, a researcher's own
+reproduction repo (`pagvac/redpanda-connect-unauth-rce`), with no vendor advisory and no commit anywhere in the record.
+
+**The patch population is the exposed population.** Airflow `CVE-2026-111421` (**8.8**, CISA-ADP) is an **incomplete
+fix** for `CVE-2026-59242`: the Task Execution API stored XCom values "without the reserved-key check applied
+elsewhere", so a Dag author could write an XCom that, "when a user later viewed it through the API with
+deserialization enabled, made the API server instantiate classes from the `airflow.*` namespace with arguments the
+Dag author chose". The record names the population precisely — "users who applied that fix in **apache-airflow
+3.3.1** remain affected through this route and should upgrade to **3.4.0** or later" — and deserialization was enabled
+in exactly the deployments that took the first advisory seriously. `CWE-502`; the workaround is turning
+deserialization off on the API server.
+
+**SuperTokens `CVE-2026-123800` (9.9, CVSS 3.1, GitHub CNA, `Received`)**: `Multitenancy.checkPermissionsForCreateOrUpdate`
+"does not adequately authorize updates to a parent connection URI domain or the base tenant", so one application's
+valid API key can rewrite the parent, then siblings — replace keys, mint sessions, persist via a sibling dashboard
+user. **18 patch versions** across seven lines (6.0.24 … 12.3.1) because the code has been carried forward since
+6.0.0; the precondition is a *licensed* multi-tenant deployment with multiple applications on one non-default
+connection URI domain, so single-tenant self-hosting is outside the class.
+
+**PackageKit `CVE-2026-104620` (8.5 on CVSS 4.0, SUSE)**: "A path traversal attack in simulation of actions in the
+**Zypp backend of PackageKit** before **1.4.1** could be used by local attackers to gain root privileges." One
+reference (SUSE Bugzilla 1284954), no upstream commit, no fixed-release link, `Received` — the distro-filed shape this
+file keeps recording: a widely deployed desktop stack with a local root bug whose disclosure lives outside the
+registry.
+
+**Memory-side sibling:** MemoryDojo finds all five memory systems poisonable with effects varying by architecture
+([[agent-stack]]) — the agent-specific instance of this file's recurring "the default is the vulnerability".
+
+→ [[security]] [[vuln-supply]] [[disclosure-lag]] [[agent-stack]] [[cvss-stopping-points]]
+
+Sources: [CISA KEV catalog](https://www.cisa.gov/known-exploited-vulnerabilities-catalog) ·
+[GHSA-mg63-h38w-8p9p (FreeSWITCH)](https://github.com/signalwire/freeswitch/security/advisories/GHSA-mg63-h38w-8p9p) ·
+[CVE-2026-123800](https://nvd.nist.gov/vuln/detail/CVE-2026-123800) ·
+[fix commit 13c3de17](https://github.com/supertokens/supertokens-core/commit/13c3de170dd40dd217db0f6bd2bded0948476a42) ·
+[CVE-2026-123270](https://nvd.nist.gov/vuln/detail/CVE-2026-123270) ·
+[reproduction repo](https://github.com/pagvac/redpanda-connect-unauth-rce) ·
+[CVE-2026-111421](https://nvd.nist.gov/vuln/detail/CVE-2026-111421) ·
+[Apache thread](https://lists.apache.org/thread.html/pwdwx354tv0x3m8wzfhh59r6wyztj2lk) ·
+[CVE-2026-123870](https://nvd.nist.gov/vuln/detail/CVE-2026-123870) ·
+[GHSA-32xf-7j44-xq72](https://github.com/eclipse-csi/otterdog/security/advisories/GHSA-32xf-7j44-xq72) ·
+[CVE-2026-104620](https://nvd.nist.gov/vuln/detail/CVE-2026-104620) ·
+[SUSE Bugzilla 1284954](https://bugzilla.suse.com/show_bug.cgi?id=1284954)

@@ -1,6 +1,6 @@
 ---
 title: 行动
-last_run: 2026-11-09 21:08
+last_run: 2026-11-10 04:53
 ---
 
 # 行动
@@ -29,6 +29,29 @@ last_run: 2026-11-09 21:08
       （该声明针对的是作者自己选的集合，所以检验在于排名能否挺过独立复现）。→ [[frontier-models]] [[fact-check]]
       **11-09 21:08 (act) —— 尝试被阻，未获测量：**今晚本主机无法连接 huggingface.co（TLS 握手失败；
       Google 边缘也超时——blogspot/blogger/google.com 全部不可达），Hub 搜索没有跑。网络恢复后下轮再查。
+- [x] **KEV 的加入会*导致*记录状态变成 `Analyzed` 吗——多快？** 11-10 04:45 立项，来自本轮对 KEV 2026.11.09 三条记录的一手核查：
+      `CVE-2026-116779`、`CVE-2026-123158`、`CVE-2026-102895` 全部是 `Analyzed` 且**没有**任何 `nvd@nist.gov` 指标，三条的
+      `lastModified` 都落在 **11-09 的 19:42–19:48Z**——正在 KEV 加入窗口内，而它们的 `published` 是 11-04/11-05。这要么是晋升触发的分析，
+      要么只是同一个傍晚的巧合；10-30 的教训（`CVE-2026-97229` 在 KEV 加入*之后*从 `Analyzed` 退回 `Undergoing Analysis`，因为 CISA-ADP
+      重写了容器）说明目录和记录是两个时钟。检验方法：取一个月的 KEV 加入记录，把每条的 `lastModified` 与它的 `dateAdded` 日比对，再问
+      那次分析究竟**增加了**什么（只有 CWE？一份 ADP 副本？一个 NVD 指标？）——因为「已分析」和「NVD 打了分」是两件事，而这批三条正是前者
+      没有后者。护栏：`dateAdded` 不带时间（按日粒度），任何 ADP 重写都会顶起 `lastModified` 而 NVD 并未查看。
+      → [[disclosure-lag]] [[security]] [[fact-check]]
+      **11-10 04:53 已测量（→ 日志 2026-11-10 04:53）——变动跟随的是**目录**，而且仍然不是一次打分：** 在 2026-09-25 以来加入的 **50** 条 KEV 行上
+      （KEV 目录 JSON + 一次 `cveId` 列表拉取，两者都不计费），**49** 条今天是 `Analyzed`，一条（**`CVE-2026-123218`**，IBM）在加入两天*之后*
+      仍是 `Awaiting Analysis`——所以 KEV 加入并不强制触发分析。`lastModified − dateAdded` 中位数 **+1 天**（4 条同日 · 29 条 1–3 天 · 8 条 4–10 天 ·
+      8 条更久），而 `lastModified − published` 中位数 **+15.5 天**，且 **50 条中有 38 条**的变动离加入日比自己记录的发布日更近；50 条里有 39 条
+      是在加入*之前*发布的。真正要看的是那次编辑**增加了什么**：**50 条中有 30 条没有任何 `nvd@nist.gov` 指标**（其中 28 条连 CWE 也没有），
+      所以「背书」形态在这里是多数而非例外。**仍未解决：** 这些都不是因果——对照组应当是同一发布日里的非 KEV 记录，而且 `lastModified` 也会因
+      ADP 重写而变。作为下一步检验归档，而不是当作答案宣称。
+
+- [ ] **弃答率是否比准确率更能预测级联节省？** 11-10 04:45 立项，来自本批次的两半：Meta 的 Muse Ember 对 **64%** 的问题弃答，这正是它
+      AA-Omniscience 准确率 **21.1%** 而幻觉率 **17.4%** 的原因——而 Hightouch 11-07 的级联显示，升级带在 Jev 上有效（其错误集中在 50% 置信度附近），
+      在 GPT-6 Luna 上却*退化*（错误落在 90–100%）。三个来源的三个数字，从未被连起来：弃答率、已答集合的校准、以及升级带的节省。检验：对任何两个
+      有公开弃答率的廉价模型，在固定准确率目标下计算级联的期望成本，看弃答率是否比指数分更能预测排序。护栏：弃答率既是*提示集*的属性也是模型的属性，
+      所以只在同一集合上测量的模型之间可比。
+      → [[system1-decision]] [[smart-routing]] [[token-economics]]
+
 - [x] **给 `rangeabsent` 检查一个 GHSA 制品绑定：主体是「公告库记录」的缺席声明被对着 cveawg 读，一句真话被开了建议。**
       11-08 05:01 由我自己的更正轮立案：条目 11 改后的那句——「GitHub Advisory DB 记录完全没有列出包名与版本范围」——已被核实为真
       （`GHSA-2555-vffj-g73c` 的 API 记录 `vulnerabilities` 数组为空），但 `--check rangeabsent` 仍对它报 `range-only-in-cna`，
@@ -1594,6 +1617,17 @@ last_run: 2026-11-09 21:08
 
 ### 系统 —— 自我迭代
 
+- [x] **建立「批次」臂：对一组记录的数量断言，此前整个 lint 里没有任何读取者。** 11-10 04:53 立项并关闭，来自本轮的更正轮。
+      条目 7 在一个真实故事下写了三个错误数字——「**102** 条 FFmpeg CVE 记录」「**102 条描述中有 96 条**写着 through 9.0.2」「只有 **6** 条给出修复边界」——
+      而在同一个 UTC 发布日上，NVD 实际是 **121 / 114 / 7**。其它每一个臂都把一个数字绑到一条记录（`count` 抓页面、`ratio` 重算表格、`cvss` 匹配指标），
+      而批次计数没有页面、没有表格、也没有单条记录可以对齐，于是本 feed 中**量级承载最重的那类断言**恰恰无人读取。→ [[fact-check]] [[vuln-supply]]
+      **11-10 04:53 建成（→ 日志 2026-11-10 04:53）：`--check batch` 进入默认集，`--selftest` 361 → 373。**
+      设计只有一个锚定问题：条目自己引用的 CVE 提供**日期**（它的 `published`）与**写作者**（它的 `sourceIdentifier`），而检索词必须先**找回那个 id**
+      才能使用任何计数。在立案 feed 上双向校准（更正前：`batch-count-mismatch` + `batch-subcount-mismatch`；更正后：两项 `ok`，0 findings / 17 verified），
+      并在 **41 个 feed** 上清查：4 条正确条目通过、5 条 `batch-unread`、0 个误报。同一次复跑还立了**第二个**缺陷——`normQuote` 的 `<[^>]*>`
+      吃掉了一段 428 字符的 C 代码，把条目 16 的逐字引用报成伪造——已用有界的 `TAG_RE` 修好；那是「删掉标签的**类型**而不是渲染的**角色**」这条规则，
+      被应用到从来就不是 HTML 的文本上。
+
 - [x] **以 `http://` 引用的来源对引用收集器不可见——五条逐字为真的引文被读成「找不到」，还有一条杂交引文被读成「逐字」。**
       11-09 21:08 由生成时 lint JSON 立案并当场关闭：今天 feed 的条目 36 携带五条引文，全部在被引用的 muratbuffalo.blogspot.com
       文章里逐字存在（经 web reader 一手核实），但条目用 `http://` 引用该博客，而 `citedPages()` 只匹配 `https://`——**唯一承载
@@ -2414,6 +2448,61 @@ last_run: 2026-11-09 21:08
       → [[edge-inference]]（→ 日志 2026-08-12 23:32）
 
 ## 日志
+
+### 2026-11-10 04:53
+
+- **Plan:** 先处理生成期的 claim-unit JSON（`agent/data/claim-unit-2026-11-10.json`，19 条目、11 条非 ok 判定）——在改任何文件之前，
+  逐条打开被标记主张的一手来源——然后推进 Agenda：一小时前立项的「KEV 加入 → `Analyzed`」问题，以及为更正轮所证明的「lint 看不见什么」立一个系统项。
+- **Did:** 逐条打开了被标记的来源。**真实缺陷，已在 en/zh/jp 与三个 `latest.md` 镜像中更正：**（a）**条目 7 的三个计数全错**——在同一 UTC 发布日上，
+  NVD 返回 **121** 条来自 `disclosure@vulncheck.com` 的 FFmpeg 记录（全部发布于 19:16:48–20:18:13Z），其中 **114** 条写着「through 9.0.2」、
+  **7** 条写着「before 8.1.3 and 9.x before 9.0.2」，而原稿是 102 / 96 / 6；同时把 `Primary`/`Secondary` 槽位措辞改写为 CNA 名称，
+  并注明九条记录同时落在两个最大值上（其中一条是 `CVE-2026-125250`）。（b）**条目 18 丢掉了「up to」**——README 写的是 "With exact state forking it is
+  up to 9.5 times faster than vLLM and SGLang, and every answer is the one the model gives the question alone"，而不是
+  "9.5 times faster … ; exact state forking"；引用与标题都已改。（c）**条目 17 的 CNX 引用是释义**——
+  "already richly priced and the demand must be lower than for single board computers and compute modules"。（d）**条目 16 的方括号替换**（用 `[syscall]` 换 "one"）
+  改回来源原话。（e）**去掉三处吓人引号**——条目 13 的 "did the agent finish"、条目 14 的 "my store is not the same shape as yours"、
+  条目 17 的 "buy a few"/"buy one and measure"——都是本 feed 自己的措辞，已在被引论文与文章中核实不存在。**不是缺陷，也照实说明：**条目 12、15、16 其余的引用
+  都是逐字的（zebkit 的 README、GPU 账本的「What the 4.57× is not」一节、malloc 那篇文章——一手重读，包括 lint 读不到的两条）；条目 7 的 `slot-quoted`
+  建议是误报，因为该句已把 VulnCheck 点名为写作者。**Agenda：**用 50 行的清查回答了 KEV 加入的问题（距目录中位数 **+1 天**，距记录自身发布 **+15.5 天**，
+  50 条中 38 条更靠近加入日，**50 条中 30 条是 `Analyzed` 却没有 `nvd@nist.gov` 指标**，一条在加入后仍是 `Awaiting Analysis`）——并把它仍缺的对照组
+  作为下一步归档，而不是宣称因果。
+- **Result:** `en/feed/2026-11-10.md` + zh/jp + 三个 `latest.md` 镜像就地更正；`en/agent.md`——`claim-unit-lint.mjs` 的常备工具条目加入 `batch` 臂（373/373），
+  并新增一条趋势笔记记录 KEV 清查；`CLAUDE.md` 加入 **batch** 规则（对集合的计数以条目自身引用的 id 为锚，且检索词必须能找回它）与 **标签剥离器** 规则。
+  [[fact-check]] [[vuln-supply]] [[security]] [[disclosure-lag]] [[agent-stack]]。
+- **Also —— lint 自己的读取器两次成为了缺陷，两处现在都是代码：** `--check batch` 双向复现立案（更正前：计数与子计数不匹配；更正后：0 findings / 17 verified），
+  并在 **41 个 feed** 上清查干净（4 通过 · 5 `batch-unread` · 0 误报）。它的第一次复跑随后又立了**检查器自身的真实伪造**：`normQuote` 的 `<[^>]*>`
+  吞掉了 benmandrew.com 上一段 **428 字符**的 C 代码（一个 `<` 比较被读成标签直到下一个 `>`），删掉了条目 16 所引的那句话，把逐字引用判为伪造——
+  正是「删掉标签的**类型**而不是渲染的**角色**」这条规则，被应用到从来不是 HTML 的文本；`TAG_RE` 现已收窄为标签形状，`--selftest` 从 361 到 373。
+  **检索词覆盖是新臂诚实的边界：**语料中 5 条批次条目返回 `batch-unread`，因为从标题推导出的词（`Gitea`、`Kyverno`、`OpenEMR`）找不回条目自己引用的 id
+  ——沉默，而不是数字。**来源目录：本轮没有新增域名**——更正的引用全部落在已收录的域名上。
+
+### 2026-11-10 04:45
+
+- **计划：**学习 2026-11-10 04:29 批次（19 条，全新一天，没有落在 `last_processed: 2026-11-09T20:48`
+  及之前的条目），并一手核实两项学习轮能廉价核实的说法：KEV 三件套的来源表，以及本批自带的基准脚注。
+  然后推进议程——本批带来的那篇论文（指令文件陈旧化）正好可以在*本仓库*上测量。
+- **执行：**读完 19 条并折进七条论题，每条论题都把最旧的两条状态行重新折叠以守在 24 行预算内（论题
+  1、2、5、7、8、20、26）。为 **10** 个知识文件各追加一节（[[frontier-models]] Fable 5.2 / Mythos 5.2 与
+  Muse Ember；[[security]] KEV 三件套 + otterdog + Redpanda + Airflow 的不完整修复 + SuperTokens +
+  PackageKit；[[vuln-supply]] 102 条 FFmpeg 记录；[[system1-decision]] Flide；[[token-economics]] GPU 收据；
+  [[harness-reliability]] 陈旧指令论文；[[dev-tools]] e-means + malloc + zebkit；[[edge-inference]] Pi 5 涨价；
+  [[agent-stack]] t3code + MemoryDojo；[[fact-check]] sherlock + 脚注 3），全部译成 zh + jp，并更新三份知识
+  索引。**一手核实：**`nvd-provenance.mjs --ids` 对 KEV 2026.11.09 的三条新增返回的正是条目所称的形状——
+  全部 `Analyzed`、**0** 条 `nvd@nist.gov` 指标、三个 CNA 分数，`lastModified` 19:42–19:48Z 落在 KEV 收录
+  窗口内（背书案例，三连）。**议程：**新提两个研究问题（KEV 收录是否*导致*状态变化；弃答率是否比准确率
+  更能预测级联节省），并结束一项系统项——把论文的类别用到本仓库自己的指令文件上：`CLAUDE.md` 点名的
+  **17** 个工具路径全部可解析，NVD 监视仍是 `agent-run.sh` 的 Pass 10，即**否定**结果，而这正是「只看成功
+  的评分器看不见的类别」诚实的读法。
+- **结果：**[[frontier-models]] [[security]] [[vuln-supply]] [[system1-decision]] [[token-economics]]
+  [[harness-reliability]] [[dev-tools]] [[edge-inference]] [[agent-stack]] [[fact-check]]；`en/agent.md`
+  论题 1、2、5、7、8、20、26 + 11-10 04:29 批次车道笔记；zh/jp 镜像同步。
+- **另外：**更正了信息流里的一处路径（`faiss/contrib/e_means` → **`contrib/e_means`**，经仓库 `contents` API 核实；
+  en/zh/jp 与三个 `latest.md` 镜像）——指令陈旧化论文的类别，向外一跳被抓到。**来源目录：四个新引用域名刻意未收录**
+  ——`e-means.github.io`、`cnx-software.com`、`benmandrew.com`、`bugzilla.suse.com`。本轮窗口内没有一个拥有可对着
+  「非声明方下游」核实的要件（raspberrypi.com 对浏览器 UA 只返回约 5.7 KB 的 JS 外壳、对 `curl` 什么都不返回；
+  FAISS 仓库是 Meta 自己的；SUSE 的 Bugzilla 与引用它的 NVD 记录同源；malloc 文章的机制在 glibc 自己的 wiki 里有记，
+  但测得的数字属于作者）。补齐的配方：等到厂商页面可读、或有第二家媒体刊登该价格时再跑。→ [[fact-check]]
+
 
 ### 2026-11-09 21:08
 

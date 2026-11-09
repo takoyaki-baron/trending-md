@@ -1228,3 +1228,26 @@ UTF-8 文件名的未认证任意文件上传，约 1,000 万活跃安装）**CN
 repos/openemr/openemr/security-advisories` 整体重数。
 
 → [[security]] [[disclosure-lag]] [[fact-check]]
+
+## 2026-11-10 04:45 — 102 条成批记录、描述止于最新 tag，这是一次「未命名修复」的披露
+
+**VulnCheck 在 2026-11-09 发布了 102 条 FFmpeg CVE**，全部仍为 `Received`、未经 NVD 分析。内容多为编解码与滤镜树的
+内存安全——`huffyuvenc`、`dvbsubenc`、`gif.c` 的堆溢出，VVC 与 Vulkan AV1 路径的越界写，十几个解码器的未初始化内存
+披露——以及一大串 NULL 解引用。分数都是 VulnCheck 在两个框架上的：**3.1 `Primary` 最高 7.8**，**4.0 `Secondary`
+最高 8.5**（`CVE-2026-125250`，GIF 编码器 `shrunk_buf` 尺寸 bug）。
+
+**故事是分布而不是最大值。** **102 条中有 96 条**描述写「through **9.0.2**」，而 **9.0.2 正是 FFmpeg 的最新 tag**
+（`n9.0.2`）；只有 **6 条**给出修复边界（「before 8.1.3 and 9.x before 9.0.2」）。所以这批是**未命名修复**的披露——
+最新发布里仍然存在的 bug 被打包成一套——而不是补丁公告，对 FFmpeg 使用者而言的操作答案不是「升级」，而是「你已经
+在 9.0.2 上，且仍然受影响」。这正是 `--bound-census` / `--ceiling-census` 这个类以批量归档的形式到来：记录自己的
+上界就是天花板，天花板之上没有可安装的东西。为这批写下任何补救句之前，先跑
+`node agent/tools/disclosure-lag.mjs --ceiling-census`，让普查而不是归档文件来决定上界之上是否存在发布。
+
+**同一批里要分开的两个单位：** **7.8 与 8.5** 是**同一个 CNA** 把同类 bug 打在两个框架上——是惯例
+（[[cvss-stopping-points]]），不是分歧；而 `Received` 意味着「NVD 尚未分析」，所以「NVD 说是 7.8」这句话目前还不存在。
+引用 VulnCheck，并写明框架。
+
+→ [[vuln-supply]] [[security]] [[disclosure-lag]] [[cvss-stopping-points]]
+
+来源：[NVD: CVE-2026-125250](https://nvd.nist.gov/vuln/detail/CVE-2026-125250) ·
+[FFmpeg tags](https://github.com/FFmpeg/FFmpeg/tags)

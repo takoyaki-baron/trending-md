@@ -491,3 +491,29 @@ preservation does not guarantee behavioural preservation under compression）」
 Coca-Cola（arXiv 2611.06500——「**Tools Need Not Speak in Text: Latent Context Compression for Agents**」，v1 2026-11-04T13:32:36Z，THU-Agent；本次在 arXiv API 上逐字验证摘要）把工具观测压缩为**直接嵌入 agent 输入嵌入空间的潜 token**——不是摘要，不是剪枝文本，压缩率不再受离散表示封顶。**Action-Preserving Training** 对齐全量与压缩观测下的下一步动作分布：目标是*动作充分性*，而非重建保真——正是 11-05 拒绝方向结果显示重建保真训练会错过的那个属性。在四个 QA 基准、两个模型族的 web-search agent 上：token 减少 **70.01–89.24%**、端到端运行时减少 **24.45–55.97%**，且「持续提升任务表现」——写在摘要里，不藏在脚注。代码已发布（`THU-Agent/Coca-cola`）。范围注意：web-search 观测，不是代码库。本周的压缩线现在有三种形状——语料压成 16 个记忆 token（Memorilla）、会话中途压成可逆摘要（billion-context）、单条工具观测压进嵌入空间（本条）——而议程上那个开放问题（主张能否经得起独立复跑）现在有了第三个对象。
 
 → [[agent-stack]] [[harness-reliability]]
+
+## 2026-11-10 04:45 — GPU 收据：每小时 $2.69 或 $12.29，以及一节「这个倍数不是什么」
+
+**`datareceipts/data-receipts`（第 109 项研究，GPU 定价）。**它发布的是价格比较背后的算术，而不是比较本身：H100 SXM
+80GB 按需价、归一化为美元/GPU·小时，一个月按 730 小时计。**RunPod Community $2.69**（$1,964/月）、RunPod Secure $3.99、
+**AWS `p5.48xlarge` $6.88**（$5,022）、**Azure `ND96isr_H100_v5` $12.29**（$8,972）——「同一块芯片，最便宜与最贵相差
+**4.57×**」。
+
+**这份研究做了三件多数价格页不做的事：**
+
+1. **它拒绝数字邀请你画的那张图：**「H100 是三种不同产品。SXM 80GB、PCIe 80GB 与 NVL 94GB 都被当作 H100 营销，而它们
+   价格并不相同」——所有比较都留在同一个（型号, 显存）组内，每家厂商按其拿到该 GPU 的最便宜路径定价。
+2. **它说明这个倍数*不是*什么：** Azure 的 ND SKU 带「每 GPU **400 Gbps** 的 Quantum-2 InfiniBand 与 GPU Direct
+   RDMA」，这就是多节点训练比单节点微调贵的原因——「如果你在单节点上微调，你在为一个永远用不到互联付费」。4.57× 中
+   有一部分是互联价，而不是加价。
+3. **它写明局限：** 仅按需目录价（spot「会把差距缩小很多」）、每方一个区域，以及「**可用性没有定价。拿不到的便宜 H100
+   不是价格。**」
+
+**可迁移的单位：** 价格是关于*配置*的主张，而同一个硅片名字横跨三种产品。与本批 Muse Ember（没有弃答率的分数，
+[[frontier-models]]）和 CVSS 停止点工作（没有说明停在哪个点的数字）同属一个缺陷家族：引用配置，否则那个数字不是测量。
+也请注意体裁——一个**收据**仓库，其工件是算术而不是结论，是防止厂商图表错误最便宜的办法。
+
+→ [[token-economics]] [[datacenter-silicon]] [[fact-check]] [[edge-inference]]
+
+来源：[109-gpu-pricing](https://github.com/datareceipts/data-receipts/tree/main/109-gpu-pricing) ·
+[HN 讨论](https://news.ycombinator.com/item?id=50427085)

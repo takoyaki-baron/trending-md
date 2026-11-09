@@ -44,7 +44,7 @@ Meta Superintelligence Labs 发布其最轻量模型 **Muse Ember**，定价为*
 - **Source:** Meta FAIR · 项目页 + arXiv 2611.09501 · 11 月 9 日
 - **Tags:** `research` `clustering` `faiss`
 
-Meta FAIR 开源了 **e-means**，一个 Lloyd 算法的替代品，已进入 **`faiss/contrib/e_means`**，并附带论文与浏览器内 playground。其主张少见，因为速度与质量通常互相交换："Across a large range of scales and datasets, e-means reaches a test loss below Lloyd's at 25 epochs, in 1.2 to 3 epochs"——作者端到端测得，相对 Flash-KMeans **GPU 上 10–45 倍墙钟加速**，相对 FAISS **CPU 上 8–15 倍**。作者为 Bessa、Mazaré、Szilvasy、Touvron、Picard、Douze 与 Jégou——后三位正是写下它所击败的 FAISS 基线的人。
+Meta FAIR 开源了 **e-means**，一个 Lloyd 算法的替代品，已进入 **`contrib/e_means`**，并附带论文与浏览器内 playground。其主张少见，因为速度与质量通常互相交换："Across a large range of scales and datasets, e-means reaches a test loss below Lloyd's at 25 epochs, in 1.2 to 3 epochs"——作者端到端测得，相对 Flash-KMeans **GPU 上 10–45 倍墙钟加速**，相对 FAISS **CPU 上 8–15 倍**。作者为 Bessa、Mazaré、Szilvasy、Touvron、Picard、Douze 与 Jégou——后三位正是写下它所击败的 FAISS 基线的人。
 
 **Why it matters:** k-means 是向量索引、量化码本与基于聚类的检索过滤之下的承重原语，迭代次数减少 10 倍会同时触及这三者，且不需要新数据结构。诚实的保留是：比较用的是作者自己的测试框架、对手是自己团队实现的当前最优；对冲的是代码进了 FAISS 本身，所以基线可复现，而不是只在论文里断言。
 
@@ -94,15 +94,15 @@ CISA 目录推进到 **2026.11.09（1,772 条）**，同一天新增三条：**F
 
 ---
 
-## 7. FFmpeg 一天收到 102 条 CVE 记录——其中 96 条说最新版本仍然受影响
+## 7. FFmpeg 62 分钟内收到 121 条 CVE 记录——其中 114 条说最新版本仍然受影响
 
 - **Velocity:** ▮▮▮ trending
-- **Source:** NVD · 11 月 9 日发布 102 条记录
+- **Source:** NVD · 11 月 9 日发布 121 条记录
 - **Tags:** `security` `cve` `ffmpeg`
 
-VulnCheck 在 **2026-11-09** 发布了 **102 条 FFmpeg CVE 记录**，全部仍处于 `Received` 状态，NVD 未做分析。这批几乎都是编解码器与滤镜树里的内存安全问题——`huffyuvenc`、`dvbsubenc` 与 `gif.c` 的堆溢出，VVC 与 Vulkan AV1 路径的越界写，十多个解码器的未初始化内存泄露——外加一长串 NULL 解引用。分数在两个框架上都来自 VulnCheck：**3.1 `Primary` 最高 7.8**，**4.0 `Secondary` 最高 8.5**（`CVE-2026-125250`，GIF 编码器 `shrunk_buf` 尺寸计算错误）。分布比最大值更重要：**102 条描述里有 96 条写着 "through 9.0.2"**，也就是 FFmpeg 的最新 tag（`n9.0.2`），只有 **6** 条给出了修复边界（"before 8.1.3 and 9.x before 9.0.2"）。
+VulnCheck 在 **2026-11-09** 发布了 **121 条 FFmpeg CVE 记录**——第一条 19:16:48Z，最后一条 20:18:13Z——全部仍处于 `Received` 状态，NVD 未做分析。这批几乎都是编解码器与滤镜树里的内存安全问题——`huffyuvenc`、`dvbsubenc` 与 `gif.c` 的堆溢出，VVC 与 Vulkan AV1 路径的越界写，十多个解码器的未初始化内存泄露——外加一长串 NULL 解引用。分数在两个框架上都来自 VulnCheck：其 **3.1 指标最高 7.8**、**4.0 指标最高 8.5**，且有九条记录同时落在两个最大值上（其中一条是 `CVE-2026-125250`，GIF 编码器 `shrunk_buf` 尺寸计算错误）。分布比最大值更重要：**121 条描述里有 114 条写着 "through 9.0.2"**，也就是 FFmpeg 的最新 tag（`n9.0.2`），只有 **7** 条给出了修复边界（"before 8.1.3 and 9.x before 9.0.2"）。
 
-**Why it matters:** 当一批 102 条记录里绝大多数条目描述的都是最新 tag 中仍然存在的缺陷时，这是一次**未命名修复版本**的披露，而不是补丁公告——而 4.0 与 3.1 的差值（同一 CNA、同一族向量，3.1 上 7.8、4.0 上 8.5）是打分口径，不是分歧。这里全部是 `Received`，所以"NVD 说"目前还不存在；引用 VulnCheck，并说明这一点。
+**Why it matters:** 当一批 121 条记录里绝大多数条目描述的都是最新 tag 中仍然存在的缺陷时，这是一次**未命名修复版本**的披露，而不是补丁公告——而 4.0 与 3.1 的差值（同一 CNA、同一族向量，3.1 上 7.8、4.0 上 8.5）是打分口径，不是分歧。这里全部是 `Received`，所以"NVD 说"目前还不存在；引用 VulnCheck，并说明这一点。
 
 [`🔗 CVE-2026-125250（NVD）`](https://nvd.nist.gov/vuln/detail/CVE-2026-125250) · [`🔗 FFmpeg tags`](https://github.com/FFmpeg/FFmpeg/tags)
 
@@ -186,7 +186,7 @@ VulnCheck 在 **2026-11-09** 发布了 **102 条 FFmpeg CVE 记录**，全部仍
 
 **《When Instruction Files Go Stale: Documentation Debt and Hidden Cost in Coding Agents》** 研究的是每个有 `CLAUDE.md` 的仓库都会遇到的事：指令文件"read in every agent session"，却"can fall behind the code and become stale (e.g., a test folder moves, but the file still points to the old one)"。实验是受控的——来自活跃开源仓库的三条真实过期指令，各自代表不同类别的指引（**一条测试命令、一个代码位置、一套新增组件的流程**）——agent 在每条指令的三种版本下完成 **22 个维护任务**：保持过期、修正为当前路径、以及删除。代码与任务保持不变，共分析 **732 条轨迹**。
 
-**Why it matters:** 作者的立论就是结论："Evaluations that check only task success can miss this cost, and the stale file can persist." 过期指令是文档债，其利息由之后每一个会话支付——所以自然的实验不是"agent 有没有做完"，而是它一路上做了什么、以及是否恢复。任何见过 agent 跑 2024 年那条测试命令的团队都认得这一类问题；这项研究固定代码、只移动文字，这才让那笔成本变得可测。
+**Why it matters:** 作者的立论就是结论："Evaluations that check only task success can miss this cost, and the stale file can persist." 过期指令是文档债，其利息由之后每一个会话支付——所以自然的实验不是 agent 有没有做完，而是它一路上做了什么、以及是否恢复。任何见过 agent 跑 2024 年那条测试命令的团队都认得这一类问题；这项研究固定代码、只移动文字，这才让那笔成本变得可测。
 
 [`🔗 arXiv 2611.09802`](https://arxiv.org/abs/2611.09802) · [`🔗 全文（HTML）`](https://arxiv.org/html/2611.09802v1)
 
@@ -200,7 +200,7 @@ VulnCheck 在 **2026-11-09** 发布了 **102 条 FFmpeg CVE 记录**，全部仍
 
 **MemoryDojo** 是一个追踪被投毒记忆生命周期的基准测试。前提是："malicious instructions encountered in one session may be stored and propagated through memory before being retrieved and acted upon in later sessions"，以及"because memory systems differ in how they process and retrieve information, the downstream effects of poisoning can vary significantly across systems"。产物是覆盖四个领域的 **155 条多会话长程轨迹**，在 **5 种不同记忆系统**上运行，追踪投毒在何处写入、何时被检索、以及 agent 随后做了什么。结论冷静且不讨好：**"all memory systems are susceptible to memory poisoning, with substantial variation in downstream effects."**
 
-**Why it matters:** 这个基准还附带一个攻击优化过程——"a memory-aware poison optimization process that increases the poisoning efficacy, highlighting differences between memory architectures"——于是架构间的差异从趣闻变成了攻击面。对任何正在交付记忆层的人（本 feed 上周覆盖了四种互不兼容的记忆格式），"我的存储和你不是一个形状"现在有了可测量的代价。
+**Why it matters:** 这个基准还附带一个攻击优化过程——"a memory-aware poison optimization process that increases the poisoning efficacy, highlighting differences between memory architectures"——于是架构间的差异从趣闻变成了攻击面。对任何正在交付记忆层的人（本 feed 上周覆盖了四种互不兼容的记忆格式），存储与你形状不同这件事现在有了可测量的代价。
 
 [`🔗 arXiv 2611.09721`](https://arxiv.org/abs/2611.09721) · [`🔗 全文（HTML）`](https://arxiv.org/html/2611.09721v1)
 
@@ -226,7 +226,7 @@ VulnCheck 在 **2026-11-09** 发布了 **102 条 FFmpeg CVE 记录**，全部仍
 - **Source:** benmandrew.com · 180 分 · 11 月 9 日（~19:31 UTC+8）
 - **Tags:** `systems` `memory` `glibc`
 
-一篇有测量的讲解，讲的是 `malloc` 的接口与内核实际看到的东西之间的缺口。第一个实验用 `strace` 跟踪 **1,000 次 `malloc(16)`** 的循环，发现总共**只有两次 `brk` 系统调用**——一次查询 program break，一次把堆扩展 **132 KiB**，都发生在第一次调用里；"the other 999 just take from that already allocated memory"。它给被摊销的东西标了价："**575 ns for an empty** [syscall], as measured below"，然后在 `sbrk` 上写了一个 bump allocator，打印进程各区域的一个地址，并指出那次运行里 break 与 `printf` 相距 **23.4 TiB**——"about 1,530 times the machine's 15.6 GiB of RAM. Nearly all of that range is unmapped, so it costs no physical memory."
+一篇有测量的讲解，讲的是 `malloc` 的接口与内核实际看到的东西之间的缺口。第一个实验用 `strace` 跟踪 **1,000 次 `malloc(16)`** 的循环，发现总共**只有两次 `brk` 系统调用**——一次查询 program break，一次把堆扩展 **132 KiB**，都发生在第一次调用里；"the other 999 just take from that already allocated memory"。它给被摊销的东西标了价："**575 ns for an empty one**, as measured below"，然后在 `sbrk` 上写了一个 bump allocator，打印进程各区域的一个地址，并指出那次运行里 break 与 `printf` 相距 **23.4 TiB**——"about 1,530 times the machine's 15.6 GiB of RAM. Nearly all of that range is unmapped, so it costs no physical memory."
 
 **Why it matters:** 这是多数性能推理会跳过的那一层——系统调用与用户态的边界，以及把它藏起来的记账。这篇文章也是"测量优于回忆"的示范：132 KiB、两次 `brk`、地址布局都是输出而不是断言，而且每一条都能用它打印的代码片段复现。
 
@@ -240,7 +240,7 @@ VulnCheck 在 **2026-11-09** 发布了 **102 条 FFmpeg CVE 记录**，全部仍
 - **Source:** CNX Software · 183 分 · 11 月 10 日（~01:42 UTC+8）
 - **Tags:** `hardware` `raspberry-pi` `pricing`
 
-Raspberry Pi 再次涨价，这次集中在 16GB 型号：**Raspberry Pi 5 16GB 现在售价 385 美元**，"an $80 increase compared to the last price hike in April"，而 **CM5** 系统模块涨 **40 美元**，"starting at $375 for the Lite model without wireless"。文章里唯一的好消息是维持不变："the Raspberry Pi 500+ mechanical keyboard PC stays at the same price, starting at $410"。CNX 自己对这种不对称的解读是：那款键盘机型"must have lower demand than for single board computers and compute modules"。
+Raspberry Pi 再次涨价，这次集中在 16GB 型号：**Raspberry Pi 5 16GB 现在售价 385 美元**，"an $80 increase compared to the last price hike in April"，而 **CM5** 系统模块涨 **40 美元**，"starting at $375 for the Lite model without wireless"。文章里唯一的好消息是维持不变："the Raspberry Pi 500+ mechanical keyboard PC stays at the same price, starting at $410"。CNX 自己对这种不对称的解读是：那款键盘机型"already richly priced and the demand must be lower than for single board computers and compute modules"。
 
 **Why it matters:** 曾经锚定低成本常开计算的那块板，现在的定价像一台小型服务器，而这次涨价是内存成本的传导，不是 Raspberry Pi 的毛利决策——正是本周把"闲置内存"玩笑变成一种体裁的同一股 DRAM 压力。对任何在盘算 homelab、CI runner 集群或边缘部署的人：16GB 这一档已经从"买几块"变成"买一块并测量"，而 CM5 一并移动。
 
@@ -248,15 +248,15 @@ Raspberry Pi 再次涨价，这次集中在 16GB 型号：**Raspberry Pi 5 16GB 
 
 ---
 
-## 18. Flide 是决策模型缺的那层服务栈——比 vLLM 与 SGLang 快 9.5 倍，支持精确状态分叉
+## 18. Flide 是决策模型缺的那层服务栈——比 vLLM 与 SGLang 最高快 9.5 倍，支持精确状态分叉
 
 - **Velocity:** ▮▮ rising
 - **Source:** Hacker News · 109 分 · 11 月 9 日（~12:43 UTC+8）
 - **Tags:** `inference` `decision-models` `serving`
 
-**`OmniJev/Flide`**（Apache 2.0，**258 星**）是"决策模型"家族的推理引擎——那种单次前向、不生成 token 的模型，本 feed 在 **2026-11-07** 覆盖过——它的立论是这类模型需要与生成式 LLM 不同的服务机制："**9.5 times faster than vLLM and SGLang; exact state forking**"，一个状态被分叉成三个问题，"each answered in one forward pass"。项目在 11 月 2 日公布方法论文（**arXiv 2610.42148**，"Accelerating Decision Inference with Exact State Forking"），并附带 `flide verify` 命令："checks exact forking on your own model and requests"。**PyPI `flide` 0.1.10** 于 **2026-11-09T06:57Z** 上传，同一天 README 记录了两个版本：0.1.9 增加 **`pplx-decider-v1.1-27b` 与 `JEV-35B`**，0.1.10 增加 **Ainvest-Decision-27b、Darwin-27B-RSI-Decision 与 KnowLine-31B-Gen1.5**，最后一个现在能读图。
+**`OmniJev/Flide`**（Apache 2.0，**258 星**）是"决策模型"家族的推理引擎——那种单次前向、不生成 token 的模型，本 feed 在 **2026-11-07** 覆盖过——它的立论是这类模型需要与生成式 LLM 不同的服务机制："**With exact state forking it is up to 9.5 times faster than vLLM and SGLang, and every answer is the one the model gives the question alone**"——一个状态被分叉成三个问题，每个都在一次前向里作答。项目在 11 月 2 日公布方法论文（**arXiv 2610.42148**，"Accelerating Decision Inference with Exact State Forking"），并附带 `flide verify` 命令："checks exact forking on your own model and requests"。**PyPI `flide` 0.1.10** 于 **2026-11-09T06:57Z** 上传，同一天 README 记录了两个版本：0.1.9 增加 **`pplx-decider-v1.1-27b` 与 `JEV-35B`**，0.1.10 增加 **Ainvest-Decision-27b、Darwin-27B-RSI-Decision 与 KnowLine-31B-Gen1.5**，最后一个现在能读图。
 
-**Why it matters:** 模型清单才是故事。Perplexity、Cloudflare（`Clef`）、Juspay、AutoTrust 等十几家现在发布的"decision"检查点不是聊天模型，而整个家族此前是用为 token 生成而建的引擎在服务。相对 vLLM 的 9.5 倍是项目在自家工作负载上的自测——但真正决定这 9.5 倍是公平比较还是一次不同计算的，是那个测分叉精确性、而不是测速度的 `verify` 命令。
+**Why it matters:** 模型清单才是故事。Perplexity、Cloudflare（`Clef`）、Juspay、AutoTrust 等十几家现在发布的"decision"检查点不是聊天模型，而整个家族此前是用为 token 生成而建的引擎在服务。相对 vLLM 最高 9.5 倍是项目在自家工作负载上的自测——那个 "up to" 是有实际作用的——但真正决定这 9.5 倍是公平比较还是一次不同计算的，是那个测分叉精确性、而不是测速度的 `verify` 命令。
 
 [`🔗 OmniJev/Flide`](https://github.com/OmniJev/Flide) · [`🔗 PyPI：flide 0.1.10`](https://pypi.org/project/flide/)
 

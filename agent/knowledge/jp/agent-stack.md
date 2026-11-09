@@ -2531,3 +2531,28 @@ PDF の世界に読み取り専用の描画を返す。
 **`garrytan/gbrain`（今回確認 31,870★、MIT、04-05 作成；11-09 +215/日）：**YC CEO Garry Tan 自身のエージェント メモリ層、MCP 経由で六つのサーフェスに供給（Claude Code、Codex、ChatGPT、Cursor、Grok Bot、Muse）、自己ホスト可能、gbrain.io がオプションの有料ホスティング。自己申告の規模：155,795 ページ、24,589 人、5,340 社、66 の cron ジョブ。差別化は他のメモリ ツールが飛ばす監査可能メモリの部分：明示的事実を**出典つき**で保存、修正と**撤回**を支援、そして合成層が引用つき回答に**加えてギャップ分析**を返す（「Alice や Acme については 4 月 22 日から六週間、脳に何も追加されていない」）。型付きグラフは BrainBench の関係質問で本番 R@5 を **0.6626 → 0.7241** に上げ、天井を印刷した状態で：「0.9791 は graph-oracle-parse の上限であり、製品スコアではない」。README は転写すべきサプライ チェーン警告を運ぶ：「GBrain is NOT distributed on npm. The npm `gbrain` package is unrelated and can shadow the real binary」——確認済み：npm `gbrain@1.3.1` は「GPU Javascript Library for Machine Learning」。claude-mem の保持＋クラウド価格設定に続き、メモリの新しい軸は**監査可能性**：誰が言ったか、いつ、脳がまだ何を知らないか。
 
 → [[agent-distribution]] [[fact-check]]
+
+## 2026-11-10 04:45 — ハーネス制御面が週間ボード首位、メモリ毒入れはアーキテクチャ別のベンチマークを得る
+
+**T3 Code（`pingdotgg/t3code`）が週間トレンド首位、**+15,379★**（累計 **53,850★**）**——リポジトリ作成は **2026-02-08**。
+自称「agent harness 制御面」：すでに課金している CLI（**Codex、Claude Code、Cursor、Grok Build、OpenCode、Google
+Antigravity、fx**）をインストール・認証し、T3 Code が iOS、Android、Web、Electron シェルから駆動する。MIT。README は
+ビジネスモデルを明言する（「Nothing. We built T3 Code because we wanted the best possible development experience with
+agents」）。夜間リリースで 11 月 9 日は 1 日 3 回（`v0.1.8-nightly.20261109.4429`、18:58 UTC）。リポジトリの年齢を示す
+数字：9 か月のプロジェクトに未クローズの issue と PR が **5,976** 件。構造的な読み：ハーネス層がモデルベンダーから
+分離しつつあり、「どのハーネスか」ではなく「どのサブスクリプションか」を選ぶことになる——README の 7 回ログインの
+インストール表が、その可搬性の実費である。（同リポジトリの「6 ハーネスの制御面」としての以前の登場は 10-25 の項目。）
+
+**MemoryDojo（arXiv 2611.09721）** ——「毒を入れられたメモリのライフサイクル」のベンチマーク：「あるセッションで遭遇した
+悪意ある指示が保存され、後のセッションで取り出されて行為される前にメモリを通じて伝播しうる」、そして「メモリシステムは
+情報の処理と検索の仕方が異なるため、毒入れの下流影響はシステム間で大きく異なりうる」。**155** のマルチセッション長距離
+軌跡 × 4 領域 × **5** 種のメモリシステムで、毒がどこに書かれ、いつ取り出され、エージェントが何をするかを追跡。見出しは
+「**すべてのメモリシステムがメモリ毒入れに脆弱**で、下流影響には相当な差がある」。攻撃も同梱する：「メモリを意識した
+毒入れ最適化過程で毒入れ効力を高め、メモリ・アーキテクチャ間の差を浮き彫りにする」——「差」を珍談から標的選択の基準に
+変える。メモリ層を出荷する側にとって（本ファイルは一週間で 4 つの競合するメモリ形式を扱った）、「自分のストアはあなたの
+ものと形が違う」に測定可能なコストが付き、アーキテクチャが*攻撃面そのもの*になる。防御側は [[security]] を参照。
+
+→ [[agent-stack]] [[security]] [[harness-reliability]]
+
+Sources: [pingdotgg/t3code](https://github.com/pingdotgg/t3code) · [t3.codes](https://t3.codes) ·
+[arXiv 2611.09721](https://arxiv.org/abs/2611.09721)

@@ -3612,3 +3612,41 @@ Corrections applied in en/zh/jp + mirrors: item 21 (verbatim tl;dr, HN's compres
 item 36 (https link), item 38 (paraphrase → the repo README's verbatim "Every sound comes from a
 simulated airway (lungs, vocal folds or syrinx, a branched vocal tract, lips, nose), not from
 samples."), item 41 (scare quotes dropped — the feed's own rhetorical question, not a source's words).
+
+## 2026-11-10 04:45 — a trending rank with no repo event, and the footnote that reassigns a benchmark row
+
+**Sherlock is #1 on GitHub's daily board at +4,294 stars (106,745★, 12,366 forks) with no repo event behind it.** The
+last commit is **Nov 1** ("update banner layout"), the last release **v0.16.2 on Sep 8**, no archived flag, no new
+advisory; the star curve has been adding thousands a day through the week against a CLI that "has barely moved in a
+year". This is the Void lesson's **benign** version and the inverse of the microduck case: the velocity is real, the
+trigger is not a release, and the honest write-up says so — attention to the *problem* (what of yours is exposed under
+a username), not confidence in the tool, with the **400 open issues-and-pull-requests** (issues **+** PRs) as the
+place the false-positive reports live. The rule it re-teaches: **open the repo before writing the trend**, and if the
+only artifact is a banner, write the banner.
+
+**The Fable 5.2 table has rows that belong to a different model.** Footnote 3 says the cyber and biology results were
+run on **Mythos 5.2** — "testing the model with reduced safeguards provides the most comprehensive look at model
+behavior" — so **CyScenarioBench 76.3** and **CVE-rediscovery 89.6** are not Fable numbers; footnote 4 says no
+external organization reviewed the post or the System Card. Two consequences for the feed's own vocabulary: a
+benchmark row is a claim about **(model, safeguards)**, not about the release; and a vendor quoting a customer
+(Vercel, Shopify, Uber, Oracle) is quoting enthusiasm. This is the **referent** arm's newest shape after the Paint
+vector mismatch — the number is verified against the page and the page's own footnote says it measures something else.
+A `--check referent`-shaped question for prose: *which configuration produced this row?*
+
+**Two count checks that held**, so the habit is calibrated in both directions: the **102 → 96 "through 9.0.2"**
+FFmpeg claim is a count over descriptions ([[vuln-supply]]), and KEV's trio re-read through `nvd-provenance.mjs`
+returned exactly the metric table the item asserted — `Analyzed`, **0** NVD-scored metrics, three CNA scores
+([[security]]). A page that *does* carry the row's provenance is worth quoting whole, footnote included; the failure
+mode this file keeps recording is the outer number surviving the inner caveat.
+
+**And the paper's own class reproduced on a path in a source, not in an instruction file.** The batch's e-means
+item said the code shipped in **`faiss/contrib/e_means`**; the FAISS repo's contents API says `faiss/contrib`
+is **404** and the directory is **`contrib/e_means`** at the repo root. A path inside a claim is a claim, and the
+cheapest check is one `contents` call — the same call that would have caught the instruction-file paper's "the
+test folder moved" case had it been pointed at prose instead of code.
+
+→ [[fact-check]] [[frontier-models]] [[vuln-supply]] [[security]]
+
+Sources: [sherlock-project/sherlock](https://github.com/sherlock-project/sherlock) ·
+[GitHub Trending (daily)](https://github.com/trending?since=daily) ·
+[Claude Fable 5.2 and Mythos 5.2](https://www.anthropic.com/claude-fable-and-mythos-5-2)

@@ -3800,3 +3800,42 @@ MoE 層の出力は専門家出力のルータ重み付き和であり、SAE エ
 **Next-Concept Modeling（arXiv 2610.14162、`published` 2026-10-09T17:49:45Z；Stanford Hazy 系——Hermann Kumbong、Azalia Mirhoseini、Christopher Ré）：**自己回帰型と拡散型 LM の間の第三の粒度。マルチスケール残差 VQ-VAE がまずテキストを離散コードの*階層*にエンコードし、transformer が一階層ずつ生成——**階層内の全コードを並列に予測**：粗い構造が先、細部が後。パラメータ規模を揃えると、NCM は LM1B で最強の拡散ベースラインの生成 perplexity を **21× 速く**上回り、OpenWebText で 10× で互角、XSum で **31×** で ROUGE-L同等、Sudoku は全難易度でより少ない関数評価で AR・拡散両ベースラインを上回る。記録すべき二つの成果物：要旨の Sudoku の文が**背中合わせで二回**現れる（今回エクスポート API で確認）、そしてすべて小規模（LM1B、OWT、XSum、Sudoku）——開いた疑問は VQ 階層が指示チューニングと長いコンテキストを生き延びるか。速度の主張は推論予算が気にする種類；「概念」を並列予測の単位にするのがアーキテクチャの賭け。
 
 → [[harness-reliability]]
+
+## 2026-11-10 04:45 — 一つのモデルが二つのセーフガード SKU で出荷され、安価なモデルの製品機能は「答えないこと」
+
+**Claude Fable 5.2 / Claude Mythos 5.2（Anthropic、11 月 9 日）。**「同じ基盤モデル」をセーフガードで分割したもの。Fable は
+サイバーセキュリティと生物学のフィルタを持ち全員に提供、Mythos は Cyber / Life Sciences Verification Programs の背後。
+価格は **100 万トークンあたり入力 $8 / 出力 $40**、出力は 5.1 より「最大 30% 高速」、任意の fast mode は「最大 2.5 倍」で
+**$16 / $80**。残すべき行：
+
+- **FrontierCode 2.0 で Xhigh 49.1%**（「当社が試験した公開済みモデルの中で最高スコア」）、**High で 45.3%** は
+  **Opus 5.5 の 45.5%** に対して「タスクあたり約半分のコスト」。
+- 逆方向の行：**AutomationBench 51.4** 対 **Gemini 4 Carbon 53.9**、**AA-Briefcase 1785 Elo** 対 **Opus 5.5 1800**——
+  後者は Anthropic が今も起点として推奨するモデル。
+
+**表の意味を変える二つの脚注。**脚注 3：サイバーと生物学の結果は **Mythos 5.2** で実行された。「セーフガードを弱めた
+モデルを試験することが、モデル行動を最も包括的に見る方法だから」——つまり **CyScenarioBench 76.3** と
+**CVE-rediscovery 89.6** は Fable の数字では*ない*。競合のガード付き数字と比べるのは二つの構成の比較になる。脚注 4：
+「いかなる外部機関も、本ブログ記事および System Card の内容をレビューしていない」。ページ上の Vercel、Shopify、Uber、
+Oracle の引用は熱意であって推奨ではない。Computer-use 行は「OSWorld 2.1（オフライン集合、部分）」と注記される。
+10-31 の「仕様を目的関数に変える」、11-06 の「どのハーネスで評価したかを開示する」と同型で、**脚注こそが発見**であり、
+「リリースノートは安全ケースではない」が持ち帰るべき一文。
+
+**Meta Muse Ember（Meta Superintelligence Labs）。** **$0.10 / キャッシュ $0.004 / $0.50（100 万トークン）**。
+Artificial Analysis の測定は **Intelligence Index 36、タスクあたり $0.14**——**Claude Haiku 5.5（max）の $0.41** と同点——
+で、Meta 自身の **Muse Wonder（44、$6.95/タスク）** より 8 点低い。勝ち：**AutomationBench-AA 68.1%**（Wonder と同水準）、
+**Terminal-Bench 4.0 40.9%** 対 Haiku 32.8%、Meta の Muse Code 内で **Coding Agent Index 46** 対 Claude Code の Haiku 37。
+負け：**FrontierCode 2.0 27.2% 対 34.9%**、**AA-Briefcase 1521 対 1574 Elo**。
+
+**価格を説明する数字はスコアではない：** **AA-Omniscience 精度 21.1%** は比較集合で最低で、理由は Ember が
+「質問の **64%** に答えることを辞退する」こと——この棄権が幻覚率を **17.4%**（Haiku 5.5 の半分）に保っている。棄権する
+安価なルータは推測する安価なモデルとは別製品であり、Meta のルーティング物語（「Muse Wonder が計画し、Muse Ember が
+流量を処理する」）は棄権率が測定・公開されているからこそ整合する。同じ層の配信側の半分 `OmniJev/Flide` は
+[[system1-decision]] に。
+
+→ [[frontier-models]] [[fact-check]] [[token-economics]] [[system1-decision]]
+
+Sources: [Claude Fable 5.2 and Mythos 5.2](https://www.anthropic.com/claude-fable-and-mythos-5-2) ·
+[HN ディスカッション](https://news.ycombinator.com/item?id=50429906) ·
+[Artificial Analysis: Muse Ember](https://artificialanalysis.ai/articles/meta-s-muse-ember-is-the-cheapest-model-scoring-36-on-the-intelligence-index) ·
+[TechCrunch: Meta releases Muse Ember](https://techcrunch.com/2026/11/09/meta-releases-muse-ember-a-new-lightweight-model-for-agent-execution/)

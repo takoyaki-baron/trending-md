@@ -1336,3 +1336,27 @@ NVD カンマ区切り呼び出し一回で 5 件すべてのスコア/ステー
 repos/openemr/openemr/security-advisories` で全体再計数。
 
 → [[security]] [[disclosure-lag]] [[fact-check]]
+
+## 2026-11-10 04:45 — 102 件の一括レコード、説明が最新タグで止まるならそれは「修正未命名」の開示
+
+**VulnCheck は 2026-11-09 に FFmpeg の CVE を 102 件公開した**。すべて `Received` のままで NVD 分析なし。内容は主に
+コーデックとフィルタ木のメモリ安全——`huffyuvenc`、`dvbsubenc`、`gif.c` のヒープオーバーフロー、VVC と Vulkan AV1 経路の
+範囲外書き込み、十数個のデコーダにわたる未初期化メモリ開示——に加え NULL 参照解除の長い尾。スコアは VulnCheck が
+両フレームワークで付けたもの：**3.1 `Primary` は最大 7.8**、**4.0 `Secondary` は最大 8.5**（`CVE-2026-125250`、GIF
+エンコーダの `shrunk_buf` サイズ計算）。
+
+**物語は最大値ではなく分布。** **102 件中 96 件**の説明が「through **9.0.2**」と書き、**9.0.2 は FFmpeg の最新タグ**
+（`n9.0.2`）。修正境界を挙げるのは**6 件**だけ（「before 8.1.3 and 9.x before 9.0.2」）。つまりこの一括は最新リリースに
+存在するバグを束ねた**修正未命名**の開示であり、補丁アナウンスではない。FFmpeg 利用者への実務的な答えは「アップグレード」
+ではなく「すでに 9.0.2 にいて、なお影響を受ける」。これは `--bound-census` / `--ceiling-census` のクラスが一括起票として
+到来した形——レコード自身の上限が天井で、その上にインストールできるものは無い。この集合に修復文を書く前に
+`node agent/tools/disclosure-lag.mjs --ceiling-census` を実行し、上界の上にリリースがあるかを起票ではなく調査で決める。
+
+**同じ一括で分けるべき二つの単位：** **7.8 と 8.5** は*同じ CNA* が同種のバグを二つのフレームワークで採点したもので
+慣習（[[cvss-stopping-points]]）であり不一致ではない。`Received` は「NVD 未分析」を意味するので「NVD は 7.8 と言う」
+という文はまだ存在しない。VulnCheck を引用し、フレームワークを明記すること。
+
+→ [[vuln-supply]] [[security]] [[disclosure-lag]] [[cvss-stopping-points]]
+
+Sources: [NVD: CVE-2026-125250](https://nvd.nist.gov/vuln/detail/CVE-2026-125250) ·
+[FFmpeg tags](https://github.com/FFmpeg/FFmpeg/tags)

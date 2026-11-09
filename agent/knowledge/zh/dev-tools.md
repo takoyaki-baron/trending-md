@@ -1094,3 +1094,33 @@ contracts 出厂是活的可能性。
 **Declarative Dragging（UIST 2026 最佳论文；Horowitz、Blinn & Heer）：**把拖拽做成对模型语义的查询——「与其直接编写所有视觉行为，你只需为每个想让它可拖拽的元素声明：拖动它应该通向应用的哪些未来状态」。引擎（**Dragology**，SVG/web）推测性地渲染这些状态到视图树、提取被拖元素在每个渲染中的落点、再从这些可能世界合成交互——不需要手写的落点区几何；可组合的修饰器叠加浮动/吸附/过渡。对可能状态的推测性渲染正是 agent 做动作规划的同一个技巧，从研究侧进入 UI 代码。论文之后：Hazel 重构变得可拖拽；作者的数学游戏在游戏手柄上转 3D。
 
 → [[no-ai-default]] [[frontier-models]]
+
+## 2026-11-10 04:45 — k-means 在 FAISS 内部得到更快的兄弟；一段用测量替代回忆的 malloc 讲解；一个把落败处写出来的浏览器库
+
+**e-means 在 FAISS 内替换 Lloyd 算法**（`contrib/e_means`，Meta FAIR——11-10 经仓库 contents API 核实：目录在仓库根下的 `contrib/e_means`，而 `faiss/contrib/e_means` 返回 404；信息流印的是后者，本次阅读已更正）。这个主张少见，因为它没有交换掉任何东西：
+「在大量规模与数据集上，e-means 在 1.2 到 3 个 epoch 就达到低于 Lloyd 25 个 epoch 的测试损失」——端到端测为 GPU 上对
+Flash-KMeans **10–45× 墙钟**、CPU 上对 FAISS **8–15×**。作者：Bessa、Mazaré、Szilvasy、Touvron、Picard、Douze、Jégou
+——后三位写了被击败的 FAISS 基线的相当一部分。意义超出数字本身：k-means 是向量索引、量化码本与基于聚类的检索过滤之下
+的承重原语，减少 epoch 会同时触及它们，且不需要新数据结构。要带上的告诫：比较是作者自己的 harness 对自己团队对前 SOTA
+的实现——对冲的是代码落进了 FAISS，所以基线可复现而不是被断言。
+
+**《What is malloc doing, anyway?》（benmandrew.com）** —— 一次对接口/内核缝隙的测量式讲解：**1,000 次 `malloc(16)`**
+在 `strace` 下只产生**两次 `brk` 系统调用**（一次得知 program break、一次把堆扩 **132 KiB**），「其余 999 次从那块已分配
+内存里取」；一次空系统调用按测得的价格是「**575 ns**」；后续一次输出显示 break 与 `printf` 相距 **23.4 TiB**——「约为该机
+15.6 GiB 内存的 1,530 倍。这段范围几乎全是未映射的，所以不占物理内存。」文章的方法就是教训：每个数字都是读者能重跑的
+代码的输出。
+
+**Zebkit（`ikey4u/zebkit`，LGPL-2.1，v0.2.0，135★）** 把 Blink + 全 JIT 分层的 V8 + PDFium + FFmpeg 作为一个库链进你自己的
+应用——没有 Chrome UI、没有 Node、没有 Electron 打包——跑在宿主自己的事件循环里（`zebkit_init()`、`zebkit_pump()`），画进
+你交给它的窗口：X11 窗口、`NSView` 或 `HWND`，带 C/Rust/Python/Go/JS 绑定。对 **Electron 45.2.1**（同 harness、同页面、
+5–11 次的中位数、Linux x86-64、日期 2026-11-06/07）：**171.2 / 59.4 MiB 发行体积** 对 260.5 / 87.1，冷启动 **2.3 s 对
+6.6 s**，空白页 **179 MB 对 250 MB**，DOM 与 JS 负载持平。值得读的是那个体裁通常会省略的 README 小节：「**Where Electron
+is ahead**：每页少一个进程；以及十个站点里有广告与视频决定的 YouTube 与 The Verge 两处内存」——zebkit 每页 **7** 个进程
+对 Electron 的 **6**，因为它「像 Chrome 一样」把存储单独沙箱化。135★ 项目的自测是关于作者工作负载的主张；把落败处
+写出来的主张，才是值得重跑的那一种。
+
+→ [[dev-tools]] [[fact-check]] [[edge-inference]] [[agent-stack]]
+
+来源：[e-means 项目页](https://e-means.github.io/) · [arXiv 2611.09501](https://arxiv.org/abs/2611.09501) ·
+[What is malloc doing, anyway?](https://benmandrew.com/articles/what-is-malloc-doing-anyway) ·
+[ikey4u/zebkit](https://github.com/ikey4u/zebkit)

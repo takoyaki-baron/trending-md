@@ -289,7 +289,7 @@ const CACHE_PATH = arg('cache') ?? 'agent/data/claim-unit-cache.json';
 // 5 MB of TEXT is ~7 MB on disk (JSON escapes newlines); 8 MB was an 11 MB file, bigger than the 9.9 MB
 // it was meant to bound.
 const CACHE_BYTES = Number(arg('cache-bytes') ?? 5_000_000);
-const CHECKS = new Set((arg('check') ?? 'issues,cvss,status,date,temporal,cwe,field,range,rangeabsent,affected,referent,idrange,repo,count,ratio,bundle,quotation,paper').split(',').map((s) => s.trim()));
+const CHECKS = new Set((arg('check') ?? 'issues,cvss,status,date,temporal,cwe,field,range,rangeabsent,affected,referent,idrange,repo,count,ratio,batch,bundle,quotation,paper').split(',').map((s) => s.trim()));
 
 const SELFTEST = has('selftest');
 const STATUS_WATCH = has('status-watch');
@@ -4300,9 +4300,17 @@ function quoteSpans(text) {
 
 /* One normalizer for BOTH sides. The page is a rendered HTML text or a raw README; the item is
  * Markdown. Whatever markup either carries is not a word, so it goes before the comparison. */
+/* A TAG has a NAME; a comparison operator does not. `<[^>]*>` applied to already-extracted text
+ * ate a **428-character** C snippet on benmandrew.com's malloc post (`< 1000 ; i ++ ) …` matched
+ * as one "tag" up to the next `>`), which deleted the very sentence item 16 quotes and reported a
+ * verbatim quotation as `quote-not-found` (sev 3) on 2026-11-10. That is the "deleting a tag TYPE
+ * rather than a rendering ROLE" defect one layer out — here the input was never HTML at all, so
+ * the `<` it deleted had no tag to be. Bounded to something tag-shaped, the same rule costs
+ * nothing on real markup and can no longer eat prose. */
+const TAG_RE = /<\/?[a-zA-Z][\w-]*(?:\s[^<>]{0,300})?\/?>/g;
 function normQuote(s) {
   return String(s)
-    .replace(/<[^>]*>/g, ' ')
+    .replace(TAG_RE, ' ')
     .replace(/\[([^\]]*)\]\([^)]*\)/g, '$1')   // a Markdown link is its label
     .replace(/[*`~]/g, '')                     // emphasis, code, strikethrough — `_` stays: snake_case is a word
     .replace(/[“”„«»]/g, '"')
@@ -4748,6 +4756,174 @@ if (has('commit-quote-census')) {
     console.log(`\n  resolved ${resolved}/${tried} from commits.atom — and an unresolved one is NOT absent: the feed holds 20 entries on the default branch only`);
   }
   process.exit(0);
+}
+
+// ── check: a BATCH count — "N CVE records" and "M of the N say …" ──────────────────────────
+/* Filed 2026-11-10 04:53 from the batch's own item 7, which shipped three wrong numbers under one
+ * true story: "102 FFmpeg CVE records", "96 of the 102 descriptions say through 9.0.2", "only 6
+ * name a fixed bound". NVD, re-read first-hand over the same UTC publication day, returns **121**
+ * records (all `disclosure@vulncheck.com`, all published 19:16:48–20:18:13Z), **114** of which say
+ * "through 9.0.2" and **7** of which carry "before 8.1.3 and 9.x before 9.0.2".
+ *
+ * No existing arm could see any of them, and not by accident: every other check binds ONE number
+ * to ONE record. `count` greps a page beside a noun, `ratio` recomputes a table's rows, `cvss`
+ * matches a score to a metric. A count over a SET of records published on a day is a different
+ * unit — it has no page, no table and no single record to agree with — so it was the one claim
+ * class in this file with no reader at all. A batch error is also the cheapest kind to make and
+ * the most consequential: the number is the whole story's magnitude.
+ *
+ * The design is one anchored question. An item that says "N records" almost always cites one of
+ * them; that id gives both the DAY (its own `published`) and the CNA (`sourceIdentifier`), so the
+ * batch is "records this CNA published that day". The only hard part is the SEARCH TERM, and the
+ * guard is that the term must RETRIEVE the cited id — a keyword that does not find the record it
+ * was derived from is the wrong keyword, and a guess that provably works is a measurement.
+ */
+const BATCH_TOTAL_RE = /\b(\d{1,4})\s+(?:[\w.+-]+\s+){0,3}?CVE records?\b/;
+/* "96 of the 102 descriptions say "through 9.0.2"" — the sub-count is a claim about the batch's own
+ * DESCRIPTIONS, so the phrase is checked against each record's `descriptions[].value`, not a page. */
+const BATCH_SUB_RE = /\b(\d{1,4})\s+of\s+the\s+(\d{1,4})\s+(?:[\w.-]+\s+){0,3}?(?:say|says|read|reads|name|names|carry|carries)\s+["“]([^"”]{3,80})["”]/;
+const BATCH_GENERIC = new Set(['cve', 'cves', 'nvd', 'security', 'vulnerability', 'vulnerabilities', 'records', 'record', 'the', 'and', 'for', 'new', 'one', 'day', 'them', 'its', 'with', 'from', 'list', 'batch', 'linux', 'windows', 'macos', 'release', 'users', 'code', 'data', 'model', 'open', 'source']);
+
+/** Pure: what this item claims about a record SET. Split out so `--selftest` pins it offline. */
+function batchClaims(plain) {
+  const out = [];
+  const tot = plain.match(BATCH_TOTAL_RE);
+  // A batch is a set: a "3 CVE records" claim has no distribution to be wrong about, and firing on
+  // it would spend a network call to confirm arithmetic nobody miscounts.
+  if (tot && Number(tot[1]) >= 20) out.push({ kind: 'total', n: Number(tot[1]), phrase: tot[0].trim() });
+  const sub = plain.match(BATCH_SUB_RE);
+  if (sub) {
+    /* The clause is "96 of the 102 DESCRIPTIONS say" — the noun sits after the stated total and
+       before the verb. Reading the tokens positionally is what made the first run print
+       "96 of the 102 102 descriptions say say" into a JSON `claim`, which is a reader-facing
+       string: a checker whose own output is garbled teaches the next pass to skim it. */
+    const noun = sub[0].replace(/["“].*$/, '').trim().split(/\s+/).slice(4).join(' ')
+      .replace(/\s*\b(?:say|says|read|reads|name|names|carry|carries)$/i, '').trim() || 'records';
+    out.push({ kind: 'sub', m: Number(sub[1]), of: Number(sub[2]), noun, quote: sub[3].trim(), phrase: sub[0].trim() });
+  }
+  return out;
+}
+
+/** Pure: the item's own words, ranked as search terms. The title's leading capitalised token is the
+ *  subject by convention, and a specific tag (`ffmpeg`) is the same word without the casing. */
+function batchKeywords(it) {
+  const tags = [...(it.body ?? '').matchAll(/`([a-z0-9][\w.+-]{2,})`/g)].map((m) => m[1]);
+  const title = [...(it.title ?? '').matchAll(/\b([A-Z][\w.+-]{2,})\b/g)].map((m) => m[1]);
+  const seen = new Set();
+  const out = [];
+  for (const k of [...title, ...tags]) {
+    const low = k.toLowerCase();
+    if (BATCH_GENERIC.has(low) || seen.has(low)) continue;
+    seen.add(low);
+    out.push(k);
+  }
+  return out;
+}
+
+/** Pure: the verdicts, given the measured set. Kept apart from the fetch so both directions of the
+ *  calibration (pre-correction finds, post-correction silent) run without a network. */
+function batchVerdicts(itemN, claims, records, { keyword, day, cited, assigner }) {
+  const out = [];
+  const total = claims.find((c) => c.kind === 'total');
+  if (total) {
+    const ok = records.length === total.n;
+    out.push({
+      check: 'batch', item: itemN, verdict: ok ? 'batch-count-ok' : 'batch-count-mismatch',
+      claim: `${total.n} records (${keyword}, ${day})`,
+      detail: ok
+        ? `${records.length} records from ${assigner} published ${day} — the claim's own set, retrieved by its own cited id ${cited}`
+        : `claimed ${total.n}, measured ${records.length} (${records.length > total.n ? 'under-count' : 'over-count'}) from ${assigner} on ${day} via keyword "${keyword}"; the set is the one that retrieves the item's own cited ${cited}`,
+    });
+  }
+  const sub = claims.find((c) => c.kind === 'sub');
+  if (sub) {
+    // the sub-count is stated against the item's OWN total, so it is measured against the same set
+    const n = records.filter((r) => (r.desc ?? '').toLowerCase().includes(sub.quote.toLowerCase())).length;
+    const ok = n === sub.m;
+    out.push({
+      check: 'batch', item: itemN, verdict: ok ? 'batch-subcount-ok' : 'batch-subcount-mismatch',
+      claim: `${sub.m} of the ${sub.of} ${sub.noun} say "${sub.quote}"`,
+      detail: ok
+        ? `${n} of ${records.length} descriptions carry the phrase`
+        : `claimed ${sub.m} of ${sub.of}; measured ${n} of ${records.length} descriptions carry "${sub.quote}"`,
+    });
+  }
+  return out;
+}
+
+/** Pure: the batch is a WRITER's set on a day, not a topic's. A keyword retrieves every record
+ *  that mentions the product, including other CNAs' records that merely reference it — counting
+ *  those would turn one CNA's batch count into an industry one, which is the class of error this
+ *  file keeps finding in other people's numbers. */
+function batchSet(records, rec, day) {
+  return records.filter((r) => r.assigner === rec.assigner && (r.published ?? '').slice(0, 10) === day);
+}
+
+async function checkBatch(it, nvd) {
+  const out = [];
+  const claims = batchClaims(it.plain);
+  if (!claims.length) return out;
+  // The anchor: without a cited id there is no day and no CNA, and a keyword alone retrieves a
+  // topic rather than a set. Silence is right — this is not a claim the check can read.
+  const cited = (it.cvesAll ?? it.cves ?? []).find((id) => nvd.has(id));
+  if (!cited) return out;
+  const rec = nvd.get(cited);
+  const day = (rec.published ?? '').slice(0, 10);
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(day)) return out;
+  const refs = [...new Set(it.cvesAll ?? it.cves ?? [])];
+  let records = null;
+  let keyword = null;
+  for (const kw of batchKeywords(it).slice(0, 2)) {
+    const got = await nvdDay(kw, day);
+    if (!got) continue;
+    // THE GUARD: a keyword is right only if it RETRIEVES the record it was derived from.
+    if (!got.some((r) => refs.includes(r.id))) continue;
+    records = got;
+    keyword = kw;
+    break;
+  }
+  if (!records) {
+    out.push({
+      check: 'batch', item: it.n, verdict: 'batch-unread',
+      claim: claims[0].phrase,
+      detail: `no search term derived from the item (${batchKeywords(it).slice(0, 2).join(', ') || 'none'}) retrieved its own cited ${cited} on ${day} — the set was not read, so nothing is claimed about the count`,
+    });
+    return out;
+  }
+  // Same CNA, same day: the batch is a writer's set, not everyone's — a keyword can retrieve other
+  // CNAs' records that merely mention the product, and counting those would turn a CNA's batch
+  // into an industry one.
+  const set = batchSet(records, rec, day);
+  return batchVerdicts(it.n, claims, set, { keyword, day, cited, assigner: rec.assigner });
+}
+
+/** One NVD call per (keyword, day). Cached 6 h like the other structured reads; a set over 2,000
+ *  records is refused rather than cached, because that is a topic search and not a batch. */
+async function nvdDay(keyword, day) {
+  const key = `nvdday:${day}:${keyword.toLowerCase()}`;
+  const hit = cache[key];
+  if (hit && Date.now() - Date.parse(hit.fetched_at ?? 0) < CACHE_TTL_MS) return hit.error ? null : hit.records;
+  const base = process.env.CLAIM_UNIT_NVD_BASE || 'https://services.nvd.nist.gov/rest/json/cves/2.0';
+  let j;
+  try {
+    const url = `${base}?keywordSearch=${encodeURIComponent(keyword)}&pubStartDate=${day}T00:00:00.000&pubEndDate=${day}T23:59:59.999&resultsPerPage=2000`;
+    j = JSON.parse(execFileSync('curl', ['-s', '--max-time', '60', url], { encoding: 'utf8', maxBuffer: 64 * 1024 * 1024 }));
+  } catch (e) {
+    cache[key] = { fetched_at: new Date().toISOString(), error: String(e.message ?? e).slice(0, 80) };
+    return null;
+  }
+  const records = (j.vulnerabilities ?? []).map((v) => ({
+    id: v.cve.id,
+    assigner: v.cve.sourceIdentifier,
+    published: v.cve.published,
+    // the phrase check needs the text, and 400 chars covers a CNA sentence's leading clause while
+    // keeping a 121-record day at ~50 KB in the committed cache
+    desc: (v.cve.descriptions ?? []).filter((d) => d.lang === 'en').map((d) => d.value).join(' ').slice(0, 400),
+  }));
+  if (records.length > 2000) { cache[key] = { fetched_at: new Date().toISOString(), error: 'set-too-large' }; return null; }
+  cache[key] = { fetched_at: new Date().toISOString(), records };
+  nvdCalls += 1;
+  return records;
 }
 
 // ── selftest (pure functions only; no network) ──────────────────────────────────────────────
@@ -5821,6 +5997,53 @@ if (SELFTEST) {
   t('star quotes: a bare total still reads',
     starQuotesOf('the repo holds 64,781 stars'), [64781]);
 
+  // 2026-11-10 — a tag stripper on plain text deletes prose: a C snippet `< 1000 ; i ++ ) …` is
+  // not a tag, and eating it made a verbatim quotation read as invented (item 16)
+  t('normQuote keeps a C comparison', normQuote('for (i < 1000; i++) { if (a > b) }').includes('< 1000'), true);
+  t('normQuote still strips real markup', normQuote('<p class="x">the other 999</p>').trim(), 'the other 999');
+  t('normQuote strips a closing tag', normQuote('end<span>s</span> here'), 'end s here');
+
+  /* 2026-11-10 04:53 — the batch arm, calibrated both ways on its own filing case. Item 7 claimed
+     102 records / 96 of 102 / 6 fixed bounds where NVD returned 121 / 114 / 7. */
+  const bItem = mk(
+    'FFmpeg gets 102 CVE records in one day — and 96 of them say the newest release is still affected',
+    'VulnCheck published **102 FFmpeg CVE records on 2026-11-09**, every one still in `Received` status. '
+    + 'The distribution matters more: **96 of the 102 descriptions say "through 9.0.2"**, while only **6** name a fixed bound.\n'
+    + '- **Tags:** `security` `cve` `ffmpeg`',
+  );
+  t('batch: the total and the sub-count are both read',
+    batchClaims(bItem.plain).map((c) => [c.kind, c.kind === 'total' ? c.n : c.m, c.kind === 'sub' ? c.of : null, c.kind === 'sub' ? c.quote : null]),
+    [['total', 102, null, null], ['sub', 96, 102, 'through 9.0.2']]);
+  // the noun is what the sub-count is ABOUT, and the claim string is read by a human: "102 102
+  // descriptions say say" is a garbled reader, not a cosmetic bug
+  t('batch: the sub-count names its noun once', batchClaims(bItem.plain).find((c) => c.kind === 'sub').noun, 'descriptions');
+  t('batch: a handful is not a batch', batchClaims('it fixes 3 CVE records'), []);
+  t('batch: a sub-count with no quoted phrase is not a sub-count',
+    batchClaims('**96 of the 102 descriptions** name the release'), []);
+  // the keyword guard is that a term must be able to FIND the item's own record; the ranking is
+  // title-first because the title's leading capitalised token is the subject by convention
+  t('batch: keywords rank the subject first, drop CVE/security and dedupe the tag against the title',
+    batchKeywords(bItem), ['FFmpeg']);
+  const cited = { assigner: 'disclosure@vulncheck.com', published: '2026-11-09T19:17:03.883' };
+  const day121 = [
+    ...Array.from({ length: 114 }, (_, i) => ({ id: `CVE-2026-1250${i}`, assigner: 'disclosure@vulncheck.com', published: cited.published, desc: 'FFmpeg through 9.0.2 contains a heap buffer overflow' })),
+    ...Array.from({ length: 7 }, (_, i) => ({ id: `CVE-2026-1251${i}`, assigner: 'disclosure@vulncheck.com', published: cited.published, desc: 'FFmpeg before 8.1.3 and 9.x before 9.0.2 contains a NULL pointer dereference' })),
+  ];
+  t('batch: the shipped numbers are two mismatches',
+    batchVerdicts(7, batchClaims(bItem.plain), day121, { keyword: 'FFmpeg', day: '2026-11-09', cited: 'CVE-2026-125250', assigner: cited.assigner }).map((v) => v.verdict),
+    ['batch-count-mismatch', 'batch-subcount-mismatch']);
+  const fixed = mk('FFmpeg gets 121 CVE records in one day', 'VulnCheck published **121 FFmpeg CVE records on 2026-11-09**. **114 of the 121 descriptions say "through 9.0.2"**.');
+  t('batch: the corrected numbers pass',
+    batchVerdicts(7, batchClaims(fixed.plain), day121, { keyword: 'FFmpeg', day: '2026-11-09', cited: 'CVE-2026-125250', assigner: cited.assigner }).map((v) => v.verdict),
+    ['batch-count-ok', 'batch-subcount-ok']);
+  // a keyword can retrieve other CNAs' records that merely MENTION the product — counting those
+  // would turn one writer's batch into an industry one, so the set is filtered by assigner
+  t('batch: another CNA mentioning the product is not in the set',
+    batchSet(day121.map((r) => (r.id.endsWith('50') ? { ...r, assigner: 'security@other.example' } : r)), cited, '2026-11-09').length, 120);
+  // and a record published on a different day is not in it either
+  t('batch: a neighbouring publication day is not in the set',
+    batchSet(day121.map((r) => (r.id.endsWith('50') ? { ...r, published: '2026-11-08T23:59:00.000' } : r)), cited, '2026-11-09').length, 120);
+
   for (const c of cases) console.log(`  ${c.pass ? '✓' : '✗'} ${c.name}${c.pass ? '' : ` — got ${JSON.stringify(c.got)}, want ${JSON.stringify(c.want)}`}`);
   const ok = cases.filter((c) => c.pass).length;
   console.log(`selftest ${ok}/${cases.length}`);
@@ -5856,7 +6079,7 @@ function pullCovers(pull, id) {
  * alone without it, the check said "NVD re-serves no metric" about a record NVD re-serves four of.
  * The statement was about the pull, not the registry, which is the "unread is not absent" defect
  * wearing a different hat (fixed 2026-11-02 12:34, while calibrating the stopping-point check). */
-if (!NO_NET && (CHECKS.has('cvss') || CHECKS.has('temporal') || CHECKS.has('status') || CHECKS.has('cwe') || CHECKS.has('field') || CHECKS.has('range') || CHECKS.has('rangeabsent') || CHECKS.has('referent') || STATUS_WATCH || CHECKS.has('quotation'))) {
+if (!NO_NET && (CHECKS.has('cvss') || CHECKS.has('temporal') || CHECKS.has('status') || CHECKS.has('cwe') || CHECKS.has('field') || CHECKS.has('range') || CHECKS.has('rangeabsent') || CHECKS.has('referent') || CHECKS.has('batch') || STATUS_WATCH || CHECKS.has('quotation'))) {
   const cves = [...new Set([...parsed.flatMap((f) => f.items.flatMap((it) => it.cvesAll ?? it.cves)), ...EXTRA_IDS])];
   const CHUNK = 25;
   for (let i = 0; i < cves.length; i += CHUNK) {
@@ -5949,6 +6172,9 @@ for (const { path: p, items } of parsed) {
   if (!NO_NET && CHECKS.has('repo')) for (const it of items) findings.push(...checkRepo(it, budget, ageBudget));
   if (!NO_NET && CHECKS.has('count')) for (const it of items) findings.push(...await checkCount(it));
   if (!NO_NET && CHECKS.has('ratio')) for (const it of items) findings.push(...await checkRatio(it));
+  /* A batch count is read against the DAY it names — the day comes from the item's own cited record,
+   * so this arm rides the same NVD pull the cvss/status checks already pay for. */
+  if (!NO_NET && CHECKS.has('batch')) for (const it of items) findings.push(...await checkBatch(it, nvd));
   // a dashed CVE range is arithmetic on identifiers, so it needs no network and runs under --no-net
   if (CHECKS.has('idrange')) for (const it of items) findings.push(...checkIdRange(it));
   // the bundle check is local-only (it reads the path the item names), so it runs even under --no-net
@@ -5997,7 +6223,7 @@ try {
   writeFileSync(CACHE_PATH, JSON.stringify(cache, null, 1));
 } catch { /* cache is best-effort */ }
 
-const SEVERITY = { ok: 0, 'ok-cited-page': 0, 'no-cve-named': 1, 'no-record': 1, 'slot-quoted': 1, 'counted-by-author': 0, 'number-other-noun': 1, 'temporal-stopping-point': 1, 'temporal-disclosed': 0, 'score-stopping-point': 1, 'cna-only-score': 1, 'star-drift': 2, 'star-dated': 1, 'star-surge': 1, 'ok-history': 0, 'history-older-than-record': 2, 'history-unreadable': 1, stale: 2, archived: 2, 'stale-disclosed': 0, 'archived-disclosed': 0, differs: 2, absent: 2, 'unsplit-issue-count': 3, 'compound-lags-parts': 3, 'version-swapped': 3, 'version-absent': 3, 'score-not-reproducible': 2, 'score-mismatch': 3, 'wrong-subject': 3, 'absence-contradicted': 3, 'status-stale': 2, 'status-dated': 1, 'date-local-shift': 2, 'date-mismatch': 2, 'cwe-absent-but-recorded': 3, 'cwe-mismatch': 3, 'cwe-unreadable': 1, 'field-present': 3, 'field-present-empty': 2, 'field-empty-contradicted': 2, 'field-empty-since-moved': 1, 'field-absent-not-empty': 1, 'field-dated': 0, 'field-unknown-name': 0, 'field-unreadable': 0, 'span-empty': 2, 'cve-range-span-mismatch': 2, 'cve-range-disclosed': 0, 'ok-range': 0, 'range-ambiguous': 0, 'range-cross-year': 0, 'range-inverted': 2, 'span-inverted': 3, 'span-unverifiable': 0, 'ok-span': 0, 'range-absent-but-served': 3, 'range-only-in-cna': 1, 'range-absent-confirmed': 0, 'range-absent-products-only': 0, 'ghsa-absent-confirmed': 0, 'ghsa-range-served': 3, 'ghsa-not-in-db': 0, 'unreadable-subject': 0, 'advisory-subject-ambiguous': 0, 'repo-advisory-cells': 0, 'affected-count-ok': 0, 'affected-count-mismatch': 3, 'affected-package-ok': 0, 'affected-package-absent': 3, 'affected-ambiguous': 0, 'range-unread': 0, 'range-in-references': 1, 'boundary-named-no-artifact': 0, 'vector-product-mismatch': 1, 'product-mismatch-disclosed': 0, 'schema-absent': 0, 'status-no-record': 1, 'status-no-cve': 1, 'advisory-unreadable': 1, 'advisory-repo-only': 0, unreadable: 1, 'artifact-unreadable': 1, 'nvd-unavailable': 1, 'ratio-row-count': 3, 'ok-ratio': 0, 'ok-delimited': 0, 'not-a-repo': 0, 'repo-absent-asserted': 0, 'ok-table-rows': 0, 'table-columns-unresolved': 0, 'bundle-ok': 0, 'bundle-lines-named': 0, 'bundle-unavailable': 0, 'bundle-line-count': 3, 'bundle-total-mismatch': 2, 'quote-not-found': 3, 'quote-paraphrase': 2, 'quote-short': 1, 'quote-not-read': 0, 'paper-date-imprecise': 1, 'paper-date-mismatch': 2, 'paper-date-revision': 1, 'paper-date-unread': 0 };
+const SEVERITY = { ok: 0, 'ok-cited-page': 0, 'no-cve-named': 1, 'no-record': 1, 'slot-quoted': 1, 'counted-by-author': 0, 'number-other-noun': 1, 'temporal-stopping-point': 1, 'temporal-disclosed': 0, 'score-stopping-point': 1, 'cna-only-score': 1, 'star-drift': 2, 'star-dated': 1, 'star-surge': 1, 'ok-history': 0, 'history-older-than-record': 2, 'history-unreadable': 1, stale: 2, archived: 2, 'stale-disclosed': 0, 'archived-disclosed': 0, differs: 2, absent: 2, 'unsplit-issue-count': 3, 'compound-lags-parts': 3, 'version-swapped': 3, 'version-absent': 3, 'score-not-reproducible': 2, 'score-mismatch': 3, 'wrong-subject': 3, 'absence-contradicted': 3, 'status-stale': 2, 'status-dated': 1, 'date-local-shift': 2, 'date-mismatch': 2, 'cwe-absent-but-recorded': 3, 'cwe-mismatch': 3, 'cwe-unreadable': 1, 'field-present': 3, 'field-present-empty': 2, 'field-empty-contradicted': 2, 'field-empty-since-moved': 1, 'field-absent-not-empty': 1, 'field-dated': 0, 'field-unknown-name': 0, 'field-unreadable': 0, 'span-empty': 2, 'cve-range-span-mismatch': 2, 'cve-range-disclosed': 0, 'ok-range': 0, 'range-ambiguous': 0, 'range-cross-year': 0, 'range-inverted': 2, 'span-inverted': 3, 'span-unverifiable': 0, 'ok-span': 0, 'range-absent-but-served': 3, 'range-only-in-cna': 1, 'range-absent-confirmed': 0, 'range-absent-products-only': 0, 'ghsa-absent-confirmed': 0, 'ghsa-range-served': 3, 'ghsa-not-in-db': 0, 'unreadable-subject': 0, 'advisory-subject-ambiguous': 0, 'repo-advisory-cells': 0, 'affected-count-ok': 0, 'affected-count-mismatch': 3, 'affected-package-ok': 0, 'affected-package-absent': 3, 'affected-ambiguous': 0, 'range-unread': 0, 'range-in-references': 1, 'boundary-named-no-artifact': 0, 'vector-product-mismatch': 1, 'product-mismatch-disclosed': 0, 'schema-absent': 0, 'status-no-record': 1, 'status-no-cve': 1, 'advisory-unreadable': 1, 'advisory-repo-only': 0, unreadable: 1, 'artifact-unreadable': 1, 'nvd-unavailable': 1, 'ratio-row-count': 3, 'ok-ratio': 0, 'ok-delimited': 0, 'not-a-repo': 0, 'repo-absent-asserted': 0, 'ok-table-rows': 0, 'table-columns-unresolved': 0, 'bundle-ok': 0, 'bundle-lines-named': 0, 'bundle-unavailable': 0, 'bundle-line-count': 3, 'bundle-total-mismatch': 2, 'quote-not-found': 3, 'quote-paraphrase': 2, 'quote-short': 1, 'quote-not-read': 0, 'paper-date-imprecise': 1, 'paper-date-mismatch': 2, 'paper-date-revision': 1, 'paper-date-unread': 0, 'batch-count-ok': 0, 'batch-count-mismatch': 3, 'batch-subcount-ok': 0, 'batch-subcount-mismatch': 3, 'batch-unread': 0 };
 const REAL = (f) => (SEVERITY[f.verdict] ?? 1) >= 2;
 
 /* `status_watch` rides the findings file so the act pass sees a backwards move without re-reading

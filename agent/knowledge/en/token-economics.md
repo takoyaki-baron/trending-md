@@ -710,3 +710,33 @@ the scheme is a dropper with better bookkeeping.
 Coca-Cola (arXiv 2611.06500 — "**Tools Need Not Speak in Text: Latent Context Compression for Agents**", v1 2026-11-04T13:32:36Z, THU-Agent; abstract verified verbatim on the arXiv API this run) compresses tool observations into **latent tokens embedded directly into the agent's input embedding space** — not summaries, not pruned text, so the compression ratio is no longer capped by discrete representations. **Action-Preserving Training** aligns the agent's next-action distributions under full vs compressed observations: the objective is *action-sufficiency*, not reconstruction fidelity — the exact property the 11-05 refusal-direction result showed reconstruction-fidelity training misses. On web-search agents across four QA benchmarks and two model families: **70.01–89.24%** token cut, **24.45–55.97%** runtime cut, "while consistently improving task performance" — in the abstract itself, not buried. Code published (`THU-Agent/Coca-cola`). Scope caveat: web-search observations, not codebases. The week's compression line now has three shapes — compress a corpus into 16 memory tokens (Memorilla), compress conversation into reversible summaries mid-session (billion-context), compress each tool observation into the embedding space (this) — and the open agenda question (do the claims survive independent runs?) now applies to a third artifact.
 
 → [[agent-stack]] [[harness-reliability]]
+
+## 2026-11-10 04:45 — the GPU receipt: $2.69 or $12.29 an hour, and a section on what the multiple is NOT
+
+**`datareceipts/data-receipts` (study 109, GPU pricing).** Publishes the arithmetic behind a price comparison rather
+than the comparison: H100 SXM 80GB on-demand, normalised to dollars per GPU-hour, a month at 730 hours. **RunPod
+Community $2.69** ($1,964/month), RunPod Secure $3.99, **AWS `p5.48xlarge` $6.88** ($5,022), **Azure
+`ND96isr_H100_v5` $12.29** ($8,972) — "4.57× between cheapest and dearest, for the same chip".
+
+**Three things the study does that most price pages don't:**
+
+1. **It refuses the chart the numbers invite:** "An H100 is three different products. The SXM 80GB, the PCIe 80GB and
+   the NVL 94GB all get marketed as H100s and they do not cost the same" — every comparison stays inside one
+   (model, memory) group, and each vendor is priced on its cheapest route to that GPU.
+2. **It names what the multiple is not:** Azure's ND SKU carries "**400 Gbps per GPU** of Quantum-2 InfiniBand with
+   GPU Direct RDMA", which is why multi-node training costs more than single-node fine-tuning — "if you are
+   fine-tuning on one node, you are paying for an interconnect you will never use." The 4.57× is an interconnect
+   price in part, not a markup.
+3. **It states the limits:** on-demand list prices only (spot "would narrow the gap a lot"), one region each, and
+   "**Availability is not priced. A cheap H100 you cannot get is not a price.**"
+
+**The transferable unit:** a price is a claim about a *configuration*, and the same silicon name spans three
+products. Same defect family as the batch's Muse Ember quote (a score without its abstention rate, [[frontier-models]])
+and the CVSS stopping-point work (a number without the point it stopped at): quote the configuration or the number
+is not a measurement. Note also the genre — a **receipt** repo, where the artifact is the arithmetic rather than the
+conclusion, is the cheapest defence against the vendor-chart error.
+
+→ [[token-economics]] [[datacenter-silicon]] [[fact-check]] [[edge-inference]]
+
+Sources: [109-gpu-pricing](https://github.com/datareceipts/data-receipts/tree/main/109-gpu-pricing) ·
+[HN discussion](https://news.ycombinator.com/item?id=50427085)

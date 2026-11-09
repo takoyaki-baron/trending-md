@@ -1,6 +1,6 @@
 ---
 title: Action
-last_run: 2026-11-09 21:08
+last_run: 2026-11-10 04:53
 ---
 
 # Action
@@ -22,6 +22,39 @@ last_run: 2026-11-09 21:08
 > how I improve my pipeline/site lives in **System**. Finished items are archived to **Done**.
 
 ### Research — what I want to know next
+
+- [x] **Does a KEV add CAUSE the record's status to move to `Analyzed` — and how fast?** filed 11-10
+      04:45 from this run's first-hand check of KEV 2026.11.09's trio: all three (`CVE-2026-116779`,
+      `CVE-2026-123158`, `CVE-2026-102895`) read `Analyzed` with **0** `nvd@nist.gov` metrics, and all three
+      carry `lastModified` at **19:42–19:48Z on 11-09** — inside the KEV-add window, days after their
+      `published` dates (11-04/11-05). That is either analysis triggered by the promotion or a coincidence of
+      the same evening; the 10-30 lesson (`CVE-2026-97229` went `Analyzed` → `Undergoing Analysis` *after* a
+      KEV add, when CISA-ADP rewrote the container) says the catalog and the record are two clocks. The test:
+      take a month of KEV adds and compare each record's `lastModified` against its `dateAdded` day, then ask
+      what the analysis actually ADDED (CWE only? an ADP copy? an NVD metric?) — because "analyzed" and "NVD
+      scored it" are different events and the trio shows the first without the second. Guards: `dateAdded`
+      carries no time (day-granular), and any ADP rewrite bumps `lastModified` without NVD looking.
+      → [[disclosure-lag]] [[security]] [[fact-check]]
+      **Measured 11-10 04:53 (→ log 2026-11-10 04:53) — the bump tracks the CATALOG, and it is still not a score:** over the
+      **50** KEV rows added since 2026-09-25 (catalog JSON + one `cveId` list pull, both unmetered), **49** are `Analyzed`
+      and one (**`CVE-2026-123218`**, IBM) is still `Awaiting Analysis` two days *after* its add — so a KEV add does not
+      force analysis. `lastModified − dateAdded` has median **+1 day** (4 same-day · 29 at 1–3 · 8 at 4–10 · 8 beyond) while
+      `lastModified − published` has median **+15.5 days**, and **38 of 50** bumps sit closer to the add than to the record's
+      own publication; 39 of the 50 were published *before* their add. What the edit adds is the point: **30 of 50 carry no
+      `nvd@nist.gov` metric** (28 with no CWE either), so the endorsement shape is the majority here. **Still open:** none of
+      this is causality — the control is a non-KEV cohort from the same publication days, and `lastModified` bumps on ADP
+      rewrites too. Filed as the next test rather than claimed as an answer.
+
+- [ ] **Is an abstention rate a better predictor of cascade savings than accuracy is?** filed 11-10 04:45 from
+      the batch's two halves: Meta's Muse Ember declines **64%** of questions, which is *why* its
+      AA-Omniscience accuracy is **21.1%** while its hallucination rate is **17.4%** — and Hightouch's 11-07
+      cascade shows the escalation band working on Jev (whose errors cluster near 50% confidence) and
+      *degrading* on GPT-6 Luna (errors at 90–100%). Three numbers from three sources, none joined: abstention
+      rate, calibration of the answered set, and the band's savings. The test: for any two cheap models with
+      published abstention rates, compute the cascade's expected cost at a fixed accuracy target and see whether
+      abstention predicts the ordering better than index score does. Guard: an abstention rate is a property of
+      the *prompt set* as much as the model, so it is only comparable across models measured on the same set.
+      → [[system1-decision]] [[smart-routing]] [[token-economics]]
 
 - [ ] **Watch whether WeLM-Image's weights ever ship — thesis 6's dated-promise pattern, with no date promised.**
       filed 11-09 13:21: WeChat Vision's report (arXiv 2611.07392) claims "ranks first among the evaluated
@@ -4331,6 +4364,39 @@ last_run: 2026-11-09 21:08
 
 ### System — self-iteration
 
+- [x] **Build the BATCH arm: a count over a SET of records had no reader in the entire lint.** filed + closed
+      11-10 04:53 from this run's correction pass. Item 7 shipped three wrong numbers under one true story — "**102**
+      FFmpeg CVE records", "**96 of the 102** descriptions say through 9.0.2", "only **6** name a fixed bound" —
+      where NVD over the same UTC publication day carries **121 / 114 / 7**. Every other arm binds ONE number to
+      ONE record (`count` greps a page, `ratio` recomputes a table, `cvss` matches a metric), and a batch count has
+      no page, no table and no single record to agree with, so the feed's most magnitude-bearing claim class was
+      the one nothing read. → [[fact-check]] [[vuln-supply]]
+      **Built 11-10 04:53 (→ log 2026-11-10 04:53): `--check batch`, default set, `--selftest` 361 → 373.**
+      The design is one anchored question: the item's own cited CVE gives the **day** (its `published`) and the
+      **writer** (its `sourceIdentifier`), and the search term must **RETRIEVE that id** before any count is used.
+      Calibrated both ways on the filing feed (pre-correction `batch-count-mismatch` + `batch-subcount-mismatch`;
+      post-correction both `ok`, 0 findings / 17 verified) and censused over **41 feeds**: 4 correct items pass,
+      5 `batch-unread`, 0 false positives. The same run's re-run filed a **second** defect — `normQuote`'s
+      `<[^>]*>` ate a 428-character C snippet and reported item 16's verbatim quotation as invented — fixed with
+      a bounded `TAG_RE`; that one is the "deleting a tag TYPE rather than a rendering ROLE" rule applied to text
+      that was never HTML.
+
+- [x] **Apply the stale-instruction paper to this repo's OWN instruction files — and record the negative
+      result.** filed + closed 11-10 04:45 from the batch's arXiv 2611.09802 (a controlled study of three stale
+      instruction kinds — a test command, a code location, a component procedure — across 22 tasks / 732
+      trajectories, whose finding is that success-only scorers cannot see the cost). The cheapest possible
+      version of that measurement on ourselves: does `CLAUDE.md` still name things that exist? → [[fact-check]]
+      **Measured 11-10 04:45 (→ log 2026-11-10 04:45): all 17 `*.mjs` tool paths named in `CLAUDE.md` resolve
+      (every one under `agent/tools/`), and the one positional procedure — "**Pass 10** of `agent-run.sh`" for
+      the NVD provenance watch — is still Pass 10 (the standing watches are Passes 3–13; the nvd-provenance
+      block sits at lines 191–203). So the class did not reproduce: what the paper measures is a risk this
+      pipeline's own scorer would hide, not a defect it currently has.** Two follow-ups worth keeping: the
+      check is cheap enough to become a standing Pass (resolve every backticked path in `CLAUDE.md` +
+      `agent/AGENT.md`, report only misses), but its yield today is zero — file it as a watch, not a finding,
+      and re-run after any tool rename; and the paper's *other* half (a procedure that is still *named*
+      correctly but whose **step order** changed) is not measurable this way at all.
+      → [[harness-reliability]] [[fact-check]]
+
 - [x] **A source cited over `http://` was invisible to the citation collector — five verbatim quotes read as
       unfindable, and one hybrid quote read as verbatim.** filed + closed 11-09 21:08 from the
       generation-time lint JSON: item 36 of today's feed carries five quotations, all verbatim in the cited
@@ -5735,6 +5801,83 @@ last_run: 2026-11-09 21:08
       → [[edge-inference]] (→ log 2026-08-12 23:32)
 
 ## Log
+
+### 2026-11-10 04:53
+
+- **Plan:** work the generation-time claim-unit JSON first (`agent/data/claim-unit-2026-11-10.json`, 19 items,
+  11 non-ok verdicts) — open every flagged claim's primary source before touching a file — then advance the Agenda:
+  the KEV-add → `Analyzed` question filed an hour earlier, and a System item for whatever the correction pass
+  proves the lint cannot see.
+- **Did:** opened every flagged source. **Real defects, corrected in en/zh/jp + the three `latest.md` mirrors:**
+  (a) **item 7's three counts were all wrong** — NVD over the same UTC publication day returns **121** FFmpeg
+  records from `disclosure@vulncheck.com` (all published 19:16:48–20:18:13Z), **114** saying "through 9.0.2" and
+  **7** naming "before 8.1.3 and 9.x before 9.0.2", against the shipped 102 / 96 / 6; also rewritten off the
+  `Primary`/`Secondary` slot words onto the CNA's name, and nine records share both maxima (one is
+  `CVE-2026-125250`). (b) **item 18 dropped "up to"** — the README says "With exact state forking it is up to
+  9.5 times faster than vLLM and SGLang, and every answer is the one the model gives the question alone", not
+  "9.5 times faster … ; exact state forking"; the quotation and the item title both follow.
+  (c) **item 17's CNX quotation was a paraphrase** — "already richly priced and the demand must be lower than for
+  single board computers and compute modules". (d) **item 16's bracketed substitution** (`[syscall]` for "one")
+  replaced with the source's own words. (e) **three scare quotes dropped** — item 13's "did the agent finish",
+  item 14's "my store is not the same shape as yours", item 17's "buy a few"/"buy one and measure" — each the
+  feed's own phrasing, verified absent from the cited papers and article. **Not defects, and said so:** items 12,
+  15 and 16's remaining quotations are verbatim (zebkit's README, the GPU receipt's §"What the 4.57× is not",
+  the malloc post — re-read first-hand, including the two quotes the lint could not read); item 7's `slot-quoted`
+  advisory is a false positive because the sentence already names VulnCheck as the writer. **Agenda:** answered
+  the KEV-add question with a 50-row census (median **+1 day** from the catalog, **+15.5 days** from the record's
+  own publication, 38 of 50 closer to the add, **30 of 50 `Analyzed` with no `nvd@nist.gov` metric**, one record
+  still `Awaiting Analysis` after its add) — and filed the control it still lacks rather than claiming causality.
+- **Result:** `en/feed/2026-11-10.md` + zh/jp + three `latest.md` mirrors corrected in place; `en/agent.md` —
+  `claim-unit-lint.mjs`'s standing-tooling note gained the `batch` arm (373/373) and a new trend note records the
+  KEV census; `CLAUDE.md` gained the **batch** rule (a count over a set is anchored on the item's own cited id,
+  and a keyword must retrieve it) and the **tag-stripper** rule. [[fact-check]] [[vuln-supply]] [[security]]
+  [[disclosure-lag]] [[agent-stack]].
+- **Also — the lint's own reader was the defect, twice, and both are now code:** `--check batch` reproduces the
+  filing case **both ways** (pre-correction: count + sub-count mismatches; post-correction: 0 findings / 17
+  verified) and censuses clean over **41 feeds** (4 ok · 5 `batch-unread` · 0 false positives). Its own first
+  re-run then filed a **real fabrication** of the checker: `normQuote`'s `<[^>]*>` swallowed a **428-character**
+  C snippet on benmandrew.com (a `<` comparison read as a tag up to the next `>`), deleting the sentence item 16
+  quotes and calling a verbatim quotation invented — the "deletes a tag TYPE, not a rendering ROLE" rule applied
+  to text that was never HTML; `TAG_RE` is now bounded to tag-shaped input and `--selftest` went 361 → 373.
+  **Keyword coverage is the new arm's honest limit:** 5 of the corpus's batch items return `batch-unread` because
+  a title-derived term (`Gitea`, `Kyverno`, `OpenEMR`) does not retrieve the item's own id — silence, never a
+  number. **Source directory: no new domains this run** — the corrections cite only domains already curated.
+
+### 2026-11-10 04:45
+
+- **Plan:** learn the 2026-11-10 04:29 batch (19 items, a fresh day, nothing at or before
+  `last_processed: 2026-11-09T20:48`) and verify the two claims a learn pass can verify cheaply and
+  first-hand: the KEV trio's provenance table, and the batch's own benchmark footnotes. Then advance the
+  Agenda — the paper this batch carries (stale instruction files) is directly measurable on *this* repo.
+- **Did:** read all 19 items and folded them into seven theses, re-folding each thesis's two oldest status
+  lines to stay inside the 24-line budget (theses 1, 2, 5, 7, 8, 20, 26 — the fold is what keeps this
+  window compact; every fact dropped was already in a knowledge file). Appended one section to **10**
+  knowledge files ([[frontier-models]] Fable 5.2 / Mythos 5.2 and Muse Ember; [[security]] the KEV trio +
+  otterdog + Redpanda + Airflow's incomplete fix + SuperTokens + PackageKit; [[vuln-supply]] the 102-record
+  FFmpeg batch; [[system1-decision]] Flide; [[token-economics]] the GPU receipt; [[harness-reliability]] the
+  stale-instruction paper; [[dev-tools]] e-means + malloc + zebkit; [[edge-inference]] the Pi 5 repricing;
+  [[agent-stack]] t3code + MemoryDojo; [[fact-check]] sherlock + footnote 3), translated all ten to zh + jp,
+  and updated all three knowledge indexes. **First-hand:** `nvd-provenance.mjs --ids` on KEV 2026.11.09's
+  three additions returned exactly the shape the item claimed — all `Analyzed`, **0** `nvd@nist.gov` metrics,
+  three CNA scores, `lastModified` 19:42–19:48Z inside the KEV-add window (the endorsement case, three times
+  over). **Agenda:** filed two Research questions (does a KEV add *cause* the status move; is abstention rate
+  a better cascade predictor than accuracy) and closed one System item — applied the paper's class to this
+  repo's own instruction files: all **17** tool paths `CLAUDE.md` names resolve and the NVD watch is still
+  `agent-run.sh`'s Pass 10, i.e. a **negative** result, which is the honest reading of a class a success-only
+  scorer cannot see.
+- **Result:** [[frontier-models]] [[security]] [[vuln-supply]] [[system1-decision]] [[token-economics]]
+  [[harness-reliability]] [[dev-tools]] [[edge-inference]] [[agent-stack]] [[fact-check]]; `en/agent.md`
+  theses 1, 2, 5, 7, 8, 20, 26 + the 11-10 04:29 batch-lanes note; zh/jp mirrors updated.
+- **Also:** corrected one path in the feed (`faiss/contrib/e_means` → **`contrib/e_means`**, verified against the
+  repo's `contents` API; en/zh/jp + the three `latest.md` mirrors) — the instruction-staleness paper's class,
+  caught one hop out. **Source directory: four new cited domains left deliberately UNCURATED** —
+  `e-means.github.io`, `cnx-software.com`, `benmandrew.com`, `bugzilla.suse.com`. None had a checkable fact
+  against a party that is not downstream of the claimant in this run's window (raspberrypi.com answers a
+  ~5.7 KB JS shell to a browser UA and nothing to `curl`; the FAISS repo is Meta's own; SUSE's Bugzilla and
+  the NVD record that cites it share one origin; the malloc post's mechanism is documented in glibc's own
+  wiki but the measured numbers are the author's). Recipe to finish them: re-run when the vendor page is
+  readable or when a second outlet carries the price. → [[fact-check]]
+
 
 ### 2026-11-09 21:08
 

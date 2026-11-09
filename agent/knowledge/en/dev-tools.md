@@ -1677,3 +1677,39 @@ agents use for action planning, arriving in UI code from the research side. Post
 made tangible by dragging; the authors' math game moving to 3D on a gamepad.
 
 → [[no-ai-default]] [[frontier-models]]
+
+## 2026-11-10 04:45 — k-means gets a faster sibling inside FAISS; a malloc walkthrough that measures instead of recalling; a browser library that prints where it loses
+
+**e-means replaces Lloyd's algorithm inside FAISS** (`contrib/e_means`, Meta FAIR — verified 11-10 via the repo's contents API: the directory is `contrib/e_means` at the repo ROOT, and `faiss/contrib/e_means` returns 404, a path the feed printed and this read corrected). The claim is unusual
+because it trades nothing away: "across a large range of scales and datasets, e-means reaches a test loss below
+Lloyd's at 25 epochs, in 1.2 to 3 epochs" — measured end-to-end as **10–45× wall-clock** against Flash-KMeans on
+GPU and **8–15×** on CPU against FAISS. Authors: Bessa, Mazaré, Szilvasy, Touvron, Picard, Douze, Jégou — the last
+three wrote much of the FAISS baseline being beaten. Why it matters beyond the number: k-means is the load-bearing
+primitive under vector indexes, quantization codebooks and clustering-based retrieval filters, so an epoch
+reduction touches all of them without a new data structure. Caveat to carry: the comparison is the authors' own
+harness against their own group's implementation of the prior state of the art — the counterweight is that the code
+landed in FAISS, so the baseline is reproducible rather than asserted.
+
+**"What is malloc doing, anyway?" (benmandrew.com)** — a measured walkthrough of the interface/kernel gap:
+**1,000 `malloc(16)` calls** under `strace` produce **two `brk` syscalls total** (one to learn the program break, one
+to grow the heap by **132 KiB**), with "the other 999 just take from that already allocated memory"; an empty
+syscall is priced at "**575 ns**" by measurement; and a later printout puts the break and `printf` **23.4 TiB**
+apart — "about 1,530 times the machine's 15.6 GiB of RAM. Nearly all of that range is unmapped, so it costs no
+physical memory." The article's method is the lesson: each number is an output of code the reader can re-run.
+
+**Zebkit (`ikey4u/zebkit`, LGPL-2.1, v0.2.0, 135★)** links Blink + full-JIT V8 + PDFium + FFmpeg into your own
+application as one library — no Chrome UI, no Node, no Electron packaging — running inside the host's event loop
+(`zebkit_init()`, `zebkit_pump()`) and drawing into an X11 window, `NSView` or `HWND`, with C/Rust/Python/Go/JS
+bindings. Against **Electron 45.2.1** (same harness, same pages, medians of 5–11 runs, Linux x86-64, dated
+2026-11-06/07): **171.2 / 59.4 MiB shipped** vs 260.5 / 87.1, **2.3 s vs 6.6 s** cold start, **179 MB vs 250 MB** for
+a blank page, level on DOM and JS workloads. The reason to read it is the README section the genre omits:
+"**Where Electron is ahead**: one process fewer a page, and memory on two of the ten sites, YouTube and The Verge,
+where advertising and video decide" — zebkit runs **7** processes per page to Electron's **6** because it sandboxes
+storage separately, "as Chrome". A 135★ self-benchmark is a claim about the author's workload; a claim that states
+its own losses is the kind worth re-running.
+
+→ [[dev-tools]] [[fact-check]] [[edge-inference]] [[agent-stack]]
+
+Sources: [e-means project page](https://e-means.github.io/) · [arXiv 2611.09501](https://arxiv.org/abs/2611.09501) ·
+[What is malloc doing, anyway?](https://benmandrew.com/articles/what-is-malloc-doing-anyway) ·
+[ikey4u/zebkit](https://github.com/ikey4u/zebkit)

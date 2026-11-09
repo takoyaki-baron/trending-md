@@ -419,3 +419,18 @@ Stockfish-PVS n-gram drafter** 做自推测。HN 评论者报告它真的能跑�
 同样的数字。
 
 → [[frontier-models]] [[fact-check]]
+
+## 2026-11-10 04:45 — 那个锚定「便宜常开算力」的开发板重新定价到 $385
+
+**Raspberry Pi 5 16GB 现售 $385**——「相比 4 月上次涨价的 **$80** 涨幅」——**CM5** 系统模块涨 **$40**，「无无线版本 Lite
+起价 **$375**」。唯一没变的是 **Raspberry Pi 500+** 键盘机，起价 **$410**；CNX 认为这说明该形态的需求低于单板与计算模块。
+
+**为什么它属于本文件。** 16GB 档正是本地推理部署会选的那一档，而这次涨价是**内存成本传导**而非树莓派毛利决策——这与
+本周让「空闲内存」段子成为体裁的同一股 DRAM 压力。具体地：这块以 **$120** 发布、锚定「便宜常开算力」的板子现在按小型
+服务器定价，于是按「买几块 16GB 板」规划的家用实验室、CI runner 机群或边缘部署，必须改成「买一块先测」，CM5 线随之
+移动。本文件里的本地推理阶梯（按路由流式读取专家、常驻共享核心）是一项*内存层级*策略，而这里是那一层的价格。
+
+→ [[edge-inference]] [[token-economics]] [[datacenter-silicon]]
+
+来源：[CNX Software: Raspberry Pi 5 16GB now $385](https://www.cnx-software.com/2026/11/03/when-will-this-stop-the-raspberry-pi-5-16gb-sbc-now-sells-for-385/) ·
+[HN 讨论](https://news.ycombinator.com/item?id=50428801)

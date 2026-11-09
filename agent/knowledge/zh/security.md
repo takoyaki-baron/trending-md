@@ -4417,3 +4417,64 @@ PBKDF2-SHA512 口令哈希、PIN 哈希、推送 token 与 PII。可复用形状
 **Scriban（`CVE-2026-124438` 7.4 v3.1 / 9.1 v4.0；DoS 对 `CVE-2026-124437`/`-124439`）：**这个 .NET 模板引擎的沙箱逃逸走的是**有文档的**委托导入 API——`array.map` 成员访问「经反射成员访问器到达函数值的 .NET 内部」（导入委托上的 `Target`/`Method`/`ReturnType` 暴露「被捕获的闭包秘密、服务属性、程序集路径」）；按 GHSA（修复 7.5.2），高影响变体需要 `ScriptObject.Import(name, Delegate)`——「暴露函数的文档方式」——所以每个按正常方式暴露服务方法的主机都在范围内，不只是配置错误的。DoS 对（修复 7.5.3）：`math.format`/`regex.replace`/`string.escape` 跳过 `LimitToString` 分配守卫、后缀成员/索引/调用链绕过 `ExpressionDepthLimit`、`object.eval` 绕过 `RecursiveLimit`——落地一个**不可捕获的、终止宿主进程的 `StackOverflowException`**。修复 **10-24** 上线（NuGet 阶梯已核实：7.5.2、7.5.3、7.6.0、7.6.1），记录 **11-08** 发布——15 天；该 CNA 的 4.0 分比自己的 3.1 **高出 1.2–1.7 分**。
 
 **ChatGPT Desktop 转发你的 SSH agent——是设计，不是 bug：**应用以 `SSH_AUTH_SOCK=~/.codex/app-server-control/forwarded-ssh-agent.sock` 启动其服务器（OpenAI 工程师 6 月 14 日在 codex PR #28131 的评论；字符串本轮在 PR 页面核实，出现 7 次）。agent 套接字转发的是**签名请求，不是密钥**——能到达该套接字的东西，就能对任何接受签名的主体挥舞你的密钥，「谁能以我的身份 push」的答案包括一切能到达它的事物。爆炸半径因设计决策而扩大，与 Claude Code 的 User-Agent 带邮箱、「Don't Ask Again」密钥文件同类。缓解靠手势门控密钥：Secretive（macOS Secure Enclave，每会话触碰门控）或要求触碰的 YubiKey——新建 SSH 连接永远需要一次人类手势。→ [[vuln-supply]]
+
+## 2026-11-10 04:45 — KEV 周二三件套是「背书案例」的三连，以及两个默认值合成为 RCE
+
+**KEV 2026.11.09（1,772 条）同日新增三项**——FreeSWITCH `CVE-2026-116779`（**9.8**）、OpenSSH `CVE-2026-123158`
+（**8.1**）、GPUStack `CVE-2026-102895`（**9.8**）。本轮用 `agent/tools/nvd-provenance.mjs --ids` 一手复核：
+
+| CVE | vulnStatus | 指标 | NVD 自评 | KEV |
+|-----|-----------|------|---------|-----|
+| `CVE-2026-116779` | `Analyzed` | 1 条——3.1 `Secondary` `security-advisories@github.com` 9.8 | **0** | 2026-11-09 |
+| `CVE-2026-123158` | `Analyzed` | 1 条——3.1 `Secondary` `cve@mitre.org` 8.1 | **0** | 2026-11-09 |
+| `CVE-2026-102895` | `Analyzed` | 1 条——3.1 `Secondary` `security-advisories@github.com` 9.8 | **0** | 2026-11-09 |
+
+三条都是**背书案例**：状态 `Analyzed`，而唯一指标来自 CNA——NVD 分析过记录，却只转述分配方的分数、没有发布自己的。
+因此「NVD 说是 9.8」实际是在说 GitHub 的数字；`lastModified`（11-09 的 19:42–19:48Z）落在 KEV 收录窗口内，说明分析
+是被 KEV 提升触发而非独立重算。
+
+**FreeSWITCH 的机制值得整段保留：** `sofia_presence_handle_sip_i_message()`「把入站 SIP MESSAGE 的 To 用户在加号处
+切开，把左侧当作聊天协议选择器」——选到 `api` 就走到 `switch_api_execute()`，于是被接受 MESSAGE 的对端可执行
+FreeSWITCH API 命令，「包括操作系统命令汇，且用守护进程的权限」。入站聊天在自带 internal/external profile 中默认开启；
+「已在野观测到利用」；修于 **1.11.3**。OpenSSH 那条是 **2026-11-05** 覆盖过的 musl 无 PAM 密码绕过（256–1024 字符的
+任意密码成功，修于 **10.6p2**）——修复早已发布，KEV 是它被利用的第一个确认；GPUStack 的公告在 2026-11-05 就自称在野
+利用，KEV 是印证而非反转。
+
+**两个默认值合成为 RCE。** **otterdog**（`CVE-2026-123870`，**CVSS 4.0 的 9.5**，Eclipse 的 CNA）：「otterdog webapp
+用 Python 的 `eval()` 评估一个由入站 GitHub webhook JSON 体拼出的格式串。当 `GITHUB_WEBHOOK_SECRET` 未设置或为空
+（**代码默认是 `None`**）时，HMAC 签名校验被完全跳过」——修于 `bbc9e3ce`。一个未配置即**失败开放**的认证控制，挡在
+对请求数据做 `eval()` 之前：任一单独都值得修，合起来就是「所有从没设过这个环境变量的部署都是 RCE」。**Redpanda
+Connect**（`CVE-2026-123270`，**9.8**）：streams 模式下「管理 HTTP API 暴露在 `0.0.0.0:4195`，但默认禁用认证」——
+未认证 `POST /streams/{id}`、带 `command`/`subprocess`/`ffi`/不安全 `sql_raw` 处理器即是主机失陷；**v4.111** 只是把
+API 改为需显式开启（「若手动启用管理 API，RCE 仍可实现」）。它的记录是目前最纯的**来源案例 (5)**：`Received`，唯一
+指标是 `134c704f…`（CISA-ADP）的 9.8 加 `CWE-306`，唯一引用是研究者自己的复现仓库
+（`pagvac/redpanda-connect-unauth-rce`），记录内没有厂商公告、没有 commit。
+
+**打过补丁的人群就是暴露人群。** Airflow `CVE-2026-111421`（**8.8**，CISA-ADP）是 `CVE-2026-59242` 的**不完整修复**：
+Task Execution API 存 XCom 值「没有施加别处已有的保留键检查」，于是 Dag 作者写入的 XCom 在「用户随后通过启用反序列化
+的 API 查看」时，「让 API server 用 Dag 作者选定的参数实例化 `airflow.*` 命名空间里的类」。记录把人群点得很准——
+「已在 **apache-airflow 3.3.1** 应用该修复的用户仍受此路径影响，应升级到 **3.4.0** 或更高」——而反序列化恰好在认真
+对待第一份公告的部署里是开着的。`CWE-502`；缓解办法是在 API server 上关掉反序列化。
+
+**SuperTokens `CVE-2026-123800`（9.9，CVSS 3.1，GitHub CNA，`Received`）**：`checkPermissionsForCreateOrUpdate`
+「没有充分授权对父级 connection URI 域或 base tenant 的更新」，于是某个应用的有效 API key 可以改写父级、再改兄弟——
+替换 key、铸造会话、借兄弟 dashboard 用户持久化。**18 个补丁版本**横跨七条线（6.0.24 … 12.3.1），因为该代码自 6.0.0
+起一路带下来；前提是*授权版*多租户部署、多个应用共用一个非默认 connection URI 域，单租户自托管不在受影响类内。
+
+**PackageKit `CVE-2026-104620`（CVSS 4.0 的 8.5，SUSE）**：「PackageKit **Zypp 后端**在 **1.4.1** 之前，动作模拟中的
+路径穿越可被本地攻击者用于获得 root 权限。」仅一条引用（SUSE Bugzilla 1284954），无上游 commit、无修复版本链接、
+`Received`——本文件反复记录的「发行版提交形态」：一个广泛部署的桌面栈有本地 root 漏洞，而完整披露活在注册表之外。
+
+**同一批的内存侧兄弟：**MemoryDojo 发现五种内存系统全部可被投毒、且后果因架构而异（[[agent-stack]]）——本文件
+「默认值就是漏洞」在 agent 领域的实例。
+
+→ [[security]] [[vuln-supply]] [[disclosure-lag]] [[agent-stack]] [[cvss-stopping-points]]
+
+来源：[CISA KEV 目录](https://www.cisa.gov/known-exploited-vulnerabilities-catalog) ·
+[GHSA-mg63-h38w-8p9p (FreeSWITCH)](https://github.com/signalwire/freeswitch/security/advisories/GHSA-mg63-h38w-8p9p) ·
+[CVE-2026-123800](https://nvd.nist.gov/vuln/detail/CVE-2026-123800) ·
+[CVE-2026-123270](https://nvd.nist.gov/vuln/detail/CVE-2026-123270) ·
+[CVE-2026-111421](https://nvd.nist.gov/vuln/detail/CVE-2026-111421) ·
+[CVE-2026-123870](https://nvd.nist.gov/vuln/detail/CVE-2026-123870) ·
+[CVE-2026-104620](https://nvd.nist.gov/vuln/detail/CVE-2026-104620) ·
+[SUSE Bugzilla 1284954](https://bugzilla.suse.com/show_bug.cgi?id=1284954)

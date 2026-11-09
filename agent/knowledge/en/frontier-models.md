@@ -5649,3 +5649,44 @@ whether the VQ hierarchy survives instruction tuning and long context. The speed
 inference budgets care about; the "concept" as the unit of parallel prediction is the architecture bet.
 
 → [[harness-reliability]]
+
+## 2026-11-10 04:45 — one model in two safeguard SKUs, and a cheap model whose product feature is refusing to answer
+
+**Claude Fable 5.2 / Claude Mythos 5.2 (Anthropic, Nov 9).** The two releases are described as "the same underlying
+model", split by safeguards: Fable carries the cybersecurity and biology filters and ships to everyone; Mythos sits
+behind the Cyber and Life Sciences Verification Programs. Price **$8 / $40 per 1M** input/output, "up to 30% faster"
+output than 5.1, optional fast mode "up to 2.5 times" faster at **$16 / $80**. Benchmark rows worth keeping:
+
+- **FrontierCode 2.0 49.1% at Xhigh** ("the highest score of any released model we've tested"); **45.3% at High**
+  against **Opus 5.5's 45.5%** "for roughly half the cost per task".
+- Rows that go the other way: **AutomationBench 51.4** vs **Gemini 4 Carbon 53.9**; **AA-Briefcase 1785 Elo** vs
+  **Opus 5.5 1800** — the model Anthropic still recommends as a starting point.
+
+**The two footnotes that change what the table is.** Footnote 3: the cyber and biology results were run on
+**Mythos 5.2**, because "testing the model with reduced safeguards provides the most comprehensive look at model
+behavior" — so **CyScenarioBench 76.3** and **CVE-rediscovery 89.6** are *not* Fable numbers, and a reader comparing
+them to a competitor's guarded numbers is comparing two configurations. Footnote 4: "None of the external
+organizations reviewed the contents of this blog post or the contents of the System Card." The vendor quotes on the
+page (Vercel, Shopify, Uber, Oracle) are enthusiasm; the Computer-use row is labelled "OSWorld 2.1 (offline set,
+partial)". Same shape as 10-31's spec-as-objective and 11-06's disclosure-of-which-harness: **the footnote is the
+finding**, and "a release note is not a safety case" is the sentence to carry.
+
+**Meta Muse Ember (Meta Superintelligence Labs).** **$0.10/$0.004 cached/$0.50 per 1M**; Artificial Analysis reads
+**36 on the Intelligence Index at $0.14 per task** — the same score as **Claude Haiku 5.5 (max) at $0.41** — and
+eight points behind Meta's own **Muse Wonder (44 at $6.95/task)**. Wins: **AutomationBench-AA 68.1%** (level with
+Wonder), **Terminal-Bench 4.0 40.9%** vs Haiku's 32.8%, **Coding Agent Index 46** inside Meta's Muse Code vs 37 for
+Haiku in Claude Code. Losses: **FrontierCode 2.0 27.2% vs 34.9%**, **AA-Briefcase 1521 vs 1574 Elo**.
+
+**The number that explains the price is not the score:** **AA-Omniscience accuracy 21.1%**, the lowest in its
+comparison set, because Ember "declines to answer **64%** of questions" — and that abstention is what keeps
+hallucination at **17.4%**, half of Haiku 5.5's. A cheap router that abstains is a different product from a cheap
+model that guesses; Meta's own routing story ("Muse Wonder plans, Muse Ember handles the volume") is coherent only
+because the abstention rate is measured and published. Cross-link: the serving half of the same tier —
+`OmniJev/Flide` — is in [[system1-decision]].
+
+→ [[frontier-models]] [[fact-check]] [[token-economics]] [[system1-decision]]
+
+Sources: [Claude Fable 5.2 and Mythos 5.2](https://www.anthropic.com/claude-fable-and-mythos-5-2) ·
+[HN discussion](https://news.ycombinator.com/item?id=50429906) ·
+[Artificial Analysis: Muse Ember](https://artificialanalysis.ai/articles/meta-s-muse-ember-is-the-cheapest-model-scoring-36-on-the-intelligence-index) ·
+[TechCrunch: Meta releases Muse Ember](https://techcrunch.com/2026/11/09/meta-releases-muse-ember-a-new-lightweight-model-for-agent-execution/)

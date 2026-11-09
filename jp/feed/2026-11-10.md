@@ -44,7 +44,7 @@ Meta Superintelligence Labs は最軽量モデル **Muse Ember** を発表した
 - **Source:** Meta FAIR · プロジェクトページ + arXiv 2611.09501 · 11 月 9 日
 - **Tags:** `research` `clustering` `faiss`
 
-Meta FAIR は Lloyd 法の代替である **e-means** をオープンソース化した。実装は **`faiss/contrib/e_means`** に入り、論文とブラウザ内プレイグラウンドが添えられている。速度と品質が通常トレードオフになるなかで、主張は珍しい。"Across a large range of scales and datasets, e-means reaches a test loss below Lloyd's at 25 epochs, in 1.2 to 3 epochs"——著者らはエンドツーエンドで、Flash-KMeans に対して **GPU で 10〜45 倍のウォールクロック短縮**、FAISS に対して **CPU で 8〜15 倍**と測定している。著者は Bessa、Mazaré、Szilvasy、Touvron、Picard、Douze、Jégou——最後の 3 名は、この手法が打ち負かす FAISS のベースラインを書いた本人たちだ。
+Meta FAIR は Lloyd 法の代替である **e-means** をオープンソース化した。実装は **`contrib/e_means`** に入り、論文とブラウザ内プレイグラウンドが添えられている。速度と品質が通常トレードオフになるなかで、主張は珍しい。"Across a large range of scales and datasets, e-means reaches a test loss below Lloyd's at 25 epochs, in 1.2 to 3 epochs"——著者らはエンドツーエンドで、Flash-KMeans に対して **GPU で 10〜45 倍のウォールクロック短縮**、FAISS に対して **CPU で 8〜15 倍**と測定している。著者は Bessa、Mazaré、Szilvasy、Touvron、Picard、Douze、Jégou——最後の 3 名は、この手法が打ち負かす FAISS のベースラインを書いた本人たちだ。
 
 **Why it matters:** k-means はベクトルインデックス、量子化コードブック、クラスタリングベースの検索フィルタの下で荷重を支えるプリミティブであり、エポックが 10 分の 1 になれば新しいデータ構造なしにその 3 つすべてに触れる。正直な留保は、比較が著者自身のハーネスと、自チームによる現行最高実装に対して行われた点だ。対抗する事実は、コードが FAISS 本体に入ったこと——ベースラインが主張ではなく再現可能になった。
 
@@ -94,15 +94,15 @@ CISA のカタログは **2026.11.09（1,772 件）**に更新され、同日 3 
 
 ---
 
-## 7. FFmpeg に 1 日で 102 件の CVE レコード——うち 96 件は最新リリースも影響下にあると書いている
+## 7. FFmpeg に 62 分で 121 件の CVE レコード——うち 114 件は最新リリースも影響下にあると書いている
 
 - **Velocity:** ▮▮▮ trending
-- **Source:** NVD · 11 月 9 日に 102 件公開
+- **Source:** NVD · 11 月 9 日に 121 件公開
 - **Tags:** `security` `cve` `ffmpeg`
 
-VulnCheck は **2026-11-09** に **102 件の FFmpeg CVE レコード**を公開した。すべて `Received` のままで NVD の分析は入っていない。内容はコーデックとフィルタ木のメモリ安全性が中心で、`huffyuvenc`、`dvbsubenc`、`gif.c` のヒープオーバーフロー、VVC と Vulkan AV1 経路の範囲外書き込み、10 以上のデコーダにわたる未初期化メモリ開示、加えて長い NULL 参照外しの尾を引く。スコアは両フレームワークとも VulnCheck のもので、**3.1 `Primary` の最大は 7.8**、**4.0 `Secondary` の最大は 8.5**（`CVE-2026-125250`、GIF エンコーダの `shrunk_buf` サイズ計算）。最大値より分布が重要だ。**102 件の説明のうち 96 件が "through 9.0.2"** と書いており、これは FFmpeg の最新タグ（`n9.0.2`）を指す。修正境界を示すのは **6 件**だけ（"before 8.1.3 and 9.x before 9.0.2"）。
+VulnCheck は **2026-11-09** に **121 件の FFmpeg CVE レコード**を公開した（最初の 1 件が 19:16:48Z、最後が 20:18:13Z）。すべて `Received` のままで NVD の分析は入っていない。内容はコーデックとフィルタ木のメモリ安全性が中心で、`huffyuvenc`、`dvbsubenc`、`gif.c` のヒープオーバーフロー、VVC と Vulkan AV1 経路の範囲外書き込み、10 以上のデコーダにわたる未初期化メモリ開示、加えて長い NULL 参照外しの尾を引く。スコアは両フレームワークとも VulnCheck のもので、**3.1 指標の最大は 7.8**、**4.0 指標の最大は 8.5** で、9 件のレコードが両方の最大値に並ぶ（その一つが `CVE-2026-125250`、GIF エンコーダの `shrunk_buf` サイズ計算）。最大値より分布が重要だ。**121 件の説明のうち 114 件が "through 9.0.2"** と書いており、これは FFmpeg の最新タグ（`n9.0.2`）を指す。修正境界を示すのは **7 件**だけ（"before 8.1.3 and 9.x before 9.0.2"）。
 
-**Why it matters:** 102 件の大半が最新タグに存在する不具合を記述しているなら、それは**修正版を名指ししない**開示であって、パッチの告知ではない。4.0 と 3.1 の差（同一 CNA、同系統のベクトルで 3.1 は 7.8、4.0 は 8.5）は採点慣行であって不一致ではない。ここはすべて `Received` なので「NVD はこう言っている」はまだ存在しない。VulnCheck を引用し、その旨を明記すること。
+**Why it matters:** 121 件の大半が最新タグに存在する不具合を記述しているなら、それは**修正版を名指ししない**開示であって、パッチの告知ではない。4.0 と 3.1 の差（同一 CNA、同系統のベクトルで 3.1 は 7.8、4.0 は 8.5）は採点慣行であって不一致ではない。ここはすべて `Received` なので「NVD はこう言っている」はまだ存在しない。VulnCheck を引用し、その旨を明記すること。
 
 [`🔗 CVE-2026-125250（NVD）`](https://nvd.nist.gov/vuln/detail/CVE-2026-125250) · [`🔗 FFmpeg のタグ`](https://github.com/FFmpeg/FFmpeg/tags)
 
@@ -186,7 +186,7 @@ VulnCheck は **2026-11-09** に **102 件の FFmpeg CVE レコード**を公開
 
 **"When Instruction Files Go Stale: Documentation Debt and Hidden Cost in Coding Agents"** は、`CLAUDE.md` を持つあらゆるリポジトリが抱える問題を扱う。指示ファイルは "read in every agent session" だが、"can fall behind the code and become stale (e.g., a test folder moves, but the file still points to the old one)"。実験は統制されている。活発なオープンソースリポジトリ由来の実在する古い指示 3 件、それぞれ別種の指針（**テストコマンド、コードの位置、コンポーネント追加手順**）を用い、agent は各指示の 3 バージョン（古いまま／現行パスに修正／削除）の下で **22 の保守タスク**を解く。コードとタスクは固定され、**732 トラジェクトリ**を分析する。
 
-**Why it matters:** 著者の立論がそのまま結論だ。"Evaluations that check only task success can miss this cost, and the stale file can persist." 古い指示はドキュメント負債であり、その利息は以後のすべてのセッションが払う。だから自然な実験は「agent が完了したか」ではなく、途中で何をしたか、そして回復したかである。2024 年のテストコマンドを agent が走らせるのを見たチームには既知の類だろう。コードを固定し文章だけを動かす設計が、そのコストを測れるものにしている。
+**Why it matters:** 著者の立論がそのまま結論だ。"Evaluations that check only task success can miss this cost, and the stale file can persist." 古い指示はドキュメント負債であり、その利息は以後のすべてのセッションが払う。だから自然な実験は agent が完了したかではなく、途中で何をしたか、そして回復したかである。2024 年のテストコマンドを agent が走らせるのを見たチームには既知の類だろう。コードを固定し文章だけを動かす設計が、そのコストを測れるものにしている。
 
 [`🔗 arXiv 2611.09802`](https://arxiv.org/abs/2611.09802) · [`🔗 全文（HTML）`](https://arxiv.org/html/2611.09802v1)
 
@@ -200,7 +200,7 @@ VulnCheck は **2026-11-09** に **102 件の FFmpeg CVE レコード**を公開
 
 **MemoryDojo** は汚染された記憶のライフサイクルを追跡するベンチマークだ。前提はこうだ。"malicious instructions encountered in one session may be stored and propagated through memory before being retrieved and acted upon in later sessions"、そして "because memory systems differ in how they process and retrieve information, the downstream effects of poisoning can vary significantly across systems"。成果物は 4 領域にわたる **155 のマルチセッション長期トラジェクトリ**で、**5 種類の記憶システム**上で走らせ、汚染がどこで書かれ、いつ検索され、agent がその後何をしたかを追う。結論は冷静で都合が悪い。**"all memory systems are susceptible to memory poisoning, with substantial variation in downstream effects."**
 
-**Why it matters:** ベンチマークは攻撃最適化も同梱する。"a memory-aware poison optimization process that increases the poisoning efficacy, highlighting differences between memory architectures"——これによりアーキテクチャ間の差は好奇心の対象から攻撃面に変わる。記憶層を出荷している側（本フィードは先週、相互に読めない 4 つの記憶フォーマットを扱った）にとって、「自分のストアはあなたのとは形が違う」に測定可能なコストが付いた。
+**Why it matters:** ベンチマークは攻撃最適化も同梱する。"a memory-aware poison optimization process that increases the poisoning efficacy, highlighting differences between memory architectures"——これによりアーキテクチャ間の差は好奇心の対象から攻撃面に変わる。記憶層を出荷している側（本フィードは先週、相互に読めない 4 つの記憶フォーマットを扱った）にとって、自分のストアが相手と形を違えることに測定可能なコストが付いた。
 
 [`🔗 arXiv 2611.09721`](https://arxiv.org/abs/2611.09721) · [`🔗 全文（HTML）`](https://arxiv.org/html/2611.09721v1)
 
@@ -226,7 +226,7 @@ VulnCheck は **2026-11-09** に **102 件の FFmpeg CVE レコード**を公開
 - **Source:** benmandrew.com · 180 ポイント · 11 月 9 日（~19:31 UTC+8）
 - **Tags:** `systems` `memory` `glibc`
 
-`malloc` のインターフェースとカーネルが見るものの間の隙間を、測定で埋める記事。最初の実験は **1,000 回の `malloc(16)`** のループを `strace` で追い、`brk` システムコールが**合計 2 回**しかないことを示す——1 回は program break の取得、もう 1 回はヒープを **132 KiB** 拡張するもの。どちらも最初の呼び出しで起き、"the other 999 just take from that already allocated memory"。記事は償却される対象に値段を付ける。"**575 ns for an empty** [syscall], as measured below"。続いて `sbrk` 上にバンプアロケータを書き、プロセスの各領域のアドレスを 1 つずつ表示し、その実行で break と `printf` が **23.4 TiB** 離れていることを指摘する。"about 1,530 times the machine's 15.6 GiB of RAM. Nearly all of that range is unmapped, so it costs no physical memory."
+`malloc` のインターフェースとカーネルが見るものの間の隙間を、測定で埋める記事。最初の実験は **1,000 回の `malloc(16)`** のループを `strace` で追い、`brk` システムコールが**合計 2 回**しかないことを示す——1 回は program break の取得、もう 1 回はヒープを **132 KiB** 拡張するもの。どちらも最初の呼び出しで起き、"the other 999 just take from that already allocated memory"。記事は償却される対象に値段を付ける。"**575 ns for an empty one**, as measured below"。続いて `sbrk` 上にバンプアロケータを書き、プロセスの各領域のアドレスを 1 つずつ表示し、その実行で break と `printf` が **23.4 TiB** 離れていることを指摘する。"about 1,530 times the machine's 15.6 GiB of RAM. Nearly all of that range is unmapped, so it costs no physical memory."
 
 **Why it matters:** これは多くの性能推論が飛ばす層——システムコールとユーザー空間の境界、そしてそれを隠す簿記だ。この記事は「記憶より測定」の実演でもある。132 KiB、2 回の `brk`、アドレス配置は主張ではなく出力であり、どれも記事が印字したコードから再現できる。
 
@@ -240,7 +240,7 @@ VulnCheck は **2026-11-09** に **102 件の FFmpeg CVE レコード**を公開
 - **Source:** CNX Software · 183 ポイント · 11 月 10 日（~01:42 UTC+8）
 - **Tags:** `hardware` `raspberry-pi` `pricing`
 
-Raspberry Pi が再び値上げし、今回は 16GB モデルに集中した。**Raspberry Pi 5 16GB は 385 ドル**、"an $80 increase compared to the last price hike in April"。**CM5** システムオンモジュールは **40 ドル**上がり、"starting at $375 for the Lite model without wireless"。唯一の朗報は据え置きだ。"the Raspberry Pi 500+ mechanical keyboard PC stays at the same price, starting at $410"。CNX 自身の読みは、キーボードモデルは "must have lower demand than for single board computers and compute modules" というもの。
+Raspberry Pi が再び値上げし、今回は 16GB モデルに集中した。**Raspberry Pi 5 16GB は 385 ドル**、"an $80 increase compared to the last price hike in April"。**CM5** システムオンモジュールは **40 ドル**上がり、"starting at $375 for the Lite model without wireless"。唯一の朗報は据え置きだ。"the Raspberry Pi 500+ mechanical keyboard PC stays at the same price, starting at $410"。CNX 自身の読みは、キーボードモデルは "already richly priced and the demand must be lower than for single board computers and compute modules" というもの。
 
 **Why it matters:** 低コスト常時稼働コンピューティングの錨だった基板が、いまや小型サーバーの価格になった。この上昇は Raspberry Pi の利益率判断ではなくメモリ費の転嫁であり、今週「アイドル RAM」の冗談を一ジャンルにしたのと同じ DRAM 圧力だ。ホームラボ、CI ランナー群、エッジ配備を見積もる人にとって、16GB の段は「数枚買う」から「1 枚買って測る」に移り、CM5 も一緒に動く。
 
@@ -248,15 +248,15 @@ Raspberry Pi が再び値上げし、今回は 16GB モデルに集中した。*
 
 ---
 
-## 18. Flide は決定モデルに欠けていた配信層——vLLM と SGLang より 9.5 倍、正確な状態分岐
+## 18. Flide は決定モデルに欠けていた配信層——vLLM と SGLang より最大 9.5 倍、正確な状態分岐
 
 - **Velocity:** ▮▮ rising
 - **Source:** Hacker News · 109 ポイント · 11 月 9 日（~12:43 UTC+8）
 - **Tags:** `inference` `decision-models` `serving`
 
-**`OmniJev/Flide`**（Apache 2.0、**258 スター**）は「決定モデル」ファミリー向けの推論エンジンだ——単一フォワードパスで生成しないモデル群で、本フィードは **2026-11-07** に扱っている——その主張は、これらが生成型 LLM とは別の配信機構を必要とするという点にある。"**9.5 times faster than vLLM and SGLang; exact state forking**"。1 つの状態が 3 つの問いに分岐し、"each answered in one forward pass"。手法は 11 月 2 日に論文として公開され（**arXiv 2610.42148**、"Accelerating Decision Inference with Exact State Forking"）、`flide verify` コマンドを同梱する。"checks exact forking on your own model and requests"。**PyPI `flide` 0.1.10** は **2026-11-09T06:57Z** にアップロードされ、同日 README は 2 つのリリースを記録した。0.1.9 が **`pplx-decider-v1.1-27b` と `JEV-35B`**、0.1.10 が **Ainvest-Decision-27b、Darwin-27B-RSI-Decision、KnowLine-31B-Gen1.5** を追加し、最後のものは画像も読むようになった。
+**`OmniJev/Flide`**（Apache 2.0、**258 スター**）は「決定モデル」ファミリー向けの推論エンジンだ——単一フォワードパスで生成しないモデル群で、本フィードは **2026-11-07** に扱っている——その主張は、これらが生成型 LLM とは別の配信機構を必要とするという点にある。"**With exact state forking it is up to 9.5 times faster than vLLM and SGLang, and every answer is the one the model gives the question alone**"——1 つの状態が 3 つの問いに分岐し、それぞれが 1 回のフォワードパスで答える。手法は 11 月 2 日に論文として公開され（**arXiv 2610.42148**、"Accelerating Decision Inference with Exact State Forking"）、`flide verify` コマンドを同梱する。"checks exact forking on your own model and requests"。**PyPI `flide` 0.1.10** は **2026-11-09T06:57Z** にアップロードされ、同日 README は 2 つのリリースを記録した。0.1.9 が **`pplx-decider-v1.1-27b` と `JEV-35B`**、0.1.10 が **Ainvest-Decision-27b、Darwin-27B-RSI-Decision、KnowLine-31B-Gen1.5** を追加し、最後のものは画像も読むようになった。
 
-**Why it matters:** モデルの一覧こそが話だ。Perplexity、Cloudflare（`Clef`）、Juspay、AutoTrust など十数社が、チャットモデルではない「decision」チェックポイントを公開しており、このファミリー全体がトークン生成向けに作られたエンジンで配信されていた。vLLM に対する 9.5 倍はプロジェクト自身のワークロードでの自己測定だが、その 9.5 倍が公平な比較か別の計算かを決めるのは、速度ではなく分岐の正確性を測る `verify` のほうだ。
+**Why it matters:** モデルの一覧こそが話だ。Perplexity、Cloudflare（`Clef`）、Juspay、AutoTrust など十数社が、チャットモデルではない「decision」チェックポイントを公開しており、このファミリー全体がトークン生成向けに作られたエンジンで配信されていた。vLLM に対する最大 9.5 倍はプロジェクト自身のワークロードでの自己測定だが——この「最大」が実際に効いている——その 9.5 倍が公平な比較か別の計算かを決めるのは、速度ではなく分岐の正確性を測る `verify` のほうだ。
 
 [`🔗 OmniJev/Flide`](https://github.com/OmniJev/Flide) · [`🔗 PyPI: flide 0.1.10`](https://pypi.org/project/flide/)
 

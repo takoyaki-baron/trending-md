@@ -1191,6 +1191,32 @@ underlying pages — this produced a two-layer false signal in a single item.
    it and must **start with a letter**, or `4-bit models` becomes a count of four. Prevalence, so the
    class is not oversold: **1 of the 40** texts in the lint's page cache carries a delimiter, and
    `--selftest` **210 → 220**.
+   **A count over a SET of records is its own unit, and `--check batch` is the only arm that reads
+   it** (added 2026-11-10 04:53, the FFmpeg item turned into a check). Item 7 of that batch shipped
+   **three** wrong numbers under one true story: "**102** FFmpeg CVE records", "**96 of the 102**
+   descriptions say through 9.0.2", "only **6** name a fixed bound". NVD re-read over the same UTC
+   publication day returns **121** records (all `disclosure@vulncheck.com`, all published
+   19:16:48–20:18:13Z), **114** saying "through 9.0.2" and **7** naming "before 8.1.3 and 9.x before
+   9.0.2". No existing arm could see any of them and not by accident — every other check binds ONE
+   number to ONE record (`count` greps a page, `ratio` recomputes a table, `cvss` matches a metric),
+   and a batch count has no page, no table and no single record to agree with. The design is one
+   anchored question: the item's own cited CVE gives the **day** (its `published`) and the **writer**
+   (its `sourceIdentifier`), and the only hard part is the search term — so **a keyword must RETRIEVE
+   the record it was derived from** before its count is used (a guess that provably works is a
+   measurement; a topic term that finds other CNAs' records is neither). Verdicts
+   `batch-count-ok` / `batch-count-mismatch` / `batch-subcount-ok` / `batch-subcount-mismatch` (sev 3,
+   direction named) / `batch-unread` (sev 0). Censused before quoting prevalence: over **41 feeds**,
+   **4** correct batch items pass, **5** return `batch-unread` (title-derived terms like `Gitea`,
+   `Kyverno`, `OpenEMR` do not retrieve the id — the safe direction), **0** false positives, and the
+   one finding is the filing case; `--selftest` **361 → 373**.
+   **And a tag stripper run on already-extracted text deletes PROSE** (same run, from the arm's own
+   first re-run). `normQuote`'s `<[^>]*>` ate a **428-character** C snippet on benmandrew.com's malloc
+   post (`for (i < 1000 ; i ++ ) …` matched as one "tag" up to the next `>`), deleting the very
+   sentence item 16 quotes and reporting a verbatim quotation as `quote-not-found` (sev 3) — the
+   "deleting a tag TYPE rather than a rendering ROLE" defect one layer out, where the input was never
+   HTML at all. The rule is now `TAG_RE`, bounded to something tag-shaped
+   (`<\/?[a-zA-Z][\w-]*(?:\s[^<>]{0,300})?\/?>`), and the comparison only ever removed text, so the
+   change cannot create a match — it can only stop deleting one.
    **And a backticked `a/b` is a repo only when the sentence is about a project** (same batch): three
    false `repo` findings in one file — `anthropic/claude-opus-4.6` (an OpenRouter model id, 404 →
    "unreadable repository"), `moonshotai/kimi-k2` (the *same sentence*, a real repo the item never

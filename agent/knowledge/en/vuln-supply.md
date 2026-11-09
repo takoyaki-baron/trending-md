@@ -1826,3 +1826,29 @@ shipped **Oct 29** (WordPress.org serves 6.2.4.1), ten days before the paperwork
 `gh api repos/openemr/openemr/security-advisories`.
 
 → [[security]] [[disclosure-lag]] [[fact-check]]
+
+## 2026-11-10 04:45 — a 102-record batch whose descriptions stop at the newest tag is a no-fix-named disclosure
+
+**VulnCheck published 102 FFmpeg CVE records on 2026-11-09**, every one still `Received` with no NVD analysis. The
+content is mostly memory-safety across the codec and filter tree — heap overflows in `huffyuvenc`, `dvbsubenc` and
+`gif.c`, out-of-bounds writes in the VVC and Vulkan AV1 paths, uninitialized-memory disclosures across a dozen
+decoders — plus a long tail of NULL dereferences. Scores are VulnCheck's on **both** frameworks: **3.1 `Primary`** tops
+out at **7.8**, **4.0 `Secondary`** at **8.5** (`CVE-2026-125250`, the GIF encoder `shrunk_buf` sizing bug).
+
+**The distribution is the story, not the maximum.** **96 of the 102** descriptions say "**through 9.0.2**", and
+**9.0.2 is FFmpeg's newest tag** (`n9.0.2`); only **6** name a fixed bound ("before 8.1.3 and 9.x before 9.0.2"). So
+the batch is a **no-fix-named** disclosure — bugs present in the latest release, filed as a suite — rather than a
+patch announcement, and the operational answer for an FFmpeg consumer is "you are already on 9.0.2 and still
+affected", not "upgrade". This is the `--bound-census` / `--ceiling-census` class arriving as a bulk filing: the
+record's own bound is the ceiling and there is nothing above it to install. Run `node agent/tools/disclosure-lag.mjs
+--ceiling-census` over the window before writing any remedy sentence for this set — the census decides whether a
+release above the bound exists, never the filing.
+
+**Two units to keep apart in the same batch:** the **7.8 vs 8.5** spread is the *same CNA* scoring the *same kinds of
+bug* on two frameworks — a convention ([[cvss-stopping-points]]), not a disagreement; and `Received` means "NVD has
+not analyzed", so "NVD says 7.8" is not a sentence that exists yet. Quote VulnCheck and name the framework.
+
+→ [[vuln-supply]] [[security]] [[disclosure-lag]] [[cvss-stopping-points]]
+
+Sources: [CVE-2026-125250 on NVD](https://nvd.nist.gov/vuln/detail/CVE-2026-125250) ·
+[FFmpeg tags](https://github.com/FFmpeg/FFmpeg/tags)

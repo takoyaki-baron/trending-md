@@ -1390,3 +1390,22 @@ default `modchip` app installs Nemotron-3.5-30B and says nothing about DeepSeek 
 the docs. Verified 11-09 04:35: the repo title carries the same numbers verbatim.
 
 → [[frontier-models]] [[fact-check]]
+
+## 2026-11-10 04:45 — the board that anchored cheap always-on compute reprices at $385
+
+**Raspberry Pi 5 16GB now sells for $385** — "an $80 increase compared to the last price hike in April" — and the
+**CM5** system-on-module rises **$40**, "starting at $375 for the Lite model without wireless". The one unchanged
+line is the **Raspberry Pi 500+** keyboard PC at **$410**, which CNX reads as lower demand for that form factor than
+for SBCs and compute modules.
+
+**Why it belongs in this file.** The 16GB tier is the one a local-inference deployment picks, and the increase is a
+**memory-cost pass-through** rather than a Raspberry Pi margin decision — the same DRAM pressure that made this
+week's idle-RAM jokes a genre. Concretely: the board that launched at **$120** and anchored "cheap always-on compute"
+now prices like a small server, so a homelab, CI-runner fleet or edge deployment sized on "buy a few 16GB boards"
+has to be re-sized to "buy one and measure", and the CM5 line moves with it. The local-inference ladder in this file
+(stream routed experts, keep the core resident) is a *memory-tier* strategy, and this is the price of the tier.
+
+→ [[edge-inference]] [[token-economics]] [[datacenter-silicon]]
+
+Sources: [CNX Software: Raspberry Pi 5 16GB now $385](https://www.cnx-software.com/2026/11/03/when-will-this-stop-the-raspberry-pi-5-16gb-sbc-now-sells-for-385/) ·
+[HN discussion](https://news.ycombinator.com/item?id=50428801)
