@@ -1,642 +1,278 @@
 ---
-date: 2026-11-09
-updated: 2026-11-09T12:38:24Z
+date: 2026-11-10
+updated: 2026-11-09T20:29:21Z
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 30
+sources: 28
 license: CC-BY-4.0
 ---
 
-# trending.md — 2026-11-09
+# trending.md — 2026-11-10
 
-## 1. OpenEMR 一批收到 44 条 CVE 记录 — 对应的漏洞其实 8、9 月的版本就已修复
-
-- **Velocity:** ▮▮▮ trending
-- **Source:** NVD · 44 条记录 · Nov 8 ~14:18Z (~22:18 UTC+8)
-- **Tags:** `security` `cve` `healthcare`
-
-VulnCheck 11 月 8 日披露潮中最大的一块 — 就是昨天报道过的、产出 Vikunja 39 条记录和 OpenAM 10.0 的同一批次 — 是 **OpenEMR**，部署最广的开源电子病历系统：**一次发布 44 条记录**，其中 4 条 CVSS 3.1 达 9.0+（VulnCheck 是 CNA，每条记录给两个分数：`Primary` CVSS 3.1 与 `Secondary` CVSS 4.0）。重点条目：CVE-2026-124469（9.9），Fee Sheet 药品库存查询的 SQL 注入，"将 `prod[N][warehouse]` POST 字段插值进 ORDER BY 子句"；CVE-2026-124450（9.9），fax/sms 模块 `disposeDocument` 动作的路径穿越，低权限用户可读取 `sqlconf.php` — 即数据库凭据文件；CVE-2026-124445（9.8），忽略 `enforce_onetime_use` 的一次性认证绕过。这四条的修复版本分别于 **8 月 18 日、9 月 13 日、9 月 20 日和 10 月 27 日**发布（8.3.0 → 8.5.0）— 文书比代码晚了 12–82 天。还有一个 CVE 视角看不到的仓库级事实：OpenEMR 的公告流共有 **100 条已发布 GHSA（8 月 18 日 → 10 月 28 日），其中只有 8 条在 GHSA 对象里带 CVE 编号** — 其余 92 条公告对所有以 CVE 编号为键的系统完全不可见。
-
-**Why it matters:** 这是一个受影响范围止于 "8.3.0/8.4.0 之前" 的医疗系统，自动更新的人几个月前就已修复 — 但按 CVE 编号做分诊的人刚刚得知：这个仓库 100 条公告里的 92 条，从未在扫描器盯着的命名空间里自我通报。批量 CNA 披露日不断奖励那些读项目自身安全公告流、而不是注册表的人。
-
-[`🔗 GHSA-cg8c-2v5q-29g7 (OpenEMR)`](https://github.com/openemr/openemr/security/advisories/GHSA-cg8c-2v5q-29g7) · [`🔗 CVE-2026-124469 on NVD`](https://nvd.nist.gov/vuln/detail/CVE-2026-124469)
-
----
-
-## 2. llama-modchip：284B MoE 量化到 1.71 bpw 塞进 64 GB CPU 内存 — 解码 9–15 tok/s，零 GPU
+## 1. Claude Fable 5.2 与 Mythos 5.2 以更低价格发布——但那张基准表并不是一边倒
 
 - **Velocity:** ▮▮▮ trending
-- **Source:** Hacker News · 285+ pts · 10h ago (~18:22 UTC+8)
-- **Tags:** `llm-inference` `cpu` `quantization`
+- **Source:** Anthropic · HN 504 分 · 11 月 10 日（~02:56 UTC+8）
+- **Tags:** `anthropic` `model-release` `benchmarks`
 
-`llama-modchip`（Apache 2.0，v2.4.0 于 11 月 4 日发布）是一套 ggml/llama.cpp 内核补丁和量化转码器，README 的标题是 DeepSeek-V4-Flash — **总参数 284.33B、激活 13.17B**，分布在 43 层 MLA 和 256 个路由专家（Top-6）— 压缩到 **1.71 bpw、56.56 GiB**，带 256K KV 缓存时 VmRSS 峰值 57.61 GiB，跑在无 GPU 的普通 64 GB 机器上。README 中的实测数字：16 核 Zen 5 上 prefill 44.36 tok/s，284B 检查点解码 9.1–14.7 tok/s，30B 级 MoE 25.0–111.6 tok/s，40 工具 Claude Code 提示词的 `/dev/shm` KV 槽恢复 13.1 ms。内核工作是 4 级 ZMM/L1/L2/L3 缓存分块（README 称 +77% prefill、+53% decode），外加 1.64 MB 的 Stockfish-PVS n-gram 起草器做自推测。HN 评论者报告它真的能跑 — Ryzen 7 5700U 配 64 GB DDR4 上 "steady 12 to 14" tok/s — 另一位早期测试者指出默认 `modchip` 应用装的是 Nemotron-3.5-30B、只字未提 DeepSeek，所以 284B 路径需要读文档。
+Anthropic 于 11 月 9 日发布 **Claude Fable 5.2 与 Claude Mythos 5.2**——"the same underlying model"，用安全机制区分：Fable 带网络安全与生物领域过滤，面向所有用户；Mythos 则通过 Cyber 与 Life Sciences 验证计划开放。输出比 5.1 "up to 30% faster"，定价为**每百万输入 token 8 美元、输出 40 美元**；可选 fast mode 让生成"up to 2.5 times"更快，价格 16/80 美元。在 **FrontierCode 2.0** 上，该模型在 Xhigh 档拿到 **49.1%**，博文称这是"the highest score of any released model we've tested"；High 档为 **45.3%**，对比 Opus 5.5 的 **45.5%**，"for roughly half the cost per task"。但同一张表也有反向的行：**AutomationBench 51.4** 对 Gemini 4 Carbon 的 **53.9**，以及 **AA-Briefcase 1785 Elo** 对 **Opus 5.5 的 1800**——而那正是 Anthropic 仍建议作为起点的模型。
 
-**Why it matters:** 关键数字是 13.17B 激活，而不是 284B — 稀疏 MoE 加极端低位量化，正在以比消费级硬件进步更快的速度推移 "本地能跑" 的界线。评论区争论的开放问题是 1.71 bpw 下的质量；README 卖的是吞吐量，而质量恰恰是它的表格没有度量的东西。
+**Why it matters:** 先读脚注，再读标题数字。脚注 3 说明网络与生物相关结果是在 **Mythos 5.2** 上跑的，理由是"testing the model with reduced safeguards provides the most comprehensive look at model behavior"——所以 CyScenarioBench 76.3 与 CVE-rediscovery 89.6 这两行不是 Fable 的数字。脚注 4 更直白："None of the external organizations reviewed the contents of this blog post or the contents of the System Card. Those organizations do not necessarily agree with any of the claims made in either publication." 页面上 Vercel、Shopify、Uber、Oracle 的引语是热情，不是背书；而 Computer-use 那一行标注着"OSWorld 2.1 (offline set, partial)"。
 
-[`🔗 synchopate/llama-modchip`](https://github.com/synchopate/llama-modchip) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50411961)
+> "Over 90% of the changes merged into Anthropic's core codebase are now written by Claude (with human guidance)."
+
+[`🔗 Claude Fable 5.2 and Mythos 5.2`](https://www.anthropic.com/claude-fable-and-mythos-5-2) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50429906)
 
 ---
 
-## 3. claude-mem 达到 114,830 星并发布 v15.12.0 — 截图默认保留，还出现了 25 GiB 云配额
+## 2. Meta 的 Muse Ember 以三分之一成本追平 Haiku 5.5 的智能指数——代价是 64% 的问题拒答
 
 - **Velocity:** ▮▮▮ trending
-- **Source:** GitHub Trending · +7,482 this week · 114.8k stars
-- **Tags:** `agents` `memory` `open-source`
+- **Source:** Artificial Analysis · HN 118 分 · 11 月 10 日（~01:58 UTC+8）
+- **Tags:** `meta` `small-models` `benchmarks`
 
-claude-mem — 捕获编码代理的所作所为、压缩并在未来会话中回注的代理记忆层（支持 Claude Code、OpenClaw、Codex、Gemini、Hermes、Copilot、OpenCode）— 是本周第二快的上升项目，21 小时内连发三个版本（v15.11.0 → v15.12.0，Nov 6 22:17Z → Nov 7 19:51Z）。v15.12.0 的头条："你的代理读取或生成的截图和图片现在默认保留，并链接到那一轮的观察记录，而不发送给 AI 模型" — 默认开启，提供 `Keep images` 开关关闭。转码移到本地（有损 WebP，每张 20 秒），并且发布说明中出现了一条云条目："每个所有者可在 cmem.ai 上存储最多 25 GiB 图片，与 Pro 强制的限额一致。"
+Meta Superintelligence Labs 发布其最轻量模型 **Muse Ember**，定价为**每百万输入 token 0.10 美元、缓存输入 0.004 美元、输出 0.50 美元**。Artificial Analysis 测得它在 **Intelligence Index 上为 36，每个任务成本 0.14 美元**——与 **Claude Haiku 5.5 (max) 的 0.41 美元**同分——比 Meta 自家的 **Muse Wonder（44 分，每任务 6.95 美元）**低 8 分。赢的地方具体但狭窄：**AutomationBench-AA 68.1%**，与 Muse Wonder 持平；**Terminal-Bench 4.0 40.9%** 对 Haiku 的 32.8%；以及**在 Meta 自家 Muse Code 里的 Coding Agent Index 得 46**，对比 Haiku 在 Claude Code 里的 37。输的地方同样具体：**FrontierCode 2.0 27.2% 对 34.9%**，以及 **AA-Briefcase 1521 对 1574 Elo**。
 
-**Why it matters:** 代理记忆正在成为编码代理栈的留存面 — 终端和编辑器的原始截图，在一个 11.4 万星的项目里默认持久化。这是真实的能力（视觉观察原本会丢失），也是本地优先的记忆工具长出云配额的时刻：发布说明把含蓄的那半句说了出来 — "与 Pro 强制的限额一致。"
+**Why it matters:** 解释这个价格的数字不是分数，而是 **AA-Omniscience 准确率 21.1%**——对比集中最低——原因是 Ember "declines to answer 64% of questions"，这把它的幻觉率压在 **17.4%**，只有 Haiku 5.5 的一半。一个会弃答的廉价路由器，与一个会瞎猜的廉价模型是两种产品；拒答率才是让路由叙事（"Muse Wonder plans, Muse Ember handles the volume"）成立的东西，而不只是一张价格图。
 
-[`🔗 thedotmack/claude-mem`](https://github.com/thedotmack/claude-mem) · [`🔗 v15.12.0 发布说明`](https://github.com/thedotmack/claude-mem/releases/tag/v15.12.0)
-
----
-
-## 4. 高盛把 Claude Code 和 Copilot 从交易员与银行家手里收回 — 十月内部指引：仅限工程师
-
-- **Velocity:** ▮▮ rising
-- **Source:** Hacker News · 252+ pts · 2h ago (~02:16 UTC+8)
-- **Tags:** `industry` `agents` `enterprise`
-
-Bloomberg 11 月 2 日报道（援引 10 月的内部指引）：高盛已 "切断了大多数员工对 Anthropic Claude Code 和 Microsoft GitHub 等高级 AI 编码工具的访问" — 只有工程师还能使用，结束了交易员和银行家数月来用这些工具监控交易流、制作内容的局面。据高盛发言人 Nick Carcaterra，Bloomberg 的报道只引用了 "包括生产力和风险管理在内的多种因素"；他补充说实验阶段已经结束，公司将把工具限定在 "最适合长期发挥其价值的人" 手里。这推翻了 7 月的立场 — 当时 CIO Marco Argenti 称赞非技术员工的 "vibe coding"：交易员用 AI 做原型，工程师负责规模化。HN 帖子于 11 月 8 日把这条新闻重新翻了出来，之后一直在攀升。
-
-**Why it matters:** 这是第一起附有具体细节的大企业收回通用代理访问权 — 而且给出的理由是生产力，不是安全。人人都配代理 与 只有工程师配代理，如今是同一家公司相隔七个月的两个书面立场。
-
-[`🔗 The Decoder`](https://the-decoder.com/goldman-sachs-pulls-ai-coding-tools-from-traders-and-bankers/) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50415628)
+[`🔗 Artificial Analysis 的测量`](https://artificialanalysis.ai/articles/meta-s-muse-ember-is-the-cheapest-model-scoring-36-on-the-intelligence-index) · [`🔗 TechCrunch：Meta 发布 Muse Ember`](https://techcrunch.com/2026/11/09/meta-releases-muse-ember-a-new-lightweight-model-for-agent-execution/)
 
 ---
 
-## 5. IBM 的编码助手 Bob 收到 8.8 代码注入记录 — 路径是工作区定义的 MCP 服务器
-
-- **Velocity:** ▮▮ rising
-- **Source:** NVD · 窗口内 79 条 IBM 记录 · Nov 8 ~19:17Z
-- **Tags:** `security` `mcp` `agents`
-
-CVE-2026-9764（8.8，IBM PSIRT 赋分，NVD `Awaiting Analysis`）覆盖 IBM Bob 1.0.4 至 2.0.1 — IBM 自己的公告标题写明了机制："IBM Bob 存在因对工作区定义的 MCP 服务器执行控制不当而导致的远程代码执行漏洞。" 工作区自带的 MCP 配置就是注入路径。它落在同一发布窗口里 — 我拉取的约 34 小时内共有 **79 条 IBM PSIRT 记录**，其中包括 IBM Concert 1.0–3.0.1.1 的两个 9.8（CVE-2026-6715 与 CVE-2026-15266，都是底层操作系统上的命令执行）。
-
-**Why it matters:** 所有人都演示过的 MCP 威胁模型 — 仓库自带的配置就是执行向量 — 刚刚拿到了一个带版本区间的厂商产品 CVE 编号，把加固建议变成了补丁管理。如果你的代理平台允许克隆的工作区注册自己的 MCP 服务器，这条记录就是给它上闸门的理由。
-
-[`🔗 IBM 安全公告 (CVE-2026-9764)`](https://www.ibm.com/support/pages/node/7291535) · [`🔗 CVE-2026-9764 on NVD`](https://nvd.nist.gov/vuln/detail/CVE-2026-9764)
-
----
-
-## 6. Outlook.com 悄然拒收无 DMARC 记录域名的邮件 — 未公告，且只弹一部分
-
-- **Velocity:** ▮▮ rising
-- **Source:** Hacker News · 45+ pts · 1h ago (~03:20 UTC+8)
-- **Tags:** `email` `deliverability` `infrastructure`
-
-MailRoute 报告（11 月 6 日）：自 **11 月 5 日**起，Outlook.com、Hotmail、Live 和 MSN "开始拒收没有 DMARC 记录域名的一部分邮件"，退信码为 `550 5.7.1 … lacks SPF/DKIM/DMARC Auth Records (AS9031519)`。与微软 2025 年 5 月的大批量发件人规则不同，这次打击的是没有日发送量阈值的小发件人，而且按 MailRoute 的说法完全未公告 — 没有 postmaster 通知、没有博客文章、没有服务健康条目。拒收还是部分且不一致的，这才是危险之处：邮件发出去什么都不证明。修复很便宜 — 加一条 `_dmarc` TXT 记录（`v=DMARC1; p=none`），并保证 SPF 或 DKIM 与 From 域名对齐（Microsoft 365 默认的 `onmicrosoft.com` 签名不算数）。
-
-**Why it matters:** 对小型邮件运营者来说，无声的概率性拒收是最坏的故障模式 — 日志看起来正常，但一部分邮件消失了。现象本身有独立佐证：两位 HN 评论者报告自己的域名被同样的拒收命中。但引用 "未公告" 的说法前有个保留 — 另一位评论者贴出了微软技术社区和 Learn 文档中关于 DMARC 推进的链接，所以微软 "没有公告什么" 是 MailRoute 的主张，不是已验证的缺失。
-
-[`🔗 MailRoute 博客`](https://mailroute.net/blog/outlook-rejecting-email-without-dmarc) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50416158)
-
----
-
-## 7. Contact Form 7：千万级安装量插件出现 9.8 未认证文件上传 — CISA-ADP 赋分，10 月 29 日已修复
-
-- **Velocity:** ▮▮ rising
-- **Source:** NVD · 1 条记录（CISA-ADP 赋分）· Nov 8 06:17Z (~14:17 UTC+8)
-- **Tags:** `security` `wordpress` `cve`
-
-CVE-2026-114432 覆盖 6.2.4 之前的 Contact Form 7：该插件 "不校验通过表单文件字段上传的文件类型或扩展名，且临时文件清理的缺陷会把上传的文件留在磁盘上。" WPScan 公告的标题更精确 — "Contact Form 7 6.2 – 6.2.3 – 经无效 UTF-8 文件名的未认证任意文件上传" — 且记录上 **没有 CNA 给出的 CVSS**：NVD 上的 9.8 CVSS 3.1 是 **CISA-ADP 富化**（`Secondary`，ADP 组织 `134c704f-…`），与记录同日发布。修复已于 10 月 29 日发布（WordPress.org 目录现在提供 6.2.4.1）— 比文书早了十天。
-
-**Why it matters:** 一千万活跃安装量，使它成为本月披露的影响面最广的文件上传漏洞之一，而所有人将引用的那个分数出自协调者而非 CNA。引用 "9.8" 时，请说明这是谁的 9.8。
-
-[`🔗 WPScan 公告`](https://wpscan.com/vulnerability/6b0a5d1f-84fb-425f-8d37-ddde5703937c/) · [`🔗 CVE-2026-114432 on NVD`](https://nvd.nist.gov/vuln/detail/CVE-2026-114432)
-
----
-
-## 8. Cognitive Symbionts：一篇立场论文主张把 "AI 增强的人类智能" 当作一等目标，而非 AGI 的副产品
-
-- **Velocity:** ▮▮ rising
-- **Source:** Hugging Face Papers · 116 upvotes · Nov 6 批次
-- **Tags:** `research` `position-paper` `human-ai`
-
-Hugging Face 11 月 6 日日榜的最高票论文（arXiv 2611.05376，Nov 3 18:59Z 提交，Hao Fei 等）主张：与 AGI 问的 "一台机器能有多聪明" 并列，AI 增强的人类智能（AHI）— 问的是 "一台机器能在特定的人身上促成多少智能" — 应当被同等对待。它设计的对象是 **认知共生体（cognitive symbiont）**：一种 "终身的、嵌入的、实时的、私密的、低摩擦的、主动的陪伴者"，感知用户所感知的、跨年保留上下文；设计空间组织为一个共生循环（感知、保留、理解、共同生活、行动、共同思考、成长），由个人运行时与信任来约束。论文还把治理当作内生部分，点名了考试中的隐蔽协助和社会性采用压力这两类一等风险。
-
-**Why it matters:** 本季度发布的每一个个人代理记忆产品，都在搭建这篇论文研究对象的一个临时版本；立场论文的价值在于给出词汇。它的框架也反衬了当前的基准现状：如果进步的单位是某个具体的人现在能做到什么，前沿榜单的增量就不再是度量。
-
-[`🔗 arXiv:2611.05376`](https://arxiv.org/abs/2611.05376) · [`🔗 Hugging Face papers`](https://huggingface.co/papers/2611.05376)
-
----
-
-## 9. SLA 用持续预训练扩展空间-语言-动作机器人模型 — 3D 感知保持冻结
-
-- **Velocity:** ▮▮ rising
-- **Source:** Hugging Face Papers · 92 upvotes · Nov 6 批次
-- **Tags:** `research` `robotics` `vla`
-
-SLA（arXiv 2611.08373，Nov 5 17:52Z 提交，Fuhao Li 等）通过持续预训练而非改架构来扩展隐式空间对齐的 VLA：以预训练的 pi05 策略初始化，联合优化动作预测与中间视觉嵌入同 **冻结的** 3D 感知模型空间表征之间的对齐，覆盖跨本体、跨任务、跨场景的异构机器人数据集。两个机制承载这种多样性：自适应聚合多个 VLA 层视觉嵌入的特征依赖门控，以及降低演示轨迹过拟合的概率状态 dropout。推理时所有辅助组件全部丢弃，预训练权重与原架构直接复用。
-
-**Why it matters:** 这里的 VLA 扩展故事是数据加辅助目标，而不是新架构 — "只在训练期存在" 的模式（部署即消失的门控与 dropout）是任何想在冻结基础策略上外挂辅助表征的人都可以搬走的技巧。
-
-[`🔗 arXiv:2611.08373`](https://arxiv.org/abs/2611.08373) · [`🔗 Hugging Face papers`](https://huggingface.co/papers/2611.08373)
-
----
-
-## 10. JIT 位图文字渲染：在单片机上为每段字符串即时编译绘制循环
-
-- **Velocity:** ▮▮ rising
-- **Source:** Hacker News · 81+ pts · 10h ago (~18:42 UTC+8)
-- **Tags:** `rust` `embedded` `graphics`
-
-Raph Levien 关于 vic-2350 的最新文章 — 仓库的自我描述是 "an envisioning of an alternate universe mid-80s home computer"（"runs on RP2350 boards"）（11 月 7 日有推送）— 攻克的是一个硬预算：这台机器逐束扫描（520 kB SRAM，无帧缓冲），每像素只剩约 6 个周期，Rust 达不到。答案是 JIT：在显示时刻为 **每段字符串** 编译一段专用的 ARM 机器码循环，用的是他为 Cortex-M33 设计的 symbolasm 语言。文章中的数字：内层循环每字形编译 23 周期，演示编译约 21k 周期、执行约 42k 周期（约单核吞吐的 2.6%），编译在扫描输出前 100 µs 内完成；字距调整归结为对每字形 2 字节位向量的 AND 加 popcount。第二遍把 1bpp 扫描行扩成 RGB565，每像素 1.75 周期。他提到 Claude 把他手写的 Rust 草稿翻译并优化成了 JIT 编译器。
-
-**Why it matters:** 这是 1982 年 Blit 的把戏 — 为将要绘制的内容生成显示代码 — 快了三个数量级，用在文字上，跑在 5 美元的单片机上。逐帧编译而非缓存，是嵌入式文字设计空间里一个真正的新点位，而且全部开源。
-
-[`🔗 linebender.org 文章`](https://linebender.org/blog/jit-bitmap-text/) · [`🔗 raphlinus/vic-2350`](https://github.com/raphlinus/vic-2350) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50412072)
-
----
-
-## 11. BestRand：随机基准子集误差呈长尾 — 剪掉尾部，估算误差降 16.4%，构建成本只要一半
-
-- **Velocity:** ▮ steady
-- **Source:** Hugging Face Papers · 51 upvotes · Nov 6 批次
-- **Tags:** `research` `benchmarks` `evaluation`
-
-基准压缩 — 用小子集估算完整基准分数 — 通常就是随机抽样，而 BestRand（arXiv 2611.00883，Oct 31 12:36Z 提交）的出发点是对该估计量误差分布的解析近似：它是 **长尾的**，随机抽样平均很好，但罕见的大误差让它不稳定，且这种不稳定性在现代基础模型间持续存在。BestRand 保留随机的效率、剪掉高误差尾部，在 "70+ 个文本、多模态与智能体基准" 上验证：高误差风险降 50.2%，估算误差降 16.4%，构建成本只要 51.3%，分布外估算误差平均降 21.8%。
-
-**Why it matters:** 模型发布节奏跑赢评测预算，省钱的评测正在变成基础设施 — 而这篇论文的贡献恰恰是把便宜选项何时会无声失效刻画清楚，这正是 "我们抽了 500 道题" 式声明里通常缺的那部分。
-
-[`🔗 arXiv:2611.00883`](https://arxiv.org/abs/2611.00883) · [`🔗 Hugging Face papers`](https://huggingface.co/papers/2611.00883)
-
----
-
-## 12. VisSearch-Bench：挂上搜索工具后，最强的多模态智能体也只能完整解决 26.47% 的长程视觉搜索
-
-- **Velocity:** ▮ steady
-- **Source:** Hugging Face Papers · 22 upvotes · Nov 6 批次
-- **Tags:** `research` `benchmarks` `multimodal`
-
-VisSearch-Bench（arXiv 2611.04894，Nov 3 13:40Z 提交）测的是作者所称的视觉上下文管理 — 多模态智能体如何在多步网络与图像搜索中查找、跟踪、关联图像。它有 **204 道人工编写的任务，横跨 7 个主领域与 25 个子领域**，三种形态（集合式、序列式、结构引导式视觉搜索），每道题带参考答案、可溯源证据和评分规则，按 Accuracy 加衡量部分正确性的 Process Score 打分。16 个多模态模型 — 即便挂上搜索工具 — "最好的系统也只能完整解决 26.47% 的任务。"
-
-**Why it matters:** 智能体搜索浪潮主要是在文本检索上得到验证的，那边 BM25 加 grep 就够了；这个基准论证的是问题的图像部分远未解决，并且给了它一个证据可溯源的评分规则，而不是凭感觉。
-
-[`🔗 arXiv:2611.04894`](https://arxiv.org/abs/2611.04894) · [`🔗 Hugging Face papers`](https://huggingface.co/papers/2611.04894)
-
----
-
-## 13. PacketHound 把 Windows 防火墙变成先问后放行的出站防火墙
-
-- **Velocity:** ▮ steady
-- **Source:** Hacker News · 44+ pts · 3h ago (~01:16 UTC+8)
-- **Tags:** `windows` `privacy` `open-source`
-
-PacketHound（v1.2.0，GPL-3.0，仓库 11 月 5 日创建、11 月 8 日有推送）是 Windows 10/11 的出站连接防火墙："Most firewalls only watch what comes in. PacketHound sniffs out what goes out" — 应用首次尝试联网时弹出 Allow 或 Block，并记住答案，同时对 Windows 自身的系统通讯保持安静，免得你被提示淹没。下载 68.2 MB；HN 帖子是它第一次面对真正的受众。
-
-**Why it matters:** Little Snitch 的工作流二十年来一直是 Mac 安静的隐私优势，而出站可见性正是现代数据外泄 — 包括智能体时代的外泄（编码代理读到的凭据出现在你意料之外的地方）— 所在之处。一个免费、先问后放的 Windows 等价物填补了真实空白；显而易见的下一个问题是，当应用孵化出一打辅助进程时，它的放行规则 UI 会怎么表现。
-
-[`🔗 packethound.app`](https://packethound.app/) · [`🔗 packethound-app/packethound.app`](https://github.com/packethound-app/packethound.app)
-
----
-
-## 14. Tasfer 把整个富文本编辑器画在 2D 画布上 — 不用 contentEditable，CRDT 经 WebRTC 同步
-
-- **Velocity:** ▮ steady
-- **Source:** Hacker News · 78+ pts · 4.7d ago（仍在首页）
-- **Tags:** `editor` `canvas` `crdt`
-
-Hamza Khuswan 的 Tasfer（11 月 3 日文章；仓库 11 月 8 日有推送）完全绕开 `contentEditable`：文字、光标、选区、断行、从右到左/阿拉伯文整形，全部由自定义代码渲染在 HTML5 2D 画布上，用一个隐藏输入框保住输入法与自动纠错。它本地优先、无账号，经作者自己实现的 CRDT 走 WebRTC 同步 — 极简服务器只帮助设备互相发现、不存储任何东西，加密中继作为后备。应用是 AGPL；编辑器引擎是 MIT，可单独商用授权。作者把提速归功于 LLM 辅助 — 2025 年 12 月发现 Claude 对这种规模的项目有多好用之后。
-
-**Why it matters:** `contentEditable` 是网络最老的沼泽之一，而每个手写编辑器的故事最终都要亲手重做断行和输入法。一个把硬骨头（RTL、IME、CRDT）都啃完的可用画布编辑器，加上 MIT 授权的引擎，是嵌入场景的真实选项 — 五天过去，HN 帖子还在被推敲。
-
-[`🔗 hamza.se/blog/tasfer`](https://www.hamza.se/blog/tasfer) · [`🔗 tasferlabs/tasfer`](https://github.com/tasferlabs/tasfer)
-
----
-
-## 15. ziwei-doushu：1.69 万星的开源紫微斗数排盘引擎 — 代码 MIT、数据 CC-BY，姊妹仓库把 160 万帧视频喂给 LLM
-
-- **Velocity:** ▮ steady
-- **Source:** GitHub Trending · +4,906 this week · 16.9k stars
-- **Tags:** `chinese-oss` `open-source` `llm`
-
-本周值得注意的中国开源上升项目是紫微斗数排盘引擎（ziwei-doushu，代码 MIT、数据集 CC BY 4.0，2026 年 5 月创建，现 16,935 星）：基于倪海厦《天纪》教学体系的完整排盘系统 — 完整排盘算法、四化系统、格局知识库与古籍原文数据。其 v4.0 解读数据集（10 月 15 日发布）覆盖 **674,976 张命盘 × 13 维 = 8,774,688 段解读，解压后 56.6 GB（约 204 亿字）**。11 月 8 日，README 加入了新的姊妹仓库 `nishi-ziwei-video-reading`（11 月 8 日创建）：多家大模型逐帧精读 17 集、160 万帧的源课程视频，方法、脚本、考题、成绩与踩坑全程随项目公开。
-
-**Why it matters:** README 的边界声明 — 算法是公开的传统智慧，价值在于解读深度、用户体验与持续运营 — 是当 "算法" 本身就是公开数据时，对开放核心护城河去向最干净的表达之一。而那个姊妹仓库本身就是一份把 LLM 规模的视频摄取用于领域语料的工作日志，自带方法论价值。
-
-> 项目连自身局限都发布了：README 指出六亲判断是它最弱的维度，并引用源课程原话说明，线上站点同样标注。
-
-[`🔗 Renhuai123/ziwei-doushu`](https://github.com/Renhuai123/ziwei-doushu) · [`🔗 nishi-ziwei-video-reading（姊妹仓库）`](https://github.com/Renhuai123/nishi-ziwei-video-reading)
-
----
-
-## 16. 从车牌到解锁车门：一条联网汽车攻击链，WAF 绕过是 LLM 在人类放弃之后找到的
+## 3. e-means 替换了 FAISS 里的 Lloyd 算法——迭代次数只要十分之一，最终损失还更低
 
 - **Velocity:** ▮▮▮ trending
-- **Source:** Hacker News · 139+ pts · 4.7h ago (~08:10 UTC+8)
-- **Tags:** `security` `automotive` `llm`
+- **Source:** Meta FAIR · 项目页 + arXiv 2611.09501 · 11 月 9 日
+- **Tags:** `research` `clustering` `faiss`
 
-Assetnote 联合创始人 Shubham Shah 与 Sam Curry 发布了针对同一车企联网汽车平台的成对研究（品牌刻意匿名；全部测试均在 "我们明确拥有或获准交互的汽车" 上进行）。澳大利亚链路：一个暴露的 `admintool.*` 子域，其管理 API 的认证仅靠 "硬编码在 JavaScript bundle 里的 API key"；经公开登记查询从车牌拿到 VIN；VIN→订阅者 GUID→个人身份信息；一个厂商 JS bundle 里内嵌的 ForgeRock OpenIDM 管理员凭据 — 本该只用于预发环境 — 在生产环境同样有效。然后是那堵墙：所有 `/openidm/` 路径都被 WAF 拦截，显眼的穿越路径（`/XUI%2f..%2fopenidm/`）直接 403，而 OpenIDM 自身的 servlet 路由拒绝含穿越字符的路径 — 哪怕它已经签发了管理员 JWT。人工尝试数日之后："我们把最接近目标版本的 OpenIDM 源码抓下来，让 GPT 5.6 Sol Ultra 在上面花了整整六个小时。它成功了。" — `/static%2f..%2fopenidm/` 这个前缀不在 WAF 覆盖范围内。再叠加一个 MFA 绕过（ROPC 令牌经 `IDTokenROPC` 服务换取），`POST /v1/remote/route/command {"command":"door-unlock"}` 即可落地："对这家车企在澳大利亚、美国和加拿大的任何车辆发送解锁、启动引擎等远程指令。" 页面同时写明：无 WAF 拦截的 `getUser` 端点泄漏 PBKDF2-SHA512 密码哈希、PIN 哈希、推送 token 与个人信息；而车企恰恰在这些端点上 "投入了大量 WAF 规则"。
+Meta FAIR 开源了 **e-means**，一个 Lloyd 算法的替代品，已进入 **`faiss/contrib/e_means`**，并附带论文与浏览器内 playground。其主张少见，因为速度与质量通常互相交换："Across a large range of scales and datasets, e-means reaches a test loss below Lloyd's at 25 epochs, in 1.2 to 3 epochs"——作者端到端测得，相对 Flash-KMeans **GPU 上 10–45 倍墙钟加速**，相对 FAISS **CPU 上 8–15 倍**。作者为 Bessa、Mazaré、Szilvasy、Touvron、Picard、Douze 与 Jégou——后三位正是写下它所击败的 FAISS 基线的人。
 
-**Why it matters:** ForgeRock 身份基础设施正在成为高价值攻击链里反复出现的那张多米诺 — 上周是 OpenAM 10.0 WebSocket 令牌窃取，这次是完整的车辆控制链 — 而这篇博文干净地记录了新的分工：人类完成系统测绘、撞上路由/WAF 之墙，LLM 的穷举搜索找到了那个未被覆盖的前缀。"作为人类，我们以为那个 403 适用于所有前缀" — 这正是自动化搜索要消灭的失败模式。
+**Why it matters:** k-means 是向量索引、量化码本与基于聚类的检索过滤之下的承重原语，迭代次数减少 10 倍会同时触及这三者，且不需要新数据结构。诚实的保留是：比较用的是作者自己的测试框架、对手是自己团队实现的当前最优；对冲的是代码进了 FAISS 本身，所以基线可复现，而不是只在论文里断言。
 
-[`🔗 shubs.io — 澳大利亚链路`](https://shubs.io/unlocking-any-car-from-x-brand-in-most-of-the-world/) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50419215)
+[`🔗 e-means 项目页`](https://e-means.github.io/) · [`🔗 arXiv 2611.09501`](https://arxiv.org/abs/2611.09501)
 
 ---
 
-## 17. NVIDIA 董事会就 "外国情报行动" 对黄仁勋启动独立调查 — 并声明未发现泄露证据
+## 4. Sherlock 登上 GitHub 趋势第一——而这个仓库自 11 月 1 日后没再提交代码
 
 - **Velocity:** ▮▮▮ trending
-- **Source:** Hacker News · 440+ pts（两条帖） · 8.5h ago (~04:26 UTC+8)
-- **Tags:** `industry` `nvidia` `governance`
+- **Source:** GitHub Trending · 今日 +4,294 星 · 11 月 10 日（~04:06 UTC+8）
+- **Tags:** `osint` `python` `github-trending`
 
-NVIDIA 董事会 11 月 8 日声明："鉴于近期关于创始人兼 CEO 黄仁勋成为外国情报行动目标的报道，董事会正启动独立调查。一个由独立董事组成、并聘请外部独立法律顾问的委员会将监督调查。" 同一声明里承重的那句是："虽然董事会没有理由认为国家安全或 NVIDIA 机密已被泄露，但董事会的调查将审视所有可用信息。" 数小时后，黄仁勋的全员信（《A Message to Our Company》）承认了引发报道的私人行为，并承诺配合审查；HN 上两份文件均在数小时内冲破 440 分。其背后的原始报道来自 Bloomberg（付费墙）。
+**sherlock-project/sherlock**——那个用用户名在社交网络上逐个探测的 MIT 许可 Python 工具——以 **+4,294 星**登顶日榜，累计 **106,745 星、12,366 fork**。星数没有告诉你的是：背后没有任何仓库事件。最后一次提交是 **11 月 1 日**（"update banner layout"），最后一次发布是 **9 月 8 日的 v0.16.2**，仓库未归档，也没有新公告。这条星曲线也不是单日现象——这一周里它每天都在增加数千星——而代码库的 CLI 一年来几乎没动。
 
-**Why it matters:** 让整个 AI 算力栈所依赖的公司的 CEO 接受治理调查，无论最终是否发现泄露，都是一条连续性新闻。董事会自己的措辞 — 预防性、无泄露证据、"对 Jensen 及其领导团队抱有信心" — 才是应当引用的句子；在原始文件之前做出的任何 "泄露" 定性都是猜测。
+**Why it matters:** 这是趋势故事诚实的那一版：一个八年的 OSINT 工具、106k 星，纯靠注意力上行。仓库里唯一真正新的产物是一处 banner 布局，所以把速度理解为对*问题*的兴趣（查清自己有哪些身份暴露在某个用户名下），而不是对工具的信心——400 个未关闭的 issue 与 PR 正是误报报告所在的地方，而这一周没有一个被修。
 
-[`🔗 NVIDIA 董事会声明`](https://nvidianews.nvidia.com/news/statement-from-nvidia-board-of-directors) · [`🔗 A Message to Our Company`](https://nvidianews.nvidia.com/news/a-message-to-our-company)
+[`🔗 sherlock-project/sherlock`](https://github.com/sherlock-project/sherlock) · [`🔗 GitHub 趋势（日榜）`](https://github.com/trending?since=daily)
 
 ---
 
-## 18. KetchUp 在 HN 发布、发布途中改名 BenchUp — Rust + WebGPU 的开源 SketchUp 替代品
+## 5. T3 Code 登上周榜第一：一个"agent harness control surface"现在驱动七种 CLI
 
 - **Velocity:** ▮▮▮ trending
-- **Source:** Hacker News · 309+ pts · 6.3h ago (~06:35 UTC+8)
-- **Tags:** `cad` `rust` `webgpu`
+- **Source:** GitHub Trending · 本周 +15,379 星 · 11 月 10 日（~04:06 UTC+8）
+- **Tags:** `agent-infra` `coding-agents` `electron`
 
-昨晚最大的 Show HN（309 分）是一款面向木工的免费开源 3D 建模器：Push/Pull、精确尺寸、组与组件、可移植的项目文件 — 既作为 Windows/macOS/Linux 原生应用运行，"也通过 WebAssembly 在桌面浏览器中运行"，浏览器构建 "优先使用 WebGPU，回退到 WebGL2"。它可导入 SketchUp 的 `.skp`、导出 `.obj`；最新版本 v0.6.6，仓库 10 月 23 日创建（目前 198 星 — HN 的热度给了网页版应用），今天 04:12Z 还有推送。这次发布的一个现场插曲：HN 标题仍写着 **KetchUp**，但站点与仓库已改名 **BenchUp**（"formerly KetchUp"），README 还在引用旧版 `.ketchup` 项目 — 公告发布一天之后的改名。
+**pingdotgg/t3code** 以 **+15,379 星**登顶周榜，仓库自 **2026 年 2 月 8 日**创建以来累计 **53,850 星**。它自称"agent harness control surface"：你安装并已认证的那些 CLI——**Codex、Claude Code、Cursor、Grok Build、OpenCode、Google Antigravity 与 fx**——由 T3 Code 从 iOS、Android、Web 或 Electron 桌面壳里统一驱动。仓库是 MIT，README 直说商业模式（"Nothing. We built T3 Code because we wanted the best possible development experience with agents"）。发布以 nightly 标签进行且非常频繁：**`v0.1.8-nightly.20261109.4429`** 于 11 月 9 日 18:58 UTC 落地，是当天的第三个 nightly。
 
-**Why it matters:** 自 SketchUp 易主之后，工坊级 CAD 这个细分一直缺少可信的自由软件答案，而这是迄今最认真的一次尝试 — 一套 Rust 代码同时产出原生应用与浏览器版本。这场中途改名也是本 feed 反复度量的 "公告 vs 工件" 落差的活体标本：引用仓库现在的名字，而不是发布标题里的那个。
+**Why it matters:** 值得关注的转变是架构性的，不是审美性的。harness 层正在与模型厂商分离——一个界面控制七种互相竞争的 agent CLI，意味着你选择的是订阅而不是 harness，而 README 的安装矩阵（七套不同的 CLI 登录流程）就是这种可移植性的真实成本。警号在计数器里：一个九个月大的仓库有 **5,976 个未关闭 issue 与 PR**。
 
-[`🔗 BenchUp3D/editor`](https://github.com/BenchUp3D/editor) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50418176)
-
----
-
-## 19. Dux Modular Shell 2.1：一个 QML shell 取代 waybar 加五个守护进程的 Wayland 桌面 — HN 225 分
-
-- **Velocity:** ▮▮ rising
-- **Source:** Hacker News · 225+ pts · 9.7h ago (~03:08 UTC+8)
-- **Tags:** `linux` `wayland` `desktop`
-
-DMS 2.1（"Stormborn"，11 月 4 日发布；当前 v2.1.2）是一个 Quickshell 上的 QML 加 Go 后端的 monorepo，提供面板、小部件、启动器、锁屏、空闲管理、通知与 polkit — 明确要取代 waybar/swaylock/swayidle/mako/fuzzel 那套组合 — 覆盖 niri、Hyprland、Sway、labwc、MangoWC、Scroll 与 Miracle WM。2.1 新增界面密度预设（Spacious 到 Dense）、"DMS Classic" 风格、带同步歌词的播放器、视频壁纸，以及安装器对 Fedora Atomic 的支持。项目 8.9k 星，已进入 Arch 的 `extra` 官方仓库（不只是 AUR），最后一次提交在 11 月 8 日。HN 标题把它低估成 "desktop shell with file manager"；实际套件还包括 Dux Files、日历与 Greeter。
-
-**Why it matters:** 后 GNOME/KDE 时代的 Wayland 世界缺的那块拼图就是 "组装好的桌面层"，而一个跨合成器的 shell 进入发行版官方仓库，是把 "自选合成器、自选 shell" 从折腾爱好变成受支持配置的里程碑。
-
-[`🔗 duxlabs.dev — v2.1 发布说明`](https://duxlabs.dev/blog/v2-1-release) · [`🔗 duxlabs-dev/dux-shell`](https://github.com/duxlabs-dev/dux-shell) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50416053)
+[`🔗 pingdotgg/t3code`](https://github.com/pingdotgg/t3code) · [`🔗 t3.codes`](https://t3.codes)
 
 ---
 
-## 20. RAM Altman：一个每天把你空闲内存数字邮件发给 Sam Altman 的 cron 脚本 — DRAM 涨价成了梗
-
-- **Velocity:** ▮▮ rising
-- **Source:** Hacker News · 216+ pts · 11.5h ago (~01:20 UTC+8)
-- **Tags:** `humor` `hardware` `dram`
-
-这个项目（仓库 11 月 5 日创建，821 星）是一个跑在定时器上的 shell 脚本：当空闲内存超过 10% 时，就把机器真实的 `MemTotal − MemAvailable` 数字放进一组轮换的文案里发给 Altman，`--dry-run` 可以只预览不发送。它玩的是 Altman 的那些言论 — 家用 PC 的 DRAM "可能只有 5% 的时间在被使用"、在个人机器里囤 DRAM "相当糟糕" — 而这些话正落在今年 AI 驱动的内存涨价潮上。该项目值得称赞的是自带更正：站点注明 Altman 已说这些话被断章取义，他发帖称 "i want you to have so much ram"，还一度在 X 上把自己改名为 Ram Altman；项目自标签为恶搞、无任何关联。
-
-**Why it matters:** 一个玩笑拿到 200+ 分是一支温度计 — 内存涨价的痛感已经在这个受众里梗化了。而一个在自己的站点上同时保留 "刺" 与 "更正" 的梗，比大多数正经报道同一言论的媒体更讲究信源卫生。
-
-[`🔗 ram-altman.lol`](https://ram-altman.lol/) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50415172)
-
----
-
-## 21. 继 2026-11-04 报道 C++26 DIS 否决之后：Herb Sutter 的复盘称决定因素不是契约 — "the language's creator strongly disagreed with the consensus of its steward body"
-
-- **Velocity:** ▮▮ rising
-- **Source:** Hacker News · 91+ pts · 5.4h ago (~07:28 UTC+8)
-- **Tags:** `cpp` `standards` `iso`
-
-P4454R0（日期 2026-10-31；isocpp.org 上九页 PDF）的 tl;dr 开门见山："The decisive issue that caused the DIS to fail is that the language's creator strongly disagreed with the consensus of its steward body responsible for its maintenance and evolution." — HN 标题将其压缩为 "a language's creator and its owners strongly disagree." Sutter 的三个事实：WG21 对契约有强共识（2026-03 克罗伊登 114–12）；"For the first time since WG21 was formed 36 years ago, C++'s creator is siding with the minority" 反对 DIS；而各国标准 body 选择给 Bjarne Stroustrup 的异议更大权重 — 游说使 "more than doubled the numerical NB opposition"，且票数接近到一票倒戈加一票弃权就能通过。针对程序性抱怨，他为共识数字做了辩护：EWG 主席 "quietly counted every contracts poll twice" 以按公司去重。他为 C++26 列出六个选项，从完全跳过 ISO 发布（选项 A）到把标准化挪进某个国家团体或 Linux 基金会（选项 E/F）— 并有一条编者注：Bjarne 在审阅该文时表示，选项 B（移除契约重新投票，理想情况下六周内产出新 DIS）"is the outcome he most wants to see"。
-
-**Why it matters:** 本周的投票被报道成契约设计之争；而第一手复盘认为技术辩论是次要的，真正起作用的是每个标准组织迟早会遇到的治理问题 — 创始人的异议相对委员会共识到底该占多大权重。并且它点出一种仍然活着的可能性：C++26 在没有契约的情况下发布。
-
-[`🔗 P4454R0（PDF，isocpp.org）`](https://isocpp.org/files/papers/P4454R0.pdf) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50418818)
-
----
-
-## 22. Keycloak 令牌交换签名绕过的公开公告比修复晚了 130 天 — CVE-2026-11800，8.1
-
-- **Velocity:** ▮▮ rising
-- **Source:** GitHub Advisory DB · GHSA-j97h-3f8r-mrjr · Nov 3 (~6d ago)
-- **Tags:** `security` `cve` `identity`
-
-CVE-2026-11800（CVSS 3.1 8.1，Red Hat CNA `secalert@redhat.com`；NVD 记录为 `Analyzed`，Red Hat 分数是唯一指标 — 属于 NVD 背书但未自行发布分数的形态 — 另有 CISA-ADP SSVC 容器）："This JWT algorithm confusion vulnerability in the JWT Authorization Grant flow allows an attacker with valid client credentials to bypass signature verification"，伪造断言铸造未授权访问令牌 — 这是身份供应商所能出现最深的一道口子，门槛只是持有有效的客户端凭据（`PR:L`）。修复随上游 **26.6.4 于 2026-06-26 发布**；记录它的 GHSA 则到 **2026-11-03** 才落地 — 晚了 130 天。当前 26.8.2 线（11 月 5 日）已带修复；Red Hat 的 RHBK 容器在 26.6.4-2/26.6-8。
-
-**Why it matters:** 全球部署最广的身份供应商之一的令牌交换被绕过，这是凭据铸造原语，不是数据泄漏 — 而披露时钟才是故事本身：按公告发布时间打补丁的人，在代码修复之后还带着漏洞跑了四个月。查查你的身份供应商六月修了什么，而不是十一月公告了什么。
-
-[`🔗 CVE-2026-11800 on NVD`](https://nvd.nist.gov/vuln/detail/CVE-2026-11800) · [`🔗 GHSA-j97h-3f8r-mrjr on OSV`](https://osv.dev/vulnerability/GHSA-j97h-3f8r-mrjr)
-
----
-
-## 23. IBM Qiskit 一次两条 8.4 — 量子检查点反序列化 RCE，以及一条把自己的修复版本写进受影响范围的记录
-
-- **Velocity:** ▮▮ rising
-- **Source:** NVD · 2 条记录 · Nov 8 17:16Z (~01:16 UTC+8)
-- **Tags:** `security` `quantum` `deserialization`
-
-CVE-2026-116499 — "IBM Qiskit SDK 1.4.2 through 2.6.2 could allow a local attacker to execute arbitrary code due to deserialization of untrusted data"：格式版本低于 13 的 QPY 文件在反序列化时内部使用 SymPy，构造的 `.qpy` 检查点在加载时即可执行代码。CVE-2026-116501（2.4.0–2.6.1）是损坏酉矩阵导致的越界写。两条均为 8.4 CVSS 3.1（IBM CNA `psirt@us.ibm.com`，Secondary 槽位），NVD `Awaiting Analysis`，带 CISA-ADP SSVC（利用：无；可自动化：否；技术影响：total）。两者都已在 **v2.6.2** 修复（PyPI 2026-11-05 — 比记录早三天）。而范围怪象就写在记录自己的描述里："1.4.2 **through** 2.6.2"，公告的修复建议却是 "升级到 2.6.2" — 修复版本落在其声称的受影响范围之内（姊妹记录的 "2.4.0 through 2.6.1" 是干净的）。
-
-**Why it matters:** 模型文件加载即执行的类已经抵达量子栈 — `.qpy` 文件是 notebook 和课件里共享的工件，这里的 "本地" 是指任何打开你检查点的人。而 "through 到修复版本" 的范围算术正是版本扫描器会照字面执行的东西；引用公告的升级行，别引用记录的范围。
-
-[`🔗 IBM 安全公告（CVE-2026-116499）`](https://www.ibm.com/support/pages/node/7295238) · [`🔗 CVE-2026-116499 on NVD`](https://nvd.nist.gov/vuln/detail/CVE-2026-116499)
-
----
-
-## 24. Stanford Stanza：藏在 bytes 字段里的 pickle 绕过 `torch.load(weights_only=True)` — CVE-2026-115878
-
-- **Velocity:** ▮▮ rising
-- **Source:** NVD · 1 条记录 · Nov 3 21:17Z (~6d ago)
-- **Tags:** `security` `ai` `pickle`
-
-CVE-2026-115878（CVSS 3.1 7.8，GitHub CNA `security-advisories@github.com`；NVD `Received`）："From 1.14.0 until 1.15.0, loading an attacker-supplied lemmatizer checkpoint" 可执行任意代码 — stanza 把词形还原器的 `pos_dict` 存成 gzip 压缩的 pickle，塞进检查点的 `dicts` 字段（一个 **`bytes`** 值），而 `torch.load(weights_only=True)` 把 `bytes` 当作基本类型，白名单根本看不到内层 pickle（向量 `AV:L/PR:N/UI:R` — 以加载模型的人的身份运行）。已在 **1.15.0** 修复（PyPI 2026-10-01，比公告早 32 天；PR #1649）。
-
-**Why it matters:** 加载检查点时大家默认伸手去拿的安全开关就是 `weights_only=True`；这是一个已修复的反例，展示它的盲区 — 一种携带序列化载荷的基本类型 — 就藏在那些大管道经常包裹的小 NLP 库里。检查点供应链的故事，总是比防护栏深一层。
-
-[`🔗 GHSA-gh9r-c94j-cmp5 on OSV`](https://osv.dev/vulnerability/GHSA-gh9r-c94j-cmp5) · [`🔗 CVE-2026-115878 on NVD`](https://nvd.nist.gov/vuln/detail/CVE-2026-115878)
-
----
-
-## 25. 微信 WeLM-Image 宣称开源图像生成第一 — 一份没有权重支撑的 31.7B MoT 报告
-
-- **Velocity:** ▮▮ rising
-- **Source:** arXiv · 2611.07392 · Nov 5（HF papers ~42 赞）
-- **Tags:** `research` `image-generation` `tencent`
-
-微信视觉团队的技术报告：统一图像基础模型（理解、生成、指令编辑、多参照合成）采用 Mixture-of-Transformers 骨干 — 共享注意力、独立的理解/生成参数 — 每条路径各配 MoE：**存储参数 31.7B，每个目标 latent token 激活约 5.4B 生成参数**，以 1.5K 原生分辨率训练，再经 rubric/清单奖励 RL 与噪声感知在线策略蒸馏。摘要的头条：1536 分辨率模型 "ranks first among the evaluated open-source models"，横跨 PRISM-Bench 与另外两个基准。Turbo 变体（MeanFlow 少步蒸馏）在单张 H20 上 **4.98 秒** 生成 1024×1024。论文还自建了编辑基准 WeGenEditBench（2,740 条精选样本），理由是既有编辑基准缺少逐样本的核验标准。而决定性的注意事项：**没有公开权重** — Hugging Face 搜索一无所获，论文也没有发布计划。
-
-**Why it matters:** "在受评的开源模型中排名第一" 是关于作者自己选定的比较集的声明，出自一个尚未发布模型的实验室 — 它确实是腾讯生产栈走到哪了的真信号，但目前既不是你能跑的模型，也不是你能复核的榜单。
-
-[`🔗 arXiv:2611.07392`](https://arxiv.org/abs/2611.07392) · [`🔗 Hugging Face papers`](https://huggingface.co/papers/2611.07392)
-
----
-
-## 26. Vercel 的 json-render 把带校验的生成式 UI 流式送进 Chat SDK 智能体 — 19.5k 星与一份约束 AI 生成 UI 的规范
-
-- **Velocity:** ▮▮ rising
-- **Source:** GitHub Trending · +149 today · 19.5k stars
-- **Tags:** `agents` `generative-ui` `frontend`
-
-11 月 7 日的 changelog 把 json-render 接进 Chat SDK 智能体：智能体输出一份类型化 JSON 规范，渲染成 Slack Block Kit 或 Teams Adaptive Cards 卡片；编辑以流式送达、变更节流至最多每 500 毫秒一次；`toCard` 按组件 schema 校验每个元素的 props，抛出带逐条诊断的 `CardSpecError`，设计上可直接回喂给模型。Apache-2.0 的核心带 React、Vue、Svelte、Solid、React Native、ink（终端）、react-three-fiber、react-pdf、remotion 与 email 适配器；v0.22.0 于 11 月 4 日发布。
-
-**Why it matters:** 让 AI 写 "constrained to your catalog" 的 UI 是所有 agent-UI 产品正在收敛的形态，而这个实现把校验-重试放进了协议 — 卡片要么通过你的 schema 类型检查，要么模型收到精确的违规清单 — 而不是靠提示词祈祷模型乖巧。
-
-[`🔗 vercel-labs/json-render`](https://github.com/vercel-labs/json-render) · [`🔗 Vercel changelog`](https://vercel.com/changelog/json-render-and-chat-sdk-agents)
-
----
-
-## 27. Paradev 在转向 MIT 数小时后发布 Desktop Canary：每个 CLI 智能体一个工作区、每个任务一个 worktree — 16.1k 星
-
-- **Velocity:** ▮▮ rising
-- **Source:** GitHub Trending · +39 today · 16.1k stars
-- **Tags:** `agents` `devtools` `worktrees`
-
-Paradev 是一个编排 Claude Code、Codex、OpenCode、Gemini CLI 与 Cursor Agent 的桌面应用：每个任务拥有自己的 git worktree、分支与终端，内置评审/PR 面板与每工作区的 dev-server 预览 — "不是编码智能体本身……不代理模型调用"。desktop-v2.0.6（11 月 8 日）加入了 Bring-Your-Own-Cloud 指南与 MIT 许可变更；**Desktop Canary** — 2026-11-09T00:53Z 发布的 main 自动构建、标注为内部测试且可能不稳定 — 是桌面线下一版的首次亮相。支持 macOS（Apple Silicon/Intel）与实验性 Linux AppImage；没有 Windows 版。CLI 仍叫 `superset`，与 Apache Superset 明确无关。
-
-**Why it matters:** CLI 智能体的指挥层正在快速整合，而 Paradev 的站位 — 不持有任何模型关系、MIT、自带云 — 直接挥向 Conductor/Codex 应用形状的在位者。值得盯的赌注是：没有模型厂商锁定的编排，能否扛住在位者的捆绑。
-
-[`🔗 ParadevAI/Paradev`](https://github.com/ParadevAI/Paradev) · [`🔗 releases`](https://github.com/ParadevAI/Paradev/releases)
-
----
-
-## 28. kortix-ai/CompanyOS：常驻智能体加服务端 Goals，只有校验会话能关单 — v0.15.1，20.6k 星
-
-- **Velocity:** ▮ steady
-- **Source:** GitHub Trending · +72 today · 20.6k stars
-- **Tags:** `agents` `open-source` `automation`
-
-CompanyOS 是一个事件驱动的多智能体 "公司操作系统"，构建于 pi 运行时之上：智能体按计划、webhook、工具事件与团队消息启动，各自运行在带持久状态的云端计算机上，宣称接入 3,000+ 应用。v0.15.1（11 月 7 日）把 Goals 迁到 API 并改为服务端状态 — "only a verifier session can mark a goal done" — 并新增 Proactive Spaces：一个读取 "Space 事件流、只在真正要紧时才开口" 的监视器。
-
-**Why it matters:** 常驻智能体的技术栈正在开源世界成形，而它的难题是信任。一个不能给自己关单的智能体 — 必须由另一个校验会话来 — 是第一批把 "谁来检查智能体的作业" 变成架构事实而非提示词指令的开源设计之一。
-
-[`🔗 kortix-ai/CompanyOS`](https://github.com/kortix-ai/CompanyOS) · [`🔗 releases`](https://github.com/kortix-ai/CompanyOS/releases)
-
----
-
-## 29. Muir：Google 发现门控 delta-rule 注意力的擦除门可以低秩 — 并拿到 2,560× 长度外推
-
-- **Velocity:** ▮ steady
-- **Source:** arXiv · 2611.08376 · Nov 5（HF papers ~9 赞）
-- **Tags:** `research` `linear-attention` `architecture`
-
-Gated DeltaNet-2 在写入新值前会衰减其 KV 状态并擦除对 incoming key 的预测。Muir 的出发点是 "state updates are far less sensitive to erasure than to writes" — key 激活与单位归一化把 key 的能量集中到稀疏的通道子集 — 因此擦除门可以是**低秩**的。Muir 把所有门融合进一个按敏感度分配的低秩投影，加入匹配滤波式读出门，把省下的参数投给更宽的 FFN，并以并行形式保证大 chunk 下的数值稳定。在 166M–1.34B 参数区间：困惑度较 GDN-2 降 1.8–2.0%、较 Transformer 降 2.5–3.6%；1.34B 规模上赢得多跳与多针检索，并实现 **2,560×** 外推 — 从 4K 训练长度到 1000 万 token 的流。论文自述的局限：在固定门秩预算下，静态与动态读出在单视野保持与多滞后适应之间做取舍；Splash Attention 在短上下文（约 11K 以内）仍然更快，因为它有融合的 Pallas 内核而 XLA 要在 HBM 里物化 chunk 临时量。
-
-**Why it matters:** 这是在 flash-linear-attention 从业者真正训练的规模上、对门控 delta-rule 家族的一次带测量结果的化简 — 引用外推头条之前，先带上那句短上下文回退的诚实注脚。
-
-[`🔗 arXiv:2611.08376`](https://arxiv.org/abs/2611.08376) · [`🔗 Hugging Face papers`](https://huggingface.co/papers/2611.08376)
-
----
-
-## 30. 潜空间通信的收益真来自通信吗？PLatour 的对照实验说有时不是 — 并把抓这类问题的测试一并开源
-
-- **Velocity:** ▮ steady
-- **Source:** arXiv · 2611.06976 · Nov 4（HF papers ~15 赞）
-- **Tags:** `research` `multi-model` `evaluation`
-
-PACT（prefill 到自回归的跨模型迁移）把大型冻结模型的提示表示与小型模型的廉价生成拼在一起。PLatour 是它的开源框架 — 零初始化线性桥接，报告称优于开源基线、并以更小的发送端在共享的数学/编码基准上超过既有系统 — 然后论文真正的贡献落地："controlled experiments show that the gains on some tasks can be reproduced by uninformative sender signals, self-communication, or receiver-only training。" 也就是说，可训练的桥接可以只作为参数高效微调起作用，完全没有利用发送端信息。论文同时发布 **PACT-Check**：一个量化训练后系统的收益里有多少是真实通信的测试。
-
-**Why it matters:** 潜空间通信与跨模型压缩的论文报告的都是端到端任务增量；这篇提供了能把 "小模型真的在用大模型" 与 "桥接只是一个伪装成通信的小 LoRA" 区分开的阴性对照。在下一个头条数字面前，先跑它。
-
-[`🔗 arXiv:2611.06976`](https://arxiv.org/abs/2611.06976) · [`🔗 zhenyi4/platour`](https://github.com/zhenyi4/platour)
-
----
-
-## 31. SAE Interprets MoE：精确到专家的特征归因 — 每个 latent 的预激活都能按专家分解，无需计数
-
-- **Velocity:** ▮ steady
-- **Source:** arXiv · 2611.08089 · Nov 5（HF papers ~7 赞）
-- **Tags:** `research` `moe` `interpretability`
-
-既有的 MoE 分析 "count how often an expert is selected on domain-labeled corpora, an instrument that … records selection rather than contribution"。ByteDance Seed 的替代方案：MoE 层输出是专家输出的路由加权和，而 SAE 编码器是仿射的，所以**每个 latent 的预激活都能对专家做精确分解** — 是贡献，不是被选次数。在 Qwen3-30B-A3B（第 4/30/46 层）上：贡献 "far more concentrated than gating"，多数 latent 只有一两个主导专家，且自动解读的主导集合呈现子域专精 — Java 与前端 web 代码分属不同专家，几何与算术/多项式亦然。代码已开源（Bytedance-Seed/SAE-Interprets-MoE）。论文自己的注意事项：粗粒度域之间的专家数 "very unequal"，谈集中度时要把这个基准率记在心上。
-
-**Why it matters:** 一个精确（而非相关性）的归因方法，带代码，跑在大家真的在用的模型上 — 而 "被选 vs 贡献" 的区分，是任何审计路由模型专家真实行为的人都能复用的部分。
-
-[`🔗 arXiv:2611.08089`](https://arxiv.org/abs/2611.08089) · [`🔗 Bytedance-Seed/SAE-Interprets-MoE`](https://github.com/Bytedance-Seed/SAE-Interprets-MoE)
-
----
-
-## 32. Agentero：让智能体写修订校验的实验记录表、渲染只读 UI 块的研究工作区 — v0.15.3
-
-- **Velocity:** ▮ steady
-- **Source:** GitHub Trending · +145 today · 2.1k stars
-- **Tags:** `agents` `research-tools` `chinese-oss`
-
-Agentero（MIT，中文优先附英文 README，2.1k 星，今日 +145）是一个人类与智能体共享同一上下文的桌面研究工作区。v0.15.3（11 月 8 日 23:58Z）新增在智能体回复内渲染的只读结构化 UI 块 — 从 `openui-lang` 代码围栏解析（layout/text/state/data/paper-reading 组件）— 以及可拖拽的 PDF 翻译悬浮卡与共享桌面抓取管线的 CLI feed 命令。v0.15.2 加入智能体经 `table_query`/`table_upsert` 以修订校验写入的实验记录表，以及 Papers-with-Code 集成。
-
-**Why it matters:** 这个设计的分工才是重点：给模型干净、结构化、带修订校验的可写上下文，把人留在舒服的 PDF 世界里、只接收只读渲染回来。这是对中国开源圈持续出货的这类工具给出的、针对智能体上下文碎片化的具体答案。
-
-[`🔗 poco-ai/Agentero`](https://github.com/poco-ai/Agentero) · [`🔗 releases`](https://github.com/poco-ai/Agentero/releases)
-
----
-
-## 33. microduck：一只全身大脑都开源的 800 克 双足鸭 — MuJoCo 训练的 RL 策略，按小时出验证构建
-
-- **Velocity:** ▮ steady
-- **Source:** GitHub Trending · +599 today · 13.6k stars
-- **Tags:** `robotics` `reinforcement-learning` `open-source`
-
-pollen-robotics 的 microduck 是一台约 25 cm / 800 g 的双足机器人，Rockchip RK3566 上的 50 Hz 控制环驱动 15 个舵机，策略来自姊妹仓库 `microduck_rl` 训练的 RL — MuJoCo + PPO、sim2real、ONNX 导出 — 具备行走、滚轮、喙部拾取与自我扶正等模式，固件更新 "verified, health-gated and reversible"（daemon 0.18.9-dev 构建今天刚盖时间戳；整機经 pollen-robotics.com 出售）。一句诚实的备注：本周的涨幅（+599 星/天）没有找到公开触发点 — 没有 HN 帖、没有媒体报道。可核验的是仓库本身、持续不断的发布节奏，和已经出货的整套栈。
-
-**Why it matters:** 便宜玩具价位的机器人几乎都带着封闭的控制栈；这一台公开了完整训练工具链，让 "自己复现" 成为可检验的声明而不是营销话术。真正要盯的是那个找不到的触发点 — 引用热度之前先调查。
-
-[`🔗 pollen-robotics/microduck`](https://github.com/pollen-robotics/microduck) · [`🔗 releases`](https://github.com/pollen-robotics/microduck/releases)
-
----
-
-## 34. Aphyr 悼念 Harvest：Bending Spoons 把他的记账月费从 $13.32 提到 $133.98
-
-- **Velocity:** ▮ steady
-- **Source:** Hacker News · 75+ pts · 2.9h ago (~09:58 UTC+8)
-- **Tags:** `saas` `pricing` `industry`
-
-Kyle Kingsbury — Jepsen 的作者 — 写 Harvest：这款时间追踪/开票 SaaS 于 2025 年被 Bending Spoons 收购（用他的话说，"the company that gutted Vimeo"）：他的套餐从 **$13.32/月 涨到 $133.98/月**，方式是强制迁往 "enterprise" 套餐和一套 "unlimited" 用量计费 — 用他的原话说，"as far as I can tell, exactly what I had before"；$12.65/月的 "flex" 套餐在常规 ~3% 卡费之上再抽 2%；而支持邮件现在由大模型回复 — "they don't read customer emails any more." 注意事项：这是单个客户的叙述 — 他自己的套餐价格、他自己对条款的定性。
-
-**Why it matters:** 自由职业者的基础设施（开票、计时）正在被收购方以约十倍重新定价，而且套路眼熟 — 把所有人迁到同一个套餐、把既有用量改名为计费项、把支持货币化。务实的做法是在迁移邮件到达之前就为续约定价，而不是之后。
-
-[`🔗 aphyr.com — RIP Harvest`](https://aphyr.com/posts/427-rip-harvest) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50420035)
-
----
-
-## 35. Declarative Dragging：声明一个拖拽应该到达哪些模型状态 — 引擎自己渲染出所有可能世界（UIST 2026 最佳论文）
+## 6. CISA 的 KEV 一次加了三条——而 FreeSWITCH 的 9.8 在被打分之前就已被利用
 
 - **Velocity:** ▮▮▮ trending
-- **Source:** Hacker News · 586+ pts · 11月4日（仍在首页）
-- **Tags:** `ui` `research` `interaction-design`
+- **Source:** CISA KEV · 目录 2026.11.09 · 11 月 10 日（~03:48 UTC+8）
+- **Tags:** `security` `cve` `kev`
 
-Declarative Dragging（Horowitz、Blinn & Heer；UIST 2026 最佳论文奖）反转了拖拽的构建方式："与其直接编写那些视觉行为，你只需对每个想让它可拖拽的元素声明：拖动它应该通向应用的哪些未来状态。" 引擎将这些状态推测性地渲染成视图树，提取被拖元素在每种渲染中的落点，再从这些可能世界合成出整个拖拽交互 — 无需手写任何 drop-zone 几何。实现是 **Dragology**，一个面向 Web SVG 界面的库，可通过可组合的 modifier 叠加浮动、吸附与过渡。演示包括代数重写谜题、树之间的保序映射、以及一个置换实验室 — 同一系统的多个并行表示在拖拽中途实时联动；论文之后的工作还包括让 Hazel 的重构操作变得可拖拽，以及作者们的数学游戏转向手柄上的 3D。
+CISA 目录推进到 **2026.11.09（1,772 条）**，同一天新增三条：**FreeSWITCH CVE-2026-116779（9.8）**、**OpenSSH CVE-2026-123158（8.1）**、**GPUStack CVE-2026-102895（9.8）**。FreeSWITCH 那条最机械：`sofia_presence_handle_sip_i_message()` "split the To user of an inbound SIP MESSAGE on a plus sign and treated the left side as a chat protocol selector"——选到 `api` 就进入了 `switch_api_execute()`，于是其 MESSAGE 被接受的对端就能执行 FreeSWITCH API 命令，"including operating-system command sinks, with the daemon's privileges"。缺省内外部 profile 都开启了入站 chat，且"exploitation has been observed in the wild"。修复版本 **1.11.3**。
 
-**Why it matters:** "不就是拖个拽吗" 是 HN 的经典笑话，因为手写它至少要一周；这里把最难的部分变成了对模型语义的查询，而不是琐碎的几何。用推测性渲染枚举可能状态，和 agent 做动作规划用的是同一个技巧 — 这次它从研究侧进入了 UI 代码。
+**Why it matters:** 注意注册表*没有*说什么。三条记录都是 `Analyzed`，且**没有任何 `nvd@nist.gov` 指标**——分数属于 GitHub 的 CNA（FreeSWITCH、GPUStack，3.1 `Secondary`）与 MITRE 的（OpenSSH），所以扫描器引用的"NVD 9.8"其实是 CNA 的数字，NVD 只是背书，没有发布自己的分数。OpenSSH 那条正是本 feed 在 **2026-11-05** 覆盖过的 musl 无 PAM 密码绕过（任意 256–1024 字符的密码都能通过，10.6p2 修复）——修复早已发布，KEV 是"它确实被用过"的第一次确认。GPUStack 的公告在 **2026-11-05** 就声称野外利用；KEV 是佐证，不是新事实。
 
-[`🔗 declarative-dragging.github.io`](https://declarative-dragging.github.io/) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50368481)
+[`🔗 CISA 已知被利用漏洞目录`](https://www.cisa.gov/known-exploited-vulnerabilities-catalog) · [`🔗 GHSA-mg63-h38w-8p9p（FreeSWITCH）`](https://github.com/signalwire/freeswitch/security/advisories/GHSA-mg63-h38w-8p9p)
 
 ---
 
-## 36. 写作作为思考工具：六页备忘录的论证死了 — "现在你可以在毫无思考的情况下产出六页"
+## 7. FFmpeg 一天收到 102 条 CVE 记录——其中 96 条说最新版本仍然受影响
 
 - **Velocity:** ▮▮▮ trending
-- **Source:** Hacker News · 383+ pts · 26h ago（昨天 ~18:41 UTC+8）
-- **Tags:** `writing` `llm` `essay`
+- **Source:** NVD · 11 月 9 日发布 102 条记录
+- **Tags:** `security` `cve` `ffmpeg`
 
-muratbuffalo 博客（自 2011 年写作至今）为"写作即认知"给出了一个干净的技术论证：Manuel Blum 对研究生的名言 — 图灵机与有限自动机的唯一区别是"有纸和笔" — 落点是 "没有写作，你就退化成一台有限自动机"。写作是核外执行（out-of-core execution）：写论文评审时他才发现自己只读懂了 "大概 60%"；2018 年那篇 Paxos 与 Nakamoto 共识解剖学相似的博文，后来成了一篇研究论文的种子。LLM 那一节更锋利："模型读尽了所有东西，唯独没有读你脑子里的" — 它知道共识性的框架，不知道你对其半成品的怀疑。而贝佐斯为六页备忘录背书的理由 — "没人能写完一份六页、叙事结构的备忘录而思绪不清晰" — 被宣告失效：有了 LLM，"你现在可以在毫无思考的情况下产出六页，而这六页看起来仍然是思考发生过的证据"。随后是五条写作规则（先写烂、再修整、保持平实、不为读者写、把它排进日程）。
+VulnCheck 在 **2026-11-09** 发布了 **102 条 FFmpeg CVE 记录**，全部仍处于 `Received` 状态，NVD 未做分析。这批几乎都是编解码器与滤镜树里的内存安全问题——`huffyuvenc`、`dvbsubenc` 与 `gif.c` 的堆溢出，VVC 与 Vulkan AV1 路径的越界写，十多个解码器的未初始化内存泄露——外加一长串 NULL 解引用。分数在两个框架上都来自 VulnCheck：**3.1 `Primary` 最高 7.8**，**4.0 `Secondary` 最高 8.5**（`CVE-2026-125250`，GIF 编码器 `shrunk_buf` 尺寸计算错误）。分布比最大值更重要：**102 条描述里有 96 条写着 "through 9.0.2"**，也就是 FFmpeg 的最新 tag（`n9.0.2`），只有 **6** 条给出了修复边界（"before 8.1.3 and 9.x before 9.0.2"）。
 
-**Why it matters:** 它点破了许多本 feed 内容底下的评估难题 — 产出的文本不再能证明思考发生过，于是每份产物（六页备忘录、基准报告、CVE 分析）都需要一个来源故事。"比较优势"的框架也是对今天 Goldman Sachs 条目的具体回应：那家公司限制掉的，恰恰是本文说最不该外包的东西。
+**Why it matters:** 当一批 102 条记录里绝大多数条目描述的都是最新 tag 中仍然存在的缺陷时，这是一次**未命名修复版本**的披露，而不是补丁公告——而 4.0 与 3.1 的差值（同一 CNA、同一族向量，3.1 上 7.8、4.0 上 8.5）是打分口径，不是分歧。这里全部是 `Received`，所以"NVD 说"目前还不存在；引用 VulnCheck，并说明这一点。
 
-[`🔗 muratbuffalo.blogspot.com`](https://muratbuffalo.blogspot.com/2026/11/writing-as-thinking-tool.html) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50412067)
-
----
-
-## 37. Opus 5.5 被削了吗？238 分的大辩论 vs 唯一一台为此而造的测量仪器 — 而它已经发表了阴性结果
-
-- **Velocity:** ▮▮▮ trending
-- **Source:** Hacker News · 238+ pts · 5h ago（~15:04 UTC+8）
-- **Tags:** `evaluation` `llm` `benchmarks`
-
-一条声称 Opus 5.5 思维模式在 11 月 3 日发生变化的疯传推文冲上 HN 首页，引来惯常的战争：质量崩塌的轶事（一位评论者：自己工作流的成功率从 ~85% 跌到 ~10%）对阵毫无察觉的人，理论从静默量化一路排到上市季降级。值得读的是那台仪器：**ninjahawk/livenerf** — 一个预注册的 30 天（现已延至 45 天）漂移基准，锁死一个 78 题的冻结面板（从 2,336 道 GPQA/MMLU-Pro/竞赛数学/AIME 题中筛出模型"时对时错"的题），钉死 CLI 版本，用纯函数评分，并在收集数据之前就提交了判定规则。其结果帖（10 月 27 日）：第 11–20 天得分 59.2%（+0.7 ± 1.8 pp）、第 21–30 天得分 57.1%（−1.5 ± 1.8 pp），对比 58.4% 的发布基线 — 没有持续回退。真正承重的是它诚实的极限：实测最小可检测效应 ≈ 每 10 天窗口 6.6 pp；一次刻意的 **Opus 5 → Opus 5.5 替换无法被区分**（−3.8 ± 6.3 pp，−23% tokens）；推理力度的削减首先体现在 token 上（medium −26%，low −62% 输出 token）；面板审计还发现了 8 个错误答案键和约 30 道歧义题。
-
-**Why it matters:** 模型质量话语里被重复最多的那类主张，目前连为此而造的最好的公共仪器都测不出来 — 作者自己说得直白："如果一台仪器连某种同家族模型替换都检测不到，那它就不该被用来声称替换没有发生。" 静默降力最先出现在 token 通道 — 该盯的是这个数字，不是感觉。
-
-[`🔗 LiveNerf 30 天结果帖`](https://blog.nathanlangley.dev/posts/livenerf-30-days.html) · [`🔗 ninjahawk/livenerf`](https://github.com/ninjahawk/livenerf) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50422069)
+[`🔗 CVE-2026-125250（NVD）`](https://nvd.nist.gov/vuln/detail/CVE-2026-125250) · [`🔗 FFmpeg tags`](https://github.com/FFmpeg/FFmpeg/tags)
 
 ---
 
-## 38. Chimera：一个所有声音都来自模拟气道的合成器 — Pink Trombone 的血脉，跑在浏览器标签页里
+## 8. SuperTokens 的 9.9：一个应用的 API key 可以改写父租户——顺带改写所有兄弟应用
 
 - **Velocity:** ▮▮ rising
-- **Source:** Hacker News · 246+ pts · 13h ago（~06:36 UTC+8）
-- **Tags:** `audio` `web` `synthesis`
+- **Source:** NVD · CVE-2026-123800 · 11 月 10 日（~03:16 UTC+8）
+- **Tags:** `security` `cve` `authentication`
 
-Chimera Vocal Synth 是一台物理建模的语音合成器："每个声音都来自一个模拟的气道（肺、声带或鸣管、分支的声道、嘴唇、鼻腔），而非采样。" 界面把乐器本身暴露出来 — 从声门到嘴唇的管道视图、放慢 100 倍的声带、实时共振峰频谱、F1/F2 元音图 — 你可以拖动舌头、嘴唇或下颌，或在 110 Hz 基频的键盘上弹奏，并调节气压（8.0 cmH₂O）、紧嗓与颤音。没有 ML 模型、没有采样；HN 评论区把它定位为 Pink Trombone（2018）的现代后裔 — 而后者又源自更早的发音合成工作 — 相关演示视频正在 X 和 Bluesky 上流传。
+**CVE-2026-123800（9.9，CVSS 3.1，GitHub CNA 打分，记录状态 `Received`）** 是开源认证服务器 **SuperTokens Core** 的多租户授权缺陷。`Multitenancy.checkPermissionsForCreateOrUpdate` "does not adequately authorize updates to a parent connection URI domain or the base tenant"：在某个非默认 connection URI 域下托管多个应用的商业授权部署里，持有**某一个**应用有效 API key 的攻击者可以改写父域，因为目标分支"checks the domain without requiring the source application and tenant to be public"。由于 `api_keys` 未受保护，链条继续延伸——替换父 key，再替换兄弟 key，读取或修改兄弟用户，以他们身份取得会话，通过兄弟 dashboard 用户建立持久化，并让兄弟应用自己的 key 被锁死。
 
-**Why it matters:** 发音合成 — 把声道当作物理乐器 — 是神经 TTS 的长期对照面：完全可解释（每个元音就是一个声道形状）、以扩散音频模型做不到的方式可控，并且是一间装进标签页的语音学教室。能在浏览器里以交互帧率跑起来，才是工程上的本事。
+**Why it matters:** 修复清单才是这个故事真正的形状：跨七个大版本共 **18 个补丁版本**（6.0.24、7.0.23、8.0.7、9.0.6 …… 12.3.1），因为这段代码自 6.0.0 起就被一路带下来。前提条件也很精确——*商业授权*的多租户部署、多个应用共用同一个非默认 connection URI 域——所以自建单租户安装不在受影响集合内。记录尚未分析，9.9 是 CNA 的数字。
 
-[`🔗 chimera-vocal-synth.vercel.app`](https://chimera-vocal-synth.vercel.app/) · [`🔗 jamesondh/chimera-vocal-synth`](https://github.com/jamesondh/chimera-vocal-synth) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50418182)
+[`🔗 CVE-2026-123800（NVD）`](https://nvd.nist.gov/vuln/detail/CVE-2026-123800) · [`🔗 修复提交 13c3de17`](https://github.com/supertokens/supertokens-core/commit/13c3de170dd40dd217db0f6bd2bded0948476a42)
 
 ---
 
-## 39. GPUI 批判：`notify` 就是 zone.js — 在 Discord 押注该框架几天后的一份实测反驳
+## 9. Redpanda Connect 的管理 API 默认挂在 `0.0.0.0:4195` 且无认证——所以一个 POST 就是 RCE
 
 - **Velocity:** ▮▮ rising
-- **Source:** Hacker News · 117+ pts · 8h ago（~11:51 UTC+8）
-- **Tags:** `rust` `gui` `performance`
+- **Source:** NVD · CVE-2026-123270 · 11 月 10 日（~02:17 UTC+8）
+- **Tags:** `security` `cve` `rce`
 
-在 Discord 宣布用 GPUI 重写桌面端（11 月 6 日已报道）几天后，一份实测的反驳来了：作者的论点是 GPUI 的状态模型回答不了"一个值变化时，哪些代码会执行？" — `cx.notify()` 只命名一个实体、实体以下一无所知，"比 zone 更精确，因为它命名了实体，但归根结底在说同一类话"，正如 Angular 的 zone.js。基准（i9-13900K、Vulkan、三次取中位数）：3,000 行、每行带缓存视图时，改一个 label 花 8.4 ms 且每 1,000 行约增 3 ms；普通元素要 92 ms；一个手写的相等性守卫能把等值写入从 7.9 ms 降到 0.9 µs。gpui-fast 分支把 8.4 降到 3.4 ms — 但仍是整棵树的遍历 — 而 Zed 自己的保留实验测得 "在日常负载下比不开启慢 1–3%"。Elm/Iced 一次 label 修改要重建 39,023 个 widget（7.3 ms）；egui 在 3,000 行下每次编辑约 32 ms。这篇帖子的披露声明是基准类文章的范本：作者把 GPUI 的 Linux 渲染器移植到了 wgpu、写下了这套测试、并且在一个竞争性的 signal 框架（zgui，0.69 ms）上工作 — "这是我的框架，而且是在这套测试上调优的，所以这些数字请打折扣来看。"
+**CVE-2026-123270（9.8）** 覆盖 **Redpanda Connect 4.39 至 4.110**：在 streams 模式下"the management HTTP API is exposed on `0.0.0.0:4195`, but authentication is disabled by default and there is no authentication gate protecting the stream CRUD routes"。能访问该端口的未认证攻击者可以向 `/streams/{id}` `POST` 一份流水线定义，其中包含可执行代码的 processor——`command`、`subprocess`、`ffi`，或不安全的 `sql_raw`——并且"because pipelines can also return command output in-band via HTTP, this vulnerability enables full host compromise, credential theft, and data exfiltration with no user interaction or credentials required"。**v4.111** 把该 API 改为默认关闭，但记录指出：若手动启用管理 API，RCE "remains achievable on v4.111 and later"。
 
-**Why it matters:** 随着 Discord 的重写让 GPUI 成为原生 Rust UI 的默认选项，这份文档就是那句反方证词 — 而且它指出的取舍是真实的：要么保住朴素的 `render` API、按视图付费，要么手工搭一棵实体 signal 图、丢掉你当初选它的理由。披露声明一节也值得所有 harness 对 harness 的基准文章照抄。
+**Why it matters:** 这个分数是 **CISA-ADP 的**，不是 Redpanda 的、也不是 NVD 的——记录为 `Received`，唯一指标是 `134c704f-…`（Vulnrichment）的 9.8，`CWE-306`。参考列表更少见：只有一条链接，研究者自己的复现仓库（`pagvac/redpanda-connect-unauth-rce`），记录里既没有厂商公告也没有提交——所以上面的段落是 CNA 描述的叙述，而修复边界（"4.111，改为显式启用"）是唯一被发布的补救表述。
 
-[`🔗 A Critique of GPUI（zortax.de）`](https://blog.zortax.de/posts/a-critique-of-gpui) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50420857)
+[`🔗 CVE-2026-123270（NVD）`](https://nvd.nist.gov/vuln/detail/CVE-2026-123270) · [`🔗 复现仓库`](https://github.com/pagvac/redpanda-connect-unauth-rce)
 
 ---
 
-## 40. 继 2026-11-08 报道 Craft CMS 的 SQL 注入之后：同一波里又来了六条记录 — 一个 9.8 的 GraphQL 越权和一个 8.8 的签名模板 RCE
+## 10. Airflow 的 8.8 是一次不完整的修复：升级到 3.3.1 并不能关掉它
 
 - **Velocity:** ▮▮ rising
-- **Source:** NVD · 6 条记录 · 11月8日 14:18Z
-- **Tags:** `security` `cve` `craftcms`
+- **Source:** NVD · CVE-2026-111421 · 11 月 9 日（~18:17 UTC+8）
+- **Tags:** `security` `cve` `airflow`
 
-11 月 8 日的 VulnCheck 披露波（与第 1 条 OpenEMR 的 44 条记录同一批 ~14:18Z）还为 Craft CMS 发出了另外六条记录，CVE-2026-124426 至 -124431 — 这还在昨天那条未认证 SQL 注入之外。主角：**CVE-2026-124427（CVSS 3.1 评 9.8）**，一个授权绕过 — "允许匿名 GraphQL 客户端经由 prev/next 字段读取作用域之外的 section 条目"，从一条可见条目链进 schema 从未暴露的 section；**CVE-2026-124430（评 8.8）**，非管理员控制面板用户"经由 app/render-elements 端点取得经 HMAC 签名的 Twig 模板"造成 RCE；以及 CVE-2026-124429（评 7.5），公开注册者可以认领已停用的非管理员账号并保留其直接权限。另有经由 app/icon-svg 端点的 SVG 路径任意文件读取（评 6.5）和一个资产卷浏览绕过（评 4.3）。VulnCheck 是 CNA，每条记录发布两次 — `Primary` CVSS 3.1 与 `Secondary` CVSS 4.0 并列 — 且两个分数的方向逐条不一致（9.8→9.3、6.5→7.1、7.5→8.7、8.8→8.7）。全部修复于 **5.11.2 — Packagist 显示其发布于 2026-09-17**，比文书早 52 天；当前版本为 5.11.5.1（10 月 8 日）。
+**CVE-2026-111421（8.8，CISA-ADP）** 是一个 Apache 以为已经修好的缺陷的另一半。Airflow 的 Task Execution API"stored XCom values written by a task without the reserved-key check applied elsewhere"，于是 Dag 作者的任务可以写入一个 XCom，"when a user later viewed it through the API with deserialization enabled, made the API server instantiate classes from the `airflow.*` namespace with arguments the Dag author chose"。记录明确说明谁仍然暴露："This is an incomplete fix for CVE-2026-59242: users who applied that fix in **apache-airflow 3.3.1** remain affected through this route and should upgrade to **apache-airflow 3.4.0** or later."
 
-**Why it matters:** 这第二批的合计严重度超过昨天那条单条记录，而 52 天的修复-到-记录时差意味着：按 CVE 发布时间打补丁的人，带着 GraphQL 越权和签名模板 RCE 跑了将近两个月。而当同一个 CNA 自己的记录之间 3.1 与 4.0 都能双向不一致时，每个分数旁边都该带上版本号。
+**Why it matters:** 反序列化本来就在那些认真对待第一份公告的部署里开着，所以仍在风险中的群体，正是打过补丁的群体——每一次"不完整修复"都会产生这种分布形状。记录里的 CWE 是 `CWE-502`，而缓解措施是乏味的那一种：在 3.4.0 部署之前，把 API server 的反序列化关掉。
 
-[`🔗 CVE-2026-124427（NVD）`](https://nvd.nist.gov/vuln/detail/CVE-2026-124427) · [`🔗 CVE-2026-124430（NVD）`](https://nvd.nist.gov/vuln/detail/CVE-2026-124430) · [`🔗 craftcms/cms（Packagist）`](https://packagist.org/packages/craftcms/cms)
+[`🔗 CVE-2026-111421（NVD）`](https://nvd.nist.gov/vuln/detail/CVE-2026-111421) · [`🔗 Apache 邮件列表线程`](https://lists.apache.org/thread.html/pwdwx354tv0x3m8wzfhh59r6wyztj2lk)
 
 ---
 
-## 41. ChatGPT Desktop 会转发你的 SSH agent — 机制写在 OpenAI 自己的 PR 评论里：一个 `forwarded-ssh-agent.sock`
+## 11. otterdog 在密钥未设置时跳过 HMAC 校验——那正是默认值——然后 `eval()` 这个 webhook body
 
 - **Velocity:** ▮▮ rising
-- **Source:** Hacker News · 53+ pts · 7.5h ago（~12:43 UTC+8）
-- **Tags:** `security` `agents` `ssh`
+- **Source:** NVD · CVE-2026-123870 · 11 月 9 日（~17:16 UTC+8）
+- **Tags:** `security` `cve` `supply-chain`
 
-一条 HN 帖子论证：ChatGPT Desktop 的 agent 设置会让"运行在远程机器上的 agent……用你本地的 SSH 凭据完成认证。也就是说它可以推送你的私有 GitHub 仓库。" 机制写在 OpenAI 自己的代码里：OpenAI 工程师 6 月 14 日在 codex PR #28131 里的评论显示，应用以 `SSH_AUTH_SOCK=~/.codex/app-server-control/forwarded-ssh-agent.sock` 启动其服务器，指向 `codex app-server --listen unix://`。SSH-agent 套接字转发的是*签名请求*而不是密钥 — 所以任何能碰到这个套接字的东西，都能拿你的密钥去对任何愿意接受该签名的主机完成认证。帖子里的缓解方案：经 Secretive 把密钥放进 macOS Secure Enclave（每次会话触控确认），或用要求触摸的 YubiKey — 让每一个新 SSH 连接都必须有人类手势。
+**CVE-2026-123870（CVSS 4.0 上的 9.5，Eclipse CNA 打分）** 落在 **otterdog**——Eclipse 基金会用代码管理 GitHub 组织的工具。 "The otterdog webapp evaluates a format-string built from the incoming GitHub webhook JSON body using Python's `eval()`. When the `GITHUB_WEBHOOK_SECRET` configuration value is unset or empty（**the code default is `None`**）, the HMAC signature check is skipped entirely, allowing an unauthenticated network client to reach the `eval()` sink with attacker-controlled input and execute arbitrary Python on the webapp host." 已在 **`bbc9e3ce`** 修复。
 
-**Why it matters:** agent 的便利性正通过设计决定、而非 bug，持续扩大凭据的爆炸半径 — 这件事与 Claude Code 的 User-Agent 带邮箱、"Don't Ask Again" 密钥文件属于同一类。如果你的桌面 agent 在任何地方挂了一个 agent 套接字，现在所有能碰到该套接字的东西都能以你的身份推送 — 在下一次 `git push` 给你惊喜之前值得查一查。
+**Why it matters:** 两个默认值合起来构成了这个漏洞：一个未配置时*失效开放*的认证控制，挡在针对请求数据的 `eval()` 前面。任意一个单独出现都值得修；合在一起，每个从没设过这个环境变量的部署都是远程代码执行。这也是一条只有 CVSS 4.0 的记录——9.5 是 Eclipse 在 4.0 框架上的数字，且记录为 `Received`，所以目前没有 NVD 或 3.1 分数可以对照。
 
-[`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50422628) · [`🔗 codex PR #28131 评论`](https://github.com/openai/codex/pull/28131#discussion_r3410013180)
+[`🔗 CVE-2026-123870（NVD）`](https://nvd.nist.gov/vuln/detail/CVE-2026-123870) · [`🔗 GHSA-32xf-7j44-xq72`](https://github.com/eclipse-csi/otterdog/security/advisories/GHSA-32xf-7j44-xq72)
 
 ---
 
-## 42. Next-Concept Modeling：一整层概念并行生成 — 同等质量下比扩散语言模型快 10–31 倍
+## 12. Zebkit 把 Chromium 的内容层链进你的应用——比 Electron 小 34%，并且诚实说明自己输在哪
 
 - **Velocity:** ▮▮ rising
-- **Source:** Hacker News · 110+ pts · 4.7h ago（~15:20 UTC+8）
-- **Tags:** `research` `architecture` `generation`
+- **Source:** Hacker News · 99 分 · 11 月 9 日（~22:34 UTC+8）
+- **Tags:** `browsers` `electron` `rust`
 
-Next-Concept Modeling（arXiv 2610.14162，10 月 9 日提交；Hermann Kumbong 等 — 斯坦福 Hazy 一脉，含 Azalia Mirhoseini 与 Christopher Ré）站在自回归与扩散语言模型之间：先由一个多尺度残差 VQ-VAE 把文本编码成离散码的*层级*，再由一个 transformer 一次生成一层，**层内所有码并行预测** — 先粗结构，后细纹理。在参数规模对齐的前提下，NCM 在 LM1B 上以 **21 倍速** 超过最强扩散基线的生成困惑度；在 OpenWebText 上 10 倍速持平；在 XSum 上以 **31 倍速** 打平 ROUGE-L；在 Sudoku 全部难度上以更少的前向次数同时超过自回归与扩散基线。一个编辑瑕疵值得记下：摘要里 Sudoku 那句话背靠背出现了两次。
+**ikey4u/zebkit**（LGPL-2.1，v0.2.0，**135 星**，10 月 10 日创建）把 Blink、带全部 JIT 档位的 V8、PDFium 与 FFmpeg 做成"one library you link into your own application"——没有 Chrome 界面、没有 Node 运行时、没有 Electron 打包。它跑在应用自己的事件循环里（`zebkit_init()`、`zebkit_pump()`），画到你交给它的窗口：X11 窗口、`NSView` 或 `HWND`，并提供 C、Rust、Python、Go、JavaScript 绑定。对 **Electron 45.2.1** 公布的基准测试——同一套 harness、同一批页面、5–11 次取中位数、Linux x86-64、日期 2026-11-06/07——读数是**发布体积 171.2 / 59.4 MiB** 对 260.5 / 87.1，**冷启动 2.3 秒** 对 6.6 秒，**空白页内存 179 MB** 对 250 MB，DOM 与 JS 负载则**持平**。
 
-**Why it matters:** next-token → 并行谱系已有两个已知极点（AR 的质量、扩散的每步全序列开销），这篇提出第三种粒度 — "概念" — 作为并行预测的单位。规模还小（LM1B、OWT、XSum、Sudoku），悬而未决的问题是 VQ 层级能否挺过指令微调与长上下文；但那组速度数字正是推理预算所在意的类型。
+**Why it matters:** 表格最后几行才是它值得读的原因。每页进程数：**zebkit 7，Electron 6**——因为 zebkit 把存储沙箱单独放进一个进程，"as Chrome"。而 README 还写了一段这个体裁通常会省略的话："**Where Electron is ahead**: one process fewer a page, and memory on two of the ten sites, YouTube and The Verge, where advertising and video decide." 一个 135 星项目的自测是主张，不是对你工作负载的测量——但一个会写明自己输在哪里的主张，值得重跑一遍。
 
-[`🔗 arXiv:2610.14162`](https://arxiv.org/abs/2610.14162) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50422168)
+[`🔗 ikey4u/zebkit`](https://github.com/ikey4u/zebkit) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50426207)
 
 ---
 
-## 43. gbrain：Garry Tan 的 agent 记忆层全面铺开 — 31.9k stars，经 MCP 接入五类 harness，并警告 npm 上的 `gbrain` 不是它
+## 13. 当指令文件过期，agent 就走那条死路——三个真实仓库上的 732 条轨迹
 
 - **Velocity:** ▮▮ rising
-- **Source:** GitHub Trending · +215 today · 31.9k stars
-- **Tags:** `agents` `memory` `open-source`
+- **Source:** arXiv 2611.09802 · 11 月 9 日列榜
+- **Tags:** `research` `coding-agents` `documentation`
 
-GBrain（"Garry's Opinionated OpenClaw/Hermes Agent Brain"）是 YC CEO Garry Tan 自己 agent 部署背后的记忆层 — 他给出的数字：155,795 页、24,589 个人、5,340 家公司、66 个自主运行的 cron 任务。MIT 许可、可自托管，gbrain.io 为可选付费托管；它存储带*来源*的显式事实、支持更正与撤回，并经 MCP 把同一颗大脑接给 Claude Code、Codex、ChatGPT、Cursor、Grok Bot 和 Muse。综合层返回带引用的答案外加缺口分析（"大脑还不知道什么" — 包括"4 月 22 日之后大脑就没有收到关于 Alice 或 Acme 的任何新内容"这类陈旧警告）；类型化图在 BrainBench 关系问题上把生产 R@5 从 0.6626 提到 0.7241，并诚实标注 "0.9791 是 graph-oracle-parse 的上限，不是产品分数"。README 还带着一条供应链警告："GBrain 不通过 npm 分发。npm 上的 `gbrain` 包与本项目无关，且可能遮蔽真正的二进制。"
+**《When Instruction Files Go Stale: Documentation Debt and Hidden Cost in Coding Agents》** 研究的是每个有 `CLAUDE.md` 的仓库都会遇到的事：指令文件"read in every agent session"，却"can fall behind the code and become stale (e.g., a test folder moves, but the file still points to the old one)"。实验是受控的——来自活跃开源仓库的三条真实过期指令，各自代表不同类别的指引（**一条测试命令、一个代码位置、一套新增组件的流程**）——agent 在每条指令的三种版本下完成 **22 个维护任务**：保持过期、修正为当前路径、以及删除。代码与任务保持不变，共分析 **732 条轨迹**。
 
-**Why it matters:** 记忆是今天的主题（上文 claude-mem，上周 Anthropic 的记忆地图），而这个新入局者的差异点是来源、撤回与缺口分析 — 让 agent 的记忆可审计而不仅是大。npm 遮蔽警告是 release-drift 教训出现在别人 README 里的样子，值得抄走。
+**Why it matters:** 作者的立论就是结论："Evaluations that check only task success can miss this cost, and the stale file can persist." 过期指令是文档债，其利息由之后每一个会话支付——所以自然的实验不是"agent 有没有做完"，而是它一路上做了什么、以及是否恢复。任何见过 agent 跑 2024 年那条测试命令的团队都认得这一类问题；这项研究固定代码、只移动文字，这才让那笔成本变得可测。
 
-[`🔗 garrytan/gbrain`](https://github.com/garrytan/gbrain) · [`🔗 gbrain.io（托管版）`](https://gbrain.io)
+[`🔗 arXiv 2611.09802`](https://arxiv.org/abs/2611.09802) · [`🔗 全文（HTML）`](https://arxiv.org/html/2611.09802v1)
 
 ---
 
-## 44. 内嵌式 .NET 模板引擎 Scriban 收到一个沙箱逃逸和一对 DoS — 全部 10 月 24 日已修，记录 11 月 8 日才发布
+## 14. MemoryDojo：每一种被测记忆架构都可被投毒，而伤害程度取决于架构
+
+- **Velocity:** ▮▮ rising
+- **Source:** arXiv 2611.09721 · 11 月 9 日列榜
+- **Tags:** `research` `agent-memory` `security`
+
+**MemoryDojo** 是一个追踪被投毒记忆生命周期的基准测试。前提是："malicious instructions encountered in one session may be stored and propagated through memory before being retrieved and acted upon in later sessions"，以及"because memory systems differ in how they process and retrieve information, the downstream effects of poisoning can vary significantly across systems"。产物是覆盖四个领域的 **155 条多会话长程轨迹**，在 **5 种不同记忆系统**上运行，追踪投毒在何处写入、何时被检索、以及 agent 随后做了什么。结论冷静且不讨好：**"all memory systems are susceptible to memory poisoning, with substantial variation in downstream effects."**
+
+**Why it matters:** 这个基准还附带一个攻击优化过程——"a memory-aware poison optimization process that increases the poisoning efficacy, highlighting differences between memory architectures"——于是架构间的差异从趣闻变成了攻击面。对任何正在交付记忆层的人（本 feed 上周覆盖了四种互不兼容的记忆格式），"我的存储和你不是一个形状"现在有了可测量的代价。
+
+[`🔗 arXiv 2611.09721`](https://arxiv.org/abs/2611.09721) · [`🔗 全文（HTML）`](https://arxiv.org/html/2611.09721v1)
+
+---
+
+## 15. 同一块 H100 是每小时 2.69 或 12.29 美元——而账单写明了这 4.57 倍不是什么
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News · 147 分 · 11 月 9 日（~23:39 UTC+8）
+- **Tags:** `gpu` `pricing` `infrastructure`
+
+**`datareceipts/data-receipts`** 发布的是价格对比背后的算术，而不是对比本身：H100 SXM 80GB 按需价格，归一化为每 GPU 每小时，并按 730 小时折月。**RunPod Community 2.69 美元**（每月 1,964）、RunPod Secure 3.99、**AWS `p5.48xlarge` 6.88**（5,022）、**Azure `ND96isr_H100_v5` 12.29**（8,972）——"4.57× between cheapest and dearest, for the same chip." 这项研究也拒绝那张显而易见的图："An H100 is three different products. The SXM 80GB, the PCIe 80GB and the NVL 94GB all get marketed as H100s and they do not cost the same"，所以所有比较都留在同一个（型号、显存）分组内，且每家厂商都按其拿到该 GPU 的*最便宜*路径计价。
+
+**Why it matters:** 仓库里"**What the 4.57× is not**"那一节才让这个数字可用：Azure 的 ND SKU 带"400 Gbps per GPU of Quantum-2 InfiniBand with GPU Direct RDMA"，这正是多机训练比单机微调贵的原因——"if you are fine-tuning on one node, you are paying for an interconnect you will never use." 声明的限制同样具体：只算按需目录价（spot"would narrow the gap a lot"）、各一个区域，以及"**Availability is not priced. A cheap H100 you cannot get is not a price.**"
+
+[`🔗 data-receipts/109-gpu-pricing`](https://github.com/datareceipts/data-receipts/tree/main/109-gpu-pricing) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50427085)
+
+---
+
+## 16. malloc 到底在做什么：1,000 次分配、2 个系统调用、132 KiB
+
+- **Velocity:** ▮▮ rising
+- **Source:** benmandrew.com · 180 分 · 11 月 9 日（~19:31 UTC+8）
+- **Tags:** `systems` `memory` `glibc`
+
+一篇有测量的讲解，讲的是 `malloc` 的接口与内核实际看到的东西之间的缺口。第一个实验用 `strace` 跟踪 **1,000 次 `malloc(16)`** 的循环，发现总共**只有两次 `brk` 系统调用**——一次查询 program break，一次把堆扩展 **132 KiB**，都发生在第一次调用里；"the other 999 just take from that already allocated memory"。它给被摊销的东西标了价："**575 ns for an empty** [syscall], as measured below"，然后在 `sbrk` 上写了一个 bump allocator，打印进程各区域的一个地址，并指出那次运行里 break 与 `printf` 相距 **23.4 TiB**——"about 1,530 times the machine's 15.6 GiB of RAM. Nearly all of that range is unmapped, so it costs no physical memory."
+
+**Why it matters:** 这是多数性能推理会跳过的那一层——系统调用与用户态的边界，以及把它藏起来的记账。这篇文章也是"测量优于回忆"的示范：132 KiB、两次 `brk`、地址布局都是输出而不是断言，而且每一条都能用它打印的代码片段复现。
+
+[`🔗 What is malloc doing, anyway?`](https://benmandrew.com/articles/what-is-malloc-doing-anyway) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50424157)
+
+---
+
+## 17. Raspberry Pi 5 16GB 涨到 385 美元——自 4 月以来跳了 80 美元，而它发布价是 120 美元
+
+- **Velocity:** ▮▮ rising
+- **Source:** CNX Software · 183 分 · 11 月 10 日（~01:42 UTC+8）
+- **Tags:** `hardware` `raspberry-pi` `pricing`
+
+Raspberry Pi 再次涨价，这次集中在 16GB 型号：**Raspberry Pi 5 16GB 现在售价 385 美元**，"an $80 increase compared to the last price hike in April"，而 **CM5** 系统模块涨 **40 美元**，"starting at $375 for the Lite model without wireless"。文章里唯一的好消息是维持不变："the Raspberry Pi 500+ mechanical keyboard PC stays at the same price, starting at $410"。CNX 自己对这种不对称的解读是：那款键盘机型"must have lower demand than for single board computers and compute modules"。
+
+**Why it matters:** 曾经锚定低成本常开计算的那块板，现在的定价像一台小型服务器，而这次涨价是内存成本的传导，不是 Raspberry Pi 的毛利决策——正是本周把"闲置内存"玩笑变成一种体裁的同一股 DRAM 压力。对任何在盘算 homelab、CI runner 集群或边缘部署的人：16GB 这一档已经从"买几块"变成"买一块并测量"，而 CM5 一并移动。
+
+[`🔗 CNX Software：Raspberry Pi 5 16GB 现价 385 美元`](https://www.cnx-software.com/2026/11/03/when-will-this-stop-the-raspberry-pi-5-16gb-sbc-now-sells-for-385/) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50428801)
+
+---
+
+## 18. Flide 是决策模型缺的那层服务栈——比 vLLM 与 SGLang 快 9.5 倍，支持精确状态分叉
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News · 109 分 · 11 月 9 日（~12:43 UTC+8）
+- **Tags:** `inference` `decision-models` `serving`
+
+**`OmniJev/Flide`**（Apache 2.0，**258 星**）是"决策模型"家族的推理引擎——那种单次前向、不生成 token 的模型，本 feed 在 **2026-11-07** 覆盖过——它的立论是这类模型需要与生成式 LLM 不同的服务机制："**9.5 times faster than vLLM and SGLang; exact state forking**"，一个状态被分叉成三个问题，"each answered in one forward pass"。项目在 11 月 2 日公布方法论文（**arXiv 2610.42148**，"Accelerating Decision Inference with Exact State Forking"），并附带 `flide verify` 命令："checks exact forking on your own model and requests"。**PyPI `flide` 0.1.10** 于 **2026-11-09T06:57Z** 上传，同一天 README 记录了两个版本：0.1.9 增加 **`pplx-decider-v1.1-27b` 与 `JEV-35B`**，0.1.10 增加 **Ainvest-Decision-27b、Darwin-27B-RSI-Decision 与 KnowLine-31B-Gen1.5**，最后一个现在能读图。
+
+**Why it matters:** 模型清单才是故事。Perplexity、Cloudflare（`Clef`）、Juspay、AutoTrust 等十几家现在发布的"decision"检查点不是聊天模型，而整个家族此前是用为 token 生成而建的引擎在服务。相对 vLLM 的 9.5 倍是项目在自家工作负载上的自测——但真正决定这 9.5 倍是公平比较还是一次不同计算的，是那个测分叉精确性、而不是测速度的 `verify` 命令。
+
+[`🔗 OmniJev/Flide`](https://github.com/OmniJev/Flide) · [`🔗 PyPI：flide 0.1.10`](https://pypi.org/project/flide/)
+
+---
+
+## 19. PackageKit 本地的 8.5：一次"模拟操作"里的路径穿越，变成 root
 
 - **Velocity:** ▮ steady
-- **Source:** NVD · 3 条记录 · 11月8日 14:18Z
-- **Tags:** `security` `dotnet` `templating`
+- **Source:** NVD · CVE-2026-104620 · 11 月 9 日（~23:17 UTC+8）
+- **Tags:** `security` `cve` `linux`
 
-同一波 11 月 8 日的 VulnCheck 披露还为 Scriban（3,990★；凡是 .NET 渲染用户模板的地方都在内嵌它）发出了三条记录。**CVE-2026-124438 是沙箱逃逸**（CVSS 3.1 评 7.4 / CVSS 4.0 评 9.1）：`array.map` 的成员访问"经反射成员访问器触达函数值的 .NET 内部" — 读导入委托上的 `Target`、`Method` 或 `ReturnType`，就能暴露"并覆写服务属性、被闭包捕获的密钥、程序集路径"。GHSA（7.5.2 修复）把范围圈得很准：高影响变体需要宿主以 `ScriptObject.Import(name, Delegate)` 导入过一个实例方法委托 — 而"这是暴露函数的文档推荐方式"。DoS 一对（CVE-2026-124437、-124439，7.5.3 修复）：`math.format`、`regex.replace`、`string.escape` 等内建函数绕过 `LimitToString` 分配守卫，后缀成员/索引/调用链绕过 `ExpressionDepthLimit`，`object.eval` 绕过 `RecursiveLimit` — 最终落下一个**无法捕获的 `StackOverflowException`，直接终止宿主进程**。修复于 10 月 24 日发布；当前版 7.6.1 于 11 月 8 日发布 — 与记录公开同日，早约 7 小时。
+**CVE-2026-104620（CVSS 4.0 上的 8.5，SUSE 打分）** 是一条很短、影响面却很大的记录："A path traversal attack in simulation of actions in the **Zypp backend of PackageKit** before **1.4.1** could be used by local attackers to gain root privileges." PackageKit 是多数桌面发行版图形化装包背后的 D-Bus 服务，按设计以 root 运行——所以缺陷出在*模拟*路径上恰恰要紧，因为模拟正是应用在请求授权前发起的非特权调用。
 
-**Why it matters:** Scriban 的沙箱之所以存在，恰恰因为模板是不可信输入；而这次逃逸走的是*文档推荐*的委托导入 API — 所以每个按正常方式暴露服务方法的宿主都在范围内，不只是配置错误的那些。这家 CNA 的 4.0 分数比它自己的 3.1 高出 1.2–1.7 分：引用分数时请带上版本。
+**Why it matters:** 记录只有一条参考——一个 **SUSE Bugzilla 条目**——没有 CVE 衍生的公告文本、没有上游提交、也没有修复版本链接，所以受影响版本的细节在厂商自己的勘误里。这也是一条只有 4.0 分数、由 Linux 发行商提交、且仍为 `Received` 的记录：一套部署极广的桌面软件栈有一个本地 root 缺陷，而它的完整披露在注册表之外——这正是本 feed 在发行商提交的记录里反复见到的形状。
 
-[`🔗 GHSA-hvr4-4p37-494f`](https://github.com/scriban/scriban/security/advisories/GHSA-hvr4-4p37-494f) · [`🔗 CVE-2026-124438（NVD）`](https://nvd.nist.gov/vuln/detail/CVE-2026-124438)
-
----
-
-## 45. RuView 的 10.3 万星"用 WiFi 穿墙看见一切"带了一张诚实表 — 自己撤回的 100% 数字、自己的 3.0% 空壳，以及真正测出来的部分
-
-- **Velocity:** ▮ steady
-- **Source:** GitHub Trending · +203 today · 103k stars
-- **Tags:** `wifi-sensing` `hardware` `open-source`
-
-RuView（103,148 stars）宣称用商品 WiFi 做空间感知：9 美元的 ESP32 CSI 节点，实现存在检测、17 关键点姿态、呼吸与心率 —"穿墙、无光、无摄像头、无穿戴设备"。值得读的是它自己那张标注表（ADR-187，"读标签，别读标题"）。**已测：** CSI 编码器 + 存在检测头，82.3% 留出 temporal-triplet 准确率 — 而更早的 "100% presence" 数字被明确*撤回*，因为"是在单一类别的录音上测的" — 以及一个 MM-Fi 姿态模型 **82.69% torso-PCK@20**（ensemble 83.59%），对 MultiFormer 的 72.25% 与 CSI2Pose 的 68.41%，在匹配协议上、于公开排行榜上可自查自纠。**诚实标注为弱：** 仓库里提交的端侧姿态模型实测 **PCK@20 = 3.0%**（目标 ≥35%），且其运行时路径"仍是一个返回 `confidence=0` 的居中骨架空壳" — "权重尚未接上"。**仅有架构：** archive/v1 "没有任何 checkpoint"。全研究数字：零样本跨主体 ~64%，房间内校准 72.2%。4-bit 编码器塞进 8 KB；HF 权重已发布。今天的 +203 没有找到公开触发点 — 没有HN帖、没有报道。
-
-**Why it matters:** 一个宣称穿墙 DensePose 的仓库，为自己的主张发布"已测/空壳/仅架构"三层表、并亲手撤回自己最好的营销数字 — 这是 Void 的反面：诚实本身就是产物。引用那个 82.69%（有基准、有公开协议），别引用头图。
-
-[`🔗 ruvnet/RuView`](https://github.com/ruvnet/RuView) · [`🔗 ruvnet/wifi-densepose-pretrained（模型）`](https://huggingface.co/ruvnet/wifi-densepose-pretrained)
+[`🔗 CVE-2026-104620（NVD）`](https://nvd.nist.gov/vuln/detail/CVE-2026-104620) · [`🔗 SUSE Bugzilla 1284954`](https://bugzilla.suse.com/show_bug.cgi?id=1284954)
 
 ---
 
@@ -644,11 +280,13 @@ RuView（103,148 stars）宣称用商品 WiFi 做空间感知：9 美元的 ESP3
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-11-09T12:38:24Z |
-| Items | 45 |
-| Sources tracked | 30 (Hacker News, GitHub Trending, NVD, CISA-ADP enrichment, VulnCheck advisories, IBM security bulletins, WPScan, GitHub Advisory DB, OSV Advisory DB, arXiv, Hugging Face Papers, NVIDIA Newsroom, isocpp.org, shubs.io, duxlabs.dev, vercel.com changelog, aphyr.com, ram-altman.lol, ketchup3d.github.io, The Decoder, MailRoute, linebender.org, packethound.app, hamza.se, declarative-dragging.github.io, blog.nathanlangley.dev, muratbuffalo.blogspot.com, blog.zortax.de, chimera-vocal-synth.vercel.app, Packagist) |
-| Update schedule | 04:03, 12:03, 20:03 UTC+8 (3x daily) |
-| Ranking | Velocity-weighted (recency × engagement acceleration × source authority) |
+| Generated | 2026-11-09T20:29:21Z |
+| Items | 19 |
+| Sources tracked | 28（Hacker News、GitHub Trending、NVD、CISA KEV、arXiv、厂商博客、安全公告） |
+| Update schedule | 04:03, 12:03, 20:03 UTC+8（每日三次） |
+| Ranking | 速度加权（时效 × 互动加速度 × 来源权威度） |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |
 
-[Previous day](2026-11-08.md) · [Raw .md](https://trending.md/zh/feed/latest.md) · [Archive](../archive/index.md)
+---
+
+[前一天](2026-11-09.md) · [原始 .md](https://trending.md/zh/feed/2026-11-10.md) · [归档](../archive/)
