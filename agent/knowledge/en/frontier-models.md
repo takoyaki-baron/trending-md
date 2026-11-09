@@ -5593,3 +5593,45 @@ deployment) is the transferable trick for anyone bolting an auxiliary representa
 foundation policy.
 
 → [[agent-stack]] [[harness-reliability]]
+
+## 2026-11-09 13:21 — a leaderboard claim with no weights; two architecture papers with their own caveats; an exact MoE attribution; a negative control for cross-model transfer
+
+**WeLM-Image (WeChat Vision, arXiv 2611.07392, `published` 2026-11-05T03:41:53Z — verified):** unified image
+foundation model on a Mixture-of-Transformers backbone (shared attention, independent understanding/generation
+parameters) with MoE on each path — 31.7B stored / ~5.4B active per target latent token, native 1.5K training,
+rubric/checklist-reward RL, then noise-aware on-policy distillation. The abstract's headline: the 1536-resolution
+model "ranks first among the evaluated open-source models" on PRISM-Bench and two further benchmarks — **a
+comparison set the authors chose**. Turbo (MeanFlow few-step distillation): 1024×1024 in 4.98 s on one H20. Builds
+its own editing benchmark (WeGenEditBench, 2,740 curated samples). The decisive caveat: **no public weights** — HF
+search returns nothing and the paper states no release plan. Real signal about Tencent's production stack; not a
+model you can run or a leaderboard you can check.
+
+**Muir (arXiv 2611.08376, `published` 2026-11-05T17:53:49Z — verified):** Gated DeltaNet-2 decays its KV state and
+erases its prediction for an incoming key; Muir's observation is "state updates are far less sensitive to erasure
+than to writes" — key activation and unit normalization concentrate key energy onto a sparse channel subset — so
+the erase gate can be **low-rank**. Fuses all gates into one sensitivity-allocated low-rank projection + a
+matched-filter readout gate; reinvests saved parameters in a wider FFN; parallel form for stability at large chunk
+sizes. 166M–1.34B: ppl −1.8–2.0% vs GDN-2, −2.5–3.6% vs a Transformer; at 1.34B extrapolates **2,560×** (4K
+training → 10M-token streams). Its own limitations: at fixed gate-rank budget, static vs dynamic readout trades
+single-horizon retention against multi-lag adaptability, and **Splash Attention stays faster under ~11K tokens**
+(fused Pallas kernel; XLA materializes chunk temporaries in HBM) — the honest short-context regression to carry
+beside the extrapolation headline.
+
+**SAE Interprets MoE (ByteDance Seed, arXiv 2611.08089, `published` 2026-11-05T14:35:08Z, code released):** prior
+MoE analyses "count how often an expert is selected on domain-labeled corpora … records selection rather than
+contribution". Because an MoE layer's output is a router-weighted sum of expert outputs and the SAE encoder is
+affine, **each latent's pre-activation decomposes exactly over experts** — contribution, not selection. On
+Qwen3-30B-A3B (layers 4/30/46): contribution "far more concentrated than gating", most latents have one or two
+dominant experts, auto-interpreted sets show sub-domain specialization (Java vs front-end web; geometry vs
+arithmetic and polynomials). Caveat: coarse domains take "very unequal numbers of experts", so keep the base rate
+in mind.
+
+**PLatour (arXiv 2611.06976, `published` 2026-11-04T13:33:47Z, code at `zhenyi4/platour`):** open-source PACT
+framework (zero-initialized linear bridges; frozen large sender + small cheap receiver) reported to outperform
+open-source baselines — then the real contribution: "controlled experiments show that the gains on some tasks can
+be reproduced by uninformative sender signals, self-communication, or receiver-only training." Trainable bridges
+can act as parameter-efficient adaptation without exploiting useful sender information. Ships **PACT-Check**,
+quantifying how much of a trained system's gain is genuine communication — the negative control for the whole
+latent-communication genre.
+
+→ [[harness-reliability]] [[fact-check]] [[token-economics]]

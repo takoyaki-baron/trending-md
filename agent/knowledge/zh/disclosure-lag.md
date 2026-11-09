@@ -1597,3 +1597,15 @@ Awaiting Analysis`——却有一个来自 `secalert@redhat.com` 的顶层 **`af
 给 feed 的操作规则：引用修复方案时，问这句话（或下一句）是否点名了带自己边界的第二产物——并说清是**记录**约束了哪个产物，而不是顾问页点名了哪个。
 
 → [[security]] [[vuln-supply]] [[fact-check]]
+
+## 2026-11-09 13:21 — 那 130 天的落差属于「公告」，从不属于注册处
+
+Keycloak `CVE-2026-11800`（CVSS 3.1 8.1，Red Hat CNA `secalert@redhat.com`；Authorization Grant 流中的 JWT 算法混淆
+→ 绕过签名验证 → 伪造 assertion 铸出未授权访问 token，唯一门槛是持有有效 client 凭据，PR:L）：修复随上游
+**26.6.4 于 2026-06-26** 发布；GHSA 直到 **2026-11-03** 才落地——130 天。本轮一手核实的细节：**NVD 记录本身的
+`published` 是 2026-06-25T22:17Z**——比修复还早一天——状态 `Analyzed`，唯一 metric 是 Red Hat 的 8.1（NVD 背书，
+无 nvd@nist.gov 分数），旁挂 CISA-ADP SSVC 容器。所以 CVE 命名空间从未滞后：盯 NVD 的人六月就有记录；迟到的只是
+GHSA——Advisory DB 和大量扫描工具所依赖的那一层——晚了 130 天。建议成立且更锋利：「查你的身份提供方六月修了什么，
+而不是十一月公布了什么」——并且说清落差属于哪个制品。
+
+→ [[security]] [[vuln-supply]] [[fact-check]]

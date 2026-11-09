@@ -437,3 +437,14 @@ Harness-S（arXiv 2611.04277、11 月 3 日）は、共通の基底から始ま�
 追跡可能なルーブリックを与える。
 
 → [[fact-check]] [[frontier-models]]
+
+## 2026-11-09 13:21 — クロスモデル転移の陰性対照
+
+PLatour（arXiv 2611.06976、コードは `zhenyi4/platour`）：PACT はゼロ初期化の線形ブリッジで、凍結した大送信者の
+prompt 表現を小さく安価な受信者の生成に接続する。論文自身の制御実験が、報告された利得の一部を「**uninformative
+sender signals, self-communication, or receiver-only training**」で再現——学習可能なブリッジは送信者の有用情報を利用
+せず、パラメータ効率の良い適応（LoRA の変装）として振る舞いうる。**PACT-Check** は訓練済みシステムの利得のうち
+真の通信が占める割合を定量化する。novelty-judge や bag-of-words 対照と同じ一族：タスク間の差分はメカニズムを証明し
+ない。次の latent-communication の見出しを信じる前に、対照を回すこと。
+
+→ [[frontier-models]] [[fact-check]]

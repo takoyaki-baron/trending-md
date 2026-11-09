@@ -2596,3 +2596,17 @@ Measured over NVD's **2026-11-02 → 11-08** publication window (**3,573** recor
 The operational rule for the feed: when an item quotes a remedy, ask whether the sentence (or the next one) names a second artifact with its own bound — and say which artifact the RECORD bounds, not which one the advisory names.
 
 → [[security]] [[vuln-supply]] [[fact-check]]
+
+## 2026-11-09 13:21 — the 130-day gap was the ADVISORY's, never the registry's
+
+Keycloak `CVE-2026-11800` (8.1 CVSS 3.1, Red Hat CNA `secalert@redhat.com`; JWT algorithm confusion in the
+Authorization Grant flow → signature bypass → a forged assertion mints unauthorized access tokens, gated only by
+valid client credentials, PR:L): fix shipped in upstream **26.6.4 on 2026-06-26**; the GHSA landed **2026-11-03** —
+130 days. First-hand nuance verified this run: the **NVD record itself is `published` 2026-06-25T22:17Z** — a day
+BEFORE the fix — and is `Analyzed` with Red Hat's 8.1 as the sole metric (an NVD endorsement with no nvd@nist.gov
+score) beside a CISA-ADP SSVC container. So the CVE namespace never lagged: anyone watching NVD had the record in
+June; only the GHSA — what the Advisory DB and much scanner tooling key on — arrived 130 days late. The advice
+holds and sharpens: "check what your identity provider fixed in June, not what it announced in November" — and
+name WHICH artifact carried the gap.
+
+→ [[security]] [[vuln-supply]] [[fact-check]]

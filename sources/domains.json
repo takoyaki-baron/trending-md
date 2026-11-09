@@ -14107,5 +14107,68 @@
   "en": "MailRoute (email-filtering vendor) blog; operational deliverability write-ups with bounce codes, dates and DNS-level fixes. Used 11-09 for Outlook.com's no-DMARC rejections starting Nov 5 (AS9031519). Cross-validated: two HN commenters (item 50416158) independently report the same rejections hitting their own domains; note the article's 'unannounced' framing is disputed in-thread by a link to Microsoft documentation.",
   "zh": "MailRoute（邮件过滤服务商）博客；操作性强的可达性文章，带退信码、日期与 DNS 级修复。11-09 用于 Outlook.com 自 11 月 5 日起拒收无 DMARC 域名邮件（AS9031519）。已交叉核验：HN 帖（item 50416158）中两位评论者独立报告自己的域名遭同样拒收；注意文中 '未公告' 的说法在帖内被一条微软文档链接质疑。",
   "jp": "MailRoute（メールフィルタリングベンダー）のブログ。バウンスコード・日付・DNS レベルの修正を含む実務的なデリバラビリティ記事。11-09 に Outlook.com の DMARC なしドメイン拒否（11 月 5 日開始、AS9031519）で使用。クロスバリデーション済み：HN スレッド（item 50416158）で二人のコメント投稿者が自分のドメインで同じ拒否を報告。ただし記事の「無告知」の枠組みは、スレッド内で Microsoft 文書へのリンクにより異議が出ている。"
+ },
+ "osv.dev": {
+  "cat": "data",
+  "cred": "high",
+  "cv": 1,
+  "density": "high",
+  "en": "OSV — the open-source vulnerability database aggregating GHSA/PYSEC/RUSTSEC records for scanners. Used 11-09 for Keycloak CVE-2026-11800 (GHSA-j97h-3f8r-mrjr, 130-day fix-to-advisory lag) and Stanza CVE-2026-115878 (weights_only pickle bypass). Cross-validated: both GHSA records' scores/mechanisms matched the NVD API records fetched the same run.",
+  "zh": "OSV——面向扫描器的开源漏洞数据库，聚合 GHSA/PYSEC/RUSTSEC 记录。11-09 用于 Keycloak CVE-2026-11800（GHSA-j97h-3f8r-mrjr，修复到公告滞后 130 天）与 Stanza CVE-2026-115878（绕过 weights_only 的 pickle）。已交叉核验：两条 GHSA 记录的分数与机制与同批抓取的 NVD API 记录一致。",
+  "jp": "OSV——スキャナ向けオープンソース脆弱性データベース。GHSA/PYSEC/RUSTSEC レコードを集約。11-09 に Keycloak CVE-2026-11800（GHSA-j97h-3f8r-mrjr、修正から勧告まで 130 日）と Stanza CVE-2026-115878（weights_only を回避する pickle）で使用。クロスバリデーション済み：両 GHSA のスコアとメカニズムは同ランで取得した NVD API レコードと一致。"
+ },
+ "isocpp.org": {
+  "cat": "community",
+  "cred": "high",
+  "cv": 0,
+  "density": "high",
+  "en": "Standard C++ Foundation site; canonical host of WG21 papers (post-2023 papers live here, open-std mirrors 404). Used 11-09 for P4454R0, Herb Sutter's C++26 DIS post-mortem, fetched as PDF and read first-hand. cv 0: the document is first-party; no independent mirror to cross-check against yet.",
+  "zh": "Standard C++ 基金会站点；WG21 论文的权威托管地（2023 年后的论文在此，open-std 镜像已 404）。11-09 用于 P4454R0（Herb Sutter 的 C++26 DIS 失败复盘），PDF 抓取并一手阅读。cv 0：文档为第一方，尚无独立镜像可交叉核对。",
+  "jp": "Standard C++ 財団のサイト。WG21 論文の権威あるホスト（2023 年以降の論文はこちらで、open-std のミラーは 404）。11-09 に P4454R0（Herb Sutter による C++26 DIS 失敗のポストモーテム）を PDF で取得し一次読解。cv 0：文書は一次資料で、独立したミラーとの突合はまだ。"
+ },
+ "shubs.io": {
+  "cat": "security",
+  "cred": "high",
+  "cv": 0,
+  "density": "high",
+  "en": "Shubham Shah (Assetnote co-founder) research blog. Used 11-09 for the connected-car chain: exposed admintool + plate-to-unlock via ForgeRock OpenIDM, with an LLM (GPT 5.6 Sol Ultra) finding the /static%2f..%2fopenidm/ WAF bypass after manual attempts failed. cv 0: first-party research; chain claims are the authors' own, no independent reproduction yet — brand redacted by design.",
+  "zh": "Shubham Shah（Assetnote 联合创始人）的研究博客。11-09 用于联网汽车攻击链：暴露的 admintool + 经 ForgeRock OpenIDM 实现车牌到开锁，人工尝试失败后由 LLM（GPT 5.6 Sol Ultra）找到 /static%2f..%2fopenidm/ 的 WAF 绕过。cv 0：第一方研究；链条声明为作者自述，尚无独立复现——品牌刻意匿名。",
+  "jp": "Shubham Shah（Assetnote 共同創業者）のリサーチブログ。11-09 にコネクテッドカーの攻撃チェーンで使用：露出した admintool と ForgeRock OpenIDM 経由のナンバープレートから解錠まで。手動の試行が失敗した後、LLM（GPT 5.6 Sol Ultra）が /static%2f..%2fopenidm/ の WAF バイパスを発見。cv 0：一次リサーチで、チェーンの主張は著者自身のもので独立再現はまだ—ブランドは意図的に伏せ字。"
+ },
+ "duxlabs.dev": {
+  "cat": "code",
+  "cred": "med",
+  "cv": 1,
+  "density": "high",
+  "en": "Dux Modular Shell project site; release notes and docs for the QML/Quickshell Wayland desktop shell. Used 11-09 for DMS 2.1 'Stormborn' (density presets, synced lyrics, Fedora Atomic support). Cross-validated: 'packaged in Arch extra' confirmed via archlinux.org's package API (dux-shell, repo extra).",
+  "zh": "Dux Modular Shell 项目站点；QML/Quickshell Wayland 桌面 shell 的发布说明与文档。11-09 用于 DMS 2.1 'Stormborn'（密度预设、同步歌词、Fedora Atomic 支持）。已交叉核验：'打包进 Arch extra' 经 archlinux.org 包 API 确认（dux-shell，仓库 extra）。",
+  "jp": "Dux Modular Shell のプロジェクトサイト。QML/Quickshell 製 Wayland デスクトップシェルのリリースノートとドキュメント。11-09 に DMS 2.1「Stormborn」（密度プリセット、同期歌詞、Fedora Atomic 対応）で使用。クロスバリデーション済み：「Arch extra にパッケージ済み」を archlinux.org のパッケージ API（dux-shell、repo extra）で確認。"
+ },
+ "aphyr.com": {
+  "cat": "community",
+  "cred": "high",
+  "cv": 1,
+  "density": "high",
+  "en": "Kyle Kingsbury (Jepsen author) personal blog. Used 11-09 for the Harvest repricing post ($13.32 to $133.98/mo under Bending Spoons). Cross-validated: the acquisition-consolidator framing matches Wikipedia's independent description of Bending Spoons; the specific plan prices remain single-source (the post itself is the only record of them).",
+  "zh": "Kyle Kingsbury（Jepsen 作者）个人博客。11-09 用于 Harvest 涨价文（Bending Spoons 旗下从 $13.32/月 涨到 $133.98/月）。已交叉核验：其 '收购整合者' 的定性与 Wikipedia 对 Bending Spoons 的独立描述一致；具体价格仍为单一来源（该文是其唯一记录）。",
+  "jp": "Kyle Kingsbury（Jepsen 作者）の個人ブログ。11-09 に Harvest 値上げ記事（Bending Spoons 傘下で $13.32/月 から $133.98/月 へ）で使用。クロスバリデーション済み：「買収タイプの統合者」という枠組みは Wikipedia の Bending Spoons 記述と一致。ただし具体的な料金は単一ソースのまま（記事が唯一の記録）。"
+ },
+ "ram-altman.lol": {
+  "cat": "community",
+  "cred": "low",
+  "cv": 0,
+  "density": "low",
+  "en": "Parody project site: a cron script that emails Sam Altman your idle-RAM figures. Used 11-09 as a thermometer for DRAM-price sentiment (216 HN points). cv 0: satire; the Altman quotes it carries are the project's own curation, presented with its own out-of-context caveat — no independent verification of the quotes.",
+  "zh": "恶搞项目站点：用 cron 把你的空闲内存数字邮件发给 Sam Altman。11-09 用作 DRAM 价格情绪的温度计（HN 216 分）。cv 0：讽刺作品；其引用的 Altman 言论为项目自选，并自带 '被断章取义' 的更正说明——引言本身未经独立核验。",
+  "jp": "パロディプロジェクトのサイト：cron でアイドル RAM の数値を Sam Altman にメールで送る。11-09 に DRAM 価格への世論の温度計として使用（HN 216 pts）。cv 0：風刺であり、掲載する Altman の発言はプロジェクト自身の選択で、文脈を無視された件の釈明も併記—発言自体の独立検証はなし。"
+ },
+ "ketchup3d.github.io": {
+  "cat": "code",
+  "cred": "med",
+  "cv": 0,
+  "density": "med",
+  "en": "Project site of BenchUp (formerly KetchUp), the open-source Rust/WebGPU SketchUp-style modeler. Used 11-09 for the launch (309 HN points). cv 0: first-party site; the mid-launch rename is evidenced by two author-originated artifacts (HN's launch title still says KetchUp; site title says BenchUp) — no third party involved yet.",
+  "zh": "BenchUp（前名 KetchUp）项目站点——开源 Rust/WebGPU 的 SketchUp 风格建模器。11-09 用于其发布（HN 309 分）。cv 0：第一方站点；发布中途改名由两个作者侧产物佐证（HN 标题仍是 KetchUp，站点标题已是 BenchUp）——尚无第三方参与。",
+  "jp": "BenchUp（旧名 KetchUp）のプロジェクトサイト。オープンソースの Rust/WebGPU 製 SketchUp 風モデラー。11-09 にローンチ（HN 309 pts）で使用。cv 0：一次サイトで、ローンチ途中の改名は二つの作者側アーティファクト（HN のタイトルは依然 KetchUp、サイトのタイトルは BenchUp）が示すのみ—第三者はまだ関与していない。"
  }
 }

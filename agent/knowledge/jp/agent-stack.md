@@ -2493,3 +2493,37 @@ enforces**」。二つのことが同時に起きている：視覚的な観測�
 検証済み；星数は 40 分後に 114,832★ で再読（ドリフトそのものがトレンド）。
 
 → [[token-economics]] [[fact-check]]
+
+## 2026-11-09 13:21 — プロトコル内検証の UI、MIT の指揮層、検証セッションだけが閉じられるゴール、改訂チェック付きテーブル
+
+**`vercel-labs/json-render`（19.5k★、本日 +149；Chat SDK 接続は 11-07 リリース）：**エージェントが型付き JSON spec を
+出力し、Slack Block Kit / Teams Adaptive Cards として描画。ストリーム編集は 500 ms に1回まで抑制。**`toCard` が全
+要素の props をコンポーネントスキーマに対して検証し、`CardSpecError` を項目ごとの診断付きで投げる。「designed to
+be fed back to the model」**——プロンプトで振る舞いを願うのではなく、検証と再試行をプロトコルに組み込む。Apache-2.0
+コアに React/Vue/Svelte/Solid/React Native/ink（端末）/react-three-fiber/react-pdf/remotion/email のアダプタ；
+v0.22.0（11-04）。
+
+**Paradev（16.1k★ 検証済み、desktop-v2.0.6 から MIT、11-08）：**Claude Code / Codex / OpenCode / Gemini CLI /
+Cursor Agent を統括するデスクトップオーケストレータ——タスクごとに git worktree + ブランチ + 端末、アプリ内
+review/PR ペイン、ワークスペースごとの dev-server プレビュー。「not a coding agent itself… does not proxy model
+calls。」**Desktop Canary** は main の自動ビルド（2026-11-09T00:53Z、内部テストの不安定 flag 付き）。macOS
+（Apple Silicon/Intel）+ 実験的な Linux AppImage。Windows なし。CLI は依然 `superset` という名前で、Apache Superset
+とは無関係と明記。位置取り：モデルとの関係を一切持たない、MIT、クラウド持ち込み——モデルベンダーロックインなし
+のオーケストレーションが、大手のバンドリングを生き延びられるかという賭け。
+
+**`kortix-ai/CompanyOS`（20.6k★、v0.15.1、11-07）：**pi ランタイム上のイベント駆動マルチエージェント「会社のオペ
+レーティングシステム」——エージェントはスケジュール・webhook・ツールイベント・チームメッセージで起動し、それぞ
+れ永続状態つきの自分のクラウドコンピュータに載る。3,000+ アプリ接続を標榜。v0.15.1 は Goals を API 側のサーバー
+状態に移し、「**only a verifier session can mark a goal done**」に——エージェントの宿題を誰が検査するかをプロンプト
+ではなくアーキテクチャの事実にする——加えて Proactive Spaces（「Space のイベントフィードを読み、重要なときだけ
+声を上げる」ウォッチャー）。
+
+**Agentero（`poco-ai/Agentero`、2.1k★、本日 +145、MIT、中国語優先・英語 README あり）：**人間とエージェントが同じ
+コンテキストを共有するデスクトップ研究ワークスペース。v0.15.3（11-08 23:58Z）：エージェント返信内の `openui-lang`
+コードフェンスから**読み取り専用**の構造化 UI ブロックを描画（レイアウト/テキスト/状態/データ/論文読解コンポーネ
+ント）+ ドラッグ可能な PDF 翻訳フロートカード + デスクトップの fetch パイプラインを共有する CLI feed コマンド。
+v0.15.2：実験ノートのテーブルをエージェントが `table_query`/`table_upsert` で**改訂チェック付きで書き込み** +
+Papers-with-Code 統合。設計の分担が要点：モデルにはきれいで構造化され改訂検査済みの文脈を書き込ませ、人間には
+PDF の世界に読み取り専用の描画を返す。
+
+→ [[agent-distribution]] [[token-economics]]

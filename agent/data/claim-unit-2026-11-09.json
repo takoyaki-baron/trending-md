@@ -1,5 +1,5 @@
 {
- "generated": "2026-11-09T05:12:14.202Z",
+ "generated": "2026-11-09T06:19:09.667Z",
  "files": [
   {
    "file": "2026-11-09.md",
@@ -97,20 +97,6 @@
      "detail": "17070★, last push 2026-11-09"
     },
     {
-     "check": "repo",
-     "item": 15,
-     "verdict": "star-drift",
-     "claim": "16935 quoted vs 1 now",
-     "detail": "Renhuai123/nishi-ziwei-video-reading: 16935 quoted vs 1 now (+1693400%) — the repo does not carry the number the item states; reread it"
-    },
-    {
-     "check": "repo",
-     "item": 15,
-     "verdict": "ok",
-     "claim": "Renhuai123/nishi-ziwei-video-reading",
-     "detail": "1★, last push 2026-11-08"
-    },
-    {
      "check": "quotation",
      "item": 1,
      "verdict": "ok",
@@ -163,7 +149,7 @@
      "check": "quotation",
      "item": 10,
      "verdict": "ok",
-     "claim": "1 quotation(s)",
+     "claim": "2 quotation(s)",
      "detail": "verbatim in 3 readable source(s)"
     },
     {
@@ -225,44 +211,9 @@
     {
      "check": "quotation",
      "item": 21,
-     "verdict": "quote-not-found",
-     "claim": "“the languages creator and its owners disagree”",
-     "detail": "7 words, 0 hits in 2 readable source(s); news.ycombinator.com/item?id=50418818 carries 5 of 7 words (“languages creator and its owners”) and continues “strongly disagree pdf hacker news hacker news new past comments ask” — use the source's wording, or drop the quotation marks"
-    },
-    {
-     "check": "quotation",
-     "item": 21,
-     "verdict": "quote-not-found",
-     "claim": "“the core decisive issue that caused the dis to fail is that the languages creator and its owners…”",
-     "detail": "19 words, 0 hits in 2 readable source(s); news.ycombinator.com/item?id=50418818 carries 5 of 19 words (“languages creator and its owners”) and continues “strongly disagree pdf hacker news hacker news new past comments ask” — use the source's wording, or drop the quotation marks"
-    },
-    {
-     "check": "quotation",
-     "item": 21,
-     "verdict": "quote-not-found",
-     "claim": "“for the first time since wg21 was formed 36 years ago c s creator is siding with the minority”",
-     "detail": "16 words, 0 hits in 2 readable source(s); news.ycombinator.com/item?id=50418818 carries 3 of 19 words (“the first time”) and continues “because itll live forever perhaps allowing features to be deprecated and” — use the source's wording, or drop the quotation marks"
-    },
-    {
-     "check": "quotation",
-     "item": 21,
-     "verdict": "quote-not-found",
-     "claim": "“more than doubled the numerical nb opposition”",
-     "detail": "7 words, 0 hits in 2 readable source(s); no source carries it (read isocpp.org/files/papers/P4454R0.pdf, news.ycombinator.com/item?id=50418818) — if this came from somewhere this item does not cite, cite it; otherwise it is the feed's own words and must not wear quotation marks"
-    },
-    {
-     "check": "quotation",
-     "item": 21,
-     "verdict": "quote-not-found",
-     "claim": "“quietly counted every contracts poll twice”",
-     "detail": "6 words, 0 hits in 2 readable source(s); no source carries it (read isocpp.org/files/papers/P4454R0.pdf, news.ycombinator.com/item?id=50418818) — if this came from somewhere this item does not cite, cite it; otherwise it is the feed's own words and must not wear quotation marks"
-    },
-    {
-     "check": "quotation",
-     "item": 21,
-     "verdict": "quote-not-found",
-     "claim": "“is the outcome he most wants to see”",
-     "detail": "8 words, 0 hits in 2 readable source(s); no source carries it (read isocpp.org/files/papers/P4454R0.pdf, news.ycombinator.com/item?id=50418818) — if this came from somewhere this item does not cite, cite it; otherwise it is the feed's own words and must not wear quotation marks"
+     "verdict": "ok",
+     "claim": "6 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
     },
     {
      "check": "quotation",
@@ -304,14 +255,28 @@
      "item": 27,
      "verdict": "ok",
      "claim": "1 quotation(s)",
-     "detail": "verbatim in 2 readable source(s)"
+     "detail": "verbatim in 1 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 28,
+     "verdict": "quote-not-read",
+     "claim": "“only a verifier session can mark a goal done”",
+     "detail": "7 words, 0 hits in 1 readable source(s), but 1 cited page(s) went unread — unread is not absent, so this is not called a fabrication; open those page(s) before publishing"
+    },
+    {
+     "check": "quotation",
+     "item": 28,
+     "verdict": "quote-not-read",
+     "claim": "“reads a spaces event feed and speaks up only when it matters”",
+     "detail": "11 words, 0 hits in 1 readable source(s), but 1 cited page(s) went unread — unread is not absent, so this is not called a fabrication; open those page(s) before publishing"
     },
     {
      "check": "quotation",
      "item": 28,
      "verdict": "ok",
-     "claim": "3 quotation(s)",
-     "detail": "verbatim in 2 readable source(s)"
+     "claim": "1 quotation(s)",
+     "detail": "verbatim in 1 readable source(s)"
     },
     {
      "check": "quotation",
@@ -339,7 +304,7 @@
      "item": 33,
      "verdict": "ok",
      "claim": "1 quotation(s)",
-     "detail": "verbatim in 2 readable source(s)"
+     "detail": "verbatim in 1 readable source(s)"
     },
     {
      "check": "quotation",

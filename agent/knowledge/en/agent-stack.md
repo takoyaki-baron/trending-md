@@ -3312,3 +3312,37 @@ patch release, not a major. All quotations lint-verified verbatim at generation 
 at 114,832★ forty minutes later (the drift is the trend).
 
 → [[token-economics]] [[fact-check]]
+
+## 2026-11-09 13:21 — validation-in-protocol UI, the MIT conductor, verifier-closed goals, revision-checked tables
+
+**`vercel-labs/json-render` (19.5k★, +149/day; Chat SDK wiring shipped 11-07):** the agent emits a typed JSON spec
+rendered as Slack Block Kit / Teams Adaptive Cards; streamed edits throttled to at most once per 500 ms;
+**`toCard` validates every element's props against the component schema, throwing `CardSpecError` with per-issue
+diagnostics "designed to be fed back to the model"** — validation-and-retry in the protocol instead of
+prompt-hoping the model behaves. Apache-2.0 core with adapters for React/Vue/Svelte/Solid/React Native/ink
+(terminal)/react-three-fiber/react-pdf/remotion/email; v0.22.0 (11-04).
+
+**Paradev (16.1k★ verified, MIT as of desktop-v2.0.6, 11-08):** desktop orchestrator for Claude Code / Codex /
+OpenCode / Gemini CLI / Cursor Agent — per-task git worktree + branch + terminals, in-app review/PR pane,
+per-workspace dev-server previews; "not a coding agent itself… does not proxy model calls." **Desktop Canary** =
+automated main build (2026-11-09T00:53Z, flagged internal testing, may be unstable). macOS (Apple Silicon/Intel) +
+experimental Linux AppImage; no Windows. The CLI is still named `superset`, explicitly unrelated to Apache
+Superset. Position: own no model relationship, MIT, bring-your-own-cloud — the bet is whether orchestration
+without model-vendor lock-in survives the incumbents' bundling.
+
+**`kortix-ai/CompanyOS` (20.6k★, v0.15.1, 11-07):** event-driven multi-agent "operating system for your company"
+on the pi runtime — agents start on schedules, webhooks, tool events and team messages, each on its own cloud
+computer with persistent state, 3,000+ app connections claimed. v0.15.1 moved Goals to the API with server-side
+state where "**only a verifier session can mark a goal done**" — who-checks-the-agent's-homework as an
+architectural fact rather than a prompt instruction — plus Proactive Spaces (a watcher that "reads a Space's event
+feed and speaks up only when it matters").
+
+**Agentero (`poco-ai/Agentero`, 2.1k★, +145/day, MIT, Chinese-first with English README):** desktop research
+workspace, humans and agents sharing one context. v0.15.3 (11-08 23:58Z): read-only structured UI blocks parsed
+from `openui-lang` code fences inside agent replies (layout/text/state/data/paper-reading components) + draggable
+PDF-translation float-cards + CLI feed commands sharing the desktop fetch pipeline. v0.15.2: lab-notebook tables
+agents write through `table_query`/`table_upsert` **with revision-checked writes** + Papers-with-Code
+integration. The design split is the point: clean, revision-checked, structured context for the model to write
+into; read-only renderings coming back to the human in PDF-land.
+
+→ [[agent-distribution]] [[token-economics]]

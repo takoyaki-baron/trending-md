@@ -1072,6 +1072,15 @@ underlying pages — this produced a two-layer false signal in a single item.
    64808 now" — a delta compared against the total, the 2026-10-27 `+312` defect wearing an
    unsigned tail. `in (a|one) day` joined the period-word alternation; four selftests pin the
    title shape, and the live re-run drops the finding;
+   **And a quoted star count belongs to the repo its SENTENCE names — the binder gave the item's
+   biggest quote to every slug** (added 2026-11-09 13:52, the same day's own JSON): item 15 quotes
+   ziwei-doushu at 16,935 stars and its companion repo `nishi-ziwei-video-reading` with no count at
+   all (1★), and the companion was tested against the 16,935 — a +1,693,400% "drift" filed against
+   a correct item. `bindStarQuotes` binds each quote to the ONE repo its sentence names (slug or
+   distinctive bare repo name — hyphen/digit/camelCase, ≥5 chars, so a repo called `notes` cannot
+   bind a sentence about release notes); a sentence naming two repos binds neither; a sentence
+   naming none binds none when the item has several repos; single-repo items keep every quote,
+   wherever its sentence sits (a `Source:` line names no slug). `--selftest` 331 → 345 → **359**.
    **repo** (`archived`, `stale` past
    `--stale-days`, and a star count that moved — **by SIGN, not by percentage** (added 2026-11-01 12:39):
    the lint runs minutes after the batch, so the only thing it can watch is the repo moving *under* the
@@ -1333,6 +1342,22 @@ underlying pages — this produced a two-layer false signal in a single item.
    before believing a page's silence, check the extracted text has the page's own scale; a body ratio
    of a few percent on a large HTML document means the stripper ate the article, and the verdict is
    `unread`, never `absent`. `--selftest` **220 → 224**.
+   **(k) A binary response is not a page** (added 2026-11-09 13:52, the P4454R0 lesson). Item 21 of
+   the 11-09 feed quotes six sentences from `P4454R0.pdf`; all six are verbatim in the paper
+   (`pdftotext`, first-hand — the learn pass had grepped them too), and the check filed six
+   `quote-not-found` (sev 3) anyway, because the 491 KB of binary arrived as a 200 and WON the
+   longest-read contest: `r.text()` keeps binary as a lossy string, `htmlText` strips nothing
+   (binary has no tags), `isBlockShell` sees a long non-shell. A source whose bytes were never
+   decoded to text is `unread is not absent` wearing a 200 — it can refute nothing, and it must
+   never be stored as the read. `citedPageText` now detects the response (`looksLikePdf`:
+   `application/pdf` Content-Type or the `%PDF-` magic in the first KB — headers lie in both
+   directions) and either extracts it with `pdftotext` (stdin→stdout; '' when the tool is missing
+   or refuses the bytes, and '' is UNREAD) or leaves the source unread; the curl-bin arm cannot
+   extract (its body is a lossy string), so it detects the magic and declines too; `PAGE_CACHE_V`
+   4 → 5, because a v4 entry for a PDF URL holds the binary as its "text". The same re-run paid
+   for a real catch the 13:12 run had missed: item 10's repo self-description quote was a
+   compression of two README sentences with "mid-80s" dropped and "runs on RP2350 boards" dressed
+   as "realized on RP2350 hardware" — corrected in en/zh/jp, mirrors re-copied (convention #7).
    Calibrated **both ways on its own filing day**: the uncorrected 10-31 feed returned **13
    findings / 9 verified** → after four in-place corrections (items **8, 10, 14, 20**) and three
    scare-quote removals (**9, 12, 16**), **0 findings / 15 verified**. The one real fabrication it

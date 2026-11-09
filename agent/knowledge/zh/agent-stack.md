@@ -2191,3 +2191,31 @@ images on cmem.ai, **the same limit Pro enforces**」。两件事同时发生：
 版本里翻转的，不是大版本。全部引文在生成期经 lint 逐字验证；星数四十分钟后复读为 114,832★（漂移即趋势）。
 
 → [[token-economics]] [[fact-check]]
+
+## 2026-11-09 13:21 — 协议内校验的 UI、MIT 指挥层、验证会话关目标、修订校验的表格
+
+**`vercel-labs/json-render`（19.5k★，今日 +149；Chat SDK 接线 11-07 上线）：**agent 产出带类型的 JSON
+spec，渲染为 Slack Block Kit / Teams Adaptive Cards；流式编辑节流至每 500 ms 至多一次；**`toCard` 按组件 schema
+校验每个元素的 props，抛出 `CardSpecError` 并携带逐条诊断，「designed to be fed back to the model」**——把
+校验-重试写进协议，而不是指望提示词让模型守规矩。Apache-2.0 核心，适配 React/Vue/Svelte/Solid/React
+Native/ink（终端）/react-three-fiber/react-pdf/remotion/email；v0.22.0（11-04）。
+
+**Paradev（16.1k★ 已核实，desktop-v2.0.6 起 MIT，11-08）：**桌面编排器，驱动 Claude Code / Codex / OpenCode /
+Gemini CLI / Cursor Agent——每任务独立 git worktree + 分支 + 终端，应用内 review/PR 面板，每工作区 dev-server
+预览；「not a coding agent itself… does not proxy model calls。」**Desktop Canary** = main 分支自动构建
+（2026-11-09T00:53Z，标注内部测试、可能不稳）。macOS（Apple Silicon/Intel）+ 实验性 Linux AppImage；无 Windows。
+CLI 仍叫 `superset`，与 Apache Superset 无关。站位：不拥有任何模型关系、MIT、自带云——赌的是无模型厂商锁定的
+编排能否在巨头的捆绑中活下来。
+
+**`kortix-ai/CompanyOS`（20.6k★，v0.15.1，11-07）：**基于 pi 运行时的事件驱动多智能体「公司操作系统」——agent 按
+调度、webhook、工具事件、团队消息启动，各自跑在带持久状态的云电脑上，声称 3,000+ 应用连接。v0.15.1 把 Goals 移到
+API，服务端状态下「**only a verifier session can mark a goal done**」——谁查 agent 的作业成了架构事实而非提示词
+——另加 Proactive Spaces（一个「读 Space 事件流、只在要紧时开口」的观察者）。
+
+**Agentero（`poco-ai/Agentero`，2.1k★，今日 +145，MIT，中文优先附英文 README）：**人机共享同一上下文的桌面科研
+工作台。v0.15.3（11-08 23:58Z）：agent 回复内解析 `openui-lang` 代码围栏渲染**只读**结构化 UI 块（布局/文本/状态/
+数据/读论文组件）+ 可拖拽 PDF 翻译浮卡 + 与桌面共用 fetch 管道的 CLI feed 命令。v0.15.2：实验记录本表格，agent 经
+`table_query`/`table_upsert` **带修订校验地写入** + Papers-with-Code 集成。设计分工是重点：给模型干净、结构化、
+修订受检的上下文去写；只读渲染送回身处 PDF 世界的人。
+
+→ [[agent-distribution]] [[token-economics]]

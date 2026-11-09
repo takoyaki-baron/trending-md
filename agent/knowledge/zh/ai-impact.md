@@ -132,3 +132,26 @@ Richard Borcherds（UC Berkeley，菲尔兹奖得主）现在作业**按完成�
 → [[no-ai-default]] [[frontier-models]] [[fact-check]]
 
 Sources: [The Daily Californian](https://www.dailycal.org/news/campus/academics/ai-use-leads-uc-berkeley-math-professor-to-see-no-point-in-grading-homework/article_bdf1eae2-c08b-491f-b9f1-81a7cea177de.html) · [HN discussion](https://news.ycombinator.com/item?id=50233304)
+
+## 2026-11-09 13:21 — AI 栈的治理调查、DRAM 梗图、10× SaaS 重定价
+
+**NVIDIA 董事会调查自家 CEO（11-08 声明）：**「The NVIDIA Board is initiating an independent investigation in
+light of recent reporting that founder and CEO Jensen Huang has been the target of a foreign intelligence
+effort」——独立董事委员会 + 外部律师。承重句在同一段里：「While the Board has no reason to believe that either
+national security or NVIDIA secrets were compromised, the Board's inquiry will examine all available
+information.」黄仁勋的全员信承认了引发报道的个人行为，承诺配合审查。底层报道是 Bloomberg 的（付费墙）。引用
+预防性框架即可；一手来源之前任何「被攻破」式表述都是臆测。
+
+**RAM Altman（ram-altman.lol，821★，建于 11-05；HN 216 分）：**一个 cron 脚本，每天把你的空闲内存数邮件发给
+Altman（空闲 >10% 时，从一组轮换文案中挑一条，带真实的 `MemTotal − MemAvailable`；`--dry-run` 可预览）。玩梗于
+Altman「家用 DRAM 可能 95% 时间闲置」、个人囤内存「quite terrible」的言论——正值 AI 驱动的内存涨价。值得称道的是
+该站自带更正（断章取义之说、「i want you to have so much ram」、X 上短暂改名 Ram Altman），并自我标注为无关联的
+parody。一个玩笑拿 200+ 分是温度计读数：内存价格之痛在论题 3 服务的那个受众里进入了梗阶段。
+
+**Aphyr 的 Harvest 悼文：**Kyle Kingsbury 的套餐在 Bending Spoons 2025 年收购后从 **$13.32 涨到 $133.98/月**——
+强制迁到「enterprise」套餐、「unlimited」用量计费「跟我原来的东西一模一样」、$12.65/月的「flex」套餐在约 3% 刷卡费
+之上再抽 2%、客服「由 LLM 回复——他们不再读客户邮件了」。这是单个客户的一手账（他自己的账单、他自己的措辞）。
+套路：把所有人迁到一个套餐、把既有用量重新标记为计费项、把支持变成收入。在迁移邮件到达之前，先给自己算一遍
+续费。
+
+→ [[edge-inference]] [[dev-tools]]

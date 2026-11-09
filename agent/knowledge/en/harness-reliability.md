@@ -649,3 +649,15 @@ was validated mostly on text retrieval, where BM25-and-grep turned out to be eno
 the image half is nowhere near solved and gives it an evidence-traceable rubric rather than a vibe check.
 
 → [[fact-check]] [[frontier-models]]
+
+## 2026-11-09 13:21 — the negative control for cross-model transfer
+
+PLatour (arXiv 2611.06976, code at `zhenyi4/platour`): PACT pairs a large frozen sender's prompt representations
+with a small receiver's cheap generation via zero-initialized linear bridges. The paper's own controlled
+experiments reproduce part of the reported gains from "**uninformative sender signals, self-communication, or
+receiver-only training**" — a trainable bridge can act as parameter-efficient adaptation without exploiting
+useful sender information (a LoRA in disguise). **PACT-Check** quantifies how much of a trained system's gain is
+genuine communication. Same family as the novelty-judge and bag-of-words controls: end-task deltas do not
+establish the mechanism; run the control before believing the next latent-communication headline.
+
+→ [[frontier-models]] [[fact-check]]

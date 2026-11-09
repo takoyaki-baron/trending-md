@@ -3444,3 +3444,34 @@ arXiv 2611.08449（11-05 提交，NVIDIA 列入 HF daily papers）：一个轻�
 消失」的门控与 dropout，是任何人往冻结基础策略上挂辅助表征时可搬走的技巧。
 
 → [[agent-stack]] [[harness-reliability]]
+
+## 2026-11-09 13:21 — 无权重的榜首声明；两篇自带告警的架构论文；精确的 MoE 归因；跨模型迁移的阴性对照
+
+**WeLM-Image（微信 Vision，arXiv 2611.07392，`published` 2026-11-05T03:41:53Z——已核实）：**Mixture-of-Transformers
+骨干上的统一图像基础模型（共享注意力、理解/生成参数独立），每条路径各挂 MoE——存储 31.7B / 每个 target latent token
+激活约 5.4B，原生 1.5K 分辨率训练，rubric/checklist 奖励 RL，再接噪声感知 on-policy 蒸馏。摘要标题：1536 分辨率模型
+「在受评开源模型中排名第一」——评的是作者自己选的比较集。Turbo 版（MeanFlow 少步蒸馏）单张 H20 上 4.98 秒出
+1024×1024。自建编辑基准（WeGenEditBench，2,740 条精筛样本）。决定性告警：**无公开权重**——HF 搜索为零，论文亦未给
+发布计划。对腾讯生产栈是真实信号；但既跑不了，也查不了榜。
+
+**Muir（arXiv 2611.08376，`published` 2026-11-05T17:53:49Z——已核实）：**Gated DeltaNet-2 在写入新 value 前会衰减 KV
+状态并擦除对 incoming key 的预测；Muir 的起点观察是「状态更新对擦除远不如对写入敏感」——key 激活与 unit 归一化把
+key 能量集中到稀疏通道子集——所以擦除门可以**低秩**。把所有门融合进一个按敏感度分配的低秩投影 + 匹配滤波读出
+门；省下的参数再投入更宽的 FFN；大 chunk 下用并行形式保稳定。166M–1.34B：ppl 较 GDN-2 −1.8–2.0%、较 Transformer
+−2.5–3.6%；1.34B 上外推 **2,560×**（4K 训练 → 10M-token 流）。论文自陈局限：固定门秩预算下，静态与动态读出在
+单视野保持与多滞后适应之间取舍，且 **~11K token 以内 Splash Attention 仍更快**（融合 Pallas kernel；XLA 把 chunk
+临时量写进 HBM）——引用外推标题时应带上这段诚实的短上下文回退。
+
+**SAE Interprets MoE（ByteDance Seed，arXiv 2611.08089，`published` 2026-11-05T14:35:08Z，代码已发布）：**以往 MoE
+分析「在按域标注的语料上统计专家被选中的频次……记录的是选择而非贡献」。MoE 层输出是专家输出的路由加权和、SAE
+编码器是仿射的，所以**每个 latent 的 pre-activation 恰好按专家分解**——是贡献，不是选择。在 Qwen3-30B-A3B（第
+4/30/46 层）：贡献「远比门控集中」，多数 latent 有一两个主导专家，自动解释的主导集合呈子域特化（Java vs 前端 web；
+几何 vs 算术与多项式）。告警：粗粒度领域分到的专家数「极不均衡」，读集中度结论时要记得这个基率。
+
+**PLatour（arXiv 2611.06976，`published` 2026-11-04T13:33:47Z，代码在 `zhenyi4/platour`）：**开源 PACT 框架
+（零初始化线性桥；冻结的大发送方 + 小而廉价的接收方），报告称优于开源基线——然后才是真正的贡献：「受控实验表明，
+部分任务上的增益可以由无信息量的发送方信号、自我通信或仅接收方训练复现。」可训练的桥可以只充当参数高效微调，
+并未利用发送方信息。附带 **PACT-Check**，量化一个训练好的系统的增益里有多少是真实通信——整个 latent-communication
+流派的阴性对照。
+
+→ [[harness-reliability]] [[fact-check]] [[token-economics]]

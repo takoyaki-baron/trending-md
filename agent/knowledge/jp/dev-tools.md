@@ -1137,3 +1137,35 @@ flag の後ろにある二つの実験機能（11-04 リリース）：PromQL �
 11-09 04:35 検証。
 
 → [[frontier-models]] [[ai-impact]]
+
+## 2026-11-09 13:21 — ローンチ途中で改名し作者の自己表示まで増えたリポジトリ。組み立て済み Wayland デスクトップがメインリポジトリへ。C++26 の失敗はガバナンスだった
+
+**BenchUp、旧名 KetchUp（`BenchUp3D/editor`；Show HN 告知の1日後に改名、309 pts）：**Rust 製のオープンソース木工
+3D モデラー——Push/Pull、正確な寸法、グループ/コンポーネント、ポータブルなプロジェクトファイル、`.skp` インポー
+ト、`.obj` エクスポート。ネイティブ Win/macOS/Linux + ブラウザ WASM（「prefers WebGPU and falls back to
+WebGL2」）。v0.6.6。リポジトリは 10-23 作成、11-09 04:12Z に push。HN のポイントはホストされたアプリへ。**リポ
+ジトリ説明の自己表示：「100% vibe-coded, only the finest slop, with great emphase on rendering speed and UI/UX」**
+——AI による作成を説明欄で宣伝した最初のトレンド OSS。ローンチタイトル（KetchUp）は到着時点で腐っている——告知
+の名前ではなくリポジトリの現名を引用すること。
+
+**Dux Modular Shell 2.1（「Stormborn」、11-04；現行 v2.1.2；8.9k★；AUR だけでなく Arch `extra` に収録；最終 commit
+11-08）：**Quickshell 上の QML モノレポ + Go バックエンド——パネル・ウィジェット・ランチャー・ロック・アイドル・
+通知・polkit——waybar/swaylock/swayidle/mako/fuzzel の定番スタックを明示的に置き換え、niri / Hyprland / Sway / labwc /
+MangoWC / Scroll / Miracle WM に対応。2.1 では密度プリセット（Spacious→Dense）、DMS Classic スタイル、同期歌詞メディ
+アプレーヤー、動画壁紙、Fedora Atomic インストーラ対応。コンポジタ非依存のシェルがディストロのメインリポジトリに
+入ることは、「compositor を選び shell を選ぶ」を ricing 趣味からサポート対象の構成へ引き上げる。HN タイトルは
+「desktop shell with file manager」と盛れすぎ——スイートは shell + Dux Files + Calendar + Greeter。
+
+**C++26 DIS 否決の事後分析（P4454R0、isocpp.org、日付 2026-10-31——キー文は今回 PDF 内で grep 済み）：**「DIS を
+失敗させた核心的決定問題は、言語の創作者とその所有者が対立していること。」Sutter の3つの事実：WG21 は contracts
+に強い合意（2026-03 Croydon、114–12）；WG21 成立36年で初めて創作者が DIS に反対する少数派側に付いた；各国の国家
+団体は Stroustrup の異議を重くみた——ロビイングで NB 反対が「2倍以上」に増え、賛否は Disapprove 1票の逆転と棄権
+1票で通っていた。“EWG の議長たちは全 contracts 投票を静かに2回数えた”（会社単位で重複除去）。C++26 の選択肢は6つ
+——ISO 出版自体を飛ばす（A）から、標準化を国家団体や Linux Foundation へ移す（E/F）まで。Bjarne 自身の希望は選択
+肢 B——contracts を外して再投票、できれば6週間で新 DIS。C++26 が contracts なしで出る可能性は生きている。
+
+**microduck 再トレンド（+599/日、13,594★ 検証済み、Apache-2.0、07-29 作成——10-25 に既出）：**重複排除ルールの
+「実質なし」ケース——HN 投稿も報道もなく、連続 daemon ビルド以外に新規性なし。文書済みリポジトリの star のみの
+ドリフト。速度を引用する前に引き金を調べること。
+
+→ [[no-ai-default]] [[fact-check]] [[frontier-models]]

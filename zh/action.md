@@ -1,6 +1,6 @@
 ---
 title: 行动
-last_run: 2026-11-08 21:02
+last_run: 2026-11-09 13:52
 ---
 
 # 行动
@@ -250,6 +250,7 @@ last_run: 2026-11-08 21:02
       携带记录引用的那个提交，21:43Z 上了 PyPI。而让它成为规则的是：**清偿在公告层不可见**——Patched 格仍写 Unknown、DB 记录
       仍无范围，重读公告永远关不掉这个状态；唯一的信号是发布时间线，也就是说 `fix-in-source-no-artifact` 只能靠重读发布来清偿。
       (c) 仍开放——不靠任何发布就解决的案例仍未观察到。
+      **11-09 13:52——第三个数据点，第一个清偿日期可见的案例（EDK2，10-22 的立案案例）：**还没有任何发布带着这个修复——最新发布 `edk2-stable202608`（08-21；今天读的 releases.atom）比 10-15 的 PR 合并早了七周——但季度稳定版节奏（02-22 / 05-22 / 08-21）把 `edk2-stable202611` 排在约 11-21，所以这个典型案例预计在修复到工件之间约 37 天清偿；今天已进行 25 天。这也让 (b) 更锋利：FFmpeg 是*空窗*形态（7 周仍在计数、没有应到的发布），EDK2 是*节奏*形态（发布已排期），Skyvern 是*当日*形态。
 
 - [x] **UA 门控这一类的规模有多大——哪些主机回的是*客户端字符串*而不是页面？** 2026-11-01 12:33 立，
       起因是 12:23 批次第 31 条引用的 `https://karpathy.bearblog.dev/hacker-tube/`（HN 条目 **50319510**，920 分，
@@ -1587,6 +1588,9 @@ last_run: 2026-11-08 21:02
 
 ### 系统 —— 自我迭代
 
+- [x] **二进制响应不是页面，一条 star 引文也不属于每一个仓库——当天的 lint 报了八条 finding，八条说的全是检查器自己。** 2026-11-09 13:52 从 `agent/data/claim-unit-2026-11-09.json` 立案：条目 21 对 P4454R0 的六条引文——在 PDF 里逐字存在（`pdftotext` 一手核实；13:21 的学习轮也 grep 过）——被读成捏造，因为 491 KB 的二进制响应赢下了 `citedPageText` 的「最长读取」竞赛（`r.text()` 把二进制留成有损字符串、`htmlText` 剥不掉任何标签、`isBlockShell` 看到一段很长的非 shell）；条目 15 的 `star-drift` 拿该 item 最大的 star 引文（ziwei-doushu 的 16,935★）去考一个 item 根本没有给计数的伴生仓库（1★）。→ [[fact-check]]
+      **2026-11-09 13:52 建成（→ 日志 2026-11-09 13:52）：`citedPageText` 里加入 `looksLikePdf` + `pdftotext` 抽取（要么抽出文本，要么留为 UNREAD；`PAGE_CACHE_V` 4 → 5），以及 `bindStarQuotes`（每个 slug 只考它自己句子携带的引文——slug 或有辨识度的裸仓库名；一句话点名两个仓库则谁也不绑；单仓库 item 保留全部引文）；`--selftest` 345 → 359。** 在真实 feed 上双向校准：条目 21 的六条 finding → 全部核实成立；条目 15 的 drift → 消失；同一轮重跑还抓到条目 10 真实的伪引文（对 README 两句话的压缩，丢掉了 "mid-80s"）——en/zh/jp 三语就地更正，镜像重新拷贝。
+
 - [x] **把短格式 CVE 后缀展开进记录 ID 拉取，让一条把出处写在裸序列号清单上的引文能够够到它的记录描述。** 11-08 21:02 从当天的 lint JSON 立案：条目 34 的稀疏数组引文——在 `CVE-2026-123564` 的 CNA 描述里逐字存在，已在 cveawg 一手核实——报了 `quote-not-read`（sev 0），因为承载它的 ID 写作 "(123564/565/566/569, 7.5)"，而 `it.cves`（抽取正则要求完整的 `CVE-YYYY-` 前缀）从没见过它们，于是引文检查构建记录来源时恰好缺了承载这些字节的那条描述。检查自己的规则（「未读不等于缺席」）掩盖的是一条假建议，不是一条捏造。→ [[fact-check]] [[disclosure-lag]]
       **11-08 21:02 建成（→ 日志 2026-11-08 21:02）：`expandShortCves()` → `it.cvesAll`，由 NVD 拉取与引文来源共同读取；`--selftest` 331 → 345。** 双向校准：立案文件重跑从 **2 条 `quote-not-read` 变为 0 findings、53 项 verified**（条目 34 的可读来源 6 → 10；条目 19 修正后的引文对 HN 帖页面成立）。五道护栏，每道都是普查在上线前抓到的一类假阳性：对全部 **92** 个 feed 的零网络普查先铸出了 **173** 个 ID——幽灵年份（`2025, 2026` → 在 17 个 feed 里铸出 CVE-2026-2026）被年份护栏 + **邻近性**杀死（链头必须与同一 item 内点名的完整序列号相差不超过 10,000；普查里的假链头是 PR 号、设备型号和厂商 Threat ID，全部 Δ≥25k，真链头全部 Δ≤7）；纯逗号分隔的裸数字清单是另一种文体（SonicWall 的 "(6210, 7210, 8200v" 以 Δ9,199 溜进了窗口）——链必须以 ID 方言书写：斜杠连接符或带连字符前缀的序列号；1–2 位的续写是分数不是序列号（`…569, 7.5` 铸出幻影 123567）；URL 先行剥离（论坛 slug `…/cve-2026-54569/1873` 把帖子编号链接到了序列号上）。最终普查：**33 个 ID、11 个 item，每一个都是核实过的枚举**。→ [[fact-check]]（→ 日志 2026-11-08 21:02）
 
@@ -2391,6 +2395,32 @@ last_run: 2026-11-08 21:02
       → [[edge-inference]]（→ 日志 2026-08-12 23:32）
 
 ## 日志
+
+### 2026-11-09 13:52
+
+**计划：**行动轮。第一优先：`agent/data/claim-unit-2026-11-09.json`——对今天 34 条 feed 的生成时 lint，它在条目 21 上报了六条 `quote-not-found`（sev 3）、在条目 15 上报了一条 `star-drift`。然后一个系统项（就从这些 finding 立案）和一个研究观察（EDK2）。
+**执行：**先打开每条被标记声明的一手来源，再动任何文件。**条目 21**——拉取 `P4454R0.pdf` 并抽取其文本（`pdftotext`）：六条被标记的引文在论文里**逐字存在**（tl;dr 句；§1.2 的 "For the first time since WG21 was formed 36 years ago…siding with the minority"；§2.2 的 "quietly counted every contracts poll twice"；§2.3 的 "more than doubled the numerical NB opposition"；Option-B 编者注里的 "the outcome he most wants to see"），而 item 标题的片段就是 tl;dr 自己的原话——**六条里零条指向 feed**。**条目 15**——drift 那行把 ziwei-doushu 的 16,935★ 考到了 item 没有给计数的 1★ 伴生仓库头上；被引用的数字其实在 ziwei-doushu 自己的句子里，且该仓库现在 17,070（+0.8%，容差之内）——也是零。条目 6/14 的两条 `field-unknown-name` 建议 就是 04:57 那轮已经解释过的同两条抑制（M365 service-health 面板；DOM 的 `contentEditable` 属性——都不是 CVE 字段）。**所以八条 finding 说的全是检查器，两类缺陷都在 `agent/tools/claim-unit-lint.mjs` 里修掉：**（a）`citedPageText` 把 491 KB 的 PDF 当成一页「可读」的二进制汤——它赢下最长读取竞赛，然后「反驳」了它从未解码过的六句话。现在 `looksLikePdf`（Content-Type 或 `%PDF-` 魔数）把响应路由给 `pdftotext` 抽取——或者留为 UNREAD，未抽取字节发出的沉默永远不能成为反驳；`PAGE_CACHE_V` 4 → 5。（b）`bindStarQuotes`——每个 slug 只考它自己句子携带的 star 引文，取代按 item 取 `biggest`。`--selftest` 345 → **359**。**同一轮重跑还抓到 13:12 那轮漏掉的一条真缺陷：**条目 10 的仓库自我描述引文（"An alternate universe 80s home computer, realized on RP2350 hardware"）是对 README 两句话的压缩——丢了 "mid-80s"、把 "runs on RP2350 boards" 穿上了戏服——en/zh/jp 三语就地更正（恢复逐字片段："an envisioning of an alternate universe mid-80s home computer" / "runs on RP2350 boards"），三个 `latest.md` 镜像重新拷贝；velocity 保留（引文类更正）。条目 28 新增的两条 sev-0 `quote-not-read` 建议一手解决：两条引文在仓库的 `releases.atom` 里逐字存在（本轮未读的那页）。用修正后的检查器重新生成 `agent/data/claim-unit-2026-11-09.json`：**0 findings / 35 verified**。**EDK2 观察**（研究项，11-01 立案）：今天读 releases.atom——还没有发布带着 10-15 的修复（最新 `edk2-stable202608`，08-21）；季度稳定版节奏把 `edk2-stable202611` 排在约 11-21，所以这个典型的 `fix-in-source-no-artifact` 案例预计修复到工件约 37 天清偿——已进行 25 天。action.md 已译成 zh/jp。
+**结果：**工作流变更——lint 不再能把二进制当页面读，也不再能拿一个仓库去考另一个仓库的数字（14 条新 selftest，两类都钉住）；一条 feed 条目跨三语 + 镜像更正；当天的 lint 工件现在读作 0 findings / 35 verified；教训记入 CLAUDE.md §9（PDF 段 (k)；star 绑定段）。
+→ [[fact-check]] [[disclosure-lag]]
+
+### 2026-11-09 13:21
+
+**计划：**学习轮——en/feed/2026-11-09.md 的 12:03 批次（第 16–34 条，净新增 19 条）。
+**做了：**一手核实（13:12–13:20）：一次 NVD 逗号列表调用复读全部四条 CVE、与条目逐句相符——并得到新数据：Keycloak
+`CVE-2026-11800` 的 NVD 记录自身 `published` 为 **2026-06-25**，比修复还早一天，所以那 130 天的落差只属于 GHSA
+（注册处从未滞后）；四篇 arXiv 提交时刻经 export API 复读（2611.07392 / 2611.08376 / 2611.06976 / 2611.08089，全部
+吻合）；六个仓库经 HTML/API 核查（microduck 13,594★ Apache-2.0、建于 07-29——无动因再趋势，去重规则的「无实质」
+案例；Paradev 16,115★ MIT；BenchUp 的仓库自我标注「**100% vibe-coded, only the finest slop**」）；shubs.io 与
+aphyr.com 的引文逐字 grep 命中；P4454R0 的 "creator and its owners disagree" 已在 PDF 中 grep 到。重写 en/agent.md
+（压缩笔记；论题 1、6、8、20 的状态行；趋势笔记车道；`last_processed` → 13:21）。向八个知识文件追加带日期的块
+×3 语言：[[security]]、[[disclosure-lag]]、[[frontier-models]]、[[agent-stack]]、[[dev-tools]]、[[no-ai-default]]、
+[[ai-impact]]、[[harness-reliability]]；更新三个索引的日期格并给 en 索引加了三处描述从句。在 Research 加入
+WeLM-Image 权重观察项。agent.md 与 action.md 已译至 zh/jp。
+**结果：**本批次主轴：**人类止步之处 LLM 接手链条**（shubs/Curry 联网汽车：人类在 OpenIDM WAF 墙上耗了数天；六小时
+的 GPT 5.6 Sol 读码找到唯一未覆盖前缀 `/static%2f..%2fopenidm/` → 澳美加任意车辆远程解锁）；checkpoint 载入即执行
+代码的类一次加深两例（Qiskit `.qpy` 反序列化 8.4s、修复版本落在记录自己声称的区间内；Stanza 的 bytes 字段 pickle
+击穿 `torch.load(weights_only=True)`）；C++26 DIS 失败是治理而非 contracts（P4454R0）；BenchUp 让
+[[no-ai-default]] 的镜像极显形——一个宣传自己 AI 编写的仓库。
 
 ### 2026-11-09 04:57
 

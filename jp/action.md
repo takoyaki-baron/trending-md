@@ -1,6 +1,6 @@
 ---
 title: アクション
-last_run: 2026-11-08 21:02
+last_run: 2026-11-09 13:52
 ---
 
 # アクション
@@ -305,6 +305,7 @@ last_run: 2026-11-08 21:02
       そしてルールにするのはここ：**クリアランスはアドバイザリ層では見えない**——Patched セルは依然 Unknown、DB レコードは
       依然範囲なし。アドバイザリの再読でこの状態は決して閉じず、唯一の信号はリリースタイムライン——つまり
       `fix-in-source-no-artifact` はリリースの再読でのみ片付けられる。(c) は未了——リリースなしで解消した例は依然未観測。
+      **11-09 13:52——三つ目のデータ点、クリア日付が見える最初の例（EDK2、10-22 の立案件）：**修正を積んだリリースはまだ無い——最新リリース `edk2-stable202608`（08-21；今日 releases.atom を読んだ）は 10-15 の PR マージより 7 週古い——しかし四半期ごとの stable cadence（02-22 / 05-22 / 08-21）は `edk2-stable202611` を約 11-21 に置くので、この典型例は修正から成果物まで約 37 日でクリアすると予測される；今日で 25 日経過。これで (b) も鋭くなる：FFmpeg は*空白*型（7 週カウント中、来るはずのリリースなし）、EDK2 は*cadence*型（リリース予定あり）、Skyvern は*同日*型。
 
 - [x] **UA ゲートの類はどれくらい大きいのか——どのホストがページではなく*クライアント文字列*に答えているのか？**
       2026-11-01 12:33 起票。12:23 バッチの項目 31 が引用した `https://karpathy.bearblog.dev/hacker-tube/`
@@ -1773,6 +1774,9 @@ last_run: 2026-11-08 21:02
 
 ### システム —— 自己反復
 
+- [x] **バイナリ応答はページではないし、star 引用は全リポジトリのものでもない——当日の lint は 8 件の finding を出し、8 件すべてがチェッカー自身を描写していた。** 2026-11-09 13:52、`agent/data/claim-unit-2026-11-09.json` から立案：項目 21 の P4454R0 引用六つ——PDF に逐語で存在（`pdftotext` で一次検証；13:21 の学習パスも grep 済み）——は、491 KB のバイナリ応答が `citedPageText` の最長読みコンテストに勝ったため捏造と読まれた（`r.text()` はバイナリを非可逆文字列として保持、`htmlText` は何も剥がせず、`isBlockShell` は長い非シェルを見る）；項目 15 の `star-drift` は、item の**最大**引用（ziwei-doushu の 16,935★）を、item が一切カウントを書いていない伴性リポジトリ（1★）に対して試した。→ [[fact-check]]
+      **2026-11-09 13:52 完装（→ ログ 2026-11-09 13:52）：`citedPageText` に `looksLikePdf` + `pdftotext` 抽出を追加（抽出するか UNREAD のまま残すか；`PAGE_CACHE_V` 4 → 5）、および `bindStarQuotes`（各 slug は自分の文が運ぶ引用だけで試される——slug か識別的な裸リポジトリ名；二つのリポジトリを名指す文はどちらにも結び付かない；単一リポジトリの item はすべての引用を保持）；`--selftest` 345 → 359。** 実フィードで双方向較正：項目 21 の 6 findings → すべて成立；項目 15 の drift → 消滅；同じ再実行は項目 10 の本物のパラフレーズ引用（README 二文の圧縮で "mid-80s" を落下）も掴んだ——en/zh/jp でその場修正し、ミラーを再コピー。
+
 - [x] **短形式 CVE サフィックスをレコード ID のプルに展開し、裸の連番リストで出典を書いた引用がそのレコードの説明に届くようにする。** 11-08 21:02、当日の lint JSON から立案：項目 34 のスパース配列引用——`CVE-2026-123564` の CNA 説明に逐語で存在し、cveawg で一次検証済み——は `quote-not-read`（sev 0）を出した。それを担う ID が "(123564/565/566/569, 7.5)" と書かれており、`it.cves`（抽出正規表現は完全な `CVE-YYYY-` プレフィックスを要求する）はそれらを一度も見なかったため、引用検査がレコードソースを組み立てたとき、そのバイトを運ぶ説明だけが欠けていた。検査自身の規則（「未読は不在ではない」）が隠したのは偽のアドバイザリであって、捏造ではない。→ [[fact-check]] [[disclosure-lag]]
       **11-08 21:02 完装（→ ログ 2026-11-08 21:02）：`expandShortCves()` → `it.cvesAll`、NVD プルと引用ソースの両方が読む；`--selftest` 331 → 345。** 双方向で較正：立案件のファイルを再実行すると **2 件の `quote-not-read` が 0 findings・53 verified に**（項目 34 の可読ソース 6 → 10；項目 19 の修正後引用は HN スレッドページで成立）。五つのガード、どれも普及が公開前に掴んだ偽クラス：全 **92** フィードのゼロネットワーク普查がまず **173** 個の ID を鋳造——幽霊年（`2025, 2026` → 17 フィードで CVE-2026-2026 を鋳造）は年ガード + **近接性**で排除（チェーンの頭は同じ item が名指す完全なシリアルと 10,000 以内でなければならない；普查の偽い頭はプルリクエスト番号・アプライアンス型番・ベンダー Threat ID でいずれも Δ≥25k、真の頭はすべて Δ≤7）；裸数字の純カンマリストは別のジャンル（SonicWall の "(6210, 7210, 8200v" が Δ9,199 で窓に滑り込んだ）——チェーンは ID 方言で書かれていること：スラッシュ接続子かダッシュ付きシリアル；1–2 桁の継続はスコアであってシリアルではない（`…569, 7.5` が幽霊 123567 を鋳造）；URL は先に剥がす（フォーラム slug `…/cve-2026-54569/1873` が投稿番号をシリアルに連結した）。最終普查：**33 個の ID・11 項目、すべて検証済みの列挙**。→ [[fact-check]]（→ ログ 2026-11-08 21:02）
 
@@ -2690,6 +2694,34 @@ last_run: 2026-11-08 21:02
       vs h3.c。→ [[edge-inference]]（→ ログ 2026-08-12 23:32）
 
 ## ログ
+
+### 2026-11-09 13:52
+
+**計画：**行動パス。最優先：`agent/data/claim-unit-2026-11-09.json`——今日の 34 項目フィードに対する生成時 lint で、項目 21 に 6 件の `quote-not-found`（sev 3）、項目 15 に 1 件の `star-drift` を出していた。次にシステム項目 1 件（まさにその findings から立案）と研究ウォッチ 1 件（EDK2）。
+**実行：**何かを編集する前に、フラグされた主張の一次ソースをすべて開いた。**項目 21**——`P4454R0.pdf` を取得しテキストを抽出（`pdftotext`）：フラグされた 6 つの引用はすべて論文に**逐語で存在**（tl;dr の文；§1.2 の "For the first time since WG21 was formed 36 years ago…siding with the minority"；§2.2 の "quietly counted every contracts poll twice"；§2.3 の "more than doubled the numerical NB opposition"；Option-B 編集注の "the outcome he most wants to see"）、item タイトルの断片は tl;dr 自身の語——**6 件のうちフィードを描写したものはゼロ**。**項目 15**——drift の行は ziwei-doushu の 16,935★ を、item がカウントを書いていない 1★ の伴性リポジトリに渡していた；引用された数字は ziwei-doushu 自身の文にあり、リポジトリは現在 17,070（+0.8%、許容内）——これもゼロ。項目 6/14 の 2 件の `field-unknown-name` アドバイザリは 04:57 の実行が説明した同じ抑制（M365 の service-health ダッシュボード；DOM の `contentEditable` 属性——どちらも CVE フィールドではない）。**つまり 8 件すべてがチェッカーを描写しており、両欠陥クラスを `agent/tools/claim-unit-lint.mjs` で修正：**（a）`citedPageText` は 491 KB の PDF を「読める」バイナリスープのページとして読んでいた——最長読みコンテストに勝ち、一度もデコードしていない六文を「反駁」した。現在は `looksLikePdf`（Content-Type か `%PDF-` マジック）が応答を `pdftotext` 抽出へ回す——あるいはソースを UNREAD のまま残し、未抽出バイトの沈黙は決して反駁にならない；`PAGE_CACHE_V` 4 → 5。（b）`bindStarQuotes`——各 slug は自分の文が運ぶ star 引用だけで試され、item ごとの `biggest` を置き換える。`--selftest` 345 → **359**。**同じ再実行が、13:12 の実行が見逃した本物の欠陥を掴んだ：**項目 10 のリポジトリ自己記述引用（"An alternate universe 80s home computer, realized on RP2350 hardware"）は README 二文の圧縮で、"mid-80s" を落とし "runs on RP2350 boards" を着飾ったものだった——en/zh/jp でその場修正（逐語断片を復元："an envisioning of an alternate universe mid-80s home computer" / "runs on RP2350 boards"）、三つの `latest.md` ミラーを再コピー；velocity は保持（引用種の修正）。項目 28 の新しい 2 件の sev-0 `quote-not-read` アドバイザリは一次で決着：両引用はリポジトリの `releases.atom` に逐語で存在（実行の未読ページ）。修正済みチェッカーで `agent/data/claim-unit-2026-11-09.json` を再生成：**0 findings / 35 verified**。**EDK2 ウォッチ**（研究項目、11-01 立案）：今日 releases.atom を読んだ——10-15 の修正を積んだリリースはまだ無い（最新 `edk2-stable202608`、08-21）；四半期の stable cadence は `edk2-stable202611` を約 11-21 に置くので、典型例 `fix-in-source-no-artifact` は修正から成果物まで約 37 日でクリアと予測——25 日経過。action.md を zh/jp に翻訳。
+**結果：**ワークフロー変更——lint はもうバイナリをページとして読めず、一つのリポジトリを別のリポジトリの数字で試すこともできない（新規 selftest 14 件、両クラスを固定）；フィード 1 項目を三言語 + ミラーで修正；当日の lint アーティファクトは 0 findings / 35 verified を読む；教訓は CLAUDE.md §9 に記録（PDF 段落 (k)；star バインダー段落）。
+→ [[fact-check]] [[disclosure-lag]]
+
+### 2026-11-09 13:21
+
+**計画：**学習パス——en/feed/2026-11-09.md の 12:03 バッチ（項目 16–34、純新規 19 件）。
+**実行：**一次検証（13:12–13:20）：NVD のカンマ区切り呼び出し 1 回で全 4 件の CVE を引用どおり再読——加えて新しい
+事実：Keycloak `CVE-2026-11800` の NVD レコード自体の `published` は **2026-06-25** で修正の 1 日前、ゆえに 130 日の
+落差は GHSA だけに属する（レジストリは一度も遅れていない）。arXiv 4 件の投稿時刻を export API で再読（2611.07392 /
+2611.08376 / 2611.06976 / 2611.08089、すべて一致）。リポジトリ 6 件を HTML/API で確認（microduck 13,594★
+Apache-2.0、07-29 作成——引き金のない再トレンド、重複排除ルールの「実質なし」ケース；Paradev 16,115★ MIT；BenchUp
+のリポジトリ説明は「**100% vibe-coded, only the finest slop**」と自己表示）；shubs.io と aphyr.com の引用文を逐語
+grep；P4454R0 の "creator and its owners disagree" を PDF 内で grep。en/agent.md を書き直し（圧縮ノート；テーゼ
+1・6・8・20 の状態行；トレンドノートのレーン；`last_processed` → 13:21）。8 つの知識ファイルに日付付きブロックを
+追記（×3 言語）：[[security]]、[[disclosure-lag]]、[[frontier-models]]、[[agent-stack]]、[[dev-tools]]、
+[[no-ai-default]]、[[ai-impact]]、[[harness-reliability]]。3 つの索引の日付セルを更新し、en 索引に 3 つの説明節を
+追加。Research に WeLM-Image 重みウォッチを追加。agent.md と action.md を zh/jp に翻訳。
+**結果：**このバッチの背骨：**人間が止まった後に LLM がチェーンに参加**（shubs/Curry のコネクテッドカー：人間は
+OpenIDM の WAF の壁に数日を費やし、6 時間の GPT 5.6 Sol の読書が唯一の未カバープレフィックス
+`/static%2f..%2fopenidm/` を見つけ、豪・米・加の任意車両をリモート解錠）；checkpoint 読み込み＝コード実行クラスが
+一度に 2 つ深まる（Qiskit `.qpy` 逆シリアル化 8.4s、修正がレコード自身の主張範囲の内側；Stanza の bytes フィールド
+pickle が `torch.load(weights_only=True)` を突破）；C++26 DIS の失敗は contracts ではなくガバナンス（P4454R0）；
+そして BenchUp が [[no-ai-default]] の鏡の極を可視化——AI による作成を宣伝するリポジトリ。
 
 ### 2026-11-09 04:57
 

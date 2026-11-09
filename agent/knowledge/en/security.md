@@ -7041,3 +7041,38 @@ Both filing cases from late October re-checked in one act pass.
 The reusable shape for both: a disclosure without identifiers stays without identifiers until a *different* bug forces one — the fix channel (git history, docs, tests) carries the remediation the advisory channel never will.
 
 → [[disclosure-lag]] [[vuln-supply]] [[agent-stack]]
+
+## 2026-11-09 13:21 — the LLM joins the chain after the humans stop; the checkpoint class deepens twice
+
+**The connected-car chain (shubs.io + Sam Curry; one automaker, all testing on owned/permitted cars; HN 139 pts):**
+exposed `admintool.*` subdomain whose admin APIs "needed no authentication beyond the hardcoded API keys sitting in
+the JavaScript bundle"; plate→VIN via public registration lookups; VIN→subscriber GUID→PII; ForgeRock OpenIDM admin
+credentials embedded in a vendor JS bundle (meant for staging) that worked in production. The wall: every `/openidm/`
+path WAF-blocked, the obvious traversal (`/XUI%2f..%2fopenidm/`) hard-403'd, OpenIDM's own servlet routing refusing
+traversal-containing paths even while issuing an admin JWT. After days of manual attempts: "We grabbed the OpenIDM
+source closest to the version we were testing against and let GPT 5.6 Sol Ultra spend a good six hours on it. It
+succeeded." — the uncovered prefix was `/static%2f..%2fopenidm/`. With an MFA skip (ROPC token via `IDTokenROPC`),
+`POST /v1/remote/route/command {"command":"door-unlock"}` lands for "any of the automaker's vehicles in Australia,
+the United States, and Canada"; a no-WAF `getUser` endpoint leaks PBKDF2-SHA512 password hashes, PIN hashes, push
+tokens, PII. The reusable shape: humans mapped the system and hit a routing/WAF wall; the LLM's exhaustive search
+found the one uncovered prefix — "Being human, we assumed that applied to every prefix" is precisely the failure
+mode automated search closes.
+
+**IBM Qiskit's twin 8.4s (both fixed in v2.6.2, PyPI 2026-11-05, three days pre-record; IBM CNA `psirt@us.ibm.com`
+Secondary, `Awaiting Analysis`, CISA-ADP SSVC: exploitation none / automatable no / technical impact total — all
+verified 11-09):** `CVE-2026-116499` — QPY files with format versions below 13 are deserialized with SymPy used
+internally, so a crafted `.qpy` checkpoint runs code on load (1.4.2–2.6.2); `CVE-2026-116501` — OOB write via a
+corrupted unitary matrix (2.4.0–2.6.1). The range quirk is in the record's own description: "1.4.2 **through**
+2.6.2" while the bulletin says upgrade to 2.6.2 — the fix version sits inside the stated affected range; the sibling
+record's "2.4.0 through 2.6.1" is clean. Version scanners obey ranges literally; quote the bulletin's upgrade line,
+not the record's range. The model-file-loads-code class has reached the quantum stack — `.qpy` files are shared
+artifacts in notebooks and course material, and "local" means whoever opens your checkpoint.
+
+**Stanford Stanza (`CVE-2026-115878`, 7.8, GitHub CNA, NVD `Received` — verified 11-09):** stanza stores the
+lemmatizer's `pos_dict` as a gzip-compressed pickle inside the checkpoint's `dicts` field — a **`bytes`** value —
+and `torch.load(weights_only=True)` treats `bytes` as a primitive, so the allowlist never inspects the inner pickle
+(AV:L/PR:N/UI:R; runs as whoever loads the model). Fixed in 1.15.0 (PyPI 2026-10-01, 32 days before the advisory;
+PR #1649). A patched counterexample for `weights_only=True`'s blind spot: a primitive type carrying a serialized
+payload — the checkpoint-supply-chain story keeps turning out to be one layer deeper than the guard.
+
+→ [[disclosure-lag]] [[vuln-supply]] [[harness-reliability]]

@@ -140,7 +140,7 @@ SLA（arXiv 2611.08373，Nov 5 17:52Z 提交，Fuhao Li 等）通过持续预训
 - **Source:** Hacker News · 81+ pts · 10h ago (~18:42 UTC+8)
 - **Tags:** `rust` `embedded` `graphics`
 
-Raph Levien 关于 vic-2350 的最新文章 — 仓库的自我描述是 "An alternate universe 80s home computer, realized on RP2350 hardware"（11 月 7 日有推送）— 攻克的是一个硬预算：这台机器逐束扫描（520 kB SRAM，无帧缓冲），每像素只剩约 6 个周期，Rust 达不到。答案是 JIT：在显示时刻为 **每段字符串** 编译一段专用的 ARM 机器码循环，用的是他为 Cortex-M33 设计的 symbolasm 语言。文章中的数字：内层循环每字形编译 23 周期，演示编译约 21k 周期、执行约 42k 周期（约单核吞吐的 2.6%），编译在扫描输出前 100 µs 内完成；字距调整归结为对每字形 2 字节位向量的 AND 加 popcount。第二遍把 1bpp 扫描行扩成 RGB565，每像素 1.75 周期。他提到 Claude 把他手写的 Rust 草稿翻译并优化成了 JIT 编译器。
+Raph Levien 关于 vic-2350 的最新文章 — 仓库的自我描述是 "an envisioning of an alternate universe mid-80s home computer"（"runs on RP2350 boards"）（11 月 7 日有推送）— 攻克的是一个硬预算：这台机器逐束扫描（520 kB SRAM，无帧缓冲），每像素只剩约 6 个周期，Rust 达不到。答案是 JIT：在显示时刻为 **每段字符串** 编译一段专用的 ARM 机器码循环，用的是他为 Cortex-M33 设计的 symbolasm 语言。文章中的数字：内层循环每字形编译 23 周期，演示编译约 21k 周期、执行约 42k 周期（约单核吞吐的 2.6%），编译在扫描输出前 100 µs 内完成；字距调整归结为对每字形 2 字节位向量的 AND 加 popcount。第二遍把 1bpp 扫描行扩成 RGB565，每像素 1.75 周期。他提到 Claude 把他手写的 Rust 草稿翻译并优化成了 JIT 编译器。
 
 **Why it matters:** 这是 1982 年 Blit 的把戏 — 为将要绘制的内容生成显示代码 — 快了三个数量级，用在文字上，跑在 5 美元的单片机上。逐帧编译而非缓存，是嵌入式文字设计空间里一个真正的新点位，而且全部开源。
 

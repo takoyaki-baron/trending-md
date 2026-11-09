@@ -4382,3 +4382,32 @@ harness 自己的权威指令块）：工作区如今同时是提示侧与执行
 两案共用的形状：没有标识符的披露会一直没有标识符，直到另一个 bug 逼出一条——修复通道（git 历史、文档、测试）承载着顾问通道永远不会承载的补救。
 
 → [[disclosure-lag]] [[vuln-supply]] [[agent-stack]]
+
+## 2026-11-09 13:21 — 人类止步之处 LLM 接手链条；checkpoint 载入代码类一次加深两例
+
+**联网汽车链条（shubs.io + Sam Curry；单一车企，全部测试在自有/获授权车辆上进行；HN 139 分）：**暴露的
+`admintool.*` 子域名，其管理 API「无需任何认证，只靠 JavaScript bundle 里的硬编码 API key」；车牌→VIN 走公开
+登记查询；VIN→订户 GUID→PII；ForgeRock OpenIDM 管理凭据内嵌在 vendor JS bundle（本应只用于 staging）里，生产环境
+照样能用。墙：所有 `/openidm/` 路径被 WAF 拦截，显而易见的 traversal（`/XUI%2f..%2fopenidm/`）硬 403，OpenIDM 自己的
+servlet 路由甚至一边发 admin JWT 一边拒绝含 traversal 的路径。人工尝试数日之后：「我们抓了与被测版本最接近的
+OpenIDM 源码，让 GPT 5.6 Sol Ultra 花了六个小时。它成功了。」——未被覆盖的前缀是 `/static%2f..%2fopenidm/`。
+配合跳过 MFA（经 `IDTokenROPC` 换取 ROPC token），`POST /v1/remote/route/command {"command":"door-unlock"}` 即可对
+「该车企在澳大利亚、美国和加拿大的任意车辆」远程解锁车门、启动引擎；一个无 WAF 的 `getUser` 端点泄露
+PBKDF2-SHA512 口令哈希、PIN 哈希、推送 token 与 PII。可复用形状：人类完成了系统测绘、撞上路由/WAF 之墙；LLM 的
+穷举搜索找到唯一未覆盖的前缀——「身为人类，我们以为那条规则适用于所有前缀」正是自动化搜索要关闭的失败模式。
+
+**IBM Qiskit 的两个 8.4（均在 v2.6.2 修复，PyPI 2026-11-05，早于记录三天；IBM CNA `psirt@us.ibm.com` Secondary、
+`Awaiting Analysis`、CISA-ADP SSVC：exploitation none / automatable no / technical impact total——11-09 全部核实）：**
+`CVE-2026-116499`——格式版本低于 13 的 QPY 文件反序列化时内部使用 SymPy，构造的 `.qpy` checkpoint 载入即执行代码
+（1.4.2–2.6.2）；`CVE-2026-116501`——单位矩阵损坏导致的越界写（2.4.0–2.6.1）。区间怪癖写在记录自己的描述里：
+「1.4.2 **through** 2.6.2」而公告要求升级到 2.6.2——修复版本落在它自己声称的受影响区间之内；姊妹记录的
+「2.4.0 through 2.6.1」是干净的。版本扫描器按字面执行区间；引用公告的升级行，不要引用记录的区间。模型文件载入即
+执行代码的类已经抵达量子栈——`.qpy` 是笔记本和课件里共享的制品，「local」意味着任何打开你 checkpoint 的人。
+
+**Stanford Stanza（`CVE-2026-115878`，7.8，GitHub CNA，NVD `Received`——11-09 核实）：**stanza 把 lemmatizer 的
+`pos_dict` 以 gzip 压缩的 pickle 存进 checkpoint 的 `dicts` 字段——一个 **`bytes`** 值——而
+`torch.load(weights_only=True)` 把 `bytes` 当原语，allowlist 从不检查内层 pickle（AV:L/PR:N/UI:R；以载入模型者身份
+运行）。1.15.0 修复（PyPI 2026-10-01，早于公告 32 天；PR #1649）。这是 `weights_only=True` 盲区的已修复反例：
+原语类型携带序列化载荷——checkpoint 供应链的故事总比防护深一层。
+
+→ [[disclosure-lag]] [[vuln-supply]] [[harness-reliability]]

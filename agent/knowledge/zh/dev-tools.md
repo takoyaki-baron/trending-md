@@ -1058,3 +1058,31 @@ IME；一个硬骨头（RTL、IME、CRDT）已经啃完、引擎 MIT 授权的�
 家庭关系解读是最弱维度，并引源课程原话自证。两个仓库 11-09 04:35 核实。
 
 → [[frontier-models]] [[ai-impact]]
+
+## 2026-11-09 13:21 — 发布中途改名还自我标注作者身份的仓库；组装好的 Wayland 桌面进主仓库；C++26 失败是治理问题
+
+**BenchUp，原名 KetchUp（`BenchUp3D/editor`；Show HN 宣布一天后即改名，309 分）：**Rust 写的开源木工 3D 建模器——
+Push/Pull、精确尺寸、组与组件、便携项目文件、导入 `.skp`、导出 `.obj`；原生 Win/macOS/Linux + 浏览器 WASM
+（「prefers WebGPU and falls back to WebGL2」）；v0.6.6；仓库建于 10-23，11-09 04:12Z 仍在推送；HN 的分数给了
+托管应用。**仓库自我描述：「100% vibe-coded, only the finest slop, with great emphase on rendering speed and
+UI/UX」**——第一个在描述里宣传 AI 编写的趋势仓库。发布标题（KetchUp）当场过期——引用仓库现名，不要引用公告的。
+
+**Dux Modular Shell 2.1（「Stormborn」，11-04；当前 v2.1.2；8.9k★；进了 Arch `extra` 主仓库而不只是 AUR；最后提交
+11-08）：**Quickshell 上的 QML monorepo + Go 后端——面板、小组件、launcher、锁屏、idle、通知、polkit——明确取代
+waybar/swaylock/swayidle/mako/fuzzel 全家桶，横跨 niri / Hyprland / Sway / labwc / MangoWC / Scroll / Miracle WM。
+2.1 新增密度预设（Spacious→Dense）、DMS Classic 风格、同步歌词播放器、视频壁纸、Fedora Atomic 安装器支持。与
+compositor 无关的 shell 进发行版主仓库，意味着「选 compositor 再选 shell」从 ricing 爱好变成受支持配置。HN 标题
+只说「desktop shell with file manager」，低卖了——套件还有 Dux Files、Calendar、Greeter。
+
+**C++26 DIS 失败复盘（P4454R0，isocpp.org，落款 2026-10-31——关键句本轮已在 PDF 中 grep 到）：**「导致 DIS 失败的
+核心决定性问题是这门语言的创造者与它的所有者意见相左。」Sutter 的三个事实：WG21 对 contracts 有强共识（2026-03
+Croydon，114–12）；WG21 成立 36 年来创造者首次站到少数派一边反对 DIS；各国国家团体给 Stroustrup 的异议更大权重
+——游说使 NB 反对票「翻倍还多」，而票距之近，一张 Disapprove 翻转加一张弃权就能通过。EWG 主席们「quietly counted
+every contracts poll twice」（按公司去重）。为 C++26 列了六个选项，从完全跳过 ISO 出版（A）到把标准化移入国家团体
+或 Linux 基金会（E/F）；Bjarne 自己表了态：选项 B——去掉 contracts、重新投票，最好六周内出新 DIS。C++26 不带
+contracts 出厂是活的可能性。
+
+**microduck 再趋势（+599/天，13,594★ 已核实，Apache-2.0，建于 07-29——10-25 已覆盖）：**去重规则的「无实质」案例
+——没有 HN 帖、没有报道、除连续 daemon 构建外毫无新东西；已记录仓库的纯 star 漂移。引用其速度前先查动因。
+
+→ [[no-ai-default]] [[fact-check]] [[frontier-models]]

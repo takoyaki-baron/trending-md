@@ -166,3 +166,13 @@ Thunderbolt 进了主线 → [[dev-tools]]。
 ## 2026-11-08 04:52 —— 一家律所跑了五年 Free 软件，以及那份诚实的放弃清单
 
 decoded.legal 的 Neil Brown 第三次年度前后报告：Debian + GNOME、mutt 与 Thunderbird、LibreOffice 配 pandoc/typst、paperless-ngx、EspoCRM 管案件、Kimai 计时、Forgejo、Wazuh、restic、WireGuard、GrapheneOS 的 Pixel。报告的价值在负空间：**Nextcloud 换成 Syncthing**（「给我制造的麻烦比解决的多」）；自建 Jitsi 换成 Signal 视频通话；**CryptPad 与自托管 Mastodon 因无人使用而关停**。AI 政策只有一行——「None, for various reasons.」——页脚写明「This blog was written by a human, without AI.」可保留的数据点：一家合规约束下的小企业，自托管 Free 软件跑了五年，客户端兼容性毫无摩擦（「No change here: zero problems」）——而放弃清单正是多数自托管文章从不发布的那部分。
+
+## 2026-11-09 13:21 — 镜像极：一个主动宣传自己 AI 编写的仓库
+
+`BenchUp3D/editor`（木工 CAD，发布中途由 KetchUp 改名，309 HN 分）的 GitHub 描述写着「**100% vibe-coded, only
+the finest slop, with great emphase on rendering speed and UI/UX**」。本线索此前所有条目都是拒绝 AI 的项目（TDF、
+Toast、NetBSD、QGIS、Pico CSS、Debian NEW 队列的抵制者）或治理出处者；这是第一个把它当卖点宣称的——而且措辞是
+自嘲式梗话（「only the finest slop」），不是流程声明：无 attestation、无工具链、无许可条款。这条轴此前从「拒绝」
+走到「披露即合规」；BenchUp 补上了「披露即品牌」。看下一个年轻仓库学的是哪一极。
+
+→ [[dev-tools]] [[ai-impact]]

@@ -138,3 +138,28 @@ Richard Borcherds（UC Berkeley、フィールズ賞）は今、宿題を正し�
 → [[no-ai-default]] [[frontier-models]] [[fact-check]]
 
 Sources: [The Daily Californian](https://www.dailycal.org/news/campus/academics/ai-use-leads-uc-berkeley-math-professor-to-see-no-point-in-grading-homework/article_bdf1eae2-c08b-491f-b9f1-81a7cea177de.html) · [HN discussion](https://news.ycombinator.com/item?id=50233304)
+
+## 2026-11-09 13:21 — AI スタックのガバナンス調査、DRAM ミーム、10× の SaaS 再価格設定
+
+**NVIDIA 取締役会が自社 CEO を調査（11-08 声明）：**「The NVIDIA Board is initiating an independent investigation in
+light of recent reporting that founder and CEO Jensen Huang has been the target of a foreign intelligence
+effort」——独立取締役の委員会 + 外部弁護士。荷重を支える文は同じ声明の中にある：「While the Board has no reason to
+believe that either national security or NVIDIA secrets were compromised, the Board's inquiry will examine all
+available information.」黄仁勲の全社員向けレターは報道の発端となった個人的行為を認め、調査への協力を約束。根底の
+報道は Bloomberg（ペイウォール）。予防的フレーミングを運ぶこと。一次資料以前の侵害フレーミングは推測にすぎない。
+
+**RAM Altman（ram-altman.lol、821★、11-05 作成；HN 216 pts）：**あなたのアイドル RAM の数値を毎日 Altman に
+メールする cron スクリプト（空きが 10% 超なら `MemTotal − MemAvailable` の実数値入りのローテーション文面を送る；
+`--dry-run` でプレビュー）。Altman の「家庭の DRAM はおそらく 5% しか使われていない」「個人マシンでの DRAM の
+溜め込みは quite terrible」という発言——AI 駆動の RAM 価格高騰のさなか——に乗った投稿。称賛すべきは、サイト
+自身が訂正を載せていること（文脈無視の主張、「i want you to have so much ram」、X での一時的な Ram Altman への改名）
+で、無関係の parody と自己表示。ジョークに 200+ pts は温度計の読み：メモリ価格の痛みが、テーゼ 3 の対象と同じ
+読者層でミーム段階に入ったこと。
+
+**Aphyr の Harvest 追悼文：**Kyle Kingsbury のプランは Bending Spoons の 2025 年買収後、**$13.32 → $133.98/月**
+に——「enterprise」プランへの強制移行、「unlimited」従量課金は「前に持っていたものとまったく同じ」、$12.65/月の
+「flex」プランは約 3% のカード手数料の上にさらに 2% を上乗せ、サポートは「LLM が返事をする——顧客のメールはもう
+読んでいない」。1人の顧客の説明（彼自身のプラン、彼自身の表現）。プレイブック：全員を1プランへ移行、既存利用を
+課金対象に再ラベル、サポートを収益化。移行のメールが届く前に、自分の更新料を見積もること。
+
+→ [[edge-inference]] [[dev-tools]]

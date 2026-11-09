@@ -4807,3 +4807,39 @@ MCP server execution」（今回 ibm.com/support/pages/node/7291535 から逐語
 両方に共通する形：識別子のない開示は、別のバグが一つ強制しない限り識別子を持たないまま——修正チャネル（git 履歴、ドキュメント、テスト）が、アドバイザリチャネルが決して運ばない救済を運ぶ。
 
 → [[disclosure-lag]] [[vuln-supply]] [[agent-stack]]
+
+## 2026-11-09 13:21 — 人間が止まった後にLLMがチェーンに参加。checkpoint 読み込みコードクラスが一度に2つ深まる
+
+**コネクテッドカーのチェーン（shubs.io + Sam Curry；単一の自動車メーカー、テストは所有/許可済み車両のみ；HN 139
+pts）：**露出した `admintool.*` サブドメインの管理 API は「JavaScript バンドルに入っているハードコードされた API
+キー以外、認証が一切ない」状態。ナンバープレート→VIN は公開登録照会、VIN→契約者 GUID→PII。ForgeRock OpenIDM の
+管理者認証情報は（staging 用の）vendor JS バンドルに埋め込まれたまま本番で通用した。壁：`/openidm/` の全パスが WAF
+でブロック、自明なトラバーサル（`/XUI%2f..%2fopenidm/`）はハード 403、OpenIDM 自身のサーブレットルーティングは
+admin JWT を発行しながらトラバーサル含有パスを拒否。手動試行を数日続けた後：「テスト対象バージョンに最も近い
+OpenIDM のソースを取得し、GPT 5.6 Sol Ultra に6時間費やさせた。成功した。」——未カバーのプレフィックスは
+`/static%2f..%2fopenidm/` だった。MFA スキップ（`IDTokenROPC` 経由で ROPC トークン）と組み合わせると
+`POST /v1/remote/route/command {"command":"door-unlock"}` が通り、「オーストラリア・米国・カナダの同メーカー車両
+すべて」に対してリモートでドア解錠・エンジン始動が可能に。WAF のない `getUser` エンドポイントは
+PBKDF2-SHA512 のパスワードハッシュ・PIN ハッシュ・プッシュトークン・PII を漏洩。再利用可能な形：人間がシステムを
+マッピングしてルーティング/WAF の壁にぶつかり、LLM の徹底的探索が唯一の未カバープレフィックスを見つけた——「人間
+だから全プレフィックスに適用されると思い込んだ」は、まさに自動化探索が閉じる失敗モード。
+
+**IBM Qiskit の双子の 8.4（どちらも v2.6.2 で修正、PyPI 2026-11-05、レコードの3日前；IBM CNA
+`psirt@us.ibm.com` Secondary、`Awaiting Analysis`、CISA-ADP SSVC：exploitation none / automatable no / technical
+impact total——11-09 全件検証済み）：**`CVE-2026-116499`——フォーマットバージョン13未満の QPY ファイルは内部で
+SymPy を使って逆シリアライズされ、細工した `.qpy` checkpoint がロード時にコードを実行（1.4.2–2.6.2）；
+`CVE-2026-116501`——破損したユニタリ行列による OOB 書き込み（2.4.0–2.6.1）。範囲のquirkはレコード自身の記述に
+ある：「1.4.2 **through** 2.6.2」なのに公報は 2.6.2 へのアップグレードを指示——修正バージョンがレコード自身の主張
+する影響範囲の内側にある。姉妹レコードの「2.4.0 through 2.6.1」は正常。バージョンスキャナは範囲を文字どおりに
+解釈する。公報のアップグレード行を引用し、レコードの範囲を引用しない。モデルファイル読み込み＝コード実行のクラ
+スが量子スタックに到達——`.qpy` はノートブックや講義資料で共有されるアーティファクトで、「local」とは checkpoint
+を開く人のこと。
+
+**Stanford Stanza（`CVE-2026-115878`、7.8、GitHub CNA、NVD `Received`——11-09 検証）：**stanza は lemmatizer の
+`pos_dict` を gzip 圧縮 pickle として checkpoint の `dicts` フィールドに格納する——これは **`bytes`** 値——そして
+`torch.load(weights_only=True)` は `bytes` をプリミティブ扱いするため、allowlist は内側の pickle を一切検査しない
+（AV:L/PR:N/UI:R。モデルをロードした人の権限で実行）。1.15.0 で修正（PyPI 2026-10-01、勧告の32日前；PR
+#1649）。`weights_only=True` の盲点についての修正済み反例：シリアライズ済みペイロードを運ぶプリミティブ型——
+checkpoint サプライチェーンの話は、ガードより常に一段深い。
+
+→ [[disclosure-lag]] [[vuln-supply]] [[harness-reliability]]

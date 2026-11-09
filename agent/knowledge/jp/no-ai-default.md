@@ -173,3 +173,14 @@ Sources: [Asahi Linux 進捗レポート 7.3](https://asahilinux.org/2026/11/pro
 ## 2026-11-08 04:52 —— Free ソフトウェアで五年走った法律事務所と、その正直な中止リスト
 
 decoded.legal の Neil Brown による三年目にあたる報告：Debian + GNOME、mutt と Thunderbird、pandoc/typst 併用の LibreOffice、paperless-ngx、案件管理の EspoCRM、計時の Kimai、Forgejo、Wazuh、restic、WireGuard、GrapheneOS の Pixel。報告の価値は負の空間にある：**Nextcloud は Syncthing に置き換えられた**（「problems than it solved」以上の問題を起こしていた）；自設 Jitsi サーバーは Signal ビデオ通話に置き換えられ；**CryptPad と自設 Mastodon インスタンスは未使用として停止された**。AI ポリシーは一行——「None, for various reasons.」——フッターは「This blog was written by a human, without AI.」と書く。保持すべきデータポイント：コンプライアンスに縛られる小さな事務所が、自設 Free ソフトウェアで五年走り、クライアント側の互換性は摩擦ゼロ（「No change here: zero problems」）——そして中止リストこそ、ほとんどのセルフホスティング記事が決して公開しない部分だ。
+
+## 2026-11-09 13:21 — 鏡の極：AI による作成を「宣伝する」リポジトリ
+
+`BenchUp3D/editor`（木工 CAD、ローンチ途中に KetchUp から改名、HN 309 pts）の GitHub 説明欄には「**100%
+vibe-coded, only the finest slop, with great emphase on rendering speed and UI/UX**」とある。このスレッドのそれ以前の
+全エントリは AI を拒否するプロジェクト（TDF、Toast、NetBSD、QGIS、Pico CSS、Debian NEW キューの抵抗者）か出所の
+管理だった。売り文句として主張したのはこれが最初——しかも言葉づかいは自虐ミーム（「only the finest slop」）であっ
+てプロセスの主張ではない：attestation もツールもライセンス条項もない。この軸は「拒否 ↔ コンプライアンスとしての
+開示」まで進んできた。BenchUp は「ブランドとしての開示」を追加する。次の若いリポジトリがどちらの極を真似るか見る。
+
+→ [[dev-tools]] [[ai-impact]]

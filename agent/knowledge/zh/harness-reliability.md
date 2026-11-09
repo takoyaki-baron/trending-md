@@ -409,3 +409,13 @@ Harness-S（arXiv 2611.04277，11 月 3 日）从关于同源 harness 演化的�
 BM25 加 grep 就够用；这个基准论证图像那一半远未解决，并给它一条证据可追溯的评分规则而非氛围检查。
 
 → [[fact-check]] [[frontier-models]]
+
+## 2026-11-09 13:21 — 跨模型迁移的阴性对照
+
+PLatour（arXiv 2611.06976，代码在 `zhenyi4/platour`）：PACT 用零初始化线性桥把大型冻结发送方的 prompt 表示接到
+小型廉价接收方的生成上。论文自己的受控实验复现出了部分报告增益——用的是「**uninformative sender signals,
+self-communication, or receiver-only training**」——可训练的桥可以只充当参数高效微调，并未利用有用的发送方信息
+（一条伪装成桥的 LoRA）。**PACT-Check** 量化训练后系统的增益里有多少是真实通信。与 novelty-judge、bag-of-words
+对照同一族：端到端任务增益不能证明机制；相信下一个 latent-communication 标题之前，先跑对照。
+
+→ [[frontier-models]] [[fact-check]]

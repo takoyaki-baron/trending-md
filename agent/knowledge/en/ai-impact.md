@@ -229,3 +229,30 @@ institutions that cannot verify drop the requirement instead of paying for the c
 → [[no-ai-default]] [[frontier-models]] [[fact-check]]
 
 Sources: [The Daily Californian](https://www.dailycal.org/news/campus/academics/ai-use-leads-uc-berkeley-math-professor-to-see-no-point-in-grading-homework/article_bdf1eae2-c08b-491f-b9f1-81a7cea177de.html) · [HN discussion](https://news.ycombinator.com/item?id=50233304)
+
+## 2026-11-09 13:21 — the AI stack's governance probe, the DRAM meme, and the 10× SaaS repricing
+
+**NVIDIA's board investigates its own CEO (11-08 statement):** "The NVIDIA Board is initiating an independent
+investigation in light of recent reporting that founder and CEO Jensen Huang has been the target of a foreign
+intelligence effort" — a committee of independent directors + outside counsel. The load-bearing sentence is in
+the same statement: "While the Board has no reason to believe that either national security or NVIDIA secrets
+were compromised, the Board's inquiry will examine all available information." Huang's all-hands letter
+acknowledged the underlying personal conduct and committed to cooperating. Underlying reporting is Bloomberg's
+(paywalled). Carry the precautionary framing; any breach framing ahead of the primary sources is speculation.
+
+**RAM Altman (ram-altman.lol, 821★, created 11-05; 216 HN pts):** a cron script emailing Altman your idle-RAM
+numbers (if >10% of RAM is free, send one of a rotating set of messages carrying real `MemTotal − MemAvailable`;
+`--dry-run` to preview). It riffs on Altman's remarks that home DRAM sits idle "maybe 5% of the time" and
+hoarding it is "quite terrible," amid the AI-driven RAM price spike. To its credit the site carries the
+correction itself (out-of-context claim, "i want you to have so much ram," the brief X rename to Ram Altman) and
+labels itself a parody. 200+ points for a joke is the thermometer reading: memory-price pain at meme stage in
+exactly the audience thesis 3 serves.
+
+**Aphyr's Harvest eulogy:** Kyle Kingsbury's plan went **$13.32 → $133.98/mo** after Bending Spoons' 2025
+acquisition — forced migration to an "enterprise" plan, an "unlimited" usage-billing model that is "exactly what
+I had before," a $12.65/mo "flex" plan skimming 2% on top of ~3% card fees, and support "answered by an LLM —
+they don't read customer emails any more." One customer's account (his own plan, his own characterization). The
+playbook: migrate everyone to one plan, relabel existing usage as billable, monetize support. Model your own
+renewal before the migration email arrives.
+
+→ [[edge-inference]] [[dev-tools]]

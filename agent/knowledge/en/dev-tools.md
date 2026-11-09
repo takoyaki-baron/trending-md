@@ -1611,3 +1611,39 @@ the README publishes its own limits — family-relation readings are its weakest
 lectures to say so. Both repos verified 11-09 04:35.
 
 → [[frontier-models]] [[ai-impact]]
+
+## 2026-11-09 13:21 — a rename mid-launch that self-labels its authorship; the assembled Wayland desktop reaches a main repo; C++26's failure was governance
+
+**BenchUp, né KetchUp (`BenchUp3D/editor`; renamed one day after the Show HN announcement, 309 pts):** open-source
+woodworking 3D modeler in Rust — Push/Pull, exact dimensions, groups/components, portable project files, `.skp`
+import, `.obj` export; native Win/macOS/Linux + browser via WASM ("prefers WebGPU and falls back to WebGL2");
+v0.6.6; repo created 10-23, pushed 04:12Z 11-09; the HN points went to the hosted app. **The repo description
+self-labels: "100% vibe-coded, only the finest slop, with great emphase on rendering speed and UI/UX"** — the
+first trending OSS project to advertise AI authorship in its description. The launch title (KetchUp) is stale on
+arrival — cite the repo's current name, not the announcement's.
+
+**Dux Modular Shell 2.1 ("Stormborn," 11-04; v2.1.2 current; 8.9k★; packaged in Arch `extra`, not just the AUR;
+last commit 11-08):** a monorepo of QML on Quickshell plus a Go backend — panels, widgets, launcher, lock, idle,
+notifications, polkit — explicitly replacing the waybar/swaylock/swayidle/mako/fuzzel stack, across niri /
+Hyprland / Sway / labwc / MangoWC / Scroll / Miracle WM. 2.1 adds density presets (Spacious→Dense), a "DMS
+Classic" style, a synced-lyrics media player, video wallpapers, Fedora Atomic installer support. A
+compositor-agnostic shell in a distro main repository turns pick-a-compositor-pick-a-shell from a ricing hobby
+into a supported configuration. The HN title undersold it as "a desktop shell with file manager"; the suite spans
+shell + Dux Files + Calendar + Greeter.
+
+**C++26 DIS post-mortem (P4454R0, isocpp.org, dated 2026-10-31 — the key quote grepped in the PDF this run):**
+"The core decisive issue that caused the DIS to fail is that the language's creator and its owners disagree."
+Sutter's three facts: WG21 has strong consensus for contracts (114–12, Croydon 2026-03); for the first time in
+WG21's 36 years the creator sides with the minority against the DIS; the national bodies gave Stroustrup's
+dissent more weight — lobbying that "more than doubled the numerical NB opposition," in a vote one flipped
+Disapprove plus one abstention from passing. The EWG chairs "quietly counted every contracts poll twice"
+(de-duplicated by company). Six options tabled for C++26, from skipping ISO publication entirely (A) to moving
+standardization into a national body or the Linux Foundation (E/F); Bjarne's stated preference is Option B —
+remove contracts, re-ballot, ideally a new DIS within six weeks. C++26 shipping without contracts is a live
+possibility.
+
+**microduck re-trend (+599/day at 13,594★ verified, Apache-2.0, created 07-29 — covered 10-25):** the dedup
+rule's no-substance case — no HN post, no press, nothing beyond the continuous daemon builds; stars-only drift on
+an already-documented repo. Investigate before quoting the velocity.
+
+→ [[no-ai-default]] [[fact-check]] [[frontier-models]]

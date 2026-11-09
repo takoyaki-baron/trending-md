@@ -2804,7 +2804,10 @@ function repoState(slug) {
  * "star-drift" finding against a correct item. Three spellings are now separated: a signed number
  * (`+312`), a number followed by a period word (`today`, `this week`, `per day`), and the `1.4k`
  * suffix that used to be dropped entirely (which is why `1.4k` could not compete with `312`). */
-function starQuotesOf(plain) {
+/* `positioned` (added 2026-11-09 13:52) returns `{ n, at }` so a quote can be bound to the
+ * repository its own sentence names — see `bindStarQuotes`. The bare-number shape stays the
+ * default: the selftests and `starQuoteSentence` read numbers. */
+function starQuotesOf(plain, positioned = false) {
   const out = [];
   const re = /([+\-−]?)(\d[\d,]*(?:\.\d+)?)\s*(k)?\s*(?:★|stars?\b)/gi;
   for (const m of plain.matchAll(re)) {
@@ -2817,7 +2820,44 @@ function starQuotesOf(plain) {
      * an unsigned tail. The number was true and dated; the reading was the checker's. */
     if (/^\s*(?:today|yesterday|this\s+(?:day|week|month)|in\s+the\s+(?:last|past)|\/\s*day|per\s+day|in\s+(?:a|one)\s+day|so\s+far|overnight|a\s+day)/.test(after)) continue;
     const n = toNum(m[2]) * (m[3] ? 1000 : 1);
-    if (Number.isFinite(n)) out.push(n);
+    if (Number.isFinite(n)) out.push(positioned ? { n, at: m.index } : n);
+  }
+  return out;
+}
+
+/* A quoted star count belongs to the repository its own SENTENCE names (added 2026-11-09 13:52).
+ * `checkRepo` compared the item's BIGGEST quote against EVERY slug — right for a single-repo item,
+ * wrong the moment an item names two: item 15 of the 11-09 feed quotes `ziwei-doushu` at 16,935
+ * stars and its companion repo `nishi-ziwei-video-reading` with **no count at all** (1★), and the
+ * companion was tested against the 16,935 — a +1,693,400% "drift" filed against a correct item.
+ * Binding rules, each the narrowest that answers the failure:
+ *   · one repo in the item → every quote is that repo's, wherever its sentence sits (a `Source:`
+ *     line names no slug);
+ *   · otherwise a quote binds to the ONE repo its sentence names — by slug or by bare repo name,
+ *     since a body introduces the slug once and then uses the name. A bare name bare-matches only
+ *     when it is distinctive (a hyphen, a digit, or camelCase, ≥5 chars): a repo called `notes`
+ *     must not bind a sentence that merely says "release notes";
+ *   · a sentence naming TWO repos binds the quote to neither, and a sentence naming no repo binds
+ *     to none — a coin flip is not a binding, the same rule that refuses to score a claim against
+ *     an artifact its own clause does not name.
+ * Pure, so `--selftest` pins the item-15 shape without a network call. */
+function bindStarQuotes(plain, quotes, repos) {
+  const esc = (s) => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  const out = new Map();
+  if (repos.length <= 1) {
+    for (const q of quotes) out.set(q, repos[0] ?? null);
+    return out;
+  }
+  const matchers = repos.map((slug) => {
+    const bare = slug.split('/')[1] || slug;
+    const bareOk = bare.length >= 5 && /[-_\d]|[a-z].*[A-Z]|[A-Z].*[a-z]/.test(bare);
+    const re = new RegExp(`(?:^|[^\\w-])(?:${esc(slug)}${bareOk ? `|${esc(bare)}` : ''})(?![\\w-])`, 'i');
+    return { slug, re };
+  });
+  for (const q of quotes) {
+    const s = sentenceAt(plain, q.at);
+    const named = matchers.filter((m) => m.re.test(s));
+    out.set(q, named.length === 1 ? named[0].slug : null);
   }
   return out;
 }
@@ -3105,7 +3145,8 @@ function checkIdRange(it) {
 
 function checkRepo(it, budget, ageBudget) {
   const out = [];
-  const starQuotes = starQuotesOf(it.plain);
+  const starQuotes = starQuotesOf(it.plain, true);
+  const starBound = bindStarQuotes(it.plain, starQuotes, it.repos);
   // the suppressions are named, not silent — the class is measurable only if it is printed
   for (const { slug, why } of it.notRepo ?? []) {
     out.push({
@@ -3145,7 +3186,10 @@ function checkRepo(it, budget, ageBudget) {
     }
     const pushed = Date.parse(st.pushed_at);
     const ageDays = Math.round((Date.now() - pushed) / 86_400_000);
-    const biggest = starQuotes.length ? Math.max(...starQuotes) : null;
+    /* bind, then compare: each slug is tested against the quotes its own sentences carry, not
+       against the item's biggest number (which usually belongs to a different repo). */
+    const mine = starQuotes.filter((q) => starBound.get(q) === slug);
+    const biggest = mine.length ? Math.max(...mine.map((q) => q.n)) : null;
     const recAgeDays = st.created_at ? Math.round((Date.now() - Date.parse(st.created_at)) / 86_400_000) : null;
     if (st.archived) {
       const disc = staleDisclosure(it.plain, st.pushed_at);
@@ -3489,6 +3533,29 @@ function htmlText(body, raw = false) {
     .replace(/[ \t]{2,}/g, ' ');
 }
 
+/* **A binary response is not a page, and a PDF is the case that pays for the rule** (added
+ * 2026-11-09 13:52). `application/pdf` in Content-Type decides, but so does the `%PDF-` magic in
+ * the first KB — headers lie in both directions (a CDN serves PDFs as octet-stream; an HTML error
+ * page can carry a pdf Content-Type). Pure, so `--selftest` pins it without a network call. */
+function looksLikePdf(contentType, head) {
+  if (String(contentType || '').toLowerCase().includes('application/pdf')) return true;
+  try {
+    return Buffer.from(head ?? '').subarray(0, 1024).includes('%PDF-');
+  } catch { return false; }
+}
+
+/* PDF bytes → text via poppler's `pdftotext` (stdin → stdout, `-q` silences it). Returns '' when
+ * the tool is missing, times out, or refuses the bytes — and '' is UNREAD: every verdict already
+ * treats an unread source as not-absent, so a paper this host cannot extract yields
+ * `quote-not-read` (sev 0), never a refutation of a quotation nobody could read. */
+function pdfText(buf) {
+  try {
+    const r = execFileSync('pdftotext', ['-q', '-', '-'],
+      { input: buf, encoding: 'utf8', maxBuffer: 64 * 1024 * 1024, timeout: 30_000 });
+    return r && r.trim() ? r : '';
+  } catch { return ''; }
+}
+
 async function citedPageText(page) {
   const key = `page:${page.url}`;
   const hit = cache[key];
@@ -3527,7 +3594,22 @@ async function citedPageText(page) {
       const r = await fetch(page.url, { signal: AbortSignal.timeout(20_000), headers: { 'user-agent': ua, accept: 'text/html,application/xhtml+xml,*/*' } });
       citedPages_requests += 1;
       if (!r.ok) continue;
-      const body = (await r.text()).slice(0, 3_000_000);
+      const buf = Buffer.from(await r.arrayBuffer());
+      /* **A binary response is not a page.** Measured 2026-11-09 13:52 on this run's own JSON: item
+       * 21 quotes six sentences from `P4454R0.pdf` (isocpp.org), all six verbatim in the paper
+       * (verified first-hand with `pdftotext`), and the check filed six `quote-not-found` (sev 3)
+       * anyway — because the 491 KB of BINARY arrived as a "200, readable" source: `r.text()` kept
+       * the bytes as a lossy string, `htmlText` stripped nothing (binary has no tags),
+       * `isBlockShell` saw a long non-shell, and the PDF won as the longest read. A page whose
+       * bytes were never decoded to text is the `unread is not absent` case wearing a 200: extract
+       * it (below) or leave it unread — silence from it must never become a refutation. */
+      if (looksLikePdf(r.headers?.get('content-type') || '', buf)) {
+        const t = pdfText(buf);
+        if (t && t.length > text.length) { text = t; client = 'pdftotext'; }
+        if (t && !isBlockShell(t)) break;
+        continue; // no extractor or it refused the bytes: leave UNREAD, let the next client try
+      }
+      const body = buf.toString('utf8').slice(0, 3_000_000);
       // An abs page is HTML: keep its text, drop the tags, so a `<blockquote>` abstract reads as prose.
       // `<style>`/`<noscript>` go too — a stylesheet's tokens can spell a noun next to a number.
       // `htmlText()` keeps a template-typed `<script>` — see its comment: stripping that is what
@@ -3546,8 +3628,11 @@ async function citedPageText(page) {
   if (needsThirdClient(text)) {
     try {
       const r = await fetchViaCurlBin(page.url, UA);
-      if (r && r.status < 400) {
-        citedPages_requests += 1;
+      citedPages_requests += 1;
+      /* The curl binary returns a string (utf8-lossy), so a PDF cannot be extracted here —
+       * detect the magic and leave the source UNREAD rather than counting binary as the read.
+       * `%PDF-` is pure ASCII, so the prefix survives the lossy decode. */
+      if (r && r.status < 400 && !looksLikePdf('', r.body.slice(0, 1024))) {
         const t = htmlText(r.body.slice(0, 3_000_000), page.raw);
         if (t.length > text.length) { text = t; client = 'curl-bin'; }
       }
@@ -3564,8 +3649,11 @@ async function citedPageText(page) {
    v4 unwraps template-typed `<script>` blocks (`htmlText`). An entry written by the v3 extractor
    holds a Blogger page with its body DELETED and still reads as a full-text page, so it is the
    most dangerous kind of stale cache: not empty, but a page whose prose is missing while its
-   length says otherwise. Bumping costs one unmetered refetch per cited page. */
-const PAGE_CACHE_V = 4;
+   length says otherwise. Bumping costs one unmetered refetch per cited page.
+   v5 detects a binary response (`looksLikePdf`) and either extracts it (`pdftotext`) or leaves it
+   UNREAD. A v4 entry for a PDF URL holds ~491 KB of binary that reads as the longest text in the
+   run — the 2026-11-09 shape that turned six verbatim quotations into `quote-not-found`. */
+const PAGE_CACHE_V = 5;
 let citedPages_requests = 0;
 
 async function checkCount(it) {
@@ -5461,6 +5549,61 @@ if (SELFTEST) {
   t('template: ld+json metadata is not a source a reader can see', bt.includes('json metadata'), false);
   t('template: the unwrapped body answers the quotation check',
     checkQuotes(mk('t', 'the post says "This update includes 213 security fixes."'), qsrc(bt)).map((x) => x.verdict), ['ok']);
+
+  /* ── a BINARY response is not a page (filed 2026-11-09 13:52, item 21 of the 11-09 feed) ───────
+     Item 21 quotes six sentences from P4454R0.pdf; all six are verbatim in the paper (verified
+     first-hand with pdftotext), and the check filed six `quote-not-found` (sev 3) because the
+     491 KB of binary arrived as the run's longest "read". The predicate, the extractor's degrade,
+     and the binding that was hiding behind them are all pure, so every arm pins here. */
+  const MIN_PDF = Buffer.from(
+    '%PDF-1.4\n'
+    + '1 0 obj << /Type /Catalog /Pages 2 0 R >> endobj\n'
+    + '2 0 obj << /Type /Pages /Kids [3 0 R] /Count 1 >> endobj\n'
+    + '3 0 obj << /Type /Page /Parent 2 0 R /MediaBox [0 0 200 200] /Contents 4 0 R /Resources << /Font << /F1 5 0 R >> >> >> endobj\n'
+    + `4 0 obj << /Length ${'BT /F1 12 Tf 20 100 Td (the decisive issue) Tj ET'.length} >> stream\nBT /F1 12 Tf 20 100 Td (the decisive issue) Tj ET\nendstream endobj\n`
+    + '5 0 obj << /Type /Font /Subtype /Type1 /BaseFont /Helvetica >> endobj\n'
+    + 'trailer << /Root 1 0 R /Size 6 >>\n%%EOF\n', 'latin1');
+  t('pdf: a pdf Content-Type decides even over HTML-shaped bytes', looksLikePdf('application/pdf', Buffer.from('<html>')), true);
+  t('pdf: the %PDF- magic decides when the header lies', looksLikePdf('application/octet-stream', Buffer.from('%PDF-1.7\njunk')), true);
+  t('pdf: a string head works too (the curl-bin arm reads strings)', looksLikePdf('', '%PDF-1.4 junk'), true);
+  t('pdf: an HTML page is not a pdf', looksLikePdf('text/html', Buffer.from('<!DOCTYPE html><html>')), false);
+  t('pdf: no header and no magic is not a pdf', looksLikePdf('', ''), false);
+  /* pdftotext degrades to '' (UNREAD) on non-PDF bytes — and on a host without the tool the same
+     arm throws to the same '', so this passes either way; unread is not absent. */
+  t('pdf: non-PDF bytes yield unread, never a throw', pdfText(Buffer.from('<html><body>not a pdf</body></html>')), '');
+  if (pdfText(MIN_PDF)) {
+    t('pdf: extraction reaches the prose (the P4454R0 shape)', pdfText(MIN_PDF).includes('decisive issue'), true);
+  }
+
+  /* ── a star quote binds to the repo its SENTENCE names (item 15 of the 11-09 feed) ──────────────
+     The item quotes ziwei-doushu at 16,935 stars and its companion repo with no count at all
+     (1★); the old per-item `biggest` gave the companion the 16,935 and filed a +1,693,400%
+     drift against a correct item. */
+  const IT15 = strip("The week's notable riser is ziwei-doushu, created May 2026, now 16,935 stars: a charting engine."
+    + ' On Nov 8 the README added a new companion repo, `nishi-ziwei-video-reading` (created Nov 8).');
+  const Q15 = starQuotesOf(IT15, true);
+  const B15 = bindStarQuotes(IT15, Q15, ['Renhuai123/ziwei-doushu', 'Renhuai123/nishi-ziwei-video-reading']);
+  t('star-bind: the quote lands on the repo its sentence names', B15.get(Q15[0]), 'Renhuai123/ziwei-doushu');
+  t('star-bind: a repo with no count of its own binds none — no drift',
+    [...B15.values()].filter((s) => s === 'Renhuai123/nishi-ziwei-video-reading').length, 0);
+  const ONE_PLAIN = strip('the repo holds 1,030 stars');
+  const ONE_Q = starQuotesOf(ONE_PLAIN, true);
+  t('star-bind: a single-repo item keeps every quote, wherever its sentence sits',
+    bindStarQuotes(ONE_PLAIN, ONE_Q, ['a/only']).get(ONE_Q[0]), 'a/only');
+  const AMB_PLAIN = strip('ziwei-doushu and its companion nishi-ziwei-video-reading together hold 500 stars');
+  const AMB_Q = starQuotesOf(AMB_PLAIN, true);
+  t('star-bind: a sentence naming both repos binds the quote to neither',
+    bindStarQuotes(AMB_PLAIN, AMB_Q, ['o/ziwei-doushu', 'o/nishi-ziwei-video-reading']).get(AMB_Q[0]), null);
+  const NONE_PLAIN = strip('GitHub Trending lists 16,900 stars overall');
+  const NONE_Q = starQuotesOf(NONE_PLAIN, true);
+  t('star-bind: a sentence naming no repo in a two-repo item binds none',
+    bindStarQuotes(NONE_PLAIN, NONE_Q, ['o/ziwei-doushu', 'o/nishi-ziwei-video-reading']).get(NONE_Q[0]), null);
+  const NOTES_PLAIN = strip('the release notes mention 900 stars');
+  const NOTES_Q = starQuotesOf(NOTES_PLAIN, true);
+  t('star-bind: a generic bare name does not bind a sentence about release notes',
+    bindStarQuotes(NOTES_PLAIN, NOTES_Q, ['acme/notes', 'other/thing']).get(NOTES_Q[0]), null);
+  t('star-bind: positioned quotes keep their numbers',
+    starQuotesOf(strip('1,030 stars and 12.5k★'), true).map((q) => q.n), [1030, 12500]);
 
   /* ── paper dates: the three filing cases of 2026-11-05, verbatim, both sides ────────────────── */
   const P = (pub, version = 1, updated = pub) => ({ id: 'x', version, published: pub, updated });

@@ -287,3 +287,15 @@ Sources: [Asahi Linux progress report 7.3](https://asahilinux.org/2026/11/progre
 ## 2026-11-08 04:52 — five years of a law firm on Free software, and the honest dropped list
 
 Neil Brown of decoded.legal's third annual-adjacent report on running the entire practice on Free software: Debian + GNOME, mutt and Thunderbird, LibreOffice with pandoc/typst, paperless-ngx, EspoCRM for matter management, Kimai for time, Forgejo, Wazuh, restic, WireGuard, a Pixel with GrapheneOS. The report's value is the negative space: **Nextcloud replaced with Syncthing** ("was causing me more problems than it solved"); a Jitsi server replaced with Signal video calls; **CryptPad and a self-hosted Mastodon instance switched off as unused**. The AI policy is one line — "None, for various reasons." — and the footer states "This blog was written by a human, without AI." The keepable datapoint: a compliance-bound small business running five years on self-hosted Free software, client-facing compatibility frictionless ("No change here: zero problems") — and the dropped-items list is the part most self-hosting write-ups never publish.
+
+## 2026-11-09 13:21 — the mirror pole: a repo that ADVERTISES its AI authorship
+
+`BenchUp3D/editor` (the woodworking CAD renamed from KetchUp mid-launch, 309 HN points) carries "**100%
+vibe-coded, only the finest slop, with great emphase on rendering speed and UI/UX**" in its GitHub description.
+Every prior entry in this thread is a project refusing AI (TDF, Toast, NetBSD, QGIS, Pico CSS, Debian's
+NEW-queue objector) or policing provenance; this is the first one claiming it as a selling point — and the
+phrasing is self-deprecating meme-speak ("only the finest slop"), not a process claim: no attestation, no
+tooling, no licence term. The axis so far ran refusal ↔ disclosure-as-compliance; BenchUp adds
+disclosure-as-brand. Watch which pole other young repos imitate.
+
+→ [[dev-tools]] [[ai-impact]]
