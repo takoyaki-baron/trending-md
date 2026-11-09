@@ -1,9 +1,9 @@
 {
- "generated": "2026-11-08T20:31:20.764Z",
+ "generated": "2026-11-09T05:12:14.202Z",
  "files": [
   {
    "file": "2026-11-09.md",
-   "items": 15,
+   "items": 34,
    "findings": [
     {
      "check": "status",
@@ -41,25 +41,74 @@
      "detail": "“contentEditable” is not a CVE record field this check knows — the claim is about something else, or FIELD_VOCAB needs the name"
     },
     {
+     "check": "status",
+     "item": 22,
+     "verdict": "ok",
+     "claim": "CVE-2026-11800 `Analyzed`",
+     "detail": "Analyzed (lastModified 2026-10-25T22:10:00.150)"
+    },
+    {
+     "check": "status",
+     "item": 23,
+     "verdict": "ok",
+     "claim": "CVE-2026-116499 `Awaiting Analysis`",
+     "detail": "Awaiting Analysis (lastModified 2026-11-09T02:16:58.717)"
+    },
+    {
+     "check": "range",
+     "item": 23,
+     "verdict": "ok-span",
+     "claim": "CVE-2026-116499 1.4.2 through 2.6.2",
+     "detail": "1.4.2 (inclusive) … 2.6.2 (inclusive) · Qiskit SDK — non-empty"
+    },
+    {
+     "check": "range",
+     "item": 23,
+     "verdict": "ok-span",
+     "claim": "CVE-2026-116501 2.4.0 – 2.6.1",
+     "detail": "2.4.0 (inclusive) … 2.6.1 (inclusive) · Qiskit SDK — non-empty"
+    },
+    {
+     "check": "range",
+     "item": 23,
+     "verdict": "ok-span",
+     "claim": "CVE-2026-116499 1.4.2 through 2.6.2",
+     "detail": "1.4.2 (inclusive) … 2.6.2 (inclusive) · Qiskit SDK — non-empty"
+    },
+    {
+     "check": "status",
+     "item": 24,
+     "verdict": "ok",
+     "claim": "CVE-2026-115878 `Received`",
+     "detail": "Received (lastModified 2026-11-03T23:17:30.297)"
+    },
+    {
      "check": "repo",
      "item": 3,
      "verdict": "ok",
      "claim": "thedotmack/claude-mem",
-     "detail": "114832★, last push 2026-11-08"
+     "detail": "114998★, last push 2026-11-09"
     },
     {
      "check": "repo",
      "item": 15,
      "verdict": "ok",
      "claim": "Renhuai123/ziwei-doushu",
-     "detail": "16935★, last push 2026-11-08"
+     "detail": "17070★, last push 2026-11-09"
+    },
+    {
+     "check": "repo",
+     "item": 15,
+     "verdict": "star-drift",
+     "claim": "16935 quoted vs 1 now",
+     "detail": "Renhuai123/nishi-ziwei-video-reading: 16935 quoted vs 1 now (+1693400%) — the repo does not carry the number the item states; reread it"
     },
     {
      "check": "repo",
      "item": 15,
      "verdict": "ok",
      "claim": "Renhuai123/nishi-ziwei-video-reading",
-     "detail": "0★, last push 2026-11-08"
+     "detail": "1★, last push 2026-11-08"
     },
     {
      "check": "quotation",
@@ -136,6 +185,167 @@
      "item": 13,
      "verdict": "ok",
      "claim": "1 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 16,
+     "verdict": "ok",
+     "claim": "6 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 17,
+     "verdict": "ok",
+     "claim": "4 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 18,
+     "verdict": "ok",
+     "claim": "2 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 19,
+     "verdict": "ok",
+     "claim": "1 quotation(s)",
+     "detail": "verbatim in 3 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 20,
+     "verdict": "ok",
+     "claim": "2 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 21,
+     "verdict": "quote-not-found",
+     "claim": "“the languages creator and its owners disagree”",
+     "detail": "7 words, 0 hits in 2 readable source(s); news.ycombinator.com/item?id=50418818 carries 5 of 7 words (“languages creator and its owners”) and continues “strongly disagree pdf hacker news hacker news new past comments ask” — use the source's wording, or drop the quotation marks"
+    },
+    {
+     "check": "quotation",
+     "item": 21,
+     "verdict": "quote-not-found",
+     "claim": "“the core decisive issue that caused the dis to fail is that the languages creator and its owners…”",
+     "detail": "19 words, 0 hits in 2 readable source(s); news.ycombinator.com/item?id=50418818 carries 5 of 19 words (“languages creator and its owners”) and continues “strongly disagree pdf hacker news hacker news new past comments ask” — use the source's wording, or drop the quotation marks"
+    },
+    {
+     "check": "quotation",
+     "item": 21,
+     "verdict": "quote-not-found",
+     "claim": "“for the first time since wg21 was formed 36 years ago c s creator is siding with the minority”",
+     "detail": "16 words, 0 hits in 2 readable source(s); news.ycombinator.com/item?id=50418818 carries 3 of 19 words (“the first time”) and continues “because itll live forever perhaps allowing features to be deprecated and” — use the source's wording, or drop the quotation marks"
+    },
+    {
+     "check": "quotation",
+     "item": 21,
+     "verdict": "quote-not-found",
+     "claim": "“more than doubled the numerical nb opposition”",
+     "detail": "7 words, 0 hits in 2 readable source(s); no source carries it (read isocpp.org/files/papers/P4454R0.pdf, news.ycombinator.com/item?id=50418818) — if this came from somewhere this item does not cite, cite it; otherwise it is the feed's own words and must not wear quotation marks"
+    },
+    {
+     "check": "quotation",
+     "item": 21,
+     "verdict": "quote-not-found",
+     "claim": "“quietly counted every contracts poll twice”",
+     "detail": "6 words, 0 hits in 2 readable source(s); no source carries it (read isocpp.org/files/papers/P4454R0.pdf, news.ycombinator.com/item?id=50418818) — if this came from somewhere this item does not cite, cite it; otherwise it is the feed's own words and must not wear quotation marks"
+    },
+    {
+     "check": "quotation",
+     "item": 21,
+     "verdict": "quote-not-found",
+     "claim": "“is the outcome he most wants to see”",
+     "detail": "8 words, 0 hits in 2 readable source(s); no source carries it (read isocpp.org/files/papers/P4454R0.pdf, news.ycombinator.com/item?id=50418818) — if this came from somewhere this item does not cite, cite it; otherwise it is the feed's own words and must not wear quotation marks"
+    },
+    {
+     "check": "quotation",
+     "item": 22,
+     "verdict": "ok",
+     "claim": "1 quotation(s)",
+     "detail": "verbatim in 4 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 23,
+     "verdict": "ok",
+     "claim": "1 quotation(s)",
+     "detail": "verbatim in 6 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 24,
+     "verdict": "ok",
+     "claim": "1 quotation(s)",
+     "detail": "verbatim in 4 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 25,
+     "verdict": "ok",
+     "claim": "2 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 26,
+     "verdict": "ok",
+     "claim": "1 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 27,
+     "verdict": "ok",
+     "claim": "1 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 28,
+     "verdict": "ok",
+     "claim": "3 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 29,
+     "verdict": "ok",
+     "claim": "1 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 30,
+     "verdict": "ok",
+     "claim": "1 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 31,
+     "verdict": "ok",
+     "claim": "3 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 33,
+     "verdict": "ok",
+     "claim": "1 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 34,
+     "verdict": "ok",
+     "claim": "3 quotation(s)",
      "detail": "verbatim in 2 readable source(s)"
     }
    ]
