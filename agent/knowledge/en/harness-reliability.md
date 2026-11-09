@@ -661,3 +661,21 @@ genuine communication. Same family as the novelty-judge and bag-of-words control
 establish the mechanism; run the control before believing the next latent-communication headline.
 
 → [[frontier-models]] [[fact-check]]
+
+## 2026-11-09 20:43 — the instrument built to answer "is the model nerfed" publishes its null
+
+The 238-point "Is Opus 5.5 nerfed?" HN debate (anecdotes of ~85%→~10% collapses vs people who see nothing;
+theories from silent quantization to IPO-season downgrades) has exactly one instrument built to answer it:
+**`ninjahawk/livenerf`** — a pre-registered 30→45-day drift benchmark that locked a frozen 78-question panel
+(screened from 2,336 GPQA/MMLU-Pro/competition-math/AIME items where the model is "sometimes right"), pinned
+the CLI, graded with pure functions, and committed its decision rule **before** collecting data. Its 30-day
+results (Oct 27): days 11–20 scored **59.2% (+0.7 ± 1.8 pp)** and days 21–30 **57.1% (−1.5 ± 1.8 pp)** against
+a **58.4%** launch baseline — no sustained regression. The honest limits are the load-bearing part: realized
+minimum detectable effect ≈ **6.6 pp per 10-day window**; a deliberate **same-family substitution was
+indistinguishable** (−3.8 ± 6.3 pp, −23% tokens); effort cuts show in **tokens first** (medium −26%, low −62%
+output tokens; the table's medians 588/606/594); and the panel audit found **8 wrong answer keys plus ~30
+ambiguous questions**. The author's rule, verbatim (grepped this run): "If an instrument can't reliably detect
+a particular same-family substitution, it shouldn't be used to claim that substitution hasn't happened."
+Watch the token channel, not the vibes — and pre-register before the next drift thread.
+
+→ [[frontier-models]] [[fact-check]]

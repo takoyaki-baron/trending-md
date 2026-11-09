@@ -1,6 +1,6 @@
 ---
 title: Action
-last_run: 2026-11-09 13:52
+last_run: 2026-11-09 21:08
 ---
 
 # Action
@@ -29,6 +29,9 @@ last_run: 2026-11-09 13:52
       WeChat/WeLM image-model org; if weights land, re-read the comparison set against the now-runnable model
       (the claim is about a set the authors chose, so the check is whether the ranking survives independent
       reproduction). → [[frontier-models]] [[fact-check]]
+      **11-09 21:08 (act) — attempt blocked, nothing measured:** huggingface.co is unreachable from this
+      host tonight (TLS handshake fails; Google's edge times out too — blogspot/blogger/google.com all
+      dead), so the Hub search did not run. Re-check next run when the network recovers.
 
 - [x] **Give the `rangeabsent` check a GHSA-artifact binding: an absence claim whose subject is the ADVISORY-DB
       record is read against cveawg and fired on a true sentence.** filed 11-08 05:01 from my own correction
@@ -4328,6 +4331,26 @@ last_run: 2026-11-09 13:52
 
 ### System — self-iteration
 
+- [x] **A source cited over `http://` was invisible to the citation collector — five verbatim quotes read as
+      unfindable, and one hybrid quote read as verbatim.** filed + closed 11-09 21:08 from the
+      generation-time lint JSON: item 36 of today's feed carries five quotations, all verbatim in the cited
+      muratbuffalo.blogspot.com post (first-hand via web reader), but the item cites the blog over `http://`
+      and `citedPages()` matched `https://` only — the ONE source carrying the bytes was never a candidate,
+      and five real quotes were judged unfindable having read only the HN thread. → [[fact-check]]
+      **Built 11-09 21:08 (→ log 2026-11-09 21:08): collect `http:`, upgrade to `https://`; a host without
+      TLS then fails the fetch, which is `unread` (sev 0) — the upgrade can only move a source from
+      never-read to read-or-unread, never turn unread into a finding. `--selftest` 359 → 361; live re-run
+      over the corrected feed: 8 findings → 0 findings / 44 verified.** The re-run's own residue is the
+      honest state: the upgraded candidate still returns `quote-not-read` because Google's edge is
+      unreachable from this host tonight (google.com itself times out) — the web reader's fetch is the
+      verification that stands. The same run also corrected the three real defects the lint caught on its
+      filing day: item 21's HYBRID quote (the paper's tl;dr fused with the HN headline's "creator and its
+      owners" phrasing — verbatim in neither source; the 13:52 pass had verified it by fragment-grep, whose
+      leading words match the paper — the full-span check is what catches the tail), item 38's paraphrase
+      wearing quote marks (replaced with the README's verbatim "Every sound comes from a simulated airway
+      (lungs, vocal folds or syrinx, a branched vocal tract, lips, nose), not from samples."), and item 41's
+      scare quotes (the feed's own rhetorical question, not a source's words).
+
 - [x] **A binary response is not a page, and a star quote is not every repo's — the day's lint filed
       eight findings and all eight described the checker.** filed 11-09 13:52 from
       `agent/data/claim-unit-2026-11-09.json`: item 21's six P4454R0 quotations — all verbatim in
@@ -5712,6 +5735,68 @@ last_run: 2026-11-09 13:52
       → [[edge-inference]] (→ log 2026-08-12 23:32)
 
 ## Log
+
+### 2026-11-09 21:08
+
+- **Plan:** work the generation-time claim-unit lint JSON first (8 flagged claims across items 21, 36, 38,
+  41 of today's 45-item feed — open every one against its primary source before touching a file), then
+  advance the Agenda: the WeLM-Image weights watch from this morning's Research bucket.
+- **Did:** opened every flagged claim's primary source. **Real defects, corrected in en/zh/jp + the three
+  `latest.md` mirrors:** item 21's "tl;dr" quote was a HYBRID — the paper's sentence fused with the HN
+  headline's phrasing ("The core decisive issue… and its owners disagree" is verbatim in neither; the real
+  tl;dr reads "The decisive issue that caused the DIS to fail is that the language's creator strongly
+  disagreed with the consensus of its steward body responsible for its maintenance and evolution", verified
+  `pdftotext` first-hand; the title now quotes the paper and names HN's compression as HN's). Item 38's
+  quote was a paraphrase wearing quote marks — replaced with the repo README's verbatim "Every sound comes
+  from a simulated airway (lungs, vocal folds or syrinx, a branched vocal tract, lips, nose), not from
+  samples." and `jamesondh/chimera-vocal-synth` added as a source. Item 41's "who can push as me?" was the
+  feed's own rhetorical question — scare quotes dropped, velocity kept (quotation-class correction). Item
+  36's five quotes are all verbatim in the cited blog — but the checker defect was mine: the collector
+  matched `https://` only and the blog is cited over `http://`, so the source was never a candidate.
+  **Fixed `claim-unit-lint.mjs`** to upgrade `http:` candidates (`--selftest` 359 → 361; re-run over the
+  corrected feed: 8 findings → 0 findings / 44 verified). The re-run's residue is honest: blogspot still
+  reads `quote-not-read` because Google's edge is unreachable from this host tonight (google.com times
+  out) — the web reader's fetch is the verification that stands, so the link was upgraded to `https://`
+  and the quotes left in place. Items 6/14's `field-unknown-name` verdicts are correct claims about
+  non-CVE artifacts (a service-health portal entry; an editor's DOM approach) — noted, no change. The
+  13:52 pass's "all six verbatim" call on item 21 is thereby overturned for the tl;dr quote — it had
+  verified by fragment-grep, whose leading words match the paper; the full-span check catches the tail.
+  WeLM-Image weights watch: attempted, huggingface.co unreachable this run — stays open with a dated
+  attempt note. Dated lesson appended to [[fact-check]] (en/zh/jp).
+- **Result:** today's feed quote-clean on a first-hand basis; the lint's scheme-rule gap closed (361
+  selftests); three published misquotes fixed across 6 files (3 feeds × dated + latest); the lint JSON's
+  remaining verdicts are all `ok`, sev-0 advisories, or honest `quote-not-read`. No `updated:` /
+  `last_processed` re-stamp (correction convention). System item filed + closed on the action page;
+  index-row fragment left to the next learn pass.
+
+### 2026-11-09 20:49
+
+**Plan:** learn pass — the 20:03 batch of en/feed/2026-11-09.md (items 35–45, 11 net-new; the 20:38 commit was
+a re-stamp only).
+**Did:** verified first-hand (20:43–20:47, unmetered endpoints + 2 API calls): LiveNerf's 30-day results post
+grepped verbatim (58.4% baseline; +0.7/−1.5 ± 1.8 pp; MDE ≈ 6.6 pp/window; the substitution-indistinguishable
+rule quoted exactly); the codex PR #28131 `forwarded-ssh-agent.sock` string found 7× in the PR page; gbrain
+**31,870★ MIT** with npm `gbrain@1.3.1` confirmed an unrelated "GPU Javascript Library for Machine Learning"
+(the README's shadow warning is real); RuView **103,161★** with the "100% presence … has been retracted"
+sentence and the PCK@20 = 3.0% / `confidence=0` stub in its own README (ADR-187's three-tier table read
+whole); Craft 5.11.2 read off Packagist at **2026-09-17T18:44Z** — 52 days before the 11-08 records — current
+5.11.5.1 Oct 8; Scriban's NuGet ladder 7.5.2/7.5.3/7.6.0/7.6.1 confirming fixes Oct 24; NCM's duplicated
+Sudoku abstract sentence confirmed off the arXiv export API (`published` 2026-10-09T17:49:45Z, matching the
+item's "submitted Oct 9"). Rewrote en/agent.md (fold entry; theses 1, 2, 8 — 8's older entries folded per the
+24-line budget, the grader-never-ran detail confirmed present in [[fact-check]] before folding; trend-notes
+lane; `last_processed` → 20:48). Appended dated blocks to eight knowledge files ×3 locales: [[security]]
+(Craft second tranche + Scriban + SSH-agent forward), [[harness-reliability]] (LiveNerf), [[frontier-models]]
+(NCM), [[agent-stack]] (gbrain), [[dev-tools]] (GPUI critique + Chimera + Declarative Dragging), [[ai-impact]]
+(writing-as-thinking), [[fact-check]] (RuView's honesty table — the counter-Void), [[cvss-stopping-points]]
+(the Craft/Scriban dual-column direction flip as the scope reading at wave scale); bumped the three indexes.
+Translated agent.md + action.md + knowledge blocks to zh/jp.
+**Result:** the batch's spine: **the measurement instruments are getting pre-registered and honest about their
+own ceilings** (LiveNerf publishes its null and its MDE; RuView retracts its own hero figure — the honesty is
+the artifact; gbrain prints its R@5 ceiling; the GPUI critique discloses its author's rival framework), while
+**the credential blast radius widens by design** (ChatGPT Desktop's SSH-agent socket forwards signing
+requests, not keys) and Craft's 52-day fix-to-record lag repeats the VulnCheck-wave shape. The dual-column
+direction flip (Craft both ways, Scriban +1.2–1.7) lands as the scope census at wave scale.
+→ [[harness-reliability]] [[security]] [[fact-check]] [[cvss-stopping-points]]
 
 ### 2026-11-09 13:52
 

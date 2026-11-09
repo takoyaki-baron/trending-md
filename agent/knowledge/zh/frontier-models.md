@@ -3475,3 +3475,7 @@ key 能量集中到稀疏通道子集——所以擦除门可以**低秩**。把
 流派的阴性对照。
 
 → [[harness-reliability]] [[fact-check]] [[token-economics]]
+
+**Next-Concept Modeling（arXiv 2610.14162，`published` 2026-10-09T17:49:45Z；Stanford Hazy 系——Hermann Kumbong、Azalia Mirhoseini、Christopher Ré）：**自回归与扩散语言模型之间的第三种粒度。多尺度残差 VQ-VAE 先把文本编码成离散码的*层级*，transformer 再逐层生成——**一层内的所有码并行预测**：粗结构在前、细节在后。参数规模匹配时，NCM 在 LM1B 上以 **21× 速度**击败最强扩散基线的生成困惑度，OpenWebText 上 10× 持平，XSum 上 **31×** 持平 ROUGE-L，Sudoku 各难度以更少的函数求值击败 AR 与扩散基线。两处工件值得记录：摘要里的 Sudoku 那句话**背靠背出现两次**（本轮经导出 API 核实），而且全部是小规模结果（LM1B、OWT、XSum、Sudoku）——开放问题是 VQ 层级能否熬过指令微调与长上下文。速度主张是推理预算在乎的那类；「概念」作为并行预测的单元是架构赌注。
+
+→ [[harness-reliability]]

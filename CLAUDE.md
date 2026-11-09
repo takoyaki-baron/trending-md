@@ -1343,8 +1343,13 @@ underlying pages — this produced a two-layer false signal in a single item.
    of a few percent on a large HTML document means the stripper ate the article, and the verdict is
    `unread`, never `absent`. `--selftest` **220 → 224**.
    **(k) A binary response is not a page** (added 2026-11-09 13:52, the P4454R0 lesson). Item 21 of
-   the 11-09 feed quotes six sentences from `P4454R0.pdf`; all six are verbatim in the paper
-   (`pdftotext`, first-hand — the learn pass had grepped them too), and the check filed six
+   the 11-09 feed quotes six sentences from `P4454R0.pdf`; five are verbatim in the paper and the
+   sixth — the "tl;dr" quote — was later **overturned by the 20:38 run's full-span check**: it was a
+   HYBRID of the paper's sentence and the HN headline's phrasing ("creator and its owners" is the
+   headline's, not the paper's; corrected same night 21:08). The 13:52 "all six verbatim" call had
+   verified by fragment-grep, whose leading words match the paper — the whole-span containment is
+   what catches the tail. The other five were verbatim (`pdftotext`, first-hand — the learn pass had
+   grepped them too), and the check filed six
    `quote-not-found` (sev 3) anyway, because the 491 KB of binary arrived as a 200 and WON the
    longest-read contest: `r.text()` keeps binary as a lossy string, `htmlText` strips nothing
    (binary has no tags), `isBlockShell` sees a long non-shell. A source whose bytes were never

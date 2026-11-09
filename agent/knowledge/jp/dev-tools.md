@@ -1169,3 +1169,11 @@ MangoWC / Scroll / Miracle WM に対応。2.1 では密度プリセット（Spac
 ドリフト。速度を引用する前に引き金を調べること。
 
 → [[no-ai-default]] [[fact-check]] [[frontier-models]]
+
+**A Critique of GPUI（blog.zortax.de、117 HN pts——Discord がデスクトップ アプリをこのフレームワークに賭けた数日後の実測反論）：**論点は GPUI の状態モデルが「ある値が変わったとき、何が走る？」に答えられないこと——`cx.notify()` は「エンティティを名指しするが、最終的には zone と同種の声明をする」。ベンチマーク（i9-13900K、Vulkan、3 回の中央値）：3,000 活性行・行ごとにキャッシュ済みビューで、ラベル 1 つの変更に **8.4 ms**、1,000 行ごとに約 3 ms 増；手書きの等価ガードで等しい書き込みが **7.9 ms → 0.9 µs**；gpui-fast フォークは 8.4 → **3.4 ms**——それでも全ツリー走査；Elm/Iced はラベル変更ごとに **39,023 widget** を再構築（7.3 ms）；egui は 3,000 行で 1 编辑あたり約 32 ms；Zed 自身の保持実験は「通常のワークロードでオフより 1–3% 遅い」を測定。開示セクションはベンチマーク記事の雛形：著者は GPUI の Linux レンダラーを wgpu へ移植し、ハーネスを自作し、競合するシグナル フレームワーク（zgui、0.69 ms）で働いている——「it is my framework and was tuned on this harness, so take these numbers with a grain of salt」。中心のトレードオフは本物：素朴な `render` API を保ってビューごとに払うか、シグナル グラフを手組みしてフレームワークを選んだ理由の単純さを失うか。
+
+**Chimera（chimera-vocal-synth.vercel.app、246 HN pts）：**ブラウザ タブの中の調音合成——「Every sound here is produced by simulating air moving through a throat, mouth and nose」。声門から唇までの管ビュー、100× スローされた声帯、ライブ フォルマント スペクトル、F1/F2 母音チャート、cmH₂O 単位の呼吸圧；**ML モデルなし、サンプルなし**；Pink Trombone（2018）の系譜が対話速度で動く。ニューラル TTS への常設の対極：完全に解釈可能（すべての母音は声道の形状）、そしてタブの中の音声学教室。
+
+**Declarative Dragging（UIST 2026 最優秀論文；Horowitz、Blinn & Heer）：**ドラッグ&ドロップをモデル セマンティクスへのクエリにする——「すべての視覚的振る舞いを直接プログラムするのではなく、ドラッグ可能にしたい各要素について、ドラッグが導くべきアプリケーションの未来状態を宣言するだけ」。エンジン（**Dragology**、SVG/web）はそれらの状態を投機的にビュー ツリーへ描画し、各描画でドラッグされた要素がどこに着地するかを抽出し、その可能世界からインタラクションを合成——手書きのドロップ ゾーン ジオメトリは不要；合成可能なモディファイアがフロート/スナップ/遷移を重ねる。可能状態の投機的描画はエージェントがアクション プランニングで使うのと同じ技で、研究側から UI コードへ到着した。論文後：Hazel のリファクタリングがドラッグで触れるものに；著者の数学ゲームはゲームパッドで 3D へ。
+
+→ [[no-ai-default]] [[frontier-models]]

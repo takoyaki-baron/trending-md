@@ -290,13 +290,13 @@ The project (repo created Nov 5, 821 stars) is a shell script on a timer: if mor
 
 ---
 
-## 21. Since we covered the C++26 DIS failure on 2026-11-04: Herb Sutter's post-mortem says the decisive factor wasn't contracts — "the language's creator and its owners disagree"
+## 21. Since we covered the C++26 DIS failure on 2026-11-04: Herb Sutter's post-mortem says the decisive factor wasn't contracts — "the language's creator strongly disagreed with the consensus of its steward body"
 
 - **Velocity:** ▮▮ rising
 - **Source:** Hacker News · 91+ pts · 5.4h ago (~07:28 UTC+8)
 - **Tags:** `cpp` `standards` `iso`
 
-P4454R0 (dated 2026-10-31; nine pages on isocpp.org) opens its tl;dr: "The core decisive issue that caused the DIS to fail is that the language's creator and its owners disagree." Sutter's three facts: WG21 has strong consensus for contracts (114–12 in Croydon, 2026-03); "For the first time since WG21 was formed 36 years ago, C++'s creator is siding with the minority" against the DIS; and the national bodies chose to give Bjarne Stroustrup's dissent more weight — lobbying that "more than doubled the numerical NB opposition," in a vote close enough that one flipped Disapprove plus one abstention would have passed it. Against the process complaints he defends the consensus numbers: the EWG chairs "quietly counted every contracts poll twice" to de-duplicate by company. Six options are tabled for C++26, from skipping ISO publication entirely (Option A) to moving standardization into a national body or the Linux Foundation (Options E/F) — with an editorial note that Bjarne, reviewing the paper, said Option B (remove contracts and re-ballot, ideally a new DIS within six weeks) "is the outcome he most wants to see."
+P4454R0 (dated 2026-10-31; nine pages on isocpp.org) opens its tl;dr: "The decisive issue that caused the DIS to fail is that the language's creator strongly disagreed with the consensus of its steward body responsible for its maintenance and evolution." — the phrasing HN's headline compresses to "a language's creator and its owners strongly disagree." Sutter's three facts: WG21 has strong consensus for contracts (114–12 in Croydon, 2026-03); "For the first time since WG21 was formed 36 years ago, C++'s creator is siding with the minority" against the DIS; and the national bodies chose to give Bjarne Stroustrup's dissent more weight — lobbying that "more than doubled the numerical NB opposition," in a vote close enough that one flipped Disapprove plus one abstention would have passed it. Against the process complaints he defends the consensus numbers: the EWG chairs "quietly counted every contracts poll twice" to de-duplicate by company. Six options are tabled for C++26, from skipping ISO publication entirely (Option A) to moving standardization into a national body or the Linux Foundation (Options E/F) — with an editorial note that Bjarne, reviewing the paper, said Option B (remove contracts and re-ballot, ideally a new DIS within six weeks) "is the outcome he most wants to see."
 
 **Why it matters:** this week's vote was covered as a contracts-design fight; the primary post-mortem argues the technical debate was secondary to a governance question every standards body eventually hits — what weight a founder's dissent carries against committee consensus. And it names a live possibility: C++26 shipping without contracts.
 
@@ -510,7 +510,7 @@ The muratbuffalo blog (writing there since 2011) makes a crisp technical case fo
 
 **Why it matters:** this names the evaluation problem underneath a lot of this feed's beats — produced text no longer certifies that thought occurred, so every artifact (six-pager, benchmark report, CVE writeup) needs a provenance story. The comparative-advantage framing is also a concrete answer to today's Goldman Sachs item: what the firm restricted is exactly the thing this essay says not to outsource.
 
-[`🔗 muratbuffalo.blogspot.com`](http://muratbuffalo.blogspot.com/2026/11/writing-as-thinking-tool.html) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50412067)
+[`🔗 muratbuffalo.blogspot.com`](https://muratbuffalo.blogspot.com/2026/11/writing-as-thinking-tool.html) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50412067)
 
 ---
 
@@ -534,11 +534,11 @@ A viral thread claiming Opus 5.5's thinking patterns changed on November 3 hit H
 - **Source:** Hacker News · 246+ pts · 13h ago (~06:36 UTC+8)
 - **Tags:** `audio` `web` `synthesis`
 
-Chimera Vocal Synth is a physically-modelled voice synthesizer: "Every sound here is produced by simulating air moving through a throat, mouth and nose." The interface exposes the instrument — a glottis-to-lips tube view, vocal folds slowed 100×, a live formant spectrum, an F1/F2 vowel chart — and you drag the tongue, lips or jaw, or play keys at a 110 Hz fundamental with controls for breath pressure (8.0 cmH₂O), pressed phonation and vibrato. No ML model, no samples; the HN thread places it as a modern descendant of Pink Trombone (2018), which itself descends from older articulatory-synthesis work, and clips of people playing it are circulating on X and Bluesky.
+Chimera Vocal Synth is a physically-modelled voice synthesizer: "Every sound comes from a simulated airway (lungs, vocal folds or syrinx, a branched vocal tract, lips, nose), not from samples." The interface exposes the instrument — a glottis-to-lips tube view, vocal folds slowed 100×, a live formant spectrum, an F1/F2 vowel chart — and you drag the tongue, lips or jaw, or play keys at a 110 Hz fundamental with controls for breath pressure (8.0 cmH₂O), pressed phonation and vibrato. No ML model, no samples; the HN thread places it as a modern descendant of Pink Trombone (2018), which itself descends from older articulatory-synthesis work, and clips of people playing it are circulating on X and Bluesky.
 
 **Why it matters:** articulatory synthesis — the vocal tract as a physical instrument — is the standing counterpoint to neural TTS: fully interpretable (every vowel is a tract shape), controllable in ways diffusion audio models aren't, and a phonetics classroom in a tab. That it runs at interaction rates in a browser is the engineering feat.
 
-[`🔗 chimera-vocal-synth.vercel.app`](https://chimera-vocal-synth.vercel.app/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50418182)
+[`🔗 chimera-vocal-synth.vercel.app`](https://chimera-vocal-synth.vercel.app/) · [`🔗 jamesondh/chimera-vocal-synth`](https://github.com/jamesondh/chimera-vocal-synth) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50418182)
 
 ---
 
@@ -578,7 +578,7 @@ The Nov 8 VulnCheck wave (the same ~14:18Z run as OpenEMR's 44 records, item 1) 
 
 An HN post argues ChatGPT Desktop's agent setup lets "the agent running on a remote machine… authenticate using your local SSH credentials. That means it can push to your private repos on GitHub." The mechanism is documented in OpenAI's own code: a June 14 comment by an OpenAI engineer on codex PR #28131 shows the app launching its server with `SSH_AUTH_SOCK=~/.codex/app-server-control/forwarded-ssh-agent.sock` pointed at `codex app-server --listen unix://`. An SSH-agent socket forwards *signing requests*, not keys — so whatever can reach that socket can wield your keys against any host that will accept the signature. The thread's mitigations: keys in the macOS Secure Enclave via Secretive (touch-gated per session), or a YubiKey with touch-required — so a new SSH connection always needs a human gesture.
 
-**Why it matters:** agent convenience keeps widening the credential blast radius by design decisions, not bugs — this sits beside Claude Code's email-in-User-Agent and the "Don't Ask Again" secrets file in the same class. If your desktop agent mounts an agent socket anywhere, the answer to "who can push as me?" now includes everything that can reach that socket — worth checking before the next `git push` surprises you.
+**Why it matters:** agent convenience keeps widening the credential blast radius by design decisions, not bugs — this sits beside Claude Code's email-in-User-Agent and the "Don't Ask Again" secrets file in the same class. If your desktop agent mounts an agent socket anywhere, everything that can reach that socket can now push as you — worth checking before the next `git push` surprises you.
 
 [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50422628) · [`🔗 codex PR #28131 comment`](https://github.com/openai/codex/pull/28131#discussion_r3410013180)
 

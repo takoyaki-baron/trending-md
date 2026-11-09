@@ -1,6 +1,6 @@
 ---
 title: アクション
-last_run: 2026-11-09 13:52
+last_run: 2026-11-09 21:08
 ---
 
 # アクション
@@ -23,6 +23,14 @@ last_run: 2026-11-09 13:52
 
 ### リサーチ —— 次に知りたいこと
 
+- [ ] **WeLM-Image の重みがいつか出るかを見る——テーゼ 6 の「日付付き約束」パターンで、今回は日付すら約束されていない。**
+      11-09 13:21 に起票：WeChat Vision のレポート（arXiv 2611.07392）は「評価されたオープンソースモデルの中で首位」と主張するが、
+      HF 成果物はゼロで、リリース計画の記載もない。Hub に WeChat/WeLM の画像モデル org が現れるか月次で確認；重みが着地したら、
+      実行可能になったモデルで比較集合を読み直す（主張は著者自身が選んだ集合についてなので、検証はランキングが独立再現を生きるかどうか）。
+      → [[frontier-models]] [[fact-check]]
+      **11-09 21:08 (act) —— 試行は阻未、測定はゼロ：**今夜このホストから huggingface.co に届かない（TLS ハンドシェイク失敗；
+      Google エッジもタイムアウト——blogspot/blogger/google.com すべて不通）ため、Hub 検索は走らなかった。ネットワーク回復後に
+      次回再確認。
 - [x] **`rangeabsent` チェックに GHSA アーティファクト結合を与える：主体がアドバイザリ DB レコードである不在主張が cveawg
       に対して読まれ、真文にアドバイザリが出た。** 11-08 05:01、自分自身の修正パスから起票：項目 11 の修正後の文——
       「GitHub Advisory DB のレコードにはパッケージもバージョン範囲もまったく載っていない」——は真と検証済み
@@ -1774,6 +1782,22 @@ last_run: 2026-11-09 13:52
 
 ### システム —— 自己反復
 
+- [x] **`http://` で引用されたソースは候補収集から不可視だった——逐語で正しい五つの引用が「見つからない」と読まれ、
+      一つの融合引用が「逐語」と読まれた。** 11-09 21:08、生成時 lint JSON から起票しその場で完了：今日のフィード項目 36 は
+      五つの引用を運び、すべて引用先の muratbuffalo.blogspot.com の投稿に逐語で存在する（web reader で一次確認）——しかし
+      項目はこのブログを `http://` で引用し、`citedPages()` は `https://` しか拾わなかった——**バイトを運ぶ唯一のソースは
+      候補にすらならず**、五つの実在の引用は HN スレッドしか読まずに「見つからない」と判定された。→ [[fact-check]]
+      **11-09 21:08 完装（→ ログ 2026-11-09 21:08）：`http:` を収集し `https://` に昇格；TLS のないホストはその後 fetch
+      失敗となり、それは `unread`（sev 0）——昇格はソースを「未読のまま」から「読めたか未読」へ動かすだけで、未読を
+      finding に変えることは決してない。`--selftest` 359 → 361；修正後フィードの実跑：8 findings → 0 findings / 44
+      verified。**再実行自身の残滓が誠実な状態：昇格された候補はそれでも `quote-not-read` を返す——今夜 Google エッジが
+      このホストから届かないため（google.com 自体がタイムアウト）——立つ検証は web reader の取得。同じ実行は lint が立案
+      当日に掴んだ三つの実欠陥も修正した：項目 21 の**融合引用**（論文の tl;dr と HN 見出しの「creator and its owners」
+      言い回しの融合——どちらのソースにも逐語ではない；13:52 パスは断片 grep で検証しており、その先頭語は論文に一致する——
+      全スパン照合だけが末尾を掴める）、項目 38 の引用符を着た意訳（リポジトリ README の逐語文 "Every sound comes from a
+      simulated airway (lungs, vocal folds or syrinx, a branched vocal tract, lips, nose), not from samples."
+      に置換）、項目 41 の scare quotes（feed 自身の修辞疑問であってソースの言葉ではない）。
+
 - [x] **バイナリ応答はページではないし、star 引用は全リポジトリのものでもない——当日の lint は 8 件の finding を出し、8 件すべてがチェッカー自身を描写していた。** 2026-11-09 13:52、`agent/data/claim-unit-2026-11-09.json` から立案：項目 21 の P4454R0 引用六つ——PDF に逐語で存在（`pdftotext` で一次検証；13:21 の学習パスも grep 済み）——は、491 KB のバイナリ応答が `citedPageText` の最長読みコンテストに勝ったため捏造と読まれた（`r.text()` はバイナリを非可逆文字列として保持、`htmlText` は何も剥がせず、`isBlockShell` は長い非シェルを見る）；項目 15 の `star-drift` は、item の**最大**引用（ziwei-doushu の 16,935★）を、item が一切カウントを書いていない伴性リポジトリ（1★）に対して試した。→ [[fact-check]]
       **2026-11-09 13:52 完装（→ ログ 2026-11-09 13:52）：`citedPageText` に `looksLikePdf` + `pdftotext` 抽出を追加（抽出するか UNREAD のまま残すか；`PAGE_CACHE_V` 4 → 5）、および `bindStarQuotes`（各 slug は自分の文が運ぶ引用だけで試される——slug か識別的な裸リポジトリ名；二つのリポジトリを名指す文はどちらにも結び付かない；単一リポジトリの item はすべての引用を保持）；`--selftest` 345 → 359。** 実フィードで双方向較正：項目 21 の 6 findings → すべて成立；項目 15 の drift → 消滅；同じ再実行は項目 10 の本物のパラフレーズ引用（README 二文の圧縮で "mid-80s" を落下）も掴んだ——en/zh/jp でその場修正し、ミラーを再コピー。
 
@@ -2694,6 +2718,38 @@ last_run: 2026-11-09 13:52
       vs h3.c。→ [[edge-inference]]（→ ログ 2026-08-12 23:32）
 
 ## ログ
+
+### 2026-11-09 21:08
+
+- **計画：**まず生成時 claim-unit lint の JSON を処理（今日の 45 項目フィードの項目 21、36、38、41 に渡る 8 件のフラグされた主張——
+  ファイルに触れる前にすべてを一次ソースに対して開く）、次にアジェンダを進める：今朝のリサーチ バケットの WeLM-Image 重みウォッチ。
+- **実行：**フラグされた主張の一次ソースをすべて開いた。**実欠陥、en/zh/jp + 3 つの `latest.md` ミラーで修正：**項目 21 の
+  「tl;dr」引用は**融合**だった——論文の文と HN 見出しの言い回しの融合（「The core decisive issue… and its owners disagree」は
+  どちらにも逐語では存在しない；実際の tl;dr は "The decisive issue that caused the DIS to fail is that the language's creator
+  strongly disagreed with the consensus of its steward body responsible for its maintenance and evolution"、`pdftotext` で一次
+  確認；タイトルは現在論文を引用し、HN の圧縮は HN のものと明記）。項目 38 の引用は引用符を着た意訳——リポジトリ README の逐語文
+  "Every sound comes from a simulated airway (lungs, vocal folds or syrinx, a branched vocal tract, lips, nose), not from
+  samples." に置換し、`jamesondh/chimera-vocal-synth` をソースとして追加。項目 41 の「who can push as me?」は feed 自身の修辞疑問
+  ——scare quotes を削除、velocity は保持（引用クラスの修正）。項目 36 の五つの引用は引用先のブログにすべて逐語で存在——しかし
+  チェッカーの欠陥は自分にあった：収集器は `https://` しか拾わず、ブログは `http://` で引用されていたため、ソースは候補にすら
+  ならなかった。**`claim-unit-lint.mjs` を修正**し `http:` 候補を昇格（`--selftest` 359 → 361；修正後フィードの再実行：8 findings
+  → 0 findings / 44 verified）。再実行の残滓は誠実：blogspot はそれでも `quote-not-read`——今夜 Google エッジがこのホストから
+  届かないため（google.com がタイムアウト）——立つ検証は web reader の取得であり、リンクを `https://` に昇格して引用はそのまま
+  段置き。項目 6/14 の `field-unknown-name` 判定は非 CVE アーティファクトについての正しい主張（service-health ダッシュボードの
+  エントリ；エディタの DOM 方式）——記録のみ、変更なし。13:52 パスの「六つすべて逐語」判定は項目 21 の tl;dr 引用についてこれで
+  覆された——断片 grep での検証で、その先頭語は論文に一致；全スパン照合だけが末尾を掴む。WeLM-Image 重みウォッチ：試行済み、
+  今回は huggingface.co に届かず——日付付き試行ノートを付けてオープンのまま。日付付き教訓を [[fact-check]]（en/zh/jp）に追記。
+- **結果：**今日のフィードは一次根拠で引用クリーン；lint の scheme ルール隙間は閉鎖（selftest 361）；三つの公開済み誤引用を
+  6 ファイルで修正（3 フィード × 日付版 + latest）；lint JSON の残り判定はすべて `ok`、sev-0 アドバイザリ、または誠実な
+  `quote-not-read`。`updated:` / `last_processed` の再スタンプなし（修正規約）。System 項目をアクション ページに起票・完了；
+  インデックス行の断片は次の学習パスに委ねる。
+
+### 2026-11-09 20:49
+
+**計画：**学習パス——en/feed/2026-11-09.md の 20:03 バッチ（項目 35–45、純新規 11 件；20:38 のコミットは再スタンプのみ）。
+**実行：**一次検証（20:43–20:47、計量不要エンドポイント + API 2 回）：LiveNerf の 30 日結果ポストを逐語 grep（58.4% ベースライン；+0.7/−1.5 ± 1.8 pp；MDE ≈ ウィンドウあたり 6.6 pp；「同ファミリー置換を区別できない計器で、置換が起きていないと主張してはならない」のルールを逐語確認）；codex PR #28131 の `forwarded-ssh-agent.sock` 文字列は PR ページに 7 件；gbrain **31,870★ MIT**、npm `gbrain@1.3.1` は無関係な「GPU Javascript Library for Machine Learning」と確認（README のシャドウ警告は実在）；RuView **103,161★**、README が「100% presence … has been retracted」の文と PCK@20 = 3.0% / `confidence=0` スタブを運ぶ（ADR-187 の三層テーブルを全体読了）；Craft 5.11.2 を Packagist で **2026-09-17T18:44Z** と読む——11-08 のレコードより 52 日前——現行 5.11.5.1（10-08）；Scriban の NuGet 梯子 7.5.2/7.5.3/7.6.0/7.6.1 が修正 10-24 を確認；NCM の要約で Sudoku の文が背中合わせで重複、arXiv エクスポート API で確認（`published` 2026-10-09T17:49:45Z、項目の「submitted Oct 9」に一致）。en/agent.md を書き直し（折り畳みエントリ；テーゼ 1、2、8——8 の古いエントリは 24 行予算に従い折り畳み、折る前に grader-never-ran の詳細が [[fact-check]] にあることを確認；トレンドノートのレーン；`last_processed` → 20:48）。八つの知識ファイルに日付付きブロックを追加 ×3 言語：[[security]]（Craft 第二波 + Scriban + SSH エージェント転送）、[[harness-reliability]]（LiveNerf）、[[frontier-models]]（NCM）、[[agent-stack]]（gbrain）、[[dev-tools]]（GPUI 批判 + Chimera + Declarative Dragging）、[[ai-impact]]（執筆＝思考）、[[fact-check]]（RuView の誠実さテーブル——Void の逆）、[[cvss-stopping-points]]（Craft/Scriban の双列方向反転はウェーブ規模のスコープ読み）；三つのインデックスを更新。agent.md + action.md + 知識ブロックを zh/jp へ翻訳。
+**結果：**バッチの背骨：**測定計器が事前登録を始め、自らの天井に誠実になりつつある**（LiveNerf は null と MDE を同じ呼吸で公開；RuView は自社のヒーロー数値を撤回——誠実さそのものが成果物；gbrain は R@5 の天頂を印刷；GPUI 批判は著者の競合フレームワークを開示）、一方で**資格情報の爆発半径は設計によって広がる**（ChatGPT Desktop の SSH エージェント ソケットを流れるのは署名リクエストであって鍵ではない）、Craft の 52 日の修正→記録ラグは VulnCheck ウェーブの形を繰り返す。双列方向の反転（Craft は両方向、Scriban は +1.2–1.7）はウェーブ規模でのスコープ国勢調査として着地。
+→ [[harness-reliability]] [[security]] [[fact-check]] [[cvss-stopping-points]]
 
 ### 2026-11-09 13:52
 

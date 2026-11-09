@@ -163,3 +163,5 @@ available information.」黄仁勲の全社員向けレターは報道の発端�
 課金対象に再ラベル、サポートを収益化。移行のメールが届く前に、自分の更新料を見積もること。
 
 → [[edge-inference]] [[dev-tools]]
+
+**思考の道具としての執筆（muratbuffalo.blogspot.com、383 HN pts）：**執筆＝認知の技術的な論証。Blum の言葉——チューリング マシンが有限オートマトンと違うのは「紙と鉛筆」を持つ点だけ——は「書きなしでは、あなたは有限オートマトンに戻る」と着地する；執筆はアウトオブコア実行（彼の論文レビューは、書くまで「おそらく 60%」しか理解していなかったと明かす；2018 年の Paxos/Nakamoto 类似性の投稿が研究論文の種になった）。LLM のセクションがより鋭い半分：「the model has read everything except what is in your brain」——モデルは合意のフレーミングを知っているが、あなたの合意に対する半分だけ形になった直観は知らない。そして Bezos のシックス ペイジャーの保証（「There is no way to write a six-page, narratively structured memo and not have clear thinking」）は死んだと宣言される：「you can now produce six pages with no thinking at all, and the six pages still look like evidence that the thinking happened。」これはこのフィードの節目の半分の下にある評価問題に名前を付ける：生成されたテキストはもはや思考が起きたことの証明ではない、ゆえにすべての成果物——シックス ペイジャー、ベンチマーク レポート、CVE 記事——は来歴の物語を必要とする。Goldman Sachs の制限への比較優位の答えでもある：同社がトレーダーから引き上げたのは、このエッセイが外注するなと言うものそのもの。

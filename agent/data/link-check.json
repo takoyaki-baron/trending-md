@@ -4863,97 +4863,250 @@
       ]
     },
     "https://news.ycombinator.com/item?id=50411961": {
-      "verdict": "blocked",
-      "streak": 2,
+      "verdict": "transient",
+      "streak": 1,
       "first_seen": "2026-11-08T21:39:57.314Z",
-      "last_seen": "2026-11-09T06:31:59.147Z",
+      "last_seen": "2026-11-09T13:45:19.787Z",
       "feeds": [
         "2026-11-09.md"
       ]
     },
     "https://news.ycombinator.com/item?id=50415628": {
-      "verdict": "blocked",
-      "streak": 2,
+      "verdict": "transient",
+      "streak": 1,
       "first_seen": "2026-11-08T21:39:57.314Z",
-      "last_seen": "2026-11-09T06:31:59.147Z",
+      "last_seen": "2026-11-09T13:45:19.787Z",
       "feeds": [
         "2026-11-09.md"
       ]
     },
     "https://news.ycombinator.com/item?id=50416158": {
-      "verdict": "blocked",
-      "streak": 2,
+      "verdict": "transient",
+      "streak": 1,
       "first_seen": "2026-11-08T21:39:57.314Z",
-      "last_seen": "2026-11-09T06:31:59.147Z",
+      "last_seen": "2026-11-09T13:45:19.787Z",
       "feeds": [
         "2026-11-09.md"
       ]
     },
     "https://news.ycombinator.com/item?id=50412072": {
-      "verdict": "blocked",
-      "streak": 2,
+      "verdict": "transient",
+      "streak": 1,
       "first_seen": "2026-11-08T21:39:57.314Z",
-      "last_seen": "2026-11-09T06:31:59.147Z",
+      "last_seen": "2026-11-09T13:45:19.787Z",
       "feeds": [
         "2026-11-09.md"
       ]
     },
     "https://news.ycombinator.com/item?id=50419215": {
-      "verdict": "blocked",
+      "verdict": "transient",
       "streak": 1,
       "first_seen": "2026-11-09T06:31:59.147Z",
-      "last_seen": "2026-11-09T06:31:59.147Z",
+      "last_seen": "2026-11-09T13:45:19.787Z",
       "feeds": [
         "2026-11-09.md"
       ]
     },
     "https://news.ycombinator.com/item?id=50416053": {
-      "verdict": "blocked",
+      "verdict": "transient",
       "streak": 1,
       "first_seen": "2026-11-09T06:31:59.147Z",
-      "last_seen": "2026-11-09T06:31:59.147Z",
+      "last_seen": "2026-11-09T13:45:19.787Z",
       "feeds": [
         "2026-11-09.md"
       ]
     },
     "https://news.ycombinator.com/item?id=50418176": {
-      "verdict": "blocked",
+      "verdict": "transient",
       "streak": 1,
       "first_seen": "2026-11-09T06:31:59.147Z",
-      "last_seen": "2026-11-09T06:31:59.147Z",
+      "last_seen": "2026-11-09T13:45:19.787Z",
       "feeds": [
         "2026-11-09.md"
       ]
     },
     "https://news.ycombinator.com/item?id=50415172": {
-      "verdict": "blocked",
+      "verdict": "transient",
       "streak": 1,
       "first_seen": "2026-11-09T06:31:59.147Z",
-      "last_seen": "2026-11-09T06:31:59.147Z",
+      "last_seen": "2026-11-09T13:45:19.787Z",
       "feeds": [
         "2026-11-09.md"
       ]
     },
     "https://news.ycombinator.com/item?id=50418818": {
-      "verdict": "blocked",
+      "verdict": "transient",
       "streak": 1,
       "first_seen": "2026-11-09T06:31:59.147Z",
-      "last_seen": "2026-11-09T06:31:59.147Z",
+      "last_seen": "2026-11-09T13:45:19.787Z",
       "feeds": [
         "2026-11-09.md"
       ]
     },
     "https://news.ycombinator.com/item?id=50420035": {
-      "verdict": "blocked",
+      "verdict": "transient",
       "streak": 1,
       "first_seen": "2026-11-09T06:31:59.147Z",
-      "last_seen": "2026-11-09T06:31:59.147Z",
+      "last_seen": "2026-11-09T13:45:19.787Z",
+      "feeds": [
+        "2026-11-09.md"
+      ]
+    },
+    "https://huggingface.co/papers/2611.05376": {
+      "verdict": "transient",
+      "streak": 1,
+      "first_seen": "2026-11-09T13:45:19.787Z",
+      "last_seen": "2026-11-09T13:45:19.787Z",
+      "feeds": [
+        "2026-11-09.md"
+      ]
+    },
+    "https://huggingface.co/papers/2611.08373": {
+      "verdict": "transient",
+      "streak": 1,
+      "first_seen": "2026-11-09T13:45:19.787Z",
+      "last_seen": "2026-11-09T13:45:19.787Z",
+      "feeds": [
+        "2026-11-09.md"
+      ]
+    },
+    "https://wpscan.com/vulnerability/6b0a5d1f-84fb-425f-8d37-ddde5703937c/": {
+      "verdict": "blocked",
+      "streak": 1,
+      "first_seen": "2026-11-09T13:45:19.787Z",
+      "last_seen": "2026-11-09T13:45:19.787Z",
+      "feeds": [
+        "2026-11-09.md"
+      ]
+    },
+    "https://huggingface.co/papers/2611.00883": {
+      "verdict": "transient",
+      "streak": 1,
+      "first_seen": "2026-11-09T13:45:19.787Z",
+      "last_seen": "2026-11-09T13:45:19.787Z",
+      "feeds": [
+        "2026-11-09.md"
+      ]
+    },
+    "https://huggingface.co/papers/2611.04894": {
+      "verdict": "transient",
+      "streak": 1,
+      "first_seen": "2026-11-09T13:45:19.787Z",
+      "last_seen": "2026-11-09T13:45:19.787Z",
+      "feeds": [
+        "2026-11-09.md"
+      ]
+    },
+    "https://isocpp.org/files/papers/P4454R0.pdf": {
+      "verdict": "blocked",
+      "streak": 1,
+      "first_seen": "2026-11-09T13:45:19.787Z",
+      "last_seen": "2026-11-09T13:45:19.787Z",
+      "feeds": [
+        "2026-11-09.md"
+      ]
+    },
+    "https://huggingface.co/papers/2611.07392": {
+      "verdict": "transient",
+      "streak": 1,
+      "first_seen": "2026-11-09T13:45:19.787Z",
+      "last_seen": "2026-11-09T13:45:19.787Z",
+      "feeds": [
+        "2026-11-09.md"
+      ]
+    },
+    "https://huggingface.co/papers/2611.08376": {
+      "verdict": "transient",
+      "streak": 1,
+      "first_seen": "2026-11-09T13:45:19.787Z",
+      "last_seen": "2026-11-09T13:45:19.787Z",
+      "feeds": [
+        "2026-11-09.md"
+      ]
+    },
+    "https://news.ycombinator.com/item?id=50418182": {
+      "verdict": "blocked",
+      "streak": 1,
+      "first_seen": "2026-11-09T13:45:19.787Z",
+      "last_seen": "2026-11-09T13:45:19.787Z",
+      "feeds": [
+        "2026-11-09.md"
+      ]
+    },
+    "https://news.ycombinator.com/item?id=50420857": {
+      "verdict": "blocked",
+      "streak": 1,
+      "first_seen": "2026-11-09T13:45:19.787Z",
+      "last_seen": "2026-11-09T13:45:19.787Z",
+      "feeds": [
+        "2026-11-09.md"
+      ]
+    },
+    "https://news.ycombinator.com/item?id=50422628": {
+      "verdict": "blocked",
+      "streak": 1,
+      "first_seen": "2026-11-09T13:45:19.787Z",
+      "last_seen": "2026-11-09T13:45:19.787Z",
+      "feeds": [
+        "2026-11-09.md"
+      ]
+    },
+    "https://news.ycombinator.com/item?id=50368481": {
+      "verdict": "transient",
+      "streak": 1,
+      "first_seen": "2026-11-09T13:45:19.787Z",
+      "last_seen": "2026-11-09T13:45:19.787Z",
+      "feeds": [
+        "2026-11-09.md"
+      ]
+    },
+    "https://news.ycombinator.com/item?id=50422168": {
+      "verdict": "blocked",
+      "streak": 1,
+      "first_seen": "2026-11-09T13:45:19.787Z",
+      "last_seen": "2026-11-09T13:45:19.787Z",
+      "feeds": [
+        "2026-11-09.md"
+      ]
+    },
+    "https://news.ycombinator.com/item?id=50422069": {
+      "verdict": "transient",
+      "streak": 1,
+      "first_seen": "2026-11-09T13:45:19.787Z",
+      "last_seen": "2026-11-09T13:45:19.787Z",
+      "feeds": [
+        "2026-11-09.md"
+      ]
+    },
+    "https://huggingface.co/ruvnet/wifi-densepose-pretrained": {
+      "verdict": "transient",
+      "streak": 1,
+      "first_seen": "2026-11-09T13:45:19.787Z",
+      "last_seen": "2026-11-09T13:45:19.787Z",
+      "feeds": [
+        "2026-11-09.md"
+      ]
+    },
+    "https://muratbuffalo.blogspot.com/2026/11/writing-as-thinking-tool.html": {
+      "verdict": "transient",
+      "streak": 1,
+      "first_seen": "2026-11-09T13:45:19.787Z",
+      "last_seen": "2026-11-09T13:45:19.787Z",
+      "feeds": [
+        "2026-11-09.md"
+      ]
+    },
+    "https://chimera-vocal-synth.vercel.app/": {
+      "verdict": "transient",
+      "streak": 1,
+      "first_seen": "2026-11-09T13:45:19.787Z",
+      "last_seen": "2026-11-09T13:45:19.787Z",
       "feeds": [
         "2026-11-09.md"
       ]
     }
   },
-  "runs": 162,
+  "runs": 163,
   "first_run": "2026-09-05T12:47:55.004Z",
-  "last_run": "2026-11-09T06:31:59.147Z"
+  "last_run": "2026-11-09T13:45:19.787Z"
 }

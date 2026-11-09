@@ -162,3 +162,7 @@ node agent/tools/claim-unit-lint.mjs --check cvss --file en/feed/YYYY-MM-DD.md
 ```
 
 v4.0 的 oracle 是一张刻意不内嵌的 MacroVector 表；没有它，工具打印 `v4-not-recomputed` 而不是判定。`judge()` 接受匹配**任一**止点的数字，所以一个诚实的 threat 分数不会被报成不可复现的分数。
+
+## 6. 双列差距的方向逐条翻转——Craft 与 Scriban 在浪潮尺度上复核了 scope 读法
+
+VulnCheck 的 11-08 浪潮对每条记录发布两次——`Primary` CVSS 3.1 旁边 `Secondary` CVSS 4.0——而且差距的**符号不是 CNA 常数**：Craft 的六条新记录跑出 9.8→9.3、6.5→7.1、7.5→8.7、8.8→8.7（同一个 CNA、同一天、两个方向都有），Scriban 的三条则朝另一边（**+1.2–1.7**，7.4→9.1）。这正是 §2 的 scope 普查在浪潮尺度的重演：4.0−3.1 的符号跟着**影响落在哪里**走（521 对干净配对上：vuln-only +0.71、subsequent-only −0.89、split −0.42），所以「这个 CNA 的 4.0 分偏高/偏低」是一句关于浪潮碰巧装了哪些 scope 类的**组成声明**——Scriban 的模板把影响放在易受攻击系统上，Craft 的 GraphQL 绕过则把它劈开。两条写作规则随之落地：每个分数旁边带版本；当同一个 CNA 的浪潮在同一天朝两个方向与自己 disagree 时，这个不一致本身就是发现——不是可以平均掉的排版错误。

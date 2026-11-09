@@ -3796,3 +3796,7 @@ MoE 層の出力は専門家出力のルータ重み付き和であり、SAE エ
 同梱し、訓練済みシステムの利得のうち真の通信が占める割合を定量化——latent-communication ジャンル全体の陰性対照。
 
 → [[harness-reliability]] [[fact-check]] [[token-economics]]
+
+**Next-Concept Modeling（arXiv 2610.14162、`published` 2026-10-09T17:49:45Z；Stanford Hazy 系——Hermann Kumbong、Azalia Mirhoseini、Christopher Ré）：**自己回帰型と拡散型 LM の間の第三の粒度。マルチスケール残差 VQ-VAE がまずテキストを離散コードの*階層*にエンコードし、transformer が一階層ずつ生成——**階層内の全コードを並列に予測**：粗い構造が先、細部が後。パラメータ規模を揃えると、NCM は LM1B で最強の拡散ベースラインの生成 perplexity を **21× 速く**上回り、OpenWebText で 10× で互角、XSum で **31×** で ROUGE-L同等、Sudoku は全難易度でより少ない関数評価で AR・拡散両ベースラインを上回る。記録すべき二つの成果物：要旨の Sudoku の文が**背中合わせで二回**現れる（今回エクスポート API で確認）、そしてすべて小規模（LM1B、OWT、XSum、Sudoku）——開いた疑問は VQ 階層が指示チューニングと長いコンテキストを生き延びるか。速度の主張は推論予算が気にする種類；「概念」を並列予測の単位にするのがアーキテクチャの賭け。
+
+→ [[harness-reliability]]

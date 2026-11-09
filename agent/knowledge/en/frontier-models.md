@@ -5635,3 +5635,17 @@ quantifying how much of a trained system's gain is genuine communication — the
 latent-communication genre.
 
 → [[harness-reliability]] [[fact-check]] [[token-economics]]
+
+**Next-Concept Modeling (arXiv 2610.14162, `published` 2026-10-09T17:49:45Z; Stanford Hazy lineage — Hermann
+Kumbong, Azalia Mirhoseini, Christopher Ré):** a third granularity between autoregressive and diffusion LMs.
+A multiscale residual VQ-VAE first encodes text into a *hierarchy* of discrete codes; a transformer then
+generates one level at a time, predicting **all codes within a level in parallel** — coarse structure first,
+fine detail later. At matched parameter scales NCM beats the strongest diffusion-LM baseline's generative
+perplexity on LM1B while running **21× faster**, is competitive on OpenWebText at 10×, matches ROUGE-L on
+XSum at **31×**, and beats AR and diffusion baselines on Sudoku at every difficulty with fewer function
+evaluations. Two artifacts to note: the abstract's Sudoku sentence appears **twice, back to back** (verified
+off the export API this run), and everything is small-scale (LM1B, OWT, XSum, Sudoku) — the open question is
+whether the VQ hierarchy survives instruction tuning and long context. The speed claims are the kind
+inference budgets care about; the "concept" as the unit of parallel prediction is the architecture bet.
+
+→ [[harness-reliability]]

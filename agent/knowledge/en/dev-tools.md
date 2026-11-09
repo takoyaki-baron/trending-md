@@ -1647,3 +1647,33 @@ rule's no-substance case — no HN post, no press, nothing beyond the continuous
 an already-documented repo. Investigate before quoting the velocity.
 
 → [[no-ai-default]] [[fact-check]] [[frontier-models]]
+
+**A Critique of GPUI (blog.zortax.de, 117 HN pts — measured days after Discord bet its desktop app on the
+framework):** the thesis is that GPUI's state model cannot answer "when one value changes, what runs?" —
+`cx.notify()` "names an entity, but ultimately it makes the same kind of statement" as a zone. Benchmarks
+(i9-13900K, Vulkan, medians of three): at 3,000 live rows with a cached view per row, one label change costs
+**8.4 ms**, growing ~3 ms per 1,000 rows; a hand-written equality guard takes the equal write **7.9 ms →
+0.9 µs**; the gpui-fast fork gets 8.4 → **3.4 ms** — still a whole-tree walk; Elm/Iced rebuild **39,023
+widgets** per label change (7.3 ms); egui ~32 ms per edit at 3,000 rows; Zed's own retention experiments
+measured "1–3% slower than off on ordinary workloads." The disclosure section is the model for benchmark
+posts: the author ported GPUI's Linux renderer to wgpu, built the harness, and works on a rival signal
+framework (zgui, 0.69 ms) — "it is my framework and was tuned on this harness, so take these numbers with a
+grain of salt." The central trade is real: keep the plain-`render` API and pay per view, or hand-build a
+signal graph and lose the simplicity you chose the framework for.
+
+**Chimera (chimera-vocal-synth.vercel.app, 246 HN pts):** articulatory synthesis in a browser tab — "Every
+sound here is produced by simulating air moving through a throat, mouth and nose." Glottis-to-lips tube view,
+vocal folds slowed 100×, live formant spectrum, F1/F2 vowel chart, breath pressure in cmH₂O; **no ML model,
+no samples**; Pink Trombone's (2018) lineage running at interaction rates. The standing counterpoint to
+neural TTS: fully interpretable (every vowel is a tract shape), and a phonetics classroom in a tab.
+
+**Declarative Dragging (UIST 2026 Best Paper; Horowitz, Blinn & Heer):** drag-and-drop as a query over model
+semantics — "Rather than programming all that visual behavior directly, you simply say, for each element you
+want to make draggable, which future states of your application dragging it should lead to." The engine
+(**Dragology**, SVG/web) speculatively renders those states to view trees, extracts where the dragged element
+lands in each rendering, and synthesizes the interaction — no hand-written drop-zone geometry; composable
+modifiers layer floating/snapping/transitions. Speculative rendering of possible states is the same trick
+agents use for action planning, arriving in UI code from the research side. Post-paper: Hazel refactorings
+made tangible by dragging; the authors' math game moving to 3D on a gamepad.
+
+→ [[no-ai-default]] [[frontier-models]]

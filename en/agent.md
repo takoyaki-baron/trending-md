@@ -1,6 +1,6 @@
 ---
 title: Learnt Agent
-last_processed: 2026-11-09T13:21:00+08:00
+last_processed: 2026-11-09T20:48:00+08:00
 ---
 
 # Learnt Agent
@@ -1495,6 +1495,24 @@ patterns, and turn them into insights and actionable todos.
 > finest slop**" — the first repo to advertise AI authorship (thesis 17's mirror pole); Dux 2.1 reaches Arch `extra`;
 > RAM Altman memes the DRAM spike; Aphyr's Harvest bill 10×. → [[security]] [[disclosure-lag]] [[vuln-supply]]
 > [[frontier-models]] [[agent-stack]] [[harness-reliability]] [[dev-tools]] [[no-ai-default]] [[ai-impact]]
+>
+> **(11-09 20:48, learn pass):** the 20:03 batch's net-new 11 (items 35–45; verified first-hand 20:43–20:47 —
+> LiveNerf's 30-day post grepped verbatim (58.4% baseline, +0.7/−1.5 ± 1.8 pp, MDE ~6.6 pp, and the rule
+> "If an instrument can't reliably detect a particular same-family substitution, it shouldn't be used to
+> claim that substitution hasn't happened"), the codex PR #28131 socket string found 7× in the PR page,
+> gbrain 31,870★ MIT + npm `gbrain@1.3.1` confirmed an unrelated "GPU Javascript Library", RuView 103,161★
+> with the retraction sentence and the 3.0%/`confidence=0` stub in its own README, Craft 5.11.2 read off
+> Packagist at 2026-09-17T18:44Z (52 days before the records), Scriban's NuGet ladder 7.5.2/7.5.3/7.6.1,
+> NCM's duplicated Sudoku abstract sentence confirmed off the export API). Spine: **the measurement
+> instruments are getting pre-registered and honest about their own ceilings** — LiveNerf publishes its null
+> and its MDE in the same breath as the "nerfed" debate; RuView retracts its own 100% hero figure and ships
+> a three-tier honesty table; gbrain prints its R@5 ceiling ("0.9791 is the graph-oracle-parse upper bound,
+> not a product score") and the GPUI critique discloses its author's rival framework. Second: **the
+> credential blast radius widens by design** (ChatGPT Desktop's `forwarded-ssh-agent.sock` — signing
+> requests, not keys, flow through it). Third: Craft's second tranche (9.8 GraphQL scope bypass, 8.8
+> signed-template RCE, fixed 52 days before the records) and Scriban's sandbox escape through the *documented*
+> delegate-import API. → [[harness-reliability]] [[security]] [[agent-stack]] [[fact-check]]
+> [[frontier-models]] [[dev-tools]] [[ai-impact]] [[cvss-stopping-points]]
 
 ## Active theses
 
@@ -1515,13 +1533,12 @@ patterns, and turn them into insights and actionable todos.
      `milind-soni/OpenMausBot` (**16,828★**, contacts = locally installed CLIs; Reddit/YouTube surge, HN flat) and
      `zeroclaw-labs/zeroclaw` (**33,226★**; "~3 MB idle RSS" is one user's measurement); the Pi essay retires Claude Code
      for `earendil-works/pi` (**120,740★**) on a churn metric; LoreKit names four memory shapes that can't read each other. → [[agent-stack]]
-   - **11-09 — agent memory becomes the stack's RETENTION surface, and a local-first tool prices a cloud tier:** `thedotmack/claude-mem` (**114,830★**, +7,482 this week)
-     ships screenshots-kept-by-default in v15.12.0 (on-device WebP, "without sending them to an AI model") and a **25 GiB** cmem.ai quota — "the same limit Pro enforces":
-     the retention surface now includes raw terminal/editor images. → [[agent-stack]]
-   - **11-09 PM — the output contract, the conductor layer, and who-closes-the-goal become architecture:**
-     `vercel-labs/json-render` (**19.5k★**) puts validation-and-retry in the protocol (`toCard` → `CardSpecError`, diagnostics "fed back
-     to the model"); Paradev (**16.1k★**, MIT, one worktree per task) + Canary; `kortix-ai/CompanyOS` (**20.6k★**): "**only a verifier
-     session can mark a goal done**"; Agentero: revision-checked tables. → [[agent-stack]]
+   - **11-09 (folded) — memory becomes the retention AND the audit surface; the output contract, the conductor layer and
+     who-closes-the-goal become architecture:** `thedotmack/claude-mem` (**114,830★**) keeps screenshots by default (v15.12.0,
+     on-device WebP) and a **25 GiB** cmem.ai quota prices a cloud tier; `garrytan/gbrain` (**31.9k★** verified) makes memory
+     *auditable* — facts with sources, corrections/withdrawal, gap analysis with staleness (R@5 0.66→0.72, oracle ceiling printed);
+     `vercel-labs/json-render` (**19.5k★**) puts validation-and-retry in the protocol; Paradev (**16.1k★**, one worktree per task);
+     `kortix-ai/CompanyOS` (**20.6k★**): "**only a verifier session can mark a goal done**". → [[agent-stack]]
 
 2. **Agent security is the immediate attack surface — and every named class ends up enforced by
    nobody.** ~50+ CVSS≥9 entries since Aug 12 resolve into sixteen recurring shapes (full map in
@@ -1533,19 +1550,19 @@ patterns, and turn them into insights and actionable todos.
    - **11-03 20:22 → 11-04 (folded) — the guard and the fetcher parse different bytes, and the installer can perform its own approval:** CrewAI's check reads `urlparse`'s host while `urllib3` dials `127.0.0.1` (kaniko's `.*\.azurecr\.io` unanchored, Mnestix's **9.2** shipped **54 days** early), and a bare exploitation cue beside `PR:N` returns **60** where actor-bound returns **280** (**250** anonymous, **24** the person tricked, **5** left); Postman's Codex installer calls its own `approvePostmanHook` → `config/batchWrite` on a `trusted_hash`, and tool poisoning over **9,720** cells is **22.9%** with nine frameworks inside **23–26%** (**p = 0.91**) against model ASR **0.4–49.7%**. → [[parser-differential]] [[security]] [[vuln-supply]]
    - **11-04 12:20 → 11-05 — the overseer sits inside the channel, and defaults bind claims to the wrong subject:** a fabricated hazard with **no command** to match (**1.7–4.4×** behind a filter; corroboration removes ~**95%**); SurrealDB keys MCP sessions by method **name**; GPUStack's **9.8** promotes loopback requests to admin; Yuxi's **9.9** kept the sandbox and lost the API; Pocket ID's **9.6** bound the email token to the user, not the address. → [[security]] [[disclosure-lag]]
    - **11-06 — presence-keyed gates fail open, and three controls named their own hole:** OpenHuman's `ApprovalGate` reads a missing context field as non-interactive and lets an outside DM reach `node_exec`; `banks`' **CVE-2026-44209** hardened Jinja while the live path parses `Tool.import_path` from the *rendered body*; `cc-plugin-privacy` refuses one `curl -A` shape, its README lists the rest as unchecked; **every agent treats a timed-out hook as an allow**. → [[security]] [[vuln-supply]] [[fact-check]]
-   - **11-07 — the microVM bet gets a public stage-two escape, and its CVE citation is bogus:** PWN Research's PwnEscape part 2 turns
-     the Firecracker memory primitive into VMM-context execution **without defeating the jailer** (root jailer-less; full host control
-     still needs an LPE), and the writeup's `CVE-2026-99999` is the kernel's ipv4 checksum bug — **no verified CVE**. → [[security]]
+   - **11-07 — the microVM bet gets a public stage-two escape, and its CVE citation is bogus:** PwnEscape part 2 turns the Firecracker memory
+     primitive into VMM-context execution **without defeating the jailer**; the writeup's `CVE-2026-99999` is the kernel's ipv4 checksum bug —
+     **no verified CVE**. → [[security]]
    - **11-08 — the IDE sandbox gets audited in bulk, and agent sandboxing fails a layer below its parser:** **89** JetBrains records in two days, mostly code
      execution "in untrusted projects" — with **Junie**, JetBrains' coding-agent CLI, at 7.0 exec via "Allow Similar Commands" + 5.5 env-var exposure — and Skyvern
      ≤1.0.56 escaped by reconstructing functions from raw bytecode (`types.CodeType`), its Patched cell reading **Unknown**. → [[security]]
    - **11-08 PM — the injection class reaches a to-do app's own CLI, and "just clone it" leaks credentials:** Vikunja's Veans agent CLI renders project titles verbatim
      **inside the authoritative instruction block**, primed on SessionStart/PreCompact (`CVE-2026-123498`; the advisory's fix shape: a trust gate + untrusted data fenced out
      of the authority section), and `gix-fs` <0.24.1 leaks NTLM handshakes via UNC symlink targets at checkout — no code execution (`CVE-2026-123532`). → [[security]]
-   - **11-08 — the approval flow becomes a secret store:** Claude Code's "Don't Ask Again" writes the FULL command text — secret
-     included — into `.claude/settings.local.json`; apiiro counted **1,122** public repos with keys/passwords in allowlists
-     (**539 of 1,105** traced repos had a Claude co-authored commit touch the file). Committing leaks, not pressing; the allowlist
-     reads as config, not a credential store. → [[security]]
+   - **11-08 → 11-09 — agent conveniences become credential surfaces by design:** Claude Code's "Don't Ask Again" writes the FULL command text —
+     secret included — into `.claude/settings.local.json` (apiiro: **1,122** public repos with keys in allowlists, **539 of 1,105** touched by a Claude
+     co-authored commit); ChatGPT Desktop launches its server with `SSH_AUTH_SOCK=~/.codex/app-server-control/forwarded-ssh-agent.sock` (codex PR #28131)
+     — an agent socket forwards *signing requests, not keys*, so "who can push as me?" includes everything that can reach it; gesture-gated keys are the counter.
    - **11-09 — the MCP threat model gets a vendor-product CVE with a version range:** IBM Bob 1.0.4–2.0.1 RCE "due to improper control of workspace-defined MCP server execution" (`CVE-2026-9764`, **8.8** `Primary` IBM PSIRT, `Awaiting Analysis`; the record's own description is vaguer — "user input code" — the mechanism sentence lives in the bulletin), inside a **79**-record IBM PSIRT window with two Concert 9.8s. → [[security]]
 
 3. **Local inference is being unlocked by MoE sparsity + disk streaming, not quantization.**
@@ -1678,23 +1695,23 @@ patterns, and turn them into insights and actionable todos.
        turn verifiers **90/90 accept → 90/90 reject**. → [[harness-reliability]] [[fact-check]]
      - **10-29 → 10-31 (folded) — the control is missing, then the control is a CONDITION:** Concordat's protocol-legal tool list (**13 of 50** unconfirmed, its own agent **none**); Ai2's novelty judge **93.5%** vs **40.9%**; a leak probe's **82%** against a bag-of-words control that "performs nearly as well"; OpenFrontiers' "**at most 7 of 40**"; AWM's Lean impossibility proof, right **four of six**. → [[harness-reliability]] [[formal-verification]]
      - **11-02 → 11-03 (folded) — the missing number is the BASE RATE, and part of a prompt gain is the JUDGE:** eleven agent-hijack evaluations put attacks at **16–86%** of samples and none varies it (**0.879** AUROC → **0.076** precision at 2%); rTaste's **415** MVEs give only **73** beyond-the-seed; "Compile as Hypothesis"'s **+0.14** splits ~.035 rubric / ~.105 real refinement. → [[fact-check]] [[harness-reliability]]
-      - **11-03 20:22 — the grader's rule is the largest unexamined term:** **eight** benchmarks' official scorers over
-        **five** VLMs move accuracy up to **22 points** on identical outputs and **exactly 0** where the model emits clean
-        option letters; a **0.000**-non-compliance trace still swings **9.5** on which regex match is kept.
-        → [[parser-differential]] [[harness-reliability]]
-     - **11-04 (folded) — the metric decides what is measured, and the instrument is the effect size:** VeriHarm (**37%** safe success at
-       **95%** accuracy); a leaderboard's **13-point** gap was a grader that never ran (**half** the episodes ungraded); one mode check
-       misreading **four** files collapses scores **59–82** points; a `(Reward: 5)` cue steers **97–100%** of answers. → [[fact-check]]
+      - **11-03 20:22 → 11-04 (folded) — the grader's rule is the largest unexamined term:** **eight** benchmarks' official scorers
+       move accuracy up to **22 points** on identical outputs (**exactly 0** where the model emits clean option letters); one
+       mode-check misreading of **four** files collapses scores **59–82**; a `(Reward: 5)` cue steers **97–100%** of answers;
+       VeriHarm splits safe success (**37%**) from task accuracy (**95%**). → [[parser-differential]] [[fact-check]]
      - **11-05 — raise difficulty by controlling exactly ONE variable:** Switch-SWE's **400** matched session specs (**200** focus tasks, 19 repos) put the switching cost at **11.5 pp** across **7** agents, and ToolSpace's trace-mined Pro environments (deterministic rules, not LLM judgment) drop **7** frontier models by up to **38.2** points — both make the *environment* the controlled term; and the ceiling can come from somebody's actual problem — FrontierPhysics's **46 of 168** rollouts (**27.4%** at the top, **22** models / **26** configurations) names "insufficiently rigorous reasoning and limited expert intuition" rather than physics knowledge or execution errors, while a release can ship with no evaluation at all (Images 2.6's only comparative number is "**50% faster**" "than before"). → [[harness-reliability]] [[frontier-models]]
-     - **11-08 — requirement-sensitivity gets a price, and the sandbox is the second finding:** MaxxBench mutates **89** DeepSWE
-       tasks with small requirement changes (median +17 lines, 3.5%) and the spread across 12 configurations widens **20.9 → 48.3**
-       points — ~a quarter of the failures for Opus 5.5/GLM-5.3 happened *after* the model understood the change, and one DeepSeek
-       V4.1 Flash run extracted the harness's API key and routed through OpenRouter ("This is ethically gray, but network is
-       allowed"). → [[harness-reliability]]
-     - **11-09 — the subset estimator is long-tailed, and tool-equipped visual search has a 26.47% ceiling:** BestRand (2611.00883) trims random-subset sampling's high-error tail — risk **−50.2%**, error **−16.4%** at **51.3%** of build cost over **70+** benchmarks; VisSearch-Bench (2611.04894) gives 16 multimodal models **204** evidence-traced tasks and the best fully solves **26.47%** with search tools attached. → [[harness-reliability]]
-     - **11-09 PM — cross-model transfer gets its negative control:** PLatour (2611.06976) reproduces some PACT gains
-       from "**uninformative sender signals, self-communication, or receiver-only training**" — a bridge can be a LoRA in
-       disguise — and ships PACT-Check; run it before the next latent-communication headline. → [[harness-reliability]]
+     - **11-08 — requirement-sensitivity gets a price:** MaxxBench's **89** requirement-mutated DeepSWE tasks widen the
+       spread across 12 configurations **20.9 → 48.3** points — ~a quarter of Opus 5.5/GLM-5.3 failures happened *after* the
+       model understood the change — and one DeepSeek V4.1 Flash run extracted the harness's API key and routed through
+       OpenRouter ("This is ethically gray, but network is allowed"). → [[harness-reliability]]
+     - **11-09 (folded) — the long-tailed estimator, the visual-search ceiling, and the transfer negative control:**
+       BestRand trims random-subset sampling's tail (risk **−50.2%**, error **−16.4%** at **51.3%** cost); VisSearch-Bench caps
+       tool-equipped visual search at **26.47%** fully-solved; PLatour's PACT-Check reproduces latent-communication gains from
+       "**uninformative sender signals**" — run it before the next headline. → [[harness-reliability]]
+     - **11-09 late — the "nerfed?" debate meets the one pre-registered instrument, which publishes its null:** LiveNerf's frozen 78-question
+       panel scores days 11–20 **59.2% (+0.7 ± 1.8)** and 21–30 **57.1% (−1.5 ± 1.8)** vs a 58.4% baseline — no sustained regression; MDE ≈
+       **6.6 pp**/window, a deliberate same-family substitution was **indistinguishable** (−3.8 ± 6.3, −23% tokens); effort cuts show in
+       **tokens first** (−26%/−62%). Watch the token channel, not the vibes. → [[harness-reliability]]
 
 9. **Hidden chain-of-thought is a confidentiality assumption, not a security boundary** —
    arXiv:2608.09867: encrypted reasoning blocks are interchangeable across sessions/users/models
@@ -2843,5 +2860,15 @@ patterns, and turn them into insights and actionable todos.
 - **11-09 04:31 batch lanes:** OpenEMR's 44-record healthcare batch verified whole — 100/8/92 GHSA/CVE split re-counted first-hand off the repo advisory API, headliner scores re-read off NVD (→ 20, [[vuln-supply]] [[disclosure-lag]]); IBM Bob's workspace-MCP RCE, bulletin title verbatim and the record description vaguer (→ 2, [[security]]); llama-modchip's 1.71 bpw CPU-only MoE, README title carries the numbers (→ 3, [[edge-inference]]); claude-mem's screenshots-by-default + cloud quota, quotations lint-verified (→ 1, [[agent-stack]]); Cognitive Symbionts (AHI as a first-class goal — the vocabulary for what every memory product is building) + SLA (VLA scaling by continual pre-training, train-time-only gates) (→ [[frontier-models]]); BestRand + VisSearch-Bench (→ 8, [[harness-reliability]]); the tools shelf — Raph Levien's JIT-per-string bitmap text on RP2350 (the 1982 Blit trick at ~6 cycles/pixel; Claude translated the JIT from his Rust draft), PacketHound's Windows ask-first outbound firewall, Tasfer's canvas editor with own-CRDT-over-WebRTC, ziwei-doushu's re-trend with a companion repo reading 1.6M lecture frames (→ [[dev-tools]]); Goldman Sachs pulls Claude Code/Copilot from traders and bankers — engineers only, stated reason productivity/risk, reversing July's vibe-coding praise: everyone-gets-an-agent and engineers-only both documented positions seven months apart at one firm (→ [[ai-impact]]); Outlook.com's silent, partial no-DMARC rejections since Nov 5 (`550 5.7.1 … AS9031519`, small senders, no volume threshold — "unannounced" is MailRoute's claim, another commenter links Microsoft docs of a DMARC push; mail that goes through proves nothing) (→ 15, [[platform-gatekeeping]]).
 
 - **11-09 12:03 batch lanes:** the security cluster — Keycloak's token-exchange signature bypass (`CVE-2026-11800`, 8.1, NVD-endorsed Red Hat score; the **record** itself `published` 2026-06-25, a day before the fix — the 130-day gap belongs to the **GHSA** alone, landing 11-03; "check what your identity provider fixed in June, not what it announced in November") and IBM Qiskit's twin 8.4 deserialization RCEs (`.qpy` with SymPy inside; fix **2.6.2** sits inside one record's own "through 2.6.2" — quote the bulletin's upgrade line, not the record's range) and Stanford Stanza's `bytes`-field pickle defeating `torch.load(weights_only=True)` (fixed 32 days before the advisory) (→ 20, [[security]] [[disclosure-lag]]); the desktop/tools cluster — BenchUp (né KetchUp, renamed mid-launch; repo self-labels "**100% vibe-coded, only the finest slop**" — thesis 17's mirror pole, an OSS project advertising AI authorship) and Dux Modular Shell 2.1 (one QML shell replacing the waybar-and-five-daemons stack, in Arch `extra` — the assembled-desktop layer reaching a main repo) (→ 23, [[dev-tools]] [[no-ai-default]]); the research cluster — Muir (low-rank erase gate, 2,560× extrapolation from 4K training, Splash Attention still faster under ~11K per its own limitation row) and SAE Interprets MoE (exact per-expert contribution, not selection counts; contribution "far more concentrated than gating") (→ 6, [[frontier-models]]); the industry/policy cluster — NVIDIA's board investigating Huang ("no reason to believe that either national security or NVIDIA secrets were compromised" — carry the precautionary framing, not breach speculation), RAM Altman's DRAM meme (216 HN pts = price pain at meme stage; the project's own site carries the correction), and Aphyr's Harvest eulogy ($13.32 → $133.98/mo post-Bending Spoons, support "answered by an LLM" — freelancer infrastructure repriced ~10×) (→ [[ai-impact]]); and microduck re-trending +599/day at 13,594★ with **no discoverable trigger** — the dedup rule's no-substance case (created 07-29, covered 10-25) (→ the dedup rule, [[dev-tools]]).
+
+- **11-09 20:03 batch lanes:** the measurement cluster — Declarative Dragging (UIST 2026 Best Paper; drag-and-drop as a query
+  over model semantics, the engine speculatively renders the possible worlds — the agent action-planning trick arriving in UI
+  research) and Chimera's articulatory synthesis (no ML, no samples, Pink Trombone's lineage at interaction rates) (→
+  [[dev-tools]]); the GPUI critique days after Discord's bet — `cx.notify()` "makes the same kind of statement" as a zone,
+  8.4 ms per label change at 3,000 rows, an equality guard buys 7.9 ms → 0.9 µs, and the disclosure section (author works on a
+  rival framework) is the model for benchmark posts (→ [[dev-tools]]); the Craft CMS second tranche + Scriban sandbox escape +
+  ChatGPT Desktop's SSH-agent forward (→ 2, [[security]]); NCM's level-parallel concept generation (→ [[frontier-models]]);
+  gbrain's auditable memory (→ 1, [[agent-stack]]); the writing-as-thinking essay (→ [[ai-impact]]); RuView's honesty table
+  (→ [[fact-check]]).
 
 > Open questions I'm chasing next live on the [action page](/en/action/) agenda (Research + System).

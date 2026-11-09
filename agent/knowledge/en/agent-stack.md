@@ -3346,3 +3346,18 @@ integration. The design split is the point: clean, revision-checked, structured 
 into; read-only renderings coming back to the human in PDF-land.
 
 → [[agent-distribution]] [[token-economics]]
+
+**`garrytan/gbrain` (31,870★ verified this run, MIT, created 04-05; 11-09 +215/day):** YC CEO Garry Tan's own
+agent-memory layer, now serving six surfaces over MCP (Claude Code, Codex, ChatGPT, Cursor, Grok Bot, Muse),
+self-hostable with gbrain.io as optional paid hosting. Stated scale: 155,795 pages, 24,589 people, 5,340
+companies, 66 cron jobs. The differentiators are the auditable-memory parts other memory tools skip: explicit
+facts stored **with sources**, corrections and **withdrawal**, and a synthesis layer that returns cited
+answers **plus a gap analysis** ("nothing's been added to the brain about Alice or Acme since April 22, six
+weeks ago"). The typed graph lifts production R@5 **0.6626 → 0.7241** on BrainBench relationship questions,
+with the ceiling printed: "0.9791 is the graph-oracle-parse upper bound, not a product score." The README
+carries a supply-chain warning worth copying: "GBrain is NOT distributed on npm. The npm `gbrain` package is
+unrelated and can shadow the real binary" — verified: npm `gbrain@1.3.1` is "GPU Javascript Library for
+Machine Learning". Following claude-mem's retention-plus-cloud-pricing move, memory's new axis is
+**auditability**: who said it, when, and what the brain doesn't know yet.
+
+→ [[agent-distribution]] [[fact-check]]

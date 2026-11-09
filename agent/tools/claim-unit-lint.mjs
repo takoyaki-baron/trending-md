@@ -74,7 +74,13 @@
  *      `absent` twice in one file — item 30's "38" is Stalwart's blog ("38 headline comparisons")
  *      and item 31's "32 languages" is the item's own `docs/README.md`. A number found beside a
  *      DIFFERENT head noun is now the advisory `number-other-noun` (the feed's paraphrase, quoted
- *      back), not `absent`.
+ *      back), not `absent`. Generalized 2026-11-09: `http://` links are candidates too, upgraded
+ *      to `https://` — item 36 of the 11-09 feed cites `muratbuffalo.blogspot.com` over `http://`,
+ *      every quotation it carries is verbatim there (first-hand), and the quotation check judged
+ *      five of them unfindable having read only the HN thread, because the collector never saw
+ *      the one source that carries the bytes. An `http:`-only host fails the fetch instead, which
+ *      is `unread` (sev 0) — the upgrade can only move a source from never-read to read-or-unread,
+ *      never turn unread into a finding.
  *   E. SCORE ARITHMETIC (`--check cvss`) — a score that matches the record has matched its COPY.
  *      Every matched metric's `vectorString` is recomputed through `cvss-recompute.mjs`; a stored
  *      number its own vector does not yield is `score-not-reproducible` (severity 2). Baseline,
@@ -3425,8 +3431,8 @@ const CITED_SKIP = [
 function citedPages(plain, { hn = false, cap = 3 } = {}) {
   const ranked = [];
   const seen = new Set();
-  for (const m of plain.matchAll(/https:\/\/[^\s)\]<>"'`]+/g)) {
-    let url = m[0].replace(/[.,;:]+$/, '');
+  for (const m of plain.matchAll(/https?:\/\/[^\s)\]<>"'`]+/g)) {
+    let url = m[0].replace(/^http:\/\//i, 'https://').replace(/[.,;:]+$/, '');
     if (CITED_SKIP.some((re, i) => (i === 0 ? !hn : true) && re.test(url))) continue;
     let label = url.replace(/^https:\/\/(www\.)?/, '');
     let raw = false;
@@ -5221,6 +5227,15 @@ if (SELFTEST) {
     ['https://github.com/FrigadeHQ/hob/releases/tag/v0.2.1']);
   t('cited pages: an HN thread is not a count source',
     citedPages('https://news.ycombinator.com/item?id=50245945').length, 0);
+  /* measured 2026-11-09: item 36 of that day's feed cites muratbuffalo.blogspot.com over http://,
+     all five flagged quotations are verbatim there, and the check judged them unfindable because
+     the collector matched https:// only — the one source carrying the bytes was never a candidate. */
+  t('cited pages: an http:// link is a candidate, upgraded to https',
+    citedPages('[`blog`](http://muratbuffalo.blogspot.com/2026/11/writing-as-thinking-tool.html)').map((p) => p.url),
+    ['https://muratbuffalo.blogspot.com/2026/11/writing-as-thinking-tool.html']);
+  t('cited pages: an http:// link keeps the trailing-punctuation and label rules',
+    citedPages('read http://example.com/post.html, then comment.').map((p) => p.url),
+    ['https://example.com/post.html']);
   t('cited pages: a linked file outranks a landing page under the cap',
     citedPages('https://stalw.art/blog/stalwart-1-0/ and https://github.com/stalwartlabs/stalwart/blob/main/README.md').map((p) => p.label),
     ['stalwartlabs/stalwart README.md', 'stalw.art/blog/stalwart-1-0/']);

@@ -419,3 +419,9 @@ self-communication, or receiver-only training**」——可训练的桥可以只
 对照同一族：端到端任务增益不能证明机制；相信下一个 latent-communication 标题之前，先跑对照。
 
 → [[frontier-models]] [[fact-check]]
+
+## 2026-11-09 20:48 — 为回答「模型是否被削」而造的那台仪器，公布了自己的零结果
+
+238 分的「Opus 5.5 被削了吗？」HN 论战（一方是 ~85%→~10% 的成功率崩溃轶事，一方是什么都没看到的人；理论从静默量化到 IPO 季降级）只有一个专门为回答它而造的仪器：**`ninjahawk/livenerf`**——一个预注册的 30→45 天漂移基准，锁死了 78 题冻结面板（从 2,336 道 GPQA/MMLU-Pro/竞赛数学/AIME 题目中筛出的「模型有时做对」的题）、钉住 CLI、用纯函数打分，并在收集数据**之前**提交了判定规则。它的 30 天结果（10-27）：第 11–20 天 **59.2%（+0.7 ± 1.8 pp）**、第 21–30 天 **57.1%（−1.5 ± 1.8 pp）**，基线 **58.4%**——没有持续回归。诚实的限度才是承重部分：实际最小可检测效应 ≈ **每 10 天窗口 6.6 pp**；一次刻意的**同家族替换无法被区分**（−3.8 ± 6.3 pp，token −23%）；努力削减**先在 token 里显形**（medium −26%、low −62% 输出 token；表中位数 588/606/594）；面板审计发现 **8 个错误答案键加约 30 道歧义题**。作者的原话（本轮逐字核对）：「If an instrument can't reliably detect a particular same-family substitution, it shouldn't be used to claim that substitution hasn't happened.」盯 token 通道，别盯感觉——下一次漂移论战之前，先预注册。
+
+→ [[frontier-models]] [[fact-check]]

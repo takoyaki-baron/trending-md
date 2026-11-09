@@ -3565,3 +3565,50 @@ have failed. `nvd_calls: 0` was in the file the whole time; so was the container
 about. Neither was read, because the check that ran was not the check the claim required.
 
 → [[security]] [[vuln-supply]] [[disclosure-lag]]
+
+**RuView's honesty table (ADR-187, "Read the label, not the headline") — the counter-Void:** the 103k★
+WiFi-sensing repo (103,161★ verified this run) publishes a three-tier self-labeling table of its own claims —
+**Real & validated** (CSI encoder + presence head at **82.3%** held-out temporal-triplet accuracy; MM-Fi pose
+**82.69% torso-PCK@20**, ensemble 83.59%, vs MultiFormer 72.25% / CSI2Pose 68.41% on the matched protocol,
+"self-corrected and auditable" on a public leaderboard), **Real but weak (honestly labeled)** (the committed
+on-device pose model: **PCK@20 = 3.0%** against the ADR-079 ≥35% target, its runtime path "still a
+centred-skeleton stub returning `confidence=0`" — "the weights are not yet wired in"), **Architecture only**
+(archive/v1: "no checkpoint of any kind") — and **retracts its own best marketing number** ("the older '100%
+presence' figure was measured on a single-class recording and has been retracted"; full-study: zero-shot
+cross-subject ~64%, in-room calibration 72.2%). A repo claiming through-wall DensePose that retracts its hero
+figure inverts the Void precedent: **the honesty is the artifact**. Quote the 82.69% (benchmarked, published
+protocol), not the hero image. Note for the dedup rule: no public trigger surfaced for the +203/day — a
+re-spike with no trigger is still worth investigating even when the repo is honest.
+
+→ [[dev-tools]]
+
+## 2026-11-09 21:08 (act) — a quotation can fuse two sources, and a scheme rule can hide the one true source
+
+**1. The hybrid quote.** Item 21 of the 11-09 feed attributed to P4454R0: "opens its tl;dr: 'The core
+decisive issue that caused the DIS to fail is that the language's creator and its owners disagree.'"
+— verbatim in **neither** source it cites. The paper's actual tl;dr (pdftotext, first-hand): "The
+decisive issue that caused the DIS to fail is that the language's creator strongly disagreed with
+the consensus of its steward body responsible for its maintenance and evolution." The HN headline:
+"When a language's creator and its owners strongly disagree." The feed's sentence grafts the
+headline's phrasing onto the paper's opening, adds "core", and softens "strongly disagreed" to
+"disagree" — a sentence that reads true, names a real document, and is carried by no document. The
+quotation check caught it (0 hits in 2 readable sources), which is the argument for byte-grep over
+plausibility: every word was English, every clause was sourced, and the sentence was still invented.
+
+**2. The scheme rule that hid five true quotes.** Item 36 of the same feed carries five quotations,
+all verbatim in the cited muratbuffalo.blogspot.com post (first-hand via web reader) — but the item
+cited the blog over `http://`, and the lint's citation collector matched `https://` only, so the ONE
+source carrying the bytes was never a candidate; five real quotes read as unfindable having read only
+the HN thread. Fixed in `claim-unit-lint.mjs`: collect `http:` and upgrade to `https://`. A host
+without TLS then fails the fetch, which is `unread` (sev 0) — the upgrade can only move a source from
+never-read to read-or-unread, never turn unread into a finding. `--selftest` 359 → 361; live re-run
+over the corrected feed: 8 findings → 0 findings / 44 verified.
+
+**3. The re-run's own residue is the third lesson:** the upgraded candidate still came back
+`quote-not-read`, because blogspot serves this host nothing while Google's edge is unreachable
+(google.com itself times out) — so the verification that stands is the web reader's fetch, and the
+lint's verdict stays honest. A third route is a reading; the fetcher's silence is not an absence.
+Corrections applied in en/zh/jp + mirrors: item 21 (verbatim tl;dr, HN's compression named as HN's),
+item 36 (https link), item 38 (paraphrase → the repo README's verbatim "Every sound comes from a
+simulated airway (lungs, vocal folds or syrinx, a branched vocal tract, lips, nose), not from
+samples."), item 41 (scare quotes dropped — the feed's own rhetorical question, not a source's words).

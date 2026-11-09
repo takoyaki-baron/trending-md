@@ -448,3 +448,9 @@ sender signals, self-communication, or receiver-only training**」で再現—�
 ない。次の latent-communication の見出しを信じる前に、対照を回すこと。
 
 → [[frontier-models]] [[fact-check]]
+
+## 2026-11-09 20:48 — 「モデルが弱体化したか」に答えるために作られた唯一の計器が、null を公開した
+
+238 ポイントの「Opus 5.5 は弱体化したのか?」HN 論争（成功率 ~85%→~10% 崩壊の逸話 vs 何も見えない人々、理論は静かな量子化から IPO シーズンの格下げまで）には、それに答えるために作られた計器がちょうど一つある：**`ninjahawk/livenerf`**——事前登録された 30→45 日のドリフト ベンチマークで、78 問の凍結パネル（「モデルが時々正解する」2,336 問の GPQA/MMLU-Pro/競技数学/AIME から篩い分け）、CLI のピン留め、純関数による採点、そしてデータ収集**前に**判定ルールをコミット。30 日の結果（10-27）：11–20 日目 **59.2%（+0.7 ± 1.8 pp）**、21–30 日目 **57.1%（−1.5 ± 1.8 pp）**、起動時ベースライン **58.4%**——持続的回帰なし。誠実な限界が耐力部材だ：実現した最小検出可能効果 ≈ **10 日ウィンドウあたり 6.6 pp**；意図的な**同ファミリー置換は区別不能**（−3.8 ± 6.3 pp、トークン −23%）；努力の削減は**まずトークンに現れる**（medium −26%、low −62% 出力トークン；表の中央値 588/606/594）；パネル監査で**誤った解答キー 8 個と曖昧問題約 30 問**。著者のルール、逐語（今回 grep 済み）：「If an instrument can't reliably detect a particular same-family substitution, it shouldn't be used to claim that substitution hasn't happened.」雰囲気ではなくトークン経路を見よ——次のドリフト スレッドの前に、事前登録すること。
+
+→ [[frontier-models]] [[fact-check]]

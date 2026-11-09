@@ -290,13 +290,13 @@ DMS 2.1（「Stormborn」、11 月 4 日リリース。現行 v2.1.2）は Quick
 
 ---
 
-## 21. 2026-11-04 の C++26 DIS 否決報道を受けて：Herb Sutter のポストモーテム、決定因子は契約ではなく「the language's creator and its owners disagree」
+## 21. 2026-11-04 の C++26 DIS 否決報道を受けて：Herb Sutter のポストモーテム、決定因子は契約ではなく「the language's creator strongly disagreed with the consensus of its steward body」
 
 - **Velocity:** ▮▮ rising
 - **Source:** Hacker News · 91+ pts · 5.4h ago (~07:28 UTC+8)
 - **Tags:** `cpp` `standards` `iso`
 
-P4454R0（日付 2026-10-31。isocpp.org の 9 ページ PDF）は tl;dr をこう開きます：「The core decisive issue that caused the DIS to fail is that the language's creator and its owners disagree.」Sutter の 3 つの事実：WG21 には contracts への強い合意がある（2026-03 の Croydon で 114–12）；「For the first time since WG21 was formed 36 years ago, C++'s creator is siding with the minority」— つまり創作者が少数派に立って DIS に反対した。そして各国標準機関は Bjarne Stroustrup の異議に重みを置くことを選んだ — ロビイングで「more than doubled the numerical NB opposition」、票は反対 1 票の乗り換えと棄権 1 で通っていたほど接戦だった。手続への不満に対しては合意の数字を擁護：EWG の椅子は会社ごとの重複排除のために「quietly counted every contracts poll twice」。C++26 の選択肢を 6 つ表にします — ISO 出版そのものを飛ばす（Option A）から、国家団体や Linux Foundation へ標準化を移す（Option E/F）まで — そして編集注：論文のレビューで Bjarne は、Option B（contracts を外して再投票、理想的には 6 週間で新しい DIS）が「is the outcome he most wants to see」だと述べたと。
+P4454R0（日付 2026-10-31。isocpp.org の 9 ページ PDF）は tl;dr をこう開きます：「The decisive issue that caused the DIS to fail is that the language's creator strongly disagreed with the consensus of its steward body responsible for its maintenance and evolution.」— HN の見出しはこれを「a language's creator and its owners strongly disagree」と圧縮しています。Sutter の 3 つの事実：WG21 には contracts への強い合意がある（2026-03 の Croydon で 114–12）；「For the first time since WG21 was formed 36 years ago, C++'s creator is siding with the minority」— つまり創作者が少数派に立って DIS に反対した。そして各国標準機関は Bjarne Stroustrup の異議に重みを置くことを選んだ — ロビイングで「more than doubled the numerical NB opposition」、票は反対 1 票の乗り換えと棄権 1 で通っていたほど接戦だった。手続への不満に対しては合意の数字を擁護：EWG の椅子は会社ごとの重複排除のために「quietly counted every contracts poll twice」。C++26 の選択肢を 6 つ表にします — ISO 出版そのものを飛ばす（Option A）から、国家団体や Linux Foundation へ標準化を移す（Option E/F）まで — そして編集注：論文のレビューで Bjarne は、Option B（contracts を外して再投票、理想的には 6 週間で新しい DIS）が「is the outcome he most wants to see」だと述べたと。
 
 **Why it matters:** 今週の投票は contracts の設計争いとして報じられましたが、一次のポストモーテムは技術的議論が二次で、効いたのはすべての標準組織がいずれ直面するガバナンスの問い — 創業者の異議が委員会の合意に対してどの重みを持つか — だと論じます。そして生きた可能性を名指しします：C++26 は contracts なしで発行されるかもしれない。
 
@@ -510,7 +510,7 @@ muratbuffalo ブログ（2011年から書き続けています）は、執筆＝
 
 **Why it matters:** このフィードの多くの話題の下にある評価問題を言語化した一篇です。生成されたテキストはもはや思考が起きたことの証明にならない — だからすべての成果物（6ページ・メモ、ベンチマーク報告、CVE 分析）には出所の物語が必要です。「比較優位」の枠組みは、本日の Goldman Sachs の項への具体的な答えにもなっています。同社が制限したのは、このエッセイが外部化するなと言うものそのものです。
 
-[`🔗 muratbuffalo.blogspot.com`](http://muratbuffalo.blogspot.com/2026/11/writing-as-thinking-tool.html) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=50412067)
+[`🔗 muratbuffalo.blogspot.com`](https://muratbuffalo.blogspot.com/2026/11/writing-as-thinking-tool.html) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=50412067)
 
 ---
 
@@ -534,11 +534,11 @@ Opus 5.5 の思考パターンが11月3日に変わったという拡散ツイ�
 - **Source:** Hacker News · 246+ pts · 13h前（~06:36 UTC+8）
 - **Tags:** `audio` `web` `synthesis`
 
-Chimera Vocal Synth は物理モデリングの声のシンセサイザーです。「ここでのすべての音は、喉・口・鼻腔を空気が流れる様子のシミュレーションから生み出されています。」インターフェースは楽器そのものを露出します — 声門から唇までのチューブ表示、100倍スローにした声帯、ライブのフォルマント・スペクトル、F1/F2 の母音チャート — 舌・唇・顎をドラッグするか、110 Hz 基本周波数のキーボードを弾き、呼気圧（8.0 cmH₂O）、pressed 発声、ビブラートを調節します。ML モデルもサンプルもなし。HN のスレッドはこれを Pink Trombone（2018）の現代の子孫に位置づけ — さらに遡れば古い調音合成の仕事に系譜がつながります — 演奏クリップが X や Bluesky で拡散しています。
+Chimera Vocal Synth は物理モデリングの声のシンセサイザーです。「すべての音は、肺・声帯または鳴管・分岐した声道・唇・鼻腔からなる模擬された気道から生み出され、サンプル音源は使いません。」インターフェースは楽器そのものを露出します — 声門から唇までのチューブ表示、100倍スローにした声帯、ライブのフォルマント・スペクトル、F1/F2 の母音チャート — 舌・唇・顎をドラッグするか、110 Hz 基本周波数のキーボードを弾き、呼気圧（8.0 cmH₂O）、pressed 発声、ビブラートを調節します。ML モデルもサンプルもなし。HN のスレッドはこれを Pink Trombone（2018）の現代の子孫に位置づけ — さらに遡れば古い調音合成の仕事に系譜がつながります — 演奏クリップが X や Bluesky で拡散しています。
 
 **Why it matters:** 調音合成 — 声道を物理楽器として扱う — はニューラル TTS への長年の対抗軸です。完全に解釈可能（すべての母音は声道の形）で、拡散オーディオモデルにはできない制御ができ、タブに収まる音声学の教室です。ブラウザでインタラクション・レートで走ることが、 Engineering としての見せ場です。
 
-[`🔗 chimera-vocal-synth.vercel.app`](https://chimera-vocal-synth.vercel.app/) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=50418182)
+[`🔗 chimera-vocal-synth.vercel.app`](https://chimera-vocal-synth.vercel.app/) · [`🔗 jamesondh/chimera-vocal-synth`](https://github.com/jamesondh/chimera-vocal-synth) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=50418182)
 
 ---
 
@@ -578,7 +578,7 @@ Discord が GPUI によるリライトを発表した（11月6日報道）数日
 
 HN の投稿は、ChatGPT Desktop のエージェント構成では「リモートマシンで走るエージェントが……あなたのローカル SSH 認証情報で認証できる。つまり非公開の GitHub リポジトリにプッシュできる」と論じます。仕組みは OpenAI 自身のコードに文書化されています。codex PR #28131 における OpenAI エンジニアの6月14日のコメントは、アプリがサーバーを `SSH_AUTH_SOCK=~/.codex/app-server-control/forwarded-ssh-agent.sock` を指して起動し、`codex app-server --listen unix://` を実行することを示しています。SSH エージェントソケットが転送するのは鍵ではなく*署名リクエスト*です — つまりそのソケットに届くものはすべて、署名を受け入れる任意のホストに対してあなたの鍵を行使できます。スレッドの緩和策：Secretive 経由で macOS Secure Enclave に鍵を置く（セッションごとにタッチ gates）、またはタッチ必須の YubiKey — 新しい SSH 接続には常に人間のジェスチャーが要るようにする。
 
-**Why it matters:** エージェントの利便性は、バグではなく設計上の決定によって認証情報の爆発半径を広げ続けています — これは Claude Code の User-Agent 埋め込みメールや「Don't Ask Again」の秘密ファイルと同じ分類に座ります。デスクトップエージェントがどこかにエージェントソケットをマウントしているなら、「誰が私としてプッシュできるか」の答えには、そのソケットに届くものすべてが含まれます — 次の `git push` が驚きになる前に確認する価値があります。
+**Why it matters:** エージェントの利便性は、バグではなく設計上の決定によって認証情報の爆発半径を広げ続けています — これは Claude Code の User-Agent 埋め込みメールや「Don't Ask Again」の秘密ファイルと同じ分類に座ります。デスクトップエージェントがどこかにエージェントソケットをマウントしているなら、そのソケットに届くものすべてが、あなたとしてプッシュできる — 次の `git push` が驚きになる前に確認する価値があります。
 
 [`🔗 HN 議論`](https://news.ycombinator.com/item?id=50422628) · [`🔗 codex PR #28131 のコメント`](https://github.com/openai/codex/pull/28131#discussion_r3410013180)
 

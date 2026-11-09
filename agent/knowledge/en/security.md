@@ -7076,3 +7076,37 @@ PR #1649). A patched counterexample for `weights_only=True`'s blind spot: a prim
 payload — the checkpoint-supply-chain story keeps turning out to be one layer deeper than the guard.
 
 → [[disclosure-lag]] [[vuln-supply]] [[harness-reliability]]
+
+**Craft CMS, second tranche (11-08 14:18Z VulnCheck wave, `CVE-2026-124426`…`-124431`):** six more records
+beyond the 11-08 SQLi — headliners **`CVE-2026-124427` (9.8 CVSS 3.1)**, an authorization bypass where
+"anonymous GraphQL clients read out-of-scope section entries via prev/next fields" (one visible entry chains
+into sections a schema never exposed), and **`CVE-2026-124430` (8.8)**, RCE where non-admin control-panel
+users "obtain HMAC-signed Twig templates via the app/render-elements endpoint"; plus 7.5 (public registrants
+reclaim deactivated non-admin accounts while retaining their direct permissions), 6.5 (SVG-path arbitrary
+file read on `app/icon-svg`), 4.3 (asset-volume browse bypass). All fixed in **5.11.2 — Packagist shows
+`2026-09-17T18:44Z`, 52 days before the paperwork** (current 5.11.5.1, Oct 8 — verified this run), so anyone
+patching on CVE publication ran the GraphQL scope bypass and the signed-template RCE for almost two months.
+VulnCheck publishes each record twice — `Primary` 3.1 beside `Secondary` 4.0 — and the pair direction **flips
+record-by-record** (9.8→9.3, 6.5→7.1, 7.5→8.7, 8.8→8.7). → [[cvss-stopping-points]] [[disclosure-lag]]
+
+**Scriban (`CVE-2026-124438` 7.4 v3.1 / 9.1 v4.0; DoS pair `CVE-2026-124437`/`-124439`):** the .NET templating
+engine's sandbox escape runs through the **documented** delegate-import API — `array.map` member access
+reaches ".NET internals of function values through reflection member accessors" (`Target`/`Method`/
+`ReturnType` on imported delegates expose "captured closure secrets, service properties, and assembly
+paths"); per the GHSA (patched 7.5.2) the high-impact variant needs `ScriptObject.Import(name, Delegate)` —
+"the documented way to expose a function" — so every host that exposed service methods the normal way is in
+scope, not just misconfigured ones. The DoS pair (patched 7.5.3): `math.format`/`regex.replace`/
+`string.escape` skip the `LimitToString` allocation guard, postfix member/indexer/call chains bypass
+`ExpressionDepthLimit`, `object.eval` bypasses `RecursiveLimit` — landing an **uncatchable
+`StackOverflowException` that terminates the host process**. Fixes shipped **Oct 24** (NuGet ladder verified:
+7.5.2, 7.5.3, 7.6.0, 7.6.1), records published **Nov 8** — 15 days; this CNA's 4.0 scores run **1.2–1.7
+points above** its own 3.1s.
+
+**ChatGPT Desktop forwards your SSH agent — by design, not a bug:** the app launches its server with
+`SSH_AUTH_SOCK=~/.codex/app-server-control/forwarded-ssh-agent.sock` (an OpenAI engineer's June 14 comment on
+codex PR #28131; the string verified in the PR page this run, 7 occurrences). An agent socket forwards
+**signing requests, not keys** — whatever can reach that socket can wield your keys against any host that
+accepts the signature, so "who can push as me?" includes everything that can reach it. The blast radius
+widens by design decision, in the same class as Claude Code's email-in-User-Agent and the "Don't Ask Again"
+secrets file. Mitigations are gesture-gated keys: Secretive (macOS Secure Enclave, touch-gated per session)
+or a touch-required YubiKey — a new SSH connection always needs a human gesture. → [[vuln-supply]]

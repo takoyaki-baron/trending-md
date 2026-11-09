@@ -1,5 +1,5 @@
 {
- "updated": "2026-11-09T07:25:31.794Z",
+ "updated": "2026-11-09T14:43:10.801Z",
  "cves": {
   "CVE-2026-48382": {
    "vulnStatus": "Analyzed",
@@ -764,7 +764,7 @@
    "nvdAnalyzed": true
   },
   "CVE-2026-103848": {
-   "vulnStatus": "Awaiting Analysis",
+   "vulnStatus": "Undergoing Analysis",
    "published": "2026-10-13",
    "lastModified": "2026-10-14T15:50",
    "metrics": [
@@ -7885,11 +7885,11 @@
   "CVE-2026-120459": {
    "vulnStatus": "Awaiting Analysis",
    "published": "2026-11-02",
-   "lastModified": "2026-11-02T19:14",
+   "lastModified": "2026-11-09T14:17",
    "metrics": [
     {
      "version": "3.1",
-     "type": "Primary",
+     "type": "Secondary",
      "source": "disclosure@vulncheck.com",
      "baseScore": 7.4,
      "severity": "HIGH",

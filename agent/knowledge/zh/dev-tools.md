@@ -1086,3 +1086,11 @@ contracts 出厂是活的可能性。
 ——没有 HN 帖、没有报道、除连续 daemon 构建外毫无新东西；已记录仓库的纯 star 漂移。引用其速度前先查动因。
 
 → [[no-ai-default]] [[fact-check]] [[frontier-models]]
+
+**A Critique of GPUI（blog.zortax.de，117 HN 分——Discord 押注桌面版框架数天后的实测反驳）：**论点是 GPUI 的状态模型回答不了「一个值变化时，什么会运行？」——`cx.notify()`「指名一个实体，但最终它做的陈述与 zone 同类」。基准（i9-13900K、Vulkan、三次取中位）：3,000 活跃行、每行缓存视图时，改一个标签花 **8.4 ms**、每 1,000 行涨约 3 ms；手写相等守卫把相等写入从 **7.9 ms 降到 0.9 µs**；gpui-fast 分叉 8.4 → **3.4 ms**——仍是整树遍历；Elm/Iced 每次改标签重建 **39,023 个 widget**（7.3 ms）；egui 在 3,000 行每次编辑约 32 ms；Zed 自己的留存实验测得「日常负载比关掉慢 1–3%」。披露节是基准类文章的范本：作者把 GPUI 的 Linux 渲染器移植到 wgpu、自己搭了 harness、且在一个竞争信号框架（zgui，0.69 ms）上工作——「it is my framework and was tuned on this harness, so take these numbers with a grain of salt」。核心取舍真实存在：保留朴素 `render` API 就按视图付费，或者手搓信号图并丢掉你选框架时想要的简单。
+
+**Chimera（chimera-vocal-synth.vercel.app，246 HN 分）：**浏览器标签页里的发音合成——「Every sound here is produced by simulating air moving through a throat, mouth and nose」。从声门到嘴唇的管道视图、放慢 100× 的声带、实时共振峰频谱、F1/F2 元音图、以 cmH₂O 计的气压；**无 ML 模型、无采样**；Pink Trombone（2018）的血脉以交互速率运行。对神经 TTS 的常设反例：完全可解释（每个元音就是一段声道形状），也是标签页里的一间语音学教室。
+
+**Declarative Dragging（UIST 2026 最佳论文；Horowitz、Blinn & Heer）：**把拖拽做成对模型语义的查询——「与其直接编写所有视觉行为，你只需为每个想让它可拖拽的元素声明：拖动它应该通向应用的哪些未来状态」。引擎（**Dragology**，SVG/web）推测性地渲染这些状态到视图树、提取被拖元素在每个渲染中的落点、再从这些可能世界合成交互——不需要手写的落点区几何；可组合的修饰器叠加浮动/吸附/过渡。对可能状态的推测性渲染正是 agent 做动作规划的同一个技巧，从研究侧进入 UI 代码。论文之后：Hazel 重构变得可拖拽；作者的数学游戏在游戏手柄上转 3D。
+
+→ [[no-ai-default]] [[frontier-models]]

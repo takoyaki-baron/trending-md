@@ -2527,3 +2527,7 @@ Papers-with-Code 統合。設計の分担が要点：モデルにはきれいで
 PDF の世界に読み取り専用の描画を返す。
 
 → [[agent-distribution]] [[token-economics]]
+
+**`garrytan/gbrain`（今回確認 31,870★、MIT、04-05 作成；11-09 +215/日）：**YC CEO Garry Tan 自身のエージェント メモリ層、MCP 経由で六つのサーフェスに供給（Claude Code、Codex、ChatGPT、Cursor、Grok Bot、Muse）、自己ホスト可能、gbrain.io がオプションの有料ホスティング。自己申告の規模：155,795 ページ、24,589 人、5,340 社、66 の cron ジョブ。差別化は他のメモリ ツールが飛ばす監査可能メモリの部分：明示的事実を**出典つき**で保存、修正と**撤回**を支援、そして合成層が引用つき回答に**加えてギャップ分析**を返す（「Alice や Acme については 4 月 22 日から六週間、脳に何も追加されていない」）。型付きグラフは BrainBench の関係質問で本番 R@5 を **0.6626 → 0.7241** に上げ、天井を印刷した状態で：「0.9791 は graph-oracle-parse の上限であり、製品スコアではない」。README は転写すべきサプライ チェーン警告を運ぶ：「GBrain is NOT distributed on npm. The npm `gbrain` package is unrelated and can shadow the real binary」——確認済み：npm `gbrain@1.3.1` は「GPU Javascript Library for Machine Learning」。claude-mem の保持＋クラウド価格設定に続き、メモリの新しい軸は**監査可能性**：誰が言ったか、いつ、脳がまだ何を知らないか。
+
+→ [[agent-distribution]] [[fact-check]]

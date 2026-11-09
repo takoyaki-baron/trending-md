@@ -2219,3 +2219,7 @@ API，服务端状态下「**only a verifier session can mark a goal done**」�
 修订受检的上下文去写；只读渲染送回身处 PDF 世界的人。
 
 → [[agent-distribution]] [[token-economics]]
+
+**`garrytan/gbrain`（本轮核实 31,870★，MIT，建于 04-05；11-09 +215/天）：**YC CEO Garry Tan 自己的 agent 记忆层，经 MCP 服务六个表面（Claude Code、Codex、ChatGPT、Cursor、Grok Bot、Muse），可自托管，gbrain.io 为可选付费托管。自报规模：155,795 页、24,589 人、5,340 家公司、66 个 cron 任务。差异点正是其他记忆工具跳过的可审计记忆部件：显式事实**连同来源**存储、支持更正与**撤回**、综合层在引用式答案之外**附带缺口分析**（「关于 Alice 或 Acme，大脑自 4 月 22 日起六周没有新增」）。类型化图把生产 R@5 从 **0.6626 提到 0.7241**（BrainBench 关系问题），且天花板印在纸面上：「0.9791 是 graph-oracle-parse 上界，不是产品分数」。README 带着一条值得抄的供应链警告：「GBrain is NOT distributed on npm. The npm `gbrain` package is unrelated and can shadow the real binary」——已核实：npm `gbrain@1.3.1` 是「GPU Javascript Library for Machine Learning」。接在 claude-mem 的保留+云定价之后，记忆的新轴是**可审计性**：谁说的、何时说的、大脑还不知道什么。
+
+→ [[agent-distribution]] [[fact-check]]

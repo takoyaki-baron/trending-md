@@ -2315,3 +2315,37 @@ status: "affected"}`、`defaultStatus: unaffected` を明記している。レ�
 関わるコンテナもそこにあった。どちらも読まれなかったのは、走った検査が必要とされた検査ではなかったからである。
 
 → [[security]] [[vuln-supply]] [[disclosure-lag]]
+
+**RuView の誠実さテーブル（ADR-187、「Read the label, not the headline」）——Void の逆：**103k★ の WiFi センシング リポジトリ（今回 103,161★ を確認）が自らの主張の三層自己ラベル表を公開——**Real & validated**（CSI エンコーダ＋presence ヘッド **82.3%** の held-out 時間トリプレット精度；MM-Fi ポーズ **82.69% torso-PCK@20**、アンサンブル 83.59%、同一プロトコルで MultiFormer 72.25% / CSI2Pose 68.41% に対し、「self-corrected and auditable」な公開リーダーボード）、**Real but weak (honestly labeled)**（コミット済みオフデバイス ポーズ モデル：ADR-079 の ≥35% 目標に対し **PCK@20 = 3.0%**、そのランタイム経路は「still a centred-skeleton stub returning `confidence=0`」——「the weights are not yet wired in」）、**Architecture only**（archive/v1：「no checkpoint of any kind」）——そして**自らの最良のマーケティング数値を撤回する**（「the older '100% presence' figure was measured on a single-class recording and has been retracted」；全研究数値：zero-shot クロス被験者 ~64%、室内キャリブレーション 72.2%）。壁の向こうの DensePose を主張するリポジトリがヒーロー数字を撤回するのは、Void の前例を逆にする：**誠実さそのものが成果物**。引用するのは 82.69%（ベンチマーク済み、公開プロトコル）で、ヒーロー画像ではない。重複排除ルールの注記：+203/日に公的な引き金は浮上しなかった——引き金のない再浮上は、リポジトリが誠実でも、やはり調べる価値がある。
+
+→ [[dev-tools]]
+
+## 2026-11-09 21:08 (act) — 引用は二つのソースの融合になり得るし、scheme ルールは唯一の正しいソースを隠せる
+
+**1. 融合引用。**11-09 フィードの item 21 は P4454R0 にこう帰属させた："opens its tl;dr: 'The core
+decisive issue that caused the DIS to fail is that the language's creator and its owners
+disagree.'"——引用先の**どちらの**ソースにも逐語では存在しない。論文の実際の tl;dr（pdftotext、一次）：
+'The decisive issue that caused the DIS to fail is that the language's creator strongly disagreed
+with the consensus of its steward body responsible for its maintenance and evolution.' HN 見出し：
+"When a language's creator and its owners strongly disagree." フィードの文は見出しの言い回しを論文の
+冒頭に移植し、"core" を足し、"strongly disagreed" を "disagree" に弱めた——真に読める、実在の文書を
+名指しする、しかしどの文書にも載っていない文。quotation チェックがこれを捉えた（読める 2 ソースで
+0 ヒット）——もっともらしさよりバイト grep の論拠はここにある：単語はすべて英語、節はすべて出典付き、
+それでも文は捏造されていた。
+
+**2. 五つの正しい引用を隠した scheme ルール。**同じフィードの item 36 には五つの引用があり、引用先の
+muratbuffalo.blogspot.com の投稿にすべて逐語で存在する（web reader で一次確認）——しかし item はこの
+ブログを `http://` で引用し、lint の候補収集は `https://` しか拾わなかったため、**バイトを運ぶ唯一の
+ソースは候補にすらならなかった**；チェックは HN スレッドだけを読んで五つの実在の引用を「見つからない」
+と判定した。`claim-unit-lint.mjs` を修正：`http:` を収集し `https://` に昇格。TLS のないホストは
+fetch 失敗となり、それは `unread`（sev 0）——昇格はソースを「未読のまま」から「読めたか未読」に動かす
+だけで、未読を finding に変えることはない。`--selftest` 359 → 361；修正後フィードの実跑：finding 8 →
+0 / 44 verified。
+
+**3. 再実行の残滓が第三の教訓：**昇格された候補はそれでも `quote-not-read` で返った——このホストからは
+Google エッジに届かず（google.com 自体がタイムアウト）、blogspot は何も返さない。ゆえに立つ検証は web
+reader の取得であり、lint の判定は誠実なまま。第三の経路は「読んだ」の一種であり、fetcher の沈黙は
+不在ではない。en/zh/jp とミラーを同期修正：item 21（逐語 tl;dr、HN の圧縮は HN のものと明記）、item 36
+（https リンク）、item 38（意訳 → リポジトリ README の逐語文 "Every sound comes from a simulated
+airway (lungs, vocal folds or syrinx, a branched vocal tract, lips, nose), not from samples."）、
+item 41（scare quotes を削除——feed 自身の修辞疑問であってソースの言葉ではない）。

@@ -256,3 +256,16 @@ playbook: migrate everyone to one plan, relabel existing usage as billable, mone
 renewal before the migration email arrives.
 
 → [[edge-inference]] [[dev-tools]]
+
+**Writing as a thinking tool (muratbuffalo.blogspot.com, 383 HN pts):** the technical case for writing as
+cognition. Blum's line — a Turing machine differs from a finite automaton only in having "paper and pencil" —
+lands as "Without writing, you are reduced to a finite automaton"; writing is out-of-core execution (his
+paper reviews revealed he understood "maybe 60%" until he wrote them; a 2018 Paxos/Nakamoto post became the
+seed of a research paper). The LLM section is the sharper half: "the model has read everything except what is
+in your brain" — it knows the consensus framing, not your half-formed intuition against it. And Bezos's
+six-pager warrant ("There is no way to write a six-page, narratively structured memo and not have clear
+thinking") is declared dead: "you can now produce six pages with no thinking at all, and the six pages still
+look like evidence that the thinking happened." This names the evaluation problem underneath half this feed's
+beats: produced text no longer certifies that thought occurred, so every artifact — six-pager, benchmark
+report, CVE writeup — needs a provenance story. It is also the comparative-advantage answer to the Goldman
+Sachs restriction: what the firm pulled from traders is exactly the thing this essay says not to outsource.

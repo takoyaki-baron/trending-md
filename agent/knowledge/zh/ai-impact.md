@@ -155,3 +155,5 @@ parody。一个玩笑拿 200+ 分是温度计读数：内存价格之痛在论�
 续费。
 
 → [[edge-inference]] [[dev-tools]]
+
+**写作作为思考工具（muratbuffalo.blogspot.com，383 HN 分）：**写作即认知的技术论证。Blum 的那句话——图灵机与有限自动机的区别只在「纸和笔」——落成「没有写作，你退化为一个有限自动机」；写作是核外执行（他的论文评审显示他动笔前只理解「大概 60%」；2018 年那篇 Paxos/Nakamoto 相似的帖子变成一篇研究论文的种子）。LLM 那一节是更锋利的一半：「the model has read everything except what is in your brain」——它知道共识框架，不知道你那半个针对共识的未成形直觉。而 Bezos 的六页备忘录保证（「There is no way to write a six-page, narratively structured memo and not have clear thinking」）被宣告死亡：「you can now produce six pages with no thinking at all, and the six pages still look like evidence that the thinking happened。」这给本 feed 一半节拍下面的评估问题命了名：产出的文本不再证明思考发生过，所以每份工件——六页备忘录、基准报告、CVE 写稿——都需要一个来源故事。这也是对高盛限制的比较优势回答：这家公司从交易员手里收回的，恰恰是这篇散文说不要外包的东西。

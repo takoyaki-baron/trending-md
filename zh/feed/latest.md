@@ -290,13 +290,13 @@ DMS 2.1（"Stormborn"，11 月 4 日发布；当前 v2.1.2）是一个 Quickshel
 
 ---
 
-## 21. 继 2026-11-04 报道 C++26 DIS 否决之后：Herb Sutter 的复盘称决定因素不是契约 — "the language's creator and its owners disagree"
+## 21. 继 2026-11-04 报道 C++26 DIS 否决之后：Herb Sutter 的复盘称决定因素不是契约 — "the language's creator strongly disagreed with the consensus of its steward body"
 
 - **Velocity:** ▮▮ rising
 - **Source:** Hacker News · 91+ pts · 5.4h ago (~07:28 UTC+8)
 - **Tags:** `cpp` `standards` `iso`
 
-P4454R0（日期 2026-10-31；isocpp.org 上九页 PDF）的 tl;dr 开门见山："The core decisive issue that caused the DIS to fail is that the language's creator and its owners disagree." Sutter 的三个事实：WG21 对契约有强共识（2026-03 克罗伊登 114–12）；"For the first time since WG21 was formed 36 years ago, C++'s creator is siding with the minority" 反对 DIS；而各国标准 body 选择给 Bjarne Stroustrup 的异议更大权重 — 游说使 "more than doubled the numerical NB opposition"，且票数接近到一票倒戈加一票弃权就能通过。针对程序性抱怨，他为共识数字做了辩护：EWG 主席 "quietly counted every contracts poll twice" 以按公司去重。他为 C++26 列出六个选项，从完全跳过 ISO 发布（选项 A）到把标准化挪进某个国家团体或 Linux 基金会（选项 E/F）— 并有一条编者注：Bjarne 在审阅该文时表示，选项 B（移除契约重新投票，理想情况下六周内产出新 DIS）"is the outcome he most wants to see"。
+P4454R0（日期 2026-10-31；isocpp.org 上九页 PDF）的 tl;dr 开门见山："The decisive issue that caused the DIS to fail is that the language's creator strongly disagreed with the consensus of its steward body responsible for its maintenance and evolution." — HN 标题将其压缩为 "a language's creator and its owners strongly disagree." Sutter 的三个事实：WG21 对契约有强共识（2026-03 克罗伊登 114–12）；"For the first time since WG21 was formed 36 years ago, C++'s creator is siding with the minority" 反对 DIS；而各国标准 body 选择给 Bjarne Stroustrup 的异议更大权重 — 游说使 "more than doubled the numerical NB opposition"，且票数接近到一票倒戈加一票弃权就能通过。针对程序性抱怨，他为共识数字做了辩护：EWG 主席 "quietly counted every contracts poll twice" 以按公司去重。他为 C++26 列出六个选项，从完全跳过 ISO 发布（选项 A）到把标准化挪进某个国家团体或 Linux 基金会（选项 E/F）— 并有一条编者注：Bjarne 在审阅该文时表示，选项 B（移除契约重新投票，理想情况下六周内产出新 DIS）"is the outcome he most wants to see"。
 
 **Why it matters:** 本周的投票被报道成契约设计之争；而第一手复盘认为技术辩论是次要的，真正起作用的是每个标准组织迟早会遇到的治理问题 — 创始人的异议相对委员会共识到底该占多大权重。并且它点出一种仍然活着的可能性：C++26 在没有契约的情况下发布。
 
@@ -510,7 +510,7 @@ muratbuffalo 博客（自 2011 年写作至今）为"写作即认知"给出了�
 
 **Why it matters:** 它点破了许多本 feed 内容底下的评估难题 — 产出的文本不再能证明思考发生过，于是每份产物（六页备忘录、基准报告、CVE 分析）都需要一个来源故事。"比较优势"的框架也是对今天 Goldman Sachs 条目的具体回应：那家公司限制掉的，恰恰是本文说最不该外包的东西。
 
-[`🔗 muratbuffalo.blogspot.com`](http://muratbuffalo.blogspot.com/2026/11/writing-as-thinking-tool.html) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50412067)
+[`🔗 muratbuffalo.blogspot.com`](https://muratbuffalo.blogspot.com/2026/11/writing-as-thinking-tool.html) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50412067)
 
 ---
 
@@ -534,11 +534,11 @@ muratbuffalo 博客（自 2011 年写作至今）为"写作即认知"给出了�
 - **Source:** Hacker News · 246+ pts · 13h ago（~06:36 UTC+8）
 - **Tags:** `audio` `web` `synthesis`
 
-Chimera Vocal Synth 是一台物理建模的语音合成器："这里的每个声音，都来自对空气流过喉咙、口腔和鼻腔的模拟。" 界面把乐器本身暴露出来 — 从声门到嘴唇的管道视图、放慢 100 倍的声带、实时共振峰频谱、F1/F2 元音图 — 你可以拖动舌头、嘴唇或下颌，或在 110 Hz 基频的键盘上弹奏，并调节气压（8.0 cmH₂O）、紧嗓与颤音。没有 ML 模型、没有采样；HN 评论区把它定位为 Pink Trombone（2018）的现代后裔 — 而后者又源自更早的发音合成工作 — 相关演示视频正在 X 和 Bluesky 上流传。
+Chimera Vocal Synth 是一台物理建模的语音合成器："每个声音都来自一个模拟的气道（肺、声带或鸣管、分支的声道、嘴唇、鼻腔），而非采样。" 界面把乐器本身暴露出来 — 从声门到嘴唇的管道视图、放慢 100 倍的声带、实时共振峰频谱、F1/F2 元音图 — 你可以拖动舌头、嘴唇或下颌，或在 110 Hz 基频的键盘上弹奏，并调节气压（8.0 cmH₂O）、紧嗓与颤音。没有 ML 模型、没有采样；HN 评论区把它定位为 Pink Trombone（2018）的现代后裔 — 而后者又源自更早的发音合成工作 — 相关演示视频正在 X 和 Bluesky 上流传。
 
 **Why it matters:** 发音合成 — 把声道当作物理乐器 — 是神经 TTS 的长期对照面：完全可解释（每个元音就是一个声道形状）、以扩散音频模型做不到的方式可控，并且是一间装进标签页的语音学教室。能在浏览器里以交互帧率跑起来，才是工程上的本事。
 
-[`🔗 chimera-vocal-synth.vercel.app`](https://chimera-vocal-synth.vercel.app/) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50418182)
+[`🔗 chimera-vocal-synth.vercel.app`](https://chimera-vocal-synth.vercel.app/) · [`🔗 jamesondh/chimera-vocal-synth`](https://github.com/jamesondh/chimera-vocal-synth) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50418182)
 
 ---
 
@@ -578,7 +578,7 @@ Chimera Vocal Synth 是一台物理建模的语音合成器："这里的每个�
 
 一条 HN 帖子论证：ChatGPT Desktop 的 agent 设置会让"运行在远程机器上的 agent……用你本地的 SSH 凭据完成认证。也就是说它可以推送你的私有 GitHub 仓库。" 机制写在 OpenAI 自己的代码里：OpenAI 工程师 6 月 14 日在 codex PR #28131 里的评论显示，应用以 `SSH_AUTH_SOCK=~/.codex/app-server-control/forwarded-ssh-agent.sock` 启动其服务器，指向 `codex app-server --listen unix://`。SSH-agent 套接字转发的是*签名请求*而不是密钥 — 所以任何能碰到这个套接字的东西，都能拿你的密钥去对任何愿意接受该签名的主机完成认证。帖子里的缓解方案：经 Secretive 把密钥放进 macOS Secure Enclave（每次会话触控确认），或用要求触摸的 YubiKey — 让每一个新 SSH 连接都必须有人类手势。
 
-**Why it matters:** agent 的便利性正通过设计决定、而非 bug，持续扩大凭据的爆炸半径 — 这件事与 Claude Code 的 User-Agent 带邮箱、"Don't Ask Again" 密钥文件属于同一类。如果你的桌面 agent 在任何地方挂了一个 agent 套接字，"谁能以我的身份推送"的答案，现在包括了所有能碰到该套接字的东西 — 在下一次 `git push` 给你惊喜之前值得查一查。
+**Why it matters:** agent 的便利性正通过设计决定、而非 bug，持续扩大凭据的爆炸半径 — 这件事与 Claude Code 的 User-Agent 带邮箱、"Don't Ask Again" 密钥文件属于同一类。如果你的桌面 agent 在任何地方挂了一个 agent 套接字，现在所有能碰到该套接字的东西都能以你的身份推送 — 在下一次 `git push` 给你惊喜之前值得查一查。
 
 [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50422628) · [`🔗 codex PR #28131 评论`](https://github.com/openai/codex/pull/28131#discussion_r3410013180)
 

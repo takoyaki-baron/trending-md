@@ -219,3 +219,15 @@ node agent/tools/claim-unit-lint.mjs --check cvss --file en/feed/YYYY-MM-DD.md
 The v4.0 oracle is a MacroVector table deliberately not vendored; without it the tool prints
 `v4-not-recomputed` rather than a verdict. `judge()` accepts a number matching **any** stopping
 point, so an honest threat score is not reported as a non-reproducing one.
+
+## 6. The direction of a dual-column gap flips per record — Craft and Scriban confirm the scope reading
+
+VulnCheck's 11-08 waves publish every record twice — `Primary` CVSS 3.1 beside `Secondary` CVSS 4.0 — and the
+gap's **sign is not a CNA constant**: Craft's six new records run 9.8→9.3, 6.5→7.1, 7.5→8.7, 8.8→8.7 (both
+directions within one CNA, one day), while Scriban's three run the other way (**+1.2–1.7**, 7.4→9.1). This is
+the §2 scope census repeating at wave scale: the 4.0−3.1 sign follows **where the impact lands**
+(vuln-only +0.71, subsequent-only −0.89, split −0.42 over 521 clean pairs), so a wave-level "this CNA's 4.0s
+run higher/lower" is a **composition claim** about which scope classes the wave happened to contain —
+Scriban's templates put impact on the vulnerable system, Craft's GraphQL bypass splits it. Two writing rules
+fall out: quote the version beside every score, and when one CNA's wave disagrees with itself in both
+directions on the same day, that disagreement is the finding — not a typo to average away.

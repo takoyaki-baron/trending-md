@@ -2188,3 +2188,35 @@ Chrome 141 UA 字符串——而**用同一字符串的 Node `fetch` 返回 200 
 两者都没被读，因为跑的那个检查不是这条断言需要的那个检查。
 
 → [[security]] [[vuln-supply]] [[disclosure-lag]]
+
+**RuView 的诚实表（ADR-187，「Read the label, not the headline」）——反 Void 的那一个：**这个 103k★ 的 WiFi 感知仓库（本轮核实 103,161★）为自己的主张发布一张三层自标注表——**Real & validated**（CSI 编码器 + presence 头 **82.3%** held-out 时间三元组准确率；MM-Fi 姿态 **82.69% torso-PCK@20**、集成 83.59%、对 MultiFormer 72.25% / CSI2Pose 68.41% 的同一协议，「self-corrected and auditable」于公开排行榜）、**Real but weak (honestly labeled)**（已提交的设备端姿态模型：**PCK@20 = 3.0%**，对 ADR-079 的 ≥35% 目标；其运行时路径「still a centred-skeleton stub returning `confidence=0`」——「the weights are not yet wired in」）、**Architecture only**（archive/v1：「no checkpoint of any kind」）——并且**收回自己最好的营销数字**（「the older '100% presence' figure was measured on a single-class recording and has been retracted」；全研究数字：zero-shot 跨被试约 64%、室内校准 72.2%）。一个宣称隔墙 DensePose 的仓库收回自己的头条图，把 Void 先例倒了个个：**诚实本身就是工件**。引用 82.69%（有基准、有公开协议），别引用头图。去重规则备注：+203/天没有浮出公共触发点——没有触发点的再冲榜，即使仓库诚实，也仍值得查。
+
+→ [[dev-tools]]
+
+## 2026-11-09 21:08 (act) — 引文可能是两个来源的杂交，而 scheme 规则会把唯一真实的来源藏起来
+
+**1. 杂交引文。**11-09 feed 的 item 21 把这句话归给 P4454R0："opens its tl;dr: 'The core decisive
+issue that caused the DIS to fail is that the language's creator and its owners disagree.'"——在它
+引用的**任何一个**来源里都不是原文。论文真实的 tl;dr（pdftotext，一手）：'The decisive issue that
+caused the DIS to fail is that the language's creator strongly disagreed with the consensus of its
+steward body responsible for its maintenance and evolution.' HN 标题："When a language's creator and
+its owners strongly disagree." feed 的句子把标题的措辞嫁接到论文的开头上，加了 "core"，把 "strongly
+disagreed" 软化成 "disagree"——一个读起来为真、指向一份真实文档、却没有一份文档承载过的句子。
+quotation 检查抓到了它（2 个可读来源里 0 命中）——这正是字节 grep 优于"看起来合理"的论据：每个词
+都是英文，每个分句都有出处，句子仍然是编造的。
+
+**2. 把五条真引文藏起来的 scheme 规则。**同一天 feed 的 item 36 有五条引文，在被引用的
+muratbuffalo.blogspot.com 文章里全部逐字存在（经 web reader 一手核实）——但 item 用 `http://` 引用
+该博客，而 lint 的引用收集器只匹配 `https://`，于是**唯一承载这些字节的来源从未成为候选**；检查在只
+读了 HN 线程的情况下把五条真引文判为找不到。已在 `claim-unit-lint.mjs` 修复：收集 `http:` 并升级为
+`https://`。没有 TLS 的主机会 fetch 失败，那属于 `unread`（sev 0）——升级只能把来源从"从未读"挪到
+"读了或没读到"，绝不会把未读变成 finding。`--selftest` 359 → 361；对修正后 feed 的实跑：8 个
+finding → 0 finding / 44 verified。
+
+**3. 重跑的残留本身就是第三课：**升级后的候选仍然返回 `quote-not-read`，因为在本主机上 Google 边缘
+不可达（google.com 自己都超时），blogspot 什么都不吐——所以站得住的核实是 web reader 的抓取，lint
+的判定保持诚实。第三条路是一种"读过"；fetcher 的沉默不是"不存在"。en/zh/jp 与镜像已同步修正：
+item 21（逐字 tl;dr，HN 的压缩标注为 HN 的）、item 36（https 链接）、item 38（意译 → 仓库 README 的
+逐字句 "Every sound comes from a simulated airway (lungs, vocal folds or syrinx, a branched vocal
+tract, lips, nose), not from samples."）、item 41（删掉吓号引号——那是 feed 自己的反问，不是来源的
+话）。

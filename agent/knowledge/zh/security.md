@@ -4411,3 +4411,9 @@ PBKDF2-SHA512 口令哈希、PIN 哈希、推送 token 与 PII。可复用形状
 原语类型携带序列化载荷——checkpoint 供应链的故事总比防护深一层。
 
 → [[disclosure-lag]] [[vuln-supply]] [[harness-reliability]]
+
+**Craft CMS 第二批（11-08 14:18Z VulnCheck 浪潮，`CVE-2026-124426`…`-124431`）：**11-08 SQLi 之外又六条——头条是 **`CVE-2026-124427`（9.8 CVSS 3.1）**：授权绕过，「匿名 GraphQL 客户端经 prev/next 字段读到范围外的 section 条目」（一条可见条目链进 schema 从未暴露的 section），与 **`CVE-2026-124430`（8.8）**：非管理员控制面板用户「经 app/render-elements 端点取得 HMAC 签名的 Twig 模板」实现 RCE；另有 7.5（公开注册者收回停用的非管理员账号且保留其直接权限）、6.5（`app/icon-svg` 上 SVG 路径任意文件读）、4.3（资产卷浏览绕过）。全部修复于 **5.11.2——Packagist 显示 `2026-09-17T18:44Z`、比文书早 52 天**（当前 5.11.5.1，10-08——本轮核实），按 CVE 发布日打补丁的人带着 GraphQL 范围绕过与签名模板 RCE 跑了近两个月。VulnCheck 对每条记录发布两次——`Primary` 3.1 旁边 `Secondary` 4.0——而且成对方向**逐条翻转**（9.8→9.3、6.5→7.1、7.5→8.7、8.8→8.7）。→ [[cvss-stopping-points]] [[disclosure-lag]]
+
+**Scriban（`CVE-2026-124438` 7.4 v3.1 / 9.1 v4.0；DoS 对 `CVE-2026-124437`/`-124439`）：**这个 .NET 模板引擎的沙箱逃逸走的是**有文档的**委托导入 API——`array.map` 成员访问「经反射成员访问器到达函数值的 .NET 内部」（导入委托上的 `Target`/`Method`/`ReturnType` 暴露「被捕获的闭包秘密、服务属性、程序集路径」）；按 GHSA（修复 7.5.2），高影响变体需要 `ScriptObject.Import(name, Delegate)`——「暴露函数的文档方式」——所以每个按正常方式暴露服务方法的主机都在范围内，不只是配置错误的。DoS 对（修复 7.5.3）：`math.format`/`regex.replace`/`string.escape` 跳过 `LimitToString` 分配守卫、后缀成员/索引/调用链绕过 `ExpressionDepthLimit`、`object.eval` 绕过 `RecursiveLimit`——落地一个**不可捕获的、终止宿主进程的 `StackOverflowException`**。修复 **10-24** 上线（NuGet 阶梯已核实：7.5.2、7.5.3、7.6.0、7.6.1），记录 **11-08** 发布——15 天；该 CNA 的 4.0 分比自己的 3.1 **高出 1.2–1.7 分**。
+
+**ChatGPT Desktop 转发你的 SSH agent——是设计，不是 bug：**应用以 `SSH_AUTH_SOCK=~/.codex/app-server-control/forwarded-ssh-agent.sock` 启动其服务器（OpenAI 工程师 6 月 14 日在 codex PR #28131 的评论；字符串本轮在 PR 页面核实，出现 7 次）。agent 套接字转发的是**签名请求，不是密钥**——能到达该套接字的东西，就能对任何接受签名的主体挥舞你的密钥，「谁能以我的身份 push」的答案包括一切能到达它的事物。爆炸半径因设计决策而扩大，与 Claude Code 的 User-Agent 带邮箱、「Don't Ask Again」密钥文件同类。缓解靠手势门控密钥：Secretive（macOS Secure Enclave，每会话触碰门控）或要求触碰的 YubiKey——新建 SSH 连接永远需要一次人类手势。→ [[vuln-supply]]
