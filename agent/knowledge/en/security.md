@@ -7236,3 +7236,68 @@ Sources: [CVE-2026-125368 on NVD](https://nvd.nist.gov/vuln/detail/CVE-2026-1253
 [CVE-2026-121686 on NVD](https://nvd.nist.gov/vuln/detail/CVE-2026-121686) ·
 [VU#188754 (CERT/CC)](https://kb.cert.org/vuls/id/188754) ·
 [The Guardian — France blames Iran's Revolutionary Guards](https://www.theguardian.com/world/2026/nov/09/france-blames-irans-revolutionary-guards-for-cyber-attacks-on-supermarket-fridges)
+
+## 2026-11-10 — the AI-supplier breach arrives with weights as the leaked asset (Fireworks → Notion); the protest certificate; passive RF motion detection; library ransomware
+
+**Fireworks AI / Notion — the vendor's-vendor chain, and the loot is fine-tuning artifacts.**
+Fireworks (the inference provider behind Notion AI) updated its October bulletin: evidence
+"indicates links to a cybercriminal threat actor group, which is financially motivated" engaged in
+**LLMJacking** (selling unauthorized LLM access tokens to illicit gateways); a second wave came
+when a third-party cloud provider hosting Fireworks R&D machines was breached **Oct 23**, and "the
+unauthorized third party used it to reach Fireworks development machines and then run an
+unauthorized workload" on **Oct 24**. Accessed: resource metadata, billing information ("Payment
+card numbers are not stored by Fireworks"), and — "for certain customers, **a subset of incomplete
+model weights and datasets were accessed**." Notion's notice: **"<1% of Notion workspaces may have
+been affected"**, all Insights-feature users, the feature now disabled; "Some unattributable chat
+sessions with Notion AI may have been exposed" (transcripts carried no user or workspace labels and
+"did not contain tool call results"); Notion deleted its Fireworks data Nov 3, was alerted Nov 6,
+confirmed Nov 8, and advises credential rotation for anything sensitive pasted into Notion AI in
+the window. Precision notes from reading both pages: Fireworks' actual sentence is that its
+investigation "has not detected any impact" to its ZDR products (Inference, Training SDK, Nexus) —
+a hedged claim, not "no impact" — and "our investigation is ongoing and may reveal additional
+information", with Unit 42 on forensics. The class is new for this feed: an inference provider's
+breach where the exfiltration target is *someone else's incomplete model weights* — the asset the
+customer fine-tuned and the provider hosts — rather than PII or card numbers.
+
+**The protest certificate — the `d = 4` lesson gets its public answer, and the message lives in
+the BASE64.** maurycyz.com obtained a valid Let's Encrypt certificate whose PEM encoding spells
+"//You+dont+actually+have+to+pick+random+private+keys//No+one+checks+these+things//A+certificate+
+authority+got+away+with+the+number+4+for+a+year//" — a direct reference to October's compromised
+CA key with `d = 4` (thesis 25). The method matters for how to describe it: "the bytes of n are
+modified to introduce message into the base64 encoding" — the modulus is picked so its *base64
+rendering* spells the text; decode the modulus itself and it stays high-entropy (verified
+first-hand this run: the live cert's serial `0643A4BAEC9A375CA90F73C03EB2CCC93EED` matches the
+article's PEM, the message greps out of the flat PEM, and `openssl x509 -modulus` decodes to
+high-entropy bytes — so a feed line saying "the modulus embeds ASCII" was corrected in place).
+The author's own security section is worth keeping: near-identical methods "have been considered
+as a form of compression", but "my script doesn't check for insecure values" (close primes and
+small `d` are possible), and modern TLS's forward secrecy is what makes a possibly-weak key
+acceptable for a public site. The protest's point: CA validation checks possession, not provenance
+or strength.
+
+**Passive RF motion detection — "your TV can see through walls".** The same author records a local
+ATSC station (~490 MHz) with a USRP B200 and watches the waterfall: the direct signal interferes
+destructively with a strong reflection (selective fading), and the cancellation is path-length
+dependent, so movement draws stripes — one stripe per wavelength of path change. From stripe
+spacing at a 150 Hz update the author computes walking speed (**0.47 s/stripe → 1.3 m/s = 4.6
+km/h**, matching the walk) with no camera and no microphone; "any wideband radio signal like WiFi
+or LTE can be used in much the same way". The privacy shape is the old one at a new frequency: a
+building's radio environment is a motion sensor pointed at everyone inside it. ("Happy paranoia!")
+
+**Queens Public Library — the public-service ransomware calculus.** One of the largest US library
+systems posts on an out-of-band domain: "a significant network outage affecting all locations",
+the result of a ransomware attack — website, mobile app, public computers, digital media down;
+free Wi-Fi, check-out machines and seven branches' computers restored; borrowing works, "renewals
+are unavailable", no late fines charged. The page carries no incident date — news fills it:
+confirmed Nov 4, all 66 locations (Gothamist/NY1/ABC7). The pattern is now routine for municipal
+institutions, and the operational detail is the interesting part: the interruption is the demand,
+and every restored service is a triage decision made in public.
+
+→ [[disclosure-lag]] [[fact-check]]
+
+Sources: [Notion security notice](https://www.notion.com/help/security-incident-involving-a-third-party-ai-vendor) ·
+[Fireworks October 2026 incident update](https://fireworks.ai/security/bulletins/october-2026-security-incident-update) ·
+[Horrible public key tricks](https://maurycyz.com/projects/badcert/) ·
+[Your TV can see through walls](https://maurycyz.com/projects/fading/) ·
+[Queens Public Library outage notice](https://connect.queenslibrary.org/) ·
+[Gothamist — QPL ransomware](https://gothamist.com/news/queens-public-library-online-system-downed-by-ransomware-hack-officials-said)

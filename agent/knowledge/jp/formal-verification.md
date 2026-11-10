@@ -176,3 +176,22 @@ Anthropic の **FlashProve**（2026-11-04、オープンソースの研究プロ
 このファイルの他の項目と並べて読むと、同じ規律が新しい場所に現れている：**範囲の陳述が主張をレビュー可能にする**——Lasm のビルド時のみのカーネル、NESformer の重みの外にある PPU と同じだ。「検証済み推論」が現在意味しうるものも、これで固定される——整数・貪欲・短文脈の MoE についての証明であり、提供される製品についての証明ではない。原型を出られるかを決める数字は二つ：70–95 倍の GPU 時間と、1,024 トークンの天井。文脈窓が百万単位で売られている年に。
 
 → [[frontier-models]] [[harness-reliability]] [[fact-check]]
+
+## 2026-11-10 —— エージェントが CPython を形式化：差分テストは証明の*前に*、反証は一級の出力
+
+David Andrews と Chao Zhang は Opus 5.5 エージェントを **CPython 3.15.2** に向け、その関数を行ごとに **Lean 4** へ書き直す。4 段階のゲートを通して（[記事](https://broyojo.com/python-formalization/)、[倉庫](https://github.com/Broyojo/python-formalization)、Apache-2.0）：
+
+1. **Mirror** —— エージェントが C または Python ソースに行ごとに従う Lean モデルを書く：同じ分岐順序、同じエラーメッセージ、同じ整数ラップアラウンド。各ステップは 3.15.2 ソースを引用する。
+2. **差分テスト** —— モデルと実 `python3` を生成入力上で並べて走らせ、複数シードにわたり **≥50,000 ケースで一致する**まで続ける。
+3. **証明または反証** —— 性質は全入力の上で述べられる。「a false statement is refuted with a counterexample, never weakened」。ビルドは **`sorry`、`native_decide`、新しい公理を拒否する**。
+4. **審査** —— モデルを書いていない別のエージェントがソースと照らして検査し、各性質を実インタープリタ上で走らせ、「壊れた実装もこの定理を満たせるか？」と問う——`FAITHFUL` の行だけが被覆として数えられる。
+
+10 日で（作業は 10-29 開始、倉庫は 11-02 作成）：定理と補題 **18,898**（「all checked on every build」）、Lean **613,318** 行・1,539 ファイル、対象の **26,004** 関数のうち **4,071**（15.7%）——そしてこのファイルの台帳にとって新規なのは出力の表だ：**3,834 性質が証明、588 が反例付きで反証、94 が未決**。反証された性質の責めが CPython 側にあるとき、それはバグ記録になる：3.15.2 で `REPRODUCED` を印字する再現器、行番号付きの原因、CPython トラッカーの重複検索、優先度。これまで **418 件のバグ報告**、「約 55」件は普通の Python コードからクラッシュまたはメモリ破壊可能（`StrEnum` 鍵の属性辞書での `setdefault` でセグフォ；ElementTree 要素への逆順スライス代入が一つの子を複製し別を失う）に加え、モジュールの C 版と純 Python 版が食い違う **129** 件。
+
+ここに属する理由：このゲートの問いは、このファイルが Anthropic×Theorem の脚注 6 以来追ってきた信頼の問題を逆にする。あちらでは「この定理を真実にしろ」と与えられた証明者はプログラムを書き換えられる。こちらでは*審査*ステップが同じ問いを反対側から立てる——「a valid proof about a wrong copy is the most misleading result you can get」——そして差分テストは証明の**前**に置かれ、何かを証明する前に写しが成果物の挙動に釘付けされる。OSS-Fuzz の走行が無クラッシュ（バイナリの性質）を証明したのに対し、この走行は**反証**を成果物として扱う：反例付きの偽 588 件は 588 の発見であって失敗ではない。1 年を隔てた規模の比較：123 ライブラリ / 239 エントリポイントの無クラッシュ vs 26,004 関数のうち審査 faithful 15.7%——被覆率がいま報告される数値で、その百分率は正直に小さい。
+
+→ [[fact-check]] [[frontier-models]]
+
+Sources: [Formalizing CPython](https://broyojo.com/python-formalization/) ·
+[Broyojo/python-formalization](https://github.com/Broyojo/python-formalization) ·
+[HN 議論](https://news.ycombinator.com/item?id=50435105)

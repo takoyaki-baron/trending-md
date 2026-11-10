@@ -359,3 +359,16 @@ detokenize 这些决策模型永远不碰的机械。要分开看的两个主张
 → [[system1-decision]] [[smart-routing]] [[agent-stack]] [[token-economics]]
 
 来源：[OmniJev/Flide](https://github.com/OmniJev/Flide) · [PyPI: flide](https://pypi.org/project/flide/)
+
+## 2026-11-10 —— Amazon 在真实工单流量上用 Strands Decider E4B 换掉 Sonnet 4.6：这个类第一次在大厂规模上被实测的生产替换
+
+Amazon 工程师 Carr Onstott 与 Mehul Jaiswal 把一个内部工单系统的 20 路分类（"customer escalations, capacity requests, automated alarms, security findings"）从 Bedrock 上的 Claude Sonnet 4.6 换成 **Strands Decider E4B**——Strands 团队一个月前发布的决策模型的 E4B Gemma 4 构建（"We started with the original Strands Decider 2B. On a test set of tickets, the E4B Gemma 4 build got clearly better results"），部署在 SageMaker `ml.g5.xlarge`（A10G、24 GB、常驻约 19 GiB、每次请求约 640 ms）。真实流量实测：**每张工单 $0.0005 对 $0.0222**（"about 44 times cheaper, a 98% reduction"）、**平均每次调用 897 对 4,215 ms**、**每张工单 2,010 对 6,724 tokens**、输出从 170 个 token 降到 1。
+
+可迁移的部分是部署机制。三挡 AppConfig 开关在每条消息上读取——`BEDROCK`（只跑 Sonnet）、`DUAL`（并行双跑，采用 Sonnet 的答案并与 Decider 对比）、`DECIDER`（只跑 Decider）——在真实流量上双跑："told us more than any offline eval would have"，而"going back was a 45-second config change"。提示词必须为这个类重写：生产的标签描述本身就超过 4,096-token 窗口，所以 20 个标签各自被改写成一到两句的判据，作为单个选择题的选项外加一个 "none"。
+
+这篇帖子**没有**的是准确率数字："The results showed E4B beating production Sonnet on a separate set of our tickets" 是全部的主张——没有比率、没有混淆矩阵、没有分标签的细分。诚实的意外才是承重的细节："**One thing that surprised us was that JSON key order changed the answer**"（概率偏移达 0.19，所以现在键要排序）、每个标签没有解释可用、标签目录"must not change weekly"、上下文必须装进窗口——"outside those, a decision model probably can't replace the LLM's job." 这些自述的边界与本文件对这类模型的既有画像一致：收益是在*任务层面*（一个有界分类）上测的、目录被冻结、回滚是配置。
+
+→ [[agent-stack]] [[token-economics]]
+
+Sources: [Amazon saves millions by replacing Sonnet with Strands Decider](https://strandsagents.com/blog/amazon-saves-millions-replacing-sonnet-with-strands-decider/) ·
+[HN 讨论](https://news.ycombinator.com/item?id=50436640)

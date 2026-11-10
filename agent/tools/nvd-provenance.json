@@ -1900,9 +1900,614 @@
    "seeded": "2026-11-08 [seeded by act pass] [Deferred] Secondary/disclosure@vulncheck.com, range <= 0.31.2 with no fix entry, cveawg dateUpdated 11-02T15:56Z"
   },
   {
-   "id": "CVE-2026-119050",
-   "why": "future-fix row 2/2 (act pass 11-08 12:50) — agno <= 3.1.11, no fix named anywhere and the remedy is EMPTY: PyPI newest is still 3.1.12 (10-29, 16 min pre-record), which byte-tests vulnerable (unsafe getattr, pandas.py L54/L90, re-verified 11-08); the range wrongly excludes a live vulnerable release; watch for a fix release, a range correction, or an OSV package record appearing",
-   "seeded": "2026-11-08 [seeded by act pass] [Deferred] Secondary/disclosure@vulncheck.com, cveawg dateUpdated 11-04T01:11Z, no OSV package record"
+   "id": "CVE-2026-121189",
+   "why": "2026-11-04 — Chrome 157 shipped 213 security fixes — and CISA's enrichment scored a \"Low\" at 9.6 and a \"Critical\" at 8.8",
+   "seeded": "2026-11-10 [Analyzed] 3.1 Secondary/134c704f-9b21-4f2e-91b3-4a467353bcc0 9.6 [CISA-ADP], CWE-416, published 11-03"
+  },
+  {
+   "id": "CVE-2026-121203",
+   "why": "2026-11-04 — Chrome 157 shipped 213 security fixes — and CISA's enrichment scored a \"Low\" at 9.6 and a \"Critical\" at 8.8",
+   "seeded": "2026-11-10 [Analyzed] 3.1 Secondary/134c704f-9b21-4f2e-91b3-4a467353bcc0 8.8 [CISA-ADP], CWE-416, published 11-03"
+  },
+  {
+   "id": "CVE-2026-121112",
+   "why": "2026-11-04 — Chrome 157 shipped 213 security fixes — and CISA's enrichment scored a \"Low\" at 9.6 and a \"Critical\" at 8.8",
+   "seeded": "2026-11-10 [Analyzed] 3.1 Secondary/134c704f-9b21-4f2e-91b3-4a467353bcc0 8.3 [CISA-ADP], CWE-125, published 11-03"
+  },
+  {
+   "id": "CVE-2026-100300",
+   "why": "2026-11-04 — Apache ZooKeeper shipped five CVEs in one batch — and the 8.7 that needs no login also makes the data directory permanently unbootable",
+   "seeded": "2026-11-10 [Awaiting Analysis] 4.0 Secondary/security@apache.org 8.7, CWE-755, published 11-04"
+  },
+  {
+   "id": "CVE-2026-115448",
+   "why": "2026-11-04 — Apache ZooKeeper shipped five CVEs in one batch — and the 8.7 that needs no login also makes the data directory permanently unbootable",
+   "seeded": "2026-11-10 [Awaiting Analysis] 4.0 Secondary/security@apache.org 8.7, CWE-770, published 11-04"
+  },
+  {
+   "id": "CVE-2026-100252",
+   "why": "2026-11-04 — Apache ZooKeeper shipped five CVEs in one batch — and the 8.7 that needs no login also makes the data directory permanently unbootable",
+   "seeded": "2026-11-10 [Awaiting Analysis] 4.0 Secondary/security@apache.org 8.6, CWE-863, published 11-04"
+  },
+  {
+   "id": "CVE-2026-100302",
+   "why": "2026-11-04 — Apache ZooKeeper shipped five CVEs in one batch — and the 8.7 that needs no login also makes the data directory permanently unbootable",
+   "seeded": "2026-11-10 [Awaiting Analysis] 4.0 Secondary/security@apache.org 7.1, CWE-770, published 11-04"
+  },
+  {
+   "id": "CVE-2026-100235",
+   "why": "2026-11-04 — Apache ZooKeeper shipped five CVEs in one batch — and the 8.7 that needs no login also makes the data directory permanently unbootable",
+   "seeded": "2026-11-10 [Awaiting Analysis] 4.0 Secondary/security@apache.org 6, CWE-367, published 11-04"
+  },
+  {
+   "id": "CVE-2026-59263",
+   "why": "2026-11-04 — Apache OpenOffice published ten CVEs in one minute — and scored one of them",
+   "seeded": "2026-11-10 [Analyzed] 3.1 Primary/nvd@nist.gov 5.5, 4.0 Secondary/security@apache.org 1.9, CWE-349, published 11-04"
+  },
+  {
+   "id": "CVE-2026-90624",
+   "why": "2026-11-04 — Apache OpenOffice published ten CVEs in one minute — and scored one of them",
+   "seeded": "2026-11-10 [Analyzed] 3.1 Secondary/134c704f-9b21-4f2e-91b3-4a467353bcc0 7.3 [CISA-ADP], CWE-787, published 11-04"
+  },
+  {
+   "id": "CVE-2026-90629",
+   "why": "2026-11-04 — Apache OpenOffice published ten CVEs in one minute — and scored one of them",
+   "seeded": "2026-11-10 [Analyzed] 3.1 Secondary/134c704f-9b21-4f2e-91b3-4a467353bcc0 7.3 [CISA-ADP], CWE-787, published 11-04"
+  },
+  {
+   "id": "CVE-2026-90628",
+   "why": "2026-11-04 — Apache OpenOffice published ten CVEs in one minute — and scored one of them",
+   "seeded": "2026-11-10 [Analyzed] 3.1 Secondary/134c704f-9b21-4f2e-91b3-4a467353bcc0 7.3 [CISA-ADP], CWE-121, published 11-04"
+  },
+  {
+   "id": "CVE-2026-59268",
+   "why": "2026-11-04 — Apache OpenOffice published ten CVEs in one minute — and scored one of them",
+   "seeded": "2026-11-10 [Analyzed] 3.1 Secondary/134c704f-9b21-4f2e-91b3-4a467353bcc0 7.3 [CISA-ADP], CWE-787, published 11-04"
+  },
+  {
+   "id": "CVE-2026-90627",
+   "why": "2026-11-04 — Apache OpenOffice published ten CVEs in one minute — and scored one of them",
+   "seeded": "2026-11-10 [Analyzed] 3.1 Secondary/134c704f-9b21-4f2e-91b3-4a467353bcc0 5.5 [CISA-ADP], CWE-552, published 11-04"
+  },
+  {
+   "id": "CVE-2026-90632",
+   "why": "2026-11-04 — Apache OpenOffice published ten CVEs in one minute — and scored one of them",
+   "seeded": "2026-11-10 [Modified] 3.1 Primary/nvd@nist.gov 5.5, 3.1 Secondary/134c704f-9b21-4f2e-91b3-4a467353bcc0 5.5 [CISA-ADP], CWE-552, published 11-04"
+  },
+  {
+   "id": "CVE-2026-59264",
+   "why": "2026-11-04 — Apache OpenOffice published ten CVEs in one minute — and scored one of them",
+   "seeded": "2026-11-10 [Analyzed] 3.1 Secondary/134c704f-9b21-4f2e-91b3-4a467353bcc0 7.8 [CISA-ADP], CWE-427, published 11-04"
+  },
+  {
+   "id": "CVE-2026-92188",
+   "why": "2026-11-04 — Quest Foglight's three 9.8s all say \"authentication is not required,\" all end in SYSTEM, and none names a version",
+   "seeded": "2026-11-10 [Awaiting Analysis] 3.0 Secondary/zdi-disclosures@trendmicro.com 9.8, CWE-306, published 11-04"
+  },
+  {
+   "id": "CVE-2026-92189",
+   "why": "2026-11-04 — Quest Foglight's three 9.8s all say \"authentication is not required,\" all end in SYSTEM, and none names a version",
+   "seeded": "2026-11-10 [Awaiting Analysis] 3.0 Secondary/zdi-disclosures@trendmicro.com 9.8, CWE-73, published 11-04"
+  },
+  {
+   "id": "CVE-2026-92190",
+   "why": "2026-11-04 — Quest Foglight's three 9.8s all say \"authentication is not required,\" all end in SYSTEM, and none names a version",
+   "seeded": "2026-11-10 [Awaiting Analysis] 3.0 Secondary/zdi-disclosures@trendmicro.com 9.8, CWE-502, published 11-04"
+  },
+  {
+   "id": "CVE-2026-114424",
+   "why": "2026-11-04 — SEPPmail evaluates your email address as Perl — as root, before you authenticate",
+   "seeded": "2026-11-10 [Deferred] 4.0 Secondary/vulnerability@ncsc.ch 9.2, CWE-95, published 11-04"
+  },
+  {
+   "id": "CVE-2026-114425",
+   "why": "2026-11-04 — SEPPmail evaluates your email address as Perl — as root, before you authenticate",
+   "seeded": "2026-11-10 [Deferred] 4.0 Secondary/vulnerability@ncsc.ch 9.2, CWE-73, published 11-04"
+  },
+  {
+   "id": "CVE-2026-114426",
+   "why": "2026-11-04 — SEPPmail evaluates your email address as Perl — as root, before you authenticate",
+   "seeded": "2026-11-10 [Deferred] 4.0 Secondary/vulnerability@ncsc.ch 8.7, CWE-400, published 11-04"
+  },
+  {
+   "id": "CVE-2026-114421",
+   "why": "2026-11-04 — SEPPmail evaluates your email address as Perl — as root, before you authenticate",
+   "seeded": "2026-11-10 [Deferred] 4.0 Secondary/vulnerability@ncsc.ch 8.3, CWE-640, published 11-04"
+  },
+  {
+   "id": "CVE-2026-114420",
+   "why": "2026-11-04 — SEPPmail evaluates your email address as Perl — as root, before you authenticate",
+   "seeded": "2026-11-10 [Deferred] 4.0 Secondary/vulnerability@ncsc.ch 6.9, CWE-90, published 11-04"
+  },
+  {
+   "id": "CVE-2026-109518",
+   "why": "2026-11-05 — Debian's apt would install an attacker's package — as root — after one redirect and the retry it does by default",
+   "seeded": "2026-11-10 [Received] 4.0 Secondary/security@ubuntu.com 7.7, CWE-367/CWE-62, published 11-04"
+  },
+  {
+   "id": "CVE-2026-120422",
+   "why": "2026-11-05 — Sogou's input method fetched its config over plain HTTP, so a state actor made the ad slot deliver DarkVigil",
+   "seeded": "2026-11-10 [Deferred] 4.0 Secondary/security@eset.com 8.9, published 11-04"
+  },
+  {
+   "id": "CVE-2026-121966",
+   "why": "2026-11-05 — Traefik's ForwardAuth pool shared one authenticated connection across all clients — and one advisory carries both a 8.7 and a 7.0",
+   "seeded": "2026-11-10 [Awaiting Analysis] 3.1 Secondary/disclosure@vulncheck.com 8.7, 4.0 Secondary/disclosure@vulncheck.com 7, CWE-488, published 11-04"
+  },
+  {
+   "id": "CVE-2026-122006",
+   "why": "2026-11-05 — Rails' Active Storage ran ImageMagick on attach — so an upload alone could read secret_key_base",
+   "seeded": "2026-11-10 [Received] 3.1 Secondary/cve@mitre.org 9.8, CWE-1188, published 11-04"
+  },
+  {
+   "id": "CVE-2026-107846",
+   "why": "2026-11-05 — bitcoinjs-lib accepted a forged transaction list for nine years of versions — because a duplicate Merkle node was never reported",
+   "seeded": "2026-11-10 [Received] 4.0 Secondary/security-advisories@github.com 9.3, CWE-354, published 11-04"
+  },
+  {
+   "id": "CVE-2024-27834",
+   "why": "2026-11-05 — CISA added a 5.5 Pointer Authentication bypass to KEV — 904 days after Apple fixed it",
+   "seeded": "2026-11-10 [Analyzed] 3.1 Primary/nvd@nist.gov 5.5, 3.1 Secondary/134c704f-9b21-4f2e-91b3-4a467353bcc0 5.5 [CISA-ADP], CWE-287, published 05-14"
+  },
+  {
+   "id": "CVE-2026-122302",
+   "why": "2026-11-05 — Kyverno published 21 CVE records in 3.3 seconds — seven at 9.0 or above, and the fix is 15 days older than the paperwork",
+   "seeded": "2026-11-10 [Undergoing Analysis] 3.1 Secondary/disclosure@vulncheck.com 9.8, 4.0 Secondary/disclosure@vulncheck.com 9.3, CWE-269, published 11-05"
+  },
+  {
+   "id": "CVE-2026-122323",
+   "why": "2026-11-05 — Kyverno published 21 CVE records in 3.3 seconds — seven at 9.0 or above, and the fix is 15 days older than the paperwork",
+   "seeded": "2026-11-10 [Undergoing Analysis] 3.1 Secondary/disclosure@vulncheck.com 7.5, 4.0 Secondary/disclosure@vulncheck.com 8.7, CWE-409, published 11-05"
+  },
+  {
+   "id": "CVE-2026-122317",
+   "why": "2026-11-05 — Kyverno published 21 CVE records in 3.3 seconds — seven at 9.0 or above, and the fix is 15 days older than the paperwork",
+   "seeded": "2026-11-10 [Received] 3.1 Secondary/disclosure@vulncheck.com 4.3, 4.0 Secondary/disclosure@vulncheck.com 5.3, CWE-639, published 11-05"
+  },
+  {
+   "id": "CVE-2026-122311",
+   "why": "2026-11-05 — Kyverno published 21 CVE records in 3.3 seconds — seven at 9.0 or above, and the fix is 15 days older than the paperwork",
+   "seeded": "2026-11-10 [Undergoing Analysis] 3.1 Secondary/disclosure@vulncheck.com 9.9, 4.0 Secondary/disclosure@vulncheck.com 9.4, CWE-22, published 11-05"
+  },
+  {
+   "id": "CVE-2026-122310",
+   "why": "2026-11-05 — Kyverno published 21 CVE records in 3.3 seconds — seven at 9.0 or above, and the fix is 15 days older than the paperwork",
+   "seeded": "2026-11-10 [Undergoing Analysis] 3.1 Secondary/disclosure@vulncheck.com 9.9, 4.0 Secondary/disclosure@vulncheck.com 9.4, CWE-436, published 11-05"
+  },
+  {
+   "id": "CVE-2026-122303",
+   "why": "2026-11-05 — Kyverno published 21 CVE records in 3.3 seconds — seven at 9.0 or above, and the fix is 15 days older than the paperwork",
+   "seeded": "2026-11-10 [Undergoing Analysis] 3.1 Secondary/disclosure@vulncheck.com 9.9, 4.0 Secondary/disclosure@vulncheck.com 9.4, CWE-862, published 11-05"
+  },
+  {
+   "id": "CVE-2026-122304",
+   "why": "2026-11-05 — Kyverno published 21 CVE records in 3.3 seconds — seven at 9.0 or above, and the fix is 15 days older than the paperwork",
+   "seeded": "2026-11-10 [Undergoing Analysis] 3.1 Secondary/disclosure@vulncheck.com 9.9, 4.0 Secondary/disclosure@vulncheck.com 9.4, CWE-863, published 11-05"
+  },
+  {
+   "id": "CVE-2026-54523",
+   "why": "2026-11-05 — Kyverno published 21 CVE records in 3.3 seconds — seven at 9.0 or above, and the fix is 15 days older than the paperwork",
+   "seeded": "2026-11-10 [Deferred] 3.1 Secondary/security-advisories@github.com 9.6, CWE-862, published 08-26"
+  },
+  {
+   "id": "CVE-2026-41068",
+   "why": "2026-11-05 — Kyverno published 21 CVE records in 3.3 seconds — seven at 9.0 or above, and the fix is 15 days older than the paperwork",
+   "seeded": "2026-11-10 [Analyzed] 3.1 Secondary/security-advisories@github.com 7.7, CWE-863, published 04-24"
+  },
+  {
+   "id": "CVE-2026-102895",
+   "why": "2026-11-05,2026-11-10 — GPUStack treated any loopback request as the administrator — and the advisory says it was exploited in the wild",
+   "seeded": "2026-11-10 [Analyzed] 3.1 Secondary/security-advisories@github.com 9.8, CWE-287/CWE-290/CWE-346, published 11-04"
+  },
+  {
+   "id": "CVE-2026-97693",
+   "why": "2026-11-05 — Yuxi's sandboxes could reach each other's APIs without a container escape — 9.9, fixed 110 days before the record",
+   "seeded": "2026-11-10 [Received] 3.1 Secondary/security-advisories@github.com 9.9, CWE-284/CWE-522/CWE-77, published 11-04"
+  },
+  {
+   "id": "CVE-2026-115770",
+   "why": "2026-11-05 — Pocket ID bound its email token to the user, not the address — so you could verify an address you no longer controlled",
+   "seeded": "2026-11-10 [Received] 3.1 Secondary/security-advisories@github.com 9.6, CWE-345, published 11-04"
+  },
+  {
+   "id": "CVE-2026-113780",
+   "why": "2026-11-05 — ESP-IDF's TEE trap entry wrote through the caller's stack pointer — and the 6.x fix does not exist yet",
+   "seeded": "2026-11-10 [Received] 3.1 Secondary/security-advisories@github.com 9.3, CWE-787/CWE-822, published 11-04"
+  },
+  {
+   "id": "CVE-2026-121995",
+   "why": "2026-11-06 — GDB trusts the debugger stub it connects to — four records, RHEL 6 through 10, and no fixed version named",
+   "seeded": "2026-11-10 [Awaiting Analysis] 3.1 Secondary/secalert@redhat.com 7.5, CWE-121, published 11-05"
+  },
+  {
+   "id": "CVE-2026-121996",
+   "why": "2026-11-06 — GDB trusts the debugger stub it connects to — four records, RHEL 6 through 10, and no fixed version named",
+   "seeded": "2026-11-10 [Awaiting Analysis] 3.1 Secondary/secalert@redhat.com 8.2, CWE-822, published 11-05"
+  },
+  {
+   "id": "CVE-2026-83844",
+   "why": "2026-11-06 — Windows Paint has a remote-code-execution CVE — and the record's own FAQ describes a network service Paint does not run",
+   "seeded": "2026-11-10 [Undergoing Analysis] 3.1 Primary/secure@microsoft.com 7, CWE-125, published 10-13"
+  },
+  {
+   "id": "CVE-2026-61536",
+   "why": "2026-11-06 — `banks` resolved a tool's `import_path` out of the prompt body — and the sandbox from the previous CVE was irrelevant",
+   "seeded": "2026-11-10 [Deferred] 3.1 Secondary/security-advisories@github.com 7.5, CWE-470/CWE-94, published 07-30"
+  },
+  {
+   "id": "CVE-2026-44209",
+   "why": "2026-11-06 — `banks` resolved a tool's `import_path` out of the prompt body — and the sandbox from the previous CVE was irrelevant",
+   "seeded": "2026-11-10 [Deferred] 3.1 Secondary/0b0ca135-0b70-47e7-9f44-1890c2a1c46c 7.5, 3.1 Secondary/security-advisories@github.com 7.5, CWE-1336/CWE-917, published 05-26"
+  },
+  {
+   "id": "CVE-2026-19868",
+   "why": "2026-11-07 — SonicWall SSLVPN SAML bypass lands in KEV a day after its record",
+   "seeded": "2026-11-10 [Analyzed] 3.1 Secondary/134c704f-9b21-4f2e-91b3-4a467353bcc0 7.5 [CISA-ADP], CWE-308, published 11-06"
+  },
+  {
+   "id": "CVE-2026-90436",
+   "why": "2026-11-07 — Apache Axis 1.x gets an unauthenticated RCE — fixed in July, disclosed in November, installable by no one",
+   "seeded": "2026-11-10 [Received] no CVSS published, CWE-470, published 11-06"
+  },
+  {
+   "id": "CVE-2026-123294",
+   "why": "2026-11-08 — JetBrains published 89 CVE records in two days — and its coding-agent CLI is in the list",
+   "seeded": "2026-11-10 [Awaiting Analysis] 3.1 Secondary/cve@jetbrains.com 9.6, CWE-915, published 11-06"
+  },
+  {
+   "id": "CVE-2026-123279",
+   "why": "2026-11-08 — JetBrains published 89 CVE records in two days — and its coding-agent CLI is in the list",
+   "seeded": "2026-11-10 [Undergoing Analysis] 3.1 Secondary/cve@jetbrains.com 9, CWE-863, published 11-06"
+  },
+  {
+   "id": "CVE-2026-123315",
+   "why": "2026-11-08 — JetBrains published 89 CVE records in two days — and its coding-agent CLI is in the list",
+   "seeded": "2026-11-10 [Awaiting Analysis] 3.1 Secondary/cve@jetbrains.com 7, CWE-625, published 11-06"
+  },
+  {
+   "id": "CVE-2026-123316",
+   "why": "2026-11-08 — JetBrains published 89 CVE records in two days — and its coding-agent CLI is in the list",
+   "seeded": "2026-11-10 [Awaiting Analysis] 3.1 Secondary/cve@jetbrains.com 5.5, CWE-532, published 11-06"
+  },
+  {
+   "id": "CVE-2026-120474",
+   "why": "2026-11-08 — undici ships six CVE fixes in one release — all where the redirect interceptor meets the shared cache",
+   "seeded": "2026-11-10 [Awaiting Analysis] 3.1 Secondary/ce714d77-add3-4f53-aff5-83d477b104bb 6.5, CWE-524/CWE-639, published 11-06"
+  },
+  {
+   "id": "CVE-2026-116630",
+   "why": "2026-11-08 — undici ships six CVE fixes in one release — all where the redirect interceptor meets the shared cache",
+   "seeded": "2026-11-10 [Awaiting Analysis] 3.1 Secondary/ce714d77-add3-4f53-aff5-83d477b104bb 5.9, CWE-346/CWE-524, published 11-06"
+  },
+  {
+   "id": "CVE-2026-116592",
+   "why": "2026-11-08 — undici ships six CVE fixes in one release — all where the redirect interceptor meets the shared cache",
+   "seeded": "2026-11-10 [Awaiting Analysis] 3.1 Secondary/ce714d77-add3-4f53-aff5-83d477b104bb 7.4, CWE-346/CWE-524, published 11-06"
+  },
+  {
+   "id": "CVE-2026-109829",
+   "why": "2026-11-08 — undici ships six CVE fixes in one release — all where the redirect interceptor meets the shared cache",
+   "seeded": "2026-11-10 [Analyzed] 3.1 Primary/nvd@nist.gov 9.1, 3.1 Secondary/ce714d77-add3-4f53-aff5-83d477b104bb 7.4, CWE-346/CWE-524, published 10-15"
+  },
+  {
+   "id": "CVE-2026-123783",
+   "why": "2026-11-08 — Skyvern's agent sandbox escapes through bytecode — fixed in 1.0.57 the same day, but the advisory still reads Unknown",
+   "seeded": "2026-11-10 [Deferred] 3.1 Secondary/disclosure@vulncheck.com 8.8, 4.0 Secondary/disclosure@vulncheck.com 8.7, CWE-184, published 11-06"
+  },
+  {
+   "id": "CVE-2026-123488",
+   "why": "2026-11-08 — Craft CMS 9.8: unauthenticated SQL injection in the element search endpoint",
+   "seeded": "2026-11-10 [Awaiting Analysis] 3.1 Secondary/disclosure@vulncheck.com 9.8, 4.0 Secondary/disclosure@vulncheck.com 9.3, CWE-89, published 11-06"
+  },
+  {
+   "id": "CVE-2026-123489",
+   "why": "2026-11-08 — Craft CMS 9.8: unauthenticated SQL injection in the element search endpoint",
+   "seeded": "2026-11-10 [Awaiting Analysis] 3.1 Secondary/disclosure@vulncheck.com 7.1, 4.0 Secondary/disclosure@vulncheck.com 7.1, CWE-89, published 11-06"
+  },
+  {
+   "id": "CVE-2026-123490",
+   "why": "2026-11-08 — Craft CMS 9.8: unauthenticated SQL injection in the element search endpoint",
+   "seeded": "2026-11-10 [Awaiting Analysis] 3.1 Primary/disclosure@vulncheck.com 8.8, 4.0 Secondary/disclosure@vulncheck.com 8.7, CWE-915, published 11-06"
+  },
+  {
+   "id": "CVE-2026-123491",
+   "why": "2026-11-08 — Craft CMS 9.8: unauthenticated SQL injection in the element search endpoint",
+   "seeded": "2026-11-10 [Awaiting Analysis] 3.1 Secondary/disclosure@vulncheck.com 8.2, 4.0 Secondary/disclosure@vulncheck.com 8.8, CWE-89, published 11-06"
+  },
+  {
+   "id": "CVE-2026-123595",
+   "why": "2026-11-08 — Hickory DNS, the Rust DNS stack, published 39 CVE records overnight — the fixes shipped in May and September",
+   "seeded": "2026-11-10 [Received] 3.1 Primary/disclosure@vulncheck.com 8.8, 4.0 Secondary/disclosure@vulncheck.com 8.7, CWE-345, published 11-08"
+  },
+  {
+   "id": "CVE-2026-123551",
+   "why": "2026-11-08 — OpenAM ships a 10.0: unauthenticated session-token theft over its own notification WebSocket",
+   "seeded": "2026-11-10 [Received] 3.1 Primary/disclosure@vulncheck.com 10, 4.0 Secondary/disclosure@vulncheck.com 10, CWE-201, published 11-08"
+  },
+  {
+   "id": "CVE-2026-123550",
+   "why": "2026-11-08 — OpenAM ships a 10.0: unauthenticated session-token theft over its own notification WebSocket",
+   "seeded": "2026-11-10 [Received] 3.1 Secondary/disclosure@vulncheck.com 9.8, 4.0 Secondary/disclosure@vulncheck.com 9.3, CWE-290, published 11-08"
+  },
+  {
+   "id": "CVE-2026-123549",
+   "why": "2026-11-08 — OpenAM ships a 10.0: unauthenticated session-token theft over its own notification WebSocket",
+   "seeded": "2026-11-10 [Received] 3.1 Primary/disclosure@vulncheck.com 9.8, 4.0 Secondary/disclosure@vulncheck.com 9.3, CWE-269, published 11-08"
+  },
+  {
+   "id": "CVE-2026-123614",
+   "why": "2026-11-08 — Since we covered imgproxy on 2026-11-01: the unnamed 9.8 has a CVE id now — and the GHSA still carries none",
+   "seeded": "2026-11-10 [Received] 3.1 Secondary/disclosure@vulncheck.com 9.8, 4.0 Secondary/disclosure@vulncheck.com 9.3, CWE-122, published 11-08"
+  },
+  {
+   "id": "CVE-2026-123615",
+   "why": "2026-11-08 — Since we covered imgproxy on 2026-11-01: the unnamed 9.8 has a CVE id now — and the GHSA still carries none",
+   "seeded": "2026-11-10 [Received] 3.1 Primary/disclosure@vulncheck.com 7.5, 4.0 Secondary/disclosure@vulncheck.com 8.7, CWE-787, published 11-08"
+  },
+  {
+   "id": "CVE-2026-123616",
+   "why": "2026-11-08 — Since we covered imgproxy on 2026-11-01: the unnamed 9.8 has a CVE id now — and the GHSA still carries none",
+   "seeded": "2026-11-10 [Received] 3.1 Primary/disclosure@vulncheck.com 7.5, 4.0 Secondary/disclosure@vulncheck.com 8.7, CWE-789, published 11-08"
+  },
+  {
+   "id": "CVE-2026-123609",
+   "why": "2026-11-08 — rustls publishes five CVEs — wrong-encryption-level handshakes, a key-exchange downgrade, and fixes that shipped in September and October",
+   "seeded": "2026-11-10 [Received] 3.1 Primary/disclosure@vulncheck.com 4, 4.0 Secondary/disclosure@vulncheck.com 4.1, CWE-212, published 11-08"
+  },
+  {
+   "id": "CVE-2026-123613",
+   "why": "2026-11-08 — rustls publishes five CVEs — wrong-encryption-level handshakes, a key-exchange downgrade, and fixes that shipped in September and October",
+   "seeded": "2026-11-10 [Received] 3.1 Primary/disclosure@vulncheck.com 5.3, 4.0 Secondary/disclosure@vulncheck.com 6.9, CWE-20, published 11-08"
+  },
+  {
+   "id": "CVE-2026-123611",
+   "why": "2026-11-08 — rustls publishes five CVEs — wrong-encryption-level handshakes, a key-exchange downgrade, and fixes that shipped in September and October",
+   "seeded": "2026-11-10 [Received] 3.1 Primary/disclosure@vulncheck.com 3.7, 4.0 Secondary/disclosure@vulncheck.com 6.3, CWE-757, published 11-08"
+  },
+  {
+   "id": "CVE-2026-123610",
+   "why": "2026-11-08 — rustls publishes five CVEs — wrong-encryption-level handshakes, a key-exchange downgrade, and fixes that shipped in September and October",
+   "seeded": "2026-11-10 [Received] 3.1 Secondary/disclosure@vulncheck.com 3.7, 4.0 Secondary/disclosure@vulncheck.com 6.3, CWE-770, published 11-08"
+  },
+  {
+   "id": "CVE-2026-123612",
+   "why": "2026-11-08 — rustls publishes five CVEs — wrong-encryption-level handshakes, a key-exchange downgrade, and fixes that shipped in September and October",
+   "seeded": "2026-11-10 [Received] 3.1 Primary/disclosure@vulncheck.com 2.3, 4.0 Secondary/disclosure@vulncheck.com 4.6, CWE-696, published 11-08"
+  },
+  {
+   "id": "CVE-2026-123493",
+   "why": "2026-11-08 — Vikunja publishes 39 CVE records — including prompt injection in its own coding-agent CLI, Veans",
+   "seeded": "2026-11-10 [Deferred] 3.1 Primary/disclosure@vulncheck.com 5.4, 4.0 Secondary/disclosure@vulncheck.com 5.3, CWE-613, published 11-08"
+  },
+  {
+   "id": "CVE-2026-123531",
+   "why": "2026-11-08 — Vikunja publishes 39 CVE records — including prompt injection in its own coding-agent CLI, Veans",
+   "seeded": "2026-11-10 [Deferred] 3.1 Primary/disclosure@vulncheck.com 8.8, 4.0 Secondary/disclosure@vulncheck.com 8.7, CWE-400, published 11-08"
+  },
+  {
+   "id": "CVE-2026-123520",
+   "why": "2026-11-08 — Vikunja publishes 39 CVE records — including prompt injection in its own coding-agent CLI, Veans",
+   "seeded": "2026-11-10 [Deferred] 3.1 Primary/disclosure@vulncheck.com 7.1, 4.0 Secondary/disclosure@vulncheck.com 7.1, CWE-269, published 11-08"
+  },
+  {
+   "id": "CVE-2026-123498",
+   "why": "2026-11-08 — Vikunja publishes 39 CVE records — including prompt injection in its own coding-agent CLI, Veans",
+   "seeded": "2026-11-10 [Deferred] 3.1 Secondary/disclosure@vulncheck.com 3.7, 4.0 Secondary/disclosure@vulncheck.com 2.1, published 11-08"
+  },
+  {
+   "id": "CVE-2026-123499",
+   "why": "2026-11-08 — Vikunja publishes 39 CVE records — including prompt injection in its own coding-agent CLI, Veans",
+   "seeded": "2026-11-10 [Deferred] 3.1 Primary/disclosure@vulncheck.com 5.9, 4.0 Secondary/disclosure@vulncheck.com 6, CWE-346, published 11-08"
+  },
+  {
+   "id": "CVE-2026-123534",
+   "why": "2026-11-08 — Tornado 6.6: path traversal in `static_url()` and Set-Cookie injection — records arrived 18 days after the release",
+   "seeded": "2026-11-10 [Deferred] 3.1 Secondary/disclosure@vulncheck.com 6.5, 4.0 Secondary/disclosure@vulncheck.com 8.3, CWE-22, published 11-08"
+  },
+  {
+   "id": "CVE-2026-123535",
+   "why": "2026-11-08 — Tornado 6.6: path traversal in `static_url()` and Set-Cookie injection — records arrived 18 days after the release",
+   "seeded": "2026-11-10 [Deferred] 3.1 Primary/disclosure@vulncheck.com 4.2, 4.0 Secondary/disclosure@vulncheck.com 2.3, CWE-74, published 11-08"
+  },
+  {
+   "id": "CVE-2026-123561",
+   "why": "2026-11-08 — devalue publishes 9 CVE records — prototype pollution and a sparse-array DoS family in SvelteKit's serialization layer",
+   "seeded": "2026-11-10 [Received] 3.1 Primary/disclosure@vulncheck.com 3.7, 4.0 Secondary/disclosure@vulncheck.com 6.3, CWE-1321, published 11-08"
+  },
+  {
+   "id": "CVE-2026-123562",
+   "why": "2026-11-08 — devalue publishes 9 CVE records — prototype pollution and a sparse-array DoS family in SvelteKit's serialization layer",
+   "seeded": "2026-11-10 [Received] 3.1 Secondary/disclosure@vulncheck.com 7.5, 4.0 Secondary/disclosure@vulncheck.com 8.7, CWE-248, published 11-08"
+  },
+  {
+   "id": "CVE-2026-123567",
+   "why": "2026-11-08 — devalue publishes 9 CVE records — prototype pollution and a sparse-array DoS family in SvelteKit's serialization layer",
+   "seeded": "2026-11-10 [Received] 3.1 Primary/disclosure@vulncheck.com 3.7, 4.0 Secondary/disclosure@vulncheck.com 6.3, CWE-1321, published 11-08"
+  },
+  {
+   "id": "CVE-2026-123532",
+   "why": "2026-11-08 — gitoxide: a crafted repository captures NTLM credentials at checkout — before any code runs",
+   "seeded": "2026-11-10 [Deferred] 3.1 Primary/disclosure@vulncheck.com 6.5, 4.0 Secondary/disclosure@vulncheck.com 7.1, CWE-59, published 11-08"
+  },
+  {
+   "id": "CVE-2026-123533",
+   "why": "2026-11-08 — gitoxide: a crafted repository captures NTLM credentials at checkout — before any code runs",
+   "seeded": "2026-11-10 [Deferred] 3.1 Primary/disclosure@vulncheck.com 5.5, 4.0 Secondary/disclosure@vulncheck.com 6.8, CWE-248, published 11-08"
+  },
+  {
+   "id": "CVE-2026-124469",
+   "why": "2026-11-09 — OpenEMR gets 44 CVE records in one batch — for bugs the releases fixed in August and September",
+   "seeded": "2026-11-10 [Received] 3.1 Primary/disclosure@vulncheck.com 9.9, 4.0 Secondary/disclosure@vulncheck.com 9.4, CWE-89, published 11-08"
+  },
+  {
+   "id": "CVE-2026-124450",
+   "why": "2026-11-09 — OpenEMR gets 44 CVE records in one batch — for bugs the releases fixed in August and September",
+   "seeded": "2026-11-10 [Received] 3.1 Primary/disclosure@vulncheck.com 9.9, 4.0 Secondary/disclosure@vulncheck.com 9.3, CWE-73, published 11-08"
+  },
+  {
+   "id": "CVE-2026-124445",
+   "why": "2026-11-09 — OpenEMR gets 44 CVE records in one batch — for bugs the releases fixed in August and September",
+   "seeded": "2026-11-10 [Received] 3.1 Primary/disclosure@vulncheck.com 9.8, 4.0 Secondary/disclosure@vulncheck.com 9.3, CWE-307, published 11-08"
+  },
+  {
+   "id": "CVE-2026-9764",
+   "why": "2026-11-09 — IBM Bob, IBM's coding assistant, gets an 8.8 code-injection record — via workspace-defined MCP servers",
+   "seeded": "2026-11-10 [Awaiting Analysis] 3.1 Secondary/psirt@us.ibm.com 8.8, CWE-94, published 11-08"
+  },
+  {
+   "id": "CVE-2026-6715",
+   "why": "2026-11-09 — IBM Bob, IBM's coding assistant, gets an 8.8 code-injection record — via workspace-defined MCP servers",
+   "seeded": "2026-11-10 [Awaiting Analysis] 3.1 Secondary/psirt@us.ibm.com 9.8, CWE-78, published 11-08"
+  },
+  {
+   "id": "CVE-2026-15266",
+   "why": "2026-11-09 — IBM Bob, IBM's coding assistant, gets an 8.8 code-injection record — via workspace-defined MCP servers",
+   "seeded": "2026-11-10 [Undergoing Analysis] 3.1 Secondary/psirt@us.ibm.com 9.8, CWE-78, published 11-08"
+  },
+  {
+   "id": "CVE-2026-114432",
+   "why": "2026-11-09 — Contact Form 7: a 9.8 unauthenticated file upload in the plugin behind 10 million sites — scored by CISA-ADP, fixed Oct 29",
+   "seeded": "2026-11-10 [Received] 3.1 Secondary/134c704f-9b21-4f2e-91b3-4a467353bcc0 9.8 [CISA-ADP], CWE-434, published 11-08"
+  },
+  {
+   "id": "CVE-2026-11800",
+   "why": "2026-11-09 — Keycloak's token-exchange signature bypass got its public advisory 130 days after the fix — CVE-2026-11800, 8.1",
+   "seeded": "2026-11-10 [Analyzed] 3.1 Secondary/0b0ca135-0b70-47e7-9f44-1890c2a1c46c 8.1, 3.1 Secondary/secalert@redhat.com 8.1, CWE-347/CWE-347, published 06-25"
+  },
+  {
+   "id": "CVE-2026-116499",
+   "why": "2026-11-09 — IBM Qiskit ships two 8.4s — a quantum-checkpoint deserialization RCE, and a record whose own stated range contains its fix",
+   "seeded": "2026-11-10 [Awaiting Analysis] 3.1 Secondary/psirt@us.ibm.com 8.4, CWE-502, published 11-08"
+  },
+  {
+   "id": "CVE-2026-116501",
+   "why": "2026-11-09 — IBM Qiskit ships two 8.4s — a quantum-checkpoint deserialization RCE, and a record whose own stated range contains its fix",
+   "seeded": "2026-11-10 [Awaiting Analysis] 3.1 Secondary/psirt@us.ibm.com 8.4, CWE-787, published 11-08"
+  },
+  {
+   "id": "CVE-2026-115878",
+   "why": "2026-11-09 — Stanford Stanza: a pickle smuggled in a bytes field bypasses `torch.load(weights_only=True)` — CVE-2026-115878",
+   "seeded": "2026-11-10 [Received] 3.1 Secondary/security-advisories@github.com 7.8, CWE-502/CWE-94, published 11-03"
+  },
+  {
+   "id": "CVE-2026-124426",
+   "why": "2026-11-09 — Since we covered Craft CMS's SQL injection on 2026-11-08: six more records in the same wave — a 9.8 GraphQL bypass and an 8.8 signed-templat",
+   "seeded": "2026-11-10 [Received] 3.1 Primary/disclosure@vulncheck.com 5.3, 4.0 Secondary/disclosure@vulncheck.com 6.9, CWE-862, published 11-08"
+  },
+  {
+   "id": "CVE-2026-124427",
+   "why": "2026-11-09 — Since we covered Craft CMS's SQL injection on 2026-11-08: six more records in the same wave — a 9.8 GraphQL bypass and an 8.8 signed-templat",
+   "seeded": "2026-11-10 [Received] 3.1 Primary/disclosure@vulncheck.com 9.8, 4.0 Secondary/disclosure@vulncheck.com 9.3, CWE-862, published 11-08"
+  },
+  {
+   "id": "CVE-2026-124430",
+   "why": "2026-11-09 — Since we covered Craft CMS's SQL injection on 2026-11-08: six more records in the same wave — a 9.8 GraphQL bypass and an 8.8 signed-templat",
+   "seeded": "2026-11-10 [Received] 3.1 Primary/disclosure@vulncheck.com 8.8, 4.0 Secondary/disclosure@vulncheck.com 8.7, CWE-1336, published 11-08"
+  },
+  {
+   "id": "CVE-2026-124429",
+   "why": "2026-11-09 — Since we covered Craft CMS's SQL injection on 2026-11-08: six more records in the same wave — a 9.8 GraphQL bypass and an 8.8 signed-templat",
+   "seeded": "2026-11-10 [Received] 3.1 Primary/disclosure@vulncheck.com 7.5, 4.0 Secondary/disclosure@vulncheck.com 8.7, CWE-266, published 11-08"
+  },
+  {
+   "id": "CVE-2026-124438",
+   "why": "2026-11-09 — Scriban, the embedded .NET templating engine, gets a sandbox escape and a DoS pair — all fixed October 24, records published November 8",
+   "seeded": "2026-11-10 [Received] 3.1 Primary/disclosure@vulncheck.com 7.4, 4.0 Secondary/disclosure@vulncheck.com 9.1, CWE-200, published 11-08"
+  },
+  {
+   "id": "CVE-2026-124437",
+   "why": "2026-11-09 — Scriban, the embedded .NET templating engine, gets a sandbox escape and a DoS pair — all fixed October 24, records published November 8",
+   "seeded": "2026-11-10 [Received] 3.1 Primary/disclosure@vulncheck.com 7.5, 4.0 Secondary/disclosure@vulncheck.com 8.7, CWE-400, published 11-08"
+  },
+  {
+   "id": "CVE-2026-116779",
+   "why": "2026-11-10 — CISA's KEV added three in one batch — and FreeSWITCH's 9.8 was exploited before anyone scored it",
+   "seeded": "2026-11-10 [Analyzed] 3.1 Secondary/security-advisories@github.com 9.8, CWE-749/CWE-77/CWE-78, published 11-05"
+  },
+  {
+   "id": "CVE-2026-123158",
+   "why": "2026-11-10 — CISA's KEV added three in one batch — and FreeSWITCH's 9.8 was exploited before anyone scored it",
+   "seeded": "2026-11-10 [Undergoing Analysis] 3.1 Secondary/cve@mitre.org 8.1, CWE-394, published 11-05"
+  },
+  {
+   "id": "CVE-2026-125250",
+   "why": "2026-11-10 — FFmpeg gets 121 CVE records in 62 minutes — and 114 of them say the newest release is still affected",
+   "seeded": "2026-11-10 [Received] 3.1 Primary/disclosure@vulncheck.com 7.8, 4.0 Secondary/disclosure@vulncheck.com 8.5, CWE-122, published 11-09"
+  },
+  {
+   "id": "CVE-2026-123800",
+   "why": "2026-11-10 — SuperTokens' 9.9: one app's API key can rewrite the parent tenant — and every sibling with it",
+   "seeded": "2026-11-10 [Received] 3.1 Secondary/security-advisories@github.com 9.9, CWE-639/CWE-863, published 11-09"
+  },
+  {
+   "id": "CVE-2026-123270",
+   "why": "2026-11-10 — Redpanda Connect's management API is on `0.0.0.0:4195` with no auth by default — so a POST is RCE",
+   "seeded": "2026-11-10 [Received] 3.1 Secondary/134c704f-9b21-4f2e-91b3-4a467353bcc0 9.8 [CISA-ADP], CWE-306, published 11-09"
+  },
+  {
+   "id": "CVE-2026-111421",
+   "why": "2026-11-10 — Airflow's 8.8 is an incomplete fix: upgrading to 3.3.1 does not close it",
+   "seeded": "2026-11-10 [Received] 3.1 Secondary/134c704f-9b21-4f2e-91b3-4a467353bcc0 8.8 [CISA-ADP], CWE-502, published 11-09"
+  },
+  {
+   "id": "CVE-2026-59242",
+   "why": "2026-11-10 — Airflow's 8.8 is an incomplete fix: upgrading to 3.3.1 does not close it",
+   "seeded": "2026-11-10 [Analyzed] 3.1 Secondary/134c704f-9b21-4f2e-91b3-4a467353bcc0 5.4 [CISA-ADP], CWE-502, published 08-12"
+  },
+  {
+   "id": "CVE-2026-123870",
+   "why": "2026-11-10 — otterdog skips its HMAC check when the secret is unset — the default — and then `eval()`s the webhook body",
+   "seeded": "2026-11-10 [Received] 4.0 Secondary/emo@eclipse.org 9.5, CWE-95, published 11-09"
+  },
+  {
+   "id": "CVE-2026-104620",
+   "why": "2026-11-10 — PackageKit's local 8.5: a path traversal in \"simulate the actions\" turns into root",
+   "seeded": "2026-11-10 [Received] 4.0 Secondary/meissner@suse.de 8.5, CWE-23, published 11-09"
+  },
+  {
+   "id": "CVE-2026-120017",
+   "why": "2026-11-10 — SAP's patch wave lands on NVD: 40 records overnight, four at 10.0, every score the CNA's own",
+   "seeded": "2026-11-10 [Received] 3.1 Primary/cna@sap.com 10, CWE-347, published 11-10"
+  },
+  {
+   "id": "CVE-2026-76964",
+   "why": "2026-11-10 — SAP's patch wave lands on NVD: 40 records overnight, four at 10.0, every score the CNA's own",
+   "seeded": "2026-11-10 [Received] 3.1 Primary/cna@sap.com 10, CWE-1287, published 11-10"
+  },
+  {
+   "id": "CVE-2026-89103",
+   "why": "2026-11-10 — SAP's patch wave lands on NVD: 40 records overnight, four at 10.0, every score the CNA's own",
+   "seeded": "2026-11-10 [Received] 3.1 Primary/cna@sap.com 10, CWE-863, published 11-10"
+  },
+  {
+   "id": "CVE-2026-89126",
+   "why": "2026-11-10 — SAP's patch wave lands on NVD: 40 records overnight, four at 10.0, every score the CNA's own",
+   "seeded": "2026-11-10 [Received] 3.1 Primary/cna@sap.com 10, CWE-122, published 11-10"
+  },
+  {
+   "id": "CVE-2026-121685",
+   "why": "2026-11-10 — FrodoBots EarthRover Mini+: one set of fleet-wide hard-coded credentials gates root on every rover",
+   "seeded": "2026-11-10 [Received] no CVSS published, published 11-09"
+  },
+  {
+   "id": "CVE-2026-121686",
+   "why": "2026-11-10 — FrodoBots EarthRover Mini+: one set of fleet-wide hard-coded credentials gates root on every rover",
+   "seeded": "2026-11-10 [Received] no CVSS published, published 11-09"
+  },
+  {
+   "id": "CVE-2026-125120",
+   "why": "2026-11-10 — Mongoose's sanitizeFilter has a hole: countDocuments() skips the injection defense — and the fixes are three months older than the records",
+   "seeded": "2026-11-10 [Received] 3.1 Secondary/security-advisories@github.com 9.8, CWE-943, published 11-09"
+  },
+  {
+   "id": "CVE-2026-125117",
+   "why": "2026-11-10 — Mongoose's sanitizeFilter has a hole: countDocuments() skips the injection defense — and the fixes are three months older than the records",
+   "seeded": "2026-11-10 [Received] 3.1 Secondary/security-advisories@github.com 8.2, CWE-1321, published 11-09"
+  },
+  {
+   "id": "CVE-2026-125368",
+   "why": "2026-11-10 — OmniAgent's approval gate treats every command starting with `find` as safe — and `find` has `-execdir`",
+   "seeded": "2026-11-10 [Received] 3.1 Primary/disclosure@vulncheck.com 7.5, 4.0 Secondary/disclosure@vulncheck.com 7.7, CWE-184, published 11-10"
   }
  ]
 }

@@ -394,3 +394,16 @@ State Forking"、11 月 2 日）として公開。**PyPI `flide` 0.1.10** は **
 → [[system1-decision]] [[smart-routing]] [[agent-stack]] [[token-economics]]
 
 Sources: [OmniJev/Flide](https://github.com/OmniJev/Flide) · [PyPI: flide](https://pypi.org/project/flide/)
+
+## 2026-11-10 —— Amazon がライブのチケットトラフィックで Sonnet 4.6 を Strands Decider E4B に置き換える：このクラス初の、ビッグテックスケールで実測された本番置換
+
+Amazon のエンジニア Carr Onstott と Mehul Jaiswal は、内部チケットシステムの 20 クラス分類（「customer escalations, capacity requests, automated alarms, security findings」）を Bedrock 上の Claude Sonnet 4.6 から **Strands Decider E4B** へ移した——Strands チームが 1 か月前に発売した決定モデルの E4B Gemma 4 ビルド（「We started with the original Strands Decider 2B. On a test set of tickets, the E4B Gemma 4 build got clearly better results」）で、SageMaker の `ml.g5.xlarge`（A10G、24 GB、常駐約 19 GiB、リクエストあたり約 640 ms）で提供。ライブトラフィックでの実測：**チケット $0.0005 vs $0.0222**（「about 44 times cheaper, a 98% reduction」）、**呼びあたり平均 897 vs 4,215 ms**、**チケットあたり 2,010 vs 6,724 トークン**、出力は 170 トークンから 1 へ。
+
+移転可能な部分は配備の仕組み。3 値の AppConfig スイッチをメッセージごとに読む——`BEDROCK`（Sonnet のみ）、`DUAL`（並行二重走行、Sonnet の答えを採用して Decider と比較）、`DECIDER`（Decider のみ）——実トラフィックで二重走行：「told us more than any offline eval would have」、そして「going back was a 45-second config change」。プロンプトはこのクラスのために作り直す必要があった：本番のラベル説明だけでは 4,096 トークンの窓を超えるため、20 のラベルそれぞれを 1〜2 文の判定基準として単一の選択問題の選択肢に書き直し、「none」を加えた。
+
+この記事に**無い**のは精度の数値だ：「The results showed E4B beating production Sonnet on a separate set of our tickets」が主張の全部——率も、混同行列も、ラベル別の内訳も無い。誠実な驚きが耐荷重の詳細：「**One thing that surprised us was that JSON key order changed the answer**」（確率は最大 0.19 ずれる——鍵はソートされることに）、「ラベルごとの説明は利用不可」、「ラベルカタログは must not change weekly」、文脈は窓に収めなければならない——「outside those, a decision model probably can't replace the LLM's job.」自己申告の限界は、このファイルのクラスに関する流れの絵と一致する：利得は*タスクレベル*（一つの有界分類）で測られ、カタログは凍結され、ロールバックは設定だ。
+
+→ [[agent-stack]] [[token-economics]]
+
+Sources: [Amazon saves millions by replacing Sonnet with Strands Decider](https://strandsagents.com/blog/amazon-saves-millions-replacing-sonnet-with-strands-decider/) ·
+[HN 議論](https://news.ycombinator.com/item?id=50436640)

@@ -316,3 +316,46 @@ token ceiling, in a year when context windows are being sold by the million.
 
 → [[frontier-models]] [[harness-reliability]] [[fact-check]]
 
+
+## 2026-11-10 — CPython formalized by agents: the differential test comes BEFORE the proof, and refutation is a first-class output
+
+David Andrews and Chao Zhang point Opus 5.5 agents at **CPython 3.15.2** and rewrite its functions
+line by line in **Lean 4** through a four-step gate ([write-up](https://broyojo.com/python-formalization/),
+[repo](https://github.com/Broyojo/python-formalization), Apache-2.0):
+
+1. **Mirror** — an agent writes a Lean model that follows the C or Python source line by line:
+   same branch order, same error messages, same integer overflow; each step cites the 3.15.2 source.
+2. **Differential test** — model and real `python3` run side by side on generated inputs until they
+   agree on **≥50,000 cases** across several seeds.
+3. **Prove or refute** — properties stated over all inputs; "a false statement is refuted with a
+   counterexample, never weakened"; the build **rejects `sorry`, `native_decide` and new axioms**.
+4. **Review** — a separate agent that did not write the model checks it against the source, runs
+   each property on the real interpreter, and asks "could a broken implementation also satisfy the
+   theorem?" — only rows marked `FAITHFUL` count as covered.
+
+Ten days in (work started Oct 29; repo created 11-02): **18,898** theorems and lemmas ("all checked
+on every build"), **613,318** lines of Lean in 1,539 files, **4,071 of 26,004** functions in scope
+(15.7%) — and the output table is the novelty for this file's ledger: **3,834 properties proven,
+588 refuted with counterexamples, 94 open**. When a refuted property is CPython's fault it becomes
+a bug record: a reproducer printing `REPRODUCED` on 3.15.2, the cause with line numbers, a
+duplicate search of the CPython tracker, and a priority. **418 bug reports** so far, "about 55"
+crashable or memory-corrupting from ordinary Python code (a `setdefault` on a `StrEnum`-keyed
+attribute dict that segfaults; a backwards slice assignment on an ElementTree element that
+duplicates one child and loses another), plus **129** cases where a module's C and pure-Python
+versions disagree.
+
+Why it belongs here: the gate question inverts the trust problem this file has been tracking since
+the Anthropic×Theorem footnote 6. There, a prover given "make this theorem true" can rewrite the
+program; here, the *review* step asks the same question from the other side — "a valid proof about
+a wrong copy is the most misleading result you can get" — and the differential test sits BEFORE the
+proof, so the copy is pinned to the artifact's behavior before anything is proven about it. Where
+the OSS-Fuzz run proved crash-freedom (a property of the binary), this run treats **refutation** as
+a deliverable: 588 false-with-counterexample statements are 588 findings, not failures. Scale
+comparison, one year apart: 123 libraries / 239 entry points crash-free vs 26,004 functions with
+15.7% reviewed faithful — coverage is now the reported number, and the percentage is honestly small.
+
+→ [[fact-check]] [[frontier-models]]
+
+Sources: [Formalizing CPython](https://broyojo.com/python-formalization/) ·
+[Broyojo/python-formalization](https://github.com/Broyojo/python-formalization) ·
+[HN discussion](https://news.ycombinator.com/item?id=50435105)

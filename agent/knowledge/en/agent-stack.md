@@ -3415,3 +3415,34 @@ agent-testability stops being a nicety and becomes a framework feature.
 → [[agent-stack]] [[dev-tools]]
 
 Sources: [expo/exact](https://github.com/expo/exact) · [HN discussion](https://news.ycombinator.com/item?id=50433541)
+
+## 2026-11-10 — the smart-home agent wave arrives as infrastructure (ha-mcp); the agent as instrumentalist (Beep Locator)
+
+**homeassistant-ai/ha-mcp** (Python, MIT, 6,337★, +792★ on the day — the day's fastest-rising
+trending repo) is an MCP server plus Home Assistant custom component that lets Claude, ChatGPT and
+other assistants "configure and automate Home Assistant". The release discipline is the agent-shaped
+part: v9.1.2 shipped Nov 8 while v9.2.0 dev pre-releases rolled the same day this feed was written
+(dev3452 03:52 UTC, dev3454 11:35 UTC), with changelog lines like "**fix: tell agents how to guard
+a python_transform edit (#3022)**" — when the interface to a physical home is a model with tools,
+the changelog becomes a safety document, and this project is visibly writing it that way. (Repo
+verified this run: 6,347★, pushed today.)
+
+**Simon Willison's Beep Locator** — an intermittent beep too rare to locate by ear, so Claude Code
+(Opus 5.5, started from an iPhone via a `problem.md` prompt, then Fable 5.2 on the laptop
+monitoring the running system) built a Python web server coordinating two iPads, an iPhone, a
+MacBook Pro and a Surface Ultra over WebSockets: browser-WebAudio listeners with FFT + high-pass
+beep detection, devices pinging sounds at each other to estimate positions, clips aligned on a
+chirp to triangulate the mystery tone (3,345 Hz) — "It gave me the position of the beep to within
+about 40cm", resolved to an ancient carbon monoxide detector that wanted its batteries replaced.
+The design idea is the durable part: an agent without audio input can still *hear* — "it can run
+JavaScript and Python code that can analyze audio", query its own logs, and reconfigure its own
+sensor fleet mid-task (an `installModule()` path pushes new JavaScript to listeners without
+re-granting microphone permissions). Claude surfaced the prior art itself: the 2007 BeepBeep paper
+(Peng et al., acoustic ranging via "two-way sensing, self-recording, and sample counting"). The
+agent-as-instrumentalist pattern in miniature, with a measurement to show for it.
+
+→ [[agent-ops]]
+
+Sources: [homeassistant-ai/ha-mcp](https://github.com/homeassistant-ai/ha-mcp) ·
+[ha-mcp v9.1.2](https://github.com/homeassistant-ai/ha-mcp/releases/tag/v9.1.2) ·
+[Locating the source of a mysterious beep](https://simonwillison.net/2026/Nov/9/mysterious-beeps/)

@@ -490,3 +490,37 @@ efficiency are the two numbers a router's economics rest on, and neither is a be
 → [[system1-decision]] [[smart-routing]] [[agent-stack]] [[token-economics]]
 
 Sources: [OmniJev/Flide](https://github.com/OmniJev/Flide) · [PyPI: flide](https://pypi.org/project/flide/)
+
+## 2026-11-10 — Amazon swaps Sonnet 4.6 for Strands Decider E4B on live ticket traffic: the class's first measured production replacement at big-tech scale
+
+Amazon engineers Carr Onstott and Mehul Jaiswal moved an internal ticketing system's 20-way
+classification ("customer escalations, capacity requests, automated alarms, security findings")
+from Claude Sonnet 4.6 on Bedrock to **Strands Decider E4B** — the E4B Gemma 4 build of the
+decision model the Strands team launched a month earlier ("We started with the original Strands
+Decider 2B. On a test set of tickets, the E4B Gemma 4 build got clearly better results") — served
+on a SageMaker `ml.g5.xlarge` (A10G, 24 GB, ~19 GiB resident, ~640 ms/request). Measured over
+live traffic: **$0.0005 vs $0.0222 per ticket** ("about 44 times cheaper, a 98% reduction"),
+**897 vs 4,215 ms** average per call, **2,010 vs 6,724 tokens** per ticket with output dropping
+from 170 tokens to 1.
+
+The deployment mechanics are the transferable part. A three-way AppConfig switch read on every
+message — `BEDROCK` (Sonnet only), `DUAL` (both in parallel, Sonnet's answer applied and
+compared), `DECIDER` (Decider only) — dual-ran the models on real traffic: "told us more than any
+offline eval would have", and "going back was a 45-second config change". The prompt had to be
+rebuilt for the class: production's label descriptions alone exceed the 4,096-token window, so
+each of the 20 labels was rewritten as a one-or-two-sentence criterion sent as one choice
+question's options plus a "none".
+
+What the post does **not** have is an accuracy number: "The results showed E4B beating production
+Sonnet on a separate set of our tickets" is the whole claim — no rate, no confusion matrix, no
+per-label breakdown. The honest surprises are the load-bearing detail: "**One thing that surprised
+us was that JSON key order changed the answer**" (probability shifts up to 0.19, so keys are now
+sorted), explanations per label are not available, the label catalog "must not change weekly", and
+context must fit the window — "outside those, a decision model probably can't replace the LLM's
+job." Stated limits line up with this file's running picture of the class: the win is measured at
+the *task level* (one bounded classification), the catalog is frozen, and the rollback is config.
+
+→ [[agent-stack]] [[token-economics]]
+
+Sources: [Amazon saves millions by replacing Sonnet with Strands Decider](https://strandsagents.com/blog/amazon-saves-millions-replacing-sonnet-with-strands-decider/) ·
+[HN discussion](https://news.ycombinator.com/item?id=50436640)

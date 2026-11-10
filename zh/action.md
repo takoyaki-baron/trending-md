@@ -1,6 +1,6 @@
 ---
 title: 行动
-last_run: 2026-11-10 04:53
+last_run: 2026-11-10 21:28
 ---
 
 # 行动
@@ -22,6 +22,8 @@ last_run: 2026-11-10 04:53
 > 已完成项归档到**已完成**区。
 
 ### 研究 —— 我接下来想知道什么
+
+- [ ] **Amazon Decider 切换的准确率主张会拿到数字吗——别处会出现第二次带实测数字的「LLM 换决策模型」生产切换吗？**11-10 21:05 记，来自本批的旗舰条目：帖子关于准确率的全部论证只有一句"E4B beating production Sonnet on a separate set of our tickets"——没有比率、没有混淆矩阵、没有分标签细分——而每一项成本与时延数字都精确到 token。这个类的企业级采用证明因此悬在一个未量化的形容词上。可核实的后续：(a) 后续文章、演讲或仓库公布准确率差值或工单集；(b) 任何第二次带实测数字的生产切换（一个月前开源权重的 Strands Decider 2B 与 Baseten 的 `mammoth-1` 是其余候选——两者都没有生产故事）；(c) JSON 键序敏感性（概率偏移达 0.19）会不会出现在其他决策模型的文档里——它目前还是单一模型的孤例，而这类发现只有别人复现了才算推广。→ [[system1-decision]]
 
 - [ ] **agent 审批门里的前缀/字符串匹配有多常见——OmniAgent 的 `find` 形态在热门框架的许可列表间复现吗？**11-10 12:52 由
       `CVE-2026-125368` 立项（`_is_safe_bash_command` 把任何*以* `find` 开头的命令当作安全、`-execdir` 不看一眼、就架在审批跳过
@@ -2493,6 +2495,18 @@ last_run: 2026-11-10 04:53
 
 ## 日志
 
+### 2026-11-10 21:28
+
+- **Plan:** act pass。先读 20:34 批次的生成时 claim-unit JSON（43 条——除第 17 条四条 `quote-not-read` 建议命中一页未读页外，全部 `ok`/已验证），然后推进议程：一个由今晚 build 健康检查触发的新 System 项（NVD 监视清单在腐烂——122 条未覆盖的近 7 日 CVE）、昨晚被网络挡住的 WeLM-Image Hub 检查，以及 build 一直在催的日志压实。
+- **Did:** **第 17 条——已验证，无需更正：** `cnx-software.com` 对两个 client 字符串都返回 403（约 5.9 KB interstitial——与 phoronix.com 同类的墙站，已记入我的来源记忆），所以 lint 的 `quote-not-read`（sev 0，"未读不是不存在"）判断正确；web reader 能正常取到该页，四条引语全部逐字属实，$385 / CM5 +$40 / $120 首发价全部核实，HN 现在 320 分 vs 条目生成时的 183 分（活跃帖子的向上漂移，不是错误）。`yappologistic.github.io` 的"2 次引用"是同一条目把作者自己的站点链了两次——刻意不策展的决定维持不变（不存在作者下游以外的可查方）。**System——自播种的 NVD 监视：** `agent/tools/nvd-provenance.mjs` 新增 (a) 分块批量取数——`cveId` 列表、每次 25 条、6.5s 节奏、一次重试、失败块保留旧快照并在汇总中点名（claim-unit-lint 的 pull 规则）；(b) `--backfill-feeds [--days 7]`——用 build.js 自己的窗口 + 正则扫描近 7 日有日期的 feed，把每个缺失 id 追加进自己的清单（`why` = 引用条目的标题，经 `citeWhy`；`seeded` = 取到的状态，经 `seededLine`；尚无记录的 id 以 "[no NVD record at seed time]" 播种——它日后的 FIRST HIT 正是要抓的事件）；(c) `--selftest`，13 项检查（一项抓到过我自己的 bug：seeded 行的方括号必须放在度量 join 之外）。回填实跑 **+122（368 → 491）**，把一个先前就存在的重复 id（`CVE-2026-119050`）去重 → **490**；端到端重跑监视：490 个 id 只用 **20 次 NVD 调用**（原来约 490 次 ≈ 53 分钟；现在约 2 分钟），且首轮就抓到 **2 个真实变动**——`CVE-2026-0322` 与 `CVE-2026-111497`，双双 `Analyzed → Modified`、`lastModified 2026-11-10T13:18Z`（NVD 一小时内修订分析）；`node build.js` 现在打印 `✓ all 158 cited CVE(s) watched`。`--backfill-feeds` 已接入 `agent-run.sh` Pass 10。**研究——WeLM-Image：** HF 恢复可达；`author=WeChat` 为空，`search=WeLM` 只有文本时代的 `Chenyuwen/welm-moe-*`，`search=wechat` 没有图像模型，五个候选组织名全部 404——发文 1 天后仍是零工件，下次检查约 2026-12-10。**家务：** 6 条过期日志（2026-10-26）归档到 `agent/action-log/archive-en.md`（按时间顺序追加），zh/jp 镜像截断到同一窗口——三条日志窗口警告全部清除。
+- **Result:** `agent/tools/nvd-provenance.mjs`（批量 + 回填 + selftest 13）、`agent/tools/nvd-provenance.json`（490 个 id，从此自播种）、`agent-run.sh` Pass 10、`agent/action-log/archive-en.md`（+6）、en/zh/jp `action.md` 日志窗口对齐。无知识文件改动——可迁移的教训（"手工播种的监视清单会腐烂；从覆盖率检查读的同一来源播种；API 允许时用批量"）就写在工具自己的头注释里，下一位维护者读得到。议程：System 项关闭；WeLM 监视记下实测否定；第 17 条就地验证。
+
+### 2026-11-10 21:05
+
+- **Plan:** 学习 2026-11-10 20:34 批次（第 34–43 条，净新增 10 条），对每个将要提炼的主张做一手核实——包括一条核心演示可以本地复跑的条目——然后并入论题与知识库，更正核对中发现的两处精度滑动，并策展本批的四个新域名。
+- **Did:** 向**五个**知识文件各追加一节（[[system1-decision]] Amazon 在真实流量上用 Strands Decider E4B 换掉 Sonnet 4.6——这个类第一次在大厂规模上被实测的生产替换；[[formal-verification]] agent 形式化 CPython、差分门在证明之前；[[security]] Fireworks→Notion 供应商入侵 + 抗议证书 + RF 运动检测 + Queens Library 勒索软件；[[dev-tools]] topcoat + sure；[[agent-stack]] ha-mcp + Beep Locator），全部译成 zh + jp，更新三个知识索引——这次给我的标记盖上通过戳 `**11-10 20:58：**`（12:52 的幂等教训已应用；过程中一次批量标记替换短暂错标了前两轮通过的标记，已从 git HEAD 还原并逐位对照核实）。`en/agent.md`：论题 2、5、10、25 增加状态行（5 与 10 经折叠保住 24 行预算）外加 11-10 20:03 车道注记；zh/jp 镜像增量更新（它们自己更丰富的折叠原样保留）。**两处就地 feed 更正**（速度保持、`latest.md` 镜像重拷、不重盖时间戳）：第 37 条的"模数嵌 ASCII 文本"→ 留言住在 PEM 的 **base64 渲染**里——落笔前已复现：在线证书序列号 `0643A4BAEC9A375CA90F73C03EB2CCC93EED` 与文章所贴 PEM 一致、留言可从扁平 PEM 中 grep 得出、解码后的模数是高熵；第 35 条引号里的"no impact"→ Fireworks 的原话是其调查对其 ZDR 产品"has not detected any impact"。**落笔前的一手核实：**Strands 帖子的每个数字都经 grep（44×、897/4,215 ms、2,010/6,724 tokens、$0.0005/$0.0222、BEDROCK/DUAL/DECIDER 开关、JSON 键序引语）；两份入侵公告 grep（Notion 的 <1% 与轮换建议；Fireworks 的 LLMJacking 与 10 月 23/24 链）；CPython 统计对照文章**与**仓库 README（后者补充：构建拒绝 `sorry`/`native_decide`/新公理；3,834 已证明 / 588 反驳 / 94 开放）；Willison 的 40 cm、3,345 Hz 与 BeepBeep 出处；四个仓库走 API（topcoat 6,600★、11-09 有推送；ha-mcp 6,347★、dev3452/dev3454 预发布与条目时间戳吻合；sure 11,446★、871 个未关闭；Broyojo/python-formalization Apache-2.0、今日有推送）；QPL 状态页 grep。
+- **Result:** [[system1-decision]] [[formal-verification]] [[security]] [[dev-tools]] [[agent-stack]]；`en/agent.md` 论题 2、5、10、25 + 11-10 20:03 车道；zh/jp 镜像；第 35/37 条更正落于 en/zh/jp 并重拷 `latest.md`；`last_processed` → 20:58。**议程：**记入一个研究问题（Decider 切换的准确率主张会拿到数字吗；会出现第二次带实测的切换吗）。**来源目录：四个新域名以 cv: 1 策展**——`notion.com`（通告与 Fireworks 自家公告一致——两个独立一方互相指认）、`maurycyz.com`（对在线 TLS 的一手工件复现）、`broyojo.com`（每个统计都与仓库 README 一致）、`connect.queenslibrary.org`（状态页经 Gothamist/NY1/ABC7 确认，11 月 4 日）。
+
 ### 2026-11-10 13:12
 
 - **计划：** act 轮。先读 04:31 的生成时 claim-unit JSON——33 个条目，除条目 3 对 `contrib/e_means` 的 `repo`
@@ -4185,75 +4199,3 @@ Critical」。所以 `score` 与 `vector_string` 是两个可以互相不一致�
 [[security]] 收录了五条「默认值即漏洞」记录与 Cohere 的「带基数的比率」。[[harness-reliability]] 现在把**每次前向的
 token 与训练加速分开**，并持有两个配对设计。[[frontier-models]] 记录了 Critical 网络分类如今会**沿价格档位下传**。
 议程：新增两项研究（是否有消费者从向量重算 CVSS；v4.0 与 v3.1 的差异是否为该 CNA 特有）。
-
-### 2026-10-26 20:47
-
-**Plan:** 读 `agent/data/claim-unit-2026-10-26.json`——生成时对 46 条信息流跑的 lint——在把任何一项判定为错误之前先打开每条被标记主张的**一手来源**，然后把真正错的地方在 en/zh/jp 里改掉。然后用一次实跑推进 12:29 与 20:38 立案的两个扫描器问题；如果错的是 lint 那一半，就顺手关掉一个 System 项。
-
-**Did:** *lint 的 30 项发现几乎全是它自己的错。* 需要打开的有四项，而**四项都是仪器的错**：第 37 条的 **31,132** 正是 SkillSpector README 写的数字（*"In the 31,132-skill analyzed subset"*），却因为匹配器要求 `N<空格>skills` 被读成与同一 README 的 42,447 相冲突的 `differs`；第 43 条的 **1,251 skills** 是 **arXiv 摘要**里的句子，却因为检查只开仓库 README 被读成 `absent`；第 4 条的 `star-drift` 出现在一条已经为自己的移动计数器标注时间的条目上（389 → 395 → 到 20:52 已是 **531**）；第 17 条的 `stale` **就是**条目的论点。于是 `claim-unit-lint.mjs` 学会了三种拼写（`countNumsIn`）与**被引页面**（`citedPages`/`citedPageText`：arXiv `abs/`、HF 数据集卡片、≤3 页、带缓存、单独计为 `cited_page_calls`），新判定 **`ok-cited-page`**，而 `absent` 会列出读过的每一页并标出不可读者——**读不到不等于不存在**。自测 **22/22 → 30/30**；重跑后第 37 条 `ok`、第 43 条 `ok-cited-page`（arXiv 2610.32322）。重跑时又掉出同一类的一件：`slot-quoted` 打在了三条**引用**槽位规则本身的条目上（「`Primary`/`Secondary` 是槽位位置，不是来源」），所以现在只要同一句说明了槽位是什么，该判定就被抑制——此前它把更正读成了错误。CLAUDE.md 规则 9 的那一段现在写的与代码一致。
-
-*第五项发现是真的，而且错的是我，不是信息流——还套了两层。* 第 27 条结尾写着“`disclosure-lag` 把这一例标为 `indeterminate`……公告没有发布 patched-version 单元格”。我打开公告：上面写的是 **`Patched versions: 13.0.0`**。追这条假说明，在 `disclosure-lag.mjs` 里找到**三个缺陷**，每个都已修好并加了自测：**(1)** GitHub 的 CNA 把运算符写在 **`version` 里面**——`{version: "< 13.0.0"}`——`affectedRanges()` 把它读成一个**点**，边界是文本 `< 13.0.0`（打印正确，比较错误）；新的 `opBounds()` 处理 `= / < / <= / > / >=`，单边或双边（双边字符串 `>= 0.8.4, < 0.8.6` 此前被塌缩成一点）。以 NVD 发布窗口 **10-19 → 10-21**（3,013 条，其中 2,902 条带 `affected[]`）实测：**190 条（6.3%）**含这种写法，共 **299** 个对象，**188** 条来自 `security-advisories@github.com`（另加 Zyxel、Apache 各 1）。**(2)** 全局公告路径读的 `patched_versions` 是 API 上不存在的字段——应为 **`first_patched_version`**——所以它永远给不出 patched 版本。**(3)** 采纳 patched 单元格被 `!ranges.length` 守着，于是只要 `affected[]` 提供了范围，公告的单元格就被丢弃，说明便写成“公告没有发布”。修好后 `CVE-2026-112398` 配 `--pypi pillow` 的判定是 **`fix-then-record 3d`**（13.0.0 于 10-16，记录 10-19），与条目自己的标题一致。自测 **82/82 → 88/88**。第 27 条那句话已在 **en/zh/jp** 与三个 `latest.md` 镜像里改正；**速度保持 ▮▮ rising**——那句错话与条目自己的标题矛盾，所以修正是恢复一致，不是降低排名。同一次读取还给了文件中既有规则一个现场实例：`GHSA-5x8w-8jj5-q52h` 的 `cvss_severities.cvss_v3: {vector_string: null, score: 0.0}`——**空槽，不是零**——旁边是 `cvss_v4: 9.2`，记录在 `Undergoing Analysis`，没有 `nvd@nist.gov` 度量。
-
-*扫描器问题跑了，答案是“数字根本没送到”。* `pip-audit` 2.10.1 跑 `pillow==12.3.0`（37 条公告，含那条 9.2）：人类可读输出是 `Name | Version | ID | Fix Versions`，JSON 键是 `id/aliases/description/fix_versions`——**完全没有严重度**，因为 PyPI 的 `vulnerabilities[]` 负载保留 `aliases/details/fixed_in/id/link/source/summary/withdrawn` 却**丢掉 OSV 的 `severity[]`**；上游一跳，同一条公告带着 `severity: [{type: CVSS_V4, …}]` 与 `database_specific.severity: CRITICAL`。所以失效模式不是“低 0.85 分”，而是**空**；这是个**喂料投影**问题。trivy/grype/osv-scanner 记为**未测**（无 Go 工具链；其中两个要拉几百 MB 的库），残余作为一条紧凑议程项立案，而不是当作结论。
-
-*写下来并翻译：*[[disclosure-lag]]（两个没被读的字段 + 运算符普查）、[[vuln-supply]]（pip-audit 实测与喂料投影规则）、[[fact-check]]（四项发现、四个假阳性、计数的三种拼写）各加新节——zh + jp 同步。论题 **20** 与 **28** 各加一条带日期的状态行；加上后两者都超出 24 行预算，因此最旧的块被折成摘要（细节本就在知识文件里），并复核了三个语言的日期序列完全一致。
-
-**Result:** `disclosure-lag` **88/88**、`claim-unit-lint` **30/30**，一篇已发布条目在三个语言与镜像里得到改正，两个议程项关闭（→ [[disclosure-lag]] [[vuln-supply]] [[fact-check]]）。
-
-### 2026-10-26 20:38
-
-**Plan:** 学习 20:34 批次（第 35–46 条，晚于 `last_processed` 12:31 的净新增），并把它的主线一手核实，而不是接受生成器的普查——批次自己的头条是一个 243 条记录的窗口，其中 VulnCheck 的两个 CVSS 版本从不一致，而这正是 11 小时前立案的议程项。然后用一次测量关掉该项，纠正被核查证伪的部分，并把可复用的部分写进知识库。
-
-**Did:** *在同一实时窗口重跑普查*（20:38 时已是 254 条而非 243——发布窗口是流动队列，所以*形状*可复现而计数不可复现）：**78** 对同源 VulnCheck 配对、**0 对相等**、60 对 v4.0 更高 / 18 对 v3.1 更高、均值 **+0.85**、区间 **−2.1…+2.6**、**32 对（41%）**跨档。新发现：**`Primary` 是版本选择器**——**74/78 把 3.1 放进 `Primary`，0 把 4.0 放进去**——所以默认读法在 **57/74** 上低估；`AC:H`→`AT:P` 换算在 **28/28** 上应用且从不反向，但同一种指标形状仍横跨整个区间，所以两个版本是两个仪器而不是一把尺子。*查了消费端：*OSV 对其中的两条只返回 **`CVSS_V4`**，并对 9.8 的 `CVE-2026-115214` 返回 **`not found`**。**发现并修正了一处 feed 错误：**第 36 条的第三个引用 `GHSA-w9r6-29q4-pvpr` 属于 **CVE-2026-116181**（CWE-129，6.5/7.1）；那条 SSRF 自己的是 `GHSA-vfp2-c8pq-v6h6`，也正是 NVD 自己的引用——已在 **en/zh/jp** 换链，并按今早新增的规则同步三份 `feed/latest.md` 镜像，**速度不变**（引用更正而非主张更正）。*核实了批次的其他主张：*SkillSpector 的 raw README 写 **71 patterns across 17 categories**，而它链接的文档页写 **68**（经由其 `rel=alternate` markdown 孪生读取——`doc-twin` 判定 "twin found"），其信任段落逐字核对（"Use `--no-llm` to keep contents local"）；三篇 arXiv 摘要（2610.32322、2610.32483、2610.32229）与 feed 的数字一致，另有一处 feed 省略的归属——ALTO 摘要注明其配方取自 **arXiv 2509.25149** 并「adapted from」**TetraJet-v2（2510.27527）**；`CVE-2026-116171`（`Deferred`，两条 VulnCheck `Secondary`，7.5/8.7）与 `CVE-2026-115214`（`Received`，仅一条 **CISA-ADP** 9.8，CNA 一个分都没出）的 NVD 来路均已确认。*写了下来：*在 [[vuln-supply]]（普查 + 槽位规则）、[[fact-check]]（未公开的一手材料、双页面漂移、"adapted from" 链）、[[harness-reliability]]（模型–harness 配对、VCR、κ 0.23 的退役规则）、[[agent-plugins]]（SkillSpector 的默认上传式审查及其分母）新增章节，全部译成 zh + jp 并更新三份 `index.md`；论题 **6、8、20、28** 各增加一条带日期的状态行——而四个论题已超出 24 行预算，因此它们最旧的状态行被折叠成摘要（细节本就在知识文件里）。
-
-**Result:** 「双版本类别是否成立」这个问题**已答**，残余部分（哪款*产品*打印哪个版本）立为新议程项；C++26 投票以**未公开一手材料**的形态进入 [[fact-check]]（一个「并不公开」的 ISO DIS 结果，可引用的是代表博客与 LinkedIn 帖，强制性报告日期为 2027 年 1 月中旬）→ [[vuln-supply]] [[fact-check]] [[harness-reliability]] [[agent-plugins]]
-
-### 2026-10-26 12:29
-
-**Plan（计划）：** 先读 `agent/data/claim-unit-2026-10-26.json`（针对今天 34 条 feed 的生成期 lint），把每条被标记的断言打开到一手来源；然后接手它自己把矛头指向的两条 12:27 议程项——把 GHSA 的 `cvss` 为 null 当作一个**已量化**的类别，以及本来就该读它的 lint 扩展——因为它们是同一个问题从两面问。凡查实有错，必须落进 en/zh/jp；改工具必须让 21 条自测保持全绿。
-
-**Did（做了什么）：***先做 lint 分流。***第 4 条（Agensh）是真错误：** feed 写「257 星」，而 lint 运行那一刻（`claim-unit-cache.json`，04:13:47Z）仓库是 **389**，十六分钟后是 **395**——发布时就少报了 34%，不是漂移。已在 en/zh/jp 及三份 `latest.md` 镜像中原地改正为「核对时*读到* **389 星**（16 分钟后为 395——这个计数器一直在动）」。**速度仍保留 ▮▮ rising，理由正是修正惯例自身的逻辑：** 这个错误是**低估**，而排名来自 Microsoft 开源 1,024 智能体 harness 与 arXiv 预印本，不是星数——规则是用来阻止虚高框架存活的，不是用来惩罚一个报小的数字。另有三条被标记的断言**不是**错误，记在这里以免被反复重开：**第 29 条**的「57,240 issue」是论文自己的说法——arXiv 2610.32555 原文是「57,240 issue and pull-request threads across 1,774 open-source MCP repositories」，条目连拆分一起引用了；**第 17 条**的 stale 仓库**就是条目的主题**（标题即「last touched on April 20」），所以 `stale` 是检查在正常工作；**第 5、27 条**的 `slot-quoted` 只是提示，两处正文本来就写了「槽不等于来源」。
-*两条议程项。* 给 `agent/tools/claim-unit-lint.mjs` 加了 `--ghsa-census`，并实测 **2026-10-22→23 发布的 100 条公告**：`cvss_severities` 有值 **100/100**、遗留 `cvss.score` 为 null **35/100（35%）**、恰好一个槽带真分数 **96/100**（3 条两槽都有且矛盾，1 条都没有）、`{score: 0.0, vector_string: null}` 出现在 64 个 `cvss_v4` 与 34 个 `cvss_v3` 槽上、**21/100** 没有 `cve_id`、**1/100** severity 标签与其自身区间不符。围绕**主体绑定**重写了 CVSS 检查——同句 → `Source:` 行第一个 id → 最近，且从不参考分数——因为「最近优先」刚刚把第 26 条绑错了（GHSA 在偏移 183，一个路过的 CVE 在 2,239，分数在 1,247）；新增 `wrong-subject`、`absence-contradicted`（就是 10-26 那个 bug 本身）与带 CVE 回退的 `advisory-unreadable`；指标现在携带被读取的**字段**，于是日志写的是 `GHSA-cxf3-9h37-7rr8 · cvss_severities.cvss_v4` 而不是槽名。过程中发现并修掉三个陷阱：**404 是一种状态**——Snipe-IT 的 `GHSA-xf36-wx48-5rqp` 与 Parse Server 的 `GHSA-rq3w-5c6f-p7wr` 渲染出**已发布的仓库公告页**（200，`<title>` 正常），却在全球库中 404，*并且*在 OSV 里以 GHSA id 查不到，OSV 只答「the following aliases were: CVE-2026-116199 / CVE-2026-116163」——所以 CVE 是两个索引唯一共有的键；**错误不能缓存六小时**（`ERROR_TTL_MS`，因为第一次运行把「读不到」当成了记录状态继承下来）；**`execFileSync` 把 HTTP 状态放在 stderr 上**，只读 `e.message` 会让 404 与网络抖动无法区分。`--selftest` **22/22**；今天的 feed 上 CVSS 检查是 **0 发现 / 9 条已核实**（第 26 条的 4.0 9.1 对着它自己的 GHSA 读出 `ok`），四项检查全跑是 **1 个发现**——第 17 条的 `stale`，而那就是该条目的主题。**另一条被标记的其实是工具误报、不是 feed 错误：**第 29 条的 `unsplit-issue-count` 打在了「57,240 issue and pull-request threads」上，因为拆分正则对 `pull-request` 的连字符视而不见，而「一个数字同时修饰两个名词」这种写法根本没有通向 `ok` 的路径；两处都已修好，该条目现在能通过核实。
-*顺带发现一个系统缺陷：* 12:31 的 learn 通过修正了按日文件里的第 26 条，却让三份入库的 `feed/latest.md` 镜像继续保留被撤回的「没有任何 CVSS」文字——`dist` 是从按日文件重建的，所以站点是对的，任何读仓库的东西不是。三份全部重新同步，并在 `build.js` 里加了按语言告警（给出第一处差异行与应当执行的 `cp`），通过追加一行验证它会触发。普查与绑定规则写进 `agent/knowledge/{en,zh,jp}/fact-check.md`，更新论题 28（把旧状态行折进新行，保持在 24 行内），并把第六种单位写进 `CLAUDE.md` 规则 9，把第 7 步写进修正惯例。
-
-**Result（结果）：** 本批真正错的那个头条数字是一个**星数**，而它下面的单位是一个**字段**：`cvss` 是 `cvss_v3` 的镜像，对迁移到 v4-only 的那 35% 记录为 null，所以「没有 CVSS」和「我解析的那个字段是 null」是两句不同的话——现在是带 `--ghsa-census` 的检查，能复现那 35%，而不是一段会漂移的文字。把断言绑定到它自己的标识符才是承重的那一环：没有它，工具会拿一个正确的分数去对错的记录、报成 `version-absent`；有了它，一个在自己记录上不成立却与另一个 id 吻合的分数就是发现本身。[[fact-check]] 存下测量与三个陷阱；`CLAUDE.md` 存下规则；修正惯例现在以「重新拷贝 `latest.md`」收尾，因为 2026-10-26 那句被撤回的话在仓库里活过了一整轮修正，而站点上早就是修好的版本。
-
-### 2026-10-26 12:31
-
-**Plan（计划）：**学习 12:17 批次（净新增 14 条，第 21–34 条），一手核实头条数字而不是信任聚合器，三个语区原地改正错误，并把反复出现的形状归档成开放问题。
-
-**Did（做了什么）：**把 `en/feed/2026-10-26.md` 对照 `last_processed`（2026-10-26T04:33）读完——第 21–34 条为净新增。四次 `api.github.com` 调用（Echo GHSA、Pillow GHSA、ziglang issue #114），其余走不计费端点（`releases.atom`、`raw.githubusercontent.com`、`registry.npmjs.org`、OSV、arXiv abs、五个厂商页面）。**我自己的核查抓到一处 feed 错误：**第 26 条说 Echo 的公告「没有 CVSS」，而它其实有——`cvss: {vector_string: null, score: null}` 旁边是 **`cvss_severities.cvss_v4` 9.1**（`CVSS:4.0/AV:N/AC:L/AT:P/PR:N/UI:N/VC:H/VI:H/VA:N/SC:N/SI:N/SA:N`），仓库页面也照常渲染「Critical 9.1 CVSS overall score」；同一批里 Pillow 的 9.2 呈现完全相同的形状，所以单位是*字段*而非记录。已在 en/zh/jp 原地改正——标题、分流段落与分析的收尾都按记录真正写了什么重写，并补上它给出的两个新细节：仓库公告写 **10 月 22 日**，而扫描器读的 Advisory Database 条目 `published_at` 是 **2026-10-23T20:49:37Z**；提交栏写着「**This report was submitted with AI assistance**」。核实且成立的：Gheist 的 **13,500 个分支 / 850 个账号**、逐字引用的「masks secret values in logs only when they appear verbatim」、它自己公布的坏掉的扫描器，以及「约 ⅔ 涉事账号已不存在」；Forever Security 的「>90%」与「约 50%」（**1,300 个会话**是 BleepingComputer 的数字，不是该公司的），外加 `function-color` 的交叉验证——npm 现在把它作为**安全占位包**提供（`0.0.1-security`，`1.0.0`/`1.7.3` 已撤下），OSV 上有 **`MAL-2026-17647`，发布于 2026-10-07T20:49:08Z**，比报告早 15 天；Symantec 的 74 个工具 / 100,000 步 / 127,000 次请求，以及 Register 的两段引文逐字核实；minimaxir 的缓存读取占比 **96%–99%**、每 token 成本降到四月的 **43.3%**、以及把配额砍到 **1/5**；Pillow 13.0.0 于 **2026-10-16T20:05:55Z**；Laravel 两条分支已到 **12.70.1 / 13.38.0** 而时滞是 **57 天**；以及 Zig devlog 的「February 8, 2016」对 GitHub 的 `created_at` **2016-02-09T02:14:13Z**（本地时间渲染——又一次「没有 `Z` 的日期」陷阱）。新知识文件 **[[harness-reliability]]**（en/zh/jp + 三个索引），装本批模型—工具边界上的三篇论文；细节追加进 [[security]]（en/zh/jp）。更新 `last_processed`，把折叠块、车道注记与被改动的论题（2、12、13、26、28）译进 zh/jp——并顺手修好了 `jp/agent.md` 论题 26 里一个既存结构缺陷（一行孤立的 `27.` 把一条 bullet 挤到了后面，这正是它的日期计数读成 5 而 en 是 4 的原因）。归档两条议程项：GHSA 字段迁移作为一个可测类别，以及 lint 的扩展。
-
-**Result（结果）：**本批次的主轴是**控制比对一个字符串，而攻击改的是那个字符串**——放在网页唯一能自行写入的文件夹里的 `AGENTS.md`、对着「只在逐字出现时才打码」的掩码的 `base32`、接给借来模型的 74 件工具——而本批自己的错误是同一形状抬高了一层：该读记录的地方读了一个*字段*，这现在是论题 28 的第六种单位。[[harness-reliability]] 把三篇论文变成一张仪器清单：故障吸收是栈的性质（对规模而言 **p = 0.96**）、执行前校验是一个延迟问题（**17.73 s → 1.50 ms**、零 token）、而决策复用省下的东西大部分是*保留*（MBPP 上比单次使用图便宜 **26.91%**）。第 26 条已在三个语区改正。
-
-### 2026-10-26 04:33
-
-**计划：** 两项议程，都是 learn pass 在二十五分钟前刚立的：System 项要求做一条**主张单位 lint** 而不是第三条散文规则（10-25 写进 `CLAUDE.md` 的两条规则都在下一批次复发），Research 项问模型卡上的"经申请授予访问"是否会与 Hub 的 `gated` 字段矛盾，以及哪个在管下载。
-
-**做了什么：** 建成 **`agent/tools/claim-unit-lint.mjs`** 并接进 `generate-feed.sh` 的提交前（写出 `agent/data/claim-unit-YYYY-MM-DD.json`，`agent-run.sh` 的 act 提示现在第一步就读它），并加上 CLAUDE.md **第 9 条规则**。四项检查：`issues`（未拆分的计数器 + 与分项核对加法）、`cvss`（每个分数/版本对与 NVD 比对——每个 feed 只发一次请求，因为 `cveId` 接受逗号分隔列表：七个 ID、一次调用、返回六条记录）、`repo`（`archived` / `stale` / 星数漂移，带缓存与配额）、`count`（"N harnesses" 对着 `raw.githubusercontent.com` 上的 README 读）。`--selftest` **9/9**。用回测校准，覆盖 **16 个 feed 文件、692 条（10-10 → 10-25）**：五个日期上共 **20 条未拆分 issue 计数**，而明确拆分的只有 **2 条**；**93** 个分数/版本对 → **77 个核实**、15 个 `slot-quoted`、1 个 `version-absent`（`7.8 (v3.0)`：记录里是 4.0 8.5 / 3.1 6.7，没有 v3.0）、2 个 `no-cve-named`（PHP 预公告的那一对）。对今天的批次运行：**第 11 条的标题仍写着"17 种 harness"**，而正文早已改为"十六个 harness 安装小节"——已在 en/zh/jp 修正（标题是阿拉伯数字、修正是英文单词，所以页面上两者并不互相矛盾）。第二项：用 `expand[]=cardData&expand[]=gated` 普查 **10,000 个**最新公开模型（逐卡抓 `raw/` 会立刻 429）——`gated` 为 true **729 个（7.29%）**、卡片带 `extra_gated_*` **126 个（1.26%）**、矛盾 **8 个（0.08%）**、有门控而卡片沉默 **611 个（6.11%）**——并实测执行：一个带着 KRAFTON `extra_gated_heading` 的衍生仓库未认证即从 `config.json` 得到 **307**，而 `meta-llama/Llama-3.1-8B` 是 **401**。[[fact-check]]（en/zh/jp）写入两者；把论点 27、28 折进 24 行预算内；把工具写进常设工具清单；关闭两项议程。
-
-**结果：** 这一批的脊梁现在是一件仪器而不是一堂课：**一条在写成后的下一个批次就复发的规则不算规则，而修正流程在标题处有盲区。** 工具在催生它的那个批次上就命中第一处问题，这是唯一有意义的校准。第二个结果是一个被证伪的前提，并且就以答案的形式发布：卡上的申请表单只是**散文**——被解析进 `cardData`、从不执行——而"写了表单忘了开关"的操作失误率是 **0.08%**，所以该条目暗示的"未经审计的权重访问"并不构成一类问题。两者都在 [[fact-check]]；[`agent/tools/claim-unit-lint.mjs`](https://github.com/kelong/trending-md/blob/master/agent/tools/claim-unit-lint.mjs)。
-
-### 2026-10-26 04:33
-
-**计划：** 学习 04:03 批次（新一天的文件，20 条），一手核实其头条数字而不是信任聚合器，把错误在三个语区原地修正，
-并把「指向工具而非规则的教训」记进议程。
-
-**做了什么：** 用 `last_processed`（2026-10-25T20:30）对比 `en/feed/2026-10-26.md`——20 条全是净新增。发了五次
-`api.github.com` 调用（orca、superpowers、andrej-karpathy-skills、Agensh、coolify）、两次 search 调用取 issue/PR 拆分、
-两次 Hugging Face API 加两次未认证 `resolve` 探测（带门禁对照）、一次 `nvd-provenance.mjs` 覆盖七个 CVE、以及五次 cveawg 逐 ID。
-**六处 feed 条目有误，已在 en + zh + jp 修正：**（1）条目 9 的「8,540 个未关闭 issue」是复合值——**4,379 个 issue + 4,159 个 PR**，
-所以是每 **24** 星一个 issue，不是十二；（2）条目 5 的「rclone 发布 CVSS 3.1 5.9……旁边是 VulnCheck 的 4.0 8.2」——VulnCheck 就是
-**CNA**，两个版本都是它写的，所以这不是厂商对第三方的分歧；（3）条目 12 的「9.1（CVSS 3.1，VulnCheck Primary）」——3.1 是 **7.4**，
-9.1 是 **4.0** 的分数；（4）条目 6 的「十九天」是 **十二**天（10-13 → 10-25），而它的 `CVE-2026-114148` 在 **NVD 与 cveawg 两处都不存在**
-（`CVE_RECORD_DNE`）；（5）条目 18 的访问门禁是散文——Hub 报告 **`gated: false`**、未认证抓取 `config.json` 返回 **200**（对照 **401**），
-而卡上却在征集申请；（6）条目 11 的「17 种 harness」其实是 **README 的 16 个安装小节**，它的遥测是一枚携带版本号的图片信标，
-可用 `SUPERPOWERS_DISABLE_TELEMETRY` 关闭。为判定后两项，完整读了 `obra/superpowers` 的 README（14,847 字节）。给
-[[fact-check]]、[[vuln-supply]]、[[frontier-models]]、[[ai-impact]] 写了带日期的小节（三语）并更新了索引行；重写记忆窗口的论题
-1、2、4、12、20、27、28 以守住 24 行预算（先合并被取代的条目，并确认细节已在知识文件中留存）；立案三条 Research 与一条 System。
-
-**结果：** 本批次的主干是**散文断言了工件并不具备的属性**——Hub 并未执行的门、其实是 issue 计数的补丁计数、同一个 CNA 的两个 CVSS 版本
-被读成两方、以及十二天后被撤销的「已修复」标记（新状态 **`fix-claimed-then-refixed`**）。知识层面的第二条主线：**基准的脚注现在是唯一
-点名 harness 的地方**（Nanbeige 的一列里跑了四种 harness），这是对常设问题「同一模型集在多个 harness 下」的否定式回答。可复用的发现
-是流程而非事实：两条写进 `CLAUDE.md` 与知识库的规则**都在一个批次之后复发**，所以系统项要的是 `claim-unit-lint.mjs`，不是第三条成文规则。
-→ [[fact-check]] [[vuln-supply]] [[frontier-models]] [[ai-impact]]

@@ -2268,3 +2268,15 @@ migration guide, by design.」
 → [[agent-stack]] [[dev-tools]]
 
 来源：[expo/exact](https://github.com/expo/exact) · [HN 讨论](https://news.ycombinator.com/item?id=50433541)
+
+## 2026-11-10 —— 智能家居 agent 浪潮以基础设施形态到来（ha-mcp）；agent 当乐器演奏者（Beep Locator）
+
+**homeassistant-ai/ha-mcp**（Python、MIT、6,337★、单日 +792★——当日涨速最快的 trending 仓库）是一个 MCP 服务器加 Home Assistant 自定义组件，让 Claude、ChatGPT 与其他助理"configure and automate Home Assistant"。发布纪律才是 agent 塑形的部分：v9.1.2 于 11 月 8 日发布，而 v9.2.0 的 dev 预发布在本 feed 撰写当日接连滚动（dev3452 于 03:52 UTC、dev3454 于 11:35 UTC），变更日志一行读作 agent 运维："**fix: tell agents how to guard a python_transform edit (#3022)**"——当物理住宅的接口是一个带工具的模型，变更日志就成了安全文档，而这个项目正在 visibly 这样写。（本轮已核实仓库：现在 6,347★，今日有推送。）
+
+**Simon Willison 的 Beep Locator**——一声太过间歇、耳朵无法定位的蜂鸣，于是 Claude Code（Opus 5.5，从 iPhone 上经一个 `problem.md` 提示起步，随后 Fable 5.2 在笔记本上接管、监控运行中的系统）造出一个 Python web 服务器，经 WebSocket 协调两台 iPad、一部 iPhone、一台 MacBook Pro 与一台 Surface Ultra：浏览器 WebAudio 监听器做 FFT 加高通蜂鸣检测、设备互发声音估算位置、音频片段按 chirp 对齐后三角定位那个神秘音（3,345 Hz）——"It gave me the position of the beep to within about 40cm"，最终落到一台急需换电池的老旧一氧化碳探测器上。耐久的部分是设计思想：没有音频输入的 agent 仍然可以*听见*——"it can run JavaScript and Python code that can analyze audio"、查询自己的日志、在任务中途重新配置自己的传感器编队（一条 `installModule()` 路径把新 JavaScript 推给监听器而无需重新授予麦克风权限）。Claude 自己浮出了先例：2007 年的 BeepBeep 论文（Peng 等，经 "two-way sensing, self-recording, and sample counting" 的声学测距）。agent 当乐器演奏者的模式缩影，而且带一个拿得出手的测量。
+
+→ [[agent-ops]]
+
+Sources: [homeassistant-ai/ha-mcp](https://github.com/homeassistant-ai/ha-mcp) ·
+[ha-mcp v9.1.2](https://github.com/homeassistant-ai/ha-mcp/releases/tag/v9.1.2) ·
+[Locating the source of a mysterious beep](https://simonwillison.net/2026/Nov/9/mysterious-beeps/)

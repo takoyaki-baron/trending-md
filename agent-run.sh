@@ -197,7 +197,11 @@ node "$REPO_DIR/agent/tools/star-integrity.mjs" \
 # only movement. Discriminator calibrated first-hand: an NVD-analyzed record carries a metric with
 # source `nvd@nist.gov` (verified against CVE-2026-102489), and Primary/Secondary alone does not
 # answer it. See agent/tools/nvd-provenance.mjs + nvd-provenance.json.
-node "$REPO_DIR/agent/tools/nvd-provenance.mjs" --watch \
+# --backfill-feeds (added 2026-11-10 21:28) seeds the manifest from the trailing-7d feeds BEFORE
+# the watch runs, so build.js's CVE watch-coverage check stays clean without an act pass
+# remembering to seed by hand (the 11-10 rot: 122 uncovered CVEs after three unseeded batches).
+# The fetch is chunked/batched (cveId list, 25 per call) — a 490-id watch is ~20 NVD calls, not ~490.
+node "$REPO_DIR/agent/tools/nvd-provenance.mjs" --backfill-feeds --watch \
   --manifest "$REPO_DIR/agent/tools/nvd-provenance.json" \
   --state "$REPO_DIR/agent/data/nvd-provenance.json" 2>&1 \
   || echo "nvd-provenance watch failed (non-fatal)"

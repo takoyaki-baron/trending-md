@@ -495,7 +495,7 @@ Amazon 工程师 Carr Onstott 与 Mehul Jaiswal 把一套内部工单系统的 2
 
 **Fireworks AI**（Notion AI 所用的推理供应商）十月的失陷事件现在变成了两家公司的联合披露。Fireworks 的更新公告称，证据"indicates links to a cybercriminal threat actor group, which is financially motivated"，并实施了 **LLMJacking**（向非法网关出售未经授权的 LLM 访问令牌）；第二波来自一家托管 Fireworks 研发机器的第三方云供应商在 **10 月 23 日**被攻破，"the unauthorized third party used it to reach Fireworks development machines and then run an unauthorized workload"（10 月 24 日）。被访问的数据包括：资源元数据、账单信息（"Payment card numbers are not stored by Fireworks and were not impacted"），以及——"for certain customers, **a subset of incomplete model weights and datasets were accessed**"。Notion 的公告称**"<1% of Notion workspaces may have been affected"**，全部是已停用的 Insights 功能的用户："Some unattributable chat sessions with Notion AI may have been exposed"——会话记录"weren't labeled with who wrote them or which workspace they came from"，且"did not contain tool call results"。Notion 于 11 月 3 日切断并删除了 Fireworks 上的全部数据，11 月 6 日收到客户数据被访问的通报，11 月 8 日确认了数据集。
 
-**Why it matters:** 这条链路就是现代 AI 供应商风险的一张示意图：你的供应商的供应商被攻破，泄漏的不是 PII，而是**专有的微调产物**——别人的未完成模型权重。值得留意两家公司各自谨慎的地方：Fireworks 称其 ZDR 产品（Inference、Training SDK、Nexus）"no impact"，且调查"is ongoing and may reveal additional information"，取证由 Unit 42 负责；Notion 给受影响用户的建议是轮换凭据——"If you or anyone on your team pasted sensitive information like passwords, API keys, or other credentials into Notion AI during this timeframe, we recommend rotating them right away"。
+**Why it matters:** 这条链路就是现代 AI 供应商风险的一张示意图：你的供应商的供应商被攻破，泄漏的不是 PII，而是**专有的微调产物**——别人的未完成模型权重。值得留意两家公司各自谨慎的地方：Fireworks 称调查对其 ZDR 产品（Inference、Training SDK、Nexus）"not detected any impact"（未发现任何影响——措辞是有保留的），且调查"is ongoing and may reveal additional information"，取证由 Unit 42 负责；Notion 给受影响用户的建议是轮换凭据——"If you or anyone on your team pasted sensitive information like passwords, API keys, or other credentials into Notion AI during this timeframe, we recommend rotating them right away"。
 
 [`🔗 Notion：涉及第三方 AI 供应商的安全事件`](https://www.notion.com/help/security-incident-involving-a-third-party-ai-vendor) · [`🔗 Fireworks 公告：2026 年 10 月事件更新`](https://fireworks.ai/security/bulletins/october-2026-security-incident-update)
 
@@ -515,13 +515,13 @@ Amazon 工程师 Carr Onstott 与 Mehul Jaiswal 把一套内部工单系统的 2
 
 ---
 
-## 37. 一张抗议证书：RSA 模数本身携带着留言——"no one checks these things"
+## 37. 一张抗议证书：RSA 公钥的 base64 编码本身携带着留言——"no one checks these things"
 
 - **Velocity:** ▮▮ rising
 - **Source:** maurycyz.com · 183 pts on HN · Nov 10 (~08:07 UTC+8)
 - **Tags:** `tls` `certificates` `security`
 
-一篇新文章（署期 11 月 8–9 日）演示了**抗议证书**：一张真实的 Let's Encrypt 签发给 maurycyz.com 的证书，其 RSA **公钥模数里嵌着 ASCII 文本**——`//You+dont+actually+have+to+pick+random+private+keys//No+one+checks+these+things//A+certificate+authority+got+away+with+the+number+4+for+a+year//`——任何客户端用 `openssl s_client -connect maurycyz.com:443 </dev/null | sed -n '/BEGIN/,/END/p' | grep -zE '////.?*////'` 就能看到。动机说得很直白：TLS 的 ACME 流程繁重、证书还会过期，"and the whole system doesn't even work because certificates are issued over plaintext connections, and trusted certificate aurthorities [sic] use very secure keys like '4'"——直接影射十月那把 `d = 4` 的失陷 CA 密钥。作者仍然想要加密（"Passive eavesdropping is a real risk… but preventing it doesn't require the whole certificate thing"），所以证书有效、浏览器照常接受；哪怕用"313333333337 (one of the most eleet primes)"这样的虚荣私钥也不会有人察觉，因为"A good protest should be obvious"。
+一篇新文章（署期 11 月 8–9 日）演示了**抗议证书**：一张真实的 Let's Encrypt 签发给 maurycyz.com 的证书，其 RSA 公钥经过构造，使**base64 编码拼出 ASCII 文本**（模数字节是为了让编码显出留言而被挑选的——直接解码模数得到的仍是高熵字节；本次运行已实地验证：与文章所贴 PEM 同序列号 `0643A4BAEC9A375CA90F73C03EB2CCC93EED`）——`//You+dont+actually+have+to+pick+random+private+keys//No+one+checks+these+things//A+certificate+authority+got+away+with+the+number+4+for+a+year//`——任何客户端用 `openssl s_client -connect maurycyz.com:443 </dev/null | sed -n '/BEGIN/,/END/p' | grep -zE '////.?*////'` 就能看到。动机说得很直白：TLS 的 ACME 流程繁重、证书还会过期，"and the whole system doesn't even work because certificates are issued over plaintext connections, and trusted certificate aurthorities [sic] use very secure keys like '4'"——直接影射十月那把 `d = 4` 的失陷 CA 密钥。作者仍然想要加密（"Passive eavesdropping is a real risk… but preventing it doesn't require the whole certificate thing"），所以证书有效、浏览器照常接受；哪怕用"313333333337 (one of the most eleet primes)"这样的虚荣私钥也不会有人察觉，因为"A good protest should be obvious"。
 
 **Why it matters:** 这个演示是对一个盲区的实测：证书颁发机构校验的是密钥的**持有**，而不是它的来源或强度，于是密钥材料成了可写的信道——而且这条消息是在真实 CA 的自动签发流程里存活下来的。这也是本 feed 第二次撞上该网站的怪癖：maurycyz.com 会向某些抓取者返回机器生成的乱码孪生页——本 feed 的阅读器两次拿到的都是无意义的生成文本——真文章只对它喜欢的请求渲染；页脚写着"This website is not licensed for LLM training or content creation"。
 

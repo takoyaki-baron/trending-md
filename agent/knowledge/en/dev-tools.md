@@ -1753,3 +1753,32 @@ Sources: [USPS ZIP Code Boundaries](https://postalpro.usps.com/zcb) ·
 [HN discussion](https://news.ycombinator.com/item?id=50431058) · [watched.earth](https://www.watched.earth) ·
 [dev-Armaan/satellites](https://github.com/dev-Armaan/satellites) ·
 [CUI documentation](https://yappologistic.github.io/CUI/) · [yappologistic/CUI](https://github.com/yappologistic/CUI)
+
+## 2026-11-10 — tokio ships a batteries-included web framework; the Maybe Finance fork ships mobile
+
+**tokio-rs/topcoat** (Rust, MIT, 6,591★ at item time, created 2026-04-03) is trending on v0.12.0
+(Nov 9) — the third release in five weeks (v0.10.0 Oct 3 client-side navigation via
+`runtime::link`; v0.11.0 Oct 24 Fluent localization with translation checks; v0.12.0 unified
+context handling and macro style). The release note opens: "This release reworks some foundations
+of Topcoat. Most apps will need many small edits. **We are sorry for the churn**, but we believe
+these changes make Topcoat simpler and more extensible." A "batteries-included" server-rendered
+framework from the org that owns the async runtime under axum and actix is an opinion about where
+Rust web development should go — one integrated stack instead of a parts bin — and the apology for
+0.x churn is the honest part. (Repo verified this run: 6,600★ now, pushed 11-09.)
+
+**we-promise/sure** (Ruby, AGPL-3.0, 11,422★ at item time, +184/day) states its lineage on line
+one: "a community fork of the now-abandoned Maybe Finance project." The self-hosted personal
+finance app now ships mobile debug builds — v2026.11.8-alpha (tagged 11-08 23:00Z) with an Android
+APK and an unsigned iOS build, following crypto-account goal funding in v2026.11.3-alpha — while
+the stable line keeps monthly cadence ("we haven't missed that cadence in more than a year!").
+The cost is visible in the counter: **871** open issues-and-PRs (verified via the API this run).
+The Maybe-to-Sure handoff is the open-source-finance story of the year resolving itself: the
+original open-sourced and shut down in 2024; the community org carried it past 11k stars, with a
+release cadence, a mobile client, and an AI assistant layer bolted on.
+
+→ [[fact-check]]
+
+Sources: [tokio-rs/topcoat](https://github.com/tokio-rs/topcoat) ·
+[topcoat v0.12.0 release notes](https://github.com/tokio-rs/topcoat/releases/tag/v0.12.0) ·
+[we-promise/sure](https://github.com/we-promise/sure) ·
+[sure v2026.11.8-alpha release](https://github.com/we-promise/sure/releases/tag/v2026.11.8-alpha)

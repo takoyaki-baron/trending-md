@@ -495,7 +495,7 @@ Amazon のエンジニア Carr Onstott と Mehul Jaiswal は、社内チケッ�
 
 **Fireworks AI**(Notion AI が利用する推論プロバイダ)の 10 月の侵害は、二社による開示になった。Fireworks の更新済みセキュリティ速報は、証拠が「indicates links to a cybercriminal threat actor group, which is financially motivated」を示し、**LLMJacking**(不正取得した LLM アクセストークンを違法ゲートウェイに転売)が行われたとする。第二波は Fireworks の R&D マシンをホストするサードパーティクラウドが **10 月 23 日**に侵害され、「the unauthorized third party used it to reach Fireworks development machines and then run an unauthorized workload」(10 月 24 日)。アクセスされたのはリソースメタデータ、請求情報(「Payment card numbers are not stored by Fireworks and were not impacted」)、そして顧客によっては「a subset of incomplete model weights and datasets were accessed」。Notion の告知は**「<1% of Notion workspaces may have been affected」**で、対象は現在無効化された Insights 機能のユーザーすべて。「Some unattributable chat sessions with Notion AI may have been exposed」——記録は「weren't labeled with who wrote them or which workspace they came from」上、「did not contain tool call results」。Notion は 11 月 3 日に Fireworks との接続を断ち同システム上の全データを削除、11 月 6 日に顧客データアクセスの通報を受け、11 月 8 日にデータセットを確認した。
 
-**Why it matters:** この連鎖は現代の AI サプライヤーリスクを一枚の図にしたものだ。あなたのベンダーのベンダーが侵害され、漏えるのが PII ではなく**独自のファインチューニング成果物**——他人の未完成モデル重み——である。両社の慎重さも見どころだ。Fireworks は ZDR 製品(Inference、Training SDK、Nexus)への「no impact」を主張しつつ調査は「is ongoing and may reveal additional information」で、フォレンジックは Unit 42。Notion の影響ユーザーへの助言は資格情報のローテーション——「If you or anyone on your team pasted sensitive information like passwords, API keys, or other credentials into Notion AI during this timeframe, we recommend rotating them right away」。
+**Why it matters:** この連鎖は現代の AI サプライヤーリスクを一枚の図にしたものだ。あなたのベンダーのベンダーが侵害され、漏えるのが PII ではなく**独自のファインチューニング成果物**——他人の未完成モデル重み——である。両社の慎重さも見どころだ。Fireworks は ZDR 製品(Inference、Training SDK、Nexus)への影響を調査「not detected any impact」(未検出——言い回しは留保付き)としつつ調査は「is ongoing and may reveal additional information」で、フォレンジックは Unit 42。Notion の影響ユーザーへの助言は資格情報のローテーション——「If you or anyone on your team pasted sensitive information like passwords, API keys, or other credentials into Notion AI during this timeframe, we recommend rotating them right away」。
 
 [`🔗 Notion:サードパーティ AI ベンダーに関わるセキュリティインシデント`](https://www.notion.com/help/security-incident-involving-a-third-party-ai-vendor) · [`🔗 Fireworks 速報:2026 年 10 月インシデント更新`](https://fireworks.ai/security/bulletins/october-2026-security-incident-update)
 
@@ -515,13 +515,13 @@ Amazon のエンジニア Carr Onstott と Mehul Jaiswal は、社内チケッ�
 
 ---
 
-## 37. 抗議証明書:RSA の法数そのものがメッセージを運ぶ ——「no one checks these things」
+## 37. 抗議証明書:RSA 公開鍵の base64 エンコーディングそのものがメッセージを運ぶ ——「no one checks these things」
 
 - **Velocity:** ▮▮ rising
 - **Source:** maurycyz.com · 183 pts on HN · Nov 10 (~08:07 UTC+8)
 - **Tags:** `tls` `certificates` `security`
 
-新しい記事(日付 11 月 8〜9 日)は**抗議証明書**の実演だ。maurycyz.com に実際に Let's Encrypt が発行した証明書の RSA **公開鍵法数に ASCII テキストが埋め込まれている**——`//You+dont+actually+have+to+pick+random+private+keys//No+one+checks+these+things//A+certificate+authority+got+away+with+the+number+4+for+a+year//`——これは `openssl s_client -connect maurycyz.com:443 </dev/null | sed -n '/BEGIN/,/END/p' | grep -zE '////.?*////'` どのクライアントでも見える。動機は率直だ。TLS の ACME 手続きは重く、証明書は失効する。「and the whole system doesn't even work because certificates are issued over plaintext connections, and trusted certificate aurthorities [sic] use very secure keys like '4'」——10 月の `d = 4` という漏洩 CA 鍵への直接の言及だ。それでも著者は暗号化は欲しい(「Passive eavesdropping is a real risk… but preventing it doesn't require the whole certificate thing」)。だから証明書は有効でブラウザは普通に受け入れる。「313333333337 (one of the most eleet primes)」のようなバニティ秘密鍵でも誰も気づかない。「A good protest should be obvious」なのだから。
+新しい記事(日付 11 月 8〜9 日)は**抗議証明書**の実演だ。maurycyz.com に実際に Let's Encrypt が発行した証明書の RSA 公開鍵は、**base64 エンコーディングが ASCII テキストを綴るよう**構成されている(法数のバイト列は、エンコーディングがメッセージを表示するように選ばれている——法数そのものをデコードしても高エントロピーのままだ。今回のランで実地検証済み:記事掲載の PEM と同一シリアル `0643A4BAEC9A375CA90F73C03EB2CCC93EED`)——`//You+dont+actually+have+to+pick+random+private+keys//No+one+checks+these+things//A+certificate+authority+got+away+with+the+number+4+for+a+year//`——これは `openssl s_client -connect maurycyz.com:443 </dev/null | sed -n '/BEGIN/,/END/p' | grep -zE '////.?*////'` どのクライアントでも見える。動機は率直だ。TLS の ACME 手続きは重く、証明書は失効する。「and the whole system doesn't even work because certificates are issued over plaintext connections, and trusted certificate aurthorities [sic] use very secure keys like '4'」——10 月の `d = 4` という漏洩 CA 鍵への直接の言及だ。それでも著者は暗号化は欲しい(「Passive eavesdropping is a real risk… but preventing it doesn't require the whole certificate thing」)。だから証明書は有効でブラウザは普通に受け入れる。「313333333337 (one of the most eleet primes)」のようなバニティ秘密鍵でも誰も気づかない。「A good protest should be obvious」なのだから。
 
 **Why it matters:** この実演は盲点の実測だ。証明書当局が検証するのは鍵の**所持**であって、出自や強度ではない。つまり鍵素材は書き込み可能なチャネルになる——しかもこのメッセージは実際の CA の自動発行フローを生き延びた。本フィードがこのサイトの癖に触れるのは 2 度目でもある。maurycyz.com は一部のフェッチャーに機械生成の無意味な孪生ページを返し(本フィードのリーダーが受け取ったのは 2 回ともその生成テキストだった)、本当の記事は気に入ったリクエストにしか描画されない。フッターには「This website is not licensed for LLM training or content creation」とある。
 

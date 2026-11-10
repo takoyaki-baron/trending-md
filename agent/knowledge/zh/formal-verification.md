@@ -174,3 +174,22 @@ Anthropic 的 **FlashProve**（2026-11-04，开源研究原型）攻的是与本
 把它放在本文件其他条目旁边读，是同一纪律在新位置的复现：**范围声明才让主张可审查**，正如 Lasm 只在构建时运行的内核、NESformer 明确置于权重之外的 PPU。「可验证推理」目前能意味着什么，也因此被固定下来——一个关于整数、贪心、短上下文 MoE 的证明，而不是关于所服务的产品。两个数字决定它能否走出原型：70–95 倍 GPU 时间，以及 1,024 token 的天花板，而在一个上下文窗口按百万来卖的年头。
 
 → [[frontier-models]] [[harness-reliability]] [[fact-check]]
+
+## 2026-11-10 —— agent 形式化 CPython：差分测试放在证明*之前*，反驳是一等输出
+
+David Andrews 与 Chao Zhang 把 Opus 5.5 agent 指向 **CPython 3.15.2**，把它的函数逐行重写进 **Lean 4**，过一道四步门（[文章](https://broyojo.com/python-formalization/)、[仓库](https://github.com/Broyojo/python-formalization)，Apache-2.0）：
+
+1. **Mirror** —— agent 写一个逐行跟随 C 或 Python 源码的 Lean 模型：同样的分支顺序、同样的错误消息、同样的整数回绕；每一步都引用 3.15.2 源码。
+2. **差分测试** —— 模型与真实 `python3` 在生成的输入上并排运行，直到跨多个种子在 **≥50,000 个用例**上一致。
+3. **证明或反驳** —— 性质在全部输入上陈述；"a false statement is refuted with a counterexample, never weakened"；构建**拒绝 `sorry`、`native_decide` 和新公理**。
+4. **审查** —— 一个没写过该模型的独立 agent 对照源码检查它、在真实解释器上运行每条性质，并问"一个写坏的实现是否也能满足这条定理？"——只有标记 `FAITHFUL` 的行才算覆盖。
+
+十天（工作始于 10-29；仓库创建于 11-02）：**18,898** 条定理与引理（"all checked on every build"）、**613,318** 行 Lean、1,539 个文件、范围内 **26,004** 个函数中的 **4,071** 个（15.7%）——而输出表才是本文件账本上的新东西：**3,834 条性质已证明、588 条带反例反驳、94 条开放**。当被反驳的性质是 CPython 自身的错时，它成为一份 bug 记录：一个在 3.15.2 上打印 `REPRODUCED` 的复现器、带行号的成因、对 CPython 追踪器的查重、一个优先级。至今 **418 份 bug 报告**，其中"约 55"个可从普通 Python 代码崩溃或破坏内存（一个以 `StrEnum` 为键的属性字典上 `setdefault` 触发段错误；ElementTree 元素上的反向切片赋值会复制一个子节点、丢掉另一个），另有 **129** 个模块的 C 版本与纯 Python 版本不一致的案例。
+
+它为什么属于这里：这道门的问题把本文件自 Anthropic×Theorem 脚注 6 以来一直追踪的信任问题反了过来。在那里，一个拿到"让这条定理为真"的证明器可以改写程序；在这里，*审查*步骤从另一侧问同一个问题——"a valid proof about a wrong copy is the most misleading result you can get"——而且差分测试放在证明*之前*，所以在对副本证明任何东西之前，副本已被钉在工件的行为上。OSS-Fuzz 那次证明的是无崩溃（二进制的性质），这一次把**反驳**当作交付物：588 条带反例的假陈述就是 588 个发现，不是失败。相隔一年的规模对比：123 个库 / 239 个入口点无崩溃，对 26,004 个函数中 15.7% 审查为忠实——覆盖率现在是被报告的数字，而这个百分比很诚实地小。
+
+→ [[fact-check]] [[frontier-models]]
+
+Sources: [Formalizing CPython](https://broyojo.com/python-formalization/) ·
+[Broyojo/python-formalization](https://github.com/Broyojo/python-formalization) ·
+[HN 讨论](https://news.ycombinator.com/item?id=50435105)

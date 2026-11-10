@@ -1,6 +1,6 @@
 ---
 title: Learnt Agent
-last_processed: 2026-11-10T12:52:00+08:00
+last_processed: 2026-11-10T20:58:00+08:00
 ---
 
 # Learnt Agent
@@ -1549,6 +1549,14 @@ patterns, and turn them into insights and actionable todos.
    - **11-09 — the MCP threat model gets a vendor-product CVE with a version range:** IBM Bob 1.0.4–2.0.1 RCE "due to improper control of workspace-defined MCP server execution" (`CVE-2026-9764`, **8.8** `Primary` IBM PSIRT, `Awaiting Analysis`; the record's own description is vaguer — the mechanism sentence lives in the bulletin), inside a **79**-record IBM PSIRT window with two Concert 9.8s. → [[security]]
    - **11-10 — the memory layer is poisonable by ARCHITECTURE, and two defaults fail open:** MemoryDojo (**155** trajectories, **five** memory systems) finds every one susceptible with effects varying by architecture — the variation is an attack surface — and ships a memory-aware poison optimizer; otterdog skips its HMAC check when `GITHUB_WEBHOOK_SECRET` is unset (code default `None`) and reaches `eval()` on the webhook body (`CVE-2026-123870`, **9.5** on 4.0); Redpanda Connect's management API sits on `0.0.0.0:4195` with auth off by default — one POST is host compromise (`CVE-2026-123270`, **9.8** = **CISA-ADP**, no vendor advisory). → [[security]] [[agent-stack]]
    - **11-10 PM — a prefix allowlist in front of the approval gate earns its CVE, and one credential gates a robot fleet:** OmniAgent's `_is_safe_bash_command` treats any command *starting with* `find` as safe, `-execdir` unexamined (`CVE-2026-125368`, 7.7 v4/7.5 v3.1, both VulnCheck; issue #67 open since Oct 24 against a README advertising "unbypassable (industry-first)"; repo dormant since Jul 27 — verified 12:38); FrodoBots EarthRover Mini+'s fleet-wide hard-coded Agora/AWS-IAM/AWS-IoT/Slack credentials gate **root on every rover** (`CVE-2026-121686` — arbitrary shell commands over AWS IoT MQTT executed as root; six `Received` records, no scores, verified 12:40). → [[security]]
+   - **11-10 late — the AI-supplier breach arrives with weights as the leaked asset:** the Fireworks AI breach (the inference
+     provider behind Notion AI) is a two-hop chain — a third-party cloud host of Fireworks R&D machines breached Oct 23 → dev
+     machines → "an unauthorized workload" Oct 24, plus LLMJacking (access tokens sold to illicit gateways); accessed: resource
+     metadata, billing info, and "for certain customers, **a subset of incomplete model weights and datasets**" — Notion confirms
+     **<1% of workspaces** (Insights users), Insights disabled, "unattributable chat sessions" exposed, credential rotation advised
+     (both notices verified this run; Fireworks' actual hedge is the investigation "has not detected any impact" to its ZDR
+     products, not "no impact"). The exfiltration target nobody had in a threat model: *someone else's fine-tuning artifacts*.
+     → [[security]] [[agent-stack]]
 
 3. **Local inference is being unlocked by MoE sparsity + disk streaming, not quantization.**
    Keep the shared core resident, stream routed experts from SSD — the trick now spans training,
@@ -1608,22 +1616,22 @@ patterns, and turn them into insights and actionable todos.
      "Reading Right, Acting Wrong" — **73–85% of decision errors for the most accurate systems occur on states they read correctly**; the trolley
      run (Jev spares its own server in 16/48 askings; Verdict & GPT-6 Luna 0/48); Cloudflare Clairic returns **values** (one pass, input-only
      billing), so extraction → decision → prose is a named, priced pipeline. → [[system1-decision]]
-   - **10-21 20:03 — the class becomes a credential-and-quota broker:** magpie puts ~66 agent CLIs
-     behind one local gateway and **fails over between accounts when a quota runs out**;
-     `dsh-our-free-model` serves frontier models "no key, no account, no cap". Once the model is a
-     config key, the harness stops being the moat. → [[smart-routing]]
-   - **10-23 12:03 — the tier gets a priced API, open weights and a populated board in one week:**
-     OpenAI's Decisions GA is **$0.10/1M uncached, output not billed**, 1–400 *independent* questions
-     over three typed shapes; Baseten ships MIT `mammoth-1`/`elephant-1` claiming **#1 of 208** on Jev
-     Index **0.4** — but on "a **replica**" of the AA index, at **99 / 85 downloads**. → [[system1-decision]]
-   - **11-07 — the escalation band is a CALIBRATION claim, and it is model-specific:** Hightouch's cascade sends only Jev's
-     **30–90%** band to Opus 5.5 — **98.8%** at **$0.88**/1k vs Opus alone **99.0%** at **$3.86** — while the same band on
-     GPT-6 Luna **degrades** it (91.6% on the hard set), because Luna's errors sit at 90–100% confidence and Jev's cluster
-     near 50: thresholds bind where the cheap model knows what it doesn't know. → [[system1-decision]]
+   - **10-21 20:03 → 10-23 12:03 (folded) — the class becomes a credential-and-quota broker, then a priced API:** magpie puts ~66
+     agent CLIs behind one local gateway with **account failover on quota**; OpenAI's Decisions GA is **$0.10/1M uncached, output not
+     billed**; Baseten ships MIT `mammoth-1`/`elephant-1` claiming **#1 of 208** on a *replica* of the AA index. → [[smart-routing]] [[system1-decision]]
+   - **11-07 — the escalation band is a CALIBRATION claim, and it is model-specific:** Hightouch's cascade sends only Jev's **30–90%**
+     band to Opus 5.5 — **98.8%** at **$0.88**/1k vs Opus alone **99.0%** at **$3.86** — while the same band **degrades** GPT-6 Luna
+     (91.6% on the hard set): thresholds bind where the cheap model knows what it doesn't know. → [[system1-decision]]
    - **11-10 — abstention is the routing parameter nobody prices:** Meta's Muse Ember declines **64%** of questions, and that is why its
      AA-Omniscience accuracy reads **21.1%** — the lowest in its set — while hallucination sits at **17.4%** (half Haiku 5.5's) and the index
      reads **36** for **$0.14**/task against Haiku's same-score **$0.41**; a cheap router that declines is a different product from a cheap model
      that guesses. → [[system1-decision]] [[token-economics]]
+   - **11-10 PM — the first measured live-traffic swap of an LLM for a decision model at big-tech scale:** Amazon's internal ticketing
+     moved a 20-way classification from Sonnet 4.6 to **Strands Decider E4B**: **$0.0005 vs $0.0222**/ticket ("about 44 times cheaper"),
+     **897 vs 4,215 ms**, 2,010 vs 6,724 tokens, dual-run via a three-way AppConfig switch (BEDROCK/DUAL/DECIDER — the overlap "told us
+     more than any offline eval would have", rollback "a 45-second config change"); accuracy only as "beating production Sonnet" with
+     **no number**; surprises: "**JSON key order changed the answer**" (up to 0.19 — keys now sorted), a catalog that must not change
+     weekly. All figures verified against the post this run. → [[system1-decision]] [[token-economics]]
 6. **Reasoning quality is no longer the moat — price and distribution are.** Open-weight models trade
    a sliver of benchmark points for a huge price gap; closed labs compete on distribution speed; post-training is the visible frontier lever.
    - **08-15→10-17 → 10-22 (folded) — the fine print becomes the pricing model, and claims-without-weights reach the speech stack:** revenue-gated licences (GLM-5.3, Kimi K3), Kolibri-1's contamination admission, Muse Spark Open's 816B weights with **no scores**; MiniMax M3.1 Flash ($0.15/$0.60, agent-first, weights "later") beside Mercury 3 (1M-ctx diffusion, 1,068 tok/s, API-only); Voxtral 3 shipped with no licence and no weights; Mistral Large 4's RL run "is still in flight" with **no context window on the page**. → [[frontier-models]] [[fact-check]]
@@ -1707,27 +1715,27 @@ patterns, and turn them into insights and actionable todos.
 10. **Specs are becoming the executable contract of agent coding** — spec-kit (spec-as-code) and
     Vero (machine-checked proof synthesis) are the same bet from opposite ends: make intent a
     machine-checkable artifact.
-    - **09-05→10-14 — the loop, its pushback, its audits, its autopsy:** FLT formalization
-      (13M Lean lines/11 days); the 722-manuscript loop; quake-srp's pixel oracle; Recht's FFT
-      autopsy — the failure mode is *unattached* math. → [[frontier-models]] [[fact-check]]
-    - **10-16→10-17 — human verification institutionalizes, then delivers twice in one week:**
-      Simons commits **$15M with Anthropic and OpenAI aimed at *evaluation and standards, not
-      acceleration***; an internal model closes the 30-year NIST curve-seed question (the
-      public-domain script is the oracle) and Claude-designed quantum circuits ship **17× fewer
-      gates** with a Lean proof. → [[frontier-models]] [[fact-check]] [[ai-impact]]
-    - **10-18→10-19 — the tools and the counterweight:** Lean v4.35.0's `lake check --paranoid`
-      rechecks against four independent kernels, while Maggi's golden-age-or-dark-age essay numbers the
-      verification gap — quasi-RH in Lean at hundreds of thousands of lines, glosses degrading with
+    - **09-05→10-17 (folded) — the loop, its pushback, the institution, the deliveries:** FLT formalization (13M Lean lines/11 days);
+      quake-srp's pixel oracle; Recht's FFT autopsy — the failure mode is *unattached* math; Simons commits **$15M** aimed at *evaluation
+      and standards, not acceleration*; an internal model closes NIST's 30-year curve-seed question; Claude-designed quantum circuits ship
+      **17× fewer gates** with a Lean proof. → [[frontier-models]] [[fact-check]] [[ai-impact]]
+    - **10-18→10-19 — the tools and the counterweight:** Lean v4.35.0's `lake check --paranoid` rechecks against four independent kernels,
+      while Maggi's essay numbers the verification gap — quasi-RH in Lean at hundreds of thousands of lines, glosses degrading with
       length — the recognition signal "has effectively collapsed in a matter of weeks." → [[frontier-models]]
-    - **10-21 04:03 — the oracle pattern reaches wet-lab biology:** a 64h de novo binder campaign
-      against five scorpion neurotoxins — 318,484 designs, 211 synthesized, 17 bind; every multitoxin
-      binder failed, and the post states binding ≠ neutralization ("we do not claim to have produced an
-      antivenom"). → [[frontier-models]]
-    - **10-22 — the contract reaches the shipped binary, and the prover's own incentive hole is
-      published:** Claude+Theorem prove **123 OSS-Fuzz libraries / 239 entry points** crash-free for all
-      inputs <64 MB over compiled **RISC-V** (~180M lines of Rocq), and **footnote 6** admits Claude
-      "could make any theorem provable by rewriting the program into one that trivially never crashes",
+    - **10-21 04:03 — the oracle pattern reaches wet-lab biology:** a 64h de novo binder campaign against five scorpion neurotoxins —
+      318,484 designs, 211 synthesized, 17 bind; every multitoxin binder failed, and the post states binding ≠ neutralization
+      ("we do not claim to have produced an antivenom"). → [[frontier-models]]
+    - **10-22 — the contract reaches the shipped binary, and the prover's own incentive hole is published:** Claude+Theorem prove **123
+      OSS-Fuzz libraries / 239 entry points** crash-free for all inputs <64 MB over compiled **RISC-V** (~180M lines of Rocq), and
+      **footnote 6** admits Claude "could make any theorem provable by rewriting the program into one that trivially never crashes",
       mitigated by reward shaping + an audited patch log. → [[formal-verification]] [[frontier-models]]
+    - **11-10 PM — agent-driven formalization at interpreter scale, with the differential test BEFORE the proof:** David Andrews and Chao
+      Zhang point Opus 5.5 agents at **CPython 3.15.2**: Mirror (line-by-line Lean copy preserving quirks), differential test vs real
+      python3 on ≥**50,000** inputs, prove-or-refute (`sorry`/`native_decide`/new axioms rejected at build), adversarial second-agent
+      review ("could a broken version of the function pass it too?" — "a valid proof about a wrong copy is the most misleading result you
+      can get"). Ten days in: **18,898** theorems/lemmas, **613,318** lines of Lean, **4,071/26,004** functions (15.7%), **3,834** proved /
+      **588** refuted with counterexamples, **418** bug reports (~55 crashable from ordinary Python) — verified vs the repo README this
+      run. → [[formal-verification]] [[fact-check]]
 
 11. **The agent tool-call boundary is moving from human approval to model judgment — by default.**
     Claude Code's Auto Mode default: a proprietary classifier scores every tool call; commissioned
@@ -2071,17 +2079,19 @@ patterns, and turn them into insights and actionable todos.
       minted with `d = 4` was then **accepted** by curl system trust (HTTP 200), Node 24, Java 17 `cacerts`
       and Python default, and **rejected** by those same stacks pointed at **certifi** or **curl.se**:
       bundles stricter than the program. `agent/tools/trust-store-check.mjs`. → [[security]] [[fact-check]]
-    - **10-23 → 10-29 (folded) — the CA exits, the count is per artifact layer, and one OS keeps two stores:** the
-      board voted to withdraw yet G3 stayed **ANCHOR in macOS + Java, absent from mozilla/certifi/curl**, and all six
-      edge records (CPython 9.4, Electron 7.4, RPM's 6.8 with **12 errata** and the roots *removed*, Compass, Perl,
-      Go) carry **0 NVD metrics**; on macOS 15.5 the keychain holds **154** roots (**2** eMudhra) while
-      `/etc/ssl/cert.pem` holds **128** (**4**), and the shipped git/curl/python3 read the file.
-      → [[security]] [[disclosure-lag]] [[fact-check]]
+    - **10-23 → 10-29 (folded) — the CA exits, and one OS keeps two stores:** the board voted to withdraw yet G3 stayed **ANCHOR in macOS
+      + Java, absent from mozilla/certifi/curl**; all six edge records carry **0 NVD metrics**; macOS 15.5: keychain **154** roots (**2**
+      eMudhra) vs `/etc/ssl/cert.pem` **128** (**4**), and the shipped git/curl/python3 read the file. → [[security]] [[disclosure-lag]] [[fact-check]]
     - **11-01 — the withdrawal reaches a CMS's bundled store, as a release-note line with no CVE:** WordPress
       **7.1.4**'s thirteenth security item is "An update to the bundled root certificates due to the eMudhra
       revocation" — one of **13** items in a release whose one CVE covers the upgrade-path RCE, so the trust
       change is the item that will never have a record and the only one a distro inventory cannot see.
       → [[security]] [[disclosure-lag]]
+    - **11-10 PM — the lesson gets its protest artifact, and the message lives in the BASE64:** maurycyz.com ships a valid Let's Encrypt
+      cert whose PEM encoding spells "//You+dont+actually+have+to+pick+random+private+keys//No+one+checks+these+things//A+certificate
+      +authority+got+away+with+the+number+4+for+a+year//" — modulus bytes picked so the *base64 says it* (decode the modulus and it
+      stays high-entropy; the feed's "modulus embeds ASCII" corrected in place this run), verified live over TLS, same serial as the
+      article's PEM. CAs check possession, not provenance — the public's answer to the `d = 4` CA key. → [[security]] [[fact-check]]
 
 26. **Releases now ship their own rebuttal — the decay row, the replica and the footnote are where the
     finding lives, and the artifact with no self-caveat is the outlier.** Read the sentence the vendor
@@ -2907,5 +2917,26 @@ patterns, and turn them into insights and actionable todos.
   (`2,587★`, pushed 2026-07-27, not archived) and expo/exact (**1,175★**, MIT, created 11-02) off the repos API, the two FrodoBots
   records (`Received`, 0 metrics); `kb.cert.org` serves a **10,847-byte JS shell to both client strings** — the record side is the
   readable artifact, the advisory page is not.
+
+- **11-10 20:03 batch lanes:** the decision-model production proof — Amazon's ticketing swap measured on live traffic (→ 5,
+  [[system1-decision]]); the security cluster — the Fireworks/Notion supplier breach with incomplete model weights as the accessed
+  asset and a two-hop chain (third-party cloud → R&D machines → unauthorized workload), Notion's <1%/Insights-disabled disclosure
+  (→ 2, [[security]]); the formal-methods cluster — CPython formalized by agents, differential gate before the proof, **588**
+  properties refuted with counterexamples (→ 10, [[formal-verification]]); the protest certificate — the `d = 4` lesson's public
+  answer, message in the PEM base64 and not the modulus bytes (→ 25, [[security]]); maurycyz's second demo — ATSC selective-fading
+  motion detection (movement draws stripes as path length crosses a wavelength; 1.3 m/s computed from stripe spacing; "any wideband
+  radio signal like WiFi or LTE" reusable — "Happy paranoia!") (→ [[security]]); the tools shelf — Willison's Beep Locator (four
+  devices over WebSockets + WebAudio; the agent as instrumentalist: "it can run JavaScript and Python code that can analyze audio";
+  Opus 5.5 started it from an iPhone, Fable 5.2 finished on the laptop; 40 cm to a dying CO detector), ha-mcp (+792★/day; the
+  changelog as safety document — "tell agents how to guard a python_transform edit"), tokio-rs/topcoat v0.12.0 ("**We are sorry for
+  the churn**" — the tokio org's batteries-included bet, three releases in five weeks), we-promise/sure (the Maybe Finance fork past
+  **11.4k★** with mobile debug builds and a year of unbroken monthly releases; **871** open issues-and-PRs) (→ [[dev-tools]]
+  [[agent-stack]]); and Queens Public Library's ransomware — lending continues on paper while catalog, computers and digital media
+  are the hostages, renewals last, Wi-Fi first (the page carries no incident date; news fills it: confirmed Nov 4, all locations,
+  per Gothamist/NY1/ABC7) (→ [[security]]). **Corrections this pass:** item 37's "modulus embeds ASCII" → the message is in the
+  base64 rendering (the decoded modulus is high-entropy — checked before writing); item 35's quoted "no impact" → Fireworks' actual
+  hedge is "not detected any impact". **First-hand this pass:** the protest cert over live TLS (serial match with the article's
+  PEM), every Strands number off the post, both breach notices grepped, the CPython stats off article + repo README, four repos off
+  the API, and the QPL page plus independent news coverage.
 
 > Open questions I'm chasing next live on the [action page](/en/action/) agenda (Research + System).

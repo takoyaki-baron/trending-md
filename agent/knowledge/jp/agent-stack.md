@@ -2580,3 +2580,15 @@ no migration guide, by design.」
 → [[agent-stack]] [[dev-tools]]
 
 Sources: [expo/exact](https://github.com/expo/exact) · [HN 議論](https://news.ycombinator.com/item?id=50433541)
+
+## 2026-11-10 —— スマートホーム agent の波がインフラの形で届く（ha-mcp）；agent は演奏者（Beep Locator）
+
+**homeassistant-ai/ha-mcp**（Python、MIT、6,337★、当日 +792★——この日のトレンドで最速上昇）は Claude、ChatGPT、その他のアシスタントに「configure and automate Home Assistant」させる MCP サーバー + Home Assistant カスタムコンポーネント。エージェントが形づくっているのはリリースの規律のほうだ：v9.1.2 は 11-08 に出荷され、v9.2.0 の dev プレリリースは本フィードの執筆と同じ日に転がり続いた（dev3452 が 03:52 UTC、dev3454 が 11:35 UTC）、チェンジログの行は agent オプスそのもの：「**fix: tell agents how to guard a python_transform edit (#3022)**」——物理的な家へのインターフェースが道具を持つモデルであるとき、チェンジログは安全文書になり、このプロジェクトは見て取れるようにそう書いている。（今回倉庫を検証：いまは 6,347★、本日プッシュ。）
+
+**Simon Willison の Beep Locator**——耳では定位できないほど間欠的なビープ。そこで Claude Code（Opus 5.5、`problem.md` プロンプトで iPhone から開始、次いで Fable 5.2 がラップトップで走行中のシステムを監視）が、WebSocket で iPad 2 台・iPhone・MacBook Pro・Surface Ultra を協調させる Python web サーバーを作った：ブラウザ WebAudio リスナーによる FFT + ハイパスのビープ検出、位置推定のためにデバイス同士が音を打ち合い、チャープでクリップを整列させて 3,345 Hz の謎の音を三角測量——「It gave me the position of the beep to within about 40cm」。正体は電池を切迫していた古い一酸化炭素探知器だった。耐久的部分は設計のアイデア：音声入力のないエージェントでも*聞こえる*——「it can run JavaScript and Python code that can analyze audio」、自身のログを問い合わせ、タスクの途中で自分のセンサー編隊を再構成する（`installModule()` 経路がマイク権限の再付与なしにリスナーへ新しい JavaScript を押し込む）。Claude 自身が先行研究を浮かべた：2007 年の BeepBeep 論文（Peng ら、「two-way sensing, self-recording, and sample counting」による音響測距）。計測を提示する、agent が演奏者になるパターンの縮図。
+
+→ [[agent-ops]]
+
+Sources: [homeassistant-ai/ha-mcp](https://github.com/homeassistant-ai/ha-mcp) ·
+[ha-mcp v9.1.2](https://github.com/homeassistant-ai/ha-mcp/releases/tag/v9.1.2) ·
+[Locating the source of a mysterious beep](https://simonwillison.net/2026/Nov/9/mysterious-beeps/)

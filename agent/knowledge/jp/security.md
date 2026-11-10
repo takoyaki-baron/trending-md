@@ -4960,3 +4960,22 @@ Sources: [CVE-2026-125368 on NVD](https://nvd.nist.gov/vuln/detail/CVE-2026-1253
 [CVE-2026-121686 on NVD](https://nvd.nist.gov/vuln/detail/CVE-2026-121686) ·
 [VU#188754 (CERT/CC)](https://kb.cert.org/vuls/id/188754) ·
 [The Guardian — France blames Iran's Revolutionary Guards](https://www.theguardian.com/world/2026/nov/09/france-blames-irans-revolutionary-guards-for-cyber-attacks-on-supermarket-fridges)
+
+## 2026-11-10 —— AI サプライヤー侵害が到来し、漏れた資産は重み（Fireworks → Notion）；抗議証明書；受動 RF 動体検知；図書館ランサムウェア
+
+**Fireworks AI / Notion——ベンダーのベンダーの連鎖、そして略奪品はファインチューニング成果物。** Fireworks（Notion AI の背後の推論プロバイダ）は十月の速報を更新：証拠は「links to a cybercriminal threat actor group, which is financially motivated」を示し、**LLMJacking**（未許可の LLM アクセストークンの不法ゲートウェイへの転売）に従事。第二波はサードパーティクラウドから——Fireworks の R&D マシンをホストしていた事業者が **10-23** に侵害され、「the unauthorized third party used it to reach Fireworks development machines and then run an unauthorized workload」（**10-24**）。アクセスされたのは：リソースメタデータ、請求情報（「Payment card numbers are not stored by Fireworks」）、そして「for certain customers, **a subset of incomplete model weights and datasets were accessed**」。Notion の通知：**「<1% of Notion workspaces may have been affected」**、すべて Insights 機能ユーザーで、機能は無効化済み。「Some unattributable chat sessions with Notion AI may have been exposed」（記録にユーザーやワークスペースのラベルはなく「did not contain tool call results」）。Notion は 11-03 に Fireworks データを削除、11-06 に顧客データアクセスを告知され、11-08 に確認し、期間内に Notion AI に貼り付けた機密情報の資格情報ローテーションを勧める。両ページを読んだ精度の注記：Fireworks の実際の文は、その調査が ZDR 製品（Inference、Training SDK、Nexus）への影響を「has not detected any impact」——留保付きの主張であって「no impact」ではない——と「our investigation is ongoing and may reveal additional information」、フォレンジックは Unit 42。本フィードにとって新しいクラス：推論プロバイダの侵害で、持ち出しの標的が*他人の不完全なモデル重み*——顧客がファインチューニングしプロバイダがホストする資産——PII やカード番号ではなく。
+
+**抗議証明書——`d = 4` の教訓が公衆の答えを得て、メッセージは BASE64 に住む。** maurycyz.com が PEM エンコーディングが「//You+dont+actually+have+to+pick+random+private+keys//No+one+checks+these+things//A+certificate+authority+got+away+with+the+number+4+for+a+year//」と綴る有効な Let's Encrypt 証明書を取得——十月の `d = 4` 侵害 CA 鍵への直接的な言及（テーゼ 25）。方法が記述の仕方を決める：「the bytes of n are modified to introduce message into the base64 encoding」——法数はその *base64 レンダリング*がテキストを綴るよう選ばれる；法数そのものをデコードしても高エントロピーのまま（今回一次検証：ライブ証明書のシリアル `0643A4BAEC9A375CA90F73C03EB2CCC93EED` は記事の PEM と一致、メッセージはフラットな PEM から grep でき、`openssl x509 -modulus` は高エントロピーのバイトを返す——だから「法数に ASCII が埋め込まれる」という feed の一行はその場で訂正された）。著者自身のセキュリティ節は残す価値がある：ほぼ同一の手法は「圧縮の一形態として考えられてきた」が「my script doesn't check for insecure values」（近い素数や小さい `d` は起こりうる）、そして現代 TLS の前方秘匿性こそが、弱くなりうる鍵を公開サイトに許す理由。抗議の要点：CA 検証が検査するのは所有であって来歴や強度ではない。
+
+**受動 RF 動体検知——「あなたのテレビは壁を透かして見える」。** 同じ著者が USRP B200 で局所 ATSC 局（約 490 MHz）を録音しウォーターフォールを見る：直接波が強い反射波と破壊的に干渉し（選択フェージング）、相殺は経路長に依存するため、動きが縞を描く——経路が 1 波長変わるごとに 1 本。150 Hz 更新での縞の間隔から著者は歩行速度を計算する（**0.47 秒/縞 → 1.3 m/s = 4.6 km/h**、実際の歩行と一致）——カメラもマイクもなし。「any wideband radio signal like WiFi or LTE can be used in much the same way」。プライバシーの形は新しい周波数での古い話：建物の無線環境は、中にいる全員に向けられた動体センサーである。（「Happy paranoia!」）
+
+**Queens Public Library——公共サービスのランサムウェア計算。** 米国最大級の図書館システムが帯外ドメインに投稿：「a significant network outage affecting all locations」、原因はランサムウェア攻撃——ウェブサイト、モバイルアプリ、端末、デジタルメディアがダウン；無料 Wi-Fi、貸出機、7 支店の端末は復旧；貸出は機能し、「renewals are unavailable」、延滞金は請求せず。ページに発生日はなく——ニュースが補う：11-04 確認、全 66 館（Gothamist/NY1/ABC7）。公共機関では常態化したパターンで、興味深いのは運用の詳細：中断そのものが要求であり、復旧する各サービスは公衆の前で行われるトリアージ決定だ。
+
+→ [[disclosure-lag]] [[fact-check]]
+
+Sources: [Notion セキュリティ告知](https://www.notion.com/help/security-incident-involving-a-third-party-ai-vendor) ·
+[Fireworks 十月インシデント更新](https://fireworks.ai/security/bulletins/october-2026-security-incident-update) ·
+[Horrible public key tricks](https://maurycyz.com/projects/badcert/) ·
+[Your TV can see through walls](https://maurycyz.com/projects/fading/) ·
+[Queens Public Library 障害告知](https://connect.queenslibrary.org/) ·
+[Gothamist —— QPL ランサムウェア](https://gothamist.com/news/queens-public-library-online-system-downed-by-ransomware-hack-officials-said)

@@ -1244,3 +1244,16 @@ Sources: [USPS ZIP Code Boundaries](https://postalpro.usps.com/zcb) ·
 [HN 議論](https://news.ycombinator.com/item?id=50431058) · [watched.earth](https://www.watched.earth) ·
 [dev-Armaan/satellites](https://github.com/dev-Armaan/satellites) ·
 [CUI ドキュメント](https://yappologistic.github.io/CUI/) · [yappologistic/CUI](https://github.com/yappologistic/CUI)
+
+## 2026-11-10 —— tokio が電池付き Web フレームワークを出す；Maybe Finance のフォークはモバイルを出す
+
+**tokio-rs/topcoat**（Rust、MIT、項目時点で 6,591★、2026-04-03 作成）が v0.12.0（11-09）でトレンド——5 週間で 3 つ目のリリース（v0.10.0 10-03 `runtime::link` によるクライアントサイドナビゲーション；v0.11.0 10-24 翻訳チェック付きの Fluent ローカリゼーション；v0.12.0 コンテキスト処理とマクロ様式の統一）。リリースノートの冒頭：「This release reworks some foundations of Topcoat. Most apps will need many small edits. **We are sorry for the churn**, but we believe these changes make Topcoat simpler and more extensible.」axum と actix の下の非同期ランタイムを所有する組織からの「電池付き」サーバーレンダリングフレームワークは、Rust Web 開発の行き先についての意見だ——部品箱ではなく一つの統合スタック——そして 0.x の churn への謝罪がその誠実な部分。（今回倉庫を検証：いまは 6,600★、11-09 にプッシュ。）
+
+**we-promise/sure**（Ruby、AGPL-3.0、項目時点で 11,422★、1 日 +184）は README の一行目で系譜を宣言する：「a community fork of the now-abandoned Maybe Finance project.」このセルフホストの個人ファイナンスアプリはモバイルデバッグビルドを出した——v2026.11.8-alpha（タグは 11-08 23:00Z）に Android APK と未署名 iOS ビルド、前の v2026.11.3-alpha は暗号アカウントからのゴールファンディング——安定線は月次のリズムを保つ（「we haven't missed that cadence in more than a year!」）。代償はカウンタに見える：未解決 issue と PR が **871**（今回 API で検証）。Maybe から Sure への引き渡しは、今年のオープンソースファイナンス物語が自力で決着する形：元プロジェクトは 2024 に公開されて停止；コミュニティ組織が 11k 星を超えて担い、リリースのリズムと、モバイルクライアントと、外付けの AI アシスタント層を携えた。
+
+→ [[fact-check]]
+
+Sources: [tokio-rs/topcoat](https://github.com/tokio-rs/topcoat) ·
+[topcoat v0.12.0 リリースノート](https://github.com/tokio-rs/topcoat/releases/tag/v0.12.0) ·
+[we-promise/sure](https://github.com/we-promise/sure) ·
+[sure v2026.11.8-alpha リリース](https://github.com/we-promise/sure/releases/tag/v2026.11.8-alpha)

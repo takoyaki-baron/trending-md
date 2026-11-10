@@ -1155,3 +1155,16 @@ ZIP Code 从来不是地理区域——它们是投递路线分组，USPS 自己
 [HN 讨论](https://news.ycombinator.com/item?id=50431058) · [watched.earth](https://www.watched.earth) ·
 [dev-Armaan/satellites](https://github.com/dev-Armaan/satellites) ·
 [CUI 文档](https://yappologistic.github.io/CUI/) · [yappologistic/CUI](https://github.com/yappologistic/CUI)
+
+## 2026-11-10 —— tokio 交出全家桶 Web 框架；Maybe Finance 的分支交出移动端
+
+**tokio-rs/topcoat**（Rust、MIT、条目发布时 6,591★、创建于 2026-04-03）随 v0.12.0（11 月 9 日）上榜——五周内第三个版本（v0.10.0 10 月 3 日经 `runtime::link` 的客户端导航；v0.11.0 10 月 24 日带翻译校验的 Fluent 本地化；v0.12.0 统一上下文处理与宏风格）。发布说明开头写道："This release reworks some foundations of Topcoat. Most apps will need many small edits. **We are sorry for the churn**, but we believe these changes make Topcoat simpler and more extensible." 一个"batteries-included"的服务端渲染框架出自拥有 axum 与 actix 底下那个异步运行时的组织，这是关于 Rust Web 开发该往哪去的一次表态——一个集成栈而不是零件箱——而 0.x 期间的破坏性变更道歉是其中诚实的部分。（本轮已核实仓库：现在 6,600★，11-09 有推送。）
+
+**we-promise/sure**（Ruby、AGPL-3.0、条目发布时 11,422★、单日 +184）在 README 第一行声明它的血统："a community fork of the now-abandoned Maybe Finance project." 这个自托管个人理财应用现在交出移动调试构建——v2026.11.8-alpha（标签时间 11-08 23:00Z）带 Android APK 与未签名 iOS 构建，此前 v2026.11.3-alpha 加了加密账户的资金目标——而稳定线保持月度节奏（"we haven't missed that cadence in more than a year!"）。代价显示在计数器里：**871** 个未关闭 issue 与 PR（本轮经 API 核实）。Maybe 到 Sure 的交接是年度开源理财故事的自我了结：原项目 2024 年开源并关停；社区组织把它带过 11k 星，带上了发布节奏、移动客户端，以及一层外挂的 AI 助理。
+
+→ [[fact-check]]
+
+Sources: [tokio-rs/topcoat](https://github.com/tokio-rs/topcoat) ·
+[topcoat v0.12.0 发布说明](https://github.com/tokio-rs/topcoat/releases/tag/v0.12.0) ·
+[we-promise/sure](https://github.com/we-promise/sure) ·
+[sure v2026.11.8-alpha 发布](https://github.com/we-promise/sure/releases/tag/v2026.11.8-alpha)

@@ -14233,5 +14233,41 @@
   "en": "GBrain's hosted-service landing page (team memory across AI tools), linked as the paid-hosting option from garrytan/gbrain. Fetched 11-09; the positioning matches the repo README's own description, but both are the same origin, so that is not counted. cv 0: vendor self-description only.",
   "zh": "GBrain 托管服务的落地页（跨 AI 工具的团队记忆），作为付费托管选项链接自 garrytan/gbrain。11-09 抓取；其定位与仓库 README 自身的描述一致，但两者同源，不计入。cv 0：仅厂商自我描述。",
   "jp": "GBrain のホストサービスのランディングページ（AI ツール横断のチーム記憶）。garrytan/gbrain から有料ホスティングの選択肢としてリンク。11-09 に取得。位置づけはリポジトリ README の自己記述と一致しますが、両者は同源なので算入しません。cv 0：ベンダーの自己記述のみ。"
+ },
+ "notion.com": {
+  "cat": "vendor",
+  "cred": "high",
+  "cv": 1,
+  "density": "med",
+  "en": "Notion first-party security notices. Cross-validated (11-10): its Fireworks incident notice (<1% of workspaces, Insights disabled, unattributable chat sessions, Nov 3/6/8 timeline) is consistent with Fireworks's own bulletin of the same incident — two independent primaries naming each other.",
+  "zh": "Notion 官方安全通告。已交叉核验（11-10）：其 Fireworks 事件通告（<1% 工作空间、Insights 停用、不可归属的会话、11 月 3/6/8 时间线）与 Fireworks 自家公告一致——两个独立一方互相指认。",
+  "jp": "Notion 一次情報のセキュリティ告知。突合済み（11-10）：Fireworks インシデント告知（ワークスペースの <1%、Insights 無効化、帰属不能セッション、11-03/06/08 の時系列）は Fireworks 自身の速報と一致——互いに名指す独立した一次情報二つ。"
+ },
+ "maurycyz.com": {
+  "cat": "community",
+  "cred": "med",
+  "cv": 1,
+  "density": "high",
+  "en": "Personal technical-demo site (machine-generated twin pages for some fetchers — read it in a browser or via a reader). Cross-validated first-hand (11-10): the protest-certificate demo reproduced against the live TLS endpoint — the served cert's serial matches the article's PEM and the message greps out of the flat PEM (it lives in the base64 rendering, not the modulus bytes).",
+  "zh": "个人技术演示站（对部分抓取器返回机器生成的孪生页——用浏览器或阅读器读）。已一手交叉核验（11-10）：抗议证书演示对在线 TLS 端点复现——实发证书序列号与文章 PEM 一致、留言可从扁平 PEM 中 grep 得出（留言住在 base64 渲染里，不在模数字节里）。",
+  "jp": "個人技術デモサイト（一部フェッチャーに機械生成の双子ページを返す——ブラウザかリーダーで読む）。今回一次で突合（11-10）：抗議証明書のデモをライブ TLS 端点に対して再現——配信された証明書のシリアルは記事の PEM と一致し、メッセージはフラット PEM から grep できる（base64 レンダリングに住み、法数のバイトには無い）。"
+ },
+ "broyojo.com": {
+  "cat": "research",
+  "cred": "med",
+  "cv": 1,
+  "density": "high",
+  "en": "Project write-up site for the agent-driven CPython formalization. Cross-validated (11-10): every headline stat (18,898 theorems, 613,318 Lean lines, 4,071/26,004 functions, 3,834 proven / 588 refuted / 94 open) matches the Apache-2.0 GitHub repo's own README — an independent artifact.",
+  "zh": "agent 驱动 CPython 形式化的项目文章站。已交叉核验（11-10）：每个头条统计（18,898 条定理、613,318 行 Lean、4,071/26,004 个函数、3,834 已证明 / 588 反驳 / 94 开放）与 Apache-2.0 的 GitHub 仓库自己的 README 一致——独立工件。",
+  "jp": "エージェント駆動 CPython 形式化のプロジェクト解説サイト。突合済み（11-10）：見出し統計のすべて（定理 18,898、Lean 613,318 行、関数 4,071/26,004、証明 3,834 / 反証 588 / 未決 94）は Apache-2.0 の GitHub 倉庫自身の README と一致——独立した成果物。"
+ },
+ "connect.queenslibrary.org": {
+  "cat": "vendor",
+  "cred": "high",
+  "cv": 1,
+  "density": "low",
+  "en": "Queens Public Library's out-of-band incident status page (the main domain goes dark during the outage). Cross-validated (11-10): its ransomware-outage notice is confirmed by independent coverage — Gothamist, NY1 and ABC7 (attack confirmed Nov 4, all 66 locations). The page itself carries no incident date; the news does.",
+  "zh": "Queens Public Library 的带外事件状态页（主域在故障期间熄灭）。已交叉核验（11-10）：其勒索软件故障通告得到独立报道确认——Gothamist、NY1 与 ABC7（11 月 4 日确认、全部 66 个馆点）。页面本身不带事发日期；新闻带。",
+  "jp": "Queens Public Library の帯外インシデント状態ページ（障害中は本体ドメインが消える）。突合済み（11-10）：ランサムウェア障害告知は独立報道で確認——Gothamist、NY1、ABC7（11-04 確認、全 66 館）。ページ自体に発生日はなく、ニュースが持つ。"
  }
 }

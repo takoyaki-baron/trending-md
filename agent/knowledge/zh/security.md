@@ -4516,3 +4516,22 @@ rover 就是别人家里的摄像头加麦克风。注意可读工件：`kb.cert
 [CVE-2026-121686 on NVD](https://nvd.nist.gov/vuln/detail/CVE-2026-121686) ·
 [VU#188754 (CERT/CC)](https://kb.cert.org/vuls/id/188754) ·
 [卫报——法国指控伊朗革命卫队](https://www.theguardian.com/world/2026/nov/09/france-blames-irans-revolutionary-guards-for-cyber-attacks-on-supermarket-fridges)
+
+## 2026-11-10 —— AI 供应商数据链破口到来，泄漏的资产是权重（Fireworks → Notion）；抗议证书；无源 RF 运动检测；图书馆勒索软件
+
+**Fireworks AI / Notion——供应商的供应商链路，赃物是微调产物。** Fireworks（Notion AI 背后的推理供应商）更新其十月公告：证据"indicates links to a cybercriminal threat actor group, which is financially motivated"，从事 **LLMJacking**（把未授权的 LLM 访问令牌卖给非法网关）；第二波来自第三方云——托管 Fireworks 研发机的宿主 **10 月 23 日**被攻破，"the unauthorized third party used it to reach Fireworks development machines and then run an unauthorized workload"（**10 月 24 日**）。被访问的有：资源元数据、账单信息（"Payment card numbers are not stored by Fireworks"），以及——"for certain customers, **a subset of incomplete model weights and datasets were accessed**"。Notion 的通知：**"<1% of Notion workspaces may have been affected"**、全部是 Insights 功能用户、该功能已停用；"Some unattributable chat sessions with Notion AI may have been exposed"（记录不带用户或工作空间标签，且"did not contain tool call results"）；Notion 于 11 月 3 日删除其 Fireworks 数据、11 月 6 日被告知客户数据被访问、11 月 8 日确认，并建议对该时间窗内粘进 Notion AI 的敏感信息轮换凭据。读两份页面得到的精度注记：Fireworks 的原话是其调查对其 ZDR 产品（Inference、Training SDK、Nexus）"has not detected any impact"——有保留的主张，不是"no impact"——以及"our investigation is ongoing and may reveal additional information"，取证由 Unit 42 负责。对这个 feed 而言这是一个新的类：推理供应商被入侵，而外泄目标是*别人的不完整模型权重*——客户微调、供应商托管的资产——而不是 PII 或卡号。
+
+**抗议证书——`d = 4` 一课得到它的公开回应，而留言住在 BASE64 里。** maurycyz.com 拿到一张有效的 Let's Encrypt 证书，其 PEM 编码拼出 "//You+dont+actually+have+to+pick+random+private+keys//No+one+checks+these+things//A+certificate+authority+got+away+with+the+number+4+for+a+year//"——直接影射十月那把 `d = 4` 的失陷 CA 密钥（论题 25）。方法决定了该怎么描述它："the bytes of n are modified to introduce message into the base64 encoding"——模数被挑选成它的 *base64 渲染*拼出文本；直接解码模数本身仍是高熵（本轮一手验证：在线证书的序列号 `0643A4BAEC9A375CA90F73C03EB2CCC93EED` 与文章所贴 PEM 一致、留言从扁平 PEM 中 grep 得出、`openssl x509 -modulus` 解出的是高熵字节——所以 feed 里"模数嵌 ASCII"一句已就地更正）。作者自己的安全小节值得保留：几乎相同的方法"have been considered as a form of compression"，但"my script doesn't check for insecure values"（接近的素数与小的 `d` 都可能出现），而现代 TLS 的前向保密才是让可能偏弱的密钥可用于公开网站的原因。抗议的要点：CA 验证查的是持有，不是出处或强度。
+
+**无源 RF 运动检测——"你的电视能穿墙看"。** 同一位作者用 USRP B200 录制本地 ATSC 电视台（约 490 MHz）看瀑布图：直达信号与强反射相消（选择性衰落），相消依赖于路径长度，所以移动会画出条纹——路径每变化一个波长出现一道条纹。在 150 Hz 更新率下从条纹间距作者算出行走速度（**0.47 秒/条纹 → 1.3 m/s = 4.6 km/h**，与实际步伐吻合），没有摄像头、没有麦克风；"any wideband radio signal like WiFi or LTE can be used in much the same way"。隐私形状是老话新频率：一栋楼的无线电环境就是一个指向楼内每个人的运动传感器。（"Happy paranoia!"）
+
+**Queens Public Library——公共服务面对勒索软件的算术。** 美国最大的图书馆系统之一在带外域名上发帖："a significant network outage affecting all locations"、系勒索软件攻击所致——网站、移动应用、公共电脑、数字媒体下线；免费 Wi-Fi、借还书机与七个分馆的公共电脑已恢复；借书可用、"renewals are unavailable"、不收滞纳金。页面不带事发日期——新闻补上：11 月 4 日确认、全部 66 个馆点（Gothamist/NY1/ABC7）。模式对市政机构已成惯例，而有趣的正是运维细节：中断本身就是勒索条件，每一项恢复的服务都是一次公开做出的分诊决定。
+
+→ [[disclosure-lag]] [[fact-check]]
+
+Sources: [Notion 安全通告](https://www.notion.com/help/security-incident-involving-a-third-party-ai-vendor) ·
+[Fireworks 十月事件更新](https://fireworks.ai/security/bulletins/october-2026-security-incident-update) ·
+[Horrible public key tricks](https://maurycyz.com/projects/badcert/) ·
+[Your TV can see through walls](https://maurycyz.com/projects/fading/) ·
+[Queens Public Library 故障通告](https://connect.queenslibrary.org/) ·
+[Gothamist —— QPL 勒索软件](https://gothamist.com/news/queens-public-library-online-system-downed-by-ransomware-hack-officials-said)
