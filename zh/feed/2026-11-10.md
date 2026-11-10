@@ -1,6 +1,6 @@
 ---
 date: 2026-11-10
-updated: 2026-11-10T04:31:34Z
+updated: 2026-11-10T12:33:35Z
 schedule: 04:03, 12:03, 20:03 UTC+8
 sources: 28
 license: CC-BY-4.0
@@ -473,14 +473,153 @@ ScrapeBench 自称首个针对网站抓取**法律合规**的 agentic 基准，�
 
 ---
 
+## 34. Amazon 内部工单系统用决策模型替换 Sonnet 4.6 —— 便宜 44 倍，而且是线上实测
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** strandsagents.com · 374 pts on HN · Nov 10 (~14:01 UTC+8)
+- **Tags:** `amazon` `decision-models` `cost`
+
+Amazon 工程师 Carr Onstott 与 Mehul Jaiswal 把一套内部工单系统的 20 类分类任务——"customer escalations, capacity requests, automated alarms, security findings"——从 **Bedrock 上的 Claude Sonnet 4.6** 迁移到了 **Strands Decider E4B**（一个月前发布的决策模型的 Gemma 4 构建，它"cannot generate text"，只"returns a probability for each option plus a confidence score"），部署在 SageMaker `ml.g5.xlarge` 上（A10G，24 GB，常驻约 19 GiB，单请求约 640 ms）。线上流量实测：**每张工单 $0.0005 对 $0.0222**——"about 44 times cheaper than Sonnet, a 98% reduction"——平均延迟 **897 ms 对 4,215 ms**，token **2,010 对 6,724**，输出从 170 个 token 降到 1 个。至于准确率，文章只给出"The results showed E4B beating production Sonnet on a separate set of our tickets"——没有数字。
+
+**Why it matters:** 真正可迁移的是部署机制：用 AppConfig 三向开关（`BEDROCK`/`DUAL`/`DECIDER`）让两个模型同时在真实流量上运行——"told us more than any offline eval would have"——而且"going back was a 45-second config change"。两个诚实的意外也值得带走："One thing that surprised us was that JSON key order changed the answer"（键序会让输出概率漂移最多 0.19，所以他们现在对键排序），以及明说的适用边界——标签不需要解释、目录不每周变动、上下文塞得进 4,096 token 窗口；超出这些，"a decision model probably can't replace the LLM's job"。
+
+[`🔗 Amazon saves millions by replacing Sonnet with Strands Decider`](https://strandsagents.com/blog/amazon-saves-millions-replacing-sonnet-with-strands-decider/) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50436640)
+
+---
+
+## 35. Fireworks AI 失陷波及 Notion 客户——模型权重与数据集在被访问之列
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Notion 安全公告 · 70 pts on HN · Nov 10 (~15:19 UTC+8)
+- **Tags:** `security` `ai-infrastructure` `breach`
+
+**Fireworks AI**（Notion AI 所用的推理供应商）十月的失陷事件现在变成了两家公司的联合披露。Fireworks 的更新公告称，证据"indicates links to a cybercriminal threat actor group, which is financially motivated"，并实施了 **LLMJacking**（向非法网关出售未经授权的 LLM 访问令牌）；第二波来自一家托管 Fireworks 研发机器的第三方云供应商在 **10 月 23 日**被攻破，"the unauthorized third party used it to reach Fireworks development machines and then run an unauthorized workload"（10 月 24 日）。被访问的数据包括：资源元数据、账单信息（"Payment card numbers are not stored by Fireworks and were not impacted"），以及——"for certain customers, **a subset of incomplete model weights and datasets were accessed**"。Notion 的公告称**"<1% of Notion workspaces may have been affected"**，全部是已停用的 Insights 功能的用户："Some unattributable chat sessions with Notion AI may have been exposed"——会话记录"weren't labeled with who wrote them or which workspace they came from"，且"did not contain tool call results"。Notion 于 11 月 3 日切断并删除了 Fireworks 上的全部数据，11 月 6 日收到客户数据被访问的通报，11 月 8 日确认了数据集。
+
+**Why it matters:** 这条链路就是现代 AI 供应商风险的一张示意图：你的供应商的供应商被攻破，泄漏的不是 PII，而是**专有的微调产物**——别人的未完成模型权重。值得留意两家公司各自谨慎的地方：Fireworks 称其 ZDR 产品（Inference、Training SDK、Nexus）"no impact"，且调查"is ongoing and may reveal additional information"，取证由 Unit 42 负责；Notion 给受影响用户的建议是轮换凭据——"If you or anyone on your team pasted sensitive information like passwords, API keys, or other credentials into Notion AI during this timeframe, we recommend rotating them right away"。
+
+[`🔗 Notion：涉及第三方 AI 供应商的安全事件`](https://www.notion.com/help/security-incident-involving-a-third-party-ai-vendor) · [`🔗 Fireworks 公告：2026 年 10 月事件更新`](https://fireworks.ai/security/bulletins/october-2026-security-incident-update)
+
+---
+
+## 36. Simon Willison 给 Claude Code 装上耳朵：四台设备、声学测距、40 厘米的答案
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** simonwillison.net · 218 pts on HN · Nov 10 (~08:10 UTC+8)
+- **Tags:** `agents` `claude-code` `hardware-hacking`
+
+一屋子搬家纸箱里有一只间歇性响的蜂鸣器，频率太低没法用耳朵定位——于是有了"Beep Locator"：一个 Python web 服务器经 WebSocket 协调**两台 iPad、一台 iPhone、一台 MacBook Pro 和一台 Surface Ultra**，每台设备跑浏览器 WebAudio 监听器，用 FFT 加高通滤波做蜂鸣检测，设备之间互相发声估算位置，再用一次 chirp 对齐音频片段，三角定位出那只神秘的声音（**3345 Hz**）。Agent 的工作流：**Claude Code（Opus 5.5，Extra thinking）** 从 Willison 的 iPhone 上由一个 `problem.md` 提示启动项目，随后 **Fable 5.2** 在笔记本上接管——监控运行中的系统、在线修改，并用 `installModule()` 通道把新 JavaScript 推给各监听器，免去重新授予麦克风权限。Claude 自己找到了先行研究：**2007 年的 BeepBeep 论文**（Peng 等），用"two-way sensing, self-recording, and sample counting"做声学测距。
+
+**Why it matters:** 结果——"It gave me the position of the beep to within about 40cm"，最后定位到"an ancient carbon monoxide detector that desperately wanted its batteries replaced"——几乎不是重点。设计思想才是：没有音频输入的 agent 依然可以**听见**——"it can run JavaScript and Python code that can analyze audio"，查询自己的日志，并在任务中途重新配置自己的传感器阵列。这是"agent 当仪器"模式的缩影，而且带着一个可复核的测量结果。
+
+[`🔗 Locating the source of a mysterious beep`](https://simonwillison.net/2026/Nov/9/mysterious-beeps/) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50434310)
+
+---
+
+## 37. 一张抗议证书：RSA 模数本身携带着留言——"no one checks these things"
+
+- **Velocity:** ▮▮ rising
+- **Source:** maurycyz.com · 183 pts on HN · Nov 10 (~08:07 UTC+8)
+- **Tags:** `tls` `certificates` `security`
+
+一篇新文章（署期 11 月 8–9 日）演示了**抗议证书**：一张真实的 Let's Encrypt 签发给 maurycyz.com 的证书，其 RSA **公钥模数里嵌着 ASCII 文本**——`//You+dont+actually+have+to+pick+random+private+keys//No+one+checks+these+things//A+certificate+authority+got+away+with+the+number+4+for+a+year//`——任何客户端用 `openssl s_client -connect maurycyz.com:443 </dev/null | sed -n '/BEGIN/,/END/p' | grep -zE '////.?*////'` 就能看到。动机说得很直白：TLS 的 ACME 流程繁重、证书还会过期，"and the whole system doesn't even work because certificates are issued over plaintext connections, and trusted certificate aurthorities [sic] use very secure keys like '4'"——直接影射十月那把 `d = 4` 的失陷 CA 密钥。作者仍然想要加密（"Passive eavesdropping is a real risk… but preventing it doesn't require the whole certificate thing"），所以证书有效、浏览器照常接受；哪怕用"313333333337 (one of the most eleet primes)"这样的虚荣私钥也不会有人察觉，因为"A good protest should be obvious"。
+
+**Why it matters:** 这个演示是对一个盲区的实测：证书颁发机构校验的是密钥的**持有**，而不是它的来源或强度，于是密钥材料成了可写的信道——而且这条消息是在真实 CA 的自动签发流程里存活下来的。这也是本 feed 第二次撞上该网站的怪癖：maurycyz.com 会向某些抓取者返回机器生成的乱码孪生页——本 feed 的阅读器两次拿到的都是无意义的生成文本——真文章只对它喜欢的请求渲染；页脚写着"This website is not licensed for LLM training or content creation"。
+
+[`🔗 Horrible public key tricks`](https://maurycyz.com/projects/badcert/) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50434264)
+
+---
+
+## 38. 你的电视能穿墙视物：一根天线和一张频谱瀑布图的运动检测
+
+- **Velocity:** ▮▮ rising
+- **Source:** maurycyz.com · 153 pts on HN · Nov 10 (~13:24 UTC+8)
+- **Tags:** `rf` `sdr` `privacy`
+
+同一位作者的 RF 演示（写于 2025 年 8 月至 2026 年 2 月，今天登上 HN）：用 **Ettus USRP B200** 录下本地 **ATSC 数字电视信号**（约 490 MHz），盯着频谱瀑布图看。直射信号与强反射相消——**选择性衰落**——由于相消依赖于路径长度，路径中的任何移动都会画出条纹："The gaps between the stripes happen when my reflection perfectly cancels out the residual signal, which happens each time the path length changes by one wavelength。"从条纹间距（150 Hz 瀑布更新率下约 70 像素）作者算出步行速度：每条纹 0.47 秒 → 2.1 Hz → **1.3 m/s = 4.6 km/h**——与实际步速吻合，而且因为行走方向与信号路径垂直，无需几何修正。
+
+**Why it matters:** 这个机制的优雅之处恰恰在于它是无源的——没有摄像头、没有麦克风，只有一台接收机和相位相消的算术；同样的几何适用于任何宽带信号（"any wideband radio signal like WiFi or LTE can be used in much the same way"）。隐私含义是老命题在新频率上的重述：一栋楼的无线电环境就是一支指向楼内所有人的运动传感器，作者的落款是"Happy paranoia!"
+
+[`🔗 Your TV can see through walls`](https://maurycyz.com/projects/fading/) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50436410)
+
+---
+
+## 39. 形式化 CPython：agent 把解释器逐行重写成 Lean——418 份 bug 报告，其中约 55 个可用普通 Python 触发崩溃
+
+- **Velocity:** ▮▮ rising
+- **Source:** broyojo.com · 86 pts on HN · Nov 10 (~09:56 UTC+8)
+- **Tags:** `research` `formal-methods` `python`
+
+**David Andrews 与 Chao Zhang** 让 agent（"Opus 5.5"）逐行重写 **CPython 3.15.2** 的函数到 **Lean 4**，每个函数要过四道关卡：拷入 Lean 并保留无符号回卷等怪癖、在**≥50,000 个输入**上与真实 Python 对拍、证明一条性质、再由独立的第二个 agent 复审——审查的门槛问题是"could a broken version of the function pass it too?"，因为"A valid proof about a wrong copy is the most misleading result you can get"。十天下来（10 月 29 日启动）：**18,898 条定理与引理**、**613,318 行 Lean**、**26,004 个函数中的 4,071 个（15.7%）**——语法规则 100%、内建类型 35%、解析器 31%、C 模块 19%、解释器核心 10%、标准库 9%。目前产出：**418 份 bug 报告**，其中"about 55 can crash the interpreter or corrupt memory from ordinary Python code"，另有 129 个模块的 C 版本与纯 Python 版本行为不一致。
+
+**Why it matters:** 区别于形式化方法演示的是规模：588 条陈述被**证伪并附反例**，对照的是真实解释器，且崩溃清单非常具体——对属性字典用 `StrEnum` 键调用 `setdefault` 会段错误、对 ElementTree 元素做反向切片赋值会复制一个子元素并丢失另一个。这套流水线本身（证明之前先对拍真实 Python、对抗性的第二 agent 复审）是任何 C 代码库的 agent 驱动验证可复用的配方，且工作已开源：仓库 Apache-2.0，今天还在推送。
+
+[`🔗 Formalizing CPython`](https://broyojo.com/python-formalization/) · [`🔗 Broyojo/python-formalization`](https://github.com/Broyojo/python-formalization) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50435105)
+
+---
+
+## 40. tokio-rs/topcoat：tokio 官方组织的全家桶式 web 框架，五周内发布第三个版本
+
+- **Velocity:** ▮ steady
+- **Source:** GitHub Trending · 今日 +192 stars · Nov 10 (~20:15 UTC+8)
+- **Tags:** `rust` `web-framework` `github-trending`
+
+**tokio-rs/topcoat**（Rust，MIT，**6,591 stars**，2026 年 4 月创建）以每日 +192 星登上趋势榜，**v0.12.0 于 11 月 9 日发布**——发布说明的措辞罕见地坦率："This release reworks some foundations of Topcoat. Most apps will need many small edits. **We are sorry for the churn**, but we believe these changes make Topcoat simpler and more extensible。"节奏才是信号：v0.10.0（10 月 3 日）加了客户端导航（`runtime::link`——更新页面、标题与历史，同时保留两侧共享的 signal 并恢复滚动位置），v0.11.0（10 月 24 日）加了基于 **Fluent** 的本地化与翻译检查，v0.12.0 统一了 context 处理（one context、route context、router settings）与宏风格（"context comes first"、"one argument style"）。
+
+**Why it matters:** 一个"batteries-included"的服务端渲染 Rust web 框架出自 tokio 官方组织——也就是拥有 axum 与 actix 底下那个异步运行时的项目——这本身就是一种立场：Rust web 开发应该走向一个整合栈，而不是零件箱。0.x 系列里为破坏性变更道歉是诚实的那一半；五周三个版本、每个版本都带升级指南是跑得快的那一半。在上面前先读懂这两半都值得。
+
+[`🔗 tokio-rs/topcoat`](https://github.com/tokio-rs/topcoat) · [`🔗 v0.12.0 发布说明`](https://github.com/tokio-rs/topcoat/releases/tag/v0.12.0)
+
+---
+
+## 41. ha-mcp：一天 792 星，让 Claude 接管你家 Home Assistant 的 MCP 服务器
+
+- **Velocity:** ▮▮ rising
+- **Source:** GitHub Trending · 今日 +792 stars · Nov 10 (~20:15 UTC+8)
+- **Tags:** `mcp` `home-automation` `github-trending`
+
+**homeassistant-ai/ha-mcp**（Python，MIT，**6,337 stars**）是今日涨速最快的趋势仓库，**+792 stars**：一套 MCP 服务器加 Home Assistant 自定义组件，让 Claude、ChatGPT 等助手"configure and automate Home Assistant"——它的发布纪律也带着 agent 的形状。**v9.1.2** 于 11 月 8 日发布，而 v9.2.0 的开发预发布版在本 feed 写作当天接连滚动（03:52 UTC 的 dev3452、11:35 UTC 的 dev3454），changelog 的条目读起来就像 agent 运维："fix: tell agents how to guard a python_transform edit (#3022)"。安装走 HACS，预发布开关可切到 dev 通道。
+
+**Why it matters:** 智能家居 agent 浪潮的到来形态是**基础设施**而不是演示——一个 6.3k 星的项目，自己的提交内容是教 agent 小心对待真实的家庭状态（可能弄坏自动化的 `python_transform` 编辑）。当一栋物理住宅的接口变成一个带工具的模型，changelog 就成了一份安全文档，而这个项目显然正在那样写它。
+
+[`🔗 homeassistant-ai/ha-mcp`](https://github.com/homeassistant-ai/ha-mcp) · [`🔗 v9.1.2 发布`](https://github.com/homeassistant-ai/ha-mcp/releases/tag/v9.1.2)
+
+---
+
+## 42. Sure：被放弃的 Maybe Finance 的社区分支开始出货移动端——Android APK 与未签名 iOS 包
+
+- **Velocity:** ▮ steady
+- **Source:** GitHub Trending · 今日 +184 stars · Nov 10 (~20:15 UTC+8)
+- **Tags:** `fintech` `self-hosted` `github-trending`
+
+**we-promise/sure**（Ruby，AGPL-3.0，**11,422 stars**，+184/日）在 README 第一行就交代了血统："This repository is a community fork of the now-abandoned Maybe Finance project。"这个自托管个人理财应用——仪表盘、净资产、支出、一个能回答你储蓄问题的 AI 助手——已经不止于 web：**v2026.11.8-alpha**（11 月 9 日）附上了**移动端 debug 构建**（Android APK 与未签名的 iOS 构建），此前 v2026.11.3-alpha 加入了加密账户为目标注资和商家 logo。稳定线保持着纪律：10 月 31 日的 **v0.7.6** 写着"we haven't missed that cadence in more than a year!"势头的代价也写在计数器里：**871 个未关闭的 issue 与 PR**。
+
+**Why it matters:** Maybe 到 Sure 的交接是年度开源理财故事的自我了断：原项目 2024 年开源并关停，一个社区组织已经把它带到停尸之后 11k 星的位置——带着发布节奏、移动客户端，以及外挂的 AI 助手层。对任何评估自托管理财工具的人，诚实的读法都在数字里：一整年不断档的月度发布是实打实的可靠性；871 个未关闭 issue 与 PR 是它身后的队列。
+
+[`🔗 we-promise/sure`](https://github.com/we-promise/sure) · [`🔗 v2026.11.8-alpha 发布说明`](https://github.com/we-promise/sure/releases/tag/v2026.11.8-alpha) · [`🔗 v0.7.6 发布说明`](https://github.com/we-promise/sure/releases/tag/v0.7.6)
+
+---
+
+## 43. 皇后区公共图书馆遭勒索软件攻击：所有馆址照常开放，但官网、App 和续借全部下线
+
+- **Velocity:** ▮ steady
+- **Source:** connect.queenslibrary.org · 58 pts on HN · Nov 10 (~17:04 UTC+8)
+- **Tags:** `ransomware` `public-services` `security`
+
+美国最大的图书馆系统之一——皇后区公共图书馆——在一个独立域名上发布了故障通告："We are open as scheduled but experiencing a significant network outage affecting all locations"，并且"This disruption, the result of a **ransomware attack**, impacts the following services"：官方网站、QPL 移动 App、多数馆址的公共电脑、数字媒体服务。已部分恢复：全部开放馆址的免费 Wi-Fi、借还书机器、以及七个分馆的公共电脑（Central Library、Far Rockaway、Flushing、Glen Oaks、Hunters Point、Jackson Heights、Kew Gardens Hills）。借阅可用，但"During this outage, however, renewals are unavailable"，且"customers are not charged late fines on borrowed materials"。页面没有给出事件日期，也没有归属团伙——它是一张滚动更新的状态页。
+
+**Why it matters:** 对市政机构来说这个模式已经司空见惯——面向公众的域名熄灭，更新迁往带外主机——但这里真正有趣的是运营细节：一家图书馆可以靠纸笔和桌子继续借书，而它的目录、公共电脑和数字馆藏才是真正的人质。这就是公共服务的勒索软件算术：**中断本身就是要挟**，每一项恢复的服务（先 Wi-Fi，续借最后）都是一次在众目睽睽下做出的分诊决策。
+
+[`🔗 皇后区公共图书馆故障通告`](https://connect.queenslibrary.org/) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50437790)
+
+---
 
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-11-10T04:31:34Z |
-| Items | 33 |
-| Sources tracked | 33（Hacker News、GitHub Trending、NVD、CISA KEV、arXiv、厂商博客、安全公告） |
+| Generated | 2026-11-10T12:33:35Z |
+| Items | 43 |
+| Sources tracked | 43（Hacker News、GitHub Trending、NVD、CISA KEV、arXiv、厂商博客、安全公告） |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8（每日三次） |
 | Ranking | 速度加权（时效 × 互动加速度 × 来源权威度） |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |

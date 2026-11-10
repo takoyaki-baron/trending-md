@@ -1,6 +1,6 @@
 ---
 date: 2026-11-10
-updated: 2026-11-10T04:31:34Z
+updated: 2026-11-10T12:33:35Z
 schedule: 04:03, 12:03, 20:03 UTC+8
 sources: 28
 license: CC-BY-4.0
@@ -473,14 +473,153 @@ dense リトリーバはクエリの意味仕様に合う段落を選ぶはず�
 
 ---
 
+## 34. Amazon の社内チケットシステム、Sonnet 4.6 を意思決定モデルに置換 —— 44 倍安く、しかも本番トラフィックで実測
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** strandsagents.com · 374 pts on HN · Nov 10 (~14:01 UTC+8)
+- **Tags:** `amazon` `decision-models` `cost`
+
+Amazon のエンジニア Carr Onstott と Mehul Jaiswal は、社内チケットシステムの 20 分類タスク——「customer escalations, capacity requests, automated alarms, security findings」——を **Bedrock 上の Claude Sonnet 4.6** から **Strands Decider E4B**(1 か月前に登場した意思決定モデルの Gemma 4 ビルド。「cannot generate text」で「returns a probability for each option plus a confidence score」だけを返す)へ置き換えた。SageMaker `ml.g5.xlarge`(A10G、24 GB、常駐約 19 GiB、1 リクエスト約 640 ms)で稼働。本番トラフィックでの実測は**チケット 1 件あたり $0.0005 対 $0.0222**——「about 44 times cheaper than Sonnet, a 98% reduction」——平均レイテンシ **897 ms 対 4,215 ms**、トークン **2,010 対 6,724**、出力は 170 トークンから 1 へ。精度については「The results showed E4B beating production Sonnet on a separate set of our tickets」としか書かれておらず、数値はない。
+
+**Why it matters:** 移植可能なのはデプロイ手法のほうだ。AppConfig の 3 値スイッチ(`BEDROCK`/`DUAL`/`DECIDER`)で両モデルを本番トラフィックに同時に流し——「told us more than any offline eval would have」——「going back was a 45-second config change」。正直に書かれた 2 つの意外も持ち帰る価値がある。「One thing that surprised us was that JSON key order changed the answer」(キー順で出力確率が最大 0.19 動くため、キーをソートするようになった)。そして明示された適用境界——ラベルに説明が要らない、カタログが週次で変わらない、文脈が 4,096 トークン窓に収まる。外れるなら「a decision model probably can't replace the LLM's job」。
+
+[`🔗 Amazon saves millions by replacing Sonnet with Strands Decider`](https://strandsagents.com/blog/amazon-saves-millions-replacing-sonnet-with-strands-decider/) · [`🔗 HN ディスカッション`](https://news.ycombinator.com/item?id=50436640)
+
+---
+
+## 35. Fireworks AI 侵害が Notion の顧客に到達 —— モデル重みとデータセットがアクセスされた中に
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Notion セキュリティ告知 · 70 pts on HN · Nov 10 (~15:19 UTC+8)
+- **Tags:** `security` `ai-infrastructure` `breach`
+
+**Fireworks AI**(Notion AI が利用する推論プロバイダ)の 10 月の侵害は、二社による開示になった。Fireworks の更新済みセキュリティ速報は、証拠が「indicates links to a cybercriminal threat actor group, which is financially motivated」を示し、**LLMJacking**(不正取得した LLM アクセストークンを違法ゲートウェイに転売)が行われたとする。第二波は Fireworks の R&D マシンをホストするサードパーティクラウドが **10 月 23 日**に侵害され、「the unauthorized third party used it to reach Fireworks development machines and then run an unauthorized workload」(10 月 24 日)。アクセスされたのはリソースメタデータ、請求情報(「Payment card numbers are not stored by Fireworks and were not impacted」)、そして顧客によっては「a subset of incomplete model weights and datasets were accessed」。Notion の告知は**「<1% of Notion workspaces may have been affected」**で、対象は現在無効化された Insights 機能のユーザーすべて。「Some unattributable chat sessions with Notion AI may have been exposed」——記録は「weren't labeled with who wrote them or which workspace they came from」上、「did not contain tool call results」。Notion は 11 月 3 日に Fireworks との接続を断ち同システム上の全データを削除、11 月 6 日に顧客データアクセスの通報を受け、11 月 8 日にデータセットを確認した。
+
+**Why it matters:** この連鎖は現代の AI サプライヤーリスクを一枚の図にしたものだ。あなたのベンダーのベンダーが侵害され、漏えるのが PII ではなく**独自のファインチューニング成果物**——他人の未完成モデル重み——である。両社の慎重さも見どころだ。Fireworks は ZDR 製品(Inference、Training SDK、Nexus)への「no impact」を主張しつつ調査は「is ongoing and may reveal additional information」で、フォレンジックは Unit 42。Notion の影響ユーザーへの助言は資格情報のローテーション——「If you or anyone on your team pasted sensitive information like passwords, API keys, or other credentials into Notion AI during this timeframe, we recommend rotating them right away」。
+
+[`🔗 Notion:サードパーティ AI ベンダーに関わるセキュリティインシデント`](https://www.notion.com/help/security-incident-involving-a-third-party-ai-vendor) · [`🔗 Fireworks 速報:2026 年 10 月インシデント更新`](https://fireworks.ai/security/bulletins/october-2026-security-incident-update)
+
+---
+
+## 36. Simon Willison が Claude Code に耳をつけた:4 台のデバイス、音響測距、40 cm の答え
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** simonwillison.net · 218 pts on HN · Nov 10 (~08:10 UTC+8)
+- **Tags:** `agents` `claude-code` `hardware-hacking`
+
+引っ越し段ボールの部屋で鳴る間欠ビープ。耳で探すには発生がまばらすぎる——そこで「Beep Locator」が作られた。Python の web サーバが WebSocket で**iPad 2 台、iPhone、MacBook Pro、Surface Ultra**を協調させ、各デバイスのブラウザ WebAudio リスナーが FFT+ハイパスフィルタでビープ検知、デバイス同士が音を打ち合って位置を推定し、最後に 1 回のチャープで音声クリップを突き合わせて謎のトーン(**3345 Hz**)を三角測量する。エージェントの流れはこうだ。**Claude Code(Opus 5.5、Extra thinking)**が Willison の iPhone から `problem.md` のプロンプトでプロジェクトを開始し、次いで **Fable 5.2** がノート PC 側で引き継いだ——稼働中のシステムを監視し、ライブで修正を加え、`installModule()` 経由で新しい JavaScript をリスナーへpushしてマイク権限の再付与を回避。Claude 自身が先行研究を突き止めた。**2007 年の BeepBeep 論文**(Peng ら)——「two-way sensing, self-recording, and sample counting」による音響測距だ。
+
+**Why it matters:** 結果——「It gave me the position of the beep to within about 40cm」、正体は「an ancient carbon monoxide detector that desperately wanted its batteries replaced」——はほぼ本題ではない。設計思想が本体だ。音声入力を持たないエージェントでも**聞く**ことができる。「it can run JavaScript and Python code that can analyze audio」——自分のログを照会し、タスクの途中で自分のセンサーラリーを再構成できる。「エージェントを楽器奏者にする」パターンの縮図で、しかも検証可能な測定結果がついてくる。
+
+[`🔗 Locating the source of a mysterious beep`](https://simonwillison.net/2026/Nov/9/mysterious-beeps/) · [`🔗 HN ディスカッション`](https://news.ycombinator.com/item?id=50434310)
+
+---
+
+## 37. 抗議証明書:RSA の法数そのものがメッセージを運ぶ ——「no one checks these things」
+
+- **Velocity:** ▮▮ rising
+- **Source:** maurycyz.com · 183 pts on HN · Nov 10 (~08:07 UTC+8)
+- **Tags:** `tls` `certificates` `security`
+
+新しい記事(日付 11 月 8〜9 日)は**抗議証明書**の実演だ。maurycyz.com に実際に Let's Encrypt が発行した証明書の RSA **公開鍵法数に ASCII テキストが埋め込まれている**——`//You+dont+actually+have+to+pick+random+private+keys//No+one+checks+these+things//A+certificate+authority+got+away+with+the+number+4+for+a+year//`——これは `openssl s_client -connect maurycyz.com:443 </dev/null | sed -n '/BEGIN/,/END/p' | grep -zE '////.?*////'` どのクライアントでも見える。動機は率直だ。TLS の ACME 手続きは重く、証明書は失効する。「and the whole system doesn't even work because certificates are issued over plaintext connections, and trusted certificate aurthorities [sic] use very secure keys like '4'」——10 月の `d = 4` という漏洩 CA 鍵への直接の言及だ。それでも著者は暗号化は欲しい(「Passive eavesdropping is a real risk… but preventing it doesn't require the whole certificate thing」)。だから証明書は有効でブラウザは普通に受け入れる。「313333333337 (one of the most eleet primes)」のようなバニティ秘密鍵でも誰も気づかない。「A good protest should be obvious」なのだから。
+
+**Why it matters:** この実演は盲点の実測だ。証明書当局が検証するのは鍵の**所持**であって、出自や強度ではない。つまり鍵素材は書き込み可能なチャネルになる——しかもこのメッセージは実際の CA の自動発行フローを生き延びた。本フィードがこのサイトの癖に触れるのは 2 度目でもある。maurycyz.com は一部のフェッチャーに機械生成の無意味な孪生ページを返し(本フィードのリーダーが受け取ったのは 2 回ともその生成テキストだった)、本当の記事は気に入ったリクエストにしか描画されない。フッターには「This website is not licensed for LLM training or content creation」とある。
+
+[`🔗 Horrible public key tricks`](https://maurycyz.com/projects/badcert/) · [`🔗 HN ディスカッション`](https://news.ycombinator.com/item?id=50434264)
+
+---
+
+## 38. あなたのテレビは壁の向こうが見える:アンテナ 1 本とスペクトラム瀑布図による動体検知
+
+- **Velocity:** ▮▮ rising
+- **Source:** maurycyz.com · 153 pts on HN · Nov 10 (~13:24 UTC+8)
+- **Tags:** `rf` `sdr` `privacy`
+
+同じ著者の RF 実演(2025 年 8 月〜2026 年 2 月に書かれ、今日 HN に上がった)。**Ettus USRP B200** で局所の **ATSC デジタル TV 局**(約 490 MHz)を録り、スペクトログラムを眺める。直接波が強い反射波と打ち消し合う——**選択的フェージング**——で、打ち消しが経路長に依存するがゆえに、経路中の移動は縞模様として描かれる。「The gaps between the stripes happen when my reflection perfectly cancels out the residual signal, which happens each time the path length changes by one wavelength。」縞の間隔(150 Hz の瀑布更新で約 70 ピクセル)から歩行速度を計算すると、1 縞 0.47 秒 → 2.1 Hz → **1.3 m/s = 4.6 km/h**——実際の歩調と一致し、進行方向が信号経路に垂直だったため幾何補正は不要だった。
+
+**Why it matters:** この仕組みの优雅さは受動的なところにある。カメラもマイクもなし、受信機と位相打ち消しの算数だけ。同じ幾何はあらゆる広帯域信号に成り立つ(「any wideband radio signal like WiFi or LTE can be used in much the same way」)。プライバシーへの含意は古い命題の新しい周波数での言い直しだ。建物の電波環境は、中にいる全員に向けられた動体センサーである。著者の締めくくりは「Happy paranoia!」
+
+[`🔗 Your TV can see through walls`](https://maurycyz.com/projects/fading/) · [`🔗 HN ディスカッション`](https://news.ycombinator.com/item?id=50436410)
+
+---
+
+## 39. CPython の形式化:エージェントがインタプリタを Lean へ行単位で書き直す —— バグ報告 418 件、うち約 55 件は通常の Python からクラッシュ可能
+
+- **Velocity:** ▮▮ rising
+- **Source:** broyojo.com · 86 pts on HN · Nov 10 (~09:56 UTC+8)
+- **Tags:** `research` `formal-methods` `python`
+
+**David Andrews と Chao Zhang** はエージェント(「Opus 5.5」)を **CPython 3.15.2** に向け、関数を行単位で **Lean 4** に書き直させた。各関数は 4 段のゲートを通る。符号なしラップアラウンドなどの癖を保ったまま Lean に写す、**50,000 入力以上**で本物の Python と対比テストする、性質を証明する、そして独立した第二のエージェントがレビューする——ゲートの問いは「could a broken version of the function pass it too?」。「A valid proof about a wrong copy is the most misleading result you can get」だからだ。開始から 10 日(10 月 29 日着手)で**定理と補題 18,898 本**、**Lean 613,318 行**、**26,004 関数のうち 4,071(15.7%)**——文法規則 100%、組み込み型 35%、パーサ 31%、C モジュール 19%、インタプリタ本体 10%、標準ライブラリ 9%。現在の成果物は**バグ報告 418 件**。「about 55 can crash the interpreter or corrupt memory from ordinary Python code」で、モジュールの C 版と純 Python 版が食い違う事例が 129 件。
+
+**Why it matters:** これを形式手法のデモと分けるのは規模だ。588 の命題が**反例つきで偽と証明**され、相手は本物のインタプリタ。クラッシュリストは具体的だ。属性 dict への `StrEnum` キーの `setdefault` でセグフォ、ElementTree 要素への後方スライス代入で子が 1 つ複製され 1 つ失われる。このパイプライン自体(証明の前に本物との対比テスト、敵対的な第二エージェントレビュー)はあらゆる C コードベースのエージェント駆動検証に転用できるレシピで、作業はオープンだ。リポジトリは Apache-2.0、今日も push されている。
+
+[`🔗 Formalizing CPython`](https://broyojo.com/python-formalization/) · [`🔗 Broyojo/python-formalization`](https://github.com/Broyojo/python-formalization) · [`🔗 HN ディスカッション`](https://news.ycombinator.com/item?id=50435105)
+
+---
+
+## 40. tokio-rs/topcoat:tokio 本家の「電池付き」Web フレームワーク、5 週間で 3 回目のリリース
+
+- **Velocity:** ▮ steady
+- **Source:** GitHub Trending · 本日 +192 スター · Nov 10 (~20:15 UTC+8)
+- **Tags:** `rust` `web-framework` `github-trending`
+
+**tokio-rs/topcoat**(Rust、MIT、**6,591 スター**、2026 年 4 月作成)が 1 日 +192 でトレンドに載っている。**v0.12.0 は 11 月 9 日にリリース**で、リリースノートの書き出しが珍しいほど率直だ。「This release reworks some foundations of Topcoat. Most apps will need many small edits. **We are sorry for the churn**, but we believe these changes make Topcoat simpler and more extensible。」信号はペースのほうだ。v0.10.0(10 月 3 日)はクライアントサイドナビゲーション(`runtime::link`——ページ・タイトル・履歴を更新しつつ共有 signal を保持しスクロール位置を復元)、v0.11.0(10 月 24 日)は **Fluent** ベースのローカリゼーションと翻訳チェック、v0.12.0 は context の統一(one context、route context、router settings)とマクロ様式(「context comes first」「one argument style」)。
+
+**Why it matters:** 「batteries-included」なサーバーレンダリング Rust Web フレームワークが tokio 本体のオルグから来る——axum や actix の足元にある非同期ランタイムを持つあのプロジェクトだ——のは、Rust の Web 開発は部品箱ではなく統合スタックへ向かうべきだという一つの意見表明だ。0.x での破壊的変更への謝罪が正直な半分、5 週間で 3 リリース・毎回アップグレードガイド付きが速さの半分。その上でアプリを始める前に、両方を読む価値がある。
+
+[`🔗 tokio-rs/topcoat`](https://github.com/tokio-rs/topcoat) · [`🔗 v0.12.0 リリースノート`](https://github.com/tokio-rs/topcoat/releases/tag/v0.12.0)
+
+---
+
+## 41. ha-mcp:Claude に Home Assistant を預ける MCP サーバが 1 日で 792 スター
+
+- **Velocity:** ▮▮ rising
+- **Source:** GitHub Trending · 本日 +792 スター · Nov 10 (~20:15 UTC+8)
+- **Tags:** `mcp` `home-automation` `github-trending`
+
+**homeassistant-ai/ha-mcp**(Python、MIT、**6,337 スター**)は本日最速のトレンド急上昇リポジトリで**+792 スター**:MCP サーバと Home Assistant カスタムコンポーネントのセットで、Claude や ChatGPT などのアシスタントに「configure and automate Home Assistant」させる。リリース規律もエージェントの形をしている。**v9.1.2** は 11 月 8 日にリリースされ、v9.2.0 の開発プレリリースは本フィードの執筆当日も転がり続けている(03:52 UTC の dev3452、11:35 UTC の dev3454)。そのチェンジログの行はエージェント運維そのものだ。「fix: tell agents how to guard a python_transform edit (#3022)」。インストールは HACS 経由で、dev チャネルにはプレリリーススイッチがある。
+
+**Why it matters:** スマートホームエージェントの波が届いたのは**インフラ**としてであって、デモとしてではない。6.3k スターのプロジェクトのコミット内容が、生きた家庭の状態をエージェントに慎重に扱わせること(自動化を壊しかねない `python_transform` 編集)そのものだ。物理的な家のインターフェースがツールを持つモデルになると、チェンジログは安全文書になる。このプロジェクトは明らかにそういう書き方をしている。
+
+[`🔗 homeassistant-ai/ha-mcp`](https://github.com/homeassistant-ai/ha-mcp) · [`🔗 v9.1.2 リリース`](https://github.com/homeassistant-ai/ha-mcp/releases/tag/v9.1.2)
+
+---
+
+## 42. Sure:放棄された Maybe Finance のコミュニティフォークがモバイルビルドを出荷し始めた —— Android APK と未署名 iOS
+
+- **Velocity:** ▮ steady
+- **Source:** GitHub Trending · 本日 +184 スター · Nov 10 (~20:15 UTC+8)
+- **Tags:** `fintech` `self-hosted` `github-trending`
+
+**we-promise/sure**(Ruby、AGPL-3.0、**11,422 スター**、+184/日)は README の最初の行で系譜を明かす。「This repository is a community fork of the now-abandoned Maybe Finance project。」セルフホストの家計管理アプリ——ダッシュボード、純資産、支出、貯蓄について答える AI アシスタント——はもう Web だけではない。**v2026.11.8-alpha**(11 月 9 日)は**モバイルの debug ビルド**(Android APK と未署名 iOS ビルド)を含み、前の v2026.11.3-alpha は暗号資産アカウントによるゴールへの資金追加やmerchantロゴを加えた。安定版ラインの規律も保たれている。10 月 31 日の **v0.7.6** は「we haven't missed that cadence in more than a year!」。勢いの代償もカウンタに見える。**未解決の issue と PR が 871**。
+
+**Why it matters:** Maybe から Sure への引き継ぎは、今年のオープンソース家計管理物語が自力で決着した形だ。元プロジェクトは 2024 年にオープンソース化して閉じ、コミュニティオルグがそれを墓の向こうの 11k スターまで運んできた——リリース規律と、モバイルクライアントと、後付けの AI アシスタント層つきで。セルフホスト fintech を評価する任何人にとって、正直な読み方は数字の中にある。1 年間途切れない月次リリースは本物の信頼性であり、871 の未解決 issue と PR はその背後のキューだ。
+
+[`🔗 we-promise/sure`](https://github.com/we-promise/sure) · [`🔗 v2026.11.8-alpha リリースノート`](https://github.com/we-promise/sure/releases/tag/v2026.11.8-alpha) · [`🔗 v0.7.6 リリースノート`](https://github.com/we-promise/sure/releases/tag/v0.7.6)
+
+---
+
+## 43. クイーンズ公共図書館がランサムウェア攻撃を受ける:全館は開館、ただし公式サイトと App と更新手続きは停止
+
+- **Velocity:** ▮ steady
+- **Source:** connect.queenslibrary.org · 58 pts on HN · Nov 10 (~17:04 UTC+8)
+- **Tags:** `ransomware` `public-services` `security`
+
+米最大級の図書館システムの一つ、クイーンズ公共図書館が別ドメイン上に障害告知を出した。「We are open as scheduled but experiencing a significant network outage affecting all locations」。そして「This disruption, the result of a **ransomware attack**, impacts the following services」——公式サイト、QPL モバイルアプリ、多くの拠点の公共 PC、デジタルメディアサービス。部分的に復旧したのは、全開放拠点の無料 Wi-Fi、貸出・返却機、7 支店(Central Library、Far Rockaway、Flushing、Glen Oaks、Hunters Point、Jackson Heights、Kew Gardens Hills)の公共 PC。貸出は動いているが「During this outage, however, renewals are unavailable」で、「customers are not charged late fines on borrowed materials」。ページには発生日も攻撃グループの帰属もない。ローリング更新のステータスページだ。
+
+**Why it matters:** 市政機関ではもう定番の型だ——公開ドメインが消え、更新は帯域外ホストへ移る——だが、ここで面白いのは運用の詳細のほうだ。図書館は紙と机で貸出を続けられる一方で、目録と公共 PC とデジタルコレクションこそが実際の人質である。公共サービスにとってのランサムウェアの算数はこれだ。**中断そのものが要求**であり、復旧した一つ一つのサービス(最初が Wi-Fi、最後が更新手続き)は、衆目の中で行われたトリアージ判断である。
+
+[`🔗 クイーンズ公共図書館 障害告知`](https://connect.queenslibrary.org/) · [`🔗 HN ディスカッション`](https://news.ycombinator.com/item?id=50437790)
+
+---
 
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-11-10T04:31:34Z |
-| Items | 33 |
-| Sources tracked | 33（Hacker News、GitHub Trending、NVD、CISA KEV、arXiv、ベンダーブログ、セキュリティアドバイザリ） |
+| Generated | 2026-11-10T12:33:35Z |
+| Items | 43 |
+| Sources tracked | 43（Hacker News、GitHub Trending、NVD、CISA KEV、arXiv、ベンダーブログ、セキュリティアドバイザリ） |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8（1 日 3 回） |
 | Ranking | 速度加重（即時性 × エンゲージメント加速度 × 情報源の権威） |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |

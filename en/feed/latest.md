@@ -1,6 +1,6 @@
 ---
 date: 2026-11-10
-updated: 2026-11-10T04:31:34Z
+updated: 2026-11-10T12:33:35Z
 schedule: 04:03, 12:03, 20:03 UTC+8
 sources: 28
 license: CC-BY-4.0
@@ -472,13 +472,153 @@ France has formally attributed October's supermarket-freezer cyber-attacks to Ir
 
 ---
 
+## 34. Amazon's internal ticketing replaced Sonnet 4.6 with a decision model — 44× cheaper, and they measured it live
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** strandsagents.com · 374 pts on HN · Nov 10 (~14:01 UTC+8)
+- **Tags:** `amazon` `decision-models` `cost`
+
+Amazon engineers Carr Onstott and Mehul Jaiswal moved an internal ticketing system's 20-way classification — "customer escalations, capacity requests, automated alarms, security findings" — from **Claude Sonnet 4.6 on Bedrock** to **Strands Decider E4B** (a Gemma 4 build of the month-old decision model that "cannot generate text" and "returns a probability for each option plus a confidence score"), served on SageMaker `ml.g5.xlarge` (A10G, 24 GB, ~19 GiB resident, ~640 ms/request). Measured over live traffic: **$0.0005 vs $0.0222 per ticket** — "about 44 times cheaper than Sonnet, a 98% reduction" — **897 ms vs 4,215 ms** average, **2,010 vs 6,724 tokens**, output dropping from 170 tokens to 1. On accuracy the post offers only "The results showed E4B beating production Sonnet on a separate set of our tickets" — no number.
+
+**Why it matters:** The deployment mechanics are the transferable part: a three-way AppConfig switch (`BEDROCK`/`DUAL`/`DECIDER`) dual-ran both models on live traffic — "told us more than any offline eval would have" — and "going back was a 45-second config change." Two honest surprises are worth carrying: "One thing that surprised us was that JSON key order changed the answer" (shifts up to 0.19, so they now sort keys), and the stated limits — no explanations per label, a catalog that must not change weekly, context within the 4,096-token window; outside those, "a decision model probably can't replace the LLM's job."
+
+[`🔗 Amazon saves millions by replacing Sonnet with Strands Decider`](https://strandsagents.com/blog/amazon-saves-millions-replacing-sonnet-with-strands-decider/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50436640)
+
+---
+
+## 35. Fireworks AI breach reached Notion customers — model weights and datasets among the accessed data
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Notion security notice · 70 pts on HN · Nov 10 (~15:19 UTC+8)
+- **Tags:** `security` `ai-infrastructure` `breach`
+
+The October breach at **Fireworks AI** — the inference provider used for Notion AI — is now a two-company disclosure. Fireworks' updated bulletin says the evidence "indicates links to a cybercriminal threat actor group, which is financially motivated" and engaged in **LLMJacking** (selling unauthorized LLM access tokens to illicit gateways); a second wave came when a third-party cloud provider hosting Fireworks R&D machines was breached **Oct 23**, and "the unauthorized third party used it to reach Fireworks development machines and then run an unauthorized workload" on Oct 24. Accessed: resource metadata, billing information ("Payment card numbers are not stored by Fireworks and were not impacted"), and — "for certain customers, **a subset of incomplete model weights and datasets were accessed**." Notion's notice says **"<1% of Notion workspaces may have been affected"**, all of them users of the Insights feature, now disabled: "Some unattributable chat sessions with Notion AI may have been exposed" — transcripts "weren't labeled with who wrote them or which workspace they came from" and "did not contain tool call results." Notion disconnected and deleted its Fireworks data on Nov 3, was alerted to customer-data access on Nov 6, and confirmed the dataset on Nov 8.
+
+**Why it matters:** The chain is the modern AI-supplier risk in one diagram: a vendor of your vendor gets breached, and the asset that leaks is not PII but **proprietary fine-tuning artifacts** — someone else's incomplete model weights. Note what both companies are careful about: Fireworks says its ZDR products (Inference, Training SDK, Nexus) show "no impact", its investigation "is ongoing and may reveal additional information", and Unit 42 is on forensics; Notion's advice to affected users is credential rotation — "If you or anyone on your team pasted sensitive information like passwords, API keys, or other credentials into Notion AI during this timeframe, we recommend rotating them right away."
+
+[`🔗 Notion: security incident involving a third-party AI vendor`](https://www.notion.com/help/security-incident-involving-a-third-party-ai-vendor) · [`🔗 Fireworks bulletin: October 2026 incident update`](https://fireworks.ai/security/bulletins/october-2026-security-incident-update)
+
+---
+
+## 36. Simon Willison gave Claude Code ears: four devices, acoustic ranging, and a 40 cm answer
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** simonwillison.net · 218 pts on HN · Nov 10 (~08:10 UTC+8)
+- **Tags:** `agents` `claude-code` `hardware-hacking`
+
+An intermittent beep in a room of moving boxes, too rare to locate by ear — so the "Beep Locator" was built: a Python web server coordinating **two iPads, an iPhone, a MacBook Pro and a Surface Ultra** over WebSockets, each running browser-WebAudio listeners with FFT + high-pass beep detection, devices pinging sounds at each other to estimate positions, then aligning audio clips on a chirp to triangulate the mystery tone (**3345 Hz**). The agent loop: **Claude Code with Opus 5.5** (Extra thinking) started the project from Willison's iPhone from a `problem.md` prompt, then **Fable 5.2** took over on the laptop — monitoring the running system, making live changes, and using an `installModule()` path to push new JavaScript to listeners without re-granting microphone permissions. Claude itself surfaced the prior art: the **2007 BeepBeep paper** (Peng et al.), acoustic ranging via "two-way sensing, self-recording, and sample counting."
+
+**Why it matters:** The result — "It gave me the position of the beep to within about 40cm", resolved to "an ancient carbon monoxide detector that desperately wanted its batteries replaced" — is almost beside the point. The design idea is that an agent without audio input can still *hear*: "it can run JavaScript and Python code that can analyze audio", query its own logs, and reconfigure its own sensor fleet mid-task. That's the agent-as-instrumentalist pattern in miniature, with a measurement to show for it.
+
+[`🔗 Locating the source of a mysterious beep`](https://simonwillison.net/2026/Nov/9/mysterious-beeps/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50434310)
+
+---
+
+## 37. A protest certificate: the RSA modulus itself carries the message — "no one checks these things"
+
+- **Velocity:** ▮▮ rising
+- **Source:** maurycyz.com · 183 pts on HN · Nov 10 (~08:07 UTC+8)
+- **Tags:** `tls` `certificates` `security`
+
+A fresh write-up (dated Nov 8–9) demonstrates a **protest certificate**: a real Let's Encrypt-issued certificate for maurycyz.com whose RSA **public key modulus embeds ASCII text** — `//You+dont+actually+have+to+pick+random+private+keys//No+one+checks+these+things//A+certificate+authority+got+away+with+the+number+4+for+a+year//` — visible to any client via `openssl s_client -connect maurycyz.com:443 </dev/null | sed -n '/BEGIN/,/END/p' | grep -zE '////.?*////'`. The motivation is stated flatly: TLS's ACME machinery is heavy and certificates expire, "and the whole system doesn't even work because certificates are issued over plaintext connections, and trusted certificate aurthorities [sic] use very secure keys like '4'" — a direct reference to the compromised CA key with `d = 4` from October. The author still wants encryption ("Passive eavesdropping is a real risk… but preventing it doesn't require the whole certificate thing"), so the certificate is valid and browsers accept it; even a vanity private key like "313333333337 (one of the most eleet primes)" would go unnoticed, because "A good protest should be obvious."
+
+**Why it matters:** The demo is a working measurement of a blind spot: certificate authorities validate *possession* of a key, not its provenance or strength, so the key material is a writable channel — one that survived automated issuance at a real CA. It is also this feed's second encounter with the site's own quirk: maurycyz.com serves machine-generated babble twin pages to some fetchers — a reader here pulled nonsense pages twice — and the real article only renders for requests it likes; the footer reads "This website is not licensed for LLM training or content creation."
+
+[`🔗 Horrible public key tricks`](https://maurycyz.com/projects/badcert/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50434264)
+
+---
+
+## 38. Your TV can see through walls: motion detection with an antenna and a spectrum waterfall
+
+- **Velocity:** ▮▮ rising
+- **Source:** maurycyz.com · 153 pts on HN · Nov 10 (~13:24 UTC+8)
+- **Tags:** `rf` `sdr` `privacy`
+
+The same author's RF demo (written Aug 2025 – Feb 2026, hitting HN today): record a local **ATSC digital TV station** (~490 MHz) with an **Ettus USRP B200** and watch the spectrogram. The direct signal interferes destructively with a strong reflection — **selective fading** — and because the cancellation is path-length dependent, any movement in the path draws stripes: "The gaps between the stripes happen when my reflection perfectly cancels out the residual signal, which happens each time the path length changes by one wavelength." From stripe spacing (~70 pixels at a 150 Hz waterfall update) the author computes walking speed: 0.47 s per stripe → 2.1 Hz → **1.3 m/s = 4.6 km/h** — matching the actual pace, with no adjustment needed because the walk was perpendicular to the signal path.
+
+**Why it matters:** The mechanism is elegant precisely because it's passive — no camera, no microphone, just a receiver and arithmetic on phase cancellation; the same geometry governs any wideband signal ("any wideband radio signal like WiFi or LTE can be used in much the same way"). The privacy implication is the old one restated at a new frequency: a building's radio environment is a motion sensor pointed at everyone inside it, and the author's sign-off is "Happy paranoia!"
+
+[`🔗 Your TV can see through walls`](https://maurycyz.com/projects/fading/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50436410)
+
+---
+
+## 39. Formalizing CPython: agents rewrote the interpreter into Lean — 418 bug reports, 55 crashable from ordinary Python
+
+- **Velocity:** ▮▮ rising
+- **Source:** broyojo.com · 86 pts on HN · Nov 10 (~09:56 UTC+8)
+- **Tags:** `research` `formal-methods` `python`
+
+**David Andrews and Chao Zhang** point agents ("Opus 5.5") at **CPython 3.15.2** and rewrite its functions line by line in **Lean 4**, each function passing a four-step gate: copy into Lean preserving quirks like unsigned wraparound, test against real Python on **≥50,000 inputs**, prove a property, then an independent second agent reviews — the gate question is "could a broken version of the function pass it too?", because "A valid proof about a wrong copy is the most misleading result you can get." Ten days in (started Oct 29): **18,898 theorems and lemmas**, **613,318 lines of Lean**, **4,071 of 26,004 functions (15.7%)** — grammar rules 100%, built-ins 35%, parser 31%, C modules 19%, interpreter core 10%, stdlib 9%. Output so far: **418 bug reports**, of which "about 55 can crash the interpreter or corrupt memory from ordinary Python code", plus 129 cases where a module's C and pure-Python versions disagree.
+
+**Why it matters:** The scale is what distinguishes this from a formal-methods demo: 588 statements were proved *false with counterexamples* against the real interpreter, and the crash list is concrete — a `setdefault` on an attribute dict with a `StrEnum` key that segfaults, a backwards slice assignment on an ElementTree element that duplicates one child and loses another. The pipeline itself (test-vs-real-Python before proof, adversarial second-agent review) is a reusable recipe for agent-driven verification of any C codebase, and the work is open: the repo is Apache-2.0, pushed today.
+
+[`🔗 Formalizing CPython`](https://broyojo.com/python-formalization/) · [`🔗 Broyojo/python-formalization`](https://github.com/Broyojo/python-formalization) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50435105)
+
+---
+
+## 40. tokio-rs/topcoat: the tokio org's batteries-included web framework ships its third release in five weeks
+
+- **Velocity:** ▮ steady
+- **Source:** GitHub Trending · +192 stars today · Nov 10 (~20:15 UTC+8)
+- **Tags:** `rust` `web-framework` `github-trending`
+
+**tokio-rs/topcoat** (Rust, MIT, **6,591 stars**, created April 2026) is trending at +192/day as **v0.12.0 landed Nov 9** — and the release note opens with unusual candor: "This release reworks some foundations of Topcoat. Most apps will need many small edits. **We are sorry for the churn**, but we believe these changes make Topcoat simpler and more extensible." The cadence is the signal: v0.10.0 (Oct 3) added client-side navigation (`runtime::link` — updates page, title and history while preserving shared signals and restoring scroll), v0.11.0 (Oct 24) added localization on **Fluent** with translation checks, and v0.12.0 unifies context handling (one context, route context, router settings) and the macro style ("context comes first", "one argument style").
+
+**Why it matters:** A "batteries-included" server-rendered Rust web framework coming from the tokio org itself — the project that owns the async runtime under axum and actix — is an opinion about where Rust web development should go: toward one integrated stack instead of a parts bin. The apology for breaking churn in a 0.x series is the honest part; three releases in five weeks with an upgrade guide in each is the moving-fast part, and both are worth reading before starting an app on it.
+
+[`🔗 tokio-rs/topcoat`](https://github.com/tokio-rs/topcoat) · [`🔗 v0.12.0 release notes`](https://github.com/tokio-rs/topcoat/releases/tag/v0.12.0)
+
+---
+
+## 41. ha-mcp: 792 stars in a day for an MCP server that lets Claude run your Home Assistant
+
+- **Velocity:** ▮▮ rising
+- **Source:** GitHub Trending · +792 stars today · Nov 10 (~20:15 UTC+8)
+- **Tags:** `mcp` `home-automation` `github-trending`
+
+**homeassistant-ai/ha-mcp** (Python, MIT, **6,337 stars**) is the day's fastest-rising trending repo at **+792 stars**: an MCP server plus Home Assistant custom component that lets Claude, ChatGPT and other assistants "configure and automate Home Assistant" — and the release discipline is agent-shaped too. **v9.1.2** shipped Nov 8, and the v9.2.0 development pre-releases are rolling in the same day this feed is written (dev3452 at 03:52 UTC, dev3454 at 11:35 UTC), whose changelog lines read like agent-ops: "fix: tell agents how to guard a python_transform edit (#3022)". Install goes through HACS, with a pre-release switch for the dev channel.
+
+**Why it matters:** The smart-home agent wave is arriving as *infrastructure*, not demos — a 6.3k-star project whose own commits are about teaching agents to be careful with live household state (`python_transform` edits that can break automations). When the interface to a physical home is a model with tools, the changelog becomes a safety document, and this project is visibly writing it that way.
+
+[`🔗 homeassistant-ai/ha-mcp`](https://github.com/homeassistant-ai/ha-mcp) · [`🔗 v9.1.2 release`](https://github.com/homeassistant-ai/ha-mcp/releases/tag/v9.1.2)
+
+---
+
+## 42. Sure: the community fork of abandoned Maybe Finance is shipping mobile builds — Android APK and unsigned iOS
+
+- **Velocity:** ▮ steady
+- **Source:** GitHub Trending · +184 stars today · Nov 10 (~20:15 UTC+8)
+- **Tags:** `fintech` `self-hosted` `github-trending`
+
+**we-promise/sure** (Ruby, AGPL-3.0, **11,422 stars**, +184/day) states its lineage on the first line of the README: "This repository is a community fork of the now-abandoned Maybe Finance project." The self-hosted personal-finance app — dashboard, net worth, spending, an AI assistant that answers questions about your savings — is now beyond the web app: **v2026.11.8-alpha** (Nov 9) ships **mobile debug builds** (an Android APK and an unsigned iOS build), following v2026.11.3-alpha with goal-funding from crypto accounts and merchant logos. The stable line keeps its discipline: **v0.7.6** on Oct 31 notes "we haven't missed that cadence in more than a year!" The cost of the momentum is visible in the counter: **871 open issues-and-pull-requests**.
+
+**Why it matters:** The Maybe-to-Sure handoff is the open-source-finance story of the year resolving itself: the original project open-sourced and shut down in 2024, and a community org has now carried it 11k stars past the grave — with a release cadence, a mobile client, and the AI-assistant layer bolted on. For anyone evaluating self-hosted fintech, the honest read is in the numbers: a year of unbroken monthly releases is real reliability; 871 open issues-and-PRs is the queue behind it.
+
+[`🔗 we-promise/sure`](https://github.com/we-promise/sure) · [`🔗 v2026.11.8-alpha release notes`](https://github.com/we-promise/sure/releases/tag/v2026.11.8-alpha) · [`🔗 v0.7.6 release notes`](https://github.com/we-promise/sure/releases/tag/v0.7.6)
+
+---
+
+## 43. Queens Public Library hit by ransomware: all locations open, but the website, app and renewals are down
+
+- **Velocity:** ▮ steady
+- **Source:** connect.queenslibrary.org · 58 pts on HN · Nov 10 (~17:04 UTC+8)
+- **Tags:** `ransomware` `public-services` `security**
+
+Queens Public Library — one of the largest US library systems — posted an outage notice on a separate domain: "We are open as scheduled but experiencing a significant network outage affecting all locations", and "This disruption, the result of a **ransomware attack**, impacts the following services": the website, the QPL mobile app, public computers at most locations, and digital media services. Partially restored: free Wi-Fi everywhere, check-out and return machines, and public computers at seven branches (Central Library, Far Rockaway, Flushing, Glen Oaks, Hunters Point, Jackson Heights, Kew Gardens Hills). Borrowing works, "During this outage, however, renewals are unavailable", and "customers are not charged late fines on borrowed materials." The page carries no incident date and no group attribution — it is a rolling status page.
+
+**Why it matters:** The pattern is now routine for municipal institutions — the public-facing domain goes dark and updates migrate to an out-of-band host — but the operational details here are the interesting part: a library can keep lending with paper and desks while its catalog, its computers and its digital collection are the actual hostages. That's the ransomware calculus for public services: the interruption is the demand, and every restored service (Wi-Fi first, renewals last) is a triage decision made in public.
+
+[`🔗 Queens Public Library outage notice`](https://connect.queenslibrary.org/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50437790)
+
+---
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-11-10T04:31:34Z |
-| Items | 33 |
-| Sources tracked | 33 (Hacker News, GitHub Trending, NVD, CISA KEV, arXiv, vendor blogs, security advisories) |
+| Generated | 2026-11-10T12:33:35Z |
+| Items | 43 |
+| Sources tracked | 43 (Hacker News, GitHub Trending, NVD, CISA KEV, arXiv, vendor blogs, security advisories) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (3x daily) |
 | Ranking | Velocity-weighted (recency × engagement acceleration × source authority) |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |

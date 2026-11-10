@@ -1,9 +1,9 @@
 {
- "generated": "2026-11-10T04:31:44.437Z",
+ "generated": "2026-11-10T12:34:34.716Z",
  "files": [
   {
    "file": "2026-11-10.md",
-   "items": 33,
+   "items": 43,
    "findings": [
     {
      "check": "issues",
@@ -17,7 +17,7 @@
      "item": 6,
      "verdict": "ok",
      "claim": "CVE-2026-116779 `Analyzed`",
-     "detail": "Analyzed (lastModified 2026-11-09T19:48:09.357)"
+     "detail": "Analyzed (lastModified 2026-11-10T05:17:57.830)"
     },
     {
      "check": "cvss",
@@ -101,7 +101,7 @@
      "item": 19,
      "verdict": "ok",
      "claim": "CVE-2026-104620 `Received`",
-     "detail": "Received (lastModified 2026-11-09T17:17:07.093)"
+     "detail": "Received (lastModified 2026-11-10T05:17:41.193)"
     },
     {
      "check": "status",
@@ -148,16 +148,16 @@
     {
      "check": "repo",
      "item": 3,
-     "verdict": "unreadable",
+     "verdict": "path-in-repo",
      "claim": "contrib/e_means",
-     "detail": "api.github.com: Command failed: gh api repos/contrib/e_means (HTTP 404)"
+     "detail": "verified: facebookresearch/faiss's default branch lists e_means under contrib/ — the \"shipped in\" claim is checkable, not just excused"
     },
     {
      "check": "repo",
      "item": 4,
      "verdict": "ok",
      "claim": "sherlock-project/sherlock",
-     "detail": "107476★, last push 2026-11-09"
+     "detail": "108239★, last push 2026-11-10"
     },
     {
      "check": "batch",
@@ -192,7 +192,7 @@
      "item": 3,
      "verdict": "ok",
      "claim": "1 quotation(s)",
-     "detail": "verbatim in 3 readable source(s)"
+     "detail": "verbatim in 4 readable source(s)"
     },
     {
      "check": "quotation",
@@ -274,9 +274,30 @@
     {
      "check": "quotation",
      "item": 17,
-     "verdict": "ok",
-     "claim": "4 quotation(s)",
-     "detail": "verbatim in 2 readable source(s)"
+     "verdict": "quote-not-read",
+     "claim": "“an 80 increase compared to the last price hike in april”",
+     "detail": "10 words, 0 hits in 1 readable source(s), but 1 cited page(s) went unread — unread is not absent, so this is not called a fabrication; open those page(s) before publishing"
+    },
+    {
+     "check": "quotation",
+     "item": 17,
+     "verdict": "quote-not-read",
+     "claim": "“starting at 375 for the lite model without wireless”",
+     "detail": "8 words, 0 hits in 1 readable source(s), but 1 cited page(s) went unread — unread is not absent, so this is not called a fabrication; open those page(s) before publishing"
+    },
+    {
+     "check": "quotation",
+     "item": 17,
+     "verdict": "quote-not-read",
+     "claim": "“the raspberry pi 500 mechanical keyboard pc stays at the same price starting at 410”",
+     "detail": "13 words, 0 hits in 1 readable source(s), but 1 cited page(s) went unread — unread is not absent, so this is not called a fabrication; open those page(s) before publishing"
+    },
+    {
+     "check": "quotation",
+     "item": 17,
+     "verdict": "quote-not-read",
+     "claim": "“already richly priced and the demand must be lower than for single board computers and compute m…”",
+     "detail": "17 words, 0 hits in 1 readable source(s), but 1 cited page(s) went unread — unread is not absent, so this is not called a fabrication; open those page(s) before publishing"
     },
     {
      "check": "quotation",
@@ -382,22 +403,84 @@
      "verdict": "ok",
      "claim": "4 quotation(s)",
      "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 34,
+     "verdict": "ok",
+     "claim": "8 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 35,
+     "verdict": "ok",
+     "claim": "10 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 36,
+     "verdict": "ok",
+     "claim": "4 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 37,
+     "verdict": "ok",
+     "claim": "6 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 38,
+     "verdict": "ok",
+     "claim": "2 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 39,
+     "verdict": "ok",
+     "claim": "3 quotation(s)",
+     "detail": "verbatim in 3 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 40,
+     "verdict": "ok",
+     "claim": "1 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 41,
+     "verdict": "ok",
+     "claim": "2 quotation(s)",
+     "detail": "verbatim in 3 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 42,
+     "verdict": "ok",
+     "claim": "2 quotation(s)",
+     "detail": "verbatim in 3 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 43,
+     "verdict": "ok",
+     "claim": "4 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
     }
    ]
   }
  ],
- "status_watch": [
-  {
-   "id": "CVE-2026-123158",
-   "from": "Analyzed",
-   "to": "Modified",
-   "regressed": false,
-   "modified": "2026-11-10T01:17:16.970"
-  }
- ],
+ "status_watch": [],
  "api_calls": 0,
  "readme_calls": 0,
- "cited_page_calls": 0,
+ "cited_page_calls": 1,
  "repo_page_calls": 0,
  "nvd_calls": 1,
  "nvd_failed_chunks": 0,
