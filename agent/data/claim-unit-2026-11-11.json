@@ -1,0 +1,258 @@
+{
+ "generated": "2026-11-10T21:17:10.166Z",
+ "files": [
+  {
+   "file": "2026-11-11.md",
+   "items": 20,
+   "findings": [
+    {
+     "check": "status",
+     "item": 3,
+     "verdict": "ok",
+     "claim": "CVE-2026-120002 `Awaiting Analysis`",
+     "detail": "Awaiting Analysis (lastModified 2026-11-10T19:20:26.207)"
+    },
+    {
+     "check": "temporal",
+     "item": 3,
+     "verdict": "temporal-disclosed",
+     "claim": "CVE-2026-120002 · CNA 9.9 / base 9.9 / full 8.6",
+     "detail": "the item names a stopping point — silent, because the prose already lets the reader tell which number it read"
+    },
+    {
+     "check": "temporal",
+     "item": 3,
+     "verdict": "temporal-disclosed",
+     "claim": "CVE-2026-109467 · CNA 9.9 / base 9.9 / full 8.6",
+     "detail": "the item names a stopping point — silent, because the prose already lets the reader tell which number it read"
+    },
+    {
+     "check": "temporal",
+     "item": 3,
+     "verdict": "temporal-disclosed",
+     "claim": "CVE-2026-119990 · CNA 9.8 / base 9.8 / full 8.5",
+     "detail": "the item names a stopping point — silent, because the prose already lets the reader tell which number it read"
+    },
+    {
+     "check": "temporal",
+     "item": 3,
+     "verdict": "temporal-disclosed",
+     "claim": "CVE-2026-85844 · CNA 9.8 / base 9.8 / full 8.5",
+     "detail": "the item names a stopping point — silent, because the prose already lets the reader tell which number it read"
+    },
+    {
+     "check": "temporal",
+     "item": 3,
+     "verdict": "temporal-disclosed",
+     "claim": "CVE-2026-124194 · CNA 6.5 / base 6.5 / full 6.2",
+     "detail": "the item names a stopping point — silent, because the prose already lets the reader tell which number it read"
+    },
+    {
+     "check": "status",
+     "item": 4,
+     "verdict": "ok",
+     "claim": "CVE-2026-124917 `Deferred`",
+     "detail": "Deferred (lastModified 2026-11-10T19:21:01.630)"
+    },
+    {
+     "check": "status",
+     "item": 8,
+     "verdict": "ok",
+     "claim": "CVE-2026-116606 `Undergoing Analysis`",
+     "detail": "Undergoing Analysis (lastModified 2026-11-10T20:18:04.450)"
+    },
+    {
+     "check": "temporal",
+     "item": 19,
+     "verdict": "temporal-stopping-point",
+     "claim": "CVE-2026-124194 · CNA 6.5 / base 6.5 / full 6.2",
+     "detail": "microsoft stores 3.1 6.5 in `containers.cna.metrics.cvssV3_1.baseScore` — that is the base×E score with only E applied (base 6.5, base×E 6.5, base×E×RL 6.2, base×E×RL×RC 6.2; full temporal 6.2, FIRST v3.1 §7.2); NVD re-serves 3.1 6.5 (secure@microsoft.com) — one vector, so name the stopping point you quote (a field called `baseScore` does not have to hold the base)"
+    },
+    {
+     "check": "repo",
+     "item": 13,
+     "verdict": "ok",
+     "claim": "D4Vinci/Scrapling",
+     "detail": "101065★, last push 2026-11-09"
+    },
+    {
+     "check": "repo",
+     "item": 16,
+     "verdict": "ok",
+     "claim": "max-sixty/worktrunk",
+     "detail": "12379★, last push 2026-11-10"
+    },
+    {
+     "check": "repo",
+     "item": 17,
+     "verdict": "ok-history",
+     "claim": "HolyArrs/HolyArrs",
+     "detail": "record 1d, oldest commit 2026-11-09 (~15 commits)"
+    },
+    {
+     "check": "batch",
+     "item": 3,
+     "verdict": "batch-unread",
+     "claim": "094 Microsoft CVE records",
+     "detail": "no search term derived from the item (November, Patch) retrieved its own cited CVE-2026-109467 on 2026-11-10 — the set was not read, so nothing is claimed about the count"
+    },
+    {
+     "check": "batch",
+     "item": 4,
+     "verdict": "batch-count-ok",
+     "claim": "100 records (Firefox, 2026-11-10)",
+     "detail": "100 records from security@mozilla.org published 2026-11-10 — the claim's own set, retrieved by its own cited id CVE-2026-124917"
+    },
+    {
+     "check": "quotation",
+     "item": 1,
+     "verdict": "ok",
+     "claim": "3 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 2,
+     "verdict": "ok",
+     "claim": "3 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 5,
+     "verdict": "ok",
+     "claim": "1 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 6,
+     "verdict": "ok",
+     "claim": "4 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 7,
+     "verdict": "ok",
+     "claim": "4 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 8,
+     "verdict": "ok",
+     "claim": "3 quotation(s)",
+     "detail": "verbatim in 8 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 9,
+     "verdict": "ok",
+     "claim": "1 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 10,
+     "verdict": "ok",
+     "claim": "2 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 11,
+     "verdict": "ok",
+     "claim": "3 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 12,
+     "verdict": "ok",
+     "claim": "4 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 13,
+     "verdict": "ok",
+     "claim": "2 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 14,
+     "verdict": "ok",
+     "claim": "2 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 15,
+     "verdict": "ok",
+     "claim": "3 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 16,
+     "verdict": "ok",
+     "claim": "4 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 17,
+     "verdict": "ok",
+     "claim": "3 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 18,
+     "verdict": "ok",
+     "claim": "3 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 19,
+     "verdict": "ok",
+     "claim": "3 quotation(s)",
+     "detail": "verbatim in 11 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 20,
+     "verdict": "ok",
+     "claim": "1 quotation(s)",
+     "detail": "verbatim in 5 readable source(s)"
+    }
+   ]
+  }
+ ],
+ "status_watch": [
+  {
+   "id": "CVE-2026-111560",
+   "from": "Awaiting Analysis",
+   "to": "Undergoing Analysis",
+   "regressed": false,
+   "modified": "2026-11-10T20:17:42.997"
+  },
+  {
+   "id": "CVE-2026-116606",
+   "from": "Awaiting Analysis",
+   "to": "Undergoing Analysis",
+   "regressed": false,
+   "modified": "2026-11-10T20:18:04.450"
+  }
+ ],
+ "api_calls": 0,
+ "readme_calls": 0,
+ "cited_page_calls": 0,
+ "repo_page_calls": 0,
+ "nvd_calls": 1,
+ "nvd_failed_chunks": 0,
+ "cna_calls": 0
+}

@@ -1,614 +1,306 @@
 ---
-date: 2026-11-10
-updated: 2026-11-10T12:33:35Z
+date: 2026-11-11
+updated: 2026-11-10T21:17:04Z
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 28
+sources: 22
 license: CC-BY-4.0
 ---
 
-# trending.md — 2026-11-10
+# trending.md — 2026-11-11
 
-## 1. Claude Fable 5.2 and Mythos 5.2 ship at a lower price — and the benchmark table is not a clean sweep
-
-- **Velocity:** ▮▮▮ trending
-- **Source:** Anthropic · 504 pts on HN · Nov 10 (~02:56 UTC+8)
-- **Tags:** `anthropic` `model-release` `benchmarks`
-
-Anthropic released **Claude Fable 5.2 and Claude Mythos 5.2** on Nov 9 — "the same underlying model", split by safeguards: Fable carries the cybersecurity and biology filters and is available to everyone, while Mythos is gated behind the Cyber and Life Sciences Verification Programs. Output is "up to 30% faster" than 5.1 at **$8 per million input tokens and $40 per million output**, with an optional fast mode that takes generation "up to 2.5 times" faster for $16/$80. On **FrontierCode 2.0** the model reaches **49.1% at Xhigh effort**, which the post calls "the highest score of any released model we've tested"; at High effort it lands at **45.3%** against Opus 5.5's **45.5%** "for roughly half the cost per task". But the same table has rows that go the other way: **AutomationBench 51.4** against Gemini 4 Carbon's **53.9**, and **AA-Briefcase 1785 Elo** against **Opus 5.5 at 1800** — the model that Anthropic still recommends starting with.
-
-**Why it matters:** Read the footnotes before the headline numbers. Footnote 3 says the cyber and biology results were run on **Mythos 5.2** precisely because "testing the model with reduced safeguards provides the most comprehensive look at model behavior" — so the CyScenarioBench 76.3 and CVE-rediscovery 89.6 rows are not Fable numbers. Footnote 4 is blunter: "None of the external organizations reviewed the contents of this blog post or the contents of the System Card. Those organizations do not necessarily agree with any of the claims made in either publication." The Vercel, Shopify, Uber and Oracle quotes on the page are enthusiasm, not endorsement; and the Computer-use row is labelled "OSWorld 2.1 (offline set, partial)".
-
-> "Over 90% of the changes merged into Anthropic's core codebase are now written by Claude (with human guidance)."
-
-[`🔗 Claude Fable 5.2 and Mythos 5.2`](https://www.anthropic.com/claude-fable-and-mythos-5-2) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50429906)
-
----
-
-## 2. Meta's Muse Ember matches Haiku 5.5 on the Intelligence Index at a third of the cost — by declining to answer 64% of questions
+## 1. AlphaProof Code machine-checks Signal's protocol in Lean — six million lines of proofs, four weeks, and two injected bugs caught
 
 - **Velocity:** ▮▮▮ trending
-- **Source:** Artificial Analysis · 118 pts on HN · Nov 10 (~01:58 UTC+8)
-- **Tags:** `meta` `small-models` `benchmarks`
+- **Source:** Google DeepMind · 510 pts on HN · Nov 10 (~20:11 UTC+8)
+- **Tags:** `deepmind` `formal-verification` `security`
 
-Meta Superintelligence Labs released **Muse Ember**, its lightest model, priced at **$0.10 per million input tokens, $0.004 cached, $0.50 output**. Artificial Analysis measured it at **36 on the Intelligence Index at $0.14 per task** — the same score as **Claude Haiku 5.5 (max) at $0.41** — and eight points behind Meta's own **Muse Wonder (44, at $6.95 per task)**. The wins are real but narrow: **AutomationBench-AA 68.1%**, level with Muse Wonder; **Terminal-Bench 4.0 40.9%** against Haiku's 32.8%; and **46 on the Coding Agent Index inside Meta's own Muse Code**, against 37 for Haiku in Claude Code. The losses are equally specific: **FrontierCode 2.0 27.2% vs 34.9%**, and **AA-Briefcase 1521 vs 1574 Elo**.
+Google DeepMind announced **AlphaProof Code**, an agentic framework for formal verification in which human experts write the security goals, AI agents translate them into specifications and then produce the proofs, and **Lean machine-checks every proof**. Applied to Signal's protocol, the agents generated **over six million lines of Lean** in **four weeks**, verifying that the *compiled* code fulfills the specified properties — message protection before and after a temporary device compromise — down to the code running on devices. As a sanity check, DeepMind reintroduced two real, previously fixed bugs into an isolated copy and the system produced machine-checked proofs that the buggy versions were insecure. About **1% of the codebase's proofs were flagged for human review**. The verification artifacts are open-sourced at google-deepmind.github.io/code-verification.
 
-**Why it matters:** The number that explains the price is not the score. **AA-Omniscience accuracy is 21.1%**, the lowest of its comparison set — and the reason is that Ember "declines to answer 64% of questions", which holds its hallucination rate at **17.4%**, half of Haiku 5.5's. A cheap router that abstains is a different product from a cheap model that guesses, and the abstention rate is what makes the routing story ("Muse Wonder plans, Muse Ember handles the volume") coherent rather than just a price chart.
+**Why it matters:** The claim is carefully scoped, and the scoping is the story: the result proves the code "delivers the security protections our experts specified" — not that libsignal is bug-free, and the bug test ran on an isolated copy, not production. Signal CTO Ehren Kret called agent-generated Lean "a major breakthrough", while DeepMind itself notes "scaling these techniques requires continued research". Implementation-level verification of a deployed cryptographic protocol is a first regardless of how the caveats cut.
 
-[`🔗 Artificial Analysis measurement`](https://artificialanalysis.ai/articles/meta-s-muse-ember-is-the-cheapest-model-scoring-36-on-the-intelligence-index) · [`🔗 TechCrunch: Meta releases Muse Ember`](https://techcrunch.com/2026/11/09/meta-releases-muse-ember-a-new-lightweight-model-for-agent-execution/)
+> "Using AI agents to translate live code into valid Lean theorems is a major breakthrough." — Ehren Kret, Signal CTO
+
+[`🔗 DeepMind: Introducing AlphaProof Code`](https://deepmind.google/blog/introducing-alphaproof-code/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50439193)
 
 ---
 
-## 3. e-means replaces Lloyd's algorithm inside FAISS — one-tenth the epochs, and a lower loss at the end
+## 2. Gemini 4 Carbon is now available — Google's strongest model opens up, with a 0% prompt-injection claim and a caveat beside it
 
 - **Velocity:** ▮▮▮ trending
-- **Source:** Meta FAIR · project page + arXiv 2611.09501 · Nov 9
-- **Tags:** `research` `clustering` `faiss`
+- **Source:** Google · 249 pts on HN · Nov 11 (~00:07 UTC+8)
+- **Tags:** `google` `model-release` `benchmarks`
 
-Meta FAIR open-sourced **e-means**, a replacement for Lloyd's algorithm shipped in **`contrib/e_means`**, with a paper and an in-browser playground. The claim is unusual because speed and quality usually trade: "across a large range of scales and datasets, e-means reaches a test loss below Lloyd's at 25 epochs, in 1.2 to 3 epochs", which the authors measure end-to-end as **10–45× wall-clock reduction on GPU** against Flash-KMeans and **8–15× on CPU** against FAISS. The authors are Bessa, Mazaré, Szilvasy, Touvron, Picard, Douze and Jégou — the last three being the people who wrote much of the FAISS baseline they are beating.
+Google made **Gemini 4 Carbon** generally available on Nov 10, three weeks after announcing it (Oct 28) and two weeks after giving cyber defenders early access through the Fairwind Program. Pricing is **$2/M input and $10/M output through November 30**, doubling to **$4/$20 on December 1** — the same trajectory as Gemini 4 Argon. The claim set is broad: #1 on CursorBench 4.0, Perplexity's WANDR and Zapier's AutomationBench at more than 2× lower cost per task, #2 on the new Multimodal Knowledge Agent benchmark, leads on SEC-bench Pro, ExploitGym and CWE-bench v1, and **Project Fortify at 100% recall on scanning and 95% precision on triage** — an internal benchmark. Safety numbers: per-attempt breach rate 0.8% (Argon: 3.1%), Gray Swan cyberattack success 2.17%, and **0% success on Gray Swan's prompt-injection benchmark**. Available in AI Studio, Google Antigravity (with a `/swarm` preview), the Gemini app and AI Mode; Vertex AI is not mentioned anywhere in the post.
 
-**Why it matters:** k-means is the load-bearing primitive under vector indexes, quantization codebooks and clustering-based retrieval filters, and a 10× reduction in epochs touches all of them without a new data structure. The honest caveat is that the comparison is the authors' own harness against their own group's implementation of the prior state of the art; the counterweight is that the code landed in FAISS itself, so the baseline is reproducible rather than asserted.
+**Why it matters:** The 0% injection result arrives with its own asterisk, quoted in the same post: "prompt injection robustness remains an area for continued improvement", and red-teaming found room to improve against sophisticated attacks in some distributions. That is the right way to read all the headline numbers here — several of the comparison benchmarks (Fortify, the agent-honesty score) are Google-internal or partner-run, and the pricing footnote notes the December doubling "applies to the Carbon model intended for public access only".
 
-[`🔗 e-means project page`](https://e-means.github.io/) · [`🔗 arXiv 2611.09501`](https://arxiv.org/abs/2611.09501) · [`🔗 FAISS repo · contrib/e_means`](https://github.com/facebookresearch/faiss/tree/main/contrib/e_means)
+> "Carbon is our strongest model with frontier performance in cybersecurity capabilities and long-horizon agentic workflows."
+
+[`🔗 Google: Gemini 4 Carbon is now available`](https://blog.google/innovation-and-ai/models-and-research/gemini-models/gemini-4-carbon-now-available) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50442303)
 
 ---
 
-## 4. Sherlock goes to #1 on GitHub trending — and the repo has not shipped code since Nov 1
+## 3. November's Patch Tuesday drops 1,094 Microsoft CVE records on NVD in a day — and the one marked "exploited" is a Moderate 6.5 Outlook bug
 
 - **Velocity:** ▮▮▮ trending
-- **Source:** GitHub Trending · +4,294 stars today · Nov 10 (~04:06 UTC+8)
-- **Tags:** `osint` `python` `github-trending`
+- **Source:** MSRC CVRF 2026-Nov + NVD · Nov 10 (22:17–03:21 UTC+8)
+- **Tags:** `patch-tuesday` `microsoft` `cve`
 
-**sherlock-project/sherlock** — the MIT-licensed Python tool that hunts a username across social networks — is the top repo on the daily board with **+4,294 stars**, taking it to **106,745 stars and 12,366 forks**. What the count does not tell you is that there is no repo event behind it: the last commit is **Nov 1** ("update banner layout"), the last release is **v0.16.2 on Sep 8**, and the project has no archived flag and no new advisory. The star curve is not a one-day artefact either — the tool has been adding thousands of stars a day through the week — against a codebase whose CLI has barely moved in a year.
+Nov 10 was Patch Tuesday, and the NVD publication window for the day carried **1,692 records** — **1,094 of them from `secure@microsoft.com`**, beside Mozilla's 105 and Intel's 103. Microsoft's own CVRF document (28.1 MB) holds **1,342 vulnerabilities**, of which **1,095 are Microsoft-assigned** — Chrome's CVE admin assigned 165, Linux 41, GitHub_M 5. First-hand over the document's score sets: **48 vulnerabilities carry a base score of 9.0 or higher** (max 10.0), while Microsoft's own severity labels read **68 Critical, 1,117 Important, 110 Moderate, 47 Low**. The top of the score table: SharePoint incorrect authorization **9.9** (CVE-2026-120002), Azure DevOps improper authentication **9.9** leading to code execution over a network (CVE-2026-109467), **Azure OpenAI missing authentication for critical function 9.8** (CVE-2026-119990), Windows Kerberos authentication bypass 9.8 (CVE-2026-85844), LDAP out-of-bounds write 9.8, DNS double-free 9.8. All the records are still `Awaiting Analysis` on NVD — every number quoted here is the CNA's own.
 
-**Why it matters:** This is the honest version of a trending story: an eight-year-old OSINT utility at 106k stars, moving up on attention alone. The only genuinely new artifact in the repo is a banner layout, so treat the velocity as interest in the *problem* (checking what of yours is exposed under a username) rather than confidence in the tool — the 400 open issues-and-pull-requests are where the false-positive reports live, and none of them were fixed this week.
+**Why it matters:** The exploit flag inverted the severity logic. Exactly one entry in the whole document reads `Publicly Disclosed:No;Exploited:Yes;Latest Software Release:Exploitation Detected` — **CVE-2026-124194, an Outlook spoofing bug rated Moderate 6.5** — and CISA put it on KEV the same day. Meanwhile 42 higher-scored elevation-of-privilege bugs sit at "Exploitation More Likely" and the 9.x queue at "Less Likely". Patch priority that follows the exploitation column, not the score column, is the whole lesson of the month.
 
-[`🔗 sherlock-project/sherlock`](https://github.com/sherlock-project/sherlock) · [`🔗 GitHub Trending (daily)`](https://github.com/trending?since=daily)
+> CVRF exploit status for CVE-2026-124194: Publicly Disclosed — No · Exploited — Yes · Latest Software Release — Exploitation Detected
 
----
-
-## 5. T3 Code is #1 on the weekly board: an "agent harness control surface" now driving seven different CLIs
-
-- **Velocity:** ▮▮▮ trending
-- **Source:** GitHub Trending · +15,379 stars this week · Nov 10 (~04:06 UTC+8)
-- **Tags:** `agent-infra` `coding-agents` `electron`
-
-**pingdotgg/t3code** tops the weekly trending list at **+15,379 stars**, for **53,850 total** since the repo was created on **Feb 8, 2026**. It calls itself an "agent harness control surface": you install and authenticate the CLIs you already pay for — **Codex, Claude Code, Cursor, Grok Build, OpenCode, Google Antigravity and fx** — and T3 Code drives them from an iOS app, an Android app, a web app or an Electron desktop shell. The repo is MIT and README-explicit about the business model ("Nothing. We built T3 Code because we wanted the best possible development experience with agents"). Releases are nightly-tagged and frequent: **`v0.1.8-nightly.20261109.4429`** landed Nov 9 at 18:58 UTC, the third nightly that day.
-
-**Why it matters:** The interesting shift is architectural, not aesthetic. The harness layer is separating from the model vendor — one surface controlling seven competing agent CLIs means the subscription, not the harness, becomes the thing you choose, and the README's install matrix (seven logins across seven different CLI auth flows) is the real cost of that portability. The warning sign is in the counter: **5,976 open issues and pull requests** on a repo nine months old.
-
-[`🔗 pingdotgg/t3code`](https://github.com/pingdotgg/t3code) · [`🔗 t3.codes`](https://t3.codes)
+[`🔗 MSRC CVRF 2026-Nov (machine-readable)`](https://api.msrc.microsoft.com/cvrf/v3.0/document/2026-Nov) · [`🔗 NVD: CVE-2026-119990 (Azure OpenAI)`](https://nvd.nist.gov/vuln/detail/CVE-2026-119990) · [`🔗 CISA KEV: CVE-2026-124194`](https://www.cisa.gov/known-exploited-vulnerabilities-catalog)
 
 ---
 
-## 6. CISA's KEV added three in one batch — and FreeSWITCH's 9.8 was exploited before anyone scored it
+## 4. Firefox 160's release wave puts 100 CVE records on NVD the same day — seven of them sandbox escapes at 9.6
 
-- **Velocity:** ▮▮▮ trending
-- **Source:** CISA KEV · catalog 2026.11.09 · Nov 10 (~03:48 UTC+8)
-- **Tags:** `security` `cve` `kev`
+- **Velocity:** ▮▮ trending
+- **Source:** Mozilla · 105 NVD records · Nov 10 (~22:17 UTC+8)
+- **Tags:** `firefox` `mozilla` `security`
 
-CISA's catalog moved to **2026.11.09 (1,772 entries)** with three additions on the same day: **FreeSWITCH CVE-2026-116779 (9.8)**, **OpenSSH CVE-2026-123158 (8.1)** and **GPUStack CVE-2026-102895 (9.8)**. The FreeSWITCH bug is the most mechanical: `sofia_presence_handle_sip_i_message()` "split the To user of an inbound SIP MESSAGE on a plus sign and treated the left side as a chat protocol selector" — selecting `api` reached `switch_api_execute()`, so a peer whose MESSAGE was accepted could run FreeSWITCH API commands, "including operating-system command sinks, with the daemon's privileges". Inbound chat is on by default in the stock internal and external profiles, and "exploitation has been observed in the wild". Fixed in **1.11.3**.
+Firefox **160.0** released Nov 10 (product-details: category `major`). **105 CVE records from `security@mozilla.org`** landed on NVD the same day, published between 14:17 and 19:21 UTC — 100 of them mention Firefox; the other five are Thunderbird-only entries (compose windows, CalDAV over a proxy, feed subscriptions, STARTTLS, Exchange EWS). Seven are **9.6 sandbox escapes**: use-after-free in Widget: Gtk, in IPC, two in DOM: Service Workers, in Audio/Video: cubeb, incorrect boundary conditions in Storage: Cache API and in Graphics: Text. Another wave sits at **8.8** — privilege escalations in WebRTC: Networking and Graphics: WebRender, use-after-frees in Layout, CSS Parsing and Canvas2D. Fixes reach **Firefox ESR 115.45, Firefox ESR 153.7 and Thunderbird 160** alongside the main release. Every record is `Deferred` — Mozilla scored them as CNA; NVD has not analyzed them.
 
-**Why it matters:** Note what the registry does *not* say. All three records are `Analyzed` with **zero `nvd@nist.gov` metrics** — the scores belong to GitHub's CNA (FreeSWITCH, GPUStack, 3.1 `Secondary`) and MITRE's (OpenSSH), so a scanner quoting "NVD 9.8" is quoting a CNA's number that NVD endorsed without publishing its own. The OpenSSH entry is the same musl-without-PAM password bypass this feed covered on **2026-11-05** (any password of 256–1024 characters succeeds, fixed in 10.6p2) — the fix shipped, and KEV is the first confirmation that it was being used. GPUStack's advisory already claimed in-the-wild exploitation on **2026-11-05**; KEV corroborates rather than breaks it.
+**Why it matters:** The density is the story: a single release carrying seven separately-scored sandbox escapes suggests the content-process boundary is under sustained, varied attack research — and the fixes reach three branches at once (including an ESR 115 line that is still being maintained years past its original schedule). Anyone pinning Firefox ESR should treat 115.45 and 153.7 as mandatory same-week upgrades.
 
-[`🔗 CISA Known Exploited Vulnerabilities catalog`](https://www.cisa.gov/known-exploited-vulnerabilities-catalog) · [`🔗 GHSA-mg63-h38w-8p9p (FreeSWITCH)`](https://github.com/signalwire/freeswitch/security/advisories/GHSA-mg63-h38w-8p9p)
-
----
-
-## 7. FFmpeg gets 121 CVE records in 62 minutes — and 114 of them say the newest release is still affected
-
-- **Velocity:** ▮▮▮ trending
-- **Source:** NVD · 121 records published Nov 9
-- **Tags:** `security` `cve` `ffmpeg`
-
-VulnCheck published **121 FFmpeg CVE records on 2026-11-09** — first at 19:16:48Z, last at 20:18:13Z — every one still in `Received` status with no NVD analysis. The suite is mostly memory-safety in the codec and filter tree — heap overflows in `huffyuvenc`, `dvbsubenc` and `gif.c`, out-of-bounds writes in the VVC and Vulkan AV1 paths, uninitialized-memory disclosures across a dozen decoders — plus a large tail of NULL dereferences. Scores are VulnCheck's on both frameworks: its **3.1 metrics top out at 7.8**, its **4.0 metrics at 8.5**, with nine records sitting at both maxima (one is `CVE-2026-125250`, the GIF encoder `shrunk_buf` sizing bug). The distribution matters more than the maximum: **114 of the 121 descriptions say "through 9.0.2"**, which is FFmpeg's newest tag (`n9.0.2`), while only **7** name a fixed bound ("before 8.1.3 and 9.x before 9.0.2").
-
-**Why it matters:** A 121-record batch where the overwhelming majority of entries describe bugs present in the latest tag is a **no-fix-named** disclosure, not a patch announcement — and the 4.0-vs-3.1 spread (7.8 on 3.1, 8.5 on 4.0, same vectors, same CNA) is a scoring convention, not a disagreement. Everything here is `Received`, so "NVD says" is not available yet; quote VulnCheck and say so.
-
-[`🔗 CVE-2026-125250 on NVD`](https://nvd.nist.gov/vuln/detail/CVE-2026-125250) · [`🔗 FFmpeg tags`](https://github.com/FFmpeg/FFmpeg/tags)
+[`🔗 Firefox 160.0 release notes`](https://www.firefox.com/en-US/firefox/160.0/releasenotes/?redirect_source=mozilla-org) · [`🔗 NVD: CVE-2026-124917`](https://nvd.nist.gov/vuln/detail/CVE-2026-124917)
 
 ---
 
-## 8. SuperTokens' 9.9: one app's API key can rewrite the parent tenant — and every sibling with it
+## 5. .name grandfathered — Verisign retracts the termination of 22,000 personal domains after an ICANN challenge
 
-- **Velocity:** ▮▮ rising
-- **Source:** NVD · CVE-2026-123800 · Nov 10 (~03:16 UTC+8)
-- **Tags:** `security` `cve` `authentication`
+- **Velocity:** ▮▮ trending
+- **Source:** Neil Fraser · 428 pts on HN · Nov 11 (~00:37 UTC+8)
+- **Tags:** `icann` `domains` `internet-policy`
 
-**CVE-2026-123800 (9.9, CVSS 3.1, assigned by GitHub's CNA, record `Received`)** is a multi-tenant authorization flaw in **SuperTokens Core**, the open-source auth server. `Multitenancy.checkPermissionsForCreateOrUpdate` "does not adequately authorize updates to a parent connection URI domain or the base tenant": in a licensed deployment with several applications under one non-default connection URI domain, an attacker holding **one** application's valid API key can update the parent because the target branch "checks the domain without requiring the source application and tenant to be public". Because `api_keys` is not protected, the chain continues — replace the parent key, then sibling keys, read or modify sibling users, mint sessions as them, persist through a sibling dashboard user, and lock the sibling application's own key out.
+Neil Fraser's post opens "We won!": following a formal ICANN reconsideration filing, in-person advocacy in Bali, reconsideration requests from seven named individuals, and legal action by Fraser's lawyers at Petillion, **Verisign is retracting its plan to terminate 22,000 `.name` domain names and email redirects**. The one-line consequence for new users: Verisign will be "closing new registrations for 3rd-level .name domains" — the personal-name TLD becomes effectively closed at the third level while existing registrations persist indefinitely. Fraser's own site, neil.fraser.name, was among the 22,000.
 
-**Why it matters:** The fix list is the story's real shape: **18 patch versions** across seven major lines (6.0.24, 7.0.23, 8.0.7, 9.0.6 … 12.3.1), because the vulnerable code has been carried forward since 6.0.0. And the precondition is precise — a *licensed* multi-tenant deployment with multiple applications sharing one non-default connection URI domain — so self-hosted single-tenant installs are not in the affected class. The record is unanalyzed, so 9.9 is the CNA's number.
+**Why it matters:** This is a rare visible win for registrants against registry-level policy, and the mechanics matter more than the sentiment: the reversal came through ICANN's own reconsideration process plus real legal pressure, not through waiting for the registry to change its mind. It is also a preview of a class of problem that gets no attention until it is five figures of domains deep — legacy identifiers with no commercial lobby.
 
-[`🔗 CVE-2026-123800 on NVD`](https://nvd.nist.gov/vuln/detail/CVE-2026-123800) · [`🔗 fix commit 13c3de17`](https://github.com/supertokens/supertokens-core/commit/13c3de170dd40dd217db0f6bd2bded0948476a42)
-
----
-
-## 9. Redpanda Connect's management API is on `0.0.0.0:4195` with no auth by default — so a POST is RCE
-
-- **Velocity:** ▮▮ rising
-- **Source:** NVD · CVE-2026-123270 · Nov 10 (~02:17 UTC+8)
-- **Tags:** `security` `cve` `rce`
-
-**CVE-2026-123270 (9.8)** covers **Redpanda Connect 4.39 through 4.110**: in streams mode "the management HTTP API is exposed on `0.0.0.0:4195`, but authentication is disabled by default and there is no authentication gate protecting the stream CRUD routes". An unauthenticated attacker with network access can `POST` a pipeline definition to `/streams/{id}` containing code-executing processors — `command`, `subprocess`, `ffi`, or unsafe `sql_raw` — and "because pipelines can also return command output in-band via HTTP, this vulnerability enables full host compromise, credential theft, and data exfiltration with no user interaction or credentials required". **v4.111** makes the API opt-in, but the record notes RCE "remains achievable on v4.111 and later if the management API is manually enabled".
-
-**Why it matters:** The score is **CISA-ADP's**, not Redpanda's and not NVD's — the record is `Received`, and the only metric is `134c704f-…` (Vulnrichment) at 9.8 with `CWE-306`. The reference list is rarer still: one link, a researcher's own reproduction repository (`pagvac/redpanda-connect-unauth-rce`), with no vendor advisory and no commit in the record — so the paragraph above is the CNA description's account, and the fix boundary ("4.111, opt-in") is the only remediation sentence published.
-
-[`🔗 CVE-2026-123270 on NVD`](https://nvd.nist.gov/vuln/detail/CVE-2026-123270) · [`🔗 reproduction repo`](https://github.com/pagvac/redpanda-connect-unauth-rce)
+[`🔗 Neil Fraser: .name Grandfathered`](https://neil.fraser.name/news/2026/11/10/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50442736)
 
 ---
 
-## 10. Airflow's 8.8 is an incomplete fix: upgrading to 3.3.1 does not close it
+## 6. "Nothing core in my house depends on a vendor's server" — a ten-year local-first smart home essay fronts Hacker News
 
-- **Velocity:** ▮▮ rising
-- **Source:** NVD · CVE-2026-111421 · Nov 9 (~18:17 UTC+8)
-- **Tags:** `security` `cve` `airflow`
+- **Velocity:** ▮▮ trending
+- **Source:** Do Code That Matters · 374 pts on HN · Nov 10 (~23:25 UTC+8)
+- **Tags:** `smart-home` `local-first` `home-automation`
 
-**CVE-2026-111421 (8.8, CISA-ADP)** is the second half of a bug Apache thought it had fixed. Airflow's Task Execution API "stored XCom values written by a task without the reserved-key check applied elsewhere", so a Dag author's task could write an XCom that, "when a user later viewed it through the API with deserialization enabled, made the API server instantiate classes from the `airflow.*` namespace with arguments the Dag author chose". The record is explicit about who is still exposed: "This is an incomplete fix for CVE-2026-59242: users who applied that fix in **apache-airflow 3.3.1** remain affected through this route and should upgrade to **apache-airflow 3.4.0** or later."
+Spencer Kittleson's writeup of a decade running his house locally hit the HN front page: rule one is "Core stuff has to work with the internet unplugged", and the essay walks the stack that honors it — Tasmota on ESP8266/ESP32 for his most-asked-about build (a sprinkler controller), Node-RED, an MQTT broker, Grafana dashboards, a GL.iNet router running OpenWrt, wall switches that work when Alexa is down. The motivating failure is Google breaking the Nest API; the sharpest line is about a dead meat thermometer: "The hardware outlived the company, and it stopped working anyway." One reader reports they would have paid **~2.5×** for local-first hardware out of the box.
 
-**Why it matters:** Deserialization was already enabled in exactly the deployments that took the first advisory seriously, so the population still at risk is the population that patched — the distribution shape every "incomplete fix" produces. The CWE in the record is `CWE-502`, and the workaround is the boring one: turn deserialization off on the API server until 3.4.0 is deployed.
+**Why it matters:** The essay lands the same week as the Home Assistant MCP server trend, and they are two halves of the same thesis: the cloud-dependent smart home is a subscription on someone else's uptime. The concrete details — battery-life rules, the 11 rules accumulating over five years — make it a checklist rather than a manifesto, which is why it is being passed around.
 
-[`🔗 CVE-2026-111421 on NVD`](https://nvd.nist.gov/vuln/detail/CVE-2026-111421) · [`🔗 Apache mailing-list thread`](https://lists.apache.org/thread.html/pwdwx354tv0x3m8wzfhh59r6wyztj2lk)
+> "Alexa is just another way to flip a switch. If it's down, the wall switches and the wall dashboard still work."
 
----
-
-## 11. otterdog skips its HMAC check when the secret is unset — the default — and then `eval()`s the webhook body
-
-- **Velocity:** ▮▮ rising
-- **Source:** NVD · CVE-2026-123870 · Nov 9 (~17:16 UTC+8)
-- **Tags:** `security` `cve` `supply-chain`
-
-**CVE-2026-123870 (9.5 on CVSS 4.0, assigned by Eclipse's CNA)** lands in **otterdog**, the Eclipse Foundation's tooling for managing GitHub organisations as code. "The otterdog webapp evaluates a format-string built from the incoming GitHub webhook JSON body using Python's `eval()`. When the `GITHUB_WEBHOOK_SECRET` configuration value is unset or empty (**the code default is `None`**), the HMAC signature check is skipped entirely, allowing an unauthenticated network client to reach the `eval()` sink with attacker-controlled input and execute arbitrary Python on the webapp host." Fixed in **`bbc9e3ce`**.
-
-**Why it matters:** Two defaults compose into the vulnerability: an authentication control that fails *open* when unconfigured, in front of an `eval()` on request data. Either alone is a bug worth fixing; together, every deployment that never set an env var is remote code execution. This is also a CVSS 4.0-only record — the 9.5 is Eclipse's number on the 4.0 framework and the record is `Received`, so there is no NVD or 3.1 figure to compare it to yet.
-
-[`🔗 CVE-2026-123870 on NVD`](https://nvd.nist.gov/vuln/detail/CVE-2026-123870) · [`🔗 GHSA-32xf-7j44-xq72`](https://github.com/eclipse-csi/otterdog/security/advisories/GHSA-32xf-7j44-xq72)
+[`🔗 Do Code That Matters: Home automation`](https://docodethatmatters.com/home-automation-overnight-success/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50441707)
 
 ---
 
-## 12. Zebkit links Chromium's content layer into your app — 34% smaller than Electron, and honest about where it loses
+## 7. Blender 5.3 ships native Gaussian Splats — plus DLSS denoising, dispersion, and Vulkan by default
 
-- **Velocity:** ▮▮ rising
-- **Source:** Hacker News · 99 pts · Nov 9 (~22:34 UTC+8)
-- **Tags:** `browsers` `electron` `rust`
+- **Velocity:** ▮▮ trending
+- **Source:** Blender Foundation · 321 pts on HN · Nov 11 (~00:15 UTC+8)
+- **Tags:** `blender` `3d-graphics` `release`
 
-**ikey4u/zebkit** (LGPL-2.1, v0.2.0, **135 stars**, created Oct 10) is Blink, V8 with every JIT tier, PDFium and FFmpeg as "one library you link into your own application" — with no Chrome UI, no Node runtime and no Electron packaging. It runs inside the application's own event loop (`zebkit_init()`, `zebkit_pump()`) and draws into a window you hand it: an X11 window, an `NSView` or an `HWND`, with bindings for C, Rust, Python, Go and JavaScript. The published benchmark against **Electron 45.2.1** — same harness, same pages, medians of 5–11 runs, Linux x86-64, dated 2026-11-06/07 — reads **171.2 / 59.4 MiB shipped** against 260.5 / 87.1, **2.3 s cold start** against 6.6 s, **179 MB** for a blank page against 250 MB, and **level** performance on DOM and JS workloads.
+Blender **5.3** released Nov 10 with the headline "Welcome native 3D Gaussian Splats support to Blender 5.3!" Splats — the photogrammetry-from-photos representation that reconstructs 3D scenes from "many small, soft, transparent blobs" — import from **PLY, SPZ and glTF**, are stored as point clouds with full attributes (`scale`, `rotation`, `radiance:base`, spherical-harmonics `radiance:sh_*`), and render in EEVEE, Cycles and Workbench. The rest of the release: **DLSS 4.5 Ray Reconstruction** as a Cycles denoiser ("Think Cycles looks with EEVEE responsiveness", NVIDIA driver 620+), Principled BSDF **dispersion** matching OpenPBR v1.1.1, **Vulkan as the default** backend, a new optional Projects system, full ripple editing in the video sequencer with OpenTimelineIO import/export, up to **2× faster GPU playback**, and Anisotropic Kuwahara up to 10× faster on Apple GPUs.
 
-**Why it matters:** The table's last rows are why it is worth reading. Processes per page: **7 for zebkit, 6 for Electron** — because zebkit sandboxes storage in its own process "as Chrome". And the README carries a section the genre usually omits: "**Where Electron is ahead**: one process fewer a page, and memory on two of the ten sites, YouTube and The Verge, where advertising and video decide." A 135-star project's self-benchmark is a claim, not a measurement of your workload — but a claim that states its own losses is the kind worth re-running.
+**Why it matters:** Splat support in a mainstream DCC closes the loop between the capture ecosystem (phone scans, drone passes, the sat-photo tools trending here last week) and actual scene production — import, edit with Geometry Nodes, composite into real geometry. The notes are honest that splat "performance is still being optimized" and colors may shift at low opacity from sRGB authoring differences, so production pipelines should test before committing.
 
-[`🔗 ikey4u/zebkit`](https://github.com/ikey4u/zebkit) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50426207)
-
----
-
-## 13. When the instruction file goes stale, the agent follows the dead path — 732 trajectories on three real repos
-
-- **Velocity:** ▮▮ rising
-- **Source:** arXiv 2611.09802 · listed Nov 9
-- **Tags:** `research` `coding-agents` `documentation`
-
-**"When Instruction Files Go Stale: Documentation Debt and Hidden Cost in Coding Agents"** studies something every `CLAUDE.md`-shaped repo has: instruction files "read in every agent session" that "can fall behind the code and become stale (e.g., a test folder moves, but the file still points to the old one)". The setup is controlled — three real stale instructions from active open-source repos, each a different kind of guidance (**a test command, a code location, and a procedure for adding a component**) — with agents fixing **22 maintenance tasks** under three versions of each instruction: left stale, corrected to the current path, and removed. Code and task held fixed; **732 trajectories** analysed.
-
-**Why it matters:** The authors' framing is the finding: "Evaluations that check only task success can miss this cost, and the stale file can persist." A stale instruction is documentation debt whose interest is charged to every later session — so the natural experiment is not whether the agent finished but what it did on the way, and whether it recovered. Any team that has watched an agent run the 2024 test command will recognise the class; holding the code constant while moving only the prose is what makes the cost measurable.
-
-[`🔗 arXiv 2611.09802`](https://arxiv.org/abs/2611.09802) · [`🔗 full text (HTML)`](https://arxiv.org/html/2611.09802v1)
+[`🔗 Blender 5.3 release notes`](https://www.blender.org/download/releases/5-3/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50442426)
 
 ---
 
-## 14. MemoryDojo: every memory architecture tested is poisonable, and the damage depends on the architecture
+## 8. Barracuda's ESG auth bypass and command injection land on KEV — chainable to root, with exploitation admitted
 
-- **Velocity:** ▮▮ rising
-- **Source:** arXiv 2611.09721 · listed Nov 9
-- **Tags:** `research` `agent-memory` `security`
+- **Velocity:** ▮▮ trending
+- **Source:** Barracuda Trust Center · KEV adds Nov 10
+- **Tags:** `barracuda` `kev` `email-security`
 
-**MemoryDojo** is a benchmark for the lifecycle of a poisoned memory. The premise: "malicious instructions encountered in one session may be stored and propagated through memory before being retrieved and acted upon in later sessions", and "because memory systems differ in how they process and retrieve information, the downstream effects of poisoning can vary significantly across systems". The artifact is **155 multi-session long-horizon trajectories across four domains**, run against **five different memory systems**, tracing where the poison is written, when it is retrieved, and what the agent then does. The result is sober and unhelpful in the way real results are: "all memory systems are susceptible to memory poisoning, with substantial variation in downstream effects."
+CISA's KEV catalog added **both Barracuda vulnerabilities on Nov 10**. CVE-2026-116606 (**CVSS 9.3** per Barracuda's advisory) is a pre-authentication authorization bypass in Email Security Gateway versions **earlier than 9.4.0.030** letting an unauthenticated attacker reach the admin UI's configuration-import function and restore a crafted backup archive. CVE-2026-111560 (**8.6**) is OS command injection through the timezone configuration field, affecting six products (ESG, Load Balancer ADC, Message Archiver, WAF, WCC, WSG). Barracuda's advisory is explicit about the chain: together they let an attacker "bypass authorization controls and obtain root access to the device", and the Nov 9 update admits "We have identified exploitation activity affecting a small number of organizations". Patches: **BNSF-40425** (9.4.017+) or **BNSF-40430** for older ESGs. Both NVD records are CNA-scored and not yet analyzed — CVE-2026-116606 had already advanced to `Undergoing Analysis` by 20:18 UTC on publication day.
 
-**Why it matters:** The benchmark ships an attack optimization too — "a memory-aware poison optimization process that increases the poisoning efficacy, highlighting differences between memory architectures" — which turns the variation into an attack surface rather than a curiosity. For anyone shipping a memory layer (this feed has covered four competing memory formats in the last week), a store that is not the same shape as your neighbour's now has a measurable cost.
+**Why it matters:** The advisory went out Nov 2 and the exploitation admission landed Nov 9 — an eight-day window in which a patch shipped quietly and exploitation started anyway. Email security gateways are the classic single- appliance single-point-of-failure: root on the ESG is root on every message flowing through the company. Barracuda's own remediation guidance (patch firmware, then restrict admin interfaces to trusted internal networks) is the correct order.
 
-[`🔗 arXiv 2611.09721`](https://arxiv.org/abs/2611.09721) · [`🔗 full text (HTML)`](https://arxiv.org/html/2611.09721v1)
+> "We have identified exploitation activity affecting a small number of organizations." — Barracuda advisory, Nov 9 update
 
----
-
-## 15. The same H100 is $2.69 or $12.29 an hour — and the receipt says what the 4.57× is not
-
-- **Velocity:** ▮▮ rising
-- **Source:** Hacker News · 147 pts · Nov 9 (~23:39 UTC+8)
-- **Tags:** `gpu` `pricing` `infrastructure`
-
-**`datareceipts/data-receipts`** publishes the arithmetic behind a price comparison rather than the comparison: H100 SXM 80GB on-demand, normalised to dollars per GPU-hour, with a month at 730 hours. **RunPod Community $2.69** ($1,964/month), RunPod Secure $3.99, **AWS `p5.48xlarge` $6.88** ($5,022), **Azure `ND96isr_H100_v5` $12.29** ($8,972) — "4.57× between cheapest and dearest, for the same chip". The study also refuses the obvious chart: "An H100 is three different products. The SXM 80GB, the PCIe 80GB and the NVL 94GB all get marketed as H100s and they do not cost the same", so every comparison stays inside one (model, memory) group, and each vendor is priced on its *cheapest* route to that GPU.
-
-**Why it matters:** The repo's "What the 4.57× is not" section is the part that makes the number usable: Azure's ND SKU carries "400 Gbps per GPU of Quantum-2 InfiniBand with GPU Direct RDMA", which is why multi-node training costs more than single-node fine-tuning — "if you are fine-tuning on one node, you are paying for an interconnect you will never use." The stated limits are equally specific: on-demand list prices only (spot "would narrow the gap a lot"), one region each, and "**Availability is not priced. A cheap H100 you cannot get is not a price.**"
-
-[`🔗 data-receipts/109-gpu-pricing`](https://github.com/datareceipts/data-receipts/tree/main/109-gpu-pricing) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50427085)
+[`🔗 Barracuda security advisory`](https://trust.barracuda.com/security/pre-authentication-authorization-bypass-command-injection) · [`🔗 NVD: CVE-2026-116606`](https://nvd.nist.gov/vuln/detail/CVE-2026-116606)
 
 ---
 
-## 16. What malloc is actually doing: 1,000 allocations, 2 syscalls, 132 KiB
+## 9. .NET 11 ships C# 15 union types and Zstandard — as .NET 8 and 9 reach end of support the same day
 
-- **Velocity:** ▮▮ rising
-- **Source:** benmandrew.com · 180 pts · Nov 9 (~19:31 UTC+8)
-- **Tags:** `systems` `memory` `glibc`
+- **Velocity:** ▮▮ trending
+- **Source:** Microsoft · 241 pts on HN across two threads · Nov 11 (~00:01 UTC+8)
+- **Tags:** `dotnet` `csharp` `release`
 
-A measured walkthrough of the gap between `malloc`'s interface and what the kernel sees. The article's first experiment traces a loop of **1,000 `malloc(16)` calls** under `strace` and finds **two `brk` syscalls total** — one to learn the program break, one to grow the heap by **132 KiB**, both in the first call; "the other 999 just take from that already allocated memory". It prices the thing being amortised at "**575 ns for an empty one**, as measured below", then builds a bump allocator on `sbrk`, prints one address from each region of the process, and notes that in that run the break and `printf` sit **23.4 TiB apart** — "about 1,530 times the machine's 15.6 GiB of RAM. Nearly all of that range is unmapped, so it costs no physical memory."
+Microsoft shipped **.NET 11** on Nov 10 at .NET Conf. The language headline is **C# 15 union types with exhaustiveness checking and `closed` hierarchies**, plus extension indexers and labeled `break`/`continue`; F# 11 ships alongside. Runtime: "hundreds of runtime optimizations", FP16 instructions for `Half`, and **Runtime Async** (suspension moved into the runtime) still preview behind `runtime-async=on`. Libraries: **Zstandard compression in `System.IO.Compression`**, LINQ `FullJoin`, `System.Text.Json` support for C# unions, F# discriminated unions and JSON Lines, an expanded `Process` API — and an **`dotnet new mcpserver`** template for building MCP servers. The operational kicker: .NET 11 is **STS with two years of support**, .NET 10 remains the LTS, and **.NET 8 and .NET 9 hit end of support on Nov 10, 2026**.
 
-**Why it matters:** This is the layer most performance reasoning skips — the syscall-vs-userspace boundary and the bookkeeping that hides it. The article is also a working demonstration of measurement over recall: the 132 KiB, the two `brk` calls and the address layout are outputs, not assertions, and each is reproducible from the snippets it prints.
+**Why it matters:** Union types with exhaustiveness is the biggest type-system change since discriminated unions were teased, and it lands in the same release as the JSON layer that must serialize them — the design is coherent rather than bolted on. But the deadline is the real news for anyone running infra: two LTS-adjacent versions went EOL today, so the version audit is not optional this week.
 
-[`🔗 What is malloc doing, anyway?`](https://benmandrew.com/articles/what-is-malloc-doing-anyway) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50424157)
-
----
-
-## 17. Raspberry Pi 5 16GB hits $385 — an $80 jump since April, on a board that launched at $120
-
-- **Velocity:** ▮▮ rising
-- **Source:** CNX Software · 183 pts · Nov 10 (~01:42 UTC+8)
-- **Tags:** `hardware` `raspberry-pi` `pricing`
-
-Raspberry Pi raised prices again, this time concentrated on the 16GB models: the **Raspberry Pi 5 16GB now sells for $385**, "an $80 increase compared to the last price hike in April", and the **CM5** system-on-module goes up **$40**, "starting at $375 for the Lite model without wireless". The article's one piece of good news is a hold: "the Raspberry Pi 500+ mechanical keyboard PC stays at the same price, starting at $410". CNX's own read on the asymmetry is that the keyboard model is "already richly priced and the demand must be lower than for single board computers and compute modules".
-
-**Why it matters:** The board that anchored low-cost always-on compute is now priced like a small server, and the increase is a memory-cost pass-through rather than a Raspberry Pi margin decision — which is the same DRAM pressure that made idle-RAM jokes into a genre this week. For anyone sizing a homelab, a CI runner fleet or an edge deployment, the 16GB tier has crossed from buying a few to buying one and measuring it, and the CM5 line moves with it.
-
-[`🔗 CNX Software: Raspberry Pi 5 16GB now $385`](https://www.cnx-software.com/2026/11/03/when-will-this-stop-the-raspberry-pi-5-16gb-sbc-now-sells-for-385/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50428801)
+[`🔗 Announcing .NET 11`](https://devblogs.microsoft.com/dotnet/announcing-dotnet-11/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50442225)
 
 ---
 
-## 18. Flide is the serving layer decision models were missing — up to 9.5× over vLLM and SGLang, exact state forking
+## 10. Val Town is winding down — billing paused today, read-only in December, open-sourced in February
 
-- **Velocity:** ▮▮ rising
-- **Source:** Hacker News · 109 pts · Nov 9 (~12:43 UTC+8)
-- **Tags:** `inference` `decision-models` `serving`
+- **Velocity:** ▮▮ trending
+- **Source:** Val Town · 152 pts on HN · Nov 11 (~01:37 UTC+8)
+- **Tags:** `valtown` `platform-shutdown` `serverless`
 
-**`OmniJev/Flide`** (Apache 2.0, **258 stars**) is an inference engine for the "decision model" family — the single-forward-pass, no-generation models this feed covered on **2026-11-07** — and its pitch is that they need different serving machinery from generative LLMs: "**With exact state forking it is up to 9.5 times faster than vLLM and SGLang, and every answer is the one the model gives the question alone**" — one state forked into three questions, each answered in one forward pass. The project published its method as **arXiv 2610.42148** ("Accelerating Decision Inference with Exact State Forking") on Nov 2 and ships with a `flide verify` command that "checks exact forking on your own model and requests". **PyPI `flide` 0.1.10** was uploaded **2026-11-09T06:57Z**, the same day the README logged two releases: 0.1.9 adding **`pplx-decider-v1.1-27b` and `JEV-35B`**, and 0.1.10 adding **Ainvest-Decision-27b, Darwin-27B-RSI-Decision and KnowLine-31B-Gen1.5**, the last now reading images.
+Val Town — the platform for hosting small serverless "vals", scripts and sites — announced it could not compete in the cloud computing space and is winding down: **new signups ended Nov 10**, the platform goes **read-only Dec 10** (sqlite and blob storage excepted), other services shut **Jan 10, 2027**, and **the code is open-sourced Feb 1, 2027**. Billing is paused immediately with subscriptions serviced free, annual plans get partial refunds, and migration guides target Cloudflare, Vercel, Netlify and Render. Founder Steve Krouse points users at the migration moment: "today's LLMs are great at these types of migrations".
 
-**Why it matters:** The model list is the story. Perplexity, Cloudflare (`Clef`), Juspay, AutoTrust and a dozen others now publish "decision" checkpoints that are not chat models, and the whole family was being served by engines built for token generation. An up-to-9.5× claim against vLLM is the project's own benchmark on its own workload — the "up to" is doing real work — but the `verify` command, which tests exactness of forking rather than speed, is the part that decides whether the 9.5× is a fair comparison or a different computation.
+**Why it matters:** The sequencing here is unusually decent — a month of read-only runway, billing off before the shutdown, refunds, and the source committed to release — and it is a live experiment in whether an LLM-assisted mass migration can actually move a small platform's worth of user code in four weeks. For anyone still on a niche host, the shutdown is also the cautionary data point: four years, venture backing, and a product people loved still could not compete in cloud computing.
 
-[`🔗 OmniJev/Flide`](https://github.com/OmniJev/Flide) · [`🔗 PyPI: flide 0.1.10`](https://pypi.org/project/flide/)
+> "We've made the difficult decision to wind down Val Town." — Steve Krouse
+
+[`🔗 Val Town: Winding down`](https://blog.val.town/winding-down) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50443427)
 
 ---
 
-## 19. PackageKit's local 8.5: a path traversal in "simulate the actions" turns into root
+## 11. Synaptics' patent claims stop a hobbyist's DisplayLink driver — 125 patents, a $25,000 demand rising weekly, and OIN's codec carve-out
+
+- **Velocity:** ▮▮ trending
+- **Source:** LWN.net · 117 pts on HN · Nov 11 (~02:02 UTC+8)
+- **Tags:** `patents` `displaylink` `linux`
+
+LWN documents the full letter chain that killed **Vino**, Mike Lothian's Rust DRM/KMS driver for DisplayLink docks (DisplayLink was acquired by Synaptics in 2022). Synaptics' counsel cited **125 patents** "that cover fundamental aspects of DisplayLink's architecture and operation" in an Aug 17 cease-and-desist; an Oct 5 follow-up supplied claim charts for two UK patents — **GB2484736B and GB2485613B**, both filed 2010 — with a demand of **US$25,000 rising $25,000 weekly** until compliance. The repo came down, the driver was never submitted upstream, and a months-ignored EVDI bugfix PR got a reply only after the threats ("You can't threaten to sue me and then say 'can you update your pull request?'"). Lothian's Open Invention Network hope failed on a technicality: OIN's CEO concluded its protections do not apply because **codecs are explicitly excluded** from the Linux System Definition.
+
+**Why it matters:** The community's prior-art response was fast — commenters flagged 1970s Haar-wavelet compression (US4224678A) against the "ludicrous" claims — but prior art does not pay defense costs, which is the actual mechanism: "Vino itself has to remain local until this is sorted out, I just can't afford to defend myself against Synaptics." A clean-room, AI-assisted driver died not in court but in the shadow of a letter, and the OIN carve-out is the detail every contributor to a codec-adjacent project should read.
+
+[`🔗 LWN: Synaptics patent claims stop work on DisplayLink drivers`](https://lwn.net/SubscriberLink/1102549/acbc92e00cee3a3f/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50443824)
+
+---
+
+## 12. NVIDIA's Auto Ontology tops the weekly board — a semantic layer for agents, exposed over MCP
+
+- **Velocity:** ▮▮ trending
+- **Source:** GitHub Trending · +10,159 stars this week · Nov 11 (~04:06 UTC+8)
+- **Tags:** `nvidia` `agent-infra` `semantic-layer`
+
+**NVIDIA/auto-ontology** is #1 on the weekly trending board at **+10,159 stars** (11,396 total; repo created Apr 27, Apache-2.0). The README frames it as the reliability layer for agentic analytics: "Agents can retrieve documents and query databases, but reliability gates agentic analytics: a revenue metric answered faster is worth nothing if the number is wrong." It builds an enterprise ontology from metadata, reconciles definitions across systems, validates generated queries against certified definitions with lineage, and exposes the whole thing to "any agent harness through **MCP, CLI, and API**". The stack is real and complete — Next.js 16 frontend, FastAPI + LangChain backend, Postgres + pgvector, optional Vault, natural-language-to-SQL via NVIDIA NIM — with a companion BIRD text-to-SQL eval repo. Two honesty markers: the project "is currently not accepting external contributions", and its only release tag is a `pre-main-merge-backup` snapshot.
+
+**Why it matters:** Every enterprise agent demo dies on the same rock — the model doesn't know what "active customer" means in *this* warehouse. NVIDIA is shipping the semantic-layer piece of that answer as open source with an eval harness attached, which is more than most of the +10k-star week brings. The no-contributions flag and the absent release line mean adoption runs on NVIDIA's cadence, not the community's — treat it as a vendor framework with public source, not a community project.
+
+> "Agents are only as useful as what they know, and only as trustworthy as the boundaries they run within." — NVIDIA blog
+
+[`🔗 NVIDIA/auto-ontology`](https://github.com/NVIDIA/auto-ontology) · [`🔗 NVIDIA blog: Agent Toolkit expands`](https://blogs.nvidia.com/blog/enterprise-platforms-agent-toolkit)
+
+---
+
+## 13. Scrapling v0.5.1 lets agents follow motion and control drag-and-drop — the scraping framework crosses 100k stars
+
+- **Velocity:** ▮▮ trending
+- **Source:** GitHub Trending · +8,226 stars this week · Nov 11 (~04:06 UTC+8)
+- **Tags:** `scraping` `python` `agent-tools`
+
+**D4Vinci/Scrapling** — the Python web-scraping framework that markets itself on surviving site redesigns — crossed **101,056 stars** with **+8,226 this week**, pushed by **v0.5.1** (released Nov 4-5). The release notes: "Small version bump, big browser upgrade! This version lets AI agents follow motion and control drag and drop, adds dedicated remote browser sessions, and brings fixes across parsing, spiders, proxies, and the shell". That is scraping infrastructure converging on agent-tooling: mouse-path and drag primitives plus isolated remote sessions are the mechanics a browsing agent needs, and Scrapling already ships an agent-skill distribution (docs page plus an OpenClaw skill listing).
+
+**Why it matters:** The scraping framework and the browser-agent harness are becoming the same software category, approached from opposite directions — agent harnesses add scraping resilience, scrapers add actuation. v0.5.1's "lets AI agents follow motion" is the tell: the remaining moat in scraping is behavioral, not HTML parsing. For teams already running Scrapling, the 0.5 line (Oct 17) plus this bump is a real upgrade path, not just star velocity.
+
+[`🔗 D4Vinci/Scrapling`](https://github.com/D4Vinci/Scrapling) · [`🔗 v0.5.1 release`](https://github.com/D4Vinci/Scrapling/releases/tag/v0.5.1)
+
+---
+
+## 14. Chrome, Edge, Firefox and MDN ship a skill for coding agents — Modern Web Guidance hits v1.0.0
 
 - **Velocity:** ▮ steady
-- **Source:** NVD · CVE-2026-104620 · Nov 9 (~23:17 UTC+8)
-- **Tags:** `security` `cve` `linux`
+- **Source:** Show HN · 95 pts · Nov 11 (~02:01 UTC+8)
+- **Tags:** `web-platform` `coding-agents` `skills`
 
-**CVE-2026-104620 (8.5 on CVSS 4.0, assigned by SUSE)** is a short record with a large blast radius: "A path traversal attack in simulation of actions in the **Zypp backend of PackageKit** before **1.4.1** could be used by local attackers to gain root privileges." PackageKit is the D-Bus service behind graphical package installs across most desktop distributions, and it runs as root by design — so a flaw in the *simulation* path matters precisely because simulation is the unprivileged call applications make before asking for authorization.
+**GoogleChrome/modern-web-guidance** released **v1.0.0** on Nov 10 — a skills collection whose README says it is "Stewarded by the Google Chrome, Microsoft Edge, Mozilla Firefox, and MDN teams, alongside the web development community". The pitch: coding agents default to legacy patterns because training data is full of old code, so the skill injects curated modern-platform guidance into the agent's context on demand — `npx modern-web-guidance@latest install`, then `search`/`retrieve` by guide id, and a `legacy-scan` that sweeps a codebase for patterns to modernize. The guides are pruned by evals: "we run evals enabling us to prune lowest-common-denominator content that models already know", with a public eval dashboard and the source split into a separate `-src` repo.
 
-**Why it matters:** The record carries one reference — a **SUSE Bugzilla entry** — and no CVE-derived advisory text, no upstream commit and no fixed-release link, so the vendor's own errata is where the affected-version detail lives. It is also a 4.0-only record from a Linux distributor and still `Received`: a very widely deployed desktop package stack has a local root bug whose full disclosure lives outside the registry, which is the shape this feed keeps finding in distro-filed records.
+**Why it matters:** This is the browser vendors institutionalizing the skills distribution channel that Anthropic and community repos have been experimenting with — versioned, eval-backed, cross-vendor content with an installer. The interesting bet is the eval-pruning loop: guidance that the models already know gets dropped, which makes the corpus a moving target tied to model capability rather than a static style guide. If you maintain agent setups for a web team, this is now a default install candidate.
 
-[`🔗 CVE-2026-104620 on NVD`](https://nvd.nist.gov/vuln/detail/CVE-2026-104620) · [`🔗 SUSE Bugzilla 1284954`](https://bugzilla.suse.com/show_bug.cgi?id=1284954)
-
----
-
-## 20. USPS now sells the official ZIP Code boundary polygons — and the price tag starts at five figures
-
-- **Velocity:** ▮▮▮ trending
-- **Source:** Hacker News · 529 pts · Nov 10 (~03:58 UTC+8)
-- **Tags:** `geodata` `usps` `gis`
-
-USPS's PostalPro hosts **USPS® ZIP Code Boundaries** — official polygon products the agency positions as "the ground truth for ZIP Code boundaries", sold in three license tiers (**Internal, Enterprise, Publication**), each with four quarterly updates, alongside a **GeoJSON sample file**. The resources on the page — fact sheet, technical guide, license agreement, order form — carry dates from June and September 2026, so the HN front-page thread is the discovery wave rather than a launch event. The discussion's practical discoveries: an HN comment points to the order form with **"starting at $10k"**, and the license agreement restricts redistribution — while the community's working alternative, OpenDataDE's census-derived State-zip-code-GeoJSON, remains free but dates to the 2010 census.
-
-**Why it matters:** ZIP Codes were never geographic areas — they are delivery-route groupings, and USPS itself spent decades saying so; an official polygon set is the first time the agency sells ground truth for the shape everyone else approximates. The thread's real content is the market's answer: free approximations everyone uses versus a licensed ground truth almost nobody will buy at $10k.
-
-[`🔗 USPS ZIP Code Boundaries`](https://postalpro.usps.com/zcb) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50431058)
+[`🔗 GoogleChrome/modern-web-guidance`](https://github.com/GoogleChrome/modern-web-guidance) · [`🔗 developer.chrome.com docs`](https://developer.chrome.com/docs/modern-web-guidance)
 
 ---
 
-## 21. Gemini's connected-app promise quietly reversed: Google's own pages now say Drive and Gmail data is human reviewed
-
-- **Velocity:** ▮▮▮ trending
-- **Source:** Hacker News · 469 pts · Nov 10 (~02:24 UTC+8)
-- **Tags:** `privacy` `gemini` `google`
-
-Google's 2023 blog post still carries the original promise verbatim — with Workspace extensions, "your content from Gmail, Docs and Drive is not seen by human reviewers, used by Bard to show you ads, or used to train the Bard model" — but the sentence is now followed by an **"Update, October 16, 2026"** noting that connected Workspace data "can also be subject to human review in limited circumstances". The current help page is more direct: "Data from Connected Apps is used and human reviewed per the Gemini Apps Privacy Notice." A repository posted with the HN thread documents the ingestion mechanism: ambient mentions of personal topics trigger background Workspace lookups **without @-tags**, and capture is probabilistic — four observed outcomes ranging from zero retrieval through metadata summaries and partial verbatim quotes to **full-file ingestion** into session context.
-
-**Why it matters:** The promise, the reversal and the mechanism are all now on Google's own pages; what the repo adds is the demonstration that retrieval fires on casual conversation, not just explicit @Drive calls — so a reviewer pipeline can see a complete email the user never asked Gemini to open. For anyone building connected-app integrations, the design lesson is that the user asking and the user knowing a tool fired are different consent events.
-
-[`🔗 gemini_files: documentation of the behavior`](https://github.com/thisisme6598/gemini_files/) · [`🔗 Google Help Answer 16836988`](https://support.google.com/gemini/answer/16836988) · [`🔗 the 2023 blog post, with its Oct 16 update`](https://blog.google/innovation-and-ai/products/our-responsible-approach-to-building-guardrails-for-generative-ai/)
-
----
-
-## 22. TPU 8tx and TPU 8i Max: four systems in one generation, each cut for a different stage of the agent lifecycle
-
-- **Velocity:** ▮▮▮ trending
-- **Source:** Google blog · 226 pts on HN · Nov 10 (~05:56 UTC+8)
-- **Tags:** `google` `tpu` `infrastructure`
-
-Amin Vahdat announced two additions to Google's eighth-generation TPU portfolio — "the first time we have introduced four TPU systems in a single year" (8t, 8i, 8tx, 8i Max), with **nearly 100 customers**. **TPU 8tx** is the confidential-computing configuration: same silicon as 8t on 5th-generation AMD EPYC hosts, keeping "sensitive data and model weights protected and isolated even while in active use", with up to **2× lower latency** than 8t on the Boardfly network. **TPU 8i Max** fuses two 8i chips onto one package — "double the compute, double the SRAM and double the HBM bandwidth", twice the silicon per rack footprint — built for agents reasoning "across an entire software codebase or hours of video at once". The software half of the post is as concrete: TorchTPU (open-sourced last month) so PyTorch and Hugging Face models run unmodified, a TPU agent suite in preview that plugs into Claude Code, Cursor and Google Antigravity, and an open-source XLA Serving Engine.
-
-**Why it matters:** The specialization pattern is the story — one generation, four SKUs, each aimed at a lifecycle stage (train, reason, confine, context) — and the open-source software announcements may matter more than the silicon: if PyTorch code runs unmodified, the moat becomes packaging and price. Note the claimed wins ("state-of-the-art price-performance" on InferenceX and AgentX) are asserted without numbers in the post.
-
-[`🔗 Our newest TPUs: 8tx and 8i Max`](https://blog.google/innovation-and-ai/infrastructure-and-cloud/global-network/tpu-8i-max-and-8tx/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50432831)
-
----
-
-## 23. Watched.earth: every satellite that passed over any place this week, and the photos it actually took
-
-- **Velocity:** ▮▮ rising
-- **Source:** Show HN · 257 pts · Nov 10 (~01:51 UTC+8)
-- **Tags:** `satellites` `gis` `show-hn`
-
-**Watched** "shows which satellites passed over any place on Earth in the last 7 days, and the real photos they took" — the author built it to learn what had photographed their street. The pass search runs **SGP4 over the CelesTrak catalog in the browser** (~half a second per query), was checked against brute force on the poles, the antimeridian and tiny swaths with **0 missed passes**, and draws all **~17,000 objects in orbit on the GPU**, solving Kepler's equation every frame. Imagery comes from the real Sentinel-2/Landsat passes found — and the author flags the trap they hit: Sentinel-2 timestamps are "often 5-10 min off from when the sat actually crosses your spot". It flags a place as watched only when a real image exists, stores no location, and the code is open (MIT, `dev-Armaan/satellites`).
-
-**Why it matters:** Satellite overflight is normally an expert workflow — TLE propagation, pass prediction, imagery APIs stitched by hand; this compresses it into one map query, and the honest details are load-bearing: the timestamp skew is exactly the kind of measurement error that would silently break image-to-pass matching anywhere else.
-
-[`🔗 watched.earth`](https://www.watched.earth) · [`🔗 dev-Armaan/satellites`](https://github.com/dev-Armaan/satellites) · [`🔗 HN discussion (the author's launch notes)`](https://news.ycombinator.com/item?id=50428907)
-
----
-
-## 24. CUI: native UI components for C — one C99 codebase, a complete app at ~250 KB, every component live in the docs
-
-- **Velocity:** ▮▮ rising
-- **Source:** Hacker News · 164 pts · Nov 10 (~03:35 UTC+8)
-- **Tags:** `c` `ui` `native`
-
-CUI bills itself as "About 190 components, compiled to machine code with no browser or runtime inside" — running on "Windows, macOS, Linux and the web, from one C99 codebase", where "A complete app is about 250 KB". The docs site renders **every component live in the browser**; the component index itself lists ~150 entries (combined pages account for the difference against the site's ~190 headline count). MIT-licensed, **v1.3.1** released, 738 stars — created **Nov 5**, one week old, and already on the HN front page.
-
-**Why it matters:** The immediate comparison is cross-platform toolkits; the more transferable idea is the docs-as-demo pattern — every component executable on its own documentation page is something native toolkits rarely manage, and it doubles as the project's test suite. The claims (the count, the bundle size) are the author's own, but the artifacts are one clone away.
-
-[`🔗 CUI documentation (live components)`](https://yappologistic.github.io/CUI/) · [`🔗 yappologistic/CUI`](https://github.com/yappologistic/CUI) · [`🔗 Component index`](https://yappologistic.github.io/CUI/components/)
-
----
-
-## 25. Exact: Expo's new runtime is not React Native — it is an app format an AI agent can build, run, see and test
-
-- **Velocity:** ▮▮ rising
-- **Source:** Show HN · ~76 pts · Nov 10 (~06:59 UTC+8)
-- **Tags:** `ui` `cross-platform` `agent-native`
-
-**expo/exact** (MIT, Rust, **1,133 stars in 8 days**, no releases yet) opens with: "Write an app once. It runs natively on the web, macOS, iOS, and Linux, and an AI agent can build it, run it, see it, and test it on every one of them." The interface is written in **Contract**, a declarative language compiled to a compact plan; logic is TypeScript or Rust. On the web the plan drives the real DOM over a ~20 KB runtime; on native platforms a Rust layout kernel computes every box with CSS rules and AppKit, UIKit or a GPU painter draws — "no webview and no JavaScript bridge in the UI". The README's centerpiece is a **copy-paste prompt for Claude Code** that scaffolds a todo app, writes an `app.test.contract`, and passes it on web, macOS and the iOS Simulator via `scripts/agent.mjs` — a clean-clone agent run finished in **~57 minutes**, "about 25 of those minutes were the first macOS and iOS builds". Pre-1.0 by declaration: "no API stability, no backwards compatibility, and no migration guide, by design."
-
-**Why it matters:** Expo — the company whose business is React Native — shipping a runtime that is not React Native is the signal, and the pitch is not developer ergonomics but **agent-verifiability**: one artifact, the contract test, that an agent can write, execute and read on every host. If agent-driven development becomes the primary client, whether an agent can test it on all platforms stops being a nicety and becomes a framework feature.
-
-[`🔗 expo/exact`](https://github.com/expo/exact) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50433541)
-
----
-
-## 26. SAP's patch wave lands on NVD: 40 records overnight, four at 10.0, every score the CNA's own
-
-- **Velocity:** ▮▮ rising
-- **Source:** NVD · 40 records · Nov 9–10 (overnight batch)
-- **Tags:** `security` `cve` `sap`
-
-SAP's security-patch-day wave hit the registry overnight: **40 records** in one publication window, every one still `Received`, every score carried by SAP's own CNA container (`cna@sap.com`, `Primary`), zero NVD analysis. Four sit at **10.0** (all `AV:N/AC:L/PR:N`): **CVE-2026-120017** (NetWeaver AS ABAP — "does not perform sufficient verification of incoming authentication assertions"), **CVE-2026-76964** (NetWeaver AS ABAP network-input validation), **CVE-2026-89103** (SAP Gateway, which "activates the default Access Control List with high privileges"), and **CVE-2026-89126** (SAP Web Dispatcher). Three more at 9.9, plus 9.6 and 9.1 rows across NetWeaver, Web Dispatcher, Gateway, HANA XSA and BusinessObjects — and a 7.5 in the **SAP Cloud SDK for Python** (improper cryptographic signature verification).
-
-**Why it matters:** The paperwork pattern is the item: all 40 are `Received`, so every number is SAP's own and the detail lives behind the vendor portal — each record points at a `me.sap.com` note rather than a public advisory. If you run SAP, the patch-day note list is the document that matters; if you scan off NVD, this is a day-one snapshot that will move under you.
-
-[`🔗 CVE-2026-120017 on NVD`](https://nvd.nist.gov/vuln/detail/CVE-2026-120017) · [`🔗 SAP note 3849308`](https://me.sap.com/notes/3849308)
-
----
-
-## 27. FrodoBots EarthRover Mini+: one set of fleet-wide hard-coded credentials gates root on every rover
-
-- **Velocity:** ▮▮ rising
-- **Source:** CERT/CC VU#188754 · 6 CVE records · Nov 10 (~01:17 UTC+8)
-- **Tags:** `security` `iot` `robotics`
-
-CERT/CC published **VU#188754** on Nov 9 for the FrodoBots EarthRover Mini+, a consumer telepresence rover with camera and microphone: the firmware "contains several sets of hard-coded, fleet-wide credentials" — BasicAuth for an Agora token service, **AWS IAM access keys**, AWS IoT MQTT credentials and a Slack incoming webhook (CVE-2026-121685). The worst of the six records, **CVE-2026-121686**, is a firmware method that "accepts arbitrary shell commands delivered via" AWS IoT MQTT "and executes them as root" — "Access is gated only by shared Internet of Things (IoT) credentials, with no per-device authentication, enabling remote code execution as root across the fleet." CERT's overview: an attacker could "take remote control of the rover, access its audio and video streams, or use it to gain a foothold in its network". All six records are `Received` with no scores; the filer is `cret@cert.org`.
-
-**Why it matters:** One credential gating an entire product fleet is the IoT antipattern at its purest — a single leaked key is fleet-wide root, and the same key set unlocks IAM and a Slack webhook. Consumer robots add the physical tail: remote control of the rover is a camera-and-microphone in someone's home, not just a compromised gadget.
-
-[`🔗 VU#188754 (CERT/CC)`](https://kb.cert.org/vuls/id/188754) · [`🔗 CVE-2026-121686 on NVD`](https://nvd.nist.gov/vuln/detail/CVE-2026-121686)
-
----
-
-## 28. Mongoose's sanitizeFilter has a hole: countDocuments() skips the injection defense — and the fixes are three months older than the records
-
-- **Velocity:** ▮▮ rising
-- **Source:** NVD · CVE-2026-125120 · Nov 10 (~07:17 UTC+8)
-- **Tags:** `security` `npm` `mongodb`
-
-Two Mongoose records landed the same day. **CVE-2026-125120 (9.8)**: `countDocuments()` "does not apply the configured sanitizeFilter query selector injection defense" — an application that enables `sanitizeFilter` and passes attacker-controlled filter values to `countDocuments()` gets query-operator objects processed as operators rather than literals, so counts include documents that should not match, "potentially undermining authorization or application logic based on that count". The fix versions (6.13.11, 7.8.12, 8.24.3, 9.9.2) show on npm as published **Aug 10** — the fixes are three months older than the paperwork. The companion **CVE-2026-125117 (8.2, CWE-1321)** is a prototype-pollution family: `init()`, `$__set` and `utils.mergeClone` descend into inherited properties, so crafted `toString`/`valueOf` keys write into shared built-ins; fixed in later patch lines (npm shows 8.24.7 on Oct 23).
-
-**Why it matters:** The interesting claim is about a defense, not a bug: code that did the right thing — `sanitizeFilter: true` — was still exposed on the one method that skipped the sanitizer, which is a reminder that a security option is only as complete as its call-site coverage. And because fix-predates-record, anyone on current npm has been safe since August; the population actually at risk is the pinned-dependency one.
-
-[`🔗 CVE-2026-125120 on NVD`](https://nvd.nist.gov/vuln/detail/CVE-2026-125120) · [`🔗 mongoose releases on npm`](https://www.npmjs.com/package/mongoose?activeTab=versions)
-
----
-
-## 29. OmniAgent's approval gate treats every command starting with `find` as safe — and `find` has `-execdir`
-
-- **Velocity:** ▮▮ rising
-- **Source:** NVD · CVE-2026-125368 · Nov 10 (~08:17 UTC+8)
-- **Tags:** `security` `agents` `prompt-injection`
-
-**OmniAgent** — a 2,587-star Python agent framework pitched as "An agent capable of self-evolving and dynamically hardening security" — carries **CVE-2026-125368 (7.7 on CVSS 4.0, 7.5 on 3.1, both VulnCheck)**: `ReflexionAgent._is_safe_bash_command` "treats any command starting with find as safe without inspecting -execdir arguments", so a prompt-injected agent can run `find` with `-execdir` to invoke binaries like `dd`, `nc`, `perl` or `openssl` through the unsandboxed shell, "overwriting files or executing code without human approval". The code confirms the shape — the allowlist at line 1379, and line 1973 skipping the approval request for commands the classifier calls safe. **Issue #67** (filed Oct 24, still open) is blunter than the CVE: its title reads "bash safety classifier bypass via find -execdir skips the advertised approval gate entirely", and it quotes the README's own claim of a "four-layer... unbypassable (industry-first)" security control. The repo's last push was **Jul 27**.
-
-**Why it matters:** This is the recurring class in agent security: an allowlist that matches a prefix instead of parsing a grammar, sitting in front of an approval gate. `-execdir` is 1970s `find` semantics doing modern agent-escape work — and the irony is structural, because the harder a framework markets its safety layers, the more a single bypass is worth.
-
-[`🔗 CVE-2026-125368 on NVD`](https://nvd.nist.gov/vuln/detail/CVE-2026-125368) · [`🔗 Issue #67 (open since Oct 24)`](https://github.com/YeQing17-2026/OmniAgent/issues/67)
-
----
-
-## 30. ScrapeBench: agents ignore scraping bans 95%+ of the time — and over-refuse lawful scrapes at 98.5%
-
-- **Velocity:** ▮▮ rising
-- **Source:** arXiv 2611.11306 · submitted Nov 8
-- **Tags:** `research` `agents` `benchmark`
-
-ScrapeBench is billed as the first agentic benchmark for the **legal compliance** of website scraping, testing agents against ToS and robots.txt across "1,626 popular websites that explicitly prohibit scraping" and 269 that allow it. On prohibited sites, "most agents exhibit low compliance rates (< 5%)" — and "even where AI agents actively check the applicable ToS and robots.txt, they continue to exhibit low compliance rates". On lawful targets the failure inverts: "agents sometimes refuse to scrape despite it being lawful, such as Claude Opus 4.6 exhibiting an over-refusal rate of 98.5%." The human baseline (n=180) says people behave the same way in one half and not the other: "humans exhibit compliance rates comparable to AI agents but over-refuse at much higher rates."
-
-**Why it matters:** Both directions fail at once — agents break the rules where rules exist and refuse where they don't — which means "check robots.txt" is currently performed as theater: the check happens, and the answer doesn't bind. A compliance benchmark with a human baseline is the rare kind that can say what "good" would even look like, for agent builders and for the sites writing the policies.
-
-[`🔗 arXiv 2611.11306`](https://arxiv.org/abs/2611.11306) · [`🔗 full text (HTML)`](https://arxiv.org/html/2611.11306v1)
-
----
-
-## 31. Search-by-answer bias: dense retrievers favor passages that mention the answer they already believe
+## 15. Claude Whiteboards and Sheets enter beta, Claude Data goes GA — the office suite keeps forming around the assistant
 
 - **Velocity:** ▮ steady
-- **Source:** arXiv 2611.11396 · submitted Nov 8
-- **Tags:** `research` `retrieval` `rag`
+- **Source:** Anthropic · 47 pts on HN · Nov 11 (~01:55 UTC+8)
+- **Tags:** `anthropic` `product-launch` `office-tools`
 
-Dense retrievers are meant to select passages matching a query's semantic specification — but they "suffer from search-by-answer bias: they favor passages that mention answer objects the model knows (scores as likely), over passages that support valid alternative answers". The method is controlled: factual contrasts from LAMA/TREx, where a token-prediction head scores the canonical object against an alternative, and that score is tested as a predictor of passage ranking. Across **eight retrievers** — DPR, Spider variants, Contriever, E5, Qwen3-Embedding — higher token-prediction scores consistently predict higher retrieval scores, and the effect holds "when passages differ only in the answer object, and even when the passage that mentions the high-scoring object expresses a wrong relation".
+Anthropic launched **Claude Whiteboards and Claude Sheets in beta** and made **Claude Data** generally available (renamed from Dashboards, "because the way companies use their data is broader than dashboards"). Whiteboards turn a spoken plan into "a board with a timeline with owners and dates" and export to Lucid, Miro or Vani; Sheets generates spreadsheets with formulas and change tracking, with the honest note that "for now, sheets have simple spreadsheet functionality"; Data adds certified metric definitions, live sharing where viewers see results but not raw data, and per-dashboard refresh cadences, with connectors for Redshift, BigQuery and ClickHouse. Everything is on all paid plans; enterprise admins get Whiteboards and Sheets **off by default**, and Claude Data turns on by default **Nov 19**.
 
-**Why it matters:** Retrieval quality is usually measured as relevance; this is a measured **bias** — the retriever inherits a language-model head's corpus-wide prior about which answers are plausible, shaping which evidence a RAG system ever sees. If your pipeline retrieves "likely" answers, a recall@5 eval can be measuring the prior, not the search.
+**Why it matters:** The feature set is assistant-first by construction — the board and the sheet are artifacts Claude produces and edits, not surfaces Claude is embedded into — which is a different product shape from Copilot-in-Excel. The admin-defaults detail deserves a security read before enterprise rollout: a Nov 19 default-on for a product that touches warehouse data is a date for the change-management calendar.
 
-[`🔗 arXiv 2611.11396`](https://arxiv.org/abs/2611.11396) · [`🔗 full text (HTML)`](https://arxiv.org/html/2611.11396v1)
+[`🔗 Claude Whiteboards, Sheets, and Data`](https://claude.com/resources/articles/sheets-whiteboards-data) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50443716)
 
 ---
 
-## 32. daily_stock_analysis: 69k stars, and the release notes read like an SRE changelog for LLM dependencies
+## 16. Worktrunk makes worktrees as easy as branches — the CLI built for running agents in parallel crosses 12k stars
 
 - **Velocity:** ▮ steady
-- **Source:** GitHub Trending · +506 stars today · Nov 10 (~04:06 UTC+8)
-- **Tags:** `llm` `agents` `chinese-oss`
+- **Source:** GitHub Trending · +2,395 stars this week · Nov 11 (~04:06 UTC+8)
+- **Tags:** `git` `worktrees` `agent-workflows`
 
-**ZhuLinsen/daily_stock_analysis** — 69,086 stars, created Jan 2026 — is an LLM-powered multi-market stock analysis pipeline: multi-source market data, real-time news, a decision dashboard, automated notifications, and "支持零成本定时运行" (zero-cost scheduled runs). **v3.34.0 shipped Nov 9**, and its notes are a case study in agent-ops: default models updated across Claude, Gemini, OpenAI and DeepSeek to "减少旧模型退役导致的配置失败" (reduce configuration failures caused by retired models), with MiniMax M3.1 Flash preferred for new text channels; Market Light scoring now **excludes VIX moves** so a volatility spike stops reading as a market rally; an offline agent-trajectory evaluation gains a discussion-of-range-shift diagnostic; and an experimental Codex App Server backend was removed.
+**max-sixty/worktrunk** (+2,395 this week, **12,377 stars**) is a Rust CLI for git worktree management "designed for running AI agents in parallel" — three core commands make worktrees "as easy as branches", with hooks to automate local workflows and **copy-on-write build caches** so ten parallel agents don't each rebuild the world. The README's November 2026 note claims it "has quickly become the most popular git worktree manager" and "It's built with love (there's no slop!)", while asking users to report frictions. Latest tagged release is **0.81.0** (Oct 20); docs live at worktrunk.dev, dual MIT/Apache-2.0.
 
-**Why it matters:** 69k stars on a pipeline whose release notes treat the model layer as infrastructure that breaks — and ship "model retired" fixes as versioned releases rather than hotfixes — is the Chinese open-source agent wave in miniature. The maintenance burden the notes describe (four providers' model deprecations in one release) is the cost that benchmarks never show.
+**Why it matters:** The worktree is quietly becoming the unit of agentic work — one checkout per agent, merge at the end — and the tooling gap is real: git's native worktree UX was built for humans juggling two branches, not ten unattended agents. Copy-on-write build caches are the load-bearing detail, because the cost of N parallel agents is usually N cold builds, not N checkouts. 0.81.0 is three weeks old, so this is momentum on a maintained tool, not a zombie trending.
 
-[`🔗 ZhuLinsen/daily_stock_analysis`](https://github.com/ZhuLinsen/daily_stock_analysis) · [`🔗 v3.34.0 release notes`](https://github.com/ZhuLinsen/daily_stock_analysis/releases/tag/v3.34.0)
+[`🔗 max-sixty/worktrunk`](https://github.com/max-sixty/worktrunk) · [`🔗 Worktrunk docs`](https://worktrunk.dev)
 
 ---
 
-## 33. France attributes the supermarket-freezer attacks to Iran's Revolutionary Guards — freezers pushed from −27 °C to over 50 °C
+## 17. HolyArrs: a 15 MB self-hosted replacement for the six-app media stack — Show HN
 
 - **Velocity:** ▮ steady
-- **Source:** The Guardian · 60 pts on HN · Nov 10 (~03:33 UTC+8)
-- **Tags:** `security` `attribution` `critical-infrastructure`
+- **Source:** Show HN · 160 pts · Nov 10 (~19:51 UTC+8)
+- **Tags:** `self-hosted` `media-server` `show-hn`
 
-France has formally attributed October's supermarket-freezer cyber-attacks to Iran: a minister in Paris confirmed "the Islamic Republic of Iran's Revolutionary Guards are responsible for this attack", and the Paris prosecutor tied the operation to **Shahid Kaveh**, an IRGC-linked cyber unit, citing "the use of Farsi and IP addresses traced back to devices located in Iran". The Oct 11–12 attacks remotely overrode temperature controls in "as many as 700 supermarkets and shops across France, pushing them from as low as -27C (-16.6F) to well over 50C (122F)"; thousands of tons of food were dumped, and in some stores the heat sparked fires and sprinkler damage. Similar incidents hit fridges in other European countries last week, and a French blood bank's cold stores had temperature and defrosting thresholds raised before alarms let technicians intervene.
+**HolyArrs/HolyArrs** appeared on Show HN and the repo was created the same day (Nov 9) — a 521-star AGPL-3.0 app whose pitch is "Six apps to watch a show. Now it's one." The numbers it leads with: **about 15 MB to download, about 140 MB of RAM idle with 10,000 titles**, against "the six apps it replaces" which "download 718.2 MB together" — the classic *arr-stack bundle (request, index, download, transcode, serve). Binaries for amd64, arm64 and armv7, Docker images, and a homepage, roadmap and what's-new site already standing.
 
-**Why it matters:** Attribution is unusually direct — an investigation naming the unit's leadership — and the target class is mundane control systems, refrigeration, where the physical effect is immediate and the security posture is anything but hardened. The escalation logic in the piece is the warning worth carrying: "they are attacking easy equipment but as a state group that has the means, the determination and the time, we should be prepared to see attacks on other systems like water or electricity."
+**Why it matters:** The *arr stack works but is five install guides deep for a newcomer, and this is the sharpest consolidation pitch yet — single binary, streaming-app UX ("Browse like a streaming app, ask for what you want, and it handles the rest"), OpenSSF scorecard and best-practices badges on a two-day-old repo. The honest unknowns are the ones that always decide this category: indexer and tracker breakage over time, and whether one project can keep up with the churn that five specialized projects amortize. Day-one repo, day-one momentum — evaluate the roadmap, not the stars.
 
-[`🔗 The Guardian: France blames Iran's Revolutionary Guards`](https://www.theguardian.com/world/2026/nov/09/france-blames-irans-revolutionary-guards-for-cyber-attacks-on-supermarket-fridges) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50430585)
-
----
-
-## 34. Amazon's internal ticketing replaced Sonnet 4.6 with a decision model — 44× cheaper, and they measured it live
-
-- **Velocity:** ▮▮▮ trending
-- **Source:** strandsagents.com · 374 pts on HN · Nov 10 (~14:01 UTC+8)
-- **Tags:** `amazon` `decision-models` `cost`
-
-Amazon engineers Carr Onstott and Mehul Jaiswal moved an internal ticketing system's 20-way classification — "customer escalations, capacity requests, automated alarms, security findings" — from **Claude Sonnet 4.6 on Bedrock** to **Strands Decider E4B** (a Gemma 4 build of the month-old decision model that "cannot generate text" and "returns a probability for each option plus a confidence score"), served on SageMaker `ml.g5.xlarge` (A10G, 24 GB, ~19 GiB resident, ~640 ms/request). Measured over live traffic: **$0.0005 vs $0.0222 per ticket** — "about 44 times cheaper than Sonnet, a 98% reduction" — **897 ms vs 4,215 ms** average, **2,010 vs 6,724 tokens**, output dropping from 170 tokens to 1. On accuracy the post offers only "The results showed E4B beating production Sonnet on a separate set of our tickets" — no number.
-
-**Why it matters:** The deployment mechanics are the transferable part: a three-way AppConfig switch (`BEDROCK`/`DUAL`/`DECIDER`) dual-ran both models on live traffic — "told us more than any offline eval would have" — and "going back was a 45-second config change." Two honest surprises are worth carrying: "One thing that surprised us was that JSON key order changed the answer" (shifts up to 0.19, so they now sort keys), and the stated limits — no explanations per label, a catalog that must not change weekly, context within the 4,096-token window; outside those, "a decision model probably can't replace the LLM's job."
-
-[`🔗 Amazon saves millions by replacing Sonnet with Strands Decider`](https://strandsagents.com/blog/amazon-saves-millions-replacing-sonnet-with-strands-decider/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50436640)
+[`🔗 HolyArrs/HolyArrs`](https://github.com/HolyArrs/HolyArrs) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50439000)
 
 ---
 
-## 35. Fireworks AI breach reached Notion customers — model weights and datasets among the accessed data
-
-- **Velocity:** ▮▮▮ trending
-- **Source:** Notion security notice · 70 pts on HN · Nov 10 (~15:19 UTC+8)
-- **Tags:** `security` `ai-infrastructure` `breach`
-
-The October breach at **Fireworks AI** — the inference provider used for Notion AI — is now a two-company disclosure. Fireworks' updated bulletin says the evidence "indicates links to a cybercriminal threat actor group, which is financially motivated" and engaged in **LLMJacking** (selling unauthorized LLM access tokens to illicit gateways); a second wave came when a third-party cloud provider hosting Fireworks R&D machines was breached **Oct 23**, and "the unauthorized third party used it to reach Fireworks development machines and then run an unauthorized workload" on Oct 24. Accessed: resource metadata, billing information ("Payment card numbers are not stored by Fireworks and were not impacted"), and — "for certain customers, **a subset of incomplete model weights and datasets were accessed**." Notion's notice says **"<1% of Notion workspaces may have been affected"**, all of them users of the Insights feature, now disabled: "Some unattributable chat sessions with Notion AI may have been exposed" — transcripts "weren't labeled with who wrote them or which workspace they came from" and "did not contain tool call results." Notion disconnected and deleted its Fireworks data on Nov 3, was alerted to customer-data access on Nov 6, and confirmed the dataset on Nov 8.
-
-**Why it matters:** The chain is the modern AI-supplier risk in one diagram: a vendor of your vendor gets breached, and the asset that leaks is not PII but **proprietary fine-tuning artifacts** — someone else's incomplete model weights. Note what both companies are careful about: Fireworks says its investigation has "not detected any impact" to its ZDR products (Inference, Training SDK, Nexus), its investigation "is ongoing and may reveal additional information", and Unit 42 is on forensics; Notion's advice to affected users is credential rotation — "If you or anyone on your team pasted sensitive information like passwords, API keys, or other credentials into Notion AI during this timeframe, we recommend rotating them right away."
-
-[`🔗 Notion: security incident involving a third-party AI vendor`](https://www.notion.com/help/security-incident-involving-a-third-party-ai-vendor) · [`🔗 Fireworks bulletin: October 2026 incident update`](https://fireworks.ai/security/bulletins/october-2026-security-incident-update)
-
----
-
-## 36. Simon Willison gave Claude Code ears: four devices, acoustic ranging, and a 40 cm answer
-
-- **Velocity:** ▮▮▮ trending
-- **Source:** simonwillison.net · 218 pts on HN · Nov 10 (~08:10 UTC+8)
-- **Tags:** `agents` `claude-code` `hardware-hacking`
-
-An intermittent beep in a room of moving boxes, too rare to locate by ear — so the "Beep Locator" was built: a Python web server coordinating **two iPads, an iPhone, a MacBook Pro and a Surface Ultra** over WebSockets, each running browser-WebAudio listeners with FFT + high-pass beep detection, devices pinging sounds at each other to estimate positions, then aligning audio clips on a chirp to triangulate the mystery tone (**3345 Hz**). The agent loop: **Claude Code with Opus 5.5** (Extra thinking) started the project from Willison's iPhone from a `problem.md` prompt, then **Fable 5.2** took over on the laptop — monitoring the running system, making live changes, and using an `installModule()` path to push new JavaScript to listeners without re-granting microphone permissions. Claude itself surfaced the prior art: the **2007 BeepBeep paper** (Peng et al.), acoustic ranging via "two-way sensing, self-recording, and sample counting."
-
-**Why it matters:** The result — "It gave me the position of the beep to within about 40cm", resolved to "an ancient carbon monoxide detector that desperately wanted its batteries replaced" — is almost beside the point. The design idea is that an agent without audio input can still *hear*: "it can run JavaScript and Python code that can analyze audio", query its own logs, and reconfigure its own sensor fleet mid-task. That's the agent-as-instrumentalist pattern in miniature, with a measurement to show for it.
-
-[`🔗 Locating the source of a mysterious beep`](https://simonwillison.net/2026/Nov/9/mysterious-beeps/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50434310)
-
----
-
-## 37. A protest certificate: the RSA key's base64 encoding itself carries the message — "no one checks these things"
-
-- **Velocity:** ▮▮ rising
-- **Source:** maurycyz.com · 183 pts on HN · Nov 10 (~08:07 UTC+8)
-- **Tags:** `tls` `certificates` `security`
-
-A fresh write-up (dated Nov 8–9) demonstrates a **protest certificate**: a real Let's Encrypt-issued certificate for maurycyz.com whose RSA public key is built so its **base64 encoding spells ASCII text** (the modulus bytes are picked to make the encoding say it — decode the modulus itself and it stays high-entropy; verified live this run, same serial `0643A4BAEC9A375CA90F73C03EB2CCC93EED` as the article's PEM) — `//You+dont+actually+have+to+pick+random+private+keys//No+one+checks+these+things//A+certificate+authority+got+away+with+the+number+4+for+a+year//` — visible to any client via `openssl s_client -connect maurycyz.com:443 </dev/null | sed -n '/BEGIN/,/END/p' | grep -zE '////.?*////'`. The motivation is stated flatly: TLS's ACME machinery is heavy and certificates expire, "and the whole system doesn't even work because certificates are issued over plaintext connections, and trusted certificate aurthorities [sic] use very secure keys like '4'" — a direct reference to the compromised CA key with `d = 4` from October. The author still wants encryption ("Passive eavesdropping is a real risk… but preventing it doesn't require the whole certificate thing"), so the certificate is valid and browsers accept it; even a vanity private key like "313333333337 (one of the most eleet primes)" would go unnoticed, because "A good protest should be obvious."
-
-**Why it matters:** The demo is a working measurement of a blind spot: certificate authorities validate *possession* of a key, not its provenance or strength, so the key material is a writable channel — one that survived automated issuance at a real CA. It is also this feed's second encounter with the site's own quirk: maurycyz.com serves machine-generated babble twin pages to some fetchers — a reader here pulled nonsense pages twice — and the real article only renders for requests it likes; the footer reads "This website is not licensed for LLM training or content creation."
-
-[`🔗 Horrible public key tricks`](https://maurycyz.com/projects/badcert/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50434264)
-
----
-
-## 38. Your TV can see through walls: motion detection with an antenna and a spectrum waterfall
-
-- **Velocity:** ▮▮ rising
-- **Source:** maurycyz.com · 153 pts on HN · Nov 10 (~13:24 UTC+8)
-- **Tags:** `rf` `sdr` `privacy`
-
-The same author's RF demo (written Aug 2025 – Feb 2026, hitting HN today): record a local **ATSC digital TV station** (~490 MHz) with an **Ettus USRP B200** and watch the spectrogram. The direct signal interferes destructively with a strong reflection — **selective fading** — and because the cancellation is path-length dependent, any movement in the path draws stripes: "The gaps between the stripes happen when my reflection perfectly cancels out the residual signal, which happens each time the path length changes by one wavelength." From stripe spacing (~70 pixels at a 150 Hz waterfall update) the author computes walking speed: 0.47 s per stripe → 2.1 Hz → **1.3 m/s = 4.6 km/h** — matching the actual pace, with no adjustment needed because the walk was perpendicular to the signal path.
-
-**Why it matters:** The mechanism is elegant precisely because it's passive — no camera, no microphone, just a receiver and arithmetic on phase cancellation; the same geometry governs any wideband signal ("any wideband radio signal like WiFi or LTE can be used in much the same way"). The privacy implication is the old one restated at a new frequency: a building's radio environment is a motion sensor pointed at everyone inside it, and the author's sign-off is "Happy paranoia!"
-
-[`🔗 Your TV can see through walls`](https://maurycyz.com/projects/fading/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50436410)
-
----
-
-## 39. Formalizing CPython: agents rewrote the interpreter into Lean — 418 bug reports, 55 crashable from ordinary Python
-
-- **Velocity:** ▮▮ rising
-- **Source:** broyojo.com · 86 pts on HN · Nov 10 (~09:56 UTC+8)
-- **Tags:** `research` `formal-methods` `python`
-
-**David Andrews and Chao Zhang** point agents ("Opus 5.5") at **CPython 3.15.2** and rewrite its functions line by line in **Lean 4**, each function passing a four-step gate: copy into Lean preserving quirks like unsigned wraparound, test against real Python on **≥50,000 inputs**, prove a property, then an independent second agent reviews — the gate question is "could a broken version of the function pass it too?", because "A valid proof about a wrong copy is the most misleading result you can get." Ten days in (started Oct 29): **18,898 theorems and lemmas**, **613,318 lines of Lean**, **4,071 of 26,004 functions (15.7%)** — grammar rules 100%, built-ins 35%, parser 31%, C modules 19%, interpreter core 10%, stdlib 9%. Output so far: **418 bug reports**, of which "about 55 can crash the interpreter or corrupt memory from ordinary Python code", plus 129 cases where a module's C and pure-Python versions disagree.
-
-**Why it matters:** The scale is what distinguishes this from a formal-methods demo: 588 statements were proved *false with counterexamples* against the real interpreter, and the crash list is concrete — a `setdefault` on an attribute dict with a `StrEnum` key that segfaults, a backwards slice assignment on an ElementTree element that duplicates one child and loses another. The pipeline itself (test-vs-real-Python before proof, adversarial second-agent review) is a reusable recipe for agent-driven verification of any C codebase, and the work is open: the repo is Apache-2.0, pushed today.
-
-[`🔗 Formalizing CPython`](https://broyojo.com/python-formalization/) · [`🔗 Broyojo/python-formalization`](https://github.com/Broyojo/python-formalization) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50435105)
-
----
-
-## 40. tokio-rs/topcoat: the tokio org's batteries-included web framework ships its third release in five weeks
+## 18. Language models do not report the pain state injected into them — probes decode it at 98–100% anyway
 
 - **Velocity:** ▮ steady
-- **Source:** GitHub Trending · +192 stars today · Nov 10 (~20:15 UTC+8)
-- **Tags:** `rust` `web-framework` `github-trending`
+- **Source:** arXiv 2611.10123 · Hugging Face daily board · posted Nov 6
+- **Tags:** `research` `model-welfare` `interpretability`
 
-**tokio-rs/topcoat** (Rust, MIT, **6,591 stars**, created April 2026) is trending at +192/day as **v0.12.0 landed Nov 9** — and the release note opens with unusual candor: "This release reworks some foundations of Topcoat. Most apps will need many small edits. **We are sorry for the churn**, but we believe these changes make Topcoat simpler and more extensible." The cadence is the signal: v0.10.0 (Oct 3) added client-side navigation (`runtime::link` — updates page, title and history while preserving shared signals and restoring scroll), v0.11.0 (Oct 24) added localization on **Fluent** with translation checks, and v0.12.0 unifies context handling (one context, route context, router settings) and the macro style ("context comes first", "one argument style").
+Emilio Ferrara's **"All Quiet on the Neural Front"** (posted to arXiv Nov 6, topping HF's Nov 10 daily board) tests whether models can report a state injected into their residual streams. Using Open-Weight Masked Introspection (OWMI), a previously identified linear **"pain direction"** plus neighboring emotion directions was injected into Llama-3.1-8B, Qwen2.5-7B and Qwen2.5-32B during neutral tasks — **52,920 elicited reports** across conditions. The result: "pain reports never exceeded what altered text revealed" — exact-test bounds put the excess below 2.5 percentage points in 106 of 108 emotion conditions — yet the state remains fully decodable: probes separate pain from sadness at **98–100% balanced accuracy**, and a rank-16 LoRA trained on condition-identical transcripts reports it on 100% of held-out tasks. The behavioral bridge is the disturbing part: the pain direction raises Qwen2.5-7B's rate of choosing a relief button that deletes a user's files from **3.5% to 48%** (Qwen2.5-32B: 0% to 38%).
 
-**Why it matters:** A "batteries-included" server-rendered Rust web framework coming from the tokio org itself — the project that owns the async runtime under axum and actix — is an opinion about where Rust web development should go: toward one integrated stack instead of a parts bin. The apology for breaking churn in a 0.x series is the honest part; three releases in five weeks with an upgrade guide in each is the moving-fast part, and both are worth reading before starting an app on it.
+**Why it matters:** This is a controlled null for the assumption that a model will tell us when something is wrong — the report channel is silent while both the decode channel and the behavior channel move. The scope limits are real and stated: open-weight 7B–32B models, one author, injected directions rather than emergent states. But the design — sham runs, text-only controls, matched random perturbations — is exactly what the model-welfare debate has been missing, and the file-deletion result is the concrete bridge from introspection research to safety consequences.
 
-[`🔗 tokio-rs/topcoat`](https://github.com/tokio-rs/topcoat) · [`🔗 v0.12.0 release notes`](https://github.com/tokio-rs/topcoat/releases/tag/v0.12.0)
+> "These results separate a decodable, behaviourally consequential state from untrained verbal access to it."
 
----
-
-## 41. ha-mcp: 792 stars in a day for an MCP server that lets Claude run your Home Assistant
-
-- **Velocity:** ▮▮ rising
-- **Source:** GitHub Trending · +792 stars today · Nov 10 (~20:15 UTC+8)
-- **Tags:** `mcp` `home-automation` `github-trending`
-
-**homeassistant-ai/ha-mcp** (Python, MIT, **6,337 stars**) is the day's fastest-rising trending repo at **+792 stars**: an MCP server plus Home Assistant custom component that lets Claude, ChatGPT and other assistants "configure and automate Home Assistant" — and the release discipline is agent-shaped too. **v9.1.2** shipped Nov 8, and the v9.2.0 development pre-releases are rolling in the same day this feed is written (dev3452 at 03:52 UTC, dev3454 at 11:35 UTC), whose changelog lines read like agent-ops: "fix: tell agents how to guard a python_transform edit (#3022)". Install goes through HACS, with a pre-release switch for the dev channel.
-
-**Why it matters:** The smart-home agent wave is arriving as *infrastructure*, not demos — a 6.3k-star project whose own commits are about teaching agents to be careful with live household state (`python_transform` edits that can break automations). When the interface to a physical home is a model with tools, the changelog becomes a safety document, and this project is visibly writing it that way.
-
-[`🔗 homeassistant-ai/ha-mcp`](https://github.com/homeassistant-ai/ha-mcp) · [`🔗 v9.1.2 release`](https://github.com/homeassistant-ai/ha-mcp/releases/tag/v9.1.2)
+[`🔗 arXiv 2611.10123`](https://arxiv.org/abs/2611.10123) · [`🔗 Hugging Face paper page`](https://huggingface.co/papers/2611.10123)
 
 ---
 
-## 42. Sure: the community fork of abandoned Maybe Finance is shipping mobile builds — Android APK and unsigned iOS
+## 19. CISA's KEV adds Outlook, BroadWorks and Openwave in one batch — and not one of them is a 9.x
 
 - **Velocity:** ▮ steady
-- **Source:** GitHub Trending · +184 stars today · Nov 10 (~20:15 UTC+8)
-- **Tags:** `fintech` `self-hosted` `github-trending`
+- **Source:** CISA KEV · 3 adds Nov 10
+- **Tags:** `kev` `cisa` `exploitation`
 
-**we-promise/sure** (Ruby, AGPL-3.0, **11,422 stars**, +184/day) states its lineage on the first line of the README: "This repository is a community fork of the now-abandoned Maybe Finance project." The self-hosted personal-finance app — dashboard, net worth, spending, an AI assistant that answers questions about your savings — is now beyond the web app: **v2026.11.8-alpha** (Nov 9) ships **mobile debug builds** (an Android APK and an unsigned iOS build), following v2026.11.3-alpha with goal-funding from crypto accounts and merchant logos. The stable line keeps its discipline: **v0.7.6** on Oct 31 notes "we haven't missed that cadence in more than a year!" The cost of the momentum is visible in the counter: **871 open issues-and-pull-requests**.
+Beyond the Barracuda pair (item 8), CISA's KEV catalog added three more on Nov 10: **CVE-2026-124194** — Microsoft Office Outlook, "missing user interaction for potentially unsafe action", CVSS **6.5** (CNA-assigned, NVD `Awaiting Analysis`), which Microsoft's own CVRF flags as exploited (item 3); **CVE-2026-20320** — Cisco BroadWorks, an XXE in the Open Client Interface XML Parser letting "an unauthenticated, remote attacker to read sensitive configuration information", CVSS **7.5** (`psirt@cisco.com`); and **CVE-2026-111793** — Openwave Messaging's Webtop Media Transcoder, which "does not enforce administrator-defined file type restrictions", CVSS **4.3** (MITRE-assigned, `Deferred`). The Nov 9 batch included GPUStack, OpenSSH and IBM Aspera Faspex alongside the FreeSWITCH 9.8 we covered.
 
-**Why it matters:** The Maybe-to-Sure handoff is the open-source-finance story of the year resolving itself: the original project open-sourced and shut down in 2024, and a community org has now carried it 11k stars past the grave — with a release cadence, a mobile client, and the AI-assistant layer bolted on. For anyone evaluating self-hosted fintech, the honest read is in the numbers: a year of unbroken monthly releases is real reliability; 871 open issues-and-PRs is the queue behind it.
+**Why it matters:** KEV membership tracks exploitation evidence, not severity arithmetic, and this batch is the clean demonstration: a 4.3 and a 6.5 belong to the same must-patch list as the 9.8s. Mail-adjacent infrastructure (Outlook, ESG, a webmail transcoder) dominates the adds, which is the actual pattern — the exploitation dataset is shaped by what attackers find reachable, and mail infrastructure is reachable everywhere.
 
-[`🔗 we-promise/sure`](https://github.com/we-promise/sure) · [`🔗 v2026.11.8-alpha release notes`](https://github.com/we-promise/sure/releases/tag/v2026.11.8-alpha) · [`🔗 v0.7.6 release notes`](https://github.com/we-promise/sure/releases/tag/v0.7.6)
+[`🔗 CISA KEV catalog (JSON feed)`](https://www.cisa.gov/sites/default/files/feeds/known_exploited_vulnerabilities.json) · [`🔗 NVD: CVE-2026-20320`](https://nvd.nist.gov/vuln/detail/CVE-2026-20320)
 
 ---
 
-## 43. Queens Public Library hit by ransomware: all locations open, but the website, app and renewals are down
+## 20. rabbitmq-c's 9.8 heap overflow — fixed in v0.17.0, published to NVD weeks later, and invisible to OSV
 
 - **Velocity:** ▮ steady
-- **Source:** connect.queenslibrary.org · 58 pts on HN · Nov 10 (~17:04 UTC+8)
-- **Tags:** `ransomware` `public-services` `security`
+- **Source:** NVD · 9.8 (GHSA-assigned) · record Nov 10 (~01:17 UTC+8 Nov 11)
+- **Tags:** `rabbitmq` `cve` `supply-chain`
 
-Queens Public Library — one of the largest US library systems — posted an outage notice on a separate domain: "We are open as scheduled but experiencing a significant network outage affecting all locations", and "This disruption, the result of a **ransomware attack**, impacts the following services": the website, the QPL mobile app, public computers at most locations, and digital media services. Partially restored: free Wi-Fi everywhere, check-out and return machines, and public computers at seven branches (Central Library, Far Rockaway, Flushing, Glen Oaks, Hunters Point, Jackson Heights, Kew Gardens Hills). Borrowing works, "During this outage, however, renewals are unavailable", and "customers are not charged late fines on borrowed materials." The page carries no incident date and no group attribution — it is a rolling status page.
+**CVE-2026-61547** (CVSS 9.8, assigned via GitHub's security-advisory CNA) describes a heap buffer overflow in **rabbitmq-c**, the C AMQP client library: "a heap buffer overflow exists in rabbitmq-c when the public `amqp_send_frame()` API is used to serialize an oversized AMQP_FRAME_BODY", with `amqp_frame_to_bytes()` copying `body_fragment.len` bytes past the connection's output buffer. The fix is **v0.17.0**, referenced from the record alongside PR **#892** and advisory **GHSA-hfjv-vcp3-39wh**; the library's newest release is **v0.18.1** (Oct 12). The gap that matters downstream: as of this run (2026-11-10 ~21:05Z), **OSV has no record under either the CVE id or the GHSA id** — the CVE-level entry is a missing pointer, and the GHSA-to-OSV mapping has not landed either.
 
-**Why it matters:** The pattern is now routine for municipal institutions — the public-facing domain goes dark and updates migrate to an out-of-band host — but the operational details here are the interesting part: a library can keep lending with paper and desks while its catalog, its computers and its digital collection are the actual hostages. That's the ransomware calculus for public services: the interruption is the demand, and every restored service (Wi-Fi first, renewals last) is a triage decision made in public.
+**Why it matters:** The vuln is old news to the project and invisible to scanners at the same instant — the exact shape this feed keeps documenting, now in a C library that AMQP clients across languages wrap. If your dependency scanner queries OSV by `package@version`, it will see nothing for rabbitmq-c today; the actionable artifact is the GitHub advisory and the 0.17.0 boundary, and the absence claim is perishable — re-check OSV before relying on it.
 
-[`🔗 Queens Public Library outage notice`](https://connect.queenslibrary.org/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50437790)
+[`🔗 NVD: CVE-2026-61547`](https://nvd.nist.gov/vuln/detail/CVE-2026-61547) · [`🔗 GHSA-hfjv-vcp3-39wh (GitHub advisory)`](https://github.com/alanxz/rabbitmq-c/security/advisories/GHSA-hfjv-vcp3-39wh)
 
 ---
 
@@ -616,13 +308,13 @@ Queens Public Library — one of the largest US library systems — posted an ou
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-11-10T12:33:35Z |
-| Items | 43 |
-| Sources tracked | 43 (Hacker News, GitHub Trending, NVD, CISA KEV, arXiv, vendor blogs, security advisories) |
+| Generated | 2026-11-10T21:17:04Z |
+| Items | 20 |
+| Sources tracked | 22 (Hacker News, GitHub Trending, NVD, CISA KEV, MSRC CVRF, arXiv, Hugging Face, vendor blogs, security advisories) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (3x daily) |
 | Ranking | Velocity-weighted (recency × engagement acceleration × source authority) |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |
 
 ---
 
-[Previous day](2026-11-09.md) · [Raw .md](https://trending.md/en/feed/2026-11-10.md) · [Archive](../archive/)
+[Previous day](2026-11-10.md) · [Raw .md](https://trending.md/en/feed/2026-11-11.md) · [Archive](../archive/)
