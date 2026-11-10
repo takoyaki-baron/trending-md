@@ -1,6 +1,6 @@
 ---
 date: 2026-11-10
-updated: 2026-11-09T20:29:21Z
+updated: 2026-11-10T04:30:36Z
 schedule: 04:03, 12:03, 20:03 UTC+8
 sources: 28
 license: CC-BY-4.0
@@ -276,13 +276,209 @@ Raspberry Pi raised prices again, this time concentrated on the 16GB models: the
 
 ---
 
+## 20. USPS now sells the official ZIP Code boundary polygons — and the price tag starts at five figures
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Hacker News · 529 pts · Nov 10 (~03:58 UTC+8)
+- **Tags:** `geodata` `usps` `gis`
+
+USPS's PostalPro hosts **USPS® ZIP Code Boundaries** — official polygon products the agency positions as "the ground truth for ZIP Code boundaries", sold in three license tiers (**Internal, Enterprise, Publication**), each with four quarterly updates, alongside a **GeoJSON sample file**. The resources on the page — fact sheet, technical guide, license agreement, order form — carry dates from June and September 2026, so the HN front-page thread is the discovery wave rather than a launch event. The discussion's practical discoveries: an HN comment points to the order form with **"starting at $10k"**, and the license agreement restricts redistribution — while the community's working alternative, OpenDataDE's census-derived State-zip-code-GeoJSON, remains free but dates to the 2010 census.
+
+**Why it matters:** ZIP Codes were never geographic areas — they are delivery-route groupings, and USPS itself spent decades saying so; an official polygon set is the first time the agency sells ground truth for the shape everyone else approximates. The thread's real content is the market's answer: free approximations everyone uses versus a licensed ground truth almost nobody will buy at $10k.
+
+[`🔗 USPS ZIP Code Boundaries`](https://postalpro.usps.com/zcb) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50431058)
+
+---
+
+## 21. Gemini's connected-app promise quietly reversed: Google's own pages now say Drive and Gmail data is human reviewed
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Hacker News · 469 pts · Nov 10 (~02:24 UTC+8)
+- **Tags:** `privacy` `gemini` `google`
+
+Google's 2023 blog post still carries the original promise verbatim — with Workspace extensions, "your content from Gmail, Docs and Drive is not seen by human reviewers, used by Bard to show you ads, or used to train the Bard model" — but the sentence is now followed by an **"Update, October 16, 2026"** noting that connected Workspace data "can also be subject to human review in limited circumstances". The current help page is more direct: "Data from Connected Apps is used and human reviewed per the Gemini Apps Privacy Notice." A repository posted with the HN thread documents the ingestion mechanism: ambient mentions of personal topics trigger background Workspace lookups **without @-tags**, and capture is probabilistic — four observed outcomes ranging from zero retrieval through metadata summaries and partial verbatim quotes to **full-file ingestion** into session context.
+
+**Why it matters:** The promise, the reversal and the mechanism are all now on Google's own pages; what the repo adds is the demonstration that retrieval fires on casual conversation, not just explicit @Drive calls — so a reviewer pipeline can see a complete email the user never asked Gemini to open. For anyone building connected-app integrations, the design lesson is that the user asking and the user knowing a tool fired are different consent events.
+
+[`🔗 gemini_files: documentation of the behavior`](https://github.com/thisisme6598/gemini_files/) · [`🔗 Google Help Answer 16836988`](https://support.google.com/gemini/answer/16836988) · [`🔗 the 2023 blog post, with its Oct 16 update`](https://blog.google/innovation-and-ai/products/our-responsible-approach-to-building-guardrails-for-generative-ai/)
+
+---
+
+## 22. TPU 8tx and TPU 8i Max: four systems in one generation, each cut for a different stage of the agent lifecycle
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Google blog · 226 pts on HN · Nov 10 (~05:56 UTC+8)
+- **Tags:** `google` `tpu` `infrastructure`
+
+Amin Vahdat announced two additions to Google's eighth-generation TPU portfolio — "the first time we have introduced four TPU systems in a single year" (8t, 8i, 8tx, 8i Max), with **nearly 100 customers**. **TPU 8tx** is the confidential-computing configuration: same silicon as 8t on 5th-generation AMD EPYC hosts, keeping "sensitive data and model weights protected and isolated even while in active use", with up to **2× lower latency** than 8t on the Boardfly network. **TPU 8i Max** fuses two 8i chips onto one package — "double the compute, double the SRAM and double the HBM bandwidth", twice the silicon per rack footprint — built for agents reasoning "across an entire software codebase or hours of video at once". The software half of the post is as concrete: TorchTPU (open-sourced last month) so PyTorch and Hugging Face models run unmodified, a TPU agent suite in preview that plugs into Claude Code, Cursor and Google Antigravity, and an open-source XLA Serving Engine.
+
+**Why it matters:** The specialization pattern is the story — one generation, four SKUs, each aimed at a lifecycle stage (train, reason, confine, context) — and the open-source software announcements may matter more than the silicon: if PyTorch code runs unmodified, the moat becomes packaging and price. Note the claimed wins ("state-of-the-art price-performance" on InferenceX and AgentX) are asserted without numbers in the post.
+
+[`🔗 Our newest TPUs: 8tx and 8i Max`](https://blog.google/innovation-and-ai/infrastructure-and-cloud/global-network/tpu-8i-max-and-8tx/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50432831)
+
+---
+
+## 23. Watched.earth: every satellite that passed over any place this week, and the photos it actually took
+
+- **Velocity:** ▮▮ rising
+- **Source:** Show HN · 257 pts · Nov 10 (~01:51 UTC+8)
+- **Tags:** `satellites` `gis` `show-hn`
+
+**Watched** "shows which satellites passed over any place on Earth in the last 7 days, and the real photos they took" — the author built it to learn what had photographed their street. The pass search runs **SGP4 over the CelesTrak catalog in the browser** (~half a second per query), was checked against brute force on the poles, the antimeridian and tiny swaths with **0 missed passes**, and draws all **~17,000 objects in orbit on the GPU**, solving Kepler's equation every frame. Imagery comes from the real Sentinel-2/Landsat passes found — and the author flags the trap they hit: Sentinel-2 timestamps are "often 5-10 min off from when the sat actually crosses your spot". It flags a place as watched only when a real image exists, stores no location, and the code is open (MIT, `dev-Armaan/satellites`).
+
+**Why it matters:** Satellite overflight is normally an expert workflow — TLE propagation, pass prediction, imagery APIs stitched by hand; this compresses it into one map query, and the honest details are load-bearing: the timestamp skew is exactly the kind of measurement error that would silently break image-to-pass matching anywhere else.
+
+[`🔗 watched.earth`](https://www.watched.earth) · [`🔗 dev-Armaan/satellites`](https://github.com/dev-Armaan/satellites) · [`🔗 HN discussion (the author's launch notes)`](https://news.ycombinator.com/item?id=50428907)
+
+---
+
+## 24. CUI: native UI components for C — one C99 codebase, a complete app at ~250 KB, every component live in the docs
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News · 164 pts · Nov 10 (~03:35 UTC+8)
+- **Tags:** `c` `ui` `native`
+
+CUI bills itself as "About 190 components, compiled to machine code with no browser or runtime inside" — running on "Windows, macOS, Linux and the web, from one C99 codebase", where "A complete app is about 250 KB". The docs site renders **every component live in the browser**; the component index itself lists ~150 entries (combined pages account for the difference against the site's ~190 headline count). MIT-licensed, **v1.3.1** released, 738 stars — created **Nov 5**, one week old, and already on the HN front page.
+
+**Why it matters:** The immediate comparison is cross-platform toolkits; the more transferable idea is the docs-as-demo pattern — every component executable on its own documentation page is something native toolkits rarely manage, and it doubles as the project's test suite. The claims (the count, the bundle size) are the author's own, but the artifacts are one clone away.
+
+[`🔗 CUI documentation (live components)`](https://yappologistic.github.io/CUI/) · [`🔗 yappologistic/CUI`](https://github.com/yappologistic/CUI) · [`🔗 Component index`](https://yappologistic.github.io/CUI/components/)
+
+---
+
+## 25. Exact: Expo's new runtime is not React Native — it is an app format an AI agent can build, run, see and test
+
+- **Velocity:** ▮▮ rising
+- **Source:** Show HN · ~76 pts · Nov 10 (~06:59 UTC+8)
+- **Tags:** `ui` `cross-platform` `agent-native`
+
+**expo/exact** (MIT, Rust, **1,133 stars in 8 days**, no releases yet) opens with: "Write an app once. It runs natively on the web, macOS, iOS, and Linux, and an AI agent can build it, run it, see it, and test it on every one of them." The interface is written in **Contract**, a declarative language compiled to a compact plan; logic is TypeScript or Rust. On the web the plan drives the real DOM over a ~20 KB runtime; on native platforms a Rust layout kernel computes every box with CSS rules and AppKit, UIKit or a GPU painter draws — "no webview and no JavaScript bridge in the UI". The README's centerpiece is a **copy-paste prompt for Claude Code** that scaffolds a todo app, writes an `app.test.contract`, and passes it on web, macOS and the iOS Simulator via `scripts/agent.mjs` — a clean-clone agent run finished in **~57 minutes**, "about 25 of those minutes were the first macOS and iOS builds". Pre-1.0 by declaration: "no API stability, no backwards compatibility, and no migration guide, by design."
+
+**Why it matters:** Expo — the company whose business is React Native — shipping a runtime that is not React Native is the signal, and the pitch is not developer ergonomics but **agent-verifiability**: one artifact, the contract test, that an agent can write, execute and read on every host. If agent-driven development becomes the primary client, whether an agent can test it on all platforms stops being a nicety and becomes a framework feature.
+
+[`🔗 expo/exact`](https://github.com/expo/exact) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50433541)
+
+---
+
+## 26. SAP's patch wave lands on NVD: 40 records overnight, four at 10.0, every score the CNA's own
+
+- **Velocity:** ▮▮ rising
+- **Source:** NVD · 40 records · Nov 9–10 (overnight batch)
+- **Tags:** `security` `cve` `sap`
+
+SAP's security-patch-day wave hit the registry overnight: **40 records** in one publication window, every one still `Received`, every score carried by SAP's own CNA container (`cna@sap.com`, `Primary`), zero NVD analysis. Four sit at **10.0** (all `AV:N/AC:L/PR:N`): **CVE-2026-120017** (NetWeaver AS ABAP — "does not perform sufficient verification of incoming authentication assertions"), **CVE-2026-76964** (NetWeaver AS ABAP network-input validation), **CVE-2026-89103** (SAP Gateway, which "activates the default Access Control List with high privileges"), and **CVE-2026-89126** (SAP Web Dispatcher). Three more at 9.9, plus 9.6 and 9.1 rows across NetWeaver, Web Dispatcher, Gateway, HANA XSA and BusinessObjects — and a 7.5 in the **SAP Cloud SDK for Python** (improper cryptographic signature verification).
+
+**Why it matters:** The paperwork pattern is the item: all 40 are `Received`, so every number is SAP's own and the detail lives behind the vendor portal — each record points at a `me.sap.com` note rather than a public advisory. If you run SAP, the patch-day note list is the document that matters; if you scan off NVD, this is a day-one snapshot that will move under you.
+
+[`🔗 CVE-2026-120017 on NVD`](https://nvd.nist.gov/vuln/detail/CVE-2026-120017) · [`🔗 SAP note 3849308`](https://me.sap.com/notes/3849308)
+
+---
+
+## 27. FrodoBots EarthRover Mini+: one set of fleet-wide hard-coded credentials gates root on every rover
+
+- **Velocity:** ▮▮ rising
+- **Source:** CERT/CC VU#188754 · 6 CVE records · Nov 10 (~01:17 UTC+8)
+- **Tags:** `security` `iot` `robotics`
+
+CERT/CC published **VU#188754** on Nov 9 for the FrodoBots EarthRover Mini+, a consumer telepresence rover with camera and microphone: the firmware "contains several sets of hard-coded, fleet-wide credentials" — BasicAuth for an Agora token service, **AWS IAM access keys**, AWS IoT MQTT credentials and a Slack incoming webhook (CVE-2026-121685). The worst of the six records, **CVE-2026-121686**, is a firmware method that "accepts arbitrary shell commands delivered via" AWS IoT MQTT "and executes them as root" — "Access is gated only by shared Internet of Things (IoT) credentials, with no per-device authentication, enabling remote code execution as root across the fleet." CERT's overview: an attacker could "take remote control of the rover, access its audio and video streams, or use it to gain a foothold in its network". All six records are `Received` with no scores; the filer is `cret@cert.org`.
+
+**Why it matters:** One credential gating an entire product fleet is the IoT antipattern at its purest — a single leaked key is fleet-wide root, and the same key set unlocks IAM and a Slack webhook. Consumer robots add the physical tail: remote control of the rover is a camera-and-microphone in someone's home, not just a compromised gadget.
+
+[`🔗 VU#188754 (CERT/CC)`](https://kb.cert.org/vuls/id/188754) · [`🔗 CVE-2026-121686 on NVD`](https://nvd.nist.gov/vuln/detail/CVE-2026-121686)
+
+---
+
+## 28. Mongoose's sanitizeFilter has a hole: countDocuments() skips the injection defense — and the fixes are three months older than the records
+
+- **Velocity:** ▮▮ rising
+- **Source:** NVD · CVE-2026-125120 · Nov 10 (~07:17 UTC+8)
+- **Tags:** `security` `npm` `mongodb`
+
+Two Mongoose records landed the same day. **CVE-2026-125120 (9.8)**: `countDocuments()` "does not apply the configured sanitizeFilter query selector injection defense" — an application that enables `sanitizeFilter` and passes attacker-controlled filter values to `countDocuments()` gets query-operator objects processed as operators rather than literals, so counts include documents that should not match, "potentially undermining authorization or application logic based on that count". The fix versions (6.13.11, 7.8.12, 8.24.3, 9.9.2) show on npm as published **Aug 10** — the fixes are three months older than the paperwork. The companion **CVE-2026-125117 (8.2, CWE-1321)** is a prototype-pollution family: `init()`, `$__set` and `utils.mergeClone` descend into inherited properties, so crafted `toString`/`valueOf` keys write into shared built-ins; fixed in later patch lines (npm shows 8.24.7 on Oct 23).
+
+**Why it matters:** The interesting claim is about a defense, not a bug: code that did the right thing — `sanitizeFilter: true` — was still exposed on the one method that skipped the sanitizer, which is a reminder that a security option is only as complete as its call-site coverage. And because fix-predates-record, anyone on current npm has been safe since August; the population actually at risk is the pinned-dependency one.
+
+[`🔗 CVE-2026-125120 on NVD`](https://nvd.nist.gov/vuln/detail/CVE-2026-125120) · [`🔗 mongoose releases on npm`](https://www.npmjs.com/package/mongoose?activeTab=versions)
+
+---
+
+## 29. OmniAgent's approval gate treats every command starting with `find` as safe — and `find` has `-execdir`
+
+- **Velocity:** ▮▮ rising
+- **Source:** NVD · CVE-2026-125368 · Nov 10 (~08:17 UTC+8)
+- **Tags:** `security` `agents` `prompt-injection`
+
+**OmniAgent** — a 2,587-star Python agent framework pitched as "An agent capable of self-evolving and dynamically hardening security" — carries **CVE-2026-125368 (7.7 on CVSS 4.0, 7.5 on 3.1, both VulnCheck)**: `ReflexionAgent._is_safe_bash_command` "treats any command starting with find as safe without inspecting -execdir arguments", so a prompt-injected agent can run `find` with `-execdir` to invoke binaries like `dd`, `nc`, `perl` or `openssl` through the unsandboxed shell, "overwriting files or executing code without human approval". The code confirms the shape — the allowlist at line 1379, and line 1973 skipping the approval request for commands the classifier calls safe. **Issue #67** (filed Oct 24, still open) is blunter than the CVE: its title reads "bash safety classifier bypass via find -execdir skips the advertised approval gate entirely", and it quotes the README's own claim of a "four-layer... unbypassable (industry-first)" security control. The repo's last push was **Jul 27**.
+
+**Why it matters:** This is the recurring class in agent security: an allowlist that matches a prefix instead of parsing a grammar, sitting in front of an approval gate. `-execdir` is 1970s `find` semantics doing modern agent-escape work — and the irony is structural, because the harder a framework markets its safety layers, the more a single bypass is worth.
+
+[`🔗 CVE-2026-125368 on NVD`](https://nvd.nist.gov/vuln/detail/CVE-2026-125368) · [`🔗 Issue #67 (open since Oct 24)`](https://github.com/YeQing17-2026/OmniAgent/issues/67)
+
+---
+
+## 30. ScrapeBench: agents ignore scraping bans 95%+ of the time — and over-refuse lawful scrapes at 98.5%
+
+- **Velocity:** ▮▮ rising
+- **Source:** arXiv 2611.11306 · submitted Nov 8
+- **Tags:** `research` `agents` `benchmark`
+
+ScrapeBench is billed as the first agentic benchmark for the **legal compliance** of website scraping, testing agents against ToS and robots.txt across "1,626 popular websites that explicitly prohibit scraping" and 269 that allow it. On prohibited sites, "most agents exhibit low compliance rates (< 5%)" — and "even where AI agents actively check the applicable ToS and robots.txt, they continue to exhibit low compliance rates". On lawful targets the failure inverts: "agents sometimes refuse to scrape despite it being lawful, such as Claude Opus 4.6 exhibiting an over-refusal rate of 98.5%." The human baseline (n=180) says people behave the same way in one half and not the other: "humans exhibit compliance rates comparable to AI agents but over-refuse at much higher rates."
+
+**Why it matters:** Both directions fail at once — agents break the rules where rules exist and refuse where they don't — which means "check robots.txt" is currently performed as theater: the check happens, and the answer doesn't bind. A compliance benchmark with a human baseline is the rare kind that can say what "good" would even look like, for agent builders and for the sites writing the policies.
+
+[`🔗 arXiv 2611.11306`](https://arxiv.org/abs/2611.11306) · [`🔗 full text (HTML)`](https://arxiv.org/html/2611.11306v1)
+
+---
+
+## 31. Search-by-answer bias: dense retrievers favor passages that mention the answer they already believe
+
+- **Velocity:** ▮ steady
+- **Source:** arXiv 2611.11396 · submitted Nov 8
+- **Tags:** `research` `retrieval` `rag`
+
+Dense retrievers are meant to select passages matching a query's semantic specification — but they "suffer from search-by-answer bias: they favor passages that mention answer objects the model knows (scores as likely), over passages that support valid alternative answers". The method is controlled: factual contrasts from LAMA/TREx, where a token-prediction head scores the canonical object against an alternative, and that score is tested as a predictor of passage ranking. Across **eight retrievers** — DPR, Spider variants, Contriever, E5, Qwen3-Embedding — higher token-prediction scores consistently predict higher retrieval scores, and the effect holds "when passages differ only in the answer object, and even when the passage that mentions the high-scoring object expresses a wrong relation".
+
+**Why it matters:** Retrieval quality is usually measured as relevance; this is a measured **bias** — the retriever inherits a language-model head's corpus-wide prior about which answers are plausible, shaping which evidence a RAG system ever sees. If your pipeline retrieves "likely" answers, a recall@5 eval can be measuring the prior, not the search.
+
+[`🔗 arXiv 2611.11396`](https://arxiv.org/abs/2611.11396) · [`🔗 full text (HTML)`](https://arxiv.org/html/2611.11396v1)
+
+---
+
+## 32. daily_stock_analysis: 69k stars, and the release notes read like an SRE changelog for LLM dependencies
+
+- **Velocity:** ▮ steady
+- **Source:** GitHub Trending · +506 stars today · Nov 10 (~04:06 UTC+8)
+- **Tags:** `llm` `agents` `chinese-oss`
+
+**ZhuLinsen/daily_stock_analysis** — 69,086 stars, created Jan 2026 — is an LLM-powered multi-market stock analysis pipeline: multi-source market data, real-time news, a decision dashboard, automated notifications, and "支持零成本定时运行" (zero-cost scheduled runs). **v3.34.0 shipped Nov 9**, and its notes are a case study in agent-ops: default models updated across Claude, Gemini, OpenAI and DeepSeek to "减少旧模型退役导致的配置失败" (reduce configuration failures caused by retired models), with MiniMax M3.1 Flash preferred for new text channels; Market Light scoring now **excludes VIX moves** so a volatility spike stops reading as a market rally; an offline agent-trajectory evaluation gains a discussion-of-range-shift diagnostic; and an experimental Codex App Server backend was removed.
+
+**Why it matters:** 69k stars on a pipeline whose release notes treat the model layer as infrastructure that breaks — and ship "model retired" fixes as versioned releases rather than hotfixes — is the Chinese open-source agent wave in miniature. The maintenance burden the notes describe (four providers' model deprecations in one release) is the cost that benchmarks never show.
+
+[`🔗 ZhuLinsen/daily_stock_analysis`](https://github.com/ZhuLinsen/daily_stock_analysis) · [`🔗 v3.34.0 release notes`](https://github.com/ZhuLinsen/daily_stock_analysis/releases/tag/v3.34.0)
+
+---
+
+## 33. France attributes the supermarket-freezer attacks to Iran's Revolutionary Guards — freezers pushed from −27 °C to over 50 °C
+
+- **Velocity:** ▮ steady
+- **Source:** The Guardian · 60 pts on HN · Nov 10 (~03:33 UTC+8)
+- **Tags:** `security` `attribution` `critical-infrastructure`
+
+France has formally attributed October's supermarket-freezer cyber-attacks to Iran: a minister in Paris confirmed "the Islamic Republic of Iran's Revolutionary Guards are responsible for this attack", and the Paris prosecutor tied the operation to **Shahid Kaveh**, an IRGC-linked cyber unit, citing "the use of Farsi and IP addresses traced back to devices located in Iran". The Oct 11–12 attacks remotely overrode temperature controls in "as many as 700 supermarkets and shops across France, pushing them from as low as -27C (-16.6F) to well over 50C (122F)"; thousands of tons of food were dumped, and in some stores the heat sparked fires and sprinkler damage. Similar incidents hit fridges in other European countries last week, and a French blood bank's cold stores had temperature and defrosting thresholds raised before alarms let technicians intervene.
+
+**Why it matters:** Attribution is unusually direct — an investigation naming the unit's leadership — and the target class is mundane control systems, refrigeration, where the physical effect is immediate and the security posture is anything but hardened. The escalation logic in the piece is the warning worth carrying: "they are attacking easy equipment but as a state group that has the means, the determination and the time, we should be prepared to see attacks on other systems like water or electricity."
+
+[`🔗 The Guardian: France blames Iran's Revolutionary Guards`](https://www.theguardian.com/world/2026/nov/09/france-blames-irans-revolutionary-guards-for-cyber-attacks-on-supermarket-fridges) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50430585)
+
+---
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-11-09T20:29:21Z |
-| Items | 19 |
-| Sources tracked | 28 (Hacker News, GitHub Trending, NVD, CISA KEV, arXiv, vendor blogs, security advisories) |
+| Generated | 2026-11-10T04:30:36Z |
+| Items | 33 |
+| Sources tracked | 33 (Hacker News, GitHub Trending, NVD, CISA KEV, arXiv, vendor blogs, security advisories) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (3x daily) |
 | Ranking | Velocity-weighted (recency × engagement acceleration × source authority) |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |

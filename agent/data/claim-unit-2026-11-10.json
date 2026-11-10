@@ -1,9 +1,9 @@
 {
- "generated": "2026-11-09T20:39:25.226Z",
+ "generated": "2026-11-10T04:30:17.808Z",
  "files": [
   {
    "file": "2026-11-10.md",
-   "items": 19,
+   "items": 33,
    "findings": [
     {
      "check": "issues",
@@ -23,15 +23,15 @@
      "check": "cvss",
      "item": 7,
      "verdict": "ok",
-     "claim": "4.0 8.5",
-     "detail": "CVE-2026-125250 · Secondary/disclosure@vulncheck.com"
+     "claim": "3.1 7.8",
+     "detail": "CVE-2026-125250 · Primary/disclosure@vulncheck.com · vector reproduces 7.8"
     },
     {
      "check": "cvss",
      "item": 7,
-     "verdict": "slot-quoted",
-     "claim": "Primary/Secondary",
-     "detail": "a metric slot is not a provenance — name the source (CNA / nvd@nist.gov / CISA-ADP) instead"
+     "verdict": "ok",
+     "claim": "4.0 8.5",
+     "detail": "CVE-2026-125250 · Secondary/disclosure@vulncheck.com"
     },
     {
      "check": "status",
@@ -104,25 +104,81 @@
      "detail": "Received (lastModified 2026-11-09T17:17:07.093)"
     },
     {
+     "check": "status",
+     "item": 26,
+     "verdict": "ok",
+     "claim": "CVE-2026-120017 `Received`",
+     "detail": "Received (lastModified 2026-11-10T01:17:16.803)"
+    },
+    {
+     "check": "status",
+     "item": 26,
+     "verdict": "ok",
+     "claim": "CVE-2026-120017 `Received`",
+     "detail": "Received (lastModified 2026-11-10T01:17:16.803)"
+    },
+    {
+     "check": "status",
+     "item": 27,
+     "verdict": "ok",
+     "claim": "CVE-2026-121685 `Received`",
+     "detail": "Received (lastModified 2026-11-09T17:17:16.680)"
+    },
+    {
+     "check": "cwe",
+     "item": 28,
+     "verdict": "ok",
+     "claim": "CVE-2026-125117 CWE-1321",
+     "detail": "stated in NVD weaknesses[] (security-advisories@github.com)"
+    },
+    {
+     "check": "cvss",
+     "item": 29,
+     "verdict": "ok",
+     "claim": "4.0 7.7",
+     "detail": "CVE-2026-125368 · Secondary/disclosure@vulncheck.com"
+    },
+    {
+     "check": "cvss",
+     "item": 29,
+     "verdict": "ok",
+     "claim": "3.1 7.5",
+     "detail": "CVE-2026-125368 · Primary/disclosure@vulncheck.com · vector reproduces 7.5"
+    },
+    {
+     "check": "repo",
+     "item": 3,
+     "verdict": "unreadable",
+     "claim": "contrib/e_means",
+     "detail": "api.github.com: Command failed: gh api repos/contrib/e_means (HTTP 404)"
+    },
+    {
      "check": "repo",
      "item": 4,
      "verdict": "ok",
      "claim": "sherlock-project/sherlock",
-     "detail": "106771★, last push 2026-11-09"
+     "detail": "107476★, last push 2026-11-09"
     },
     {
-     "check": "repo",
-     "item": 12,
-     "verdict": "ok",
-     "claim": "ikey4u/zebkit",
-     "detail": "139★, last push 2026-11-09"
+     "check": "batch",
+     "item": 7,
+     "verdict": "batch-count-ok",
+     "claim": "121 records (FFmpeg, 2026-11-09)",
+     "detail": "121 records from disclosure@vulncheck.com published 2026-11-09 — the claim's own set, retrieved by its own cited id CVE-2026-125250"
+    },
+    {
+     "check": "batch",
+     "item": 7,
+     "verdict": "batch-subcount-ok",
+     "claim": "114 of the 121 descriptions say \"through 9.0.2\"",
+     "detail": "114 of 121 descriptions carry the phrase"
     },
     {
      "check": "quotation",
      "item": 1,
      "verdict": "ok",
      "claim": "7 quotation(s)",
-     "detail": "verbatim in 1 readable source(s)"
+     "detail": "verbatim in 2 readable source(s)"
     },
     {
      "check": "quotation",
@@ -136,7 +192,7 @@
      "item": 3,
      "verdict": "ok",
      "claim": "1 quotation(s)",
-     "detail": "verbatim in 2 readable source(s)"
+     "detail": "verbatim in 3 readable source(s)"
     },
     {
      "check": "quotation",
@@ -150,7 +206,7 @@
      "item": 6,
      "verdict": "ok",
      "claim": "3 quotation(s)",
-     "detail": "verbatim in 10 readable source(s)"
+     "detail": "verbatim in 12 readable source(s)"
     },
     {
      "check": "quotation",
@@ -178,21 +234,14 @@
      "item": 11,
      "verdict": "ok",
      "claim": "1 quotation(s)",
-     "detail": "verbatim in 4 readable source(s)"
+     "detail": "verbatim in 5 readable source(s)"
     },
     {
      "check": "quotation",
      "item": 12,
-     "verdict": "quote-not-read",
+     "verdict": "ok",
      "claim": "2 quotation(s)",
-     "detail": "no cited page, README or record was readable this run — unread is not absent, so nothing is claimed about these quotation(s)"
-    },
-    {
-     "check": "quotation",
-     "item": 13,
-     "verdict": "quote-paraphrase",
-     "claim": "“did the agent finish”",
-     "detail": "4 words, 0 hits in 2 readable source(s); no source carries it (read arXiv 2611.09802, arxiv.org/html/2611.09802v1) — if this came from somewhere this item does not cite, cite it; otherwise it is the feed's own words and must not wear quotation marks"
+     "detail": "verbatim in 2 readable source(s)"
     },
     {
      "check": "quotation",
@@ -200,13 +249,6 @@
      "verdict": "ok",
      "claim": "4 quotation(s)",
      "detail": "verbatim in 2 readable source(s)"
-    },
-    {
-     "check": "quotation",
-     "item": 14,
-     "verdict": "quote-not-found",
-     "claim": "“my store is not the same shape as yours”",
-     "detail": "9 words, 0 hits in 2 readable source(s); no source carries it (read arXiv 2611.09721, arxiv.org/html/2611.09721v1) — if this came from somewhere this item does not cite, cite it; otherwise it is the feed's own words and must not wear quotation marks"
     },
     {
      "check": "quotation",
@@ -218,71 +260,29 @@
     {
      "check": "quotation",
      "item": 15,
-     "verdict": "quote-not-read",
-     "claim": "7 quotation(s)",
-     "detail": "no cited page, README or record was readable this run — unread is not absent, so nothing is claimed about these quotation(s)"
-    },
-    {
-     "check": "quotation",
-     "item": 16,
-     "verdict": "quote-not-read",
-     "claim": "“the other 999 just take from that already allocated memory”",
-     "detail": "9 words, 0 hits in 1 readable source(s), but 1 cited page(s) went unread (news.ycombinator.com/item?id=50424157 served a bot wall) — unread is not absent, so this is not called a fabrication; open those page(s) before publishing"
-    },
-    {
-     "check": "quotation",
-     "item": 16,
-     "verdict": "quote-not-read",
-     "claim": "“575 ns for an empty syscall as measured below”",
-     "detail": "8 words, 0 hits in 1 readable source(s), but 1 cited page(s) went unread (news.ycombinator.com/item?id=50424157 served a bot wall) — unread is not absent, so this is not called a fabrication; open those page(s) before publishing"
-    },
-    {
-     "check": "quotation",
-     "item": 16,
      "verdict": "ok",
-     "claim": "1 quotation(s)",
-     "detail": "verbatim in 1 readable source(s)"
+     "claim": "7 quotation(s)",
+     "detail": "verbatim in 3 readable source(s)"
     },
     {
      "check": "quotation",
-     "item": 17,
-     "verdict": "quote-not-read",
-     "claim": "“must have lower demand than for single board computers and compute modules”",
-     "detail": "12 words, 0 hits in 1 readable source(s), but 1 cited page(s) went unread (news.ycombinator.com/item?id=50428801 served a bot wall) — unread is not absent, so this is not called a fabrication; open those page(s) before publishing"
-    },
-    {
-     "check": "quotation",
-     "item": 17,
-     "verdict": "quote-short",
-     "claim": "“buy one and measure”",
-     "detail": "4 words, 0 hits in 1 readable source(s), 1 cited page(s) unread; no source carries it (read cnx-software.com/2026/11/03/when-will-this-stop-the-raspberry-pi-5-16gb-sbc-now-sells-for-385/) — if this came from somewhere this item does not cite, cite it; otherwise it is the feed's own words and must not wear quotation marks"
-    },
-    {
-     "check": "quotation",
-     "item": 17,
+     "item": 16,
      "verdict": "ok",
      "claim": "3 quotation(s)",
-     "detail": "verbatim in 1 readable source(s)"
+     "detail": "verbatim in 2 readable source(s)"
     },
     {
      "check": "quotation",
-     "item": 18,
-     "verdict": "quote-not-found",
-     "claim": "“9 5 times faster than vllm and sglang exact state forking”",
-     "detail": "9 words, 0 hits in 2 readable source(s); OmniJev/Flide README carries 8 of 11 words (“9 5 times faster than vllm and sglang”) and continues “and every answer is the one the model gives the question” — use the source's wording, or drop the quotation marks"
-    },
-    {
-     "check": "quotation",
-     "item": 18,
-     "verdict": "quote-not-found",
-     "claim": "“each answered in one forward pass”",
-     "detail": "6 words, 0 hits in 2 readable source(s); no source carries it (read OmniJev/Flide README, pypi.org/project/flide/) — if this came from somewhere this item does not cite, cite it; otherwise it is the feed's own words and must not wear quotation marks"
+     "item": 17,
+     "verdict": "ok",
+     "claim": "4 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
     },
     {
      "check": "quotation",
      "item": 18,
      "verdict": "ok",
-     "claim": "2 quotation(s)",
+     "claim": "3 quotation(s)",
      "detail": "verbatim in 2 readable source(s)"
     },
     {
@@ -291,24 +291,107 @@
      "verdict": "ok",
      "claim": "1 quotation(s)",
      "detail": "verbatim in 4 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 20,
+     "verdict": "ok",
+     "claim": "1 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 21,
+     "verdict": "ok",
+     "claim": "3 quotation(s)",
+     "detail": "verbatim in 3 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 22,
+     "verdict": "ok",
+     "claim": "5 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 23,
+     "verdict": "ok",
+     "claim": "2 quotation(s)",
+     "detail": "verbatim in 3 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 24,
+     "verdict": "ok",
+     "claim": "3 quotation(s)",
+     "detail": "verbatim in 3 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 25,
+     "verdict": "ok",
+     "claim": "4 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 26,
+     "verdict": "ok",
+     "claim": "2 quotation(s)",
+     "detail": "verbatim in 9 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 27,
+     "verdict": "ok",
+     "claim": "5 quotation(s)",
+     "detail": "verbatim in 6 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 28,
+     "verdict": "ok",
+     "claim": "2 quotation(s)",
+     "detail": "verbatim in 5 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 29,
+     "verdict": "ok",
+     "claim": "5 quotation(s)",
+     "detail": "verbatim in 5 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 30,
+     "verdict": "ok",
+     "claim": "5 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 31,
+     "verdict": "ok",
+     "claim": "2 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 33,
+     "verdict": "ok",
+     "claim": "4 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
     }
    ]
   }
  ],
- "status_watch": [
-  {
-   "id": "CVE-2026-102895",
-   "from": "Received",
-   "to": "Analyzed",
-   "regressed": false,
-   "modified": "2026-11-09T19:42:09.450"
-  }
- ],
- "api_calls": 8,
- "readme_calls": 14,
- "cited_page_calls": 33,
+ "status_watch": [],
+ "api_calls": 0,
+ "readme_calls": 0,
+ "cited_page_calls": 4,
  "repo_page_calls": 0,
  "nvd_calls": 1,
  "nvd_failed_chunks": 0,
- "cna_calls": 10
+ "cna_calls": 0
 }
