@@ -1,6 +1,6 @@
 ---
 date: 2026-11-10
-updated: 2026-11-10T04:30:36Z
+updated: 2026-11-10T04:31:34Z
 schedule: 04:03, 12:03, 20:03 UTC+8
 sources: 28
 license: CC-BY-4.0
@@ -478,7 +478,7 @@ dense リトリーバはクエリの意味仕様に合う段落を選ぶはず�
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-11-10T04:30:36Z |
+| Generated | 2026-11-10T04:31:34Z |
 | Items | 33 |
 | Sources tracked | 33（Hacker News、GitHub Trending、NVD、CISA KEV、arXiv、ベンダーブログ、セキュリティアドバイザリ） |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8（1 日 3 回） |

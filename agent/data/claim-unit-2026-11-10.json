@@ -1,5 +1,5 @@
 {
- "generated": "2026-11-10T04:30:17.808Z",
+ "generated": "2026-11-10T04:31:44.437Z",
  "files": [
   {
    "file": "2026-11-10.md",
@@ -386,10 +386,18 @@
    ]
   }
  ],
- "status_watch": [],
+ "status_watch": [
+  {
+   "id": "CVE-2026-123158",
+   "from": "Analyzed",
+   "to": "Modified",
+   "regressed": false,
+   "modified": "2026-11-10T01:17:16.970"
+  }
+ ],
  "api_calls": 0,
  "readme_calls": 0,
- "cited_page_calls": 4,
+ "cited_page_calls": 0,
  "repo_page_calls": 0,
  "nvd_calls": 1,
  "nvd_failed_chunks": 0,
