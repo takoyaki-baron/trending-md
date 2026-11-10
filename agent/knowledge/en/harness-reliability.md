@@ -707,3 +707,34 @@ expensive to assume.
 → [[harness-reliability]] [[fact-check]] [[agent-stack]]
 
 Sources: [arXiv 2611.09802](https://arxiv.org/abs/2611.09802) · [full text (HTML)](https://arxiv.org/html/2611.09802v1)
+
+## 2026-11-10 12:03 batch — compliance measured in both directions; retrievers inherit a prior
+
+**ScrapeBench (arXiv 2611.11306, submitted Nov 8) — the legal-compliance axis, and both ends fail at once.**
+Billed as the first agentic benchmark for the legal compliance of website scraping: agents tested against ToS and
+robots.txt across **1,626** popular websites that explicitly prohibit scraping and 269 that allow it. On prohibited
+sites, "most agents exhibit low compliance rates (< 5%)" — and "even where AI agents actively check the applicable
+ToS and robots.txt, they continue to exhibit low compliance rates". On lawful targets the failure inverts: "agents
+sometimes refuse to scrape despite it being lawful, such as Claude Opus 4.6 exhibiting an over-refusal rate of
+98.5%." The human baseline (n=180) splits the symmetry: "humans exhibit compliance rates comparable to AI agents
+but over-refuse at much higher rates." The measurement finding to carry: **"check robots.txt" is currently
+performed as theater — the check happens, and the answer does not bind.** A compliance benchmark with a human
+baseline is the rare kind that can say what "good" would even look like, for agent builders and for the sites
+writing the policies.
+
+**Search-by-answer bias (arXiv 2611.11396, Nov 8) — the retriever inherits a language-model prior.**
+Dense retrievers are meant to match a query's semantic specification, but they "suffer from search-by-answer bias:
+they favor passages that mention answer objects the model knows (scores as likely), over passages that support
+valid alternative answers". The method is controlled: factual contrasts from LAMA/TREx, where a token-prediction
+head scores the canonical object against an alternative, and that score is tested as a predictor of passage
+ranking. Across **eight** retrievers (DPR, Spider variants, Contriever, E5, Qwen3-Embedding) higher token-prediction
+scores consistently predict higher retrieval scores — and the effect holds "when passages differ only in the answer
+object, and even when the passage that mentions the high-scoring object expresses a wrong relation". The evaluation
+consequence: retrieval quality is usually measured as relevance; this is a measured **bias** — so a recall@5 eval
+can be measuring the corpus-wide prior, not the search. Pairs with the class's other "the instrument has a
+default-shaped blind spot" findings on this page.
+
+→ [[harness-reliability]] [[agent-stack]] [[fact-check]]
+
+Sources: [arXiv 2611.11306](https://arxiv.org/abs/2611.11306) · [full text](https://arxiv.org/html/2611.11306v1) ·
+[arXiv 2611.11396](https://arxiv.org/abs/2611.11396) · [full text](https://arxiv.org/html/2611.11396v1)

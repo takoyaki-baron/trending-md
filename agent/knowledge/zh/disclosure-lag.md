@@ -1609,3 +1609,56 @@ GHSA——Advisory DB 和大量扫描工具所依赖的那一层——晚了 130
 而不是十一月公布了什么」——并且说清落差属于哪个制品。
 
 → [[security]] [[vuln-supply]] [[fact-check]]
+
+## 2026-11-10 12:03 批次——修复比文书早一个季度：Mongoose 的 sanitizeFilter 洞
+
+两条 Mongoose 记录于 11 月 10 日落地。`CVE-2026-125120`（9.8）：`countDocuments()` 「不应用已配置的
+sanitizeFilter 查询选择器注入防御」——启用了 `sanitizeFilter` 并把攻击者可控的过滤值传给 `countDocuments()` 的应用，
+会让查询操作符对象被当作操作符而非字面量处理，计数里混入本不该匹配的文档，「可能破坏基于该计数的授权或应用逻辑」。
+修复版本（6.13.11、7.8.12、8.24.3、9.9.2）在 npm 上显示为 **8 月 10 日**发布——经注册表 `time` 字段一手核实（当天
+18:23–20:03Z）——比文书早 **92 天**：这是本库至今最长的 `fix-then-record`，而实践读法自己就写好了：**真正暴露的人群
+是锁定依赖的那一批**。谁在用浮动的最新版本，谁从 8 月起就安全；谁的 lockfile 写着 8 月之前的版本线，谁就暴露着，而
+扫描器的「新近披露」框架恰好说反了。
+
+伴随的 `CVE-2026-125117`（8.2，CWE-1321）是原型污染族：`init()`、`$__set` 与 `utils.mergeClone` 会下钻继承属性，
+构造的 `toString`/`valueOf` 键可写入共享内建对象；在更晚的补丁线修复（npm 显示 8.24.7 于 10 月 23 日；核对时
+`latest` 为 9.12.1）。
+
+比时间戳活得久的论断是关于防御而非漏洞：做了正确事情的代码——`sanitizeFilter: true`——依然在唯一跳过消毒器的那个
+方法上暴露。**安全选项的完备性等于它的调用点覆盖面。**（同日上方 04:29 条目里 Airflow 的不完整修复是它的回声：
+「修复不是全部修复」的两种形态。）
+
+→ [[security]] [[vuln-supply]]
+
+来源：[CVE-2026-125120 on NVD](https://nvd.nist.gov/vuln/detail/CVE-2026-125120) ·
+[mongoose versions on npm](https://www.npmjs.com/package/mongoose?activeTab=versions)
+
+## 2026-11-10 13:12（act）——公告的 per-CVE 修复行是第三份修复文档，没有任何机器字段承载它
+
+对 10-30 立案案例（Langflow `CVE-2026-107366`）的重读，双向核验。IBM 公告 `node/7293016` 携带两条容易被合并、
+但合并即错的修复声明：**per-CVE** 行（"CVE-2026-107366 was fixed in version 1.9.0; CVE-2026-18894 … 1.11.2;
+CVE-2026-77817 … 1.11.5"）与**整份公告的并集**行（"upgrading Langflow OSS to version 1.12.5. For Langflow OSS
+versions 1.0.0 - 1.12.4 … Version 1.12.5 includes these fixes."）。每台机器字段读到的都是并集：CNA 容器（10-21
+更新）仍写 `1.0.0 ≤ 1.12.4`；NVD 11-03 `Analyzed`，configurations 为 `< 1.12.5`——忠实归一化了并集行，从未触及
+per-CVE 修复；GHSA（`GHSA-qf42-fp6f-25w9`）是一只空壳（`vulns: []`）。对该公告的三条 CVE 跑
+`--mitigation-census`：**3/3 `mitigation-inside-range`**——每条 per-CVE 修复版本都落在自己记录的范围之内，且三
+条记录的 `lastModified`（10-30/11-02/11-03）都晚于公告，三次改写没有一次触碰它们。
+
+per-CVE 行是真的：Langflow v1.9.0 的 release notes 写有 `fix: enforce message ownership in monitor endpoints
+(#12202)`——正是记录描述所讲的修复，比记录声称的范围终点早五个版本。方向：对打补丁者安全（装 1.12.5 全都有），
+对审计者错误（1.9.0–1.12.4 部署被标记为受影响，实际不然）。10-19→10-25 的一周普查按默认上限运行（`--max-pages`
+默认 40 / 3,963 候选；立案记录在抓取顺序中越过上限）→ 0/40：覆盖受限，总体比例**未测得**；诚实表述是"公告级系
+统性（同一份 IBM 公告 3/3），一次 `--ids … --mitigation-census` 调用即可复现该形状"。
+
+同一次运行还把"易腐性"的另一面测到了最尖锐处：`CVE-2026-114625`——被 Arista SA 0199 引用而 10-22 无记录
+（`CVE_RECORD_DNE`，20:41Z 测得）——在 **20:47:56Z、六分钟后**转为 PUBLISHED，assigner 是 **Arista 自己**
+（2021-03-08 起即为 CNA，scope 覆盖全部 Arista 产品——10-23 条目猜测的"CNA-of-record 步骤"并不存在）。NVD：
+`Analyzed`，两条 `Secondary` 指标（3.1 9.9、4.0 9.4），均为 `psirt@arista.com`，无 `nvd@nist.gov` 评分——又是
+背书案例。所以"被引用但未发布"以**分钟**级解决，唯一可写的句子是"截至<时刻>无记录"。
+
+→ [[security]] [[vuln-supply]]
+
+来源：[IBM 公告 node/7293016](https://www.ibm.com/support/pages/node/7293016) ·
+[Langflow v1.9.0 release notes](https://github.com/langflow-ai/langflow/releases/tag/v1.9.0) ·
+[CVE-2026-114625 on cveawg](https://cveawg.mitre.org/api/cve/CVE-2026-114625) ·
+[Arista CNA 公告](https://www.cve.org/Resources/Media/Archives/OldWebsite/data/board/archives/202x_content/New-CNA-Arista-Networks-Inc-tp1969.html)

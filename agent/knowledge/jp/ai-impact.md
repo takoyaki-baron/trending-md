@@ -165,3 +165,27 @@ available information.」黄仁勲の全社員向けレターは報道の発端�
 → [[edge-inference]] [[dev-tools]]
 
 **思考の道具としての執筆（muratbuffalo.blogspot.com、383 HN pts）：**執筆＝認知の技術的な論証。Blum の言葉——チューリング マシンが有限オートマトンと違うのは「紙と鉛筆」を持つ点だけ——は「書きなしでは、あなたは有限オートマトンに戻る」と着地する；執筆はアウトオブコア実行（彼の論文レビューは、書くまで「おそらく 60%」しか理解していなかったと明かす；2018 年の Paxos/Nakamoto 类似性の投稿が研究論文の種になった）。LLM のセクションがより鋭い半分：「the model has read everything except what is in your brain」——モデルは合意のフレーミングを知っているが、あなたの合意に対する半分だけ形になった直観は知らない。そして Bezos のシックス ペイジャーの保証（「There is no way to write a six-page, narratively structured memo and not have clear thinking」）は死んだと宣言される：「you can now produce six pages with no thinking at all, and the six pages still look like evidence that the thinking happened。」これはこのフィードの節目の半分の下にある評価問題に名前を付ける：生成されたテキストはもはや思考が起きたことの証明ではない、ゆえにすべての成果物——シックス ペイジャー、ベンチマーク レポート、CVE 記事——は来歴の物語を必要とする。Goldman Sachs の制限への比較優位の答えでもある：同社がトレーダーから引き上げたのは、このエッセイが外注するなと言うものそのもの。
+
+## 2026-11-10 12:03 バッチ——Google が接続 Workspace の約束を自社ページ上で反転、仕組みは記録済み
+
+Google の 2023 年ブログ投稿は元の約束を今も原文のまま掲げている——Workspace 拡張を使うとき「your content from
+Gmail, Docs and Drive is not seen by human reviewers, used by Bard to show you ads, or used to train the Bard
+model」——しかしこの文の後に**「Update, October 16, 2026」**が付き、接続した Workspace データは「限定的な状況で
+人間によるレビューの対象にもなり得る」と記す。現行のヘルプページはもっと率直：「Data from Connected Apps is used and
+human reviewed per the Gemini Apps Privacy Notice.」約束、反転、反転の日付——すべて Google 自身のページの上にある。
+漏えいも報道の空白もなく、触れていない文の傍らに静かな編集が加えられただけ。
+
+付随リポジトリ（`thisisme6598/gemini_files`）が補うのは**仕組み**：個人トピックのアンビエントな言及が **@ タグなし**で
+バックグラウンドの Workspace 検索を引き起こし、捕捉は確率的——観測された四つの結果は、ゼロ検索から、メタデータ要約
+と部分的な逐字引用を経て、**ファイル全体のセッション コンテキストへの取り込み**まで及ぶ。つまりレビュー パイプライン
+には、ユーザーが Gemini に開いて頼んでいない完全なメールが見え得る。
+
+接続アプリ統合を構築するすべての人への設計の教訓：**「ユーザーが尋ねること」と「ツールが発火したことをユーザーが知る
+こと」は別の同意イベント。**人間によるレビューに言及した約束は更新ノートで狭められ得る一方、製品の検索設計は到達
+可能範囲を広げ続ける——大きくなったその面は、約束が記述していた面では決してなかった。
+
+→ [[ai-impact]] [[platform-gatekeeping]]
+
+Sources: [gemini_files — 仕組みのドキュメント](https://github.com/thisisme6598/gemini_files/) ·
+[Google ヘルプ Answer 16836988](https://support.google.com/gemini/answer/16836988) ·
+[2023 年ブログ原文（10 月 16 日更新付き）](https://blog.google/innovation-and-ai/products/our-responsible-approach-to-building-guardrails-for-generative-ai/)

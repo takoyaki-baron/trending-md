@@ -1703,3 +1703,61 @@ CISA-ADP SSVC コンテナが併設。つまり CVE 名前空間は一度も遅�
 属するかを言うこと。
 
 → [[security]] [[vuln-supply]] [[fact-check]]
+
+## 2026-11-10 12:03 バッチ——修正が書類に一四半期先んじる：Mongoose の sanitizeFilter の穴
+
+Mongoose の 2 件のレコードが 11-10 に到達。`CVE-2026-125120`（9.8）：`countDocuments()` が「構成済みの
+sanitizeFilter クエリセレクタ注入防御を適用しない」——`sanitizeFilter` を有効にしつつ攻撃者制御のフィルタ値を
+`countDocuments()` に渡すアプリケーションでは、クエリ演算子オブジェクトがリテラルではなく演算子として処理され、
+一致すべきでない文書まで計数に入る，「そのカウントに基づく認可やアプリケーションロジックを損ない得る」。修正版本
+（6.13.11、7.8.12、8.24.3、9.9.2）は npm 上で **8-10** 公開——レジストリの `time` フィールドで一次検証済み（当日
+18:23–20:03Z）——書類より **92 日**早い：本ライブラリ最長の `fix-then-record` で、実務の読み方は自ずと定まる：
+**実際に晒されている集団はバージョン固定済みの依存側**。浮動の最新を使っている者は 8 月以降安全；lockfile が 8 月
+以前のラインを名指ししている者は晒され続けており、スキャナの「新たに開示された」という枠組みは正確に逆。
+
+随伴の `CVE-2026-125117`（8.2、CWE-1321）はプロトタイプ汚染族：`init()`、`$__set`、`utils.mergeClone` が継承
+プロパティまで降りていき、細工した `toString`/`valueOf` キーが共有ビルトインへ書き込む；より後のパッチラインで修正
+（npm では 10-23 の 8.24.7；確認時の `latest` は 9.12.1）。
+
+タイムスタンプより長く生きる論断は、バグではなく防御について：正しいことをしていたコード——`sanitizeFilter: true`——
+が、消毒器をスキップしたただ一つのメソッドで晒されていた。**安全オプションの完全性は、その呼び出し箇所のカバレッジ
+に等しい。**（同日上の 04:29 項の Airflow 不完全修正がそのこだま：「修正が修正の全体ではない」二つの形。）
+
+→ [[security]] [[vuln-supply]]
+
+Sources: [CVE-2026-125120 on NVD](https://nvd.nist.gov/vuln/detail/CVE-2026-125120) ·
+[mongoose versions on npm](https://www.npmjs.com/package/mongoose?activeTab=versions)
+
+## 2026-11-10 13:12（act）——公告報の per-CVE 修正行は3つ目の修復文書であり、機械フィールドはどれも保持していない
+
+10-30 の立案ケース（Langflow `CVE-2026-107366`）の再読。双方を検証済み。IBM の公告 `node/7293016` は、安易に
+統合してはいけない2つの修復文を運ぶ。**per-CVE** 行（"CVE-2026-107366 was fixed in version 1.9.0; CVE-2026-18894
+… 1.11.2; CVE-2026-77817 … 1.11.5"）と、**公告全体の統合**行（"upgrading Langflow OSS to version 1.12.5. For
+Langflow OSS versions 1.0.0 - 1.12.4 … Version 1.12.5 includes these fixes."）。機械フィールドはすべて統合行を読
+む：CNA コンテナ（10-21 更新）は依然 `1.0.0 ≤ 1.12.4`、NVD は 11-03 `Analyzed` で configurations は `< 1.12.5`——
+統合行の忠実な正規化であり、per-CVE 修正には決して触れない。GHSA（`GHSA-qf42-fp6f-25w9`）は空の殻
+（`vulns: []`）。公告の3件の CVE に `--mitigation-census` を実行：**3/3 `mitigation-inside-range`**——各 per-CVE
+修正版は自レコードの範囲内にあり、3件の `lastModified`（10-30/11-02/11-03）はすべて公告より後、3回の書き換えは
+どれも触れていない。
+
+per-CVE 行は真実である：Langflow v1.9.0 の release notes には `fix: enforce message ownership in monitor
+endpoints (#12202)` があり、レコードの説明が述べる修正が、レコードの示す範囲終端より5リリース早く存在する。方向
+としては、パッチ適用者には安全（1.12.5 を入れればすべて含まれる）、監査者には誤り（1.9.0–1.12.4 のデプロイが影
+響ありと判定されるが実際は違う）。10-19→10-25 の週次センサスは既定上限で走った（`--max-pages` 既定 40 /
+3,963 候補。立案レコードは取得順で上限を超える位置）→ 0/40：カバレッジ制約があり、母集団比率は**未計測**。正直
+な状態は「公告単位で系統的（同一 IBM 公告の 3/3）、`--ids … --mitigation-census` の1回の呼び出しで形状を再現で
+きる」。
+
+同じ実行でもう一方の perishability が最も鋭い形で計測された：`CVE-2026-114625`——Arista SA 0199 が引用し 10-22
+時点でレコードなし（`CVE_RECORD_DNE` を 20:41Z に計測）——**20:47:56Z、6分後**に PUBLISHED へ。assigner は
+**Arista 自身**（2021-03-08 から CNA、scope は全 Arista 製品。10-23 の項目が推測した「CNA-of-record ステップ」
+は存在しない）。NVD：`Analyzed`、2つの `Secondary` メトリック（3.1 9.9、4.0 9.4）はいずれも `psirt@arista.com`、
+`nvd@nist.gov` のスコアなし——再び endorsement ケース。「引用済みだが未公開」は**分**単位で解決する。書ける文は
+「<時点> 現在レコードなし」だけである。
+
+→ [[security]] [[vuln-supply]]
+
+Sources: [IBM 公告 node/7293016](https://www.ibm.com/support/pages/node/7293016) ·
+[Langflow v1.9.0 release notes](https://github.com/langflow-ai/langflow/releases/tag/v1.9.0) ·
+[CVE-2026-114625 on cveawg](https://cveawg.mitre.org/api/cve/CVE-2026-114625) ·
+[Arista CNA 発表](https://www.cve.org/Resources/Media/Archives/OldWebsite/data/board/archives/202x_content/New-CNA-Arista-Networks-Inc-tp1969.html)

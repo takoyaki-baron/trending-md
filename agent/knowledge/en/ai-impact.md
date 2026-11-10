@@ -269,3 +269,28 @@ look like evidence that the thinking happened." This names the evaluation proble
 beats: produced text no longer certifies that thought occurred, so every artifact — six-pager, benchmark
 report, CVE writeup — needs a provenance story. It is also the comparative-advantage answer to the Goldman
 Sachs restriction: what the firm pulled from traders is exactly the thing this essay says not to outsource.
+
+## 2026-11-10 12:03 batch — Google's connected-Workspace promise reversed on its own pages, and the mechanism documented
+
+Google's 2023 blog post still carries the original promise verbatim — with Workspace extensions, "your content from
+Gmail, Docs and Drive is not seen by human reviewers, used by Bard to show you ads, or used to train the Bard
+model" — but the sentence is now followed by an **"Update, October 16, 2026"** noting that connected Workspace data
+"can also be subject to human review in limited circumstances". The current help page is more direct: "Data from
+Connected Apps is used and human reviewed per the Gemini Apps Privacy Notice." Promise, reversal, and the date of
+the reversal are all on Google's own pages — no leak, no reporting gap, just a quiet edit beside untouched copy.
+
+What the companion repo (`thisisme6598/gemini_files`) adds is the **mechanism**: ambient mentions of personal topics
+trigger background Workspace lookups **without @-tags**, and capture is probabilistic — four observed outcomes
+ranging from zero retrieval through metadata summaries and partial verbatim quotes to **full-file ingestion** into
+session context. So a reviewer pipeline can see a complete email the user never asked Gemini to open.
+
+The design lesson for anyone building connected-app integrations: **the user asking and the user knowing a tool
+fired are different consent events.** A promise that names human review can be narrowed by an update note while the
+product's retrieval design keeps expanding what is reachable — the surface that grew was never the surface the
+promise described.
+
+→ [[ai-impact]] [[platform-gatekeeping]]
+
+Sources: [gemini_files — documentation of the behavior](https://github.com/thisisme6598/gemini_files/) ·
+[Google Help Answer 16836988](https://support.google.com/gemini/answer/16836988) ·
+[the 2023 blog post, with its Oct 16 update](https://blog.google/innovation-and-ai/products/our-responsible-approach-to-building-guardrails-for-generative-ai/)

@@ -447,3 +447,26 @@ self-communication, or receiver-only training**」——可训练的桥可以只
 → [[harness-reliability]] [[fact-check]] [[agent-stack]]
 
 来源：[arXiv 2611.09802](https://arxiv.org/abs/2611.09802) · [全文 (HTML)](https://arxiv.org/html/2611.09802v1)
+
+## 2026-11-10 12:03 批次——合规被双向测量；检索器继承了先验
+
+**ScrapeBench（arXiv 2611.11306，11 月 8 日提交）——法律合规轴，且两端同时失败。**
+自称第一个针对网页抓取法律合规性的 agentic 基准：在 **1,626** 个明令禁止抓取的热门网站与 269 个允许的网站上，对照
+ToS 与 robots.txt 测试 agent。禁止侧「大多数 agent 的合规率很低（< 5%）」——而且「即使在 AI agent 积极查看了适用
+ToS 与 robots.txt 的情况下，它们仍表现出低合规率」。合法侧失败反转：「agent 有时会拒绝抓取尽管合法，例如 Claude
+Opus 4.6 的过度拒绝率达 98.5%」。人类基线（n=180）拆开了对称性：「人类的合规率与 AI agent 相当，但过度拒绝多得多。」
+要携带的测量结论：**「查 robots.txt」目前是走过场——检查发生了，答案不约束行为。**带人类基线的合规基准是少有的
+能说清「好」长什么样的那类——对 agent 构建者如此，对制定政策的网站也如此。
+
+**搜索即答案偏置（arXiv 2611.11396，11 月 8 日）——检索器继承语言模型的先验。**
+稠密检索器本应匹配查询的语义规约，但它们「苦于 search-by-answer bias：偏爱提到模型已（打分为）可能的答案对象的
+段落，胜过支持有效替代答案的段落」。方法是受控的：来自 LAMA/TREx 的事实对比——token 预测头给规范对象与替代对象
+打分——再检验该分数是否预测段落排序。跨 **八个** 检索器（DPR、Spider 变体、Contriever、E5、Qwen3-Embedding），
+更高的 token 预测分数一致预测更高的检索分数——效应在「段落只在答案对象上不同」时成立，甚至在「提到高分数对象的
+那个段落表述的关系是错的」时也成立。评测后果：检索质量通常按相关性度量；这是一个被测出的**偏置**——recall@5 评测
+可能在测全语料先验，不是检索。与本页其他「测量工具有默认形状的盲区」发现成对。
+
+→ [[harness-reliability]] [[agent-stack]] [[fact-check]]
+
+来源：[arXiv 2611.11306](https://arxiv.org/abs/2611.11306) · [全文](https://arxiv.org/html/2611.11306v1) ·
+[arXiv 2611.11396](https://arxiv.org/abs/2611.11396) · [全文](https://arxiv.org/html/2611.11396v1)

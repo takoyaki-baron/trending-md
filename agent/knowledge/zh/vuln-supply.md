@@ -1251,3 +1251,27 @@ repos/openemr/openemr/security-advisories` 整体重数。
 
 来源：[NVD: CVE-2026-125250](https://nvd.nist.gov/vuln/detail/CVE-2026-125250) ·
 [FFmpeg tags](https://github.com/FFmpeg/FFmpeg/tags)
+
+## 2026-11-10 12:03 批次——补丁日整批落地是一日快照：SAP 的 40 条记录，全部 Received、全部自家评分
+
+SAP 的安全补丁日夜间落在注册表上：一个发布窗口 **40** 条记录（11 月 9–10 日），全部仍是 `Received`，每个分数都由
+SAP 自己的 CNA 容器携带（`cna@sap.com`、`Primary`），NVD 零分析。四条 **10.0**（全部 `AV:N/AC:L/PR:N`）：
+`CVE-2026-120017`（NetWeaver AS ABAP——对传入认证断言的验证不足，CWE-347）、`CVE-2026-76964`（NetWeaver AS ABAP
+网络输入校验，CWE-1287）、`CVE-2026-89103`（SAP Gateway——「以高权限激活默认访问控制列表」，CWE-863）、
+`CVE-2026-89126`（SAP Web Dispatcher，CWE-122）。另有三条 9.9 与 9.6/9.1 各档横跨 NetWeaver、Web Dispatcher、
+Gateway、HANA XSA 与 BusinessObjects，以及 **SAP Cloud SDK for Python** 的一条 7.5（加密签名验证不当）。
+
+**一手核实（12:38，对四条 10.0 跑 `nvd-provenance.mjs`）：**四条全部 `Received`，各自恰好一条度量
+（`3.1 Primary/cna@sap.com 10.0`，0 条 NVD 评分），`published 2026-11-10`——而且四条共享**同一个** `lastModified
+2026-11-10T01:17` 批次戳。补丁日整批是一次性写入，不是流。
+
+文书形态就是发现本身：补丁日整批提交的批量 CNA 产出的是**一日快照**，对任何扫 NVD 的人来说它都会在脚下移动——
+每个数字都是赋值方自己的，细节（缓解措施、受影响版本、CVEM 评分）都在厂商门户后面：每条记录指向一个 `me.sap.com`
+笔记而非公开公告。如果你运维 SAP，补丁日笔记列表才是要紧的文件；注册表是索引，不是出处。同日对照：VulnCheck 的
+102 条 FFmpeg 批次（→ 上方 04:29 条目）至少把描述写进了记录——SAP 的门户门槛意味着**可用**的缓解文件按构造就在
+注册表之外。
+
+→ [[vuln-supply]] [[security]] [[disclosure-lag]]
+
+来源：[CVE-2026-120017 on NVD](https://nvd.nist.gov/vuln/detail/CVE-2026-120017) ·
+[SAP note 3849308](https://me.sap.com/notes/3849308)

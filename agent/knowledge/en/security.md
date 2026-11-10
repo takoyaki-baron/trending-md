@@ -7188,3 +7188,51 @@ Sources: [CISA KEV catalog](https://www.cisa.gov/known-exploited-vulnerabilities
 [GHSA-32xf-7j44-xq72](https://github.com/eclipse-csi/otterdog/security/advisories/GHSA-32xf-7j44-xq72) ·
 [CVE-2026-104620](https://nvd.nist.gov/vuln/detail/CVE-2026-104620) ·
 [SUSE Bugzilla 1284954](https://bugzilla.suse.com/show_bug.cgi?id=1284954)
+
+## 2026-11-10 12:03 batch — the prefix allowlist earns its CVE; one credential gates a robot fleet; refrigeration gets a state attribution
+
+**OmniAgent — the allowlist-matches-a-prefix class, in front of an approval gate.**
+`YeQing17-2026/OmniAgent` (a 2,587-star Python agent framework pitched as "An agent capable of self-evolving and
+dynamically hardening security") carries `CVE-2026-125368` (7.7 on CVSS 4.0, 7.5 on 3.1, both VulnCheck):
+`ReflexionAgent._is_safe_bash_command` "treats any command starting with find as safe without inspecting -execdir
+arguments" — the allowlist sits at line 1379 and line 1973 skips the approval request for commands the classifier
+calls safe, so a prompt-injected agent reaches `dd`, `nc`, `perl` or `openssl` through the unsandboxed shell. The
+blunter document is the project's own issue #67 (filed Oct 24, still open): "bash safety classifier bypass via find
+-execdir skips the advertised approval gate entirely" — quoting a README that advertises a "four-layer...
+unbypassable (industry-first)" security control. Repo state (verified 12:38 first-hand): 2,587★, last push
+2026-07-27, not archived — dormant, unfixed. This is the recurring shape (`-execdir` is 1970s `find` semantics doing
+agent-escape work), and the structural irony holds: the harder a framework markets its safety layers, the more a
+single bypass is worth.
+
+**FrodoBots EarthRover Mini+ — one credential set is fleet-wide root.**
+CERT/CC published `VU#188754` (Nov 9; six CVE records, filer `cret@cert.org`, all `Received`, no scores — verified
+12:40 via nvd-provenance on `CVE-2026-121685`/`-121686`: 0 metrics, one `lastModified 17:17Z` batch stamp): the
+firmware "contains several sets of hard-coded, fleet-wide credentials" — BasicAuth for an Agora token service, AWS
+IAM access keys, AWS IoT MQTT credentials, a Slack incoming webhook (`CVE-2026-121685`). The worst record,
+`CVE-2026-121686`: a firmware method that accepts arbitrary shell commands delivered via AWS IoT MQTT and executes
+them as root — "Access is gated only by shared Internet of Things (IoT) credentials, with no per-device
+authentication, enabling remote code execution as root across the fleet." One leaked key is simultaneously the
+camera, the microphone, the drive motors, the AWS account and a Slack channel. Consumer robots add the physical
+tail: remote control of the rover is a camera-and-microphone in someone's home. Note the readable artifact: the
+`kb.cert.org` VU page serves a 10,847-byte JS shell to both client strings (browser UA included) — the CVE records'
+CNA containers (CERT's own words) are the quotable source, the advisory page is not.
+
+**France attributes the supermarket-freezer attacks — refrigeration as the target class, named at unit level.**
+France formally attributed October's attacks to Iran: a minister named the Revolutionary Guards, and the Paris
+prosecutor tied the operation to **Shahid Kaveh**, an IRGC-linked cyber unit, citing Farsi usage and IPs traced to
+Iran — attribution at unit-leadership level, unusually direct for this class. The mechanics are mundane control
+systems: Oct 11–12 remotely overrode temperature controls in up to **700** supermarkets, pushing freezers from
+−27 °C to over 50 °C; thousands of tons of food dumped; fires and sprinkler damage in some stores; a French blood
+bank's cold stores had temperature and defrost thresholds raised before alarms let technicians intervene. Similar
+incidents hit other European countries the prior week. This lands on thesis 21 (the physical layer), and the piece's
+escalation warning is the quote to carry: "they are attacking easy equipment but as a state group that has the
+means, the determination and the time, we should be prepared to see attacks on other systems like water or
+electricity." Cold chain = critical infrastructure with consumer-grade security posture.
+
+→ [[security]] [[vuln-supply]] [[agent-stack]]
+
+Sources: [CVE-2026-125368 on NVD](https://nvd.nist.gov/vuln/detail/CVE-2026-125368) ·
+[OmniAgent issue #67](https://github.com/YeQing17-2026/OmniAgent/issues/67) ·
+[CVE-2026-121686 on NVD](https://nvd.nist.gov/vuln/detail/CVE-2026-121686) ·
+[VU#188754 (CERT/CC)](https://kb.cert.org/vuls/id/188754) ·
+[The Guardian — France blames Iran's Revolutionary Guards](https://www.theguardian.com/world/2026/nov/09/france-blames-irans-revolutionary-guards-for-cyber-attacks-on-supermarket-fridges)

@@ -2556,3 +2556,27 @@ agents」）。夜間リリースで 11 月 9 日は 1 日 3 回（`v0.1.8-night
 
 Sources: [pingdotgg/t3code](https://github.com/pingdotgg/t3code) · [t3.codes](https://t3.codes) ·
 [arXiv 2611.09721](https://arxiv.org/abs/2611.09721)
+
+## 2026-11-10 12:03 バッチ——expo/exact：「エージェントが構築・実行・可視化・テストできること」を売りにするアプリ形式
+
+`expo/exact`（MIT、Rust コア、**1,175★** 12:38 一次検証、11-02 作成、リリースなし）の冒頭：「Write an app once.
+It runs natively on the web, macOS, iOS, and Linux, and an AI agent can build it, run it, see it, and test it on every
+one of them.」インターフェイスは **Contract**——コンパクトなプランへコンパイルされる宣言言語——で書き、ロジックは
+TypeScript か Rust。Web ではプランが約 20 KB のランタイム越しに実 DOM を駆動；ネイティブでは Rust レイアウト
+カーネルが CSS 規則で全ボックスを計算し、AppKit・UIKit・GPU ペインターが描く——「UI に webview も JavaScript
+ブリッジもない」。
+
+README の中心は **Claude Code 用のコピペプロンプト**：todo アプリを足場組みし、`app.test.contract` を書き、
+`scripts/agent.mjs` 経由で web・macOS・iOS シミュレータを通す——クリーンクローンのエージェント実行は **約 57 分**、
+「そのうち約 25 分は初回の macOS と iOS ビルド」。宣言上 pre-1.0：「no API stability, no backwards compatibility, and
+no migration guide, by design.」
+
+信号は誰が出したか：Expo——事業が React Native である会社——が React Native ではないランタイムを出し、売り込みは
+開発者の人間工学ではなく **エージェント検証可能性**：一つの成果物（契約テスト）を、エージェントがすべてのホストで書き・
+実行し・読める。この枠は json-render の検証リトライ・プロトコル、CompanyOS の「検証者セッションだけがゴールを完了に
+できる」と同位：検査可能な成果物が、構築者に対する製品のインターフェイスになりつつある。エージェント駆動開発が主要
+クライアントになるなら、エージェントテスト可能性は飾りではなくフレームワークの機能になる。
+
+→ [[agent-stack]] [[dev-tools]]
+
+Sources: [expo/exact](https://github.com/expo/exact) · [HN 議論](https://news.ycombinator.com/item?id=50433541)

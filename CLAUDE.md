@@ -1230,6 +1230,20 @@ underlying pages — this produced a two-layer false signal in a single item.
    stars arriving on a 7-hour-old Show HN repo read as a 25% drift), and `claim-unit-cache.json` is
    **committed**, so its text-bearing entries are pruned to a **5 MB** budget at write time (a
    month-wide census took it 9.9 MB → 19 MB, 5 MB of that from three pages). `--selftest` **135 → 152**.
+   **And a backticked `a/b` can be a PATH inside a repository — the fourth shape, and the first one a
+   check now VERIFIES rather than excuses** (added 2026-11-10 13:12, from the day's own lint JSON: item 3
+   wrote "shipped in **`contrib/e_means`**" — a module directory inside `facebookresearch/faiss`, verified
+   first-hand — and the slug reader spent an `api.github.com` call on `repos/contrib/e_means`, got the 404
+   that shape deserves, and filed `unreadable` against a TRUE claim). `REPO_DIR_PREFIXES` (`contrib`,
+   `packages`, `plugins`, `src`, `tools`, `skills`, …) classifies such slugs as paths: never spent on
+   `repos/<slug>`, and always REPORTED, not dropped — `path-repo-ambiguous` (sev 0) when the item names no
+   single github.com repo to resolve against, and `path-in-repo` (sev 0) / `path-absent` (sev 2) when it
+   names one, ONE contents call on the linked repo's directory deciding (a 404 on the parent directory is
+   worded "default branch — check release tags", because a tag may carry the path). Precedence: the
+   TECHNICAL_NOUN tell wins — `plugins/sql` in an "endpoint" sentence stays `not-a-repo` (and stays in
+   `repos` for count/ratio); a github.com link outranks the prefix guess. The feed item gained the FAISS
+   tree link (en/zh/jp + mirrors), which flipped the re-run from `path-repo-ambiguous` to
+   **`path-in-repo`** — the claim went from excused to verified. `--selftest` 373 → **382**.
    **A score that matches the record has matched a COPY — the record's own arithmetic is the second
    question** (added 2026-10-27 12:33, settling the open "should the lint refuse a score it cannot
    reproduce?"). The `cvss` check now recomputes every matched metric's vector through

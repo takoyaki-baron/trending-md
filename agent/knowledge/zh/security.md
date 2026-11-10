@@ -4478,3 +4478,41 @@ Task Execution API 存 XCom 值「没有施加别处已有的保留键检查」�
 [CVE-2026-123870](https://nvd.nist.gov/vuln/detail/CVE-2026-123870) ·
 [CVE-2026-104620](https://nvd.nist.gov/vuln/detail/CVE-2026-104620) ·
 [SUSE Bugzilla 1284954](https://bugzilla.suse.com/show_bug.cgi?id=1284954)
+
+## 2026-11-10 12:03 批次——前缀白名单挣到了它的 CVE；一份凭据管住整个机器人车队；冷藏链得到国家级行为者归因
+
+**OmniAgent——「白名单匹配前缀」这一类，就架在审批门前面。**
+`YeQing17-2026/OmniAgent`（一个 2,587 星的 Python agent 框架，宣传语是「能自我进化、动态加固安全的 agent」）带上
+`CVE-2026-125368`（CVSS 4.0 打 7.7、3.1 打 7.5，均出自 VulnCheck）：`ReflexionAgent._is_safe_bash_command`
+「把任何以 find 开头的命令当作安全命令，不检查 -execdir 参数」——白名单在第 1379 行，第 1973 行对分类器判定安全的
+命令跳过审批请求，于是被提示注入的 agent 可以经由未沙箱的 shell 调到 `dd`、`nc`、`perl`、`openssl`。更直白的文件是
+项目自己的 issue #67（10-24 提交、至今开放）：「bash safety classifier bypass via find -execdir skips the advertised
+approval gate entirely」——引用的 README 宣传「四层……unbypassable (industry-first)」的安全控制。仓库状态（12:38 一手
+核实）：2,587★、最后推送 2026-07-27、未归档——休眠、未修复。这就是反复出现的形态（`-execdir` 是 1970 年代的 `find`
+语义在干 agent 逃逸的活），结构性反讽也成立：框架把安全层宣传得越响，单个绕过就越值钱。
+
+**FrodoBots EarthRover Mini+——一份凭据集就是全车队的 root。**
+CERT/CC 发布 `VU#188754`（11 月 9 日；六条 CVE 记录、提交方 `cret@cert.org`、全部 `Received`、无分数——12:40 经
+nvd-provenance 核实 `CVE-2026-121685`/`-121686`：0 指标、同一个 `lastModified 17:17Z` 批次戳）：固件「包含多组硬编码的
+车队级凭据」——Agora token 服务的基本认证、AWS IAM 访问密钥、AWS IoT MQTT 凭据、一个 Slack incoming webhook
+（`CVE-2026-121685`）。最重的一条 `CVE-2026-121686`：固件方法接受经 AWS IoT MQTT 下发的任意 shell 命令并以 root
+执行——「访问仅由共享的物联网（IoT）凭据把守，没有按设备的认证，使整个车队范围内的 root 远程代码执行成为可能」。
+一把泄漏的钥匙同时是摄像头、麦克风、驱动电机、AWS 账户和一个 Slack 频道。消费级机器人再加上物理尾巴：远程控制
+rover 就是别人家里的摄像头加麦克风。注意可读工件：`kb.cert.org` 的 VU 页面对两种客户端字符串（含浏览器 UA）都返回
+10,847 字节的 JS 壳——CVE 记录的 CNA 容器（CERT 自己的话）才是可引用的出处，公告页不是。
+
+**法国给超市冷柜攻击做出归因——冷藏链成为目标类，点名到单位级。**
+法国正式把 10 月的攻击归因于伊朗：部长点名革命卫队，巴黎检察官把行动系于 **Shahid Kaveh**——一个 IRGC 关联的网络
+单位，证据是波斯语的使用与追溯到伊朗的 IP——这一类的归因很少见地直接到单位领导层。机制是平庸的控制系统：10 月
+11–12 日远程改写了多达 **700** 家超市的温度控制，把冷柜从 −27 °C 推到 50 °C 以上；数千吨食品被倾倒；部分门店起火并
+触发喷淋；一家法国血库的冷藏库在警报让技术人员介入之前阈值已被调高。前一周其他欧洲国家也出现类似事件。这条落在
+论题 21（物理层）上，而文中值得携带的是升级警告：「他们攻击的是容易的设备，但作为一个有手段、有决心、有时间的国家
+组织，我们应该准备好看到对供水或电力等其他系统的攻击。」冷链 = 消费级安全姿态的关键基础设施。
+
+→ [[security]] [[vuln-supply]] [[agent-stack]]
+
+来源：[CVE-2026-125368 on NVD](https://nvd.nist.gov/vuln/detail/CVE-2026-125368) ·
+[OmniAgent issue #67](https://github.com/YeQing17-2026/OmniAgent/issues/67) ·
+[CVE-2026-121686 on NVD](https://nvd.nist.gov/vuln/detail/CVE-2026-121686) ·
+[VU#188754 (CERT/CC)](https://kb.cert.org/vuls/id/188754) ·
+[卫报——法国指控伊朗革命卫队](https://www.theguardian.com/world/2026/nov/09/france-blames-irans-revolutionary-guards-for-cyber-attacks-on-supermarket-fridges)

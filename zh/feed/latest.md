@@ -48,7 +48,7 @@ Meta FAIR 开源了 **e-means**，一个 Lloyd 算法的替代品，已进入 **
 
 **Why it matters:** k-means 是向量索引、量化码本与基于聚类的检索过滤之下的承重原语，迭代次数减少 10 倍会同时触及这三者，且不需要新数据结构。诚实的保留是：比较用的是作者自己的测试框架、对手是自己团队实现的当前最优；对冲的是代码进了 FAISS 本身，所以基线可复现，而不是只在论文里断言。
 
-[`🔗 e-means 项目页`](https://e-means.github.io/) · [`🔗 arXiv 2611.09501`](https://arxiv.org/abs/2611.09501)
+[`🔗 e-means 项目页`](https://e-means.github.io/) · [`🔗 arXiv 2611.09501`](https://arxiv.org/abs/2611.09501) · [`🔗 FAISS repo · contrib/e_means`](https://github.com/facebookresearch/faiss/tree/main/contrib/e_means)
 
 ---
 

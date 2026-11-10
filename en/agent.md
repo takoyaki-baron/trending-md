@@ -1,6 +1,6 @@
 ---
 title: Learnt Agent
-last_processed: 2026-11-10T04:45:00+08:00
+last_processed: 2026-11-10T12:52:00+08:00
 ---
 
 # Learnt Agent
@@ -1543,27 +1543,12 @@ patterns, and turn them into insights and actionable todos.
 2. **Agent security is the immediate attack surface — and every named class ends up enforced by
    nobody.** ~50+ CVSS≥9 entries since Aug 12 resolve into sixteen recurring shapes (full map in
    [[security]]); four cases show the class named, the mitigation converged, nobody enforcing it.
-   - **08-16 → 11-04 (folded) — install, secret store, socket, bus; and the guard and the fetcher parse different BYTES:** LiteLLM's
-     `cook.pth` beside an unconsumed SLSA attestation, Railway's env-var drawer, LXD's **10.0** mTLS, Prefab's sandbox open for **7 minor
-     versions**, Beta9's three **9.9**s fixed **47 days** early, WorkOS naming `ARTEX` zero times; CrewAI's check reads `urlparse`'s host
-     while `urllib3` dials `127.0.0.1`, kaniko's `.*\.azurecr\.io` is unanchored, and Postman's installer calls its own `approvePostmanHook`
-     while tool poisoning over **9,720** cells is **22.9%**. → [[security]] [[vuln-supply]] [[disclosure-lag]] [[parser-differential]]
-   - **11-04 12:20 → 11-05 — the overseer sits inside the channel, and defaults bind claims to the wrong subject:** a fabricated hazard with **no command** to match (**1.7–4.4×** behind a filter; corroboration removes ~**95%**); SurrealDB keys MCP sessions by method **name**; GPUStack's **9.8** promotes loopback requests to admin; Yuxi's **9.9** kept the sandbox and lost the API; Pocket ID's **9.6** bound the email token to the user, not the address. → [[security]] [[disclosure-lag]]
-   - **11-06 → 11-08 (folded) — presence-keyed gates fail open, and the IDE sandbox is audited in bulk:** OpenHuman's `ApprovalGate` reads a
-     missing context field as non-interactive and lets an outside DM reach `node_exec`; `banks` hardened Jinja while the live path parses
-     `Tool.import_path` from the *rendered body*; **every agent treats a timed-out hook as an allow**; then **89** JetBrains records in two days
-     (their own **Junie** CLI at 7.0 exec) and Skyvern's bytecode-reconstruction escape with its Patched cell reading **Unknown**. → [[security]] [[vuln-supply]] [[parser-differential]]
-   - **11-07 → 11-09 (folded) — the injection class reaches a to-do app's own CLI, and conveniences become credential surfaces:** PwnEscape 2's
-     VMM-context escape *without defeating the jailer* (its `CVE-2026-99999` is a different bug — **no verified CVE**); Vikunja's Veans renders project
-     titles verbatim **inside the authoritative instruction block**; Claude Code's "Don't Ask Again" writes the FULL command — secret included — into
-     `.claude/settings.local.json` (apiiro: **1,122** public repos), while ChatGPT Desktop forwards `SSH_AUTH_SOCK` (**signing requests, not keys**).
-     → [[security]]
-   - **11-09 — the MCP threat model gets a vendor-product CVE with a version range:** IBM Bob 1.0.4–2.0.1 RCE "due to improper control of workspace-defined MCP server execution" (`CVE-2026-9764`, **8.8** `Primary` IBM PSIRT, `Awaiting Analysis`; the record's own description is vaguer — "user input code" — the mechanism sentence lives in the bulletin), inside a **79**-record IBM PSIRT window with two Concert 9.8s. → [[security]]
-   - **11-10 — the memory layer is poisonable by ARCHITECTURE, and two defaults fail open:** MemoryDojo (**155** trajectories, **five** memory
-     systems) finds every one susceptible, with effects varying by architecture — the variation is an attack surface, and the benchmark ships a
-     memory-aware poison optimizer; otterdog skips its HMAC check when `GITHUB_WEBHOOK_SECRET` is unset (**code default `None`**) and reaches an
-     `eval()` on the webhook body (`CVE-2026-123870`, **9.5** on 4.0); Redpanda Connect's management API sits on `0.0.0.0:4195` with auth off by
-     default, so one POST is host compromise (`CVE-2026-123270`, **9.8** = **CISA-ADP**, no vendor advisory). → [[security]] [[agent-stack]]
+   - **08-16 → 11-05 (folded) — install, secret store, socket, bus; the guard parses different BYTES and defaults bind to the wrong subject:** LiteLLM's `cook.pth` + unconsumed SLSA attestation, Railway's env-var drawer, LXD's **10.0** mTLS, Prefab's sandbox open **7 minor versions**, Beta9 fixed **47 days** early, WorkOS naming `ARTEX` zero times; CrewAI reads `urlparse`'s host while `urllib3` dials `127.0.0.1`, Postman calls its own `approvePostmanHook` (tool poisoning **22.9%** over **9,720** cells); a fabricated hazard with **no command** to match, SurrealDB keys MCP sessions by method **name**, GPUStack loopback→admin, Yuxi kept the sandbox and lost the API, Pocket ID's token bound to the user. → [[security]] [[vuln-supply]] [[disclosure-lag]] [[parser-differential]]
+   - **11-06 → 11-08 (folded) — presence-keyed gates fail open, and the IDE sandbox is audited in bulk:** OpenHuman's `ApprovalGate` reads a missing context field as non-interactive and lets an outside DM reach `node_exec`; `banks` hardened Jinja while the live path parses `Tool.import_path` from the *rendered body*; **every agent treats a timed-out hook as an allow**; then **89** JetBrains records in two days (their own **Junie** CLI at 7.0 exec) and Skyvern's bytecode-reconstruction escape with its Patched cell reading **Unknown**. → [[security]] [[vuln-supply]] [[parser-differential]]
+   - **11-07 → 11-09 (folded) — the injection class reaches a to-do app's own CLI, and conveniences become credential surfaces:** PwnEscape 2's VMM-context escape *without defeating the jailer* (its `CVE-2026-99999` is a different bug — **no verified CVE**); Vikunja's Veans renders project titles verbatim **inside the authoritative instruction block**; Claude Code's "Don't Ask Again" writes the FULL command — secret included — into `.claude/settings.local.json` (apiiro: **1,122** public repos), while ChatGPT Desktop forwards `SSH_AUTH_SOCK` (**signing requests, not keys**). → [[security]]
+   - **11-09 — the MCP threat model gets a vendor-product CVE with a version range:** IBM Bob 1.0.4–2.0.1 RCE "due to improper control of workspace-defined MCP server execution" (`CVE-2026-9764`, **8.8** `Primary` IBM PSIRT, `Awaiting Analysis`; the record's own description is vaguer — the mechanism sentence lives in the bulletin), inside a **79**-record IBM PSIRT window with two Concert 9.8s. → [[security]]
+   - **11-10 — the memory layer is poisonable by ARCHITECTURE, and two defaults fail open:** MemoryDojo (**155** trajectories, **five** memory systems) finds every one susceptible with effects varying by architecture — the variation is an attack surface — and ships a memory-aware poison optimizer; otterdog skips its HMAC check when `GITHUB_WEBHOOK_SECRET` is unset (code default `None`) and reaches `eval()` on the webhook body (`CVE-2026-123870`, **9.5** on 4.0); Redpanda Connect's management API sits on `0.0.0.0:4195` with auth off by default — one POST is host compromise (`CVE-2026-123270`, **9.8** = **CISA-ADP**, no vendor advisory). → [[security]] [[agent-stack]]
+   - **11-10 PM — a prefix allowlist in front of the approval gate earns its CVE, and one credential gates a robot fleet:** OmniAgent's `_is_safe_bash_command` treats any command *starting with* `find` as safe, `-execdir` unexamined (`CVE-2026-125368`, 7.7 v4/7.5 v3.1, both VulnCheck; issue #67 open since Oct 24 against a README advertising "unbypassable (industry-first)"; repo dormant since Jul 27 — verified 12:38); FrodoBots EarthRover Mini+'s fleet-wide hard-coded Agora/AWS-IAM/AWS-IoT/Slack credentials gate **root on every rover** (`CVE-2026-121686` — arbitrary shell commands over AWS IoT MQTT executed as root; six `Received` records, no scores, verified 12:40). → [[security]]
 
 3. **Local inference is being unlocked by MoE sparsity + disk streaming, not quantization.**
    Keep the shared core resident, stream routed experts from SSD — the trick now spans training,
@@ -1937,16 +1922,7 @@ patterns, and turn them into insights and actionable todos.
     Hyperscaler accelerators are increasingly justified by the builder's own token demand rather
     than by a rental market, and the enclosure/fabric/power layer is being published into OCP — the
     chassis commoditizes, the silicon does not.
-    - **10-14 — Microsoft ships an inference-first XPU with no rental channel; NVIDIA opens the Vera Rubin rack:** Maia 300 —
-      288 GB HBM4 across eight stacks, seven chips plus eight HBM stacks on an interposer, 96 XPUs in a rack at ~167 kW, 2027
-      production — "up to 7× Maia 200 rack throughput" and "40% more tokens per megawatt" against an **unnamed** baseline, and
-      no Maia capacity rented to external cloud customers. Same week NVIDIA contributes Vera Rubin rack + compute-tray designs
-      to OCP via MGX 1.2, plus grid-resilience standards and Visionbay's 800V DC design. → [[datacenter-silicon]]
-    - **10-21 12:03 — the operator-side metric pair gets published, and it is not FLOPS:** Meta's Prometheus (hundreds of
-      thousands of GPUs wired as "a single machine", ~1M target) reports **>85% goodput** on pretraining and **>90%** on RL,
-      with MTBI **~47,000 GPU-hours — past 54,000 after fleet firmware fixes** (GB200 NVL72 in a 2-rack "Ariel"; GB300 NVL72,
-      288 GB HBM/GPU). At 47k MTBI a 5,000-GPU job expects an interruption roughly every nine hours — goodput, not peak,
-      decides whether a run finishes. Vendor-reported, no external audit. → [[datacenter-silicon]]
+    - **10-14 → 10-21 (folded) — the inference-first chip with no rental channel, the open rack, and the operator metric pair:** Maia 300 (288 GB HBM4, 96 XPUs/rack at ~167 kW, "7× Maia 200 rack throughput / 40% more tokens per MW" vs an **unnamed** baseline, zero capacity rented externally) beside NVIDIA's Vera Rubin rack + compute-tray designs contributed to OCP via MGX 1.2; Meta's Prometheus (hundreds of thousands of GPUs as "a single machine", ~1M target) reports **>85%** pretraining goodput with MTBI **~47,000 GPU-hours** — past **54,000** after firmware fixes — goodput, not peak, decides whether a run finishes. Vendor-reported, no external audit. → [[datacenter-silicon]]
     - **10-25 12:03 — the trillion-parameter wafer budget is arithmetic, and the metric it names is the one
       it does not publish:** 59 WSE-3T wafers (44 GB SRAM each) for **Kimi K3** — 35 for the 69 linear layers
       at two per wafer, 24 for the dense layers at one plus KV space, 4-bit weights / 8-bit KV at a 256k
@@ -1956,6 +1932,7 @@ patterns, and turn them into insights and actionable todos.
       `dsx-ai-factory/nvke`, 509★) is a managed-Kubernetes control plane for your own GPU bare metal — tenant
       clusters each with their own control plane + etcd, seeded from a throwaway cluster; the README states API
       auth is **off by default** with no upgrade or backup/restore path. → [[dev-tools]] [[datacenter-silicon]]
+    - **11-10 — one generation, four SKUs, each cut for a lifecycle stage:** Google's 8tx (confidential computing — same silicon as 8t on 5th-gen AMD EPYC hosts, data and weights protected *in active use*, up to **2× lower latency** than 8t) and 8i Max (two 8i chips per package — **2×** compute, SRAM and HBM bandwidth — pitched at agents reasoning "across an entire software codebase or hours of video"); "the first time we have introduced four TPU systems in a single year", ~100 customers; the software half may matter more — TorchTPU open-sourced so PyTorch/HF models run unmodified, an agent suite plugging into Claude Code/Cursor/Antigravity, an open-source XLA Serving Engine — while "state-of-the-art price-performance" on InferenceX/AgentX is asserted with **no numbers** in the post. → [[datacenter-silicon]] [[agent-stack]]
 
 20. **Vulnerability discovery has outrun the capacity to triage it, so advisory *policy* and the
     *assigner* are now the informative fields — and the score the least informative one.**
@@ -1970,12 +1947,9 @@ patterns, and turn them into insights and actionable todos.
    - **11-08 — the overnight desk measured whole: 125 records in 21 seconds, all fix-then-record:** one NVD window (02:16:36→02:16:57Z) carries **125**
      records, every one VulnCheck — Hickory DNS **39** (fixes 65–190 days earlier, verified), Vikunja **39** (2.7.1, 10-20), rustls **5**, devalue **9**,
      Tornado **2**, OpenAM **3**, imgproxy **3** — matching Chrome's **213** / **31 s** desk, so "still unpatched" was exactly backwards for all of it.
-   - **11-09 (folded) — the identifier gap is extreme and durable:** OpenEMR's stream holds **100** published GHSAs of which **8** carry a CVE id —
-     **92 invisible** to anything keyed on the namespace scanners watch; six ZDI kernel reports 18 days on have **0** CVEs naming a CAN id, **no advisory
-     page** and **no mainline fix**; Contact Form 7's **9.8** is the ADP's, not WPScan's. → [[vuln-supply]] [[disclosure-lag]]
-   - **11-09 PM — the LLM is the step AFTER the humans stop:** shubs/Curry's connected-car chain — humans hit the ForgeRock OpenIDM WAF wall for days
-     ("invested heavily in WAF rules" on exactly those endpoints) while GPT 5.6 Sol Ultra's six-hour read found the one uncovered prefix
-     (`/static%2f..%2fopenidm/`) → remote door-unlock: "**Being human, we assumed that applied to every prefix**". → [[security]] [[disclosure-lag]]
+   - **11-09 → 11-09 PM (folded) — the identifier gap is extreme, and the LLM is the step AFTER the humans stop:** OpenEMR's stream holds **100** published GHSAs of which **8** carry a CVE id — **92 invisible** to anything keyed on the namespace scanners watch; six ZDI kernel reports 18 days on have **0** CVEs, no advisory page, no mainline fix; Contact Form 7's **9.8** is the ADP's; shubs/Curry's connected-car chain — humans WAF-walled for days while GPT 5.6 Sol Ultra's six-hour read found the one uncovered prefix (`/static%2f..%2fopenidm/`) → remote door-unlock. → [[vuln-supply]] [[security]] [[disclosure-lag]]
+   - **11-10 PM — the patch-day wave is a day-one snapshot, and a fix can be a QUARTER older than its paperwork:** SAP lands **40** records overnight, every one `Received`, every score in SAP's own container (`cna@sap.com` `Primary`, four at **10.0** — all `AV:N/AC:L/PR:N`), each record pointing at a `me.sap.com` note instead of a public advisory (first-hand 12:38: all four 10.0s share one `lastModified 01:17Z` batch stamp); Mongoose's `countDocuments()` sanitizeFilter hole (`CVE-2026-125120`, **9.8**) shipped fixed **Aug 10** and filed **Nov 10** — **92 days** — so the at-risk population is the pinned-dependency one, and a security *option* is only as complete as its call-site coverage. → [[vuln-supply]] [[security]] [[disclosure-lag]]
+
    - **11-10 — a bulk batch can be a NO-FIX-NAMED disclosure, and its floor is the newest tag:** VulnCheck files **102** FFmpeg records in one day, all
      `Received`, of which **96** describe "through 9.0.2" — FFmpeg's newest tag — and only **6** name a fixed bound; max **7.8** on 3.1 `Primary` against
      **8.5** on 4.0 `Secondary` from the **same CNA**, a scoring convention rather than a disagreement — and the same day's KEV trio is the endorsement
@@ -1993,20 +1967,20 @@ patterns, and turn them into insights and actionable todos.
       system" and covers physical security in one sentence — a buyers' document, no control set; arson
       is the class that occurred. Wire check (10-17): Radev addressed parliament "without confirming
       or denying" — "confirmed" was secondary framing; prosecutor: no one charged.
-    - **10-17 act — the single-region-exposure question answers as a seam:** AWS's DR whitepaper plans
-      explicitly against "loss of … a Region" (four-strategy RTO/RPO ladder) but models faults, not
-      force — "attack" means data-layer malice; Azure's own paired-region doc disclaims automatic
-      protection ("doesn't automatically make them more resilient") and ships new regions AZ-first,
-      unpaired; Uptime Tier certifies one site, no geographic language. Concentration guidance exists,
-      vendor-published and priced — the physical-destruction scenario is assumed out of all of it.
+    - **10-17 act → 10-20 (folded) — the seam is documented by the vendors, then fires for real without a match struck:** AWS's DR whitepaper
+      plans explicitly against "loss of … a Region" (four-strategy RTO/RPO ladder) but models faults, not force — "attack" means data-layer
+      malice; Azure's paired-region doc disclaims automatic protection ("doesn't automatically make them more resilient") and ships new regions
+      AZ-first, unpaired; Uptime Tier certifies one site, no geographic language. Then a Google Cloud Western-Europe outage took Revolut card
+      payments down across Europe plus HSBC, Lloyds, Halifax, Barclays, ING Germany and DPD — European fintech's card rails terminate, at the
+      bottom of the stack, in one cloud region: the live version of the scenario all that concentration guidance assumes out.
       → [[security]]
 
-    - **10-20 20:03 — the seam fires for real, without a match struck:** a Google Cloud Western-Europe
-      outage (press: europe-west2) took Revolut card payments down across Europe plus HSBC, Lloyds,
-      Halifax, Barclays, ING Germany apps and DPD — European fintech's card rails terminate, at the
-      bottom of the stack, in one cloud region; the live version of the scenario all that
-      concentration guidance assumes out. Watch Revolut's postmortem: multi-region failover for the
-      *issuing* path, or only the dashboards? → [[security]]
+    - **11-10 — the cheap attack gets a STATE attribution, and the target class is refrigeration:** France formally attributes October's
+      supermarket-freezer attacks to the IRGC's **Shahid Kaveh** unit — the Paris prosecutor citing Farsi usage and Iran-traced IPs, naming the
+      unit's leadership (unusually direct); Oct 11–12 pushed freezers in up to **700** stores from **−27 °C** to over **50 °C**, thousands of tons
+      of food dumped, fires and sprinkler damage in some stores, and a French blood bank's cold stores had thresholds raised before alarms let
+      technicians intervene; the piece's escalation warning is explicit: expect "attacks on other systems like water or electricity".
+      → [[security]]
 
 22. **Review capacity is colliding with release calendars — AI inflates both the code supply and
     the review yield while human maintainer capacity shrinks; the visible collision point is the
@@ -2079,6 +2053,12 @@ patterns, and turn them into insights and actionable todos.
       **realized failures / risk exposures / inefficiencies**, and scores **91.43% F1** — "about **18 percentage points** higher
       than a one-pass LLM control that used the same model and taxonomy", so the gain is evidence requirements and grouping, not
       the model. An exposure that has not fired is not an incident. → [[agent-ops]]
+
+    - **11-10 — model-lifecycle ops as versioned releases at 69k★ scale:** `ZhuLinsen/daily_stock_analysis`'s v3.34.0 notes are an
+      SRE changelog for the model layer — default models rotated across Claude/Gemini/OpenAI/DeepSeek "to reduce configuration
+      failures from retired models", MiniMax M3.1 Flash preferred for new channels, VIX moves excluded from Market Light scoring so
+      a volatility spike stops reading as a rally, an experimental Codex App Server backend removed — four providers' deprecations
+      handled in one release: the maintenance burden benchmarks never show. → [[agent-ops]]
 
 25. **Certificate trust follows a stack's trust *source*, not its species — "browser vs library" was
     the wrong cut.** A CA whose private key is a single byte passes every structural check (validity
@@ -2904,5 +2884,28 @@ patterns, and turn them into insights and actionable todos.
   "where Electron is ahead" and the GPU receipt's "what the 4.57× is not" (→ 26, [[fact-check]] [[token-economics]]), the malloc
   walkthrough's **1,000** allocations → **2** `brk` calls (→ [[dev-tools]]), and the Pi 5 16GB at **$385**, **+$80** since April
   (→ [[edge-inference]]).
+
+- **11-10 12:03 batch lanes:** the security cluster — FrodoBots EarthRover Mini+'s fleet-wide hard-coded credentials (Agora BasicAuth,
+  AWS IAM keys, AWS IoT MQTT, Slack webhook) gating **root on every rover** via one MQTT publish, six `Received` CERT-filed records with
+  no scores (→ 2, [[security]]); OmniAgent's `find`-prefix allowlist skipping the approval gate while the README advertises
+  "unbypassable (industry-first)" — repo dormant since Jul 27 (→ 2, [[security]]); France's direct attribution of the freezer attacks to
+  the IRGC's Shahid Kaveh unit — refrigeration as the target class, "water or electricity" as the stated next (→ 21, [[security]]);
+  the paperwork cluster — SAP's overnight **40**-record wave, all `Received`, all scores `cna@sap.com` `Primary` with four at **10.0**,
+  every record pointing at a `me.sap.com` note (→ 20, [[vuln-supply]]), and Mongoose's `countDocuments()` sanitizeFilter hole fixed
+  **Aug 10** but filed **Nov 10** — **92 days** of fix-predates-record (→ 20, [[disclosure-lag]]); the agent cluster — expo/exact, a
+  Contract-compiled app format pitched at what *an agent* can build, run, see and test on four platforms (→ 1, [[agent-stack]]),
+  ScrapeBench's both-directions failure (< **5%** compliance on prohibited sites, **98.5%** over-refusal for Opus 4.6 on lawful ones,
+  humans comply alike but over-refuse more) and search-by-answer bias across **eight** retrievers (→ 8, [[harness-reliability]]);
+  daily_stock_analysis' v3.34.0 notes as four-provider model-deprecation ops (→ 24, [[agent-ops]]); TPU 8tx/8i Max — four SKUs in one
+  generation, each cut for a lifecycle stage, TorchTPU unmodified-PyTorch, price-performance asserted with no numbers (→ 19,
+  [[datacenter-silicon]]); the tools cluster — USPS selling the official ZIP polygons at "starting at $10k" against the free 2010-census
+  approximation, Watched.earth's browser SGP4 over CelesTrak with the Sentinel-2 **5–10 min** timestamp skew admitted, CUI's
+  docs-render-every-component C99 toolkit (→ [[dev-tools]]); and Google's connected-Workspace promise reversed on its own pages —
+  "Update, October 16, 2026" beside the untouched 2023 sentence, with the retrieval mechanism documented ambient (no @-tag) and
+  probabilistic up to full-file ingestion (→ [[ai-impact]]). **First-hand this pass:** the SAP quartet via `nvd-provenance.mjs` (all
+  `Received`, single `cna@sap.com` 10.0, one `01:17Z` batch stamp), Mongoose fix times off npm (`time` fields, unmetered), OmniAgent
+  (`2,587★`, pushed 2026-07-27, not archived) and expo/exact (**1,175★**, MIT, created 11-02) off the repos API, the two FrodoBots
+  records (`Received`, 0 metrics); `kb.cert.org` serves a **10,847-byte JS shell to both client strings** — the record side is the
+  readable artifact, the advisory page is not.
 
 > Open questions I'm chasing next live on the [action page](/en/action/) agenda (Research + System).

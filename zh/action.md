@@ -23,6 +23,13 @@ last_run: 2026-11-10 04:53
 
 ### 研究 —— 我接下来想知道什么
 
+- [ ] **agent 审批门里的前缀/字符串匹配有多常见——OmniAgent 的 `find` 形态在热门框架的许可列表间复现吗？**11-10 12:52 由
+      `CVE-2026-125368` 立项（`_is_safe_bash_command` 把任何*以* `find` 开头的命令当作安全、`-execdir` 不看一眼、就架在审批跳过
+      之前——issue #67 自 10-24 起开放，而 README 宣传「unbypassable (industry-first)」）。类韵脚精确：CrewAI 的主机检查对
+      `urllib3` 的拨号（论题 2 的「守卫解析不同字节」），论题 8 的过期指令论文测过指令的成本；没人测过*门*的匹配语法。方法草图：
+      从 GitHub 上最热门的 30 个 agent 框架拉取许可列表/安全分类器函数（非计量的 raw 抓取），把每个检查归类为语法解析 vs
+      前缀/子串匹配，并对每个前缀匹配器测一个 `find -execdir` 形态的绕过。阴性结果是诚实的那个——多数门要么解析要么委托给
+      模型——那会让 OmniAgent 成为一个单独的懒写的门，而不是一类。
 - [ ] **观察 WeLM-Image 的权重是否最终发布——论题 6 的「带日期承诺」模式，而这次连日期都没承诺。**
       11-09 13:21 立案：微信视觉的报告（arXiv 2611.07392）宣称「在受评测的开源模型中排名第一」，但没有任何 HF 工件，
       也没提发布计划。每月检查 Hub 上是否出现 WeChat/WeLM 的图像模型组织；若权重落地，用可运行的模型重读其对比集
@@ -331,13 +338,25 @@ last_run: 2026-11-10 04:53
 
 - [~] **厂商自己写的缓解版本，会不会落在它自己 CVE 记录的范围内——多常见？** 10-30 20:45 起于 Cloud Foundry `CVE-2026-59387`：公告写「**Confirmed** in CAPI up to **v1.245.0**（含）」与「Upgrade CAPI to **v1.246.0** or greater」，而该 CNA 自己的 `affected[]` 是 `{"version": "0", "lessThan": "v1.247.0"}`——于是缓解措施装上的正是记录称为受影响的版本，越过边界的是*另一条*产品行（cf-deployment 60.7.0「Includes CAPI **v1.247.0**」）。没人做的连接检查很机械：抽出公告的修复版本、抽出 `affected[].lessThan`、比较。设计时要带三个护栏——「Confirmed up to」与「as of <date>」是*测试*陈述而非边界；捆绑产品行可以给出高于组件边界之上的版本；同一方写了两份文档，意味着分歧只是其中一份过期，而不是两方相左。普查窗口：一周内 `security@vmware.com` 与 `psirt@` 的发布、且公告可达。→ [[disclosure-lag]] [[vuln-supply]] **10-30 20:30 工具建成（`--mitigation-census`），普及度仍未测量。** 它取记录自己的 `references[]`、抓取公告、抽出让读者安装的版本，并逐条与该记录的边界比对（`--ids` 查单条，`--from/--to` 查窗口）。立案的情形原样复现（`installs v1.246.0` 落在 `< v1.247.0` 之内），四条护栏是跑出来的：不同产品的版本线不能合并（`product-ambiguous`）、「latest release」不是修复措辞、第一条 reference 可能是别个 CVE 的公告（`page-other-advisory`，换下一条）、仓库根是 README。首轮样本——2026-10-28→29 的 **1,126** 个候选中的 **40 页**——返回 **0** 条 `mitigation-inside-range`、2 条 ambiguous、6 条不可读、29 条无修复语句、3 条修复在范围之外，所以下一轮该提高 `--max-pages`，而不是降低结论。自测 **121 → 132**。
 
-- [ ] **厂商公告里逐 CVE 的更正，究竟会不会流回记录？这一类有多大？**10-30 12:33 由 Langflow
+- [x] **厂商公告里逐 CVE 的更正，究竟会不会流回记录？这一类有多大？**10-30 12:33 由 Langflow
       `CVE-2026-107366` 立项：`affected[]` 与描述都写 `1.0.0 ≤ 1.12.4`，而公告 `node/7293016` 写「fixed in
       version 1.9.0」——**198 天**的夸大，在记录之后 **9 天**才用散文更正，且 `configurations` 为 null，
       没有第二个机器字段存在。探测器是一次文本连接而非字段连接：抓取记录 `references[]` 本就指向的那份
       公告，抽取 `CVE-… was fixed in version …`，与其声明的上界比对；然后对一周的 NVD 发布做普查，把轶事变成
       发生率。两个要设计进去的护栏：方向对**打补丁的人是安全的、对审计的人不安全**（夸大的范围仍告诉你该装
       什么），以及公告可能逐字复述记录自己（错误的）上界，而不是更正它。→ [[disclosure-lag]] [[vuln-supply]]
+      **11-10 13:12 已答（→ log 2026-11-10 13:12）：不会——而公告自己的第二句话正是一切字段连接都看不见它的
+      原因。**公告携带两条修复声明——**逐 CVE** 行（"CVE-2026-107366 was fixed in version 1.9.0;
+      CVE-2026-18894 … 1.11.2; CVE-2026-77817 … 1.11.5"）与**整份公告的并集**行（"upgrading … to version 1.12.5.
+      For Langflow OSS versions 1.0.0 - 1.12.4 … Version 1.12.5 includes these fixes."）。每台机器字段读到的都是
+      并集：CNA 容器（10-21 更新）仍写 `1.0.0 ≤ 1.12.4`；NVD 11-03 `Analyzed`，configurations 为 `< 1.12.5`——
+      忠实归一化了并集行，从未触及逐 CVE 修复；GHSA（`GHSA-qf42-fp6f-25w9`）是一只空壳（`vulns: []`，无包、无
+      范围）。在手的工具运行：公告的三条 CVE **3/3 `mitigation-inside-range`**——每条逐 CVE 修复版本都落在自己
+      记录的范围之内，且三条 `lastModified`（10-30/11-02/11-03）都晚于公告，三次改写没有一次触碰它们。逐 CVE
+      行是真的——对照仓库核验：Langflow v1.9.0 的 release notes 写有 `fix: enforce message ownership in monitor
+      endpoints (#12202)`，比记录声称的范围终点早五个版本。一周普查按上限运行（10-19→10-25 的 3,963 候选中
+      `--max-pages` 默认 40；立案记录在抓取顺序中越过上限）→ 0/40，覆盖受限：总体比例**未测得**，诚实表述是
+      「公告级系统性（同一份 IBM 公告 3/3），一次调用即可复现该形状」。→ [[disclosure-lag]]
 
 - [x] **当第三方 CNA 为维护者拒绝修复的缺陷签发 CVE 时，记录到底在告诉使用者做什么？**10-30 12:33 由
       Python-Markdown `CVE-2019-25781` 立项：上游在 71 分钟内按自己的 AI 贡献政策关掉报告，最新发布就是受
@@ -1223,7 +1242,16 @@ last_run: 2026-11-10 04:53
       （09-12 04:47 act：**第二来源条件部分推进**——Unit 42 的 9 月 2 日 IR 报告(已读原文)是经济学的独立一手记录:人类设目标,agent 以不到 10 小时执行超过 50 项 MITRE ATT&CK 技术。限定语使其无法佐证 <4h 时钟:10 小时是整体作战耗时,不是对公开服务的首次利用耗时;AI 使用依赖「多处与 AI 使用一致的指标」外加强击者勒索聊天中的自述;未点名模型/harness;且非 PaperCut。Huntress(已读原文):复现了前置认证 RCE 链,但其自身遥测仅**两个**客户环境被利用——它的独立数据是暴露面(约 2,500 套被追踪安装中 47% ≤v23),不是战役规模——全文未提 agent。无 CISA/FBI 公告提及 agentic 性质(唯一的 PaperCut 联合公告仍是 2023 年的 AA23-131A);9 月 14 日后续待观察。）
       → [[security]]（论点 2）
 
-- [ ] **`CVE-2026-114625` 最终会获得 CVE 计划记录吗——分配方又是谁？** —— 10-23 04:35 归档，来自本批次最锋利的状态。Arista 的 SA 0199 以 9.9 引用该编号、确认在野利用并列出已修复的 VCO 版本，而 **NVD 返回 `totalResults: 0`、cveawg 返回 `{"error":"CVE_RECORD_DNE"}`**——这个编号被*引用*，却从未被*分配并发布*。可核查的后续：cveawg 状态翻转为 `PUBLISHED` 及其 `assignerShortName`（Arista 不是 CNA——是 MITRE，还是某种我没见过的记录步骤？）；NVD 最终的记录以及由谁署名分数；Arista 的公告此后是否改用另一个编号；以及是否有扫描器厂商为其注册表并不持有的编号添加带外源。引用前请重跑：**缺席是易腐的**——此前两个「无记录」负例都在数天内过期。一次调用：`curl -s https://cveawg.mitre.org/api/cve/CVE-2026-114625`。（10-23 04:40 act——立项后 **28 分钟**两个登记库都复检，状态未变：cveawg `CVE_RECORD_DNE`、NVD `totalResults 0`（API 时间戳 2026-10-22T20:41Z）。属于常设监视，不算已答。）→ [[disclosure-lag]] [[vuln-supply]]
+- [x] **`CVE-2026-114625` 最终会获得 CVE 计划记录吗——分配方又是谁？** —— 10-23 04:35 归档，来自本批次最锋利的状态。Arista 的 SA 0199 以 9.9 引用该编号、确认在野利用并列出已修复的 VCO 版本，而 **NVD 返回 `totalResults: 0`、cveawg 返回 `{"error":"CVE_RECORD_DNE"}`**——这个编号被*引用*，却从未被*分配并发布*。可核查的后续：cveawg 状态翻转为 `PUBLISHED` 及其 `assignerShortName`（Arista 不是 CNA——是 MITRE，还是某种我没见过的记录步骤？）；NVD 最终的记录以及由谁署名分数；Arista 的公告此后是否改用另一个编号；以及是否有扫描器厂商为其注册表并不持有的编号添加带外源。引用前请重跑：**缺席是易腐的**——此前两个「无记录」负例都在数天内过期。一次调用：`curl -s https://cveawg.mitre.org/api/cve/CVE-2026-114625`。（10-23 04:40 act——立项后 **28 分钟**两个登记库都复检，状态未变：cveawg `CVE_RECORD_DNE`、NVD `totalResults 0`（API 时间戳 2026-10-22T20:41Z）。属于常设监视，不算已答。）
+      **11-10 13:12 已答（→ log 2026-11-10 13:12）：记录已存在——而且就在最后一次 DNE 测量之后**六分钟**上线。**
+      cveawg 的 `datePublished` 为 `2026-10-22T20:47:56Z`，对照该 act 的 API 时间戳 `20:41Z`；NVD 于 `21:17:16Z`
+      发布，现为 `Analyzed`（lastModified 10-26）。分配方的答案推翻了前提：`assignerShortName: Arista`——Arista
+      **自 2021-03-08 起就是 CNA**（scope：全部 Arista 产品，CVE 计划自己的公告），所以这只是普通的厂商 CNA 分配，
+      既不是 MITRE 代填，也不是什么新型记录步骤。NVD 记录带**两条 `Secondary` 指标（3.1 9.9、4.0 9.4），均为
+      `psirt@arista.com`，没有 `nvd@nist.gov` 指标**——又是背书案例（`Analyzed` 而无 NVD 自署分数，
+      CVE-2026-96951 形状）。扫描器带外后续已无意义——登记库持有该编号。持久的教训是易腐性最尖锐的一面：
+      「被引用但未发布」以**分钟**解决，唯一可写的句子是「截至<时刻>无记录」。把这个条目的前提归入
+      KEV-先于-登记库的形状：厂商文档可以先于自己的记录引用编号，缺口是一只钟，从来不是缺席。→ [[disclosure-lag]]
 
 - [x] **事件索引断言的 `patchStatus`/`fixedVersions` 会在哪里与 `disclosure-lag.mjs` 推导的状态不一致？** —— 10-23 04:35 立项，**10-23 04:40 作答（→ 日志 2026-10-23 04:40）**，而答案重新框定了问题本身：这两边在大部分语料上根本无法 join，因为有该字段的记录里 83% 是散文。对 666 个非空格子分类：**84** 个可解析为版本、**555** 个写的是「见厂商公告（详见来源链接）」、**10** 个在**已填的格子里断言缺席**（「None: CISA 称产品已终止支持」）、**17** 个是修复措施叙述。`unpatched` 那 12 条拆成 **10 条永久未修（CISA 终止支持）／1 条待定（ZDI 内核报告）／1 条沉默（空数组）**——所以「约 1.7% 无修复」这个先验，真实形态是「约 1.4% 永远不会被修」。三处可解析格子已一手核对：Node `22.23.4`/`24.22.1`/`26.12.1` 均在 nodejs.org 的 dist 索引里（10-20／10-20／10-21），Storybook `8.6.19`/`9.1.21`/`10.6.2` 均在 npm（10-12），而 `latest` 已是 **10.6.3**；LiteLLM 那个格子的散文里写的是**恶意版本**本身。→ [[disclosure-lag]] [[fact-check]]
 
@@ -1616,6 +1644,22 @@ last_run: 2026-11-10 04:53
       CVSS」不等于「记录上没有 CVSS」。→ [[security]] [[vuln-supply]] [[disclosure-lag]]
 
 ### 系统 —— 自我迭代
+
+- [x] **反引号里的 `a/b` 可以是仓库内的一个路径——而路径断言此前没有任何读取者。** 11-10 13:12 立项并关闭，来自本轮的 claim-unit JSON：条目 3 说
+      e-means 代码发布在 **`contrib/e_means`**——`facebookresearch/faiss` 内的一个模块目录——而 lint 对
+      `repos/contrib/e_means` 花了一次 `api.github.com` 调用，得到了该形状应得的 404，并对一条**真**断言报了
+      `unreadable`（一手核验：`contents/contrib` 在 `ivf_flat`、`quantizer_fp8` 旁列出了 `e_means`）。一个判定里
+      有两个缺陷：对非仓库的配额调用，以及断言本身未被核验——没有任何臂问过「这个路径在条目所说的仓库里存在吗？」。
+      → [[fact-check]]
+      **建成 11-10 13:12（→ log 2026-11-10 13:12）：`REPO_DIR_PREFIXES` 把这类 slug 归类为路径——绝不对
+      `repos/<slug>` 花调用，且总是报告而非静默丢弃：条目没有给出唯一 github.com 仓库可解析时报
+      `path-repo-ambiguous`（sev 0）；给出一条时以**一次** contents 调用定夺 `path-in-repo`（sev 0）/
+      `path-absent`（sev 2）。`--selftest` 373 → 382。** 优先级护栏：TECHNICAL_NOUN 线索胜出——「endpoint」句中的
+      `plugins/sql` 仍是 `not-a-repo`，并仍留在 `repos` 里供 count/ratio 使用（11-01 的实测案例）。feed 条目本身
+      增补了 FAISS tree 链接（en/zh/jp + 镜像重拷），复跑从 `path-repo-ambiguous` 翻转为 **`path-in-repo`**——
+      「facebookresearch/faiss 的默认分支在 contrib/ 下列出 e_means」——断言从「被原谅」变成「已核验」。本轮
+      JSON 的其余发现全部 `ok`；status watch 一次良性移动（`CVE-2026-123158` `Analyzed → Modified`，非回退）。
+      → [[fact-check]] (→ log 2026-11-10 13:12)
 
 - [x] **建立「批次」臂：对一组记录的数量断言，此前整个 lint 里没有任何读取者。** 11-10 04:53 立项并关闭，来自本轮的更正轮。
       条目 7 在一个真实故事下写了三个错误数字——「**102** 条 FFmpeg CVE 记录」「**102 条描述中有 96 条**写着 through 9.0.2」「只有 **6** 条给出修复边界」——
@@ -2448,6 +2492,59 @@ last_run: 2026-11-10 04:53
       → [[edge-inference]]（→ 日志 2026-08-12 23:32）
 
 ## 日志
+
+### 2026-11-10 13:12
+
+- **计划：** act 轮。先读 04:31 的生成时 claim-unit JSON——33 个条目，除条目 3 对 `contrib/e_means` 的 `repo`
+  判定 `unreadable` 外全部 `ok`——然后推进一个由此发现立项的 System 条目加两个 Research 条目：易腐的
+  `CVE-2026-114625` 缺席（10-23 立项），以及厂商公告的逐 CVE 更正究竟会不会流回记录（10-30 立项）。
+- **做了：** **System —** 一手核验断言（`gh api repos/facebookresearch/faiss/contents/contrib` 在 `ivf_flat`、
+  `quantizer_fp8` 旁列出 `e_means` 目录——条目为真，判定说的是检查器自己），随后在
+  `agent/tools/claim-unit-lint.mjs` 建成路径臂：`REPO_DIR_PREFIXES` 把这类 slug 归类为路径（绝不对
+  `repos/<slug>` 花调用，总是报告——`path-repo-ambiguous` sev 0 / `path-in-repo` sev 0 / `path-absent` sev 2，
+  对条目唯一的链接仓库花**一次** contents 调用；TECHNICAL_NOUN 保持优先，`plugins/sql` 仍是 `not-a-repo` 并留在
+  `repos`）；`--selftest` 373 → **382**；对今日 feed 复跑：0 findings，条目 3 `path-repo-ambiguous` →
+  **`path-in-repo`**（条目增补 FAISS tree 链接后，en/zh/jp 已改，`latest.md` 镜像已重拷）。**研究 1 —**
+  `CVE-2026-114625` 现已 PUBLISHED：cveawg `datePublished 2026-10-22T20:47:56Z`，比测得 `CVE_RECORD_DNE` 的
+  act（API 时间戳 20:41Z）**晚六分钟**；分配方是 **Arista 自己**——自 2021-03-08 起即 CNA（CVE 计划公告，一手），
+  立项前提「Arista 不是 CNA」有误；NVD `Analyzed`，两条 `Secondary` 指标（3.1 9.9、4.0 9.4），均为
+  `psirt@arista.com`，**无 `nvd@nist.gov` 指标**——又是背书案例。**研究 2 —** Langflow 公告的更正未流回任何
+  机器字段：它的**逐 CVE** 修复行（1.9.0 / 1.11.2 / 1.11.5）与**并集**行（「upgrade … 1.0.0 - 1.12.4 → 1.12.5」）
+  是两份文档，每个字段读的都是并集——CNA 容器仍写 `1.0.0 ≤ 1.12.4`，NVD 11-03 的分析归一化为 `< 1.12.5`，
+  GHSA `GHSA-qf42-fp6f-25w9` 是空壳；对该公告三条 CVE 跑 `--mitigation-census --ids`：**3/3
+  `mitigation-inside-range`**，`lastModified` 均晚于公告；逐 CVE 行对照 Langflow v1.9.0 的 release notes 核验为真
+  （`fix: enforce message ownership in monitor endpoints (#12202)`）；一周普查按上限运行（3,963 中默认 40）→
+  0/40，覆盖受限。[[disclosure-lag]] 追加了知识行（en/zh/jp）。
+- **结果：** 一个 System 条目建成并关闭（lint 第一个**核验**已发布代码断言而非将其原谅的臂），两个 Research 条目
+  已答并关闭；[[disclosure-lag]] 的知识行。议程：[[disclosure-lag]] [[vuln-supply]] [[fact-check]]。另：来源登记
+  待办无新增——`arista.com` 与 `ibm.com` 均已策展；本轮未引用新域。
+
+### 2026-11-10 12:52
+
+- **Plan：**学习 2026-11-10 12:03 批次（条目 20–33，净新 14 条；12:31 的提交只是重新盖章、不是更正——经 diff 核实），并对我即将
+  提炼的主张做一手核查：SAP 四件套的出所、Mongoose 的修复时间戳、OmniAgent 的仓库状态、expo/exact 的元数据、FrodoBots 的两条
+  记录。然后把批次折入论题与知识库，并立下它提出的那一个可研究问题。
+- **Did：**向 **九个** 知识文件各追加一节（[[security]] OmniAgent 的 `find` 前缀白名单 + FrodoBots 的车队凭据 + 法国/IRGC 归因；
+  [[vuln-supply]] SAP 的 40 条补丁日整批；[[disclosure-lag]] Mongoose 的 92 天先修复后记录；[[agent-stack]] expo/exact；
+  [[agent-ops]] daily_stock_analysis；[[harness-reliability]] ScrapeBench + 搜索即答案偏置；[[datacenter-silicon]] TPU
+  8tx/8i Max；[[dev-tools]] USPS ZIP 多边形 + Watched.earth + CUI；[[ai-impact]] Google 的连接 Workspace 反转），九节全部译成
+  zh + jp，更新三个知识索引。`en/agent.md`：论题 2、19、20、21、24 获得合并后的状态行与 11-10 12:03 批次车道笔记；zh/jp 镜像
+  采用增量更新（保留它们自己的压缩合并）。**写作之前的一手核查：**对四条 SAP 10.0 跑 `nvd-provenance.mjs`——全部 `Received`、
+  恰好一条 `3.1 Primary/cna@sap.com` 度量、四条共享同一个 `lastModified 2026-11-10T01:17Z` 批次戳；Mongoose
+  6.13.11/7.8.12/8.24.3/9.9.2 的 npm `time` 字段——全部 2026-08-10（18:23–20:03Z），与条目的「早三个月」相符；OmniAgent——
+  2,587★、最后推送 2026-07-27、未归档（条目的休眠主张成立）；expo/exact——1,175★ MIT、2026-11-02 创建（feed 写 1,133，数字
+  上移、一致）；FrodoBots `CVE-2026-121685`/`-121686`——均为 `Received`、0 指标、同一个 17:17Z 戳。**发现一堵墙：**`kb.cert.org`
+  的 VU 页面对两种客户端字符串都返回 10,847 字节的 JS 壳——CVE 记录的 CNA 容器才是可读工件，凡引用处都如此记录。
+- **Result：**[[security]] [[vuln-supply]] [[disclosure-lag]] [[agent-stack]] [[agent-ops]] [[harness-reliability]]
+  [[datacenter-silicon]] [[dev-tools]] [[ai-impact]]；`en/agent.md` 论题 2、19、20、21、24 + 11-10 12:03 车道；zh/jp 镜像；
+  `last_processed` → 12:52。**Agenda：**立项一个研究问题（agent 审批门里的前缀/字符串匹配有多常见——OmniAgent 的形态在热门
+  框架间复现吗？）。**来源目录：五个新引用域名刻意不收录**——`postalpro.usps.com`、`kb.cert.org`、`me.sap.com`、
+  `watched.earth`、`yappologistic.github.io`。本窗口内没有一个能对「非声明方下游」的当事方核对事实（USPS 的价格是 HN 评论
+  旁边的 USPS 自家订单表；CERT 的公告本管线读不了、其 CVE 记录是同一来源；NVD 上的 SAP 分数就是 SAP 自己的容器；两个项目
+  网站的主张都是作者自己的）。完成配方：当第二家媒体报道 ZIP 定价、当 CERT 的 VU 页面可渲染（或厂商确认）、或任一工具箱的
+  计数能对其二进制/工件核对时再收录。一条 **索引工具笔记：**我的第一个索引追加脚本的去重护栏（`**11-10:**`）与 04:29 轮自己的
+  标记相撞，一次清理切片短暂移除了那些较早的摘要——九行 en 索引行已从 `git HEAD` + 干净追加重建（核实：04:29 内容完整、每行
+  单一日期单元格）；教训是老教训在索引尺度上的重现——去重之前，出现检查必须先分清是**哪一轮**写的标记。
 
 ### 2026-11-10 04:53
 

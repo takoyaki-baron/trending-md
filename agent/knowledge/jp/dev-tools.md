@@ -1209,3 +1209,38 @@ zebkit は「Chrome のように」ストレージを別プロセスに砂箱化
 Sources: [e-means プロジェクトページ](https://e-means.github.io/) · [arXiv 2611.09501](https://arxiv.org/abs/2611.09501) ·
 [What is malloc doing, anyway?](https://benmandrew.com/articles/what-is-malloc-doing-anyway) ·
 [ikey4u/zebkit](https://github.com/ikey4u/zebkit)
+
+## 2026-11-10 12:03 バッチ——グラウンドトゥルースが販売される；衛星のフライオーバーが一つのクエリになる；ドキュメント頁自体が動く C ツールキット
+
+**USPS ZIP Code Boundaries——「ZIP は地域ではない」と言い続けた機関が ZIP ポリゴンを売り始める。**
+USPS の PostalPro が **USPS® ZIP Code Boundaries** を公開——「ZIP Code 境界の ground truth」と位置づけられる公式
+ポリゴン製品、三つのライセンス階層（Internal、Enterprise、Publication）、各々に四半期更新 4 回、GeoJSON サンプルを
+添付。ページの資料は 2026 年 6/9 月の日付を持ち、HN フロントページのスレッド（529 pts）は発見の波であって発表では
+ない。スレッドの実用的な発見：注文フォームは **「starting at $10k」**、ライセンス契約は再配布を制限——一方コミュニティ
+の実働代替品 OpenDataDE の国勢調査版 State-zip-code-GeoJSON は無料のまま、**2010** 年国勢調査で止まっている。耐久
+する事実：ZIP Code は地理的領域では一度もなかった——配達経路のグルーピングであり、USPS 自身が数十年そう言ってきた；
+公式ポリゴンセットは、全員が近似している形状の ground truth を機関が売る初めての例。スレッドの本当の中身は
+市場の答え：誰もが使う無料の近似と、$10k ではほとんど誰も買わないライセンス付きの真値。
+
+**Watched.earth——衛星フライオーバーが一枚の地図クエリに圧縮される。**
+「過去 7 日間で地球上のどの地点をどの衛星が通過し、どんな実写を撮ったかを表示する」（Show HN、257 pts；MIT、
+`dev-Armaan/satellites`）。フライオーバー検索は**ブラウザ内で CelesTrak カタログに SGP4 を走らせる**（1 クエリ約 0.5 秒）、
+極・反経線・微小範囲で総当たりと突き合わせて取りこぼし **0**；軌道上の全 **約 17,000** 天体を GPU 描画し、毎フレーム
+ケプラー方程式を解く。画像は見つかった実物の Sentinel-2/Landsat フライオーバーから——そして正直な細部が荷重を担う：
+Sentinel-2 のタイムスタンプは「衛星が実際にその地点を横切る時刻と 5〜10 分ずれることが多い」——画像とフライオーバーの
+マッチングを静かに壊す種類の測定誤差。実写が存在するときだけその地点を撮影済みと表示；位置は保存しない。
+
+**CUI——C 言語のネイティブ UI コンポーネント、全コンポーネントが自分のドキュメント頁で生きている。**
+`yappologistic/CUI`（MIT、**v1.3.1**、738★、11-05 作成）：「約 190 コンポーネント、ブラウザもランタイムも内部に持たず
+マシンコードへコンパイル」——一つの C99 コードベースで Windows・macOS・Linux・web を、「完全なアプリは約 250 KB」。
+ドキュメントサイトは**全コンポーネントをブラウザでライブ描画**；コンポーネント索引は約 150 項目（結合ページが約 190 の
+見出し数との差を説明する）。移転可能な発想は docs-as-demo パターン——全コンポーネントがそのドキュメント頁で実行
+できるのはネイティブツールキットが滅多に達しないことで、プロジェクトのテストスイートを兼ねる。数字（個数、バンドル
+サイズ）は作者自身のもの；成果物はクローン一つで届く。
+
+→ [[dev-tools]] [[datacenter-silicon]]
+
+Sources: [USPS ZIP Code Boundaries](https://postalpro.usps.com/zcb) ·
+[HN 議論](https://news.ycombinator.com/item?id=50431058) · [watched.earth](https://www.watched.earth) ·
+[dev-Armaan/satellites](https://github.com/dev-Armaan/satellites) ·
+[CUI ドキュメント](https://yappologistic.github.io/CUI/) · [yappologistic/CUI](https://github.com/yappologistic/CUI)

@@ -48,7 +48,7 @@ Meta FAIR open-sourced **e-means**, a replacement for Lloyd's algorithm shipped 
 
 **Why it matters:** k-means is the load-bearing primitive under vector indexes, quantization codebooks and clustering-based retrieval filters, and a 10× reduction in epochs touches all of them without a new data structure. The honest caveat is that the comparison is the authors' own harness against their own group's implementation of the prior state of the art; the counterweight is that the code landed in FAISS itself, so the baseline is reproducible rather than asserted.
 
-[`🔗 e-means project page`](https://e-means.github.io/) · [`🔗 arXiv 2611.09501`](https://arxiv.org/abs/2611.09501)
+[`🔗 e-means project page`](https://e-means.github.io/) · [`🔗 arXiv 2611.09501`](https://arxiv.org/abs/2611.09501) · [`🔗 FAISS repo · contrib/e_means`](https://github.com/facebookresearch/faiss/tree/main/contrib/e_means)
 
 ---
 

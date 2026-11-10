@@ -1124,3 +1124,34 @@ is ahead**：每页少一个进程；以及十个站点里有广告与视频决�
 来源：[e-means 项目页](https://e-means.github.io/) · [arXiv 2611.09501](https://arxiv.org/abs/2611.09501) ·
 [What is malloc doing, anyway?](https://benmandrew.com/articles/what-is-malloc-doing-anyway) ·
 [ikey4u/zebkit](https://github.com/ikey4u/zebkit)
+
+## 2026-11-10 12:03 批次——地面真值开始售卖；卫星过境变成一次查询；文档页自己会跑的 C 工具箱
+
+**USPS ZIP Code Boundaries——说过「ZIP 不是区域」的机构开始卖 ZIP 多边形。**
+USPS 的 PostalPro 挂出 **USPS® ZIP Code Boundaries**——定位为「ZIP Code 边界的 ground truth」的官方多边形产品，三个
+许可档（Internal、Enterprise、Publication），各带四次季度更新，旁附 GeoJSON 样例。页面资源带 2026 年 6/9 月的日期，
+所以 HN 首页帖（529 分）是发现潮而非发布事件。帖子的实用发现：订单表写着 **「starting at $10k」**，许可协议限制再分发
+——而社区的工作替代品 OpenDataDE 的普查版 State-zip-code-GeoJSON 仍然免费，但停在 **2010** 年人口普查。耐久事实：
+ZIP Code 从来不是地理区域——它们是投递路线分组，USPS 自己花了几十年这么说；官方多边形集是该机构第一次为所有人都在
+近似的形状出售 ground truth。帖子的真实内容是市场的回答：人人都在用的免费近似，与 $10k 价格下几乎没人买的许可真值。
+
+**Watched.earth——卫星过境被压缩成一次地图查询。**
+「显示过去 7 天哪些卫星飞过地球上任何地点，以及它们真实拍下的照片」（Show HN，257 分；MIT，`dev-Armaan/satellites`）。
+过境搜索**在浏览器内对 CelesTrak 目录跑 SGP4**（每次查询约半秒），在极点、反子午线与极小范围上对照暴力枚举验证，
+**0 漏报**；全部约 **17,000** 个在轨物体上 GPU 绘制，每帧解开普勒方程。图像来自找到的真实 Sentinel-2/Landsat 过境
+——而那个诚实的细节是承重的：Sentinel-2 时间戳「与卫星实际过境你的位置常差 5–10 分钟」，这正是会在别处悄悄弄坏
+图像-过境匹配的测量误差。只有存在真实图像时才把地点标记为被拍摄；不存储任何位置。
+
+**CUI——C 语言原生 UI 组件，每个都在自己的文档页里活着。**
+`yappologistic/CUI`（MIT，**v1.3.1**，738★，11-05 创建）：「约 190 个组件，编译为机器码，内部没有浏览器也没有运行时」
+——一份 C99 代码库通吃 Windows、macOS、Linux 与 web，「一个完整应用约 250 KB」。文档站**在浏览器里实时渲染每个
+组件**；组件索引列约 150 条（合并页解释了与 ~190 宣传数的差值）。可迁移的思想是 docs-as-demo 模式——每个组件都能在
+其文档页上执行，这是原生工具箱很少做到的，而且它兼任项目的测试套件。数字（组件数、包体积）是作者自己的；工件一克隆
+即达。
+
+→ [[dev-tools]] [[datacenter-silicon]]
+
+来源：[USPS ZIP Code Boundaries](https://postalpro.usps.com/zcb) ·
+[HN 讨论](https://news.ycombinator.com/item?id=50431058) · [watched.earth](https://www.watched.earth) ·
+[dev-Armaan/satellites](https://github.com/dev-Armaan/satellites) ·
+[CUI 文档](https://yappologistic.github.io/CUI/) · [yappologistic/CUI](https://github.com/yappologistic/CUI)

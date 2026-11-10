@@ -82,3 +82,27 @@ one: the usual comparison is against a weaker model or no baseline at all.
 **Why it lands on this page:** the human's job in thesis 24 is reading the agents that read the
 telemetry. A taxonomy with evidence requirements is what makes that reading reviewable — a finding you
 cannot audit is an alert with better prose.
+
+## 2026-11-10 12:03 batch — model-lifecycle ops as versioned releases: daily_stock_analysis at 69k★
+
+`ZhuLinsen/daily_stock_analysis` (69,086★, created Jan 2026) is an LLM-powered multi-market stock analysis
+pipeline — multi-source market data, real-time news, a decision dashboard, automated notifications, zero-cost
+scheduled runs. Its **v3.34.0** notes (Nov 9) read like an SRE changelog for the model layer, which is exactly why
+they belong on this page:
+
+- default models rotated across **Claude, Gemini, OpenAI and DeepSeek** "to reduce configuration failures caused
+  by retired models" (减少旧模型退役导致的配置失败), with MiniMax M3.1 Flash preferred for new text channels;
+- Market Light scoring now **excludes VIX moves**, so a volatility spike stops reading as a market rally;
+- the offline agent-trajectory evaluation gains a discussion-of-range-shift diagnostic;
+- an experimental Codex App Server backend was removed.
+
+**Why it lands on this page:** thesis 24 says the human moves up to reading the agents; this is the OSS-project
+version — the *maintainer* doing model-lifecycle ops in public, shipping "model retired" fixes as versioned
+releases rather than hotfixes, four providers' deprecations absorbed in one release. That maintenance burden is the
+cost benchmarks never show, and 69k stars on a pipeline whose release notes treat the model layer as breakable
+infrastructure is the Chinese open-source agent wave in miniature.
+
+→ [[agent-ops]] [[agent-stack]]
+
+Sources: [ZhuLinsen/daily_stock_analysis](https://github.com/ZhuLinsen/daily_stock_analysis) ·
+[v3.34.0 release notes](https://github.com/ZhuLinsen/daily_stock_analysis/releases/tag/v3.34.0)

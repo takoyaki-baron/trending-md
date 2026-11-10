@@ -118,3 +118,26 @@ output speed, from any vendor.
 → [[frontier-models]] [[fact-check]]
 
 Sources: [Cerebras — how we deploy trillion-parameter frontier models](https://www.cerebras.ai/blog/how-we-deploy-trillion-parameter-frontier-models-on-cerebras) · [HN 50227356](https://news.ycombinator.com/item?id=50227356)
+
+## 2026-11-10 12:03 batch — TPU 8tx and 8i Max: one generation, four SKUs, each cut for a lifecycle stage
+
+Amin Vahdat announced the two additions that make Google's eighth TPU generation a four-system lineup (8t, 8i,
+8tx, 8i Max) — "the first time we have introduced four TPU systems in a single year" — with **nearly 100
+customers**. **TPU 8tx** is the confidential-computing configuration: same silicon as 8t on 5th-generation AMD EPYC
+hosts, keeping "sensitive data and model weights protected and isolated even while in active use", with up to **2×
+lower latency** than 8t on the Boardfly network. **TPU 8i Max** fuses two 8i chips onto one package — "double the
+compute, double the SRAM and double the HBM bandwidth", twice the silicon per rack footprint — built for agents
+reasoning "across an entire software codebase or hours of video at once".
+
+The software half of the post may matter more than the silicon: TorchTPU (open-sourced last month) so PyTorch and
+Hugging Face models run unmodified, a TPU agent suite in preview that plugs into Claude Code, Cursor and Google
+Antigravity, and an open-source XLA Serving Engine. If PyTorch code runs unmodified, the moat becomes packaging and
+price. The specialization pattern is the story — one generation, four SKUs, each aimed at a lifecycle stage (train,
+reason, confine, context). And the standing caveat applies verbatim: the claimed wins ("state-of-the-art
+price-performance" on InferenceX and AgentX) are **asserted without numbers in the post** — self-measured until a
+table exists.
+
+→ [[datacenter-silicon]] [[agent-stack]]
+
+Sources: [Our newest TPUs: 8tx and 8i Max](https://blog.google/innovation-and-ai/infrastructure-and-cloud/global-network/tpu-8i-max-and-8tx/) ·
+[HN discussion](https://news.ycombinator.com/item?id=50432831)

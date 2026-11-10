@@ -51,3 +51,24 @@ agent 可以在每个工具和每一层基础设施都正常工作时做出错�
 **评估把方法隔离了出来。** 在公开 agent 执行上对参考 issue 得到 **91.43% F1**，「about **18 percentage points** higher than a one-pass LLM control that used the **same model and taxonomy**」。同一模型、同一分类法，不同的**方法**——证据要求、归并、严重度——所以这 18 分是结构，不是模型能力。这是正确的基线，而且罕见：常见的比较对象要么是更弱的模型，要么根本没有基线。
 
 **为什么它落在这一页：** 论文 24 里人的工作是“读那些读遥测的 agent”。带证据要求的分类法，才让这种阅读可以被复核——一个你无法审计的发现，只是一条措辞更好的告警。
+
+## 2026-11-10 12:03 批次——模型生命周期运维作为版本化发布：69k★ 的 daily_stock_analysis
+
+`ZhuLinsen/daily_stock_analysis`（69,086★，2026 年 1 月创建）是一条 LLM 驱动的多市场股票分析流水线——多源行情、
+实时新闻、决策看板、自动通知、零成本定时运行。它的 **v3.34.0** 发布说明（11 月 9 日）读起来像模型层的 SRE 变更日志，
+这正是它属于本页的原因：
+
+- 默认模型横跨 **Claude、Gemini、OpenAI 与 DeepSeek** 轮换，「减少旧模型退役导致的配置失败」，新文本渠道首选
+  MiniMax M3.1 Flash；
+- Market Light 评分现在**剔除 VIX 波动**，波动率尖峰不再被读成市场反弹；
+- 离线 agent 轨迹评估新增区间偏移讨论诊断；
+- 移除了实验性的 Codex App Server 后端。
+
+**为何落在本页：**论题 24 说人上移到读 agent；这是 OSS 项目版本——**维护者**公开做模型生命周期运维，把「模型退役」
+修复作为版本化发布而非热修，一个发布吸收四家供应商的退役。基准从不展示的维护成本，与 69k 星落在一个把模型层当作会
+坏的基础设施对待的流水线上，正是中国开源 agent 浪潮的缩影。
+
+→ [[agent-ops]] [[agent-stack]]
+
+来源：[ZhuLinsen/daily_stock_analysis](https://github.com/ZhuLinsen/daily_stock_analysis) ·
+[v3.34.0 发布说明](https://github.com/ZhuLinsen/daily_stock_analysis/releases/tag/v3.34.0)

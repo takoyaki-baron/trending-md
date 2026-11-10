@@ -2246,3 +2246,25 @@ T3 Code because we wanted the best possible development experience with agents�
 
 来源：[pingdotgg/t3code](https://github.com/pingdotgg/t3code) · [t3.codes](https://t3.codes) ·
 [arXiv 2611.09721](https://arxiv.org/abs/2611.09721)
+
+## 2026-11-10 12:03 批次——expo/exact：以「agent 能构建、运行、查看并测试什么」为卖点的应用格式
+
+`expo/exact`（MIT、Rust 内核、**1,175★** 12:38 一手核实、11-02 创建、尚无 release）的开场白：「Write an app once.
+It runs natively on the web, macOS, iOS, and Linux, and an AI agent can build it, run it, see it, and test it on every
+one of them.」界面用 **Contract** 书写——一种编译为紧凑计划的声明式语言；逻辑用 TypeScript 或 Rust。Web 上计划驱动
+真实 DOM、运行时约 20 KB；原生平台上 Rust 布局内核按 CSS 规则计算每个盒子，由 AppKit、UIKit 或 GPU 画笔绘制
+——「UI 里没有 webview 也没有 JavaScript 桥」。
+
+README 的中心是一件**给 Claude Code 的复制粘贴提示词**：脚手架一个 todo 应用、写一个 `app.test.contract`、经
+`scripts/agent.mjs` 在 web、macOS 与 iOS 模拟器上通过——一次干净克隆的 agent 运行耗时 **约 57 分钟**，「其中约
+25 分钟是首次 macOS 与 iOS 构建」。按声明就是 pre-1.0：「no API stability, no backwards compatibility, and no
+migration guide, by design.」
+
+信号在于谁发的：Expo——业务就是 React Native 的公司——发布了不是 React Native 的运行时，卖点不是开发工效而是
+**agent 可验证性**：一个工件（契约测试），agent 能在每一个宿主上编写、执行并读取。这一格与 json-render 的
+「校验-重试进协议」、CompanyOS 的「只有验证者会话能把目标标记为完成」同位：可检查的工件正在成为产品面向其构建者
+的接口。若 agent 驱动开发成为主要客户，agent 可测试性就不再是锦上添花，而是框架特性。
+
+→ [[agent-stack]] [[dev-tools]]
+
+来源：[expo/exact](https://github.com/expo/exact) · [HN 讨论](https://news.ycombinator.com/item?id=50433541)

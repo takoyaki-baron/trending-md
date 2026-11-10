@@ -1713,3 +1713,43 @@ its own losses is the kind worth re-running.
 Sources: [e-means project page](https://e-means.github.io/) · [arXiv 2611.09501](https://arxiv.org/abs/2611.09501) ·
 [What is malloc doing, anyway?](https://benmandrew.com/articles/what-is-malloc-doing-anyway) ·
 [ikey4u/zebkit](https://github.com/ikey4u/zebkit)
+
+## 2026-11-10 12:03 batch — ground truth goes on sale; satellite overflight becomes one query; a C toolkit whose docs run
+
+**USPS ZIP Code Boundaries — the agency that said ZIPs are not areas now sells their polygons.**
+USPS's PostalPro hosts **USPS® ZIP Code Boundaries** — official polygon products positioned as "the ground truth
+for ZIP Code boundaries", sold in three license tiers (Internal, Enterprise, Publication), each with four quarterly
+updates, alongside a GeoJSON sample. Page resources carry June/September 2026 dates, so the HN front-page thread
+(529 pts) is a discovery wave, not a launch. The thread's practical finds: the order form reads **"starting at
+$10k"**, and the license agreement restricts redistribution — while the community's working alternative,
+OpenDataDE's census-derived State-zip-code-GeoJSON, remains free but dates to the **2010** census. The durable
+fact: ZIP Codes were never geographic areas — they are delivery-route groupings, and USPS spent decades saying so;
+an official polygon set is the first time the agency sells ground truth for the shape everyone else approximates.
+The thread's real content is the market's answer: free approximations everyone uses versus a licensed ground truth
+almost nobody buys at $10k.
+
+**Watched.earth — satellite overflight compressed into one map query.**
+"Shows which satellites passed over any place on Earth in the last 7 days, and the real photos they took"
+(Show HN, 257 pts; MIT, `dev-Armaan/satellites`). Pass search runs **SGP4 over the CelesTrak catalog in the
+browser** (~half a second per query), checked against brute force on the poles, the antimeridian and tiny swaths
+with **0 missed passes**; all **~17,000** in-orbit objects drawn on the GPU, Kepler's equation solved every frame.
+Imagery comes from the real Sentinel-2/Landsat passes found — and the honest detail is load-bearing: Sentinel-2
+timestamps are "often 5-10 min off from when the sat actually crosses your spot", exactly the measurement error
+that would silently break image-to-pass matching anywhere else. Flags a place as watched only when a real image
+exists; stores no location.
+
+**CUI — native UI components for C, every one live in its own docs page.**
+`yappologistic/CUI` (MIT, **v1.3.1**, 738★, created Nov 5): "About 190 components, compiled to machine code with no
+browser or runtime inside" — Windows, macOS, Linux and the web from one C99 codebase, "A complete app is about
+250 KB". The docs site renders **every component live in the browser**; the component index lists ~150 entries
+(combined pages account for the gap against the ~190 headline). The transferable idea is the docs-as-demo pattern —
+every component executable on its documentation page is something native toolkits rarely manage, and it doubles as
+the project's test suite. The claims (the count, the bundle size) are the author's own; the artifacts are one clone
+away.
+
+→ [[dev-tools]] [[datacenter-silicon]]
+
+Sources: [USPS ZIP Code Boundaries](https://postalpro.usps.com/zcb) ·
+[HN discussion](https://news.ycombinator.com/item?id=50431058) · [watched.earth](https://www.watched.earth) ·
+[dev-Armaan/satellites](https://github.com/dev-Armaan/satellites) ·
+[CUI documentation](https://yappologistic.github.io/CUI/) · [yappologistic/CUI](https://github.com/yappologistic/CUI)

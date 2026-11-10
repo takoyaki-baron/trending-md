@@ -78,3 +78,22 @@ illustrative example, we use:",那是更弱的主张，而且诚实地给出。
 → [[frontier-models]] [[fact-check]]
 
 来源：[Cerebras——如何部署万亿参数前沿模型](https://www.cerebras.ai/blog/how-we-deploy-trillion-parameter-frontier-models-on-cerebras) · [HN 50227356](https://news.ycombinator.com/item?id=50227356)
+
+## 2026-11-10 12:03 批次——TPU 8tx 与 8i Max：一代四型 SKU，各按生命周期阶段裁切
+
+Amin Vahdat 宣布了两款让 Google 第八代 TPU 成为四系统阵容（8t、8i、8tx、8i Max）的新品——「我们首次在一年内推出
+四套 TPU 系统」——客户近 **100 家**。**TPU 8tx** 是机密计算配置：与 8t 相同的硅片跑在第五代 AMD EPYC 主机上，
+「敏感数据与模型权重即便在使用中也保持受保护与隔离」，Boardfly 网络上较 8t 延迟最高低 **2×**。**TPU 8i Max** 把两颗
+8i 芯片封装到一起——「算力翻倍、SRAM 翻倍、HBM 带宽翻倍」，每机架占地硅片翻倍——为「跨整个软件代码库或数小时
+视频」推理的 agent 而建。
+
+帖子的软件半边可能比硅片更重要：TorchTPU（上月开源）让 PyTorch 与 Hugging Face 模型无改动运行；一套预览中的
+TPU agent 套件接入 Claude Code、Cursor 与 Google Antigravity；还有开源的 XLA Serving Engine。若 PyTorch 代码无改动
+可跑，护城河就成了封装与价格。专门化模式是主线——一代四型，各对一个生命周期阶段（训练、推理、隔离、上下文）。而
+常设警示原文适用：宣称的胜利（InferenceX 与 AgentX 上的「最先进性价比」）**在帖子里没有给出任何数字**——在表格出现
+之前都是自测。
+
+→ [[datacenter-silicon]] [[agent-stack]]
+
+来源：[Our newest TPUs: 8tx and 8i Max](https://blog.google/innovation-and-ai/infrastructure-and-cloud/global-network/tpu-8i-max-and-8tx/) ·
+[HN 讨论](https://news.ycombinator.com/item?id=50432831)

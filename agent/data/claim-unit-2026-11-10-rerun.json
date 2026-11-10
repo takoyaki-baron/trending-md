@@ -1,0 +1,397 @@
+{
+ "generated": "2026-11-10T05:28:04.174Z",
+ "files": [
+  {
+   "file": "2026-11-10.md",
+   "items": 33,
+   "findings": [
+    {
+     "check": "issues",
+     "item": 5,
+     "verdict": "ok",
+     "claim": "5976 issues+PRs combined",
+     "detail": "one number for both nouns — that is the composite the counter reports, so nothing is being presented as an issue-only count"
+    },
+    {
+     "check": "status",
+     "item": 6,
+     "verdict": "ok",
+     "claim": "CVE-2026-116779 `Analyzed`",
+     "detail": "Analyzed (lastModified 2026-11-10T05:17:57.830)"
+    },
+    {
+     "check": "cvss",
+     "item": 7,
+     "verdict": "ok",
+     "claim": "3.1 7.8",
+     "detail": "CVE-2026-125250 · Primary/disclosure@vulncheck.com · vector reproduces 7.8"
+    },
+    {
+     "check": "cvss",
+     "item": 7,
+     "verdict": "ok",
+     "claim": "4.0 8.5",
+     "detail": "CVE-2026-125250 · Secondary/disclosure@vulncheck.com"
+    },
+    {
+     "check": "status",
+     "item": 7,
+     "verdict": "ok",
+     "claim": "CVE-2026-125250 `Received`",
+     "detail": "Received (lastModified 2026-11-09T19:17:03.883)"
+    },
+    {
+     "check": "status",
+     "item": 7,
+     "verdict": "ok",
+     "claim": "CVE-2026-125250 `Received`",
+     "detail": "Received (lastModified 2026-11-09T19:17:03.883)"
+    },
+    {
+     "check": "status",
+     "item": 8,
+     "verdict": "ok",
+     "claim": "CVE-2026-123800 `Received`",
+     "detail": "Received (lastModified 2026-11-09T19:16:46.647)"
+    },
+    {
+     "check": "status",
+     "item": 9,
+     "verdict": "ok",
+     "claim": "CVE-2026-123270 `Received`",
+     "detail": "Received (lastModified 2026-11-09T18:17:25.207)"
+    },
+    {
+     "check": "range",
+     "item": 9,
+     "verdict": "ok-span",
+     "claim": "CVE-2026-123270 4.39 through 4.110",
+     "detail": "4.39 (inclusive) … 4.110 (inclusive) · Connect — non-empty"
+    },
+    {
+     "check": "cwe",
+     "item": 10,
+     "verdict": "ok",
+     "claim": "CVE-2026-111421 CWE-502",
+     "detail": "stated in NVD weaknesses[] (security@apache.org)"
+    },
+    {
+     "check": "cvss",
+     "item": 11,
+     "verdict": "ok",
+     "claim": "4.0 9.5",
+     "detail": "CVE-2026-123870 · Secondary/emo@eclipse.org"
+    },
+    {
+     "check": "status",
+     "item": 11,
+     "verdict": "ok",
+     "claim": "CVE-2026-123870 `Received`",
+     "detail": "Received (lastModified 2026-11-09T09:16:58.653)"
+    },
+    {
+     "check": "cvss",
+     "item": 19,
+     "verdict": "ok",
+     "claim": "4.0 8.5",
+     "detail": "CVE-2026-104620 · Secondary/meissner@suse.de"
+    },
+    {
+     "check": "status",
+     "item": 19,
+     "verdict": "ok",
+     "claim": "CVE-2026-104620 `Received`",
+     "detail": "Received (lastModified 2026-11-10T05:17:41.193)"
+    },
+    {
+     "check": "status",
+     "item": 26,
+     "verdict": "ok",
+     "claim": "CVE-2026-120017 `Received`",
+     "detail": "Received (lastModified 2026-11-10T01:17:16.803)"
+    },
+    {
+     "check": "status",
+     "item": 26,
+     "verdict": "ok",
+     "claim": "CVE-2026-120017 `Received`",
+     "detail": "Received (lastModified 2026-11-10T01:17:16.803)"
+    },
+    {
+     "check": "status",
+     "item": 27,
+     "verdict": "ok",
+     "claim": "CVE-2026-121685 `Received`",
+     "detail": "Received (lastModified 2026-11-09T17:17:16.680)"
+    },
+    {
+     "check": "cwe",
+     "item": 28,
+     "verdict": "ok",
+     "claim": "CVE-2026-125117 CWE-1321",
+     "detail": "stated in NVD weaknesses[] (security-advisories@github.com)"
+    },
+    {
+     "check": "cvss",
+     "item": 29,
+     "verdict": "ok",
+     "claim": "4.0 7.7",
+     "detail": "CVE-2026-125368 · Secondary/disclosure@vulncheck.com"
+    },
+    {
+     "check": "cvss",
+     "item": 29,
+     "verdict": "ok",
+     "claim": "3.1 7.5",
+     "detail": "CVE-2026-125368 · Primary/disclosure@vulncheck.com · vector reproduces 7.5"
+    },
+    {
+     "check": "repo",
+     "item": 3,
+     "verdict": "path-in-repo",
+     "claim": "contrib/e_means",
+     "detail": "verified: facebookresearch/faiss's default branch lists e_means under contrib/ — the \"shipped in\" claim is checkable, not just excused"
+    },
+    {
+     "check": "repo",
+     "item": 4,
+     "verdict": "ok",
+     "claim": "sherlock-project/sherlock",
+     "detail": "107476★, last push 2026-11-09"
+    },
+    {
+     "check": "batch",
+     "item": 7,
+     "verdict": "batch-count-ok",
+     "claim": "121 records (FFmpeg, 2026-11-09)",
+     "detail": "121 records from disclosure@vulncheck.com published 2026-11-09 — the claim's own set, retrieved by its own cited id CVE-2026-125250"
+    },
+    {
+     "check": "batch",
+     "item": 7,
+     "verdict": "batch-subcount-ok",
+     "claim": "114 of the 121 descriptions say \"through 9.0.2\"",
+     "detail": "114 of 121 descriptions carry the phrase"
+    },
+    {
+     "check": "quotation",
+     "item": 1,
+     "verdict": "ok",
+     "claim": "7 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 2,
+     "verdict": "ok",
+     "claim": "2 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 3,
+     "verdict": "ok",
+     "claim": "1 quotation(s)",
+     "detail": "verbatim in 4 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 5,
+     "verdict": "ok",
+     "claim": "3 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 6,
+     "verdict": "ok",
+     "claim": "3 quotation(s)",
+     "detail": "verbatim in 12 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 8,
+     "verdict": "ok",
+     "claim": "2 quotation(s)",
+     "detail": "verbatim in 5 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 9,
+     "verdict": "ok",
+     "claim": "3 quotation(s)",
+     "detail": "verbatim in 4 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 10,
+     "verdict": "ok",
+     "claim": "3 quotation(s)",
+     "detail": "verbatim in 6 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 11,
+     "verdict": "ok",
+     "claim": "1 quotation(s)",
+     "detail": "verbatim in 5 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 12,
+     "verdict": "ok",
+     "claim": "2 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 13,
+     "verdict": "ok",
+     "claim": "4 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 14,
+     "verdict": "ok",
+     "claim": "4 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 15,
+     "verdict": "ok",
+     "claim": "7 quotation(s)",
+     "detail": "verbatim in 3 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 16,
+     "verdict": "ok",
+     "claim": "3 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 17,
+     "verdict": "ok",
+     "claim": "4 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 18,
+     "verdict": "ok",
+     "claim": "3 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 19,
+     "verdict": "ok",
+     "claim": "1 quotation(s)",
+     "detail": "verbatim in 4 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 20,
+     "verdict": "ok",
+     "claim": "1 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 21,
+     "verdict": "ok",
+     "claim": "3 quotation(s)",
+     "detail": "verbatim in 3 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 22,
+     "verdict": "ok",
+     "claim": "5 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 23,
+     "verdict": "ok",
+     "claim": "2 quotation(s)",
+     "detail": "verbatim in 3 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 24,
+     "verdict": "ok",
+     "claim": "3 quotation(s)",
+     "detail": "verbatim in 3 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 25,
+     "verdict": "ok",
+     "claim": "4 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 26,
+     "verdict": "ok",
+     "claim": "2 quotation(s)",
+     "detail": "verbatim in 9 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 27,
+     "verdict": "ok",
+     "claim": "5 quotation(s)",
+     "detail": "verbatim in 6 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 28,
+     "verdict": "ok",
+     "claim": "2 quotation(s)",
+     "detail": "verbatim in 5 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 29,
+     "verdict": "ok",
+     "claim": "5 quotation(s)",
+     "detail": "verbatim in 5 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 30,
+     "verdict": "ok",
+     "claim": "5 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 31,
+     "verdict": "ok",
+     "claim": "2 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 33,
+     "verdict": "ok",
+     "claim": "4 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    }
+   ]
+  }
+ ],
+ "status_watch": [],
+ "api_calls": 2,
+ "readme_calls": 1,
+ "cited_page_calls": 1,
+ "repo_page_calls": 0,
+ "nvd_calls": 1,
+ "nvd_failed_chunks": 0,
+ "cna_calls": 0
+}

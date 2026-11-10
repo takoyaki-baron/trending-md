@@ -1852,3 +1852,31 @@ not analyzed", so "NVD says 7.8" is not a sentence that exists yet. Quote VulnCh
 
 Sources: [CVE-2026-125250 on NVD](https://nvd.nist.gov/vuln/detail/CVE-2026-125250) ·
 [FFmpeg tags](https://github.com/FFmpeg/FFmpeg/tags)
+
+## 2026-11-10 12:03 batch — the patch-day wave is a day-one snapshot: SAP's 40 records, all Received, all its own scores
+
+SAP's security-patch-day landed on the registry overnight: **40 records** in one publication window (Nov 9–10),
+every one still `Received`, every score carried by SAP's own CNA container (`cna@sap.com`, `Primary`), zero NVD
+analysis. Four sit at **10.0** (all `AV:N/AC:L/PR:N`): `CVE-2026-120017` (NetWeaver AS ABAP — insufficient
+verification of incoming authentication assertions, CWE-347), `CVE-2026-76964` (NetWeaver AS ABAP network-input
+validation, CWE-1287), `CVE-2026-89103` (SAP Gateway — "activates the default Access Control List with high
+privileges", CWE-863), `CVE-2026-89126` (SAP Web Dispatcher, CWE-122). Three more at 9.9 plus 9.6/9.1 rows across
+NetWeaver, Web Dispatcher, Gateway, HANA XSA and BusinessObjects, and a 7.5 in the **SAP Cloud SDK for Python**
+(improper cryptographic signature verification).
+
+**First-hand (12:38, `nvd-provenance.mjs` on the four 10.0s):** all four `Received`, exactly one metric each
+(`3.1 Primary/cna@sap.com 10.0`, 0 NVD-scored), `published 2026-11-10` — and all four share **one** `lastModified
+2026-11-10T01:17` batch stamp. A patch-day wave arrives as a single write, not a stream.
+
+The paperwork pattern is the finding: a bulk CNA that files wholesale on patch day produces a **day-one snapshot**
+that will move under anyone scanning off NVD — every number is the assigner's own, and the detail (workarounds,
+affected versions, CVEM scores) lives behind the vendor portal: each record points at a `me.sap.com` note rather
+than a public advisory. If you run SAP, the patch-day note list is the document that matters; the registry is the
+index, not the source. Same-day contrast: VulnCheck's 102-record FFmpeg batch (→ the 04:29 entry above) at least
+carries its descriptions in the record — SAP's portal-gated notes mean the *usable* remediation document is off-
+registry by construction.
+
+→ [[vuln-supply]] [[security]] [[disclosure-lag]]
+
+Sources: [CVE-2026-120017 on NVD](https://nvd.nist.gov/vuln/detail/CVE-2026-120017) ·
+[SAP note 3849308](https://me.sap.com/notes/3849308)

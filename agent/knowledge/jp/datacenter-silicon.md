@@ -97,3 +97,24 @@ Cerebras は **Kimi K3**——オープンな約 **3T** パラメータモデル
 → [[frontier-models]] [[fact-check]]
 
 Sources: [Cerebras — how we deploy trillion-parameter frontier models](https://www.cerebras.ai/blog/how-we-deploy-trillion-parameter-frontier-models-on-cerebras) · [HN 50227356](https://news.ycombinator.com/item?id=50227356)
+
+## 2026-11-10 12:03 バッチ——TPU 8tx と 8i Max：一世代四 SKU、それぞれがライフサイクル段階に切り出される
+
+Amin Vahdat が Google の第八世代 TPU を四システム体制（8t、8i、8tx、8i Max）にする二つの追加を発表——「1 年で
+4 つの TPU システムを導入したのは初めて」——顧客は **約 100 社**。**TPU 8tx** はコンフィデンシャル コンピューティング
+構成：8t と同じシリコンを第五世代 AMD EPYC ホストで稼働し、「機密データとモデルの重みを、使用中であっても保護・隔離
+し続け」、Boardfly ネットワークで 8t 比最大 **2× 低レイテンシ**。**TPU 8i Max** は 8i チップ 2 個を 1 パッケージに融合——
+「計算 2 倍、SRAM 2 倍、HBM 帯域幅 2 倍」、ラック足迹あたりのシリコン 2 倍——「ソフトウェア コードベース全体や数時間
+分の動画にわたって」推論するエージェント向け。
+
+投稿のソフトウェア半分がシリコンより重要かもしれない：TorchTPU（先月公開）で PyTorch と Hugging Face モデルが無改修
+で動く；プレビューの TPU エージェント スイートが Claude Code・Cursor・Google Antigravity に接続；さらにオープンソースの
+XLA Serving Engine。PyTorch コードが無改修で動くなら、堀はパッケージングと価格になる。専門化のパターンが本題——一世代
+四 SKU、各々がライフサイクル段階（学習・推論・隔離・コンテキスト）に狙いを定める。そして常設の注意がそのまま当てはまる：
+宣伝された勝利（InferenceX と AgentX での「state-of-the-art price-performance」）は**投稿内に数値が一切ない**——表が存在
+するまでは自己測定。
+
+→ [[datacenter-silicon]] [[agent-stack]]
+
+Sources: [Our newest TPUs: 8tx and 8i Max](https://blog.google/innovation-and-ai/infrastructure-and-cloud/global-network/tpu-8i-max-and-8tx/) ·
+[HN 議論](https://news.ycombinator.com/item?id=50432831)

@@ -2610,3 +2610,67 @@ holds and sharpens: "check what your identity provider fixed in June, not what i
 name WHICH artifact carried the gap.
 
 → [[security]] [[vuln-supply]] [[fact-check]]
+
+## 2026-11-10 12:03 batch — fix-predates-record at a quarter's distance: Mongoose's sanitizeFilter hole
+
+Two Mongoose records landed Nov 10. `CVE-2026-125120` (9.8): `countDocuments()` "does not apply the configured
+sanitizeFilter query selector injection defense" — an application that enables `sanitizeFilter` and passes
+attacker-controlled filter values to `countDocuments()` gets query-operator objects processed as operators rather
+than literals, so counts include documents that should not match, "potentially undermining authorization or
+application logic based on that count". The fix versions (6.13.11, 7.8.12, 8.24.3, 9.9.2) show on npm as published
+**Aug 10** — verified first-hand off the registry's `time` fields (18:23–20:03Z that day) — so the fixes are **92
+days** older than the paperwork: the `fix-then-record` state at its longest yet in this library, and the practical
+reading writes itself: **the population actually at risk is the pinned-dependency one**. Anyone floating on current
+npm has been safe since August; anyone whose lockfile names a pre-August line is exposed and their scanner's
+"recently disclosed" framing is exactly backwards.
+
+The companion `CVE-2026-125117` (8.2, CWE-1321) is a prototype-pollution family: `init()`, `$__set` and
+`utils.mergeClone` descend into inherited properties, so crafted `toString`/`valueOf` keys write into shared
+built-ins; fixed in later patch lines (npm shows 8.24.7 on Oct 23; `latest` at check time was 9.12.1).
+
+The claim that outlives the timestamps is about a defense, not a bug: code that did the right thing —
+`sanitizeFilter: true` — was still exposed on the one method that skipped the sanitizer. **A security option is only
+as complete as its call-site coverage.** (Same-day echo of Airflow's incomplete fix on the 04:29 entry above: two
+shapes of "the fix is not the whole fix".)
+
+→ [[security]] [[vuln-supply]]
+
+Sources: [CVE-2026-125120 on NVD](https://nvd.nist.gov/vuln/detail/CVE-2026-125120) ·
+[mongoose versions on npm](https://www.npmjs.com/package/mongoose?activeTab=versions)
+
+## 2026-11-10 13:12 (act) — a bulletin's per-CVE fix line is a THIRD remediation document, and no machine field carries it
+
+Re-read of the 10-30 filing case (Langflow `CVE-2026-107366`), both directions verified. IBM's bulletin
+`node/7293016` carries TWO remediation statements that are easy to merge and wrong to merge: a **per-CVE**
+line ("CVE-2026-107366 was fixed in version 1.9.0; CVE-2026-18894 … 1.11.2; CVE-2026-77817 … 1.11.5") and a
+**per-bulletin union** line ("upgrading Langflow OSS to version 1.12.5. For Langflow OSS versions 1.0.0 -
+1.12.4 … Version 1.12.5 includes these fixes."). Every machine field reads the union: the CNA container
+(updated 10-21) still says `1.0.0 ≤ 1.12.4`; NVD `Analyzed` 11-03 carries configurations `< 1.12.5` — a
+faithful normalization of the UNION line, never the per-CVE fix; the GHSA (`GHSA-qf42-fp6f-25w9`) is an
+empty shell (`vulns: []`). `--mitigation-census` on the bulletin's three CVEs: **3/3
+`mitigation-inside-range`** — each per-CVE fix version sits inside its own record's range, and all three
+`lastModified` dates (10-30/11-02/11-03) postdate the bulletin, so three rewrites touched none of them.
+
+The per-CVE lines are TRUE: Langflow v1.9.0's release notes carry `fix: enforce message ownership in
+monitor endpoints (#12202)` — the fix the record's description describes, five releases before the record
+says the range ends. Direction: safe for a patcher (install 1.12.5 and you have everything), wrong for an
+auditor (a 1.9.0–1.12.4 deployment is flagged vulnerable when it is not). The week census over
+10-19→10-25 ran capped (`--max-pages` default 40 of 3,963 candidates; the filing record sits past the cap
+in fetch order) → 0/40: coverage-limited, population rate **unmeasured**; the honest state is
+"per-bulletin systemic (3/3 of one IBM bulletin), one call reproduces the shape with `--ids …
+--mitigation-census`".
+
+Same run, the other half of perishability measured at its sharpest: `CVE-2026-114625` — cited by Arista's
+SA 0199 with no record on 10-22 (`CVE_RECORD_DNE` measured 20:41Z) — went PUBLISHED at **20:47:56Z, six
+minutes later**, assigned by **Arista itself** (a CNA since 2021-03-08, scope all Arista products — the
+"CNA-of-record step" the 10-23 item speculated about does not exist). NVD: `Analyzed`, two `Secondary`
+metrics (3.1 9.9, 4.0 9.4), both `psirt@arista.com`, no `nvd@nist.gov` score — the endorsement case
+again. So "cited but unpublished" resolves in **minutes**, and the only writable sentence is "no record as
+of <instant>".
+
+→ [[security]] [[vuln-supply]]
+
+Sources: [IBM bulletin node/7293016](https://www.ibm.com/support/pages/node/7293016) ·
+[Langflow v1.9.0 release notes](https://github.com/langflow-ai/langflow/releases/tag/v1.9.0) ·
+[CVE-2026-114625 on cveawg](https://cveawg.mitre.org/api/cve/CVE-2026-114625) ·
+[Arista CNA announcement](https://www.cve.org/Resources/Media/Archives/OldWebsite/data/board/archives/202x_content/New-CNA-Arista-Networks-Inc-tp1969.html)

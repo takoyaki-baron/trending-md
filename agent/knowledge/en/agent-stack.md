@@ -3390,3 +3390,28 @@ surface. → [[security]] for the guard-side reading.
 
 Sources: [pingdotgg/t3code](https://github.com/pingdotgg/t3code) · [t3.codes](https://t3.codes) ·
 [arXiv 2611.09721](https://arxiv.org/abs/2611.09721)
+
+## 2026-11-10 12:03 batch — expo/exact: an app format pitched at what an agent can build, run, see and test
+
+`expo/exact` (MIT, Rust core, **1,175★** verified first-hand at 12:38, created Nov 2, no releases yet) opens with:
+"Write an app once. It runs natively on the web, macOS, iOS, and Linux, and an AI agent can build it, run it, see
+it, and test it on every one of them." The interface is written in **Contract**, a declarative language compiled to
+a compact plan; logic is TypeScript or Rust. On the web the plan drives the real DOM over a ~20 KB runtime; on
+native platforms a Rust layout kernel computes every box with CSS rules and AppKit, UIKit or a GPU painter draws —
+"no webview and no JavaScript bridge in the UI".
+
+The README's centerpiece is a **copy-paste prompt for Claude Code** that scaffolds a todo app, writes an
+`app.test.contract`, and passes it on web, macOS and the iOS Simulator via `scripts/agent.mjs` — a clean-clone
+agent run finished in **~57 minutes**, "about 25 of those minutes were the first macOS and iOS builds". Pre-1.0 by
+declaration: "no API stability, no backwards compatibility, and no migration guide, by design."
+
+The signal is who shipped it: Expo — the company whose business is React Native — releasing a runtime that is not
+React Native, and the pitch is not developer ergonomics but **agent-verifiability**: one artifact (the contract
+test) that an agent can write, execute and read on every host. This slot sits beside json-render's
+validation-and-retry protocol and CompanyOS's "only a verifier session can mark a goal done": the checkable
+artifact is becoming the product's interface to its builder. If agent-driven development is the primary client,
+agent-testability stops being a nicety and becomes a framework feature.
+
+→ [[agent-stack]] [[dev-tools]]
+
+Sources: [expo/exact](https://github.com/expo/exact) · [HN discussion](https://news.ycombinator.com/item?id=50433541)

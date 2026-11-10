@@ -1,5 +1,5 @@
 {
- "updated": "2026-11-09T22:01:40.564Z",
+ "updated": "2026-11-10T06:43:02.605Z",
  "cves": {
   "CVE-2026-48382": {
    "vulnStatus": "Analyzed",
@@ -8832,7 +8832,7 @@
   "CVE-2026-54143": {
    "vulnStatus": "Deferred",
    "published": "2026-11-05",
-   "lastModified": "2026-11-06T21:41",
+   "lastModified": "2026-11-09T23:17",
    "metrics": [
     {
      "version": "3.1",
@@ -8854,7 +8854,7 @@
   "CVE-2026-54141": {
    "vulnStatus": "Deferred",
    "published": "2026-11-05",
-   "lastModified": "2026-11-06T21:41",
+   "lastModified": "2026-11-09T23:17",
    "metrics": [
     {
      "version": "3.1",
@@ -9000,7 +9000,7 @@
   "CVE-2026-73856": {
    "vulnStatus": "Received",
    "published": "2026-11-05",
-   "lastModified": "2026-11-05T16:17",
+   "lastModified": "2026-11-09T23:17",
    "metrics": [
     {
      "version": "3.1",

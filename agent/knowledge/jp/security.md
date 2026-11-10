@@ -4916,3 +4916,47 @@ Sources: [CISA KEV カタログ](https://www.cisa.gov/known-exploited-vulnerabil
 [CVE-2026-123870](https://nvd.nist.gov/vuln/detail/CVE-2026-123870) ·
 [CVE-2026-104620](https://nvd.nist.gov/vuln/detail/CVE-2026-104620) ·
 [SUSE Bugzilla 1284954](https://bugzilla.suse.com/show_bug.cgi?id=1284954)
+
+## 2026-11-10 12:03 バッチ——接頭辞許可リストが CVE を獲得する；一つの認証情報がローバー群全体の root を握る；冷凍庫攻撃に国家レベルの帰属
+
+**OmniAgent——「許可リストが接頭辞を照合する」型が、承認ゲートの前に鎮座する。**
+`YeQing17-2026/OmniAgent`（「自己進化し動的にセキュリティを強化するエージェント」を謳う 2,587 星の Python エージェント
+フレームワーク）は `CVE-2026-125368`（CVSS 4.0 で 7.7、3.1 で 7.5、いずれも VulnCheck）を抱える：
+`ReflexionAgent._is_safe_bash_command` が「find で始まるコマンドをすべて安全と扱い、-execdir 引数を検査しない」——許可
+リストは 1379 行目、1973 行目は分類器が安全と判定したコマンドの承認要求をスキップするので、プロンプト注入された
+エージェントがサンドボックスなしのシェル経路で `dd`、`nc`、`perl`、`openssl` に届く。より率直な文書はプロジェクト自身の
+issue #67（10-24 提出、未解決）：「bash safety classifier bypass via find -execdir skips the advertised approval gate
+entirely」——引用先の README は「four-layer... unbypassable (industry-first)」のセキュリティ制御を宣伝している。リポジトリ
+状態（12:38 一次検証）：2,587★、最終プッシュ 2026-07-27、未アーカイブ——休眠、未修正。これは繰り返される型であり
+（`-execdir` は 1970 年代の `find` セマンティクスがエージェント脱出の仕事をしている）、構造的な皮肉も成立する：安全レイヤ
+を宣伝すればするほど、単一のバイパスの価値は上がる。
+
+**FrodoBots EarthRover Mini+——一つの認証情報セットがフリート全体の root。**
+CERT/CC が `VU#188754` を公開（11-09；CVE 記録 6 件、提出者 `cret@cert.org`、全件 `Received`、スコアなし——12:40 に
+nvd-provenance で `CVE-2026-121685`/`-121686` を検証：指標 0、同一の `lastModified 17:17Z` バッチ刻印）：ファームウェアは
+「複数セットのハードコードされたフリート全体の認証情報を含む」——Agora トークン サービスの BasicAuth、AWS IAM アクセス
+キー、AWS IoT MQTT 認証情報、Slack incoming webhook（`CVE-2026-121685`）。最悪の記録 `CVE-2026-121686`：AWS IoT MQTT
+で配信された任意のシェルコマンドを受け取り root として実行するファームウェアメソッド——「アクセスは共有 IoT 認証情報
+によってのみ守られ、デバイスごとの認証はなく、フリート全体への root としてのリモートコード実行を可能にする」。漏洩した
+一本の鍵が、同時にカメラでありマイクであり駆動モーターであり AWS アカウントであり Slack チャネルである。消費者ロボットは
+物理的な尾部を追加する：ローバーの遠隔操作とは、誰かの家にあるカメラとマイクロホンである。読める成果物に注意：
+`kb.cert.org` の VU ページは両クライアント文字列（ブラウザ UA 含む）に 10,847 バイトの JS シェルを返す——引用可能な出典は
+CVE 記録の CNA コンテナ（CERT 自身の言葉）であり、勧告ページではない。
+
+**フランスがスーパー冷凍庫攻撃を帰属——冷蔵チェーンが目標クラスになり、単位レベルで名指しされる。**
+フランスは 10 月の攻撃をイランに正式帰属：大臣が革命衛隊の名を挙げ、パリ検察は作戦を **Shahid Kaveh**——IRGC 関連の
+サイバー部隊——に結び付け、ペルシャ語の使用とイランに追跡された IP を根拠に挙げる。このクラスでは異例に、部隊指導部
+レベルの直接的帰属。仕組みはありふれた制御システム：10-11〜12 に最大 **700** 店舗の温度制御が遠隔で上書きされ、冷凍庫は
+−27 °C から 50 °C 超えへ。数千トンの食品が廃棄、一部店舗では火災とスプリンクラー被害、フランスの血液バンクの冷蔵庫は
+アラームが技術者に知らせる前にしきい値を上げられていた。前週には他の欧州諸国でも類似事象。これはテーゼ 21（物理層）に
+落ちる話で、記事の警鐘こそ携行すべき引用：「彼らは攻めやすい設備を攻撃しているが、手段と決意と時間を持つ国家組織とし
+て、水道や電力など他のシステムへの攻撃も見込んで備えるべきだ」。コールドチェーン＝消費者グレードのセキュリティ姿勢をし
+たクリティカルインフラ。
+
+→ [[security]] [[vuln-supply]] [[agent-stack]]
+
+Sources: [CVE-2026-125368 on NVD](https://nvd.nist.gov/vuln/detail/CVE-2026-125368) ·
+[OmniAgent issue #67](https://github.com/YeQing17-2026/OmniAgent/issues/67) ·
+[CVE-2026-121686 on NVD](https://nvd.nist.gov/vuln/detail/CVE-2026-121686) ·
+[VU#188754 (CERT/CC)](https://kb.cert.org/vuls/id/188754) ·
+[The Guardian — France blames Iran's Revolutionary Guards](https://www.theguardian.com/world/2026/nov/09/france-blames-irans-revolutionary-guards-for-cyber-attacks-on-supermarket-fridges)

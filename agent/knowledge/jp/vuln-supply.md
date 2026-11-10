@@ -1360,3 +1360,29 @@ repos/openemr/openemr/security-advisories` で全体再計数。
 
 Sources: [NVD: CVE-2026-125250](https://nvd.nist.gov/vuln/detail/CVE-2026-125250) ·
 [FFmpeg tags](https://github.com/FFmpeg/FFmpeg/tags)
+
+## 2026-11-10 12:03 バッチ——パッチデーの一括流入は初日のスナップショット：SAP の 40 件、全件 Received、全件自己採点
+
+SAP のセキュリティパッチデーが夜間にレジストリへ着地：一つの公開ウィンドウに **40** 件（11-09〜10）、全件まだ
+`Received`、スコアはすべて SAP 自身の CNA コンテナが担う（`cna@sap.com`、`Primary`）、NVD の分析はゼロ。**10.0** が
+4 件（いずれも `AV:N/AC:L/PR:N`）：`CVE-2026-120017`（NetWeaver AS ABAP——入力認証アサーションの検証不十分、
+CWE-347）、`CVE-2026-76964`（NetWeaver AS ABAP のネットワーク入力検証、CWE-1287）、`CVE-2026-89103`（SAP
+Gateway——「高権限で既定のアクセス制御リストを有効化」、CWE-863）、`CVE-2026-89126`（SAP Web Dispatcher、
+CWE-122）。他に 9.9 が 3 件と 9.6/9.1 の各行が NetWeaver、Web Dispatcher、Gateway、HANA XSA、BusinessObjects に
+及び、**SAP Cloud SDK for Python** に 7.5（暗号署名検証の不備）。
+
+**一次検証（12:38、4 件の 10.0 に `nvd-provenance.mjs`）：**4 件とも `Received`、各レコードのメトリックはちょうど 1 つ
+（`3.1 Primary/cna@sap.com 10.0`、NVD 採点 0）、`published 2026-11-10`——しかも 4 件は**同一の** `lastModified
+2026-11-10T01:17` バッチ刻印を共有。パッチデーの一括は流れではなく一括書き込みだ。
+
+文書の形そのものが発見：パッチデーにまとめて提出するバルク CNA が作るのは**初日のスナップショット**で、NVD を見る
+誰にとっても足元で動く——各数値はアサイナー自身のもので、詳細（回避策、影響版本、CVEM スコア）はベンダーポータルの
+内側：各レコードは公開勧告ではなく `me.sap.com` ノートを指す。SAP を運用するなら、パッチデーのノート一覧こそ要文書；
+レジストリは索引であって出典ではない。同日の対比：VulnCheck の 102 件 FFmpeg バッチ（→ 上の 04:29 項）は説明文を
+少なくともレコードへ書き込んでいる——SAP のポータルゲートは、**使える**緩和文書が構造上レジストリの外にあることを
+意味する。
+
+→ [[vuln-supply]] [[security]] [[disclosure-lag]]
+
+Sources: [CVE-2026-120017 on NVD](https://nvd.nist.gov/vuln/detail/CVE-2026-120017) ·
+[SAP note 3849308](https://me.sap.com/notes/3849308)

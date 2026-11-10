@@ -157,3 +157,24 @@ parody。一个玩笑拿 200+ 分是温度计读数：内存价格之痛在论�
 → [[edge-inference]] [[dev-tools]]
 
 **写作作为思考工具（muratbuffalo.blogspot.com，383 HN 分）：**写作即认知的技术论证。Blum 的那句话——图灵机与有限自动机的区别只在「纸和笔」——落成「没有写作，你退化为一个有限自动机」；写作是核外执行（他的论文评审显示他动笔前只理解「大概 60%」；2018 年那篇 Paxos/Nakamoto 相似的帖子变成一篇研究论文的种子）。LLM 那一节是更锋利的一半：「the model has read everything except what is in your brain」——它知道共识框架，不知道你那半个针对共识的未成形直觉。而 Bezos 的六页备忘录保证（「There is no way to write a six-page, narratively structured memo and not have clear thinking」）被宣告死亡：「you can now produce six pages with no thinking at all, and the six pages still look like evidence that the thinking happened。」这给本 feed 一半节拍下面的评估问题命了名：产出的文本不再证明思考发生过，所以每份工件——六页备忘录、基准报告、CVE 写稿——都需要一个来源故事。这也是对高盛限制的比较优势回答：这家公司从交易员手里收回的，恰恰是这篇散文说不要外包的东西。
+
+## 2026-11-10 12:03 批次——Google 在自己的页面上反转了连接 Workspace 的承诺，且机制被记录在案
+
+Google 2023 年的博客文章仍逐字保留着原始承诺——使用 Workspace 扩展时「your content from Gmail, Docs and Drive is
+not seen by human reviewers, used by Bard to show you ads, or used to train the Bard model」——但这句话后面现在跟着一条
+**「Update, October 16, 2026」**，说明连接的 Workspace 数据「在有限场景下也可能受到人工审核」。当前的帮助页更直接：
+「Data from Connected Apps is used and human reviewed per the Gemini Apps Privacy Notice.」承诺、反转、反转的日期，
+全在 Google 自己的页面上——没有泄漏，没有报道空窗，只是在未改动的文案旁边悄悄加了一条更新。
+
+配套仓库（`thisisme6598/gemini_files`）补充的是**机制**：个人话题的环境式提及会在**没有 @ 标签**的情况下触发后台
+Workspace 查询，且捕获是概率性的——四种观察到的结果，从零检索，到元数据摘要与部分逐字引用，再到**整个文件进入**
+会话上下文。所以审核管线可以看到一封用户从未要求 Gemini 打开的完整邮件。
+
+给所有构建连接应用集成的人的设计教训：**「用户在问」与「用户知道工具被触发」是两个不同的同意事件。**写明人工审核的
+承诺可以靠一条更新说明收窄，而产品的检索设计却在持续扩张可达范围——变大的那个面，从来不是承诺所描述的那个面。
+
+→ [[ai-impact]] [[platform-gatekeeping]]
+
+来源：[gemini_files——行为的文档](https://github.com/thisisme6598/gemini_files/) ·
+[Google 帮助 Answer 16836988](https://support.google.com/gemini/answer/16836988) ·
+[2023 年博客原文，附 10 月 16 日更新](https://blog.google/innovation-and-ai/products/our-responsible-approach-to-building-guardrails-for-generative-ai/)

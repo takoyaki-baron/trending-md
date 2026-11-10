@@ -48,7 +48,7 @@ Meta FAIR は Lloyd 法の代替である **e-means** をオープンソース�
 
 **Why it matters:** k-means はベクトルインデックス、量子化コードブック、クラスタリングベースの検索フィルタの下で荷重を支えるプリミティブであり、エポックが 10 分の 1 になれば新しいデータ構造なしにその 3 つすべてに触れる。正直な留保は、比較が著者自身のハーネスと、自チームによる現行最高実装に対して行われた点だ。対抗する事実は、コードが FAISS 本体に入ったこと——ベースラインが主張ではなく再現可能になった。
 
-[`🔗 e-means プロジェクトページ`](https://e-means.github.io/) · [`🔗 arXiv 2611.09501`](https://arxiv.org/abs/2611.09501)
+[`🔗 e-means プロジェクトページ`](https://e-means.github.io/) · [`🔗 arXiv 2611.09501`](https://arxiv.org/abs/2611.09501) · [`🔗 FAISS repo · contrib/e_means`](https://github.com/facebookresearch/faiss/tree/main/contrib/e_means)
 
 ---
 

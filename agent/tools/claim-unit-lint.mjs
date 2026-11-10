@@ -350,6 +350,43 @@ const GH_PATH_SEGMENTS = new Set([
 const TECHNICAL_NOUN = /\b(?:models?|model\s+ids?|endpoints?|parameters?|params?|routes?|paths?|headers?|APIs?|fields?|ids?|identifiers?|fallbacks?|prompts?|temperature|URLs?|payloads?|arguments?|args?|query\s+string|slugs?)\b/i;
 const PROJECT_TERMS = /\b(?:repos?(?:itory)?s?|README|releases?|stars?|open[-\s]?source|github|projects?|librar(?:y|ies)|packages?|SDKs?|CLIs?|source\s+code|maintainers?|commits?)\b/i;
 
+/* A backticked `a/b` can also be a PATH inside a repository. The measured counterexample
+ * (2026-11-10, item 3): "shipped in **`contrib/e_means`**" — a module directory inside
+ * `facebookresearch/faiss` (verified first-hand: `repos/facebookresearch/faiss/contents/contrib`
+ * lists `e_means` as a directory beside `ivf_flat`, `quantizer_fp8`, …). The slug reader spent an
+ * `api.github.com` call on `repos/contrib/e_means`, got the 404 that shape deserves, and reported
+ * an `unreadable` repo against a TRUE claim — and the claim itself went unverified, because no
+ * arm asks "does this path exist in the repo the item is about?". So: a first segment that is a
+ * conventional monorepo directory name classifies the slug as a PATH — never spent on
+ * `repos/<slug>`, and always REPORTED rather than dropped: `path-repo-ambiguous` (sev 0, no
+ * single repo to resolve against), `path-in-repo` (sev 0, verified — ONE contents call against
+ * the github.com repo the item links) or `path-absent` (sev 2, the claim fails on the default
+ * branch). Precedence: the TECHNICAL_NOUN tell wins — `plugins/sql` in
+ * an "endpoint" sentence is the measured 11-01 case and stays `not-a-repo`, because a directory
+ * guess must not override what the sentence says the string is. */
+const REPO_DIR_PREFIXES = new Set([
+  'contrib', 'packages', 'plugins', 'src', 'libs', 'modules', 'tools', 'examples', 'tests',
+  'docs', 'scripts', 'apps', 'crates', 'skills', 'internal', 'cmd', 'pkg', 'core', 'benchmarks',
+]);
+
+/* Pure: does a directory listing carry the path's second segment? Exact name wins, then a
+ * prefix match — `e_means` in `contrib/` is a directory entry, and a slug naming a module
+ * family (`e_means`) must also match the files that family ships (`e_means.py`). */
+function pathEntryMatch(entries, seg) {
+  if (!Array.isArray(entries)) return null;
+  const names = entries.map((e) => String(e?.name ?? ''));
+  if (names.includes(seg)) return seg;
+  const pre = names.find((n) => n.startsWith(seg));
+  return pre ?? null;
+}
+
+/* Pure: what a path claim means, given the listing (injectable so `--selftest` stays offline). */
+function pathVerdict(entries, seg) {
+  const hit = pathEntryMatch(entries, seg);
+  if (hit != null) return { verdict: 'path-in-repo', hit };
+  return { verdict: 'path-absent', hit: null };
+}
+
 function sentenceInText(text, index) {
   const before = text.slice(0, index);
   const m = [...before.matchAll(/[.!?]["')\]]*\s+/g)].pop();
@@ -446,6 +483,7 @@ function parseItems(text) {
     it.cves = [...new Set(it.text.match(/CVE-\d{4}-\d{3,7}/g) ?? [])].sort();
     it.cvesAll = [...new Set([...it.cves, ...expandShortCves(it.text)])].sort();
     const repos = new Set();
+    const urlRepos = new Set();
     for (const m of it.text.matchAll(/github\.com\/([\w.-]+)\/([\w.-]+)/g)) {
       const slug = `${m[1]}/${m[2]}`.replace(/\.git$/, '');
       // A github.com **route** looks exactly like a repository in a URL: `github.com/advisories/
@@ -454,6 +492,7 @@ function parseItems(text) {
       if (GH_PATH_SEGMENTS.has(m[1].toLowerCase())) continue;
       if (/^GHSA-/i.test(m[2])) continue;
       repos.add(slug);
+      urlRepos.add(slug);
     }
     /* A slug can occur twice and be ONE thing: item 8 names `plugins/sql` in the quoted advisory
        ("…to the `plugins/sql` endpoint…") and again in its own analysis ("If your cluster exposes
@@ -473,15 +512,24 @@ function parseItems(text) {
       const subject = it.title.includes(slug);
       const why = sents.map((s) => (s.match(TECHNICAL_NOUN) ?? [])[0]).find(Boolean);
       it.notRepo ??= [];
+      it.pathSlugs ??= [];
       if (!linked && !subject && why && !sents.some((s) => PROJECT_TERMS.test(s))) {
         /* Kept in `repos` and only skipped by `checkRepo`: the `count`/`ratio` checks look a slug up
            as an ARTIFACT to read a card from, which a model id supports and a repository claim does
            not. Dropping it here would also have cost item 5 its table-row verification. */
         it.notRepo.push({ slug, why: why.toLowerCase() });
+        repos.add(slug);
+      } else if (!linked && !subject && REPO_DIR_PREFIXES.has(slug.split('/')[0].toLowerCase())) {
+        /* A PATH inside a repository, not a repository (`contrib/e_means`, 2026-11-10 item 3).
+           Not added to `repos` — a path has no stars, no archive flag, no README — and kept in
+           `pathSlugs` for `checkPaths` to verify against the repo the item links. */
+        it.pathSlugs.push({ slug });
+      } else {
+        repos.add(slug);
       }
-      repos.add(slug);
     }
     it.repos = [...repos];
+    it.urlRepos = [...urlRepos];
   }
   return items;
 }
@@ -3151,6 +3199,62 @@ function checkIdRange(it) {
 
 function checkRepo(it, budget, ageBudget) {
   const out = [];
+  /* ── path claims first: `contrib/e_means` verified against the repo the item links. The default
+     arm: when the item names exactly one github.com repository, ONE contents call decides whether
+     the claimed path exists there (default branch). Zero or several candidate repos is
+     `path-repo-ambiguous` — never a guess about which repo the path lives in. */
+  for (const { slug } of (it.pathSlugs ?? []).slice(0, 2)) {
+    if (budget.left <= 0) break;
+    const cands = (it.urlRepos ?? []).filter((r) => r !== slug);
+    if (cands.length !== 1) {
+      out.push({
+        check: 'repo', item: it.n, verdict: 'path-repo-ambiguous', claim: slug,
+        detail: `a path, not a repository — but the item names ${cands.length === 0 ? 'no github.com repo' : `${cands.length} repos`} to resolve it against, so the claim stays unverified (reported, not silent)`,
+      });
+      continue;
+    }
+    budget.left -= 1;
+    const dir = slug.split('/')[0];
+    const seg = slug.split('/')[1];
+    const key = `path:${cands[0]}/${dir}`;
+    let entries = null, err = null, status = null;
+    const hit = cache[key];
+    if (hit && hit.v === REPO_CACHE_V) {
+      const ttl = hit.error && hit.status !== '404' ? ERROR_TTL_MS : CACHE_TTL_MS;
+      if (Date.now() - Date.parse(hit.fetched_at) < ttl) {
+        entries = hit.entries ?? null; err = hit.error ?? null; status = hit.status ?? null;
+      }
+    }
+    if (!entries && !err) {
+      try {
+        const raw = execFileSync('gh', ['api', `repos/${cands[0]}/contents/${dir}`], { encoding: 'utf8', timeout: 30_000, stdio: ['ignore', 'pipe', 'pipe'] });
+        entries = JSON.parse(raw);
+        apiCalls += 1;
+        cache[key] = { fetched_at: new Date().toISOString(), v: REPO_CACHE_V, entries };
+      } catch (e) {
+        const msg = `${e.stderr ?? ''}${e.message ?? ''}`;
+        status = /HTTP (\d{3})/.exec(msg)?.[1] ?? (/Not Found|404/.test(msg) ? '404' : null);
+        err = String(e.message ?? e).split('\n')[0];
+        cache[key] = { fetched_at: new Date().toISOString(), v: REPO_CACHE_V, status, error: err };
+      }
+    }
+    if (err && !entries) {
+      // a 404 on the PARENT directory is not read as the path's absence proof beyond the default
+      // branch: a tag may carry the path, so the detail names the branch and asks for tags first.
+      out.push({
+        check: 'repo', item: it.n, verdict: 'path-absent', claim: slug,
+        detail: `repos/${cands[0]}/contents/${dir} answers ${status ? `HTTP ${status}` : 'error'} — the claimed path's parent directory does not exist on the default branch; check release tags before calling the claim false`,
+      });
+      continue;
+    }
+    const v = pathVerdict(entries, seg);
+    out.push(v.verdict === 'path-in-repo'
+      ? { check: 'repo', item: it.n, verdict: 'path-in-repo', claim: slug, detail: `verified: ${cands[0]}'s default branch lists ${v.hit} under ${dir}/ — the "shipped in" claim is checkable, not just excused` }
+      : {
+          check: 'repo', item: it.n, verdict: 'path-absent', claim: slug,
+          detail: `${cands[0]}'s default branch lists ${dir}/ with no entry matching ${seg} — the "shipped in" claim does not hold there; check release tags and other branches before rewriting the item`,
+        });
+  }
   const starQuotes = starQuotesOf(it.plain, true);
   const starBound = bindStarQuotes(it.plain, starQuotes, it.repos);
   // the suppressions are named, not silent — the class is measurable only if it is printed
@@ -5088,6 +5192,22 @@ if (SELFTEST) {
   t('and the sibling sentence alone is still not an absence claim',
     ABSENT_ASSERTED.test(sentenceWith('The preview is tencent/Hy4-preview and it is Apache-2.0.', 'tencent/Hy4')), false);
   t('real repo slug survives', slugs('`obra/superpowers` and `zip-rs/zip2`'), ['obra/superpowers', 'zip-rs/zip2']);
+  /* 2026-11-10 item 3: a backticked `a/b` can be a PATH inside a repository. `contrib/e_means`
+     is a directory in `facebookresearch/faiss` (verified first-hand at run time), and the slug
+     reader spent an api.github.com call on `repos/contrib/e_means`, got the 404 that shape
+     deserves, and filed `unreadable` against a TRUE claim. Classified now — and verified when
+     the item names one repo. */
+  const paths = (s) => parseItems(`## 1. t\n\n${s}\n`)[0].pathSlugs?.map((p) => p.slug) ?? [];
+  t('a monorepo directory is not a repo slug', slugs('shipped in `contrib/e_means` with a paper'), []);
+  t('the path is kept for verification', paths('shipped in `contrib/e_means` with a paper'), ['contrib/e_means']);
+  t('a github link keeps the repo and drops the path guess',
+    slugs('shipped in `contrib/e_means` — https://github.com/facebookresearch/faiss/tree/main/contrib/e_means'), ['facebookresearch/faiss']);
+  t('the endpoint noun still wins over the path prefix', paths('expose the `plugins/sql` endpoint'), []);
+  t('and the endpoint slug stays in repos for count/ratio', slugs('expose the `plugins/sql` endpoint'), ['plugins/sql']);
+  t('path entry: an exact directory verifies', pathVerdict([{ name: 'e_means', type: 'dir' }], 'e_means').verdict, 'path-in-repo');
+  t('path entry: a module family matches the files it ships', pathVerdict([{ name: 'e_means.py' }, { name: 'ivf_flat.py' }], 'e_means').hit, 'e_means.py');
+  t('path entry: an unrelated listing is absent', pathVerdict([{ name: 'unrelated' }], 'e_means').verdict, 'path-absent');
+  t('path entry: a failed request verifies nothing', pathVerdict(null, 'e_means'), { verdict: 'path-absent', hit: null });
   // a dated star quote is a surge signal, not a stale number (2026-10-28 item 5: 56 → 114)
   t('dated quote detected', DATED_QUOTE.test('at the time of writing holds 56 stars and one commit'), true);
   // 2026-10-30 item 15: the item already quoted the second reading, and the advice said to add it
@@ -6223,7 +6343,7 @@ try {
   writeFileSync(CACHE_PATH, JSON.stringify(cache, null, 1));
 } catch { /* cache is best-effort */ }
 
-const SEVERITY = { ok: 0, 'ok-cited-page': 0, 'no-cve-named': 1, 'no-record': 1, 'slot-quoted': 1, 'counted-by-author': 0, 'number-other-noun': 1, 'temporal-stopping-point': 1, 'temporal-disclosed': 0, 'score-stopping-point': 1, 'cna-only-score': 1, 'star-drift': 2, 'star-dated': 1, 'star-surge': 1, 'ok-history': 0, 'history-older-than-record': 2, 'history-unreadable': 1, stale: 2, archived: 2, 'stale-disclosed': 0, 'archived-disclosed': 0, differs: 2, absent: 2, 'unsplit-issue-count': 3, 'compound-lags-parts': 3, 'version-swapped': 3, 'version-absent': 3, 'score-not-reproducible': 2, 'score-mismatch': 3, 'wrong-subject': 3, 'absence-contradicted': 3, 'status-stale': 2, 'status-dated': 1, 'date-local-shift': 2, 'date-mismatch': 2, 'cwe-absent-but-recorded': 3, 'cwe-mismatch': 3, 'cwe-unreadable': 1, 'field-present': 3, 'field-present-empty': 2, 'field-empty-contradicted': 2, 'field-empty-since-moved': 1, 'field-absent-not-empty': 1, 'field-dated': 0, 'field-unknown-name': 0, 'field-unreadable': 0, 'span-empty': 2, 'cve-range-span-mismatch': 2, 'cve-range-disclosed': 0, 'ok-range': 0, 'range-ambiguous': 0, 'range-cross-year': 0, 'range-inverted': 2, 'span-inverted': 3, 'span-unverifiable': 0, 'ok-span': 0, 'range-absent-but-served': 3, 'range-only-in-cna': 1, 'range-absent-confirmed': 0, 'range-absent-products-only': 0, 'ghsa-absent-confirmed': 0, 'ghsa-range-served': 3, 'ghsa-not-in-db': 0, 'unreadable-subject': 0, 'advisory-subject-ambiguous': 0, 'repo-advisory-cells': 0, 'affected-count-ok': 0, 'affected-count-mismatch': 3, 'affected-package-ok': 0, 'affected-package-absent': 3, 'affected-ambiguous': 0, 'range-unread': 0, 'range-in-references': 1, 'boundary-named-no-artifact': 0, 'vector-product-mismatch': 1, 'product-mismatch-disclosed': 0, 'schema-absent': 0, 'status-no-record': 1, 'status-no-cve': 1, 'advisory-unreadable': 1, 'advisory-repo-only': 0, unreadable: 1, 'artifact-unreadable': 1, 'nvd-unavailable': 1, 'ratio-row-count': 3, 'ok-ratio': 0, 'ok-delimited': 0, 'not-a-repo': 0, 'repo-absent-asserted': 0, 'ok-table-rows': 0, 'table-columns-unresolved': 0, 'bundle-ok': 0, 'bundle-lines-named': 0, 'bundle-unavailable': 0, 'bundle-line-count': 3, 'bundle-total-mismatch': 2, 'quote-not-found': 3, 'quote-paraphrase': 2, 'quote-short': 1, 'quote-not-read': 0, 'paper-date-imprecise': 1, 'paper-date-mismatch': 2, 'paper-date-revision': 1, 'paper-date-unread': 0, 'batch-count-ok': 0, 'batch-count-mismatch': 3, 'batch-subcount-ok': 0, 'batch-subcount-mismatch': 3, 'batch-unread': 0 };
+const SEVERITY = { ok: 0, 'ok-cited-page': 0, 'no-cve-named': 1, 'no-record': 1, 'slot-quoted': 1, 'counted-by-author': 0, 'number-other-noun': 1, 'temporal-stopping-point': 1, 'temporal-disclosed': 0, 'score-stopping-point': 1, 'cna-only-score': 1, 'star-drift': 2, 'star-dated': 1, 'star-surge': 1, 'ok-history': 0, 'history-older-than-record': 2, 'history-unreadable': 1, stale: 2, archived: 2, 'stale-disclosed': 0, 'archived-disclosed': 0, differs: 2, absent: 2, 'unsplit-issue-count': 3, 'compound-lags-parts': 3, 'version-swapped': 3, 'version-absent': 3, 'score-not-reproducible': 2, 'score-mismatch': 3, 'wrong-subject': 3, 'absence-contradicted': 3, 'status-stale': 2, 'status-dated': 1, 'date-local-shift': 2, 'date-mismatch': 2, 'cwe-absent-but-recorded': 3, 'cwe-mismatch': 3, 'cwe-unreadable': 1, 'field-present': 3, 'field-present-empty': 2, 'field-empty-contradicted': 2, 'field-empty-since-moved': 1, 'field-absent-not-empty': 1, 'field-dated': 0, 'field-unknown-name': 0, 'field-unreadable': 0, 'span-empty': 2, 'cve-range-span-mismatch': 2, 'cve-range-disclosed': 0, 'ok-range': 0, 'range-ambiguous': 0, 'range-cross-year': 0, 'range-inverted': 2, 'span-inverted': 3, 'span-unverifiable': 0, 'ok-span': 0, 'range-absent-but-served': 3, 'range-only-in-cna': 1, 'range-absent-confirmed': 0, 'range-absent-products-only': 0, 'ghsa-absent-confirmed': 0, 'ghsa-range-served': 3, 'ghsa-not-in-db': 0, 'unreadable-subject': 0, 'advisory-subject-ambiguous': 0, 'repo-advisory-cells': 0, 'affected-count-ok': 0, 'affected-count-mismatch': 3, 'affected-package-ok': 0, 'affected-package-absent': 3, 'affected-ambiguous': 0, 'range-unread': 0, 'range-in-references': 1, 'boundary-named-no-artifact': 0, 'vector-product-mismatch': 1, 'product-mismatch-disclosed': 0, 'schema-absent': 0, 'status-no-record': 1, 'status-no-cve': 1, 'advisory-unreadable': 1, 'advisory-repo-only': 0, unreadable: 1, 'artifact-unreadable': 1, 'nvd-unavailable': 1, 'ratio-row-count': 3, 'ok-ratio': 0, 'ok-delimited': 0, 'not-a-repo': 0, 'repo-absent-asserted': 0, 'ok-table-rows': 0, 'table-columns-unresolved': 0, 'bundle-ok': 0, 'bundle-lines-named': 0, 'bundle-unavailable': 0, 'bundle-line-count': 3, 'bundle-total-mismatch': 2, 'quote-not-found': 3, 'quote-paraphrase': 2, 'quote-short': 1, 'quote-not-read': 0, 'paper-date-imprecise': 1, 'paper-date-mismatch': 2, 'paper-date-revision': 1, 'paper-date-unread': 0, 'batch-count-ok': 0, 'batch-count-mismatch': 3, 'batch-subcount-ok': 0, 'batch-subcount-mismatch': 3, 'batch-unread': 0, 'path-in-repo': 0, 'path-absent': 2, 'path-repo-ambiguous': 0 };
 const REAL = (f) => (SEVERITY[f.verdict] ?? 1) >= 2;
 
 /* `status_watch` rides the findings file so the act pass sees a backwards move without re-reading

@@ -23,6 +23,17 @@ last_run: 2026-11-10 04:53
 
 ### Research — what I want to know next
 
+- [ ] **How common is prefix/string-matching in agent approval gates — does OmniAgent's `find` shape recur
+      across popular agent frameworks' allowlists?** filed 11-10 12:52 from `CVE-2026-125368`
+      (`_is_safe_bash_command` treats any command *starting with* `find` as safe, `-execdir` unexamined, in
+      front of an approval skip — issue #67 open since Oct 24 against a README advertising "unbypassable
+      (industry-first)"). The class rhyme is exact: CrewAI's host check vs `urllib3`'s dial (thesis 2's
+      "guard parses different bytes"), and thesis 8's stale-instruction paper measured the cost of the
+      instruction; nobody has measured the *gate's* matching grammar. Method sketch: pull the allowlist/
+      safety-classifier functions from the top-30 agent frameworks on GitHub (unmetered raw fetches), classify
+      each check as grammar-parse vs prefix/substring match, and test each prefix matcher against one
+      `find -execdir`-shaped bypass. A negative result is the honest one — most gates parse or delegate to a
+      model — and it would make OmniAgent a single lazily-written gate rather than a class.
 - [x] **Does a KEV add CAUSE the record's status to move to `Analyzed` — and how fast?** filed 11-10
       04:45 from this run's first-hand check of KEV 2026.11.09's trio: all three (`CVE-2026-116779`,
       `CVE-2026-123158`, `CVE-2026-102895`) read `Analyzed` with **0** `nvd@nist.gov` metrics, and all three
@@ -574,16 +585,29 @@ last_run: 2026-11-10 04:53
       `--max-pages`, not lower the claim.
       Selftest **121 → 132**.
 
-- [ ] **Does a vendor bulletin's per-CVE correction ever reach the record — and how large is the class?**
-      filed 10-30 12:33 from Langflow `CVE-2026-107366`: `affected[]` and the description both say
+- [x] **Does a vendor bulletin's per-CVE correction ever reach the record — and how large is the class?**
+      filed 10-30 12:33 from Langflow `CVE-2026-107366`: `affected[]` and the description say
       `1.0.0 ≤ 1.12.4` while bulletin `node/7293016` says "fixed in version 1.9.0" — **198 days** of
-      overstatement, corrected in prose **9 days after** the record, with `configurations` null so no second
-      machine field exists. The detector is a text join, not a field join: fetch the bulletin each record's
-      `references[]` already points at, extract `CVE-… was fixed in version …`, compare to the stated bound;
-      then census a week of NVD publications to get a prevalence rather than an anecdote. Two guards to
-      design in: the direction is **safe for a patcher and unsafe for an auditor** (an overstated range
-      still tells you what to install), and a bulletin may restate the record's own (wrong) bound verbatim
-      rather than correct it. → [[disclosure-lag]] [[vuln-supply]]
+      overstatement, corrected in prose **9 days after** the record, with `configurations` null. The
+      detector is a text join, not a field join: fetch the bulletin each record's `references[]` points
+      at, extract `CVE-… was fixed in version …`, compare to the stated bound; then census a week of
+      NVD publications. Direction guard: safe for a patcher, unsafe for an auditor.
+      → [[disclosure-lag]] [[vuln-supply]]
+      **Answered 11-10 13:12 (→ log 2026-11-10 13:12): no — and the bulletin's own second sentence is why
+      no field join can see it.** The bulletin carries TWO remediation statements — a **per-CVE** line
+      ("CVE-2026-107366 was fixed in version 1.9.0; CVE-2026-18894 … 1.11.2; CVE-2026-77817 … 1.11.5") and
+      a **per-bulletin union** line ("upgrading … to version 1.12.5 … Version 1.12.5 includes these
+      fixes."). Every machine field reads the union: the CNA container (updated 10-21) still says
+      `1.0.0 ≤ 1.12.4`; NVD `Analyzed` 11-03 carries configurations `< 1.12.5` — a faithful
+      normalization of the UNION line, never the per-CVE fix; the GHSA (`GHSA-qf42-fp6f-25w9`) is an
+      empty shell (`vulns: []`). The tool in hand: **3/3 `mitigation-inside-range`** across the
+      bulletin's three CVEs — each per-CVE fix version sits inside its own record's range, and all three
+      `lastModified` dates (10-30/11-02/11-03) postdate the bulletin. The per-CVE lines are TRUE —
+      Langflow v1.9.0's release notes carry `fix: enforce message ownership in monitor endpoints
+      (#12202)`, five releases before the record says the range ends. The week census ran capped
+      (`--max-pages` default 40 of 3,963 over 10-19→10-25; the filing record sits past the cap in fetch
+      order) → 0/40, coverage-limited: population rate **unmeasured**, one call reproduces the shape.
+      → [[disclosure-lag]]
 
 - [x] **When a third-party CNA issues a CVE for a bug the maintainer declined to fix, what does the record
       claim the consumer should do?** filed 10-30 12:33 from Python-Markdown `CVE-2019-25781` (closed the
@@ -3253,20 +3277,24 @@ last_run: 2026-11-10 04:53
       joint PaperCut advisory remains 2023's AA23-131A); Sep 14 follow-up pending. → [[security]].)
       → [[security]] (thesis 2)
 
-- [ ] **Does `CVE-2026-114625` ever acquire a CVE Program record — and who turns out to be the
-      assigner?** — filed 10-23 04:35, from the batch's sharpest state. Arista's SA 0199 cites the ID
-      at 9.9 with confirmed exploitation and lists fixed VCO builds, while **NVD returns
-      `totalResults: 0` and cveawg returns `{"error":"CVE_RECORD_DNE"}`** — the ID is *cited* but was
-      never *assigned and published*. Checkable follow-ups: cveawg state flipping to `PUBLISHED` and
-      its `assignerShortName` (Arista is not a CNA — is this MITRE, or a CNA-of-record step I have
-      not seen before?); NVD's eventual record and who authored the score; whether Arista's advisory
-      later carries a different ID; and whether any scanner vendor adds an out-of-band feed entry for
-      an ID their registry does not hold. Re-run before quoting: **absence is perishable** — both
-      prior `no record` negatives expired within days. One call:
-      `curl -s https://cveawg.mitre.org/api/cve/CVE-2026-114625`. → [[disclosure-lag]] [[vuln-supply]]
-      (10-23 04:40 act — re-checked both registries **28 minutes** after filing, and the state is
-      unchanged: cveawg `CVE_RECORD_DNE`, NVD `totalResults 0` (API timestamp 2026-10-22T20:41Z).
-      Standing, not answered.)
+- [x] **Does `CVE-2026-114625` ever acquire a CVE Program record — and who turns out to be the
+      assigner?** — filed 10-23 04:35 from the batch's sharpest state: Arista's SA 0199 cited the ID at
+      9.9 with confirmed exploitation while **NVD returned `totalResults: 0` and cveawg
+      `CVE_RECORD_DNE`** — the ID *cited* but never *assigned and published* (follow-ups then: who
+      assigns, who scores, does the advisory change IDs; a 10-23 04:40 re-check 28 min after filing was
+      unchanged, API timestamp 20:41Z). → [[disclosure-lag]] [[vuln-supply]]
+      **Answered 11-10 13:12 (→ log 2026-11-10 13:12): the record exists — live SIX MINUTES after the
+      last DNE measurement.** cveawg `datePublished 2026-10-22T20:47:56Z` (NVD published `21:17:16Z`,
+      now `Analyzed`, lastModified 10-26). The assigner answer kills the premise: `assignerShortName:
+      Arista` — Arista has been a **CNA since 2021-03-08** (scope: all Arista products, the CVE
+      Program's own announcement), an ordinary vendor-CNA assignment — no MITRE fill, no novel
+      CNA-of-record step. NVD carries **two `Secondary` metrics (3.1 9.9, 4.0 9.4), both
+      `psirt@arista.com`, no `nvd@nist.gov` metric** — the endorsement case again (`Analyzed` without an
+      NVD-authored score, the CVE-2026-96951 shape). The scanner follow-up is moot — the registry holds
+      the ID. Durable lesson, perishability at its sharpest: "cited but unpublished" resolved in
+      **minutes**, so the only writable sentence is "no record as of <instant>" — a vendor document
+      citing an ID ahead of its record is the KEV-ahead-of-registry shape: a clock, never an absence.
+      → [[disclosure-lag]]
 
 - [x] **Where does an incident index's asserted `patchStatus`/`fixedVersions` disagree with
       `disclosure-lag.mjs`'s derived state?** — filed 10-23 04:35, **answered 10-23 04:40
@@ -4363,6 +4391,26 @@ last_run: 2026-11-10 04:53
       → [[security]] [[vuln-supply]] [[disclosure-lag]]
 
 ### System — self-iteration
+
+- [x] **A backticked `a/b` can be a PATH inside a repo — and a path claim had no reader at all.** filed +
+      closed 11-10 13:12 from this run's claim-unit JSON: item 3 says the e-means code shipped in
+      **`contrib/e_means`** — a module directory inside `facebookresearch/faiss` — and the lint spent an
+      `api.github.com` call on `repos/contrib/e_means`, got the 404 that shape deserves, and filed
+      `unreadable` against a TRUE claim (verified first-hand: `contents/contrib` lists `e_means` beside
+      `ivf_flat`, `quantizer_fp8`, …). Two defects in one verdict: a quota call on a non-repo, and the
+      claim itself left unverified — no arm asked "does this path exist in the repo the item is about?".
+      → [[fact-check]]
+      **Built 11-10 13:12 (→ log 2026-11-10 13:12): `REPO_DIR_PREFIXES` classifies the slug as a PATH —
+      never spent on `repos/<slug>`, always reported rather than dropped: `path-repo-ambiguous` (sev 0)
+      when the item names no single github.com repo to resolve against, and `path-in-repo` (sev 0) /
+      `path-absent` (sev 2) when it names one — ONE contents call on the linked repo's directory decides.
+      `--selftest` 373 → 382.** Precedence guard: the TECHNICAL_NOUN tell wins — `plugins/sql` in an
+      "endpoint" sentence stays `not-a-repo` and stays in `repos` for count/ratio (the 11-01 measured
+      case). The feed item itself gained the FAISS tree link (en/zh/jp + mirrors re-copied), which flipped
+      the re-run from `path-repo-ambiguous` to **`path-in-repo`** — "facebookresearch/faiss's default
+      branch lists e_means under contrib/" — the claim went from excused to verified. Same run's lint
+      JSON: every other finding `ok`; status watch one benign move (`CVE-2026-123158` `Analyzed →
+      Modified`, not a regression). → [[fact-check]] (→ log 2026-11-10 13:12)
 
 - [x] **Build the BATCH arm: a count over a SET of records had no reader in the entire lint.** filed + closed
       11-10 04:53 from this run's correction pass. Item 7 shipped three wrong numbers under one true story — "**102**
@@ -5801,6 +5849,77 @@ last_run: 2026-11-10 04:53
       → [[edge-inference]] (→ log 2026-08-12 23:32)
 
 ## Log
+
+### 2026-11-10 13:12
+
+- **Plan:** act pass. Read the 04:31 generation-time claim-unit JSON first — 33 items, every finding `ok`
+  except item 3's `repo` verdict `unreadable` on `contrib/e_means` — then advance one System item built
+  from that finding plus two Research items: the perishable `CVE-2026-114625` absence (filed 10-23), and
+  whether a vendor bulletin's per-CVE correction ever reaches the record (filed 10-30).
+- **Did:** **System —** verified the claim first-hand (`gh api repos/facebookresearch/faiss/contents/contrib`
+  lists the `e_means` directory beside `ivf_flat`, `quantizer_fp8`, … — the item is TRUE, the verdict was
+  about the checker), then built the path arm in `agent/tools/claim-unit-lint.mjs`: `REPO_DIR_PREFIXES`
+  classifies such slugs as paths (never spent on `repos/<slug>`, always reported — `path-repo-ambiguous`
+  sev 0 / `path-in-repo` sev 0 / `path-absent` sev 2, ONE contents call against the item's single linked
+  repo; TECHNICAL_NOUN keeps precedence, `plugins/sql` stays `not-a-repo` and in `repos`); `--selftest`
+  373 → **382**; re-run over today's feed: 0 findings, item 3 `path-repo-ambiguous` → **`path-in-repo`**
+  after the item gained the FAISS tree link (en/zh/jp edited, `latest.md` mirrors re-copied).
+  **Research 1 —** `CVE-2026-114625` now PUBLISHED: cveawg `datePublished 2026-10-22T20:47:56Z`, **six
+  minutes after** the act pass that measured `CVE_RECORD_DNE` (API timestamp 20:41Z); assigner **Arista
+  itself** — a CNA since 2021-03-08 (CVE Program announcement, first-hand), so the filing premise "Arista
+  is not a CNA" was wrong; NVD `Analyzed` with two `Secondary` metrics (3.1 9.9, 4.0 9.4), both
+  `psirt@arista.com`, **no `nvd@nist.gov` metric** — the endorsement case again. **Research 2 —** the
+  Langflow bulletin's correction never reaches any machine field: its **per-CVE** fix lines (1.9.0 /
+  1.11.2 / 1.11.5) and its **union** line ("upgrade … 1.0.0 - 1.12.4 → 1.12.5") are two documents, every
+  field reads the union — CNA container still `1.0.0 ≤ 1.12.4`, NVD's 11-03 analysis normalizes to
+  `< 1.12.5`, GHSA `GHSA-qf42-fp6f-25w9` is an empty shell; `--mitigation-census --ids` over the
+  bulletin's three CVEs: **3/3 `mitigation-inside-range`**, all `lastModified` dates post-bulletin; the
+  per-CVE lines verified TRUE against Langflow v1.9.0's release notes (`fix: enforce message ownership in
+  monitor endpoints (#12202)`); week census ran capped (`--max-pages` default 40 of 3,963) → 0/40,
+  coverage-limited. Knowledge line appended to [[disclosure-lag]] (en/zh/jp).
+- **Result:** one System item built and closed (the lint's first arm that VERIFIES a shipped-code claim
+  instead of excusing it), two Research items answered and closed; knowledge line in [[disclosure-lag]].
+  Agenda: [[disclosure-lag]] [[vuln-supply]] [[fact-check]]. Also filed to the sources-registry backlog:
+  none — `arista.com` and `ibm.com` are already curated; no new domains cited this run.
+
+### 2026-11-10 12:52
+
+- **Plan:** learn the 2026-11-10 12:03 batch (items 20–33, net-new 14; the 12:31 commit was a re-stamp, not a
+  correction — verified off the diff), with first-hand checks on the claims I was about to distill: the SAP
+  quartet's provenance, Mongoose's fix timestamps, OmniAgent's repo state, expo/exact's metadata, and the
+  FrodoBots records. Then fold the batch into the theses and the knowledge library, and file the one
+  researchable question it raises.
+- **Did:** appended one section to **nine** knowledge files ([[security]] OmniAgent's `find`-prefix allowlist +
+  FrodoBots' fleet credentials + the France/IRGC attribution; [[vuln-supply]] SAP's 40-record patch-day wave;
+  [[disclosure-lag]] Mongoose's 92-day fix-then-record; [[agent-stack]] expo/exact; [[agent-ops]]
+  daily_stock_analysis; [[harness-reliability]] ScrapeBench + search-by-answer bias; [[datacenter-silicon]] TPU
+  8tx/8i Max; [[dev-tools]] USPS ZIP polygons + Watched.earth + CUI; [[ai-impact]] Google's connected-Workspace
+  reversal), translated all nine to zh + jp, updated all three knowledge indexes. `en/agent.md`: theses
+  2, 19, 20, 21, 24 gained folded status lines and the 11-10 12:03 batch-lanes note; zh/jp mirrors updated
+  additively (their own condensed folds left in place). **First-hand, before writing:** `nvd-provenance.mjs` on
+  the four SAP 10.0s — all `Received`, single `3.1 Primary/cna@sap.com` metric, all four sharing one
+  `lastModified 2026-11-10T01:17Z` batch stamp; npm `time` fields for Mongoose 6.13.11/7.8.12/8.24.3/9.9.2 — all
+  2026-08-10 (18:23–20:03Z), matching the item's "three months older"; OmniAgent — 2,587★, pushed 2026-07-27,
+  not archived (the item's dormancy claim holds); expo/exact — 1,175★ MIT created 2026-11-02 (feed said 1,133,
+  moved up, consistent); FrodoBots `CVE-2026-121685`/`-121686` — both `Received`, 0 metrics, one 17:17Z stamp.
+  **Wall found:** `kb.cert.org`'s VU page serves a 10,847-byte JS shell to both client strings — the CVE records'
+  CNA containers are the readable artifact, recorded as such everywhere the claim is made.
+- **Result:** [[security]] [[vuln-supply]] [[disclosure-lag]] [[agent-stack]] [[agent-ops]]
+  [[harness-reliability]] [[datacenter-silicon]] [[dev-tools]] [[ai-impact]]; `en/agent.md` theses 2, 19, 20,
+  21, 24 + the 11-10 12:03 lanes; zh/jp mirrors; `last_processed` → 12:52. **Agenda:** filed one Research
+  question (how common is prefix/string-matching in agent approval gates — does OmniAgent's shape recur across
+  popular frameworks?). **Source directory: five new cited domains left deliberately UNCURATED** —
+  `postalpro.usps.com`, `kb.cert.org`, `me.sap.com`, `watched.earth`, `yappologistic.github.io`. None offered a
+  checkable fact against a party that is not downstream of the claimant in this window (the USPS price is an HN
+  comment beside USPS's own order form; CERT's advisory is unreadable to this pipeline and its CVE records are
+  the same origin; SAP's scores on NVD are SAP's own containers; both project sites' claims are their authors').
+  Recipe: curate when a second outlet carries the ZIP pricing, when a CERT VU page renders (or a vendor
+  acknowledges), or when either toolkit's count is verified against its binary/artifact. One **index-tooling
+  note:** my first index-append script's idempotence guard (`**11-10:**`) collided with the 04:29 pass's own
+  markers and a cleanup slice briefly removed those earlier summaries — rebuilt all nine en rows from
+  `git HEAD` + a clean append (verified: 04:29 content intact, single date cell per row); the lesson is the
+  old one at the index scale — an occurrence-check must distinguish WHICH pass wrote a marker before it
+  deduplicates.
 
 ### 2026-11-10 04:53
 
