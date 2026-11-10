@@ -46,7 +46,7 @@ Google 于 11 月 10 日让 **Gemini 4 Carbon** 正式开放（generally availab
 - **Source:** MSRC CVRF 2026-Nov + NVD · 11 月 10 日（22:17–03:21 UTC+8）
 - **Tags:** `patch-tuesday` `microsoft` `cve`
 
-11 月 10 日是补丁星期二，当天的 NVD 发布窗口共 **1,692 条记录**——其中 **1,094 条来自 `secure@microsoft.com`**，另有 Mozilla 的 105 条与 Intel 的 103 条。Microsoft 自己的 CVRF 文档（28.1 MB）收录 **1,342 个漏洞**，其中 **1,095 个为 Microsoft 自分配**——Chrome 的 CVE 管理方分配了 165 个，Linux 41 个，GitHub_M 5 个。对文档分数集的一手统计：**48 个漏洞的基础分数达到 9.0 或更高**（最高 10.0），而 Microsoft 自己的严重性标签为 **Critical 68、Important 1,117、Moderate 110、Low 47**。分数表顶端：SharePoint 错误授权 **9.9**（CVE-2026-120002）、Azure DevOps 不当认证 **9.9** 并可经网络导致代码执行（CVE-2026-109467）、**Azure OpenAI 关键功能缺少认证 9.8**（CVE-2026-119990）、Windows Kerberos 认证绕过 9.8（CVE-2026-85844）、LDAP 越界写 9.8、DNS 双重释放 9.8。所有记录在 NVD 上仍为 `Awaiting Analysis`——这里引用的每个数字都是 CNA 自己的。
+11 月 10 日是补丁星期二，本条 21:17Z 读取时 NVD 发布窗口共 **1,692 条记录**——窗口仍在填充，21:58Z 时已达 **2,015 条**——其中 **1,094 条来自 `secure@microsoft.com`**，另有 Mozilla 的 105 条与 Intel 的 103 条，三个数字复读时全部精确一致。Microsoft 自己的 CVRF 文档（28.1 MB）收录 **1,342 个漏洞**，其中 **1,095 个为 Microsoft 自分配**——Chrome 的 CVE 管理方分配了 165 个，Linux 41 个，GitHub_M 5 个。对文档分数集的一手统计：**48 个漏洞的基础分数达到 9.0 或更高**（最高 10.0），而 Microsoft 自己的严重性标签为 **Critical 68、Important 1,117、Moderate 110、Low 47**。分数表顶端：SharePoint 错误授权 **9.9**（CVE-2026-120002）、Azure DevOps 不当认证 **9.9** 并可经网络导致代码执行（CVE-2026-109467）、**Azure OpenAI 关键功能缺少认证 9.8**（CVE-2026-119990）、Windows Kerberos 认证绕过 9.8（CVE-2026-85844）、LDAP 越界写 9.8、DNS 双重释放 9.8。所有记录在 NVD 上仍为 `Awaiting Analysis`——这里引用的每个数字都是 CNA 自己的。
 
 **Why it matters:** 利用标志反转了严重性逻辑。整份文档中只有一条记录写着 `Publicly Disclosed:No;Exploited:Yes;Latest Software Release:Exploitation Detected`——**CVE-2026-124194，一个被评为 Moderate 6.5 的 Outlook 欺骗漏洞**——CISA 同一天把它放进 KEV。与此同时，42 个分数更高的提权漏洞停在 "Exploitation More Likely"，9.x 队列停在 "Less Likely"。补丁优先级跟着利用列走而不是跟着分数列走，就是这个月的全部教训。
 
@@ -62,7 +62,7 @@ Google 于 11 月 10 日让 **Gemini 4 Carbon** 正式开放（generally availab
 - **Source:** Mozilla · NVD 105 条记录 · 11 月 10 日（~22:17 UTC+8）
 - **Tags:** `firefox` `mozilla` `security`
 
-Firefox **160.0** 于 11 月 10 日发布（product-details：类别 `major`）。**来自 `security@mozilla.org` 的 105 条 CVE 记录**同日落上 NVD，发布时间介于 14:17 与 19:21 UTC 之间——其中 100 条提及 Firefox；另外五条是仅涉 Thunderbird 的条目（compose 窗口、经代理的 CalDAV、订阅源、STARTTLS、Exchange EWS）。七条是 **9.6 的沙箱逃逸**：Widget: Gtk 的 use-after-free、IPC 的 use-after-free、DOM: Service Workers 两处、Audio/Video: cubeb 的 use-after-free、Storage: Cache API 与 Graphics: Text 的错误边界条件。另一波停在 **8.8**——WebRTC: Networking 与 Graphics: WebRender 的提权，Layout、CSS Parsing 与 Canvas2D 的 use-after-free。修复覆盖 **Firefox ESR 115.45、Firefox ESR 153.7 与 Thunderbird 160**，与主版本同步。每条记录都是 `Deferred`——Mozilla 以 CNA 身份打了分；NVD 尚未分析。
+Firefox **160.0** 于 11 月 10 日发布（product-details：类别 `major`）。**来自 `security@mozilla.org` 的 105 条 CVE 记录**同日落上 NVD，发布时间介于 14:17 与 19:21 UTC 之间——其中 100 条提及 Firefox；另外五条是仅涉 Thunderbird 的条目（compose 窗口、经代理的 CalDAV、订阅源、STARTTLS、Exchange EWS）。七条是 **9.6 的沙箱逃逸**：Widget: Gtk 的 use-after-free、IPC 的 use-after-free、DOM: Service Workers 两处、Audio/Video: cubeb 的 use-after-free、Storage: Cache API 与 Graphics: Text 的错误边界条件。另一波停在 **8.8**——WebRTC: Networking 与 Graphics: WebRender 的提权，Layout、CSS Parsing 与 Canvas2D 的 use-after-free。修复覆盖 **Firefox ESR 115.45、Firefox ESR 153.7 与 Thunderbird 160**，与主版本同步。每条记录都是 `Deferred`——NVD 尚未分析，而 Mozilla 的 CNA 容器完全没写 CVSS（在抽样的 `CVE-2026-124917` 上经 cveawg 一手核实）：该记录的 9.6 是 **CISA-ADP** 富化——严重度只有文字、数字由 ADP 写。
 
 **Why it matters:** 密度才是故事：单次发布携带七条单独打分的沙箱逃逸，说明内容进程边界正处于持续且多样的攻击研究之下——而且修复一次覆盖三个分支（其中包括早已超出原定维护期多年仍在维护的 ESR 115 线）。任何钉在 Firefox ESR 上的人都应把 115.45 与 153.7 当作当周必升。
 
@@ -282,7 +282,7 @@ Emilio Ferrara 的 **"All Quiet on the Neural Front"**（11 月 6 日提交 arXi
 - **Source:** CISA KEV · 11 月 10 日新增 3 条
 - **Tags:** `kev` `cisa` `exploitation`
 
-除 Barracuda 一对（第 8 条）之外，CISA 的 KEV 目录 11 月 10 日又加了三条：**CVE-2026-124194**——Microsoft Office Outlook，"missing user interaction for potentially unsafe action"，CVSS **6.5**（CNA 打分，NVD `Awaiting Analysis`），Microsoft 自己的 CVRF 将其标记为已被利用（第 3 条）；**CVE-2026-20320**——Cisco BroadWorks，Open Client Interface XML 解析器中的 XXE，让"an unauthenticated, remote attacker to read sensitive configuration information"，CVSS **7.5**（`psirt@cisco.com`）；以及 **CVE-2026-111793**——Openwave Messaging 的 Webtop Media Transcoder，它"does not enforce administrator-defined file type restrictions"，CVSS **4.3**（MITRE 打分，`Deferred`）。11 月 9 日那批还包括 GPUStack、OpenSSH 与 IBM Aspera Faspex，以及我们覆盖过的 FreeSWITCH 9.8。
+除 Barracuda 一对（第 8 条）之外，CISA 的 KEV 目录 11 月 10 日又加了三条：**CVE-2026-124194**——Microsoft Office Outlook，"missing user interaction for potentially unsafe action"，CVSS **6.5（base）**——Microsoft 自己的向量带 `E:H/RL:O/RC:C`，因此完整时间分（temporal）为 **6.2**（CNA 打分，NVD `Awaiting Analysis`），Microsoft 自己的 CVRF 将其标记为已被利用（第 3 条）；**CVE-2026-20320**——Cisco BroadWorks，Open Client Interface XML 解析器中的 XXE，让"an unauthenticated, remote attacker to read sensitive configuration information"，CVSS **7.5**（`psirt@cisco.com`）；以及 **CVE-2026-111793**——Openwave Messaging 的 Webtop Media Transcoder，它"does not enforce administrator-defined file type restrictions"，CVSS **4.3**（MITRE 打分，`Deferred`）。11 月 9 日那批还包括 GPUStack、OpenSSH 与 IBM Aspera Faspex，以及我们覆盖过的 FreeSWITCH 9.8。
 
 **Why it matters:** KEV 成员资格追踪的是利用证据，不是严重性算术，这一批是干净的演示：一条 4.3 和一条 6.5 与 9.8 们同在必补清单上。邮件邻近基础设施（Outlook、ESG、一个 webmail 转码器）主导了本次新增，这才是真实的模式——利用数据集的形状由攻击者够得着什么决定，而邮件基础设施哪里都够得着。
 

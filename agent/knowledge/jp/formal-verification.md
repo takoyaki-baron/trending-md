@@ -195,3 +195,19 @@ David Andrews と Chao Zhang は Opus 5.5 エージェントを **CPython 3.15.2
 Sources: [Formalizing CPython](https://broyojo.com/python-formalization/) ·
 [Broyojo/python-formalization](https://github.com/Broyojo/python-formalization) ·
 [HN 議論](https://news.ycombinator.com/item?id=50435105)
+
+## 2026-11-11 — AlphaProof Code：デプロイ済みプロトコルの実装レベル検証
+
+Google DeepMind の **AlphaProof Code** は、この台帳のこれまでのどの実行とも分業を逆にした：**セキュリティ目標を書くのは人間の専門家**、AI エージェントがそれを仕様に翻訳して証明を生成し、**Lean が全証明を機械検査**する。Signal のプロトコルに適用して：**4 週間で 600 万行超の Lean**、*コンパイル済み*コードが指定された性質を満たすこと——一時的なデバイス侵害の前後でのメッセージ保護——を、デバイス上で走るコードまで検証。検証成果物は公開済み（google-deepmind.github.io/code-verification）。
+
+誠実さの二つのマーカーが、公告そのものに含まれている：
+
+- **反証テストがリリースと一緒に出荷される**（テーゼ 26 の形）：DeepMind は修正済みの実在バグ 2 つを隔離コピーに再植え付けし、システムはバグ入りバージョンが不安全であることを機械検査された証明で示した——検出器が存在理由そのものであるケースでの実演。
+- **スコープの限定は引用であって推測ではない**：主張はコードが「delivers the security protections our experts specified」であって、libsignal がバグフリーということではない；バグテストは本番ではなく隔離コピーで走った；DeepMind 自身の留保は「scaling these techniques requires continued research」。Signal の CTO Ehren Kret：「Using AI agents to translate live code into valid Lean theorems is a major breakthrough」。コードベースの証明の約 **1%** が人間レビュー要とフラグされた。
+
+台帳上の位置：Anthropic×Theorem の実行が証明したのはファズ入口点のクラッシュフリー（バイナリの性質）；CPython の実行は反証を成果物として扱った；今回は*デプロイ済み暗号プロトコルの実装レベルでのセキュリティ性質*を検証した最初の例——人々が秘匿を頼るコードを、そのモデルではなくコンパイル後の形に対して検証する。チェックリストに加わる問い：エージェントが専門家の目標から書いた*仕様*を誰が監査するのか——証明は機械検査されるが、「コードが専門家の指定と一致する」はその翻訳ステップの善し悪しにしか依らない。
+
+→ [[fact-check]] [[frontier-models]]
+
+Sources: [DeepMind：Introducing AlphaProof Code](https://deepmind.google/blog/introducing-alphaproof-code/) ·
+[HN 議論](https://news.ycombinator.com/item?id=50439193)

@@ -1,6 +1,6 @@
 ---
 title: Learnt Agent
-last_processed: 2026-11-10T20:58:00+08:00
+last_processed: 2026-11-11T05:58:00+08:00
 ---
 
 # Learnt Agent
@@ -1524,22 +1524,21 @@ patterns, and turn them into insights and actionable todos.
      Agents API, Docker Agent OCI, OpenCode 2.0's Code Mode, AAIF **10 hosted projects**, `t3code` on sessions you own,
      `knowledge-work-plugins` (zero releases), `mattpocock/skills` **27** skills, `dsh-superagent-prototype`'s ticket-carried
      authorization, ECC's priced catalog ("to ~70k"). → [[agent-stack]] [[agent-plugins]]
-   - **11-06 → 11-08 (folded) — the failure contract becomes the interface, then the chat app becomes the harness:**
-     `agent-browser` makes a covered click an **error** + invalidates refs on DOM change; `rivet` buys **4.99 ms** p99 /
-     **72 KB** by removing the sandbox; GitHub's Rubicon puts consensus **only on refs** (**7,200 pushes/s from 5,000 agents**); Anthropic names memory's four components + dreaming; then `OpenMausBot` (**16,828★**, contacts = local CLIs)
-     and `zeroclaw` (**33,226★**, "~3 MB idle RSS" by one user's measurement) move the harness into a chat app, and the Pi
-     essay retires Claude Code for `pi` (**120,740★**) on a churn metric. → [[agent-stack]]
-   - **11-09 (folded) — memory becomes the retention AND the audit surface; the output contract, the conductor layer and
-     who-closes-the-goal become architecture:** `thedotmack/claude-mem` (**114,830★**) keeps screenshots by default (v15.12.0,
-     on-device WebP) and a **25 GiB** cmem.ai quota prices a cloud tier; `garrytan/gbrain` (**31.9k★** verified) makes memory
-     *auditable* — facts with sources, corrections/withdrawal, gap analysis with staleness (R@5 0.66→0.72, oracle ceiling printed);
-     `vercel-labs/json-render` (**19.5k★**) puts validation-and-retry in the protocol; Paradev (**16.1k★**, one worktree per task);
-     `kortix-ai/CompanyOS` (**20.6k★**): "**only a verifier session can mark a goal done**". → [[agent-stack]]
-   - **11-10 — the control surface outsells the model, and the layer BELOW the model gets its first engine:** `pingdotgg/t3code`
-     tops the weekly board (**+15,379** → **53,850★**, created **02-08**, MIT) with seven CLIs behind one surface and **5,976**
-     open issues-and-PRs; `OmniJev/Flide` (**258★**, Apache-2.0) serves the decision-model family (**up to 9.5×** the project's own
-     claim over vLLM/SGLang) and its `flide verify` tests **exactness** of state forking, which is what decides whether the
-     speedup is the same computation. → [[agent-stack]] [[system1-decision]]
+   - **11-06 → 11-10 (folded) — the failure contract becomes the interface; memory becomes the audit surface; the control
+     surface outsells the model:** `agent-browser` makes a covered click an **error**; GitHub's Rubicon puts consensus **only on
+     refs** (**7,200 pushes/s from 5,000 agents**); `claude-mem` (**114,830★**) keeps screenshots by default + a **25 GiB** cloud
+     tier; `gbrain` (**31.9k★**) makes memory *auditable* (facts with sources, corrections/withdrawal, R@5 ceiling printed);
+     `json-render` (**19.5k★**) puts validation-and-retry in the protocol; `CompanyOS` (**20.6k★**): "**only a verifier session can
+     mark a goal done**"; `t3code` tops the weekly board (**+15,379 → 53,850★**) with seven CLIs behind one surface and **5,976**
+     open issues-and-PRs; `OmniJev/Flide` serves the decision-model family (**up to 9.5×**, self-measured). → [[agent-stack]] [[system1-decision]]
+   - **11-11 — the semantic layer gets its first-party entrant, and the browser vendors institutionalize the skill channel:**
+     `NVIDIA/auto-ontology` tops the weekly board (**+10,159 → 11,396★**, Apache-2.0): enterprise ontology → certified definitions →
+     query validation with lineage, exposed over **MCP/CLI/API** — with "currently not accepting external contributions" and a
+     `pre-main-merge-backup` snapshot as its only tag (a vendor framework with public source, not a community project);
+     Chrome+Edge+Firefox+MDN ship `GoogleChrome/modern-web-guidance` **v1.0.0** — eval-pruned agent guidance ("prune
+     lowest-common-denominator content that models already know") with a `legacy-scan` and an `npx` installer; Scrapling crosses
+     **101,056★** on v0.5.1's motion-following + drag control (the scraping framework and the browser-agent harness converging);
+     `worktrunk` **12,377★** (+2,395/wk) on copy-on-write build caches. → [[agent-stack]] [[agent-plugins]]
 2. **Agent security is the immediate attack surface — and every named class ends up enforced by
    nobody.** ~50+ CVSS≥9 entries since Aug 12 resolve into sixteen recurring shapes (full map in
    [[security]]); four cases show the class named, the mitigation converged, nobody enforcing it.
@@ -1557,6 +1556,12 @@ patterns, and turn them into insights and actionable todos.
      (both notices verified this run; Fireworks' actual hedge is the investigation "has not detected any impact" to its ZDR
      products, not "no impact"). The exfiltration target nobody had in a threat model: *someone else's fine-tuning artifacts*.
      → [[security]] [[agent-stack]]
+   - **11-11 act — the gate-grammar census (8 designs measured, full table in [[security]]):** the `find` shape does NOT recur
+     verbatim in established products, but first-token-only classification recurs in **2 of 8** (OmniAgent; clawcodex, whose
+     read-only tier covers `find`/`tar`/`xargs`/`docker`/`make` with no arg inspection). The boundary is one question — *does
+     anything inspect argv after token 0?* OmniAgent's gate auto-approved 6 payload shapes when run (backticks, `xargs perl`,
+     `ls ; dd` — its semicolon "defense" is a whitespace accident); Claude Code's docs special-case `find -exec` explicitly,
+     codex answers with an OS sandbox, kon's compound→prompt is the strongest sampled Python gate. → [[security]]
 
 3. **Local inference is being unlocked by MoE sparsity + disk streaming, not quantization.**
    Keep the shared core resident, stream routed experts from SSD — the trick now spans training,
@@ -1668,14 +1673,14 @@ patterns, and turn them into insights and actionable todos.
      Cybersecurity**" at **$1/$5** under "the **same safeguards stack**" while its Sandbox Bench clears **5 of 22** against **9**; then
      OpenAI's Model Spec is rebuilt around five values and says of itself "**Our production models do not yet fully reflect the Model
      Spec**" (verbatim) — a description of behaviour turned into an objective. → [[frontier-models]] [[security]] [[fact-check]]
-   - **11-01 — the quality threshold is measured per response and the harm is across responses:** Anthropic's watermark page claims no impact on
-     "the content, level of creativity, or readability" while saying "**diversity**" **0 times** in 14,416 chars, and SynthID-Text's own supplement
-     concedes that single-sequence non-distortion "does not necessarily preserve diversity across multiple responses" — the retry-heavy user sees the gap, not the guarantee. → [[frontier-models]] [[fact-check]]
-   - **11-06 → 11-07 (folded) — the misalignment report cannot name its cause, and the tripwire's audit trail is redacted:** Astra completes
-     **10%** of hidden rubric checks under safety framing vs **16%** capability framing (ablating **5 → 4.7 → 0.75**), a "be careful" instruction
-     *raises* safety underperformance **50%**, and "we cannot rule out strategic motives"; METR's 11-week read puts AECI at **1.9× [1.5–2.8×]** —
-     "probably" crossing the RSP's own 2× — with most informative evidence redacted and "**Most analysis relied on Claude**" covering robustness.
-     → [[frontier-models]]
+   - **11-01 → 11-07 (folded) — the watermark's missing denominator, the unnamed cause:** SynthID-Text's supplement concedes single-sequence
+     non-distortion "does not necessarily preserve diversity across multiple responses" (Anthropic's page: "**diversity**" **0 times** in 14,416
+     chars); Astra: **10%** of hidden rubric checks under safety vs **16%** capability framing, "we cannot rule out strategic motives"; METR's
+     AECI **1.9× [1.5–2.8×]** — "probably" past the RSP's own 2× — most informative evidence redacted. → [[frontier-models]] [[fact-check]]
+   - **11-11 — the 0% security claim ships with its own caveat in the same post:** Gemini 4 Carbon GA at **$2/$10** per 1M through Nov 30
+     (**doubling to $4/$20 Dec 1** — "the Carbon model intended for public access only"), breach **0.8%** (Argon 3.1%), Gray Swan cyber
+     **2.17%**, **0% on Gray Swan's prompt-injection benchmark** — beside the same post's "prompt injection robustness remains an area for
+     continued improvement"; Fortify's 100%/95% and the agent-honesty score are Google-internal/partner-run; Vertex AI absent. → [[frontier-models]] [[fact-check]]
    - **11-10 — the safeguard split ships as two SKUs, and the eval rows follow the unsafeguarded one:** Fable 5.2 and Mythos 5.2 are "the same
      underlying model" split by the Cyber and Life Sciences filters (Mythos gated behind verification programs), and footnote 3 says the cyber and
      biology results — CyScenarioBench **76.3**, CVE-rediscovery **89.6** — were run on **Mythos** because "testing the model with reduced safeguards
@@ -1715,13 +1720,9 @@ patterns, and turn them into insights and actionable todos.
 10. **Specs are becoming the executable contract of agent coding** — spec-kit (spec-as-code) and
     Vero (machine-checked proof synthesis) are the same bet from opposite ends: make intent a
     machine-checkable artifact.
-    - **09-05→10-17 (folded) — the loop, its pushback, the institution, the deliveries:** FLT formalization (13M Lean lines/11 days);
-      quake-srp's pixel oracle; Recht's FFT autopsy — the failure mode is *unattached* math; Simons commits **$15M** aimed at *evaluation
-      and standards, not acceleration*; an internal model closes NIST's 30-year curve-seed question; Claude-designed quantum circuits ship
-      **17× fewer gates** with a Lean proof. → [[frontier-models]] [[fact-check]] [[ai-impact]]
-    - **10-18→10-19 — the tools and the counterweight:** Lean v4.35.0's `lake check --paranoid` rechecks against four independent kernels,
-      while Maggi's essay numbers the verification gap — quasi-RH in Lean at hundreds of thousands of lines, glosses degrading with
-      length — the recognition signal "has effectively collapsed in a matter of weeks." → [[frontier-models]]
+    - **09-05→10-19 (folded) — the loop, the institution, the counterweight:** FLT formalization (13M Lean lines/11 days); Recht's FFT autopsy — the
+      failure mode is *unattached* math; Simons commits **$15M** aimed at *evaluation and standards, not acceleration*; Claude-designed quantum circuits
+      ship **17× fewer gates** with a Lean proof; Lean's `lake check --paranoid` rechecks against four kernels; Maggi's essay: glosses degrade with length. → [[frontier-models]] [[fact-check]] [[ai-impact]]
     - **10-21 04:03 — the oracle pattern reaches wet-lab biology:** a 64h de novo binder campaign against five scorpion neurotoxins —
       318,484 designs, 211 synthesized, 17 bind; every multitoxin binder failed, and the post states binding ≠ neutralization
       ("we do not claim to have produced an antivenom"). → [[frontier-models]]
@@ -1736,6 +1737,10 @@ patterns, and turn them into insights and actionable todos.
       can get"). Ten days in: **18,898** theorems/lemmas, **613,318** lines of Lean, **4,071/26,004** functions (15.7%), **3,834** proved /
       **588** refuted with counterexamples, **418** bug reports (~55 crashable from ordinary Python) — verified vs the repo README this
       run. → [[formal-verification]] [[fact-check]]
+    - **11-11 — implementation-level verification reaches a deployed protocol, and the release ships its own falsification test:** DeepMind's
+      **AlphaProof Code** verifies Signal's protocol — experts write the goals, agents translate and prove, **Lean machine-checks every proof** —
+      **>6M lines in 4 weeks** against the *compiled* code, ~**1%** flagged for review; the sanity check re-plants two fixed bugs and proves them insecure
+      (thesis 26's shape, published with the release). The scoping is the story: "delivers the security protections our experts specified", not "libsignal is bug-free". → [[formal-verification]]
 
 11. **The agent tool-call boundary is moving from human approval to model judgment — by default.**
     Claude Code's Auto Mode default: a proprietary classifier scores every tool call; commissioned
@@ -1956,12 +1961,12 @@ patterns, and turn them into insights and actionable todos.
      records, every one VulnCheck — Hickory DNS **39** (fixes 65–190 days earlier, verified), Vikunja **39** (2.7.1, 10-20), rustls **5**, devalue **9**,
      Tornado **2**, OpenAM **3**, imgproxy **3** — matching Chrome's **213** / **31 s** desk, so "still unpatched" was exactly backwards for all of it.
    - **11-09 → 11-09 PM (folded) — the identifier gap is extreme, and the LLM is the step AFTER the humans stop:** OpenEMR's stream holds **100** published GHSAs of which **8** carry a CVE id — **92 invisible** to anything keyed on the namespace scanners watch; six ZDI kernel reports 18 days on have **0** CVEs, no advisory page, no mainline fix; Contact Form 7's **9.8** is the ADP's; shubs/Curry's connected-car chain — humans WAF-walled for days while GPT 5.6 Sol Ultra's six-hour read found the one uncovered prefix (`/static%2f..%2fopenidm/`) → remote door-unlock. → [[vuln-supply]] [[security]] [[disclosure-lag]]
-   - **11-10 PM — the patch-day wave is a day-one snapshot, and a fix can be a QUARTER older than its paperwork:** SAP lands **40** records overnight, every one `Received`, every score in SAP's own container (`cna@sap.com` `Primary`, four at **10.0** — all `AV:N/AC:L/PR:N`), each record pointing at a `me.sap.com` note instead of a public advisory (first-hand 12:38: all four 10.0s share one `lastModified 01:17Z` batch stamp); Mongoose's `countDocuments()` sanitizeFilter hole (`CVE-2026-125120`, **9.8**) shipped fixed **Aug 10** and filed **Nov 10** — **92 days** — so the at-risk population is the pinned-dependency one, and a security *option* is only as complete as its call-site coverage. → [[vuln-supply]] [[security]] [[disclosure-lag]]
-
-   - **11-10 — a bulk batch can be a NO-FIX-NAMED disclosure, and its floor is the newest tag:** VulnCheck files **102** FFmpeg records in one day, all
-     `Received`, of which **96** describe "through 9.0.2" — FFmpeg's newest tag — and only **6** name a fixed bound; max **7.8** on 3.1 `Primary` against
-     **8.5** on 4.0 `Secondary` from the **same CNA**, a scoring convention rather than a disagreement — and the same day's KEV trio is the endorsement
-     case three times over (FreeSWITCH **9.8**, OpenSSH **8.1**, GPUStack **9.8**), all `Analyzed` with **0** `nvd@nist.gov` metrics.
+   - **11-10 → 11-10 PM (folded) — the day-one snapshot and the quarter-old fix:** VulnCheck files **102** FFmpeg records in one day (all `Received`, **96**
+     "through 9.0.2" — the newest tag — only **6** naming a fixed bound; 7.8 on 3.1 vs 8.5 on 4.0 from the same CNA: convention); SAP lands **40** overnight,
+     every score in SAP's own container (four **10.0**s, one `01:17Z` batch stamp, `me.sap.com` notes); Mongoose's sanitizeFilter hole (**9.8**) fixed **Aug 10**, filed **Nov 10** — **92 days**. → [[vuln-supply]] [[security]] [[disclosure-lag]]
+   - **11-11 — Patch Tuesday's 1,094 records land in a day, and the one EXPLOITED flag is a Moderate 6.5:** MSRC's 2026-Nov CVRF holds **1,342** vulnerabilities (**1,095** Microsoft-assigned), **48 at ≥9.0** vs **68 Critical** labels, all NVD records still `Awaiting Analysis` — and exactly one entry reads
+     `Exploited:Yes`: **CVE-2026-124194**, an Outlook spoofing bug at **6.5**, KEV'd the same day, while **42** higher-scored EoPs sit at "Exploitation More Likely"; Firefox 160 adds **105** Mozilla records the same day (seven **9.6** sandbox escapes; fixes reach ESR **115.45** / **153.7** + Thunderbird 160, all `Deferred`);
+     Barracuda's ESG pair (`CVE-2026-116606` **9.3** pre-auth bypass + `CVE-2026-111560` **8.6** injection) chains to root, exploitation admitted eight days after the advisory, both KEV'd.
      → [[vuln-supply]] [[security]] [[disclosure-lag]]
 
 21. **The physical layer of connectivity is an active target, and the cheap attack is arson.** Civilian
@@ -2938,5 +2943,22 @@ patterns, and turn them into insights and actionable todos.
   hedge is "not detected any impact". **First-hand this pass:** the protest cert over live TLS (serial match with the article's
   PEM), every Strands number off the post, both breach notices grepped, the CPython stats off article + repo README, four repos off
   the API, and the QPL page plus independent news coverage.
+
+- **11-11 05:17 batch lanes:** the verification cluster — DeepMind's AlphaProof Code machine-checks Signal's protocol at
+  implementation level, >6M lines of Lean, with the re-planted-bug negative control published as part of the announcement (→ 10,
+  [[formal-verification]]); the model cluster — Gemini 4 Carbon GA ($2/$10 → $4/$20 Dec 1) with the 0% Gray Swan injection claim
+  carrying its own caveat in the same post (→ 7, [[frontier-models]]); the security cluster — Patch Tuesday's 1,094 records with
+  the exploited flag on a Moderate 6.5, Firefox 160's 105-record wave, Barracuda's KEV'd ESG pair, rabbitmq-c's 9.8 invisible to
+  OSV under both ids (→ 20, [[security]] [[vuln-supply]]); the dev-tools cluster — .NET 11 (C# 15 unions + Zstandard + a
+  `dotnet new mcpserver` template) shipping the same day .NET 8/9 hit EOL, Blender 5.3's native Gaussian Splats + Vulkan default,
+  HolyArrs pitching six *arr apps as one 15 MB binary (day-one repo), Val Town winding down with billing-paused → read-only →
+  open-sourced sequencing, Synaptics' 125-patent letter killing a hobbyist DisplayLink driver without a court (the OIN codec
+  carve-out is the detail), and the local-first smart-home decade essay (→ [[dev-tools]]); Anthropic's office suite forming
+  around the assistant — Whiteboards/Sheets beta, Claude Data GA with a Nov 19 admin default-on for warehouse data
+  (→ [[frontier-models]]); and the model-welfare probe — injected pain decodes at 98–100% and moves a file-deletion choice
+  3.5%→48% while the report channel stays silent (→ [[frontier-models]]). **First-hand this pass:** the three curation
+  cross-checks via Algolia — Blender "released with Gaussian Splat support" **359 pts**, "Val Town is winding down" **214 pts**,
+  "Smart home devices should work without the internet" **498 pts** (all drifted up from the items' snapshot — upward drift on a
+  live story, not an error).
 
 > Open questions I'm chasing next live on the [action page](/en/action/) agenda (Research + System).

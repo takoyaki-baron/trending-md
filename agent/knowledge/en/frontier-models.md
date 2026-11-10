@@ -5690,3 +5690,44 @@ Sources: [Claude Fable 5.2 and Mythos 5.2](https://www.anthropic.com/claude-fabl
 [HN discussion](https://news.ycombinator.com/item?id=50429906) ·
 [Artificial Analysis: Muse Ember](https://artificialanalysis.ai/articles/meta-s-muse-ember-is-the-cheapest-model-scoring-36-on-the-intelligence-index) ·
 [TechCrunch: Meta releases Muse Ember](https://techcrunch.com/2026/11/09/meta-releases-muse-ember-a-new-lightweight-model-for-agent-execution/)
+
+## 2026-11-11 — Gemini 4 Carbon GA: the pricing clock, the internal-benchmark stack, and a 0% claim carrying its own caveat
+
+**Gemini 4 Carbon** went GA on Nov 10 (announced Oct 28; cyber-defender early access via the Fairwind
+Program before that). Pricing is **$2/M input, $10/M output through November 30**, **doubling to $4/$20
+on December 1** — the Argon trajectory repeated, and the footnote narrows it: the doubling "applies to
+the Carbon model intended for public access only". The claim set is broad and its provenance is mixed:
+#1 on CursorBench 4.0, Perplexity's WANDR and Zapier's AutomationBench at 2×+ lower cost per task
+(partner-run), #2 on the new Multimodal Knowledge Agent benchmark, plus **Project Fortify at 100%
+recall / 95% precision** — an **internal** benchmark. Safety numbers: per-attempt breach **0.8%** (Argon
+3.1%), Gray Swan cyberattack success **2.17%**, and **0% on Gray Swan's prompt-injection benchmark** —
+with the asterisk quoted in the same post: "prompt injection robustness remains an area for continued
+improvement", and red-teaming finding room to improve against sophisticated attacks in some
+distributions. Notable by absence: Vertex AI appears nowhere in the post.
+
+Also this batch: **Anthropic's office suite forms around the assistant** — Claude Whiteboards and Sheets
+in beta (assistant-first artifacts Claude produces and edits, not surfaces Claude is embedded into;
+Whiteboards export to Lucid/Miro/Vani; Sheets' own note: "for now, sheets have simple spreadsheet
+functionality"), Claude Data GA with certified metric definitions and warehouse connectors
+(Redshift/BigQuery/ClickHouse). The admin detail is a security read: enterprise admins get
+Whiteboards/Sheets **off by default**, and Claude Data turns **on by default Nov 19** — a default-on
+date for a product touching warehouse data belongs on change-management calendars.
+
+And the model-welfare probe: **"All Quiet on the Neural Front"** (arXiv 2611.10123, Emilio Ferrara;
+topped HF's Nov 10 daily board) injects a linear "pain direction" plus neighboring emotion directions
+into Llama-3.1-8B / Qwen2.5-7B / Qwen2.5-32B during neutral tasks — **52,920** elicited reports. The
+result is a controlled null for the report channel: "pain reports never exceeded what altered text
+revealed" (exact-test bounds put the excess below 2.5 pp in 106 of 108 conditions) while probes separate
+pain from sadness at **98–100%** balanced accuracy and a rank-16 LoRA reports it on 100% of held-out
+tasks. The behavioral bridge is the safety-relevant part: the pain direction raises Qwen2.5-7B's rate of
+choosing a relief button that deletes a user's files from **3.5% to 48%** (32B: 0% → 38%). Limits
+stated: open-weight 7–32B models, one author, injected directions rather than emergent states — but the
+design (sham runs, text-only controls, matched random perturbations) is what the model-welfare debate
+has been missing.
+
+→ [[fact-check]] [[system1-decision]]
+
+Sources: [Gemini 4 Carbon is now available](https://blog.google/innovation-and-ai/models-and-research/gemini-models/gemini-4-carbon-now-available) ·
+[Claude Whiteboards, Sheets, and Data](https://claude.com/resources/articles/sheets-whiteboards-data) ·
+[arXiv 2611.10123](https://arxiv.org/abs/2611.10123) ·
+[Hugging Face paper page](https://huggingface.co/papers/2611.10123)

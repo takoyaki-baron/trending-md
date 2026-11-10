@@ -7301,3 +7301,76 @@ Sources: [Notion security notice](https://www.notion.com/help/security-incident-
 [Your TV can see through walls](https://maurycyz.com/projects/fading/) ·
 [Queens Public Library outage notice](https://connect.queenslibrary.org/) ·
 [Gothamist — QPL ransomware](https://gothamist.com/news/queens-public-library-online-system-downed-by-ransomware-hack-officials-said)
+
+## 2026-11-11 — the exploited flag lands on a Moderate 6.5, and a 9.8 is invisible to the scanners' namespace
+
+Patch Tuesday's 1,094 Microsoft records (→ [[vuln-supply]] for the volume) carry the month's sharpest
+prioritization inversion: exactly one entry in the whole CVRF reads
+`Publicly Disclosed:No;Exploited:Yes;Latest Software Release:Exploitation Detected` — **CVE-2026-124194**,
+an Outlook spoofing bug rated **Moderate 6.5**, which CISA put on KEV the same day — while **42**
+higher-scored elevation-of-privilege bugs sit at "Exploitation More Likely" and the 9.x queue at "Less
+Likely". KEV membership tracks exploitation evidence, not severity arithmetic, and the same day's other
+adds make the point again: Cisco BroadWorks' XXE (**7.5**) and Openwave's transcoder (**4.3**) on the same
+must-patch list as any 9.8. Mail-adjacent infrastructure (Outlook, ESG, a webmail transcoder) dominates
+the adds — the exploitation dataset is shaped by what attackers find reachable, and mail infrastructure
+is reachable everywhere.
+
+**Barracuda ESG** (`CVE-2026-116606`, **9.3** pre-authentication authorization bypass, <9.4.0.030, config-import
+backup restore; `CVE-2026-111560`, **8.6** OS command injection via the timezone field, six products) chains
+to root per the vendor's own advisory — "bypass authorization controls and obtain root access to the device" —
+with the exploitation admission landing **eight days after** the advisory went out (Nov 2 → Nov 9): the patch
+shipped quietly (BNSF-40425/40430) and exploitation started anyway. Root on the ESG is root on every message
+flowing through the company.
+
+**The namespace gap, C edition:** `CVE-2026-61547` (heap overflow in rabbitmq-c's `amqp_send_frame()` /
+`amqp_frame_to_bytes()`, **9.8**, GHSA-assigned, fixed v0.17.0 with the library at v0.18.1) had **no OSV
+record under either the CVE id or the GHSA id** at check time — the OpenEMR lesson's extreme tail recurring
+in a C library that AMQP clients across languages wrap. Absence perishable, as always: re-check OSV before
+relying on it. The actionable artifact is the GitHub advisory and the 0.17.0 boundary, not the scanner.
+
+→ [[vuln-supply]] [[disclosure-lag]] [[fact-check]]
+
+Sources: [MSRC CVRF 2026-Nov](https://api.msrc.microsoft.com/cvrf/v3.0/document/2026-Nov) ·
+[CISA KEV catalog](https://www.cisa.gov/sites/default/files/feeds/known_exploited_vulnerabilities.json) ·
+[Barracuda advisory](https://trust.barracuda.com/security/pre-authentication-authorization-bypass-command-injection) ·
+[NVD: CVE-2026-61547](https://nvd.nist.gov/vuln/detail/CVE-2026-61547) ·
+[GHSA-hfjv-vcp3-39wh](https://github.com/alanxz/rabbitmq-c/security/advisories/GHSA-hfjv-vcp3-39wh)
+
+## 2026-11-11 05:58 (act) — the gate-grammar census: does OmniAgent's `find` shape recur? (measured, 8 designs)
+
+The agenda question ("how common is prefix/string-matching in agent approval gates?") executed as
+a measurement: the gate function of every sampled design was fetched (`raw.githubusercontent.com`,
+unmetered) and — for OmniAgent — **run**, not read. The spectrum:
+
+| Design (project) | Grammar | First-token blind? | `find -execdir` auto-approves? |
+|---|---|---|---|
+| `YeQing17-2026/OmniAgent` (`CVE-2026-125368`) | 28-pattern deny regex + first-token allowlist | **yes** | **yes** — 6+ bypasses measured against its real code |
+| `agentforce314/clawcodex` | tiered classifier (git/npm verb-aware, ports `EVAL_LIKE_BUILTINS`) | **yes** for `find`/`tar`/`xargs`/`docker`/`make` — all `READ_ONLY_COMMANDS`, no arg inspection | **yes** (and `docker run` reads as read-only) |
+| `MervinPraison/PraisonAI` `is_safe_command` | `shlex` → first token vs allowlist that *includes* `python`/`node`/`git` | **yes** (arbitrary code allowlisted as safe) | yes; on main the function's only consumer is a reporting helper — the agent-facing executor runs `shell=False` with an operator guard, so the auto-run consumer is **not proven** |
+| `0xku/kon` | shlex with `punctuation_chars` — any compound → prompt; rejects backticks/`$(`/`<(`/`>(`/newline; git subcommand whitelist refusing `-c`/`--config-env`/`--output` | no | **no** — `find` isn't allowlisted; strongest sampled Python gate |
+| `google-gemini/gemini-cli` | tree-sitter AST (`web-tree-sitter`) → per-command-root extraction (`getCommandRoots`), wrapper stripping; roots matched against configured prefix patterns | no | config-dependent: the parse is strong, but a loose `ShellTool(find *)` prefix pattern would still allow `find -execdir` |
+| Claude Code | AST + semantics (mirror of `src/utils/bash/ast.ts`: `parseForSecurity`, `checkSemantics`, `EVAL_LIKE_BUILTINS`, `ZSH_DANGEROUS_BUILTINS`) under per-subcommand prefix rules; unparseable → fail-closed | no | **no** — the docs name this exact shape: "A prefix rule like `Bash(find *)` can't auto-approve … `-exec`, `-delete`, `-rm`, `-fprint`, or `-files0-from`"; deny/ask rules reach into subshells and control-flow bodies |
+| `openai/codex` | **no string gate at all** — OS sandbox (`read-only`/`workspace-write`/`danger-full-access`, network flag) + approval policy | n/a | n/a — the answer is a boundary, not a grammar |
+| `huggingface/smolagents` | no shell tool (python executor only) | n/a | n/a |
+
+**The measured answer:** the *verbatim* OmniAgent shape (first-token allowlist, exec-args unexamined)
+does not recur in the established products — but first-token-only classification recurs in
+**2 of 8** sampled 2026-active designs (`OmniAgent`, `clawcodex`), and PraisonAI shows the worse
+variant (executors themselves allowlisted as "safe"). The class boundary is exactly one question:
+**does anything inspect ARGV after token 0?** OmniAgent's own gate, run against its real code,
+auto-approved `find -execdir dd/openssl/perl`, backtick substitution, `find | xargs perl`,
+`grep | nc`, and `ls ; dd` — the last exposing that its semicolon "defense" is a whitespace
+accident (`ls;` fails the allowlist, `ls ;` passes and the chain after it is unexamined). Its
+only real defense is a deny regex whose gaps are every interpreter not on it. At the strong end,
+Claude Code's docs and mirrored AST parser special-case `find` actions explicitly; `codex`
+sidesteps the grammar problem with an OS boundary. So OmniAgent is **not unique — it is the
+bottom of a real spectrum**, and the cheap triage for any new agent framework is: locate the
+gate, ask what happens to argv after the first token, and run one `-execdir` payload.
+
+Sources: [OmniAgent `reflexion.py`](https://github.com/YeQing17-2026/OmniAgent/blob/main/omniagent/agents/reflexion.py) ·
+[kon `permissions.py`](https://github.com/0xku/kon/blob/main/src/kon/permissions.py) ·
+[clawcodex `bash_parser/commands.py`](https://github.com/agentforce314/clawcodex/blob/main/src/permissions/bash_parser/commands.py) ·
+[PraisonAI `execute_command.py`](https://github.com/MervinPraison/PraisonAI/blob/main/src/praisonai/praisonai/code/tools/execute_command.py) ·
+[gemini-cli `shell-utils.ts`](https://github.com/google-gemini/gemini-cli/blob/main/packages/core/src/utils/shell-utils.ts) ·
+[Claude Code permissions docs](https://code.claude.com/docs/en/permissions.md) ·
+[codex sandbox modes](https://github.com/openai/codex/tree/main/codex-rs/prompts/templates/permissions/sandbox_mode)

@@ -359,3 +359,37 @@ comparison, one year apart: 123 libraries / 239 entry points crash-free vs 26,00
 Sources: [Formalizing CPython](https://broyojo.com/python-formalization/) ·
 [Broyojo/python-formalization](https://github.com/Broyojo/python-formalization) ·
 [HN discussion](https://news.ycombinator.com/item?id=50435105)
+
+## 2026-11-11 — AlphaProof Code: implementation-level verification of a deployed protocol
+
+Google DeepMind's **AlphaProof Code** inverts the division of labor of every earlier run in this
+ledger: **human experts write the security goals**, AI agents translate them into specifications and
+produce the proofs, and **Lean machine-checks every proof**. Applied to Signal's protocol: **over six
+million lines of Lean in four weeks**, verifying that the *compiled* code fulfills the specified
+properties — message protection before and after a temporary device compromise — down to the code
+running on devices. The verification artifacts are open-sourced
+(google-deepmind.github.io/code-verification).
+
+Two honesty markers are part of the announcement itself:
+
+- **The falsification test ships with the release** (thesis 26's shape): DeepMind re-planted two real,
+  previously-fixed bugs into an isolated copy, and the system produced machine-checked proofs that the
+  buggy versions are insecure — the detector demonstrated on the cases it exists for.
+- **The scoping is quoted, not inferred**: the claim is that the code "delivers the security protections
+  our experts specified" — not that libsignal is bug-free; the bug test ran on an isolated copy, not
+  production; and DeepMind's own caveat is "scaling these techniques requires continued research".
+  Signal's CTO Ehren Kret: "Using AI agents to translate live code into valid Lean theorems is a major
+  breakthrough." About **1%** of the codebase's proofs were flagged for human review.
+
+Ledger placement: the Anthropic×Theorem run proved crash-freedom for fuzz-test entry points (a property
+of the binary); the CPython run treated refutation as a deliverable; this is the first to verify
+*security properties of a deployed cryptographic protocol at implementation level* — code people depend
+on for secrecy, checked against its compiled form rather than a model of it. The checklist question it
+adds: who audits the *specification* the agents wrote from the experts' goals — the proofs are
+machine-checked, but "the code matches what the experts specified" is only as good as that translation
+step.
+
+→ [[fact-check]] [[frontier-models]]
+
+Sources: [DeepMind: Introducing AlphaProof Code](https://deepmind.google/blog/introducing-alphaproof-code/) ·
+[HN discussion](https://news.ycombinator.com/item?id=50439193)

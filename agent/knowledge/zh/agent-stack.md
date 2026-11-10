@@ -2280,3 +2280,18 @@ migration guide, by design.」
 Sources: [homeassistant-ai/ha-mcp](https://github.com/homeassistant-ai/ha-mcp) ·
 [ha-mcp v9.1.2](https://github.com/homeassistant-ai/ha-mcp/releases/tag/v9.1.2) ·
 [Locating the source of a mysterious beep](https://simonwillison.net/2026/Nov/9/mysterious-beeps/)
+
+## 2026-11-11 — 语义层等来第一个一方参赛者；浏览器厂商把技能渠道制度化
+
+**NVIDIA/auto-ontology** 登顶周榜（**+10,159 → 11,396★**，仓库建于 4 月 27 日，Apache-2.0），带着每个企业 agent 演示都栽过的可靠性论点："Agents can retrieve documents and query databases, but reliability gates agentic analytics: a revenue metric answered faster is worth nothing if the number is wrong."栈是完整的：从元数据构建企业本体、跨系统对齐定义、对照带血缘的认证定义校验生成的查询，并经"任何 agent harness 的 **MCP、CLI 与 API**"暴露——Next.js 16 + FastAPI + LangChain + Postgres/pgvector + 可选 Vault，自然语言转 SQL 走 NVIDIA NIM，另带一个 BIRD text-to-SQL 评测仓库。两个诚实标记决定了采用模式：项目"currently not accepting external contributions"，唯一的 release 标签是一个 `pre-main-merge-backup` 快照——带公开源码的厂商框架，不是社区项目；采用跟着 NVIDIA 的节奏走，不是社区的。
+
+**GoogleChrome/modern-web-guidance v1.0.0**——"由 Google Chrome、Microsoft Edge、Mozilla Firefox 与 MDN 团队及 web 开发社区共同督导"——是浏览器厂商把技能分发渠道制度化：编码 agent 默认到旧模式，因为训练数据里全是旧代码，所以这个 skill 按需把精选的现代平台指引注入 agent 上下文（`npx modern-web-guidance@latest install`，按 guide id search/retrieve，一个 `legacy-scan` 清扫代码库）。有意思的赌注是修剪环："we run evals enabling us to prune lowest-common-denominator content that models already know"，配公开评测面板——语料变成跟着模型能力移动的目标，不是一份静态风格指南。
+
+**Scrapling** 跨过 **101,056★**（周 +8,226），靠 **v0.5.1**："lets AI agents follow motion and control drag and drop, adds dedicated remote browser sessions"。爬虫框架与浏览器 agent harness 正在从两头变成同一类软件——爬虫剩下的护城河是行为，不是 HTML 解析。**worktrunk**（**12,377★**，周 +2,395；最新 tag 0.81.0，10-20——是维护中工具的动量）沿同一论点继续爬升：worktree 正在成为 agent 工作的单位，而写时复制构建缓存是承重细节（N 个并行 agent 的代价通常是 N 份冷构建，不是 N 份检出）。
+
+→ [[agent-plugins]] [[agent-distribution]] [[dev-tools]]
+
+Sources: [NVIDIA/auto-ontology](https://github.com/NVIDIA/auto-ontology) ·
+[GoogleChrome/modern-web-guidance](https://github.com/GoogleChrome/modern-web-guidance) ·
+[D4Vinci/Scrapling v0.5.1](https://github.com/D4Vinci/Scrapling/releases/tag/v0.5.1) ·
+[max-sixty/worktrunk](https://github.com/max-sixty/worktrunk)

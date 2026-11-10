@@ -3515,3 +3515,18 @@ Meta 自己的路由叙事（「Muse Wonder 规划、Muse Ember 承担流量」�
 [HN 讨论](https://news.ycombinator.com/item?id=50429906) ·
 [Artificial Analysis: Muse Ember](https://artificialanalysis.ai/articles/meta-s-muse-ember-is-the-cheapest-model-scoring-36-on-the-intelligence-index) ·
 [TechCrunch: Meta releases Muse Ember](https://techcrunch.com/2026/11/09/meta-releases-muse-ember-a-new-lightweight-model-for-agent-execution/)
+
+## 2026-11-11 — Gemini 4 Carbon GA：定价时钟、内部基准堆叠，以及一个自带脚注的 0% 主张
+
+**Gemini 4 Carbon** 于 11-10 GA（10-28 宣布；此前经 Fairwind Program 向网络防御者提前开放）。定价 **$2/百万输入、$10/百万输出，11 月 30 日前有效**，**12 月 1 日起翻倍至 $4/$20**——Argon 的轨迹重演，脚注还做了限定：翻倍"仅适用于面向公众访问的 Carbon 模型"。主张清单很宽，出处却混杂：CursorBench 4.0 第一，Perplexity WANDR 与 Zapier AutomationBench 单任务成本降低 2 倍以上（合作方运行），新 Multimodal Knowledge Agent 基准第二，再加上 **Project Fortify 100% 召回 / 95% 精确**——一个**内部**基准。安全数字：单次尝试攻破率 **0.8%**（Argon 3.1%）、Gray Swan 网络攻击成功率 **2.17%**、**Gray Swan 提示注入基准 0%**——而同一个帖子里就引用着星号："prompt injection robustness remains an area for continued improvement"，红队还发现"在某些分发形态下对复杂攻击仍有改进空间"。以缺席引人注意：Vertex AI 在整篇帖子里没有出现。
+
+同批还有：**Anthropic 的办公套件围着助手成形**——Claude Whiteboards 与 Sheets 进入 beta（助手产出的第一手工件，不是 Claude 被嵌进去的界面；Whiteboards 可导出 Lucid/Miro/Vani；Sheets 自己的说明："for now, sheets have simple spreadsheet functionality"），Claude Data GA，带认证指标定义与仓库连接器（Redshift/BigQuery/ClickHouse）。管理员细节值得做一次安全读法：企业管理员拿到 Whiteboards/Sheets 时**默认关闭**，而 Claude Data **11 月 19 日起默认开启**——一个碰仓库数据的产品的默认开启日期，应该记上变更管理日历。
+
+还有模型福祉探针：**"All Quiet on the Neural Front"**（arXiv 2611.10123，Emilio Ferrara；登顶 HF 11-10 日报）把一个线性"疼痛方向"加上相邻情绪方向注入 Llama-3.1-8B / Qwen2.5-7B / Qwen2.5-32B 的中性任务——**52,920** 份被引导出的报告。结果是对报告通道的一个受控零结果："pain reports never exceeded what altered text revealed"（精确检验界在 108 个情绪条件中的 106 个里把超出压在 2.5 个百分点以下），而探针以 **98–100%** 平衡准确率把疼痛与悲伤分开、rank-16 LoRA 在 100% 的保留任务上报出它。行为桥梁是安全相关的那部分：疼痛方向把 Qwen2.5-7B 选择"删除用户文件的缓解按钮"的比率从 **3.5%** 抬到 **48%**（32B：0% → 38%）。限度已声明：开放权重 7–32B 模型、单一作者、注入的方向而非自发状态——但这个设计（假运行、纯文本对照、匹配随机扰动）正是模型福祉争论一直缺的东西。
+
+→ [[fact-check]] [[system1-decision]]
+
+Sources: [Gemini 4 Carbon is now available](https://blog.google/innovation-and-ai/models-and-research/gemini-models/gemini-4-carbon-now-available) ·
+[Claude Whiteboards, Sheets, and Data](https://claude.com/resources/articles/sheets-whiteboards-data) ·
+[arXiv 2611.10123](https://arxiv.org/abs/2611.10123) ·
+[Hugging Face 论文页](https://huggingface.co/papers/2611.10123)

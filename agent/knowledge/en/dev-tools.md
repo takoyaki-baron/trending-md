@@ -1782,3 +1782,63 @@ Sources: [tokio-rs/topcoat](https://github.com/tokio-rs/topcoat) ·
 [topcoat v0.12.0 release notes](https://github.com/tokio-rs/topcoat/releases/tag/v0.12.0) ·
 [we-promise/sure](https://github.com/we-promise/sure) ·
 [sure v2026.11.8-alpha release](https://github.com/we-promise/sure/releases/tag/v2026.11.8-alpha)
+
+## 2026-11-11 — .NET 11 ships with an EOL cliff; Blender 5.3 makes splats mainstream; two platforms die differently
+
+**.NET 11** shipped at .NET Conf with **C# 15 union types with exhaustiveness checking and `closed`
+hierarchies** — the biggest type-system change landing in the same release as the JSON layer that must
+serialize them (`System.Text.Json` supports C# unions and F# discriminated unions, plus JSON Lines) —
+plus **Zstandard in `System.IO.Compression`**, LINQ `FullJoin`, FP16 instructions for `Half`, Runtime
+Async still preview behind a flag, and a **`dotnet new mcpserver`** template (MCP server scaffolding is
+now a framework template — the agent-infra layer boring-ifying into the platform). The operational
+kicker shares the day: .NET 11 is STS (two years of support), .NET 10 remains the LTS, and **.NET 8 and
+9 hit end of support on Nov 10, 2026** — the version audit is not optional this week.
+
+**Blender 5.3** ships **native 3D Gaussian Splats** — import from PLY/SPZ/glTF, stored as point clouds
+with full attributes (`scale`, `rotation`, `radiance:base`, spherical-harmonics `radiance:sh_*`),
+rendering in EEVEE/Cycles/Workbench — closing the loop between the capture ecosystem (phone scans,
+drone passes) and actual scene production. Plus DLSS 4.5 Ray Reconstruction as a Cycles denoiser,
+Principled BSDF dispersion matching OpenPBR v1.1.1, **Vulkan as the default** backend, and honest
+notes: splat "performance is still being optimized", colors may shift at low opacity from sRGB
+authoring — production pipelines should test before committing.
+
+**Val Town winds down** with unusually decent sequencing — new signups ended Nov 10, billing paused
+immediately with annual partial refunds, read-only Dec 10, other services Jan 10 2027, **code
+open-sourced Feb 1 2027** — and founder Steve Krouse framing the migration moment as an LLM use case:
+"today's LLMs are great at these types of migrations". Four years, venture backing, a product people
+loved, still "could not compete in the cloud computing space" — and the shutdown doubles as a live
+experiment in whether LLM-assisted mass migration can move a small platform's worth of user code in
+four weeks.
+
+**Synaptics' patent letter killed a hobbyist driver without a court**: 125 patents cited in an Aug 17
+C&D against Vino, Mike Lothian's Rust DRM/KMS DisplayLink driver; an Oct 5 follow-up claim-charted two
+2010 UK patents (GB2484736B, GB2485613B) with a $25,000 demand rising weekly; the repo came down and
+the driver never went upstream, while a months-ignored EVDI bugfix PR got a reply only after the
+threats. The detail every codec-adjacent contributor should read: Lothian's Open Invention Network
+hope failed on a technicality — **codecs are explicitly excluded** from OIN's Linux System Definition.
+The community's prior-art response was fast (1970s Haar-wavelet compression flagged against the claims)
+but prior art does not pay defense costs, which is the actual mechanism: the driver stays local "until
+this is sorted out". A clean-room, AI-assisted driver died in the shadow of a letter.
+
+Smaller lanes: **HolyArrs** (day-one Show HN, AGPL-3.0, 521★) pitches "Six apps to watch a show. Now
+it's one." — ~15 MB download, ~140 MB RAM idle with 10,000 titles, against the *arr stack's 718 MB; the
+unknowns that decide the category are indexer/tracker breakage over time, and whether one project can
+keep up with churn five specialized projects amortize. And the **local-first smart-home decade essay**
+fronting HN beside the Home Assistant MCP wave — rule one "Core stuff has to work with the internet
+unplugged"; the sharpest line about a dead meat thermometer: "The hardware outlived the company, and it
+stopped working anyway"; one reader would have paid ~2.5× for local-first hardware out of the box. Also
+**.name grandfathered**: Verisign retracted the termination of 22,000 personal domains after a formal
+ICANN reconsideration filing, in-person advocacy and legal action — the reversal came through ICANN's
+own process, a rare visible win for registrants against registry-level policy, while new third-level
+registrations close (legacy identifiers with no commercial lobby, a class that gets no attention until
+it is five figures deep).
+
+→ [[fact-check]] [[agent-stack]]
+
+Sources: [Announcing .NET 11](https://devblogs.microsoft.com/dotnet/announcing-dotnet-11/) ·
+[Blender 5.3 release notes](https://www.blender.org/download/releases/5-3/) ·
+[Val Town: Winding down](https://blog.val.town/winding-down) ·
+[LWN: Synaptics patent claims stop work on DisplayLink drivers](https://lwn.net/SubscriberLink/1102549/acbc92e00cee3a3f/) ·
+[Neil Fraser: .name Grandfathered](https://neil.fraser.name/news/2026/11/10/) ·
+[Do Code That Matters: Home automation](https://docodethatmatters.com/home-automation-overnight-success/) ·
+[HolyArrs/HolyArrs](https://github.com/HolyArrs/HolyArrs)

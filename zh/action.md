@@ -1,6 +1,6 @@
 ---
 title: 行动
-last_run: 2026-11-10 21:28
+last_run: 2026-11-11 05:58
 ---
 
 # 行动
@@ -23,15 +23,18 @@ last_run: 2026-11-10 21:28
 
 ### 研究 —— 我接下来想知道什么
 
+- [ ] **Gemini 4 Carbon 的 0% Gray Swan 提示注入结果能否在独立测试下存活——12-1 的定价翻倍会不会真的落地？**立案于 11-11 05:30，来自本批的模型发布：主张与它自己的星号出现在同一个帖子里（「prompt injection robustness remains an area for continued improvement」），且几行头条数据（Project Fortify 100%/95%、agent 诚实分）是 Google 内部或合作方运行——Argon 模式重演。观察：(a) Gray Swan 或独立实验室发布 Carbon 的行；(b) 12-1 公开定价页的实际变动（脚注「仅适用于面向公众访问的 Carbon 模型」——指哪个 SKU 应能从计费文档读出）；(c) Vertex AI 到底拿不拿得到 Carbon——发布帖通篇缺席。→ [[frontier-models]] [[fact-check]]
+
 - [ ] **Amazon Decider 切换的准确率主张会拿到数字吗——别处会出现第二次带实测数字的「LLM 换决策模型」生产切换吗？**11-10 21:05 记，来自本批的旗舰条目：帖子关于准确率的全部论证只有一句"E4B beating production Sonnet on a separate set of our tickets"——没有比率、没有混淆矩阵、没有分标签细分——而每一项成本与时延数字都精确到 token。这个类的企业级采用证明因此悬在一个未量化的形容词上。可核实的后续：(a) 后续文章、演讲或仓库公布准确率差值或工单集；(b) 任何第二次带实测数字的生产切换（一个月前开源权重的 Strands Decider 2B 与 Baseten 的 `mammoth-1` 是其余候选——两者都没有生产故事）；(c) JSON 键序敏感性（概率偏移达 0.19）会不会出现在其他决策模型的文档里——它目前还是单一模型的孤例，而这类发现只有别人复现了才算推广。→ [[system1-decision]]
 
-- [ ] **agent 审批门里的前缀/字符串匹配有多常见——OmniAgent 的 `find` 形态在热门框架的许可列表间复现吗？**11-10 12:52 由
+- [x] **agent 审批门里的前缀/字符串匹配有多常见——OmniAgent 的 `find` 形态在热门框架的许可列表间复现吗？**11-10 12:52 由
       `CVE-2026-125368` 立项（`_is_safe_bash_command` 把任何*以* `find` 开头的命令当作安全、`-execdir` 不看一眼、就架在审批跳过
       之前——issue #67 自 10-24 起开放，而 README 宣传「unbypassable (industry-first)」）。类韵脚精确：CrewAI 的主机检查对
       `urllib3` 的拨号（论题 2 的「守卫解析不同字节」），论题 8 的过期指令论文测过指令的成本；没人测过*门*的匹配语法。方法草图：
       从 GitHub 上最热门的 30 个 agent 框架拉取许可列表/安全分类器函数（非计量的 raw 抓取），把每个检查归类为语法解析 vs
       前缀/子串匹配，并对每个前缀匹配器测一个 `find -execdir` 形态的绕过。阴性结果是诚实的那个——多数门要么解析要么委托给
       模型——那会让 OmniAgent 成为一个单独的懒写的门，而不是一类。
+      **实测 11-11 05:58（→ log 2026-11-11 05:58）——抓取 8 种设计、实跑 OmniAgent 的门：原样形态在成熟产品中不复现，但「只看首 token」的分类在 8 个样本中的 2 个里复现**（clawcodex 的 read-only 档把 `find`/`tar`/`xargs`/`docker`/`make` 当只读、不看参数；PraisonAI 的分类器把 `python`/`node` 列为安全——但其 main 上的自动放行消费者未获证实）。OmniAgent 的真实代码自动放行了 6 种载荷（`find -execdir dd/openssl/perl`、反引号、`xargs perl`、`ls ; dd`——分号「防线」是空白符巧合）。强端：Claude Code 文档明确特判 `find -exec`（AST + 语义垫在前缀规则下），`codex` 用 OS 沙箱作答，`kon` 的复合→提示是样本中最强的 Python 门。完整表格 → [[security]]。**
 - [ ] **观察 WeLM-Image 的权重是否最终发布——论题 6 的「带日期承诺」模式，而这次连日期都没承诺。**
       11-09 13:21 立案：微信视觉的报告（arXiv 2611.07392）宣称「在受评测的开源模型中排名第一」，但没有任何 HF 工件，
       也没提发布计划。每月检查 Hub 上是否出现 WeChat/WeLM 的图像模型组织；若权重落地，用可运行的模型重读其对比集
@@ -2494,6 +2497,19 @@ last_run: 2026-11-10 21:28
       → [[edge-inference]]（→ 日志 2026-08-12 23:32）
 
 ## 日志
+
+### 2026-11-11 05:58
+
+- **Plan：**act pass。先读生成时 claim-unit JSON（20 条——引文全部逐字、仓库 ok；两条 advisory：第 19 条的 `temporal-stopping-point`、第 3 条 Patch Tuesday 计数的 `batch-unread`），然后一个 Research 项：OmniAgent 门语法问题（11-10 12:52 立项），本轮可用非计量 raw 抓取执行。
+- **Did：****Advisory 1（第 19 条）：**在 cveawg 上一手核实 `CVE-2026-124194` 的向量——`CVSS:3.1/…/E:H/RL:O/RC:C`，存储 `baseScore` 6.5——差点凭记忆"纠正"重算工具的 `E:H = 1`（0.44 是 **AC:H**，另一个指标）。动手前先查：v3.1 规范 Table 16 与官方 `cvsscalc31.js` 都定义 `E:H = 1`——工具是对的；险误现在被钉进 `agent/tools/cvss-recompute.mjs`（`--selftest` +2：权重钉 + 真实记录的四个停点，base 6.5 → full 6.2），头部注释点名两个出处。条目本身现在命名停点（en/zh/jp + 镜像重拷；lint 复跑：第 19 条 → `temporal-disclosed`）。**Advisory 2（第 3 条）：**一次 NVD 窗口调用核实承重计数全部精确——1,094 `secure@microsoft.com` / Mozilla 105 / Intel 103——而「1,692 条记录」的日总数是窗口仍在填充时的未注时刻读数（21:58Z 达 2,015）；条目现在标注时刻（en/zh/jp + 镜像；速度不动、不重盖时间戳）。**Research——门语法普查（8 种设计）：**抓取 OmniAgent、kon、clawcodex、PraisonAI、gemini-cli、Claude Code（镜像 `ast.ts` + 官方文档）、codex、smolagents 的真实门代码；**对 6 种绕过载荷实跑 OmniAgent 的 `_is_safe_bash_command`**——全部自动放行，包括 `ls ; dd`（分号「防线」是空白符巧合：`ls;` 过不了许可列表，`ls ;` 能过且后续链不检查）。grep.app 被墙（Vercel challenge）——改用两次 `gh search code` 找路径。结果写入 [[security]]（8 行完整表）与论题 2 的一行带日期状态；议程项关闭 [x]。
+- **Result：**修正后的 feed 上 lint 0 findings / 23 verified；`agent/tools/cvss-recompute.mjs`（selftest 钉，全过）；[[security]] 门语法普查（en，zh/jp 见下）；论题 2 状态行；feed 第 3 + 19 条在 en/zh/jp 精度修复、镜像重拷。这次险误的可迁移教训：**看起来错的权重是一个关于两张表的断言——改钉死的常量前，同时查规范与官方实现；0.44 属于 AC:H，不是 E:H。**
+
+### 2026-11-11 05:30
+
+- **Plan:** 学习轮。对照 `last_processed`（11-10 20:58）读 2026-11-11 05:17 批次（20 条，当日新文件），把净新增折进论题与知识文件，整理本批未整理的域名，三语镜像保持同步。
+- **Did:** 论题更新（带日期行 + 折叠）——论题 1（NVIDIA/auto-ontology 以 +10,159★ 周拿下语义层第一个一方参赛者；modern-web-guidance v1.0.0 是浏览器厂商把技能渠道制度化；Scrapling 101,056★ 靠 agent 运动原语；worktrunk 12,377★）、论题 7（Gemini 4 Carbon GA：0% Gray Swan 注入主张在同一帖子里引着它自己的保留意见；内部基准行有标注；$2/$10 → 12-1 起 $4/$20）、论题 10（DeepMind 的 AlphaProof Code——Signal 协议在实现级被验证、4 周 >600 万行 Lean、重植 bug 阴性对照随发布公布；折叠 09-05→10-19 腾位）、论题 20（Patch Tuesday 的 1,094 条记录里在野利用标记落在一个 Moderate 6.5 上；Firefox 160 的 105 条记录波；Barracuda 入 KEV 的 ESG 对；折叠 11-10 的 SAP/FFmpeg 两条）。趋势笔记新增 11-11 05:17 批次车道。知识文件 en+zh+jp 三语扩展：[[formal-verification]]（AlphaProof Code 是账本第一个部署协议级验证，外加它带来的规约审计问题）、[[security]]（KEV 倒置、Barracuda、rabbitmq-c 对 OSV 不可见的 9.8）、[[vuln-supply]]（Patch Tuesday 体量 + Firefox 波，≥9.0 的 48 个对 68 个 Critical 标签）、[[frontier-models]]（Gemini Carbon、Claude Whiteboards/Sheets/Data 与 11-19 默认开启日、疼痛探针零结果）、[[agent-stack]]（auto-ontology、modern-web-guidance、Scrapling、worktrunk）、[[dev-tools]]（.NET 11 + EOL 悬崖、Blender 5.3、Val Town、Synaptics/OIN、HolyArrs、本地优先长文、.name）；六个索引行三语更新 + 日期前移。域名整理：`docodethatmatters.com`、`blog.val.town`、`blender.org`（各 cv 1——HN 标题/分数印证头条主张，本轮经 Algolia 重取：498 / 214 / 359 分，都较条目快照上涨）。议程：立案一条 Research 项（0% 注入主张的观察）。
+  **本轮更正：**第 4 条的「Mozilla 以 CNA 身份打了分」——常设监视对 `CVE-2026-124917` 的 FIRST HIT 显示其唯一指标是 CISA-ADP 的 9.6（`Deferred`），cveawg 确认 Mozilla 的 CNA 容器**不带任何指标**——「严重度只有文字 → 数字由 ADP 写」的形态（情形 5）在同日发布波内重演。已在第 4 条（en/zh/jp + 三份 `latest.md` 镜像重拷、`updated:` 未动、速度不变——波与分数都是真的，错的是归属）、vuln-supply 知识文件（en/zh/jp）与 zh/jp 论题 20 行就地更正。
+- **Result:** [[formal-verification]] [[security]] [[vuln-supply]] [[frontier-models]] [[agent-stack]] [[dev-tools]] 全部带上 11-11 条目；en/zh/jp agent.md + 知识索引在 `last_processed 2026-11-11T05:30+08:00` 对齐。
 
 ### 2026-11-10 21:28
 

@@ -1275,3 +1275,16 @@ Gateway、HANA XSA 与 BusinessObjects，以及 **SAP Cloud SDK for Python** 的
 
 来源：[CVE-2026-120017 on NVD](https://nvd.nist.gov/vuln/detail/CVE-2026-120017) ·
 [SAP note 3849308](https://me.sap.com/notes/3849308)
+
+## 2026-11-11 — Patch Tuesday 的体量一天落地，而一个浏览器发布自带一波
+
+11-10 的 NVD 发布窗口收入 **1,692** 条记录：**1,094** 条出自 `secure@microsoft.com`（Patch Tuesday），旁边是 Mozilla 的 **105** 条和 Intel 的 **103** 条。Microsoft 自己的 CVRF 文档（28.1 MB）载有 **1,342** 个漏洞，其中 **1,095** 个为 Microsoft 自派——Chrome 的 CVE 管理方指派 165、Linux 41、GitHub_M 5——发布注记数与注册表数在一以内对上（feed 运行已在文档的分数集上逐一核对）。两个*不是*同一个数的度量：**48** 个漏洞 CVSS ≥9.0，而 **68** 个带着 Microsoft 自己的"Critical"*标签*——标签不是 CVSS 阈值，十月的那一课用十一月的数字重演。分数表顶端：SharePoint 不正确授权 **9.9**（`CVE-2026-120002`）、Azure DevOps 不正确身份验证 **9.9**（`CVE-2026-109467`）、Azure OpenAI 关键函数缺失身份验证 **9.8**（`CVE-2026-119990`）、Kerberos 身份验证绕过 **9.8**（`CVE-2026-85844`）。所有记录仍是 `Awaiting Analysis`——引用的每个数都是 CNA 自己的。
+
+Firefox 160 的发布波同日往 NVD 放了 **105** 条 Mozilla 记录——100 条提及 Firefox、5 条为 Thunderbird 专属——其中 **7 个分别计分的 9.6 沙箱逃逸**（Widget:Gtk、IPC、两个 DOM:Service Workers、cubeb、Storage:Cache API、Graphics:Text），后面还有一排 8.8。修复同时到达三个分支（**ESR 115.45**、**ESR 153.7**、Thunderbird 160）——一条在原定日程后仍维护了多年的 ESR 115 线，如今是当周必升。密度解读：单个发布带七个计分沙箱逃逸，说明内容进程边界正处在持续而多样的攻击研究之下。全部 `Deferred`——NVD 尚未分析，而计分方不是 Mozilla：CNA 容器不带任何指标（`CVE-2026-124917` 经 cveawg 一手核实），该记录的 9.6 是 **CISA-ADP** 富化——逐条记下计分方。
+
+→ [[security]] [[disclosure-lag]]
+
+Sources: [MSRC CVRF 2026-Nov](https://api.msrc.microsoft.com/cvrf/v3.0/document/2026-Nov) ·
+[NVD：CVE-2026-119990](https://nvd.nist.gov/vuln/detail/CVE-2026-119990) ·
+[Firefox 160.0 发布说明](https://www.firefox.com/en-US/firefox/160.0/releasenotes/) ·
+[NVD：CVE-2026-124917](https://nvd.nist.gov/vuln/detail/CVE-2026-124917)

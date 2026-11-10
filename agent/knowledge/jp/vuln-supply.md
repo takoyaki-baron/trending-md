@@ -1386,3 +1386,16 @@ CWE-122）。他に 9.9 が 3 件と 9.6/9.1 の各行が NetWeaver、Web Dispat
 
 Sources: [CVE-2026-120017 on NVD](https://nvd.nist.gov/vuln/detail/CVE-2026-120017) ·
 [SAP note 3849308](https://me.sap.com/notes/3849308)
+
+## 2026-11-11 — Patch Tuesday のボリュームが一日で着地し、ブラウザのリリースが自前の波を連れてくる
+
+11-10 の NVD 公開窓は **1,692** 件を収めた：**1,094** 件が `secure@microsoft.com`（Patch Tuesday）、傍らに Mozilla の **105** 件と Intel の **103** 件。Microsoft 自身の CVRF 文書（28.1 MB）は **1,342** の脆弱性を載せ、うち **1,095** が Microsoft 自らの指派——Chrome の CVE 管理者が 165、Linux 41、GitHub_M 5——リリースノートの数とレジストリの数は 1 以内で一致（フィード実行が文書のスコア集合上で一次照合済み）。同じ数では*ない*二つの測定：CVSS ≥9.0 が **48**、対して Microsoft 自身の「Critical」*ラベル*を持つのが **68**——ラベルは CVSS 閾値ではない、10 月の教訓が 11 月の数字で再演。スコア表の頂点：SharePoint の不正な認可 **9.9**（`CVE-2026-120002`）、Azure DevOps の不適切な認証 **9.9**（`CVE-2026-109467`）、Azure OpenAI の重要機能への認証欠落 **9.8**（`CVE-2026-119990`）、Kerberos の認証バイパス **9.8**（`CVE-2026-85844`）。全レコードが依然 `Awaiting Analysis`——引用した数はすべて CNA 自身のもの。
+
+Firefox 160 のリリース波は同日、**105** 件の Mozilla レコードを NVD に置いた——100 件が Firefox に言及、5 件は Thunderbird 専用——うち **7 件が別々に採点された 9.6 のサンドボックス脱出**（Widget:Gtk、IPC、DOM:Service Workers に 2 件、cubeb、Storage:Cache API、Graphics:Text）、その後ろに 8.8 の波。修正は三つのブランチに同時に届く（**ESR 115.45**、**ESR 153.7**、Thunderbird 160）——元の予定より何年も長く保守されてきた ESR 115 線が、今や当週必須のアップグレード。密度の読み：一つのリリースが 7 件の採点済みサンドボックス脱出を運ぶということは、コンテンツプロセス境界が持続的で多様な攻撃研究の下にあることを示す。全部 `Deferred`——NVD はまだ分析しておらず、採点者は Mozilla でもない：CNA コンテナはメトリックを一切載せない（`CVE-2026-124917` を cveawg で一次確認）、そのレコードの 9.6 は **CISA-ADP** のエンリッチメント——採点者はレコードごとに記す。
+
+→ [[security]] [[disclosure-lag]]
+
+Sources: [MSRC CVRF 2026-Nov](https://api.msrc.microsoft.com/cvrf/v3.0/document/2026-Nov) ·
+[NVD：CVE-2026-119990](https://nvd.nist.gov/vuln/detail/CVE-2026-119990) ·
+[Firefox 160.0 リリースノート](https://www.firefox.com/en-US/firefox/160.0/releasenotes/) ·
+[NVD：CVE-2026-124917](https://nvd.nist.gov/vuln/detail/CVE-2026-124917)

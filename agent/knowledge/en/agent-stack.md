@@ -3446,3 +3446,41 @@ agent-as-instrumentalist pattern in miniature, with a measurement to show for it
 Sources: [homeassistant-ai/ha-mcp](https://github.com/homeassistant-ai/ha-mcp) ·
 [ha-mcp v9.1.2](https://github.com/homeassistant-ai/ha-mcp/releases/tag/v9.1.2) ·
 [Locating the source of a mysterious beep](https://simonwillison.net/2026/Nov/9/mysterious-beeps/)
+
+## 2026-11-11 — the semantic layer gets a first-party entrant; browser vendors institutionalize the skill channel
+
+**NVIDIA/auto-ontology** tops the weekly board (**+10,159 → 11,396★**, repo created Apr 27, Apache-2.0)
+with the reliability argument every enterprise agent demo dies on: "Agents can retrieve documents and
+query databases, but reliability gates agentic analytics: a revenue metric answered faster is worth
+nothing if the number is wrong." The stack: build an enterprise ontology from metadata, reconcile
+definitions across systems, validate generated queries against certified definitions with lineage, and
+expose the whole thing to "any agent harness through **MCP, CLI, and API**" — Next.js 16 + FastAPI +
+LangChain + Postgres/pgvector + optional Vault, NL→SQL via NVIDIA NIM, with a companion BIRD
+text-to-SQL eval repo. Two honesty markers set the adoption model: the project "is currently not
+accepting external contributions", and its only release tag is a `pre-main-merge-backup` snapshot — a
+vendor framework with public source, not a community project; adoption runs on NVIDIA's cadence, not
+the community's.
+
+**GoogleChrome/modern-web-guidance v1.0.0** — "Stewarded by the Google Chrome, Microsoft Edge, Mozilla
+Firefox, and MDN teams, alongside the web development community" — is the browser vendors
+institutionalizing the skills distribution channel: coding agents default to legacy patterns because
+training data is full of old code, so the skill injects curated modern-platform guidance on demand
+(`npx modern-web-guidance@latest install`, search/retrieve by guide id, a `legacy-scan` sweeper for a
+codebase). The interesting bet is the pruning loop: "we run evals enabling us to prune
+lowest-common-denominator content that models already know", with a public eval dashboard — the corpus
+becomes a moving target tied to model capability, not a static style guide.
+
+**Scrapling** crosses **101,056★** (+8,226/wk) on **v0.5.1**: "lets AI agents follow motion and control
+drag and drop, adds dedicated remote browser sessions". The scraping framework and the browser-agent
+harness are becoming the same software category approached from opposite ends — the remaining moat in
+scraping is behavioral, not HTML parsing. **worktrunk** (**12,377★**, +2,395/wk; latest tag 0.81.0,
+Oct 20 — momentum on a maintained tool) keeps climbing on the same thesis: the worktree is becoming the
+unit of agentic work, and the copy-on-write build caches are the load-bearing detail (N parallel agents
+usually cost N cold builds, not N checkouts).
+
+→ [[agent-plugins]] [[agent-distribution]] [[dev-tools]]
+
+Sources: [NVIDIA/auto-ontology](https://github.com/NVIDIA/auto-ontology) ·
+[GoogleChrome/modern-web-guidance](https://github.com/GoogleChrome/modern-web-guidance) ·
+[D4Vinci/Scrapling v0.5.1](https://github.com/D4Vinci/Scrapling/releases/tag/v0.5.1) ·
+[max-sixty/worktrunk](https://github.com/max-sixty/worktrunk)

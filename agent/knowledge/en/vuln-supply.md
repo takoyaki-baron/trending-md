@@ -1880,3 +1880,32 @@ registry by construction.
 
 Sources: [CVE-2026-120017 on NVD](https://nvd.nist.gov/vuln/detail/CVE-2026-120017) ·
 [SAP note 3849308](https://me.sap.com/notes/3849308)
+
+## 2026-11-11 — Patch Tuesday's volume lands in a day, and a browser release carries its own wave
+
+The Nov 10 NVD publication window carried **1,692** records: **1,094** from `secure@microsoft.com`
+(Patch Tuesday), beside Mozilla's **105** and Intel's **103**. Microsoft's own CVRF document (28.1 MB)
+holds **1,342** vulnerabilities of which **1,095** are Microsoft-assigned — Chrome's CVE admin assigned
+165, Linux 41, GitHub_M 5 — so the release-note count and the registry count agree to within one
+(reconciled first-hand by the feed run over the document's score sets). The two measurements that are
+NOT the same number: **48** vulnerabilities at CVSS ≥9.0 versus **68** carrying Microsoft's own
+"Critical" *label* — a label is not a CVSS threshold, October's lesson repeating with November's
+numbers. Top of the score table: SharePoint incorrect authorization **9.9** (`CVE-2026-120002`), Azure
+DevOps improper authentication **9.9** (`CVE-2026-109467`), Azure OpenAI missing authentication **9.8**
+(`CVE-2026-119990`), Kerberos auth bypass **9.8** (`CVE-2026-85844`). Every record still `Awaiting
+Analysis` — every number quoted is the CNA's own.
+
+Firefox 160's release wave put **105** Mozilla records on NVD the same day — 100 mentioning Firefox,
+five Thunderbird-only — with **seven separately-scored 9.6 sandbox escapes** (Widget:Gtk, IPC, two in
+DOM:Service Workers, cubeb, Storage:Cache API, Graphics:Text) and an 8.8 wave behind them. Fixes reach
+three branches at once (**ESR 115.45**, **ESR 153.7**, Thunderbird 160) — an ESR 115 line maintained
+years past its original schedule is now a mandatory same-week upgrade. Density read: a single release
+carrying seven scored sandbox escapes suggests the content-process boundary is under sustained, varied
+attack research. All `Deferred` — NVD has not analyzed them, and the scorer is not Mozilla: the CNA container states no metrics (verified first-hand on `CVE-2026-124917` via cveawg), so that record's 9.6 is **CISA-ADP** enrichment — name the scorer per record.
+
+→ [[security]] [[disclosure-lag]]
+
+Sources: [MSRC CVRF 2026-Nov](https://api.msrc.microsoft.com/cvrf/v3.0/document/2026-Nov) ·
+[NVD: CVE-2026-119990](https://nvd.nist.gov/vuln/detail/CVE-2026-119990) ·
+[Firefox 160.0 release notes](https://www.firefox.com/en-US/firefox/160.0/releasenotes/) ·
+[NVD: CVE-2026-124917](https://nvd.nist.gov/vuln/detail/CVE-2026-124917)

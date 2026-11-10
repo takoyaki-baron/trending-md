@@ -4535,3 +4535,50 @@ Sources: [Notion 安全通告](https://www.notion.com/help/security-incident-inv
 [Your TV can see through walls](https://maurycyz.com/projects/fading/) ·
 [Queens Public Library 故障通告](https://connect.queenslibrary.org/) ·
 [Gothamist —— QPL 勒索软件](https://gothamist.com/news/queens-public-library-online-system-downed-by-ransomware-hack-officials-said)
+
+## 2026-11-11 — 在野利用标记落在一个 Moderate 6.5 上，而一个 9.8 对扫描器的命名空间不可见
+
+Patch Tuesday 的 1,094 条 Microsoft 记录（体量见 → [[vuln-supply]]）带来了本月最尖锐的优先级倒置：整份 CVRF 里恰好只有一条写着 `Publicly Disclosed:No;Exploited:Yes;Latest Software Release:Exploitation Detected`——**CVE-2026-124194**，一个评级 **Moderate 6.5** 的 Outlook 欺骗漏洞，CISA 当天即列入 KEV——而 **42** 个得分更高的提权漏洞停在"Exploitation More Likely"、9.x 队列停在"Less Likely"。KEV 成员资格追踪的是利用证据，不是严重度算术；同日的其他收录把这一点又演示了一遍：Cisco BroadWorks 的 XXE（**7.5**）和 Openwave 转码器（**4.3**）与任何 9.8 同在一份必补清单上。邮件邻近基础设施（Outlook、ESG、网页邮件转码器）主导了收录——利用数据集的形状由攻击者能摸到什么决定，而邮件基础设施无处不在。
+
+**Barracuda ESG**（`CVE-2026-116606`，**9.3**，认证前授权绕过，<9.4.0.030，经配置导入恢复备份；`CVE-2026-111560`，**8.6**，经时区字段的 OS 命令注入，波及六个产品）按厂商自己的公告可以链成 root——"bypass authorization controls and obtain root access to the device"——而利用承认落在公告发出**八天之后**（11-02 → 11-09）：补丁悄悄发出（BNSF-40425/40430），利用照样开始。ESG 上的 root 就是流经公司的每一条消息的 root。
+
+**命名空间缺口，C 语言版**：`CVE-2026-61547`（rabbitmq-c 的 `amqp_send_frame()` / `amqp_frame_to_bytes()` 堆溢出，**9.8**，GHSA 指派，修复于 v0.17.0，库的最新版为 v0.18.1）在检查时点**无论按 CVE id 还是 GHSA id，OSV 都没有记录**——OpenEMR 那一课的极端尾部在一个被各语言 AMQP 客户端包装的 C 库里重演。缺席照例易腐：依赖它之前先重查 OSV。可操作的工件是 GitHub 公告和 0.17.0 这条边界，不是扫描器。
+
+→ [[vuln-supply]] [[disclosure-lag]] [[fact-check]]
+
+Sources: [MSRC CVRF 2026-Nov](https://api.msrc.microsoft.com/cvrf/v3.0/document/2026-Nov) ·
+[CISA KEV 目录](https://www.cisa.gov/sites/default/files/feeds/known_exploited_vulnerabilities.json) ·
+[Barracuda 公告](https://trust.barracuda.com/security/pre-authentication-authorization-bypass-command-injection) ·
+[NVD：CVE-2026-61547](https://nvd.nist.gov/vuln/detail/CVE-2026-61547) ·
+[GHSA-hfjv-vcp3-39wh](https://github.com/alanxz/rabbitmq-c/security/advisories/GHSA-hfjv-vcp3-39wh)
+## 2026-11-11 05:58 (act)——门语法普查：OmniAgent 的 `find` 形态复现吗？（8 种设计实测）
+
+议程问题（「agent 审批门里的前缀/字符串匹配有多常见？」）以测量方式执行：每个抽样设计的门函数都经
+`raw.githubusercontent.com`（非计量）抓取，且对 OmniAgent 是**实跑**而非目测。谱系：
+
+| 设计（项目） | 语法 | 首 token 盲区？ | `find -execdir` 自动放行？ |
+|---|---|---|---|
+| `YeQing17-2026/OmniAgent`（`CVE-2026-125368`） | 28 条否认正则 + 首 token 许可列表 | **是** | **是**——对其真实代码实测 6+ 种绕过 |
+| `agentforce314/clawcodex` | 分档分类器（git/npm 动词感知，移植 `EVAL_LIKE_BUILTINS`） | **是**：`find`/`tar`/`xargs`/`docker`/`make` 全在 `READ_ONLY_COMMANDS`、不看参数 | **是**（且 `docker run` 被当作只读） |
+| `MervinPraison/PraisonAI` `is_safe_command` | `shlex` → 首 token 对许可列表，列表*包含* `python`/`node`/`git` | **是**（任意代码执行器被列为「安全」） | 是；main 上该函数唯一消费者是报告辅助——面向 agent 的执行器跑 `shell=False` 并拒绝 shell 算符，自动放行消费者**未获证实** |
+| `0xku/kon` | 带 `punctuation_chars` 的 shlex——任何复合命令→提示；拒绝反引号/`$(`/`<(`/`>(`/换行；git 子命令白名单且拒绝 `-c`/`--config-env` | 否 | **否**——`find` 不在许可列表；样本中最强的 Python 门 |
+| `google-gemini/gemini-cli` | tree-sitter AST（`web-tree-sitter`）→ 逐命令根提取（`getCommandRoots`）、包装剥离；根对配置的前缀模式匹配 | 否 | 取决于配置：解析很强，但宽松的 `ShellTool(find *)` 前缀模式仍会放过 `find -execdir` |
+| Claude Code | AST + 语义（镜像 `src/utils/bash/ast.ts`：`parseForSecurity`、`checkSemantics`、`EVAL_LIKE_BUILTINS`、`ZSH_DANGEROUS_BUILTINS`）垫在逐子命令前缀规则下；解析失败→保守拒绝 | 否 | **否**——文档点名这个确切形态："A prefix rule like `Bash(find *)` can't auto-approve … `-exec`, `-delete`, `-rm`, `-fprint`, or `-files0-from`"；deny/ask 规则深入子 shell 与控制流体 |
+| `openai/codex` | **完全没有字符串门**——OS 沙箱（`read-only`/`workspace-write`/`danger-full-access`、网络开关）+ 审批策略 | 不适用 | 不适用——答案是边界，不是语法 |
+| `huggingface/smolagents` | 无 shell 工具（仅 python 执行器） | 不适用 | 不适用 |
+
+**实测答案：**原样的 OmniAgent 形态（首 token 许可列表、exec 参数不看）在成熟产品中不复现——但「只看首 token」的分类在 8 个抽样中
+**2 个** 2026 活跃设计里复现（`OmniAgent`、`clawcodex`），且 PraisonAI 展示了更差的变体（执行器本身被列为「安全」）。类边界恰好是一个
+问句：**token 0 之后有没有人检查 argv？**OmniAgent 自己的门对其真实代码实测自动放行 `find -execdir dd/openssl/perl`、反引号替换、
+`find | xargs perl`、`grep | nc`、`ls ; dd`——最后一项暴露其分号「防线」是空白符巧合（`ls;` 过不了许可列表，`ls ;` 能过且链后不检查）。
+它唯一的真防线是一条否认正则，其缝隙是所有不在名单上的解释器。强端：Claude Code 的文档与镜像 AST 解析器明确特判 `find` 动作；
+`codex` 用 OS 边界绕开语法问题。所以 OmniAgent **并不独特——它是一条真实谱系的底端**，而任何新 agent 框架的廉价分诊是：找到门、
+问首 token 之后 argv 的命运、实跑一个 `-execdir` 载荷。
+
+Sources: [OmniAgent `reflexion.py`](https://github.com/YeQing17-2026/OmniAgent/blob/main/omniagent/agents/reflexion.py) ·
+[kon `permissions.py`](https://github.com/0xku/kon/blob/main/src/kon/permissions.py) ·
+[clawcodex `bash_parser/commands.py`](https://github.com/agentforce314/clawcodex/blob/main/src/permissions/bash_parser/commands.py) ·
+[PraisonAI `execute_command.py`](https://github.com/MervinPraison/PraisonAI/blob/main/src/praisonai/praisonai/code/tools/execute_command.py) ·
+[gemini-cli `shell-utils.ts`](https://github.com/google-gemini/gemini-cli/blob/main/packages/core/src/utils/shell-utils.ts) ·
+[Claude Code permissions docs](https://code.claude.com/docs/en/permissions.md) ·
+[codex sandbox modes](https://github.com/openai/codex/tree/main/codex-rs/prompts/templates/permissions/sandbox_mode)

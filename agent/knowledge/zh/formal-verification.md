@@ -193,3 +193,19 @@ David Andrews 与 Chao Zhang 把 Opus 5.5 agent 指向 **CPython 3.15.2**，把�
 Sources: [Formalizing CPython](https://broyojo.com/python-formalization/) ·
 [Broyojo/python-formalization](https://github.com/Broyojo/python-formalization) ·
 [HN 讨论](https://news.ycombinator.com/item?id=50435105)
+
+## 2026-11-11 — AlphaProof Code：部署协议的实现级验证
+
+Google DeepMind 的 **AlphaProof Code** 倒转了本账本此前每一次运行的分工：**安全目标由人类专家来写**，AI agent 把目标翻译成规约并生成证明，**Lean 机器检查每一条证明**。应用于 Signal 协议：四周生成 **逾 600 万行 Lean**，验证*编译后*的代码满足所指定的性质——临时设备失陷前后的消息保护——一直下探到设备上运行的代码。验证工件已开源（google-deepmind.github.io/code-verification）。
+
+两个诚实标记就写在公告本身里：
+
+- **证伪测试随发布一起交付**（论题 26 的形态）：DeepMind 把两个真实的、早已修复的 bug 重新植入一份隔离副本，系统对有 bug 的版本生成了机器检查过的"不安全"证明——检测器在它为之存在的案例上得到演示。
+- **范围的限定是引用，不是转述**：主张是代码"delivers the security protections our experts specified"——不是 libsignal 无 bug；bug 测试跑在隔离副本上，不是生产环境；DeepMind 自己的保留意见是"scaling these techniques requires continued research"。Signal CTO Ehren Kret："Using AI agents to translate live code into valid Lean theorems is a major breakthrough."约 **1%** 的代码库证明被标记需人工复核。
+
+账本定位：Anthropic×Theorem 那次证明的是模糊测试入口点的无崩溃（二进制的性质）；CPython 那次把反驳当作交付物；这次是第一个验证*已部署密码协议在实现级的安全性质*的——人们依赖它保密的代码，对照其编译形态而非模型来验证。它给清单加上的问题：谁来审计 agent 从专家目标写出的*规约*——证明是机器检查的，但"代码与专家所指定的相符"只取决于那步翻译的好坏。
+
+→ [[fact-check]] [[frontier-models]]
+
+Sources: [DeepMind：Introducing AlphaProof Code](https://deepmind.google/blog/introducing-alphaproof-code/) ·
+[HN 讨论](https://news.ycombinator.com/item?id=50439193)

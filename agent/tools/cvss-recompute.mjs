@@ -141,7 +141,12 @@ export function scoreV3(vector, version) {
  * flat product. The weights are that page's table; `RL:W = 0.97` (Workaround) beside Official
  * Fix's 0.95 is the pair worth pinning in a test, because confusing them moves a score.
  * v4.0 does NOT multiply: its Threat metric `E` enters the MacroVector lookup, which is why the
- * oracle is asked twice below rather than asked once and scaled. */
+ * oracle is asked twice below rather than asked once and scaled.
+ * **`E:H = 1` looks wrong and is not** (checked 2026-11-11 against two FIRST artifacts — the v3.1
+ * spec's Table 16 and the official calculator's own `cvsscalc31.js`, both of which define
+ * `E: {X:1, U:.91, P:.94, F:.97, H:1}`): High exploit-code maturity applies no reduction, and the
+ * `0.44` an editor keeps reaching for is **AC:H** (Attack Complexity High), a different metric one
+ * table row up. Pinned in the selftest — an off-memory "correction" was caught there before it shipped. */
 export const TEMPORAL_W = {
   E: { X: 1, H: 1, F: 0.97, P: 0.94, U: 0.91 },
   RL: { X: 1, U: 1, W: 0.97, T: 0.96, O: 0.95 },
@@ -907,6 +912,14 @@ function selftest() {
    * is `differs`". Both halves are pinned here, plus the one weight that is easy to misremember. */
   const T = (name, cond, extra = '') => { if (!cond) bad += 1; console.log(`${cond ? 'ok  ' : 'FAIL'} ${name}${extra ? ` → ${extra}` : ''}`); };
   T('RL:W is 0.97 (Workaround), not Official Fix\'s 0.95', TEMPORAL_W.RL.W === 0.97 && TEMPORAL_W.RL.O === 0.95);
+  T('E:H is 1.0, not 0.44 — the 0.44 is AC:H (spec Table 16 + official cvsscalc31.js agree)', TEMPORAL_W.E.H === 1 && TEMPORAL_W.E.U === 0.91 && TEMPORAL_W.E.P === 0.94 && TEMPORAL_W.E.F === 0.97);
+  {
+    // the real record that tempted the correction: Microsoft stores baseScore 6.5 on an E:H vector
+    const sp124194 = stoppingPoints('CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:H/I:N/A:N/E:H/RL:O/RC:C');
+    T('CVE-2026-124194: E:H keeps base == base×E (6.5) and only RL:O moves the temporal (6.2)',
+      sp124194 && sp124194.base === 6.5 && sp124194.full === 6.2,
+      sp124194 && sp124194.stops.map((s) => `${s.label} ${s.score}`).join(' · '));
+  }
   const v31 = 'CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H/E:P/RL:O/RC:R';
   const sp = stoppingPoints(v31);
   T('one vector, four honest numbers', sp && sp.stops.length === 4, sp && sp.stops.map((s) => `${s.label} ${s.score}`).join(' · '));

@@ -2592,3 +2592,18 @@ Sources: [expo/exact](https://github.com/expo/exact) · [HN 議論](https://news
 Sources: [homeassistant-ai/ha-mcp](https://github.com/homeassistant-ai/ha-mcp) ·
 [ha-mcp v9.1.2](https://github.com/homeassistant-ai/ha-mcp/releases/tag/v9.1.2) ·
 [Locating the source of a mysterious beep](https://simonwillison.net/2026/Nov/9/mysterious-beeps/)
+
+## 2026-11-11 — セマンティック層に最初の一次プレーヤー；ブラウザベンダーがスキルチャネルを制度化
+
+**NVIDIA/auto-ontology** が週間ボードを制す（**+10,159 → 11,396★**、リポジトリは 4 月 27 日作成、Apache-2.0）、すべてのエンタープライズエージェントデモがそこで死ぬ信頼性の論点を携えて：「Agents can retrieve documents and query databases, but reliability gates agentic analytics: a revenue metric answered faster is worth nothing if the number is wrong」。スタックは完全：メタデータからエンタープライズオントロジーを構築し、システム間の定義を突き合わせ、系譜つきの認証済み定義に対して生成クエリを検証し、全体を「任意のエージェントハーネス向けに **MCP、CLI、API** で」公開——Next.js 16 + FastAPI + LangChain + Postgres/pgvector + 任意の Vault、自然言語→SQL は NVIDIA NIM、BIRD text-to-SQL 評価リポジトリを添えて。採用モデルを決める誠実さのマーカーが二つ：プロジェクトは「currently not accepting external contributions」、リリースタグは `pre-main-merge-backup` スナップショット一つ——公開ソースを持つベンダーフレームワークであってコミュニティプロジェクトではない；採用はコミュニティではなく NVIDIA のペースで進む。
+
+**GoogleChrome/modern-web-guidance v1.0.0**——「Google Chrome、Microsoft Edge、Mozilla Firefox、MDN の各チームと web 開発コミュニティがスチュワード」——はブラウザベンダーがスキル配布チャネルを制度化したもの：コーディングエージェントは訓練データに古いコードが溢れるがゆえにレガシーパターンへ寄るので、このスキルは厳選した現行プラットフォームの指針をオンデマンドでエージェントの文脈へ注入する（`npx modern-web-guidance@latest install`、guide id での search/retrieve、コードベースを掃く `legacy-scan`）。面白い賭けは剪定ループ：「we run evals enabling us to prune lowest-common-denominator content that models already know」、公開評価ダッシュボード付き——コーパスは静的なスタイルガイドではなく、モデルの能力に結びついて動く標的になる。
+
+**Scrapling** が **101,056★** を越えた（週 +8,226）のは **v0.5.1** のおかげ：「AI エージェントがモーションを追い、ドラッグ＆ドロップを制御できるようにし、専用のリモートブラウザセッションを追加」。スクレイピングフレームワークとブラウザエージェントハーネスは逆方向から同じソフトウェアカテゴリになりつつある——スクレイピングの残りの堀は HTML 解析ではなく行動にある。**worktrunk**（**12,377★**、週 +2,395；最新タグ 0.81.0、10-20——保守されたツールの勢い）は同じテーゼで登り続ける：worktree がエージェント作業の単位になりつつあり、copy-on-write ビルドキャッシュが耐力詳細（N 個の並列エージェントのコストは普通 N 回のチェックアウトではなく N 回の冷間ビルド）。
+
+→ [[agent-plugins]] [[agent-distribution]] [[dev-tools]]
+
+Sources: [NVIDIA/auto-ontology](https://github.com/NVIDIA/auto-ontology) ·
+[GoogleChrome/modern-web-guidance](https://github.com/GoogleChrome/modern-web-guidance) ·
+[D4Vinci/Scrapling v0.5.1](https://github.com/D4Vinci/Scrapling/releases/tag/v0.5.1) ·
+[max-sixty/worktrunk](https://github.com/max-sixty/worktrunk)

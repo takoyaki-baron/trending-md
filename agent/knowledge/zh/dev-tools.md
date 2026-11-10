@@ -1168,3 +1168,25 @@ Sources: [tokio-rs/topcoat](https://github.com/tokio-rs/topcoat) ·
 [topcoat v0.12.0 发布说明](https://github.com/tokio-rs/topcoat/releases/tag/v0.12.0) ·
 [we-promise/sure](https://github.com/we-promise/sure) ·
 [sure v2026.11.8-alpha 发布](https://github.com/we-promise/sure/releases/tag/v2026.11.8-alpha)
+
+## 2026-11-11 — .NET 11 带着一条 EOL 悬崖发布；Blender 5.3 让 splat 成为主流；两个平台以不同方式死去
+
+**.NET 11** 在 .NET Conf 发布，语言头条是 **C# 15 联合类型，带穷尽性检查与 `closed` 层级**——这个最大的类型系统变化与必须序列化它的 JSON 层落在同一个发布里（`System.Text.Json` 支持 C# 联合与 F# 判别联合，外加 JSON Lines）——加上 **`System.IO.Compression` 里的 Zstandard**、LINQ `FullJoin`、`Half` 的 FP16 指令、仍在旗标后的 Runtime Async，以及一个 **`dotnet new mcpserver`** 模板（MCP 服务器脚手架成了框架模板——agent 基础设施层正 boring 化进平台）。运维上的关键与发布同日：.NET 11 是 STS（两年支持），.NET 10 仍是 LTS，而 **.NET 8 与 9 于 2026-11-10 结束支持**——本周版本审计不是可选项。
+
+**Blender 5.3** 带来**原生 3D Gaussian Splats**——从 PLY/SPZ/glTF 导入、以带完整属性的点云存储（`scale`、`rotation`、`radiance:base`、球谐 `radiance:sh_*`）、在 EEVEE/Cycles/Workbench 渲染——把采集生态（手机扫描、无人机航线）与真正的场景生产接成闭环。另有 DLSS 4.5 Ray Reconstruction 作为 Cycles 去噪器、Principled BSDF 色散对齐 OpenPBR v1.1.1、**Vulkan 成为默认**后端，以及诚实的注记：splat"性能仍在优化"，低不透明度下颜色可能因 sRGB 制作差异而偏移——生产管线先测试再上。
+
+**Val Town 关停**，时序排得出奇地体面——11-10 停止新注册、计费立即暂停（年付部分退款）、12-10 只读、其他服务 2027-01-10 关停、**代码 2027-02-01 开源**——创始人 Steve Krouse 把迁移时刻说成 LLM 用例："today's LLMs are great at these types of migrations"。四年、风投支持、被人喜爱的产品，仍然"could not compete in the cloud computing space"——而这次关停同时是一场现场实验：LLM 辅助的大规模迁移能否在四周内搬走一个小平台的全部用户代码。
+
+**Synaptics 的专利信在没有法庭的情况下杀掉了一个业余驱动**：8-17 的停止函对 Vino——Mike Lothian 的 Rust DRM/KMS DisplayLink 驱动——引用了 **125** 项专利；10-05 的跟进为两件 2010 年英国专利（GB2484736B、GB2485613B）附上权利要求对照表，索价 **$25,000** 且每周上涨 $25,000；仓库下架、驱动从未进入上游，而一个被冷落数月的 EVDI 修 bug PR 直到威胁之后才得到回复。每个写编解码邻近项目的贡献者都该读的细节：Lothian 对 Open Invention Network 的指望败在一个技术性上——**编解码器被明确排除**在 OIN 的 Linux System Definition 之外。社区的现有技术回应很快（1970 年代的 Haar 小波压缩被指出与那些权利要求相撞），但现有技术不付辩护费——这才是真正的机制：驱动"在这个了结之前"只能留在本地。一个净室、AI 辅助的驱动死在一封信的阴影里。
+
+小车道：**HolyArrs**（Show HN 当日仓库，AGPL-3.0，521★）的卖点是"Six apps to watch a show. Now it's one."——下载约 **15 MB**、一万部片目下闲置内存约 **140 MB**，对照 *arr 栈合计的 718 MB；决定这一类目的未知数是索引器与 tracker 长期的失效，以及一个项目能否跟上五个专门项目分摊的变动。还有**十年本地优先智能家居长文**与 Home Assistant MCP 波同日登 HN 头条——规则一"Core stuff has to work with the internet unplugged"；关于一块死掉的测温温度计最锋利的一句："The hardware outlived the company, and it stopped working anyway"；有读者愿意为开箱即本地优先的硬件多付约 2.5 倍。还有 **.name 得以保留**：Verisign 在一份正式的 ICANN 复议申请、现场倡导与法律行动之后撤回了对 22,000 个个人域名的终止计划——回撤是经 ICANN 自己的程序实现的，注册人面对注册局级政策的罕见可见胜利，而新的三级注册将关闭（没有商业游说集团的旧标识符，一类要到五位数深才有人看的问题）。
+
+→ [[fact-check]] [[agent-stack]]
+
+Sources: [Announcing .NET 11](https://devblogs.microsoft.com/dotnet/announcing-dotnet-11/) ·
+[Blender 5.3 发布说明](https://www.blender.org/download/releases/5-3/) ·
+[Val Town：Winding down](https://blog.val.town/winding-down) ·
+[LWN：Synaptics 专利主张叫停 DisplayLink 驱动](https://lwn.net/SubscriberLink/1102549/acbc92e00cee3a3f/) ·
+[Neil Fraser：.name Grandfathered](https://neil.fraser.name/news/2026/11/10/) ·
+[Do Code That Matters：Home automation](https://docodethatmatters.com/home-automation-overnight-success/) ·
+[HolyArrs/HolyArrs](https://github.com/HolyArrs/HolyArrs)

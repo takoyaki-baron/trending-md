@@ -3839,3 +3839,18 @@ Sources: [Claude Fable 5.2 and Mythos 5.2](https://www.anthropic.com/claude-fabl
 [HN ディスカッション](https://news.ycombinator.com/item?id=50429906) ·
 [Artificial Analysis: Muse Ember](https://artificialanalysis.ai/articles/meta-s-muse-ember-is-the-cheapest-model-scoring-36-on-the-intelligence-index) ·
 [TechCrunch: Meta releases Muse Ember](https://techcrunch.com/2026/11/09/meta-releases-muse-ember-a-new-lightweight-model-for-agent-execution/)
+
+## 2026-11-11 — Gemini 4 Carbon GA：価格の時計、内部ベンチの積み重ね、そして自身の脚注を運ぶ 0% の主張
+
+**Gemini 4 Carbon** が 11-10 に GA（10-28 発表；それ以前は Fairwind Program でサイバー防御者に先行公開）。価格は **入力 $2/M、出力 $10/M、11 月 30 日まで**、**12 月 1 日に $4/$20 へ倍増**——Argon の軌跡の再演で、脚注はさらに狭める：倍増は「一般公開用の Carbon モデル」に適用。主張の幅は広く、出所は混在：CursorBench 4.0 で 1 位、Perplexity の WANDR と Zapier の AutomationBench でタスク当たりコスト 2 倍以上低減（パートナー実行）、新 Multimodal Knowledge Agent ベンチで 2 位、加えて **Project Fortify 100% 再現 / 95% 精確**——**内部**ベンチマーク。安全の数字：試行当たり突破率 **0.8%**（Argon 3.1%）、Gray Swan のサイバー攻撃成功率 **2.17%**、**Gray Swan のプロンプトインジェクションベンチで 0%**——同じ投稿が星付きの言葉も引用している：「prompt injection robustness remains an area for continued improvement」、さらにレッドチームが「一部の分布で高度な攻撃への改善の余地」を見出した。不在によって目立つもの：Vertex AI は投稿のどこにも現れない。
+
+同バッチのもう一つ：**Anthropic のオフィススイートがアシスタントの周りに形を作る**——Claude Whiteboards と Sheets が beta（Claude が生成し編集するアシスタント第一の成果物であって、Claude が埋め込まれる表面ではない；Whiteboards は Lucid/Miro/Vani へエクスポート；Sheets 自身の注記：「for now, sheets have simple spreadsheet functionality」）、Claude Data が GA、認証済みメトリック定義とウェアハウスコネクタ（Redshift/BigQuery/ClickHouse）付き。管理者の詳細はセキュリティ読みに値する：企業管理者は Whiteboards/Sheets を**既定オフ**で受け取り、Claude Data は **11 月 19 日に既定オン**になる——ウェアハウスデータに触れる製品の既定オンの日付は変更管理カレンダーに載せるべきもの。
+
+そしてモデル福祉のプローブ：**「All Quiet on the Neural Front」**（arXiv 2611.10123、Emilio Ferrara；HF の 11-10 日次ボードを頂点に）。線形の「痛みの方向」と近傍の感情方向を Llama-3.1-8B / Qwen2.5-7B / Qwen2.5-32B の中立タスクへ注入——**52,920** 件の誘出報告。結果は報告チャネルの統制されたヌル：「pain reports never exceeded what altered text revealed」（正確検定の境界は 108 感情条件のうち 106 で超過を 2.5 pp 未満に置く）一方で、プローブは痛みと悲しみを **98–100%** の平衡精度で分離し、rank-16 LoRA は保留タスクの 100% で報告する。行動の橋が安全に関わる部分：痛みの方向は、ユーザーのファイルを削除する緩和ボタンを選ぶ Qwen2.5-7B の率を **3.5% → 48%** に上げる（32B：0% → 38%）。限界は明示済み：公開重みの 7–32B モデル、単一著者、創発状態ではなく注入された方向——だがこの設計（シャム実行、テキストのみの対照、匹配したランダム摂動）は、モデル福祉の議論が欠いていたものそのもの。
+
+→ [[fact-check]] [[system1-decision]]
+
+Sources: [Gemini 4 Carbon is now available](https://blog.google/innovation-and-ai/models-and-research/gemini-models/gemini-4-carbon-now-available) ·
+[Claude Whiteboards, Sheets, and Data](https://claude.com/resources/articles/sheets-whiteboards-data) ·
+[arXiv 2611.10123](https://arxiv.org/abs/2611.10123) ·
+[Hugging Face 論文ページ](https://huggingface.co/papers/2611.10123)

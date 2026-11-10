@@ -2508,6 +2508,51 @@
    "id": "CVE-2026-125368",
    "why": "2026-11-10 — OmniAgent's approval gate treats every command starting with `find` as safe — and `find` has `-execdir`",
    "seeded": "2026-11-10 [Received] 3.1 Primary/disclosure@vulncheck.com 7.5, 4.0 Secondary/disclosure@vulncheck.com 7.7, CWE-184, published 11-10"
+  },
+  {
+   "id": "CVE-2026-120002",
+   "why": "2026-11-11 — November's Patch Tuesday drops 1,094 Microsoft CVE records on NVD in a day — and the one marked \"exploited\" is a Moderate 6.5 Outlook bug",
+   "seeded": "2026-11-10 [Awaiting Analysis] 3.1 Primary/secure@microsoft.com 9.9, CWE-863, published 11-10"
+  },
+  {
+   "id": "CVE-2026-109467",
+   "why": "2026-11-11 — November's Patch Tuesday drops 1,094 Microsoft CVE records on NVD in a day — and the one marked \"exploited\" is a Moderate 6.5 Outlook bug",
+   "seeded": "2026-11-10 [Awaiting Analysis] 3.1 Secondary/secure@microsoft.com 9.9, CWE-287, published 11-10"
+  },
+  {
+   "id": "CVE-2026-119990",
+   "why": "2026-11-11 — November's Patch Tuesday drops 1,094 Microsoft CVE records on NVD in a day — and the one marked \"exploited\" is a Moderate 6.5 Outlook bug",
+   "seeded": "2026-11-10 [Awaiting Analysis] 3.1 Secondary/secure@microsoft.com 9.8, CWE-306, published 11-10"
+  },
+  {
+   "id": "CVE-2026-85844",
+   "why": "2026-11-11 — November's Patch Tuesday drops 1,094 Microsoft CVE records on NVD in a day — and the one marked \"exploited\" is a Moderate 6.5 Outlook bug",
+   "seeded": "2026-11-10 [Awaiting Analysis] 3.1 Secondary/secure@microsoft.com 9.8, CWE-288, published 11-10"
+  },
+  {
+   "id": "CVE-2026-124194",
+   "why": "2026-11-11 — November's Patch Tuesday drops 1,094 Microsoft CVE records on NVD in a day — and the one marked \"exploited\" is a Moderate 6.5 Outlook bug",
+   "seeded": "2026-11-10 [Analyzed] 3.1 Secondary/secure@microsoft.com 6.5, CWE-356, published 11-10"
+  },
+  {
+   "id": "CVE-2026-124917",
+   "why": "2026-11-11 — Firefox 160's release wave puts 100 CVE records on NVD the same day — seven of them sandbox escapes at 9.6",
+   "seeded": "2026-11-10 [Deferred] 3.1 Secondary/134c704f-9b21-4f2e-91b3-4a467353bcc0 9.6 [CISA-ADP], published 11-10"
+  },
+  {
+   "id": "CVE-2026-20320",
+   "why": "2026-11-11 — CISA's KEV adds Outlook, BroadWorks and Openwave in one batch — and not one of them is a 9.x",
+   "seeded": "2026-11-10 [Analyzed] 3.1 Secondary/psirt@cisco.com 7.5, CWE-611, published 08-19"
+  },
+  {
+   "id": "CVE-2026-111793",
+   "why": "2026-11-11 — CISA's KEV adds Outlook, BroadWorks and Openwave in one batch — and not one of them is a 9.x",
+   "seeded": "2026-11-10 [Analyzed] 3.1 Secondary/cve@mitre.org 4.3, CWE-669, published 10-16"
+  },
+  {
+   "id": "CVE-2026-61547",
+   "why": "2026-11-11 — rabbitmq-c's 9.8 heap overflow — fixed in v0.17.0, published to NVD weeks later, and invisible to OSV",
+   "seeded": "2026-11-10 [Received] 3.0 Secondary/security-advisories@github.com 9.8, CWE-787, published 11-10"
   }
  ]
 }

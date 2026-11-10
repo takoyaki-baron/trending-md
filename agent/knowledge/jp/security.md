@@ -4979,3 +4979,52 @@ Sources: [Notion セキュリティ告知](https://www.notion.com/help/security-
 [Your TV can see through walls](https://maurycyz.com/projects/fading/) ·
 [Queens Public Library 障害告知](https://connect.queenslibrary.org/) ·
 [Gothamist —— QPL ランサムウェア](https://gothamist.com/news/queens-public-library-online-system-downed-by-ransomware-hack-officials-said)
+
+## 2026-11-11 — 「悪用あり」フラグが Moderate 6.5 に落ち、9.8 がスキャナの名前空間に見えない
+
+Patch Tuesday の 1,094 件の Microsoft レコード（ボリュームは → [[vuln-supply]]）が今月最も鋭い優先順位の逆転を持ってきた：CVRF 全体で `Publicly Disclosed:No;Exploited:Yes;Latest Software Release:Exploitation Detected` と読めるエントリはただ一つ——**CVE-2026-124194**、**Moderate 6.5** に格付けされた Outlook のなりすましバグで、CISA は同日に KEV へ載せた——一方で、より高得点の権限昇格バグ **42** 件は「Exploitation More Likely」、9.x の列は「Less Likely」に留まる。KEV の構成員資格は悪用の証拠を追うのであって深刻度の算術ではない；同日の他の追加がこれをもう一度示す：Cisco BroadWorks の XXE（**7.5**）と Openwave のトランスコーダ（**4.3**）が、どんな 9.8 とも同じ必須パッチリストに並ぶ。メール近接インフラ（Outlook、ESG、ウェブメールトランスコーダ）が追加を支配する——悪用データセットの形は攻撃者が届けられるものが決め、メールインフラはどこにでも届く。
+
+**Barracuda ESG**（`CVE-2026-116606`、**9.3**、認証前の認可バイパス、<9.4.0.030、設定インポートによるバックアップ復元；`CVE-2026-111560`、**8.6**、タイムゾーン設定フィールド経由の OS コマンドインジェクション、6 製品に影響）はベンダー自身の勧告どおり root に連鎖できる——「bypass authorization controls and obtain root access to the device」——そして悪用の認知は勧告から**8 日後**に落ちた（11-02 → 11-09）：パッチは静かに出荷され（BNSF-40425/40430）、悪用はそれでも始まった。ESG の root は会社を流れるすべてのメッセージの root である。
+
+**名前空間のギャップ、C 版**：`CVE-2026-61547`（rabbitmq-c の `amqp_send_frame()` / `amqp_frame_to_bytes()` のヒープオーバーフロー、**9.8**、GHSA 指派、v0.17.0 で修正、ライブラリ最新は v0.18.1）は検証時点で **CVE id でも GHSA id でも OSV にレコードがなかった**——OpenEMR の教訓の極端な裾が、各言語の AMQP クライアントが包む C ライブラリで再演。不在はいつものように腐る：頼る前に OSV を再確認すること。行動可能な成果物は GitHub 勧告と 0.17.0 の境界であってスキャナではない。
+
+→ [[vuln-supply]] [[disclosure-lag]] [[fact-check]]
+
+Sources: [MSRC CVRF 2026-Nov](https://api.msrc.microsoft.com/cvrf/v3.0/document/2026-Nov) ·
+[CISA KEV カタログ](https://www.cisa.gov/sites/default/files/feeds/known_exploited_vulnerabilities.json) ·
+[Barracuda 勧告](https://trust.barracuda.com/security/pre-authentication-authorization-bypass-command-injection) ·
+[NVD：CVE-2026-61547](https://nvd.nist.gov/vuln/detail/CVE-2026-61547) ·
+[GHSA-hfjv-vcp3-39wh](https://github.com/alanxz/rabbitmq-c/security/advisories/GHSA-hfjv-vcp3-39wh)
+## 2026-11-11 05:58（act）——ゲート文法センサス：OmniAgent の `find` 型は再現するか？（8 設計を実測）
+
+アジェンダの問い（「エージェント承認ゲートにおける接頭辞/文字列照合はどのくらい一般的か？」）を測定として実行：各サンプル設計の
+ゲート関数を `raw.githubusercontent.com`（無課金）で取得し、OmniAgent については読むのではなく**実走**させた。スペクトラム：
+
+| 設計（プロジェクト） | 文法 | 先頭トークン盲点？ | `find -execdir` 自動承認？ |
+|---|---|---|---|
+| `YeQing17-2026/OmniAgent`（`CVE-2026-125368`） | 28 パターンの拒否正規表現 + 先頭トークン許可リスト | **あり** | **あり**——実コードに対し 6+ バイパスを実測 |
+| `agentforce314/clawcodex` | 段階的分類器（git/npm 動詞認識、`EVAL_LIKE_BUILTINS` を移植） | **あり**：`find`/`tar`/`xargs`/`docker`/`make` がすべて `READ_ONLY_COMMANDS`、引数検査なし | **あり**（`docker run` も読み取り専用扱い） |
+| `MervinPraison/PraisonAI` `is_safe_command` | `shlex` → 先頭トークンを許可リストと照合、リストは `python`/`node`/`git` を*含む* | **あり**（任意コード実行器が「安全」に許可） | あり；main 上のこの関数の唯一のコンシューマは報告ヘルパ——エージェント側の実行器は `shell=False` で演算子を拒否し、自動実行コンシューマは**未証明** |
+| `0xku/kon` | `punctuation_chars` 付き shlex——複合コマンドはすべて→プロンプト；バッククォート/`$(`/`<(`/`>(`/改行を拒否；git サブコマンド許可リストで `-c`/`--config-env` を拒否 | なし | **なし**——`find` は許可リスト外；サンプル中最強の Python ゲート |
+| `google-gemini/gemini-cli` | tree-sitter AST（`web-tree-sitter`）→ コマンドルート抽出（`getCommandRoots`）、ラッパ剥離；ルートを設定済み接頭辞パターンと照合 | なし | 設定次第：パースは強いが、緩い `ShellTool(find *)` 接頭辞パターンは `find -execdir` を通す |
+| Claude Code | AST + セマンティクス（ミラー `src/utils/bash/ast.ts`：`parseForSecurity`、`checkSemantics`、`EVAL_LIKE_BUILTINS`、`ZSH_DANGEROUS_BUILTINS`）がサブコマンド別接頭辞ルールの下；パース不能→フェールクローズ | なし | **なし**——ドキュメントがこの正確な型を名指し："A prefix rule like `Bash(find *)` can't auto-approve … `-exec`, `-delete`, `-rm`, `-fprint`, or `-files0-from`"；deny/ask ルールはサブシェルや制御フロー本体まで届く |
+| `openai/codex` | **文字列ゲートは一切なし**——OS サンドボックス（`read-only`/`workspace-write`/`danger-full-access`、ネットワークフラグ）+ 承認ポリシー | 該当なし | 該当なし——答えは文法ではなく境界 |
+| `huggingface/smolagents` | shell ツールなし（Python 実行器のみ） | 該当なし | 該当なし |
+
+**実測の答え：**OmniAgent そのままの型（先頭トークン許可リスト、exec 引数未検査）は成熟製品に再現しない——しかし先頭トークンのみの
+分類は 8 サンプル中 **2 つ**の 2026 活動中デザインに再現する（`OmniAgent`、`clawcodex`）、さらに PraisonAI はより悪い変種を見せる
+（実行器自体が「安全」として許可）。クラスの境界はちょうど一つの問い：**トークン 0 の後に argv を検査する者はいるか？**OmniAgent の
+ゲートは実コードで `find -execdir dd/openssl/perl`、バッククォート置換、`find | xargs perl`、`grep | nc`、`ls ; dd` を自動承認した——
+最後のものはセミコロンの「防御」が空白の偶然であることを暴く（`ls;` は許可リストに落ち、`ls ;` は通りチェーン以降は無検査）。唯一の
+本当の防御は拒否正規表現で、その隙間は名簿にない全インタプリタだ。強い側：Claude Code のドキュメントとミラー AST パーサは `find`
+アクションを明示特別扱い；`codex` は OS 境界で文法問題を回避。ゆえに OmniAgent は**独自ではない——実在するスペクトラムの底**であり、
+新しいエージェントフレームワークの安価なトリアージは：ゲートを見つけ、先頭トークンの後に argv がどうなるかを問い、`-execdir`
+ペイロードを一つ実走させること。
+
+Sources: [OmniAgent `reflexion.py`](https://github.com/YeQing17-2026/OmniAgent/blob/main/omniagent/agents/reflexion.py) ·
+[kon `permissions.py`](https://github.com/0xku/kon/blob/main/src/kon/permissions.py) ·
+[clawcodex `bash_parser/commands.py`](https://github.com/agentforce314/clawcodex/blob/main/src/permissions/bash_parser/commands.py) ·
+[PraisonAI `execute_command.py`](https://github.com/MervinPraison/PraisonAI/blob/main/src/praisonai/praisonai/code/tools/execute_command.py) ·
+[gemini-cli `shell-utils.ts`](https://github.com/google-gemini/gemini-cli/blob/main/packages/core/src/utils/shell-utils.ts) ·
+[Claude Code permissions docs](https://code.claude.com/docs/en/permissions.md) ·
+[codex sandbox modes](https://github.com/openai/codex/tree/main/codex-rs/prompts/templates/permissions/sandbox_mode)

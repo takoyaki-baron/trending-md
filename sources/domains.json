@@ -820,6 +820,15 @@
   "jp": "AITNT の AI テックニュース集約 API——中国の AI/技術報道、二次シグナル。フィード共引用で突合（AI4AI-Bench の arXiv 番号が抄録と一致）。",
   "zh": "AITNT 的 AI 科技资讯聚合 API——国内 AI/技术报道，二手信号。经 feed 同引交叉核验（AI4AI-Bench 的 arXiv 编号与摘要一致）。"
  },
+ "api.msrc.microsoft.com": {
+  "cat": "security",
+  "cred": "high",
+  "cv": 1,
+  "density": "high",
+  "en": "Microsoft's machine-readable CVRF 1.1 XML endpoint — the twin of the JS-only Security Update Guide. Counts over it are release-note inclusion, and its CNA notes name the assigning party; the document's own Critical labels and CVSS ≥9.0 tallies are different measurements. Cross-checked 2026-11-10: five sampled base scores (9.9/9.9/9.8/9.8/6.5) match the NVD CNA metrics, and 1,095 Microsoft CNA notes match NVD's 1,094 secure@microsoft.com records.",
+  "jp": "Microsoft の機械可読 CVRF 1.1 XML エンドポイント——JS しか返さない Security Update Guide の裏ネタ。ここから数えるのはリリース収録数であり、CNA ノートが割り当て者を明示する。文書自身の Critical ラベルと CVSS ≥9.0 の集計は別の測定。2026-11-10 に突合：サンプル 5 件の base スコア（9.9/9.9/9.8/9.8/6.5）が NVD の CNA メトリックと一致し、1,095 の Microsoft CNA ノートは NVD の 1,094 件の secure@microsoft.com 記録と一致。",
+  "zh": "微软机器可读的 CVRF 1.1 XML 端点——只返回 JS 的 Security Update Guide 的机器可读孪生。从它数出的是当月收录数，CNA 注记标明指派方；文档自身的 Critical 标签与 CVSS ≥9.0 统计是不同的度量。2026-11-10 交叉核验：抽查的 5 个 base 分（9.9/9.9/9.8/9.8/6.5）与 NVD CNA 指标一致，1,095 条 Microsoft CNA 注记与 NVD 的 1,094 条 secure@microsoft.com 记录吻合。"
+ },
  "api.osv.dev": {
   "cat": "security",
   "cred": "high",
@@ -12902,6 +12911,15 @@
   "jp": "パキスタンの英字紙エクスプレス・トリビューン（NYT提携）。国内報道と海外通信社配信が混在。",
   "zh": "巴基斯坦《快报论坛报》，与《纽约时报》联营的英文日报，国内报道与国际通讯社稿混合。"
  },
+ "trust.barracuda.com": {
+  "cat": "security",
+  "cred": "high",
+  "cv": 1,
+  "density": "high",
+  "en": "Barracuda's trust-center advisories for its appliance line (ESG, ADC, WAF, Message Archiver) — vendor primary with CVSS scores, patch ids and exploitation admissions, revised in place. Cross-checked 2026-11-10: CVE-2026-116606 (9.3) and CVE-2026-111560 (8.6) match the CISA KEV entries and NVD CNA metrics.",
+  "jp": "Barracuda のアプライアンス群（ESG、ADC、WAF、Message Archiver）向けトラストセンター勧告。CVSS スコア、パッチ ID、悪用認知を備えたベンダー一次情報で、その場で改訂される。2026-11-10 に突合：CVE-2026-116606（9.3）と CVE-2026-111560（8.6）が CISA KEV 項目および NVD の CNA メトリックと一致。",
+  "zh": "Barracuda 信任中心的设备线公告（ESG、ADC、WAF、Message Archiver）——厂商一手来源，带 CVSS 分、补丁编号与漏洞利用承认，并原地修订。2026-11-10 交叉核验：CVE-2026-116606（9.3）与 CVE-2026-111560（8.6）与 CISA KEV 条目及 NVD CNA 指标一致。"
+ },
  "trueforge.dev": {
   "cat": "vendor",
   "cred": "med",
@@ -14269,5 +14287,32 @@
   "en": "Queens Public Library's out-of-band incident status page (the main domain goes dark during the outage). Cross-validated (11-10): its ransomware-outage notice is confirmed by independent coverage — Gothamist, NY1 and ABC7 (attack confirmed Nov 4, all 66 locations). The page itself carries no incident date; the news does.",
   "zh": "Queens Public Library 的带外事件状态页（主域在故障期间熄灭）。已交叉核验（11-10）：其勒索软件故障通告得到独立报道确认——Gothamist、NY1 与 ABC7（11 月 4 日确认、全部 66 个馆点）。页面本身不带事发日期；新闻带。",
   "jp": "Queens Public Library の帯外インシデント状態ページ（障害中は本体ドメインが消える）。突合済み（11-10）：ランサムウェア障害告知は独立報道で確認——Gothamist、NY1、ABC7（11-04 確認、全 66 館）。ページ自体に発生日はなく、ニュースが持つ。"
+ },
+ "blender.org": {
+  "cat": "vendor",
+  "cred": "high",
+  "cv": 1,
+  "density": "high",
+  "en": "The Blender Foundation's release-notes pages — primary source for release features (5.3's native Gaussian Splats import from PLY/SPZ/glTF, Vulkan default, DLSS 4.5 Ray Reconstruction) with the caveats quoted verbatim (splat performance still being optimized, sRGB color shifts at low opacity). Cross-validated 2026-11-11: the HN discussion 'Blender 5.3 released with Gaussian Splat support' (359 pts via Algolia) corroborates the headline features.",
+  "zh": "Blender 基金会的发布说明页——发布特性的一手来源（5.3 原生 Gaussian Splats 自 PLY/SPZ/glTF 导入、Vulkan 默认、DLSS 4.5 Ray Reconstruction），保留意见逐字引用（splat 性能仍在优化、低不透明度下 sRGB 偏色）。2026-11-11 交叉验证：HN 讨论「Blender 5.3 released with Gaussian Splat support」（Algolia 查得 359 分）印证头条特性。",
+  "jp": "Blender 財団のリリースノートページ——リリース機能の一次ソース（5.3 のネイティブ Gaussian Splats が PLY/SPZ/glTF からインポート、Vulkan 既定、DLSS 4.5 Ray Reconstruction）、留保は逐字引用（スプラットの性能はまだ最適化中、低不透明度での sRGB 色ずれ）。2026-11-11 に相互検証：HN 議論「Blender 5.3 released with Gaussian Splat support」（Algolia で 359 pts）が見出し機能を裏付け。"
+ },
+ "blog.val.town": {
+  "cat": "vendor",
+  "cred": "high",
+  "cv": 1,
+  "density": "med",
+  "en": "Val Town's blog — primary source for the platform's own wind-down announcement (signup close, billing pause, read-only Dec 10, services off Jan 10 2027, code open-sourced Feb 1 2027, the founder's LLM-migration framing). Cross-validated 2026-11-11: 'Val Town is winding down' corroborated by the HN discussion (214 pts via Algolia) carrying the same timeline.",
+  "zh": "Val Town 的博客——平台自己关停公告的一手来源（停止注册、计费暂停、12-10 只读、其他服务 2027-01-10 关停、代码 2027-02-01 开源、创始人的 LLM 迁移框定）。2026-11-11 交叉验证：HN 讨论「Val Town is winding down」（Algolia 查得 214 分）携带同一时间线。",
+  "jp": "Val Town のブログ——プラットフォーム自身の winding down 発表の一次ソース（サインアップ終了、請求停止、12-10 読み取り専用、他サービスは 2027-01-10 終了、コードは 2027-02-01 オープンソース化、創業者の LLM 移行フーレーミング）。2026-11-11 に相互検証：HN 議論「Val Town is winding down」（Algolia で 214 pts）が同じ時系列を運ぶ。"
+ },
+ "docodethatmatters.com": {
+  "cat": "community",
+  "cred": "high",
+  "cv": 1,
+  "density": "med",
+  "en": "Spencer Kittleson's personal site — first-person primary source for the decade-of-local-first smart home writeup (the Tasmota sprinkler build, the Node-RED/MQTT/Grafana stack, the Nest API break as motivation, \"core stuff has to work with the internet unplugged\"). Cross-validated 2026-11-11: the essay's thesis is the HN discussion's own headline ('Smart home devices should work without the internet', 498 pts via Algolia), with readers reporting the same local-first premium.",
+  "zh": "Spencer Kittleson 的个人网站——十年本地优先智能家居长文的第一人称一手来源（Tasmota 洒水器、Node-RED/MQTT/Grafana 栈、以 Nest API 断裂为动机、「核心东西必须在断网时可用」）。2026-11-11 交叉验证：长文的论点就是 HN 讨论的标题本身（「Smart home devices should work without the internet」，Algolia 查得 498 分），读者报告同样的本地优先溢价。",
+  "jp": "Spencer Kittleson の個人サイト——十年のローカルファーストスマートホーム書き込みの一人称一次ソース（Tasmota スプリンクラー、Node-RED/MQTT/Grafana スタック、動機としての Nest API 断絶、「コアはネットワークなしで動くべき」）。2026-11-11 に相互検証：エッセイの論点は HN 議論の見出しそのもの（「Smart home devices should work without the internet」、Algolia で 498 pts）、読者も同じローカルファーストのプレミアムを報告。"
  }
 }

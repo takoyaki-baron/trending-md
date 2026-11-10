@@ -1257,3 +1257,25 @@ Sources: [tokio-rs/topcoat](https://github.com/tokio-rs/topcoat) ·
 [topcoat v0.12.0 リリースノート](https://github.com/tokio-rs/topcoat/releases/tag/v0.12.0) ·
 [we-promise/sure](https://github.com/we-promise/sure) ·
 [sure v2026.11.8-alpha リリース](https://github.com/we-promise/sure/releases/tag/v2026.11.8-alpha)
+
+## 2026-11-11 — .NET 11 が EOL の崖と一緒に出荷；Blender 5.3 がスプラットを主流に；二つのプラットフォームが違う仕方で死ぬ
+
+**.NET 11** が .NET Conf で出荷、言語の見出しは**網羅性検査と `closed` 階層付きの C# 15 ユニオン型**——最大の型システム変更が、それを直列化しなければならない JSON 層と同じリリースに着地（`System.Text.Json` は C# ユニオンと F# 判別ユニオン、さらに JSON Lines をサポート）——加えて **`System.IO.Compression` の Zstandard**、LINQ `FullJoin`、`Half` の FP16 命令、Runtime Async はまだフラグの後ろのプレビュー、そして **`dotnet new mcpserver`** テンプレート（MCP サーバーの足場がフレームワークテンプレートに——エージェントインフラ層の platform への boring 化）。運用の要点は同じ日を共有する：.NET 11 は STS（2 年サポート）、.NET 10 が LTS のまま、そして **.NET 8 と 9 が 2026-11-10 にサポート終了**——今週、バージョン監査は任意ではない。
+
+**Blender 5.3** が**ネイティブ 3D Gaussian Splats** を出荷——PLY/SPZ/glTF からインポート、完全な属性を持つ点群として保存（`scale`、`rotation`、`radiance:base`、球面調和 `radiance:sh_*`）、EEVEE/Cycles/Workbench で描画——キャプチャ生態系（スマホのスキャン、ドローンの航路）と実際のシーン制作の輪を閉じる。加えて Cycles のデノイザーとして DLSS 4.5 Ray Reconstruction、OpenPBR v1.1.1 に揃えた Principled BSDF の分散、**Vulkan が既定**のバックエンドに、そして正直な注記：スプラットの「パフォーマンスはまだ最適化中」、低不透明度では sRGB オーサリングの差で色がずれうる——制作パイプラインはコミットの前に試すべき。
+
+**Val Town が winding down**、異例なほど行儀の良い順序で——新規サインアップは 11-10 終了、請求は即時停止（年額は部分返金）、12-10 に読み取り専用、他のサービスは 2027-01-10 終了、**コードは 2027-02-01 にオープンソース化**——そして創業者 Steve Krouse は移行の瞬間を LLM のユースケースとして位置づける：「today's LLMs are great at these types of migrations」。四年、ベンチャーの資金、人々に愛された製品、それでも「could not compete in the cloud computing space」——そしてこの shutdown は同時に実地実験でもある：LLM 支援の大量移行は四週間で小さなプラットフォーム分のユーザーコードを動かせるのか。
+
+**Synaptics の特許書簡が法廷なしで趣味のドライバを殺した**：8-17 の停止命令書は Vino——Mike Lothian の Rust DRM/KMS DisplayLink ドライバ——に **125** 件の特許を引用；10-05 の追伸は 2010 年の英特許 2 件（GB2484736B、GB2485613B）のクレームチャートを添え、**$25,000** から週 **$25,000** へ上がる要求；リポジトリは降ろされ、ドライバは上流に提出されないまま、数か月無視された EVDI のバグ修正 PR は脅しの後にだけ返事を受け取った。コーデック隣接のプロジェクトに貢献するすべての人が読むべき詳細：Lothian の Open Invention Network への望みは技術的な一字で崩れた——**コーデックは OIN の Linux System Definition から明示的に除外されている**。コミュニティの先行技術の応答は速かった（1970 年代の Haar ウェーブレット圧縮がクレームに対して指摘された）が、先行技術は弁護費用を払わない——それが実際のメカニズム：ドライバは「これが片付くまで」ローカルに留まるしかない。クリーンルームで AI 支援のドライバが、書簡の影の中で死んだ。
+
+小さいレーン：**HolyArrs**（Show HN 当日誕生のリポジトリ、AGPL-3.0、521★）は「Six apps to watch a show. Now it's one.」と売る——ダウンロード約 **15 MB**、1 万タイトルでアイドル RAM 約 **140 MB**、*arr スタック合計の 718 MB に対して；このカテゴリを決める未知数はインデクサとトラッカーの長期の破損、そして一つのプロジェクトが五つの専門プロジェクトが償却してきた変動に追いつけるか。そして**十年のローカルファーストスマートホームエッセイ**が Home Assistant MCP の波と同じ日に HN の前面へ——規則一「Core stuff has to work with the internet unplugged」；死んだ肉用温度計についての最も鋭い一文：「The hardware outlived the company, and it stopped working anyway」；読者の一人は最初からローカルファーストのハードウェアに約 2.5 倍払ってもよかったと報告。さらに **.name は祖父条項化**：Verisign は正式な ICANN 再考慮申請、現地での働きかけと法的行動の後、22,000 個の個人ドメインの終了計画を撤回——撤回は ICANN 自身の手続きを通じて実現した、登録者による登録局レベル政策への珍しい可視の勝利、一方で新しい第三レベルの登録は閉じる（商業的ロビーを持たないレガシー識別子、五桁の深さになるまで注意を受けないクラス）。
+
+→ [[fact-check]] [[agent-stack]]
+
+Sources: [Announcing .NET 11](https://devblogs.microsoft.com/dotnet/announcing-dotnet-11/) ·
+[Blender 5.3 リリースノート](https://www.blender.org/download/releases/5-3/) ·
+[Val Town：Winding down](https://blog.val.town/winding-down) ·
+[LWN：Synaptics の特許主張が DisplayLink ドライバの作業を停止](https://lwn.net/SubscriberLink/1102549/acbc92e00cee3a3f/) ·
+[Neil Fraser：.name Grandfathered](https://neil.fraser.name/news/2026/11/10/) ·
+[Do Code That Matters：Home automation](https://docodethatmatters.com/home-automation-overnight-success/) ·
+[HolyArrs/HolyArrs](https://github.com/HolyArrs/HolyArrs)

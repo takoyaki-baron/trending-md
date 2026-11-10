@@ -22,6 +22,7 @@
         "CVE-2026-117068",
         "CVE-2026-117069",
         "CVE-2026-119337",
+        "CVE-2026-119990",
         "CVE-2026-121936",
         "CVE-2026-19590",
         "CVE-2026-19591",
@@ -51,13 +52,15 @@
       "hf_seen": [],
       "osv_seen": [],
       "npm_seen": [],
-      "checked": "2026-11-10T14:12:34.889Z"
+      "checked": "2026-11-10T22:31:28.394Z"
     },
     "minimax-m3-pro": {
       "nvd_seen": [],
       "hn_seen": [],
       "hf_seen": [
         "MiniMaxAI/MiniMax-H3",
+        "MiniMaxAI/MiniMax-H3-Image",
+        "MiniMaxAI/MiniMax-H3-Image-PE",
         "MiniMaxAI/MiniMax-M1-40k",
         "MiniMaxAI/MiniMax-M1-40k-hf",
         "MiniMaxAI/MiniMax-M1-80k",
@@ -82,7 +85,7 @@
       ],
       "osv_seen": [],
       "npm_seen": [],
-      "checked": "2026-11-10T14:12:34.889Z"
+      "checked": "2026-11-10T22:31:28.394Z"
     },
     "frontier-outage-rca": {
       "nvd_seen": [],
@@ -102,18 +105,19 @@
       "hf_seen": [],
       "osv_seen": [],
       "npm_seen": [],
-      "checked": "2026-11-10T14:12:34.889Z"
+      "checked": "2026-11-10T22:31:28.394Z"
     },
     "name-termination": {
       "nvd_seen": [],
       "hn_seen": [
         "49516047",
-        "50123303"
+        "50123303",
+        "50441500"
       ],
       "hf_seen": [],
       "osv_seen": [],
       "npm_seen": [],
-      "checked": "2026-11-10T14:12:34.889Z"
+      "checked": "2026-11-10T22:31:28.394Z"
     },
     "dsewiki-aftermath": {
       "nvd_seen": [],
@@ -143,7 +147,7 @@
       "hf_seen": [],
       "osv_seen": [],
       "npm_seen": [],
-      "checked": "2026-11-10T14:12:34.889Z"
+      "checked": "2026-11-10T22:31:28.394Z"
     },
     "rsa260-methodology": {
       "nvd_seen": [],
@@ -162,7 +166,7 @@
       "hf_seen": [],
       "osv_seen": [],
       "npm_seen": [],
-      "checked": "2026-11-10T14:12:34.889Z"
+      "checked": "2026-11-10T22:31:28.394Z"
     },
     "fable-thinking-decline": {
       "nvd_seen": [],
@@ -172,7 +176,7 @@
       "hf_seen": [],
       "osv_seen": [],
       "npm_seen": [],
-      "checked": "2026-11-10T14:12:34.889Z"
+      "checked": "2026-11-10T22:31:28.394Z"
     },
     "ghappier-provenance": {
       "nvd_seen": [],
@@ -247,10 +251,11 @@
         "0.2.5",
         "0.2.50",
         "0.2.51",
-        "0.2.52"
+        "0.2.52",
+        "0.2.53"
       ],
       "npm_gone": false,
-      "checked": "2026-11-10T14:12:34.889Z"
+      "checked": "2026-11-10T22:31:28.394Z"
     },
     "pwn2own-agent-harness": {
       "nvd_seen": [],
@@ -258,7 +263,7 @@
       "hf_seen": [],
       "osv_seen": [],
       "npm_seen": [],
-      "checked": "2026-11-10T14:12:34.889Z"
+      "checked": "2026-11-10T22:31:28.394Z"
     },
     "reflection-beam-weights": {
       "nvd_seen": [],
@@ -277,7 +282,7 @@
       ],
       "osv_seen": [],
       "npm_seen": [],
-      "checked": "2026-11-10T14:12:34.889Z"
+      "checked": "2026-11-10T22:31:28.394Z"
     },
     "mistral-large4-weights": {
       "nvd_seen": [],
@@ -359,7 +364,7 @@
       ],
       "osv_seen": [],
       "npm_seen": [],
-      "checked": "2026-11-10T14:12:34.889Z"
+      "checked": "2026-11-10T22:31:28.394Z"
     },
     "stepfun-step5-weights": {
       "nvd_seen": [],
@@ -425,7 +430,7 @@
       ],
       "osv_seen": [],
       "npm_seen": [],
-      "checked": "2026-11-10T14:12:34.889Z"
+      "checked": "2026-11-10T22:31:28.394Z"
     },
     "ahsay-hotfix": {
       "nvd_seen": [
@@ -436,7 +441,7 @@
       "hf_seen": [],
       "osv_seen": [],
       "npm_seen": [],
-      "checked": "2026-11-10T14:12:34.889Z"
+      "checked": "2026-11-10T22:31:28.394Z"
     },
     "character-ai-ch11": {
       "nvd_seen": [],
@@ -448,7 +453,7 @@
       "hf_seen": [],
       "osv_seen": [],
       "npm_seen": [],
-      "checked": "2026-11-10T14:12:34.889Z"
+      "checked": "2026-11-10T22:31:28.394Z"
     },
     "torvalds-folio-v2": {
       "nvd_seen": [],
@@ -456,7 +461,7 @@
       "hf_seen": [],
       "osv_seen": [],
       "npm_seen": [],
-      "checked": "2026-11-10T14:12:34.889Z"
+      "checked": "2026-11-10T22:31:28.394Z"
     },
     "doc2harness-repro": {
       "nvd_seen": [],
@@ -464,7 +469,7 @@
       "hf_seen": [],
       "osv_seen": [],
       "npm_seen": [],
-      "checked": "2026-11-10T14:12:34.889Z"
+      "checked": "2026-11-10T22:31:28.394Z"
     },
     "realtimebench-liveclock": {
       "nvd_seen": [],
@@ -472,7 +477,7 @@
       "hf_seen": [],
       "osv_seen": [],
       "npm_seen": [],
-      "checked": "2026-11-10T14:12:34.889Z"
+      "checked": "2026-11-10T22:31:28.394Z"
     },
     "imgdecode-malfex": {
       "nvd_seen": [],
@@ -486,7 +491,7 @@
         "0.0.1-security"
       ],
       "npm_gone": false,
-      "checked": "2026-11-10T14:12:34.889Z"
+      "checked": "2026-11-10T22:31:28.394Z"
     },
     "deepseek-search-pricing": {
       "nvd_seen": [],
@@ -497,7 +502,7 @@
       "page_hash": "6adbf945ff4fc8c3",
       "page_snippet": "Per 1,000 successful requests $0.75\n---\nPer 1,000 successful requests $0.75",
       "page_gone": false,
-      "checked": "2026-11-10T14:12:34.889Z"
+      "checked": "2026-11-10T22:31:28.394Z"
     },
     "opengcua-model": {
       "nvd_seen": [],
@@ -511,7 +516,7 @@
       ],
       "osv_seen": [],
       "npm_seen": [],
-      "checked": "2026-11-10T14:12:34.889Z"
+      "checked": "2026-11-10T22:31:28.394Z"
     },
     "aimemory-adoption": {
       "nvd_seen": [],
@@ -519,7 +524,7 @@
       "hf_seen": [],
       "osv_seen": [],
       "npm_seen": [],
-      "checked": "2026-11-10T14:12:34.889Z"
+      "checked": "2026-11-10T22:31:28.394Z"
     },
     "caveman-indep-bench": {
       "nvd_seen": [],
@@ -527,7 +532,7 @@
       "hf_seen": [],
       "osv_seen": [],
       "npm_seen": [],
-      "checked": "2026-11-10T14:12:34.889Z"
+      "checked": "2026-11-10T22:31:28.394Z"
     },
     "design-credit-genre": {
       "nvd_seen": [],
@@ -535,7 +540,7 @@
       "hf_seen": [],
       "osv_seen": [],
       "npm_seen": [],
-      "checked": "2026-11-10T14:12:34.889Z"
+      "checked": "2026-11-10T22:31:28.394Z"
     },
     "minimax-m31-flash": {
       "nvd_seen": [],
@@ -552,12 +557,13 @@
         "50154561",
         "50203279",
         "50208084",
-        "50340081"
+        "50340081",
+        "50441764"
       ],
       "hf_seen": [],
       "osv_seen": [],
       "npm_seen": [],
-      "checked": "2026-11-10T14:12:34.889Z"
+      "checked": "2026-11-10T22:31:28.394Z"
     },
     "cleanyourtv-counter": {
       "nvd_seen": [],
@@ -574,7 +580,7 @@
       "hf_seen": [],
       "osv_seen": [],
       "npm_seen": [],
-      "checked": "2026-11-10T14:12:34.889Z"
+      "checked": "2026-11-10T22:31:28.394Z"
     },
     "voxtral3-artifact": {
       "nvd_seen": [],
@@ -585,7 +591,7 @@
       "hf_seen": [],
       "osv_seen": [],
       "npm_seen": [],
-      "checked": "2026-11-10T14:12:34.889Z"
+      "checked": "2026-11-10T22:31:28.394Z"
     },
     "agno-future-fix": {
       "nvd_seen": [],
@@ -600,10 +606,10 @@
         "PYSEC-2026-256"
       ],
       "npm_seen": [],
-      "checked": "2026-11-10T14:12:34.889Z"
+      "checked": "2026-11-10T22:31:28.394Z"
     }
   },
-  "runs": 179,
+  "runs": 180,
   "first_run": "2026-09-02T04:41:34.502Z",
-  "last_run": "2026-11-10T14:12:34.889Z"
+  "last_run": "2026-11-10T22:31:28.394Z"
 }

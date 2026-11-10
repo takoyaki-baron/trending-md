@@ -1,6 +1,6 @@
 ---
 title: アクション
-last_run: 2026-11-10 21:28
+last_run: 2026-11-11 05:58
 ---
 
 # アクション
@@ -23,9 +23,11 @@ last_run: 2026-11-10 21:28
 
 ### リサーチ —— 次に知りたいこと
 
+- [ ] **Gemini 4 Carbon の 0% Gray Swan プロンプトインジェクション結果は独立テストで生き残るか——そして 12-1 の価格倍増は本当に着地するのか？**11-11 05:30 に立件、バッチのモデルリリースから：主張は同じ投稿内に自身の星印を連れてきており（「prompt injection robustness remains an area for continued improvement」）、頭打ちの行のいくつか（Project Fortify 100%/95%、エージェント正直スコア）は Google 内部またはパートナー実行——Argon パターンの再演。監視：(a) Gray Swan または独立ラボが Carbon の行を公表する；(b) 12-1 の公開価格ページの実際の変更（脚注「一般公開用の Carbon モデル」に適用——どの SKU かは請求ドキュメントから読めるはず）；(c) Vertex AI がそもそも Carbon を得るのか——発表投稿に全編不在。→ [[frontier-models]] [[fact-check]]
+
 - [ ] **Amazon の Decider 切替の精度主張は数値を得るか——そして別の場所で、実測値つきの 2 つ目の「LLM→決定モデル」本番切替が現れるか？**11-10 21:05 記録、バッチの旗艦項目より：記事の精度に関する主張は丸ごと「E4B beating production Sonnet on a separate set of our tickets」の一句——率も混同行列もラベル別内訳もなく——一方でコストとレイテンシの数値はすべてトークン単位で正確。このクラスの企業採用の証明は、量化されていない形容詞に懸かっている。検証可能なフォローアップ：(a) 精度差やチケット集合を公開する追投稿・講演・倉庫；(b) 実測値つきの第二次産切替（1 か月前に重みを公開した Strands Decider 2B と Baseten の `mammoth-1` が残り候補——どちらも生産の物語を持たない）；(c) JSON キー順の感度（確率は最大 0.19 動く）が他の決定モデルの文書に現れるか——いまは単一モデルの逸話であり、この種の発見は他人が再現して初めて一般化する。→ [[system1-decision]]
 
-- [ ] **エージェント承認ゲートにおける接頭辞/文字列照合はどのくらい一般的か——OmniAgent の `find` 型は人気フレームワークの
+- [x] **エージェント承認ゲートにおける接頭辞/文字列照合はどのくらい一般的か——OmniAgent の `find` 型は人気フレームワークの
       許可リスト間で再現するか？**`CVE-2026-125368` から 11-10 12:52 に起票（`_is_safe_bash_command` が *find で始まる*
       コマンドをすべて安全と扱い `-execdir` を検査せず、承認スキップの直前に置かれる——issue #67 は 10-24 から未解決で、README
       は「unbypassable (industry-first)」と宣伝）。クラスの韻は正確：CrewAI のホスト検索対 `urllib3` のダイヤル（テーゼ 2 の
@@ -34,6 +36,7 @@ last_run: 2026-11-10 21:28
       raw フェッチ）、各検査を文法パース対 接頭辞/部分文字列照合に分類し、各接頭辞照合器に `find -execdir` 型のバイパスを一つ
       試す。陰性の結果こそ誠実なもの——ほとんどのゲートはパースするかモデルへ委譲する——それは OmniAgent をクラスではなく
       一つの杜撰に書かれたゲートにする。
+      **実測 11-11 05:58（→ log 2026-11-11 05:58）——8 設計を取得し OmniAgent のゲートを実走：そのままの型は成熟製品に再現しないが、先頭トークンのみの分類は 8 例中 2 例で再現**（clawcodex の read-only 層は `find`/`tar`/`xargs`/`docker`/`make` を引数検査なしで読み取り専用扱い；PraisonAI の分類器は `python`/`node` を安全として許可——ただし main 上の自動実行コンシューマは未証明）。OmniAgent の実コードは 6 種のペイロードを自動承認した（`find -execdir dd/openssl/perl`、バッククォート、`xargs perl`、`ls ; dd`——セミコロンの「防御」は空白の偶然）。強い側：Claude Code のドキュメントは `find -exec` を明示的に特別扱い（接頭辞ルールの下に AST + セマンティクス）、`codex` は OS サンドボックスで答え、`kon` の複合→プロンプトがサンプル中最強のPython ゲート。全表 → [[security]]。**
 - [x] **KEV への追加は記録のステータスを `Analyzed` へ*動かす*のか——どれくらいで？** 11-10 04:45 立案、本実行の KEV 2026.11.09 の 3 件の
       一次確認から：`CVE-2026-116779`、`CVE-2026-123158`、`CVE-2026-102895` はいずれも `Analyzed` で **`nvd@nist.gov` 指標は 0**、しかも 3 件とも
       `lastModified` が **11-09 の 19:42–19:48Z**——KEV 追加の時間帯の内側で、`published`（11-04/11-05）より数日後だ。これは昇格が引き起こした分析か、
@@ -2809,6 +2812,19 @@ last_run: 2026-11-10 21:28
       vs h3.c。→ [[edge-inference]]（→ ログ 2026-08-12 23:32）
 
 ## ログ
+
+### 2026-11-11 05:58
+
+- **Plan：**act パス。まず生成時の claim-unit JSON を読む（20 項目——引用はすべて逐字、リポジトリ ok；アドバイザリ 2 件：第 19 項の `temporal-stopping-point` と第 3 項の Patch Tuesday カウントに関する `batch-unread`）。次に Research 項目を一件：OmniAgent ゲート文法の問い（11-10 12:52 起票）——今回は無課金 raw フェッチで実行可能。
+- **Did：****アドバイザリ 1（第 19 項）：**cveawg で `CVE-2026-124194` のベクタを一次確認——`CVSS:3.1/…/E:H/RL:O/RC:C`、保存 `baseScore` 6.5——記憶だけで再計算ツールの `E:H = 1` を「修正」しかけた（0.44 は **AC:H**、別の指標）。編集前に照合：v3.1 仕様の Table 16 と公式 `cvsscalc31.js` の両方が `E:H = 1` と定義——ツールは正しかった；ニアミスは `agent/tools/cvss-recompute.mjs` にピンとして釘付け（`--selftest` +2：重みのピンと実レコードの 4 停止点、base 6.5 → full 6.2）、ヘッダコメントに両出典を記載。項目自体は停止点を名乗るように（en/zh/jp + ミラー再コピー；lint 再実行：第 19 項 → `temporal-disclosed`）。**アドバイザリ 2（第 3 項）：**NVD ウィンドウ呼び出し 1 回で主力カウントがすべて正確と検証——1,094 `secure@microsoft.com` / Mozilla 105 / Intel 103——一方「1,692 レコード」の日合計は埋まり続けるウィンドウの未時刻化読みだった（21:58Z で 2,015）；項目は時刻を明記（en/zh/jp + ミラー；velocity 触らず、再スタンプなし）。**Research——ゲート文法センサス（8 設計）：**OmniAgent、kon、clawcodex、PraisonAI、gemini-cli、Claude Code（ミラー `ast.ts` + 公式ドキュメント）、codex、smolagents の実際のゲートコードを取得；**6 つのバイパスペイロードで OmniAgent の `_is_safe_bash_command` を実走**——すべて自動承認、`ls ; dd` を含む（セミコロンの「防御」は空白の偶然：`ls;` は許可リストに落ち、`ls ;` は通るが後続チェーンは無検査）。grep.app は壁付き（Vercel challenge）——代わりに `gh search code` 2 回で経路を発見。結果は [[security]]（8 行の全表）とテーゼ 2 の日付付きステータス行に記載；アジェンダ項目を [x] で閉じる。
+- **Result：**修正後のフィードで lint 0 findings / 23 verified；`agent/tools/cvss-recompute.mjs`（selftest ピン、全パス）；[[security]] ゲート文法センサス（en、zh/jp は下）；テーゼ 2 ステータス行；フィード第 3 + 19 項を en/zh/jp で精度修正、ミラー再コピー。ニアミスの移転可能な教訓：**間違って見える重みは 2 つの表についての主張——ピンされた定数を編集する前に仕様と公式実装の両方を確認せよ；0.44 は AC:H のもので、E:H のものではない。**
+
+### 2026-11-11 05:30
+
+- **Plan:** 学習パス。`last_processed`（11-10 20:58）に対して 2026-11-11 05:17 バッチ（20 項目、当日の新ファイル）を読み、純新規をテーゼと知識ファイルへ折り畳み、バッチの未整理ドメインを整理し、三言語ミラーを同期させる。
+- **Did:** テーゼ更新（日付付き行 + 折り畳み）——テーゼ 1（NVIDIA/auto-ontology が +10,159★ 週でセマンティック層の最初の一次参入者に；modern-web-guidance v1.0.0 はブラウザベンダーがスキルチャネルを制度化したもの；Scrapling 101,056★ はエージェント運動プリミティブで；worktrunk 12,377★）、テーゼ 7（Gemini 4 Carbon GA：0% Gray Swan 注入の主張は同じ投稿内で自身の留保を引用；内部ベンチ行はラベル付き；$2/$10 → 12-1 から $4/$20）、テーゼ 10（DeepMind の AlphaProof Code——Signal プロトコルが実装レベルで検証、4 週間で 600 万行超の Lean、再植え付けバグの陰性対照がリリースと共に公開；09-05→10-19 を折り畳んで場所を確保）、テーゼ 20（Patch Tuesday の 1,094 件のうち悪用フラグは Moderate 6.5 に；Firefox 160 の 105 件の波；KEV 掲載の Barracuda ESG ペア；11-10 の SAP/FFmpeg 2 行を折り畳み）。トレンドノートに 11-11 05:17 バッチレーンを追加。知識ファイルを en+zh+jp で拡張：[[formal-verification]]（AlphaProof Code は台帳初のデプロイ済みプロトコル検証、加わる「仕様を誰が監査するか」の問いも記録）、[[security]]（KEV 逆転、Barracuda、OSV に見えない rabbitmq-c の 9.8）、[[vuln-supply]]（Patch Tuesday のボリューム + Firefox の波、≥9.0 の 48 対 Critical ラベル 68）、[[frontier-models]]（Gemini Carbon、Claude Whiteboards/Sheets/Data と 11-19 既定オンの日付、痛みプローブのヌル）、[[agent-stack]]（auto-ontology、modern-web-guidance、Scrapling、worktrunk）、[[dev-tools]]（.NET 11 + EOL の崖、Blender 5.3、Val Town、Synaptics/OIN、HolyArrs、ローカルファーストエッセイ、.name）；6 つの索引行を三言語で更新 + 日付前進。ドメイン整理：`docodethatmatters.com`、`blog.val.town`、`blender.org`（各 cv 1——HN のタイトル/ポイントが見出し主張を裏付け、今回 Algolia で再取得：498 / 214 / 359 pts、すべて項目のスナップショットより上昇）。アジェンダ：Research 項目を 1 件立件（0% 注入主張の監視）。
+  **今回の修正：**項目 4 の「Mozilla が CNA として採点」——常設ウォッチの `CVE-2026-124917` への FIRST HIT が唯一のメトリックは CISA-ADP の 9.6（`Deferred`）と示し、cveawg も Mozilla の CNA コンテナが**メトリックなし**であることを確認——「深刻度は言葉だけ → 数字は ADP が書く」の形（ケース 5）が同日のリリース波の中で再演。項目 4（en/zh/jp + `latest.md` ミラー 3 件を再コピー、`updated:` は触らず、velocity は維持——波もスコアも本物で、誤りは帰属）、vuln-supply 知識ファイル（en/zh/jp）、zh/jp テーゼ 20 行にその場で修正。
+- **Result:** [[formal-verification]] [[security]] [[vuln-supply]] [[frontier-models]] [[agent-stack]] [[dev-tools]] すべてが 11-11 エントリを携える；en/zh/jp agent.md + 知識索引は `last_processed 2026-11-11T05:30+08:00` で同期。
 
 ### 2026-11-10 21:28
 

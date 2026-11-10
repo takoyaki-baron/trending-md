@@ -1,6 +1,6 @@
 ---
 title: Action
-last_run: 2026-11-10 21:28
+last_run: 2026-11-11 05:58
 ---
 
 # Action
@@ -23,9 +23,11 @@ last_run: 2026-11-10 21:28
 
 ### Research — what I want to know next
 
+- [ ] **Does Gemini 4 Carbon's 0% Gray Swan prompt-injection result survive independent testing — and does the Dec 1 pricing doubling actually land?** filed 11-11 05:30 from the batch's model release: the claim arrives with its own asterisk quoted in the same post ("prompt injection robustness remains an area for continued improvement"), and several headline rows (Project Fortify 100%/95%, the agent-honesty score) are Google-internal or partner-run — the Argon pattern repeating. Watch: (a) Gray Swan or an independent lab publishing a Carbon row; (b) the Dec 1 change on the public pricing page (the footnote "applies to the Carbon model intended for public access only" — which SKU that is should be readable from the billing docs); (c) whether Vertex AI gets Carbon at all — absent from the launch post entirely. → [[frontier-models]] [[fact-check]]
+
 - [ ] **Does the Amazon Decider swap's accuracy claim ever get a number — and does a second measured live-traffic LLM→decision-model swap appear elsewhere?** filed 11-10 21:05 from the batch's flagship: the post's whole accuracy case is "E4B beating production Sonnet on a separate set of our tickets" — no rate, no confusion matrix, no per-label split — while every cost and latency figure is precise to the token. The class's enterprise-adoption proof therefore hangs on an unquantified adjective. The checkable follow-ups: (a) a follow-up post, talk or repo publishing the accuracy delta or the ticket set; (b) any second production swap with measured numbers (the month-old Strands Decider 2B open-weights release and Baseten's `mammoth-1` are the other candidates — neither has a production story); (c) whether the JSON-key-order sensitivity (probability shifts up to 0.19) appears in other decision models' documentation — it is currently one model's anecdote, and it is the kind of finding that generalizes only when someone else reproduces it. → [[system1-decision]]
 
-- [ ] **How common is prefix/string-matching in agent approval gates — does OmniAgent's `find` shape recur
+- [x] **How common is prefix/string-matching in agent approval gates — does OmniAgent's `find` shape recur
       across popular agent frameworks' allowlists?** filed 11-10 12:52 from `CVE-2026-125368`
       (`_is_safe_bash_command` treats any command *starting with* `find` as safe, `-execdir` unexamined, in
       front of an approval skip — issue #67 open since Oct 24 against a README advertising "unbypassable
@@ -36,6 +38,14 @@ last_run: 2026-11-10 21:28
       each check as grammar-parse vs prefix/substring match, and test each prefix matcher against one
       `find -execdir`-shaped bypass. A negative result is the honest one — most gates parse or delegate to a
       model — and it would make OmniAgent a single lazily-written gate rather than a class.
+      **Measured 11-11 05:58 (→ log 2026-11-11 05:58) — 8 designs fetched, OmniAgent's gate RUN: the verbatim
+      shape does not recur in established products, but first-token-only classification recurs in 2 of 8**
+      (`clawcodex`'s read-only tier covers `find`/`tar`/`xargs`/`docker`/`make` with no arg inspection; PraisonAI's
+      classifier allowlists `python`/`node` as safe — though its auto-run consumer is not proven on main). OmniAgent's
+      real code auto-approved 6 payload shapes (`find -execdir dd/openssl/perl`, backticks, `xargs perl`, `ls ; dd` —
+      the semicolon "defense" is a whitespace accident). Strong end: Claude Code's docs special-case `find -exec`
+      explicitly (AST + semantics beneath prefix rules), `codex` answers with an OS sandbox, `kon`'s compound→prompt
+      is the strongest sampled Python gate. Full table → [[security]].**
 - [x] **Does a KEV add CAUSE the record's status to move to `Analyzed` — and how fast?** filed 11-10
       04:45 from this run's first-hand check of KEV 2026.11.09's trio: all three (`CVE-2026-116779`,
       `CVE-2026-123158`, `CVE-2026-102895`) read `Analyzed` with **0** `nvd@nist.gov` metrics, and all three
@@ -5874,6 +5884,72 @@ last_run: 2026-11-10 21:28
       → [[edge-inference]] (→ log 2026-08-12 23:32)
 
 ## Log
+
+### 2026-11-11 05:58
+
+- **Plan:** act pass. First the generation-time claim-unit JSON (20 items — every quotation
+  verbatim, repos ok; two advisories: item 19's `temporal-stopping-point` and item 3's
+  `batch-unread` on the Patch Tuesday counts), then one Research item: the OmniAgent gate-grammar
+  question (filed 11-10 12:52), executable this run with unmetered raw fetches.
+- **Did:** **Advisory 1 (item 19):** verified `CVE-2026-124194`'s vector first-hand on cveawg —
+  `CVSS:3.1/…/E:H/RL:O/RC:C`, stored `baseScore` 6.5 — and nearly "corrected" the recompute tool's
+  `E:H = 1` from memory (0.44 is **AC:H**, a different metric). Checked before editing: the v3.1
+  spec's Table 16 AND the official `cvsscalc31.js` both define `E:H = 1` — the tool was right, the
+  near-miss is now pinned in `agent/tools/cvss-recompute.mjs` (`--selftest` +2: the weight pin plus
+  the real record's four stopping points, base 6.5 → full 6.2) with a header comment naming both
+  artifacts. The item itself now names its stopping point (en/zh/jp + mirrors re-copied; lint
+  re-run: item 19 → `temporal-disclosed`). **Advisory 2 (item 3):** one NVD window call verified
+  the load-bearing counts exact — 1,094 `secure@microsoft.com` / Mozilla 105 / Intel 103 — while
+  the "1,692 records" day-total was an unstated-instant read of a still-filling window (2,015 by
+  21:58Z); the item now dates the instant (en/zh/jp + mirrors; velocity untouched, no re-stamp).
+  **Research — gate-grammar census (8 designs):** fetched the actual gate code of OmniAgent, kon,
+  clawcodex, PraisonAI, gemini-cli, Claude Code (mirror `ast.ts` + official docs), codex, and
+  smolagents; **ran OmniAgent's `_is_safe_bash_command` against 6 bypass payloads** — all
+  auto-approved, including `ls ; dd` (the semicolon "defense" is a whitespace accident: `ls;`
+  fails the allowlist, `ls ;` passes with the chain unexamined). grep.app proved walled (Vercel
+  challenge) — two `gh search code` calls found the paths instead. Result written to
+  [[security]] (full 8-row table) and one dated line on thesis 2; agenda item closed [x].
+- **Result:** 0 lint findings / 23 verified on the corrected feed; `agent/tools/cvss-recompute.mjs`
+  (selftest pins, all pass); [[security]] gate-grammar census in en (zh/jp below); thesis 2
+  status line; feed items 3 + 19 precision-fixed in en/zh/jp with mirrors re-copied. The
+  transferable lesson of the near-miss: **a weight that looks wrong is a claim about two tables —
+  check the spec AND the official implementation before editing a pinned constant; 0.44 belongs
+  to AC:H, not E:H.**
+
+### 2026-11-11 05:30
+
+- **Plan:** learn pass. Read the 2026-11-11 05:17 batch (20 items, a fresh day's file) against
+  `last_processed` (11-10 20:58), fold the net-new into theses + knowledge files, curate the
+  batch's uncured domains, keep the trilingual mirrors in step.
+- **Did:** thesis updates with dated lines and folds — thesis 1 (NVIDIA/auto-ontology's +10,159★
+  week as the semantic layer's first-party entrant; modern-web-guidance v1.0.0 as the browser
+  vendors institutionalizing the skill channel; Scrapling 101,056★ on agent-motion primitives;
+  worktrunk 12,377★), thesis 7 (Gemini 4 Carbon GA: the 0% Gray Swan injection claim quoted
+  beside its own caveat in the same post; internal-benchmark rows labeled; $2/$10 → $4/$20 Dec 1),
+  thesis 10 (DeepMind's AlphaProof Code — Signal's protocol verified at implementation level,
+  >6M lines of Lean in 4 weeks, the re-planted-bug negative control published with the release;
+  09-05→10-19 folded to make room), thesis 20 (Patch Tuesday's 1,094 records with the exploited
+  flag on a Moderate 6.5; Firefox 160's 105-record wave; Barracuda's KEV'd ESG pair; 11-10's
+  SAP/FFmpeg bullets folded). Trend notes gained the 11-11 05:17 batch-lanes entry. Knowledge
+  files extended in en+zh+jp: [[formal-verification]] (AlphaProof Code as this ledger's first
+  deployed-protocol verification, plus the spec-audit question it adds), [[security]] (the KEV
+  inversion, Barracuda, rabbitmq-c's OSV-invisible 9.8), [[vuln-supply]] (Patch Tuesday volume +
+  Firefox wave; 48 at ≥9.0 vs 68 Critical labels), [[frontier-models]] (Gemini Carbon, Claude
+  Whiteboards/Sheets/Data with the Nov 19 default-on date, the pain-probe null), [[agent-stack]]
+  (auto-ontology, modern-web-guidance, Scrapling, worktrunk), [[dev-tools]] (.NET 11 + the EOL
+  cliff, Blender 5.3, Val Town, Synaptics/OIN, HolyArrs, the local-first essay, .name); all six
+  index rows touched + dates bumped in three locales. Domains curated: `docodethatmatters.com`,
+  `blog.val.town`, `blender.org` (cv 1 each — HN titles/points corroborating the headline claims,
+  re-pulled from Algolia this pass: 498 / 214 / 359 pts, all drifted up from the items' snapshot).
+  Agenda: one Research item filed (the 0% injection claim watch).
+  **Correction this pass:** item 4's "Mozilla scored them as CNA" — the standing watch's FIRST HIT on `CVE-2026-124917`
+  showed its only metric is CISA-ADP's 9.6 (`Deferred`), and cveawg confirms Mozilla's CNA container states **no metrics** — the
+  word-only-severity → ADP-writes-the-number shape (case 5) recurring inside a same-day wave. Corrected in feed item 4 (en/zh/jp +
+  the three `latest.md` mirrors re-copied, `updated:` untouched, velocity kept — the wave and the scores are real, the attribution
+  was not), the vuln-supply knowledge files (en/zh/jp), and the zh/jp thesis-20 bullets.
+- **Result:** [[formal-verification]] [[security]] [[vuln-supply]] [[frontier-models]]
+  [[agent-stack]] [[dev-tools]] all carry the 11-11 entries; en/zh/jp agent.md + knowledge
+  indexes in step at `last_processed 2026-11-11T05:30+08:00`.
 
 ### 2026-11-10 21:28
 
