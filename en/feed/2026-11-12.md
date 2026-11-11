@@ -1,6 +1,6 @@
 ---
 date: 2026-11-12
-updated: 2026-11-11T20:41:58Z
+updated: 2026-11-11T20:43:46Z
 schedule: 04:03, 12:03, 20:03 UTC+8
 sources: 21
 license: CC-BY-4.0
@@ -300,7 +300,7 @@ Intel's SA-01580 covers three vulnerabilities in the **TDX Migration Trust Domai
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-11-11T20:41:58Z |
+| Generated | 2026-11-11T20:43:46Z |
 | Items | 20 |
 | Sources tracked | 21 (Hacker News, GitHub Trending, NVD, CISA KEV, arXiv/ICML, vendor blogs, security advisories) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (3x daily) |

@@ -3556,6 +3556,198 @@
      "modified": "2026-11-10T22:18:25.920"
     }
    ]
+  },
+  "CVE-2026-44685": {
+   "status": "Awaiting Analysis",
+   "modified": "2026-11-10T22:06:57.400",
+   "seen": "2026-11-11T20:43:48.841Z",
+   "history": [
+    {
+     "at": "2026-11-11T20:43:48.841Z",
+     "status": "Awaiting Analysis",
+     "modified": "2026-11-10T22:06:57.400"
+    }
+   ]
+  },
+  "CVE-2026-61473": {
+   "status": "Received",
+   "modified": "2026-11-10T18:17:44.563",
+   "seen": "2026-11-11T20:43:48.841Z",
+   "history": [
+    {
+     "at": "2026-11-11T20:43:48.841Z",
+     "status": "Received",
+     "modified": "2026-11-10T18:17:44.563"
+    }
+   ]
+  },
+  "CVE-2026-61887": {
+   "status": "Received",
+   "modified": "2026-11-10T18:17:44.703",
+   "seen": "2026-11-11T20:43:48.841Z",
+   "history": [
+    {
+     "at": "2026-11-11T20:43:48.841Z",
+     "status": "Received",
+     "modified": "2026-11-10T18:17:44.703"
+    }
+   ]
+  },
+  "CVE-2026-107496": {
+   "status": "Awaiting Analysis",
+   "modified": "2026-11-10T22:10:04.727",
+   "seen": "2026-11-11T20:43:48.841Z",
+   "history": [
+    {
+     "at": "2026-11-11T20:43:48.841Z",
+     "status": "Awaiting Analysis",
+     "modified": "2026-11-10T22:10:04.727"
+    }
+   ]
+  },
+  "CVE-2026-88822": {
+   "status": "Awaiting Analysis",
+   "modified": "2026-11-10T22:10:04.727",
+   "seen": "2026-11-11T20:43:48.841Z",
+   "history": [
+    {
+     "at": "2026-11-11T20:43:48.841Z",
+     "status": "Awaiting Analysis",
+     "modified": "2026-11-10T22:10:04.727"
+    }
+   ]
+  },
+  "CVE-2026-88823": {
+   "status": "Awaiting Analysis",
+   "modified": "2026-11-10T22:10:04.727",
+   "seen": "2026-11-11T20:43:48.841Z",
+   "history": [
+    {
+     "at": "2026-11-11T20:43:48.841Z",
+     "status": "Awaiting Analysis",
+     "modified": "2026-11-10T22:10:04.727"
+    }
+   ]
+  },
+  "CVE-2026-95691": {
+   "status": "Awaiting Analysis",
+   "modified": "2026-11-10T22:10:04.727",
+   "seen": "2026-11-11T20:43:48.841Z",
+   "history": [
+    {
+     "at": "2026-11-11T20:43:48.841Z",
+     "status": "Awaiting Analysis",
+     "modified": "2026-11-10T22:10:04.727"
+    }
+   ]
+  },
+  "CVE-2026-95692": {
+   "status": "Awaiting Analysis",
+   "modified": "2026-11-10T22:10:04.727",
+   "seen": "2026-11-11T20:43:48.841Z",
+   "history": [
+    {
+     "at": "2026-11-11T20:43:48.841Z",
+     "status": "Awaiting Analysis",
+     "modified": "2026-11-10T22:10:04.727"
+    }
+   ]
+  },
+  "CVE-2026-120808": {
+   "status": "Awaiting Analysis",
+   "modified": "2026-11-10T22:08:59.707",
+   "seen": "2026-11-11T20:43:48.841Z",
+   "history": [
+    {
+     "at": "2026-11-11T20:43:48.841Z",
+     "status": "Awaiting Analysis",
+     "modified": "2026-11-10T22:08:59.707"
+    }
+   ]
+  },
+  "CVE-2026-120815": {
+   "status": "Awaiting Analysis",
+   "modified": "2026-11-10T22:08:59.707",
+   "seen": "2026-11-11T20:43:48.841Z",
+   "history": [
+    {
+     "at": "2026-11-11T20:43:48.841Z",
+     "status": "Awaiting Analysis",
+     "modified": "2026-11-10T22:08:59.707"
+    }
+   ]
+  },
+  "CVE-2026-107372": {
+   "status": "Awaiting Analysis",
+   "modified": "2026-11-10T22:17:44.923",
+   "seen": "2026-11-11T20:43:48.841Z",
+   "history": [
+    {
+     "at": "2026-11-11T20:43:48.841Z",
+     "status": "Awaiting Analysis",
+     "modified": "2026-11-10T22:17:44.923"
+    }
+   ]
+  },
+  "CVE-2026-108167": {
+   "status": "Awaiting Analysis",
+   "modified": "2026-11-10T22:17:44.923",
+   "seen": "2026-11-11T20:43:48.841Z",
+   "history": [
+    {
+     "at": "2026-11-11T20:43:48.841Z",
+     "status": "Awaiting Analysis",
+     "modified": "2026-11-10T22:17:44.923"
+    }
+   ]
+  },
+  "CVE-2026-118383": {
+   "status": "Awaiting Analysis",
+   "modified": "2026-11-10T22:08:59.707",
+   "seen": "2026-11-11T20:43:48.841Z",
+   "history": [
+    {
+     "at": "2026-11-11T20:43:48.841Z",
+     "status": "Awaiting Analysis",
+     "modified": "2026-11-10T22:08:59.707"
+    }
+   ]
+  },
+  "CVE-2026-120824": {
+   "status": "Awaiting Analysis",
+   "modified": "2026-11-10T22:08:59.707",
+   "seen": "2026-11-11T20:43:48.841Z",
+   "history": [
+    {
+     "at": "2026-11-11T20:43:48.841Z",
+     "status": "Awaiting Analysis",
+     "modified": "2026-11-10T22:08:59.707"
+    }
+   ]
+  },
+  "CVE-2026-126128": {
+   "status": "Awaiting Analysis",
+   "modified": "2026-11-10T22:17:44.923",
+   "seen": "2026-11-11T20:43:48.841Z",
+   "history": [
+    {
+     "at": "2026-11-11T20:43:48.841Z",
+     "status": "Awaiting Analysis",
+     "modified": "2026-11-10T22:17:44.923"
+    }
+   ]
+  },
+  "CVE-2026-126129": {
+   "status": "Received",
+   "modified": "2026-11-10T22:18:31.733",
+   "seen": "2026-11-11T20:43:48.841Z",
+   "history": [
+    {
+     "at": "2026-11-11T20:43:48.841Z",
+     "status": "Received",
+     "modified": "2026-11-10T22:18:31.733"
+    }
+   ]
   }
  },
  "_note": "vulnStatus watch (agent/tools/claim-unit-lint.mjs --status-watch). Records the one field NVD moves on its own, so a BACKWARDS move is visible rather than inferred from four timestamps by hand. Filed 2026-10-30 after CVE-2026-97229 went Analyzed → Undergoing Analysis when CISA-ADP rewrote its container 27 minutes after a KEV add. `at` is when this tool observed it; `modified` is the record's own lastModified."
