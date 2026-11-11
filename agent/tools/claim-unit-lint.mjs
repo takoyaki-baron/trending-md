@@ -3607,6 +3607,37 @@ function isBlockShell(text) {
   return t.length < 1_200 && BLOCK_SHELL_RE.test(t.slice(0, 900).toLowerCase());
 }
 
+/* A 200 that answers a few hundred bytes of near-whitespace is a FAILED request, not a page.
+ * Measured 2026-11-12 05:15 on the run's own JSON: `discuss.python.org`'s memorial topic served
+ * undici a **739-byte** shell (title + whitespace, ~26 non-whitespace chars) while the same URL
+ * answers 67 KB of server-rendered post to `curl` minutes later — the wall is per-request (the
+ * 2026-11-01 rule) but this shape carries NO wall marker, so `isBlockShell` passed it as readable
+ * and two verbatim quotations from Guido van Rossum's post were filed `quote-not-found`. The
+ * guard is the 2026-11-04 rule ("check the extracted text has the page's own scale") made a
+ * predicate: an extraction with fewer than 200 non-whitespace chars cannot carry a quotable
+ * sentence or a count, so treating it as UNREAD only ever suppresses a finding, never invents
+ * one — the `unread is not absent` direction. The floor is deliberately inside `isWhitespaceShell`
+ * and not inside `needsThirdClient`, whose contract ("a short page WITHOUT a wall marker does not
+ * ask for the third client") is pinned by selftest. */
+function isWhitespaceShell(text) {
+  return String(text ?? '').replace(/\s/g, '').length < 200;
+}
+
+/* The scale half of the same lesson, and the half that actually fires on the filing case: the
+ * 739-char shell carried **248 non-whitespace chars** of navigation chrome — over
+ * `isWhitespaceShell`'s floor — but it was extracted from a **323 KB** response. A body ratio of
+ * a fraction of a percent on a large HTML document means the stripper ate the article (the
+ * 2026-11-04 Blogger rule, now a predicate the fetch loop consults before ACCEPTING a client's
+ * read): the loop must not break on such an extraction, because the next client string may serve
+ * the plain-HTML variant whose body survives. Discourse is the measured host class: to a
+ * browser-shaped UA it serves the Ember-embedded page (post inside spans the tag strip deletes;
+ * 323 KB → 1,323 chars → 739 after collapse), to `curl/*` it serves the server-rendered DOM
+ * (67 KB → ~30 KB of prose, both quotations intact). Same suppression-only direction: refusing a
+ * read can only demote a verdict to `unread`, never invent a finding. */
+function stripperAtePage(bodyLen, textLen) {
+  return bodyLen > 50_000 && textLen < 1_200;
+}
+
 /* A `<script type="text/template">` is NOT code — it is markup the page renders, and stripping
  * every `<script>` deletes the article. Measured 2026-11-04, the day it produced two findings
  * against correct quotations (item 37 of the 11-04 feed): chromereleases.googleblog.com's Chrome
@@ -3688,9 +3719,10 @@ async function citedPageText(page) {
      the page). A 6-hour TTL on the wall would have turned one unlucky request into half a day of
      "unread", which is the `unread is not absent` rule leaking in through the cache. So an entry
      that holds a wall — or no text at all — gets the error TTL. */
-  const hitWall = hit && (isBlockShell(hit.text) || !hit.text);
+  const hitWall = hit && (isBlockShell(hit.text) || isWhitespaceShell(hit.text) || !hit.text);
   if (hit && hit.v === PAGE_CACHE_V && Date.now() - Date.parse(hit.fetched_at) < (hitWall ? ERROR_TTL_MS : CACHE_TTL_MS)) return hit;
   let text = '';
+  let bigBodyLen = 0; // the raw size behind `text` — the stripper-ate-the-article scale check
   /* The UA is part of the request, and **no single client string is right** — measured 2026-11-01
    * on two hosts a few hours apart, with the verdict inverted between them:
    *  · `karpathy.bearblog.dev/hacker-tube/` answers **404 / 9 bytes "Not found"** to `curl/*` *and*
@@ -3723,7 +3755,7 @@ async function citedPageText(page) {
       if (looksLikePdf(r.headers?.get('content-type') || '', buf)) {
         const t = pdfText(buf);
         if (t && t.length > text.length) { text = t; client = 'pdftotext'; }
-        if (t && !isBlockShell(t)) break;
+        if (t && !isBlockShell(t) && !isWhitespaceShell(t)) break;
         continue; // no extractor or it refused the bytes: leave UNREAD, let the next client try
       }
       const body = buf.toString('utf8').slice(0, 3_000_000);
@@ -3733,8 +3765,12 @@ async function citedPageText(page) {
       // deleted a Blogger post's whole body and reported two verbatim quotations as inventions.
       const t = htmlText(body, page.raw);
       // keep the longest read: a wall is short by construction, but a truncated 200 also arrives
-      if (t.length > text.length) text = t;
-      if (!isBlockShell(t)) break;
+      if (t.length > text.length) { text = t; bigBodyLen = body.length; }
+      /* Accept the client's read only when the extraction has the page's own scale: a wall, a
+       * near-empty shell, OR a tiny extraction from a big body each mean the read failed and the
+       * next client string may serve the variant whose body survives (2026-11-12, Discourse:
+       * browser UA 323 KB → 739 chars, curl UA 67 KB → ~30 KB prose). */
+      if (!isBlockShell(t) && !isWhitespaceShell(t) && !stripperAtePage(body.length, t.length)) break;
     } catch { /* unreadable is a state, not an absence — it is reported as unread this run */ }
   }
   /* The third client (2026-11-08, the openai.com shape): both attempts above share undici's TLS
@@ -3742,7 +3778,7 @@ async function citedPageText(page) {
    * reached ONLY when the loop yielded no prose (`needsThirdClient`), so a normal run pays zero
    * extra requests. The entry records which client produced the text: "the page does not say
    * that" is a claim about bytes, and the bytes depend on who asked. */
-  if (needsThirdClient(text)) {
+  if (needsThirdClient(text) || isWhitespaceShell(text) || stripperAtePage(bigBodyLen, text.length)) {
     try {
       const r = await fetchViaCurlBin(page.url, UA);
       citedPages_requests += 1;
@@ -3769,8 +3805,13 @@ async function citedPageText(page) {
    length says otherwise. Bumping costs one unmetered refetch per cited page.
    v5 detects a binary response (`looksLikePdf`) and either extracts it (`pdftotext`) or leaves it
    UNREAD. A v4 entry for a PDF URL holds ~491 KB of binary that reads as the longest text in the
-   run — the 2026-11-09 shape that turned six verbatim quotations into `quote-not-found`. */
-const PAGE_CACHE_V = 6;
+   run — the 2026-11-09 shape that turned six verbatim quotations into `quote-not-found`.
+   v7 treats a near-whitespace extraction as the UNREAD it is (`isWhitespaceShell`). A v6 entry
+   holds the 2026-11-12 shape: `discuss.python.org` answered undici **739 bytes** of title +
+   whitespace one run, the entry stored it with `bytes: 739` and no wall marker, and two verbatim
+   quotations from Guido van Rossum's memorial post were filed `quote-not-found` against it — a
+   failed request dressed as the read. Bumping costs one unmetered refetch per cited page. */
+const PAGE_CACHE_V = 7;
 let citedPages_requests = 0;
 
 async function checkCount(it) {
@@ -4627,7 +4668,7 @@ async function checkQuote(it, nvd, cna) {
      * back `quote-not-found` (sev 3) against an item whose only page carrying them was unread —
      * the exact "unread is not absent" failure this check exists to avoid, in the shape of a
      * finding. A wall is unfetched text, so it belongs in the unread denominator. */
-    if (t.text && !isBlockShell(t.text)) sources.push(quoteSource(p.label, t.text));
+    if (t.text && !isBlockShell(t.text) && !isWhitespaceShell(t.text)) sources.push(quoteSource(p.label, t.text));
     else { unread += 1; if (t.text) shells.push(p.label); }
   }
   // (3) the records — a field quotation is a claim about a field, not about a page
@@ -4997,35 +5038,38 @@ async function checkBatch(it, nvd) {
   const refs = [...new Set(it.cvesAll ?? it.cves ?? [])];
   let records = null;
   let keyword = null;
-  for (const kw of batchKeywords(it).slice(0, 2)) {
-    const got = await nvdDay(kw, day);
-    if (!got) continue;
-    // THE GUARD: a keyword is right only if it RETRIEVES the record it was derived from.
-    if (!got.some((r) => refs.includes(r.id))) continue;
-    records = got;
-    keyword = kw;
-    break;
-  }
-  if (!records) {
-    // FALLBACK ARM — the writer's own field (added 2026-11-11 21:11, calibrated on the same day's
-    // item 3). The keyword terms are guesses about the record TEXT derived from the item's prose,
-    // and a bulk CNA's descriptions need not contain the subject name at all: Microsoft's
-    // Patch-Tuesday descriptions read "Use after free in HEIF Image Extensions…" — no "Microsoft"
-    // token — so "November"/"Patch" retrieved nothing and the item's exact 1,094-record claim went
-    // `batch-unread` while one sourceIdentifier call answers it. The anchor record carries the
-    // writer (`sourceIdentifier`), and a query by that field + the anchor's own day retrieves the
-    // anchor BY CONSTRUCTION — writer and day are the set's own two dimensions — so the fallback
-    // can only widen coverage; it cannot misread a set the keyword arm already read.
-    const src = batchFallbackTerm(rec);
-    if (src) {
-      const got = await nvdDay(src, day, true);
-      if (got && got.some((r) => refs.includes(r.id))) {
-        records = got;
-        keyword = `source=${src}`;
-      }
+  /* SOURCE ARM FIRST (added 2026-11-12 05:15, calibrated on the same day's MongoDB item) — the
+   * writer's own sourceIdentifier + the anchor's day is the batch BY CONSTRUCTION, and a keyword
+   * that PASSES the retrieval guard can still UNDER-COUNT that set: MongoDB's 26 records
+   * published 2026-11-10 include three (`CVE-2026-120816`, `-120826`, `-120828`) whose
+   * descriptions carry no "mongodb" token, so the keyword arm retrieved the anchor, counted 23,
+   * and filed `batch-count-mismatch` against a correct 26-claim. Retrieval validates the TERM,
+   * never the COUNT — and since `batchSet` filters keyword results to the anchor's assigner
+   * anyway, a passing keyword is always a SUBSET of the writer's set, never a superset: the
+   * keyword arm can only lose records. The keyword loop keeps its old role as the fallback
+   * (anchors whose record carries no sourceIdentifier, or whose source query failed). */
+  const srcFirst = batchFallbackTerm(rec);
+  if (srcFirst) {
+    const got = await nvdDay(srcFirst, day, true);
+    if (got && got.some((r) => refs.includes(r.id))) {
+      records = got;
+      keyword = `source=${srcFirst}`;
     }
   }
   if (!records) {
+    for (const kw of batchKeywords(it).slice(0, 2)) {
+      const got = await nvdDay(kw, day);
+      if (!got) continue;
+      // THE GUARD: a keyword is right only if it RETRIEVES the record it was derived from.
+      if (!got.some((r) => refs.includes(r.id))) continue;
+      records = got;
+      keyword = kw;
+      break;
+    }
+  }
+  if (!records) {
+    // (the 2026-11-11 keyword-then-source ordering ended here; the source arm now runs first, so
+    // this block's old FALLBACK ARM retry would repeat the same cached call and is gone)
     const src = batchFallbackTerm(rec);
     out.push({
       check: 'batch', item: it.n, verdict: 'batch-unread',
@@ -5831,6 +5875,31 @@ if (SELFTEST) {
     isBlockShell('Deprecated: this function is removed in 3.0. Use `open()` instead. See the migration note for details and two worked examples.'), false);
   t('quote: a long article that merely says "just a moment" is a page',
     isBlockShell('just a moment of your time — this is a long post. ' + 'x'.repeat(1_400)), false);
+  /* 2026-11-12 05:15 — the 739-byte shell that stored itself as the read. discuss.python.org
+   * answered undici with title + whitespace (~26 non-whitespace chars) one run and the full
+   * server-rendered post minutes later; no wall marker, so `isBlockShell` passed it and two
+   * verbatim quotations of Guido's post were filed `quote-not-found`. An extraction this sparse
+   * is a failed request, not a page. */
+  const WS739 = ' In Memoriam: Tim Peters 1952–2026 - Core Development - Discussions on Python.org '
+    + '\n \n'.repeat(40);
+  t('quote: a 739-byte title+whitespace shell is UNREAD', isWhitespaceShell(WS739), true);
+  t('quote: an empty extraction is UNREAD', isWhitespaceShell('  \n\t '), true);
+  t('quote: the 200-char floor rejects a sparse shell just under it',
+    isWhitespaceShell('x'.repeat(199)), true);
+  t('quote: the 200-char floor admits a page at it', isWhitespaceShell('x'.repeat(200)), false);
+  t('quote: a real error-stub page is unreadable-for-verdicts (suppression only)',
+    isWhitespaceShell('Not Found'), true);
+  t('quote: prose carries itself', isWhitespaceShell(WS739 + ' It is hard to overestimate '
+    + 'Tim’s influence on Python, and the memorial thread runs long enough to matter. '
+    + 'x'.repeat(180)), false);
+  /* the scale predicate — the 248-nws shell was OVER the whitespace floor; what gives it away is
+   * that it was extracted from a 323 KB response (0.2% ratio) */
+  t('quote: a tiny extraction from a big body is a stripper casualty',
+    stripperAtePage(323_486, 739), true);
+  t('quote: the same extraction from a small page is the whole page',
+    stripperAtePage(9_000, 739), false);
+  t('quote: real prose from a big body has scale',
+    stripperAtePage(67_000, 30_000), false);
   t('quote: an unread cited page demotes a 6-word miss from fabricated to unread',
     [checkQuotes(mk('t', 'it states "this vulnerability is being actively exploited in the wild"'), qsrc('Nothing of the kind here.'), { unread: 1 }).map((x) => x.verdict),
       checkQuotes(mk('t', 'it states "this vulnerability is being actively exploited in the wild"'), qsrc('Nothing of the kind here.'), { unread: 0 }).map((x) => x.verdict)],

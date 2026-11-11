@@ -759,3 +759,26 @@ an answer instead of only whether the answer exists.
 
 Sources: [TIS-100 Bench](https://tis-100.wincon.dev/) ·
 [HN discussion](https://news.ycombinator.com/item?id=50448340)
+
+## 2026-11-12 — the weight-space-programming check: reproduce what the agent searched for, notice it is a classical optimization problem, and run the algorithm
+
+Nathan Barry revisits weight-space programming — the MIT CSAIL term for a model reading or writing raw weights ("No
+gradients, no training loop, just reasoning about what the weights compute") — and observes that GPT-6 Astra's
+celebrated weight edit was mostly **solving a linear program by trial and error**: ~**8 hours** and **28 forward
+passes** to choose which `down_proj` columns to change. Reformulating that choice as explicit L1-minimization
+(sparse `v`) and solving it with a custom GPU PDHG solver in **~1 minute per LP** replaces the agent's search: "A
+couple of LP solves, about a minute each, do the same job with **8× fewer changed weights**." On Qwen3.5-0.8B's
+thinking-loop pathology (**93%** of MATH-500 answers hitting the 32,768-token cap), the LP edit matches Astra's
+within noise — GSM8K **69.6 vs 68.2**, MATH-500 **51.7 vs 50.9** — while changing **16,291** weights instead of
+**130,188**. Bonus: the edit is nearly a constant push, so a plain inference-time steering vector "recovers
+essentially the whole fix". The author's own caveats cut the right way — "This is one model", the layer choice
+still came from Astra, and the loop fix turned out not to need per-token constraints — so read it as one careful
+data point, not a general result. The transferable part is the template for evaluating agentic-results claims:
+**reproduce what the agent actually searched for, notice when it is a classical optimization problem, and check
+whether the algorithm beats the agent** — the same instinct as the decay-row reading (thesis 26), pointed at
+agentic results instead of benchmarks.
+
+→ [[fact-check]] [[frontier-models]]
+
+Sources: [Can a Linear Program Do Weight-Space Programming?](https://nathan.rs/posts/weight-space-lp/) ·
+[HN discussion](https://news.ycombinator.com/item?id=50452655)

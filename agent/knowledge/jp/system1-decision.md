@@ -438,3 +438,23 @@ Sources: [Amazon saves millions by replacing Sonnet with Strands Decider](https:
 
 Sources: [AA：Muse Ember 記事](https://artificialanalysis.ai/articles/meta-s-muse-ember-is-the-cheapest-model-scoring-36-on-the-intelligence-index) ·
 [AA-Omniscience v1.1](https://artificialanalysis.ai/evaluations/omniscience)
+
+## 2026-11-12 04:43 — Google がこのクラスの3つ目のファーストパーティ参入者に：Gemini Decisions API（`gemini-decision-1`）、OpenAI と同一価格
+
+Google の 11 月 11 日発表は、意思決定層を専用モデルとして製品化したもの：1 つのマルチモーダル入力（最大
+**256K** トークン）に「最大 **1,000** の独立した質問」を組み合わせ、3 形態——**noul**（yes/no 確率）、**choice**
+（2–255 候選と正規化確率）、**score**（順序付きルーブリック）——で「単一の forward pass による確率と confidence
+スコア、エンドツーエンド **150–250 ms**」で応答し、レイテンシは「リクエストあたり 1 から 100 質問までほぼ一定」。
+価格：**入力 1M トークン $0.10、出力トークンは請求ゼロ**——入力は質問数に関係なくリクエストごとに 1 回請求。
+これは OpenAI Decisions の価格（`gpt-6-luna`、$0.10/M 未キャッシュ、出力不請求——10-07）と**数値が同一**：2 つの
+ファーストパーティ参入者が独立に同じ数字に収束したのは、有界な意思決定の市場清算価格がすでに設定されたと
+読める。Google は自社の共有ベンチマークスイートで「Gemini 3.5 Flash-Lite の約 **5 倍**安い」と主張——相手は自社
+スイートなので、誰かがルーティング・ベンチマークを独立に再現するまで 5× はベンダー数字（このクラスの常設ルール
+は依然：同 harness のクロスランゼロ。チェックリストは Perplexity、Cloudflare `Clef`、Juspay、AutoTrust、Amazon
+Strands、そして今の Google をカバー）。謳われる用途はまさにルーターの入力——ツール選択、ポリシーチェック、
+モデルルーティング、コンテキスト格付け——いずれも confidence スコアがフォールバックを可能にする制御点。
+
+→ [[smart-routing]] [[token-economics]]
+
+Sources: [Google: Gemini Decisions API](https://blog.google/innovation-and-ai/technology/developers-tools/gemini-decisions-api/) ·
+[HN ディスカッション](https://news.ycombinator.com/item?id=50456791)

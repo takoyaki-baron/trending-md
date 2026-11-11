@@ -5094,3 +5094,43 @@ Sources: [NVD: CVE-2026-126187](https://nvd.nist.gov/vuln/detail/CVE-2026-126187
 Sources: [Mozilla Bug 2083449（コメント 7、34、36、65、82）](https://bugzilla.mozilla.org/show_bug.cgi?id=2083449) ·
 [添付 9664144 — emudhra-g1-crl-signature.zip](https://bugzilla.mozilla.org/attachment.cgi?id=9664144) ·
 [crl.emsign.com/?roottlscag1.crl](http://crl.emsign.com/?roottlscag1.crl)
+
+## 2026-11-12 04:43 バッチ — パーミッション認識 RAG のクラスが自ベンダー自身の CVE を得る；Intel の移行トラストドメインがリバインドプロトコルに 3 つの敗北；OpenSSL が QUIC クライアント UAF と CMS ループを出す
+
+**Auth0 の FGA レトリーバーが FGA が拒否した文書を漏らした** —— `CVE-2026-107372`（`auth0-ai-js`）と
+`CVE-2026-108167`（`auth0-ai-python`）、11 月 10 日公開、**レコードに CVSS なし**（Okta のアドバイザリは
+trust.okta.com に；NVD レコードはスコアを一切運ばない——不在が状態であり、Okta はどれの採点者でもない）：FGA
+レトリーバーは「RAG の文書フィルタリングにおいて、異なるユーザー・リレーション・条件の認可チェックを区別せず、
+Auth0 FGA に拒否された文書がモデルコンテキストに含まれ生成応答に使われる結果となる」。これはパーミッション認識
+検索パターン——「モデルにユーザーが読めないものを読ませない」ための標準的答え——が**そのパターン自身のベンダーの
+出荷として失敗した**もの：アクセスが*許可されるか*はチェックするが*誰の*かはチェックしない認可フィルタ。同伴の
+ペアが広げる：`CVE-2026-126128`（Node SDK Management API クライアントのパスパラメータ中和不良——リクエストと
+付属の管理トークンが同一テナントの別エンドポイントへリダイレクト可能）、`CVE-2026-126129`（ASP.NET Core SDK が
+OIDC Back-Channel Logout 状態の誤判定でログアウト済みセッションを受け入れる）。FGA/ReBAC エンジンをレトリーバーの
+背後に包むすべての人への再利用可能なテスト：**正しさを呼び出し者 ID から独立にチェックする**——presence キーの
+ゲートが open-fail する形（テーゼ 2、11-06）の一層上：ここゲートは*誰か*に対して開く、ただし*あなた*とは限らない。
+
+**Intel SA-01580 —— TDX 移行トラストドメイン（MigTD）が自身のプロトコルに 3 つの敗北**、各レコードは Intel の CNA
+による CVSS 4.0、各々「Ring 0: Hypervisor 内」の特権昇格：`CVE-2026-61887`（**9.4**）、「MigTD SPDM リバインド実装の
+認証に重要なステップが欠落」、非認証ユーザーのネットワーク敵対者に対して；`CVE-2026-44685`（**9.3**）、リバインド
+プロトコルでのなりすましによる認証バイパス；`CVE-2026-61473`（**9.2**）、キャプチャ・リプレイによる認証バイパス。
+読取時に NVD 分析なし（`Awaiting Analysis` / `Received` ×2）——数字は Intel 自身のもの。構造的要点：機密計算の
+セキュリティ物語はアテステーション handshake に依存し、これらはまさに**移行**経路のリバインド/認証ステップ——
+ライブ VM がどのホストへ移れるかを証明する瞬間は TCB の一部。
+
+**OpenSSL の 5 件**（すべて `Awaiting Analysis`、レコードにスコアなし）：group order が 1 の EC 証明書への CMS
+暗号化で `CMS_encrypt()` が無限ループ（`CVE-2026-107496`——CMS 暗号化を行うアプリは提供された受取人証明書から
+この DoS を継承する）；QUIC のペア——`CVE-2026-95691`、「再送された QUIC CRYPTO フレームがパケットストレージを
+解放でき、TLS レコード層はそのストレージへの直接ポインタを保持し続けて use after free を起こす」（悪意ある
+サーバーが OpenSSL QUIC *クライアント*の heap-UAF 読みを引き起こす）、`CVE-2026-88822`（自動ピア検出が「未初期化
+スタックデータを受信アドレスへ漏らし、それが送信パケットの宛先として使われる」）；AES-GCM-SIV のペア——ゼロ長
+AAD 更新がリセットとして扱われる（`CVE-2026-88823`）、短い IV による heap out-of-bounds 読み（`CVE-2026-95692`）。
+すべてのレコードが参照に直接の修正コミットを運び、ブランチのトリアージは機械的——レコード自身の散文が到達可能性
+を正確に述べている。
+
+→ [[vuln-supply]] [[disclosure-lag]]
+
+Sources: [Okta アドバイザリ: auth0-ai-js（CVE-2026-107372）](https://trust.okta.com/security-advisories/improper-access-control-in-auth0-ai-js-document-retrieval-cve-2026-107372) ·
+[NVD: CVE-2026-108167](https://nvd.nist.gov/vuln/detail/CVE-2026-108167) ·
+[Intel SA-01580](https://intel.com/content/www/us/en/security-center/advisory/intel-sa-01580.html) ·
+[NVD: CVE-2026-95691](https://nvd.nist.gov/vuln/detail/CVE-2026-95691)

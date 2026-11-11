@@ -1,0 +1,208 @@
+{
+ "generated": "2026-11-11T21:36:47.353Z",
+ "files": [
+  {
+   "file": "2026-11-12.md",
+   "items": 20,
+   "findings": [
+    {
+     "check": "cvss",
+     "item": 12,
+     "verdict": "ok",
+     "claim": "3.1 7.4",
+     "detail": "CVE-2026-120808 · Secondary/cna@mongodb.com · vector reproduces 7.4"
+    },
+    {
+     "check": "cvss",
+     "item": 12,
+     "verdict": "ok",
+     "claim": "4.0 9.1",
+     "detail": "CVE-2026-120808 · Secondary/cna@mongodb.com"
+    },
+    {
+     "check": "status",
+     "item": 12,
+     "verdict": "ok",
+     "claim": "CVE-2026-118383 `Awaiting Analysis`",
+     "detail": "Awaiting Analysis (lastModified 2026-11-10T22:08:59.707)"
+    },
+    {
+     "check": "status",
+     "item": 17,
+     "verdict": "ok",
+     "claim": "CVE-2026-107496 `Awaiting Analysis`",
+     "detail": "Awaiting Analysis (lastModified 2026-11-10T22:10:04.727)"
+    },
+    {
+     "check": "repo",
+     "item": 15,
+     "verdict": "ok",
+     "claim": "FrigadeHQ/yogurt",
+     "detail": "238★, last push 2026-11-11"
+    },
+    {
+     "check": "repo",
+     "item": 19,
+     "verdict": "ok",
+     "claim": "herdrdev/herdr",
+     "detail": "50278★, last push 2026-11-07"
+    },
+    {
+     "check": "repo",
+     "item": 20,
+     "verdict": "ok",
+     "claim": "addyosmani/agent-skills",
+     "detail": "115813★, last push 2026-11-01"
+    },
+    {
+     "check": "batch",
+     "item": 12,
+     "verdict": "batch-count-ok",
+     "claim": "26 records (source=cna@mongodb.com, 2026-11-10)",
+     "detail": "26 records from cna@mongodb.com published 2026-11-10 — the claim's own set, retrieved by its own cited id CVE-2026-118383"
+    },
+    {
+     "check": "quotation",
+     "item": 1,
+     "verdict": "ok",
+     "claim": "7 quotation(s)",
+     "detail": "verbatim in 3 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 2,
+     "verdict": "ok",
+     "claim": "4 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 3,
+     "verdict": "ok",
+     "claim": "3 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 4,
+     "verdict": "ok",
+     "claim": "5 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 5,
+     "verdict": "ok",
+     "claim": "5 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 6,
+     "verdict": "ok",
+     "claim": "4 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 7,
+     "verdict": "ok",
+     "claim": "2 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 8,
+     "verdict": "ok",
+     "claim": "3 quotation(s)",
+     "detail": "verbatim in 3 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 9,
+     "verdict": "ok",
+     "claim": "4 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 10,
+     "verdict": "ok",
+     "claim": "5 quotation(s)",
+     "detail": "verbatim in 3 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 11,
+     "verdict": "ok",
+     "claim": "6 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 13,
+     "verdict": "ok",
+     "claim": "1 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 14,
+     "verdict": "ok",
+     "claim": "3 quotation(s)",
+     "detail": "verbatim in 9 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 15,
+     "verdict": "ok",
+     "claim": "2 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 16,
+     "verdict": "ok",
+     "claim": "3 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 17,
+     "verdict": "ok",
+     "claim": "4 quotation(s)",
+     "detail": "verbatim in 12 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 18,
+     "verdict": "ok",
+     "claim": "1 quotation(s)",
+     "detail": "verbatim in 7 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 19,
+     "verdict": "ok",
+     "claim": "4 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 20,
+     "verdict": "ok",
+     "claim": "3 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    }
+   ]
+  }
+ ],
+ "status_watch": [],
+ "api_calls": 0,
+ "readme_calls": 0,
+ "cited_page_calls": 4,
+ "repo_page_calls": 0,
+ "nvd_calls": 1,
+ "nvd_failed_chunks": 0,
+ "cna_calls": 0
+}

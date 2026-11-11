@@ -1260,3 +1260,24 @@ Karpathy の STE 概要図が ASD-STE100 第 9 版に対して誤りを含むこ
 
 Sources: [Dodaios/ste80-humanizer](https://github.com/Dodaios/ste80-humanizer) ·
 [Show HN](https://news.ycombinator.com/item?id=50429144)
+
+## 2026-11-12 — addyosmani/agent-skills が 115k を超える：ライフサイクル集と `/build auto` の正直な自律境界
+
+`addyosmani/agent-skills` ——「AI コーディングエージェントのためのプロダクション級エンジニアリングスキル」——
+本日の日次ボード #5、**+788**、合計 **115,812★**。ライフサイクルに対応づけられた 9 つの slash コマンド——`/spec`、
+`/plan`、`/build`、`/test`、`/constraints`、`/review`、`/webperf`、`/code-simplify`、`/ship`——スキルは文脈で自動活性化
+する（「API を設計すると `api-and-interface-design` が発火」）。差別化の piece は **`/build auto`**：「プランを 1 回
+承認すれば、あとは自律的に走る……取り除くのはタスクの*間*に立つ人間であって検証ではない：すべてのタスクは依然
+テスト駆動で個別にコミットされ、失敗やリスクのあるステップで停止する」——1 回の長い無人ランではなく、タスクごとの
+検証ゲート付きバッチ実行、これは機能として宣言された自律境界（CompanyOS の「ゴールを done にできるのは verifier
+セッションだけ」11-08 と同じ本能、リポジトリ規模で）。Claude Code ではコマンドはプラグインコマンドとして
+インストールされ、組み込みと衝突する箇所は `/agent-skills:review` と名前空間化。115k 星において、プロセス・アズ・
+スキルは主流であり、このコレクションはこのファイルが追跡する最大のもの——現在 3 つの組織軸が並存する：
+**ライフサイクル**（agent-skills の 9 コマンド）、**オーディエンス**（mattpocock/skills のユーザー呼び出し vs モデル
+呼び出し）、**ベンダー面**（google/skills の 185 製品スキル）——スキルはライブラリ API ではなくエージェントが読む
+インターフェースなので、フォーマットには 3 すべての余裕がある。
+
+→ [[agent-stack]] [[agent-distribution]]
+
+Sources: [addyosmani/agent-skills](https://github.com/addyosmani/agent-skills) ·
+[AddyOsmani.com: Agent Skills](https://addyosmani.com/blog/agent-skills/)

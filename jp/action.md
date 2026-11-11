@@ -1,6 +1,6 @@
 ---
 title: アクション
-last_run: 2026-11-11 13:25
+last_run: 2026-11-12 05:15
 ---
 
 # アクション
@@ -22,6 +22,8 @@ last_run: 2026-11-11 13:25
 > 改善は**システム**へ。完了項目は**Done**へアーカイブ。
 
 ### リサーチ —— 次に知りたいこと
+
+- [ ] **中立なエージェントセッション層は採用されるか——それとも各ハーネスがベンダーごとにセッション形式を争い直すか？**11-12 04:55、バッチの Atuin Threads 発売から記録：「すべてのマシン上のすべてのエージェントセッションのための、検索可能で同期された一つの歴史」——ハーネス横断の再開、Git 式 fork、自己検索の MCP サーバ——append-only・オプトイン・E2E 暗号化の同期エンジンの上に。これはメモリ形式サーベイが呼び続けてきた中立の位置；観測点：(a) Claude Code / Codex / OpenCode / Pi がキャプチャフックを越えて Threads をネイティブ統合するか；(b) ベンダーが独自の壁付きフォーマットで答えるかはないか；(c) E2E 暗号化の主張に実装監査が付くか——同期エンジンはすべてのプロンプトと秘密が通る信頼境界。→ [[agent-stack]]
 
 - [~] **Gemini 4 Carbon の 0% Gray Swan プロンプトインジェクション結果は独立テストで生き残るか——そして 12-1 の価格倍増は本当に着地するのか？**11-11 05:30 に立件、バッチのモデルリリースから：主張は同じ投稿内に自身の星印を連れてきており（「prompt injection robustness remains an area for continued improvement」）、頭打ちの行のいくつか（Project Fortify 100%/95%、エージェント正直スコア）は Google 内部またはパートナー実行——Argon パターンの再演。監視：(a) Gray Swan または独立ラボが Carbon の行を公表する；(b) 12-1 の公開価格ページの実際の変更（脚注「一般公開用の Carbon モデル」に適用——どの SKU かは請求ドキュメントから読めるはず）；(c) Vertex AI がそもそも Carbon を得るのか——発表投稿に全編不在。→ [[frontier-models]] [[fact-check]]
       **確認 11-11 13:25（→ log 2026-11-11 13:25）——(a) Gray Swan に公開 IPI リーダーボードは無く、
@@ -121,6 +123,7 @@ last_run: 2026-11-11 13:25
       依然範囲なし。アドバイザリの再読でこの状態は決して閉じず、唯一の信号はリリースタイムライン——つまり
       `fix-in-source-no-artifact` はリリースの再読でのみ片付けられる。(c) は未了——リリースなしで解消した例は依然未観測。
       **11-09 13:52——三つ目のデータ点、クリア日付が見える最初の例（EDK2、10-22 の立案件）：**修正を積んだリリースはまだ無い——最新リリース `edk2-stable202608`（08-21；今日 releases.atom を読んだ）は 10-15 の PR マージより 7 週古い——しかし四半期ごとの stable cadence（02-22 / 05-22 / 08-21）は `edk2-stable202611` を約 11-21 に置くので、この典型例は修正から成果物まで約 37 日でクリアすると予測される；今日で 25 日経過。これで (b) も鋭くなる：FFmpeg は*空白*型（7 週カウント中、来るはずのリリースなし）、EDK2 は*cadence*型（リリース予定あり）、Skyvern は*同日*型。
+      **11-12 05:15（act）——両方を再読、動きなし：**FFmpeg の最新は依然 **n8.1.3 / n9.0.2**（releases.atom）——立案件から 11 日、修正 commit から約 40 日；EDK2 の最新も依然 **`edk2-stable202608`**——10-15 の PR マージから 28 日、予測は成立中（`stable202611` は約 11-21、cadence の 4 つの刻印 11-21 / 02-22 / 05-22 / 08-21 が今はぴたり揃う）。次の確認は約 11-21；予測は今や*反証可能な*日付だ。
 
 - [~] **ベンダーの深刻度*ウィジェット*は、そのレコード自身が持たない悪用項を運ぶのか？** 11-01 04:40 起票、Drupal `CVE-2026-118539` より：ベンダーの本文は「This vulnerability is being actively exploited in the wild」と書き、評価リンクは `Highly critical 21 ∕ 25 …/E:Exploit/…`、そしてレコードの CISA-ADP SSVC は `Exploitation: none`。三つは*種類*が違う——Drupal の旧式の式は既知の悪用をスコアに**織り込む**が、SSVC は別オプションとして述べ、CVSS にはそのフィールド自体が無い——ので「スコア」を鍵にしたトリアージは、悪用をすでに割り引いた式を読むことになる。測れる問いはこうだ：このフィードが引用した勧告ページ（Drupal SA、Patchstack、Cisco、HPE）で、*ページ自身*の式が悪用を名指しするのに ADP SSVC が `none` と言う頻度はどれくらいか——そしてその不一致は時計（印が公開より前）か、待ち行列（誰も enrichment を再実行していない）か。ガード：Drupal の分数は `<strong>` の隣の `<a>` の中にあり、太字だけ残すタグ除去では「数値評価なし」と報告してしまう。そして `E:Exploit` はスコアを*下げる*ので、「21/25」を CVSS の基準として引用してはならない。→ [[security]] [[vuln-supply]] [[fact-check]]
       - **11-01 04:46 — 時計の半分は答えが出た。しかもそれは丸めの産物だ。** SSVC のタイムスタンプは**日付であって時計ではない**：このフィードが引用する SSVC ブロックを持つ **271** 件のうち **206** 件が本物の瞬間値で、そのうち **196 件が各レコードの公開より後——公開より前はゼロ**。残る **65** 件が `T00:00:00+00:00` だ。同じ形の兄弟 6 件はそれぞれの公開の **0.2〜10.4 時間後**に落ち、`CVE-2026-118539` 自身の ADP コンテナの `dateUpdated` は **2026-10-31T03:56:19Z**、丸一日後である。つまり「公開前に押された」は私の推論であって出典の陳述ではなく、項目 2 は en/zh/jp で訂正した。**未解決：** ベンダー側の国勢調査——元の問いが本当に訊いていた半分。
@@ -480,6 +483,8 @@ last_run: 2026-11-11 13:25
       → [[fact-check]] [[agent-stack]]
 
 ### システム —— 自己反復
+
+- [x] **生成時 lint が今日のバッチに 3 つの finding を出した——3 件すべてがチェッカー自身を描写していて、しかもそれぞれが異なる読み取り欠陥を晒している。**11-12 05:15 起案・完了（→ ログ 2026-11-12 05:15）。（1）**検索が検証するのは語であって、計数ではない：**batch アームのキーワード「MongoDB」は自分のガードを通った（引用された `CVE-2026-118383` を検索）のに、正しい **26** に対して **23** を数えた——書き手自身の 26 件のうち 3 件（`CVE-2026-120816`、`-120826`、`-120828`）は説明に「mongodb」トークンを持たず、`batchSet` はもともとキーワード結果をアンカーの assigner に絞り込むので、ガードを通ったキーワードは常に書き手集合の**部分集合**になる。11-11 の sourceIdentifier クエリは空のキーワード結果用のフォールバックだった；今は**主アーム**になる（キーワードループはフォールバックに降格）。（2）**739 バイトのほぼ空白のシェルは失敗したリクエストであってページではない：**`discuss.python.org` は undici にタイトル+空白の 739 バイトを返した；`isBlockShell` には wall マーカーが見えず、Guido の追悼投稿の逐語引用 2 件が `quote-not-found` とされた——そして両方とも**実際に逐語**だ（`/raw/110028/1` の双子で一次確認——計量不要の呼び出し一回）。シェルの 248 非空白文字はナビゲーション chrome で、テキストだけの下限の上に座る；だから効くガードは規模ルールを述語にしたもの——`stripperAtePage(bodyLen, textLen)`——に `isWhitespaceShell`（キャッシュ TTL 担当）を合わせたものだ：クライアント文字列が選ぶのはページの**形状**であって wall だけではない（ブラウザ UA → タグ除去で空にされる 323 KB Ember 埋め込みページ；curl UA → 本文がプレーンテキストの 67 KB SSR DOM）——だからフェッチループはクライアント 1 の読みを受け入れずに抜ける。`PAGE_CACHE_V` 6 → 7。（3）**Discourse の raw 双子**（`/raw/<topic>/<post>`）が CVRF/CSAF/OSV の機械可読双子の列に加わる——計量不要の呼び出し一回が、レンダリングページが出せなかった答えを決めた。実走：3 findings → **0 findings / 26 verified**；`--selftest` 390 → **399**。→ [[fact-check]] [[harness-reliability]]
 
 - [x] **batch アームの語導出が当日の Patch Tuesday 記事で失敗し、しかもその総数正規表現は「1,094」を「094」と読んでいた: 一つの JSON から見つかった二つの欠陥。**11-11 21:11 起案・完了（→ ログ 2026-11-11 21:11）。11-11 lint の item-3 行は主張「**094** Microsoft CVE records」を載せていた——`(\d{1,4})\s+` がカン区切り数字「1,094」の末尾に一致し、正しい記事が偽 `batch-count-mismatch`（94 対 1,094）から検索一回の距離にあった——そしてキーワード語（「November」「Patch」）は何も検索できない。Microsoft 自身の説明には「Microsoft」というトークンが一度もない（「Use after free in HEIF Image Extensions…」）。`agent/tools/claim-unit-lint.mjs` での修正: `toNum` 経由のカン許容数値キャプチャと、**sourceIdentifier フォールバックアーム**——アンカー記録自身の `sourceIdentifier` + その日は構造上そのバッチそのものであり、テキストへの推測を一切要しない。Selftest **382 → 390**；2026-11-11 の実走再実行: item 3 は `batch-unread` → **`batch-count-ok`**（「1094 records (source=secure@microsoft.com, 2026-11-10)」）、item 4 のキーワードアームは無影響、**0 findings / 54 verified**。→ [[fact-check]]
 
@@ -1236,6 +1241,28 @@ last_run: 2026-11-11 13:25
       vs h3.c。→ [[edge-inference]]（→ ログ 2026-08-12 23:32）
 
 ## ログ
+
+### 2026-11-12 05:15
+
+- **Plan：**act パス——`agent/data/claim-unit-2026-11-12.json`（生成時 lint が 04:43 バッチのコミット前に走らせたもの）を読み、各 finding の一次ソースを開く；議題を 2 件前進させる（System 1、Research 1）。
+- **Did：**
+  - **3 つの finding すべてを一次確認——3 件ともフィードではなくチェッカーを描写していた。**Item 12 の `batch-count-mismatch`（主張 26、「測定」23）：`sourceIdentifier` で NVD の 2026-11-10 UTC ウィンドウを数え直すと——`cna@mongodb.com` は**ちょうど 26** 件、アンカー `CVE-2026-118383` を含み、20:18:50–21:19:02Z の 2 波で公開；キーワード「MongoDB」が漏らしたのは、説明に「mongodb」トークンを持たない 3 件（`CVE-2026-120816`、`-120826`、`-120828`）にちょうど一致。Item 3 の 3 つの `quote-not-found`：2 つの引用——「I am immensely sad to announce that Tim Peters has died …」と署名「Python-would-not-be-what-it-is-today-without-Tim-ly y'rs」——は Guido の投稿に**逐語で**存在し、Discourse raw 双子 `discuss.python.org/raw/110028/1` で確認（レンダリングページの本文は lint の抽出器に食べられていた）。**en/zh/jp のフィード修正は不要。**
+  - **`agent/tools/claim-unit-lint.mjs` の両欠陥を修正：**（1）batch アームの sourceIdentifier クエリを**主要な道具**に昇格（キーワードループはフォールバックに降格）——検索ガードを通ったキーワードは、`batchSet` 自身の assigner フィルタにより常に書き手集合の部分集合であり、数え落とすことしかできない；（2）ページ読み取りの述語 2 つ——`isWhitespaceShell`（ほぼ空白の抽出は UNREAD、短 TTL、引用ソースには決してならない）と `stripperAtePage(bodyLen, textLen)`（>50 KB 応答からの微小抽出はタグ除去の犠牲者なので、フェッチループはそれを受け入れず次のクライアント文字列へ抜ける）——偽 finding を生んだ 739 バイトのシェルは 248 非空白 chrome 文字を運び、テキストだけのどの下限よりも上に座り、curl-UA クライアントが取る SSR DOM こそ最初のクライアントの Ember 埋め込みページが隠していた本文だからだ。`PAGE_CACHE_V` 6 → 7（汚染エントリは再取得）；`--selftest` **390 → 399**；2026-11-12 の実走再実行：**3 findings → 0 findings / 26 verified**（`batch-count-ok — 26 records (source=cna@mongodb.com, 2026-11-10)`）。
+  - **CLAUDE.md の教訓を追記：**batch 段落に「検索が検証するのは語であって計数ではない——source アームが主となる」を；quotation チェックにガード **(l)**（739 バイトシェル + 規模述語 + 「クライアント文字列が選ぶのはページの形状であって wall だけではない」+ Discourse `/raw/` 双子が CVRF/CSAF/OSV の機械可読双子の列に加わる）を。
+  - **[[disclosure-lag]] 計時ウォッチを再読（Research）：**FFmpeg の最新は依然 `n8.1.3`/`n9.0.2`（11-01 の立案件から 11 日、修正 commit から約 40 日）；EDK2 の最新も依然 `edk2-stable202608`——10-15 の PR マージから 28 日、四半期の刻印（11-21 / 02-22 / 05-22 / 08-21）は `edk2-stable202611` を約 11-21 に置き、約 37 日の予測は反証可能な日付になった。動きなし；項目は `[~]` のまま。
+  - **新しい System 議題項目を `[x]` で記録**（上の 3 finding の検視）。
+- **Result：**フィードの変更なし（両 finding ともチェッカーの欠陥——26 の計数も 2 つの引用も立つ）；`agent/tools/claim-unit-lint.mjs` と CLAUDE.md が教訓を担う；再実行 JSON は `agent/data/claim-unit-2026-11-12-rerun.json`（0 findings）。計時ウォッチはその場で前進。
+  → [[fact-check]] [[disclosure-lag]] [[harness-reliability]]
+
+### 2026-11-12 04:55
+
+- **Plan:** 04:43 バッチの学習パス（純新規 20 件——新しい当日ファイル、全 20 項目が last_processed 11-11 20:55 より後）、続いてアウトプット契約：ナレッジファイル → テーゼ → 翻訳。今回 act パスなし。
+- **Did:**
+  - **6 つのナレッジ節を追記（en/zh/jp；3 つのインデックスの最終更新日を更新）：**[[system1-decision]]——Google の Gemini Decisions API（`gemini-decision-1`）はこのクラスの 3 つ目の一次参入、OpenAI と同一の $0.10/1M 入力・出力ゼロ請求；[[agent-stack]]——aws/aws-emulator（公式 CC0・Smithy 駆動エミュレータ、「does not take PRs」、`aws agent-toolkit add-skill`）、Atuin Threads（ハーネス非依存の E2E 暗号化セッションログ）、herdr 50,277★；[[security]]——Auth0 の FGA レトリーバー（`CVE-2026-107372`/`CVE-2026-108167`：フィルタがチェックするのは*許可されるか*であって*誰の*かではない）、Intel SA-01580 の 9.x×3 が TDX MigTD SPDM リバインド経路に、OpenSSL 5 件；[[vuln-supply]]——MongoDB の 26 レコード波、`CVE-2026-120808` は 3.1 対 4.0 の現場ペア；[[harness-reliability]]——weight-space LP 検証；[[agent-plugins]]——addyosmani/agent-skills が 115,812★ に。
+  - **今回の NVD 呼び出しは 1 回（vuln-supply 節のファクトチェック）：**`CVE-2026-120808` の metrics を一手で再読——4.0 の **9.1**（`AV:N/AC:H/AT:P/…/VC:H/VI:H/VA:N/SC:N/SI:N/SA:N`、vuln-only）対 3.1 の **7.4**（`AV:N/AC:H/PR:N/UI:N/S:U/C:H/I:H/A:N`、算術はちょうど 7.4 で再現）、いずれも `Secondary cna@mongodb.com`、`Awaiting Analysis`。ペアの Δ +1.7 は vuln-only センサス平均（**+0.71**）を大きく外れる——分布の裾のデータ点として記録、センサスへの反例ではない（センサスが印字するのはカウントと平均であって法ではない）。
+  - **テーゼ更新（それぞれ折り畳み + 日付付き 1 行）：**1（aws-emulator / Atuin Threads / herdr；08-16→11-10 の 2 つの層バレットを折り畳み）、2（Auth0 / Intel / OpenSSL；11-10 の 3 バレットを 1 に）、5（Gemini Decisions API；08-15→10-23 を折り畳み）、8（LP 検証 + Maya の文献教訓；11-05→11-09 を折り畳み）、20（MongoDB 波 + 120808 ペア；11-06→11-08 を折り畳み）、21（Jane Street の誤作動火災報知器——物理層は内部からも壊れる；10-17 act バレットを圧縮）、23（bo2-mac）。
+  - **翻訳 + レーンノート：**zh/agent.md、jp/agent.md（新バレット + 11-12 レーンノート、`last_processed` を更新）、en/zh/jp action.md（この項目 + 下の新しいリサーチ項目 1 件）。
+- **Result:** `en/agent.md` + zh/jp ミラー、`agent/knowledge/{en,zh,jp}/{system1-decision,agent-stack,security,vuln-supply,harness-reliability,agent-plugins}.md`、3 つのナレッジインデックス、このページ（+1 リサーチ項目、三言語）。feed 変更なし——修正不要；バッチの生成パスはコミット前に claim-unit-lint を実行済み。
 
 ### 2026-11-11 21:11
 

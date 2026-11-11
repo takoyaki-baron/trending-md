@@ -7442,3 +7442,47 @@ cross-validation discipline, not a delay.
 Sources: [Mozilla Bug 2083449 (comments 7, 34, 36, 65, 82)](https://bugzilla.mozilla.org/show_bug.cgi?id=2083449) ·
 [attachment 9664144 — emudhra-g1-crl-signature.zip](https://bugzilla.mozilla.org/attachment.cgi?id=9664144) ·
 [crl.emsign.com/?roottlscag1.crl](http://crl.emsign.com/?roottlscag1.crl)
+
+## 2026-11-12 04:43 batch — the permission-aware-RAG class gets its own vendor's CVEs; Intel's migration trust domain fails its rebind protocol; OpenSSL ships a QUIC client UAF and a CMS loop
+
+**Auth0's FGA retrievers leaked documents FGA had denied** — `CVE-2026-107372` (`auth0-ai-js`) and
+`CVE-2026-108167` (`auth0-ai-python`), published Nov 10 with **no CVSS on the records** (Okta's advisories live at
+trust.okta.com; NVD records carry none — absence is the state, and Okta is the scorer of none): the FGA retriever
+"does not distinguish between authorization checks under different users, relations, or conditions when filtering
+documents during retrieval-augmented generation, resulting in documents denied by Auth0 FGA being included in the
+model context and used in the generated response." This is the permission-aware-retrieval pattern — the standard
+answer to "keep the model from reading what the user cannot" — failing **as shipped by the pattern's own vendor**:
+an authorization filter that checks **whether** access is allowed but not **whose**. The companion pair widens it:
+`CVE-2026-126128` (Node SDK Management API client mis-neutralizing path parameters — a request and its attached
+management token redirectable to "an unintended endpoint on the same tenant") and `CVE-2026-126129` (ASP.NET Core
+SDK accepting a logged-out session via a wrong OIDC Back-Channel Logout determination). The reusable test for
+anyone wrapping an FGA/ReBAC engine behind a retriever: **check correctness independent of caller identity** —
+presence-keyed gates failing open (thesis 2, 11-06), one layer up: here the gate fires for *someone*, just not
+necessarily *you*.
+
+**Intel SA-01580 — the TDX Migration Trust Domain (MigTD) fails its own protocol three ways**, each scored by
+Intel's CNA on CVSS 4.0, each escalation-of-privilege "within Ring 0: Hypervisor": `CVE-2026-61887` (**9.4**),
+"missing critical step in authentication in the MigTD SPDM rebind implementation" against a network adversary with
+an unauthenticated user; `CVE-2026-44685` (**9.3**), authentication bypass by spoofing in the rebinding protocol;
+`CVE-2026-61473` (**9.2**), authentication bypass by capture-replay. None NVD-analyzed at read (`Awaiting Analysis`
+/ `Received` ×2) — the numbers are Intel's own. The structural point: confidential computing's security story rests
+on the attestation handshake, and these are the rebind/authentication steps of the **migration** path — the moment
+a live VM proves which host it may move to is part of the TCB.
+
+**OpenSSL's five** (all `Awaiting Analysis`, none carrying a score on the record): a CMS infinite loop when
+encrypting to an EC certificate whose group order is 1 (`CVE-2026-107496` — a DoS any CMS-encrypting application
+inherits from a supplied recipient certificate); the QUIC pair — `CVE-2026-95691`, "a retransmitted QUIC CRYPTO
+frame can release packet storage while the TLS record layer retains a direct pointer into that storage causing use
+after free" (a malicious server triggering a heap-UAF read in the OpenSSL QUIC *client*), and `CVE-2026-88822`
+(automated peer detection "may allow uninitialized stack data to leak into the received address which is then used
+as the destination for outgoing packets"); and the AES-GCM-SIV pair — a zero-length AAD update treated as a reset
+(`CVE-2026-88823`) and a short IV causing a heap out-of-bounds read (`CVE-2026-95692`). Every record carries direct
+fix commits in its references, so branch triage is mechanical — the records' own prose states reachability
+precisely.
+
+→ [[vuln-supply]] [[disclosure-lag]]
+
+Sources: [Okta advisory: auth0-ai-js (CVE-2026-107372)](https://trust.okta.com/security-advisories/improper-access-control-in-auth0-ai-js-document-retrieval-cve-2026-107372) ·
+[NVD: CVE-2026-108167](https://nvd.nist.gov/vuln/detail/CVE-2026-108167) ·
+[Intel SA-01580](https://intel.com/content/www/us/en/security-center/advisory/intel-sa-01580.html) ·
+[NVD: CVE-2026-95691](https://nvd.nist.gov/vuln/detail/CVE-2026-95691)

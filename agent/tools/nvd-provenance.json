@@ -2673,6 +2673,86 @@
    "id": "CVE-2026-121287",
    "why": "2026-11-11 — Arista's 26-record drop: BGP crash at 9.8 — and C-260/C-250 access points shipping fleet-wide static firmware keys",
    "seeded": "2026-11-11 [Received] 3.1 Secondary/psirt@arista.com 8.8, 4.0 Secondary/psirt@arista.com 7.7, CWE-124, published 11-10"
+  },
+  {
+   "id": "CVE-2026-118383",
+   "why": "2026-11-12 — MongoDB drops 26 CVE records in one wave — a 9.0 replication UAF, and a macOS TLS bypass whose 4.0 score is 1.7 points higher than its 3.1",
+   "seeded": "2026-11-11 [Awaiting Analysis] 3.1 Secondary/cna@mongodb.com 9, 4.0 Secondary/cna@mongodb.com 9.5, CWE-416, published 11-10"
+  },
+  {
+   "id": "CVE-2026-120824",
+   "why": "2026-11-12 — MongoDB drops 26 CVE records in one wave — a 9.0 replication UAF, and a macOS TLS bypass whose 4.0 score is 1.7 points higher than its 3.1",
+   "seeded": "2026-11-11 [Awaiting Analysis] 3.1 Secondary/cna@mongodb.com 8.8, 4.0 Secondary/cna@mongodb.com 8.7, CWE-416, published 11-10"
+  },
+  {
+   "id": "CVE-2026-120815",
+   "why": "2026-11-12 — MongoDB drops 26 CVE records in one wave — a 9.0 replication UAF, and a macOS TLS bypass whose 4.0 score is 1.7 points higher than its 3.1",
+   "seeded": "2026-11-11 [Awaiting Analysis] 3.1 Secondary/cna@mongodb.com 8.4, 4.0 Secondary/cna@mongodb.com 8.6, CWE-863, published 11-10"
+  },
+  {
+   "id": "CVE-2026-120808",
+   "why": "2026-11-12 — MongoDB drops 26 CVE records in one wave — a 9.0 replication UAF, and a macOS TLS bypass whose 4.0 score is 1.7 points higher than its 3.1",
+   "seeded": "2026-11-11 [Awaiting Analysis] 3.1 Secondary/cna@mongodb.com 7.4, 4.0 Secondary/cna@mongodb.com 9.1, CWE-295, published 11-10"
+  },
+  {
+   "id": "CVE-2026-107372",
+   "why": "2026-11-12 — Auth0's own RAG retrievers leaked documents FGA had denied — two SDK CVEs hit the permission-aware-AI pattern",
+   "seeded": "2026-11-11 [Awaiting Analysis] no CVSS published, CWE-863, published 11-10"
+  },
+  {
+   "id": "CVE-2026-108167",
+   "why": "2026-11-12 — Auth0's own RAG retrievers leaked documents FGA had denied — two SDK CVEs hit the permission-aware-AI pattern",
+   "seeded": "2026-11-11 [Awaiting Analysis] no CVSS published, CWE-863, published 11-10"
+  },
+  {
+   "id": "CVE-2026-126128",
+   "why": "2026-11-12 — Auth0's own RAG retrievers leaked documents FGA had denied — two SDK CVEs hit the permission-aware-AI pattern",
+   "seeded": "2026-11-11 [Awaiting Analysis] no CVSS published, CWE-22/CWE-706, published 11-10"
+  },
+  {
+   "id": "CVE-2026-126129",
+   "why": "2026-11-12 — Auth0's own RAG retrievers leaked documents FGA had denied — two SDK CVEs hit the permission-aware-AI pattern",
+   "seeded": "2026-11-11 [Received] no CVSS published, CWE-1254/CWE-287/CWE-807, published 11-10"
+  },
+  {
+   "id": "CVE-2026-107496",
+   "why": "2026-11-12 — OpenSSL publishes five CVE records — two QUIC memory bugs, a CMS infinite loop, and an AES-GCM-SIV pair",
+   "seeded": "2026-11-11 [Awaiting Analysis] no CVSS published, CWE-835, published 11-10"
+  },
+  {
+   "id": "CVE-2026-88822",
+   "why": "2026-11-12 — OpenSSL publishes five CVE records — two QUIC memory bugs, a CMS infinite loop, and an AES-GCM-SIV pair",
+   "seeded": "2026-11-11 [Awaiting Analysis] no CVSS published, CWE-457, published 11-10"
+  },
+  {
+   "id": "CVE-2026-95691",
+   "why": "2026-11-12 — OpenSSL publishes five CVE records — two QUIC memory bugs, a CMS infinite loop, and an AES-GCM-SIV pair",
+   "seeded": "2026-11-11 [Awaiting Analysis] no CVSS published, CWE-416, published 11-10"
+  },
+  {
+   "id": "CVE-2026-88823",
+   "why": "2026-11-12 — OpenSSL publishes five CVE records — two QUIC memory bugs, a CMS infinite loop, and an AES-GCM-SIV pair",
+   "seeded": "2026-11-11 [Awaiting Analysis] no CVSS published, CWE-325, published 11-10"
+  },
+  {
+   "id": "CVE-2026-95692",
+   "why": "2026-11-12 — OpenSSL publishes five CVE records — two QUIC memory bugs, a CMS infinite loop, and an AES-GCM-SIV pair",
+   "seeded": "2026-11-11 [Awaiting Analysis] no CVSS published, CWE-125, published 11-10"
+  },
+  {
+   "id": "CVE-2026-61887",
+   "why": "2026-11-12 — Intel's TDX migration trust domain fails its own protocol three ways — three 9.x records in one advisory",
+   "seeded": "2026-11-11 [Received] 4.0 Secondary/secure@intel.com 9.4, CWE-304, published 11-10"
+  },
+  {
+   "id": "CVE-2026-44685",
+   "why": "2026-11-12 — Intel's TDX migration trust domain fails its own protocol three ways — three 9.x records in one advisory",
+   "seeded": "2026-11-11 [Awaiting Analysis] 4.0 Secondary/secure@intel.com 9.3, CWE-290, published 11-10"
+  },
+  {
+   "id": "CVE-2026-61473",
+   "why": "2026-11-12 — Intel's TDX migration trust domain fails its own protocol three ways — three 9.x records in one advisory",
+   "seeded": "2026-11-11 [Received] 4.0 Secondary/secure@intel.com 9.2, CWE-294, published 11-10"
   }
  ]
 }

@@ -2306,3 +2306,37 @@ Sources: [NVIDIA/auto-ontology](https://github.com/NVIDIA/auto-ontology) ·
 
 Sources: [gmkurtzer/ginux](https://github.com/gmkurtzer/ginux) ·
 [HN discussion](https://news.ycombinator.com/item?id=50450007)
+
+## 2026-11-12 04:43 — AWS 以 agent 优先认领本地仿真层；Atuin Threads 把 agent 会话变成同步的加密日志；herdr 与 agent-skills 跨过 50k/115k
+
+**`aws/aws-emulator`** —— Amazon 把「AWS API 的本地仿真器」放进官方 org，HN 帖子两小时破 300 分：一个 Rust Cargo
+workspace，**一个 service 一个 crate**，由与 AWS 线上协议相同的 **Smithy 模型**驱动；在自签证书后的
+`127.0.0.1:9297` 上服务 HTTPS；**嵌入式模式**为每个测试运行一个隔离的进程内实例。三个值得细读的政策细节：
+**CC0** 许可、每个 release 公布保真度分数；**「This repository does not take PRs」**；以及 agent 钩子——
+`aws agent-toolkit add-skill` 把它安装成编码 agent 的技能——连同 Werner Vogels 同日谈「当 agent 写代码时工程意味
+着什么」的文章，读作 Amazon 在**以 agent 优先**建设本地仿真：一个第三方类别（LocalStack 等，已十年）成为官方
+默认值，而安装器就是技能渠道。
+
+**Atuin Threads**（随 18.24+ 发布）——「每一台机器上、每一个 agent 会话，一份可搜索的同步历史」：跨 harness 恢复
+（「在 Claude Code 开始一个任务，在另一台机器上于 Codex 中继续」），像「Git 分支」一样 fork 会话，以及一个 MCP
+服务器（`atuin mcp install claude/codex/pi/opencode`）让 agent 自己搜索既往会话以找回意图与被放弃的工作。架构上
+复用现有同步引擎——「它是通用的，能同步任何可建模为 append-only 日志的东西」——捕获**可选**、同步**端到端加密**。
+agent 会话是工具链里最难移植的工件（困在每个 harness、每台机器里；至今每家的答案都是自己的围墙格式），这正是
+记忆格式综述一直在呼唤的中立、跨 harness 会话层——Skillsync/txcript（会话导出）、git-ai（Scion 设计的自托管版）、
+LayerFS（共享 COW 历史上的工作区）各解了一块。开放问题：harness 厂商是采纳它，还是逐厂商重吵会话格式？
+
+**herdr**（**50,277★**，周 +2,196——带日期的更新）现在把需求说得明明白白：一个后台服务器让 agent 终端在客户端
+断开与 SSH 掉线后存活，机器重启后恢复保存的布局，并把**每一个面板标记为 working / blocked / idle**；agent 经
+CLI + socket API 驱动它来「生成面板、互相提示、等待另一个 agent 真正被阻塞」，并且运行你已在用的 harness 而非
+替换它们。它自己的边界注记与 Threads 配对：「原始进程不能在重启后存活」——herdr 是**终端持久性**，Threads 是
+**会话持久性**，多 agent 栈两者都要。单个 Rust 二进制，Apache-2.0，tmux 风格前缀键，插件走 marketplace。
+**`addyosmani/agent-skills`** 跨过 **115,812★**（日榜第 5，+788）——细节 → [[agent-plugins]]。
+
+→ [[agent-plugins]] [[system1-decision]] [[dev-tools]]
+
+Sources: [aws/aws-emulator](https://github.com/aws/aws-emulator) ·
+[Vogels：AWS Emulator 与工程师的工作](https://www.allthingsdistributed.com/2026/11/aws-emulator-and-the-engineers-job-when-agents-write-the-code.html) ·
+[Atuin：Threads — agent 会话](https://blog.atuin.sh/threads-agent-sessions/) ·
+[herdrdev/herdr](https://github.com/herdrdev/herdr) ·
+[HN：aws-emulator](https://news.ycombinator.com/item?id=50456631) ·
+[HN：Atuin Threads](https://news.ycombinator.com/item?id=50453637)

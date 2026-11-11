@@ -1123,3 +1123,21 @@ STE 禁止把 check/test 作动词、直接禁用 may/should；该技能保留�
 
 Sources: [Dodaios/ste80-humanizer](https://github.com/Dodaios/ste80-humanizer) ·
 [Show HN](https://news.ycombinator.com/item?id=50429144)
+
+## 2026-11-12 — addyosmani/agent-skills 跨过 115k：生命周期集，以及 `/build auto` 里一个诚实的自治边界
+
+`addyosmani/agent-skills`——「为 AI 编码 agent 准备的生产级工程技能」——今天日榜第 5，**+788**，总计
+**115,812★**。九个 slash 命令映射到一个生命周期——`/spec`、`/plan`、`/build`、`/test`、`/constraints`、`/review`、
+`/webperf`、`/code-simplify`、`/ship`——技能按上下文自动激活（「设计 API 触发 `api-and-interface-design`」）。
+差异化的 piece 是 **`/build auto`**：「你批准计划一次，然后它自主运行……它移除的是站在任务*之间*的人，而不是
+验证：每个任务仍然测试驱动、单独提交，并在失败或高风险步骤上暂停」——带逐任务验证门的批处理执行，而非一次
+长时间无人值守运行，这是被当作特性陈述出来的自治边界（对照 CompanyOS 的「只有 verifier 会话能把目标标记为
+完成」，11-08——同一本能，在仓库尺度）。在 Claude Code 中这些命令作为插件命令安装，内置命令冲突处命名空间为
+`/agent-skills:review`。在 115k 星处，流程即技能已是主流，且该集是本文件追踪的最大者——现在三种组织轴并存：
+**生命周期**（agent-skills 的九个命令）、**受众**（mattpocock/skills 的用户调用 vs 模型调用之分）、**厂商面**
+（google/skills 的 185 个产品技能）——格式容得下三者，因为技能是 agent 读取的接口，不是库 API。
+
+→ [[agent-stack]] [[agent-distribution]]
+
+Sources: [addyosmani/agent-skills](https://github.com/addyosmani/agent-skills) ·
+[AddyOsmani.com：Agent Skills](https://addyosmani.com/blog/agent-skills/)

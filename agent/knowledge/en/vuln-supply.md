@@ -1945,3 +1945,30 @@ Sources: [VulnCheck: Glasswing November update](https://www.vulncheck.com/blog/a
 Sources: [APSB26-191](https://www.adobe.com/trust/security/products/connect/apsb26-191.html) ·
 [NVD: CVE-2026-126187](https://nvd.nist.gov/vuln/detail/CVE-2026-126187) ·
 [Chrome Releases](https://chromereleases.googleblog.com/2026/11/stable-channel-update-for-desktop_018223192.html)
+
+## 2026-11-12 04:43 batch — MongoDB drops 26 records in one wave, all CNA-scored and analysis-free; one record is a live 3.1-vs-4.0 pair whose direction sits outside the census means
+
+MongoDB's CNA published **26 records** under `cna@mongodb.com` on NVD on Nov 10 (counted by source, not keyword —
+every score its own), all still `Awaiting Analysis`. Top of the table: `CVE-2026-118383`, a **9.0** use-after-free
+in replication (network vector, `S:C` scope change); `CVE-2026-120824`, an **8.8** UAF in time-series collections
+(`PR:L`); `CVE-2026-120815`, an **8.4** incorrect-authorization in the authorization subsystem. The rest is a UAF
+family across the engine — SBE window-function accumulators, plan cache, server-side JavaScript, aggregation
+framework — plus Kerberos/SSPI and X.509 cluster-membership guards. Every record links a `jira.mongodb.org` ticket,
+so affected-version questions are answerable one hop from the record.
+
+The seminar record is `CVE-2026-120808`: the macOS TLS client bypassing chain-of-trust validation for IPv6 peers
+under the Apple SecureTransport backend carries **7.4 on CVSS 3.1 and 9.1 on CVSS 4.0 from the same CNA** (both
+`Secondary`, record `Awaiting Analysis`; vectors re-read first-hand this pass). The 3.1 side is
+`AV:N/AC:H/PR:N/UI:N/S:U/C:H/I:H/A:N` — the arithmetic reproduces at exactly 7.4 — and the 4.0 side is
+`AV:N/AC:H/AT:P/…/VC:H/VI:H/VA:N/SC:N/SI:N/SA:N`, i.e. **vuln-only on both sides**: the impact never leaves the
+vulnerable system in either framework. Yet Δ = 4.0 − 3.1 here is **+1.7**, far outside the 521-pair census mean for
+vuln-only pairs (**+0.71**) — a tail-of-the-distribution datapoint, which is exactly why the band table prints
+counts and means rather than a law (the visible structural difference: v4.0 splits exploitability across `AC:H` +
+`AT:P` and weights vuln-system impact on its own scale). The only safe sentence remains the feed's: quote each score
+with its version, and read the two numbers as one bug through two frameworks' scope conventions — not a
+disagreement, and not a stopping-point artifact (no Threat metric on either vector).
+
+→ [[security]] [[cvss-stopping-points]] [[disclosure-lag]]
+
+Sources: [NVD: CVE-2026-118383](https://nvd.nist.gov/vuln/detail/CVE-2026-118383) ·
+[NVD: CVE-2026-120808](https://nvd.nist.gov/vuln/detail/CVE-2026-120808)

@@ -1320,3 +1320,25 @@ Sources: [VulnCheck: Glasswing November update](https://www.vulncheck.com/blog/a
 Sources: [APSB26-191](https://www.adobe.com/trust/security/products/connect/apsb26-191.html) ·
 [NVD: CVE-2026-126187](https://nvd.nist.gov/vuln/detail/CVE-2026-126187) ·
 [Chrome Releases](https://chromereleases.googleblog.com/2026/11/stable-channel-update-for-desktop_018223192.html)
+
+## 2026-11-12 04:43 批次 — MongoDB 一波投下 26 条记录，全部 CNA 打分、零分析；其中一条是方向落在普查均值之外的 3.1-vs-4.0 现场对
+
+MongoDB 的 CNA 在 11 月 10 日于 NVD 一次发布 **26 条记录**（按来源计数、非关键词——每条分数各有其主），全部仍是
+`Awaiting Analysis`。表顶：`CVE-2026-118383`，复制的释放后使用 **9.0**（网络向量，`S:C` 范围变更）；
+`CVE-2026-120824`，时序集合 UAF **8.8**（`PR:L`）；`CVE-2026-120815`，授权子系统的错误授权 **8.4**。其余是引擎内
+的一个 UAF 家族——SBE 窗口函数累加器、计划缓存、服务端 JavaScript、聚合框架——外加 Kerberos/SSPI 与 X.509 集群
+成员资格守卫。每条记录都链接一个 `jira.mongodb.org` 工单，受影响版本问题从记录一跳即达。
+
+研讨课记录是 `CVE-2026-120808`：macOS TLS 客户端在 Apple SecureTransport 后端下对 IPv6 对端绕过证书链信任验证，
+**同一 CNA 给出 CVSS 3.1 的 7.4 与 CVSS 4.0 的 9.1**（均为 `Secondary`，记录 `Awaiting Analysis`；向量本轮一手重读）。
+3.1 侧是 `AV:N/AC:H/PR:N/UI:N/S:U/C:H/I:H/A:N`——算术精确复现为 7.4；4.0 侧是
+`AV:N/AC:H/AT:P/…/VC:H/VI:H/VA:N/SC:N/SI:N/SA:N`，即**两侧都是 vuln-only**：两个框架里影响都未离开易受攻击系统。
+但此处 Δ = 4.0 − 3.1 为 **+1.7**，远在 521 对普查的 vuln-only 均值（**+0.71**）之外——一条分布尾部的数据点，这正是
+频带表印计数与均值而不印定律的原因（可见的结构差异：v4.0 把可利用性拆成 `AC:H` + `AT:P`，并按自己的尺度为易受
+攻击系统的影响加权）。唯一安全的句子仍是 feed 写下的那句：每个分数带上它的版本引用，把两个数字读作同一 bug 经由
+两个框架的范围约定——不是分歧，也不是 stopping-point 工件（两条向量上都没有 Threat 度量）。
+
+→ [[security]] [[cvss-stopping-points]] [[disclosure-lag]]
+
+Sources: [NVD: CVE-2026-118383](https://nvd.nist.gov/vuln/detail/CVE-2026-118383) ·
+[NVD: CVE-2026-120808](https://nvd.nist.gov/vuln/detail/CVE-2026-120808)

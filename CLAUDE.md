@@ -1209,6 +1209,20 @@ underlying pages — this produced a two-layer false signal in a single item.
    **4** correct batch items pass, **5** return `batch-unread` (title-derived terms like `Gitea`,
    `Kyverno`, `OpenEMR` do not retrieve the id — the safe direction), **0** false positives, and the
    one finding is the filing case; `--selftest` **361 → 373**.
+   **And retrieval validates the TERM, never the COUNT — the source arm is now PRIMARY** (added
+   2026-11-12 05:15, the MongoDB item's own false mismatch). The 11-11 fix made the
+   sourceIdentifier query a *fallback* that fired only when the keyword retrieved nothing; the
+   very next batch broke exactly that seam: the keyword "MongoDB" **retrieved the anchor** (passed
+   the guard) and returned **23** records against a correct claim of **26** — because **3 of the
+   writer's own 26** records published 2026-11-10 (`CVE-2026-120816`, `-120826`, `-120828`) carry
+   no "mongodb" token in their descriptions. The arithmetic that makes this structural, not
+   unlucky: `batchSet` filters keyword results to the anchor's assigner anyway, so a passing
+   keyword is always a **subset** of the writer's set, never a superset — the keyword arm can only
+   lose records. The item had pre-empted the failure in prose ("counted by source, not keyword")
+   and the check still misread it. Fix in `checkBatch`: the source arm (`sourceIdentifier` + the
+   anchor's day — the batch by construction) runs FIRST; the keyword loop keeps the fallback role.
+   Live calibration on the filing day: `batch-count-mismatch` → **`batch-count-ok`** ("26 records
+   (source=cna@mongodb.com, 2026-11-10)"), everything else unchanged; `--selftest` 390 → **399**.
    **And a tag stripper run on already-extracted text deletes PROSE** (same run, from the arm's own
    first re-run). `normQuote`'s `<[^>]*>` ate a **428-character** C snippet on benmandrew.com's malloc
    post (`for (i < 1000 ; i ++ ) …` matched as one "tag" up to the next `>`), deleting the very
@@ -1409,6 +1423,31 @@ underlying pages — this produced a two-layer false signal in a single item.
    caught was invisible to every other check: the paper says "**to test the full proposed method
    further experimentation is necessary**", not "the complete proposed method still requires
    further experimentation". `--selftest` **109→126** (17 of them this check's own).
+   **(l) A 739-byte near-whitespace shell is a FAILED request, not a page — and a tiny extraction
+   from a big response is the STRIPPER's casualty, not the page's** (added 2026-11-12 05:15, the
+   Discourse lesson, found by re-reading the run's own JSON). `discuss.python.org`'s memorial topic
+   answered undici **739 bytes** of title + whitespace one run (fetched 20:18Z, cached v6), and two
+   verbatim quotations from Guido van Rossum's post — "I am immensely sad to announce that Tim
+   Peters has died" and the hyphenated sign-off "Python-would-not-be-what-it-is-today-without-Tim-ly
+   y'rs" — were filed `quote-not-found` against it. Both are verbatim (verified first-hand against
+   the `/raw/110028/1` twin), so the finding described the checker. Three things the post-mortem
+   added to the two-test rule: **(1) the shell carries no wall marker**, so `isBlockShell` passed
+   it, and its **248 non-whitespace chars** (navigation chrome) sit over any "cannot carry a
+   sentence" floor — the guard that fires is the **2026-11-04 scale rule made a predicate**:
+   `stripperAtePage(bodyLen, textLen)` (body > 50 KB && text < 1,200 chars) refuses a client's read
+   whose extraction is a fraction of a percent of the response, because the NEXT client string may
+   serve the variant whose body survives. **(2) A client string selects a page SHAPE, not just a
+   wall** — measured on the same host minutes apart: the browser UA gets the **323 KB
+   Ember-embedded** page whose post body the tag strip deletes (323 KB → 1,323 → 739 chars), while
+   `curl/*` gets the **67 KB server-rendered DOM** with the post as plain text (→ ~30 KB, both
+   quotations intact) — so the loop must fall through to client 2 instead of accepting client 1's
+   read. **(3) The raw twin made the verdict checkable in one call** — Discourse topics expose
+   `/raw/<topic_id>/<post_n>` (plain Markdown, no JS), the same machine-readable-sibling move as
+   the CVRF/CSAF twins; probe it before believing any JS-shaped silence. Both predicates
+   (`isWhitespaceShell` floor 200, `stripperAtePage`) are suppression-only: refusing a read can
+   only demote a verdict to `unread`, never invent a finding. `PAGE_CACHE_V` **6 → 7** (a v6 entry
+   holds the 739-byte shell as its "read"); live calibration: 3 findings → **0 findings / 26
+   verified**, `--selftest` 390 → **399**.
    **The check's own blind spots are censused now, and one of them was costing 13% of the corpus**
    (added 2026-10-31 12:32, `--quotation-census` over **31** October feeds / **1,248** items). **(a)
    Odd lines were `unpaired` and skipped WHOLE — and they are not stray marks: they are

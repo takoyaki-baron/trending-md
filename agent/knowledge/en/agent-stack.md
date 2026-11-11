@@ -3495,3 +3495,43 @@ Sources: [NVIDIA/auto-ontology](https://github.com/NVIDIA/auto-ontology) ·
 
 Sources: [gmkurtzer/ginux](https://github.com/gmkurtzer/ginux) ·
 [HN discussion](https://news.ycombinator.com/item?id=50450007)
+
+## 2026-11-12 04:43 — AWS claims the local-emulation layer agent-first; Atuin Threads makes agent sessions a synced, encrypted log; herdr and agent-skills cross 50k/115k
+
+**`aws/aws-emulator`** — Amazon puts "a local emulator of the AWS APIs" into its official org, and the HN thread
+crossed 300 points in two hours: a Rust Cargo workspace, **one crate per service**, driven by the same **Smithy
+models** that define AWS's wire protocols; serves HTTPS on `127.0.0.1:9297` behind a self-signed cert; an **embedded
+mode** runs one isolated in-process instance per test. Three policy details to read closely: **CC0**-licensed with
+fidelity scores published per release; **"This repository does not take PRs"**; and the agent hook — `aws
+agent-toolkit add-skill` installs it as a coding-agent skill — which alongside Werner Vogels' same-day essay on
+engineering "when agents write the code" reads as Amazon building local emulation **agent-first**: a third-party
+category (LocalStack et al., a decade old) becomes the official default, and the installer is the skill channel.
+
+**Atuin Threads** (shipped in 18.24+) — "one searchable, synced history for every agent session, on every machine":
+cross-harness resumption ("Start a task in Claude Code, then resume it in Codex on another machine"), forking a
+session "just like a Git branch", and an MCP server (`atuin mcp install claude/codex/pi/opencode`) so agents can
+search their own prior sessions to recover intent and abandoned work. Architecturally it leans on the existing sync
+engine — "It's generic, and can sync anything that can be modelled as an append-only log" — with capture **opt-in**
+and sync **end-to-end encrypted**. Agent sessions are the least portable artifact in the toolchain (trapped
+per-harness, per-machine; every vendor's answer so far its own walled format), and this is the neutral,
+harness-agnostic session layer the memory-format survey kept calling for — Skillsync/txcript (session export),
+git-ai (Scion's design self-hosted), LayerFS (workspaces over shared COW history) each solved a piece. The open
+question: do harness vendors adopt it, or re-argue session formats per vendor?
+
+**herdr** (**50,277★**, +2,196/wk — the dated update) now states the demand plainly: a background server keeps agent
+terminals alive across client disconnects and SSH loss, restores the saved layout after machine restart, and marks
+**every pane working / blocked / idle**; agents drive it via CLI + socket API to "spawn panes, prompt each other, and
+wait until another agent is genuinely blocked", and it runs the harnesses you already run rather than replacing them.
+Its own boundary note pairs with Threads: "the original processes do not survive" a restart — herdr is **terminal
+persistence**, Threads is **session persistence**, and the multi-agent stack wants both. One Rust binary, Apache-2.0,
+tmux-style prefix keys, plugins via a marketplace. **`addyosmani/agent-skills`** crosses **115,812★** (#5 daily,
++788) — detail → [[agent-plugins]].
+
+→ [[agent-plugins]] [[system1-decision]] [[dev-tools]]
+
+Sources: [aws/aws-emulator](https://github.com/aws/aws-emulator) ·
+[Vogels: AWS Emulator and the engineer's job](https://www.allthingsdistributed.com/2026/11/aws-emulator-and-the-engineers-job-when-agents-write-the-code.html) ·
+[Atuin: Threads — agent sessions](https://blog.atuin.sh/threads-agent-sessions/) ·
+[herdrdev/herdr](https://github.com/herdrdev/herdr) ·
+[HN: aws-emulator](https://news.ycombinator.com/item?id=50456631) ·
+[HN: Atuin Threads](https://news.ycombinator.com/item?id=50453637)

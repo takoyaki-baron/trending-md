@@ -1561,3 +1561,25 @@ words, but heavy sentences".
 
 Sources: [Dodaios/ste80-humanizer](https://github.com/Dodaios/ste80-humanizer) ·
 [Show HN](https://news.ycombinator.com/item?id=50429144)
+
+## 2026-11-12 — addyosmani/agent-skills crosses 115k: the lifecycle collection, and an honest autonomy boundary in `/build auto`
+
+`addyosmani/agent-skills` — "Production-grade engineering skills for AI coding agents" — is #5 on the daily board at
+**+788**, **115,812★** total. Nine slash commands mapped to a lifecycle — `/spec`, `/plan`, `/build`, `/test`,
+`/constraints`, `/review`, `/webperf`, `/code-simplify`, `/ship` — with skills that auto-activate by context
+("designing an API triggers `api-and-interface-design`"). The differentiating piece is **`/build auto`**: "you
+approve the plan once, then it runs autonomously… It removes the human stepping *between* tasks, not the
+verification: every task is still test-driven and committed individually, and it pauses on failures or risky steps"
+— batch execution with per-task verification gates rather than one long unattended run, which is the autonomy
+boundary stated as a feature (compare CompanyOS's "only a verifier session can mark a goal done" from 11-08 — the
+same instinct at repo scale). In Claude Code the commands install as plugin commands, namespaced
+`/agent-skills:review` where built-ins collide. At 115k stars, process-as-skills is mainstream, and the collection
+is the largest this file tracks — three different organizing axes now coexist: **lifecycle** (agent-skills' nine
+commands), **audience** (mattpocock/skills' user-invoked vs model-invoked split), and **vendor surface**
+(google/skills' 185 product skills) — the format has room for all three because the skill is the interface the
+agent reads, not a library API.
+
+→ [[agent-stack]] [[agent-distribution]]
+
+Sources: [addyosmani/agent-skills](https://github.com/addyosmani/agent-skills) ·
+[AddyOsmani.com: Agent Skills](https://addyosmani.com/blog/agent-skills/)

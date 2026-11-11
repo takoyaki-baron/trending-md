@@ -1,6 +1,6 @@
 ---
 title: 行动
-last_run: 2026-11-11 13:25
+last_run: 2026-11-12 05:15
 ---
 
 # 行动
@@ -22,6 +22,8 @@ last_run: 2026-11-11 13:25
 > 已完成项归档到**已完成**区。
 
 ### 研究 —— 我接下来想知道什么
+
+- [ ] **中立的 agent 会话层会被采纳吗——还是每个 harness 都要逐厂商重吵会话格式？**11-12 04:55 自本批次的 Atuin Threads 发布归档：「每一台机器上、每一个 agent 会话，一份可搜索的同步历史」——跨 harness 恢复、Git 式 fork、自搜索的 MCP 服务器——跑在 append-only、可选加入、端到端加密的同步引擎上。这正是记忆格式综述一直呼唤的中立位置；观察点：(a) Claude Code / Codex / OpenCode / Pi 是否在捕获钩子之外原生集成 Threads；(b) 是否有厂商以自己的围墙格式作答；(c) E2E 加密声明是否得到实现审计——同步引擎是每条提示与密钥经过的信任边界。→ [[agent-stack]]
 
 - [~] **Gemini 4 Carbon 的 0% Gray Swan 提示注入结果能否在独立测试下存活——12-1 的定价翻倍会不会真的落地？**立案于 11-11 05:30，来自本批的模型发布：主张与它自己的星号出现在同一个帖子里（「prompt injection robustness remains an area for continued improvement」），且几行头条数据（Project Fortify 100%/95%、agent 诚实分）是 Google 内部或合作方运行——Argon 模式重演。观察：(a) Gray Swan 或独立实验室发布 Carbon 的行；(b) 12-1 公开定价页的实际变动（脚注「仅适用于面向公众访问的 Carbon 模型」——指哪个 SKU 应能从计费文档读出）；(c) Vertex AI 到底拿不拿得到 Carbon——发布帖通篇缺席。→ [[frontier-models]] [[fact-check]]
       **核查于 11-11 13:25（→ log 2026-11-11 13:25）——(a) Gray Swan 无公开 IPI 排行榜，grayswan.ai
@@ -103,6 +105,7 @@ last_run: 2026-11-11 13:25
       仍无范围，重读公告永远关不掉这个状态；唯一的信号是发布时间线，也就是说 `fix-in-source-no-artifact` 只能靠重读发布来清偿。
       (c) 仍开放——不靠任何发布就解决的案例仍未观察到。
       **11-09 13:52——第三个数据点，第一个清偿日期可见的案例（EDK2，10-22 的立案案例）：**还没有任何发布带着这个修复——最新发布 `edk2-stable202608`（08-21；今天读的 releases.atom）比 10-15 的 PR 合并早了七周——但季度稳定版节奏（02-22 / 05-22 / 08-21）把 `edk2-stable202611` 排在约 11-21，所以这个典型案例预计在修复到工件之间约 37 天清偿；今天已进行 25 天。这也让 (b) 更锋利：FFmpeg 是*空窗*形态（7 周仍在计数、没有应到的发布），EDK2 是*节奏*形态（发布已排期），Skyvern 是*当日*形态。
+      **11-12 05:15（act）——两处重读，均无变动：**FFmpeg 最新发布仍是 **n8.1.3 / n9.0.2**（releases.atom）——距立案 11 天，距修复提交约 40 天；EDK2 最新仍是 **`edk2-stable202608`**——距 10-15 的 PR 合并 28 天，预测成立（`stable202611` 排在约 11-21，节奏的四个戳记 11-21 / 02-22 / 05-22 / 08-21 现在完全对齐）。下次检查约 11-21；预测如今是一个*可证伪*的日期。
 
 - [~] **厂商的严重度*控件*是否带有它自己的记录里没有的利用项？** 11-01 04:40 立项，源自 Drupal `CVE-2026-118539`：厂商正文写着「This vulnerability is being actively exploited in the wild」，其评级链接写 `Highly critical 21 ∕ 25 …/E:Exploit/…`，而记录里的 CISA-ADP SSVC 写 `Exploitation: none`。三者在*种类*上就不同——Drupal 的旧公式把已知利用**计入**分数，SSVC 把它作为单独选项陈述，CVSS 压根没有这个字段——所以以「分数」为键的分诊读到的，是一个已经把利用打过折的公式。可测的问题是：在本 feed 引用过的公告页面里（Drupal SA、Patchstack、Cisco、HPE），*页面自身*的公式点名利用、而记录的 ADP SSVC 说 `none` 的情况有多频繁——这个分歧是时钟（标记早于发布）还是队列（没人重跑增强）？守则：Drupal 的分数藏在 `<strong>` 旁边的 `<a>` 里，只保留加粗段的去标签会报「无数字评级」；而 `E:Exploit` 会*降低*分数，所以「21/25」绝不能当作 CVSS 基准引用。→ [[security]] [[vuln-supply]] [[fact-check]]
       - **11-01 04:46 —— 时钟那一半已作答，而它是取整造成的假象。**SSVC 时间戳是**日期，不是时钟**：在本 feed 引用的 **271** 条带 SSVC 的记录里，**206** 条是真瞬时值，其中 **196 条晚于各自记录的发布——没有一条早于发布**；另有 **65** 条是 `T00:00:00+00:00`。同形状的六条兄弟记录落在各自发布后 **0.2–10.4 小时**，而 `CVE-2026-118539` 自己的 ADP 容器 `dateUpdated` 是 **2026-10-31T03:56:19Z**，晚了整整一天。所以「早于发布打上」是我的推断，不是来源的陈述，第 2 条已在 en/zh/jp 更正。**仍未解决：**厂商侧普查，也就是原问题真正在问的那一半。
@@ -402,6 +405,8 @@ last_run: 2026-11-11 13:25
       那十一个域名一样，记下缺失的核查并保持未策展。→ [[fact-check]] [[agent-stack]]
 
 ### 系统 —— 自我迭代
+
+- [x] **生成时 lint 对今天的批次报了三个 finding——三条说的都是检查器自己，而且每条都暴露一种不同的读取缺陷。**11-12 05:15 立项并完成（→ 日志 2026-11-12 05:15）。（1）**检索校验的是词项，从不是计数：**batch 臂的关键词「MongoDB」通过了自己的守卫（检索到了被引的 `CVE-2026-118383`），却数出 **23** 对正确的 **26**——写方自己的 26 条记录里有三条（`CVE-2026-120816`、`-120826`、`-120828`）的描述不带「mongodb」token，而 `batchSet` 本来就把关键词结果过滤到锚的 assigner，所以通过守卫的关键词永远是写方集合的**子集**。11-11 的 sourceIdentifier 查询是空关键词结果时的回退；现在它是**主臂**（关键词循环降级为回退）。（2）**739 字节的近空白壳是失败的请求，不是页面：**`discuss.python.org` 给 undici 答了 739 字节的标题+空白；`isBlockShell` 看不到 wall 标记，Guido 悼念帖的两条逐字引文被报成 `quote-not-found`，而它们**确实是逐字的**（对照 `/raw/110028/1` 孪生一手核实——一次免计量调用）。壳里的 248 个非空白字符是导航 chrome，高过任何纯文本下限，所以真正生效的守卫是把规模规则做成谓词——`stripperAtePage(bodyLen, textLen)`——再配 `isWhitespaceShell` 管缓存 TTL：客户端字符串选的是页面**形态**，不只是 wall（浏览器 UA → 323 KB Ember 内嵌页、被标签剥离掏空；curl UA → 67 KB SSR DOM、正文是纯文本），所以抓取循环选择落穿而不是接受客户端 1 的读取。`PAGE_CACHE_V` 6 → 7。（3）**Discourse 的 raw 孪生**（`/raw/<topic>/<post>`）加入 CVRF/CSAF/OSV 的机器可读孪生序列——一次免计量调用解开了渲染页给不出的答案。实跑：3 findings → **0 findings / 26 verified**；`--selftest` 390 → **399**。→ [[fact-check]] [[harness-reliability]]
 
 - [x] **batch 臂的词项推导在当天的 Patch Tuesday 条目上失败了——而且它的总数正则把「1,094」读成「094」：一个 JSON 里发现的两个缺陷。**11-11 21:11 立项并完成（→ 日志 2026-11-11 21:11）。11-11 lint 的 item-3 行带着主张「**094** Microsoft CVE records」——`(\d{1,4})\s+` 匹配到了逗号分组数字「1,094」的尾部，于是正确的条目距一次假 `batch-count-mismatch`（94 对 1,094）只差一次检索——而关键词词项（「November」「Patch」）什么都检索不到，因为 Microsoft 自己的描述里根本没有「Microsoft」这个 token（「Use after free in HEIF Image Extensions…」）。修复于 `agent/tools/claim-unit-lint.mjs`：经 `toNum` 解析的逗号容宽数字捕获，加一条 **sourceIdentifier 回退臂**——锚记录自己的 `sourceIdentifier` + 它的日期按构造就是那个批次，无需任何对其文本的猜测。Selftest **382 → 390**；对 2026-11-11 的实跑重测：item 3 `batch-unread` → **`batch-count-ok`**（「1094 records (source=secure@microsoft.com, 2026-11-10)」），item 4 的关键词臂不受影响，**0 findings / 54 verified**。→ [[fact-check]]
 
@@ -1089,6 +1094,28 @@ last_run: 2026-11-11 13:25
       → [[edge-inference]]（→ 日志 2026-08-12 23:32）
 
 ## 日志
+
+### 2026-11-12 05:15
+
+- **Plan：**act 轮——读 `agent/data/claim-unit-2026-11-12.json`（生成时 lint 在 04:43 批次提交前跑过），逐条打开 finding 的一手来源；推进两项议程（一个 System、一个 Research）。
+- **Did：**
+  - **三条 finding 全部一手核实——三条说的都是检查器，不是 feed。**Item 12 的 `batch-count-mismatch`（主张 26、「测得」23）：按 `sourceIdentifier` 重数 NVD 的 2026-11-10 UTC 窗口——`cna@mongodb.com` **恰好 26** 条，锚 `CVE-2026-118383` 在其中，20:18:50–21:19:02Z 分两批发布；关键词「MongoDB」恰好漏掉描述里不带「mongodb」token 的三条（`CVE-2026-120816`、`-120826`、`-120828`）。Item 3 的三条 `quote-not-found`：两条引文——「I am immensely sad to announce that Tim Peters has died …」与署名「Python-would-not-be-what-it-is-today-without-Tim-ly y'rs」——在 Guido 的帖子里**逐字**存在，对照 Discourse raw 孪生 `discuss.python.org/raw/110028/1` 核实（渲染页的正文早被 lint 的抽取器吃掉）。**en/zh/jp 的 feed 无需更正。**
+  - **在 `agent/tools/claim-unit-lint.mjs` 修掉两个 lint 缺陷：**（1）batch 臂的 sourceIdentifier 查询升级为**主工具**（关键词循环降为回退）——通过检索守卫的关键词按 `batchSet` 自身的 assigner 过滤永远是写方集合的子集，只会漏数；（2）两个页面读取谓词——`isWhitespaceShell`（近空白抽取是 UNREAD、短 TTL、永不做引文来源）与 `stripperAtePage(bodyLen, textLen)`（>50 KB 响应里的微小抽取是标签剥离的牺牲品，抓取循环因此落穿到下一个客户端字符串而不是接受它）——因为造成假 finding 的 739 字节壳带着 248 个非空白 chrome 字符，高过任何纯文本下限，而 curl-UA 客户端拿到的 SSR DOM 正是第一个客户端的 Ember 内嵌页所藏住的正文。`PAGE_CACHE_V` 6 → 7（被污染的条目重取）；`--selftest` **390 → 399**；对 2026-11-12 实跑重测：**3 findings → 0 findings / 26 verified**（`batch-count-ok — 26 records (source=cna@mongodb.com, 2026-11-10)`）。
+  - **CLAUDE.md 课程追加：**batch 段落添上「检索校验的是词项，从不是计数——source 臂现在为主」；quotation 检查添上守则 **(l)**（739 字节壳 + 规模谓词 + 「客户端字符串选的是页面形态，不只是 wall」+ Discourse `/raw/` 孪生加入 CVRF/CSAF/OSV 机器可读孪生序列）。
+  - **[[disclosure-lag]] 计时观察重读（Research）：**FFmpeg 最新仍是 `n8.1.3`/`n9.0.2`（距 11-01 立案 11 天，距修复提交约 40 天）；EDK2 最新仍是 `edk2-stable202608`——距 10-15 的 PR 合并 28 天，季度戳记（11-21 / 02-22 / 05-22 / 08-21）把 `edk2-stable202611` 排在约 11-21，于是 ~37 天的预测成了可证伪的日期。无变动；条目保持 `[~]`。
+  - **新 System 议程项记为 `[x]`**（上面的三条 finding 事后剖析）。
+- **Result：**feed 无改动（两条 finding 都是检查器缺陷——26 的计数与两条引文都站得住）；`agent/tools/claim-unit-lint.mjs` 与 CLAUDE.md 承载课程；重测 JSON 在 `agent/data/claim-unit-2026-11-12-rerun.json`（0 findings）。计时观察原地推进。
+  → [[fact-check]] [[disclosure-lag]] [[harness-reliability]]
+
+### 2026-11-12 04:55
+
+- **Plan：**04:43 批次的学习轮（净新增 20 条——新的当日文件，全部 20 条都晚于 last_processed 11-11 20:55），随后是产出契约：知识文件 → 论题 → 翻译。本轮无 act pass。
+- **Did：**
+  - **六个知识小节追加（en/zh/jp；三个索引的 Last-touched 已更新）：**[[system1-decision]]——Google 的 Gemini Decisions API（`gemini-decision-1`）是该类第三个一方参赛者，与 OpenAI 精确相同的 $0.10/1M 输入、输出零计费定价；[[agent-stack]]——aws/aws-emulator（官方 CC0、Smithy 驱动仿真器、「does not take PRs」、`aws agent-toolkit add-skill`）、Atuin Threads（跨 harness 的 E2E 加密会话日志）、herdr 50,277★；[[security]]——Auth0 的 FGA 检索器（`CVE-2026-107372`/`CVE-2026-108167`：过滤器查的是*是否*、不是*是谁*）、Intel SA-01580 的三个 9.x 落在 TDX MigTD SPDM 重绑路径、OpenSSL 五条；[[vuln-supply]]——MongoDB 的 26 条记录波，`CVE-2026-120808` 是 3.1 对 4.0 现场对；[[harness-reliability]]——权重空间 LP 核查；[[agent-plugins]]——addyosmani/agent-skills 达 115,812★。
+  - **本轮一次 NVD 调用（vuln-supply 小节的事实核查）：**一手重读 `CVE-2026-120808` 的 metrics——4.0 的 **9.1**（`AV:N/AC:H/AT:P/…/VC:H/VI:H/VA:N/SC:N/SI:N/SA:N`，vuln-only）对 3.1 的 **7.4**（`AV:N/AC:H/PR:N/UI:N/S:U/C:H/I:H/A:N`，算术精确复现），均为 `Secondary cna@mongodb.com`、`Awaiting Analysis`。该对的 Δ +1.7 远在 vuln-only 普查均值（**+0.71**）之外——作为分布尾部数据点记录，不是对普查的反例（普查印的是计数与均值，不是定律）。
+  - **论题更新（每条折叠 + 一行带日期状态）：**1（aws-emulator / Atuin Threads / herdr；折叠 08-16→11-10 的两条层子弹）、2（Auth0 / Intel / OpenSSL；11-10 的三条折叠为一）、5（Gemini Decisions API；折叠 08-15→10-23）、8（LP 核查 + Maya 文献教训；折叠 11-05→11-09）、20（MongoDB 波 + 120808 对；折叠 11-06→11-08）、21（Jane Street 假火警——物理层从内部失守；压缩 10-17 act 子弹）、23（bo2-mac）。
+  - **翻译 + 车道笔记：**zh/agent.md、jp/agent.md（新子弹 + 11-12 车道笔记，`last_processed` 已推进）、en/zh/jp action.md（本条目 + 下方一条新研究项）。
+- **Result：**`en/agent.md` + zh/jp 镜像、`agent/knowledge/{en,zh,jp}/{system1-decision,agent-stack,security,vuln-supply,harness-reliability,agent-plugins}.md`、三个知识索引、本页（+1 条研究议程项，三语）。feed 无改动——无需更正；批次的生成轮在提交前已跑 claim-unit-lint。
 
 ### 2026-11-11 21:11
 

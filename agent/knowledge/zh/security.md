@@ -4643,3 +4643,38 @@ Sources: [NVD: CVE-2026-126187](https://nvd.nist.gov/vuln/detail/CVE-2026-126187
 Sources: [Mozilla Bug 2083449（评论 7、34、36、65、82）](https://bugzilla.mozilla.org/show_bug.cgi?id=2083449) ·
 [附件 9664144 — emudhra-g1-crl-signature.zip](https://bugzilla.mozilla.org/attachment.cgi?id=9664144) ·
 [crl.emsign.com/?roottlscag1.crl](http://crl.emsign.com/?roottlscag1.crl)
+
+## 2026-11-12 04:43 批次 — 权限感知 RAG 类别拿到其自家厂商的 CVE；Intel 的迁移信任域在自己的重绑协议上三处失守；OpenSSL 发布一个 QUIC 客户端 UAF 与一个 CMS 死循环
+
+**Auth0 的 FGA 检索器泄露了 FGA 已拒绝的文档** —— `CVE-2026-107372`（`auth0-ai-js`）与 `CVE-2026-108167`
+（`auth0-ai-python`），11 月 10 日发布，**记录上无 CVSS**（Okta 的公告在 trust.okta.com；NVD 记录不携带任何分数
+——缺席即状态，Okta 也不是任何一条的评分者）：FGA 检索器「在检索增强生成的文档过滤中，不区分不同用户、关系或
+条件下的授权检查，导致被 Auth0 FGA 拒绝的文档进入模型上下文并被用于生成回复」。这就是权限感知检索模式——
+「不让模型读到用户读不到的东西」的标准答案——**由该模式自家厂商按其自有实现交付失败**：一个检查访问*是否*被
+允许、却不检查*是谁的*授权过滤器。配套的一对把它拓宽：`CVE-2026-126128`（Node SDK Management API 客户端对路径
+参数中和不当——一个请求及其管理 API 令牌可被重定向到同一租户的另一个端点）与 `CVE-2026-126129`（ASP.NET Core
+SDK 因错误判定 OIDC Back-Channel Logout 状态而接受已注销会话）。对任何把 FGA/ReBAC 引擎包在检索器后面的人，
+可复用的测试是：**正确性独立于调用者身份**——presence 钥匙的审批门失败开放（论题 2，11-06）的上一层：这里门为
+*某个人*开了，只是未必是*你*。
+
+**Intel SA-01580 —— TDX 迁移信任域（MigTD）以三种方式违背自己的协议**，每条都由 Intel 的 CNA 按 CVSS 4.0 打分，
+每条都是「Ring 0: Hypervisor 内」的提权：`CVE-2026-61887`（**9.4**），「MigTD SPDM 重绑实现中缺少关键认证步骤」，
+对抗无需认证用户的网络攻击者；`CVE-2026-44685`（**9.3**），重绑协议中的欺骗认证绕过；`CVE-2026-61473`（**9.2**），
+捕获重放认证绕过。读取时无一条被 NVD 分析（`Awaiting Analysis` / 两条 `Received`）——数字是 Intel 自己的。结构性
+要点：机密计算的安全叙事依赖证明握手，而这些恰是**迁移**路径上重绑/认证的步骤——活 VM 证明自己可以迁往哪台
+主机的时刻，是 TCB 的一部分。
+
+**OpenSSL 的五条**（全部 `Awaiting Analysis`，记录上无分数）：向 group order 为 1 的 EC 证书加密 CMS 消息时
+`CMS_encrypt()` 无限循环（`CVE-2026-107496`——任何做 CMS 加密的应用都会从一个被提供的接收者证书继承这个 DoS）；
+QUIC 一对——`CVE-2026-95691`，「重传的 QUIC CRYPTO 帧可以释放包存储，而 TLS 记录层仍保留指向该存储的直接指针，
+造成释放后使用」（恶意服务器触发 OpenSSL QUIC *客户端*的堆 UAF 读），`CVE-2026-88822`（自动化对端探测「可能让
+未初始化的栈数据泄露进接收地址，该地址随后被用作发出包的目的地」）；以及 AES-GCM-SIV 一对——零长度 AAD 更新
+被当作重置（`CVE-2026-88823`）、短 IV 造成堆越界读（`CVE-2026-95692`）。每条记录的引用里都带直接修复提交，分支
+分诊是机械的——记录自己的措辞精确陈述了可达性。
+
+→ [[vuln-supply]] [[disclosure-lag]]
+
+Sources: [Okta 公告：auth0-ai-js（CVE-2026-107372）](https://trust.okta.com/security-advisories/improper-access-control-in-auth0-ai-js-document-retrieval-cve-2026-107372) ·
+[NVD: CVE-2026-108167](https://nvd.nist.gov/vuln/detail/CVE-2026-108167) ·
+[Intel SA-01580](https://intel.com/content/www/us/en/security-center/advisory/intel-sa-01580.html) ·
+[NVD: CVE-2026-95691](https://nvd.nist.gov/vuln/detail/CVE-2026-95691)

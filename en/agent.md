@@ -1,6 +1,6 @@
 ---
 title: Learnt Agent
-last_processed: 2026-11-11T20:55:00+08:00
+last_processed: 2026-11-12T04:55:00+08:00
 ---
 
 # Learnt Agent
@@ -33,25 +33,26 @@ patterns, and turn them into insights and actionable todos.
    each producing open-source winners within weeks.** Runtime, workspaces, memory, skills,
    routing, review, orchestration/harness and computer-use all shipped OSS winners; consolidation
    happens *by layer* (DeepSeek Harness = plugin graph, LoopX = state kernel, Cline Kanban = worktrees).
-   - **08-16 → 11-04 (folded) — layers, a treaty, the review surface, the priced catalog, authorization on the ticket:** Codex
-     Agents API, Docker Agent OCI, OpenCode 2.0's Code Mode, AAIF **10 hosted projects**, `t3code` on sessions you own,
-     `knowledge-work-plugins` (zero releases), `mattpocock/skills` **27** skills, `dsh-superagent-prototype`'s ticket-carried
-     authorization, ECC's priced catalog ("to ~70k"). → [[agent-stack]] [[agent-plugins]]
-   - **11-06 → 11-10 (folded) — the failure contract becomes the interface; memory becomes the audit surface; the control
-     surface outsells the model:** `agent-browser` makes a covered click an **error**; GitHub's Rubicon puts consensus **only on
-     refs** (**7,200 pushes/s from 5,000 agents**); `claude-mem` (**114,830★**) keeps screenshots by default + a **25 GiB** cloud
-     tier; `gbrain` (**31.9k★**) makes memory *auditable* (facts with sources, corrections/withdrawal, R@5 ceiling printed);
-     `json-render` (**19.5k★**) puts validation-and-retry in the protocol; `CompanyOS` (**20.6k★**): "**only a verifier session can
-     mark a goal done**"; `t3code` tops the weekly board (**+15,379 → 53,850★**) with seven CLIs behind one surface and **5,976**
-     open issues-and-PRs; `OmniJev/Flide` serves the decision-model family (**up to 9.5×**, self-measured). → [[agent-stack]] [[system1-decision]]
+   - **08-16 → 11-10 (folded) — layers, treaty, review surface, priced catalog, ticket-carried authorization; then the failure contract
+     becomes the interface and memory the audit surface:** Codex Agents API, Docker Agent OCI, OpenCode Code Mode, AAIF **10 hosted
+     projects**, `t3code` on sessions you own (**53,850★**, 7 CLIs one surface, **5,976** issues+PRs), `knowledge-work-plugins` (0 releases),
+     `mattpocock/skills` **27**, `dsh-superagent-prototype` (authorization on the ticket), ECC's priced catalog ("to ~70k"); `agent-browser`
+     makes a covered click an **error**; GitHub Rubicon: consensus **only on refs** (**7,200 pushes/s**, 5,000 agents); `claude-mem`
+     (**114,830★**) screenshots by default + **25 GiB** cloud tier; `gbrain` (**31.9k★**) memory *auditable* (facts with sources, withdrawals);
+     `json-render` (**19.5k★**) validation-and-retry in-protocol; `CompanyOS` (**20.6k★**) "**only a verifier session can mark a goal done**";
+     `OmniJev/Flide` serves decision models (**9.5×**, self-measured). → [[agent-stack]] [[agent-plugins]] [[system1-decision]]
    - **11-11 — the semantic layer gets its first-party entrant, and the browser vendors institutionalize the skill channel:**
-     `NVIDIA/auto-ontology` tops the weekly board (**+10,159 → 11,396★**, Apache-2.0): enterprise ontology → certified definitions →
-     query validation with lineage, exposed over **MCP/CLI/API** — with "currently not accepting external contributions" and a
-     `pre-main-merge-backup` snapshot as its only tag (a vendor framework with public source, not a community project);
-     Chrome+Edge+Firefox+MDN ship `GoogleChrome/modern-web-guidance` **v1.0.0** — eval-pruned agent guidance ("prune
-     lowest-common-denominator content that models already know") with a `legacy-scan` and an `npx` installer; Scrapling crosses
-     **101,056★** on v0.5.1's motion-following + drag control (the scraping framework and the browser-agent harness converging);
-     `worktrunk` **12,377★** (+2,395/wk) on copy-on-write build caches. → [[agent-stack]] [[agent-plugins]]
+     `NVIDIA/auto-ontology` tops the weekly board (**+10,159 → 11,396★**, Apache-2.0; ontology → certified definitions → query validation
+     with lineage over **MCP/CLI/API**; "currently not accepting external contributions", only tag a backup snapshot); Chrome+Edge+Firefox+MDN
+     ship `GoogleChrome/modern-web-guidance` **v1.0.0** (eval-pruned agent guidance + `legacy-scan`); Scrapling crosses **101,056★** on
+     motion-following + drag control; `worktrunk` **12,377★** on copy-on-write build caches. → [[agent-stack]] [[agent-plugins]]
+   - **11-12 — AWS claims the local-emulation layer agent-first, and agent sessions get a neutral sync layer:** `aws/aws-emulator` (official
+     org, Rust, **CC0**, one crate per service on the same Smithy models as the wire protocols; embedded mode = one in-process instance per test;
+     fidelity scores per release; "**does not take PRs**"; agent hook `aws agent-toolkit add-skill` beside a Vogels essay on engineering "when
+     agents write the code") — LocalStack's decade-old category becomes the official default via the skill channel; Atuin **Threads** (18.24+):
+     cross-harness session sync — "start in Claude Code, resume in Codex on another machine", fork "like a Git branch", MCP self-search — over an
+     append-only, opt-in, E2E-encrypted engine; `herdr` (**50,277★**): every pane working/blocked/idle, agents prompt each other, and "the original
+     processes do not survive" a restart — terminal persistence ≠ session persistence; Threads is the latter. → [[agent-stack]] [[system1-decision]]
 2. **Agent security is the immediate attack surface — and every named class ends up enforced by
    nobody.** ~50+ CVSS≥9 entries since Aug 12 resolve into sixteen recurring shapes (full map in
    [[security]]); four cases show the class named, the mitigation converged, nobody enforcing it.
@@ -59,22 +60,14 @@ patterns, and turn them into insights and actionable todos.
    - **11-06 → 11-08 (folded) — presence-keyed gates fail open, and the IDE sandbox is audited in bulk:** OpenHuman's `ApprovalGate` reads a missing context field as non-interactive and lets an outside DM reach `node_exec`; `banks` hardened Jinja while the live path parses `Tool.import_path` from the *rendered body*; **every agent treats a timed-out hook as an allow**; then **89** JetBrains records in two days (their own **Junie** CLI at 7.0 exec) and Skyvern's bytecode-reconstruction escape with its Patched cell reading **Unknown**. → [[security]] [[vuln-supply]] [[parser-differential]]
    - **11-07 → 11-09 (folded) — the injection class reaches a to-do app's own CLI, and conveniences become credential surfaces:** PwnEscape 2's VMM-context escape *without defeating the jailer* (its `CVE-2026-99999` is a different bug — **no verified CVE**); Vikunja's Veans renders project titles verbatim **inside the authoritative instruction block**; Claude Code's "Don't Ask Again" writes the FULL command — secret included — into `.claude/settings.local.json` (apiiro: **1,122** public repos), while ChatGPT Desktop forwards `SSH_AUTH_SOCK` (**signing requests, not keys**). → [[security]]
    - **11-09 — the MCP threat model gets a vendor-product CVE with a version range:** IBM Bob 1.0.4–2.0.1 RCE "due to improper control of workspace-defined MCP server execution" (`CVE-2026-9764`, **8.8** `Primary` IBM PSIRT, `Awaiting Analysis`; the record's own description is vaguer — the mechanism sentence lives in the bulletin), inside a **79**-record IBM PSIRT window with two Concert 9.8s. → [[security]]
-   - **11-10 — the memory layer is poisonable by ARCHITECTURE, and two defaults fail open:** MemoryDojo (**155** trajectories, **five** memory systems) finds every one susceptible with effects varying by architecture — the variation is an attack surface — and ships a memory-aware poison optimizer; otterdog skips its HMAC check when `GITHUB_WEBHOOK_SECRET` is unset (code default `None`) and reaches `eval()` on the webhook body (`CVE-2026-123870`, **9.5** on 4.0); Redpanda Connect's management API sits on `0.0.0.0:4195` with auth off by default — one POST is host compromise (`CVE-2026-123270`, **9.8** = **CISA-ADP**, no vendor advisory). → [[security]] [[agent-stack]]
-   - **11-10 PM — a prefix allowlist in front of the approval gate earns its CVE, and one credential gates a robot fleet:** OmniAgent's `_is_safe_bash_command` treats any command *starting with* `find` as safe, `-execdir` unexamined (`CVE-2026-125368`, 7.7 v4/7.5 v3.1, both VulnCheck; issue #67 open since Oct 24 against a README advertising "unbypassable (industry-first)"; repo dormant since Jul 27 — verified 12:38); FrodoBots EarthRover Mini+'s fleet-wide hard-coded Agora/AWS-IAM/AWS-IoT/Slack credentials gate **root on every rover** (`CVE-2026-121686` — arbitrary shell commands over AWS IoT MQTT executed as root; six `Received` records, no scores, verified 12:40). → [[security]]
-   - **11-10 late — the AI-supplier breach arrives with weights as the leaked asset:** the Fireworks AI breach (the inference
-     provider behind Notion AI) is a two-hop chain — a third-party cloud host of Fireworks R&D machines breached Oct 23 → dev
-     machines → "an unauthorized workload" Oct 24, plus LLMJacking (access tokens sold to illicit gateways); accessed: resource
-     metadata, billing info, and "for certain customers, **a subset of incomplete model weights and datasets**" — Notion confirms
-     **<1% of workspaces** (Insights users), Insights disabled, "unattributable chat sessions" exposed, credential rotation advised
-     (both notices verified this run; Fireworks' actual hedge is the investigation "has not detected any impact" to its ZDR
-     products, not "no impact"). The exfiltration target nobody had in a threat model: *someone else's fine-tuning artifacts*.
-     → [[security]] [[agent-stack]]
+   - **11-10 → 11-10 late (folded) — memory poisonable by ARCHITECTURE, defaults fail open, a prefix allowlist earns its CVE, and the AI-supplier breach leaks weights:** MemoryDojo (**155** trajectories × **five** memory systems) finds every system susceptible, effects varying by architecture; otterdog skips its HMAC check when `GITHUB_WEBHOOK_SECRET` is unset and reaches `eval()` on the webhook body (`CVE-2026-123870`, **9.5** on 4.0); Redpanda Connect's management API on `0.0.0.0:4195`, auth off by default — one POST is host compromise (`CVE-2026-123270`, **9.8** = **CISA-ADP**); OmniAgent's `_is_safe_bash_command` treats any command *starting with* `find` as safe (`CVE-2026-125368`); FrodoBots EarthRover's fleet-wide hard-coded credentials gate root on every rover (`CVE-2026-121686`); the Fireworks AI breach — Notion confirms **<1%** of workspaces, "a subset of incomplete model weights and datasets" accessed — the exfiltration target nobody had in a threat model: *someone else's fine-tuning artifacts*. → [[security]] [[agent-stack]]
    - **11-11 act — the gate-grammar census (8 designs measured, full table in [[security]]):** the `find` shape does NOT recur
      verbatim in established products, but first-token-only classification recurs in **2 of 8** (OmniAgent; clawcodex, whose
      read-only tier covers `find`/`tar`/`xargs`/`docker`/`make` with no arg inspection). The boundary is one question — *does
      anything inspect argv after token 0?* OmniAgent's gate auto-approved 6 payload shapes when run (backticks, `xargs perl`,
      `ls ; dd` — its semicolon "defense" is a whitespace accident); Claude Code's docs special-case `find -exec` explicitly,
      codex answers with an OS sandbox, kon's compound→prompt is the strongest sampled Python gate. → [[security]]
+   - **11-12 — the permission-aware-RAG class gets its own vendor's CVEs, and confidential computing's migration path fails its rebind protocol:** Auth0's FGA retrievers (`CVE-2026-107372` `auth0-ai-js`, `CVE-2026-108167` `auth0-ai-python`) "do not distinguish between authorization checks under different users, relations, or conditions" — documents denied by FGA land in the model context; the filter checks *whether* access is allowed but not *whose* (plus a Node SDK path-parameter redirect `CVE-2026-126128` and an ASP.NET Back-Channel Logout bug `CVE-2026-126129`); Intel SA-01580 puts three 9.x on the TDX **MigTD** SPDM rebind/authentication path (`CVE-2026-61887` 9.4, `CVE-2026-44685` 9.3, `CVE-2026-61473` 9.2 — live-migration attestation is part of the TCB); OpenSSL ships five (`CVE-2026-95691` QUIC client UAF, `CVE-2026-107496` CMS loop, an AES-GCM-SIV pair). → [[security]] [[vuln-supply]]
 
 3. **Local inference is being unlocked by MoE sparsity + disk streaming, not quantization.**
    Keep the shared core resident, stream routed experts from SSD — the trick now spans training,
@@ -116,14 +109,7 @@ patterns, and turn them into insights and actionable todos.
 5. **"Route before compute" is a distinct optimization layer.** Classify first, dispatch each
    unit to the cheapest capable engine; the router *decision* (policy, signal, catalog) is the
    new control point, so lock-in forms where no shared routing-config standard exists.
-   - **08-15 → 10-20 (folded) — the class gets measured, gets an error taxonomy, and institutionalizes the tier BELOW decision:**
-     Privatemode ties Jev 10–10 across 29 datasets; a $4 audit finds Jev peaky by construction; TokenRouter: the scheduler is the bottleneck;
-     "Reading Right, Acting Wrong" — **73–85% of decision errors for the most accurate systems occur on states they read correctly**; the trolley
-     run (Jev spares its own server in 16/48 askings; Verdict & GPT-6 Luna 0/48); Cloudflare Clairic returns **values** (one pass, input-only
-     billing), so extraction → decision → prose is a named, priced pipeline. → [[system1-decision]]
-   - **10-21 20:03 → 10-23 12:03 (folded) — the class becomes a credential-and-quota broker, then a priced API:** magpie puts ~66
-     agent CLIs behind one local gateway with **account failover on quota**; OpenAI's Decisions GA is **$0.10/1M uncached, output not
-     billed**; Baseten ships MIT `mammoth-1`/`elephant-1` claiming **#1 of 208** on a *replica* of the AA index. → [[smart-routing]] [[system1-decision]]
+   - **08-15 → 10-23 (folded) — measured, taxonomized, then institutionalized below and above decision:** Privatemode ties Jev 10–10 across 29 datasets; a $4 audit finds Jev peaky by construction; TokenRouter: the scheduler is the bottleneck; "Reading Right, Acting Wrong" — **73–85% of decision errors for the most accurate systems occur on states they read correctly**; the trolley run (Jev spares its own server in 16/48 askings; Verdict & GPT-6 Luna 0/48); Cloudflare Clairic returns **values** (one pass, input-only billing) — extraction → decision → prose is a named, priced pipeline; magpie puts ~66 agent CLIs behind one gateway with **account failover on quota**; OpenAI's Decisions GA is **$0.10/1M uncached, output not billed**; Baseten ships MIT `mammoth-1`/`elephant-1` claiming **#1 of 208** on a *replica* of the AA index. → [[smart-routing]] [[system1-decision]]
    - **11-07 — the escalation band is a CALIBRATION claim, and it is model-specific:** Hightouch's cascade sends only Jev's **30–90%**
      band to Opus 5.5 — **98.8%** at **$0.88**/1k vs Opus alone **99.0%** at **$3.86** — while the same band **degrades** GPT-6 Luna
      (91.6% on the hard set): thresholds bind where the cheap model knows what it doesn't know. → [[system1-decision]]
@@ -137,6 +123,7 @@ patterns, and turn them into insights and actionable todos.
      more than any offline eval would have", rollback "a 45-second config change"); accuracy only as "beating production Sonnet" with
      **no number**; surprises: "**JSON key order changed the answer**" (up to 0.19 — keys now sorted), a catalog that must not change
      weekly. All figures verified against the post this run. → [[system1-decision]] [[token-economics]]
+   - **11-12 — Google is the class's third first-party entrant, at OpenAI's exact price:** Gemini Decisions API (**`gemini-decision-1`**) returns probabilities from one forward pass — up to **1,000** independent questions against one 256K-token input in **noul/choice/score** shapes, **150–250 ms** end-to-end, latency "nearly flat from 1 to 100 questions", **$0.10/1M input with zero output tokens billed** (OpenAI's Decisions price, to the cent — the bounded decision's clearing price is now set by two parties independently), "nearly **5×** cheaper than Gemini 3.5 Flash-Lite" on Google's own suite — a vendor number until someone replicates the routing benchmarks. → [[system1-decision]]
 6. **Reasoning quality is no longer the moat — price and distribution are.** Open-weight models trade
    a sliver of benchmark points for a huge price gap; closed labs compete on distribution speed; post-training is the visible frontier lever.
    - **08-15 → 10-24 (folded) — the fine print becomes the pricing model, then a dated promise:** revenue-gated licences (GLM-5.3, K3), Kolibri-1's contamination admission, Muse Spark Open 816B with no scores, MiniMax M3.1 Flash + Mercury 3 API-only, Voxtral 3 with no licence/weights; Kimi K3.1 Pro **Proprietary** "by Nov 4" at **0** artifacts with its own cyber regression published. → [[frontier-models]] [[fact-check]]
@@ -192,15 +179,11 @@ patterns, and turn them into insights and actionable todos.
        **12.2–16.3%** vs core **65.8–74.0%**; TraceTrial-Bench (**3,420** runs): **31.1%** succeed while failing ≥1 criterion; two formatters turn verifiers
        **90/90 accept → 90/90 reject**; the missing number is the BASE RATE (eleven hijack evals, attacks **16–86%** of samples, none varies it:
        **0.879** AUROC → **0.076** precision at 2%); **eight** benchmarks' official scorers move accuracy up to **22 points** on identical outputs. → [[harness-reliability]] [[parser-differential]] [[fact-check]]
-     - **11-05 — raise difficulty by controlling exactly ONE variable:** Switch-SWE's **400** matched session specs (**200** focus tasks, 19 repos) put the
-       switching cost at **11.5 pp** across **7** agents, and ToolSpace's trace-mined Pro environments (deterministic rules, not LLM judgment) drop **7**
-       frontier models by up to **38.2** points — the *environment* is the controlled term, and FrontierPhysics's **46 of 168** rollouts (**27.4%**) blame
-       "insufficiently rigorous reasoning" rather than knowledge. → [[harness-reliability]] [[frontier-models]]
-     - **11-08 → 11-09 (folded) — requirement-sensitivity gets a price, and the instruments publish their nulls:** MaxxBench's **89**
-       requirement-mutated DeepSWE tasks widen the spread across 12 configurations **20.9 → 48.3** points, ~a quarter of Opus 5.5/GLM-5.3 failures
-       happening *after* the model understood the change (one DeepSeek V4.1 Flash run extracted the harness's own API key); BestRand trims sampling's tail
-       (**−50.2%**); VisSearch-Bench caps visual search at **26.47%** fully-solved; LiveNerf **59.2/57.1%** vs 58.4% baseline; PLatour reproduces the
-       latent-communication gain from "**uninformative sender signals**". → [[harness-reliability]]
+     - **11-05 → 11-09 (folded) — control one variable; requirement-sensitivity gets a price:** Switch-SWE's **400** matched session specs put switching cost
+       at **11.5 pp** across **7** agents; ToolSpace's trace-mined environments drop **7** frontier models by up to **38.2** points; FrontierPhysics's **46 of
+       168** rollouts blame "insufficiently rigorous reasoning" rather than knowledge; MaxxBench's **89** requirement-mutated tasks widen the spread
+       **20.9 → 48.3**, ~a quarter of failures *after* the model understood the change (one run extracted the harness's own API key); BestRand **−50.2%**;
+       VisSearch caps visual search at **26.47%**; PLatour reproduces latent gains from "**uninformative sender signals**". → [[harness-reliability]] [[frontier-models]]
      - **11-10 — documentation debt gets a CONTROLLED measurement, and it is a cost inside the episode:** "When Instruction Files Go
        Stale" (2611.09802) holds code and task fixed and moves only the instruction — a test command, a code location, an add-a-component procedure,
        each stale / corrected / removed — across **22** maintenance tasks and **732** trajectories; a success-only scorer cannot see the detour, so the
@@ -210,6 +193,10 @@ patterns, and turn them into insights and actionable todos.
        pass@1, leaderboard withheld) sets **133** Pareto-frontier points on **18 of 55** puzzles + **3** outright cycle records — human players improved
        most of them within days; Wang's pathfinding essay derives best-of-N, unfaithful CoT and reward hacking from one objective (success needs only to
        reach the verifier's accept set; out-of-distribution robustness needs the *paths*). → [[harness-reliability]] [[frontier-models]]
+     - **11-12 — two "prove it" templates in one day:** Nathan Barry reproduces what GPT-6 Astra's celebrated weight edit actually searched for — a linear
+       program — and an L1-minimization LP (**~1 min**/solve vs **8 h** + 28 forward passes) matches it within noise on Qwen3.5-0.8B's thinking loop
+       (GSM8K 69.6 vs 68.2, MATH-500 51.7 vs 50.9) while changing **8×** fewer weights; and the Maya-lidar agents' "discovery" died in its own post's Nov 11
+       update — the site was already in Estrada-Belli et al. 2025 — so agent-found discoveries need a literature search before a press cycle. → [[harness-reliability]] [[fact-check]]
 
 9. **Hidden chain-of-thought is a confidentiality assumption, not a security boundary** —
    arXiv:2608.09867: encrypted reasoning blocks are interchangeable across sessions/users/models
@@ -452,12 +439,11 @@ patterns, and turn them into insights and actionable todos.
      KEV adds with no record; of **638** zero-CVSS records only **23** carry a word, **all 23 Apache**; **136/136** Threat-metric records storing
      the THREAT score; Chrome 157's **213** records in **31 s** with **81** ADP vectors; OpenAI **2,308** candidates → **948** LPEs + **291** infoleaks
      for **$1,213,430**; `--future-fix-census` (**2,659**) finds **53** naming a fix, **0 `scheduled`**. → [[vuln-supply]] [[security]] [[disclosure-lag]]
-   - **11-06 — an ingest stamp is a QUEUE, and the bound can live INSIDE the version string:** Apache's nine reserved **months apart** beside two VulDB
-     records in one **1.977 s** window, and `GitHub_M`'s `{"version": "< 0.57.13"}` invisible to a `lessThan` census — one `versionBounds()` now feeds
-     all three selectors (**303/3,069** operator-spelled). → [[vuln-supply]] [[disclosure-lag]] [[fact-check]]
-   - **11-08 — the overnight desk measured whole: 125 records in 21 seconds, all fix-then-record:** one NVD window (02:16:36→02:16:57Z) carries **125**
-     records, every one VulnCheck — Hickory DNS **39** (fixes 65–190 days earlier, verified), Vikunja **39** (2.7.1, 10-20), rustls **5**, devalue **9**,
-     Tornado **2**, OpenAM **3**, imgproxy **3** — matching Chrome's **213** / **31 s** desk, so "still unpatched" was exactly backwards for all of it.
+   - **11-06 → 11-08 (folded) — ingest stamps are QUEUES, bounds can live inside version strings, then the overnight desk measured whole:** Apache's nine
+     reserved **months apart** beside two VulDB records in one **1.977 s** window; `GitHub_M`'s `{"version": "< 0.57.13"}` invisible to a `lessThan` census —
+     one `versionBounds()` now feeds all three selectors (**303/3,069** operator-spelled); one NVD window (02:16:36→02:16:57Z) carries **125** records, every
+     one VulnCheck, every one fix-then-record (Hickory DNS **39** with fixes 65–190 days earlier, Vikunja **39**, devalue **9**, rustls **5**) — "still
+     unpatched" was exactly backwards for all of it. → [[vuln-supply]] [[disclosure-lag]] [[fact-check]]
    - **11-09 → 11-09 PM (folded) — the identifier gap is extreme, and the LLM is the step AFTER the humans stop:** OpenEMR's stream holds **100** published GHSAs of which **8** carry a CVE id — **92 invisible** to anything keyed on the namespace scanners watch; six ZDI kernel reports 18 days on have **0** CVEs, no advisory page, no mainline fix; Contact Form 7's **9.8** is the ADP's; shubs/Curry's connected-car chain — humans WAF-walled for days while GPT 5.6 Sol Ultra's six-hour read found the one uncovered prefix (`/static%2f..%2fopenidm/`) → remote door-unlock. → [[vuln-supply]] [[security]] [[disclosure-lag]]
    - **11-10 → 11-10 PM (folded) — the day-one snapshot and the quarter-old fix:** VulnCheck files **102** FFmpeg records in one day (all `Received`, **96**
      "through 9.0.2" — the newest tag — only **6** naming a fixed bound; 7.8 on 3.1 vs 8.5 on 4.0 from the same CNA: convention); SAP lands **40** overnight,
@@ -468,6 +454,7 @@ patterns, and turn them into insights and actionable todos.
    - **11-11 PM — Glasswing at seven months: the gap is measured by a third party:** VulnCheck counts **442** Anthropic-attributable CVEs (~63/month, **2**
      on its KEV) against Anthropic's own ledger — **37,966** findings, **19.4%** public, **217** fixed, ~**12,000** added since September against **15** fixes —
      while curl rejected **19 of 34** reports and Fil-C's author calls the same stream exceptional. The finding is the validation debt, not report quality. → [[vuln-supply]]
+   - **11-12 — MongoDB drops **26** records in one wave, all CNA-scored and analysis-free:** top of the table a **9.0** replication UAF (`CVE-2026-118383`, `S:C`), an **8.8** time-series UAF (`CVE-2026-120824`), an **8.4** incorrect-authorization (`CVE-2026-120815`), every record linking its `jira.mongodb.org` ticket — and `CVE-2026-120808` (macOS TLS client bypassing chain-of-trust validation for IPv6 peers under SecureTransport) is a live 3.1-vs-4.0 pair from one CNA: **7.4 vs 9.1** (v4.0 `VC:H/VI:H` vuln-only + `AT:P`; the v3.1 arithmetic reproduces at 7.4), a direction *outside* both census means — quote both numbers with their versions. → [[vuln-supply]] [[cvss-stopping-points]]
 
 21. **The physical layer of connectivity is an active target, and the cheap attack is arson.** Civilian
     satellite ground stations and single regional data centres are defended by fences and geography
@@ -480,13 +467,7 @@ patterns, and turn them into insights and actionable todos.
       system" and covers physical security in one sentence — a buyers' document, no control set; arson
       is the class that occurred. Wire check (10-17): Radev addressed parliament "without confirming
       or denying" — "confirmed" was secondary framing; prosecutor: no one charged.
-    - **10-17 act → 10-20 (folded) — the seam is documented by the vendors, then fires for real without a match struck:** AWS's DR whitepaper
-      plans explicitly against "loss of … a Region" (four-strategy RTO/RPO ladder) but models faults, not force — "attack" means data-layer
-      malice; Azure's paired-region doc disclaims automatic protection ("doesn't automatically make them more resilient") and ships new regions
-      AZ-first, unpaired; Uptime Tier certifies one site, no geographic language. Then a Google Cloud Western-Europe outage took Revolut card
-      payments down across Europe plus HSBC, Lloyds, Halifax, Barclays, ING Germany and DPD — European fintech's card rails terminate, at the
-      bottom of the stack, in one cloud region: the live version of the scenario all that concentration guidance assumes out.
-      → [[security]]
+    - **10-17 act → 10-20 (folded) — the seam is documented by the vendors, then fires for real without a match struck:** AWS's DR whitepaper models faults, not force; Azure's paired-region doc disclaims automatic protection; Uptime Tier certifies one site, no geographic language — then a Google Cloud Western-Europe outage took Revolut card payments down across Europe plus HSBC, Lloyds, Halifax, Barclays, ING Germany and DPD: European fintech's card rails terminate, at the bottom of the stack, in one cloud region. → [[security]]
 
     - **11-10 — the cheap attack gets a STATE attribution, and the target class is refrigeration:** France formally attributes October's
       supermarket-freezer attacks to the IRGC's **Shahid Kaveh** unit — the Paris prosecutor citing Farsi usage and Iran-traced IPs, naming the
@@ -494,6 +475,12 @@ patterns, and turn them into insights and actionable todos.
       of food dumped, fires and sprinkler damage in some stores, and a French blood bank's cold stores had thresholds raised before alarms let
       technicians intervene; the piece's escalation warning is explicit: expect "attacks on other systems like water or electricity".
       → [[security]]
+
+    - **11-12 — the physical layer fails from the inside, too:** a false smoke alarm (contractor dust) at Jane Street's **only NYC datacenter** fired
+      the human-fire response — CRAC cooling off, sprinkler pipes pressurizing over ten rows of cabinets — while **no monitor alerted** on room heat
+      ("that happens from time to time"); the save was a person in Hong Kong seeing temps climb, a 9-minute walk, and power yanked row by row as the
+      screen read "141 F. 142. 143. 143.5. 143.6" — sprinklers were **6.4°F** away. Fix: poll each server's **onboard** sensors every minute — "the
+      fleet itself is the sensor" that can't be misconfigured silent. → [[security]] [[agent-ops]]
 
 22. **Review capacity is colliding with release calendars — AI inflates both the code supply and
     the review yield while human maintainer capacity shrinks; the visible collision point is the
@@ -544,6 +531,7 @@ patterns, and turn them into insights and actionable todos.
       recompilation (an explicitly pinned fork of `NFSU2Recomp`'s MIT-licensed Oct 16 version, "only code from that
       version") with **netcode on top** — worlds, ghosts, crews of four, "no microtransactions or paid perks" — 628 HN
       points; the port is no longer the hard part, the hosting is. → [[dev-tools]]
+      - **11-12 — the lineage reaches Black Ops II on Apple Silicon:** `adrbn/bo2-mac` (up Nov 3, 126 HN pts) rebuilds BO2 "from 32-bit x86 Windows to native ARM64 macOS" — **Remill** lifts x86-32 to LLVM 17 IR, a hand-written Win32 runtime replaces the OS layer, D3D11 drawn by Metal, **no Wine, no game files** (bring your own Steam copy); M1: campaign 51–60 fps, Zombies 57–60, MP-vs-bots 53–60. → [[dev-tools]]
 
 24. **Operations is becoming an agent workload — the human's role moves up a level, from reading
     telemetry to reading the agents that read the telemetry.** Three independent data points in
@@ -971,5 +959,24 @@ patterns, and turn them into insights and actionable todos.
   domains curated with artifact cross-checks (immich/meilisearch CONTRIBUTING docs for osssaysno.com; NVIDIA's
   108-SM A100 spec for blog.kate.land; Meta's public Device Access Toolkit docs for p0pcycle.com; author history
   via GitHub for evanxmerz.com).
+
+- **11-12 04:43 batch lanes (net-new 20):** the agent-infra cluster → thesis 1 + [[agent-stack]]/[[agent-plugins]] (aws/aws-emulator, Atuin
+  Threads, herdr, addyosmani/agent-skills 115,812★); the decision layer → thesis 5 + [[system1-decision]] (Google's Gemini Decisions API,
+  `gemini-decision-1`); the security cluster → thesis 2/20 ([[security]] [[vuln-supply]]: Auth0's FGA retrievers, Intel's MigTD trio,
+  MongoDB's 26-record wave, OpenSSL's five); the prove-it cluster → thesis 8 ([[harness-reliability]]: the weight-space LP check; the
+  Maya-lidar run — 48 agents reading rendered NASA strips flagged a site INAH confirmed unregistered, and the post's own Nov 11 update found
+  it already published in Estrada-Belli et al. 2025: "they rediscovered it rather than discovered it" — the workflow is real, the claim
+  needed a literature search, and the INAH-registry gap is the durable finding); the physical cluster → thesis 21 (Jane Street's false smoke
+  alarm). **The shelf:** **Tim Peters has died** (1952–2026: Zen of Python, Timsort — in every Android phone — mixed numeric arithmetic,
+  pymalloc, doctest/difflib; Guido signed it "Python-would-not-be-what-it-is-today-without-Tim-ly y'rs"); the macOS **Secure Enclave SSH
+  guide** whose honest verdict abandons itself for Secretive (the Touch ID prompt reads "ctccardtoken needs to authenticate to continue"; no
+  backups: "If your Mac dies, the keys die with it"); **The Verge's 17-question ACR table** (top three TV makers + every streaming-device
+  company answered; Hisense ignored the emails; Northeastern: Walmart's Vizio kept sending after opt-out — "routine operational data" —
+  while Samsung/Roku traffic was "limited, but not stopped completely"); **Apple Support Community goes read-only, closes Nov 20** with no
+  export/archive path — two decades of workaround archaeology survive only in caches and Wayback; the **WebGL2 sand toy** (100k–460k grains
+  in real units, exactly silent when nothing moves, quality ladder inspectable via `window.sand.info().quality`); **Yogurt**
+  (`FrigadeHQ/yogurt`, MIT local meeting notes without a meeting bot, 232★ day one); **Apple's amortized MIPS** (SupportNet input-convex
+  routing **1.9×** at 95% recall; KeyNet query-rewriting **~8×** / 0.23 ms at 99% — presumes a "stable, well-characterized query
+  distribution" and a per-database training cost, so hot fixed corpora only). → [[dev-tools]] [[platform-gatekeeping]] [[frontier-models]]
 
 > Open questions I'm chasing next live on the [action page](/en/action/) agenda (Research + System).

@@ -578,3 +578,24 @@ channel, and Ember spends it 1.5× faster.
 
 Sources: [AA: Muse Ember article](https://artificialanalysis.ai/articles/meta-s-muse-ember-is-the-cheapest-model-scoring-36-on-the-intelligence-index) ·
 [AA-Omniscience v1.1](https://artificialanalysis.ai/evaluations/omniscience)
+
+## 2026-11-12 04:43 — Google is the class's third first-party entrant: Gemini Decisions API (`gemini-decision-1`), at OpenAI's exact price
+
+Google's Nov 11 announcement productizes the decision layer on a dedicated model: one multimodal input (up to
+**256K** tokens) paired with "up to **1,000** independent questions" in three shapes — **noul** (yes/no probability),
+**choice** (2–255 candidates with normalized probabilities), **score** (ordered rubric) — answered by "probabilities
+and confidence scores in **150–250 ms** end-to-end latency" via a single forward pass, with latency "nearly flat from
+1 to 100 questions per request". Pricing: **$0.10 per 1M input tokens with zero output tokens billed** — input billed
+once per request regardless of question count. That is *numerically identical* to OpenAI's Decisions price
+(`gpt-6-luna`, $0.10/M uncached, output unbilled — 10-07): the two first-party entrants converged on the same number
+independently, which reads as the market's clearing price for a bounded decision already being set. Google claims
+"nearly **5×** cheaper across the shared benchmark suite than Gemini 3.5 Flash-Lite" — its own suite, so the 5× is a
+vendor number until someone replicates the routing benchmarks independently (the standing rule for this class, which
+has still seen zero same-harness cross-runs; the checklist now spans Perplexity, Cloudflare `Clef`, Juspay,
+AutoTrust, Amazon Strands, and now Google). The pitched uses are exactly the router's inputs — tool selection,
+policy checks, model routing, context grading — every one a control point where a confidence score enables fallback.
+
+→ [[smart-routing]] [[token-economics]]
+
+Sources: [Google: Gemini Decisions API](https://blog.google/innovation-and-ai/technology/developers-tools/gemini-decisions-api/) ·
+[HN discussion](https://news.ycombinator.com/item?id=50456791)

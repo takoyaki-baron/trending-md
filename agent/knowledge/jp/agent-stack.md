@@ -2618,3 +2618,44 @@ Sources: [NVIDIA/auto-ontology](https://github.com/NVIDIA/auto-ontology) ·
 
 Sources: [gmkurtzer/ginux](https://github.com/gmkurtzer/ginux) ·
 [HN discussion](https://news.ycombinator.com/item?id=50450007)
+
+## 2026-11-12 04:43 — AWS がローカル・エミュレーション層をエージェント優先で取る；Atuin Threads がエージェントセッションを同期された暗号化ログに；herdr と agent-skills が 50k/115k を超える
+
+**`aws/aws-emulator`** —— Amazon が「AWS API のローカルエミュレータ」を公式 org に入れ、HN スレッドは 2 時間で
+300 ポイントを超えた：Rust Cargo ワークスペース、**サービスごとに 1 クレート**、AWS のワイヤプロトコルを定義する
+のと同じ **Smithy モデル**で駆動；自己署名証明書の下 `127.0.0.1:9297` で HTTPS を提供；**埋め込みモード**はテスト
+ごとに隔離されたインプロセス・インスタンスを走らせる。精読すべき 3 つのポリシー詳細：**CC0** ライセンスで
+フィデリティ・スコアをリリースごとに公表；**「This repository does not take PRs」**；そしてエージェントフック——
+`aws agent-toolkit add-skill` がコーディングエージェントのスキルとしてインストールする——Werner Vogels の同日
+エッセイ「エージェントがコードを書くときのエンジニアリング」と併せて、Amazon がローカルエミュレーションを
+**エージェント優先**で建てていると読める：10 年の歴史あるサードパーティ・カテゴリ（LocalStack など）が公式
+デフォルトになり、インストーラはスキルチャネル。
+
+**Atuin Threads**（18.24+ で出荷）——「すべてのマシン上のすべてのエージェントセッションのための、検索可能で
+同期された一つの歴史」：ハーネス横断の再開（「Claude Code でタスクを始め、別マシンの Codex で再開する」）、
+セッションを「Git ブランチのように」fork、そしてエージェント自身が過去セッションを検索して意図や中断された
+作業を復元できる MCP サーバ（`atuin mcp install claude/codex/pi/opencode`）。アーキテクチャは既存の同期エンジンに
+乗る——「append-only ログとしてモデル化できるものなら何でも同期できる」——キャプチャは**オプトイン**、同期は
+**エンドツーエンド暗号化**。エージェントセッションはツールチェーンで最も移植性のない成果物（ハーネスごと・
+マシンごとに閉じ込められ、各ベンダーの答えは独自の壁付きフォーマット）であり、これはメモリ形式サーベイが
+呼び続けてきた中立でハーネス非依存のセッション層——Skillsync/txcript（セッション書き出し）、git-ai（Scion 設計の
+セルフホスト版）、LayerFS（共有 COW 履歴上のワークスペース）がそれぞれ一片を解いていた。開いた問い：ハーネス・
+ベンダーは採用するのか、それともベンダーごとにセッション形式を争い直すのか？
+
+**herdr**（**50,277★**、週 +2,196——日付付き更新）は需要を明快に言語化する：バックグラウンド・サーバーが
+エージェント端末をクライアント切断と SSH 切断を越えて生かし続け、マシン再起動後に保存されたレイアウトを復元し、
+**すべてのペインを working / blocked / idle とマーク**；エージェントは CLI + socket API で「ペインを生成し、互いに
+プロンプトを送り、別のエージェントが本当に blocked になるまで待つ」ために駆動し、既存のハーネスを置き換えずに
+走らせる。自身の境界注記が Threads と対になる：「元のプロセスは再起動を生き延びない」——herdr は**端末の永続性**、
+Threads は**セッションの永続性**、マルチエージェント・スタックは両方を欲する。単一 Rust バイナリ、Apache-2.0、
+tmux 風プレフィックスキー、プラグインはマーケットプレイス経由。**`addyosmani/agent-skills`** が **115,812★** を
+超える（日次 #5、+788）——詳細 → [[agent-plugins]]。
+
+→ [[agent-plugins]] [[system1-decision]] [[dev-tools]]
+
+Sources: [aws/aws-emulator](https://github.com/aws/aws-emulator) ·
+[Vogels: AWS Emulator とエンジニアの仕事](https://www.allthingsdistributed.com/2026/11/aws-emulator-and-the-engineers-job-when-agents-write-the-code.html) ·
+[Atuin: Threads — エージェントセッション](https://blog.atuin.sh/threads-agent-sessions/) ·
+[herdrdev/herdr](https://github.com/herdrdev/herdr) ·
+[HN: aws-emulator](https://news.ycombinator.com/item?id=50456631) ·
+[HN: Atuin Threads](https://news.ycombinator.com/item?id=50453637)

@@ -1433,3 +1433,29 @@ Sources: [VulnCheck: Glasswing November update](https://www.vulncheck.com/blog/a
 Sources: [APSB26-191](https://www.adobe.com/trust/security/products/connect/apsb26-191.html) ·
 [NVD: CVE-2026-126187](https://nvd.nist.gov/vuln/detail/CVE-2026-126187) ·
 [Chrome Releases](https://chromereleases.googleblog.com/2026/11/stable-channel-update-for-desktop_018223192.html)
+
+## 2026-11-12 04:43 バッチ — MongoDB が 1 波で 26 レコードを投下、すべて CNA 採点・無分析；1 レコードはセンサス平均の外に出る方向の 3.1-vs-4.0 ペア
+
+MongoDB の CNA が 11 月 10 日に NVD へ **26 レコード**を `cna@mongodb.com` で発表した（キーワードではなくソースで
+数える——スコアは各々の持ち主がいる）、すべて依然 `Awaiting Analysis`。表の頂上：`CVE-2026-118383`、レプリケーション
+の use-after-free **9.0**（ネットワークベクトル、`S:C` スコープ変更）；`CVE-2026-120824`、時系列コレクションの UAF
+**8.8**（`PR:L`）；`CVE-2026-120815`、認可サブシステムの不正認可 **8.4**。残りはエンジン内の UAF ファミリー——SBE
+ウィンドウ関数アキュムレータ、プランキャッシュ、サーバーサイド JavaScript、集計フレームワーク——に Kerberos/SSPI と
+X.509 クラスタメンバーシップ・ガードが加わる。すべてのレコードが `jira.mongodb.org` チケットへリンクし、影響バージョン
+の質問はレコードから 1 ホップで答えられる。
+
+セミナー記録は `CVE-2026-120808`：Apple SecureTransport バックエンド下で IPv6 ピアへの証明書チェーン・トラスト検証を
+バイパスする macOS TLS クライアントが、**同一 CNA から CVSS 3.1 で 7.4、CVSS 4.0 で 9.1**（どちらも `Secondary`、
+レコード `Awaiting Analysis`；ベクトルは今回一手で再読）。3.1 側は `AV:N/AC:H/PR:N/UI:N/S:U/C:H/I:H/A:N`——算術は
+ちょうど 7.4 で再現——4.0 側は `AV:N/AC:H/AT:P/…/VC:H/VI:H/VA:N/SC:N/SI:N/SA:N`、つまり**両側とも vuln-only**：どの
+フレームワークでも影響は脆弱システムの外へ出ない。にもかかわらずここでの Δ = 4.0 − 3.1 は **+1.7**、521 ペア・
+センサスの vuln-only 平均（**+0.71**）を大きく外れる——分布の裾のデータ点であり、これこそ帯テーブルが法ではなく
+カウントと平均を印字する理由（目に見える構造差：v4.0 は悪用可能性を `AC:H` + `AT:P` に分け、脆弱システム影響を
+自尺度で重み付け）。唯一安全な文は feed の書いたまま：各スコアにそのバージョンを付して引用し、2 つの数字を 2 つの
+フレームワークのスコープ規約を通した同一バグとして読む——不一致ではなく、stopping-point の産物でもない（どちらの
+ベクトルにも Threat メトリックはない）。
+
+→ [[security]] [[cvss-stopping-points]] [[disclosure-lag]]
+
+Sources: [NVD: CVE-2026-118383](https://nvd.nist.gov/vuln/detail/CVE-2026-118383) ·
+[NVD: CVE-2026-120808](https://nvd.nist.gov/vuln/detail/CVE-2026-120808)

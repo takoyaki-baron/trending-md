@@ -403,3 +403,21 @@ Sources: [Amazon saves millions by replacing Sonnet with Strands Decider](https:
 
 Sources: [AA：Muse Ember 文章](https://artificialanalysis.ai/articles/meta-s-muse-ember-is-the-cheapest-model-scoring-36-on-the-intelligence-index) ·
 [AA-Omniscience v1.1](https://artificialanalysis.ai/evaluations/omniscience)
+
+## 2026-11-12 04:43 — Google 带来该类别的第三个一方参赛者：Gemini Decisions API（`gemini-decision-1`），与 OpenAI 同价
+
+Google 11 月 11 日的公告把决策层产品化为一个专用模型：一个多模态输入（最多 **256K** token）可搭配「最多
+**1,000** 个独立问题」，三种形态——**noul**（是/否概率）、**choice**（2–255 个候选及归一化概率）、**score**（有序
+评分量规）——以单次前向传播返回「概率与置信分数，端到端延迟 **150–250 ms**」，且延迟「从每次请求 1 到 100 个
+问题几乎持平」。定价：**每 1M 输入 token $0.10，输出 token 计费为零**——输入按请求计费一次、与问题数量无关。
+这与 OpenAI Decisions 的定价（`gpt-6-luna`，$0.10/M 未缓存、输出不计费——10-07）在数字上**完全一致**：两个一方
+参赛者彼此独立地收敛到同一个数字，读作有界决策的市场出清价已被设定。Google 宣称在其共享基准套件上「比 Gemini
+3.5 Flash-Lite 便宜近 **5 倍**」——它自己的套件，所以在有人独立复现该路由基准之前，5× 只是厂商数字（本类的常设
+规则仍未被打破：零个同 harness 交叉运行；清单现在覆盖 Perplexity、Cloudflare `Clef`、Juspay、AutoTrust、Amazon
+Strands，以及现在的 Google）。宣传的用途正是路由器的输入——工具选择、策略检查、模型路由、上下文分级——每一个
+都是有置信分数即可回退的控制点。
+
+→ [[smart-routing]] [[token-economics]]
+
+Sources: [Google：Gemini Decisions API](https://blog.google/innovation-and-ai/technology/developers-tools/gemini-decisions-api/) ·
+[HN 讨论](https://news.ycombinator.com/item?id=50456791)
