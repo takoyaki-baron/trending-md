@@ -1,6 +1,6 @@
 ---
 date: 2026-11-11
-updated: 2026-11-11T04:50:47Z
+updated: 2026-11-11T12:40:05Z
 schedule: 04:03, 12:03, 20:03 UTC+8
 sources: 28
 license: CC-BY-4.0
@@ -514,12 +514,181 @@ Mozilla / UC San Diego / トロント大学の研究のコンパニオンサイ�
 
 ---
 
+## 35. React Server Components に2つ目の未認証 RCE——10月14日に修正済み、CVE レコードの公開は11月10日
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** GitHub Advisory（CNA）+ NVD · CVSS 4.0 9.5 · レコード 11月10日（~07:17 UTC+8）
+- **Tags:** `react` `rce` `supply-chain`
+
+**CVE-2026-126187**（GitHub CNA、2026-11-10 23:17Z 公開、ステータス `Received`）。`react-server-dom-webpack`、`-parcel`、`-turbopack` の3パッケージに、**19.0.0–19.0.8、19.1.0–19.1.9、19.2.0–19.2.8、19.3.0** のバージョンで「React Server Components をサポートするフレームワークを狙った細工済みペイロードによる、未認証のリモートコード実行」の脆弱性。アドバイザリ（GHSA-xqc2-xf4c-x3h3、severity Critical、CVSS 4.0 **9.5**——`AV:N/AC:L/AT:P/PR:N/UI:N/VC:H/VI:H/VA:H/SC:H/SI:H/SA:N`）はスコープを強く限定している。「これは、レスポンスが複数の型付き配列と攻撃者制御の値を同時に運ぶ、極めて稀なケースにのみ影響する」。サーバーを使わない React コードのアプリや、RSC 対応フレームワーク・バンドラ・プラグインを使わないアプリは影響を受けない。修正は **19.0.9、19.1.10、19.2.9、19.3.1** で、npm の公開タイムスタンプによれば4バージョンすべて **2026-10-14** にリリースされている——CVE レコードがスキャナから見えるようになるより4週間早い。これは RSC ペイロードデコーダーファミリーで1年足らずでの2つ目の未認証 RCE だ（CVE-2025-55182、2025年12月）。本実行時点で react.dev のブログには関連記事がなく、アドバイザリとレコードそのものが開示である。参照先は `github.com/react/react`——React Foundation が2月に Linux Foundation の下へ移ってからのオーグホーム。
+
+**Why it matters:** RSC flight ペイロードデコーダーは再発型の RCE 表面になりつつある——11か月で2回、いずれもこれらのパッケージを推移的にバンドルする Next.js 系フレームワーク経由で到達できる。運用面の教訓は稀性条項ではなくラグの方だ。修正版は10月14日から npm にあったので、露出を決めるのは緊急性ではなく依存解決だ。≥ 19.0.9 / 19.1.10 / 19.2.9 / 19.3.1 を固定し、どちら側にいるかは lockfile に教えてもらえ。
+
+[`🔗 NVD：CVE-2026-126187`](https://nvd.nist.gov/vuln/detail/CVE-2026-126187) · [`🔗 GHSA-xqc2-xf4c-x3h3`](https://github.com/react/react/security/advisories/GHSA-xqc2-xf4c-x3h3)
+
+---
+
+## 36. Apple の Harbor：Mac をプライベート AI 推論サーバーに変えるリークされた Mac アプリ——Thunderbolt 5 で複数 Mac をプーリング
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** 9to5Mac · HN 297 pts · 11月11日（~05:25 UTC+8）
+- **Tags:** `apple` `local-ai` `inference`
+
+リーカー Aaron Perris が、未発表の Apple Mac アプリ **Harbor** の証拠を出した。リーク文言そのまま。「Harbor turns your Mac into a private AI inference server. Run open-weight models locally on Apple silicon—your data never leaves your hardware, and nothing reaches the cloud. Connect multiple Mac computers over Thunderbolt 5 to pool…」ユニファイドメモリをプーリングし、1台では捌けない大きなモデルと高い同時実行性を可能にする。"ツイートは、Harbor が現在 Claris ブランドの下でプライベートプレビュー中だと締めている——Claris、FileMaker の背景にある Apple のソフトウェアブランドだ。9to5Mac はこれを、今年 Mac Studio や Mac mini がオープンウェイトモデル実行で人気を博した「ローカル AI ボックスとしての Mac」という用途に、Apple がさらに腰を据える動きと読む。これはシステムレベルの証拠であって発表ではない。アプリのスクリーンショットも日付もバージョンもなく、Apple は何も確認していない。
+
+**Why it matters:** Thunderbolt 5 による複数 Mac のプーリングは、より多くのユニファイドメモリをひとつのモデルの後ろにどう置くかという、昔からの問いへの初のファーストパーティ製の答えになる——今週の llama.cpp の NCCL マルチノード作業や llama-modchip の CPU オフロード実験が攻めていたのは同じ問題だ。ニュースはポジショニングの細部だ。*推論サーバー*はインフラの言語であってコンシューマーチャットアプリのそれではない。これは現在ホストを務めている Ollama/LM Studio 層との直接競合を意味する。Apple が出荷または確認するまで、機能リストはリークの文言として扱うこと。
+
+[`🔗 9to5Mac：Apple has new Mac app coming`](https://9to5mac.com/2026/11/10/apple-has-new-mac-app-coming-to-make-running-local-ai-models-easy/) · [`🔗 HN ディスカッション`](https://news.ycombinator.com/item?id=50446520)
+
+---
+
+## 37. 「AI の使用は壊れやすいコードベースを生成する」——Meta エンジニアによる AI クォータの内部証言と、4つの破綻パターン
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Evan X. Merz · HN 582 pts · 11月10日（~18:25 UTC+8）
+- **Tags:** `ai-coding` `code-quality` `analysis`
+
+Evan X. Merz のエッセイは今週の HN で最もポイントの高い記事で、最初の段落がすでにニュースだ。5月に Meta をレイオフされた理由の一つを「同僚の何人かより、AI/LLM をコーディングツールとして採用することへの抵抗が少し強かったからではないか」と推測しつつ、クォータを赤裸々に書いている。「あそこの最後の数か月、私が書いたコードの少なくとも90%は AI 生成だった。それがまともな評価を得るための最低ラインだった」。生産性の主張は測定済みで、修辞ではない。「AI は私の書くコード量を10倍にはしなかった。2倍にすらしなかった」。具体 specimen はこれだ。「チームで最も優れたプログラマーの一人が、`:hover` セレクタではなく JavaScript イベントでマウスオーバー効果を実装したコードをマージしようとしていた」。現在は「別の大手テック企業」で「それが今日の期待値だから」と100% AI 生成に切り替えた彼が、この実践がコードベースを脆くする4つの道を列挙する。軸となる命題は一つ。「AI はコンテキストウィンドウに収まる問題を非常にうまく解くが、その比較的小さな枠では理解できない長期的な問題には完全に盲目的だ」。
+
+**Why it matters:** これはクォータシステムの内部からの一次証言だ。「まともな評価のための最低ライン」という細部が、エンタープライズ規模で AI 使用メトリクスが実際に何を測っているかを定量化する。今週の同じ主張の計測版（コーディングエージェントはタスクの95%を完了するが安全に完了するのは37%、未完了タスクの交互配置で11.5ポイント失う）と並べて読める。それは研究ではなく逸話だ——しかし `:hover` の例は転送可能な検査ターゲットだ。スタイル上はもっともらしく、機能的には誤りで、しかもレビューもテストも通るコード。
+
+[`🔗 Evan X. Merz：AI usage generates a fragile codebase`](https://evanxmerz.com/post/ai-usage-generates-a-fragile-codebase/) · [`🔗 HN ディスカッション`](https://news.ycombinator.com/item?id=50438318)
+
+---
+
+## 38. Adobe のパッチチューズデー：110レコード——Experience Manager に9.9が4件、Adobe Connect に10.0が5件
+
+- **Velocity:** ▮▮ rising
+- **Source:** Adobe PSIRT（APSB26-189/191）+ NVD · 11月10–11日
+- **Tags:** `adobe` `cve` `patch-tuesday`
+
+NVD のパッチチューズデーウィンドウには **`psirt@adobe.com` からの110レコード**（測定区間 11月10日 04:30Z → 11日 12:00Z）が流れ込んだ——採点の重みでは Microsoft の1,094に次ぐ。**21件が ≥9.0で、同じウィンドウの Microsoft の25件に次ぐ**（Google の dsap 158レコードに高スコアはゼロ）、スコアはすべて CNA 自身のものだ。**APSB26-189（Experience Manager）**は9.9を4件出している。CVE-2026-113579 と CVE-2026-113580（コードインジェクション——「低権限の攻撃者がこの脆弱性を悪用して任意コードを実行できる。悪用にユーザー操作は不要。スコープは変更済み」）、CVE-2026-114371 と CVE-2026-119017（不適切な認可による任意コード実行）。**APSB26-191（Adobe Connect**、11月10日公開、Priority 2、**12.12 以前**が影響対象）はさらに刺さる文書だ。**10.0 の CVE が5件**——SSRF（CVE-2026-121356、ベクトル `CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:C/C:H/I:H/A:N`）、パストラバーサル（CVE-2026-121351）、不適切な認可（CVE-2026-121352）、CRLF インジェクション（CVE-2026-121353）、そして2つ目の SSRF（CVE-2026-121889）——に続き、9.9 の棚（SQL インジェクション、コードインジェクション、XXE、パストラバーサル）。修正ビルドは **12.12.a / 12.11.i / 12.10.f / 12.9.a / 12.8.a**。Adobe は「本アップデートで対処された問題のいずれについても in-the-wild の悪用は把握していない」と述べている。この波は After Effects と Audition（8.6–8.7）にも及ぶ。サンプルしたレコードは NVD 上 `Received`。
+
+**Why it matters:** 多くの企業が自分たちが所有していることすら忘れている会議製品が、1つのアドバイザリにベクトル上は事前認証不要の10.0を5つ抱えている——そしてパッチチューズデーのトリアージが Microsoft のリストで止まるなら、そのどれも視野に入らない。Priority 2 のラベルが5つの10.0の隣に座る違和感。定性評価と CVSS セットが緊急性について食い違っているのは、今月の Microsoft の波が見せたのと同じ逆転だ（より高スコアの権限昇格42件のうち、悪用されていたのは Moderate 6.5 の1件）。
+
+[`🔗 APSB26-191（Adobe Connect）`](https://www.adobe.com/trust/security/products/connect/apsb26-191.html) · [`🔗 APSB26-189（Experience Manager）`](https://www.adobe.com/trust/security/products/experience-manager/apsb26-189.html)
+
+---
+
+## 39. Chrome、報告から3日で in-the-wild の XML Use-After-Free を修正——CISA が翌日に KEV 掲載
+
+- **Velocity:** ▮▮ rising
+- **Source:** Chrome Releases + CISA KEV · 修正 11月9日、KEV 掲載 11月10日
+- **Tags:** `chrome` `kev` `in-the-wild`
+
+月曜のデスクトップ安定版アップデート（**157.0.8103.50/.51**、11月9日）には9件のセキュリティ修正が入った——そしてそれらの重みを並べ替える一文が1つ。**「Google is aware that an exploit for CVE-2026-125350 exists in the wild.」**（Google は CVE-2026-125350 の悪用が in-the-wild で存在することを認知している。）CVE-2026-125350 は XML における Use-After-Free で、**匿名の報告者が 2026-11-06 に報告**（報奨金：TBD）——報告から3日で修正され、詳細は制限付き、そして **CISA が11月10日に KEV へ追加**した。NVD のレコードは `Analyzed`。そこにある8.8は CISA-ADP エンリッチメント（唯一のメトリクス——NVD 自身のスコアではない）。同じリリースでは **CVE-2026-125347**（FileSystem の不適切な認可）も修正。ADP 採点のレコードによれば9.6で、「リモートの攻撃者がソーシャルエンジニアリングを利用してサンドボックス**外**で任意コードを実行できるようにしていた」（still `Undergoing Analysis`）。ほかに V8 の型混同、GPU の Out-of-bounds 書き込み、Compositing のバッファオーバーフロー、WebGL と GPU の未初期化リソース（すべて High。Medium 2件はどちらも GPU）。
+
+**Why it matters:** 先週の213件修正の Chrome 157 の波に続く緊急パッチだ。そしてパターンは一貫している。悪用されていたのは、パッチデーの直前に匿名で報告され、公開詳細が最も少ないバグだった。サンドボックス脱出（125347）と悪用確認済みのサンドボックス内 RCE（125350）が同じ月曜リリースに乗った以上、≤ 157.0.8103.51 は今週、どこでも離れるべきバージョンラインだ。
+
+[`🔗 Chrome Releases：Stable Channel Update for Desktop`](https://chromereleases.googleblog.com/2026/11/stable-channel-update-for-desktop_018223192.html) · [`🔗 NVD：CVE-2026-125350`](https://nvd.nist.gov/vuln/detail/CVE-2026-125350)
+
+---
+
+## 40. Meta Ray-Ban グラスへのハッキング：OTA フックでファームウェア取得、グラス上への自己署名 APK、そして修正を打ち破る MobileConfig の1バイト反転
+
+- **Velocity:** ▮▮ rising
+- **Source:** p0pcycle（pamoutaf）· HN 125 pts · 11月10日（スレッド ~01:19 UTC+8、11月8日）
+- **Tags:** `hardware-hacking` `android` `vuln-research`
+
+記事は、借りたスマートグラスでの全チェーンを歩む。ファームウェアは Meta 自身のパイプラインから来た。Meta AI Android アプリを JADX でリバースして OTA フローを暴露——`OTAArtifactInfo` に Frida フックを挂けて CDN のダウンロード URL を表示させ、GraphQL 入力 `device_firmware_full_update_only` を true に反転させて**フル**アップデートを取得。`payload.bin` を含む Android イメージで、payload-dumper でダンプしてマウントした。コード実行には Meta の開発者用経路を使った。DAT SDK（Device Access Toolkit）の APK はスマホアプリがグラスへプッシュするものだが、「ファームウェア126まで、ファームウェアは DAT APK が Meta によって署名されているかを検証していなかった」——そこで Frida のスワップで自己署名 APK を植えた。Meta のサンプルアプリが DAT セッションを開く。`startDwaReadinessProbe()` をフックしてセッションを切られるのを防いだ後、植えたアプリが Wi-Fi Direct サブネット（192.168.49.x）の **TCP 31337** にシェルをバインド。`nc` でグラスに繋ぐと uid 10097 が返ってきた。Meta はその後、MobileConfig によって署名検証を行うファームウェア127を出した——しかし設定はペアリングされたスマホ経由で Airship を通ってグラスに届き、グラスは構造的な正当性のみ検証する。「改ざんされていないこと」は検証しない。そこで `0.mctable` の1バイト（0x80→0x00）を反転すれば検証は無効化できる。「We're soooo back。」Meta のバグバウンティに報告済み。投稿の承認は「今は修正されていると仮定してくれる」。`ToneGenerator` のビープによるデバッグ（「Beep is the new printf」）と、報奨金の揉め事（「we settled (ok there was no settling but I agreed to the new payout)」）も記録している。
+
+**Why it matters:** 一般化できる教訓が3つある。開発者/デバッグ面（DAT）が攻撃表面だった——またか。デバイスを堅牢化する設定が、デバイスが改ざん検証しない経路で届く——これはあらゆる管理対象デバイスが共有するパターンだ。そして報奨金の摩擦（スレッドによれば「ウェアラブル部門ではなかった」）は、次の研究者が公開するかどうかを決める経済学だ。
+
+[`🔗 p0pcycle：Hacking the Meta Ray-Ban smartglasses`](https://p0pcycle.com/2026/11/06/hacking-the-meta-ray-ban-smartglasses/) · [`🔗 HN ディスカッション`](https://news.ycombinator.com/item?id=50406224)
+
+---
+
+## 41. Qwen4 が来る——Qwen4-Max が Alibaba の Token Plan でプレビュー開始、重みもベンチマークもなし
+
+- **Velocity:** ▮▮ rising
+- **Source:** Alibaba Qwen（公式発表）· HN 43 pts · 11月11日（~10:33 UTC+8）
+- **Tags:** `qwen` `model-release` `alibaba`
+
+Qwen の公式アカウントが次世代を発表した。「Qwen4 is coming. Deeper knowledge. Richer world understanding. Stronger coding and agentic capabilities. Built for real-world tasks — from complex coding and knowledge work to front-end builds and professional software workflows. **Qwen4-Max is now in preview on Alibaba's Token Plan**」。QwenWork、Qoder、Qwen アプリ、QwenStudio で早期アクセスが可能。これが開示の全部だ——パラメータ数なし、ベンチマークカードなし、重みなし、Token Plan の言及以外の API 料金もない。本実行時点で qwen.ai のブログは JS シェルで、添付の記事はない。
+
+**Why it matters:** これは Qwen4 の世代が存在することの初の公式確認だ。そのオープンウェイトの系譜は、今年のオープンエコシステム成果の大半を支えてきた（Figma などがポストトレーニングした Qwen 3.8 27B チェックポイントを含む）。Max が商用プランでプレビュー先行なのは、このファミリーの最近のパターン——発表、ホステッドアクセス、重みは後——を踏襲する。直近の Hy4 のケースでは重みは最後まで保留されたままだった。Qwen4-Max がオープンウェイトの道を辿るかどうか。それが、これらのモデルをトレンドに押し上げてきた人々にとって唯一重要な問いだ。
+
+[`🔗 Qwen on X：Qwen4-Max preview`](https://x.com/Alibaba_Qwen/status/2120335993643684315) · [`🔗 HN ディスカッション`](https://news.ycombinator.com/item?id=50449130)
+
+---
+
+## 42. Ginux、ブータブルな Rust カーネルからユーザースペースカーネルへ旋回——AI がカーネルを作った実験が、自分の限界を名指しする
+
+- **Velocity:** ▮▮ rising
+- **Source:** gmkurtzer/ginux · HN 83 pts · 11月11日（~13:25 UTC+8）
+- **Tags:** `linux` `kernels` `agents`
+
+Rocky Linux の創設者で Singularity の作者でもある Greg Kurtzer が、**ginux** にピボットの説明を発表した。プロジェクトは「UEFI から直接ブートし、Rocky Linux 10 のユーザースペースを実行する独立した Rust カーネル」として始まった。「その研究フェーズは完了した」（ソースは `bootable-kernel` ブランチと `bootable-kernel-final` タグに永久保存）。「以降の開発はここではユーザースペースカーネルとして続く」——「普通の Linux プロセスとして実行され、管理対象ワークロードとホストカーネルの間に明示的でバージョン付けされたコントラクトを置く」。README は、実験が何を証明したかに異例なほど率直だ。「アーキテクチャ、ゲート、実行可能テストを通じて経験豊富な人間に導かれた AI コーディングエージェントは、意味のある Linux ユーザースペースを実行できる新しいカーネルを構築できた。それは同時に、その結果の限界も明白にした」——「Linux はソースコードよりはるかに多い。それは安定したインターフェースであり、開発プロセスであり、グローバルなコミュニティであり、ベンダーとハードウェアのアライメントであり、数十年の互換性と運用経験だ。カーネルのメカニズムを再実装しても、その生態系は再現されない」。HN のコメント欄はすぐに User-mode Linux を祖先として持ち出した。リポジトリは Apache-2.0、10月11日作成、今日もプッシュされている。
+
+**Why it matters:** ひとつの項目に2つの物語がある。エージェント能力論にとっては、スコープ規律を備えた実証例だ。エージェントは人間のアーキテクチャ的指導の下で実際にブータブルなカーネルを作った——そしてプロジェクトはその後、重要な方の勝利を辞退した（「Linux と競争することは決して目標ではなかった」）。システム屋にとっては、ワークロードとホストカーネルの間のバージョン付けされたコントラクトは実に興味深いアイソレーションプリミティブで、スレッドがすでに問いている開いた問いは、実践で namespaces や UML とどこが違うのか、だ。
+
+[`🔗 gmkurtzer/ginux`](https://github.com/gmkurtzer/ginux) · [`🔗 HN ディスカッション`](https://news.ycombinator.com/item?id=50450007)
+
+---
+
+## 43. 最難関の tarball：ひとつのアーカイブを、日常使いのツールが8通りに展開する
+
+- **Velocity:** ▮▮ rising
+- **Source:** Harmen Stoppels · HN 150 pts · 11月10日（~23:00 UTC+8）
+- **Tags:** `tar` `interop` `spec-ambiguity`
+
+Harmen Stoppels は、GNU tar の呼び出し一回で、どの実装が読むかで意味が変わるアーカイブを作った。トリックはこうだ。`file`、`./file`（ハードリンクとして格納）、`empty` を順にアーカイブし、2番目のエントリのユニークなパスを利用してハードリンクを `café` にリネームし、ハードリンクに `size=512` の pax レコードを加える。512 は tar ヘッダのサイズそのものなので、すべての読み手は判断を迫られる。その512バイトはハードリンクのデータなのか、次のメンバーのヘッダなのか。POSIX はハードリンクのデータブロックが pax アーカイブに「含まれてもよい」と言い、その含意は不明瞭だ。結果：GNU tar、BusyBox、Python、Go、Perl は3ファイルすべてを合理的に展開する。**bsdtar——macOS のシステム tar——は512バイトをハードリンクの中に書き込み、`file` は最終的に `empty` の tar ヘッダを格納する**。7-Zip、node-tar、tar-fs、Rust の tar は前方へスキップして `empty` を静かに落とす。Java の Commons Compress は「データとしてのヘッダ」を格納する別ファイルを作る。PHP の PharData、RubyGems（`PaxHeaders` ディレクトリを作る）、R（サイズを `empty` に誤適用——512個のヌルバイト）、Haskell（`café` を `cafÃ©` に化けさせる）はそれぞれ独自の読み方を見つける。そして .NET、Julia、uv はアーカイブを拒否する——「技術的には POSIX 非準拠だとしても、これができる最善のことだと私は信じている」。これは彼の tar-minefield スイートにある **134 の厄介な tarball** のひとつだ（ドキュメントは stoppels.ch/tar、Zenodo DOI あり）。「実装が tar アーカイブを同じように展開することを保証する」という目的で作られている。
+
+**Why it matters:** tar 展開の不一致はセキュリティ問題だと minefield の README は言う。アーカイブツーリングはパストラバーサルと展開混乱バグの棲み処で、このケースが見せるのは、同じバイト列が macOS と Linux と自分の言語のライブラリで異なるファイルを意味しうることだ。アーカイブ処理コードを書くすべての人にとって、真似する価値のある振る舞いは、拒否する側のそれだ。
+
+[`🔗 Stoppels：The hardest tarball?`](https://stoppels.ch/2026/11/07/the-hardest-tarball.html) · [`🔗 haampie/tar-minefield`](https://github.com/haampie/tar-minefield)
+
+---
+
+## 44. Arista の26レコード投下：9.8 の BGP クラッシュ——そして C-260/C-250 アクセスポイントにフリート共通の静的ファームウェア鍵が出荷されていた
+
+- **Velocity:** ▮ steady
+- **Source:** Arista PSIRT + NVD · 26 レコード · 11月10–11日
+- **Tags:** `arista` `network-security` `cve`
+
+`psirt@arista.com` は同じ NVD ウィンドウに **26 レコード**を入れた。**5件が ≥9.0**、すべて `Received` でスコアは CNA 自身のものだ。サプライチェーンに関心がある者向けのヘッドラインは **CVE-2026-102166（9.4）**。「Arista C-260 および C-250 アクセスポイントは、ファームウェアイメージ検証と SSLP 認証に使われる、フリート共通の静的暗号鍵を出荷している。これらの鍵にアクセスできる攻撃者は、検証チェックを通過する改変ファームウェアを作れる」——そしてその2モデルに限定していると明示している（「他のアクセスポイントモデルはセキュアブート付きのデジタル署名済みアップグレードイメージを強制しており、影響を受けない」）。隣のルーティング機器のバッチ：**CVE-2026-121289（9.8**、未認証の細工済み BGP パケットで BGP エージェントがクラッシュ**)**、CVE-2026-121367（9.6、RIPv2）、CVE-2026-121370 と CVE-2026-121295（9.2、PTP と S-BFD）、CVE-2026-120982 と CVE-2026-121371（8.7、BGP と eAPI HTTP）、CVE-2026-121368（8.9、BFD keyed MD5/SHA1）、CVE-2026-121287（8.8、RIPv2 隣接ネットワーク）。
+
+**Why it matters:** ファームウェア検証における静的鍵は、サプライチェーン脅威を永続化するクラスだ——検証を通過する改変ファームウェアは、構造的に再起動後も生き残る。スコープを限定する一文は実質的な仕事をしている（セキュアブートのモデルは影響を受けない）。それはキャンパスのアクセスポイント群を再イメージする前に確認すべき文と exactly 一致する。
+
+[`🔗 Arista Security Advisory 0227（静的鍵）`](https://www.arista.com/en/support/advisories-notices/security-advisory/25049-security-advisory-0227) · [`🔗 NVD：CVE-2026-102166`](https://nvd.nist.gov/vuln/detail/CVE-2026-102166)
+
+---
+
+## 45. 電圧グリッチングで CMP 170HX マイニングカードを A100-80G に変える——SM 数はリテール A100 より多い
+
+- **Velocity:** ▮ steady
+- **Source:** blog.kate.land · HN 新着 · 11月11日（~18:48 UTC+8）
+- **Tags:** `hardware` `voltage-glitching` `gpu`
+
+GA100 ダイ上の電圧故障注入脆弱性「操作者が任意のフューズを焼けるようにするもの」。作者は CMP 170HX マイニングカードを「実質的に A100-80G」に変換した——そしてロック解除されたカードは「リテール A100 より**約1.2倍速い**。すべての機能 SM が有効化されているため（約120〜126、ダイのくじ引き次第）、NVIDIA が量産 A100 全体で選んだ歩留まり安全側の108 SM ではなく」。CMP で無効化された機能も同じ方法でアンロック可能だ——NVLink、PCIe Gen4、NVJPG、NVDEC、MIG（最後の3つは未検証）。記事はハードウェア制限モデル（「fuseless fuses」、floorsweeping）、フューズ焼きの手順、そして3つの故障注入ステージ——すべてのフューズがゼロに感知される段階、RIR 読み取りが乱される段階、そして決める「Goldilock's glitch」——を記録している。投稿の nvidia-smi 出力は 81,920 MiB のデバイス2枚と NVLink トポロジ（NV12）を示す。
+
+**Why it matters:** CMP ラインの制限は供給側の市場セグメンテーションだった——マイニングカードを意図的に計算に使えなくした——そしてこれは、そのセグメンテーションが電圧グリッチングで任意に書けるフューズによって、1枚のフューズ焼きの深さしかないことを実証した。セキュリティペーパーとして読むこと（物理アクセスを持つ操作者は消音されたシリコンを再有効化し、SKU の境界を破れる）。ショッピングガイドとしてではない。手順は物理的なカードアクセス、専用装置、そしてダイのくじ引きを必要とする。
+
+[`🔗 Kate's blog：Using voltage glitching to unleash the A100`](https://blog.kate.land/posts/using-voltage-glitching-to-unlock-the-a100/) · [`🔗 HN ディスカッション`](https://news.ycombinator.com/item?id=50451903)
+
+---
+
+## 46. Open Source Says No：22プロジェクトの AI コントリビューションポリシーを1つのカタログに——immich と meilisearch は全面禁止
+
+- **Velocity:** ▮ steady
+- **Source:** osssaysno.com · HN 52 pts · 11月11日（~16:51 UTC+8）
+- **Tags:** `open-source` `ai-policy` `maintainers`
+
+新しいディレクトリ（「Last refreshed 2026-11-11」）が、著名な OSS プロジェクトの公開ポリシーが AI 支援または AI 生成コントリビューションについて何を言っているかをカタログ化している。ラベルは3つ。**Banned**、**Restricted**、**Assist allowed**（現時点で22プロジェクト）。禁止ティアには **immich**（「LLM が生成した PR を開かないでほしい」——118,789スター）と **meilisearch**（「生成 AI ツーリング（GitHub Copilot、ChatGPT、Claude Code、Cursor など）が生成したコンテンツは、外部コントリビューションとして一切考慮しない。対象には、コード、テスト、ドキュメント、PR 説明、PR コメント、issue 説明、issue コメントを含む」——59,840スター）が含まれ、ほかに okhttp と Servo。同サイトは「情報提供のみを目的とし、これらのポリシーの是非について立場を取らない」。投稿は事前入力済みの issue を開き、「その上で自動ポリシーチェックが走る」。
+
+**Why it matters:** AI コントリビューションに関するメンテナのポリシーは、CONTRIBUTING.md と怒りの issue スレッドに散らばっていた。プロジェクトごとに読みやすい形にすることで、コントリビューターの行動は変わる——複数リポジトリに AI 生成 PR を出すなら、まず確認すべきリストだ。そしてそれは、Glasswing 規模の機械生成脆弱性レポートが同じメンテナに着地しているまさにその時、AI コントリビューション反対の立場に最初の構造化データセットを与えるものでもある。
+
+[`🔗 Open Source Says No`](https://osssaysno.com) · [`🔗 HN ディスカッション`](https://news.ycombinator.com/item?id=50451102)
+
+---
+
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-11-11T04:50:47Z |
-| Items | 34 |
+| Generated | 2026-11-11T12:40:05Z |
+| Items | 46 |
 | Sources tracked | 28（Hacker News、GitHub Trending、NVD、CISA KEV、MSRC CVRF、arXiv、Hugging Face、ベンダーブログ、セキュリティアドバイザリ） |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8（1 日 3 回） |
 | Ranking | 速度加重（即時性 × エンゲージメント加速度 × 情報源の権威） |

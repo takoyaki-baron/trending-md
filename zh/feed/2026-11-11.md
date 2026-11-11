@@ -1,6 +1,6 @@
 ---
 date: 2026-11-11
-updated: 2026-11-11T04:50:47Z
+updated: 2026-11-11T12:40:05Z
 schedule: 04:03, 12:03, 20:03 UTC+8
 sources: 28
 license: CC-BY-4.0
@@ -514,12 +514,181 @@ Mozilla / 加州大学圣地亚哥分校 / 多伦多大学联合研究的配套�
 
 ---
 
+## 35. React Server Components 出现第二个未认证 RCE——10 月 14 日已修复，CVE 记录 11 月 10 日才落地
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** GitHub Advisory（CNA）+ NVD · CVSS 4.0 9.5 · 记录 11 月 10 日（~07:17 UTC+8）
+- **Tags:** `react` `rce` `supply-chain`
+
+**CVE-2026-126187**（GitHub CNA，2026-11-10 23:17Z 发布，状态 `Received`）：`react-server-dom-webpack`、`-parcel`、`-turbopack` 三个包在 **19.0.0–19.0.8、19.1.0–19.1.9、19.2.0–19.2.8、19.3.0** 版本中存在"通过构造载荷攻击支持 React Server Components 的框架、实现未认证远程代码执行"的漏洞。公告（GHSA-xqc2-xf4c-x3h3，severity Critical，CVSS 4.0 **9.5**——`AV:N/AC:L/AT:P/PR:N/UI:N/VC:H/VI:H/VA:H/SC:H/SI:H/SA:N`）把范围收得很紧："这只影响响应同时传输多个类型化数组和一个攻击者可控值的极端罕见情形"；React 代码不使用服务端的应用、或不使用支持 RSC 的框架/打包器/插件的应用均不受影响。修复版本为 **19.0.9、19.1.10、19.2.9、19.3.1**，npm 的发布时间戳显示这四个版本全部于 **2026-10-14** 落地——比 CVE 记录让扫描器能看到它们早了四周。这是 RSC 载荷解码器家族不到一年内的第二个未认证 RCE（CVE-2025-55182，2025 年 12 月）。截至今日运行，react.dev 博客还没有相关文章——公告和记录本身就是披露；引用指向 `github.com/react/react`，即 React Foundation 于 2 月转入 Linux Foundation 之后的新组织地址。
+
+**Why it matters:** RSC flight 载荷解码器正在成为复发型 RCE 面——11 个月内两次，每次都可经由传递打包这些包的 Next.js 类框架触达。操作层面的教训是滞后期而非罕见性条款：修复版本 10 月 14 日就已在 npm 上，决定暴露面的是依赖解析，不是紧迫感。钉住 ≥ 19.0.9 / 19.1.10 / 19.2.9 / 19.3.1，让 lockfile 告诉你自己在哪一侧。
+
+[`🔗 NVD：CVE-2026-126187`](https://nvd.nist.gov/vuln/detail/CVE-2026-126187) · [`🔗 GHSA-xqc2-xf4c-x3h3`](https://github.com/react/react/security/advisories/GHSA-xqc2-xf4c-x3h3)
+
+---
+
+## 36. 苹果 Harbor：泄露的 Mac 应用把 Mac 变成私有 AI 推理服务器——经 Thunderbolt 5 池化多台 Mac
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** 9to5Mac · HN 297 分 · 11 月 11 日（~05:25 UTC+8）
+- **Tags:** `apple` `local-ai` `inference`
+
+爆料人 Aaron Perris 曝出一个未发布的苹果 Mac 应用 **Harbor**——按泄露文案的原话："Harbor turns your Mac into a private AI inference server. Run open-weight models locally on Apple silicon—your data never leaves your hardware, and nothing reaches the cloud. Connect multiple Mac computers over Thunderbolt 5 to pool…"以汇集统一内存，让大型模型与更高并发成为可能，这是一台电脑独自无法承载的。"推文结尾提到 Harbor 目前正以 Claris 品牌处于私密预览阶段——Claris，FileMaker 背后的苹果软件品牌。9to5Mac 将其解读为苹果正加码"Mac 作为本地 AI 盒子"这一用例——今年 Mac Studio 和 Mac mini 因跑开源权重模型而走红的正是这条路线。这是系统层面的证据，不是官方公告：没有应用截图、没有日期、没有版本号，苹果也未确认任何内容。
+
+**Why it matters:** 多台 Mac 经 Thunderbolt 5 池化，将是"如何把更多统一内存置于一个模型身后"这一悬而未决问题的首个第一方答案——本周 llama.cpp 的 NCCL 多节点工作和 llama-modchip 的 CPU 卸载实验攻的正是同一道题。定位措辞本身就是新闻：*推理服务器*是基础设施语言，不是消费级聊天应用，它将让苹果直接与目前寄居其上的 Ollama/LM Studio 层竞争。在苹果出货或确认之前，把功能清单当作泄露文案的原话看待。
+
+[`🔗 9to5Mac：Apple has new Mac app coming`](https://9to5mac.com/2026/11/10/apple-has-new-mac-app-coming-to-make-running-local-ai-models-easy/) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50446520)
+
+---
+
+## 37. "AI 的使用生成脆弱的代码库"——一位 Meta 工程师对 AI 配额的内部叙述，并列出四种失效模式
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Evan X. Merz · HN 582 分 · 11 月 10 日（~18:25 UTC+8）
+- **Tags:** `ai-coding` `code-quality` `analysis`
+
+Evan X. Merz 的这篇文章是本周 HN 得分最高的故事，而第一段就是新闻：他怀疑自己 5 月从 Meta 被裁的原因之一是"我对把 AI/LLM 当编程工具这件事，比一些同事要更抗拒一点"——同时把配额说得明明白白："我在那儿的最后几个月，至少 90% 的代码是用 AI 生成的，这是拿到像样绩效的最低线。"生产力主张是量过的，不是修辞："AI 没有把我写的代码量放大 10 倍，连 2 倍都没有。"他给出的具体标本："我们团队最好的程序员之一，试图合入用 JavaScript 事件做鼠标悬停效果、而不是用 `:hover` 选择器的代码。"如今在"另一家大公司"按"今天的预期"100% 用 AI 生成代码的他，列出了这种做法让代码库变脆的四种方式，统摄在一个论点下："AI 倾向于把能塞进它上下文窗口的问题解决得很好，但对那些无法在这个相对狭小的框里理解的长期问题，它完全失明。"
+
+**Why it matters:** 这是来自配额体系内部的第一手叙述——"拿到像样绩效的最低线"量化了企业规模下 AI 使用指标到底在测量什么，并与本周同一主张的计量版相互印证（编码智能体完成 95% 的任务、安全完成的只有 37%；交错未完成任务损失 11.5 分）。它是轶事而非研究——但 `:hover` 这个例子是可迁移的检查靶点：风格上貌似合理、功能上错误、却能同时通过评审和测试的代码。
+
+[`🔗 Evan X. Merz：AI usage generates a fragile codebase`](https://evanxmerz.com/post/ai-usage-generates-a-fragile-codebase/) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50438318)
+
+---
+
+## 38. Adobe 补丁星期二：110 条记录——Experience Manager 四个 9.9，Adobe Connect 五个 10.0
+
+- **Velocity:** ▮▮ rising
+- **Source:** Adobe PSIRT（APSB26-189/191）+ NVD · 11 月 10–11 日
+- **Tags:** `adobe` `cve` `patch-tuesday`
+
+NVD 的补丁星期二窗口录得 **110 条 `psirt@adobe.com` 记录**（统计区间 11 月 10 日 04:30Z → 11 月 11 日 12:00Z）——分数权重仅次于微软的 1,094 条：**21 条 ≥9.0，同一窗口内仅次于微软的 25 条**（Google 的 158 条 dsap 记录无一高分），每个分数都是 CNA 自己给的。**APSB26-189（Experience Manager）**贡献四个 9.9：CVE-2026-113579 与 CVE-2026-113580（代码注入——"低权限攻击者即可利用该漏洞执行任意代码。利用无需用户交互。范围已变更。"）、CVE-2026-114371 与 CVE-2026-119017（不正确授权导致任意代码执行）。**APSB26-191（Adobe Connect**，11 月 10 日发布，Priority 2，影响 **12.12 及更早版本**）是更扎眼的一份：**五条 10.0 CVE**——SSRF（CVE-2026-121356，向量 `CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:C/C:H/I:H/A:N`）、路径遍历（CVE-2026-121351）、不正确授权（CVE-2026-121352）、CRLF 注入（CVE-2026-121353）、以及第二个 SSRF（CVE-2026-121889）——其后是一排 9.9（SQL 注入、代码注入、XXE、路径遍历）。修复版本：**12.12.a / 12.11.i / 12.10.f / 12.9.a / 12.8.a**。Adobe 表示"未发现在野利用本更新所涉任何漏洞的行为"。这波还波及 After Effects 与 Audition（8.6–8.7）。抽样记录在 NVD 上为 `Received`。
+
+**Why it matters:** 一个多数企业早已忘记自己还拥有的会议产品，在一份公告里塞了五个按向量即为未认证的 10.0——而如果补丁星期二的排查只看微软的清单，这一切都不会进入视野。Priority 2 的标签与五个 10.0 并排显得突兀——定性评级与 CVSS 集合对紧迫性的判断互相矛盾，这正是本月微软一波展示过的倒置（42 个更高分提权漏洞中，被在野利用的却是一个 Moderate 6.5）。
+
+[`🔗 APSB26-191（Adobe Connect）`](https://www.adobe.com/trust/security/products/connect/apsb26-191.html) · [`🔗 APSB26-189（Experience Manager）`](https://www.adobe.com/trust/security/products/experience-manager/apsb26-189.html)
+
+---
+
+## 39. Chrome 修复一个在野利用的 XML 释放后重用——报告后三天，CISA 次日收入 KEV
+
+- **Velocity:** ▮▮ rising
+- **Source:** Chrome Releases + CISA KEV · 修复 11 月 9 日，KEV 收录 11 月 10 日
+- **Tags:** `chrome` `kev` `in-the-wild`
+
+周一的桌面稳定版更新（**157.0.8103.50/.51**，11 月 9 日）带 9 项安全修复——以及一句改变它们分量的话：**"Google is aware that an exploit for CVE-2026-125350 exists in the wild."**（Google 获悉 CVE-2026-125350 存在在野利用。）CVE-2026-125350 是 XML 中的释放后重用，**匿名者于 2026-11-06 报告**（悬赏：TBD）——报告后三天即修复，细节受限，且 **CISA 于 11 月 10 日将其收入 KEV**。NVD 记录为 `Analyzed`，其上的 8.8 是 CISA-ADP 富化（唯一一条指标——并非 NVD 自己的分数）。同一版本还修复 **CVE-2026-125347**（FileSystem 中的不正确授权）——按 ADP 打分的记录，9.6，"允许远程攻击者借社交工程执行沙箱**外**任意代码"（仍处 `Undergoing Analysis`）——另有 V8 类型混淆、GPU 越界写、Compositing 缓冲区溢出、WebGL 与 GPU 未初始化资源等（全部 High；两个 Medium 均在 GPU）。
+
+**Why it matters:** 这是上周 213 项修复的 Chrome 157 大潮之后的紧急跟进，且模式一贯：被在野利用的，恰是补丁日前夕由匿名者报告、公开细节最少的那一个。沙箱逃逸（125347）与被在野利用的沙箱内 RCE（125350）同落一个周一更新，让 ≤ 157.0.8103.51 成为本周必须摆脱的版本线。
+
+[`🔗 Chrome Releases：Stable Channel Update for Desktop`](https://chromereleases.googleblog.com/2026/11/stable-channel-update-for-desktop_018223192.html) · [`🔗 NVD：CVE-2026-125350`](https://nvd.nist.gov/vuln/detail/CVE-2026-125350)
+
+---
+
+## 40. 黑进 Meta Ray-Ban 眼镜：OTA 钩子取固件、往眼镜上装自签名 APK、再用一个 MobileConfig 字节翻转击穿修复
+
+- **Velocity:** ▮▮ rising
+- **Source:** p0pcycle（pamoutaf）· HN 125 分 · 11 月 10 日（帖子 ~01:19 UTC+8，11 月 8 日）
+- **Tags:** `hardware-hacking` `android` `vuln-research`
+
+文章走通了在一副借来的智能眼镜上的完整链条。固件来自 Meta 自己的管线：用 JADX 逆向 Meta AI 安卓应用暴露了 OTA 流程——在 `OTAArtifactInfo` 上挂 Frida 钩子打印 CDN 下载地址，再把 GraphQL 入参 `device_firmware_full_update_only` 翻成 true 拿到**完整**更新包，那是一个带 `payload.bin` 的安卓镜像，用 payload-dumper 转储并挂载。代码执行走的是 Meta 的开发者通道：DAT SDK（Device Access Toolkit）APK 由手机应用推上眼镜，而"直到并包括固件 126，固件都不校验 DAT APK 是否为 Meta 签名"——于是用 Frida 换包种入自签名 APK。用 Meta 的示例应用开启 DAT 会话；在钩掉 `startDwaReadinessProbe()` 阻止其拆会话之后，种入的应用在 Wi-Fi Direct 子网（192.168.49.x）的 **TCP 31337** 上绑了一个 shell——`nc` 连上眼镜即返回 uid 10097。Meta 随后推送固件 127，用 MobileConfig 驱动签名校验——但这份配置经配对手机走 Airship 到达眼镜，眼镜只验证其结构完整性，"并不验证它未被篡改"，于是把 `0.mctable` 里一个字节从 0x80 翻成 0x00 即可关闭校验："We're soooo back。"已上报 Meta 的漏洞赏金平台；帖子获批准"让我假设它现在已修复"。作者还记录了用 `ToneGenerator` 蜂鸣调试的方法（"Beep is the new printf"）以及赏金的拉锯："we settled (ok there was no settling but I agreed to the new payout)."
+
+**Why it matters:** 三条教训可推广。开发者/调试面（DAT）就是攻击面——又一次。加固设备的配置经由设备不做防篡改校验的通道到达——这是每台托管设备共享的模式。而赏金的摩擦（按帖子，"不在穿戴品类"）正是决定下一位研究者发不发文章的经济学。
+
+[`🔗 p0pcycle：Hacking the Meta Ray-Ban smartglasses`](https://p0pcycle.com/2026/11/06/hacking-the-meta-ray-ban-smartglasses/) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50406224)
+
+---
+
+## 41. Qwen4 要来了——Qwen4-Max 在阿里巴巴 Token Plan 开启预览，没有权重也没有基准
+
+- **Velocity:** ▮▮ rising
+- **Source:** 阿里巴巴 Qwen（官方公告）· HN 43 分 · 11 月 11 日（~10:33 UTC+8）
+- **Tags:** `qwen` `model-release` `alibaba`
+
+Qwen 官方账号宣布了下一代："Qwen4 is coming. Deeper knowledge. Richer world understanding. Stronger coding and agentic capabilities. Built for real-world tasks — from complex coding and knowledge work to front-end builds and professional software workflows. **Qwen4-Max is now in preview on Alibaba's Token Plan**"，并可在 QwenWork、Qoder、Qwen App 与 QwenStudio 获取早期访问。这就是全部披露——没有参数量、没有基准卡、没有权重，除 Token Plan 的表述外没有 API 定价。截至今日运行，qwen.ai 博客是一个没有任何配套文章的 JS 壳。
+
+**Why it matters:** 这是 Qwen4 这一代首次得到官方确认，来自其开源权重谱系支撑了今年大多数开放生态成果的实验室（包括被 Figma 等后训练的 Qwen 3.8 27B 检查点）。Max 以预览形态先上商业套餐，延续了该家族近期的模式——先公告、先托管访问、权重后补；而最近的 Hy4 甚至全扣不发。Qwen4-Max 走不走开源权重路线，是唯一对把这类模型捧上趋势榜的人群真正重要的问题。
+
+[`🔗 Qwen on X：Qwen4-Max preview`](https://x.com/Alibaba_Qwen/status/2120335993643684315) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50449130)
+
+---
+
+## 42. Ginux 从可引导的 Rust 内核转向用户态内核——AI 造内核实验亲口说出了自己的边界
+
+- **Velocity:** ▮▮ rising
+- **Source:** gmkurtzer/ginux · HN 83 分 · 11 月 11 日（~13:25 UTC+8）
+- **Tags:** `linux` `kernels` `agents`
+
+Rocky Linux 创始人、Singularity 作者 Greg Kurtzer 在 **ginux** 发布了转型说明：项目"始于一个经 UEFI 直接引导、运行 Rocky Linux 10 用户态的独立 Rust 内核。那个研究阶段已经完成"（源码永久保存在 `bootable-kernel` 分支与 `bootable-kernel-final` 标签上）；"后续开发现在以用户态内核的形式在此继续"——它"作为一个普通 Linux 进程运行，在托管工作负载与宿主内核之间放置一份显式的、带版本的契约"。README 对实验证明了什么异常坦诚："一个由有经验的人类通过架构、门禁和可执行测试来引导的 AI 编码智能体，能够构造出一个足以运行有意义的 Linux 用户态的新内核。它也把这个结果的边界暴露得一清二楚"——"Linux 远不止是源代码。它是一个稳定的接口、一套开发流程、一个全球社区、厂商与硬件的对齐，以及数十年的兼容性与运维经验。重新实现内核机制并不能再造那个生态。"HN 评论者立刻搬出 User-mode Linux 当祖先；仓库 Apache-2.0，10 月 11 日创建，今天仍在推送。
+
+**Why it matters:** 一个条目里装着两个故事。对智能体能力之辩，这是一个带着范围纪律的实证案例：智能体确实在人类架构指导下造出了可引导内核——而项目随后拒绝了那场真正重要的胜利（"与 Linux 竞争从来不是目标"）。对系统圈的人，工作负载与宿主内核之间的带版本契约是一个真正有意思的隔离原语，帖子已在问的那个开放问题是：它在实践里与 namespaces 和 UML 差在哪。
+
+[`🔗 gmkurtzer/ginux`](https://github.com/gmkurtzer/ginux) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50450007)
+
+---
+
+## 43. 最难的 tar 包：一个归档，被你天天在用的工具解出八种结果
+
+- **Velocity:** ▮▮ rising
+- **Source:** Harmen Stoppels · HN 150 分 · 11 月 10 日（~23:00 UTC+8）
+- **Tags:** `tar` `interop` `spec-ambiguity`
+
+Harmen Stoppels 用一条 GNU tar 命令构造出一个归档：它的含义完全取决于哪个实现来读它。技巧是：按顺序归档 `file`、`./file`（被存为硬链接）与 `empty`，利用第二个条目的独特路径把硬链接重命名为 `café`，再给硬链接加一条 `size=512` 的 pax 记录——512 恰好是一个 tar 头的大小，于是每个读取方都必须判断：这 512 字节是硬链接的数据，还是下一个成员的头。POSIX 说硬链接的数据块"可以包含"在 pax 归档里，而其含义并不明确。结果：GNU tar、BusyBox、Python、Go、Perl 合理地解出全部三个文件；**bsdtar——macOS 的系统 tar——把 512 字节写进硬链接，于是 `file` 最终装着 `empty` 的 tar 头**；7-Zip、node-tar、tar-fs 与 Rust 的 tar 向前跳过并静默丢掉 `empty`；Java 的 Commons Compress 单独创建一个装着"作为数据的头"的文件；PHP 的 PharData、RubyGems（它会建一个 `PaxHeaders` 目录）、R（把 size 错套到 `empty` 上——512 个空字节）与 Haskell（把 `café` 弄成 `cafÃ©`）各自找到自己的读法；.NET、Julia 与 uv 直接拒绝这个归档——"我认为这是你能做的最好的事，哪怕它在技术上并不 POSIX 合规。"它是他 tar-minefield 测试套件中 **134 个刁钻 tar 包**之一（文档在 stoppels.ch/tar，有 Zenodo DOI），目标是"确保各实现对 tar 归档的解包方式一致"。
+
+**Why it matters:** tar 解包分歧是安全问题，正如 minefield README 所说——归档工具正是路径遍历与解包混淆 bug 的聚居地，而这个案例展示的是同一串字节在 macOS、Linux 与你的语言库里意味着不同的文件。对任何写归档处理代码的人，值得抄的行为是那个会拒绝的。
+
+[`🔗 Stoppels：The hardest tarball?`](https://stoppels.ch/2026/11/07/the-hardest-tarball.html) · [`🔗 haampie/tar-minefield`](https://github.com/haampie/tar-minefield)
+
+---
+
+## 44. Arista 一次性落下 26 条记录：9.8 的 BGP 崩溃——以及 C-260/C-250 出厂自带全族群静态固件密钥
+
+- **Velocity:** ▮ steady
+- **Source:** Arista PSIRT + NVD · 26 条记录 · 11 月 10–11 日
+- **Tags:** `arista` `network-security` `cve`
+
+`psirt@arista.com` 向同一 NVD 窗口放入 **26 条记录**，**5 条 ≥9.0**，全部为 `Received`、分数出自 CNA 之手。对供应链敏感的读者，头条是 **CVE-2026-102166（9.4）**——"Arista C-260 与 C-250 接入点出厂自带用于固件镜像校验与 SSLP 认证的全族群静态密码密钥。能够接触这些密钥的攻击者可以制作能通过校验检查的改造固件"——且明确限定在这两个型号（"其他接入点型号强制使用带安全启动的数字签名升级镜像，不受影响"）。旁边的路由设备批次：**CVE-2026-121289（9.8**，未认证的构造 BGP 包令 BGP 代理崩溃**)**、CVE-2026-121367（9.6，RIPv2）、CVE-2026-121370 与 CVE-2026-121295（9.2，PTP 与 S-BFD）、CVE-2026-120982 与 CVE-2026-121371（8.7，BGP 与 eAPI HTTP）、CVE-2026-121368（8.9，BFD keyed MD5/SHA1）、CVE-2026-121287（8.8，RIPv2 邻接网络）。
+
+**Why it matters:** 固件校验中的静态密钥，是把供应链威胁变成持久化威胁的那一类——能通过校验的改造固件天然在重启后存活。范围限定的那句话在做实事（带安全启动的型号不受影响），而这正是给整批园区接入点重刷镜像前该核对的那一句。
+
+[`🔗 Arista Security Advisory 0227（静态密钥）`](https://www.arista.com/en/support/advisories-notices/security-advisory/25049-security-advisory-0227) · [`🔗 NVD：CVE-2026-102166`](https://nvd.nist.gov/vuln/detail/CVE-2026-102166)
+
+---
+
+## 45. 电压毛刺把一张 CMP 170HX 矿卡变成 A100-80G——SM 数量比零售 A100 还多
+
+- **Velocity:** ▮ steady
+- **Source:** blog.kate.land · HN 新帖 · 11 月 11 日（~18:48 UTC+8）
+- **Tags:** `hardware` `voltage-glitching` `gpu`
+
+GA100 裸片上的一个电压故障注入漏洞，"允许操作者烧写任意熔丝"：作者把一张 CMP 170HX 矿卡变成了"实际上是一块 A100-80G"的东西——而且解锁后的卡"**比零售 A100 快约 1.2 倍**，因为它启用了全部功能性 SM（约 120–126 个，取决于裸片抽签），而不是 NVIDIA 为所有量产 A100 选择的良率保守的 108 个 SM"。被 CMP 禁用的特性同样可以解锁——NVLink、PCIe Gen4、NVJPG、NVDEC、MIG（后三项未测试）。文章记录了硬件限制模型（"fuseless fuses"、floorsweeping）、烧熔丝流程，以及三个故障注入阶段——全部熔丝被感为零、RIR 读取被打断、以及一击命中的"Goldilock's glitch"。帖中的 nvidia-smi 输出显示两块 81,920 MiB 设备、NVLink 拓扑（NV12）。
+
+**Why it matters:** CMP 产品线的限制是供给侧的市场切分——故意让矿卡无法用于计算——而这证明了这道切分只有一层熔丝深，且电压毛刺可以任意写这些熔丝。把它当安全论文读（能物理接触卡的操作者可以重新启用被消音的硅、打破 SKU 边界），别当购物指南：流程需要物理接触、定制设备和一次裸片抽签。
+
+[`🔗 Kate's blog：Using voltage glitching to unleash the A100`](https://blog.kate.land/posts/using-voltage-glitching-to-unlock-the-a100/) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50451903)
+
+---
+
+## 46. Open Source Says No：22 个项目的 AI 贡献政策集中编目——immich 与 meilisearch 直接封禁
+
+- **Velocity:** ▮ steady
+- **Source:** osssaysno.com · HN 52 分 · 11 月 11 日（~16:51 UTC+8）
+- **Tags:** `open-source` `ai-policy` `maintainers`
+
+一个新目录（"Last refreshed 2026-11-11"）集中编目了知名 OSS 项目已发布政策对 AI 辅助或 AI 生成贡献的立场，分三个标签：**Banned**、**Restricted**、**Assist allowed**（目前 22 个项目）。封禁档包括 **immich**（"我们请求你不要提交 LLM 生成的 PR"——118,789 星）与 **meilisearch**（"我们不会考虑任何由生成式 AI 工具（GitHub Copilot、ChatGPT、Claude Code、Cursor 等）生成的外部贡献，包括：代码、测试、文档、PR 描述、PR 评论、issue 描述与 issue 评论"——59,840 星），还有 okhttp 与 Servo。该站"仅提供信息，不对这些政策的是非表态"；提交会开启一个预填好的 issue 并"在其上运行自动政策检查"。
+
+**Why it matters:** 维护者对 AI 贡献的政策一直散落在 CONTRIBUTING.md 和愤怒的 issue 帖里；按项目让它变得可查，会改变贡献者行为——如果你在向多个仓库提交 AI 生成的 PR，这就是要先查的清单。它也给了"反 AI 贡献"立场第一份结构化数据集，恰逢 Glasswing 规模的机器生成漏洞报告正砸向同一批维护者。
+
+[`🔗 Open Source Says No`](https://osssaysno.com) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50451102)
+
+---
+
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-11-11T04:50:47Z |
-| Items | 34 |
+| Generated | 2026-11-11T12:40:05Z |
+| Items | 46 |
 | Sources tracked | 28（Hacker News、GitHub Trending、NVD、CISA KEV、MSRC CVRF、arXiv、Hugging Face、厂商博客、安全公告） |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8（每日三次） |
 | Ranking | 速度加权（时效 × 互动加速度 × 来源权威度） |

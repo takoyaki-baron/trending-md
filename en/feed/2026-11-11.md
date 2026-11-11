@@ -1,6 +1,6 @@
 ---
 date: 2026-11-11
-updated: 2026-11-11T04:50:47Z
+updated: 2026-11-11T12:40:05Z
 schedule: 04:03, 12:03, 20:03 UTC+8
 sources: 28
 license: CC-BY-4.0
@@ -514,12 +514,180 @@ NSTM-6, the **National Policy for Nucleic Acid Synthesis Screening**, was signed
 
 ---
 
+## 35. React Server Components has a second unauthenticated RCE — fixed October 14, the CVE record lands November 10
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** GitHub Advisory (CNA) + NVD · CVSS 4.0 9.5 · record Nov 10 (~07:17 UTC+8)
+- **Tags:** `react` `rce` `supply-chain`
+
+**CVE-2026-126187** (GitHub CNA, published 2026-11-10 23:17Z, status `Received`): the `react-server-dom-webpack`, `-parcel` and `-turbopack` packages are vulnerable to "unauthenticated remote code execution through crafted payloads targeting frameworks that support React Server Components" in **19.0.0–19.0.8, 19.1.0–19.1.9, 19.2.0–19.2.8 and 19.3.0**. The advisory (GHSA-xqc2-xf4c-x3h3, severity Critical, CVSS 4.0 **9.5** — `AV:N/AC:L/AT:P/PR:N/UI:N/VC:H/VI:H/VA:H/SC:H/SI:H/SA:N`) scopes it hard: "This only affects extremely rare cases where responses transport multiple typed arrays and an attacker-controlled value" — and apps whose React code doesn't use a server, or don't use an RSC-capable framework, bundler or bundler plugin, are not affected. Fixes shipped in **19.0.9, 19.1.10, 19.2.9, 19.3.1**, and npm's publish timestamps show all four landed **2026-10-14** — four weeks before the CVE record made them legible to scanners. It is the second pre-auth RCE in the RSC payload-decoder family in under a year (CVE-2025-55182, December 2025). As of this run react.dev's blog has no post for it — the advisory and the record are the disclosure — and the references point at `github.com/react/react`, the org home since the React Foundation moved under the Linux Foundation in February.
+
+**Why it matters:** The RSC flight-payload decoder is now a recurring RCE surface — twice in 11 months, both times reachable through the Next.js-class frameworks that bundle these packages transitively. The operational lesson is the lag, not the rarity clause: the patched versions have been on npm since October 14, so dependency resolution — not urgency — decides exposure. Pin ≥ 19.0.9 / 19.1.10 / 19.2.9 / 19.3.1 and let your lockfile tell you which side you're on.
+
+[`🔗 NVD: CVE-2026-126187`](https://nvd.nist.gov/vuln/detail/CVE-2026-126187) · [`🔗 GHSA-xqc2-xf4c-x3h3`](https://github.com/react/react/security/advisories/GHSA-xqc2-xf4c-x3h3)
+
+---
+
+## 36. Apple's Harbor: a leaked Mac app that turns Macs into a private AI inference server — pooling multiple Macs over Thunderbolt 5
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** 9to5Mac · 297 pts on HN · Nov 11 (~05:25 UTC+8)
+- **Tags:** `apple` `local-ai` `inference`
+
+Leaker Aaron Perris surfaced evidence of an unannounced Apple Mac app called **Harbor** — in the leak's own words: "Harbor turns your Mac into a private AI inference server. Run open-weight models locally on Apple silicon—your data never leaves your hardware, and nothing reaches the cloud. Connect multiple Mac computers over Thunderbolt 5 to pool unified memory, enabling large models and higher concurrency that a single computer can handle alone." The tweet closes by noting Harbor is currently in a private preview under the Claris brand — Claris, the Apple software brand behind FileMaker. 9to5Mac frames it as Apple leaning into the Mac-as-local-AI-box use case that has made Mac Studio and Mac mini popular for running open-weight models this year. This is system-level evidence, not an announcement: no app screenshots, no date, no version, and Apple has confirmed nothing.
+
+**Why it matters:** Multi-Mac Thunderbolt 5 pooling would be the first first-party answer to the standing question of how to put more unified memory behind one model — the exact question driving this week's llama.cpp NCCL multi-node work and the llama-modchip CPU-offload experiments. The positioning detail is the news: *inference server* is infrastructure language, not a consumer chat app, and it would put Apple in direct competition with the Ollama/LM Studio layer it currently hosts. Until Apple ships or confirms it, treat the feature list as the leak's wording.
+
+[`🔗 9to5Mac: Apple has new Mac app coming`](https://9to5mac.com/2026/11/10/apple-has-new-mac-app-coming-to-make-running-local-ai-models-easy/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50446520)
+
+---
+
+## 37. "AI usage generates a fragile codebase" — a Meta engineer's insider account of the AI quota, and four failure modes
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Evan X. Merz · 582 pts on HN · Nov 10 (~18:25 UTC+8)
+- **Tags:** `ai-coding` `code-quality` `analysis`
+
+Evan X. Merz's essay is the week's highest-points HN story, and its first paragraph is the news: he suspects one reason he was laid off from Meta in May is that he was "a little bit more resistant to adopting AI/LLMs as coding tools than some of my peers" — while also stating the quota plainly: "I generated at least 90% of my code using AI in my last few months there, which was the minimum for a decent rating." The productivity claim is measured, not rhetorical: "AI didn't 10X the amount of code I was writing. It didn't even 2X it." His concrete specimen: "one of the best programmers on my team try to merge code that used javascript events for mouseover CSS effects rather than using the :hover selector." Now at "another large tech company" generating 100% of his code with AI "because that's the expectation today," he lists four ways the practice produces fragile codebases, under one thesis: "AI tends to solve the problems that can fit within its context window very well, but it's totally oblivious to the long term issues that can't be understood in that relatively small frame."
+
+**Why it matters:** This is a first-hand account from inside the quota system — "the minimum for a decent rating" quantifies what AI-usage metrics actually measure at enterprise scale, and it pairs with the week's measured versions of the same claim (coding agents completing 95% of tasks safely 37% of the time; interleaved unfinished tasks costing 11.5 points). It is anecdote, not study — but the `:hover` example is the transferable inspection target: stylistically plausible, functionally wrong code that passes both review and tests.
+
+[`🔗 Evan X. Merz: AI usage generates a fragile codebase`](https://evanxmerz.com/post/ai-usage-generates-a-fragile-codebase/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50438318)
+
+---
+
+## 38. Adobe's Patch Tuesday: 110 records — Experience Manager four 9.9s, Adobe Connect five 10.0s
+
+- **Velocity:** ▮▮ rising
+- **Source:** Adobe PSIRT (APSB26-189/191) + NVD · Nov 10–11
+- **Tags:** `adobe` `cve` `patch-tuesday`
+
+NVD's Patch-Tuesday window carried **110 records from `psirt@adobe.com`** (measured 04:30Z Nov 10 → 12:00Z Nov 11) — second only to Microsoft's 1,094 in scored weight: **21 of them at ≥9.0, behind Microsoft's 25 in the same window** (Google's 158 dsap records carry none), every score the CNA's own. **APSB26-189 (Experience Manager)** contributes four 9.9s: CVE-2026-113579 and CVE-2026-113580 (code injection — "A low-privileged attacker could exploit this vulnerability to execute arbitrary code. Exploitation of this issue does not require user interaction. Scope is changed."), CVE-2026-114371 and CVE-2026-119017 (incorrect authorization to arbitrary code execution). **APSB26-191 (Adobe Connect**, published Nov 10, Priority 2, affects **12.12 and earlier**) is the sharper document: **five CVEs at 10.0** — SSRF (CVE-2026-121356, vector `CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:C/C:H/I:H/A:N`), path traversal (CVE-2026-121351), incorrect authorization (CVE-2026-121352), CRLF injection (CVE-2026-121353), and a second SSRF (CVE-2026-121889) — followed by a shelf of 9.9s (SQL injection, code injection, XXE, path traversal). Fixed builds: **12.12.a / 12.11.i / 12.10.f / 12.9.a / 12.8.a**. Adobe states it is "not aware of any exploits in the wild for any of the issues addressed in this update." The wave also reaches After Effects and Audition (8.6–8.7). Sampled records are `Received` on NVD.
+
+**Why it matters:** A conferencing product most enterprises forgot they own carries five pre-auth-by-vector 10.0s in one bulletin, and none of it registers if Patch Tuesday triage stops at Microsoft's list. The Priority 2 label sits oddly beside five 10.0s — the qualitative rating and the CVSS set disagree about urgency, which is the same inversion this month's Microsoft wave showed (one exploited Moderate 6.5 among 42 higher-scored elevation bugs).
+
+[`🔗 APSB26-191 (Adobe Connect)`](https://www.adobe.com/trust/security/products/connect/apsb26-191.html) · [`🔗 APSB26-189 (Experience Manager)`](https://www.adobe.com/trust/security/products/experience-manager/apsb26-189.html)
+
+---
+
+## 39. Chrome patches an in-the-wild XML use-after-free three days after report — CISA KEV'd it the next day
+
+- **Velocity:** ▮▮ rising
+- **Source:** Chrome Releases + CISA KEV · fix Nov 9, KEV add Nov 10
+- **Tags:** `chrome` `kev` `in-the-wild`
+
+Monday's desktop stable update (**157.0.8103.50/.51**, Nov 9) carries 9 security fixes — and one sentence that reorders them: **"Google is aware that an exploit for CVE-2026-125350 exists in the wild."** CVE-2026-125350 is a use-after-free in XML, reported by **anonymous on 2026-11-06** (reward: TBD) — patched three days after report, details restricted, and **CISA added it to KEV on Nov 10**. NVD's record is `Analyzed`, and the 8.8 on it is CISA-ADP enrichment (the sole metric — not an NVD score). The same release fixes **CVE-2026-125347**, incorrect authorization in FileSystem — per the ADP-scored record, 9.6 and "allowed a remote attacker leveraging social engineering to execute arbitrary code **outside the sandbox**" (still `Undergoing Analysis`) — plus type confusion in V8, an out-of-bounds write in GPU, a buffer overflow in Compositing, and uninitialized-resource bugs in WebGL and GPU (all High; two Medium, both GPU).
+
+**Why it matters:** This is the emergency follow-up to the 213-fix Chrome 157 wave from last week, and the pattern is consistent: the exploited bug is the one reported anonymously right before patch day, with the least public detail. A sandbox escape (125347) and an exploited sandboxed RCE (125350) landing in one Monday release makes anything ≤ 157.0.8103.51 the version line to be off, everywhere, this week.
+
+[`🔗 Chrome Releases: Stable Channel Update for Desktop`](https://chromereleases.googleblog.com/2026/11/stable-channel-update-for-desktop_018223192.html) · [`🔗 NVD: CVE-2026-125350`](https://nvd.nist.gov/vuln/detail/CVE-2026-125350)
+
+---
+
+## 40. Hacking the Meta Ray-Ban glasses: OTA-hooked firmware, a self-signed APK on the glasses, and a MobileConfig byte-flip that beat the fix
+
+- **Velocity:** ▮▮ rising
+- **Source:** p0pcycle (pamoutaf) · 125 pts on HN · Nov 10 (thread ~01:19 UTC+8 Nov 8)
+- **Tags:** `hardware-hacking` `android` `vuln-research`
+
+The writeup walks the full chain on a pair of smart glasses the author borrowed. Firmware came from Meta's own pipeline: reversing the Meta AI Android app (JADX) exposed the OTA flow — a Frida hook on `OTAArtifactInfo` prints the CDN download URL, and flipping the GraphQL input `device_firmware_full_update_only` to true yields the **full** update, an Android image with `payload.bin`, dumped and mounted with payload-dumper. Code execution used Meta's developer path: the DAT SDK (Device Access Toolkit) APK is pushed onto the glasses by the phone app, and "up until and including firmware 126, the firmware did not verify that the DAT APK was signed by Meta" — so a Frida swap planted a self-signed APK. A Meta sample app opens the DAT session; after hooking `startDwaReadinessProbe()` to stop it tearing the session down, the planted app bound a shell on **TCP 31337** on the Wi-Fi Direct subnet (192.168.49.x) — `nc` to the glasses returned uid 10097. Meta then shipped firmware 127 with signature verification driven by MobileConfig — but the config reaches the glasses from the paired phone over Airship and is checked only for structural validity, "not that it hadn't been tampered with," so flipping one byte in `0.mctable` (0x80→0x00) disabled the check: "We're soooo back." Reported to Meta's bug bounty; the post's approval "makes me assume it is now fixed." The author also documents debugging by `ToneGenerator` beeps ("Beep is the new printf") and the payout fight: "we settled (ok there was no settling but I agreed to the new payout)."
+
+**Why it matters:** Three lessons generalize. The developer/debug surface (DAT) was the attack surface — again. The config that hardens the device arrives through a channel the device does not tamper-check, which is a pattern every fleet-managed device shares. And the payout friction ("not in wearables," per the thread) is the economics that decides whether the next researcher publishes or doesn't.
+
+[`🔗 p0pcycle: Hacking the Meta Ray-Ban smartglasses`](https://p0pcycle.com/2026/11/06/hacking-the-meta-ray-ban-smartglasses/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50406224)
+
+---
+
+## 41. Qwen4 is coming — Qwen4-Max enters preview on Alibaba's Token Plan, with no weights and no benchmarks
+
+- **Velocity:** ▮▮ rising
+- **Source:** Alibaba Qwen (official announcement) · 43 pts on HN · Nov 11 (~10:33 UTC+8)
+- **Tags:** `qwen` `model-release` `alibaba`
+
+Qwen's official account announced the next generation: "Qwen4 is coming. Deeper knowledge. Richer world understanding. Stronger coding and agentic capabilities. Built for real-world tasks — from complex coding and knowledge work to front-end builds and professional software workflows. **Qwen4-Max is now in preview on Alibaba's Token Plan**," with early access on QwenWork, Qoder, the Qwen app and QwenStudio. That is the entire disclosure — no parameter counts, no benchmark card, no weights, no API pricing beyond the Token Plan framing. The qwen.ai blog is a JS shell with no accompanying post as of this run.
+
+**Why it matters:** This is the first official confirmation that the Qwen4 generation exists, from the lab whose open-weight lineage underpinned most of this year's open-ecosystem results (including the Qwen 3.8 27B checkpoints Figma and others post-trained). Max going preview-first on a commercial plan echoes the family's recent pattern — announcement, hosted access, weights later; and in the recent Hy4 case, weights withheld entirely. Whether Qwen4-Max follows the open-weights path is the only question that matters to the people who made these models trend.
+
+[`🔗 Qwen on X: Qwen4-Max preview`](https://x.com/Alibaba_Qwen/status/2120335993643684315) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50449130)
+
+---
+
+## 42. Ginux pivots from a bootable Rust kernel to a userspace kernel — and the AI-built-kernel experiment names its own limits
+
+- **Velocity:** ▮▮ rising
+- **Source:** gmkurtzer/ginux · 83 pts on HN · Nov 11 (~13:25 UTC+8)
+- **Tags:** `linux` `kernels` `agents`
+
+Greg Kurtzer — Rocky Linux's founder and Singularity's author — published the pivot note in **ginux**: the project "began as an independent Rust kernel that booted directly through UEFI and ran a Rocky Linux 10 userspace. That research phase is complete" (source preserved on the `bootable-kernel` branch and the `bootable-kernel-final` tag); "Active development now continues here as a userspace kernel" — one that "runs as an ordinary Linux process and places an explicit, versioned contract between managed workloads and the host kernel." The README is unusually honest about what the experiment proved: "an AI coding agent, directed by an experienced human through architecture, gates, and executable tests, could construct a new kernel capable of running meaningful Linux userspace. It also made the limits of that result obvious" — "Linux is much more than source code. It is a stable interface, a development process, a global community, vendor and hardware alignment, and decades of compatibility and operational experience. Reimplementing kernel mechanisms does not reproduce that ecosystem." HN commenters immediately reached for User-mode Linux as the ancestor; the repo is Apache-2.0, created Oct 11, and pushed today.
+
+**Why it matters:** Two stories in one. For the agent-capability debate it is a worked example with scope discipline: an agent demonstrably built a bootable kernel under human architectural direction — and the project then declined the victory that matters ("competing with Linux was never the goal"). For the systems crowd, a versioned contract between workloads and the host kernel is a genuinely interesting isolation primitive, and the open question the thread is already asking is how it differs from namespaces and UML in practice.
+
+[`🔗 gmkurtzer/ginux`](https://github.com/gmkurtzer/ginux) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50450007)
+
+---
+
+## 43. The hardest tarball: one archive, extracted eight different ways by tools you use every day
+
+- **Velocity:** ▮▮ rising
+- **Source:** Harmen Stoppels · 150 pts on HN · Nov 10 (~23:00 UTC+8)
+- **Tags:** `tar` `interop` `spec-ambiguity`
+
+Harmen Stoppels constructed — with a single GNU tar invocation — an archive whose meaning depends entirely on which implementation reads it. The trick: archive `file`, `./file` (stored as a hard link) and `empty` in sequence, use the second entry's unique path to rename the hard link to `café`, and add a `size=512` pax record to the hard link — 512 being exactly the size of a tar header, so every reader must decide whether those bytes are the hard link's data or the next member's header. POSIX says hard-link data blocks "may be included," and the implications are unclear. The results: GNU tar, BusyBox, Python, Go and Perl extract all three files; **bsdtar — the macOS system tar — writes the 512 bytes into the hard link, so `file` ends up containing the tar header of `empty`**; 7-Zip, node-tar, tar-fs and Rust's tar skip forward and silently drop `empty`; Java's Commons Compress creates a separate file containing the header as data; PHP's PharData, RubyGems (which creates a `PaxHeaders` directory), R (which misapplies the size to `empty` — 512 null bytes) and Haskell (which mangles `café` into `cafÃ©`) each find their own reading; and .NET, Julia and uv reject the archive — "I believe this is the best thing you can do, even if it's technically not POSIX-compliant." It is one of **134 tricky tarballs** in his tar-minefield suite (docs at stoppels.ch/tar, Zenodo DOI), built "with the goal of ensuring that implementations extract tar archives the same way."
+
+**Why it matters:** Divergent tar extraction is a security concern, as the minefield's README says — archive tooling is where path traversal and extraction-confusion bugs live, and this case shows the same bytes meaning different files on macOS versus Linux versus your language's library. For anyone writing archive-handling code, the behavior worth copying is the one that refuses.
+
+[`🔗 Stoppels: The hardest tarball?`](https://stoppels.ch/2026/11/07/the-hardest-tarball.html) · [`🔗 haampie/tar-minefield`](https://github.com/haampie/tar-minefield)
+
+---
+
+## 44. Arista's 26-record drop: BGP crash at 9.8 — and C-260/C-250 access points shipping fleet-wide static firmware keys
+
+- **Velocity:** ▮ steady
+- **Source:** Arista PSIRT + NVD · 26 records · Nov 10–11
+- **Tags:** `arista` `network-security` `cve`
+
+`psirt@arista.com` put **26 records** into the same NVD window, **5 at ≥9.0**, all `Received` with the CNA's own scores. The headliner for the supply-chain-minded: **CVE-2026-102166 (9.4)** — "Arista C-260 and C-250 access points ship with fleet-wide static cryptographic keys used for firmware image verification and SSLP authentication. An attacker who is able to access these keys would be able to create modified firmware that will pass verification checks" — explicitly scoped to those two models ("other access point models enforce digitally signed upgrade images with secure boot and are not affected"). The routing-machine batch beside it: **CVE-2026-121289 (9.8**, unauthenticated crafted BGP packet crashes the BGP agent**)**, CVE-2026-121367 (9.6, RIPv2), CVE-2026-121370 and CVE-2026-121295 (9.2, PTP and S-BFD), CVE-2026-120982 and CVE-2026-121371 (8.7, BGP and eAPI HTTP), CVE-2026-121368 (8.9, BFD keyed MD5/SHA1), CVE-2026-121287 (8.8, RIPv2 adjacent-network).
+
+**Why it matters:** Static keys in firmware verification are the class that turns a supply-chain threat into a persistent one — modified firmware that passes verification survives reboots by construction. The scoping sentence is doing real work (secure-boot models are unaffected), which is exactly the detail to check before re-imaging a fleet of campus access points.
+
+[`🔗 Arista Security Advisory 0227 (static keys)`](https://www.arista.com/en/support/advisories-notices/security-advisory/25049-security-advisory-0227) · [`🔗 NVD: CVE-2026-102166`](https://nvd.nist.gov/vuln/detail/CVE-2026-102166)
+
+---
+
+## 45. Voltage glitching turns a CMP 170HX mining card into an A100-80G — with more SMs than a retail A100
+
+- **Velocity:** ▮ steady
+- **Source:** blog.kate.land · fresh on HN · Nov 11 (~18:48 UTC+8)
+- **Tags:** `hardware` `voltage-glitching` `gpu`
+
+A voltage fault injection vulnerability on the GA100 die, "allowing an operator to blow arbitrary fuses": the author converted a CMP 170HX mining card into "what is effectively an A100-80G" — and the unlocked cards run "**~1.2x faster than a retail A100** by having all functional SMs enabled (~120-126, die-lottery dependent), rather than the yield-safe 108 SMs NVIDIA chose for all production A100 cards." The CMP-disabled features are unlockable the same way — NVLink, PCIe Gen4, NVJPG, NVDEC, MIG (the last three untested). The writeup documents the hardware-restriction model ("fuseless fuses", floorsweeping), the fuse-burn procedure, and three fault-injection stages — all fuses sensed as zero, a disrupted RIR read, and the "Goldilock's glitch" that lands it. The post's nvidia-smi output shows two 81,920 MiB devices with NVLink topology (NV12).
+
+**Why it matters:** The CMP line's restrictions were supply-side market segmentation — mining cards deliberately made unusable for compute — and this demonstrates the segmentation was one fuse-burn deep, enforced by fuses that voltage glitching can write arbitrarily. Read it as a security paper (an operator with physical access can re-enable silenced silicon and break the SKU boundary), not a shopping guide: the procedure needs physical card access, custom equipment, and a die lottery.
+
+[`🔗 Kate's blog: Using voltage glitching to unleash the A100`](https://blog.kate.land/posts/using-voltage-glitching-to-unlock-the-a100/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50451903)
+
+---
+
+## 46. Open Source Says No: 22 projects' AI-contribution policies in one catalogue — immich and meilisearch ban outright
+
+- **Velocity:** ▮ steady
+- **Source:** osssaysno.com · 52 pts on HN · Nov 11 (~16:51 UTC+8)
+- **Tags:** `open-source` `ai-policy` `maintainers`
+
+A new directory — "Last refreshed 2026-11-11" — catalogs what well-known OSS projects' published policies say about AI-assisted or AI-generated contributions, across three labels: **Banned**, **Restricted**, **Assist allowed** (22 projects so far). The ban tier includes **immich** ("We ask you not to open PRs generated with an LLM" — 118,789 stars) and **meilisearch** ("We will not consider any content generated by generative AI tooling (GitHub Copilot, ChatGPT, Claude Code, Cursor, etc.) in external contributions, including: code, tests, documentation, PR descriptions, PR comments, issue descriptions, and issue comments" — 59,840 stars), plus okhttp and Servo. The site "is informational and takes no position"; submissions open a prefilled issue and "an automated policy check runs on it."
+
+**Why it matters:** Maintainer policy on AI contributions has been scattered across CONTRIBUTING.md files and angry issue threads; making it legible per-project changes contributor behavior — if you ship AI-generated PRs to multiple repos, this is the list to check first. It also gives the anti-AI-contribution position its first structured dataset, at exactly the moment machine-generated vulnerability reports at Glasswing scale are landing on the same maintainers.
+
+[`🔗 Open Source Says No`](https://osssaysno.com) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50451102)
+
+---
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-11-11T04:50:47Z |
-| Items | 34 |
+| Generated | 2026-11-11T12:40:05Z |
+| Items | 46 |
 | Sources tracked | 28 (Hacker News, GitHub Trending, NVD, CISA KEV, MSRC CVRF, arXiv, Hugging Face, vendor blogs, security advisories) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (3x daily) |
 | Ranking | Velocity-weighted (recency × engagement acceleration × source authority) |
