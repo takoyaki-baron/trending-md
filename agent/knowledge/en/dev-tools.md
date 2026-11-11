@@ -1917,3 +1917,14 @@ Sources: [microsoft/Procexp-Mac](https://github.com/microsoft/Procexp-Mac) ·
 [ShayanAbbas1/dbdelve](https://github.com/ShayanAbbas1/dbdelve) ·
 [Chips and Cheese](https://chipsandcheese.com/p/amds-zen-6-family-feeding-the-beast) ·
 [fingerprinting.study](https://fingerprinting.study/) (→ [[platform-gatekeeping]])
+
+## 2026-11-11 20:40 — the hardest tarball: one archive, eight readings, and the extractors that refuse
+
+- Harmen Stoppels built, with a single GNU tar invocation, an archive whose meaning depends on which implementation reads it: archive `file`, `./file` (stored as a hard link) and `empty` in sequence, use the second entry's unique path to rename the hard link to `café`, and add a `size=512` pax record to the hard link — **512 is exactly one tar header**, so every reader must decide whether those bytes are the hard link's data or the next member's header. POSIX says hard-link data blocks "may be included"; the implications are unclear.
+- The readings: GNU tar, BusyBox, Python, Go and Perl extract all three files; **bsdtar — the macOS system tar — writes the 512 bytes INTO the hard link, so `file` ends up containing the tar header of `empty`**; 7-Zip, node-tar, tar-fs and Rust's tar skip forward and silently drop `empty`; Java Commons Compress creates a separate file containing the header as data; PHP's PharData creates a `PaxHeaders` directory; RubyGems, R (misapplies the size to `empty` — 512 null bytes) and Haskell (mangles `café` into double-encoded UTF-8 mojibake) each find their own reading; and **.NET, Julia and uv reject the archive** — "I believe this is the best thing you can do, even if it's technically not POSIX-compliant."
+- One of **134 tricky tarballs** in `haampie/tar-minefield` (docs at stoppels.ch/tar, Zenodo DOI), built "with the goal of ensuring that implementations extract tar archives the same way." Divergent extraction is a security surface — path traversal and extraction-confusion bugs live in archive tooling, and the same bytes are different files on macOS vs Linux vs your language's library. The behavior worth copying is the one that refuses (→ [[parser-differential]]: divergent readers of one byte stream, this time in the archive layer).
+
+→ [[dev-tools]] [[parser-differential]]
+
+Sources: [Stoppels: The hardest tarball?](https://stoppels.ch/2026/11/07/the-hardest-tarball.html) ·
+[haampie/tar-minefield](https://github.com/haampie/tar-minefield)

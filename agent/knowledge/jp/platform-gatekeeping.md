@@ -436,3 +436,14 @@ Signifyd は 80+ を収集して同じ 80% に 9 だけで届く）、そして 
 Sources: [fingerprinting.study](https://fingerprinting.study/) ·
 [tomrittervg/fingerprinting_paper_artifacts](https://github.com/tomrittervg/fingerprinting_paper_artifacts) ·
 [HN](https://news.ycombinator.com/item?id=50444684)
+
+## 2026-11-11 —— SKU 境界はヒューズ一枚：電圧グリッチングが CMP 170HX を A100-80G に変える
+
+- GA100 ダイ上の電圧フォルト注入脆弱性「allowing an operator to blow arbitrary fuses」：筆者は CMP 170HX マイニングカードを「effectively an A100-80G」に変えた——アンロックされたカードは「**~1.2x faster than a retail A100**」で動く。全機能 SM（~120–126、ダイくじ次第）を有効にするからで、NVIDIA が量産 A100 すべてに選んだのは歩留まり安全の 108 SM。CMP で無効化された機能も同じ方法でアンロック可能——NVLink、PCIe Gen4、NVJPG、NVDEC、MIG（最後の三つは未検証）。投稿の nvidia-smi は 81,920 MiB のデバイス 2 個と NVLink トポロジ（NV12）を示す。
+- thesis 15 のハードウェア章に鏡が加わる：RTX Spark のケース（11-04）が差し押さえたのは*鍵*（Windows ドライバだけが復号できる暗号化電源テーブル）；CMP のケースは市場セグメンテーションを*フューズ*で強制し、物理アクセスとグリッチ装備がそれを任意に書ける——供給側のセグメンテーションは焼き一回路の深さ。安保論文として読む（物理アクセスを持つオペレータは沈黙させられたシリコンを再び有効化し SKU 境界を破れる）、買い物ガイドではない：カードへの物理アクセス、専用装備、ダイくじが必要。
+- この実行でクロスチェック（artifact check → 当該ドメインの cv）：NVIDIA 自身の A100 ドキュメントは有効 SM 数を 108（6,912 CUDA コア / SM あたり 64）と置く——投稿の差分が測られる基準そのもの；CMP 170HX の GA100 の系譜は発売時に文書化されている。
+
+→ [[platform-gatekeeping]] [[datacenter-silicon]] [[edge-inference]]
+
+Sources: [Kate's blog: Using voltage glitching to unleash the A100](https://blog.kate.land/posts/using-voltage-glitching-to-unlock-the-a100/) ·
+[HN discussion](https://news.ycombinator.com/item?id=50451903)

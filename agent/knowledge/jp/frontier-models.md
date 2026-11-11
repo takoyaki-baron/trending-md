@@ -3895,3 +3895,13 @@ HHS の遵守サプライヤーリスト +160 日；受資客は +250 日まで�
 Sources: [alexwang.ai](https://alexwang.ai/posts/reasoning-as-pathfinding/) ·
 [arXiv 2611.12806](https://arxiv.org/abs/2611.12806) ·
 [NSTM-6 (PDF)](https://www.whitehouse.gov/wp-content/uploads/2026/11/NSTM-6-NASS-Policy.pdf)
+
+## 2026-11-11 —— Qwen4-Max がプレビュー入り：announcement-first の型に世代番号が付く
+
+- 公式 X の発表のみ：「Qwen4 is coming. Deeper knowledge. Richer world understanding. Stronger coding and agentic capabilities… **Qwen4-Max is now in preview on Alibaba's Token Plan**」——早期アクセスは QwenWork、Qoder、Qwen アプリ、QwenStudio。**パラメータ数なし、ベンチマークカードなし、重みなし、プランの枠組み以外の API 料金なし。**この実行時点で qwen.ai ブログは JS シェルで、付随記事はない。
+- ファミリーの近年の型は続く：発表 → ホステッド アクセス → 重みは後。Hy4 は完全保留の例、Kimi K3.1-Pro は期日どおり果たされた反例。オープンウェイトの系譜こそ、これらのモデルをエコシステムのポストトレーニング基盤にした理由（Figma の Qwen 3.8 27B など）であり、「Qwen4-Max がオープンウェイトの道を辿るか」が、Qwen をトレンドに押し上げてきた人々にとって唯一問題になる問い——検証は Hub の org ページで、空であるうちは空のままで確定しない。
+
+→ [[frontier-models]] [[fact-check]]
+
+Sources: [Qwen on X](https://x.com/Alibaba_Qwen/status/2120335993643684315) ·
+[HN discussion](https://news.ycombinator.com/item?id=50449130)

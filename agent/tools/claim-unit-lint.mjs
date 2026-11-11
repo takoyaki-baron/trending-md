@@ -4890,10 +4890,16 @@ if (has('commit-quote-census')) {
  * guard is that the term must RETRIEVE the cited id — a keyword that does not find the record it
  * was derived from is the wrong keyword, and a guess that provably works is a measurement.
  */
-const BATCH_TOTAL_RE = /\b(\d{1,4})\s+(?:[\w.+-]+\s+){0,3}?CVE records?\b/;
+/* Comma-grouped numbers are read WHOLE (added 2026-11-11 21:11, found in the same day's own JSON).
+ * The old `\d{1,4}` matched the tail of "1,094" — the capture began after the comma, so the 11-11
+ * Patch-Tuesday claim read as "**094** Microsoft CVE records" and a correct item was one retrieval
+ * away from a false `batch-count-mismatch` (claimed 94, measured 1,094). Feeds write thousands
+ * grouped, so the capture takes `1,094` as one number and `toNum` parses it. */
+const BATCH_TOTAL_RE = /\b(\d{1,3}(?:,\d{3})+|\d{1,4})\s+(?:[\w.+-]+\s+){0,3}?CVE records?\b/;
 /* "96 of the 102 descriptions say "through 9.0.2"" — the sub-count is a claim about the batch's own
- * DESCRIPTIONS, so the phrase is checked against each record's `descriptions[].value`, not a page. */
-const BATCH_SUB_RE = /\b(\d{1,4})\s+of\s+the\s+(\d{1,4})\s+(?:[\w.-]+\s+){0,3}?(?:say|says|read|reads|name|names|carry|carries)\s+["“]([^"”]{3,80})["”]/;
+ * DESCRIPTIONS, so the phrase is checked against each record's `descriptions[].value`, not a page.
+ * Both counts take the comma-grouped spelling, same lesson, same day. */
+const BATCH_SUB_RE = /\b(\d{1,3}(?:,\d{3})+|\d{1,4})\s+of\s+the\s+(\d{1,3}(?:,\d{3})+|\d{1,4})\s+(?:[\w.-]+\s+){0,3}?(?:say|says|read|reads|name|names|carry|carries)\s+["“]([^"”]{3,80})["”]/;
 const BATCH_GENERIC = new Set(['cve', 'cves', 'nvd', 'security', 'vulnerability', 'vulnerabilities', 'records', 'record', 'the', 'and', 'for', 'new', 'one', 'day', 'them', 'its', 'with', 'from', 'list', 'batch', 'linux', 'windows', 'macos', 'release', 'users', 'code', 'data', 'model', 'open', 'source']);
 
 /** Pure: what this item claims about a record SET. Split out so `--selftest` pins it offline. */
@@ -4902,7 +4908,7 @@ function batchClaims(plain) {
   const tot = plain.match(BATCH_TOTAL_RE);
   // A batch is a set: a "3 CVE records" claim has no distribution to be wrong about, and firing on
   // it would spend a network call to confirm arithmetic nobody miscounts.
-  if (tot && Number(tot[1]) >= 20) out.push({ kind: 'total', n: Number(tot[1]), phrase: tot[0].trim() });
+  if (tot && toNum(tot[1]) >= 20) out.push({ kind: 'total', n: toNum(tot[1]), phrase: tot[0].trim() });
   const sub = plain.match(BATCH_SUB_RE);
   if (sub) {
     /* The clause is "96 of the 102 DESCRIPTIONS say" — the noun sits after the stated total and
@@ -4911,7 +4917,7 @@ function batchClaims(plain) {
        string: a checker whose own output is garbled teaches the next pass to skim it. */
     const noun = sub[0].replace(/["“].*$/, '').trim().split(/\s+/).slice(4).join(' ')
       .replace(/\s*\b(?:say|says|read|reads|name|names|carry|carries)$/i, '').trim() || 'records';
-    out.push({ kind: 'sub', m: Number(sub[1]), of: Number(sub[2]), noun, quote: sub[3].trim(), phrase: sub[0].trim() });
+    out.push({ kind: 'sub', m: toNum(sub[1]), of: toNum(sub[2]), noun, quote: sub[3].trim(), phrase: sub[0].trim() });
   }
   return out;
 }
@@ -4944,7 +4950,7 @@ function batchVerdicts(itemN, claims, records, { keyword, day, cited, assigner }
       claim: `${total.n} records (${keyword}, ${day})`,
       detail: ok
         ? `${records.length} records from ${assigner} published ${day} — the claim's own set, retrieved by its own cited id ${cited}`
-        : `claimed ${total.n}, measured ${records.length} (${records.length > total.n ? 'under-count' : 'over-count'}) from ${assigner} on ${day} via keyword "${keyword}"; the set is the one that retrieves the item's own cited ${cited}`,
+        : `claimed ${total.n}, measured ${records.length} (${records.length > total.n ? 'under-count' : 'over-count'}) from ${assigner} on ${day} via "${keyword}"; the set is the one that retrieves the item's own cited ${cited}`,
     });
   }
   const sub = claims.find((c) => c.kind === 'sub');
@@ -4971,6 +4977,12 @@ function batchSet(records, rec, day) {
   return records.filter((r) => r.assigner === rec.assigner && (r.published ?? '').slice(0, 10) === day);
 }
 
+/** Pure: the fallback arm's query — the writer's own `sourceIdentifier`, never a guessed word. The
+ *  anchor record already carries it, so the fallback needs nothing the pull did not fetch. */
+function batchFallbackTerm(rec) {
+  return rec?.assigner ?? null;
+}
+
 async function checkBatch(it, nvd) {
   const out = [];
   const claims = batchClaims(it.plain);
@@ -4995,10 +5007,30 @@ async function checkBatch(it, nvd) {
     break;
   }
   if (!records) {
+    // FALLBACK ARM — the writer's own field (added 2026-11-11 21:11, calibrated on the same day's
+    // item 3). The keyword terms are guesses about the record TEXT derived from the item's prose,
+    // and a bulk CNA's descriptions need not contain the subject name at all: Microsoft's
+    // Patch-Tuesday descriptions read "Use after free in HEIF Image Extensions…" — no "Microsoft"
+    // token — so "November"/"Patch" retrieved nothing and the item's exact 1,094-record claim went
+    // `batch-unread` while one sourceIdentifier call answers it. The anchor record carries the
+    // writer (`sourceIdentifier`), and a query by that field + the anchor's own day retrieves the
+    // anchor BY CONSTRUCTION — writer and day are the set's own two dimensions — so the fallback
+    // can only widen coverage; it cannot misread a set the keyword arm already read.
+    const src = batchFallbackTerm(rec);
+    if (src) {
+      const got = await nvdDay(src, day, true);
+      if (got && got.some((r) => refs.includes(r.id))) {
+        records = got;
+        keyword = `source=${src}`;
+      }
+    }
+  }
+  if (!records) {
+    const src = batchFallbackTerm(rec);
     out.push({
       check: 'batch', item: it.n, verdict: 'batch-unread',
       claim: claims[0].phrase,
-      detail: `no search term derived from the item (${batchKeywords(it).slice(0, 2).join(', ') || 'none'}) retrieved its own cited ${cited} on ${day} — the set was not read, so nothing is claimed about the count`,
+      detail: `no search term derived from the item (${batchKeywords(it).slice(0, 2).join(', ') || 'none'}) and not the writer's own sourceIdentifier (${src ?? 'none'}) retrieved its own cited ${cited} on ${day} — the set was not read, so nothing is claimed about the count`,
     });
     return out;
   }
@@ -5010,15 +5042,17 @@ async function checkBatch(it, nvd) {
 }
 
 /** One NVD call per (keyword, day). Cached 6 h like the other structured reads; a set over 2,000
- *  records is refused rather than cached, because that is a topic search and not a batch. */
-async function nvdDay(keyword, day) {
-  const key = `nvdday:${day}:${keyword.toLowerCase()}`;
+ *  records is refused rather than cached, because that is a topic search and not a batch.
+ *  `bySource` swaps keywordSearch for sourceIdentifier — the writer's own field, which retrieves
+ *  the anchor record without any guess about its text (the fallback arm's instrument). */
+async function nvdDay(keyword, day, bySource = false) {
+  const key = `nvdday:${day}:${bySource ? 'src:' : ''}${keyword.toLowerCase()}`;
   const hit = cache[key];
   if (hit && Date.now() - Date.parse(hit.fetched_at ?? 0) < CACHE_TTL_MS) return hit.error ? null : hit.records;
   const base = process.env.CLAIM_UNIT_NVD_BASE || 'https://services.nvd.nist.gov/rest/json/cves/2.0';
   let j;
   try {
-    const url = `${base}?keywordSearch=${encodeURIComponent(keyword)}&pubStartDate=${day}T00:00:00.000&pubEndDate=${day}T23:59:59.999&resultsPerPage=2000`;
+    const url = `${base}?${bySource ? 'sourceIdentifier' : 'keywordSearch'}=${encodeURIComponent(keyword)}&pubStartDate=${day}T00:00:00.000&pubEndDate=${day}T23:59:59.999&resultsPerPage=2000`;
     j = JSON.parse(execFileSync('curl', ['-s', '--max-time', '60', url], { encoding: 'utf8', maxBuffer: 64 * 1024 * 1024 }));
   } catch (e) {
     cache[key] = { fetched_at: new Date().toISOString(), error: String(e.message ?? e).slice(0, 80) };
@@ -6185,6 +6219,29 @@ if (SELFTEST) {
   // and a record published on a different day is not in it either
   t('batch: a neighbouring publication day is not in the set',
     batchSet(day121.map((r) => (r.id.endsWith('50') ? { ...r, published: '2026-11-08T23:59:00.000' } : r)), cited, '2026-11-09').length, 120);
+
+  /* 2026-11-11 21:11 — two defects found in the SAME day's JSON, one arm. Item 3 (Patch Tuesday)
+     went `batch-unread` because "November"/"Patch" retrieve nothing (Microsoft's own descriptions
+     carry no "Microsoft" token), and the lint's claim string read "**094** Microsoft CVE records" —
+     the old `\d{1,4}` had matched the tail of comma-grouped "1,094", so a correct item sat one
+     retrieval away from a false batch-count-mismatch (claimed 94, measured 1,094). */
+  t('batch: a comma-grouped total reads whole',
+    batchClaims('**1,094 Microsoft CVE records** on NVD in a day').map((c) => [c.kind, c.n, c.phrase]),
+    [['total', 1094, '1,094 Microsoft CVE records']]);
+  t('batch: a comma-grouped sub-count reads whole',
+    batchClaims('**96 of the 1,094 descriptions say "through 9.0.2"**').map((c) => [c.kind, c.m, c.of]),
+    [['sub', 96, 1094]]);
+  t('batch: the fallback arm is the writer\'s own field, not a guessed word',
+    batchFallbackTerm({ assigner: 'secure@microsoft.com', published: '2026-11-10T19:17:39.033' }), 'secure@microsoft.com');
+  t('batch: a recordless anchor has no fallback',
+    batchFallbackTerm(null), null);
+  // the claim string names the arm that read the set, so a reader can tell a keyword measurement
+  // from a writer-scoped one
+  t('batch: the claim names the arm that read it',
+    batchVerdicts(3, batchClaims('**1,094 Microsoft CVE records** on NVD in a day'),
+      Array.from({ length: 1094 }, (_, i) => ({ id: `CVE-2026-1${String(i).padStart(4, '0')}`, assigner: 'secure@microsoft.com', published: '2026-11-10T19:17:39.033', desc: 'Use after free in HEIF Image Extensions' })),
+      { keyword: 'source=secure@microsoft.com', day: '2026-11-10', cited: 'CVE-2026-109467', assigner: 'secure@microsoft.com' }).map((v) => [v.verdict, v.claim]),
+    [['batch-count-ok', '1094 records (source=secure@microsoft.com, 2026-11-10)']]);
 
   for (const c of cases) console.log(`  ${c.pass ? '✓' : '✗'} ${c.name}${c.pass ? '' : ` — got ${JSON.stringify(c.got)}, want ${JSON.stringify(c.want)}`}`);
   const ok = cases.filter((c) => c.pass).length;

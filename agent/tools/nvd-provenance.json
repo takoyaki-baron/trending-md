@@ -2563,6 +2563,116 @@
    "id": "CVE-2026-26980",
    "why": "Ghost CMS unauthenticated path, Glasswing-discovered, KEV; Glasswing 7-month audit item (2026-11-11)",
    "seeded": "2026-11-11 [Modified] NVD-analyzed 7.5 (nvd@nist.gov Primary) beside GitHub CNA Secondary 9.4, published 02-20"
+  },
+  {
+   "id": "CVE-2026-126187",
+   "why": "2026-11-11 — React Server Components has a second unauthenticated RCE — fixed October 14, the CVE record lands November 10",
+   "seeded": "2026-11-11 [Received] 4.0 Secondary/security-advisories@github.com 9.5, CWE-502, published 11-10"
+  },
+  {
+   "id": "CVE-2025-55182",
+   "why": "2026-11-11 — React Server Components has a second unauthenticated RCE — fixed October 14, the CVE record lands November 10",
+   "seeded": "2026-11-11 [Analyzed] 3.1 Secondary/cve-assign@fb.com 10, CWE-502/CWE-502, published 12-03"
+  },
+  {
+   "id": "CVE-2026-113579",
+   "why": "2026-11-11 — Adobe's Patch Tuesday: 110 records — Experience Manager four 9.9s, Adobe Connect five 10.0s",
+   "seeded": "2026-11-11 [Received] 3.1 Secondary/psirt@adobe.com 9.9, CWE-94, published 11-10"
+  },
+  {
+   "id": "CVE-2026-113580",
+   "why": "2026-11-11 — Adobe's Patch Tuesday: 110 records — Experience Manager four 9.9s, Adobe Connect five 10.0s",
+   "seeded": "2026-11-11 [Received] 3.1 Secondary/psirt@adobe.com 9.9, CWE-94, published 11-10"
+  },
+  {
+   "id": "CVE-2026-114371",
+   "why": "2026-11-11 — Adobe's Patch Tuesday: 110 records — Experience Manager four 9.9s, Adobe Connect five 10.0s",
+   "seeded": "2026-11-11 [Received] 3.1 Secondary/psirt@adobe.com 9.9, CWE-863, published 11-10"
+  },
+  {
+   "id": "CVE-2026-119017",
+   "why": "2026-11-11 — Adobe's Patch Tuesday: 110 records — Experience Manager four 9.9s, Adobe Connect five 10.0s",
+   "seeded": "2026-11-11 [Received] 3.1 Secondary/psirt@adobe.com 9.9, CWE-863, published 11-10"
+  },
+  {
+   "id": "CVE-2026-121356",
+   "why": "2026-11-11 — Adobe's Patch Tuesday: 110 records — Experience Manager four 9.9s, Adobe Connect five 10.0s",
+   "seeded": "2026-11-11 [Received] 3.1 Secondary/psirt@adobe.com 10, CWE-918, published 11-10"
+  },
+  {
+   "id": "CVE-2026-121351",
+   "why": "2026-11-11 — Adobe's Patch Tuesday: 110 records — Experience Manager four 9.9s, Adobe Connect five 10.0s",
+   "seeded": "2026-11-11 [Received] 3.1 Secondary/psirt@adobe.com 10, CWE-22, published 11-10"
+  },
+  {
+   "id": "CVE-2026-121352",
+   "why": "2026-11-11 — Adobe's Patch Tuesday: 110 records — Experience Manager four 9.9s, Adobe Connect five 10.0s",
+   "seeded": "2026-11-11 [Received] 3.1 Secondary/psirt@adobe.com 10, CWE-863, published 11-10"
+  },
+  {
+   "id": "CVE-2026-121353",
+   "why": "2026-11-11 — Adobe's Patch Tuesday: 110 records — Experience Manager four 9.9s, Adobe Connect five 10.0s",
+   "seeded": "2026-11-11 [Received] 3.1 Secondary/psirt@adobe.com 10, CWE-93, published 11-10"
+  },
+  {
+   "id": "CVE-2026-121889",
+   "why": "2026-11-11 — Adobe's Patch Tuesday: 110 records — Experience Manager four 9.9s, Adobe Connect five 10.0s",
+   "seeded": "2026-11-11 [Received] 3.1 Secondary/psirt@adobe.com 10, CWE-918, published 11-10"
+  },
+  {
+   "id": "CVE-2026-125350",
+   "why": "2026-11-11 — Chrome patches an in-the-wild XML use-after-free three days after report — CISA KEV'd it the next day",
+   "seeded": "2026-11-11 [Analyzed] 3.1 Secondary/134c704f-9b21-4f2e-91b3-4a467353bcc0 8.8 [CISA-ADP], CWE-416, published 11-10"
+  },
+  {
+   "id": "CVE-2026-125347",
+   "why": "2026-11-11 — Chrome patches an in-the-wild XML use-after-free three days after report — CISA KEV'd it the next day",
+   "seeded": "2026-11-11 [Undergoing Analysis] 3.1 Secondary/134c704f-9b21-4f2e-91b3-4a467353bcc0 9.6 [CISA-ADP], CWE-863, published 11-10"
+  },
+  {
+   "id": "CVE-2026-102166",
+   "why": "2026-11-11 — Arista's 26-record drop: BGP crash at 9.8 — and C-260/C-250 access points shipping fleet-wide static firmware keys",
+   "seeded": "2026-11-11 [Received] 3.1 Secondary/psirt@arista.com 8.8, 4.0 Secondary/psirt@arista.com 9.4, CWE-798, published 11-10"
+  },
+  {
+   "id": "CVE-2026-121289",
+   "why": "2026-11-11 — Arista's 26-record drop: BGP crash at 9.8 — and C-260/C-250 access points shipping fleet-wide static firmware keys",
+   "seeded": "2026-11-11 [Received] 3.1 Secondary/psirt@arista.com 9.8, 4.0 Secondary/psirt@arista.com 9.3, CWE-121, published 11-10"
+  },
+  {
+   "id": "CVE-2026-121367",
+   "why": "2026-11-11 — Arista's 26-record drop: BGP crash at 9.8 — and C-260/C-250 access points shipping fleet-wide static firmware keys",
+   "seeded": "2026-11-11 [Received] 3.1 Secondary/psirt@arista.com 9.6, 4.0 Secondary/psirt@arista.com 6.1, CWE-440, published 11-10"
+  },
+  {
+   "id": "CVE-2026-121370",
+   "why": "2026-11-11 — Arista's 26-record drop: BGP crash at 9.8 — and C-260/C-250 access points shipping fleet-wide static firmware keys",
+   "seeded": "2026-11-11 [Received] 3.1 Secondary/psirt@arista.com 8.6, 4.0 Secondary/psirt@arista.com 9.2, CWE-770, published 11-10"
+  },
+  {
+   "id": "CVE-2026-121295",
+   "why": "2026-11-11 — Arista's 26-record drop: BGP crash at 9.8 — and C-260/C-250 access points shipping fleet-wide static firmware keys",
+   "seeded": "2026-11-11 [Received] 3.1 Secondary/psirt@arista.com 8.6, 4.0 Secondary/psirt@arista.com 9.2, CWE-1284, published 11-10"
+  },
+  {
+   "id": "CVE-2026-120982",
+   "why": "2026-11-11 — Arista's 26-record drop: BGP crash at 9.8 — and C-260/C-250 access points shipping fleet-wide static firmware keys",
+   "seeded": "2026-11-11 [Received] 3.1 Secondary/psirt@arista.com 7.5, 4.0 Secondary/psirt@arista.com 8.7, CWE-440, published 11-10"
+  },
+  {
+   "id": "CVE-2026-121371",
+   "why": "2026-11-11 — Arista's 26-record drop: BGP crash at 9.8 — and C-260/C-250 access points shipping fleet-wide static firmware keys",
+   "seeded": "2026-11-11 [Received] 3.1 Secondary/psirt@arista.com 7.5, 4.0 Secondary/psirt@arista.com 8.7, CWE-22, published 11-10"
+  },
+  {
+   "id": "CVE-2026-121368",
+   "why": "2026-11-11 — Arista's 26-record drop: BGP crash at 9.8 — and C-260/C-250 access points shipping fleet-wide static firmware keys",
+   "seeded": "2026-11-11 [Received] 3.1 Secondary/psirt@arista.com 8.6, 4.0 Secondary/psirt@arista.com 8.9, CWE-787, published 11-10"
+  },
+  {
+   "id": "CVE-2026-121287",
+   "why": "2026-11-11 — Arista's 26-record drop: BGP crash at 9.8 — and C-260/C-250 access points shipping fleet-wide static firmware keys",
+   "seeded": "2026-11-11 [Received] 3.1 Secondary/psirt@arista.com 8.8, 4.0 Secondary/psirt@arista.com 7.7, CWE-124, published 11-10"
   }
  ]
 }

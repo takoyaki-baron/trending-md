@@ -1409,3 +1409,14 @@ has to be re-sized to "buy one and measure", and the CM5 line moves with it. The
 
 Sources: [CNX Software: Raspberry Pi 5 16GB now $385](https://www.cnx-software.com/2026/11/03/when-will-this-stop-the-raspberry-pi-5-16gb-sbc-now-sells-for-385/) ·
 [HN discussion](https://news.ycombinator.com/item?id=50428801)
+
+## 2026-11-11 — Apple's Harbor leak: multi-Mac Thunderbolt 5 memory pooling behind a first-party "private AI inference server"
+
+- Leaked via Aaron Perris (system-level evidence — no screenshots, no date, no version; Apple has confirmed nothing; private preview under the **Claris** brand, FileMaker's parent brand): "Harbor turns your Mac into a private AI inference server. Run open-weight models locally on Apple silicon—your data never leaves your hardware, and nothing reaches the cloud. Connect multiple Mac computers over **Thunderbolt 5** to pool unified memory, enabling large models and higher concurrency that a single computer can handle alone."
+- The positioning is the news: *inference server* is infrastructure language, not a consumer chat app — it would put Apple in direct competition with the Ollama/LM Studio layer it currently hosts, and it is the first **first-party** answer to the standing question of putting more unified memory behind one model — the same question driving llama.cpp v0.9.0's NCCL multi-node TP and llama-modchip's CPU-offload decode.
+- Thesis 3's two bets meet on consumer hardware: pooling unified memory across a TB5 fabric vs streaming routed experts off SSD are rival answers to the same constraint. Until Apple ships or confirms, treat the feature list as the leak's wording — this file's rule for leaks (cf. the Hexacon teaser).
+
+→ [[edge-inference]] [[platform-gatekeeping]]
+
+Sources: [9to5Mac](https://9to5mac.com/2026/11/10/apple-has-new-mac-app-coming-to-make-running-local-ai-models-easy/) ·
+[HN discussion](https://news.ycombinator.com/item?id=50446520)

@@ -178,3 +178,14 @@ Workspace 查询，且捕获是概率性的——四种观察到的结果，从�
 来源：[gemini_files——行为的文档](https://github.com/thisisme6598/gemini_files/) ·
 [Google 帮助 Answer 16836988](https://support.google.com/gemini/answer/16836988) ·
 [2023 年博客原文，附 10 月 16 日更新](https://blog.google/innovation-and-ai/products/our-responsible-approach-to-building-guardrails-for-generative-ai/)
+
+## 2026-11-11 —— 配额系统内部：一位 Meta 工程师的叙述给出了指标与它的下限
+
+- Evan X. Merz（5 月从 Meta 被裁；怀疑自己「a little bit more resistant to adopting AI/LLMs as coding tools than some of my peers」是原因之一）：「**I generated at least 90% of my code using AI in my last few months there, which was the minimum for a decent rating.**」生产力主张是量化的，不是修辞：「AI didn't 10X the amount of code I was writing. It didn't even 2X it.」
+- 那个标本是可迁移的检查目标：「one of the best programmers on my team try to merge code that used javascript events for mouseover CSS effects rather than using the :hover selector」——风格上可信、功能上错误、同时通过评审与测试。他的四种失效模式共处一个论点之下：「AI tends to solve the problems that can fit within its context window very well, but it's totally oblivious to the long term issues that can't be understood in that relatively small frame.」
+- 他如今在「another large tech company」以 100% AI 生成代码工作，「because that's the expectation today」。是轶闻，不是研究——但它量化了企业 AI 使用度指标到底测什么（评级的下限，而非产出的度量），与本周的量化版本并列：coding agent 在 37% 的任务上安全完成 95% 的任务、交错任务切换损耗 11.5 分。
+
+→ [[ai-impact]] [[dev-tools]]
+
+Sources: [Evan X. Merz: AI usage generates a fragile codebase](https://evanxmerz.com/post/ai-usage-generates-a-fragile-codebase/) ·
+[HN discussion](https://news.ycombinator.com/item?id=50438318)

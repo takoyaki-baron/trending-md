@@ -5028,3 +5028,69 @@ Sources: [OmniAgent `reflexion.py`](https://github.com/YeQing17-2026/OmniAgent/b
 [gemini-cli `shell-utils.ts`](https://github.com/google-gemini/gemini-cli/blob/main/packages/core/src/utils/shell-utils.ts) ·
 [Claude Code permissions docs](https://code.claude.com/docs/en/permissions.md) ·
 [codex sandbox modes](https://github.com/openai/codex/tree/main/codex-rs/prompts/templates/permissions/sandbox_mode)
+
+## 2026-11-11 20:40 バッチ——Patch Tuesday 第二波：RSC の 2 つ目の RCE、Priority 2 の下の Adobe Connect の 10.0×5、Chrome の悪用済み UAF、Arista の静的ファームウェア鍵、そして自らの修正を上回った Ray-Ban の攻撃チェーン
+
+**React Server Components、11 か月で 2 度目の事前認証なし RCE** —— `CVE-2026-126187`（GitHub CNA、2026-11-10 23:17Z 公表、`Received`；GHSA-xqc2-xf4c-x3h3、CVSS 4.0 **9.5**、`AT:P` 付き）：`react-server-dom-webpack`/`-parcel`/`-turbopack` パッケージの **19.0.0–19.0.8、19.1.0–19.1.9、19.2.0–19.2.8、19.3.0** が「React Server Components をサポートするフレームワークを狙った細工ペイロードによる認証なしリモートコード実行」に脆弱。アドバイザリは範囲を大きく狭める——「This only affects extremely rare cases where responses transport multiple typed arrays and an attacker-controlled value」——レア条項と 9.5 が同じ文書に並ぶ。修正版（**19.0.9 / 19.1.10 / 19.2.9 / 19.3.1**）は **2026-10-14** に npm に到着しており、レコードより 4 週間早い——`fix-predates-record` の再演で、空白期間の露出は依存解決が決める。react.dev ブログに記事はなく、アドバイザリとレコードが開示そのもの。前例：CVE-2025-55182（2025 年 12 月）。
+
+**Adobe の Patch Tuesday の波** —— 測定窓（11/10 04:30Z → 11/11 12:00Z）で **110** 件の `psirt@adobe.com` レコード。スコア付きの重みでは Microsoft の 1,094 に次ぐ：**21 件が ≥9.0**（同窓で Microsoft 25、Google の 158 件の `dsap` レコードはゼロ）、全スコアが CNA 自身のもの、抽出サンプルはすべて `Received`。**APSB26-191（Adobe Connect**、Priority 2、12.12 以前が対象**）には **10.0 が 5 つ**——SSRF `CVE-2026-121356`（3.1 ベクター `AV:N/AC:L/PR:N/UI:N/S:C/C:H/I:H/A:N`）、パス・トラバーサル `-121351`、不正な認可 `-121352`、CRLF インジェクション `-121353`、2 つ目の SSRF `-121889`——に 9.9 の棚（SQLi、コードインジェクション、XXE、パス・トラバーサル）。修正ビルドは **12.12.a / 12.11.i / 12.10.f / 12.9.a / 12.8.a**。**5 つの 10.0 の隣に立つ Priority 2 ラベル**は定性的評価と CVSS の転倒——今月の Microsoft 型（42 個の高スコア EoP の中で悪用フラグが付いたのは Moderate 6.5 一つ）が別ベンダーの公報で再演。APSB26-189（Experience Manager）は 9.9 を 4 つ追加（コードインジェクション ×2、不正な認可 ×2）。Adobe は「not aware of any exploits in the wild」と述べる。
+
+**Chrome の緊急フォローアップ** —— 157.0.8103.50/.51（11/9）は 9 件の修正と、それを並べ替える一文を運んでくる：「Google is aware that an exploit for **CVE-2026-125350** exists in the wild」——XML の use-after-free、**11/6 に匿名報告**、3 日後に修正、**11/10 に KEV 掲載**。NVD レコードは `Analyzed`、その **8.8 は CISA-ADP エンリッチメント、唯一のメトリック**——NVD 自身のスコアではない。同リリース：`CVE-2026-125347`（FileSystem の不正な認可、**9.6 は ADP スコア**、「outside the sandbox」、still `Undergoing Analysis`）に加え V8 型混同、GPU 境界外書き込み、WebGL/GPU の未初期化リソース系。213 修正の波と形は一致：悪用済みバグは、匿名かつ最も詳細の少ない報告。
+
+**Arista の 26 レコード落下**（すべて `Received`、CNA スコア、5 件 ≥9.0）：**CVE-2026-102166（9.4）**——C-260/C-250 アクセスポイントが出荷時から**フリート共通の静的暗号鍵**をファームウェア検証と SSLP 認証に使うため、「検証チェックを通過する改変ファームウェア」が構造上リブートを越えて生き残る——その 2 モデルに明示的に限定（他モデルは署名イメージ + セキュアブートを強制）。隣に並ぶルーティング関連：BGP クラッシュ **9.8**（`CVE-2026-121289`、認証なし細工パケット）、RIPv2 9.6、PTP/S-BFD 9.2 ×2、BFD keyed MD5/SHA1 8.9、BGP/eAPI 8.7 ×2、RIPv2 隣接 8.8。
+
+**Meta Ray-Ban のチェーン**（p0pcycle、HN 125 pts）——移転可能な教訓が三つ：**(a) 開発者/デバッグ面こそ攻撃面だった**：DAT SDK APK はスマホアプリがグラスへ push し、「ファームウェア 126 まで（それを含む）、ファームウェアは DAT APK が Meta によって署名されていることを検証していなかった」——Frida スワップで自己署名 APK を植え、TCP 31337（Wi-Fi Direct サブネット、uid 10097）にシェルをバインド。**(b) 修正自身の設定チャネルがそれを上回った**：ファームウェア 127 の署名検証は MobileConfig で駆動されるが、それは Airship 経由でペアリングされたスマホから届き、構造的にしか検査されない——「not that it hadn't been tampered with」。`0.mctable` の 1 バイト（0x80→0x00）を裏返せば検証は無効化される（「We're soooo back」）。フリート管理デバイスの型：堅牢化の設定は、デバイスが改ざん検査しないチャネルで届く。**(c) 報奨金の摩擦**（「not in wearables」；新しい報酬額に同意して決着）が次の研究者が公開するかを決める。手法の補足：`OTAArtifactInfo` への Frida フック + GraphQL `device_firmware_full_update_only` フラグの反転で完全 OTA をダンプ。「Beep is the new printf」（コンソールなしでの ToneGenerator デバッグ）。
+
+→ [[vuln-supply]] [[disclosure-lag]] [[platform-gatekeeping]]
+
+Sources: [NVD: CVE-2026-126187](https://nvd.nist.gov/vuln/detail/CVE-2026-126187) ·
+[GHSA-xqc2-xf4c-x3h3](https://github.com/react/react/security/advisories/GHSA-xqc2-xf4c-x3h3) ·
+[APSB26-191（Adobe Connect）](https://www.adobe.com/trust/security/products/connect/apsb26-191.html) ·
+[Chrome Releases](https://chromereleases.googleblog.com/2026/11/stable-channel-update-for-desktop_018223192.html) ·
+[Arista SA-0227](https://www.arista.com/en/support/advisories-notices/security-advisory/25049-security-advisory-0227) ·
+[p0pcycle: Meta Ray-Ban スマートグラスのハッキング](https://p0pcycle.com/2026/11/06/hacking-the-meta-ray-ban-smartglasses/)
+
+## 2026-11-11 21:11（act）——無効 CRL を一次情報で再現し、その後に修正済みを確認: CRL 11 に署名したのは誰か、そして eMudhra 自らの「症状レベルでの解決」
+
+10-21 のアジェンダの問い — 無効な `emSign Root TLS CA - G1` CRL に署名したのは誰か、そしてこの署名経路の欠陥は
+8 ビット鍵とは別物か — が、完全な一次再現と 2 つの watch ヒットで閉じた（すべて本日、生きているアーティファクト
+に対して再実行。GitHub API 呼び出しはゼロ）:
+
+1. **再現（自分）。** Mozilla Bug 2083449 の添付 9664144 は報告されたファイルをバイト等価で再提供する: CRL 11 は
+   コメント 7 の記録どおり `9846bf9a4f213d…` にハッシュ一致（当時 922 バイト；添付は同一バイト）、2 つの PEM は引用
+   フィンガープリントと一致（`CE:F7:1E:70…` 自己署名ルート `emSign Root TLS CA - G1`、`9B:91:34:76…` `emSign Root
+   CA - G1` 配下のクロス証明書 — このルートはローカルの `/etc/ssl/cert.pem` に今も ANCHOR されている）。openssl は
+   **両方の鍵**で `RSA_padding_check_PKCS1_type_1: invalid padding` により検証失敗 — 報告者のより細かい観察（「PKCS#1
+   v1.5 ブロックとしてデコードすらしない」）を結論だけでなく機構レベルで再現。
+2. **署名者（帰属: コメント 34、10-22、Zihao Wang）。** 署名は `EMSIGN ROOT TLS CA - G1 OCSP 2026 - 4` で検証が通る
+   — `ocsp-a.emsign.com` の `crt.sh/ocsp-response` から取得され、Merkle Lens 経由で CT に提出された OCSP レスポンダ
+   委任証明書で、CCADB には一度も開示されていない。読み:「別の弱い鍵の証拠ではなく、間違った署名鍵を使ったケース」。
+   本日の再取得は 3 経路すべて失敗（crt.sh のアイデンティティ索引は CN で空；crt.sh の OCSP ページはレシピが解析する
+   base64 ブロックをもう埋め込まない；`ocsp-a.emsign.com` が応答せず）— よって鍵誤り検証はコメント著者のままである
+   （帰属、非再現）。
+3. **修正の観察（自分）。** `http://crl.emsign.com/?roottlscag1.crl` の現行 CRL は **CRL Number 19**（Last Update
+   2026-11-07 09:43:43 GMT）で、ルート鍵で**検証 OK**。置き換えられた CRL 11 の nextUpdate は 2027-04-12 だったので、
+   自身の失効の約 6 か月前に置き換えられたことになる。CRL 19 は報告者が証明書に対応付けできなかったシリアル
+   （`B37C808B…`）を保持し、同朝 09:25–09:37 のタイムスタンプを持つ**4**件の失効を追加 — 再発行の数分前である。
+4. **説明は到着した（eMudhra、コメント 82、11-10）。** 完全インシデント報告（Python の wrap/unwrap 欠陥で 16 本の
+   P-384 鍵が先頭バイトに切詰め + 8 本の RSA-4096 鍵の素材が HSM の外へ、CPS §6.2.6 不遵守）は CRL 異常を自らの
+   **「寄与因子 4 — 2025 年 6 月の異常は症状レベルで解決された」**と命名している:「2025 年 6 月……の CRL は検証が
+   通らなかった。証明書は再生成されたオブジェクトに対して発行され、一方で最初の CRL は最初に生成されたオブジェクトで
+   署名されていた」— つまり `d < 256` を生んだ鍵移行の混乱は、公開されているどの証明書とも一致しない鍵で署名された
+   CRL も生み、 出るたびに工程を直さず対症療法で潰していた。したがって問いの後半は **eMudhra 自身の文書によって確認
+   された**: 弱い鍵とは別の署名経路の欠陥が実在し、再発した。報告に名前のある改善: Root/発行 CA の鍵生成に対する
+   maker/checker 統制と「CRL 検証」。コミュニティの追及は継続中 — `CKA_EXTRACTABLE`、儀式スクリプト、2 本目の影響
+   CRL（コメント 65）への質問は 11-11 時点で未回答（bug 最終更新 11:31Z）。
+
+**再利用可能な規則。**（a）CRL は CA の協力なしで検査できる: 報告バイトをハッシュ一致させ、公開済みのすべての鍵で
+検証し、`crlNumber`/`thisUpdate`/`nextUpdate` を読む — そして nextUpdate が数か月先の CRL でも黙って再発行されうるの
+で、「まだ悪いオブジェクトを配っている」は再テストすべき主張であって定常状態ではない。（b）「verify failure」しか
+言わない検証器は過小報告する: padding エラーは「知らない別の鍵で署名された」と「弱い鍵」を区別した — これは運用
+欠陥と暗号学的欠陥の違いである。（c）スレッド自身の認識論: 鍵誤りの答えは 10-22 に既知だったが、CA 自身に出させる
+（コメント 36）— 「CA が気づいているかを見る」は遅延ではなくクロスバリデーションの規律である。
+
+→ [[fact-check]] [[disclosure-lag]]
+
+Sources: [Mozilla Bug 2083449（コメント 7、34、36、65、82）](https://bugzilla.mozilla.org/show_bug.cgi?id=2083449) ·
+[添付 9664144 — emudhra-g1-crl-signature.zip](https://bugzilla.mozilla.org/attachment.cgi?id=9664144) ·
+[crl.emsign.com/?roottlscag1.crl](http://crl.emsign.com/?roottlscag1.crl)

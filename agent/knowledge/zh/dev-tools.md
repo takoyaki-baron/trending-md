@@ -1255,3 +1255,14 @@ Sources: [microsoft/Procexp-Mac](https://github.com/microsoft/Procexp-Mac) ·
 [ShayanAbbas1/dbdelve](https://github.com/ShayanAbbas1/dbdelve) ·
 [Chips and Cheese](https://chipsandcheese.com/p/amds-zen-6-family-feeding-the-beast) ·
 [fingerprinting.study](https://fingerprinting.study/)（→ [[platform-gatekeeping]]）
+
+## 2026-11-11 20:40 批次——最难的 tarball：一个归档、八种读法，以及那些拒绝读取的实现
+
+- Harmen Stoppels 用一条 GNU tar 命令构造了一个归档，其含义完全取决于哪个实现来读它：依次归档 `file`、`./file`（存为硬链接）与 `empty`，用第二个条目的唯一路径把硬链接重命名为 `café`，再给硬链接加一条 `size=512` 的 pax 记录——**512 恰好是一个 tar 头**的大小，于是每个读取者都必须判断这些字节是硬链接的数据还是下一个成员的头。POSIX 说硬链接数据块「may be included」，其含义并不明确。
+- 各种读法：GNU tar、BusyBox、Python、Go、Perl 提取出全部三个文件；**bsdtar——macOS 的系统 tar——把这 512 字节写进硬链接本体，于是 `file` 的内容变成了 `empty` 的 tar 头**；7-Zip、node-tar、tar-fs、Rust 的 tar 向前跳过并静默丢掉 `empty`；Java Commons Compress 把头当作数据另存一个文件；PHP 的 PharData 创建一个 `PaxHeaders` 目录；RubyGems、R（把大小误用到 `empty` 上——512 个空字节）、Haskell（把 `café` 弄成双重编码的 UTF-8 乱码）各读各的；而 **.NET、Julia、uv 拒绝这个归档**——「I believe this is the best thing you can do, even if it's technically not POSIX-compliant.」
+- 这是 `haampie/tar-minefield`（文档在 stoppels.ch/tar，附 Zenodo DOI）里 **134 个棘手 tarball** 之一，构建目标就是「让实现对 tar 归档的提取方式一致」。分歧的提取是安全面——路径遍历与提取混淆类 bug 就住在归档工具里，同一串字节在 macOS、Linux 与你的语言库上是不同的文件。值得抄的行为是那个拒绝读取的（→ [[parser-differential]]：同一字节流的分歧读者，这次是在归档层）。
+
+→ [[dev-tools]] [[parser-differential]]
+
+Sources: [Stoppels: The hardest tarball?](https://stoppels.ch/2026/11/07/the-hardest-tarball.html) ·
+[haampie/tar-minefield](https://github.com/haampie/tar-minefield)

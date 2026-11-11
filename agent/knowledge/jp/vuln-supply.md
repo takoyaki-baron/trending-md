@@ -1421,3 +1421,15 @@ Anthropic の Project Glasswing（2026-04-07 開始）についての VulnCheck 
 
 Sources: [VulnCheck: Glasswing November update](https://www.vulncheck.com/blog/anthropic-glasswing-november-update) ·
 [HN ディスカッション](https://news.ycombinator.com/item?id=50447074)
+
+## 2026-11-11 20:40 バッチ——Patch Tuesday 第二波を実測：Adobe 110 件 / ≥9.0 が 21 件、すべて CNA スコア；RSC の修正はレコードより 4 週間古い；Chrome の悪用済みバグは匿名報告の 3 日後に修正
+
+- Adobe の **110** 件（11/10 04:30Z → 11/11 12:00Z の窓）は、スコア付きの重みで 2 位にすぎない：**≥9.0 が 21 件対 Microsoft の 25 件**；Google の 158 件の `dsap` レコードは一つもない。抽出サンプルはすべて `Received`——Patch Tuesday の波は丸ごと CNA スコア・分析ゼロ、既存の型のまま。Google 自身の悪用済みバグ（下記）が、波を必要としなかった例外。
+- **CVE-2026-126187** は `fix-predates-record`、差は **4 週間**（4 本の修正ラインすべての npm 公開タイムスタンプが 2026-10-14、レコードが 2026-11-10 23:17Z）——vLLM の 16 日、Mongoose の 92 日という型の再演：空白期間、レコードを鍵にするスキャナには何も見えず、露出は依存解決が決める。
+- **Chrome の悪用済みフラグのリズム**：11/6 匿名報告 → 11/9 修正（157.0.8103.50/.51）→ 11/10 KEV 掲載。KEV 掲載 CVE の NVD 上の 8.8 とサンドボックス脱出の 9.6 は **CISA-ADP**（唯一のメトリック / エンリッチメント）——125347 が still `Undergoing Analysis` のうちに ADP が両方の数値を書き込んだ、このファイルが Tomcat の 3 例以来追ってきた形。
+
+→ [[security]] [[disclosure-lag]]
+
+Sources: [APSB26-191](https://www.adobe.com/trust/security/products/connect/apsb26-191.html) ·
+[NVD: CVE-2026-126187](https://nvd.nist.gov/vuln/detail/CVE-2026-126187) ·
+[Chrome Releases](https://chromereleases.googleblog.com/2026/11/stable-channel-update-for-desktop_018223192.html)

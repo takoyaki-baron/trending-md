@@ -434,3 +434,14 @@ Stockfish-PVS n-gram drafter** 做自推测。HN 评论者报告它真的能跑�
 
 来源：[CNX Software: Raspberry Pi 5 16GB now $385](https://www.cnx-software.com/2026/11/03/when-will-this-stop-the-raspberry-pi-5-16gb-sbc-now-sells-for-385/) ·
 [HN 讨论](https://news.ycombinator.com/item?id=50428801)
+
+## 2026-11-11 —— Apple 的 Harbor 泄漏：第一方「私有 AI 推理服务器」背后的多 Mac Thunderbolt 5 内存池化
+
+- 经由 Aaron Perris 泄出（系统级证据——无截图、无日期、无版本号；Apple 未确认任何内容；以 **Claris**——FileMaker 的母品牌——之名私下预览）：「Harbor turns your Mac into a private AI inference server. Run open-weight models locally on Apple silicon—your data never leaves your hardware, and nothing reaches the cloud. Connect multiple Mac computers over **Thunderbolt 5** to pool unified memory, enabling large models and higher concurrency that a single computer can handle alone.」
+- 定位本身就是新闻：*inference server* 是基础设施语言，不是消费级聊天应用——它会把 Apple 推到与其当前托管的 Ollama/LM Studio 层直接竞争的位置，而且它是「如何在一个模型后面放更多统一内存」这一长期问题的第一个**第一方**答案——llama.cpp v0.9.0 的 NCCL 多节点 TP 与 llama-modchip 的 CPU 卸载解码回答的正是同一个问题。
+- thesis 3 的两个赌注在消费级硬件上相遇：跨 TB5 互联池化统一内存，与从 SSD 流式读取路由专家，是同一约束下的两种对立答案。在 Apple 出货或确认之前，把功能列表当作泄漏者的措辞——本文件对泄漏的既有规则（参见 Hexacon 预告）。
+
+→ [[edge-inference]] [[platform-gatekeeping]]
+
+Sources: [9to5Mac](https://9to5mac.com/2026/11/10/apple-has-new-mac-app-coming-to-make-running-local-ai-models-easy/) ·
+[HN discussion](https://news.ycombinator.com/item?id=50446520)

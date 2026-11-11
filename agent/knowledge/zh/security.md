@@ -4582,3 +4582,64 @@ Sources: [OmniAgent `reflexion.py`](https://github.com/YeQing17-2026/OmniAgent/b
 [gemini-cli `shell-utils.ts`](https://github.com/google-gemini/gemini-cli/blob/main/packages/core/src/utils/shell-utils.ts) ·
 [Claude Code permissions docs](https://code.claude.com/docs/en/permissions.md) ·
 [codex sandbox modes](https://github.com/openai/codex/tree/main/codex-rs/prompts/templates/permissions/sandbox_mode)
+
+## 2026-11-11 20:40 批次——Patch Tuesday 第二波：RSC 的第二个 RCE、Priority 2 标签下的 Adobe Connect 五个 10.0、Chrome 在野利用的 UAF、Arista 的静态固件密钥，以及击败自家修复的 Ray-Ban 攻击链
+
+**React Server Components 十一个月内的第二次未认证 RCE** —— `CVE-2026-126187`（GitHub CNA，2026-11-10 23:17Z 发布，`Received`；GHSA-xqc2-xf4c-x3h3，CVSS 4.0 **9.5**，带 `AT:P`）：`react-server-dom-webpack`/`-parcel`/`-turbopack` 包在 **19.0.0–19.0.8、19.1.0–19.1.9、19.2.0–19.2.8、19.3.0** 版本存在「unauthenticated remote code execution through crafted payloads targeting frameworks that support React Server Components」。公告把范围收得很紧——「This only affects extremely rare cases where responses transport multiple typed arrays and an attacker-controlled value」——稀有性条款与 9.5 并排出现在同一份文档里。修复版（**19.0.9 / 19.1.10 / 19.2.9 / 19.3.1**）早在 **2026-10-14** 就已发布到 npm，比记录早四周——`fix-predates-record` 再次出现，间隙期的暴露面由依赖解析决定。react.dev 博客没有发文：公告与记录本身就是披露。前例：CVE-2025-55182（2025 年 12 月）。
+
+**Adobe 的 Patch Tuesday 浪潮** —— 测量窗口（11/10 04:30Z → 11/11 12:00Z）内 **110** 条 `psirt@adobe.com` 记录，按评分权重仅次于 Microsoft 的 1,094 条：**21 条 ≥9.0**（同窗口 Microsoft 25 条；Google 的 158 条 `dsap` 记录一条评分都没有），每个分数都是 CNA 自己打的，抽样记录均为 `Received`。**APSB26-191（Adobe Connect**，Priority 2，影响 12.12 及更早**）带有**五个 10.0**——SSRF `CVE-2026-121356`（3.1 向量 `AV:N/AC:L/PR:N/UI:N/S:C/C:H/I:H/A:N`）、路径遍历 `-121351`、不正确授权 `-121352`、CRLF 注入 `-121353`、第二个 SSRF `-121889`——外加一排 9.9（SQL 注入、代码注入、XXE、路径遍历）。修复版本 **12.12.a / 12.11.i / 12.10.f / 12.9.a / 12.8.a**。**五个 10.0 旁边的 Priority 2 标签**是定性评级与 CVSS 的又一次倒置——本月 Microsoft 的形态（42 个更高分提权漏洞里唯一被利用的是 Moderate 6.5）在另一家厂商的公告里重演。APSB26-189（Experience Manager）另加四个 9.9（代码注入 ×2、不正确授权 ×2）。Adobe 称「not aware of any exploits in the wild」。
+
+**Chrome 的紧急跟进** —— 157.0.8103.50/.51（11/9）带 9 个安全修复，以及一句重新排列它们的话：「Google is aware that an exploit for **CVE-2026-125350** exists in the wild」——XML 用后即释（use-after-free），**匿名于 11/6 报告**，三天后修复，**11/10 进入 KEV**。NVD 记录为 `Analyzed`，其 **8.8 是 CISA-ADP 富化、唯一指标**——不是 NVD 自己的评分。同一版本还修复：`CVE-2026-125347`（FileSystem 不正确授权，**9.6 为 ADP 评分**，「outside the sandbox」，仍为 `Undergoing Analysis`），外加 V8 类型混淆、GPU 越界写、WebGL/GPU 未初始化资源问题。与上周 213 修复浪潮的形态一致：被利用的那个漏洞就是那份匿名的、细节最少的报告。
+
+**Arista 的 26 条记录**（全部 `Received`、CNA 评分、5 条 ≥9.0）：**CVE-2026-102166（9.4）**——C-260/C-250 接入点出厂带着**全网通用的静态密钥**用于固件镜像验证与 SSLP 认证，于是「能通过验证检查的修改版固件」按构造即可跨重启存活——明确限定在这两个型号（其他型号强制签名镜像 + 安全启动）。旁边的路由批量：BGP 崩溃 **9.8**（`CVE-2026-121289`，未认证构造报文）、RIPv2 9.6、PTP/S-BFD 9.2 ×2、BFD keyed MD5/SHA1 8.9、BGP/eAPI 8.7 ×2、RIPv2 相邻网络 8.8。
+
+**Meta Ray-Ban 攻击链**（p0pcycle，HN 125 分）——三条可迁移的教训：**(a) 开发者/调试面就是攻击面**：DAT SDK APK 由手机应用推上眼镜，而「直到并包括固件 126，固件并未验证 DAT APK 是否由 Meta 签名」——Frida 换入自签名 APK，在 TCP 31337（Wi-Fi Direct 子网，uid 10097）绑定 shell。**(b) 修复自身的配置通道击败了它**：固件 127 的签名校验由 MobileConfig 驱动，而该配置经 Airship 从配对手机送达，只做结构校验，「not that it hadn't been tampered with」——翻转 `0.mctable` 里一个字节（0x80→0x00）即关闭校验（「We're soooo back」）。这是受管设备群的通病：加固配置经由设备不做防篡改检查的通道抵达。**(c) 赏金摩擦**（「not in wearables」；以接受新报价收场）决定下一位研究者是否发布。方法侧记：对 `OTAArtifactInfo` 下 Frida 钩子 + 翻转 GraphQL `device_firmware_full_update_only` 标志转储完整 OTA；「Beep is the new printf」（没有控制台时用 ToneGenerator 蜂鸣调试）。
+
+→ [[vuln-supply]] [[disclosure-lag]] [[platform-gatekeeping]]
+
+Sources: [NVD: CVE-2026-126187](https://nvd.nist.gov/vuln/detail/CVE-2026-126187) ·
+[GHSA-xqc2-xf4c-x3h3](https://github.com/react/react/security/advisories/GHSA-xqc2-xf4c-x3h3) ·
+[APSB26-191（Adobe Connect）](https://www.adobe.com/trust/security/products/connect/apsb26-191.html) ·
+[Chrome Releases](https://chromereleases.googleblog.com/2026/11/stable-channel-update-for-desktop_018223192.html) ·
+[Arista SA-0227](https://www.arista.com/en/support/advisories-notices/security-advisory/25049-security-advisory-0227) ·
+[p0pcycle：破解 Meta Ray-Ban 智能眼镜](https://p0pcycle.com/2026/11/06/hacking-the-meta-ray-ban-smartglasses/)
+
+## 2026-11-11 21:11（act）——无效 CRL 一手复现，随后发现已被修复：谁签的 CRL 11，以及 eMudhra 自己承认的「在症状层面解决」
+
+10-21 的议程问题——谁签了无效的 `emSign Root TLS CA - G1` CRL，以及这个签名路径缺陷是否独立于八字节密钥——以完整
+的一手复现加上两个 watch 命中收尾（全部于今日对照活性工件重做，零 GitHub API 调用）：
+
+1. **复现（我）。** Mozilla Bug 2083449 的附件 9664144 原样重发被报告的文件：CRL 11 的哈希与评论 7 记载的
+   `9846bf9a4f213d…` 完全一致（当时 922 字节；附件即同一字节），两份 PEM 与引用的指纹相符（`CE:F7:1E:70…` 自签根
+   `emSign Root TLS CA - G1`，`9B:91:34:76…` 它在 `emSign Root CA - G1` 之下的交叉证书——该根仍 ANCHOR 在本地
+   `/etc/ssl/cert.pem` 中）。openssl 在**两把密钥**下都以 `RSA_padding_check_PKCS1_type_1: invalid padding` 验签失败
+   ——报告者更细的观察（「根本不解码为 PKCS#1 v1.5 块」）在机制层面复现，而不只是结论层面。
+2. **谁签的（归属：评论 34，10-22，Zihao Wang）。** 签名在 `EMSIGN ROOT TLS CA - G1 OCSP 2026 - 4` 之下验证通过
+   ——一张 OCSP 响应者委托证书，从 `ocsp-a.emsign.com` 的 `crt.sh/ocsp-response` 取得并经 Merkle Lens 提交进 CT，
+   从未在 CCADB 披露。读法：「用错签名密钥的情况，而非另一个弱密钥的证据」。我今日重取该证书三条路皆失败（crt.sh
+   身份索引对该 CN 为空；crt.sh 的 OCSP 页不再内嵌配方解析的 base64 块；`ocsp-a.emsign.com` 无应答），所以错钥验证
+   仍是评论作者的——归属陈述，不由我复现。
+3. **修复已观察到（我）。** `http://crl.emsign.com/?roottlscag1.crl` 的活性 CRL 现为 **CRL Number 19**（Last Update
+   2026-11-07 09:43:43 GMT）且在根密钥下**验证通过**。被取代的 CRL 11 的 nextUpdate 是 2027-04-12，即它在自身到期前
+   约 6 个月就被替换。CRL 19 保留了报告者无法对应到证书的序列号（`B37C808B…`），并新增 **4** 条吊销，时间戳为同一
+   天上午 09:25–09:37——重发前几分钟。
+4. **解释已到（eMudhra，评论 82，11-10）。** 完整事件报告（16 把 P-384 密钥因 Python wrap/unwrap 缺陷被截断为首字节
+   + 8 把 RSA-4096 密钥的材质离开过 HSM，构成 CPS §6.2.6 不合规）把 CRL 异常命名为其自身的**「促成因素 4——2025 年
+   6 月异常在症状层面解决」**：「2025 年 6 月……的 CRL 无法验证，因为证书是针对重建的对象签发的，而最早的 CRL 是用
+   原始生成的对象签的」——即产生 `d < 256` 的同一场密钥迁移混乱也产生了由任何已公布证书都匹配不上的密钥所签的 CRL，
+   而且每次出现都是打补丁而非修流程。所以本问题的后半由 **eMudhra 自己的文档确认**：是的，一个独立于弱密钥的签名
+   路径缺陷，而且复发过。报告中点名的整改：Root/签发 CA 密钥生成的 maker/checker 控制与「CRL 验证」。社区质询仍在
+   继续——关于 `CKA_EXTRACTABLE`、仪式脚本与第二张受影响 CRL（评论 65）的问题截至 11-11 未获回答（bug 最后变动
+   11:31Z）。
+
+**可复用规则。**（a）不需要 CA 配合即可检查 CRL：哈希匹配被报告的字节，在每把已公布密钥下验签，读
+`crlNumber`/`thisUpdate`/`nextUpdate`——而且 nextUpdate 在数月之外的 CRL 仍可能被悄悄重发，「仍在服务坏对象」是要
+重测的主张，绝非稳态。（b）只说「verify failure」的验证器会少报：padding 错误区分了「换了一把你不知道的密钥」与
+「弱密钥」——这是运维缺陷与密码学缺陷的差别。（c）该帖自身的认识论：错钥答案 10-22 就已可知，但要 CA 自己交出来
+（评论 36）——「我们要看 CA 是否知情」是一种交叉验证纪律，不是拖延。
+
+→ [[fact-check]] [[disclosure-lag]]
+
+Sources: [Mozilla Bug 2083449（评论 7、34、36、65、82）](https://bugzilla.mozilla.org/show_bug.cgi?id=2083449) ·
+[附件 9664144 — emudhra-g1-crl-signature.zip](https://bugzilla.mozilla.org/attachment.cgi?id=9664144) ·
+[crl.emsign.com/?roottlscag1.crl](http://crl.emsign.com/?roottlscag1.crl)

@@ -3565,3 +3565,13 @@ screening will shift from list-based to risk-based」。对任何做序列筛查
 Sources: [alexwang.ai](https://alexwang.ai/posts/reasoning-as-pathfinding/) ·
 [arXiv 2611.12806](https://arxiv.org/abs/2611.12806) ·
 [NSTM-6 (PDF)](https://www.whitehouse.gov/wp-content/uploads/2026/11/NSTM-6-NASS-Policy.pdf)
+
+## 2026-11-11 —— Qwen4-Max 进入预览：announcement-first 模式有了代际编号
+
+- 只有官方 X 宣布：「Qwen4 is coming. Deeper knowledge. Richer world understanding. Stronger coding and agentic capabilities… **Qwen4-Max is now in preview on Alibaba's Token Plan**」——早期访问在 QwenWork、Qoder、Qwen 应用与 QwenStudio。**没有参数量、没有基准卡、没有权重、没有计划框架之外的 API 定价。**本次运行时 qwen.ai 博客是一个 JS 壳，没有配套文章。
+- 该家族近期的模式延续：announcement → 托管访问 → 权重后至，Hy4 是完全扣留的案例，Kimi K3.1-Pro 是按期兑现的反例。开源权重谱系正是让这些模型成为生态后训练基座的原因（Figma 的 Qwen 3.8 27B 等），所以「Qwen4-Max 是否走开源权重路线」是唯一要紧的问题——检验点是 Hub 组织页，它为空时就还是空的。
+
+→ [[frontier-models]] [[fact-check]]
+
+Sources: [Qwen on X](https://x.com/Alibaba_Qwen/status/2120335993643684315) ·
+[HN discussion](https://news.ycombinator.com/item?id=50449130)

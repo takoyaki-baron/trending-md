@@ -5774,3 +5774,13 @@ own words for what it replaces: "relied on self-attestation rather than independ
 Sources: [alexwang.ai](https://alexwang.ai/posts/reasoning-as-pathfinding/) ·
 [arXiv 2611.12806](https://arxiv.org/abs/2611.12806) ·
 [NSTM-6 (PDF)](https://www.whitehouse.gov/wp-content/uploads/2026/11/NSTM-6-NASS-Policy.pdf)
+
+## 2026-11-11 — Qwen4-Max enters preview: the announcement-first pattern gets a generation number
+
+- Official X announcement only: "Qwen4 is coming. Deeper knowledge. Richer world understanding. Stronger coding and agentic capabilities… **Qwen4-Max is now in preview on Alibaba's Token Plan**" — early access on QwenWork, Qoder, the Qwen app and QwenStudio. **No parameter counts, no benchmark card, no weights, no API pricing** beyond the plan framing. The qwen.ai blog is a JS shell with no accompanying post as of this run.
+- The family's recent pattern holds: announcement → hosted access → weights later, with Hy4 as the withheld-entirely case and Kimi K3.1-Pro as the kept-promise counterexample. The open-weight lineage is what made these models the ecosystem's post-training base (Figma's Qwen 3.8 27B et al.), so "whether Qwen4-Max follows the open-weights path" is the only question that matters to the people who made Qwen trend — the check is the Hub org, and it is empty until it isn't.
+
+→ [[frontier-models]] [[fact-check]]
+
+Sources: [Qwen on X](https://x.com/Alibaba_Qwen/status/2120335993643684315) ·
+[HN discussion](https://news.ycombinator.com/item?id=50449130)

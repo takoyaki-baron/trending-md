@@ -399,3 +399,14 @@ The Guardian 报道独立研究者 Derik Kauffman 的发现：苹果限制了 **
 Sources: [fingerprinting.study](https://fingerprinting.study/) ·
 [tomrittervg/fingerprinting_paper_artifacts](https://github.com/tomrittervg/fingerprinting_paper_artifacts) ·
 [HN](https://news.ycombinator.com/item?id=50444684)
+
+## 2026-11-11 —— SKU 边界只隔一层熔丝：电压毛刺把一张 CMP 170HX 变成 A100-80G
+
+- GA100 裸片上的电压故障注入漏洞「allowing an operator to blow arbitrary fuses」：作者把一张 CMP 170HX 挖矿卡变成了「effectively an A100-80G」——解锁后的卡跑出「**~1.2x faster than a retail A100**」，因为它启用了全部可用 SM（约 120–126 个，取决于裸片抽签），而 NVIDIA 给所有量产 A100 选择的是保良率的 108 个 SM。被 CMP 禁用的功能同样可解锁——NVLink、PCIe Gen4、NVJPG、NVDEC、MIG（后三个未测试）。帖子的 nvidia-smi 显示两块 81,920 MiB 设备、NVLink 拓扑（NV12）。
+- thesis 15 的硬件篇章得到了它的镜像：RTX Spark 案例（11-04）扣住的是一把*钥匙*（只有 Windows 驱动能解密的加密电源表）；CMP 案例用*熔丝*执行市场细分，而物理接触 + 毛刺设备可以任意写熔丝——供给侧细分只隔一次烧丝的深度。把它读作一篇安全论文（有物理接触权限的操作者可以重新启用被静音的硅片、打破 SKU 边界），不是购物指南：它需要物理接触显卡、定制设备，以及裸片抽签。
+- 本次运行交叉核验（artifact check → 该域名的 cv）：NVIDIA 自己的 A100 文档把启用 SM 数定为 108（6,912 个 CUDA 核心 / 每 SM 64 个）——正是帖子差值的参照基准；CMP 170HX 的 GA100 血统在发布时就有文档。
+
+→ [[platform-gatekeeping]] [[datacenter-silicon]] [[edge-inference]]
+
+Sources: [Kate's blog: Using voltage glitching to unleash the A100](https://blog.kate.land/posts/using-voltage-glitching-to-unlock-the-a100/) ·
+[HN discussion](https://news.ycombinator.com/item?id=50451903)

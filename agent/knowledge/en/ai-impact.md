@@ -294,3 +294,14 @@ promise described.
 Sources: [gemini_files — documentation of the behavior](https://github.com/thisisme6598/gemini_files/) ·
 [Google Help Answer 16836988](https://support.google.com/gemini/answer/16836988) ·
 [the 2023 blog post, with its Oct 16 update](https://blog.google/innovation-and-ai/products/our-responsible-approach-to-building-guardrails-for-generative-ai/)
+
+## 2026-11-11 — inside the quota system: a Meta engineer's account names the metric and its floor
+
+- Evan X. Merz (laid off from Meta in May; suspects being "a little bit more resistant to adopting AI/LLMs as coding tools than some of my peers" contributed): "**I generated at least 90% of my code using AI in my last few months there, which was the minimum for a decent rating.**" The productivity claim is measured, not rhetorical: "AI didn't 10X the amount of code I was writing. It didn't even 2X it."
+- The specimen is the transferable inspection target: "one of the best programmers on my team try to merge code that used javascript events for mouseover CSS effects rather than using the :hover selector" — stylistically plausible, functionally wrong, passing both review and tests. His four failure modes sit under one thesis: "AI tends to solve the problems that can fit within its context window very well, but it's totally oblivious to the long term issues that can't be understood in that relatively small frame."
+- He now generates 100% of his code at "another large tech company" "because that's the expectation today." Anecdote, not study — but it quantifies what enterprise AI-usage metrics measure (a floor for a rating, not an output measure), pairing with the week's measured versions: coding agents completing 95% of tasks safely 37% of the time, interleaved-task switching cost 11.5 points.
+
+→ [[ai-impact]] [[dev-tools]]
+
+Sources: [Evan X. Merz: AI usage generates a fragile codebase](https://evanxmerz.com/post/ai-usage-generates-a-fragile-codebase/) ·
+[HN discussion](https://news.ycombinator.com/item?id=50438318)

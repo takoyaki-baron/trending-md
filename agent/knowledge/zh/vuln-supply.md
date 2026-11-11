@@ -1308,3 +1308,15 @@ VulnCheck 对 Anthropic Project Glasswing（2026-04-07 启动）的十一月更�
 
 Sources: [VulnCheck: Glasswing November update](https://www.vulncheck.com/blog/anthropic-glasswing-november-update) ·
 [HN 讨论](https://news.ycombinator.com/item?id=50447074)
+
+## 2026-11-11 20:40 批次——第二波 Patch Tuesday 的量化：Adobe 110 条 / 21 条 ≥9.0 全为 CNA 评分；RSC 的修复比其记录早四周；Chrome 在野利用漏洞在匿名报告三天后修复
+
+- Adobe 的 **110** 条记录（11/10 04:30Z → 11/11 12:00Z 窗口）仅在评分权重上居次：**21 条 ≥9.0，同窗口 Microsoft 为 25 条**；Google 的 158 条 `dsap` 记录一条评分都没有。抽样记录全部 `Received`——整个 Patch Tuesday 浪潮都是 CNA 评分、零分析，与既有形态一致。Google 自己那个被利用的漏洞（见下）是不需要浪潮的例外。
+- **CVE-2026-126187** 属于 `fix-predates-record`，差距**四周**（四条修复线的 npm 发布时间戳均为 2026-10-14，记录为 2026-11-10 23:17Z）——vLLM 16 天、Mongoose 92 天形态的再现：间隙期里，以记录为键的扫描器什么都看不到，暴露面由依赖解析决定。
+- **Chrome 被利用标志的节奏**：11/6 匿名报告 → 11/9 修复（157.0.8103.50/.51）→ 11/10 KEV 收录。被 KEV 的 CVE 在 NVD 上的 8.8 与沙箱逃逸的 9.6 都是 **CISA-ADP**（唯一指标 / 富化）——ADP 在 125347 仍为 `Undergoing Analysis` 时就把两个数写了进去，即本文件自 Tomcat 三例以来追踪的那种形态。
+
+→ [[security]] [[disclosure-lag]]
+
+Sources: [APSB26-191](https://www.adobe.com/trust/security/products/connect/apsb26-191.html) ·
+[NVD: CVE-2026-126187](https://nvd.nist.gov/vuln/detail/CVE-2026-126187) ·
+[Chrome Releases](https://chromereleases.googleblog.com/2026/11/stable-channel-update-for-desktop_018223192.html)

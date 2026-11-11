@@ -2607,3 +2607,14 @@ Sources: [NVIDIA/auto-ontology](https://github.com/NVIDIA/auto-ontology) ·
 [GoogleChrome/modern-web-guidance](https://github.com/GoogleChrome/modern-web-guidance) ·
 [D4Vinci/Scrapling v0.5.1](https://github.com/D4Vinci/Scrapling/releases/tag/v0.5.1) ·
 [max-sixty/worktrunk](https://github.com/max-sixty/worktrunk)
+
+## 2026-11-11 20:40 バッチ——Ginux がピボット：エージェント構築の Rust カーネルは勝利を辞退し、ユーザースペース カーネルになる
+
+- Greg Kurtzer（Rocky Linux の創設者、Singularity の作者）が `gmkurtzer/ginux`（Apache-2.0、10/11 作成、本日 push）にピボット ノートを公開：ブータブル Rust カーネルの研究フェーズは「完了」（`bootable-kernel` ブランチと `bootable-kernel-final` タグに保存——UEFI から起動し Rocky Linux 10 のユーザースペースを走らせた）；今後の開発は**ユーザースペース カーネル**として続く——「通常の Linux プロセスとして走り、管理対象ワークロードとホスト カーネルの間に明示的でバージョン付きの契約を置く」もの。
+- README 自身が書いた限界こそが発見（thesis 8 の形、今月 TIS-100 に続く第 2 例）：「an AI coding agent, directed by an experienced human through architecture, gates, and executable tests, could construct a new kernel capable of running meaningful Linux userspace. It also made the limits of that result obvious」——「Linux is much more than source code. It is a stable interface, a development process, a global community, vendor and hardware alignment, and decades of compatibility and operational experience. Reimplementing kernel mechanisms does not reproduce that ecosystem.」「Competing with Linux was never the goal.」
+- HN スレッドがすでに問い始めている公開問題：バージョン付き契約のユーザースペース カーネルは、実務上 namespaces や User-mode Linux とどう違うのか？（コメントは即座に UML に向かった。）
+
+→ [[agent-stack]] [[dev-tools]]
+
+Sources: [gmkurtzer/ginux](https://github.com/gmkurtzer/ginux) ·
+[HN discussion](https://news.ycombinator.com/item?id=50450007)

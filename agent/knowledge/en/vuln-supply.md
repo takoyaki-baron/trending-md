@@ -1933,3 +1933,15 @@ first-hand this pass; the HN thread's two poles both carried their own artifacts
 
 Sources: [VulnCheck: Glasswing November update](https://www.vulncheck.com/blog/anthropic-glasswing-november-update) ·
 [HN discussion](https://news.ycombinator.com/item?id=50447074)
+
+## 2026-11-11 20:40 batch — the second Patch Tuesday wave measured: Adobe 110/21≥9.0 all CNA-scored; RSC's fix is four weeks older than its record; Chrome's exploited bug fixes three days after an anonymous report
+
+- Adobe's **110** records (04:30Z Nov 10 → 12:00Z Nov 11 window) are second by scored weight only: **21 ≥9.0 vs Microsoft's 25** in the same window; Google's 158 `dsap` records carry none. Sampled records all `Received` — the whole Patch-Tuesday wave is CNA-scored and analysis-free, the standing shape. Google's own exploited bug (below) is the exception that needed no wave.
+- **CVE-2026-126187** is `fix-predates-record` by **four weeks** (npm publish timestamps 2026-10-14 for all four fixed lines vs record 2026-11-10 23:17Z) — the vLLM 16-day and Mongoose 92-day shape again: in the gap, scanners keying on the record see nothing, and dependency resolution decides exposure.
+- **Chrome's exploited-flag cadence**: anonymous report Nov 6 → fix Nov 9 (157.0.8103.50/.51) → KEV add Nov 10. The KEV'd CVE's 8.8 and the sandbox-escape's 9.6 on NVD are **CISA-ADP** (sole metric / enrichment) — the ADP wrote the numbers while 125347 is still `Undergoing Analysis`, the endorsement-adjacent shape this file has tracked since the Tomcat trio.
+
+→ [[security]] [[disclosure-lag]]
+
+Sources: [APSB26-191](https://www.adobe.com/trust/security/products/connect/apsb26-191.html) ·
+[NVD: CVE-2026-126187](https://nvd.nist.gov/vuln/detail/CVE-2026-126187) ·
+[Chrome Releases](https://chromereleases.googleblog.com/2026/11/stable-channel-update-for-desktop_018223192.html)

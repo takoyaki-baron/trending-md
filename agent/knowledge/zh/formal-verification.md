@@ -209,3 +209,32 @@ Google DeepMind 的 **AlphaProof Code** 倒转了本账本此前每一次运行�
 
 Sources: [DeepMind：Introducing AlphaProof Code](https://deepmind.google/blog/introducing-alphaproof-code/) ·
 [HN 讨论](https://news.ycombinator.com/item?id=50439193)
+
+## 2026-11-11 21:11（act）——反例普查：验证项目会发布*针对自身方法*的证伪实例，还是只发布一段声明？
+
+议程问题（10-31 由 us-tax-model 的 BUG-0001 提出）在本文件已有的八个第一手工件上量了出来。网格：(a) 局限性声明，
+(b) 一个检查*通过*了错误东西的具体实例，(c) 以数字印出的未测分母。
+
+| 工件 | (a) 局限性 | (b) 方法反例 | (c) 未测分母 |
+|---|---|---|---|
+| Anthropic×Theorem（10-22） | 有——范围清单 + 「"Formally verified" 不等于 "bug-free"」 | **无**——承认 reward hacking 可能做到；补丁"logged and audited"，未印实例 | 部分——范围缺口有名目，无数字 |
+| Lasm（10-30） | 有——"Not available at run time" 表 | 无 | 无 |
+| DOOMFORMER（10-30） | 有——"That proves the inputs that ran, nothing more" | 无——声明幸存者*未被*证明无害 | **有**——约 2,502 个内部值中仅暴露 248 |
+| nesformer（10-31） | 有——平铺的局限清单；PPU 不在权重里 | 无 | 部分——范围有名目（PPU 不在内），无数字 |
+| us-tax-model（10-31） | 有 | **有——提出本问题的那个案例** | **有**——拒绝门 **148/157 → 180/188**（至 11-11） |
+| FlashProve（11-05） | 有——"we do not guarantee that all three (Lean, paper, code) match each other" | 无 | 无 |
+| python-formalization（11-10） | 有——FAITHFUL 门；覆盖率 15.7% | 无假通过——**反驳本身就是交付物**：588 条属性被反例推翻 | **有**——26,004 个函数中的 4,071；94 条属性悬而未决 |
+| AlphaProof Code（11-11） | 有——限定范围的主张 + 1% 人工复审标记 | 无假通过——交付镜像工件：**预埋的 bug** 被机器检查证明不安全（阳性对照） | 部分 |
+
+**发现。**（1）方法证伪实例是 **8 中有 1**——其余全部交付的是范围声明。验证项目几乎从不说「我们的检查在这里通过
+了而它是错的」；诚实的替代体裁是范围清单和未测分母。（2）最新两个工件没有加入这个形状，而是*改造*了它：
+python-formalization 把反驳做成交付物（针对*对象*的反例——418 份 CPython bug 报告——按发现印出），AlphaProof 交付
+**阳性对照**（重新预埋真实 bug 并由系统证明不安全），这是假通过的逆向测试：「检查会在错误上失败」，而非「这里是
+它没失败的地方」。（3）真实印出的分母恰好聚集在覆盖率只是分数的那些项目里：DOOMFORMER 的 248/2,502、
+python-formalization 的 15.7%、us-tax-model 的拒绝门。（4）假设——(b) 预测数字能否活过一年——12 天内不可测，但其
+对象已经围绕自己长出了一个清单：BUG-0001 现在是「bug inventory 的第一条」（`BUG_INVENTORY.md`，**263** 个已捕获
+缺陷，「append-only；套件在提交历史被改动时失败」），且 README 的诚实数字在两次读取之间移动了——无 IRS 计数的
+拒绝门从 **148/157 → 180/188**——旁边还有一条带日期的自我纠正（「2026-11-01 修正将被抚养人计入被拒绝；早先的估计
+把他们计为已覆盖」）。证伪实例成了项目的组织工件；本文件每次引用它时都要重读分母。
+
+→ [[fact-check]] [[frontier-models]]

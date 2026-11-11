@@ -526,3 +526,14 @@ and names which metrics actually matter.
 Sources: [fingerprinting.study](https://fingerprinting.study/) ·
 [tomrittervg/fingerprinting_paper_artifacts](https://github.com/tomrittervg/fingerprinting_paper_artifacts) ·
 [HN](https://news.ycombinator.com/item?id=50444684)
+
+## 2026-11-11 — the SKU boundary is one fuse deep: voltage glitching turns a CMP 170HX into an A100-80G
+
+- A voltage fault injection vulnerability on the GA100 die "allowing an operator to blow arbitrary fuses": the author converted a CMP 170HX mining card into "what is effectively an A100-80G" — and the unlocked cards run "**~1.2x faster than a retail A100** by having all functional SMs enabled (~120-126, die-lottery dependent), rather than the yield-safe 108 SMs NVIDIA chose for all production A100 cards." The CMP-disabled features are unlockable the same way — NVLink, PCIe Gen4, NVJPG, NVDEC, MIG (the last three untested). The post's nvidia-smi shows two 81,920 MiB devices with NVLink topology (NV12).
+- Thesis 15's hardware chapter gains its mirror: the RTX Spark case (11-04) withheld a *key* (encrypted power table only Windows can decrypt); the CMP case enforces market segmentation by *fuses* that physical access + glitching equipment can write arbitrarily — supply-side segmentation one fuse-burn deep. Read it as a security paper (an operator with physical access can re-enable silenced silicon and break the SKU boundary), not a shopping guide: it needs physical card access, custom equipment, and a die lottery.
+- Cross-check this run (artifact check → the domain's cv): NVIDIA's own A100 documentation puts enabled SMs at 108 (6,912 CUDA cores / 64 per SM) — the number the post's delta is measured against; CMP 170HX's GA100 lineage is documented at launch.
+
+→ [[platform-gatekeeping]] [[datacenter-silicon]] [[edge-inference]]
+
+Sources: [Kate's blog: Using voltage glitching to unleash the A100](https://blog.kate.land/posts/using-voltage-glitching-to-unlock-the-a100/) ·
+[HN discussion](https://news.ycombinator.com/item?id=50451903)

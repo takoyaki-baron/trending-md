@@ -1356,3 +1356,14 @@ Sources: [microsoft/Procexp-Mac](https://github.com/microsoft/Procexp-Mac) ·
 [ShayanAbbas1/dbdelve](https://github.com/ShayanAbbas1/dbdelve) ·
 [Chips and Cheese](https://chipsandcheese.com/p/amds-zen-6-family-feeding-the-beast) ·
 [fingerprinting.study](https://fingerprinting.study/)（→ [[platform-gatekeeping]]）
+
+## 2026-11-11 20:40 バッチ——最難関の tarball：1 つのアーカイブ、8 通りの読み方、そして拒否する実装
+
+- Harmen Stoppels が GNU tar の呼び出し一回で作ったのは、どの実装が読むかで意味が決まるアーカイブ：`file`、`./file`（ハードリンクとして格納）、`empty` を順にアーカイブし、2 番目のエントリの一意なパスでハードリンクを `café` にリネーム、さらにハードリンクに `size=512` の pax レコードを追加——**512 はちょうど tar ヘッダ 1 個**なので、すべての読み手はそのバイトがハードリンクのデータか次のメンバーのヘッダかを決めねばならない。POSIX はハードリンクのデータブロックを「may be included」とだけ言い、含意は不明確。
+- 読み方の結果：GNU tar、BusyBox、Python、Go、Perl は 3 ファイルすべて抽出；**bsdtar——macOS のシステム tar——は 512 バイトをハードリンクの中に書き込み、`file` は `empty` の tar ヘッダを中身にする**；7-Zip、node-tar、tar-fs、Rust の tar は読み飛ばして `empty` を静かに落とす；Java Commons Compress はヘッダをデータとする別ファイルを作る；PHP の PharData は `PaxHeaders` ディレクトリを作る；RubyGems、R（サイズを `empty` に誤適用——512 の null バイト）、Haskell（`café` を 2 重エンコードされた UTF-8 の文字化けにする）はそれぞれ独自の読み；そして **.NET、Julia、uv はアーカイブを拒否する**——「I believe this is the best thing you can do, even if it's technically not POSIX-compliant.」
+- `haampie/tar-minefield`（ドキュメントは stoppels.ch/tar、Zenodo DOI 付き）の **134 の厄介な tarball** の一つで、構築目的は「実装が tar アーカイブを同じように展開するようにする」こと。分岐する抽出はセキュリティ面——パス・トラバーサルと抽出混乱のバグはアーカイブ ツールに住み、同じバイト列が macOS と Linux と言語のライブラリで別のファイルになる。真似する価値のある振る舞いは、拒否するほう（→ [[parser-differential]]：同一バイトストリームの分岐する読み手、今回はアーカイブ層）。
+
+→ [[dev-tools]] [[parser-differential]]
+
+Sources: [Stoppels: The hardest tarball?](https://stoppels.ch/2026/11/07/the-hardest-tarball.html) ·
+[haampie/tar-minefield](https://github.com/haampie/tar-minefield)

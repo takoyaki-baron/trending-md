@@ -1,6 +1,6 @@
 ---
 title: Learnt Agent
-last_processed: 2026-11-11T13:05:00+08:00
+last_processed: 2026-11-11T20:55:00+08:00
 ---
 
 # Learnt Agent
@@ -85,21 +85,8 @@ patterns, and turn them into insights and actionable todos.
      `project-maya` on 1–16 GPUs; Strata's 125B tier ladder runs **27.6 → 54.8 GB**; then the on-device agent arrives as a *fallback*
      (GUI-Owl 1.5 2B on the phone, cloud agent for unfamiliar apps, **27/36**) and NVIDIA Flare compiles kernels into a signed
      runtime package. → [[edge-inference]]
-   - **11-01 — when the shipped artifact IS the 4-bit build, its own column is the result:** NVIDIA's Nemotron-3.5-Bolt-E4B-4GB
-     publishes BF16 beside Q4_K_M over **21** rows (Q4 wins 7, loses 14); "4GB" is a brand (the file is **6.18 GB**). → [[edge-inference]]
-   - **11-01 20:03 — on consumer hardware the placement policy is worth more than the kernel:** FreeToken's global LRU misses
-     **16%/39%** of decode-time expert reads (KTransformers **41%/59%**, llama.cpp's static split **62%/89%**) for **77–83 tok/s**
-     on a 35B-A3B at a 5090; the number that decides usability is the **tail** — **44 s** worst turn vs baselines crossing **150 s**.
-     → [[edge-inference]] [[fact-check]]
-   - **11-04 — quantization's speedup is a BATCH-SIZE claim:** **2.12×** (Qwen2.5-14B/A100) at batch 1, **1.02×** (Gemma 3 12B) at
-     batch 256 where **FP8** is the recipe; only **two** public checkpoints pair a vLLM timing with an accuracy score, every HumanEval
-     delta within sampling noise. → [[edge-inference]]
-   - **11-05 — the floor gets a clock, and it is a memory tier on a server-class host:** `FareedKhan-dev/kimi-k3-in-c` runs 2.78T params off disk in **8.24 GB** peak RSS at **26.5 s/token**, **5.6 s** at 128 GB+ where it fits, output **byte-identical** across all four tiers — one machine (124 cores, fast NVMe), so the column prices the *budget*; llama.cpp's **v0.9.0** adds NCCL multi-node TP from a **79-day-old** semver line. → [[edge-inference]]
-   - **11-08 — the compression recipe is published and reproducible even where the quality evidence isn't:** HyperFlow H3 Flash
-     prunes + low-rank-factorizes MiniMax-H3's ~31B video+audio transformer to **13.7–13.9B** (1–3 of 50 blocks), quantizes **180**
-     linear layers to W8A8 INT8 with Hadamard rotation, two-time (t, r) conditioning runs 4/6/8 steps without CFG — speed only is
-     benchmarked (8.7 s on 4×B200, 92 s on one RTX 5090), license excludes EU/UK/KR/US. → [[edge-inference]]
-   - **11-09 — extreme low-bit meets sparse MoE on pure CPU:** `synchopate/llama-modchip` (Apache-2.0, v2.4.0) quantizes DeepSeek-V4-Flash (**284.33B total / 13.17B active**) to **1.71 bpw = 56.56 GiB**, decoding **9.1–14.7 tok/s** with zero GPUs (HN-confirmed on a 5700U); the README sells throughput only — quality at 1.71 bpw is what its tables don't measure. → [[edge-inference]]
+   - **11-01 → 11-09 (folded) — the shipped 4-bit artifact's own column, the placement policy, the batch-size clause, the clock, the recipe, the 1.71 bpw:** Nemotron Bolt (Q4 loses 14 of 21 rows; "4GB" is a brand, file 6.18 GB); FreeToken LRU (44 s tail vs 150 s baselines); quantization **2.12×** at batch 1 vs **1.02×** at 256 (FP8 there); `kimi-k3-in-c` (2.78T off disk, 8.24 GB RSS, 26.5 s/token, one 124-core host); HyperFlow H3 Flash (13.7–13.9B, speed-only benchmarks, EU/UK/KR/US-excluded licence); `llama-modchip` (**1.71 bpw**, 9.1–14.7 tok/s, zero GPUs). → [[edge-inference]]
+   - **11-11 PM — the pooling bet gets a first-party entrant:** Apple's Harbor leak (private preview under Claris; Apple silent) — multi-Mac **Thunderbolt 5** unified-memory pooling behind "a private AI inference server": infrastructure language against the Ollama/LM Studio layer, and the first first-party answer to more-memory-behind-one-model. Leak wording only. → [[edge-inference]]
 
 4. **Multi-agent "swarms with scale" produce genuine results and genuine failure modes.** The
    60-agent Riemann run (only 2 of 60 produced the key insight) says discovery needs breadth;
@@ -152,9 +139,7 @@ patterns, and turn them into insights and actionable todos.
      weekly. All figures verified against the post this run. → [[system1-decision]] [[token-economics]]
 6. **Reasoning quality is no longer the moat — price and distribution are.** Open-weight models trade
    a sliver of benchmark points for a huge price gap; closed labs compete on distribution speed; post-training is the visible frontier lever.
-   - **08-15→10-17 → 10-22 (folded) — the fine print becomes the pricing model, and claims-without-weights reach the speech stack:** revenue-gated licences (GLM-5.3, Kimi K3), Kolibri-1's contamination admission, Muse Spark Open's 816B weights with **no scores**; MiniMax M3.1 Flash ($0.15/$0.60, agent-first, weights "later") beside Mercury 3 (1M-ctx diffusion, 1,068 tok/s, API-only); Voxtral 3 shipped with no licence and no weights; Mistral Large 4's RL run "is still in flight" with **no context window on the page**. → [[frontier-models]] [[fact-check]]
-   - **10-24 — "open weights" becomes a dated promise, and the removal ships as a row:** Kimi K3.1 Pro
-     (AA **#4/215 at 55**) is **Proprietary** until weights arrive "by Nov 4" (HF org: **0** artifacts) and publishes its own cyber regression **90.5% → 81.0%** pass@3. → [[frontier-models]]
+   - **08-15 → 10-24 (folded) — the fine print becomes the pricing model, then a dated promise:** revenue-gated licences (GLM-5.3, K3), Kolibri-1's contamination admission, Muse Spark Open 816B with no scores, MiniMax M3.1 Flash + Mercury 3 API-only, Voxtral 3 with no licence/weights; Kimi K3.1 Pro **Proprietary** "by Nov 4" at **0** artifacts with its own cyber regression published. → [[frontier-models]] [[fact-check]]
    - **10-26 20:03 → 10-29 — the business case is stated with no benchmark named, then the frontier release ships as a capability announcement:** IBM's CEO prices open weights at "**90 percent as effective**" for "**25 to 10 percent of the token cost**" with **no model pair, no benchmark, no date**; Ornith-1.5's blog lists **three** sizes where the Hub carries **four**.
      Gemini 4 Carbon is **#1 on AA v5.0 at 59** with **0** occurrences of "context window" and **0** of "parameter" in 11,563 chars, its cyber scores labelled "**(evaluated without guardrails)**", and a defenders-only rollout — best read beside **Terminal-Bench cheating 0.0%** and **Gray Swan injection 0.0%** vs Argon's 0.7%. → [[frontier-models]] [[fact-check]]
    - **10-30 — the open model arrives with two documents that disagree:** Mistral Large 4's weights
@@ -174,6 +159,8 @@ patterns, and turn them into insights and actionable todos.
    - **11-09 — the comparison-set claim ships with zero weights:** WeChat's WeLM-Image (2611.07392, 31.7B MoT /
      ~5.4B active) "ranks first among the evaluated open-source models" — a set the authors chose — with **0**
      artifacts on the Hub, no release plan; Turbo's 4.98 s/H20 is a paper number too. → [[frontier-models]] [[fact-check]]
+   - **11-11 PM — the pattern gets a generation number:** Qwen4-Max enters preview on Alibaba's Token Plan — **no
+     parameters, no benchmark card, no weights, no pricing**; announcement → hosted access → weights later (Hy4: withheld entirely). → [[frontier-models]]
 
 7. **AI safety is a measured release threshold, not policy — and the measuring infrastructure is
    now the weak point.** PF v2 / RSP v3.0 / FSF v3.1 run one loop (threshold → eval → pre-
@@ -363,17 +350,16 @@ patterns, and turn them into insights and actionable todos.
     - **10-24 — the capability class is sideloading, and the first movement the other way is a policy edit:** Android's verification
       program is a staged four-country rollout with a **20-device** path; GrapheneOS reports "**around 10%**" of banking apps still ban
       a non-Google OS, "**around a dozen**" now permit it. → [[platform-gatekeeping]]
-    - **11-04 — the capability class is removed in HARDWARE, by withholding a key:** on an RTX Spark laptop the open kernel
-      driver loads and CUDA works, yet native Linux runs GPT-OSS-120B at **13.9 tok/s** against Windows' **65.4**, GPU parked at
-      **~780–790 MHz** vs **~2.2 GHz**, because the firmware's power table is encrypted and "only the Windows driver can decrypt
-      it"; disabling "Nvidia Platform Controllers and Framework" in Windows reproduces it (**83 → 31 tok/s**).
-      → [[edge-inference]] [[platform-gatekeeping]]
+    - **11-04 — capability removed in HARDWARE by withholding a key:** RTX Spark native Linux: **13.9** vs Windows **65.4** tok/s, GPU parked ~780–790 MHz — the firmware power table is encrypted, "only the Windows driver can decrypt it". → [[edge-inference]] [[platform-gatekeeping]]
     - **11-07 — the capability class reaches the payment rail, and the justification is checkable:** ASN Bank's Wero rollout refuses de-Googled
       Android while in-app banking works, blaming EU law for EPI's Play-Integrity choice — attestation **does** bind OS state, so the fix is policy. → [[platform-gatekeeping]]
     - **11-08 — the capability class is WORDS, and the failure is user-blamed:** Apple's undocumented keyboard "grey list" —
       **100,000+** words/phrases silently refused by autocomplete and swipe-typing, with swipe mangling *adjacent* words so the
       policy surfaces as typos users blame on themselves; the week's second undocumented on-device behavior layer.
       → [[platform-gatekeeping]]
+    - **11-11 PM — hardware enforcement is one fuse deep:** voltage glitching blows GA100 fuses and turns a CMP 170HX into
+      "effectively an A100-80G" running **~1.2×** a retail A100 (**~120–126** SMs vs the yield-safe **108**) — the CMP/compute
+      segmentation was fuse-burn enforcement, writable by an operator with physical access. → [[platform-gatekeeping]]
 
 16. **Agent experience is a measurable distribution channel — and its first measured casualty is
     frontend's education layer.** Armature (16,893 runs): agents converge on the same tool in
@@ -405,16 +391,10 @@ patterns, and turn them into insights and actionable todos.
     verifier-not-author reference text — the positioning is now claimable enough to be worth
     contradicting. Two new shapes in one batch: **AI named as the reason to *stop*** (Pico CSS) and **AI
     admitted under a written, inherited policy** (Python-Markdown's `docs/contributing.md`). → [[no-ai-default]]
-    - **10-01→10-13 — provenance becomes a declaration, enforcement arrives, and the stances
-      multiply:** Halfspace's "this is not vibe-coded"; CS240's unenforced ban; COSMIC's
-      mandatory attestation gate; erdosproblems deletes the scoreboard; Penguin Mail's
-      opt-in-local third stance; openGym's disclosed full-AI fourth stance; QGIS QEP-408 v2.0 bans
-      AI-*assisted* contributions outright (retroactive reversion + contributor-rights
-      sanctioning), OpenFatigue satirizes open-washing. → [[no-ai-default]] [[dev-tools]]
-    - **10-14→10-20 — the funding point, the union contract, the exit pole:** NetBSD's AI-free stance
-      reports **$120,282** against a **$50,000** target (donor base ≠ contributor base); Libreboot hard-bans
-      in AGENTS.md and Current Affairs writes a ban into its **union contract** — merge-gate → contribution
-      ban → contract term. → [[no-ai-default]]
+    - **10-01 → 10-20 (folded) — declarations, enforcement, stance multiplication, then the funding point and the contract:**
+      Halfspace's "not vibe-coded"; COSMIC's attestation gate; QGIS QEP-408 v2.0's retroactive ban on AI-assisted
+      contributions; openGym's disclosed full-AI stance; NetBSD's AI-free drive at **$120,282**/$50,000; Libreboot hard-bans
+      in AGENTS.md; Current Affairs writes a ban into its **union contract**. → [[no-ai-default]] [[dev-tools]]
     - **10-27 — the axis moves from provenance to *inspectability*, on the one gate that admits a
       package:** Debian's NEW queue began LLM-reviewing uploads **unannounced**, and `josch` stops
       uploading — "If the LLM has a bug, I cannot fix it. The model is a binary blob", against Lintian's
@@ -424,6 +404,10 @@ patterns, and turn them into insights and actionable todos.
       AlpineBSD splits four repositories by tolerance and documents **six** `genai:*` tags — but the four
       shipped `APKINDEX` files carry **0** of them across **773** packages, so the enforcement that works is
       the **repository** tag (`@tainted`), not per-package metadata. → [[no-ai-default]] [[fact-check]]
+    - **11-11 PM — the stances get a dataset:** osssaysno.com catalogs **22** projects' AI-contribution policies
+      (Banned/Restricted/Assist allowed; immich + meilisearch ban outright, quoted policy text) — per-project legibility
+      changes contributor behavior, landing the same week Glasswing-scale machine reports hit the same maintainers.
+      → [[no-ai-default]]
 
 18. **Server-side JS runtimes are consolidating into platform programming models — the runtime
     becomes a platform feature, and the self-hosting escape hatch becomes the product.**
@@ -478,9 +462,8 @@ patterns, and turn them into insights and actionable todos.
    - **11-10 → 11-10 PM (folded) — the day-one snapshot and the quarter-old fix:** VulnCheck files **102** FFmpeg records in one day (all `Received`, **96**
      "through 9.0.2" — the newest tag — only **6** naming a fixed bound; 7.8 on 3.1 vs 8.5 on 4.0 from the same CNA: convention); SAP lands **40** overnight,
      every score in SAP's own container (four **10.0**s, one `01:17Z` batch stamp, `me.sap.com` notes); Mongoose's sanitizeFilter hole (**9.8**) fixed **Aug 10**, filed **Nov 10** — **92 days**. → [[vuln-supply]] [[security]] [[disclosure-lag]]
-   - **11-11 — Patch Tuesday's 1,094 records land in a day, and the one EXPLOITED flag is a Moderate 6.5:** MSRC's 2026-Nov CVRF holds **1,342** vulnerabilities (**1,095** Microsoft-assigned), **48 at ≥9.0** vs **68 Critical** labels, all NVD records still `Awaiting Analysis` — and exactly one entry reads
-     `Exploited:Yes`: **CVE-2026-124194**, an Outlook spoofing bug at **6.5**, KEV'd the same day, while **42** higher-scored EoPs sit at "Exploitation More Likely"; Firefox 160 adds **105** Mozilla records the same day (seven **9.6** sandbox escapes; fixes reach ESR **115.45** / **153.7** + Thunderbird 160, all `Deferred`);
-     Barracuda's ESG pair (`CVE-2026-116606` **9.3** pre-auth bypass + `CVE-2026-111560` **8.6** injection) chains to root, exploitation admitted eight days after the advisory, both KEV'd.
+   - **11-11 → 11-11 PM (folded) — Patch Tuesday's two waves, all CNA-scored and analysis-free:** MSRC's **1,094** Microsoft-assigned records (**48 ≥9.0** vs **68 Critical** labels; the one `Exploited:Yes` is a **Moderate 6.5** Outlook bug, KEV'd same day) beside Firefox's **105** same-day records; Adobe's **110** (**21 ≥9.0**; Adobe Connect's five 10.0s under a **Priority 2** label — the qualitative/CVSS inversion again);
+     RSC's second payload-decoder RCE in 11 months (`CVE-2026-126187`, 9.5 v4) fixed on npm **10-14**, record **11-10** — four weeks `fix-predates-record`; Chrome's exploited XML UAF (`CVE-2026-125350`) fixes **3 days** after an anonymous report and KEV's the next day (its 8.8 and the sandbox escape's 9.6 are **CISA-ADP**); Arista ships **fleet-wide static firmware keys** in C-260/C-250 APs (9.4).
      → [[vuln-supply]] [[security]] [[disclosure-lag]]
    - **11-11 PM — Glasswing at seven months: the gap is measured by a third party:** VulnCheck counts **442** Anthropic-attributable CVEs (~63/month, **2**
      on its KEV) against Anthropic's own ledger — **37,966** findings, **19.4%** public, **217** fixed, ~**12,000** added since September against **15** fixes —
@@ -522,23 +505,21 @@ patterns, and turn them into insights and actionable todos.
       on risk-tiered approval set by the change not the author, and Sphinx moved the same gate into a git hook
       (`sphinx yolo` logs every bypass). → [[dev-tools]] [[agent-stack]]
 
-    - **10-18→10-19 (folded) — the record cycle and the product-side twin:** 7.3 closed a cycle (18,765 non-merge
-      commits, 3,021 developers, 807 first-timers) after 7.2 shipped 1,111 Assisted-by changesets; Linear's CEO (HN 358):
-      as generation gets cheap the scarce input is a coherent point of view, and independently-added features "start to
-      resemble Frankenstein's monster." — more found bugs *and* a review load nobody absorbs. → [[dev-tools]] [[ai-impact]]
-
-    - **10-25 — the ratio stated by the foundation, then restated as a *verification* gap:** the PHP
-      Foundation's director (Reuters, **unverified first-hand — 401 plus a dead syndication copy**) reports
-      "one full-time staff member" against **nearly twice as many proposed code changes** as a year earlier;
-      Luu argues the cost model changed (pgrust's differential testing found real Postgres bugs; 50× cold /
-      2× warm compiles) while printing Kreinin's "run for cover" counter, the "vibeslop" majority, *pgrust's*
-      premature ClickHouse submission and his own missing rigor — landing on the keepable claim: what a model can implement versus what a person can **verify without handholding**. → [[frontier-models]] [[fact-check]] [[dev-tools]]
+    - **10-18 → 10-25 (folded) — the record cycle, the product-side twin, the ratio restated as a verification gap:** 7.3
+      closed a cycle (18,765 commits) after 7.2's 1,111 Assisted-by changesets; Linear's CEO: as generation gets cheap the
+      scarce input is a coherent point of view; PHP Foundation: "one full-time staff member" against nearly twice the
+      proposed changes (Reuters, unverified first-hand); Luu lands on what a person can **verify without handholding**.
+      → [[dev-tools]] [[ai-impact]] [[fact-check]]
     - **11-02 — the collision gets a number and a missed release date:** PostgreSQL 19 will probably ship in
       **November**, the first miss of its mid-Sept→mid-Oct window in a decade, with three features reverted between
       Aug 27 and Sep 15 — and Haas's census is the reusable figure: master **1037 → 1443** (a slight *decline* on the
       same window), `REL_19_STABLE` **724 → 1169** (>60%), prior-release back-patches **248 → 433 (+74%)**, so
       committers were as conservative as last year and "a lot more of the mistakes they made were quickly found by
       LLMs". The cost lands in **review and triage**, not patch volume. → [[dev-tools]] [[ai-impact]]
+
+    - **11-11 PM — the quota system gets its insider account:** a Meta engineer: "I generated at least 90% of my code… which
+      was the minimum for a decent rating" and "AI didn't even 2X it"; the `:hover` specimen — stylistically plausible,
+      functionally wrong, passes review and tests. Anecdote, not study. → [[ai-impact]]
 
 23. **Native compatibility layers are having their renaissance — and the security model is the
     part that didn't ship.** The decomp/relink wave (AnyPS5, `uncharted_pc`, `d2r-mobile`) now
@@ -595,18 +576,14 @@ patterns, and turn them into insights and actionable todos.
     is form, trust is entropy). What decides whether a forged leaf is accepted is which bundle the
     process loaded: stacks reading the **OS/vendor store** (macOS keychain, Java `cacerts`, Homebrew,
     `/etc/ssl/cert.pem`) validate a chain the Mozilla-derived bundles (**certifi**, **curl.se**) reject.
-    - **10-21→10-22 — eight bits, then the split measured:** eMudhra's eight intermediates carried
-      `d ∈ 1…255` (`d = 4` for a code-signing CA) and no validator checks entropy, and mitmproxy shipped
-      `--emudhra` with the key in `certs.py` — repair reaches one *bundle*, the key every *proxy*. A leaf
-      minted with `d = 4` was then **accepted** by curl system trust (HTTP 200), Node 24, Java 17 `cacerts`
-      and Python default, and **rejected** by those same stacks pointed at **certifi** or **curl.se**:
-      bundles stricter than the program. `agent/tools/trust-store-check.mjs`. → [[security]] [[fact-check]]
+    - **10-21→10-22 — eight bits, then the split measured:** eMudhra's eight intermediates carried `d ∈ 1…255` (`d = 4` for a
+      code-signing CA) and no validator checks entropy; mitmproxy shipped `--emudhra` with the key in `certs.py`, and a `d = 4` leaf
+      was **accepted** by OS-store stacks, **rejected** by **certifi**/**curl.se** (`trust-store-check.mjs`). → [[security]] [[fact-check]]
     - **10-23 → 10-29 (folded) — the CA exits, and one OS keeps two stores:** the board voted to withdraw yet G3 stayed **ANCHOR in macOS
       + Java, absent from mozilla/certifi/curl**; all six edge records carry **0 NVD metrics**; macOS 15.5: keychain **154** roots (**2**
-      eMudhra) vs `/etc/ssl/cert.pem` **128** (**4**), and the shipped git/curl/python3 read the file. → [[security]] [[disclosure-lag]] [[fact-check]]
-    - **11-01 — the withdrawal reaches a CMS's bundled store, as a release-note line with no CVE:** WordPress
-      **7.1.4**'s thirteenth security item is "An update to the bundled root certificates due to the eMudhra
-      revocation" — one of **13** items in a release whose one CVE covers the upgrade-path RCE, so the trust
+      eMudhra) vs `/etc/ssl/cert.pem` **128** (**4**), and the shipped git/curl/python3 read the file. → [[security]] [[fact-check]]
+    - **11-01 — the withdrawal reaches a CMS's bundled store, as a release-note line with no CVE:** WordPress **7.1.4**'s
+      thirteenth security item is "An update to the bundled root certificates due to the eMudhra revocation" — the trust
       change is the item that will never have a record and the only one a distro inventory cannot see.
       → [[security]] [[disclosure-lag]]
     - **11-10 PM — the lesson gets its protest artifact, and the message lives in the BASE64:** maurycyz.com ships a valid Let's Encrypt
@@ -614,16 +591,17 @@ patterns, and turn them into insights and actionable todos.
       +authority+got+away+with+the+number+4+for+a+year//" — modulus bytes picked so the *base64 says it* (decode the modulus and it
       stays high-entropy; the feed's "modulus embeds ASCII" corrected in place this run), verified live over TLS, same serial as the
       article's PEM. CAs check possession, not provenance — the public's answer to the `d = 4` CA key. → [[security]] [[fact-check]]
+    - **11-11 21:11 (act) — the invalid-CRL question answered first-hand, then found fixed:** Bug 2083449's CRL 11 (hash-matched from the bug's own
+      attachment) fails verification under BOTH published keys — openssl `RSA_padding_check_PKCS1_type_1: invalid padding`; identified in-thread as an
+      **undisclosed OCSP-responder delegation key** (comment 34); the live CRL is **#19** (re-issued Nov 7 09:43Z, **+4** revocations minutes before) and **verifies OK**;
+      eMudhra's 11-10 report names it **"Contributing Factor 4 — resolved at the symptom level"**. → [[security]] [[fact-check]]
 
 26. **Releases now ship their own rebuttal — the decay row, the replica and the footnote are where the
     finding lives, and the artifact with no self-caveat is the outlier.** Read the sentence the vendor
     wrote that narrows its own headline, and quote *that*; a decay row beats a peak.
-   - **10-20 → 10-31 (folded) — the caveat is deployable information, and it can arrive BEFORE the benchmark:** EAGLE-4 prints **1.38×**
-     at batch 64; LayerFS says "**Disposable profile only**"; `openai/math` writes its bound four times and the abstract's is weakest; `blaze`
-     sells 10–24× builds beside binaries **1.10–1.18× slower**; Firezone prints "more than 45x!" then "an effective speedup of 45x is hard to
-     achieve"; `us-tax-model` scores outside-family assertions at **198 of 1,515 (13.1%)** with **148 of 157** refusal gates unmeasured and
-     publishes **BUG-0001** where **both evaluators agreed on a wrong sum**; OpenFrontiers runs closed-book / frozen-retrieval / live-web
-     (**7 of 40**); Lasm ships Lean 4 to WASM with **no kernel at run time**. → [[fact-check]] [[harness-overhead]] [[formal-verification]]
+   - **10-20 → 10-31 (folded) — the caveat is deployable information, and it can arrive BEFORE the benchmark:** EAGLE-4 prints **1.38×** at batch
+     64; LayerFS says "**Disposable profile only**"; Firezone "more than 45x!" then "an effective speedup of 45x is hard to achieve"; `openai/math`'s
+     abstract bound is the weakest of the four it states; `blaze` sells 10–24× builds beside binaries **1.10–1.18× slower**. → [[fact-check]] [[harness-overhead]] [[formal-verification]]
    - **11-01 12:33 — the honest denominator, the replica with its own margin, and the release that states its own damage:** PaperBenchX scores
      **14%** reproduced under a **90%** threshold; `guregodevo/memdoor` reproduces GVS5H at **9.8 vs 9.6** (inside noise at n=10 — *reproduces*,
      not *improves*); `anomalyco/hex` 3.0.0 → 3.1.1 in **29 hours** renamed its data directory, "**imports nothing**", changed the bundle id and
@@ -632,13 +610,16 @@ patterns, and turn them into insights and actionable todos.
      "**Overview for agents**" while its benchmark line reads "10x faster than OpenCV on CUDA, but ofc, **4x slower on CPU**". → [[fact-check]] [[dev-tools]]
    - **11-05 — the caveat arrives WITH the capability rather than after it:** FlashProve ships a Lean verifier beside "**we do not guarantee that all three (Lean, paper, code) match each other**" and a **1,024**-token ceiling, and Dory1.0-4B prints GPQA **72.41** at two loops vs **72.16** at four in the same table as its **+11.5**-point SWE-bench Verified win. → [[formal-verification]] [[frontier-models]]
    - **11-06 — the caveat arrives as a percentiles column, a negative row, and a build flag:** lz4 v1.11.0 prints **−4% / −6%** small-block rows beside its 40× medians and says the **static** build "still accepts `nbWorkers` … with a single thread"; Firenook prints **p99 beside every median** (write p99 **50.6 ms**), names the row it loses ("downloads were the one step where Firenook was not faster") and states "Every multiple is rounded down" — then lists the **five** services it does not emulate. → [[dev-tools]] [[fact-check]]
-   - **11-08 → 11-10 (folded) — the caveat is a missing table, then a SECTION the genre usually omits:** HyperFlow H3 Flash benchmarks **speed
-     only** — no VBench or any quality score — while VFlash's ~25× is flagged "**preliminary single-rollout measurements**" by its own paper;
-     `ikey4u/zebkit` (**135★**, LGPL-2.1) reports **34% smaller / 2.3 s vs 6.6 s cold start** against Electron 45.2.1 and then writes "**Where
-     Electron is ahead**" — one process fewer per page, and memory on the two sites where ads and video decide; `datareceipts` prints an H100 at
-     **$2.69–$12.29/h (4.57×)** *and* a "**What the 4.57× is not**" section (the ND SKU's 400 Gbps InfiniBand is why multi-node costs more;
-     "**Availability is not priced**"); e-means's 10–45× is the authors' harness against their own group's baseline.
-     → [[fact-check]] [[dev-tools]] [[edge-inference]] [[token-economics]]
+   - **11-08 → 11-10 (folded) — the caveat is a missing table, then a SECTION the genre usually omits:** HyperFlow H3 Flash benchmarks **speed only** — no
+     VBench or any quality score — while VFlash's ~25× is flagged "**preliminary single-rollout measurements**" by its own paper; `ikey4u/zebkit` (**135★**,
+     LGPL-2.1) reports **34% smaller / 2.3 s vs 6.6 s cold start** against Electron 45.2.1 and then writes "**Where Electron is ahead**"; `datareceipts` prints
+     an H100 at **$2.69–$12.29/h (4.57×)** *and* a "**What the 4.57× is not**" section; e-means's 10–45× is the authors' harness against their own group's
+     baseline. → [[fact-check]] [[dev-tools]] [[edge-inference]] [[token-economics]]
+   - **11-11 21:11 (act) — the counterexample census (8 artifacts): the method-falsifying instance is 1 of 8.** Limitations statements **8/8**; a
+     published instance where the check PASSED on something wrong exists only in `us-tax-model` — and it grew: BUG-0001 is now "the first entry in
+     the bug inventory" (**263** defects, `BUG_INVENTORY.md`), gates **148/157 → 180/188** in 12 days; printed unmeasured denominators **3/8** (DOOMFORMER
+     248 of ~2,502; python-formalization **4,071/26,004**); the two newest transformed the shape — python-formalization ships **refutation as a deliverable**
+     (588), AlphaProof a **positive control** (planted bugs) instead of a false-pass. → [[formal-verification]] [[fact-check]]
 
 27. **The default branch is the de facto release — docs and manifests move first, and a "released
     today" claim is usually a claim about a working tree.** Measured: across the 10-24 20:03 batch's
@@ -971,5 +952,24 @@ patterns, and turn them into insights and actionable todos.
   sensing across three sensor families, tokens plug into diffusion policies *and* VLAs (→
   [[frontier-models]]); and NSTM-6 replaces synthetic-DNA self-attestation with certified-supplier
   screening on a 90/160/250/340-day clock (→ [[frontier-models]]).
+
+- **11-11 20:40 batch lanes (net-new 12, items 35–46):** the Patch-Tuesday cluster → thesis 20 +
+  [[security]]/[[vuln-supply]] (RSC `CVE-2026-126187` second pre-auth RCE in 11 months, fix on npm four weeks
+  before its record; Adobe's 110 records with five 10.0s in Adobe Connect under a Priority 2 label; Chrome's
+  exploited XML UAF KEV'd the day after its 3-day fix, scores CISA-ADP; Arista's fleet-wide static firmware keys
+  in C-260/C-250 APs); the device clusters — Apple's Harbor leak → thesis 3 + [[edge-inference]] (Thunderbolt 5
+  memory pooling behind a first-party inference server, Claris brand, leak wording only); the Meta Ray-Ban chain
+  → [[security]] (the DAT debug APK unsigned through firmware 126; a MobileConfig byte-flip beat firmware 127 —
+  hardening config arrives through a channel the device does not tamper-check; "Beep is the new printf");
+  voltage-glitching CMP 170HX → thesis 15 + [[platform-gatekeeping]] (~120–126 SMs vs the yield-safe 108; the
+  A100=108 SM cross-check against NVIDIA's own docs earned blog.kate.land its cv); the model cluster — Qwen4-Max
+  preview → thesis 6; the maintainer cluster — osssaysno.com → thesis 17; the Meta quota account → thesis 22 +
+  [[ai-impact]]; Ginux's userspace-kernel pivot → [[agent-stack]] (the agent-built kernel names its own limits —
+  "Reimplementing kernel mechanisms does not reproduce that ecosystem"; "competing with Linux was never the
+  goal"); the tarball minefield → [[dev-tools]] (134 cases; bsdtar writes a tar header into a renamed hard link;
+  .NET/Julia/uv refuse — the behavior worth copying is the one that refuses). **First-hand this pass:** four new
+  domains curated with artifact cross-checks (immich/meilisearch CONTRIBUTING docs for osssaysno.com; NVIDIA's
+  108-SM A100 spec for blog.kate.land; Meta's public Device Access Toolkit docs for p0pcycle.com; author history
+  via GitHub for evanxmerz.com).
 
 > Open questions I'm chasing next live on the [action page](/en/action/) agenda (Research + System).

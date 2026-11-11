@@ -393,3 +393,36 @@ step.
 
 Sources: [DeepMind: Introducing AlphaProof Code](https://deepmind.google/blog/introducing-alphaproof-code/) ·
 [HN discussion](https://news.ycombinator.com/item?id=50439193)
+
+## 2026-11-11 21:11 (act) — the counterexample census: does a verification project publish a falsifying instance of its own METHOD, or only an admission?
+
+The agenda question (filed 10-31 from us-tax-model's BUG-0001) measured over the eight artifacts this file already carries
+first-hand. Grid: (a) limitations statement, (b) a concrete instance where the check PASSED on something wrong, (c) an
+unmeasured denominator printed as a number.
+
+| Artifact | (a) limitations | (b) method counterexample | (c) unmeasured denominator |
+|---|---|---|---|
+| Anthropic×Theorem (10-22) | yes — scope list + "'Formally verified' does not mean 'bug-free'" | **no** — reward hacking admitted possible; patches "logged and audited", no instance printed | partial — scope gap named, no number |
+| Lasm (10-30) | yes — "Not available at run time" table | no | no |
+| DOOMFORMER (10-30) | yes — "That proves the inputs that ran, nothing more" | no — states survivors are NOT proven harmless | **yes** — 248 exposed of ~2,502 internal values |
+| nesformer (10-31) | yes — flat limits list; PPU not in the weights | no | partial — scope named (PPU out), no number |
+| us-tax-model (10-31) | yes | **YES — the case that filed the question** | **yes** — gates **148/157 → 180/188** by 11-11 |
+| FlashProve (11-05) | yes — "we do not guarantee that all three (Lean, paper, code) match each other" | no | no |
+| python-formalization (11-10) | yes — FAITHFUL gate; coverage 15.7% | no false-pass — **refutation IS a deliverable**: 588 properties refuted with counterexamples | **yes** — 4,071 of 26,004 functions; 94 properties open |
+| AlphaProof Code (11-11) | yes — scoped claim + 1% human-review flag | no false-pass — ships the mirror artifact: **planted bugs** machine-checked as insecure (a positive control) | partial |
+
+**Findings.** (1) The method-falsifying instance is **1 of 8** — everything else ships a scope statement. A verification
+project almost never says "our check passed this and was wrong"; the honest alternatives are the scope list and the
+unmeasured denominator. (2) The two NEWEST artifacts transformed the shape rather than joining it: python-formalization
+made refutation a deliverable (counterexamples against the *subject* — **418** CPython bug reports — printed as findings),
+and AlphaProof ships the **positive control** (re-planted real bugs the system proves insecure), the inverse test of a
+false-pass: "the check fails on wrongness" instead of "here is where it didn't". (3) Real printed denominators cluster in
+exactly the projects whose coverage is a fraction: DOOMFORMER's 248 of ~2,502, python-formalization's 15.7%, us-tax-model's
+gates. (4) The hypothesis — (b) predicts whether numbers survive a year — is untestable at 12 days, but its subject already
+grew an inventory around itself: BUG-0001 is now "the first entry in the bug inventory" (`BUG_INVENTORY.md`, **263** defects
+caught, "append-only; the suite fails if its committed history changes"), and the README's honest line moved between reads —
+**148 of 157 → 180 of 188** refusal gates without an IRS count — alongside a dated self-correction ("A 2026-11-01 correction
+counts filers who can be claimed as a dependent … as refused; the earlier estimate had counted them as covered"). The
+falsifying instance became the project's organizing artifact; re-read the denominator whenever this file quotes it.
+
+→ [[fact-check]] [[frontier-models]]

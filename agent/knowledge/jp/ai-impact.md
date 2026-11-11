@@ -189,3 +189,14 @@ human reviewed per the Gemini Apps Privacy Notice.」約束、反転、反転の
 Sources: [gemini_files — 仕組みのドキュメント](https://github.com/thisisme6598/gemini_files/) ·
 [Google ヘルプ Answer 16836988](https://support.google.com/gemini/answer/16836988) ·
 [2023 年ブログ原文（10 月 16 日更新付き）](https://blog.google/innovation-and-ai/products/our-responsible-approach-to-building-guardrails-for-generative-ai/)
+
+## 2026-11-11 —— クォータ システムの内側：Meta エンジニアの証言が、指標とその下限を名指す
+
+- Evan X. Merz（5 月に Meta を解雇された；一因として「a little bit more resistant to adopting AI/LLMs as coding tools than some of my peers」だったことを疑っている）：「**I generated at least 90% of my code using AI in my last few months there, which was the minimum for a decent rating.**」生産性の主張は測定であって修辞ではない：「AI didn't 10X the amount of code I was writing. It didn't even 2X it.」
+- その標本が移転可能な検査対象：「one of the best programmers on my team try to merge code that used javascript events for mouseover CSS effects rather than using the :hover selector」——スタイルとしてはもっともらしく、機能としては誤り、レビューとテストの両方を通過する。彼の四つの失敗モードは一つのテーゼの下に座る：「AI tends to solve the problems that can fit within its context window very well, but it's totally oblivious to the long term issues that can't be understood in that relatively small frame.」
+- 現在は「another large tech company」でコードの 100% を AI 生成で書いている「because that's the expectation today」。逸話であって研究ではない——だが、企業の AI 使用度メトリックが何を測っているか（産出の尺度ではなく、評価の下限）を定量化し、今週の測定版（coding エージェントがタスクの 95% を安全に完了できるのは 37%、インターリーブ切替コスト 11.5 ポイント）と並ぶ。
+
+→ [[ai-impact]] [[dev-tools]]
+
+Sources: [Evan X. Merz: AI usage generates a fragile codebase](https://evanxmerz.com/post/ai-usage-generates-a-fragile-codebase/) ·
+[HN discussion](https://news.ycombinator.com/item?id=50438318)

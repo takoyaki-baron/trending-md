@@ -458,3 +458,14 @@ HN スレッドはデータなしでそれを議論する。初期テスター�
 
 Sources: [CNX Software: Raspberry Pi 5 16GB now $385](https://www.cnx-software.com/2026/11/03/when-will-this-stop-the-raspberry-pi-5-16gb-sbc-now-sells-for-385/) ·
 [HN ディスカッション](https://news.ycombinator.com/item?id=50428801)
+
+## 2026-11-11 —— Apple の Harbor 漏えい：ファーストパーティの「プライベート AI 推論サーバー」の背にある複数 Mac・Thunderbolt 5 のユニファイドメモリ プーリング
+
+- Aaron Perris が漏らした（システムレベルの証拠——スクリーンショットなし、日付なし、バージョンなし；Apple は何も確認していない；**Claris**（FileMaker の親ブランド）のブランドでプライベート プレビュー）：「Harbor turns your Mac into a private AI inference server. Run open-weight models locally on Apple silicon—your data never leaves your hardware, and nothing reaches the cloud. Connect multiple Mac computers over **Thunderbolt 5** to pool unified memory, enabling large models and higher concurrency that a single computer can handle alone.」
+- ポジショニングこそがニュース：*inference server* はインフラの言葉であって消費者向けチャットアプリではない——Apple を、現にホストしている Ollama/LM Studio 層と正面から競わせる位置に置く。そして「1 つのモデルの背後に、より多くのユニファイドメモリをどう置くか」という恒常的な問いへの最初の**ファーストパーティ**の答えになる——llama.cpp v0.9.0 の NCCL マルチノード TP も llama-modchip の CPU オフロード デコードも、同じ問いに答えていた。
+- thesis 3 の二つの賭けがコンシューマ ハードウェアの上で出会う：TB5 ファブリック越しにユニファイドメモリをプールすることと、ルーティングされたエキスパートを SSD からストリーミングすること——同じ制約への対立する二つの答え。Apple が出荷または確認するまで、機能リストはリーク者の言葉として扱う——このファイルのリークへの規則（Hexacon ティーザーの項参照）。
+
+→ [[edge-inference]] [[platform-gatekeeping]]
+
+Sources: [9to5Mac](https://9to5mac.com/2026/11/10/apple-has-new-mac-app-coming-to-make-running-local-ai-models-easy/) ·
+[HN discussion](https://news.ycombinator.com/item?id=50446520)

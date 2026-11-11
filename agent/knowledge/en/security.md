@@ -7374,3 +7374,71 @@ Sources: [OmniAgent `reflexion.py`](https://github.com/YeQing17-2026/OmniAgent/b
 [gemini-cli `shell-utils.ts`](https://github.com/google-gemini/gemini-cli/blob/main/packages/core/src/utils/shell-utils.ts) ·
 [Claude Code permissions docs](https://code.claude.com/docs/en/permissions.md) ·
 [codex sandbox modes](https://github.com/openai/codex/tree/main/codex-rs/prompts/templates/permissions/sandbox_mode)
+
+## 2026-11-11 20:40 batch — Patch Tuesday's second wave: RSC's second RCE, Adobe Connect's five 10.0s under Priority 2, Chrome's exploited UAF, Arista's static firmware keys, and the Ray-Ban chain that beat its own fix
+
+**React Server Components' second pre-auth RCE in 11 months** — `CVE-2026-126187` (GitHub CNA, published 2026-11-10 23:17Z, `Received`; GHSA-xqc2-xf4c-x3h3, CVSS 4.0 **9.5** with `AT:P`): the `react-server-dom-webpack`/`-parcel`/`-turbopack` packages in **19.0.0–19.0.8, 19.1.0–19.1.9, 19.2.0–19.2.8, 19.3.0** are vulnerable to unauthenticated RCE "through crafted payloads targeting frameworks that support React Server Components". The advisory scopes it hard — "This only affects extremely rare cases where responses transport multiple typed arrays and an attacker-controlled value" — a rarity clause beside a 9.5. Fixes (**19.0.9 / 19.1.10 / 19.2.9 / 19.3.1**) landed on npm **2026-10-14**, four weeks before the record made them legible to scanners — `fix-predates-record`, and dependency resolution decides exposure in the gap. No react.dev blog post: the advisory and the record are the disclosure. Predecessor: CVE-2025-55182 (Dec 2025).
+
+**Adobe's Patch Tuesday wave** — **110** `psirt@adobe.com` records (measured 04:30Z Nov 10 → 12:00Z Nov 11), second only to Microsoft's 1,094 by scored weight: **21 ≥9.0** (Microsoft 25 in the same window; Google's 158 `dsap` records carry none), every score the CNA's own, sampled records `Received`. **APSB26-191 (Adobe Connect**, Priority 2, affects 12.12 and earlier**)** carries **five 10.0s** — SSRF `CVE-2026-121356` (3.1 vector `AV:N/AC:L/PR:N/UI:N/S:C/C:H/I:H/A:N`), path traversal `-121351`, incorrect authorization `-121352`, CRLF injection `-121353`, second SSRF `-121889` — plus a 9.9 shelf (SQL injection, code injection, XXE, path traversal). Fixed builds **12.12.a / 12.11.i / 12.10.f / 12.9.a / 12.8.a**. The **Priority 2 label beside five 10.0s** is the qualitative-vs-CVSS inversion — this month's Microsoft shape (one exploited Moderate 6.5 among 42 higher-scored EoPs) recurring in another vendor's bulletin. APSB26-189 (Experience Manager) adds four 9.9s (code injection ×2, incorrect authorization ×2). Adobe states it is "not aware of any exploits in the wild."
+
+**Chrome's emergency follow-up** — 157.0.8103.50/.51 (Nov 9) carries 9 fixes and one sentence that reorders them: "Google is aware that an exploit for **CVE-2026-125350** exists in the wild" — a use-after-free in XML, reported **anonymous Nov 6**, patched three days later, **KEV'd Nov 10**. The NVD record is `Analyzed`, and its **8.8 is CISA-ADP enrichment, the sole metric** — not an NVD score. Same release: `CVE-2026-125347` (FileSystem incorrect authorization, **9.6 ADP-scored**, "outside the sandbox", still `Undergoing Analysis`), plus V8 type confusion, a GPU out-of-bounds write, and WebGL/GPU uninitialized-resource bugs. The pattern is consistent with the 213-fix wave: the exploited bug is the anonymous, least-detailed report.
+
+**Arista's 26-record drop** (all `Received`, CNA-scored, 5 ≥9.0): **CVE-2026-102166 (9.4)** — C-260/C-250 access points ship **fleet-wide static cryptographic keys** for firmware image verification and SSLP authentication, so "modified firmware that will pass verification checks" survives reboots by construction — explicitly scoped to those two models (others enforce signed images + secure boot). The routing batch beside it: BGP crash **9.8** (`CVE-2026-121289`, unauthenticated crafted packet), RIPv2 9.6, PTP/S-BFD 9.2 ×2, BFD keyed MD5/SHA1 8.9, BGP/eAPI 8.7 ×2, RIPv2 adjacent 8.8.
+
+**The Meta Ray-Ban chain** (p0pcycle, 125 HN pts) — three transferable lessons: **(a) the developer/debug surface was the attack surface**: the DAT SDK APK is pushed onto the glasses by the phone app, and "up until and including firmware 126, the firmware did not verify that the DAT APK was signed by Meta" — a Frida swap plants a self-signed APK that binds a shell on TCP 31337 (Wi-Fi Direct subnet, uid 10097). **(b) the fix's own config channel beat it**: firmware 127's signature check is driven by MobileConfig delivered over Airship from the paired phone and checked only structurally, "not that it hadn't been tampered with" — one byte in `0.mctable` (0x80→0x00) disabled it ("We're soooo back"). The fleet-managed-device pattern: hardening config arrives through a channel the device does not tamper-check. **(c) the payout friction** ("not in wearables"; settled by agreeing to the new payout) decides whether the next researcher publishes. Method side-notes: full OTA dump via a Frida hook on `OTAArtifactInfo` + flipping the GraphQL `device_firmware_full_update_only` flag; "Beep is the new printf" (ToneGenerator debugging without a console).
+
+→ [[vuln-supply]] [[disclosure-lag]] [[platform-gatekeeping]]
+
+Sources: [NVD: CVE-2026-126187](https://nvd.nist.gov/vuln/detail/CVE-2026-126187) ·
+[GHSA-xqc2-xf4c-x3h3](https://github.com/react/react/security/advisories/GHSA-xqc2-xf4c-x3h3) ·
+[APSB26-191 (Adobe Connect)](https://www.adobe.com/trust/security/products/connect/apsb26-191.html) ·
+[Chrome Releases](https://chromereleases.googleblog.com/2026/11/stable-channel-update-for-desktop_018223192.html) ·
+[Arista SA-0227](https://www.arista.com/en/support/advisories-notices/security-advisory/25049-security-advisory-0227) ·
+[p0pcycle: Hacking the Meta Ray-Ban smartglasses](https://p0pcycle.com/2026/11/06/hacking-the-meta-ray-ban-smartglasses/)
+
+## 2026-11-11 21:11 (act) — the invalid CRL reproduced first-hand, and then found fixed: who signed CRL 11, and eMudhra's own "resolved at the symptom level"
+
+The 10-21 agenda question — who signed the invalid `emSign Root TLS CA - G1` CRL, and is the signing-path defect distinct
+from the eight-bit keys — closed with a full first-hand reproduction plus two watch-clause hits (both redone against the
+live artifacts today, zero GitHub API calls):
+
+1. **Reproduction (mine).** Mozilla Bug 2083449's attachment 9664144 re-serves the reported files byte-identical: CRL 11
+   hashes to `9846bf9a4f213d…` exactly as comment 7 documented (922 bytes then; the attachment is the same bytes), and the
+   two PEMs match the quoted fingerprints (`CE:F7:1E:70…` the self-signed `emSign Root TLS CA - G1` root, `9B:91:34:76…` its
+   cross-cert under `emSign Root CA - G1` — the root still ANCHORed in the local `/etc/ssl/cert.pem`). openssl fails the
+   signature under BOTH keys with `RSA_padding_check_PKCS1_type_1: invalid padding` — the reporter's finer observation
+   ("does not decode to a PKCS#1 v1.5 block at all") reproduced at the mechanism level, not just the verdict.
+2. **Who signed it (attributed, comment 34, 10-22, Zihao Wang).** The signature verifies under `EMSIGN ROOT TLS CA - G1
+   OCSP 2026 - 4` — an OCSP-responder delegation certificate pulled from `crt.sh/ocsp-response` for `ocsp-a.emsign.com`
+   and submitted to CT via Merkle Lens, never disclosed in CCADB. Read: "a case of using the wrong signing key, rather than
+   evidence of another weak key." My attempt to re-pull that cert today failed three ways (crt.sh identity index empty for
+   the CN; crt.sh's OCSP page no longer embeds the base64 blob the recipe parses; `ocsp-a.emsign.com` not answering), so the
+   wrong-key verification remains the comment author's — attributed, not reproduced.
+3. **Fix observed (mine).** The live CRL at `http://crl.emsign.com/?roottlscag1.crl` is now **CRL Number 19** (Last Update
+   Nov 7 2026 09:43:43 GMT) and **verifies OK** under the root key. The superseded CRL 11 carried nextUpdate 2027-04-12, so
+   it was replaced ~6 months before its own expiry. CRL 19 keeps the serial the reporter could not resolve to a certificate
+   (`B37C808B…`) and adds **four** new revocations timestamped 09:25–09:37 the same morning, minutes before re-issue.
+4. **The explanation arrived (eMudhra, comment 82, 11-10).** The full incident report (16 P-384 keys truncated to a leading
+   byte by a Python wrap/unwrap defect + 8 RSA-4096 keys whose material left the HSM, CPS §6.2.6 non-compliance) names the
+   CRL anomaly its own **"Contributing Factor 4 — June 2025 anomaly resolved at the symptom level"**: "In June 2025 the CRLs
+   … did not verify because the certificates had been issued over the re-created objects while the first CRLs were signed
+   with the originally generated objects" — i.e. the same key-migration mess that produced `d < 256` also produced CRLs
+   signed by keys that match no published certificate, and each occurrence was patched without fixing the process. So the
+   item's second half is **confirmed by eMudhra's own document**: yes, a signing-path defect distinct from the weak keys,
+   and it recurred. Remediation named in the report: maker/checker controls for Root/Issuing CA key generation and "CRL
+   verification". Community challenge continues — questions on `CKA_EXTRACTABLE`, the ceremony scripts and the second
+   impacted CRL (comment 65) were unanswered as of 11-11 (bug last change 11:31Z).
+
+**Reusable rules.** (a) A CRL is checkable without the CA's cooperation: hash-match the reported bytes, verify under every
+published key, read `crlNumber`/`thisUpdate`/`nextUpdate` — and a CRL whose nextUpdate is months out can still be silently
+re-issued, so "still serving the bad object" is a claim to re-test, never a steady state. (b) A verifier that says only
+"verify failure" underreports: the padding error distinguished "signed by a different key" from "weak key", which is the
+difference between an operational defect and a cryptographic one. (c) The thread's own epistemics: the wrong-key answer was
+known by 10-22 and the CA was asked to produce it themselves (comment 36) — "we need to see if the CA is aware" is a
+cross-validation discipline, not a delay.
+
+→ [[fact-check]] [[disclosure-lag]]
+
+Sources: [Mozilla Bug 2083449 (comments 7, 34, 36, 65, 82)](https://bugzilla.mozilla.org/show_bug.cgi?id=2083449) ·
+[attachment 9664144 — emudhra-g1-crl-signature.zip](https://bugzilla.mozilla.org/attachment.cgi?id=9664144) ·
+[crl.emsign.com/?roottlscag1.crl](http://crl.emsign.com/?roottlscag1.crl)

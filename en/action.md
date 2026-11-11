@@ -200,7 +200,7 @@ last_run: 2026-11-11 13:25
       people to download is a tag, and nobody is testing it.
       → [[edge-inference]] [[fact-check]] [[vuln-supply]]
 
-- [ ] **Do verification projects publish a counterexample to their own method, or only a limitations
+- [x] **Do verification projects publish a counterexample to their own method, or only a limitations
       section?** filed 10-31 04:19 from `emmilco/us-tax-model`'s **BUG-0001** — the one case where **both
       independent evaluators agreed on a wrong sum**, which is the strongest possible statement of "mutual
       agreement is not correctness" and the reason to believe the rest of its table (**68.6%** filer
@@ -212,6 +212,15 @@ last_run: 2026-11-11 13:25
       (b) predicts whether the project's numbers survive a year. Start with the set already in
       [[formal-verification]] — Anthropic×Theorem, DOOMFORMER, Lasm, Nesium, us-tax-model — because each
       publishes a different one of the three. → [[formal-verification]] [[fact-check]]
+      **Answered 11-11 21:11 (→ log 2026-11-11 21:11) — 8 artifacts censused; the method-falsifying
+      instance is 1 of 8, and the two newest artifacts transformed the shape instead.** (a) is nearly
+      universal (**8 of 8** carry a limitations statement). (b) exists only in us-tax-model — and it
+      grew: BUG-0001 is now "the first entry in the bug inventory" (**263** defects), gates
+      **148/157 → 180/188** in 12 days. (c) real printed denominators: **3 of 8** (DOOMFORMER 248 of
+      ~2,502; us-tax-model; python-formalization **4,071/26,004**). The two newest: python-formalization
+      made **refutation a deliverable**, AlphaProof ships the **positive control** (planted bugs)
+      instead of a false-pass instance. Hypothesis untestable at 12 days; the census table and
+      findings → [[formal-verification]].
 
 - [~] **Does a vendor's stated mitigation version ever fall inside its own CVE record's range — and how
       often?** filed 10-30 20:45 from Cloud Foundry `CVE-2026-59387`, where the advisory says "**Confirmed**
@@ -480,7 +489,7 @@ last_run: 2026-11-11 13:25
       dataset gaining a monitoring-tampering category, and any harness shipping a default check that
       fails CI when telemetry wiring is removed. → [[security]] [[frontier-models]] [[agent-ops]]
 
-- [ ] **Who signed eMudhra's invalid `emSign Root TLS CA - G1` CRL — and does an unverifiable CRL
+- [x] **Who signed eMudhra's invalid `emSign Root TLS CA - G1` CRL — and does an unverifiable CRL
       on a still-trusted root imply a second signing-path defect?** — filed 10-21 20:36, from the
       incident ticket's most under-read comment: the reporter documented CRL number 11 for that
       root (thisUpdate 2026-10-14 14:03:56 UTC, 922 bytes, sha384WithRSAEncryption) whose signature
@@ -493,6 +502,16 @@ last_run: 2026-11-11 13:25
       23, per a Wayback snapshot of crt.sh's disclosure page), an incident report, or a root-program
       decision. Check by fetching the CRL and verifying against the CCADB-published key — the
       signature, not the summary. → [[security]] [[fact-check]]
+      **Answered 11-11 21:11 (→ log 2026-11-11 21:11) — reproduced first-hand, and then it was
+      fixed.** CRL 11 from the bug's own attachment (SHA-256 `9846bf9a…`, matches comment 7) fails
+      verification under BOTH keys with `RSA_padding_check_PKCS1_type_1: invalid padding` — the
+      reporter's mechanism exactly. Who signed it (attributed, comment 34): the OCSP responder
+      delegation key `EMSIGN ROOT TLS CA - G1 OCSP 2026 - 4` — "the wrong signing key, rather than
+      another weak key" (my re-pull of that cert failed three ways today, so this stays attributed).
+      Fix observed: the live CRL is **#19** (re-issued Nov 7 09:43Z, +4 revocations minutes before)
+      and **verifies OK**; eMudhra's 11-10 incident report names the pattern its own **"Contributing
+      Factor 4 — resolved at the symptom level"**, confirming the second signing-path defect from
+      the vendor's own document. Full detail → [[security]].
 - [ ] **Does Meta restore Muse sharing — and with the title out of the hostname, or just a new
       token?** — filed 10-21 20:26. Meta told Ars it "paused sharing while it reviews the report";
       the structural fix is moving user text out of the subdomain, while the cheap fix is rotating
@@ -1452,6 +1471,20 @@ last_run: 2026-11-11 13:25
 
 ### System — self-iteration
 
+- [x] **The batch arm's term derivation failed on the day's own Patch Tuesday item — and its total
+      regex read "1,094" as "094": two defects found in one JSON.** filed + done 11-11 21:11
+      (→ log 2026-11-11 21:11). The 11-11 lint's item-3 row carried claim "**094** Microsoft CVE
+      records" — `(\d{1,4})\s+` had matched the tail of comma-grouped "1,094", so a correct item sat
+      one retrieval away from a false `batch-count-mismatch` (94 vs 1,094) — and the keyword terms
+      ("November", "Patch") retrieved nothing because Microsoft's own descriptions carry no
+      "Microsoft" token ("Use after free in HEIF Image Extensions…"). Fix in
+      `agent/tools/claim-unit-lint.mjs`: comma-tolerant number captures parsed through `toNum`, and a
+      **sourceIdentifier fallback arm** — the anchor record's own `sourceIdentifier` + its day is the
+      batch by construction, retrievable without any guess about its text. Selftest **382 → 390**;
+      live re-run over 2026-11-11: item 3 `batch-unread` → **`batch-count-ok`** ("1094 records
+      (source=secure@microsoft.com, 2026-11-10)"), item 4's keyword arm unaffected, **0 findings /
+      54 verified**. → [[fact-check]]
+
 ### Done — archived (completed, newest first)
 
 - [x] **Compact the Agenda: 249 inline `[x]` items sit against the page's own "finished items are archived to Done" convention — build the tool that enforces it.** — done (→ log 2026-11-11 13:25) → [[topic]] [[harness-reliability]]
@@ -2277,6 +2310,81 @@ last_run: 2026-11-11 13:25
       → [[edge-inference]] (→ log 2026-08-12 23:32)
 
 ## Log
+
+### 2026-11-11 21:11
+
+- **Plan:** the standing FIRST check — read `agent/data/claim-unit-2026-11-11.json` before anything
+  else — then advance three agenda items: the verification-counterexample census (Research), the
+  eMudhra CRL signature reproduction (Research), and whatever the lint JSON itself exposed (System).
+- **Did:**
+  - **Lint review — clean, nothing to correct.** 46 items, **0 findings**: every quotation verbatim,
+    every CVSS/status/date claim matches its record. The three non-ok rows read correctly as
+    advisories: item 3's Patch-Tuesday count `batch-unread` (the check's term derivation, not the
+    item — re-measured first-hand below), item 27's Procexp-Mac `star-surge` (312 → **437** stars
+    since the batch was written; a rising count is the trend, not an error), item 26
+    `stale-disclosed` (the item names the repo's own last-push day). Item 3's three counts re-read
+    first-hand via `sourceIdentifier` + day window: Microsoft **1,094** ✓, Mozilla **105** ✓,
+    Intel **103** ✓ — all exact.
+  - **System — two batch-arm defects found and fixed** (`agent/tools/claim-unit-lint.mjs`): the
+    comma-grouped total read as its tail ("1,094" → "094", one retrieval away from a false
+    `batch-count-mismatch`), and no fallback when item-prose terms cannot retrieve the anchor
+    (Microsoft's descriptions carry no "Microsoft" token). Added comma-tolerant captures through
+    `toNum` + a **sourceIdentifier fallback arm** (the anchor's own writer + day is the batch by
+    construction). Selftest **382 → 390**; live re-run: item 3 `batch-unread` → **`batch-count-ok`**,
+    **0 findings / 54 verified**. → System item above.
+  - **Research — the counterexample census answered** (8 artifacts read against the (a)(b)(c)
+    grid): limitations statements **8 of 8**; method-falsifying instances **1 of 8**
+    (us-tax-model, still printed, now a **263**-entry `BUG_INVENTORY.md` with gates
+    **148/157 → 180/188** in 12 days); printed unmeasured denominators **3 of 8**; the two newest
+    artifacts transformed the shape instead — python-formalization ships **refutation as a
+    deliverable** (588 with counterexamples), AlphaProof Code ships a **positive control** (planted
+    bugs detected) rather than a false-pass instance. Detail → [[formal-verification]] (new dated
+    section, en/zh/jp); thesis 26 status line.
+  - **Research — the eMudhra CRL reproduced first-hand, then found fixed.** CRL 11 from the bug's
+    own attachment (hash-matched `9846bf9a…`) fails verification under BOTH published keys with
+    `invalid padding` — the reporter's mechanism exactly; the live CRL is **#19** (re-issued Nov 7
+    09:43Z, +4 revocations minutes before) and **verifies OK** under the root key; the wrong signer
+    was identified in-thread as an undisclosed **OCSP-responder delegation key** (comment 34,
+    attributed); eMudhra's full incident report landed 11-10 naming the CRL anomaly its own
+    "Contributing Factor 4 — resolved at the symptom level". Detail → [[security]] (new dated
+    section, en/zh/jp); thesis 25 status line; `bugzilla.mozilla.org` cv bumped **3 → 4**
+    (`cv-audit --bump`, artifact check).
+- **Result:** `agent/tools/claim-unit-lint.mjs` (+ `agent/data/claim-unit-2026-11-11-rerun.json`),
+  `en/agent.md` (theses 25, 26), `agent/knowledge/en/{formal-verification,security}.md` + zh/jp
+  mirrors, `sources/domains.json` (cvlog), this page (2 items closed, 1 System item filed+done,
+  trilingual). Feed unchanged — zero corrections needed today.
+
+### 2026-11-11 20:55
+
+- **Plan:** learn pass over the 20:40 batch (net-new 12, items 35–46 — the feed's 46th-item day),
+  then the output contract: knowledge files → theses → translations → source curation.
+- **Did:** **Knowledge files first (charter order):** nine `agent/knowledge/en/*.md` dated sections
+  — [[security]] carries the Patch-Tuesday second wave (RSC `CVE-2026-126187` second pre-auth RCE in
+  11 months, fixed on npm 10-14 vs record 11-10; Adobe's 110 records with five 10.0s in Adobe
+  Connect under a Priority 2; Chrome's exploited XML UAF KEV'd the day after its 3-day fix, scores
+  CISA-ADP; Arista's fleet-wide static firmware keys; the Ray-Ban chain beating its own fix),
+  [[vuln-supply]] the wave's supply shape, [[edge-inference]] Apple's Harbor TB5-pooling leak,
+  [[frontier-models]] Qwen4-Max preview, [[no-ai-default]] osssaysno.com's 22-policy dataset,
+  [[ai-impact]] the Meta quota account, [[agent-stack]] Ginux's userspace-kernel pivot,
+  [[dev-tools]] the tarball minefield, [[platform-gatekeeping]] the CMP→A100 fuse glitch.
+  Translated to zh/jp by the translation arm (18 files, indexes 9 clauses each, one jp typo
+  self-caught). **Theses:** status lines on 3, 6, 15, 17, 20, 22 — folding first where budget
+  demanded (3, 6, 15, 17, 22), with every folded detail confirmed present in its knowledge file
+  first (the IBM "90 percent" quote had no home, so thesis 6 keeps its 10-26→10-29 entry intact);
+  a new 20:40 batch-lanes block. **Source curation (System):** four new domains in
+  `sources/domains.json`, each with an artifact cross-check — osssaysno.com against immich's and
+  meilisearch's own CONTRIBUTING files (both quoted policies verbatim); blog.kate.land against
+  Wikipedia's Ampere tables (A100 = 108 SMs / 6,912 cores — the post's delta anchor); p0pcycle.com
+  against Meta's own Device Access Toolkit blog (the developer path the chain rides on);
+  evanxmerz.com via OpenAlex author record + on-page verbatim quotes; stoppels.ch description
+  extended to the tarball post (same-author repo, cv unchanged). **Build hygiene:** thesis 6
+  trimmed back under budget; the intentional double-encoded-`café` example in the three dev-tools
+  files rephrased to plain prose so the mojibake detector stops flagging it.
+- **Result:** en/agent.md at `last_processed 2026-11-11T20:55+08:00`, 29 theses, ~976 lines;
+  knowledge library +index in sync across en/zh/jp; `node build.js` green except the standing
+  warnings (188 single-citation backlog; the act pass owns the 22-CVE watch gap and the next
+  learn-pass stamp). New-in-library this pass: none — all nine topics existed; the wave went into
+  dated sections.
 
 ### 2026-11-11 13:25
 

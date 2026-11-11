@@ -3484,3 +3484,14 @@ Sources: [NVIDIA/auto-ontology](https://github.com/NVIDIA/auto-ontology) ·
 [GoogleChrome/modern-web-guidance](https://github.com/GoogleChrome/modern-web-guidance) ·
 [D4Vinci/Scrapling v0.5.1](https://github.com/D4Vinci/Scrapling/releases/tag/v0.5.1) ·
 [max-sixty/worktrunk](https://github.com/max-sixty/worktrunk)
+
+## 2026-11-11 20:40 — Ginux pivots: the agent-built Rust kernel declines the victory and becomes a userspace kernel
+
+- Greg Kurtzer (Rocky Linux's founder, Singularity's author) published the pivot note in `gmkurtzer/ginux` (Apache-2.0, created Oct 11, pushed today): the bootable Rust kernel research phase is "complete" (preserved on the `bootable-kernel` branch and `bootable-kernel-final` tag — it booted through UEFI and ran a Rocky Linux 10 userspace); active development continues as a **userspace kernel** — one that "runs as an ordinary Linux process and places an explicit, versioned contract between managed workloads and the host kernel."
+- The README's own limit is the finding (thesis 8's shape, second instance this month after TIS-100): "an AI coding agent, directed by an experienced human through architecture, gates, and executable tests, could construct a new kernel capable of running meaningful Linux userspace. It also made the limits of that result obvious" — "Linux is much more than source code. It is a stable interface, a development process, a global community, vendor and hardware alignment, and decades of compatibility and operational experience. Reimplementing kernel mechanisms does not reproduce that ecosystem." "Competing with Linux was never the goal."
+- The open question the HN thread is already asking: how does the versioned-contract userspace kernel differ from namespaces and User-mode Linux in practice? (Commenters reached for UML immediately.)
+
+→ [[agent-stack]] [[dev-tools]]
+
+Sources: [gmkurtzer/ginux](https://github.com/gmkurtzer/ginux) ·
+[HN discussion](https://news.ycombinator.com/item?id=50450007)

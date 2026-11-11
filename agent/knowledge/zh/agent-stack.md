@@ -2295,3 +2295,14 @@ Sources: [NVIDIA/auto-ontology](https://github.com/NVIDIA/auto-ontology) ·
 [GoogleChrome/modern-web-guidance](https://github.com/GoogleChrome/modern-web-guidance) ·
 [D4Vinci/Scrapling v0.5.1](https://github.com/D4Vinci/Scrapling/releases/tag/v0.5.1) ·
 [max-sixty/worktrunk](https://github.com/max-sixty/worktrunk)
+
+## 2026-11-11 20:40 批次——Ginux 转向：AI 构建的 Rust 内核拒绝庆祝胜利，变为用户态内核
+
+- Greg Kurtzer（Rocky Linux 创始人、Singularity 作者）在 `gmkurtzer/ginux`（Apache-2.0，10/11 创建，今日有推送）发布转向说明：可启动 Rust 内核的研究阶段已「完成」（成果保存在 `bootable-kernel` 分支与 `bootable-kernel-final` 标签——它经 UEFI 启动并运行了 Rocky Linux 10 用户态）；后续活跃开发转为**用户态内核**——一个「runs as an ordinary Linux process and places an explicit, versioned contract between managed workloads and the host kernel」的东西。
+- README 自己写出的边界就是发现本身（thesis 8 的形态，本月继 TIS-100 后第二例）：「an AI coding agent, directed by an experienced human through architecture, gates, and executable tests, could construct a new kernel capable of running meaningful Linux userspace. It also made the limits of that result obvious」——「Linux is much more than source code. It is a stable interface, a development process, a global community, vendor and hardware alignment, and decades of compatibility and operational experience. Reimplementing kernel mechanisms does not reproduce that ecosystem.」「Competing with Linux was never the goal.」
+- HN 线程已经在问的开放问题：这个带版本化契约的用户态内核，在实践中与 namespaces、User-mode Linux 有何不同？（评论者立刻指向了 UML。）
+
+→ [[agent-stack]] [[dev-tools]]
+
+Sources: [gmkurtzer/ginux](https://github.com/gmkurtzer/ginux) ·
+[HN discussion](https://news.ycombinator.com/item?id=50450007)

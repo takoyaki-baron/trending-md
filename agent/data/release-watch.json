@@ -3,11 +3,11 @@
     "vllm-project/semantic-router": {
       "tag": "v0.4.0",
       "published_at": "2026-09-27T06:59:53Z",
-      "pushed_at": "2026-11-11T06:03:19Z",
-      "stars": 6450,
+      "pushed_at": "2026-11-11T13:36:11Z",
+      "stars": 6452,
       "flags": [],
       "frozen_pushed_at": null,
-      "checked": "2026-11-11T06:03:26.439Z"
+      "checked": "2026-11-11T13:54:36.249Z"
     },
     "BitRouter/BitRouter": {
       "tag": "v1.0.0-alpha.33",
@@ -15,17 +15,17 @@
       "pushed_at": "2026-11-11T01:59:47Z",
       "stars": 239,
       "flags": [],
-      "frozen_pushed_at": null,
-      "checked": "2026-11-11T06:03:26.439Z"
+      "frozen_pushed_at": "2026-11-11T01:59:47Z",
+      "checked": "2026-11-11T13:54:36.249Z"
     },
     "Continuum-AI-Corp/OrcaRouter-Lite": {
       "tag": "v0.1.0",
       "published_at": "2026-05-11T02:58:59Z",
       "pushed_at": "2026-10-08T07:08:33Z",
-      "stars": 2005,
+      "stars": 2031,
       "flags": [],
       "frozen_pushed_at": "2026-10-08T07:08:33Z",
-      "checked": "2026-11-11T06:03:26.439Z"
+      "checked": "2026-11-11T13:54:36.249Z"
     },
     "workweave/router": {
       "tag": null,
@@ -40,46 +40,46 @@
       "tag": "v7.0.2",
       "published_at": "2026-11-03T22:17:54Z",
       "pushed_at": "2026-11-03T23:24:58Z",
-      "stars": 315857,
+      "stars": 316049,
       "flags": [],
       "frozen_pushed_at": "2026-11-03T23:24:58Z",
-      "checked": "2026-11-11T06:03:26.439Z"
+      "checked": "2026-11-11T13:54:36.249Z"
     },
     "mattpocock/skills": {
       "tag": "v1.3.2",
       "published_at": "2026-10-29T10:27:41Z",
       "pushed_at": "2026-11-09T14:03:07Z",
-      "stars": 321172,
+      "stars": 321572,
       "flags": [],
       "frozen_pushed_at": "2026-11-09T14:03:07Z",
-      "checked": "2026-11-11T06:03:26.439Z"
+      "checked": "2026-11-11T13:54:36.249Z"
     },
     "multica-ai/andrej-karpathy-skills": {
       "tag": null,
       "published_at": null,
       "pushed_at": "2026-04-20T10:05:04Z",
-      "stars": 231955,
+      "stars": 232098,
       "flags": [],
       "frozen_pushed_at": "2026-04-20T10:05:04Z",
-      "checked": "2026-11-11T06:03:26.439Z"
+      "checked": "2026-11-11T13:54:36.249Z"
     },
     "DietrichGebert/ponytail": {
       "tag": "v5.3.3",
       "published_at": "2026-10-29T03:11:08Z",
       "pushed_at": "2026-10-29T11:59:31Z",
-      "stars": 188541,
+      "stars": 188836,
       "flags": [],
       "frozen_pushed_at": "2026-10-29T11:59:31Z",
-      "checked": "2026-11-11T06:03:26.439Z"
+      "checked": "2026-11-11T13:54:36.249Z"
     },
     "orval-labs/orval": {
       "tag": "v8.47.0",
       "published_at": "2026-11-07T21:12:44Z",
-      "pushed_at": "2026-11-11T00:26:01Z",
+      "pushed_at": "2026-11-11T12:51:13Z",
       "stars": 6604,
       "flags": [],
       "frozen_pushed_at": null,
-      "checked": "2026-11-11T06:03:26.439Z"
+      "checked": "2026-11-11T13:54:36.249Z"
     },
     "SalesforceAIResearch/Random-Attention": {
       "tag": null,
@@ -88,16 +88,16 @@
       "stars": 75,
       "flags": [],
       "frozen_pushed_at": "2026-09-04T01:34:07Z",
-      "checked": "2026-11-11T06:03:26.439Z"
+      "checked": "2026-11-11T13:54:36.249Z"
     },
     "weave-os/router": {
       "tag": null,
       "published_at": null,
-      "pushed_at": "2026-11-11T01:33:39Z",
-      "stars": 5618,
+      "pushed_at": "2026-11-11T11:58:54Z",
+      "stars": 5619,
       "flags": [],
       "frozen_pushed_at": null,
-      "checked": "2026-11-11T06:03:26.439Z"
+      "checked": "2026-11-11T13:54:36.249Z"
     },
     "wfzyx/von": {
       "tag": "v1.3.7",
@@ -106,7 +106,7 @@
       "stars": 922,
       "flags": [],
       "frozen_pushed_at": "2026-10-19T17:55:57Z",
-      "checked": "2026-11-11T06:03:26.439Z"
+      "checked": "2026-11-11T13:54:36.249Z"
     },
     "jabr/classifier-benchmark": {
       "tag": null,
@@ -115,7 +115,7 @@
       "stars": 4,
       "flags": [],
       "frozen_pushed_at": "2026-09-26T01:12:48Z",
-      "checked": "2026-11-11T06:03:26.439Z"
+      "checked": "2026-11-11T13:54:36.249Z"
     },
     "0xNatoshi/jev-codex-router": {
       "tag": null,
@@ -124,7 +124,7 @@
       "stars": 274,
       "flags": [],
       "frozen_pushed_at": "2026-09-22T07:08:08Z",
-      "checked": "2026-11-11T06:03:26.439Z"
+      "checked": "2026-11-11T13:54:36.249Z"
     },
     "NeOMakinG/kev-model-router": {
       "tag": null,
@@ -133,16 +133,16 @@
       "stars": 2,
       "flags": [],
       "frozen_pushed_at": "2026-09-21T09:41:40Z",
-      "checked": "2026-11-11T06:03:26.439Z"
+      "checked": "2026-11-11T13:54:36.249Z"
     },
     "ollaya-dev/ollaya": {
       "tag": "v0.18.0",
       "published_at": "2026-10-25T13:50:07Z",
       "pushed_at": "2026-11-10T18:55:04Z",
-      "stars": 1457,
+      "stars": 1458,
       "flags": [],
       "frozen_pushed_at": "2026-11-10T18:55:04Z",
-      "checked": "2026-11-11T06:03:26.439Z"
+      "checked": "2026-11-11T13:54:36.249Z"
     },
     "fstandhartinger/jevbench": {
       "tag": "v1.4.2",
@@ -151,16 +151,16 @@
       "stars": 339,
       "flags": [],
       "frozen_pushed_at": "2026-10-15T04:07:55Z",
-      "checked": "2026-11-11T06:03:26.439Z"
+      "checked": "2026-11-11T13:54:36.249Z"
     },
     "zhengkid/Dream-RSI": {
       "tag": null,
       "published_at": null,
       "pushed_at": "2026-10-23T18:30:23Z",
-      "stars": 1584,
+      "stars": 1587,
       "flags": [],
       "frozen_pushed_at": "2026-10-23T18:30:23Z",
-      "checked": "2026-11-11T06:03:26.439Z"
+      "checked": "2026-11-11T13:54:36.249Z"
     },
     "robinber/dream-rsi-spark": {
       "tag": null,
@@ -169,16 +169,16 @@
       "stars": 2,
       "flags": [],
       "frozen_pushed_at": "2026-09-17T12:18:17Z",
-      "checked": "2026-11-11T06:03:26.439Z"
+      "checked": "2026-11-11T13:54:36.249Z"
     },
     "vectorize-io/hindsight": {
       "tag": "v1.2.1",
       "published_at": "2026-11-10T14:34:26Z",
-      "pushed_at": "2026-11-10T22:57:37Z",
-      "stars": 60348,
+      "pushed_at": "2026-11-11T13:56:16Z",
+      "stars": 60446,
       "flags": [],
       "frozen_pushed_at": null,
-      "checked": "2026-11-11T06:03:26.439Z"
+      "checked": "2026-11-11T13:54:36.249Z"
     },
     "PostHog/jeeves": {
       "tag": null,
@@ -187,7 +187,7 @@
       "stars": 440,
       "flags": [],
       "frozen_pushed_at": "2026-10-16T14:31:02Z",
-      "checked": "2026-11-11T06:03:26.439Z"
+      "checked": "2026-11-11T13:54:36.249Z"
     },
     "LMCache/LMCache": {
       "tag": "v0.5.6",
@@ -201,11 +201,11 @@
     "sgl-project/sglang": {
       "tag": "v0.5.23",
       "published_at": "2026-11-02T22:14:10Z",
-      "pushed_at": "2026-11-11T06:01:21Z",
-      "stars": 38709,
+      "pushed_at": "2026-11-11T13:40:05Z",
+      "stars": 38740,
       "flags": [],
       "frozen_pushed_at": null,
-      "checked": "2026-11-11T06:03:26.439Z"
+      "checked": "2026-11-11T13:54:36.249Z"
     },
     "SciSharp/BotSharp": {
       "tag": "r5.2-image-composition",
@@ -214,25 +214,25 @@
       "stars": 3116,
       "flags": [],
       "frozen_pushed_at": "2026-11-10T07:17:36Z",
-      "checked": "2026-11-11T06:03:26.439Z"
+      "checked": "2026-11-11T13:54:36.249Z"
     },
     "RVC-Boss/GPT-SoVITS": {
       "tag": "20250606v2pro",
       "published_at": "2025-06-06T03:04:27Z",
       "pushed_at": "2026-11-09T13:59:04Z",
-      "stars": 64742,
+      "stars": 64776,
       "flags": [],
       "frozen_pushed_at": "2026-11-09T13:59:04Z",
-      "checked": "2026-11-11T06:03:26.439Z"
+      "checked": "2026-11-11T13:54:36.249Z"
     },
     "Legcord/Legcord": {
       "tag": "v1.3.1",
       "published_at": "2026-10-17T16:06:23Z",
       "pushed_at": "2026-11-10T05:40:23Z",
-      "stars": 3519,
+      "stars": 3518,
       "flags": [],
       "frozen_pushed_at": "2026-11-10T05:40:23Z",
-      "checked": "2026-11-11T06:03:26.439Z"
+      "checked": "2026-11-11T13:54:36.249Z"
     },
     "anthropics/claude-code": {
       "seen_tags": [
@@ -267,9 +267,9 @@
         "v2.1.289",
         "v2.1.288"
       ],
-      "pushed_at": "2026-11-10T21:21:30Z",
-      "stars": 155226,
-      "checked": "2026-11-11T06:03:26.439Z"
+      "pushed_at": "2026-11-11T08:38:12Z",
+      "stars": 155269,
+      "checked": "2026-11-11T13:54:36.249Z"
     },
     "google-gemini/gemini-cli": {
       "seen_tags": [
@@ -305,11 +305,12 @@
         "v0.64.0"
       ],
       "pushed_at": "2026-11-11T01:02:24Z",
-      "stars": 108766,
-      "checked": "2026-11-11T06:03:26.439Z"
+      "stars": 108774,
+      "checked": "2026-11-11T13:54:36.249Z"
     },
     "openai/codex": {
       "seen_tags": [
+        "rust-v0.169.0-alpha.11",
         "rust-v0.167.1",
         "rust-v0.169.0-alpha.9",
         "rust-v0.169.0-alpha.10",
@@ -338,12 +339,11 @@
         "rust-v0.166.0-alpha.5",
         "rust-v0.165.0",
         "rust-v0.166.0-alpha.4",
-        "rust-v0.166.0-alpha.3",
-        "rust-v0.166.0-alpha.2"
+        "rust-v0.166.0-alpha.3"
       ],
-      "pushed_at": "2026-11-11T05:39:26Z",
-      "stars": 134813,
-      "checked": "2026-11-11T06:03:26.439Z"
+      "pushed_at": "2026-11-11T11:02:01Z",
+      "stars": 134879,
+      "checked": "2026-11-11T13:54:36.249Z"
     },
     "anomalyco/opencode": {
       "seen_tags": [
@@ -378,30 +378,30 @@
         "v1.18.25",
         "v1.18.24"
       ],
-      "pushed_at": "2026-11-11T05:56:47Z",
-      "stars": 225952,
-      "checked": "2026-11-11T06:03:26.439Z"
+      "pushed_at": "2026-11-11T11:58:21Z",
+      "stars": 226063,
+      "checked": "2026-11-11T13:54:36.249Z"
     },
     "Tongyi-MAI/OpenGCUA": {
       "tag": "v0.3.1",
       "published_at": "2026-10-23T09:09:38Z",
       "pushed_at": "2026-10-26T06:34:47Z",
-      "stars": 597,
+      "stars": 596,
       "flags": [],
       "frozen_pushed_at": "2026-10-26T06:34:47Z",
-      "checked": "2026-11-11T06:03:26.439Z"
+      "checked": "2026-11-11T13:54:36.249Z"
     },
     "Gathin23/cleanyourtv": {
       "tag": "v3.4.0",
       "published_at": "2026-11-05T14:36:13Z",
-      "pushed_at": "2026-11-10T16:10:42Z",
-      "stars": 56119,
+      "pushed_at": "2026-11-11T13:26:26Z",
+      "stars": 56291,
       "flags": [],
-      "frozen_pushed_at": "2026-11-10T16:10:42Z",
-      "checked": "2026-11-11T06:03:26.439Z"
+      "frozen_pushed_at": null,
+      "checked": "2026-11-11T13:54:36.249Z"
     }
   },
-  "runs": 167,
+  "runs": 168,
   "first_run": "2026-09-01T20:48:09.140Z",
-  "last_run": "2026-11-11T06:03:26.439Z"
+  "last_run": "2026-11-11T13:54:36.249Z"
 }
