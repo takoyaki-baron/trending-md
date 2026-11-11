@@ -1,8 +1,8 @@
 ---
 date: 2026-11-11
-updated: 2026-11-10T21:17:04Z
+updated: 2026-11-11T04:50:47Z
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 22
+sources: 28
 license: CC-BY-4.0
 ---
 
@@ -304,13 +304,223 @@ Beyond the Barracuda pair (item 8), CISA's KEV catalog added three more on Nov 1
 
 ---
 
+## 21. Glasswing at seven months: 442 CVEs, 2 exploited in the wild, and 217 fixes against 37,966 findings
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** VulnCheck · 333 pts on HN · Nov 11 (~06:17 UTC+8)
+- **Tags:** `anthropic` `vulnerability-disclosure` `ai-security`
+
+VulnCheck's November update on Anthropic's Project Glasswing (launched April 7) puts numbers on the AI vulnerability-discovery claim: **442 CVEs attributable to Anthropic** in seven months — about **0.5% of the 93,450 CVEs published this year**, ~63/month — and only **2 of the 442 on VulnCheck's KEV** (CVE-2026-61500, CVE-2026-26980), i.e. 0.45% exploited in the wild. Anthropic's own disclosure ledger (Nov 2 update) lists **37,966 findings** with the claimed true-positive rate risen from 90.8% to 94.2% — but only **7,349 (19.4%) are public** and just **217 are marked fixed**; since September, ~12,000 findings were added while **15 additional fixes** were recorded. **~1,654 findings (4.4%) are marked duplicates** — nearly eight times the number fixed — and 419 were withdrawn. The maintainer-side story is curl: **19 of 34 published reports were rejected as vulnerabilities**, 6 confirmed low severity, 9 awaiting assessment.
+
+**Why it matters:** The discovery-to-remediation gap is the finding — AI surfaces vulnerabilities far faster than maintainers can validate them, and the validation work lands on unpaid maintainers. But the HN thread shows the ground truth is split: Fil-C's author reports receiving 9 Anthropic reports, "all of them were real bugs... The quality of the reports was exceptional", calling out "the enormous chasm between what I saw of anthropic's capability and what TFA says". Both things are true at once: exceptional reports, and a ledger where fixes grow at 0.1% the rate of findings.
+
+> "Since September, Anthropic has added nearly 12,000 findings while recording just 15 additional fixes, widening the gap between discovery and remediation."
+
+[`🔗 VulnCheck: Glasswing November update`](https://www.vulncheck.com/blog/anthropic-glasswing-november-update) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50447074)
+
+---
+
+## 22. Starlink Mini 2 puts a battery inside the dish — and drops the dumb 12–48 V input that made vehicle installs easy
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** SpaceX · 304 pts on HN · Nov 11 (~02:22 UTC+8)
+- **Tags:** `starlink` `satellite` `hardware`
+
+SpaceX launched **Starlink Mini 2** (304 points on HN within hours). The official page is a JS shell with no spec table, so the concrete numbers come from the launch thread: a **built-in battery** (~71 Wh, roughly **4.5 hours** of runtime per early figures), **25–35 W** draw, a **60 W power brick** where Mini 1 required a 100 W source — and a standard **USB-C** port replacing Mini 1's proprietary cable. The trade that has the off-grid crowd grumbling: Mini 1 accepted **12–48 V without any negotiation**, which made vehicle-battery and solar installs trivial; Mini 2's USB-C negotiates, so that trick needs a trigger dongle again. Commenters report the launch bundle at **$999 with a one-year subscription**, with Mini 1 clearing out at **$149** and a $10/month standby plan still available.
+
+**Why it matters:** The first satellite terminal that survives a power cut without wiring is a real operational change for remote work, boats, and disaster response — and the thread's power-input complaint is the case study in how a "standardization" change (USB-C) can be a downgrade for the install base that valued dumb, wide-range DC input. Treat the spec numbers as thread-reported until SpaceX publishes a spec table — the vendor page lacks one.
+
+> "The specs say Mini 2 works with a 60W power brick. Mini 1 requires a 100W source." — HN thread
+
+[`🔗 Starlink Mini 2 (official page)`](https://www.starlink.com/mini-2) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50444129)
+
+---
+
+## 23. Zen 6, measured: the integer scheduler returns to Zen 3/4's layout, and mispredict recovery gets cheaper
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Chips and Cheese · 198 pts on HN · Nov 11 (~01:02 UTC+8)
+- **Tags:** `amd` `cpu` `microarchitecture`
+
+Chips and Cheese published the first public microarchitectural deep-dive of AMD's **Zen 6 core family** (Nov 10, George Cozma). From a bird's-eye view Zen 6 is a natural evolution of Zen 5 — bigger OoO structures, iterative improvements — but underneath, parts are heavily reworked: "reminding me of the changes from Zen 1 to Zen 2." The measured specifics: the **integer scheduler returns to a layout reminiscent of Zen 3 and Zen 4**; branch-mispredict recovery is cheaper (the wrong-path plateau drops from ~3.5–4 ns on Zen 5 to **~3–3.5 ns**); **2 branches/cycle within the L1 instruction cache**; a single thread can now use **both decode clusters** (Zen 5 limited a thread to one); **NOP pairing returns** with up to 16 NOPs retired per cycle; and the core sustains **5.96 64-bit adds/cycle** against Zen 5's 5.25. The piece also reads what Zen 6 vs Zen 6c says about AMD's dual-design strategy, and finds the direction predictor carrying over from Zen 5's best-measured one, now with faster BTB lookups.
+
+**Why it matters:** This is the core that will land in next-generation servers, desktops and consoles, and the interesting result is not the headline IPC but the *shape* of the changes — AMD unwinding Zen 5's more aggressive scheduler layout rather than iterating on it. For compiler and systems engineers, the restored NOP pairing and cheaper mispredict recovery are the immediately actionable details.
+
+> "Digging in deeper however tells a different story, with AMD heavily re-working several parts of the core, reminding me of the changes from Zen 1 to Zen 2."
+
+[`🔗 Chips and Cheese: AMD's Zen 6 Family`](https://chipsandcheese.com/p/amds-zen-6-family-feeding-the-beast) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50443090)
+
+---
+
+## 24. Ableton Live 13 announced — Step Sequencer clips, ARA 2, and Capture Automation, free for Live 12 buyers
+
+- **Velocity:** ▮▮ rising
+- **Source:** Ableton · 290 pts on HN · Nov 11 (~20:58 UTC+8 Nov 10)
+- **Tags:** `ableton` `audio` `release`
+
+Ableton announced **Live 13**. The new surface: **Step Sequencer clips** for beats, melodies and polyrhythms; **ARA 2** plug-in support ("Work with ARA 2 plug-ins in Live for faster, more advanced audio editing"); **Drum Synth** with over 20 drum engines; **Capture Automation** — tweak controls while exploring, press Capture, and the gestures become automation; contextual browsing; **Looplet**; a Transient Shaper and Clipper; Envelope Clips; new rack types; and bundled **Softube effects**. The purchasing detail that moved the thread: **buy Live 12 now and Live 13 is a free upgrade**.
+
+**Why it matters:** ARA 2 is the load-bearing item for tool builders — it lets plug-ins see and edit the project's audio context instead of just the clip they're inserted on, which changes what processing tools can be built *in* Live rather than around it. Max for Live developers get the new rack types and device slots to absorb. The rest of the release is workflow, but the free-upgrade window is the operational detail: decide within it.
+
+[`🔗 Ableton Live 13 (What's new)`](https://www.ableton.com/en/live/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50439695)
+
+---
+
+## 25. What objective is reasoning solving? A pathfinding framing that unifies best-of-N, unfaithful CoT, and reward hacking
+
+- **Velocity:** ▮▮ rising
+- **Source:** Alex Wang · 120 pts on HN · Nov 11 (~03:25 UTC+8)
+- **Tags:** `research` `reasoning` `analysis`
+
+Alex Wang's essay "What objective is reasoning solving?" formalizes reasoning as **pathfinding in token space**: given a prompt x and a verifier r(x, y), the model's job is to find a path z from x into the success set S_x = {y : r(x, y) = 1}, and training maximizes the probability that a sampled path lands in S_x. From that one objective the essay derives the familiar effects: **best-of-k is the guaranteed axis** (success rises as 1 − (1−p)^k, so more samples always help when p > 0); **unfaithful chains of thought** are expected, because a path only needs to *reach* S_x, not to be a good explanation of how; and **reward hacking** is the shortest path to the verifier's accept region rather than to truth. It also explains why asking the same question ten times yields ten different chains is not noise but the objective working as designed.
+
+**Why it matters:** It is a lens, not a paper — but it connects phenomena this feed has measured separately (turn-level best-of-N buying 5–10% accuracy; models following `(Reward: 5)` cues 97–100% of the time) under one objective, and it states a testable consequence: the success probability does not care whether the model reaches answers via diverse paths or one memorized route, but out-of-distribution robustness absolutely does.
+
+> "Ask a reasoning model the same math problem ten times and you'll get ten different chains of thought. Rather than thinking of reasoning as one mysterious process heading toward an answer, let's think of it as pathfinding in token space."
+
+[`🔗 Alex Wang: What objective is reasoning solving?`](https://alexwang.ai/posts/reasoning-as-pathfinding/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50445013)
+
+---
+
+## 26. Mozilla measured browser fingerprinting on ~25M real Firefox users — and shipped protections that cut unique users from 75% to 46%
+
+- **Velocity:** ▮▮ rising
+- **Source:** Mozilla + UC San Diego · 84 pts on HN · Nov 11 (~03:03 UTC+8)
+- **Tags:** `privacy` `fingerprinting` `firefox`
+
+The companion site to a Mozilla/UC San Diego/University of Toronto study (authors include Tom Ritter, Stefan Savage, Geoffrey Voelker) presents a fingerprinting measurement with an unusual property: it ran on **almost 25 million Firefox release users**, not test-site volunteers, with privacy-preserving telemetry (**OHTTP**) so no individual user was tracked. Two findings carry the paper: uniqueness is driven by a **small set of high-impact metrics** — of the users seen as unique by Fingerprint Pro (which collects 50+ metrics), **80% are unique after only 8 metrics**; Signifyd collects 80+ and still needs just 9 for the same 80% — and the numbers mean nothing without the OS breakdown. The mitigations built from this data **shipped in Firefox 143**, dropping the uniquely-identifiable fraction from **75% to 46%** while keeping web compatibility. The site publishes the full appendix, the aggregate data and analysis code (`tomrittervg/fingerprinting_paper_artifacts` — a frozen artifact dump, last push 2026-09-09, at the paper's finalization), and an interactive test against the measured population.
+
+**Why it matters:** Most fingerprinting percentages you have read come from self-selected test-site visitors; this is a population-scale measurement that produced *shipped* mitigations and names which metrics actually matter. The 8-metric result is the budget line for anti-fingerprinting work: randomize or uniformize those eight and the long tail matters little.
+
+> "If a user has a unique fingerprint, it is typically not because of a single measurement, but it is also not because of 20 or 30 measurements. It is a small number of metrics that make users unique."
+
+[`🔗 Fingerprinting in the Wild (study site)`](https://fingerprinting.study/) · [`🔗 Data & analysis code`](https://github.com/tomrittervg/fingerprinting_paper_artifacts) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50444684)
+
+---
+
+## 27. Microsoft ships Sysinternals Process Explorer for macOS — native Swift, with code-signing inspection built into the process table
+
+- **Velocity:** ▮▮ rising
+- **Source:** Microsoft · 154 pts on HN · Nov 10 (~06:30 UTC+8)
+- **Tags:** `sysinternals` `macos` `developer-tools`
+
+**microsoft/Procexp-Mac** is a native macOS port of Process Explorer — the first Sysinternals tool on the platform, built with Swift, SwiftUI and AppKit over public APIs (`libproc`, `sysctl`, Mach host statistics, Security.framework, IOKit, Metal). The feature list is the Windows tool's, translated: a live process tree with Procexp-style coloring, lower-pane module/handle/thread inspection, per-process Properties (Image, Performance, Threads, TCP/IP with reverse-DNS, Security, Environment, Strings), system-wide performance graphs including GPU, performance-vs-efficiency core labeling on Apple Silicon — and the macOS-specific addition: a **Security tab reading signer, certificate chain, Team ID, notarization status and SHA-256, with VirusTotal integration** per process. An optional privileged helper handles cross-user operations. Repo created July 6, pushed Nov 10; 312 stars; requires macOS 14+. Note: the repo carries **no license file** — source-available to read, no reuse rights stated.
+
+**Why it matters:** Sysinternals has been Windows-only for ~30 years; a native port rather than an Electron wrapper signals real investment in first-party macOS diagnostics. The signature/notarization column in the process table is the supply-chain-native touch — unnotarized and ad-hoc-signed processes are exactly what to surface when auditing a Mac. Read the code, but do not treat it as open source until a license lands.
+
+[`🔗 microsoft/Procexp-Mac`](https://github.com/microsoft/Procexp-Mac) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50433216)
+
+---
+
+## 28. DBDelve: a Rust+GPUI database client that launches in 1.1 s where DBeaver takes 5.2 s — and states its own pathological benchmark
+
+- **Velocity:** ▮ steady
+- **Source:** Show HN · 120 pts · Nov 10 (~00:36 UTC+8)
+- **Tags:** `databases` `rust` `gpui`
+
+**ShayanAbbas1/dbdelve** (1,005 stars) is a native, cross-platform DB client in Rust on **GPUI** — no Electron, no JVM. The author's benchmark against DBeaver 25.3.1 (M1 Pro, median of 5): **launch 1.1 s vs 5.2 s; idle memory 133 MB vs 606 MB; a 1,000-row query 0.21 s vs 1.96 s; 1M rows 56 s vs 208 s** — and the 1M-row memory row (4.9 GB vs 17 GB) comes with the footnote that this case is pathological on purpose (row limit off, the whole 1M×100 table pulled into memory, DBeaver's heap limit raised manually). Engines: Postgres, MySQL/MariaDB, SQLite, Turso, DuckDB, Snowflake, SQL Server, MongoDB, Redis (and Valkey/KeyDB/Dragonfly), ClickHouse — plus an **ODBC bridge** reaching Db2, Oracle, SAP HANA, Redshift, BigQuery, Databricks and friends. Imports connections from DBeaver and TablePlus, themes from Zed and VS Code. Distributed as a Homebrew cask — **not notarized**, so the install asks you to clear the quarantine flag yourself.
+
+**Why it matters:** GPUI keeps escaping Zed (DBDelve is the third non-Zed app in this feed's recent memory after BUI and the GPUI critique coverage), and the benchmark table is unusually honest about its own worst row. The notarization gap is the operational caveat: great for local dev workflows, but an enterprise rollout will need the unsigned-binary conversation first.
+
+[`🔗 ShayanAbbas1/dbdelve`](https://github.com/ShayanAbbas1/dbdelve) · [`🔗 Show HN discussion`](https://news.ycombinator.com/item?id=50427934)
+
+---
+
+## 29. MeowDisplay is iPhone Mirroring in reverse — your iPhone, iPad or Android becomes a Mac display, open source
+
+- **Velocity:** ▮ steady
+- **Source:** Show HN · 114 pts · Nov 10 (~02:39 UTC+8)
+- **Tags:** `macos` `display` `open-source`
+
+**MeowDisplay** (raiseCatError/meowdisplay, free and open source) turns an iPhone, iPad, Android device or another Mac into a **display for your Mac** — mirror or extend, with direct touch, trackpad-precise control, Apple Pencil support, a unified clipboard, audio, Picture-in-Picture, and remote access. Mac 2.0 and iOS 2.0 are stable; **Android 10+ is in closed testing**; version 2.1 teases floating windows that hover over the layout without taking a pane's place. Connection is USB ("Plug in") or Wi-Fi.
+
+**Why it matters:** Apple's Sidecar and iPhone Mirroring move control *toward* Apple hardware in one direction; this flips it — the Mac is the machine being viewed and the phone is the screen — and crosses to Android, which no first-party feature does. The second-screen-for-free use case (an old iPhone as a Mac's stats display) is the one HN actually wants, and open source is what makes the Android path plausible.
+
+[`🔗 MeowDisplay`](https://meowdisplay.app/) · [`🔗 raiseCatError/meowdisplay`](https://github.com/raiseCatError/meowdisplay) · [`🔗 Show HN discussion`](https://news.ycombinator.com/item?id=50429636)
+
+---
+
+## 30. Someone Was Here: your Mac photographs whoever uses it while you're away — and tells your iPhone
+
+- **Velocity:** ▮ steady
+- **Source:** Show HN · 113 pts · Nov 10 (~02:50 UTC+8)
+- **Tags:** `macos` `security` `privacy`
+
+**Someone Was Here** (free, Mac App Store, macOS 14+) photographs anyone who uses your Mac while you're away: when someone uses the machine after it's been idle, tries the lock screen, or unlocks it, the app captures their photo with the time, how they got in, and how long they stayed. It learns your face in a two-minute on-device setup and "stays quiet" about you; photos reach the free iPhone app **within seconds over your own iCloud**, or via Pushover, ntfy, Telegram or a webhook. The consent posture is stated on the landing page: every photo turns on the camera light, photos stay on the Mac, no accounts, zero ads and tracking, and it sits visible in the menu bar — "If you share your space, tell people it's there."
+
+**Why it matters:** This is the old "webcam trap" productized with the disclosure details made explicit — camera light always on, on-device face matching, no hidden capture. The ntfy/webhook support is the part that generalizes: any notification pipeline (including a local-first Home Assistant setup, this week's other HN theme) can receive the events instead of a vendor app.
+
+[`🔗 Someone Was Here`](https://someonewashere.app/) · [`🔗 Show HN discussion`](https://news.ycombinator.com/item?id=50429812)
+
+---
+
+## 31. STE80 Humanizer: Karpathy's "80% of the way to ASD-STE100" writing method, packaged as an agent skill
+
+- **Velocity:** ▮ steady
+- **Source:** Show HN · 105 pts · Nov 10 (~02:05 UTC+8)
+- **Tags:** `writing` `agent-skills` `asd-ste100`
+
+**Dodaios/ste80-humanizer** (322 stars, MIT, created Nov 9) is a two-pass agent skill for de-AI-ing text. Pass 1 strips the **26 tells from Wikipedia's "Signs of AI writing"** (the blader/humanizer catalog) — "Great question!", "not just X", the dramatic closer. Pass 2 rebuilds the sentences to **ASD-STE100**, the controlled English of aircraft-maintenance manuals, at **80%** per Andrej Karpathy's Oct 2 tip: full STE bans "check"/"test" as verbs and "may"/"should" outright, so the skill keeps natural vocabulary while enforcing the structure — one idea per sentence, active voice, 20 words per instruction. The README does something rare for the genre: it **fact-checked its own source**, noting Karpathy's STE overview graphic has errors against Issue 9 of ASD-STE100 ("approximately" is approved, "TEST" is a noun only, no "in order to" entry) and that the skill follows Issue 9. It also states plainly: "Getting past AI detectors is not a goal."
+
+**Why it matters:** The method escaping a tweet into a versioned, CI-validated artifact is one more piece of evidence that "skills" are becoming the distribution format for prompt-engineering lore — and correcting its own upstream source is the kind of hygiene the skills ecosystem mostly lacks. The worked before/after example is the honest part: Pass 1 alone leaves "clean words, but heavy sentences".
+
+[`🔗 Dodaios/ste80-humanizer`](https://github.com/Dodaios/ste80-humanizer) · [`🔗 Show HN discussion`](https://news.ycombinator.com/item?id=50429144)
+
+---
+
+## 32. 16 LLMs played TIS-100 blind — and set 133 new frontier points on a decade-old human leaderboard
+
+- **Velocity:** ▮ steady
+- **Source:** TIS-100 Bench · 22 pts on HN · Nov 11 (~08:37 UTC+8)
+- **Tags:** `benchmarks` `llm` `pareto-frontier`
+
+**TIS-100 Bench** gave 16 LLMs Zachtronics' assembly puzzle game and its manual, withheld the decade-old community leaderboard, and gave each model one scored attempt (pass@1, 10–45 minutes per puzzle) across all **55 puzzles** (47 in-game plus 8 community tournament). Results: **133 new Pareto-frontier points across 18 of 55 puzzles, and 3 outright cycle records**. TIS-100 scores solutions on cycles, nodes and instructions — a three-axis tradeoff, so each puzzle has a frontier of good answers rather than one best — which is exactly why the benchmark is interesting: "improving one score can make another worse." Within days, human players had picked up the models' programs and improved on most of them.
+
+**Why it matters:** A rare case of machines pushing past a decade of accumulated human optimization on *some* axes of a real programming puzzle — and of the humans immediately returning the favor. The Pareto-frontier framing is the transferable part: it measures the shape of a model's solution space, not just whether it passes, which pass/fail coding benchmarks flatten away.
+
+> "Within days, players picked up the models' programs and improved on most of them."
+
+[`🔗 TIS-100 Bench`](https://tis-100.wincon.dev/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50448340)
+
+---
+
+## 33. LingBot-Touch: one tactile foundation model across piezoresistive, magnetic and visuotactile sensors
+
+- **Velocity:** ▮ steady
+- **Source:** arXiv 2611.12806 · #1 on HF daily board (94 upvotes) · posted Nov 6
+- **Tags:** `robotics` `tactile` `foundation-model`
+
+**LingBot-Touch** (top of Hugging Face's Nov 10 daily board) targets the fragmentation that keeps robot touch data small: every tactile sensor type — piezoresistive, magnetic, visuotactile — has different physics and its own dataset that can't be pooled with the others. The model learns a **unified representation across the three sensor families**, extensible to new types, and the resulting tactile tokens are **plug-and-play**: they drop into policy models across paradigms, from diffusion policies to vision-language-action models such as **π0.5** and LingBot-VLA, "consistently enhancing manipulation dexterity." Experiments span simulation and real-robot deployments across multiple hardware platforms, with explicit attention to computational efficiency.
+
+**Why it matters:** Touch is the modality where robot learning is still dataset-poor, and a sensor-agnostic representation is the precondition for pooling the field's small heterogeneous datasets the way vision and language did. The claim to watch is the integration one — tokens that improve *both* a diffusion policy and a VLA suggest the representation is doing real work, not just fitting one policy family's eval.
+
+[`🔗 arXiv 2611.12806`](https://arxiv.org/abs/2611.12806) · [`🔗 Hugging Face paper page`](https://huggingface.co/papers/2611.12806)
+
+---
+
+## 34. The White House replaces synthetic-DNA self-attestation with certified-supplier screening — a 90/160/250/340-day clock
+
+- **Velocity:** ▮ steady
+- **Source:** White House NSTM-6 · 10 pts on HN (fresh) · Nov 11 (~10:57 UTC+8)
+- **Tags:** `biosecurity` `policy` `synthetic-biology`
+
+NSTM-6, the **National Policy for Nucleic Acid Synthesis Screening**, was signed Nov 5 by National Security Advisor Marco Rubio and OSTP Director Michael Kratsios under Executive Order 14292 (HN picked it up this morning). It replaces the 2024 Framework — which, in the memo's own words, "relied on self-attestation rather than independent verification" — and requires **all recipients of Federal life-sciences funding to procure synthetic nucleic acids and benchtop synthesis equipment exclusively from certified suppliers** that verify the legitimacy of customers and sequences ordered. The clock: **NIST issues standards and test protocols within 90 days**; HHS publishes the first adherent-supplier list **within 160 days**; federally funded customers must buy all synthesis from certified suppliers **within 250 days**, and all benchtop equipment **within 340 days**. The framing leans hard on AI: the memo is built around "super intelligence (SI)" converging with biology, and says "Powered by SI, screening will shift from list-based to risk-based".
+
+**Why it matters:** Concrete compliance deadlines for anyone shipping sequence-screening tooling, synthesis services, or wet-lab procurement software — NIST has 90 days to stand up standards, and the policy explicitly bets the screening layer on AI-enabled verification. The mechanism change is the part to read: self-attestation to independent, supplier-level verification, with a government list as the enforcement point.
+
+> "Existing Federal guidance has relied on self-attestation rather than independent verification, forcing responsible American companies to compete against firms that bypass biosecurity safeguards for economic gain."
+
+[`🔗 NSTM-6 policy (PDF)`](https://www.whitehouse.gov/wp-content/uploads/2026/11/NSTM-6-NASS-Policy.pdf) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50449275)
+
+---
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-11-10T21:17:04Z |
-| Items | 20 |
-| Sources tracked | 22 (Hacker News, GitHub Trending, NVD, CISA KEV, MSRC CVRF, arXiv, Hugging Face, vendor blogs, security advisories) |
+| Generated | 2026-11-11T04:50:47Z |
+| Items | 34 |
+| Sources tracked | 28 (Hacker News, GitHub Trending, NVD, CISA KEV, MSRC CVRF, arXiv, Hugging Face, vendor blogs, security advisories) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (3x daily) |
 | Ranking | Velocity-weighted (recency × engagement acceleration × source authority) |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |

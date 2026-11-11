@@ -1,8 +1,8 @@
 ---
 date: 2026-11-11
-updated: 2026-11-10T21:17:04Z
+updated: 2026-11-11T04:50:47Z
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 22
+sources: 28
 license: CC-BY-4.0
 ---
 
@@ -304,13 +304,223 @@ Emilio Ferrara 的 **"All Quiet on the Neural Front"**（11 月 6 日提交 arXi
 
 ---
 
+## 21. Glasswing 七个月成绩单：442 个 CVE，野外利用仅 2 个，37,966 条发现对 217 个修复
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** VulnCheck · HN 333 pts · 11 月 11 日（~06:17 UTC+8）
+- **Tags:** `anthropic` `vulnerability-disclosure` `ai-security`
+
+VulnCheck 对 Anthropic 的 Project Glasswing（4 月 7 日启动）的十一月更新给出了量化账本：七个月内**可归于 Anthropic 的 CVE 共 442 个**——约为今年发表的 93,450 个 CVE 的 **0.5%**，每月约 63 个——其中进入 VulnCheck KEV 的只有 **2 个**（CVE-2026-61500、CVE-2026-26980），即 0.45% 被野外利用。Anthropic 自己的披露台账（11 月 2 日更新）列出 **37,966 条发现**，声称的真实阳性率从 90.8% 升至 94.2%——但只有 **7,349 条（19.4%）公开**，标记为已修复的仅 **217 条**；9 月以来新增约 12,000 条发现，而新增修复只有 **15 条**。**约 1,654 条（4.4%）被标记为重复**——接近已修复数的八倍——另有 419 条被撤回。维护者一侧的故事是 curl：**34 份已发布报告中有 19 份被拒绝认定为漏洞**，6 份确认为低危，9 份仍在评估。
+
+**Why it matters:** 真正的发现是"发现到修复"的鸿沟——AI 找漏洞的速度远超维护者验证的速度，而验证工作落在了无偿维护者头上。但 HN 讨论串显示地面真相是分裂的：Fil-C 作者报告收到 9 份 Anthropic 报告，"全部都是真实漏洞……报告质量出色"，并直指"我所见到的 Anthropic 能力与这篇文章之间存在巨大鸿沟"。两件事同时为真：报告质量出色，以及台账上修复的增长速度只有发现的 0.1%。
+
+> "9 月以来，Anthropic 新增了近 12,000 条发现，而新增修复只有 15 条，发现与修复之间的差距在扩大。"
+
+[`🔗 VulnCheck：Glasswing 十一月更新`](https://www.vulncheck.com/blog/anthropic-glasswing-november-update) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50447074)
+
+---
+
+## 22. Starlink Mini 2 把电池塞进了锅盖——却去掉了让车载安装变得简单的 12–48 V 直插输入
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** SpaceX · HN 304 pts · 11 月 11 日（~02:22 UTC+8）
+- **Tags:** `starlink` `satellite` `hardware`
+
+SpaceX 发布了 **Starlink Mini 2**（数小时内 HN 304 分）。官方页面是 JS 壳，没有规格表，具体数字来自发布讨论串：**内置电池**（约 71 Wh，按早期数据约 **4.5 小时**续航）、功耗 **25–35 W**、配备 **60 W 电源适配器**（Mini 1 需要 100 W），以及替代 Mini 1 专有线缆的标准 **USB-C** 口。让离网玩家抱怨的取舍是：Mini 1 接受**未经协商的 12–48 V** 直流输入，车载电瓶和太阳能安装毫无门槛；Mini 2 的 USB-C 需要协商，这个玩法又要靠触发器转接头。评论者报告首发捆绑**999 美元含一年订阅**，Mini 1 清仓价 **149 美元**，10 美元/月的待机套餐仍在。
+
+**Why it matters:** 第一台断电也能工作的卫星终端，对远程办公、船舶和救灾是真正的运维改变——而讨论串对供电输入的抱怨，是"标准化"改变（USB-C）对看重傻瓜式宽压直流输入的老安装群体反而构成降级的活案例。在 SpaceX 发布正式规格表之前，请把规格数字当作讨论串转述——厂商页面没有规格表。
+
+> "规格说 Mini 2 用 60W 电源适配器。Mini 1 需要 100W 电源。"——HN 讨论串
+
+[`🔗 Starlink Mini 2（官方页面）`](https://www.starlink.com/mini-2) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50444129)
+
+---
+
+## 23. 实测 Zen 6：整数调度器回到 Zen 3/4 的布局，误预测恢复更便宜
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Chips and Cheese · HN 198 pts · 11 月 11 日（~01:02 UTC+8）
+- **Tags:** `amd` `cpu` `microarchitecture`
+
+Chips and Cheese 发布了 AMD **Zen 6 核心家族**的首份公开微架构深度分析（11 月 10 日，George Cozma）。鸟瞰之下 Zen 6 是 Zen 5 的自然演进——更大的乱序结构和逐项改进——但深挖下去，部分部件被大改："让我想起 Zen 1 到 Zen 2 的变化。"实测细节：**整数调度器回到让人想起 Zen 3 与 Zen 4 的布局**；分支误预测恢复更便宜（错误路径平台期从 Zen 5 的约 3.5–4 ns 降到**约 3–3.5 ns**）；**L1 指令缓存内每周期 2 个分支**；单线程现在可以**同时使用两个解码簇**（Zen 5 单线程只能用一个）；**NOP 配对回归**，每周期最多退役 16 条 NOP；核心可持续 **5.96 次/周期**的 64 位加法（Zen 5 为 5.25）。文章还解读了 Zen 6 与 Zen 6c 的差异对 AMD 双设计策略的说明，并发现方向预测器延续自 Zen 5 那颗实测最强的一颗，只是 BTB 查找更快。
+
+**Why it matters:** 这是将落入下一代服务器、桌面与主机的核心，有趣的不是标题 IPC，而是改动的*形状*——AMD 拆掉了 Zen 5 更激进的调度器布局，而不是在其上迭代。对编译器与系统工程师，恢复的 NOP 配对和更便宜的误预测恢复是立即可用的细节。
+
+> "但深挖下去讲的却是另一个故事：AMD 大改了核心的几个部分，让我想起 Zen 1 到 Zen 2 的变化。"
+
+[`🔗 Chips and Cheese：AMD 的 Zen 6 家族`](https://chipsandcheese.com/p/amds-zen-6-family-feeding-the-beast) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50443090)
+
+---
+
+## 24. Ableton Live 13 发布——Step Sequencer 剪辑、ARA 2 与 Capture Automation，Live 12 买家的免费升级
+
+- **Velocity:** ▮▮ rising
+- **Source:** Ableton · HN 290 pts · 11 月 10 日（~20:58 UTC+8）
+- **Tags:** `ableton` `audio` `release`
+
+Ableton 发布了 **Live 13**。新界面：用于节拍、旋律与复合节奏的 **Step Sequencer 剪辑**；**ARA 2** 插件支持（页面原话："Work with ARA 2 plug-ins in Live for faster, more advanced audio editing"）；带 20 多种鼓引擎的 **Drum Synth**；**Capture Automation**——即兴探索时随手调整控件，按下 Capture，手势即成为自动化；上下文浏览；**Looplet**；Transient Shaper 与 Clipper；Envelope Clips；新机架类型；以及捆绑的 **Softube 效果器**。带动讨论区的购买细节：**现在购买 Live 12，Live 13 就是免费升级**。
+
+**Why it matters:** 对工具开发者而言，ARA 2 是承重项——它让插件能看到并编辑工程的音频上下文，而不只是被插入的那条剪辑，这改变了"在 Live 内"而非"围着 Live"能构建什么样的处理工具。Max for Live 开发者则有新机架类型和设备槽可消化。其余都是工作流改进，但免费升级窗口才是操作性细节：要在窗口内做决定。
+
+[`🔗 Ableton Live 13（新特性）`](https://www.ableton.com/en/live/) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50439695)
+
+---
+
+## 25. 推理究竟在解什么目标？一个统一 best-of-N、不忠实 CoT 与奖励作弊的"寻路"框架
+
+- **Velocity:** ▮▮ rising
+- **Source:** Alex Wang · HN 120 pts · 11 月 11 日（~03:25 UTC+8）
+- **Tags:** `research` `reasoning` `analysis`
+
+Alex Wang 的文章《What objective is reasoning solving?》把推理形式化为**词元空间中的寻路**：给定提示 x 与验证器 r(x, y)，模型的任务是找到一条从 x 通向成功集合 S_x = {y : r(x, y) = 1} 的路径 z，训练则在最大化"采样路径落入 S_x"的概率。从这个单一目标出发，文章推导出熟悉的现象：**best-of-k 是有保证的扩展轴**（成功率按 1 − (1−p)^k 上升，只要 p > 0，多采样总有帮助）；**不忠实的思维链**是预期行为，因为路径只需*抵达* S_x，而不必是对"如何抵达"的好解释；**奖励作弊**则是通往验证器接受区域而非真相的最短路径。它还解释了：同一道题问十次、得到十条不同思维链，不是噪声，而是目标函数按设计工作。
+
+**Why it matters:** 这是透镜而非论文——但它把本 feed 分别测量过的现象（回合级 best-of-N 买到 5–10% 准确率；模型 97–100% 地跟着 `(Reward: 5)` 线索走）统一在同一个目标之下，并给出可检验的推论：成功概率并不关心模型是经由多样路径还是一条背熟的路线抵达答案，但分布外鲁棒性绝对关心。
+
+> "问推理模型同一道数学题十次，你会得到十条不同的思维链。与其把推理想成某个神秘过程走向答案，不如把它想成词元空间中的寻路。"
+
+[`🔗 Alex Wang：What objective is reasoning solving?`](https://alexwang.ai/posts/reasoning-as-pathfinding/) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50445013)
+
+---
+
+## 26. Mozilla 在约 2500 万真实 Firefox 用户上实测浏览器指纹——并上线了把"唯一可识别用户"从 75% 降到 46% 的防护
+
+- **Velocity:** ▮▮ rising
+- **Source:** Mozilla + UC San Diego · HN 84 pts · 11 月 11 日（~03:03 UTC+8）
+- **Tags:** `privacy` `fingerprinting` `firefox`
+
+Mozilla / 加州大学圣地亚哥分校 / 多伦多大学联合研究的配套网站（作者包括 Tom Ritter、Stefan Savage、Geoffrey Voelker）展示了一次性质特殊的指纹测量：它跑在**近 2500 万 Firefox 正式版用户**上，而非测试站志愿者，遥测采用隐私保护技术（**OHTTP**），不追踪任何个体。论文的两大发现：唯一性由**少数高影响指标**驱动——在采集 50+ 指标的 Fingerprint Pro 眼中唯一的用户，**仅 8 个指标后就解释了 80%**；Signifyd 采集 80+ 指标，同样 80% 也只需 9 个——而且这些数字离开操作系统分解毫无意义。基于这份数据构建的防护**已随 Firefox 143 发布**，把唯一可识别用户占比从 **75% 降到 46%**，同时保持 Web 兼容性。网站公开完整附录、聚合数据与分析代码（`tomrittervg/fingerprinting_paper_artifacts`——一个冻结的工件库，最后推送 2026-09-09，即论文定稿时），以及一个对照实测人群的交互测试。
+
+**Why it matters:** 你读过的多数指纹百分比来自自选择的测试站访客；这是产生了*已发布*防护的人口级测量，并且点名了真正起作用的指标。8 个指标的结果是反指纹工作的预算线：随机化或统一这八个，长尾就无关紧要。
+
+> "如果用户有唯一指纹，通常不是因为单个指标，也不是因为 20 或 30 个指标。是少数几个指标让用户变得唯一。"
+
+[`🔗 Fingerprinting in the Wild（研究网站）`](https://fingerprinting.study/) · [`🔗 数据与分析代码`](https://github.com/tomrittervg/fingerprinting_paper_artifacts) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50444684)
+
+---
+
+## 27. 微软发布 macOS 版 Sysinternals Process Explorer——原生 Swift，进程表里内置代码签名检查
+
+- **Velocity:** ▮▮ rising
+- **Source:** Microsoft · HN 154 pts · 11 月 10 日（~06:30 UTC+8）
+- **Tags:** `sysinternals` `macos` `developer-tools`
+
+**microsoft/Procexp-Mac** 是 Process Explorer 的原生 macOS 移植——首个登陆该平台的 Sysinternals 工具，用 Swift、SwiftUI 与 AppKit 构建，走公开 API（`libproc`、`sysctl`、Mach 主机统计、Security.framework、IOKit、Metal）。功能列表是 Windows 版的照译：带 Procexp 风格配色的实时进程树、下窗格模块/句柄/线程检查、每进程属性（Image、Performance、Threads、带反向 DNS 的 TCP/IP、Security、Environment、Strings）、含 GPU 的系统级性能曲线、Apple Silicon 上的性能核/能效核标注——以及 macOS 特有的增量：**Security 标签读取签名者、证书链、Team ID、公证状态与 SHA-256，并集成 VirusTotal**，每进程一份。可选的特权辅助进程负责跨用户操作。仓库 7 月 6 日创建，11 月 10 日有推送；312 星；要求 macOS 14+。注意：仓库**没有 LICENSE 文件**——可阅读的源码可用，但未声明任何复用权利。
+
+**Why it matters:** Sysinternals 约 30 年来只有 Windows；原生移植而非 Electron 套壳，说明微软在第一方 macOS 诊断工具上投入了真功夫。进程表中的签名/公证列是供应链原生的细节——审计一台 Mac 时，未公证与 ad-hoc 签名的进程正是最该被浮出水面的东西。代码可以读，但在 LICENSE 落地前别把它当开源。
+
+[`🔗 microsoft/Procexp-Mac`](https://github.com/microsoft/Procexp-Mac) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50433216)
+
+---
+
+## 28. DBDelve：Rust+GPUI 数据库客户端，启动 1.1 秒对 DBeaver 的 5.2 秒——并公布了自己最病态的基准行
+
+- **Velocity:** ▮ steady
+- **Source:** Show HN · 120 pts · 11 月 10 日（~00:36 UTC+8）
+- **Tags:** `databases` `rust` `gpui`
+
+**ShayanAbbas1/dbdelve**（1,005 星）是 Rust 写在 **GPUI** 上的原生跨平台数据库客户端——无 Electron，无 JVM。作者对 DBeaver 25.3.1 的基准（M1 Pro，5 次取中位数）：**启动 1.1 s 对 5.2 s；空闲内存 133 MB 对 606 MB；1000 行查询 0.21 s 对 1.96 s；100 万行 56 s 对 208 s**——而 100 万行内存行（4.9 GB 对 17 GB）带着脚注：这一场景是故意病态的（行数限制关闭，整张 100 万行×100 列的表全部载入内存，DBeaver 的堆上限被手动调大）。引擎：Postgres、MySQL/MariaDB、SQLite、Turso、DuckDB、Snowflake、SQL Server、MongoDB、Redis（含 Valkey/KeyDB/Dragonfly）、ClickHouse——外加一条 **ODBC 桥**，可达 Db2、Oracle、SAP HANA、Redshift、BigQuery、Databricks 等。可从 DBeaver 与 TablePlus 导入连接，从 Zed 与 VS Code 导入主题。以 Homebrew cask 分发——**未公证**，安装时需要自己清除隔离标志。
+
+**Why it matters:** GPUI 正不断逃出 Zed（继 BUI 与 GPUI 批评的报道之后，DBDelve 是本 feed 近期记忆中的第三个非 Zed 应用），而这张基准表对自己最差一行罕见地诚实。未公证是操作性警告：本地开发工作流很好，企业部署得先过"未签名二进制"这一关。
+
+[`🔗 ShayanAbbas1/dbdelve`](https://github.com/ShayanAbbas1/dbdelve) · [`🔗 Show HN 讨论`](https://news.ycombinator.com/item?id=50427934)
+
+---
+
+## 29. MeowDisplay 是反向的 iPhone Mirroring——iPhone、iPad 或 Android 变成 Mac 的显示器，且开源
+
+- **Velocity:** ▮ steady
+- **Source:** Show HN · 114 pts · 11 月 10 日（~02:39 UTC+8）
+- **Tags:** `macos` `display` `open-source`
+
+**MeowDisplay**（raiseCatError/meowdisplay，免费开源）把 iPhone、iPad、Android 设备或另一台 Mac 变成 **Mac 的显示器**——镜像或扩展，支持直接触控、触控板级精准控制、Apple Pencil、统一剪贴板、音频、画中画与远程访问。Mac 2.0 与 iOS 2.0 已稳定；**Android 10+ 处于封闭测试**；2.1 预告可悬浮在布局之上、不占用窗格位置的浮动窗口。连接走 USB（"即插"）或 Wi-Fi。
+
+**Why it matters:** Apple 的 Sidecar 与 iPhone Mirroring 只朝 Apple 硬件的单方向移动控制；这个把它翻了过来——Mac 是被观看的机器，手机是屏幕——并且跨到 Android，没有任何第一方功能做到这一点。"把旧 iPhone 当 Mac 的状态显示器"是 HN 真正想要用例，而开源是 Android 路径可信的前提。
+
+[`🔗 MeowDisplay`](https://meowdisplay.app/) · [`🔗 raiseCatError/meowdisplay`](https://github.com/raiseCatError/meowdisplay) · [`🔗 Show HN 讨论`](https://news.ycombinator.com/item?id=50429636)
+
+---
+
+## 30. Someone Was Here：你不在时谁动了你的 Mac，它会拍照并通知你的 iPhone
+
+- **Velocity:** ▮ steady
+- **Source:** Show HN · 113 pts · 11 月 10 日（~02:50 UTC+8）
+- **Tags:** `macos` `security` `privacy`
+
+**Someone Was Here**（免费，Mac App Store，macOS 14+）在你不在时给动用 Mac 的人拍照：有人在设备闲置后被使用、尝试锁屏或解锁时，应用会拍到对方的照片，附带时间、如何进入与停留时长。它用两分钟的设备内设置学会你的脸，对你"保持安静"；照片经**你自己的 iCloud 在数秒内送达免费 iPhone 应用**，也可走 Pushover、ntfy、Telegram 或 webhook。落地页把知情姿态写明：每张照片都会点亮摄像头指示灯、照片留在 Mac 上、无需账号、零广告零追踪、菜单栏常驻可见——"如果你与他人共享空间，请告知他们它的存在。"
+
+**Why it matters:** 这是把老式"摄像头陷阱"产品化、并把告知细节显式化的产品——摄像头灯常亮、设备内人脸匹配、无隐藏拍摄。ntfy/webhook 支持是可泛化的部分：任何通知管道（包括本地优先的 Home Assistant 配置——本周 HN 的另一个主题）都能接收事件，而不必依赖厂商应用。
+
+[`🔗 Someone Was Here`](https://someonewashere.app/) · [`🔗 Show HN 讨论`](https://news.ycombinator.com/item?id=50429812)
+
+---
+
+## 31. STE80 Humanizer：Karpathy 的"向 ASD-STE100 走 80%"写作法，打包成 agent skill
+
+- **Velocity:** ▮ steady
+- **Source:** Show HN · 105 pts · 11 月 10 日（~02:05 UTC+8）
+- **Tags:** `writing` `agent-skills` `asd-ste100`
+
+**Dodaios/ste80-humanizer**（322 星，MIT，11 月 9 日创建）是一个给文本去 AI 味的两遍 agent skill。第一遍剥离**维基百科"Signs of AI writing"列出的 26 个特征**（blader/humanizer 目录）——"Great question!"、"not just X"、戏剧化收尾。第二遍把句子重写到 **ASD-STE100**——飞机维护手册用的受控英语——按 Andrej Karpathy 10 月 2 日的建议走 **80%**：100% 的 STE 禁止 "check"/"test" 作动词、禁 "may"/"should"，所以 skill 保留自然词汇，只强制结构——一句一个想法、主动语态、每条指令 20 词。README 做了这个品类里罕见的事：**事实核查了自己的来源**，指出 Karpathy 的 STE 总览图相对 ASD-STE100 第 9 期有错（"approximately" 是 approved，"TEST" 只能作名词，没有 "in order to" 条目），skill 遵循第 9 期。它还把话说明白："绕过 AI 检测器不是目标。"
+
+**Why it matters:** 一个方法从推文逃逸成版本化、经 CI 验证的工件，是"skills 正在成为提示工程口口相传知识的分发格式"的又一证据——而纠正自己的上游来源，正是 skills 生态普遍缺失的卫生习惯。README 里的前后对照示例是诚实的部分：只走第一遍，留下的是"词干净，句子仍沉重"。
+
+[`🔗 Dodaios/ste80-humanizer`](https://github.com/Dodaios/ste80-humanizer) · [`🔗 Show HN 讨论`](https://news.ycombinator.com/item?id=50429144)
+
+---
+
+## 32. 16 个 LLM 盲玩 TIS-100——在十年老的人类排行榜上立下 133 个新前沿点
+
+- **Velocity:** ▮ steady
+- **Source:** TIS-100 Bench · HN 22 pts · 11 月 11 日（~08:37 UTC+8）
+- **Tags:** `benchmarks` `llm` `pareto-frontier`
+
+**TIS-100 Bench** 把 Zachtronics 的汇编解谜游戏及其手册交给 16 个 LLM，对它们隐去有十年历史的社区排行榜，每个模型只有一次计分机会（pass@1，每题 10–45 分钟），覆盖全部 **55 题**（游戏内 47 题＋8 道社区锦标赛题）。结果：**在 55 题中的 18 题立下 133 个新帕累托前沿点，外加 3 项周期数绝对纪录**。TIS-100 对解法按周期数、节点数、指令数三项计分——三轴权衡，每题都有一个"好答案前沿"而非唯一最优——这正是这个基准有趣的原因："改进一项得分会让另一项变差。"几天之内，人类玩家捡起模型的程序，把其中大多数又改进了一遍。
+
+**Why it matters:** 机器在一个真实编程谜题的*部分*轴上推过十年人类积累的优化——而且人类立刻反哺——这种案例很少见。可迁移的部分是帕累托前沿框架：它测量的是模型解空间的*形状*，而不只是通过与否，后者正是通过/失败式编码基准抹掉的东西。
+
+> "几天之内，玩家捡起了模型的程序，把其中大多数又改进了一遍。"
+
+[`🔗 TIS-100 Bench`](https://tis-100.wincon.dev/) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50448340)
+
+---
+
+## 33. LingBot-Touch：横跨压阻、磁与视触觉三类传感器的统一触觉基础模型
+
+- **Velocity:** ▮ steady
+- **Source:** arXiv 2611.12806 · HF 日榜第一（94 赞）· 11 月 6 日提交
+- **Tags:** `robotics` `tactile` `foundation-model`
+
+**LingBot-Touch**（Hugging Face 11 月 10 日日榜第一）瞄准让机器人触觉数据始终偏小的碎片化：每种触觉传感器——压阻、磁、视触觉——物理不同，各自的数据集无法互相合并。该模型学得一个**横跨三类传感器家族的统一表示**，并可扩展到新类型；产出的触觉 token **即插即用**：从扩散策略到 **π0.5**、LingBot-VLA 这样的视觉-语言-动作模型，跨范式直接接入策略模型，"一致地提升操作灵巧性"。实验横跨仿真与多硬件平台的真机部署，并明确关注计算效率。
+
+**Why it matters:** 触觉是机器人学习中数据仍然贫瘠的模态，而传感器无关的表示是把全领域的小型异构数据集像视觉与语言那样合并起来的先决条件。值得盯的声明是集成这一条——既能改进扩散策略、又能改进 VLA 的 token，暗示这个表示在干真活，而不只是拟合某一个策略家族的评测。
+
+[`🔗 arXiv 2611.12806`](https://arxiv.org/abs/2611.12806) · [`🔗 Hugging Face 论文页`](https://huggingface.co/papers/2611.12806)
+
+---
+
+## 34. 白宫以认证供应商筛查取代合成 DNA 的自我声明——90/160/250/340 天倒计时
+
+- **Velocity:** ▮ steady
+- **Source:** 白宫 NSTM-6 · HN 10 pts（新鲜）· 11 月 11 日（~10:57 UTC+8）
+- **Tags:** `biosecurity` `policy` `synthetic-biology`
+
+**核酸合成筛查国家政策** NSTM-6 于 11 月 5 日由国家安全顾问 Marco Rubio 与科技政策办公室主任 Michael Kratsios 依据第 14292 号行政令签署（HN 今早转帖）。它取代 2024 年框架——用备忘录自己的话说，旧框架"依赖自我声明而非独立验证"——并要求**所有联邦生命科学经费接受者，只能从验证客户身份与所订序列合法性的认证供应商处采购合成核酸与台式合成设备**。时间表：**NIST 须在 90 天内发布标准与测试规程**；HHS 在 **160 天内**公布首批守规供应商名单；联邦资助客户须在 **250 天内**实现全部合成采购走认证供应商，**340 天内**覆盖全部台式设备。措辞重度押注 AI：备忘录围绕"超级智能（SI）"与生物学的交汇构建，并指出 "Powered by SI, screening will shift from list-based to risk-based"（SI 驱动下，筛查将从基于清单转向基于风险）。
+
+**Why it matters:** 对任何在做的序列筛查工具、合成服务或湿实验室采购软件，这是具体的合规死线——NIST 有 90 天拿出标准，政策明确把筛查层押在 AI 验证上。要读的机制变化在这里：从自我声明到独立的供应商级验证，以政府名单作为执行点。
+
+> "现行联邦指南依赖自我声明而非独立验证，迫使负责任的美国公司与绕过生物安全保障以谋取经济利益的企业竞争。"
+
+[`🔗 NSTM-6 政策（PDF）`](https://www.whitehouse.gov/wp-content/uploads/2026/11/NSTM-6-NASS-Policy.pdf) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50449275)
+
+---
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-11-10T21:17:04Z |
-| Items | 20 |
-| Sources tracked | 22（Hacker News、GitHub Trending、NVD、CISA KEV、MSRC CVRF、arXiv、Hugging Face、厂商博客、安全公告） |
+| Generated | 2026-11-11T04:50:47Z |
+| Items | 34 |
+| Sources tracked | 28（Hacker News、GitHub Trending、NVD、CISA KEV、MSRC CVRF、arXiv、Hugging Face、厂商博客、安全公告） |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8（每日三次） |
 | Ranking | 速度加权（时效 × 互动加速度 × 来源权威度） |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |

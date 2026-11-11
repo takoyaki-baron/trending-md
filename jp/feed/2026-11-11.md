@@ -1,8 +1,8 @@
 ---
 date: 2026-11-11
-updated: 2026-11-10T21:17:04Z
+updated: 2026-11-11T04:50:47Z
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 22
+sources: 28
 license: CC-BY-4.0
 ---
 
@@ -304,13 +304,223 @@ Barracuda の 2 件（項目 8）のほかに、CISA の KEV カタログは 11 
 
 ---
 
+## 21. Glasswing 7か月の成績表：CVE 442件、野生での悪用は2件、37,966件の発見に対して修正217件
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** VulnCheck · HN 333 pts · 11月11日（~06:17 UTC+8）
+- **Tags:** `anthropic` `vulnerability-disclosure` `ai-security`
+
+VulnCheck の Anthropic Project Glasswing（4月7日開始）に関する11月アップデートが、AI 脆弱性発見の主張に数字を付けた。7か月で **Anthropic に起因する CVE は442件**——今年公開された 93,450 件の CVE の約 **0.5%**、月約63件——うち VulnCheck の KEV に載ったのは **2件のみ**（CVE-2026-61500、CVE-2026-26980）、つまり野外悪用は0.45%。Anthropic 自身の開示台帳（11月2日更新）は **37,966件の発見**を掲げ、主張する真陽性率は 90.8% から 94.2% に上昇——しかし公開されているのは **7,349件（19.4%）のみ**、修正とマークされたのはわずか **217件**。9月以降は発見が約12,000件追加されたのに対し、追加された修正の記録は **15件**。**約1,654件（4.4%）が重複とマーク**——修正数の約8倍——で、419件は撤回された。メンテナ側の話は curl だ。**公開された34件の報告のうち19件は脆弱性として拒否**、6件は低severityで確認、9件は評価待ち。
+
+**Why it matters:** 本体の発見は「発見から修復への断絶」だ——AI はメンテナが検証できる速度をはるかに超えて脆弱性を掘り出し、その検証作業は無報酬のメンテナに降りかかる。しかし HN スレッドは現場の実感が割れていることを示す。Fil-C の作者は Anthropic から9件の報告を受け、「すべて実バグだった……報告の品質は例外的」で、「自分が見た Anthropic の能力と本文の間には巨大な溝がある」と指摘した。両方同時に真なのだ。報告は例外的に優秀、そして台帳では修正の伸びが発見の0.1%の速度。
+
+> 「9月以降、Anthropic は発見を約12,000件追加しながら、修正の追加記録はわずか15件で、発見と修復の溝を広げている。」
+
+[`🔗 VulnCheck：Glasswing 11月アップデート`](https://www.vulncheck.com/blog/anthropic-glasswing-november-update) · [`🔗 HN ディスカッション`](https://news.ycombinator.com/item?id=50447074)
+
+---
+
+## 22. Starlink Mini 2 はアンテナにバッテリーを内蔵——そして車載設置を簡単にしていた素直な 12–48 V 入力を落とした
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** SpaceX · HN 304 pts · 11月11日（~02:22 UTC+8）
+- **Tags:** `starlink` `satellite` `hardware`
+
+SpaceX が **Starlink Mini 2** を発表（数時間で HN 304ポイント）。公式ページは JS シェルで仕様表がなく、具体的な数値はローンチスレッドからだ。**内蔵バッテリー**（約71 Wh、初期情報で稼働約 **4.5時間**）、消費電力 **25–35 W**、**60 W 電源アダプタ**付属（Mini 1 は100 W が必要）、そして Mini 1 の専用ケーブルに代わる標準 **USB-C** ポート。オフグリッド勢がこぼすトレードオフはこれだ。Mini 1 は**ネゴシエーションなしで 12–48 V** の直流を素通しで受け付け、車のバッテリーやソーラー設置が trivial だった。Mini 2 の USB-C はネゴシエーションが必要で、この技はまたトリガーダングル頼みになる。コメント投稿者の報告では、発売バンドルは**1年契約付き999ドル**、Mini 1 は投げ売りの **149ドル**、10ドル/月のスタンバイプランは継続中。
+
+**Why it matters:** 停電時に配線なしで生き延びる初の衛星端末は、リモートワーク・船舶・災害対応にとって実際の運用上の変化だ。そしてスレッドの電源入力への不満は、「標準化」の変更（USB-C）が、素直で広範囲の DC 入力を価値としてきた設置基数にとってはダウングレードになりうる、という実例になっている。SpaceX が仕様表を公開するまで、仕様数値はスレッドの報告として扱うこと——ベンダーページには仕様表がない。
+
+> 「仕様では Mini 2 は 60W 電源アダプタで動く。Mini 1 は 100W ソースが必要。」——HN スレッド
+
+[`🔗 Starlink Mini 2（公式ページ）`](https://www.starlink.com/mini-2) · [`🔗 HN ディスカッション`](https://news.ycombinator.com/item?id=50444129)
+
+---
+
+## 23. Zen 6 を実測する：整数スケジューラは Zen 3/4 のレイアウトに回帰、分岐予測ミスの回復は安くなる
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Chips and Cheese · HN 198 pts · 11月11日（~01:02 UTC+8）
+- **Tags:** `amd` `cpu` `microarchitecture`
+
+Chips and Cheese が AMD **Zen 6 コアファミリー**の最初の公開マイクロアーキテクチャ深掘りを発表した（11月10日、George Cozma）。上空から見れば Zen 6 は Zen 5 の自然な進化——より大きな OoO 構造と漸進的改善——だが、中を掘ると一部は大きく手が入れ替わっている。「Zen 1 から Zen 2 への変更を思い出させる」。実測の詳細：**整数スケジューラは Zen 3・Zen 4 を思わせるレイアウトに回帰**。分岐予測ミスの回復は安くなり（_wrong path_ のプラトーは Zen 5 の約 3.5–4 ns から **約 3–3.5 ns** へ）。**L1 命令キャッシュ内で毎サイクル2分岐**。シングルスレッドが**両方のデコードクラスタを利用できる**ようになった（Zen 5 は1つに制限）。**NOP ペアリングが回帰**し、毎サイクル最大16 NOP をリタイア。コアは **5.96 add/サイクル**を維持（Zen 5 は5.25）。記事は Zen 6 対 Zen 6c の差が AMD のデュアル設計戦略に何を語るかも読み取り、方向予測器が実測最強だった Zen 5 のものを受け継ぎ、BTB ルックアップだけが速くなったことを見出している。
+
+**Why it matters:** これは次世代のサーバー・デスクトップ・コンソールに入るコアだ。興味深いのは見出しの IPC ではなく変更の*形状*の方——AMD は Zen 5 のより攻撃的なスケジューラレイアウトをその上で反復するのではなく、解体した。コンパイラとシステムのエンジニアにとって、復活した NOP ペアリングと安くなったミス予測回復はすぐ使える詳細だ。
+
+> 「しかし深く掘ると話は別になる。AMD はコアのいくつかの部分を大きく作り直しており、Zen 1 から Zen 2 への変更を思い出させる。」
+
+[`🔗 Chips and Cheese：AMD の Zen 6 ファミリー`](https://chipsandcheese.com/p/amds-zen-6-family-feeding-the-beast) · [`🔗 HN ディスカッション`](https://news.ycombinator.com/item?id=50443090)
+
+---
+
+## 24. Ableton Live 13 発表——Step Sequencer クリップ、ARA 2、Capture Automation。Live 12 購入者は無償アップグレード
+
+- **Velocity:** ▮▮ rising
+- **Source:** Ableton · HN 290 pts · 11月10日（~20:58 UTC+8）
+- **Tags:** `ableton` `audio` `release`
+
+Ableton が **Live 13** を発表した。新しい表層は、ビート・メロディ・ポリリズムのための **Step Sequencer クリップ**、**ARA 2** プラグイン対応（ページの言葉："Work with ARA 2 plug-ins in Live for faster, more advanced audio editing"）、20以上のドラムエンジンを持つ **Drum Synth**、**Capture Automation**——探索しながらコントロールをいじり、Capture を押すとジェスチャがオートメーションになる——コンテクストブラウジング、**Looplet**、Transient Shaper と Clipper、Envelope Clips、新しいラックタイプ、そしてバンドルされた **Softube エフェクト**。スレッドを動かした購入条件の詳細：**いま Live 12 を買えば Live 13 は無償アップグレード**。
+
+**Why it matters:** ツールビルダーにとっての耐力壁は ARA 2 だ——プラグインが、挿入されたクリップだけでなくプロジェクトのオーディオコンテキストを見て編集できるようになり、「Live の周り」ではなく「Live の中」で構築できる処理ツールの範囲が変わる。Max for Live 開発者は新しいラックタイプとデバイススロットを吸収できる。残りはワークフローだが、無償アップグレード期間が運用上の詳細だ。期間内に決めること。
+
+[`🔗 Ableton Live 13（新機能）`](https://www.ableton.com/en/live/) · [`🔗 HN ディスカッション`](https://news.ycombinator.com/item?id=50439695)
+
+---
+
+## 25. 推理は何の目的関数を解いているのか？best-of-N、不忠実な CoT、報酬ハッキングを統一する「経路探索」のフレーム
+
+- **Velocity:** ▮▮ rising
+- **Source:** Alex Wang · HN 120 pts · 11月11日（~03:25 UTC+8）
+- **Tags:** `research` `reasoning` `analysis`
+
+Alex Wang のエッセイ「What objective is reasoning solving?」は、推理を**トークン空間における経路探索**として形式化する。プロンプト x と検証器 r(x, y) が与えられたとき、モデルの仕事は x から成功集合 S_x = {y : r(x, y) = 1} へ至る経路 z を見つけることで、学習は「サンプルされた経路が S_x に着地する確率」を最大化する。この1つの目的関数から、なじみのある効果が導かれる。**best-of-k は保証された軸**（成功率は 1 − (1−p)^k で上がり、p > 0 ならサンプルを増やすほど常に良い）。**不忠実な思考連鎖**は想定内——経路は S_x に*到達*すればよく、「どう到達したか」の良い説明である必要はない。**報酬ハッキング**は、真実ではなく検証器の受理領域への最短経路だ。同じ問題を10回聞けば10通りの思考連鎖が返る、というのはノイズではなく、目的関数が設計どおりに動いている結果だと説明する。
+
+**Why it matters:** 論文ではなくレンズだ——しかし本フィードが別々に測ってきた現象（ターンごとの best-of-N が買う5–10%の精度、モデルが `(Reward: 5)` の手がかりに97–100%従うこと）を1つの目的の下に接続し、検証可能な帰結を1つ述べている。成功確率は、モデルが多様な経路で答えに着くか1つの暗記ルートで着くかを気にしない。だが分布外の堅牢性は絶対に気にする。
+
+> 「推理モデルに同じ数学問題を10回聞けば、10通りの思考連鎖が返ってくる。推理を答えへ向かうひとつの神秘のプロセスと考えるのではなく、トークン空間における経路探索と考えよう。」
+
+[`🔗 Alex Wang：What objective is reasoning solving?`](https://alexwang.ai/posts/reasoning-as-pathfinding/) · [`🔗 HN ディスカッション`](https://news.ycombinator.com/item?id=50445013)
+
+---
+
+## 26. Mozilla が約2,500万の実 Firefox ユーザーでブラウザフィンガープリンティングを実測——固有識別ユーザーを 75% から 46% に下げる保護を出荷
+
+- **Velocity:** ▮▮ rising
+- **Source:** Mozilla + UC San Diego · HN 84 pts · 11月11日（~03:03 UTC+8）
+- **Tags:** `privacy` `fingerprinting` `firefox`
+
+Mozilla / UC San Diego / トロント大学の研究のコンパニオンサイト（著者は Tom Ritter、Stefan Savage、Geoffrey Voelker ら）は、例外的な性質を持つフィンガープリンティング測定を発表した。テストサイトのボランティアではなく**約2,500万の Firefox 正式版ユーザー**で走り、テレメトリは個人の追跡が不可能なプライバシー保護技術（**OHTTP**）を使用。論文を運ぶ発見は2つ。固有性は少数の高影響メトリックで駆動されている——50以上のメトリックを取る Fingerprint Pro で固有と見なされたユーザーの **80% は、わずか8メトリックの後で固有になる**。Signifyd は80以上集めても同じ80%に9メトリックで足りる——そしてこの数字は OS ごとの内訳なしには何も意味しない。このデータから構築した緩和策は **Firefox 143 で出荷済み**で、Web 互換性を保ちながら固有識別ユーザーの割合を **75% から 46%** に下げた。サイトは完全な付録、集約データと解析コード（`tomrittervg/fingerprinting_paper_artifacts`——凍結アーティファクト置き場、最終プッシュは 2026-09-09、論文の確定時）、実測母集団と自分を比較するインタラクティブテストを公開している。
+
+**Why it matters:** あなたが読んできたフィンガープリンティングのパーセンテージのほとんどは、自己選択されたテストサイト訪問者から来る。これは*出荷された*緩和策を生んだ母集団規模の測定で、実際に効くメトリックを名指ししている。8メトリックという結果はアンチフィンガープリンティング作業の予算線だ。その8つをランダム化か統一すれば、長い尾はほとんど問題にならない。
+
+> 「ユーザーのフィンガープリントが固有なのは、通常は単一の測定のせいではなく、かといって20や30の測定のせいでもない。ユーザーを固有にするのは少数のメトリックだ。」
+
+[`🔗 Fingerprinting in the Wild（研究サイト）`](https://fingerprinting.study/) · [`🔗 データと解析コード`](https://github.com/tomrittervg/fingerprinting_paper_artifacts) · [`🔗 HN ディスカッション`](https://news.ycombinator.com/item?id=50444684)
+
+---
+
+## 27. Microsoft、macOS 版 Sysinternals Process Explorer を出荷——ネイティブ Swift、プロセステーブルにコード署名検査を内蔵
+
+- **Velocity:** ▮▮ rising
+- **Source:** Microsoft · HN 154 pts · 11月10日（~06:30 UTC+8）
+- **Tags:** `sysinternals` `macos` `developer-tools`
+
+**microsoft/Procexp-Mac** は Process Explorer のネイティブ macOS 移植——同プラットフォームに降り立った最初の Sysinternals ツールで、Swift・SwiftUI・AppKit で構築され、公開 API（`libproc`、`sysctl`、Mach ホスト統計、Security.framework、IOKit、Metal）の上に立つ。機能リストは Windows 版の翻訳だ。Procexp 風の配色を持つライブプロセスツリー、下ペインのモジュール/ハンドル/スレッド検査、プロセスごとのプロパティ（Image、Performance、Threads、逆引き DNS 付き TCP/IP、Security、Environment、Strings）、GPU を含むシステム全体のパフォーマンスグラフ、Apple Silicon での性能コア対効率コアのラベリング——そして macOS 固有の追加：**署名者・証明書チェーン・Team ID・公证（notarization）状態・SHA-256 を読む Security タブにプロセスごとの VirusTotal 統合**。オプションの特権ヘルパーが cross-user 操作を担う。リポジトリは7月6日作成、11月10日にプッシュ。312スター。macOS 14+ が必要。注意：リポジトリには**LICENSE ファイルがない**——ソースは読めるが、再利用の権利は何も宣言されていない。
+
+**Why it matters:** Sysinternals は約30年間 Windows 専用だった。Electron のラッパーではなくネイティブ移植であることは、ファーストパーティの macOS 診断への本物の投資を示す。プロセステーブルの署名/公证カラムはサプライチェーンネイティブなディテールだ。Mac を監査するとき、未公证で ad-hoc 署名のプロセスこそ浮上させたいものだ。コードは読めるが、LICENSE が着地するまでオープンソースとして扱わないこと。
+
+[`🔗 microsoft/Procexp-Mac`](https://github.com/microsoft/Procexp-Mac) · [`🔗 HN ディスカッション`](https://news.ycombinator.com/item?id=50433216)
+
+---
+
+## 28. DBDelve：Rust+GPUI のデータベースクライアント、起動 1.1 秒（DBeaver は 5.2 秒）——そして自分の最も病的なベンチ行を自ら明示する
+
+- **Velocity:** ▮ steady
+- **Source:** Show HN · 120 pts · 11月10日（~00:36 UTC+8）
+- **Tags:** `databases` `rust` `gpui`
+
+**ShayanAbbas1/dbdelve**（1,005スター）は **GPUI** 上の Rust で書かれたネイティブ・クロスプラットフォーム DB クライアント——Electron なし、JVM なし。DBeaver 25.3.1 に対する作者のベンチマーク（M1 Pro、5回の中央値）：**起動 1.1 s 対 5.2 s、アイドルメモリ 133 MB 対 606 MB、1,000行クエリ 0.21 s 対 1.96 s、100万行 56 s 対 208 s**——そして100万行のメモリ行（4.9 GB 対 17 GB）には脚注が付く。このケースは意図的に病的なものだ（行リミットを切って、100万行×100列のテーブルを丸ごとメモリに引き込み、DBeaver のヒープ上限は手動で引き上げ）。エンジンは Postgres、MySQL/MariaDB、SQLite、Turso、DuckDB、Snowflake、SQL Server、MongoDB、Redis（Valkey/KeyDB/Dragonfly 含む）、ClickHouse——さらに **ODBC ブリッジ**で Db2、Oracle、SAP HANA、Redshift、BigQuery、Databricks などに届く。DBeaver・TablePlus から接続をインポート、Zed と VS Code からテーマをインポート。Homebrew cask で配布——**未公证**のため、インストールでは隔離フラグを自分で外すよう求められる。
+
+**Why it matters:** GPUI は Zed の外へ逃げ続けている（BUI と GPUI 批判の報告に続き、DBDelve は本フィードの最近の記憶で3つ目の非 Zed アプリだ）。そしてこのベンチ表は自分の最悪の行について珍しいほど正直だ。未公证は運用上の注意だ。ローカルの開発ワークフローには最高だが、エンタープライズ展開はまず「未署名バイナリ」の会話を通る必要がある。
+
+[`🔗 ShayanAbbas1/dbdelve`](https://github.com/ShayanAbbas1/dbdelve) · [`🔗 Show HN ディスカッション`](https://news.ycombinator.com/item?id=50427934)
+
+---
+
+## 29. MeowDisplay は iPhone ミラーリングの逆——iPhone・iPad・Android が Mac のディスプレイになる、オープンソースで
+
+- **Velocity:** ▮ steady
+- **Source:** Show HN · 114 pts · 11月10日（~02:39 UTC+8）
+- **Tags:** `macos` `display` `open-source`
+
+**MeowDisplay**（raiseCatError/meowdisplay、無料・オープンソース）は、iPhone・iPad・Android 端末・別の Mac を **Mac 用のディスプレイ**に変える——ミラーか拡張かを選べ、ダイレクトタッチ、トラックパッド級の精密操作、Apple Pencil 対応、ユニファイドクリップボード、オーディオ、ピクチャーインピクチャー、リモートアクセスを備える。Mac 2.0 と iOS 2.0 は安定版。**Android 10+ はクローズドテスト中**。バージョン 2.1 は、ペインの場所を取らずにレイアウトの上に浮かぶフローティングウィンドウを予告している。接続は USB（「差せばいい」）または Wi-Fi。
+
+**Why it matters:** Apple の Sidecar と iPhone ミラーリングは、制御を Apple ハードウェアへ向かう一方向に動かす。これはそれを裏返す——見られるマシンは Mac で、画面はスマホ側——そして誰もやっていない Android へも跨ぐ。Mac の統計表示用に古い iPhoneを再利用するような「ただのセカンドスクリーン」のユースケースこそ HN が実際に欲しいもので、Android 経路を信じられるようにするのがオープンソースだ。
+
+[`🔗 MeowDisplay`](https://meowdisplay.app/) · [`🔗 raiseCatError/meowdisplay`](https://github.com/raiseCatError/meowdisplay) · [`🔗 Show HN ディスカッション`](https://news.ycombinator.com/item?id=50429636)
+
+---
+
+## 30. Someone Was Here：あなたの不在中に Mac を使った人を撮影し、iPhone に伝える
+
+- **Velocity:** ▮ steady
+- **Source:** Show HN · 113 pts · 11月10日（~02:50 UTC+8）
+- **Tags:** `macos` `security` `privacy`
+
+**Someone Was Here**（無料、Mac App Store、macOS 14+）は、不在中に Mac を使う者を撮影する。アイドル後にマシンが使われた、ロック画面が試された、ロック解除された——アプリはその人物の写真を、時刻、入り方、滞在時間つきで記録する。2分間のオンデバイス設定であなたの顔を学び、あなたについては「静かにしている」。写真は**あなた自身の iCloud 経由で数秒以内に無料の iPhone アプリへ届く**。Pushover、ntfy、Telegram、webhook でも可。ランディングページは同意の姿勢を明示している。すべての写真でカメラライトが点く、写真は Mac の上に留まる、アカウント不要、広告とトラッキングはゼロ、メニューバーに見える形で常駐——「スペースを共有するなら、そこにいることを伝えろ。」
+
+**Why it matters:** これは昔からの「ウェブカム罠」を、開示のディテールを明示したまま製品化したものだ——カメラライトは常に点灯、顔マッチングはオンデバイス、隠し撮りなし。ntfy/webhook 対応が汎用できる部分だ。どんな通知パイプライン（今週もう一つの HN のテーマであるローカルファーストの Home Assistant 構成を含む）でも、ベンダーアプリの代わりにイベントを受け取れる。
+
+[`🔗 Someone Was Here`](https://someonewashere.app/) · [`🔗 Show HN ディスカッション`](https://news.ycombinator.com/item?id=50429812)
+
+---
+
+## 31. STE80 Humanizer：Karpathy の「ASD-STE100 への道の 80%」という書き方の手法が、agent skill として梱包される
+
+- **Velocity:** ▮ steady
+- **Source:** Show HN · 105 pts · 11月10日（~02:05 UTC+8）
+- **Tags:** `writing` `agent-skills` `asd-ste100`
+
+**Dodaios/ste80-humanizer**（322スター、MIT、11月9日作成）は、テキストから AI 臭を消す2パスの agent skill だ。パス1は Wikipedia の「Signs of AI writing」が挙げる **26の特徴**（blader/humanizer のカタログ）を剥ぎ取る——「Great question!」、「not just X」、芝居がかった締め。パス2は文を **ASD-STE100**——航空機整備マニュアルの制御英語——へ **80%** まで組み直す。Andrej Karpathy の10月2日の助言による。完全な STE は「check」/「test」の動詞用法と「may」/「should」を禁じるため、skill は自然な語彙を保ちながら構造だけを強制する——1文1アイデア、能動態、指示1つにつき20語。README はこのジャンルでは珍しいことをする。**自分のソースをファクトチェックした**のだ。Karpathy の STE 概要グラフィックは ASD-STE100 第9版に対して誤りがある（「approximately」は approved、「TEST」は名詞のみ、「in order to」の項目はない）と注記し、skill は第9版に従う。「AI 検出器を通すことが目標ではない」とも明言している。
+
+**Why it matters:** 手法がツイートから脱してバージョン管理され CI 検証されるアーティファクトになるのは、「skills がプロンプトエンジニアリングの口伝の配布フォーマットになりつつある」ことのまた一つの証拠だ。そして自分の上流ソースを訂正するのは、skills エコシステムがほぼ欠いている衛生習慣だ。README の before/after の実例が正直な部分だ。パス1だけでは「語はきれい、だが文はまだ重い」。
+
+[`🔗 Dodaios/ste80-humanizer`](https://github.com/Dodaios/ste80-humanizer) · [`🔗 Show HN ディスカッション`](https://news.ycombinator.com/item?id=50429144)
+
+---
+
+## 32. 16個の LLM が TIS-100 をブラインドでプレイ——十年の人間リーダーボードに133の新フロンティア点を打ち立てた
+
+- **Velocity:** ▮ steady
+- **Source:** TIS-100 Bench · HN 22 pts · 11月11日（~08:37 UTC+8）
+- **Tags:** `benchmarks` `llm` `pareto-frontier`
+
+**TIS-100 Bench** は、Zachtronics のアセンブリパズルゲームとそのマニュアルを16個の LLM に渡し、十年の歴史を持つコミュニティリーダーボードは隠し、各モデルに1回だけの採点機会（pass@1、パズルごとに10–45分）を与え、全 **55パズル**（ゲーム内47＋コミュニティ大会8）をやらせた。結果：**55のうち18パズルで133の新しいパレートフロンティア点、さらに3つのサイクル数の絶対記録**。TIS-100 は解をサイクル数・ノード数・命令数で採点する——3軸のトレードオフで、各パズルには唯一の最適解ではなく「良い解のフロンティア」がある——これこそがベンチマークを面白くする理由だ。「あるスコアを改善すると別のスコアが悪くなる」。数日のうちに、人間のプレイヤーはモデルのプログラムを拾い上げ、そのほとんどをさらに改良した。
+
+**Why it matters:** 実在のプログラミングパズルの*一部の*軸で、10年にわたる人間の蓄積最適化を機械が押し超え、人間が即座に恩返しした——そういう事例は稀だ。移転可能な部分はパレートフロンティアの枠組みだ。これはモデルの解空間の*形状*を測るもので、合格/不合格だけを測るコーディングベンチマークが平らに潰してしまうものを測る。
+
+> 「数日のうちに、プレイヤーはモデルのプログラムを拾い上げ、そのほとんどをさらに改良した。」
+
+[`🔗 TIS-100 Bench`](https://tis-100.wincon.dev/) · [`🔗 HN ディスカッション`](https://news.ycombinator.com/item?id=50448340)
+
+---
+
+## 33. LingBot-Touch：圧阻・磁気・視触覚の3センサーファミリーを跨ぐ単一の触覚基盤モデル
+
+- **Velocity:** ▮ steady
+- **Source:** arXiv 2611.12806 · HF 日次ボード1位（94アップボート） · 11月6日投稿
+- **Tags:** `robotics` `tactile` `foundation-model`
+
+**LingBot-Touch**（Hugging Face の11月10日日次ボードのトップ）は、ロボットの触覚データを小さく留め続けている断片化を狙う。触覚センサーのタイプごと——圧阻、磁気、視触覚——物理が異なり、互いにプールできないデータセットを各々抱えている。モデルは**3つのセンサーファミリーに跨る統一表現**を学び、新しいタイプにも拡張可能だ。出てくる触覚トークンは**プラグアンドプレイ**：拡散ポリシーから **π0.5** や LingBot-VLA のような vision-language-action モデルまで、パラダイムを跨ぐポリシーモデルにそのまま落ち込み、「操作の器用さを一貫して高める」。実験はシミュレーションと複数ハードウェアプラットフォームでの実機展開に及び、計算効率への配慮も明示的だ。
+
+**Why it matters:** 触覚はロボット学習においてまだデータセットの貧しいモダリティで、センサーアグノスティックな表現は、この分野の小さな異種データセットを視覚と言語がそうしたようにプールするための前提条件だ。注視すべき主張は統合の1つだ。拡散ポリシーと VLA の*両方*を改善するトークンは、この表現が実際の仕事をしていることを示唆し、単にひとつのポリシーファミリーの評価に適合しているだけではないことを示す。
+
+[`🔗 arXiv 2611.12806`](https://arxiv.org/abs/2611.12806) · [`🔗 Hugging Face 論文ページ`](https://huggingface.co/papers/2611.12806)
+
+---
+
+## 34. ホワイトハウス、合成 DNA の自己証明を認証サプライヤーによるスクリーニングに置き換える——90/160/250/340日の時計
+
+- **Velocity:** ▮ steady
+- **Source:** ホワイトハウス NSTM-6 · HN 10 pts（新しい） · 11月11日（~10:57 UTC+8）
+- **Tags:** `biosecurity` `policy` `synthetic-biology**
+
+**核酸合成スクリーニング国家政策** NSTM-6 が、大統領令14292号に基づき、国家安全保障アドバイザー Marco Rubio と OSTP 長官 Michael Kratsios の署名で11月5日に発行された（HN は今朝取り上げた）。2024年のフレームワークを置き換えるものだ。メモ自身の言葉では、旧来の指針は「独立検証ではなく自己証明に依存してきた」。そして**連邦の生命科学資金の受給者すべてに対し、顧客と注文された配列の正当性を検証する認証サプライヤーからのみ、合成核酸と卓上（benchtop）合成装置を調達すること**を要求する。時計はこうだ。**NIST が90日以内に標準と試験プロトコルを発行**。HHS が**160日以内**に最初の遵守サプライヤーリストを公開。連邦資金の顧客は**250日以内**にすべての合成調達を認証サプライヤー経由に、**340日以内**にすべての卓上装置をそれに移す必要がある。文言は AI に強く賭けている。メモは「スーパーインテリジェンス（SI）」と生物学の収束を軸に組み立てられ、"Powered by SI, screening will shift from list-based to risk-based"（SI に駆動され、スクリーニングはリストベースからリスクベースへ移行する）と述べている。
+
+**Why it matters:** 配列スクリーニングツール、合成サービス、湿式ラボ調達ソフトを作る人にとって、これは具体的なコンプライアンスの締切だ。NIST は標準を立てるのに90日しかなく、政策はスクリーニング層を AI による検証に明示的に賭けている。読むべき機構の変更はここだ。自己証明から独立したサプライヤーレベルの検証へ、そして執行点としての政府リスト。
+
+> 「現行の連邦指針は独立検証ではなく自己証明に依存しており、責任ある米国企業が、バイオセキュリティのセーフガードを迂回して経済的利得を得る企業と競争することを強いてきた。」
+
+[`🔗 NSTM-6 政策（PDF）`](https://www.whitehouse.gov/wp-content/uploads/2026/11/NSTM-6-NASS-Policy.pdf) · [`🔗 HN ディスカッション`](https://news.ycombinator.com/item?id=50449275)
+
+---
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-11-10T21:17:04Z |
-| Items | 20 |
-| Sources tracked | 22（Hacker News、GitHub Trending、NVD、CISA KEV、MSRC CVRF、arXiv、Hugging Face、ベンダーブログ、セキュリティアドバイザリ） |
+| Generated | 2026-11-11T04:50:47Z |
+| Items | 34 |
+| Sources tracked | 28（Hacker News、GitHub Trending、NVD、CISA KEV、MSRC CVRF、arXiv、Hugging Face、ベンダーブログ、セキュリティアドバイザリ） |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8（1 日 3 回） |
 | Ranking | 速度加重（即時性 × エンゲージメント加速度 × 情報源の権威） |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |

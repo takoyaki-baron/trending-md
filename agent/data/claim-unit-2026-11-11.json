@@ -1,9 +1,9 @@
 {
- "generated": "2026-11-10T21:17:10.166Z",
+ "generated": "2026-11-11T04:51:23.509Z",
  "files": [
   {
    "file": "2026-11-11.md",
-   "items": 20,
+   "items": 34,
    "findings": [
     {
      "check": "status",
@@ -52,7 +52,7 @@
      "item": 4,
      "verdict": "ok",
      "claim": "CVE-2026-124917 `Deferred`",
-     "detail": "Deferred (lastModified 2026-11-10T19:21:01.630)"
+     "detail": "Deferred (lastModified 2026-11-10T21:19:18.507)"
     },
     {
      "check": "status",
@@ -64,30 +64,44 @@
     {
      "check": "temporal",
      "item": 19,
-     "verdict": "temporal-stopping-point",
+     "verdict": "temporal-disclosed",
      "claim": "CVE-2026-124194 · CNA 6.5 / base 6.5 / full 6.2",
-     "detail": "microsoft stores 3.1 6.5 in `containers.cna.metrics.cvssV3_1.baseScore` — that is the base×E score with only E applied (base 6.5, base×E 6.5, base×E×RL 6.2, base×E×RL×RC 6.2; full temporal 6.2, FIRST v3.1 §7.2); NVD re-serves 3.1 6.5 (secure@microsoft.com) — one vector, so name the stopping point you quote (a field called `baseScore` does not have to hold the base)"
+     "detail": "the item names a stopping point — silent, because the prose already lets the reader tell which number it read"
     },
     {
      "check": "repo",
      "item": 13,
      "verdict": "ok",
      "claim": "D4Vinci/Scrapling",
-     "detail": "101065★, last push 2026-11-09"
+     "detail": "101240★, last push 2026-11-09"
     },
     {
      "check": "repo",
      "item": 16,
      "verdict": "ok",
      "claim": "max-sixty/worktrunk",
-     "detail": "12379★, last push 2026-11-10"
+     "detail": "12413★, last push 2026-11-11"
     },
     {
      "check": "repo",
      "item": 17,
      "verdict": "ok-history",
      "claim": "HolyArrs/HolyArrs",
-     "detail": "record 1d, oldest commit 2026-11-09 (~15 commits)"
+     "detail": "record 1d, oldest commit 2026-11-09 (~20 commits)"
+    },
+    {
+     "check": "repo",
+     "item": 26,
+     "verdict": "stale-disclosed",
+     "claim": "tomrittervg/fingerprinting_paper_artifacts",
+     "detail": "last push 2026-09-09 (62d) with 1 stars — the item names this repo's own last-push day (2026-09-09), so the staleness is the story rather than an unexamined number"
+    },
+    {
+     "check": "repo",
+     "item": 27,
+     "verdict": "ok",
+     "claim": "microsoft/Procexp-Mac",
+     "detail": "314★, last push 2026-11-10"
     },
     {
      "check": "batch",
@@ -228,24 +242,108 @@
      "verdict": "ok",
      "claim": "1 quotation(s)",
      "detail": "verbatim in 5 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 21,
+     "verdict": "ok",
+     "claim": "3 quotation(s)",
+     "detail": "verbatim in 6 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 22,
+     "verdict": "ok",
+     "claim": "1 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 23,
+     "verdict": "ok",
+     "claim": "2 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 24,
+     "verdict": "ok",
+     "claim": "1 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 25,
+     "verdict": "ok",
+     "claim": "2 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 26,
+     "verdict": "ok",
+     "claim": "1 quotation(s)",
+     "detail": "verbatim in 3 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 30,
+     "verdict": "ok",
+     "claim": "1 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 31,
+     "verdict": "ok",
+     "claim": "4 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 32,
+     "verdict": "ok",
+     "claim": "2 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 33,
+     "verdict": "ok",
+     "claim": "1 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 34,
+     "verdict": "ok",
+     "claim": "3 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
     }
    ]
   }
  ],
  "status_watch": [
   {
-   "id": "CVE-2026-111560",
-   "from": "Awaiting Analysis",
-   "to": "Undergoing Analysis",
+   "id": "CVE-2026-20320",
+   "from": "Undergoing Analysis",
+   "to": "Analyzed",
    "regressed": false,
-   "modified": "2026-11-10T20:17:42.997"
+   "modified": "2026-11-10T21:31:51.953"
   },
   {
-   "id": "CVE-2026-116606",
-   "from": "Awaiting Analysis",
-   "to": "Undergoing Analysis",
+   "id": "CVE-2026-111793",
+   "from": "Undergoing Analysis",
+   "to": "Analyzed",
    "regressed": false,
-   "modified": "2026-11-10T20:18:04.450"
+   "modified": "2026-11-10T21:32:47.230"
+  },
+  {
+   "id": "CVE-2026-124194",
+   "from": "Undergoing Analysis",
+   "to": "Analyzed",
+   "regressed": false,
+   "modified": "2026-11-10T21:29:50.613"
   }
  ],
  "api_calls": 0,
