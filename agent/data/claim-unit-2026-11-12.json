@@ -1,0 +1,222 @@
+{
+ "generated": "2026-11-11T20:28:16.495Z",
+ "files": [
+  {
+   "file": "2026-11-12.md",
+   "items": 20,
+   "findings": [
+    {
+     "check": "cvss",
+     "item": 12,
+     "verdict": "ok",
+     "claim": "3.1 7.4",
+     "detail": "CVE-2026-120808 · Secondary/cna@mongodb.com · vector reproduces 7.4"
+    },
+    {
+     "check": "cvss",
+     "item": 12,
+     "verdict": "ok",
+     "claim": "4.0 9.1",
+     "detail": "CVE-2026-120808 · Secondary/cna@mongodb.com"
+    },
+    {
+     "check": "status",
+     "item": 12,
+     "verdict": "ok",
+     "claim": "CVE-2026-118383 `Awaiting Analysis`",
+     "detail": "Awaiting Analysis (lastModified 2026-11-10T22:08:59.707)"
+    },
+    {
+     "check": "status",
+     "item": 17,
+     "verdict": "ok",
+     "claim": "CVE-2026-107496 `Awaiting Analysis`",
+     "detail": "Awaiting Analysis (lastModified 2026-11-10T22:10:04.727)"
+    },
+    {
+     "check": "repo",
+     "item": 15,
+     "verdict": "ok",
+     "claim": "FrigadeHQ/yogurt",
+     "detail": "238★, last push 2026-11-11"
+    },
+    {
+     "check": "repo",
+     "item": 19,
+     "verdict": "ok",
+     "claim": "herdrdev/herdr",
+     "detail": "50278★, last push 2026-11-07"
+    },
+    {
+     "check": "repo",
+     "item": 20,
+     "verdict": "ok",
+     "claim": "addyosmani/agent-skills",
+     "detail": "115813★, last push 2026-11-01"
+    },
+    {
+     "check": "batch",
+     "item": 12,
+     "verdict": "batch-count-mismatch",
+     "claim": "26 records (MongoDB, 2026-11-10)",
+     "detail": "claimed 26, measured 23 (over-count) from cna@mongodb.com on 2026-11-10 via \"MongoDB\"; the set is the one that retrieves the item's own cited CVE-2026-118383"
+    },
+    {
+     "check": "quotation",
+     "item": 1,
+     "verdict": "ok",
+     "claim": "7 quotation(s)",
+     "detail": "verbatim in 3 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 2,
+     "verdict": "ok",
+     "claim": "4 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 3,
+     "verdict": "quote-not-found",
+     "claim": "“i am immensely sad to announce that tim peters has died”",
+     "detail": "10 words, 0 hits in 2 readable source(s); news.ycombinator.com/item?id=50450488 carries 4 of 11 words (“tim peters has died”) and continues “hacker news hacker news new past comments ask show jobs submit” — use the source's wording, or drop the quotation marks"
+    },
+    {
+     "check": "quotation",
+     "item": 3,
+     "verdict": "quote-not-found",
+     "claim": "“python would not be what it is today without tim ly yrs”",
+     "detail": "12 words, 0 hits in 2 readable source(s); no source carries it (read discuss.python.org/t/in-memoriam-tim-peters-1952-2026/110028, news.ycombinator.com/item?id=50450488) — if this came from somewhere this item does not cite, cite it; otherwise it is the feed's own words and must not wear quotation marks"
+    },
+    {
+     "check": "quotation",
+     "item": 3,
+     "verdict": "quote-not-found",
+     "claim": "“i am immensely sad to announce that tim peters has died”",
+     "detail": "10 words, 0 hits in 2 readable source(s); news.ycombinator.com/item?id=50450488 carries 4 of 11 words (“tim peters has died”) and continues “hacker news hacker news new past comments ask show jobs submit” — use the source's wording, or drop the quotation marks"
+    },
+    {
+     "check": "quotation",
+     "item": 4,
+     "verdict": "ok",
+     "claim": "5 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 5,
+     "verdict": "ok",
+     "claim": "5 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 6,
+     "verdict": "ok",
+     "claim": "4 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 7,
+     "verdict": "ok",
+     "claim": "2 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 8,
+     "verdict": "ok",
+     "claim": "3 quotation(s)",
+     "detail": "verbatim in 3 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 9,
+     "verdict": "ok",
+     "claim": "4 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 10,
+     "verdict": "ok",
+     "claim": "5 quotation(s)",
+     "detail": "verbatim in 3 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 11,
+     "verdict": "ok",
+     "claim": "6 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 13,
+     "verdict": "ok",
+     "claim": "1 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 14,
+     "verdict": "ok",
+     "claim": "3 quotation(s)",
+     "detail": "verbatim in 10 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 15,
+     "verdict": "ok",
+     "claim": "2 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 16,
+     "verdict": "ok",
+     "claim": "3 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 17,
+     "verdict": "ok",
+     "claim": "4 quotation(s)",
+     "detail": "verbatim in 13 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 18,
+     "verdict": "ok",
+     "claim": "1 quotation(s)",
+     "detail": "verbatim in 8 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 19,
+     "verdict": "ok",
+     "claim": "4 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 20,
+     "verdict": "ok",
+     "claim": "3 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    }
+   ]
+  }
+ ],
+ "status_watch": [],
+ "api_calls": 0,
+ "readme_calls": 0,
+ "cited_page_calls": 0,
+ "repo_page_calls": 0,
+ "nvd_calls": 1,
+ "nvd_failed_chunks": 0,
+ "cna_calls": 0
+}
